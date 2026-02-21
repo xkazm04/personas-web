@@ -13,7 +13,7 @@ const platforms = [
 
 export default function DownloadCTA() {
   return (
-    <section id="download" className="noise relative px-6 py-32 md:py-44">
+    <section id="download" className="noise relative px-4 sm:px-6 py-28 md:py-44">
       {/* Background orbs */}
       <div className="pointer-events-none absolute inset-0 flex items-center justify-center">
         <div
@@ -56,38 +56,62 @@ export default function DownloadCTA() {
         viewport={{ once: true, margin: "-100px" }}
         className="relative z-10 mx-auto max-w-2xl text-center"
       >
+        <motion.div variants={fadeUp}>
+          <span className="inline-block rounded-full border border-brand-cyan/20 bg-brand-cyan/5 px-3.5 py-1 text-[11px] font-medium tracking-wider uppercase text-brand-cyan/70 font-mono mb-6">
+            v0.12 — Cloud Integration
+          </span>
+        </motion.div>
+
         <motion.h2
           variants={fadeUp}
-          className="text-3xl font-bold tracking-tight md:text-5xl lg:text-[3.5rem]"
+          className="text-4xl font-extrabold tracking-tight sm:text-5xl md:text-7xl lg:text-[4.5rem] drop-shadow-md"
         >
           Ready to build your
           <br />
-          <GradientText>first agent?</GradientText>
+          <span className="font-light text-white/80">first</span> <GradientText className="drop-shadow-lg">agent?</GradientText>
         </motion.h2>
 
-        {/* Decorative line */}
-        <motion.div variants={fadeUp} className="mx-auto mt-6 h-px w-24 bg-gradient-to-r from-transparent via-brand-cyan/20 to-transparent" />
-
-        <motion.p variants={fadeUp} className="mt-6 text-lg text-muted leading-relaxed">
+        <motion.p variants={fadeUp} className="mt-8 text-lg text-muted-dark leading-relaxed sm:text-xl font-light">
           Download Personas for free. Start building in minutes.
         </motion.p>
 
+        <motion.div variants={fadeUp} className="mt-6 mx-auto grid max-w-xl grid-cols-1 gap-2 text-left sm:grid-cols-3">
+          {[
+            "Download installer",
+            "Connect Claude CLI",
+            "Launch first agent",
+          ].map((step, index) => (
+            <div key={step} className="rounded-xl border border-white/[0.05] bg-white/[0.015] px-3 py-2">
+              <p className="text-[10px] font-mono uppercase tracking-wider text-muted-dark">Step {index + 1}</p>
+              <p className="mt-1 text-xs text-muted">{step}</p>
+            </div>
+          ))}
+        </motion.div>
+
         {/* Main CTA */}
         <motion.div variants={fadeUp} className="mt-10">
-          <div className="relative inline-block rounded-full p-px bg-gradient-to-r from-brand-cyan via-blue-400 to-brand-purple animate-border-flow">
+          <div className="flex flex-col items-center justify-center gap-3 sm:flex-row">
+            <div className="relative inline-block rounded-full p-px bg-gradient-to-r from-brand-cyan via-blue-400 to-brand-purple animate-border-flow">
+              <a
+                href="#"
+                className="group relative inline-flex w-[min(100%,20rem)] items-center justify-center gap-3 overflow-hidden rounded-full bg-brand-cyan px-8 py-4 text-sm font-semibold text-black transition-all duration-300 hover:brightness-110 sm:w-auto sm:px-10 sm:py-4.5 sm:text-base"
+              >
+                <div className="absolute inset-0 -translate-x-full bg-gradient-to-r from-transparent via-white/25 to-transparent transition-transform duration-700 group-hover:translate-x-full" />
+                <Download className="relative h-5 w-5 transition-transform duration-300 group-hover:-translate-y-0.5" />
+                <span className="relative">Download for Windows</span>
+              </a>
+            </div>
             <a
-              href="#"
-              className="group relative inline-flex items-center gap-3 overflow-hidden rounded-full bg-brand-cyan px-10 py-4.5 text-base font-semibold text-black transition-all duration-300 hover:brightness-110"
+              href="#features"
+              className="inline-flex w-[min(100%,20rem)] items-center justify-center rounded-full border border-white/[0.08] bg-white/[0.015] px-6 py-3 text-sm font-medium text-muted transition-colors duration-300 hover:border-white/[0.15] hover:text-foreground sm:w-auto"
             >
-              <div className="absolute inset-0 -translate-x-full bg-gradient-to-r from-transparent via-white/25 to-transparent transition-transform duration-700 group-hover:translate-x-full" />
-              <Download className="relative h-5 w-5 transition-transform duration-300 group-hover:-translate-y-0.5" />
-              <span className="relative">Download for Windows</span>
+              Explore capabilities first
             </a>
           </div>
         </motion.div>
 
         {/* Platform pills */}
-        <motion.div variants={fadeUp} className="mt-8 flex items-center justify-center gap-3">
+        <motion.div variants={fadeUp} className="mt-8 flex flex-wrap items-center justify-center gap-3">
           {platforms.map((p) => (
             <div
               key={p.label}
@@ -108,17 +132,17 @@ export default function DownloadCTA() {
         </motion.div>
 
         {/* Trust signals */}
-        <motion.div variants={fadeUp} className="mt-8 flex items-center justify-center gap-5 text-xs text-muted-dark">
+        <motion.div variants={fadeUp} className="mt-8 flex flex-wrap items-center justify-center gap-3 text-xs text-muted-dark sm:gap-5">
           <span className="flex items-center gap-1.5">
             <div className="h-1 w-1 rounded-full bg-brand-cyan/40" />
             Requires Claude CLI
           </span>
-          <span className="h-3 w-px bg-white/[0.06]" />
+          <span className="hidden h-3 w-px bg-white/[0.06] sm:inline-block" />
           <span className="flex items-center gap-1.5">
             <div className="h-1 w-1 rounded-full bg-brand-cyan/40" />
             12 MB installer
           </span>
-          <span className="h-3 w-px bg-white/[0.06]" />
+          <span className="hidden h-3 w-px bg-white/[0.06] sm:inline-block" />
           <span className="flex items-center gap-1.5">
             <div className="h-1 w-1 rounded-full bg-brand-cyan/40" />
             No telemetry

@@ -1,279 +1,206 @@
 "use client";
 
 import { motion } from "framer-motion";
-import SectionWrapper from "@/components/SectionWrapper";
+import Image from "next/image";
+import {
+  Mail, MessageSquare, Github, Calendar, CreditCard,
+  HardDrive, SquareKanban, Figma,
+} from "lucide-react";
 import GradientText from "@/components/GradientText";
 import { fadeUp } from "@/lib/animations";
 
-const agents = [
-  { label: "Email", x: 50, y: 12, color: "#60a5fa" },
-  { label: "Slack", x: 88, y: 40, color: "#a78bfa" },
-  { label: "GitHub", x: 73, y: 85, color: "#34d399" },
-  { label: "Review", x: 27, y: 85, color: "#fbbf24" },
-  { label: "Deploy", x: 12, y: 40, color: "#22d3ee" },
+const producers = [
+  { id: "gmail", name: "Gmail", icon: Mail, color: "#ea4335", x: 12 },
+  { id: "slack", name: "Slack", icon: MessageSquare, color: "#4a154b", x: 32 },
+  { id: "github", name: "GitHub", icon: Github, color: "#8b5cf6", x: 52 },
+  { id: "calendar", name: "Calendar", icon: Calendar, color: "#06b6d4", x: 72 },
 ];
 
-const paths = [
-  { from: 0, to: 1, d: "M 50 12 Q 75 20, 88 40" },
-  { from: 1, to: 2, d: "M 88 40 Q 88 68, 73 85" },
-  { from: 2, to: 3, d: "M 73 85 Q 50 94, 27 85" },
-  { from: 3, to: 4, d: "M 27 85 Q 12 68, 12 40" },
-  { from: 4, to: 0, d: "M 12 40 Q 22 20, 50 12" },
-  { from: 0, to: 3, d: "M 50 12 Q 32 48, 27 85" },
-  { from: 1, to: 4, d: "M 88 40 Q 50 45, 12 40" },
+const consumers = [
+  { id: "jira", name: "Jira", icon: SquareKanban, color: "#0052cc", x: 22 },
+  { id: "drive", name: "Drive", icon: HardDrive, color: "#34a853", x: 42 },
+  { id: "stripe", name: "Stripe", icon: CreditCard, color: "#635bff", x: 62 },
+  { id: "figma", name: "Figma", icon: Figma, color: "#f24e1e", x: 82 },
 ];
 
-const particleConfigs = [
-  { duration: 3.8, repeatDelay: 2.1 },
-  { duration: 4.3, repeatDelay: 1.7 },
-  { duration: 3.2, repeatDelay: 3.4 },
-  { duration: 4.7, repeatDelay: 1.3 },
-  { duration: 3.5, repeatDelay: 2.8 },
-  { duration: 4.1, repeatDelay: 1.9 },
-  { duration: 3.9, repeatDelay: 2.5 },
+const eventDots = [
+  { delay: 0, color: "#ea4335", duration: 3.5 },
+  { delay: 0.8, color: "#8b5cf6", duration: 4.0 },
+  { delay: 1.5, color: "#06b6d4", duration: 3.2 },
+  { delay: 2.3, color: "#4a154b", duration: 3.8 },
+  { delay: 3.0, color: "#34a853", duration: 4.2 },
+  { delay: 3.8, color: "#fbbf24", duration: 3.6 },
+  { delay: 4.5, color: "#635bff", duration: 3.4 },
+  { delay: 5.2, color: "#f24e1e", duration: 3.9 },
 ];
 
-function Particle({
-  path, delay, color, duration, repeatDelay,
+function ToolNode({
+  tool,
+  side,
+  index,
 }: {
-  path: string; delay: number; color: string; duration: number; repeatDelay: number;
+  tool: typeof producers[0];
+  side: "top" | "bottom";
+  index: number;
 }) {
+  const y = side === "top" ? 18 : 82;
+  const queueY = 50;
+  const connectorStart = side === "top" ? y + 8 : queueY + 3;
+  const connectorEnd = side === "top" ? queueY - 3 : y - 8;
+
   return (
-    <motion.circle
-      r="2.5"
-      fill={color}
-      filter="url(#glow)"
-      initial={{ offsetDistance: "0%" }}
-      animate={{ offsetDistance: "100%" }}
-      transition={{ duration, delay, repeat: Infinity, repeatDelay, ease: "linear" }}
-      style={{ offsetPath: `path("${path}")`, offsetRotate: "0deg" }}
-    />
+    <g>
+      <line
+        x1={tool.x} y1={connectorStart} x2={tool.x} y2={connectorEnd}
+        stroke="rgba(255,255,255,0.06)" strokeWidth="0.3" strokeDasharray="1.5 2"
+      />
+      {side === "top" ? (
+        <polygon points={`${tool.x - 1},${queueY - 4} ${tool.x},${queueY - 2} ${tool.x + 1},${queueY - 4}`} fill="rgba(255,255,255,0.12)" />
+      ) : (
+        <polygon points={`${tool.x - 1},${queueY + 4} ${tool.x},${queueY + 2} ${tool.x + 1},${queueY + 4}`} fill="rgba(255,255,255,0.12)" />
+      )}
+      <motion.circle
+        r="0.8" fill={tool.color} cx={tool.x}
+        initial={{ cy: connectorStart, opacity: 0 }}
+        animate={{ cy: [connectorStart, connectorEnd], opacity: [0, 0.9, 0.9, 0] }}
+        transition={{ duration: 2, delay: index * 0.6 + (side === "bottom" ? 0.3 : 0), repeat: Infinity, repeatDelay: 3, ease: "linear" }}
+      />
+      <circle cx={tool.x} cy={y} r="5" fill={`${tool.color}0a`} stroke={tool.color} strokeWidth="0.35" opacity="0.7" />
+      <circle cx={tool.x} cy={y} r="1.8" fill={tool.color} opacity="0.8" />
+      <circle cx={tool.x} cy={y} r="7" fill={tool.color} opacity="0.02" />
+      <text x={tool.x} y={side === "top" ? y - 8 : y + 10} textAnchor="middle" fill="rgba(255,255,255,0.55)" fontSize="2.4" fontFamily="var(--font-geist-mono)" letterSpacing="0.04em">
+        {tool.name}
+      </text>
+      <text x={tool.x} y={side === "top" ? y - 5 : y + 13} textAnchor="middle" fill="rgba(255,255,255,0.2)" fontSize="1.3" fontFamily="var(--font-geist-mono)" letterSpacing="0.08em">
+        {side === "top" ? "PRODUCER" : "CONSUMER"}
+      </text>
+    </g>
   );
 }
 
 export default function EventBusShowcase() {
   return (
-    <SectionWrapper className="overflow-hidden">
-      {/* Background decoration */}
-      <div className="pointer-events-none absolute inset-0 overflow-hidden">
-        <div
-          className="absolute left-1/2 top-1/2 h-[600px] w-[600px] -translate-x-1/2 -translate-y-1/2 rounded-full opacity-30"
-          style={{ background: "radial-gradient(circle, rgba(6,182,212,0.04) 0%, rgba(168,85,247,0.02) 40%, transparent 70%)" }}
+    <section className="relative overflow-hidden px-4 sm:px-6 py-24 md:py-32">
+      {/* Background illustration */}
+      <div className="absolute inset-0">
+        <Image
+          src="/imgs/illustration_photo.jpg"
+          alt="Personas agent roster"
+          fill
+          className="object-cover object-center"
+          sizes="100vw"
+          quality={80}
         />
+        <div className="absolute inset-0 bg-black/70" />
+        <div className="absolute inset-0 bg-gradient-to-b from-background via-transparent to-background" />
+        <div className="absolute inset-0 bg-gradient-to-r from-background/40 via-transparent to-background/40" />
       </div>
 
-      <motion.div variants={fadeUp} className="text-center relative">
-        <span className="inline-block rounded-full border border-brand-cyan/20 bg-brand-cyan/5 px-3.5 py-1 text-[11px] font-medium tracking-wider uppercase text-brand-cyan/70 font-mono mb-6">
-          Coordination
-        </span>
-        <h2 className="text-3xl font-bold tracking-tight md:text-5xl">
-          Agents that <GradientText>talk to each other</GradientText>
-        </h2>
-        <p className="mx-auto mt-4 max-w-2xl text-muted leading-relaxed">
-          The event bus enables real-time agent-to-agent coordination.
-          One agent&apos;s output triggers the next — automatically.
-        </p>
-        {/* Decorative line */}
-        <div className="mx-auto mt-6 h-px w-24 bg-gradient-to-r from-transparent via-brand-cyan/15 to-transparent" />
-      </motion.div>
+      <motion.div
+        initial="hidden"
+        whileInView="visible"
+        viewport={{ once: true, margin: "-80px" }}
+        className="relative z-10 mx-auto max-w-6xl"
+      >
+        <motion.div variants={fadeUp} className="relative">
+          <h2 className="text-4xl font-extrabold tracking-tight sm:text-5xl md:text-7xl lg:text-[5.5rem] leading-[1.05] text-center drop-shadow-md">
+            Agents that{" "}
+            <GradientText className="drop-shadow-lg">talk to each other</GradientText>
+          </h2>
+          <p className="mx-auto mt-8 max-w-3xl text-white/70 leading-relaxed text-center text-lg sm:text-xl font-light">
+            The event bus is a central queue. Producers emit events, consumers react.
+            One agent&apos;s output triggers the next — <span className="text-white font-medium">automatically.</span>
+          </p>
+        </motion.div>
 
-      <motion.div variants={fadeUp} className="relative mx-auto mt-16 max-w-xl">
-        {/* Central glow layers */}
-        <div className="pointer-events-none absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2">
-          <div className="h-64 w-64 rounded-full animate-pulse-slow" style={{ background: "radial-gradient(circle, rgba(6,182,212,0.08) 0%, transparent 70%)" }} />
-        </div>
-        <div className="pointer-events-none absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2">
-          <div className="h-40 w-40 rounded-full" style={{ background: "radial-gradient(circle, rgba(168,85,247,0.05) 0%, transparent 70%)" }} />
-        </div>
+        {/* Glass box wrapping the animation */}
+        <motion.div variants={fadeUp} className="relative mx-auto mt-16 max-w-3xl">
+          <div className="rounded-2xl border border-white/[0.08] bg-black/50 backdrop-blur-xl p-4 md:p-6 shadow-[0_0_80px_rgba(0,0,0,0.4)] animate-breathe-glow">
+            {/* Top bar — terminal chrome */}
+            <div className="flex items-center gap-2 mb-4 pb-3 border-b border-white/[0.04]">
+              <div className="flex gap-1.5">
+                <div className="h-2 w-2 rounded-full bg-brand-rose/40" />
+                <div className="h-2 w-2 rounded-full bg-brand-amber/40" />
+                <div className="h-2 w-2 rounded-full bg-brand-emerald/40" />
+              </div>
+              <span className="text-[10px] font-mono text-white/20 ml-2">event-bus — live</span>
+              <div className="ml-auto flex items-center gap-1.5">
+                <div className="h-1.5 w-1.5 rounded-full bg-brand-emerald shadow-[0_0_6px_rgba(52,211,153,0.5)] animate-glow-border" />
+                <span className="text-[10px] font-mono text-brand-emerald/50">connected</span>
+              </div>
+            </div>
 
-        {/* Orbital background ring */}
-        <div className="pointer-events-none absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2">
-          <div className="animate-spin-slow" style={{ width: 420, height: 420, animationDuration: "45s" }}>
-            <svg viewBox="0 0 420 420" className="h-full w-full">
-              <circle cx="210" cy="210" r="200" fill="none" stroke="rgba(6,182,212,0.02)" strokeWidth="0.5" strokeDasharray="3 10" />
-              <circle cx="210" cy="10" r="1.5" fill="rgba(6,182,212,0.1)" />
+            <svg viewBox="0 0 100 100" className="min-h-[260px] w-full sm:min-h-[360px]">
+              <defs>
+                <filter id="evGlow">
+                  <feGaussianBlur stdDeviation="1" result="blur" />
+                  <feMerge>
+                    <feMergeNode in="blur" />
+                    <feMergeNode in="SourceGraphic" />
+                  </feMerge>
+                </filter>
+                <linearGradient id="queueGrad" x1="0%" y1="0%" x2="100%" y2="0%">
+                  <stop offset="0%" stopColor="rgba(6,182,212,0.0)" />
+                  <stop offset="15%" stopColor="rgba(6,182,212,0.1)" />
+                  <stop offset="50%" stopColor="rgba(168,85,247,0.08)" />
+                  <stop offset="85%" stopColor="rgba(6,182,212,0.1)" />
+                  <stop offset="100%" stopColor="rgba(6,182,212,0.0)" />
+                </linearGradient>
+                <clipPath id="queueClip">
+                  <rect x="5" y="46" width="90" height="8" rx="4" />
+                </clipPath>
+              </defs>
+
+              <rect x="5" y="46" width="90" height="8" rx="4" fill="rgba(255,255,255,0.015)" stroke="rgba(255,255,255,0.08)" strokeWidth="0.3" />
+              <rect x="5" y="46" width="90" height="8" rx="4" fill="url(#queueGrad)" />
+              <text x="50" y="51" textAnchor="middle" dominantBaseline="middle" fill="rgba(6,182,212,0.25)" fontSize="2.2" fontFamily="var(--font-geist-mono)" letterSpacing="0.15em">EVENT QUEUE</text>
+              <line x1="8" y1="50" x2="92" y2="50" stroke="rgba(255,255,255,0.03)" strokeWidth="0.2" strokeDasharray="2 3" />
+              <polygon points="93,49 95.5,50 93,51" fill="rgba(6,182,212,0.2)" />
+
+              <g clipPath="url(#queueClip)">
+                {eventDots.map((dot, i) => (
+                  <motion.circle
+                    key={i} r="0.8" cy="50" fill={dot.color} filter="url(#evGlow)" opacity="0.85"
+                    initial={{ cx: 3 }} animate={{ cx: [3, 97] }}
+                    transition={{ duration: dot.duration, delay: dot.delay, repeat: Infinity, repeatDelay: 1.5, ease: "linear" }}
+                  />
+                ))}
+              </g>
+
+              {producers.map((tool, i) => (
+                <ToolNode key={tool.id} tool={tool} side="top" index={i} />
+              ))}
+              {consumers.map((tool, i) => (
+                <ToolNode key={tool.id} tool={tool} side="bottom" index={i} />
+              ))}
             </svg>
           </div>
-        </div>
 
-        <svg viewBox="0 0 100 100" className="h-full w-full" style={{ minHeight: 380 }}>
-          <defs>
-            <filter id="glow">
-              <feGaussianBlur stdDeviation="1.5" result="blur" />
-              <feMerge>
-                <feMergeNode in="blur" />
-                <feMergeNode in="SourceGraphic" />
-              </feMerge>
-            </filter>
-            <filter id="node-glow">
-              <feGaussianBlur stdDeviation="2.5" result="blur" />
-              <feMerge>
-                <feMergeNode in="blur" />
-                <feMergeNode in="blur" />
-                <feMergeNode in="SourceGraphic" />
-              </feMerge>
-            </filter>
-            {/* Radial gradient for path glow */}
-            <linearGradient id="pathGrad" x1="0%" y1="0%" x2="100%" y2="0%">
-              <stop offset="0%" stopColor="rgba(6,182,212,0.06)" />
-              <stop offset="50%" stopColor="rgba(168,85,247,0.04)" />
-              <stop offset="100%" stopColor="rgba(6,182,212,0.06)" />
-            </linearGradient>
-          </defs>
+          {/* Glow behind the glass box */}
+          <div className="pointer-events-none absolute -inset-6 -z-10 rounded-3xl bg-gradient-to-br from-brand-cyan/[0.04] via-transparent to-brand-purple/[0.04] blur-2xl" />
+        </motion.div>
 
-          {/* Connection lines — outer glow layer */}
-          {paths.map((p, i) => (
-            <path
-              key={`glow-${i}`}
-              d={p.d}
-              fill="none"
-              stroke="url(#pathGrad)"
-              strokeWidth="1.2"
-              opacity="0.3"
-            />
-          ))}
-
-          {/* Connection lines — crisp inner */}
-          {paths.map((p, i) => (
-            <path
-              key={i}
-              d={p.d}
-              fill="none"
-              stroke="rgba(255,255,255,0.04)"
-              strokeWidth="0.4"
-            />
-          ))}
-
-          {/* Animated particles */}
-          {paths.map((p, i) => (
-            <Particle
-              key={`p-${i}`}
-              path={p.d}
-              delay={i * 0.7}
-              color={agents[p.from].color}
-              duration={particleConfigs[i % particleConfigs.length].duration}
-              repeatDelay={particleConfigs[i % particleConfigs.length].repeatDelay}
-            />
-          ))}
-
-          {/* Agent nodes */}
-          {agents.map((agent) => (
-            <g key={agent.label}>
-              {/* Outer halo — large soft glow */}
-              <circle
-                cx={agent.x}
-                cy={agent.y}
-                r="8"
-                fill={agent.color}
-                opacity="0.025"
-                filter="url(#node-glow)"
-              />
-              {/* Pulsing ring */}
-              <circle
-                cx={agent.x}
-                cy={agent.y}
-                r="6.5"
-                fill="none"
-                stroke={agent.color}
-                strokeWidth="0.15"
-                opacity="0.15"
-              >
-                <animate attributeName="r" values="6.5;7.5;6.5" dur="3s" repeatCount="indefinite" />
-                <animate attributeName="opacity" values="0.15;0.06;0.15" dur="3s" repeatCount="indefinite" />
-              </circle>
-              {/* Outer ring */}
-              <circle
-                cx={agent.x}
-                cy={agent.y}
-                r="5.5"
-                fill="none"
-                stroke={agent.color}
-                strokeWidth="0.25"
-                opacity="0.25"
-              />
-              {/* Inner circle */}
-              <circle
-                cx={agent.x}
-                cy={agent.y}
-                r="3.5"
-                fill={`${agent.color}10`}
-                stroke={agent.color}
-                strokeWidth="0.4"
-                opacity="0.7"
-              />
-              {/* Bright center */}
-              <circle
-                cx={agent.x}
-                cy={agent.y}
-                r="1.2"
-                fill={agent.color}
-                opacity="0.9"
-              />
-              {/* Label background pill */}
-              <rect
-                x={agent.x - 8}
-                y={agent.y + 7}
-                width="16"
-                height="4.5"
-                rx="2"
-                fill="rgba(10,10,18,0.6)"
-                stroke={`${agent.color}`}
-                strokeWidth="0.15"
-                opacity="0.5"
-              />
-              {/* Label */}
-              <text
-                x={agent.x}
-                y={agent.y + 10}
-                textAnchor="middle"
-                fill="rgba(255,255,255,0.55)"
-                fontSize="2.4"
-                fontFamily="var(--font-geist-mono)"
-                letterSpacing="0.05em"
-              >
-                {agent.label}
-              </text>
-            </g>
-          ))}
-
-          {/* Center hex pattern */}
-          <polygon
-            points="50,42 55,45 55,51 50,54 45,51 45,45"
-            fill="none"
-            stroke="rgba(6,182,212,0.06)"
-            strokeWidth="0.2"
-          />
-
-          {/* Center label */}
-          <text
-            x="50"
-            y="47.5"
-            textAnchor="middle"
-            dominantBaseline="middle"
-            fill="rgba(6,182,212,0.25)"
-            fontSize="2.5"
-            fontFamily="var(--font-geist-mono)"
-            letterSpacing="0.12em"
-          >
-            EVENT BUS
-          </text>
-          <text
-            x="50"
-            y="51"
-            textAnchor="middle"
-            dominantBaseline="middle"
-            fill="rgba(6,182,212,0.12)"
-            fontSize="1.6"
-            fontFamily="var(--font-geist-mono)"
-            letterSpacing="0.08em"
-          >
-            real-time
-          </text>
-        </svg>
+        {/* Legend */}
+        <motion.div variants={fadeUp} className="mt-6 flex flex-wrap items-center justify-center gap-3 sm:gap-6 text-[11px] text-white/40">
+          <div className="flex items-center gap-2">
+            <div className="h-2 w-8 rounded-full bg-gradient-to-r from-brand-cyan/25 to-brand-purple/25 ring-1 ring-white/[0.08]" />
+            <span>Event queue</span>
+          </div>
+          <div className="flex items-center gap-2">
+            <div className="h-1.5 w-1.5 rounded-full bg-brand-cyan shadow-[0_0_4px_rgba(6,182,212,0.4)]" />
+            <span>Event in transit</span>
+          </div>
+          <div className="flex items-center gap-2">
+            <svg width="16" height="8" className="text-white/25">
+              <line x1="0" y1="4" x2="16" y2="4" stroke="currentColor" strokeWidth="0.5" strokeDasharray="2 2" />
+            </svg>
+            <span>Connection to bus</span>
+          </div>
+          <div className="rounded-full border border-white/[0.08] bg-white/[0.02] px-3 py-1.5 font-mono tracking-wide text-white/55">
+            Typical response cycle: &lt; 2s
+          </div>
+        </motion.div>
       </motion.div>
-
-      {/* Section divider */}
-      <div className="section-line mt-16 opacity-50" />
-    </SectionWrapper>
+    </section>
   );
 }
