@@ -28,16 +28,28 @@ const accentMap: Record<AccentColor, { border: string; glow: string; accent: str
   },
 };
 
+type TextureType = "none" | "dense-grid" | "stripes" | "dots" | "lines";
+
+const textureClass: Record<TextureType, string> = {
+  none: "",
+  "dense-grid": "",
+  stripes: "texture-stripes",
+  dots: "texture-dots",
+  lines: "texture-lines",
+};
+
 export default function GlowCard({
   accent = "cyan",
   children,
   className = "",
   highlighted = false,
+  texture = "none",
 }: {
   accent?: AccentColor;
   children: React.ReactNode;
   className?: string;
   highlighted?: boolean;
+  texture?: TextureType;
 }) {
   const colors = accentMap[accent];
 
@@ -51,16 +63,17 @@ export default function GlowCard({
         ${colors.border} ${colors.glow}
         transition-all duration-500
         ${highlighted ? "ring-1 ring-brand-purple/20 scale-[1.02]" : ""}
+        ${textureClass[texture]}
         ${className}
       `}
     >
-      {/* Subtle grid overlay */}
+      {/* Grid overlay — denser variant for dense-grid texture */}
       <div
-        className="pointer-events-none absolute inset-0 opacity-[0.015]"
+        className={`pointer-events-none absolute inset-0 ${texture === "dense-grid" ? "opacity-[0.025]" : "opacity-[0.015]"}`}
         style={{
           backgroundImage: `linear-gradient(rgba(255,255,255,0.06) 1px, transparent 1px),
                             linear-gradient(90deg, rgba(255,255,255,0.06) 1px, transparent 1px)`,
-          backgroundSize: "24px 24px",
+          backgroundSize: texture === "dense-grid" ? "12px 12px" : "24px 24px",
         }}
       />
       {/* Top shine line */}

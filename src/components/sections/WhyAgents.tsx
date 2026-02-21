@@ -23,6 +23,12 @@ const benefits = [
 ];
 
 export default function WhyAgents() {
+  const comparisonHighlights = [
+    "Deterministic flows break on edge cases",
+    "Agent systems adapt under uncertainty",
+    "One prompt can replace branch-heavy diagrams",
+  ];
+
   return (
     <SectionWrapper id="why-agents">
       {/* Section background accent orb */}
@@ -34,18 +40,24 @@ export default function WhyAgents() {
       </div>
 
       <motion.div variants={fadeUp} className="text-center relative">
-        <span className="inline-block rounded-full border border-brand-rose/20 bg-brand-rose/5 px-3.5 py-1 text-[11px] font-medium tracking-wider uppercase text-brand-rose/70 font-mono mb-6">
-          The Problem
-        </span>
-        <h2 className="text-3xl font-bold tracking-tight md:text-5xl">
-          Why agents, <GradientText>not workflows</GradientText>
+        <p className="text-xl italic text-muted-dark mb-8 font-light tracking-wide">What if your workflows could think?</p>
+        <h2 className="text-4xl font-extrabold tracking-tight sm:text-5xl md:text-7xl drop-shadow-md">
+          Why agents, <span className="font-black text-brand-rose drop-shadow-[0_0_15px_rgba(244,63,94,0.5)]">not</span> <GradientText className="drop-shadow-lg">workflows</GradientText>
         </h2>
-        <p className="mx-auto mt-4 max-w-2xl text-muted leading-relaxed">
+        <p className="mx-auto mt-8 max-w-3xl text-lg text-muted-dark leading-relaxed font-light">
           Traditional workflow engines execute deterministic A→B→C pipelines.
           Personas agents reason, adapt, and coordinate.
         </p>
-        {/* Decorative line under heading */}
-        <div className="mx-auto mt-6 h-px w-24 bg-gradient-to-r from-transparent via-brand-rose/15 to-transparent" />
+        <div className="mx-auto mt-10 flex max-w-4xl flex-wrap items-center justify-center gap-3">
+          {comparisonHighlights.map((item) => (
+            <span
+              key={item}
+              className="rounded-full border border-white/[0.1] bg-white/[0.03] px-4 py-2 text-xs font-mono tracking-wider text-muted backdrop-blur-sm transition-colors hover:bg-white/[0.08] hover:text-white shadow-[0_0_10px_rgba(255,255,255,0.02)]"
+            >
+              {item}
+            </span>
+          ))}
+        </div>
       </motion.div>
 
       <div className="mt-16 grid gap-6 md:grid-cols-2 md:gap-8 relative">
@@ -65,7 +77,7 @@ export default function WhyAgents() {
         <motion.div
           variants={slideInLeft}
           transition={{ duration: 0.6 }}
-          className="group rounded-2xl border border-white/[0.04] bg-gradient-to-br from-white/[0.015] to-transparent p-8 relative overflow-hidden transition-all duration-500 hover:border-white/[0.06]"
+          className="texture-stripes group rounded-2xl border border-white/[0.04] bg-gradient-to-br from-white/[0.015] to-transparent p-6 md:p-8 relative overflow-hidden transition-all duration-500 hover:border-white/[0.06]"
         >
           {/* Subtle red tint in corner */}
           <div className="pointer-events-none absolute -right-20 -top-20 h-40 w-40 rounded-full bg-brand-rose/[0.04] blur-3xl" />
@@ -92,6 +104,7 @@ export default function WhyAgents() {
             <div>
               <h3 className="text-lg font-semibold text-muted">Traditional Workflows</h3>
               <p className="text-xs text-muted-dark mt-0.5">Rigid, breakable, limited</p>
+              <p className="text-[10px] font-mono uppercase tracking-wider text-brand-rose/50 mt-1.5">Best for fixed linear tasks</p>
             </div>
           </div>
 
@@ -118,7 +131,7 @@ export default function WhyAgents() {
         <motion.div
           variants={slideInRight}
           transition={{ duration: 0.6 }}
-          className="group rounded-2xl border border-brand-cyan/10 bg-gradient-to-br from-brand-cyan/[0.03] to-transparent p-8 shadow-[0_0_80px_rgba(6,182,212,0.04)] relative overflow-hidden transition-all duration-500 hover:border-brand-cyan/15 hover:shadow-[0_0_100px_rgba(6,182,212,0.06)]"
+          className="texture-dots group rounded-2xl border border-brand-cyan/10 bg-gradient-to-br from-brand-cyan/[0.03] to-transparent p-6 md:p-8 shadow-[0_0_80px_rgba(6,182,212,0.04)] relative overflow-hidden transition-all duration-500 hover:border-brand-cyan/15 hover:shadow-[0_0_100px_rgba(6,182,212,0.06)]"
         >
           {/* Subtle cyan tint */}
           <div className="pointer-events-none absolute -left-20 -bottom-20 h-40 w-40 rounded-full bg-brand-cyan/[0.04] blur-3xl" />
@@ -147,6 +160,7 @@ export default function WhyAgents() {
             <div>
               <h3 className="text-lg font-semibold">Personas Agents</h3>
               <p className="text-xs text-muted-dark mt-0.5">Intelligent, adaptive, connected</p>
+              <p className="text-[10px] font-mono uppercase tracking-wider text-brand-cyan/50 mt-1.5">Best for evolving real-world workflows</p>
             </div>
           </div>
 
@@ -170,8 +184,6 @@ export default function WhyAgents() {
         </motion.div>
       </div>
 
-      {/* Section divider */}
-      <div className="section-line mt-20 opacity-50" />
     </SectionWrapper>
   );
 }

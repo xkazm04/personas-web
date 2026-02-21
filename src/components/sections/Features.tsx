@@ -17,6 +17,7 @@ const features = [
     iconGlow: "shadow-[0_0_12px_rgba(168,85,247,0.08)]",
     number: "01",
     title: "Design with natural language",
+    proof: "Prompt scaffolding",
     description:
       "Describe what you want your agent to do. The design engine analyzes feasibility, suggests tools, and generates the optimal prompt structure.",
     visual: (
@@ -65,6 +66,7 @@ const features = [
     iconGlow: "shadow-[0_0_12px_rgba(6,182,212,0.08)]",
     number: "02",
     title: "Agents that coordinate",
+    proof: "Event-driven chaining",
     description:
       "Built-in event bus lets agents trigger each other. Email agent → Slack agent → GitHub agent. Runs locally, no cloud required.",
     visual: (
@@ -101,6 +103,7 @@ const features = [
     iconGlow: "shadow-[0_0_12px_rgba(52,211,153,0.08)]",
     number: "03",
     title: "One-click cloud deployment",
+    proof: "Hybrid execution",
     description:
       "When you need 24/7 operation, deploy your agents to the cloud with one click. Bring your own infrastructure or use ours.",
     visual: (
@@ -138,6 +141,7 @@ const features = [
     iconGlow: "shadow-[0_0_12px_rgba(251,191,36,0.08)]",
     number: "04",
     title: "Full visibility",
+    proof: "Operational telemetry",
     description:
       "Real-time execution streaming, event audit trails, healing engine, and usage analytics. Know exactly what your agents are doing.",
     visual: (
@@ -181,49 +185,89 @@ export default function Features() {
         />
       </div>
 
-      <motion.div variants={fadeUp} className="text-center relative">
-        <span className="inline-block rounded-full border border-brand-cyan/20 bg-brand-cyan/5 px-3.5 py-1 text-[11px] font-medium tracking-wider uppercase text-brand-cyan/70 font-mono mb-6">
-          Platform
+      <motion.div variants={fadeUp} className="relative">
+        {/* Large ghost number */}
+        <span className="pointer-events-none absolute -top-6 -left-2 select-none font-mono font-bold text-[6rem] sm:text-[8rem] leading-none text-white/[0.03]">
+          01–04
         </span>
-        <h2 className="text-3xl font-bold tracking-tight md:text-5xl">
-          Everything you need to{" "}
-          <GradientText>build &amp; operate</GradientText>
-        </h2>
-        <p className="mx-auto mt-4 max-w-2xl text-muted leading-relaxed">
-          A complete platform for designing, testing, executing, and monitoring
-          AI agents — from your desktop.
-        </p>
-        {/* Decorative line */}
-        <div className="mx-auto mt-6 h-px w-24 bg-gradient-to-r from-transparent via-brand-cyan/15 to-transparent" />
+
+        <div className="relative">
+          <span className="inline-block rounded-full border border-brand-cyan/30 bg-brand-cyan/10 px-4 py-1.5 text-xs font-semibold tracking-widest uppercase text-brand-cyan shadow-[0_0_15px_rgba(6,182,212,0.2)] font-mono mb-6">
+            Platform
+          </span>
+          <h2 className="text-3xl font-extrabold tracking-tight sm:text-4xl md:text-6xl drop-shadow-md">
+            Everything you need to{" "}
+            <GradientText className="drop-shadow-lg">build &amp; operate</GradientText>
+          </h2>
+          <p className="mt-6 max-w-2xl text-lg text-muted-dark leading-relaxed font-light">
+            A complete platform for designing, testing, executing, and monitoring
+            AI agents — from your desktop.
+          </p>
+        </div>
       </motion.div>
 
-      <motion.div
-        variants={staggerContainer}
-        className="mt-16 grid gap-6 md:grid-cols-2"
-      >
-        {features.map((f) => (
-          <GlowCard key={f.title} accent={f.accent} className="p-8">
-            <div className="flex items-center justify-between">
-              <div className="flex items-center gap-3">
-                <div
-                  className={`flex h-11 w-11 items-center justify-center rounded-xl ring-1 ${f.iconBg} ${f.iconRing} ${f.iconGlow}`}
-                >
-                  <f.icon className={`h-5 w-5 ${f.iconColor}`} />
+      <motion.div variants={staggerContainer} className="mt-16 space-y-6">
+        {/* Hero card — full width, horizontal layout with animated conic border */}
+        {(() => {
+          const f = features[0];
+          return (
+            <div className="animated-conic-border p-[1px] rounded-2xl">
+              <GlowCard accent={f.accent} texture="dense-grid" className="p-6 md:p-8 rounded-2xl">
+                <div className="grid md:grid-cols-2 gap-6 md:gap-10 items-center">
+                  {/* Text side */}
+                  <div>
+                    <div className="flex items-start justify-between gap-3">
+                      <div className="flex items-center gap-3">
+                        <div
+                          className={`flex h-11 w-11 items-center justify-center rounded-xl ring-1 ${f.iconBg} ${f.iconRing} ${f.iconGlow}`}
+                        >
+                          <f.icon className={`h-5 w-5 ${f.iconColor}`} />
+                        </div>
+                        <div className="min-w-0">
+                          <h3 className="font-semibold text-[15px] leading-tight">{f.title}</h3>
+                          <p className="mt-1 text-[10px] font-mono uppercase tracking-wider text-muted-dark/70">{f.proof}</p>
+                        </div>
+                      </div>
+                      <span className="shrink-0 font-mono text-xs text-muted-dark/50 tabular-nums">{f.number}</span>
+                    </div>
+                    <p className="mt-4 text-sm leading-relaxed text-muted">
+                      {f.description}
+                    </p>
+                  </div>
+                  {/* Visual side */}
+                  <div>{f.visual}</div>
                 </div>
-                <h3 className="font-semibold text-[15px]">{f.title}</h3>
-              </div>
-              <span className="font-mono text-xs text-muted-dark/50 tabular-nums">{f.number}</span>
+              </GlowCard>
             </div>
-            <p className="mt-4 text-sm leading-relaxed text-muted">
-              {f.description}
-            </p>
-            {f.visual}
-          </GlowCard>
-        ))}
-      </motion.div>
+          );
+        })()}
 
-      {/* Section divider */}
-      <div className="section-line mt-20 opacity-50" />
+        {/* Remaining 3 features — 3-column grid */}
+        <div className="grid gap-6 md:grid-cols-3">
+          {features.slice(1).map((f) => (
+            <GlowCard key={f.title} accent={f.accent} className="p-6 md:p-8">
+              <div className="flex items-start justify-between gap-3">
+                <div className="flex items-center gap-3">
+                  <div
+                    className={`flex h-11 w-11 items-center justify-center rounded-xl ring-1 ${f.iconBg} ${f.iconRing} ${f.iconGlow}`}
+                  >
+                    <f.icon className={`h-5 w-5 ${f.iconColor}`} />
+                  </div>
+                  <div className="min-w-0">
+                    <h3 className="font-semibold text-[15px] leading-tight">{f.title}</h3>
+                    <p className="mt-1 text-[10px] font-mono uppercase tracking-wider text-muted-dark/70">{f.proof}</p>
+                  </div>
+                </div>
+                <span className="shrink-0 font-mono text-xs text-muted-dark/50 tabular-nums">{f.number}</span>
+              </div>
+              <p className="mt-4 text-sm leading-relaxed text-muted">
+                {f.description}
+              </p>
+              {f.visual}
+            </GlowCard>
+          ))}
+        </div>
+      </motion.div>
     </SectionWrapper>
   );
 }

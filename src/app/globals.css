@@ -213,3 +213,154 @@ html {
 .animate-bar-grow { animation: bar-grow 0.8s ease-out forwards; transform-origin: bottom; }
 .animate-spin-slow { animation: spin-slow 30s linear infinite; }
 .animate-border-flow { animation: border-flow 4s linear infinite; background-size: 200% 100%; }
+
+/* ── Micro-Texture Surfaces (Direction 8) ─────────── */
+
+.texture-stripes {
+  position: relative;
+}
+.texture-stripes::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  opacity: 0.018;
+  background: repeating-linear-gradient(
+    -45deg,
+    transparent,
+    transparent 8px,
+    rgba(255,255,255,0.08) 8px,
+    rgba(255,255,255,0.08) 9px
+  );
+  z-index: 1;
+  border-radius: inherit;
+}
+
+.texture-dots {
+  position: relative;
+}
+.texture-dots::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  opacity: 0.025;
+  background-image: radial-gradient(circle, rgba(255,255,255,0.15) 1px, transparent 1px);
+  background-size: 16px 16px;
+  z-index: 1;
+  border-radius: inherit;
+}
+
+.texture-lines {
+  position: relative;
+}
+.texture-lines::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  opacity: 0.015;
+  background: repeating-linear-gradient(
+    0deg,
+    transparent,
+    transparent 23px,
+    rgba(255,255,255,0.06) 23px,
+    rgba(255,255,255,0.06) 24px
+  );
+  z-index: 1;
+  border-radius: inherit;
+}
+
+/* ── Animated Borders (Direction 9) ───────────────── */
+
+@property --conic-angle {
+  syntax: "<angle>";
+  initial-value: 0deg;
+  inherits: false;
+}
+
+@keyframes conic-rotate {
+  to { --conic-angle: 360deg; }
+}
+
+.animated-conic-border {
+  background: conic-gradient(
+    from var(--conic-angle),
+    rgba(6,182,212,0.5),
+    rgba(168,85,247,0.5),
+    rgba(52,211,153,0.3),
+    rgba(6,182,212,0.5)
+  );
+  animation: conic-rotate 4s linear infinite;
+  border-radius: 16px;
+}
+
+@keyframes breathe-glow {
+  0%, 100% { box-shadow: 0 0 20px rgba(6,182,212,0.05), inset 0 0 20px rgba(6,182,212,0.02); }
+  50% { box-shadow: 0 0 50px rgba(6,182,212,0.12), inset 0 0 30px rgba(6,182,212,0.04); }
+}
+.animate-breathe-glow {
+  animation: breathe-glow 4s ease-in-out infinite;
+}
+
+@keyframes dash-flow {
+  to { stroke-dashoffset: -32; }
+}
+
+.shimmer-surface::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    110deg,
+    transparent 25%,
+    rgba(168,85,247,0.04) 50%,
+    transparent 75%
+  );
+  background-size: 200% 100%;
+  animation: shimmer 5s ease-in-out infinite;
+  pointer-events: none;
+  z-index: 1;
+  border-radius: inherit;
+}
+
+/* ── Topographic Background (Direction 2) ─────────── */
+
+@keyframes topo-drift {
+  0% { transform: translate(0, 0) scale(1); }
+  33% { transform: translate(-20px, -15px) scale(1.02); }
+  66% { transform: translate(15px, -10px) scale(0.98); }
+  100% { transform: translate(0, 0) scale(1); }
+}
+
+.topo-bg {
+  animation: topo-drift 80s ease-in-out infinite;
+}
+
+/* ── Cinematic Section (Direction 10) ─────────────── */
+
+.cinematic-gradient {
+  background: linear-gradient(
+    135deg,
+    rgba(6,182,212,0.06) 0%,
+    rgba(168,85,247,0.04) 33%,
+    rgba(52,211,153,0.03) 66%,
+    rgba(6,182,212,0.05) 100%
+  );
+  background-size: 300% 300%;
+  animation: gradient-sweep 16s ease infinite;
+}
+
+/* ── Existing Utilities ───────────────────────────── */
+
+/* Focus visible ring for accessibility */
+*:focus-visible {
+  outline: 2px solid rgba(6, 182, 212, 0.4);
+  outline-offset: 2px;
+  border-radius: 4px;
+}
+
+/* Smooth image loading */
+img {
+  transition: opacity 0.3s ease;
+}
