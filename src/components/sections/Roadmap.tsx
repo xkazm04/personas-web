@@ -408,11 +408,29 @@ export default function Roadmap() {
           <span className="font-medium tracking-wide">11 of 15 phases complete</span>
           <span className="text-brand-cyan font-bold text-sm drop-shadow-[0_0_8px_rgba(6,182,212,0.8)]">73%</span>
         </div>
-        <div className="h-2.5 rounded-full bg-white/[0.06] overflow-hidden shadow-inner">
+        <div className="relative h-2.5 rounded-full bg-white/[0.06] shadow-inner">
           <motion.div
-            className="h-full rounded-full bg-gradient-to-r from-brand-cyan via-blue-400 to-brand-purple shadow-[0_0_15px_rgba(168,85,247,0.5)]"
+            className="relative h-full rounded-full bg-gradient-to-r from-brand-cyan via-blue-400 to-brand-purple shadow-[0_0_15px_rgba(168,85,247,0.5)] overflow-hidden"
             initial={{ width: 0 }}
             whileInView={{ width: "73%" }}
+            viewport={{ once: true }}
+            transition={{ duration: 1.2, ease: "easeOut", delay: 0.4 }}
+          >
+            {/* Shimmer pulse at leading edge */}
+            <div
+              className="absolute inset-0 animate-progress-shimmer"
+              style={{
+                background: "linear-gradient(90deg, transparent 70%, rgba(255,255,255,0.15) 90%, transparent 100%)",
+                backgroundSize: "200% 100%",
+              }}
+            />
+          </motion.div>
+          {/* Glowing dot at the leading edge */}
+          <motion.div
+            className="absolute top-1/2 -translate-y-1/2 -translate-x-1/2 h-1 w-1 rounded-full bg-brand-cyan animate-progress-dot-breathe"
+            style={{ boxShadow: "0 0 6px rgba(6,182,212,0.8), 0 0 12px rgba(6,182,212,0.4)" }}
+            initial={{ left: "0%" }}
+            whileInView={{ left: "73%" }}
             viewport={{ once: true }}
             transition={{ duration: 1.2, ease: "easeOut", delay: 0.4 }}
           />

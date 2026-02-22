@@ -1,19 +1,25 @@
 "use client";
 
+import { useState } from "react";
 import { motion } from "framer-motion";
 import { Download, Monitor, Apple, Terminal } from "lucide-react";
 import { fadeUp } from "@/lib/animations";
 import GradientText from "@/components/GradientText";
+import PrimaryCTA from "@/components/PrimaryCTA";
+import SectionWrapper from "@/components/SectionWrapper";
+import WaitlistModal from "@/components/WaitlistModal";
 
 const platforms = [
   { icon: Monitor, label: "Windows", available: true },
   { icon: Apple, label: "macOS", available: false },
   { icon: Terminal, label: "Linux", available: false },
-];
+] as const;
 
 export default function DownloadCTA() {
+  const [waitlistPlatform, setWaitlistPlatform] = useState<(typeof platforms)[number] | null>(null);
+
   return (
-    <section id="download" className="noise relative px-4 sm:px-6 py-28 md:py-44">
+    <SectionWrapper id="download" dotGrid className="noise py-28 md:py-44">
       {/* Background orbs */}
       <div className="pointer-events-none absolute inset-0 flex items-center justify-center">
         <div
@@ -47,15 +53,7 @@ export default function DownloadCTA() {
       {/* Top section line */}
       <div className="pointer-events-none absolute inset-x-0 top-0 section-line" />
 
-      {/* Dot grid background */}
-      <div className="dot-grid pointer-events-none absolute inset-0 opacity-40" />
-
-      <motion.div
-        initial="hidden"
-        whileInView="visible"
-        viewport={{ once: true, margin: "-100px" }}
-        className="relative z-10 mx-auto max-w-2xl text-center"
-      >
+      <div className="mx-auto max-w-2xl text-center">
         <motion.div variants={fadeUp}>
           <span className="inline-block rounded-full border border-brand-cyan/20 bg-brand-cyan/5 px-3.5 py-1 text-[11px] font-medium tracking-wider uppercase text-brand-cyan/70 font-mono mb-6">
             v0.12 — Cloud Integration
@@ -91,16 +89,7 @@ export default function DownloadCTA() {
         {/* Main CTA */}
         <motion.div variants={fadeUp} className="mt-10">
           <div className="flex flex-col items-center justify-center gap-3 sm:flex-row">
-            <div className="relative inline-block rounded-full p-px bg-gradient-to-r from-brand-cyan via-blue-400 to-brand-purple animate-border-flow">
-              <a
-                href="#"
-                className="group relative inline-flex w-[min(100%,20rem)] items-center justify-center gap-3 overflow-hidden rounded-full bg-brand-cyan px-8 py-4 text-sm font-semibold text-black transition-all duration-300 hover:brightness-110 sm:w-auto sm:px-10 sm:py-4.5 sm:text-base"
-              >
-                <div className="absolute inset-0 -translate-x-full bg-gradient-to-r from-transparent via-white/25 to-transparent transition-transform duration-700 group-hover:translate-x-full" />
-                <Download className="relative h-5 w-5 transition-transform duration-300 group-hover:-translate-y-0.5" />
-                <span className="relative">Download for Windows</span>
-              </a>
-            </div>
+            <PrimaryCTA href="#" icon={Download} label="Download for Windows" variant="solid" />
             <a
               href="#features"
               className="inline-flex w-[min(100%,20rem)] items-center justify-center rounded-full border border-white/[0.08] bg-white/[0.015] px-6 py-3 text-sm font-medium text-muted transition-colors duration-300 hover:border-white/[0.15] hover:text-foreground sm:w-auto"
@@ -112,23 +101,28 @@ export default function DownloadCTA() {
 
         {/* Platform pills */}
         <motion.div variants={fadeUp} className="mt-8 flex flex-wrap items-center justify-center gap-3">
-          {platforms.map((p) => (
-            <div
-              key={p.label}
-              className={`flex items-center gap-2 rounded-full border px-4 py-2 text-xs font-medium transition-all duration-300 ${
-                p.available
-                  ? "border-brand-cyan/20 bg-brand-cyan/5 text-brand-cyan shadow-[0_0_15px_rgba(6,182,212,0.06)]"
-                  : "border-white/[0.04] bg-white/[0.01] text-muted-dark hover:border-white/[0.06]"
-              }`}
-            >
-              <p.icon className="h-3.5 w-3.5" />
-              {p.label}
-              {p.available && (
+          {platforms.map((p) =>
+            p.available ? (
+              <div
+                key={p.label}
+                className="flex items-center gap-2 rounded-full border border-brand-cyan/20 bg-brand-cyan/5 px-4 py-2 text-xs font-medium text-brand-cyan shadow-[0_0_15px_rgba(6,182,212,0.06)] transition-all duration-300"
+              >
+                <p.icon className="h-3.5 w-3.5" />
+                {p.label}
                 <div className="h-1.5 w-1.5 rounded-full bg-brand-cyan shadow-[0_0_4px_rgba(6,182,212,0.5)]" />
-              )}
-              {!p.available && <span className="text-[10px] text-muted-dark/60">soon</span>}
-            </div>
-          ))}
+              </div>
+            ) : (
+              <button
+                key={p.label}
+                onClick={() => setWaitlistPlatform(p)}
+                className="flex cursor-pointer items-center gap-2 rounded-full border border-white/[0.04] bg-white/[0.01] px-4 py-2 text-xs font-medium text-muted-dark transition-all duration-300 hover:border-brand-purple/20 hover:bg-brand-purple/5 hover:text-brand-purple/80"
+              >
+                <p.icon className="h-3.5 w-3.5" />
+                {p.label}
+                <span className="text-[10px]">notify me</span>
+              </button>
+            )
+          )}
         </motion.div>
 
         {/* Trust signals */}
@@ -148,7 +142,17 @@ export default function DownloadCTA() {
             No telemetry
           </span>
         </motion.div>
-      </motion.div>
-    </section>
+      </div>
+
+      {/* Waitlist modal */}
+      {waitlistPlatform && (
+        <WaitlistModal
+          platform={waitlistPlatform.label}
+          platformIcon={waitlistPlatform.icon}
+          open={!!waitlistPlatform}
+          onClose={() => setWaitlistPlatform(null)}
+        />
+      )}
+    </SectionWrapper>
   );
 }

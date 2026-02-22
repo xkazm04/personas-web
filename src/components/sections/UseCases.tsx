@@ -70,8 +70,16 @@ export default function UseCases() {
   const [selected, setSelected] = useState<string>(tools[0].id);
   const [autoplay, setAutoplay] = useState(true);
   const [progress, setProgress] = useState(0);
+  const [isMobile, setIsMobile] = useState(false);
+  const [connectorPath, setConnectorPath] = useState<string>("");
+  const [connectorVisible, setConnectorVisible] = useState(false);
   const userClickedRef = useRef(false);
   const progressRef = useRef(0);
+  const containerRef = useRef<HTMLDivElement | null>(null);
+  const detailCardRef = useRef<HTMLDivElement | null>(null);
+  const desktopButtonRefs = useRef<Record<string, HTMLButtonElement | null>>({});
+  const mobileButtonRefs = useRef<Record<string, HTMLButtonElement | null>>({});
+  const selectionCycleRef = useRef(0);
   const activeTool = tools.find((t) => t.id === selected);
   const totalAutomations = tools.reduce((sum, tool) => sum + tool.useCases.length, 0);
 
@@ -84,16 +92,91 @@ export default function UseCases() {
     progressRef.current = 0;
   }, []);
 
+  const rafStartRef = useRef<number | null>(null);
+
   useEffect(() => {
     if (!autoplay) return;
-    const tick = 50;
-    const interval = setInterval(() => {
-      progressRef.current += tick;
-      setProgress(progressRef.current / AUTOPLAY_INTERVAL);
-      if (progressRef.current >= AUTOPLAY_INTERVAL) advanceToNext();
-    }, tick);
-    return () => clearInterval(interval);
+    rafStartRef.current = null;
+    let rafId: number;
+
+    const frame = (timestamp: number) => {
+      if (rafStartRef.current === null) rafStartRef.current = timestamp;
+      const elapsed = timestamp - rafStartRef.current;
+      const pct = Math.min(elapsed / AUTOPLAY_INTERVAL, 1);
+
+      // Only update state when progress changes by ≥1% to reduce re-renders
+      if (Math.abs(pct - progressRef.current) >= 0.01 || pct >= 1) {
+        progressRef.current = pct;
+        setProgress(pct);
+      }
+
+      if (pct >= 1) {
+        advanceToNext();
+      } else {
+        rafId = requestAnimationFrame(frame);
+      }
+    };
+
+    rafId = requestAnimationFrame(frame);
+    return () => cancelAnimationFrame(rafId);
   }, [autoplay, selected, advanceToNext]);
+
+  useEffect(() => {
+    const media = window.matchMedia("(max-width: 767px)");
+    const apply = () => setIsMobile(media.matches);
+    apply();
+    media.addEventListener("change", apply);
+    return () => media.removeEventListener("change", apply);
+  }, []);
+
+  useEffect(() => {
+    const updatePath = () => {
+      const container = containerRef.current;
+      const detail = detailCardRef.current;
+      if (!container || !detail) return;
+
+      const sourceButton = isMobile
+        ? mobileButtonRefs.current[selected]
+        : desktopButtonRefs.current[selected];
+
+      if (!sourceButton || sourceButton.offsetParent === null) {
+        setConnectorPath("");
+        return;
+      }
+
+      const containerRect = container.getBoundingClientRect();
+      const sourceRect = sourceButton.getBoundingClientRect();
+      const detailRect = detail.getBoundingClientRect();
+
+      const sx = sourceRect.left + sourceRect.width / 2 - containerRect.left;
+      const sy = sourceRect.top + sourceRect.height / 2 - containerRect.top;
+      const tx = detailRect.left + detailRect.width / 2 - containerRect.left;
+      const ty = detailRect.top - containerRect.top + 8;
+      const cpY = sy + (ty - sy) * 0.55;
+
+      setConnectorPath(`M ${sx} ${sy} C ${sx} ${cpY}, ${tx} ${cpY}, ${tx} ${ty}`);
+    };
+
+    selectionCycleRef.current += 1;
+    const currentCycle = selectionCycleRef.current;
+    setConnectorVisible(false);
+
+    const timer = window.setTimeout(() => {
+      if (selectionCycleRef.current !== currentCycle) return;
+      updatePath();
+      setConnectorVisible(true);
+    }, 200);
+
+    const onResize = () => {
+      updatePath();
+    };
+
+    window.addEventListener("resize", onResize);
+    return () => {
+      window.clearTimeout(timer);
+      window.removeEventListener("resize", onResize);
+    };
+  }, [selected, isMobile]);
 
   const handleManualClick = (toolId: string) => {
     if (!userClickedRef.current) { userClickedRef.current = true; setAutoplay(false); }
@@ -105,7 +188,7 @@ export default function UseCases() {
   return (
     <SectionWrapper id="use-cases">
       <div className="pointer-events-none absolute inset-0 overflow-hidden">
-        <div className="absolute left-1/2 top-1/3 h-[500px] w-[800px] -translate-x-1/2 rounded-full opacity-30" style={{ background: "radial-gradient(ellipse, rgba(6,182,212,0.04) 0%, transparent 60%)" }} />
+        <div className="absolute left-1/2 top-1/3 h-125 w-200 -translate-x-1/2 rounded-full opacity-30" style={{ background: "radial-gradient(ellipse, rgba(6,182,212,0.04) 0%, transparent 60%)" }} />
       </div>
 
       <motion.div variants={fadeUp} className="relative">
@@ -124,19 +207,37 @@ export default function UseCases() {
         </div>
       </motion.div>
 
-      <div className="mt-16 relative">
-        <motion.div variants={fadeUp} className="relative mx-auto h-[280px] sm:h-[320px]" style={{ maxWidth: 720 }}>
+      <div ref={containerRef} className="mt-16 relative">
+        <svg className="pointer-events-none absolute inset-0 z-5 h-full w-full overflow-visible">
+          <motion.path
+            d={connectorPath}
+            initial={false}
+            animate={{ opacity: connectorVisible && connectorPath ? 1 : 0 }}
+            transition={{ duration: 0.2 }}
+            fill="none"
+            stroke="rgba(6,182,212,0.15)"
+            strokeWidth="2"
+            strokeDasharray="6 6"
+            style={{ animation: "dash-flow 1.4s linear infinite" }}
+          />
+        </svg>
+
+        {/* ── Desktop: scattered layout (md+) ── */}
+        <motion.div variants={fadeUp} className="relative mx-auto hidden md:block h-80" style={{ maxWidth: 720 }}>
           {tools.map((tool, i) => {
             const pos = positions[i];
             const isActive = selected === tool.id;
             return (
               <motion.button
                 key={tool.id}
+                ref={(node) => {
+                  desktopButtonRefs.current[tool.id] = node;
+                }}
                 onClick={() => handleManualClick(tool.id)}
-                className={`absolute flex flex-col items-center gap-2 rounded-2xl border px-4 py-3 backdrop-blur-sm transition-all duration-500 cursor-pointer ${
+                className={`absolute relative flex flex-col items-center gap-2 overflow-hidden rounded-2xl border px-4 py-3 backdrop-blur-sm transition-all duration-500 cursor-pointer ${
                   isActive
                     ? "border-brand-cyan/30 bg-brand-cyan/8 shadow-[0_0_40px_rgba(6,182,212,0.10)] scale-110 z-10"
-                    : "border-white/[0.05] bg-white/[0.015] hover:border-white/[0.10] hover:bg-white/[0.03]"
+                    : "border-white/5 bg-white/1.5 hover:border-white/10 hover:bg-white/3"
                 }`}
                 style={{ left: `${pos.x}%`, top: `${pos.y}%` }}
                 whileHover={{ scale: isActive ? 1.1 : 1.06 }}
@@ -147,9 +248,12 @@ export default function UseCases() {
                 transition={{ delay: i * 0.06, duration: 0.4 }}
               >
                 {isActive && autoplay && (
-                  <svg className="pointer-events-none absolute -inset-[3px] z-20" viewBox="0 0 100 100">
-                    <rect x="1" y="1" width="98" height="98" rx="16" fill="none" stroke="rgba(6,182,212,0.3)" strokeWidth="1.5" strokeDasharray={`${progress * 388} 388`} strokeLinecap="round" className="transition-none" />
-                  </svg>
+                  <div className="pointer-events-none absolute inset-x-0 bottom-0 z-20 h-1 bg-white/6">
+                    <div
+                      className="h-full bg-linear-to-r from-brand-cyan to-brand-purple transition-none"
+                      style={{ width: `${progress * 100}%` }}
+                    />
+                  </div>
                 )}
                 <div className={`flex h-10 w-10 items-center justify-center rounded-xl transition-shadow duration-500 ${isActive ? "shadow-[0_0_20px_rgba(6,182,212,0.15)]" : ""}`} style={{ backgroundColor: `${tool.color}15` }}>
                   <tool.icon className="h-5 w-5 transition-transform duration-300" style={{ color: tool.color === "#e6e6e6" ? "#999" : tool.color, transform: isActive ? "scale(1.1)" : undefined }} />
@@ -160,6 +264,54 @@ export default function UseCases() {
           })}
         </motion.div>
 
+        {/* ── Mobile: horizontally-scrollable strip (<md) ── */}
+        <motion.div
+          variants={fadeUp}
+          className="md:hidden"
+          style={{
+            maskImage: "linear-gradient(to right, black 85%, transparent)",
+            WebkitMaskImage: "linear-gradient(to right, black 85%, transparent)",
+          }}
+        >
+          <div className="flex gap-3 overflow-x-auto snap-x snap-mandatory pb-4 scrollbar-hide">
+            {tools.map((tool, i) => {
+              const isActive = selected === tool.id;
+              return (
+                <motion.button
+                  key={tool.id}
+                  ref={(node) => {
+                    mobileButtonRefs.current[tool.id] = node;
+                  }}
+                  onClick={() => handleManualClick(tool.id)}
+                  className={`relative flex shrink-0 snap-start flex-col items-center gap-2 overflow-hidden rounded-2xl border px-4 py-3 backdrop-blur-sm transition-all duration-500 cursor-pointer ${
+                    isActive
+                      ? "border-brand-cyan/30 bg-brand-cyan/8 shadow-[0_0_40px_rgba(6,182,212,0.10)]"
+                        : "border-white/5 bg-white/1.5"
+                  }`}
+                  whileTap={{ scale: 0.95 }}
+                  initial={{ opacity: 0, y: 20 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  viewport={{ once: true }}
+                  transition={{ delay: i * 0.04, duration: 0.3 }}
+                >
+                  {isActive && autoplay && (
+                    <div className="pointer-events-none absolute inset-x-0 bottom-0 z-20 h-1 bg-white/6">
+                      <div
+                        className="h-full bg-linear-to-r from-brand-cyan to-brand-purple transition-none"
+                        style={{ width: `${progress * 100}%` }}
+                      />
+                    </div>
+                  )}
+                  <div className={`flex h-10 w-10 items-center justify-center rounded-xl transition-shadow duration-500 ${isActive ? "shadow-[0_0_20px_rgba(6,182,212,0.15)]" : ""}`} style={{ backgroundColor: `${tool.color}15` }}>
+                    <tool.icon className="h-5 w-5" style={{ color: tool.color === "#e6e6e6" ? "#999" : tool.color }} />
+                  </div>
+                  <span className={`text-xs font-medium whitespace-nowrap transition-colors duration-300 ${isActive ? "text-foreground" : "text-muted-dark"}`}>{tool.name}</span>
+                </motion.button>
+              );
+            })}
+          </div>
+        </motion.div>
+
         <AnimatePresence mode="wait">
           {activeTool && (
             <motion.div
@@ -167,10 +319,11 @@ export default function UseCases() {
               initial={{ opacity: 0, y: 16 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -8 }}
               transition={{ duration: 0.3, ease: "easeOut" }}
               className="mx-auto mt-8 max-w-3xl"
+              ref={detailCardRef}
             >
-              <div className="relative rounded-2xl border border-white/[0.05] bg-gradient-to-br from-white/[0.025] to-transparent p-5 sm:p-8 backdrop-blur-md overflow-hidden">
+              <div className="relative rounded-2xl border border-white/5 bg-linear-to-br from-white/2.5 to-transparent p-5 sm:p-8 backdrop-blur-md overflow-hidden">
                 <div className="pointer-events-none absolute -right-16 -top-16 h-32 w-32 rounded-full blur-3xl" style={{ backgroundColor: `${activeTool.color}08` }} />
-                <div className="pointer-events-none absolute inset-x-0 bottom-0 h-px bg-gradient-to-r from-transparent via-brand-cyan/10 to-transparent" />
+                <div className="pointer-events-none absolute inset-x-0 bottom-0 h-px bg-linear-to-r from-transparent via-brand-cyan/10 to-transparent" />
 
                 <div className="relative mb-6 flex flex-wrap items-center gap-3">
                   <div className="flex h-12 w-12 items-center justify-center rounded-xl shadow-lg" style={{ backgroundColor: `${activeTool.color}12`, boxShadow: `0 4px 20px ${activeTool.color}10` }}>
@@ -180,9 +333,6 @@ export default function UseCases() {
                     <h3 className="font-semibold text-lg">{activeTool.name} Agents</h3>
                     <p className="text-xs text-muted-dark">What Personas can automate</p>
                   </div>
-                  <div className="w-full rounded-full border border-white/[0.06] bg-white/[0.02] px-3 py-1 text-[10px] font-mono tracking-wider text-muted-dark uppercase sm:ml-auto sm:w-auto">
-                    {activeTool.useCases.length} ready patterns
-                  </div>
                 </div>
 
                 <div className="grid gap-4 md:grid-cols-3 items-start">
@@ -191,7 +341,7 @@ export default function UseCases() {
                       key={uc.title}
                       initial={{ opacity: 0, y: 12 }} animate={{ opacity: 1, y: 0 }}
                       transition={{ delay: i * 0.08, duration: 0.3 }}
-                      className={`group rounded-xl border border-white/[0.04] bg-white/[0.015] p-4 transition-all duration-300 hover:border-white/[0.08] hover:bg-white/[0.025] ${i === 1 ? "md:-mt-2" : i === 2 ? "md:mt-4" : ""}`}
+                      className={`group rounded-xl border border-white/4 bg-white/1.5 p-4 transition-all duration-300 hover:border-white/8 hover:bg-white/2.5 ${i === 1 ? "md:-mt-2" : i === 2 ? "md:mt-4" : ""}`}
                     >
                       <div className="flex items-center gap-2 mb-2">
                         <div className="h-1.5 w-1.5 rounded-full bg-brand-cyan shadow-[0_0_4px_rgba(6,182,212,0.5)]" />

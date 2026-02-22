@@ -1,10 +1,12 @@
 "use client";
 
+import { useId } from "react";
 import { motion } from "framer-motion";
 import { Download, Github, ChevronDown } from "lucide-react";
 import { fadeUp, staggerContainer } from "@/lib/animations";
 import GradientText from "@/components/GradientText";
 import FloatingParticles from "@/components/FloatingParticles";
+import PrimaryCTA from "@/components/PrimaryCTA";
 
 const completedCount = 11;
 const totalCount = 15;
@@ -16,6 +18,9 @@ const phases = Array.from({ length: totalCount }, (_, i) => ({
 }));
 
 function ProgressArc() {
+  const uid = useId();
+  const gradientId = `${uid}-arcGradient`;
+  const glowId = `${uid}-arcGlow`;
   const radius = 90;
   const strokeWidth = 5;
   const gap = 4;
@@ -25,11 +30,11 @@ function ProgressArc() {
     <div className="relative flex items-center justify-center">
       <svg width="220" height="220" viewBox="0 0 220 220" className="drop-shadow-[0_0_30px_rgba(6,182,212,0.08)]">
         <defs>
-          <linearGradient id="arcGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+          <linearGradient id={gradientId} x1="0%" y1="0%" x2="100%" y2="100%">
             <stop offset="0%" stopColor="rgba(6,182,212,0.8)" />
             <stop offset="100%" stopColor="rgba(168,85,247,0.8)" />
           </linearGradient>
-          <filter id="arcGlow">
+          <filter id={glowId}>
             <feGaussianBlur stdDeviation="2.5" result="blur" />
             <feMerge><feMergeNode in="blur" /><feMergeNode in="SourceGraphic" /></feMerge>
           </filter>
@@ -46,16 +51,16 @@ function ProgressArc() {
           const y2 = 110 + radius * Math.sin(endRad);
           return (
             <path key={phase.index} d={`M ${x1} ${y1} A ${radius} ${radius} 0 0 1 ${x2} ${y2}`}
-              fill="none" stroke={phase.completed ? "url(#arcGradient)" : "rgba(255,255,255,0.06)"}
+              fill="none" stroke={phase.completed ? `url(#${gradientId})` : "rgba(255,255,255,0.06)"}
               strokeWidth={phase.completed ? strokeWidth : strokeWidth - 1} strokeLinecap="round"
-              filter={phase.completed ? "url(#arcGlow)" : undefined} opacity={phase.completed ? 1 : 0.5}
+              filter={phase.completed ? `url(#${glowId})` : undefined} opacity={phase.completed ? 1 : 0.5}
             />
           );
         })}
         <circle cx="110" cy="110" r={radius - 18} fill="none" stroke="rgba(255,255,255,0.02)" strokeWidth="0.5" strokeDasharray="3 8" />
       </svg>
       <div className="absolute inset-0 flex flex-col items-center justify-center">
-        <span className="text-4xl font-bold tracking-tight bg-gradient-to-r from-brand-cyan to-brand-purple bg-clip-text text-transparent">
+        <span className="text-4xl font-bold tracking-tight bg-linear-to-r from-brand-cyan to-brand-purple bg-clip-text text-transparent">
           {percentage}%
         </span>
         <span className="text-[10px] text-muted-dark font-mono tracking-wider mt-1">
@@ -67,15 +72,18 @@ function ProgressArc() {
 }
 
 export default function Hero() {
-  const operatingModes = ["Design in plain English", "Run locally first", "Scale to cloud when needed"];
+  const uid = useId();
+  const ring1Id = `${uid}-ringGradient1`;
+  const ring2Id = `${uid}-ringGradient2`;
+  const operatingModes = ["Design in one sentence", "Run locally for free", "Scale to cloud when needed"];
 
   return (
     <section className="noise relative flex min-h-screen items-center justify-center overflow-hidden px-4 sm:px-6">
       {/* Background layers */}
       <div className="pointer-events-none absolute inset-0">
-        <div className="animate-pulse-slow absolute left-[15%] top-[15%] h-[800px] w-[800px] rounded-full mix-blend-screen" style={{ background: "radial-gradient(circle, rgba(168,85,247,0.15) 0%, rgba(168,85,247,0.02) 50%, transparent 70%)" }} />
-        <div className="animate-pulse-slower absolute bottom-[10%] right-[5%] h-[900px] w-[900px] rounded-full mix-blend-screen" style={{ background: "radial-gradient(circle, rgba(6,182,212,0.12) 0%, rgba(6,182,212,0.02) 50%, transparent 70%)" }} />
-        <div className="animate-pulse-slow absolute left-1/2 top-1/2 h-[600px] w-[600px] -translate-x-1/2 -translate-y-1/2 rounded-full mix-blend-screen" style={{ background: "radial-gradient(circle, rgba(96,165,250,0.08) 0%, transparent 60%)", animationDelay: "3s" }} />
+        <div className="animate-pulse-slow absolute left-[15%] top-[15%] h-200 w-200 rounded-full mix-blend-screen" style={{ background: "radial-gradient(circle, rgba(168,85,247,0.15) 0%, rgba(168,85,247,0.02) 50%, transparent 70%)" }} />
+        <div className="animate-pulse-slower absolute bottom-[10%] right-[5%] h-225 w-225 rounded-full mix-blend-screen" style={{ background: "radial-gradient(circle, rgba(6,182,212,0.12) 0%, rgba(6,182,212,0.02) 50%, transparent 70%)" }} />
+        <div className="animate-pulse-slow absolute left-1/2 top-1/2 h-150 w-150 -translate-x-1/2 -translate-y-1/2 rounded-full mix-blend-screen" style={{ background: "radial-gradient(circle, rgba(96,165,250,0.08) 0%, transparent 60%)", animationDelay: "3s" }} />
       </div>
 
       <div className="dot-grid pointer-events-none absolute inset-0 opacity-40" />
@@ -85,17 +93,17 @@ export default function Hero() {
       <div className="pointer-events-none absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2">
         <div className="animate-spin-slow" style={{ width: 800, height: 800 }}>
           <svg viewBox="0 0 800 800" className="h-full w-full opacity-60">
-            <circle cx="400" cy="400" r="380" fill="none" stroke="url(#ringGradient1)" strokeWidth="1" strokeDasharray="4 12" />
-            <circle cx="400" cy="400" r="280" fill="none" stroke="url(#ringGradient2)" strokeWidth="1" strokeDasharray="3 15" />
+            <circle cx="400" cy="400" r="380" fill="none" stroke={`url(#${ring1Id})`} strokeWidth="1" strokeDasharray="4 12" />
+            <circle cx="400" cy="400" r="280" fill="none" stroke={`url(#${ring2Id})`} strokeWidth="1" strokeDasharray="3 15" />
             <circle cx="400" cy="20" r="3" fill="rgba(6,182,212,0.4)" className="animate-pulse" />
             <circle cx="120" cy="400" r="2" fill="rgba(168,85,247,0.4)" className="animate-pulse" style={{ animationDelay: "1s" }} />
             <defs>
-              <linearGradient id="ringGradient1" x1="0%" y1="0%" x2="100%" y2="100%">
+              <linearGradient id={ring1Id} x1="0%" y1="0%" x2="100%" y2="100%">
                 <stop offset="0%" stopColor="rgba(6,182,212,0.1)" />
                 <stop offset="50%" stopColor="rgba(168,85,247,0.02)" />
                 <stop offset="100%" stopColor="rgba(6,182,212,0.1)" />
               </linearGradient>
-              <linearGradient id="ringGradient2" x1="100%" y1="0%" x2="0%" y2="100%">
+              <linearGradient id={ring2Id} x1="100%" y1="0%" x2="0%" y2="100%">
                 <stop offset="0%" stopColor="rgba(168,85,247,0.1)" />
                 <stop offset="50%" stopColor="rgba(6,182,212,0.02)" />
                 <stop offset="100%" stopColor="rgba(168,85,247,0.1)" />
@@ -116,17 +124,17 @@ export default function Hero() {
         <div className="text-center lg:text-left">
           <motion.div variants={fadeUp}>
             <span className="relative inline-flex items-center overflow-hidden rounded-full border border-brand-cyan/20 bg-brand-cyan/5 px-4 py-1.5 text-xs font-medium tracking-wider uppercase text-brand-cyan font-mono">
-              <span className="absolute inset-0 animate-shimmer bg-gradient-to-r from-transparent via-brand-cyan/10 to-transparent" style={{ animationDuration: "3s" }} />
+              <span className="absolute inset-0 animate-shimmer bg-linear-to-r from-transparent via-brand-cyan/10 to-transparent" style={{ animationDuration: "3s" }} />
               <span className="relative">AI Agent Platform</span>
             </span>
           </motion.div>
 
           <motion.h1 variants={fadeUp} className="mt-8 text-5xl font-extrabold leading-[1.05] tracking-tight sm:text-6xl md:text-7xl lg:text-[5.5rem]">
-            <span className="block text-transparent bg-clip-text bg-gradient-to-b from-white to-white/70">Build intelligent agents</span>
+            <span className="block text-transparent bg-clip-text bg-linear-to-b from-white to-white/70">Intelligent agents</span>
             <GradientText className="block mt-2 drop-shadow-lg">that work for you</GradientText>
           </motion.h1>
 
-          <motion.div variants={fadeUp} className="mx-auto lg:mx-0 mt-8 h-px w-40 bg-gradient-to-r from-brand-cyan/40 via-brand-purple/30 to-transparent" />
+          <motion.div variants={fadeUp} className="mx-auto lg:mx-0 mt-8 h-px w-40 bg-linear-to-r from-brand-cyan/40 via-brand-purple/30 to-transparent" />
 
           <motion.p variants={fadeUp} className="mx-auto lg:mx-0 mt-8 max-w-2xl text-lg leading-relaxed text-muted-dark md:text-xl font-light">
             Design agents in natural language. Orchestrate them locally or in the
@@ -137,7 +145,7 @@ export default function Hero() {
             {operatingModes.map((mode) => (
               <span
                 key={mode}
-                className="rounded-full border border-white/[0.08] bg-white/[0.03] px-4 py-2 text-xs font-mono tracking-wide text-muted-dark backdrop-blur-sm transition-colors hover:bg-white/[0.06] hover:text-white"
+                className="rounded-full border border-white/8 bg-white/3 px-4 py-2 text-xs font-mono tracking-wide text-muted-dark backdrop-blur-sm transition-colors hover:bg-white/6 hover:text-white"
               >
                 {mode}
               </span>
@@ -146,40 +154,47 @@ export default function Hero() {
 
           {/* CTAs */}
           <motion.div variants={fadeUp} className="mt-12 flex w-full flex-col items-center justify-center gap-5 sm:w-auto sm:flex-row lg:items-start">
-            <div className="relative rounded-full p-[2px] bg-gradient-to-r from-brand-cyan via-blue-400 to-brand-purple animate-border-flow shadow-[0_0_30px_rgba(6,182,212,0.3)]">
-              <a href="#download" className="group relative flex w-[min(100%,20rem)] items-center justify-center gap-3 overflow-hidden rounded-full bg-black/80 backdrop-blur-md px-8 py-4 text-sm font-semibold text-white transition-all duration-300 hover:bg-black/60 sm:w-auto">
-                <div className="absolute inset-0 -translate-x-full bg-gradient-to-r from-transparent via-white/10 to-transparent transition-transform duration-700 group-hover:translate-x-full" />
-                <Download className="relative h-5 w-5 text-brand-cyan transition-transform duration-300 group-hover:-translate-y-0.5" />
-                <span className="relative">Download for Windows</span>
-              </a>
-            </div>
-            <a href="https://github.com" target="_blank" rel="noopener noreferrer" className="group flex w-[min(100%,20rem)] items-center justify-center gap-3 rounded-full border border-white/[0.1] bg-white/[0.02] px-8 py-4 text-sm font-medium text-muted transition-all duration-300 hover:border-white/[0.2] hover:text-white hover:bg-white/[0.05] hover:shadow-[0_0_20px_rgba(255,255,255,0.05)] sm:w-auto">
+            <PrimaryCTA href="#download" icon={Download} label="Download for Windows" />
+            <a href="https://github.com" target="_blank" rel="noopener noreferrer" className="group flex w-[min(100%,20rem)] items-center justify-center gap-3 rounded-full border border-white/10 bg-white/2 px-8 py-4 text-sm font-medium text-muted transition-all duration-300 hover:border-white/20 hover:text-white hover:bg-white/5 hover:shadow-[0_0_20px_rgba(255,255,255,0.05)] sm:w-auto">
               <Github className="h-5 w-5 transition-transform duration-300 group-hover:scale-110" />
               View on GitHub
             </a>
           </motion.div>
 
-          {/* Trust line */}
-          <motion.div variants={fadeUp} className="mt-8 flex flex-wrap items-center justify-center gap-3 text-xs text-muted-dark lg:justify-start lg:gap-6">
-            <span>Free forever</span>
-            <span className="hidden h-3 w-px bg-white/[0.06] lg:inline-block" />
-            <span>No account required</span>
-            <span className="hidden h-3 w-px bg-white/[0.06] lg:inline-block" />
-            <span>12 MB installer</span>
+          <motion.div variants={fadeUp} className="mt-6 flex flex-col items-center gap-3 rounded-xl border border-white/6 bg-white/2 px-4 py-3 lg:hidden">
+            <div className="text-[10px] font-mono uppercase tracking-wider text-muted-dark">Adoption snapshot</div>
+            <div className="h-1 w-full max-w-xs overflow-hidden rounded-full bg-white/6">
+              <div
+                className="h-full rounded-full bg-linear-to-r from-brand-cyan to-brand-purple"
+                style={{ width: `${percentage}%` }}
+              />
+            </div>
+            <div className="flex justify-center gap-6 text-center">
+              {[
+                { value: "42", label: "Agents" },
+                { value: "18.4k", label: "Executions" },
+                { value: "120+", label: "Templates" },
+              ].map((stat) => (
+                <div key={stat.label}>
+                  <div className="text-sm font-bold tracking-tight font-mono">{stat.value}</div>
+                  <div className="text-[10px] text-muted-dark font-mono tracking-wider">{stat.label}</div>
+                </div>
+              ))}
+            </div>
           </motion.div>
         </div>
 
         {/* Right — progress arc */}
         <motion.div variants={fadeUp} className="hidden lg:flex flex-col items-center gap-4">
           <ProgressArc />
-          <div className="rounded-full border border-white/[0.06] bg-white/[0.02] px-4 py-1.5 text-[10px] font-mono tracking-wider text-muted-dark uppercase">
-            Production readiness snapshot
+          <div className="rounded-full border border-white/6 bg-white/2 px-4 py-1.5 text-[10px] font-mono tracking-wider text-muted-dark uppercase">
+            Adoption
           </div>
           <div className="flex gap-4 text-center">
             {[
-              { value: "228", label: "Rust tests" },
-              { value: "70+", label: "Commands" },
-              { value: "24", label: "DB tables" },
+              { value: "42", label: "Agents" },
+              { value: "18.4k", label: "Executions" },
+              { value: "120+", label: "Templates" },
             ].map((stat) => (
               <div key={stat.label}>
                 <div className="text-lg font-bold tracking-tight">{stat.value}</div>
@@ -198,7 +213,7 @@ export default function Hero() {
         </motion.div>
       </div>
 
-      <div className="pointer-events-none absolute inset-x-0 bottom-0 h-40 bg-gradient-to-t from-background via-background/80 to-transparent" />
+      <div className="pointer-events-none absolute inset-x-0 bottom-0 h-40 bg-linear-to-t from-background via-background/80 to-transparent" />
     </section>
   );
 }
