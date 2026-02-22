@@ -1,6 +1,6 @@
 "use client";
 
-import { motion } from "framer-motion";
+import { motion, type Variants } from "framer-motion";
 import { fadeUp } from "@/lib/animations";
 
 type AccentColor = "cyan" | "purple" | "emerald" | "amber";
@@ -44,18 +44,20 @@ export default function GlowCard({
   className = "",
   highlighted = false,
   texture = "none",
+  variants,
 }: {
   accent?: AccentColor;
   children: React.ReactNode;
   className?: string;
   highlighted?: boolean;
   texture?: TextureType;
+  variants?: Variants;
 }) {
   const colors = accentMap[accent];
 
   return (
     <motion.div
-      variants={fadeUp}
+      variants={variants ?? fadeUp}
       whileHover={{ y: -6, transition: { duration: 0.3, ease: "easeOut" } }}
       className={`
         relative overflow-hidden rounded-2xl border backdrop-blur-md

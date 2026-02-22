@@ -1,13 +1,10 @@
-"use client";
-
-import { motion, useScroll, useTransform, type MotionValue } from "framer-motion";
-
 type AccentDef = {
   type: "ring" | "cross" | "diamond" | "dot";
   x: string;
   y: string;
   size: number;
   color: string;
+  /** Parallax travel = -(speed * 600)px over full scroll */
   speed: number;
 };
 
@@ -54,32 +51,21 @@ function ShapeSVG({ type, size, color }: { type: AccentDef["type"]; size: number
   }
 }
 
-function ParallaxShape({
-  accent,
-  scrollYProgress,
-}: {
-  accent: AccentDef;
-  scrollYProgress: MotionValue<number>;
-}) {
-  const y = useTransform(scrollYProgress, [0, 1], [0, -accent.speed * 600]);
-
-  return (
-    <motion.div
-      className="absolute"
-      style={{ left: accent.x, top: accent.y, y }}
-    >
-      <ShapeSVG type={accent.type} size={accent.size} color={accent.color} />
-    </motion.div>
-  );
-}
-
 export default function ParallaxAccents() {
-  const { scrollYProgress } = useScroll();
-
   return (
     <div className="pointer-events-none fixed inset-0 z-0 overflow-hidden">
       {accents.map((accent, i) => (
-        <ParallaxShape key={i} accent={accent} scrollYProgress={scrollYProgress} />
+        <div
+          key={i}
+          className="absolute parallax-shape"
+          style={{
+            left: accent.x,
+            top: accent.y,
+            "--parallax-offset": `${-accent.speed * 600}px`,
+          } as React.CSSProperties}
+        >
+          <ShapeSVG type={accent.type} size={accent.size} color={accent.color} />
+        </div>
       ))}
     </div>
   );

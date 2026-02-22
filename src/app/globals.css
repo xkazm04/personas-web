@@ -200,6 +200,16 @@ html {
   100% { background-position: 200% 50%; }
 }
 
+@keyframes progress-shimmer {
+  0% { background-position: 200% 0; }
+  100% { background-position: -200% 0; }
+}
+
+@keyframes progress-dot-breathe {
+  0%, 100% { opacity: 0.7; transform: translateY(-50%) translateX(-50%) scale(1); box-shadow: 0 0 6px rgba(6,182,212,0.6), 0 0 12px rgba(6,182,212,0.3); }
+  50% { opacity: 1; transform: translateY(-50%) translateX(-50%) scale(1.8); box-shadow: 0 0 10px rgba(6,182,212,1), 0 0 20px rgba(6,182,212,0.6); }
+}
+
 /* ── Animation Classes ─────────────────────────────── */
 
 .animate-float { animation: float 4s ease-in-out infinite; }
@@ -213,6 +223,8 @@ html {
 .animate-bar-grow { animation: bar-grow 0.8s ease-out forwards; transform-origin: bottom; }
 .animate-spin-slow { animation: spin-slow 30s linear infinite; }
 .animate-border-flow { animation: border-flow 4s linear infinite; background-size: 200% 100%; }
+.animate-progress-shimmer { animation: progress-shimmer 2s ease-in-out infinite; }
+.animate-progress-dot-breathe { animation: progress-dot-breathe 2s ease-in-out infinite; }
 
 /* ── Micro-Texture Surfaces (Direction 8) ─────────── */
 
@@ -349,6 +361,35 @@ html {
   );
   background-size: 300% 300%;
   animation: gradient-sweep 16s ease infinite;
+}
+
+/* ── Parallax Accents (CSS scroll-driven) ────────── */
+
+@keyframes parallax-drift {
+  from { transform: translateY(0); }
+  to   { transform: translateY(var(--parallax-offset)); }
+}
+
+.parallax-shape {
+  animation: parallax-drift linear both;
+  animation-timeline: scroll();
+  animation-range: 0% 100%;
+}
+
+/* Fallback: if scroll-driven animations aren't supported, stay static */
+@supports not (animation-timeline: scroll()) {
+  .parallax-shape {
+    animation: none;
+  }
+}
+
+/* Hide scrollbar for horizontal scroll strips */
+.scrollbar-hide {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+.scrollbar-hide::-webkit-scrollbar {
+  display: none;
 }
 
 /* ── Existing Utilities ───────────────────────────── */

@@ -1,6 +1,12 @@
 "use client";
 
+import { useId } from "react";
+
 export default function TopoBackground() {
+  const uid = useId();
+  const grad1 = `${uid}-topoGrad1`;
+  const grad2 = `${uid}-topoGrad2`;
+
   return (
     <div className="pointer-events-none fixed inset-0 -z-10 overflow-hidden">
       <div className="topo-bg absolute -inset-[10%] opacity-[0.05]">
@@ -14,12 +20,12 @@ export default function TopoBackground() {
           {/* Large outer contours */}
           <path
             d="M-50,400 C100,180 350,80 600,180 C850,280 1050,60 1250,400 C1050,640 850,740 600,620 C350,500 100,720 -50,400Z"
-            stroke="url(#topoGrad1)"
+            stroke={`url(#${grad1})`}
             strokeWidth="1.2"
           />
           <path
             d="M0,400 C130,210 370,120 600,210 C830,300 1020,100 1200,400 C1020,620 830,700 600,590 C370,480 130,680 0,400Z"
-            stroke="url(#topoGrad2)"
+            stroke={`url(#${grad2})`}
             strokeWidth="0.9"
           />
           <path
@@ -64,12 +70,12 @@ export default function TopoBackground() {
             strokeWidth="0.4"
           />
           <defs>
-            <linearGradient id="topoGrad1" x1="0%" y1="0%" x2="100%" y2="100%">
+            <linearGradient id={grad1} x1="0%" y1="0%" x2="100%" y2="100%">
               <stop offset="0%" stopColor="rgba(6,182,212,0.8)" />
               <stop offset="50%" stopColor="rgba(168,85,247,0.4)" />
               <stop offset="100%" stopColor="rgba(6,182,212,0.8)" />
             </linearGradient>
-            <linearGradient id="topoGrad2" x1="100%" y1="0%" x2="0%" y2="100%">
+            <linearGradient id={grad2} x1="100%" y1="0%" x2="0%" y2="100%">
               <stop offset="0%" stopColor="rgba(168,85,247,0.8)" />
               <stop offset="50%" stopColor="rgba(6,182,212,0.4)" />
               <stop offset="100%" stopColor="rgba(168,85,247,0.8)" />
