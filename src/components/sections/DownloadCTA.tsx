@@ -4,6 +4,7 @@ import { useState } from "react";
 import { motion } from "framer-motion";
 import { Download, Monitor, Apple, Terminal } from "lucide-react";
 import { fadeUp } from "@/lib/animations";
+import { trackDownloadClick } from "@/lib/analytics";
 import GradientText from "@/components/GradientText";
 import PrimaryCTA from "@/components/PrimaryCTA";
 import SectionWrapper from "@/components/SectionWrapper";
@@ -89,7 +90,10 @@ export default function DownloadCTA() {
         {/* Main CTA */}
         <motion.div variants={fadeUp} className="mt-10">
           <div className="flex flex-col items-center justify-center gap-3 sm:flex-row">
-            <PrimaryCTA href="#" icon={Download} label="Download for Windows" variant="solid" />
+            {/* eslint-disable-next-line jsx-a11y/click-events-have-key-events, jsx-a11y/no-static-element-interactions */}
+            <div onClick={() => trackDownloadClick("windows")}>
+              <PrimaryCTA href="#" icon={Download} label="Download for Windows" variant="solid" />
+            </div>
             <a
               href="#features"
               className="inline-flex w-[min(100%,20rem)] items-center justify-center rounded-full border border-white/[0.08] bg-white/[0.015] px-6 py-3 text-sm font-medium text-muted transition-colors duration-300 hover:border-white/[0.15] hover:text-foreground sm:w-auto"
