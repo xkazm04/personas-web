@@ -1,7 +1,7 @@
 "use client";
 
-import { useState, useEffect, useCallback } from "react";
-import { motion, AnimatePresence } from "framer-motion";
+import { useState, useEffect, useCallback, useRef, memo, useMemo } from "react";
+import { motion, AnimatePresence, useScroll, useTransform } from "framer-motion";
 import Image from "next/image";
 import {
   X, Check, GitBranch, Sparkles, ArrowRight, ArrowDown,
@@ -214,7 +214,7 @@ function WorkflowPanel({ scenario }: { scenario: Scenario }) {
             <div className={`mt-0.5 flex h-5 w-5 shrink-0 items-center justify-center rounded-md ring-1 ${statusBg[step.status]}`}>
               <Icon className={`h-3 w-3 ${statusColor[step.status]}`} />
             </div>
-            <span className={`text-xs leading-relaxed ${step.status === "error" ? "text-brand-rose/60 line-through decoration-brand-rose/30" : "text-muted-dark"}`}>
+            <span className={`text-base leading-relaxed ${step.status === "error" ? "text-brand-rose/70 line-through decoration-brand-rose/30" : "text-white/70"}`}>
               {step.text}
             </span>
           </motion.div>
@@ -233,7 +233,7 @@ function WorkflowPanel({ scenario }: { scenario: Scenario }) {
           <ShieldAlert className="h-3 w-3 text-brand-rose/60" />
           <span className="text-[10px] font-mono uppercase tracking-wider text-brand-rose/50">Result</span>
         </div>
-        <p className="text-xs text-brand-rose/70 leading-relaxed">{scenario.workflow.result}</p>
+        <p className="text-base text-brand-rose/80 leading-relaxed">{scenario.workflow.result}</p>
       </motion.div>
     </div>
   );
@@ -257,7 +257,7 @@ function AgentPanel({ scenario }: { scenario: Scenario }) {
           <div className="mt-0.5 flex h-5 w-5 shrink-0 items-center justify-center rounded-md bg-brand-purple/10 ring-1 ring-brand-purple/10">
             <Brain className="h-3 w-3 text-brand-purple/70" />
           </div>
-          <span className="text-xs text-muted-dark leading-relaxed italic">
+          <span className="text-base text-white/70 leading-relaxed italic">
             &ldquo;{thought}&rdquo;
           </span>
         </motion.div>
@@ -276,7 +276,7 @@ function AgentPanel({ scenario }: { scenario: Scenario }) {
           <div className="mt-0.5 flex h-5 w-5 shrink-0 items-center justify-center rounded-md bg-brand-cyan/10 ring-1 ring-brand-cyan/10">
             <Zap className="h-3 w-3 text-brand-cyan/70" />
           </div>
-          <span className="text-xs text-muted-dark leading-relaxed">{action}</span>
+          <span className="text-base text-white/70 leading-relaxed">{action}</span>
         </motion.div>
       ))}
 
@@ -295,7 +295,7 @@ function AgentPanel({ scenario }: { scenario: Scenario }) {
           <Check className="h-3 w-3 text-brand-emerald/60" />
           <span className="text-[10px] font-mono uppercase tracking-wider text-brand-emerald/50">Result</span>
         </div>
-        <p className="text-xs text-brand-emerald/70 leading-relaxed">{scenario.agent.result}</p>
+        <p className="text-base text-brand-emerald/80 leading-relaxed">{scenario.agent.result}</p>
       </motion.div>
     </div>
   );
@@ -316,11 +316,12 @@ type ComparisonCardProps = {
   children: React.ReactNode;
 };
 
-function ComparisonCard({ variant, texture, className, color, cornerPosition, extraOrbs, icon: Icon, title, subtitle, children }: ComparisonCardProps) {
+const ComparisonCard = memo(function ComparisonCard({ variant, texture, className, color, cornerPosition, extraOrbs, icon: Icon, title, subtitle, children }: ComparisonCardProps) {
   return (
     <motion.div
       variants={variant}
       transition={{ duration: 0.6 }}
+      whileHover={{ scale: 1.02, boxShadow: `0 0 30px ${color.grid.replace('0.08', '0.2')}` }}
       className={`${texture} group rounded-2xl p-5 md:p-6 relative overflow-hidden transition-all duration-500 ${className}`}
     >
       {/* Blur orb */}
@@ -351,9 +352,13 @@ function ComparisonCard({ variant, texture, className, color, cornerPosition, ex
 
       {/* Header */}
       <div className="relative flex items-center gap-3 mb-5">
-        <div className={`flex h-10 w-10 items-center justify-center rounded-xl ${color.iconBg} ring-1 ${color.iconRing}`}>
+        <motion.div
+          animate={{ scale: [1, 1.1, 1] }}
+          transition={{ duration: 2, repeat: Infinity, ease: "easeInOut" }}
+          className={`flex h-10 w-10 items-center justify-center rounded-xl ${color.iconBg} ring-1 ${color.iconRing}`}
+        >
           <Icon className={`h-5 w-5 ${color.iconText}`} />
-        </div>
+        </motion.div>
         <div>
           <h3 className="text-base font-semibold text-foreground">{title}</h3>
           <p className={`text-[10px] font-mono uppercase tracking-wider mt-0.5 ${color.subtitle}`}>{subtitle}</p>
@@ -363,7 +368,47 @@ function ComparisonCard({ variant, texture, className, color, cornerPosition, ex
       {children}
     </motion.div>
   );
-}
+});
+
+/* ── Memoized scenario content panels ── */
+
+const WorkflowContent = memo(function WorkflowContent({ activeIndex, minHeight }: { activeIndex: number; minHeight: number }) {
+  const scenario = scenarios[activeIndex];
+  return (
+    <AnimatePresence mode="wait">
+      <motion.div
+        key={scenario.id + "-wf"}
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        exit={{ opacity: 0 }}
+        transition={{ duration: 0.2 }}
+        className="relative"
+        style={{ minHeight }}
+      >
+        <WorkflowPanel scenario={scenario} />
+      </motion.div>
+    </AnimatePresence>
+  );
+});
+
+const AgentContent = memo(function AgentContent({ activeIndex, minHeight }: { activeIndex: number; minHeight: number }) {
+  const scenario = scenarios[activeIndex];
+  return (
+    <AnimatePresence mode="wait">
+      <motion.div
+        key={scenario.id + "-ag"}
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        exit={{ opacity: 0 }}
+        transition={{ duration: 0.2 }}
+        className="relative"
+        style={{ minHeight }}
+      >
+        <AgentPanel scenario={scenario} />
+      </motion.div>
+    </AnimatePresence>
+  );
+});
 
 /* ── Main component ── */
 
@@ -373,9 +418,58 @@ const comparisonHighlights = [
   "One prompt can replace branch-heavy diagrams",
 ] as const;
 
+// Pre-compute stable min-heights from scenario data to prevent layout shifts.
+// Each item row is ~36px (text-base leading-relaxed + gap-2.5 spacing).
+// The result box is ~72px (border + padding + label + text).
+// space-y-3 adds 12px gap between items, mt-4 adds 16px before result.
+const ITEM_HEIGHT = 36;
+const RESULT_HEIGHT = 72;
+const ITEM_GAP = 12;
+const RESULT_GAP = 16;
+
+function computePanelHeight(itemCount: number) {
+  return itemCount * ITEM_HEIGHT + (itemCount - 1) * ITEM_GAP + RESULT_GAP + RESULT_HEIGHT;
+}
+
+const workflowMinHeight = Math.max(
+  ...scenarios.map((s) => computePanelHeight(s.workflow.steps.length))
+);
+const agentMinHeight = Math.max(
+  ...scenarios.map((s) => computePanelHeight(s.agent.thoughts.length + s.agent.actions.length))
+);
+
 export default function WhyAgents() {
   const [activeIndex, setActiveIndex] = useState(0);
   const [paused, setPaused] = useState(false);
+  const [measuredWfHeight, setMeasuredWfHeight] = useState(0);
+  const [measuredAgHeight, setMeasuredAgHeight] = useState(0);
+  const measureRef = useRef<HTMLDivElement>(null);
+
+  // Measure all scenarios off-screen on mount to get accurate max heights
+  useEffect(() => {
+    const el = measureRef.current;
+    if (!el) return;
+    const wfPanels = el.querySelectorAll<HTMLElement>("[data-measure-wf]");
+    const agPanels = el.querySelectorAll<HTMLElement>("[data-measure-ag]");
+    let maxWf = 0;
+    let maxAg = 0;
+    wfPanels.forEach((p) => { maxWf = Math.max(maxWf, p.scrollHeight); });
+    agPanels.forEach((p) => { maxAg = Math.max(maxAg, p.scrollHeight); });
+    if (maxWf > 0) setMeasuredWfHeight(maxWf);
+    if (maxAg > 0) setMeasuredAgHeight(maxAg);
+  }, []);
+
+  const wfMinH = measuredWfHeight || workflowMinHeight;
+  const agMinH = measuredAgHeight || agentMinHeight;
+
+  const workflowChildren = useMemo(
+    () => <WorkflowContent activeIndex={activeIndex} minHeight={wfMinH} />,
+    [activeIndex, wfMinH],
+  );
+  const agentChildren = useMemo(
+    () => <AgentContent activeIndex={activeIndex} minHeight={agMinH} />,
+    [activeIndex, agMinH],
+  );
 
   const advance = useCallback(() => {
     setActiveIndex((prev) => (prev + 1) % scenarios.length);
@@ -389,29 +483,38 @@ export default function WhyAgents() {
 
   const scenario = scenarios[activeIndex];
 
+  const containerRef = useRef<HTMLDivElement>(null);
+  const { scrollYProgress } = useScroll({
+    target: containerRef,
+    offset: ["start end", "end start"],
+  });
+  const y = useTransform(scrollYProgress, [0, 1], ["-15%", "15%"]);
+
   return (
-    <SectionWrapper id="why-agents">
-      {/* Background illustration */}
-      <div className="pointer-events-none absolute inset-0 bg-black">
-        <Image
-          src="/imgs/illustration_photo.jpg"
-          alt="Personas agent roster"
-          fill
-          className="object-cover object-center"
-          sizes="100vw"
-          quality={80}
-          loading="lazy"
-          priority={false}
-          placeholder="blur"
-          blurDataURL="data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/2wBDAAoHBwgHBgoICAgLCgoLDhgQDg0NDh0VFhEYIx8lJCIfIiEmKzcvJik0KSEiMEExNDk7Pj4+JS5ESUM8SDc9Pjv/2wBDAQoLCw4NDhwQEBw7KCIoOzs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozv/wAARCAAGAAoDASIAAhEBAxEB/8QAFgABAQEAAAAAAAAAAAAAAAAAAAUH/8QAIBAAAgIBBAMBAAAAAAAAAAAAAQIAAwQFERIhBjFBUf/EABQBAQAAAAAAAAAAAAAAAAAAAAP/xAAYEQADAQEAAAAAAAAAAAAAAAABAgMAEf/aAAwDAQACEQMRAD8AyTDw8nPyFx8WprLG6KoJLH4BLPp3h+T6ULaW/wBJZX1sVh7XjuIiVeli5Ef/2Q=="
-        />
+    <SectionWrapper id="why-agents" className="relative overflow-hidden" aria-roledescription="carousel" aria-label="Why agents not workflows — scenario comparison">
+      <div ref={containerRef} className="absolute inset-0 pointer-events-none">
+        {/* Background illustration */}
+        <motion.div style={{ y }} className="absolute inset-0 h-[130%] -top-[15%] bg-black">
+          <Image
+            src="/imgs/illustration_photo.jpg"
+            alt="Personas agent roster"
+            fill
+            className="object-cover object-center"
+            sizes="100vw"
+            quality={80}
+            loading="lazy"
+            priority={false}
+            placeholder="blur"
+            blurDataURL="data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/2wBDAAoHBwgHBgoICAgLCgoLDhgQDg0NDh0VFhEYIx8lJCIfIiEmKzcvJik0KSEiMEExNDk7Pj4+JS5ESUM8SDc9Pjv/2wBDAQoLCw4NDhwQEBw7KCIoOzs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozv/wAARCAAGAAoDASIAAhEBAxEB/8QAFgABAQEAAAAAAAAAAAAAAAAAAAUH/8QAIBAAAgIBBAMBAAAAAAAAAAAAAQIAAwQFERIhBjFBUf/EABQBAQAAAAAAAAAAAAAAAAAAAAP/xAAYEQADAQEAAAAAAAAAAAAAAAABAgMAEf/aAAwDAQACEQMRAD8AyTDw8nPyFx8WprLG6KoJLH4BLPp3h+T6ULaW/wBJZX1sVh7XjuIiVeli5Ef/2Q=="
+          />
+        </motion.div>
         <div className="absolute inset-0 bg-black/70" />
         <div className="absolute inset-0 bg-linear-to-b from-background via-transparent to-background" />
         <div className="absolute inset-0 bg-linear-to-r from-background/40 via-transparent to-background/40" />
       </div>
 
       {/* Header */}
-      <motion.div variants={fadeUp} className="text-center relative">
+      <motion.div variants={fadeUp} className="text-center relative z-10">
         <p className="text-xl italic text-muted-dark mb-8 font-light tracking-wide">What if your workflows could think?</p>
         <h2 className="text-4xl font-extrabold tracking-tight sm:text-5xl md:text-7xl drop-shadow-md">
           Why agents, <span className="font-black text-brand-rose drop-shadow-[0_0_15px_rgba(244,63,94,0.5)]">not</span> <GradientText className="drop-shadow-lg">workflows</GradientText>
@@ -438,6 +541,7 @@ export default function WhyAgents() {
           <button
             key={s.id}
             onClick={() => { setActiveIndex(i); setPaused(true); }}
+            aria-pressed={i === activeIndex}
             className={`cursor-pointer rounded-full border px-3.5 py-1.5 text-[11px] font-mono tracking-wider transition-all duration-300 ${
               i === activeIndex
                 ? "border-brand-cyan/30 bg-brand-cyan/10 text-brand-cyan shadow-[0_0_12px_rgba(6,182,212,0.15)]"
@@ -450,28 +554,31 @@ export default function WhyAgents() {
       </motion.div>
 
       {/* Scenario trigger */}
-      <AnimatePresence mode="wait">
-        <motion.div
-          key={scenario.id + "-trigger"}
-          initial={{ opacity: 0, y: 10 }}
-          animate={{ opacity: 1, y: 0 }}
-          exit={{ opacity: 0, y: -10 }}
-          transition={{ duration: 0.3 }}
-          className="mt-6 mx-auto max-w-3xl"
-        >
-          <div className="rounded-xl border border-white/[0.06] bg-white/[0.02] px-4 py-3 text-center backdrop-blur-sm">
-            <div className="flex items-center justify-center gap-2 mb-1.5">
-              <Mail className="h-3 w-3 text-muted-dark" />
-              <span className="text-[10px] font-mono uppercase tracking-wider text-muted-dark/60">Incoming scenario</span>
+      <div aria-live="polite" aria-atomic="true" className="mt-6 mx-auto max-w-3xl">
+        <AnimatePresence mode="wait">
+          <motion.div
+            key={scenario.id + "-trigger"}
+            initial={{ opacity: 0, y: 10 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: -10 }}
+            transition={{ duration: 0.3 }}
+          >
+            <div className="rounded-xl border border-white/[0.06] bg-white/[0.02] px-4 py-3 text-center backdrop-blur-sm">
+              <div className="flex items-center justify-center gap-2 mb-1.5">
+                <Mail className="h-3 w-3 text-muted-dark" aria-hidden="true" />
+                <span className="text-[10px] font-mono uppercase tracking-wider text-muted-dark/60">Incoming scenario</span>
+              </div>
+              <p className="text-sm text-muted leading-relaxed">{scenario.trigger}</p>
             </div>
-            <p className="text-sm text-muted leading-relaxed">{scenario.trigger}</p>
-          </div>
-        </motion.div>
-      </AnimatePresence>
+          </motion.div>
+        </AnimatePresence>
+      </div>
 
       {/* Side-by-side duel panels */}
       <div
         className="mt-8 grid gap-6 md:grid-cols-2 md:gap-8 relative"
+        role="group"
+        aria-label={`Scenario ${activeIndex + 1} of ${scenarios.length}: ${scenario.label}`}
         onMouseEnter={() => setPaused(true)}
         onMouseLeave={() => setPaused(false)}
       >
@@ -490,7 +597,7 @@ export default function WhyAgents() {
         <ComparisonCard
           variant={slideInLeft}
           texture="texture-stripes"
-          className="border border-white/4 bg-linear-to-br from-white/1.5 to-transparent hover:border-white/6"
+          className="border border-white/8 bg-linear-to-br from-white/6 to-white/2 backdrop-blur-lg hover:border-white/12"
           color={{
             orb: "-right-20 -top-20 bg-brand-rose/4",
             line: "via-brand-rose/8",
@@ -506,18 +613,7 @@ export default function WhyAgents() {
           title="Traditional Workflow"
           subtitle="Deterministic pipeline"
         >
-          <AnimatePresence mode="wait">
-            <motion.div
-              key={scenario.id + "-wf"}
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              exit={{ opacity: 0 }}
-              transition={{ duration: 0.2 }}
-              className="relative min-h-[260px]"
-            >
-              <WorkflowPanel scenario={scenario} />
-            </motion.div>
-          </AnimatePresence>
+          {workflowChildren}
         </ComparisonCard>
 
         {/* Mobile divider */}
@@ -533,7 +629,7 @@ export default function WhyAgents() {
         <ComparisonCard
           variant={slideInRight}
           texture="texture-dots"
-          className="border border-brand-cyan/10 bg-linear-to-br from-brand-cyan/3 to-transparent shadow-[0_0_80px_rgba(6,182,212,0.04)] hover:border-brand-cyan/15 hover:shadow-[0_0_100px_rgba(6,182,212,0.06)]"
+          className="border border-brand-cyan/15 bg-linear-to-br from-brand-cyan/8 to-white/2 backdrop-blur-lg shadow-[0_0_80px_rgba(6,182,212,0.04)] hover:border-brand-cyan/20 hover:shadow-[0_0_100px_rgba(6,182,212,0.06)]"
           color={{
             orb: "-left-20 -bottom-20 bg-brand-cyan/4",
             line: "via-brand-cyan/10",
@@ -550,18 +646,7 @@ export default function WhyAgents() {
           title="Personas Agent"
           subtitle="Reasoning engine"
         >
-          <AnimatePresence mode="wait">
-            <motion.div
-              key={scenario.id + "-ag"}
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              exit={{ opacity: 0 }}
-              transition={{ duration: 0.2 }}
-              className="relative min-h-[260px]"
-            >
-              <AgentPanel scenario={scenario} />
-            </motion.div>
-          </AnimatePresence>
+          {agentChildren}
         </ComparisonCard>
       </div>
 
@@ -612,6 +697,31 @@ export default function WhyAgents() {
           </button>
         </div>
       </motion.div>
+
+      {/* Hidden measurement container — renders all scenarios to capture max heights */}
+      <div
+        ref={measureRef}
+        aria-hidden="true"
+        className="pointer-events-none absolute left-0 top-0 -z-50 w-full overflow-hidden opacity-0"
+        style={{ visibility: "hidden" }}
+      >
+        <div className="grid gap-6 md:grid-cols-2 md:gap-8">
+          <div>
+            {scenarios.map((s) => (
+              <div key={s.id + "-mw"} data-measure-wf>
+                <WorkflowPanel scenario={s} />
+              </div>
+            ))}
+          </div>
+          <div>
+            {scenarios.map((s) => (
+              <div key={s.id + "-ma"} data-measure-ag>
+                <AgentPanel scenario={s} />
+              </div>
+            ))}
+          </div>
+        </div>
+      </div>
 
     </SectionWrapper>
   );

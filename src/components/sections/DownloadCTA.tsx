@@ -6,6 +6,7 @@ import { Download, Monitor, Apple, Terminal } from "lucide-react";
 import { fadeUp } from "@/lib/animations";
 import { trackDownloadClick } from "@/lib/analytics";
 import GradientText from "@/components/GradientText";
+import SectionHeading from "@/components/SectionHeading";
 import PrimaryCTA from "@/components/PrimaryCTA";
 import SectionWrapper from "@/components/SectionWrapper";
 import WaitlistModal from "@/components/WaitlistModal";
@@ -61,30 +62,68 @@ export default function DownloadCTA() {
           </span>
         </motion.div>
 
-        <motion.h2
-          variants={fadeUp}
-          className="text-4xl font-extrabold tracking-tight sm:text-5xl md:text-7xl lg:text-[4.5rem] drop-shadow-md"
-        >
-          Ready to build your
-          <br />
-          <span className="font-light text-white/80">first</span> <GradientText className="drop-shadow-lg">agent?</GradientText>
-        </motion.h2>
+        <motion.div variants={fadeUp}>
+          <SectionHeading>
+            Ready to build your
+            <br />
+            <span className="font-light text-white/80">first</span> <GradientText className="drop-shadow-lg">agent?</GradientText>
+          </SectionHeading>
+        </motion.div>
 
         <motion.p variants={fadeUp} className="mt-8 text-lg text-muted-dark leading-relaxed sm:text-xl font-light">
           Download Personas for free. Start building in minutes.
         </motion.p>
 
-        <motion.div variants={fadeUp} className="mt-6 mx-auto grid max-w-xl grid-cols-1 gap-2 text-left sm:grid-cols-3">
+        <motion.div
+          className="mt-6 mx-auto grid max-w-xl grid-cols-1 gap-2 text-left sm:grid-cols-3"
+          initial="hidden"
+          whileInView="visible"
+          viewport={{ once: true }}
+          variants={{ hidden: {}, visible: { transition: { staggerChildren: 0.6 } } }}
+        >
           {[
             "Download installer",
             "Connect Claude CLI",
             "Launch first agent",
-          ].map((step, index) => (
-            <div key={step} className="rounded-xl border border-white/[0.05] bg-white/[0.015] px-3 py-2">
-              <p className="text-[10px] font-mono uppercase tracking-wider text-muted-dark">Step {index + 1}</p>
-              <p className="mt-1 text-xs text-muted">{step}</p>
-            </div>
-          ))}
+          ].map((step, index) => {
+            const glowColor = index === 0
+              ? "rgba(6,182,212,0.5)"
+              : index === 1
+                ? "rgba(109,133,224,0.5)"
+                : "rgba(168,85,247,0.5)";
+            return (
+              <motion.div
+                key={step}
+                className="rounded-xl border border-white/[0.05] bg-white/[0.015] px-3 py-2"
+                variants={{
+                  hidden: { opacity: 0, y: 12 },
+                  visible: {
+                    opacity: 1,
+                    y: 0,
+                    boxShadow: [
+                      `0 0 0px ${glowColor.replace("0.5", "0")}`,
+                      `0 0 20px ${glowColor}, inset 0 0 12px ${glowColor.replace("0.5", "0.08")}`,
+                      `0 0 0px ${glowColor.replace("0.5", "0")}`,
+                    ],
+                    borderColor: [
+                      "rgba(255,255,255,0.05)",
+                      glowColor.replace("0.5", "0.4"),
+                      "rgba(255,255,255,0.05)",
+                    ],
+                    transition: {
+                      opacity: { duration: 0.3 },
+                      y: { duration: 0.3 },
+                      boxShadow: { duration: 0.8, ease: "easeInOut" },
+                      borderColor: { duration: 0.8, ease: "easeInOut" },
+                    },
+                  },
+                }}
+              >
+                <p className="text-[10px] font-mono uppercase tracking-wider text-muted-dark">Step {index + 1}</p>
+                <p className="mt-1 text-xs text-muted">{step}</p>
+              </motion.div>
+            );
+          })}
         </motion.div>
 
         {/* Main CTA */}

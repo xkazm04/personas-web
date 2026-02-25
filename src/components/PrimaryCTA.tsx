@@ -17,7 +17,7 @@ const variantStyles: Record<
 > = {
   ghost: {
     wrapper:
-      "rounded-full p-[2px] bg-gradient-to-r from-brand-cyan via-blue-400 to-brand-purple animate-border-flow shadow-[0_0_30px_rgba(6,182,212,0.3)]",
+      "rounded-full p-[2px] bg-gradient-to-r from-brand-cyan via-blue-400 to-brand-purple animate-border-flow shadow-[0_0_30px_rgba(6,182,212,0.3)] hover:shadow-[0_0_50px_rgba(168,85,247,0.5)] transition-shadow duration-500",
     inner:
       "bg-black/80 backdrop-blur-md text-white hover:bg-black/60",
     shimmer: "via-white/10",

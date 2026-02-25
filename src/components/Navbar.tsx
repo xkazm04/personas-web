@@ -1,11 +1,22 @@
 "use client";
 
-import { motion, useMotionValueEvent, useScroll } from "framer-motion";
-import { useState } from "react";
+import { motion, useMotionValueEvent, useScroll, AnimatePresence } from "framer-motion";
+import { useState, useEffect, useRef } from "react";
 import { Download } from "lucide-react";
 import { usePathname } from "next/navigation";
 import Image from "next/image";
 import Link from "next/link";
+import useActiveSection from "@/hooks/useActiveSection";
+
+const preloadHowImage = () => {
+  if (document.querySelector('link[data-preload-how-bg]')) return;
+  const link = document.createElement("link");
+  link.rel = "preload";
+  link.as = "image";
+  link.href = "/imgs/illustration_photo.jpg";
+  link.setAttribute("data-preload-how-bg", "");
+  document.head.appendChild(link);
+};
 
 const routes = [
   { label: "Personas", href: "/" },
@@ -13,10 +24,50 @@ const routes = [
   { label: "Roadmap", href: "/roadmap" },
 ];
 
+const landingSections = [
+  { id: "hero", label: "Hero" },
+  { id: "use-cases", label: "Tools" },
+  { id: "vision", label: "Vision" },
+  { id: "pricing", label: "Pricing" },
+  { id: "faq", label: "FAQ" },
+  { id: "download", label: "Download" },
+];
+
+const BADGE_VISIBLE_MS = 1500;
+
 export default function Navbar() {
   const [scrolled, setScrolled] = useState(false);
   const { scrollY } = useScroll();
   const pathname = usePathname();
+  const isLanding = pathname === "/";
+
+  const activeSection = useActiveSection(isLanding ? landingSections : []);
+
+  // Transient badge: show on section change, hide after 1.5s
+  const [visibleBadge, setVisibleBadge] = useState<string | null>(null);
+  const timerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const prevSectionRef = useRef<string | null>(null);
+
+  useEffect(() => {
+    // Skip "Hero" — no badge needed at the top
+    if (!activeSection || activeSection === "Hero") {
+      prevSectionRef.current = activeSection;
+      setVisibleBadge(null);
+      return;
+    }
+
+    if (activeSection !== prevSectionRef.current) {
+      prevSectionRef.current = activeSection;
+      setVisibleBadge(activeSection);
+
+      if (timerRef.current) clearTimeout(timerRef.current);
+      timerRef.current = setTimeout(() => setVisibleBadge(null), BADGE_VISIBLE_MS);
+    }
+
+    return () => {
+      if (timerRef.current) clearTimeout(timerRef.current);
+    };
+  }, [activeSection]);
 
   useMotionValueEvent(scrollY, "change", (v) => setScrolled(v > 40));
 
@@ -48,6 +99,23 @@ export default function Navbar() {
             <span className="text-lg font-semibold tracking-tight">Personas</span>
           </Link>
 
+          {/* Active section badge */}
+          <AnimatePresence mode="wait">
+            {isLanding && visibleBadge && (
+              <motion.span
+                key={visibleBadge}
+                initial={{ opacity: 0, x: -6, scale: 0.9 }}
+                animate={{ opacity: 1, x: 0, scale: 1 }}
+                exit={{ opacity: 0, x: 4, scale: 0.95 }}
+                transition={{ duration: 0.25, ease: "easeOut" }}
+                className="hidden md:inline-flex items-center gap-1.5 rounded-full border border-brand-cyan/15 bg-brand-cyan/6 px-3 py-0.5 text-[11px] font-medium uppercase tracking-wider text-brand-cyan/80 backdrop-blur-sm"
+              >
+                <span className="h-1 w-1 rounded-full bg-brand-cyan/60 section-badge-dot" />
+                {visibleBadge}
+              </motion.span>
+            )}
+          </AnimatePresence>
+
           {/* Route tabs */}
           <div className="hidden items-center gap-1 rounded-full border border-white/6 bg-white/2 p-1 backdrop-blur-sm md:flex">
             {routes.map((route) => {
@@ -56,6 +124,7 @@ export default function Navbar() {
                 <Link
                   key={route.href}
                   href={route.href}
+                  onMouseEnter={route.href === "/how" ? preloadHowImage : undefined}
                   className={`relative rounded-full px-5 py-1.5 text-sm font-medium transition-all duration-300 ${
                     isActive
                       ? "bg-white/8 text-foreground shadow-[0_0_12px_rgba(6,182,212,0.1)]"
@@ -93,6 +162,7 @@ export default function Navbar() {
               <Link
                 key={route.href}
                 href={route.href}
+                onMouseEnter={route.href === "/how" ? preloadHowImage : undefined}
                 className={`relative flex-1 rounded-full px-3 py-1.5 text-center text-xs font-medium transition-all duration-300 ${
                   isActive
                     ? "bg-white/8 text-foreground shadow-[0_0_12px_rgba(6,182,212,0.1)]"

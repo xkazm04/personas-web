@@ -1,13 +1,14 @@
 "use client";
 
 import { useState } from "react";
-import { motion } from "framer-motion";
+import { motion, AnimatePresence } from "framer-motion";
 import {
   Apple,
   Globe,
   LayoutDashboard,
   Building2,
   ChevronUp,
+  ChevronDown,
   Lightbulb,
   Send,
   Check,
@@ -84,16 +85,15 @@ const accentTokens: Record<
 
 /* ── Card ── */
 
-function VoteCard({ feature, rank }: { feature: Feature; rank: number }) {
+function VoteCard({ feature }: { feature: Feature }) {
   const [voted, setVoted] = useState(false);
   const [count, setCount] = useState(feature.votes);
+  const [expanded, setExpanded] = useState(false);
   const t = accentTokens[feature.accent];
   const rgba = (a: number) => `rgba(${t.r},${t.g},${t.b},${a})`;
 
-  const maxVotes = Math.max(...features.map((f) => f.votes)) + 1;
-  const barWidth = Math.max((count / maxVotes) * 100, 12);
-
-  const handleVote = () => {
+  const handleVote = (e: React.MouseEvent) => {
+    e.stopPropagation();
     trackFeatureVote(feature.id, voted ? "undo" : "upvote");
     if (voted) {
       setVoted(false);
@@ -110,26 +110,26 @@ function VoteCard({ feature, rank }: { feature: Feature; rank: number }) {
       whileHover={{ y: -4, transition: { duration: 0.35, ease: "easeOut" } }}
       className="group relative flex flex-col overflow-hidden rounded-2xl border border-white/[0.05] bg-gradient-to-b from-white/[0.03] to-transparent backdrop-blur-sm transition-all duration-500 hover:border-white/[0.1] hover:shadow-[0_8px_60px_rgba(0,0,0,0.35)]"
     >
-      {/* ── Illustration area (top) ── */}
-      <div className="relative flex items-center justify-center py-14 sm:py-16 overflow-hidden">
+      {/* ── Full-card illustration area ── */}
+      <div className="relative flex flex-1 items-center justify-center py-20 sm:py-24 overflow-hidden">
         {/* Ambient radial glow — rests dim, blooms on hover */}
         <div
           className="pointer-events-none absolute inset-0 transition-opacity duration-700 opacity-0 group-hover:opacity-100"
           style={{
-            background: `radial-gradient(circle at 50% 55%, ${rgba(0.12)} 0%, ${rgba(0.04)} 40%, transparent 70%)`,
+            background: `radial-gradient(circle at 50% 50%, ${rgba(0.14)} 0%, ${rgba(0.05)} 40%, transparent 70%)`,
           }}
         />
-        {/* Always-on faint glow so the area isn't fully flat */}
+        {/* Always-on faint glow */}
         <div
           className="pointer-events-none absolute inset-0"
           style={{
-            background: `radial-gradient(circle at 50% 55%, ${rgba(0.04)} 0%, transparent 60%)`,
+            background: `radial-gradient(circle at 50% 50%, ${rgba(0.05)} 0%, transparent 60%)`,
           }}
         />
 
         {/* Concentric ring decoration */}
         <div className="pointer-events-none absolute inset-0 flex items-center justify-center">
-          {[72, 104, 140].map((size) => (
+          {[80, 120, 168, 220].map((size) => (
             <div
               key={size}
               className="absolute rounded-full border transition-all duration-700 group-hover:scale-110"
@@ -144,8 +144,8 @@ function VoteCard({ feature, rank }: { feature: Feature; rank: number }) {
           <div
             className="absolute rounded-full border opacity-0 scale-90 transition-all duration-700 group-hover:opacity-100 group-hover:scale-100"
             style={{
-              width: 180,
-              height: 180,
+              width: 270,
+              height: 270,
               borderColor: rgba(0.08),
             }}
           />
@@ -161,93 +161,45 @@ function VoteCard({ feature, rank }: { feature: Feature; rank: number }) {
           }}
         />
 
-        {/* The icon — white → accent colour + glow on hover */}
+        {/* The icon — large, white → accent on hover */}
         <div className="relative z-10">
-          {/* Glow orb behind icon (only visible on hover) */}
+          {/* Glow orb behind icon */}
           <div
-            className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 h-20 w-20 rounded-full opacity-0 blur-2xl transition-opacity duration-500 group-hover:opacity-100"
+            className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 h-28 w-28 rounded-full opacity-0 blur-3xl transition-opacity duration-500 group-hover:opacity-100"
             style={{ background: rgba(0.35) }}
           />
           {/* White icon — fades out on hover */}
           <div className="relative transition-opacity duration-500 group-hover:opacity-0">
-            <feature.icon className="h-14 w-14 sm:h-16 sm:w-16 text-white/70 drop-shadow-lg" />
+            <feature.icon className="h-20 w-20 sm:h-24 sm:w-24 text-white/70 drop-shadow-lg" />
           </div>
-          {/* Coloured duplicate layered on top — fades in on hover */}
+          {/* Coloured duplicate — fades in on hover */}
           <div
             className="absolute inset-0 opacity-0 transition-opacity duration-500 group-hover:opacity-100"
             style={{
               color: rgba(1),
-              filter: `drop-shadow(0 0 18px ${rgba(0.5)}) drop-shadow(0 0 40px ${rgba(0.25)})`,
+              filter: `drop-shadow(0 0 24px ${rgba(0.5)}) drop-shadow(0 0 50px ${rgba(0.25)})`,
             }}
           >
-            <feature.icon className="h-14 w-14 sm:h-16 sm:w-16" />
+            <feature.icon className="h-20 w-20 sm:h-24 sm:w-24" />
           </div>
         </div>
-
-        {/* Rank badge */}
-        <span
-          className="absolute top-4 right-4 font-mono text-[11px] tabular-nums transition-colors duration-500 text-white/15 group-hover:text-white/30"
-        >
-          #{rank}
-        </span>
-
-        {/* Bottom edge fade into metadata area */}
-        <div className="pointer-events-none absolute inset-x-0 bottom-0 h-12 bg-gradient-to-t from-[#0a0a12] to-transparent" />
       </div>
 
-      {/* ── Metadata area (bottom) ── */}
-      <div className="relative z-10 flex flex-1 flex-col px-5 pb-5 pt-1">
+      {/* ── Bottom action row: Upvote + Feature Name ── */}
+      <div
+        className="relative z-10 cursor-pointer"
+        onClick={() => setExpanded((v) => !v)}
+      >
         {/* Top accent line */}
         <div
-          className="absolute inset-x-5 top-0 h-px opacity-40 transition-opacity duration-500 group-hover:opacity-80"
-          style={{ background: `linear-gradient(90deg, transparent, ${rgba(0.25)}, transparent)` }}
+          className="absolute inset-x-0 top-0 h-px opacity-60"
+          style={{ background: `linear-gradient(90deg, transparent, ${rgba(0.2)}, transparent)` }}
         />
 
-        <div className="flex items-center gap-2.5 mt-1">
-          <h3 className="text-base font-semibold leading-tight">{feature.title}</h3>
-          <span
-            className="rounded-full border px-2 py-0.5 text-[10px] font-mono uppercase tracking-wider transition-colors duration-500"
-            style={{
-              borderColor: rgba(0.15),
-              backgroundColor: rgba(0.06),
-              color: rgba(0.7),
-            }}
-          >
-            {feature.subtitle}
-          </span>
-        </div>
-
-        <p className="mt-2.5 text-[13px] leading-relaxed text-muted-dark flex-1">
-          {feature.description}
-        </p>
-
-        {/* Vote bar */}
-        <div className="mt-4">
-          <div className="relative h-1 rounded-full bg-white/[0.04] overflow-hidden">
-            <motion.div
-              className="absolute inset-y-0 left-0 rounded-full"
-              style={{
-                background: `linear-gradient(90deg, ${rgba(0.45)}, ${rgba(0.15)})`,
-              }}
-              initial={{ width: 0 }}
-              whileInView={{ width: `${barWidth}%` }}
-              viewport={{ once: true }}
-              transition={{ duration: 0.8, ease: "easeOut", delay: 0.2 }}
-            />
-          </div>
-        </div>
-
-        {/* Vote action row */}
-        <div className="mt-3 flex items-center justify-between">
-          <div className="flex items-center gap-1.5 text-xs font-mono text-muted-dark/60">
-            <span className="tabular-nums font-medium text-white/70">
-              {count.toLocaleString()}
-            </span>
-            <span>votes</span>
-          </div>
+        <div className="flex items-center gap-3 px-4 py-3">
           <button
             onClick={handleVote}
-            className="flex items-center gap-1.5 rounded-full border px-3.5 py-1.5 text-xs font-medium transition-all duration-300 cursor-pointer"
+            className="flex items-center gap-1.5 rounded-full border px-3 py-1.5 text-xs font-medium transition-all duration-300 cursor-pointer shrink-0"
             style={
               voted
                 ? {
@@ -264,13 +216,40 @@ function VoteCard({ feature, rank }: { feature: Feature; rank: number }) {
             }
           >
             <ChevronUp
-              className={`h-3.5 w-3.5 transition-transform duration-300 ${
-                voted ? "scale-110" : ""
-              }`}
+              className={`h-3.5 w-3.5 transition-transform duration-300 ${voted ? "scale-110" : ""}`}
             />
-            <span>{voted ? "Voted" : "Upvote"}</span>
+            <span className="tabular-nums">{count}</span>
           </button>
+
+          <h3 className="text-sm font-semibold leading-tight flex-1 text-center">{feature.title}</h3>
+
+          <ChevronDown
+            className={`h-4 w-4 text-muted-dark/50 shrink-0 transition-transform duration-300 ${expanded ? "rotate-180" : ""}`}
+          />
         </div>
+
+        {/* Expandable description */}
+        <AnimatePresence>
+          {expanded && (
+            <motion.div
+              initial={{ height: 0, opacity: 0 }}
+              animate={{ height: "auto", opacity: 1 }}
+              exit={{ height: 0, opacity: 0 }}
+              transition={{ duration: 0.3, ease: "easeOut" }}
+              className="overflow-hidden"
+            >
+              <div className="px-4 pb-4">
+                <div
+                  className="h-px mb-3 opacity-30"
+                  style={{ background: `linear-gradient(90deg, transparent, ${rgba(0.15)}, transparent)` }}
+                />
+                <p className="text-[13px] leading-relaxed text-muted-dark">
+                  {feature.description}
+                </p>
+              </div>
+            </motion.div>
+          )}
+        </AnimatePresence>
       </div>
     </motion.div>
   );
@@ -415,8 +394,8 @@ export default function FeatureVoting() {
         variants={staggerContainer}
         className="mt-16 grid gap-5 sm:grid-cols-2"
       >
-        {sorted.map((feature, i) => (
-          <VoteCard key={feature.id} feature={feature} rank={i + 1} />
+        {sorted.map((feature) => (
+          <VoteCard key={feature.id} feature={feature} />
         ))}
       </motion.div>
 

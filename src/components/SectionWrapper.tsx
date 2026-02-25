@@ -8,11 +8,15 @@ export default function SectionWrapper({
   children,
   className = "",
   dotGrid = false,
+  "aria-label": ariaLabel,
+  "aria-roledescription": ariaRoleDescription,
 }: {
   id?: string;
   children: React.ReactNode;
   className?: string;
   dotGrid?: boolean;
+  "aria-label"?: string;
+  "aria-roledescription"?: string;
 }) {
   return (
     <motion.section
@@ -22,6 +26,9 @@ export default function SectionWrapper({
       viewport={{ once: true, margin: "-80px" }}
       variants={staggerContainer}
       className={`relative px-6 py-24 md:py-32 ${dotGrid ? "dot-grid" : ""} ${className}`}
+      aria-label={ariaLabel}
+      aria-roledescription={ariaRoleDescription}
+      data-animate-when-visible
     >
       <div className="mx-auto max-w-6xl">{children}</div>
     </motion.section>

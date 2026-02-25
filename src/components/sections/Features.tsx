@@ -354,13 +354,20 @@ export default function Features() {
           {/* Remaining 3 features — cascade with alternating directions */}
           <div className="grid gap-6 md:grid-cols-3">
             {features.slice(1).map((f, i) => (
-              <GlowCard key={f.title} accent={f.accent} className="p-6 md:p-8" variants={gridCardVariants[i]}>
-                <FeatureCardHeader f={f} />
-                <p className="mt-4 text-sm leading-relaxed text-muted">
-                  {f.description}
-                </p>
-                {f.visual}
-              </GlowCard>
+              <motion.div
+                key={f.title}
+                variants={gridCardVariants[i]}
+                whileHover={{ scale: 1.02, boxShadow: `0 0 20px rgba(255,255,255,0.05)` }}
+                transition={{ duration: 0.3 }}
+              >
+                <GlowCard accent={f.accent} className="p-6 md:p-8 h-full">
+                  <FeatureCardHeader f={f} />
+                  <p className="mt-4 text-sm leading-relaxed text-muted">
+                    {f.description}
+                  </p>
+                  {f.visual}
+                </GlowCard>
+              </motion.div>
             ))}
           </div>
         </div>

@@ -1,12 +1,13 @@
 "use client";
 
-import { useState, useEffect, useCallback } from "react";
-import { motion } from "framer-motion";
+import { useState, useEffect, useCallback, useRef } from "react";
+import { motion, useScroll, useTransform, useReducedMotion } from "framer-motion";
 import Image from "next/image";
 import {
   Mail, MessageSquare, Github, CreditCard, Calendar, HardDrive,
 } from "lucide-react";
 import GradientText from "@/components/GradientText";
+import SectionHeading from "@/components/SectionHeading";
 import TerminalChrome from "@/components/TerminalChrome";
 import SectionWrapper from "@/components/SectionWrapper";
 import { fadeUp, revealFromBelow } from "@/lib/animations";
@@ -38,6 +39,7 @@ const statusStyles: Record<string, { dot: string; label: string; text: string }>
 };
 
 export default function Vision() {
+  const prefersReducedMotion = useReducedMotion();
   const [agents, setAgents] = useState(initialAgents);
   const [flashIdx, setFlashIdx] = useState<number | null>(null);
 
@@ -61,11 +63,14 @@ export default function Vision() {
       return next;
     });
 
-    setFlashIdx(idx);
-    setTimeout(() => setFlashIdx(null), 600);
-  }, [agents.length]);
+    if (!prefersReducedMotion) {
+      setFlashIdx(idx);
+      setTimeout(() => setFlashIdx(null), 600);
+    }
+  }, [agents.length, prefersReducedMotion]);
 
   useEffect(() => {
+    if (prefersReducedMotion) return;
     const schedule = () => {
       const delay = 3000 + Math.random() * 2000; // 3-5s
       return setTimeout(() => {
@@ -75,7 +80,7 @@ export default function Vision() {
     };
     let timerRef = schedule();
     return () => clearTimeout(timerRef);
-  }, [tick]);
+  }, [tick, prefersReducedMotion]);
 
   // Compute status summary
   const statusCounts = agents.reduce(
@@ -88,23 +93,32 @@ export default function Vision() {
     statusCounts.idle && `${statusCounts.idle} idle`,
   ].filter(Boolean).join(" \u00b7 ");
 
+  const containerRef = useRef<HTMLDivElement>(null);
+  const { scrollYProgress } = useScroll({
+    target: containerRef,
+    offset: ["start end", "end start"],
+  });
+  const y = useTransform(scrollYProgress, [0, 1], ["-10%", "10%"]);
+
   return (
-    <SectionWrapper className="overflow-hidden py-20 md:py-24">
-      {/* Background image */}
-      <div className="pointer-events-none absolute inset-0">
-        <Image
-          src="/imgs/illustration_hd.jpg"
-          alt="Futuristic command center with AI personality cards"
-          fill className="object-cover object-center" sizes="100vw" quality={80}
-          placeholder="blur"
-          blurDataURL="data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/2wBDAAoHBwgHBgoICAgLCgoLDhgQDg0NDh0VFhEYIx8lJCIfIiEmKzcvJik0KSEiMEExNDk7Pj4+JS5ESUM8SDc9Pjv/2wBDAQoLCw4NDhwQEBw7KCIoOzs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozv/wAARCAAGAAoDASIAAhEBAxEB/8QAFgABAQEAAAAAAAAAAAAAAAAAAAUH/8QAIBAAAgIBBAMBAAAAAAAAAAAAAQIAAwQFERIhBjFBUf/EABQBAQAAAAAAAAAAAAAAAAAAAAP/xAAYEQADAQEAAAAAAAAAAAAAAAABAgMAEf/aAAwDAQACEQMRAD8AyTDw8nPyFx8WprLG6KoJLH4BLPp3h+T6ULaW/wBJZX1sVh7XjuIiVeli5Ef/2Q=="
-        />
+    <SectionWrapper id="vision" className="relative overflow-hidden py-20 md:py-24">
+      <div ref={containerRef} className="absolute inset-0 pointer-events-none">
+        {/* Background image */}
+        <motion.div style={{ y }} className="absolute inset-0 h-[120%] -top-[10%]">
+          <Image
+            src="/imgs/illustration_hd.jpg"
+            alt="Futuristic command center with AI personality cards"
+            fill className="object-cover object-center" sizes="100vw" quality={80}
+            placeholder="blur"
+            blurDataURL="data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/2wBDAAoHBwgHBgoICAgLCgoLDhgQDg0NDh0VFhEYIx8lJCIfIiEmKzcvJik0KSEiMEExNDk7Pj4+JS5ESUM8SDc9Pjv/2wBDAQoLCw4NDhwQEBw7KCIoOzs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozv/wAARCAAGAAoDASIAAhEBAxEB/8QAFgABAQEAAAAAAAAAAAAAAAAAAAUH/8QAIBAAAgIBBAMBAAAAAAAAAAAAAQIAAwQFERIhBjFBUf/EABQBAQAAAAAAAAAAAAAAAAAAAAP/xAAYEQADAQEAAAAAAAAAAAAAAAABAgMAEf/aAAwDAQACEQMRAD8AyTDw8nPyFx8WprLG6KoJLH4BLPp3h+T6ULaW/wBJZX1sVh7XjuIiVeli5Ef/2Q=="
+          />
+        </motion.div>
         <div className="absolute inset-0 bg-black/65" />
         <div className="absolute inset-0 bg-linear-to-b from-background via-transparent to-background" />
         <div className="absolute inset-0 bg-linear-to-r from-background/40 via-transparent to-background/40" />
       </div>
 
-      <div className="mx-auto max-w-3xl text-center">
+      <div className="mx-auto max-w-3xl text-center relative z-10">
         <motion.div variants={fadeUp} className="mx-auto mb-5 flex max-w-4xl flex-wrap items-center justify-center gap-3">
           {[
             "Design once",
@@ -120,21 +134,17 @@ export default function Vision() {
           ))}
         </motion.div>
 
-        <motion.h2 variants={revealFromBelow} className="text-4xl font-extrabold tracking-tight sm:text-5xl md:text-6xl lg:text-7xl leading-[1.1] drop-shadow-md">
-          Your personal army of{" "}
-          <GradientText className="drop-shadow-lg">AI specialists</GradientText>
-        </motion.h2>
+        <motion.div variants={revealFromBelow}>
+          <SectionHeading className="leading-[1.1]">
+            Your personal army of{" "}
+            <GradientText className="drop-shadow-lg">AI specialists</GradientText>
+          </SectionHeading>
+        </motion.div>
 
-        <motion.p variants={fadeUp} className="mt-5 text-lg text-white/80 leading-relaxed sm:text-xl font-light">
-          Imagine a world where every repetitive task is handled by a
-          purpose-built AI agent — designed by you in plain English,
-          coordinated through an intelligent event bus, and running
-          autonomously on your desktop or in the cloud.
-        </motion.p>
       </div>
 
       {/* Agent monitoring dashboard — compact */}
-      <motion.div variants={fadeUp} className="mt-12 mx-auto max-w-2xl">
+      <motion.div variants={fadeUp} className="mt-12 mx-auto max-w-2xl relative z-10">
         <div className="rounded-2xl border border-white/8 bg-black/50 backdrop-blur-xl overflow-hidden shadow-[0_0_60px_rgba(0,0,0,0.3)]">
           <TerminalChrome
             title="agent-monitor"
@@ -154,7 +164,7 @@ export default function Vision() {
                   whileInView={{ opacity: 1, x: 0 }}
                   viewport={{ once: true }}
                   transition={{ delay: i * 0.06, duration: 0.25 }}
-                  className={`group grid grid-cols-[1fr_auto] items-center gap-2 sm:gap-3 px-4 py-3 sm:px-5 transition-colors duration-500 hover:bg-white/2 ${flashIdx === i ? "bg-brand-cyan/4" : ""}`}
+                  className={`group grid grid-cols-[1fr_auto] items-center gap-2 sm:gap-3 px-4 py-3 sm:px-5 transition-all duration-500 hover:bg-white/5 hover:backdrop-blur-md hover:shadow-[inset_0_0_20px_rgba(255,255,255,0.02)] ${flashIdx === i ? "bg-brand-cyan/4" : ""}`}
                 >
                   {/* Left: icon + name + status */}
                   <div className="flex items-center gap-3 min-w-0">
