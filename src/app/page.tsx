@@ -9,6 +9,7 @@ import {
   LazyVision,
 } from "@/components/sections/lazy";
 import StageSection from "@/components/StageSection";
+import SectionDivider from "@/components/SectionDivider";
 import PageShell from "@/components/PageShell";
 
 const scrollMapItems = [
@@ -30,9 +31,13 @@ export default function Home() {
           <Hero />
         </div>
 
+        <SectionDivider from="cyan" to="emerald" />
+
         <StageSection glow="emerald" fromColor="rgba(6,182,212,0.03)" toColor="rgba(52,211,153,0.04)">
           <LazyUseCases />
         </StageSection>
+
+        <SectionDivider from="emerald" to="purple" />
 
         <div id="vision">
           <StageSection glow="purple" fromColor="rgba(52,211,153,0.03)" toColor="rgba(168,85,247,0.04)">
@@ -40,13 +45,19 @@ export default function Home() {
           </StageSection>
         </div>
 
+        <SectionDivider from="purple" to="purple" />
+
         <StageSection glow="purple" fromColor="rgba(52,211,153,0.03)" toColor="rgba(168,85,247,0.04)">
           <LazyPricing />
         </StageSection>
 
+        <SectionDivider from="purple" to="cyan" />
+
         <StageSection glow="cyan" fromColor="rgba(168,85,247,0.03)" toColor="rgba(6,182,212,0.04)">
           <LazyFAQ />
         </StageSection>
+
+        <SectionDivider from="cyan" to="cyan" />
 
         <StageSection glow="cyan" fromColor="rgba(6,182,212,0.03)">
           <LazyDownloadCTA />

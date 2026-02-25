@@ -1,13 +1,14 @@
 "use client";
 
-import { useState, useEffect, useRef, useCallback } from "react";
-import { motion, AnimatePresence } from "framer-motion";
+import { useState, useEffect, useRef, useCallback, useId } from "react";
+import { motion, AnimatePresence, useReducedMotion } from "framer-motion";
 import {
   Mail, MessageSquare, Github, HardDrive, SquareKanban,
   BookOpen, CreditCard, Calendar, Figma,
 } from "lucide-react";
 import SectionWrapper from "@/components/SectionWrapper";
 import GradientText from "@/components/GradientText";
+import SectionHeading from "@/components/SectionHeading";
 import { fadeUp } from "@/lib/animations";
 
 const tools = [
@@ -60,15 +61,12 @@ const tools = [
 
 const AUTOPLAY_INTERVAL = 4000;
 
-const positions = [
-  { x: 8, y: 5 }, { x: 55, y: 0 }, { x: 85, y: 8 },
-  { x: 0, y: 38 }, { x: 35, y: 32 }, { x: 68, y: 36 },
-  { x: 15, y: 68 }, { x: 50, y: 65 }, { x: 80, y: 62 },
-];
 
 export default function UseCases() {
+  const uid = useId();
+  const prefersReducedMotion = useReducedMotion();
   const [selected, setSelected] = useState<string>(tools[0].id);
-  const [autoplay, setAutoplay] = useState(true);
+  const [autoplay, setAutoplay] = useState(!prefersReducedMotion);
   const [progress, setProgress] = useState(0);
   const [isMobile, setIsMobile] = useState(false);
   const [connectorPath, setConnectorPath] = useState<string>("");
@@ -178,12 +176,48 @@ export default function UseCases() {
     };
   }, [selected, isMobile]);
 
-  const handleManualClick = (toolId: string) => {
+  const handleManualClick = useCallback((toolId: string) => {
     if (!userClickedRef.current) { userClickedRef.current = true; setAutoplay(false); }
     setSelected(toolId);
     setProgress(0);
     progressRef.current = 0;
-  };
+  }, []);
+
+  const handleToolbarKeyDown = useCallback((e: React.KeyboardEvent) => {
+    const currentIdx = tools.findIndex((t) => t.id === selected);
+    let nextIdx: number | null = null;
+
+    if (e.key === "ArrowRight" || e.key === "ArrowDown") {
+      e.preventDefault();
+      nextIdx = (currentIdx + 1) % tools.length;
+    } else if (e.key === "ArrowLeft" || e.key === "ArrowUp") {
+      e.preventDefault();
+      nextIdx = (currentIdx - 1 + tools.length) % tools.length;
+    } else if (e.key === "Home") {
+      e.preventDefault();
+      nextIdx = 0;
+    } else if (e.key === "End") {
+      e.preventDefault();
+      nextIdx = tools.length - 1;
+    } else if (e.key === "Escape") {
+      e.preventDefault();
+      setAutoplay(true);
+      userClickedRef.current = false;
+      setProgress(0);
+      progressRef.current = 0;
+      return;
+    }
+
+    if (nextIdx !== null) {
+      const nextId = tools[nextIdx].id;
+      handleManualClick(nextId);
+      // Focus the corresponding button
+      const btn = isMobile
+        ? mobileButtonRefs.current[nextId]
+        : desktopButtonRefs.current[nextId];
+      btn?.focus();
+    }
+  }, [selected, isMobile, handleManualClick]);
 
   return (
     <SectionWrapper id="use-cases">
@@ -192,10 +226,10 @@ export default function UseCases() {
       </div>
 
       <motion.div variants={fadeUp} className="relative">
-        <h2 className="text-center text-3xl font-extrabold tracking-tight sm:text-4xl md:text-6xl drop-shadow-md">
+        <SectionHeading className="text-center">
           One agent per tool.{" "}
           <GradientText className="drop-shadow-lg">Infinite possibilities</GradientText>
-        </h2>
+        </SectionHeading>
         <div className="mt-8 flex flex-col items-center gap-5 sm:flex-row sm:items-start sm:justify-between max-w-4xl mx-auto">
           <span className="shrink-0 rounded-full border border-brand-emerald/30 bg-brand-emerald/10 px-4 py-1.5 text-xs font-semibold tracking-widest uppercase text-brand-emerald shadow-[0_0_15px_rgba(52,211,153,0.2)] font-mono">
             {tools.length} integrations · {totalAutomations} patterns
@@ -209,23 +243,29 @@ export default function UseCases() {
 
       <div ref={containerRef} className="mt-16 relative">
         <svg className="pointer-events-none absolute inset-0 z-5 h-full w-full overflow-visible">
+          <defs>
+            <linearGradient id={`${uid}-connectorGrad`} x1="0%" y1="0%" x2="100%" y2="100%">
+              <stop offset="0%" stopColor={activeTool?.color || "rgba(6,182,212,0.5)"} stopOpacity="0.8" />
+              <stop offset="100%" stopColor="rgba(168,85,247,0.5)" stopOpacity="0.2" />
+            </linearGradient>
+          </defs>
           <motion.path
             d={connectorPath}
             initial={false}
             animate={{ opacity: connectorVisible && connectorPath ? 1 : 0 }}
             transition={{ duration: 0.2 }}
             fill="none"
-            stroke="rgba(6,182,212,0.15)"
+            stroke={`url(#${uid}-connectorGrad)`}
             strokeWidth="2"
             strokeDasharray="6 6"
             style={{ animation: "dash-flow 1.4s linear infinite" }}
           />
         </svg>
 
-        {/* ── Desktop: scattered layout (md+) ── */}
-        <motion.div variants={fadeUp} className="relative mx-auto hidden md:block h-80" style={{ maxWidth: 720 }}>
+        {/* ── Desktop: grid layout (md+) ── */}
+        {/* eslint-disable-next-line jsx-a11y/interactive-supports-focus */}
+        <motion.div variants={fadeUp} className="hidden md:grid grid-cols-5 gap-3 mx-auto max-w-2xl lg:grid-cols-9 lg:max-w-4xl" role="toolbar" aria-label="Integration tools" onKeyDown={handleToolbarKeyDown}>
           {tools.map((tool, i) => {
-            const pos = positions[i];
             const isActive = selected === tool.id;
             return (
               <motion.button
@@ -233,14 +273,21 @@ export default function UseCases() {
                 ref={(node) => {
                   desktopButtonRefs.current[tool.id] = node;
                 }}
+                tabIndex={isActive ? 0 : -1}
+                aria-pressed={isActive}
                 onClick={() => handleManualClick(tool.id)}
-                className={`absolute relative flex flex-col items-center gap-2 overflow-hidden rounded-2xl border px-4 py-3 backdrop-blur-sm transition-all duration-500 cursor-pointer ${
+                className={`relative flex flex-col items-center gap-2 overflow-hidden rounded-2xl border px-4 py-3 backdrop-blur-sm transition-all duration-500 cursor-pointer ${
                   isActive
                     ? "border-brand-cyan/30 bg-brand-cyan/8 shadow-[0_0_40px_rgba(6,182,212,0.10)] scale-110 z-10"
                     : "border-white/5 bg-white/1.5 hover:border-white/10 hover:bg-white/3"
                 }`}
-                style={{ left: `${pos.x}%`, top: `${pos.y}%` }}
-                whileHover={{ scale: isActive ? 1.1 : 1.06 }}
+                style={{
+                  boxShadow: isActive ? `0 0 40px ${tool.color}30` : undefined
+                }}
+                whileHover={{
+                  scale: isActive ? 1.1 : 1.06,
+                  boxShadow: `0 0 20px ${tool.color}20`
+                }}
                 whileTap={{ scale: 0.95 }}
                 initial={{ opacity: 0, y: 20 }}
                 whileInView={{ opacity: 1, y: 0 }}
@@ -273,7 +320,8 @@ export default function UseCases() {
             WebkitMaskImage: "linear-gradient(to right, black 85%, transparent)",
           }}
         >
-          <div className="flex gap-3 overflow-x-auto snap-x snap-mandatory pb-4 scrollbar-hide">
+          {/* eslint-disable-next-line jsx-a11y/interactive-supports-focus */}
+          <div className="flex gap-3 overflow-x-auto snap-x snap-mandatory pb-4 scrollbar-hide" role="toolbar" aria-label="Integration tools" onKeyDown={handleToolbarKeyDown}>
             {tools.map((tool, i) => {
               const isActive = selected === tool.id;
               return (
@@ -282,6 +330,8 @@ export default function UseCases() {
                   ref={(node) => {
                     mobileButtonRefs.current[tool.id] = node;
                   }}
+                  tabIndex={isActive ? 0 : -1}
+                  aria-pressed={isActive}
                   onClick={() => handleManualClick(tool.id)}
                   className={`relative flex shrink-0 snap-start flex-col items-center gap-2 overflow-hidden rounded-2xl border px-4 py-3 backdrop-blur-sm transition-all duration-500 cursor-pointer ${
                     isActive
@@ -322,6 +372,8 @@ export default function UseCases() {
               ref={detailCardRef}
             >
               <div className="relative rounded-2xl border border-white/5 bg-linear-to-br from-white/2.5 to-transparent p-5 sm:p-8 backdrop-blur-md overflow-hidden">
+                <div className="absolute inset-0 opacity-[0.03] bg-[url('/imgs/noise.png')] mix-blend-overlay" />
+                <div className="absolute inset-0 bg-[linear-gradient(to_right,#80808012_1px,transparent_1px),linear-gradient(to_bottom,#80808012_1px,transparent_1px)] bg-[size:24px_24px] [mask-image:radial-gradient(ellipse_60%_50%_at_50%_0%,#000_70%,transparent_100%)]" />
                 <div className="pointer-events-none absolute -right-16 -top-16 h-32 w-32 rounded-full blur-3xl" style={{ backgroundColor: `${activeTool.color}08` }} />
                 <div className="pointer-events-none absolute inset-x-0 bottom-0 h-px bg-linear-to-r from-transparent via-brand-cyan/10 to-transparent" />
 
@@ -339,15 +391,22 @@ export default function UseCases() {
                   {activeTool.useCases.map((uc, i) => (
                     <motion.div
                       key={uc.title}
-                      initial={{ opacity: 0, y: 12 }} animate={{ opacity: 1, y: 0 }}
-                      transition={{ delay: i * 0.08, duration: 0.3 }}
-                      className={`group rounded-xl border border-white/4 bg-white/1.5 p-4 transition-all duration-300 hover:border-white/8 hover:bg-white/2.5 ${i === 1 ? "md:-mt-2" : i === 2 ? "md:mt-4" : ""}`}
+                      initial={{ opacity: 0, y: 20, scale: 0.95 }}
+                      whileInView={{ opacity: 1, y: 0, scale: 1 }}
+                      viewport={{ once: true, margin: "-50px" }}
+                      whileHover={{ scale: 1.03, boxShadow: `0 0 20px ${activeTool.color}30`, borderColor: `${activeTool.color}50` }}
+                      transition={{ delay: i * 0.15, duration: 0.4, ease: "easeOut" }}
+                      className={`group rounded-xl border border-white/4 bg-white/1.5 p-4 transition-all duration-300 hover:bg-white/2.5 ${i === 1 ? "md:-mt-2" : i === 2 ? "md:mt-4" : ""}`}
                     >
                       <div className="flex items-center gap-2 mb-2">
-                        <div className="h-1.5 w-1.5 rounded-full bg-brand-cyan shadow-[0_0_4px_rgba(6,182,212,0.5)]" />
-                        <h4 className="text-sm font-medium">{uc.title}</h4>
+                        <motion.div 
+                          animate={{ scale: [1, 1.5, 1], opacity: [0.5, 1, 0.5] }}
+                          transition={{ duration: 2, repeat: Infinity, delay: i * 0.3 }}
+                          className="h-1.5 w-1.5 rounded-full bg-brand-cyan shadow-[0_0_8px_rgba(6,182,212,0.8)]" 
+                        />
+                        <h4 className="text-sm font-medium group-hover:text-white transition-colors">{uc.title}</h4>
                       </div>
-                      <p className="text-xs leading-relaxed text-muted-dark">{uc.desc}</p>
+                      <p className="text-xs leading-relaxed text-muted-dark group-hover:text-muted transition-colors">{uc.desc}</p>
                     </motion.div>
                   ))}
                 </div>

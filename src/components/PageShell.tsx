@@ -1,9 +1,17 @@
+"use client";
+
 import type { ReactNode } from "react";
+import dynamic from "next/dynamic";
 import ScrollMap from "@/components/ScrollMap";
-import SectionSnapScroll from "@/components/SectionSnapScroll";
-import TopoBackground from "@/components/TopoBackground";
-import ParallaxAccents from "@/components/ParallaxAccents";
 import AmbientOrbs from "@/components/AmbientOrbs";
+import AnimationPauseObserver from "@/components/AnimationPauseObserver";
+
+const TopoBackground = dynamic(() => import("@/components/TopoBackground"), {
+  ssr: false,
+});
+const ParallaxAccents = dynamic(() => import("@/components/ParallaxAccents"), {
+  ssr: false,
+});
 
 interface ScrollMapItem {
   label: string;
@@ -19,7 +27,7 @@ export default function PageShell({
 }) {
   return (
     <main className="relative isolate overflow-hidden">
-      <SectionSnapScroll />
+      <AnimationPauseObserver />
       <TopoBackground />
       <ParallaxAccents />
       <AmbientOrbs />

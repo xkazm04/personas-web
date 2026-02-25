@@ -1,4 +1,8 @@
-import { Sparkles, Github, Twitter } from "lucide-react";
+"use client";
+
+import { useState } from "react";
+import { Sparkles, Github, Twitter, ChevronDown } from "lucide-react";
+import { motion, AnimatePresence } from "framer-motion";
 
 const columns = [
   {
@@ -27,6 +31,70 @@ const columns = [
   },
 ];
 
+function FooterLinkColumn({ title, links }: (typeof columns)[number]) {
+  const [open, setOpen] = useState(false);
+
+  return (
+    <div className="min-w-0">
+      {/* Desktop: static heading; Mobile: accordion trigger */}
+      <button
+        onClick={() => setOpen((v) => !v)}
+        className="flex w-full items-center justify-between md:pointer-events-none md:cursor-default"
+      >
+        <h4 className="text-xs font-medium uppercase tracking-wider text-muted-dark/70">
+          {title}
+        </h4>
+        <ChevronDown
+          className={`h-3.5 w-3.5 text-muted-dark/50 transition-transform duration-200 md:hidden ${open ? "rotate-180" : ""}`}
+        />
+      </button>
+      <div className="mt-1.5 h-px w-8 bg-linear-to-r from-brand-cyan/10 to-transparent" />
+
+      {/* Desktop: always visible */}
+      <ul className="mt-3 hidden md:block space-y-1">
+        {links.map((link) => (
+          <li key={link.label}>
+            <a
+              href={link.href}
+              className="group/link flex min-h-[44px] items-center gap-1.5 text-sm text-muted-dark transition-colors duration-300 hover:text-foreground"
+            >
+              <div className="h-1 w-1 rounded-full bg-white/8 transition-all duration-300 group-hover/link:bg-brand-cyan/40 group-hover/link:shadow-[0_0_4px_rgba(6,182,212,0.3)]" />
+              {link.label}
+            </a>
+          </li>
+        ))}
+      </ul>
+
+      {/* Mobile: accordion with AnimatePresence */}
+      <div className="md:hidden">
+        <AnimatePresence initial={false}>
+          {open && (
+            <motion.ul
+              initial={{ height: 0, opacity: 0 }}
+              animate={{ height: "auto", opacity: 1 }}
+              exit={{ height: 0, opacity: 0 }}
+              transition={{ duration: 0.2, ease: "easeInOut" }}
+              className="overflow-hidden mt-2 space-y-0.5"
+            >
+              {links.map((link) => (
+                <li key={link.label}>
+                  <a
+                    href={link.href}
+                    className="group/link flex min-h-[44px] items-center gap-1.5 text-sm text-muted-dark transition-colors duration-300 hover:text-foreground"
+                  >
+                    <div className="h-1 w-1 rounded-full bg-white/8 transition-all duration-300 group-hover/link:bg-brand-cyan/40 group-hover/link:shadow-[0_0_4px_rgba(6,182,212,0.3)]" />
+                    {link.label}
+                  </a>
+                </li>
+              ))}
+            </motion.ul>
+          )}
+        </AnimatePresence>
+      </div>
+    </div>
+  );
+}
+
 export default function Footer() {
   return (
     <footer className="relative border-t border-white/3 px-6 pb-8 pt-16">
@@ -46,9 +114,9 @@ export default function Footer() {
       </div>
 
       <div className="relative mx-auto w-full max-w-6xl">
-        <div className="grid grid-cols-2 gap-8 md:grid-cols-5 md:gap-10">
+        <div className="grid grid-cols-1 gap-8 md:grid-cols-5 md:gap-10">
           {/* Brand */}
-          <div className="col-span-2 md:col-span-2">
+          <div className="md:col-span-2">
             <div className="flex items-center gap-2.5">
               <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-brand-cyan/10 ring-1 ring-brand-cyan/6 shadow-[0_0_10px_rgba(6,182,212,0.06)]">
                 <Sparkles className="h-4 w-4 text-brand-cyan" />
@@ -70,28 +138,12 @@ export default function Footer() {
             </div>
           </div>
 
-          {/* Link columns */}
-          {columns.map((col) => (
-            <div key={col.title} className="min-w-0">
-              <h4 className="text-xs font-medium uppercase tracking-wider text-muted-dark/70">
-                {col.title}
-              </h4>
-              <div className="mt-1.5 h-px w-8 bg-linear-to-r from-brand-cyan/10 to-transparent" />
-              <ul className="mt-4 space-y-2.5">
-                {col.links.map((link) => (
-                  <li key={link.label}>
-                    <a
-                      href={link.href}
-                      className="group/link flex items-center gap-1.5 text-sm text-muted-dark transition-colors duration-300 hover:text-foreground"
-                    >
-                      <div className="h-1 w-1 rounded-full bg-white/8 transition-all duration-300 group-hover/link:bg-brand-cyan/40 group-hover/link:shadow-[0_0_4px_rgba(6,182,212,0.3)]" />
-                      {link.label}
-                    </a>
-                  </li>
-                ))}
-              </ul>
-            </div>
-          ))}
+          {/* Link columns — 2-col grid on mobile, 3 individual cols on desktop */}
+          <div className="col-span-1 grid grid-cols-2 gap-6 md:col-span-3 md:grid-cols-3 md:gap-10">
+            {columns.map((col) => (
+              <FooterLinkColumn key={col.title} {...col} />
+            ))}
+          </div>
         </div>
 
         {/* Copyright */}

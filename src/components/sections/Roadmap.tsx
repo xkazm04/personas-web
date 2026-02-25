@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { memo, useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import {
   ChevronDown,
@@ -12,6 +12,7 @@ import {
 } from "lucide-react";
 import SectionWrapper from "@/components/SectionWrapper";
 import GradientText from "@/components/GradientText";
+import SectionHeading from "@/components/SectionHeading";
 import { fadeUp, staggerContainer } from "@/lib/animations";
 
 type PhaseTask = {
@@ -246,7 +247,7 @@ const priorityClass: Record<Phase["priority"], string> = {
   Later: "border-white/[0.08] bg-white/[0.02] text-muted-dark",
 };
 
-function RoadmapCard({ phase, index }: { phase: Phase; index: number }) {
+const RoadmapCard = memo(function RoadmapCard({ phase, index }: { phase: Phase; index: number }) {
   const [expanded, setExpanded] = useState(false);
   const status = statusConfig[phase.status];
 
@@ -372,7 +373,7 @@ function RoadmapCard({ phase, index }: { phase: Phase; index: number }) {
       </div>
     </motion.div>
   );
-}
+});
 
 export default function Roadmap() {
   return (
@@ -393,9 +394,9 @@ export default function Roadmap() {
         <div className="text-[8rem] sm:text-[10rem] md:text-[14rem] font-black leading-none tracking-tighter select-none bg-gradient-to-b from-white to-white/10 bg-clip-text text-transparent drop-shadow-lg">
           73%
         </div>
-        <h2 className="-mt-6 sm:-mt-8 md:-mt-12 text-4xl font-extrabold tracking-tight sm:text-5xl md:text-7xl drop-shadow-md">
+        <SectionHeading className="-mt-6 sm:-mt-8 md:-mt-12">
           4 phases to <GradientText className="drop-shadow-lg">launch</GradientText>
-        </h2>
+        </SectionHeading>
         <p className="mx-auto mt-8 max-w-3xl text-lg text-muted-dark leading-relaxed font-light">
           Cloud integration, web app, orchestrator hardening, and distribution.
           Click any phase to explore the full task breakdown.

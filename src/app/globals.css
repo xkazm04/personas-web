@@ -226,6 +226,17 @@ html {
 .animate-progress-shimmer { animation: progress-shimmer 2s ease-in-out infinite; }
 .animate-progress-dot-breathe { animation: progress-dot-breathe 2s ease-in-out infinite; }
 
+/* ── Section Badge Dot Pulse ──────────────────────── */
+
+@keyframes section-badge-pulse {
+  0%, 100% { opacity: 0.6; transform: scale(1); }
+  50% { opacity: 1; transform: scale(1.6); }
+}
+
+.section-badge-dot {
+  animation: section-badge-pulse 1s ease-in-out 1;
+}
+
 /* ── Micro-Texture Surfaces (Direction 8) ─────────── */
 
 .texture-stripes {
@@ -404,4 +415,47 @@ html {
 /* Smooth image loading */
 img {
   transition: opacity 0.3s ease;
+}
+
+/* ── Off-Screen Animation Pause ──────────────────── */
+
+.animations-paused,
+.animations-paused *,
+.animations-paused *::before,
+.animations-paused *::after {
+  animation-play-state: paused !important;
+}
+
+/* ── Reduced Motion ──────────────────────────────── */
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+
+  /* Hide purely decorative motion layers */
+  .animate-float,
+  .animate-spin-slow,
+  .animate-pulse-slow,
+  .animate-pulse-slower,
+  .topo-bg,
+  .parallax-shape {
+    animation: none !important;
+  }
+
+  .shimmer-surface::before,
+  .animate-shimmer {
+    animation: none !important;
+  }
+
+  /* Hide purely decorative motion layers entirely */
+  .topo-bg,
+  .parallax-shape {
+    display: none !important;
+  }
 }

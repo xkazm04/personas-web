@@ -6,6 +6,7 @@ import Footer from "@/components/sections/Footer";
 import StageSection from "@/components/StageSection";
 import CinematicBreather from "@/components/CinematicBreather";
 import PageShell from "@/components/PageShell";
+import SectionBreadcrumb from "@/components/SectionBreadcrumb";
 
 const scrollMapItems = [
   { label: "AGENTS", href: "#why-agents" },
@@ -13,10 +14,17 @@ const scrollMapItems = [
   { label: "EVENTS", href: "#event-bus" },
 ];
 
+const breadcrumbItems = [
+  { label: "AGENTS", href: "#why-agents", color: "#f43f5e" },
+  { label: "PLATFORM", href: "#features", color: "#06b6d4" },
+  { label: "EVENTS", href: "#event-bus", color: "#06b6d4" },
+];
+
 export default function HowItWorks() {
   return (
     <>
       <Navbar />
+      <SectionBreadcrumb items={breadcrumbItems} />
       <PageShell scrollMapItems={scrollMapItems}>
 
         {/* Spacer for fixed navbar */}
