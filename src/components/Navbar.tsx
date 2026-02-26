@@ -2,11 +2,12 @@
 
 import { motion, useMotionValueEvent, useScroll, AnimatePresence } from "framer-motion";
 import { useState, useEffect, useRef } from "react";
-import { Download } from "lucide-react";
+import { Download, LayoutDashboard } from "lucide-react";
 import { usePathname } from "next/navigation";
 import Image from "next/image";
 import Link from "next/link";
 import useActiveSection from "@/hooks/useActiveSection";
+import { useAuthStore } from "@/stores/authStore";
 
 const preloadHowImage = () => {
   if (document.querySelector('link[data-preload-how-bg]')) return;
@@ -40,6 +41,8 @@ export default function Navbar() {
   const { scrollY } = useScroll();
   const pathname = usePathname();
   const isLanding = pathname === "/";
+  const isAuthenticated = useAuthStore((s) => s.isAuthenticated);
+  const signInWithGoogle = useAuthStore((s) => s.signInWithGoogle);
 
   const activeSection = useActiveSection(isLanding ? landingSections : []);
 
@@ -145,14 +148,35 @@ export default function Navbar() {
           </div>
 
           {/* CTA */}
-          <Link
-            href="/#download"
-            className="group relative flex items-center gap-2 overflow-hidden rounded-full border border-brand-cyan/25 bg-brand-cyan/8 px-5 py-2 text-sm font-medium text-brand-cyan transition-all duration-300 hover:border-brand-cyan/40 hover:bg-brand-cyan/12"
-          >
-            <div className="absolute inset-0 -translate-x-full bg-linear-to-r from-transparent via-brand-cyan/10 to-transparent transition-transform duration-700 group-hover:translate-x-full" />
-            <Download className="relative h-3.5 w-3.5" />
-            <span className="relative hidden sm:inline">Download</span>
-          </Link>
+          <div className="flex items-center gap-2">
+            {isAuthenticated ? (
+              <Link
+                href="/dashboard"
+                className="group relative flex items-center gap-2 overflow-hidden rounded-full border border-brand-cyan/25 bg-brand-cyan/8 px-5 py-2 text-sm font-medium text-brand-cyan transition-all duration-300 hover:border-brand-cyan/40 hover:bg-brand-cyan/12"
+              >
+                <div className="absolute inset-0 -translate-x-full bg-linear-to-r from-transparent via-brand-cyan/10 to-transparent transition-transform duration-700 group-hover:translate-x-full" />
+                <LayoutDashboard className="relative h-3.5 w-3.5" />
+                <span className="relative hidden sm:inline">Dashboard</span>
+              </Link>
+            ) : (
+              <>
+                <button
+                  onClick={signInWithGoogle}
+                  className="hidden items-center gap-2 rounded-full border border-white/10 bg-white/2 px-4 py-2 text-sm font-medium text-muted transition-all duration-300 hover:border-white/20 hover:text-foreground sm:flex"
+                >
+                  Sign in
+                </button>
+                <Link
+                  href="/#download"
+                  className="group relative flex items-center gap-2 overflow-hidden rounded-full border border-brand-cyan/25 bg-brand-cyan/8 px-5 py-2 text-sm font-medium text-brand-cyan transition-all duration-300 hover:border-brand-cyan/40 hover:bg-brand-cyan/12"
+                >
+                  <div className="absolute inset-0 -translate-x-full bg-linear-to-r from-transparent via-brand-cyan/10 to-transparent transition-transform duration-700 group-hover:translate-x-full" />
+                  <Download className="relative h-3.5 w-3.5" />
+                  <span className="relative hidden sm:inline">Download</span>
+                </Link>
+              </>
+            )}
+          </div>
         </div>
 
         <div className="mt-3 flex items-center gap-1 rounded-full border border-white/6 bg-white/2 p-1 backdrop-blur-sm md:hidden">

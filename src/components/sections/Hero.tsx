@@ -2,12 +2,13 @@
 
 import { useId, useRef } from "react";
 import { motion, useScroll, useTransform, useMotionValue, useSpring, useReducedMotion } from "framer-motion";
-import { Download, Github, ChevronDown } from "lucide-react";
+import { Download, Github, ChevronDown, LayoutDashboard } from "lucide-react";
 import { fadeUp, staggerContainer } from "@/lib/animations";
 import GradientText from "@/components/GradientText";
 import SectionHeading from "@/components/SectionHeading";
 import FloatingParticles from "@/components/FloatingParticles";
 import PrimaryCTA from "@/components/PrimaryCTA";
+import { useAuthStore } from "@/stores/authStore";
 
 const completedCount = 11;
 const totalCount = 15;
@@ -77,6 +78,7 @@ function ProgressArc() {
 }
 
 export default function Hero() {
+  const isAuthenticated = useAuthStore((s) => s.isAuthenticated);
   const uid = useId();
   const ring1Id = `${uid}-ringGradient1`;
   const ring2Id = `${uid}-ringGradient2`;
@@ -200,7 +202,11 @@ export default function Hero() {
 
           {/* CTAs */}
           <motion.div variants={fadeUp} className="mt-12 flex w-full flex-col items-center justify-center gap-5 sm:w-auto sm:flex-row lg:items-start">
-            <PrimaryCTA href="#download" icon={Download} label="Download for Windows" />
+            {isAuthenticated ? (
+              <PrimaryCTA href="/dashboard" icon={LayoutDashboard} label="Open Dashboard" />
+            ) : (
+              <PrimaryCTA href="#download" icon={Download} label="Download for Windows" />
+            )}
             <a href="https://github.com" target="_blank" rel="noopener noreferrer" className="group relative flex w-[min(100%,20rem)] items-center justify-center gap-3 rounded-full border border-white/10 bg-white/2 px-8 py-4 text-sm font-medium text-muted transition-all duration-300 hover:border-white/20 hover:text-white hover:bg-white/5 hover:shadow-[0_0_20px_rgba(255,255,255,0.05)] sm:w-auto overflow-hidden">
               <span className="absolute inset-0 w-full h-full bg-linear-to-r from-transparent via-white/10 to-transparent -translate-x-full group-hover:animate-[shimmer_1.5s_infinite]" />
               <Github className="h-5 w-5 transition-transform duration-300 group-hover:scale-110 group-hover:drop-shadow-[0_0_8px_rgba(255,255,255,0.8)]" />
