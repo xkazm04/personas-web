@@ -56,18 +56,34 @@ function ExecutionOutput({ executionId }: { executionId: string }) {
       </div>
 
       {/* Output stream */}
-      <div className="max-h-80 overflow-auto rounded-xl bg-black/40 p-4 font-mono text-xs leading-relaxed text-slate-300">
-        {output.length === 0 ? (
-          <span className="text-muted-dark">
-            {status === "queued" ? "Waiting for worker..." : "No output yet"}
-          </span>
-        ) : (
-          output.map((line, i) => (
-            <div key={i} className="whitespace-pre-wrap break-all">
-              {line}
+      <div className="relative mt-2 max-h-80 overflow-auto rounded-xl border border-white/[0.08] bg-[#0a0a0a] p-4 font-mono text-xs leading-relaxed text-slate-300 shadow-inner">
+        {/* Decorative terminal header */}
+        <div className="absolute left-0 top-0 flex w-full items-center gap-1.5 bg-white/[0.02] px-3 py-2 border-b border-white/[0.05]">
+          <div className="h-2 w-2 rounded-full bg-red-500/80"></div>
+          <div className="h-2 w-2 rounded-full bg-amber-500/80"></div>
+          <div className="h-2 w-2 rounded-full bg-emerald-500/80"></div>
+          <span className="ml-2 text-[10px] text-muted-dark">stdout</span>
+        </div>
+        <div className="mt-6">
+          {output.length === 0 ? (
+            <span className="text-muted-dark flex items-center gap-2">
+              {status === "queued" ? "Waiting for worker..." : "No output yet"}
+              {status === "running" && <span className="h-1.5 w-1.5 animate-pulse rounded-full bg-brand-cyan"></span>}
+            </span>
+          ) : (
+            <div className="space-y-1">
+              {output.map((line, i) => (
+                <div key={i} className="whitespace-pre-wrap break-all text-emerald-400/90">
+                  <span className="mr-2 text-white/20 select-none">{">"}</span>
+                  {line}
+                </div>
+              ))}
+              {status === "running" && (
+                <div className="animate-pulse text-brand-cyan/80">_</div>
+              )}
             </div>
-          ))
-        )}
+          )}
+        </div>
       </div>
     </div>
   );

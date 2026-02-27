@@ -92,7 +92,10 @@ export default function DashboardSidebar() {
         <div className="flex items-center gap-2 text-[11px]">
           {isConnected ? (
             <>
-              <Wifi className="h-3 w-3 text-emerald-400" />
+              <div className="relative flex h-3 w-3 items-center justify-center">
+                <Wifi className="absolute h-3 w-3 text-emerald-400" />
+                <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-emerald-400 opacity-40"></span>
+              </div>
               <span className="text-emerald-400">Connected</span>
               {health?.workers && (
                 <span className="ml-auto text-muted-dark tabular-nums">

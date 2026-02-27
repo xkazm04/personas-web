@@ -8,6 +8,7 @@ import DashboardNavbar from "@/components/dashboard/DashboardNavbar";
 import DashboardSidebar from "@/components/dashboard/DashboardSidebar";
 import DashboardSkeleton from "@/components/dashboard/DashboardSkeleton";
 import SignInPrompt from "@/components/dashboard/SignInPrompt";
+import AmbientOrbs from "@/components/AmbientOrbs";
 
 export default function DashboardLayout({
   children,
@@ -32,7 +33,8 @@ export default function DashboardLayout({
   if (!isAuthenticated) return <SignInPrompt />;
 
   return (
-    <div className="flex min-h-screen flex-col bg-[var(--background)]">
+    <div className="flex min-h-screen flex-col bg-[var(--background)] relative z-0">
+      <AmbientOrbs />
       <DashboardNavbar />
       <div className="flex flex-1">
         <DashboardSidebar />

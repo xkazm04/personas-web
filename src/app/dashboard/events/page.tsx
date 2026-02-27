@@ -141,8 +141,8 @@ function EventRow({
               </div>
 
               {/* Payload */}
-              <div className="max-h-60 overflow-auto rounded-xl bg-black/40 p-4">
-                <pre className="font-mono text-xs leading-relaxed text-slate-300 whitespace-pre-wrap break-all">
+              <div className="max-h-60 overflow-auto rounded-xl bg-[#0a0a0a] p-4 border border-white/[0.08] shadow-inner">
+                <pre className="font-mono text-xs leading-relaxed text-emerald-400/90 whitespace-pre-wrap break-all">
                   {formatPayload(event.payload)}
                 </pre>
               </div>

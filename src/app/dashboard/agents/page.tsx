@@ -4,7 +4,6 @@ import { useEffect, useState, useCallback } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import {
   Bot,
-  Zap,
   Radio,
   Clock,
   ChevronDown,
@@ -63,9 +62,16 @@ function AgentDetail({ persona }: { persona: Persona }) {
 
   if (!data) {
     return (
-      <div className="animate-pulse space-y-2 pt-2">
-        <div className="h-4 w-1/2 rounded bg-white/[0.04]" />
-        <div className="h-4 w-1/3 rounded bg-white/[0.04]" />
+      <div className="mt-4 space-y-3 border-t border-white/[0.06] pt-4">
+        <div className="flex animate-pulse space-x-4">
+          <div className="flex-1 space-y-3 py-1">
+            <div className="h-3 w-24 rounded bg-white/[0.05]" />
+            <div className="space-y-2">
+              <div className="h-2.5 rounded bg-white/[0.03]" />
+              <div className="h-2.5 w-5/6 rounded bg-white/[0.03]" />
+            </div>
+          </div>
+        </div>
       </div>
     );
   }
@@ -238,10 +244,11 @@ export default function AgentsPage() {
                       e.stopPropagation();
                       void handleExecute(persona.id);
                     }}
-                    className="flex items-center gap-1.5 rounded-lg border border-brand-cyan/20 bg-brand-cyan/8 px-3 py-1.5 text-[11px] font-medium text-brand-cyan transition-all hover:bg-brand-cyan/15"
+                    className="group relative flex items-center gap-1.5 overflow-hidden rounded-lg border border-brand-cyan/20 bg-brand-cyan/10 px-3 py-1.5 text-[11px] font-medium text-brand-cyan transition-all hover:bg-brand-cyan/20"
                   >
-                    <Play className="h-3 w-3" />
-                    Execute
+                    <div className="absolute inset-0 -translate-x-full bg-gradient-to-r from-transparent via-white/10 to-transparent transition-transform duration-500 group-hover:translate-x-full" />
+                    <Play className="relative z-10 h-3 w-3" />
+                    <span className="relative z-10">Execute</span>
                   </button>
                   <button
                     onClick={() =>

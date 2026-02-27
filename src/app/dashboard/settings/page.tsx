@@ -138,23 +138,23 @@ export default function SettingsPage() {
 
           {status ? (
             <div className="grid gap-6 sm:grid-cols-3">
-              <div className="rounded-xl border border-white/[0.06] bg-white/[0.02] p-4 text-center">
-                <p className="text-3xl font-bold tracking-tight text-foreground tabular-nums">
-                  {status.workerCounts.total}
+              <div className="rounded-xl border border-white/[0.06] bg-white/[0.02] p-4 text-center shadow-[inset_0_1px_0_0_rgba(255,255,255,0.05)]">
+                <p className="text-4xl font-bold tracking-tight tabular-nums">
+                  <GradientText>{status.workerCounts.total}</GradientText>
                 </p>
-                <p className="mt-1 text-xs text-muted-dark">Total Workers</p>
+                <p className="mt-2 text-xs font-medium uppercase tracking-wider text-muted-dark">Total Workers</p>
               </div>
-              <div className="rounded-xl border border-white/[0.06] bg-white/[0.02] p-4 text-center">
-                <p className="text-3xl font-bold tracking-tight text-foreground tabular-nums">
-                  {status.queueLength}
+              <div className="rounded-xl border border-white/[0.06] bg-white/[0.02] p-4 text-center shadow-[inset_0_1px_0_0_rgba(255,255,255,0.05)]">
+                <p className="text-4xl font-bold tracking-tight tabular-nums">
+                  <GradientText>{status.queueLength}</GradientText>
                 </p>
-                <p className="mt-1 text-xs text-muted-dark">Queue Length</p>
+                <p className="mt-2 text-xs font-medium uppercase tracking-wider text-muted-dark">Queue Length</p>
               </div>
-              <div className="rounded-xl border border-white/[0.06] bg-white/[0.02] p-4 text-center">
-                <p className="text-3xl font-bold tracking-tight text-foreground tabular-nums">
-                  {status.activeExecutions.length}
+              <div className="rounded-xl border border-white/[0.06] bg-white/[0.02] p-4 text-center shadow-[inset_0_1px_0_0_rgba(255,255,255,0.05)]">
+                <p className="text-4xl font-bold tracking-tight tabular-nums">
+                  <GradientText>{status.activeExecutions.length}</GradientText>
                 </p>
-                <p className="mt-1 text-xs text-muted-dark">
+                <p className="mt-2 text-xs font-medium uppercase tracking-wider text-muted-dark">
                   Active Executions
                 </p>
               </div>
