@@ -171,13 +171,6 @@ export type PersonaExecutionStatus =
 
 export type EventStatus = "pending" | "processed" | "failed";
 
-export type DashboardTab =
-  | "agents"
-  | "executions"
-  | "events"
-  | "reviews"
-  | "settings";
-
 // ---------------------------------------------------------------------------
 // API input types
 // ---------------------------------------------------------------------------
@@ -196,3 +189,83 @@ export interface ExecFilterOpts {
   limit?: number;
   offset?: number;
 }
+
+// ---------------------------------------------------------------------------
+// Observability types
+// ---------------------------------------------------------------------------
+
+export interface ObservabilityMetrics {
+  totalCost: number;
+  totalExecutions: number;
+  successRate: number;
+  activePersonas: number;
+  costTrend: number; // percentage change vs prior period
+  execTrend: number;
+  successTrend: number;
+}
+
+export interface DailyMetric {
+  date: string;
+  cost: number;
+  executions: number;
+  successes: number;
+  failures: number;
+}
+
+export interface PersonaSpend {
+  personaId: string;
+  personaName: string;
+  personaColor: string;
+  totalCost: number;
+  executionCount: number;
+  budgetUsd: number | null;
+}
+
+export interface HealthIssue {
+  id: string;
+  severity: "critical" | "high" | "medium" | "low";
+  title: string;
+  description: string;
+  personaId: string | null;
+  personaName: string | null;
+  detectedAt: string;
+  status: "open" | "auto_fixed" | "resolved";
+  category: string;
+}
+
+// ---------------------------------------------------------------------------
+// Usage analytics types
+// ---------------------------------------------------------------------------
+
+export interface ToolUsageSummary {
+  toolName: string;
+  invocations: number;
+  avgDurationMs: number;
+  successRate: number;
+}
+
+export interface ToolUsageOverTime {
+  date: string;
+  tools: Record<string, number>;
+}
+
+export interface ToolUsageByPersona {
+  personaId: string;
+  personaName: string;
+  personaColor: string;
+  tools: Record<string, number>;
+}
+
+// ---------------------------------------------------------------------------
+// Dashboard tab type (expanded)
+// ---------------------------------------------------------------------------
+
+export type DashboardTab =
+  | "home"
+  | "agents"
+  | "executions"
+  | "events"
+  | "reviews"
+  | "observability"
+  | "usage"
+  | "settings";

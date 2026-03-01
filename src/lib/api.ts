@@ -9,6 +9,13 @@ import {
   MOCK_HEALTH,
   MOCK_STATUS,
   MOCK_REVIEWS,
+  MOCK_OBSERVABILITY_METRICS,
+  MOCK_DAILY_METRICS,
+  MOCK_PERSONA_SPEND,
+  MOCK_HEALTH_ISSUES,
+  MOCK_TOOL_USAGE,
+  MOCK_TOOL_USAGE_OVER_TIME,
+  MOCK_TOOL_USAGE_BY_PERSONA,
   getMockExecutionDetail,
   resetMockOutputOffset,
 } from "./mockData";
@@ -23,6 +30,13 @@ import type {
   StatusResponse,
   CreateEventInput,
   ExecFilterOpts,
+  ObservabilityMetrics,
+  DailyMetric,
+  PersonaSpend,
+  HealthIssue,
+  ToolUsageSummary,
+  ToolUsageOverTime,
+  ToolUsageByPersona,
 } from "./types";
 
 // ---------------------------------------------------------------------------
@@ -191,6 +205,34 @@ const mockApi = {
     await delay(200);
     return { ...MOCK_STATUS };
   },
+
+  getObservability: async (): Promise<{
+    metrics: ObservabilityMetrics;
+    dailyMetrics: DailyMetric[];
+    personaSpend: PersonaSpend[];
+    healthIssues: HealthIssue[];
+  }> => {
+    await delay(300);
+    return {
+      metrics: { ...MOCK_OBSERVABILITY_METRICS },
+      dailyMetrics: [...MOCK_DAILY_METRICS],
+      personaSpend: [...MOCK_PERSONA_SPEND],
+      healthIssues: [...MOCK_HEALTH_ISSUES],
+    };
+  },
+
+  getUsageAnalytics: async (): Promise<{
+    toolUsage: ToolUsageSummary[];
+    toolUsageOverTime: ToolUsageOverTime[];
+    toolUsageByPersona: ToolUsageByPersona[];
+  }> => {
+    await delay(300);
+    return {
+      toolUsage: [...MOCK_TOOL_USAGE],
+      toolUsageOverTime: [...MOCK_TOOL_USAGE_OVER_TIME],
+      toolUsageByPersona: [...MOCK_TOOL_USAGE_BY_PERSONA],
+    };
+  },
 };
 
 // ---------------------------------------------------------------------------
@@ -290,4 +332,21 @@ export const api = DEVELOPMENT
       getHealth: () => orchestratorFetch<HealthResponse>("/health"),
 
       getStatus: () => orchestratorFetch<StatusResponse>("/api/status"),
+
+      // Observability
+      getObservability: () =>
+        orchestratorFetch<{
+          metrics: ObservabilityMetrics;
+          dailyMetrics: DailyMetric[];
+          personaSpend: PersonaSpend[];
+          healthIssues: HealthIssue[];
+        }>("/api/observability"),
+
+      // Usage analytics
+      getUsageAnalytics: () =>
+        orchestratorFetch<{
+          toolUsage: ToolUsageSummary[];
+          toolUsageOverTime: ToolUsageOverTime[];
+          toolUsageByPersona: ToolUsageByPersona[];
+        }>("/api/usage"),
     };

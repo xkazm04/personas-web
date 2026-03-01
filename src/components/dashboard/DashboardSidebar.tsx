@@ -3,10 +3,13 @@
 import { usePathname } from "next/navigation";
 import Link from "next/link";
 import {
+  LayoutDashboard,
   Bot,
   Zap,
   Radio,
   ClipboardCheck,
+  Activity,
+  BarChart3,
   Settings,
   Wifi,
   WifiOff,
@@ -14,10 +17,13 @@ import {
 import { useDashboardStore } from "@/stores/dashboardStore";
 
 const navItems = [
+  { key: "home", label: "Overview", icon: LayoutDashboard, href: "/dashboard/home" },
   { key: "agents", label: "Agents", icon: Bot, href: "/dashboard/agents" },
   { key: "executions", label: "Executions", icon: Zap, href: "/dashboard/executions" },
   { key: "events", label: "Events", icon: Radio, href: "/dashboard/events" },
   { key: "reviews", label: "Reviews", icon: ClipboardCheck, href: "/dashboard/reviews" },
+  { key: "observability", label: "Observability", icon: Activity, href: "/dashboard/observability" },
+  { key: "usage", label: "Usage", icon: BarChart3, href: "/dashboard/usage" },
   { key: "settings", label: "Settings", icon: Settings, href: "/dashboard/settings" },
 ] as const;
 
@@ -38,13 +44,13 @@ export default function DashboardSidebar() {
           {navItems.map((item) => {
             const isActive =
               pathname === item.href ||
-              (item.href !== "/dashboard/agents" &&
+              (item.href !== "/dashboard/home" &&
                 pathname.startsWith(item.href));
-            // Default to agents for /dashboard
-            const isAgentsActive =
-              item.key === "agents" &&
-              (pathname === "/dashboard" || pathname === "/dashboard/agents");
-            const active = isActive || isAgentsActive;
+            // Default to home for /dashboard
+            const isHomeActive =
+              item.key === "home" &&
+              (pathname === "/dashboard" || pathname === "/dashboard/home");
+            const active = isActive || isHomeActive;
 
             const Icon = item.icon;
             const badge =

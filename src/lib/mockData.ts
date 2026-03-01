@@ -9,6 +9,13 @@ import type {
   StatusResponse,
   GlobalExecution,
   ManualReviewItem,
+  ObservabilityMetrics,
+  DailyMetric,
+  PersonaSpend,
+  HealthIssue,
+  ToolUsageSummary,
+  ToolUsageOverTime,
+  ToolUsageByPersona,
 } from "./types";
 
 // ---------------------------------------------------------------------------
@@ -555,6 +562,93 @@ export const MOCK_STATUS: StatusResponse = {
   hasClaudeToken: true,
   oauth: { connected: true, scopes: ["user:read", "repo"], expiresAt: new Date(Date.now() + 3600_000).toISOString() },
 };
+
+// ---------------------------------------------------------------------------
+// Manual reviews (parsed from events)
+// ---------------------------------------------------------------------------
+
+// ---------------------------------------------------------------------------
+// Observability metrics
+// ---------------------------------------------------------------------------
+
+function daysAgo(d: number): string {
+  const date = new Date(Date.now() - d * 86400_000);
+  return date.toISOString().split("T")[0];
+}
+
+export const MOCK_OBSERVABILITY_METRICS: ObservabilityMetrics = {
+  totalCost: 4.82,
+  totalExecutions: 47,
+  successRate: 89.4,
+  activePersonas: 4,
+  costTrend: 12.3,
+  execTrend: 8.5,
+  successTrend: -2.1,
+};
+
+export const MOCK_DAILY_METRICS: DailyMetric[] = Array.from({ length: 14 }, (_, i) => {
+  const day = 13 - i;
+  const base = 2 + Math.sin(i * 0.7) * 1.5;
+  const execs = Math.floor(3 + Math.random() * 5);
+  const fails = Math.floor(Math.random() * 2);
+  return {
+    date: daysAgo(day),
+    cost: +(base * (0.8 + Math.random() * 0.4)).toFixed(2),
+    executions: execs,
+    successes: execs - fails,
+    failures: fails,
+  };
+});
+
+export const MOCK_PERSONA_SPEND: PersonaSpend[] = [
+  { personaId: id("p", 1), personaName: "PR Review Agent", personaColor: "#06b6d4", totalCost: 1.45, executionCount: 18, budgetUsd: 5.0 },
+  { personaId: id("p", 2), personaName: "Incident Responder", personaColor: "#f43f5e", totalCost: 1.89, executionCount: 8, budgetUsd: 10.0 },
+  { personaId: id("p", 3), personaName: "Daily Standup Digest", personaColor: "#a855f7", totalCost: 0.62, executionCount: 10, budgetUsd: 2.0 },
+  { personaId: id("p", 5), personaName: "Customer Feedback Analyzer", personaColor: "#fbbf24", totalCost: 0.86, executionCount: 11, budgetUsd: 4.0 },
+];
+
+export const MOCK_HEALTH_ISSUES: HealthIssue[] = [
+  { id: "hi-1", severity: "high", title: "High error rate on PR Review Agent", description: "Error rate exceeded 25% in the last hour. 3 of 12 executions failed due to context window overflow.", personaId: id("p", 1), personaName: "PR Review Agent", detectedAt: ago(30), status: "open", category: "error_rate" },
+  { id: "hi-2", severity: "medium", title: "Budget threshold warning", description: "Daily Standup Digest has used 62% of its $2.00 monthly budget with 3 weeks remaining.", personaId: id("p", 3), personaName: "Daily Standup Digest", detectedAt: ago(180), status: "open", category: "budget" },
+  { id: "hi-3", severity: "low", title: "Slow execution detected", description: "Customer Feedback Analyzer took 62.3s, which is 2.1x the average duration.", personaId: id("p", 5), personaName: "Customer Feedback Analyzer", detectedAt: ago(1440), status: "auto_fixed", category: "latency" },
+  { id: "hi-4", severity: "critical", title: "Worker connection lost", description: "Worker w-005 disconnected unexpectedly. Last heartbeat was 5 minutes ago.", personaId: null, personaName: null, detectedAt: ago(5), status: "resolved", category: "infrastructure" },
+];
+
+// ---------------------------------------------------------------------------
+// Usage analytics
+// ---------------------------------------------------------------------------
+
+export const MOCK_TOOL_USAGE: ToolUsageSummary[] = [
+  { toolName: "github_pr_review", invocations: 142, avgDurationMs: 3200, successRate: 94.2 },
+  { toolName: "slack_send_message", invocations: 98, avgDurationMs: 450, successRate: 99.0 },
+  { toolName: "pagerduty_get_incident", invocations: 67, avgDurationMs: 820, successRate: 97.0 },
+  { toolName: "github_get_diff", invocations: 58, avgDurationMs: 1200, successRate: 96.5 },
+  { toolName: "linear_create_issue", invocations: 45, avgDurationMs: 680, successRate: 100.0 },
+  { toolName: "zendesk_search_tickets", invocations: 34, avgDurationMs: 2100, successRate: 91.2 },
+  { toolName: "datadog_query_metrics", invocations: 29, avgDurationMs: 1800, successRate: 93.1 },
+  { toolName: "email_send", invocations: 22, avgDurationMs: 350, successRate: 100.0 },
+];
+
+export const MOCK_TOOL_USAGE_OVER_TIME: ToolUsageOverTime[] = Array.from({ length: 14 }, (_, i) => {
+  const day = 13 - i;
+  return {
+    date: daysAgo(day),
+    tools: {
+      github_pr_review: Math.floor(8 + Math.random() * 6),
+      slack_send_message: Math.floor(5 + Math.random() * 8),
+      pagerduty_get_incident: Math.floor(2 + Math.random() * 6),
+      github_get_diff: Math.floor(3 + Math.random() * 4),
+      linear_create_issue: Math.floor(1 + Math.random() * 5),
+    },
+  };
+});
+
+export const MOCK_TOOL_USAGE_BY_PERSONA: ToolUsageByPersona[] = [
+  { personaId: id("p", 1), personaName: "PR Review Agent", personaColor: "#06b6d4", tools: { github_pr_review: 142, github_get_diff: 58, slack_send_message: 24 } },
+  { personaId: id("p", 2), personaName: "Incident Responder", personaColor: "#f43f5e", tools: { pagerduty_get_incident: 67, datadog_query_metrics: 29, slack_send_message: 38 } },
+  { personaId: id("p", 3), personaName: "Daily Standup Digest", personaColor: "#a855f7", tools: { slack_send_message: 22, email_send: 22, linear_create_issue: 10 } },
+  { personaId: id("p", 5), personaName: "Customer Feedback Analyzer", personaColor: "#fbbf24", tools: { zendesk_search_tickets: 34, slack_send_message: 14, linear_create_issue: 35 } },
+];
 
 // ---------------------------------------------------------------------------
 // Manual reviews (parsed from events)

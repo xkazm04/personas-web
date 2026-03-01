@@ -11,6 +11,13 @@ import type {
   StatusResponse,
   DashboardTab,
   ExecFilterOpts,
+  ObservabilityMetrics,
+  DailyMetric,
+  PersonaSpend,
+  HealthIssue,
+  ToolUsageSummary,
+  ToolUsageOverTime,
+  ToolUsageByPersona,
 } from "@/lib/types";
 
 // ---------------------------------------------------------------------------
@@ -102,6 +109,21 @@ interface DashboardState {
   status: StatusResponse | null;
   fetchHealth: () => Promise<void>;
   fetchStatus: () => Promise<void>;
+
+  // Observability
+  observabilityMetrics: ObservabilityMetrics | null;
+  dailyMetrics: DailyMetric[];
+  personaSpend: PersonaSpend[];
+  healthIssues: HealthIssue[];
+  observabilityLoading: boolean;
+  fetchObservability: () => Promise<void>;
+
+  // Usage analytics
+  toolUsage: ToolUsageSummary[];
+  toolUsageOverTime: ToolUsageOverTime[];
+  toolUsageByPersona: ToolUsageByPersona[];
+  usageLoading: boolean;
+  fetchUsage: () => Promise<void>;
 
   // UI
   sidebarTab: DashboardTab;
@@ -223,7 +245,51 @@ export const useDashboardStore = create<DashboardState>((set, get) => ({
     }
   },
 
+  // -- Observability --
+  observabilityMetrics: null,
+  dailyMetrics: [],
+  personaSpend: [],
+  healthIssues: [],
+  observabilityLoading: false,
+  fetchObservability: async () => {
+    set({ observabilityLoading: true });
+    try {
+      const data = await api.getObservability();
+      set({
+        observabilityMetrics: data.metrics,
+        dailyMetrics: data.dailyMetrics,
+        personaSpend: data.personaSpend,
+        healthIssues: data.healthIssues,
+      });
+    } catch {
+      // leave stale
+    } finally {
+      set({ observabilityLoading: false });
+    }
+  },
+
+  // -- Usage --
+  toolUsage: [],
+  toolUsageOverTime: [],
+  toolUsageByPersona: [],
+  usageLoading: false,
+  fetchUsage: async () => {
+    set({ usageLoading: true });
+    try {
+      const data = await api.getUsageAnalytics();
+      set({
+        toolUsage: data.toolUsage,
+        toolUsageOverTime: data.toolUsageOverTime,
+        toolUsageByPersona: data.toolUsageByPersona,
+      });
+    } catch {
+      // leave stale
+    } finally {
+      set({ usageLoading: false });
+    }
+  },
+
   // -- UI --
-  sidebarTab: "agents",
+  sidebarTab: "home",
   setSidebarTab: (tab) => set({ sidebarTab: tab }),
 }));
