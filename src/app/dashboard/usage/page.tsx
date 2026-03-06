@@ -1,22 +1,8 @@
 "use client";
 
-import { useEffect, useMemo } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import { motion } from "framer-motion";
-import {
-  BarChart,
-  Bar,
-  PieChart,
-  Pie,
-  Cell,
-  AreaChart,
-  Area,
-  XAxis,
-  YAxis,
-  CartesianGrid,
-  Tooltip,
-  ResponsiveContainer,
-  Legend,
-} from "recharts";
+import dynamic from "next/dynamic";
 import {
   BarChart3,
   Wrench,
@@ -27,50 +13,84 @@ import { fadeUp, staggerContainer } from "@/lib/animations";
 import GlowCard from "@/components/GlowCard";
 import GradientText from "@/components/GradientText";
 import EmptyState from "@/components/dashboard/EmptyState";
-import { useDashboardStore } from "@/stores/dashboardStore";
+import useSWR from "swr";
+import { api } from "@/lib/api";
+import { CHART_COLORS } from "@/lib/constants";
+
+const UsageInvocationsBarChart = dynamic(
+  () =>
+    import("@/components/dashboard/UsageCharts").then(
+      (mod) => mod.UsageInvocationsBarChart,
+    ),
+  { ssr: false },
+);
+
+const UsageDistributionPieChart = dynamic(
+  () =>
+    import("@/components/dashboard/UsageCharts").then(
+      (mod) => mod.UsageDistributionPieChart,
+    ),
+  { ssr: false },
+);
+
+const UsageOverTimeAreaChart = dynamic(
+  () =>
+    import("@/components/dashboard/UsageCharts").then(
+      (mod) => mod.UsageOverTimeAreaChart,
+    ),
+  { ssr: false },
+);
+
+const UsageByPersonaBarChart = dynamic(
+  () =>
+    import("@/components/dashboard/UsageCharts").then(
+      (mod) => mod.UsageByPersonaBarChart,
+    ),
+  { ssr: false },
+);
 
 // ---------------------------------------------------------------------------
 // Helpers
 // ---------------------------------------------------------------------------
 
+const _toolNameCache = new Map<string, string>();
 function formatToolName(name: string): string {
-  return name
+  const cached = _toolNameCache.get(name);
+  if (cached) return cached;
+  const formatted = name
     .replace(/_/g, " ")
     .replace(/\b\w/g, (c) => c.toUpperCase());
+  _toolNameCache.set(name, formatted);
+  return formatted;
 }
 
-const CHART_COLORS = [
-  "#06b6d4",
-  "#a855f7",
-  "#f43f5e",
-  "#34d399",
-  "#fbbf24",
-  "#3b82f6",
-  "#ec4899",
-  "#f97316",
-];
+function useDeferredMount(rootMargin = "220px") {
+  const ref = useRef<HTMLDivElement | null>(null);
+  const [mounted, setMounted] = useState(false);
 
-function ChartTooltipContent({
-  active,
-  payload,
-  label,
-}: {
-  active?: boolean;
-  payload?: Array<{ value: number; name: string; color: string }>;
-  label?: string;
-}) {
-  if (!active || !payload?.length) return null;
-  return (
-    <div className="rounded-xl border border-white/[0.1] bg-[#0f0f1a]/95 px-3 py-2 text-xs shadow-xl backdrop-blur-md">
-      <p className="mb-1 text-muted-dark">{label}</p>
-      {payload.map((entry) => (
-        <p key={entry.name} style={{ color: entry.color }} className="flex items-center gap-2">
-          <span className="h-1.5 w-1.5 rounded-full" style={{ backgroundColor: entry.color }} />
-          {formatToolName(entry.name)}: <span className="font-medium">{entry.value}</span>
-        </p>
-      ))}
-    </div>
-  );
+  useEffect(() => {
+    const element = ref.current;
+    if (!element || mounted) return;
+
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (entry.isIntersecting) {
+          setMounted(true);
+          observer.disconnect();
+        }
+      },
+      { rootMargin },
+    );
+
+    observer.observe(element);
+    return () => observer.disconnect();
+  }, [mounted, rootMargin]);
+
+  return { ref, mounted };
+}
+
+function ChartCardSkeleton({ height }: { height: number }) {
+  return <div className="animate-pulse rounded-xl bg-white/[0.03]" style={{ height }} />;
 }
 
 function InsightBadge({ text }: { text: string }) {
@@ -87,28 +107,36 @@ function InsightBadge({ text }: { text: string }) {
 // ---------------------------------------------------------------------------
 
 export default function UsagePage() {
-  const toolUsage = useDashboardStore((s) => s.toolUsage);
-  const toolUsageOverTime = useDashboardStore((s) => s.toolUsageOverTime);
-  const toolUsageByPersona = useDashboardStore((s) => s.toolUsageByPersona);
-  const loading = useDashboardStore((s) => s.usageLoading);
-  const fetchUsage = useDashboardStore((s) => s.fetchUsage);
+  const { data, isLoading: loading } = useSWR("usage", api.getUsageAnalytics, {
+    dedupingInterval: 8_000,
+    revalidateOnFocus: false,
+    keepPreviousData: true,
+  });
+  const toolUsage = data?.toolUsage ?? [];
+  const toolUsageOverTime = data?.toolUsageOverTime ?? [];
+  const toolUsageByPersona = data?.toolUsageByPersona ?? [];
 
-  useEffect(() => {
-    void fetchUsage();
-  }, [fetchUsage]);
-
-  // Bar chart data: sorted by invocations desc
-  const barData = useMemo(
-    () =>
-      [...toolUsage]
-        .sort((a, b) => b.invocations - a.invocations)
-        .map((t) => ({
-          name: formatToolName(t.toolName),
-          invocations: t.invocations,
-          fill: CHART_COLORS[toolUsage.indexOf(t) % CHART_COLORS.length],
-        })),
-    [toolUsage],
-  );
+  // Bar chart data: sorted by invocations desc, capped at top 15 + "Other"
+  const MAX_BAR_TOOLS = 15;
+  const barData = useMemo(() => {
+    const sorted = [...toolUsage].sort((a, b) => b.invocations - a.invocations);
+    const top = sorted.slice(0, MAX_BAR_TOOLS).map((t, i) => ({
+      name: formatToolName(t.toolName),
+      invocations: t.invocations,
+      fill: CHART_COLORS[i % CHART_COLORS.length],
+    }));
+    if (sorted.length > MAX_BAR_TOOLS) {
+      const otherTotal = sorted
+        .slice(MAX_BAR_TOOLS)
+        .reduce((sum, t) => sum + t.invocations, 0);
+      top.push({
+        name: "Other",
+        invocations: otherTotal,
+        fill: "#64748b",
+      });
+    }
+    return top;
+  }, [toolUsage]);
 
   // Pie chart data
   const pieData = useMemo(
@@ -126,22 +154,6 @@ export default function UsagePage() {
     [toolUsage],
   );
 
-  // Stacked area data
-  const areaData = useMemo(() => {
-    const topTools = [...toolUsage]
-      .sort((a, b) => b.invocations - a.invocations)
-      .slice(0, 5)
-      .map((t) => t.toolName);
-
-    return toolUsageOverTime.map((d) => {
-      const row: Record<string, string | number> = { date: d.date.slice(5) };
-      topTools.forEach((tool) => {
-        row[tool] = d.tools[tool] ?? 0;
-      });
-      return row;
-    });
-  }, [toolUsageOverTime, toolUsage]);
-
   const topTools = useMemo(
     () =>
       [...toolUsage]
@@ -150,6 +162,17 @@ export default function UsagePage() {
         .map((t) => t.toolName),
     [toolUsage],
   );
+
+  // Stacked area data — references topTools to avoid duplicate sort+slice
+  const areaData = useMemo(() => {
+    return toolUsageOverTime.map((d) => {
+      const row: Record<string, string | number> = { date: d.date.slice(5) };
+      topTools.forEach((tool) => {
+        row[tool] = d.tools[tool] ?? 0;
+      });
+      return row;
+    });
+  }, [toolUsageOverTime, topTools]);
 
   // Per-persona bar data
   const personaBarData = useMemo(
@@ -182,7 +205,10 @@ export default function UsagePage() {
     return `${formatToolName(top.toolName)} is used ${ratio}x more than ${formatToolName(second.toolName)}, making it your most utilized tool integration.`;
   }, [toolUsage]);
 
-  if (loading && toolUsage.length === 0) {
+  const overTimeDeferred = useDeferredMount("260px");
+  const byPersonaDeferred = useDeferredMount("260px");
+
+  if (loading && !data) {
     return (
       <div className="flex items-center justify-center py-24">
         <Loader2 className="h-6 w-6 animate-spin text-muted-dark" />
@@ -227,26 +253,7 @@ export default function UsagePage() {
             <Wrench className="h-4 w-4 text-brand-cyan" />
             Tool Invocations
           </h3>
-          <ResponsiveContainer width="100%" height={280}>
-            <BarChart data={barData} layout="vertical" margin={{ top: 0, right: 16, left: 0, bottom: 0 }}>
-              <CartesianGrid strokeDasharray="3 3" stroke="rgba(255,255,255,0.04)" horizontal={false} />
-              <XAxis type="number" tick={{ fontSize: 10, fill: "#64748b" }} axisLine={false} tickLine={false} />
-              <YAxis
-                dataKey="name"
-                type="category"
-                tick={{ fontSize: 10, fill: "#94a3b8" }}
-                axisLine={false}
-                tickLine={false}
-                width={120}
-              />
-              <Tooltip content={<ChartTooltipContent />} />
-              <Bar dataKey="invocations" radius={[0, 6, 6, 0]}>
-                {barData.map((entry, i) => (
-                  <Cell key={entry.name} fill={CHART_COLORS[i % CHART_COLORS.length]} fillOpacity={0.8} />
-                ))}
-              </Bar>
-            </BarChart>
-          </ResponsiveContainer>
+          <UsageInvocationsBarChart barData={barData} formatToolName={formatToolName} />
           {insight && <InsightBadge text={insight} />}
         </GlowCard>
 
@@ -256,125 +263,52 @@ export default function UsagePage() {
             <BarChart3 className="h-4 w-4 text-brand-purple" />
             Distribution
           </h3>
-          <div className="relative">
-            <ResponsiveContainer width="100%" height={220}>
-              <PieChart>
-                <Pie
-                  data={pieData}
-                  cx="50%"
-                  cy="50%"
-                  innerRadius={55}
-                  outerRadius={85}
-                  paddingAngle={2}
-                  dataKey="value"
-                  stroke="none"
-                >
-                  {pieData.map((entry, i) => (
-                    <Cell key={entry.name} fill={entry.color || CHART_COLORS[i % CHART_COLORS.length]} />
-                  ))}
-                </Pie>
-                <Tooltip
-                  formatter={(value) => String(value)}
-                  contentStyle={{
-                    background: "rgba(15,15,26,0.95)",
-                    border: "1px solid rgba(255,255,255,0.1)",
-                    borderRadius: "12px",
-                    fontSize: "12px",
-                  }}
-                />
-              </PieChart>
-            </ResponsiveContainer>
-            {/* Center text */}
-            <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
-              <div className="text-center">
-                <p className="text-xl font-bold tabular-nums text-foreground">
-                  {totalInvocations}
-                </p>
-                <p className="text-[10px] text-muted-dark">total</p>
-              </div>
-            </div>
-          </div>
-          {/* Legend */}
-          <div className="mt-2 space-y-1.5">
-            {pieData.slice(0, 5).map((entry) => (
-              <div key={entry.name} className="flex items-center gap-2 text-[11px]">
-                <span className="h-2 w-2 rounded-full flex-shrink-0" style={{ backgroundColor: entry.color }} />
-                <span className="flex-1 text-muted truncate">{entry.name}</span>
-                <span className="tabular-nums text-muted-dark">{entry.value}</span>
-              </div>
-            ))}
-          </div>
+          <UsageDistributionPieChart
+            pieData={pieData}
+            totalInvocations={totalInvocations}
+            formatToolName={formatToolName}
+          />
         </GlowCard>
       </div>
 
       {/* Middle: Usage over time */}
-      <GlowCard accent="emerald" variants={fadeUp} className="p-5 mb-8">
-        <h3 className="text-sm font-semibold text-foreground mb-4 flex items-center gap-2">
-          <BarChart3 className="h-4 w-4 text-emerald-400" />
-          Usage Over Time
-          <span className="text-[11px] text-muted-dark font-normal ml-auto">Last 14 days</span>
-        </h3>
-        <ResponsiveContainer width="100%" height={280}>
-          <AreaChart data={areaData} margin={{ top: 8, right: 8, left: -20, bottom: 0 }}>
-            <defs>
-              {topTools.map((tool, i) => (
-                <linearGradient key={tool} id={`gradTool${i}`} x1="0" y1="0" x2="0" y2="1">
-                  <stop offset="0%" stopColor={CHART_COLORS[i]} stopOpacity={0.2} />
-                  <stop offset="100%" stopColor={CHART_COLORS[i]} stopOpacity={0} />
-                </linearGradient>
-              ))}
-            </defs>
-            <CartesianGrid strokeDasharray="3 3" stroke="rgba(255,255,255,0.04)" vertical={false} />
-            <XAxis dataKey="date" tick={{ fontSize: 10, fill: "#64748b" }} axisLine={false} tickLine={false} />
-            <YAxis tick={{ fontSize: 10, fill: "#64748b" }} axisLine={false} tickLine={false} allowDecimals={false} />
-            <Tooltip content={<ChartTooltipContent />} />
-            <Legend
-              iconType="circle"
-              iconSize={6}
-              formatter={(value: string) => (
-                <span className="text-[10px] text-muted-dark">{formatToolName(value)}</span>
-              )}
+      <div ref={overTimeDeferred.ref}>
+        <GlowCard accent="emerald" variants={fadeUp} className="p-5 mb-8">
+          <h3 className="text-sm font-semibold text-foreground mb-4 flex items-center gap-2">
+            <BarChart3 className="h-4 w-4 text-emerald-400" />
+            Usage Over Time
+            <span className="text-[11px] text-muted-dark font-normal ml-auto">Last 14 days</span>
+          </h3>
+          {overTimeDeferred.mounted ? (
+            <UsageOverTimeAreaChart
+              areaData={areaData}
+              topTools={topTools}
+              formatToolName={formatToolName}
             />
-            {topTools.map((tool, i) => (
-              <Area
-                key={tool}
-                type="monotone"
-                dataKey={tool}
-                stackId="1"
-                stroke={CHART_COLORS[i]}
-                strokeWidth={1.5}
-                fill={`url(#gradTool${i})`}
-              />
-            ))}
-          </AreaChart>
-        </ResponsiveContainer>
-      </GlowCard>
+          ) : (
+            <ChartCardSkeleton height={280} />
+          )}
+        </GlowCard>
+      </div>
 
       {/* Bottom: Per-persona usage */}
-      <GlowCard accent="amber" variants={fadeUp} className="p-5">
-        <h3 className="text-sm font-semibold text-foreground mb-4 flex items-center gap-2">
-          <Wrench className="h-4 w-4 text-amber-400" />
-          Tool Usage by Agent
-        </h3>
-        <ResponsiveContainer width="100%" height={240}>
-          <BarChart data={personaBarData} margin={{ top: 8, right: 8, left: -20, bottom: 0 }}>
-            <CartesianGrid strokeDasharray="3 3" stroke="rgba(255,255,255,0.04)" vertical={false} />
-            <XAxis dataKey="name" tick={{ fontSize: 10, fill: "#94a3b8" }} axisLine={false} tickLine={false} />
-            <YAxis tick={{ fontSize: 10, fill: "#64748b" }} axisLine={false} tickLine={false} allowDecimals={false} />
-            <Tooltip content={<ChartTooltipContent />} />
-            <Legend
-              iconType="circle"
-              iconSize={6}
-              formatter={(value: string) => (
-                <span className="text-[10px] text-muted-dark">{value}</span>
-              )}
+      <div ref={byPersonaDeferred.ref}>
+        <GlowCard accent="amber" variants={fadeUp} className="p-5">
+          <h3 className="text-sm font-semibold text-foreground mb-4 flex items-center gap-2">
+            <Wrench className="h-4 w-4 text-amber-400" />
+            Tool Usage by Agent
+          </h3>
+          {byPersonaDeferred.mounted ? (
+            <UsageByPersonaBarChart
+              personaBarData={personaBarData}
+              allToolNames={allToolNames}
+              formatToolName={formatToolName}
             />
-            {allToolNames.map((tool, i) => (
-              <Bar key={tool} dataKey={tool} stackId="persona" fill={CHART_COLORS[i % CHART_COLORS.length]} />
-            ))}
-          </BarChart>
-        </ResponsiveContainer>
-      </GlowCard>
+          ) : (
+            <ChartCardSkeleton height={240} />
+          )}
+        </GlowCard>
+      </div>
     </motion.div>
   );
 }

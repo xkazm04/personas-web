@@ -1,10 +1,11 @@
 "use client";
 
-import dynamic from "next/dynamic";
+import { useRef, useState, useEffect, type ComponentType } from "react";
+import { motion } from "framer-motion";
 
-function SectionSkeleton({ className = "" }: { className?: string }) {
+export function SectionSkeleton({ className = "" }: { className?: string }) {
   return (
-    <section className={`relative px-6 py-24 md:py-32 ${className}`}>
+    <section className={`relative px-6 py-32 md:py-40 ${className}`}>
       <div className="mx-auto max-w-6xl flex flex-col items-center gap-4">
         <div className="h-10 w-2/3 max-w-md rounded-lg bg-white/3 animate-pulse sm:h-12" />
         <div className="h-4 w-1/2 max-w-sm rounded-md bg-white/2 animate-pulse" />
@@ -14,56 +15,112 @@ function SectionSkeleton({ className = "" }: { className?: string }) {
   );
 }
 
-const UseCasesSection = dynamic(() => import("@/components/sections/UseCases"), {
-  ssr: false,
-  loading: () => <SectionSkeleton />,
-});
+// ---------------------------------------------------------------------------
+// Scroll-proximity lazy loader
+// Defers the dynamic import until the placeholder scrolls within `rootMargin`
+// of the viewport (default 800px). This keeps chunk fetches off the critical
+// path so the Hero section gets all the bandwidth.
+// ---------------------------------------------------------------------------
 
-const VisionSection = dynamic(() => import("@/components/sections/Vision"), {
-  ssr: false,
-  loading: () => <SectionSkeleton className="py-28 md:py-44" />,
-});
+function useScrollProximity(rootMargin = "800px"): [React.RefObject<HTMLDivElement | null>, boolean] {
+  const ref = useRef<HTMLDivElement | null>(null);
+  const [near, setNear] = useState(false);
 
-const RoadmapSection = dynamic(() => import("@/components/sections/Roadmap"), {
-  ssr: false,
-  loading: () => <SectionSkeleton />,
-});
+  useEffect(() => {
+    const el = ref.current;
+    if (!el || near) return;
 
-const PricingSection = dynamic(() => import("@/components/sections/Pricing"), {
-  ssr: false,
-  loading: () => <SectionSkeleton />,
-});
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (entry.isIntersecting) {
+          setNear(true);
+          observer.disconnect();
+        }
+      },
+      { rootMargin },
+    );
 
-const FAQSection = dynamic(() => import("@/components/sections/FAQ"), {
-  ssr: false,
-  loading: () => <SectionSkeleton />,
-});
+    observer.observe(el);
+    return () => observer.disconnect();
+  }, [rootMargin, near]);
 
-const DownloadCTASection = dynamic(() => import("@/components/sections/DownloadCTA"), {
-  ssr: false,
-  loading: () => <SectionSkeleton className="py-28 md:py-44" />,
-});
+  return [ref, near];
+}
+
+function LazySection({
+  loader,
+  fallback,
+}: {
+  loader: () => Promise<{ default: ComponentType }>;
+  fallback: React.ReactNode;
+}) {
+  const [ref, near] = useScrollProximity();
+  const [Component, setComponent] = useState<ComponentType | null>(null);
+
+  useEffect(() => {
+    if (!near || Component) return;
+    let cancelled = false;
+    loader().then((mod) => {
+      if (!cancelled) setComponent(() => mod.default);
+    });
+    return () => { cancelled = true; };
+  }, [near, Component, loader]);
+
+  if (Component)
+    return (
+      <motion.div
+        initial={{ opacity: 0, y: 30 }}
+        whileInView={{ opacity: 1, y: 0 }}
+        viewport={{ once: true, margin: "-100px" }}
+        transition={{ duration: 0.6, ease: "easeOut" }}
+      >
+        <Component />
+      </motion.div>
+    );
+
+  return <div ref={ref}>{fallback}</div>;
+}
+
+// ---------------------------------------------------------------------------
+// Stable loader references (defined outside component to avoid re-creation)
+// ---------------------------------------------------------------------------
+
+const loadUseCases = () => import("@/components/sections/UseCases");
+const loadVision = () => import("@/components/sections/Vision");
+const loadPricing = () => import("@/components/sections/Pricing");
+const loadFAQ = () => import("@/components/sections/FAQ");
+const loadDownloadCTA = () => import("@/components/sections/DownloadCTA");
+const loadChangelog = () => import("@/components/sections/Changelog");
+const loadAgentPlayground = () => import("@/components/sections/AgentPlayground");
+
+// ---------------------------------------------------------------------------
+// Exported lazy wrappers
+// ---------------------------------------------------------------------------
 
 export function LazyUseCases() {
-  return <UseCasesSection />;
+  return <LazySection loader={loadUseCases} fallback={<SectionSkeleton />} />;
 }
 
 export function LazyVision() {
-  return <VisionSection />;
-}
-
-export function LazyRoadmap() {
-  return <RoadmapSection />;
+  return <LazySection loader={loadVision} fallback={<SectionSkeleton />} />;
 }
 
 export function LazyPricing() {
-  return <PricingSection />;
+  return <LazySection loader={loadPricing} fallback={<SectionSkeleton />} />;
 }
 
 export function LazyFAQ() {
-  return <FAQSection />;
+  return <LazySection loader={loadFAQ} fallback={<SectionSkeleton />} />;
 }
 
 export function LazyDownloadCTA() {
-  return <DownloadCTASection />;
+  return <LazySection loader={loadDownloadCTA} fallback={<SectionSkeleton className="py-40 md:py-48" />} />;
+}
+
+export function LazyAgentPlayground() {
+  return <LazySection loader={loadAgentPlayground} fallback={<SectionSkeleton />} />;
+}
+
+export function LazyChangelog() {
+  return <LazySection loader={loadChangelog} fallback={<SectionSkeleton className="py-16 md:py-20" />} />;
 }

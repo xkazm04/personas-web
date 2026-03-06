@@ -1,24 +1,6 @@
 import { useAuthStore } from "@/stores/authStore";
 import { DEVELOPMENT } from "./dev";
-import {
-  MOCK_PERSONAS,
-  MOCK_EXECUTIONS,
-  MOCK_EVENTS,
-  MOCK_SUBSCRIPTIONS,
-  MOCK_TRIGGERS,
-  MOCK_HEALTH,
-  MOCK_STATUS,
-  MOCK_REVIEWS,
-  MOCK_OBSERVABILITY_METRICS,
-  MOCK_DAILY_METRICS,
-  MOCK_PERSONA_SPEND,
-  MOCK_HEALTH_ISSUES,
-  MOCK_TOOL_USAGE,
-  MOCK_TOOL_USAGE_OVER_TIME,
-  MOCK_TOOL_USAGE_BY_PERSONA,
-  getMockExecutionDetail,
-  resetMockOutputOffset,
-} from "./mockData";
+import { mockApi } from "./mockApi";
 import type {
   Persona,
   PersonaExecution,
@@ -37,6 +19,8 @@ import type {
   ToolUsageSummary,
   ToolUsageOverTime,
   ToolUsageByPersona,
+  PersonaExecutionStatus,
+  EventStatus,
 } from "./types";
 
 // ---------------------------------------------------------------------------
@@ -104,145 +88,37 @@ async function orchestratorFetch<T>(
 }
 
 // ---------------------------------------------------------------------------
-// Mock API (dev mode)
+// Shared interface — enforces parity between mock and real implementations
 // ---------------------------------------------------------------------------
 
-function delay(ms = 300): Promise<void> {
-  return new Promise((r) => setTimeout(r, ms));
+export interface ApiClient {
+  listPersonas(): Promise<Persona[]>;
+  getPersona(id: string): Promise<Persona>;
+  deletePersona(id: string): Promise<{ deleted: boolean }>;
+  listExecutions(opts?: ExecFilterOpts): Promise<PersonaExecution[]>;
+  getExecution(id: string, offset?: number): Promise<ExecutionDetail>;
+  cancelExecution(id: string): Promise<{ executionId: string; status: PersonaExecutionStatus }>;
+  executePersona(personaId: string, prompt: string): Promise<{ executionId: string; status: PersonaExecutionStatus }>;
+  listEvents(opts?: { eventType?: string; status?: string; limit?: number; offset?: number }): Promise<PersonaEvent[]>;
+  publishEvent(input: CreateEventInput): Promise<PersonaEvent>;
+  updateEvent(id: string, body: { status: EventStatus; metadata?: string }): Promise<PersonaEvent>;
+  listSubscriptions(personaId: string): Promise<PersonaEventSubscription[]>;
+  listAllSubscriptions(): Promise<PersonaEventSubscription[]>;
+  createSubscription(input: { personaId: string; eventType: string; sourceFilter?: string }): Promise<PersonaEventSubscription>;
+  updateSubscription(personaId: string, subId: string, body: { enabled?: boolean; eventType?: string; sourceFilter?: string | null }): Promise<PersonaEventSubscription>;
+  deleteSubscription(personaId: string, subId: string): Promise<void>;
+  listTriggers(personaId: string): Promise<PersonaTrigger[]>;
+  getHealth(): Promise<HealthResponse>;
+  getStatus(): Promise<StatusResponse>;
+  getObservability(): Promise<{ metrics: ObservabilityMetrics; dailyMetrics: DailyMetric[]; personaSpend: PersonaSpend[]; healthIssues: HealthIssue[] }>;
+  getUsageAnalytics(): Promise<{ toolUsage: ToolUsageSummary[]; toolUsageOverTime: ToolUsageOverTime[]; toolUsageByPersona: ToolUsageByPersona[] }>;
 }
 
-const mockApi = {
-  listPersonas: async (): Promise<Persona[]> => {
-    await delay();
-    return [...MOCK_PERSONAS];
-  },
-
-  getPersona: async (id: string): Promise<Persona> => {
-    await delay();
-    const p = MOCK_PERSONAS.find((pp) => pp.id === id);
-    if (!p) throw new ApiError(404, "Persona not found");
-    return { ...p };
-  },
-
-  deletePersona: async (_id: string): Promise<{ deleted: boolean }> => {
-    await delay();
-    return { deleted: true };
-  },
-
-  listExecutions: async (_opts?: ExecFilterOpts): Promise<PersonaExecution[]> => {
-    await delay();
-    let result = [...MOCK_EXECUTIONS];
-    if (_opts?.personaId) {
-      result = result.filter((e) => e.personaId === _opts.personaId);
-    }
-    if (_opts?.status) {
-      result = result.filter((e) => e.status === _opts.status);
-    }
-    return result;
-  },
-
-  getExecution: async (id: string, _offset?: number): Promise<ExecutionDetail> => {
-    await delay(200);
-    return getMockExecutionDetail(id);
-  },
-
-  cancelExecution: async (id: string): Promise<{ executionId: string; status: string }> => {
-    await delay();
-    return { executionId: id, status: "cancelled" };
-  },
-
-  executePersona: async (personaId: string, _prompt: string): Promise<{ executionId: string; status: string }> => {
-    await delay(500);
-    resetMockOutputOffset();
-    return { executionId: `e-new-${Date.now()}`, status: "queued" };
-  },
-
-  listEvents: async (opts?: {
-    eventType?: string;
-    status?: string;
-    limit?: number;
-    offset?: number;
-  }): Promise<PersonaEvent[]> => {
-    await delay();
-    let result = [...MOCK_EVENTS];
-    if (opts?.eventType) {
-      result = result.filter((e) => e.eventType === opts.eventType);
-    }
-    if (opts?.status) {
-      result = result.filter((e) => e.status === opts.status);
-    }
-    return result;
-  },
-
-  publishEvent: async (_input: CreateEventInput): Promise<PersonaEvent> => {
-    await delay();
-    return MOCK_EVENTS[0];
-  },
-
-  updateEvent: async (id: string, body: { status: string; metadata?: string }): Promise<PersonaEvent> => {
-    await delay();
-    const ev = MOCK_EVENTS.find((e) => e.id === id);
-    if (!ev) throw new ApiError(404, "Event not found");
-    return { ...ev, status: body.status, processedAt: new Date().toISOString() };
-  },
-
-  listSubscriptions: async (personaId: string): Promise<PersonaEventSubscription[]> => {
-    await delay(150);
-    return [...(MOCK_SUBSCRIPTIONS[personaId] ?? [])];
-  },
-
-  listTriggers: async (personaId: string): Promise<PersonaTrigger[]> => {
-    await delay(150);
-    return [...(MOCK_TRIGGERS[personaId] ?? [])];
-  },
-
-  getHealth: async (): Promise<HealthResponse> => {
-    await delay(100);
-    return { ...MOCK_HEALTH, timestamp: Date.now() };
-  },
-
-  getStatus: async (): Promise<StatusResponse> => {
-    await delay(200);
-    return { ...MOCK_STATUS };
-  },
-
-  getObservability: async (): Promise<{
-    metrics: ObservabilityMetrics;
-    dailyMetrics: DailyMetric[];
-    personaSpend: PersonaSpend[];
-    healthIssues: HealthIssue[];
-  }> => {
-    await delay(300);
-    return {
-      metrics: { ...MOCK_OBSERVABILITY_METRICS },
-      dailyMetrics: [...MOCK_DAILY_METRICS],
-      personaSpend: [...MOCK_PERSONA_SPEND],
-      healthIssues: [...MOCK_HEALTH_ISSUES],
-    };
-  },
-
-  getUsageAnalytics: async (): Promise<{
-    toolUsage: ToolUsageSummary[];
-    toolUsageOverTime: ToolUsageOverTime[];
-    toolUsageByPersona: ToolUsageByPersona[];
-  }> => {
-    await delay(300);
-    return {
-      toolUsage: [...MOCK_TOOL_USAGE],
-      toolUsageOverTime: [...MOCK_TOOL_USAGE_OVER_TIME],
-      toolUsageByPersona: [...MOCK_TOOL_USAGE_BY_PERSONA],
-    };
-  },
-};
-
 // ---------------------------------------------------------------------------
-// API namespace
+// Real API implementation
 // ---------------------------------------------------------------------------
 
-export const api = DEVELOPMENT
-  ? mockApi
-  : {
-      // Personas
+const realApi: ApiClient = {
       listPersonas: () => orchestratorFetch<Persona[]>("/api/personas"),
 
       getPersona: (id: string) =>
@@ -271,13 +147,13 @@ export const api = DEVELOPMENT
         }),
 
       cancelExecution: (id: string) =>
-        orchestratorFetch<{ executionId: string; status: string }>(
+        orchestratorFetch<{ executionId: string; status: PersonaExecutionStatus }>(
           `/api/executions/${id}/cancel`,
           { method: "POST" },
         ),
 
       executePersona: (personaId: string, prompt: string) =>
-        orchestratorFetch<{ executionId: string; status: string }>(
+        orchestratorFetch<{ executionId: string; status: PersonaExecutionStatus }>(
           "/api/execute",
           {
             method: "POST",
@@ -309,7 +185,7 @@ export const api = DEVELOPMENT
 
       updateEvent: (
         id: string,
-        body: { status: string; metadata?: string },
+        body: { status: EventStatus; metadata?: string },
       ) =>
         orchestratorFetch<PersonaEvent>(`/api/events/${id}`, {
           method: "PUT",
@@ -320,6 +196,44 @@ export const api = DEVELOPMENT
       listSubscriptions: (personaId: string) =>
         orchestratorFetch<PersonaEventSubscription[]>(
           `/api/personas/${personaId}/subscriptions`,
+        ),
+
+      listAllSubscriptions: async () => {
+        const personas = await orchestratorFetch<Persona[]>("/api/personas");
+        const results = await Promise.all(
+          personas.map((p) =>
+            orchestratorFetch<PersonaEventSubscription[]>(
+              `/api/personas/${p.id}/subscriptions`,
+            ),
+          ),
+        );
+        return results.flat();
+      },
+
+      createSubscription: (input: {
+        personaId: string;
+        eventType: string;
+        sourceFilter?: string;
+      }) =>
+        orchestratorFetch<PersonaEventSubscription>(
+          `/api/personas/${input.personaId}/subscriptions`,
+          { method: "POST", body: input },
+        ),
+
+      updateSubscription: (
+        personaId: string,
+        subId: string,
+        body: { enabled?: boolean; eventType?: string; sourceFilter?: string | null },
+      ) =>
+        orchestratorFetch<PersonaEventSubscription>(
+          `/api/personas/${personaId}/subscriptions/${subId}`,
+          { method: "PUT", body },
+        ),
+
+      deleteSubscription: (personaId: string, subId: string) =>
+        orchestratorFetch<void>(
+          `/api/personas/${personaId}/subscriptions/${subId}`,
+          { method: "DELETE" },
         ),
 
       // Triggers
@@ -350,3 +264,5 @@ export const api = DEVELOPMENT
           toolUsageByPersona: ToolUsageByPersona[];
         }>("/api/usage"),
     };
+
+export const api: ApiClient = DEVELOPMENT ? mockApi : realApi;

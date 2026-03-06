@@ -11,6 +11,7 @@ import {
 import SectionWrapper from "@/components/SectionWrapper";
 import GradientText from "@/components/GradientText";
 import { fadeUp, slideInLeft, slideInRight } from "@/lib/animations";
+import type { ViewerRole } from "@/components/RoleSelector";
 
 /* ── Scenario data ── */
 
@@ -412,11 +413,48 @@ const AgentContent = memo(function AgentContent({ activeIndex, minHeight }: { ac
 
 /* ── Main component ── */
 
-const comparisonHighlights = [
-  "Deterministic flows break on edge cases",
-  "Agent systems adapt under uncertainty",
-  "One prompt can replace branch-heavy diagrams",
-] as const;
+/* ── Role-specific copy variants ── */
+
+type RoleCopy = {
+  tagline: string;
+  subtitle: string;
+  highlights: readonly string[];
+};
+
+const roleCopy: Record<ViewerRole, RoleCopy> = {
+  developer: {
+    tagline: "What if your workflows could think?",
+    subtitle:
+      "Traditional workflow engines execute deterministic A→B→C pipelines. Personas agents reason, adapt, and coordinate — right from your terminal.",
+    highlights: [
+      "Replace branch-heavy YAML with a single prompt",
+      "Agent loops handle retries and edge cases natively",
+      "Ship in hours, not sprint cycles",
+    ],
+  },
+  "product-manager": {
+    tagline: "What if your automation never needed a ticket?",
+    subtitle:
+      "Workflow builders force you to anticipate every edge case upfront. Personas agents adapt on the fly — no flowchart maintenance required.",
+    highlights: [
+      "Visual outcome dashboards, not debug logs",
+      "Zero-code configuration for common patterns",
+      "Agents self-heal — fewer escalations to engineering",
+    ],
+  },
+  enterprise: {
+    tagline: "What if your operations scaled without headcount?",
+    subtitle:
+      "Rigid RPA breaks when processes change. Personas agents observe, reason, and act within your security perimeter — with full audit trails.",
+    highlights: [
+      "SOC 2 audit trails on every decision",
+      "Horizontal scaling with zero branch explosion",
+      "99.9% uptime SLA with automatic failover",
+    ],
+  },
+};
+
+const defaultCopy = roleCopy["developer"];
 
 // Pre-compute stable min-heights from scenario data to prevent layout shifts.
 // Each item row is ~36px (text-base leading-relaxed + gap-2.5 spacing).
@@ -438,7 +476,8 @@ const agentMinHeight = Math.max(
   ...scenarios.map((s) => computePanelHeight(s.agent.thoughts.length + s.agent.actions.length))
 );
 
-export default function WhyAgents() {
+export default function WhyAgents({ role }: { role?: ViewerRole }) {
+  const copy = role ? roleCopy[role] : defaultCopy;
   const [activeIndex, setActiveIndex] = useState(0);
   const [paused, setPaused] = useState(false);
   const [measuredWfHeight, setMeasuredWfHeight] = useState(0);
@@ -515,23 +554,53 @@ export default function WhyAgents() {
 
       {/* Header */}
       <motion.div variants={fadeUp} className="text-center relative z-10">
-        <p className="text-xl italic text-muted-dark mb-8 font-light tracking-wide">What if your workflows could think?</p>
+        <AnimatePresence mode="wait">
+          <motion.p
+            key={copy.tagline}
+            initial={{ opacity: 0, y: 6 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: -6 }}
+            transition={{ duration: 0.25 }}
+            className="text-xl italic text-muted-dark mb-8 font-light tracking-wide"
+          >
+            {copy.tagline}
+          </motion.p>
+        </AnimatePresence>
         <h2 className="text-4xl font-extrabold tracking-tight sm:text-5xl md:text-7xl drop-shadow-md">
           Why agents, <span className="font-black text-brand-rose drop-shadow-[0_0_15px_rgba(244,63,94,0.5)]">not</span> <GradientText className="drop-shadow-lg">workflows</GradientText>
         </h2>
-        <p className="mx-auto mt-8 max-w-3xl text-lg text-muted-dark leading-relaxed font-light">
-          Traditional workflow engines execute deterministic A→B→C pipelines.
-          Personas agents reason, adapt, and coordinate.
-        </p>
+        <AnimatePresence mode="wait">
+          <motion.p
+            key={copy.subtitle}
+            initial={{ opacity: 0, y: 6 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: -6 }}
+            transition={{ duration: 0.25, delay: 0.05 }}
+            className="mx-auto mt-8 max-w-3xl text-lg text-muted-dark leading-relaxed font-light"
+          >
+            {copy.subtitle}
+          </motion.p>
+        </AnimatePresence>
         <div className="mx-auto mt-10 flex max-w-4xl flex-wrap items-center justify-center gap-3">
-          {comparisonHighlights.map((item) => (
-            <span
-              key={item}
-              className="rounded-full border border-white/10 bg-white/3 px-4 py-2 text-xs font-mono tracking-wider text-muted backdrop-blur-sm transition-colors hover:bg-white/8 hover:text-white shadow-[0_0_10px_rgba(255,255,255,0.02)]"
+          <AnimatePresence mode="wait">
+            <motion.div
+              key={role ?? "developer"}
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              transition={{ duration: 0.2 }}
+              className="flex flex-wrap items-center justify-center gap-3"
             >
-              {item}
-            </span>
-          ))}
+              {copy.highlights.map((item) => (
+                <span
+                  key={item}
+                  className="rounded-full border border-white/10 bg-white/3 px-4 py-2 text-xs font-mono tracking-wider text-muted backdrop-blur-sm transition-colors hover:bg-white/8 hover:text-white shadow-[0_0_10px_rgba(255,255,255,0.02)]"
+                >
+                  {item}
+                </span>
+              ))}
+            </motion.div>
+          </AnimatePresence>
         </div>
       </motion.div>
 
@@ -596,7 +665,7 @@ export default function WhyAgents() {
         {/* Workflow (left) */}
         <ComparisonCard
           variant={slideInLeft}
-          texture="texture-stripes"
+          texture="stripes"
           className="border border-white/8 bg-linear-to-br from-white/6 to-white/2 backdrop-blur-lg hover:border-white/12"
           color={{
             orb: "-right-20 -top-20 bg-brand-rose/4",
@@ -628,7 +697,7 @@ export default function WhyAgents() {
         {/* Agent (right) */}
         <ComparisonCard
           variant={slideInRight}
-          texture="texture-dots"
+          texture="dots"
           className="border border-brand-cyan/15 bg-linear-to-br from-brand-cyan/8 to-white/2 backdrop-blur-lg shadow-[0_0_80px_rgba(6,182,212,0.04)] hover:border-brand-cyan/20 hover:shadow-[0_0_100px_rgba(6,182,212,0.06)]"
           color={{
             orb: "-left-20 -bottom-20 bg-brand-cyan/4",

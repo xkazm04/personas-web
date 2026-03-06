@@ -1,6 +1,21 @@
 "use client";
 
 import dynamic from "next/dynamic";
+import type { ViewerRole } from "@/components/RoleSelector";
+
+function SectionSkeleton() {
+  return (
+    <section className="relative overflow-hidden px-4 sm:px-6 py-24 md:py-32">
+      <div className="relative z-10 mx-auto max-w-6xl">
+        <div className="flex flex-col items-center gap-4">
+          <div className="h-12 w-3/4 max-w-lg rounded-lg bg-white/4 animate-pulse sm:h-14 md:h-16" />
+          <div className="h-5 w-2/3 max-w-xl rounded-md bg-white/3 animate-pulse" />
+          <div className="h-5 w-1/2 max-w-md rounded-md bg-white/3 animate-pulse" />
+        </div>
+      </div>
+    </section>
+  );
+}
 
 function EventBusShowcaseSkeleton() {
   return (
@@ -43,6 +58,24 @@ const EventBusShowcaseSection = dynamic(() => import("@/components/sections/Even
   ssr: false,
   loading: () => <EventBusShowcaseSkeleton />,
 });
+
+const WhyAgentsSection = dynamic(() => import("@/components/sections/WhyAgents"), {
+  ssr: false,
+  loading: () => <SectionSkeleton />,
+});
+
+const FeaturesSection = dynamic(() => import("@/components/sections/Features"), {
+  ssr: false,
+  loading: () => <SectionSkeleton />,
+});
+
+export function LazyWhyAgents({ role }: { role: ViewerRole }) {
+  return <WhyAgentsSection role={role} />;
+}
+
+export function LazyFeatures() {
+  return <FeaturesSection />;
+}
 
 export function LazyEventBusShowcase() {
   return <EventBusShowcaseSection />;

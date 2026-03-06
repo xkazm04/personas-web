@@ -29,7 +29,7 @@ export interface PersonaExecution {
   personaId: string;
   triggerId: string | null;
   useCaseId: string | null;
-  status: string;
+  status: PersonaExecutionStatus;
   inputData: string | null;
   outputData: string | null;
   claudeSessionId: string | null;
@@ -54,7 +54,7 @@ export interface PersonaEvent {
   sourceId: string | null;
   targetPersonaId: string | null;
   payload: string | null;
-  status: string;
+  status: EventStatus;
   errorMessage: string | null;
   processedAt: string | null;
   useCaseId: string | null;
@@ -101,7 +101,7 @@ export interface WorkerInfo {
 
 export interface ExecutionDetail {
   executionId: string;
-  status: string;
+  status: PersonaExecutionStatus;
   outputLines: number;
   output: string[];
   durationMs?: number;
@@ -151,11 +151,13 @@ export interface ManualReviewItem extends WithPersonaInfo {
   executionId: string;
   eventType: string;
   content: string;
-  severity: string;
-  status: string;
+  severity: ReviewSeverity;
+  status: ReviewStatus;
   reviewerNotes: string | null;
   createdAt: string;
   resolvedAt: string | null;
+  resolvedBy: string | null;
+  escalatedAt: string | null;
 }
 
 // ---------------------------------------------------------------------------
@@ -170,6 +172,23 @@ export type PersonaExecutionStatus =
   | "cancelled";
 
 export type EventStatus = "pending" | "processed" | "failed";
+
+export type ReviewSeverity = "critical" | "warning" | "info";
+export type ReviewStatus = "pending" | "approved" | "rejected";
+export type EscalationAction = "auto_approve" | "escalate" | "none";
+
+export interface EscalationRule {
+  slaMinutes: number;
+  action: EscalationAction;
+}
+
+export type EscalationPolicy = Record<ReviewSeverity, EscalationRule>;
+
+/** All status values the StatusBadge component can render. */
+export type BadgeStatus =
+  | PersonaExecutionStatus
+  | EventStatus
+  | ReviewStatus;
 
 // ---------------------------------------------------------------------------
 // API input types
@@ -269,3 +288,12 @@ export type DashboardTab =
   | "observability"
   | "usage"
   | "settings";
+
+// ---------------------------------------------------------------------------
+// UI types
+// ---------------------------------------------------------------------------
+
+export interface ScrollMapItem {
+  label: string;
+  href: string;
+}

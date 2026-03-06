@@ -3,16 +3,14 @@
 import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { ChevronDown, MessageCircle } from "lucide-react";
-import Image from "next/image";
 import SectionWrapper from "@/components/SectionWrapper";
+import SectionHeading from "@/components/SectionHeading";
 import GradientText from "@/components/GradientText";
 import { fadeUp, staggerContainer } from "@/lib/animations";
 
 type FAQItem = {
   question: string;
   answer: string;
-  mediaSrc: string;
-  mediaAlt: string;
 };
 
 const faqs: FAQItem[] = [
@@ -20,43 +18,31 @@ const faqs: FAQItem[] = [
     question: "What is Claude CLI and why do I need it?",
     answer:
       "Claude CLI is Anthropic's official command-line interface for interacting with Claude. Personas uses it under the hood to run your agents locally — it handles authentication, model access, and streaming responses. You'll need an active Claude Pro or Max subscription and the CLI installed before launching Personas.",
-    mediaSrc: "/imgs/illustration_hd.jpg",
-    mediaAlt: "FAQ media placeholder for Claude CLI setup",
   },
   {
     question: "Does Personas collect any telemetry or usage data?",
     answer:
       "No. Personas runs entirely on your machine with zero telemetry. We don't collect analytics, usage metrics, or any personal data. Your prompts, agent configurations, and execution logs never leave your device unless you explicitly enable cloud execution.",
-    mediaSrc: "/imgs/illustration_hd.jpg",
-    mediaAlt: "FAQ media placeholder for telemetry and privacy",
   },
   {
     question: "How does the pricing model work?",
     answer:
       "The desktop app is free forever with unlimited local agents. Cloud plans (Starter, Pro, Team) add 24/7 execution, remote workers, and team features on top. You always need your own Claude subscription — we never touch your Anthropic bill. Think of Personas as the orchestration layer, and Claude as the engine.",
-    mediaSrc: "/imgs/illustration_hd.jpg",
-    mediaAlt: "FAQ media placeholder for pricing model",
   },
   {
     question: "What is Bring Your Own Infrastructure (BYOI)?",
     answer:
       "BYOI lets you connect your own cloud provider credentials (e.g., Fly.io API tokens) instead of using our managed infrastructure. Personas provisions and manages the workers on your account, giving you unlimited execution without per-month caps — you only pay your cloud provider directly.",
-    mediaSrc: "/imgs/illustration_hd.jpg",
-    mediaAlt: "FAQ media placeholder for BYOI",
   },
   {
     question: "What's the difference between local and cloud execution?",
     answer:
       "Local execution runs agents on your machine using Claude CLI — it's instant, free, and private, but stops when your computer sleeps. Cloud execution runs agents on remote workers 24/7, supports event-bus bridging across environments, and enables team collaboration. You can switch between modes per-agent.",
-    mediaSrc: "/imgs/illustration_hd.jpg",
-    mediaAlt: "FAQ media placeholder for execution modes",
   },
   {
     question: "Are there any limits on the number of agents?",
     answer:
       "Locally, there are no limits — create as many agents as you want. Cloud plans have worker limits (1–5 depending on tier) and monthly execution caps. Pro and Team plans include burst auto-scaling for traffic spikes. BYOI removes all caps entirely.",
-    mediaSrc: "/imgs/illustration_hd.jpg",
-    mediaAlt: "FAQ media placeholder for agent limits",
   },
 ];
 
@@ -95,21 +81,6 @@ function FAQCard({ item, index }: { item: FAQItem; index: number }) {
             className="overflow-hidden"
           >
             <div className="px-5 pb-1 pt-3">
-              <div className="mb-4 overflow-hidden rounded-xl border border-white/6 bg-white/3">
-                <div className="relative aspect-video w-full">
-                  <Image
-                    src={item.mediaSrc}
-                    alt={item.mediaAlt}
-                    fill
-                    sizes="(max-width: 768px) 100vw, 50vw"
-                    className="object-cover"
-                  />
-                  <div className="absolute inset-0 bg-black/45" />
-                  <div className="absolute bottom-3 right-3 rounded-full border border-white/15 bg-black/35 px-3 py-1 text-[10px] font-mono uppercase tracking-wider text-white/80">
-                    GIF placeholder
-                  </div>
-                </div>
-              </div>
               <p className="text-sm text-muted-dark leading-relaxed">
                 {item.answer}
               </p>
@@ -147,10 +118,10 @@ export default function FAQ() {
       </div>
 
       <motion.div variants={fadeUp} className="text-center relative">
-        <h2 className="text-4xl font-extrabold tracking-tight sm:text-5xl md:text-7xl drop-shadow-md">
+        <SectionHeading>
           Frequently{" "}
           <GradientText className="drop-shadow-lg">asked</GradientText>
-        </h2>
+        </SectionHeading>
         <p className="mx-auto mt-8 max-w-3xl text-lg text-muted-dark leading-relaxed font-light">
           Everything you need to know about getting started with Personas.
         </p>

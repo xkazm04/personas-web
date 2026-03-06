@@ -22,6 +22,7 @@ import {
   createSnapshot,
   type QueueTelemetryAdapter,
 } from "@/lib/queueTelemetry";
+import { EXTENDED_TOOLS, TOOL_MAP } from "@/lib/tool-catalogue";
 
 type QueueVariant = "swarm" | "lanes";
 
@@ -29,10 +30,10 @@ const queueRouteSeeds = [
   {
     id: "gmail-jira",
     producerId: "gmail",
-    producerLabel: "Gmail",
+    producerLabel: TOOL_MAP.get("gmail")!.name,
     consumerId: "jira",
-    consumerLabel: "Jira",
-    color: "#ea4335",
+    consumerLabel: TOOL_MAP.get("jira")!.name,
+    color: TOOL_MAP.get("gmail")!.color,
     eventType: "email.received → inbox_triage agent",
     queueDepth: 34,
     throughputEps: 28,
@@ -41,10 +42,10 @@ const queueRouteSeeds = [
   {
     id: "slack-drive",
     producerId: "slack",
-    producerLabel: "Slack",
+    producerLabel: TOOL_MAP.get("slack")!.name,
     consumerId: "drive",
-    consumerLabel: "Drive",
-    color: "#4a154b",
+    consumerLabel: TOOL_MAP.get("drive")!.name,
+    color: TOOL_MAP.get("slack")!.color,
     eventType: "slack.message → digest agent",
     queueDepth: 21,
     throughputEps: 36,
@@ -53,10 +54,10 @@ const queueRouteSeeds = [
   {
     id: "github-figma",
     producerId: "github",
-    producerLabel: "GitHub",
+    producerLabel: TOOL_MAP.get("github")!.name,
     consumerId: "figma",
-    consumerLabel: "Figma",
-    color: "#8b5cf6",
+    consumerLabel: TOOL_MAP.get("figma")!.name,
+    color: TOOL_MAP.get("github")!.color,
     eventType: "pr.opened → review_summary agent",
     queueDepth: 12,
     throughputEps: 19,
@@ -65,10 +66,10 @@ const queueRouteSeeds = [
   {
     id: "calendar-stripe",
     producerId: "calendar",
-    producerLabel: "Calendar",
+    producerLabel: TOOL_MAP.get("calendar")!.name,
     consumerId: "stripe",
-    consumerLabel: "Stripe",
-    color: "#06b6d4",
+    consumerLabel: TOOL_MAP.get("stripe")!.name,
+    color: TOOL_MAP.get("calendar")!.color,
     eventType: "meeting.ended → followup agent",
     queueDepth: 48,
     throughputEps: 14,
@@ -78,32 +79,25 @@ const queueRouteSeeds = [
 
 const defaultTelemetryAdapter = createMockQueueTelemetryAdapter(queueRouteSeeds, 1400);
 
-const extendedTools = [
-  { id: "gmail", name: "Gmail", color: "#ea4335", icon: "/tools/gmail.svg" },
-  { id: "slack", name: "Slack", color: "#4a154b", icon: "/tools/slack.svg" },
-  { id: "github", name: "GitHub", color: "#8b5cf6", icon: "/tools/github.svg" },
-  { id: "calendar", name: "Calendar", color: "#06b6d4", icon: "/tools/calendar.svg" },
-  { id: "jira", name: "Jira", color: "#0052cc", icon: "/tools/jira.svg" },
-  { id: "drive", name: "Drive", color: "#34a853", icon: "/tools/drive.svg" },
-  { id: "react", name: "React", color: "#61DAFB", icon: "/tools/react.svg" },
-  { id: "figma", name: "Figma", color: "#f24e1e", icon: "/tools/figma.svg" },
-  { id: "notion", name: "Notion", color: "#ffffff", icon: "/tools/notion.svg" },
-  { id: "nextjs", name: "Next.js", color: "#ffffff", icon: "/tools/nextjs.svg" },
-  { id: "discord", name: "Discord", color: "#5865F2", icon: "/tools/discord.svg" },
-  { id: "nodejs", name: "Node.js", color: "#339933", icon: "/tools/nodejs.svg" },
-  { id: "datadog", name: "Datadog", color: "#632CA6", icon: "/tools/datadog.svg" },
-  { id: "typescript", name: "TypeScript", color: "#3178C6", icon: "/tools/typescript.svg" },
-  { id: "aws", name: "AWS", color: "#FF9900", icon: "/tools/aws.svg" },
-  { id: "vercel", name: "Vercel", color: "#ffffff", icon: "/tools/vercel.svg" },
-  { id: "salesforce", name: "Salesforce", color: "#00A1E0", icon: "/tools/salesforce.svg" },
-  { id: "python", name: "Python", color: "#3776AB", icon: "/tools/python.svg" },
-  { id: "docker", name: "Docker", color: "#2496ED", icon: "/tools/docker.svg" },
-  { id: "kubernetes", name: "Kubernetes", color: "#326CE5", icon: "/tools/kubernetes.svg" },
-  { id: "postgresql", name: "PostgreSQL", color: "#4169E1", icon: "/tools/postgresql.svg" },
-  { id: "redis", name: "Redis", color: "#DC382D", icon: "/tools/redis.svg" },
-  { id: "mongodb", name: "MongoDB", color: "#47A248", icon: "/tools/mongodb.svg" },
-  { id: "trello", name: "Trello", color: "#0052CC", icon: "/tools/trello.svg" }
-];
+const extendedTools = EXTENDED_TOOLS;
+
+/** Colored initial rendered inline in SVG — no external images needed */
+function ToolInitial({ name, color, x, y }: { name: string; color: string; x: number; y: number }) {
+  return (
+    <text
+      x={x}
+      y={y}
+      textAnchor="middle"
+      dominantBaseline="central"
+      fill={color}
+      fontSize="3"
+      fontFamily="var(--font-geist-mono)"
+      fontWeight="bold"
+    >
+      {name.charAt(0).toUpperCase()}
+    </text>
+  );
+}
 
 export default function EventBusShowcase({ telemetryAdapter }: { telemetryAdapter?: QueueTelemetryAdapter }) {
   const uid = useId();
@@ -153,9 +147,36 @@ export default function EventBusShowcase({ telemetryAdapter }: { telemetryAdapte
 
   useEffect(() => {
     if (!inView || variant !== "swarm") return;
-    const id = setInterval(computeActiveCount, 250);
-    computeActiveCount();
-    return () => clearInterval(id);
+
+    let id: ReturnType<typeof setInterval> | null = null;
+
+    const start = () => {
+      if (id || document.visibilityState === "hidden") return;
+      id = setInterval(computeActiveCount, 250);
+      computeActiveCount();
+    };
+
+    const stop = () => {
+      if (!id) return;
+      clearInterval(id);
+      id = null;
+    };
+
+    const handleVisibility = () => {
+      if (document.visibilityState === "hidden") {
+        stop();
+      } else {
+        start();
+      }
+    };
+
+    start();
+    document.addEventListener("visibilitychange", handleVisibility);
+
+    return () => {
+      stop();
+      document.removeEventListener("visibilitychange", handleVisibility);
+    };
   }, [inView, variant, computeActiveCount]);
 
   const laneMetrics = useMemo(() => snapshot.routes.map((route) => ({
@@ -283,7 +304,7 @@ export default function EventBusShowcase({ telemetryAdapter }: { telemetryAdapte
                 <circle cx="50" cy="50" r="8" fill="rgba(255,255,255,0.05)" stroke="rgba(6,182,212,0.3)" strokeWidth="0.5" />
                 <text x="50" y="51" textAnchor="middle" dominantBaseline="middle" fill="rgba(255,255,255,0.8)" fontSize="2.5" fontFamily="var(--font-geist-mono)" letterSpacing="0.1em">BUS</text>
 
-                {/* Swarm Nodes */}
+                {/* Swarm Nodes — SMIL animations run on compositor, not JS thread */}
                 {extendedTools.map((tool, i) => {
                   // Distribute in 2 rings
                   const isOuter = i % 2 === 0;
@@ -291,32 +312,52 @@ export default function EventBusShowcase({ telemetryAdapter }: { telemetryAdapte
                   const angle = (i * (360 / extendedTools.length)) * (Math.PI / 180);
                   const x = 50 + radius * Math.cos(angle);
                   const y = 50 + radius * Math.sin(angle);
-                  
-                  // Randomize animation delays
+
+                  // Staggered timing per node
                   const delay = (i * 0.37) % 4;
                   const duration = 3 + (i % 3);
-                  
+                  const totalCycle = duration + 1; // duration + repeatDelay
+
+                  // Opacity keyTimes: fade-in, hold, fade-out, idle
+                  const kt1 = (duration * 0.33 / totalCycle).toFixed(4);
+                  const kt2 = (duration * 0.66 / totalCycle).toFixed(4);
+                  const kt3 = (duration / totalCycle).toFixed(4);
+
+                  // Particle travels during first 40% of active duration
+                  const pActive = (duration * 0.4 / totalCycle).toFixed(4);
+                  const pEnd = Math.min(parseFloat(pActive) + 0.001, 1).toFixed(4);
+                  const dx = (50 - x).toFixed(2);
+                  const dy = (50 - y).toFixed(2);
+
                   return (
-                    <motion.g 
-                      key={tool.id}
-                      initial={{ opacity: 0 }}
-                      animate={inView ? { opacity: [0, 0.8, 0.8, 0] } : { opacity: 0 }}
-                      transition={{ duration, delay, repeat: inView ? Infinity : 0, repeatDelay: 1 }}
-                    >
-                      <line x1={x} y1={y} x2="50" y2="50" stroke="rgba(255,255,255,0.05)" strokeWidth="0.2" strokeDasharray="1 2" />
-                      
-                      {/* Particle moving to/from center */}
-                      <motion.circle
-                        r="0.8" fill={tool.color} filter={`url(#${uid}-swarmGlow)`}
-                        initial={{ cx: x, cy: y }}
-                        animate={inView ? { cx: [x, 50], cy: [y, 50] } : { cx: x, cy: y }}
-                        transition={{ duration: duration * 0.4, delay: delay + duration * 0.2, repeat: inView ? Infinity : 0, repeatDelay: duration * 0.6 + 1 }}
+                    <g key={tool.id} opacity="0">
+                      <animate
+                        attributeName="opacity"
+                        values="0;0.8;0.8;0;0"
+                        keyTimes={`0;${kt1};${kt2};${kt3};1`}
+                        dur={`${totalCycle}s`}
+                        begin={`${delay}s`}
+                        repeatCount="indefinite"
                       />
-                      
+                      <line x1={x} y1={y} x2="50" y2="50" stroke="rgba(255,255,255,0.05)" strokeWidth="0.2" strokeDasharray="1 2" />
+
+                      {/* Particle moving toward center */}
+                      <circle r="0.8" fill={tool.color} filter={`url(#${uid}-swarmGlow)`} cx={x} cy={y}>
+                        <animateTransform
+                          attributeName="transform"
+                          type="translate"
+                          values={`0 0;${dx} ${dy};0 0;0 0`}
+                          keyTimes={`0;${pActive};${pEnd};1`}
+                          dur={`${totalCycle}s`}
+                          begin={`${delay + duration * 0.2}s`}
+                          repeatCount="indefinite"
+                        />
+                      </circle>
+
                       <circle cx={x} cy={y} r="3.5" fill={`${tool.color}2a`} stroke={tool.color} strokeWidth="0.3" />
-                      <image href={tool.icon} x={x - 2} y={y - 2} width="4" height="4" />
+                      <ToolInitial name={tool.name} color={tool.color} x={x} y={y} />
                       <text x={x} y={y + 5.5} textAnchor="middle" fill="rgba(255,255,255,0.5)" fontSize="1.8" fontFamily="var(--font-geist-mono)">{tool.name}</text>
-                    </motion.g>
+                    </g>
                   );
                 })}
 

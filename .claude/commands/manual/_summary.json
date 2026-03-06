@@ -1,0 +1,711 @@
+[
+    {
+        "File":  "idea-090394a4-defer-below-fold-charts-with-i.md",
+        "Title":  "Defer below-fold charts with IntersectionObserver",
+        "Category":  "performance",
+        "Effort":  "Medium (2/3)",
+        "Impact":  "Medium (2/3)",
+        "RelatedFiles":  [
+                             "src/app/dashboard/usage/page.tsx",
+                             "src/stores/dashboardStore.ts",
+                             "src/lib/api.ts",
+                             "src/lib/types.ts",
+                             "src/lib/mockData.ts"
+                         ]
+    },
+    {
+        "File":  "idea-0b7a64f6-memoize-sorted-features-and-sh.md",
+        "Title":  "Memoize sorted features and shippedMap in FeatureVoting",
+        "Category":  "performance",
+        "Effort":  "Low (1/3)",
+        "Impact":  "Low (1/3)",
+        "RelatedFiles":  [
+                             "src/components/WaitlistModal.tsx",
+                             "src/components/sections/FeatureVoting.tsx",
+                             "src/app/api/waitlist/route.ts",
+                             "src/lib/analytics.ts",
+                             "src/components/PageViewTracker.tsx",
+                             "src/lib/supabase.ts"
+                         ]
+    },
+    {
+        "File":  "idea-1254bb94-conditionally-render-animatepr.md",
+        "Title":  "Conditionally render AnimatePresence for expanded row",
+        "Category":  "performance",
+        "Effort":  "Low (1/3)",
+        "Impact":  "Medium (2/3)",
+        "RelatedFiles":  [
+                             "src/app/dashboard/executions/page.tsx",
+                             "src/hooks/useExecutionPolling.ts",
+                             "src/hooks/usePolling.ts",
+                             "src/stores/dashboardStore.ts",
+                             "src/lib/api.ts",
+                             "src/lib/types.ts",
+                             "src/lib/mockData.ts",
+                             "src/components/dashboard/DataTable.tsx",
+                             "src/components/dashboard/FilterBar.tsx",
+                             "src/components/dashboard/StatusBadge.tsx"
+                         ]
+    },
+    {
+        "File":  "idea-125554ef-apply-stale-while-revalidate-t.md",
+        "Title":  "Apply stale-while-revalidate to usage store fetch",
+        "Category":  "performance",
+        "Effort":  "Low (1/3)",
+        "Impact":  "Medium (2/3)",
+        "RelatedFiles":  [
+                             "src/app/dashboard/usage/page.tsx",
+                             "src/stores/dashboardStore.ts",
+                             "src/lib/api.ts",
+                             "src/lib/types.ts",
+                             "src/lib/mockData.ts"
+                         ]
+    },
+    {
+        "File":  "idea-16ca8be5-prevent-re-render-cascade-from.md",
+        "Title":  "Prevent re-render cascade from useAuthStore",
+        "Category":  "performance",
+        "Effort":  "Low (1/3)",
+        "Impact":  "High (3/3)",
+        "RelatedFiles":  [
+                             "src/components/AuthProvider.tsx",
+                             "src/stores/authStore.ts",
+                             "src/lib/supabase.ts",
+                             "src/components/dashboard/SignInPrompt.tsx",
+                             "src/components/dashboard/DashboardNavbar.tsx",
+                             "src/lib/dev.ts",
+                             "src/lib/types.ts"
+                         ]
+    },
+    {
+        "File":  "idea-1a850d5c-stabilize-handlevote-with-user.md",
+        "Title":  "Stabilize handleVote with useRef to prevent rerenders",
+        "Category":  "performance",
+        "Effort":  "Low (1/3)",
+        "Impact":  "Medium (2/3)",
+        "RelatedFiles":  [
+                             "src/components/WaitlistModal.tsx",
+                             "src/components/sections/FeatureVoting.tsx",
+                             "src/app/api/waitlist/route.ts",
+                             "src/lib/analytics.ts",
+                             "src/components/PageViewTracker.tsx",
+                             "src/lib/supabase.ts"
+                         ]
+    },
+    {
+        "File":  "idea-2377e165-split-observabilitycharts-into.md",
+        "Title":  "Split ObservabilityCharts into per-chart chunks",
+        "Category":  "performance",
+        "Effort":  "Medium (2/3)",
+        "Impact":  "Medium (2/3)",
+        "RelatedFiles":  [
+                             "src/app/dashboard/observability/page.tsx",
+                             "src/stores/dashboardStore.ts",
+                             "src/lib/api.ts",
+                             "src/lib/types.ts",
+                             "src/lib/mockData.ts",
+                             "src/instrumentation.ts",
+                             "sentry.client.config.ts",
+                             "sentry.server.config.ts",
+                             "sentry.edge.config.ts"
+                         ]
+    },
+    {
+        "File":  "idea-24070508-replace-sectiondivider-usescro.md",
+        "Title":  "Replace SectionDivider useScroll with CSS scroll-driven",
+        "Category":  "performance",
+        "Effort":  "Low (1/3)",
+        "Impact":  "Medium (2/3)",
+        "RelatedFiles":  [
+                             "src/app/page.tsx",
+                             "src/app/layout.tsx",
+                             "src/app/globals.css",
+                             "src/app/global-error.tsx",
+                             "src/components/Navbar.tsx",
+                             "src/components/PageShell.tsx",
+                             "src/components/SectionWrapper.tsx",
+                             "src/components/SectionHeading.tsx",
+                             "src/components/SectionDivider.tsx",
+                             "src/components/SectionBreadcrumb.tsx",
+                             "src/components/SectionSnapScroll.tsx",
+                             "src/components/ScrollMap.tsx",
+                             "src/components/GradientText.tsx",
+                             "src/components/PrimaryCTA.tsx",
+                             "src/components/sections/Hero.tsx",
+                             "src/components/sections/Features.tsx",
+                             "src/components/sections/UseCases.tsx",
+                             "src/components/sections/Vision.tsx",
+                             "src/components/sections/WhyAgents.tsx",
+                             "src/components/sections/Pricing.tsx",
+                             "src/components/sections/FAQ.tsx",
+                             "src/components/sections/SocialProof.tsx",
+                             "src/components/sections/DownloadCTA.tsx",
+                             "src/components/sections/Footer.tsx",
+                             "src/components/sections/lazy.tsx",
+                             "src/hooks/useActiveSection.ts",
+                             "src/lib/animations.ts"
+                         ]
+    },
+    {
+        "File":  "idea-29030abb-memo-wrap-chart-components-to.md",
+        "Title":  "Memo-wrap chart components to skip same-data re-renders",
+        "Category":  "performance",
+        "Effort":  "Low (1/3)",
+        "Impact":  "Medium (2/3)",
+        "RelatedFiles":  [
+                             "src/app/dashboard/observability/page.tsx",
+                             "src/stores/dashboardStore.ts",
+                             "src/lib/api.ts",
+                             "src/lib/types.ts",
+                             "src/lib/mockData.ts",
+                             "src/instrumentation.ts",
+                             "sentry.client.config.ts",
+                             "sentry.server.config.ts",
+                             "sentry.edge.config.ts"
+                         ]
+    },
+    {
+        "File":  "idea-3027e46c-single-grouped-query-for-waitl.md",
+        "Title":  "Single grouped query for waitlist platform counts",
+        "Category":  "performance",
+        "Effort":  "Low (1/3)",
+        "Impact":  "Medium (2/3)",
+        "RelatedFiles":  [
+                             "src/components/WaitlistModal.tsx",
+                             "src/components/sections/FeatureVoting.tsx",
+                             "src/app/api/waitlist/route.ts",
+                             "src/lib/analytics.ts",
+                             "src/components/PageViewTracker.tsx",
+                             "src/lib/supabase.ts"
+                         ]
+    },
+    {
+        "File":  "idea-37952062-gate-animatepresence-to-only-t.md",
+        "Title":  "Gate AnimatePresence to only the expanded agent card",
+        "Category":  "performance",
+        "Effort":  "Low (1/3)",
+        "Impact":  "Low (1/3)",
+        "RelatedFiles":  [
+                             "src/app/dashboard/agents/page.tsx",
+                             "src/components/dashboard/PersonaAvatar.tsx",
+                             "src/stores/dashboardStore.ts",
+                             "src/lib/api.ts",
+                             "src/lib/types.ts",
+                             "src/lib/mockData.ts"
+                         ]
+    },
+    {
+        "File":  "idea-3b86dbac-suppress-list-poll-while-execu.md",
+        "Title":  "Suppress list poll while execution detail is expanded",
+        "Category":  "performance",
+        "Effort":  "Low (1/3)",
+        "Impact":  "Medium (2/3)",
+        "RelatedFiles":  [
+                             "src/app/dashboard/executions/page.tsx",
+                             "src/hooks/useExecutionPolling.ts",
+                             "src/hooks/usePolling.ts",
+                             "src/stores/dashboardStore.ts",
+                             "src/lib/api.ts",
+                             "src/lib/types.ts",
+                             "src/lib/mockData.ts",
+                             "src/components/dashboard/DataTable.tsx",
+                             "src/components/dashboard/FilterBar.tsx",
+                             "src/components/dashboard/StatusBadge.tsx"
+                         ]
+    },
+    {
+        "File":  "idea-3bc12df1-centralize-usereducedmotion-in.md",
+        "Title":  "Centralize useReducedMotion into QualityContext",
+        "Category":  "performance",
+        "Effort":  "Low (1/3)",
+        "Impact":  "Medium (2/3)",
+        "RelatedFiles":  [
+                             "src/app/page.tsx",
+                             "src/app/layout.tsx",
+                             "src/app/globals.css",
+                             "src/app/global-error.tsx",
+                             "src/components/Navbar.tsx",
+                             "src/components/PageShell.tsx",
+                             "src/components/SectionWrapper.tsx",
+                             "src/components/SectionHeading.tsx",
+                             "src/components/SectionDivider.tsx",
+                             "src/components/SectionBreadcrumb.tsx",
+                             "src/components/SectionSnapScroll.tsx",
+                             "src/components/ScrollMap.tsx",
+                             "src/components/GradientText.tsx",
+                             "src/components/PrimaryCTA.tsx",
+                             "src/components/sections/Hero.tsx",
+                             "src/components/sections/Features.tsx",
+                             "src/components/sections/UseCases.tsx",
+                             "src/components/sections/Vision.tsx",
+                             "src/components/sections/WhyAgents.tsx",
+                             "src/components/sections/Pricing.tsx",
+                             "src/components/sections/FAQ.tsx",
+                             "src/components/sections/SocialProof.tsx",
+                             "src/components/sections/DownloadCTA.tsx",
+                             "src/components/sections/Footer.tsx",
+                             "src/components/sections/lazy.tsx",
+                             "src/hooks/useActiveSection.ts",
+                             "src/lib/animations.ts"
+                         ]
+    },
+    {
+        "File":  "idea-495d9bf8-memoize-sidebar-running-count.md",
+        "Title":  "Memoize sidebar running-count selector",
+        "Category":  "performance",
+        "Effort":  "Low (1/3)",
+        "Impact":  "Medium (2/3)",
+        "RelatedFiles":  [
+                             "src/app/dashboard/layout.tsx",
+                             "src/app/dashboard/page.tsx",
+                             "src/app/dashboard/home/page.tsx",
+                             "src/app/dashboard/settings/page.tsx",
+                             "src/components/dashboard/DashboardSidebar.tsx",
+                             "src/components/dashboard/DashboardNavbar.tsx",
+                             "src/components/dashboard/DashboardSkeleton.tsx",
+                             "src/components/dashboard/DataTable.tsx",
+                             "src/components/dashboard/EmptyState.tsx",
+                             "src/components/dashboard/FilterBar.tsx",
+                             "src/components/dashboard/StatusBadge.tsx",
+                             "src/components/dashboard/PersonaAvatar.tsx",
+                             "src/stores/dashboardStore.ts"
+                         ]
+    },
+    {
+        "File":  "idea-4fb483e5-prefetch-adjacent-dashboard-ro.md",
+        "Title":  "Prefetch adjacent dashboard routes on hover",
+        "Category":  "performance",
+        "Effort":  "Low (1/3)",
+        "Impact":  "High (3/3)",
+        "RelatedFiles":  [
+                             "src/app/dashboard/layout.tsx",
+                             "src/app/dashboard/page.tsx",
+                             "src/app/dashboard/home/page.tsx",
+                             "src/app/dashboard/settings/page.tsx",
+                             "src/components/dashboard/DashboardSidebar.tsx",
+                             "src/components/dashboard/DashboardNavbar.tsx",
+                             "src/components/dashboard/DashboardSkeleton.tsx",
+                             "src/components/dashboard/DataTable.tsx",
+                             "src/components/dashboard/EmptyState.tsx",
+                             "src/components/dashboard/FilterBar.tsx",
+                             "src/components/dashboard/StatusBadge.tsx",
+                             "src/components/dashboard/PersonaAvatar.tsx",
+                             "src/stores/dashboardStore.ts"
+                         ]
+    },
+    {
+        "File":  "idea-5e488f72-single-pass-audit-analytics-co.md",
+        "Title":  "Single-pass audit analytics computation",
+        "Category":  "performance",
+        "Effort":  "Medium (2/3)",
+        "Impact":  "Medium (2/3)",
+        "RelatedFiles":  [
+                             "src/app/dashboard/reviews/page.tsx",
+                             "src/stores/dashboardStore.ts",
+                             "src/lib/api.ts",
+                             "src/lib/types.ts",
+                             "src/lib/mockData.ts",
+                             "src/components/dashboard/EmptyState.tsx",
+                             "src/components/dashboard/StatusBadge.tsx"
+                         ]
+    },
+    {
+        "File":  "idea-64020ea8-replace-setinterval-with-chain.md",
+        "Title":  "Replace setInterval with chained setTimeout in pollers",
+        "Category":  "performance",
+        "Effort":  "Low (1/3)",
+        "Impact":  "Medium (2/3)",
+        "RelatedFiles":  [
+                             "src/app/dashboard/executions/page.tsx",
+                             "src/hooks/useExecutionPolling.ts",
+                             "src/hooks/usePolling.ts",
+                             "src/stores/dashboardStore.ts",
+                             "src/lib/api.ts",
+                             "src/lib/types.ts",
+                             "src/lib/mockData.ts",
+                             "src/components/dashboard/DataTable.tsx",
+                             "src/components/dashboard/FilterBar.tsx",
+                             "src/components/dashboard/StatusBadge.tsx"
+                         ]
+    },
+    {
+        "File":  "idea-6ebfdde8-dynamic-import-recharts-on-usa.md",
+        "Title":  "Dynamic-import Recharts on usage page like observability",
+        "Category":  "performance",
+        "Effort":  "Low (1/3)",
+        "Impact":  "Medium (2/3)",
+        "RelatedFiles":  [
+                             "src/app/dashboard/usage/page.tsx",
+                             "src/stores/dashboardStore.ts",
+                             "src/lib/api.ts",
+                             "src/lib/types.ts",
+                             "src/lib/mockData.ts"
+                         ]
+    },
+    {
+        "File":  "idea-70c51ca1-cache-agentdetail-data-to-avoi.md",
+        "Title":  "Cache AgentDetail data to avoid refetch on re-expand",
+        "Category":  "performance",
+        "Effort":  "Low (1/3)",
+        "Impact":  "Medium (2/3)",
+        "RelatedFiles":  [
+                             "src/app/dashboard/agents/page.tsx",
+                             "src/components/dashboard/PersonaAvatar.tsx",
+                             "src/stores/dashboardStore.ts",
+                             "src/lib/api.ts",
+                             "src/lib/types.ts",
+                             "src/lib/mockData.ts"
+                         ]
+    },
+    {
+        "File":  "idea-7826efc0-add-stale-while-revalidate-to.md",
+        "Title":  "Add stale-while-revalidate to persona store fetch",
+        "Category":  "performance",
+        "Effort":  "Low (1/3)",
+        "Impact":  "Medium (2/3)",
+        "RelatedFiles":  [
+                             "src/app/dashboard/agents/page.tsx",
+                             "src/components/dashboard/PersonaAvatar.tsx",
+                             "src/stores/dashboardStore.ts",
+                             "src/lib/api.ts",
+                             "src/lib/types.ts",
+                             "src/lib/mockData.ts"
+                         ]
+    },
+    {
+        "File":  "idea-7939f372-lazy-load-whyagents-and-featur.md",
+        "Title":  "Lazy-load WhyAgents and Features on How page",
+        "Category":  "performance",
+        "Effort":  "Low (1/3)",
+        "Impact":  "Medium (2/3)",
+        "RelatedFiles":  [
+                             "src/app/how/page.tsx",
+                             "src/app/roadmap/page.tsx",
+                             "src/components/PhaseCard.tsx",
+                             "src/components/StageSection.tsx",
+                             "src/components/FlowComposer.tsx",
+                             "src/components/sections/Roadmap.tsx",
+                             "src/components/sections/EventBusShowcase.tsx",
+                             "src/components/sections/how-lazy.tsx",
+                             "src/lib/queueTelemetry.ts"
+                         ]
+    },
+    {
+        "File":  "idea-7dfc47a9-add-swr-refreshinterval-for-li.md",
+        "Title":  "Add SWR refreshInterval for live observability updates",
+        "Category":  "performance",
+        "Effort":  "Low (1/3)",
+        "Impact":  "Medium (2/3)",
+        "RelatedFiles":  [
+                             "src/app/dashboard/observability/page.tsx",
+                             "src/stores/dashboardStore.ts",
+                             "src/lib/api.ts",
+                             "src/lib/types.ts",
+                             "src/lib/mockData.ts",
+                             "src/instrumentation.ts",
+                             "sentry.client.config.ts",
+                             "sentry.server.config.ts",
+                             "sentry.edge.config.ts"
+                         ]
+    },
+    {
+        "File":  "idea-98c3b0b4-replace-typewriterline-per-cha.md",
+        "Title":  "Replace TypewriterLine per-char motion.spans with CSS",
+        "Category":  "performance",
+        "Effort":  "Medium (2/3)",
+        "Impact":  "Medium (2/3)",
+        "RelatedFiles":  [
+                             "src/components/AmbientOrbs.tsx",
+                             "src/components/AnimatedBorder.tsx",
+                             "src/components/AnimationPauseObserver.tsx",
+                             "src/components/CinematicBreather.tsx",
+                             "src/components/FloatingParticles.tsx",
+                             "src/components/GlowCard.tsx",
+                             "src/components/ParallaxAccents.tsx",
+                             "src/components/TopoBackground.tsx",
+                             "src/components/TerminalChrome.tsx",
+                             "src/hooks/useAnimationPause.ts"
+                         ]
+    },
+    {
+        "File":  "idea-a29db458-memoize-persona-lookup-map-in.md",
+        "Title":  "Memoize persona lookup Map in enrichWithPersona",
+        "Category":  "performance",
+        "Effort":  "Low (1/3)",
+        "Impact":  "High (3/3)",
+        "RelatedFiles":  [
+                             "src/app/dashboard/executions/page.tsx",
+                             "src/hooks/useExecutionPolling.ts",
+                             "src/hooks/usePolling.ts",
+                             "src/stores/dashboardStore.ts",
+                             "src/lib/api.ts",
+                             "src/lib/types.ts",
+                             "src/lib/mockData.ts",
+                             "src/components/dashboard/DataTable.tsx",
+                             "src/components/dashboard/FilterBar.tsx",
+                             "src/components/dashboard/StatusBadge.tsx"
+                         ]
+    },
+    {
+        "File":  "idea-b012a249-pause-eventbus-active-count-ti.md",
+        "Title":  "Pause EventBus active-count timer on hidden tab",
+        "Category":  "performance",
+        "Effort":  "Low (1/3)",
+        "Impact":  "Low (1/3)",
+        "RelatedFiles":  [
+                             "src/app/how/page.tsx",
+                             "src/app/roadmap/page.tsx",
+                             "src/components/PhaseCard.tsx",
+                             "src/components/StageSection.tsx",
+                             "src/components/FlowComposer.tsx",
+                             "src/components/sections/Roadmap.tsx",
+                             "src/components/sections/EventBusShowcase.tsx",
+                             "src/components/sections/how-lazy.tsx",
+                             "src/lib/queueTelemetry.ts"
+                         ]
+    },
+    {
+        "File":  "idea-b3466d2a-defer-auth-initialization-on-p.md",
+        "Title":  "Defer auth initialization on public pages",
+        "Category":  "performance",
+        "Effort":  "Low (1/3)",
+        "Impact":  "Medium (2/3)",
+        "RelatedFiles":  [
+                             "src/components/AuthProvider.tsx",
+                             "src/stores/authStore.ts",
+                             "src/lib/supabase.ts",
+                             "src/components/dashboard/SignInPrompt.tsx",
+                             "src/components/dashboard/DashboardNavbar.tsx",
+                             "src/lib/dev.ts",
+                             "src/lib/types.ts"
+                         ]
+    },
+    {
+        "File":  "idea-b3e9a435-fix-auth-listener-memory-leak.md",
+        "Title":  "Fix auth listener memory leak in authStore",
+        "Category":  "performance",
+        "Effort":  "Low (1/3)",
+        "Impact":  "Low (1/3)",
+        "RelatedFiles":  [
+                             "src/components/AuthProvider.tsx",
+                             "src/stores/authStore.ts",
+                             "src/lib/supabase.ts",
+                             "src/components/dashboard/SignInPrompt.tsx",
+                             "src/components/dashboard/DashboardNavbar.tsx",
+                             "src/lib/dev.ts",
+                             "src/lib/types.ts"
+                         ]
+    },
+    {
+        "File":  "idea-bb0e22e9-debounce-canvas-compositor-res.md",
+        "Title":  "Debounce canvas compositor resize handler",
+        "Category":  "performance",
+        "Effort":  "Low (1/3)",
+        "Impact":  "Medium (2/3)",
+        "RelatedFiles":  [
+                             "src/components/AmbientOrbs.tsx",
+                             "src/components/AnimatedBorder.tsx",
+                             "src/components/AnimationPauseObserver.tsx",
+                             "src/components/CinematicBreather.tsx",
+                             "src/components/FloatingParticles.tsx",
+                             "src/components/GlowCard.tsx",
+                             "src/components/ParallaxAccents.tsx",
+                             "src/components/TopoBackground.tsx",
+                             "src/components/TerminalChrome.tsx",
+                             "src/hooks/useAnimationPause.ts"
+                         ]
+    },
+    {
+        "File":  "idea-bdfdb8c5-split-navbar-mobile-menu-into.md",
+        "Title":  "Split Navbar mobile menu into dynamic import",
+        "Category":  "performance",
+        "Effort":  "Low (1/3)",
+        "Impact":  "Medium (2/3)",
+        "RelatedFiles":  [
+                             "src/app/page.tsx",
+                             "src/app/layout.tsx",
+                             "src/app/globals.css",
+                             "src/app/global-error.tsx",
+                             "src/components/Navbar.tsx",
+                             "src/components/PageShell.tsx",
+                             "src/components/SectionWrapper.tsx",
+                             "src/components/SectionHeading.tsx",
+                             "src/components/SectionDivider.tsx",
+                             "src/components/SectionBreadcrumb.tsx",
+                             "src/components/SectionSnapScroll.tsx",
+                             "src/components/ScrollMap.tsx",
+                             "src/components/GradientText.tsx",
+                             "src/components/PrimaryCTA.tsx",
+                             "src/components/sections/Hero.tsx",
+                             "src/components/sections/Features.tsx",
+                             "src/components/sections/UseCases.tsx",
+                             "src/components/sections/Vision.tsx",
+                             "src/components/sections/WhyAgents.tsx",
+                             "src/components/sections/Pricing.tsx",
+                             "src/components/sections/FAQ.tsx",
+                             "src/components/sections/SocialProof.tsx",
+                             "src/components/sections/DownloadCTA.tsx",
+                             "src/components/sections/Footer.tsx",
+                             "src/components/sections/lazy.tsx",
+                             "src/hooks/useActiveSection.ts",
+                             "src/lib/animations.ts"
+                         ]
+    },
+    {
+        "File":  "idea-beae9600-split-observabilitycharts-into.md",
+        "Title":  "Split ObservabilityCharts into per-chart dynamic imports",
+        "Category":  "performance",
+        "Effort":  "Medium (2/3)",
+        "Impact":  "Medium (2/3)",
+        "RelatedFiles":  [
+                             "src/app/dashboard/observability/page.tsx",
+                             "src/stores/dashboardStore.ts",
+                             "src/lib/api.ts",
+                             "src/lib/types.ts",
+                             "src/lib/mockData.ts",
+                             "src/instrumentation.ts",
+                             "sentry.client.config.ts",
+                             "sentry.server.config.ts",
+                             "sentry.edge.config.ts"
+                         ]
+    },
+    {
+        "File":  "idea-bf10f488-scope-mutationobserver-to-main.md",
+        "Title":  "Scope MutationObserver to main content container",
+        "Category":  "performance",
+        "Effort":  "Low (1/3)",
+        "Impact":  "Medium (2/3)",
+        "RelatedFiles":  [
+                             "src/components/AmbientOrbs.tsx",
+                             "src/components/AnimatedBorder.tsx",
+                             "src/components/AnimationPauseObserver.tsx",
+                             "src/components/CinematicBreather.tsx",
+                             "src/components/FloatingParticles.tsx",
+                             "src/components/GlowCard.tsx",
+                             "src/components/ParallaxAccents.tsx",
+                             "src/components/TopoBackground.tsx",
+                             "src/components/TerminalChrome.tsx",
+                             "src/hooks/useAnimationPause.ts"
+                         ]
+    },
+    {
+        "File":  "idea-c378e847-memoize-over-budget-personas-t.md",
+        "Title":  "Memoize over-budget personas to avoid double filter",
+        "Category":  "performance",
+        "Effort":  "Low (1/3)",
+        "Impact":  "Low (1/3)",
+        "RelatedFiles":  [
+                             "src/app/dashboard/observability/page.tsx",
+                             "src/stores/dashboardStore.ts",
+                             "src/lib/api.ts",
+                             "src/lib/types.ts",
+                             "src/lib/mockData.ts",
+                             "src/instrumentation.ts",
+                             "sentry.client.config.ts",
+                             "sentry.server.config.ts",
+                             "sentry.edge.config.ts"
+                         ]
+    },
+    {
+        "File":  "idea-c3bc3700-prefetch-agent-details-on-poin.md",
+        "Title":  "Prefetch agent details on pointer hover",
+        "Category":  "performance",
+        "Effort":  "Medium (2/3)",
+        "Impact":  "Medium (2/3)",
+        "RelatedFiles":  [
+                             "src/app/dashboard/agents/page.tsx",
+                             "src/components/dashboard/PersonaAvatar.tsx",
+                             "src/stores/dashboardStore.ts",
+                             "src/lib/api.ts",
+                             "src/lib/types.ts",
+                             "src/lib/mockData.ts"
+                         ]
+    },
+    {
+        "File":  "idea-c7a42dc5-replace-personas-find-with-map.md",
+        "Title":  "Replace personas.find with Map lookup in event columns",
+        "Category":  "performance",
+        "Effort":  "Low (1/3)",
+        "Impact":  "Medium (2/3)",
+        "RelatedFiles":  [
+                             "src/app/dashboard/events/page.tsx",
+                             "src/stores/dashboardStore.ts",
+                             "src/lib/api.ts",
+                             "src/lib/types.ts",
+                             "src/lib/mockData.ts",
+                             "src/components/dashboard/DataTable.tsx",
+                             "src/components/dashboard/FilterBar.tsx",
+                             "src/components/dashboard/StatusBadge.tsx"
+                         ]
+    },
+    {
+        "File":  "idea-c8706b67-hoist-glowcard-hover-capabilit.md",
+        "Title":  "Hoist GlowCard hover-capability check to context",
+        "Category":  "performance",
+        "Effort":  "Low (1/3)",
+        "Impact":  "Low (1/3)",
+        "RelatedFiles":  [
+                             "src/components/AmbientOrbs.tsx",
+                             "src/components/AnimatedBorder.tsx",
+                             "src/components/AnimationPauseObserver.tsx",
+                             "src/components/CinematicBreather.tsx",
+                             "src/components/FloatingParticles.tsx",
+                             "src/components/GlowCard.tsx",
+                             "src/components/ParallaxAccents.tsx",
+                             "src/components/TopoBackground.tsx",
+                             "src/components/TerminalChrome.tsx",
+                             "src/hooks/useAnimationPause.ts"
+                         ]
+    },
+    {
+        "File":  "idea-d06e3208-replace-flowcomposer-resize-li.md",
+        "Title":  "Replace FlowComposer resize listener with matchMedia",
+        "Category":  "performance",
+        "Effort":  "Low (1/3)",
+        "Impact":  "Medium (2/3)",
+        "RelatedFiles":  [
+                             "src/app/how/page.tsx",
+                             "src/app/roadmap/page.tsx",
+                             "src/components/PhaseCard.tsx",
+                             "src/components/StageSection.tsx",
+                             "src/components/FlowComposer.tsx",
+                             "src/components/sections/Roadmap.tsx",
+                             "src/components/sections/EventBusShowcase.tsx",
+                             "src/components/sections/how-lazy.tsx",
+                             "src/lib/queueTelemetry.ts"
+                         ]
+    },
+    {
+        "File":  "idea-f0c90b49-evict-stale-rate-limit-entries.md",
+        "Title":  "Evict stale rate-limit entries to prevent memory leak",
+        "Category":  "performance",
+        "Effort":  "Low (1/3)",
+        "Impact":  "Medium (2/3)",
+        "RelatedFiles":  [
+                             "src/components/WaitlistModal.tsx",
+                             "src/components/sections/FeatureVoting.tsx",
+                             "src/app/api/waitlist/route.ts",
+                             "src/lib/analytics.ts",
+                             "src/components/PageViewTracker.tsx",
+                             "src/lib/supabase.ts"
+                         ]
+    },
+    {
+        "File":  "idea-fe40cc96-throttle-phasecardstrip-scroll.md",
+        "Title":  "Throttle PhaseCardStrip scroll handler with rAF",
+        "Category":  "performance",
+        "Effort":  "Low (1/3)",
+        "Impact":  "Medium (2/3)",
+        "RelatedFiles":  [
+                             "src/app/how/page.tsx",
+                             "src/app/roadmap/page.tsx",
+                             "src/components/PhaseCard.tsx",
+                             "src/components/StageSection.tsx",
+                             "src/components/FlowComposer.tsx",
+                             "src/components/sections/Roadmap.tsx",
+                             "src/components/sections/EventBusShowcase.tsx",
+                             "src/components/sections/how-lazy.tsx",
+                             "src/lib/queueTelemetry.ts"
+                         ]
+    }
+]

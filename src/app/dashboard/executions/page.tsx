@@ -10,31 +10,14 @@ import FilterBar from "@/components/dashboard/FilterBar";
 import StatusBadge from "@/components/dashboard/StatusBadge";
 import PersonaAvatar from "@/components/dashboard/PersonaAvatar";
 import EmptyState from "@/components/dashboard/EmptyState";
-import { useDashboardStore } from "@/stores/dashboardStore";
+import { useExecutionStore, useEnrichedExecutions } from "@/stores/executionStore";
 import { usePolling } from "@/hooks/usePolling";
 import { useExecutionPolling } from "@/hooks/useExecutionPolling";
 import type { GlobalExecution } from "@/lib/types";
+import { relativeTime, formatDuration, formatCost } from "@/lib/format";
 
-function relativeTime(iso: string): string {
-  const diff = Date.now() - new Date(iso).getTime();
-  const mins = Math.floor(diff / 60_000);
-  if (mins < 1) return "just now";
-  if (mins < 60) return `${mins}m ago`;
-  const hours = Math.floor(mins / 60);
-  if (hours < 24) return `${hours}h ago`;
-  return `${Math.floor(hours / 24)}d ago`;
-}
-
-function formatDuration(ms: number | null): string {
-  if (!ms) return "-";
-  if (ms < 1000) return `${ms}ms`;
-  return `${(ms / 1000).toFixed(1)}s`;
-}
-
-function formatCost(usd: number): string {
-  if (usd === 0) return "-";
-  return `$${usd.toFixed(4)}`;
-}
+const INITIAL_VISIBLE_EXECUTIONS = 200;
+const EXECUTIONS_LOAD_STEP = 200;
 
 function ExecutionOutput({ executionId }: { executionId: string }) {
   const { output, status, durationMs, totalCostUsd } =
@@ -90,11 +73,13 @@ function ExecutionOutput({ executionId }: { executionId: string }) {
 }
 
 export default function ExecutionsPage() {
-  const executions = useDashboardStore((s) => s.executions);
-  const executionsLoading = useDashboardStore((s) => s.executionsLoading);
-  const fetchExecutions = useDashboardStore((s) => s.fetchExecutions);
-  const cancelExecution = useDashboardStore((s) => s.cancelExecution);
+  const executions = useEnrichedExecutions();
+  const executionsLoading = useExecutionStore((s) => s.executionsLoading);
+  const fetchExecutions = useExecutionStore((s) => s.fetchExecutions);
+  const cancelExecution = useExecutionStore((s) => s.cancelExecution);
   const [filter, setFilter] = useState("all");
+  const [expandedExecutionId, setExpandedExecutionId] = useState<string | null>(null);
+  const [visibleCount, setVisibleCount] = useState(INITIAL_VISIBLE_EXECUTIONS);
 
   // Initial fetch
   useEffect(() => {
@@ -106,12 +91,21 @@ export default function ExecutionsPage() {
     () => executions.some((e) => e.status === "running" || e.status === "queued"),
     [executions],
   );
-  usePolling(fetchExecutions, 3_000, hasRunning);
+  usePolling(fetchExecutions, 3_000, hasRunning && !expandedExecutionId);
 
   const filtered = useMemo(() => {
     if (filter === "all") return executions;
     return executions.filter((e) => e.status === filter);
   }, [executions, filter]);
+
+  const visibleExecutions = useMemo(
+    () => filtered.slice(0, visibleCount),
+    [filtered, visibleCount],
+  );
+
+  useEffect(() => {
+    setVisibleCount(INITIAL_VISIBLE_EXECUTIONS);
+  }, [filter]);
 
   const counts = useMemo(() => {
     const c = { all: executions.length, running: 0, completed: 0, failed: 0 };
@@ -162,7 +156,7 @@ export default function ExecutionsPage() {
       {
         key: "duration",
         header: "Duration",
-        className: "w-24 text-right",
+        className: "w-24 text-right hidden sm:block",
         render: (row: GlobalExecution) => (
           <span className="font-mono text-xs text-muted tabular-nums">
             {formatDuration(row.durationMs)}
@@ -172,7 +166,7 @@ export default function ExecutionsPage() {
       {
         key: "cost",
         header: "Cost",
-        className: "w-20 text-right",
+        className: "w-20 text-right hidden sm:block",
         render: (row: GlobalExecution) => (
           <span className="font-mono text-xs text-muted tabular-nums">
             {formatCost(row.costUsd)}
@@ -222,7 +216,7 @@ export default function ExecutionsPage() {
         </p>
       </motion.div>
 
-      <motion.div variants={fadeUp} className="mb-4 flex items-center justify-between">
+      <motion.div variants={fadeUp} className="mb-4 flex flex-wrap items-center justify-between gap-3">
         <FilterBar
           options={[
             { key: "all", label: "All", count: counts.all },
@@ -241,9 +235,10 @@ export default function ExecutionsPage() {
       <motion.div variants={fadeUp}>
         <DataTable
           columns={columns}
-          data={filtered}
+          data={visibleExecutions}
           keyExtractor={(row) => row.id}
           expandable={(row) => <ExecutionOutput executionId={row.id} />}
+          onExpandedChange={setExpandedExecutionId}
           emptyState={
             <EmptyState
               icon={Zap}
@@ -252,6 +247,22 @@ export default function ExecutionsPage() {
             />
           }
         />
+
+        {filtered.length > visibleExecutions.length && (
+          <div className="mt-3 flex items-center justify-center">
+            <button
+              type="button"
+              onClick={() => {
+                setVisibleCount((prev) =>
+                  Math.min(filtered.length, prev + EXECUTIONS_LOAD_STEP),
+                );
+              }}
+              className="rounded-lg border border-white/[0.08] bg-white/[0.03] px-3 py-1.5 text-xs text-muted transition-colors hover:border-white/[0.14] hover:text-foreground"
+            >
+              Load more executions ({visibleExecutions.length}/{filtered.length})
+            </button>
+          </div>
+        )}
       </motion.div>
     </motion.div>
   );

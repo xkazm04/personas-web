@@ -1,4 +1,4 @@
-import { useEffect, useRef, useCallback } from "react";
+import { useEffect, useRef, useCallback, useState } from "react";
 
 /**
  * Generic polling hook. Calls `callback` immediately, then every `intervalMs`
@@ -9,6 +9,10 @@ export function usePolling(
   intervalMs: number,
   enabled: boolean,
 ) {
+  const [isHidden, setIsHidden] = useState(
+    () => typeof document !== "undefined" && document.visibilityState === "hidden",
+  );
+
   const callbackRef = useRef(callback);
   callbackRef.current = callback;
 
@@ -21,12 +25,44 @@ export function usePolling(
   }, []);
 
   useEffect(() => {
-    if (!enabled) return;
+    if (typeof document === "undefined") return;
 
-    // Fire immediately
-    void tick();
+    const handleVisibilityChange = () => {
+      setIsHidden(document.visibilityState === "hidden");
+    };
 
-    const id = setInterval(tick, intervalMs);
-    return () => clearInterval(id);
-  }, [enabled, intervalMs, tick]);
+    document.addEventListener("visibilitychange", handleVisibilityChange);
+    return () => {
+      document.removeEventListener("visibilitychange", handleVisibilityChange);
+    };
+  }, []);
+
+  useEffect(() => {
+    if (!enabled || isHidden) return;
+
+    let cancelled = false;
+    let timeoutId: ReturnType<typeof setTimeout> | null = null;
+
+    const scheduleNext = () => {
+      timeoutId = setTimeout(() => {
+        void run();
+      }, intervalMs);
+    };
+
+    const run = async () => {
+      if (cancelled) return;
+      await tick();
+      if (!cancelled) {
+        scheduleNext();
+      }
+    };
+
+    // Fire immediately, then schedule after each completed tick.
+    void run();
+
+    return () => {
+      cancelled = true;
+      if (timeoutId) clearTimeout(timeoutId);
+    };
+  }, [enabled, intervalMs, isHidden, tick]);
 }

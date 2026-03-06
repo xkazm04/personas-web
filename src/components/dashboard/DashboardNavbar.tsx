@@ -22,7 +22,7 @@ export default function DashboardNavbar() {
       transition={{ duration: 0.5, ease: "easeOut" }}
       className="sticky top-0 z-50 border-b border-white/[0.06] bg-black/20 backdrop-blur-3xl"
     >
-      <nav className="mx-auto flex items-center justify-between px-6 py-3">
+      <nav className="mx-auto flex items-center justify-between px-4 py-3 sm:px-6">
         {/* Left: Logo + breadcrumb */}
         <div className="flex items-center gap-3">
           <Link href="/" className="flex items-center gap-2">
@@ -64,9 +64,9 @@ export default function DashboardNavbar() {
 
           <button
             onClick={signOut}
-            className="flex items-center gap-1.5 rounded-full border border-white/[0.06] bg-white/[0.03] px-3 py-1.5 text-xs text-muted transition-all duration-200 hover:bg-white/[0.06] hover:text-foreground"
+            className="flex min-h-[44px] min-w-[44px] items-center justify-center gap-1.5 rounded-full border border-white/[0.06] bg-white/[0.03] px-2 py-1.5 text-xs text-muted transition-all duration-200 hover:bg-white/[0.06] hover:text-foreground sm:px-3"
           >
-            <LogOut className="h-3 w-3" />
+            <LogOut className="h-4 w-4 sm:h-3 sm:w-3" />
             <span className="hidden sm:inline">Sign out</span>
           </button>
         </div>

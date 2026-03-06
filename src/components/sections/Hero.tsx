@@ -1,7 +1,7 @@
 "use client";
 
-import { useId, useRef } from "react";
-import { motion, useScroll, useTransform, useMotionValue, useSpring, useReducedMotion } from "framer-motion";
+import { useId, useRef, useState, useEffect } from "react";
+import { motion, useInView, useScroll, useTransform, useMotionValue, useSpring, useReducedMotion } from "framer-motion";
 import { Download, Github, ChevronDown, LayoutDashboard } from "lucide-react";
 import { fadeUp, staggerContainer } from "@/lib/animations";
 import GradientText from "@/components/GradientText";
@@ -19,7 +19,7 @@ const phases = Array.from({ length: totalCount }, (_, i) => ({
   completed: i < completedCount,
 }));
 
-function ProgressArc() {
+function ProgressArc({ disableFilter = false }: { disableFilter?: boolean }) {
   const uid = useId();
   const gradientId = `${uid}-arcGradient`;
   const glowId = `${uid}-arcGlow`;
@@ -55,7 +55,7 @@ function ProgressArc() {
             <motion.path key={phase.index} d={`M ${x1} ${y1} A ${radius} ${radius} 0 0 1 ${x2} ${y2}`}
               fill="none" stroke={phase.completed ? `url(#${gradientId})` : "rgba(255,255,255,0.06)"}
               strokeWidth={phase.completed ? strokeWidth : strokeWidth - 1} strokeLinecap="round"
-              filter={phase.completed ? `url(#${glowId})` : undefined} opacity={phase.completed ? 1 : 0.5}
+              filter={phase.completed && !disableFilter ? `url(#${glowId})` : undefined} opacity={phase.completed ? 1 : 0.5}
               initial={{ pathLength: 0, opacity: 0 }}
               animate={{ pathLength: 1, opacity: phase.completed ? 1 : 0.5 }}
               transition={{ duration: 1.5, delay: i * 0.1, ease: "easeOut" }}
@@ -63,7 +63,7 @@ function ProgressArc() {
           );
         })}
         <circle cx="110" cy="110" r={radius - 18} fill="none" stroke="rgba(255,255,255,0.02)" strokeWidth="0.5" strokeDasharray="3 8" />
-        <circle cx="110" cy="110" r={radius - 25} fill={`url(#${gradientId})`} opacity="0.1" className="animate-pulse-slow" filter={`url(#${glowId})`} />
+        <circle cx="110" cy="110" r={radius - 25} fill={`url(#${gradientId})`} opacity="0.1" className="animate-pulse-slow" filter={disableFilter ? undefined : `url(#${glowId})`} />
       </svg>
       <div className="absolute inset-0 flex flex-col items-center justify-center">
         <span className="text-4xl font-bold tracking-tight bg-linear-to-r from-brand-cyan to-brand-purple bg-clip-text text-transparent drop-shadow-[0_0_10px_rgba(6,182,212,0.5)]">
@@ -73,6 +73,66 @@ function ProgressArc() {
           {completedCount}/{totalCount} PHASES
         </span>
       </div>
+    </div>
+  );
+}
+
+const heroStats = [
+  { value: 42, decimals: 0, suffix: "", label: "Agents" },
+  { value: 18.4, decimals: 1, suffix: "k", label: "Executions" },
+  { value: 120, decimals: 0, suffix: "+", label: "Templates" },
+];
+
+function HeroAnimatedStat({
+  value,
+  decimals,
+  suffix,
+  label,
+  delay,
+  className,
+  labelClassName,
+}: {
+  value: number;
+  decimals: number;
+  suffix: string;
+  label: string;
+  delay: number;
+  className?: string;
+  labelClassName?: string;
+}) {
+  const ref = useRef<HTMLDivElement>(null);
+  const inView = useInView(ref, { once: true, margin: "-40px" });
+  const [display, setDisplay] = useState("0");
+
+  useEffect(() => {
+    if (!inView) return;
+    let rafId = 0;
+    const start = performance.now() + delay * 1000;
+    const duration = 1100;
+
+    const tick = (timestamp: number) => {
+      if (timestamp < start) {
+        rafId = requestAnimationFrame(tick);
+        return;
+      }
+      const t = Math.min((timestamp - start) / duration, 1);
+      const eased = 1 - Math.pow(1 - t, 3);
+      const current = value * eased;
+      setDisplay(decimals > 0 ? current.toFixed(decimals) : String(Math.round(current)));
+      if (t < 1) rafId = requestAnimationFrame(tick);
+    };
+
+    rafId = requestAnimationFrame(tick);
+    return () => cancelAnimationFrame(rafId);
+  }, [delay, inView, value, decimals]);
+
+  return (
+    <div ref={ref} className="group">
+      <div className={className}>
+        {display}
+        {suffix && <span className="text-brand-cyan/70">{suffix}</span>}
+      </div>
+      <div className={labelClassName}>{label}</div>
     </div>
   );
 }
@@ -96,6 +156,7 @@ export default function Hero() {
   const opacity = useTransform(scrollYProgress, [0, 0.8], [1, prefersReducedMotion ? 1 : 0]);
 
   // 3D Tilt effect for the right card
+  const [isInteracting, setIsInteracting] = useState(false);
   const x = useMotionValue(0);
   const y = useMotionValue(0);
   const mouseXSpring = useSpring(x);
@@ -113,11 +174,13 @@ export default function Hero() {
     const yPct = mouseY / height - 0.5;
     x.set(xPct);
     y.set(yPct);
+    if (!isInteracting) setIsInteracting(true);
   };
 
   const handleMouseLeave = () => {
     x.set(0);
     y.set(0);
+    setIsInteracting(false);
   };
 
   return (
@@ -187,30 +250,26 @@ export default function Hero() {
           </motion.p>
 
           <motion.div variants={fadeUp} className="mt-8 flex flex-wrap items-center justify-center gap-3 lg:justify-start">
-            {operatingModes.map((mode, i) => (
-              <motion.span
+            {operatingModes.map((mode) => (
+              <span
                 key={mode}
-                whileHover={{ scale: 1.05, boxShadow: "0 0 15px rgba(255,255,255,0.2)" }}
-                animate={{ boxShadow: ["0 0 0px rgba(255,255,255,0)", "0 0 10px rgba(255,255,255,0.1)", "0 0 0px rgba(255,255,255,0)"] }}
-                transition={{ duration: 2, repeat: Infinity, delay: i * 0.5 }}
-                className="rounded-full border border-white/8 bg-white/3 px-4 py-2 text-xs font-mono tracking-wide text-muted-dark backdrop-blur-sm transition-colors hover:bg-white/6 hover:text-white cursor-default"
+                className="rounded-full border border-white/10 bg-white/3 px-4 py-2 text-xs font-mono tracking-wide text-muted-dark backdrop-blur-sm transition-colors hover:bg-white/6 hover:text-white cursor-default"
               >
                 {mode}
-              </motion.span>
+              </span>
             ))}
           </motion.div>
 
           {/* CTAs */}
-          <motion.div variants={fadeUp} className="mt-12 flex w-full flex-col items-center justify-center gap-5 sm:w-auto sm:flex-row lg:items-start">
+          <motion.div variants={fadeUp} className="mt-16 flex w-full flex-col items-center justify-center gap-5 sm:w-auto sm:flex-row lg:items-start">
             {isAuthenticated ? (
               <PrimaryCTA href="/dashboard" icon={LayoutDashboard} label="Open Dashboard" />
             ) : (
               <PrimaryCTA href="#download" icon={Download} label="Download for Windows" />
             )}
-            <a href="https://github.com" target="_blank" rel="noopener noreferrer" className="group relative flex w-[min(100%,20rem)] items-center justify-center gap-3 rounded-full border border-white/10 bg-white/2 px-8 py-4 text-sm font-medium text-muted transition-all duration-300 hover:border-white/20 hover:text-white hover:bg-white/5 hover:shadow-[0_0_20px_rgba(255,255,255,0.05)] sm:w-auto overflow-hidden">
-              <span className="absolute inset-0 w-full h-full bg-linear-to-r from-transparent via-white/10 to-transparent -translate-x-full group-hover:animate-[shimmer_1.5s_infinite]" />
-              <Github className="h-5 w-5 transition-transform duration-300 group-hover:scale-110 group-hover:drop-shadow-[0_0_8px_rgba(255,255,255,0.8)]" />
-              <span className="relative z-10">View on GitHub</span>
+            <a href="https://github.com" target="_blank" rel="noopener noreferrer" className="flex w-[min(100%,20rem)] items-center justify-center gap-3 rounded-full border border-white/8 bg-white/2 px-8 py-4 text-sm font-medium text-muted-dark transition-all duration-300 hover:border-white/15 hover:text-white sm:w-auto">
+              <Github className="h-5 w-5" />
+              <span>View on GitHub</span>
             </a>
           </motion.div>
 
@@ -223,15 +282,14 @@ export default function Hero() {
               />
             </div>
             <div className="flex justify-center gap-6 text-center">
-              {[
-                { value: "42", label: "Agents" },
-                { value: "18.4k", label: "Executions" },
-                { value: "120+", label: "Templates" },
-              ].map((stat) => (
-                <div key={stat.label}>
-                  <div className="text-sm font-bold tracking-tight font-mono">{stat.value}</div>
-                  <div className="text-[10px] text-muted-dark font-mono tracking-wider">{stat.label}</div>
-                </div>
+              {heroStats.map((stat, i) => (
+                <HeroAnimatedStat
+                  key={stat.label}
+                  {...stat}
+                  delay={i * 0.2}
+                  className="text-sm font-bold tracking-tight font-mono"
+                  labelClassName="text-[10px] text-muted-dark font-mono tracking-wider"
+                />
               ))}
             </div>
           </motion.div>
@@ -246,21 +304,20 @@ export default function Hero() {
           style={{ rotateX, rotateY, transformStyle: "preserve-3d" }}
         >
           <div className="relative p-8 rounded-3xl border border-white/5 bg-white/2 backdrop-blur-md shadow-2xl transition-all duration-300 hover:border-white/10 hover:bg-white/5" style={{ transform: "translateZ(50px)" }}>
-            <ProgressArc />
+            <ProgressArc disableFilter={isInteracting} />
             <div className="mt-6 flex flex-col items-center gap-4">
               <div className="rounded-full border border-white/6 bg-white/2 px-4 py-1.5 text-[10px] font-mono tracking-wider text-muted-dark uppercase shadow-[0_0_10px_rgba(0,0,0,0.5)]">
                 Adoption
               </div>
               <div className="flex gap-6 text-center">
-                {[
-                  { value: "42", label: "Agents" },
-                  { value: "18.4k", label: "Executions" },
-                  { value: "120+", label: "Templates" },
-                ].map((stat) => (
-                  <div key={stat.label} className="group">
-                    <div className="text-xl font-bold tracking-tight transition-colors group-hover:text-brand-cyan drop-shadow-[0_0_5px_rgba(255,255,255,0.2)]">{stat.value}</div>
-                    <div className="text-[10px] text-muted-dark font-mono tracking-wider transition-colors group-hover:text-white/70">{stat.label}</div>
-                  </div>
+                {heroStats.map((stat, i) => (
+                  <HeroAnimatedStat
+                    key={stat.label}
+                    {...stat}
+                    delay={i * 0.2}
+                    className="text-xl font-bold tracking-tight transition-colors group-hover:text-brand-cyan drop-shadow-[0_0_5px_rgba(255,255,255,0.2)]"
+                    labelClassName="text-[10px] text-muted-dark font-mono tracking-wider transition-colors group-hover:text-white/70"
+                  />
                 ))}
               </div>
             </div>
@@ -270,7 +327,7 @@ export default function Hero() {
 
       {/* Scroll indicator */}
       <div className="absolute bottom-8 left-1/2 z-10 -translate-x-1/2">
-        <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 1.5, duration: 1 }} className="flex flex-col items-center gap-1">
+        <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 2.5, duration: 1 }} className="flex flex-col items-center gap-1">
           <span className="text-[10px] tracking-widest uppercase text-muted-dark">Scroll</span>
           <ChevronDown className="h-4 w-4 text-muted-dark animate-scroll-hint" />
         </motion.div>

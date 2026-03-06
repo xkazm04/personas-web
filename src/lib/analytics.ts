@@ -26,6 +26,8 @@ export function trackFeatureVote(featureId: string, action: "upvote" | "undo") {
 /**
  * Track a custom feature request submission.
  */
-export function trackFeatureRequest() {
-  Sentry.metrics.count("feature_request", 1);
+export function trackFeatureRequest(text?: string) {
+  Sentry.metrics.count("feature_request", 1, {
+    attributes: text ? { text: text.slice(0, 200) } : undefined,
+  });
 }

@@ -1,7 +1,9 @@
 "use client";
 
+import type { BadgeStatus } from "@/lib/types";
+
 const statusConfig: Record<
-  string,
+  BadgeStatus,
   { label: string; color: string; bgColor: string; borderColor: string; pulse?: boolean }
 > = {
   queued: {
@@ -61,15 +63,8 @@ const statusConfig: Record<
   },
 };
 
-const fallback = {
-  label: "Unknown",
-  color: "text-slate-400",
-  bgColor: "bg-slate-500/10",
-  borderColor: "border-slate-500/20",
-};
-
-export default function StatusBadge({ status }: { status: string }) {
-  const cfg = statusConfig[status] ?? fallback;
+export default function StatusBadge({ status }: { status: BadgeStatus }) {
+  const cfg = statusConfig[status];
   return (
     <span
       className={`inline-flex items-center gap-1.5 rounded-full border px-2.5 py-0.5 text-[11px] font-medium tracking-wide ${cfg.color} ${cfg.bgColor} ${cfg.borderColor}`}

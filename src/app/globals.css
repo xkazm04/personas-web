@@ -51,6 +51,25 @@ html {
 ::-webkit-scrollbar-thumb { background: #1e293b; border-radius: 3px; }
 ::-webkit-scrollbar-thumb:hover { background: #334155; }
 
+/* ── Mobile safe area ─────────────────────────────── */
+
+.safe-bottom {
+  padding-bottom: env(safe-area-inset-bottom, 0px);
+}
+
+.pb-safe {
+  padding-bottom: env(safe-area-inset-bottom, 0px);
+}
+
+/* Hide scrollbar but keep functionality */
+.scrollbar-hide {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+.scrollbar-hide::-webkit-scrollbar {
+  display: none;
+}
+
 /* ── Decorative Utilities ──────────────────────────── */
 
 .glass {
@@ -127,6 +146,11 @@ html {
 }
 
 /* ── Keyframes ─────────────────────────────────────── */
+
+@keyframes undo-shrink {
+  from { width: 100%; }
+  to { width: 0%; }
+}
 
 @keyframes float {
   0%, 100% { transform: translateY(0px); opacity: 0.15; }
@@ -237,6 +261,27 @@ html {
   animation: section-badge-pulse 1s ease-in-out 1;
 }
 
+/* ── Grid Texture Overlay ─────────────────────────── */
+
+.grid-texture {
+  background-image:
+    linear-gradient(rgba(255,255,255,0.06) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255,255,255,0.06) 1px, transparent 1px);
+  background-size: 24px 24px;
+}
+.grid-texture-dense {
+  background-image:
+    linear-gradient(rgba(255,255,255,0.06) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255,255,255,0.06) 1px, transparent 1px);
+  background-size: 12px 12px;
+}
+.grid-texture-md {
+  background-image:
+    linear-gradient(rgba(255,255,255,0.06) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255,255,255,0.06) 1px, transparent 1px);
+  background-size: 20px 20px;
+}
+
 /* ── Micro-Texture Surfaces (Direction 8) ─────────── */
 
 .texture-stripes {
@@ -318,6 +363,43 @@ html {
   border-radius: 16px;
 }
 
+@keyframes section-divider-scroll-reveal {
+  0% { opacity: 0; transform: scaleX(0.6); }
+  30% { opacity: 0.15; transform: scaleX(1); }
+  70% { opacity: 0.15; transform: scaleX(1); }
+  100% { opacity: 0; transform: scaleX(0.6); }
+}
+
+.section-divider-scroll {
+  animation-name: section-divider-scroll-reveal;
+  animation-duration: 1ms;
+  animation-fill-mode: both;
+  transform-origin: center;
+}
+
+@keyframes typewriter-line-reveal {
+  from {
+    width: 0;
+    opacity: 0.35;
+    filter: blur(0.5px);
+  }
+  to {
+    width: 100%;
+    opacity: 1;
+    filter: blur(0);
+  }
+}
+
+.typewriter-line {
+  display: inline-block;
+  overflow: hidden;
+  white-space: nowrap;
+  width: 0;
+  animation-name: typewriter-line-reveal;
+  animation-fill-mode: forwards;
+  animation-timing-function: steps(24, end);
+}
+
 @keyframes breathe-glow {
   0%, 100% { box-shadow: 0 0 20px rgba(6,182,212,0.05), inset 0 0 20px rgba(6,182,212,0.02); }
   50% { box-shadow: 0 0 50px rgba(6,182,212,0.12), inset 0 0 30px rgba(6,182,212,0.04); }
@@ -345,6 +427,22 @@ html {
   pointer-events: none;
   z-index: 1;
   border-radius: inherit;
+}
+
+/* ── Ambient Orbs Breathing ────────────────────────── */
+
+@keyframes orb-breathe {
+  0%, 100% { transform: scale(1);    opacity: 1; }
+  50%      { transform: scale(1.08); opacity: 0.7; }
+}
+
+.orb-pulse {
+  animation: orb-breathe 10s ease-in-out infinite;
+}
+
+.orb-pulse-delayed {
+  animation: orb-breathe 12s ease-in-out infinite;
+  animation-delay: -4s;
 }
 
 /* ── Topographic Background (Direction 2) ─────────── */
@@ -392,6 +490,13 @@ html {
   .parallax-shape {
     animation: none;
   }
+}
+
+/* ── Review urgency escalation pulse ────────── */
+
+@keyframes urgency-pulse {
+  0%, 100% { opacity: 0.4; }
+  50% { opacity: 1; }
 }
 
 /* Hide scrollbar for horizontal scroll strips */
@@ -443,8 +548,11 @@ img {
   .animate-spin-slow,
   .animate-pulse-slow,
   .animate-pulse-slower,
+  .orb-pulse,
+  .orb-pulse-delayed,
   .topo-bg,
-  .parallax-shape {
+  .parallax-shape,
+  .cinematic-gradient {
     animation: none !important;
   }
 
@@ -454,8 +562,7 @@ img {
   }
 
   /* Hide purely decorative motion layers entirely */
-  .topo-bg,
-  .parallax-shape {
+  .topo-bg {
     display: none !important;
   }
 }

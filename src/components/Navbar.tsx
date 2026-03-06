@@ -2,12 +2,17 @@
 
 import { motion, useMotionValueEvent, useScroll, AnimatePresence } from "framer-motion";
 import { useState, useEffect, useRef } from "react";
-import { Download, LayoutDashboard } from "lucide-react";
+import { Download, LayoutDashboard, Menu } from "lucide-react";
 import { usePathname } from "next/navigation";
+import dynamic from "next/dynamic";
 import Image from "next/image";
 import Link from "next/link";
 import useActiveSection from "@/hooks/useActiveSection";
 import { useAuthStore } from "@/stores/authStore";
+
+const NavbarMobileMenu = dynamic(() => import("@/components/NavbarMobileMenu"), {
+  ssr: false,
+});
 
 const preloadHowImage = () => {
   if (document.querySelector('link[data-preload-how-bg]')) return;
@@ -38,6 +43,7 @@ const BADGE_VISIBLE_MS = 1500;
 
 export default function Navbar() {
   const [scrolled, setScrolled] = useState(false);
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const { scrollY } = useScroll();
   const pathname = usePathname();
   const isLanding = pathname === "/";
@@ -111,7 +117,7 @@ export default function Navbar() {
                 animate={{ opacity: 1, x: 0, scale: 1 }}
                 exit={{ opacity: 0, x: 4, scale: 0.95 }}
                 transition={{ duration: 0.25, ease: "easeOut" }}
-                className="hidden md:inline-flex items-center gap-1.5 rounded-full border border-brand-cyan/15 bg-brand-cyan/6 px-3 py-0.5 text-[11px] font-medium uppercase tracking-wider text-brand-cyan/80 backdrop-blur-sm"
+                className="inline-flex items-center gap-1.5 rounded-full border border-brand-cyan/15 bg-brand-cyan/6 px-3 py-0.5 text-[11px] font-medium uppercase tracking-wider text-brand-cyan/80 backdrop-blur-sm"
               >
                 <span className="h-1 w-1 rounded-full bg-brand-cyan/60 section-badge-dot" />
                 {visibleBadge}
@@ -152,10 +158,11 @@ export default function Navbar() {
             {isAuthenticated ? (
               <Link
                 href="/dashboard"
-                className="group relative flex items-center gap-2 overflow-hidden rounded-full border border-brand-cyan/25 bg-brand-cyan/8 px-5 py-2 text-sm font-medium text-brand-cyan transition-all duration-300 hover:border-brand-cyan/40 hover:bg-brand-cyan/12"
+                aria-label="Dashboard"
+                className="group relative hidden min-h-[44px] min-w-[44px] items-center justify-center gap-2 overflow-hidden rounded-full border border-brand-cyan/25 bg-brand-cyan/8 px-3 py-2 text-sm font-medium text-brand-cyan transition-all duration-300 hover:border-brand-cyan/40 hover:bg-brand-cyan/12 sm:flex sm:px-5"
               >
                 <div className="absolute inset-0 -translate-x-full bg-linear-to-r from-transparent via-brand-cyan/10 to-transparent transition-transform duration-700 group-hover:translate-x-full" />
-                <LayoutDashboard className="relative h-3.5 w-3.5" />
+                <LayoutDashboard className="relative h-4 w-4 sm:h-3.5 sm:w-3.5" />
                 <span className="relative hidden sm:inline">Dashboard</span>
               </Link>
             ) : (
@@ -168,14 +175,22 @@ export default function Navbar() {
                 </button>
                 <Link
                   href="/#download"
-                  className="group relative flex items-center gap-2 overflow-hidden rounded-full border border-brand-cyan/25 bg-brand-cyan/8 px-5 py-2 text-sm font-medium text-brand-cyan transition-all duration-300 hover:border-brand-cyan/40 hover:bg-brand-cyan/12"
+                  className="group relative hidden items-center gap-2 overflow-hidden rounded-full border border-brand-cyan/25 bg-brand-cyan/8 px-5 py-2 text-sm font-medium text-brand-cyan transition-all duration-300 hover:border-brand-cyan/40 hover:bg-brand-cyan/12 sm:flex"
                 >
                   <div className="absolute inset-0 -translate-x-full bg-linear-to-r from-transparent via-brand-cyan/10 to-transparent transition-transform duration-700 group-hover:translate-x-full" />
                   <Download className="relative h-3.5 w-3.5" />
-                  <span className="relative hidden sm:inline">Download</span>
+                  <span className="relative">Download</span>
                 </Link>
               </>
             )}
+            {/* Mobile hamburger — always visible on small screens */}
+            <button
+              onClick={() => setMobileMenuOpen(true)}
+              className="flex items-center justify-center rounded-lg border border-white/10 bg-white/2 p-2 text-muted transition-colors hover:border-white/20 hover:text-foreground sm:hidden"
+              aria-label="Open menu"
+            >
+              <Menu className="h-5 w-5" />
+            </button>
           </div>
         </div>
 
@@ -187,7 +202,7 @@ export default function Navbar() {
                 key={route.href}
                 href={route.href}
                 onMouseEnter={route.href === "/how" ? preloadHowImage : undefined}
-                className={`relative flex-1 rounded-full px-3 py-1.5 text-center text-xs font-medium transition-all duration-300 ${
+                className={`relative flex-1 rounded-full px-3 py-2.5 text-center text-xs font-medium transition-all duration-300 min-h-[40px] flex items-center justify-center ${
                   isActive
                     ? "bg-white/8 text-foreground shadow-[0_0_12px_rgba(6,182,212,0.1)]"
                     : "text-muted hover:text-foreground hover:bg-white/3"
@@ -199,6 +214,15 @@ export default function Navbar() {
           })}
         </div>
       </nav>
+
+      <NavbarMobileMenu
+        open={mobileMenuOpen}
+        routes={routes}
+        pathname={pathname}
+        isAuthenticated={isAuthenticated}
+        signInWithGoogle={signInWithGoogle}
+        onClose={() => setMobileMenuOpen(false)}
+      />
     </motion.header>
   );
 }

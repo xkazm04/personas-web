@@ -101,7 +101,7 @@ export default function Vision() {
   const y = useTransform(scrollYProgress, [0, 1], ["-10%", "10%"]);
 
   return (
-    <SectionWrapper id="vision" className="relative overflow-hidden py-20 md:py-24">
+    <SectionWrapper id="vision" className="relative overflow-hidden">
       <div ref={containerRef} className="absolute inset-0 pointer-events-none">
         {/* Background image */}
         <motion.div style={{ y }} className="absolute inset-0 h-[120%] -top-[10%]">
@@ -179,12 +179,12 @@ export default function Vision() {
                   </div>
 
                   {/* Right: executions + success rate */}
-                  <div className="flex items-center gap-4 shrink-0">
+                  <div className="flex items-center gap-2 sm:gap-4 shrink-0">
                     <div className="text-right">
                       <div className="text-[11px] font-mono text-white/50 tabular-nums">{agent.executions.toLocaleString()}</div>
                       <div className="text-[9px] font-mono text-white/20">runs</div>
                     </div>
-                    <div className="w-12">
+                    <div className="hidden sm:block w-12">
                       <div className="h-1 rounded-full bg-white/4 overflow-hidden">
                         <motion.div
                           className="h-full rounded-full"

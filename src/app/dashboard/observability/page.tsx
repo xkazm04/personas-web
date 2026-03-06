@@ -1,194 +1,48 @@
 "use client";
 
-import { useEffect, useMemo } from "react";
+import { useMemo } from "react";
 import { motion } from "framer-motion";
-import {
-  AreaChart,
-  Area,
-  BarChart,
-  Bar,
-  PieChart,
-  Pie,
-  Cell,
-  XAxis,
-  YAxis,
-  CartesianGrid,
-  Tooltip,
-  ResponsiveContainer,
-} from "recharts";
+import dynamic from "next/dynamic";
+
+const CostChart = dynamic(() => import("@/components/dashboard/ObservabilityCostChart"), { ssr: false });
+const ExecChart = dynamic(() => import("@/components/dashboard/ObservabilityExecChart"), { ssr: false });
+const SpendPieChart = dynamic(() => import("@/components/dashboard/ObservabilitySpendPieChart"), { ssr: false });
 import {
   DollarSign,
   Zap,
   TrendingUp,
-  TrendingDown,
   Users,
   AlertTriangle,
   ShieldAlert,
   ShieldCheck,
-  CircleDot,
   Loader2,
   Activity,
 } from "lucide-react";
 import { fadeUp, staggerContainer } from "@/lib/animations";
 import GlowCard from "@/components/GlowCard";
 import GradientText from "@/components/GradientText";
-import { useDashboardStore } from "@/stores/dashboardStore";
-import type { HealthIssue } from "@/lib/types";
+import MetricCard from "@/components/dashboard/MetricCard";
+import HealthIssueRow from "@/components/dashboard/HealthIssueRow";
+import useSWR from "swr";
+import { api } from "@/lib/api";
 
-// ---------------------------------------------------------------------------
-// Chart tooltip
-// ---------------------------------------------------------------------------
-
-function ChartTooltipContent({
-  active,
-  payload,
-  label,
-}: {
-  active?: boolean;
-  payload?: Array<{ value: number; name: string; color: string }>;
-  label?: string;
-}) {
-  if (!active || !payload?.length) return null;
-  return (
-    <div className="rounded-xl border border-white/[0.1] bg-[#0f0f1a]/95 px-3 py-2 text-xs shadow-xl backdrop-blur-md">
-      <p className="mb-1 text-muted-dark">{label}</p>
-      {payload.map((entry) => (
-        <p key={entry.name} style={{ color: entry.color }} className="flex items-center gap-2">
-          <span className="h-1.5 w-1.5 rounded-full" style={{ backgroundColor: entry.color }} />
-          {entry.name}: <span className="font-medium">
-            {entry.name.toLowerCase().includes("cost") ? `$${entry.value.toFixed(2)}` : entry.value}
-          </span>
-        </p>
-      ))}
-    </div>
-  );
-}
-
-// ---------------------------------------------------------------------------
-// Metric card
-// ---------------------------------------------------------------------------
-
-function MetricCard({
-  icon: Icon,
-  label,
-  value,
-  trend,
-  trendLabel,
-  accent,
-}: {
-  icon: React.ElementType;
-  label: string;
-  value: string;
-  trend?: number;
-  trendLabel?: string;
-  accent: "cyan" | "purple" | "emerald" | "amber";
-}) {
-  const accentMap = {
-    cyan: "text-cyan-400",
-    purple: "text-purple-400",
-    emerald: "text-emerald-400",
-    amber: "text-amber-400",
-  };
-
-  return (
-    <GlowCard accent={accent} variants={fadeUp} className="p-5">
-      <div className="flex items-center gap-2 mb-3">
-        <div className="flex h-8 w-8 items-center justify-center rounded-xl bg-white/[0.04]">
-          <Icon className={`h-4 w-4 ${accentMap[accent]}`} />
-        </div>
-        <span className="text-xs font-medium text-muted-dark uppercase tracking-wider">
-          {label}
-        </span>
-      </div>
-      <p className="text-2xl font-bold tracking-tight tabular-nums text-foreground">
-        {value}
-      </p>
-      {trend !== undefined && (
-        <div className="mt-2 flex items-center gap-1 text-[11px]">
-          {trend >= 0 ? (
-            <TrendingUp className="h-3 w-3 text-emerald-400" />
-          ) : (
-            <TrendingDown className="h-3 w-3 text-red-400" />
-          )}
-          <span className={trend >= 0 ? "text-emerald-400" : "text-red-400"}>
-            {trend >= 0 ? "+" : ""}
-            {trend.toFixed(1)}%
-          </span>
-          {trendLabel && <span className="text-muted-dark">{trendLabel}</span>}
-        </div>
-      )}
-    </GlowCard>
-  );
-}
-
-// ---------------------------------------------------------------------------
-// Health issue row
-// ---------------------------------------------------------------------------
-
-const severityStyles: Record<string, { color: string; bgColor: string; icon: React.ElementType }> = {
-  critical: { color: "text-red-400", bgColor: "bg-red-500/10 border-red-500/20", icon: AlertTriangle },
-  high: { color: "text-orange-400", bgColor: "bg-orange-500/10 border-orange-500/20", icon: ShieldAlert },
-  medium: { color: "text-amber-400", bgColor: "bg-amber-500/10 border-amber-500/20", icon: CircleDot },
-  low: { color: "text-blue-400", bgColor: "bg-blue-500/10 border-blue-500/20", icon: CircleDot },
-};
-
-function HealthIssueRow({ issue }: { issue: HealthIssue }) {
-  const sev = severityStyles[issue.severity] ?? severityStyles.low;
-  const SevIcon = sev.icon;
-  const diff = Date.now() - new Date(issue.detectedAt).getTime();
-  const mins = Math.floor(diff / 60_000);
-  const age = mins < 60 ? `${mins}m ago` : `${Math.floor(mins / 60)}h ago`;
-
-  return (
-    <div className={`flex items-start gap-3 rounded-xl border p-3.5 transition-colors ${sev.bgColor}`}>
-      <SevIcon className={`mt-0.5 h-4 w-4 flex-shrink-0 ${sev.color}`} />
-      <div className="flex-1 min-w-0">
-        <div className="flex items-center gap-2">
-          <p className="text-sm font-medium text-foreground truncate">
-            {issue.title}
-          </p>
-          {issue.status === "auto_fixed" && (
-            <span className="flex items-center gap-1 rounded-full border border-emerald-500/20 bg-emerald-500/8 px-2 py-0.5 text-[10px] text-emerald-400">
-              <ShieldCheck className="h-2.5 w-2.5" />
-              Auto-fixed
-            </span>
-          )}
-          {issue.status === "resolved" && (
-            <span className="flex items-center gap-1 rounded-full border border-blue-500/20 bg-blue-500/8 px-2 py-0.5 text-[10px] text-blue-400">
-              Resolved
-            </span>
-          )}
-        </div>
-        <p className="mt-1 text-xs text-muted-dark line-clamp-2">
-          {issue.description}
-        </p>
-        <div className="mt-2 flex items-center gap-3 text-[10px] text-muted-dark">
-          {issue.personaName && <span>{issue.personaName}</span>}
-          <span>{age}</span>
-          <span className={`uppercase font-medium ${sev.color}`}>{issue.severity}</span>
-        </div>
-      </div>
-    </div>
-  );
-}
+const BUDGET_THRESHOLD = 0.8;
 
 // ---------------------------------------------------------------------------
 // Page
 // ---------------------------------------------------------------------------
 
-const PIE_COLORS = ["#06b6d4", "#f43f5e", "#a855f7", "#fbbf24", "#34d399"];
-
 export default function ObservabilityPage() {
-  const metrics = useDashboardStore((s) => s.observabilityMetrics);
-  const dailyMetrics = useDashboardStore((s) => s.dailyMetrics);
-  const personaSpend = useDashboardStore((s) => s.personaSpend);
-  const healthIssues = useDashboardStore((s) => s.healthIssues);
-  const loading = useDashboardStore((s) => s.observabilityLoading);
-  const fetchObservability = useDashboardStore((s) => s.fetchObservability);
-
-  useEffect(() => {
-    void fetchObservability();
-  }, [fetchObservability]);
+  const { data, isLoading: loading } = useSWR("observability", api.getObservability, {
+    refreshInterval: 30_000,
+    dedupingInterval: 8_000,
+    revalidateOnFocus: false,
+    keepPreviousData: true,
+  });
+  const metrics = data?.metrics ?? null;
+  const dailyMetrics = data?.dailyMetrics ?? [];
+  const personaSpend = data?.personaSpend ?? [];
+  const healthIssues = data?.healthIssues ?? [];
 
   const costChartData = useMemo(
     () =>
@@ -224,6 +78,11 @@ export default function ObservabilityPage() {
     [healthIssues],
   );
 
+  const overBudgetPersonas = useMemo(
+    () => personaSpend.filter((p) => p.budgetUsd && p.totalCost / p.budgetUsd > BUDGET_THRESHOLD),
+    [personaSpend],
+  );
+
   if (loading && !metrics) {
     return (
       <div className="flex items-center justify-center py-24">
@@ -245,9 +104,7 @@ export default function ObservabilityPage() {
       </motion.div>
 
       {/* Budget warning */}
-      {personaSpend.some(
-        (p) => p.budgetUsd && p.totalCost / p.budgetUsd > 0.8,
-      ) && (
+      {overBudgetPersonas.length > 0 && (
         <motion.div
           variants={fadeUp}
           className="mb-6 flex items-center gap-3 rounded-xl border border-amber-500/20 bg-amber-500/5 px-4 py-3"
@@ -255,10 +112,7 @@ export default function ObservabilityPage() {
           <AlertTriangle className="h-4 w-4 text-amber-400 flex-shrink-0" />
           <p className="text-sm text-amber-300">
             Budget threshold exceeded for{" "}
-            {personaSpend
-              .filter((p) => p.budgetUsd && p.totalCost / p.budgetUsd > 0.8)
-              .map((p) => p.personaName)
-              .join(", ")}
+            {overBudgetPersonas.map((p) => p.personaName).join(", ")}
           </p>
         </motion.div>
       )}
@@ -305,21 +159,7 @@ export default function ObservabilityPage() {
             <DollarSign className="h-4 w-4 text-brand-cyan" />
             Cost Over Time
           </h3>
-          <ResponsiveContainer width="100%" height={240}>
-            <AreaChart data={costChartData} margin={{ top: 8, right: 8, left: -20, bottom: 0 }}>
-              <defs>
-                <linearGradient id="gradCost" x1="0" y1="0" x2="0" y2="1">
-                  <stop offset="0%" stopColor="#06b6d4" stopOpacity={0.3} />
-                  <stop offset="100%" stopColor="#06b6d4" stopOpacity={0} />
-                </linearGradient>
-              </defs>
-              <CartesianGrid strokeDasharray="3 3" stroke="rgba(255,255,255,0.04)" vertical={false} />
-              <XAxis dataKey="date" tick={{ fontSize: 10, fill: "#64748b" }} axisLine={false} tickLine={false} />
-              <YAxis tick={{ fontSize: 10, fill: "#64748b" }} axisLine={false} tickLine={false} tickFormatter={(v) => `$${v}`} />
-              <Tooltip content={<ChartTooltipContent />} />
-              <Area type="monotone" dataKey="Cost" stroke="#06b6d4" strokeWidth={2} fill="url(#gradCost)" />
-            </AreaChart>
-          </ResponsiveContainer>
+          <CostChart data={costChartData} />
         </GlowCard>
 
         {/* Execution health */}
@@ -328,16 +168,7 @@ export default function ObservabilityPage() {
             <Activity className="h-4 w-4 text-emerald-400" />
             Execution Health
           </h3>
-          <ResponsiveContainer width="100%" height={240}>
-            <BarChart data={execChartData} margin={{ top: 8, right: 8, left: -20, bottom: 0 }}>
-              <CartesianGrid strokeDasharray="3 3" stroke="rgba(255,255,255,0.04)" vertical={false} />
-              <XAxis dataKey="date" tick={{ fontSize: 10, fill: "#64748b" }} axisLine={false} tickLine={false} />
-              <YAxis tick={{ fontSize: 10, fill: "#64748b" }} axisLine={false} tickLine={false} allowDecimals={false} />
-              <Tooltip content={<ChartTooltipContent />} />
-              <Bar dataKey="Successes" stackId="exec" fill="#34d399" radius={[0, 0, 0, 0]} />
-              <Bar dataKey="Failures" stackId="exec" fill="#f43f5e" radius={[4, 4, 0, 0]} />
-            </BarChart>
-          </ResponsiveContainer>
+          <ExecChart data={execChartData} />
         </GlowCard>
       </div>
 
@@ -352,33 +183,7 @@ export default function ObservabilityPage() {
           {spendPieData.length > 0 ? (
             <>
               <div className="flex items-center justify-center">
-                <ResponsiveContainer width="100%" height={200}>
-                  <PieChart>
-                    <Pie
-                      data={spendPieData}
-                      cx="50%"
-                      cy="50%"
-                      innerRadius={50}
-                      outerRadius={80}
-                      paddingAngle={3}
-                      dataKey="value"
-                      stroke="none"
-                    >
-                      {spendPieData.map((entry, i) => (
-                        <Cell key={entry.name} fill={entry.color || PIE_COLORS[i % PIE_COLORS.length]} />
-                      ))}
-                    </Pie>
-                    <Tooltip
-                      formatter={(value) => `$${Number(value).toFixed(2)}`}
-                      contentStyle={{
-                        background: "rgba(15,15,26,0.95)",
-                        border: "1px solid rgba(255,255,255,0.1)",
-                        borderRadius: "12px",
-                        fontSize: "12px",
-                      }}
-                    />
-                  </PieChart>
-                </ResponsiveContainer>
+                <SpendPieChart data={spendPieData} />
               </div>
               <div className="mt-2 space-y-2">
                 {personaSpend.map((p) => (
@@ -398,7 +203,7 @@ export default function ObservabilityPage() {
                             className="h-full rounded-full transition-all"
                             style={{
                               width: `${Math.min(100, (p.totalCost / p.budgetUsd) * 100)}%`,
-                              backgroundColor: p.totalCost / p.budgetUsd > 0.8 ? "#fbbf24" : p.personaColor,
+                              backgroundColor: p.totalCost / p.budgetUsd > BUDGET_THRESHOLD ? "#fbbf24" : p.personaColor,
                             }}
                           />
                         </div>

@@ -1,14 +1,17 @@
 import { useState, useCallback, useRef, useEffect } from "react";
 import { api } from "@/lib/api";
+import { usePolling } from "@/hooks/usePolling";
+import type { PersonaExecutionStatus } from "@/lib/types";
 
 interface ExecutionPollState {
   output: string[];
-  status: string;
+  status: PersonaExecutionStatus;
   durationMs?: number;
   totalCostUsd?: number;
 }
 
 const TERMINAL_STATUSES = new Set(["completed", "failed", "cancelled"]);
+const MAX_OUTPUT_LINES = 500;
 
 /**
  * Polls a running execution's output every `intervalMs` (default 1000ms).
@@ -23,48 +26,35 @@ export function useExecutionPolling(
     status: "queued",
   });
   const offsetRef = useRef(0);
-  const timerRef = useRef<ReturnType<typeof setInterval> | null>(null);
+  const [stopped, setStopped] = useState(false);
+
+  // Reset when executionId changes
+  useEffect(() => {
+    setState({ output: [], status: "queued" });
+    offsetRef.current = 0;
+    setStopped(false);
+  }, [executionId]);
 
   const stop = useCallback(() => {
-    if (timerRef.current) {
-      clearInterval(timerRef.current);
-      timerRef.current = null;
-    }
+    setStopped(true);
   }, []);
 
   const poll = useCallback(async () => {
     if (!executionId) return;
-    try {
-      const data = await api.getExecution(executionId, offsetRef.current);
-      setState((prev) => {
-        const merged = [...prev.output, ...data.output];
-        return {
-          output: merged,
-          status: data.status,
-          durationMs: data.durationMs,
-          totalCostUsd: data.totalCostUsd,
-        };
-      });
-      offsetRef.current += data.output.length;
-      if (TERMINAL_STATUSES.has(data.status)) {
-        stop();
-      }
-    } catch {
-      // Keep polling on transient errors
+    const data = await api.getExecution(executionId, offsetRef.current);
+    setState((prev) => ({
+      output: [...prev.output, ...data.output].slice(-MAX_OUTPUT_LINES),
+      status: data.status,
+      durationMs: data.durationMs,
+      totalCostUsd: data.totalCostUsd,
+    }));
+    offsetRef.current += data.output.length;
+    if (TERMINAL_STATUSES.has(data.status)) {
+      setStopped(true);
     }
-  }, [executionId, stop]);
+  }, [executionId]);
 
-  useEffect(() => {
-    if (!executionId) return;
-    // Reset
-    setState({ output: [], status: "queued" });
-    offsetRef.current = 0;
-
-    void poll();
-    timerRef.current = setInterval(poll, intervalMs);
-
-    return stop;
-  }, [executionId, intervalMs, poll, stop]);
+  usePolling(poll, intervalMs, !!executionId && !stopped);
 
   return { ...state, stop };
 }

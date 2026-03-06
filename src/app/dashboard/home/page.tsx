@@ -1,16 +1,8 @@
 "use client";
 
-import { useEffect, useMemo } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import { motion } from "framer-motion";
-import {
-  AreaChart,
-  Area,
-  XAxis,
-  YAxis,
-  CartesianGrid,
-  Tooltip,
-  ResponsiveContainer,
-} from "recharts";
+import dynamic from "next/dynamic";
 import {
   ClipboardCheck,
   Zap,
@@ -19,24 +11,33 @@ import {
   Activity,
   ArrowUpRight,
 } from "lucide-react";
+
+const TrafficChart = dynamic(
+  () => import("@/components/dashboard/TrafficChart"),
+  {
+    ssr: false,
+    loading: () => (
+      <div className="flex items-center justify-center h-[200px] sm:h-[280px] lg:h-[320px]">
+        <div className="h-4 w-4 animate-spin rounded-full border-2 border-white/10 border-t-brand-cyan" />
+      </div>
+    ),
+  },
+);
 import { fadeUp, staggerContainer } from "@/lib/animations";
 import GlowCard from "@/components/GlowCard";
 import GradientText from "@/components/GradientText";
 import StatusBadge from "@/components/dashboard/StatusBadge";
+import StatBadge from "@/components/dashboard/StatBadge";
 import PersonaAvatar from "@/components/dashboard/PersonaAvatar";
-import { useDashboardStore } from "@/stores/dashboardStore";
+import { usePersonaStore } from "@/stores/personaStore";
+import { useExecutionStore, useEnrichedExecutions } from "@/stores/executionStore";
+import { useReviewStore } from "@/stores/reviewStore";
+import { useSystemStore } from "@/stores/systemStore";
 import { useAuthStore } from "@/stores/authStore";
+import useSWR from "swr";
+import { api } from "@/lib/api";
 import Link from "next/link";
-
-function relativeTime(iso: string): string {
-  const diff = Date.now() - new Date(iso).getTime();
-  const mins = Math.floor(diff / 60_000);
-  if (mins < 1) return "just now";
-  if (mins < 60) return `${mins}m ago`;
-  const hours = Math.floor(mins / 60);
-  if (hours < 24) return `${hours}h ago`;
-  return `${Math.floor(hours / 24)}d ago`;
-}
+import { relativeTime } from "@/lib/format";
 
 function getGreeting(): string {
   const hour = new Date().getHours();
@@ -45,85 +46,52 @@ function getGreeting(): string {
   return "Good Evening";
 }
 
-function ChartTooltipContent({
-  active,
-  payload,
-  label,
-}: {
-  active?: boolean;
-  payload?: Array<{ value: number; name: string; color: string }>;
-  label?: string;
-}) {
-  if (!active || !payload?.length) return null;
-  return (
-    <div className="rounded-xl border border-white/[0.1] bg-[#0f0f1a]/95 px-3 py-2 text-xs shadow-xl backdrop-blur-md">
-      <p className="mb-1 text-muted-dark">{label}</p>
-      {payload.map((entry) => (
-        <p key={entry.name} style={{ color: entry.color }} className="flex items-center gap-2">
-          <span
-            className="h-1.5 w-1.5 rounded-full"
-            style={{ backgroundColor: entry.color }}
-          />
-          {entry.name}: <span className="font-medium">{entry.value}</span>
-        </p>
-      ))}
-    </div>
-  );
-}
-
-interface StatBadgeProps {
-  icon: React.ElementType;
-  label: string;
-  value: string | number;
-  accent: "cyan" | "purple" | "emerald" | "amber";
-  href?: string;
-}
-
-function StatBadge({ icon: Icon, label, value, accent, href }: StatBadgeProps) {
-  const colorMap = {
-    cyan: "border-cyan-500/20 bg-cyan-500/8 text-cyan-400",
-    purple: "border-purple-500/20 bg-purple-500/8 text-purple-400",
-    emerald: "border-emerald-500/20 bg-emerald-500/8 text-emerald-400",
-    amber: "border-amber-500/20 bg-amber-500/8 text-amber-400",
-  };
-
-  const content = (
-    <div
-      className={`group flex items-center gap-2.5 rounded-xl border px-3.5 py-2.5 transition-all hover:scale-[1.02] ${colorMap[accent]}`}
-    >
-      <Icon className="h-4 w-4 flex-shrink-0" />
-      <div className="flex items-baseline gap-1.5">
-        <span className="text-lg font-bold tabular-nums">{value}</span>
-        <span className="text-[11px] text-muted-dark">{label}</span>
-      </div>
-      {href && (
-        <ArrowUpRight className="ml-auto h-3 w-3 opacity-0 transition-opacity group-hover:opacity-100" />
-      )}
-    </div>
-  );
-
-  if (href) {
-    return <Link href={href}>{content}</Link>;
-  }
-  return content;
-}
-
 export default function DashboardHomePage() {
   const user = useAuthStore((s) => s.user);
-  const personas = useDashboardStore((s) => s.personas);
-  const executions = useDashboardStore((s) => s.executions);
-  const pendingReviewCount = useDashboardStore((s) => s.pendingReviewCount);
-  const health = useDashboardStore((s) => s.health);
-  const dailyMetrics = useDashboardStore((s) => s.dailyMetrics);
-  const fetchExecutions = useDashboardStore((s) => s.fetchExecutions);
-  const fetchReviews = useDashboardStore((s) => s.fetchReviews);
-  const fetchObservability = useDashboardStore((s) => s.fetchObservability);
+  const personas = usePersonaStore((s) => s.personas);
+  const executions = useEnrichedExecutions();
+  const pendingReviewCount = useReviewStore((s) => s.pendingReviewCount);
+  const health = useSystemStore((s) => s.health);
+  const fetchExecutions = useExecutionStore((s) => s.fetchExecutions);
+  const fetchReviews = useReviewStore((s) => s.fetchReviews);
+
+  const chartSectionRef = useRef<HTMLDivElement | null>(null);
+  const [loadObservability, setLoadObservability] = useState(false);
+
+  const { data: observabilityData } = useSWR(
+    loadObservability ? "observability" : null,
+    api.getObservability,
+    {
+      revalidateOnFocus: false,
+      revalidateOnReconnect: false,
+      dedupingInterval: 60_000,
+      focusThrottleInterval: 60_000,
+    },
+  );
+  const dailyMetrics = observabilityData?.dailyMetrics ?? [];
+
+  useEffect(() => {
+    const target = chartSectionRef.current;
+    if (!target || loadObservability) return;
+
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (entry.isIntersecting) {
+          setLoadObservability(true);
+          observer.disconnect();
+        }
+      },
+      { rootMargin: "220px" },
+    );
+
+    observer.observe(target);
+    return () => observer.disconnect();
+  }, [loadObservability]);
 
   useEffect(() => {
     void fetchExecutions();
     void fetchReviews();
-    void fetchObservability();
-  }, [fetchExecutions, fetchReviews, fetchObservability]);
+  }, [fetchExecutions, fetchReviews]);
 
   const displayName = user?.user_metadata?.full_name?.split(" ")[0] ?? "there";
 
@@ -257,7 +225,7 @@ export default function DashboardHomePage() {
         </motion.div>
 
         {/* Traffic & Errors Chart */}
-        <motion.div variants={fadeUp} className="lg:col-span-3">
+        <motion.div variants={fadeUp} className="lg:col-span-3" ref={chartSectionRef}>
           <GlowCard accent="purple" className="p-5 h-full">
             <div className="flex items-center justify-between mb-4">
               <div className="flex items-center gap-2">
@@ -269,70 +237,13 @@ export default function DashboardHomePage() {
               <span className="text-[11px] text-muted-dark">Last 14 days</span>
             </div>
 
-            {chartData.length === 0 ? (
-              <div className="flex items-center justify-center h-64 text-xs text-muted-dark">
-                No data available yet
-              </div>
+            {loadObservability ? (
+              <TrafficChart chartData={chartData} />
             ) : (
-              <ResponsiveContainer width="100%" height={320}>
-                <AreaChart data={chartData} margin={{ top: 8, right: 8, left: -20, bottom: 0 }}>
-                  <defs>
-                    <linearGradient id="gradExec" x1="0" y1="0" x2="0" y2="1">
-                      <stop offset="0%" stopColor="#06b6d4" stopOpacity={0.3} />
-                      <stop offset="100%" stopColor="#06b6d4" stopOpacity={0} />
-                    </linearGradient>
-                    <linearGradient id="gradErr" x1="0" y1="0" x2="0" y2="1">
-                      <stop offset="0%" stopColor="#f43f5e" stopOpacity={0.3} />
-                      <stop offset="100%" stopColor="#f43f5e" stopOpacity={0} />
-                    </linearGradient>
-                  </defs>
-                  <CartesianGrid
-                    strokeDasharray="3 3"
-                    stroke="rgba(255,255,255,0.04)"
-                    vertical={false}
-                  />
-                  <XAxis
-                    dataKey="date"
-                    tick={{ fontSize: 10, fill: "#64748b" }}
-                    axisLine={false}
-                    tickLine={false}
-                  />
-                  <YAxis
-                    tick={{ fontSize: 10, fill: "#64748b" }}
-                    axisLine={false}
-                    tickLine={false}
-                    allowDecimals={false}
-                  />
-                  <Tooltip content={<ChartTooltipContent />} />
-                  <Area
-                    type="monotone"
-                    dataKey="Executions"
-                    stroke="#06b6d4"
-                    strokeWidth={2}
-                    fill="url(#gradExec)"
-                  />
-                  <Area
-                    type="monotone"
-                    dataKey="Errors"
-                    stroke="#f43f5e"
-                    strokeWidth={2}
-                    fill="url(#gradErr)"
-                  />
-                </AreaChart>
-              </ResponsiveContainer>
+              <div className="flex items-center justify-center h-[200px] sm:h-[280px] lg:h-[320px]">
+                <div className="h-4 w-4 animate-spin rounded-full border-2 border-white/10 border-t-brand-cyan" />
+              </div>
             )}
-
-            {/* Legend */}
-            <div className="mt-3 flex items-center gap-4 text-[11px] text-muted-dark">
-              <span className="flex items-center gap-1.5">
-                <span className="h-2 w-2 rounded-full bg-cyan-400" />
-                Executions
-              </span>
-              <span className="flex items-center gap-1.5">
-                <span className="h-2 w-2 rounded-full bg-rose-400" />
-                Errors
-              </span>
-            </div>
           </GlowCard>
         </motion.div>
       </div>

@@ -50,7 +50,9 @@ export function useAnimationPause() {
       }
     });
 
-    mutation.observe(document.body, { childList: true, subtree: true });
+    const mutationRoot =
+      document.getElementById("main-content") ?? document.body;
+    mutation.observe(mutationRoot, { childList: true, subtree: true });
 
     return () => {
       observer.disconnect();

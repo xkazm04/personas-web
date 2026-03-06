@@ -4,8 +4,9 @@ import { useState, useEffect, useRef, useCallback, useId } from "react";
 import { motion, AnimatePresence, useReducedMotion } from "framer-motion";
 import {
   Mail, MessageSquare, Github, HardDrive, SquareKanban,
-  BookOpen, CreditCard, Calendar, Figma,
+  BookOpen, CreditCard, Calendar, Figma, LayoutGrid,
 } from "lucide-react";
+import Link from "next/link";
 import SectionWrapper from "@/components/SectionWrapper";
 import GradientText from "@/components/GradientText";
 import SectionHeading from "@/components/SectionHeading";
@@ -415,6 +416,17 @@ export default function UseCases() {
           )}
         </AnimatePresence>
       </div>
+
+      <motion.div variants={fadeUp} className="mt-12 flex justify-center">
+        <Link
+          href="/templates"
+          className="group relative inline-flex items-center gap-3 overflow-hidden rounded-full border border-brand-cyan/30 bg-brand-cyan/5 px-8 py-4 text-sm font-semibold text-foreground backdrop-blur-sm transition-all duration-300 hover:border-brand-cyan/50 hover:bg-brand-cyan/10 hover:shadow-[0_0_30px_rgba(6,182,212,0.2)]"
+        >
+          <div className="absolute inset-0 -translate-x-full bg-gradient-to-r from-transparent via-white/5 to-transparent transition-transform duration-700 group-hover:translate-x-full" />
+          <LayoutGrid className="relative h-5 w-5 text-brand-cyan transition-transform duration-300 group-hover:-translate-y-0.5" />
+          <span className="relative">Browse All Templates</span>
+        </Link>
+      </motion.div>
 
     </SectionWrapper>
   );

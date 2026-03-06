@@ -1,11 +1,9 @@
 "use client";
 
-import { useEffect, useState, useCallback } from "react";
+import { useEffect, useState, useCallback, useRef } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import {
   Bot,
-  Radio,
-  Clock,
   ChevronDown,
   Power,
   PowerOff,
@@ -15,123 +13,33 @@ import { fadeUp, staggerContainer } from "@/lib/animations";
 import GlowCard from "@/components/GlowCard";
 import GradientText from "@/components/GradientText";
 import PersonaAvatar from "@/components/dashboard/PersonaAvatar";
-import StatusBadge from "@/components/dashboard/StatusBadge";
+import AgentDetail, { prefetchAgentDetail } from "@/components/dashboard/AgentDetail";
 import EmptyState from "@/components/dashboard/EmptyState";
-import { useDashboardStore } from "@/stores/dashboardStore";
+import { usePersonaStore } from "@/stores/personaStore";
+import { useSystemStore } from "@/stores/systemStore";
 import { api } from "@/lib/api";
-import type { Persona, PersonaExecution, PersonaEventSubscription, PersonaTrigger } from "@/lib/types";
+import type { Persona } from "@/lib/types";
 
-function relativeTime(iso: string): string {
-  const diff = Date.now() - new Date(iso).getTime();
-  const mins = Math.floor(diff / 60_000);
-  if (mins < 1) return "just now";
-  if (mins < 60) return `${mins}m ago`;
-  const hours = Math.floor(mins / 60);
-  if (hours < 24) return `${hours}h ago`;
-  const days = Math.floor(hours / 24);
-  return `${days}d ago`;
-}
+const colorToAccent: Record<string, "cyan" | "purple" | "emerald" | "amber"> = {
+  "#06b6d4": "cyan",
+  "#a855f7": "purple",
+  "#34d399": "emerald",
+  "#fbbf24": "amber",
+};
 
 function accentFromColor(color: string | null): "cyan" | "purple" | "emerald" | "amber" {
   if (!color) return "cyan";
-  const lower = color.toLowerCase();
-  if (lower.includes("purple") || lower.includes("a855") || lower.includes("8b5")) return "purple";
-  if (lower.includes("emerald") || lower.includes("34d3") || lower.includes("10b9")) return "emerald";
-  if (lower.includes("amber") || lower.includes("fbbf") || lower.includes("f59")) return "amber";
-  return "cyan";
-}
-
-interface AgentDetailData {
-  executions: PersonaExecution[];
-  subscriptions: PersonaEventSubscription[];
-  triggers: PersonaTrigger[];
-}
-
-function AgentDetail({ persona }: { persona: Persona }) {
-  const [data, setData] = useState<AgentDetailData | null>(null);
-
-  useEffect(() => {
-    Promise.all([
-      api.listExecutions({ personaId: persona.id, limit: 5 }),
-      api.listSubscriptions(persona.id),
-      api.listTriggers(persona.id),
-    ]).then(([executions, subscriptions, triggers]) => {
-      setData({ executions, subscriptions, triggers });
-    });
-  }, [persona.id]);
-
-  if (!data) {
-    return (
-      <div className="mt-4 space-y-3 border-t border-white/[0.06] pt-4">
-        <div className="flex animate-pulse space-x-4">
-          <div className="flex-1 space-y-3 py-1">
-            <div className="h-3 w-24 rounded bg-white/[0.05]" />
-            <div className="space-y-2">
-              <div className="h-2.5 rounded bg-white/[0.03]" />
-              <div className="h-2.5 w-5/6 rounded bg-white/[0.03]" />
-            </div>
-          </div>
-        </div>
-      </div>
-    );
-  }
-
-  return (
-    <div className="mt-4 space-y-3 border-t border-white/[0.06] pt-4">
-      {/* Recent executions */}
-      <div>
-        <h4 className="text-[11px] font-medium uppercase tracking-wider text-muted-dark">
-          Recent Executions
-        </h4>
-        {data.executions.length === 0 ? (
-          <p className="mt-1 text-xs text-muted-dark">No executions yet</p>
-        ) : (
-          <div className="mt-1.5 space-y-1">
-            {data.executions.map((exec) => (
-              <div
-                key={exec.id}
-                className="flex items-center gap-2 text-xs text-muted"
-              >
-                <StatusBadge status={exec.status} />
-                <span className="flex-1 truncate font-mono text-[11px] text-muted-dark">
-                  {exec.id.slice(0, 8)}
-                </span>
-                {exec.durationMs && (
-                  <span className="tabular-nums text-muted-dark">
-                    {(exec.durationMs / 1000).toFixed(1)}s
-                  </span>
-                )}
-                <span className="text-muted-dark">
-                  {relativeTime(exec.createdAt)}
-                </span>
-              </div>
-            ))}
-          </div>
-        )}
-      </div>
-
-      {/* Subscriptions & Triggers summary */}
-      <div className="flex gap-4 text-xs text-muted-dark">
-        <span className="flex items-center gap-1">
-          <Radio className="h-3 w-3" />
-          {data.subscriptions.length} subscription{data.subscriptions.length !== 1 ? "s" : ""}
-        </span>
-        <span className="flex items-center gap-1">
-          <Clock className="h-3 w-3" />
-          {data.triggers.length} trigger{data.triggers.length !== 1 ? "s" : ""}
-        </span>
-      </div>
-    </div>
-  );
+  return colorToAccent[color.toLowerCase()] ?? "cyan";
 }
 
 export default function AgentsPage() {
-  const personas = useDashboardStore((s) => s.personas);
-  const personasLoading = useDashboardStore((s) => s.personasLoading);
-  const fetchPersonas = useDashboardStore((s) => s.fetchPersonas);
-  const fetchHealth = useDashboardStore((s) => s.fetchHealth);
-  const health = useDashboardStore((s) => s.health);
+  const personas = usePersonaStore((s) => s.personas);
+  const personasLoading = usePersonaStore((s) => s.personasLoading);
+  const fetchPersonas = usePersonaStore((s) => s.fetchPersonas);
+  const fetchHealth = useSystemStore((s) => s.fetchHealth);
+  const health = useSystemStore((s) => s.health);
   const [expandedId, setExpandedId] = useState<string | null>(null);
+  const prefetchedDetailIdsRef = useRef<Set<string>>(new Set());
 
   useEffect(() => {
     void fetchPersonas();
@@ -193,7 +101,15 @@ export default function AgentsPage() {
             const isExpanded = expandedId === persona.id;
 
             return (
-              <GlowCard key={persona.id} accent={accent} variants={fadeUp} className="p-5">
+              <div
+                key={persona.id}
+                onMouseEnter={() => {
+                  if (prefetchedDetailIdsRef.current.has(persona.id)) return;
+                  prefetchedDetailIdsRef.current.add(persona.id);
+                  void prefetchAgentDetail(persona.id);
+                }}
+              >
+                <GlowCard accent={accent} variants={fadeUp} className="p-5">
                 {/* Top row */}
                 <div className="flex items-start justify-between">
                   <div className="flex items-center gap-3">
@@ -225,7 +141,7 @@ export default function AgentsPage() {
                 </div>
 
                 {/* Stats */}
-                <div className="mt-4 flex items-center gap-4 text-xs text-muted-dark">
+                <div className="mt-4 flex flex-wrap items-center gap-2 sm:gap-4 text-xs text-muted-dark">
                   <span className="font-mono">{persona.maxConcurrent} max</span>
                   <span className="font-mono">
                     {(persona.timeoutMs / 1000).toFixed(0)}s timeout
@@ -277,7 +193,8 @@ export default function AgentsPage() {
                     </motion.div>
                   )}
                 </AnimatePresence>
-              </GlowCard>
+                </GlowCard>
+              </div>
             );
           })}
         </div>

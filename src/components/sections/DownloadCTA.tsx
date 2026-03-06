@@ -21,7 +21,7 @@ export default function DownloadCTA() {
   const [waitlistPlatform, setWaitlistPlatform] = useState<(typeof platforms)[number] | null>(null);
 
   return (
-    <SectionWrapper id="download" dotGrid className="noise py-28 md:py-44">
+    <SectionWrapper id="download" dotGrid className="noise py-40 md:py-48">
       {/* Background orbs */}
       <div className="pointer-events-none absolute inset-0 flex items-center justify-center">
         <div

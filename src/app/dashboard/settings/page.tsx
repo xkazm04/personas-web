@@ -15,15 +15,15 @@ import { fadeUp, staggerContainer } from "@/lib/animations";
 import GradientText from "@/components/GradientText";
 import GlowCard from "@/components/GlowCard";
 import { useAuthStore } from "@/stores/authStore";
-import { useDashboardStore } from "@/stores/dashboardStore";
+import { useSystemStore } from "@/stores/systemStore";
 
 export default function SettingsPage() {
   const user = useAuthStore((s) => s.user);
   const signOut = useAuthStore((s) => s.signOut);
-  const health = useDashboardStore((s) => s.health);
-  const status = useDashboardStore((s) => s.status);
-  const fetchStatus = useDashboardStore((s) => s.fetchStatus);
-  const fetchHealth = useDashboardStore((s) => s.fetchHealth);
+  const health = useSystemStore((s) => s.health);
+  const status = useSystemStore((s) => s.status);
+  const fetchStatus = useSystemStore((s) => s.fetchStatus);
+  const fetchHealth = useSystemStore((s) => s.fetchHealth);
 
   useEffect(() => {
     void fetchStatus();

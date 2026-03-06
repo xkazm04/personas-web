@@ -1,6 +1,7 @@
 "use client";
 
-import { useState, useEffect, useRef, useMemo } from "react";
+import { useMemo } from "react";
+import { useActiveSectionId } from "@/contexts/SectionObserverContext";
 
 interface SectionDef {
   id: string;
@@ -8,59 +9,18 @@ interface SectionDef {
 }
 
 /**
- * Detects which named section is currently in view based on scroll position.
- * Returns the label of the active section (or null when at the very top / hero).
+ * Returns the label of the currently active section, powered by the shared
+ * SectionObserverContext (IntersectionObserver). Falls back to null when no
+ * provider is mounted or no section is active.
  */
 export default function useActiveSection(sections: SectionDef[]) {
-  const [activeLabel, setActiveLabel] = useState<string | null>(null);
-  const ids = useMemo(() => sections.map((s) => s.id), [sections]);
-  const elementsRef = useRef<Record<string, HTMLElement | null>>({});
-  const rafRef = useRef<number | null>(null);
+  const activeSectionId = useActiveSectionId();
 
-  // Cache DOM references once after mount
-  useEffect(() => {
-    const next: Record<string, HTMLElement | null> = {};
-    for (const id of ids) {
-      next[id] = document.getElementById(id);
-    }
-    elementsRef.current = next;
-  }, [ids]);
-
-  useEffect(() => {
-    const compute = () => {
-      const threshold = window.innerHeight / 3;
-      let current: string | null = null;
-
-      for (const section of sections) {
-        const el = elementsRef.current[section.id];
-        if (!el) continue;
-        const top = el.getBoundingClientRect().top;
-        if (top <= threshold) {
-          current = section.label;
-        }
-      }
-
-      setActiveLabel(current);
-    };
-
-    const onScroll = () => {
-      if (rafRef.current !== null) return;
-      rafRef.current = requestAnimationFrame(() => {
-        rafRef.current = null;
-        compute();
-      });
-    };
-
-    window.addEventListener("scroll", onScroll, { passive: true });
-    compute();
-
-    return () => {
-      window.removeEventListener("scroll", onScroll);
-      if (rafRef.current !== null) {
-        cancelAnimationFrame(rafRef.current);
-      }
-    };
+  const labelMap = useMemo(() => {
+    const map = new Map<string, string>();
+    for (const s of sections) map.set(s.id, s.label);
+    return map;
   }, [sections]);
 
-  return activeLabel;
+  return activeSectionId ? (labelMap.get(activeSectionId) ?? null) : null;
 }

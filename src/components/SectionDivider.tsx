@@ -1,7 +1,6 @@
 "use client";
 
-import { useId, useRef } from "react";
-import { motion, useScroll, useTransform } from "framer-motion";
+import { useId } from "react";
 
 const brandColors: Record<string, string> = {
   cyan: "6,182,212",
@@ -22,27 +21,23 @@ export default function SectionDivider({
 }) {
   const uid = useId();
   const gradId = `${uid}-sd`;
-  const ref = useRef<HTMLDivElement>(null);
-  const { scrollYProgress } = useScroll({
-    target: ref,
-    offset: ["start end", "end start"],
-  });
-
-  const opacity = useTransform(scrollYProgress, [0, 0.3, 0.7, 1], [0, 0.15, 0.15, 0]);
-  const scaleX = useTransform(scrollYProgress, [0, 0.4, 0.6, 1], [0.6, 1, 1, 0.6]);
 
   const fromRgb = brandColors[from] ?? brandColors.cyan;
   const toRgb = brandColors[to] ?? brandColors.purple;
 
   return (
     <div
-      ref={ref}
       className="pointer-events-none relative overflow-hidden"
       style={{ height }}
     >
-      <motion.div
-        className="absolute inset-0"
-        style={{ opacity, scaleX }}
+      <div
+        className="absolute inset-0 section-divider-scroll"
+        style={
+          {
+            animationTimeline: "view()",
+            animationRange: "entry 0% cover 100%",
+          } as Record<string, string>
+        }
       >
         <svg
           viewBox="0 0 1440 100"
@@ -73,7 +68,7 @@ export default function SectionDivider({
             background: `radial-gradient(ellipse, rgba(${fromRgb},0.08) 0%, rgba(${toRgb},0.04) 50%, transparent 80%)`,
           }}
         />
-      </motion.div>
+      </div>
     </div>
   );
 }
