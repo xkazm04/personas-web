@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { Sparkles, Github, Twitter, ChevronDown } from "lucide-react";
+import { Sparkles, Github, Twitter, ChevronDown, MessageCircle } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 
 const columns = [
@@ -17,16 +17,14 @@ const columns = [
   {
     title: "Resources",
     links: [
-      { label: "Documentation", href: "#" },
-      { label: "Changelog", href: "#changelog" },
-      { label: "Blog", href: "#" },
+      { label: "Roadmap", href: "/roadmap" },
     ],
   },
   {
     title: "Legal",
     links: [
-      { label: "Privacy", href: "#" },
-      { label: "Terms", href: "#" },
+      { label: "Privacy", href: "/legal" },
+      { label: "Terms", href: "/legal" },
     ],
   },
 ];
@@ -41,11 +39,11 @@ function FooterLinkColumn({ title, links }: (typeof columns)[number]) {
         onClick={() => setOpen((v) => !v)}
         className="flex w-full items-center justify-between md:pointer-events-none md:cursor-default"
       >
-        <h4 className="text-xs font-medium uppercase tracking-wider text-muted-dark/70">
+        <h4 className="text-xs font-medium uppercase tracking-wider text-muted-dark">
           {title}
         </h4>
         <ChevronDown
-          className={`h-3.5 w-3.5 text-muted-dark/50 transition-transform duration-200 md:hidden ${open ? "rotate-180" : ""}`}
+          className={`h-3.5 w-3.5 text-muted-dark transition-transform duration-200 md:hidden ${open ? "rotate-180" : ""}`}
         />
       </button>
       <div className="mt-1.5 h-px w-8 bg-linear-to-r from-brand-cyan/10 to-transparent" />
@@ -114,7 +112,7 @@ export default function Footer() {
       </div>
 
       <div className="relative mx-auto w-full max-w-6xl">
-        <div className="grid grid-cols-1 gap-8 md:grid-cols-5 md:gap-10">
+        <div className="grid grid-cols-1 gap-8 md:grid-cols-5 md:gap-12">
           {/* Brand */}
           <div className="md:col-span-2">
             <div className="flex items-center gap-2.5">
@@ -128,18 +126,21 @@ export default function Footer() {
               language, run locally or in the cloud.
             </p>
             {/* Social */}
-            <div className="mt-5 flex items-center gap-3">
-              <a href="#" className="group flex h-8 w-8 items-center justify-center rounded-lg border border-white/4 bg-white/2 text-muted-dark transition-all duration-300 hover:border-white/10 hover:text-muted hover:bg-white/4 hover:shadow-[0_0_10px_rgba(255,255,255,0.02)]">
+            <div className="mt-4 flex items-center gap-3">
+              <a href="https://github.com/personas-ai" target="_blank" rel="noopener noreferrer" aria-label="GitHub" className="group flex min-h-11 min-w-11 items-center justify-center rounded-lg border border-white/4 bg-white/2 text-muted-dark transition-all duration-300 hover:border-white/10 hover:text-muted hover:bg-white/4 hover:shadow-[0_0_10px_rgba(255,255,255,0.02)]">
                 <Github className="h-4 w-4 transition-transform duration-300 group-hover:scale-110" />
               </a>
-              <a href="#" className="group flex h-8 w-8 items-center justify-center rounded-lg border border-white/4 bg-white/2 text-muted-dark transition-all duration-300 hover:border-white/10 hover:text-muted hover:bg-white/4 hover:shadow-[0_0_10px_rgba(255,255,255,0.02)]">
+              <a href="https://twitter.com/personas_ai" target="_blank" rel="noopener noreferrer" aria-label="Twitter" className="group flex min-h-11 min-w-11 items-center justify-center rounded-lg border border-white/4 bg-white/2 text-muted-dark transition-all duration-300 hover:border-white/10 hover:text-muted hover:bg-white/4 hover:shadow-[0_0_10px_rgba(255,255,255,0.02)]">
                 <Twitter className="h-4 w-4 transition-transform duration-300 group-hover:scale-110" />
+              </a>
+              <a href="https://discord.gg/personas" target="_blank" rel="noopener noreferrer" aria-label="Discord" className="group flex min-h-11 min-w-11 items-center justify-center rounded-lg border border-white/4 bg-white/2 text-muted-dark transition-all duration-300 hover:border-white/10 hover:text-muted hover:bg-white/4 hover:shadow-[0_0_10px_rgba(255,255,255,0.02)]">
+                <MessageCircle className="h-4 w-4 transition-transform duration-300 group-hover:scale-110" />
               </a>
             </div>
           </div>
 
           {/* Link columns — 2-col grid on mobile, 3 individual cols on desktop */}
-          <div className="col-span-1 grid grid-cols-2 gap-6 md:col-span-3 md:grid-cols-3 md:gap-10">
+          <div className="col-span-1 grid grid-cols-2 gap-6 md:col-span-3 md:grid-cols-3 md:gap-12">
             {columns.map((col) => (
               <FooterLinkColumn key={col.title} {...col} />
             ))}
@@ -149,7 +150,7 @@ export default function Footer() {
         {/* Copyright */}
         <div className="mt-16 flex flex-col items-center justify-between gap-4 border-t border-white/3 pt-6 text-xs text-muted-dark md:flex-row">
           <span>&copy; {new Date().getFullYear()} Personas. All rights reserved.</span>
-          <span className="text-muted-dark/50 flex items-center gap-2">
+          <span className="text-muted-dark flex items-center gap-2">
             <div className="h-px w-4 bg-linear-to-r from-brand-cyan/20 to-transparent" />
             Built for developers who automate everything.
             <div className="h-px w-4 bg-linear-to-l from-brand-cyan/20 to-transparent" />

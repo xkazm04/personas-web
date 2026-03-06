@@ -1,13 +1,7 @@
 "use client";
 
-import { useRef, useCallback } from "react";
+import { useRef, useEffect, useCallback } from "react";
 import { motion } from "framer-motion";
-import {
-  useQualityTier,
-  useReducedMotionPreference,
-  type QualityTier,
-} from "@/contexts/QualityContext";
-import { useCanvasCompositor, type LayerRenderFn, type LayerResizeFn } from "@/hooks/useCanvasCompositor";
 
 function TypewriterLine({
   text,
@@ -22,16 +16,22 @@ function TypewriterLine({
   charStep?: number;
   pulseAfter?: boolean;
 }) {
-  const revealDuration = text.length * charStep;
+  const chars = Array.from(text);
+  const revealDuration = chars.length * charStep;
   return (
-    <span
-      className={`block typewriter-line ${className}`}
-      style={{
-        animationDelay: `${baseDelay}s`,
-        animationDuration: `${Math.max(0.4, revealDuration)}s`,
-      }}
-    >
-      {text}
+    <span className={`block ${className}`}>
+      {chars.map((char, index) => (
+        <motion.span
+          key={`${text}-${index}-${char}`}
+          initial={{ opacity: 0, y: 8 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true, margin: "-80px" }}
+          transition={{ delay: baseDelay + index * charStep, duration: 0.18, ease: "easeOut" }}
+          className="inline-block"
+        >
+          {char === " " ? "\u00A0" : char}
+        </motion.span>
+      ))}
       {pulseAfter && (
         <motion.span
           className="absolute inset-0 pointer-events-none bg-linear-to-r from-brand-cyan/0 via-brand-cyan/20 to-brand-purple/0 mix-blend-screen"
@@ -47,10 +47,10 @@ function TypewriterLine({
 
 /* ── Ambient particle field ── */
 
-const PARTICLE_COUNTS: Record<QualityTier, number> = { high: 25, medium: 12, low: 4 };
+const PARTICLE_COUNT = 25;
 const BASE_SPEED = 0.3; // px per frame
 
-interface AmbientParticle {
+interface Particle {
   x: number;
   y: number;
   r: number;
@@ -59,39 +59,71 @@ interface AmbientParticle {
 }
 
 function AmbientParticles() {
-  const prefersReducedMotion = useReducedMotionPreference();
-  const tier = useQualityTier();
   const canvasRef = useRef<HTMLCanvasElement>(null);
-  const particlesRef = useRef<AmbientParticle[]>([]);
-  const particleCount = PARTICLE_COUNTS[tier];
+  const particlesRef = useRef<Particle[]>([]);
+  const rafRef = useRef<number>(0);
+  const inViewRef = useRef(false);
 
-  const onResize = useCallback<LayerResizeFn>((w, h) => {
-    particlesRef.current = Array.from({ length: particleCount }, () => ({
+  const initParticles = useCallback((w: number, h: number) => {
+    particlesRef.current = Array.from({ length: PARTICLE_COUNT }, () => ({
       x: Math.random() * w,
       y: Math.random() * h,
       r: 1 + Math.random() * 1.5,
       opacity: 0.03 + Math.random() * 0.05,
       speed: BASE_SPEED + Math.random() * 0.2,
     }));
-  }, [particleCount]);
-
-  const render = useCallback<LayerRenderFn>((ctx, w, h) => {
-    for (const p of particlesRef.current) {
-      p.y -= p.speed;
-      if (p.y + p.r < 0) {
-        p.y = h + p.r;
-        p.x = Math.random() * w;
-      }
-      ctx.beginPath();
-      ctx.arc(p.x, p.y, p.r, 0, Math.PI * 2);
-      ctx.fillStyle = `rgba(255,255,255,${p.opacity})`;
-      ctx.fill();
-    }
   }, []);
 
-  useCanvasCompositor(canvasRef, render, { onResize, enabled: !prefersReducedMotion });
+  useEffect(() => {
+    const canvas = canvasRef.current;
+    if (!canvas) return;
+    const ctx = canvas.getContext("2d");
+    if (!ctx) return;
 
-  if (prefersReducedMotion) return null;
+    const resize = () => {
+      const rect = canvas.parentElement!.getBoundingClientRect();
+      canvas.width = rect.width;
+      canvas.height = rect.height;
+      if (particlesRef.current.length === 0) initParticles(rect.width, rect.height);
+    };
+    resize();
+    window.addEventListener("resize", resize);
+
+    // Pause when off-screen
+    const observer = new IntersectionObserver(
+      ([entry]) => { inViewRef.current = entry.isIntersecting; },
+      { threshold: 0.1 },
+    );
+    observer.observe(canvas);
+
+    const draw = () => {
+      rafRef.current = requestAnimationFrame(draw);
+      if (!inViewRef.current || document.hidden) return;
+
+      const { width: w, height: h } = canvas;
+      ctx.clearRect(0, 0, w, h);
+
+      for (const p of particlesRef.current) {
+        p.y -= p.speed;
+        // Respawn at bottom
+        if (p.y + p.r < 0) {
+          p.y = h + p.r;
+          p.x = Math.random() * w;
+        }
+        ctx.beginPath();
+        ctx.arc(p.x, p.y, p.r, 0, Math.PI * 2);
+        ctx.fillStyle = `rgba(255,255,255,${p.opacity})`;
+        ctx.fill();
+      }
+    };
+    rafRef.current = requestAnimationFrame(draw);
+
+    return () => {
+      cancelAnimationFrame(rafRef.current);
+      window.removeEventListener("resize", resize);
+      observer.disconnect();
+    };
+  }, [initParticles]);
 
   return (
     <canvas
@@ -103,12 +135,10 @@ function AmbientParticles() {
 }
 
 export default function CinematicBreather() {
-  const prefersReducedMotion = useReducedMotionPreference();
-
   return (
     <section className="relative flex min-h-[50vh] items-center justify-center overflow-hidden px-4">
       {/* Full-bleed animated gradient */}
-      {!prefersReducedMotion && <div className="absolute inset-0 cinematic-gradient" />}
+      <div className="absolute inset-0 cinematic-gradient" />
 
       {/* Ambient particle field */}
       <AmbientParticles />
@@ -143,7 +173,7 @@ export default function CinematicBreather() {
             <TypewriterLine
               text="Your infrastructure."
               baseDelay={1.05}
-              className="text-white/45 font-light tracking-wide drop-shadow-[0_0_20px_rgba(255,255,255,0.1)]"
+              className="text-white/70 font-light tracking-wide drop-shadow-[0_0_20px_rgba(255,255,255,0.1)]"
               pulseAfter
             />
           </span>

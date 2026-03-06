@@ -74,7 +74,7 @@ export default function SectionBreadcrumb({
                     className={`relative flex h-full items-center text-[11px] font-mono uppercase tracking-wider transition-colors duration-200 ${
                       isActive
                         ? "text-white/90"
-                        : "text-white/30 hover:text-white/55"
+                        : "text-white/70 hover:text-white/90"
                     }`}
                   >
                     {item.label}

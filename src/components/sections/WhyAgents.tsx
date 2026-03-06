@@ -232,7 +232,7 @@ function WorkflowPanel({ scenario }: { scenario: Scenario }) {
       >
         <div className="flex items-center gap-2 mb-1">
           <ShieldAlert className="h-3 w-3 text-brand-rose/60" />
-          <span className="text-[10px] font-mono uppercase tracking-wider text-brand-rose/50">Result</span>
+          <span className="text-[10px] font-mono uppercase tracking-wider text-brand-rose/70">Result</span>
         </div>
         <p className="text-base text-brand-rose/80 leading-relaxed">{scenario.workflow.result}</p>
       </motion.div>
@@ -294,7 +294,7 @@ function AgentPanel({ scenario }: { scenario: Scenario }) {
       >
         <div className="flex items-center gap-2 mb-1">
           <Check className="h-3 w-3 text-brand-emerald/60" />
-          <span className="text-[10px] font-mono uppercase tracking-wider text-brand-emerald/50">Result</span>
+          <span className="text-[10px] font-mono uppercase tracking-wider text-brand-emerald/70">Result</span>
         </div>
         <p className="text-base text-brand-emerald/80 leading-relaxed">{scenario.agent.result}</p>
       </motion.div>
@@ -323,7 +323,7 @@ const ComparisonCard = memo(function ComparisonCard({ variant, texture, classNam
       variants={variant}
       transition={{ duration: 0.6 }}
       whileHover={{ scale: 1.02, boxShadow: `0 0 30px ${color.grid.replace('0.08', '0.2')}` }}
-      className={`${texture} group rounded-2xl p-5 md:p-6 relative overflow-hidden transition-all duration-500 ${className}`}
+      className={`${texture} group rounded-2xl p-4 md:p-6 relative overflow-hidden transition-all duration-500 ${className}`}
     >
       {/* Blur orb */}
       <div className={`pointer-events-none absolute h-40 w-40 rounded-full blur-3xl ${color.orb}`} />
@@ -352,7 +352,7 @@ const ComparisonCard = memo(function ComparisonCard({ variant, texture, classNam
       )}
 
       {/* Header */}
-      <div className="relative flex items-center gap-3 mb-5">
+      <div className="relative flex items-center gap-3 mb-4">
         <motion.div
           animate={{ scale: [1, 1.1, 1] }}
           transition={{ duration: 2, repeat: Infinity, ease: "easeInOut" }}
@@ -384,7 +384,7 @@ const WorkflowContent = memo(function WorkflowContent({ activeIndex, minHeight }
         exit={{ opacity: 0 }}
         transition={{ duration: 0.2 }}
         className="relative"
-        style={{ minHeight }}
+        style={{ minHeight: minHeight || undefined }}
       >
         <WorkflowPanel scenario={scenario} />
       </motion.div>
@@ -403,7 +403,7 @@ const AgentContent = memo(function AgentContent({ activeIndex, minHeight }: { ac
         exit={{ opacity: 0 }}
         transition={{ duration: 0.2 }}
         className="relative"
-        style={{ minHeight }}
+        style={{ minHeight: minHeight || undefined }}
       >
         <AgentPanel scenario={scenario} />
       </motion.div>
@@ -456,25 +456,9 @@ const roleCopy: Record<ViewerRole, RoleCopy> = {
 
 const defaultCopy = roleCopy["developer"];
 
-// Pre-compute stable min-heights from scenario data to prevent layout shifts.
-// Each item row is ~36px (text-base leading-relaxed + gap-2.5 spacing).
-// The result box is ~72px (border + padding + label + text).
-// space-y-3 adds 12px gap between items, mt-4 adds 16px before result.
-const ITEM_HEIGHT = 36;
-const RESULT_HEIGHT = 72;
-const ITEM_GAP = 12;
-const RESULT_GAP = 16;
-
-function computePanelHeight(itemCount: number) {
-  return itemCount * ITEM_HEIGHT + (itemCount - 1) * ITEM_GAP + RESULT_GAP + RESULT_HEIGHT;
-}
-
-const workflowMinHeight = Math.max(
-  ...scenarios.map((s) => computePanelHeight(s.workflow.steps.length))
-);
-const agentMinHeight = Math.max(
-  ...scenarios.map((s) => computePanelHeight(s.agent.thoughts.length + s.agent.actions.length))
-);
+// Min-heights are measured from the DOM at mount time via the hidden measurement
+// container below. This avoids brittle magic-number constants that break when
+// font size, line height, or spacing tokens change.
 
 export default function WhyAgents({ role }: { role?: ViewerRole }) {
   const copy = role ? roleCopy[role] : defaultCopy;
@@ -498,8 +482,8 @@ export default function WhyAgents({ role }: { role?: ViewerRole }) {
     if (maxAg > 0) setMeasuredAgHeight(maxAg);
   }, []);
 
-  const wfMinH = measuredWfHeight || workflowMinHeight;
-  const agMinH = measuredAgHeight || agentMinHeight;
+  const wfMinH = measuredWfHeight;
+  const agMinH = measuredAgHeight;
 
   const workflowChildren = useMemo(
     () => <WorkflowContent activeIndex={activeIndex} minHeight={wfMinH} />,
@@ -635,7 +619,7 @@ export default function WhyAgents({ role }: { role?: ViewerRole }) {
             <div className="rounded-xl border border-white/[0.06] bg-white/[0.02] px-4 py-3 text-center backdrop-blur-sm">
               <div className="flex items-center justify-center gap-2 mb-1.5">
                 <Mail className="h-3 w-3 text-muted-dark" aria-hidden="true" />
-                <span className="text-[10px] font-mono uppercase tracking-wider text-muted-dark/60">Incoming scenario</span>
+                <span className="text-[10px] font-mono uppercase tracking-wider text-muted-dark">Incoming scenario</span>
               </div>
               <p className="text-sm text-muted leading-relaxed">{scenario.trigger}</p>
             </div>
@@ -675,7 +659,7 @@ export default function WhyAgents({ role }: { role?: ViewerRole }) {
             iconBg: "bg-brand-rose/10",
             iconRing: "ring-brand-rose/6",
             iconText: "text-brand-rose",
-            subtitle: "text-brand-rose/50",
+            subtitle: "text-brand-rose/70",
           }}
           cornerPosition="top-left"
           icon={GitBranch}
@@ -707,7 +691,7 @@ export default function WhyAgents({ role }: { role?: ViewerRole }) {
             iconBg: "bg-brand-cyan/10",
             iconRing: "ring-brand-cyan/8 shadow-[0_0_15px_rgba(6,182,212,0.08)]",
             iconText: "text-brand-cyan",
-            subtitle: "text-brand-cyan/50",
+            subtitle: "text-brand-cyan/70",
           }}
           cornerPosition="bottom-right"
           extraOrbs={<div className="pointer-events-none absolute -right-10 -top-10 h-24 w-24 rounded-full bg-brand-purple/3 blur-3xl" />}
@@ -746,7 +730,7 @@ export default function WhyAgents({ role }: { role?: ViewerRole }) {
             </button>
           ))}
         </div>
-        <div className="mt-2 flex items-center justify-between text-[10px] font-mono text-muted-dark/50">
+        <div className="mt-2 flex items-center justify-between text-[10px] font-mono text-muted-dark">
           <span>Scenario {activeIndex + 1} of {scenarios.length}</span>
           <button
             onClick={() => setPaused((v) => !v)}

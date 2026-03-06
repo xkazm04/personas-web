@@ -99,6 +99,11 @@ export default function UseCases() {
     let rafId: number;
 
     const frame = (timestamp: number) => {
+      // Pause autoplay timer while the tab is backgrounded
+      if (document.hidden) {
+        rafId = requestAnimationFrame(frame);
+        return;
+      }
       if (rafStartRef.current === null) rafStartRef.current = timestamp;
       const elapsed = timestamp - rafStartRef.current;
       const pct = Math.min(elapsed / AUTOPLAY_INTERVAL, 1);
@@ -231,13 +236,13 @@ export default function UseCases() {
           One agent per tool.{" "}
           <GradientText className="drop-shadow-lg">Infinite possibilities</GradientText>
         </SectionHeading>
-        <div className="mt-8 flex flex-col items-center gap-5 sm:flex-row sm:items-start sm:justify-between max-w-4xl mx-auto">
+        <div className="mt-8 flex flex-col items-center gap-6 sm:flex-row sm:items-start sm:justify-between max-w-4xl mx-auto">
           <span className="shrink-0 rounded-full border border-brand-emerald/30 bg-brand-emerald/10 px-4 py-1.5 text-xs font-semibold tracking-widest uppercase text-brand-emerald shadow-[0_0_15px_rgba(52,211,153,0.2)] font-mono">
             {tools.length} integrations · {totalAutomations} patterns
           </span>
           <p className="text-muted-dark leading-relaxed text-base sm:text-right max-w-lg font-light">
             Click any integration to explore what a Personas agent can automate.
-            {autoplay && <span className="text-white/60 font-medium"> Auto-cycling — click to stop.</span>}
+            {autoplay && <span className="text-white/70 font-medium"> Auto-cycling — click to stop.</span>}
           </p>
         </div>
       </motion.div>
@@ -372,7 +377,7 @@ export default function UseCases() {
               className="mx-auto mt-8 max-w-3xl"
               ref={detailCardRef}
             >
-              <div className="relative rounded-2xl border border-white/5 bg-linear-to-br from-white/2.5 to-transparent p-5 sm:p-8 backdrop-blur-md overflow-hidden">
+              <div className="relative rounded-2xl border border-white/5 bg-linear-to-br from-white/2.5 to-transparent p-4 sm:p-8 backdrop-blur-md overflow-hidden">
                 <div className="absolute inset-0 opacity-[0.03] bg-[url('/imgs/noise.png')] mix-blend-overlay" />
                 <div className="absolute inset-0 bg-[linear-gradient(to_right,#80808012_1px,transparent_1px),linear-gradient(to_bottom,#80808012_1px,transparent_1px)] bg-[size:24px_24px] [mask-image:radial-gradient(ellipse_60%_50%_at_50%_0%,#000_70%,transparent_100%)]" />
                 <div className="pointer-events-none absolute -right-16 -top-16 h-32 w-32 rounded-full blur-3xl" style={{ backgroundColor: `${activeTool.color}08` }} />

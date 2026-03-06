@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useMemo } from "react";
 import { motion } from "framer-motion";
 import { Download, Monitor, Apple, Terminal } from "lucide-react";
 import { fadeUp } from "@/lib/animations";
@@ -11,6 +11,11 @@ import PrimaryCTA from "@/components/PrimaryCTA";
 import SectionWrapper from "@/components/SectionWrapper";
 import WaitlistModal from "@/components/WaitlistModal";
 
+const APP_VERSION = process.env.NEXT_PUBLIC_APP_VERSION ?? "0.1.0";
+const RELEASE_TITLE = process.env.NEXT_PUBLIC_RELEASE_TITLE || "Latest";
+const RELEASE_DATE = process.env.NEXT_PUBLIC_RELEASE_DATE ?? "";
+const SEVEN_DAYS_MS = 7 * 24 * 60 * 60 * 1000;
+
 const platforms = [
   { icon: Monitor, label: "Windows", available: true },
   { icon: Apple, label: "macOS", available: false },
@@ -19,6 +24,12 @@ const platforms = [
 
 export default function DownloadCTA() {
   const [waitlistPlatform, setWaitlistPlatform] = useState<(typeof platforms)[number] | null>(null);
+
+  const isFresh = useMemo(() => {
+    if (!RELEASE_DATE) return false;
+    const released = new Date(RELEASE_DATE).getTime();
+    return !isNaN(released) && Date.now() - released < SEVEN_DAYS_MS;
+  }, []);
 
   return (
     <SectionWrapper id="download" dotGrid className="noise py-40 md:py-48">
@@ -57,8 +68,8 @@ export default function DownloadCTA() {
 
       <div className="mx-auto max-w-2xl text-center">
         <motion.div variants={fadeUp}>
-          <span className="inline-block rounded-full border border-brand-cyan/20 bg-brand-cyan/5 px-3.5 py-1 text-[11px] font-medium tracking-wider uppercase text-brand-cyan/70 font-mono mb-6">
-            v0.12 — Cloud Integration
+          <span className={`inline-block rounded-full border border-brand-cyan/20 bg-brand-cyan/5 px-3.5 py-1 text-[11px] font-medium tracking-wider uppercase text-brand-cyan/70 font-mono mb-6${isFresh ? " animate-badge-pulse" : ""}`}>
+            v{APP_VERSION} — {RELEASE_TITLE}
           </span>
         </motion.div>
 
@@ -169,7 +180,7 @@ export default function DownloadCTA() {
         </motion.div>
 
         {/* Trust signals */}
-        <motion.div variants={fadeUp} className="mt-8 flex flex-wrap items-center justify-center gap-3 text-xs text-muted-dark sm:gap-5">
+        <motion.div variants={fadeUp} className="mt-8 flex flex-wrap items-center justify-center gap-3 text-xs text-muted-dark sm:gap-6">
           <span className="flex items-center gap-1.5">
             <div className="h-1 w-1 rounded-full bg-brand-cyan/40" />
             Requires Claude CLI

@@ -1,0 +1,71 @@
+/**
+ * @personas/tokens — Single source of truth for design tokens.
+ *
+ * Both personas-desktop and personas-web import this file.
+ * DO NOT define token values inline in project globals.css — import from here.
+ *
+ * To add or change a token:
+ *   1. Update this file.
+ *   2. Run `node packages/tokens/check-drift.mjs` from the monorepo root.
+ *   3. Both projects will pick up the new values automatically.
+ */
+
+/* ── Canonical Design Tokens ──────────────────────────────────────────── */
+
+:root {
+  /* ── Core palette ───────────────────────────────────────────────────── */
+  --background: #0a0a12;
+  --foreground: #f0f0f5;
+  --muted: #a0a0b0;
+  --muted-dark: #60607a;
+  --muted-foreground: #94a3b8;
+
+  /* ── Semantic ────────────────────────────────────────────────────────── */
+  --primary: #3b82f6;
+  --secondary: #1e293b;
+  --accent: #8b5cf6;
+  --border: #334155;
+  --btn-primary: #2563eb;
+
+  /* ── Surface ─────────────────────────────────────────────────────────── */
+  --card-bg: rgba(255, 255, 255, 0.02);
+  --card-border: rgba(255, 255, 255, 0.04);
+
+  /* ── Brand ───────────────────────────────────────────────────────────── */
+  --brand-cyan: #06b6d4;
+  --brand-purple: #a855f7;
+  --brand-emerald: #34d399;
+  --brand-amber: #fbbf24;
+  --brand-rose: #f43f5e;
+
+  /* ── Glass morphism ─────────────────────────────────────────────────── */
+  --glass-bg: rgba(255, 255, 255, 0.02);
+  --glass-blur: 12px;
+  --glass-border: rgba(255, 255, 255, 0.04);
+
+  /* ── Border-radius tiers ────────────────────────────────────────────── */
+  --radius-sm: 0.5rem;
+  --radius-md: 0.75rem;
+  --radius-lg: 1rem;
+  --radius-pill: 9999px;
+
+  /* ── 4px-grid spacing scale ─────────────────────────────────────────── */
+  --spacing-1: 4px;
+  --spacing-2: 8px;
+  --spacing-3: 12px;
+  --spacing-4: 16px;
+  --spacing-6: 24px;
+  --spacing-8: 32px;
+  --spacing-12: 48px;
+  --spacing-16: 64px;
+
+  /* ── Animation timing ───────────────────────────────────────────────── */
+  --duration-instant: 100ms;
+  --duration-fast: 150ms;
+  --duration-normal: 250ms;
+  --duration-slow: 400ms;
+
+  /* ── Typography ─────────────────────────────────────────────────────── */
+  --font-sans: var(--font-geist-sans, ui-sans-serif, system-ui, sans-serif);
+  --font-mono: var(--font-geist-mono, ui-monospace, monospace);
+}

@@ -1,209 +1,199 @@
 import { NextRequest, NextResponse } from "next/server";
-import { isValidEmail } from "@/lib/validation";
-import { DEVELOPMENT } from "@/lib/dev";
+import { promises as fs } from "fs";
+import path from "path";
+import { randomBytes } from "crypto";
 
-const ALLOWED_PLATFORMS = new Set(["Windows", "macOS", "Linux"]);
+const DATA_DIR = path.join(process.cwd(), ".data");
+const WAITLIST_FILE = path.join(DATA_DIR, "waitlist.json");
 
-// ---------------------------------------------------------------------------
-// Rate limiting (in-memory, per-IP, resets on deploy)
-// ---------------------------------------------------------------------------
+interface WaitlistEntry {
+  email: string;
+  platform: string;
+  earlyBeta: boolean;
+  createdAt: string;
+}
+
+interface WaitlistData {
+  entries: WaitlistEntry[];
+}
+
+// --- Input validation ---
+
+/** Basic RFC 5322 email pattern — intentionally simple to avoid ReDoS */
+const EMAIL_RE = /^[^\s@<>'"`;(){}[\]\\]+@[^\s@<>'"`;(){}[\]\\]+\.[a-zA-Z]{2,}$/;
+const MAX_EMAIL_LENGTH = 254;
+
+const VALID_PLATFORMS = new Set(["macos", "windows", "linux"]);
+
+// --- Rate limiting (in-memory, per IP, sliding window) ---
 
 const RATE_WINDOW_MS = 60_000; // 1 minute
-const RATE_MAX = 5; // max requests per window
+const RATE_LIMIT_POST = 5;     // max 5 signups per minute per IP
+const RATE_LIMIT_GET = 30;     // max 30 reads per minute per IP
 
-const hits = new Map<string, { count: number; resetAt: number }>();
+const rateBuckets = new Map<string, number[]>();
 
-function isRateLimited(ip: string): boolean {
+function rateLimit(ip: string, limit: number): boolean {
   const now = Date.now();
-
-  // Opportunistically evict expired entries to avoid unbounded growth.
-  for (const [key, value] of hits) {
-    if (now > value.resetAt) {
-      hits.delete(key);
-    }
+  let timestamps = rateBuckets.get(ip);
+  if (!timestamps) {
+    timestamps = [];
+    rateBuckets.set(ip, timestamps);
   }
+  // Prune old entries
+  const filtered = timestamps.filter((t) => now - t < RATE_WINDOW_MS);
+  rateBuckets.set(ip, filtered);
 
-  const entry = hits.get(ip);
-  if (!entry || now > entry.resetAt) {
-    hits.set(ip, { count: 1, resetAt: now + RATE_WINDOW_MS });
-    return false;
-  }
-  entry.count++;
-  return entry.count > RATE_MAX;
+  if (filtered.length >= limit) return false;
+  filtered.push(now);
+  return true;
 }
 
-// ---------------------------------------------------------------------------
-// Referral code generation
-// ---------------------------------------------------------------------------
-
-const REFERRAL_CHARS = "ABCDEFGHJKLMNPQRSTUVWXYZabcdefghjkmnpqrstuvwxyz23456789";
-
-function generateReferralCode(): string {
-  let code = "";
-  for (let i = 0; i < 8; i++) {
-    code += REFERRAL_CHARS[Math.floor(Math.random() * REFERRAL_CHARS.length)];
-  }
-  return code;
-}
-
-// ---------------------------------------------------------------------------
-// Supabase helpers
-// ---------------------------------------------------------------------------
-
-async function getSupabaseClient() {
-  const { getSupabase } = await import("@/lib/supabase");
-  return getSupabase();
-}
-
-// ---------------------------------------------------------------------------
-// GET — return counts per platform
-// ---------------------------------------------------------------------------
-
-export async function GET() {
-  if (DEVELOPMENT) {
-    return NextResponse.json({
-      counts: { Windows: 142, macOS: 89, Linux: 67 },
-    });
-  }
-
-  const sb = await getSupabaseClient();
-  const counts: Record<string, number> = {
-    Windows: 0,
-    macOS: 0,
-    Linux: 0,
-  };
-
-  // Preferred path: DB-side grouped aggregation if the RPC exists.
-  const grouped = await sb.rpc("waitlist_platform_counts");
-  if (!grouped.error && Array.isArray(grouped.data)) {
-    for (const row of grouped.data as Array<{ platform?: string; count?: number }>) {
-      const platform = row.platform;
-      if (platform && platform in counts) {
-        counts[platform] = Number(row.count ?? 0);
+// Periodic cleanup every 5 minutes
+if (typeof setInterval !== "undefined") {
+  setInterval(() => {
+    const now = Date.now();
+    for (const [ip, timestamps] of rateBuckets) {
+      const filtered = timestamps.filter((t) => now - t < RATE_WINDOW_MS);
+      if (filtered.length === 0) {
+        rateBuckets.delete(ip);
+      } else {
+        rateBuckets.set(ip, filtered);
       }
     }
-    return NextResponse.json({ counts });
+  }, 5 * 60_000).unref();
+}
+
+function getClientIp(req: NextRequest): string {
+  return (
+    req.headers.get("x-forwarded-for")?.split(",")[0]?.trim() ||
+    req.headers.get("x-real-ip") ||
+    "unknown"
+  );
+}
+
+async function readWaitlist(): Promise<WaitlistData> {
+  try {
+    const raw = await fs.readFile(WAITLIST_FILE, "utf-8");
+    return JSON.parse(raw) as WaitlistData;
+  } catch {
+    return { entries: [] };
+  }
+}
+
+async function writeWaitlist(data: WaitlistData): Promise<void> {
+  await fs.mkdir(DATA_DIR, { recursive: true });
+  // Atomic write: write to a temp file then rename, so readers never see
+  // a partially-written file and a crash mid-write won't corrupt the data.
+  const tmpFile = path.join(DATA_DIR, `.waitlist-${randomBytes(6).toString("hex")}.tmp`);
+  await fs.writeFile(tmpFile, JSON.stringify(data, null, 2));
+  await fs.rename(tmpFile, WAITLIST_FILE);
+}
+
+// --- In-process mutex for read-modify-write serialization ---
+// Chains all mutating operations so concurrent POSTs are serialized.
+let writeLock = Promise.resolve();
+
+function withWriteLock<T>(fn: () => Promise<T>): Promise<T> {
+  const next = writeLock.then(fn, fn);
+  // Update the chain so subsequent callers wait for this one.
+  // Swallow errors to prevent a failed request from breaking the chain.
+  writeLock = next.then(() => {}, () => {});
+  return next;
+}
+
+// GET — return counts per platform
+export async function GET(req: NextRequest) {
+  const ip = getClientIp(req);
+  if (!rateLimit(ip, RATE_LIMIT_GET)) {
+    return NextResponse.json(
+      { error: "Too many requests" },
+      { status: 429, headers: { "Retry-After": "60" } }
+    );
   }
 
-  // Fallback path: single lightweight read and in-memory fold.
-  const { data, error } = await sb.from("waitlist").select("platform");
-  if (error) {
-    return NextResponse.json({ error: "Failed to read waitlist" }, { status: 500 });
+  const data = await readWaitlist();
+  const counts: Record<string, number> = {};
+  for (const entry of data.entries) {
+    counts[entry.platform] = (counts[entry.platform] || 0) + 1;
   }
-
-  for (const row of data ?? []) {
-    const platform = row.platform as string;
-    if (platform in counts) {
-      counts[platform] += 1;
-    }
-  }
-
   return NextResponse.json({ counts });
 }
 
-// ---------------------------------------------------------------------------
 // POST — add an email to the waitlist
-// ---------------------------------------------------------------------------
-
 export async function POST(req: NextRequest) {
-  // Rate limit by IP
-  const ip =
-    req.headers.get("x-forwarded-for")?.split(",")[0]?.trim() ?? "unknown";
-  if (isRateLimited(ip)) {
-    return NextResponse.json({ error: "Too many requests" }, { status: 429 });
+  const ip = getClientIp(req);
+  if (!rateLimit(ip, RATE_LIMIT_POST)) {
+    return NextResponse.json(
+      { error: "Too many requests" },
+      { status: 429, headers: { "Retry-After": "60" } }
+    );
   }
 
-  let body: {
-    email?: string;
-    platform?: string;
-    earlyBeta?: boolean;
-    referredBy?: string;
-  };
+  let body: { email?: string; platform?: string; earlyBeta?: boolean };
   try {
     body = await req.json();
   } catch {
     return NextResponse.json({ error: "Invalid JSON" }, { status: 400 });
   }
 
-  const { email, platform, earlyBeta, referredBy } = body;
+  const { email, platform, earlyBeta } = body;
 
-  if (!email || typeof email !== "string" || !isValidEmail(email)) {
+  // Email validation
+  if (!email || typeof email !== "string") {
+    return NextResponse.json({ error: "Email is required" }, { status: 400 });
+  }
+  const trimmedEmail = email.trim().toLowerCase();
+  if (trimmedEmail.length > MAX_EMAIL_LENGTH) {
+    return NextResponse.json({ error: "Email is too long" }, { status: 400 });
+  }
+  if (!EMAIL_RE.test(trimmedEmail)) {
     return NextResponse.json(
-      { error: "Valid email is required" },
-      { status: 400 },
+      { error: "Invalid email format" },
+      { status: 400 }
     );
   }
 
-  if (
-    !platform ||
-    typeof platform !== "string" ||
-    !ALLOWED_PLATFORMS.has(platform)
-  ) {
+  // Platform validation — whitelist
+  if (!platform || typeof platform !== "string") {
+    return NextResponse.json({ error: "Platform is required" }, { status: 400 });
+  }
+  if (!VALID_PLATFORMS.has(platform)) {
     return NextResponse.json(
-      { error: "Platform must be one of: Windows, macOS, Linux" },
-      { status: 400 },
+      { error: `Platform must be one of: ${[...VALID_PLATFORMS].join(", ")}` },
+      { status: 400 }
     );
   }
 
-  const normalizedEmail = email.trim().toLowerCase();
-  const referralCode = generateReferralCode();
+  // Serialize read-modify-write to prevent TOCTOU race conditions.
+  // Concurrent POSTs are queued and processed one at a time.
+  const result = await withWriteLock(async () => {
+    const data = await readWaitlist();
 
-  if (DEVELOPMENT) {
-    return NextResponse.json({
-      message: "Added to waitlist",
-      count: 143,
-      referralCode,
-      position: 143,
+    // Check for duplicate
+    const exists = data.entries.some(
+      (e) => e.email === trimmedEmail && e.platform === platform
+    );
+    if (exists) {
+      return { duplicate: true, count: 0 } as const;
+    }
+
+    data.entries.push({
+      email: trimmedEmail,
+      platform,
+      earlyBeta: !!earlyBeta,
+      createdAt: new Date().toISOString(),
     });
-  }
 
-  const sb = await getSupabaseClient();
-  const sanitizedReferredBy =
-    referredBy && typeof referredBy === "string" && referredBy.length === 8
-      ? referredBy
-      : null;
+    await writeWaitlist(data);
 
-  // Check for duplicate
-  const { data: existing } = await sb
-    .from("waitlist")
-    .select("id, referral_code")
-    .eq("email", normalizedEmail)
-    .eq("platform", platform)
-    .limit(1)
-    .single();
-
-  if (existing) {
-    return NextResponse.json({
-      message: "Already on the waitlist",
-      referralCode: existing.referral_code,
-    });
-  }
-
-  const { error } = await sb.from("waitlist").insert({
-    email: normalizedEmail,
-    platform,
-    early_beta: !!earlyBeta,
-    referral_code: referralCode,
-    referred_by: sanitizedReferredBy,
+    const count = data.entries.filter((e) => e.platform === platform).length;
+    return { duplicate: false, count } as const;
   });
 
-  if (error) {
-    return NextResponse.json(
-      { error: "Failed to join waitlist" },
-      { status: 500 },
-    );
+  if (result.duplicate) {
+    return NextResponse.json({ message: "Already on the waitlist" });
   }
 
-  // Get count for this platform
-  const { count } = await sb
-    .from("waitlist")
-    .select("*", { count: "exact", head: true })
-    .eq("platform", platform);
-
-  return NextResponse.json({
-    message: "Added to waitlist",
-    count: count ?? 0,
-    referralCode,
-    position: count ?? 0,
-  });
+  return NextResponse.json({ message: "Added to waitlist", count: result.count });
 }

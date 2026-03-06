@@ -33,7 +33,7 @@ export default function ScrollMap({ items }: { items: ScrollMapItem[] }) {
             className={`pointer-events-auto flex items-center justify-end gap-2 transition-all duration-300 cursor-pointer ${
               i === activeIndex
                 ? "text-brand-cyan scale-105"
-                : "text-muted-dark/80 hover:text-muted"
+                : "text-muted-dark hover:text-muted"
             }`}
           >
             <span>{item.label}</span>

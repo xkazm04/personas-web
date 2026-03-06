@@ -223,7 +223,7 @@ export default function EventBusShowcase({ telemetryAdapter }: { telemetryAdapte
             <div className="mt-6 flex justify-center">
               <button
                 onClick={() => setComposerOpen(true)}
-                className="group flex items-center gap-2 rounded-full border border-brand-cyan/25 bg-brand-cyan/10 px-5 py-2.5 text-sm font-medium text-brand-cyan/90 transition-all hover:bg-brand-cyan/20 hover:border-brand-cyan/40 hover:shadow-[0_0_20px_rgba(6,182,212,0.15)]"
+                className="group flex items-center gap-2 rounded-full border border-brand-cyan/25 bg-brand-cyan/10 px-6 py-2.5 text-sm font-medium text-brand-cyan/90 transition-all hover:bg-brand-cyan/20 hover:border-brand-cyan/40 hover:shadow-[0_0_20px_rgba(6,182,212,0.15)]"
               >
                 <Wand2 className="w-4 h-4 transition-transform group-hover:rotate-12" />
                 Try it yourself — build a flow
@@ -263,11 +263,11 @@ export default function EventBusShowcase({ telemetryAdapter }: { telemetryAdapte
                   className={`group rounded-full border px-4 py-2 text-[11px] font-mono uppercase tracking-wider transition-all duration-300 ${
                     isActive
                       ? "border-brand-cyan/35 bg-brand-cyan/12 text-brand-cyan shadow-[0_0_18px_rgba(6,182,212,0.14)]"
-                      : "border-white/10 bg-white/2 text-white/55 hover:border-white/20 hover:text-white/85"
+                      : "border-white/10 bg-white/2 text-white/70 hover:border-white/20 hover:text-white/90"
                   }`}
                 >
                   <span>{tab.label}</span>
-                  <span className="ml-2 text-[9px] normal-case tracking-normal text-white/45 group-hover:text-white/65">
+                  <span className="ml-2 text-[9px] normal-case tracking-normal text-white/70 group-hover:text-white/80">
                     {tab.hint}
                   </span>
                 </button>
@@ -391,10 +391,10 @@ export default function EventBusShowcase({ telemetryAdapter }: { telemetryAdapte
                       <div className="mb-2 flex flex-wrap items-center justify-between gap-2">
                         <div className="flex items-center gap-2 text-xs font-mono text-white/80">
                           <span className="rounded-full border border-white/10 px-2 py-0.5">{lane.producer}</span>
-                          <span className="text-white/35">→</span>
+                          <span className="text-white/70">→</span>
                           <span className="rounded-full border border-white/10 px-2 py-0.5">{lane.consumer}</span>
                         </div>
-                        <div className="flex items-center gap-2 text-[10px] font-mono text-white/60">
+                        <div className="flex items-center gap-2 text-[10px] font-mono text-white/70">
                           <span className="rounded-full border border-white/10 px-2 py-0.5">{lane.eps} evt/s</span>
                           <span className="rounded-full border border-white/10 px-2 py-0.5">{lane.latencyMs} ms</span>
                         </div>
@@ -419,7 +419,7 @@ export default function EventBusShowcase({ telemetryAdapter }: { telemetryAdapte
                         />
                       </div>
 
-                      <div className="mt-2 grid grid-cols-2 gap-2 text-[10px] font-mono text-white/50">
+                      <div className="mt-2 grid grid-cols-2 gap-2 text-[10px] font-mono text-white/70">
                         <div className="rounded-lg border border-white/8 bg-white/2 px-2 py-1">
                           Queue depth: <span className="text-white/80">{lane.queueDepth}</span>
                         </div>
@@ -444,7 +444,7 @@ export default function EventBusShowcase({ telemetryAdapter }: { telemetryAdapte
 
         {/* Legend (only shown in showcase mode) */}
         {!composerOpen && (
-        <motion.div variants={fadeUp} className="mt-6 flex flex-wrap items-center justify-center gap-3 sm:gap-6 text-[11px] text-white/40">
+        <motion.div variants={fadeUp} className="mt-6 flex flex-wrap items-center justify-center gap-3 sm:gap-6 text-[11px] text-white/70">
           <div className="flex items-center gap-2">
             <div className="h-2 w-8 rounded-full bg-linear-to-r from-brand-cyan/25 to-brand-purple/25 ring-1 ring-white/8" />
             <span>Event queue</span>
@@ -454,12 +454,12 @@ export default function EventBusShowcase({ telemetryAdapter }: { telemetryAdapte
             <span>Event in transit</span>
           </div>
           <div className="flex items-center gap-2">
-            <svg width="16" height="8" className="text-white/25">
+            <svg width="16" height="8" className="text-white/70">
               <line x1="0" y1="4" x2="16" y2="4" stroke="currentColor" strokeWidth="0.5" strokeDasharray="2 2" />
             </svg>
             <span>Connection to bus</span>
           </div>
-          <div className="rounded-full border border-white/8 bg-white/2 px-3 py-1.5 font-mono tracking-wide text-white/55">
+          <div className="rounded-full border border-white/8 bg-white/2 px-3 py-1.5 font-mono tracking-wide text-white/70">
             Typical response cycle: {averageLatency}ms
           </div>
         </motion.div>

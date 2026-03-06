@@ -1,14 +1,12 @@
 "use client";
 
-import { useState, useEffect, useCallback, useRef, type FormEvent } from "react";
-import { useSearchParams } from "next/navigation";
+import { useState, useEffect, useRef, useCallback, type FormEvent } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { X, Bell, CheckCircle2, Users, Sparkles, Copy, Check, Share2 } from "lucide-react";
-import { isValidEmail } from "@/lib/validation";
+import { X, Bell, CheckCircle2, Users, Sparkles } from "lucide-react";
+import { TRANSITION_FAST, TRANSITION_NORMAL } from "@/lib/animations";
+import * as Sentry from "@sentry/nextjs";
 
-/* ── Client-side cache for waitlist counts (avoids redundant fetches) ── */
-const STALE_MS = 3 * 60 * 1000; // 3 minutes
-const countCache = new Map<string, { count: number; ts: number }>();
+const FETCH_TIMEOUT_MS = 15_000;
 
 interface WaitlistModalProps {
   platform: string;
@@ -23,111 +21,60 @@ export default function WaitlistModal({
   open,
   onClose,
 }: WaitlistModalProps) {
-  const searchParams = useSearchParams();
   const [email, setEmail] = useState("");
   const [earlyBeta, setEarlyBeta] = useState(false);
   const [status, setStatus] = useState<"idle" | "loading" | "success" | "error">("idle");
   const [errorMsg, setErrorMsg] = useState("");
   const [waitlistCount, setWaitlistCount] = useState<number | null>(null);
-  const [referralCode, setReferralCode] = useState<string | null>(null);
-  const [position, setPosition] = useState<number | null>(null);
-  const [copied, setCopied] = useState(false);
 
-  const modalRef = useRef<HTMLDivElement>(null);
-  const referredBy = searchParams.get("ref");
+  const submitAbortRef = useRef<AbortController | null>(null);
 
-  const referralLink = referralCode
-    ? `${typeof window !== "undefined" ? window.location.origin : ""}?ref=${referralCode}`
-    : null;
-
-  const fetchCount = useCallback(async (bypassCache = false) => {
-    const cached = countCache.get(platform);
-    if (!bypassCache && cached && Date.now() - cached.ts < STALE_MS) {
-      setWaitlistCount(cached.count);
-      return;
-    }
+  const fetchCount = useCallback(async (signal: AbortSignal) => {
     try {
-      const res = await fetch("/api/waitlist");
+      const res = await fetch("/api/waitlist", { signal });
       if (res.ok) {
         const data = await res.json();
         const count = data.counts?.[platform] ?? 0;
-        countCache.set(platform, { count, ts: Date.now() });
         setWaitlistCount(count);
       }
-    } catch {
+    } catch (err) {
+      if (err instanceof DOMException && err.name === "AbortError") return;
       // Non-critical — just hide the count
     }
   }, [platform]);
 
   useEffect(() => {
-    if (open) {
-      fetchCount();
-      setStatus("idle");
-      setEmail("");
-      setEarlyBeta(false);
-      setErrorMsg("");
-      setReferralCode(null);
-      setPosition(null);
-      setCopied(false);
-    }
+    if (!open) return;
+    const controller = new AbortController();
+    fetchCount(controller.signal);
+    setStatus("idle");
+    setEmail("");
+    setEarlyBeta(false);
+    setErrorMsg("");
+    return () => controller.abort();
   }, [open, fetchCount]);
 
-  // Body scroll lock
+  // Close on Escape
   useEffect(() => {
     if (!open) return;
-    const prev = document.body.style.overflow;
-    document.body.style.overflow = "hidden";
-    return () => { document.body.style.overflow = prev; };
-  }, [open]);
-
-  // Escape to close + focus trap
-  useEffect(() => {
-    if (!open) return;
-
     const handler = (e: KeyboardEvent) => {
-      if (e.key === "Escape") { onClose(); return; }
-
-      if (e.key === "Tab") {
-        const modal = modalRef.current;
-        if (!modal) return;
-        const focusable = modal.querySelectorAll<HTMLElement>(
-          'a[href], button:not([disabled]), input:not([disabled]), textarea:not([disabled]), select:not([disabled]), [tabindex]:not([tabindex="-1"])'
-        );
-        if (focusable.length === 0) return;
-        const first = focusable[0];
-        const last = focusable[focusable.length - 1];
-
-        if (e.shiftKey) {
-          if (document.activeElement === first) {
-            e.preventDefault();
-            last.focus();
-          }
-        } else {
-          if (document.activeElement === last) {
-            e.preventDefault();
-            first.focus();
-          }
-        }
-      }
+      if (e.key === "Escape") onClose();
     };
-
-    // Auto-focus first focusable element
-    requestAnimationFrame(() => {
-      const modal = modalRef.current;
-      if (!modal) return;
-      const first = modal.querySelector<HTMLElement>(
-        'input:not([disabled]), button:not([disabled]), a[href], textarea:not([disabled])'
-      );
-      first?.focus();
-    });
-
     window.addEventListener("keydown", handler);
     return () => window.removeEventListener("keydown", handler);
   }, [open, onClose]);
 
+  // Abort any in-flight submit when the modal closes
+  useEffect(() => {
+    if (!open) {
+      submitAbortRef.current?.abort();
+      submitAbortRef.current = null;
+    }
+  }, [open]);
+
   const handleSubmit = async (e: FormEvent) => {
     e.preventDefault();
-    if (!isValidEmail(email)) {
+    if (!email.includes("@")) {
       setErrorMsg("Please enter a valid email address");
       return;
     }
@@ -135,42 +82,40 @@ export default function WaitlistModal({
     setStatus("loading");
     setErrorMsg("");
 
+    // Abort any previous in-flight submit
+    submitAbortRef.current?.abort();
+    const controller = new AbortController();
+    submitAbortRef.current = controller;
+    const timeout = setTimeout(() => controller.abort(), FETCH_TIMEOUT_MS);
+
     try {
       const res = await fetch("/api/waitlist", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          email,
-          platform,
-          earlyBeta,
-          ...(referredBy ? { referredBy } : {}),
-        }),
+        body: JSON.stringify({ email, platform, earlyBeta }),
+        signal: controller.signal,
       });
 
       if (!res.ok) {
-        const data = await res.json();
-        throw new Error(data.error || "Failed to join waitlist");
+        let message = "Failed to join waitlist";
+        try {
+          const data = await res.json();
+          message = data.error || message;
+        } catch {
+          // Server returned non-JSON (e.g. HTML 502) — use default message
+        }
+        throw new Error(message);
       }
 
-      const data = await res.json();
-      setReferralCode(data.referralCode ?? null);
-      setPosition(data.position ?? null);
       setStatus("success");
-      fetchCount(true);
+      fetchCount(controller.signal);
     } catch (err) {
+      if (err instanceof DOMException && err.name === "AbortError") return;
+      Sentry.captureException(err, { tags: { component: "WaitlistModal" } });
       setStatus("error");
       setErrorMsg(err instanceof Error ? err.message : "Something went wrong");
-    }
-  };
-
-  const handleCopy = async () => {
-    if (!referralLink) return;
-    try {
-      await navigator.clipboard.writeText(referralLink);
-      setCopied(true);
-      setTimeout(() => setCopied(false), 2000);
-    } catch {
-      // Fallback: select text for manual copy
+    } finally {
+      clearTimeout(timeout);
     }
   };
 
@@ -181,7 +126,7 @@ export default function WaitlistModal({
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           exit={{ opacity: 0 }}
-          transition={{ duration: 0.2 }}
+          transition={TRANSITION_FAST}
           className="fixed inset-0 z-50 flex items-center justify-center px-4"
           onClick={onClose}
         >
@@ -190,22 +135,17 @@ export default function WaitlistModal({
 
           {/* Modal */}
           <motion.div
-            ref={modalRef}
             initial={{ opacity: 0, scale: 0.95, y: 10 }}
             animate={{ opacity: 1, scale: 1, y: 0 }}
             exit={{ opacity: 0, scale: 0.95, y: 10 }}
-            transition={{ duration: 0.25, ease: [0.22, 1, 0.36, 1] }}
-            role="dialog"
-            aria-modal="true"
-            aria-labelledby="waitlist-modal-title"
+            transition={TRANSITION_NORMAL}
             onClick={(e) => e.stopPropagation()}
             className="relative w-full max-w-md rounded-2xl border border-white/[0.06] bg-[#0a0a0f] p-6 shadow-[0_0_80px_rgba(0,0,0,0.5)]"
           >
             {/* Close button */}
             <button
               onClick={onClose}
-              aria-label="Close"
-              className="absolute right-4 top-4 rounded-lg p-1 text-muted-dark/60 transition-colors hover:text-muted-dark"
+              className="absolute right-4 top-4 rounded-lg p-1 text-muted-dark transition-colors hover:text-muted"
             >
               <X className="h-4 w-4" />
             </button>
@@ -216,7 +156,7 @@ export default function WaitlistModal({
                 <PlatformIcon className="h-5 w-5 text-brand-purple" />
               </div>
               <div>
-                <h3 id="waitlist-modal-title" className="text-base font-semibold text-foreground">
+                <h3 className="text-base font-semibold text-foreground">
                   Personas for {platform}
                 </h3>
                 <p className="text-xs text-muted-dark">Coming soon</p>
@@ -238,74 +178,24 @@ export default function WaitlistModal({
               <motion.div
                 initial={{ opacity: 0, y: 8 }}
                 animate={{ opacity: 1, y: 0 }}
-                className="mt-6"
+                className="mt-6 text-center"
               >
-                <div className="text-center">
-                  <div className="mx-auto mb-3 flex h-12 w-12 items-center justify-center rounded-full bg-brand-emerald/15 ring-1 ring-brand-emerald/20">
-                    <CheckCircle2 className="h-6 w-6 text-brand-emerald" />
-                  </div>
-                  <p className="text-sm font-medium text-foreground">You&apos;re on the list!</p>
-                  <p className="mt-1 text-xs text-muted-dark">
-                    We&apos;ll notify you when Personas for {platform} is ready.
-                  </p>
+                <div className="mx-auto mb-3 flex h-12 w-12 items-center justify-center rounded-full bg-brand-emerald/15 ring-1 ring-brand-emerald/20">
+                  <CheckCircle2 className="h-6 w-6 text-brand-emerald" />
                 </div>
-
-                {/* Queue position */}
-                {position !== null && (
-                  <div className="mt-4 flex items-center justify-center gap-2 rounded-lg border border-brand-cyan/10 bg-brand-cyan/[0.04] px-3 py-2.5">
-                    <span className="text-xs text-muted-dark">Your position:</span>
-                    <span className="text-sm font-semibold text-brand-cyan">#{position}</span>
-                  </div>
-                )}
-
-                {/* Referral link */}
-                {referralLink && (
-                  <div className="mt-4 space-y-2">
-                    <div className="flex items-center gap-1.5">
-                      <Share2 className="h-3 w-3 text-brand-purple/70" />
-                      <span className="text-xs font-medium text-foreground/80">
-                        Share to move up the queue
-                      </span>
-                    </div>
-                    <div className="flex items-center gap-2 rounded-lg border border-white/[0.06] bg-white/[0.03] px-3 py-2">
-                      <input
-                        type="text"
-                        readOnly
-                        value={referralLink}
-                        className="min-w-0 flex-1 bg-transparent text-xs text-muted-dark outline-none"
-                      />
-                      <button
-                        onClick={handleCopy}
-                        className="flex shrink-0 items-center gap-1 rounded-md border border-white/[0.08] bg-white/[0.04] px-2 py-1 text-xs text-muted-dark transition-colors hover:border-white/[0.15] hover:text-foreground"
-                      >
-                        {copied ? (
-                          <>
-                            <Check className="h-3 w-3 text-brand-emerald" />
-                            <span className="text-brand-emerald">Copied</span>
-                          </>
-                        ) : (
-                          <>
-                            <Copy className="h-3 w-3" />
-                            <span>Copy</span>
-                          </>
-                        )}
-                      </button>
-                    </div>
-                    <p className="text-[11px] text-muted-dark/60 leading-relaxed">
-                      Each friend who joins moves you up one spot in the queue.
-                    </p>
-                  </div>
-                )}
-
+                <p className="text-sm font-medium text-foreground">You&apos;re on the list!</p>
+                <p className="mt-1 text-xs text-muted-dark">
+                  We&apos;ll notify you when Personas for {platform} is ready.
+                </p>
                 <button
                   onClick={onClose}
-                  className="mt-5 w-full rounded-full border border-white/[0.08] bg-white/[0.02] px-4 py-2.5 text-sm font-medium text-muted transition-colors hover:border-white/[0.15] hover:text-foreground"
+                  className="mt-4 w-full rounded-full border border-white/[0.08] bg-white/[0.02] px-4 py-2.5 text-sm font-medium text-muted transition-colors hover:border-white/[0.15] hover:text-foreground"
                 >
                   Close
                 </button>
               </motion.div>
             ) : (
-              <form onSubmit={handleSubmit} className="mt-5 space-y-4">
+              <form onSubmit={handleSubmit} className="mt-4 space-y-4">
                 <div>
                   <label htmlFor="waitlist-email" className="sr-only">
                     Email address
@@ -317,22 +207,23 @@ export default function WaitlistModal({
                     onChange={(e) => { setEmail(e.target.value); setErrorMsg(""); }}
                     placeholder="you@example.com"
                     required
-                    className="w-full rounded-xl border border-white/[0.06] bg-white/[0.03] px-4 py-3 text-sm text-foreground placeholder:text-muted-dark/40 focus:border-brand-cyan/30 focus:outline-none focus:ring-1 focus:ring-brand-cyan/20 transition-colors"
+                    autoFocus
+                    className="w-full rounded-xl border border-white/[0.06] bg-white/[0.03] px-4 py-3 text-sm text-foreground placeholder:text-muted-dark focus:border-brand-cyan/30 focus:outline-none focus:ring-1 focus:ring-brand-cyan/20 transition-colors"
                   />
-                  {errorMsg && (
-                    <p className="mt-1.5 text-xs text-brand-rose/70">{errorMsg}</p>
-                  )}
+                  <AnimatePresence>
+                    {errorMsg && (
+                      <motion.p
+                        initial={{ opacity: 0, y: -4 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        exit={{ opacity: 0, y: -4 }}
+                        transition={TRANSITION_FAST}
+                        className="mt-1.5 text-xs text-brand-rose/70"
+                      >
+                        {errorMsg}
+                      </motion.p>
+                    )}
+                  </AnimatePresence>
                 </div>
-
-                {/* Referred by badge */}
-                {referredBy && (
-                  <div className="flex items-center gap-2 rounded-lg border border-brand-purple/10 bg-brand-purple/[0.04] px-3 py-2">
-                    <Sparkles className="h-3 w-3 text-brand-purple/70" />
-                    <span className="text-xs text-muted-dark">
-                      You were referred — you&apos;ll get priority access
-                    </span>
-                  </div>
-                )}
 
                 {/* Early beta checkbox */}
                 <label className="flex cursor-pointer items-start gap-3 rounded-xl border border-white/[0.04] bg-white/[0.015] px-3.5 py-3 transition-colors hover:border-white/[0.08]">
@@ -347,7 +238,7 @@ export default function WaitlistModal({
                       <Sparkles className="h-3 w-3 text-brand-purple/70" />
                       <span className="text-xs font-medium text-foreground/80">Early beta access</span>
                     </div>
-                    <p className="mt-0.5 text-[11px] text-muted-dark/60 leading-relaxed">
+                    <p className="mt-0.5 text-[11px] text-muted-dark leading-relaxed">
                       Get access to unstable builds before the public release
                     </p>
                   </div>
@@ -358,7 +249,14 @@ export default function WaitlistModal({
                   disabled={status === "loading"}
                   className="flex w-full items-center justify-center gap-2 rounded-full bg-gradient-to-r from-brand-cyan to-brand-purple px-4 py-3 text-sm font-medium text-white transition-opacity hover:opacity-90 disabled:opacity-60"
                 >
-                  <Bell className="h-4 w-4" />
+                  {status === "loading" ? (
+                    <svg className="h-4 w-4 animate-spin" viewBox="0 0 24 24" fill="none">
+                      <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="3" />
+                      <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z" />
+                    </svg>
+                  ) : (
+                    <Bell className="h-4 w-4" />
+                  )}
                   {status === "loading" ? "Joining..." : "Notify me when available"}
                 </button>
               </form>

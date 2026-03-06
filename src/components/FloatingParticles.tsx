@@ -1,101 +1,136 @@
 "use client";
 
-import { useRef, useCallback, useMemo } from "react";
+import { useRef, useEffect, useCallback } from "react";
 import { useReducedMotion } from "framer-motion";
-import { useQualityTier, type QualityTier } from "@/contexts/QualityContext";
-import { useCanvasCompositor, type LayerRenderFn } from "@/hooks/useCanvasCompositor";
-import { BRAND_COLORS } from "@/lib/colors";
 
-const PARTICLE_COUNTS: Record<QualityTier, number> = { high: 30, medium: 15, low: 5 };
+const PARTICLE_COUNT = 30;
 
-// Parse "r,g,b" string to numeric tuple for canvas rendering
-function parseRgb(rgb: string): [number, number, number] {
-  const [r, g, b] = rgb.split(",").map(Number);
-  return [r, g, b];
-}
-
+// Match the original color palette (parsed to rgb components for canvas)
 const COLORS: [number, number, number, number][] = [
-  [...parseRgb(BRAND_COLORS.cyan), 0.3],
-  [...parseRgb(BRAND_COLORS.purple), 0.2],
-  [...parseRgb(BRAND_COLORS.emerald), 0.15],
-  [...parseRgb(BRAND_COLORS.blue), 0.12],
+  [6, 182, 212, 0.3],   // cyan
+  [168, 85, 247, 0.2],  // purple
+  [52, 211, 153, 0.15], // emerald
+  [96, 165, 250, 0.12], // blue
 ];
-
-// Pre-computed sine lookup table (256 entries for one full cycle)
-const SINE_LUT_SIZE = 256;
-const SINE_LUT = new Float32Array(SINE_LUT_SIZE);
-for (let i = 0; i < SINE_LUT_SIZE; i++) {
-  SINE_LUT[i] = Math.sin((i / SINE_LUT_SIZE) * Math.PI * 2);
-}
-function sinLut(progress: number): number {
-  // progress is 0..1 representing one full cycle
-  return SINE_LUT[((progress * SINE_LUT_SIZE) | 0) % SINE_LUT_SIZE];
-}
 
 interface Particle {
   xPct: number;       // horizontal position as 0-1 fraction
   size: number;        // radius
   delay: number;       // animation delay in seconds
   duration: number;    // animation duration in seconds
-  invDuration: number; // 1/duration — avoid per-frame division
+  color: [number, number, number, number]; // rgba
   blur: boolean;
-  fillMain: string;    // pre-built rgba string (alpha=1)
-  fillBlur: string;    // pre-built rgba string (alpha=0.3)
 }
 
-// Deterministic particle config — generated for max count, sliced by tier
-const ALL_PARTICLES: Particle[] = Array.from({ length: 30 }, (_, i) => {
-  const c = COLORS[i % 4];
-  return {
-    xPct: ((i * 3.33 + (i * 7.3) % 10) % 100) / 100,
-    size: (1.5 + ((i * 2.7) % 3)) / 2,
-    delay: (i * 0.27) % 10,
-    duration: 5 + ((i * 2.1) % 8),
-    invDuration: 1 / (5 + ((i * 2.1) % 8)),
-    blur: i % 5 === 0,
-    fillMain: `rgba(${c[0]},${c[1]},${c[2]},1)`,
-    fillBlur: `rgba(${c[0]},${c[1]},${c[2]},0.3)`,
-  };
-});
+// Deterministic particle config matching the original procedural generation
+const PARTICLES: Particle[] = Array.from({ length: PARTICLE_COUNT }, (_, i) => ({
+  xPct: ((i * 3.33 + (i * 7.3) % 10) % 100) / 100,
+  size: (1.5 + ((i * 2.7) % 3)) / 2, // half-size = radius
+  delay: (i * 0.27) % 10,
+  duration: 5 + ((i * 2.1) % 8),
+  color: COLORS[i % 4],
+  blur: i % 5 === 0,
+}));
 
 export default function FloatingParticles() {
   const prefersReducedMotion = useReducedMotion();
-  const tier = useQualityTier();
   const canvasRef = useRef<HTMLCanvasElement>(null);
+  const rafRef = useRef<number>(0);
+  const inViewRef = useRef(false);
+  const startTimeRef = useRef<number>(0);
 
-  const particleCount = PARTICLE_COUNTS[tier];
-  const particles = useMemo(() => ALL_PARTICLES.slice(0, particleCount), [particleCount]);
-  const skipBlur = tier === "low";
+  const draw = useCallback((now: number) => {
+    rafRef.current = requestAnimationFrame(draw);
+    if (!inViewRef.current || document.hidden) return;
 
-  const render = useCallback<LayerRenderFn>((ctx, w, h, elapsed) => {
-    const TWO_PI = Math.PI * 2;
-    for (const p of particles) {
+    const canvas = canvasRef.current;
+    if (!canvas) return;
+    const ctx = canvas.getContext("2d");
+    if (!ctx) return;
+
+    if (startTimeRef.current === 0) startTimeRef.current = now;
+    const elapsed = (now - startTimeRef.current) / 1000; // seconds
+
+    const { width: w, height: h } = canvas;
+    ctx.clearRect(0, 0, w, h);
+
+    for (const p of PARTICLES) {
+      // Replicate the CSS float keyframe: ease-in-out sine wave
+      // Subtract delay so each particle starts at a different phase
       const t = elapsed - p.delay;
-      if (t < 0) continue;
+      if (t < 0) continue; // still in delay period
 
-      const progress = (t % p.duration) * p.invDuration;
-      const sine = sinLut(progress);
+      // Progress through one cycle (0 to 1), looping
+      const progress = (t % p.duration) / p.duration;
+      // ease-in-out sine: maps 0→0, 0.5→1, 1→0
+      const sine = Math.sin(progress * Math.PI * 2);
+
+      // Y offset: original is translateY(-20px) at 50%, 0 at 0%/100%
+      // sine goes -1 to 1, we want 0 to -20 to 0
+      const yOffset = -sine * 20; // negative = upward
+
+      // Opacity: original is 0.15 at 0%/100%, 0.4 at 50%
+      // sine-based interpolation for ease-in-out
+      const opacityMix = (1 + sine) / 2; // 0→1→0 over cycle
+      const baseAlpha = p.color[3];
+      // Scale base alpha: at 0%/100% use 0.15/baseAlpha ratio, at 50% use 0.4/baseAlpha ratio
+      // Original CSS: opacity goes 0.15→0.4→0.15 regardless of color alpha
+      // The color already has its own alpha baked in, and opacity modulates on top
+      const opacity = 0.15 + opacityMix * 0.25;
 
       const x = p.xPct * w;
-      const y = h + 10 - sine * 20;
+      const baseY = h + 10; // bottom: -10px equivalent (start just below canvas)
+      const y = baseY + yOffset;
 
-      ctx.globalAlpha = 0.275 + sine * 0.125;
+      ctx.globalAlpha = opacity;
 
-      if (p.blur && !skipBlur) {
+      if (p.blur) {
+        // Approximate blur with a larger, more transparent circle
         ctx.beginPath();
-        ctx.arc(x, y, p.size + 1, 0, TWO_PI);
-        ctx.fillStyle = p.fillBlur;
+        ctx.arc(x, y, p.size + 1, 0, Math.PI * 2);
+        ctx.fillStyle = `rgba(${p.color[0]},${p.color[1]},${p.color[2]},0.3)`;
         ctx.fill();
       }
 
       ctx.beginPath();
-      ctx.arc(x, y, p.size, 0, TWO_PI);
-      ctx.fillStyle = p.fillMain;
+      ctx.arc(x, y, p.size, 0, Math.PI * 2);
+      ctx.fillStyle = `rgba(${p.color[0]},${p.color[1]},${p.color[2]},1)`;
       ctx.fill();
     }
-  }, [particles, skipBlur]);
 
-  useCanvasCompositor(canvasRef, render, { enabled: !prefersReducedMotion });
+    ctx.globalAlpha = 1;
+  }, []);
+
+  useEffect(() => {
+    if (prefersReducedMotion) return;
+
+    const canvas = canvasRef.current;
+    if (!canvas) return;
+
+    const resize = () => {
+      const parent = canvas.parentElement;
+      if (!parent) return;
+      const rect = parent.getBoundingClientRect();
+      canvas.width = rect.width;
+      canvas.height = rect.height;
+    };
+    resize();
+    window.addEventListener("resize", resize);
+
+    const observer = new IntersectionObserver(
+      ([entry]) => { inViewRef.current = entry.isIntersecting; },
+      { threshold: 0.1 },
+    );
+    observer.observe(canvas);
+
+    rafRef.current = requestAnimationFrame(draw);
+
+    return () => {
+      cancelAnimationFrame(rafRef.current);
+      window.removeEventListener("resize", resize);
+      observer.disconnect();
+    };
+  }, [prefersReducedMotion, draw]);
 
   if (prefersReducedMotion) return null;
 
