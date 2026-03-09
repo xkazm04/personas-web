@@ -2,12 +2,13 @@
 
 import { useEffect, useRef, useState, type ReactNode } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { Check, Zap, Building } from "lucide-react";
+import { Check, Zap, Building, LayoutGrid, Table2 } from "lucide-react";
 import SectionWrapper from "@/components/SectionWrapper";
 import GlowCard from "@/components/GlowCard";
 import GradientText from "@/components/GradientText";
 import SectionHeading from "@/components/SectionHeading";
 import { fadeUp, staggerContainer } from "@/lib/animations";
+import { PRICING_TIERS, COMPARISON_FEATURES, TIER_COLUMNS } from "@/data/pricing";
 
 function MagneticGlowSurface({
   color,
@@ -20,6 +21,7 @@ function MagneticGlowSurface({
 }) {
   const ref = useRef<HTMLDivElement | null>(null);
   const rafRef = useRef<number | null>(null);
+  const inViewRef = useRef(false);
   const targetRef = useRef({ x: 0, y: 0, opacity: 0 });
   const currentRef = useRef({ x: 0, y: 0, opacity: 0 });
 
@@ -27,9 +29,23 @@ function MagneticGlowSurface({
     const el = ref.current;
     if (!el) return;
 
+    // Visibility gating — only run RAF when in viewport
+    const io = new IntersectionObserver(
+      ([entry]) => {
+        inViewRef.current = entry.isIntersecting;
+        if (entry.isIntersecting && rafRef.current === null) {
+          rafRef.current = requestAnimationFrame(frame);
+        }
+      },
+      { threshold: 0.1 },
+    );
+    io.observe(el);
+
     const frame = () => {
-      rafRef.current = requestAnimationFrame(frame);
-      if (document.hidden) return;
+      if (!inViewRef.current || document.hidden) {
+        rafRef.current = null;
+        return;
+      }
 
       currentRef.current.x += (targetRef.current.x - currentRef.current.x) * 0.18;
       currentRef.current.y += (targetRef.current.y - currentRef.current.y) * 0.18;
@@ -38,10 +54,13 @@ function MagneticGlowSurface({
       el.style.setProperty("--magnetic-x", `${currentRef.current.x}px`);
       el.style.setProperty("--magnetic-y", `${currentRef.current.y}px`);
       el.style.setProperty("--magnetic-opacity", `${currentRef.current.opacity}`);
+
+      rafRef.current = requestAnimationFrame(frame);
     };
 
     rafRef.current = requestAnimationFrame(frame);
     return () => {
+      io.disconnect();
       if (rafRef.current !== null) {
         cancelAnimationFrame(rafRef.current);
       }
@@ -68,6 +87,7 @@ function MagneticGlowSurface({
       }}
     >
       <div
+        aria-hidden="true"
         className="pointer-events-none absolute inset-0 rounded-2xl transition-opacity duration-300"
         style={{
           opacity: "var(--magnetic-opacity)",
@@ -79,67 +99,112 @@ function MagneticGlowSurface({
   );
 }
 
-const tiers = [
-  {
-    name: "Free",
-    price: "$0",
-    period: "forever",
-    accent: "cyan" as const,
-    cta: "Download Free",
-    href: "#download",
-    bestFor: "Solo builders getting started",
-    capacity: 10,
-    ctaStyle: "border border-white/[0.08] text-muted hover:border-white/[0.15] hover:text-foreground hover:bg-white/[0.02]",
-    features: [
-      "Unlimited local agents",
-      "Local event bus & scheduler",
-      "Full observability dashboard",
-      "Design engine",
-      "Team canvas (local)",
-    ],
+const tiers = PRICING_TIERS;
+
+const ACCENT_STYLES = {
+  purple: {
+    magnetic: "rgba(168,85,247,1)",
+    divider: "via-brand-purple/15",
+    capacity: "bg-linear-to-r from-brand-purple to-brand-cyan",
+    checkBg: "bg-brand-purple/15 ring-1 ring-brand-purple/12 group-hover/feat:ring-brand-purple/25",
+    checkIcon: "text-brand-purple",
+    focus: "focus-visible:outline-brand-purple/50",
   },
-  {
-    name: "Pro",
-    price: "$29",
-    period: "/mo",
-    accent: "purple" as const,
-    highlighted: true,
-    cta: "Go Pro",
-    comingSoon: true,
-    bestFor: "Fast-moving individual teams",
-    capacity: 65,
-    ctaStyle: "bg-brand-purple text-white hover:bg-purple-400 shadow-[0_0_25px_rgba(168,85,247,0.15)]",
-    features: [
-      "Everything in Free",
-      "3 cloud workers",
-      "1,000 executions/mo",
-      "10,000 events/mo",
-      "Burst auto-scaling",
-    ],
+  amber: {
+    magnetic: "rgba(251,191,36,1)",
+    divider: "via-brand-amber/15",
+    capacity: "bg-linear-to-r from-brand-amber to-brand-purple",
+    checkBg: "bg-brand-amber/15 ring-1 ring-brand-amber/12 group-hover/feat:ring-brand-amber/25",
+    checkIcon: "text-brand-amber",
+    focus: "focus-visible:outline-brand-amber/50",
   },
-  {
-    name: "Enterprise",
-    price: "Custom",
-    period: "",
-    accent: "amber" as const,
-    cta: "Contact Sales",
-    comingSoon: true,
-    bestFor: "Organizations with compliance & scale needs",
-    capacity: 100,
-    ctaStyle: "border border-brand-amber/25 text-brand-amber hover:bg-brand-amber/10 shadow-[0_0_25px_rgba(251,191,36,0.08)]",
-    features: [
-      "Everything in Pro",
-      "SSO via SAML & OIDC",
-      "Multi-tenant workspaces with RBAC",
-      "Execution audit trail export",
-      "Dedicated cloud workers & SLA",
-      "Priority support",
-    ],
+  cyan: {
+    magnetic: "rgba(6,182,212,1)",
+    divider: "via-white/6",
+    capacity: "bg-brand-cyan/50",
+    checkBg: "bg-brand-cyan/10 ring-1 ring-brand-cyan/6 group-hover/feat:ring-brand-cyan/15",
+    checkIcon: "text-brand-cyan",
+    focus: "focus-visible:outline-brand-cyan/50",
   },
-];
+} as const;
+
+const comparisonFeatures = COMPARISON_FEATURES;
+const tierColumns = TIER_COLUMNS;
+
+function ComparisonTable({ onCtaClick }: { onCtaClick: (tierName: string) => void }) {
+  return (
+    <motion.div variants={fadeUp} className="mt-16 max-w-4xl mx-auto overflow-x-auto">
+      <div className="min-w-[480px]">
+        {/* Header row */}
+        <div className="grid grid-cols-[1fr_repeat(3,100px)] sm:grid-cols-[1fr_repeat(3,120px)] gap-px mb-1">
+          <div /> {/* empty top-left cell */}
+          {tierColumns.map((col) => (
+            <div key={col.key} className="text-center px-3 py-4">
+              <div className={`text-sm font-semibold ${col.accent}`}>{col.name}</div>
+              <div className="mt-1">
+                <span className="text-lg font-bold tracking-tight">{col.price}</span>
+                {col.period && <span className="text-xs text-muted-dark">{col.period}</span>}
+              </div>
+            </div>
+          ))}
+        </div>
+
+        {/* Feature rows */}
+        <div className="rounded-xl border border-white/[0.05] overflow-hidden">
+          {comparisonFeatures.map((feat, i) => (
+            <div
+              key={feat.label}
+              className={`grid grid-cols-[1fr_repeat(3,100px)] sm:grid-cols-[1fr_repeat(3,120px)] gap-px ${
+                i % 2 === 0 ? "bg-white/[0.015]" : "bg-transparent"
+              } ${i > 0 ? "border-t border-white/[0.03]" : ""}`}
+            >
+              <div className="px-4 py-3 text-sm text-muted flex items-center">{feat.label}</div>
+              {(["free", "pro", "enterprise"] as const).map((key) => (
+                <div key={key} className="flex items-center justify-center px-2 py-3">
+                  {feat[key] ? (
+                    <div className="flex h-5 w-5 items-center justify-center rounded-full bg-brand-cyan/10 ring-1 ring-brand-cyan/15">
+                      <Check className="h-3 w-3 text-brand-cyan" />
+                    </div>
+                  ) : (
+                    <span className="text-white/10 text-xs">—</span>
+                  )}
+                </div>
+              ))}
+            </div>
+          ))}
+        </div>
+
+        {/* CTA row */}
+        <div className="grid grid-cols-[1fr_repeat(3,100px)] sm:grid-cols-[1fr_repeat(3,120px)] gap-px mt-4">
+          <div />
+          {tiers.map((tier) => (
+            <div key={tier.name} className="flex justify-center px-2">
+              {tier.href ? (
+                <a
+                  href={tier.href}
+                  className="text-xs font-medium text-brand-cyan hover:text-white transition-colors"
+                >
+                  {tier.cta}
+                </a>
+              ) : (
+                <button
+                  onClick={() => tier.comingSoon && onCtaClick(tier.name)}
+                  className="text-xs font-medium text-muted-dark hover:text-white transition-colors cursor-pointer"
+                >
+                  {tier.cta}
+                </button>
+              )}
+            </div>
+          ))}
+        </div>
+      </div>
+    </motion.div>
+  );
+}
 
 export default function Pricing() {
   const [comingSoonToast, setComingSoonToast] = useState<string | null>(null);
+  const [viewMode, setViewMode] = useState<"cards" | "table">("cards");
 
   const showComingSoon = (tierName: string) => {
     setComingSoonToast(tierName);
@@ -147,7 +212,7 @@ export default function Pricing() {
   };
 
   return (
-    <SectionWrapper id="pricing" dotGrid>
+    <SectionWrapper id="pricing" aria-labelledby="pricing-heading">
       {/* Coming soon toast */}
       <AnimatePresence>
         {comingSoonToast && (
@@ -164,16 +229,8 @@ export default function Pricing() {
         )}
       </AnimatePresence>
 
-      {/* Background accents */}
-      <div className="pointer-events-none absolute inset-0 overflow-hidden">
-        <div
-          className="absolute left-1/2 top-[30%] h-125 w-175 -translate-x-1/2 rounded-full opacity-30"
-          style={{ background: "radial-gradient(ellipse, rgba(168,85,247,0.04) 0%, rgba(6,182,212,0.02) 40%, transparent 70%)" }}
-        />
-      </div>
-
       <motion.div variants={fadeUp} className="text-center relative">
-        <SectionHeading>
+        <SectionHeading id="pricing-heading">
           Start free,{" "}
           <span className="inline-block bg-linear-to-b from-white to-white/50 bg-clip-text text-transparent drop-shadow-lg">
             scale
@@ -184,30 +241,54 @@ export default function Pricing() {
           Full-featured desktop app is free forever. Cloud adds 24/7 operation
           and team collaboration.
         </p>
+
+        {/* View mode toggle */}
+        <div className="mt-8 flex items-center justify-center gap-1 rounded-full border border-white/[0.06] bg-white/[0.02] p-1 w-fit mx-auto">
+          <button
+            onClick={() => setViewMode("cards")}
+            className={`flex items-center gap-1.5 rounded-full px-4 py-1.5 text-xs font-medium transition-all duration-200 cursor-pointer ${
+              viewMode === "cards"
+                ? "bg-white/[0.08] text-white shadow-sm"
+                : "text-muted-dark hover:text-white/70"
+            }`}
+          >
+            <LayoutGrid className="h-3.5 w-3.5" />
+            Cards
+          </button>
+          <button
+            onClick={() => setViewMode("table")}
+            className={`flex items-center gap-1.5 rounded-full px-4 py-1.5 text-xs font-medium transition-all duration-200 cursor-pointer ${
+              viewMode === "table"
+                ? "bg-white/[0.08] text-white shadow-sm"
+                : "text-muted-dark hover:text-white/70"
+            }`}
+          >
+            <Table2 className="h-3.5 w-3.5" />
+            Compare
+          </button>
+        </div>
       </motion.div>
 
+      {viewMode === "table" ? (
+        <ComparisonTable onCtaClick={showComingSoon} />
+      ) : (
       <motion.div
         variants={staggerContainer}
         className="mt-16 grid gap-6 sm:grid-cols-2 lg:grid-cols-3 max-w-5xl mx-auto items-start"
       >
         {tiers.map((tier) => {
-          const magneticColor =
-            tier.accent === "purple"
-              ? "rgba(168,85,247,1)"
-              : tier.accent === "amber"
-                ? "rgba(251,191,36,1)"
-                : "rgba(6,182,212,1)";
+          const styles = ACCENT_STYLES[tier.accent];
 
           return (
             <MagneticGlowSurface
               key={tier.name}
-              color={magneticColor}
+              color={styles.magnetic}
               maxOpacity={tier.highlighted ? 0.08 : 0.05}
             >
               <GlowCard
                 accent={tier.accent}
                 highlighted={tier.highlighted}
-                className="flex flex-col p-4 sm:p-6 relative"
+                className="flex flex-col p-5 sm:p-6 relative"
               >
                 {/* Popular badge */}
                 {tier.highlighted && (
@@ -237,14 +318,14 @@ export default function Pricing() {
                   <span className="text-sm text-muted-dark">{tier.period}</span>
                 </div>
 
-                <div className={`mt-2 h-px bg-linear-to-r from-transparent to-transparent ${tier.accent === "purple" ? "via-brand-purple/15" : tier.accent === "amber" ? "via-brand-amber/15" : "via-white/6"}`} />
+                <div className={`mt-2 h-px bg-linear-to-r from-transparent to-transparent ${styles.divider}`} />
 
                 <div className="mt-4 rounded-xl border border-white/4 bg-white/1 px-3 py-2">
                   <p className="text-[10px] font-mono uppercase tracking-wider text-muted-dark">Best for</p>
                   <p className="mt-1 text-xs text-muted">{tier.bestFor}</p>
                   <div className="mt-2 h-1.5 overflow-hidden rounded-full bg-white/5">
                     <div
-                      className={`h-full rounded-full ${tier.accent === "purple" ? "bg-linear-to-r from-brand-purple to-brand-cyan" : tier.accent === "amber" ? "bg-linear-to-r from-brand-amber to-brand-purple" : "bg-brand-cyan/50"}`}
+                      className={`h-full rounded-full ${styles.capacity}`}
                       style={{ width: `${tier.capacity}%` }}
                     />
                   </div>
@@ -252,7 +333,7 @@ export default function Pricing() {
                 </div>
 
                 <motion.ul
-                  className="relative mt-4 flex-1 space-y-3"
+                  className="relative mt-4 flex-1 space-y-3.5"
                   initial="hidden"
                   whileInView="visible"
                   viewport={{ once: true }}
@@ -275,14 +356,8 @@ export default function Pricing() {
                       }}
                       className="flex items-start gap-2.5 text-sm text-muted group/feat"
                     >
-                      <div className={`mt-1 flex h-4 w-4 shrink-0 items-center justify-center rounded-full transition-all duration-300 ${
-                        tier.accent === "purple"
-                            ? "bg-brand-purple/15 ring-1 ring-brand-purple/12 group-hover/feat:ring-brand-purple/25"
-                            : tier.accent === "amber"
-                              ? "bg-brand-amber/15 ring-1 ring-brand-amber/12 group-hover/feat:ring-brand-amber/25"
-                              : "bg-brand-cyan/10 ring-1 ring-brand-cyan/6 group-hover/feat:ring-brand-cyan/15"
-                      }`}>
-                        <Check className={`h-2.5 w-2.5 ${tier.accent === "purple" ? "text-brand-purple" : tier.accent === "amber" ? "text-brand-amber" : "text-brand-cyan"}`} />
+                      <div className={`mt-1 flex h-4 w-4 shrink-0 items-center justify-center rounded-full transition-all duration-300 ${styles.checkBg}`}>
+                        <Check className={`h-2.5 w-2.5 ${styles.checkIcon}`} />
                       </div>
                       <span className="transition-colors duration-300 group-hover/feat:text-foreground">{f}</span>
                     </motion.li>
@@ -290,13 +365,8 @@ export default function Pricing() {
                 </motion.ul>
 
                 {(() => {
-                  const focusOutline = tier.accent === "purple"
-                    ? "focus-visible:outline-brand-purple/50"
-                    : tier.accent === "amber"
-                      ? "focus-visible:outline-brand-amber/50"
-                      : "focus-visible:outline-brand-cyan/50";
-                  const pyClass = tier.highlighted ? "py-3.5" : "py-2.5";
-                  const base = `group relative mt-8 w-full rounded-full text-sm font-medium transition-all duration-300 cursor-pointer overflow-hidden focus-visible:outline-2 focus-visible:outline-offset-2 ${pyClass} ${focusOutline} ${tier.ctaStyle}`;
+                  const pyClass = tier.highlighted ? "py-3.5" : "py-3";
+                  const base = `group relative mt-8 w-full rounded-full text-sm font-medium transition-all duration-300 cursor-pointer overflow-hidden focus-visible:outline-2 focus-visible:outline-offset-2 ${pyClass} ${styles.focus} ${tier.ctaStyle}`;
 
                   return tier.href ? (
                     <a href={tier.href} className={`block text-center ${base}`}>
@@ -315,6 +385,7 @@ export default function Pricing() {
           );
         })}
       </motion.div>
+      )}
 
       <motion.div variants={fadeUp} className="mt-10 text-center">
         <div className="mx-auto max-w-5xl rounded-2xl border border-white/4 bg-white/1 px-4 py-3 sm:px-6">

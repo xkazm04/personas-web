@@ -44,12 +44,12 @@ export default function NotifyInput({
         onChange={(e) => setEmail(e.target.value)}
         onKeyDown={(e) => { if (e.key === "Enter") handleSave(); }}
         placeholder="Email to get notified"
-        className="min-w-0 flex-1 bg-transparent text-[11px] text-muted-dark placeholder:text-muted-dark/30 outline-none"
+        className="min-w-0 flex-1 bg-transparent py-1.5 text-[11px] text-muted-dark placeholder:text-muted-dark/30 outline-none border-b border-transparent focus:border-brand-cyan/20 transition-colors duration-200"
       />
       <button
         onClick={handleSave}
         disabled={!isValidEmail(email)}
-        className="text-[11px] font-medium text-brand-cyan/70 hover:text-brand-cyan disabled:text-muted-dark/20 transition-colors"
+        className="text-[11px] font-medium text-brand-cyan/70 hover:text-brand-cyan disabled:text-muted-dark/20 transition-colors duration-200"
       >
         Notify me
       </button>

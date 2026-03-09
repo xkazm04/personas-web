@@ -1,8 +1,7 @@
 "use client";
 
 import { useState, useEffect, useCallback, useRef, memo, useMemo } from "react";
-import { motion, AnimatePresence, useScroll, useTransform } from "framer-motion";
-import Image from "next/image";
+import { motion, AnimatePresence } from "framer-motion";
 import {
   X, Check, GitBranch, Sparkles, ArrowRight, ArrowDown,
   AlertTriangle, Brain, RefreshCw, Mail, ShieldAlert,
@@ -10,6 +9,7 @@ import {
 } from "lucide-react";
 import SectionWrapper from "@/components/SectionWrapper";
 import GradientText from "@/components/GradientText";
+import ImageBackground from "@/components/ImageBackground";
 import { fadeUp, slideInLeft, slideInRight } from "@/lib/animations";
 import type { ViewerRole } from "@/components/RoleSelector";
 
@@ -322,8 +322,8 @@ const ComparisonCard = memo(function ComparisonCard({ variant, texture, classNam
     <motion.div
       variants={variant}
       transition={{ duration: 0.6 }}
-      whileHover={{ scale: 1.02, boxShadow: `0 0 30px ${color.grid.replace('0.08', '0.2')}` }}
-      className={`${texture} group rounded-2xl p-4 md:p-6 relative overflow-hidden transition-all duration-500 ${className}`}
+      whileHover={{ scale: 1.02 }}
+      className={`${texture} group rounded-2xl p-4 md:p-6 relative overflow-hidden transition-[border-color,opacity] duration-500 will-change-transform ${className}`}
     >
       {/* Blur orb */}
       <div className={`pointer-events-none absolute h-40 w-40 rounded-full blur-3xl ${color.orb}`} />
@@ -506,35 +506,14 @@ export default function WhyAgents({ role }: { role?: ViewerRole }) {
 
   const scenario = scenarios[activeIndex];
 
-  const containerRef = useRef<HTMLDivElement>(null);
-  const { scrollYProgress } = useScroll({
-    target: containerRef,
-    offset: ["start end", "end start"],
-  });
-  const y = useTransform(scrollYProgress, [0, 1], ["-15%", "15%"]);
-
   return (
     <SectionWrapper id="why-agents" className="relative overflow-hidden" aria-roledescription="carousel" aria-label="Why agents not workflows — scenario comparison">
-      <div ref={containerRef} className="absolute inset-0 pointer-events-none">
-        {/* Background illustration */}
-        <motion.div style={{ y }} className="absolute inset-0 h-[130%] -top-[15%] bg-black">
-          <Image
-            src="/imgs/illustration_photo.jpg"
-            alt="Personas agent roster"
-            fill
-            className="object-cover object-center"
-            sizes="100vw"
-            quality={80}
-            loading="lazy"
-            priority={false}
-            placeholder="blur"
-            blurDataURL="data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/2wBDAAoHBwgHBgoICAgLCgoLDhgQDg0NDh0VFhEYIx8lJCIfIiEmKzcvJik0KSEiMEExNDk7Pj4+JS5ESUM8SDc9Pjv/2wBDAQoLCw4NDhwQEBw7KCIoOzs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozv/wAARCAAGAAoDASIAAhEBAxEB/8QAFgABAQEAAAAAAAAAAAAAAAAAAAUH/8QAIBAAAgIBBAMBAAAAAAAAAAAAAQIAAwQFERIhBjFBUf/EABQBAQAAAAAAAAAAAAAAAAAAAAP/xAAYEQADAQEAAAAAAAAAAAAAAAABAgMAEf/aAAwDAQACEQMRAD8AyTDw8nPyFx8WprLG6KoJLH4BLPp3h+T6ULaW/wBJZX1sVh7XjuIiVeli5Ef/2Q=="
-          />
-        </motion.div>
-        <div className="absolute inset-0 bg-black/70" />
-        <div className="absolute inset-0 bg-linear-to-b from-background via-transparent to-background" />
-        <div className="absolute inset-0 bg-linear-to-r from-background/40 via-transparent to-background/40" />
-      </div>
+      <ImageBackground
+        src="/imgs/illustration_photo.jpg"
+        alt="Personas agent roster"
+        overlayClass="bg-black/70"
+        blurDataURL="data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/2wBDAAoHBwgHBgoICAgLCgoLDhgQDg0NDh0VFhEYIx8lJCIfIiEmKzcvJik0KSEiMEExNDk7Pj4+JS5ESUM8SDc9Pjv/2wBDAQoLCw4NDhwQEBw7KCIoOzs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozv/wAARCAAGAAoDASIAAhEBAxEB/8QAFgABAQEAAAAAAAAAAAAAAAAAAAUH/8QAIBAAAgIBBAMBAAAAAAAAAAAAAQIAAwQFERIhBjFBUf/EABQBAQAAAAAAAAAAAAAAAAAAAAP/xAAYEQADAQEAAAAAAAAAAAAAAAABAgMAEf/aAAwDAQACEQMRAD8AyTDw8nPyFx8WprLG6KoJLH4BLPp3h+T6ULaW/wBJZX1sVh7XjuIiVeli5Ef/2Q=="
+      />
 
       {/* Header */}
       <motion.div variants={fadeUp} className="text-center relative z-10">

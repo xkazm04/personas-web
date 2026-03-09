@@ -1,6 +1,6 @@
 "use client";
 
-import { useId, useRef, useState, useEffect, useMemo, useCallback } from "react";
+import { useId, useRef, useState, useEffect, useMemo } from "react";
 import { motion, useInView, AnimatePresence } from "framer-motion";
 import { Wand2 } from "lucide-react";
 import dynamic from "next/dynamic";
@@ -21,7 +21,7 @@ import {
   createMockQueueTelemetryAdapter,
   createSnapshot,
   type QueueTelemetryAdapter,
-} from "@/lib/queueTelemetry";
+} from "@/lib/event-bus-demo";
 import { EXTENDED_TOOLS, TOOL_MAP } from "@/lib/tool-catalogue";
 
 type QueueVariant = "swarm" | "lanes";
@@ -79,25 +79,8 @@ const queueRouteSeeds = [
 
 const defaultTelemetryAdapter = createMockQueueTelemetryAdapter(queueRouteSeeds, 1400);
 
-const extendedTools = EXTENDED_TOOLS;
-
-/** Colored initial rendered inline in SVG — no external images needed */
-function ToolInitial({ name, color, x, y }: { name: string; color: string; x: number; y: number }) {
-  return (
-    <text
-      x={x}
-      y={y}
-      textAnchor="middle"
-      dominantBaseline="central"
-      fill={color}
-      fontSize="3"
-      fontFamily="var(--font-geist-mono)"
-      fontWeight="bold"
-    >
-      {name.charAt(0).toUpperCase()}
-    </text>
-  );
-}
+const SWARM_TOOL_IDS = ["gmail", "slack", "github", "jira", "figma", "discord", "notion", "docker", "python", "redis"];
+const swarmTools = EXTENDED_TOOLS.filter((t) => SWARM_TOOL_IDS.includes(t.id));
 
 export default function EventBusShowcase({ telemetryAdapter }: { telemetryAdapter?: QueueTelemetryAdapter }) {
   const uid = useId();
@@ -120,64 +103,6 @@ export default function EventBusShowcase({ telemetryAdapter }: { telemetryAdapte
     }
     return false;
   });
-
-  // Live active-connection counter for swarm view
-  const [activeCount, setActiveCount] = useState(0);
-  const startTimeRef = useRef<number>(0);
-
-  const computeActiveCount = useCallback(() => {
-    if (startTimeRef.current === 0) startTimeRef.current = performance.now();
-    const elapsed = (performance.now() - startTimeRef.current) / 1000;
-    let count = 0;
-    for (let i = 0; i < extendedTools.length; i++) {
-      const delay = (i * 0.37) % 4;
-      const duration = 3 + (i % 3);
-      const cycleDuration = duration + 1; // duration + repeatDelay
-      const t = elapsed - delay;
-      if (t < 0) continue;
-      const progress = (t % cycleDuration) / duration;
-      // opacity keyframes [0, 0.8, 0.8, 0] over `duration` portion of cycle
-      // Active when progress is within 0..1 and not at the very start/end
-      if (progress >= 0 && progress <= 1 && progress > 0.02 && progress < 0.98) {
-        count++;
-      }
-    }
-    setActiveCount(count);
-  }, []);
-
-  useEffect(() => {
-    if (!inView || variant !== "swarm") return;
-
-    let id: ReturnType<typeof setInterval> | null = null;
-
-    const start = () => {
-      if (id || document.visibilityState === "hidden") return;
-      id = setInterval(computeActiveCount, 250);
-      computeActiveCount();
-    };
-
-    const stop = () => {
-      if (!id) return;
-      clearInterval(id);
-      id = null;
-    };
-
-    const handleVisibility = () => {
-      if (document.visibilityState === "hidden") {
-        stop();
-      } else {
-        start();
-      }
-    };
-
-    start();
-    document.addEventListener("visibilitychange", handleVisibility);
-
-    return () => {
-      stop();
-      document.removeEventListener("visibilitychange", handleVisibility);
-    };
-  }, [inView, variant, computeActiveCount]);
 
   const laneMetrics = useMemo(() => snapshot.routes.map((route) => ({
     id: route.id,
@@ -202,14 +127,6 @@ export default function EventBusShowcase({ telemetryAdapter }: { telemetryAdapte
 
   return (
     <SectionWrapper id="event-bus">
-      {/* Background accent orb */}
-      <div className="pointer-events-none absolute inset-0 overflow-hidden">
-        <div
-          className="absolute left-1/2 top-1/3 h-150 w-200 -translate-x-1/2 rounded-full opacity-30"
-          style={{ background: "radial-gradient(ellipse, rgba(6,182,212,0.04) 0%, rgba(168,85,247,0.03) 40%, transparent 70%)" }}
-        />
-      </div>
-
         <motion.div variants={fadeUp} className="relative">
           <h2 className="text-4xl font-extrabold tracking-tight sm:text-5xl md:text-7xl lg:text-[5.5rem] leading-[1.05] text-center drop-shadow-md">
             Agents that{" "}
@@ -305,11 +222,9 @@ export default function EventBusShowcase({ telemetryAdapter }: { telemetryAdapte
                 <text x="50" y="51" textAnchor="middle" dominantBaseline="middle" fill="rgba(255,255,255,0.8)" fontSize="2.5" fontFamily="var(--font-geist-mono)" letterSpacing="0.1em">BUS</text>
 
                 {/* Swarm Nodes — SMIL animations run on compositor, not JS thread */}
-                {extendedTools.map((tool, i) => {
-                  // Distribute in 2 rings
-                  const isOuter = i % 2 === 0;
-                  const radius = isOuter ? 42 : 28;
-                  const angle = (i * (360 / extendedTools.length)) * (Math.PI / 180);
+                {swarmTools.map((tool, i) => {
+                  const radius = 35;
+                  const angle = (i * (360 / swarmTools.length)) * (Math.PI / 180);
                   const x = 50 + radius * Math.cos(angle);
                   const y = 50 + radius * Math.sin(angle);
 
@@ -328,6 +243,8 @@ export default function EventBusShowcase({ telemetryAdapter }: { telemetryAdapte
                   const pEnd = Math.min(parseFloat(pActive) + 0.001, 1).toFixed(4);
                   const dx = (50 - x).toFixed(2);
                   const dy = (50 - y).toFixed(2);
+
+                  const iconSize = 5;
 
                   return (
                     <g key={tool.id} opacity="0">
@@ -354,23 +271,12 @@ export default function EventBusShowcase({ telemetryAdapter }: { telemetryAdapte
                         />
                       </circle>
 
-                      <circle cx={x} cy={y} r="3.5" fill={`${tool.color}2a`} stroke={tool.color} strokeWidth="0.3" />
-                      <ToolInitial name={tool.name} color={tool.color} x={x} y={y} />
-                      <text x={x} y={y + 5.5} textAnchor="middle" fill="rgba(255,255,255,0.5)" fontSize="1.8" fontFamily="var(--font-geist-mono)">{tool.name}</text>
+                      <circle cx={x} cy={y} r="4.5" fill={`${tool.color}2a`} stroke={tool.color} strokeWidth="0.3" />
+                      <image href={`/tools/${tool.id}.svg`} x={x - iconSize / 2} y={y - iconSize / 2} width={iconSize} height={iconSize} />
+                      <text x={x} y={y + 6.5} textAnchor="middle" fill="rgba(255,255,255,0.5)" fontSize="1.8" fontFamily="var(--font-geist-mono)">{tool.name}</text>
                     </g>
                   );
                 })}
-
-                {/* Live connection counter */}
-                {inView && (
-                  <foreignObject x="68" y="88" width="30" height="10">
-                    <div className="flex items-center justify-center rounded-full border border-brand-cyan/25 bg-brand-cyan/15 px-1 py-px backdrop-blur-sm">
-                      <span className="text-[4px] font-mono tracking-wide text-brand-cyan whitespace-nowrap">
-                        {activeCount}/{extendedTools.length} active
-                      </span>
-                    </div>
-                  </foreignObject>
-                )}
               </svg>
             )}
 

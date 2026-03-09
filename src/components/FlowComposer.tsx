@@ -147,13 +147,22 @@ export default function FlowComposer({ onClose }: { onClose: () => void }) {
   const [shareToast, setShareToast] = useState(false);
   const [dragNode, setDragNode] = useState<string | null>(null);
   const svgRef = useRef<SVGSVGElement>(null);
+  const rafPending = useRef(false);
+  const hashTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 
-  // Sync hash on state change
+  // Sync hash on state change — debounced 500ms
   useEffect(() => {
-    const encoded = encodeFlow({ nodes, wires });
-    if (encoded) {
-      window.history.replaceState(null, "", `#flow=${encoded}`);
-    }
+    if (hashTimerRef.current) clearTimeout(hashTimerRef.current);
+    hashTimerRef.current = setTimeout(() => {
+      const encoded = encodeFlow({ nodes, wires });
+      if (encoded) {
+        window.history.replaceState(null, "", `#flow=${encoded}`);
+      }
+      hashTimerRef.current = null;
+    }, 500);
+    return () => {
+      if (hashTimerRef.current) clearTimeout(hashTimerRef.current);
+    };
   }, [nodes, wires]);
 
   const shareUrl = useCallback(() => {
@@ -176,9 +185,14 @@ export default function FlowComposer({ onClose }: { onClose: () => void }) {
 
   const handlePointerMove = useCallback(
     (e: React.PointerEvent) => {
-      if (!dragNode) return;
-      const x = toSvgX(e.clientX);
-      setNodes((prev) => prev.map((n) => (n.id === dragNode ? { ...n, x } : n)));
+      if (!dragNode || rafPending.current) return;
+      const clientX = e.clientX;
+      rafPending.current = true;
+      requestAnimationFrame(() => {
+        rafPending.current = false;
+        const x = toSvgX(clientX);
+        setNodes((prev) => prev.map((n) => (n.id === dragNode ? { ...n, x } : n)));
+      });
     },
     [dragNode, toSvgX],
   );
@@ -609,12 +623,15 @@ export default function FlowComposer({ onClose }: { onClose: () => void }) {
           animate={{ opacity: 1, y: 0 }}
           className="mt-6 flex flex-col items-center gap-3"
         >
-          <div className="relative inline-block rounded-full p-[2px] bg-gradient-to-r from-brand-cyan via-blue-400 to-brand-purple animate-border-flow shadow-[0_0_30px_rgba(6,182,212,0.3)]">
+          <div className="relative inline-block rounded-full p-[2px] bg-gradient-to-r from-brand-cyan via-blue-400 to-brand-purple motion-safe:animate-border-flow shadow-[0_0_30px_rgba(6,182,212,0.3)]">
             <a
               href="#download"
               className="group relative flex items-center justify-center gap-3 overflow-hidden rounded-full bg-black/80 backdrop-blur-md px-8 py-4 text-sm font-semibold text-white transition-all duration-300 hover:bg-black/60"
             >
-              <div className="absolute inset-0 -translate-x-full bg-gradient-to-r from-transparent via-white/10 to-transparent transition-transform duration-700 group-hover:translate-x-full" />
+              <div aria-hidden="true" className="absolute inset-0 bg-gradient-to-r from-transparent via-white/10 to-transparent 
+                motion-safe:-translate-x-full motion-safe:transition-transform motion-safe:duration-700 motion-safe:group-hover:translate-x-full
+                motion-reduce:opacity-0 motion-reduce:group-hover:opacity-100 motion-reduce:transition-opacity motion-reduce:duration-300" 
+              />
               <Download className="relative h-5 w-5 text-brand-cyan transition-transform duration-300 group-hover:-translate-y-0.5" />
               <span className="relative">Build this flow in Personas</span>
             </a>
@@ -636,7 +653,7 @@ export default function FlowComposer({ onClose }: { onClose: () => void }) {
           <span>Click producer → consumer to wire</span>
         </div>
         <div className="flex items-center gap-2">
-          <svg width="16" height="8" className="text-white/70">
+          <svg width="16" height="8" className="text-white/70" aria-hidden="true">
             <line x1="0" y1="4" x2="16" y2="4" stroke="currentColor" strokeWidth="0.5" strokeDasharray="2 2" />
           </svg>
           <span>Drag nodes to reposition</span>
@@ -644,7 +661,7 @@ export default function FlowComposer({ onClose }: { onClose: () => void }) {
       </div>
 
       {/* Glow behind */}
-      <div className="pointer-events-none absolute -inset-6 -z-10 rounded-3xl bg-linear-to-br from-brand-cyan/4 via-transparent to-brand-purple/4 blur-2xl" />
+      <div aria-hidden="true" className="pointer-events-none absolute -inset-6 -z-10 rounded-3xl bg-linear-to-br from-brand-cyan/4 via-transparent to-brand-purple/4 blur-2xl" />
     </div>
   );
 }

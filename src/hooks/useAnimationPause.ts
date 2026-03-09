@@ -1,15 +1,53 @@
 "use client";
 
-import { useEffect } from "react";
+import { useEffect, useRef } from "react";
+
+/**
+ * ── data-animate-when-visible Contract ─────────────────────────────────────
+ *
+ * To optimize GPU budget, CSS animations should be paused when off-screen.
+ * This module implements a "pause-off-screen" protocol:
+ *
+ * 1. Server-rendered elements use the `data-animate-when-visible` attribute
+ *    (picked up via one-time querySelectorAll on mount).
+ * 2. Client components that mount dynamically (e.g. lazy-loaded sections)
+ *    register via `useAnimationPauseRegister`.
+ * 3. `globals.css` defines `.animations-paused` to set `animation-play-state: paused`.
+ *
+ * This replaces the previous MutationObserver approach with a registry
+ * pattern to eliminate querySelectorAll on every DOM mutation.
+ * ───────────────────────────────────────────────────────────────────────────
+ */
 
 const SELECTOR = "[data-animate-when-visible]";
 const PAUSED_CLASS = "animations-paused";
 
+// ── Module-level registry (singleton) ──
+// Client components register their element refs here on mount.
+// The IntersectionObserver in useAnimationPause picks them up.
+
+let _observer: IntersectionObserver | null = null;
+const _registered = new Set<Element>();
+
+function registerAnimationElement(el: Element) {
+  if (_registered.has(el)) return;
+  _registered.add(el);
+  _observer?.observe(el);
+}
+
+function deregisterAnimationElement(el: Element) {
+  _registered.delete(el);
+  _observer?.unobserve(el);
+}
+
 /**
- * Observes all elements with `data-animate-when-visible` and toggles
- * the `.animations-paused` class when they leave the viewport
- * (with a one-viewport-height margin). This pauses CSS animations
- * on off-screen sections to free GPU compositing budget.
+ * Observes all elements with `data-animate-when-visible` and those registered
+ * via the module registry. Toggles `.animations-paused` when elements leave
+ * the viewport (with a one-viewport-height margin).
+ *
+ * Uses a one-time querySelectorAll on mount for server-rendered elements,
+ * plus the registry for dynamically-mounted client components — no
+ * MutationObserver needed.
  */
 export function useAnimationPause() {
   useEffect(() => {
@@ -31,32 +69,46 @@ export function useAnimationPause() {
       },
     );
 
+    // Expose the observer to the registry so late-mounting components
+    // can be observed immediately on register.
+    _observer = observer;
+
+    // One-time scan for server-rendered elements
     const elements = document.querySelectorAll(SELECTOR);
     elements.forEach((el) => observer.observe(el));
 
-    // Re-observe if new sections are lazily added to the DOM
-    const mutation = new MutationObserver((mutations) => {
-      for (const m of mutations) {
-        for (const node of m.addedNodes) {
-          if (node instanceof HTMLElement) {
-            if (node.hasAttribute("data-animate-when-visible")) {
-              observer.observe(node);
-            }
-            node
-              .querySelectorAll(SELECTOR)
-              .forEach((el) => observer.observe(el));
-          }
-        }
-      }
-    });
-
-    const mutationRoot =
-      document.getElementById("main-content") ?? document.body;
-    mutation.observe(mutationRoot, { childList: true, subtree: true });
+    // Observe any elements that registered before the observer was created
+    for (const el of _registered) {
+      observer.observe(el);
+    }
 
     return () => {
       observer.disconnect();
-      mutation.disconnect();
+      _observer = null;
     };
   }, []);
+}
+
+/**
+ * Hook for client components to register their root element with the
+ * animation pause system. Call from any client component whose root
+ * element should participate in off-screen animation pausing.
+ *
+ * Returns a ref callback to attach to the element. If you already have
+ * a ref, pass it as the argument instead.
+ */
+export function useAnimationPauseRegister(
+  externalRef?: React.RefObject<Element | null>,
+) {
+  const internalRef = useRef<Element | null>(null);
+  const ref = externalRef ?? internalRef;
+
+  useEffect(() => {
+    const el = ref.current;
+    if (!el) return;
+    registerAnimationElement(el);
+    return () => deregisterAnimationElement(el);
+  }, [ref]);
+
+  return externalRef ? undefined : internalRef;
 }

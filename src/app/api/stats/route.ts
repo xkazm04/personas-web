@@ -7,6 +7,29 @@ const WAITLIST_FILE = path.join(DATA_DIR, "waitlist.json");
 const STATS_CACHE_FILE = path.join(DATA_DIR, "stats-cache.json");
 const CACHE_TTL_MS = 60 * 60 * 1000; // 1 hour
 
+/**
+ * Marketing floor values for the landing page hero stats display.
+ *
+ * These are intentional minimums that prevent the landing page from
+ * showing embarrassingly low numbers during early access. The actual
+ * stats are Math.max(real, floor). As real usage grows beyond these
+ * values, the floors become irrelevant.
+ *
+ * To update: change values here. These are NOT bugs — they are a
+ * deliberate marketing decision.
+ */
+const MINIMUM_DISPLAY_VALUES: PlatformStats = {
+  totalUsers: 228,
+  totalExecutions: 34_000,
+  totalTemplates: 120,
+  totalToolsConnected: 24,
+  totalAgents: 42,
+  totalCliCommands: 70,
+  coldStartSeconds: 2,
+  roadmapCompleted: 11,
+  roadmapTotal: 15,
+};
+
 export interface PlatformStats {
   totalUsers: number;
   totalExecutions: number;
@@ -56,27 +79,23 @@ async function writeCache(stats: PlatformStats): Promise<void> {
 async function aggregateStats(): Promise<PlatformStats> {
   const waitlistUsers = await getWaitlistCount();
 
-  // Base metrics from the platform — these grow as real data accumulates.
-  // The waitlist count is always live; other counters read from the cache
-  // file which can be updated by a background job or admin endpoint.
+  // Start with marketing floor values (see MINIMUM_DISPLAY_VALUES JSDoc).
+  // The waitlist count is always live; all other counters default to the
+  // floor values and can be overridden by platform-counters.json.
   const stats: PlatformStats = {
-    totalUsers: Math.max(waitlistUsers, 228),
-    totalExecutions: 34_000,
-    totalTemplates: 120,
-    totalToolsConnected: 24,
-    totalAgents: 42,
-    totalCliCommands: 70,
-    coldStartSeconds: 2,
-    roadmapCompleted: 11,
-    roadmapTotal: 15,
+    ...MINIMUM_DISPLAY_VALUES,
+    totalUsers: Math.max(waitlistUsers, MINIMUM_DISPLAY_VALUES.totalUsers),
   };
 
-  // Try to read persisted counters that may have been updated externally
+  // Try to read persisted counters that may have been updated externally.
+  // NOTE: platform-counters.json is expected to be written by an external
+  // process (background job, admin CLI, or CI pipeline) that does NOT yet
+  // exist. Until that process is built, stats will always equal the floor
+  // values above. This is intentional — do not remove as "dead code".
   try {
     const countersFile = path.join(DATA_DIR, "platform-counters.json");
     const raw = await fs.readFile(countersFile, "utf-8");
     const counters = JSON.parse(raw) as Partial<PlatformStats>;
-    // Merge any externally-updated counters
     if (counters.totalUsers !== undefined) stats.totalUsers = Math.max(stats.totalUsers, counters.totalUsers);
     if (counters.totalExecutions !== undefined) stats.totalExecutions = counters.totalExecutions;
     if (counters.totalTemplates !== undefined) stats.totalTemplates = counters.totalTemplates;
@@ -87,7 +106,7 @@ async function aggregateStats(): Promise<PlatformStats> {
     if (counters.roadmapCompleted !== undefined) stats.roadmapCompleted = counters.roadmapCompleted;
     if (counters.roadmapTotal !== undefined) stats.roadmapTotal = counters.roadmapTotal;
   } catch {
-    // No external counters file — use defaults
+    // No external counters file — use floor values from MINIMUM_DISPLAY_VALUES
   }
 
   return stats;

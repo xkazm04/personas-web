@@ -377,19 +377,7 @@ const RoadmapCard = memo(function RoadmapCard({ phase, index }: { phase: Phase; 
 
 export default function Roadmap() {
   return (
-    <SectionWrapper id="roadmap" dotGrid>
-      {/* Background accents */}
-      <div className="pointer-events-none absolute inset-0 overflow-hidden">
-        <div
-          className="absolute left-[5%] top-[20%] h-[500px] w-[400px] rounded-full opacity-30"
-          style={{ background: "radial-gradient(circle, rgba(6,182,212,0.04) 0%, transparent 60%)" }}
-        />
-        <div
-          className="absolute right-[5%] bottom-[20%] h-[400px] w-[400px] rounded-full opacity-30"
-          style={{ background: "radial-gradient(circle, rgba(168,85,247,0.03) 0%, transparent 60%)" }}
-        />
-      </div>
-
+    <SectionWrapper id="roadmap">
       <motion.div variants={fadeUp} className="text-center relative">
         <div className="text-[8rem] sm:text-[10rem] md:text-[14rem] font-black leading-none tracking-tighter select-none bg-gradient-to-b from-white to-white/10 bg-clip-text text-transparent drop-shadow-lg">
           73%

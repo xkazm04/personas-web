@@ -14,10 +14,11 @@ import WaitlistModal from "@/components/WaitlistModal";
 const APP_VERSION = process.env.NEXT_PUBLIC_APP_VERSION ?? "0.1.0";
 const RELEASE_TITLE = process.env.NEXT_PUBLIC_RELEASE_TITLE || "Latest";
 const RELEASE_DATE = process.env.NEXT_PUBLIC_RELEASE_DATE ?? "";
+const DOWNLOAD_URL = process.env.NEXT_PUBLIC_DOWNLOAD_URL;
 const SEVEN_DAYS_MS = 7 * 24 * 60 * 60 * 1000;
 
 const platforms = [
-  { icon: Monitor, label: "Windows", available: true },
+  { icon: Monitor, label: "Windows", available: !!DOWNLOAD_URL },
   { icon: Apple, label: "macOS", available: false },
   { icon: Terminal, label: "Linux", available: false },
 ] as const;
@@ -32,27 +33,7 @@ export default function DownloadCTA() {
   }, []);
 
   return (
-    <SectionWrapper id="download" dotGrid className="noise py-40 md:py-48">
-      {/* Background orbs */}
-      <div className="pointer-events-none absolute inset-0 flex items-center justify-center">
-        <div
-          className="animate-pulse-slow h-[600px] w-[600px] rounded-full"
-          style={{
-            background:
-              "radial-gradient(circle, rgba(6,182,212,0.1) 0%, rgba(168,85,247,0.06) 30%, transparent 65%)",
-          }}
-        />
-      </div>
-      <div className="pointer-events-none absolute inset-0 flex items-center justify-center">
-        <div
-          className="animate-pulse-slower h-[400px] w-[400px] rounded-full"
-          style={{
-            background:
-              "radial-gradient(circle, rgba(96,165,250,0.05) 0%, transparent 60%)",
-          }}
-        />
-      </div>
-
+    <SectionWrapper id="download" aria-labelledby="download-heading" className="noise py-40 md:py-48">
       {/* Decorative orbital ring */}
       <div className="pointer-events-none absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2">
         <div className="animate-spin-slow" style={{ width: 500, height: 500, animationDuration: "40s" }}>
@@ -74,7 +55,7 @@ export default function DownloadCTA() {
         </motion.div>
 
         <motion.div variants={fadeUp}>
-          <SectionHeading>
+          <SectionHeading id="download-heading">
             Ready to build your
             <br />
             <span className="font-light text-white/80">first</span> <GradientText className="drop-shadow-lg">agent?</GradientText>
@@ -89,11 +70,14 @@ export default function DownloadCTA() {
           className="mt-6 mx-auto grid max-w-xl grid-cols-1 gap-2 text-left sm:grid-cols-3"
           initial="hidden"
           whileInView="visible"
-          viewport={{ once: true }}
-          variants={{ hidden: {}, visible: { transition: { staggerChildren: 0.6 } } }}
+          viewport={{ once: false, amount: 0.4 }}
+          variants={{
+            hidden: { transition: { staggerChildren: 0.1 } },
+            visible: { transition: { staggerChildren: 0.6 } },
+          }}
         >
           {[
-            "Download installer",
+            DOWNLOAD_URL ? "Download installer" : "Join waitlist",
             "Connect Claude CLI",
             "Launch first agent",
           ].map((step, index) => {
@@ -107,7 +91,11 @@ export default function DownloadCTA() {
                 key={step}
                 className="rounded-xl border border-white/[0.05] bg-white/[0.015] px-3 py-2"
                 variants={{
-                  hidden: { opacity: 0, y: 12 },
+                  hidden: {
+                    opacity: 0,
+                    y: 12,
+                    transition: { duration: 0.3, ease: "easeOut" },
+                  },
                   visible: {
                     opacity: 1,
                     y: 0,
@@ -140,13 +128,25 @@ export default function DownloadCTA() {
         {/* Main CTA */}
         <motion.div variants={fadeUp} className="mt-10">
           <div className="flex flex-col items-center justify-center gap-3 sm:flex-row">
-            {/* eslint-disable-next-line jsx-a11y/click-events-have-key-events, jsx-a11y/no-static-element-interactions */}
-            <div onClick={() => trackDownloadClick("windows")}>
-              <PrimaryCTA href="#" icon={Download} label="Download for Windows" variant="solid" />
-            </div>
+            {DOWNLOAD_URL ? (
+              <PrimaryCTA
+                href="/api/download"
+                onClick={() => trackDownloadClick("windows")}
+                icon={Download}
+                label="Download for Windows"
+                variant="solid"
+              />
+            ) : (
+              <PrimaryCTA
+                onClick={() => setWaitlistPlatform(platforms[0])}
+                icon={Download}
+                label="Join Windows Waitlist"
+                variant="solid"
+              />
+            )}
             <a
               href="#features"
-              className="inline-flex w-[min(100%,20rem)] items-center justify-center rounded-full border border-white/[0.08] bg-white/[0.015] px-6 py-3 text-sm font-medium text-muted transition-colors duration-300 hover:border-white/[0.15] hover:text-foreground sm:w-auto"
+              className="inline-flex w-[min(100%,20rem)] items-center justify-center rounded-full border border-white/[0.08] bg-white/[0.015] px-6 py-3 text-sm font-medium text-muted transition-colors duration-300 hover:border-white/[0.15] hover:text-foreground sm:w-auto focus-visible:ring-2 focus-visible:ring-brand-cyan/40 focus-visible:outline-none"
             >
               Explore capabilities first
             </a>
@@ -169,7 +169,7 @@ export default function DownloadCTA() {
               <button
                 key={p.label}
                 onClick={() => setWaitlistPlatform(p)}
-                className="flex cursor-pointer items-center gap-2 rounded-full border border-white/[0.04] bg-white/[0.01] px-4 py-2 text-xs font-medium text-muted-dark transition-all duration-300 hover:border-brand-purple/20 hover:bg-brand-purple/5 hover:text-brand-purple/80"
+                className="flex cursor-pointer items-center gap-2 rounded-full border border-white/[0.04] bg-white/[0.01] px-4 py-2 text-xs font-medium text-muted-dark transition-all duration-300 hover:border-brand-purple/20 hover:bg-brand-purple/5 hover:text-brand-purple/80 focus-visible:ring-2 focus-visible:ring-brand-cyan/40 focus-visible:outline-none"
               >
                 <p.icon className="h-3.5 w-3.5" />
                 {p.label}
@@ -181,19 +181,28 @@ export default function DownloadCTA() {
 
         {/* Trust signals */}
         <motion.div variants={fadeUp} className="mt-8 flex flex-wrap items-center justify-center gap-3 text-xs text-muted-dark sm:gap-6">
-          <span className="flex items-center gap-1.5">
-            <div className="h-1 w-1 rounded-full bg-brand-cyan/40" />
-            Requires Claude CLI
-          </span>
-          <span className="hidden h-3 w-px bg-white/[0.06] sm:inline-block" />
-          <span className="flex items-center gap-1.5">
-            <div className="h-1 w-1 rounded-full bg-brand-cyan/40" />
-            12 MB installer
-          </span>
-          <span className="hidden h-3 w-px bg-white/[0.06] sm:inline-block" />
+          {DOWNLOAD_URL && (
+            <>
+              <span className="flex items-center gap-1.5">
+                <div className="h-1 w-1 rounded-full bg-brand-cyan/40" />
+                Requires Claude CLI
+              </span>
+              <span className="hidden h-3 w-px bg-white/[0.06] sm:inline-block" />
+              <span className="flex items-center gap-1.5">
+                <div className="h-1 w-1 rounded-full bg-brand-cyan/40" />
+                12 MB installer
+              </span>
+              <span className="hidden h-3 w-px bg-white/[0.06] sm:inline-block" />
+            </>
+          )}
           <span className="flex items-center gap-1.5">
             <div className="h-1 w-1 rounded-full bg-brand-cyan/40" />
             No telemetry
+          </span>
+          <span className="hidden h-3 w-px bg-white/[0.06] sm:inline-block" />
+          <span className="flex items-center gap-1.5">
+            <div className="h-1 w-1 rounded-full bg-brand-cyan/40" />
+            Local-first security
           </span>
         </motion.div>
       </div>

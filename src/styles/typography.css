@@ -1,0 +1,130 @@
+/* ── Language-specific font families ─────────────── */
+/* Noto Sans fonts loaded via <link> in layout.tsx */
+
+[data-lang="en"] { --font-lang: var(--font-geist-sans), system-ui, sans-serif; }
+[data-lang="zh"] { --font-lang: "Noto Sans SC", var(--font-geist-sans), system-ui, sans-serif; }
+[data-lang="ar"] { --font-lang: "Noto Sans Arabic", var(--font-geist-sans), system-ui, sans-serif; }
+[data-lang="hi"] { --font-lang: "Noto Sans Devanagari", var(--font-geist-sans), system-ui, sans-serif; }
+[data-lang="ru"] { --font-lang: var(--font-geist-sans), system-ui, sans-serif; }
+[data-lang="id"] { --font-lang: var(--font-geist-sans), system-ui, sans-serif; }
+
+body {
+  font-family: var(--font-lang, var(--font-geist-sans), system-ui, sans-serif);
+}
+
+/* ── Script-specific line-height adjustments ─────── */
+
+[data-lang="zh"] body,
+[data-lang="ar"] body,
+[data-lang="hi"] body {
+  line-height: 1.85;
+}
+
+[data-lang="zh"] .typo-hero,
+[data-lang="ar"] .typo-hero,
+[data-lang="hi"] .typo-hero {
+  line-height: 1.3;
+}
+
+[data-lang="zh"] .typo-heading,
+[data-lang="ar"] .typo-heading,
+[data-lang="hi"] .typo-heading,
+[data-lang="zh"] .typo-heading-lg,
+[data-lang="ar"] .typo-heading-lg,
+[data-lang="hi"] .typo-heading-lg {
+  line-height: 1.45;
+}
+
+/* ── RTL support ─────────────────────────────────── */
+
+.typo-rtl {
+  direction: rtl;
+  text-align: right;
+}
+
+/* ── Language-specific letter-spacing ────────────── */
+
+[data-lang="ar"] .typo-heading,
+[data-lang="ar"] .typo-heading-lg,
+[data-lang="ar"] .typo-hero {
+  letter-spacing: -0.01em;
+}
+
+[data-lang="zh"] .typo-heading,
+[data-lang="zh"] .typo-heading-lg,
+[data-lang="zh"] .typo-hero {
+  letter-spacing: 0.02em;
+}
+
+/* ── Semantic typography classes ──────────────────── */
+
+.typo-hero {
+  font-size: clamp(2.5rem, 5vw, 4rem);
+  font-weight: 700;
+  line-height: 1.1;
+  letter-spacing: -0.03em;
+}
+
+.typo-heading {
+  font-size: clamp(1.25rem, 2.5vw, 1.75rem);
+  font-weight: 600;
+  line-height: 1.3;
+  letter-spacing: -0.02em;
+}
+
+.typo-heading-lg {
+  font-size: clamp(1.75rem, 3.5vw, 2.5rem);
+  font-weight: 700;
+  line-height: 1.2;
+  letter-spacing: -0.025em;
+}
+
+.typo-body {
+  font-size: 1rem;
+  font-weight: 400;
+  line-height: 1.7;
+}
+
+.typo-body-lg {
+  font-size: 1.125rem;
+  font-weight: 400;
+  line-height: 1.75;
+}
+
+.typo-caption {
+  font-size: 0.8125rem;
+  font-weight: 400;
+  line-height: 1.5;
+  color: var(--muted);
+}
+
+.typo-label {
+  font-size: 0.6875rem;
+  font-weight: 600;
+  line-height: 1.2;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+
+.typo-data {
+  font-size: 1.5rem;
+  font-weight: 700;
+  line-height: 1.2;
+  font-variant-numeric: tabular-nums;
+  font-family: var(--font-mono), ui-monospace, monospace;
+}
+
+.typo-data-lg {
+  font-size: 2.5rem;
+  font-weight: 700;
+  line-height: 1.1;
+  font-variant-numeric: tabular-nums;
+  font-family: var(--font-mono), ui-monospace, monospace;
+}
+
+.typo-code {
+  font-size: 0.875rem;
+  font-weight: 400;
+  line-height: 1.6;
+  font-family: var(--font-mono), ui-monospace, monospace;
+}

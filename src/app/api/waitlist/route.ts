@@ -1,7 +1,33 @@
+/**
+ * WAITLIST API - SERVERLESS LIMITATIONS & PRODUCTION WARNING
+ *
+ * 1. DEVELOPMENT ONLY: This implementation uses the local filesystem (.data/waitlist.json)
+ *    for storage. On serverless platforms (Vercel, AWS Lambda), the filesystem is ephemeral.
+ *    Data will be LOST on every cold start or redeploy.
+ *
+ * 2. DATABASE REQUIRED: Production deployment requires a persistent database backend.
+ *    Supabase (PostgreSQL) is already integrated into the project's Auth context and
+ *    is the recommended path for production waitlist storage.
+ *
+ * 3. RATE LIMITING: The rate limiter uses an in-memory Map. On serverless, this state
+ *    is reset per invocation and shared only within the same warm instance, providing
+ *    no reliable protection against distributed attacks or high-volume spam.
+ *
+ * ── PII Policy ──────────────────────────────────────────────────────
+ * This route collects:
+ * - email: provided voluntarily by the user to join the waitlist
+ * - platform: the platform the user is interested in (not PII)
+ * IP addresses are used ONLY for transient in-memory rate limiting
+ * and are NEVER persisted to the database or filesystem.
+ * ────────────────────────────────────────────────────────────────────
+ */
+
 import { NextRequest, NextResponse } from "next/server";
 import { promises as fs } from "fs";
 import path from "path";
 import { randomBytes } from "crypto";
+import { isValidEmail } from "@/lib/validation";
+import { withWriteLock } from "@/lib/fileLock";
 
 const DATA_DIR = path.join(process.cwd(), ".data");
 const WAITLIST_FILE = path.join(DATA_DIR, "waitlist.json");
@@ -18,10 +44,6 @@ interface WaitlistData {
 }
 
 // --- Input validation ---
-
-/** Basic RFC 5322 email pattern — intentionally simple to avoid ReDoS */
-const EMAIL_RE = /^[^\s@<>'"`;(){}[\]\\]+@[^\s@<>'"`;(){}[\]\\]+\.[a-zA-Z]{2,}$/;
-const MAX_EMAIL_LENGTH = 254;
 
 const VALID_PLATFORMS = new Set(["macos", "windows", "linux"]);
 
@@ -72,11 +94,32 @@ function getClientIp(req: NextRequest): string {
   );
 }
 
+// --- O(1) indices (populated on first read, kept in sync on writes) ---
+
+let dedupIndex: Set<string> | null = null;
+let platformCounts: Map<string, number> | null = null;
+
+function dedupKey(email: string, platform: string): string {
+  return `${email}:${platform}`;
+}
+
 async function readWaitlist(): Promise<WaitlistData> {
   try {
     const raw = await fs.readFile(WAITLIST_FILE, "utf-8");
-    return JSON.parse(raw) as WaitlistData;
+    const data = JSON.parse(raw) as WaitlistData;
+    // Build indices on first read
+    if (!dedupIndex || !platformCounts) {
+      dedupIndex = new Set();
+      platformCounts = new Map();
+      for (const e of data.entries) {
+        dedupIndex.add(dedupKey(e.email, e.platform));
+        platformCounts.set(e.platform, (platformCounts.get(e.platform) || 0) + 1);
+      }
+    }
+    return data;
   } catch {
+    if (!dedupIndex) dedupIndex = new Set();
+    if (!platformCounts) platformCounts = new Map();
     return { entries: [] };
   }
 }
@@ -90,18 +133,6 @@ async function writeWaitlist(data: WaitlistData): Promise<void> {
   await fs.rename(tmpFile, WAITLIST_FILE);
 }
 
-// --- In-process mutex for read-modify-write serialization ---
-// Chains all mutating operations so concurrent POSTs are serialized.
-let writeLock = Promise.resolve();
-
-function withWriteLock<T>(fn: () => Promise<T>): Promise<T> {
-  const next = writeLock.then(fn, fn);
-  // Update the chain so subsequent callers wait for this one.
-  // Swallow errors to prevent a failed request from breaking the chain.
-  writeLock = next.then(() => {}, () => {});
-  return next;
-}
-
 // GET — return counts per platform
 export async function GET(req: NextRequest) {
   const ip = getClientIp(req);
@@ -112,11 +143,16 @@ export async function GET(req: NextRequest) {
     );
   }
 
-  const data = await readWaitlist();
-  const counts: Record<string, number> = {};
-  for (const entry of data.entries) {
-    counts[entry.platform] = (counts[entry.platform] || 0) + 1;
+  // Use in-memory counts if available to avoid disk I/O and O(n) scan
+  if (!platformCounts) {
+    await readWaitlist();
   }
+
+  const counts: Record<string, number> = {};
+  for (const platform of VALID_PLATFORMS) {
+    counts[platform] = platformCounts!.get(platform) || 0;
+  }
+
   return NextResponse.json({ counts });
 }
 
@@ -144,10 +180,7 @@ export async function POST(req: NextRequest) {
     return NextResponse.json({ error: "Email is required" }, { status: 400 });
   }
   const trimmedEmail = email.trim().toLowerCase();
-  if (trimmedEmail.length > MAX_EMAIL_LENGTH) {
-    return NextResponse.json({ error: "Email is too long" }, { status: 400 });
-  }
-  if (!EMAIL_RE.test(trimmedEmail)) {
+  if (!isValidEmail(trimmedEmail)) {
     return NextResponse.json(
       { error: "Invalid email format" },
       { status: 400 }
@@ -167,14 +200,12 @@ export async function POST(req: NextRequest) {
 
   // Serialize read-modify-write to prevent TOCTOU race conditions.
   // Concurrent POSTs are queued and processed one at a time.
-  const result = await withWriteLock(async () => {
+  const result = await withWriteLock("waitlist", async () => {
     const data = await readWaitlist();
 
-    // Check for duplicate
-    const exists = data.entries.some(
-      (e) => e.email === trimmedEmail && e.platform === platform
-    );
-    if (exists) {
+    // Check for duplicate — O(1) Set lookup
+    const key = dedupKey(trimmedEmail, platform);
+    if (dedupIndex!.has(key)) {
       return { duplicate: true, count: 0 } as const;
     }
 
@@ -186,13 +217,17 @@ export async function POST(req: NextRequest) {
     });
 
     await writeWaitlist(data);
+    dedupIndex!.add(key);
 
-    const count = data.entries.filter((e) => e.platform === platform).length;
-    return { duplicate: false, count } as const;
+    // Update in-memory counts (write-through)
+    const currentCount = (platformCounts!.get(platform) || 0) + 1;
+    platformCounts!.set(platform, currentCount);
+
+    return { duplicate: false, count: currentCount } as const;
   });
 
   if (result.duplicate) {
-    return NextResponse.json({ message: "Already on the waitlist" });
+    return NextResponse.json({ message: "Already on the waitlist", duplicate: true });
   }
 
   return NextResponse.json({ message: "Added to waitlist", count: result.count });

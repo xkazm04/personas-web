@@ -1,10 +1,10 @@
 "use client";
 
-import type { ReactNode } from "react";
+import { useMemo, type ReactNode } from "react";
 import dynamic from "next/dynamic";
 import ScrollMap from "@/components/ScrollMap";
-import AmbientOrbs from "@/components/AmbientOrbs";
 import AnimationPauseObserver from "@/components/AnimationPauseObserver";
+import { SectionObserverProvider } from "@/contexts/SectionObserverContext";
 
 const TopoBackground = dynamic(() => import("@/components/TopoBackground"), {
   ssr: false,
@@ -25,14 +25,18 @@ export default function PageShell({
   scrollMapItems: ScrollMapItem[];
   children: ReactNode;
 }) {
+  const sectionIds = useMemo(
+    () => scrollMapItems.map((item) => item.href.replace("#", "")),
+    [scrollMapItems],
+  );
+
   return (
-    <main id="main-content" className="relative isolate overflow-hidden">
-      <AnimationPauseObserver />
-      <TopoBackground />
-      <ParallaxAccents />
-      <AmbientOrbs />
-      <ScrollMap items={scrollMapItems} />
-      {children}
-    </main>
+    <SectionObserverProvider sectionIds={sectionIds}>
+      <main id="main-content" className="relative isolate overflow-hidden">
+        <AnimationPauseObserver />
+        <ScrollMap items={scrollMapItems} />
+        {children}
+      </main>
+    </SectionObserverProvider>
   );
 }

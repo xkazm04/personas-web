@@ -171,14 +171,17 @@ export default function UseCases() {
       setConnectorVisible(true);
     }, 200);
 
-    const onResize = () => {
-      updatePath();
-    };
+    const container = containerRef.current;
+    if (!container) return;
 
-    window.addEventListener("resize", onResize);
+    const ro = new ResizeObserver(() => {
+      requestAnimationFrame(updatePath);
+    });
+    ro.observe(container);
+
     return () => {
       window.clearTimeout(timer);
-      window.removeEventListener("resize", onResize);
+      ro.disconnect();
     };
   }, [selected, isMobile]);
 
@@ -227,10 +230,6 @@ export default function UseCases() {
 
   return (
     <SectionWrapper id="use-cases">
-      <div className="pointer-events-none absolute inset-0 overflow-hidden">
-        <div className="absolute left-1/2 top-1/3 h-125 w-200 -translate-x-1/2 rounded-full opacity-30" style={{ background: "radial-gradient(ellipse, rgba(6,182,212,0.04) 0%, transparent 60%)" }} />
-      </div>
-
       <motion.div variants={fadeUp} className="relative">
         <SectionHeading className="text-center">
           One agent per tool.{" "}
@@ -292,7 +291,6 @@ export default function UseCases() {
                 }}
                 whileHover={{
                   scale: isActive ? 1.1 : 1.06,
-                  boxShadow: `0 0 20px ${tool.color}20`
                 }}
                 whileTap={{ scale: 0.95 }}
                 initial={{ opacity: 0, y: 20 }}

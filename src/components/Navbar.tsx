@@ -7,6 +7,8 @@ import { usePathname } from "next/navigation";
 import Image from "next/image";
 import Link from "next/link";
 import useActiveSection from "@/hooks/useActiveSection";
+import { NAVBAR_SECTIONS } from "@/lib/constants";
+import LanguageSwitcher from "@/components/LanguageSwitcher";
 
 const preloadHowImage = () => {
   if (document.querySelector('link[data-preload-how-bg]')) return;
@@ -25,14 +27,7 @@ const routes = [
   { label: "Roadmap", href: "/roadmap" },
 ];
 
-const landingSections = [
-  { id: "hero", label: "Hero" },
-  { id: "use-cases", label: "Tools" },
-  { id: "vision", label: "Vision" },
-  { id: "pricing", label: "Pricing" },
-  { id: "faq", label: "FAQ" },
-  { id: "download", label: "Download" },
-];
+const landingSections = NAVBAR_SECTIONS;
 
 const BADGE_VISIBLE_MS = 1500;
 
@@ -133,14 +128,14 @@ export default function Navbar() {
       transition={{ duration: 0.6, ease: "easeOut" }}
       className={`fixed top-0 z-50 w-full transition-all duration-500 ${
         scrolled
-          ? "border-b border-white/4 bg-background/70 backdrop-blur-2xl shadow-[0_1px_30px_rgba(0,0,0,0.3)]"
+          ? "bg-background/70 backdrop-blur-2xl shadow-[0_1px_30px_rgba(0,0,0,0.3)]"
           : "bg-transparent"
       }`}
     >
       <nav className="mx-auto max-w-6xl px-6 py-4">
         <div className="flex items-center justify-between">
           {/* Logo */}
-          <Link href="/" className="group flex items-center gap-2.5">
+          <Link href="/" className="group flex items-center gap-2.5 focus-ring">
             <div className="relative flex h-8 w-8 items-center justify-center rounded-lg transition-transform duration-300 group-hover:scale-105">
               <Image
                 src="/imgs/logo.png"
@@ -180,7 +175,7 @@ export default function Navbar() {
                   key={route.href}
                   href={route.href}
                   onMouseEnter={route.href === "/how" ? preloadHowImage : undefined}
-                  className={`relative rounded-full px-6 py-1.5 min-h-11 flex items-center text-sm font-medium transition-all duration-300 ${
+                  className={`relative rounded-full px-6 py-1.5 min-h-11 flex items-center text-sm font-medium transition-all duration-300 focus-ring ${
                     isActive
                       ? "bg-white/8 text-foreground shadow-[0_0_12px_rgba(6,182,212,0.1)]"
                       : "text-muted hover:text-foreground hover:bg-white/3"
@@ -199,10 +194,15 @@ export default function Navbar() {
             })}
           </div>
 
+          {/* Language switcher — desktop */}
+          <div className="hidden md:flex">
+            <LanguageSwitcher />
+          </div>
+
           {/* CTA — hidden on mobile, shown in slide-in panel instead */}
           <Link
             href="/#download"
-            className="group relative hidden items-center gap-2 overflow-hidden rounded-full border border-brand-cyan/25 bg-brand-cyan/8 px-6 py-2 text-sm font-medium text-brand-cyan transition-all duration-300 hover:border-brand-cyan/40 hover:bg-brand-cyan/12 md:flex"
+            className="group relative hidden items-center gap-2 overflow-hidden rounded-full border border-brand-cyan/25 bg-brand-cyan/8 px-6 py-2 text-sm font-medium text-brand-cyan transition-all duration-300 hover:border-brand-cyan/40 hover:bg-brand-cyan/12 md:flex focus-ring"
           >
             <div className="absolute inset-0 -translate-x-full bg-linear-to-r from-transparent via-brand-cyan/10 to-transparent transition-transform duration-700 group-hover:translate-x-full" />
             <Download className="relative h-3.5 w-3.5" />
@@ -212,7 +212,7 @@ export default function Navbar() {
           {/* Hamburger — mobile only */}
           <button
             onClick={() => setMobileOpen((v) => !v)}
-            className="flex items-center justify-center min-w-11 min-h-11 rounded-lg text-muted hover:text-foreground hover:bg-white/5 transition-colors md:hidden"
+            className="flex items-center justify-center min-w-11 min-h-11 rounded-lg text-muted hover:text-foreground hover:bg-white/5 transition-colors md:hidden focus-ring"
             aria-label={mobileOpen ? "Close menu" : "Open menu"}
             aria-expanded={mobileOpen}
           >
@@ -246,14 +246,14 @@ export default function Navbar() {
               role="dialog"
               aria-modal="true"
               aria-label="Navigation menu"
-              className="fixed top-0 right-0 z-50 flex h-full w-72 flex-col border-l border-white/6 bg-background/95 backdrop-blur-2xl shadow-2xl md:hidden"
+              className="fixed top-0 right-0 z-50 flex h-full w-72 flex-col border-l border-white/6 bg-[#0a0a12] shadow-2xl md:hidden"
             >
               {/* Panel header */}
               <div className="flex items-center justify-between px-5 py-4 border-b border-white/6">
                 <span className="text-sm font-semibold tracking-tight text-foreground/80">Menu</span>
                 <button
                   onClick={closeMobile}
-                  className="flex items-center justify-center min-w-11 min-h-11 rounded-lg text-muted hover:text-foreground hover:bg-white/5 transition-colors"
+                  className="flex items-center justify-center min-w-11 min-h-11 rounded-lg text-muted hover:text-foreground hover:bg-white/5 transition-colors focus-ring"
                   aria-label="Close menu"
                 >
                   <X className="h-4.5 w-4.5" />
@@ -288,7 +288,7 @@ export default function Navbar() {
                       key={route.href}
                       href={route.href}
                       onClick={closeMobile}
-                      className={`relative rounded-xl px-4 py-3 text-sm font-medium transition-all duration-200 ${
+                      className={`relative rounded-xl px-4 py-3 text-sm font-medium transition-all duration-200 focus-ring ${
                         isActive
                           ? "bg-brand-cyan/8 text-foreground border border-brand-cyan/15"
                           : "text-muted hover:text-foreground hover:bg-white/4 border border-transparent"
@@ -305,6 +305,11 @@ export default function Navbar() {
                 })}
               </div>
 
+              {/* Language switcher — mobile */}
+              <div className="px-4 mt-4">
+                <LanguageSwitcher />
+              </div>
+
               {/* Spacer */}
               <div className="flex-1" />
 
@@ -313,7 +318,7 @@ export default function Navbar() {
                 <Link
                   href="/#download"
                   onClick={closeMobile}
-                  className="group relative flex items-center justify-center gap-2 overflow-hidden rounded-full border border-brand-cyan/25 bg-brand-cyan/8 px-6 py-2.5 text-sm font-medium text-brand-cyan transition-all duration-300 hover:border-brand-cyan/40 hover:bg-brand-cyan/12 w-full"
+                  className="group relative flex items-center justify-center gap-2 overflow-hidden rounded-full border border-brand-cyan/25 bg-brand-cyan/8 px-6 py-2.5 text-sm font-medium text-brand-cyan transition-all duration-300 hover:border-brand-cyan/40 hover:bg-brand-cyan/12 w-full focus-ring"
                 >
                   <div className="absolute inset-0 -translate-x-full bg-linear-to-r from-transparent via-brand-cyan/10 to-transparent transition-transform duration-700 group-hover:translate-x-full" />
                   <Download className="relative h-3.5 w-3.5" />

@@ -17,6 +17,19 @@ const FALLBACK_STATS: PlatformStats = {
 
 let cachedResult: PlatformStats | null = null;
 
+/**
+ * Fetches and manages platform-wide statistics for the marketing site.
+ * 
+ * Data Source Contract:
+ * - Real Data: `totalUsers` reflects the live waitlist signup count (min 228).
+ * - Mock/Aspirational: `totalExecutions`, `totalTemplates`, `totalAgents`, etc. are
+ *   currently seeded with marketing defaults in the API route, though they can be
+ *   overridden by a server-side `platform-counters.json` file.
+ * - Cadence: Fetched once per session (client-side cache). API response is cached
+ *   on the server for 1 hour (SWR-ish).
+ * 
+ * @returns {PlatformStats} The latest platform statistics or fallback defaults.
+ */
 export function useLiveStats(): PlatformStats {
   const [stats, setStats] = useState<PlatformStats>(cachedResult ?? FALLBACK_STATS);
 

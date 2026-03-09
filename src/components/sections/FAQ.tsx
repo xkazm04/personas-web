@@ -1,209 +1,24 @@
 "use client";
 
-import { useState, type ReactNode } from "react";
+import { useState, useRef, useCallback, type ReactNode } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { ChevronDown, MessageCircle } from "lucide-react";
 import SectionWrapper from "@/components/SectionWrapper";
 import GradientText from "@/components/GradientText";
 import { fadeUp, staggerContainer, TRANSITION_FAST, TRANSITION_NORMAL } from "@/lib/animations";
 
+import TerminalIllustration from "@/components/illustrations/TerminalIllustration";
+import ShieldIllustration from "@/components/illustrations/ShieldIllustration";
+import PricingIllustration from "@/components/illustrations/PricingIllustration";
+import CloudInfraIllustration from "@/components/illustrations/CloudInfraIllustration";
+import LocalCloudIllustration from "@/components/illustrations/LocalCloudIllustration";
+import AgentGridIllustration from "@/components/illustrations/AgentGridIllustration";
+
 type FAQItem = {
   question: string;
   answer: string;
   illustration: ReactNode;
 };
-
-/* ── Inline SVG illustrations ─────────────────────────────────────────── */
-
-function TerminalIllustration() {
-  return (
-    <svg viewBox="0 0 320 180" fill="none" xmlns="http://www.w3.org/2000/svg" className="w-full h-full">
-      <defs>
-        <linearGradient id="faq-term-bg" x1="0" y1="0" x2="320" y2="180" gradientUnits="userSpaceOnUse">
-          <stop stopColor="#06b6d4" stopOpacity="0.08" />
-          <stop offset="1" stopColor="#a855f7" stopOpacity="0.04" />
-        </linearGradient>
-      </defs>
-      <rect width="320" height="180" rx="12" fill="url(#faq-term-bg)" />
-      {/* Terminal window */}
-      <rect x="40" y="30" width="240" height="120" rx="8" fill="rgba(255,255,255,0.03)" stroke="rgba(6,182,212,0.2)" strokeWidth="1" />
-      {/* Title bar */}
-      <rect x="40" y="30" width="240" height="24" rx="8" fill="rgba(6,182,212,0.06)" />
-      <circle cx="56" cy="42" r="3" fill="rgba(255,255,255,0.15)" />
-      <circle cx="68" cy="42" r="3" fill="rgba(255,255,255,0.15)" />
-      <circle cx="80" cy="42" r="3" fill="rgba(255,255,255,0.15)" />
-      {/* Command lines */}
-      <text x="56" y="74" fill="#06b6d4" opacity="0.7" fontSize="11" fontFamily="monospace">$ claude --version</text>
-      <text x="56" y="92" fill="rgba(255,255,255,0.35)" fontSize="11" fontFamily="monospace">claude v3.2.1</text>
-      <text x="56" y="116" fill="#06b6d4" opacity="0.7" fontSize="11" fontFamily="monospace">$ personas start</text>
-      <text x="56" y="134" fill="#34d399" opacity="0.6" fontSize="11" fontFamily="monospace">✓ 3 agents running</text>
-    </svg>
-  );
-}
-
-function ShieldIllustration() {
-  return (
-    <svg viewBox="0 0 320 180" fill="none" xmlns="http://www.w3.org/2000/svg" className="w-full h-full">
-      <defs>
-        <linearGradient id="faq-shield-bg" x1="0" y1="0" x2="320" y2="180" gradientUnits="userSpaceOnUse">
-          <stop stopColor="#34d399" stopOpacity="0.06" />
-          <stop offset="1" stopColor="#06b6d4" stopOpacity="0.04" />
-        </linearGradient>
-        <linearGradient id="faq-shield-fill" x1="160" y1="30" x2="160" y2="155" gradientUnits="userSpaceOnUse">
-          <stop stopColor="#34d399" stopOpacity="0.15" />
-          <stop offset="1" stopColor="#34d399" stopOpacity="0.03" />
-        </linearGradient>
-      </defs>
-      <rect width="320" height="180" rx="12" fill="url(#faq-shield-bg)" />
-      {/* Shield shape */}
-      <path d="M160 28 L210 50 V100 C210 130 185 148 160 155 C135 148 110 130 110 100 V50 Z" fill="url(#faq-shield-fill)" stroke="#34d399" strokeOpacity="0.3" strokeWidth="1" />
-      {/* Lock icon inside shield */}
-      <rect x="148" y="82" width="24" height="18" rx="3" fill="none" stroke="#34d399" strokeOpacity="0.5" strokeWidth="1.5" />
-      <path d="M153 82 V76 C153 72.134 156.134 69 160 69 C163.866 69 167 72.134 167 76 V82" fill="none" stroke="#34d399" strokeOpacity="0.5" strokeWidth="1.5" />
-      <circle cx="160" cy="91" r="2" fill="#34d399" opacity="0.6" />
-      {/* Zero telemetry labels */}
-      <text x="60" y="80" fill="rgba(255,255,255,0.2)" fontSize="9" fontFamily="monospace">NO ANALYTICS</text>
-      <text x="60" y="96" fill="rgba(255,255,255,0.2)" fontSize="9" fontFamily="monospace">NO TRACKING</text>
-      <text x="222" y="80" fill="rgba(255,255,255,0.2)" fontSize="9" fontFamily="monospace">LOCAL ONLY</text>
-      <text x="222" y="96" fill="rgba(255,255,255,0.2)" fontSize="9" fontFamily="monospace">YOUR DATA</text>
-    </svg>
-  );
-}
-
-function PricingIllustration() {
-  return (
-    <svg viewBox="0 0 320 180" fill="none" xmlns="http://www.w3.org/2000/svg" className="w-full h-full">
-      <defs>
-        <linearGradient id="faq-price-bg" x1="0" y1="0" x2="320" y2="180" gradientUnits="userSpaceOnUse">
-          <stop stopColor="#a855f7" stopOpacity="0.06" />
-          <stop offset="1" stopColor="#06b6d4" stopOpacity="0.04" />
-        </linearGradient>
-      </defs>
-      <rect width="320" height="180" rx="12" fill="url(#faq-price-bg)" />
-      {/* Tier cards */}
-      {/* Free */}
-      <rect x="30" y="45" width="75" height="95" rx="6" fill="rgba(255,255,255,0.03)" stroke="rgba(52,211,153,0.25)" strokeWidth="1" />
-      <text x="67" y="68" fill="#34d399" opacity="0.7" fontSize="10" fontFamily="sans-serif" textAnchor="middle" fontWeight="600">Free</text>
-      <text x="67" y="85" fill="rgba(255,255,255,0.3)" fontSize="18" fontFamily="sans-serif" textAnchor="middle" fontWeight="700">$0</text>
-      <rect x="42" y="98" width="51" height="3" rx="1.5" fill="rgba(52,211,153,0.15)" />
-      <rect x="42" y="108" width="38" height="3" rx="1.5" fill="rgba(52,211,153,0.1)" />
-      <rect x="42" y="118" width="45" height="3" rx="1.5" fill="rgba(52,211,153,0.1)" />
-      {/* Starter */}
-      <rect x="122" y="45" width="75" height="95" rx="6" fill="rgba(255,255,255,0.03)" stroke="rgba(6,182,212,0.25)" strokeWidth="1" />
-      <text x="159" y="68" fill="#06b6d4" opacity="0.7" fontSize="10" fontFamily="sans-serif" textAnchor="middle" fontWeight="600">Starter</text>
-      <text x="159" y="85" fill="rgba(255,255,255,0.3)" fontSize="18" fontFamily="sans-serif" textAnchor="middle" fontWeight="700">$19</text>
-      <rect x="134" y="98" width="51" height="3" rx="1.5" fill="rgba(6,182,212,0.15)" />
-      <rect x="134" y="108" width="38" height="3" rx="1.5" fill="rgba(6,182,212,0.1)" />
-      <rect x="134" y="118" width="45" height="3" rx="1.5" fill="rgba(6,182,212,0.1)" />
-      {/* Pro */}
-      <rect x="214" y="38" width="75" height="102" rx="6" fill="rgba(168,85,247,0.06)" stroke="rgba(168,85,247,0.35)" strokeWidth="1.5" />
-      <text x="251" y="61" fill="#a855f7" opacity="0.8" fontSize="10" fontFamily="sans-serif" textAnchor="middle" fontWeight="600">Pro</text>
-      <text x="251" y="78" fill="rgba(255,255,255,0.4)" fontSize="18" fontFamily="sans-serif" textAnchor="middle" fontWeight="700">$49</text>
-      <rect x="226" y="91" width="51" height="3" rx="1.5" fill="rgba(168,85,247,0.2)" />
-      <rect x="226" y="101" width="38" height="3" rx="1.5" fill="rgba(168,85,247,0.15)" />
-      <rect x="226" y="111" width="45" height="3" rx="1.5" fill="rgba(168,85,247,0.15)" />
-      <rect x="226" y="121" width="30" height="3" rx="1.5" fill="rgba(168,85,247,0.1)" />
-    </svg>
-  );
-}
-
-function CloudInfraIllustration() {
-  return (
-    <svg viewBox="0 0 320 180" fill="none" xmlns="http://www.w3.org/2000/svg" className="w-full h-full">
-      <defs>
-        <linearGradient id="faq-byoi-bg" x1="0" y1="0" x2="320" y2="180" gradientUnits="userSpaceOnUse">
-          <stop stopColor="#06b6d4" stopOpacity="0.06" />
-          <stop offset="1" stopColor="#a855f7" stopOpacity="0.05" />
-        </linearGradient>
-      </defs>
-      <rect width="320" height="180" rx="12" fill="url(#faq-byoi-bg)" />
-      {/* Cloud shape */}
-      <path d="M180 55 C180 42 192 32 206 32 C216 32 224 38 228 46 C230 45 233 44 236 44 C246 44 254 52 254 62 C254 72 246 80 236 80 H150 C140 80 132 72 132 62 C132 54 137 47 145 45 C147 48 153 42 160 42 C168 42 175 47 180 55 Z" fill="rgba(6,182,212,0.08)" stroke="#06b6d4" strokeOpacity="0.3" strokeWidth="1" />
-      {/* Connection lines to infrastructure nodes */}
-      <line x1="160" y1="80" x2="100" y2="130" stroke="#a855f7" strokeOpacity="0.2" strokeWidth="1" strokeDasharray="4 3" />
-      <line x1="190" y1="80" x2="160" y2="130" stroke="#a855f7" strokeOpacity="0.2" strokeWidth="1" strokeDasharray="4 3" />
-      <line x1="220" y1="80" x2="220" y2="130" stroke="#a855f7" strokeOpacity="0.2" strokeWidth="1" strokeDasharray="4 3" />
-      {/* Infrastructure nodes */}
-      <rect x="82" y="125" width="36" height="28" rx="4" fill="rgba(168,85,247,0.08)" stroke="#a855f7" strokeOpacity="0.25" strokeWidth="1" />
-      <text x="100" y="143" fill="#a855f7" opacity="0.5" fontSize="8" fontFamily="monospace" textAnchor="middle">Fly.io</text>
-      <rect x="142" y="125" width="36" height="28" rx="4" fill="rgba(168,85,247,0.08)" stroke="#a855f7" strokeOpacity="0.25" strokeWidth="1" />
-      <text x="160" y="143" fill="#a855f7" opacity="0.5" fontSize="8" fontFamily="monospace" textAnchor="middle">AWS</text>
-      <rect x="202" y="125" width="36" height="28" rx="4" fill="rgba(168,85,247,0.08)" stroke="#a855f7" strokeOpacity="0.25" strokeWidth="1" />
-      <text x="220" y="143" fill="#a855f7" opacity="0.5" fontSize="8" fontFamily="monospace" textAnchor="middle">GCP</text>
-      {/* "Your account" label */}
-      <text x="160" y="170" fill="rgba(255,255,255,0.2)" fontSize="9" fontFamily="monospace" textAnchor="middle">YOUR INFRASTRUCTURE</text>
-    </svg>
-  );
-}
-
-function LocalCloudIllustration() {
-  return (
-    <svg viewBox="0 0 320 180" fill="none" xmlns="http://www.w3.org/2000/svg" className="w-full h-full">
-      <defs>
-        <linearGradient id="faq-lc-bg" x1="0" y1="0" x2="320" y2="180" gradientUnits="userSpaceOnUse">
-          <stop stopColor="#34d399" stopOpacity="0.05" />
-          <stop offset="1" stopColor="#a855f7" stopOpacity="0.05" />
-        </linearGradient>
-      </defs>
-      <rect width="320" height="180" rx="12" fill="url(#faq-lc-bg)" />
-      {/* Divider */}
-      <line x1="160" y1="30" x2="160" y2="155" stroke="rgba(255,255,255,0.06)" strokeWidth="1" strokeDasharray="4 4" />
-      {/* Local side */}
-      <text x="80" y="42" fill="rgba(255,255,255,0.25)" fontSize="10" fontFamily="sans-serif" textAnchor="middle" fontWeight="600">LOCAL</text>
-      {/* Monitor icon */}
-      <rect x="55" y="55" width="50" height="35" rx="4" fill="none" stroke="#34d399" strokeOpacity="0.3" strokeWidth="1" />
-      <rect x="60" y="59" width="40" height="24" rx="2" fill="rgba(52,211,153,0.06)" />
-      <rect x="73" y="90" width="14" height="4" rx="1" fill="rgba(52,211,153,0.15)" />
-      <rect x="67" y="94" width="26" height="2" rx="1" fill="rgba(52,211,153,0.1)" />
-      {/* Local features */}
-      <text x="80" y="115" fill="#34d399" opacity="0.5" fontSize="8" fontFamily="monospace" textAnchor="middle">✓ Private</text>
-      <text x="80" y="128" fill="#34d399" opacity="0.5" fontSize="8" fontFamily="monospace" textAnchor="middle">✓ Free</text>
-      <text x="80" y="141" fill="#34d399" opacity="0.5" fontSize="8" fontFamily="monospace" textAnchor="middle">✓ Instant</text>
-      {/* Cloud side */}
-      <text x="240" y="42" fill="rgba(255,255,255,0.25)" fontSize="10" fontFamily="sans-serif" textAnchor="middle" fontWeight="600">CLOUD</text>
-      {/* Cloud shape */}
-      <path d="M255 68 C255 60 262 53 271 53 C277 53 282 57 284 62 C285 61 287 60 289 60 C295 60 300 65 300 71 C300 77 295 82 289 82 H225 C219 82 214 77 214 71 C214 66 217 62 222 61 C223 63 227 58 232 58 C238 58 244 62 255 68 Z" fill="rgba(168,85,247,0.08)" stroke="#a855f7" strokeOpacity="0.3" strokeWidth="1" />
-      {/* Cloud features */}
-      <text x="240" y="100" fill="#a855f7" opacity="0.5" fontSize="8" fontFamily="monospace" textAnchor="middle">✓ 24/7</text>
-      <text x="240" y="113" fill="#a855f7" opacity="0.5" fontSize="8" fontFamily="monospace" textAnchor="middle">✓ Teams</text>
-      <text x="240" y="126" fill="#a855f7" opacity="0.5" fontSize="8" fontFamily="monospace" textAnchor="middle">✓ Scaling</text>
-      {/* Toggle indicator */}
-      <rect x="138" y="155" width="44" height="16" rx="8" fill="rgba(255,255,255,0.04)" stroke="rgba(255,255,255,0.1)" strokeWidth="1" />
-      <circle cx="152" cy="163" r="5" fill="#34d399" opacity="0.4" />
-    </svg>
-  );
-}
-
-function AgentGridIllustration() {
-  return (
-    <svg viewBox="0 0 320 180" fill="none" xmlns="http://www.w3.org/2000/svg" className="w-full h-full">
-      <defs>
-        <linearGradient id="faq-grid-bg" x1="0" y1="0" x2="320" y2="180" gradientUnits="userSpaceOnUse">
-          <stop stopColor="#06b6d4" stopOpacity="0.05" />
-          <stop offset="1" stopColor="#34d399" stopOpacity="0.05" />
-        </linearGradient>
-      </defs>
-      <rect width="320" height="180" rx="12" fill="url(#faq-grid-bg)" />
-      {/* Grid of agent nodes */}
-      {[0, 1, 2, 3].map((row) =>
-        [0, 1, 2, 3, 4].map((col) => {
-          const cx = 60 + col * 50;
-          const cy = 40 + row * 36;
-          const isActive = (row + col) % 3 !== 0;
-          const color = col < 2 ? "#06b6d4" : col < 4 ? "#a855f7" : "#34d399";
-          return (
-            <g key={`${row}-${col}`}>
-              <circle cx={cx} cy={cy} r="10" fill={isActive ? `${color}` : "rgba(255,255,255,0.02)"} fillOpacity={isActive ? 0.08 : 1} stroke={color} strokeOpacity={isActive ? 0.3 : 0.08} strokeWidth="1" />
-              {isActive && <circle cx={cx} cy={cy} r="3" fill={color} opacity="0.4" />}
-            </g>
-          );
-        })
-      )}
-      {/* ∞ symbol */}
-      <text x="160" y="175" fill="rgba(255,255,255,0.2)" fontSize="11" fontFamily="sans-serif" textAnchor="middle" fontWeight="500">UNLIMITED LOCAL AGENTS</text>
-    </svg>
-  );
-}
 
 /* ── FAQ data ─────────────────────────────────────────────────────────── */
 
@@ -246,14 +61,31 @@ const faqs: FAQItem[] = [
   },
 ];
 
-function FAQCard({ item, index }: { item: FAQItem; index: number }) {
+function FAQCard({
+  item,
+  index,
+  buttonRef,
+  onKeyDown,
+}: {
+  item: FAQItem;
+  index: number;
+  buttonRef: (el: HTMLButtonElement | null) => void;
+  onKeyDown: (e: React.KeyboardEvent) => void;
+}) {
   const [open, setOpen] = useState(false);
+  const triggerId = `faq-trigger-${index}`;
+  const panelId = `faq-panel-${index}`;
 
   return (
     <motion.div variants={fadeUp}>
       <button
+        ref={buttonRef}
+        id={triggerId}
         onClick={() => setOpen((v) => !v)}
-        className="w-full text-left cursor-pointer group"
+        onKeyDown={onKeyDown}
+        aria-expanded={open}
+        aria-controls={panelId}
+        className="w-full text-left cursor-pointer group focus-visible:ring-2 focus-visible:ring-brand-cyan/40 focus-visible:outline-none focus-visible:rounded-2xl"
       >
         <div className="rounded-2xl border border-white/[0.04] bg-gradient-to-br from-white/[0.02] to-transparent p-4 transition-all duration-300 hover:border-white/[0.08] hover:bg-white/[0.025]">
           <div className="flex items-start justify-between gap-4">
@@ -274,6 +106,9 @@ function FAQCard({ item, index }: { item: FAQItem; index: number }) {
       <AnimatePresence initial={false}>
         {open && (
           <motion.div
+            id={panelId}
+            role="region"
+            aria-labelledby={triggerId}
             initial={{ height: 0, opacity: 0 }}
             animate={{ height: "auto", opacity: 1 }}
             exit={{ height: 0, opacity: 0 }}
@@ -301,29 +136,45 @@ export default function FAQ() {
   const midpoint = Math.ceil(faqs.length / 2);
   const leftColumn = faqs.slice(0, midpoint);
   const rightColumn = faqs.slice(midpoint);
+  const buttonRefs = useRef<(HTMLButtonElement | null)[]>([]);
+
+  const setButtonRef = useCallback(
+    (index: number) => (el: HTMLButtonElement | null) => {
+      buttonRefs.current[index] = el;
+    },
+    [],
+  );
+
+  const handleKeyDown = useCallback(
+    (index: number) => (e: React.KeyboardEvent) => {
+      const total = faqs.length;
+      let nextIndex: number | null = null;
+
+      if (e.key === "ArrowDown") {
+        e.preventDefault();
+        nextIndex = (index + 1) % total;
+      } else if (e.key === "ArrowUp") {
+        e.preventDefault();
+        nextIndex = (index - 1 + total) % total;
+      } else if (e.key === "Home") {
+        e.preventDefault();
+        nextIndex = 0;
+      } else if (e.key === "End") {
+        e.preventDefault();
+        nextIndex = total - 1;
+      }
+
+      if (nextIndex !== null) {
+        buttonRefs.current[nextIndex]?.focus();
+      }
+    },
+    [],
+  );
 
   return (
-    <SectionWrapper id="faq" dotGrid>
-      {/* Background accents */}
-      <div className="pointer-events-none absolute inset-0 overflow-hidden">
-        <div
-          className="absolute left-[10%] top-[30%] h-[400px] w-[400px] rounded-full opacity-30"
-          style={{
-            background:
-              "radial-gradient(circle, rgba(6,182,212,0.03) 0%, transparent 60%)",
-          }}
-        />
-        <div
-          className="absolute right-[10%] bottom-[30%] h-[400px] w-[400px] rounded-full opacity-30"
-          style={{
-            background:
-              "radial-gradient(circle, rgba(168,85,247,0.03) 0%, transparent 60%)",
-          }}
-        />
-      </div>
-
+    <SectionWrapper id="faq" aria-labelledby="faq-heading">
       <motion.div variants={fadeUp} className="text-center relative">
-        <h2 className="text-4xl font-extrabold tracking-tight sm:text-5xl md:text-7xl drop-shadow-md">
+        <h2 id="faq-heading" className="text-4xl font-extrabold tracking-tight sm:text-5xl md:text-7xl drop-shadow-md">
           Frequently{" "}
           <GradientText className="drop-shadow-lg">asked</GradientText>
         </h2>
@@ -339,12 +190,24 @@ export default function FAQ() {
       >
         <div className="space-y-4">
           {leftColumn.map((item, i) => (
-            <FAQCard key={i} item={item} index={i} />
+            <FAQCard
+              key={i}
+              item={item}
+              index={i}
+              buttonRef={setButtonRef(i)}
+              onKeyDown={handleKeyDown(i)}
+            />
           ))}
         </div>
         <div className="space-y-4">
           {rightColumn.map((item, i) => (
-            <FAQCard key={i + midpoint} item={item} index={i + midpoint} />
+            <FAQCard
+              key={i + midpoint}
+              item={item}
+              index={i + midpoint}
+              buttonRef={setButtonRef(i + midpoint)}
+              onKeyDown={handleKeyDown(i + midpoint)}
+            />
           ))}
         </div>
       </motion.div>
@@ -363,7 +226,7 @@ export default function FAQ() {
           </div>
           <a
             href="#"
-            className="inline-flex items-center rounded-full border border-brand-purple/20 bg-brand-purple/10 px-6 py-2 text-sm font-medium text-brand-purple transition-all duration-300 hover:border-brand-purple/30 hover:bg-brand-purple/15"
+            className="inline-flex items-center rounded-full border border-brand-purple/20 bg-brand-purple/10 px-6 py-2 text-sm font-medium text-brand-purple transition-all duration-300 hover:border-brand-purple/30 hover:bg-brand-purple/15 focus-visible:ring-2 focus-visible:ring-brand-purple/40 focus-visible:outline-none"
           >
             Join Discord
           </a>

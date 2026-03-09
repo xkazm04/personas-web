@@ -1,21 +1,23 @@
+// ── PII Policy ──────────────────────────────────────────────────────────
+// This route collects:
+// - voter_id: a client-generated anonymous identifier (not PII)
+// - email (optional): provided voluntarily by the user for notifications
+// IP addresses are used ONLY for transient in-memory rate limiting and
+// are NEVER persisted to the database or filesystem.
+// ────────────────────────────────────────────────────────────────────────
+
 import { NextRequest, NextResponse } from "next/server";
 import { promises as fs } from "fs";
 import path from "path";
+import { randomBytes } from "crypto";
 import { isValidEmail } from "@/lib/validation";
+import { withWriteLock } from "@/lib/fileLock";
 
 // ---------------------------------------------------------------------------
 // Validation
 // ---------------------------------------------------------------------------
 
 const ALLOWED_FEATURES = new Set(["macos", "i18n", "dashboard", "enterprise"]);
-
-// Seed counts shown until real votes accumulate
-const SEED_COUNTS: Record<string, number> = {
-  macos: 342,
-  i18n: 189,
-  dashboard: 276,
-  enterprise: 214,
-};
 
 // ---------------------------------------------------------------------------
 // Rate limiting (in-memory, per-IP, resets on deploy)
@@ -82,7 +84,9 @@ async function readVotes(): Promise<VotesData> {
 
 async function writeVotes(data: VotesData): Promise<void> {
   await fs.mkdir(DATA_DIR, { recursive: true });
-  await fs.writeFile(VOTES_FILE, JSON.stringify(data, null, 2));
+  const tmpFile = path.join(DATA_DIR, `.votes-${randomBytes(6).toString("hex")}.tmp`);
+  await fs.writeFile(tmpFile, JSON.stringify(data, null, 2));
+  await fs.rename(tmpFile, VOTES_FILE);
 }
 
 // ---------------------------------------------------------------------------
@@ -133,7 +137,10 @@ export async function GET(req: NextRequest) {
       );
     }
 
-    const counts: Record<string, number> = { ...SEED_COUNTS };
+    // Vote counts reflect real engagement only. The client-side features array
+    // in FeatureVoting.tsx holds seed display values that are shown until the
+    // API responds, and are added on top of the real counts from this endpoint.
+    const counts: Record<string, number> = {};
     const userVotes: string[] = [];
     let userEmail: string | null = null;
 
@@ -152,7 +159,7 @@ export async function GET(req: NextRequest) {
 
   // Filesystem fallback
   const [data, shippedData] = await Promise.all([readVotes(), readShipped()]);
-  const counts: Record<string, number> = { ...SEED_COUNTS };
+  const counts: Record<string, number> = {};
   const userVotes: string[] = [];
   let userEmail: string | null = null;
 
@@ -261,33 +268,36 @@ export async function POST(req: NextRequest) {
   }
 
   // --- Filesystem fallback ---
-  const data = await readVotes();
+  // Serialize read-modify-write to prevent TOCTOU race conditions.
+  return withWriteLock("votes", async () => {
+    const data = await readVotes();
 
-  const existingIdx = data.entries.findIndex(
-    (e) => e.feature_id === featureId && e.voter_id === voterId,
-  );
+    const existingIdx = data.entries.findIndex(
+      (e) => e.feature_id === featureId && e.voter_id === voterId,
+    );
 
-  if (existingIdx !== -1) {
-    // If email provided, update it on existing vote instead of removing
-    if (normalizedEmail) {
-      data.entries[existingIdx].email = normalizedEmail;
+    if (existingIdx !== -1) {
+      // If email provided, update it on existing vote instead of removing
+      if (normalizedEmail) {
+        data.entries[existingIdx].email = normalizedEmail;
+        await writeVotes(data);
+        return NextResponse.json({ action: "email_saved" });
+      }
+      // Remove vote (toggle off)
+      data.entries.splice(existingIdx, 1);
       await writeVotes(data);
-      return NextResponse.json({ action: "email_saved" });
+      return NextResponse.json({ action: "removed" });
     }
-    // Remove vote (toggle off)
-    data.entries.splice(existingIdx, 1);
+
+    // Add vote
+    data.entries.push({
+      feature_id: featureId,
+      voter_id: voterId,
+      ...(normalizedEmail ? { email: normalizedEmail } : {}),
+      created_at: new Date().toISOString(),
+    });
+
     await writeVotes(data);
-    return NextResponse.json({ action: "removed" });
-  }
-
-  // Add vote
-  data.entries.push({
-    feature_id: featureId,
-    voter_id: voterId,
-    ...(normalizedEmail ? { email: normalizedEmail } : {}),
-    created_at: new Date().toISOString(),
+    return NextResponse.json({ action: "added" });
   });
-
-  await writeVotes(data);
-  return NextResponse.json({ action: "added" });
 }

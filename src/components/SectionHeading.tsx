@@ -7,15 +7,18 @@ const scaleClasses = {
 
 export default function SectionHeading({
   as: Tag = "h2",
+  id,
   children,
   className = "",
 }: {
   as?: "h1" | "h2";
+  id?: string;
   children: ReactNode;
   className?: string;
 }) {
   return (
     <Tag
+      id={id}
       className={`font-extrabold tracking-tight drop-shadow-md ${scaleClasses[Tag]} ${className}`}
     >
       {children}

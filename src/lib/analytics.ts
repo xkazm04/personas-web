@@ -1,33 +1,44 @@
 import * as Sentry from "@sentry/nextjs";
 
+// ── Analytics provider (single place to swap the backing service) ────────────
+
+function trackEvent(name: string, attributes?: Record<string, string>) {
+  Sentry.metrics.count(name, 1, { attributes });
+}
+
+// ── Public API (signatures stay unchanged) ───────────────────────────────────
+
 /**
  * Track a page view. Call from client components on mount / route change.
  */
 export function trackPageView(page: string) {
-  Sentry.metrics.count("page_view", 1, { attributes: { page } });
+  trackEvent("page_view", { page });
 }
 
 /**
  * Track a download button click.
  */
 export function trackDownloadClick(platform: string) {
-  Sentry.metrics.count("download_click", 1, { attributes: { platform } });
+  trackEvent("download_click", { platform });
 }
 
 /**
  * Track a feature vote (upvote or undo).
  */
 export function trackFeatureVote(featureId: string, action: "upvote" | "undo") {
-  Sentry.metrics.count("feature_vote", 1, {
-    attributes: { feature: featureId, action },
-  });
+  trackEvent("feature_vote", { feature: featureId, action });
 }
 
 /**
  * Track a custom feature request submission.
  */
 export function trackFeatureRequest(text?: string) {
-  Sentry.metrics.count("feature_request", 1, {
-    attributes: text ? { text: text.slice(0, 200) } : undefined,
-  });
+  trackEvent("feature_request", text ? { text: text.slice(0, 200) } : undefined);
+}
+
+/**
+ * Track a comment on a feature vote card.
+ */
+export function trackFeatureComment(featureId: string, action: "add" | "reply") {
+  trackEvent("feature_comment", { feature: featureId, action });
 }

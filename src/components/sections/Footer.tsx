@@ -1,17 +1,18 @@
 "use client";
 
 import { useState } from "react";
-import { Sparkles, Github, Twitter, ChevronDown, MessageCircle } from "lucide-react";
+import { Github, Twitter, ChevronDown, MessageCircle } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
+import Image from "next/image";
 
 const columns = [
   {
     title: "Product",
     links: [
-      { label: "Features", href: "#features" },
-      { label: "Use Cases", href: "#use-cases" },
-      { label: "Pricing", href: "#pricing" },
-      { label: "Download", href: "#download" },
+      { label: "Features", href: "/#features" },
+      { label: "Use Cases", href: "/#use-cases" },
+      { label: "Pricing", href: "/#pricing" },
+      { label: "Download", href: "/#download" },
     ],
   },
   {
@@ -37,7 +38,7 @@ function FooterLinkColumn({ title, links }: (typeof columns)[number]) {
       {/* Desktop: static heading; Mobile: accordion trigger */}
       <button
         onClick={() => setOpen((v) => !v)}
-        className="flex w-full items-center justify-between md:pointer-events-none md:cursor-default"
+        className="flex w-full items-center justify-between md:pointer-events-none md:cursor-default focus-visible:ring-2 focus-visible:ring-brand-cyan/40 focus-visible:outline-none focus-visible:rounded-lg"
       >
         <h4 className="text-xs font-medium uppercase tracking-wider text-muted-dark">
           {title}
@@ -99,41 +100,33 @@ export default function Footer() {
       {/* Top gradient accent */}
       <div className="pointer-events-none absolute inset-x-0 top-0 h-px bg-linear-to-r from-transparent via-brand-cyan/15 to-transparent" />
 
-      {/* Subtle background glow */}
-      <div className="pointer-events-none absolute inset-0 overflow-hidden">
-        <div
-          className="absolute left-1/4 bottom-0 h-75 w-75 rounded-full opacity-20"
-          style={{ background: "radial-gradient(circle, rgba(6,182,212,0.04) 0%, transparent 60%)" }}
-        />
-        <div
-          className="absolute right-1/4 bottom-0 h-50 w-50 rounded-full opacity-20"
-          style={{ background: "radial-gradient(circle, rgba(168,85,247,0.03) 0%, transparent 60%)" }}
-        />
-      </div>
-
       <div className="relative mx-auto w-full max-w-6xl">
         <div className="grid grid-cols-1 gap-8 md:grid-cols-5 md:gap-12">
           {/* Brand */}
           <div className="md:col-span-2">
             <div className="flex items-center gap-2.5">
-              <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-brand-cyan/10 ring-1 ring-brand-cyan/6 shadow-[0_0_10px_rgba(6,182,212,0.06)]">
-                <Sparkles className="h-4 w-4 text-brand-cyan" />
-              </div>
+              <Image
+                src="/imgs/logo.png"
+                alt="Personas logo"
+                width={24}
+                height={24}
+                className="h-6 w-auto object-contain drop-shadow-[0_0_8px_rgba(6,182,212,0.3)]"
+              />
               <span className="font-semibold tracking-tight">Personas</span>
             </div>
             <p className="mt-4 max-w-sm text-sm leading-relaxed text-muted-dark">
-              Build intelligent AI agents that work for you. Design in natural
-              language, run locally or in the cloud.
+              AI agents that automate your work, so you can focus on what
+              matters most.
             </p>
             {/* Social */}
             <div className="mt-4 flex items-center gap-3">
-              <a href="https://github.com/personas-ai" target="_blank" rel="noopener noreferrer" aria-label="GitHub" className="group flex min-h-11 min-w-11 items-center justify-center rounded-lg border border-white/4 bg-white/2 text-muted-dark transition-all duration-300 hover:border-white/10 hover:text-muted hover:bg-white/4 hover:shadow-[0_0_10px_rgba(255,255,255,0.02)]">
+              <a href="https://github.com/personas-ai" target="_blank" rel="noopener noreferrer" aria-label="GitHub" className="group flex min-h-11 min-w-11 items-center justify-center rounded-lg border border-white/4 bg-white/2 text-muted-dark transition-all duration-300 hover:border-white/10 hover:text-muted hover:bg-white/4 hover:shadow-[0_0_10px_rgba(255,255,255,0.02)] focus-visible:ring-2 focus-visible:ring-brand-cyan/40 focus-visible:outline-none">
                 <Github className="h-4 w-4 transition-transform duration-300 group-hover:scale-110" />
               </a>
-              <a href="https://twitter.com/personas_ai" target="_blank" rel="noopener noreferrer" aria-label="Twitter" className="group flex min-h-11 min-w-11 items-center justify-center rounded-lg border border-white/4 bg-white/2 text-muted-dark transition-all duration-300 hover:border-white/10 hover:text-muted hover:bg-white/4 hover:shadow-[0_0_10px_rgba(255,255,255,0.02)]">
+              <a href="https://twitter.com/personas_ai" target="_blank" rel="noopener noreferrer" aria-label="Twitter" className="group flex min-h-11 min-w-11 items-center justify-center rounded-lg border border-white/4 bg-white/2 text-muted-dark transition-all duration-300 hover:border-white/10 hover:text-muted hover:bg-white/4 hover:shadow-[0_0_10px_rgba(255,255,255,0.02)] focus-visible:ring-2 focus-visible:ring-brand-cyan/40 focus-visible:outline-none">
                 <Twitter className="h-4 w-4 transition-transform duration-300 group-hover:scale-110" />
               </a>
-              <a href="https://discord.gg/personas" target="_blank" rel="noopener noreferrer" aria-label="Discord" className="group flex min-h-11 min-w-11 items-center justify-center rounded-lg border border-white/4 bg-white/2 text-muted-dark transition-all duration-300 hover:border-white/10 hover:text-muted hover:bg-white/4 hover:shadow-[0_0_10px_rgba(255,255,255,0.02)]">
+              <a href="https://discord.gg/personas" target="_blank" rel="noopener noreferrer" aria-label="Discord" className="group flex min-h-11 min-w-11 items-center justify-center rounded-lg border border-white/4 bg-white/2 text-muted-dark transition-all duration-300 hover:border-white/10 hover:text-muted hover:bg-white/4 hover:shadow-[0_0_10px_rgba(255,255,255,0.02)] focus-visible:ring-2 focus-visible:ring-brand-cyan/40 focus-visible:outline-none">
                 <MessageCircle className="h-4 w-4 transition-transform duration-300 group-hover:scale-110" />
               </a>
             </div>
@@ -152,7 +145,7 @@ export default function Footer() {
           <span>&copy; {new Date().getFullYear()} Personas. All rights reserved.</span>
           <span className="text-muted-dark flex items-center gap-2">
             <div className="h-px w-4 bg-linear-to-r from-brand-cyan/20 to-transparent" />
-            Built for developers who automate everything.
+            Automate your work. Reclaim your time.
             <div className="h-px w-4 bg-linear-to-l from-brand-cyan/20 to-transparent" />
           </span>
         </div>

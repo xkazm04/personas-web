@@ -1,11 +1,48 @@
 import type { ManualReviewItem, ReviewSeverity } from "@/lib/types";
+import { DEFAULT_ESCALATION_POLICY } from "@/stores/reviewStore";
 
-// Threshold minutes per severity level (used by urgency and SLA calculations)
+/**
+ * Visual urgency thresholds (minutes) per severity level.
+ *
+ * These drive the **UI-only** urgency glow in the review queue via
+ * {@link getUrgencyLevel}. They are intentionally shorter than the escalation
+ * SLA timers defined in `DEFAULT_ESCALATION_POLICY` (reviewStore.ts):
+ *
+ * | Severity | Urgency threshold | Escalation SLA |
+ * |----------|-------------------|----------------|
+ * | critical | 5 min             | 30 min         |
+ * | warning  | 30 min            | 240 min (4 h)  |
+ * | info     | 120 min (2 h)     | 480 min (8 h)  |
+ *
+ * **Urgency** is a cosmetic indicator — it makes the row glow to attract
+ * attention but triggers no automated action.
+ *
+ * **Escalation SLA** (in reviewStore) drives real automated behaviour: once
+ * the SLA expires the system either auto-approves or escalates depending on
+ * the configured {@link EscalationPolicy}.
+ *
+ * The invariant `escalation SLA >= urgency threshold` must always hold; if it
+ * doesn't, a review could be auto-approved while the UI still shows a calm
+ * (non-urgent) state.  A runtime assertion below enforces this.
+ */
 export const severityThresholdMinutes: Record<ReviewSeverity, number> = {
   critical: 5,
   warning: 30,
   info: 120,
 };
+
+// Runtime assertion: escalation SLA must always be >= urgency threshold.
+// Fires at module-load time so misconfigurations surface immediately.
+for (const sev of Object.keys(severityThresholdMinutes) as ReviewSeverity[]) {
+  const urgency = severityThresholdMinutes[sev];
+  const sla = DEFAULT_ESCALATION_POLICY[sev].slaMinutes;
+  if (sla < urgency) {
+    throw new Error(
+      `[reviewUtils] Escalation SLA for "${sev}" (${sla}m) is shorter than its urgency threshold (${urgency}m). ` +
+        `This would allow automated actions before the UI signals urgency.`,
+    );
+  }
+}
 
 /**
  * Urgency level: 0 when below threshold, ramps 0→1 over the next 2x threshold

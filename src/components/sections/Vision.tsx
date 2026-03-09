@@ -1,8 +1,7 @@
 "use client";
 
-import { useState, useEffect, useCallback, useRef } from "react";
-import { motion, useScroll, useTransform, useReducedMotion } from "framer-motion";
-import Image from "next/image";
+import { useState, useEffect, useCallback } from "react";
+import { motion, useReducedMotion } from "framer-motion";
 import {
   Mail, MessageSquare, Github, CreditCard, Calendar, HardDrive,
 } from "lucide-react";
@@ -10,6 +9,7 @@ import GradientText from "@/components/GradientText";
 import SectionHeading from "@/components/SectionHeading";
 import TerminalChrome from "@/components/TerminalChrome";
 import SectionWrapper from "@/components/SectionWrapper";
+import ImageBackground from "@/components/ImageBackground";
 import { fadeUp, revealFromBelow } from "@/lib/animations";
 
 import type { LucideIcon } from "lucide-react";
@@ -93,30 +93,15 @@ export default function Vision() {
     statusCounts.idle && `${statusCounts.idle} idle`,
   ].filter(Boolean).join(" \u00b7 ");
 
-  const containerRef = useRef<HTMLDivElement>(null);
-  const { scrollYProgress } = useScroll({
-    target: containerRef,
-    offset: ["start end", "end start"],
-  });
-  const y = useTransform(scrollYProgress, [0, 1], ["-10%", "10%"]);
-
   return (
-    <SectionWrapper id="vision" className="relative overflow-hidden">
-      <div ref={containerRef} className="absolute inset-0 pointer-events-none">
-        {/* Background image */}
-        <motion.div style={{ y }} className="absolute inset-0 h-[120%] -top-[10%]">
-          <Image
-            src="/imgs/illustration_hd.jpg"
-            alt="Futuristic command center with AI personality cards"
-            fill className="object-cover object-center" sizes="100vw" quality={80}
-            placeholder="blur"
-            blurDataURL="data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/2wBDAAoHBwgHBgoICAgLCgoLDhgQDg0NDh0VFhEYIx8lJCIfIiEmKzcvJik0KSEiMEExNDk7Pj4+JS5ESUM8SDc9Pjv/2wBDAQoLCw4NDhwQEBw7KCIoOzs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozv/wAARCAAGAAoDASIAAhEBAxEB/8QAFgABAQEAAAAAAAAAAAAAAAAAAAUH/8QAIBAAAgIBBAMBAAAAAAAAAAAAAQIAAwQFERIhBjFBUf/EABQBAQAAAAAAAAAAAAAAAAAAAAP/xAAYEQADAQEAAAAAAAAAAAAAAAABAgMAEf/aAAwDAQACEQMRAD8AyTDw8nPyFx8WprLG6KoJLH4BLPp3h+T6ULaW/wBJZX1sVh7XjuIiVeli5Ef/2Q=="
-          />
-        </motion.div>
-        <div className="absolute inset-0 bg-black/65" />
-        <div className="absolute inset-0 bg-linear-to-b from-background via-transparent to-background" />
-        <div className="absolute inset-0 bg-linear-to-r from-background/40 via-transparent to-background/40" />
-      </div>
+    <SectionWrapper id="vision" aria-labelledby="vision-heading" className="relative overflow-hidden">
+      <ImageBackground
+        src="/imgs/illustration_hd.jpg"
+        alt="Futuristic command center with AI personality cards"
+        overlayClass="bg-black/65"
+        parallax
+        blurDataURL="data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/2wBDAAoHBwgHBgoICAgLCgoLDhgQDg0NDh0VFhEYIx8lJCIfIiEmKzcvJik0KSEiMEExNDk7Pj4+JS5ESUM8SDc9Pjv/2wBDAQoLCw4NDhwQEBw7KCIoOzs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozv/wAARCAAGAAoDASIAAhEBAxEB/8QAFgABAQEAAAAAAAAAAAAAAAAAAAUH/8QAIBAAAgIBBAMBAAAAAAAAAAAAAQIAAwQFERIhBjFBUf/EABQBAQAAAAAAAAAAAAAAAAAAAAP/xAAYEQADAQEAAAAAAAAAAAAAAAABAgMAEf/aAAwDAQACEQMRAD8AyTDw8nPyFx8WprLG6KoJLH4BLPp3h+T6ULaW/wBJZX1sVh7XjuIiVeli5Ef/2Q=="
+      />
 
       <div className="mx-auto max-w-3xl text-center relative z-10">
         <motion.div variants={fadeUp} className="mx-auto mb-6 flex max-w-4xl flex-wrap items-center justify-center gap-3">
@@ -135,7 +120,7 @@ export default function Vision() {
         </motion.div>
 
         <motion.div variants={revealFromBelow}>
-          <SectionHeading className="leading-[1.1]">
+          <SectionHeading id="vision-heading" className="leading-[1.1]">
             Your personal army of{" "}
             <GradientText className="drop-shadow-lg">AI specialists</GradientText>
           </SectionHeading>

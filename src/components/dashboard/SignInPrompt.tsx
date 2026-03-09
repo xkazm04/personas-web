@@ -39,7 +39,7 @@ export default function SignInPrompt() {
           <div className="pointer-events-none absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-white/[0.06] to-transparent" />
 
           {/* Animated conic border */}
-          <div className="pointer-events-none absolute -inset-px -z-10 rounded-2xl opacity-40 animated-conic-border" />
+          <div className="pointer-events-none absolute -inset-px -z-10 rounded-2xl opacity-40 motion-safe:animated-conic-border" />
 
           <div className="flex flex-col items-center text-center">
             {/* Icon */}
@@ -49,7 +49,7 @@ export default function SignInPrompt() {
 
             <h1 className="mt-6 text-2xl font-bold tracking-tight">
               Sign in to your{" "}
-              <GradientText>Dashboard</GradientText>
+              <GradientText variant="silver">Dashboard</GradientText>
             </h1>
 
             <p className="mt-3 text-sm text-muted-dark leading-relaxed">
@@ -63,7 +63,10 @@ export default function SignInPrompt() {
               onClick={signInWithGoogle}
               className="group relative mt-8 flex w-full items-center justify-center gap-3 overflow-hidden rounded-full border border-brand-cyan/25 bg-brand-cyan/8 px-6 py-3.5 text-sm font-semibold text-brand-cyan transition-all duration-300 hover:border-brand-cyan/40 hover:bg-brand-cyan/15 hover:shadow-[0_0_30px_rgba(6,182,212,0.15)]"
             >
-              <div className="absolute inset-0 -translate-x-full bg-gradient-to-r from-transparent via-brand-cyan/10 to-transparent transition-transform duration-700 group-hover:translate-x-full" />
+              <div className="absolute inset-0 bg-gradient-to-r from-transparent via-brand-cyan/10 to-transparent 
+                motion-safe:-translate-x-full motion-safe:transition-transform motion-safe:duration-700 motion-safe:group-hover:translate-x-full
+                motion-reduce:opacity-0 motion-reduce:group-hover:opacity-100 motion-reduce:transition-opacity motion-reduce:duration-300" 
+              />
               {DEVELOPMENT ? (
                 <>
                   <FlaskConical className="relative h-5 w-5" />

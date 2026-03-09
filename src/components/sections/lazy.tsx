@@ -1,35 +1,7 @@
 "use client";
 
 import dynamic from "next/dynamic";
-
-/* ── Shared pulse block ─────────────────────────────────────────── */
-
-const P = "animate-pulse bg-white/[0.03] rounded-2xl";
-const Ps = "animate-pulse bg-white/[0.03] rounded-lg";
-const Pm = "animate-pulse bg-white/[0.03] rounded-md";
-
-/* ── UseCases skeleton: heading + 9-button tool grid + detail card ── */
-function UseCasesSkeleton() {
-  return (
-    <section className="relative px-6 py-24 md:py-32">
-      <div className="mx-auto max-w-6xl flex flex-col items-center">
-        {/* Heading */}
-        <div className={`h-10 w-2/3 max-w-md sm:h-12 ${Ps}`} />
-        <div className={`mt-4 h-4 w-1/2 max-w-sm ${Pm}`} />
-
-        {/* Tool grid — 9 buttons in a row (5-col on md, 9 on lg) */}
-        <div className="mt-16 grid grid-cols-5 gap-3 w-full max-w-2xl lg:grid-cols-9 lg:max-w-4xl">
-          {Array.from({ length: 9 }).map((_, i) => (
-            <div key={i} className={`${P} h-[76px]`} />
-          ))}
-        </div>
-
-        {/* Detail card */}
-        <div className={`mt-8 w-full max-w-3xl h-56 ${P}`} />
-      </div>
-    </section>
-  );
-}
+import { P, Ps, Pm, createLazySection } from "./LazySection";
 
 /* ── Vision skeleton: tags + heading + terminal dashboard card ── */
 function VisionSkeleton() {
@@ -150,107 +122,24 @@ function MidPageCTASkeleton() {
   );
 }
 
-/* ── DownloadCTA skeleton: badge + heading + step cards + buttons ── */
-function DownloadCTASkeleton() {
-  return (
-    <section className="relative px-6 py-28 md:py-44">
-      <div className="mx-auto max-w-2xl flex flex-col items-center">
-        {/* Version badge */}
-        <div className={`${Pm} h-7 w-44 !rounded-full`} />
-
-        {/* Heading */}
-        <div className={`mt-6 h-12 w-3/4 max-w-md ${Ps}`} />
-
-        {/* Subtitle */}
-        <div className={`mt-8 h-5 w-2/3 max-w-sm ${Pm}`} />
-
-        {/* 3 step cards */}
-        <div className="mt-6 grid grid-cols-1 gap-2 w-full max-w-xl sm:grid-cols-3">
-          {Array.from({ length: 3 }).map((_, i) => (
-            <div key={i} className={`${P} h-14`} />
-          ))}
-        </div>
-
-        {/* CTA buttons */}
-        <div className="mt-10 flex gap-3">
-          <div className={`${Pm} h-12 w-52 !rounded-full`} />
-          <div className={`${Pm} h-12 w-48 !rounded-full`} />
-        </div>
-
-        {/* Platform pills */}
-        <div className="mt-8 flex gap-3">
-          {[90, 80, 70].map((w, i) => (
-            <div key={i} className={`${Pm} h-9 !rounded-full`} style={{ width: w }} />
-          ))}
-        </div>
-
-        {/* Trust signals */}
-        <div className={`mt-8 h-4 w-72 ${Pm}`} />
-      </div>
-    </section>
-  );
-}
-
-/* ── Generic fallback for sections without a specific skeleton ── */
-function SectionSkeleton() {
-  return (
-    <section className="relative px-6 py-24 md:py-32">
-      <div className="mx-auto max-w-6xl flex flex-col items-center gap-4">
-        <div className={`h-10 w-2/3 max-w-md sm:h-12 ${Ps}`} />
-        <div className={`h-4 w-1/2 max-w-sm ${Pm}`} />
-        <div className={`mt-8 h-40 w-full max-w-2xl ${P}`} />
-      </div>
-    </section>
-  );
-}
-
 /* ── Dynamic imports with section-specific skeletons ─────────── */
 
-const UseCasesSection = dynamic(() => import("@/components/sections/UseCases"), {
-  ssr: false,
-  loading: () => <UseCasesSkeleton />,
-});
-
 const VisionSection = dynamic(() => import("@/components/sections/Vision"), {
-  ssr: false,
+  ssr: true,
   loading: () => <VisionSkeleton />,
 });
-
-const RoadmapSection = dynamic(() => import("@/components/sections/Roadmap"), {
-  ssr: false,
-  loading: () => <SectionSkeleton />,
-});
-
 const PricingSection = dynamic(() => import("@/components/sections/Pricing"), {
-  ssr: false,
+  ssr: true,
   loading: () => <PricingSkeleton />,
 });
-
 const FAQSection = dynamic(() => import("@/components/sections/FAQ"), {
-  ssr: false,
+  ssr: true,
   loading: () => <FAQSkeleton />,
 });
-
-const MidPageCTASection = dynamic(() => import("@/components/sections/MidPageCTA"), {
-  ssr: false,
-  loading: () => <MidPageCTASkeleton />,
-});
-
-const DownloadCTASection = dynamic(() => import("@/components/sections/DownloadCTA"), {
-  ssr: false,
-  loading: () => <DownloadCTASkeleton />,
-});
-
-export function LazyUseCases() {
-  return <UseCasesSection />;
-}
+const MidPageCTASection = createLazySection(() => import("@/components/sections/MidPageCTA"), MidPageCTASkeleton);
 
 export function LazyVision() {
   return <VisionSection />;
-}
-
-export function LazyRoadmap() {
-  return <RoadmapSection />;
 }
 
 export function LazyPricing() {
@@ -265,6 +154,13 @@ export function LazyMidPageCTA() {
   return <MidPageCTASection />;
 }
 
-export function LazyDownloadCTA() {
-  return <DownloadCTASection />;
+const UseCasesSection = createLazySection(() => import("@/components/sections/UseCases"));
+const AgentPlaygroundSection = createLazySection(() => import("@/components/sections/AgentPlayground"));
+
+export function LazyUseCases() {
+  return <UseCasesSection />;
+}
+
+export function LazyAgentPlayground() {
+  return <AgentPlaygroundSection />;
 }

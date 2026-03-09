@@ -1,3 +1,5 @@
+import { BRAND_COLORS, rgba, resolveStageColor } from "@/lib/colors";
+import type { StageColor } from "@/lib/colors";
 import type { ReactNode } from "react";
 
 export default function StageSection({
@@ -12,30 +14,33 @@ export default function StageSection({
   id?: string;
   glow: "cyan" | "purple" | "emerald";
   showTopLine?: boolean;
-  fromColor?: string;
-  toColor?: string;
+  fromColor?: StageColor;
+  toColor?: StageColor;
 }) {
   const glowStyle: Record<typeof glow, string> = {
-    cyan: "radial-gradient(circle, rgba(6,182,212,0.05) 0%, transparent 65%)",
-    purple: "radial-gradient(circle, rgba(168,85,247,0.045) 0%, transparent 65%)",
-    emerald: "radial-gradient(circle, rgba(52,211,153,0.04) 0%, transparent 65%)",
+    cyan: `radial-gradient(circle, ${rgba(BRAND_COLORS.cyan, 0.05)} 0%, transparent 65%)`,
+    purple: `radial-gradient(circle, ${rgba(BRAND_COLORS.purple, 0.045)} 0%, transparent 65%)`,
+    emerald: `radial-gradient(circle, ${rgba(BRAND_COLORS.emerald, 0.04)} 0%, transparent 65%)`,
   };
+
+  const fromRgba = fromColor ? resolveStageColor(fromColor, "from") : undefined;
+  const toRgba = toColor ? resolveStageColor(toColor, "to") : undefined;
 
   return (
     <section id={id} className="relative overflow-hidden" data-animate-when-visible>
       {showTopLine && !fromColor && (
         <div className="pointer-events-none absolute inset-x-0 top-0 z-[1] section-line" />
       )}
-      {fromColor && (
+      {fromRgba && (
         <div
           className="pointer-events-none absolute inset-x-0 top-0 z-[1] h-24"
-          style={{ background: `linear-gradient(to bottom, ${fromColor}, transparent)` }}
+          style={{ background: `linear-gradient(to bottom, ${fromRgba}, transparent)` }}
         />
       )}
-      {toColor && (
+      {toRgba && (
         <div
           className="pointer-events-none absolute inset-x-0 bottom-0 z-[1] h-24"
-          style={{ background: `linear-gradient(to top, ${toColor}, transparent)` }}
+          style={{ background: `linear-gradient(to top, ${toRgba}, transparent)` }}
         />
       )}
       <div className="pointer-events-none absolute inset-0">

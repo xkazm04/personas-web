@@ -2,7 +2,7 @@
 
 import { useEffect, useState, useMemo, useCallback } from "react";
 import { motion } from "framer-motion";
-import { Zap, XCircle, Loader2 } from "lucide-react";
+import { Zap, XCircle, Loader2, AlertTriangle } from "lucide-react";
 import { fadeUp, staggerContainer } from "@/lib/animations";
 import GradientText from "@/components/GradientText";
 import DataTable from "@/components/dashboard/DataTable";
@@ -75,6 +75,7 @@ function ExecutionOutput({ executionId }: { executionId: string }) {
 export default function ExecutionsPage() {
   const executions = useEnrichedExecutions();
   const executionsLoading = useExecutionStore((s) => s.executionsLoading);
+  const executionsError = useExecutionStore((s) => s.executionsError);
   const fetchExecutions = useExecutionStore((s) => s.fetchExecutions);
   const cancelExecution = useExecutionStore((s) => s.cancelExecution);
   const [filter, setFilter] = useState("all");
@@ -95,6 +96,7 @@ export default function ExecutionsPage() {
 
   const filtered = useMemo(() => {
     if (filter === "all") return executions;
+    if (filter === "running") return executions.filter((e) => e.status === "running" || e.status === "queued");
     return executions.filter((e) => e.status === filter);
   }, [executions, filter]);
 
@@ -108,11 +110,12 @@ export default function ExecutionsPage() {
   }, [filter]);
 
   const counts = useMemo(() => {
-    const c = { all: executions.length, running: 0, completed: 0, failed: 0 };
+    const c = { all: executions.length, running: 0, completed: 0, failed: 0, cancelled: 0 };
     for (const e of executions) {
       if (e.status === "running" || e.status === "queued") c.running++;
       else if (e.status === "completed") c.completed++;
       else if (e.status === "failed") c.failed++;
+      else if (e.status === "cancelled") c.cancelled++;
     }
     return c;
   }, [executions]);
@@ -186,7 +189,7 @@ export default function ExecutionsPage() {
       {
         key: "actions",
         header: "",
-        className: "w-10",
+        className: "w-14 text-right",
         render: (row: GlobalExecution) =>
           row.status === "running" ? (
             <button
@@ -209,20 +212,34 @@ export default function ExecutionsPage() {
     <motion.div initial="hidden" animate="visible" variants={staggerContainer}>
       <motion.div variants={fadeUp} className="mb-6">
         <h1 className="text-2xl font-bold tracking-tight">
-          <GradientText>Executions</GradientText>
+          <GradientText variant="silver">Executions</GradientText>
         </h1>
         <p className="mt-1 text-sm text-muted-dark">
           Monitor agent execution runs in real-time
         </p>
       </motion.div>
 
+      {executionsError && (
+        <motion.div
+          variants={fadeUp}
+          className="mb-4 flex items-center gap-3 rounded-xl border border-amber-500/20 bg-amber-500/5 px-4 py-3"
+        >
+          <AlertTriangle className="h-4 w-4 text-amber-400 flex-shrink-0" />
+          <p className="text-sm text-amber-300">
+            Failed to refresh executions — showing last known data.{" "}
+            <span className="text-amber-300/60">{executionsError}</span>
+          </p>
+        </motion.div>
+      )}
+
       <motion.div variants={fadeUp} className="mb-4 flex flex-wrap items-center justify-between gap-3">
         <FilterBar
           options={[
             { key: "all", label: "All", count: counts.all },
-            { key: "running", label: "Running", count: counts.running },
+            { key: "running", label: "Active", count: counts.running },
             { key: "completed", label: "Completed", count: counts.completed },
             { key: "failed", label: "Failed", count: counts.failed },
+            { key: "cancelled", label: "Cancelled", count: counts.cancelled },
           ]}
           active={filter}
           onChange={setFilter}
@@ -239,6 +256,21 @@ export default function ExecutionsPage() {
           keyExtractor={(row) => row.id}
           expandable={(row) => <ExecutionOutput executionId={row.id} />}
           onExpandedChange={setExpandedExecutionId}
+          rowClassName={(row) => {
+            switch (row.status) {
+              case "running":
+              case "queued":
+                return "border-l-2 border-l-blue-400/40";
+              case "completed":
+                return "border-l-2 border-l-emerald-400/40";
+              case "failed":
+                return "border-l-2 border-l-red-400/40 bg-red-500/[0.02]";
+              case "cancelled":
+                return "border-l-2 border-l-amber-400/40";
+              default:
+                return "";
+            }
+          }}
           emptyState={
             <EmptyState
               icon={Zap}

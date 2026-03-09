@@ -3,13 +3,14 @@
 import { useState, useMemo } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { Search, Plug, Download, Plus } from "lucide-react";
+import Image from "next/image";
 import SectionWrapper from "@/components/SectionWrapper";
 import GradientText from "@/components/GradientText";
 import PrimaryCTA from "@/components/PrimaryCTA";
 import { fadeUp } from "@/lib/animations";
 import { connectors, categories, type Connector } from "@/data/connectors";
 
-/* ── Accent color mappings for category pills ── */
+/* ── Accent color mappings ── */
 
 const accentStyles = {
   cyan: {
@@ -32,8 +33,9 @@ const accentStyles = {
 
 /* ── Connector Card ── */
 
-function ConnectorCard({ connector: c, index }: { connector: Connector; index: number }) {
+function ConnectorCard({ connector: c, index, onClick }: { connector: Connector; index: number; onClick?: () => void }) {
   const categoryMeta = categories.find((cat) => cat.key === c.category);
+  const iconName = c.icon ?? c.name;
 
   return (
     <motion.div
@@ -44,11 +46,23 @@ function ConnectorCard({ connector: c, index }: { connector: Connector; index: n
       transition={{ delay: Math.min(index * 0.03, 0.6), duration: 0.35 }}
       whileHover={{
         y: -4,
-        boxShadow: `0 0 40px ${c.color}15`,
         transition: { duration: 0.25 },
       }}
-      className="group relative overflow-hidden rounded-2xl border border-white/[0.06] bg-gradient-to-br from-white/[0.035] to-white/[0.008] backdrop-blur-sm transition-[border-color] duration-500 hover:border-white/[0.12]"
+      onClick={onClick}
+      className="group relative overflow-hidden rounded-2xl border border-white/[0.06] bg-gradient-to-br from-white/[0.035] to-white/[0.008] transition-[border-color] duration-500 hover:border-white/[0.12] cursor-pointer will-change-transform"
     >
+      {/* Background icon — covers the whole card */}
+      <div className="pointer-events-none absolute inset-0 flex items-center justify-center overflow-hidden">
+        <Image
+          src={`/tools/${iconName}.svg`}
+          alt=""
+          width={120}
+          height={120}
+          className="opacity-[0.04] transition-[opacity,transform] duration-500 group-hover:opacity-[0.12] group-hover:scale-110"
+          onError={(e) => { (e.target as HTMLImageElement).style.display = "none"; }}
+        />
+      </div>
+
       {/* Top shine line */}
       <div className="pointer-events-none absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-white/[0.06] to-transparent" />
 
@@ -57,12 +71,6 @@ function ConnectorCard({ connector: c, index }: { connector: Connector; index: n
         className="pointer-events-none absolute inset-x-3 bottom-0 h-[2px] rounded-full opacity-0 transition-opacity duration-500 group-hover:opacity-100"
         style={{ background: `linear-gradient(90deg, transparent, ${c.color}, transparent)` }}
       />
-
-      {/* Corner accent — top-left */}
-      <div className="pointer-events-none absolute top-0 left-0 w-6 h-6">
-        <div className="absolute top-0 left-0 w-full h-px" style={{ background: `linear-gradient(90deg, ${c.color}20, transparent)` }} />
-        <div className="absolute top-0 left-0 h-full w-px" style={{ background: `linear-gradient(180deg, ${c.color}20, transparent)` }} />
-      </div>
 
       {/* Grid overlay */}
       <div
@@ -82,20 +90,8 @@ function ConnectorCard({ connector: c, index }: { connector: Connector; index: n
 
       {/* Content */}
       <div className="relative z-10 p-5">
-        {/* Monogram badge */}
-        <div
-          className="flex h-11 w-11 items-center justify-center rounded-xl text-xs font-bold tracking-wider border transition-shadow duration-300 group-hover:shadow-lg"
-          style={{
-            backgroundColor: `${c.color}12`,
-            color: c.color,
-            borderColor: `${c.color}20`,
-          }}
-        >
-          {c.monogram}
-        </div>
-
         {/* Name */}
-        <h3 className="mt-3 text-[15px] font-semibold leading-tight">{c.label}</h3>
+        <h3 className="text-[15px] font-semibold leading-tight">{c.label}</h3>
 
         {/* Category */}
         <span className="mt-1 inline-block text-[10px] font-mono uppercase tracking-wider text-muted-dark">
@@ -139,9 +135,81 @@ function ExtendCard({ title, description, accent }: { title: string; description
   );
 }
 
+/* ── Category Sidebar (desktop) ── */
+
+function CategorySidebar({
+  activeCategory,
+  onSelect,
+  categoryCount,
+  total,
+}: {
+  activeCategory: string;
+  onSelect: (key: string) => void;
+  categoryCount: Record<string, number>;
+  total: number;
+}) {
+  const sorted = useMemo(
+    () => [...categories].sort((a, b) => a.label.localeCompare(b.label)),
+    [],
+  );
+
+  return (
+    <aside className="pointer-events-none fixed left-5 top-1/2 z-40 hidden -translate-y-1/2 lg:flex flex-col items-start gap-1">
+      <div className="pointer-events-auto rounded-full border border-white/6 bg-black/20 px-2.5 py-1 text-[10px] uppercase tracking-[0.2em] text-muted-dark backdrop-blur-sm font-mono mb-2">
+        Categories
+      </div>
+
+      {/* All button */}
+      <button
+        onClick={() => onSelect("all")}
+        className={`pointer-events-auto flex items-center gap-2 text-left text-[10px] font-mono tracking-wider transition-all duration-300 py-1 ${
+          activeCategory === "all"
+            ? "text-brand-cyan scale-105"
+            : "text-muted-dark hover:text-muted"
+        }`}
+      >
+        <div
+          className={`h-px transition-all duration-300 ${
+            activeCategory === "all"
+              ? "w-6 bg-gradient-to-r from-brand-cyan/80 to-transparent"
+              : "w-4 bg-gradient-to-r from-brand-cyan/35 to-transparent"
+          }`}
+        />
+        All ({total})
+      </button>
+
+      {sorted.map((cat) => {
+        const count = categoryCount[cat.key] || 0;
+        if (count === 0) return null;
+        const isActive = activeCategory === cat.key;
+        const styles = accentStyles[cat.accent];
+        return (
+          <button
+            key={cat.key}
+            onClick={() => onSelect(cat.key)}
+            className={`pointer-events-auto flex items-center gap-2 text-left text-[10px] font-mono tracking-wider transition-all duration-300 py-1 ${
+              isActive ? "text-brand-cyan scale-105" : "text-muted-dark hover:text-muted"
+            }`}
+          >
+            <div
+              className={`h-px transition-all duration-300 ${
+                isActive
+                  ? "w-6 bg-gradient-to-r from-brand-cyan/80 to-transparent"
+                  : "w-4 bg-gradient-to-r from-brand-cyan/35 to-transparent"
+              }`}
+            />
+            <span className={`inline-block h-1.5 w-1.5 rounded-full transition-colors duration-300 ${isActive ? styles.dot : "bg-white/20"}`} />
+            {cat.label} ({count})
+          </button>
+        );
+      })}
+    </aside>
+  );
+}
+
 /* ── Main Catalog Section ── */
 
-export default function ConnectionsCatalog() {
+export default function ConnectionsCatalog({ onConnectorClick }: { onConnectorClick?: (connector: Connector) => void }) {
   const [activeCategory, setActiveCategory] = useState("all");
   const [search, setSearch] = useState("");
 
@@ -168,21 +236,13 @@ export default function ConnectionsCatalog() {
 
   return (
     <SectionWrapper id="connections-catalog" aria-label="Connections catalog">
-      {/* Background accent orbs */}
-      <div className="pointer-events-none absolute inset-0 overflow-hidden">
-        <div
-          className="absolute right-[10%] top-[10%] h-100 w-100 rounded-full opacity-30"
-          style={{ background: "radial-gradient(circle, rgba(6,182,212,0.04) 0%, transparent 60%)" }}
-        />
-        <div
-          className="absolute left-[5%] top-[40%] h-75 w-75 rounded-full opacity-30"
-          style={{ background: "radial-gradient(circle, rgba(168,85,247,0.03) 0%, transparent 60%)" }}
-        />
-        <div
-          className="absolute right-[15%] bottom-[10%] h-80 w-80 rounded-full opacity-20"
-          style={{ background: "radial-gradient(circle, rgba(52,211,153,0.03) 0%, transparent 60%)" }}
-        />
-      </div>
+      {/* Category sidebar — fixed left, desktop only */}
+      <CategorySidebar
+        activeCategory={activeCategory}
+        onSelect={setActiveCategory}
+        categoryCount={categoryCount}
+        total={connectors.length}
+      />
 
       {/* ── Hero heading ── */}
       <motion.div variants={fadeUp} className="relative text-center">
@@ -233,9 +293,8 @@ export default function ConnectionsCatalog() {
           />
         </div>
 
-        {/* Category pills */}
-        <div className="mt-6 flex flex-wrap items-center justify-center gap-2">
-          {/* "All" pill */}
+        {/* Category pills — mobile only */}
+        <div className="mt-6 flex flex-wrap items-center justify-center gap-2 lg:hidden">
           <button
             onClick={() => setActiveCategory("all")}
             className={`rounded-full px-4 py-1.5 text-xs font-medium transition-all duration-300 cursor-pointer ${
@@ -246,8 +305,6 @@ export default function ConnectionsCatalog() {
           >
             All ({connectors.length})
           </button>
-
-          {/* Category pills */}
           {categories.map((cat) => {
             const count = categoryCount[cat.key] || 0;
             if (count === 0) return null;
@@ -295,10 +352,10 @@ export default function ConnectionsCatalog() {
       </motion.div>
 
       {/* ── Connector grid ── */}
-      <div className="mt-12 grid grid-cols-1 gap-4 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
+      <div className="mt-12 grid grid-cols-1 gap-4 sm:grid-cols-2 md:grid-cols-3">
         <AnimatePresence mode="popLayout">
           {filteredConnectors.map((c, i) => (
-            <ConnectorCard key={c.name} connector={c} index={i} />
+            <ConnectorCard key={c.name} connector={c} index={i} onClick={() => onConnectorClick?.(c)} />
           ))}
         </AnimatePresence>
 

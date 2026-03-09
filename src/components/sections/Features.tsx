@@ -263,19 +263,7 @@ function FeatureCardHeader({ f }: { f: Feature }) {
 
 export default function Features() {
   return (
-    <SectionWrapper id="features" dotGrid>
-      {/* Background accent orb */}
-      <div className="pointer-events-none absolute inset-0 overflow-hidden">
-        <div
-          className="absolute right-[10%] top-[20%] h-100 w-100 rounded-full opacity-30"
-          style={{ background: "radial-gradient(circle, rgba(168,85,247,0.04) 0%, transparent 60%)" }}
-        />
-        <div
-          className="absolute left-[5%] bottom-[10%] h-75 w-75 rounded-full opacity-30"
-          style={{ background: "radial-gradient(circle, rgba(6,182,212,0.03) 0%, transparent 60%)" }}
-        />
-      </div>
-
+    <SectionWrapper id="features">
       <motion.div variants={fadeUp} className="relative">
         {/* Large ghost number */}
         {/* eslint-disable-next-line custom-a11y/no-low-text-opacity -- decorative ghost number, not readable text */}

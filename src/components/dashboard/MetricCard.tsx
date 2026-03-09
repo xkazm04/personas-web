@@ -1,6 +1,7 @@
 import { TrendingUp, TrendingDown } from "lucide-react";
 import { fadeUp } from "@/lib/animations";
 import GlowCard from "@/components/GlowCard";
+import Sparkline from "@/components/dashboard/Sparkline";
 
 const accentMap = {
   cyan: "text-cyan-400",
@@ -16,6 +17,7 @@ export default function MetricCard({
   trend,
   trendLabel,
   accent,
+  sparklineData,
 }: {
   icon: React.ElementType;
   label: string;
@@ -23,6 +25,7 @@ export default function MetricCard({
   trend?: number;
   trendLabel?: string;
   accent: "cyan" | "purple" | "emerald" | "amber";
+  sparklineData?: number[];
 }) {
   return (
     <GlowCard accent={accent} variants={fadeUp} className="p-5">
@@ -33,6 +36,11 @@ export default function MetricCard({
         <span className="text-xs font-medium text-muted-dark uppercase tracking-wider">
           {label}
         </span>
+        {sparklineData && sparklineData.length > 1 && (
+          <div className="ml-auto">
+            <Sparkline data={sparklineData} accent={accent} width={56} height={20} />
+          </div>
+        )}
       </div>
       <p className="text-2xl font-bold tracking-tight tabular-nums text-foreground">
         {value}

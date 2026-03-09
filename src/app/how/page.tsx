@@ -11,6 +11,7 @@ import CinematicBreather from "@/components/CinematicBreather";
 import InfoPageLayout from "@/components/InfoPageLayout";
 import RoleSelector from "@/components/RoleSelector";
 import type { ViewerRole } from "@/components/RoleSelector";
+import type { StageColor } from "@/lib/colors";
 
 const scrollMapItems = [
   { label: "AGENTS", href: "#why-agents" },
@@ -32,27 +33,27 @@ const stageGlows: Record<ViewerRole, { hero: "cyan" | "purple" | "emerald"; feat
   enterprise: { hero: "emerald", features: "emerald", events: "cyan" },
 };
 
-const stageColors: Record<ViewerRole, { heroTo: string; featFrom: string; featTo: string; evFrom: string; evTo: string }> = {
+const stageColors: Record<ViewerRole, { heroTo: StageColor; featFrom: StageColor; featTo: StageColor; evFrom: StageColor; evTo: StageColor }> = {
   developer: {
-    heroTo: "rgba(244,63,94,0.04)",
-    featFrom: "rgba(244,63,94,0.03)",
-    featTo: "rgba(6,182,212,0.04)",
-    evFrom: "rgba(52,211,153,0.03)",
-    evTo: "rgba(6,182,212,0.04)",
+    heroTo: "rose",
+    featFrom: "rose",
+    featTo: "cyan",
+    evFrom: "emerald",
+    evTo: "cyan",
   },
   "product-manager": {
-    heroTo: "rgba(168,85,247,0.04)",
-    featFrom: "rgba(168,85,247,0.03)",
-    featTo: "rgba(168,85,247,0.04)",
-    evFrom: "rgba(168,85,247,0.03)",
-    evTo: "rgba(168,85,247,0.04)",
+    heroTo: "purple",
+    featFrom: "purple",
+    featTo: "purple",
+    evFrom: "purple",
+    evTo: "purple",
   },
   enterprise: {
-    heroTo: "rgba(52,211,153,0.04)",
-    featFrom: "rgba(52,211,153,0.03)",
-    featTo: "rgba(52,211,153,0.04)",
-    evFrom: "rgba(52,211,153,0.03)",
-    evTo: "rgba(6,182,212,0.04)",
+    heroTo: "emerald",
+    featFrom: "emerald",
+    featTo: "emerald",
+    evFrom: "emerald",
+    evTo: "cyan",
   },
 };
 
@@ -64,7 +65,7 @@ export default function HowItWorks() {
   return (
     <InfoPageLayout scrollMapItems={scrollMapItems} breadcrumbItems={breadcrumbItems}>
       {/* Role selector */}
-      <div className="relative z-10 flex justify-center pt-4 pb-2">
+      <div className="relative z-10 flex flex-col items-center gap-3 pt-4 pb-2">
         <RoleSelector active={role} onChange={setRole} />
       </div>
 
