@@ -26,6 +26,7 @@ const preloadHowImage = () => {
 
 const routes = [
   { label: "Personas", href: "/" },
+  { label: "Features", href: "/todo" },
   { label: "How it works", href: "/how" },
   { label: "Roadmap", href: "/roadmap" },
 ];
