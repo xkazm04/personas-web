@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useState, useCallback, useRef } from "react";
+import Image from "next/image";
 import { motion, AnimatePresence } from "framer-motion";
 import {
   Bot,
@@ -56,23 +57,69 @@ export default function AgentsPage() {
 
   if (personasLoading && personas.length === 0) {
     return (
-      <div className="space-y-4">
+      <div className="grid gap-4 sm:grid-cols-2 xl:grid-cols-3">
         {Array.from({ length: 3 }).map((_, i) => (
-          <div
-            key={i}
-            className="h-36 animate-pulse rounded-2xl bg-white/[0.04]"
-          />
+          <GlowCard key={i} accent="cyan" className="p-5">
+            {/* Avatar + name row */}
+            <div className="flex items-center gap-3">
+              <div className="relative h-9 w-9 shrink-0 overflow-hidden rounded-lg bg-white/[0.04]">
+                <div className="absolute inset-0 -translate-x-full animate-shimmer bg-gradient-to-r from-transparent via-white/[0.06] to-transparent" />
+              </div>
+              <div className="flex-1 space-y-1.5">
+                <div className="relative h-3.5 w-28 overflow-hidden rounded bg-white/[0.04]">
+                  <div className="absolute inset-0 -translate-x-full animate-shimmer bg-gradient-to-r from-transparent via-white/[0.06] to-transparent" />
+                </div>
+                <div className="relative h-2.5 w-40 overflow-hidden rounded bg-white/[0.02]">
+                  <div className="absolute inset-0 -translate-x-full animate-shimmer bg-gradient-to-r from-transparent via-white/[0.06] to-transparent" />
+                </div>
+              </div>
+            </div>
+            {/* Stats row */}
+            <div className="mt-4 flex items-center gap-3">
+              <div className="relative h-3 w-14 overflow-hidden rounded bg-white/[0.02]">
+                <div className="absolute inset-0 -translate-x-full animate-shimmer bg-gradient-to-r from-transparent via-white/[0.06] to-transparent" />
+              </div>
+              <div className="relative h-3 w-16 overflow-hidden rounded bg-white/[0.02]">
+                <div className="absolute inset-0 -translate-x-full animate-shimmer bg-gradient-to-r from-transparent via-white/[0.06] to-transparent" />
+              </div>
+              <div className="relative h-3 w-18 overflow-hidden rounded bg-white/[0.02]">
+                <div className="absolute inset-0 -translate-x-full animate-shimmer bg-gradient-to-r from-transparent via-white/[0.06] to-transparent" />
+              </div>
+            </div>
+            {/* Action buttons row */}
+            <div className="mt-4 flex items-center gap-2">
+              <div className="relative h-7 w-20 overflow-hidden rounded-lg bg-white/[0.04]">
+                <div className="absolute inset-0 -translate-x-full animate-shimmer bg-gradient-to-r from-transparent via-white/[0.06] to-transparent" />
+              </div>
+              <div className="relative h-7 w-16 overflow-hidden rounded-lg bg-white/[0.02]">
+                <div className="absolute inset-0 -translate-x-full animate-shimmer bg-gradient-to-r from-transparent via-white/[0.06] to-transparent" />
+              </div>
+            </div>
+          </GlowCard>
         ))}
       </div>
     );
   }
 
   return (
-    <motion.div initial="hidden" animate="visible" variants={staggerContainer}>
+    <motion.div initial="hidden" animate="visible" variants={staggerContainer} className="relative">
+      {/* Background illustration */}
+      <div className="pointer-events-none absolute inset-x-0 top-0 h-80 overflow-hidden">
+        <Image
+          src="/gen/backgrounds/bg-agents.png"
+          alt=""
+          fill
+          sizes="100vw"
+          loading="lazy"
+          className="object-cover opacity-[0.12]"
+        />
+        <div className="absolute inset-0 bg-gradient-to-b from-transparent via-transparent to-[var(--background)]" />
+      </div>
+
       {/* Header */}
       <motion.div variants={fadeUp} className="mb-8">
         <h1 className="text-2xl font-bold tracking-tight">
-          <GradientText>Agents</GradientText>
+          <GradientText variant="silver">Agents</GradientText>
         </h1>
         <div className="mt-2 flex items-center gap-3 text-sm text-muted-dark">
           <span>{personas.length} agent{personas.length !== 1 ? "s" : ""} deployed</span>

@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect } from "react";
+import Image from "next/image";
 import { motion } from "framer-motion";
 import {
   Settings,
@@ -36,10 +37,23 @@ export default function SettingsPage() {
   const isConnected = health?.status === "ok";
 
   return (
-    <motion.div initial="hidden" animate="visible" variants={staggerContainer}>
+    <motion.div initial="hidden" animate="visible" variants={staggerContainer} className="relative">
+      {/* Background illustration */}
+      <div className="pointer-events-none absolute inset-x-0 top-0 h-80 overflow-hidden">
+        <Image
+          src="/gen/backgrounds/bg-settings.png"
+          alt=""
+          fill
+          sizes="100vw"
+          loading="lazy"
+          className="object-cover opacity-[0.12]"
+        />
+        <div className="absolute inset-0 bg-gradient-to-b from-transparent via-transparent to-[var(--background)]" />
+      </div>
+
       <motion.div variants={fadeUp} className="mb-8">
         <h1 className="text-2xl font-bold tracking-tight">
-          <GradientText>Settings</GradientText>
+          <GradientText variant="silver">Settings</GradientText>
         </h1>
         <p className="mt-1 text-sm text-muted-dark">
           Account and cloud connection configuration

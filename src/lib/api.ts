@@ -49,7 +49,16 @@ async function orchestratorFetch<T>(
     params?: Record<string, string | undefined>;
   },
 ): Promise<T> {
-  const { accessToken } = useAuthStore.getState();
+  const { accessToken, initialized } = useAuthStore.getState();
+
+  if (!initialized) {
+    throw new Error(
+      `orchestratorFetch("${path}"): auth store has not been initialized. ` +
+        "API calls require AuthProvider to have run first (only happens under /dashboard routes). " +
+        "If you need to call the API outside the dashboard, ensure auth is initialized beforehand.",
+    );
+  }
+
   const base = process.env.NEXT_PUBLIC_ORCHESTRATOR_URL;
   const url = new URL(path, base);
 

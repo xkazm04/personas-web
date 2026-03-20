@@ -400,17 +400,10 @@ export default function EventsListPanel() {
     return c;
   }, [events]);
 
-  const eventTypeChipOptions = useMemo(() => {
-    const countMap = new Map<string, number>();
-    for (const e of events) {
-      countMap.set(e.eventType, (countMap.get(e.eventType) ?? 0) + 1);
-    }
-    const chips = [{ key: "", label: "All types", count: events.length }];
-    for (const [type, count] of [...countMap.entries()].sort((a, b) => a[0].localeCompare(b[0]))) {
-      chips.push({ key: type, label: type.replace(/_/g, " "), count });
-    }
-    return chips;
-  }, [events]);
+  const uniqueEventTypes = useMemo(
+    () => [...new Set(events.map((e) => e.eventType))].sort(),
+    [events],
+  );
 
   const handleReplay = useCallback((event: PersonaEvent) => {
     void replayEvent(event);
@@ -504,11 +497,11 @@ export default function EventsListPanel() {
           />
         </div>
 
-        <FilterBar
-          options={eventTypeChipOptions}
-          active={eventTypeFilter}
+        <DropdownFilter
+          label="Event type"
+          value={eventTypeFilter}
+          options={uniqueEventTypes}
           onChange={setEventTypeFilter}
-          compact
         />
 
         <DropdownFilter

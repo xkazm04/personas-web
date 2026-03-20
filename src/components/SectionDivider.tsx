@@ -1,29 +1,22 @@
 "use client";
 
 import { useId } from "react";
-
-const brandColors: Record<string, string> = {
-  cyan: "6,182,212",
-  purple: "168,85,247",
-  emerald: "52,211,153",
-  blue: "96,165,250",
-  amber: "251,191,36",
-};
+import { BRAND_COLORS } from "@/lib/colors";
 
 export default function SectionDivider({
   from = "cyan",
   to = "purple",
   height = 100,
 }: {
-  from?: string;
-  to?: string;
+  from?: keyof typeof BRAND_COLORS;
+  to?: keyof typeof BRAND_COLORS;
   height?: number;
 }) {
   const uid = useId();
   const gradId = `${uid}-sd`;
 
-  const fromRgb = brandColors[from] ?? brandColors.cyan;
-  const toRgb = brandColors[to] ?? brandColors.purple;
+  const fromRgb = BRAND_COLORS[from] ?? BRAND_COLORS.cyan;
+  const toRgb = BRAND_COLORS[to] ?? BRAND_COLORS.purple;
 
   return (
     <div

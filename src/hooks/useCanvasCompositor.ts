@@ -25,30 +25,34 @@ interface Registration {
   inView: boolean;
 }
 
-const entries = new Map<symbol, Registration>();
+const registrations = new Map<symbol, Registration>();
 let rafId = 0;
 let startTime = 0;
-let observer: IntersectionObserver | null = null;
-let resizeAttached = false;
-let resizeTimeoutId: ReturnType<typeof setTimeout> | null = null;
-const debouncedResizeHandler = () => {
-  if (resizeTimeoutId) clearTimeout(resizeTimeoutId);
-  resizeTimeoutId = setTimeout(() => {
-    handleResize();
-    resizeTimeoutId = null;
-  }, 120);
-};
+let intersectionObserver: IntersectionObserver | null = null;
+let resizeObserver: ResizeObserver | null = null;
+
+function anyInView(): boolean {
+  for (const entry of registrations.values()) {
+    if (entry.inView) return true;
+  }
+  return false;
+}
 
 function tick(now: number) {
+  // Stop loop entirely when all canvases are off-screen or tab is hidden
+  if (!anyInView() || document.hidden) {
+    rafId = 0;
+    return;
+  }
+
   if (startTime === 0) startTime = now;
   const elapsed = (now - startTime) / 1000;
 
   const dpr = window.devicePixelRatio || 1;
-  for (const entry of entries.values()) {
+  for (const entry of registrations.values()) {
     if (!entry.inView) continue;
     const ctx = entry.canvas.getContext("2d");
     if (!ctx) continue;
-    // Pass CSS dimensions — the context transform handles DPR scaling
     const w = entry.canvas.width / dpr;
     const h = entry.canvas.height / dpr;
     ctx.clearRect(0, 0, w, h);
@@ -56,13 +60,13 @@ function tick(now: number) {
     ctx.globalAlpha = 1;
   }
 
-  if (entries.size > 0) {
+  if (registrations.size > 0) {
     rafId = requestAnimationFrame(tick);
   }
 }
 
 function startLoop() {
-  if (rafId === 0 && entries.size > 0) {
+  if (rafId === 0 && registrations.size > 0) {
     rafId = requestAnimationFrame(tick);
   }
 }
@@ -75,22 +79,48 @@ function stopLoop() {
   }
 }
 
-function getObserver(): IntersectionObserver {
-  if (!observer) {
-    observer = new IntersectionObserver(
-      (ioEntries) => {
-        for (const io of ioEntries) {
-          for (const reg of entries.values()) {
+function getIntersectionObserver(): IntersectionObserver {
+  if (!intersectionObserver) {
+    intersectionObserver = new IntersectionObserver(
+      (entries) => {
+        for (const io of entries) {
+          for (const reg of registrations.values()) {
             if (reg.canvas === io.target) {
               reg.inView = io.isIntersecting;
             }
           }
         }
+        // Restart loop if a canvas came into view while loop was stopped
+        if (rafId === 0 && anyInView()) {
+          startLoop();
+        }
       },
       { threshold: 0.1 },
     );
   }
-  return observer;
+  return intersectionObserver;
+}
+
+function getResizeObserver(): ResizeObserver {
+  if (!resizeObserver) {
+    resizeObserver = new ResizeObserver((entries) => {
+      // ResizeObserver already batches, but RAF ensures we stay in sync with display
+      requestAnimationFrame(() => {
+        for (const entry of entries) {
+          const parent = entry.target;
+          const { width, height } = entry.contentRect;
+          
+          for (const reg of registrations.values()) {
+            if (reg.canvas.parentElement === parent) {
+              applyCanvasSize(reg.canvas, width, height);
+              reg.onResize?.(width, height);
+            }
+          }
+        }
+      });
+    });
+  }
+  return resizeObserver;
 }
 
 function applyCanvasSize(canvas: HTMLCanvasElement, cssW: number, cssH: number) {
@@ -103,22 +133,13 @@ function applyCanvasSize(canvas: HTMLCanvasElement, cssW: number, cssH: number) 
   if (ctx) ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
 }
 
-function handleResize() {
-  for (const entry of entries.values()) {
-    const parent = entry.canvas.parentElement;
-    if (!parent) continue;
-    const rect = parent.getBoundingClientRect();
-    applyCanvasSize(entry.canvas, rect.width, rect.height);
-    entry.onResize?.(rect.width, rect.height);
-  }
-}
-
 // ── Public hook ──
 
 /**
  * Registers a canvas element with the global compositor.
  * The compositor runs a single RAF loop shared across all registered canvases,
- * a single IntersectionObserver for visibility, and a single resize handler.
+ * a single IntersectionObserver for visibility, and a single ResizeObserver
+ * for responsive sizing.
  *
  * @param canvasRef - Ref to the canvas element
  * @param render - Called each frame (canvas is pre-cleared)
@@ -146,9 +167,9 @@ export function useCanvasCompositor(
     if (!canvas) return;
 
     const key = Symbol();
-
-    // Initial sizing (HiDPI-aware)
     const parent = canvas.parentElement;
+
+    // Initial sizing
     if (parent) {
       const rect = parent.getBoundingClientRect();
       applyCanvasSize(canvas, rect.width, rect.height);
@@ -162,32 +183,23 @@ export function useCanvasCompositor(
       inView: false,
     };
 
-    entries.set(key, registration);
-    getObserver().observe(canvas);
-
-    if (!resizeAttached) {
-      window.addEventListener("resize", debouncedResizeHandler);
-      resizeAttached = true;
-    }
+    registrations.set(key, registration);
+    getIntersectionObserver().observe(canvas);
+    if (parent) getResizeObserver().observe(parent);
 
     startLoop();
 
     return () => {
-      entries.delete(key);
-      getObserver().unobserve(canvas);
+      registrations.delete(key);
+      getIntersectionObserver().unobserve(canvas);
+      if (parent) getResizeObserver().unobserve(parent);
 
-      if (entries.size === 0) {
+      if (registrations.size === 0) {
         stopLoop();
-        observer?.disconnect();
-        observer = null;
-        if (resizeAttached) {
-          window.removeEventListener("resize", debouncedResizeHandler);
-          if (resizeTimeoutId) {
-            clearTimeout(resizeTimeoutId);
-            resizeTimeoutId = null;
-          }
-          resizeAttached = false;
-        }
+        intersectionObserver?.disconnect();
+        intersectionObserver = null;
+        resizeObserver?.disconnect();
+        resizeObserver = null;
       }
     };
   }, [canvasRef, enabled]);

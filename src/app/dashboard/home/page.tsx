@@ -29,6 +29,9 @@ import GradientText from "@/components/GradientText";
 import StatusBadge from "@/components/dashboard/StatusBadge";
 import StatBadge from "@/components/dashboard/StatBadge";
 import PersonaAvatar from "@/components/dashboard/PersonaAvatar";
+import SkeletonCard from "@/components/dashboard/SkeletonCard";
+import HealthDigestPanel from "@/components/dashboard/HealthDigestPanel";
+import MemoryActionsPanel from "@/components/dashboard/MemoryActionsPanel";
 import { usePersonaStore } from "@/stores/personaStore";
 import { useExecutionStore, useEnrichedExecutions } from "@/stores/executionStore";
 import { useReviewStore } from "@/stores/reviewStore";
@@ -57,6 +60,7 @@ export default function DashboardHomePage() {
 
   const chartSectionRef = useRef<HTMLDivElement | null>(null);
   const [loadObservability, setLoadObservability] = useState(false);
+  const [panelsReady, setPanelsReady] = useState(false);
 
   const { data: observabilityData } = useSWR(
     loadObservability ? "observability" : null,
@@ -92,6 +96,12 @@ export default function DashboardHomePage() {
     void fetchExecutions();
     void fetchReviews();
   }, [fetchExecutions, fetchReviews]);
+
+  // Simulate brief loading state for intelligence panels
+  useEffect(() => {
+    const timer = setTimeout(() => setPanelsReady(true), 600);
+    return () => clearTimeout(timer);
+  }, []);
 
   const displayName = user?.user_metadata?.full_name?.split(" ")[0] ?? "there";
 
@@ -129,7 +139,7 @@ export default function DashboardHomePage() {
       {/* Greeting */}
       <motion.div variants={fadeUp} className="mb-8">
         <h1 className="text-2xl font-bold tracking-tight">
-          <GradientText>
+          <GradientText variant="silver">
             {getGreeting()}, {displayName}
           </GradientText>
         </h1>
@@ -171,6 +181,25 @@ export default function DashboardHomePage() {
           accent="purple"
           href="/dashboard/agents"
         />
+      </motion.div>
+
+      {/* Health Digest + Memory Actions row */}
+      <motion.div variants={fadeUp} className="mb-6 grid gap-6 lg:grid-cols-2">
+        {panelsReady ? (
+          <>
+            <GlowCard accent="emerald" className="p-5">
+              <HealthDigestPanel />
+            </GlowCard>
+            <GlowCard accent="purple" className="p-5">
+              <MemoryActionsPanel />
+            </GlowCard>
+          </>
+        ) : (
+          <>
+            <SkeletonCard lines={5} />
+            <SkeletonCard lines={4} />
+          </>
+        )}
       </motion.div>
 
       <div className="grid gap-6 lg:grid-cols-5">

@@ -14,9 +14,9 @@ const statusConfig: Record<
   },
   running: {
     label: "Running",
-    color: "text-blue-400",
-    bgColor: "bg-blue-500/10",
-    borderColor: "border-blue-500/30",
+    color: "text-cyan-400",
+    bgColor: "bg-cyan-500/10",
+    borderColor: "border-cyan-500/30",
     pulse: true,
   },
   completed: {
@@ -71,8 +71,8 @@ export default function StatusBadge({ status }: { status: BadgeStatus }) {
     >
       {cfg.pulse && (
         <span className="relative flex h-1.5 w-1.5">
-          <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-blue-400 opacity-75" />
-          <span className="relative inline-flex h-1.5 w-1.5 rounded-full bg-blue-400" />
+          <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-cyan-400 opacity-75" />
+          <span className="relative inline-flex h-1.5 w-1.5 rounded-full bg-cyan-400" />
         </span>
       )}
       {cfg.label}

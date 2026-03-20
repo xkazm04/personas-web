@@ -1,9 +1,6 @@
-import * as Sentry from "@sentry/nextjs";
-import { baseSentryConfig } from "@/lib/sentry";
+import { initSentry } from "@/lib/sentry";
 
-Sentry.init({
-  ...baseSentryConfig,
-
+initSentry({
   replaysSessionSampleRate: 0,
   replaysOnErrorSampleRate: 0,
 });

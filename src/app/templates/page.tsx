@@ -5,6 +5,7 @@ import { motion, AnimatePresence } from "framer-motion";
 import { ArrowLeft, Search, Copy, Check, X } from "lucide-react";
 import Link from "next/link";
 import Navbar from "@/components/Navbar";
+import GradientText from "@/components/GradientText";
 import {
   templates,
   categories,
@@ -257,10 +258,9 @@ export default function TemplatesPage() {
               Back to home
             </Link>
             <h1 className="text-4xl font-extrabold tracking-tight sm:text-5xl md:text-6xl">
-              Agent Template{" "}
-              <span className="bg-gradient-to-r from-brand-cyan via-blue-400 to-brand-purple bg-clip-text text-transparent">
-                Gallery
-              </span>
+              <GradientText variant="silver">
+                Agent Template Gallery
+              </GradientText>
             </h1>
             <p className="mt-4 max-w-2xl text-base text-muted-dark leading-relaxed">
               Browse {templates.length} ready-made agent templates. Pick one,

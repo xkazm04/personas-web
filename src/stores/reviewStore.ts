@@ -68,7 +68,7 @@ function parseManualReview(
 
 const ESCALATION_POLICY_KEY = "review-escalation-policy";
 
-const DEFAULT_ESCALATION_POLICY: EscalationPolicy = {
+export const DEFAULT_ESCALATION_POLICY: EscalationPolicy = {
   critical: { slaMinutes: 30, action: "escalate" },
   warning: { slaMinutes: 240, action: "escalate" },
   info: { slaMinutes: 480, action: "auto_approve" },

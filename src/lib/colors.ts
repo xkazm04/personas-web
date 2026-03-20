@@ -12,3 +12,22 @@ export const BRAND_COLORS = {
 export function rgba(rgb: string, alpha: number): string {
   return `rgba(${rgb},${alpha})`;
 }
+
+/** Color names accepted by StageSection gradient edge props. */
+export type StageColor = keyof typeof BRAND_COLORS;
+
+/** Alpha used for the top gradient edge (fromColor). */
+const STAGE_FROM_ALPHA = 0.03;
+/** Alpha used for the bottom gradient edge (toColor). */
+const STAGE_TO_ALPHA = 0.04;
+
+/** Resolve a StageColor name to an rgba string for a gradient edge. */
+export function resolveStageColor(
+  color: StageColor,
+  edge: "from" | "to",
+): string {
+  return rgba(
+    BRAND_COLORS[color],
+    edge === "from" ? STAGE_FROM_ALPHA : STAGE_TO_ALPHA,
+  );
+}

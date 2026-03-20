@@ -1151,7 +1151,7 @@ export default function ReviewsPage() {
     <motion.div initial="hidden" animate="visible" variants={staggerContainer}>
       <motion.div variants={fadeUp} className="mb-6">
         <h1 className="text-2xl font-bold tracking-tight">
-          <GradientText>Manual Reviews</GradientText>
+          <GradientText variant="silver">Manual Reviews</GradientText>
         </h1>
         <p className="mt-1 text-sm text-muted-dark">
           Review and approve agent decisions requiring human oversight

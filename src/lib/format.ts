@@ -1,13 +1,14 @@
 export function formatDuration(ms: number | null): string {
-  if (!ms) return "-";
+  if (ms == null) return "-";
   if (ms < 1000) return `${ms}ms`;
   if (ms < 60_000) return `${(ms / 1000).toFixed(1)}s`;
   if (ms < 3_600_000) return `${Math.round(ms / 60_000)}m`;
   return `${(ms / 3_600_000).toFixed(1)}h`;
 }
 
-export function formatCost(usd: number): string {
-  if (usd === 0) return "-";
+export function formatCost(usd: number | null): string {
+  if (usd == null) return "-";
+  if (usd === 0) return "$0.0000";
   return `$${usd.toFixed(4)}`;
 }
 

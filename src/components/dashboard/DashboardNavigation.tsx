@@ -8,8 +8,10 @@ import {
   Zap,
   Radio,
   ClipboardCheck,
+  Terminal,
   Activity,
   BarChart3,
+  Brain,
   Settings,
 } from "lucide-react";
 import { useSystemStore } from "@/stores/systemStore";
@@ -24,8 +26,10 @@ export const navItems = [
   { key: "executions", label: "Executions", icon: Zap, href: "/dashboard/executions" },
   { key: "events", label: "Events", icon: Radio, href: "/dashboard/events" },
   { key: "reviews", label: "Reviews", icon: ClipboardCheck, href: "/dashboard/reviews" },
+  { key: "playground", label: "Playground", icon: Terminal, href: "/dashboard/playground" },
   { key: "observability", label: "Observability", icon: Activity, href: "/dashboard/observability" },
   { key: "usage", label: "Usage", icon: BarChart3, href: "/dashboard/usage" },
+  { key: "knowledge", label: "Knowledge", icon: Brain, href: "/dashboard/knowledge" },
   { key: "settings", label: "Settings", icon: Settings, href: "/dashboard/settings" },
 ] as const;
 

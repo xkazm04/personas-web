@@ -1,6 +1,6 @@
 "use client";
 
-import { useId, useRef, useState, useCallback, useEffect, useMemo } from "react";
+import { useId, useRef, useState, useCallback, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import {
   Mail, MessageSquare, Github, Calendar, CreditCard, HardDrive,
@@ -11,10 +11,8 @@ import {
 import type { LucideIcon } from "lucide-react";
 import TerminalChrome from "@/components/TerminalChrome";
 import GradientText from "@/components/GradientText";
-import { useIsMobile } from "@/hooks/useIsMobile";
-import { CORE_TOOLS } from "@/lib/tool-catalogue";
 
-/* ── Catalogue of available tool integrations (augmented with icons & categories) ── */
+/* ── Catalogue of available tool integrations ── */
 
 interface ToolDef {
   id: string;
@@ -24,27 +22,28 @@ interface ToolDef {
   category: "producer" | "consumer" | "both";
 }
 
-const ICON_MAP: Record<string, LucideIcon> = {
-  gmail: Mail, slack: MessageSquare, github: Github, calendar: Calendar,
-  stripe: CreditCard, jira: SquareKanban, drive: HardDrive, figma: Figma,
-  webhook: Webhook, api: Globe, database: Database, notify: Bell,
-  docs: FileText, s3: Cloud, rss: Rss, auth: Shield, cli: Terminal,
-  agent: Bot, plugin: Plug, pubsub: Share2,
-};
-
-const CATEGORY_MAP: Record<string, "producer" | "consumer" | "both"> = {
-  gmail: "both", slack: "both", github: "both", calendar: "producer",
-  stripe: "both", jira: "both", drive: "consumer", figma: "consumer",
-  webhook: "producer", api: "both", database: "consumer", notify: "consumer",
-  docs: "consumer", s3: "both", rss: "producer", auth: "producer",
-  cli: "both", agent: "both", plugin: "both", pubsub: "both",
-};
-
-const TOOL_CATALOGUE: ToolDef[] = CORE_TOOLS.map((t) => ({
-  ...t,
-  icon: ICON_MAP[t.id] ?? Globe,
-  category: CATEGORY_MAP[t.id] ?? "both",
-}));
+const TOOL_CATALOGUE: ToolDef[] = [
+  { id: "gmail", name: "Gmail", icon: Mail, color: "#ea4335", category: "both" },
+  { id: "slack", name: "Slack", icon: MessageSquare, color: "#4a154b", category: "both" },
+  { id: "github", name: "GitHub", icon: Github, color: "#8b5cf6", category: "both" },
+  { id: "calendar", name: "Calendar", icon: Calendar, color: "#06b6d4", category: "producer" },
+  { id: "stripe", name: "Stripe", icon: CreditCard, color: "#635bff", category: "both" },
+  { id: "jira", name: "Jira", icon: SquareKanban, color: "#0052cc", category: "both" },
+  { id: "drive", name: "Drive", icon: HardDrive, color: "#34a853", category: "consumer" },
+  { id: "figma", name: "Figma", icon: Figma, color: "#f24e1e", category: "consumer" },
+  { id: "webhook", name: "Webhook", icon: Webhook, color: "#f59e0b", category: "producer" },
+  { id: "api", name: "REST API", icon: Globe, color: "#3b82f6", category: "both" },
+  { id: "database", name: "Database", icon: Database, color: "#14b8a6", category: "consumer" },
+  { id: "notify", name: "Notify", icon: Bell, color: "#ec4899", category: "consumer" },
+  { id: "docs", name: "Docs", icon: FileText, color: "#6366f1", category: "consumer" },
+  { id: "s3", name: "S3 Bucket", icon: Cloud, color: "#f97316", category: "both" },
+  { id: "rss", name: "RSS Feed", icon: Rss, color: "#fb923c", category: "producer" },
+  { id: "auth", name: "Auth", icon: Shield, color: "#10b981", category: "producer" },
+  { id: "cli", name: "CLI", icon: Terminal, color: "#a3a3a3", category: "both" },
+  { id: "agent", name: "AI Agent", icon: Bot, color: "#8b5cf6", category: "both" },
+  { id: "plugin", name: "Plugin", icon: Plug, color: "#d946ef", category: "both" },
+  { id: "pubsub", name: "Pub/Sub", icon: Share2, color: "#0ea5e9", category: "both" },
+];
 
 const TOOL_MAP = new Map(TOOL_CATALOGUE.map((t) => [t.id, t]));
 
@@ -97,15 +96,6 @@ const PRODUCER_Y = 16;
 const CONSUMER_Y = 84;
 const NODE_R = 5;
 
-// Mobile-friendly sizes (used when isMobile is true)
-const MOBILE_NODE_R = 8;
-const MOBILE_PRODUCER_Y = 22;
-const MOBILE_CONSUMER_Y = 78;
-const MOBILE_FONT_SIZE = 3.5;
-const MOBILE_LABEL_FONT = 2;
-const MOBILE_DELETE_R = 4;
-const MOBILE_WIRE_HIT_R = 5;
-
 /* ── Default starter flow ── */
 const DEFAULT_NODES: CanvasNode[] = [
   { id: "n1", toolId: "gmail", side: "producer", x: 20 },
@@ -122,26 +112,18 @@ const DEFAULT_WIRES: Wire[] = [
   { from: "n3", to: "n6", label: "hook.payload" },
 ];
 
+let _nextId = 100;
+function nextId() {
+  return `n${++_nextId}`;
+}
+
 /* ── Main composer ── */
 
 export default function FlowComposer({ onClose }: { onClose: () => void }) {
-  const isMobile = useIsMobile();
-  const nextIdRef = useRef(100);
-  const nextId = () => `n${++nextIdRef.current}`;
-
   const uid = useId();
   const evGlow = `${uid}-cGlow`;
   const qGrad = `${uid}-cQGrad`;
   const qClip = `${uid}-cQClip`;
-
-  // Responsive sizing
-  const nr = isMobile ? MOBILE_NODE_R : NODE_R;
-  const prodY = isMobile ? MOBILE_PRODUCER_Y : PRODUCER_Y;
-  const consY = isMobile ? MOBILE_CONSUMER_Y : CONSUMER_Y;
-  const labelFs = isMobile ? MOBILE_FONT_SIZE : 2.2;
-  const subLabelFs = isMobile ? MOBILE_LABEL_FONT : 1.3;
-  const delR = isMobile ? MOBILE_DELETE_R : 1.5;
-  const wireHitR = isMobile ? MOBILE_WIRE_HIT_R : 2.5;
 
   // Load from hash or use defaults
   const [nodes, setNodes] = useState<CanvasNode[]>(() => {
@@ -163,17 +145,24 @@ export default function FlowComposer({ onClose }: { onClose: () => void }) {
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const [wiringFrom, setWiringFrom] = useState<string | null>(null);
   const [shareToast, setShareToast] = useState(false);
-  const dragRef = useRef<{ id: string; origX: number; currentX: number } | null>(null);
+  const [dragNode, setDragNode] = useState<string | null>(null);
   const svgRef = useRef<SVGSVGElement>(null);
+  const rafPending = useRef(false);
+  const hashTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 
-  // Sync hash on state change — skip during active drag to avoid
-  // expensive synchronous history.replaceState calls at 60fps
+  // Sync hash on state change — debounced 500ms
   useEffect(() => {
-    if (dragRef.current) return;
-    const encoded = encodeFlow({ nodes, wires });
-    if (encoded) {
-      window.history.replaceState(null, "", `#flow=${encoded}`);
-    }
+    if (hashTimerRef.current) clearTimeout(hashTimerRef.current);
+    hashTimerRef.current = setTimeout(() => {
+      const encoded = encodeFlow({ nodes, wires });
+      if (encoded) {
+        window.history.replaceState(null, "", `#flow=${encoded}`);
+      }
+      hashTimerRef.current = null;
+    }, 500);
+    return () => {
+      if (hashTimerRef.current) clearTimeout(hashTimerRef.current);
+    };
   }, [nodes, wires]);
 
   const shareUrl = useCallback(() => {
@@ -185,18 +174,6 @@ export default function FlowComposer({ onClose }: { onClose: () => void }) {
     });
   }, [nodes, wires]);
 
-  // Node position lookup — O(1) per wire instead of O(N) find()
-  const nodePosMap = useMemo(() => {
-    const map = new Map<string, { x: number; y: number }>();
-    for (const n of nodes) {
-      map.set(n.id, { x: n.x, y: n.side === "producer" ? prodY : consY });
-    }
-    return map;
-  }, [nodes, prodY, consY]);
-
-  const defaultPos = { x: 50, y: QUEUE_Y };
-  const nodePos = (id: string) => nodePosMap.get(id) ?? defaultPos;
-
   // Drag handling — convert mouse position to SVG viewBox coords
   const toSvgX = useCallback((clientX: number): number => {
     const svg = svgRef.current;
@@ -206,87 +183,22 @@ export default function FlowComposer({ onClose }: { onClose: () => void }) {
     return Math.max(8, Math.min(92, (clientX - rect.left) * ratio));
   }, []);
 
-  /* ── Direct DOM update during drag (bypasses React reconciliation) ── */
-  const updateDragDOM = useCallback((nodeId: string, newX: number) => {
-    const svg = svgRef.current;
-    if (!svg) return;
-
-    // Find the node in state to get its original x for computing delta
-    const drag = dragRef.current;
-    if (!drag) return;
-    const deltaX = newX - drag.origX;
-
-    // Translate the dragged node group
-    const nodeGroup = svg.querySelector(`[data-node-id="${nodeId}"]`) as SVGGElement | null;
-    if (nodeGroup) {
-      nodeGroup.setAttribute("transform", `translate(${deltaX}, 0)`);
-    }
-
-    // Update connector line for this node
-    const conn = svg.querySelector(`[data-conn="${nodeId}"]`) as SVGLineElement | null;
-    if (conn) {
-      conn.setAttribute("x1", String(newX));
-      conn.setAttribute("x2", String(newX));
-    }
-
-    // Update wire paths that reference this node
-    svg.querySelectorAll(`[data-wire-from="${nodeId}"], [data-wire-to="${nodeId}"]`).forEach((el) => {
-      const wireG = el as SVGGElement;
-      const fromId = wireG.getAttribute("data-wire-from")!;
-      const toId = wireG.getAttribute("data-wire-to")!;
-
-      // Resolve effective x for each endpoint
-      const fromX = fromId === nodeId ? newX : (nodePosMap.get(fromId)?.x ?? 50);
-      const toX = toId === nodeId ? newX : (nodePosMap.get(toId)?.x ?? 50);
-      const fromY = nodePosMap.get(fromId)?.y ?? QUEUE_Y;
-      const toY = nodePosMap.get(toId)?.y ?? QUEUE_Y;
-
-      // Wire path
-      const path = wireG.querySelector("path");
-      if (path) {
-        path.setAttribute("d", `M ${fromX} ${fromY + nr} L ${fromX} ${QUEUE_Y} L ${toX} ${QUEUE_Y} L ${toX} ${toY - nr}`);
-      }
-
-      // Wire label position
-      const midX = (fromX + toX) / 2;
-      const label = wireG.querySelector<SVGTextElement>("text");
-      if (label) label.setAttribute("x", String(midX));
-
-      // Wire hit circle
-      const hitCircle = wireG.querySelector<SVGCircleElement>("circle");
-      if (hitCircle) hitCircle.setAttribute("cx", String(midX));
-
-      // Animated dot (motion.circle) — update initial position but Framer handles animation
-    });
-  }, [nodePosMap, nr]);
-
   const handlePointerMove = useCallback(
     (e: React.PointerEvent) => {
-      const drag = dragRef.current;
-      if (!drag) return;
-      const x = toSvgX(e.clientX);
-      drag.currentX = x;
-      updateDragDOM(drag.id, x);
+      if (!dragNode || rafPending.current) return;
+      const clientX = e.clientX;
+      rafPending.current = true;
+      requestAnimationFrame(() => {
+        rafPending.current = false;
+        const x = toSvgX(clientX);
+        setNodes((prev) => prev.map((n) => (n.id === dragNode ? { ...n, x } : n)));
+      });
     },
-    [toSvgX, updateDragDOM],
+    [dragNode, toSvgX],
   );
 
   const handlePointerUp = useCallback(() => {
-    const drag = dragRef.current;
-    if (!drag) return;
-    const finalX = drag.currentX;
-    const nodeId = drag.id;
-    dragRef.current = null;
-
-    // Commit final position to React state (single re-render)
-    setNodes((prev) => prev.map((n) => (n.id === nodeId ? { ...n, x: finalX } : n)));
-
-    // Clean up transform — React will re-render with correct position
-    const svg = svgRef.current;
-    if (svg) {
-      const nodeGroup = svg.querySelector(`[data-node-id="${nodeId}"]`) as SVGGElement | null;
-      if (nodeGroup) nodeGroup.removeAttribute("transform");
-    }
+    setDragNode(null);
   }, []);
 
   // Add a node from the sidebar
@@ -308,7 +220,7 @@ export default function FlowComposer({ onClose }: { onClose: () => void }) {
   // Click on a node: start/finish wiring
   const handleNodeClick = useCallback(
     (nodeId: string) => {
-      if (dragRef.current) return; // ignore clicks during drag
+      if (dragNode) return; // ignore clicks during drag
       const node = nodes.find((n) => n.id === nodeId);
       if (!node) return;
 
@@ -332,7 +244,7 @@ export default function FlowComposer({ onClose }: { onClose: () => void }) {
       }
       setWiringFrom(null);
     },
-    [wiringFrom, nodes, wires],
+    [wiringFrom, nodes, wires, dragNode],
   );
 
   // Remove a wire
@@ -340,38 +252,49 @@ export default function FlowComposer({ onClose }: { onClose: () => void }) {
     setWires((prev) => prev.filter((w) => !(w.from === from && w.to === to)));
   }, []);
 
+  // Node position helpers
+  const nodePos = useCallback(
+    (id: string): { x: number; y: number } => {
+      const n = nodes.find((nd) => nd.id === id);
+      if (!n) return { x: 50, y: QUEUE_Y };
+      return { x: n.x, y: n.side === "producer" ? PRODUCER_Y : CONSUMER_Y };
+    },
+    [nodes],
+  );
+
   const hasContent = nodes.length > 0;
 
   return (
     <div className="relative">
       {/* Header row */}
-      <div className="flex flex-wrap items-center justify-between gap-3 mb-6">
-        <div className="min-w-0">
+      <div className="flex items-center justify-between mb-6">
+        <div>
           <h3 className="text-lg font-bold text-white/90 sm:text-xl">
             <GradientText>Flow Composer</GradientText>
           </h3>
-          <p className="text-xs text-white/40 mt-1 font-mono">
+          <p className="text-xs text-white/70 mt-1 font-mono">
             Drag nodes, click producer then consumer to wire, share your flow
           </p>
         </div>
         <div className="flex items-center gap-2">
           <button
             onClick={() => setSidebarOpen(!sidebarOpen)}
-            className="flex items-center gap-1.5 rounded-full border border-brand-cyan/25 bg-brand-cyan/10 px-3 py-1.5 text-[11px] font-mono text-brand-cyan/80 hover:bg-brand-cyan/20 transition-colors"
+            className="flex items-center gap-1.5 rounded-full border border-brand-cyan/25 bg-brand-cyan/10 px-3 py-1.5 text-[11px] font-mono text-brand-cyan/80 hover:bg-brand-cyan/20 transition-colors focus-visible:ring-2 focus-visible:ring-brand-cyan/60 focus-visible:outline-none"
           >
             <Plus className="w-3 h-3" />
             Add Node
           </button>
           <button
             onClick={shareUrl}
-            className="flex items-center gap-1.5 rounded-full border border-white/10 bg-white/5 px-3 py-1.5 text-[11px] font-mono text-white/60 hover:bg-white/10 transition-colors"
+            className="flex items-center gap-1.5 rounded-full border border-white/10 bg-white/5 px-3 py-1.5 text-[11px] font-mono text-white/80 hover:bg-white/10 transition-colors focus-visible:ring-2 focus-visible:ring-brand-cyan/60 focus-visible:outline-none"
           >
             <Link2 className="w-3 h-3" />
             Share
           </button>
           <button
             onClick={onClose}
-            className="flex items-center gap-1.5 rounded-full border border-white/10 bg-white/5 px-3 py-1.5 text-[11px] font-mono text-white/60 hover:bg-white/10 transition-colors"
+            aria-label="Close Flow Composer"
+            className="flex items-center gap-1.5 rounded-full border border-white/10 bg-white/5 px-3 py-1.5 text-[11px] font-mono text-white/80 hover:bg-white/10 transition-colors focus-visible:ring-2 focus-visible:ring-brand-cyan/60 focus-visible:outline-none"
           >
             <X className="w-3 h-3" />
           </button>
@@ -392,78 +315,53 @@ export default function FlowComposer({ onClose }: { onClose: () => void }) {
         )}
       </AnimatePresence>
 
-      {/* Sidebar / Bottom Sheet */}
+      {/* Sidebar */}
       <AnimatePresence>
         {sidebarOpen && (
-          <>
-            {/* Backdrop on mobile */}
-            {isMobile && (
-              <motion.div
-                initial={{ opacity: 0 }}
-                animate={{ opacity: 1 }}
-                exit={{ opacity: 0 }}
-                className="fixed inset-0 z-20 bg-black/50"
-                onClick={() => setSidebarOpen(false)}
-              />
-            )}
-            <motion.div
-              initial={isMobile ? { opacity: 1, y: "100%" } : { opacity: 0, x: 20 }}
-              animate={isMobile ? { opacity: 1, y: 0 } : { opacity: 1, x: 0 }}
-              exit={isMobile ? { opacity: 1, y: "100%" } : { opacity: 0, x: 20 }}
-              transition={{ type: "spring", damping: 25, stiffness: 300 }}
-              className={
-                isMobile
-                  ? "fixed inset-x-0 bottom-0 z-30 max-h-[70vh] overflow-y-auto rounded-t-2xl border-t border-white/10 bg-black/95 backdrop-blur-xl p-4 pb-8 shadow-2xl"
-                  : "absolute right-0 top-14 z-20 w-56 max-h-80 overflow-y-auto rounded-xl border border-white/10 bg-black/90 backdrop-blur-xl p-3 shadow-2xl"
-              }
-            >
-              {/* Drag handle on mobile */}
-              {isMobile && (
-                <div className="flex justify-center mb-3">
-                  <div className="h-1 w-10 rounded-full bg-white/20" />
-                </div>
-              )}
-              <p className="text-[10px] font-mono text-white/30 uppercase tracking-wider mb-2">
-                Available Integrations
-              </p>
-              <div className={isMobile ? "grid grid-cols-2 gap-1" : "space-y-1"}>
-                {TOOL_CATALOGUE.map((tool) => {
-                  const alreadyOnCanvas = nodes.some((n) => n.toolId === tool.id);
-                  return (
-                    <div key={tool.id} className="flex items-center gap-2">
+          <motion.div
+            initial={{ opacity: 0, x: 20 }}
+            animate={{ opacity: 1, x: 0 }}
+            exit={{ opacity: 0, x: 20 }}
+            className="absolute right-0 top-14 z-20 w-56 max-h-80 overflow-y-auto rounded-xl border border-white/10 bg-black/90 backdrop-blur-xl p-3 shadow-2xl"
+          >
+            <p className="text-[10px] font-mono text-white/70 uppercase tracking-wider mb-2">
+              Available Integrations
+            </p>
+            <div className="space-y-1">
+              {TOOL_CATALOGUE.map((tool) => {
+                const alreadyOnCanvas = nodes.some((n) => n.toolId === tool.id);
+                return (
+                  <div key={tool.id} className="flex items-center gap-2">
+                    <button
+                      disabled={alreadyOnCanvas && tool.category !== "both"}
+                      onClick={() =>
+                        addNode(
+                          tool.id,
+                          tool.category === "consumer" ? "consumer" : "producer",
+                        )
+                      }
+                      className="flex-1 flex items-center gap-2 rounded-lg px-2.5 py-1.5 text-left text-xs transition-colors hover:bg-white/8 disabled:opacity-30 disabled:cursor-not-allowed"
+                    >
+                      <tool.icon className="w-3.5 h-3.5 flex-shrink-0" style={{ color: tool.color }} />
+                      <span className="text-white/70">{tool.name}</span>
+                      <span className="ml-auto text-[9px] text-white/70 font-mono uppercase">
+                        {tool.category === "both" ? "any" : tool.category === "producer" ? "prod" : "cons"}
+                      </span>
+                    </button>
+                    {tool.category === "both" && !nodes.some((n) => n.toolId === tool.id && n.side === "consumer") && (
                       <button
-                        disabled={alreadyOnCanvas && tool.category !== "both"}
-                        onClick={() =>
-                          addNode(
-                            tool.id,
-                            tool.category === "consumer" ? "consumer" : "producer",
-                          )
-                        }
-                        className={`flex-1 flex items-center gap-2 rounded-lg text-left transition-colors hover:bg-white/8 disabled:opacity-30 disabled:cursor-not-allowed ${
-                          isMobile ? "px-3 py-2.5 text-sm" : "px-2.5 py-1.5 text-xs"
-                        }`}
+                        onClick={() => addNode(tool.id, "consumer")}
+                        className="text-[9px] text-white/70 hover:text-white/80 font-mono px-1"
+                        title="Add as consumer"
                       >
-                        <tool.icon className={`flex-shrink-0 ${isMobile ? "w-4.5 h-4.5" : "w-3.5 h-3.5"}`} style={{ color: tool.color }} />
-                        <span className="text-white/70">{tool.name}</span>
-                        <span className={`ml-auto text-white/25 font-mono uppercase ${isMobile ? "text-[10px]" : "text-[9px]"}`}>
-                          {tool.category === "both" ? "any" : tool.category === "producer" ? "prod" : "cons"}
-                        </span>
+                        +C
                       </button>
-                      {tool.category === "both" && !nodes.some((n) => n.toolId === tool.id && n.side === "consumer") && (
-                        <button
-                          onClick={() => addNode(tool.id, "consumer")}
-                          className={`text-white/30 hover:text-white/60 font-mono ${isMobile ? "text-xs px-2 py-1" : "text-[9px] px-1"}`}
-                          title="Add as consumer"
-                        >
-                          +C
-                        </button>
-                      )}
-                    </div>
-                  );
-                })}
-              </div>
-            </motion.div>
-          </>
+                    )}
+                  </div>
+                );
+              })}
+            </div>
+          </motion.div>
         )}
       </AnimatePresence>
 
@@ -478,8 +376,8 @@ export default function FlowComposer({ onClose }: { onClose: () => void }) {
         <svg
           ref={svgRef}
           viewBox={`0 0 ${VB_W} ${VB_H}`}
-          className="w-full select-none touch-none"
-          style={{ minHeight: isMobile ? 340 : 260 }}
+          className="w-full select-none"
+          style={{ minHeight: 340 }}
           onPointerMove={handlePointerMove}
           onPointerUp={handlePointerUp}
           onPointerLeave={handlePointerUp}
@@ -519,9 +417,9 @@ export default function FlowComposer({ onClose }: { onClose: () => void }) {
             const to = nodePos(wire.to);
             const midX = (from.x + to.x) / 2;
             return (
-              <g key={`${wire.from}-${wire.to}`} data-wire-from={wire.from} data-wire-to={wire.to}>
+              <g key={`${wire.from}-${wire.to}`}>
                 <path
-                  d={`M ${from.x} ${from.y + nr} L ${from.x} ${QUEUE_Y} L ${to.x} ${QUEUE_Y} L ${to.x} ${to.y - nr}`}
+                  d={`M ${from.x} ${from.y + NODE_R} L ${from.x} ${QUEUE_Y} L ${to.x} ${QUEUE_Y} L ${to.x} ${to.y - NODE_R}`}
                   fill="none"
                   stroke="rgba(6,182,212,0.3)"
                   strokeWidth="0.5"
@@ -529,13 +427,13 @@ export default function FlowComposer({ onClose }: { onClose: () => void }) {
                 />
                 {/* Animated event dot */}
                 <motion.circle
-                  r={isMobile ? 1.5 : 0.9}
+                  r="0.9"
                   fill="rgba(6,182,212,0.95)"
                   filter={`url(#${evGlow})`}
-                  initial={{ cx: from.x, cy: from.y + nr, opacity: 0 }}
+                  initial={{ cx: from.x, cy: from.y + NODE_R, opacity: 0 }}
                   animate={{
                     cx: [from.x, from.x, to.x, to.x],
-                    cy: [from.y + nr, QUEUE_Y, QUEUE_Y, to.y - nr],
+                    cy: [from.y + NODE_R, QUEUE_Y, QUEUE_Y, to.y - NODE_R],
                     opacity: [0, 1, 1, 0],
                   }}
                   transition={{ duration: 2.5, repeat: Infinity, ease: "linear", repeatDelay: 1 }}
@@ -546,7 +444,7 @@ export default function FlowComposer({ onClose }: { onClose: () => void }) {
                   y={QUEUE_Y - 6}
                   textAnchor="middle"
                   fill="rgba(6,182,212,0.35)"
-                  fontSize={isMobile ? 2.4 : 1.6}
+                  fontSize="1.6"
                   fontFamily="var(--font-geist-mono)"
                 >
                   {wire.label}
@@ -555,10 +453,19 @@ export default function FlowComposer({ onClose }: { onClose: () => void }) {
                 <circle
                   cx={midX}
                   cy={QUEUE_Y - 6}
-                  r={wireHitR}
+                  r="2.5"
                   fill="transparent"
-                  className="cursor-pointer"
+                  role="button"
+                  tabIndex={0}
+                  aria-label={`Remove wire ${wire.label}`}
+                  className="cursor-pointer focus-visible:outline-none focus-visible:stroke-brand-cyan focus-visible:stroke-[0.5]"
                   onClick={() => removeWire(wire.from, wire.to)}
+                  onKeyDown={(e) => {
+                    if (e.key === "Enter" || e.key === " ") {
+                      e.preventDefault();
+                      removeWire(wire.from, wire.to);
+                    }
+                  }}
                 >
                   <title>Remove wire</title>
                 </circle>
@@ -568,13 +475,12 @@ export default function FlowComposer({ onClose }: { onClose: () => void }) {
 
           {/* Connector lines (no wire yet) */}
           {nodes.map((node) => {
-            const y = node.side === "producer" ? prodY : consY;
-            const connStart = node.side === "producer" ? y + nr : QUEUE_Y + 4;
-            const connEnd = node.side === "producer" ? QUEUE_Y - 4 : y - nr;
+            const y = node.side === "producer" ? PRODUCER_Y : CONSUMER_Y;
+            const connStart = node.side === "producer" ? y + NODE_R : QUEUE_Y + 4;
+            const connEnd = node.side === "producer" ? QUEUE_Y - 4 : y - NODE_R;
             return (
               <line
                 key={`conn-${node.id}`}
-                data-conn={node.id}
                 x1={node.x}
                 y1={connStart}
                 x2={node.x}
@@ -597,42 +503,51 @@ export default function FlowComposer({ onClose }: { onClose: () => void }) {
           {nodes.map((node) => {
             const tool = TOOL_MAP.get(node.toolId);
             if (!tool) return null;
-            const y = node.side === "producer" ? prodY : consY;
+            const y = node.side === "producer" ? PRODUCER_Y : CONSUMER_Y;
             const isWiringSource = wiringFrom === node.id;
 
             return (
               <g
                 key={node.id}
-                data-node-id={node.id}
-                className="cursor-grab"
+                role="button"
+                tabIndex={0}
+                aria-label={`${tool.name} ${node.side} node`}
+                className="cursor-grab focus-visible:outline-none [&:focus-visible>circle:nth-of-type(1)]:stroke-[1] [&:focus-visible>circle:nth-of-type(1)]:stroke-brand-cyan"
                 onPointerDown={(e) => {
                   e.stopPropagation();
-                  dragRef.current = { id: node.id, origX: node.x, currentX: node.x };
+                  setDragNode(node.id);
                   (e.target as SVGElement).setPointerCapture?.(e.pointerId);
                 }}
                 onClick={(e) => {
                   e.stopPropagation();
                   handleNodeClick(node.id);
                 }}
+                onKeyDown={(e) => {
+                  if (e.key === "Enter" || e.key === " ") {
+                    e.preventDefault();
+                    e.stopPropagation();
+                    handleNodeClick(node.id);
+                  }
+                }}
               >
                 {/* Outer glow on wiring source */}
                 {isWiringSource && (
-                  <circle cx={node.x} cy={y} r={nr + 2} fill="none" stroke="rgba(6,182,212,0.4)" strokeWidth="0.3" strokeDasharray="1 1">
-                    <animate attributeName="r" values={`${nr + 1.5};${nr + 2.5};${nr + 1.5}`} dur="1s" repeatCount="indefinite" />
+                  <circle cx={node.x} cy={y} r={NODE_R + 2} fill="none" stroke="rgba(6,182,212,0.4)" strokeWidth="0.3" strokeDasharray="1 1">
+                    <animate attributeName="r" values={`${NODE_R + 1.5};${NODE_R + 2.5};${NODE_R + 1.5}`} dur="1s" repeatCount="indefinite" />
                   </circle>
                 )}
 
                 {/* Node circle */}
-                <circle cx={node.x} cy={y} r={nr} fill={`${tool.color}15`} stroke={tool.color} strokeWidth={isMobile ? 0.5 : 0.35} opacity="0.8" />
-                <circle cx={node.x} cy={y} r={isMobile ? 3 : 1.8} fill={tool.color} opacity="0.8" />
+                <circle cx={node.x} cy={y} r={NODE_R} fill={`${tool.color}15`} stroke={tool.color} strokeWidth="0.35" opacity="0.8" />
+                <circle cx={node.x} cy={y} r="1.8" fill={tool.color} opacity="0.8" />
 
                 {/* Label */}
                 <text
                   x={node.x}
-                  y={node.side === "producer" ? y - nr - 2 : y + nr + 4}
+                  y={node.side === "producer" ? y - NODE_R - 2 : y + NODE_R + 4}
                   textAnchor="middle"
                   fill="rgba(255,255,255,0.55)"
-                  fontSize={labelFs}
+                  fontSize="2.2"
                   fontFamily="var(--font-geist-mono)"
                   letterSpacing="0.04em"
                 >
@@ -640,39 +555,49 @@ export default function FlowComposer({ onClose }: { onClose: () => void }) {
                 </text>
                 <text
                   x={node.x}
-                  y={node.side === "producer" ? y + nr + 3.5 : y - nr - 1}
+                  y={node.side === "producer" ? y + NODE_R + 3.5 : y - NODE_R - 1}
                   textAnchor="middle"
                   fill="rgba(255,255,255,0.18)"
-                  fontSize={subLabelFs}
+                  fontSize="1.3"
                   fontFamily="var(--font-geist-mono)"
                   letterSpacing="0.08em"
                 >
                   {node.side === "producer" ? "PRODUCER" : "CONSUMER"}
                 </text>
 
-                {/* Delete button — always visible on mobile for tap access */}
+                {/* Delete button */}
                 <g
-                  className={isMobile ? "cursor-pointer" : "cursor-pointer opacity-0 hover:opacity-100 transition-opacity"}
+                  role="button"
+                  tabIndex={0}
+                  aria-label={`Remove ${tool.name} node`}
+                  className="cursor-pointer opacity-0 hover:opacity-100 focus-visible:opacity-100 transition-opacity focus-visible:outline-none [&:focus-visible>circle]:stroke-[0.5] [&:focus-visible>circle]:stroke-brand-cyan"
                   onClick={(e) => {
                     e.stopPropagation();
                     removeNode(node.id);
                   }}
+                  onKeyDown={(e) => {
+                    if (e.key === "Enter" || e.key === " ") {
+                      e.preventDefault();
+                      e.stopPropagation();
+                      removeNode(node.id);
+                    }
+                  }}
                 >
                   <circle
-                    cx={node.x + nr}
-                    cy={y - nr}
-                    r={delR}
+                    cx={node.x + NODE_R}
+                    cy={y - NODE_R}
+                    r="1.5"
                     fill="rgba(239,68,68,0.3)"
                     stroke="rgba(239,68,68,0.5)"
-                    strokeWidth={isMobile ? 0.3 : 0.2}
+                    strokeWidth="0.2"
                   />
                   <text
-                    x={node.x + nr}
-                    y={y - nr + (isMobile ? 0.8 : 0.5)}
+                    x={node.x + NODE_R}
+                    y={y - NODE_R + 0.5}
                     textAnchor="middle"
                     dominantBaseline="middle"
                     fill="rgba(239,68,68,0.8)"
-                    fontSize={isMobile ? 3 : 1.5}
+                    fontSize="1.5"
                     fontFamily="var(--font-geist-mono)"
                   >
                     x
@@ -698,34 +623,37 @@ export default function FlowComposer({ onClose }: { onClose: () => void }) {
           animate={{ opacity: 1, y: 0 }}
           className="mt-6 flex flex-col items-center gap-3"
         >
-          <div className="relative inline-block rounded-full p-[2px] bg-gradient-to-r from-brand-cyan via-blue-400 to-brand-purple animate-border-flow shadow-[0_0_30px_rgba(6,182,212,0.3)]">
+          <div className="relative inline-block rounded-full p-[2px] bg-gradient-to-r from-brand-cyan via-blue-400 to-brand-purple motion-safe:animate-border-flow shadow-[0_0_30px_rgba(6,182,212,0.3)]">
             <a
               href="#download"
               className="group relative flex items-center justify-center gap-3 overflow-hidden rounded-full bg-black/80 backdrop-blur-md px-8 py-4 text-sm font-semibold text-white transition-all duration-300 hover:bg-black/60"
             >
-              <div className="absolute inset-0 -translate-x-full bg-gradient-to-r from-transparent via-white/10 to-transparent transition-transform duration-700 group-hover:translate-x-full" />
+              <div aria-hidden="true" className="absolute inset-0 bg-gradient-to-r from-transparent via-white/10 to-transparent 
+                motion-safe:-translate-x-full motion-safe:transition-transform motion-safe:duration-700 motion-safe:group-hover:translate-x-full
+                motion-reduce:opacity-0 motion-reduce:group-hover:opacity-100 motion-reduce:transition-opacity motion-reduce:duration-300" 
+              />
               <Download className="relative h-5 w-5 text-brand-cyan transition-transform duration-300 group-hover:-translate-y-0.5" />
               <span className="relative">Build this flow in Personas</span>
             </a>
           </div>
-          <p className="text-[11px] text-white/30 font-mono">
+          <p className="text-[11px] text-white/70 font-mono">
             {nodes.length} nodes, {wires.length} connection{wires.length !== 1 ? "s" : ""} — ready to import
           </p>
         </motion.div>
       )}
 
       {/* Legend */}
-      <div className="mt-6 flex flex-wrap items-center justify-center gap-3 sm:gap-6 text-[11px] text-white/40">
+      <div className="mt-6 flex flex-wrap items-center justify-center gap-3 sm:gap-6 text-[11px] text-white/70">
         <div className="flex items-center gap-2">
-          <Trash2 className="w-3 h-3 text-white/25" />
-          <span>{isMobile ? "Tap × to delete" : "Hover node to delete"}</span>
+          <Trash2 className="w-3 h-3 text-white/70" />
+          <span>Hover node to delete</span>
         </div>
         <div className="flex items-center gap-2">
           <div className="h-1.5 w-1.5 rounded-full bg-brand-cyan shadow-[0_0_4px_rgba(6,182,212,0.4)]" />
-          <span>{isMobile ? "Tap producer → consumer to wire" : "Click producer → consumer to wire"}</span>
+          <span>Click producer → consumer to wire</span>
         </div>
         <div className="flex items-center gap-2">
-          <svg width="16" height="8" className="text-white/25">
+          <svg width="16" height="8" className="text-white/70" aria-hidden="true">
             <line x1="0" y1="4" x2="16" y2="4" stroke="currentColor" strokeWidth="0.5" strokeDasharray="2 2" />
           </svg>
           <span>Drag nodes to reposition</span>
@@ -733,7 +661,7 @@ export default function FlowComposer({ onClose }: { onClose: () => void }) {
       </div>
 
       {/* Glow behind */}
-      <div className="pointer-events-none absolute -inset-6 -z-10 rounded-3xl bg-linear-to-br from-brand-cyan/4 via-transparent to-brand-purple/4 blur-2xl" />
+      <div aria-hidden="true" className="pointer-events-none absolute -inset-6 -z-10 rounded-3xl bg-linear-to-br from-brand-cyan/4 via-transparent to-brand-purple/4 blur-2xl" />
     </div>
   );
 }

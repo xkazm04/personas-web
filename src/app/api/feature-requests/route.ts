@@ -1,3 +1,10 @@
+// ── PII Policy ──────────────────────────────────────────────────────────
+// This route collects: feature request text (user-submitted content).
+// IP addresses are used ONLY for transient in-memory rate limiting and
+// are NEVER persisted to the database or filesystem.
+// No email, no cookies, no fingerprints are collected by this endpoint.
+// ────────────────────────────────────────────────────────────────────────
+
 import { NextRequest, NextResponse } from "next/server";
 import { promises as fs } from "fs";
 import path from "path";
@@ -47,7 +54,6 @@ const REQUESTS_FILE = path.join(DATA_DIR, "feature-requests.json");
 
 interface FeatureRequestEntry {
   text: string;
-  ip: string;
   created_at: string;
 }
 
@@ -100,7 +106,6 @@ export async function POST(req: NextRequest) {
     const sb = await getSupabaseClient();
     const { error } = await sb.from("feature_requests").insert({
       text,
-      ip,
     });
 
     if (error) {
@@ -117,7 +122,6 @@ export async function POST(req: NextRequest) {
   const data = await readRequests();
   data.entries.push({
     text,
-    ip,
     created_at: new Date().toISOString(),
   });
   await writeRequests(data);

@@ -1,8 +1,7 @@
 "use client";
 
-import { useState, useEffect, useCallback, useRef } from "react";
-import { motion, useScroll, useTransform, useReducedMotion } from "framer-motion";
-import Image from "next/image";
+import { useState, useEffect, useCallback } from "react";
+import { motion, useReducedMotion } from "framer-motion";
 import {
   Mail, MessageSquare, Github, CreditCard, Calendar, HardDrive,
 } from "lucide-react";
@@ -10,6 +9,7 @@ import GradientText from "@/components/GradientText";
 import SectionHeading from "@/components/SectionHeading";
 import TerminalChrome from "@/components/TerminalChrome";
 import SectionWrapper from "@/components/SectionWrapper";
+import ImageBackground from "@/components/ImageBackground";
 import { fadeUp, revealFromBelow } from "@/lib/animations";
 
 import type { LucideIcon } from "lucide-react";
@@ -93,33 +93,18 @@ export default function Vision() {
     statusCounts.idle && `${statusCounts.idle} idle`,
   ].filter(Boolean).join(" \u00b7 ");
 
-  const containerRef = useRef<HTMLDivElement>(null);
-  const { scrollYProgress } = useScroll({
-    target: containerRef,
-    offset: ["start end", "end start"],
-  });
-  const y = useTransform(scrollYProgress, [0, 1], ["-10%", "10%"]);
-
   return (
-    <SectionWrapper id="vision" className="relative overflow-hidden">
-      <div ref={containerRef} className="absolute inset-0 pointer-events-none">
-        {/* Background image */}
-        <motion.div style={{ y }} className="absolute inset-0 h-[120%] -top-[10%]">
-          <Image
-            src="/imgs/illustration_hd.jpg"
-            alt="Futuristic command center with AI personality cards"
-            fill className="object-cover object-center" sizes="100vw" quality={80}
-            placeholder="blur"
-            blurDataURL="data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/2wBDAAoHBwgHBgoICAgLCgoLDhgQDg0NDh0VFhEYIx8lJCIfIiEmKzcvJik0KSEiMEExNDk7Pj4+JS5ESUM8SDc9Pjv/2wBDAQoLCw4NDhwQEBw7KCIoOzs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozv/wAARCAAGAAoDASIAAhEBAxEB/8QAFgABAQEAAAAAAAAAAAAAAAAAAAUH/8QAIBAAAgIBBAMBAAAAAAAAAAAAAQIAAwQFERIhBjFBUf/EABQBAQAAAAAAAAAAAAAAAAAAAAP/xAAYEQADAQEAAAAAAAAAAAAAAAABAgMAEf/aAAwDAQACEQMRAD8AyTDw8nPyFx8WprLG6KoJLH4BLPp3h+T6ULaW/wBJZX1sVh7XjuIiVeli5Ef/2Q=="
-          />
-        </motion.div>
-        <div className="absolute inset-0 bg-black/65" />
-        <div className="absolute inset-0 bg-linear-to-b from-background via-transparent to-background" />
-        <div className="absolute inset-0 bg-linear-to-r from-background/40 via-transparent to-background/40" />
-      </div>
+    <SectionWrapper id="vision" aria-labelledby="vision-heading" className="relative overflow-hidden">
+      <ImageBackground
+        src="/imgs/illustration_hd.jpg"
+        alt="Futuristic command center with AI personality cards"
+        overlayClass="bg-black/65"
+        parallax
+        blurDataURL="data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/2wBDAAoHBwgHBgoICAgLCgoLDhgQDg0NDh0VFhEYIx8lJCIfIiEmKzcvJik0KSEiMEExNDk7Pj4+JS5ESUM8SDc9Pjv/2wBDAQoLCw4NDhwQEBw7KCIoOzs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozv/wAARCAAGAAoDASIAAhEBAxEB/8QAFgABAQEAAAAAAAAAAAAAAAAAAAUH/8QAIBAAAgIBBAMBAAAAAAAAAAAAAQIAAwQFERIhBjFBUf/EABQBAQAAAAAAAAAAAAAAAAAAAAP/xAAYEQADAQEAAAAAAAAAAAAAAAABAgMAEf/aAAwDAQACEQMRAD8AyTDw8nPyFx8WprLG6KoJLH4BLPp3h+T6ULaW/wBJZX1sVh7XjuIiVeli5Ef/2Q=="
+      />
 
       <div className="mx-auto max-w-3xl text-center relative z-10">
-        <motion.div variants={fadeUp} className="mx-auto mb-5 flex max-w-4xl flex-wrap items-center justify-center gap-3">
+        <motion.div variants={fadeUp} className="mx-auto mb-6 flex max-w-4xl flex-wrap items-center justify-center gap-3">
           {[
             "Design once",
             "Observe continuously",
@@ -135,7 +120,7 @@ export default function Vision() {
         </motion.div>
 
         <motion.div variants={revealFromBelow}>
-          <SectionHeading className="leading-[1.1]">
+          <SectionHeading id="vision-heading" className="leading-[1.1]">
             Your personal army of{" "}
             <GradientText className="drop-shadow-lg">AI specialists</GradientText>
           </SectionHeading>
@@ -150,7 +135,7 @@ export default function Vision() {
             title="agent-monitor"
             status="live"
             info={`${totalExec.toLocaleString()} total exec`}
-            className="px-4 py-3 sm:px-5"
+            className="px-4 py-3 sm:px-6"
           />
 
           {/* Agent rows */}
@@ -164,7 +149,7 @@ export default function Vision() {
                   whileInView={{ opacity: 1, x: 0 }}
                   viewport={{ once: true }}
                   transition={{ delay: i * 0.06, duration: 0.25 }}
-                  className={`group grid grid-cols-[1fr_auto] items-center gap-2 sm:gap-3 px-4 py-3 sm:px-5 transition-all duration-500 hover:bg-white/5 hover:backdrop-blur-md hover:shadow-[inset_0_0_20px_rgba(255,255,255,0.02)] ${flashIdx === i ? "bg-brand-cyan/4" : ""}`}
+                  className={`group grid grid-cols-[1fr_auto] items-center gap-2 sm:gap-3 px-4 py-3 sm:px-6 transition-all duration-500 hover:bg-white/5 hover:backdrop-blur-md hover:shadow-[inset_0_0_20px_rgba(255,255,255,0.02)] ${flashIdx === i ? "bg-brand-cyan/4" : ""}`}
                 >
                   {/* Left: icon + name + status */}
                   <div className="flex items-center gap-3 min-w-0">
@@ -181,8 +166,8 @@ export default function Vision() {
                   {/* Right: executions + success rate */}
                   <div className="flex items-center gap-2 sm:gap-4 shrink-0">
                     <div className="text-right">
-                      <div className="text-[11px] font-mono text-white/50 tabular-nums">{agent.executions.toLocaleString()}</div>
-                      <div className="text-[9px] font-mono text-white/20">runs</div>
+                      <div className="text-[11px] font-mono text-white/70 tabular-nums">{agent.executions.toLocaleString()}</div>
+                      <div className="text-[9px] font-mono text-white/70">runs</div>
                     </div>
                     <div className="hidden sm:block w-12">
                       <div className="h-1 rounded-full bg-white/4 overflow-hidden">
@@ -195,7 +180,7 @@ export default function Vision() {
                           transition={{ delay: 0.3 + i * 0.08, duration: 0.5, ease: "easeOut" }}
                         />
                       </div>
-                      <div className="text-[9px] font-mono text-white/25 text-center mt-0.5">{agent.rate}%</div>
+                      <div className="text-[9px] font-mono text-white/70 text-center mt-0.5">{agent.rate}%</div>
                     </div>
                   </div>
                 </motion.div>
@@ -203,9 +188,9 @@ export default function Vision() {
             })}
           </div>
 
-          <div className="flex flex-wrap items-center justify-between gap-2 border-t border-white/4 px-4 py-3 sm:px-5 text-[10px] font-mono tracking-wider uppercase text-white/30">
+          <div className="flex flex-wrap items-center justify-between gap-2 border-t border-white/4 px-4 py-3 sm:px-6 text-[10px] font-mono tracking-wider uppercase text-white/70">
             <span>Fleet health overview</span>
-            <span className="text-brand-emerald/60">{statusSummary}</span>
+            <span className="text-brand-emerald/70">{statusSummary}</span>
           </div>
         </div>
       </motion.div>

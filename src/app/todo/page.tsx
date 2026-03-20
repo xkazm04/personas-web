@@ -34,35 +34,35 @@ const breadcrumbItems = [
 export default function TodoPage() {
   return (
     <InfoPageLayout scrollMapItems={scrollMapItems} breadcrumbItems={breadcrumbItems}>
-      <StageSection glow="purple" showTopLine={false} toColor="rgba(168,85,247,0.04)">
+      <StageSection glow="purple" showTopLine={false} toColor="purple">
         <DesignEngine />
       </StageSection>
 
-      <StageSection glow="emerald" fromColor="rgba(168,85,247,0.03)" toColor="rgba(251,191,36,0.04)">
+      <StageSection glow="emerald" fromColor="purple" toColor="amber">
         <LabHeatmap />
       </StageSection>
 
-      <StageSection glow="cyan" fromColor="rgba(251,191,36,0.03)" toColor="rgba(6,182,212,0.04)">
+      <StageSection glow="cyan" fromColor="amber" toColor="cyan">
         <GenomeTree />
       </StageSection>
 
-      <StageSection glow="purple" fromColor="rgba(6,182,212,0.03)" toColor="rgba(168,85,247,0.04)">
+      <StageSection glow="purple" fromColor="cyan" toColor="purple">
         <MemoryLayers />
       </StageSection>
 
-      <StageSection glow="emerald" fromColor="rgba(168,85,247,0.03)" toColor="rgba(244,63,94,0.04)">
+      <StageSection glow="emerald" fromColor="purple" toColor="rose">
         <HealingCircuit />
       </StageSection>
 
-      <StageSection glow="cyan" fromColor="rgba(244,63,94,0.03)" toColor="rgba(6,182,212,0.04)">
+      <StageSection glow="cyan" fromColor="rose" toColor="cyan">
         <TriggerSystem />
       </StageSection>
 
-      <StageSection glow="emerald" fromColor="rgba(6,182,212,0.03)" toColor="rgba(52,211,153,0.04)">
+      <StageSection glow="emerald" fromColor="cyan" toColor="emerald">
         <ObservabilityDeck />
       </StageSection>
 
-      <StageSection glow="purple" fromColor="rgba(52,211,153,0.03)" toColor="rgba(168,85,247,0.04)">
+      <StageSection glow="purple" fromColor="emerald" toColor="purple">
         <DevToolsSuite />
       </StageSection>
     </InfoPageLayout>

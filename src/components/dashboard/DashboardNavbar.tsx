@@ -38,7 +38,7 @@ export default function DashboardNavbar() {
             </span>
           </Link>
           <ChevronRight className="h-3.5 w-3.5 text-muted-dark" />
-          <GradientText className="text-sm font-medium">
+          <GradientText variant="silver" className="text-sm font-medium">
             Dashboard
           </GradientText>
         </div>

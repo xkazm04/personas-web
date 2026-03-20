@@ -25,20 +25,20 @@ export default function ScrollMap({ items }: { items: ScrollMapItem[] }) {
       <div className="rounded-full border border-white/6 bg-black/20 px-2.5 py-1 text-[10px] uppercase tracking-[0.2em] text-muted-dark backdrop-blur-sm">
         Scroll Map
       </div>
-      <div className="space-y-1.5 text-[10px] font-mono tracking-wider">
+      <div className="flex flex-col text-[10px] font-mono tracking-wider">
         {items.map((item, i) => (
           <button
             key={item.href}
             onClick={() => scrollTo(item.href)}
-            className={`pointer-events-auto flex items-center justify-end gap-2 transition-all duration-300 cursor-pointer ${
+            className={`pointer-events-auto flex h-11 -my-3.5 items-center justify-end gap-2 transition-[color,transform] duration-300 cursor-pointer focus-ring focus-visible:ring-offset-4 ${
               i === activeIndex
                 ? "text-brand-cyan scale-105"
-                : "text-muted-dark/80 hover:text-muted"
+                : "text-muted-dark hover:text-muted"
             }`}
           >
             <span>{item.label}</span>
             <span
-              className={`h-px transition-all duration-300 ${
+              className={`h-px transition-[width,background-color] duration-300 ${
                 i === activeIndex
                   ? "w-6 bg-linear-to-l from-brand-cyan/80 to-transparent"
                   : "w-4 bg-linear-to-l from-brand-cyan/35 to-transparent"

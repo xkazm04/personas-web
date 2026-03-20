@@ -2,9 +2,12 @@
 
 import { useState } from "react";
 import { motion } from "framer-motion";
-import { Lightbulb, Send, Check } from "lucide-react";
+import { Lightbulb, Send, Check, Loader2 } from "lucide-react";
 import { fadeUp } from "@/lib/animations";
 import { trackFeatureRequest } from "@/lib/analytics";
+
+const MAX_LENGTH = 1000;
+const COUNT_THRESHOLD = 0.6; // Show count after 60% of max
 
 export default function CustomRequest() {
   const [value, setValue] = useState("");
@@ -56,6 +59,7 @@ export default function CustomRequest() {
               <input
                 type="text"
                 value={value}
+                maxLength={MAX_LENGTH}
                 onChange={(e) => {
                   setValue(e.target.value);
                   if (submitted) setSubmitted(false);
@@ -68,6 +72,20 @@ export default function CustomRequest() {
               />
               {/* Focus glow accent under the input */}
               <div className="pointer-events-none absolute inset-x-4 -bottom-px h-px bg-gradient-to-r from-transparent via-brand-cyan/0 to-transparent transition-all duration-300 peer-focus:via-brand-cyan/20" />
+              {/* Character count — appears after 60% of max */}
+              {value.length > MAX_LENGTH * COUNT_THRESHOLD && (
+                <span
+                  className={`absolute right-3 top-1/2 -translate-y-1/2 text-[10px] font-mono tabular-nums transition-colors duration-200 ${
+                    value.length >= MAX_LENGTH
+                      ? "text-brand-amber"
+                      : value.length >= MAX_LENGTH * 0.85
+                        ? "text-brand-amber/60"
+                        : "text-brand-cyan/50"
+                  }`}
+                >
+                  {value.length}/{MAX_LENGTH}
+                </span>
+              )}
             </div>
             <button
               onClick={() => void handleSubmit()}
@@ -80,7 +98,9 @@ export default function CustomRequest() {
                     : "border-white/[0.06] bg-white/[0.02] text-muted-dark/30"
               }`}
             >
-              {submitted ? (
+              {saving ? (
+                <Loader2 className="h-4 w-4 animate-spin" />
+              ) : submitted ? (
                 <Check className="h-4 w-4" />
               ) : (
                 <Send className="h-4 w-4" />

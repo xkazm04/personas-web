@@ -13,19 +13,27 @@ export default function PersonaAvatar({
   color,
   name,
   size = "sm",
+  active = false,
 }: {
   icon?: string | null;
   color?: string | null;
   name?: string;
   size?: "sm" | "md" | "lg";
+  active?: boolean;
 }) {
   const bg = color ?? "#06b6d4";
   return (
     <div
-      className={`flex items-center justify-center rounded-lg font-semibold ${sizeMap[size]}`}
+      className={`relative flex items-center justify-center rounded-lg font-semibold ${sizeMap[size]}`}
       style={{ backgroundColor: `${bg}20`, color: bg }}
       title={name}
     >
+      {active && (
+        <div
+          className="absolute inset-[-2px] rounded-lg animate-breathe-glow pointer-events-none"
+          style={{ boxShadow: `0 0 6px 1px ${bg}4D` }}
+        />
+      )}
       {icon ? (
         <span>{icon}</span>
       ) : (

@@ -50,6 +50,43 @@ const UsageByPersonaBarChart = dynamic(
 );
 
 // ---------------------------------------------------------------------------
+// Mock data (shown when no real usage data exists)
+// ---------------------------------------------------------------------------
+
+const MOCK_TOOL_USAGE = [
+  { toolName: "slack", invocations: 342 },
+  { toolName: "github", invocations: 287 },
+  { toolName: "postgres", invocations: 198 },
+  { toolName: "redis", invocations: 156 },
+  { toolName: "notion", invocations: 89 },
+  { toolName: "jira", invocations: 67 },
+  { toolName: "sentry", invocations: 45 },
+];
+
+const MOCK_TOOL_USAGE_OVER_TIME = (() => {
+  const tools = ["slack", "github", "postgres", "redis", "notion"];
+  const days: { date: string; tools: Record<string, number> }[] = [];
+  for (let i = 13; i >= 0; i--) {
+    const d = new Date();
+    d.setDate(d.getDate() - i);
+    const date = d.toISOString().slice(0, 10);
+    const t: Record<string, number> = {};
+    tools.forEach((tool, idx) => {
+      t[tool] = Math.round(12 + Math.sin((i + idx) * 0.7) * 8 + Math.random() * 6 + (5 - idx) * 3);
+    });
+    days.push({ date, tools: t });
+  }
+  return days;
+})();
+
+const MOCK_TOOL_USAGE_BY_PERSONA = [
+  { personaName: "DevOps Bot", tools: { slack: 120, github: 85, postgres: 40, redis: 90, notion: 15 } },
+  { personaName: "Code Reviewer", tools: { slack: 45, github: 180, postgres: 12, jira: 60, notion: 30 } },
+  { personaName: "Data Pipeline", tools: { slack: 22, postgres: 140, redis: 55, notion: 8 } },
+  { personaName: "Alert Monitor", tools: { slack: 155, sentry: 45, github: 22, redis: 11 } },
+];
+
+// ---------------------------------------------------------------------------
 // Helpers
 // ---------------------------------------------------------------------------
 
@@ -112,9 +149,10 @@ export default function UsagePage() {
     revalidateOnFocus: false,
     keepPreviousData: true,
   });
-  const toolUsage = data?.toolUsage ?? [];
-  const toolUsageOverTime = data?.toolUsageOverTime ?? [];
-  const toolUsageByPersona = data?.toolUsageByPersona ?? [];
+  const hasRealData = (data?.toolUsage ?? []).length > 0;
+  const toolUsage = hasRealData ? data!.toolUsage : MOCK_TOOL_USAGE;
+  const toolUsageOverTime = hasRealData ? (data!.toolUsageOverTime ?? []) : MOCK_TOOL_USAGE_OVER_TIME;
+  const toolUsageByPersona = hasRealData ? (data!.toolUsageByPersona ?? []) : MOCK_TOOL_USAGE_BY_PERSONA;
 
   // Bar chart data: sorted by invocations desc, capped at top 15 + "Other"
   const MAX_BAR_TOOLS = 15;
@@ -216,34 +254,24 @@ export default function UsagePage() {
     );
   }
 
-  if (toolUsage.length === 0) {
-    return (
-      <motion.div initial="hidden" animate="visible" variants={staggerContainer}>
-        <motion.div variants={fadeUp} className="mb-8">
-          <h1 className="text-2xl font-bold tracking-tight">
-            <GradientText>Usage Analytics</GradientText>
-          </h1>
-        </motion.div>
-        <EmptyState
-          icon={BarChart3}
-          title="No usage data"
-          description="Tool usage analytics will appear here once agents start running executions"
-        />
-      </motion.div>
-    );
-  }
-
   return (
     <motion.div initial="hidden" animate="visible" variants={staggerContainer}>
       {/* Header */}
       <motion.div variants={fadeUp} className="mb-8">
         <h1 className="text-2xl font-bold tracking-tight">
-          <GradientText>Usage Analytics</GradientText>
+          <GradientText variant="silver">Usage Analytics</GradientText>
         </h1>
         <p className="mt-1 text-sm text-muted-dark">
           Tool utilization patterns across your agent fleet
         </p>
       </motion.div>
+
+      {!hasRealData && (
+        <motion.div variants={fadeUp} className="mb-6 flex items-center gap-2 rounded-xl border border-amber-500/20 bg-amber-500/5 px-4 py-2.5 text-xs text-amber-400">
+          <Lightbulb className="h-3.5 w-3.5 flex-shrink-0" />
+          Showing example data. Real analytics will appear once agents start running executions.
+        </motion.div>
+      )}
 
       {/* Top row: invocations bar + distribution pie */}
       <div className="grid gap-6 lg:grid-cols-5 mb-8">

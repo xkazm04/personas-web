@@ -1,14 +1,13 @@
 "use client";
 
-import { useRef } from "react";
-import { motion, useScroll, useTransform, type Variants } from "framer-motion";
+import { motion, type Variants } from "framer-motion";
 import { Wand2, Zap, Cloud, Activity } from "lucide-react";
 import SectionWrapper from "@/components/SectionWrapper";
 import GlowCard from "@/components/GlowCard";
 import GradientText from "@/components/GradientText";
-import { fadeUp } from "@/lib/animations";
+import { fadeUp, TRANSITION_NORMAL } from "@/lib/animations";
 
-/* -- Choreographed entrance variants -- */
+/* ── Choreographed entrance variants ── */
 const cardOrchestrator: Variants = {
   hidden: {},
   visible: { transition: { staggerChildren: 0.15, delayChildren: 0.2 } },
@@ -54,15 +53,25 @@ const gridCardVariants: Variants[] = [
   },
 ];
 
-/* -- Feature visuals -- */
+const connectorDraw: Variants = {
+  hidden: { pathLength: 0, opacity: 0 },
+  visible: {
+    pathLength: 1,
+    opacity: 1,
+    transition: { duration: 0.8, delay: 0.9, ease: "easeOut" },
+  },
+};
+
+/* ── Feature visuals (extracted for readability & independent editing) ── */
 
 function DesignVisual() {
   return (
-    <div className="mt-6 space-y-2.5 rounded-xl border border-purple-500/8 bg-purple-500/2 p-5 font-mono text-xs relative overflow-hidden">
+    <div className="mt-6 space-y-2.5 rounded-xl border border-purple-500/8 bg-purple-500/2 p-4 font-mono text-xs relative overflow-hidden">
       <div className="pointer-events-none absolute inset-0 opacity-[0.015]" style={{
         backgroundImage: "repeating-linear-gradient(0deg, transparent, transparent 3px, rgba(168,85,247,0.15) 3px, rgba(168,85,247,0.15) 4px)",
       }} />
       <div className="relative">
+        {/* eslint-disable-next-line custom-a11y/no-low-text-opacity -- decorative code visual */}
         <div className="flex items-center gap-2 text-purple-400/40">
           <div className="h-2 w-2 rounded-full bg-purple-400/30 shadow-[0_0_4px_rgba(168,85,247,0.3)]" />
           <span>agent.config</span>
@@ -123,11 +132,13 @@ function DeployVisual() {
     <div className="mt-6 flex items-center justify-center gap-3 py-3 relative">
       <div className="pointer-events-none absolute top-1/2 left-[10%] right-[10%] h-8 -translate-y-1/2 rounded-full bg-linear-to-r from-transparent via-emerald-500/2 to-transparent" />
       <div className="relative rounded-xl border border-emerald-500/12 bg-emerald-500/5 px-4 py-2.5 text-xs font-mono text-emerald-400">
+        {/* eslint-disable-next-line custom-a11y/no-low-text-opacity -- decorative label in visual */}
         <div className="text-[10px] text-emerald-400/40 mb-0.5">local</div>
         Desktop
         <div className="absolute -top-1 -right-1 h-2 w-2 rounded-full bg-emerald-400/70 shadow-[0_0_6px_rgba(52,211,153,0.5)]" />
       </div>
       <div className="flex flex-col items-center gap-1">
+        {/* eslint-disable-next-line custom-a11y/no-low-text-opacity -- decorative SVG arrow */}
         <svg width="48" height="8" className="text-emerald-500/30">
           <line x1="0" y1="4" x2="48" y2="4" stroke="currentColor" strokeWidth="1" strokeDasharray="3 3" />
           <polygon points="44,1 48,4 44,7" fill="currentColor" />
@@ -135,6 +146,7 @@ function DeployVisual() {
         <span className="text-[9px] text-muted-dark font-mono">deploy</span>
       </div>
       <div className="relative rounded-xl border border-emerald-400/20 bg-emerald-500/10 px-4 py-2.5 text-xs font-mono text-emerald-300 shadow-[0_0_25px_rgba(52,211,153,0.10)]">
+        {/* eslint-disable-next-line custom-a11y/no-low-text-opacity -- decorative label in visual */}
         <div className="text-[10px] text-emerald-400/40 mb-0.5">cloud</div>
         24/7
         <div className="absolute inset-0 rounded-xl border border-emerald-400/10 animate-glow-border" />
@@ -167,7 +179,7 @@ function TelemetryVisual() {
   );
 }
 
-/* -- Feature data -- */
+/* ── Feature data ── */
 
 const features = [
   {
@@ -195,7 +207,7 @@ const features = [
     title: "Agents that coordinate",
     proof: "Event-driven chaining",
     description:
-      "Built-in event bus lets agents trigger each other. Email agent -> Slack agent -> GitHub agent. Runs locally, no cloud required.",
+      "Built-in event bus lets agents trigger each other. Email agent → Slack agent → GitHub agent. Runs locally, no cloud required.",
     visual: <CoordinateVisual />,
   },
   {
@@ -230,13 +242,6 @@ const features = [
 
 type Feature = (typeof features)[number];
 
-const accentColors: Record<string, string> = {
-  purple: "168,85,247",
-  cyan: "6,182,212",
-  emerald: "52,211,153",
-  amber: "251,191,36",
-};
-
 function FeatureCardHeader({ f }: { f: Feature }) {
   return (
     <div className="flex items-start justify-between gap-3">
@@ -248,119 +253,22 @@ function FeatureCardHeader({ f }: { f: Feature }) {
         </div>
         <div className="min-w-0">
           <h3 className="font-semibold text-[15px] leading-tight">{f.title}</h3>
-          <p className="mt-1 text-[10px] font-mono uppercase tracking-wider text-muted-dark/70">{f.proof}</p>
+          <p className="mt-1 text-[10px] font-mono uppercase tracking-wider text-muted-dark">{f.proof}</p>
         </div>
       </div>
-      <span className="shrink-0 font-mono text-xs text-muted-dark/50 tabular-nums md:hidden">{f.number}</span>
+      <span className="shrink-0 font-mono text-xs text-muted-dark tabular-nums md:hidden">{f.number}</span>
     </div>
   );
 }
 
-/* -- Scroll-driven timeline path -- */
-
-function TimelinePath({ sectionRef }: { sectionRef: React.RefObject<HTMLElement | null> }) {
-  const { scrollYProgress } = useScroll({
-    target: sectionRef,
-    offset: ["start end", "end start"],
-  });
-
-  const pathLength = useTransform(scrollYProgress, [0.1, 0.8], [0, 1]);
-  const pathOpacity = useTransform(scrollYProgress, [0.05, 0.15, 0.85, 0.95], [0, 1, 1, 0]);
-
-  return (
-    <svg
-      className="pointer-events-none absolute inset-0 h-full w-full hidden md:block"
-      preserveAspectRatio="none"
-      viewBox="0 0 32 1000"
-      fill="none"
-    >
-      <defs>
-        <linearGradient id="timeline-gradient" x1="0" y1="0" x2="0" y2="1">
-          <stop offset="0%" stopColor={`rgba(${accentColors.purple}, 0.4)`} />
-          <stop offset="33%" stopColor={`rgba(${accentColors.cyan}, 0.3)`} />
-          <stop offset="66%" stopColor={`rgba(${accentColors.emerald}, 0.3)`} />
-          <stop offset="100%" stopColor={`rgba(${accentColors.amber}, 0.4)`} />
-        </linearGradient>
-      </defs>
-      {/* Background track */}
-      <line
-        x1="16" y1="20" x2="16" y2="980"
-        stroke="rgba(255,255,255,0.04)"
-        strokeWidth="1"
-        strokeDasharray="4 4"
-      />
-      {/* Animated gradient path */}
-      <motion.line
-        x1="16" y1="20" x2="16" y2="980"
-        stroke="url(#timeline-gradient)"
-        strokeWidth="1.5"
-        strokeLinecap="round"
-        style={{
-          pathLength,
-          opacity: pathOpacity,
-        }}
-      />
-    </svg>
-  );
-}
-
-/* -- Step node component -- */
-
-function StepNode({ feature, index }: { feature: Feature; index: number }) {
-  const isFirst = index === 0;
-  const rgb = accentColors[feature.accent];
-
-  return (
-    <motion.div
-      className="flex items-center justify-center"
-      variants={{
-        hidden: { scale: 0, opacity: 0 },
-        visible: {
-          scale: 1,
-          opacity: 1,
-          transition: { delay: 0.4 + index * 0.15, duration: 0.4, ease: [0.22, 1, 0.36, 1] },
-        },
-      }}
-    >
-      <div
-        className={`flex items-center justify-center rounded-full border text-[9px] font-mono font-bold tabular-nums ${
-          isFirst
-            ? `h-7 w-7 border-brand-purple/30 bg-brand-purple/10 text-brand-purple shadow-[0_0_12px_rgba(168,85,247,0.15)]`
-            : `h-5 w-5 border-white/8 bg-white/3 text-white/30`
-        }`}
-        style={
-          !isFirst
-            ? { borderColor: `rgba(${rgb}, 0.15)`, backgroundColor: `rgba(${rgb}, 0.06)`, color: `rgba(${rgb}, 0.5)` }
-            : undefined
-        }
-      >
-        {feature.number}
-      </div>
-    </motion.div>
-  );
-}
-
 export default function Features() {
-  const sectionRef = useRef<HTMLElement>(null);
-
   return (
-    <SectionWrapper id="features" dotGrid ref={sectionRef}>
-      {/* Background accent orb */}
-      <div className="pointer-events-none absolute inset-0 overflow-hidden">
-        <div
-          className="absolute right-[10%] top-[20%] h-100 w-100 rounded-full opacity-30"
-          style={{ background: "radial-gradient(circle, rgba(168,85,247,0.04) 0%, transparent 60%)" }}
-        />
-        <div
-          className="absolute left-[5%] bottom-[10%] h-75 w-75 rounded-full opacity-30"
-          style={{ background: "radial-gradient(circle, rgba(6,182,212,0.03) 0%, transparent 60%)" }}
-        />
-      </div>
-
+    <SectionWrapper id="features">
       <motion.div variants={fadeUp} className="relative">
         {/* Large ghost number */}
+        {/* eslint-disable-next-line custom-a11y/no-low-text-opacity -- decorative ghost number, not readable text */}
         <span className="pointer-events-none absolute -top-6 -left-2 select-none font-mono font-bold text-[6rem] sm:text-[8rem] leading-none text-white/3">
-          01-04
+          01–04
         </span>
 
         <div className="relative">
@@ -379,61 +287,81 @@ export default function Features() {
       </motion.div>
 
       <motion.div variants={cardOrchestrator} className="relative mt-16">
-        {/* -- Timeline column with scroll-driven SVG path (desktop only) -- */}
-        <div className="pointer-events-none absolute left-0 top-0 bottom-0 hidden md:block" style={{ width: 32 }}>
-          <TimelinePath sectionRef={sectionRef} />
+        {/* ── Progression thread (desktop only) ── */}
+        <div className="pointer-events-none absolute left-0 top-0 bottom-0 hidden md:flex flex-col items-center" style={{ width: 32 }}>
+          {/* Vertical dashed line */}
+          <motion.div
+            className="absolute inset-x-3.75 top-6 bottom-6 w-px border-l border-dashed border-white/6"
+            variants={{ hidden: { scaleY: 0 }, visible: { scaleY: 1, transition: { duration: 1.2, delay: 0.3, ease: "easeOut" } } }}
+            style={{ transformOrigin: "top" }}
+          />
+          {/* Step nodes */}
+          {features.map((f, i) => (
+            <motion.div
+              key={f.number}
+              className="absolute flex items-center justify-center"
+              style={{ top: i === 0 ? 28 : `calc(50% + ${(i - 1) * 80 - 40}px)`, left: 8 }}
+              variants={{ hidden: { scale: 0, opacity: 0 }, visible: { scale: 1, opacity: 1, transition: { delay: 0.4 + i * 0.15, duration: 0.4, ease: [0.22, 1, 0.36, 1] } } }}
+            >
+              <div className={`flex items-center justify-center rounded-full border text-[9px] font-mono font-bold tabular-nums ${
+                i === 0
+                  ? "h-7 w-7 border-brand-purple/30 bg-brand-purple/10 text-brand-purple shadow-[0_0_12px_rgba(168,85,247,0.15)]"
+                  : "h-5 w-5 border-white/8 bg-white/3 text-white/70"
+              }`}>
+                {f.number}
+              </div>
+            </motion.div>
+          ))}
         </div>
 
-        {/* -- Cards laid out with grid-aligned timeline nodes -- */}
-        <div className="md:pl-10">
-          {/* Grid layout: timeline nodes on left, cards on right */}
-          <div className="grid gap-6" style={{ gridTemplateColumns: "max-content 1fr" }}>
-            {/* Row 1: Hero card */}
-            <div className="hidden md:flex items-center justify-center" style={{ width: 32, marginLeft: -40 }}>
-              <StepNode feature={features[0]} index={0} />
-            </div>
-            <div className="p-px rounded-2xl col-start-1 md:col-start-2">
-              <GlowCard accent={features[0].accent} texture="dense-grid" className="p-6 md:p-8 rounded-2xl" variants={heroSlideIn}>
-                <div className="grid md:grid-cols-2 gap-6 md:gap-10 items-center">
-                  <div>
-                    <FeatureCardHeader f={features[0]} />
-                    <p className="mt-4 text-sm leading-relaxed text-muted">
-                      {features[0].description}
-                    </p>
-                  </div>
-                  <div>{features[0].visual}</div>
+        {/* ── Cards area (offset on desktop to make room for thread) ── */}
+        <div className="md:pl-10 space-y-6">
+          {/* Hero card — full width, slides in from left with scale-up */}
+          <div className="p-px rounded-2xl">
+            <GlowCard accent={features[0].accent} texture="dense-grid" className="p-6 md:p-8 rounded-2xl" variants={heroSlideIn}>
+              <div className="grid md:grid-cols-2 gap-6 md:gap-12 items-center">
+                {/* Text side */}
+                <div>
+                  <FeatureCardHeader f={features[0]} />
+                  <p className="mt-4 text-sm leading-relaxed text-muted">
+                    {features[0].description}
+                  </p>
                 </div>
-              </GlowCard>
-            </div>
+                {/* Visual side */}
+                <div>{features[0].visual}</div>
+              </div>
+            </GlowCard>
+          </div>
 
-            {/* Row 2: Three remaining cards with their step nodes */}
-            <div className="hidden md:flex items-start justify-center pt-8" style={{ width: 32, marginLeft: -40 }}>
-              <div className="flex flex-col items-center gap-[72px]">
-                {features.slice(1).map((f, i) => (
-                  <StepNode key={f.number} feature={f} index={i + 1} />
-                ))}
-              </div>
-            </div>
-            <div className="col-start-1 md:col-start-2">
-              <div className="grid gap-6 md:grid-cols-3">
-                {features.slice(1).map((f, i) => (
-                  <motion.div
-                    key={f.title}
-                    variants={gridCardVariants[i]}
-                    whileHover={{ scale: 1.02, boxShadow: `0 0 20px rgba(255,255,255,0.05)` }}
-                    transition={{ duration: 0.3 }}
-                  >
-                    <GlowCard accent={f.accent} className="p-6 md:p-8 h-full">
-                      <FeatureCardHeader f={f} />
-                      <p className="mt-4 text-sm leading-relaxed text-muted">
-                        {f.description}
-                      </p>
-                      {f.visual}
-                    </GlowCard>
-                  </motion.div>
-                ))}
-              </div>
-            </div>
+          {/* Connecting line — draws after hero lands */}
+          <svg className="pointer-events-none mx-auto block h-8 w-px overflow-visible" viewBox="0 0 2 32">
+            <motion.line
+              x1="1" y1="0" x2="1" y2="32"
+              stroke="rgba(168,85,247,0.15)"
+              strokeWidth="1"
+              strokeDasharray="3 3"
+              variants={connectorDraw}
+            />
+          </svg>
+
+          {/* Remaining 3 features — cascade with alternating directions */}
+          <div className="grid gap-6 md:grid-cols-3">
+            {features.slice(1).map((f, i) => (
+              <motion.div
+                key={f.title}
+                variants={gridCardVariants[i]}
+                whileHover={{ scale: 1.02, boxShadow: `0 0 20px rgba(255,255,255,0.05)` }}
+                transition={TRANSITION_NORMAL}
+              >
+                <GlowCard accent={f.accent} className="p-6 md:p-8 h-full">
+                  <FeatureCardHeader f={f} />
+                  <p className="mt-4 text-sm leading-relaxed text-muted">
+                    {f.description}
+                  </p>
+                  {f.visual}
+                </GlowCard>
+              </motion.div>
+            ))}
           </div>
         </div>
       </motion.div>

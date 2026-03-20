@@ -1,17 +1,9 @@
 @import "tailwindcss";
+@import "../styles/tokens.css";
+@import "../styles/typography.css";
 
-:root {
-  --background: #0a0a12;
-  --foreground: #e2e8f0;
-  --brand-cyan: #06b6d4;
-  --brand-purple: #a855f7;
-  --brand-emerald: #34d399;
-  --brand-amber: #fbbf24;
-  --brand-rose: #f43f5e;
-  --card-bg: rgba(17, 24, 39, 0.6);
-  --card-border: rgba(255, 255, 255, 0.06);
-}
-
+/* ── Bridge shared tokens into Tailwind @theme ──
+   Raw values live in packages/tokens/tokens.css — do NOT duplicate here. */
 @theme inline {
   --color-background: var(--background);
   --color-foreground: var(--foreground);
@@ -22,10 +14,26 @@
   --color-brand-rose: var(--brand-rose);
   --color-card-bg: var(--card-bg);
   --color-card-border: var(--card-border);
-  --color-muted: #94a3b8;
-  --color-muted-dark: #64748b;
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
+  --color-muted: var(--muted);
+  --color-muted-dark: var(--muted-dark);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-primary: var(--primary);
+  --color-secondary: var(--secondary);
+  --color-accent: var(--accent);
+  --color-border: var(--border);
+  --color-btn-primary: var(--btn-primary);
+  --font-sans: var(--font-sans);
+  --font-mono: var(--font-mono);
+
+  /* 4px-grid spacing scale */
+  --spacing-1: var(--spacing-1);
+  --spacing-2: var(--spacing-2);
+  --spacing-3: var(--spacing-3);
+  --spacing-4: var(--spacing-4);
+  --spacing-6: var(--spacing-6);
+  --spacing-8: var(--spacing-8);
+  --spacing-12: var(--spacing-12);
+  --spacing-16: var(--spacing-16);
 }
 
 /* ── Base ──────────────────────────────────────────── */
@@ -43,7 +51,7 @@ html {
 
 ::selection {
   background: rgba(6, 182, 212, 0.3);
-  color: #e2e8f0;
+  color: var(--foreground);
 }
 
 ::-webkit-scrollbar { width: 6px; }
@@ -73,16 +81,11 @@ html {
 /* ── Decorative Utilities ──────────────────────────── */
 
 .glass {
-  background: rgba(255, 255, 255, 0.03);
-  backdrop-filter: blur(20px);
-  -webkit-backdrop-filter: blur(20px);
-  border: 1px solid rgba(255, 255, 255, 0.06);
+  background: var(--glass-bg);
+  backdrop-filter: blur(var(--glass-blur));
+  -webkit-backdrop-filter: blur(var(--glass-blur));
+  border: 1px solid var(--glass-border);
   border-radius: 16px;
-}
-
-.dot-grid {
-  background-image: radial-gradient(circle, rgba(255, 255, 255, 0.04) 1px, transparent 1px);
-  background-size: 24px 24px;
 }
 
 .noise {
@@ -143,6 +146,12 @@ html {
   border-bottom: 1px solid var(--brand-purple);
   border-right: 1px solid var(--brand-purple);
   border-radius: 0 0 16px 0;
+}
+
+/* ── Hero Background Gradients ────────────────────── */
+
+.hero-vignette {
+  background: radial-gradient(ellipse 80% 70% at 50% 50%, transparent 40%, rgba(10,10,18,0.8) 100%);
 }
 
 /* ── Keyframes ─────────────────────────────────────── */
@@ -236,19 +245,32 @@ html {
 
 /* ── Animation Classes ─────────────────────────────── */
 
-.animate-float { animation: float 4s ease-in-out infinite; }
-.animate-pulse-slow { animation: pulse-slow 20s ease-in-out infinite; }
-.animate-pulse-slower { animation: pulse-slower 25s ease-in-out infinite 2s; }
-.animate-shimmer { animation: shimmer 2s infinite; }
-.animate-gradient-sweep { animation: gradient-sweep 6s ease infinite; background-size: 200% 200%; }
-.animate-glow-border { animation: glow-border 3s ease-in-out infinite; }
-.animate-glow-pulse { animation: glow-pulse 3s ease-in-out infinite; }
-.animate-scroll-hint { animation: scroll-hint 2s ease-in-out infinite; }
-.animate-bar-grow { animation: bar-grow 0.8s ease-out forwards; transform-origin: bottom; }
-.animate-spin-slow { animation: spin-slow 30s linear infinite; }
-.animate-border-flow { animation: border-flow 4s linear infinite; background-size: 200% 100%; }
-.animate-progress-shimmer { animation: progress-shimmer 2s ease-in-out infinite; }
-.animate-progress-dot-breathe { animation: progress-dot-breathe 2s ease-in-out infinite; }
+@media (prefers-reduced-motion: no-preference) {
+  .animate-float { animation: float 4s ease-in-out infinite; }
+  .animate-pulse-slow { animation: pulse-slow 20s ease-in-out infinite; }
+  .animate-pulse-slower { animation: pulse-slower 25s ease-in-out infinite 2s; }
+  .animate-shimmer { animation: shimmer 2s infinite; }
+  .animate-gradient-sweep { animation: gradient-sweep 6s ease infinite; background-size: 200% 200%; }
+  .animate-glow-border { animation: glow-border 3s ease-in-out infinite; }
+  .animate-glow-pulse { animation: glow-pulse 3s ease-in-out infinite; }
+  .animate-scroll-hint { animation: scroll-hint 2s ease-in-out infinite; }
+  .animate-bar-grow { animation: bar-grow 0.8s ease-out forwards; transform-origin: bottom; }
+  .animate-spin-slow { animation: spin-slow 30s linear infinite; }
+  .animate-border-flow { animation: border-flow 4s linear infinite; background-size: 200% 100%; }
+  .animate-progress-shimmer { animation: progress-shimmer 2s ease-in-out infinite; }
+  .animate-progress-dot-breathe { animation: progress-dot-breathe 2s ease-in-out infinite; }
+  .animate-badge-pulse { animation: badge-pulse 3s ease-in-out infinite; }
+  .topo-bg { animation: topo-drift 80s ease-in-out infinite; }
+  .cinematic-gradient { animation: gradient-sweep 16s ease infinite; }
+  .animate-breathe-glow { animation: breathe-glow 4s ease-in-out infinite; }
+  .shimmer-surface::before { animation: shimmer 5s ease-in-out infinite; }
+  .animated-conic-border { animation: conic-rotate 4s linear infinite; }
+}
+
+@keyframes badge-pulse {
+  0%, 100% { border-color: rgba(6,182,212,0.2); box-shadow: 0 0 0 rgba(6,182,212,0); }
+  50% { border-color: rgba(6,182,212,0.45); box-shadow: 0 0 8px rgba(6,182,212,0.15); }
+}
 
 /* ── Section Badge Dot Pulse ──────────────────────── */
 
@@ -259,6 +281,65 @@ html {
 
 .section-badge-dot {
   animation: section-badge-pulse 1s ease-in-out 1;
+}
+
+/* ── GlowCard Pseudo-Element Decorations ───────────
+   Replaces 5 decorative child divs (grid overlay, top shine, bottom accent,
+   two corner accents) with two pseudo-elements. Saves ~5 DOM nodes per card. */
+
+/* ::before — grid overlay + top shine line */
+.glow-card::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  opacity: var(--gc-grid-opacity, 0.015);
+  background-image:
+    linear-gradient(to right, transparent, rgba(255,255,255,0.06), transparent),
+    linear-gradient(rgba(255,255,255,0.06) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255,255,255,0.06) 1px, transparent 1px);
+  background-size:
+    100% 1px,
+    var(--gc-grid-size, 24px) var(--gc-grid-size, 24px),
+    var(--gc-grid-size, 24px) var(--gc-grid-size, 24px);
+  background-position: top center, 0 0, 0 0;
+  background-repeat: no-repeat, repeat, repeat;
+  border-radius: inherit;
+  z-index: 1;
+}
+
+/* ::after — corner accents (always visible) + bottom accent line (hover only) */
+.glow-card::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  border-radius: inherit;
+  border: none;
+  z-index: 1;
+  background:
+    linear-gradient(90deg, rgba(var(--gc-accent, 6,182,212), 0.08), transparent)
+      no-repeat top left / 2rem 1px,
+    linear-gradient(180deg, rgba(var(--gc-accent, 6,182,212), 0.08), transparent)
+      no-repeat top left / 1px 2rem,
+    linear-gradient(270deg, rgba(var(--gc-accent, 6,182,212), 0.08), transparent)
+      no-repeat bottom right / 2rem 1px,
+    linear-gradient(0deg, rgba(var(--gc-accent, 6,182,212), 0.08), transparent)
+      no-repeat bottom right / 1px 2rem;
+  box-shadow: inset 0 -1px 0 0 transparent;
+  transition: box-shadow 500ms;
+}
+
+.glow-card:hover::after {
+  box-shadow: inset 0 -1px 0 0 rgba(var(--gc-accent, 6,182,212), 0.08);
+}
+
+/* Texture classes already use ::after — let the texture rule take precedence */
+.glow-card.texture-stripes::after,
+.glow-card.texture-dots::after,
+.glow-card.texture-lines::after {
+  background: none;
+  box-shadow: none;
 }
 
 /* ── Grid Texture Overlay ─────────────────────────── */
@@ -400,6 +481,33 @@ html {
   animation-timing-function: steps(24, end);
 }
 
+/* ── Typewriter Character Reveal (CinematicBreather) ── */
+
+@keyframes tw-char-reveal {
+  from { opacity: 0; transform: translateY(8px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+.tw-char-hidden {
+  opacity: 0;
+}
+
+.tw-char-reveal {
+  opacity: 0;
+  animation: tw-char-reveal 0.18s ease-out forwards;
+}
+
+@keyframes tw-pulse {
+  0%   { opacity: 0; }
+  50%  { opacity: 0.15; }
+  100% { opacity: 0; }
+}
+
+.tw-pulse-reveal {
+  opacity: 0;
+  animation: tw-pulse 1.2s ease-in-out forwards;
+}
+
 @keyframes breathe-glow {
   0%, 100% { box-shadow: 0 0 20px rgba(6,182,212,0.05), inset 0 0 20px rgba(6,182,212,0.02); }
   50% { box-shadow: 0 0 50px rgba(6,182,212,0.12), inset 0 0 30px rgba(6,182,212,0.04); }
@@ -429,21 +537,6 @@ html {
   border-radius: inherit;
 }
 
-/* ── Ambient Orbs Breathing ────────────────────────── */
-
-@keyframes orb-breathe {
-  0%, 100% { transform: scale(1);    opacity: 1; }
-  50%      { transform: scale(1.08); opacity: 0.7; }
-}
-
-.orb-pulse {
-  animation: orb-breathe 10s ease-in-out infinite;
-}
-
-.orb-pulse-delayed {
-  animation: orb-breathe 12s ease-in-out infinite;
-  animation-delay: -4s;
-}
 
 /* ── Topographic Background (Direction 2) ─────────── */
 
@@ -483,6 +576,7 @@ html {
   animation: parallax-drift linear both;
   animation-timeline: scroll();
   animation-range: 0% 100%;
+  will-change: transform;
 }
 
 /* Fallback: if scroll-driven animations aren't supported, stay static */
@@ -510,6 +604,10 @@ html {
 
 /* ── Existing Utilities ───────────────────────────── */
 
+.focus-ring {
+  @apply focus-visible:ring-2 focus-visible:ring-brand-cyan/50 focus-visible:ring-offset-2 focus-visible:ring-offset-black focus:outline-none focus-visible:rounded-sm;
+}
+
 /* Focus visible ring for accessibility */
 *:focus-visible {
   outline: 2px solid rgba(6, 182, 212, 0.4);
@@ -522,12 +620,22 @@ img {
   transition: opacity 0.3s ease;
 }
 
-/* ── Off-Screen Animation Pause ──────────────────── */
+/* ── Off-Screen Animation Pause ──────────────────── 
+   Managed by useAnimationPause.ts to save GPU budget on off-screen sections.
+   Target elements MUST have [data-animate-when-visible] attribute. */
 
 .animations-paused,
 .animations-paused *,
 .animations-paused *::before,
 .animations-paused *::after {
+  animation-play-state: paused !important;
+}
+
+/* ── Background-Tab Animation Pause ─────────────── */
+
+.page-hidden *,
+.page-hidden *::before,
+.page-hidden *::after {
   animation-play-state: paused !important;
 }
 
@@ -548,8 +656,6 @@ img {
   .animate-spin-slow,
   .animate-pulse-slow,
   .animate-pulse-slower,
-  .orb-pulse,
-  .orb-pulse-delayed,
   .topo-bg,
   .parallax-shape,
   .cinematic-gradient {

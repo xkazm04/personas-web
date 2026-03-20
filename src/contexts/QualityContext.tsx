@@ -24,7 +24,9 @@ const UPGRADE_MS = 17;   // below this → eligible to upgrade
 /** Consecutive passing windows required before upgrading (prevents oscillation). */
 const UPGRADE_PASSES_REQUIRED = 3;
 /** Stop measuring after this many seconds to save overhead once tier is stable. */
-const SETTLE_TIMEOUT_MS = 30_000;
+const SETTLE_TIMEOUT_MS = 15_000;
+/** Fallback delay if requestIdleCallback is unavailable. */
+const IDLE_FALLBACK_MS = 2_000;
 
 function percentile90(sorted: Float64Array, len: number): number {
   const idx = Math.floor(len * 0.9);
@@ -48,9 +50,10 @@ export function QualityProvider({ children }: { children: ReactNode }) {
     if (typeof window === "undefined") return;
     if (window.matchMedia?.("(prefers-reduced-motion: reduce)").matches) return;
 
-    const startTime = performance.now();
+    let startTime = 0;
 
     const tick = (now: number) => {
+      if (startTime === 0) startTime = now;
       if (settledRef.current) return;
 
       const prev = lastFrameRef.current;
@@ -108,9 +111,34 @@ export function QualityProvider({ children }: { children: ReactNode }) {
       }
     };
 
-    rafRef.current = requestAnimationFrame(tick);
+    // Defer measurement until the browser is idle so we don't compete
+    // with critical rendering (LCP, FID) during initial page load.
+    let idleHandle: number | undefined;
+    let fallbackTimer: ReturnType<typeof setTimeout> | undefined;
+
+    const startMeasuring = () => {
+      if (idleHandle !== undefined) {
+        cancelIdleCallback(idleHandle);
+        idleHandle = undefined;
+      }
+      if (fallbackTimer !== undefined) {
+        clearTimeout(fallbackTimer);
+        fallbackTimer = undefined;
+      }
+      rafRef.current = requestAnimationFrame(tick);
+    };
+
+    if (typeof requestIdleCallback === "function") {
+      idleHandle = requestIdleCallback(startMeasuring);
+      // Fallback in case idle callback is heavily delayed
+      fallbackTimer = setTimeout(startMeasuring, IDLE_FALLBACK_MS);
+    } else {
+      fallbackTimer = setTimeout(startMeasuring, IDLE_FALLBACK_MS);
+    }
 
     return () => {
+      if (idleHandle !== undefined) cancelIdleCallback(idleHandle);
+      if (fallbackTimer !== undefined) clearTimeout(fallbackTimer);
       cancelAnimationFrame(rafRef.current);
     };
   }, []);

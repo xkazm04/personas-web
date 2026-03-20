@@ -44,6 +44,7 @@ interface ExecutionState {
   /** Raw executions without persona enrichment */
   rawExecutions: PersonaExecution[];
   executionsLoading: boolean;
+  executionsError: string | null;
   fetchExecutions: (opts?: ExecFilterOpts) => Promise<void>;
   cancelExecution: (id: string) => Promise<void>;
 }
@@ -51,16 +52,22 @@ interface ExecutionState {
 export const useExecutionStore = create<ExecutionState>((set) => ({
   rawExecutions: [],
   executionsLoading: false,
+  executionsError: null,
   fetchExecutions: async (opts) => {
     const seq = ++executionFetchSeq;
     set({ executionsLoading: true });
     try {
       const raw = await api.listExecutions({ limit: 50, ...opts });
       if (seq === executionFetchSeq) {
-        set({ rawExecutions: raw });
+        set({ rawExecutions: raw, executionsError: null });
       }
-    } catch {
-      // leave stale
+    } catch (err) {
+      if (seq === executionFetchSeq) {
+        set({
+          executionsError:
+            err instanceof Error ? err.message : "Failed to fetch executions",
+        });
+      }
     } finally {
       if (seq === executionFetchSeq) {
         set({ executionsLoading: false });

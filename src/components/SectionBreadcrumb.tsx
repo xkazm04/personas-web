@@ -1,7 +1,8 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
+import { useMemo } from "react";
 import { motion, AnimatePresence } from "framer-motion";
+import { useActiveSectionId } from "@/contexts/SectionObserverContext";
 
 interface BreadcrumbItem {
   label: string;
@@ -14,42 +15,12 @@ export default function SectionBreadcrumb({
 }: {
   items: BreadcrumbItem[];
 }) {
-  const [activeIndex, setActiveIndex] = useState(-1);
-  const observerRef = useRef<IntersectionObserver | null>(null);
+  const activeSectionId = useActiveSectionId();
 
-  useEffect(() => {
-    const sectionIds = items.map((item) => item.href.replace("#", ""));
-    const elements = sectionIds
-      .map((id) => document.getElementById(id))
-      .filter(Boolean) as HTMLElement[];
-
-    if (elements.length === 0) return;
-
-    // Track which sections are currently intersecting
-    const visibleSet = new Set<string>();
-
-    observerRef.current = new IntersectionObserver(
-      (entries) => {
-        for (const entry of entries) {
-          if (entry.isIntersecting) {
-            visibleSet.add(entry.target.id);
-          } else {
-            visibleSet.delete(entry.target.id);
-          }
-        }
-        // Pick the first visible section in document order
-        const idx = sectionIds.findIndex((id) => visibleSet.has(id));
-        setActiveIndex(idx);
-      },
-      { rootMargin: "-80px 0px -40% 0px", threshold: 0 },
-    );
-
-    elements.forEach((el) => observerRef.current!.observe(el));
-
-    return () => {
-      observerRef.current?.disconnect();
-    };
-  }, [items]);
+  const activeIndex = useMemo(() => {
+    if (!activeSectionId) return -1;
+    return items.findIndex((item) => item.href === `#${activeSectionId}`);
+  }, [items, activeSectionId]);
 
   const active = activeIndex >= 0 ? items[activeIndex] : null;
 
@@ -71,17 +42,17 @@ export default function SectionBreadcrumb({
                   <a
                     key={item.href}
                     href={item.href}
-                    className={`relative flex h-full items-center text-[11px] font-mono uppercase tracking-wider transition-colors duration-200 ${
+                    className={`relative flex h-11 -my-1.5 items-center text-[11px] font-mono uppercase tracking-wider transition-colors duration-200 focus-ring ${
                       isActive
                         ? "text-white/90"
-                        : "text-white/30 hover:text-white/55"
+                        : "text-white/70 hover:text-white/90"
                     }`}
                   >
                     {item.label}
                     {isActive && (
                       <motion.div
                         layoutId="breadcrumb-underline"
-                        className="absolute bottom-0 left-0 right-0 h-[2px] rounded-full"
+                        className="absolute bottom-1.5 left-0 right-0 h-[2px] rounded-full"
                         style={{
                           background: `linear-gradient(90deg, ${item.color}, transparent)`,
                         }}
