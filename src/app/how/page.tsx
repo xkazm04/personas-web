@@ -5,6 +5,10 @@ import {
   LazyEventBusShowcase,
   LazyFeatures,
   LazyWhyAgents,
+  LazyAgentsTimeline,
+  LazyAgentsChat,
+  LazyPlatformLayers,
+  LazyPlatformCommand,
 } from "@/components/sections/how-lazy";
 import StageSection from "@/components/StageSection";
 import CinematicBreather from "@/components/CinematicBreather";
@@ -14,7 +18,11 @@ import type { ViewerRole } from "@/components/RoleSelector";
 
 const scrollMapItems = [
   { label: "AGENTS", href: "#why-agents" },
+  { label: "AGENTS: TIMELINE", href: "#agents-timeline" },
+  { label: "AGENTS: CHAT", href: "#agents-chat" },
   { label: "PLATFORM", href: "#features" },
+  { label: "PLATFORM: LAYERS", href: "#platform-layers" },
+  { label: "PLATFORM: CLI", href: "#platform-command" },
   { label: "EVENTS", href: "#event-bus" },
 ];
 
@@ -68,12 +76,30 @@ export default function HowItWorks() {
         <RoleSelector active={role} onChange={setRole} />
       </div>
 
+      {/* Agents: 3 variants */}
       <StageSection glow={glows.hero} toColor={colors.heroTo}>
         <LazyWhyAgents role={role} />
       </StageSection>
 
+      <StageSection glow="cyan" fromColor="rgba(244,63,94,0.03)" toColor="rgba(6,182,212,0.04)">
+        <LazyAgentsTimeline />
+      </StageSection>
+
+      <StageSection glow="emerald" fromColor="rgba(6,182,212,0.03)" toColor="rgba(52,211,153,0.04)">
+        <LazyAgentsChat />
+      </StageSection>
+
+      {/* Platform: 3 variants */}
       <StageSection glow={glows.features} fromColor={colors.featFrom} toColor={colors.featTo}>
         <LazyFeatures />
+      </StageSection>
+
+      <StageSection glow="purple" fromColor="rgba(6,182,212,0.03)" toColor="rgba(168,85,247,0.04)">
+        <LazyPlatformLayers />
+      </StageSection>
+
+      <StageSection glow="cyan" fromColor="rgba(168,85,247,0.03)" toColor="rgba(6,182,212,0.04)">
+        <LazyPlatformCommand />
       </StageSection>
 
       <CinematicBreather />

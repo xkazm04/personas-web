@@ -69,12 +69,48 @@ const FeaturesSection = dynamic(() => import("@/components/sections/Features"), 
   loading: () => <SectionSkeleton />,
 });
 
+const AgentsTimelineSection = dynamic(() => import("@/components/sections/AgentsTimeline"), {
+  ssr: false,
+  loading: () => <SectionSkeleton />,
+});
+
+const AgentsChatSection = dynamic(() => import("@/components/sections/AgentsChat"), {
+  ssr: false,
+  loading: () => <SectionSkeleton />,
+});
+
+const PlatformLayersSection = dynamic(() => import("@/components/sections/PlatformLayers"), {
+  ssr: false,
+  loading: () => <SectionSkeleton />,
+});
+
+const PlatformCommandSection = dynamic(() => import("@/components/sections/PlatformCommand"), {
+  ssr: false,
+  loading: () => <SectionSkeleton />,
+});
+
 export function LazyWhyAgents({ role }: { role: ViewerRole }) {
   return <WhyAgentsSection role={role} />;
 }
 
 export function LazyFeatures() {
   return <FeaturesSection />;
+}
+
+export function LazyAgentsTimeline() {
+  return <AgentsTimelineSection />;
+}
+
+export function LazyAgentsChat() {
+  return <AgentsChatSection />;
+}
+
+export function LazyPlatformLayers() {
+  return <PlatformLayersSection />;
+}
+
+export function LazyPlatformCommand() {
+  return <PlatformCommandSection />;
 }
 
 export function LazyEventBusShowcase() {

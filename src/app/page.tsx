@@ -10,6 +10,10 @@ import {
   LazyPricing,
   LazyUseCases,
   LazyVision,
+  LazyPlaygroundSplit,
+  LazyPlaygroundTimeline,
+  LazyVisionGlobe,
+  LazyVisionHoneycomb,
 } from "@/components/sections/lazy";
 import StageSection from "@/components/StageSection";
 import SectionDivider from "@/components/SectionDivider";
@@ -20,7 +24,11 @@ const scrollMapItems = [
   { label: "HERO", href: "#hero" },
   { label: "TOOLS", href: "#use-cases" },
   { label: "PLAYGROUND", href: "#playground" },
+  { label: "PLAYGROUND: SPLIT", href: "#playground-split" },
+  { label: "PLAYGROUND: TIMELINE", href: "#playground-timeline" },
   { label: "VISION", href: "#vision" },
+  { label: "VISION: GLOBE", href: "#vision-globe" },
+  { label: "VISION: HIVE", href: "#vision-honeycomb" },
   { label: "PRICING", href: "#pricing" },
   { label: "FAQ", href: "#faq" },
   { label: "DOWNLOAD", href: "#download" },
@@ -39,12 +47,16 @@ interface SectionConfig {
 }
 
 const sections: SectionConfig[] = [
-  { Component: LazyUseCases,        glow: "emerald", fromColor: "rgba(6,182,212,0.03)",   toColor: "rgba(52,211,153,0.04)",  dividerFrom: "cyan",    dividerTo: "emerald" },
-  { Component: LazyAgentPlayground, glow: "purple",  fromColor: "rgba(52,211,153,0.03)",  toColor: "rgba(168,85,247,0.03)",  dividerFrom: "emerald", dividerTo: "purple" },
-  { Component: LazyVision,          glow: "purple",  fromColor: "rgba(52,211,153,0.03)",  toColor: "rgba(168,85,247,0.04)",  dividerFrom: "purple",  dividerTo: "purple", wrapperId: "vision" },
-  { Component: LazyPricing,         glow: "purple",  fromColor: "rgba(52,211,153,0.03)",  toColor: "rgba(168,85,247,0.04)",  dividerFrom: "purple",  dividerTo: "purple" },
-  { Component: LazyFAQ,             glow: "cyan",    fromColor: "rgba(168,85,247,0.03)",  toColor: "rgba(6,182,212,0.04)",   dividerFrom: "purple",  dividerTo: "cyan" },
-  { Component: LazyDownloadCTA,     glow: "cyan",    fromColor: "rgba(6,182,212,0.03)",                                      dividerFrom: "cyan",    dividerTo: "cyan" },
+  { Component: LazyUseCases,           glow: "emerald", fromColor: "rgba(6,182,212,0.03)",   toColor: "rgba(52,211,153,0.04)",  dividerFrom: "cyan",    dividerTo: "emerald" },
+  { Component: LazyAgentPlayground,    glow: "purple",  fromColor: "rgba(52,211,153,0.03)",  toColor: "rgba(168,85,247,0.03)",  dividerFrom: "emerald", dividerTo: "purple" },
+  { Component: LazyPlaygroundSplit,    glow: "cyan",    fromColor: "rgba(168,85,247,0.03)",  toColor: "rgba(6,182,212,0.04)",   dividerFrom: "purple",  dividerTo: "cyan" },
+  { Component: LazyPlaygroundTimeline, glow: "emerald", fromColor: "rgba(6,182,212,0.03)",   toColor: "rgba(52,211,153,0.04)",  dividerFrom: "cyan",    dividerTo: "emerald" },
+  { Component: LazyVision,            glow: "purple",  fromColor: "rgba(52,211,153,0.03)",  toColor: "rgba(168,85,247,0.04)",  dividerFrom: "emerald", dividerTo: "purple", wrapperId: "vision" },
+  { Component: LazyVisionGlobe,       glow: "cyan",    fromColor: "rgba(168,85,247,0.03)",  toColor: "rgba(6,182,212,0.04)",   dividerFrom: "purple",  dividerTo: "cyan" },
+  { Component: LazyVisionHoneycomb,   glow: "emerald", fromColor: "rgba(6,182,212,0.03)",   toColor: "rgba(52,211,153,0.04)",  dividerFrom: "cyan",    dividerTo: "emerald" },
+  { Component: LazyPricing,           glow: "purple",  fromColor: "rgba(52,211,153,0.03)",  toColor: "rgba(168,85,247,0.04)",  dividerFrom: "emerald", dividerTo: "purple" },
+  { Component: LazyFAQ,               glow: "cyan",    fromColor: "rgba(168,85,247,0.03)",  toColor: "rgba(6,182,212,0.04)",   dividerFrom: "purple",  dividerTo: "cyan" },
+  { Component: LazyDownloadCTA,        glow: "cyan",    fromColor: "rgba(6,182,212,0.03)",                                      dividerFrom: "cyan",    dividerTo: "cyan" },
 ];
 
 export default function Home() {

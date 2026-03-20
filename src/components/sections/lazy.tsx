@@ -92,6 +92,10 @@ const loadFAQ = () => import("@/components/sections/FAQ");
 const loadDownloadCTA = () => import("@/components/sections/DownloadCTA");
 const loadChangelog = () => import("@/components/sections/Changelog");
 const loadAgentPlayground = () => import("@/components/sections/AgentPlayground");
+const loadPlaygroundSplit = () => import("@/components/sections/PlaygroundSplit");
+const loadPlaygroundTimeline = () => import("@/components/sections/PlaygroundTimeline");
+const loadVisionGlobe = () => import("@/components/sections/VisionGlobe");
+const loadVisionHoneycomb = () => import("@/components/sections/VisionHoneycomb");
 
 // ---------------------------------------------------------------------------
 // Exported lazy wrappers
@@ -119,6 +123,22 @@ export function LazyDownloadCTA() {
 
 export function LazyAgentPlayground() {
   return <LazySection loader={loadAgentPlayground} fallback={<SectionSkeleton />} />;
+}
+
+export function LazyPlaygroundSplit() {
+  return <LazySection loader={loadPlaygroundSplit} fallback={<SectionSkeleton />} />;
+}
+
+export function LazyPlaygroundTimeline() {
+  return <LazySection loader={loadPlaygroundTimeline} fallback={<SectionSkeleton />} />;
+}
+
+export function LazyVisionGlobe() {
+  return <LazySection loader={loadVisionGlobe} fallback={<SectionSkeleton />} />;
+}
+
+export function LazyVisionHoneycomb() {
+  return <LazySection loader={loadVisionHoneycomb} fallback={<SectionSkeleton />} />;
 }
 
 export function LazyChangelog() {
