@@ -25,25 +25,14 @@ const phases = Array.from({ length: totalPhases }, (_, i) => ({
   completed: i < completedCount,
 }));
 
-/* ── Agent dot positions (inner workspace scene) ───────────────────── */
-const agentDots = [
-  { cx: 75, cy: 95, color: "var(--brand-cyan)", label: "cyan" },
-  { cx: 145, cy: 85, color: "var(--brand-purple)", label: "purple" },
-  { cx: 110, cy: 130, color: "var(--brand-emerald)", label: "emerald" },
-] as const;
-
 function CommandCenterIllustration() {
   const uid = useId();
   const arcGradientId = `${uid}-arcGrad`;
   const arcGlowId = `${uid}-arcGlow`;
-  const cyanGlowId = `${uid}-cyanGlow`;
-  const purpleGlowId = `${uid}-purpleGlow`;
-  const emeraldGlowId = `${uid}-emeraldGlow`;
   const radius = 100;
   const strokeWidth = 4;
   const gap = 4;
   const segmentAngle = (360 - gap * totalPhases) / totalPhases;
-  const glowFilters = [cyanGlowId, purpleGlowId, emeraldGlowId];
 
   return (
     <div className="relative flex items-center justify-center group">
@@ -54,9 +43,6 @@ function CommandCenterIllustration() {
             <stop offset="100%" stopColor="var(--foreground)" stopOpacity="0.7" />
           </linearGradient>
           <filter id={arcGlowId}><feGaussianBlur stdDeviation="1.5" result="blur" /><feMerge><feMergeNode in="blur" /><feMergeNode in="SourceGraphic" /></feMerge></filter>
-          <filter id={cyanGlowId}><feGaussianBlur stdDeviation="3" result="blur" /><feMerge><feMergeNode in="blur" /><feMergeNode in="SourceGraphic" /></feMerge></filter>
-          <filter id={purpleGlowId}><feGaussianBlur stdDeviation="3" result="blur" /><feMerge><feMergeNode in="blur" /><feMergeNode in="SourceGraphic" /></feMerge></filter>
-          <filter id={emeraldGlowId}><feGaussianBlur stdDeviation="3" result="blur" /><feMerge><feMergeNode in="blur" /><feMergeNode in="SourceGraphic" /></feMerge></filter>
         </defs>
 
         {/* Outer segmented arc ring */}
@@ -82,52 +68,7 @@ function CommandCenterIllustration() {
           );
         })}
 
-        {/* Inner scene: glassmorphism workspace panel */}
-        <rect x="60" y="65" width="100" height="70" rx="8" ry="8"
-          fill="rgba(255,255,255,0.02)" stroke="rgba(255,255,255,0.03)" strokeWidth="0.5" />
-        {/* Title bar */}
-        <rect x="60" y="65" width="100" height="12" rx="8" ry="8" fill="var(--foreground)" fillOpacity="0.03" />
-        <rect x="60" y="73" width="100" height="4" rx="0" ry="0" fill="var(--foreground)" fillOpacity="0.03" />
-        {/* Window dots */}
-        <circle cx="68" cy="71" r="1.5" fill="var(--brand-rose)" fillOpacity="0.6" />
-        <circle cx="74" cy="71" r="1.5" fill="var(--brand-amber)" fillOpacity="0.6" />
-        <circle cx="80" cy="71" r="1.5" fill="var(--brand-emerald)" fillOpacity="0.6" />
-        {/* "PERSONAS" label */}
-        <text x="110" y="72" textAnchor="middle" fontSize="4" fill="var(--foreground)" fillOpacity="0.3" fontFamily="monospace">PERSONAS</text>
 
-        {/* Connecting arc lines between agents */}
-        <motion.path d={`M ${agentDots[0].cx} ${agentDots[0].cy} Q 110 70 ${agentDots[1].cx} ${agentDots[1].cy}`}
-          fill="none" stroke="var(--brand-cyan)" strokeOpacity="0.15" strokeWidth="0.8" strokeDasharray="3 2"
-          initial={{ pathLength: 0 }} animate={{ pathLength: 1 }}
-          transition={{ duration: 2, delay: 1.8, ease: "easeOut" }} />
-        <motion.path d={`M ${agentDots[1].cx} ${agentDots[1].cy} Q 140 115 ${agentDots[2].cx} ${agentDots[2].cy}`}
-          fill="none" stroke="var(--brand-purple)" strokeOpacity="0.15" strokeWidth="0.8" strokeDasharray="3 2"
-          initial={{ pathLength: 0 }} animate={{ pathLength: 1 }}
-          transition={{ duration: 2, delay: 2.0, ease: "easeOut" }} />
-        <motion.path d={`M ${agentDots[2].cx} ${agentDots[2].cy} Q 80 120 ${agentDots[0].cx} ${agentDots[0].cy}`}
-          fill="none" stroke="var(--brand-emerald)" strokeOpacity="0.15" strokeWidth="0.8" strokeDasharray="3 2"
-          initial={{ pathLength: 0 }} animate={{ pathLength: 1 }}
-          transition={{ duration: 2, delay: 2.2, ease: "easeOut" }} />
-
-        {/* Pulsing agent dots */}
-        {agentDots.map((dot, i) => (
-          <g key={dot.label}>
-            <motion.circle cx={dot.cx} cy={dot.cy} r="6"
-              fill={dot.color} opacity={0} filter={`url(#${glowFilters[i]})`}
-              animate={{ opacity: [0.15, 0.35, 0.15] }}
-              transition={{ duration: 2, repeat: Infinity, delay: i * 0.4, ease: "easeInOut" }} />
-            <motion.circle cx={dot.cx} cy={dot.cy} r="3"
-              fill={dot.color} filter={`url(#${glowFilters[i]})`}
-              initial={{ scale: 0, opacity: 0 }}
-              animate={{ scale: 1, opacity: 1 }}
-              transition={{ duration: 0.5, delay: 1.5 + i * 0.2, ease: "easeOut" }} />
-            <motion.circle cx={dot.cx} cy={dot.cy} r="3"
-              fill="none" stroke={dot.color} strokeWidth="0.5"
-              initial={{ scale: 1, opacity: 0.6 }}
-              animate={{ scale: [1, 2.5], opacity: [0.6, 0] }}
-              transition={{ duration: 2, repeat: Infinity, delay: 1.8 + i * 0.5, ease: "easeOut" }} />
-          </g>
-        ))}
 
         {/* Inner decorative ring */}
         <circle cx="110" cy="110" r={radius - 18} fill="none" stroke="rgba(255,255,255,0.02)" strokeWidth="0.5" strokeDasharray="3 8" />

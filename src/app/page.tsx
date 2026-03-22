@@ -4,7 +4,6 @@ import Navbar from "@/components/Navbar";
 import Hero from "@/components/sections/Hero";
 import Footer from "@/components/sections/Footer";
 import {
-  LazyChangelog,
   LazyDownloadCTA,
   LazyFAQ,
   LazyMidPageCTA,
@@ -160,7 +159,6 @@ export default function Home() {
         })}
 
         <LazyMidPageCTA />
-        <LazyChangelog />
       </PageShell>
       <Footer />
     </SectionObserverProvider>

@@ -121,7 +121,7 @@ function FAQCard({
                   {item.illustration}
                 </div>
               </div>
-              <p className="text-sm text-muted-dark leading-relaxed">
+              <p className="text-sm text-muted leading-relaxed">
                 {item.answer}
               </p>
             </div>

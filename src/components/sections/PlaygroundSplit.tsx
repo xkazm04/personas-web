@@ -577,7 +577,7 @@ export default function PlaygroundSplit() {
                       </AnimatePresence>
                     ) : (
                       <div className="flex items-center h-full">
-                        <p className="font-mono text-[11px] text-white/15">
+                        <p className="font-mono text-[11px] text-foreground">
                           Select a prompt to begin...
                         </p>
                       </div>
@@ -660,12 +660,12 @@ export default function PlaygroundSplit() {
                 <div className="flex h-full items-center justify-center min-h-[400px]">
                   <div className="text-center space-y-3">
                     <div className="mx-auto w-16 h-16 rounded-2xl border border-white/[0.06] bg-white/[0.02] flex items-center justify-center">
-                      <Cpu className="h-7 w-7 text-white/10" />
+                      <Cpu className="h-7 w-7 text-foreground" />
                     </div>
-                    <p className="text-xs text-white/15 font-mono">
+                    <p className="text-xs text-foreground font-mono">
                       Agent mind visualization
                     </p>
-                    <p className="text-[10px] text-white/10 font-mono">
+                    <p className="text-[10px] text-foreground font-mono">
                       Select a prompt to see the flowchart
                     </p>
                   </div>

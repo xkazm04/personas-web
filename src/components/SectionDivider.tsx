@@ -6,7 +6,7 @@ import { BRAND_COLORS } from "@/lib/colors";
 export default function SectionDivider({
   from = "cyan",
   to = "purple",
-  height = 100,
+  height = 0,
 }: {
   from?: keyof typeof BRAND_COLORS;
   to?: keyof typeof BRAND_COLORS;

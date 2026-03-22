@@ -2,13 +2,13 @@
 
 import { useEffect, useRef, useState, type ReactNode } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { Check, Zap, Building, LayoutGrid, Table2 } from "lucide-react";
+import { Check, Zap, Building } from "lucide-react";
 import SectionWrapper from "@/components/SectionWrapper";
 import GlowCard from "@/components/GlowCard";
 import GradientText from "@/components/GradientText";
 import SectionHeading from "@/components/SectionHeading";
 import { fadeUp, staggerContainer } from "@/lib/animations";
-import { PRICING_TIERS, COMPARISON_FEATURES, TIER_COLUMNS } from "@/data/pricing";
+import { PRICING_TIERS } from "@/data/pricing";
 
 function MagneticGlowSurface({
   color,
@@ -128,83 +128,8 @@ const ACCENT_STYLES = {
   },
 } as const;
 
-const comparisonFeatures = COMPARISON_FEATURES;
-const tierColumns = TIER_COLUMNS;
-
-function ComparisonTable({ onCtaClick }: { onCtaClick: (tierName: string) => void }) {
-  return (
-    <motion.div variants={fadeUp} className="mt-16 max-w-4xl mx-auto overflow-x-auto">
-      <div className="min-w-[480px]">
-        {/* Header row */}
-        <div className="grid grid-cols-[1fr_repeat(3,100px)] sm:grid-cols-[1fr_repeat(3,120px)] gap-px mb-1">
-          <div /> {/* empty top-left cell */}
-          {tierColumns.map((col) => (
-            <div key={col.key} className="text-center px-3 py-4">
-              <div className={`text-sm font-semibold ${col.accent}`}>{col.name}</div>
-              <div className="mt-1">
-                <span className="text-lg font-bold tracking-tight">{col.price}</span>
-                {col.period && <span className="text-xs text-muted-dark">{col.period}</span>}
-              </div>
-            </div>
-          ))}
-        </div>
-
-        {/* Feature rows */}
-        <div className="rounded-xl border border-white/[0.05] overflow-hidden">
-          {comparisonFeatures.map((feat, i) => (
-            <div
-              key={feat.label}
-              className={`grid grid-cols-[1fr_repeat(3,100px)] sm:grid-cols-[1fr_repeat(3,120px)] gap-px ${
-                i % 2 === 0 ? "bg-white/[0.015]" : "bg-transparent"
-              } ${i > 0 ? "border-t border-white/[0.03]" : ""}`}
-            >
-              <div className="px-4 py-3 text-sm text-muted flex items-center">{feat.label}</div>
-              {(["free", "pro", "enterprise"] as const).map((key) => (
-                <div key={key} className="flex items-center justify-center px-2 py-3">
-                  {feat[key] ? (
-                    <div className="flex h-5 w-5 items-center justify-center rounded-full bg-brand-cyan/10 ring-1 ring-brand-cyan/15">
-                      <Check className="h-3 w-3 text-brand-cyan" />
-                    </div>
-                  ) : (
-                    <span className="text-white/10 text-xs">—</span>
-                  )}
-                </div>
-              ))}
-            </div>
-          ))}
-        </div>
-
-        {/* CTA row */}
-        <div className="grid grid-cols-[1fr_repeat(3,100px)] sm:grid-cols-[1fr_repeat(3,120px)] gap-px mt-4">
-          <div />
-          {tiers.map((tier) => (
-            <div key={tier.name} className="flex justify-center px-2">
-              {tier.href ? (
-                <a
-                  href={tier.href}
-                  className="text-xs font-medium text-brand-cyan hover:text-white transition-colors"
-                >
-                  {tier.cta}
-                </a>
-              ) : (
-                <button
-                  onClick={() => tier.comingSoon && onCtaClick(tier.name)}
-                  className="text-xs font-medium text-muted-dark hover:text-white transition-colors cursor-pointer"
-                >
-                  {tier.cta}
-                </button>
-              )}
-            </div>
-          ))}
-        </div>
-      </div>
-    </motion.div>
-  );
-}
-
 export default function Pricing() {
   const [comingSoonToast, setComingSoonToast] = useState<string | null>(null);
-  const [viewMode, setViewMode] = useState<"cards" | "table">("cards");
 
   const showComingSoon = (tierName: string) => {
     setComingSoonToast(tierName);
@@ -242,36 +167,8 @@ export default function Pricing() {
           and team collaboration.
         </p>
 
-        {/* View mode toggle */}
-        <div className="mt-8 flex items-center justify-center gap-1 rounded-full border border-white/[0.06] bg-white/[0.02] p-1 w-fit mx-auto">
-          <button
-            onClick={() => setViewMode("cards")}
-            className={`flex items-center gap-1.5 rounded-full px-4 py-1.5 text-xs font-medium transition-all duration-200 cursor-pointer ${
-              viewMode === "cards"
-                ? "bg-white/[0.08] text-white shadow-sm"
-                : "text-muted-dark hover:text-white/70"
-            }`}
-          >
-            <LayoutGrid className="h-3.5 w-3.5" />
-            Cards
-          </button>
-          <button
-            onClick={() => setViewMode("table")}
-            className={`flex items-center gap-1.5 rounded-full px-4 py-1.5 text-xs font-medium transition-all duration-200 cursor-pointer ${
-              viewMode === "table"
-                ? "bg-white/[0.08] text-white shadow-sm"
-                : "text-muted-dark hover:text-white/70"
-            }`}
-          >
-            <Table2 className="h-3.5 w-3.5" />
-            Compare
-          </button>
-        </div>
       </motion.div>
 
-      {viewMode === "table" ? (
-        <ComparisonTable onCtaClick={showComingSoon} />
-      ) : (
       <motion.div
         variants={staggerContainer}
         className="mt-16 grid gap-6 sm:grid-cols-2 lg:grid-cols-3 max-w-5xl mx-auto items-start"
@@ -385,7 +282,6 @@ export default function Pricing() {
           );
         })}
       </motion.div>
-      )}
 
       <motion.div variants={fadeUp} className="mt-10 text-center">
         <div className="mx-auto max-w-5xl rounded-2xl border border-white/4 bg-white/1 px-4 py-3 sm:px-6">
