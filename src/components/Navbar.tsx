@@ -247,7 +247,7 @@ export default function Navbar() {
               role="dialog"
               aria-modal="true"
               aria-label="Navigation menu"
-              className="fixed top-0 right-0 z-50 flex h-full w-72 flex-col border-l border-white/6 bg-[#0a0a12] shadow-2xl md:hidden"
+              className="fixed top-0 right-0 z-50 flex h-full w-72 flex-col border-l border-white/6 bg-background shadow-2xl md:hidden"
             >
               {/* Panel header */}
               <div className="flex items-center justify-between px-5 py-4 border-b border-white/6">

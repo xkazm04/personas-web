@@ -157,11 +157,7 @@ export function LazyMidPageCTA() {
 /* ── Generic lazy sections (use shared SectionSkeleton) ──────── */
 
 const UseCasesSection = createLazySection(() => import("@/components/sections/UseCases"));
-const AgentPlaygroundSection = createLazySection(() => import("@/components/sections/AgentPlayground"));
 const PlaygroundSplitSection = createLazySection(() => import("@/components/sections/PlaygroundSplit"));
-const PlaygroundTimelineSection = createLazySection(() => import("@/components/sections/PlaygroundTimeline"));
-const VisionGlobeSection = createLazySection(() => import("@/components/sections/VisionGlobe"));
-const VisionHoneycombSection = createLazySection(() => import("@/components/sections/VisionHoneycomb"));
 const DownloadCTASection = createLazySection(() => import("@/components/sections/DownloadCTA"));
 const ChangelogSection = createLazySection(() => import("@/components/sections/Changelog"));
 
@@ -169,24 +165,8 @@ export function LazyUseCases() {
   return <UseCasesSection />;
 }
 
-export function LazyAgentPlayground() {
-  return <AgentPlaygroundSection />;
-}
-
 export function LazyPlaygroundSplit() {
   return <PlaygroundSplitSection />;
-}
-
-export function LazyPlaygroundTimeline() {
-  return <PlaygroundTimelineSection />;
-}
-
-export function LazyVisionGlobe() {
-  return <VisionGlobeSection />;
-}
-
-export function LazyVisionHoneycomb() {
-  return <VisionHoneycombSection />;
 }
 
 export function LazyDownloadCTA() {

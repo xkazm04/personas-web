@@ -2,12 +2,12 @@ type GradientVariant = "marketing" | "silver";
 
 const VARIANTS: Record<GradientVariant, { gradient: string; shadow: string }> = {
   marketing: {
-    gradient: "from-white via-brand-cyan/90 to-white/60",
-    shadow: "0 0 40px rgba(6,182,212,0.15)",
+    gradient: "from-foreground via-brand-cyan/90 to-foreground/60",
+    shadow: "0 0 40px color-mix(in srgb, var(--brand-cyan) 15%, transparent)",
   },
   silver: {
-    gradient: "from-white via-gray-300 to-white/70",
-    shadow: "0 0 30px rgba(255,255,255,0.06)",
+    gradient: "from-foreground via-muted to-foreground/70",
+    shadow: "0 0 30px color-mix(in srgb, var(--foreground) 6%, transparent)",
   },
 };
 

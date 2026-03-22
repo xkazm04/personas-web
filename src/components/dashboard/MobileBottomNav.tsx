@@ -65,7 +65,7 @@ function MobileMoreMenu({
       {open && (
         <>
           <div className="fixed inset-0 z-40" onClick={() => setOpen(false)} />
-          <div className="absolute bottom-full right-0 z-50 mb-2 w-48 rounded-xl border border-white/[0.08] bg-[#0a0a0f]/95 backdrop-blur-xl p-1.5 shadow-2xl">
+          <div className="absolute bottom-full right-0 z-50 mb-2 w-48 rounded-xl border border-white/[0.08] bg-background/95 backdrop-blur-xl p-1.5 shadow-2xl">
             {items.map((item) => {
               const active = getActive(item);
               const Icon = item.icon;

@@ -4,7 +4,6 @@ import Navbar from "@/components/Navbar";
 import Hero from "@/components/sections/Hero";
 import Footer from "@/components/sections/Footer";
 import {
-  LazyAgentPlayground,
   LazyChangelog,
   LazyDownloadCTA,
   LazyFAQ,
@@ -13,9 +12,6 @@ import {
   LazyUseCases,
   LazyVision,
   LazyPlaygroundSplit,
-  LazyPlaygroundTimeline,
-  LazyVisionGlobe,
-  LazyVisionHoneycomb,
 } from "@/components/sections/lazy";
 import StageSection from "@/components/StageSection";
 import SectionDivider from "@/components/SectionDivider";
@@ -122,16 +118,12 @@ interface SectionConfig {
 }
 
 const sections: SectionConfig[] = [
-  { Component: LazyUseCases,           glow: "emerald", fromColor: "cyan",    toColor: "emerald", dividerFrom: "cyan",    dividerTo: "emerald" },
-  { Component: LazyAgentPlayground,    glow: "purple",  fromColor: "emerald", toColor: "purple",  dividerFrom: "emerald", dividerTo: "purple" },
-  { Component: LazyPlaygroundSplit,    glow: "cyan",    fromColor: "purple",  toColor: "cyan",    dividerFrom: "purple",  dividerTo: "cyan" },
-  { Component: LazyPlaygroundTimeline, glow: "emerald", fromColor: "cyan",    toColor: "emerald", dividerFrom: "cyan",    dividerTo: "emerald" },
-  { Component: LazyVision,            glow: "purple",  fromColor: "emerald", toColor: "purple",  dividerFrom: "emerald", dividerTo: "purple", wrapperId: "vision" },
-  { Component: LazyVisionGlobe,       glow: "cyan",    fromColor: "purple",  toColor: "cyan",    dividerFrom: "purple",  dividerTo: "cyan" },
-  { Component: LazyVisionHoneycomb,   glow: "emerald", fromColor: "cyan",    toColor: "emerald", dividerFrom: "cyan",    dividerTo: "emerald" },
-  { Component: LazyPricing,           glow: "purple",  fromColor: "emerald", toColor: "purple",  dividerFrom: "emerald", dividerTo: "purple" },
-  { Component: LazyFAQ,               glow: "cyan",    fromColor: "purple",  toColor: "cyan",    dividerFrom: "purple",  dividerTo: "cyan" },
-  { Component: LazyDownloadCTA,        glow: "cyan",    fromColor: "cyan",                        dividerFrom: "cyan",    dividerTo: "cyan" },
+  { Component: LazyUseCases,        glow: "emerald", fromColor: "cyan",    toColor: "emerald", dividerFrom: "cyan",    dividerTo: "emerald" },
+  { Component: LazyPlaygroundSplit, glow: "cyan",    fromColor: "emerald", toColor: "cyan",    dividerFrom: "emerald", dividerTo: "cyan" },
+  { Component: LazyVision,         glow: "purple",  fromColor: "cyan",    toColor: "purple",  dividerFrom: "cyan",    dividerTo: "purple", wrapperId: "vision" },
+  { Component: LazyPricing,        glow: "purple",  fromColor: "purple",  toColor: "purple",  dividerFrom: "purple",  dividerTo: "purple" },
+  { Component: LazyFAQ,            glow: "cyan",    fromColor: "purple",  toColor: "cyan",    dividerFrom: "purple",  dividerTo: "cyan" },
+  { Component: LazyDownloadCTA,    glow: "cyan",    fromColor: "cyan",                        dividerFrom: "cyan",    dividerTo: "cyan" },
 ];
 
 export default function Home() {

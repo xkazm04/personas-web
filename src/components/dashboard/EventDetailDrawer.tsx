@@ -113,10 +113,10 @@ export default function EventDetailDrawer({ node, onClose }: EventDetailDrawerPr
             animate={{ x: 0 }}
             exit={{ x: "100%" }}
             transition={{ type: "spring", damping: 30, stiffness: 300 }}
-            className="fixed right-0 top-0 z-50 h-full w-full max-w-md overflow-y-auto border-l border-white/[0.06] bg-[#0c0c0e]/95 backdrop-blur-xl"
+            className="fixed right-0 top-0 z-50 h-full w-full max-w-md overflow-y-auto border-l border-white/[0.06] bg-background/95 backdrop-blur-xl"
           >
             {/* Header */}
-            <div className="sticky top-0 z-10 flex items-center justify-between border-b border-white/[0.06] bg-[#0c0c0e]/80 px-5 py-4 backdrop-blur-md">
+            <div className="sticky top-0 z-10 flex items-center justify-between border-b border-white/[0.06] bg-background/80 px-5 py-4 backdrop-blur-md">
               <div className="flex items-center gap-3">
                 {node.icon && (
                   <span className="text-lg">{node.icon}</span>
@@ -243,7 +243,7 @@ export default function EventDetailDrawer({ node, onClose }: EventDetailDrawerPr
                 <label className="mb-1.5 block text-[10px] font-medium uppercase tracking-wider text-muted-dark">
                   Sample Payload
                 </label>
-                <div className="relative max-h-64 overflow-auto rounded-xl bg-[#0a0a0a] p-4 border border-white/[0.08] shadow-inner">
+                <div className="relative max-h-64 overflow-auto rounded-xl bg-background p-4 border border-white/[0.08] shadow-inner">
                   <pre className="font-mono text-[11px] leading-relaxed text-white/30 whitespace-pre-wrap break-all">
                     {highlightJson(mockPayloadForNode(node))}
                   </pre>

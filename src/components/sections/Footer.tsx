@@ -4,6 +4,7 @@ import { useState } from "react";
 import { Github, Twitter, ChevronDown, MessageCircle } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 import Image from "next/image";
+import ThemeSwitcher from "@/components/ThemeSwitcher";
 
 const columns = [
   {
@@ -143,6 +144,7 @@ export default function Footer() {
         {/* Copyright */}
         <div className="mt-16 flex flex-col items-center justify-between gap-4 border-t border-white/3 pt-6 text-xs text-muted-dark md:flex-row">
           <span>&copy; {new Date().getFullYear()} Personas. All rights reserved.</span>
+          <ThemeSwitcher />
           <span className="text-muted-dark flex items-center gap-2">
             <div className="h-px w-4 bg-linear-to-r from-brand-cyan/20 to-transparent" />
             Automate your work. Reclaim your time.

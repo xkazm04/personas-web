@@ -202,7 +202,7 @@ export default function WaitlistModal({
             exit={{ opacity: 0, scale: 0.95, y: 10 }}
             transition={TRANSITION_NORMAL}
             onClick={(e) => e.stopPropagation()}
-            className="relative w-full max-w-[440px] rounded-2xl border border-white/[0.06] bg-[#0a0a0f] p-6 shadow-[0_0_80px_rgba(0,0,0,0.5)]"
+            className="relative w-full max-w-[440px] rounded-2xl border border-white/[0.06] bg-background p-6 shadow-[0_0_80px_rgba(0,0,0,0.5)]"
           >
             {/* Close button */}
             <button

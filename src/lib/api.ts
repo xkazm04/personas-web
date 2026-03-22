@@ -274,4 +274,15 @@ const realApi: ApiClient = {
         }>("/api/usage"),
     };
 
-export const api: ApiClient = DEVELOPMENT ? mockApi : realApi;
+/**
+ * Dynamic API dispatch: uses mockApi when DEVELOPMENT is true OR when the user
+ * entered via the "Try Demo" button (isDemo flag in auth store).
+ */
+export const api: ApiClient = new Proxy({} as ApiClient, {
+  get(_target, prop: string | symbol) {
+    if (DEVELOPMENT) return mockApi[prop as keyof ApiClient];
+    const { isDemo } = useAuthStore.getState();
+    const impl = isDemo ? mockApi : realApi;
+    return impl[prop as keyof ApiClient];
+  },
+});

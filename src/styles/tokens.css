@@ -38,10 +38,19 @@
   --brand-amber: #fbbf24;
   --brand-rose: #f43f5e;
 
+  /* ── Surface overlay (white for dark, black for light — used in glass patterns) */
+  --surface-overlay: 255, 255, 255;
+
   /* ── Glass morphism ─────────────────────────────────────────────────── */
   --glass-bg: rgba(255, 255, 255, 0.02);
   --glass-blur: 12px;
   --glass-border: rgba(255, 255, 255, 0.04);
+
+  /* ── Status (semantic) ─────────────────────────────────────────────── */
+  --status-success: #34d399;
+  --status-warning: #fbbf24;
+  --status-error: #f87171;
+  --status-info: #60a5fa;
 
   /* ── Border-radius tiers ────────────────────────────────────────────── */
   --radius-sm: 0.5rem;

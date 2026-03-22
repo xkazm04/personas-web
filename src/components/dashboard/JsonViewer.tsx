@@ -66,7 +66,7 @@ export default function JsonViewer({ payload }: { payload: string | null }) {
   const formatted = formatPayload(payload);
 
   return (
-    <div className="relative max-h-60 overflow-auto rounded-xl bg-[#0a0a0a] p-4 border border-white/[0.08] shadow-inner">
+    <div className="relative max-h-60 overflow-auto rounded-xl bg-background p-4 border border-white/[0.08] shadow-inner">
       <button
         onClick={() => {
           void navigator.clipboard.writeText(formatted).then(() => {

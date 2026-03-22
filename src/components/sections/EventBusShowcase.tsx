@@ -140,7 +140,7 @@ export default function EventBusShowcase({ telemetryAdapter }: { telemetryAdapte
             <div className="mt-6 flex justify-center">
               <button
                 onClick={() => setComposerOpen(true)}
-                className="group flex items-center gap-2 rounded-full border border-brand-cyan/25 bg-brand-cyan/10 px-6 py-2.5 text-sm font-medium text-brand-cyan/90 transition-all hover:bg-brand-cyan/20 hover:border-brand-cyan/40 hover:shadow-[0_0_20px_rgba(6,182,212,0.15)]"
+                className="group flex items-center gap-2 rounded-full border border-brand-cyan/25 bg-brand-cyan/10 px-6 py-2.5 text-sm font-medium text-brand-cyan/90 transition-all hover:bg-brand-cyan/20 hover:border-brand-cyan/40 hover:shadow-[0_0_20px_color-mix(in_srgb,var(--brand-cyan)_15%,transparent)]"
               >
                 <Wand2 className="w-4 h-4 transition-transform group-hover:rotate-12" />
                 Try it yourself — build a flow
@@ -179,7 +179,7 @@ export default function EventBusShowcase({ telemetryAdapter }: { telemetryAdapte
                   onClick={() => setVariant(tab.id)}
                   className={`group rounded-full border px-4 py-2 text-[11px] font-mono uppercase tracking-wider transition-all duration-300 ${
                     isActive
-                      ? "border-brand-cyan/35 bg-brand-cyan/12 text-brand-cyan shadow-[0_0_18px_rgba(6,182,212,0.14)]"
+                      ? "border-brand-cyan/35 bg-brand-cyan/12 text-brand-cyan shadow-[0_0_18px_color-mix(in_srgb,var(--brand-cyan)_14%,transparent)]"
                       : "border-white/10 bg-white/2 text-white/70 hover:border-white/20 hover:text-white/90"
                   }`}
                 >
@@ -192,7 +192,7 @@ export default function EventBusShowcase({ telemetryAdapter }: { telemetryAdapte
             })}
           </div>
 
-          <div ref={containerRef} className="rounded-2xl border border-white/8 bg-black/50 backdrop-blur-xl p-4 md:p-6 shadow-[0_0_80px_rgba(0,0,0,0.4)] animate-breathe-glow">
+          <div ref={containerRef} className="rounded-2xl border border-white/8 bg-black/50 backdrop-blur-xl p-4 md:p-6 shadow-[0_0_80px_rgba(0,0,0,0.25)] animate-breathe-glow">
             <TerminalChrome
               title="event-bus — live"
               info={`${snapshot.source} stream · ${snapshot.totalInFlight} in-flight · backlog ${snapshot.totalBacklog}`}
@@ -210,16 +210,16 @@ export default function EventBusShowcase({ telemetryAdapter }: { telemetryAdapte
                     </feMerge>
                   </filter>
                   <radialGradient id={`${uid}-coreGrad`} cx="50%" cy="50%" r="50%">
-                    <stop offset="0%" stopColor="rgba(6,182,212,0.4)" />
-                    <stop offset="40%" stopColor="rgba(168,85,247,0.2)" />
-                    <stop offset="100%" stopColor="rgba(6,182,212,0)" />
+                    <stop offset="0%" stopColor="var(--brand-cyan)" stopOpacity="0.4" />
+                    <stop offset="40%" stopColor="var(--brand-purple)" stopOpacity="0.2" />
+                    <stop offset="100%" stopColor="var(--brand-cyan)" stopOpacity="0" />
                   </radialGradient>
                 </defs>
 
                 {/* Central Core */}
                 <circle cx="50" cy="50" r="15" fill={`url(#${uid}-coreGrad)`} />
-                <circle cx="50" cy="50" r="8" fill="rgba(255,255,255,0.05)" stroke="rgba(6,182,212,0.3)" strokeWidth="0.5" />
-                <text x="50" y="51" textAnchor="middle" dominantBaseline="middle" fill="rgba(255,255,255,0.8)" fontSize="2.5" fontFamily="var(--font-geist-mono)" letterSpacing="0.1em">BUS</text>
+                <circle cx="50" cy="50" r="8" fill="var(--foreground)" fillOpacity="0.05" stroke="var(--brand-cyan)" strokeOpacity="0.3" strokeWidth="0.5" />
+                <text x="50" y="51" textAnchor="middle" dominantBaseline="middle" fill="var(--foreground)" fillOpacity="0.8" fontSize="2.5" fontFamily="var(--font-geist-mono)" letterSpacing="0.1em">BUS</text>
 
                 {/* Swarm Nodes — SMIL animations run on compositor, not JS thread */}
                 {swarmTools.map((tool, i) => {
@@ -256,7 +256,7 @@ export default function EventBusShowcase({ telemetryAdapter }: { telemetryAdapte
                         begin={`${delay}s`}
                         repeatCount="indefinite"
                       />
-                      <line x1={x} y1={y} x2="50" y2="50" stroke="rgba(255,255,255,0.05)" strokeWidth="0.2" strokeDasharray="1 2" />
+                      <line x1={x} y1={y} x2="50" y2="50" stroke="var(--foreground)" strokeOpacity="0.05" strokeWidth="0.2" strokeDasharray="1 2" />
 
                       {/* Particle moving toward center */}
                       <circle r="0.8" fill={tool.color} filter={`url(#${uid}-swarmGlow)`} cx={x} cy={y}>
@@ -273,7 +273,7 @@ export default function EventBusShowcase({ telemetryAdapter }: { telemetryAdapte
 
                       <circle cx={x} cy={y} r="4.5" fill={`${tool.color}2a`} stroke={tool.color} strokeWidth="0.3" />
                       <image href={`/tools/${tool.id}.svg`} x={x - iconSize / 2} y={y - iconSize / 2} width={iconSize} height={iconSize} />
-                      <text x={x} y={y + 6.5} textAnchor="middle" fill="rgba(255,255,255,0.5)" fontSize="1.8" fontFamily="var(--font-geist-mono)">{tool.name}</text>
+                      <text x={x} y={y + 6.5} textAnchor="middle" fill="var(--foreground)" fillOpacity="0.5" fontSize="1.8" fontFamily="var(--font-geist-mono)">{tool.name}</text>
                     </g>
                   );
                 })}
@@ -311,7 +311,7 @@ export default function EventBusShowcase({ telemetryAdapter }: { telemetryAdapte
                           className="absolute inset-y-0 left-0 rounded-full"
                           style={{
                             width: `${Math.max(depthRatio * 100, 8)}%`,
-                            background: `linear-gradient(90deg, ${lane.color}66, rgba(6,182,212,0.6))`,
+                            background: `linear-gradient(90deg, ${lane.color}66, color-mix(in srgb, var(--brand-cyan) 60%, transparent))`,
                           }}
                           initial={{ width: 0 }}
                           animate={{ width: `${Math.max(depthRatio * 100, 8)}%` }}
@@ -356,7 +356,7 @@ export default function EventBusShowcase({ telemetryAdapter }: { telemetryAdapte
             <span>Event queue</span>
           </div>
           <div className="flex items-center gap-2">
-            <div className="h-1.5 w-1.5 rounded-full bg-brand-cyan shadow-[0_0_4px_rgba(6,182,212,0.4)]" />
+            <div className="h-1.5 w-1.5 rounded-full bg-brand-cyan shadow-[0_0_4px_color-mix(in_srgb,var(--brand-cyan)_40%,transparent)]" />
             <span>Event in transit</span>
           </div>
           <div className="flex items-center gap-2">

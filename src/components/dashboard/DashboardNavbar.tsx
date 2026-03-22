@@ -1,7 +1,7 @@
 "use client";
 
 import { motion } from "framer-motion";
-import { LogOut, ChevronRight } from "lucide-react";
+import { LogOut, ChevronRight, FlaskConical } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
 import GradientText from "@/components/GradientText";
@@ -10,6 +10,7 @@ import { useAuthStore } from "@/stores/authStore";
 export default function DashboardNavbar() {
   const user = useAuthStore((s) => s.user);
   const signOut = useAuthStore((s) => s.signOut);
+  const isDemo = useAuthStore((s) => s.isDemo);
 
   const avatarUrl = user?.user_metadata?.avatar_url;
   const displayName =
@@ -41,6 +42,12 @@ export default function DashboardNavbar() {
           <GradientText variant="silver" className="text-sm font-medium">
             Dashboard
           </GradientText>
+          {isDemo && (
+            <span className="flex items-center gap-1 rounded-full border border-amber-500/20 bg-amber-500/5 px-2.5 py-0.5 text-[10px] font-medium text-amber-400">
+              <FlaskConical className="h-3 w-3" />
+              Demo
+            </span>
+          )}
         </div>
 
         {/* Right: User + sign-out */}

@@ -1,5 +1,6 @@
 @import "tailwindcss";
 @import "../styles/tokens.css";
+@import "../styles/themes.css";
 @import "../styles/typography.css";
 
 /* ── Bridge shared tokens into Tailwind @theme ──
@@ -22,6 +23,10 @@
   --color-accent: var(--accent);
   --color-border: var(--border);
   --color-btn-primary: var(--btn-primary);
+  --color-status-success: var(--status-success);
+  --color-status-warning: var(--status-warning);
+  --color-status-error: var(--status-error);
+  --color-status-info: var(--status-info);
   --font-sans: var(--font-sans);
   --font-mono: var(--font-mono);
 
@@ -39,7 +44,7 @@
 /* ── Base ──────────────────────────────────────────── */
 
 body {
-  background: var(--background);
+  background-color: var(--background);
   color: var(--foreground);
   font-family: var(--font-geist-sans), system-ui, sans-serif;
   overflow-x: hidden;
@@ -50,7 +55,7 @@ html {
 }
 
 ::selection {
-  background: rgba(6, 182, 212, 0.3);
+  background: color-mix(in srgb, var(--accent) 30%, transparent);
   color: var(--foreground);
 }
 
@@ -119,7 +124,7 @@ html {
 /* Section accent line — horizontal gradient divider */
 .section-line {
   height: 1px;
-  background: linear-gradient(90deg, transparent 0%, rgba(6,182,212,0.12) 30%, rgba(168,85,247,0.12) 70%, transparent 100%);
+  background: linear-gradient(90deg, transparent 0%, color-mix(in srgb, var(--brand-cyan) 12%, transparent) 30%, color-mix(in srgb, var(--brand-purple) 12%, transparent) 70%, transparent 100%);
 }
 
 /* Corner accents for cards */
@@ -239,8 +244,8 @@ html {
 }
 
 @keyframes progress-dot-breathe {
-  0%, 100% { opacity: 0.7; transform: translateY(-50%) translateX(-50%) scale(1); box-shadow: 0 0 6px rgba(6,182,212,0.6), 0 0 12px rgba(6,182,212,0.3); }
-  50% { opacity: 1; transform: translateY(-50%) translateX(-50%) scale(1.8); box-shadow: 0 0 10px rgba(6,182,212,1), 0 0 20px rgba(6,182,212,0.6); }
+  0%, 100% { opacity: 0.7; transform: translateY(-50%) translateX(-50%) scale(1); box-shadow: 0 0 6px color-mix(in srgb, var(--brand-cyan) 60%, transparent), 0 0 12px color-mix(in srgb, var(--brand-cyan) 30%, transparent); }
+  50% { opacity: 1; transform: translateY(-50%) translateX(-50%) scale(1.8); box-shadow: 0 0 10px var(--brand-cyan), 0 0 20px color-mix(in srgb, var(--brand-cyan) 60%, transparent); }
 }
 
 /* ── Animation Classes ─────────────────────────────── */
@@ -268,8 +273,8 @@ html {
 }
 
 @keyframes badge-pulse {
-  0%, 100% { border-color: rgba(6,182,212,0.2); box-shadow: 0 0 0 rgba(6,182,212,0); }
-  50% { border-color: rgba(6,182,212,0.45); box-shadow: 0 0 8px rgba(6,182,212,0.15); }
+  0%, 100% { border-color: color-mix(in srgb, var(--brand-cyan) 20%, transparent); box-shadow: 0 0 0 transparent; }
+  50% { border-color: color-mix(in srgb, var(--brand-cyan) 45%, transparent); box-shadow: 0 0 8px color-mix(in srgb, var(--brand-cyan) 15%, transparent); }
 }
 
 /* ── Section Badge Dot Pulse ──────────────────────── */
@@ -340,6 +345,13 @@ html {
 .glow-card.texture-lines::after {
   background: none;
   box-shadow: none;
+}
+
+/* ── Dot Grid (from Personas desktop) ────────────── */
+
+.dot-grid {
+  background-image: radial-gradient(circle, rgba(255, 255, 255, 0.03) 1px, transparent 1px);
+  background-size: 24px 24px;
 }
 
 /* ── Grid Texture Overlay ─────────────────────────── */
@@ -435,10 +447,10 @@ html {
 .animated-conic-border {
   background: conic-gradient(
     from var(--conic-angle),
-    rgba(6,182,212,0.5),
-    rgba(168,85,247,0.5),
-    rgba(52,211,153,0.3),
-    rgba(6,182,212,0.5)
+    color-mix(in srgb, var(--brand-cyan) 50%, transparent),
+    color-mix(in srgb, var(--brand-purple) 50%, transparent),
+    color-mix(in srgb, var(--brand-emerald) 30%, transparent),
+    color-mix(in srgb, var(--brand-cyan) 50%, transparent)
   );
   animation: conic-rotate 4s linear infinite;
   border-radius: 16px;
@@ -509,8 +521,8 @@ html {
 }
 
 @keyframes breathe-glow {
-  0%, 100% { box-shadow: 0 0 20px rgba(6,182,212,0.05), inset 0 0 20px rgba(6,182,212,0.02); }
-  50% { box-shadow: 0 0 50px rgba(6,182,212,0.12), inset 0 0 30px rgba(6,182,212,0.04); }
+  0%, 100% { box-shadow: 0 0 20px color-mix(in srgb, var(--brand-cyan) 5%, transparent), inset 0 0 20px color-mix(in srgb, var(--brand-cyan) 2%, transparent); }
+  50% { box-shadow: 0 0 50px color-mix(in srgb, var(--brand-cyan) 12%, transparent), inset 0 0 30px color-mix(in srgb, var(--brand-cyan) 4%, transparent); }
 }
 .animate-breathe-glow {
   animation: breathe-glow 4s ease-in-out infinite;
@@ -527,7 +539,7 @@ html {
   background: linear-gradient(
     110deg,
     transparent 25%,
-    rgba(168,85,247,0.04) 50%,
+    color-mix(in srgb, var(--brand-purple) 4%, transparent) 50%,
     transparent 75%
   );
   background-size: 200% 100%;
@@ -556,10 +568,10 @@ html {
 .cinematic-gradient {
   background: linear-gradient(
     135deg,
-    rgba(6,182,212,0.06) 0%,
-    rgba(168,85,247,0.04) 33%,
-    rgba(52,211,153,0.03) 66%,
-    rgba(6,182,212,0.05) 100%
+    color-mix(in srgb, var(--brand-cyan) 6%, transparent) 0%,
+    color-mix(in srgb, var(--brand-purple) 4%, transparent) 33%,
+    color-mix(in srgb, var(--brand-emerald) 3%, transparent) 66%,
+    color-mix(in srgb, var(--brand-cyan) 5%, transparent) 100%
   );
   background-size: 300% 300%;
   animation: gradient-sweep 16s ease infinite;
@@ -671,4 +683,75 @@ img {
   .topo-bg {
     display: none !important;
   }
+}
+
+/* ── Theme transition crossfade ────────────────────────────────────────── */
+
+.theme-transitioning,
+.theme-transitioning *,
+.theme-transitioning *::before,
+.theme-transitioning *::after {
+  transition: background-color 250ms ease, color 250ms ease, border-color 250ms ease, fill 250ms ease !important;
+}
+
+/* ══════════════════════════════════════════════════════════════════════════
+   PER-THEME BODY BACKGROUND GRADIENTS
+   Placed last to override the base `body { background-color }` rule.
+   Subtle two-tone gradients add depth without fighting content.
+   ══════════════════════════════════════════════════════════════════════════ */
+
+/* Dark: Midnight (default) — dark blue-to-charcoal */
+:root body,
+[data-theme="dark-midnight"] body {
+  background: linear-gradient(168deg, #0a0e14 0%, #0d0f18 40%, #0a0c12 100%);
+}
+
+/* Dark: Cyan — deep teal warmth */
+[data-theme="dark-cyan"] body {
+  background: linear-gradient(168deg, #0a1214 0%, #0b1518 45%, #091012 100%);
+}
+
+/* Dark: Bronze — warm amber undertone */
+[data-theme="dark-bronze"] body {
+  background: linear-gradient(168deg, #121008 0%, #14120a 45%, #100e06 100%);
+}
+
+/* Dark: Frost — cool steel */
+[data-theme="dark-frost"] body {
+  background: linear-gradient(168deg, #0f1115 0%, #111418 45%, #0d0f13 100%);
+}
+
+/* Dark: Purple — deep violet */
+[data-theme="dark-purple"] body {
+  background: linear-gradient(168deg, #0e0a14 0%, #100c18 45%, #0c0812 100%);
+}
+
+/* Dark: Pink — deep magenta warmth */
+[data-theme="dark-pink"] body {
+  background: linear-gradient(168deg, #140a10 0%, #160c14 45%, #12080e 100%);
+}
+
+/* Dark: Red — near-black with faint crimson */
+[data-theme="dark-red"] body {
+  background: linear-gradient(168deg, #080808 0%, #0a0808 45%, #060606 100%);
+}
+
+/* Dark: Matrix — pure black with barely-there green edge glow */
+[data-theme="dark-matrix"] body {
+  background: linear-gradient(168deg, #050505 0%, #040604 45%, #030303 100%);
+}
+
+/* Light — warm parchment */
+[data-theme="light"] body {
+  background: linear-gradient(168deg, #e9e6df 0%, #e5e1d8 50%, #ece8e0 100%);
+}
+
+/* Light: Ice — cool blue fade */
+[data-theme="light-ice"] body {
+  background: linear-gradient(168deg, #e8eff6 0%, #e3eaf4 50%, #ebf0f7 100%);
+}
+
+/* Light: News — vintage paper warmth */
+[data-theme="light-news"] body {
+  background: linear-gradient(168deg, #e0ded9 0%, #dcdad4 50%, #e2e0db 100%);
 }

@@ -572,7 +572,7 @@ function VoteCard({
                     animate={{ opacity: 1, y: 0, scale: 1 }}
                     exit={{ opacity: 0, y: 4, scale: 0.95 }}
                     transition={{ duration: 0.15 }}
-                    className="absolute bottom-full right-0 mb-2 flex items-center gap-1.5 rounded-xl border border-white/[0.08] bg-[#111]/95 backdrop-blur-xl px-2.5 py-2 shadow-2xl z-20"
+                    className="absolute bottom-full right-0 mb-2 flex items-center gap-1.5 rounded-xl border border-white/[0.08] bg-background/95 backdrop-blur-xl px-2.5 py-2 shadow-2xl z-20"
                     onClick={(e) => e.stopPropagation()}
                   >
                     <span className="text-[9px] text-muted-dark/60 font-mono mr-1">Boost</span>

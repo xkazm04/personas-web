@@ -12,7 +12,9 @@ interface AuthState {
   isAuthenticated: boolean;
   isLoading: boolean;
   initialized: boolean;
+  isDemo: boolean;
   signInWithGoogle: () => Promise<void>;
+  signInAsDemo: () => void;
   signOut: () => Promise<void>;
   initialize: () => (() => void) | undefined;
 }
@@ -23,6 +25,7 @@ export const useAuthStore = create<AuthState>((set, get) => ({
   isAuthenticated: false,
   isLoading: true,
   initialized: false,
+  isDemo: false,
 
   initialize: () => {
     if (get().initialized) return authSubscriptionCleanup ?? undefined;
@@ -99,6 +102,11 @@ export const useAuthStore = create<AuthState>((set, get) => ({
     return authSubscriptionCleanup;
   },
 
+  signInAsDemo: () => {
+    mockSignIn(set);
+    set({ isDemo: true });
+  },
+
   signInWithGoogle: async () => {
     if (DEVELOPMENT) {
       mockSignIn(set);
@@ -119,8 +127,9 @@ export const useAuthStore = create<AuthState>((set, get) => ({
       authSubscriptionCleanup();
     }
 
-    if (DEVELOPMENT) {
+    if (DEVELOPMENT || get().isDemo) {
       mockSignOut(set);
+      set({ isDemo: false });
       return;
     }
 

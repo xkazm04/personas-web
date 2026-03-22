@@ -21,6 +21,7 @@ import { useSystemStore } from "@/stores/systemStore";
 export default function SettingsPage() {
   const user = useAuthStore((s) => s.user);
   const signOut = useAuthStore((s) => s.signOut);
+  const isDemo = useAuthStore((s) => s.isDemo);
   const health = useSystemStore((s) => s.health);
   const status = useSystemStore((s) => s.status);
   const fetchStatus = useSystemStore((s) => s.fetchStatus);
@@ -125,7 +126,7 @@ export default function SettingsPage() {
             <div className="flex items-center justify-between">
               <span className="text-sm text-muted">Orchestrator</span>
               <code className="text-xs text-muted-dark font-mono">
-                {process.env.NEXT_PUBLIC_ORCHESTRATOR_URL ?? "Not configured"}
+                {isDemo ? "mock://demo-data" : (process.env.NEXT_PUBLIC_ORCHESTRATOR_URL ?? "Not configured")}
               </code>
             </div>
 

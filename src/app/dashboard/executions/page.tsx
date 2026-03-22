@@ -39,7 +39,7 @@ function ExecutionOutput({ executionId }: { executionId: string }) {
       </div>
 
       {/* Output stream */}
-      <div className="relative mt-2 max-h-80 overflow-auto rounded-xl border border-white/[0.08] bg-[#0a0a0a] p-4 font-mono text-xs leading-relaxed text-slate-300 shadow-inner">
+      <div className="relative mt-2 max-h-80 overflow-auto rounded-xl border border-white/[0.08] bg-background p-4 font-mono text-xs leading-relaxed text-slate-300 shadow-inner">
         {/* Decorative terminal header */}
         <div className="absolute left-0 top-0 flex w-full items-center gap-1.5 bg-white/[0.02] px-3 py-2 border-b border-white/[0.05]">
           <div className="h-2 w-2 rounded-full bg-red-500/80"></div>

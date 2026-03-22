@@ -27,9 +27,9 @@ const phases = Array.from({ length: totalPhases }, (_, i) => ({
 
 /* ── Agent dot positions (inner workspace scene) ───────────────────── */
 const agentDots = [
-  { cx: 75, cy: 95, color: "rgb(6,182,212)", label: "cyan" },
-  { cx: 145, cy: 85, color: "rgb(168,85,247)", label: "purple" },
-  { cx: 110, cy: 130, color: "rgb(52,211,153)", label: "emerald" },
+  { cx: 75, cy: 95, color: "var(--brand-cyan)", label: "cyan" },
+  { cx: 145, cy: 85, color: "var(--brand-purple)", label: "purple" },
+  { cx: 110, cy: 130, color: "var(--brand-emerald)", label: "emerald" },
 ] as const;
 
 function CommandCenterIllustration() {
@@ -50,8 +50,8 @@ function CommandCenterIllustration() {
       <svg width="220" height="220" viewBox="0 0 220 220" className="drop-shadow-lg transition-all duration-500 group-hover:drop-shadow-xl">
         <defs>
           <linearGradient id={arcGradientId} x1="0%" y1="0%" x2="100%" y2="100%">
-            <stop offset="0%" stopColor="rgba(209,213,219,0.9)" />
-            <stop offset="100%" stopColor="rgba(255,255,255,0.7)" />
+            <stop offset="0%" stopColor="var(--muted)" stopOpacity="0.9" />
+            <stop offset="100%" stopColor="var(--foreground)" stopOpacity="0.7" />
           </linearGradient>
           <filter id={arcGlowId}><feGaussianBlur stdDeviation="1.5" result="blur" /><feMerge><feMergeNode in="blur" /><feMergeNode in="SourceGraphic" /></feMerge></filter>
           <filter id={cyanGlowId}><feGaussianBlur stdDeviation="3" result="blur" /><feMerge><feMergeNode in="blur" /><feMergeNode in="SourceGraphic" /></feMerge></filter>
@@ -86,26 +86,26 @@ function CommandCenterIllustration() {
         <rect x="60" y="65" width="100" height="70" rx="8" ry="8"
           fill="rgba(255,255,255,0.02)" stroke="rgba(255,255,255,0.03)" strokeWidth="0.5" />
         {/* Title bar */}
-        <rect x="60" y="65" width="100" height="12" rx="8" ry="8" fill="rgba(255,255,255,0.03)" />
-        <rect x="60" y="73" width="100" height="4" rx="0" ry="0" fill="rgba(255,255,255,0.03)" />
+        <rect x="60" y="65" width="100" height="12" rx="8" ry="8" fill="var(--foreground)" fillOpacity="0.03" />
+        <rect x="60" y="73" width="100" height="4" rx="0" ry="0" fill="var(--foreground)" fillOpacity="0.03" />
         {/* Window dots */}
-        <circle cx="68" cy="71" r="1.5" fill="rgba(244,63,94,0.6)" />
-        <circle cx="74" cy="71" r="1.5" fill="rgba(251,191,36,0.6)" />
-        <circle cx="80" cy="71" r="1.5" fill="rgba(52,211,153,0.6)" />
+        <circle cx="68" cy="71" r="1.5" fill="var(--brand-rose)" fillOpacity="0.6" />
+        <circle cx="74" cy="71" r="1.5" fill="var(--brand-amber)" fillOpacity="0.6" />
+        <circle cx="80" cy="71" r="1.5" fill="var(--brand-emerald)" fillOpacity="0.6" />
         {/* "PERSONAS" label */}
-        <text x="110" y="72" textAnchor="middle" fontSize="4" fill="rgba(255,255,255,0.3)" fontFamily="monospace">PERSONAS</text>
+        <text x="110" y="72" textAnchor="middle" fontSize="4" fill="var(--foreground)" fillOpacity="0.3" fontFamily="monospace">PERSONAS</text>
 
         {/* Connecting arc lines between agents */}
         <motion.path d={`M ${agentDots[0].cx} ${agentDots[0].cy} Q 110 70 ${agentDots[1].cx} ${agentDots[1].cy}`}
-          fill="none" stroke="rgba(6,182,212,0.15)" strokeWidth="0.8" strokeDasharray="3 2"
+          fill="none" stroke="var(--brand-cyan)" strokeOpacity="0.15" strokeWidth="0.8" strokeDasharray="3 2"
           initial={{ pathLength: 0 }} animate={{ pathLength: 1 }}
           transition={{ duration: 2, delay: 1.8, ease: "easeOut" }} />
         <motion.path d={`M ${agentDots[1].cx} ${agentDots[1].cy} Q 140 115 ${agentDots[2].cx} ${agentDots[2].cy}`}
-          fill="none" stroke="rgba(168,85,247,0.15)" strokeWidth="0.8" strokeDasharray="3 2"
+          fill="none" stroke="var(--brand-purple)" strokeOpacity="0.15" strokeWidth="0.8" strokeDasharray="3 2"
           initial={{ pathLength: 0 }} animate={{ pathLength: 1 }}
           transition={{ duration: 2, delay: 2.0, ease: "easeOut" }} />
         <motion.path d={`M ${agentDots[2].cx} ${agentDots[2].cy} Q 80 120 ${agentDots[0].cx} ${agentDots[0].cy}`}
-          fill="none" stroke="rgba(52,211,153,0.15)" strokeWidth="0.8" strokeDasharray="3 2"
+          fill="none" stroke="var(--brand-emerald)" strokeOpacity="0.15" strokeWidth="0.8" strokeDasharray="3 2"
           initial={{ pathLength: 0 }} animate={{ pathLength: 1 }}
           transition={{ duration: 2, delay: 2.2, ease: "easeOut" }} />
 
@@ -199,7 +199,7 @@ export default function HeroClient() {
         {/* Left — text */}
         <div className="text-center lg:text-left">
           <motion.div variants={fadeUp}>
-            <span className="relative inline-flex items-center overflow-hidden rounded-full border border-brand-cyan/20 bg-brand-cyan/5 px-4 py-1.5 text-xs font-medium tracking-wider uppercase text-brand-cyan font-mono shadow-[0_0_15px_rgba(6,182,212,0.2)]">
+            <span className="relative inline-flex items-center overflow-hidden rounded-full border border-brand-cyan/20 bg-brand-cyan/5 px-4 py-1.5 text-xs font-medium tracking-wider uppercase text-brand-cyan font-mono shadow-[0_0_15px_color-mix(in_srgb,var(--brand-cyan)_20%,transparent)]">
               <span className="absolute inset-0 animate-shimmer bg-linear-to-r from-transparent via-brand-cyan/10 to-transparent" style={{ animationDuration: "3s" }} />
               <span className="relative">AI Agent Platform</span>
             </span>
@@ -207,16 +207,16 @@ export default function HeroClient() {
 
           <motion.div variants={fadeUp} className="mt-8 relative">
             <SectionHeading as="h1" id="hero-heading" className="leading-[1.05]">
-              <span className="block text-transparent bg-clip-text bg-linear-to-b from-white to-white/70 drop-shadow-[0_0_20px_rgba(255,255,255,0.1)]">Intelligent agents</span>
-              <GradientText className="block mt-2 drop-shadow-[0_0_30px_rgba(168,85,247,0.3)]">that work for you</GradientText>
+              <span className="block text-transparent bg-clip-text bg-linear-to-b from-foreground to-foreground/70 drop-shadow-[0_0_20px_color-mix(in_srgb,var(--foreground)_10%,transparent)]">Intelligent agents</span>
+              <GradientText className="block mt-2 drop-shadow-[0_0_30px_color-mix(in_srgb,var(--accent)_30%,transparent)]">that work for you</GradientText>
             </SectionHeading>
           </motion.div>
 
-          <motion.div variants={fadeUp} className="mx-auto lg:mx-0 mt-8 h-px w-40 bg-linear-to-r from-brand-cyan/40 via-brand-purple/30 to-transparent shadow-[0_0_10px_rgba(6,182,212,0.5)]" />
+          <motion.div variants={fadeUp} className="mx-auto lg:mx-0 mt-8 h-px w-40 bg-linear-to-r from-brand-cyan/40 via-brand-purple/30 to-transparent shadow-[0_0_10px_color-mix(in_srgb,var(--brand-cyan)_50%,transparent)]" />
 
           <motion.p variants={fadeUp} className="mx-auto lg:mx-0 mt-8 max-w-2xl text-lg leading-relaxed text-muted-dark md:text-xl font-light">
             Design agents in natural language. Orchestrate them locally or in the
-            cloud. <span className="text-white/80 font-medium drop-shadow-[0_0_5px_rgba(255,255,255,0.5)]">No workflow diagrams. No code.</span>
+            cloud. <span className="text-foreground/80 font-medium drop-shadow-[0_0_5px_color-mix(in_srgb,var(--foreground)_50%,transparent)]">No workflow diagrams. No code.</span>
           </motion.p>
 
           <motion.div variants={fadeUp} className="mt-8 flex flex-wrap items-center justify-center gap-3 lg:justify-start">

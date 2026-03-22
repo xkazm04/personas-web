@@ -2,6 +2,7 @@
 
 import { useEffect, useRef } from "react";
 import { DEVELOPMENT } from "@/lib/dev";
+import { useAuthStore } from "@/stores/authStore";
 import { useEventStore } from "@/stores/eventStore";
 import type { PersonaEvent } from "@/lib/types";
 
@@ -22,14 +23,15 @@ function isPageVisible(): boolean {
 export function useEventStream() {
   const appendEvent = useEventStore((s) => s.appendEvent);
   const fetchEvents = useEventStore((s) => s.fetchEvents);
+  const isDemo = useAuthStore((s) => s.isDemo);
   const appendRef = useRef(appendEvent);
   appendRef.current = appendEvent;
   const fetchRef = useRef(fetchEvents);
   fetchRef.current = fetchEvents;
 
   useEffect(() => {
-    // In dev mode, SSE endpoint doesn't exist — fall back to polling
-    if (DEVELOPMENT) {
+    // In dev/demo mode, SSE endpoint doesn't exist — fall back to polling
+    if (DEVELOPMENT || isDemo) {
       let pollTimer: ReturnType<typeof setTimeout> | null = null;
       let disposed = false;
 
@@ -142,5 +144,5 @@ export function useEventStream() {
       stopFallbackPolling();
       document.removeEventListener("visibilitychange", onVisibilityChange);
     };
-  }, []);
+  }, [isDemo]);
 }

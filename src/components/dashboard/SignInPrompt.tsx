@@ -10,6 +10,7 @@ import { DEVELOPMENT } from "@/lib/dev";
 
 export default function SignInPrompt() {
   const signInWithGoogle = useAuthStore((s) => s.signInWithGoogle);
+  const signInAsDemo = useAuthStore((s) => s.signInAsDemo);
 
   return (
     <AuthLayout>
@@ -99,6 +100,16 @@ export default function SignInPrompt() {
                 </>
               )}
             </button>
+
+            {!DEVELOPMENT && (
+              <button
+                onClick={signInAsDemo}
+                className="group relative mt-3 flex w-full items-center justify-center gap-2 overflow-hidden rounded-full border border-white/[0.08] bg-white/[0.03] px-6 py-3 text-sm font-medium text-muted-dark transition-all duration-300 hover:border-white/[0.15] hover:bg-white/[0.06] hover:text-foreground/80"
+              >
+                <FlaskConical className="relative h-4 w-4" />
+                <span className="relative">Try Demo</span>
+              </button>
+            )}
 
             <p className="mt-4 text-[11px] text-muted-dark/60">
               {DEVELOPMENT

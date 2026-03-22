@@ -159,7 +159,7 @@ function PreviewCard({
   mode?: "cover" | "tile";
 }) {
   return (
-    <div className="relative rounded-xl border border-white/[0.06] bg-[#0a0a12] overflow-hidden aspect-[16/9]">
+    <div className="relative rounded-xl border border-white/[0.06] bg-background overflow-hidden aspect-[16/9]">
       {asset && <ImageLayer asset={asset} opacity={opacity} mode={mode} />}
       {!asset && (
         <div className="absolute inset-0 flex items-center justify-center text-white/20 text-sm">
@@ -240,7 +240,7 @@ function CombineView() {
   return (
     <div className="space-y-6">
       {/* Live combined preview */}
-      <div className="relative rounded-xl border border-white/[0.06] bg-[#0a0a12] overflow-hidden aspect-[21/9]">
+      <div className="relative rounded-xl border border-white/[0.06] bg-background overflow-hidden aspect-[21/9]">
         {bgAsset && <ImageLayer asset={bgAsset} opacity={bgOpacity} />}
         {patAsset && <ImageLayer asset={patAsset} opacity={patOpacity} mode="tile" />}
 

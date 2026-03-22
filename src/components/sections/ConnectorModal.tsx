@@ -185,7 +185,7 @@ export default function ConnectorModal({
             exit={{ opacity: 0, scale: 0.92, y: 30 }}
             transition={{ type: "spring", damping: 28, stiffness: 340 }}
             onClick={(e) => e.stopPropagation()}
-            className="relative w-full max-w-2xl max-h-[90vh] overflow-y-auto rounded-2xl border border-white/[0.08] bg-[#0a0a12] shadow-2xl shadow-black/50"
+            className="relative w-full max-w-2xl max-h-[90vh] overflow-y-auto rounded-2xl border border-white/[0.08] bg-background shadow-2xl shadow-black/50"
           >
             {/* Close button */}
             <button

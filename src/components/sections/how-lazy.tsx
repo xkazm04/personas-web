@@ -2,7 +2,6 @@
 
 import dynamic from "next/dynamic";
 import { createLazySection, SectionSkeleton, P, Ps, Pm } from "./LazySection";
-import type { ViewerRole } from "@/components/RoleSelector";
 
 function EventBusShowcaseSkeleton() {
   return (
@@ -42,8 +41,6 @@ function EventBusShowcaseSkeleton() {
 }
 
 const EventBusShowcaseSection = createLazySection(() => import("@/components/sections/EventBusShowcase"), EventBusShowcaseSkeleton);
-const WhyAgentsSection = createLazySection(() => import("@/components/sections/WhyAgents"));
-const FeaturesSection = createLazySection(() => import("@/components/sections/Features"));
 
 const AgentsTimelineSection = dynamic(() => import("@/components/sections/AgentsTimeline"), {
   ssr: false,
@@ -60,19 +57,6 @@ const PlatformLayersSection = dynamic(() => import("@/components/sections/Platfo
   loading: () => <SectionSkeleton />,
 });
 
-const PlatformCommandSection = dynamic(() => import("@/components/sections/PlatformCommand"), {
-  ssr: false,
-  loading: () => <SectionSkeleton />,
-});
-
-export function LazyWhyAgents({ role }: { role: ViewerRole }) {
-  return <WhyAgentsSection role={role} />;
-}
-
-export function LazyFeatures() {
-  return <FeaturesSection />;
-}
-
 export function LazyAgentsTimeline() {
   return <AgentsTimelineSection />;
 }
@@ -83,10 +67,6 @@ export function LazyAgentsChat() {
 
 export function LazyPlatformLayers() {
   return <PlatformLayersSection />;
-}
-
-export function LazyPlatformCommand() {
-  return <PlatformCommandSection />;
 }
 
 export function LazyEventBusShowcase() {

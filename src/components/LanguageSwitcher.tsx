@@ -66,7 +66,7 @@ export default function LanguageSwitcher() {
             transition={{ duration: 0.15, ease: "easeOut" }}
             role="listbox"
             aria-label="Select language"
-            className="absolute right-0 top-full mt-2 z-50 min-w-[160px] overflow-hidden rounded-xl border border-white/[0.06] bg-[#0a0a12] shadow-2xl backdrop-blur-xl"
+            className="absolute right-0 top-full mt-2 z-50 min-w-[160px] overflow-hidden rounded-xl border border-white/[0.06] bg-background shadow-2xl backdrop-blur-xl"
           >
             {languages.map((lang) => {
               const isActive = lang.code === language;
