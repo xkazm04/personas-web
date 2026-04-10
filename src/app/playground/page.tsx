@@ -60,7 +60,7 @@ function TabButton({ active, onClick, children }: { active: boolean; onClick: ()
       className={`relative cursor-pointer px-5 py-2.5 text-sm font-medium tracking-wide transition-all duration-200 rounded-lg ${
         active
           ? "text-white bg-white/[0.06] border border-white/10"
-          : "text-white/40 hover:text-white/70 border border-transparent"
+          : "text-muted-dark hover:text-muted border border-transparent"
       }`}
     >
       {children}
@@ -74,8 +74,8 @@ function TabButton({ active, onClick, children }: { active: boolean; onClick: ()
 function OpacitySlider({ value, onChange, label }: { value: number; onChange: (v: number) => void; label?: string }) {
   return (
     <div className="flex items-center gap-3">
-      {label && <span className="text-xs text-white/40">{label}</span>}
-      <span className="text-xs text-white/30 font-mono w-10">{Math.round(value * 100)}%</span>
+      {label && <span className="text-xs text-muted-dark">{label}</span>}
+      <span className="text-xs text-muted-dark font-mono w-10">{Math.round(value * 100)}%</span>
       <input
         type="range"
         min={0}
@@ -95,7 +95,7 @@ function AssetPill({ asset, selected, onClick }: { asset: VisualAsset; selected:
       className={`cursor-pointer px-3 py-1.5 rounded-full text-xs font-medium tracking-wide transition-all duration-200 border ${
         selected
           ? "border-white/20 bg-white/[0.08] text-white"
-          : "border-white/[0.04] bg-white/[0.02] text-white/40 hover:text-white/60 hover:border-white/10"
+          : "border-white/[0.04] bg-white/[0.02] text-muted-dark hover:text-muted hover:border-white/10"
       }`}
       style={selected ? { boxShadow: `0 0 12px ${asset.accent}20` } : undefined}
     >
@@ -162,14 +162,14 @@ function PreviewCard({
     <div className="relative rounded-xl border border-white/[0.06] bg-background overflow-hidden aspect-[16/9]">
       {asset && <ImageLayer asset={asset} opacity={opacity} mode={mode} />}
       {!asset && (
-        <div className="absolute inset-0 flex items-center justify-center text-white/20 text-sm">
+        <div className="absolute inset-0 flex items-center justify-center text-muted-dark text-sm">
           Select a {label} to preview
         </div>
       )}
       {asset && (
         <div className="absolute inset-0 flex flex-col items-center justify-center gap-2 z-10">
-          <div className="text-white/60 text-lg font-semibold tracking-tight">{asset.label}</div>
-          <div className="text-white/25 text-xs font-mono">opacity: {Math.round(opacity * 100)}%</div>
+          <div className="text-muted text-lg font-semibold tracking-tight">{asset.label}</div>
+          <div className="text-muted-dark text-xs font-mono">opacity: {Math.round(opacity * 100)}%</div>
         </div>
       )}
     </div>
@@ -209,7 +209,7 @@ function GalleryGrid({
             <div className="absolute inset-x-0 bottom-0 p-3 bg-gradient-to-t from-black/60 to-transparent z-10">
               <div className="flex items-center gap-2">
                 <span className="w-2 h-2 rounded-full" style={{ backgroundColor: asset.accent, opacity: 0.7 }} />
-                <span className="text-xs font-medium text-white/70">{asset.label}</span>
+                <span className="text-xs font-medium text-muted">{asset.label}</span>
               </div>
             </div>
             {isActive && (
@@ -245,17 +245,17 @@ function CombineView() {
         {patAsset && <ImageLayer asset={patAsset} opacity={patOpacity} mode="tile" />}
 
         <div className="absolute inset-0 flex flex-col items-center justify-center z-10 gap-4 p-8">
-          <h2 className="text-2xl md:text-4xl font-bold tracking-tight text-white/90">
+          <h2 className="text-2xl md:text-4xl font-bold tracking-tight text-foreground">
             Sample Page Content
           </h2>
-          <p className="text-sm md:text-base text-white/40 max-w-md text-center leading-relaxed">
+          <p className="text-sm md:text-base text-muted-dark max-w-md text-center leading-relaxed">
             Preview how the selected background and pattern combine as page overlays. Adjust opacity sliders to fine-tune the visual treatment.
           </p>
           <div className="flex gap-3 mt-2">
             <span className="px-4 py-2 rounded-lg bg-brand-cyan/10 border border-brand-cyan/20 text-brand-cyan text-sm font-medium">
               Primary Action
             </span>
-            <span className="px-4 py-2 rounded-lg bg-white/[0.04] border border-white/[0.06] text-white/50 text-sm">
+            <span className="px-4 py-2 rounded-lg bg-white/[0.04] border border-white/[0.06] text-muted text-sm">
               Secondary
             </span>
           </div>
@@ -267,7 +267,7 @@ function CombineView() {
         {/* Background selector */}
         <div className="space-y-3">
           <div className="flex items-center justify-between">
-            <h3 className="text-sm font-medium text-white/60">Background</h3>
+            <h3 className="text-sm font-medium text-muted">Background</h3>
             <OpacitySlider value={bgOpacity} onChange={setBgOpacity} />
           </div>
           <div className="flex flex-wrap gap-2">
@@ -276,7 +276,7 @@ function CombineView() {
               className={`cursor-pointer px-3 py-1.5 rounded-full text-xs font-medium tracking-wide transition-all duration-200 border ${
                 selectedBg === null
                   ? "border-white/20 bg-white/[0.08] text-white"
-                  : "border-white/[0.04] bg-white/[0.02] text-white/40 hover:text-white/60 hover:border-white/10"
+                  : "border-white/[0.04] bg-white/[0.02] text-muted-dark hover:text-muted hover:border-white/10"
               }`}
             >
               None
@@ -290,7 +290,7 @@ function CombineView() {
         {/* Pattern selector */}
         <div className="space-y-3">
           <div className="flex items-center justify-between">
-            <h3 className="text-sm font-medium text-white/60">Pattern Overlay</h3>
+            <h3 className="text-sm font-medium text-muted">Pattern Overlay</h3>
             <OpacitySlider value={patOpacity} onChange={setPatOpacity} />
           </div>
           <div className="flex flex-wrap gap-2">
@@ -299,7 +299,7 @@ function CombineView() {
               className={`cursor-pointer px-3 py-1.5 rounded-full text-xs font-medium tracking-wide transition-all duration-200 border ${
                 selectedPat === null
                   ? "border-white/20 bg-white/[0.08] text-white"
-                  : "border-white/[0.04] bg-white/[0.02] text-white/40 hover:text-white/60 hover:border-white/10"
+                  : "border-white/[0.04] bg-white/[0.02] text-muted-dark hover:text-muted hover:border-white/10"
               }`}
             >
               None
@@ -339,7 +339,7 @@ export default function PlaygroundPage() {
               <h1 className="text-3xl md:text-4xl font-bold tracking-tight mb-3">
                 <GradientText>Visual Asset Playground</GradientText>
               </h1>
-              <p className="text-sm text-white/40 max-w-lg mx-auto">
+              <p className="text-sm text-muted-dark max-w-lg mx-auto">
                 Browse 10 AI-generated backgrounds and 10 decorative patterns. Combine layers to find the perfect visual treatment for your pages.
               </p>
             </motion.div>
@@ -362,7 +362,7 @@ export default function PlaygroundPage() {
               {tab === "backgrounds" && (
                 <div className="space-y-6">
                   <div className="flex items-center justify-between">
-                    <h2 className="text-lg font-semibold text-white/70">Background Scenes</h2>
+                    <h2 className="text-lg font-semibold text-muted">Background Scenes</h2>
                     <OpacitySlider value={bgOpacity} onChange={setBgOpacity} />
                   </div>
                   <PreviewCard asset={bgAsset} opacity={bgOpacity} label="background" />
@@ -373,7 +373,7 @@ export default function PlaygroundPage() {
               {tab === "patterns" && (
                 <div className="space-y-6">
                   <div className="flex items-center justify-between">
-                    <h2 className="text-lg font-semibold text-white/70">Decorative Patterns</h2>
+                    <h2 className="text-lg font-semibold text-muted">Decorative Patterns</h2>
                     <OpacitySlider value={patOpacity} onChange={setPatOpacity} />
                   </div>
                   <PreviewCard asset={patAsset} opacity={patOpacity} label="pattern" mode="tile" />

@@ -3,9 +3,10 @@
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { Wifi, WifiOff } from "lucide-react";
-import { navItems, useNavState } from "./DashboardNavigation";
+import { useNavItems, useNavState } from "./DashboardNavigation";
 
 export default function DesktopSidebar() {
+  const navItems = useNavItems();
   const { isConnected, health, getActive, getBadge } = useNavState();
   const router = useRouter();
 

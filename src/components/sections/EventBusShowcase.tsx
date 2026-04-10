@@ -132,7 +132,7 @@ export default function EventBusShowcase({ telemetryAdapter }: { telemetryAdapte
             Agents that{" "}
             <GradientText className="drop-shadow-lg">talk to each other</GradientText>
           </h2>
-          <p className="mx-auto mt-8 max-w-3xl text-white/70 leading-relaxed text-center text-lg sm:text-xl font-light">
+          <p className="mx-auto mt-8 max-w-3xl text-muted leading-relaxed text-center text-lg sm:text-xl font-light">
             The event bus is a central queue. Producers emit events, consumers react.
             One agent&apos;s output triggers the next — <span className="text-white font-medium">automatically.</span>
           </p>
@@ -180,11 +180,11 @@ export default function EventBusShowcase({ telemetryAdapter }: { telemetryAdapte
                   className={`group rounded-full border px-4 py-2 text-[11px] font-mono uppercase tracking-wider transition-all duration-300 ${
                     isActive
                       ? "border-brand-cyan/35 bg-brand-cyan/12 text-brand-cyan shadow-[0_0_18px_color-mix(in_srgb,var(--brand-cyan)_14%,transparent)]"
-                      : "border-white/10 bg-white/2 text-white/70 hover:border-white/20 hover:text-white/90"
+                      : "border-white/10 bg-white/2 text-muted hover:border-white/20 hover:text-foreground"
                   }`}
                 >
                   <span>{tab.label}</span>
-                  <span className="ml-2 text-[9px] normal-case tracking-normal text-white/70 group-hover:text-white/80">
+                  <span className="ml-2 text-[9px] normal-case tracking-normal text-muted group-hover:text-foreground/80">
                     {tab.hint}
                   </span>
                 </button>
@@ -295,12 +295,12 @@ export default function EventBusShowcase({ telemetryAdapter }: { telemetryAdapte
                       className="rounded-xl border border-white/8 bg-white/2 px-3 py-3 md:px-4"
                     >
                       <div className="mb-2 flex flex-wrap items-center justify-between gap-2">
-                        <div className="flex items-center gap-2 text-xs font-mono text-white/80">
+                        <div className="flex items-center gap-2 text-xs font-mono text-foreground/80">
                           <span className="rounded-full border border-white/10 px-2 py-0.5">{lane.producer}</span>
-                          <span className="text-white/70">→</span>
+                          <span className="text-muted">→</span>
                           <span className="rounded-full border border-white/10 px-2 py-0.5">{lane.consumer}</span>
                         </div>
-                        <div className="flex items-center gap-2 text-[10px] font-mono text-white/70">
+                        <div className="flex items-center gap-2 text-[10px] font-mono text-muted">
                           <span className="rounded-full border border-white/10 px-2 py-0.5">{lane.eps} evt/s</span>
                           <span className="rounded-full border border-white/10 px-2 py-0.5">{lane.latencyMs} ms</span>
                         </div>
@@ -325,12 +325,12 @@ export default function EventBusShowcase({ telemetryAdapter }: { telemetryAdapte
                         />
                       </div>
 
-                      <div className="mt-2 grid grid-cols-2 gap-2 text-[10px] font-mono text-white/70">
+                      <div className="mt-2 grid grid-cols-2 gap-2 text-[10px] font-mono text-muted">
                         <div className="rounded-lg border border-white/8 bg-white/2 px-2 py-1">
-                          Queue depth: <span className="text-white/80">{lane.queueDepth}</span>
+                          Queue depth: <span className="text-foreground/80">{lane.queueDepth}</span>
                         </div>
                         <div className="rounded-lg border border-white/8 bg-white/2 px-2 py-1">
-                          Latency load: <span className="text-white/80">{Math.round(latencyRatio * 100)}%</span>
+                          Latency load: <span className="text-foreground/80">{Math.round(latencyRatio * 100)}%</span>
                         </div>
                       </div>
                     </motion.div>
@@ -350,7 +350,7 @@ export default function EventBusShowcase({ telemetryAdapter }: { telemetryAdapte
 
         {/* Legend (only shown in showcase mode) */}
         {!composerOpen && (
-        <motion.div variants={fadeUp} className="mt-6 flex flex-wrap items-center justify-center gap-3 sm:gap-6 text-[11px] text-white/70">
+        <motion.div variants={fadeUp} className="mt-6 flex flex-wrap items-center justify-center gap-3 sm:gap-6 text-[11px] text-muted">
           <div className="flex items-center gap-2">
             <div className="h-2 w-8 rounded-full bg-linear-to-r from-brand-cyan/25 to-brand-purple/25 ring-1 ring-white/8" />
             <span>Event queue</span>
@@ -360,12 +360,12 @@ export default function EventBusShowcase({ telemetryAdapter }: { telemetryAdapte
             <span>Event in transit</span>
           </div>
           <div className="flex items-center gap-2">
-            <svg width="16" height="8" className="text-white/70">
+            <svg width="16" height="8" className="text-muted">
               <line x1="0" y1="4" x2="16" y2="4" stroke="currentColor" strokeWidth="0.5" strokeDasharray="2 2" />
             </svg>
             <span>Connection to bus</span>
           </div>
-          <div className="rounded-full border border-white/8 bg-white/2 px-3 py-1.5 font-mono tracking-wide text-white/70">
+          <div className="rounded-full border border-white/8 bg-white/2 px-3 py-1.5 font-mono tracking-wide text-muted">
             Typical response cycle: {averageLatency}ms
           </div>
         </motion.div>

@@ -1,12 +1,28 @@
 /* ── Language-specific font families ─────────────── */
-/* Noto Sans fonts loaded via <link> in layout.tsx */
+/* Noto Sans fonts loaded via <link> in layout.tsx   */
+/* Font tokens defined in tokens.css                 */
 
-[data-lang="en"] { --font-lang: var(--font-geist-sans), system-ui, sans-serif; }
-[data-lang="zh"] { --font-lang: "Noto Sans SC", var(--font-geist-sans), system-ui, sans-serif; }
-[data-lang="ar"] { --font-lang: "Noto Sans Arabic", var(--font-geist-sans), system-ui, sans-serif; }
-[data-lang="hi"] { --font-lang: "Noto Sans Devanagari", var(--font-geist-sans), system-ui, sans-serif; }
-[data-lang="ru"] { --font-lang: var(--font-geist-sans), system-ui, sans-serif; }
-[data-lang="id"] { --font-lang: var(--font-geist-sans), system-ui, sans-serif; }
+/* Latin-script languages — use base Geist Sans */
+[data-lang="en"] { --font-lang: var(--font-latin); }
+[data-lang="es"] { --font-lang: var(--font-latin); }
+[data-lang="fr"] { --font-lang: var(--font-latin); }
+[data-lang="de"] { --font-lang: var(--font-latin); }
+[data-lang="id"] { --font-lang: var(--font-latin); }
+[data-lang="vi"] { --font-lang: var(--font-latin); }
+[data-lang="cs"] { --font-lang: var(--font-latin); }
+[data-lang="ru"] { --font-lang: var(--font-latin); }
+
+/* CJK languages — need dedicated Noto Sans variants */
+[data-lang="zh"] { --font-lang: var(--font-cjk-zh); }
+[data-lang="ja"] { --font-lang: var(--font-cjk-ja); }
+[data-lang="ko"] { --font-lang: var(--font-cjk-ko); }
+
+/* Arabic script */
+[data-lang="ar"] { --font-lang: var(--font-arabic); }
+
+/* Indic scripts */
+[data-lang="hi"] { --font-lang: var(--font-devanagari); }
+[data-lang="bn"] { --font-lang: var(--font-bengali); }
 
 body {
   font-family: var(--font-lang, var(--font-geist-sans), system-ui, sans-serif);
@@ -14,24 +30,49 @@ body {
 
 /* ── Script-specific line-height adjustments ─────── */
 
+/* CJK scripts need taller line-height for dense glyphs */
 [data-lang="zh"] body,
-[data-lang="ar"] body,
-[data-lang="hi"] body {
+[data-lang="ja"] body,
+[data-lang="ko"] body {
   line-height: 1.85;
 }
 
+/* Arabic and Indic scripts need more vertical breathing room */
+[data-lang="ar"] body,
+[data-lang="hi"] body,
+[data-lang="bn"] body {
+  line-height: 1.85;
+}
+
+/* CJK heading line-heights */
 [data-lang="zh"] .typo-hero,
-[data-lang="ar"] .typo-hero,
-[data-lang="hi"] .typo-hero {
+[data-lang="ja"] .typo-hero,
+[data-lang="ko"] .typo-hero {
   line-height: 1.3;
 }
 
 [data-lang="zh"] .typo-heading,
+[data-lang="ja"] .typo-heading,
+[data-lang="ko"] .typo-heading,
+[data-lang="zh"] .typo-heading-lg,
+[data-lang="ja"] .typo-heading-lg,
+[data-lang="ko"] .typo-heading-lg {
+  line-height: 1.45;
+}
+
+/* Arabic / Indic heading line-heights */
+[data-lang="ar"] .typo-hero,
+[data-lang="hi"] .typo-hero,
+[data-lang="bn"] .typo-hero {
+  line-height: 1.3;
+}
+
 [data-lang="ar"] .typo-heading,
 [data-lang="hi"] .typo-heading,
-[data-lang="zh"] .typo-heading-lg,
+[data-lang="bn"] .typo-heading,
 [data-lang="ar"] .typo-heading-lg,
-[data-lang="hi"] .typo-heading-lg {
+[data-lang="hi"] .typo-heading-lg,
+[data-lang="bn"] .typo-heading-lg {
   line-height: 1.45;
 }
 
@@ -42,18 +83,38 @@ body {
   text-align: right;
 }
 
+/* Auto-apply RTL for Arabic */
+[data-lang="ar"] body {
+  direction: rtl;
+}
+
 /* ── Language-specific letter-spacing ────────────── */
 
+/* Arabic: slightly tighter for connected script */
 [data-lang="ar"] .typo-heading,
 [data-lang="ar"] .typo-heading-lg,
 [data-lang="ar"] .typo-hero {
   letter-spacing: -0.01em;
 }
 
+/* CJK: slightly wider for ideographic clarity */
 [data-lang="zh"] .typo-heading,
 [data-lang="zh"] .typo-heading-lg,
-[data-lang="zh"] .typo-hero {
+[data-lang="zh"] .typo-hero,
+[data-lang="ja"] .typo-heading,
+[data-lang="ja"] .typo-heading-lg,
+[data-lang="ja"] .typo-hero,
+[data-lang="ko"] .typo-heading,
+[data-lang="ko"] .typo-heading-lg,
+[data-lang="ko"] .typo-hero {
   letter-spacing: 0.02em;
+}
+
+/* Bengali: slight positive spacing for clarity */
+[data-lang="bn"] .typo-heading,
+[data-lang="bn"] .typo-heading-lg,
+[data-lang="bn"] .typo-hero {
+  letter-spacing: 0.01em;
 }
 
 /* ── Semantic typography classes ──────────────────── */

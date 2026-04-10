@@ -11,11 +11,12 @@ export interface LandingSection {
 
 export const LANDING_SECTIONS: LandingSection[] = [
   { id: "hero", label: "Hero" },
-  { id: "use-cases", label: "Tools", scrollMap: false },
+  { id: "use-cases", label: "Tools" },
+  { id: "playground-split", label: "Playground" },
   { id: "vision", label: "Vision" },
-  { id: "pricing", label: "Pricing" },
+  { id: "pricing", label: "Compare" },
   { id: "faq", label: "FAQ" },
-  { id: "download", label: "Download", scrollMap: false },
+  { id: "download", label: "Download" },
 ];
 
 /** Sections shown in the Navbar badge (navbar !== false). */

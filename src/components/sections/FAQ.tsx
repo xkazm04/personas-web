@@ -7,6 +7,7 @@ import SectionWrapper from "@/components/SectionWrapper";
 import GradientText from "@/components/GradientText";
 import { fadeUp, staggerContainer, TRANSITION_FAST, TRANSITION_NORMAL } from "@/lib/animations";
 
+import { useTranslation } from "@/i18n/useTranslation";
 import TerminalIllustration from "@/components/illustrations/TerminalIllustration";
 import ShieldIllustration from "@/components/illustrations/ShieldIllustration";
 import PricingIllustration from "@/components/illustrations/PricingIllustration";
@@ -22,43 +23,13 @@ type FAQItem = {
 
 /* ── FAQ data ─────────────────────────────────────────────────────────── */
 
-const faqs: FAQItem[] = [
-  {
-    question: "What is Claude CLI and why do I need it?",
-    answer:
-      "Claude CLI is Anthropic's official command-line interface for interacting with Claude. Personas uses it under the hood to run your agents locally — it handles authentication, model access, and streaming responses. You'll need an active Claude Pro or Max subscription and the CLI installed before launching Personas.",
-    illustration: <TerminalIllustration />,
-  },
-  {
-    question: "Does Personas collect any telemetry or usage data?",
-    answer:
-      "No. Personas runs entirely on your machine with zero telemetry. We don't collect analytics, usage metrics, or any personal data. Your prompts, agent configurations, and execution logs never leave your device unless you explicitly enable cloud execution.",
-    illustration: <ShieldIllustration />,
-  },
-  {
-    question: "How does the pricing model work?",
-    answer:
-      "The desktop app is free forever with unlimited local agents. Cloud plans (Starter, Pro, Team) add 24/7 execution, remote workers, and team features on top. You always need your own Claude subscription — we never touch your Anthropic bill. Think of Personas as the orchestration layer, and Claude as the engine.",
-    illustration: <PricingIllustration />,
-  },
-  {
-    question: "What is Bring Your Own Infrastructure (BYOI)?",
-    answer:
-      "BYOI lets you connect your own cloud provider credentials (e.g., Fly.io API tokens) instead of using our managed infrastructure. Personas provisions and manages the workers on your account, giving you unlimited execution without per-month caps — you only pay your cloud provider directly.",
-    illustration: <CloudInfraIllustration />,
-  },
-  {
-    question: "What's the difference between local and cloud execution?",
-    answer:
-      "Local execution runs agents on your machine using Claude CLI — it's instant, free, and private, but stops when your computer sleeps. Cloud execution runs agents on remote workers 24/7, supports event-bus bridging across environments, and enables team collaboration. You can switch between modes per-agent.",
-    illustration: <LocalCloudIllustration />,
-  },
-  {
-    question: "Are there any limits on the number of agents?",
-    answer:
-      "Locally, there are no limits — create as many agents as you want. Cloud plans have worker limits (1–5 depending on tier) and monthly execution caps. Pro and Team plans include burst auto-scaling for traffic spikes. BYOI removes all caps entirely.",
-    illustration: <AgentGridIllustration />,
-  },
+const illustrations = [
+  <TerminalIllustration key="terminal" />,
+  <ShieldIllustration key="shield" />,
+  <PricingIllustration key="pricing" />,
+  <CloudInfraIllustration key="cloud" />,
+  <LocalCloudIllustration key="local" />,
+  <AgentGridIllustration key="grid" />,
 ];
 
 function FAQCard({
@@ -133,6 +104,13 @@ function FAQCard({
 }
 
 export default function FAQ() {
+  const { t } = useTranslation();
+
+  const faqs: FAQItem[] = t.faqSection.questions.map((q, i) => ({
+    question: q.q,
+    answer: q.a,
+    illustration: illustrations[i],
+  }));
   const midpoint = Math.ceil(faqs.length / 2);
   const leftColumn = faqs.slice(0, midpoint);
   const rightColumn = faqs.slice(midpoint);
@@ -175,11 +153,11 @@ export default function FAQ() {
     <SectionWrapper id="faq" aria-labelledby="faq-heading">
       <motion.div variants={fadeUp} className="text-center relative">
         <h2 id="faq-heading" className="text-4xl font-extrabold tracking-tight sm:text-5xl md:text-7xl drop-shadow-md">
-          Frequently{" "}
-          <GradientText className="drop-shadow-lg">asked</GradientText>
+          {t.faqSection.heading}{" "}
+          <GradientText className="drop-shadow-lg">{t.faqSection.headingGradient}</GradientText>
         </h2>
         <p className="mx-auto mt-8 max-w-3xl text-lg text-muted-dark leading-relaxed font-light">
-          Everything you need to know about getting started with Personas.
+          {t.faqSection.subtitle}
         </p>
       </motion.div>
 
@@ -219,16 +197,16 @@ export default function FAQ() {
             <MessageCircle className="h-5 w-5 text-brand-purple" />
           </div>
           <div className="text-center sm:text-left">
-            <p className="text-sm font-medium">Still have questions?</p>
-            <p className="mt-1 text-xs text-muted-dark">
-              Join our Discord community for help and discussion.
+            <p className="text-sm font-medium">{t.faqSection.stillQuestions}</p>
+            <p className="mt-1 text-sm text-muted-dark">
+              {t.faqSection.discordSubtitle}
             </p>
           </div>
           <a
             href="#"
             className="inline-flex items-center rounded-full border border-brand-purple/20 bg-brand-purple/10 px-6 py-2 text-sm font-medium text-brand-purple transition-all duration-300 hover:border-brand-purple/30 hover:bg-brand-purple/15 focus-visible:ring-2 focus-visible:ring-brand-purple/40 focus-visible:outline-none"
           >
-            Join Discord
+            {t.faqSection.joinDiscord}
           </a>
         </div>
       </motion.div>

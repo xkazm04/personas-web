@@ -12,6 +12,7 @@ import EventBusVisualization from "@/components/dashboard/EventBusVisualization"
 import EventBusStats from "@/components/dashboard/EventBusStats";
 import EventDetailDrawer from "@/components/dashboard/EventDetailDrawer";
 import { useEventStore } from "@/stores/eventStore";
+import { useTranslation } from "@/i18n/useTranslation";
 import { SWARM_PERSONAS, SWARM_SOURCES, EVENT_TYPES, type SwarmNode } from "@/lib/mock-dashboard-data";
 
 type PageTab = "events" | "subscriptions" | "visualization";
@@ -32,6 +33,7 @@ const EVENT_TYPE_COLORS: Record<string, string> = {
 };
 
 export default function EventsPage() {
+  const { t } = useTranslation();
   const events = useEventStore((s) => s.events);
   const subscriptions = useEventStore((s) => s.subscriptions);
   const [pageTab, setPageTab] = useState<PageTab>("events");
@@ -79,7 +81,7 @@ export default function EventsPage() {
 
       <motion.div variants={fadeUp} className="mb-6">
         <h1 className="flex items-center gap-2.5 text-2xl font-bold tracking-tight">
-          <GradientText variant="silver">Events</GradientText>
+          <GradientText variant="silver">{t.eventsPage.title}</GradientText>
           <span className="relative flex h-2.5 w-2.5">
             {alive && (
               <span className="absolute inset-0 animate-ping rounded-full bg-emerald-400/60" />
@@ -88,7 +90,7 @@ export default function EventsPage() {
           </span>
         </h1>
         <p className="mt-1 text-sm text-muted-dark">
-          Event bus activity across all agents
+          {t.eventsPage.subtitle}
         </p>
         {/* Page tab switcher */}
         <div className="mt-4 flex overflow-x-auto rounded-lg border border-white/[0.06] bg-white/[0.02] p-0.5 w-fit max-w-full scrollbar-hide">
@@ -101,7 +103,7 @@ export default function EventsPage() {
             }`}
           >
             <Radio className="h-3.5 w-3.5" />
-            Events
+            {t.eventsPage.tabEvents}
             <span className="ml-1 rounded-full bg-white/[0.06] px-1.5 py-0.5 text-[10px] tabular-nums">
               {events.length}
             </span>
@@ -115,7 +117,7 @@ export default function EventsPage() {
             }`}
           >
             <Zap className="h-3.5 w-3.5" />
-            Subscriptions
+            {t.eventsPage.tabSubscriptions}
             <span className="ml-1 rounded-full bg-white/[0.06] px-1.5 py-0.5 text-[10px] tabular-nums">
               {subscriptions.length}
             </span>
@@ -129,7 +131,7 @@ export default function EventsPage() {
             }`}
           >
             <Orbit className="h-3.5 w-3.5" />
-            Visualization
+            {t.eventsPage.tabVisualization}
           </button>
         </div>
       </motion.div>

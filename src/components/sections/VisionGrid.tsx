@@ -148,7 +148,7 @@ export default function VisionGrid() {
 
               <div className="relative flex flex-col items-center px-3 py-5">
                 {/* Name above icon */}
-                <span className="text-[11px] font-medium text-foreground/80 truncate max-w-full mb-3">
+                <span className="text-sm font-medium text-foreground/80 truncate max-w-full mb-3">
                   {agent.name}
                 </span>
 
@@ -164,7 +164,7 @@ export default function VisionGrid() {
                 <div className="text-sm font-mono font-semibold text-foreground tabular-nums tracking-tight">
                   {agent.executions.toLocaleString()}
                 </div>
-                <div className="text-[9px] font-mono uppercase tracking-wider text-muted-dark mb-2">
+                <div className="text-sm font-mono uppercase tracking-wider text-muted-dark mb-2">
                   executions
                 </div>
 
@@ -182,7 +182,7 @@ export default function VisionGrid() {
                   </div>
                   <div className="text-center mt-1">
                     <span
-                      className="text-[10px] font-mono font-medium tabular-nums"
+                      className="text-sm font-mono font-medium tabular-nums"
                       style={{ color: rateColor }}
                     >
                       {agent.rate}%

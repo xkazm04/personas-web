@@ -2,9 +2,11 @@
 
 import { useState } from "react";
 import Link from "next/link";
-import { navItems, useNavState, type NavItem } from "./DashboardNavigation";
+import { useNavItems, useNavState, type NavItem } from "./DashboardNavigation";
+import { useTranslation } from "@/i18n/useTranslation";
 
 export default function MobileBottomNav() {
+  const navItems = useNavItems();
   const { getActive, getBadge } = useNavState();
 
   return (
@@ -59,7 +61,7 @@ function MobileMoreMenu({
         }`}
       >
         <MoreHorizontalIcon className="h-5 w-5" />
-        <span className="leading-none">More</span>
+        <MoreLabel />
       </button>
 
       {open && (
@@ -90,6 +92,11 @@ function MobileMoreMenu({
       )}
     </div>
   );
+}
+
+function MoreLabel() {
+  const { t } = useTranslation();
+  return <span className="leading-none">{t.dashboard.more}</span>;
 }
 
 function MoreHorizontalIcon({ className }: { className?: string }) {

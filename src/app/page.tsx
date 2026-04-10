@@ -1,5 +1,6 @@
 import type { ComponentType } from "react";
 import type { StageColor } from "@/lib/colors";
+import Image from "next/image";
 import Navbar from "@/components/Navbar";
 import Hero from "@/components/sections/Hero";
 import Footer from "@/components/sections/Footer";
@@ -27,6 +28,32 @@ const scrollMapItems = SCROLL_MAP_SECTIONS.map((s) => ({
 const sectionIds = scrollMapItems.map((item) => item.href.replace("#", ""));
 
 /* ── JSON-LD structured data for SEO ──────────────────────────────── */
+
+const organizationJsonLd = {
+  "@context": "https://schema.org",
+  "@type": "Organization",
+  name: "Personas",
+  url: "https://personas.ai",
+  logo: "https://personas.ai/imgs/logo.png",
+  description:
+    "Build intelligent AI agents in natural language. Orchestrate them locally or in the cloud.",
+  sameAs: [],
+};
+
+const softwareJsonLd = {
+  "@context": "https://schema.org",
+  "@type": "SoftwareApplication",
+  name: "Personas",
+  applicationCategory: "DeveloperApplication",
+  operatingSystem: "macOS, Windows, Linux",
+  description:
+    "Build intelligent AI agents in natural language. Orchestrate them locally or in the cloud. No workflow diagrams. No code.",
+  offers: {
+    "@type": "Offer",
+    price: "0",
+    priceCurrency: "USD",
+  },
+};
 
 const faqJsonLd = {
   "@context": "https://schema.org",
@@ -120,7 +147,7 @@ const sections: SectionConfig[] = [
   { Component: LazyUseCases,        glow: "emerald", fromColor: "cyan",    toColor: "emerald", dividerFrom: "cyan",    dividerTo: "emerald" },
   { Component: LazyPlaygroundSplit, glow: "cyan",    fromColor: "emerald", toColor: "cyan",    dividerFrom: "emerald", dividerTo: "cyan" },
   { Component: LazyVision,         glow: "purple",  fromColor: "cyan",    toColor: "purple",  dividerFrom: "cyan",    dividerTo: "purple", wrapperId: "vision" },
-  { Component: LazyPricing,        glow: "purple",  fromColor: "purple",  toColor: "purple",  dividerFrom: "purple",  dividerTo: "purple" },
+  { Component: LazyPricing,        glow: "purple",  fromColor: "purple",  toColor: "purple",  dividerFrom: "purple",  dividerTo: "purple", wrapperId: "pricing" },
   { Component: LazyFAQ,            glow: "cyan",    fromColor: "purple",  toColor: "cyan",    dividerFrom: "purple",  dividerTo: "cyan" },
   { Component: LazyDownloadCTA,    glow: "cyan",    fromColor: "cyan",                        dividerFrom: "cyan",    dividerTo: "cyan" },
 ];
@@ -128,7 +155,31 @@ const sections: SectionConfig[] = [
 export default function Home() {
   return (
     <SectionObserverProvider sectionIds={sectionIds}>
+      {/* Decorative cinematic illustration — top-left ambient layer */}
+      <div className="pointer-events-none absolute top-0 left-0 z-0 w-[560px] h-[420px] md:w-[720px] md:h-[540px]">
+        <Image
+          src="/imgs/illustration_cyber_cinematic.png"
+          alt=""
+          width={720}
+          height={540}
+          className="h-full w-full object-cover opacity-[0.98] mix-blend-lighten"
+          style={{
+            maskImage: "radial-gradient(ellipse 90% 85% at 15% 25%, black 0%, rgba(0,0,0,0.5) 35%, transparent 65%)",
+            WebkitMaskImage: "radial-gradient(ellipse 90% 85% at 15% 25%, black 0%, rgba(0,0,0,0.5) 35%, transparent 65%)",
+          }}
+          priority
+          aria-hidden="true"
+        />
+      </div>
       <Navbar />
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(organizationJsonLd) }}
+      />
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(softwareJsonLd) }}
+      />
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(faqJsonLd) }}

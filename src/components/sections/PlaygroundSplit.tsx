@@ -223,7 +223,7 @@ function getStatusIcon(status: NodeStatus, Icon: LucideIcon) {
     case "active":
       return <Loader2 className="h-4 w-4 text-brand-cyan animate-spin" />;
     default:
-      return <Icon className="h-4 w-4 text-white/30" />;
+      return <Icon className="h-4 w-4 text-muted-dark" />;
   }
 }
 
@@ -285,13 +285,13 @@ function SyntaxPrompt({ text }: { text: string }) {
 
   return (
     <div className="font-mono text-sm leading-relaxed">
-      <span className="text-white/30">{">"} </span>
+      <span className="text-muted-dark">{">"} </span>
       {parts.map((part, i) => {
         const isKeyword = /^(inbox|draft|replies|urgent|emails|PR|#142|bugs|style|issues|missing|tests|#engineering|#product|channels|24h|calendar|focus|time|next week)$/i.test(part);
         return (
           <span
             key={i}
-            className={isKeyword ? "text-brand-cyan" : "text-white/70"}
+            className={isKeyword ? "text-brand-cyan" : "text-muted"}
           >
             {part}
           </span>
@@ -500,7 +500,7 @@ export default function PlaygroundSplit() {
             key={ex.label}
             onClick={() => handleExampleClick(i)}
             disabled={isRunning}
-            className={`group flex items-center gap-2 rounded-full border px-4 py-2 text-xs font-medium transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed ${
+            className={`group flex items-center gap-2 rounded-full border px-4 py-2 text-sm font-medium transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed ${
               activeExample === i
                 ? "border-brand-cyan/40 bg-brand-cyan/10 text-foreground"
                 : "border-white/10 text-muted-dark hover:border-white/20 hover:text-foreground hover:bg-white/5"
@@ -513,7 +513,7 @@ export default function PlaygroundSplit() {
         {phase === "done" && (
           <button
             onClick={handleReset}
-            className="flex items-center gap-1.5 rounded-full border border-white/10 px-4 py-2 text-xs font-medium text-muted-dark hover:border-white/20 hover:text-foreground hover:bg-white/5 transition-all"
+            className="flex items-center gap-1.5 rounded-full border border-white/10 px-4 py-2 text-sm font-medium text-muted-dark hover:border-white/20 hover:text-foreground hover:bg-white/5 transition-all"
           >
             <RotateCcw className="h-3.5 w-3.5" />
             Reset
@@ -539,7 +539,7 @@ export default function PlaygroundSplit() {
               {/* Line numbers + prompt */}
               <div className="rounded-xl border border-white/[0.06] bg-white/[0.02] p-4">
                 <div className="flex gap-4">
-                  <div className="flex flex-col items-end font-mono text-[11px] text-white/15 leading-relaxed select-none pt-[2px]">
+                  <div className="flex flex-col items-end font-mono text-sm text-muted-dark leading-relaxed select-none pt-[2px]">
                     {[1, 2, 3, 4, 5].map((n) => (
                       <span key={n}>{n}</span>
                     ))}
@@ -554,11 +554,11 @@ export default function PlaygroundSplit() {
                           exit={{ opacity: 0, y: -10 }}
                           transition={{ duration: reduced ? 0 : 0.3 }}
                         >
-                          <div className="font-mono text-[11px] text-white/30 mb-1">
+                          <div className="font-mono text-sm text-muted-dark mb-1">
                             {"// Agent instruction"}
                           </div>
                           <SyntaxPrompt text={activeExampleData.prompt} />
-                          <div className="font-mono text-[11px] text-white/20 mt-3">
+                          <div className="font-mono text-sm text-muted-dark mt-3">
                             {"// Detected intent:"}
                           </div>
                           <AnimatePresence>
@@ -567,7 +567,7 @@ export default function PlaygroundSplit() {
                                 initial={{ opacity: 0 }}
                                 animate={{ opacity: 1 }}
                                 transition={{ delay: reduced ? 0 : 0.5, duration: 0.3 }}
-                                className="font-mono text-[11px] text-brand-cyan"
+                                className="font-mono text-sm text-brand-cyan"
                               >
                                 {activeExampleData.intentText}
                               </motion.div>
@@ -577,7 +577,7 @@ export default function PlaygroundSplit() {
                       </AnimatePresence>
                     ) : (
                       <div className="flex items-center h-full">
-                        <p className="font-mono text-[11px] text-foreground">
+                        <p className="font-mono text-sm text-foreground">
                           Select a prompt to begin...
                         </p>
                       </div>
@@ -594,7 +594,7 @@ export default function PlaygroundSplit() {
                     animate={{ opacity: 1, y: 0 }}
                     transition={{ delay: reduced ? 0 : 0.8, duration: 0.4 }}
                   >
-                    <div className="text-[10px] font-mono uppercase tracking-wider text-white/25 mb-2">
+                    <div className="text-sm font-mono uppercase tracking-wider text-muted-dark mb-2">
                       Selected Tools
                     </div>
                     <div className="flex flex-wrap gap-2">
@@ -609,7 +609,7 @@ export default function PlaygroundSplit() {
                             type: "spring",
                             stiffness: 300,
                           }}
-                          className="flex items-center gap-1.5 rounded-lg border border-white/10 bg-white/[0.03] px-3 py-1.5 text-[11px] font-mono text-white/50"
+                          className="flex items-center gap-1.5 rounded-lg border border-white/10 bg-white/[0.03] px-3 py-1.5 text-sm font-mono text-muted"
                         >
                           <tool.icon className="h-3 w-3 text-brand-purple/70" />
                           {tool.label}
@@ -629,10 +629,10 @@ export default function PlaygroundSplit() {
                     transition={{ duration: 0.4 }}
                     className="rounded-xl border border-brand-emerald/20 bg-brand-emerald/5 p-4"
                   >
-                    <div className="text-[10px] font-mono uppercase tracking-wider text-brand-emerald/50 mb-1.5">
+                    <div className="text-sm font-mono uppercase tracking-wider text-brand-emerald/50 mb-1.5">
                       Result
                     </div>
-                    <p className="font-mono text-xs text-brand-emerald/80 leading-relaxed">
+                    <p className="font-mono text-sm text-brand-emerald/80 leading-relaxed">
                       {activeExampleData.resultText}
                     </p>
                   </motion.div>
@@ -662,10 +662,10 @@ export default function PlaygroundSplit() {
                     <div className="mx-auto w-16 h-16 rounded-2xl border border-white/[0.06] bg-white/[0.02] flex items-center justify-center">
                       <Cpu className="h-7 w-7 text-foreground" />
                     </div>
-                    <p className="text-xs text-foreground font-mono">
+                    <p className="text-sm text-foreground font-mono">
                       Agent mind visualization
                     </p>
-                    <p className="text-[10px] text-foreground font-mono">
+                    <p className="text-sm text-foreground font-mono">
                       Select a prompt to see the flowchart
                     </p>
                   </div>
@@ -744,12 +744,12 @@ export default function PlaygroundSplit() {
                         >
                           {getStatusIcon(node.status, node.icon)}
                           <span
-                            className={`text-[10px] font-medium truncate ${
+                            className={`text-sm font-medium truncate ${
                               node.status === "pending"
-                                ? "text-white/30"
+                                ? "text-muted-dark"
                                 : node.status === "active"
                                 ? "text-brand-cyan"
-                                : "text-white/60"
+                                : "text-muted"
                             }`}
                           >
                             {node.label}
@@ -766,7 +766,7 @@ export default function PlaygroundSplit() {
 
         {/* Bottom execution bar */}
         <div className="flex items-center justify-between border-t border-white/[0.04] px-5 py-2.5 bg-white/[0.01]">
-          <div className="flex items-center gap-3 text-[10px] font-mono tracking-wider uppercase text-white/20">
+          <div className="flex items-center gap-3 text-sm font-mono tracking-wider uppercase text-muted-dark">
             <span>Split View</span>
             {isRunning && (
               <motion.span
@@ -785,10 +785,10 @@ export default function PlaygroundSplit() {
                 animate={{ opacity: 1 }}
                 className="flex items-center gap-1.5"
               >
-                <Clock className="h-3 w-3 text-white/20" />
+                <Clock className="h-3 w-3 text-muted-dark" />
                 <span
-                  className={`text-[11px] font-mono tabular-nums ${
-                    phase === "done" ? "text-brand-emerald/60" : "text-white/30"
+                  className={`text-sm font-mono tabular-nums ${
+                    phase === "done" ? "text-brand-emerald/60" : "text-muted-dark"
                   }`}
                 >
                   {(elapsedMs / 1000).toFixed(1)}s
@@ -799,7 +799,7 @@ export default function PlaygroundSplit() {
               <motion.span
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1 }}
-                className="text-[10px] font-mono tracking-wider uppercase text-brand-emerald/60"
+                className="text-sm font-mono tracking-wider uppercase text-brand-emerald/60"
               >
                 execution complete
               </motion.span>

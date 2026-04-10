@@ -16,9 +16,9 @@
   /* ── Core palette ───────────────────────────────────────────────────── */
   --background: #0a0a12;
   --foreground: #f0f0f5;
-  --muted: #a0a0b0;
-  --muted-dark: #60607a;
-  --muted-foreground: #94a3b8;
+  --muted: #d0d0dd;
+  --muted-dark: #c0c0d0;
+  --muted-foreground: #b4bfcc;
 
   /* ── Semantic ────────────────────────────────────────────────────────── */
   --primary: #3b82f6;
@@ -77,4 +77,20 @@
   /* ── Typography ─────────────────────────────────────────────────────── */
   --font-sans: var(--font-geist-sans, ui-sans-serif, system-ui, sans-serif);
   --font-mono: var(--font-geist-mono, ui-monospace, monospace);
+
+  /* ── Font tokens per script group ──────────────────────────────────── */
+  /* Latin / Cyrillic / Vietnamese / Central European — Geist covers all */
+  --font-latin: var(--font-geist-sans, ui-sans-serif, system-ui, sans-serif);
+
+  /* CJK scripts */
+  --font-cjk-zh: "Noto Sans SC", var(--font-latin);
+  --font-cjk-ja: "Noto Sans JP", var(--font-latin);
+  --font-cjk-ko: "Noto Sans KR", var(--font-latin);
+
+  /* Arabic script */
+  --font-arabic: "Noto Sans Arabic", var(--font-latin);
+
+  /* Indic scripts */
+  --font-devanagari: "Noto Sans Devanagari", var(--font-latin);
+  --font-bengali: "Noto Sans Bengali", var(--font-latin);
 }

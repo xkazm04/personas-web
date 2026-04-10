@@ -105,7 +105,7 @@ export default function DesignEngine() {
         </motion.div>
         <motion.p variants={fadeUp} className="mx-auto mt-4 max-w-xl text-muted-dark font-light">
           No forms. No config files. Just tell Claude what you need — it asks the right questions,
-          generates the full agent config, and <span className="text-white/80 font-medium">deploys in one click.</span>
+          generates the full agent config, and <span className="text-foreground/80 font-medium">deploys in one click.</span>
         </motion.p>
       </motion.div>
 
@@ -125,13 +125,13 @@ export default function DesignEngine() {
                 <Sparkles className="h-4 w-4 text-brand-purple" />
               </div>
               <div>
-                <div className="text-xs font-medium text-white/80">Design Engine</div>
-                <div className="text-[10px] text-white/30 font-mono">Powered by Claude</div>
+                <div className="text-sm font-medium text-foreground/80">Design Engine</div>
+                <div className="text-sm text-muted-dark font-mono">Powered by Claude</div>
               </div>
             </div>
             <div className="flex items-center gap-1.5">
               <div className={`h-1.5 w-1.5 rounded-full ${phase === "running" ? "bg-brand-amber animate-pulse" : phase === "done" ? "bg-brand-emerald" : "bg-white/20"}`} />
-              <span className="text-[10px] font-mono text-white/30">
+              <span className="text-sm font-mono text-muted-dark">
                 {phase === "running" ? "designing..." : phase === "done" ? "complete" : "ready"}
               </span>
             </div>
@@ -141,7 +141,7 @@ export default function DesignEngine() {
           <div ref={chatRef} className="h-[420px] overflow-y-auto px-5 py-4 space-y-4 scrollbar-hide">
             {phase === "idle" && (
               <div className="flex h-full items-center justify-center">
-                <p className="text-xs text-white/15 font-mono text-center">Scroll to start design conversation...</p>
+                <p className="text-sm text-muted-dark font-mono text-center">Scroll to start design conversation...</p>
               </div>
             )}
 
@@ -180,7 +180,7 @@ export default function DesignEngine() {
                     >
                       <div className="flex items-center gap-2 rounded-full border border-brand-emerald/15 bg-brand-emerald/5 px-4 py-1.5">
                         <CheckCircle className="h-3 w-3 text-brand-emerald/60" />
-                        <span className="text-[11px] font-mono text-brand-emerald/70">{msg.content}</span>
+                        <span className="text-sm font-mono text-brand-emerald/70">{msg.content}</span>
                       </div>
                     </motion.div>
                   );
@@ -205,16 +205,16 @@ export default function DesignEngine() {
                     </div>
                     <div className={`max-w-[80%] rounded-xl border px-4 py-2.5 ${
                       isUser
-                        ? "rounded-tr-sm border-brand-cyan/15 bg-brand-cyan/6 text-white/80"
-                        : "rounded-tl-sm border-white/6 bg-white/3 text-white/70"
+                        ? "rounded-tr-sm border-brand-cyan/15 bg-brand-cyan/6 text-foreground/80"
+                        : "rounded-tl-sm border-white/6 bg-white/3 text-muted"
                     }`}>
                       {msg.content.split("\n").map((line, j) => (
-                        <p key={j} className="text-[13px] leading-relaxed">
+                        <p key={j} className="text-sm leading-relaxed">
                           {line.split(/(\*\*[^*]+\*\*|`[^`]+`)/g).map((part, k) => {
                             if (part.startsWith("**") && part.endsWith("**"))
-                              return <strong key={k} className="text-white/90 font-semibold">{part.slice(2, -2)}</strong>;
+                              return <strong key={k} className="text-foreground font-semibold">{part.slice(2, -2)}</strong>;
                             if (part.startsWith("`") && part.endsWith("`"))
-                              return <code key={k} className="text-brand-cyan/80 text-[11px] font-mono bg-brand-cyan/5 px-1 py-0.5 rounded">{part.slice(1, -1)}</code>;
+                              return <code key={k} className="text-brand-cyan/80 text-sm font-mono bg-brand-cyan/5 px-1 py-0.5 rounded">{part.slice(1, -1)}</code>;
                             return <span key={k}>{part}</span>;
                           })}
                         </p>
@@ -228,7 +228,7 @@ export default function DesignEngine() {
 
           {/* Input bar */}
           <div className="border-t border-white/4 px-5 py-3 flex items-center gap-3">
-            <div className="flex-1 rounded-lg border border-white/6 bg-white/2 px-4 py-2.5 text-xs text-white/20 font-mono">
+            <div className="flex-1 rounded-lg border border-white/6 bg-white/2 px-4 py-2.5 text-sm text-muted-dark font-mono">
               Describe what your agent should do...
             </div>
             <div className="flex h-9 w-9 items-center justify-center rounded-lg border border-brand-purple/20 bg-brand-purple/10">
@@ -237,7 +237,7 @@ export default function DesignEngine() {
           </div>
 
           {/* Footer */}
-          <div className="flex items-center justify-between border-t border-white/4 px-5 py-2 text-[9px] font-mono text-white/15 uppercase tracking-wider">
+          <div className="flex items-center justify-between border-t border-white/4 px-5 py-2 text-sm font-mono text-muted-dark uppercase tracking-wider">
             <span>6-step design pipeline</span>
             {phase === "done" && (
               <button

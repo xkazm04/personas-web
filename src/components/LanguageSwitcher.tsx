@@ -7,11 +7,19 @@ import { useI18nStore, type Language } from "@/stores/i18nStore";
 
 const languages: { code: Language; flag: string; label: string }[] = [
   { code: "ar", flag: "\uD83C\uDDF8\uD83C\uDDE6", label: "\u0627\u0644\u0639\u0631\u0628\u064A\u0629" },
-  { code: "zh", flag: "\uD83C\uDDE8\uD83C\uDDF3", label: "\u4E2D\u6587" },
+  { code: "bn", flag: "\uD83C\uDDE7\uD83C\uDDE9", label: "\u09AC\u09BE\u0982\u09B2\u09BE" },
+  { code: "cs", flag: "\uD83C\uDDE8\uD83C\uDDFF", label: "\u010Ce\u0161tina" },
+  { code: "de", flag: "\uD83C\uDDE9\uD83C\uDDEA", label: "Deutsch" },
   { code: "en", flag: "\uD83C\uDDFA\uD83C\uDDF8", label: "English" },
+  { code: "es", flag: "\uD83C\uDDEA\uD83C\uDDF8", label: "Espa\u00F1ol" },
+  { code: "fr", flag: "\uD83C\uDDEB\uD83C\uDDF7", label: "Fran\u00E7ais" },
   { code: "hi", flag: "\uD83C\uDDEE\uD83C\uDDF3", label: "\u0939\u093F\u0928\u094D\u0926\u0940" },
   { code: "id", flag: "\uD83C\uDDEE\uD83C\uDDE9", label: "Bahasa" },
+  { code: "ja", flag: "\uD83C\uDDEF\uD83C\uDDF5", label: "\u65E5\u672C\u8A9E" },
+  { code: "ko", flag: "\uD83C\uDDF0\uD83C\uDDF7", label: "\uD55C\uAD6D\uC5B4" },
   { code: "ru", flag: "\uD83C\uDDF7\uD83C\uDDFA", label: "\u0420\u0443\u0441\u0441\u043A\u0438\u0439" },
+  { code: "vi", flag: "\uD83C\uDDFB\uD83C\uDDF3", label: "Ti\u1EBFng Vi\u1EC7t" },
+  { code: "zh", flag: "\uD83C\uDDE8\uD83C\uDDF3", label: "\u4E2D\u6587" },
 ];
 
 export default function LanguageSwitcher() {

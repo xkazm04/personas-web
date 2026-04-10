@@ -10,6 +10,7 @@ import SectionHeading from "@/components/SectionHeading";
 import PrimaryCTA from "@/components/PrimaryCTA";
 import SectionWrapper from "@/components/SectionWrapper";
 import WaitlistModal from "@/components/WaitlistModal";
+import { useTranslation } from "@/i18n/useTranslation";
 
 const APP_VERSION = process.env.NEXT_PUBLIC_APP_VERSION ?? "0.1.0";
 const RELEASE_TITLE = process.env.NEXT_PUBLIC_RELEASE_TITLE || "Latest";
@@ -17,14 +18,21 @@ const RELEASE_DATE = process.env.NEXT_PUBLIC_RELEASE_DATE ?? "";
 const DOWNLOAD_URL = process.env.NEXT_PUBLIC_DOWNLOAD_URL;
 const SEVEN_DAYS_MS = 7 * 24 * 60 * 60 * 1000;
 
-const platforms = [
-  { icon: Monitor, label: "Windows", available: !!DOWNLOAD_URL },
-  { icon: Apple, label: "macOS", available: false },
-  { icon: Terminal, label: "Linux", available: false },
-] as const;
+type Platform = { icon: typeof Monitor; label: string; available: boolean };
+
+function usePlatforms(): Platform[] {
+  const { t } = useTranslation();
+  return [
+    { icon: Monitor, label: t.downloadSection.windows, available: !!DOWNLOAD_URL },
+    { icon: Apple, label: t.downloadSection.macos, available: false },
+    { icon: Terminal, label: t.downloadSection.linux, available: false },
+  ];
+}
 
 export default function DownloadCTA() {
-  const [waitlistPlatform, setWaitlistPlatform] = useState<(typeof platforms)[number] | null>(null);
+  const { t } = useTranslation();
+  const platforms = usePlatforms();
+  const [waitlistPlatform, setWaitlistPlatform] = useState<Platform | null>(null);
 
   const isFresh = useMemo(() => {
     if (!RELEASE_DATE) return false;
@@ -49,21 +57,21 @@ export default function DownloadCTA() {
 
       <div className="mx-auto max-w-2xl text-center">
         <motion.div variants={fadeUp}>
-          <span className={`inline-block rounded-full border border-brand-cyan/20 bg-brand-cyan/5 px-3.5 py-1 text-[11px] font-medium tracking-wider uppercase text-brand-cyan/70 font-mono mb-6${isFresh ? " animate-badge-pulse" : ""}`}>
+          <span className={`inline-block rounded-full border border-brand-cyan/20 bg-brand-cyan/5 px-3.5 py-1 text-sm font-medium tracking-wider uppercase text-brand-cyan/70 font-mono mb-6${isFresh ? " animate-badge-pulse" : ""}`}>
             v{APP_VERSION} — {RELEASE_TITLE}
           </span>
         </motion.div>
 
         <motion.div variants={fadeUp}>
           <SectionHeading id="download-heading">
-            Ready to build your
+            {t.downloadSection.heading}
             <br />
-            <span className="font-light text-white/80">first</span> <GradientText className="drop-shadow-lg">agent?</GradientText>
+            <GradientText className="drop-shadow-lg">{t.downloadSection.headingGradient}</GradientText>
           </SectionHeading>
         </motion.div>
 
         <motion.p variants={fadeUp} className="mt-8 text-lg text-muted-dark leading-relaxed sm:text-xl font-light">
-          Download Personas for free. Start building in minutes.
+          {t.downloadSection.subtitle}
         </motion.p>
 
         <motion.div
@@ -77,9 +85,9 @@ export default function DownloadCTA() {
           }}
         >
           {[
-            DOWNLOAD_URL ? "Download installer" : "Join waitlist",
-            "Connect Claude CLI",
-            "Launch first agent",
+            DOWNLOAD_URL ? t.downloadSection.downloadInstaller : t.downloadSection.joinWaitlist,
+            t.downloadSection.connectCli,
+            t.downloadSection.launchAgent,
           ].map((step, index) => {
             const glowColor = index === 0
               ? "rgba(6,182,212,0.5)"
@@ -118,8 +126,8 @@ export default function DownloadCTA() {
                   },
                 }}
               >
-                <p className="text-[10px] font-mono uppercase tracking-wider text-muted-dark">Step {index + 1}</p>
-                <p className="mt-1 text-xs text-muted">{step}</p>
+                <p className="text-sm font-mono uppercase tracking-wider text-muted-dark">{t.common.step} {index + 1}</p>
+                <p className="mt-1 text-sm text-muted">{step}</p>
               </motion.div>
             );
           })}
@@ -133,14 +141,14 @@ export default function DownloadCTA() {
                 href="/api/download"
                 onClick={() => trackDownloadClick("windows")}
                 icon={Download}
-                label="Download for Windows"
+                label={t.hero.downloadForWindows}
                 variant="solid"
               />
             ) : (
               <PrimaryCTA
                 onClick={() => setWaitlistPlatform(platforms[0])}
                 icon={Download}
-                label="Join Windows Waitlist"
+                label={t.hero.joinWaitlist}
                 variant="solid"
               />
             )}
@@ -148,7 +156,7 @@ export default function DownloadCTA() {
               href="#features"
               className="inline-flex w-[min(100%,20rem)] items-center justify-center rounded-full border border-white/[0.08] bg-white/[0.015] px-6 py-3 text-sm font-medium text-muted transition-colors duration-300 hover:border-white/[0.15] hover:text-foreground sm:w-auto focus-visible:ring-2 focus-visible:ring-brand-cyan/40 focus-visible:outline-none"
             >
-              Explore capabilities first
+              {t.downloadSection.exploreFirst}
             </a>
           </div>
         </motion.div>
@@ -159,7 +167,7 @@ export default function DownloadCTA() {
             p.available ? (
               <div
                 key={p.label}
-                className="flex items-center gap-2 rounded-full border border-brand-cyan/20 bg-brand-cyan/5 px-4 py-2 text-xs font-medium text-brand-cyan shadow-[0_0_15px_rgba(6,182,212,0.06)] transition-all duration-300"
+                className="flex items-center gap-2 rounded-full border border-brand-cyan/20 bg-brand-cyan/5 px-4 py-2 text-sm font-medium text-brand-cyan shadow-[0_0_15px_rgba(6,182,212,0.06)] transition-all duration-300"
               >
                 <p.icon className="h-3.5 w-3.5" />
                 {p.label}
@@ -169,40 +177,40 @@ export default function DownloadCTA() {
               <button
                 key={p.label}
                 onClick={() => setWaitlistPlatform(p)}
-                className="flex cursor-pointer items-center gap-2 rounded-full border border-white/[0.04] bg-white/[0.01] px-4 py-2 text-xs font-medium text-muted-dark transition-all duration-300 hover:border-brand-purple/20 hover:bg-brand-purple/5 hover:text-brand-purple/80 focus-visible:ring-2 focus-visible:ring-brand-cyan/40 focus-visible:outline-none"
+                className="flex cursor-pointer items-center gap-2 rounded-full border border-white/[0.04] bg-white/[0.01] px-4 py-2 text-sm font-medium text-muted-dark transition-all duration-300 hover:border-brand-purple/20 hover:bg-brand-purple/5 hover:text-brand-purple/80 focus-visible:ring-2 focus-visible:ring-brand-cyan/40 focus-visible:outline-none"
               >
                 <p.icon className="h-3.5 w-3.5" />
                 {p.label}
-                <span className="text-[10px]">notify me</span>
+                <span className="text-sm">{t.common.notifyMe}</span>
               </button>
             )
           )}
         </motion.div>
 
         {/* Trust signals */}
-        <motion.div variants={fadeUp} className="mt-8 flex flex-wrap items-center justify-center gap-3 text-xs text-muted-dark sm:gap-6">
+        <motion.div variants={fadeUp} className="mt-8 flex flex-wrap items-center justify-center gap-3 text-sm text-muted-dark sm:gap-6">
           {DOWNLOAD_URL && (
             <>
               <span className="flex items-center gap-1.5">
                 <div className="h-1 w-1 rounded-full bg-brand-cyan/40" />
-                Requires Claude CLI
+                {t.downloadSection.requiresCli}
               </span>
               <span className="hidden h-3 w-px bg-white/[0.06] sm:inline-block" />
               <span className="flex items-center gap-1.5">
                 <div className="h-1 w-1 rounded-full bg-brand-cyan/40" />
-                12 MB installer
+                {t.downloadSection.installerSize}
               </span>
               <span className="hidden h-3 w-px bg-white/[0.06] sm:inline-block" />
             </>
           )}
           <span className="flex items-center gap-1.5">
             <div className="h-1 w-1 rounded-full bg-brand-cyan/40" />
-            No telemetry
+            {t.downloadSection.noTelemetry}
           </span>
           <span className="hidden h-3 w-px bg-white/[0.06] sm:inline-block" />
           <span className="flex items-center gap-1.5">
             <div className="h-1 w-1 rounded-full bg-brand-cyan/40" />
-            Local-first security
+            {t.downloadSection.localFirst}
           </span>
         </motion.div>
       </div>

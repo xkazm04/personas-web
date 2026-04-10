@@ -292,7 +292,7 @@ export default function GenomeTree() {
           className="mx-auto mt-4 max-w-xl text-muted-dark font-light"
         >
           Watch prompt lineages branch, compete, and evolve.{" "}
-          <span className="text-white/80 font-medium">
+          <span className="text-foreground/80 font-medium">
             The fittest survive, dead ends fade away.
           </span>
         </motion.p>
@@ -581,10 +581,10 @@ export default function GenomeTree() {
               <button
                 onClick={startGrow}
                 disabled={growing}
-                className={`flex items-center gap-1.5 rounded-lg border px-3 py-1.5 text-xs font-mono transition-all duration-300 ${
+                className={`flex items-center gap-1.5 rounded-lg border px-3 py-1.5 text-sm font-mono transition-all duration-300 ${
                   growing
-                    ? "border-brand-emerald/30 bg-brand-emerald/10 text-brand-emerald/70"
-                    : "border-white/10 bg-white/5 text-white/50 hover:border-brand-cyan/20 hover:bg-brand-cyan/5 hover:text-brand-cyan/80"
+                    ? "border-brand-emerald/30 bg-brand-emerald/10 text-brand-emerald"
+                    : "border-white/10 bg-white/5 text-muted hover:border-brand-cyan/20 hover:bg-brand-cyan/5 hover:text-brand-cyan/80"
                 }`}
               >
                 <Play className="h-3 w-3" />
@@ -593,13 +593,13 @@ export default function GenomeTree() {
               <button
                 onClick={resetTree}
                 disabled={growing}
-                className="flex items-center gap-1.5 rounded-lg border border-white/10 bg-white/5 px-3 py-1.5 text-xs font-mono text-white/50 transition-all hover:border-white/20 hover:text-white/70 disabled:opacity-30"
+                className="flex items-center gap-1.5 rounded-lg border border-white/10 bg-white/5 px-3 py-1.5 text-sm font-mono text-muted transition-all hover:border-white/20 hover:text-muted disabled:opacity-30"
               >
                 <RotateCcw className="h-3 w-3" />
                 New tree
               </button>
             </div>
-            <div className="flex items-center gap-3 text-[10px] font-mono text-white/25">
+            <div className="flex items-center gap-3 text-sm font-mono text-muted-dark">
               <span className="flex items-center gap-1">
                 <span className="h-2 w-6 rounded-full bg-gradient-to-r from-brand-cyan via-brand-purple to-brand-emerald" />
                 best path
@@ -655,10 +655,10 @@ export default function GenomeTree() {
                           )}
                         </div>
                         <div>
-                          <div className="text-sm font-mono font-bold text-white/90">
+                          <div className="text-sm font-mono font-bold text-foreground">
                             {selectedNodeData.version}
                           </div>
-                          <div className="text-[10px] font-mono text-white/30">
+                          <div className="text-sm font-mono text-muted-dark">
                             Generation {selectedNodeData.generation}
                           </div>
                         </div>
@@ -672,7 +672,7 @@ export default function GenomeTree() {
                         <div className="text-2xl font-bold font-mono" style={{ color: selectedNodeData.color }}>
                           {selectedNodeData.fitness}
                         </div>
-                        <div className="text-[9px] font-mono text-white/25">fitness</div>
+                        <div className="text-sm font-mono text-muted-dark">fitness</div>
                       </motion.div>
                     </div>
 
@@ -697,11 +697,11 @@ export default function GenomeTree() {
                           key={row.label}
                           className="flex items-center justify-between rounded-md border border-white/4 bg-white/2 px-3 py-2"
                         >
-                          <span className="text-[10px] font-mono text-white/30">
+                          <span className="text-sm font-mono text-muted-dark">
                             {row.label}
                           </span>
                           <span
-                            className="text-xs font-mono"
+                            className="text-sm font-mono"
                             style={{
                               color:
                                 row.label === "Status"
@@ -746,11 +746,11 @@ export default function GenomeTree() {
                     exit={{ opacity: 0 }}
                     className="flex flex-col items-center justify-center h-[160px] text-center"
                   >
-                    <GitBranch className="h-8 w-8 text-white/10 mb-3" />
-                    <div className="text-xs font-mono text-white/20">
+                    <GitBranch className="h-8 w-8 text-muted-dark mb-3" />
+                    <div className="text-sm font-mono text-muted-dark">
                       Click a node on the tree
                     </div>
-                    <div className="text-[10px] font-mono text-white/10 mt-1">
+                    <div className="text-sm font-mono text-muted-dark mt-1">
                       to inspect its lineage and fitness
                     </div>
                   </motion.div>
@@ -824,7 +824,7 @@ export default function GenomeTree() {
                         className="h-3.5 w-3.5"
                         style={{ color: `${stat.color}80` }}
                       />
-                      <span className="text-[11px] font-mono text-white/40">
+                      <span className="text-sm font-mono text-muted">
                         {stat.label}
                       </span>
                     </div>
@@ -847,7 +847,7 @@ export default function GenomeTree() {
           <div className="rounded-xl border border-white/8 bg-black/50 backdrop-blur-xl p-4">
             <div className="flex items-center gap-2 mb-3">
               <Star className="h-3.5 w-3.5 text-brand-amber/60" />
-              <span className="text-[10px] font-mono text-white/30">
+              <span className="text-sm font-mono text-muted-dark">
                 Best evolutionary path
               </span>
             </div>
@@ -866,17 +866,17 @@ export default function GenomeTree() {
                         scale: isVisible ? 1 : 0.8,
                       }}
                       transition={{ delay: i * 0.1 }}
-                      className={`flex items-center gap-1 rounded-md border px-2 py-1 text-[9px] font-mono transition-all ${
+                      className={`flex items-center gap-1 rounded-md border px-2 py-1 text-sm font-mono transition-all ${
                         selectedNode === nodeId
                           ? "border-brand-emerald/30 bg-brand-emerald/10 text-brand-emerald/80"
-                          : "border-white/6 bg-white/3 text-white/40 hover:border-white/15 hover:text-white/60"
+                          : "border-white/6 bg-white/3 text-muted hover:border-white/15 hover:text-muted"
                       }`}
                     >
                       <span>{node.version}</span>
                       <span className="text-brand-emerald/60">{node.fitness}</span>
                     </motion.button>
                     {i < treeData.bestPath.length - 1 && (
-                      <span className="text-white/10 text-[8px]">&rarr;</span>
+                      <span className="text-muted-dark text-sm">&rarr;</span>
                     )}
                   </div>
                 );

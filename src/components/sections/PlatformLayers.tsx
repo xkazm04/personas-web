@@ -37,7 +37,7 @@ const layers = [
     },
     description: "One-click cloud deployment. Local to cloud, hybrid execution, bring your own infra.",
     visual: (
-      <div className="flex items-center gap-2 font-mono text-[10px]">
+      <div className="flex items-center gap-2 font-mono text-sm">
         <span className="text-emerald-400/60">local</span>
         <svg width="32" height="8" className="text-emerald-500/40">
           <line x1="0" y1="4" x2="28" y2="4" stroke="currentColor" strokeWidth="1" strokeDasharray="3 3" />
@@ -64,7 +64,7 @@ const layers = [
     },
     description: "Event bus chaining — Email triggers Slack triggers GitHub. Runs locally.",
     visual: (
-      <div className="flex items-center gap-1.5 font-mono text-[10px]">
+      <div className="flex items-center gap-1.5 font-mono text-sm">
         {["Em", "Sl", "GH"].map((n, i) => (
           <div key={n} className="flex items-center gap-1.5">
             <div className="flex h-7 w-7 items-center justify-center rounded-lg border border-cyan-500/20 bg-cyan-500/10 text-cyan-400">
@@ -95,10 +95,10 @@ const layers = [
     },
     description: "Natural language design — prompt scaffolding, feasibility analysis, tool suggestions.",
     visual: (
-      <div className="font-mono text-[10px] space-y-0.5">
-        <div><span className="text-purple-400">role</span><span className="text-white/20">: </span><span className="text-emerald-400">&quot;Email triage&quot;</span></div>
-        <div><span className="text-purple-400">tools</span><span className="text-white/20">: </span><span className="text-amber-400">[gmail, slack]</span></div>
-        <div><span className="text-purple-400">healing</span><span className="text-white/20">: </span><span className="text-emerald-400">true</span></div>
+      <div className="font-mono text-sm space-y-0.5">
+        <div><span className="text-purple-400">role</span><span className="text-muted-dark">: </span><span className="text-emerald-400">&quot;Email triage&quot;</span></div>
+        <div><span className="text-purple-400">tools</span><span className="text-muted-dark">: </span><span className="text-amber-400">[gmail, slack]</span></div>
+        <div><span className="text-purple-400">healing</span><span className="text-muted-dark">: </span><span className="text-emerald-400">true</span></div>
       </div>
     ),
   },
@@ -212,13 +212,13 @@ export default function PlatformLayers() {
 
       {/* Header */}
       <motion.div variants={fadeUp} className="text-center mb-20">
-        <span className="inline-block rounded-full border border-brand-purple/30 bg-brand-purple/10 px-4 py-1.5 text-xs font-semibold tracking-widest uppercase text-brand-purple shadow-[0_0_15px_rgba(168,85,247,0.2)] font-mono mb-6">
+        <span className="inline-block rounded-full border border-brand-purple/30 bg-brand-purple/10 px-4 py-1.5 text-sm font-semibold tracking-widest uppercase text-brand-purple shadow-[0_0_15px_rgba(168,85,247,0.2)] font-mono mb-6">
           Architecture
         </span>
         <SectionHeading>
           <GradientText>Layered</GradientText> by design
         </SectionHeading>
-        <p className="mt-6 mx-auto max-w-2xl text-lg text-white/40 leading-relaxed font-light">
+        <p className="mt-6 mx-auto max-w-2xl text-lg text-muted-dark leading-relaxed font-light">
           Four architectural layers that compose into a complete AI agent platform.
           Scroll to explore the stack.
         </p>
@@ -288,7 +288,7 @@ function StackLabelsAnimated({
           transition={{ delay: 0.3 + i * 0.1, duration: 0.4 }}
           viewport={{ once: true }}
         >
-          <span className={`text-[10px] font-mono uppercase tracking-wider ${layer.tw.text} opacity-60`}>
+          <span className={`text-sm font-mono uppercase tracking-wider ${layer.tw.text} opacity-60`}>
             {layer.label}
           </span>
           <div className="w-6 h-px" style={{ background: `rgba(${layer.rgb}, 0.3)` }} />
@@ -427,11 +427,11 @@ function LayerAnimated({
               <h3 className={`text-sm font-semibold ${layer.tw.text}`}>
                 {layer.pillar}
               </h3>
-              <span className="text-[10px] font-mono text-white/20 uppercase tracking-wider">
+              <span className="text-sm font-mono text-muted-dark uppercase tracking-wider">
                 {layer.label}
               </span>
             </div>
-            <p className="text-xs text-white/40 leading-relaxed line-clamp-2">
+            <p className="text-sm text-muted-dark leading-relaxed line-clamp-2">
               {layer.description}
             </p>
           </div>

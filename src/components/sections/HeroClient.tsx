@@ -11,6 +11,7 @@ import PrimaryCTA from "@/components/PrimaryCTA";
 import { useLiveStats } from "@/hooks/useLiveStats";
 import { useAnimationPauseRegister } from "@/hooks/useAnimationPause";
 import { completedCount, totalPhases, progressPercent } from "@/data/roadmap-phases";
+import { useTranslation } from "@/i18n/useTranslation";
 
 function formatCompact(n: number): string {
   if (n >= 1_000_000) return `${(n / 1_000_000).toFixed(1).replace(/\.0$/, "")}M`;
@@ -25,7 +26,7 @@ const phases = Array.from({ length: totalPhases }, (_, i) => ({
   completed: i < completedCount,
 }));
 
-function CommandCenterIllustration() {
+function CommandCenterIllustration({ phasesLabel }: { phasesLabel: string }) {
   const uid = useId();
   const arcGradientId = `${uid}-arcGrad`;
   const arcGlowId = `${uid}-arcGlow`;
@@ -79,8 +80,8 @@ function CommandCenterIllustration() {
         <span className="text-4xl font-bold tracking-tight text-white drop-shadow-[0_0_10px_rgba(255,255,255,0.3)]">
           {percentage}%
         </span>
-        <span className="text-[10px] text-muted-dark font-mono tracking-wider mt-1">
-          {completedCount}/{totalPhases} PHASES
+        <span className="text-sm text-muted-dark font-mono tracking-wider mt-1">
+          {completedCount}/{totalPhases} {phasesLabel}
         </span>
       </div>
     </div>
@@ -88,17 +89,18 @@ function CommandCenterIllustration() {
 }
 
 export default function HeroClient() {
-  const operatingModes = ["Design in one sentence", "Run locally for free", "Scale to cloud when needed"];
+  const { t } = useTranslation();
+  const operatingModes = [t.hero.mode1, t.hero.mode2, t.hero.mode3];
   const liveStats = useLiveStats();
   const DOWNLOAD_URL = process.env.NEXT_PUBLIC_DOWNLOAD_URL;
   const sectionRef = useRef<HTMLElement>(null);
   useAnimationPauseRegister(sectionRef);
 
   const heroStats = useMemo(() => [
-    { value: String(liveStats.totalAgents), label: "Agents" },
-    { value: formatCompact(liveStats.totalExecutions), label: "Executions" },
-    { value: `${liveStats.totalTemplates}+`, label: "Templates" },
-  ], [liveStats.totalAgents, liveStats.totalExecutions, liveStats.totalTemplates]);
+    { value: String(liveStats.totalAgents), label: t.hero.agents },
+    { value: formatCompact(liveStats.totalExecutions), label: t.hero.executions },
+    { value: `${liveStats.totalTemplates}+`, label: t.hero.templates },
+  ], [liveStats.totalAgents, liveStats.totalExecutions, liveStats.totalTemplates, t]);
 
   // 3D Tilt effect for the right card
   const x = useMotionValue(0);
@@ -140,24 +142,23 @@ export default function HeroClient() {
         {/* Left — text */}
         <div className="text-center lg:text-left">
           <motion.div variants={fadeUp}>
-            <span className="relative inline-flex items-center overflow-hidden rounded-full border border-brand-cyan/20 bg-brand-cyan/5 px-4 py-1.5 text-xs font-medium tracking-wider uppercase text-brand-cyan font-mono shadow-[0_0_15px_color-mix(in_srgb,var(--brand-cyan)_20%,transparent)]">
+            <span className="ml-[500px] relative inline-flex items-center overflow-hidden rounded-full border border-brand-cyan/80 bg-brand-cyan/5 px-4 py-1.5 text-lg font-bold tracking-wider uppercase text-brand-cyan font-mono shadow-[0_0_15px_color-mix(in_srgb,var(--brand-cyan)_20%,transparent)]">
               <span className="absolute inset-0 animate-shimmer bg-linear-to-r from-transparent via-brand-cyan/10 to-transparent" style={{ animationDuration: "3s" }} />
-              <span className="relative">AI Agent Platform</span>
+              <span className="relative">{t.hero.badge}</span>
             </span>
           </motion.div>
 
           <motion.div variants={fadeUp} className="mt-8 relative">
             <SectionHeading as="h1" id="hero-heading" className="leading-[1.05]">
-              <span className="block text-transparent bg-clip-text bg-linear-to-b from-foreground to-foreground/70 drop-shadow-[0_0_20px_color-mix(in_srgb,var(--foreground)_10%,transparent)]">Intelligent agents</span>
-              <GradientText className="block mt-2 drop-shadow-[0_0_30px_color-mix(in_srgb,var(--accent)_30%,transparent)]">that work for you</GradientText>
+              <span className="block text-transparent bg-clip-text bg-linear-to-b from-foreground to-foreground/70 drop-shadow-[0_0_20px_color-mix(in_srgb,var(--foreground)_10%,transparent)]">{t.hero.headingLine1}</span>
+              <GradientText className="block mt-2 drop-shadow-[0_0_30px_color-mix(in_srgb,var(--accent)_30%,transparent)]">{t.hero.headingLine2}</GradientText>
             </SectionHeading>
           </motion.div>
 
           <motion.div variants={fadeUp} className="mx-auto lg:mx-0 mt-8 h-px w-40 bg-linear-to-r from-brand-cyan/40 via-brand-purple/30 to-transparent shadow-[0_0_10px_color-mix(in_srgb,var(--brand-cyan)_50%,transparent)]" />
 
           <motion.p variants={fadeUp} className="mx-auto lg:mx-0 mt-8 max-w-2xl text-lg leading-relaxed text-muted-dark md:text-xl font-light">
-            Design agents in natural language. Orchestrate them locally or in the
-            cloud. <span className="text-foreground/80 font-medium drop-shadow-[0_0_5px_color-mix(in_srgb,var(--foreground)_50%,transparent)]">No workflow diagrams. No code.</span>
+            {t.hero.description} <span className="text-foreground/80 font-medium drop-shadow-[0_0_5px_color-mix(in_srgb,var(--foreground)_50%,transparent)]">{t.hero.descriptionBold}</span>
           </motion.p>
 
           <motion.div variants={fadeUp} className="mt-8 flex flex-wrap items-center justify-center gap-3 lg:justify-start">
@@ -165,7 +166,7 @@ export default function HeroClient() {
               <motion.span
                 key={mode}
                 whileHover={{ scale: 1.05 }}
-                className="rounded-full border border-white/8 bg-white/3 px-4 py-2 text-xs font-mono tracking-wide text-muted-dark transition-colors duration-300 hover:bg-white/6 hover:text-white hover:border-white/15 cursor-default"
+                className="rounded-full border border-white/8 bg-white/3 px-4 py-2 text-sm font-mono tracking-wide text-muted-dark transition-colors duration-300 hover:bg-white/6 hover:text-white hover:border-white/15 cursor-default"
               >
                 {mode}
               </motion.span>
@@ -177,17 +178,17 @@ export default function HeroClient() {
             <PrimaryCTA
               href={DOWNLOAD_URL ? "/api/download" : "#download"}
               icon={Download}
-              label={DOWNLOAD_URL ? "Download for Windows" : "Join Windows Waitlist"}
+              label={DOWNLOAD_URL ? t.hero.downloadForWindows : t.hero.joinWaitlist}
             />
             <a href="https://github.com" target="_blank" rel="noopener noreferrer" className="group relative flex w-[min(100%,20rem)] items-center justify-center gap-3 rounded-full border border-white/10 bg-white/2 px-8 py-4 text-sm font-medium text-muted transition-all duration-300 hover:border-white/20 hover:text-white hover:bg-white/5 hover:shadow-[0_0_20px_rgba(255,255,255,0.05)] sm:w-auto overflow-hidden focus-visible:ring-2 focus-visible:ring-brand-cyan/40 focus-visible:outline-none">
               <span className="absolute inset-0 w-full h-full bg-linear-to-r from-transparent via-white/10 to-transparent -translate-x-full group-hover:animate-[shimmer_1.5s_infinite]" />
               <Github className="h-5 w-5 transition-transform duration-300 group-hover:scale-110 group-hover:drop-shadow-[0_0_8px_rgba(255,255,255,0.8)]" />
-              <span className="relative z-10">View on GitHub</span>
+              <span className="relative z-10">{t.hero.viewOnGithub}</span>
             </a>
           </motion.div>
 
           <motion.div variants={fadeUp} className="mt-6 flex flex-col items-center gap-3 rounded-xl border border-white/6 bg-white/2 px-4 py-3 lg:hidden" data-testid="mock-stats">
-            <div className="text-[10px] font-mono uppercase tracking-wider text-muted-dark">Adoption snapshot</div>
+            <div className="text-sm font-mono uppercase tracking-wider text-muted-dark">{t.hero.adoptionSnapshot}</div>
             <div className="h-1 w-full max-w-xs overflow-hidden rounded-full bg-white/6">
               <div
                 className="h-full rounded-full bg-linear-to-r from-brand-cyan to-brand-purple"
@@ -198,7 +199,7 @@ export default function HeroClient() {
               {heroStats.map((stat) => (
                 <div key={stat.label}>
                   <div className="text-sm font-bold tracking-tight font-mono">{stat.value}</div>
-                  <div className="text-[10px] text-muted-dark font-mono tracking-wider">{stat.label}</div>
+                  <div className="text-sm text-muted-dark font-mono tracking-wider">{stat.label}</div>
                 </div>
               ))}
             </div>
@@ -214,16 +215,16 @@ export default function HeroClient() {
           style={{ rotateX, rotateY, transformStyle: "preserve-3d" }}
         >
           <div className="relative p-8 rounded-3xl border border-white/5 bg-white/2 backdrop-blur-md shadow-2xl transition-all duration-300 hover:border-white/10 hover:bg-white/5" style={{ transform: "translateZ(50px)" }}>
-            <CommandCenterIllustration />
+            <CommandCenterIllustration phasesLabel={t.hero.phases} />
             <div className="mt-6 flex flex-col items-center gap-4">
-              <div className="rounded-full border border-white/6 bg-white/2 px-4 py-1.5 text-[10px] font-mono tracking-wider text-muted-dark uppercase shadow-[0_0_10px_rgba(0,0,0,0.5)]">
-                Command Center
+              <div className="rounded-full border border-white/6 bg-white/2 px-4 py-1.5 text-sm font-mono tracking-wider text-muted-dark uppercase shadow-[0_0_10px_rgba(0,0,0,0.5)]">
+                {t.hero.commandCenter}
               </div>
               <div className="flex gap-6 text-center" data-testid="mock-stats">
                 {heroStats.map((stat) => (
                   <div key={stat.label} className="group">
                     <div className="text-xl font-bold tracking-tight transition-colors group-hover:text-brand-cyan drop-shadow-[0_0_5px_rgba(255,255,255,0.2)]">{stat.value}</div>
-                    <div className="text-[10px] text-muted-dark font-mono tracking-wider transition-colors group-hover:text-white/70">{stat.label}</div>
+                    <div className="text-sm text-muted-dark font-mono tracking-wider transition-colors group-hover:text-white/70">{stat.label}</div>
                   </div>
                 ))}
               </div>
@@ -235,7 +236,7 @@ export default function HeroClient() {
       {/* Scroll indicator */}
       <div className="absolute bottom-8 left-1/2 z-10 -translate-x-1/2">
         <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 1.5, duration: 1 }} className="flex flex-col items-center gap-1">
-          <span className="text-[10px] tracking-widest uppercase text-muted-dark">Scroll</span>
+          <span className="text-sm tracking-widest uppercase text-muted-dark">{t.hero.scroll}</span>
           <ChevronDown className="h-4 w-4 text-muted-dark animate-scroll-hint" />
         </motion.div>
       </div>

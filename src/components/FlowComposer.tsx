@@ -269,24 +269,24 @@ export default function FlowComposer({ onClose }: { onClose: () => void }) {
       {/* Header row */}
       <div className="flex items-center justify-between mb-6">
         <div>
-          <h3 className="text-lg font-bold text-white/90 sm:text-xl">
+          <h3 className="text-lg font-bold text-foreground sm:text-xl">
             <GradientText>Flow Composer</GradientText>
           </h3>
-          <p className="text-xs text-white/70 mt-1 font-mono">
+          <p className="text-xs text-muted mt-1 font-mono">
             Drag nodes, click producer then consumer to wire, share your flow
           </p>
         </div>
         <div className="flex items-center gap-2">
           <button
             onClick={() => setSidebarOpen(!sidebarOpen)}
-            className="flex items-center gap-1.5 rounded-full border border-brand-cyan/25 bg-brand-cyan/10 px-3 py-1.5 text-[11px] font-mono text-brand-cyan/80 hover:bg-brand-cyan/20 transition-colors focus-visible:ring-2 focus-visible:ring-brand-cyan/60 focus-visible:outline-none"
+            className="flex items-center gap-1.5 rounded-full border border-brand-cyan/25 bg-brand-cyan/10 px-3 py-1.5 text-sm font-mono text-brand-cyan/80 hover:bg-brand-cyan/20 transition-colors focus-visible:ring-2 focus-visible:ring-brand-cyan/60 focus-visible:outline-none"
           >
             <Plus className="w-3 h-3" />
             Add Node
           </button>
           <button
             onClick={shareUrl}
-            className="flex items-center gap-1.5 rounded-full border border-white/10 bg-white/5 px-3 py-1.5 text-[11px] font-mono text-white/80 hover:bg-white/10 transition-colors focus-visible:ring-2 focus-visible:ring-brand-cyan/60 focus-visible:outline-none"
+            className="flex items-center gap-1.5 rounded-full border border-white/10 bg-white/5 px-3 py-1.5 text-sm font-mono text-foreground/80 hover:bg-white/10 transition-colors focus-visible:ring-2 focus-visible:ring-brand-cyan/60 focus-visible:outline-none"
           >
             <Link2 className="w-3 h-3" />
             Share
@@ -294,7 +294,7 @@ export default function FlowComposer({ onClose }: { onClose: () => void }) {
           <button
             onClick={onClose}
             aria-label="Close Flow Composer"
-            className="flex items-center gap-1.5 rounded-full border border-white/10 bg-white/5 px-3 py-1.5 text-[11px] font-mono text-white/80 hover:bg-white/10 transition-colors focus-visible:ring-2 focus-visible:ring-brand-cyan/60 focus-visible:outline-none"
+            className="flex items-center gap-1.5 rounded-full border border-white/10 bg-white/5 px-3 py-1.5 text-sm font-mono text-foreground/80 hover:bg-white/10 transition-colors focus-visible:ring-2 focus-visible:ring-brand-cyan/60 focus-visible:outline-none"
           >
             <X className="w-3 h-3" />
           </button>
@@ -324,7 +324,7 @@ export default function FlowComposer({ onClose }: { onClose: () => void }) {
             exit={{ opacity: 0, x: 20 }}
             className="absolute right-0 top-14 z-20 w-56 max-h-80 overflow-y-auto rounded-xl border border-white/10 bg-black/90 backdrop-blur-xl p-3 shadow-2xl"
           >
-            <p className="text-[10px] font-mono text-white/70 uppercase tracking-wider mb-2">
+            <p className="text-sm font-mono text-muted uppercase tracking-wider mb-2">
               Available Integrations
             </p>
             <div className="space-y-1">
@@ -343,15 +343,15 @@ export default function FlowComposer({ onClose }: { onClose: () => void }) {
                       className="flex-1 flex items-center gap-2 rounded-lg px-2.5 py-1.5 text-left text-xs transition-colors hover:bg-white/8 disabled:opacity-30 disabled:cursor-not-allowed"
                     >
                       <tool.icon className="w-3.5 h-3.5 flex-shrink-0" style={{ color: tool.color }} />
-                      <span className="text-white/70">{tool.name}</span>
-                      <span className="ml-auto text-[9px] text-white/70 font-mono uppercase">
+                      <span className="text-muted">{tool.name}</span>
+                      <span className="ml-auto text-sm text-muted font-mono uppercase">
                         {tool.category === "both" ? "any" : tool.category === "producer" ? "prod" : "cons"}
                       </span>
                     </button>
                     {tool.category === "both" && !nodes.some((n) => n.toolId === tool.id && n.side === "consumer") && (
                       <button
                         onClick={() => addNode(tool.id, "consumer")}
-                        className="text-[9px] text-white/70 hover:text-white/80 font-mono px-1"
+                        className="text-sm text-muted hover:text-foreground/80 font-mono px-1"
                         title="Add as consumer"
                       >
                         +C
@@ -636,16 +636,16 @@ export default function FlowComposer({ onClose }: { onClose: () => void }) {
               <span className="relative">Build this flow in Personas</span>
             </a>
           </div>
-          <p className="text-[11px] text-white/70 font-mono">
+          <p className="text-sm text-muted font-mono">
             {nodes.length} nodes, {wires.length} connection{wires.length !== 1 ? "s" : ""} — ready to import
           </p>
         </motion.div>
       )}
 
       {/* Legend */}
-      <div className="mt-6 flex flex-wrap items-center justify-center gap-3 sm:gap-6 text-[11px] text-white/70">
+      <div className="mt-6 flex flex-wrap items-center justify-center gap-3 sm:gap-6 text-sm text-muted">
         <div className="flex items-center gap-2">
-          <Trash2 className="w-3 h-3 text-white/70" />
+          <Trash2 className="w-3 h-3 text-muted" />
           <span>Hover node to delete</span>
         </div>
         <div className="flex items-center gap-2">
@@ -653,7 +653,7 @@ export default function FlowComposer({ onClose }: { onClose: () => void }) {
           <span>Click producer → consumer to wire</span>
         </div>
         <div className="flex items-center gap-2">
-          <svg width="16" height="8" className="text-white/70" aria-hidden="true">
+          <svg width="16" height="8" className="text-muted" aria-hidden="true">
             <line x1="0" y1="4" x2="16" y2="4" stroke="currentColor" strokeWidth="0.5" strokeDasharray="2 2" />
           </svg>
           <span>Drag nodes to reposition</span>

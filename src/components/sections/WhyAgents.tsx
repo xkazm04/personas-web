@@ -215,7 +215,7 @@ function WorkflowPanel({ scenario }: { scenario: Scenario }) {
             <div className={`mt-0.5 flex h-5 w-5 shrink-0 items-center justify-center rounded-md ring-1 ${statusBg[step.status]}`}>
               <Icon className={`h-3 w-3 ${statusColor[step.status]}`} />
             </div>
-            <span className={`text-base leading-relaxed ${step.status === "error" ? "text-brand-rose/70 line-through decoration-brand-rose/30" : "text-white/70"}`}>
+            <span className={`text-base leading-relaxed ${step.status === "error" ? "text-brand-rose/70 line-through decoration-brand-rose/30" : "text-muted"}`}>
               {step.text}
             </span>
           </motion.div>
@@ -258,7 +258,7 @@ function AgentPanel({ scenario }: { scenario: Scenario }) {
           <div className="mt-0.5 flex h-5 w-5 shrink-0 items-center justify-center rounded-md bg-brand-purple/10 ring-1 ring-brand-purple/10">
             <Brain className="h-3 w-3 text-brand-purple/70" />
           </div>
-          <span className="text-base text-white/70 leading-relaxed italic">
+          <span className="text-base text-muted leading-relaxed italic">
             &ldquo;{thought}&rdquo;
           </span>
         </motion.div>
@@ -277,7 +277,7 @@ function AgentPanel({ scenario }: { scenario: Scenario }) {
           <div className="mt-0.5 flex h-5 w-5 shrink-0 items-center justify-center rounded-md bg-brand-cyan/10 ring-1 ring-brand-cyan/10">
             <Zap className="h-3 w-3 text-brand-cyan/70" />
           </div>
-          <span className="text-base text-white/70 leading-relaxed">{action}</span>
+          <span className="text-base text-muted leading-relaxed">{action}</span>
         </motion.div>
       ))}
 

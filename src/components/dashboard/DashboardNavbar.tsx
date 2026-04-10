@@ -6,8 +6,10 @@ import Image from "next/image";
 import Link from "next/link";
 import GradientText from "@/components/GradientText";
 import { useAuthStore } from "@/stores/authStore";
+import { useTranslation } from "@/i18n/useTranslation";
 
 export default function DashboardNavbar() {
+  const { t } = useTranslation();
   const user = useAuthStore((s) => s.user);
   const signOut = useAuthStore((s) => s.signOut);
   const isDemo = useAuthStore((s) => s.isDemo);
@@ -40,12 +42,12 @@ export default function DashboardNavbar() {
           </Link>
           <ChevronRight className="h-3.5 w-3.5 text-muted-dark" />
           <GradientText variant="silver" className="text-sm font-medium">
-            Dashboard
+            {t.dashboard.title}
           </GradientText>
           {isDemo && (
             <span className="flex items-center gap-1 rounded-full border border-amber-500/20 bg-amber-500/5 px-2.5 py-0.5 text-[10px] font-medium text-amber-400">
               <FlaskConical className="h-3 w-3" />
-              Demo
+              {t.common.demo}
             </span>
           )}
         </div>
@@ -74,7 +76,7 @@ export default function DashboardNavbar() {
             className="flex min-h-[44px] min-w-[44px] items-center justify-center gap-1.5 rounded-full border border-white/[0.06] bg-white/[0.03] px-2 py-1.5 text-xs text-muted transition-all duration-200 hover:bg-white/[0.06] hover:text-foreground sm:px-3"
           >
             <LogOut className="h-4 w-4 sm:h-3 sm:w-3" />
-            <span className="hidden sm:inline">Sign out</span>
+            <span className="hidden sm:inline">{t.common.signOut}</span>
           </button>
         </div>
       </nav>

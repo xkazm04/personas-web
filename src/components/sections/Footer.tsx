@@ -5,33 +5,37 @@ import { Github, Twitter, ChevronDown, MessageCircle } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 import Image from "next/image";
 import ThemeSwitcher from "@/components/ThemeSwitcher";
+import { useTranslation } from "@/i18n/useTranslation";
 
-const columns = [
-  {
-    title: "Product",
-    links: [
-      { label: "Features", href: "/#features" },
-      { label: "Use Cases", href: "/#use-cases" },
-      { label: "Pricing", href: "/#pricing" },
-      { label: "Download", href: "/#download" },
-    ],
-  },
-  {
-    title: "Resources",
-    links: [
-      { label: "Roadmap", href: "/roadmap" },
-    ],
-  },
-  {
-    title: "Legal",
-    links: [
-      { label: "Privacy", href: "/legal" },
-      { label: "Terms", href: "/legal" },
-    ],
-  },
-];
+function useColumns() {
+  const { t } = useTranslation();
+  return [
+    {
+      title: t.footer.product,
+      links: [
+        { label: t.sections.features, href: "/#features" },
+        { label: t.sections.useCases, href: "/#use-cases" },
+        { label: t.sections.pricing, href: "/#pricing" },
+        { label: t.sections.download, href: "/#download" },
+      ],
+    },
+    {
+      title: t.footer.resources,
+      links: [
+        { label: t.nav.roadmap, href: "/roadmap" },
+      ],
+    },
+    {
+      title: t.footer.legal,
+      links: [
+        { label: t.footer.privacy, href: "/legal" },
+        { label: t.footer.terms, href: "/legal" },
+      ],
+    },
+  ];
+}
 
-function FooterLinkColumn({ title, links }: (typeof columns)[number]) {
+function FooterLinkColumn({ title, links }: { title: string; links: { label: string; href: string }[] }) {
   const [open, setOpen] = useState(false);
 
   return (
@@ -41,7 +45,7 @@ function FooterLinkColumn({ title, links }: (typeof columns)[number]) {
         onClick={() => setOpen((v) => !v)}
         className="flex w-full items-center justify-between md:pointer-events-none md:cursor-default focus-visible:ring-2 focus-visible:ring-brand-cyan/40 focus-visible:outline-none focus-visible:rounded-lg"
       >
-        <h4 className="text-xs font-medium uppercase tracking-wider text-muted-dark">
+        <h4 className="text-sm font-medium uppercase tracking-wider text-muted-dark">
           {title}
         </h4>
         <ChevronDown
@@ -96,6 +100,8 @@ function FooterLinkColumn({ title, links }: (typeof columns)[number]) {
 }
 
 export default function Footer() {
+  const { t } = useTranslation();
+  const columns = useColumns();
   return (
     <footer className="relative border-t border-white/3 px-6 pb-8 pt-16">
       {/* Top gradient accent */}
@@ -116,8 +122,7 @@ export default function Footer() {
               <span className="font-semibold tracking-tight">Personas</span>
             </div>
             <p className="mt-4 max-w-sm text-sm leading-relaxed text-muted-dark">
-              AI agents that automate your work, so you can focus on what
-              matters most.
+              {t.footer.motto}
             </p>
             {/* Social */}
             <div className="mt-4 flex items-center gap-3">
@@ -142,12 +147,12 @@ export default function Footer() {
         </div>
 
         {/* Copyright */}
-        <div className="mt-16 flex flex-col items-center justify-between gap-4 border-t border-white/3 pt-6 text-xs text-muted-dark md:flex-row">
-          <span>&copy; {new Date().getFullYear()} Personas. All rights reserved.</span>
+        <div className="mt-16 flex flex-col items-center justify-between gap-4 border-t border-white/3 pt-6 text-sm text-muted-dark md:flex-row">
+          <span>&copy; {new Date().getFullYear()} {t.footer.copyright}</span>
           <ThemeSwitcher />
           <span className="text-muted-dark flex items-center gap-2">
             <div className="h-px w-4 bg-linear-to-r from-brand-cyan/20 to-transparent" />
-            Automate your work. Reclaim your time.
+            {t.footer.slogan}
             <div className="h-px w-4 bg-linear-to-l from-brand-cyan/20 to-transparent" />
           </span>
         </div>

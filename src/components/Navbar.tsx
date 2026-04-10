@@ -4,11 +4,9 @@ import { motion, useMotionValueEvent, useScroll, AnimatePresence } from "framer-
 import { useState, useEffect, useRef, useCallback } from "react";
 import { Download, Menu, X } from "lucide-react";
 import { usePathname } from "next/navigation";
-import Image from "next/image";
 import Link from "next/link";
-import useActiveSection from "@/hooks/useActiveSection";
-import { NAVBAR_SECTIONS } from "@/lib/constants";
 import LanguageSwitcher from "@/components/LanguageSwitcher";
+import { useTranslation } from "@/i18n/useTranslation";
 
 const preloadHowImage = () => {
   if (document.querySelector('link[data-preload-how-bg]')) return;
@@ -20,51 +18,22 @@ const preloadHowImage = () => {
   document.head.appendChild(link);
 };
 
-const routes = [
-  { label: "Personas", href: "/" },
-  { label: "Features", href: "/todo" },
-  { label: "How it works", href: "/how" },
-  { label: "Connections", href: "/connections" },
-  { label: "Roadmap", href: "/roadmap" },
-];
-
-const landingSections = NAVBAR_SECTIONS;
-
-const BADGE_VISIBLE_MS = 1500;
+function useRoutes() {
+  const { t } = useTranslation();
+  return [
+    { label: t.nav.home, href: "/" },
+    { label: t.nav.features, href: "/features" },
+    { label: t.nav.connections, href: "/connections" },
+    { label: t.nav.roadmap, href: "/roadmap" },
+  ];
+}
 
 export default function Navbar() {
+  const { t } = useTranslation();
+  const routes = useRoutes();
   const [scrolled, setScrolled] = useState(false);
   const { scrollY } = useScroll();
   const pathname = usePathname();
-  const isLanding = pathname === "/";
-
-  const activeSection = useActiveSection(isLanding ? landingSections : []);
-
-  // Transient badge: show on section change, hide after 1.5s
-  const [visibleBadge, setVisibleBadge] = useState<string | null>(null);
-  const timerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
-  const prevSectionRef = useRef<string | null>(null);
-
-  useEffect(() => {
-    // Skip "Hero" — no badge needed at the top
-    if (!activeSection || activeSection === "Hero") {
-      prevSectionRef.current = activeSection;
-      setVisibleBadge(null);
-      return;
-    }
-
-    if (activeSection !== prevSectionRef.current) {
-      prevSectionRef.current = activeSection;
-      setVisibleBadge(activeSection);
-
-      if (timerRef.current) clearTimeout(timerRef.current);
-      timerRef.current = setTimeout(() => setVisibleBadge(null), BADGE_VISIBLE_MS);
-    }
-
-    return () => {
-      if (timerRef.current) clearTimeout(timerRef.current);
-    };
-  }, [activeSection]);
 
   // Mobile menu
   const [mobileOpen, setMobileOpen] = useState(false);
@@ -135,38 +104,6 @@ export default function Navbar() {
     >
       <nav className="mx-auto max-w-6xl px-6 py-4">
         <div className="flex items-center justify-between">
-          {/* Logo */}
-          <Link href="/" className="group flex items-center gap-2.5 focus-ring">
-            <div className="relative flex h-8 w-8 items-center justify-center rounded-lg transition-transform duration-300 group-hover:scale-105">
-              <Image
-                src="/imgs/logo.png"
-                alt="Personas logo"
-                width={32}
-                height={32}
-                className="h-8 w-8 object-contain drop-shadow-[0_0_8px_rgba(6,182,212,0.3)]"
-                priority
-              />
-            </div>
-            <span className="text-lg font-semibold tracking-tight">Personas</span>
-          </Link>
-
-          {/* Active section badge */}
-          <AnimatePresence mode="wait">
-            {isLanding && visibleBadge && (
-              <motion.span
-                key={visibleBadge}
-                initial={{ opacity: 0, x: -6, scale: 0.9 }}
-                animate={{ opacity: 1, x: 0, scale: 1 }}
-                exit={{ opacity: 0, x: 4, scale: 0.95 }}
-                transition={{ duration: 0.25, ease: "easeOut" }}
-                className="hidden md:inline-flex items-center gap-1.5 rounded-full border border-brand-cyan/15 bg-brand-cyan/6 px-3 py-0.5 text-[11px] font-medium uppercase tracking-wider text-brand-cyan/80 backdrop-blur-sm"
-              >
-                <span className="h-1 w-1 rounded-full bg-brand-cyan/60 section-badge-dot" />
-                {visibleBadge}
-              </motion.span>
-            )}
-          </AnimatePresence>
-
           {/* Route tabs */}
           <div className="hidden items-center gap-1 rounded-full border border-white/6 bg-white/2 p-1 backdrop-blur-sm md:flex">
             {routes.map((route) => {
@@ -207,7 +144,7 @@ export default function Navbar() {
           >
             <div className="absolute inset-0 -translate-x-full bg-linear-to-r from-transparent via-brand-cyan/10 to-transparent transition-transform duration-700 group-hover:translate-x-full" />
             <Download className="relative h-3.5 w-3.5" />
-            <span className="relative">Download</span>
+            <span className="relative">{t.nav.download}</span>
           </Link>
 
           {/* Hamburger — mobile only */}
@@ -251,7 +188,7 @@ export default function Navbar() {
             >
               {/* Panel header */}
               <div className="flex items-center justify-between px-5 py-4 border-b border-white/6">
-                <span className="text-sm font-semibold tracking-tight text-foreground/80">Menu</span>
+                <span className="text-sm font-semibold tracking-tight text-foreground/80">{t.nav.menu}</span>
                 <button
                   onClick={closeMobile}
                   className="flex items-center justify-center min-w-11 min-h-11 rounded-lg text-muted hover:text-foreground hover:bg-white/5 transition-colors focus-ring"
@@ -260,25 +197,6 @@ export default function Navbar() {
                   <X className="h-4.5 w-4.5" />
                 </button>
               </div>
-
-              {/* Active section badge — mobile */}
-              <AnimatePresence mode="wait">
-                {isLanding && visibleBadge && (
-                  <motion.div
-                    key={visibleBadge}
-                    initial={{ opacity: 0, y: -4 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    exit={{ opacity: 0, y: -4 }}
-                    transition={{ duration: 0.2 }}
-                    className="mx-5 mt-4"
-                  >
-                    <span className="inline-flex items-center gap-1.5 rounded-full border border-brand-cyan/15 bg-brand-cyan/6 px-3 py-0.5 text-[11px] font-medium uppercase tracking-wider text-brand-cyan/80">
-                      <span className="h-1 w-1 rounded-full bg-brand-cyan/60 section-badge-dot" />
-                      {visibleBadge}
-                    </span>
-                  </motion.div>
-                )}
-              </AnimatePresence>
 
               {/* Route links */}
               <div className="flex flex-col gap-1 px-4 mt-4">
@@ -323,7 +241,7 @@ export default function Navbar() {
                 >
                   <div className="absolute inset-0 -translate-x-full bg-linear-to-r from-transparent via-brand-cyan/10 to-transparent transition-transform duration-700 group-hover:translate-x-full" />
                   <Download className="relative h-3.5 w-3.5" />
-                  <span className="relative">Download</span>
+                  <span className="relative">{t.nav.download}</span>
                 </Link>
               </div>
             </motion.div>

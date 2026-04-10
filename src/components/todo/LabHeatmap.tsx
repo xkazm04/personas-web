@@ -157,7 +157,7 @@ export default function LabHeatmap() {
           className="mx-auto mt-4 max-w-xl text-muted-dark font-light"
         >
           Live performance matrix across every model and dimension.{" "}
-          <span className="text-white/80 font-medium">
+          <span className="text-foreground/80 font-medium">
             Watch scores shift in real time.
           </span>
         </motion.p>
@@ -205,7 +205,7 @@ export default function LabHeatmap() {
                       : { opacity: 0, y: -10 }
                   }
                   transition={{ delay: ci * 0.06, duration: 0.3 }}
-                  className="text-[10px] font-mono text-white/30 text-center tracking-wider uppercase"
+                  className="text-sm font-mono text-muted-dark text-center tracking-wider uppercase"
                 >
                   {dim}
                 </motion.div>
@@ -236,7 +236,7 @@ export default function LabHeatmap() {
                     className="h-2 w-2 rounded-full shrink-0"
                     style={{ backgroundColor: modelColors[model] }}
                   />
-                  <span className="text-[11px] font-mono text-white/50 truncate">
+                  <span className="text-sm font-mono text-muted truncate">
                     {model}
                   </span>
                   {bestModel.index === ri && (
@@ -306,7 +306,7 @@ export default function LabHeatmap() {
                       )}
                       {/* Score text on hover */}
                       <div className="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-200">
-                        <span className="text-[11px] font-mono font-bold text-white drop-shadow-[0_1px_3px_rgba(0,0,0,0.8)]">
+                        <span className="text-sm font-mono font-bold text-white drop-shadow-[0_1px_3px_rgba(0,0,0,0.8)]">
                           {score}
                         </span>
                       </div>
@@ -339,11 +339,11 @@ export default function LabHeatmap() {
                   }}
                 >
                   <div className="rounded-lg border border-white/15 bg-black/90 backdrop-blur-sm px-3 py-2 shadow-xl">
-                    <div className="text-[10px] font-mono text-white/50 mb-1">
+                    <div className="text-sm font-mono text-muted mb-1">
                       {models[tooltip.row]}
                     </div>
                     <div className="flex items-center gap-2">
-                      <span className="text-[10px] font-mono text-white/30 uppercase tracking-wider">
+                      <span className="text-sm font-mono text-muted-dark uppercase tracking-wider">
                         {dimensions[tooltip.col]}
                       </span>
                       <span
@@ -367,8 +367,8 @@ export default function LabHeatmap() {
             {/* Color legend */}
             <div className="flex items-center gap-3">
               <div className="flex items-center gap-1">
-                <Info className="h-3 w-3 text-white/20" />
-                <span className="text-[10px] font-mono text-white/20">
+                <Info className="h-3 w-3 text-muted-dark" />
+                <span className="text-sm font-mono text-muted-dark">
                   Score
                 </span>
               </div>
@@ -382,7 +382,7 @@ export default function LabHeatmap() {
                   />
                 ))}
               </div>
-              <span className="text-[9px] font-mono text-white/15">
+              <span className="text-sm font-mono text-muted-dark">
                 50 — 99
               </span>
             </div>
@@ -395,7 +395,7 @@ export default function LabHeatmap() {
               className="flex items-center gap-2"
             >
               <Crown className="h-3 w-3 text-brand-amber/60" />
-              <span className="text-[10px] font-mono text-white/40">
+              <span className="text-sm font-mono text-muted">
                 Best:{" "}
                 <span
                   className="font-medium"
@@ -404,7 +404,7 @@ export default function LabHeatmap() {
                   {bestModel.name}
                 </span>
               </span>
-              <span className="text-[10px] font-mono text-white/25">
+              <span className="text-sm font-mono text-muted-dark">
                 avg {bestModel.avg}
               </span>
             </motion.div>
@@ -439,7 +439,7 @@ export default function LabHeatmap() {
                   className="h-2.5 w-2.5 rounded-full"
                   style={{ backgroundColor: modelColors[model] }}
                 />
-                <span className="text-[11px] font-mono text-white/60 truncate">
+                <span className="text-sm font-mono text-muted truncate">
                   {model}
                 </span>
               </div>
@@ -449,7 +449,7 @@ export default function LabHeatmap() {
               >
                 {avg}
               </div>
-              <div className="text-[9px] font-mono text-white/25 mt-1">
+              <div className="text-sm font-mono text-muted-dark mt-1">
                 Best: {bestDim} ({best})
               </div>
             </motion.div>

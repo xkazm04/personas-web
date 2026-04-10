@@ -19,21 +19,31 @@ import { useReviewStore } from "@/stores/reviewStore";
 import { useExecutionStore } from "@/stores/executionStore";
 import DesktopSidebar from "./DesktopSidebar";
 import MobileBottomNav from "./MobileBottomNav";
+import { useTranslation } from "@/i18n/useTranslation";
 
-export const navItems = [
-  { key: "home", label: "Overview", icon: LayoutDashboard, href: "/dashboard/home" },
-  { key: "agents", label: "Agents", icon: Bot, href: "/dashboard/agents" },
-  { key: "executions", label: "Executions", icon: Zap, href: "/dashboard/executions" },
-  { key: "events", label: "Events", icon: Radio, href: "/dashboard/events" },
-  { key: "reviews", label: "Reviews", icon: ClipboardCheck, href: "/dashboard/reviews" },
-  { key: "playground", label: "Playground", icon: Terminal, href: "/dashboard/playground" },
-  { key: "observability", label: "Observability", icon: Activity, href: "/dashboard/observability" },
-  { key: "usage", label: "Usage", icon: BarChart3, href: "/dashboard/usage" },
-  { key: "knowledge", label: "Knowledge", icon: Brain, href: "/dashboard/knowledge" },
-  { key: "settings", label: "Settings", icon: Settings, href: "/dashboard/settings" },
+export const navItemDefs = [
+  { key: "home", labelKey: "overview" as const, icon: LayoutDashboard, href: "/dashboard/home" },
+  { key: "agents", labelKey: "agents" as const, icon: Bot, href: "/dashboard/agents" },
+  { key: "executions", labelKey: "executions" as const, icon: Zap, href: "/dashboard/executions" },
+  { key: "events", labelKey: "events" as const, icon: Radio, href: "/dashboard/events" },
+  { key: "reviews", labelKey: "reviews" as const, icon: ClipboardCheck, href: "/dashboard/reviews" },
+  { key: "playground", labelKey: "playground" as const, icon: Terminal, href: "/dashboard/playground" },
+  { key: "observability", labelKey: "observability" as const, icon: Activity, href: "/dashboard/observability" },
+  { key: "usage", labelKey: "usage" as const, icon: BarChart3, href: "/dashboard/usage" },
+  { key: "knowledge", labelKey: "knowledge" as const, icon: Brain, href: "/dashboard/knowledge" },
+  { key: "settings", labelKey: "settings" as const, icon: Settings, href: "/dashboard/settings" },
 ] as const;
 
-export type NavItem = (typeof navItems)[number];
+export type NavItemDef = (typeof navItemDefs)[number];
+export type NavItem = NavItemDef & { label: string };
+
+export function useNavItems(): NavItem[] {
+  const { t } = useTranslation();
+  return navItemDefs.map((item) => ({
+    ...item,
+    label: t.dashboard[item.labelKey],
+  }));
+}
 
 export function useNavState() {
   const pathname = usePathname();

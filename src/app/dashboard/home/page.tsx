@@ -41,15 +41,17 @@ import useSWR from "swr";
 import { api } from "@/lib/api";
 import Link from "next/link";
 import { relativeTime } from "@/lib/format";
-
-function getGreeting(): string {
-  const hour = new Date().getHours();
-  if (hour < 12) return "Good Morning";
-  if (hour < 18) return "Good Afternoon";
-  return "Good Evening";
-}
+import { useTranslation } from "@/i18n/useTranslation";
 
 export default function DashboardHomePage() {
+  const { t } = useTranslation();
+
+  const getGreeting = (): string => {
+    const hour = new Date().getHours();
+    if (hour < 12) return t.dashboard.greeting.morning;
+    if (hour < 18) return t.dashboard.greeting.afternoon;
+    return t.dashboard.greeting.evening;
+  };
   const user = useAuthStore((s) => s.user);
   const personas = usePersonaStore((s) => s.personas);
   const executions = useEnrichedExecutions();
@@ -144,7 +146,7 @@ export default function DashboardHomePage() {
           </GradientText>
         </h1>
         <p className="mt-1 text-sm text-muted-dark">
-          Here&apos;s what&apos;s happening with your agents
+          {t.dashboard.agentsStatus}
         </p>
       </motion.div>
 
@@ -155,28 +157,28 @@ export default function DashboardHomePage() {
       >
         <StatBadge
           icon={ClipboardCheck}
-          label="pending reviews"
+          label={t.dashboard.pendingReviews}
           value={pendingReviewCount}
           accent="amber"
           href="/dashboard/reviews"
         />
         <StatBadge
           icon={Zap}
-          label="total executions"
+          label={t.dashboard.totalExecutions}
           value={stats.total}
           accent="cyan"
           href="/dashboard/executions"
         />
         <StatBadge
           icon={TrendingUp}
-          label="success rate"
+          label={t.dashboard.successRate}
           value={`${stats.successRate}%`}
           accent="emerald"
           href="/dashboard/observability"
         />
         <StatBadge
           icon={Bot}
-          label="active agents"
+          label={t.dashboard.activeAgents}
           value={stats.activeAgents}
           accent="purple"
           href="/dashboard/agents"
@@ -209,19 +211,19 @@ export default function DashboardHomePage() {
             <div className="flex items-center gap-2 mb-4">
               <Activity className="h-4 w-4 text-brand-cyan" />
               <h2 className="text-sm font-semibold text-foreground">
-                Recent Activity
+                {t.dashboard.recentActivity}
               </h2>
               {stats.running > 0 && (
                 <span className="ml-auto flex items-center gap-1.5 rounded-full border border-cyan-500/20 bg-cyan-500/8 px-2 py-0.5 text-[10px] font-medium text-cyan-400">
                   <span className="h-1.5 w-1.5 animate-pulse rounded-full bg-cyan-400" />
-                  {stats.running} running
+                  {stats.running} {t.dashboard.running}
                 </span>
               )}
             </div>
 
             {recentExecs.length === 0 ? (
               <p className="text-xs text-muted-dark py-8 text-center">
-                No executions yet. Execute an agent to see activity here.
+                {t.dashboard.noExecutionsYet} {t.dashboard.executeToSee}
               </p>
             ) : (
               <div className="space-y-1.5 max-h-[420px] overflow-y-auto pr-1">
@@ -260,10 +262,10 @@ export default function DashboardHomePage() {
               <div className="flex items-center gap-2">
                 <TrendingUp className="h-4 w-4 text-brand-purple" />
                 <h2 className="text-sm font-semibold text-foreground">
-                  Traffic & Errors
+                  {t.dashboard.trafficErrors}
                 </h2>
               </div>
-              <span className="text-[11px] text-muted-dark">Last 14 days</span>
+              <span className="text-[11px] text-muted-dark">{t.dashboard.last14Days}</span>
             </div>
 
             {loadObservability ? (
@@ -280,10 +282,10 @@ export default function DashboardHomePage() {
       {/* Quick links row */}
       <motion.div variants={fadeUp} className="mt-6 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
         {[
-          { label: "Agents", desc: `${personas.length} deployed`, icon: Bot, href: "/dashboard/agents", accent: "cyan" as const },
-          { label: "Observability", desc: "Metrics & health", icon: Activity, href: "/dashboard/observability", accent: "emerald" as const },
-          { label: "Usage Analytics", desc: "Tool utilization", icon: TrendingUp, href: "/dashboard/usage", accent: "purple" as const },
-          { label: "Settings", desc: `${health?.workers.total ?? 0} workers`, icon: Activity, href: "/dashboard/settings", accent: "amber" as const },
+          { label: t.dashboard.agents, desc: `${personas.length} ${t.dashboard.deployed}`, icon: Bot, href: "/dashboard/agents", accent: "cyan" as const },
+          { label: t.dashboard.observability, desc: t.dashboard.metricsHealth, icon: Activity, href: "/dashboard/observability", accent: "emerald" as const },
+          { label: t.dashboard.usageAnalytics, desc: t.dashboard.toolUtilization, icon: TrendingUp, href: "/dashboard/usage", accent: "purple" as const },
+          { label: t.dashboard.settings, desc: `${health?.workers.total ?? 0} ${t.dashboard.workers}`, icon: Activity, href: "/dashboard/settings", accent: "amber" as const },
         ].map((link) => (
           <Link key={link.href} href={link.href}>
             <GlowCard

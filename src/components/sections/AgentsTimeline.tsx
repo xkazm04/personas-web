@@ -221,7 +221,7 @@ function StepBlock({
     : isWarn
       ? "text-yellow-400"
       : isWorkflow
-        ? "text-white/50"
+        ? "text-muted"
         : "text-brand-emerald";
 
   const Icon = isError ? X : isWarn ? AlertTriangle : Check;
@@ -250,10 +250,10 @@ function StepBlock({
     >
       <Icon className={`h-3.5 w-3.5 shrink-0 ${iconColor}`} />
       <span
-        className={`text-xs font-mono whitespace-nowrap ${
+        className={`text-sm font-mono whitespace-nowrap ${
           isError
             ? "text-brand-rose line-through decoration-brand-rose/40"
-            : "text-white/70"
+            : "text-muted"
         }`}
       >
         {step.label}
@@ -295,7 +295,7 @@ function StepBlock({
           initial={{ opacity: 0 }}
           animate={isActive ? { opacity: 0.5 } : { opacity: 0 }}
           transition={{ delay: isActive ? index * 0.35 + 0.2 : 0 }}
-          className="absolute -right-4 top-1/2 -translate-y-1/2 text-white/20"
+          className="absolute -right-4 top-1/2 -translate-y-1/2 text-muted-dark"
         >
           <svg width="12" height="12" viewBox="0 0 12 12">
             <path
@@ -354,7 +354,7 @@ function RaceTimer({
   return (
     <div className="flex items-center gap-1.5">
       <Timer className={`h-3 w-3 ${color}`} />
-      <span className={`text-[10px] font-mono tabular-nums ${color}`}>
+      <span className={`text-sm font-mono tabular-nums ${color}`}>
         {label}: {seconds}s
       </span>
     </div>
@@ -393,7 +393,7 @@ function ResultCard({
               <Check className="h-3.5 w-3.5 text-brand-emerald" />
             )}
             <span
-              className={`text-[10px] font-mono uppercase tracking-wider ${
+              className={`text-sm font-mono uppercase tracking-wider ${
                 isWorkflow ? "text-brand-rose/60" : "text-brand-emerald/60"
               }`}
             >
@@ -477,7 +477,7 @@ function Track({
       <div className="flex items-center justify-between mb-3">
         <div className="flex items-center gap-2">
           <Icon className={`h-4 w-4 ${headerColor}`} />
-          <span className={`text-xs font-mono uppercase tracking-wider ${headerColor}`}>
+          <span className={`text-sm font-mono uppercase tracking-wider ${headerColor}`}>
             {label}
           </span>
         </div>
@@ -641,7 +641,7 @@ export default function AgentsTimeline() {
               setActiveIndex(i);
               setPaused(true);
             }}
-            className={`cursor-pointer rounded-full border px-3.5 py-1.5 text-[11px] font-mono tracking-wider transition-all duration-300 ${
+            className={`cursor-pointer rounded-full border px-3.5 py-1.5 text-sm font-mono tracking-wider transition-all duration-300 ${
               i === activeIndex
                 ? "border-brand-cyan/30 bg-brand-cyan/10 text-brand-cyan shadow-[0_0_12px_rgba(6,182,212,0.15)]"
                 : "border-white/[0.06] bg-white/[0.02] text-muted-dark hover:border-white/[0.12] hover:text-muted"
@@ -663,7 +663,7 @@ export default function AgentsTimeline() {
             transition={{ duration: 0.3 }}
             className="mx-auto max-w-3xl rounded-xl border border-white/[0.06] bg-white/[0.02] px-4 py-3 text-center backdrop-blur-sm"
           >
-            <span className="text-[10px] font-mono uppercase tracking-wider text-muted-dark/60">
+            <span className="text-sm font-mono uppercase tracking-wider text-muted-dark/60">
               Scenario trigger
             </span>
             <p className="mt-1 text-sm text-muted leading-relaxed">
@@ -684,7 +684,7 @@ export default function AgentsTimeline() {
           title="agents-vs-workflows.race"
           status={isPlaying ? "racing" : showResults ? "complete" : "ready"}
           info={
-            <span className="text-[10px] font-mono text-white/20">
+            <span className="text-sm font-mono text-muted-dark">
               scenario {activeIndex + 1}/{scenarios.length}
             </span>
           }
@@ -762,14 +762,14 @@ export default function AgentsTimeline() {
                       <div className="h-3 w-3 rounded-full bg-brand-rose/30 flex items-center justify-center">
                         <X className="h-2 w-2 text-brand-rose" />
                       </div>
-                      <span className="text-[10px] font-mono uppercase tracking-wider text-brand-rose/60">
+                      <span className="text-sm font-mono uppercase tracking-wider text-brand-rose/60">
                         Workflow
                       </span>
                     </div>
                     <div className="text-2xl font-bold text-brand-rose/80 tabular-nums">
                       {(scenario.workflow.totalMs / 1000).toFixed(1)}s
                     </div>
-                    <div className="text-[10px] text-brand-rose/40 font-mono mt-1">
+                    <div className="text-sm text-brand-rose/40 font-mono mt-1">
                       FAILED
                     </div>
                   </div>
@@ -780,14 +780,14 @@ export default function AgentsTimeline() {
                       <div className="h-3 w-3 rounded-full bg-brand-emerald/30 flex items-center justify-center">
                         <Check className="h-2 w-2 text-brand-emerald" />
                       </div>
-                      <span className="text-[10px] font-mono uppercase tracking-wider text-brand-emerald/60">
+                      <span className="text-sm font-mono uppercase tracking-wider text-brand-emerald/60">
                         Agent
                       </span>
                     </div>
                     <div className="text-2xl font-bold text-brand-emerald/80 tabular-nums">
                       {(scenario.agent.totalMs / 1000).toFixed(1)}s
                     </div>
-                    <div className="text-[10px] text-brand-emerald/40 font-mono mt-1">
+                    <div className="text-sm text-brand-emerald/40 font-mono mt-1">
                       RESOLVED
                     </div>
                   </div>
@@ -797,7 +797,7 @@ export default function AgentsTimeline() {
                 <div className="mt-4 pt-3 border-t border-white/5">
                   <div className="flex items-center justify-center gap-2">
                     <Zap className="h-3.5 w-3.5 text-brand-cyan" />
-                    <span className="text-xs font-mono text-brand-cyan/70">
+                    <span className="text-sm font-mono text-brand-cyan/70">
                       Agent resolved{" "}
                       <span className="text-brand-cyan font-bold">
                         {(
@@ -847,7 +847,7 @@ export default function AgentsTimeline() {
             </button>
           ))}
         </div>
-        <div className="mt-2 flex items-center justify-between text-[10px] font-mono text-muted-dark/50">
+        <div className="mt-2 flex items-center justify-between text-sm font-mono text-muted-dark/50">
           <span>
             Race {activeIndex + 1} of {scenarios.length}
           </span>

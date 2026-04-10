@@ -132,8 +132,8 @@ const colorClasses: Record<OutputLine["color"], string> = {
   emerald: "text-emerald-400",
   amber: "text-amber-400",
   purple: "text-purple-400",
-  white: "text-white/70",
-  muted: "text-white/20",
+  white: "text-muted",
+  muted: "text-muted-dark",
   rose: "text-rose-400",
 };
 
@@ -160,7 +160,7 @@ function TerminalLine({ line, index }: { line: OutputLine; index: number }) {
       initial={{ opacity: 0, y: 4 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.15, delay: index * 0.03 }}
-      className={`font-mono text-xs sm:text-sm leading-relaxed ${colorClasses[line.color]}`}
+      className={`font-mono text-sm sm:text-sm leading-relaxed ${colorClasses[line.color]}`}
       style={{ paddingLeft: line.indent ? `${line.indent * 8}px` : undefined }}
     >
       <span style={{ whiteSpace: "pre" }}>{line.text || "\u00A0"}</span>
@@ -202,7 +202,7 @@ function CommandBadge({ command, index }: { command: CommandSequence; index: num
       className={`inline-flex items-center gap-1.5 rounded-full border px-3 py-1 ${bgColors[index]} ${borderColors[index]}`}
     >
       <Icon className={`h-3 w-3 ${colors[index]}`} />
-      <span className={`text-[10px] font-mono font-medium ${colors[index]}`}>
+      <span className={`text-sm font-mono font-medium ${colors[index]}`}>
         {command.pillar}
       </span>
     </div>
@@ -418,13 +418,13 @@ export default function PlatformCommand() {
 
       {/* Header */}
       <motion.div variants={fadeUp} className="text-center mb-16">
-        <span className="inline-block rounded-full border border-brand-cyan/30 bg-brand-cyan/10 px-4 py-1.5 text-xs font-semibold tracking-widest uppercase text-brand-cyan shadow-[0_0_15px_rgba(6,182,212,0.2)] font-mono mb-6">
+        <span className="inline-block rounded-full border border-brand-cyan/30 bg-brand-cyan/10 px-4 py-1.5 text-sm font-semibold tracking-widest uppercase text-brand-cyan shadow-[0_0_15px_rgba(6,182,212,0.2)] font-mono mb-6">
           CLI
         </span>
         <SectionHeading>
           One <GradientText>command</GradientText> at a time
         </SectionHeading>
-        <p className="mt-6 mx-auto max-w-2xl text-lg text-white/40 leading-relaxed font-light">
+        <p className="mt-6 mx-auto max-w-2xl text-lg text-muted-dark leading-relaxed font-light">
           Design, connect, deploy, and monitor your agents — all from the terminal.
         </p>
       </motion.div>
@@ -458,7 +458,7 @@ export default function PlatformCommand() {
               title="personas-cli"
               status="active"
               info={
-                <span className="text-white/20">
+                <span className="text-muted-dark">
                   {completedCount}/{commands.length} complete
                 </span>
               }
@@ -477,14 +477,14 @@ export default function PlatformCommand() {
             {/* History: previously completed commands */}
             {history.map((entry, hIdx) => (
               <div key={hIdx} className="mb-4">
-                <div className="font-mono text-xs sm:text-sm">
-                  <span className="text-white/30">~/agents $ </span>
-                  <span className="text-white/70">{entry.command}</span>
+                <div className="font-mono text-sm sm:text-sm">
+                  <span className="text-muted-dark">~/agents $ </span>
+                  <span className="text-muted">{entry.command}</span>
                 </div>
                 {entry.output.map((line, lIdx) => (
                   <div
                     key={lIdx}
-                    className={`font-mono text-xs sm:text-sm leading-relaxed ${colorClasses[line.color]}`}
+                    className={`font-mono text-sm sm:text-sm leading-relaxed ${colorClasses[line.color]}`}
                     style={{
                       paddingLeft: line.indent ? `${line.indent * 8}px` : undefined,
                       whiteSpace: "pre",
@@ -499,9 +499,9 @@ export default function PlatformCommand() {
             {/* Current command being typed */}
             {phase !== "idle" && phase !== "done" && phase !== "summary" && currentCmd && (
               <div className="mb-2">
-                <div className="font-mono text-xs sm:text-sm">
-                  <span className="text-white/30">~/agents $ </span>
-                  <span className="text-white/70">{typedText}</span>
+                <div className="font-mono text-sm sm:text-sm">
+                  <span className="text-muted-dark">~/agents $ </span>
+                  <span className="text-muted">{typedText}</span>
                   {phase === "typing" && <BlinkingCursor />}
                 </div>
 
@@ -526,7 +526,7 @@ export default function PlatformCommand() {
                   {summaryLines.map((line, lIdx) => (
                     <div
                       key={lIdx}
-                      className={`font-mono text-xs sm:text-sm leading-relaxed ${colorClasses[line.color]}`}
+                      className={`font-mono text-sm sm:text-sm leading-relaxed ${colorClasses[line.color]}`}
                       style={{ whiteSpace: "pre" }}
                     >
                       {line.text || "\u00A0"}
@@ -542,9 +542,9 @@ export default function PlatformCommand() {
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1 }}
                 transition={{ delay: 0.5 }}
-                className="mt-4 font-mono text-xs sm:text-sm"
+                className="mt-4 font-mono text-sm sm:text-sm"
               >
-                <span className="text-white/30">~/agents $ </span>
+                <span className="text-muted-dark">~/agents $ </span>
                 <BlinkingCursor />
               </motion.div>
             )}
@@ -576,7 +576,7 @@ export default function PlatformCommand() {
                   animate={{ opacity: 1, scale: 1 }}
                   exit={{ opacity: 0, scale: 0.9 }}
                   onClick={skipCommand}
-                  className="flex items-center gap-1.5 rounded-lg border border-white/10 bg-white/5 px-3 py-1.5 text-[10px] font-mono text-white/40 hover:text-white/60 hover:border-white/20 transition-all"
+                  className="flex items-center gap-1.5 rounded-lg border border-white/10 bg-white/5 px-3 py-1.5 text-sm font-mono text-muted-dark hover:text-muted hover:border-white/20 transition-all"
                 >
                   <SkipForward className="h-3 w-3" />
                   Skip
@@ -589,7 +589,7 @@ export default function PlatformCommand() {
                   initial={{ opacity: 0, scale: 0.9 }}
                   animate={{ opacity: 1, scale: 1 }}
                   onClick={restart}
-                  className="flex items-center gap-1.5 rounded-lg border border-brand-cyan/20 bg-brand-cyan/5 px-3 py-1.5 text-[10px] font-mono text-brand-cyan/60 hover:text-brand-cyan hover:border-brand-cyan/30 transition-all"
+                  className="flex items-center gap-1.5 rounded-lg border border-brand-cyan/20 bg-brand-cyan/5 px-3 py-1.5 text-sm font-mono text-brand-cyan/60 hover:text-brand-cyan hover:border-brand-cyan/30 transition-all"
                 >
                   Replay
                 </motion.button>

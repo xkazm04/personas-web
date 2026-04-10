@@ -396,13 +396,13 @@ function StarRating({
         >
           <Star
             className={`h-3.5 w-3.5 ${
-              i < score ? color : "text-white/10"
+              i < score ? color : "text-muted-dark"
             }`}
             fill={i < score ? "currentColor" : "none"}
           />
         </motion.div>
       ))}
-      <span className={`ml-1.5 text-xs font-mono ${color}`}>
+      <span className={`ml-1.5 text-sm font-mono ${color}`}>
         {score}/{maxScore}
       </span>
     </div>
@@ -425,7 +425,7 @@ function ChatBubble({
   const prefersReduced = useReducedMotion();
 
   const toneStyles = {
-    neutral: "border-white/[0.06] bg-white/[0.03] text-white/70",
+    neutral: "border-white/[0.06] bg-white/[0.03] text-muted",
     thinking:
       "border-brand-purple/20 bg-brand-purple/5 text-brand-purple/80 italic",
     warning: "border-yellow-400/20 bg-yellow-400/5 text-yellow-400/80",
@@ -452,7 +452,7 @@ function ChatBubble({
           ? "text-brand-emerald/60"
           : message.tone === "thinking"
             ? "text-brand-purple/60"
-            : "text-white/30";
+            : "text-muted-dark";
 
   return (
     <AnimatePresence>
@@ -468,8 +468,8 @@ function ChatBubble({
           transition={{ duration: 0.35, ease: "easeOut" }}
           className={`rounded-lg border px-3 py-2 ${toneStyles[message.tone]} ${
             message.sender === "system"
-              ? "mx-2 text-center text-[10px] font-mono uppercase tracking-wider"
-              : "text-xs leading-relaxed"
+              ? "mx-2 text-center text-sm font-mono uppercase tracking-wider"
+              : "text-sm leading-relaxed"
           }`}
         >
           <div className="flex items-start gap-2">
@@ -479,7 +479,7 @@ function ChatBubble({
             <div className="flex-1 min-w-0">
               <span>{message.text}</span>
             </div>
-            <span className="shrink-0 text-[9px] font-mono text-white/20 mt-0.5">
+            <span className="shrink-0 text-sm font-mono text-muted-dark mt-0.5">
               {message.timestamp}
             </span>
           </div>
@@ -540,7 +540,7 @@ function ChatChannel({
         className={`flex items-center gap-2 px-3 py-2.5 border-b ${channelColor} ${headerBg}`}
       >
         <Hash className={`h-3.5 w-3.5 ${headerColor}`} />
-        <span className={`text-xs font-mono tracking-wider ${headerColor}`}>
+        <span className={`text-sm font-mono tracking-wider ${headerColor}`}>
           {channelName}
         </span>
         <div className="ml-auto">
@@ -572,7 +572,7 @@ function ChatChannel({
               exit={{ opacity: 0 }}
               className="flex items-center gap-2"
             >
-              <Bot className="h-3 w-3 text-white/20" />
+              <Bot className="h-3 w-3 text-muted-dark" />
               <TypingIndicator
                 color={isWorkflow ? "bg-brand-rose/40" : "bg-brand-emerald/40"}
               />
@@ -592,7 +592,7 @@ function ChatChannel({
             className={`px-3 py-2.5 border-t ${channelColor} ${headerBg}`}
           >
             <div className="flex items-center justify-between">
-              <span className="text-[10px] font-mono uppercase tracking-wider text-white/30">
+              <span className="text-sm font-mono uppercase tracking-wider text-muted-dark">
                 Satisfaction
               </span>
               <StarRating
@@ -734,7 +734,7 @@ export default function AgentsChat() {
               setActiveIndex(i);
               setPaused(true);
             }}
-            className={`cursor-pointer rounded-full border px-3.5 py-1.5 text-[11px] font-mono tracking-wider transition-all duration-300 ${
+            className={`cursor-pointer rounded-full border px-3.5 py-1.5 text-sm font-mono tracking-wider transition-all duration-300 ${
               i === activeIndex
                 ? "border-brand-cyan/30 bg-brand-cyan/10 text-brand-cyan shadow-[0_0_12px_rgba(6,182,212,0.15)]"
                 : "border-white/[0.06] bg-white/[0.02] text-muted-dark hover:border-white/[0.12] hover:text-muted"
@@ -761,11 +761,11 @@ export default function AgentsChat() {
                 <div className="flex h-5 w-5 items-center justify-center rounded-full bg-brand-cyan/15 ring-1 ring-brand-cyan/20">
                   <User className="h-3 w-3 text-brand-cyan/70" />
                 </div>
-                <span className="text-[10px] font-mono uppercase tracking-wider text-brand-cyan/50">
+                <span className="text-sm font-mono uppercase tracking-wider text-brand-cyan/50">
                   Customer message
                 </span>
               </div>
-              <p className="text-sm text-white/70 leading-relaxed pl-7">
+              <p className="text-sm text-muted leading-relaxed pl-7">
                 {scenario.userMessage}
               </p>
             </div>
@@ -784,7 +784,7 @@ export default function AgentsChat() {
           title="support-channels.compare"
           status={showSatisfaction ? "complete" : "live"}
           info={
-            <span className="text-[10px] font-mono text-white/20">
+            <span className="text-sm font-mono text-muted-dark">
               {scenario.name}
             </span>
           }
@@ -851,13 +851,13 @@ export default function AgentsChat() {
                 <div className="grid grid-cols-3 gap-4 items-center">
                   {/* Workflow summary */}
                   <div className="text-center">
-                    <div className="text-[10px] font-mono uppercase tracking-wider text-brand-rose/50 mb-1">
+                    <div className="text-sm font-mono uppercase tracking-wider text-brand-rose/50 mb-1">
                       Workflow
                     </div>
                     <div className="text-lg font-bold text-brand-rose/70">
                       {scenario.workflow.messages.length} msgs
                     </div>
-                    <div className="text-[10px] text-brand-rose/40 font-mono">
+                    <div className="text-sm text-brand-rose/40 font-mono">
                       {
                         scenario.workflow.messages[
                           scenario.workflow.messages.length - 1
@@ -881,20 +881,20 @@ export default function AgentsChat() {
                     >
                       <Zap className="h-4 w-4 text-brand-cyan" />
                     </motion.div>
-                    <span className="text-[10px] font-mono text-brand-cyan/60">
+                    <span className="text-sm font-mono text-brand-cyan/60">
                       vs
                     </span>
                   </div>
 
                   {/* Agent summary */}
                   <div className="text-center">
-                    <div className="text-[10px] font-mono uppercase tracking-wider text-brand-emerald/50 mb-1">
+                    <div className="text-sm font-mono uppercase tracking-wider text-brand-emerald/50 mb-1">
                       Agent
                     </div>
                     <div className="text-lg font-bold text-brand-emerald/70">
                       {scenario.agent.messages.length} msgs
                     </div>
-                    <div className="text-[10px] text-brand-emerald/40 font-mono">
+                    <div className="text-sm text-brand-emerald/40 font-mono">
                       {
                         scenario.agent.messages[
                           scenario.agent.messages.length - 1
@@ -940,7 +940,7 @@ export default function AgentsChat() {
             </button>
           ))}
         </div>
-        <div className="mt-2 flex items-center justify-between text-[10px] font-mono text-muted-dark/50">
+        <div className="mt-2 flex items-center justify-between text-sm font-mono text-muted-dark/50">
           <span>
             Chat {activeIndex + 1} of {scenarios.length}
           </span>

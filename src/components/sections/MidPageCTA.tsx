@@ -41,7 +41,7 @@ export default function MidPageCTA() {
             >
               <p.icon className="h-4 w-4" />
               <span>{p.label}</span>
-              <span className="text-[10px] text-muted-dark">notify me</span>
+              <span className="text-sm text-muted-dark">notify me</span>
             </button>
           ))}
         </motion.div>

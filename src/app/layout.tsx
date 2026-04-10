@@ -3,6 +3,14 @@ import { Geist, Geist_Mono } from "next/font/google";
 import PageViewTracker from "@/components/PageViewTracker";
 import AuthProvider from "@/components/AuthProvider";
 import { QualityProvider } from "@/contexts/QualityContext";
+import {
+  SITE_URL,
+  SITE_NAME,
+  SITE_DESCRIPTION,
+  SITE_LOCALE,
+  TWITTER_HANDLE,
+} from "@/lib/seo";
+import ThemeInit from "@/components/ThemeInit";
 import "./globals.css";
 
 const geistSans = Geist({
@@ -19,19 +27,61 @@ export const viewport: Viewport = {
   width: "device-width",
   initialScale: 1,
   viewportFit: "cover",
+  themeColor: "#06b6d4",
 };
 
 export const metadata: Metadata = {
-  title: "Personas — AI Agents That Work For You",
-  description:
-    "Build intelligent agents in natural language. Orchestrate them locally or in the cloud. No workflow diagrams. No code.",
-  keywords: ["AI agents", "Claude Code", "automation", "orchestration", "event bus"],
-  openGraph: {
-    title: "Personas — AI Agents That Work For You",
-    description:
-      "Build intelligent agents in natural language. Orchestrate them locally or in the cloud.",
-    type: "website",
+  metadataBase: new URL(SITE_URL),
+  title: {
+    default: `${SITE_NAME} — AI Agents That Work For You`,
+    template: `%s — ${SITE_NAME}`,
   },
+  description: SITE_DESCRIPTION,
+  keywords: [
+    "AI agents",
+    "AI automation",
+    "Claude Code",
+    "agent orchestration",
+    "event bus",
+    "no-code AI",
+    "local AI agents",
+    "cloud AI agents",
+    "natural language automation",
+    "AI workflow",
+  ],
+  authors: [{ name: SITE_NAME, url: SITE_URL }],
+  creator: SITE_NAME,
+  publisher: SITE_NAME,
+  robots: {
+    index: true,
+    follow: true,
+    googleBot: {
+      index: true,
+      follow: true,
+      "max-video-preview": -1,
+      "max-image-preview": "large",
+      "max-snippet": -1,
+    },
+  },
+  openGraph: {
+    type: "website",
+    locale: SITE_LOCALE,
+    url: SITE_URL,
+    siteName: SITE_NAME,
+    title: `${SITE_NAME} — AI Agents That Work For You`,
+    description: SITE_DESCRIPTION,
+  },
+  twitter: {
+    card: "summary_large_image",
+    site: TWITTER_HANDLE,
+    creator: TWITTER_HANDLE,
+    title: `${SITE_NAME} — AI Agents That Work For You`,
+    description: SITE_DESCRIPTION,
+  },
+  alternates: {
+    canonical: SITE_URL,
+  },
+  category: "technology",
 };
 
 export default function RootLayout({
@@ -42,14 +92,10 @@ export default function RootLayout({
   return (
     <html lang="en" className="dark" suppressHydrationWarning>
       <head>
-        <script
-          dangerouslySetInnerHTML={{
-            __html: `(function(){try{var s=localStorage.getItem("personas-web-theme");if(s){var t=JSON.parse(s).state?.themeId;if(t&&t!=="dark-midnight"){document.documentElement.setAttribute("data-theme",t);if(t.startsWith("light"))document.documentElement.classList.remove("dark")}}}catch(e){}})()`,
-          }}
-        />
+        {/* Random theme applied client-side on mount via ThemeInit */}
         <link
           rel="stylesheet"
-          href="https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@300;400;500;600;700&family=Noto+Sans+Arabic:wght@300;400;500;600;700&family=Noto+Sans+Devanagari:wght@300;400;500;600;700&display=swap"
+          href="https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@300;400;500;600;700&family=Noto+Sans+JP:wght@300;400;500;600;700&family=Noto+Sans+KR:wght@300;400;500;600;700&family=Noto+Sans+Arabic:wght@300;400;500;600;700&family=Noto+Sans+Devanagari:wght@300;400;500;600;700&family=Noto+Sans+Bengali:wght@300;400;500;600;700&display=swap"
         />
       </head>
       <body
@@ -61,6 +107,7 @@ export default function RootLayout({
         >
           Skip to main content
         </a>
+        <ThemeInit />
         <AuthProvider>
           <QualityProvider>
             <PageViewTracker />

@@ -439,7 +439,7 @@ export default function HealingCircuit() {
           className="mx-auto mt-4 max-w-xl text-muted-dark font-light"
         >
           Every connection between your services is monitored.{" "}
-          <span className="text-white/80 font-medium">
+          <span className="text-foreground/80 font-medium">
             When a trace breaks, repair bots diagnose and weld it back
           </span>{" "}
           — automatically.
@@ -458,8 +458,8 @@ export default function HealingCircuit() {
           {/* Top bar */}
           <div className="flex items-center justify-between px-5 py-3 border-b border-white/6 bg-black/40">
             <div className="flex items-center gap-2">
-              <Cpu className="h-4 w-4 text-brand-cyan/70" />
-              <span className="text-[11px] font-mono text-white/40 tracking-wider uppercase">
+              <Cpu className="h-4 w-4 text-brand-cyan" />
+              <span className="text-sm font-mono text-muted tracking-wider uppercase">
                 Circuit Board — Infrastructure
               </span>
             </div>
@@ -485,7 +485,7 @@ export default function HealingCircuit() {
                       transition={{ duration: 0.6, repeat: Infinity }}
                     />
                     <span
-                      className="text-[9px] font-mono uppercase tracking-wider"
+                      className="text-sm font-mono uppercase tracking-wider"
                       style={{ color: healingStages[activeStage].color }}
                     >
                       {healingStages[activeStage].statusLabel}
@@ -493,7 +493,7 @@ export default function HealingCircuit() {
                   </motion.div>
                 )}
               </AnimatePresence>
-              <span className="text-[10px] font-mono text-white/20">
+              <span className="text-sm font-mono text-muted-dark">
                 Cycle #{cycleIndex + 1}
               </span>
             </div>
@@ -772,8 +772,8 @@ export default function HealingCircuit() {
             {/* Status Panel */}
             <div className="lg:w-64 border-t lg:border-t-0 lg:border-l border-white/6 bg-black/30 p-4">
               <div className="flex items-center gap-1.5 mb-4">
-                <Shield className="h-3.5 w-3.5 text-white/30" />
-                <span className="text-[10px] font-mono text-white/40 uppercase tracking-wider">
+                <Shield className="h-3.5 w-3.5 text-muted-dark" />
+                <span className="text-sm font-mono text-muted uppercase tracking-wider">
                   Connection Status
                 </span>
               </div>
@@ -823,13 +823,13 @@ export default function HealingCircuit() {
                               : {}
                           }
                         />
-                        <span className="text-[10px] font-mono text-white/50">
+                        <span className="text-sm font-mono text-muted">
                           {fromNode?.label.split(" ")[0]} →{" "}
                           {toNode?.label.split(" ")[0]}
                         </span>
                       </div>
                       <span
-                        className="text-[8px] font-mono uppercase tracking-wider"
+                        className="text-sm font-mono uppercase tracking-wider"
                         style={{ color: statusColor }}
                       >
                         {status === "healthy"
@@ -861,13 +861,13 @@ export default function HealingCircuit() {
                         style={{ color: healingStages[activeStage].color }}
                       />
                       <span
-                        className="text-[9px] font-mono font-semibold uppercase tracking-wider"
+                        className="text-sm font-mono font-semibold uppercase tracking-wider"
                         style={{ color: healingStages[activeStage].color }}
                       >
                         {healingStages[activeStage].label}
                       </span>
                     </div>
-                    <p className="text-[10px] text-white/35 font-mono leading-relaxed">
+                    <p className="text-sm text-white/35 font-mono leading-relaxed">
                       {healingStages[activeStage].desc}
                     </p>
                   </motion.div>
@@ -909,7 +909,7 @@ export default function HealingCircuit() {
                           }}
                         />
                         <span
-                          className="text-[10px] font-mono transition-colors duration-300"
+                          className="text-sm font-mono transition-colors duration-300"
                           style={{
                             color: isReached
                               ? `${stage.color}cc`
@@ -947,7 +947,7 @@ export default function HealingCircuit() {
                   );
                 })}
               </div>
-              <div className="hidden sm:flex items-center gap-1.5 text-[9px] font-mono text-white/20">
+              <div className="hidden sm:flex items-center gap-1.5 text-sm font-mono text-muted-dark">
                 <Wifi className="h-3 w-3" />
                 <span>
                   {connections.filter(

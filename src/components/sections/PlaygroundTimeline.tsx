@@ -393,18 +393,18 @@ function StageCard({
             ) : status === "active" ? (
               <Loader2 className="h-4 w-4 text-brand-cyan animate-spin" />
             ) : status === "locked" ? (
-              <Lock className="h-3.5 w-3.5 text-white/15" />
+              <Lock className="h-3.5 w-3.5 text-muted-dark" />
             ) : (
-              <Icon className="h-4 w-4 text-white/30" />
+              <Icon className="h-4 w-4 text-muted-dark" />
             )}
           </div>
           <span
-            className={`text-[10px] font-mono tabular-nums ${
+            className={`text-sm font-mono tabular-nums ${
               status === "active"
                 ? "text-brand-cyan/70"
                 : status === "done"
                 ? "text-brand-emerald/50"
-                : "text-white/15"
+                : "text-muted-dark"
             }`}
           >
             {stage.timing}
@@ -418,7 +418,7 @@ function StageCard({
               ? "text-brand-cyan"
               : status === "done"
               ? "text-foreground"
-              : "text-white/25"
+              : "text-muted-dark"
           }`}
         >
           {stage.label}
@@ -432,12 +432,12 @@ function StageCard({
               animate={{ opacity: 1, height: "auto" }}
               exit={{ opacity: 0, height: 0 }}
               transition={{ duration: reduced ? 0 : 0.3 }}
-              className={`text-[11px] leading-relaxed ${
+              className={`text-sm leading-relaxed ${
                 status === "done"
                   ? isOutput
                     ? "text-brand-emerald/70 font-medium"
-                    : "text-white/40"
-                  : "text-white/50"
+                    : "text-muted-dark"
+                  : "text-muted"
               }`}
             >
               {stage.description}
@@ -599,7 +599,7 @@ export default function PlaygroundTimeline() {
             key={ex.label}
             onClick={() => handleExampleClick(i)}
             disabled={isRunning}
-            className={`group flex items-center gap-2 rounded-full border px-4 py-2 text-xs font-medium transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed ${
+            className={`group flex items-center gap-2 rounded-full border px-4 py-2 text-sm font-medium transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed ${
               activeExample === i
                 ? "border-brand-cyan/40 bg-brand-cyan/10 text-foreground"
                 : "border-white/10 text-muted-dark hover:border-white/20 hover:text-foreground hover:bg-white/5"
@@ -614,7 +614,7 @@ export default function PlaygroundTimeline() {
         <div className="flex items-center gap-2 ml-2">
           <button
             onClick={toggleSpeed}
-            className="flex items-center gap-1.5 rounded-full border border-white/10 px-3 py-2 text-xs font-mono text-muted-dark hover:border-white/20 hover:text-foreground hover:bg-white/5 transition-all"
+            className="flex items-center gap-1.5 rounded-full border border-white/10 px-3 py-2 text-sm font-mono text-muted-dark hover:border-white/20 hover:text-foreground hover:bg-white/5 transition-all"
           >
             <Gauge className="h-3.5 w-3.5" />
             {speed}x
@@ -622,7 +622,7 @@ export default function PlaygroundTimeline() {
           {phase === "done" && (
             <button
               onClick={handleReplay}
-              className="flex items-center gap-1.5 rounded-full border border-white/10 px-3 py-2 text-xs font-medium text-muted-dark hover:border-white/20 hover:text-foreground hover:bg-white/5 transition-all"
+              className="flex items-center gap-1.5 rounded-full border border-white/10 px-3 py-2 text-sm font-medium text-muted-dark hover:border-white/20 hover:text-foreground hover:bg-white/5 transition-all"
             >
               <RotateCcw className="h-3.5 w-3.5" />
               Replay
@@ -632,7 +632,7 @@ export default function PlaygroundTimeline() {
             <button
               onClick={handleReset}
               disabled={isRunning}
-              className="flex items-center gap-1.5 rounded-full border border-white/10 px-3 py-2 text-xs font-medium text-muted-dark hover:border-white/20 hover:text-foreground hover:bg-white/5 transition-all disabled:opacity-40"
+              className="flex items-center gap-1.5 rounded-full border border-white/10 px-3 py-2 text-sm font-medium text-muted-dark hover:border-white/20 hover:text-foreground hover:bg-white/5 transition-all disabled:opacity-40"
             >
               Reset
             </button>
@@ -713,7 +713,7 @@ export default function PlaygroundTimeline() {
                     )
                   )}
                 </div>
-                <p className="text-xs text-white/15 font-mono">
+                <p className="text-sm text-muted-dark font-mono">
                   Pick an example to watch the execution pipeline
                 </p>
               </div>
@@ -794,7 +794,7 @@ export default function PlaygroundTimeline() {
 
         {/* Bottom bar */}
         <div className="flex items-center justify-between border-t border-white/[0.04] px-5 py-2.5 bg-white/[0.01]">
-          <div className="flex items-center gap-3 text-[10px] font-mono tracking-wider uppercase text-white/20">
+          <div className="flex items-center gap-3 text-sm font-mono tracking-wider uppercase text-muted-dark">
             <span>Pipeline View</span>
             {isRunning && (
               <motion.span
@@ -808,7 +808,7 @@ export default function PlaygroundTimeline() {
           </div>
           <div className="flex items-center gap-4">
             {totalStages > 0 && (
-              <span className="text-[10px] font-mono text-white/20">
+              <span className="text-sm font-mono text-muted-dark">
                 {doneCount}/{totalStages} stages
               </span>
             )}
@@ -817,7 +817,7 @@ export default function PlaygroundTimeline() {
                 initial={{ opacity: 0, scale: 0.9 }}
                 animate={{ opacity: 1, scale: 1 }}
                 transition={{ type: "spring", stiffness: 300 }}
-                className="text-[10px] font-mono tracking-wider uppercase text-brand-emerald/60"
+                className="text-sm font-mono tracking-wider uppercase text-brand-emerald/60"
               >
                 pipeline complete
               </motion.span>

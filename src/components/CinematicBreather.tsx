@@ -157,7 +157,7 @@ export default function CinematicBreather() {
             <TypewriterLine
               text="Your infrastructure."
               baseDelay={1.05}
-              className="text-white/70 font-light tracking-wide drop-shadow-[0_0_20px_rgba(255,255,255,0.1)]"
+              className="text-muted font-light tracking-wide drop-shadow-[0_0_20px_rgba(255,255,255,0.1)]"
               pulseAfter
             />
           </span>

@@ -71,15 +71,12 @@ const newMemoryPool: Omit<Memory, "id">[] = [
 function MemoryPill({
   mem,
   isNew,
-  isHovered,
-  onHover,
-  onLeave,
 }: {
   mem: Memory;
   isNew: boolean;
-  isHovered: boolean;
-  onHover: () => void;
-  onLeave: () => void;
+  isHovered?: boolean;
+  onHover?: () => void;
+  onLeave?: () => void;
 }) {
   const meta = CATEGORY_META[mem.category];
 
@@ -91,33 +88,21 @@ function MemoryPill({
           ? { opacity: 0, y: -120, scale: 0.7 }
           : { opacity: 0, scale: 0.8 }
       }
-      animate={{
-        opacity: 1,
-        y: 0,
-        scale: isHovered ? 1.05 : 1,
-        zIndex: isHovered ? 30 : 1,
-      }}
+      animate={{ opacity: 1, y: 0, scale: 1 }}
       exit={{ opacity: 0, scale: 0.6, transition: { duration: 0.3 } }}
       transition={
         isNew
           ? { type: "spring", bounce: 0.35, duration: 1.4 }
           : { type: "spring", bounce: 0.2, duration: 0.6 }
       }
-      onMouseEnter={onHover}
-      onMouseLeave={onLeave}
       className="relative cursor-default select-none"
     >
       <div
-        className={`
-          relative rounded-xl border backdrop-blur-md px-3.5 py-2 transition-shadow duration-300
-          ${isHovered ? "shadow-lg" : "shadow-sm"}
-        `}
+        className="relative rounded-xl border backdrop-blur-md px-3.5 py-2 shadow-sm"
         style={{
-          borderColor: isHovered ? `${meta.color}50` : `${meta.color}20`,
-          backgroundColor: isHovered ? `${meta.color}15` : `${meta.color}08`,
-          boxShadow: isHovered
-            ? `0 0 24px ${meta.color}25, 0 4px 16px rgba(0,0,0,0.3)`
-            : `0 1px 4px rgba(0,0,0,0.2)`,
+          borderColor: `${meta.color}20`,
+          backgroundColor: `${meta.color}08`,
+          boxShadow: `0 1px 4px rgba(0,0,0,0.2)`,
         }}
       >
         {/* New badge glow */}
@@ -137,7 +122,7 @@ function MemoryPill({
             {Array.from({ length: 5 }).map((_, i) => (
               <div
                 key={i}
-                className="h-1 w-1 rounded-full transition-all duration-300"
+                className="h-1 w-1 rounded-full"
                 style={{
                   backgroundColor:
                     i < Math.ceil(mem.importance / 2)
@@ -153,25 +138,14 @@ function MemoryPill({
           </div>
 
           <div className="min-w-0">
-            <div className="text-[11px] text-white/80 leading-snug truncate max-w-[200px]">
+            <div className="text-sm text-foreground/80 leading-snug truncate max-w-[200px]">
               {mem.title}
             </div>
-            {isHovered && (
-              <motion.div
-                initial={{ opacity: 0, height: 0 }}
-                animate={{ opacity: 1, height: "auto" }}
-                className="flex items-center gap-2 mt-1"
-              >
-                <span className="text-[9px] font-mono" style={{ color: `${meta.color}80` }}>
-                  {mem.source}
-                </span>
-                {mem.tags.map((t) => (
-                  <span key={t} className="text-[8px] font-mono text-brand-cyan/35">
-                    #{t}
-                  </span>
-                ))}
-              </motion.div>
-            )}
+            <div className="flex items-center gap-2 mt-0.5">
+              <span className="text-sm font-mono" style={{ color: `${meta.color}60` }}>
+                {mem.source}
+              </span>
+            </div>
           </div>
         </div>
       </div>
@@ -182,7 +156,7 @@ function MemoryPill({
 function DepthScale() {
   return (
     <div className="hidden md:flex flex-col items-center justify-between py-6 px-3 shrink-0">
-      <div className="text-[9px] font-mono text-white/25 -rotate-90 whitespace-nowrap mb-6">
+      <div className="text-sm font-mono text-muted-dark -rotate-90 whitespace-nowrap mb-6">
         IMPORTANCE
       </div>
       <div className="flex-1 flex flex-col items-center justify-between relative">
@@ -191,13 +165,13 @@ function DepthScale() {
         {[10, 8, 6, 4, 2].map((val) => (
           <div key={val} className="relative flex items-center gap-2 z-10">
             <div className="h-1.5 w-1.5 rounded-full bg-white/20" />
-            <span className="text-[8px] font-mono text-white/15">{val}</span>
+            <span className="text-sm font-mono text-muted-dark">{val}</span>
           </div>
         ))}
       </div>
-      <div className="flex items-center gap-1 mt-4 text-white/15">
+      <div className="flex items-center gap-1 mt-4 text-muted-dark">
         <ArrowDown className="h-3 w-3" />
-        <span className="text-[9px] font-mono">depth</span>
+        <span className="text-sm font-mono">depth</span>
       </div>
     </div>
   );
@@ -206,13 +180,11 @@ function DepthScale() {
 function GeologicalLayer({
   category,
   memories,
-  hoveredId,
-  setHoveredId,
 }: {
   category: Category;
   memories: Memory[];
-  hoveredId: number | null;
-  setHoveredId: (id: number | null) => void;
+  hoveredId?: number | null;
+  setHoveredId?: (id: number | null) => void;
 }) {
   const meta = CATEGORY_META[category];
 
@@ -244,12 +216,12 @@ function GeologicalLayer({
               style={{ backgroundColor: meta.color, boxShadow: `0 0 8px ${meta.color}40` }}
             />
             <span
-              className="text-[10px] font-mono uppercase tracking-widest"
+              className="text-sm font-mono uppercase tracking-widest"
               style={{ color: `${meta.color}60` }}
             >
               {meta.label} layer
             </span>
-            <span className="text-[9px] font-mono text-white/15 ml-auto">
+            <span className="text-sm font-mono text-muted-dark ml-auto">
               {memories.length} {memories.length === 1 ? "memory" : "memories"}
             </span>
           </div>
@@ -264,16 +236,13 @@ function GeologicalLayer({
                     key={mem.id}
                     mem={mem}
                     isNew={false}
-                    isHovered={hoveredId === mem.id}
-                    onHover={() => setHoveredId(mem.id)}
-                    onLeave={() => setHoveredId(null)}
                   />
                 ))}
             </AnimatePresence>
           </div>
 
           {memories.length === 0 && (
-            <div className="text-[10px] font-mono text-white/15 py-2 text-center">
+            <div className="text-sm font-mono text-muted-dark py-2 text-center">
               no memories in this layer
             </div>
           )}
@@ -327,12 +296,12 @@ function DroppingMemory({
           boxShadow: `0 0 30px ${meta.color}30, 0 8px 32px rgba(0,0,0,0.4)`,
         }}
       >
-        <div className="text-[11px] text-white/80">{mem.title}</div>
+        <div className="text-sm text-foreground/80">{mem.title}</div>
         <div className="flex items-center gap-2 mt-0.5">
-          <span className="text-[9px] font-mono" style={{ color: `${meta.color}70` }}>
+          <span className="text-sm font-mono" style={{ color: `${meta.color}70` }}>
             {mem.source}
           </span>
-          <span className="text-[8px] font-mono text-white/20">
+          <span className="text-sm font-mono text-muted-dark">
             importance: {mem.importance}
           </span>
         </div>
@@ -388,7 +357,6 @@ function ParallaxLayer({
 export default function MemoryLayers() {
   const prefersReducedMotion = useReducedMotion();
   const [memories, setMemories] = useState<Memory[]>(initialMemories);
-  const [hoveredId, setHoveredId] = useState<number | null>(null);
   const [droppingMem, setDroppingMem] = useState<Memory | null>(null);
   const nextIdRef = useRef(6);
   const poolIdxRef = useRef(0);
@@ -478,7 +446,7 @@ export default function MemoryLayers() {
           className="mx-auto mt-4 max-w-xl text-muted-dark font-light"
         >
           Memories settle into categorical layers like geological strata.{" "}
-          <span className="text-white/80 font-medium">
+          <span className="text-foreground/80 font-medium">
             Most important memories rise to the surface
           </span>{" "}
           — deeper layers hold supporting context.
@@ -501,11 +469,11 @@ export default function MemoryLayers() {
           <div className="flex items-center justify-between border-b border-white/5 px-5 py-3">
             <div className="flex items-center gap-2">
               <Layers className="h-4 w-4 text-brand-purple/60" />
-              <span className="text-xs font-mono text-white/40">
+              <span className="text-sm font-mono text-muted">
                 cortical-layers-view
               </span>
             </div>
-            <div className="flex items-center gap-3 text-[10px] font-mono text-white/25">
+            <div className="flex items-center gap-3 text-sm font-mono text-muted-dark">
               <span className="flex items-center gap-1">
                 <Brain className="h-3 w-3" /> {memories.length} memories
               </span>
@@ -538,8 +506,6 @@ export default function MemoryLayers() {
                   <GeologicalLayer
                     category={group.category}
                     memories={group.memories}
-                    hoveredId={hoveredId}
-                    setHoveredId={setHoveredId}
                   />
                 </ParallaxLayer>
               ))}
@@ -562,7 +528,7 @@ export default function MemoryLayers() {
                       boxShadow: `0 0 6px ${meta.color}60`,
                     }}
                   />
-                  <span className="text-[10px] font-mono text-white/30">
+                  <span className="text-sm font-mono text-muted-dark">
                     {meta.label}
                   </span>
                 </div>
@@ -581,11 +547,11 @@ export default function MemoryLayers() {
           "Categorical geological layers",
           "Importance determines depth",
           "New memories sink into place",
-          "Parallax hover interaction",
+          "Automatic process capture",
         ].map((note) => (
           <span
             key={note}
-            className="rounded-full border border-white/6 bg-white/2 px-4 py-2 text-xs text-muted-dark backdrop-blur-sm transition-colors hover:bg-white/5 hover:text-white/60"
+            className="rounded-full border border-white/6 bg-white/2 px-4 py-2 text-sm text-muted backdrop-blur-sm"
           >
             {note}
           </span>

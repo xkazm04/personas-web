@@ -61,8 +61,8 @@ function AnimatedMetric({ target, prefix, suffix, color, label, trend }: { targe
   return (
     <div ref={ref} className="p-5 text-center">
       <div className="text-2xl font-bold font-mono" style={{ color }}>{prefix}{formatted}{suffix}</div>
-      <div className="text-[10px] font-mono text-white/30 mt-1">{label}</div>
-      <div className="text-[10px] font-mono text-brand-emerald/50 mt-0.5">{trend}</div>
+      <div className="text-sm font-mono text-muted-dark mt-1">{label}</div>
+      <div className="text-sm font-mono text-brand-emerald mt-0.5">{trend}</div>
     </div>
   );
 }
@@ -104,7 +104,7 @@ export default function ObservabilityDeck() {
         </motion.div>
         <motion.p variants={fadeUp} className="mx-auto mt-4 max-w-xl text-muted-dark font-light">
           See everything your agents do. Real-time event bus, execution tracing,
-          cost attribution, and performance analytics <span className="text-white/80 font-medium">in one dashboard.</span>
+          cost attribution, and performance analytics <span className="text-foreground/80 font-medium">in one dashboard.</span>
         </motion.p>
       </motion.div>
 
@@ -127,7 +127,7 @@ export default function ObservabilityDeck() {
           </div>
 
           {/* Live activity feed */}
-          <div className="px-5 py-3 space-y-1">
+          <div className="px-5 py-3 space-y-1 h-[180px] overflow-y-auto scrollbar-hide">
             <AnimatePresence mode="popLayout" initial={false}>
               {activity.map((row) => (
                 <motion.div
@@ -137,19 +137,19 @@ export default function ObservabilityDeck() {
                   animate={{ opacity: 1, x: 0, height: "auto" }}
                   exit={{ opacity: 0, height: 0 }}
                   transition={{ type: "spring", bounce: 0.15, duration: 0.4 }}
-                  className={`flex items-center justify-between text-[10px] font-mono py-1 rounded px-1 transition-colors duration-500 ${
+                  className={`flex items-center justify-between text-sm font-mono py-1 rounded px-1 transition-colors duration-500 ${
                     newRow === row.time ? "bg-brand-cyan/5" : ""
                   }`}
                 >
                   <div className="flex items-center gap-3">
-                    <span className="text-white/15 w-14">{row.time}</span>
-                    <span className="text-white/50 w-24 truncate">{row.agent}</span>
+                    <span className="text-muted-dark w-14">{row.time}</span>
+                    <span className="text-muted w-24 truncate">{row.agent}</span>
                     <div className="flex items-center gap-1.5">
                       <div className="h-1 w-1 rounded-full" style={{ backgroundColor: row.color }} />
                       <span style={{ color: `${row.color}80` }}>{row.event}</span>
                     </div>
                   </div>
-                  <div className="flex items-center gap-4 text-white/25">
+                  <div className="flex items-center gap-4 text-muted-dark">
                     <span className="w-10 text-right">{row.duration}</span>
                     <span className="w-10 text-right">{row.cost}</span>
                   </div>
@@ -158,9 +158,9 @@ export default function ObservabilityDeck() {
             </AnimatePresence>
           </div>
 
-          <div className="flex items-center justify-between border-t border-white/4 px-5 py-2.5 text-[10px] font-mono tracking-wider uppercase text-white/20">
+          <div className="flex items-center justify-between border-t border-white/4 px-5 py-2.5 text-sm font-mono tracking-wider uppercase text-muted-dark">
             <span>Live event stream</span>
-            <span className="text-brand-emerald/40">auto-refreshing</span>
+            <span className="text-brand-emerald">auto-refreshing</span>
           </div>
         </div>
       </motion.div>
@@ -178,8 +178,8 @@ export default function ObservabilityDeck() {
             className="group rounded-xl border border-white/6 bg-white/2 p-5 transition-all duration-300 hover:border-white/15 hover:bg-white/5"
           >
             <f.icon className="h-5 w-5 mb-2 transition-transform duration-300 group-hover:scale-110" style={{ color: f.color }} />
-            <div className="text-sm font-medium text-white/90">{f.title}</div>
-            <div className="mt-1.5 text-xs text-muted-dark leading-relaxed">{f.desc}</div>
+            <div className="text-sm font-medium text-foreground">{f.title}</div>
+            <div className="mt-1.5 text-sm text-muted-dark leading-relaxed">{f.desc}</div>
           </motion.div>
         ))}
       </div>

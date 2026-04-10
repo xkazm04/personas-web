@@ -61,25 +61,28 @@ function applyThemeToDOM(themeId: ThemeId) {
   setTimeout(() => el.classList.remove("theme-transitioning"), 300);
 }
 
+/** Pick a random theme on every fresh page load. */
+function pickRandomTheme(): ThemeId {
+  const ids = THEMES.map((t) => t.id);
+  return ids[Math.floor(Math.random() * ids.length)];
+}
+
 interface ThemeState {
   themeId: ThemeId;
   setTheme: (id: ThemeId) => void;
 }
 
-export const useThemeStore = create<ThemeState>()(
-  persist(
-    (set) => ({
-      themeId: "dark-midnight",
-      setTheme: (themeId) => {
-        applyThemeToDOM(themeId);
-        set({ themeId });
-      },
-    }),
-    {
-      name: "personas-web-theme",
-      onRehydrateStorage: () => (state) => {
-        if (state) applyThemeToDOM(state.themeId);
-      },
-    },
-  ),
-);
+export const useThemeStore = create<ThemeState>()((set) => ({
+  themeId: "dark-midnight",
+  setTheme: (themeId) => {
+    applyThemeToDOM(themeId);
+    set({ themeId });
+  },
+}));
+
+/** Initialise once on app mount — random theme each visit. */
+export function initRandomTheme() {
+  const id = pickRandomTheme();
+  applyThemeToDOM(id);
+  useThemeStore.setState({ themeId: id });
+}

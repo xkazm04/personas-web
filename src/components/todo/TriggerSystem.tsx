@@ -68,7 +68,7 @@ export default function TriggerSystem() {
         </motion.div>
         <motion.p variants={fadeUp} className="mx-auto mt-4 max-w-xl text-muted-dark font-light">
           Schedule, webhook, clipboard, file watch, chaining, event bus, polling, or manual.
-          <span className="text-white/80 font-medium"> Combine triggers for complex automation.</span>
+          <span className="text-foreground/80 font-medium"> Combine triggers for complex automation.</span>
         </motion.p>
       </motion.div>
 
@@ -166,8 +166,8 @@ export default function TriggerSystem() {
             return (
               <span
                 key={`label-${t.name}`}
-                className={`absolute text-[9px] font-mono uppercase tracking-wider transition-all duration-300 pointer-events-none ${
-                  isActive ? "text-white/60" : "text-white/15"
+                className={`absolute text-sm font-mono uppercase tracking-wider transition-all duration-300 pointer-events-none ${
+                  isActive ? "text-muted" : "text-muted-dark"
                 }`}
                 style={{
                   left: `${50 + labelRadius * Math.cos(rad)}%`,
@@ -197,13 +197,13 @@ export default function TriggerSystem() {
                   <active.icon className="h-7 w-7" style={{ color: active.color }} />
                 </div>
                 <div>
-                  <div className="text-xl font-semibold text-white/90">{active.name}</div>
+                  <div className="text-xl font-semibold text-foreground">{active.name}</div>
                   <div className="text-sm text-muted-dark">{active.desc}</div>
                 </div>
               </div>
-              <div className="text-sm text-white/60 leading-relaxed mb-5">{active.detail}</div>
+              <div className="text-sm text-muted leading-relaxed mb-5">{active.detail}</div>
               <div className="rounded-lg border border-white/6 bg-black/30 px-4 py-3">
-                <div className="text-[10px] font-mono text-white/25 mb-1 uppercase tracking-wider">Example</div>
+                <div className="text-sm font-mono text-muted-dark mb-1 uppercase tracking-wider">Example</div>
                 <div className="text-sm font-mono" style={{ color: `${active.color}99` }}>{active.example}</div>
               </div>
 
