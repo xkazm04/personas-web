@@ -57,6 +57,11 @@ function parseInline(text: string, keyBase: string): ReactNode[] {
 
 // ── Block parser ─────────────────────────────────────────────────────
 
+function isBlockStart(line: string): boolean {
+  const t = line.trimStart();
+  return t.startsWith("#") || t.startsWith("```") || /^---+$/.test(t) || t.startsWith("> ") || /^\s*[-*]\s/.test(line) || /^\s*\d+\.\s/.test(line);
+}
+
 function parseBlocks(lines: string[]): ReactNode[] {
   const elements: ReactNode[] = [];
   let i = 0;
@@ -117,7 +122,7 @@ function parseBlocks(lines: string[]): ReactNode[] {
     // ── Blockquote
     if (line.trimStart().startsWith("> ")) {
       const bqLines: string[] = [];
-      while (i < lines.length && (lines[i].trimStart().startsWith("> ") || lines[i].trim() === "")) {
+      while (i < lines.length && lines[i].trimStart().startsWith("> ")) {
         bqLines.push(lines[i].replace(/^>\s?/, ""));
         i++;
       }
@@ -178,7 +183,7 @@ function parseBlocks(lines: string[]): ReactNode[] {
 
     // ── Paragraph (default)
     const pLines: string[] = [];
-    while (i < lines.length && lines[i].trim() !== "" && !lines[i].trimStart().startsWith("#") && !lines[i].trimStart().startsWith("```") && !/^---+$/.test(lines[i].trim()) && !lines[i].trimStart().startsWith("> ") && !/^\s*[-*]\s/.test(lines[i]) && !/^\s*\d+\.\s/.test(lines[i])) {
+    while (i < lines.length && lines[i].trim() !== "" && !isBlockStart(lines[i])) {
       pLines.push(lines[i]);
       i++;
     }

@@ -90,7 +90,18 @@ export default function SearchCombobox({
 
   const grouped = useMemo(() => groupResultsByCategory(results), [results]);
 
-  let flatIndex = 0;
+  // Pre-compute flat index map so indices are stable across re-renders
+  const flatIndexMap = useMemo(() => {
+    const map = new Map<string, number>();
+    let idx = 0;
+    for (const group of grouped) {
+      for (const r of group.results) {
+        map.set(r.topic.id, idx++);
+      }
+    }
+    return map;
+  }, [grouped]);
+
   const activeId = activeIndex >= 0 ? `search-option-${activeIndex}` : undefined;
 
   return (
@@ -139,7 +150,7 @@ export default function SearchCombobox({
                       <span className="text-xs font-medium text-muted-dark">{group.category.name}</span>
                     </div>
                     {group.results.map((result) => {
-                      const idx = flatIndex++;
+                      const idx = flatIndexMap.get(result.topic.id) ?? -1;
                       const isActive = idx === activeIndex;
                       const badge = BADGE_LABEL[result.matchType];
                       return (
@@ -157,7 +168,7 @@ export default function SearchCombobox({
                           <span className="h-1.5 w-1.5 shrink-0 rounded-full" style={{ backgroundColor: group.category.color }} />
                           <span className="min-w-0 flex-1 truncate text-foreground">{result.topic.title}</span>
                           {badge && (
-                            <span className="shrink-0 rounded bg-white/[0.06] px-1.5 py-0.5 text-[10px] leading-none text-muted-dark">
+                            <span className="shrink-0 rounded bg-white/[0.06] px-1.5 py-0.5 text-sm leading-none text-muted-dark">
                               {badge}
                             </span>
                           )}
@@ -167,7 +178,7 @@ export default function SearchCombobox({
                     })}
                   </div>
                 ))}
-                <div className="border-t border-white/[0.06] px-3 py-1.5 text-right text-[11px] text-muted-dark">
+                <div className="border-t border-white/[0.06] px-3 py-1.5 text-right text-sm text-muted-dark">
                   {results.length} result{results.length !== 1 && "s"}
                 </div>
               </>
