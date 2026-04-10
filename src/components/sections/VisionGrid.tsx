@@ -8,7 +8,9 @@ import {
   HeartPulse,
   Dna,
   Zap,
+  ArrowRight,
 } from "lucide-react";
+import Link from "next/link";
 import GradientText from "@/components/GradientText";
 import SectionHeading from "@/components/SectionHeading";
 import SectionWrapper from "@/components/SectionWrapper";
@@ -24,6 +26,7 @@ interface Capability {
   color: string;
   description: string;
   details: string[];
+  slug?: string;
 }
 
 const capabilities: Capability[] = [
@@ -31,6 +34,7 @@ const capabilities: Capability[] = [
     title: "Multi-Agent Canvas",
     icon: GitBranch,
     color: "#06b6d4",
+    slug: "orchestration",
     description:
       "Wire agents into visual pipelines. Drag, connect, and orchestrate multi-agent workflows on an interactive canvas.",
     details: [
@@ -43,6 +47,7 @@ const capabilities: Capability[] = [
     title: "Credential Vault",
     icon: ShieldCheck,
     color: "#a855f7",
+    slug: "security",
     description:
       "AES-256-GCM encryption with OS-native keyring integration. Your secrets never leave your device.",
     details: [
@@ -55,6 +60,7 @@ const capabilities: Capability[] = [
     title: "Multi-Provider AI",
     icon: Cpu,
     color: "#34d399",
+    slug: "multi-provider",
     description:
       "Switch between Claude, OpenAI, Gemini, Ollama, and custom endpoints. Automatic failover with circuit-breaker health tracking.",
     details: [
@@ -79,6 +85,7 @@ const capabilities: Capability[] = [
     title: "Genome Evolution",
     icon: Dna,
     color: "#fbbf24",
+    slug: "genome",
     description:
       "Evolutionary prompt optimization. Breed, mutate, and select the best-performing agent configurations automatically.",
     details: [
@@ -138,13 +145,8 @@ export default function VisionGrid() {
         {capabilities.map((cap) => {
           const Icon = cap.icon;
 
-          return (
-            <motion.div
-              key={cap.title}
-              variants={cardVariants}
-              className="group relative rounded-xl border border-white/[0.06] bg-white/[0.02] backdrop-blur-sm overflow-hidden transition-all duration-500 hover:bg-white/[0.05] hover:border-white/[0.12] hover:scale-[1.02]"
-            >
-              <div className="relative flex flex-col px-5 py-6">
+          const inner = (
+            <div className="relative flex flex-col px-5 py-6">
                 {/* Icon circle */}
                 <div
                   className="flex h-11 w-11 items-center justify-center rounded-full mb-4"
@@ -178,7 +180,31 @@ export default function VisionGrid() {
                     </li>
                   ))}
                 </ul>
-              </div>
+
+                {/* Learn more link */}
+                {cap.slug && (
+                  <div
+                    className="mt-4 flex items-center gap-1 text-sm font-medium"
+                    style={{ color: cap.color }}
+                  >
+                    Learn more
+                    <ArrowRight className="h-3.5 w-3.5 transition-transform group-hover:translate-x-1" />
+                  </div>
+                )}
+            </div>
+          );
+
+          return (
+            <motion.div
+              key={cap.title}
+              variants={cardVariants}
+              className="group relative rounded-xl border border-white/[0.06] bg-white/[0.02] backdrop-blur-sm overflow-hidden transition-all duration-500 hover:bg-white/[0.05] hover:border-white/[0.12] hover:scale-[1.02]"
+            >
+              {cap.slug ? (
+                <Link href={`/features/${cap.slug}`}>{inner}</Link>
+              ) : (
+                inner
+              )}
             </motion.div>
           );
         })}
