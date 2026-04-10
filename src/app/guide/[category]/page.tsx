@@ -30,7 +30,7 @@ export default async function CategoryPage({ params }: { params: Promise<{ categ
   if (!cat) notFound();
 
   const topics = GUIDE_TOPICS.filter((t) => t.categoryId === cat.id);
-  const illustration = GUIDE_ILLUSTRATIONS[cat.id]?.dark ?? "";
+  const illus = GUIDE_ILLUSTRATIONS[cat.id];
 
   return (
     <div className="px-6 pb-24">
@@ -44,15 +44,23 @@ export default async function CategoryPage({ params }: { params: Promise<{ categ
           Back to Guide
         </Link>
 
-        {/* Illustration banner */}
-        {illustration && (
+        {/* Illustration banner — dark/light variants swap via CSS */}
+        {illus && (
           <div className="relative mt-6 overflow-hidden rounded-2xl">
             <Image
-              src={illustration}
+              src={illus.dark}
               alt={cat.name}
               width={800}
               height={400}
-              className="h-auto max-h-48 w-full object-cover opacity-60"
+              className="hidden dark:block h-auto max-h-48 w-full object-cover opacity-60"
+              priority
+            />
+            <Image
+              src={illus.light}
+              alt={cat.name}
+              width={800}
+              height={400}
+              className="block dark:hidden h-auto max-h-48 w-full object-cover opacity-60"
               priority
             />
             <div className="absolute inset-0 bg-gradient-to-t from-background via-background/40 to-transparent" />

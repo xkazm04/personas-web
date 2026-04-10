@@ -61,22 +61,29 @@ export default function GuidePage() {
           >
             {GUIDE_CATEGORIES.map((cat) => {
               const count = topicCountFor(cat.id);
-              const illustration = GUIDE_ILLUSTRATIONS[cat.id]?.dark ?? "";
+              const illus = GUIDE_ILLUSTRATIONS[cat.id];
               return (
                 <motion.div key={cat.id} variants={fadeUp}>
                   <Link
                     href={`/guide/${cat.id}`}
                     className="group block overflow-hidden rounded-2xl border border-white/[0.06] bg-white/[0.02] backdrop-blur-sm transition-all duration-300 hover:scale-[1.01] hover:border-white/[0.12]"
                   >
-                    {/* Illustration header */}
-                    {illustration && (
+                    {/* Illustration header — dark/light variants swap via CSS */}
+                    {illus && (
                       <div className="relative aspect-video w-full overflow-hidden bg-white/[0.02]">
                         <Image
-                          src={illustration}
+                          src={illus.dark}
                           alt={cat.name}
                           width={800}
                           height={400}
-                          className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105"
+                          className="hidden dark:block h-full w-full object-cover transition-transform duration-500 group-hover:scale-105"
+                        />
+                        <Image
+                          src={illus.light}
+                          alt={cat.name}
+                          width={800}
+                          height={400}
+                          className="block dark:hidden h-full w-full object-cover transition-transform duration-500 group-hover:scale-105"
                         />
                       </div>
                     )}
