@@ -67,6 +67,8 @@ export interface Translations {
     mode1: string;
     mode2: string;
     mode3: string;
+    mode4: string;
+    mode5: string;
     viewOnGithub: string;
     downloadForWindows: string;
     joinWaitlist: string;
@@ -339,9 +341,11 @@ export const en: Translations = {
     headingLine2: 'that work for you',
     description: 'Design agents in natural language. Orchestrate them locally or in the cloud.',
     descriptionBold: 'No workflow diagrams. No code.',
-    mode1: 'Design in one sentence',
-    mode2: 'Run locally for free',
-    mode3: 'Scale to cloud when needed',
+    mode1: 'Multi-Agent Pipelines',
+    mode2: '40+ Integrations',
+    mode3: 'AES-256 Encrypted',
+    mode4: 'Multi-Provider AI',
+    mode5: 'Self-Healing Engine',
     viewOnGithub: 'View on GitHub',
     downloadForWindows: 'Download for Windows',
     joinWaitlist: 'Join Windows Waitlist',

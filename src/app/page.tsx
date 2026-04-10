@@ -8,6 +8,7 @@ import {
   LazyDownloadCTA,
   LazyFAQ,
   LazyMidPageCTA,
+  LazyPipelineShowcase,
   LazyPricing,
   LazyUseCases,
   LazyVision,
@@ -47,12 +48,23 @@ const softwareJsonLd = {
   applicationCategory: "DeveloperApplication",
   operatingSystem: "macOS, Windows, Linux",
   description:
-    "Build intelligent AI agents in natural language. Orchestrate them locally or in the cloud. No workflow diagrams. No code.",
+    "Build and orchestrate multi-agent AI pipelines locally or in the cloud. Multi-provider AI, AES-256 encrypted credential vault, self-healing execution, and 40+ integrations — no code required.",
   offers: {
     "@type": "Offer",
     price: "0",
     priceCurrency: "USD",
   },
+  featureList: [
+    "Multi-agent visual pipeline builder",
+    "AES-256-GCM encrypted credential vault with OS keyring",
+    "Multi-provider AI: Claude, OpenAI, Gemini, Ollama",
+    "Self-healing execution with automatic recovery",
+    "Evolutionary prompt optimization (Genome system)",
+    "40+ built-in integrations (Slack, GitHub, Jira, Notion, etc.)",
+    "6 trigger types: schedule, webhook, clipboard, file watcher, chain, event",
+    "Real-time event bus and observability dashboard",
+    "Local-first architecture with optional cloud deployment",
+  ],
 };
 
 const faqJsonLd = {
@@ -144,12 +156,13 @@ interface SectionConfig {
 }
 
 const sections: SectionConfig[] = [
-  { Component: LazyUseCases,        glow: "emerald", fromColor: "cyan",    toColor: "emerald", dividerFrom: "cyan",    dividerTo: "emerald" },
-  { Component: LazyPlaygroundSplit, glow: "cyan",    fromColor: "emerald", toColor: "cyan",    dividerFrom: "emerald", dividerTo: "cyan" },
-  { Component: LazyVision,         glow: "purple",  fromColor: "cyan",    toColor: "purple",  dividerFrom: "cyan",    dividerTo: "purple", wrapperId: "vision" },
-  { Component: LazyPricing,        glow: "purple",  fromColor: "purple",  toColor: "purple",  dividerFrom: "purple",  dividerTo: "purple", wrapperId: "pricing" },
-  { Component: LazyFAQ,            glow: "cyan",    fromColor: "purple",  toColor: "cyan",    dividerFrom: "purple",  dividerTo: "cyan" },
-  { Component: LazyDownloadCTA,    glow: "cyan",    fromColor: "cyan",                        dividerFrom: "cyan",    dividerTo: "cyan" },
+  { Component: LazyUseCases,           glow: "emerald", fromColor: "cyan",    toColor: "emerald", dividerFrom: "cyan",    dividerTo: "emerald" },
+  { Component: LazyPlaygroundSplit,    glow: "cyan",    fromColor: "emerald", toColor: "cyan",    dividerFrom: "emerald", dividerTo: "cyan" },
+  { Component: LazyPipelineShowcase,   glow: "emerald", fromColor: "cyan",    toColor: "emerald", dividerFrom: "cyan",    dividerTo: "emerald", wrapperId: "pipelines" },
+  { Component: LazyVision,            glow: "purple",  fromColor: "emerald", toColor: "purple",  dividerFrom: "emerald", dividerTo: "purple", wrapperId: "vision" },
+  { Component: LazyPricing,           glow: "purple",  fromColor: "purple",  toColor: "purple",  dividerFrom: "purple",  dividerTo: "purple", wrapperId: "pricing" },
+  { Component: LazyFAQ,               glow: "cyan",    fromColor: "purple",  toColor: "cyan",    dividerFrom: "purple",  dividerTo: "cyan" },
+  { Component: LazyDownloadCTA,        glow: "cyan",    fromColor: "cyan",                        dividerFrom: "cyan",    dividerTo: "cyan" },
 ];
 
 export default function Home() {

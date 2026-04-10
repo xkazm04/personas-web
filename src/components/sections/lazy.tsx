@@ -159,6 +159,7 @@ export function LazyMidPageCTA() {
 const UseCasesSection = createLazySection(() => import("@/components/sections/UseCases"));
 const PlaygroundSplitSection = createLazySection(() => import("@/components/sections/PlaygroundSplit"));
 const DownloadCTASection = createLazySection(() => import("@/components/sections/DownloadCTA"));
+const PipelineShowcaseSection = createLazySection(() => import("@/components/sections/PipelineShowcase"));
 const ChangelogSection = createLazySection(() => import("@/components/sections/Changelog"));
 
 export function LazyUseCases() {
@@ -171,6 +172,10 @@ export function LazyPlaygroundSplit() {
 
 export function LazyDownloadCTA() {
   return <DownloadCTASection />;
+}
+
+export function LazyPipelineShowcase() {
+  return <PipelineShowcaseSection />;
 }
 
 export function LazyChangelog() {

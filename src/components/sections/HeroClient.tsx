@@ -2,7 +2,7 @@
 
 import { useId, useMemo, useRef } from "react";
 import { motion, useTransform, useMotionValue, useSpring } from "framer-motion";
-import { Download, Github, ChevronDown } from "lucide-react";
+import { Download, Github, ChevronDown, GitBranch, Puzzle, ShieldCheck, Cpu, HeartPulse } from "lucide-react";
 import { fadeUp, staggerContainer } from "@/lib/animations";
 import GradientText from "@/components/GradientText";
 import SectionHeading from "@/components/SectionHeading";
@@ -90,7 +90,13 @@ function CommandCenterIllustration({ phasesLabel }: { phasesLabel: string }) {
 
 export default function HeroClient() {
   const { t } = useTranslation();
-  const operatingModes = [t.hero.mode1, t.hero.mode2, t.hero.mode3];
+  const differentiators = [
+    { label: t.hero.mode1, Icon: GitBranch },
+    { label: t.hero.mode2, Icon: Puzzle },
+    { label: t.hero.mode3, Icon: ShieldCheck },
+    { label: t.hero.mode4, Icon: Cpu },
+    { label: t.hero.mode5, Icon: HeartPulse },
+  ];
   const liveStats = useLiveStats();
   const DOWNLOAD_URL = process.env.NEXT_PUBLIC_DOWNLOAD_URL;
   const sectionRef = useRef<HTMLElement>(null);
@@ -162,13 +168,14 @@ export default function HeroClient() {
           </motion.p>
 
           <motion.div variants={fadeUp} className="mt-8 flex flex-wrap items-center justify-center gap-3 lg:justify-start">
-            {operatingModes.map((mode, i) => (
+            {differentiators.map(({ label, Icon }) => (
               <motion.span
-                key={mode}
+                key={label}
                 whileHover={{ scale: 1.05 }}
-                className="rounded-full border border-white/8 bg-white/3 px-4 py-2 text-sm font-mono tracking-wide text-muted-dark transition-colors duration-300 hover:bg-white/6 hover:text-white hover:border-white/15 cursor-default"
+                className="flex items-center gap-2 rounded-full border border-white/8 bg-white/3 px-4 py-2 text-sm font-mono tracking-wide text-muted-dark transition-colors duration-300 hover:bg-white/6 hover:text-white hover:border-white/15 cursor-default"
               >
-                {mode}
+                <Icon className="h-3.5 w-3.5 opacity-60" />
+                {label}
               </motion.span>
             ))}
           </motion.div>
