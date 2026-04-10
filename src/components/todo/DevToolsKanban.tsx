@@ -210,11 +210,11 @@ export default function DevToolsKanban() {
     <SectionWrapper id="dev-tools-kanban" aria-label="Developer tools kanban board">
       <motion.div variants={fadeUp} className="text-center mb-12">
         <SectionHeading>
-          Built-in <GradientText>developer tools</GradientText>
+          Everything to build, test, and <GradientText>improve</GradientText>
         </SectionHeading>
         <p className="mt-4 text-lg text-muted-dark max-w-2xl mx-auto">
-          Six integrated tools form an autonomous development lifecycle — scan, analyze,
-          triage, execute, and learn without leaving the app.
+          A complete toolkit in one place — find issues, review changes, run tests,
+          and track results. <span className="font-medium text-foreground/80">Your agents improve continuously without you lifting a finger.</span>
         </p>
       </motion.div>
 

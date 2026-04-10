@@ -283,17 +283,18 @@ export default function GenomeTree() {
       >
         <motion.div variants={fadeUp}>
           <SectionHeading>
-            Evolutionary{" "}
-            <GradientText className="drop-shadow-lg">phylogenetic tree</GradientText>
+            Gets{" "}
+            <GradientText className="drop-shadow-lg">smarter</GradientText> every time it runs
           </SectionHeading>
         </motion.div>
         <motion.p
           variants={fadeUp}
           className="mx-auto mt-4 max-w-xl text-muted-dark font-light"
         >
-          Watch prompt lineages branch, compete, and evolve.{" "}
+          Instead of manually tweaking instructions for hours, your agents automatically
+          test what works, keep what&apos;s best, and discard the rest —{" "}
           <span className="text-foreground/80 font-medium">
-            The fittest survive, dead ends fade away.
+            like natural selection for AI.
           </span>
         </motion.p>
       </motion.div>
@@ -308,7 +309,7 @@ export default function GenomeTree() {
           className="rounded-2xl border border-white/8 bg-black/50 backdrop-blur-xl overflow-hidden shadow-[0_0_60px_rgba(0,0,0,0.3)]"
         >
           <TerminalChrome
-            title="phylogenetic-tree"
+            title="evolution-tree"
             status={growing ? "growing" : "complete"}
             info={`gen ${growStep}/${maxGeneration}`}
             className="px-5 py-3"
@@ -848,7 +849,7 @@ export default function GenomeTree() {
             <div className="flex items-center gap-2 mb-3">
               <Star className="h-3.5 w-3.5 text-brand-amber/60" />
               <span className="text-sm font-mono text-muted-dark">
-                Best evolutionary path
+                Winning path
               </span>
             </div>
             <div className="flex items-center gap-1 overflow-x-auto pb-1">

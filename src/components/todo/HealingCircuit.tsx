@@ -430,19 +430,18 @@ export default function HealingCircuit() {
       >
         <motion.div variants={fadeUp}>
           <SectionHeading>
-            Self-repairing{" "}
-            <GradientText className="drop-shadow-lg">circuit board</GradientText>
+            Fixes itself when things{" "}
+            <GradientText className="drop-shadow-lg">break</GradientText>
           </SectionHeading>
         </motion.div>
         <motion.p
           variants={fadeUp}
           className="mx-auto mt-4 max-w-xl text-muted-dark font-light"
         >
-          Every connection between your services is monitored.{" "}
+          When something goes wrong, your agents don&apos;t just stop — they figure out what happened, fix it, and keep going.{" "}
           <span className="text-foreground/80 font-medium">
-            When a trace breaks, repair bots diagnose and weld it back
-          </span>{" "}
-          — automatically.
+            No 3 AM alerts, no manual restarts.
+          </span>
         </motion.p>
       </motion.div>
 

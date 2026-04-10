@@ -29,9 +29,9 @@ const eventPool = ["execution.completed", "execution.started", "tool.http_reques
 const colorPool = ["#34d399", "#06b6d4", "#a855f7", "#fbbf24", "#f43f5e", "#60a5fa"];
 
 const observFeatures = [
-  { icon: Activity, title: "Real-time event bus", desc: "Animated particle lanes showing events flowing between agents. Live status for every persona.", color: "#06b6d4" },
-  { icon: Eye, title: "Execution tracing", desc: "OpenTelemetry-style spans with parent-child relationships. Waterfall visualization of every step.", color: "#a855f7" },
-  { icon: DollarSign, title: "Cost attribution", desc: "Per-execution, per-persona, per-model cost tracking. Monthly trends, budget enforcement, alerts.", color: "#fbbf24" },
+  { icon: Activity, title: "Live activity feed", desc: "Animated particle lanes showing events flowing between agents. Live status for every persona.", color: "#06b6d4" },
+  { icon: Eye, title: "Step-by-step history", desc: "OpenTelemetry-style spans with parent-child relationships. Waterfall visualization of every step.", color: "#a855f7" },
+  { icon: DollarSign, title: "Cost tracking", desc: "Per-execution, per-persona, per-model cost tracking. Monthly trends, budget enforcement, alerts.", color: "#fbbf24" },
   { icon: Gauge, title: "Performance analytics", desc: "Prompt version comparison, error rates by model, token usage analytics, regression detection.", color: "#34d399" },
   { icon: FileText, title: "Execution transcripts", desc: "Full I/O logs for every run. Tool call steps, protocol messages, and Claude session ID tracking.", color: "#f43f5e" },
   { icon: BarChart3, title: "Knowledge graph", desc: "Cross-persona insights and relationship mapping. Semantic search across the knowledge base.", color: "#60a5fa" },
@@ -98,13 +98,13 @@ export default function ObservabilityDeck() {
       <motion.div initial="hidden" whileInView="visible" viewport={{ once: true }} variants={staggerContainer} className="text-center">
         <motion.div variants={fadeUp}>
           <SectionHeading>
-            Full-stack{" "}
-            <GradientText className="drop-shadow-lg">observability</GradientText>
+            See everything,{" "}
+            <GradientText className="drop-shadow-lg">miss nothing</GradientText>
           </SectionHeading>
         </motion.div>
         <motion.p variants={fadeUp} className="mx-auto mt-4 max-w-xl text-muted-dark font-light">
-          See everything your agents do. Real-time event bus, execution tracing,
-          cost attribution, and performance analytics <span className="text-foreground/80 font-medium">in one dashboard.</span>
+          Watch your agents work in real time. Track what they do, what they cost,
+          and how well they perform — <span className="text-foreground/80 font-medium">all in one dashboard, zero setup required.</span>
         </motion.p>
       </motion.div>
 

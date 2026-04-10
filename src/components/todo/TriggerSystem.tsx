@@ -23,13 +23,13 @@ interface Trigger {
 
 const triggers: Trigger[] = [
   { icon: MousePointerClick, name: "Manual", color: "#06b6d4", desc: "On-demand from the UI", detail: "Click to run instantly. Supports dry-run mode and custom JSON input.", example: "\"Run my PR reviewer now\"" },
-  { icon: Clock, name: "Schedule", color: "#a855f7", desc: "Cron expressions", detail: "5-field cron with next-run preview. Background scheduler checks every 5 seconds.", example: "0 9 * * MON-FRI" },
-  { icon: Globe, name: "Webhook", color: "#34d399", desc: "Inbound HTTP POST", detail: "Custom path routing, header validation, request logging with replay.", example: "POST /webhook/deploy" },
-  { icon: Clipboard, name: "Clipboard", color: "#fbbf24", desc: "System clipboard watch", detail: "Regex-based filtering. Captures text, URLs, JSON from clipboard.", example: "/^JIRA-\\d+/" },
-  { icon: FolderOpen, name: "File Watch", color: "#f43f5e", desc: "Filesystem events", detail: "Watch directories with globs. Triggers on create/modify/delete with debounce.", example: "~/Downloads/*.csv" },
-  { icon: Link, name: "Chain", color: "#60a5fa", desc: "Agent-to-agent", detail: "Output from one persona triggers the next. JSON mapping between agents.", example: "Triage → Classify → Route" },
-  { icon: Radio, name: "Event Bus", color: "#a855f7", desc: "Custom event subscriptions", detail: "Pattern matching on event type and data. Dead-letter queue for failures.", example: "on: deploy.failed" },
-  { icon: Timer, name: "Polling", color: "#06b6d4", desc: "Interval-based checks", detail: "Every N seconds, check condition. Smart deduplication prevents redundant runs.", example: "Every 60s: check API" },
+  { icon: Clock, name: "Schedule", color: "#a855f7", desc: "Time-based schedule", detail: "Set any schedule — every hour, daily, weekly, or custom. Background scheduler checks every 5 seconds.", example: "0 9 * * MON-FRI" },
+  { icon: Globe, name: "Webhook", color: "#34d399", desc: "Incoming web requests", detail: "Receives data from any web service, with request logging and replay.", example: "POST /webhook/deploy" },
+  { icon: Clipboard, name: "Clipboard", color: "#fbbf24", desc: "Clipboard monitor", detail: "Watches for specific text patterns you define. Captures text, URLs, and JSON from clipboard.", example: "/^JIRA-\\d+/" },
+  { icon: FolderOpen, name: "File Watch", color: "#f43f5e", desc: "File changes", detail: "Watches folders for new or changed files. Triggers on create, modify, or delete.", example: "~/Downloads/*.csv" },
+  { icon: Link, name: "Chain", color: "#60a5fa", desc: "Chain to next agent", detail: "One agent's output feeds into the next. Seamless handoff between agents.", example: "Triage → Classify → Route" },
+  { icon: Radio, name: "Event Bus", color: "#a855f7", desc: "Custom events", detail: "Listens for specific events in your system. Failed events are saved for retry.", example: "on: deploy.failed" },
+  { icon: Timer, name: "Polling", color: "#06b6d4", desc: "Regular check-ins", detail: "Checks at regular intervals, skips duplicates. Prevents redundant runs automatically.", example: "Every 60s: check API" },
 ];
 
 export default function TriggerSystem() {
@@ -62,13 +62,13 @@ export default function TriggerSystem() {
       <motion.div initial="hidden" whileInView="visible" viewport={{ once: true }} variants={staggerContainer} className="text-center">
         <motion.div variants={fadeUp}>
           <SectionHeading>
-            8 ways to{" "}
-            <GradientText className="drop-shadow-lg">trigger your agents</GradientText>
+            Runs when and how{" "}
+            <GradientText className="drop-shadow-lg">you</GradientText> want
           </SectionHeading>
         </motion.div>
         <motion.p variants={fadeUp} className="mx-auto mt-4 max-w-xl text-muted-dark font-light">
-          Schedule, webhook, clipboard, file watch, chaining, event bus, polling, or manual.
-          <span className="text-foreground/80 font-medium"> Combine triggers for complex automation.</span>
+          On a schedule, when a file changes, when you copy something, or when another agent finishes — eight flexible ways to start your agents.
+          <span className="text-foreground/80 font-medium"> Mix and match for any workflow.</span>
         </motion.p>
       </motion.div>
 

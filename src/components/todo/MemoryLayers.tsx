@@ -437,19 +437,18 @@ export default function MemoryLayers() {
       >
         <motion.div variants={fadeUp}>
           <SectionHeading>
-            Memory{" "}
-            <GradientText className="drop-shadow-lg">layers</GradientText>
+            Remembers what{" "}
+            <GradientText className="drop-shadow-lg">works</GradientText>
           </SectionHeading>
         </motion.div>
         <motion.p
           variants={fadeUp}
           className="mx-auto mt-4 max-w-xl text-muted-dark font-light"
         >
-          Memories settle into categorical layers like geological strata.{" "}
+          Every task teaches your agents something new. Important lessons rise to the top, while background context stays accessible —{" "}
           <span className="text-foreground/80 font-medium">
-            Most important memories rise to the surface
-          </span>{" "}
-          — deeper layers hold supporting context.
+            your agents get better the more they work.
+          </span>
         </motion.p>
       </motion.div>
 
@@ -478,7 +477,7 @@ export default function MemoryLayers() {
                 <Brain className="h-3 w-3" /> {memories.length} memories
               </span>
               <span className="flex items-center gap-1">
-                <Search className="h-3 w-3" /> semantic search
+                <Search className="h-3 w-3" /> instant recall
               </span>
             </div>
           </div>
@@ -544,10 +543,10 @@ export default function MemoryLayers() {
         className="mt-8 flex flex-wrap justify-center gap-2 relative z-10"
       >
         {[
-          "Categorical geological layers",
-          "Importance determines depth",
-          "New memories sink into place",
-          "Automatic process capture",
+          "Learns from every task",
+          "Focuses on what matters most",
+          "Finds relevant knowledge instantly",
+          "Gets smarter over time",
         ].map((note) => (
           <span
             key={note}

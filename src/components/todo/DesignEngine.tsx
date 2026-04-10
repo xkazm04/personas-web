@@ -19,7 +19,7 @@ const conversation: ChatMessage[] = [
   { role: "user", content: "Monitor my GitHub PRs and post Slack summaries every morning at 9am.", delay: 0 },
   { role: "system", content: "Parsing intent... 2 tools detected, 1 trigger needed", delay: 800 },
   { role: "assistant", content: "I'll create a **PR Review Digest** agent. Here's what I'm setting up:", delay: 1200 },
-  { role: "assistant", content: "**Identity:** PR Review Digest Agent\n**Tools:** `github_list_prs`, `slack_post_message`\n**Trigger:** Schedule — `0 9 * * MON-FRI`\n**Prompt:** 6-section structured (identity, instructions, toolGuidance, examples, errorHandling, custom)", delay: 800 },
+  { role: "assistant", content: "**Identity:** PR Review Digest Agent\n**Tools:** `github_list_prs`, `slack_post_message`\n**Trigger:** Schedule — `0 9 * * MON-FRI`\n**Prompt:** 6-part agent blueprint (identity, instructions, toolGuidance, examples, errorHandling, custom)", delay: 800 },
   { role: "assistant", content: "A few questions before I finalize:", delay: 600 },
   { role: "assistant", content: "1. Which GitHub repos should I monitor? (all, or specific ones?)\n2. Which Slack channel for the digest?\n3. Should I include draft PRs or only open ones?", delay: 400 },
   { role: "user", content: "All repos in our org, post to #engineering, skip drafts.", delay: 2000 },
@@ -99,13 +99,13 @@ export default function DesignEngine() {
       <motion.div initial="hidden" whileInView="visible" viewport={{ once: true }} variants={staggerContainer} className="text-center">
         <motion.div variants={fadeUp}>
           <SectionHeading>
-            Design agents through{" "}
-            <GradientText className="drop-shadow-lg">conversation</GradientText>
+            Describe it.{" "}
+            <GradientText className="drop-shadow-lg">Done.</GradientText>
           </SectionHeading>
         </motion.div>
         <motion.p variants={fadeUp} className="mx-auto mt-4 max-w-xl text-muted-dark font-light">
-          No forms. No config files. Just tell Claude what you need — it asks the right questions,
-          generates the full agent config, and <span className="text-foreground/80 font-medium">deploys in one click.</span>
+          Tell Personas what you need in one sentence. It asks the right questions,
+          builds your agent, and gets it running — <span className="text-foreground/80 font-medium">no forms, no config files, no code.</span>
         </motion.p>
       </motion.div>
 
