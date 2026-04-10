@@ -395,5 +395,39 @@ export const ko: Translations = {
       deployment: '\ubc30\ud3ec & \ud1b5\ud569',
       troubleshooting: '\ubb38\uc81c \ud574\uacb0',
     },
+    categoryDescriptions: {
+      "getting-started": "Personas를 설치하고, 첫 번째 에이전트를 만들고, 10분 안에 기본 사항을 익히세요.",
+      credentials: "서비스에 안전하게 연결하세요. 암호화된 Vault의 작동 방식과 데이터 보호 방법을 이해할 수 있습니다.",
+      "agents-prompts": "AI 에이전트를 생성, 구성, 미세 조정하세요. 심플 모드와 구조화된 프롬프트 모드를 마스터하세요.",
+      triggers: "에이전트의 실행 시기와 방법을 설정하세요 — 스케줄, webhook, 파일 감시 등.",
+      pipelines: "에이전트를 비주얼 파이프라인으로 연결하세요. 팀 캔버스에서 멀티 에이전트 워크플로를 구축하세요.",
+      memories: "에이전트는 학습하고 기억합니다. 에이전트가 아는 것과 과거 경험을 활용하는 방법을 관리하세요.",
+      monitoring: "모든 실행을 실시간으로 추적하세요. 에이전트의 동작, 성능, 비용을 확인할 수 있습니다.",
+      testing: "아레나 테스트, A/B 비교를 실행하고, Genome 시스템으로 최적의 프롬프트를 진화시키세요.",
+      deployment: "에이전트를 클라우드에 배포하고 GitHub Actions, GitLab CI, n8n 워크플로에 연결하세요.",
+      troubleshooting: "일반적인 문제를 해결하고, 오류 메시지를 이해하고, 에이전트를 정상 궤도로 복구하세요.",
+    },
+  },
+  featurePages: {
+    orchestration: {
+      headline: "함께 일하는 에이전트",
+      description: "여러 에이전트가 복잡한 작업을 협력하는 비주얼 파이프라인을 구축하세요. 한 에이전트의 출력이 다음 에이전트의 입력이 됩니다 — 글루 코드 없이, 수동 단계 없이, 오케스트레이션에 제한 없이.",
+      cta: "첫 번째 파이프라인 만들기",
+    },
+    security: {
+      headline: "당신의 비밀은 안전합니다",
+      description: "모든 비밀번호, API key, 액세스 토큰은 은행 수준의 AES-256 암호화로 디바이스에서 암호화됩니다. 인증 정보는 운영 체제의 보안 Vault에 저장되며, 클라우드로 전송되는 것은 절대 없습니다.",
+      cta: "연결 보안 설정",
+    },
+    "multi-provider": {
+      headline: "하나의 AI에 종속되지 않습니다",
+      description: "Claude, OpenAI, Gemini를 사용하거나 Ollama로 로컬 모델을 실행하세요. 공급자 간 자유롭게 전환하고, 서로 다른 에이전트에 다른 모델을 할당하며, 한 공급자가 다운되면 — 에이전트가 자동으로 다른 공급자로 전환합니다.",
+      cta: "AI 선택하기",
+    },
+    genome: {
+      headline: "에이전트가 자동으로 더 똑똑해집니다",
+      description: "프롬프트를 수시간 동안 수동으로 조정하는 대신, Genome 시스템에 맡기세요. 변형을 테스트하고, 효과적인 것을 유지하고, 나머지는 버립니다 — AI 에이전트를 위한 자연 선택처럼.",
+      cta: "에이전트 진화시키기",
+    },
   },
 };

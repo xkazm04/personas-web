@@ -395,5 +395,39 @@ export const cs: Translations = {
       deployment: 'Nasazen\u00ed a integrace',
       troubleshooting: '\u0158e\u0161en\u00ed probl\u00e9m\u016f',
     },
+    categoryDescriptions: {
+      "getting-started": "Nainstalujte Personas, vytvořte svého prvního agenta a naučte se základy za méně než 10 minut.",
+      credentials: "Připojte se k službám bezpečně. Pochopte šifrovaný trezor a jak zůstávají vaše data v bezpečí.",
+      "agents-prompts": "Vytvářejte, konfigurujte a dolaďujte své AI agenty. Ovládněte jednoduchý i strukturovaný režim promptů.",
+      triggers: "Nastavte, kdy a jak vaši agenti běží — plány, webhooky, sledování souborů a další.",
+      pipelines: "Propojte agenty do vizuálních pipeline. Sestavte multi-agentové workflow na týmovém plátně.",
+      memories: "Vaši agenti se učí a pamatují si. Spravujte, co vědí a jak využívají předchozí zkušenosti.",
+      monitoring: "Sledujte každé spuštění v reálném čase. Podívejte se, co vaši agenti dělají, jak si vedou a kolik stojí.",
+      testing: "Spusťte arénové testy, A/B porovnání a nechte systém Genome vyvinout vaše nejlepší prompty.",
+      deployment: "Nasaďte agenty do cloudu, připojte je ke GitHub Actions, GitLab CI a n8n workflow.",
+      troubleshooting: "Opravte běžné problémy, porozumějte chybovým zprávám a vraťte své agenty zpět na správnou cestu.",
+    },
+  },
+  featurePages: {
+    orchestration: {
+      headline: "Agenti, kteří spolupracují",
+      description: "Sestavte vizuální pipeline, kde více agentů spolupracuje na složitých úkolech. Výstup jednoho agenta přechází do dalšího — žádný spojovací kód, žádné ruční kroky, žádné limity toho, co můžete orchestrovat.",
+      cta: "Sestavte svůj první pipeline",
+    },
+    security: {
+      headline: "Vaše tajemství zůstanou vaše",
+      description: "Každé heslo, API klíč a přístupový token je šifrován na vašem zařízení pomocí bankovního šifrování AES-256. Vaše přihlašovací údaje jsou uloženy v zabezpečeném trezoru vašeho operačního systému — nic se nikdy neodesílá do cloudu.",
+      cta: "Zabezpečte svá připojení",
+    },
+    "multi-provider": {
+      headline: "Nejste svázáni s jedním AI",
+      description: "Používejte Claude, OpenAI, Gemini nebo provozujte modely lokálně s Ollama. Volně přepínejte mezi poskytovateli, přiřazujte různé modely různým agentům, a pokud jeden poskytovatel vypadne — vaši agenti se automaticky přepnou na jiného.",
+      cta: "Vyberte si své AI",
+    },
+    genome: {
+      headline: "Vaši agenti se automaticky zlepšují",
+      description: "Místo hodin ručního ladění promptů nechte systém Genome, ať to udělá za vás. Testuje varianty, ponechá to, co funguje, a zbytek zahodí — jako přirozený výběr pro vaše AI agenty.",
+      cta: "Vyviňte své agenty",
+    },
   },
 };

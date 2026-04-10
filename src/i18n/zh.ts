@@ -395,5 +395,39 @@ export const zh: Translations = {
       deployment: '\u90e8\u7f72\u4e0e\u96c6\u6210',
       troubleshooting: '\u6545\u969c\u6392\u9664',
     },
+    categoryDescriptions: {
+      "getting-started": "安装 Personas，创建你的第一个智能体，10 分钟内掌握基础知识。",
+      credentials: "安全地连接到各类服务。了解加密保险库的工作原理以及你的数据如何得到保护。",
+      "agents-prompts": "创建、配置和微调你的 AI 智能体。掌握简单模式和结构化提示词模式。",
+      triggers: "设置智能体的运行时机和方式 — 定时计划、webhook、文件监控等。",
+      pipelines: "将智能体连接成可视化流水线。在团队画布上构建多智能体工作流。",
+      memories: "你的智能体会学习和记忆。管理它们的知识以及它们如何运用过往经验。",
+      monitoring: "实时追踪每次执行。查看智能体的行为、表现和成本。",
+      testing: "运行竞技场测试、A/B 对比，让 Genome 系统进化出最优提示词。",
+      deployment: "将智能体部署到云端，连接 GitHub Actions、GitLab CI 和 n8n 工作流。",
+      troubleshooting: "修复常见问题，理解错误信息，让你的智能体恢复正常运行。",
+    },
+  },
+  featurePages: {
+    orchestration: {
+      headline: "协同工作的智能体",
+      description: "构建可视化流水线，让多个智能体协作完成复杂任务。一个智能体的输出自动成为下一个的输入 — 无需胶水代码，无需手动步骤，编排能力不受限制。",
+      cta: "构建你的第一条流水线",
+    },
+    security: {
+      headline: "你的秘密始终属于你",
+      description: "每个密码、API key 和访问令牌都在你的设备上使用银行级 AES-256 加密进行保护。凭证存储在操作系统自带的安全保险库中 — 任何数据都不会发送到云端。",
+      cta: "保护你的连接",
+    },
+    "multi-provider": {
+      headline: "不被单一 AI 绑定",
+      description: "使用 Claude、OpenAI、Gemini，或通过 Ollama 在本地运行模型。自由切换供应商，为不同智能体分配不同模型，如果某个供应商宕机 — 你的智能体会自动切换到其他供应商。",
+      cta: "选择你的 AI",
+    },
+    genome: {
+      headline: "你的智能体自动变得更聪明",
+      description: "不必花费数小时手动调整提示词，让 Genome 系统替你完成。它测试各种变体，保留有效的，淘汰其余的 — 就像 AI 智能体的自然选择。",
+      cta: "进化你的智能体",
+    },
   },
 };

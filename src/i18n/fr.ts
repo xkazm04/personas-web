@@ -395,5 +395,39 @@ export const fr: Translations = {
       deployment: 'Déploiement et Intégrations',
       troubleshooting: 'Dépannage',
     },
+    categoryDescriptions: {
+      "getting-started": "Installez Personas, créez votre premier agent et apprenez les bases en moins de 10 minutes.",
+      credentials: "Connectez-vous aux services en toute sécurité. Comprenez le coffre-fort chiffré et comment vos données restent protégées.",
+      "agents-prompts": "Créez, configurez et affinez vos agents IA. Maîtrisez les modes de prompt simple et structuré.",
+      triggers: "Définissez quand et comment vos agents s'exécutent — planifications, webhooks, surveillance de fichiers et plus encore.",
+      pipelines: "Reliez vos agents dans des pipelines visuels. Construisez des workflows multi-agents sur le canvas d'équipe.",
+      memories: "Vos agents apprennent et se souviennent. Gérez ce qu'ils savent et comment ils exploitent leurs expériences passées.",
+      monitoring: "Suivez chaque exécution en temps réel. Voyez ce que font vos agents, leurs performances et leurs coûts.",
+      testing: "Lancez des tests d'arène, des comparaisons A/B et laissez le système Genome faire évoluer vos meilleurs prompts.",
+      deployment: "Déployez vos agents dans le cloud, connectez-les à GitHub Actions, GitLab CI et aux workflows n8n.",
+      troubleshooting: "Résolvez les problèmes courants, comprenez les messages d'erreur et remettez vos agents sur les rails.",
+    },
+  },
+  featurePages: {
+    orchestration: {
+      headline: "Des agents qui travaillent ensemble",
+      description: "Construisez des pipelines visuels où plusieurs agents collaborent sur des tâches complexes. La sortie d'un agent alimente le suivant — pas de code de liaison, pas d'étapes manuelles, aucune limite à ce que vous pouvez orchestrer.",
+      cta: "Créez votre premier pipeline",
+    },
+    security: {
+      headline: "Vos secrets restent les vôtres",
+      description: "Chaque mot de passe, clé API et jeton d'accès est chiffré sur votre appareil avec un chiffrement AES-256 de niveau bancaire. Vos identifiants sont stockés dans le coffre-fort sécurisé de votre système d'exploitation — rien n'est jamais envoyé dans le cloud.",
+      cta: "Sécurisez vos connexions",
+    },
+    "multi-provider": {
+      headline: "Pas enfermé avec une seule IA",
+      description: "Utilisez Claude, OpenAI, Gemini ou exécutez des modèles localement avec Ollama. Passez librement d'un fournisseur à l'autre, assignez différents modèles à différents agents, et si un fournisseur tombe en panne — vos agents basculent automatiquement vers un autre.",
+      cta: "Choisissez votre IA",
+    },
+    genome: {
+      headline: "Vos agents s'améliorent automatiquement",
+      description: "Au lieu de peaufiner manuellement vos prompts pendant des heures, laissez le système Genome s'en charger. Il teste des variations, conserve ce qui fonctionne et élimine le reste — comme une sélection naturelle pour vos agents IA.",
+      cta: "Faites évoluer vos agents",
+    },
   },
 };

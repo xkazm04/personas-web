@@ -395,5 +395,39 @@ export const de: Translations = {
       deployment: 'Bereitstellung & Integrationen',
       troubleshooting: 'Fehlerbehebung',
     },
+    categoryDescriptions: {
+      "getting-started": "Installieren Sie Personas, erstellen Sie Ihren ersten Agenten und lernen Sie die Grundlagen in unter 10 Minuten.",
+      credentials: "Verbinden Sie sich sicher mit Diensten. Verstehen Sie den verschlüsselten Tresor und wie Ihre Daten geschützt bleiben.",
+      "agents-prompts": "Erstellen, konfigurieren und optimieren Sie Ihre KI-Agenten. Meistern Sie einfache und strukturierte Prompt-Modi.",
+      triggers: "Legen Sie fest, wann und wie Ihre Agenten laufen — Zeitpläne, Webhooks, Dateiüberwachung und mehr.",
+      pipelines: "Verbinden Sie Agenten zu visuellen Pipelines. Erstellen Sie Multi-Agenten-Workflows auf dem Team-Canvas.",
+      memories: "Ihre Agenten lernen und merken sich Dinge. Verwalten Sie, was sie wissen und wie sie vergangene Erfahrungen nutzen.",
+      monitoring: "Verfolgen Sie jede Ausführung in Echtzeit. Sehen Sie, was Ihre Agenten tun, wie gut sie arbeiten und was sie kosten.",
+      testing: "Führen Sie Arena-Tests, A/B-Vergleiche durch und lassen Sie das Genome-System Ihre besten Prompts weiterentwickeln.",
+      deployment: "Stellen Sie Agenten in der Cloud bereit, verbinden Sie sie mit GitHub Actions, GitLab CI und n8n-Workflows.",
+      troubleshooting: "Beheben Sie häufige Probleme, verstehen Sie Fehlermeldungen und bringen Sie Ihre Agenten wieder auf Kurs.",
+    },
+  },
+  featurePages: {
+    orchestration: {
+      headline: "Agenten, die zusammenarbeiten",
+      description: "Erstellen Sie visuelle Pipelines, in denen mehrere Agenten bei komplexen Aufgaben zusammenarbeiten. Die Ausgabe eines Agenten fließt in den nächsten — kein Verbindungscode, keine manuellen Schritte, keine Grenzen für das, was Sie orchestrieren können.",
+      cta: "Erstellen Sie Ihre erste Pipeline",
+    },
+    security: {
+      headline: "Ihre Geheimnisse bleiben Ihre",
+      description: "Jedes Passwort, jeder API-Schlüssel und jedes Zugriffstoken wird auf Ihrem Gerät mit banküblicher AES-256-Verschlüsselung verschlüsselt. Ihre Zugangsdaten werden im sicheren Tresor Ihres Betriebssystems gespeichert — nichts wird jemals in die Cloud gesendet.",
+      cta: "Sichern Sie Ihre Verbindungen",
+    },
+    "multi-provider": {
+      headline: "Nicht an eine KI gebunden",
+      description: "Nutzen Sie Claude, OpenAI, Gemini oder betreiben Sie Modelle lokal mit Ollama. Wechseln Sie frei zwischen Anbietern, weisen Sie verschiedenen Agenten verschiedene Modelle zu, und wenn ein Anbieter ausfällt — wechseln Ihre Agenten automatisch zu einem anderen.",
+      cta: "Wählen Sie Ihre KI",
+    },
+    genome: {
+      headline: "Ihre Agenten werden automatisch schlauer",
+      description: "Anstatt stundenlang Prompts manuell zu optimieren, lassen Sie das Genome-System die Arbeit übernehmen. Es testet Variationen, behält, was funktioniert, und verwirft den Rest — wie natürliche Selektion für Ihre KI-Agenten.",
+      cta: "Entwickeln Sie Ihre Agenten weiter",
+    },
   },
 };

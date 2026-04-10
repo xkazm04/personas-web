@@ -305,6 +305,24 @@ export interface Translations {
       deployment: string;
       troubleshooting: string;
     };
+    categoryDescriptions: {
+      "getting-started": string;
+      credentials: string;
+      "agents-prompts": string;
+      triggers: string;
+      pipelines: string;
+      memories: string;
+      monitoring: string;
+      testing: string;
+      deployment: string;
+      troubleshooting: string;
+    };
+  };
+  featurePages: {
+    orchestration: { headline: string; description: string; cta: string };
+    security: { headline: string; description: string; cta: string };
+    "multi-provider": { headline: string; description: string; cta: string };
+    genome: { headline: string; description: string; cta: string };
   };
 }
 
@@ -702,6 +720,40 @@ export const en: Translations = {
       monitoring: 'Monitoring & Costs',
       deployment: 'Deployment & Integrations',
       troubleshooting: 'Troubleshooting',
+    },
+    categoryDescriptions: {
+      "getting-started": "Install Personas, create your first agent, and learn the basics in under 10 minutes.",
+      credentials: "Connect to services securely. Understand the encrypted vault and how your data stays safe.",
+      "agents-prompts": "Create, configure, and fine-tune your AI agents. Master simple and structured prompt modes.",
+      triggers: "Set up when and how your agents run — schedules, webhooks, file watchers, and more.",
+      pipelines: "Wire agents together into visual pipelines. Build multi-agent workflows on the team canvas.",
+      memories: "Your agents learn and remember. Manage what they know and how they use past experience.",
+      monitoring: "Track every execution in real time. See what your agents do, how well they perform, and what they cost.",
+      testing: "Run arena tests, A/B comparisons, and let the genome system evolve your best prompts.",
+      deployment: "Deploy agents to the cloud, connect to GitHub Actions, GitLab CI, and n8n workflows.",
+      troubleshooting: "Fix common issues, understand error messages, and get your agents back on track.",
+    },
+  },
+  featurePages: {
+    orchestration: {
+      headline: "Agents that work together",
+      description: "Build visual pipelines where multiple agents collaborate on complex tasks. One agent's output feeds into the next — no glue code, no manual steps, no limits on what you can orchestrate.",
+      cta: "Build your first pipeline",
+    },
+    security: {
+      headline: "Your secrets stay yours",
+      description: "Every password, API key, and access token is encrypted on your device using bank-grade AES-256 encryption. Your credentials are stored in your operating system's own secure vault — nothing is ever sent to the cloud.",
+      cta: "Secure your connections",
+    },
+    "multi-provider": {
+      headline: "Not locked to one AI",
+      description: "Use Claude, OpenAI, Gemini, or run models locally with Ollama. Switch between providers freely, assign different models to different agents, and if one provider goes down — your agents automatically switch to another.",
+      cta: "Choose your AI",
+    },
+    genome: {
+      headline: "Your agents get smarter automatically",
+      description: "Instead of manually tweaking prompts for hours, let the Genome system do it for you. It tests variations, keeps what works, and discards the rest — like natural selection for your AI agents.",
+      cta: "Evolve your agents",
     },
   },
 };

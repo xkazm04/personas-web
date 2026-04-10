@@ -395,5 +395,39 @@ export const es: Translations = {
       deployment: 'Despliegue e Integraciones',
       troubleshooting: 'Solución de Problemas',
     },
+    categoryDescriptions: {
+      "getting-started": "Instala Personas, crea tu primer agente y aprende lo básico en menos de 10 minutos.",
+      credentials: "Conéctate a servicios de forma segura. Entiende la bóveda cifrada y cómo se protegen tus datos.",
+      "agents-prompts": "Crea, configura y ajusta tus agentes de IA. Domina los modos de prompt simple y estructurado.",
+      triggers: "Configura cuándo y cómo se ejecutan tus agentes — horarios, webhooks, observadores de archivos y más.",
+      pipelines: "Conecta agentes en pipelines visuales. Construye flujos de trabajo multi-agente en el canvas de equipo.",
+      memories: "Tus agentes aprenden y recuerdan. Gestiona lo que saben y cómo usan su experiencia pasada.",
+      monitoring: "Rastrea cada ejecución en tiempo real. Observa qué hacen tus agentes, su rendimiento y cuánto cuestan.",
+      testing: "Ejecuta pruebas de arena, comparaciones A/B y deja que el sistema Genome evolucione tus mejores prompts.",
+      deployment: "Despliega agentes en la nube, conéctalos a GitHub Actions, GitLab CI y flujos de trabajo n8n.",
+      troubleshooting: "Soluciona problemas comunes, comprende los mensajes de error y pon a tus agentes de nuevo en marcha.",
+    },
+  },
+  featurePages: {
+    orchestration: {
+      headline: "Agentes que trabajan juntos",
+      description: "Construye pipelines visuales donde múltiples agentes colaboran en tareas complejas. La salida de un agente alimenta al siguiente — sin código de unión, sin pasos manuales, sin límites en lo que puedes orquestar.",
+      cta: "Construye tu primer pipeline",
+    },
+    security: {
+      headline: "Tus secretos son solo tuyos",
+      description: "Cada contraseña, clave API y token de acceso se cifra en tu dispositivo con encriptación AES-256 de grado bancario. Tus credenciales se almacenan en la bóveda segura de tu sistema operativo — nada se envía jamás a la nube.",
+      cta: "Asegura tus conexiones",
+    },
+    "multi-provider": {
+      headline: "Sin ataduras a una sola IA",
+      description: "Usa Claude, OpenAI, Gemini o ejecuta modelos localmente con Ollama. Cambia libremente entre proveedores, asigna diferentes modelos a diferentes agentes, y si un proveedor falla — tus agentes cambian automáticamente a otro.",
+      cta: "Elige tu IA",
+    },
+    genome: {
+      headline: "Tus agentes mejoran automáticamente",
+      description: "En lugar de ajustar prompts manualmente durante horas, deja que el sistema Genome lo haga por ti. Prueba variaciones, conserva lo que funciona y descarta el resto — como selección natural para tus agentes de IA.",
+      cta: "Evoluciona tus agentes",
+    },
   },
 };

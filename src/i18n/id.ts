@@ -395,5 +395,39 @@ export const id: Translations = {
       deployment: 'Deployment & Integrasi',
       troubleshooting: 'Pemecahan Masalah',
     },
+    categoryDescriptions: {
+      "getting-started": "Instal Personas, buat agen pertama Anda, dan pelajari dasar-dasarnya dalam waktu kurang dari 10 menit.",
+      credentials: "Hubungkan ke layanan dengan aman. Pahami vault terenkripsi dan bagaimana data Anda tetap terlindungi.",
+      "agents-prompts": "Buat, konfigurasikan, dan sempurnakan agen AI Anda. Kuasai mode prompt sederhana dan terstruktur.",
+      triggers: "Atur kapan dan bagaimana agen Anda berjalan — jadwal, webhook, pemantau file, dan lainnya.",
+      pipelines: "Hubungkan agen menjadi pipeline visual. Bangun alur kerja multi-agen di kanvas tim.",
+      memories: "Agen Anda belajar dan mengingat. Kelola apa yang mereka ketahui dan bagaimana mereka menggunakan pengalaman sebelumnya.",
+      monitoring: "Pantau setiap eksekusi secara real time. Lihat apa yang dilakukan agen Anda, seberapa baik kinerjanya, dan berapa biayanya.",
+      testing: "Jalankan tes arena, perbandingan A/B, dan biarkan sistem genome mengembangkan prompt terbaik Anda.",
+      deployment: "Deploy agen ke cloud, hubungkan ke GitHub Actions, GitLab CI, dan alur kerja n8n.",
+      troubleshooting: "Perbaiki masalah umum, pahami pesan error, dan kembalikan agen Anda ke jalur yang benar.",
+    },
+  },
+  featurePages: {
+    orchestration: {
+      headline: "Agen yang bekerja bersama",
+      description: "Bangun pipeline visual di mana beberapa agen berkolaborasi dalam tugas kompleks. Output satu agen menjadi input agen berikutnya — tanpa kode penghubung, tanpa langkah manual, tanpa batasan dalam orkestrasi.",
+      cta: "Bangun pipeline pertama Anda",
+    },
+    security: {
+      headline: "Rahasia Anda tetap milik Anda",
+      description: "Setiap kata sandi, API key, dan token akses dienkripsi di perangkat Anda menggunakan enkripsi AES-256 tingkat perbankan. Kredensial Anda disimpan di vault aman sistem operasi Anda — tidak ada yang pernah dikirim ke cloud.",
+      cta: "Amankan koneksi Anda",
+    },
+    "multi-provider": {
+      headline: "Tidak terikat pada satu AI",
+      description: "Gunakan Claude, OpenAI, Gemini, atau jalankan model secara lokal dengan Ollama. Beralih antar penyedia dengan bebas, tetapkan model berbeda untuk agen berbeda, dan jika satu penyedia mati — agen Anda otomatis beralih ke yang lain.",
+      cta: "Pilih AI Anda",
+    },
+    genome: {
+      headline: "Agen Anda semakin pintar secara otomatis",
+      description: "Daripada mengubah prompt secara manual selama berjam-jam, biarkan sistem Genome melakukannya untuk Anda. Sistem ini menguji variasi, mempertahankan yang berhasil, dan membuang sisanya — seperti seleksi alam untuk agen AI Anda.",
+      cta: "Evolusikan agen Anda",
+    },
   },
 };

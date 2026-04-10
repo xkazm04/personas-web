@@ -395,5 +395,39 @@ export const vi: Translations = {
       deployment: 'Tri\u1ec3n khai & T\u00edch h\u1ee3p',
       troubleshooting: 'X\u1eed l\u00fd s\u1ef1 c\u1ed1',
     },
+    categoryDescriptions: {
+      "getting-started": "Cài đặt Personas, tạo tác nhân đầu tiên và nắm vững kiến thức cơ bản trong chưa đầy 10 phút.",
+      credentials: "Kết nối với các dịch vụ một cách an toàn. Tìm hiểu cách vault mã hóa hoạt động và dữ liệu của bạn được bảo vệ như thế nào.",
+      "agents-prompts": "Tạo, cấu hình và tinh chỉnh các tác nhân AI của bạn. Làm chủ chế độ prompt đơn giản và có cấu trúc.",
+      triggers: "Thiết lập thời điểm và cách thức tác nhân chạy — lịch trình, webhook, theo dõi tệp và nhiều hơn nữa.",
+      pipelines: "Kết nối các tác nhân thành pipeline trực quan. Xây dựng quy trình đa tác nhân trên canvas nhóm.",
+      memories: "Tác nhân của bạn học hỏi và ghi nhớ. Quản lý những gì chúng biết và cách chúng sử dụng kinh nghiệm trước đó.",
+      monitoring: "Theo dõi mọi lần thực thi theo thời gian thực. Xem tác nhân làm gì, hiệu suất ra sao và chi phí bao nhiêu.",
+      testing: "Chạy kiểm thử arena, so sánh A/B, và để hệ thống Genome tiến hóa các prompt tốt nhất của bạn.",
+      deployment: "Triển khai tác nhân lên cloud, kết nối với GitHub Actions, GitLab CI và quy trình n8n.",
+      troubleshooting: "Khắc phục sự cố thường gặp, hiểu thông báo lỗi và đưa tác nhân trở lại hoạt động bình thường.",
+    },
+  },
+  featurePages: {
+    orchestration: {
+      headline: "Các tác nhân phối hợp cùng nhau",
+      description: "Xây dựng các pipeline trực quan nơi nhiều tác nhân cộng tác trong các tác vụ phức tạp. Đầu ra của tác nhân này trở thành đầu vào của tác nhân tiếp theo — không cần mã kết nối, không cần bước thủ công, không giới hạn khả năng điều phối.",
+      cta: "Xây dựng pipeline đầu tiên",
+    },
+    security: {
+      headline: "Bí mật của bạn luôn được bảo vệ",
+      description: "Mọi mật khẩu, API key và token truy cập đều được mã hóa trên thiết bị của bạn bằng mã hóa AES-256 cấp ngân hàng. Thông tin xác thực được lưu trong vault bảo mật của hệ điều hành — không có gì được gửi lên cloud.",
+      cta: "Bảo mật kết nối của bạn",
+    },
+    "multi-provider": {
+      headline: "Không bị ràng buộc với một AI duy nhất",
+      description: "Sử dụng Claude, OpenAI, Gemini hoặc chạy mô hình cục bộ với Ollama. Tự do chuyển đổi giữa các nhà cung cấp, gán mô hình khác nhau cho các tác nhân khác nhau, và nếu một nhà cung cấp gặp sự cố — tác nhân của bạn tự động chuyển sang nhà cung cấp khác.",
+      cta: "Chọn AI của bạn",
+    },
+    genome: {
+      headline: "Tác nhân của bạn tự động thông minh hơn",
+      description: "Thay vì mất hàng giờ chỉnh sửa prompt thủ công, hãy để hệ thống Genome làm điều đó cho bạn. Hệ thống kiểm thử các biến thể, giữ lại những gì hiệu quả và loại bỏ phần còn lại — như chọn lọc tự nhiên cho các tác nhân AI của bạn.",
+      cta: "Tiến hóa tác nhân của bạn",
+    },
   },
 };
