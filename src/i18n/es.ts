@@ -11,6 +11,7 @@ export const es: Translations = {
     dashboard: 'Panel',
     features: 'Caracter\u00edsticas',
     guide: 'Gu\u00eda',
+    useCases: 'Casos de uso',
     tour: 'Tour',
     security: 'Seguridad',
     blog: 'Blog',

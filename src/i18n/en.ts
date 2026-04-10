@@ -9,6 +9,7 @@ export interface Translations {
     dashboard: string;
     features: string;
     guide: string;
+    useCases: string;
     tour: string;
     security: string;
     blog: string;
@@ -316,6 +317,7 @@ export const en: Translations = {
     dashboard: 'Dashboard',
     features: 'Features',
     guide: 'Guide',
+    useCases: 'Use Cases',
     tour: 'Tour',
     security: 'Security',
     blog: 'Blog',
