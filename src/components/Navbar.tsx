@@ -26,6 +26,7 @@ function useRoutes() {
     { label: t.nav.guide, href: "/guide" },
     { label: t.nav.connections, href: "/connections" },
     { label: t.nav.compare, href: "/compare" },
+    { label: t.nav.blog, href: "/blog" },
     { label: t.nav.roadmap, href: "/roadmap" },
   ];
 }

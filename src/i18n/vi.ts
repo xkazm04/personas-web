@@ -11,6 +11,8 @@ export const vi: Translations = {
     dashboard: 'B\u1ea3ng \u0111i\u1ec1u khi\u1ec3n',
     features: 'T\u00ednh n\u0103ng',
     guide: 'H\u01B0\u1EDBng d\u1EABn',
+    blog: 'Blog',
+    changelog: 'Nhật ký thay đổi',
     compare: 'So sánh',
     menu: 'Menu',
   },

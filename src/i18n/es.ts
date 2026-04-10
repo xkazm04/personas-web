@@ -11,6 +11,8 @@ export const es: Translations = {
     dashboard: 'Panel',
     features: 'Caracter\u00edsticas',
     guide: 'Gu\u00eda',
+    blog: 'Blog',
+    changelog: 'Registro de cambios',
     compare: 'Comparar',
     menu: 'Men\u00fa',
   },
