@@ -13,6 +13,7 @@ import {
   LazyUseCases,
   LazyVision,
   LazyPlaygroundSplit,
+  LazySocialProof,
 } from "@/components/sections/lazy";
 import StageSection from "@/components/StageSection";
 import SectionDivider from "@/components/SectionDivider";
@@ -158,7 +159,8 @@ interface SectionConfig {
 const sections: SectionConfig[] = [
   { Component: LazyUseCases,           glow: "emerald", fromColor: "cyan",    toColor: "emerald", dividerFrom: "cyan",    dividerTo: "emerald" },
   { Component: LazyPlaygroundSplit,    glow: "cyan",    fromColor: "emerald", toColor: "cyan",    dividerFrom: "emerald", dividerTo: "cyan" },
-  { Component: LazyPipelineShowcase,   glow: "emerald", fromColor: "cyan",    toColor: "emerald", dividerFrom: "cyan",    dividerTo: "emerald", wrapperId: "pipelines" },
+  { Component: LazySocialProof,       glow: "purple",  fromColor: "cyan",    toColor: "purple",  dividerFrom: "cyan",    dividerTo: "purple", wrapperId: "social-proof" },
+  { Component: LazyPipelineShowcase,   glow: "emerald", fromColor: "purple",  toColor: "emerald", dividerFrom: "purple",  dividerTo: "emerald", wrapperId: "pipelines" },
   { Component: LazyVision,            glow: "purple",  fromColor: "emerald", toColor: "purple",  dividerFrom: "emerald", dividerTo: "purple", wrapperId: "vision" },
   { Component: LazyPricing,           glow: "purple",  fromColor: "purple",  toColor: "purple",  dividerFrom: "purple",  dividerTo: "purple", wrapperId: "pricing" },
   { Component: LazyFAQ,               glow: "cyan",    fromColor: "purple",  toColor: "cyan",    dividerFrom: "purple",  dividerTo: "cyan" },

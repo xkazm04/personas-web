@@ -161,6 +161,7 @@ const PlaygroundSplitSection = createLazySection(() => import("@/components/sect
 const DownloadCTASection = createLazySection(() => import("@/components/sections/DownloadCTA"));
 const PipelineShowcaseSection = createLazySection(() => import("@/components/sections/PipelineShowcase"));
 const ChangelogSection = createLazySection(() => import("@/components/sections/Changelog"));
+const SocialProofSection = createLazySection(() => import("@/components/sections/SocialProof"));
 
 export function LazyUseCases() {
   return <UseCasesSection />;
@@ -180,4 +181,8 @@ export function LazyPipelineShowcase() {
 
 export function LazyChangelog() {
   return <ChangelogSection />;
+}
+
+export function LazySocialProof() {
+  return <SocialProofSection />;
 }
