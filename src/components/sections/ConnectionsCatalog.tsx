@@ -10,6 +10,17 @@ import PrimaryCTA from "@/components/PrimaryCTA";
 import { fadeUp } from "@/lib/animations";
 import { connectors, categories, type Connector } from "@/data/connectors";
 
+/* ── Human-friendly auth-type labels ── */
+
+const authTypeLabels: Record<string, string> = {
+  PAT: "Personal Access Token",
+};
+
+/** Return a friendly label for raw authType values (e.g. "PAT" → "Personal Access Token") */
+function friendlyAuthType(raw: string): string {
+  return authTypeLabels[raw] ?? raw;
+}
+
 /* ── Accent color mappings ── */
 
 const accentStyles = {
@@ -104,7 +115,7 @@ function ConnectorCard({ connector: c, index, onClick }: { connector: Connector;
         {/* Auth type indicator */}
         <div className="mt-3 flex items-center gap-1.5">
           <div className="h-1 w-1 rounded-full" style={{ backgroundColor: `${c.color}80` }} />
-          <span className="text-[10px] text-muted-dark">{c.authType}</span>
+          <span className="text-[10px] text-muted-dark">{friendlyAuthType(c.authType)}</span>
         </div>
       </div>
     </motion.div>
@@ -256,25 +267,25 @@ export default function ConnectionsCatalog({ onConnectorClick }: { onConnectorCl
         </span>
 
         <h1 className="text-4xl font-extrabold tracking-tight sm:text-5xl md:text-7xl drop-shadow-md">
-          Built-in{" "}
-          <GradientText className="drop-shadow-lg">Connections</GradientText>
+          Connect to{" "}
+          <GradientText className="drop-shadow-lg">everything</GradientText>
         </h1>
 
         <p className="mt-6 mx-auto max-w-2xl text-lg text-muted-dark leading-relaxed font-light">
-          Pre-built connectors for the tools your team already uses.
-          Connect once in the Vault, automate forever with agents.
+          Your agents can talk to {connectors.length}+ services you already use.
+          Set it up once, and your agents handle the rest — automatically.
         </p>
 
         {/* Stat badges */}
         <div className="mt-8 flex flex-wrap items-center justify-center gap-3">
           <span className="rounded-full border border-white/8 bg-white/[0.03] px-4 py-1.5 text-xs font-mono text-muted backdrop-blur-sm">
-            {connectors.length} connectors
+            {connectors.length} services ready
           </span>
           <span className="rounded-full border border-white/8 bg-white/[0.03] px-4 py-1.5 text-xs font-mono text-muted backdrop-blur-sm">
             {categories.length} categories
           </span>
           <span className="rounded-full border border-brand-emerald/20 bg-brand-emerald/8 px-4 py-1.5 text-xs font-mono text-brand-emerald backdrop-blur-sm">
-            Growing every month
+            New services added regularly
           </span>
         </div>
       </motion.div>
@@ -286,7 +297,7 @@ export default function ConnectionsCatalog({ onConnectorClick }: { onConnectorCl
           <Search className="absolute left-4 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-dark pointer-events-none" />
           <input
             type="text"
-            placeholder="Search connectors..."
+            placeholder="Search services..."
             value={search}
             onChange={(e) => setSearch(e.target.value)}
             className="w-full rounded-xl border border-white/6 bg-white/[0.03] pl-11 pr-4 py-3 text-sm text-foreground placeholder:text-muted-dark backdrop-blur-sm transition-all duration-300 focus:border-brand-cyan/30 focus:bg-white/[0.05] focus:outline-none focus:ring-1 focus:ring-brand-cyan/20"
@@ -364,12 +375,12 @@ export default function ConnectionsCatalog({ onConnectorClick }: { onConnectorCl
           <>
             <ExtendCard
               title="MCP Servers"
-              description="Connect any Model Context Protocol server"
+              description="Connect any MCP-compatible AI tool"
               accent="#06b6d4"
             />
             <ExtendCard
               title="Custom APIs"
-              description="Bring your own REST or GraphQL endpoint"
+              description="Connect to any web service with a custom setup"
               accent="#a855f7"
             />
           </>
@@ -383,7 +394,7 @@ export default function ConnectionsCatalog({ onConnectorClick }: { onConnectorCl
             className="col-span-full py-16 text-center"
           >
             <Plug className="mx-auto h-8 w-8 text-muted-dark mb-3" />
-            <p className="text-muted-dark text-sm">No connectors match your search.</p>
+            <p className="text-muted-dark text-sm">No services found. Try a different search.</p>
           </motion.div>
         )}
       </div>
@@ -391,9 +402,8 @@ export default function ConnectionsCatalog({ onConnectorClick }: { onConnectorCl
       {/* ── Bottom CTA ── */}
       <motion.div variants={fadeUp} className="mt-24 text-center">
         <p className="text-muted-dark text-sm max-w-lg mx-auto leading-relaxed">
-          All connectors are configured through the{" "}
-          <strong className="text-foreground font-medium">Vault</strong> in the Personas desktop app.
-          Your credentials are stored locally and encrypted at rest.
+          All connections are set up in the Personas desktop app.
+          Your passwords and keys stay on your device, protected by bank-grade encryption.
         </p>
         <div className="mt-8">
           <PrimaryCTA href="/#download" icon={Download} label="Download Personas" variant="ghost" />

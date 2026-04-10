@@ -18,12 +18,12 @@ function generateSimOutput(connector: Connector): { text: string; delay: number 
 
   return [
     { text: `$ ${uc.command}`, delay: 0 },
-    { text: `[${ts(0)}] Authenticating with ${connector.label} (${connector.authType})...`, delay: 600 },
-    { text: `[${ts(820)}] Connection established. Fetching data...`, delay: 1200 },
-    { text: `[${ts(1540)}] Processing ${uc.title.toLowerCase()}...`, delay: 1800 },
-    { text: `[${ts(2300)}] Received 24 records. Applying filters...`, delay: 2400 },
-    { text: `[${ts(3100)}] Task completed successfully. 3 items updated.`, delay: 3200 },
-    { text: `[${ts(3400)}] Done in 3.4s`, delay: 3800 },
+    { text: `[${ts(0)}] Connecting to ${connector.label}...`, delay: 600 },
+    { text: `[${ts(820)}] Connected. Fetching data...`, delay: 1200 },
+    { text: `[${ts(1540)}] Working on ${uc.title.toLowerCase()}...`, delay: 1800 },
+    { text: `[${ts(2300)}] Found 24 results. Filtering...`, delay: 2400 },
+    { text: `[${ts(3100)}] All done! 3 items updated.`, delay: 3200 },
+    { text: `[${ts(3400)}] Finished in 3.4s`, delay: 3800 },
   ];
 }
 
@@ -60,7 +60,7 @@ function TerminalSimulator({ connector }: { connector: Connector }) {
       {/* Title bar */}
       <div className="flex items-center gap-2 border-b border-white/[0.06] px-4 py-2.5">
         <Terminal className="h-3.5 w-3.5" style={{ color: connector.color }} />
-        <span className="text-[11px] font-mono text-muted-dark">personas-agent</span>
+        <span className="text-[11px] font-mono text-muted-dark">Live preview</span>
         <div className="ml-auto flex gap-1.5">
           <div className="h-2 w-2 rounded-full bg-white/10" />
           <div className="h-2 w-2 rounded-full bg-white/10" />
@@ -72,8 +72,8 @@ function TerminalSimulator({ connector }: { connector: Connector }) {
       <div ref={containerRef} className="max-h-52 overflow-y-auto p-4 font-mono text-[12px] leading-relaxed">
         {lines.map((line, i) => {
           const isCommand = line.startsWith("$");
-          const isDone = line.includes("Done in");
-          const isSuccess = line.includes("successfully");
+          const isDone = line.includes("Finished in");
+          const isSuccess = line.includes("All done!");
           return (
             <motion.div
               key={i}
@@ -190,6 +190,7 @@ export default function ConnectorModal({
             {/* Close button */}
             <button
               onClick={onClose}
+              aria-label="Close connector details"
               className="absolute top-4 right-4 z-10 flex h-8 w-8 items-center justify-center rounded-lg border border-white/[0.06] bg-white/[0.03] text-muted-dark transition-colors hover:bg-white/[0.08] hover:text-white cursor-pointer"
             >
               <X className="h-4 w-4" />
@@ -235,9 +236,9 @@ export default function ConnectorModal({
                       {categoryMeta?.label ?? connector.category}
                     </span>
 
-                    {/* Auth type */}
+                    {/* How to connect */}
                     <span className="rounded-full border border-white/[0.06] bg-white/[0.03] px-2.5 py-0.5 text-[10px] font-mono text-muted-dark">
-                      {connector.authType}
+                      Connects via {connector.authType}
                     </span>
                   </div>
                   <p className="mt-3 text-sm leading-relaxed text-muted">
@@ -253,7 +254,7 @@ export default function ConnectorModal({
             {/* Use case cards */}
             <div className="px-8 py-6 space-y-3">
               <h3 className="text-xs font-mono uppercase tracking-widest text-muted-dark mb-4">
-                Use Cases
+                What you can do
               </h3>
               {connector.useCases.map((uc, i) => (
                 <div
@@ -318,7 +319,10 @@ export default function ConnectorModal({
                     style={{ color: connector.color }}
                   />
                 </div>
-                <span className="text-white">Try it now</span>
+                <div>
+                  <span className="text-white">Try it now</span>
+                  <span className="block text-[11px] text-muted-dark mt-0.5">See a preview of how this connector works</span>
+                </div>
                 <div className="ml-auto">
                   <div
                     className={`h-5 w-9 rounded-full transition-colors duration-300 flex items-center ${
