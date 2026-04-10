@@ -8,6 +8,7 @@ export interface Translations {
     download: string;
     dashboard: string;
     features: string;
+    guide: string;
     menu: string;
   };
   footer: {
@@ -273,6 +274,30 @@ export interface Translations {
     ephemeralConnections: string;
     queueDepth: string;
   };
+  guide: {
+    title: string;
+    subtitle: string;
+    searchPlaceholder: string;
+    searchInCategory: string;
+    topics: string;
+    backToGuide: string;
+    showAllResults: string;
+    noResults: string;
+    stillQuestions: string;
+    joinDiscord: string;
+    categories: {
+      "getting-started": string;
+      "agents-prompts": string;
+      triggers: string;
+      credentials: string;
+      pipelines: string;
+      testing: string;
+      memories: string;
+      monitoring: string;
+      deployment: string;
+      troubleshooting: string;
+    };
+  };
 }
 
 export const en: Translations = {
@@ -285,6 +310,7 @@ export const en: Translations = {
     download: 'Download',
     dashboard: 'Dashboard',
     features: 'Features',
+    guide: 'Guide',
     menu: 'Menu',
   },
   footer: {
@@ -637,5 +663,29 @@ export const en: Translations = {
     latencyLanes: 'Latency Lanes',
     ephemeralConnections: 'Ephemeral connections',
     queueDepth: 'Queue depth + throughput',
+  },
+  guide: {
+    title: 'User',
+    subtitle: 'Everything you need to know about Personas — from your first agent to advanced multi-agent pipelines.',
+    searchPlaceholder: 'Search 100+ topics...',
+    searchInCategory: 'Search in this category...',
+    topics: 'topics',
+    backToGuide: 'Back to Guide',
+    showAllResults: 'Show all results',
+    noResults: 'No topics found. Try a different search term.',
+    stillQuestions: 'Still have questions?',
+    joinDiscord: 'Join our Discord',
+    categories: {
+      "getting-started": 'Getting Started',
+      "agents-prompts": 'Agents & Prompts',
+      triggers: 'Triggers & Scheduling',
+      credentials: 'Credentials & Security',
+      pipelines: 'Pipelines & Teams',
+      testing: 'Testing & Optimization',
+      memories: 'Memories & Knowledge',
+      monitoring: 'Monitoring & Costs',
+      deployment: 'Deployment & Integrations',
+      troubleshooting: 'Troubleshooting',
+    },
   },
 };

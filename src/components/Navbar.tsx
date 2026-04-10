@@ -23,6 +23,7 @@ function useRoutes() {
   return [
     { label: t.nav.home, href: "/" },
     { label: t.nav.features, href: "/features" },
+    { label: t.nav.guide, href: "/guide" },
     { label: t.nav.connections, href: "/connections" },
     { label: t.nav.roadmap, href: "/roadmap" },
   ];
