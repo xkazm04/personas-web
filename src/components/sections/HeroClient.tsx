@@ -2,7 +2,8 @@
 
 import { useId, useMemo, useRef } from "react";
 import { motion, useTransform, useMotionValue, useSpring } from "framer-motion";
-import { Download, Github, ChevronDown, GitBranch, Puzzle, ShieldCheck, Cpu, HeartPulse } from "lucide-react";
+import { Download, ChevronDown, GitBranch, Puzzle, ShieldCheck, Cpu, HeartPulse } from "lucide-react";
+import { GithubIcon } from "@/components/icons/brand-icons";
 import { fadeUp, staggerContainer } from "@/lib/animations";
 import GradientText from "@/components/GradientText";
 import SectionHeading from "@/components/SectionHeading";
@@ -189,8 +190,23 @@ export default function HeroClient() {
             />
             <a href="https://github.com" target="_blank" rel="noopener noreferrer" className="group relative flex w-[min(100%,20rem)] items-center justify-center gap-3 rounded-full border border-white/10 bg-white/2 px-8 py-4 text-sm font-medium text-muted transition-all duration-300 hover:border-white/20 hover:text-white hover:bg-white/5 hover:shadow-[0_0_20px_rgba(255,255,255,0.05)] sm:w-auto overflow-hidden focus-visible:ring-2 focus-visible:ring-brand-cyan/40 focus-visible:outline-none">
               <span className="absolute inset-0 w-full h-full bg-linear-to-r from-transparent via-white/10 to-transparent -translate-x-full group-hover:animate-[shimmer_1.5s_infinite]" />
-              <Github className="h-5 w-5 transition-transform duration-300 group-hover:scale-110 group-hover:drop-shadow-[0_0_8px_rgba(255,255,255,0.8)]" />
+              <GithubIcon className="h-5 w-5 transition-transform duration-300 group-hover:scale-110 group-hover:drop-shadow-[0_0_8px_rgba(255,255,255,0.8)]" />
               <span className="relative z-10">{t.hero.viewOnGithub}</span>
+            </a>
+          </motion.div>
+
+          {/* Secondary CTAs */}
+          <motion.div variants={fadeUp} className="mt-4 flex flex-wrap items-center justify-center gap-4">
+            <a href="/compare" className="text-sm text-muted hover:text-foreground transition-colors flex items-center gap-1">
+              Compare to competitors <span aria-hidden="true">&rarr;</span>
+            </a>
+            <span className="text-white/10 hidden sm:inline">|</span>
+            <a href="/security" className="text-sm text-muted hover:text-foreground transition-colors flex items-center gap-1">
+              Security &amp; Privacy <span aria-hidden="true">&rarr;</span>
+            </a>
+            <span className="text-white/10 hidden sm:inline">|</span>
+            <a href="/tour" className="text-sm text-muted hover:text-foreground transition-colors flex items-center gap-1">
+              Product Tour <span aria-hidden="true">&rarr;</span>
             </a>
           </motion.div>
 

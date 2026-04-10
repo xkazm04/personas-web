@@ -1,7 +1,7 @@
 "use client";
 
 import { motion } from "framer-motion";
-import { ArrowLeft, Clock } from "lucide-react";
+import { ArrowLeft, Clock, ArrowRight } from "lucide-react";
 import Link from "next/link";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/sections/Footer";
@@ -169,6 +169,35 @@ export default function BlogArticle({
               <div>
                 <p className="text-sm font-medium text-foreground">{post.author}</p>
                 <p className="text-xs text-muted">{formatDate(post.date)}</p>
+              </div>
+            </div>
+            {/* Cross-links */}
+            <div className="mt-12 pt-8 border-t border-white/[0.06]">
+              <h3 className="text-sm font-semibold text-foreground uppercase tracking-wider mb-4">
+                Continue exploring
+              </h3>
+              <div className="grid gap-3 sm:grid-cols-3">
+                <Link
+                  href="/tour"
+                  className="group flex items-center gap-2 rounded-lg border border-white/[0.06] bg-white/[0.02] px-4 py-3 text-sm text-muted hover:border-white/[0.1] hover:text-foreground transition-colors"
+                >
+                  See it in action
+                  <ArrowRight className="h-3.5 w-3.5 ml-auto opacity-0 group-hover:opacity-100 transition-opacity" />
+                </Link>
+                <Link
+                  href="/use-cases"
+                  className="group flex items-center gap-2 rounded-lg border border-white/[0.06] bg-white/[0.02] px-4 py-3 text-sm text-muted hover:border-white/[0.1] hover:text-foreground transition-colors"
+                >
+                  Explore use cases
+                  <ArrowRight className="h-3.5 w-3.5 ml-auto opacity-0 group-hover:opacity-100 transition-opacity" />
+                </Link>
+                <Link
+                  href="/compare"
+                  className="group flex items-center gap-2 rounded-lg border border-white/[0.06] bg-white/[0.02] px-4 py-3 text-sm text-muted hover:border-white/[0.1] hover:text-foreground transition-colors"
+                >
+                  Compare platforms
+                  <ArrowRight className="h-3.5 w-3.5 ml-auto opacity-0 group-hover:opacity-100 transition-opacity" />
+                </Link>
               </div>
             </div>
           </motion.div>

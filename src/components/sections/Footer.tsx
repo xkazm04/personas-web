@@ -26,6 +26,8 @@ function useColumns() {
       links: [
         { label: t.nav.blog, href: "/blog" },
         { label: t.nav.changelog, href: "/changelog" },
+        { label: t.nav.guide, href: "/guide" },
+        { label: t.nav.compare, href: "/compare" },
         { label: t.nav.roadmap, href: "/roadmap" },
       ],
     },

@@ -16,6 +16,29 @@ export const metadata: Metadata = {
   },
 };
 
+const jsonLd = {
+  "@context": "https://schema.org",
+  "@type": "WebPage",
+  name: "Personas vs CrewAI vs LangChain vs n8n vs AutoGen",
+  description: "Feature-by-feature comparison of AI agent platforms.",
+  url: `${SITE_URL}/compare`,
+  mainEntity: {
+    "@type": "ItemList",
+    itemListElement: [
+      { "@type": "ListItem", position: 1, name: "Personas", url: SITE_URL },
+      { "@type": "ListItem", position: 2, name: "CrewAI", url: "https://crewai.com" },
+      { "@type": "ListItem", position: 3, name: "LangChain", url: "https://langchain.com" },
+      { "@type": "ListItem", position: 4, name: "n8n", url: "https://n8n.io" },
+      { "@type": "ListItem", position: 5, name: "AutoGen", url: "https://github.com/microsoft/autogen" },
+    ],
+  },
+};
+
 export default function CompareLayout({ children }: { children: React.ReactNode }) {
-  return children;
+  return (
+    <>
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }} />
+      {children}
+    </>
+  );
 }

@@ -202,6 +202,19 @@ export default function UseCaseDetail({ useCase }: { useCase: UseCase }) {
                 Take the Tour
               </Link>
             </div>
+            <div className="mt-6 flex flex-wrap items-center justify-center gap-4 text-sm text-muted">
+              <Link href="/blog" className="hover:text-foreground transition-colors">
+                Read the blog &rarr;
+              </Link>
+              <span className="text-white/10">|</span>
+              <Link href="/compare" className="hover:text-foreground transition-colors">
+                Compare platforms &rarr;
+              </Link>
+              <span className="text-white/10">|</span>
+              <Link href="/security" className="hover:text-foreground transition-colors">
+                Security &amp; Privacy &rarr;
+              </Link>
+            </div>
           </motion.div>
         </SectionWrapper>
       </PageShell>

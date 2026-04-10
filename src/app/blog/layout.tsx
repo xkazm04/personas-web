@@ -14,6 +14,20 @@ export const metadata: Metadata = {
   alternates: { canonical: `${SITE_URL}/blog` },
 };
 
+const jsonLd = {
+  "@context": "https://schema.org",
+  "@type": "Blog",
+  name: "Personas Blog",
+  description: "Product updates, tutorials, and engineering deep-dives on AI agent orchestration.",
+  url: `${SITE_URL}/blog`,
+  publisher: { "@type": "Organization", name: "Personas", url: SITE_URL },
+};
+
 export default function BlogLayout({ children }: { children: React.ReactNode }) {
-  return children;
+  return (
+    <>
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }} />
+      {children}
+    </>
+  );
 }
