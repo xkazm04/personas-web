@@ -2,13 +2,13 @@ import type { Metadata } from "next";
 import { SITE_URL } from "@/lib/seo";
 
 export const metadata: Metadata = {
-  title: "Visual Playground",
+  title: "Agent Playground",
   description:
-    "Browse AI-generated backgrounds and decorative patterns. Combine layers and preview visual treatments for your pages.",
+    "See how Personas agents work. Pick a task, watch the agent think, and see the results — all in your browser.",
   openGraph: {
-    title: "Visual Asset Playground — Personas",
+    title: "Agent Playground — Personas",
     description:
-      "AI-generated backgrounds and patterns. Combine layers to find the perfect visual treatment.",
+      "See how Personas agents work. Pick a task, watch the agent think, and see the results — all in your browser.",
     url: `${SITE_URL}/playground`,
   },
   alternates: {

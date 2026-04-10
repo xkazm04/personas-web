@@ -1,387 +1,403 @@
 "use client";
 
-import { useState } from "react";
-import { motion } from "framer-motion";
-import Image from "next/image";
-import { fadeUp, staggerContainer } from "@/lib/animations";
-import GradientText from "@/components/GradientText";
+import { useState, useEffect, useRef, useCallback } from "react";
+import { motion, AnimatePresence, useReducedMotion } from "framer-motion";
+import {
+  Mail, GitPullRequest, MessageSquare, Calendar,
+  FileText, Search, Download, LayoutGrid, RotateCcw,
+} from "lucide-react";
+import Link from "next/link";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/sections/Footer";
+import GradientText from "@/components/GradientText";
+import SectionHeading from "@/components/SectionHeading";
+import TerminalChrome from "@/components/TerminalChrome";
+import { fadeUp, staggerContainer } from "@/lib/animations";
 
-/* ─────────────────────────────────────────── */
-/*  Asset registry                             */
-/* ─────────────────────────────────────────── */
+/* ------------------------------------------------------------------ */
+/*  Types & Data                                                       */
+/* ------------------------------------------------------------------ */
 
-type VisualAsset = {
-  id: string;
-  label: string;
-  src: string;
-  accent: string;
-  width: number;
-  height: number;
+interface OutputLine {
+  text: string;
+  type: "header" | "info" | "tool" | "process" | "success" | "result";
+  indent?: number;
+}
+
+interface PromptCard {
+  icon: typeof Mail;
+  title: string;
+  description: string;
+  lines: OutputLine[];
+}
+
+const prompts: PromptCard[] = [
+  {
+    icon: Mail,
+    title: "Triage my inbox",
+    description: "Read new emails, classify by urgency, and draft replies",
+    lines: [
+      { text: '> Parsing: "Triage my inbox"', type: "header" },
+      { text: "  Intent: email_triage", type: "success" },
+      { text: "  Tools: gmail_api, nlp_classifier", type: "tool" },
+      { text: "", type: "info" },
+      { text: "> Executing...", type: "header" },
+      { text: "  Fetching 12 new emails from Gmail...", type: "process", indent: 1 },
+      { text: "  Classifying by urgency and sender...", type: "process", indent: 1 },
+      { text: "  3 urgent, 5 follow-up, 4 FYI", type: "info", indent: 1 },
+      { text: "  Drafting reply for urgent #1...", type: "process", indent: 1 },
+      { text: "  Drafting reply for urgent #2...", type: "process", indent: 1 },
+      { text: "  Drafting reply for urgent #3...", type: "process", indent: 1 },
+      { text: "", type: "info" },
+      { text: "Complete in 4.2s", type: "success" },
+      { text: "  3 replies drafted, 5 flagged for follow-up, 4 archived", type: "result", indent: 1 },
+    ],
+  },
+  {
+    icon: GitPullRequest,
+    title: "Review this PR",
+    description: "Analyze code changes, find bugs, and suggest improvements",
+    lines: [
+      { text: '> Parsing: "Review this PR"', type: "header" },
+      { text: "  Intent: code_review", type: "success" },
+      { text: "  Tools: github_api, ast_analyzer, test_scanner", type: "tool" },
+      { text: "", type: "info" },
+      { text: "> Executing...", type: "header" },
+      { text: "  Fetching PR #142 diff (14 files, +342 / -89)...", type: "process", indent: 1 },
+      { text: "  Analyzing code structure and patterns...", type: "process", indent: 1 },
+      { text: "  Found 2 potential null derefs in api/handler.ts", type: "info", indent: 1 },
+      { text: "  Checking test coverage for changed files...", type: "process", indent: 1 },
+      { text: "  auth middleware: 0% coverage (gap detected)", type: "info", indent: 1 },
+      { text: "  Posting 6 inline review comments...", type: "process", indent: 1 },
+      { text: "", type: "info" },
+      { text: "Complete in 3.8s", type: "success" },
+      { text: "  2 bugs flagged, 3 style notes, 1 test gap identified", type: "result", indent: 1 },
+    ],
+  },
+  {
+    icon: MessageSquare,
+    title: "Summarize Slack",
+    description: "Digest today's channels into actionable highlights",
+    lines: [
+      { text: '> Parsing: "Summarize Slack"', type: "header" },
+      { text: "  Intent: channel_digest", type: "success" },
+      { text: "  Tools: slack_api, summarizer, nlp_extractor", type: "tool" },
+      { text: "", type: "info" },
+      { text: "> Executing...", type: "header" },
+      { text: "  Connecting to workspace (4 channels)...", type: "process", indent: 1 },
+      { text: "  Reading #engineering: 127 messages, 14 threads...", type: "process", indent: 1 },
+      { text: "  Reading #product: 83 messages, 9 threads...", type: "process", indent: 1 },
+      { text: "  Extracting decisions and action items...", type: "process", indent: 1 },
+      { text: "  3 key decisions, 2 blockers, 5 action items found", type: "info", indent: 1 },
+      { text: "  Generating structured digest...", type: "process", indent: 1 },
+      { text: "", type: "info" },
+      { text: "Complete in 5.1s", type: "success" },
+      { text: "  Digest posted to #my-updates with action items tagged", type: "result", indent: 1 },
+    ],
+  },
+  {
+    icon: Calendar,
+    title: "Optimize my schedule",
+    description: "Find free slots, resolve conflicts, and block focus time",
+    lines: [
+      { text: '> Parsing: "Optimize my schedule"', type: "header" },
+      { text: "  Intent: schedule_optimize", type: "success" },
+      { text: "  Tools: calendar_api, schedule_analyzer", type: "tool" },
+      { text: "", type: "info" },
+      { text: "> Executing...", type: "header" },
+      { text: "  Loading next week's calendar...", type: "process", indent: 1 },
+      { text: "  Mon: 6h meetings | Tue: 3h | Wed: 5h | Thu: 2h | Fri: 4h", type: "info", indent: 1 },
+      { text: "  Detecting meeting-heavy days...", type: "process", indent: 1 },
+      { text: "  Monday and Wednesday exceed 4h threshold", type: "info", indent: 1 },
+      { text: "  Finding optimal focus time slots...", type: "process", indent: 1 },
+      { text: "  Creating 3 focus blocks: Tue 9-11, Thu 9-12, Fri 9-11", type: "process", indent: 1 },
+      { text: "", type: "info" },
+      { text: "Complete in 2.9s", type: "success" },
+      { text: "  3 focus blocks added (6h total), 0 conflicts", type: "result", indent: 1 },
+    ],
+  },
+  {
+    icon: FileText,
+    title: "Draft release notes",
+    description: "Scan recent commits and write user-facing changelog",
+    lines: [
+      { text: '> Parsing: "Draft release notes"', type: "header" },
+      { text: "  Intent: release_changelog", type: "success" },
+      { text: "  Tools: git_api, commit_analyzer, markdown_writer", type: "tool" },
+      { text: "", type: "info" },
+      { text: "> Executing...", type: "header" },
+      { text: "  Fetching commits since v2.3.0 (47 commits)...", type: "process", indent: 1 },
+      { text: "  Categorizing: 12 features, 8 fixes, 27 chores...", type: "process", indent: 1 },
+      { text: "  Filtering user-facing changes...", type: "process", indent: 1 },
+      { text: "  12 features and 8 fixes qualify for changelog", type: "info", indent: 1 },
+      { text: "  Writing human-readable descriptions...", type: "process", indent: 1 },
+      { text: "  Formatting as markdown with categories...", type: "process", indent: 1 },
+      { text: "", type: "info" },
+      { text: "Complete in 3.4s", type: "success" },
+      { text: "  CHANGELOG.md updated: 12 features, 8 fixes documented", type: "result", indent: 1 },
+    ],
+  },
+  {
+    icon: Search,
+    title: "Research competitors",
+    description: "Find pricing changes, new features, and market positioning",
+    lines: [
+      { text: '> Parsing: "Research competitors"', type: "header" },
+      { text: "  Intent: competitive_analysis", type: "success" },
+      { text: "  Tools: web_scraper, pricing_tracker, diff_engine", type: "tool" },
+      { text: "", type: "info" },
+      { text: "> Executing...", type: "header" },
+      { text: "  Scanning 5 competitor websites...", type: "process", indent: 1 },
+      { text: "  Checking pricing pages for changes...", type: "process", indent: 1 },
+      { text: "  Competitor A: price increase +15% detected", type: "info", indent: 1 },
+      { text: "  Analyzing new feature announcements...", type: "process", indent: 1 },
+      { text: "  Competitor B: launched AI assistant feature", type: "info", indent: 1 },
+      { text: "  Comparing positioning statements...", type: "process", indent: 1 },
+      { text: "", type: "info" },
+      { text: "Complete in 6.7s", type: "success" },
+      { text: "  Report generated: 2 pricing changes, 3 new features, 1 pivot", type: "result", indent: 1 },
+    ],
+  },
+];
+
+const lineColors: Record<OutputLine["type"], string> = {
+  header: "text-foreground",
+  info: "text-muted-dark",
+  tool: "text-brand-cyan",
+  process: "text-amber-400",
+  success: "text-brand-emerald",
+  result: "text-muted",
 };
 
-const backgrounds: VisualAsset[] = [
-  { id: "circuit", label: "Circuit", src: "/gen/backgrounds/bg-circuit.png", accent: "#06b6d4", width: 1536, height: 512 },
-  { id: "energy", label: "Energy Waves", src: "/gen/backgrounds/bg-energy.png", accent: "#06b6d4", width: 1536, height: 512 },
-  { id: "stars", label: "Starfield", src: "/gen/backgrounds/bg-stars.png", accent: "#60a5fa", width: 1536, height: 512 },
-  { id: "mesh", label: "Mesh Gradient", src: "/gen/backgrounds/bg-mesh.png", accent: "#a855f7", width: 1536, height: 512 },
-  { id: "android", label: "Android Head", src: "/gen/backgrounds/bg-android.png", accent: "#06b6d4", width: 1536, height: 512 },
-  { id: "datastream", label: "Data Stream", src: "/gen/backgrounds/bg-datastream.png", accent: "#06b6d4", width: 1536, height: 512 },
-  { id: "observability", label: "Observability", src: "/gen/backgrounds/bg-observability.png", accent: "#06b6d4", width: 1536, height: 512 },
-  { id: "settings", label: "Settings", src: "/gen/backgrounds/bg-settings.png", accent: "#34d399", width: 1536, height: 512 },
-  { id: "agents", label: "Agents", src: "/gen/backgrounds/bg-agents.png", accent: "#a855f7", width: 1536, height: 512 },
-  { id: "events", label: "Events", src: "/gen/backgrounds/bg-events.png", accent: "#34d399", width: 1536, height: 512 },
-];
-
-const patterns: VisualAsset[] = [
-  { id: "hexgrid", label: "Hex Grid", src: "/gen/patterns/pat-hexgrid.png", accent: "#06b6d4", width: 512, height: 512 },
-  { id: "circuit-pat", label: "Circuit Traces", src: "/gen/patterns/pat-circuit.png", accent: "#a855f7", width: 512, height: 512 },
-  { id: "topo", label: "Topographic", src: "/gen/patterns/pat-topo.png", accent: "#06b6d4", width: 512, height: 512 },
-  { id: "dots", label: "Dot Matrix", src: "/gen/patterns/pat-dots.png", accent: "#ffffff", width: 512, height: 512 },
-  { id: "geo", label: "Geometric", src: "/gen/patterns/pat-geo.png", accent: "#a855f7", width: 512, height: 512 },
-  { id: "waves", label: "Wave Interference", src: "/gen/patterns/pat-waves.png", accent: "#34d399", width: 512, height: 512 },
-  { id: "neural", label: "Neural Network", src: "/gen/patterns/pat-neural.png", accent: "#06b6d4", width: 512, height: 512 },
-  { id: "dna", label: "DNA Helix", src: "/gen/patterns/pat-dna.png", accent: "#a855f7", width: 512, height: 512 },
-  { id: "radial", label: "Radial Burst", src: "/gen/patterns/pat-radial.png", accent: "#06b6d4", width: 512, height: 512 },
-  { id: "noise", label: "Noise Texture", src: "/gen/patterns/pat-noise.png", accent: "#ffffff", width: 512, height: 512 },
-];
-
-type Tab = "backgrounds" | "patterns" | "combine";
-
-/* ─────────────────────────────────────────── */
-/*  Sub-components                             */
-/* ─────────────────────────────────────────── */
-
-function TabButton({ active, onClick, children }: { active: boolean; onClick: () => void; children: React.ReactNode }) {
-  return (
-    <button
-      onClick={onClick}
-      className={`relative cursor-pointer px-5 py-2.5 text-sm font-medium tracking-wide transition-all duration-200 rounded-lg ${
-        active
-          ? "text-white bg-white/[0.06] border border-white/10"
-          : "text-muted-dark hover:text-muted border border-transparent"
-      }`}
-    >
-      {children}
-      {active && (
-        <span className="absolute bottom-0 left-1/2 -translate-x-1/2 w-8 h-0.5 rounded-full bg-brand-cyan" />
-      )}
-    </button>
-  );
-}
-
-function OpacitySlider({ value, onChange, label }: { value: number; onChange: (v: number) => void; label?: string }) {
-  return (
-    <div className="flex items-center gap-3">
-      {label && <span className="text-xs text-muted-dark">{label}</span>}
-      <span className="text-xs text-muted-dark font-mono w-10">{Math.round(value * 100)}%</span>
-      <input
-        type="range"
-        min={0}
-        max={100}
-        value={Math.round(value * 100)}
-        onChange={(e) => onChange(Number(e.target.value) / 100)}
-        className="h-1 w-32 appearance-none rounded-full bg-white/10 accent-brand-cyan cursor-pointer [&::-webkit-slider-thumb]:h-3 [&::-webkit-slider-thumb]:w-3 [&::-webkit-slider-thumb]:rounded-full [&::-webkit-slider-thumb]:appearance-none [&::-webkit-slider-thumb]:bg-brand-cyan"
-      />
-    </div>
-  );
-}
-
-function AssetPill({ asset, selected, onClick }: { asset: VisualAsset; selected: boolean; onClick: () => void }) {
-  return (
-    <button
-      onClick={onClick}
-      className={`cursor-pointer px-3 py-1.5 rounded-full text-xs font-medium tracking-wide transition-all duration-200 border ${
-        selected
-          ? "border-white/20 bg-white/[0.08] text-white"
-          : "border-white/[0.04] bg-white/[0.02] text-muted-dark hover:text-muted hover:border-white/10"
-      }`}
-      style={selected ? { boxShadow: `0 0 12px ${asset.accent}20` } : undefined}
-    >
-      <span
-        className="inline-block w-2 h-2 rounded-full mr-1.5"
-        style={{ backgroundColor: asset.accent, opacity: selected ? 0.8 : 0.3 }}
-      />
-      {asset.label}
-    </button>
-  );
-}
-
-/* ── Image overlay layer ── */
-function ImageLayer({
-  asset,
-  opacity,
-  mode = "cover",
-}: {
-  asset: VisualAsset;
-  opacity: number;
-  mode?: "cover" | "tile";
-}) {
-  if (mode === "tile") {
-    return (
-      <div
-        className="absolute inset-0 pointer-events-none"
-        style={{
-          opacity,
-          backgroundImage: `url(${asset.src})`,
-          backgroundSize: "512px 512px",
-          backgroundRepeat: "repeat",
-        }}
-      />
-    );
-  }
-
-  return (
-    <div className="absolute inset-0 pointer-events-none" style={{ opacity }}>
-      <Image
-        src={asset.src}
-        alt={asset.label}
-        fill
-        sizes="100vw"
-        className="object-cover"
-        priority={false}
-      />
-    </div>
-  );
-}
-
-/* ── Big preview ── */
-function PreviewCard({
-  asset,
-  opacity,
-  label,
-  mode,
-}: {
-  asset: VisualAsset | null;
-  opacity: number;
-  label: string;
-  mode?: "cover" | "tile";
-}) {
-  return (
-    <div className="relative rounded-xl border border-white/[0.06] bg-background overflow-hidden aspect-[16/9]">
-      {asset && <ImageLayer asset={asset} opacity={opacity} mode={mode} />}
-      {!asset && (
-        <div className="absolute inset-0 flex items-center justify-center text-muted-dark text-sm">
-          Select a {label} to preview
-        </div>
-      )}
-      {asset && (
-        <div className="absolute inset-0 flex flex-col items-center justify-center gap-2 z-10">
-          <div className="text-muted text-lg font-semibold tracking-tight">{asset.label}</div>
-          <div className="text-muted-dark text-xs font-mono">opacity: {Math.round(opacity * 100)}%</div>
-        </div>
-      )}
-    </div>
-  );
-}
-
-/* ── Gallery grid ── */
-function GalleryGrid({
-  items,
-  selectedId,
-  onSelect,
-  opacity,
-  mode,
-}: {
-  items: VisualAsset[];
-  selectedId: string | null;
-  onSelect: (id: string) => void;
-  opacity: number;
-  mode?: "cover" | "tile";
-}) {
-  return (
-    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
-      {items.map((asset) => {
-        const isActive = asset.id === selectedId;
-        return (
-          <button
-            key={asset.id}
-            onClick={() => onSelect(asset.id)}
-            className={`group relative rounded-xl overflow-hidden aspect-[16/10] cursor-pointer transition-all duration-300 border ${
-              isActive
-                ? "border-brand-cyan/30 ring-1 ring-brand-cyan/20"
-                : "border-white/[0.04] hover:border-white/10"
-            }`}
-            style={{ background: "#0a0a12" }}
-          >
-            <ImageLayer asset={asset} opacity={opacity} mode={mode} />
-            <div className="absolute inset-x-0 bottom-0 p-3 bg-gradient-to-t from-black/60 to-transparent z-10">
-              <div className="flex items-center gap-2">
-                <span className="w-2 h-2 rounded-full" style={{ backgroundColor: asset.accent, opacity: 0.7 }} />
-                <span className="text-xs font-medium text-muted">{asset.label}</span>
-              </div>
-            </div>
-            {isActive && (
-              <div className="absolute top-2 right-2 w-5 h-5 rounded-full bg-brand-cyan/20 border border-brand-cyan/40 flex items-center justify-center z-10">
-                <div className="w-2 h-2 rounded-full bg-brand-cyan" />
-              </div>
-            )}
-          </button>
-        );
-      })}
-    </div>
-  );
-}
-
-/* ─────────────────────────────────────────── */
-/*  Combine Tab                                */
-/* ─────────────────────────────────────────── */
-
-function CombineView() {
-  const [selectedBg, setSelectedBg] = useState<string | null>("circuit");
-  const [selectedPat, setSelectedPat] = useState<string | null>("hexgrid");
-  const [bgOpacity, setBgOpacity] = useState(0.15);
-  const [patOpacity, setPatOpacity] = useState(0.08);
-
-  const bgAsset = backgrounds.find((b) => b.id === selectedBg) ?? null;
-  const patAsset = patterns.find((p) => p.id === selectedPat) ?? null;
-
-  return (
-    <div className="space-y-6">
-      {/* Live combined preview */}
-      <div className="relative rounded-xl border border-white/[0.06] bg-background overflow-hidden aspect-[21/9]">
-        {bgAsset && <ImageLayer asset={bgAsset} opacity={bgOpacity} />}
-        {patAsset && <ImageLayer asset={patAsset} opacity={patOpacity} mode="tile" />}
-
-        <div className="absolute inset-0 flex flex-col items-center justify-center z-10 gap-4 p-8">
-          <h2 className="text-2xl md:text-4xl font-bold tracking-tight text-foreground">
-            Sample Page Content
-          </h2>
-          <p className="text-sm md:text-base text-muted-dark max-w-md text-center leading-relaxed">
-            Preview how the selected background and pattern combine as page overlays. Adjust opacity sliders to fine-tune the visual treatment.
-          </p>
-          <div className="flex gap-3 mt-2">
-            <span className="px-4 py-2 rounded-lg bg-brand-cyan/10 border border-brand-cyan/20 text-brand-cyan text-sm font-medium">
-              Primary Action
-            </span>
-            <span className="px-4 py-2 rounded-lg bg-white/[0.04] border border-white/[0.06] text-muted text-sm">
-              Secondary
-            </span>
-          </div>
-        </div>
-      </div>
-
-      {/* Controls */}
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-        {/* Background selector */}
-        <div className="space-y-3">
-          <div className="flex items-center justify-between">
-            <h3 className="text-sm font-medium text-muted">Background</h3>
-            <OpacitySlider value={bgOpacity} onChange={setBgOpacity} />
-          </div>
-          <div className="flex flex-wrap gap-2">
-            <button
-              onClick={() => setSelectedBg(null)}
-              className={`cursor-pointer px-3 py-1.5 rounded-full text-xs font-medium tracking-wide transition-all duration-200 border ${
-                selectedBg === null
-                  ? "border-white/20 bg-white/[0.08] text-white"
-                  : "border-white/[0.04] bg-white/[0.02] text-muted-dark hover:text-muted hover:border-white/10"
-              }`}
-            >
-              None
-            </button>
-            {backgrounds.map((bg) => (
-              <AssetPill key={bg.id} asset={bg} selected={selectedBg === bg.id} onClick={() => setSelectedBg(bg.id)} />
-            ))}
-          </div>
-        </div>
-
-        {/* Pattern selector */}
-        <div className="space-y-3">
-          <div className="flex items-center justify-between">
-            <h3 className="text-sm font-medium text-muted">Pattern Overlay</h3>
-            <OpacitySlider value={patOpacity} onChange={setPatOpacity} />
-          </div>
-          <div className="flex flex-wrap gap-2">
-            <button
-              onClick={() => setSelectedPat(null)}
-              className={`cursor-pointer px-3 py-1.5 rounded-full text-xs font-medium tracking-wide transition-all duration-200 border ${
-                selectedPat === null
-                  ? "border-white/20 bg-white/[0.08] text-white"
-                  : "border-white/[0.04] bg-white/[0.02] text-muted-dark hover:text-muted hover:border-white/10"
-              }`}
-            >
-              None
-            </button>
-            {patterns.map((pat) => (
-              <AssetPill key={pat.id} asset={pat} selected={selectedPat === pat.id} onClick={() => setSelectedPat(pat.id)} />
-            ))}
-          </div>
-        </div>
-      </div>
-    </div>
-  );
-}
-
-/* ─────────────────────────────────────────── */
-/*  Main Page                                  */
-/* ─────────────────────────────────────────── */
+/* ------------------------------------------------------------------ */
+/*  Page Component                                                     */
+/* ------------------------------------------------------------------ */
 
 export default function PlaygroundPage() {
-  const [tab, setTab] = useState<Tab>("backgrounds");
-  const [selectedBg, setSelectedBg] = useState<string | null>("circuit");
-  const [selectedPat, setSelectedPat] = useState<string | null>("hexgrid");
-  const [bgOpacity, setBgOpacity] = useState(0.15);
-  const [patOpacity, setPatOpacity] = useState(0.1);
+  const prefersReducedMotion = useReducedMotion();
+  const [activePrompt, setActivePrompt] = useState<number | null>(null);
+  const [lines, setLines] = useState<OutputLine[]>([]);
+  const [isRunning, setIsRunning] = useState(false);
+  const [isDone, setIsDone] = useState(false);
+  const terminalRef = useRef<HTMLDivElement>(null);
+  const timeoutsRef = useRef<ReturnType<typeof setTimeout>[]>([]);
 
-  const bgAsset = backgrounds.find((b) => b.id === selectedBg) ?? null;
-  const patAsset = patterns.find((p) => p.id === selectedPat) ?? null;
+  const clearTimeouts = useCallback(() => {
+    timeoutsRef.current.forEach(clearTimeout);
+    timeoutsRef.current = [];
+  }, []);
+
+  const scrollTerminal = useCallback(() => {
+    if (!terminalRef.current) return;
+    if (prefersReducedMotion) {
+      terminalRef.current.scrollTop = terminalRef.current.scrollHeight;
+    } else {
+      requestAnimationFrame(() => {
+        if (terminalRef.current) {
+          terminalRef.current.scrollTop = terminalRef.current.scrollHeight;
+        }
+      });
+    }
+  }, [prefersReducedMotion]);
+
+  const runSimulation = useCallback(
+    (promptLines: OutputLine[]) => {
+      clearTimeouts();
+      setLines([]);
+      setIsRunning(true);
+      setIsDone(false);
+
+      let cumulative = 0;
+      promptLines.forEach((line, i) => {
+        const delay = line.type === "info" && line.text === "" ? 100 : 250 + Math.random() * 150;
+        cumulative += delay;
+        const t = setTimeout(() => {
+          setLines((prev) => [...prev, line]);
+          scrollTerminal();
+          if (i === promptLines.length - 1) {
+            setIsRunning(false);
+            setIsDone(true);
+          }
+        }, cumulative);
+        timeoutsRef.current.push(t);
+      });
+    },
+    [clearTimeouts, scrollTerminal]
+  );
+
+  const handlePromptClick = useCallback(
+    (idx: number) => {
+      if (isRunning && activePrompt === idx) return;
+      clearTimeouts();
+      setActivePrompt(idx);
+      runSimulation(prompts[idx].lines);
+    },
+    [isRunning, activePrompt, clearTimeouts, runSimulation]
+  );
+
+  const handleReset = useCallback(() => {
+    clearTimeouts();
+    setActivePrompt(null);
+    setLines([]);
+    setIsRunning(false);
+    setIsDone(false);
+  }, [clearTimeouts]);
+
+  useEffect(() => clearTimeouts, [clearTimeouts]);
+
+  const status = isRunning ? "executing..." : isDone ? "complete" : "ready";
 
   return (
     <>
       <Navbar />
       <main className="relative min-h-screen bg-[var(--background)] overflow-hidden">
-        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 pt-28 pb-20">
+        <div className="mx-auto max-w-6xl px-4 sm:px-6 lg:px-8 pt-28 pb-20">
           <motion.div initial="hidden" animate="visible" variants={staggerContainer}>
-            {/* Header */}
-            <motion.div variants={fadeUp} className="text-center mb-10">
-              <h1 className="text-3xl md:text-4xl font-bold tracking-tight mb-3">
-                <GradientText>Visual Asset Playground</GradientText>
-              </h1>
-              <p className="text-sm text-muted-dark max-w-lg mx-auto">
-                Browse 10 AI-generated backgrounds and 10 decorative patterns. Combine layers to find the perfect visual treatment for your pages.
+            {/* Hero */}
+            <motion.div variants={fadeUp} className="text-center mb-14">
+              <SectionHeading>
+                See agents in <GradientText>action</GradientText>
+              </SectionHeading>
+              <p className="mt-5 text-muted-dark text-base md:text-lg max-w-2xl mx-auto leading-relaxed">
+                Pick a task below and watch how a Personas agent breaks it down,
+                selects the right tools, and delivers results — all in seconds.
               </p>
             </motion.div>
 
-            {/* Tab navigation */}
-            <motion.div variants={fadeUp} className="flex justify-center gap-2 mb-8">
-              <TabButton active={tab === "backgrounds"} onClick={() => setTab("backgrounds")}>
-                Backgrounds
-              </TabButton>
-              <TabButton active={tab === "patterns"} onClick={() => setTab("patterns")}>
-                Patterns
-              </TabButton>
-              <TabButton active={tab === "combine"} onClick={() => setTab("combine")}>
-                Combine
-              </TabButton>
+            {/* Prompt Cards - 2x3 grid */}
+            <motion.div
+              variants={fadeUp}
+              className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 mb-10"
+            >
+              {prompts.map((prompt, idx) => {
+                const Icon = prompt.icon;
+                const isActive = activePrompt === idx;
+                return (
+                  <button
+                    key={prompt.title}
+                    onClick={() => handlePromptClick(idx)}
+                    className={`group relative text-left rounded-xl border p-4 transition-all duration-300 cursor-pointer backdrop-blur-sm ${
+                      isActive
+                        ? "border-brand-cyan/40 bg-brand-cyan/[0.06] shadow-[0_0_30px_rgba(6,182,212,0.08)]"
+                        : "border-white/[0.06] bg-white/[0.02] hover:border-white/15 hover:bg-white/[0.04]"
+                    }`}
+                  >
+                    <div className="flex items-start gap-3">
+                      <div
+                        className={`mt-0.5 flex h-8 w-8 shrink-0 items-center justify-center rounded-lg transition-colors ${
+                          isActive ? "bg-brand-cyan/15" : "bg-white/[0.04] group-hover:bg-white/[0.08]"
+                        }`}
+                      >
+                        <Icon className="h-4 w-4 text-brand-cyan" />
+                      </div>
+                      <div>
+                        <h3 className="text-sm font-semibold text-foreground">{prompt.title}</h3>
+                        <p className="mt-0.5 text-xs text-muted-dark leading-relaxed">
+                          {prompt.description}
+                        </p>
+                      </div>
+                    </div>
+                  </button>
+                );
+              })}
             </motion.div>
 
-            {/* Tab content */}
-            <motion.div variants={fadeUp}>
-              {tab === "backgrounds" && (
-                <div className="space-y-6">
-                  <div className="flex items-center justify-between">
-                    <h2 className="text-lg font-semibold text-muted">Background Scenes</h2>
-                    <OpacitySlider value={bgOpacity} onChange={setBgOpacity} />
-                  </div>
-                  <PreviewCard asset={bgAsset} opacity={bgOpacity} label="background" />
-                  <GalleryGrid items={backgrounds} selectedId={selectedBg} onSelect={setSelectedBg} opacity={bgOpacity} />
-                </div>
-              )}
+            {/* Terminal Simulation */}
+            <motion.div variants={fadeUp} className="mx-auto max-w-3xl mb-16">
+              <div className="rounded-2xl border border-white/[0.08] bg-black/50 backdrop-blur-xl overflow-hidden shadow-[0_0_60px_rgba(0,0,0,0.3)]">
+                <TerminalChrome
+                  title="agent-playground — live"
+                  status={status}
+                  className="px-4 py-3 sm:px-5"
+                />
 
-              {tab === "patterns" && (
-                <div className="space-y-6">
-                  <div className="flex items-center justify-between">
-                    <h2 className="text-lg font-semibold text-muted">Decorative Patterns</h2>
-                    <OpacitySlider value={patOpacity} onChange={setPatOpacity} />
-                  </div>
-                  <PreviewCard asset={patAsset} opacity={patOpacity} label="pattern" mode="tile" />
-                  <GalleryGrid items={patterns} selectedId={selectedPat} onSelect={setSelectedPat} opacity={patOpacity} mode="tile" />
-                </div>
-              )}
+                <div
+                  ref={terminalRef}
+                  className="h-[320px] overflow-y-auto px-4 py-4 sm:px-5 scrollbar-hide"
+                >
+                  {activePrompt === null && (
+                    <div className="flex h-full items-center justify-center">
+                      <p className="text-sm text-muted-dark font-mono text-center">
+                        Select a task above to start the simulation
+                      </p>
+                    </div>
+                  )}
 
-              {tab === "combine" && <CombineView />}
+                  <AnimatePresence>
+                    {lines.map((line, i) => (
+                      <motion.div
+                        key={i}
+                        initial={{ opacity: 0, y: 4 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        transition={{ duration: 0.15 }}
+                        className={`font-mono text-sm leading-relaxed ${lineColors[line.type]}`}
+                        style={{ paddingLeft: line.indent ? `${line.indent * 12}px` : undefined }}
+                      >
+                        {line.text || "\u00A0"}
+                      </motion.div>
+                    ))}
+                  </AnimatePresence>
+
+                  {isRunning && (
+                    <motion.div
+                      initial={{ opacity: 0 }}
+                      animate={{ opacity: [0.3, 1, 0.3] }}
+                      transition={{ duration: 1, repeat: Infinity }}
+                      className="mt-1 font-mono text-sm text-brand-cyan/60"
+                    >
+                      _
+                    </motion.div>
+                  )}
+                </div>
+
+                {/* Terminal footer */}
+                <div className="flex items-center justify-between border-t border-white/[0.04] px-4 py-2.5 sm:px-5">
+                  <span className="text-xs font-mono text-muted-dark uppercase tracking-wider">
+                    Simulated execution
+                  </span>
+                  {isDone && (
+                    <button
+                      onClick={handleReset}
+                      className="flex items-center gap-1.5 text-xs font-mono text-muted-dark hover:text-foreground transition-colors cursor-pointer"
+                    >
+                      <RotateCcw className="h-3 w-3" />
+                      Reset
+                    </button>
+                  )}
+                </div>
+              </div>
+            </motion.div>
+
+            {/* Bottom CTA */}
+            <motion.div variants={fadeUp} className="mx-auto max-w-xl">
+              <div className="relative rounded-2xl border border-white/[0.08] bg-white/[0.02] backdrop-blur-xl p-8 text-center overflow-hidden">
+                {/* Gradient border glow */}
+                <div className="absolute inset-0 rounded-2xl bg-gradient-to-br from-brand-cyan/[0.04] via-transparent to-purple-500/[0.04] pointer-events-none" />
+
+                <h3 className="relative text-xl font-bold text-foreground mb-3">
+                  Ready to build your own agents?
+                </h3>
+                <p className="relative text-sm text-muted-dark mb-6">
+                  Download Personas and create autonomous agents that connect to your tools,
+                  follow your rules, and run on your schedule.
+                </p>
+                <div className="relative flex flex-col sm:flex-row items-center justify-center gap-3">
+                  <Link
+                    href="/#download"
+                    className="inline-flex items-center gap-2 rounded-lg bg-brand-cyan/15 border border-brand-cyan/30 px-5 py-2.5 text-sm font-semibold text-brand-cyan transition-all hover:bg-brand-cyan/25"
+                  >
+                    <Download className="h-4 w-4" />
+                    Download Personas
+                  </Link>
+                  <Link
+                    href="/templates"
+                    className="inline-flex items-center gap-2 rounded-lg border border-white/10 bg-white/[0.04] px-5 py-2.5 text-sm font-medium text-muted hover:text-foreground hover:border-white/20 transition-all"
+                  >
+                    <LayoutGrid className="h-4 w-4" />
+                    Browse Templates
+                  </Link>
+                </div>
+              </div>
             </motion.div>
           </motion.div>
         </div>
