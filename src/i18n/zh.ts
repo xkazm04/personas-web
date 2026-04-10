@@ -11,6 +11,7 @@ export const zh: Translations = {
     dashboard: '\u63A7\u5236\u53F0',
     features: '\u529F\u80FD',
     guide: '\u6307\u5357',
+    compare: '比较',
     menu: '\u83DC\u5355',
   },
   footer: {

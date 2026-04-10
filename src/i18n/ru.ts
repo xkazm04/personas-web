@@ -11,6 +11,7 @@ export const ru: Translations = {
     dashboard: '\u041F\u0430\u043D\u0435\u043B\u044C \u0443\u043F\u0440\u0430\u0432\u043B\u0435\u043D\u0438\u044F',
     features: '\u0424\u0443\u043D\u043A\u0446\u0438\u0438',
     guide: '\u0420\u0443\u043A\u043E\u0432\u043E\u0434\u0441\u0442\u0432\u043E',
+    compare: 'Сравнение',
     menu: '\u041C\u0435\u043D\u044E',
   },
   footer: {

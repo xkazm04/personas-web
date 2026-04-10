@@ -149,7 +149,7 @@ export default function Pricing() {
         </div>
       </motion.div>
 
-      <motion.div variants={fadeUp} className="mt-10 text-center">
+      <motion.div variants={fadeUp} className="mt-10 text-center space-y-4">
         <div className="mx-auto max-w-4xl rounded-2xl border border-white/4 bg-white/1 px-4 py-3 sm:px-6">
           <p className="text-sm text-muted leading-relaxed">
             Personas is a free desktop app for AI agent orchestration. You bring your own Claude subscription.
@@ -157,6 +157,13 @@ export default function Pricing() {
             <span className="text-brand-cyan/70">We never touch your Anthropic bill.</span>
           </p>
         </div>
+        <a
+          href="/compare"
+          className="inline-flex items-center gap-1.5 text-sm text-brand-cyan/70 hover:text-brand-cyan transition-colors"
+        >
+          See full comparison with CrewAI, LangChain, n8n &amp; more
+          <span aria-hidden="true">&rarr;</span>
+        </a>
       </motion.div>
     </SectionWrapper>
   );

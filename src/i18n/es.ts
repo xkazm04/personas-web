@@ -11,6 +11,7 @@ export const es: Translations = {
     dashboard: 'Panel',
     features: 'Caracter\u00edsticas',
     guide: 'Gu\u00eda',
+    compare: 'Comparar',
     menu: 'Men\u00fa',
   },
   footer: {

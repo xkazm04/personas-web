@@ -11,6 +11,7 @@ export const ko: Translations = {
     dashboard: '\ub300\uc2dc\ubcf4\ub4dc',
     features: '\uae30\ub2a5',
     guide: '\uAC00\uC774\uB4DC',
+    compare: '비교',
     menu: '\uba54\ub274',
   },
   footer: {

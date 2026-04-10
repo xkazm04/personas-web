@@ -11,6 +11,7 @@ export const id: Translations = {
     dashboard: 'Dasbor',
     features: 'Fitur',
     guide: 'Panduan',
+    compare: 'Bandingkan',
     menu: 'Menu',
   },
   footer: {

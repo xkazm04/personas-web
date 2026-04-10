@@ -11,6 +11,7 @@ export const ar: Translations = {
     dashboard: '\u0644\u0648\u062D\u0629 \u0627\u0644\u062A\u062D\u0643\u0645',
     features: '\u0627\u0644\u0645\u064A\u0632\u0627\u062A',
     guide: '\u0627\u0644\u062F\u0644\u064A\u0644',
+    compare: 'مقارنة',
     menu: '\u0627\u0644\u0642\u0627\u0626\u0645\u0629',
   },
   footer: {
