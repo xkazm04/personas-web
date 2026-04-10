@@ -10,17 +10,17 @@ interface GuideMarkdownProps {
 // Splits a text string into React nodes handling: images, links, bold+italic,
 // bold, italic, and inline code.
 
-const INLINE_RE =
-  /!\[([^\]]*)\]\(([^)]+)\)|\[([^\]]*)\]\(([^)]+)\)|\*\*\*(.+?)\*\*\*|\*\*(.+?)\*\*|\*(.+?)\*|`([^`]+)`/g;
-
 function parseInline(text: string, keyBase: string): ReactNode[] {
+  // Create a NEW regex per call — a shared global regex corrupts lastIndex
+  // across recursive calls (bold/link text triggers nested parseInline).
+  const re =
+    /!\[([^\]]*)\]\(([^)]+)\)|\[([^\]]*)\]\(([^)]+)\)|\*\*\*(.+?)\*\*\*|\*\*(.+?)\*\*|\*(.+?)\*|`([^`]+)`/g;
   const nodes: ReactNode[] = [];
   let last = 0;
   let k = 0;
   let m: RegExpExecArray | null;
 
-  INLINE_RE.lastIndex = 0;
-  while ((m = INLINE_RE.exec(text)) !== null) {
+  while ((m = re.exec(text)) !== null) {
     if (m.index > last) nodes.push(text.slice(last, m.index));
 
     const key = `${keyBase}-i${k++}`;
