@@ -28,6 +28,7 @@ function useColumns() {
         { label: t.nav.changelog, href: "/changelog" },
         { label: t.nav.guide, href: "/guide" },
         { label: t.nav.compare, href: "/compare" },
+        { label: t.nav.community, href: "/community" },
         { label: t.nav.roadmap, href: "/roadmap" },
       ],
     },

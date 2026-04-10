@@ -9,6 +9,7 @@ export interface Translations {
     dashboard: string;
     features: string;
     guide: string;
+    community: string;
     useCases: string;
     tour: string;
     security: string;
@@ -92,6 +93,7 @@ export interface Translations {
     pricing: string;
     faq: string;
     features: string;
+    community: string;
     useCases: string;
     eventBus: string;
     download: string;
@@ -317,6 +319,7 @@ export const en: Translations = {
     dashboard: 'Dashboard',
     features: 'Features',
     guide: 'Guide',
+    community: 'Community',
     useCases: 'Use Cases',
     tour: 'Tour',
     security: 'Security',
@@ -400,6 +403,7 @@ export const en: Translations = {
     pricing: 'Pricing',
     faq: 'FAQ',
     features: 'Features',
+    community: 'Community',
     useCases: 'Use Cases',
     eventBus: 'Event Bus',
     download: 'Download',
