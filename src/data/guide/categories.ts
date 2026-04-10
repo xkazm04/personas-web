@@ -9,6 +9,13 @@ export const GUIDE_CATEGORIES: GuideCategory[] = [
     color: "#06b6d4",
   },
   {
+    id: "credentials",
+    name: "Credentials & Security",
+    description: "Connect to services securely. Understand the encrypted vault and how your data stays safe.",
+    icon: "ShieldCheck",
+    color: "#f43f5e",
+  },
+  {
     id: "agents-prompts",
     name: "Agents & Prompts",
     description: "Create, configure, and fine-tune your AI agents. Master simple and structured prompt modes.",
@@ -23,25 +30,11 @@ export const GUIDE_CATEGORIES: GuideCategory[] = [
     color: "#fbbf24",
   },
   {
-    id: "credentials",
-    name: "Credentials & Security",
-    description: "Connect to services securely. Understand the encrypted vault and how your data stays safe.",
-    icon: "ShieldCheck",
-    color: "#f43f5e",
-  },
-  {
     id: "pipelines",
     name: "Pipelines & Teams",
     description: "Wire agents together into visual pipelines. Build multi-agent workflows on the team canvas.",
     icon: "GitBranch",
     color: "#34d399",
-  },
-  {
-    id: "testing",
-    name: "Testing & Optimization",
-    description: "Run arena tests, A/B comparisons, and let the genome system evolve your best prompts.",
-    icon: "FlaskConical",
-    color: "#3b82f6",
   },
   {
     id: "memories",
@@ -56,6 +49,13 @@ export const GUIDE_CATEGORIES: GuideCategory[] = [
     description: "Track every execution in real time. See what your agents do, how well they perform, and what they cost.",
     icon: "BarChart3",
     color: "#10b981",
+  },
+  {
+    id: "testing",
+    name: "Testing & Optimization",
+    description: "Run arena tests, A/B comparisons, and let the genome system evolve your best prompts.",
+    icon: "FlaskConical",
+    color: "#3b82f6",
   },
   {
     id: "deployment",

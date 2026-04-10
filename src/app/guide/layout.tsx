@@ -1,4 +1,6 @@
 import type { Metadata } from "next";
+import Navbar from "@/components/Navbar";
+import GuideSidebar from "@/components/guide/GuideSidebar";
 
 export const metadata: Metadata = {
   title: "User Guide",
@@ -7,5 +9,15 @@ export const metadata: Metadata = {
 };
 
 export default function GuideLayout({ children }: { children: React.ReactNode }) {
-  return children;
+  return (
+    <>
+      <Navbar />
+      <div className="flex min-h-screen pt-16">
+        <GuideSidebar />
+        <main className="flex-1 min-w-0 overflow-y-auto">
+          {children}
+        </main>
+      </div>
+    </>
+  );
 }

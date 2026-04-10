@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useMemo } from "react";
+import Link from "next/link";
 import { motion } from "framer-motion";
 import { Search } from "lucide-react";
 import type { GuideTopic } from "@/data/guide/types";
@@ -11,11 +12,12 @@ import { fadeUp, staggerContainer } from "@/lib/animations";
 interface CategoryTopicsProps {
   topics: GuideTopic[];
   color: string;
+  categoryId: string;
 }
 
 /* ── Component ────────────────────────────────────────────────────────── */
 
-export default function CategoryTopics({ topics, color }: CategoryTopicsProps) {
+export default function CategoryTopics({ topics, color, categoryId }: CategoryTopicsProps) {
   const [query, setQuery] = useState("");
 
   const filtered = useMemo(() => {
@@ -39,13 +41,13 @@ export default function CategoryTopics({ topics, color }: CategoryTopicsProps) {
           value={query}
           onChange={(e) => setQuery(e.target.value)}
           placeholder={`Filter ${topics.length} topics...`}
-          className="w-full rounded-xl border border-white/[0.08] bg-white/[0.03] py-2.5 pl-11 pr-4 text-sm text-foreground placeholder:text-muted-dark backdrop-blur-sm outline-none transition-all duration-300 focus:border-brand-cyan/30 focus:ring-2 focus:ring-brand-cyan/10"
+          className="w-full rounded-xl border border-white/[0.08] bg-white/[0.03] py-2.5 pl-11 pr-4 text-base text-foreground placeholder:text-muted-dark backdrop-blur-sm outline-none transition-all duration-300 focus:border-brand-cyan/30 focus:ring-2 focus:ring-brand-cyan/10"
         />
       </div>
 
       {/* Results count when filtering */}
       {query.trim() && (
-        <p className="mt-4 text-sm text-muted-dark">
+        <p className="mt-4 text-base text-muted-dark">
           {filtered.length} result{filtered.length !== 1 && "s"} found
         </p>
       )}
@@ -58,35 +60,38 @@ export default function CategoryTopics({ topics, color }: CategoryTopicsProps) {
         className="mt-6 grid gap-4 sm:grid-cols-2"
       >
         {filtered.map((topic) => (
-          <motion.div
-            key={topic.id}
-            variants={fadeUp}
-            className="group rounded-2xl border border-white/[0.06] bg-white/[0.02] p-5 backdrop-blur-sm transition-all duration-300 hover:border-white/[0.12] hover:bg-white/[0.05]"
-          >
-            <h3 className="text-sm font-semibold text-foreground">{topic.title}</h3>
-            <p className="mt-2 text-sm leading-relaxed text-muted-dark line-clamp-3">
-              {topic.description}
-            </p>
+          <motion.div key={topic.id} variants={fadeUp}>
+            <Link
+              href={`/guide/${categoryId}/${topic.id}`}
+              className="group block rounded-2xl border border-white/[0.06] bg-white/[0.02] p-5 backdrop-blur-sm transition-all duration-300 hover:border-white/[0.12] hover:bg-white/[0.05]"
+            >
+              <h3 className="text-lg font-semibold text-foreground group-hover:text-brand-cyan transition-colors">
+                {topic.title}
+              </h3>
+              <p className="mt-2 text-base leading-relaxed text-muted-dark line-clamp-3">
+                {topic.description}
+              </p>
 
-            {/* Tags */}
-            {topic.tags.length > 0 && (
-              <div className="mt-3 flex flex-wrap gap-1.5">
-                {topic.tags.slice(0, 5).map((tag) => (
-                  <span
-                    key={tag}
-                    className="rounded-full px-2 py-0.5 text-[10px] font-medium"
-                    style={{ backgroundColor: `${color}12`, color }}
-                  >
-                    {tag}
-                  </span>
-                ))}
-                {topic.tags.length > 5 && (
-                  <span className="rounded-full px-2 py-0.5 text-[10px] font-medium text-muted-dark">
-                    +{topic.tags.length - 5}
-                  </span>
-                )}
-              </div>
-            )}
+              {/* Tags */}
+              {topic.tags.length > 0 && (
+                <div className="mt-3 flex flex-wrap gap-1.5">
+                  {topic.tags.slice(0, 5).map((tag) => (
+                    <span
+                      key={tag}
+                      className="rounded-full px-2 py-0.5 text-sm font-medium"
+                      style={{ backgroundColor: `${color}12`, color }}
+                    >
+                      {tag}
+                    </span>
+                  ))}
+                  {topic.tags.length > 5 && (
+                    <span className="rounded-full px-2 py-0.5 text-sm font-medium text-muted-dark">
+                      +{topic.tags.length - 5}
+                    </span>
+                  )}
+                </div>
+              )}
+            </Link>
           </motion.div>
         ))}
       </motion.div>
