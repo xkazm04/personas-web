@@ -11,6 +11,7 @@ import {
   TWITTER_HANDLE,
 } from "@/lib/seo";
 import ThemeInit from "@/components/ThemeInit";
+import CookieConsent from "@/components/CookieConsent";
 import "./globals.css";
 
 const geistSans = Geist({
@@ -118,6 +119,7 @@ export default function RootLayout({
             {children}
           </QualityProvider>
         </AuthProvider>
+        <CookieConsent />
       </body>
     </html>
   );
