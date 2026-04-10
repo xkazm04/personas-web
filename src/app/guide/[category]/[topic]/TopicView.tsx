@@ -3,7 +3,9 @@
 import Link from "next/link";
 import { ChevronLeft, ChevronRight } from "lucide-react";
 import GuideMarkdown from "@/components/guide/GuideMarkdown";
+import RelatedTopics from "@/components/guide/RelatedTopics";
 import type { GuideCategory, GuideTopic } from "@/data/guide/types";
+import type { RelatedTopic } from "@/lib/guide-utils";
 
 interface TopicViewProps {
   category: GuideCategory;
@@ -11,9 +13,10 @@ interface TopicViewProps {
   content: string;
   prevTopic: GuideTopic | null;
   nextTopic: GuideTopic | null;
+  related: RelatedTopic[];
 }
 
-export default function TopicView({ category, topic, content, prevTopic, nextTopic }: TopicViewProps) {
+export default function TopicView({ category, topic, content, prevTopic, nextTopic, related }: TopicViewProps) {
   return (
     <div className="px-6 pb-24">
       <div className="mx-auto max-w-3xl">
@@ -47,6 +50,9 @@ export default function TopicView({ category, topic, content, prevTopic, nextTop
         <article className="mt-8">
           <GuideMarkdown content={content} />
         </article>
+
+        {/* Related topics */}
+        <RelatedTopics related={related} />
 
         {/* Prev / Next navigation */}
         <div className="mt-16 grid grid-cols-2 gap-4">
