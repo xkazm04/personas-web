@@ -11,6 +11,7 @@ export const cs: Translations = {
     dashboard: 'N\u00e1st\u011bnka',
     features: 'Funkce',
     guide: 'Průvodce',
+    security: 'Bezpečnost',
     blog: 'Blog',
     changelog: 'Historie změn',
     compare: 'Srovnání',

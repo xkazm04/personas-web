@@ -11,6 +11,7 @@ export const ko: Translations = {
     dashboard: '\ub300\uc2dc\ubcf4\ub4dc',
     features: '\uae30\ub2a5',
     guide: '\uAC00\uC774\uB4DC',
+    security: '보안',
     blog: '블로그',
     changelog: '변경 이력',
     compare: '비교',

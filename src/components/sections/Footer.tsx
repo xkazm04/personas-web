@@ -1,7 +1,8 @@
 "use client";
 
 import { useState } from "react";
-import { Github, Twitter, ChevronDown, MessageCircle } from "lucide-react";
+import { ChevronDown, MessageCircle } from "lucide-react";
+import { GithubIcon, TwitterIcon } from "@/components/icons/brand-icons";
 import { motion, AnimatePresence } from "framer-motion";
 import Image from "next/image";
 import ThemeSwitcher from "@/components/ThemeSwitcher";
@@ -22,12 +23,15 @@ function useColumns() {
     {
       title: t.footer.resources,
       links: [
+        { label: t.nav.blog, href: "/blog" },
+        { label: t.nav.changelog, href: "/changelog" },
         { label: t.nav.roadmap, href: "/roadmap" },
       ],
     },
     {
       title: t.footer.legal,
       links: [
+        { label: t.nav.security, href: "/security" },
         { label: t.footer.privacy, href: "/legal" },
         { label: t.footer.terms, href: "/legal" },
       ],
@@ -127,10 +131,10 @@ export default function Footer() {
             {/* Social */}
             <div className="mt-4 flex items-center gap-3">
               <a href="https://github.com/personas-ai" target="_blank" rel="noopener noreferrer" aria-label="GitHub" className="group flex min-h-11 min-w-11 items-center justify-center rounded-lg border border-white/4 bg-white/2 text-muted-dark transition-all duration-300 hover:border-white/10 hover:text-muted hover:bg-white/4 hover:shadow-[0_0_10px_rgba(255,255,255,0.02)] focus-visible:ring-2 focus-visible:ring-brand-cyan/40 focus-visible:outline-none">
-                <Github className="h-4 w-4 transition-transform duration-300 group-hover:scale-110" />
+                <GithubIcon className="h-4 w-4 transition-transform duration-300 group-hover:scale-110" />
               </a>
               <a href="https://twitter.com/personas_ai" target="_blank" rel="noopener noreferrer" aria-label="Twitter" className="group flex min-h-11 min-w-11 items-center justify-center rounded-lg border border-white/4 bg-white/2 text-muted-dark transition-all duration-300 hover:border-white/10 hover:text-muted hover:bg-white/4 hover:shadow-[0_0_10px_rgba(255,255,255,0.02)] focus-visible:ring-2 focus-visible:ring-brand-cyan/40 focus-visible:outline-none">
-                <Twitter className="h-4 w-4 transition-transform duration-300 group-hover:scale-110" />
+                <TwitterIcon className="h-4 w-4 transition-transform duration-300 group-hover:scale-110" />
               </a>
               <a href="https://discord.gg/personas" target="_blank" rel="noopener noreferrer" aria-label="Discord" className="group flex min-h-11 min-w-11 items-center justify-center rounded-lg border border-white/4 bg-white/2 text-muted-dark transition-all duration-300 hover:border-white/10 hover:text-muted hover:bg-white/4 hover:shadow-[0_0_10px_rgba(255,255,255,0.02)] focus-visible:ring-2 focus-visible:ring-brand-cyan/40 focus-visible:outline-none">
                 <MessageCircle className="h-4 w-4 transition-transform duration-300 group-hover:scale-110" />
