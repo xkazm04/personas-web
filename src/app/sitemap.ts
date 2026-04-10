@@ -2,7 +2,7 @@ import type { MetadataRoute } from "next";
 import { SITE_URL } from "@/lib/seo";
 import { GUIDE_CATEGORIES } from "@/data/guide/categories";
 import { GUIDE_TOPICS } from "@/data/guide/topics";
-import { templates } from "@/lib/templates";
+import { templateList as templates } from "@/lib/templates";
 import { FEATURE_PAGES } from "@/data/feature-pages";
 import { BLOG_POSTS } from "@/data/blog";
 import { USE_CASES } from "@/data/use-cases";

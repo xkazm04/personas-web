@@ -4,7 +4,7 @@ import { useState, useMemo } from "react";
 import Link from "next/link";
 import { motion } from "framer-motion";
 import { Search, Clock, Webhook, Mouse, Zap, Radio, ChevronRight, type LucideIcon } from "lucide-react";
-import { templates, categories, difficultyColors, type Category, type AgentTemplate } from "@/lib/templates";
+import { templateList as templates, categories, difficultyColors, type Category, type TemplateListItem as AgentTemplate } from "@/lib/templates";
 import { fadeUp, staggerContainer } from "@/lib/animations";
 import Navbar from "@/components/Navbar";
 

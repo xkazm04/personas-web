@@ -47,6 +47,9 @@ const securityHeaders = [
 ];
 
 const nextConfig: NextConfig = {
+  images: {
+    formats: ["image/avif", "image/webp"],
+  },
   turbopack: {
     root: __dirname,
   },

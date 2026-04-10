@@ -1906,6 +1906,10 @@ steps:
   },
 ];
 
+/** Lightweight template list without YAML configs — use for gallery/search pages */
+export const templateList = templates.map(({ config, ...rest }) => rest);
+export type TemplateListItem = Omit<AgentTemplate, "config">;
+
 export const difficultyColors: Record<Difficulty, string> = {
   Beginner: "text-green-400 border-green-400/30 bg-green-400/10",
   Intermediate: "text-yellow-400 border-yellow-400/30 bg-yellow-400/10",
