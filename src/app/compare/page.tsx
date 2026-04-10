@@ -2,6 +2,7 @@
 
 import { motion } from "framer-motion";
 import { Download, Shield, Zap, MessageSquare } from "lucide-react";
+import Link from "next/link";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/sections/Footer";
 import PageShell from "@/components/PageShell";
@@ -102,19 +103,19 @@ export default function ComparePage() {
               account. Your agents run on your machine from minute one.
             </p>
             <div className="mt-10 flex flex-wrap items-center justify-center gap-4">
-              <a
+              <Link
                 href="/#download"
                 className="inline-flex items-center gap-2 rounded-full bg-brand-cyan/15 border border-brand-cyan/30 px-8 py-3 text-sm font-semibold text-brand-cyan transition-colors hover:bg-brand-cyan/25"
               >
                 <Download className="h-4 w-4" />
                 Download Free
-              </a>
-              <a
+              </Link>
+              <Link
                 href="/features"
                 className="inline-flex items-center gap-2 rounded-full border border-white/10 px-8 py-3 text-sm font-medium text-muted transition-colors hover:border-white/20 hover:text-foreground"
               >
                 Explore Features
-              </a>
+              </Link>
             </div>
           </motion.div>
         </SectionWrapper>
