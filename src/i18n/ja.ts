@@ -11,6 +11,7 @@ export const ja: Translations = {
     dashboard: '\u30c0\u30c3\u30b7\u30e5\u30dc\u30fc\u30c9',
     features: '\u6a5f\u80fd',
     guide: '\u30AC\u30A4\u30C9',
+    tour: 'ツアー',
     security: 'セキュリティ',
     blog: 'ブログ',
     changelog: '変更履歴',

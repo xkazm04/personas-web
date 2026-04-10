@@ -11,6 +11,7 @@ export const hi: Translations = {
     dashboard: '\u0921\u0948\u0936\u092C\u094B\u0930\u094D\u0921',
     features: '\u0935\u093F\u0936\u0947\u0937\u0924\u093E\u090F\u0902',
     guide: '\u0917\u093E\u0907\u0921',
+    tour: 'टूर',
     security: 'सुरक्षा',
     blog: 'ब्लॉग',
     changelog: 'परिवर्तन लॉग',

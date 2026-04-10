@@ -11,6 +11,7 @@ export const zh: Translations = {
     dashboard: '\u63A7\u5236\u53F0',
     features: '\u529F\u80FD',
     guide: '\u6307\u5357',
+    tour: '导览',
     security: '安全',
     blog: '博客',
     changelog: '更新日志',

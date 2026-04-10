@@ -11,6 +11,7 @@ export const bn: Translations = {
     dashboard: '\u09a1\u09cd\u09af\u09be\u09b6\u09ac\u09cb\u09b0\u09cd\u09a1',
     features: '\u09ac\u09c8\u09b6\u09bf\u09b7\u09cd\u099f\u09cd\u09af',
     guide: '\u0997\u09be\u0987\u09a1',
+    tour: 'ট্যুর',
     security: 'নিরাপত্তা',
     blog: 'ব্লগ',
     changelog: 'পরিবর্তন',
