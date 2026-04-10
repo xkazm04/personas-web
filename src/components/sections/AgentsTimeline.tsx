@@ -54,20 +54,20 @@ const scenarios: Scenario[] = [
       '"Cancel my order... actually, change the address instead."',
     workflow: {
       steps: [
-        { label: "Parse intent", durationMs: 800, status: "ok" },
-        { label: "Route to cancellation", durationMs: 900, status: "ok" },
-        { label: "Detect conflict", durationMs: 700, status: "warn" },
-        { label: "No branch exists", durationMs: 600, status: "error" },
+        { label: "Read the message", durationMs: 800, status: "ok" },
+        { label: "Start cancellation process", durationMs: 900, status: "ok" },
+        { label: "Notice conflicting instructions", durationMs: 700, status: "warn" },
+        { label: "No rule for this situation", durationMs: 600, status: "error" },
         { label: "STUCK", durationMs: 0, status: "error" },
       ],
       totalMs: 3000,
-      result: "Stuck in queue. Customer waits hours.",
+      result: "Stuck. No one helps the customer for hours.",
     },
     agent: {
       steps: [
         { label: "Read full context", durationMs: 500, status: "ok" },
-        { label: "Identify corrected intent", durationMs: 600, status: "ok" },
-        { label: "Call address API", durationMs: 400, status: "ok" },
+        { label: "Understand the real request", durationMs: 600, status: "ok" },
+        { label: "Update the address", durationMs: 400, status: "ok" },
         { label: "Send confirmation", durationMs: 300, status: "ok" },
       ],
       totalMs: 1800,
@@ -82,13 +82,13 @@ const scenarios: Scenario[] = [
     workflow: {
       steps: [
         { label: "Look up payment", durationMs: 700, status: "ok" },
-        { label: "Route to refund handler", durationMs: 800, status: "ok" },
-        { label: "Detect split payment", durationMs: 600, status: "warn" },
-        { label: "No split-refund connector", durationMs: 500, status: "error" },
-        { label: "Exception thrown", durationMs: 0, status: "error" },
+        { label: "Send to refund system", durationMs: 800, status: "ok" },
+        { label: "Find two payment methods", durationMs: 600, status: "warn" },
+        { label: "Can't handle split refunds", durationMs: 500, status: "error" },
+        { label: "System gives up", durationMs: 0, status: "error" },
       ],
       totalMs: 2600,
-      result: "Escalated to finance. 3-day resolution.",
+      result: "Handed off to finance team. Customer waits 3 days.",
     },
     agent: {
       steps: [
@@ -108,21 +108,21 @@ const scenarios: Scenario[] = [
       '"Set up staging identical to production but with debug logging."',
     workflow: {
       steps: [
-        { label: 'Match template: "create env"', durationMs: 600, status: "ok" },
-        { label: "Clone production config", durationMs: 900, status: "ok" },
-        { label: "Apply debug flag", durationMs: 700, status: "warn" },
-        { label: "12 services need reconfig", durationMs: 800, status: "error" },
-        { label: "Branch explosion", durationMs: 0, status: "error" },
+        { label: "Find the 'create environment' template", durationMs: 600, status: "ok" },
+        { label: "Copy production setup", durationMs: 900, status: "ok" },
+        { label: "Turn on debugging", durationMs: 700, status: "warn" },
+        { label: "12 services need manual changes", durationMs: 800, status: "error" },
+        { label: "Too many paths to handle", durationMs: 0, status: "error" },
       ],
       totalMs: 3000,
-      result: "Partial deploy. 6 services misconfigured.",
+      result: "Half-finished. 6 out of 12 services broken.",
     },
     agent: {
       steps: [
-        { label: "Inventory 12 services", durationMs: 500, status: "ok" },
-        { label: "Clone with debug overrides", durationMs: 600, status: "ok" },
-        { label: "Deploy with health checks", durationMs: 500, status: "ok" },
-        { label: "Verify all healthy", durationMs: 300, status: "ok" },
+        { label: "List all 12 services", durationMs: 500, status: "ok" },
+        { label: "Copy each with debugging on", durationMs: 600, status: "ok" },
+        { label: "Deploy and verify each one", durationMs: 500, status: "ok" },
+        { label: "Confirm everything works", durationMs: 300, status: "ok" },
       ],
       totalMs: 1900,
       result: "Full staging environment in 90 seconds.",
@@ -135,21 +135,21 @@ const scenarios: Scenario[] = [
       "API call returns 503 during a batch of 200 transactions.",
     workflow: {
       steps: [
-        { label: "Begin batch", durationMs: 600, status: "ok" },
-        { label: "Process 1-147", durationMs: 1000, status: "ok" },
-        { label: "Txn 148: 503 error", durationMs: 500, status: "error" },
-        { label: "Retry 3x failed", durationMs: 700, status: "error" },
-        { label: "Entire batch failed", durationMs: 0, status: "error" },
+        { label: "Start processing", durationMs: 600, status: "ok" },
+        { label: "Process transactions 1 through 147", durationMs: 1000, status: "ok" },
+        { label: "Transaction 148: server goes down", durationMs: 500, status: "error" },
+        { label: "Three retries all fail", durationMs: 700, status: "error" },
+        { label: "Everything gets undone", durationMs: 0, status: "error" },
       ],
       totalMs: 2800,
-      result: "147 successful transactions rolled back.",
+      result: "147 good transactions undone because of 1 failure.",
     },
     agent: {
       steps: [
-        { label: "Checkpoint at 147", durationMs: 400, status: "ok" },
-        { label: "Backoff + retry 148", durationMs: 700, status: "ok" },
-        { label: "Provider back online", durationMs: 400, status: "ok" },
-        { label: "Complete remaining 53", durationMs: 500, status: "ok" },
+        { label: "Save progress at 147", durationMs: 400, status: "ok" },
+        { label: "Wait and try again", durationMs: 700, status: "ok" },
+        { label: "Server recovers", durationMs: 400, status: "ok" },
+        { label: "Finish the rest", durationMs: 500, status: "ok" },
       ],
       totalMs: 2000,
       result: "All 200 transactions processed. Zero data loss.",
@@ -165,11 +165,11 @@ const scenarios: Scenario[] = [
         { label: "Customer type: VIP", durationMs: 500, status: "ok" },
         { label: "Check discount eligibility", durationMs: 700, status: "ok" },
         { label: "Existing discount detected", durationMs: 600, status: "warn" },
-        { label: "Can't stack discounts", durationMs: 500, status: "error" },
-        { label: "No rule for VIP + legacy", durationMs: 0, status: "error" },
+        { label: "System can't combine discounts", durationMs: 500, status: "error" },
+        { label: "No rule for this situation", durationMs: 0, status: "error" },
       ],
       totalMs: 2300,
-      result: "Request denied. Customer escalates to manager.",
+      result: "Request denied. Frustrated customer asks for a manager.",
     },
     agent: {
       steps: [
@@ -624,8 +624,8 @@ export default function AgentsTimeline() {
           The <GradientText>Race</GradientText> Is Already Over
         </SectionHeading>
         <p className="mx-auto mt-6 max-w-2xl text-lg text-muted-dark leading-relaxed font-light">
-          Watch workflows break down step by step while agents adapt and resolve
-          in real time.
+          See what happens when a rigid system meets a real-world problem — and
+          how an intelligent agent handles it instead.
         </p>
       </motion.div>
 

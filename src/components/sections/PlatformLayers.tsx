@@ -35,7 +35,7 @@ const layers = [
       labelBg: "bg-emerald-500/10",
       labelBorder: "border-emerald-500/20",
     },
-    description: "One-click cloud deployment. Local to cloud, hybrid execution, bring your own infra.",
+    description: "Run agents on your computer or in the cloud — or both at once. Deploy with a single click, and use your own servers if you prefer.",
     visual: (
       <div className="flex items-center gap-2 font-mono text-sm">
         <span className="text-emerald-400/60">local</span>
@@ -62,7 +62,7 @@ const layers = [
       labelBg: "bg-cyan-500/10",
       labelBorder: "border-cyan-500/20",
     },
-    description: "Event bus chaining — Email triggers Slack triggers GitHub. Runs locally.",
+    description: "One action triggers the next automatically. An email arrives, Slack gets notified, GitHub gets updated — all without you lifting a finger.",
     visual: (
       <div className="flex items-center gap-1.5 font-mono text-sm">
         {["Em", "Sl", "GH"].map((n, i) => (
@@ -93,7 +93,7 @@ const layers = [
       labelBg: "bg-purple-500/10",
       labelBorder: "border-purple-500/20",
     },
-    description: "Natural language design — prompt scaffolding, feasibility analysis, tool suggestions.",
+    description: "Describe what you want in plain English. Personas helps you build the right agent with step-by-step guidance and smart suggestions.",
     visual: (
       <div className="font-mono text-sm space-y-0.5">
         <div><span className="text-purple-400">role</span><span className="text-muted-dark">: </span><span className="text-emerald-400">&quot;Email triage&quot;</span></div>
@@ -117,7 +117,7 @@ const layers = [
       labelBg: "bg-amber-500/10",
       labelBorder: "border-amber-500/20",
     },
-    description: "Real-time streaming, audit trails, healing engine, usage analytics.",
+    description: "See everything your agents do in real time. Track performance, review activity logs, and let the system fix problems automatically.",
     visual: (
       <div className="flex items-end gap-0.5 h-6">
         {[30, 55, 40, 70, 45, 80, 60, 90].map((h, i) => (
@@ -213,14 +213,14 @@ export default function PlatformLayers() {
       {/* Header */}
       <motion.div variants={fadeUp} className="text-center mb-20">
         <span className="inline-block rounded-full border border-brand-purple/30 bg-brand-purple/10 px-4 py-1.5 text-sm font-semibold tracking-widest uppercase text-brand-purple shadow-[0_0_15px_rgba(168,85,247,0.2)] font-mono mb-6">
-          Architecture
+          How It's Built
         </span>
         <SectionHeading>
-          <GradientText>Layered</GradientText> by design
+          Built to <GradientText>grow</GradientText> with you
         </SectionHeading>
         <p className="mt-6 mx-auto max-w-2xl text-lg text-muted-dark leading-relaxed font-light">
-          Four architectural layers that compose into a complete AI agent platform.
-          Scroll to explore the stack.
+          Four layers that work together to power your agents — from the interface you see
+          to the cloud that runs them. Scroll to explore.
         </p>
       </motion.div>
 

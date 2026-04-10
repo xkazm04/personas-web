@@ -34,7 +34,7 @@ const queueRouteSeeds = [
     consumerId: "jira",
     consumerLabel: TOOL_MAP.get("jira")!.name,
     color: TOOL_MAP.get("gmail")!.color,
-    eventType: "email.received → inbox_triage agent",
+    eventType: "Email arrives → Inbox triage agent handles it",
     queueDepth: 34,
     throughputEps: 28,
     latencyMs: 420,
@@ -46,7 +46,7 @@ const queueRouteSeeds = [
     consumerId: "drive",
     consumerLabel: TOOL_MAP.get("drive")!.name,
     color: TOOL_MAP.get("slack")!.color,
-    eventType: "slack.message → digest agent",
+    eventType: "Slack message → Digest agent summarizes it",
     queueDepth: 21,
     throughputEps: 36,
     latencyMs: 310,
@@ -58,7 +58,7 @@ const queueRouteSeeds = [
     consumerId: "figma",
     consumerLabel: TOOL_MAP.get("figma")!.name,
     color: TOOL_MAP.get("github")!.color,
-    eventType: "pr.opened → review_summary agent",
+    eventType: "Pull request opened → Review agent analyzes it",
     queueDepth: 12,
     throughputEps: 19,
     latencyMs: 260,
@@ -70,7 +70,7 @@ const queueRouteSeeds = [
     consumerId: "stripe",
     consumerLabel: TOOL_MAP.get("stripe")!.name,
     color: TOOL_MAP.get("calendar")!.color,
-    eventType: "meeting.ended → followup agent",
+    eventType: "Meeting ends → Follow-up agent sends notes",
     queueDepth: 48,
     throughputEps: 14,
     latencyMs: 520,
@@ -121,8 +121,8 @@ export default function EventBusShowcase({ telemetryAdapter }: { telemetryAdapte
   }, [snapshot.routes]);
 
   const variantTabs: { id: QueueVariant; label: string; hint: string }[] = [
-    { id: "swarm", label: "Dynamic Swarm", hint: "Ephemeral connections" },
-    { id: "lanes", label: "Latency Lanes", hint: "Queue depth + throughput" },
+    { id: "swarm", label: "Live Connections", hint: "Real-time activity" },
+    { id: "lanes", label: "Performance View", hint: "Speed + delivery stats" },
   ];
 
   return (
@@ -133,8 +133,8 @@ export default function EventBusShowcase({ telemetryAdapter }: { telemetryAdapte
             <GradientText className="drop-shadow-lg">talk to each other</GradientText>
           </h2>
           <p className="mx-auto mt-8 max-w-3xl text-muted leading-relaxed text-center text-lg sm:text-xl font-light">
-            The event bus is a central queue. Producers emit events, consumers react.
-            One agent&apos;s output triggers the next — <span className="text-white font-medium">automatically.</span>
+            Your agents share information through a central message hub.
+            When one agent finishes a task, it can automatically trigger the next — <span className="text-white font-medium">no manual steps needed.</span>
           </p>
           {!composerOpen && (
             <div className="mt-6 flex justify-center">
@@ -194,8 +194,8 @@ export default function EventBusShowcase({ telemetryAdapter }: { telemetryAdapte
 
           <div ref={containerRef} className="rounded-2xl border border-white/8 bg-black/50 backdrop-blur-xl p-4 md:p-6 shadow-[0_0_80px_rgba(0,0,0,0.25)] animate-breathe-glow">
             <TerminalChrome
-              title="event-bus — live"
-              info={`${snapshot.source} stream · ${snapshot.totalInFlight} in-flight · backlog ${snapshot.totalBacklog}`}
+              title="message hub — live"
+              info={`${snapshot.source} stream · ${snapshot.totalInFlight} being sent · ${snapshot.totalBacklog} waiting`}
               className="mb-4 pb-3"
             />
 
@@ -301,7 +301,7 @@ export default function EventBusShowcase({ telemetryAdapter }: { telemetryAdapte
                           <span className="rounded-full border border-white/10 px-2 py-0.5">{lane.consumer}</span>
                         </div>
                         <div className="flex items-center gap-2 text-[10px] font-mono text-muted">
-                          <span className="rounded-full border border-white/10 px-2 py-0.5">{lane.eps} evt/s</span>
+                          <span className="rounded-full border border-white/10 px-2 py-0.5">{lane.eps} msgs/s</span>
                           <span className="rounded-full border border-white/10 px-2 py-0.5">{lane.latencyMs} ms</span>
                         </div>
                       </div>
@@ -327,10 +327,10 @@ export default function EventBusShowcase({ telemetryAdapter }: { telemetryAdapte
 
                       <div className="mt-2 grid grid-cols-2 gap-2 text-[10px] font-mono text-muted">
                         <div className="rounded-lg border border-white/8 bg-white/2 px-2 py-1">
-                          Queue depth: <span className="text-foreground/80">{lane.queueDepth}</span>
+                          Waiting: <span className="text-foreground/80">{lane.queueDepth}</span>
                         </div>
                         <div className="rounded-lg border border-white/8 bg-white/2 px-2 py-1">
-                          Latency load: <span className="text-foreground/80">{Math.round(latencyRatio * 100)}%</span>
+                          Delivery time: <span className="text-foreground/80">{Math.round(latencyRatio * 100)}%</span>
                         </div>
                       </div>
                     </motion.div>
@@ -353,20 +353,20 @@ export default function EventBusShowcase({ telemetryAdapter }: { telemetryAdapte
         <motion.div variants={fadeUp} className="mt-6 flex flex-wrap items-center justify-center gap-3 sm:gap-6 text-[11px] text-muted">
           <div className="flex items-center gap-2">
             <div className="h-2 w-8 rounded-full bg-linear-to-r from-brand-cyan/25 to-brand-purple/25 ring-1 ring-white/8" />
-            <span>Event queue</span>
+            <span>Message queue</span>
           </div>
           <div className="flex items-center gap-2">
             <div className="h-1.5 w-1.5 rounded-full bg-brand-cyan shadow-[0_0_4px_color-mix(in_srgb,var(--brand-cyan)_40%,transparent)]" />
-            <span>Event in transit</span>
+            <span>Message being delivered</span>
           </div>
           <div className="flex items-center gap-2">
             <svg width="16" height="8" className="text-muted">
               <line x1="0" y1="4" x2="16" y2="4" stroke="currentColor" strokeWidth="0.5" strokeDasharray="2 2" />
             </svg>
-            <span>Connection to bus</span>
+            <span>Connection to hub</span>
           </div>
           <div className="rounded-full border border-white/8 bg-white/2 px-3 py-1.5 font-mono tracking-wide text-muted">
-            Typical response cycle: {averageLatency}ms
+            Typical delivery time: {averageLatency}ms
           </div>
         </motion.div>
         )}

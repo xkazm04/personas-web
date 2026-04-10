@@ -70,19 +70,19 @@ const scenarios: ChatScenario[] = [
         },
         {
           sender: "system",
-          text: "WARNING: Conflicting intent detected. Unable to parse follow-up instruction.",
+          text: "WARNING: I detected conflicting instructions. I can't understand what you actually want.",
           tone: "warning",
           timestamp: "0:05",
         },
         {
           sender: "bot",
-          text: "I can only process one request at a time. Please submit a new ticket for address changes.",
+          text: "I can only handle one thing at a time. Please create a new request for the address change.",
           tone: "error",
           timestamp: "0:08",
         },
         {
           sender: "system",
-          text: "ESCALATED TO HUMAN AGENT. Estimated wait: 47 minutes.",
+          text: "Transferred to our team. Expected wait: 47 minutes.",
           tone: "error",
           timestamp: "0:10",
         },
@@ -140,19 +140,19 @@ const scenarios: ChatScenario[] = [
         },
         {
           sender: "system",
-          text: "ERROR: Multiple payment methods detected. Split refund not supported.",
+          text: "ERROR: I found two payment methods but I can't split refunds.",
           tone: "error",
           timestamp: "0:06",
         },
         {
           sender: "bot",
-          text: "I'm unable to process split payment refunds automatically. Creating a support ticket.",
+          text: "I can't handle split refunds. Creating a help request for you.",
           tone: "error",
           timestamp: "0:09",
         },
         {
           sender: "system",
-          text: "ESCALATED TO FINANCE TEAM. Expected resolution: 3 business days.",
+          text: "Sent to our finance team. This will take about 3 business days.",
           tone: "error",
           timestamp: "0:12",
         },
@@ -204,7 +204,7 @@ const scenarios: ChatScenario[] = [
       messages: [
         {
           sender: "bot",
-          text: 'Matched template: "create environment". Cloning production config.',
+          text: "Found the 'create environment' template. Copying production setup.",
           tone: "neutral",
           timestamp: "0:02",
         },
@@ -216,19 +216,19 @@ const scenarios: ChatScenario[] = [
         },
         {
           sender: "system",
-          text: "WARNING: 12 dependent services require individual reconfiguration.",
+          text: "WARNING: 12 connected services each need separate changes.",
           tone: "warning",
           timestamp: "0:08",
         },
         {
           sender: "system",
-          text: "ERROR: Branch explosion - 47 conditional paths detected. Cannot resolve automatically.",
+          text: "ERROR: Too many possible combinations (47 paths). I can't figure this out.",
           tone: "error",
           timestamp: "0:14",
         },
         {
           sender: "bot",
-          text: "Partial deployment completed. 6 of 12 services are misconfigured. Manual intervention required.",
+          text: "Only partially done. 6 of 12 services are broken. Someone needs to fix them manually.",
           tone: "error",
           timestamp: "0:18",
         },
@@ -286,25 +286,25 @@ const scenarios: ChatScenario[] = [
         },
         {
           sender: "system",
-          text: "ERROR: Transaction #148 failed with 503. Retry attempt 1/3...",
+          text: "ERROR: Transaction #148 failed — the server is down. Trying again (attempt 1 of 3)...",
           tone: "error",
           timestamp: "0:05",
         },
         {
           sender: "system",
-          text: "ERROR: Retry attempt 3/3 failed. Provider still unavailable.",
+          text: "ERROR: All 3 retries failed. The server is still down.",
           tone: "error",
           timestamp: "0:12",
         },
         {
           sender: "bot",
-          text: "All 3 retry attempts failed. Rolling back entire batch including 147 successful transactions.",
+          text: "All retries failed. Undoing everything — even the 147 transactions that worked.",
           tone: "error",
           timestamp: "0:15",
         },
         {
           sender: "system",
-          text: "BATCH FAILED. All 200 transactions rolled back. Manual reprocessing required.",
+          text: "FAILED. All 200 transactions undone. Someone needs to redo everything manually.",
           tone: "error",
           timestamp: "0:18",
         },
@@ -315,13 +315,13 @@ const scenarios: ChatScenario[] = [
       messages: [
         {
           sender: "bot",
-          text: "503 means temporary outage. Saving checkpoint at transaction #147 - no need to redo those.",
+          text: "The server is temporarily down. I'll save my progress at transaction #147 — no need to redo those.",
           tone: "thinking",
           timestamp: "0:02",
         },
         {
           sender: "bot",
-          text: "Waiting 5 seconds with exponential backoff before retrying #148...",
+          text: "Waiting a few seconds before trying #148 again...",
           tone: "neutral",
           timestamp: "0:05",
         },
@@ -339,7 +339,7 @@ const scenarios: ChatScenario[] = [
         },
         {
           sender: "system",
-          text: "RESOLVED. Batch complete with checkpoint recovery.",
+          text: "RESOLVED. All 200 transactions done. Progress was saved so nothing was wasted.",
           tone: "success",
           timestamp: "0:16",
         },
@@ -717,8 +717,8 @@ export default function AgentsChat() {
           Same Message, <GradientText>Different Intelligence</GradientText>
         </SectionHeading>
         <p className="mx-auto mt-6 max-w-2xl text-lg text-muted-dark leading-relaxed font-light">
-          Watch how a rigid workflow bot and an intelligent agent handle the
-          exact same customer request.
+          Same customer message, two very different experiences. See why
+          intelligence matters more than rules.
         </p>
       </motion.div>
 
