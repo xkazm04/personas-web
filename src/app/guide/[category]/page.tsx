@@ -52,6 +52,7 @@ export default async function CategoryPage({ params }: { params: Promise<{ categ
               alt={cat.name}
               width={800}
               height={400}
+              aria-hidden="true"
               className="hidden dark:block h-auto max-h-48 w-full object-cover opacity-60"
               priority
             />

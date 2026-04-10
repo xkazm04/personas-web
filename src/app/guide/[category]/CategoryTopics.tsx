@@ -41,6 +41,7 @@ export default function CategoryTopics({ topics, color, categoryId }: CategoryTo
           value={query}
           onChange={(e) => setQuery(e.target.value)}
           placeholder={`Filter ${topics.length} topics...`}
+          aria-label="Filter topics in this category"
           className="w-full rounded-xl border border-white/[0.08] bg-white/[0.03] py-2.5 pl-11 pr-4 text-base text-foreground placeholder:text-muted-dark backdrop-blur-sm outline-none transition-all duration-300 focus:border-brand-cyan/30 focus:ring-2 focus:ring-brand-cyan/10"
         />
       </div>

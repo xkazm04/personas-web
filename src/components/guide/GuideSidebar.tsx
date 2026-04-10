@@ -68,6 +68,7 @@ export default function GuideSidebar() {
             value={query}
             onChange={(e) => setQuery(e.target.value)}
             placeholder="Search topics..."
+            aria-label="Search sidebar topics"
             className="w-full rounded-lg border border-white/[0.08] bg-white/[0.03] py-2 pl-9 pr-3 text-sm text-foreground placeholder:text-muted-dark outline-none transition-colors focus:border-brand-cyan/30"
           />
         </div>
@@ -85,6 +86,8 @@ export default function GuideSidebar() {
               {/* Category header */}
               <button
                 onClick={() => toggle(cat.id)}
+                aria-expanded={isExpanded}
+                aria-controls={`topics-${cat.id}`}
                 className={`flex w-full items-center gap-2.5 rounded-lg px-3 py-2 text-left text-sm font-semibold transition-colors hover:bg-white/[0.04] ${
                   isActiveCategory && !activeTopic ? "bg-white/[0.06] text-foreground" : "text-muted"
                 }`}
@@ -92,6 +95,7 @@ export default function GuideSidebar() {
                 <span
                   className="h-2 w-2 shrink-0 rounded-full"
                   style={{ backgroundColor: cat.color }}
+                  aria-hidden="true"
                 />
                 <span className="flex-1 truncate">{cat.name}</span>
                 <span className="text-sm text-muted-dark tabular-nums">{topics.length}</span>
@@ -107,6 +111,8 @@ export default function GuideSidebar() {
                 {isExpanded && topics.length > 0 && (
                   <motion.div
                     key={cat.id + "-topics"}
+                    id={`topics-${cat.id}`}
+                    role="region"
                     variants={collapseVariants}
                     initial="hidden"
                     animate="visible"
@@ -172,6 +178,8 @@ export default function GuideSidebar() {
               onClick={() => setMobileOpen(false)}
             />
             <motion.aside
+              role="dialog"
+              aria-modal="true"
               initial={{ x: -288 }}
               animate={{ x: 0 }}
               exit={{ x: -288 }}

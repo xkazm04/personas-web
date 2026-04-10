@@ -111,6 +111,7 @@ export default function SearchCombobox({
         <input
           ref={inputRef}
           role="combobox"
+          aria-label="Search guide topics"
           aria-expanded={isOpen}
           aria-haspopup="listbox"
           aria-controls="search-listbox"
@@ -130,6 +131,7 @@ export default function SearchCombobox({
           <motion.div
             id="search-listbox"
             role="listbox"
+            aria-label="Search results"
             ref={listRef}
             initial={{ opacity: 0, y: -6 }}
             animate={{ opacity: 1, y: 0 }}
@@ -146,7 +148,7 @@ export default function SearchCombobox({
                 {grouped.map((group) => (
                   <div key={group.category.id}>
                     <div className="sticky top-0 z-10 flex items-center gap-2 bg-surface/90 px-3 py-1.5 backdrop-blur-md">
-                      <span className="h-2 w-2 rounded-full" style={{ backgroundColor: group.category.color }} />
+                      <span className="h-2 w-2 rounded-full" style={{ backgroundColor: group.category.color }} aria-hidden="true" />
                       <span className="text-xs font-medium text-muted-dark">{group.category.name}</span>
                     </div>
                     {group.results.map((result) => {
@@ -178,7 +180,7 @@ export default function SearchCombobox({
                     })}
                   </div>
                 ))}
-                <div className="border-t border-white/[0.06] px-3 py-1.5 text-right text-sm text-muted-dark">
+                <div className="border-t border-white/[0.06] px-3 py-1.5 text-right text-sm text-muted-dark" aria-live="polite">
                   {results.length} result{results.length !== 1 && "s"}
                 </div>
               </>

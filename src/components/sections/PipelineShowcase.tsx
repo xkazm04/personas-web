@@ -154,12 +154,14 @@ export default function PipelineShowcase() {
       </motion.p>
 
       {/* ── Tab switcher ── */}
-      <motion.div variants={fadeUp} className="flex flex-wrap justify-center gap-3 mb-10">
+      <motion.div variants={fadeUp} role="tablist" aria-label="Select pipeline example" className="flex flex-wrap justify-center gap-3 mb-10">
         {pipelines.map((p) => {
           const isActive = p.id === activeId;
           return (
             <button
               key={p.id}
+              role="tab"
+              aria-selected={isActive}
               onClick={() => setActiveId(p.id)}
               className={`rounded-lg px-5 py-2.5 text-sm font-medium transition-all duration-300 border ${
                 isActive

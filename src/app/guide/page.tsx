@@ -88,6 +88,7 @@ export default function GuidePage() {
                           alt={cat.name}
                           width={800}
                           height={400}
+                          aria-hidden="true"
                           className="hidden dark:block h-full w-full object-cover transition-transform duration-500 group-hover:scale-105"
                         />
                         <Image

@@ -217,6 +217,8 @@ export default function FeatureDetail({ slug }: Props) {
               >
                 <button
                   onClick={() => setOpenFaq(openFaq === i ? null : i)}
+                  aria-expanded={openFaq === i}
+                  aria-controls={`faq-${i}`}
                   className="flex w-full items-center justify-between px-6 py-4 text-left font-medium"
                 >
                   {item.question}
@@ -230,6 +232,7 @@ export default function FeatureDetail({ slug }: Props) {
                 <AnimatePresence initial={false}>
                   {openFaq === i && (
                     <motion.div
+                      id={`faq-${i}`}
                       initial={{ height: 0, opacity: 0 }}
                       animate={{ height: "auto", opacity: 1 }}
                       exit={{ height: 0, opacity: 0 }}

@@ -14,7 +14,7 @@ export default function RelatedTopics({ related }: RelatedTopicsProps) {
   if (related.length === 0) return null;
 
   return (
-    <section className="mt-16">
+    <section className="mt-16" aria-label="Related guide topics">
       <hr className="mb-6 border-white/[0.06]" />
       <h2 className="mb-4 text-lg font-semibold text-foreground">Related Topics</h2>
 
@@ -38,7 +38,7 @@ export default function RelatedTopics({ related }: RelatedTopicsProps) {
                 >
                   {category.name}
                 </span>
-                <ArrowRight className="h-4 w-4 translate-x-0 text-muted-dark opacity-0 transition-all group-hover:translate-x-1 group-hover:opacity-100" />
+                <ArrowRight aria-hidden="true" className="h-4 w-4 translate-x-0 text-muted-dark opacity-0 transition-all group-hover:translate-x-1 group-hover:opacity-100" />
               </div>
 
               <p className="text-base font-semibold text-foreground">{topic.title}</p>

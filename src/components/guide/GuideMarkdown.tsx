@@ -27,11 +27,11 @@ function parseInline(text: string, keyBase: string): ReactNode[] {
     if (m[1] !== undefined || m[2] !== undefined) {
       // Image ![alt](src)
       // eslint-disable-next-line @next/next/no-img-element
-      nodes.push(<img key={key} src={m[2]} alt={m[1] ?? ""} className="rounded-xl max-w-full h-auto my-4" />);
+      nodes.push(<img key={key} src={m[2]} alt={m[1] || "Illustration"} className="rounded-xl max-w-full h-auto my-4" />);
     } else if (m[3] !== undefined) {
       // Link [text](url)
       nodes.push(
-        <a key={key} href={m[4]} className="text-brand-cyan underline underline-offset-2 hover:text-white transition-colors" target="_blank" rel="noopener noreferrer">
+        <a key={key} href={m[4]} className="text-brand-cyan underline underline-offset-2 hover:text-white transition-colors" target="_blank" rel="noopener noreferrer" title="Opens in new tab">
           {parseInline(m[3], key)}
         </a>,
       );

@@ -58,6 +58,8 @@ export default function MultiProviderAI() {
         initial="hidden"
         whileInView="visible"
         viewport={{ once: true }}
+        role="group"
+        aria-label="AI providers"
         className="mt-14 flex gap-3 overflow-x-auto pb-2 scrollbar-hide sm:justify-center"
       >
         {providers.map((p) => (

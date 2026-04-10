@@ -112,8 +112,10 @@ export default function TemplatesPage() {
 
           {/* Category tabs — horizontal scrollable */}
           <motion.div variants={fadeUp} className="mb-4 -mx-6 px-6 overflow-x-auto scrollbar-none">
-            <div className="flex gap-1 border-b border-white/[0.06] min-w-max">
+            <div role="tablist" aria-label="Filter by category" className="flex gap-1 border-b border-white/[0.06] min-w-max">
               <button
+                role="tab"
+                aria-selected={activeCategory === null}
                 onClick={() => setActiveCategory(null)}
                 className={`shrink-0 px-4 py-2.5 text-sm font-medium transition-colors border-b-2 ${
                   activeCategory === null ? "border-white text-foreground" : "border-transparent text-muted-dark hover:text-foreground"
@@ -125,6 +127,8 @@ export default function TemplatesPage() {
               {categories.map((cat) => (
                 <button
                   key={cat}
+                  role="tab"
+                  aria-selected={activeCategory === cat}
                   onClick={() => setActiveCategory(activeCategory === cat ? null : cat)}
                   className={`shrink-0 px-4 py-2.5 text-sm font-medium transition-colors border-b-2 ${
                     activeCategory === cat
@@ -141,10 +145,11 @@ export default function TemplatesPage() {
 
           {/* Complexity toggle + search */}
           <motion.div variants={fadeUp} className="mb-8 flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
-            <div className="flex rounded-xl border border-white/[0.08] bg-white/[0.02] p-1 backdrop-blur-sm">
+            <div role="group" aria-label="Filter by complexity" className="flex rounded-xl border border-white/[0.08] bg-white/[0.02] p-1 backdrop-blur-sm">
               {complexities.map(({ value, label }) => (
                 <button
                   key={label}
+                  aria-pressed={activeComplexity === value}
                   onClick={() => setActiveComplexity(value)}
                   className={`rounded-lg px-4 py-1.5 text-xs font-medium transition-all ${
                     activeComplexity === value
@@ -163,13 +168,14 @@ export default function TemplatesPage() {
                 placeholder="Search templates, tools, services..."
                 value={search}
                 onChange={(e) => setSearch(e.target.value)}
+                aria-label="Search templates"
                 className="w-full rounded-xl border border-white/10 bg-white/[0.03] py-2.5 pl-10 pr-4 text-sm text-foreground placeholder:text-muted-dark outline-none transition-colors focus:border-brand-cyan/40 focus:bg-white/[0.05]"
               />
             </div>
           </motion.div>
 
           {/* Results summary */}
-          <motion.p variants={fadeUp} className="mb-6 text-xs text-muted-dark">
+          <motion.p variants={fadeUp} className="mb-6 text-xs text-muted-dark" aria-live="polite" aria-atomic="true">
             Showing {filtered.length} of {templates.length} templates
             {activeFilterLabels.length > 0 && (
               <> &mdash; {activeFilterLabels.map((f, i) => (

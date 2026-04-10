@@ -201,7 +201,7 @@ export default function VisionGrid() {
               className="group relative rounded-xl border border-white/[0.06] bg-white/[0.02] backdrop-blur-sm overflow-hidden transition-all duration-500 hover:bg-white/[0.05] hover:border-white/[0.12] hover:scale-[1.02]"
             >
               {cap.slug ? (
-                <Link href={`/features/${cap.slug}`}>{inner}</Link>
+                <Link href={`/features/${cap.slug}`} aria-label={`Learn more about ${cap.title}`}>{inner}</Link>
               ) : (
                 inner
               )}
