@@ -25,12 +25,12 @@ type RoadmapItem = {
 // -- Fallback data (used when API is unavailable) ----------------------------
 
 const FALLBACK_ITEMS: RoadmapItem[] = [
-  { id: "1", name: "Dev Mode", description: "Development mode tooling, debugging, and hot-reload capabilities for rapid agent iteration.", status: "in_progress", priority: "now", sort_order: 1 },
-  { id: "2", name: "Cloud Integration", description: "Connect desktop app to cloud orchestrator for 24/7 agent execution with WebSocket streaming.", status: "in_progress", priority: "now", sort_order: 2 },
-  { id: "3", name: "Web App", description: "Marketing site, auth portal, subscription management, and cloud dashboard.", status: "in_progress", priority: "now", sort_order: 3 },
-  { id: "4", name: "Internationalization", description: "Multi-language support with locale management, RTL layouts, and community translations.", status: "in_progress", priority: "now", sort_order: 4 },
-  { id: "5", name: "Distribution & Polish", description: "Production-ready installers, auto-updates, code signing, and final QA across all platforms.", status: "next", priority: "next", sort_order: 5 },
-  { id: "6", name: "Team (Group Projects)", description: "Shared workspaces, collaborative agent development, role-based access, and team dashboards.", status: "next", priority: "next", sort_order: 6 },
+  { id: "1", name: "Dev Mode", description: "Tools for developers to build and test agents faster — with instant preview and debugging.", status: "in_progress", priority: "now", sort_order: 1 },
+  { id: "2", name: "Cloud Integration", description: "Run your agents 24/7 in the cloud, even when your computer is off.", status: "in_progress", priority: "now", sort_order: 2 },
+  { id: "3", name: "Web App", description: "This website — where you can learn about Personas, sign up, and manage your account.", status: "in_progress", priority: "now", sort_order: 3 },
+  { id: "4", name: "Internationalization", description: "Support for 15+ languages so anyone around the world can use Personas in their own language.", status: "in_progress", priority: "now", sort_order: 4 },
+  { id: "5", name: "Distribution & Polish", description: "One-click installers for Windows, Mac, and Linux with automatic updates and a smooth first-time experience.", status: "next", priority: "next", sort_order: 5 },
+  { id: "6", name: "Team (Group Projects)", description: "Work together with your team — shared agents, collaborative editing, and team dashboards.", status: "next", priority: "next", sort_order: 6 },
 ];
 
 // -- Visual config -----------------------------------------------------------
@@ -197,7 +197,7 @@ export default function Roadmap() {
           <div>
             <p className="text-sm font-mono font-bold uppercase tracking-widest text-brand-cyan drop-shadow-sm">Current focus</p>
             <p className="mt-1.5 text-base text-foreground font-medium leading-relaxed">
-              Shipping <span className="text-white font-bold">Dev Mode</span>, <span className="text-white font-bold">Cloud Integration</span>, <span className="text-white font-bold">Web App</span> and <span className="text-white font-bold">Internationalization</span>.
+              Building <span className="text-white font-bold">cloud execution</span> so your agents run 24/7, plus <span className="text-white font-bold">this website</span> and support for <span className="text-white font-bold">15+ languages</span>.
             </p>
           </div>
         </div>
@@ -237,11 +237,11 @@ export default function Roadmap() {
         <div className="mt-4 flex flex-wrap items-center justify-between gap-3 text-sm font-mono text-muted font-medium">
           <div className="flex items-center gap-2">
             <CheckCircle2 className="h-4 w-4 text-brand-emerald drop-shadow-[0_0_5px_rgba(52,211,153,0.6)]" />
-            <span>Phases 1-11 shipped</span>
+            <span>Phases 1-11 done</span>
           </div>
           <div className="flex items-center gap-2">
             <Circle className="h-4 w-4 text-muted" />
-            <span>Phases 12-15 remaining</span>
+            <span>4 phases to go</span>
           </div>
         </div>
       </motion.div>
