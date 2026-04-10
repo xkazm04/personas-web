@@ -17,7 +17,7 @@ function useColumns() {
         { label: t.sections.features, href: "/#features" },
         { label: t.nav.useCases, href: "/use-cases" },
         { label: t.sections.pricing, href: "/#pricing" },
-        { label: t.sections.download, href: "/#download" },
+        { label: t.sections.download, href: "/download" },
         { label: t.nav.tour, href: "/tour" },
       ],
     },
