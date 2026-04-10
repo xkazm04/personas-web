@@ -49,6 +49,19 @@ export default function TemplateDetail({ templateId }: { templateId: string }) {
 
   return (
     <>
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify({
+          "@context": "https://schema.org",
+          "@type": "SoftwareSourceCode",
+          name: template.title,
+          description: template.description,
+          programmingLanguage: "YAML",
+          runtimePlatform: "Personas",
+          applicationCategory: template.category,
+          url: `https://personas.ai/templates/${template.id}`,
+        }) }}
+      />
       <Navbar />
       <main className="mx-auto max-w-4xl px-6 pb-24 pt-32">
         <motion.div variants={staggerContainer} initial="hidden" animate="visible">

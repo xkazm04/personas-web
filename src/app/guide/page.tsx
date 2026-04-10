@@ -23,6 +23,18 @@ export default function GuidePage() {
 
   return (
     <div className="px-6 pb-24">
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify({
+          "@context": "https://schema.org",
+          "@type": "CollectionPage",
+          name: "Personas User Guide",
+          description: "Everything you need to know about Personas — from your first agent to advanced multi-agent pipelines. 102 topics across 10 categories.",
+          url: "https://personas.ai/guide",
+          isPartOf: { "@type": "WebSite", name: "Personas", url: "https://personas.ai" },
+          numberOfItems: 102,
+        }) }}
+      />
       <div className="mx-auto max-w-5xl">
         {/* ── Hero ──────────────────────────────────────────────── */}
         <motion.div

@@ -30,6 +30,21 @@ export default function FeatureDetail({ slug }: Props) {
 
   return (
     <>
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify({
+          "@context": "https://schema.org",
+          "@type": "WebPage",
+          name: feature.title,
+          description: feature.description,
+          url: `https://personas.ai/features/${feature.slug}`,
+          mainEntity: {
+            "@type": "SoftwareApplication",
+            name: "Personas",
+            featureList: feature.benefits.map((b: { title: string }) => b.title),
+          },
+        }) }}
+      />
       <Navbar />
 
       <main className="relative min-h-screen overflow-hidden bg-[#09090b] text-white">
