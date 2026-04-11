@@ -17,7 +17,9 @@ This means your agents get smarter the more you use them. An agent that has hand
 
 During a run, if the agent encounters something worth remembering — a useful fact, an important decision, or a lesson learned — it creates a memory entry. The next time the agent runs, it can recall relevant memories to make better decisions. You have full control to review and manage what your agent remembers.
 
-> **Tip:** Memory works best when agents have consistent, focused tasks. An agent that always handles expense reports will build more useful memories than one that does a different task each time.
+:::tip
+Memory works best when agents have consistent, focused tasks. An agent that always handles expense reports will build more useful memories than one that does a different task each time.
+:::
   `,
 
   "memory-categories": `
@@ -29,17 +31,21 @@ Understanding these categories helps you review and manage your agent's knowledg
 
 ### The Five Categories
 
-- **Facts** — concrete information your agent has learned (e.g., "The client prefers formal language")
-- **Decisions** — choices the agent made and why (e.g., "Chose Express shipping because the order was urgent")
-- **Insights** — patterns or observations discovered over multiple runs
-- **Learnings** — lessons from mistakes or successes that improve future behavior
-- **Warnings** — potential problems or pitfalls to watch out for
+| Category | Purpose | Example |
+|----------|---------|---------|
+| **Fact** | Concrete information learned from tasks | "The client prefers formal language" |
+| **Decision** | Choices made and the reasoning behind them | "Chose Express shipping because the order was urgent" |
+| **Insight** | Patterns or observations discovered over multiple runs | "Support tickets spike every Monday morning" |
+| **Learning** | Lessons from mistakes or successes | "Shorter subject lines get higher open rates" |
+| **Warning** | Potential problems or pitfalls to watch out for | "Never send invoices before contract is signed" |
 
 ### How It Works
 
 When an agent creates a memory, it automatically categorizes it based on the content. Facts are straightforward pieces of information. Decisions record choices with reasoning. Insights capture patterns. Learnings come from reflecting on outcomes. Warnings flag things to avoid.
 
-> **Tip:** Pay special attention to the Warnings category during your reviews. These memories help your agent avoid repeating past mistakes — they're often the most valuable.
+:::tip
+Pay special attention to the Warnings category during your reviews. These memories help your agent avoid repeating past mistakes — they're often the most valuable.
+:::
   `,
 
   "importance-levels": `
@@ -51,17 +57,21 @@ This ranking system keeps your agent focused on what matters most, rather than d
 
 ### The Scale
 
-- **1 (Routine)** — minor details that might be useful occasionally
-- **2 (Useful)** — helpful context that enriches the agent's understanding
-- **3 (Important)** — knowledge that regularly influences decisions
-- **4 (Very Important)** — key information the agent should almost always consider
-- **5 (Critical)** — essential knowledge that must never be forgotten or ignored
+| Level | Label | Recall Priority | Description |
+|-------|-------|-----------------|-------------|
+| 1 | Routine | Low | Minor details that might be useful occasionally |
+| 2 | Useful | Moderate | Helpful context that enriches understanding |
+| 3 | Important | Standard | Knowledge that regularly influences decisions |
+| 4 | Very Important | High | Key information the agent should almost always consider |
+| 5 | Critical | Always | Essential knowledge that must never be forgotten or ignored |
 
 ### How It Works
 
 Importance is assigned automatically when a memory is created, based on factors like how often the information is referenced and how much it affected outcomes. You can also adjust importance levels manually if you disagree with the automatic assignment.
 
-> **Tip:** If an agent keeps making the same mistake, check if the relevant memory exists and whether its importance level is high enough. Bumping it to 4 or 5 ensures the agent pays attention to it.
+:::tip
+If an agent keeps making the same mistake, check if the relevant memory exists and whether its importance level is high enough. Bumping it to 4 or 5 ensures the agent pays attention to it.
+:::
   `,
 
   "searching-agent-memories": `
@@ -82,7 +92,9 @@ Searching helps you understand what your agents know, verify they've learned cor
 
 Open the \`Memories\` section and type your search query in the search bar. Results appear instantly with the matching text highlighted. Use the filter buttons to narrow down by category, importance level, date range, or specific agent. Click any result to see the full memory with all its context.
 
-> **Tip:** Search for a topic before creating a manual memory. Your agent might already know what you're about to teach it — in which case, you can simply update the existing memory.
+:::tip
+Search for a topic before creating a manual memory. Your agent might already know what you're about to teach it — in which case, you can simply update the existing memory.
+:::
   `,
 
   "creating-memories-manually": `
@@ -92,19 +104,21 @@ Sometimes you want your agent to know something before it learns on its own — 
 
 This is especially useful for company-specific information, personal preferences, or critical rules that should never be learned through trial and error.
 
-### Step by Step
-
-- Open the **\`Memories\`** section and click **\`Add Memory\`**
-- Choose the **category** (fact, decision, insight, learning, or warning)
-- Write the **memory content** in plain language
-- Set the **importance level** (1-5)
-- Assign it to a **specific agent** or make it available to all agents
+:::steps
+1. **Open the Memories section** — click \`Memories\` in the sidebar and then \`Add Memory\`
+2. **Choose the category** — select fact, decision, insight, learning, or warning
+3. **Write the memory content** — describe the knowledge in plain language
+4. **Set the importance level** — assign a score from 1 (routine) to 5 (critical)
+5. **Assign to an agent** — pick a specific agent or make the memory available to all agents
+:::
 
 ### How It Works
 
 The memory you create is added to the agent's knowledge base just like an automatically learned memory. The next time the agent runs, it can access this information alongside everything it has learned on its own. Manual memories are marked with a small icon so you can distinguish them from automatic ones.
 
-> **Tip:** Create a few "Warning" memories for your most critical rules before an agent goes live. For example: "Never share pricing information without manager approval."
+:::tip
+Create a few "Warning" memories for your most critical rules before an agent goes live. For example: "Never share pricing information without manager approval."
+:::
   `,
 
   "memory-tiers-explained": `
@@ -116,16 +130,20 @@ This tiered system keeps your agent fast and efficient. It recalls the most rele
 
 ### The Four Tiers
 
-- **Core** — permanent, always-available memories (critical rules and facts)
-- **Active** — frequently accessed memories from recent work
-- **Working** — memories from the current task or recent sessions
-- **Archive** — older memories that haven't been accessed recently but are preserved
+| Tier | Availability | Contents | Promotion / Demotion |
+|------|-------------|----------|----------------------|
+| **Core** | Always loaded | Permanent critical rules and facts | Manually pinned; never demoted |
+| **Active** | Loaded on recall | Frequently accessed recent memories | Auto-promoted by usage frequency |
+| **Working** | Session-scoped | Memories from the current task or recent sessions | Created during execution; ages into Active |
+| **Archive** | On-demand only | Older memories not accessed recently | Auto-demoted after inactivity; preserved indefinitely |
 
 ### How It Works
 
 Memories move between tiers automatically based on usage patterns. A frequently recalled memory gets promoted to a higher tier; one that hasn't been accessed in a while gradually moves toward archive. You can also manually pin memories to the Core tier to ensure they're always top-of-mind for your agent.
 
-> **Tip:** Pin your most important rules and facts to the Core tier. This guarantees your agent always considers them, regardless of how old they are.
+:::tip
+Pin your most important rules and facts to the Core tier. This guarantees your agent always considers them, regardless of how old they are.
+:::
   `,
 
   "memory-and-execution": `
@@ -146,7 +164,9 @@ The recall process is smart — it doesn't dump every memory at once. Instead, i
 
 Before your agent processes its task, the memory system scans for relevant entries based on the task's content and context. These memories are provided to the AI model alongside your instructions. After the task completes, the agent evaluates whether anything new was learned and creates memories accordingly.
 
-> **Tip:** If an agent isn't using its memories effectively, check that the memories are categorized and scored correctly. Well-organized memories are recalled more reliably.
+:::tip
+If an agent isn't using its memories effectively, check that the memories are categorized and scored correctly. Well-organized memories are recalled more reliably.
+:::
   `,
 
   "reviewing-and-cleaning-memories": `
@@ -167,7 +187,9 @@ A clean memory base leads to better agent performance. An agent that relies on o
 
 Open the \`Memories\` section and browse your agent's memory list. Sort by date, importance, or category to focus your review. Click any memory to edit its content, change its importance level, or delete it. The system also suggests potential duplicates that could be merged.
 
-> **Tip:** Schedule a monthly review of your most active agents' memories. Even 15 minutes of cleanup can noticeably improve an agent's decision-making quality.
+:::tip
+Schedule a monthly review of your most active agents' memories. Even 15 minutes of cleanup can noticeably improve an agent's decision-making quality.
+:::
   `,
 
   "exporting-and-importing-memories": `
@@ -188,7 +210,9 @@ This feature is also great for giving a new agent the benefit of another's exper
 
 Open an agent's memory settings and click \`Export\`. Choose which memories to include (all, or filtered by category/importance) and save the file. To import, open the target agent's memory settings, click \`Import\`, and select your file. Personas detects duplicates and lets you decide how to handle them.
 
-> **Tip:** Before a major change to an agent's prompt, export its memories as a backup. If the new prompt creates confusion, you can restore the original memories.
+:::tip
+Before a major change to an agent's prompt, export its memories as a backup. If the new prompt creates confusion, you can restore the original memories.
+:::
   `,
 
   "memory-best-practices": `
@@ -210,6 +234,8 @@ Follow these guidelines to build agents that genuinely improve over time rather 
 
 Good memory management is an ongoing practice, not a one-time setup. Start by creating a few manual memories for your most important rules. Let the agent learn naturally from its runs. Review periodically to correct mistakes and remove outdated information. Adjust importance levels as your understanding of what matters evolves.
 
-> **Tip:** Think of memory management like tending a garden. Regular small efforts — pruning, watering, replanting — produce much better results than occasional big overhauls.
+:::tip
+Think of memory management like tending a garden. Regular small efforts — pruning, watering, replanting — produce much better results than occasional big overhauls.
+:::
   `,
 };

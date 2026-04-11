@@ -6,6 +6,14 @@ A pipeline is a group of agents working together to handle a complex task. Think
 
 For example, a content pipeline might have one agent that researches a topic, another that writes a draft, a third that edits for grammar, and a fourth that formats the final output. Each agent focuses on what it does best.
 
+| | Single Agent | Pipeline |
+|---|-------------|----------|
+| Complexity | One task at a time | Multi-step workflows |
+| Specialization | One set of instructions | Each agent is a specialist |
+| Data flow | Input → Output | Chained: output of one feeds the next |
+| Error isolation | Whole task fails | Failing step is pinpointed |
+| Reusability | Reuse the agent | Reuse the entire workflow |
+
 ### Key Points
 
 - **Multi-agent workflows** — combine multiple agents into one cohesive process
@@ -17,7 +25,9 @@ For example, a content pipeline might have one agent that researches a topic, an
 
 You design a pipeline on the team canvas by placing agents and drawing connections between them. When you run the pipeline, data flows through each agent in order. If a step fails, the pipeline stops and shows you exactly where the problem occurred.
 
-> **Tip:** Start with a simple two-agent pipeline to learn the basics. You can always add more agents as your workflow grows.
+:::tip
+Start with a simple two-agent pipeline to learn the basics. You can always add more agents as your workflow grows.
+:::
   `,
 
   "the-team-canvas": `
@@ -34,11 +44,20 @@ The canvas gives you a bird's-eye view of your entire workflow. You can zoom in 
 - **Zoom and pan** to navigate large pipelines comfortably
 - **Auto-layout** option to tidy up your canvas with one click
 
-### How It Works
+### Building Your First Pipeline
 
-Open the \`Pipelines\` section and click \`New Pipeline\`. The canvas appears with your agent library on the side. Drag agents onto the canvas, position them in the order they should run, and draw lines to connect outputs to inputs. Save your pipeline and it's ready to run.
+:::steps
+1. **Open the Pipelines section** — click \`Pipelines\` in the sidebar and then \`New Pipeline\`
+2. **Browse your agent library** — the sidebar panel shows all available agents
+3. **Drag agents onto the canvas** — place them in the order they should execute
+4. **Draw connections** — click and drag from one agent's output port to the next agent's input port
+5. **Arrange left to right** — position agents in execution order for a clear visual flow
+6. **Save your pipeline** — click \`Save\` and your pipeline is ready to run
+:::
 
-> **Tip:** Arrange your agents from left to right in the order they execute. This visual flow makes pipelines easy to understand at a glance.
+:::tip
+Arrange your agents from left to right in the order they execute. This visual flow makes pipelines easy to understand at a glance.
+:::
   `,
 
   "adding-agents-to-a-pipeline": `
@@ -59,7 +78,9 @@ An agent can appear in multiple pipelines, and its behavior in each one is indep
 
 With the canvas open, find the agent you want in the sidebar library panel. Drag it onto the canvas and drop it in position. Click the placed agent to open its pipeline settings, where you can adjust inputs, outputs, and any pipeline-specific behavior.
 
-> **Tip:** If you need a slightly different version of an agent for a pipeline, use the pipeline-specific settings instead of modifying the original. This keeps your base agent clean.
+:::tip
+If you need a slightly different version of an agent for a pipeline, use the pipeline-specific settings instead of modifying the original. This keeps your base agent clean.
+:::
   `,
 
   "connecting-agents-with-data-flow": `
@@ -76,11 +97,19 @@ Data flows along these connections like water through pipes. The first agent pro
 - **Multiple connections** — one agent's output can feed several downstream agents
 - **Delete connections** by clicking on the line and pressing Delete
 
-### How It Works
+### Connecting Two Agents
 
-Each agent on the canvas has small circles (ports) on its edges — outputs on the right, inputs on the left. Drag from a right port to a left port to connect two agents. When the pipeline runs, data flows along these connections in order. You can see the data at each connection point during execution.
+:::steps
+1. **Locate the output port** — find the small circle on the right edge of the source agent
+2. **Click and drag** — hold the mouse button and drag from the output port toward the target agent
+3. **Drop on the input port** — release on the small circle on the left edge of the target agent
+4. **Verify the connection** — a line appears showing the data path between the two agents
+5. **Test the flow** — run the pipeline and click any connection to inspect the data passing through it
+:::
 
-> **Tip:** Keep your connections clean and avoid crossing lines when possible. A well-organized canvas is much easier to debug and modify later.
+:::tip
+Keep your connections clean and avoid crossing lines when possible. A well-organized canvas is much easier to debug and modify later.
+:::
   `,
 
   "pipeline-execution": `
@@ -101,7 +130,9 @@ If everything goes smoothly, you get your final result at the end of the pipelin
 
 Click the green \`Run\` button on the canvas toolbar. Data enters at your starting agent and flows through each connection. Each agent's icon pulses while it's working and turns green when done. The final result appears at the end of the pipeline. Click any step to inspect its input and output.
 
-> **Tip:** If your pipeline is taking too long, check the execution times for each step. The slowest step is your bottleneck — consider optimizing that agent or switching it to a faster model.
+:::tip
+If your pipeline is taking too long, check the execution times for each step. The slowest step is your bottleneck — consider optimizing that agent or switching it to a faster model.
+:::
   `,
 
   "conditional-routing": `
@@ -122,7 +153,9 @@ This transforms simple linear pipelines into smart decision-making workflows tha
 
 On the canvas, add a conditional node between agents. Define your conditions using simple rules like "if the text contains 'urgent'" or "if the amount is greater than 100." Each condition connects to a different downstream agent. When data arrives, the conditional node evaluates it and sends it down the matching path.
 
-> **Tip:** Always include a default path for data that doesn't match any condition. This prevents data from getting "stuck" in your pipeline.
+:::warning
+Always include a default path for data that doesn't match any condition. Without one, unmatched data gets stuck in your pipeline with no way to proceed.
+:::
   `,
 
   "team-members-and-roles": `
@@ -143,7 +176,9 @@ Roles also help when you're troubleshooting. If the final output has a research 
 
 When you place an agent on the canvas, you can assign it a role label. This label appears above the agent icon and describes its function in this pipeline. Roles are purely organizational — they help you and others understand the workflow but don't change how the agent works.
 
-> **Tip:** Name roles by what they do, not by which agent fills them. This makes it easy to swap in a different agent later if you find a better option.
+:::tip
+Name roles by what they do, not by which agent fills them. This makes it easy to swap in a different agent later if you find a better option.
+:::
   `,
 
   "pipeline-run-history": `
@@ -164,7 +199,9 @@ Run history is invaluable for troubleshooting ("what went wrong last Tuesday?") 
 
 Open your pipeline and click the \`History\` tab. You'll see a list of all past runs sorted by date. Click any run to expand it and see each step's details. You can compare two runs side by side to understand what's different when results vary.
 
-> **Tip:** After making changes to a pipeline, compare the next run's results to a previous run. This confirms whether your changes had the intended effect.
+:::tip
+After making changes to a pipeline, compare the next run's results to a previous run. This confirms whether your changes had the intended effect.
+:::
   `,
 
   "pipeline-templates": `
@@ -185,7 +222,9 @@ Templates cover common use cases like content creation, data processing, custome
 
 Open the \`Pipelines\` section and click \`Templates\`. Browse or search for a template that matches your use case. Click \`Use Template\` to create a new pipeline based on it. The canvas opens with all agents and connections pre-configured. Customize any part and save.
 
-> **Tip:** Even if no template matches your exact use case, find the closest one. It's usually faster to modify a template than to build from scratch.
+:::tip
+Even if no template matches your exact use case, find the closest one. It's usually faster to modify a template than to build from scratch.
+:::
   `,
 
   "debugging-pipeline-issues": `
@@ -206,6 +245,8 @@ Most pipeline issues fall into a few categories: bad data flowing between steps,
 
 When a pipeline fails, click the red-highlighted step on the canvas. The debug panel shows the input data it received, the error message, and the agent's full output. Fix the issue — whether it's a prompt change, a credential problem, or a data format mismatch — and click \`Retry Step\` to resume from that point.
 
-> **Tip:** Use the data inspection feature even on successful runs. Seeing what flows between agents helps you optimize your pipeline and catch subtle issues before they become failures.
+:::tip
+Use the data inspection feature even on successful runs. Seeing what flows between agents helps you optimize your pipeline and catch subtle issues before they become failures.
+:::
   `,
 };

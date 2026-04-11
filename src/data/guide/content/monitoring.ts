@@ -6,18 +6,22 @@ The monitoring dashboard is your command center for all agent activity. At a gla
 
 You don't need to check agents individually. The dashboard aggregates the most important information so you can stay on top of your entire setup in seconds.
 
-### Key Points
+### Dashboard Sections
 
-- **Running agents** — see which agents are currently active with live progress indicators
-- **Recent results** — quick view of the latest execution outcomes
-- **Key metrics** — success rates, costs, and performance at a glance
-- **Alerts** — any issues or warnings that need your attention are surfaced at the top
+| Section | What It Shows | Position |
+|---------|--------------|----------|
+| **Active Runs** | Agents currently executing with live progress indicators | Top |
+| **Recent Results** | Latest execution outcomes with status badges | Middle |
+| **Key Metrics** | Success rates, total cost, and performance summaries | Bottom |
+| **Alerts** | Issues and warnings that need your attention | Top banner |
 
 ### How It Works
 
-Open the \`Monitoring\` section from the sidebar. The dashboard loads with real-time data organized into sections: active runs at the top, recent results in the middle, and metrics at the bottom. Click any item to drill down into details. The dashboard refreshes automatically so you're always seeing the latest information.
+Open the \`Monitoring\` section from the sidebar. The dashboard loads with real-time data organized into the sections above. Click any item to drill down into details. The dashboard refreshes automatically so you're always seeing the latest information.
 
-> **Tip:** Start your day with a quick look at the monitoring dashboard. A 30-second check tells you if everything is running smoothly or if something needs your attention.
+:::tip
+Start your day with a quick look at the monitoring dashboard. A 30-second check tells you if everything is running smoothly or if something needs your attention.
+:::
   `,
 
   "execution-logs": `
@@ -38,7 +42,9 @@ Logs are like a detailed receipt for every agent run. They give you full transpa
 
 Navigate to \`Monitoring > Logs\` or click on a specific agent to see its log history. Each entry shows a summary line — click to expand and see full details including the exact input, complete output, any tool calls made, and the total cost. You can filter logs by date, agent, or status.
 
-> **Tip:** When an agent produces unexpected results, check the log to see the full input it received. Often, the issue is in the input data, not the agent's instructions.
+:::tip
+When an agent produces unexpected results, check the log to see the full input it received. Often, the issue is in the input data, not the agent's instructions.
+:::
   `,
 
   "real-time-activity-feed": `
@@ -59,7 +65,9 @@ This is especially useful when you have many agents running simultaneously or wh
 
 Open the activity feed from the monitoring dashboard or the sidebar. Updates stream in automatically as your agents work. Each entry shows the agent name, action, timestamp, and result. Click any entry to jump to the full execution details. The feed is scrollable and searchable.
 
-> **Tip:** Keep the activity feed open in a side panel while testing new agents. Watching the live output helps you spot issues immediately and iterate faster.
+:::tip
+Keep the activity feed open in a side panel while testing new agents. Watching the live output helps you spot issues immediately and iterate faster.
+:::
   `,
 
   "cost-tracking-per-agent": `
@@ -80,7 +88,9 @@ Understanding costs per agent lets you make smart decisions about model selectio
 
 Go to \`Monitoring > Costs\` and select the per-agent view. You'll see a list of all agents sorted by spending. Click any agent to see its cost breakdown by time period, model used, and number of runs. Charts show trends so you can spot cost increases early.
 
-> **Tip:** If an agent is costing more than expected, try switching it to a smaller or cheaper AI model. Many tasks don't need the most powerful model to produce great results.
+:::tip
+If an agent is costing more than expected, try switching it to a smaller or cheaper AI model. Many tasks don't need the most powerful model to produce great results.
+:::
   `,
 
   "cost-tracking-per-model": `
@@ -101,7 +111,9 @@ This view is essential for optimizing your overall AI spending.
 
 Go to \`Monitoring > Costs\` and select the per-model view. You'll see a breakdown of spending by AI provider and model. Each row shows total cost, number of calls, average cost per call, and a trend indicator. The system highlights models where a cheaper alternative might produce similar results.
 
-> **Tip:** Run your most expensive agents through Arena testing with cheaper models. You might find that a model at half the price produces results that are 95% as good.
+:::tip
+Run your most expensive agents through Arena testing with cheaper models. You might find that a model at half the price produces results that are 95% as good.
+:::
   `,
 
   "success-rate-metrics": `
@@ -122,7 +134,9 @@ Tracking success rates over time helps you maintain high-quality automation and 
 
 Open \`Monitoring > Metrics\` to see success rates for all your agents. Each agent shows its current rate and a trend arrow (up, down, or stable). Click any agent to see detailed metrics including success rate by time period, by trigger type, and by input characteristics.
 
-> **Tip:** Set a threshold alert for any agent below 90%. This way you're automatically notified when an agent needs attention rather than discovering problems after the fact.
+:::tip
+Set a threshold alert for any agent below 90%. This way you're automatically notified when an agent needs attention rather than discovering problems after the fact.
+:::
   `,
 
   "execution-tracing": `
@@ -143,7 +157,9 @@ This is invaluable for understanding complex agent behavior, verifying that agen
 
 Open an execution log and click the \`Trace\` tab. You'll see a timeline of every step the agent took, from reading the input to producing the final output. Each step is expandable — click to see the full details including tool calls, intermediate results, and timing.
 
-> **Tip:** Use tracing when your agent produces correct results but you want to understand *how* it got there. This insight often reveals opportunities to make the agent faster or more reliable.
+:::tip
+Use tracing when your agent produces correct results but you want to understand *how* it got there. This insight often reveals opportunities to make the agent faster or more reliable.
+:::
   `,
 
   "performance-trends": `
@@ -164,7 +180,9 @@ This long-term perspective helps you celebrate wins (your agent is getting faste
 
 Open \`Monitoring > Trends\` and select the metrics and agents you want to track. Charts render automatically with data points for each time period. Hover over any point to see exact numbers. Use the date range selector to zoom in on specific periods or zoom out for the full picture.
 
-> **Tip:** Check trends after making changes to an agent. If you updated a prompt last Tuesday, look at the trend starting from that date to see if it actually improved things.
+:::tip
+Check trends after making changes to an agent. If you updated a prompt last Tuesday, look at the trend starting from that date to see if it actually improved things.
+:::
   `,
 
   "setting-budget-limits": `
@@ -173,6 +191,10 @@ Open \`Monitoring > Trends\` and select the metrics and agents you want to track
 Budget limits keep your AI spending under control. Set a daily, weekly, or monthly cap, and your agents will pause when they reach the limit. It's like setting a spending limit on a credit card — you stay in full control of your costs and are never surprised by an unexpected bill.
 
 This is especially important when agents run automatically on schedules or triggers, where you might not be watching every execution.
+
+:::warning
+Agents running on automatic triggers without budget limits can accumulate unexpected costs. Always set at least a daily limit for any agent that runs unattended, especially during initial testing when cost patterns are unpredictable.
+:::
 
 ### Key Points
 
@@ -185,7 +207,9 @@ This is especially important when agents run automatically on schedules or trigg
 
 Go to \`Settings > Budget\` and set your limits. You can set a global limit that covers all agents, individual limits per agent, or both. When a limit is reached, affected agents pause and you receive a notification. You can increase the limit or wait for the next period to begin.
 
-> **Tip:** Start with a conservative daily limit and increase it gradually as you understand your typical usage patterns. It's much easier to raise a limit than to undo overspending.
+:::tip
+Start with a conservative daily limit and increase it gradually as you understand your typical usage patterns. It's much easier to raise a limit than to undo overspending.
+:::
   `,
 
   "anomaly-detection": `
@@ -206,6 +230,8 @@ This catches problems you might not notice on your own, especially when you have
 
 Anomaly detection runs automatically in the background. As your agents execute, the system builds a profile of normal behavior for each one. When a run falls significantly outside that profile — a sudden cost spike, an unusual failure, or a run that takes five times longer than normal — you receive an alert with details about what's unusual.
 
-> **Tip:** Don't dismiss anomaly alerts, even if everything seems fine on the surface. They often catch the early signs of problems — like a slowly expiring credential or a degrading AI model — before they cause real failures.
+:::tip
+Don't dismiss anomaly alerts, even if everything seems fine on the surface. They often catch the early signs of problems — like a slowly expiring credential or a degrading AI model — before they cause real failures.
+:::
   `,
 };

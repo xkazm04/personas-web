@@ -17,7 +17,9 @@ Most errors fall into a few categories: credential problems, timeout issues, and
 
 When an error occurs, it appears in the execution log with a code and description. Click the error to see a detailed explanation and suggested fix. Many errors include a \`Fix Now\` button that takes you directly to the setting that needs attention.
 
-> **Tip:** Don't panic when you see an error. Read the message carefully — it almost always tells you what went wrong and points you toward the solution.
+:::tip
+Don't panic when you see an error. Read the message carefully — it almost always tells you what went wrong and points you toward the solution.
+:::
   `,
 
   "agent-not-responding": `
@@ -29,17 +31,21 @@ Most unresponsive agent issues resolve themselves when you identify and fix the 
 
 ### Diagnostic Checklist
 
-- **Check the execution log** — look for error messages or warnings that explain the stall
-- **Verify your AI provider** — make sure your provider's API is online and your account is active
-- **Check credentials** — ensure the agent's credentials haven't expired
-- **Review limits** — the agent may have hit its timeout or max turns setting
-- **Try a manual run** — run the agent with simple test input to isolate the issue
+:::steps
+1. **Check the execution log** — look for error messages or warnings that explain the stall
+2. **Verify your AI provider** — make sure your provider's API is online and your account is active
+3. **Check credentials** — ensure the agent's credentials haven't expired
+4. **Review limits** — the agent may have hit its timeout or max turns setting
+5. **Try a manual run** — run the agent with simple test input to isolate the issue
+:::
 
 ### How It Works
 
 Open the agent and check its latest execution log. If it shows an error, follow the fix for that specific error. If the log shows the agent is still running, it may be processing a particularly complex task. Check the timeout setting — if it's too short, the agent may be stopping before it finishes.
 
-> **Tip:** If an agent is truly stuck (no progress for several minutes), click \`Stop\` and then try a manual run with simpler input. This helps you determine if the issue is with the input or the agent itself.
+:::tip
+If an agent is truly stuck (no progress for several minutes), click \`Stop\` and then try a manual run with simpler input. This helps you determine if the issue is with the input or the agent itself.
+:::
   `,
 
   "credential-errors": `
@@ -60,7 +66,9 @@ The key is identifying which credential is causing the problem, then refreshing 
 
 Check the error message in the execution log — it will mention which service failed. Go to \`Credentials\` and find the credential for that service. Check its health status. If it's red or yellow, click it to see what's wrong and follow the suggested fix — usually refreshing the token or re-entering the password.
 
-> **Tip:** Set up credential health checks to run automatically. They'll catch expiring credentials before they cause agent failures, turning a potential crisis into a routine maintenance task.
+:::tip
+Set up credential health checks to run automatically. They'll catch expiring credentials before they cause agent failures, turning a potential crisis into a routine maintenance task.
+:::
   `,
 
   "trigger-not-firing": `
@@ -72,17 +80,21 @@ The trigger log is your best friend here. It records every activation attempt, i
 
 ### Diagnostic Steps
 
-- **Check the trigger log** — it shows every attempt, including failures and filtered-out events
-- **Verify the trigger is enabled** — disabled triggers don't fire (look for the toggle switch)
-- **Check filters** — your filter conditions might be too strict, blocking all events
-- **Test manually** — use the trigger tester to simulate an event and verify the configuration
-- **Check permissions** — file watchers need folder access, webhooks need network access
+:::steps
+1. **Check the trigger log** — open the agent's trigger settings and click the \`Log\` tab to see every attempt, including failures
+2. **Verify the trigger is enabled** — look for the toggle switch; disabled triggers don't fire
+3. **Check filters** — review your filter conditions, which might be too strict and blocking all events
+4. **Test manually** — use the trigger tester to simulate an event and verify the configuration
+5. **Check permissions** — confirm that file watchers have folder access and webhooks have network access
+:::
 
 ### How It Works
 
 Open the agent's trigger settings and click the \`Log\` tab. Every trigger attempt is listed with a status: fired, filtered, or failed. Click any entry to see why it didn't fire. The most common finding is a filter that's slightly too strict — adjusting it usually solves the problem immediately.
 
-> **Tip:** When setting up a new trigger, start without any filters. Once you confirm it fires correctly, add filters one at a time. This way you know each filter works as expected.
+:::tip
+When setting up a new trigger, start without any filters. Once you confirm it fires correctly, add filters one at a time. This way you know each filter works as expected.
+:::
   `,
 
   "self-healing-explained": `
@@ -103,7 +115,13 @@ Self-healing doesn't mean your agent never fails — it means it recovers from t
 
 When an error occurs, the self-healing system evaluates it. Transient errors (network timeouts, rate limits, temporary outages) trigger an automatic retry after a short wait. Credential expirations trigger an automatic refresh attempt. Permanent errors (invalid configuration, missing permissions) are reported to you immediately because they require your attention.
 
-> **Tip:** Check the self-healing log occasionally to see what's being caught. If the same error keeps getting healed, it might indicate an underlying issue worth fixing permanently.
+:::success
+When self-healing succeeds, the agent continues as if nothing happened. The execution log marks the recovered error with a green "healed" badge so you can see what was caught and resolved automatically.
+:::
+
+:::tip
+Check the self-healing log occasionally to see what's being caught. If the same error keeps getting healed, it might indicate an underlying issue worth fixing permanently.
+:::
   `,
 
   "checking-system-health": `
@@ -125,7 +143,9 @@ Think of it as a visit to the doctor for your Personas setup. A quick check-up c
 
 Go to \`Settings > System Health\` and click \`Run Health Check\`. The scan takes a few seconds and produces a report. Green items are healthy, yellow items need attention soon, and red items need immediate fixing. Each item includes a description of the issue and a suggested fix.
 
-> **Tip:** Run a health check after installing updates, after connectivity issues, or before deploying a critical agent. It takes just seconds and gives you peace of mind.
+:::tip
+Run a health check after installing updates, after connectivity issues, or before deploying a critical agent. It takes just seconds and gives you peace of mind.
+:::
   `,
 
   "log-files-and-debugging": `
@@ -146,7 +166,9 @@ You don't need to read logs regularly, but knowing where they are and how to use
 
 Log files are stored locally on your computer. Access them from \`Settings > Logs\` or navigate to the log folder directly. Each file covers one day and contains timestamped entries. Use the built-in log viewer to search, filter, and browse. For support requests, the \`Export Log\` button creates a shareable excerpt.
 
-> **Tip:** When contacting support about an issue, include the relevant log excerpt. It dramatically speeds up the troubleshooting process because the support team can see exactly what happened.
+:::tip
+When contacting support about an issue, include the relevant log excerpt. It dramatically speeds up the troubleshooting process because the support team can see exactly what happened.
+:::
   `,
 
   "resetting-to-defaults": `
@@ -155,6 +177,10 @@ Log files are stored locally on your computer. Access them from \`Settings > Log
 If you've changed a setting and can't figure out what's causing a problem, resetting to defaults gives you a clean starting point. This only resets your preferences and configuration settings — your agents, credentials, memories, and data are all preserved. Nothing important is lost.
 
 Think of it as restoring a room to its original layout. All your belongings (agents and data) stay, but the furniture (settings) goes back to where it started.
+
+:::warning
+Resetting clears all customized preferences in one action. This includes your theme, default model, notification settings, and keyboard shortcuts. Your agents, credentials, memories, and data are not affected — but any carefully tuned preferences will need to be reconfigured manually afterward.
+:::
 
 ### What Gets Reset
 
@@ -174,6 +200,8 @@ Think of it as restoring a room to its original layout. All your belongings (age
 
 Go to \`Settings > Advanced > Reset to Defaults\`. Review what will be reset, then click \`Confirm\`. Your settings return to their factory values while all your work is preserved. You can then reconfigure settings one at a time to identify which change was causing the issue.
 
-> **Tip:** Before resetting, make a note of any settings you've customized intentionally. This way you can quickly restore the ones you want after the reset fixes your issue.
+:::tip
+Before resetting, make a note of any settings you've customized intentionally. This way you can quickly restore the ones you want after the reset fixes your issue.
+:::
   `,
 };

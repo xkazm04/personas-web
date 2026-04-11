@@ -6,18 +6,22 @@ Personas agents can run in two places: on your own computer (local) or on a remo
 
 **Cloud execution** keeps your agents running 24/7, even when your computer is off or you're away. This is ideal for scheduled tasks, webhook-triggered automations, and anything that needs to be always available.
 
-### Key Points
-
-- **Local** — runs on your computer, great for testing and private data, stops when your computer is off
-- **Cloud** — runs on remote servers, always available, works even when you're away
-- **Same agent** — switch between local and cloud without changing your agent's configuration
-- **Mix and match** — some agents can run locally while others run in the cloud
+| | Local | Cloud |
+|---|-------|-------|
+| Availability | Only when your computer is on | 24/7, always available |
+| Best for | Testing, private data, supervised tasks | Schedules, webhooks, always-on automation |
+| Setup | Works out of the box | Requires cloud orchestrator connection |
+| Cost | Uses your machine's resources | Managed hosting or BYOI |
+| Data privacy | Data stays on your machine | Data travels to remote servers |
+| Real-time monitoring | Full, immediate visibility | Synced to desktop with slight delay |
 
 ### How It Works
 
 By default, agents run locally. To enable cloud execution, connect to a cloud orchestrator in \`Settings > Deployment\`. Once connected, you can deploy any agent to the cloud with a few clicks. Local and cloud executions use the same prompts, tools, and settings.
 
-> **Tip:** Develop and test locally, then deploy to the cloud once your agent is working well. This gives you the best of both worlds — hands-on control during development and always-on reliability in production.
+:::tip
+Develop and test locally, then deploy to the cloud once your agent is working well. This gives you the best of both worlds — hands-on control during development and always-on reliability in production.
+:::
   `,
 
   "connecting-to-the-cloud-orchestrator": `
@@ -27,19 +31,26 @@ The cloud orchestrator is the service that runs your agents around the clock on 
 
 The setup is straightforward — enter your orchestrator credentials and Personas handles the rest.
 
-### Step by Step
+:::steps
+1. **Open deployment settings** — go to \`Settings > Deployment\`
+2. **Click Connect Cloud Orchestrator** — the connection dialog opens
+3. **Enter your orchestrator URL** — paste the server address provided by your orchestrator
+4. **Enter your authentication key** — paste the secret key for secure access
+5. **Click Test Connection** — verify the server is reachable and credentials are valid
+6. **Click Save** — your cloud environment is ready for deployments
+:::
 
-- Open **\`Settings > Deployment\`**
-- Click **\`Connect Cloud Orchestrator\`**
-- Enter your **orchestrator URL** and **authentication key**
-- Click **\`Test Connection\`** to verify everything works
-- Click **\`Save\`** — your cloud environment is ready
+:::warning
+Keep your authentication key secret. Anyone with this key can deploy agents to your cloud orchestrator. Never share it in chat, email, or version control.
+:::
 
 ### How It Works
 
 The orchestrator is a server that receives your agent configurations and executes them on your schedule. When you deploy an agent, its prompt, tools, and trigger settings are securely transmitted to the orchestrator. Execution results are synced back to your desktop app automatically.
 
-> **Tip:** Test the connection before deploying any agents. The test button verifies that your credentials are correct and the server is reachable, saving you from troubleshooting deployment issues later.
+:::tip
+Test the connection before deploying any agents. The test button verifies that your credentials are correct and the server is reachable, saving you from troubleshooting deployment issues later.
+:::
   `,
 
   "deploying-an-agent-to-the-cloud": `
@@ -49,19 +60,26 @@ Publishing an agent to the cloud takes just a few clicks. Select an agent, choos
 
 Deployment doesn't remove the agent from your local setup — you can still test and modify it on your desktop.
 
-### Step by Step
+:::steps
+1. **Verify cloud connection** — make sure your cloud orchestrator is connected (check \`Settings > Deployment\`)
+2. **Open the agent** — navigate to the agent you want to deploy
+3. **Click Deploy to Cloud** — find this option in the agent's menu bar
+4. **Review deployment settings** — confirm the region, resource allocation, and schedule
+5. **Click Deploy** — your agent is packaged and sent to the cloud within seconds
+6. **Verify it's live** — check the monitoring dashboard for a cloud icon next to the agent
+:::
 
-- Make sure your **cloud orchestrator** is connected (see "Connecting to the Cloud Orchestrator")
-- Open the agent you want to deploy
-- Click **\`Deploy to Cloud\`** in the agent's menu
-- Review the deployment settings (region, resources, schedule)
-- Click **\`Deploy\`** — your agent is live in the cloud
+:::warning
+Double-check that any credentials your agent uses are configured for cloud access. Local-only credentials will not work after deployment and will cause authentication errors on the first cloud run.
+:::
 
 ### How It Works
 
 When you deploy, Personas packages your agent's configuration — prompt, tools, credentials, and triggers — and sends it to the cloud orchestrator. The orchestrator creates a running instance of your agent that operates independently. Any changes you make locally can be pushed to the cloud with a single click.
 
-> **Tip:** Deploy agents that need to run on a schedule first. These benefit the most from cloud execution because they need to be available at specific times regardless of whether your computer is on.
+:::tip
+Deploy agents that need to run on a schedule first. These benefit the most from cloud execution because they need to be available at specific times regardless of whether your computer is on.
+:::
   `,
 
   "cloud-execution-monitoring": `
@@ -82,7 +100,9 @@ Everything is synced automatically, so you always see the latest data without an
 
 Open the monitoring dashboard and your cloud agents appear alongside local ones. A small cloud icon distinguishes them. Click any cloud agent to see its full execution history, logs, and costs — everything syncs from the orchestrator to your desktop in real time.
 
-> **Tip:** Set up budget limits for cloud agents just like you would for local ones. Cloud agents running 24/7 can accumulate costs faster than agents you run manually.
+:::tip
+Set up budget limits for cloud agents just like you would for local ones. Cloud agents running 24/7 can accumulate costs faster than agents you run manually.
+:::
   `,
 
   "github-actions-integration": `
@@ -103,7 +123,13 @@ It's like giving your agent a button that starts your team's standard processes.
 
 Add the GitHub Actions tool to your agent and connect it with your GitHub credentials. In your agent's instructions, describe when and how to trigger workflows. For example: "When you find a critical bug, trigger the hotfix-deploy workflow." The agent uses the GitHub API to start the workflow and can pass along relevant data.
 
-> **Tip:** Start with a non-critical workflow for testing — like a notification pipeline — before connecting agents to production deployment workflows.
+:::warning
+Never store GitHub tokens in your agent's prompt text. Use the Personas credential vault to store tokens securely and grant your agent access through the tool configuration.
+:::
+
+:::tip
+Start with a non-critical workflow for testing — like a notification pipeline — before connecting agents to production deployment workflows.
+:::
   `,
 
   "gitlab-ci-cd-integration": `
@@ -124,7 +150,13 @@ Your agents and your CI/CD pipelines can work hand-in-hand, each doing what it d
 
 Open an agent and click \`Export > GitLab CI/CD\`. Personas generates a YAML file that defines a GitLab pipeline stage for your agent. Add this file to your repository's CI/CD configuration. When the pipeline runs, your agent executes as a step in the larger workflow.
 
-> **Tip:** Use GitLab CI/CD integration for agents that are part of your development process — code review helpers, documentation generators, or test automation agents.
+:::warning
+The exported YAML may reference credential variables. Make sure these are defined as protected CI/CD variables in GitLab — never hardcode secrets in pipeline files committed to your repository.
+:::
+
+:::tip
+Use GitLab CI/CD integration for agents that are part of your development process — code review helpers, documentation generators, or test automation agents.
+:::
   `,
 
   "n8n-workflow-integration": `
@@ -145,7 +177,9 @@ This combination is powerful — n8n handles the plumbing (moving data between s
 
 Install the Personas node in your n8n instance. Configure it with your Personas connection details. In your n8n workflow, add a Personas node wherever you need AI processing. The node sends data to your agent, waits for the result, and passes it along to the next step in your n8n workflow.
 
-> **Tip:** Use Personas agents for the "thinking" steps in your n8n workflows — analyzing data, making decisions, writing text — and let n8n handle the "doing" steps like sending emails or updating databases.
+:::tip
+Use Personas agents for the "thinking" steps in your n8n workflows — analyzing data, making decisions, writing text — and let n8n handle the "doing" steps like sending emails or updating databases.
+:::
   `,
 
   "byoi-bring-your-own-infrastructure": `
@@ -166,7 +200,9 @@ This is ideal for organizations with strict data handling requirements or teams 
 
 Follow the BYOI setup guide in \`Settings > Deployment > Self-Hosted\`. You'll install the orchestrator software on your server, configure it with your preferred settings, and connect it to your Personas desktop app. From that point on, deploying agents works exactly the same — the only difference is where they run.
 
-> **Tip:** BYOI requires some server administration knowledge. If you're not comfortable managing servers, the managed cloud orchestrator is the easier path and works great for most users.
+:::info
+BYOI requires some server administration knowledge. If you're not comfortable managing servers, the managed cloud orchestrator is the easier path and works great for most users.
+:::
   `,
 
   "syncing-desktop-and-cloud": `
@@ -187,7 +223,9 @@ You can also pull the latest cloud execution results to your desktop, giving you
 
 Syncing happens in the background whenever your computer is connected to the internet. A small sync indicator in the status bar shows the current state — green means everything is up to date, yellow means syncing is in progress. Click the indicator to see details or manually trigger a sync.
 
-> **Tip:** Check the sync indicator after making important changes. A quick glance confirms that your cloud agents have received the latest updates.
+:::tip
+Check the sync indicator after making important changes. A quick glance confirms that your cloud agents have received the latest updates.
+:::
   `,
 
   "cloud-troubleshooting": `
@@ -208,6 +246,12 @@ This guide walks you through diagnosing and fixing the most frequent cloud deplo
 
 Start by checking the \`Deployment\` status page, which shows the health of your cloud connection and all deployed agents. Most issues are visible here — a red indicator tells you something needs attention. Click the indicator for a specific diagnosis and recommended fix.
 
-> **Tip:** When in doubt, try redeploying the problematic agent. This pushes a fresh copy to the cloud and resolves most configuration-related issues.
+:::warning
+If you need to redeploy an agent, make sure the local version is up to date first. Redeploying an outdated local version will overwrite the cloud configuration with older settings.
+:::
+
+:::tip
+When in doubt, try redeploying the problematic agent. This pushes a fresh copy to the cloud and resolves most configuration-related issues.
+:::
   `,
 };
