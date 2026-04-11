@@ -18,6 +18,7 @@ export const bn: Translations = {
     blog: 'ব্লগ',
     changelog: 'পরিবর্তন',
     compare: 'তুলনা',
+    pricing: 'মূল্য',
     menu: '\u09ae\u09c7\u09a8\u09c1',
   },
   footer: {

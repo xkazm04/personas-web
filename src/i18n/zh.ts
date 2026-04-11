@@ -18,6 +18,7 @@ export const zh: Translations = {
     blog: '博客',
     changelog: '更新日志',
     compare: '比较',
+    pricing: '定价',
     menu: '\u83DC\u5355',
   },
   footer: {

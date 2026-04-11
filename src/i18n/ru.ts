@@ -18,6 +18,7 @@ export const ru: Translations = {
     blog: 'Блог',
     changelog: 'Журнал изменений',
     compare: 'Сравнение',
+    pricing: 'Цены',
     menu: '\u041C\u0435\u043D\u044E',
   },
   footer: {

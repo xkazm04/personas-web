@@ -18,6 +18,7 @@ export const de: Translations = {
     blog: 'Blog',
     changelog: 'Änderungsprotokoll',
     compare: 'Vergleich',
+    pricing: 'Preise',
     menu: 'Men\u00fc',
   },
   footer: {

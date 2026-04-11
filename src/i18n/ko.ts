@@ -18,6 +18,7 @@ export const ko: Translations = {
     blog: '블로그',
     changelog: '변경 이력',
     compare: '비교',
+    pricing: '요금',
     menu: '\uba54\ub274',
   },
   footer: {

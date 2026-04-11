@@ -18,6 +18,7 @@ export const vi: Translations = {
     blog: 'Blog',
     changelog: 'Nhật ký thay đổi',
     compare: 'So sánh',
+    pricing: 'Bảng giá',
     menu: 'Menu',
   },
   footer: {

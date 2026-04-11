@@ -18,6 +18,7 @@ export const hi: Translations = {
     blog: 'ब्लॉग',
     changelog: 'परिवर्तन लॉग',
     compare: 'तुलना',
+    pricing: 'मूल्य',
     menu: '\u092E\u0947\u0928\u094D\u092F\u0942',
   },
   footer: {

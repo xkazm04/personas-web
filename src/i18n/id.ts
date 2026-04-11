@@ -18,6 +18,7 @@ export const id: Translations = {
     blog: 'Blog',
     changelog: 'Catatan perubahan',
     compare: 'Bandingkan',
+    pricing: 'Harga',
     menu: 'Menu',
   },
   footer: {

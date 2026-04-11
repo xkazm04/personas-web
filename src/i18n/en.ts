@@ -16,6 +16,7 @@ export interface Translations {
     blog: string;
     changelog: string;
     compare: string;
+    pricing: string;
     menu: string;
   };
   footer: {
@@ -344,6 +345,7 @@ export const en: Translations = {
     blog: 'Blog',
     changelog: 'Changelog',
     compare: 'Compare',
+    pricing: 'Pricing',
     menu: 'Menu',
   },
   footer: {

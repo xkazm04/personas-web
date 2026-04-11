@@ -18,6 +18,7 @@ export const ja: Translations = {
     blog: 'ブログ',
     changelog: '変更履歴',
     compare: '比較',
+    pricing: '料金',
     menu: '\u30e1\u30cb\u30e5\u30fc',
   },
   footer: {

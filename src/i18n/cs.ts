@@ -18,6 +18,7 @@ export const cs: Translations = {
     blog: 'Blog',
     changelog: 'Historie změn',
     compare: 'Srovnání',
+    pricing: 'Ceník',
     menu: 'Menu',
   },
   footer: {

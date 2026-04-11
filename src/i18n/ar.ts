@@ -18,6 +18,7 @@ export const ar: Translations = {
     blog: 'المدونة',
     changelog: 'سجل التغييرات',
     compare: 'مقارنة',
+    pricing: 'التسعير',
     menu: '\u0627\u0644\u0642\u0627\u0626\u0645\u0629',
   },
   footer: {

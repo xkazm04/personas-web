@@ -18,6 +18,7 @@ export const es: Translations = {
     blog: 'Blog',
     changelog: 'Registro de cambios',
     compare: 'Comparar',
+    pricing: 'Precios',
     menu: 'Men\u00fa',
   },
   footer: {
