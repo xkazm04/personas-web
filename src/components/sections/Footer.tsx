@@ -5,6 +5,7 @@ import { ChevronDown, MessageCircle } from "lucide-react";
 import { GithubIcon, TwitterIcon } from "@/components/icons/brand-icons";
 import { motion, AnimatePresence } from "framer-motion";
 import Image from "next/image";
+import Link from "next/link";
 import ThemeSwitcher from "@/components/ThemeSwitcher";
 import { useTranslation } from "@/i18n/useTranslation";
 
@@ -14,9 +15,10 @@ function useColumns() {
     {
       title: t.footer.product,
       links: [
-        { label: t.sections.features, href: "/#features" },
+        { label: t.sections.features, href: "/features" },
         { label: t.nav.useCases, href: "/use-cases" },
-        { label: t.sections.pricing, href: "/#pricing" },
+        { label: t.nav.pricing, href: "/pricing" },
+        { label: t.nav.templates, href: "/templates" },
         { label: t.sections.download, href: "/download" },
         { label: t.nav.tour, href: "/tour" },
       ],
@@ -24,9 +26,11 @@ function useColumns() {
     {
       title: t.footer.resources,
       links: [
+        { label: t.nav.guide, href: "/guide" },
+        { label: t.nav.how, href: "/how" },
         { label: t.nav.blog, href: "/blog" },
         { label: t.nav.changelog, href: "/changelog" },
-        { label: t.nav.guide, href: "/guide" },
+        { label: t.nav.connections, href: "/connections" },
         { label: t.nav.compare, href: "/compare" },
         { label: t.nav.community, href: "/community" },
         { label: t.nav.roadmap, href: "/roadmap" },
@@ -41,6 +45,10 @@ function useColumns() {
       ],
     },
   ];
+}
+
+function isExternal(href: string) {
+  return href.startsWith("http") || href.startsWith("//");
 }
 
 function FooterLinkColumn({ title, links }: { title: string; links: { label: string; href: string }[] }) {
@@ -64,17 +72,19 @@ function FooterLinkColumn({ title, links }: { title: string; links: { label: str
 
       {/* Desktop: always visible */}
       <ul className="mt-3 hidden md:block space-y-1">
-        {links.map((link) => (
-          <li key={link.label}>
-            <a
-              href={link.href}
-              className="group/link flex min-h-[44px] items-center gap-1.5 text-sm text-muted-dark transition-colors duration-300 hover:text-foreground"
-            >
-              <div className="h-1 w-1 rounded-full bg-white/8 transition-all duration-300 group-hover/link:bg-brand-cyan/40 group-hover/link:shadow-[0_0_4px_rgba(6,182,212,0.3)]" />
-              {link.label}
-            </a>
-          </li>
-        ))}
+        {links.map((link) => {
+          const cls = "group/link flex min-h-[44px] items-center gap-1.5 text-sm text-muted-dark transition-colors duration-300 hover:text-foreground";
+          const dot = <div className="h-1 w-1 rounded-full bg-white/8 transition-all duration-300 group-hover/link:bg-brand-cyan/40 group-hover/link:shadow-[0_0_4px_rgba(6,182,212,0.3)]" />;
+          return (
+            <li key={link.label}>
+              {isExternal(link.href) ? (
+                <a href={link.href} className={cls} target="_blank" rel="noopener noreferrer">{dot}{link.label}</a>
+              ) : (
+                <Link href={link.href} className={cls}>{dot}{link.label}</Link>
+              )}
+            </li>
+          );
+        })}
       </ul>
 
       {/* Mobile: accordion with AnimatePresence */}
@@ -88,17 +98,19 @@ function FooterLinkColumn({ title, links }: { title: string; links: { label: str
               transition={{ duration: 0.2, ease: "easeInOut" }}
               className="overflow-hidden mt-2 space-y-0.5"
             >
-              {links.map((link) => (
-                <li key={link.label}>
-                  <a
-                    href={link.href}
-                    className="group/link flex min-h-[44px] items-center gap-1.5 text-sm text-muted-dark transition-colors duration-300 hover:text-foreground"
-                  >
-                    <div className="h-1 w-1 rounded-full bg-white/8 transition-all duration-300 group-hover/link:bg-brand-cyan/40 group-hover/link:shadow-[0_0_4px_rgba(6,182,212,0.3)]" />
-                    {link.label}
-                  </a>
-                </li>
-              ))}
+              {links.map((link) => {
+                const cls = "group/link flex min-h-[44px] items-center gap-1.5 text-sm text-muted-dark transition-colors duration-300 hover:text-foreground";
+                const dot = <div className="h-1 w-1 rounded-full bg-white/8 transition-all duration-300 group-hover/link:bg-brand-cyan/40 group-hover/link:shadow-[0_0_4px_rgba(6,182,212,0.3)]" />;
+                return (
+                  <li key={link.label}>
+                    {isExternal(link.href) ? (
+                      <a href={link.href} className={cls} target="_blank" rel="noopener noreferrer">{dot}{link.label}</a>
+                    ) : (
+                      <Link href={link.href} className={cls}>{dot}{link.label}</Link>
+                    )}
+                  </li>
+                );
+              })}
             </motion.ul>
           )}
         </AnimatePresence>
