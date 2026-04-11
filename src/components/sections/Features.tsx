@@ -1,11 +1,18 @@
 "use client";
 
 import { motion, type Variants } from "framer-motion";
-import { Wand2, Zap, Cloud, Activity } from "lucide-react";
+import Link from "next/link";
+import { Wand2, Zap, Cloud, Activity, BookOpen } from "lucide-react";
 import SectionWrapper from "@/components/SectionWrapper";
 import GlowCard from "@/components/GlowCard";
 import GradientText from "@/components/GradientText";
 import { fadeUp, TRANSITION_NORMAL } from "@/lib/animations";
+
+interface GuideLink {
+  label: string;
+  category: string;
+  topic: string;
+}
 
 /* ── Choreographed entrance variants ── */
 const cardOrchestrator: Variants = {
@@ -195,6 +202,10 @@ const features = [
     description:
       "Describe what you want your agent to do. The design engine analyzes feasibility, suggests tools, and generates the optimal prompt structure.",
     visual: <DesignVisual />,
+    guideTopics: [
+      { label: "Creating a new agent", category: "agents-prompts", topic: "creating-a-new-agent" },
+      { label: "Writing effective prompts", category: "agents-prompts", topic: "writing-effective-prompts" },
+    ] as GuideLink[],
   },
   {
     icon: Zap,
@@ -209,6 +220,10 @@ const features = [
     description:
       "Built-in event bus lets agents trigger each other. Email agent → Slack agent → GitHub agent. Runs locally, no cloud required.",
     visual: <CoordinateVisual />,
+    guideTopics: [
+      { label: "Event-based triggers", category: "triggers", topic: "event-based-triggers" },
+      { label: "Chain triggers", category: "triggers", topic: "chain-triggers" },
+    ] as GuideLink[],
   },
   {
     icon: Cloud,
@@ -223,6 +238,10 @@ const features = [
     description:
       "When you need 24/7 operation, deploy your agents to the cloud with one click. Bring your own infrastructure or use ours.",
     visual: <DeployVisual />,
+    guideTopics: [
+      { label: "Local vs cloud execution", category: "deployment", topic: "local-vs-cloud-execution" },
+      { label: "Cloud orchestrator setup", category: "deployment", topic: "connecting-to-the-cloud-orchestrator" },
+    ] as GuideLink[],
   },
   {
     icon: Activity,
@@ -237,6 +256,10 @@ const features = [
     description:
       "Real-time execution streaming, event audit trails, healing engine, and usage analytics. Know exactly what your agents are doing.",
     visual: <TelemetryVisual />,
+    guideTopics: [
+      { label: "Cost tracking per model", category: "monitoring", topic: "cost-tracking-per-model" },
+      { label: "Success rate metrics", category: "monitoring", topic: "success-rate-metrics" },
+    ] as GuideLink[],
   },
 ];
 
@@ -326,6 +349,20 @@ export default function Features() {
                   <p className="mt-4 text-sm leading-relaxed text-muted">
                     {features[0].description}
                   </p>
+                  {features[0].guideTopics && features[0].guideTopics.length > 0 && (
+                    <div className="mt-3 pt-3 border-t border-white/[0.06] flex flex-wrap gap-x-4 gap-y-1.5">
+                      {features[0].guideTopics.map((gt) => (
+                        <Link
+                          key={gt.topic}
+                          href={`/guide/${gt.category}/${gt.topic}`}
+                          className="inline-flex items-center gap-1.5 text-xs text-muted-dark hover:text-brand-cyan transition-colors"
+                        >
+                          <BookOpen className="h-3 w-3 shrink-0" />
+                          <span>{gt.label}</span>
+                        </Link>
+                      ))}
+                    </div>
+                  )}
                 </div>
                 {/* Visual side */}
                 <div>{features[0].visual}</div>
@@ -359,6 +396,20 @@ export default function Features() {
                     {f.description}
                   </p>
                   {f.visual}
+                  {f.guideTopics && f.guideTopics.length > 0 && (
+                    <div className="mt-3 pt-3 border-t border-white/[0.06] space-y-1.5">
+                      {f.guideTopics.map((gt) => (
+                        <Link
+                          key={gt.topic}
+                          href={`/guide/${gt.category}/${gt.topic}`}
+                          className="flex items-center gap-1.5 text-xs text-muted-dark hover:text-brand-cyan transition-colors"
+                        >
+                          <BookOpen className="h-3 w-3 shrink-0" />
+                          <span className="truncate">{gt.label}</span>
+                        </Link>
+                      ))}
+                    </div>
+                  )}
                 </GlowCard>
               </motion.div>
             ))}
