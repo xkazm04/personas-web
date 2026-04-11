@@ -16,21 +16,39 @@ export const metadata: Metadata = {
   },
 };
 
+const competitors = [
+  { name: "Personas", url: SITE_URL, category: "Desktop-first AI agent orchestration" },
+  { name: "CrewAI", url: "https://crewai.com", category: "Python AI agent framework" },
+  { name: "LangChain", url: "https://langchain.com", category: "LLM application framework" },
+  { name: "n8n", url: "https://n8n.io", category: "Workflow automation platform" },
+  { name: "AutoGen", url: "https://github.com/microsoft/autogen", category: "Multi-agent conversation framework" },
+];
+
 const jsonLd = {
   "@context": "https://schema.org",
   "@type": "WebPage",
-  name: "Personas vs CrewAI vs LangChain vs n8n vs AutoGen",
-  description: "Feature-by-feature comparison of AI agent platforms.",
+  name: "Personas vs CrewAI vs LangChain vs n8n vs AutoGen — AI Agent Platform Comparison",
+  description:
+    "Feature-by-feature comparison of AI agent platforms covering pricing, security, triggers, observability, and developer experience.",
   url: `${SITE_URL}/compare`,
+  about: {
+    "@type": "Thing",
+    name: "AI Agent Orchestration Platforms",
+    description: "Software platforms for building, orchestrating, and deploying AI agents.",
+  },
   mainEntity: {
     "@type": "ItemList",
-    itemListElement: [
-      { "@type": "ListItem", position: 1, name: "Personas", url: SITE_URL },
-      { "@type": "ListItem", position: 2, name: "CrewAI", url: "https://crewai.com" },
-      { "@type": "ListItem", position: 3, name: "LangChain", url: "https://langchain.com" },
-      { "@type": "ListItem", position: 4, name: "n8n", url: "https://n8n.io" },
-      { "@type": "ListItem", position: 5, name: "AutoGen", url: "https://github.com/microsoft/autogen" },
-    ],
+    numberOfItems: competitors.length,
+    itemListElement: competitors.map((c, i) => ({
+      "@type": "ListItem",
+      position: i + 1,
+      item: {
+        "@type": "SoftwareApplication",
+        name: c.name,
+        url: c.url,
+        applicationCategory: c.category,
+      },
+    })),
   },
 };
 

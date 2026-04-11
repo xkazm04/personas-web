@@ -1,169 +1,129 @@
 "use client";
 
-import { useState } from "react";
 import { motion } from "framer-motion";
-import { Check, X, Minus, ChevronDown } from "lucide-react";
-import Image from "next/image";
+import { Check, ArrowRight, Sparkles } from "lucide-react";
+import Link from "next/link";
 import SectionWrapper from "@/components/SectionWrapper";
 import GradientText from "@/components/GradientText";
 import SectionHeading from "@/components/SectionHeading";
 import { fadeUp, staggerContainer } from "@/lib/animations";
-import { COMPARISON_DATA } from "@/data/pricing";
+import { PRICING_TIERS } from "@/data/pricing";
 
-function CellValue({ value }: { value: string | boolean }) {
-  if (value === true) {
-    return (
-      <div className="flex items-center justify-center">
-        <div className="flex h-6 w-6 items-center justify-center rounded-full bg-brand-emerald/15">
-          <Check className="h-3.5 w-3.5 text-brand-emerald" />
-        </div>
-      </div>
-    );
-  }
-  if (value === false) {
-    return (
-      <div className="flex items-center justify-center">
-        <div className="flex h-6 w-6 items-center justify-center rounded-full bg-white/5">
-          <X className="h-3.5 w-3.5 text-muted" />
-        </div>
-      </div>
-    );
-  }
-  return (
-    <span className="text-sm text-muted text-center block">{value}</span>
-  );
-}
+/* ── Accent helpers ───────────────────────────────────────────────── */
 
-function CategorySection({
-  name,
-  features,
-  defaultOpen,
-}: {
-  name: string;
-  features: typeof COMPARISON_DATA[0]["features"];
-  defaultOpen: boolean;
-}) {
-  const [open, setOpen] = useState(defaultOpen);
+const ACCENT: Record<string, string> = {
+  cyan: "#06b6d4",
+  purple: "#a855f7",
+  amber: "#fbbf24",
+};
+
+/* ── Compact tier card (landing page version) ─────────────────────── */
+
+function TierPreview({ tier }: { tier: (typeof PRICING_TIERS)[number] }) {
+  const color = ACCENT[tier.accent] ?? "#06b6d4";
 
   return (
-    <div className="border-b border-white/5 last:border-b-0">
-      <button
-        onClick={() => setOpen((v) => !v)}
-        className="flex w-full items-center justify-between px-4 sm:px-6 py-4 text-left transition-colors hover:bg-white/2"
-      >
-        <span className="text-sm font-semibold text-foreground uppercase tracking-wider">
-          {name}
-        </span>
-        <ChevronDown
-          className={`h-4 w-4 text-muted transition-transform duration-200 ${
-            open ? "rotate-180" : ""
-          }`}
-        />
-      </button>
-
-      {open && (
-        <div className="pb-2">
-          {features.map((row) => (
-            <div
-              key={row.label}
-              className={`grid grid-cols-[1fr_100px_100px] sm:grid-cols-[1fr_140px_140px] items-center gap-2 px-4 sm:px-6 py-3 transition-colors ${
-                row.highlight
-                  ? "bg-brand-cyan/[0.03]"
-                  : "hover:bg-white/[0.015]"
-              }`}
-            >
-              <span className={`text-sm ${row.highlight ? "text-foreground font-medium" : "text-muted"}`}>
-                {row.label}
-              </span>
-              <CellValue value={row.personas} />
-              <CellValue value={row.n8n} />
-            </div>
-          ))}
+    <motion.div
+      variants={fadeUp}
+      className={`relative flex flex-col rounded-xl border backdrop-blur-sm p-5 transition-all duration-300 ${
+        tier.highlighted
+          ? "border-brand-purple/30 bg-brand-purple/[0.04]"
+          : "border-white/[0.06] bg-white/[0.02] hover:border-white/[0.12]"
+      }`}
+    >
+      {tier.highlighted && (
+        <div className="absolute -top-2.5 left-1/2 -translate-x-1/2 flex items-center gap-1 rounded-full bg-brand-purple px-2.5 py-0.5 text-[10px] font-semibold text-white">
+          <Sparkles className="h-2.5 w-2.5" />
+          Popular
         </div>
       )}
-    </div>
+
+      <div className="flex items-baseline gap-1">
+        <span className="text-2xl font-extrabold tracking-tight" style={{ color }}>
+          {tier.price}
+        </span>
+        {tier.period && (
+          <span className="text-xs text-muted-dark">{tier.period}</span>
+        )}
+      </div>
+
+      <h3 className="mt-1 text-sm font-semibold text-foreground">{tier.name}</h3>
+
+      {tier.comingSoon && (
+        <span className="mt-1.5 inline-flex w-fit rounded-full border border-white/[0.08] bg-white/[0.03] px-2 py-0.5 text-[10px] font-medium text-muted-dark">
+          Coming soon
+        </span>
+      )}
+
+      <ul className="mt-3 flex-1 space-y-1.5">
+        {tier.features.slice(0, 3).map((f) => (
+          <li key={f} className="flex items-start gap-1.5 text-xs text-muted-dark">
+            <Check className="mt-0.5 h-3 w-3 shrink-0" style={{ color }} />
+            {f}
+          </li>
+        ))}
+        {tier.features.length > 3 && (
+          <li className="text-xs text-muted-dark/60">
+            +{tier.features.length - 3} more
+          </li>
+        )}
+      </ul>
+    </motion.div>
   );
 }
+
+/* ── Section ──────────────────────────────────────────────────────── */
 
 export default function Pricing() {
   return (
     <SectionWrapper id="pricing" aria-labelledby="pricing-heading">
       <motion.div variants={fadeUp} className="text-center relative">
         <SectionHeading id="pricing-heading">
-          Why{" "}
-          <GradientText className="drop-shadow-lg">Personas</GradientText>
-          ?
+          Simple,{" "}
+          <GradientText className="drop-shadow-lg">transparent</GradientText>
+          {" "}pricing
         </SectionHeading>
-        <p className="mx-auto mt-8 max-w-3xl text-base text-muted leading-relaxed font-light">
-          Personas is a free orchestration layer. You pay only for your own Claude Code usage.
-          Compare the features that matter.
+        <p className="mx-auto mt-8 max-w-2xl text-base text-muted leading-relaxed font-light">
+          The desktop app is free forever. Cloud plans add always-on execution
+          and team features when you&apos;re ready to scale.
         </p>
       </motion.div>
 
+      {/* ── Tier cards ───────────────────────────────────────────── */}
       <motion.div
         variants={staggerContainer}
-        className="mt-16 mx-auto max-w-4xl"
+        className="mt-14 mx-auto max-w-4xl grid grid-cols-2 lg:grid-cols-4 gap-3"
       >
-        {/* Comparison table */}
-        <div className="rounded-2xl border border-white/8 bg-black/40 backdrop-blur-xl overflow-hidden shadow-[0_0_60px_rgba(0,0,0,0.3)]">
-          {/* Header */}
-          <div className="grid grid-cols-[1fr_100px_100px] sm:grid-cols-[1fr_140px_140px] items-center gap-2 px-4 sm:px-6 py-5 border-b border-white/8 bg-white/[0.02]">
-            <div className="text-sm font-medium text-muted">Feature</div>
-            <div className="text-center">
-              <div className="flex flex-col items-center gap-1.5">
-                <Image
-                  src="/imgs/logo.png"
-                  alt="Personas"
-                  width={24}
-                  height={24}
-                  className="h-6 w-6 object-contain"
-                />
-                <span className="text-sm font-semibold text-foreground">Personas</span>
-                <span className="rounded-full border border-brand-emerald/30 bg-brand-emerald/10 px-2.5 py-0.5 text-sm font-semibold text-brand-emerald uppercase tracking-wider">
-                  Free
-                </span>
-              </div>
-            </div>
-            <div className="text-center">
-              <div className="flex flex-col items-center gap-1.5">
-                <div className="flex h-6 w-6 items-center justify-center rounded bg-[#ea4b83]/15">
-                  <span className="text-sm font-bold text-[#ea4b83]">n</span>
-                </div>
-                <span className="text-sm font-semibold text-foreground">n8n</span>
-                <span className="rounded-full border border-white/10 bg-white/5 px-2.5 py-0.5 text-sm font-semibold text-muted uppercase tracking-wider">
-                  From €20/mo
-                </span>
-              </div>
-            </div>
-          </div>
-
-          {/* Categories */}
-          {COMPARISON_DATA.map((cat, i) => (
-            <CategorySection
-              key={cat.name}
-              name={cat.name}
-              features={cat.features}
-              defaultOpen={i < 3}
-            />
-          ))}
-        </div>
+        {PRICING_TIERS.map((tier) => (
+          <TierPreview key={tier.name} tier={tier} />
+        ))}
       </motion.div>
 
-      <motion.div variants={fadeUp} className="mt-10 text-center space-y-4">
+      {/* ── CTAs ─────────────────────────────────────────────────── */}
+      <motion.div variants={fadeUp} className="mt-10 flex flex-col items-center gap-4">
+        <Link
+          href="/pricing"
+          className="inline-flex items-center gap-2 rounded-full bg-brand-cyan/15 border border-brand-cyan/30 px-8 py-3 text-sm font-semibold text-brand-cyan transition-colors hover:bg-brand-cyan/25"
+        >
+          See all plans and features
+          <ArrowRight className="h-4 w-4" />
+        </Link>
+
         <div className="mx-auto max-w-4xl rounded-2xl border border-white/4 bg-white/1 px-4 py-3 sm:px-6">
-          <p className="text-sm text-muted leading-relaxed">
+          <p className="text-sm text-muted leading-relaxed text-center">
             Personas is a free desktop app for AI agent orchestration. You bring your own Claude subscription.
             <span className="mx-2 hidden sm:inline text-white/10">|</span>
             <span className="text-brand-cyan/70">We never touch your Anthropic bill.</span>
           </p>
         </div>
-        <a
+
+        <Link
           href="/compare"
           className="inline-flex items-center gap-1.5 text-sm text-brand-cyan/70 hover:text-brand-cyan transition-colors"
         >
-          See full comparison with CrewAI, LangChain, n8n &amp; more
+          Compare with CrewAI, LangChain, n8n &amp; more
           <span aria-hidden="true">&rarr;</span>
-        </a>
+        </Link>
       </motion.div>
     </SectionWrapper>
   );
