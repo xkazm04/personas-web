@@ -6,17 +6,30 @@ Triggers are the "when" behind your agents. While prompts tell an agent *what* t
 
 Personas offers several trigger types: manual buttons, time-based schedules, webhooks from external services, file watchers, clipboard monitors, chain triggers, and event listeners. You can mix and match them freely.
 
-### Trigger Type Comparison
+### Trigger Types
 
-| Trigger Type | Activation | Best For | Input Source |
-|---|---|---|---|
-| Manual | Button click | Testing, on-demand tasks | User-typed text |
-| Schedule | Time-based (cron) | Routine reports, daily checks | None (time-based) |
-| Webhook | External HTTP call | Reacting to external events | HTTP payload |
-| Clipboard | Copy event match | Quick lookups, translations | Copied text |
-| File Watcher | File system event | Processing uploads, imports | File path & contents |
-| Chain | Previous agent finishes | Multi-step pipelines | Previous agent output |
-| Event-Based | Internal event emitted | Reactive, decoupled systems | Event data payload |
+:::compare
+**Manual**
+Button click. Test agents on demand with custom input. Every agent gets this by default.
+---
+**Schedule**
+Time-based (cron). Routine reports, daily checks. Runs without any input at your chosen time.
+---
+**Webhook**
+External HTTP call. React to events from Stripe, GitHub, Shopify. Receives the HTTP payload as input.
+---
+**Clipboard**
+Copy event match. Quick lookups and translations. Triggers on copied text matching your rules.
+---
+**File Watcher**
+File system event. Process uploads, imports, new documents. Receives the file path and contents.
+---
+**Chain**
+Previous agent finishes. Build multi-step pipelines. Receives the previous agent's output as input.
+---
+**Event-Based**
+Internal event emitted. Reactive, decoupled systems. Receives the event data payload.
+:::
 
 ### Key Points
 
@@ -167,6 +180,10 @@ Create a dedicated "Drop Zone" folder for your agent to watch. This keeps things
 Chain triggers connect agents in sequence — when one finishes, the next one starts automatically using the previous agent's output. This lets you build assembly lines where each agent handles one step and passes its result forward.
 
 For example, a research agent could gather data, pass it to a writing agent that creates a report, and then a formatting agent polishes the final document. Each agent does its specialty, and the chain connects them seamlessly.
+
+:::diagram
+[Research Agent] --> [Writing Agent] --> [Formatting Agent] --> [Final Output]
+:::
 
 ### Key Points
 

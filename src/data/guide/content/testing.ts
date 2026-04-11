@@ -31,12 +31,19 @@ Think of the Testing Lab as your agent's training ground. Here's where good agen
 
 ### The Four Modes
 
-| Mode | Purpose | Best For |
-|---|---|---|
-| **Arena** | Test your prompt across multiple AI models at once | Finding the best model for your task |
-| **A/B Testing** | Compare two prompt versions side-by-side | Improving a specific prompt |
-| **Matrix** | Auto-generate and test dozens of prompt variations | Discovering unexpected winning combinations |
-| **Eval** | Test multiple prompts against multiple models in a grid | Comprehensive optimization of prompt + model |
+:::compare
+**Arena**
+Test your prompt across multiple AI models at once. Send the same task to Claude, GPT, Gemini and see which model wins. Best for finding the right model.
+---
+**A/B Testing**
+Compare two prompt versions side-by-side under identical conditions. Change one thing, measure the impact. Best for improving a specific prompt.
+---
+**Matrix**
+Auto-generate and test dozens of prompt variations by mixing building blocks. Discover unexpected winning combinations you'd never try manually.
+---
+**Eval**
+Test multiple prompts against multiple models in a comprehensive grid. The complete picture when you want to optimize both prompt and model together.
+:::
 
 ### How It Works
 
@@ -87,6 +94,18 @@ This takes the guesswork out of prompt tweaking. Instead of hoping a change help
 ### How It Works
 
 Open the Testing Lab and select \`A/B Test\`. Load your current prompt as Version A, then create Version B with your proposed change. Run the test with sample input. Both versions execute and their results appear side by side. Rate each result to determine the winner.
+
+:::code-compare
+### Version A
+Summarize the document.
+Keep it short.
+---
+### Version B
+Summarize the document in exactly
+3 bullet points. Each bullet should
+be one sentence. Start with the
+most important finding.
+:::
 
 :::warning
 Only change one thing between versions. If you change the tone *and* the format *and* the length, you won't know which change made the difference.

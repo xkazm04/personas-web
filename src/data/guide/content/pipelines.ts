@@ -6,13 +6,13 @@ A pipeline is a group of agents working together to handle a complex task. Think
 
 For example, a content pipeline might have one agent that researches a topic, another that writes a draft, a third that edits for grammar, and a fourth that formats the final output. Each agent focuses on what it does best.
 
-| | Single Agent | Pipeline |
-|---|-------------|----------|
-| Complexity | One task at a time | Multi-step workflows |
-| Specialization | One set of instructions | Each agent is a specialist |
-| Data flow | Input → Output | Chained: output of one feeds the next |
-| Error isolation | Whole task fails | Failing step is pinpointed |
-| Reusability | Reuse the agent | Reuse the entire workflow |
+:::compare
+**Single Agent**
+Handles one task at a time with one set of instructions. Input goes in, output comes out. If something fails, the whole task fails. Simple to set up, but limited for complex workflows.
+---
+**Pipeline** [recommended]
+Multi-step workflows where each agent is a specialist. Data flows between agents — the output of one feeds the next. Failing steps are pinpointed instantly. Reuse the entire workflow with different inputs.
+:::
 
 ### Key Points
 
@@ -128,6 +128,10 @@ If everything goes smoothly, you get your final result at the end of the pipelin
 
 ### How It Works
 
+:::diagram
+[Start] --> [Agent 1 processes] --> [Agent 2 processes] --> [Agent 3 processes] --> [Final Result]
+:::
+
 Click the green \`Run\` button on the canvas toolbar. Data enters at your starting agent and flows through each connection. Each agent's icon pulses while it's working and turns green when done. The final result appears at the end of the pipeline. Click any step to inspect its input and output.
 
 :::tip
@@ -141,6 +145,11 @@ If your pipeline is taking too long, check the execution times for each step. Th
 Sometimes your pipeline needs to take different paths depending on the data. Conditional routing lets you set rules that direct data to different agents based on conditions — like sorting mail into different boxes. If the data meets condition A, it goes one way; if condition B, it goes another.
 
 This transforms simple linear pipelines into smart decision-making workflows that handle different scenarios appropriately.
+
+:::feature
+**Smart Decision Nodes**
+Conditional routing uses plain-language rules — no code required. Write conditions like "if the text contains 'urgent'" and data flows to the right agent automatically.
+:::
 
 ### Key Points
 
