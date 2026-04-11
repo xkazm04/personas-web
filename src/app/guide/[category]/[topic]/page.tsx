@@ -2,8 +2,48 @@ import { notFound } from "next/navigation";
 import { GUIDE_CATEGORIES } from "@/data/guide/categories";
 import { GUIDE_TOPICS } from "@/data/guide/topics";
 import { getRelatedTopics } from "@/lib/guide-utils";
-import { SITE_URL } from "@/lib/seo";
+import { SITE_URL, SITE_NAME } from "@/lib/seo";
 import TopicView from "./TopicView";
+
+/* ── Helpers for structured data ────────────────────────────────────── */
+
+/** Extract steps from :::steps blocks for HowTo JSON-LD. */
+function extractSteps(content: string): { title: string; body: string }[] {
+  const stepsBlocks = content.match(/:::steps\n([\s\S]*?):::/g);
+  if (!stepsBlocks) return [];
+  const steps: { title: string; body: string }[] = [];
+  for (const block of stepsBlocks) {
+    const inner = block.replace(/^:::steps\n/, "").replace(/\n:::$/, "");
+    for (const line of inner.split("\n")) {
+      const m = line.match(/^\d+\.\s+\*\*(.+?)\*\*\s*(?:[—–-]\s*)?(.*)$/);
+      if (m) steps.push({ title: m[1], body: m[2] });
+    }
+  }
+  return steps;
+}
+
+/** Build HowTo JSON-LD if the topic contains steps. */
+function buildHowToJsonLd(
+  topic: { title: string; description: string },
+  categoryId: string,
+  topicId: string,
+  steps: { title: string; body: string }[],
+) {
+  if (steps.length === 0) return null;
+  return {
+    "@context": "https://schema.org",
+    "@type": "HowTo",
+    name: topic.title,
+    description: topic.description,
+    url: `${SITE_URL}/guide/${categoryId}/${topicId}`,
+    step: steps.map((s, i) => ({
+      "@type": "HowToStep",
+      position: i + 1,
+      name: s.title,
+      text: s.body || s.title,
+    })),
+  };
+}
 
 /* ── Load only the single category file needed (≈14 KB vs 136 KB) ──── */
 
@@ -27,12 +67,23 @@ export async function generateMetadata({ params }: { params: Promise<{ category:
   const topic = GUIDE_TOPICS.find((t) => t.id === topicId);
   const category = GUIDE_CATEGORIES.find((c) => c.id === categoryId);
   const categoryLabel = category?.name ?? "Guide";
+  // Build a richer description with category context and keyword tags
+  const tagSuffix = topic?.tags.slice(0, 4).join(", ");
+  const description = topic
+    ? `${topic.description} Part of the ${categoryLabel} section in the ${SITE_NAME} User Guide.${tagSuffix ? ` Topics: ${tagSuffix}.` : ""}`
+    : undefined;
   return {
-    title: topic ? `${topic.title} | ${categoryLabel}` : "Guide",
-    description: topic?.description,
+    title: topic ? `${topic.title} | ${categoryLabel} — ${SITE_NAME} Guide` : "Guide",
+    description,
     alternates: {
       canonical: topic ? `${SITE_URL}/guide/${categoryId}/${topicId}` : undefined,
     },
+    openGraph: topic ? {
+      title: `${topic.title} — ${SITE_NAME} Guide`,
+      description: topic.description,
+      url: `${SITE_URL}/guide/${categoryId}/${topicId}`,
+      type: "article",
+    } : undefined,
   };
 }
 
@@ -56,6 +107,8 @@ export default async function TopicPage({ params }: { params: Promise<{ category
   const prevTopic = currentIndex > 0 ? categoryTopics[currentIndex - 1] : null;
   const nextTopic = currentIndex < categoryTopics.length - 1 ? categoryTopics[currentIndex + 1] : null;
   const related = getRelatedTopics(topicId);
+  const steps = extractSteps(content);
+  const howToJsonLd = buildHowToJsonLd(topic, categoryId, topicId, steps);
 
   const articleJsonLd = {
     "@context": "https://schema.org",
@@ -88,6 +141,12 @@ export default async function TopicPage({ params }: { params: Promise<{ category
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbJsonLd) }}
       />
+      {howToJsonLd && (
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(howToJsonLd) }}
+        />
+      )}
       <TopicView
         category={category}
         topic={topic}
