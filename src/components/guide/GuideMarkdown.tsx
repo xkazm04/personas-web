@@ -1,7 +1,17 @@
 "use client";
 
 import React, { type ReactNode } from "react";
-import { Callout, StepWizard, KeyboardGrid, MarkdownTable } from "./GuideBlocks";
+import {
+  Callout,
+  StepWizard,
+  KeyboardGrid,
+  MarkdownTable,
+  CompareBlock,
+  ArchitectureDiagram,
+  FeatureHighlight,
+  Checklist,
+  CodeCompare,
+} from "./GuideBlocks";
 
 interface GuideMarkdownProps {
   content: string;
@@ -212,6 +222,107 @@ function parseBlocks(lines: string[]): ReactNode[] {
           if (keyMatch) shortcuts.push({ combo: keyMatch[1].trim(), description: keyMatch[2].trim() });
         }
         if (shortcuts.length > 0) emit(<KeyboardGrid shortcuts={shortcuts} />);
+      } else if (blockType === "compare") {
+        // Split items by "---" separator, parse **Title** + body
+        const chunks: { title: string; body: string; highlight?: boolean }[] = [];
+        let cur: { title: string; body: string; highlight?: boolean } | null = null;
+        for (const cl of innerLines) {
+          if (/^---+$/.test(cl.trim())) {
+            if (cur) chunks.push(cur);
+            cur = null;
+            continue;
+          }
+          const titleMatch = cl.match(/^\*\*(.+?)\*\*\s*(\[recommended\])?\s*$/);
+          if (titleMatch && !cur) {
+            cur = { title: titleMatch[1], body: "", highlight: !!titleMatch[2] };
+          } else if (titleMatch && cur && !cur.body) {
+            // Title line for new item without separator
+            chunks.push(cur);
+            cur = { title: titleMatch[1], body: "", highlight: !!titleMatch[2] };
+          } else if (cl.trim() && cur) {
+            cur.body += (cur.body ? " " : "") + cl.trim();
+          } else if (cl.trim() && !cur) {
+            cur = { title: "", body: cl.trim() };
+          }
+        }
+        if (cur) chunks.push(cur);
+        if (chunks.length > 0) emit(<CompareBlock items={chunks} />);
+      } else if (blockType === "diagram") {
+        // Parse "[Node]" blocks and "-->" arrows
+        const nodes: { label: string; arrow?: boolean }[] = [];
+        for (const dl of innerLines) {
+          const trimmed = dl.trim();
+          if (!trimmed) continue;
+          if (/^-+>$/.test(trimmed)) {
+            // Standalone arrow line
+            if (nodes.length > 0) nodes.push({ label: "", arrow: true });
+          } else {
+            // Possibly "[Label] --> [Label] --> [Label]" on one line
+            const parts = trimmed.split(/\s*-+>\s*/);
+            parts.forEach((part, pi) => {
+              const label = part.replace(/^\[|\]$/g, "").trim();
+              if (!label) return;
+              if (pi > 0) nodes.push({ label, arrow: true });
+              else if (nodes.length > 0) nodes.push({ label, arrow: true });
+              else nodes.push({ label });
+            });
+          }
+        }
+        if (nodes.length > 0) emit(<ArchitectureDiagram nodes={nodes} />);
+      } else if (blockType === "feature") {
+        // **Title** on first line, rest is body. Optional color= on first line.
+        let title = "";
+        let color: string | undefined;
+        const bodyParts: string[] = [];
+        for (const fl of innerLines) {
+          const titleMatch = fl.match(/^\*\*(.+?)\*\*\s*(?:color=(\S+))?\s*$/);
+          if (titleMatch && !title) {
+            title = titleMatch[1];
+            color = titleMatch[2];
+          } else if (fl.trim()) {
+            bodyParts.push(fl.trim());
+          }
+        }
+        if (title || bodyParts.length > 0) {
+          emit(<FeatureHighlight title={title} body={bodyParts.join(" ")} color={color} />);
+        }
+      } else if (blockType === "checklist") {
+        const items: string[] = [];
+        for (const cl of innerLines) {
+          const itemMatch = cl.match(/^\s*[-*]\s+(.+)$/);
+          if (itemMatch) items.push(itemMatch[1].trim());
+          else if (cl.trim()) items.push(cl.trim());
+        }
+        if (items.length > 0) emit(<Checklist items={items} />);
+      } else if (blockType === "code-compare") {
+        // Split by "### Before" / "### After" headers (or "---" separator)
+        let section: "before" | "after" = "before";
+        const beforeLines: string[] = [];
+        const afterLines: string[] = [];
+        let beforeLabel = "Before";
+        let afterLabel = "After";
+        for (const cl of innerLines) {
+          const headerMatch = cl.match(/^###?\s+(.+)$/);
+          if (headerMatch) {
+            const h = headerMatch[1].trim().toLowerCase();
+            if (h.includes("after") || h.includes("new") || h.includes("improved")) {
+              afterLabel = headerMatch[1].trim();
+              section = "after";
+            } else {
+              beforeLabel = headerMatch[1].trim();
+              section = "before";
+            }
+            continue;
+          }
+          if (/^---+$/.test(cl.trim())) { section = "after"; continue; }
+          if (section === "before") beforeLines.push(cl);
+          else afterLines.push(cl);
+        }
+        const before = beforeLines.join("\n").trim();
+        const after = afterLines.join("\n").trim();
+        if (before || after) {
+          emit(<CodeCompare before={before} after={after} beforeLabel={beforeLabel} afterLabel={afterLabel} />);
+        }
       } else if (["tip", "warning", "info", "success"].includes(blockType)) {
         const content = innerLines.filter((l) => l.trim()).join(" ").trim();
         emit(

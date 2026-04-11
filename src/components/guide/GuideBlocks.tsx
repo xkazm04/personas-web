@@ -6,6 +6,9 @@ import {
   AlertTriangle,
   Info,
   CheckCircle2,
+  ArrowRight,
+  Check,
+  Star,
   type LucideIcon,
 } from "lucide-react";
 
@@ -198,6 +201,187 @@ export function MarkdownTable({
           ))}
         </tbody>
       </table>
+    </div>
+  );
+}
+
+// ── Compare Block ──────────────────────────────────────────────────
+// Usage: :::compare with items separated by "---"
+// Each item: **Title** on first line, then body lines
+
+export function CompareBlock({
+  items,
+}: {
+  items: { title: string; body: string; highlight?: boolean }[];
+}) {
+  const colors = ["#06b6d4", "#a855f7", "#34d399", "#f43f5e", "#fbbf24"];
+  return (
+    <div className="my-6 grid gap-3 sm:grid-cols-2">
+      {items.map((item, i) => {
+        const color = colors[i % colors.length];
+        return (
+          <div
+            key={i}
+            className={`relative rounded-xl border px-5 py-4 backdrop-blur-sm transition-colors ${
+              item.highlight
+                ? "border-white/[0.12] bg-white/[0.04]"
+                : "border-white/[0.06] bg-white/[0.02]"
+            }`}
+          >
+            {item.highlight && (
+              <span className="absolute -top-2.5 right-3 inline-flex items-center gap-1 rounded-full bg-brand-cyan/15 border border-brand-cyan/20 px-2 py-0.5 text-[10px] font-semibold uppercase tracking-wider text-brand-cyan">
+                <Star className="h-2.5 w-2.5" aria-hidden="true" />
+                Recommended
+              </span>
+            )}
+            <div
+              className="mb-2 h-0.5 w-8 rounded-full"
+              style={{ backgroundColor: color }}
+              aria-hidden="true"
+            />
+            <h4 className="text-base font-semibold text-foreground">
+              {item.title}
+            </h4>
+            <p className="mt-1.5 text-sm leading-relaxed text-muted-dark">
+              {item.body}
+            </p>
+          </div>
+        );
+      })}
+    </div>
+  );
+}
+
+// ── Architecture Diagram ───────────────────────────────────────────
+// Usage: :::diagram with "[Node Label]" and "-->" arrow lines
+
+export function ArchitectureDiagram({
+  nodes,
+}: {
+  nodes: { label: string; arrow?: boolean }[];
+}) {
+  return (
+    <div className="my-6 flex flex-wrap items-center justify-center gap-2 rounded-xl border border-white/[0.06] bg-white/[0.02] px-6 py-5 backdrop-blur-sm overflow-x-auto">
+      {nodes.map((node, i) => (
+        <React.Fragment key={i}>
+          {node.arrow && (
+            <ArrowRight
+              className="h-4 w-4 shrink-0 text-brand-cyan/50"
+              aria-hidden="true"
+            />
+          )}
+          <div className="relative flex items-center justify-center rounded-lg border border-white/[0.10] bg-white/[0.04] px-4 py-2 text-sm font-medium text-foreground shadow-[0_0_12px_rgba(6,182,212,0.04)]">
+            <div
+              className="absolute inset-0 rounded-lg opacity-[0.03]"
+              style={{
+                background:
+                  "linear-gradient(135deg, rgba(6,182,212,0.3), rgba(168,85,247,0.3))",
+              }}
+              aria-hidden="true"
+            />
+            <span className="relative">{node.label}</span>
+          </div>
+        </React.Fragment>
+      ))}
+    </div>
+  );
+}
+
+// ── Feature Highlight ──────────────────────────────────────────────
+// Usage: :::feature with **Title** on first line, then body
+
+export function FeatureHighlight({
+  title,
+  body,
+  color,
+}: {
+  title: string;
+  body: string;
+  color?: string;
+}) {
+  const accentColor = color ?? "#06b6d4";
+  return (
+    <div className="my-6 rounded-xl border border-white/[0.08] bg-gradient-to-br from-white/[0.03] to-transparent px-5 py-4 backdrop-blur-sm">
+      <div className="flex items-start gap-3">
+        <div
+          className="mt-0.5 flex h-8 w-8 shrink-0 items-center justify-center rounded-lg"
+          style={{ backgroundColor: `${accentColor}15` }}
+          aria-hidden="true"
+        >
+          <Star className="h-4 w-4" style={{ color: accentColor }} />
+        </div>
+        <div className="min-w-0 flex-1">
+          <h4 className="text-base font-semibold text-foreground">{title}</h4>
+          <p className="mt-1 text-sm leading-relaxed text-muted-dark">{body}</p>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+// ── Checklist ──────────────────────────────────────────────────────
+// Usage: :::checklist with "- Item text" lines
+
+export function Checklist({
+  items,
+}: {
+  items: string[];
+}) {
+  return (
+    <div className="my-6 space-y-2">
+      {items.map((item, i) => (
+        <div
+          key={i}
+          className="flex items-start gap-3 rounded-lg border border-white/[0.06] bg-white/[0.02] px-4 py-2.5 backdrop-blur-sm"
+        >
+          <div className="mt-0.5 flex h-5 w-5 shrink-0 items-center justify-center rounded-md border border-emerald-400/30 bg-emerald-400/[0.08]">
+            <Check className="h-3 w-3 text-emerald-400" aria-hidden="true" />
+          </div>
+          <span className="text-sm leading-relaxed text-muted-dark">{item}</span>
+        </div>
+      ))}
+    </div>
+  );
+}
+
+// ── Code Compare ───────────────────────────────────────────────────
+// Usage: :::code-compare with "### Before" / "### After" sections
+
+export function CodeCompare({
+  before,
+  after,
+  beforeLabel,
+  afterLabel,
+}: {
+  before: string;
+  after: string;
+  beforeLabel?: string;
+  afterLabel?: string;
+}) {
+  return (
+    <div className="my-6 grid gap-3 sm:grid-cols-2">
+      <div className="rounded-xl border border-rose-400/10 bg-rose-400/[0.02] overflow-hidden">
+        <div className="flex items-center gap-2 border-b border-rose-400/10 bg-rose-400/[0.04] px-4 py-2">
+          <div className="h-2 w-2 rounded-full bg-rose-400/50" aria-hidden="true" />
+          <span className="text-xs font-semibold uppercase tracking-wider text-rose-400/70">
+            {beforeLabel ?? "Before"}
+          </span>
+        </div>
+        <pre className="p-4 font-mono text-sm leading-relaxed text-muted-dark overflow-x-auto">
+          <code>{before}</code>
+        </pre>
+      </div>
+      <div className="rounded-xl border border-emerald-400/10 bg-emerald-400/[0.02] overflow-hidden">
+        <div className="flex items-center gap-2 border-b border-emerald-400/10 bg-emerald-400/[0.04] px-4 py-2">
+          <div className="h-2 w-2 rounded-full bg-emerald-400/50" aria-hidden="true" />
+          <span className="text-xs font-semibold uppercase tracking-wider text-emerald-400/70">
+            {afterLabel ?? "After"}
+          </span>
+        </div>
+        <pre className="p-4 font-mono text-sm leading-relaxed text-muted-dark overflow-x-auto">
+          <code>{after}</code>
+        </pre>
+      </div>
     </div>
   );
 }
