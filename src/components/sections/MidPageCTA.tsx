@@ -2,9 +2,10 @@
 
 import { useState } from "react";
 import { motion } from "framer-motion";
-import { Download, Apple, Terminal } from "lucide-react";
+import { Download, Apple, Terminal, BookOpen } from "lucide-react";
 import { fadeUp } from "@/lib/animations";
 import { trackDownloadClick } from "@/lib/analytics";
+import Link from "next/link";
 import PrimaryCTA from "@/components/PrimaryCTA";
 import WaitlistModal from "@/components/WaitlistModal";
 
@@ -44,6 +45,16 @@ export default function MidPageCTA() {
               <span className="text-sm text-muted-dark">notify me</span>
             </button>
           ))}
+        </motion.div>
+
+        <motion.div variants={fadeUp}>
+          <Link
+            href="/guide"
+            className="flex items-center gap-2 rounded-full border border-white/[0.06] bg-white/[0.02] px-6 py-3 text-sm font-medium text-muted-dark transition-colors duration-300 hover:border-brand-cyan/20 hover:bg-brand-cyan/5 hover:text-brand-cyan/80"
+          >
+            <BookOpen className="h-4 w-4" />
+            Browse the Guide
+          </Link>
         </motion.div>
       </motion.div>
 
