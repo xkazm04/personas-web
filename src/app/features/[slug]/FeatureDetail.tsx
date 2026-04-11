@@ -4,12 +4,41 @@ import { useState } from "react";
 import Link from "next/link";
 import Image from "next/image";
 import { motion, AnimatePresence } from "framer-motion";
-import { ArrowLeft, ChevronDown, Check, Download, ArrowRight } from "lucide-react";
+import { ArrowLeft, ChevronDown, Check, Download, ArrowRight, BookOpen } from "lucide-react";
 import { FEATURE_PAGES } from "@/data/feature-pages";
 import { FEATURE_ILLUSTRATIONS } from "@/data/feature-illustrations";
 import { fadeUp, staggerContainer } from "@/lib/animations";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/sections/Footer";
+
+/* ── Guide topic mapping per feature slug ──────────────────────────── */
+
+const FEATURE_GUIDE_MAP: Record<string, { label: string; category: string; topic: string }[]> = {
+  orchestration: [
+    { label: "What are pipelines?", category: "pipelines", topic: "what-are-pipelines" },
+    { label: "The team canvas", category: "pipelines", topic: "the-team-canvas" },
+    { label: "Connecting agents with data flow", category: "pipelines", topic: "connecting-agents-with-data-flow" },
+    { label: "Pipeline execution", category: "pipelines", topic: "pipeline-execution" },
+  ],
+  security: [
+    { label: "How Personas keeps your data safe", category: "credentials", topic: "how-personas-keeps-your-data-safe" },
+    { label: "Understanding the credential vault", category: "credentials", topic: "understanding-the-credential-vault" },
+    { label: "Adding a new credential", category: "credentials", topic: "adding-a-new-credential" },
+    { label: "OAuth setup walkthrough", category: "credentials", topic: "oauth-setup-walkthrough" },
+  ],
+  "multi-provider": [
+    { label: "Choosing your AI provider", category: "getting-started", topic: "choosing-your-ai-provider" },
+    { label: "Cost tracking per model", category: "monitoring", topic: "cost-tracking-per-model" },
+    { label: "Cost tracking per agent", category: "monitoring", topic: "cost-tracking-per-agent" },
+    { label: "Arena testing", category: "testing", topic: "arena-testing" },
+  ],
+  genome: [
+    { label: "Genome evolution basics", category: "testing", topic: "genome-evolution-basics" },
+    { label: "Running a breeding cycle", category: "testing", topic: "running-a-breeding-cycle" },
+    { label: "Fitness scoring explained", category: "testing", topic: "fitness-scoring-explained" },
+    { label: "Adopting evolved prompts", category: "testing", topic: "adopting-evolved-prompts" },
+  ],
+};
 
 /* ------------------------------------------------------------------ */
 
@@ -249,6 +278,40 @@ export default function FeatureDetail({ slug }: Props) {
             ))}
           </motion.div>
         </section>
+
+        {/* ── RELATED GUIDE TOPICS ─────────────────────────────────── */}
+        {FEATURE_GUIDE_MAP[slug] && FEATURE_GUIDE_MAP[slug].length > 0 && (
+          <section className="mx-auto max-w-4xl px-6 py-16">
+            <motion.div
+              initial="hidden"
+              whileInView="visible"
+              viewport={{ once: true, amount: 0.3 }}
+              variants={staggerContainer}
+            >
+              <motion.div variants={fadeUp} className="flex items-center gap-2 mb-8">
+                <BookOpen className="h-5 w-5" style={{ color: feature.color }} />
+                <h2 className="text-2xl font-semibold">Learn more in the Guide</h2>
+              </motion.div>
+
+              <div className="grid gap-3 sm:grid-cols-2">
+                {FEATURE_GUIDE_MAP[slug].map((gt) => (
+                  <motion.div key={gt.topic} variants={fadeUp}>
+                    <Link
+                      href={`/guide/${gt.category}/${gt.topic}`}
+                      className="group flex items-center gap-3 rounded-xl border border-white/[0.06] bg-white/[0.02] px-5 py-4 transition-all duration-300 hover:border-white/[0.12] hover:bg-white/[0.05]"
+                    >
+                      <BookOpen className="h-4 w-4 shrink-0 text-muted-dark group-hover:text-brand-cyan transition-colors" />
+                      <span className="text-sm font-medium text-foreground group-hover:text-brand-cyan transition-colors">
+                        {gt.label}
+                      </span>
+                      <ArrowRight className="ml-auto h-3.5 w-3.5 text-muted-dark opacity-0 group-hover:opacity-100 transition-all group-hover:translate-x-0.5" />
+                    </Link>
+                  </motion.div>
+                ))}
+              </div>
+            </motion.div>
+          </section>
+        )}
 
         {/* ── BOTTOM CTA ───────────────────────────────────────────── */}
         <section className="mx-auto max-w-4xl px-6 pb-24 pt-8">
