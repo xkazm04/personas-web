@@ -53,7 +53,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
     url: `${SITE_URL}/guide/${t.categoryId}/${t.id}`,
     lastModified: now,
     changeFrequency: "monthly" as const,
-    priority: 0.5,
+    priority: 0.6,
   }));
 
   /* ── Template detail pages ────────────────────────────────────────── */

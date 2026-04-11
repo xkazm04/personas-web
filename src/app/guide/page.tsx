@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { Suspense, useState } from "react";
 import { useSearchParams } from "next/navigation";
 import Link from "next/link";
 import Image from "next/image";
@@ -29,7 +29,7 @@ const MODE_OPTIONS: Array<{ value: GuideMode | null; label: string; icon: typeof
 
 /* ── Page ─────────────────────────────────────────────────────────────── */
 
-export default function GuidePage() {
+function GuidePageInner() {
   const searchParams = useSearchParams();
   const initialMode = searchParams.get("mode") as GuideMode | null;
   const [modeFilter, setModeFilter] = useState<GuideMode | null>(initialMode);
@@ -191,5 +191,13 @@ export default function GuidePage() {
         </motion.div>
       </div>
     </div>
+  );
+}
+
+export default function GuidePage() {
+  return (
+    <Suspense>
+      <GuidePageInner />
+    </Suspense>
   );
 }
