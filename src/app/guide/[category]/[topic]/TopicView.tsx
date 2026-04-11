@@ -4,6 +4,8 @@ import Link from "next/link";
 import { ChevronLeft, ChevronRight } from "lucide-react";
 import GuideMarkdown from "@/components/guide/GuideMarkdown";
 import RelatedTopics from "@/components/guide/RelatedTopics";
+import ModuleBadge from "@/components/guide/ModuleBadge";
+import { TOPIC_MODULE_MAP } from "@/data/guide/desktop-modules";
 import type { GuideCategory, GuideTopic } from "@/data/guide/types";
 import type { RelatedTopic } from "@/lib/guide-utils";
 
@@ -31,9 +33,16 @@ export default function TopicView({ category, topic, content, prevTopic, nextTop
           <span className="text-foreground" aria-current="page">{topic.title}</span>
         </nav>
 
+        {/* Desktop app reference + Tags */}
+        <div className="mt-5 flex flex-wrap items-center gap-1.5">
+          {TOPIC_MODULE_MAP[topic.id] && (
+            <ModuleBadge moduleRef={TOPIC_MODULE_MAP[topic.id]} categoryColor={category.color} />
+          )}
+        </div>
+
         {/* Tags */}
         {topic.tags.length > 0 && (
-          <div className="mt-5 flex flex-wrap gap-1.5">
+          <div className="mt-3 flex flex-wrap gap-1.5">
             {topic.tags.map((tag) => (
               <span
                 key={tag}
