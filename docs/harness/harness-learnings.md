@@ -31,10 +31,10 @@
 ## Open follow-ups (from Run #1, 2026-04-10)
 - The Pipeline Showcase section uses tab switching but has no mobile-optimized touch gestures (swipe)
 - The Platform Capabilities cards have no "Learn more" links to dedicated feature pages (these pages don't exist yet)
-- The Pricing comparison table content is still separate from the new Platform Capabilities section — consider consolidating messaging
-- VisionHoneycomb.tsx exists but isn't used anywhere — could be repurposed for a dedicated orchestration page
+- ~~The Pricing comparison table content is still separate from the new Platform Capabilities section~~ DONE (Run #32) — Pricing section now shows tier cards from PRICING_TIERS, links to /pricing
+- VisionHoneycomb.tsx exists but isn't used anywhere — intentionally preserved as potential reuse for orchestration page
 - ~~No dedicated feature deep-dive pages exist yet (/features/orchestration, /features/security, etc.)~~ DONE (Run #10)
-- The legacy `COMPARISON_DATA` in `pricing.ts` (Personas vs n8n only) is still used by the landing page Pricing section. Could be migrated to use `comparison.ts` multi-competitor data instead.
+- ~~The legacy `COMPARISON_DATA` in `pricing.ts` (Personas vs n8n only) is still used by the landing page Pricing section.~~ DONE (Run #32) — Removed. Landing page now uses PRICING_TIERS. /compare uses comparison.ts.
 
 ## Open follow-ups (from Run #30, 2026-04-11)
 - The `TOPIC_MODULE_MAP` in `src/data/guide/desktop-modules.ts` maps all 102 guide topics to desktop app modules. When the desktop app adds new features or renames sidebar items, this file needs updating to stay in sync.
@@ -44,6 +44,6 @@
 - Guide content markdown was written during Runs #3-4 (2026-04-10) and broadly matches the desktop app. No content was rewritten this run — the module badge system provides the cross-reference layer instead.
 
 ## Open follow-ups (from Run #12, 2026-04-10)
-- /compare page has no structured data (JSON-LD ComparisonTable or similar schema)
+- ~~`/compare` page has no structured data~~ DONE (Run #32) — Enhanced JSON-LD with SoftwareApplication types + applicationCategory per competitor
 - Competitor data in `comparison.ts` should be periodically verified against live competitor sites for accuracy
-- The Pricing section's "See full comparison" link is an `<a>` tag, not `<Link>` — minor lint inconsistency since Pricing.tsx is a client section component
+- ~~The Pricing section's "See full comparison" link is an `<a>` tag, not `<Link>`~~ DONE (Run #32) — Pricing.tsx rewritten with `<Link>` throughout
