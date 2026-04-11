@@ -9,6 +9,7 @@ import {
   Dna,
   Zap,
   ArrowRight,
+  BookOpen,
 } from "lucide-react";
 import Link from "next/link";
 import GradientText from "@/components/GradientText";
@@ -20,6 +21,12 @@ import type { LucideIcon } from "lucide-react";
 
 /* ────────────────────────── Data ────────────────────────── */
 
+interface GuideLink {
+  label: string;
+  category: string;
+  topic: string;
+}
+
 interface Capability {
   title: string;
   icon: LucideIcon;
@@ -27,6 +34,7 @@ interface Capability {
   description: string;
   details: string[];
   slug?: string;
+  guideTopics?: GuideLink[];
 }
 
 const capabilities: Capability[] = [
@@ -42,6 +50,10 @@ const capabilities: Capability[] = [
       "Data-flow connections",
       "Real-time execution status",
     ],
+    guideTopics: [
+      { label: "What are pipelines?", category: "pipelines", topic: "what-are-pipelines" },
+      { label: "The team canvas", category: "pipelines", topic: "the-team-canvas" },
+    ],
   },
   {
     title: "Credential Vault",
@@ -54,6 +66,10 @@ const capabilities: Capability[] = [
       "OS keyring (Windows/macOS/Linux)",
       "Automatic token refresh",
       "Zero-knowledge architecture",
+    ],
+    guideTopics: [
+      { label: "How Personas keeps your data safe", category: "credentials", topic: "how-personas-keeps-your-data-safe" },
+      { label: "Understanding the credential vault", category: "credentials", topic: "understanding-the-credential-vault" },
     ],
   },
   {
@@ -68,6 +84,10 @@ const capabilities: Capability[] = [
       "Automatic failover",
       "Cost attribution per model",
     ],
+    guideTopics: [
+      { label: "Choosing your AI provider", category: "getting-started", topic: "choosing-your-ai-provider" },
+      { label: "Cost tracking per model", category: "monitoring", topic: "cost-tracking-per-model" },
+    ],
   },
   {
     title: "Self-Healing Engine",
@@ -79,6 +99,10 @@ const capabilities: Capability[] = [
       "Transient failure recovery",
       "One-click fixes",
       "Auto-rollback on failure",
+    ],
+    guideTopics: [
+      { label: "Self-healing explained", category: "troubleshooting", topic: "self-healing-explained" },
+      { label: "Agent health indicators", category: "agents-prompts", topic: "agent-health-indicators" },
     ],
   },
   {
@@ -93,6 +117,10 @@ const capabilities: Capability[] = [
       "Fitness scoring",
       "Automated A/B testing",
     ],
+    guideTopics: [
+      { label: "Genome evolution basics", category: "testing", topic: "genome-evolution-basics" },
+      { label: "Running a breeding cycle", category: "testing", topic: "running-a-breeding-cycle" },
+    ],
   },
   {
     title: "Trigger System",
@@ -104,6 +132,10 @@ const capabilities: Capability[] = [
       "Cron scheduling",
       "Webhook endpoints",
       "File & clipboard watchers",
+    ],
+    guideTopics: [
+      { label: "How triggers work", category: "triggers", topic: "how-triggers-work" },
+      { label: "Schedule triggers", category: "triggers", topic: "schedule-triggers" },
     ],
   },
 ];
@@ -189,6 +221,23 @@ export default function VisionGrid() {
                   >
                     Learn more
                     <ArrowRight className="h-3.5 w-3.5 transition-transform group-hover:translate-x-1" />
+                  </div>
+                )}
+
+                {/* Guide topic links */}
+                {cap.guideTopics && cap.guideTopics.length > 0 && (
+                  <div className="mt-3 pt-3 border-t border-white/[0.06] space-y-1.5">
+                    {cap.guideTopics.map((gt) => (
+                      <Link
+                        key={gt.topic}
+                        href={`/guide/${gt.category}/${gt.topic}`}
+                        className="flex items-center gap-1.5 text-xs text-muted-dark hover:text-brand-cyan transition-colors"
+                        onClick={(e) => e.stopPropagation()}
+                      >
+                        <BookOpen className="h-3 w-3 shrink-0" />
+                        <span className="truncate">{gt.label}</span>
+                      </Link>
+                    ))}
                   </div>
                 )}
             </div>
