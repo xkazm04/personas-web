@@ -189,7 +189,7 @@ export function MarkdownTable({
               {row.map((cell, ci) => (
                 <td
                   key={ci}
-                  className="px-4 py-2.5 text-muted-dark whitespace-nowrap"
+                  className="px-4 py-2.5 text-muted-dark sm:whitespace-nowrap"
                 >
                   {cell}
                 </td>
