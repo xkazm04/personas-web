@@ -12,12 +12,12 @@ import {
 import {
   Mail,
   MessageSquare,
-  Github,
   CreditCard,
   Calendar,
   HardDrive,
   Cpu,
 } from "lucide-react";
+import { Github } from "@/components/icons/brand-icons";
 import GradientText from "@/components/GradientText";
 import SectionHeading from "@/components/SectionHeading";
 import SectionWrapper from "@/components/SectionWrapper";
@@ -303,7 +303,7 @@ export default function VisionHoneycomb() {
   const [hoveredIdx, setHoveredIdx] = useState<number | null>(null);
 
   const totalExec = agents.reduce((s, a) => s + a.executions, 0);
-  const hexPositions = useMemo(getHexPositions, []);
+  const hexPositions = useMemo(() => getHexPositions(), []);
 
   /* ── Activity tick ── */
   const tick = useCallback(() => {
@@ -535,7 +535,7 @@ export default function VisionHoneycomb() {
                         <div className="flex items-center gap-4 text-[10px] font-mono text-white/40 ml-auto">
                           <span>{agent.executions.toLocaleString()} executions</span>
                           <span>Rate: {agent.rate}%</span>
-                          <span>Last: {Math.floor(Math.random() * 8 + 1)}s ago</span>
+                          <span>Last: {(agent.executions % 8) + 1}s ago</span>
                         </div>
                       </>
                     );

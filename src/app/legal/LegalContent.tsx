@@ -198,11 +198,10 @@ const TAB_CONTENT: Record<TabId, React.FC> = {
 
 /* ── Main Component ──────────────────────────────────────────────── */
 export default function LegalContent() {
-  const [activeTab, setActiveTab] = useState<TabId>("privacy");
+  const [activeTab, setActiveTab] = useState<TabId>(getInitialTab);
 
-  /* Sync tab from URL hash on mount */
+  /* Sync tab from URL hash changes */
   useEffect(() => {
-    setActiveTab(getInitialTab());
     const onHash = () => setActiveTab(getInitialTab());
     window.addEventListener("hashchange", onHash);
     return () => window.removeEventListener("hashchange", onHash);

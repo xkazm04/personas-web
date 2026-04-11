@@ -687,7 +687,7 @@ export default function AgentsChat() {
 
   // Play scenario when activeIndex changes
   useEffect(() => {
-    playScenario();
+    queueMicrotask(() => playScenario());
   }, [activeIndex, playScenario]);
 
   // Auto-cycle

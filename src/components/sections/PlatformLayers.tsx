@@ -213,7 +213,7 @@ export default function PlatformLayers() {
       {/* Header */}
       <motion.div variants={fadeUp} className="text-center mb-20">
         <span className="inline-block rounded-full border border-brand-purple/30 bg-brand-purple/10 px-4 py-1.5 text-sm font-semibold tracking-widest uppercase text-brand-purple shadow-[0_0_15px_rgba(168,85,247,0.2)] font-mono mb-6">
-          How It's Built
+          How It&apos;s Built
         </span>
         <SectionHeading>
           Built to <GradientText>grow</GradientText> with you

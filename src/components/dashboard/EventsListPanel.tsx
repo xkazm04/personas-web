@@ -428,11 +428,11 @@ export default function EventsListPanel() {
   }, [events, selectedIds, replayEvents]);
 
   useEffect(() => {
-    setSelectedIds(new Set());
+    queueMicrotask(() => setSelectedIds(new Set()));
   }, [filter]);
 
   useEffect(() => {
-    setVisibleCount(INITIAL_VISIBLE_EVENTS);
+    queueMicrotask(() => setVisibleCount(INITIAL_VISIBLE_EVENTS));
   }, [filter, query, eventTypeFilter, sourceTypeFilter]);
 
   const columns = useMemo(

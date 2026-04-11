@@ -11,7 +11,7 @@ export default function CookieConsent() {
   const [visible, setVisible] = useState(false);
 
   useEffect(() => {
-    if (!localStorage.getItem(KEY)) setVisible(true);
+    if (!localStorage.getItem(KEY)) queueMicrotask(() => setVisible(true));
   }, []);
 
   const accept = (value: "all" | "essential") => {

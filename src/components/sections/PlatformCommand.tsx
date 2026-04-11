@@ -266,8 +266,10 @@ export default function PlatformCommand() {
 
     if (prefersReducedMotion) {
       /* Skip animation: show full command immediately */
-      setTypedText(fullText);
-      setPhase("output");
+      queueMicrotask(() => {
+        setTypedText(fullText);
+        setPhase("output");
+      });
       return;
     }
 
@@ -285,56 +287,6 @@ export default function PlatformCommand() {
       }, 300);
     }
   }, [phase, typedText, currentCommandIndex, prefersReducedMotion]);
-
-  /* Output reveal */
-  useEffect(() => {
-    if (phase !== "output" || !isActiveRef.current) return;
-
-    const cmd = commands[currentCommandIndex];
-    if (!cmd) return;
-
-    if (prefersReducedMotion) {
-      /* Show all output at once */
-      setOutputLines(cmd.output);
-      timeoutRef.current = setTimeout(() => {
-        if (isActiveRef.current) advanceToNext();
-      }, 800);
-      return;
-    }
-
-    if (outputLines.length < cmd.output.length) {
-      const nextLine = cmd.output[outputLines.length];
-      const delay = nextLine.delay ?? 60;
-      timeoutRef.current = setTimeout(() => {
-        if (isActiveRef.current) {
-          setOutputLines((prev) => [...prev, nextLine]);
-        }
-      }, delay);
-    } else {
-      /* All output shown, pause then advance */
-      timeoutRef.current = setTimeout(() => {
-        if (isActiveRef.current) advanceToNext();
-      }, 1200);
-    }
-  }, [phase, outputLines, currentCommandIndex, prefersReducedMotion]);
-
-  /* Summary phase */
-  useEffect(() => {
-    if (phase !== "summary" || !isActiveRef.current) return;
-
-    setShowSummary(true);
-
-    /* Auto-restart after a long pause */
-    timeoutRef.current = setTimeout(() => {
-      if (isActiveRef.current) {
-        setPhase("done");
-        /* Restart after 4 seconds */
-        timeoutRef.current = setTimeout(() => {
-          if (isActiveRef.current) restart();
-        }, 4000);
-      }
-    }, 3000);
-  }, [phase]);
 
   /* Advance to the next command */
   const advanceToNext = useCallback(() => {
@@ -393,6 +345,56 @@ export default function PlatformCommand() {
     setShowSummary(false);
     setPhase("typing");
   }, []);
+
+  /* Output reveal */
+  useEffect(() => {
+    if (phase !== "output" || !isActiveRef.current) return;
+
+    const cmd = commands[currentCommandIndex];
+    if (!cmd) return;
+
+    if (prefersReducedMotion) {
+      /* Show all output at once */
+      queueMicrotask(() => setOutputLines(cmd.output));
+      timeoutRef.current = setTimeout(() => {
+        if (isActiveRef.current) advanceToNext();
+      }, 800);
+      return;
+    }
+
+    if (outputLines.length < cmd.output.length) {
+      const nextLine = cmd.output[outputLines.length];
+      const delay = nextLine.delay ?? 60;
+      timeoutRef.current = setTimeout(() => {
+        if (isActiveRef.current) {
+          setOutputLines((prev) => [...prev, nextLine]);
+        }
+      }, delay);
+    } else {
+      /* All output shown, pause then advance */
+      timeoutRef.current = setTimeout(() => {
+        if (isActiveRef.current) advanceToNext();
+      }, 1200);
+    }
+  }, [phase, outputLines, currentCommandIndex, prefersReducedMotion]);
+
+  /* Summary phase */
+  useEffect(() => {
+    if (phase !== "summary" || !isActiveRef.current) return;
+
+    queueMicrotask(() => setShowSummary(true));
+
+    /* Auto-restart after a long pause */
+    timeoutRef.current = setTimeout(() => {
+      if (isActiveRef.current) {
+        setPhase("done");
+        /* Restart after 4 seconds */
+        timeoutRef.current = setTimeout(() => {
+          if (isActiveRef.current) restart();
+        }, 4000);
+      }
+    }, 3000);
+  }, [phase]);
 
   /* Current command info */
   const currentCmd = commands[currentCommandIndex];

@@ -14,7 +14,7 @@ export function usePolling(
   );
 
   const callbackRef = useRef(callback);
-  callbackRef.current = callback;
+  useEffect(() => { callbackRef.current = callback; });
 
   const tick = useCallback(async () => {
     try {

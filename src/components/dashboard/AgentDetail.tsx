@@ -43,15 +43,19 @@ export default function AgentDetail({ persona }: { persona: Persona }) {
     let cancelled = false;
     const cached = getCachedAgentDetail(persona.id);
     if (cached) {
-      setData(cached);
-      setError(false);
+      queueMicrotask(() => {
+        setData(cached);
+        setError(false);
+      });
       return () => {
         cancelled = true;
       };
     }
 
-    setData(null);
-    setError(false);
+    queueMicrotask(() => {
+      setData(null);
+      setError(false);
+    });
 
     loadAgentDetail(persona.id)
       .then((next) => {

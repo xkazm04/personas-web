@@ -123,7 +123,7 @@ export default function FAQ() {
     [],
   );
 
-  const handleKeyDown = useCallback(
+  const handleKeyDown =
     (index: number) => (e: React.KeyboardEvent) => {
       const total = faqs.length;
       let nextIndex: number | null = null;
@@ -145,9 +145,7 @@ export default function FAQ() {
       if (nextIndex !== null) {
         buttonRefs.current[nextIndex]?.focus();
       }
-    },
-    [],
-  );
+    };
 
   return (
     <SectionWrapper id="faq" aria-labelledby="faq-heading">

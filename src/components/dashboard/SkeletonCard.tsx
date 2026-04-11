@@ -1,5 +1,6 @@
 "use client";
 
+import { useState } from "react";
 import { motion } from "framer-motion";
 
 export default function SkeletonCard({
@@ -9,6 +10,9 @@ export default function SkeletonCard({
   lines?: number;
   className?: string;
 }) {
+  const [lineWidths] = useState(() =>
+    Array.from({ length: lines }, () => 70 + Math.random() * 30),
+  );
   return (
     <div
       className={`relative overflow-hidden rounded-2xl border border-white/[0.06] bg-gradient-to-br from-white/[0.035] to-white/[0.008] p-5 ${className}`}
@@ -35,11 +39,11 @@ export default function SkeletonCard({
       <div className="h-7 w-24 rounded bg-white/[0.06] animate-pulse mb-3" />
 
       {/* Line placeholders */}
-      {Array.from({ length: lines }).map((_, i) => (
+      {lineWidths.map((w, i) => (
         <div
           key={i}
           className="h-2 rounded bg-white/[0.04] animate-pulse mb-2"
-          style={{ width: `${70 + Math.random() * 30}%`, animationDelay: `${i * 150}ms` }}
+          style={{ width: `${w}%`, animationDelay: `${i * 150}ms` }}
         />
       ))}
     </div>
@@ -47,6 +51,9 @@ export default function SkeletonCard({
 }
 
 export function SkeletonChart({ className = "" }: { className?: string }) {
+  const [barHeights] = useState(() =>
+    Array.from({ length: 14 }, (_, i) => 30 + Math.sin(i * 0.8) * 25 + Math.random() * 20),
+  );
   return (
     <div
       className={`relative overflow-hidden rounded-2xl border border-white/[0.06] bg-gradient-to-br from-white/[0.035] to-white/[0.008] p-5 ${className}`}
@@ -66,12 +73,12 @@ export function SkeletonChart({ className = "" }: { className?: string }) {
         <div className="h-3 w-28 rounded bg-white/[0.06] animate-pulse" />
       </div>
       <div className="h-[200px] flex items-end gap-1 px-4">
-        {Array.from({ length: 14 }).map((_, i) => (
+        {barHeights.map((h, i) => (
           <div
             key={i}
             className="flex-1 rounded-t bg-white/[0.04] animate-pulse"
             style={{
-              height: `${30 + Math.sin(i * 0.8) * 25 + Math.random() * 20}%`,
+              height: `${h}%`,
               animationDelay: `${i * 100}ms`,
             }}
           />

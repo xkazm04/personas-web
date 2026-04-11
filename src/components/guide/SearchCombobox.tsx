@@ -36,7 +36,7 @@ export default function SearchCombobox({
 
   // Debounced search
   useEffect(() => {
-    if (query.length < 2) { setResults([]); setIsOpen(false); return; }
+    if (query.length < 2) { queueMicrotask(() => { setResults([]); setIsOpen(false); }); return; }
     const timer = setTimeout(() => {
       const r = searchGuide(query);
       setResults(r);

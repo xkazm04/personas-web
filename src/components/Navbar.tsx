@@ -48,7 +48,7 @@ export default function Navbar() {
 
   // Close on route change
   useEffect(() => {
-    setMobileOpen(false);
+    queueMicrotask(() => setMobileOpen(false));
   }, [pathname]);
 
   // Lock body scroll and handle Escape key when panel is open

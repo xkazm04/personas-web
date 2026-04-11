@@ -1,3 +1,4 @@
+import { useState } from "react";
 import { AlertTriangle, ShieldAlert, ShieldCheck, CircleDot } from "lucide-react";
 import type { HealthIssue } from "@/lib/types";
 
@@ -11,9 +12,11 @@ const severityStyles: Record<string, { color: string; bgColor: string; icon: Rea
 export default function HealthIssueRow({ issue }: { issue: HealthIssue }) {
   const sev = severityStyles[issue.severity] ?? severityStyles.low;
   const SevIcon = sev.icon;
-  const diff = Date.now() - new Date(issue.detectedAt).getTime();
-  const mins = Math.floor(diff / 60_000);
-  const age = mins < 60 ? `${mins}m ago` : `${Math.floor(mins / 60)}h ago`;
+  const [age] = useState(() => {
+    const diff = Date.now() - new Date(issue.detectedAt).getTime();
+    const mins = Math.floor(diff / 60_000);
+    return mins < 60 ? `${mins}m ago` : `${Math.floor(mins / 60)}h ago`;
+  });
 
   return (
     <div className={`flex items-start gap-3 rounded-xl border p-3.5 transition-colors ${sev.bgColor}`}>

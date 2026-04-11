@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useMemo, useRef, useState } from "react";
+import { useCallback, useMemo, useRef, useState } from "react";
 import { motion } from "framer-motion";
 import dynamic from "next/dynamic";
 import {
@@ -101,29 +101,37 @@ function formatToolName(name: string): string {
   return formatted;
 }
 
-function useDeferredMount(rootMargin = "220px") {
-  const ref = useRef<HTMLDivElement | null>(null);
+function useDeferredMount(rootMargin = "220px"): [(el: HTMLDivElement | null) => void, boolean] {
   const [mounted, setMounted] = useState(false);
+  const observerRef = useRef<IntersectionObserver | null>(null);
 
-  useEffect(() => {
-    const element = ref.current;
-    if (!element || mounted) return;
+  const callbackRef = useCallback(
+    (element: HTMLDivElement | null) => {
+      // Clean up previous observer
+      if (observerRef.current) {
+        observerRef.current.disconnect();
+        observerRef.current = null;
+      }
 
-    const observer = new IntersectionObserver(
-      ([entry]) => {
-        if (entry.isIntersecting) {
-          setMounted(true);
-          observer.disconnect();
-        }
-      },
-      { rootMargin },
-    );
+      if (!element || mounted) return;
 
-    observer.observe(element);
-    return () => observer.disconnect();
-  }, [mounted, rootMargin]);
+      const observer = new IntersectionObserver(
+        ([entry]) => {
+          if (entry.isIntersecting) {
+            setMounted(true);
+            observer.disconnect();
+          }
+        },
+        { rootMargin },
+      );
 
-  return { ref, mounted };
+      observer.observe(element);
+      observerRef.current = observer;
+    },
+    [mounted, rootMargin],
+  );
+
+  return [callbackRef, mounted];
 }
 
 function ChartCardSkeleton({ height }: { height: number }) {
@@ -243,8 +251,8 @@ export default function UsagePage() {
     return `${formatToolName(top.toolName)} is used ${ratio}x more than ${formatToolName(second.toolName)}, making it your most utilized tool integration.`;
   }, [toolUsage]);
 
-  const overTimeDeferred = useDeferredMount("260px");
-  const byPersonaDeferred = useDeferredMount("260px");
+  const [overTimeRef, overTimeMounted] = useDeferredMount("260px");
+  const [byPersonaRef, byPersonaMounted] = useDeferredMount("260px");
 
   if (loading && !data) {
     return (
@@ -300,14 +308,14 @@ export default function UsagePage() {
       </div>
 
       {/* Middle: Usage over time */}
-      <div ref={overTimeDeferred.ref}>
+      <div ref={overTimeRef}>
         <GlowCard accent="emerald" variants={fadeUp} className="p-5 mb-8">
           <h3 className="text-sm font-semibold text-foreground mb-4 flex items-center gap-2">
             <BarChart3 className="h-4 w-4 text-emerald-400" />
             Usage Over Time
             <span className="text-[11px] text-muted-dark font-normal ml-auto">Last 14 days</span>
           </h3>
-          {overTimeDeferred.mounted ? (
+          {overTimeMounted ? (
             <UsageOverTimeAreaChart
               areaData={areaData}
               topTools={topTools}
@@ -320,13 +328,13 @@ export default function UsagePage() {
       </div>
 
       {/* Bottom: Per-persona usage */}
-      <div ref={byPersonaDeferred.ref}>
+      <div ref={byPersonaRef}>
         <GlowCard accent="amber" variants={fadeUp} className="p-5">
           <h3 className="text-sm font-semibold text-foreground mb-4 flex items-center gap-2">
             <Wrench className="h-4 w-4 text-amber-400" />
             Tool Usage by Agent
           </h3>
-          {byPersonaDeferred.mounted ? (
+          {byPersonaMounted ? (
             <UsageByPersonaBarChart
               personaBarData={personaBarData}
               allToolNames={allToolNames}

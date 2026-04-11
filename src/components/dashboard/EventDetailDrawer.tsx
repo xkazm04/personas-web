@@ -1,5 +1,6 @@
 "use client";
 
+import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { X, ArrowRight, Clock, Timer, Tag } from "lucide-react";
 import { type SwarmNode, EVENT_TYPES } from "@/lib/mock-dashboard-data";
@@ -89,9 +90,9 @@ interface EventDetailDrawerProps {
 }
 
 export default function EventDetailDrawer({ node, onClose }: EventDetailDrawerProps) {
-  const eventType = EVENT_TYPES[Math.floor(Math.random() * EVENT_TYPES.length)];
-  const durationMs = Math.floor(200 + Math.random() * 4800);
-  const timestamp = new Date(Date.now() - Math.floor(Math.random() * 3600_000)).toISOString();
+  const [eventType] = useState(() => EVENT_TYPES[Math.floor(Math.random() * EVENT_TYPES.length)]);
+  const [durationMs] = useState(() => Math.floor(200 + Math.random() * 4800));
+  const [timestamp] = useState(() => new Date(Date.now() - Math.floor(Math.random() * 3600_000)).toISOString());
 
   return (
     <AnimatePresence>

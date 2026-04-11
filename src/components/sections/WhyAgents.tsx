@@ -478,8 +478,10 @@ export default function WhyAgents({ role }: { role?: ViewerRole }) {
     let maxAg = 0;
     wfPanels.forEach((p) => { maxWf = Math.max(maxWf, p.scrollHeight); });
     agPanels.forEach((p) => { maxAg = Math.max(maxAg, p.scrollHeight); });
-    if (maxWf > 0) setMeasuredWfHeight(maxWf);
-    if (maxAg > 0) setMeasuredAgHeight(maxAg);
+    queueMicrotask(() => {
+      if (maxWf > 0) setMeasuredWfHeight(maxWf);
+      if (maxAg > 0) setMeasuredAgHeight(maxAg);
+    });
   }, []);
 
   const wfMinH = measuredWfHeight;

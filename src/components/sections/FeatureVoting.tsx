@@ -421,8 +421,10 @@ function VoteCard({
 
   // Sync with hydrated votedIds (initial render has empty set, useEffect fills it)
   useEffect(() => {
-    setVoted(initialVoted);
-    setCount(feature.votes + (initialVoted ? 1 : 0));
+    queueMicrotask(() => {
+      setVoted(initialVoted);
+      setCount(feature.votes + (initialVoted ? 1 : 0));
+    });
   }, [initialVoted, feature.votes]);
   const [expanded, setExpanded] = useState(false);
   const [showComments, setShowComments] = useState(false);
@@ -783,9 +785,11 @@ export default function FeatureVoting() {
 
   // Hydrate from localStorage after mount (avoids SSR mismatch)
   useEffect(() => {
-    setVotedIds(readVotedIds());
-    setComments(readComments());
-    setBoosts(readBoosts());
+    queueMicrotask(() => {
+      setVotedIds(readVotedIds());
+      setComments(readComments());
+      setBoosts(readBoosts());
+    });
   }, []);
 
   const handleToggleVote = useCallback((featureId: string, voted: boolean) => {

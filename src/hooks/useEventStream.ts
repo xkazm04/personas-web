@@ -25,9 +25,11 @@ export function useEventStream() {
   const fetchEvents = useEventStore((s) => s.fetchEvents);
   const isDemo = useAuthStore((s) => s.isDemo);
   const appendRef = useRef(appendEvent);
-  appendRef.current = appendEvent;
   const fetchRef = useRef(fetchEvents);
-  fetchRef.current = fetchEvents;
+  useEffect(() => {
+    appendRef.current = appendEvent;
+    fetchRef.current = fetchEvents;
+  });
 
   useEffect(() => {
     // In dev/demo mode, SSE endpoint doesn't exist — fall back to polling

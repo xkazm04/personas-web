@@ -155,9 +155,11 @@ export function useCanvasCompositor(
   },
 ) {
   const renderRef = useRef(render);
-  renderRef.current = render;
   const onResizeRef = useRef(options?.onResize);
-  onResizeRef.current = options?.onResize;
+  useEffect(() => {
+    renderRef.current = render;
+    onResizeRef.current = options?.onResize;
+  });
 
   const enabled = options?.enabled ?? true;
 

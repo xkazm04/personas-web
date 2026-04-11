@@ -30,9 +30,11 @@ export function useExecutionPolling(
 
   // Reset when executionId changes
   useEffect(() => {
-    setState({ output: [], status: "queued" });
+    queueMicrotask(() => {
+      setState({ output: [], status: "queued" });
+      setStopped(false);
+    });
     offsetRef.current = 0;
-    setStopped(false);
   }, [executionId]);
 
   const stop = useCallback(() => {

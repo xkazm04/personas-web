@@ -93,13 +93,17 @@ const severityStyles: Record<
 // Mock Health Issue Row (extended version)
 // ---------------------------------------------------------------------------
 
+function computeAge(detectedAt: string): string {
+  const diff = Date.now() - new Date(detectedAt).getTime();
+  const mins = Math.floor(diff / 60_000);
+  return mins < 60 ? `${mins}m ago` : `${Math.floor(mins / 60)}h ago`;
+}
+
 function MockHealthIssueRow({ issue }: { issue: MockHealthIssue }) {
   const [expanded, setExpanded] = useState(false);
+  const [age] = useState(() => computeAge(issue.detectedAt));
   const sev = severityStyles[issue.severity] ?? severityStyles.low;
   const SevIcon = sev.icon;
-  const diff = Date.now() - new Date(issue.detectedAt).getTime();
-  const mins = Math.floor(diff / 60_000);
-  const age = mins < 60 ? `${mins}m ago` : `${Math.floor(mins / 60)}h ago`;
 
   return (
     <div

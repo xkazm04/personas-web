@@ -45,7 +45,7 @@ export function SectionObserverProvider({
   const visibleRef = useRef<Set<string>>(new Set());
   // Ordered list of section IDs for determining "last visible"
   const orderedIdsRef = useRef(sectionIds);
-  orderedIdsRef.current = sectionIds;
+  useEffect(() => { orderedIdsRef.current = sectionIds; });
 
   // Map of observed elements
   const elementsRef = useRef<Map<string, HTMLElement>>(new Map());

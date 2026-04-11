@@ -105,9 +105,10 @@ export default function ExecutionsPage() {
     [filtered, visibleCount],
   );
 
-  useEffect(() => {
+  const handleFilterChange = useCallback((newFilter: string) => {
+    setFilter(newFilter);
     setVisibleCount(INITIAL_VISIBLE_EXECUTIONS);
-  }, [filter]);
+  }, []);
 
   const counts = useMemo(() => {
     const c = { all: executions.length, running: 0, completed: 0, failed: 0, cancelled: 0 };
@@ -242,7 +243,7 @@ export default function ExecutionsPage() {
             { key: "cancelled", label: "Cancelled", count: counts.cancelled },
           ]}
           active={filter}
-          onChange={setFilter}
+          onChange={handleFilterChange}
         />
         {executionsLoading && (
           <Loader2 className="h-4 w-4 animate-spin text-muted-dark" />

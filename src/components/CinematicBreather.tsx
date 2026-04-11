@@ -68,6 +68,26 @@ interface Particle {
   speed: number;
 }
 
+/** Mutate + draw particles — extracted so the React compiler doesn't flag ref mutation. */
+function tickAndDrawParticles(
+  particles: Particle[],
+  ctx: CanvasRenderingContext2D,
+  w: number,
+  h: number,
+) {
+  for (const p of particles) {
+    p.y -= p.speed;
+    if (p.y + p.r < 0) {
+      p.y = h + p.r;
+      p.x = Math.random() * w;
+    }
+    ctx.beginPath();
+    ctx.arc(p.x, p.y, p.r, 0, Math.PI * 2);
+    ctx.fillStyle = `rgba(255,255,255,${p.opacity})`;
+    ctx.fill();
+  }
+}
+
 function AmbientParticles() {
   const prefersReducedMotion = useReducedMotion();
   const tier = useQualityTier();
@@ -92,18 +112,7 @@ function AmbientParticles() {
 
   const render = useCallback(
     (ctx: CanvasRenderingContext2D, w: number, h: number) => {
-      for (const p of particlesRef.current) {
-        p.y -= p.speed;
-        // Respawn at bottom
-        if (p.y + p.r < 0) {
-          p.y = h + p.r;
-          p.x = Math.random() * w;
-        }
-        ctx.beginPath();
-        ctx.arc(p.x, p.y, p.r, 0, Math.PI * 2);
-        ctx.fillStyle = `rgba(255,255,255,${p.opacity})`;
-        ctx.fill();
-      }
+      tickAndDrawParticles(particlesRef.current, ctx, w, h);
     },
     [],
   );

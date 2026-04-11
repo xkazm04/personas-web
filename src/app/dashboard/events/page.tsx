@@ -59,7 +59,7 @@ export default function EventsPage() {
 
   useEffect(() => {
     if (events.length > prevCountRef.current) {
-      markAlive();
+      queueMicrotask(markAlive);
     }
     prevCountRef.current = events.length;
   }, [events.length, markAlive]);

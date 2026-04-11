@@ -330,7 +330,7 @@ function RaceTimer({
 
   useEffect(() => {
     if (!isRunning) {
-      setElapsed(0);
+      queueMicrotask(() => setElapsed(0));
       startRef.current = null;
       return;
     }
@@ -590,7 +590,7 @@ export default function AgentsTimeline() {
 
   // Start animation when scenario changes
   useEffect(() => {
-    startAnimation();
+    queueMicrotask(() => startAnimation());
   }, [activeIndex, startAnimation]);
 
   // Auto-cycle

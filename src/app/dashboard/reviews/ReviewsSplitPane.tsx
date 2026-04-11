@@ -245,7 +245,7 @@ function DetailPanel({
             </span>
           </div>
           <div className="rounded-lg bg-black/40 border border-white/[0.06] p-3 overflow-auto max-h-[40vh]">
-            <pre className="whitespace-pre-wrap break-words font-mono text-[11px] leading-relaxed text-slate-300">
+            <pre className="whitespace-pre-wrap wrap-break-word font-mono text-[11px] leading-relaxed text-slate-300">
               {review.content}
             </pre>
           </div>
@@ -354,7 +354,7 @@ export default function ReviewsSplitPane() {
   const escalationEnabled = useReviewStore((s) => s.escalationEnabled);
 
   const [filter, setFilter] = useState("all");
-  const [selectedId, setSelectedId] = useState<string | null>(null);
+  const [selectedIdRaw, setSelectedId] = useState<string | null>(null);
 
   useEffect(() => {
     void fetchReviews();
@@ -393,6 +393,14 @@ export default function ReviewsSplitPane() {
     return c;
   }, [reviews]);
 
+  // Derive effective selectedId: auto-select first if nothing selected or selection not in list
+  const selectedId = useMemo(() => {
+    if (selectedIdRaw && filtered.find((r) => r.id === selectedIdRaw)) {
+      return selectedIdRaw;
+    }
+    return filtered[0]?.id ?? null;
+  }, [selectedIdRaw, filtered]);
+
   const selectedReview = useMemo(
     () => filtered.find((r) => r.id === selectedId) ?? null,
     [filtered, selectedId]
@@ -428,20 +436,6 @@ export default function ReviewsSplitPane() {
     window.addEventListener("keydown", handler);
     return () => window.removeEventListener("keydown", handler);
   }, [selectedIndex, filtered, selectedReview, resolveReview]);
-
-  // Auto-select first review if nothing selected
-  useEffect(() => {
-    if (!selectedId && filtered.length > 0) {
-      setSelectedId(filtered[0].id);
-    }
-  }, [filtered, selectedId]);
-
-  // Clear selection on filter change if the current selection is no longer visible
-  useEffect(() => {
-    if (selectedId && !filtered.find((r) => r.id === selectedId)) {
-      setSelectedId(filtered[0]?.id ?? null);
-    }
-  }, [filter, filtered, selectedId]);
 
   const handleResolve = useCallback(
     (id: string, status: "approved" | "rejected", notes?: string) => {

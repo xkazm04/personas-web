@@ -34,11 +34,11 @@ export default function DownloadCTA() {
   const platforms = usePlatforms();
   const [waitlistPlatform, setWaitlistPlatform] = useState<Platform | null>(null);
 
-  const isFresh = useMemo(() => {
+  const [isFresh] = useState(() => {
     if (!RELEASE_DATE) return false;
     const released = new Date(RELEASE_DATE).getTime();
     return !isNaN(released) && Date.now() - released < SEVEN_DAYS_MS;
-  }, []);
+  });
 
   return (
     <SectionWrapper id="download" aria-labelledby="download-heading" className="noise py-40 md:py-48">
