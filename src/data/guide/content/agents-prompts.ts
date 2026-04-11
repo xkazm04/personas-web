@@ -6,20 +6,22 @@ Setting up a new agent is like hiring a new team member — you give them a name
 
 You'll also select which AI model powers your agent and what tools it can access. These choices shape your agent's capabilities, but don't worry about getting everything perfect on the first try — you can change any setting later.
 
-### Step by Step
-
-- Click **\`Create Agent\`** from the sidebar or home screen
-- Enter a descriptive **name** and pick an **icon**
-- Choose the **AI model** that will power this agent
-- Write your **instructions** in the prompt editor
-- Assign any **tools** your agent needs (email, web search, file access, etc.)
-- Click **\`Save\`** to finish
+:::steps
+1. **Click Create Agent** — from the sidebar or home screen
+2. **Enter a descriptive name** — and pick an icon
+3. **Choose the AI model** — that will power this agent
+4. **Write your instructions** — in the prompt editor
+5. **Assign any tools** — your agent needs (email, web search, file access, etc.)
+6. **Click Save** — to finish
+:::
 
 ### How It Works
 
 The name and icon are just for you — they help you stay organized as your collection grows. The real magic is in the instructions and tool selection, which tell the AI exactly what to do and what it's allowed to use.
 
-> **Tip:** Good agent names describe the task, not the technology. "Morning Email Summary" is more useful than "GPT Agent 3."
+:::tip
+Good agent names describe the task, not the technology. "Morning Email Summary" is more useful than "GPT Agent 3."
+:::
   `,
 
   "writing-effective-prompts": `
@@ -41,7 +43,9 @@ Small changes in wording can have a big impact. Being specific ("summarize in ex
 
 Your prompt is sent to the AI model every time the agent runs. The model treats your instructions like a detailed brief and tries to follow them precisely. The more clearly you communicate, the more accurate the results.
 
-> **Tip:** Write your prompt as if you're explaining the task to a smart but brand-new intern. Assume nothing, explain everything.
+:::tip
+Write your prompt as if you're explaining the task to a smart but brand-new intern. Assume nothing, explain everything.
+:::
   `,
 
   "simple-vs-structured-prompt-mode": `
@@ -51,18 +55,25 @@ Personas gives you two ways to write agent instructions. **Simple mode** is a si
 
 **Structured mode** breaks your prompt into separate sections: identity, instructions, tools, examples, and error handling. This is like filling out a detailed form instead of writing a free-form letter. It helps you think through each aspect of your agent's behavior and produces more reliable results for complex tasks.
 
-### Key Points
+| Feature | Simple Mode | Structured Mode |
+|---|---|---|
+| **Editor** | Single text box | Multiple dedicated sections |
+| **Best for** | Quick tasks, simple agents | Complex agents, production use |
+| **Speed** | Fast to write | Takes more time upfront |
+| **Reliability** | Good for basic tasks | More consistent results |
+| **Flexibility** | Free-form, anything goes | Guided, covers all angles |
 
-- **Simple mode** — one text box, fast to write, great for basic tasks
-- **Structured mode** — multiple sections, more thorough, better for complex agents
-- You can **switch between modes** at any time without losing your work
-- Structured mode helps you catch things you might forget in simple mode
+:::info
+You can switch between modes at any time without losing your work. Structured mode reorganizes your simple prompt into sections, and simple mode combines sections back into one text box.
+:::
 
 ### How It Works
 
 In simple mode, everything goes in one place. In structured mode, each section has a specific purpose — identity defines who the agent is, instructions say what to do, examples show what good output looks like, and error handling covers what to do when things go wrong.
 
-> **Tip:** Start with simple mode for your first few agents. Once you want more control, switch to structured mode and explore the extra sections.
+:::tip
+Start with simple mode for your first few agents. Once you want more control, switch to structured mode and explore the extra sections.
+:::
   `,
 
   "structured-prompt-sections-explained": `
@@ -84,7 +95,9 @@ This separation makes it easier to update one part without accidentally breaking
 
 Each section is sent to the AI model as part of a structured prompt. The model reads all sections together but treats each one as a distinct set of guidance. This means you can update your error handling without touching your core instructions.
 
-> **Tip:** The examples section is the most underused but one of the most powerful. Even one good example can dramatically improve your agent's output quality.
+:::tip
+The examples section is the most underused but one of the most powerful. Even one good example can dramatically improve your agent's output quality.
+:::
   `,
 
   "agent-settings-and-limits": `
@@ -92,7 +105,9 @@ Each section is sent to the AI model as part of a structured prompt. The model r
 
 Settings and limits act as guardrails for your agents — they keep things running smoothly without unexpected surprises. You can control how long an agent runs, how much it's allowed to spend, and how many tasks it can handle at once.
 
+:::info
 These are especially important once you start running agents automatically on schedules or triggers. Setting a budget cap, for example, means your agent will never accidentally run up a big bill.
+:::
 
 ### Key Settings
 
@@ -105,7 +120,9 @@ These are especially important once you start running agents automatically on sc
 
 Open your agent's settings panel and adjust the sliders or enter values. These limits are enforced every time the agent runs. If an agent hits a limit, it stops gracefully and reports what happened — no data is lost.
 
-> **Tip:** Start with conservative limits and loosen them as you gain confidence. It's easier to increase a limit than to undo an expensive mistake.
+:::tip
+Start with conservative limits and loosen them as you gain confidence. It's easier to increase a limit than to undo an expensive mistake.
+:::
   `,
 
   "assigning-tools-to-agents": `
@@ -113,7 +130,9 @@ Open your agent's settings panel and adjust the sliders or enter values. These l
 
 Tools are like apps on a phone — your agent can only use the ones you install. By assigning specific tools, you control exactly what your agent can do. An agent with email access can read and send messages; one with web search can look things up online.
 
+:::warning
 This is also a safety feature. An agent can't accidentally modify files if it doesn't have file access, and it can't send emails if it doesn't have email tools. You're always in control of what your agents can and can't touch.
+:::
 
 ### Available Tool Types
 
@@ -123,11 +142,19 @@ This is also a safety feature. An agent can't accidentally modify files if it do
 - **API calls** — interact with external services and databases
 - **Clipboard** — read from and write to your clipboard
 
-### How It Works
+### How to Assign Tools
 
-In your agent's settings, you'll see a list of available tools. Toggle on the ones your agent needs and leave the rest off. Each tool may require a credential (like an email password) — you'll be prompted to connect one if needed.
+:::steps
+1. **Open your agent's settings** — click the gear icon or open the agent detail page
+2. **Find the Tools section** — you'll see a list of available tools
+3. **Toggle on the tools you need** — and leave the rest off
+4. **Connect credentials if prompted** — some tools require authentication (like an email password)
+5. **Save your changes** — the agent can now use the assigned tools
+:::
 
-> **Tip:** Only assign the tools your agent actually needs. Fewer tools means fewer things that can go wrong, and your agent stays focused on its job.
+:::tip
+Only assign the tools your agent actually needs. Fewer tools means fewer things that can go wrong, and your agent stays focused on its job.
+:::
   `,
 
   "prompt-version-history": `
@@ -148,7 +175,9 @@ You never have to worry about losing a prompt that was working well. Experiment 
 
 Open your agent and click the \`Version History\` tab. You'll see a list of every saved version with timestamps. Click any version to preview it, and click \`Restore\` to make it the active prompt. The current version is saved before restoring, so you can always switch back.
 
-> **Tip:** Before making a big change to a working prompt, make a small "checkpoint" save first. This gives you a clean version to return to if the experiment doesn't work out.
+:::tip
+Before making a big change to a working prompt, make a small "checkpoint" save first. This gives you a clean version to return to if the experiment doesn't work out.
+:::
   `,
 
   "comparing-prompt-versions": `
@@ -169,7 +198,9 @@ This is especially helpful when you've made several edits over time and can't re
 
 Open \`Version History\`, select two versions by checking their boxes, and click \`Compare\`. The diff view appears showing every difference between them. You can use this to understand what changed, decide which version is better, and make informed decisions about future edits.
 
-> **Tip:** If your agent suddenly got worse, compare the current version to the last known good version. The highlighted differences will point you straight to the cause.
+:::tip
+If your agent suddenly got worse, compare the current version to the last known good version. The highlighted differences will point you straight to the cause.
+:::
   `,
 
   "cloning-and-duplicating-agents": `
@@ -190,7 +221,9 @@ It's also useful when you want to create a similar agent for a different purpose
 
 Right-click on any agent in the sidebar (or use the three-dot menu) and select \`Clone\`. A new agent appears with the same configuration and a "(Copy)" label. Rename it, make your changes, and you have a new agent ready to go.
 
-> **Tip:** Use cloning to create A/B test candidates. Clone your agent, change one thing in the clone, and compare their results to see which performs better.
+:::tip
+Use cloning to create A/B test candidates. Clone your agent, change one thing in the clone, and compare their results to see which performs better.
+:::
   `,
 
   "agent-groups-and-organization": `
@@ -211,7 +244,9 @@ You can drag and drop agents between groups, collapse sections you're not using,
 
 Right-click in the sidebar and select \`New Group\`. Give it a name and drag agents into it. You can nest groups, reorder them, and rename them freely. Agents can only belong to one group at a time, but you can move them whenever you like.
 
-> **Tip:** Create a "Testing" group for agents you're still experimenting with. This keeps your production agents separate from works-in-progress.
+:::tip
+Create a "Testing" group for agents you're still experimenting with. This keeps your production agents separate from works-in-progress.
+:::
   `,
 
   "disabling-and-archiving-agents": `
@@ -232,7 +267,9 @@ Sometimes you need to stop an agent without deleting it. **Disabling** pauses an
 
 Open an agent's three-dot menu and select \`Disable\` or \`Archive\`. Disabled agents show a muted icon in the sidebar. Archived agents move to the \`Archive\` section, accessible from the bottom of the sidebar. To bring one back, find it in the archive and click \`Restore\`.
 
-> **Tip:** Archive seasonal agents instead of deleting them. When the season comes around again, just restore and they're ready to go.
+:::tip
+Archive seasonal agents instead of deleting them. When the season comes around again, just restore and they're ready to go.
+:::
   `,
 
   "agent-health-indicators": `
@@ -244,15 +281,19 @@ These indicators save you from having to check each agent individually. A quick 
 
 ### What Each Color Means
 
-- **Green** — healthy, all recent runs succeeded, no issues detected
-- **Yellow** — warning, something may need attention soon (expiring credential, slow performance)
-- **Red** — error, the agent failed recently or has a configuration problem
-- **Gray** — disabled or never run
+| Color | Status | Meaning |
+|---|---|---|
+| **Green** | Healthy | All recent runs succeeded, no issues detected |
+| **Yellow** | Warning | Something may need attention soon (expiring credential, slow performance) |
+| **Red** | Error | The agent failed recently or has a configuration problem |
+| **Gray** | Inactive | Disabled or never run |
 
 ### How It Works
 
 Health is calculated automatically based on recent execution results, credential status, and configuration completeness. Click on the indicator to see a summary of what's causing the current status. From there, you can jump directly to the settings or logs that need attention.
 
-> **Tip:** Make it a habit to scan your sidebar colors once a day. Catching a yellow indicator early prevents it from becoming a red one.
+:::tip
+Make it a habit to scan your sidebar colors once a day. Catching a yellow indicator early prevents it from becoming a red one.
+:::
   `,
 };

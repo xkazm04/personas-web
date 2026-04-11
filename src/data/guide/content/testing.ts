@@ -17,7 +17,9 @@ Without testing, you're relying on hope. With testing, you're relying on evidenc
 
 Personas offers four testing modes — Arena, A/B, Matrix, and Eval — each answering a different question about your agent. You don't need to use all of them. Start by running your agent once and reviewing the output. As you get more comfortable, explore the advanced testing modes.
 
-> **Tip:** Make testing a habit, not a chore. Every time you change a prompt, run a quick test to confirm it still works well. This one habit prevents most agent problems.
+:::tip
+Make testing a habit, not a chore. Every time you change a prompt, run a quick test to confirm it still works well. This one habit prevents most agent problems.
+:::
   `,
 
   "the-testing-lab-overview": `
@@ -29,16 +31,20 @@ Think of the Testing Lab as your agent's training ground. Here's where good agen
 
 ### The Four Modes
 
-- **Arena** — test your prompt across multiple AI models at once to find the best match
-- **A/B Testing** — compare two prompt versions side-by-side to see which performs better
-- **Matrix** — automatically generate and test dozens of prompt variations to find hidden winners
-- **Eval** — test multiple prompts against multiple models in a comprehensive grid
+| Mode | Purpose | Best For |
+|---|---|---|
+| **Arena** | Test your prompt across multiple AI models at once | Finding the best model for your task |
+| **A/B Testing** | Compare two prompt versions side-by-side | Improving a specific prompt |
+| **Matrix** | Auto-generate and test dozens of prompt variations | Discovering unexpected winning combinations |
+| **Eval** | Test multiple prompts against multiple models in a grid | Comprehensive optimization of prompt + model |
 
 ### How It Works
 
 Open the \`Testing Lab\` from the sidebar. Choose a mode based on what you want to learn. Arena is great for choosing a model. A/B testing helps you improve a specific prompt. Matrix explores the space of possibilities. Eval gives you the complete picture when you want to optimize both prompt and model.
 
-> **Tip:** Start with Arena testing to find the right AI model for your agent, then use A/B testing to refine the prompt. This two-step process covers the most important optimization decisions.
+:::tip
+Start with Arena testing to find the right AI model for your agent, then use A/B testing to refine the prompt. This two-step process covers the most important optimization decisions.
+:::
   `,
 
   "arena-testing": `
@@ -59,7 +65,9 @@ This is the fastest way to find the right model for your specific use case, beca
 
 Open the Testing Lab, select \`Arena\`, and choose which models to include. Enter your test input (or use a previous execution's data) and click \`Run\`. Results from each model appear side by side. Review them, vote on the best ones, and the system records your preferences.
 
-> **Tip:** Run Arena tests with 3-4 models rather than every available option. Too many comparisons can be overwhelming. Focus on the top contenders.
+:::tip
+Run Arena tests with 3-4 models rather than every available option. Too many comparisons can be overwhelming. Focus on the top contenders.
+:::
   `,
 
   "ab-testing-prompts": `
@@ -80,7 +88,9 @@ This takes the guesswork out of prompt tweaking. Instead of hoping a change help
 
 Open the Testing Lab and select \`A/B Test\`. Load your current prompt as Version A, then create Version B with your proposed change. Run the test with sample input. Both versions execute and their results appear side by side. Rate each result to determine the winner.
 
-> **Tip:** Only change one thing between versions. If you change the tone *and* the format *and* the length, you won't know which change made the difference.
+:::warning
+Only change one thing between versions. If you change the tone *and* the format *and* the length, you won't know which change made the difference.
+:::
   `,
 
   "matrix-testing": `
@@ -97,11 +107,17 @@ It's like trying every combination on a lock instead of guessing. You might disc
 - **Time-efficient** — test dozens of variations in the time it would take to write three
 - **Ranked results** — variations are sorted from best to worst based on your criteria
 
+:::info
+With three components of three options each, you get 27 variations. The matrix handles the combinatorial explosion so you don't have to write each one manually.
+:::
+
 ### How It Works
 
 Open the Testing Lab and select \`Matrix\`. Define your prompt components — for example, three different introduction styles and four different output formats. The matrix generates all 12 combinations, runs each one with your test input, and ranks the results. Review the top performers and adopt the best.
 
-> **Tip:** Keep each component small and focused (2-3 options per component). With three components of three options each, you already get 27 variations — more than enough to find winners.
+:::tip
+Keep each component small and focused (2-3 options per component). With three components of three options each, you already get 27 variations — more than enough to find winners.
+:::
   `,
 
   "eval-testing": `
@@ -122,7 +138,9 @@ Use Eval when you want to make a major decision about both your prompt and your 
 
 Open the Testing Lab and select \`Eval\`. Add the prompt versions you want to test and the models you want to compare. Click \`Run\` and the system tests every combination. Results populate a grid table where rows are prompts and columns are models (or vice versa). The best combination is highlighted.
 
-> **Tip:** Eval testing is the most thorough but also the most expensive mode. Save it for important decisions and use Arena or A/B testing for quick checks.
+:::warning
+Eval testing is the most thorough but also the most expensive mode. Save it for important decisions and use Arena or A/B testing for quick checks.
+:::
   `,
 
   "rating-and-scoring-results": `
@@ -139,11 +157,17 @@ Rating is quick and intuitive. You don't need to write detailed reviews — a si
 - **Feedback history** — all your ratings are saved and used to improve future recommendations
 - **Consistency matters** — rate results by the same standards each time for reliable insights
 
+:::info
+Your ratings are the primary input for fitness scoring and genome evolution. The more consistently you rate, the better the system can optimize prompts for your specific standards.
+:::
+
 ### How It Works
 
 After a test completes, each result has rating buttons next to it. Click thumbs up for good results and thumbs down for poor ones. For more detail, use the star rating. Your ratings feed into the fitness scoring system, which uses them to identify top-performing prompts and guide evolution.
 
-> **Tip:** Rate results based on what you actually need, not what's technically impressive. A shorter, simpler answer that's correct is often better than a long, elaborate one that misses the point.
+:::tip
+Rate results based on what you actually need, not what's technically impressive. A shorter, simpler answer that's correct is often better than a long, elaborate one that misses the point.
+:::
   `,
 
   "genome-evolution-basics": `
@@ -152,6 +176,10 @@ After a test completes, each result has rating buttons next to it. Click thumbs 
 Genome evolution is Personas' most innovative feature — it automatically breeds better prompts over time. Think of it like plant breeding: the best-performing prompts are combined to create offspring that inherit the best traits from each parent. Each generation gets closer to the ideal instructions for your specific task.
 
 You don't need to understand genetics or algorithms. Just set a goal, start the evolution, and let the system find better prompts than you could write manually.
+
+:::info
+The evolution process is fully automatic once started. You provide the starting prompt and define what "good" means — the system handles creating variations, testing them, and combining winners across generations.
+:::
 
 ### Key Points
 
@@ -164,7 +192,9 @@ You don't need to understand genetics or algorithms. Just set a goal, start the 
 
 You provide a starting prompt and define what "good" means for your use case. The system creates variations, tests them, scores them based on your criteria, and combines the best performers to create a new generation. Over several cycles, the prompts converge on highly optimized instructions.
 
-> **Tip:** Be patient with evolution. The first generation might not be much better than your original prompt, but by generation three or four, you'll typically see significant improvement.
+:::tip
+Be patient with evolution. The first generation might not be much better than your original prompt, but by generation three or four, you'll typically see significant improvement.
+:::
   `,
 
   "running-a-breeding-cycle": `
@@ -174,19 +204,21 @@ A breeding cycle is one round of prompt evolution. You start with a population o
 
 Running a cycle is straightforward — select your agent, set your goals, and click Start. The system handles the rest.
 
-### Step by Step
-
-- Open the **\`Testing Lab\`** and select **\`Genome\`**
-- Choose the **agent** whose prompt you want to evolve
-- Define your **success criteria** (quality, speed, cost, or a combination)
-- Set the **population size** (how many variations per generation)
-- Click **\`Start Cycle\`** and let the system work
+:::steps
+1. **Open the Testing Lab** — and select the Genome tab
+2. **Choose your agent** — the one whose prompt you want to evolve
+3. **Define success criteria** — quality, speed, cost, or a combination
+4. **Set the population size** — how many variations per generation
+5. **Click Start Cycle** — and let the system work
+:::
 
 ### How It Works
 
 The system creates variations of your current prompt by making small, strategic changes — rewording instructions, adjusting structure, adding or removing details. Each variation is tested with sample inputs and scored. The top performers are combined to create the next generation. You can run multiple cycles to keep improving.
 
-> **Tip:** Start with a population size of 8-12 variations. This gives enough diversity to find improvements without being wasteful with AI calls.
+:::tip
+Start with a population size of 8-12 variations. This gives enough diversity to find improvements without being wasteful with AI calls.
+:::
   `,
 
   "adopting-evolved-prompts": `
@@ -203,11 +235,19 @@ This is the payoff of the evolution process — discovering a prompt that works 
 - **Safe rollback** — your previous prompt is saved in version history
 - **Preview first** — read and review the evolved prompt before adopting it
 
-### How It Works
+### How to Adopt
 
-After a breeding cycle completes, the top-performing prompt is highlighted with a \`Adopt\` button. Click it to preview the evolved prompt and see its performance metrics compared to your current version. If you're satisfied, click \`Confirm\` to make it your agent's active prompt.
+:::steps
+1. **Wait for the breeding cycle to complete** — the top-performing prompt is highlighted
+2. **Click the Adopt button** — on the winning prompt variation
+3. **Preview the evolved prompt** — read through it to check for unexpected phrasing
+4. **Review performance metrics** — compare against your current version's scores
+5. **Click Confirm** — to make it your agent's active prompt
+:::
 
-> **Tip:** Always read the evolved prompt before adopting it. The evolution system is smart, but occasionally produces prompts with unexpected phrasing. A quick review ensures quality.
+:::tip
+Always read the evolved prompt before adopting it. The evolution system is smart, but occasionally produces prompts with unexpected phrasing. A quick review ensures quality.
+:::
   `,
 
   "fitness-scoring-explained": `
@@ -228,7 +268,9 @@ The scoring system uses your ratings, execution metrics, and success rates to ca
 
 Each time a prompt variation runs, its result is scored based on your success criteria. Your manual ratings (thumbs up/down, star ratings) are the primary input. These are combined with objective metrics like response time and token cost. The resulting fitness score determines which prompts survive to the next generation in evolution.
 
-> **Tip:** If you care more about quality than cost, adjust the fitness weights to emphasize your ratings over the cost metric. This ensures evolution optimizes for what matters most to you.
+:::tip
+If you care more about quality than cost, adjust the fitness weights to emphasize your ratings over the cost metric. This ensures evolution optimizes for what matters most to you.
+:::
   `,
 
   "test-history-and-trends": `
@@ -249,6 +291,8 @@ This long-term view is motivating — you can see concrete evidence of improveme
 
 Open the Testing Lab and click the \`History\` tab. Browse past tests sorted by date, filter by testing mode or agent, and view results for any historical test. The \`Trends\` sub-tab shows charts with your scores over time, with markers for significant events like prompt changes or model switches.
 
-> **Tip:** Look at your trend lines after every major change. If the line goes up, the change was good. If it goes down, consider reverting. This simple habit keeps your agents improving steadily.
+:::tip
+Look at your trend lines after every major change. If the line goes up, the change was good. If it goes down, consider reverting. This simple habit keeps your agents improving steadily.
+:::
   `,
 };
