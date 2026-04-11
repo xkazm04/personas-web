@@ -14,6 +14,9 @@
 - **2026-04-10** — Internal links in `"use client"` pages MUST use `<Link>` from `next/link`, not `<a>`. ESLint enforces `@next/next/no-html-link-for-pages`.
 - **2026-04-10** — `src/data/comparison.ts` has multi-competitor comparison data (Personas vs CrewAI, LangChain, n8n, AutoGen). `src/data/pricing.ts` still has the legacy Personas-vs-n8n-only `COMPARISON_DATA` used by the landing page Pricing section.
 - **2026-04-11** — Desktop app module mapping lives in `src/data/guide/desktop-modules.ts`. Contains `DESKTOP_MODULES` (hierarchy) and `TOPIC_MODULE_MAP` (102 entries keyed by topic ID). The desktop app has 14 main sidebar modules with 60+ sub-views. Platform-agnostic link handling is in `src/lib/guide-link.ts`.
+- **2026-04-12** — Guide markdown renderer at `src/components/guide/GuideMarkdown.tsx` now supports 10 custom block types: `:::tip`, `:::warning`, `:::info`, `:::success` (callouts), `:::steps` (wizard), `:::keys` (shortcut grid), `:::compare` (side-by-side cards), `:::diagram` (flow nodes), `:::feature` (highlight box), `:::checklist` (styled list), `:::code-compare` (before/after panels). All components in `GuideBlocks.tsx`.
+- **2026-04-12** — Topic pages auto-generate HowTo JSON-LD when content contains `:::steps` blocks. The `extractSteps()` helper in `[topic]/page.tsx` parses steps and `buildHowToJsonLd()` creates the schema.org structured data.
+- **2026-04-12** — Landing page Features.tsx cards now have `guideTopics` deep links (4 cards × 2 links = 8 guide links). VisionGrid had these already (6 capabilities × 2 links = 12 guide links). Total: 20 landing page → guide deep links.
 
 ## Conventions enforced
 - All section components use `SectionWrapper` with a unique `id` prop
@@ -21,7 +24,8 @@
 - Animation patterns: `staggerContainer`, `fadeUp`, `revealFromBelow` from `@/lib/animations`
 - Color theme: cyan (#06b6d4), purple (#a855f7), emerald (#34d399), rose (#f43f5e), amber (#fbbf24)
 - Desktop app cross-references in guide use `ModuleBadge` (full) and `ModuleBadge compact` — never raw `<a href>` links for desktop app navigation
-- Guide markdown custom blocks: `:::tip`, `:::warning`, `:::info`, `:::success` (callouts), `:::steps` (wizard), `:::keys` (shortcut grid), `| pipe | tables |`. All implemented in `GuideBlocks.tsx`, parsed in `GuideMarkdown.tsx`
+- Guide markdown custom blocks: `:::tip`, `:::warning`, `:::info`, `:::success` (callouts), `:::steps` (wizard), `:::keys` (shortcut grid), `:::compare` (side-by-side cards), `:::diagram` (flow nodes), `:::feature` (highlight box), `:::checklist` (styled list), `:::code-compare` (before/after panels), `| pipe | tables |`. All implemented in `GuideBlocks.tsx`, parsed in `GuideMarkdown.tsx`
+- Landing page deep links to guide use `BookOpen` icon + `text-xs text-muted-dark hover:text-brand-cyan` style, matching VisionGrid pattern
 
 ## Anti-patterns to avoid
 - Don't edit `Vision.tsx` directly — it just re-exports `VisionGrid.tsx`
@@ -42,6 +46,13 @@
 - ModuleBadge popover uses static text ("Open the Personas desktop app and navigate to..."). Future enhancement: detect if the guide is running inside the desktop app and change to a "Go to this section" action button.
 - The compact ModuleBadge on category cards shows `moduleRef.label` truncated to 120px. If labels exceed this, consider adding full text on hover.
 - Guide content markdown was written during Runs #3-4 (2026-04-10) and broadly matches the desktop app. No content was rewritten this run — the module badge system provides the cross-reference layer instead.
+
+## Open follow-ups (from Run #31/32, 2026-04-12)
+- Not all 102 topics use the new visual blocks yet. Priority enrichment targets: monitoring (anomaly-detection), troubleshooting (remaining topics), deployment (environment variables). Each would benefit from `:::checklist` or `:::diagram`.
+- `:::compare` blocks with `[recommended]` tag should be reviewed for accuracy — some "recommended" labels were added based on general best practices, not user-specific preferences.
+- The `:::diagram` block renders as a horizontal flow. For topics with branching flows (like conditional routing), a vertical or branching layout would be more appropriate. Consider a `:::tree` block type in the future.
+- `extractSteps()` in topic page.tsx only parses the first `:::steps` block's structure. Topics with multiple `:::steps` blocks generate HowTo with steps from all blocks concatenated — verify this produces valid schema.org data.
+- Category-level pages (`/guide/[category]`) don't have HowTo or enhanced meta yet — only individual topics do. Consider adding ItemList JSON-LD to category pages.
 
 ## Open follow-ups (from Run #12, 2026-04-10)
 - ~~`/compare` page has no structured data~~ DONE (Run #32) — Enhanced JSON-LD with SoftwareApplication types + applicationCategory per competitor
