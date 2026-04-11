@@ -98,7 +98,10 @@ If an agent is costing more than expected, try switching it to a smaller or chea
 
 Different AI models charge different rates, and the per-model view shows you where your money goes across all providers. You might discover that most of your spending is on one model, or that switching a few agents to a cheaper alternative could save you significantly without any loss in quality.
 
-This view is essential for optimizing your overall AI spending.
+:::feature
+**Smart Optimization Hints** color=#34d399
+The system analyzes your usage patterns and automatically suggests where cheaper models might produce similar results — saving money without sacrificing quality.
+:::
 
 ### Key Points
 

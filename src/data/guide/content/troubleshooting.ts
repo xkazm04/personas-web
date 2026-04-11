@@ -6,6 +6,16 @@ Error messages can look scary, but most have simple solutions. This guide transl
 
 Most errors fall into a few categories: credential problems, timeout issues, and input format mismatches. Once you know the patterns, troubleshooting becomes second nature.
 
+### Quick Diagnostic Checklist
+
+:::checklist
+- Check if the AI provider's API is online and your account is active
+- Verify credential health in the Credentials panel (look for red/yellow indicators)
+- Review rate limits — wait a minute if you've sent too many requests
+- Try a manual run with simple test input to isolate the issue
+- Check input format if data comes from a trigger or pipeline
+:::
+
 ### Most Common Errors
 
 - **"Authentication failed"** — your credential has expired or was entered incorrectly. Go to \`Credentials\` and refresh or re-enter it.

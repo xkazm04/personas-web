@@ -76,6 +76,10 @@ This is the most secure way to connect services because your password never touc
 
 ### How It Works
 
+:::diagram
+[Click Connect] --> [Browser opens] --> [Sign in to service] --> [Approve permissions] --> [Token stored securely]
+:::
+
 OAuth works like a valet key for your car — it gives limited access without handing over the master key. The service gives Personas a token that allows specific actions (like reading emails) without granting full account access. If you ever want to revoke access, you can do it from the service's security settings.
 
 :::info
@@ -93,6 +97,11 @@ Some OAuth connections expire periodically. Personas will notify you when a reco
 The credential vault is where all your secrets live — encrypted, local, and under your control. Think of it like a bank safe: even if someone gained access to your computer, they couldn't read the contents without your master password. Every secret is individually wrapped in AES-256 encryption.
 
 The vault file lives on your computer's hard drive. It's never uploaded to the cloud, shared with third parties, or included in backups unless you explicitly choose to.
+
+:::feature
+**AES-256-GCM Encryption** color=#a855f7
+Every credential is individually encrypted with AES-256-GCM and stored locally. Your master key is derived through the OS-native keyring (Windows DPAPI, macOS Keychain, Linux Secret Service) — it never exists in plaintext on disk.
+:::
 
 ### Key Points
 

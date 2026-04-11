@@ -6,14 +6,13 @@ Personas agents can run in two places: on your own computer (local) or on a remo
 
 **Cloud execution** keeps your agents running 24/7, even when your computer is off or you're away. This is ideal for scheduled tasks, webhook-triggered automations, and anything that needs to be always available.
 
-| | Local | Cloud |
-|---|-------|-------|
-| Availability | Only when your computer is on | 24/7, always available |
-| Best for | Testing, private data, supervised tasks | Schedules, webhooks, always-on automation |
-| Setup | Works out of the box | Requires cloud orchestrator connection |
-| Cost | Uses your machine's resources | Managed hosting or BYOI |
-| Data privacy | Data stays on your machine | Data travels to remote servers |
-| Real-time monitoring | Full, immediate visibility | Synced to desktop with slight delay |
+:::compare
+**Local Execution**
+Runs on your machine. Available when your computer is on. Works out of the box with zero setup. Data stays private on your device. Full real-time visibility. Best for testing, private data, and supervised tasks.
+---
+**Cloud Execution** [recommended]
+Runs 24/7 on remote servers. Available even when your computer is off. Requires cloud orchestrator connection. Managed hosting or Bring Your Own Infrastructure. Best for schedules, webhooks, and always-on automation.
+:::
 
 ### How It Works
 
@@ -120,6 +119,10 @@ It's like giving your agent a button that starts your team's standard processes.
 - **Bi-directional** — GitHub can also trigger your Personas agents via webhooks
 
 ### How It Works
+
+:::diagram
+[Agent detects event] --> [Evaluates condition] --> [Calls GitHub API] --> [Workflow starts] --> [Results sync back]
+:::
 
 Add the GitHub Actions tool to your agent and connect it with your GitHub credentials. In your agent's instructions, describe when and how to trigger workflows. For example: "When you find a critical bug, trigger the hotfix-deploy workflow." The agent uses the GitHub API to start the workflow and can pass along relevant data.
 

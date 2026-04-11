@@ -31,13 +31,22 @@ Understanding these categories helps you review and manage your agent's knowledg
 
 ### The Five Categories
 
-| Category | Purpose | Example |
-|----------|---------|---------|
-| **Fact** | Concrete information learned from tasks | "The client prefers formal language" |
-| **Decision** | Choices made and the reasoning behind them | "Chose Express shipping because the order was urgent" |
-| **Insight** | Patterns or observations discovered over multiple runs | "Support tickets spike every Monday morning" |
-| **Learning** | Lessons from mistakes or successes | "Shorter subject lines get higher open rates" |
-| **Warning** | Potential problems or pitfalls to watch out for | "Never send invoices before contract is signed" |
+:::compare
+**Fact**
+Concrete information learned from tasks. Example: "The client prefers formal language." Straightforward pieces of knowledge your agent picks up.
+---
+**Decision**
+Choices made and the reasoning behind them. Example: "Chose Express shipping because the order was urgent." Records the why, not just the what.
+---
+**Insight**
+Patterns discovered over multiple runs. Example: "Support tickets spike every Monday morning." Gets smarter over time.
+---
+**Learning**
+Lessons from mistakes or successes. Example: "Shorter subject lines get higher open rates." Continuous improvement in action.
+---
+**Warning**
+Pitfalls to watch out for. Example: "Never send invoices before contract is signed." Prevents your agent from repeating past mistakes.
+:::
 
 ### How It Works
 
@@ -130,12 +139,23 @@ This tiered system keeps your agent fast and efficient. It recalls the most rele
 
 ### The Four Tiers
 
-| Tier | Availability | Contents | Promotion / Demotion |
-|------|-------------|----------|----------------------|
-| **Core** | Always loaded | Permanent critical rules and facts | Manually pinned; never demoted |
-| **Active** | Loaded on recall | Frequently accessed recent memories | Auto-promoted by usage frequency |
-| **Working** | Session-scoped | Memories from the current task or recent sessions | Created during execution; ages into Active |
-| **Archive** | On-demand only | Older memories not accessed recently | Auto-demoted after inactivity; preserved indefinitely |
+:::diagram
+[Working (session)] --> [Active (frequent)] --> [Core (pinned)]
+:::
+
+:::compare
+**Core**
+Always loaded. Permanent critical rules and facts. Manually pinned and never demoted. Your agent's most important knowledge.
+---
+**Active**
+Loaded on recall. Frequently accessed recent memories. Auto-promoted by usage frequency. The "desk drawer" of useful context.
+---
+**Working**
+Session-scoped. Memories from the current task or recent sessions. Created during execution and ages into Active over time.
+---
+**Archive**
+On-demand only. Older memories not accessed recently. Auto-demoted after inactivity but preserved indefinitely. Nothing is ever lost.
+:::
 
 ### How It Works
 
