@@ -1,25 +1,38 @@
 "use client";
 
+import { useState } from "react";
+import { useSearchParams } from "next/navigation";
 import Link from "next/link";
 import Image from "next/image";
 import { motion } from "framer-motion";
-import { MessageCircle } from "lucide-react";
+import { MessageCircle, Sparkles, Zap } from "lucide-react";
 import GradientText from "@/components/GradientText";
 import SearchCombobox from "@/components/guide/SearchCombobox";
 import { GUIDE_CATEGORIES } from "@/data/guide/categories";
 import { GUIDE_TOPICS } from "@/data/guide/topics";
 import { GUIDE_ILLUSTRATIONS } from "@/data/guide/illustrations";
 import { fadeUp, staggerContainer } from "@/lib/animations";
+import { isTopicVisibleForMode, isCategoryVisibleForMode } from "@/lib/guide-utils";
+import type { GuideMode } from "@/data/guide/types";
 
 /* ── Helpers ─────────────────────────────────────────────────────────── */
 
-function topicCountFor(categoryId: string) {
-  return GUIDE_TOPICS.filter((t) => t.categoryId === categoryId).length;
+function topicCountFor(categoryId: string, modeFilter: GuideMode | null) {
+  return GUIDE_TOPICS.filter((t) => t.categoryId === categoryId && isTopicVisibleForMode(t, modeFilter)).length;
 }
+
+const MODE_OPTIONS: Array<{ value: GuideMode | null; label: string; icon: typeof Sparkles; color: string }> = [
+  { value: null, label: "All", icon: Zap, color: "#94a3b8" },
+  { value: "simple", label: "Simple", icon: Sparkles, color: "#F59E0B" },
+  { value: "power", label: "Power", icon: Zap, color: "#06b6d4" },
+];
 
 /* ── Page ─────────────────────────────────────────────────────────────── */
 
 export default function GuidePage() {
+  const searchParams = useSearchParams();
+  const initialMode = searchParams.get("mode") as GuideMode | null;
+  const [modeFilter, setModeFilter] = useState<GuideMode | null>(initialMode);
 
   return (
     <div className="px-6 pb-24">
@@ -61,6 +74,29 @@ export default function GuidePage() {
           <motion.div variants={fadeUp} className="mx-auto mt-8 max-w-xl">
             <SearchCombobox placeholder="Search 100+ topics..." />
           </motion.div>
+
+          {/* ── Mode filter toggle ──────────────────────────────── */}
+          <motion.div variants={fadeUp} className="mt-6 flex items-center justify-center gap-2">
+            {MODE_OPTIONS.map((opt) => {
+              const Icon = opt.icon;
+              const isActive = modeFilter === opt.value;
+              return (
+                <button
+                  key={opt.label}
+                  onClick={() => setModeFilter(opt.value)}
+                  className={`inline-flex items-center gap-1.5 rounded-full px-4 py-2 text-sm font-medium transition-all duration-200 ${
+                    isActive
+                      ? "border bg-white/[0.06] shadow-sm"
+                      : "border border-transparent text-muted-dark hover:text-foreground hover:bg-white/[0.03]"
+                  }`}
+                  style={isActive ? { borderColor: `${opt.color}40`, color: opt.color } : undefined}
+                >
+                  <Icon className="h-3.5 w-3.5" />
+                  {opt.label}
+                </button>
+              );
+            })}
+          </motion.div>
         </motion.div>
 
         {/* ── Category grid ─────────────────────────────────────── */}
@@ -71,8 +107,8 @@ export default function GuidePage() {
             variants={staggerContainer}
             className="mt-12 grid gap-4 sm:grid-cols-2"
           >
-            {GUIDE_CATEGORIES.map((cat) => {
-              const count = topicCountFor(cat.id);
+            {GUIDE_CATEGORIES.filter((cat) => isCategoryVisibleForMode(cat.id, modeFilter)).map((cat) => {
+              const count = topicCountFor(cat.id, modeFilter);
               const illus = GUIDE_ILLUSTRATIONS[cat.id];
               return (
                 <motion.div key={cat.id} variants={fadeUp}>

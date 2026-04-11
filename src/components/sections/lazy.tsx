@@ -162,6 +162,7 @@ const DownloadCTASection = createLazySection(() => import("@/components/sections
 const PipelineShowcaseSection = createLazySection(() => import("@/components/sections/PipelineShowcase"));
 const ChangelogSection = createLazySection(() => import("@/components/sections/Changelog"));
 const SocialProofSection = createLazySection(() => import("@/components/sections/SocialProof"));
+const ModeSelectorSection = createLazySection(() => import("@/components/sections/ModeSelector"));
 
 export function LazyUseCases() {
   return <UseCasesSection />;
@@ -185,4 +186,8 @@ export function LazyChangelog() {
 
 export function LazySocialProof() {
   return <SocialProofSection />;
+}
+
+export function LazyModeSelector() {
+  return <ModeSelectorSection />;
 }

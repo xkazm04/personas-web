@@ -8,6 +8,7 @@ import {
   LazyDownloadCTA,
   LazyFAQ,
   LazyMidPageCTA,
+  LazyModeSelector,
   LazyPipelineShowcase,
   LazyPricing,
   LazyUseCases,
@@ -208,6 +209,10 @@ export default function Home() {
         <div id="hero">
           <Hero />
         </div>
+
+        <SectionDivider from="cyan" to="amber" />
+        <LazyModeSelector />
+        <SectionDivider from="amber" to="cyan" />
 
         {sections.map(({ Component, glow, fromColor, toColor, dividerFrom, dividerTo, wrapperId }, i) => {
           const stage = (

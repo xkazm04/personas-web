@@ -1,6 +1,26 @@
 import { GUIDE_TOPICS } from "@/data/guide/topics";
 import { GUIDE_CATEGORIES } from "@/data/guide/categories";
-import type { GuideTopic, GuideCategory } from "@/data/guide/types";
+import type { GuideTopic, GuideCategory, GuideMode } from "@/data/guide/types";
+
+/** Resolve the effective mode for a topic: topic-level override > category default > "both". */
+export function getTopicMode(topic: GuideTopic): GuideMode {
+  if (topic.mode) return topic.mode;
+  const cat = GUIDE_CATEGORIES.find((c) => c.id === topic.categoryId);
+  return cat?.mode ?? "both";
+}
+
+/** Whether a topic is visible for a given mode filter. "both" topics are always visible. */
+export function isTopicVisibleForMode(topic: GuideTopic, modeFilter: GuideMode | null): boolean {
+  if (!modeFilter) return true;
+  const topicMode = getTopicMode(topic);
+  return topicMode === "both" || topicMode === modeFilter;
+}
+
+/** Whether a category has any visible topics for a given mode filter. */
+export function isCategoryVisibleForMode(categoryId: string, modeFilter: GuideMode | null): boolean {
+  if (!modeFilter) return true;
+  return GUIDE_TOPICS.some((t) => t.categoryId === categoryId && isTopicVisibleForMode(t, modeFilter));
+}
 
 export interface RelatedTopic {
   topic: GuideTopic;

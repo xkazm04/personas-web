@@ -28,6 +28,7 @@ export const GUIDE_CATEGORIES: GuideCategory[] = [
     description: "Set up when and how your agents run — schedules, webhooks, file watchers, and more.",
     icon: "Zap",
     color: "#fbbf24",
+    mode: "power",
   },
   {
     id: "pipelines",
@@ -35,6 +36,7 @@ export const GUIDE_CATEGORIES: GuideCategory[] = [
     description: "Wire agents together into visual pipelines. Build multi-agent workflows on the team canvas.",
     icon: "GitBranch",
     color: "#34d399",
+    mode: "power",
   },
   {
     id: "memories",
@@ -42,6 +44,7 @@ export const GUIDE_CATEGORIES: GuideCategory[] = [
     description: "Your agents learn and remember. Manage what they know and how they use past experience.",
     icon: "Brain",
     color: "#8b5cf6",
+    mode: "power",
   },
   {
     id: "monitoring",
@@ -49,6 +52,7 @@ export const GUIDE_CATEGORIES: GuideCategory[] = [
     description: "Track every execution in real time. See what your agents do, how well they perform, and what they cost.",
     icon: "BarChart3",
     color: "#10b981",
+    mode: "power",
   },
   {
     id: "testing",
@@ -56,6 +60,7 @@ export const GUIDE_CATEGORIES: GuideCategory[] = [
     description: "Run arena tests, A/B comparisons, and let the genome system evolve your best prompts.",
     icon: "FlaskConical",
     color: "#3b82f6",
+    mode: "power",
   },
   {
     id: "deployment",
@@ -63,6 +68,7 @@ export const GUIDE_CATEGORIES: GuideCategory[] = [
     description: "Deploy agents to the cloud, connect to GitHub Actions, GitLab CI, and n8n workflows.",
     icon: "Cloud",
     color: "#0ea5e9",
+    mode: "power",
   },
   {
     id: "troubleshooting",
