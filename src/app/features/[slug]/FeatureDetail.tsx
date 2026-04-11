@@ -288,10 +288,10 @@ export default function FeatureDetail({ slug }: Props) {
               viewport={{ once: true, amount: 0.3 }}
               variants={staggerContainer}
             >
-              <motion.div variants={fadeUp} className="flex items-center gap-2 mb-8">
-                <BookOpen className="h-5 w-5" style={{ color: feature.color }} />
-                <h2 className="text-2xl font-semibold">Learn more in the Guide</h2>
-              </motion.div>
+              <motion.h2 variants={fadeUp} className="flex items-center gap-2 mb-8 text-2xl font-semibold">
+                <BookOpen className="h-5 w-5" style={{ color: feature.color }} aria-hidden="true" />
+                Learn more in the Guide
+              </motion.h2>
 
               <div className="grid gap-3 sm:grid-cols-2">
                 {FEATURE_GUIDE_MAP[slug].map((gt) => (

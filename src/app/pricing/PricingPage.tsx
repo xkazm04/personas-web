@@ -54,7 +54,7 @@ function TierCard({
       )}
 
       {tier.comingSoon && (
-        <span className="mb-3 inline-flex w-fit items-center rounded-full border border-white/[0.08] bg-white/[0.03] px-2.5 py-0.5 text-xs font-medium text-muted-dark">
+        <span role="status" aria-label="This plan is coming soon" className="mb-3 inline-flex w-fit items-center rounded-full border border-white/[0.08] bg-white/[0.03] px-2.5 py-0.5 text-xs font-medium text-muted-dark">
           Coming soon
         </span>
       )}
@@ -123,16 +123,14 @@ function ComparisonMatrix() {
           Compare <GradientText>every feature</GradientText>
         </h2>
 
-        <div className="rounded-2xl border border-white/[0.06] bg-white/[0.02] backdrop-blur-sm overflow-hidden">
+        <div role="table" aria-label="Feature comparison across pricing tiers" className="rounded-2xl border border-white/[0.06] bg-white/[0.02] backdrop-blur-sm overflow-hidden">
           {/* Header row */}
-          <div className="grid grid-cols-[1fr_80px_80px_80px] sm:grid-cols-[1fr_120px_120px_120px] items-center gap-2 px-4 sm:px-6 py-4 border-b border-white/[0.08] bg-white/[0.03]">
-            <span className="text-sm font-semibold text-foreground">Feature</span>
+          <div role="row" className="grid grid-cols-[1fr_80px_80px_80px] sm:grid-cols-[1fr_120px_120px_120px] items-center gap-2 px-4 sm:px-6 py-4 border-b border-white/[0.08] bg-white/[0.03]">
+            <span role="columnheader" className="text-sm font-semibold text-foreground">Feature</span>
             {TIER_COLUMNS.map((col) => (
-              <div key={col.key} className="text-center">
-                <span className="text-sm font-semibold" style={{ color: col.accent }}>
-                  {col.name}
-                </span>
-              </div>
+              <span key={col.key} role="columnheader" className="text-center text-sm font-semibold" style={{ color: col.accent }}>
+                {col.name}
+              </span>
             ))}
           </div>
 
@@ -154,19 +152,20 @@ function ComparisonMatrix() {
             <div>
               {COMPARISON_FEATURES.map((row) => (
                 <div
+                  role="row"
                   key={row.label}
                   className="grid grid-cols-[1fr_80px_80px_80px] sm:grid-cols-[1fr_120px_120px_120px] items-center gap-2 px-4 sm:px-6 py-3 border-b border-white/[0.03] last:border-b-0 hover:bg-white/[0.015] transition-colors"
                 >
-                  <span className="text-sm text-muted-dark">{row.label}</span>
+                  <span role="rowheader" className="text-sm text-muted-dark">{row.label}</span>
                   {[row.free, row.pro, row.enterprise].map((val, ci) => (
-                    <div key={ci} className="flex justify-center">
+                    <div key={ci} role="cell" aria-label={val ? "Included" : "Not included"} className="flex justify-center">
                       {val ? (
                         <div className="flex h-6 w-6 items-center justify-center rounded-full bg-brand-emerald/15">
-                          <Check className="h-3.5 w-3.5 text-brand-emerald" />
+                          <Check className="h-3.5 w-3.5 text-brand-emerald" aria-hidden="true" />
                         </div>
                       ) : (
                         <div className="flex h-6 w-6 items-center justify-center rounded-full bg-white/5">
-                          <X className="h-3.5 w-3.5 text-muted-dark/40" />
+                          <X className="h-3.5 w-3.5 text-muted-dark/40" aria-hidden="true" />
                         </div>
                       )}
                     </div>

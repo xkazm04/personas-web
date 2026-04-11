@@ -215,13 +215,14 @@ export default function VisionGrid() {
 
                 {/* Learn more link */}
                 {cap.slug && (
-                  <div
-                    className="mt-4 flex items-center gap-1 text-sm font-medium"
+                  <Link
+                    href={`/features/${cap.slug}`}
+                    className="mt-4 inline-flex items-center gap-1 text-sm font-medium transition-colors hover:opacity-80"
                     style={{ color: cap.color }}
                   >
                     Learn more
                     <ArrowRight className="h-3.5 w-3.5 transition-transform group-hover:translate-x-1" />
-                  </div>
+                  </Link>
                 )}
 
                 {/* Guide topic links */}
@@ -232,7 +233,6 @@ export default function VisionGrid() {
                         key={gt.topic}
                         href={`/guide/${gt.category}/${gt.topic}`}
                         className="flex items-center gap-1.5 text-xs text-muted-dark hover:text-brand-cyan transition-colors"
-                        onClick={(e) => e.stopPropagation()}
                       >
                         <BookOpen className="h-3 w-3 shrink-0" />
                         <span className="truncate">{gt.label}</span>
@@ -249,11 +249,7 @@ export default function VisionGrid() {
               variants={cardVariants}
               className="group relative rounded-xl border border-white/[0.06] bg-white/[0.02] backdrop-blur-sm overflow-hidden transition-all duration-500 hover:bg-white/[0.05] hover:border-white/[0.12] hover:scale-[1.02]"
             >
-              {cap.slug ? (
-                <Link href={`/features/${cap.slug}`} aria-label={`Learn more about ${cap.title}`}>{inner}</Link>
-              ) : (
-                inner
-              )}
+              {inner}
             </motion.div>
           );
         })}

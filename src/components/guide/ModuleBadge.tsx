@@ -71,6 +71,7 @@ export default function ModuleBadge({ moduleRef, categoryColor = "#06b6d4", comp
         <div
           ref={popoverRef}
           role="dialog"
+          aria-modal="true"
           aria-label="Desktop app location"
           className="absolute left-0 top-full z-50 mt-2 w-64 rounded-xl border border-white/[0.08] bg-[#0a0a0f]/95 backdrop-blur-md p-4 shadow-xl shadow-black/40"
         >

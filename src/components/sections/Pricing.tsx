@@ -50,7 +50,7 @@ function TierPreview({ tier }: { tier: (typeof PRICING_TIERS)[number] }) {
       <h3 className="mt-1 text-sm font-semibold text-foreground">{tier.name}</h3>
 
       {tier.comingSoon && (
-        <span className="mt-1.5 inline-flex w-fit rounded-full border border-white/[0.08] bg-white/[0.03] px-2 py-0.5 text-[10px] font-medium text-muted-dark">
+        <span role="status" aria-label="This plan is coming soon" className="mt-1.5 inline-flex w-fit rounded-full border border-white/[0.08] bg-white/[0.03] px-2 py-0.5 text-[10px] font-medium text-muted-dark">
           Coming soon
         </span>
       )}

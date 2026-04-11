@@ -172,6 +172,7 @@ export function MarkdownTable({
             {headers.map((h, i) => (
               <th
                 key={i}
+                scope="col"
                 className="px-4 py-2.5 text-left text-sm font-semibold text-foreground whitespace-nowrap"
               >
                 {h}

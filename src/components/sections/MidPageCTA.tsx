@@ -28,9 +28,8 @@ export default function MidPageCTA() {
         viewport={{ once: true, margin: "-40px" }}
         variants={{ hidden: {}, visible: { transition: { staggerChildren: 0.1 } } }}
       >
-        {/* eslint-disable-next-line jsx-a11y/click-events-have-key-events, jsx-a11y/no-static-element-interactions */}
-        <motion.div variants={fadeUp} onClick={() => trackDownloadClick("windows_mid")}>
-          <PrimaryCTA href="#" icon={Download} label="Download for Windows" variant="solid" />
+        <motion.div variants={fadeUp}>
+          <PrimaryCTA href="#" icon={Download} label="Download for Windows" variant="solid" onClick={() => trackDownloadClick("windows_mid")} />
         </motion.div>
 
         <motion.div variants={fadeUp} className="flex items-center gap-3">
