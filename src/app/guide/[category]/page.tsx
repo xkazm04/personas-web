@@ -5,6 +5,7 @@ import { ArrowLeft } from "lucide-react";
 import { GUIDE_CATEGORIES } from "@/data/guide/categories";
 import { GUIDE_TOPICS } from "@/data/guide/topics";
 import { GUIDE_ILLUSTRATIONS } from "@/data/guide/illustrations";
+import { SITE_URL } from "@/lib/seo";
 import CategoryTopics from "./CategoryTopics";
 
 /* ── Static generation ───────────────────────────────────────────────── */
@@ -16,9 +17,13 @@ export function generateStaticParams() {
 export async function generateMetadata({ params }: { params: Promise<{ category: string }> }) {
   const { category } = await params;
   const cat = GUIDE_CATEGORIES.find((c) => c.id === category);
+  const topicCount = GUIDE_TOPICS.filter((t) => t.categoryId === category).length;
   return {
-    title: cat?.name ?? "Guide",
+    title: cat ? `${cat.name} — ${topicCount} Topics` : "Guide",
     description: cat?.description,
+    alternates: {
+      canonical: cat ? `${SITE_URL}/guide/${category}` : undefined,
+    },
   };
 }
 
@@ -32,7 +37,42 @@ export default async function CategoryPage({ params }: { params: Promise<{ categ
   const topics = GUIDE_TOPICS.filter((t) => t.categoryId === cat.id);
   const illus = GUIDE_ILLUSTRATIONS[cat.id];
 
+  const itemListJsonLd = {
+    "@context": "https://schema.org",
+    "@type": "CollectionPage",
+    name: cat.name,
+    description: cat.description,
+    mainEntity: {
+      "@type": "ItemList",
+      numberOfItems: topics.length,
+      itemListElement: topics.map((t, i) => ({
+        "@type": "ListItem",
+        position: i + 1,
+        url: `${SITE_URL}/guide/${cat.id}/${t.id}`,
+        name: t.title,
+      })),
+    },
+  };
+
+  const breadcrumbJsonLd = {
+    "@context": "https://schema.org",
+    "@type": "BreadcrumbList",
+    itemListElement: [
+      { "@type": "ListItem", position: 1, name: "Guide", item: `${SITE_URL}/guide` },
+      { "@type": "ListItem", position: 2, name: cat.name, item: `${SITE_URL}/guide/${cat.id}` },
+    ],
+  };
+
   return (
+    <>
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(itemListJsonLd) }}
+      />
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbJsonLd) }}
+      />
     <div className="px-6 pb-24">
       <div className="mx-auto max-w-4xl">
         {/* Back link */}
@@ -90,5 +130,6 @@ export default async function CategoryPage({ params }: { params: Promise<{ categ
         <CategoryTopics topics={topics} color={cat.color} categoryId={cat.id} />
       </div>
     </div>
+    </>
   );
 }
