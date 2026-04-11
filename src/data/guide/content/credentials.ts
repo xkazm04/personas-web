@@ -17,7 +17,13 @@ The encryption uses AES-256, the same standard used by banks and governments. Ev
 
 When you store a credential, it's immediately encrypted and saved to a local vault file. When an agent needs that credential (like an API key to call a service), it's decrypted just long enough to make the call, then locked again. The raw key is never displayed or logged.
 
-> **Tip:** Think of the credential vault like a safe deposit box at a bank. Your secrets are locked away and only taken out when needed for a specific job.
+:::warning
+Never share your master password or vault file with anyone. These are the keys to all your stored credentials. If you suspect either has been compromised, rotate all stored secrets immediately.
+:::
+
+:::tip
+Think of the credential vault like a safe deposit box at a bank. Your secrets are locked away and only taken out when needed for a specific job.
+:::
   `,
 
   "adding-a-new-credential": `
@@ -29,18 +35,26 @@ Your credential is encrypted immediately and ready for your agents to use. You'l
 
 ### Step by Step
 
-- Navigate to **\`Credentials\`** in the sidebar
-- Click **\`Add Credential\`**
-- Select the **credential type** (API key, OAuth token, password, etc.)
-- **Paste your secret** into the secure input field
-- Give it a **descriptive name** you'll recognize later
-- Click **\`Save\`** — your credential is encrypted and stored
+:::steps
+1. **Navigate to Credentials** — Open the \`Credentials\` section in the sidebar
+2. **Click Add Credential** — Hit the \`Add Credential\` button at the top
+3. **Select the credential type** — Choose from API key, OAuth token, password, or other types
+4. **Paste your secret** — Enter the value into the secure input field
+5. **Give it a descriptive name** — Use something recognizable like "Stripe Live Key" or "Gmail Work Account"
+6. **Click Save** — Your credential is encrypted with AES-256 and stored in the local vault
+:::
 
 ### How It Works
 
 The moment you click Save, your credential is encrypted using AES-256 and stored in the local vault. The raw value is never shown again — you'll only see the credential's name and type. To use it, assign it to an agent in that agent's settings.
 
-> **Tip:** Use clear, descriptive names like "Stripe Live Key" or "Gmail Work Account." When you have many credentials, good names save you from guessing which is which.
+:::warning
+Never paste credentials into chat messages, agent prompts, or unencrypted files. Always use the secure credential input field — it ensures the raw value is encrypted immediately and never logged.
+:::
+
+:::tip
+Use clear, descriptive names like "Stripe Live Key" or "Gmail Work Account." When you have many credentials, good names save you from guessing which is which.
+:::
   `,
 
   "oauth-setup-walkthrough": `
@@ -52,17 +66,25 @@ This is the most secure way to connect services because your password never touc
 
 ### Step by Step
 
-- Go to **\`Credentials\`** and click **\`Add Credential\`**
-- Choose the service you want to connect (Google, GitHub, Slack, etc.)
-- Click **\`Connect\`** — a browser window opens to the service's login page
-- **Sign in** with your account and approve the permissions
-- The window closes and your credential appears as connected
+:::steps
+1. **Go to Credentials** — Open the \`Credentials\` section and click \`Add Credential\`
+2. **Choose the service** — Select the service you want to connect (Google, GitHub, Slack, etc.)
+3. **Click Connect** — A browser window opens to the service's login page
+4. **Sign in and approve** — Log in with your account and approve the requested permissions
+5. **Confirmation** — The window closes automatically and your credential appears as connected
+:::
 
 ### How It Works
 
 OAuth works like a valet key for your car — it gives limited access without handing over the master key. The service gives Personas a token that allows specific actions (like reading emails) without granting full account access. If you ever want to revoke access, you can do it from the service's security settings.
 
-> **Tip:** Some OAuth connections expire periodically. Personas will notify you when a reconnection is needed — it only takes a few seconds.
+:::info
+OAuth tokens grant limited, scoped access — not full account control. Each service defines exactly which permissions are requested. You can review and revoke these permissions at any time from the service's own security settings page.
+:::
+
+:::tip
+Some OAuth connections expire periodically. Personas will notify you when a reconnection is needed — it only takes a few seconds.
+:::
   `,
 
   "understanding-the-credential-vault": `
@@ -83,7 +105,13 @@ The vault file lives on your computer's hard drive. It's never uploaded to the c
 
 When you add a credential, it's encrypted with a key derived from your master password and stored in the vault file. When an agent needs the credential, the vault decrypts it in memory just long enough to use it, then discards the decrypted version. The vault file itself is never in an unencrypted state.
 
-> **Tip:** Choose a strong master password that you don't use anywhere else. This single password protects all your stored credentials.
+:::warning
+Choose a strong master password that you don't use anywhere else. This single password protects all your stored credentials. If your master password is weak or reused, every secret in the vault is at risk.
+:::
+
+:::tip
+Choose a strong master password that you don't use anywhere else. This single password protects all your stored credentials.
+:::
   `,
 
   "credential-health-checks": `
@@ -104,7 +132,9 @@ Think of it as a regular check-up for your connections — a quick test to confi
 
 Personas periodically sends a small test request to each service to verify the credential works. If a test fails, the credential's status changes and you see an alert. Click the alert to go directly to the credential settings where you can refresh or replace it.
 
-> **Tip:** Run a manual health check before deploying a new agent that depends on credentials. This ensures everything is working before your agent tries to use it.
+:::tip
+Run a manual health check before deploying a new agent that depends on credentials. This ensures everything is working before your agent tries to use it.
+:::
   `,
 
   "auto-credential-browser": `
@@ -125,7 +155,9 @@ Instead of hunting through documentation, you select a service and the browser s
 
 When adding a credential, click \`Browse Services\` to open the auto-credential browser. Search or browse for the service you need. The browser shows you a step-by-step guide specific to that service, including where to find your API key and which permissions to grant.
 
-> **Tip:** Even if you're familiar with a service, the auto-browser is worth checking. It often highlights permissions you might have missed that your agents will need.
+:::tip
+Even if you're familiar with a service, the auto-browser is worth checking. It often highlights permissions you might have missed that your agents will need.
+:::
   `,
 
   "which-agents-use-which-credentials": `
@@ -146,7 +178,13 @@ This is especially helpful before you delete or rotate a key. You'll know exactl
 
 Go to \`Credentials\` and look at the \`Usage\` column next to each credential. It shows a count of how many agents use it. Click the count to see the full list. You can also view this from an agent's side — open an agent's settings to see all credentials it depends on.
 
-> **Tip:** Before deleting a credential, always check its usage map. Reassign dependent agents to a new credential first to avoid unexpected failures.
+:::warning
+Before deleting or rotating a credential, always check its usage map. Removing a credential that active agents depend on will cause those agents to fail on their next run.
+:::
+
+:::tip
+Before deleting a credential, always check its usage map. Reassign dependent agents to a new credential first to avoid unexpected failures.
+:::
   `,
 
   "refreshing-expired-tokens": `
@@ -167,7 +205,9 @@ Most of the time, refreshing is a one-click operation. For OAuth connections, it
 
 When a token is nearing expiration, you'll see a yellow warning on the credential and any agents that use it. Click the warning to open the credential settings, where a \`Refresh\` button handles the renewal. For OAuth credentials, Personas often refreshes the token automatically in the background.
 
-> **Tip:** If you see a yellow warning on a credential, refresh it right away. A two-minute refresh now prevents a failed agent run later.
+:::tip
+If you see a yellow warning on a credential, refresh it right away. A two-minute refresh now prevents a failed agent run later.
+:::
   `,
 
   "deleting-credentials-safely": `
@@ -188,7 +228,13 @@ This prevents accidental breakage. You can reassign dependent agents to a differ
 
 Select a credential and click \`Delete\`. Personas shows a list of all agents that depend on it. If any exist, you can reassign them to another credential right from the deletion dialog. Once all dependencies are cleared (or you confirm you want to proceed anyway), the credential is permanently removed from the vault.
 
-> **Tip:** If you're rotating a key (replacing old with new), add the new credential first, reassign your agents, and then delete the old one. This ensures zero downtime.
+:::warning
+Credential deletion is permanent and cannot be undone. The encrypted data is wiped from the vault completely. Make sure you have a backup of the raw secret if you might need it again.
+:::
+
+:::tip
+If you're rotating a key (replacing old with new), add the new credential first, reassign your agents, and then delete the old one. This ensures zero downtime.
+:::
   `,
 
   "connector-catalog": `
@@ -197,6 +243,19 @@ Select a credential and click \`Delete\`. Personas shows a list of all agents th
 The connector catalog is your one-stop shop for service integrations. It lists 40+ pre-configured connectors for popular services — from email providers and cloud storage to payment processors and social media platforms. Each connector comes with built-in configuration so you don't have to figure out the technical details.
 
 Just pick a service, sign in, and your agents can start using it. New connectors are added regularly based on user requests.
+
+### Connector Categories
+
+| Category | Services | Auth Type |
+|---|---|---|
+| Email | Gmail, Outlook, IMAP/SMTP | OAuth / Password |
+| Cloud Storage | Google Drive, Dropbox, OneDrive, S3 | OAuth / API Key |
+| Payments | Stripe, PayPal, Square | API Key |
+| Social Media | Twitter/X, LinkedIn, Facebook | OAuth |
+| Developer Tools | GitHub, GitLab, Jira, Linear | OAuth / API Key |
+| Communication | Slack, Discord, Teams, Telegram | OAuth / Bot Token |
+| CRM | Salesforce, HubSpot, Pipedrive | OAuth / API Key |
+| AI Providers | OpenAI, Anthropic, Google AI | API Key |
 
 ### Key Points
 
@@ -209,6 +268,8 @@ Just pick a service, sign in, and your agents can start using it. New connectors
 
 Open the connector catalog from the \`Credentials\` section and browse or search for the service you need. Click on a connector to see what it does and how to set it up. Follow the guided steps to connect your account. Once connected, the service becomes available as a tool for your agents.
 
-> **Tip:** Browse the catalog even if you don't need a specific service right now. You might discover integrations that inspire new automation ideas you hadn't considered.
+:::tip
+Browse the catalog even if you don't need a specific service right now. You might discover integrations that inspire new automation ideas you hadn't considered.
+:::
   `,
 };

@@ -6,6 +6,18 @@ Triggers are the "when" behind your agents. While prompts tell an agent *what* t
 
 Personas offers several trigger types: manual buttons, time-based schedules, webhooks from external services, file watchers, clipboard monitors, chain triggers, and event listeners. You can mix and match them freely.
 
+### Trigger Type Comparison
+
+| Trigger Type | Activation | Best For | Input Source |
+|---|---|---|---|
+| Manual | Button click | Testing, on-demand tasks | User-typed text |
+| Schedule | Time-based (cron) | Routine reports, daily checks | None (time-based) |
+| Webhook | External HTTP call | Reacting to external events | HTTP payload |
+| Clipboard | Copy event match | Quick lookups, translations | Copied text |
+| File Watcher | File system event | Processing uploads, imports | File path & contents |
+| Chain | Previous agent finishes | Multi-step pipelines | Previous agent output |
+| Event-Based | Internal event emitted | Reactive, decoupled systems | Event data payload |
+
 ### Key Points
 
 - Each agent can have **multiple triggers** of different types
@@ -17,7 +29,9 @@ Personas offers several trigger types: manual buttons, time-based schedules, web
 
 Open your agent's trigger settings and add the type you want. Configure its conditions (like "every Monday at 9 AM" for a schedule trigger) and save. From that point on, your agent will start automatically whenever the trigger condition is met.
 
-> **Tip:** Start with a manual trigger so you can test your agent on demand. Add automatic triggers once you're confident it works correctly.
+:::tip
+Start with a manual trigger so you can test your agent on demand. Add automatic triggers once you're confident it works correctly.
+:::
   `,
 
   "manual-triggers": `
@@ -38,7 +52,9 @@ This is perfect for tasks you don't want to automate yet, or for agents you only
 
 Open any agent and click the green \`Run\` button. If the agent accepts input, you'll see a text field where you can type or paste data before starting. The agent processes your request and shows results in the output panel. You can run as many times as you like.
 
-> **Tip:** Use manual triggers during development. Once your agent consistently produces good results, add a schedule or webhook trigger to automate it.
+:::tip
+Use manual triggers during development. Once your agent consistently produces good results, add a schedule or webhook trigger to automate it.
+:::
   `,
 
   "schedule-triggers": `
@@ -55,11 +71,19 @@ You set the schedule once, and your agent handles the rest. No need to remember 
 - Schedules respect your **timezone** automatically
 - You can **pause and resume** a schedule without deleting it
 
-### How It Works
+### Setting Up a Schedule
 
-In your agent's trigger settings, select \`Schedule\` and pick a frequency. For daily triggers, choose the time of day. For weekly, pick the day and time. For anything more specific, use the custom schedule builder. Your agent will run automatically at every scheduled time.
+:::steps
+1. **Open trigger settings** — Navigate to your agent and open the trigger configuration panel
+2. **Select Schedule type** — Choose \`Schedule\` from the trigger type dropdown
+3. **Pick a frequency** — Select hourly, daily, weekly, or custom
+4. **Set the time** — For daily triggers, choose the time of day; for weekly, pick the day and time
+5. **Save and activate** — Click Save and your agent will run automatically at every scheduled time
+:::
 
-> **Tip:** Schedule triggers work best for tasks with predictable timing. For example, you might set up an agent to check your email every morning at 8 AM and send you a summary.
+:::tip
+Schedule triggers work best for tasks with predictable timing. For example, you might set up an agent to check your email every morning at 8 AM and send you a summary.
+:::
   `,
 
   "webhook-triggers": `
@@ -76,11 +100,19 @@ This is powerful because it means your agents can react to real-world events in 
 - Webhooks work with **any service** that supports sending webhooks
 - You can add **filters** so your agent only reacts to specific events
 
-### How It Works
+### Connecting a Webhook
 
-Add a webhook trigger to your agent and copy the generated URL. Paste that URL into the external service's webhook settings. Now, whenever that service sends a notification (like a new order, a code push, or a payment), your agent receives the data and starts working.
+:::steps
+1. **Add a webhook trigger** — Open your agent's trigger settings and add a new Webhook trigger
+2. **Copy the generated URL** — Each webhook trigger gets a unique endpoint URL
+3. **Configure the external service** — Paste the URL into the service's webhook settings (e.g., Stripe Dashboard, GitHub repo settings)
+4. **Set optional filters** — Add conditions so your agent only reacts to specific event types
+5. **Test the connection** — Use the built-in \`Send Test\` button to verify everything is wired up
+:::
 
-> **Tip:** Test your webhook by using the built-in \`Send Test\` button before connecting the real service. This confirms everything is wired up correctly.
+:::tip
+Test your webhook by using the built-in \`Send Test\` button before connecting the real service. This confirms everything is wired up correctly.
+:::
   `,
 
   "clipboard-monitor": `
@@ -101,7 +133,9 @@ It turns your clipboard into a trigger — copy something specific, and your age
 
 Add a clipboard monitor trigger to your agent and define what kind of copied text should activate it. For example, set it to trigger on any text containing "@" to catch email addresses. When you copy matching text anywhere on your computer, your agent receives it and runs.
 
-> **Tip:** Be specific with your matching rules to avoid your agent triggering on every copy-paste. Matching a keyword like "invoice" or a pattern like email addresses keeps things focused.
+:::tip
+Be specific with your matching rules to avoid your agent triggering on every copy-paste. Matching a keyword like "invoice" or a pattern like email addresses keeps things focused.
+:::
   `,
 
   "file-watcher-triggers": `
@@ -122,7 +156,9 @@ This is ideal for workflows where files arrive at unpredictable times — expens
 
 Add a file watcher trigger, point it at a folder, and choose which events to watch for. When a matching file event happens, your agent starts with the file information as input. For example, an agent watching a "Reports" folder could automatically summarize every new PDF that appears.
 
-> **Tip:** Create a dedicated "Drop Zone" folder for your agent to watch. This keeps things clean and avoids triggering on files you didn't intend to process.
+:::tip
+Create a dedicated "Drop Zone" folder for your agent to watch. This keeps things clean and avoids triggering on files you didn't intend to process.
+:::
   `,
 
   "chain-triggers": `
@@ -143,7 +179,9 @@ For example, a research agent could gather data, pass it to a writing agent that
 
 In your agent's trigger settings, add a \`Chain\` trigger and select which agent should trigger this one. When that source agent finishes successfully, its output is automatically sent as input to your agent. You can chain as many agents as you need.
 
-> **Tip:** Keep each agent in the chain focused on one specific task. Small, specialized agents are easier to debug and reuse than one massive do-everything agent.
+:::tip
+Keep each agent in the chain focused on one specific task. Small, specialized agents are easier to debug and reuse than one massive do-everything agent.
+:::
   `,
 
   "event-based-triggers": `
@@ -164,7 +202,9 @@ This is the most flexible trigger type. Unlike webhooks (which come from externa
 
 Define the event your agent should listen for (e.g., "report-generated" or "error-detected"). When any part of your system emits that event, all subscribed agents receive it and start running. The event's data payload is passed as input to each triggered agent.
 
-> **Tip:** Events are perfect for building reactive systems. Instead of one monolithic agent, create several focused agents that each respond to relevant events.
+:::tip
+Events are perfect for building reactive systems. Instead of one monolithic agent, create several focused agents that each respond to relevant events.
+:::
   `,
 
   "combining-multiple-triggers": `
@@ -185,7 +225,9 @@ For example, your email summary agent might run every morning at 8 AM (schedule)
 
 Open your agent's trigger settings and add as many triggers as you need. Each one operates independently — a schedule trigger fires at its appointed time regardless of whether a webhook trigger also exists. All triggers feed into the same agent with the same instructions.
 
-> **Tip:** Combine a schedule trigger for regular runs with a manual trigger for on-demand use. This covers both routine needs and unexpected situations.
+:::tip
+Combine a schedule trigger for regular runs with a manual trigger for on-demand use. This covers both routine needs and unexpected situations.
+:::
   `,
 
   "testing-and-debugging-triggers": `
@@ -202,10 +244,18 @@ Debugging a trigger that isn't firing is also straightforward. The trigger log s
 - Check **filter conditions** to make sure they match what you expect
 - Test webhooks with the built-in **\`Send Test\`** button
 
-### How It Works
+### Debugging a Trigger Step by Step
 
-Open your trigger's settings and click \`Test\`. For schedule triggers, the tester shows when the next run would occur. For webhooks, it lets you send sample data. For file watchers, it simulates a file event. The result tells you whether the trigger would fire and what data your agent would receive.
+:::steps
+1. **Open trigger settings** — Navigate to the trigger you want to test and click \`Test\`
+2. **Review simulated results** — For schedules, see when the next run would occur; for webhooks, send sample data; for file watchers, simulate a file event
+3. **Check the trigger log** — Open the log to see every activation attempt, including filtered-out and failed ones
+4. **Inspect filter conditions** — Verify your filters match the data you expect; a too-strict filter is the most common issue
+5. **Fix and retest** — Adjust configuration, permissions, or filters and run the test again until the trigger fires correctly
+:::
 
-> **Tip:** If a trigger isn't firing, check the trigger log first. It often reveals the cause — a filter that's too strict, a missing permission, or a configuration typo.
+:::tip
+If a trigger isn't firing, check the trigger log first. It often reveals the cause — a filter that's too strict, a missing permission, or a configuration typo.
+:::
   `,
 };
