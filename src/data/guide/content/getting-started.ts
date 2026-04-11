@@ -77,15 +77,19 @@ An AI agent is like a smart assistant that follows your instructions to complete
 
 Think of it this way: a chatbot is like asking a friend for advice, while an agent is like hiring an assistant who actually does the work for you. You write the instructions once, and your agent can repeat that task as many times as you need.
 
-| | Chatbot | AI Agent |
-|---|---------|----------|
-| Interaction | Answers questions | Completes tasks |
-| Actions | Suggests | Executes |
-| Tools | None | Email, files, web, APIs |
-| Automation | Manual only | Scheduled, triggered, or manual |
-| Programming | Not needed | Not needed |
+:::compare
+**Chatbot**
+Answers questions and makes suggestions. You type, it responds. Interaction is manual and one-off — the chatbot doesn't take actions or remember across sessions. Great for quick lookups, but you do all the work.
+---
+**AI Agent** [recommended]
+Completes tasks from start to finish. You write instructions once, and the agent executes them — sending emails, processing files, searching the web. Runs on schedules, triggers, or manually. The agent does the work for you.
+:::
 
 ### How It Works
+
+:::diagram
+[You write instructions] --> [Agent reads them] --> [AI model processes] --> [Tools execute actions] --> [Results delivered]
+:::
 
 You create an agent by describing a task in everyday language. The AI model reads your instructions and carries them out using the tools you've provided. For example, an agent with email access can read your inbox, draft replies, and send them — all based on the rules you set.
 
@@ -125,12 +129,19 @@ AI providers are the engines that power your agents. Personas supports several p
 
 You're not locked into one choice. You can assign different providers to different agents, and switch anytime. Most users start with one provider and experiment with others as they get comfortable.
 
-| Provider | Best For | Strengths |
-|----------|----------|-----------|
-| Claude | Following detailed instructions | Nuance, safety, long context |
-| OpenAI (GPT) | General-purpose tasks | Versatility, wide ecosystem |
-| Google Gemini | Research and large text | Speed, multimodal input |
-| Local models | Privacy-sensitive work | No data leaves your machine |
+:::compare
+**Claude (Anthropic)** [recommended]
+Best for following detailed instructions. Excels at nuance, safety-aware responses, and working with long documents. A great default choice for most agent tasks.
+---
+**OpenAI (GPT)**
+Best for general-purpose tasks. Offers versatility and a wide ecosystem of integrations. Strong all-rounder with the largest community.
+---
+**Google Gemini**
+Best for research and processing large text. Fast responses and multimodal input support (text, images, code).
+---
+**Local Models (Ollama)**
+Best for privacy-sensitive work. Your data never leaves your machine. Trade-off: smaller models may be less capable than cloud providers.
+:::
 
 ### How It Works
 
@@ -148,14 +159,16 @@ Personas offers three tiers to match different needs. **Starter** is free and pe
 
 **Team** adds collaboration features, letting multiple people share agents and work together. **Builder** unlocks the most advanced features — complex pipelines, genome evolution, and unlimited triggers. You can upgrade or downgrade anytime, and your agents stay intact.
 
-| Feature | Starter (Free) | Team | Builder |
-|---------|----------------|------|---------|
-| Agents | Up to 5 | Unlimited | Unlimited |
-| Triggers | Manual + Schedule | All types | All types |
-| Pipelines | — | Team pipelines | Advanced pipelines |
-| Testing | Basic | Full lab | Genome evolution |
-| Deployment | Local only | Cloud | Cloud + BYOI |
-| Support | Community | Priority | Priority |
+:::compare
+**Starter (Free)**
+Up to 5 agents with manual + schedule triggers. Local-only deployment. Basic testing capabilities and community support. Perfect for learning and personal automation.
+---
+**Team**
+Unlimited agents with all trigger types. Team pipelines and full testing lab. Cloud deployment with priority support. Built for collaboration.
+---
+**Builder** [recommended]
+Everything in Team plus advanced pipelines, genome evolution, and BYOI (Bring Your Own Infrastructure). The full power of Personas, unrestricted.
+:::
 
 ### How It Works
 
@@ -173,13 +186,13 @@ Personas is designed to be lightweight and run on most modern computers. You don
 
 The app uses minimal resources when idle and scales up only when agents are actively running. Most of the heavy lifting happens on the AI provider's servers, not on your computer.
 
-| Requirement | Minimum | Recommended |
-|-------------|---------|-------------|
-| OS | Windows 10 / macOS 12 / Ubuntu 20.04+ | Latest version |
-| RAM | 4 GB | 8 GB+ |
-| Disk Space | 500 MB | 1 GB+ |
-| Internet | Stable connection | Broadband |
-| CPU | Any modern dual-core | Quad-core |
+:::checklist
+- Windows 10+, macOS 12+, or Ubuntu 20.04+ (latest version recommended)
+- At least 4 GB RAM (8 GB+ recommended)
+- 500 MB free disk space (1 GB+ recommended)
+- Stable internet connection (broadband recommended)
+- Any modern dual-core CPU (quad-core recommended)
+:::
 
 ### How It Works
 

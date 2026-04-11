@@ -31,13 +31,15 @@ A prompt is the set of instructions you give your agent. Good prompts are like g
 
 Small changes in wording can have a big impact. Being specific ("summarize in exactly 3 bullet points") works much better than being vague ("give me a summary"). Tell your agent what to do, how to do it, and what the result should look like.
 
-### Key Points
+### Prompt Quality Checklist
 
-- **Be specific** — say exactly what you want, not roughly what you want
-- **Give examples** — show your agent what good output looks like
-- **Set the format** — tell it whether you want bullets, paragraphs, tables, etc.
-- **Define boundaries** — explain what to skip or avoid, not just what to include
-- **Use simple language** — clear instructions work better than fancy wording
+:::checklist
+- Be specific — say exactly what you want, not roughly what you want
+- Give examples — show your agent what good output looks like
+- Set the format — tell it whether you want bullets, paragraphs, tables, etc.
+- Define boundaries — explain what to skip or avoid, not just what to include
+- Use simple language — clear instructions work better than fancy wording
+:::
 
 ### How It Works
 
@@ -55,13 +57,13 @@ Personas gives you two ways to write agent instructions. **Simple mode** is a si
 
 **Structured mode** breaks your prompt into separate sections: identity, instructions, tools, examples, and error handling. This is like filling out a detailed form instead of writing a free-form letter. It helps you think through each aspect of your agent's behavior and produces more reliable results for complex tasks.
 
-| Feature | Simple Mode | Structured Mode |
-|---|---|---|
-| **Editor** | Single text box | Multiple dedicated sections |
-| **Best for** | Quick tasks, simple agents | Complex agents, production use |
-| **Speed** | Fast to write | Takes more time upfront |
-| **Reliability** | Good for basic tasks | More consistent results |
-| **Flexibility** | Free-form, anything goes | Guided, covers all angles |
+:::compare
+**Simple Mode**
+A single text box — write freely, like typing a note. Fast to create and edit. Best for quick tasks and simple agents where you want flexibility. Good for beginners and experimentation.
+---
+**Structured Mode** [recommended]
+Multiple dedicated sections: identity, instructions, tools, examples, error handling. Takes more time upfront but produces more reliable, consistent results. Best for complex agents and production use.
+:::
 
 :::info
 You can switch between modes at any time without losing your work. Structured mode reorganizes your simple prompt into sections, and simple mode combines sections back into one text box.
@@ -84,6 +86,10 @@ When you use structured mode, your prompt is split into five sections, each givi
 This separation makes it easier to update one part without accidentally breaking another. It also helps the AI model understand your intentions more clearly.
 
 ### The Five Sections
+
+:::diagram
+[Identity] --> [Instructions] --> [Tools] --> [Examples] --> [Error Handling]
+:::
 
 - **Identity** — who is this agent? Define its personality, expertise, and communication style
 - **Instructions** — the core task. What should the agent do, step by step?
@@ -187,6 +193,18 @@ When you're trying to understand why your agent started behaving differently, co
 
 This is especially helpful when you've made several edits over time and can't remember which one caused a particular improvement or problem.
 
+:::code-compare
+### Original
+Summarize the emails in my inbox.
+Give me the key points.
+---
+### Improved
+Read my 5 most recent unread emails.
+For each email, write a 2-sentence summary
+including the sender name and action needed.
+Format as a numbered list.
+:::
+
 ### Key Points
 
 - **Side-by-side view** — see both versions next to each other with changes highlighted
@@ -278,6 +296,11 @@ Archive seasonal agents instead of deleting them. When the season comes around a
 Every agent has a small colored dot next to its name that tells you its status at a glance. **Green** means everything is running smoothly. **Yellow** means something needs your attention — maybe a credential is about to expire or a recent run had a warning. **Red** means there's a problem that needs fixing.
 
 These indicators save you from having to check each agent individually. A quick look at your sidebar tells you the health of your entire setup.
+
+:::feature
+**At-a-Glance Health Monitoring**
+Personas continuously tracks execution results, credential expiry, and configuration completeness for every agent. Health indicators update automatically — no manual checks required.
+:::
 
 ### What Each Color Means
 
