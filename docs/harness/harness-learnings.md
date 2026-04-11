@@ -13,12 +13,14 @@
 - **2026-04-10** — Navbar routes are in `useRoutes()` inside `src/components/Navbar.tsx`. Adding a new nav item requires: (1) add to useRoutes array, (2) add i18n key to Translations interface + all 14 language files.
 - **2026-04-10** — Internal links in `"use client"` pages MUST use `<Link>` from `next/link`, not `<a>`. ESLint enforces `@next/next/no-html-link-for-pages`.
 - **2026-04-10** — `src/data/comparison.ts` has multi-competitor comparison data (Personas vs CrewAI, LangChain, n8n, AutoGen). `src/data/pricing.ts` still has the legacy Personas-vs-n8n-only `COMPARISON_DATA` used by the landing page Pricing section.
+- **2026-04-11** — Desktop app module mapping lives in `src/data/guide/desktop-modules.ts`. Contains `DESKTOP_MODULES` (hierarchy) and `TOPIC_MODULE_MAP` (102 entries keyed by topic ID). The desktop app has 14 main sidebar modules with 60+ sub-views. Platform-agnostic link handling is in `src/lib/guide-link.ts`.
 
 ## Conventions enforced
 - All section components use `SectionWrapper` with a unique `id` prop
 - Glass-morphism card style: `rounded-xl border border-white/[0.06] bg-white/[0.02] backdrop-blur-sm`
 - Animation patterns: `staggerContainer`, `fadeUp`, `revealFromBelow` from `@/lib/animations`
 - Color theme: cyan (#06b6d4), purple (#a855f7), emerald (#34d399), rose (#f43f5e), amber (#fbbf24)
+- Desktop app cross-references in guide use `ModuleBadge` (full) and `ModuleBadge compact` — never raw `<a href>` links for desktop app navigation
 
 ## Anti-patterns to avoid
 - Don't edit `Vision.tsx` directly — it just re-exports `VisionGrid.tsx`
@@ -32,6 +34,13 @@
 - VisionHoneycomb.tsx exists but isn't used anywhere — could be repurposed for a dedicated orchestration page
 - ~~No dedicated feature deep-dive pages exist yet (/features/orchestration, /features/security, etc.)~~ DONE (Run #10)
 - The legacy `COMPARISON_DATA` in `pricing.ts` (Personas vs n8n only) is still used by the landing page Pricing section. Could be migrated to use `comparison.ts` multi-competitor data instead.
+
+## Open follow-ups (from Run #30, 2026-04-11)
+- The `TOPIC_MODULE_MAP` in `src/data/guide/desktop-modules.ts` maps all 102 guide topics to desktop app modules. When the desktop app adds new features or renames sidebar items, this file needs updating to stay in sync.
+- The `openGuideLink()` utility in `src/lib/guide-link.ts` dispatches `personas:open-external` CustomEvent for desktop context. The desktop app's webview host needs to listen for this event to handle external link opening.
+- ModuleBadge popover uses static text ("Open the Personas desktop app and navigate to..."). Future enhancement: detect if the guide is running inside the desktop app and change to a "Go to this section" action button.
+- The compact ModuleBadge on category cards shows `moduleRef.label` truncated to 120px. If labels exceed this, consider adding full text on hover.
+- Guide content markdown was written during Runs #3-4 (2026-04-10) and broadly matches the desktop app. No content was rewritten this run — the module badge system provides the cross-reference layer instead.
 
 ## Open follow-ups (from Run #12, 2026-04-10)
 - /compare page has no structured data (JSON-LD ComparisonTable or similar schema)
