@@ -89,10 +89,12 @@ test.describe("User Guide", () => {
     await expect(article.locator("h2", { hasText: "Installing Personas" })).toBeVisible();
     // Content text should be present
     await expect(article).toContainText("Getting Personas on your computer");
-    // Key Points section
-    await expect(article).toContainText("Key Points");
-    // Tip blockquote
-    await expect(article).toContainText("Tip:");
+    // Step wizard should render (installing-personas has :::steps)
+    const steps = article.locator("ol li");
+    const stepCount = await steps.count();
+    expect(stepCount).toBeGreaterThanOrEqual(3);
+    // Callout should render (:::tip or :::info)
+    await expect(article.locator("text=Tip").first()).toBeVisible();
   });
 
   test("topic detail page has prev/next navigation", async ({ page }) => {
@@ -150,5 +152,56 @@ test.describe("User Guide", () => {
     await expect(article).toBeVisible();
     // Should show credential/security content, not getting-started content
     await expect(article).toContainText("encrypt");
+  });
+
+  test("guide topic renders table component", async ({ page }) => {
+    // "what-is-an-ai-agent" has a chatbot vs agent comparison table
+    await page.goto("/guide/getting-started/what-is-an-ai-agent");
+    const article = page.locator("article");
+    const table = article.locator("table");
+    await expect(table).toBeVisible();
+    await expect(table).toContainText("Chatbot");
+    await expect(table).toContainText("AI Agent");
+  });
+
+  test("guide topic renders keyboard grid", async ({ page }) => {
+    await page.goto("/guide/getting-started/keyboard-shortcuts-and-tips");
+    const article = page.locator("article");
+    // Keyboard grid renders kbd elements
+    const kbdElements = article.locator("kbd");
+    const count = await kbdElements.count();
+    expect(count).toBeGreaterThanOrEqual(6);
+  });
+
+  test("guide topic renders step wizard with numbered steps", async ({ page }) => {
+    await page.goto("/guide/getting-started/creating-your-first-agent");
+    const article = page.locator("article");
+    // Step wizard renders an ordered list with step content
+    const steps = article.locator("ol li");
+    const count = await steps.count();
+    expect(count).toBeGreaterThanOrEqual(4);
+  });
+
+  test("module badge renders on topic page", async ({ page }) => {
+    await page.goto("/guide/getting-started/installing-personas");
+    // ModuleBadge should show "In app" button
+    const badge = page.getByText("In app");
+    await expect(badge).toBeVisible();
+  });
+
+  test("module badge popover opens on click", async ({ page }) => {
+    await page.goto("/guide/getting-started/installing-personas");
+    const badge = page.getByText("In app");
+    await badge.click();
+    // Popover should show "Find in app" and the navigation path
+    await expect(page.getByText("Find in app")).toBeVisible();
+    await expect(page.getByText("Home")).toBeVisible();
+  });
+
+  test("compact module badge renders on category topic cards", async ({ page }) => {
+    await page.goto("/guide/getting-started");
+    // CategoryTopics cards should have compact module badges with Monitor icon
+    const moduleLabels = page.locator("span", { hasText: "Welcome screen" });
+    await expect(moduleLabels.first()).toBeVisible();
   });
 });
