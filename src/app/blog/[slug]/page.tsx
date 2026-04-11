@@ -38,5 +38,25 @@ export default async function BlogPostPage({ params }: Props) {
 
   const category = BLOG_CATEGORIES.find((c) => c.id === post.category);
 
-  return <BlogArticle post={post} categoryLabel={category?.label ?? post.category} categoryColor={category?.color ?? "#06b6d4"} />;
+  const articleJsonLd = {
+    "@context": "https://schema.org",
+    "@type": "Article",
+    headline: post.title,
+    description: post.description,
+    author: { "@type": "Organization", name: post.author },
+    publisher: { "@type": "Organization", name: "Personas", url: SITE_URL },
+    datePublished: post.date,
+    mainEntityOfPage: `${SITE_URL}/blog/${slug}`,
+    articleSection: category?.label ?? post.category,
+  };
+
+  return (
+    <>
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(articleJsonLd) }}
+      />
+      <BlogArticle post={post} categoryLabel={category?.label ?? post.category} categoryColor={category?.color ?? "#06b6d4"} />
+    </>
+  );
 }
