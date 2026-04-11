@@ -21,6 +21,7 @@
 - Animation patterns: `staggerContainer`, `fadeUp`, `revealFromBelow` from `@/lib/animations`
 - Color theme: cyan (#06b6d4), purple (#a855f7), emerald (#34d399), rose (#f43f5e), amber (#fbbf24)
 - Desktop app cross-references in guide use `ModuleBadge` (full) and `ModuleBadge compact` — never raw `<a href>` links for desktop app navigation
+- Guide markdown custom blocks: `:::tip`, `:::warning`, `:::info`, `:::success` (callouts), `:::steps` (wizard), `:::keys` (shortcut grid), `| pipe | tables |`. All implemented in `GuideBlocks.tsx`, parsed in `GuideMarkdown.tsx`
 
 ## Anti-patterns to avoid
 - Don't edit `Vision.tsx` directly — it just re-exports `VisionGrid.tsx`
