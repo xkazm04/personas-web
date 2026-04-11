@@ -1,6 +1,7 @@
 "use client";
 
 import React, { type ReactNode } from "react";
+import { Callout, StepWizard, KeyboardGrid, MarkdownTable } from "./GuideBlocks";
 
 interface GuideMarkdownProps {
   content: string;
@@ -59,7 +60,7 @@ function parseInline(text: string, keyBase: string): ReactNode[] {
 
 function isBlockStart(line: string): boolean {
   const t = line.trimStart();
-  return t.startsWith("#") || t.startsWith("```") || /^---+$/.test(t) || t.startsWith("> ") || /^\s*[-*]\s/.test(line) || /^\s*\d+\.\s/.test(line);
+  return t.startsWith("#") || t.startsWith("```") || t.startsWith(":::") || /^---+$/.test(t) || t.startsWith("> ") || /^\s*[-*]\s/.test(line) || /^\s*\d+\.\s/.test(line) || /^\|.+\|/.test(t);
 }
 
 function parseBlocks(lines: string[]): ReactNode[] {
@@ -178,6 +179,66 @@ function parseBlocks(lines: string[]): ReactNode[] {
           ))}
         </ol>,
       );
+      continue;
+    }
+
+    // ── Custom block  :::type ... :::
+    const customMatch = line.trimStart().match(/^:::(\w+)$/);
+    if (customMatch) {
+      const blockType = customMatch[1];
+      const innerLines: string[] = [];
+      i++;
+      while (i < lines.length && !lines[i].trimStart().startsWith(":::")) {
+        innerLines.push(lines[i]);
+        i++;
+      }
+      i++; // skip closing :::
+
+      if (blockType === "steps") {
+        const steps: { title: string; body: string }[] = [];
+        for (const sl of innerLines) {
+          const stepMatch = sl.match(/^\d+\.\s+\*\*(.+?)\*\*\s*(?:[—–-]\s*)?(.*)$/);
+          if (stepMatch) {
+            steps.push({ title: stepMatch[1], body: stepMatch[2] });
+          } else if (sl.trim() && steps.length > 0) {
+            steps[steps.length - 1].body += (steps[steps.length - 1].body ? " " : "") + sl.trim();
+          }
+        }
+        if (steps.length > 0) emit(<StepWizard steps={steps} />);
+      } else if (blockType === "keys") {
+        const shortcuts: { combo: string; description: string }[] = [];
+        for (const kl of innerLines) {
+          const keyMatch = kl.match(/^(.+?)\s*[—–-]\s+(.+)$/);
+          if (keyMatch) shortcuts.push({ combo: keyMatch[1].trim(), description: keyMatch[2].trim() });
+        }
+        if (shortcuts.length > 0) emit(<KeyboardGrid shortcuts={shortcuts} />);
+      } else if (["tip", "warning", "info", "success"].includes(blockType)) {
+        const content = innerLines.filter((l) => l.trim()).join(" ").trim();
+        emit(
+          <Callout type={blockType}>
+            <p>{parseInline(content, `callout${key}`)}</p>
+          </Callout>,
+        );
+      }
+      continue;
+    }
+
+    // ── Pipe table  |...|
+    if (/^\|.+\|/.test(line.trimStart())) {
+      const tableLines: string[] = [];
+      while (i < lines.length && /^\|.+\|/.test(lines[i].trimStart())) {
+        tableLines.push(lines[i]);
+        i++;
+      }
+      const parseRow = (r: string) =>
+        r.split("|").slice(1, -1).map((c) => c.trim());
+      if (tableLines.length >= 2) {
+        const headers = parseRow(tableLines[0]);
+        // Skip separator row (|---|---|)
+        const dataStart = /^[\s|:-]+$/.test(tableLines[1].replace(/\|/g, "").replace(/[-: ]/g, "")) ? 2 : 1;
+        const rows = tableLines.slice(dataStart).map(parseRow);
+        emit(<MarkdownTable headers={headers} rows={rows} />);
+      }
       continue;
     }
 
