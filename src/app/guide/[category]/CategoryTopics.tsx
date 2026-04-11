@@ -5,6 +5,8 @@ import Link from "next/link";
 import { motion } from "framer-motion";
 import { Search } from "lucide-react";
 import type { GuideTopic } from "@/data/guide/types";
+import { TOPIC_MODULE_MAP } from "@/data/guide/desktop-modules";
+import ModuleBadge from "@/components/guide/ModuleBadge";
 import { fadeUp, staggerContainer } from "@/lib/animations";
 
 /* ── Props ────────────────────────────────────────────────────────────── */
@@ -69,6 +71,11 @@ export default function CategoryTopics({ topics, color, categoryId }: CategoryTo
               <h3 className="text-lg font-semibold text-foreground group-hover:text-brand-cyan transition-colors">
                 {topic.title}
               </h3>
+              {TOPIC_MODULE_MAP[topic.id] && (
+                <div className="mt-1.5">
+                  <ModuleBadge moduleRef={TOPIC_MODULE_MAP[topic.id]} compact />
+                </div>
+              )}
               <p className="mt-2 text-base leading-relaxed text-muted-dark line-clamp-3">
                 {topic.description}
               </p>
