@@ -6,7 +6,7 @@ import { Search, Home, BookOpen, Download, ArrowRight, Puzzle, BarChart3, Shield
 const POPULAR_PAGES = [
   { label: "Home", href: "/", icon: Home, color: "#06b6d4" },
   { label: "Features", href: "/features", icon: BarChart3, color: "#a855f7" },
-  { label: "Product Tour", href: "/tour", icon: ArrowRight, color: "#34d399" },
+  { label: "Get Started", href: "/#get-started", icon: ArrowRight, color: "#34d399" },
   { label: "Guide", href: "/guide", icon: BookOpen, color: "#fbbf24" },
   { label: "Templates", href: "/templates", icon: Puzzle, color: "#06b6d4" },
   { label: "Download", href: "/download", icon: Download, color: "#34d399" },
@@ -21,7 +21,7 @@ export default function NotFound() {
       <main className="flex min-h-[70vh] flex-col items-center justify-center px-6 py-32">
         <div className="mx-auto max-w-2xl text-center">
           {/* 404 badge */}
-          <div className="mb-6 inline-flex items-center gap-2 rounded-full border border-brand-cyan/20 bg-brand-cyan/5 px-4 py-1.5 text-sm font-mono font-medium text-brand-cyan/70">
+          <div className="mb-6 inline-flex items-center gap-2 rounded-full border border-brand-cyan/20 bg-brand-cyan/5 px-4 py-1.5 text-base font-mono font-medium text-brand-cyan/70">
             404
           </div>
 
@@ -53,7 +53,7 @@ export default function NotFound() {
                       style={{ color: page.color }}
                     />
                   </div>
-                  <span className="text-xs font-medium text-muted group-hover:text-foreground transition-colors">
+                  <span className="text-sm font-medium text-muted group-hover:text-foreground transition-colors">
                     {page.label}
                   </span>
                 </Link>
@@ -65,7 +65,7 @@ export default function NotFound() {
           <div className="mt-10">
             <Link
               href="/"
-              className="inline-flex items-center gap-2 rounded-full border border-brand-cyan/30 bg-brand-cyan/10 px-6 py-2.5 text-sm font-medium text-brand-cyan transition-colors hover:bg-brand-cyan/20"
+              className="inline-flex items-center gap-2 rounded-full border border-brand-cyan/30 bg-brand-cyan/10 px-6 py-2.5 text-base font-medium text-brand-cyan transition-colors hover:bg-brand-cyan/20"
             >
               <Home className="h-4 w-4" />
               Back to home

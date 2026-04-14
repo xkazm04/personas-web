@@ -62,10 +62,10 @@ function SubscriptionCard({
         />
         <div className="flex-1 min-w-0">
           <div className="flex items-center gap-2">
-            <span className="text-sm font-medium text-foreground truncate">
+            <span className="text-base font-medium text-foreground truncate">
               {sub.personaName ?? "Unknown agent"}
             </span>
-            <span className={`inline-flex items-center rounded-full px-2 py-0.5 text-[10px] font-medium ${
+            <span className={`inline-flex items-center rounded-full px-2 py-0.5 text-sm font-medium ${
               sub.enabled
                 ? "bg-emerald-500/10 text-emerald-400 border border-emerald-500/20"
                 : "bg-white/[0.04] text-muted-dark border border-white/[0.08]"
@@ -75,19 +75,19 @@ function SubscriptionCard({
           </div>
 
           <div className="mt-2 flex flex-wrap items-center gap-2">
-            <span className="inline-flex items-center gap-1 rounded-md border border-cyan-500/25 bg-cyan-500/10 px-2 py-0.5 text-[11px] font-mono text-cyan-400">
+            <span className="inline-flex items-center gap-1 rounded-md border border-cyan-500/25 bg-cyan-500/10 px-2 py-0.5 text-sm font-mono text-cyan-400">
               <Zap className="h-3 w-3" />
               {sub.eventType}
             </span>
             {sub.sourceFilter && (
-              <span className="inline-flex items-center gap-1 rounded-md border border-amber-500/25 bg-amber-500/10 px-2 py-0.5 text-[11px] font-mono text-amber-400">
+              <span className="inline-flex items-center gap-1 rounded-md border border-amber-500/25 bg-amber-500/10 px-2 py-0.5 text-sm font-mono text-amber-400">
                 <Filter className="h-3 w-3" />
                 {sub.sourceFilter}
               </span>
             )}
           </div>
 
-          <div className="mt-2 flex items-center gap-3 text-[11px] text-muted-dark">
+          <div className="mt-2 flex items-center gap-3 text-sm text-muted-dark">
             <span>Created {relativeTime(sub.createdAt)}</span>
             <span className="flex items-center gap-1">
               <span className={`inline-block h-1.5 w-1.5 rounded-full ${eventMatchCount > 0 ? "bg-emerald-400" : "bg-white/20"}`} />
@@ -117,13 +117,13 @@ function SubscriptionCard({
               <button
                 onClick={() => void handleDelete()}
                 disabled={deleting}
-                className="rounded-md border border-red-500/30 bg-red-500/10 px-2 py-1 text-[10px] font-medium text-red-400 transition-all hover:bg-red-500/20 disabled:opacity-50"
+                className="rounded-md border border-red-500/30 bg-red-500/10 px-2 py-1 text-sm font-medium text-red-400 transition-all hover:bg-red-500/20 disabled:opacity-50"
               >
                 {deleting ? <Loader2 className="h-3 w-3 animate-spin" /> : "Delete"}
               </button>
               <button
                 onClick={() => setConfirmDelete(false)}
-                className="rounded-md px-2 py-1 text-[10px] text-muted-dark hover:text-foreground transition-colors"
+                className="rounded-md px-2 py-1 text-sm text-muted-dark hover:text-foreground transition-colors"
               >
                 Cancel
               </button>
@@ -183,17 +183,17 @@ function CreateSubscriptionForm({ onClose }: { onClose: () => void }) {
       exit={{ opacity: 0, y: -8 }}
     >
       <GlowCard accent="cyan" className="p-5">
-        <h3 className="text-sm font-semibold text-foreground mb-4">Create Subscription</h3>
+        <h3 className="text-base font-semibold text-foreground mb-4">Create Subscription</h3>
         <form onSubmit={(e) => void handleSubmit(e)} className="space-y-3">
           <div>
-            <label className="text-[11px] font-medium uppercase tracking-wider text-muted-dark">
+            <label className="text-sm font-medium uppercase tracking-wider text-muted-dark">
               Persona
             </label>
             <select
               value={personaId}
               onChange={(e) => setPersonaId(e.target.value)}
               required
-              className="mt-1 w-full rounded-xl border border-white/[0.08] bg-white/[0.03] px-3 py-2 text-sm text-foreground focus:border-brand-cyan/30 focus:outline-none appearance-none cursor-pointer"
+              className="mt-1 w-full rounded-xl border border-white/[0.08] bg-white/[0.03] px-3 py-2 text-base text-foreground focus:border-brand-cyan/30 focus:outline-none appearance-none cursor-pointer"
             >
               <option value="">Select a persona...</option>
               {personas.map((p) => (
@@ -203,14 +203,14 @@ function CreateSubscriptionForm({ onClose }: { onClose: () => void }) {
           </div>
 
           <div>
-            <label className="text-[11px] font-medium uppercase tracking-wider text-muted-dark">
+            <label className="text-sm font-medium uppercase tracking-wider text-muted-dark">
               Event Type
             </label>
             <select
               value={eventType}
               onChange={(e) => setEventType(e.target.value)}
               required
-              className="mt-1 w-full rounded-xl border border-white/[0.08] bg-white/[0.03] px-3 py-2 text-sm text-foreground focus:border-brand-cyan/30 focus:outline-none appearance-none cursor-pointer"
+              className="mt-1 w-full rounded-xl border border-white/[0.08] bg-white/[0.03] px-3 py-2 text-base text-foreground focus:border-brand-cyan/30 focus:outline-none appearance-none cursor-pointer"
             >
               <option value="">Select event type...</option>
               {knownEventTypes.map((t) => (
@@ -220,7 +220,7 @@ function CreateSubscriptionForm({ onClose }: { onClose: () => void }) {
           </div>
 
           <div>
-            <label className="text-[11px] font-medium uppercase tracking-wider text-muted-dark">
+            <label className="text-sm font-medium uppercase tracking-wider text-muted-dark">
               Source Filter <span className="normal-case text-muted-dark/50">(optional)</span>
             </label>
             <input
@@ -228,7 +228,7 @@ function CreateSubscriptionForm({ onClose }: { onClose: () => void }) {
               value={sourceFilter}
               onChange={(e) => setSourceFilter(e.target.value)}
               placeholder="e.g. github, pagerduty..."
-              className="mt-1 w-full rounded-xl border border-white/[0.08] bg-white/[0.03] px-3 py-2 text-sm text-foreground placeholder:text-muted-dark/50 focus:border-brand-cyan/30 focus:outline-none"
+              className="mt-1 w-full rounded-xl border border-white/[0.08] bg-white/[0.03] px-3 py-2 text-base text-foreground placeholder:text-muted-dark/50 focus:border-brand-cyan/30 focus:outline-none"
             />
           </div>
 
@@ -236,7 +236,7 @@ function CreateSubscriptionForm({ onClose }: { onClose: () => void }) {
             <button
               type="submit"
               disabled={creating || !personaId || !eventType}
-              className="flex items-center gap-1.5 rounded-lg border border-brand-cyan/30 bg-brand-cyan/10 px-4 py-2 text-xs font-medium text-brand-cyan transition-all hover:bg-brand-cyan/20 disabled:opacity-50"
+              className="flex items-center gap-1.5 rounded-lg border border-brand-cyan/30 bg-brand-cyan/10 px-4 py-2 text-sm font-medium text-brand-cyan transition-all hover:bg-brand-cyan/20 disabled:opacity-50"
             >
               {creating ? <Loader2 className="h-3 w-3 animate-spin" /> : <Plus className="h-3 w-3" />}
               Create
@@ -244,7 +244,7 @@ function CreateSubscriptionForm({ onClose }: { onClose: () => void }) {
             <button
               type="button"
               onClick={onClose}
-              className="rounded-lg px-4 py-2 text-xs text-muted-dark hover:text-foreground transition-colors"
+              className="rounded-lg px-4 py-2 text-sm text-muted-dark hover:text-foreground transition-colors"
             >
               Cancel
             </button>
@@ -320,7 +320,7 @@ export default function SubscriptionsPanel() {
               <button
                 key={key}
                 onClick={() => setFilterEnabled(key)}
-                className={`rounded-md px-3 py-1.5 text-[11px] font-medium transition-all ${
+                className={`rounded-md px-3 py-1.5 text-sm font-medium transition-all ${
                   filterEnabled === key
                     ? "bg-white/[0.08] text-foreground shadow-sm"
                     : "text-muted-dark hover:text-muted"
@@ -336,7 +336,7 @@ export default function SubscriptionsPanel() {
         </div>
         <button
           onClick={() => setShowCreate(true)}
-          className="flex items-center gap-1.5 rounded-lg border border-brand-cyan/30 bg-brand-cyan/10 px-3 py-1.5 text-xs font-medium text-brand-cyan transition-all hover:bg-brand-cyan/20"
+          className="flex items-center gap-1.5 rounded-lg border border-brand-cyan/30 bg-brand-cyan/10 px-3 py-1.5 text-sm font-medium text-brand-cyan transition-all hover:bg-brand-cyan/20"
         >
           <Plus className="h-3.5 w-3.5" />
           New Subscription

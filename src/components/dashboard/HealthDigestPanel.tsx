@@ -70,7 +70,7 @@ export default function HealthDigestPanel() {
         className="flex items-center gap-2 self-start mb-4"
       >
         <Heart className="h-4 w-4 text-brand-cyan" />
-        <h2 className="text-sm font-semibold text-foreground">
+        <h2 className="text-base font-semibold text-foreground">
           System Health
         </h2>
       </motion.div>
@@ -116,7 +116,7 @@ export default function HealthDigestPanel() {
           </span>
         </div>
 
-        <span className="mt-1.5 text-[10px] font-medium uppercase tracking-wider text-muted-dark">
+        <span className="mt-1.5 text-sm font-medium uppercase tracking-wider text-muted-dark">
           Health
         </span>
       </motion.div>
@@ -138,7 +138,7 @@ export default function HealthDigestPanel() {
               />
 
               {/* Agent name */}
-              <span className="text-xs font-medium text-foreground truncate min-w-0 flex-shrink-0 w-24">
+              <span className="text-sm font-medium text-foreground truncate min-w-0 flex-shrink-0 w-24">
                 {agent.name}
               </span>
 
@@ -152,25 +152,25 @@ export default function HealthDigestPanel() {
 
               {/* Score number */}
               <span
-                className={`text-[10px] font-medium tabular-nums w-6 text-right ${agentColors.text}`}
+                className={`text-sm font-medium tabular-nums w-6 text-right ${agentColors.text}`}
               >
                 {agent.score}
               </span>
 
               {/* Issue count badge */}
               {agent.issues > 0 ? (
-                <span className="flex items-center gap-0.5 rounded-full border border-red-500/20 bg-red-500/8 px-1.5 py-0.5 text-[9px] font-medium text-red-400">
+                <span className="flex items-center gap-0.5 rounded-full border border-red-500/20 bg-red-500/8 px-1.5 py-0.5 text-sm font-medium text-red-400">
                   <AlertCircle className="h-2.5 w-2.5" />
                   {agent.issues}
                 </span>
               ) : (
-                <span className="flex items-center rounded-full border border-emerald-500/20 bg-emerald-500/8 px-1.5 py-0.5 text-[9px] font-medium text-emerald-400">
+                <span className="flex items-center rounded-full border border-emerald-500/20 bg-emerald-500/8 px-1.5 py-0.5 text-sm font-medium text-emerald-400">
                   <CheckCircle className="h-2.5 w-2.5" />
                 </span>
               )}
 
               {/* Last run */}
-              <span className="text-[10px] text-muted-dark whitespace-nowrap w-12 text-right">
+              <span className="text-sm text-muted-dark whitespace-nowrap w-12 text-right">
                 {relativeTime(agent.lastRun)}
               </span>
             </motion.div>

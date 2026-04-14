@@ -115,7 +115,7 @@ export default async function CategoryPage({ params }: { params: Promise<{ categ
               {cat.name}
             </h1>
             <span
-              className="rounded-full px-2.5 py-0.5 text-sm font-semibold"
+              className="rounded-full px-2.5 py-0.5 text-base font-semibold"
               style={{ backgroundColor: `${cat.color}15`, color: cat.color }}
             >
               {topics.length} topic{topics.length !== 1 && "s"}

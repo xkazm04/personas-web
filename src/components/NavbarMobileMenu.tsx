@@ -80,7 +80,7 @@ export default function NavbarMobileMenu({
                       key={route.href}
                       href={route.href}
                       onClick={onClose}
-                      className={`flex items-center rounded-xl px-4 py-3 text-sm font-medium transition-all duration-200 ${
+                      className={`flex items-center rounded-xl px-4 py-3 text-base font-medium transition-all duration-200 ${
                         isActive
                           ? "bg-brand-cyan/8 text-brand-cyan border border-brand-cyan/15"
                           : "text-muted hover:text-foreground hover:bg-white/4 border border-transparent"
@@ -98,7 +98,7 @@ export default function NavbarMobileMenu({
                 <Link
                   href="/dashboard"
                   onClick={onClose}
-                  className="flex w-full items-center justify-center gap-2 rounded-xl border border-brand-cyan/25 bg-brand-cyan/8 px-4 py-3 text-sm font-medium text-brand-cyan transition-all duration-200 hover:border-brand-cyan/40 hover:bg-brand-cyan/12"
+                  className="flex w-full items-center justify-center gap-2 rounded-xl border border-brand-cyan/25 bg-brand-cyan/8 px-4 py-3 text-base font-medium text-brand-cyan transition-all duration-200 hover:border-brand-cyan/40 hover:bg-brand-cyan/12"
                 >
                   <LayoutDashboard className="h-4 w-4" />
                   Dashboard
@@ -110,14 +110,14 @@ export default function NavbarMobileMenu({
                       onClose();
                       void signInWithGoogle();
                     }}
-                    className="flex w-full items-center justify-center gap-2 rounded-xl border border-white/10 bg-white/4 px-4 py-3 text-sm font-medium text-foreground transition-all duration-200 hover:border-white/20 hover:bg-white/8"
+                    className="flex w-full items-center justify-center gap-2 rounded-xl border border-white/10 bg-white/4 px-4 py-3 text-base font-medium text-foreground transition-all duration-200 hover:border-white/20 hover:bg-white/8"
                   >
                     Sign in
                   </button>
                   <Link
                     href="/#download"
                     onClick={onClose}
-                    className="flex w-full items-center justify-center gap-2 rounded-xl border border-brand-cyan/25 bg-brand-cyan/8 px-4 py-3 text-sm font-medium text-brand-cyan transition-all duration-200 hover:border-brand-cyan/40 hover:bg-brand-cyan/12"
+                    className="flex w-full items-center justify-center gap-2 rounded-xl border border-brand-cyan/25 bg-brand-cyan/8 px-4 py-3 text-base font-medium text-brand-cyan transition-all duration-200 hover:border-brand-cyan/40 hover:bg-brand-cyan/12"
                   >
                     <Download className="h-4 w-4" />
                     Download

@@ -41,7 +41,7 @@ export default function CookieConsent() {
             <div className="flex flex-col sm:flex-row items-start sm:items-center gap-4">
               <div className="flex items-center gap-3 flex-1 min-w-0">
                 <Cookie size={20} className="shrink-0 text-brand-cyan" />
-                <p className="text-sm text-white/70">
+                <p className="text-base text-white/70">
                   We use essential cookies to keep things running smoothly. No
                   tracking, no ads.{" "}
                   <Link href="/legal#cookies" className="underline text-brand-cyan/80 hover:text-brand-cyan">
@@ -53,13 +53,13 @@ export default function CookieConsent() {
               <div className="flex items-center gap-2 shrink-0">
                 <button
                   onClick={() => accept("essential")}
-                  className="px-4 py-1.5 text-sm rounded-lg text-white/60 hover:text-white/90 hover:bg-white/[0.06] transition-colors"
+                  className="px-4 py-1.5 text-base rounded-lg text-white/60 hover:text-white/90 hover:bg-white/[0.06] transition-colors"
                 >
                   Essential Only
                 </button>
                 <button
                   onClick={() => accept("all")}
-                  className="px-4 py-1.5 text-sm rounded-lg bg-brand-cyan text-black font-medium hover:bg-brand-cyan/90 transition-colors"
+                  className="px-4 py-1.5 text-base rounded-lg bg-brand-cyan text-black font-medium hover:bg-brand-cyan/90 transition-colors"
                 >
                   Accept All
                 </button>

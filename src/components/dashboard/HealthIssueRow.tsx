@@ -23,25 +23,25 @@ export default function HealthIssueRow({ issue }: { issue: HealthIssue }) {
       <SevIcon className={`mt-0.5 h-4 w-4 flex-shrink-0 ${sev.color}`} />
       <div className="flex-1 min-w-0">
         <div className="flex items-center gap-2">
-          <p className="text-sm font-medium text-foreground truncate">
+          <p className="text-base font-medium text-foreground truncate">
             {issue.title}
           </p>
           {issue.status === "auto_fixed" && (
-            <span className="flex items-center gap-1 rounded-full border border-emerald-500/20 bg-emerald-500/8 px-2 py-0.5 text-[10px] text-emerald-400">
+            <span className="flex items-center gap-1 rounded-full border border-emerald-500/20 bg-emerald-500/8 px-2 py-0.5 text-sm text-emerald-400">
               <ShieldCheck className="h-2.5 w-2.5" />
               Auto-fixed
             </span>
           )}
           {issue.status === "resolved" && (
-            <span className="flex items-center gap-1 rounded-full border border-blue-500/20 bg-blue-500/8 px-2 py-0.5 text-[10px] text-blue-400">
+            <span className="flex items-center gap-1 rounded-full border border-blue-500/20 bg-blue-500/8 px-2 py-0.5 text-sm text-blue-400">
               Resolved
             </span>
           )}
         </div>
-        <p className="mt-1 text-xs text-muted-dark line-clamp-2">
+        <p className="mt-1 text-sm text-muted-dark line-clamp-2">
           {issue.description}
         </p>
-        <div className="mt-2 flex items-center gap-3 text-[10px] text-muted-dark">
+        <div className="mt-2 flex items-center gap-3 text-sm text-muted-dark">
           {issue.personaName && <span>{issue.personaName}</span>}
           <span>{age}</span>
           <span className={`uppercase font-medium ${sev.color}`}>{issue.severity}</span>

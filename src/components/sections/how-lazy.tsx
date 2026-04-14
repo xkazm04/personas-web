@@ -1,7 +1,8 @@
 "use client";
 
 import dynamic from "next/dynamic";
-import { createLazySection, SectionSkeleton, P, Ps, Pm } from "./LazySection";
+import { TerminalPanel } from "@/components/primitives";
+import { createLazySection, SectionSkeleton, Ps, Pm } from "./LazySection";
 
 function EventBusShowcaseSkeleton() {
   return (
@@ -14,7 +15,7 @@ function EventBusShowcaseSkeleton() {
         </div>
 
         <div className="relative mx-auto mt-16 max-w-3xl">
-          <div className="rounded-2xl border border-white/8 bg-black/50 backdrop-blur-xl p-4 md:p-6 shadow-[0_0_80px_rgba(0,0,0,0.4)]">
+          <TerminalPanel shadow="hero" bodyClassName="p-4 md:p-6">
             <div className="flex items-center gap-2 mb-4 pb-3 border-b border-white/4">
               <div className="flex gap-1.5">
                 <div className="h-2 w-2 rounded-full bg-white/6" />
@@ -25,7 +26,7 @@ function EventBusShowcaseSkeleton() {
             </div>
 
             <div className={`min-h-65 w-full sm:min-h-90 ${Pm}`} />
-          </div>
+          </TerminalPanel>
 
           <div className="pointer-events-none absolute -inset-6 -z-10 rounded-3xl bg-linear-to-br from-brand-cyan/4 via-transparent to-brand-purple/4 blur-2xl" />
         </div>

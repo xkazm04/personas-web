@@ -222,7 +222,7 @@ export default function WaitlistModal({
                 <h3 id="waitlist-modal-title" className="text-base font-semibold text-foreground">
                   Personas for {platform}
                 </h3>
-                <p className="text-xs text-muted-dark">Coming soon</p>
+                <p className="text-sm text-muted-dark">Coming soon</p>
               </div>
             </div>
 
@@ -230,7 +230,7 @@ export default function WaitlistModal({
             {waitlistCount !== null && waitlistCount > 0 && (
               <div className="mt-5 flex items-center gap-2 rounded-lg border border-white/[0.04] bg-white/[0.02] px-3 py-2">
                 <Users className="h-3.5 w-3.5 text-brand-cyan/60" />
-                <span className="text-xs text-muted-dark">
+                <span className="text-sm text-muted-dark">
                   Join <span className="font-medium text-brand-cyan">{waitlistCount}</span>{" "}
                   {waitlistCount === 1 ? "person" : "others"} waiting for {platform}
                 </span>
@@ -257,24 +257,24 @@ export default function WaitlistModal({
                     <CheckCircle2 className="h-6 w-6 text-brand-emerald" />
                   )}
                 </div>
-                <p className="text-sm font-medium text-foreground">
+                <p className="text-base font-medium text-foreground">
                   {status === "duplicate" ? "Already on the list!" : "You're on the list!"}
                 </p>
-                <p className="mt-1 text-xs text-muted-dark">
+                <p className="mt-1 text-sm text-muted-dark">
                   {status === "duplicate" 
                     ? `No action needed — we already have your request for Personas for ${platform}.`
                     : `We'll notify you when Personas for ${platform} is ready.`}
                 </p>
                 <button
                   onClick={onClose}
-                  className="mt-4 w-full rounded-full border border-white/[0.08] bg-white/[0.02] px-4 py-2.5 text-sm font-medium text-muted transition-colors hover:border-white/[0.15] hover:text-foreground"
+                  className="mt-4 w-full rounded-full border border-white/[0.08] bg-white/[0.02] px-4 py-2.5 text-base font-medium text-muted transition-colors hover:border-white/[0.15] hover:text-foreground"
                 >
                   Close
                 </button>
 
                 <button
                   onClick={handleShare}
-                  className="mt-2 group relative flex w-full items-center justify-center gap-2 rounded-full bg-white/[0.04] px-4 py-2.5 text-sm font-medium text-brand-cyan transition-colors hover:bg-white/[0.08]"
+                  className="mt-2 group relative flex w-full items-center justify-center gap-2 rounded-full bg-white/[0.04] px-4 py-2.5 text-base font-medium text-brand-cyan transition-colors hover:bg-white/[0.08]"
                 >
                   <Share2 className="h-3.5 w-3.5" />
                   <span>Share with a friend</span>
@@ -285,7 +285,7 @@ export default function WaitlistModal({
                         initial={{ opacity: 0, y: 10, scale: 0.9 }}
                         animate={{ opacity: 1, y: 0, scale: 1 }}
                         exit={{ opacity: 0, scale: 0.9 }}
-                        className="absolute -top-10 rounded-lg bg-brand-cyan px-2 py-1 text-[10px] font-bold uppercase tracking-wider text-black shadow-lg shadow-brand-cyan/20"
+                        className="absolute -top-10 rounded-lg bg-brand-cyan px-2 py-1 text-sm font-bold uppercase tracking-wider text-black shadow-lg shadow-brand-cyan/20"
                       >
                         Copied!
                         <div className="absolute -bottom-1 left-1/2 h-2 w-2 -translate-x-1/2 rotate-45 bg-brand-cyan" />
@@ -308,7 +308,7 @@ export default function WaitlistModal({
                     placeholder="you@example.com"
                     required
                     autoFocus
-                    className="w-full rounded-xl border border-white/[0.06] bg-white/[0.03] px-4 py-3 text-sm text-foreground placeholder:text-muted-dark focus:border-brand-cyan/30 focus:outline-none focus:ring-1 focus:ring-brand-cyan/20 transition-colors"
+                    className="w-full rounded-xl border border-white/[0.06] bg-white/[0.03] px-4 py-3 text-base text-foreground placeholder:text-muted-dark focus:border-brand-cyan/30 focus:outline-none focus:ring-1 focus:ring-brand-cyan/20 transition-colors"
                   />
                   <AnimatePresence>
                     {errorMsg && (
@@ -318,7 +318,7 @@ export default function WaitlistModal({
                         exit={{ opacity: 0, y: -4 }}
                         transition={TRANSITION_FAST}
                         role="alert"
-                        className="mt-2 flex items-center gap-1.5 text-xs font-medium text-brand-rose"
+                        className="mt-2 flex items-center gap-1.5 text-sm font-medium text-brand-rose"
                       >
                         <AlertCircle className="h-3.5 w-3.5 shrink-0" />
                         {errorMsg}
@@ -338,9 +338,9 @@ export default function WaitlistModal({
                   <div>
                     <div className="flex items-center gap-1.5">
                       <Sparkles className="h-3 w-3 text-brand-purple/70" />
-                      <span className="text-xs font-medium text-foreground/80">Early beta access</span>
+                      <span className="text-sm font-medium text-foreground/80">Early beta access</span>
                     </div>
-                    <p className="mt-0.5 text-[11px] text-muted-dark leading-relaxed">
+                    <p className="mt-0.5 text-sm text-muted-dark leading-relaxed">
                       Get access to unstable builds before the public release
                     </p>
                   </div>
@@ -349,7 +349,7 @@ export default function WaitlistModal({
                 <button
                   type="submit"
                   disabled={status === "loading"}
-                  className="flex w-full items-center justify-center gap-2 rounded-full bg-gradient-to-r from-brand-cyan to-brand-purple px-4 py-3.5 text-sm font-medium text-white transition-opacity hover:opacity-90 disabled:opacity-60"
+                  className="flex w-full items-center justify-center gap-2 rounded-full bg-gradient-to-r from-brand-cyan to-brand-purple px-4 py-3.5 text-base font-medium text-white transition-opacity hover:opacity-90 disabled:opacity-60"
                 >
                   {status === "loading" ? (
                     <svg className="h-4 w-4 animate-spin" viewBox="0 0 24 24" fill="none">

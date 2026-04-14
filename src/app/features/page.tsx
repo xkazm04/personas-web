@@ -1,37 +1,37 @@
 import InfoPageLayout from "@/components/InfoPageLayout";
 import StageSection from "@/components/StageSection";
 import DesignEngine from "@/components/todo/DesignEngine";
-import GenomeTree from "@/components/todo/GenomeTree";
 import MemoryLayers from "@/components/todo/MemoryLayers";
 import HealingCircuit from "@/components/todo/HealingCircuit";
 import TriggerSystem from "@/components/todo/TriggerSystem";
 import ObservabilityDeck from "@/components/todo/ObservabilityDeck";
-import DevToolsSuite from "@/components/todo/DevToolsSuite";
+import Lab from "@/components/todo/Lab";
+import Plugins from "@/components/todo/Plugins";
 import SecurityVault from "@/components/todo/SecurityVault";
 import MultiProviderAI from "@/components/todo/MultiProviderAI";
 
 const scrollMapItems = [
   { label: "DESIGN", href: "#design" },
-  { label: "GENOME", href: "#genome-tree" },
   { label: "MEMORY", href: "#memory-layers" },
   { label: "HEALING", href: "#healing-circuit" },
   { label: "TRIGGERS", href: "#triggers" },
   { label: "SECURITY", href: "#security" },
   { label: "AI MODELS", href: "#multi-provider" },
   { label: "OBSERVE", href: "#observe" },
-  { label: "DEVTOOLS", href: "#devtools" },
+  { label: "LAB", href: "#lab" },
+  { label: "PLUGINS", href: "#plugins" },
 ];
 
 const breadcrumbItems = [
   { label: "DESIGN", href: "#design", color: "#a855f7" },
-  { label: "GENOME", href: "#genome-tree", color: "#06b6d4" },
   { label: "MEMORY", href: "#memory-layers", color: "#a855f7" },
   { label: "HEALING", href: "#healing-circuit", color: "#f43f5e" },
   { label: "TRIGGERS", href: "#triggers", color: "#fbbf24" },
   { label: "SECURITY", href: "#security", color: "#f43f5e" },
   { label: "AI MODELS", href: "#multi-provider", color: "#3b82f6" },
   { label: "OBSERVE", href: "#observe", color: "#34d399" },
-  { label: "DEVTOOLS", href: "#devtools", color: "#a855f7" },
+  { label: "LAB", href: "#lab", color: "#06b6d4" },
+  { label: "PLUGINS", href: "#plugins", color: "#a855f7" },
 ];
 
 export default function FeaturesPage() {
@@ -41,11 +41,7 @@ export default function FeaturesPage() {
         <DesignEngine />
       </StageSection>
 
-      <StageSection glow="cyan" fromColor="purple" toColor="cyan">
-        <GenomeTree />
-      </StageSection>
-
-      <StageSection glow="purple" fromColor="cyan" toColor="purple">
+      <StageSection glow="purple" fromColor="purple" toColor="purple">
         <MemoryLayers />
       </StageSection>
 
@@ -69,8 +65,12 @@ export default function FeaturesPage() {
         <ObservabilityDeck />
       </StageSection>
 
-      <StageSection glow="purple" fromColor="emerald" toColor="purple">
-        <DevToolsSuite />
+      <StageSection glow="cyan" fromColor="emerald" toColor="cyan">
+        <Lab />
+      </StageSection>
+
+      <StageSection glow="purple" fromColor="cyan" toColor="purple">
+        <Plugins />
       </StageSection>
     </InfoPageLayout>
   );

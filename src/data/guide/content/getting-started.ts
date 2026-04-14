@@ -147,6 +147,29 @@ Best for privacy-sensitive work. Your data never leaves your machine. Trade-off:
 
 Go to \`Settings\` and add your provider's API key (a special password that connects your account). Once connected, you'll see the provider as an option when creating or editing agents. You can also set a default provider so new agents use it automatically.
 
+### See It In Action
+
+:::usecases
+**Model-Per-Agent Strategy**
+You have agents with different needs
+---
+Code review agent uses Claude (best at reasoning), email summarizer uses GPT-4o-mini (fast and cheap), and your private data agent runs on Ollama locally.
+===
+**Provider Outage Recovery**
+OpenAI goes down during a critical batch
+---
+Your agents automatically switch to Claude, finish the batch, and switch back when OpenAI recovers. Zero manual intervention.
+===
+**Cost Control**
+Monthly AI costs are climbing
+---
+The cost dashboard shows which agents spend the most. You reassign expensive agents to cheaper models and cut costs significantly.
+:::
+
+:::info
+Failover works through a per-provider health score. When a provider's error rate crosses a threshold, Personas seamlessly routes new runs to the next healthy provider in your priority list. When the failed provider recovers, it automatically rejoins rotation.
+:::
+
 :::tip
 Most providers offer free credits for new users. Try a couple before committing to find the best fit for your typical tasks.
 :::

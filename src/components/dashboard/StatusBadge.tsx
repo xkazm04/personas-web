@@ -67,7 +67,7 @@ export default function StatusBadge({ status }: { status: BadgeStatus }) {
   const cfg = statusConfig[status];
   return (
     <span
-      className={`inline-flex items-center gap-1.5 rounded-full border px-2.5 py-0.5 text-[11px] font-medium tracking-wide ${cfg.color} ${cfg.bgColor} ${cfg.borderColor}`}
+      className={`inline-flex items-center gap-1.5 rounded-full border px-2.5 py-0.5 text-sm font-medium tracking-wide ${cfg.color} ${cfg.bgColor} ${cfg.borderColor}`}
     >
       {cfg.pulse && (
         <span className="relative flex h-1.5 w-1.5">

@@ -33,7 +33,7 @@ export default function MetricCard({
         <div className="flex h-8 w-8 items-center justify-center rounded-xl bg-white/[0.04]">
           <Icon className={`h-4 w-4 ${accentMap[accent]}`} />
         </div>
-        <span className="text-xs font-medium text-muted-dark uppercase tracking-wider">
+        <span className="text-sm font-medium text-muted-dark uppercase tracking-wider">
           {label}
         </span>
         {sparklineData && sparklineData.length > 1 && (
@@ -46,7 +46,7 @@ export default function MetricCard({
         {value}
       </p>
       {trend !== undefined && (
-        <div className="mt-2 flex items-center gap-1 text-[11px]">
+        <div className="mt-2 flex items-center gap-1 text-sm">
           {trend >= 0 ? (
             <TrendingUp className="h-3 w-3 text-emerald-400" />
           ) : (

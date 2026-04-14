@@ -34,7 +34,7 @@ export default function DesktopSidebar() {
                 key={item.key}
                 href={item.href}
                 onMouseEnter={() => prefetchAdjacent(index)}
-                className={`group flex items-center gap-3 rounded-xl px-3 py-2.5 text-sm font-medium transition-all duration-200 ${
+                className={`group flex items-center gap-3 rounded-xl px-3 py-2.5 text-base font-medium transition-all duration-200 ${
                   active
                     ? "bg-brand-cyan/8 text-brand-cyan border-l-2 border-brand-cyan -ml-px"
                     : "text-muted hover:text-foreground hover:bg-white/[0.04]"
@@ -48,7 +48,7 @@ export default function DesktopSidebar() {
                 <span className="flex-1">{item.label}</span>
                 {badge !== null && (
                   <span
-                    className={`rounded-full px-1.5 py-px text-[10px] font-medium tabular-nums ${
+                    className={`rounded-full px-1.5 py-px text-sm font-medium tabular-nums ${
                       active
                         ? "bg-brand-cyan/20 text-brand-cyan"
                         : "bg-white/[0.08] text-muted-dark"
@@ -65,7 +65,7 @@ export default function DesktopSidebar() {
 
       {/* Connection status */}
       <div className="border-t border-white/[0.06] px-4 py-3">
-        <div className="flex items-center gap-2 text-[11px]">
+        <div className="flex items-center gap-2 text-sm">
           {isConnected ? (
             <>
               <div className="relative flex h-3 w-3 items-center justify-center">

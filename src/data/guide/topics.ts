@@ -17,6 +17,9 @@ export const GUIDE_TOPICS: GuideTopic[] = [
     description:
       "A step-by-step walkthrough of building your very first AI agent. You'll go from a blank slate to a working agent in about five minutes. By the end, you'll have a personal assistant that can carry out a real task for you.",
     tags: ["getting-started", "first-agent", "tutorial", "walkthrough", "beginner"],
+    coverage: {
+      screenshotRecipe: "tools/guide-screenshots/recipes/creating-your-first-agent.yaml",
+    },
   },
   {
     id: "understanding-the-interface",
@@ -25,6 +28,9 @@ export const GUIDE_TOPICS: GuideTopic[] = [
     description:
       "A tour of the main screen, sidebar, and navigation. Learn where everything lives so you can move around the app with confidence. Think of it like a quick orientation before you start building.",
     tags: ["getting-started", "interface", "navigation", "sidebar", "tour"],
+    coverage: {
+      screenshotRecipe: "tools/guide-screenshots/recipes/understanding-the-interface.yaml",
+    },
   },
   {
     id: "what-is-an-ai-agent",
@@ -49,6 +55,9 @@ export const GUIDE_TOPICS: GuideTopic[] = [
     description:
       "How to connect Claude, OpenAI, or other AI services to power your agents. Each provider has different strengths, and you can switch anytime. We'll help you pick the best fit for your needs and budget.",
     tags: ["getting-started", "provider", "claude", "openai", "ai-model", "setup"],
+    coverage: {
+      screenshotRecipe: "tools/guide-screenshots/recipes/choosing-your-ai-provider.yaml",
+    },
   },
   {
     id: "starter-vs-team-vs-builder-tiers",

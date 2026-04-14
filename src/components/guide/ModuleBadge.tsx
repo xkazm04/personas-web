@@ -44,7 +44,7 @@ export default function ModuleBadge({ moduleRef, categoryColor = "#06b6d4", comp
   if (compact) {
     return (
       <span
-        className="inline-flex items-center gap-1 text-xs text-muted-dark"
+        className="inline-flex items-center gap-1 text-sm text-muted-dark"
         title={`Find in app: ${moduleRef.path.join(" → ")}`}
       >
         <Monitor className="h-3 w-3 shrink-0" aria-hidden="true" />
@@ -61,7 +61,7 @@ export default function ModuleBadge({ moduleRef, categoryColor = "#06b6d4", comp
         onClick={() => setOpen((v) => !v)}
         aria-expanded={open}
         aria-haspopup="dialog"
-        className="inline-flex items-center gap-1.5 rounded-full px-2.5 py-0.5 text-xs font-medium transition-colors border border-white/[0.08] bg-white/[0.03] hover:bg-white/[0.06] hover:border-white/[0.14] text-muted-dark hover:text-foreground"
+        className="inline-flex items-center gap-1.5 rounded-full px-2.5 py-0.5 text-sm font-medium transition-colors border border-white/[0.08] bg-white/[0.03] hover:bg-white/[0.06] hover:border-white/[0.14] text-muted-dark hover:text-foreground"
       >
         <Monitor className="h-3 w-3 shrink-0" aria-hidden="true" />
         <span>In app</span>
@@ -76,7 +76,7 @@ export default function ModuleBadge({ moduleRef, categoryColor = "#06b6d4", comp
           className="absolute left-0 top-full z-50 mt-2 w-64 rounded-xl border border-white/[0.08] bg-[#0a0a0f]/95 backdrop-blur-md p-4 shadow-xl shadow-black/40"
         >
           <div className="flex items-start justify-between gap-2">
-            <p className="text-xs text-muted-dark font-medium uppercase tracking-wider">
+            <p className="text-sm text-muted-dark font-medium uppercase tracking-wider">
               Find in app
             </p>
             <button
@@ -99,7 +99,7 @@ export default function ModuleBadge({ moduleRef, categoryColor = "#06b6d4", comp
                   />
                 )}
                 <span
-                  className="rounded-md px-1.5 py-0.5 text-sm font-medium"
+                  className="rounded-md px-1.5 py-0.5 text-base font-medium"
                   style={
                     i === moduleRef.path.length - 1
                       ? { backgroundColor: `${categoryColor}15`, color: categoryColor }
@@ -112,7 +112,7 @@ export default function ModuleBadge({ moduleRef, categoryColor = "#06b6d4", comp
             ))}
           </div>
 
-          <p className="mt-3 text-xs text-muted-dark leading-relaxed">
+          <p className="mt-3 text-sm text-muted-dark leading-relaxed">
             Open the Personas desktop app and navigate to{" "}
             <span className="text-foreground font-medium">{moduleRef.path.join(" → ")}</span>{" "}
             to use this feature.

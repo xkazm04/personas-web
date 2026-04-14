@@ -211,6 +211,29 @@ The evolution process is fully automatic once started. You provide the starting 
 
 You provide a starting prompt and define what "good" means for your use case. The system creates variations, tests them, scores them based on your criteria, and combines the best performers to create a new generation. Over several cycles, the prompts converge on highly optimized instructions.
 
+### See It In Action
+
+:::usecases
+**Prompt Optimization**
+Your email triage agent miscategorizes 15% of emails
+---
+Genome runs 5 generations of variations, finds a prompt that reduces errors to 3%, and you approve it with one click.
+===
+**A/B Testing at Scale**
+You're not sure which instruction style works better
+---
+Genome tests 10 variations simultaneously, scores each on accuracy and speed, and shows you a clear winner.
+===
+**Adapting to Change**
+Your customers start asking different types of questions
+---
+Schedule monthly evolution cycles. Your support agent's prompt automatically evolves to handle the new patterns.
+:::
+
+:::info
+Every generation is versioned. If a newly evolved prompt doesn't behave as expected in production, you can roll back to any previous version with one click — no data or history is ever lost.
+:::
+
 :::tip
 Be patient with evolution. The first generation might not be much better than your original prompt, but by generation three or four, you'll typically see significant improvement.
 :::

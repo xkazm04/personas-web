@@ -79,7 +79,7 @@ export default function JsonViewer({ payload }: { payload: string | null }) {
       >
         {copied ? <Check className="h-3.5 w-3.5 text-emerald-400" /> : <ClipboardCopy className="h-3.5 w-3.5" />}
       </button>
-      <pre className="font-mono text-xs leading-relaxed text-white/30 whitespace-pre-wrap break-all">
+      <pre className="font-mono text-sm leading-relaxed text-white/30 whitespace-pre-wrap break-all">
         {highlightJson(formatted)}
       </pre>
     </div>

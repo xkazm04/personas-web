@@ -57,7 +57,7 @@ function EventTypeBadge({ eventType }: { eventType: string }) {
   const config = eventTypeConfig[eventType] ?? defaultEventType;
   const Icon = config.icon;
   return (
-    <span className={`inline-flex items-center gap-1.5 rounded-md border ${config.border} ${config.bg} px-2 py-0.5 text-[11px] font-mono ${config.text}`}>
+    <span className={`inline-flex items-center gap-1.5 rounded-md border ${config.border} ${config.bg} px-2 py-0.5 text-sm font-mono ${config.text}`}>
       <Icon className="h-3 w-3" />
       {eventType}
     </span>
@@ -67,7 +67,7 @@ function EventTypeBadge({ eventType }: { eventType: string }) {
 function EventExpandedContent({ event }: { event: PersonaEvent }) {
   return (
     <div className="space-y-3">
-      <div className="flex flex-wrap gap-x-6 gap-y-1 text-xs text-muted-dark">
+      <div className="flex flex-wrap gap-x-6 gap-y-1 text-sm text-muted-dark">
         <span>
           ID: <code className="text-muted">{event.id.slice(0, 12)}...</code>
         </span>
@@ -86,7 +86,7 @@ function EventExpandedContent({ event }: { event: PersonaEvent }) {
       {event.errorMessage && (
         <div className="rounded-xl border border-red-500/20 bg-red-500/5 p-3">
           <div className="flex items-start justify-between gap-3">
-            <p className="text-xs text-red-400">{event.errorMessage}</p>
+            <p className="text-sm text-red-400">{event.errorMessage}</p>
             {event.status === "failed" && (
               <RetryButton event={event} />
             )}
@@ -106,7 +106,7 @@ function RetryButton({ event }: { event: PersonaEvent }) {
     <button
       onClick={() => void replayEvent(event)}
       disabled={isReplaying}
-      className="flex items-center gap-1.5 rounded-lg border border-amber-500/30 bg-amber-500/10 px-3 py-1.5 text-[11px] font-medium text-amber-400 transition-all hover:bg-amber-500/20 disabled:opacity-50 flex-shrink-0"
+      className="flex items-center gap-1.5 rounded-lg border border-amber-500/30 bg-amber-500/10 px-3 py-1.5 text-sm font-medium text-amber-400 transition-all hover:bg-amber-500/20 disabled:opacity-50 flex-shrink-0"
     >
       {isReplaying ? (
         <Loader2 className="h-3 w-3 animate-spin" />
@@ -134,7 +134,7 @@ function DropdownFilter({
       value={value}
       onChange={(e) => onChange(e.target.value)}
       aria-label={label}
-      className="h-10 sm:h-8 rounded-lg border border-white/[0.06] bg-white/[0.03] px-3 sm:px-2 text-sm sm:text-xs text-muted transition-colors hover:border-white/[0.12] focus:border-brand-cyan/30 focus:outline-none focus:ring-1 focus:ring-brand-cyan/20 appearance-none cursor-pointer"
+      className="h-10 sm:h-8 rounded-lg border border-white/[0.06] bg-white/[0.03] px-3 sm:px-2 text-base sm:text-sm text-muted transition-colors hover:border-white/[0.12] focus:border-brand-cyan/30 focus:outline-none focus:ring-1 focus:ring-brand-cyan/20 appearance-none cursor-pointer"
     >
       <option value="">{label}</option>
       {options.map((opt) => (
@@ -237,7 +237,7 @@ function buildColumns(
                     setActiveChain(chain ?? null);
                   }
                 }}
-                className={`flex items-center gap-1 rounded-md px-1.5 py-0.5 text-[10px] font-mono transition-colors ${
+                className={`flex items-center gap-1 rounded-md px-1.5 py-0.5 text-sm font-mono transition-colors ${
                   isInActiveChain
                     ? "bg-brand-cyan/15 text-brand-cyan border border-brand-cyan/25"
                     : "text-muted-dark/50 hover:text-muted-dark hover:bg-white/[0.04]"
@@ -257,7 +257,7 @@ function buildColumns(
       header: "Source",
       className: "w-24 flex-shrink-0 hidden sm:block",
       render: (event) => (
-        <span className="text-xs text-muted-dark">{event.sourceType}</span>
+        <span className="text-sm text-muted-dark">{event.sourceType}</span>
       ),
     },
     {
@@ -274,7 +274,7 @@ function buildColumns(
         const count = retryCounts[event.id];
         if (!count) return null;
         return (
-          <span className="flex items-center gap-0.5 text-[10px] font-mono text-amber-400/70" title={`Retried ${count} time${count !== 1 ? "s" : ""}`}>
+          <span className="flex items-center gap-0.5 text-sm font-mono text-amber-400/70" title={`Retried ${count} time${count !== 1 ? "s" : ""}`}>
             <RotateCcw className="h-2.5 w-2.5" />
             {count}
           </span>
@@ -286,7 +286,7 @@ function buildColumns(
       header: "Time",
       className: "w-16 flex-shrink-0 text-right",
       render: (event) => (
-        <span className="text-xs text-muted-dark">{relativeTime(event.createdAt)}</span>
+        <span className="text-sm text-muted-dark">{relativeTime(event.createdAt)}</span>
       ),
     },
     {
@@ -468,7 +468,7 @@ export default function EventsListPanel() {
             value={query}
             onChange={(e) => setQuery(e.target.value)}
             placeholder="Search payloads, event types, sources, errors..."
-            className="w-full rounded-xl border border-white/[0.06] bg-white/[0.03] py-2 pl-9 pr-9 text-sm text-foreground placeholder:text-muted-dark/40 transition-colors focus:border-brand-cyan/30 focus:outline-none focus:ring-1 focus:ring-brand-cyan/20"
+            className="w-full rounded-xl border border-white/[0.06] bg-white/[0.03] py-2 pl-9 pr-9 text-base text-foreground placeholder:text-muted-dark/40 transition-colors focus:border-brand-cyan/30 focus:outline-none focus:ring-1 focus:ring-brand-cyan/20"
           />
           {query && (
             <button
@@ -514,7 +514,7 @@ export default function EventsListPanel() {
         {hasActiveFilters && (
           <button
             onClick={() => { setQuery(""); setEventTypeFilter(""); setSourceTypeFilter(""); setFilter("all"); }}
-            className="flex items-center gap-1 rounded-lg border border-white/[0.06] bg-white/[0.03] px-2.5 py-1.5 text-[11px] text-muted-dark transition-colors hover:border-white/[0.12] hover:text-foreground"
+            className="flex items-center gap-1 rounded-lg border border-white/[0.06] bg-white/[0.03] px-2.5 py-1.5 text-sm text-muted-dark transition-colors hover:border-white/[0.12] hover:text-foreground"
           >
             <X className="h-3 w-3" />
             Clear filters
@@ -524,7 +524,7 @@ export default function EventsListPanel() {
         {activeChain && (
           <button
             onClick={() => setActiveChain(null)}
-            className="flex items-center gap-1 rounded-lg border border-brand-cyan/20 bg-brand-cyan/5 px-2.5 py-1.5 text-[11px] text-brand-cyan transition-colors hover:border-brand-cyan/30 hover:bg-brand-cyan/10"
+            className="flex items-center gap-1 rounded-lg border border-brand-cyan/20 bg-brand-cyan/5 px-2.5 py-1.5 text-sm text-brand-cyan transition-colors hover:border-brand-cyan/30 hover:bg-brand-cyan/10"
           >
             <Link2 className="h-3 w-3" />
             Chain: {activeChain.size} events
@@ -534,7 +534,7 @@ export default function EventsListPanel() {
 
         <div className="ml-auto flex items-center gap-2">
           {hasActiveFilters && (
-            <span className="text-xs text-muted-dark tabular-nums">
+            <span className="text-sm text-muted-dark tabular-nums">
               {filtered.length} result{filtered.length !== 1 ? "s" : ""}
             </span>
           )}
@@ -576,7 +576,7 @@ export default function EventsListPanel() {
             onClick={() => {
               setVisibleCount((prev) => Math.min(filtered.length, prev + EVENTS_LOAD_STEP));
             }}
-            className="rounded-lg border border-white/[0.08] bg-white/[0.03] px-3 py-1.5 text-xs text-muted transition-colors hover:border-white/[0.14] hover:text-foreground"
+            className="rounded-lg border border-white/[0.08] bg-white/[0.03] px-3 py-1.5 text-sm text-muted transition-colors hover:border-white/[0.14] hover:text-foreground"
           >
             Load more events ({visibleEvents.length}/{filtered.length})
           </button>
@@ -594,7 +594,7 @@ export default function EventsListPanel() {
           >
             <div className="mx-auto flex max-w-7xl items-center justify-between gap-2 px-4 py-3 sm:px-6">
               <div className="flex items-center gap-3">
-                <span className="text-sm text-foreground">
+                <span className="text-base text-foreground">
                   {selectedIds.size} failed event{selectedIds.size !== 1 ? "s" : ""} selected
                 </span>
                 <button
@@ -602,13 +602,13 @@ export default function EventsListPanel() {
                     const failedIds = new Set(visibleEvents.filter((e) => e.status === "failed").map((e) => e.id));
                     setSelectedIds(failedIds);
                   }}
-                  className="text-xs text-brand-cyan hover:underline"
+                  className="text-sm text-brand-cyan hover:underline"
                 >
                   Select all failed
                 </button>
                 <button
                   onClick={() => setSelectedIds(new Set())}
-                  className="text-xs text-muted-dark hover:text-muted"
+                  className="text-sm text-muted-dark hover:text-muted"
                 >
                   Clear
                 </button>
@@ -616,7 +616,7 @@ export default function EventsListPanel() {
               <button
                 onClick={() => void handleBulkRetry()}
                 disabled={bulkRetrying}
-                className="flex items-center gap-1.5 rounded-lg border border-amber-500/30 bg-amber-500/10 px-4 py-2 text-xs font-medium text-amber-400 transition-all hover:bg-amber-500/20 disabled:opacity-50"
+                className="flex items-center gap-1.5 rounded-lg border border-amber-500/30 bg-amber-500/10 px-4 py-2 text-sm font-medium text-amber-400 transition-all hover:bg-amber-500/20 disabled:opacity-50"
               >
                 {bulkRetrying ? (
                   <Loader2 className="h-3.5 w-3.5 animate-spin" />

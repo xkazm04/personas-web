@@ -86,14 +86,14 @@ export default function CategoryTopics({ topics, color, categoryId }: CategoryTo
                   {topic.tags.slice(0, 5).map((tag) => (
                     <span
                       key={tag}
-                      className="rounded-full px-2 py-0.5 text-sm font-medium"
+                      className="rounded-full px-2 py-0.5 text-base font-medium"
                       style={{ backgroundColor: `${color}12`, color }}
                     >
                       {tag}
                     </span>
                   ))}
                   {topic.tags.length > 5 && (
-                    <span className="rounded-full px-2 py-0.5 text-sm font-medium text-muted-dark">
+                    <span className="rounded-full px-2 py-0.5 text-base font-medium text-muted-dark">
                       +{topic.tags.length - 5}
                     </span>
                   )}

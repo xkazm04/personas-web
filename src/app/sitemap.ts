@@ -3,7 +3,6 @@ import { SITE_URL } from "@/lib/seo";
 import { GUIDE_CATEGORIES } from "@/data/guide/categories";
 import { GUIDE_TOPICS } from "@/data/guide/topics";
 import { templateList as templates } from "@/lib/templates";
-import { FEATURE_PAGES } from "@/data/feature-pages";
 import { BLOG_POSTS } from "@/data/blog";
 import { USE_CASES } from "@/data/use-cases";
 
@@ -22,23 +21,13 @@ export default function sitemap(): MetadataRoute.Sitemap {
     { url: `${SITE_URL}/blog`, lastModified: now, changeFrequency: "weekly", priority: 0.8 },
     { url: `${SITE_URL}/changelog`, lastModified: now, changeFrequency: "monthly", priority: 0.7 },
     { url: `${SITE_URL}/security`, lastModified: now, changeFrequency: "monthly", priority: 0.8 },
-    { url: `${SITE_URL}/tour`, lastModified: now, changeFrequency: "monthly", priority: 0.8 },
     { url: `${SITE_URL}/use-cases`, lastModified: now, changeFrequency: "monthly", priority: 0.8 },
     { url: `${SITE_URL}/download`, lastModified: now, changeFrequency: "monthly", priority: 0.9 },
     { url: `${SITE_URL}/community`, lastModified: now, changeFrequency: "monthly", priority: 0.7 },
     { url: `${SITE_URL}/roadmap`, lastModified: now, changeFrequency: "weekly", priority: 0.7 },
     { url: `${SITE_URL}/playground`, lastModified: now, changeFrequency: "monthly", priority: 0.5 },
-    { url: `${SITE_URL}/pricing`, lastModified: now, changeFrequency: "monthly", priority: 0.9 },
     { url: `${SITE_URL}/legal`, lastModified: now, changeFrequency: "yearly", priority: 0.3 },
   ];
-
-  /* ── Feature deep-dive pages ──────────────────────────────────────── */
-  const featurePages: MetadataRoute.Sitemap = FEATURE_PAGES.map((f) => ({
-    url: `${SITE_URL}/features/${f.slug}`,
-    lastModified: now,
-    changeFrequency: "monthly" as const,
-    priority: 0.8,
-  }));
 
   /* ── Guide category pages ─────────────────────────────────────────── */
   const guideCategories: MetadataRoute.Sitemap = GUIDE_CATEGORIES.map((c) => ({
@@ -80,5 +69,5 @@ export default function sitemap(): MetadataRoute.Sitemap {
     priority: 0.7,
   }));
 
-  return [...staticPages, ...featurePages, ...guideCategories, ...guideTopics, ...templatePages, ...blogPages, ...useCasePages];
+  return [...staticPages, ...guideCategories, ...guideTopics, ...templatePages, ...blogPages, ...useCasePages];
 }

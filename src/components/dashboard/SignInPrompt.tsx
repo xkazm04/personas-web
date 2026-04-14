@@ -24,7 +24,7 @@ export default function SignInPrompt() {
         {DEVELOPMENT && (
           <motion.div
             variants={fadeUp}
-            className="mb-4 flex items-center justify-center gap-2 rounded-xl border border-amber-500/20 bg-amber-500/5 px-4 py-2.5 text-xs text-amber-400"
+            className="mb-4 flex items-center justify-center gap-2 rounded-xl border border-amber-500/20 bg-amber-500/5 px-4 py-2.5 text-sm text-amber-400"
           >
             <FlaskConical className="h-3.5 w-3.5" />
             <span>Development Mode — using mock data</span>
@@ -53,7 +53,7 @@ export default function SignInPrompt() {
               <GradientText variant="silver">Dashboard</GradientText>
             </h1>
 
-            <p className="mt-3 text-sm text-muted-dark leading-relaxed">
+            <p className="mt-3 text-base text-muted-dark leading-relaxed">
               {DEVELOPMENT
                 ? "Click below to enter the dashboard with example data and explore the UI."
                 : "Monitor your cloud agents, review executions, and manage events from one place."}
@@ -62,7 +62,7 @@ export default function SignInPrompt() {
             {/* Sign-In Button */}
             <button
               onClick={signInWithGoogle}
-              className="group relative mt-8 flex w-full items-center justify-center gap-3 overflow-hidden rounded-full border border-brand-cyan/25 bg-brand-cyan/8 px-6 py-3.5 text-sm font-semibold text-brand-cyan transition-all duration-300 hover:border-brand-cyan/40 hover:bg-brand-cyan/15 hover:shadow-[0_0_30px_rgba(6,182,212,0.15)]"
+              className="group relative mt-8 flex w-full items-center justify-center gap-3 overflow-hidden rounded-full border border-brand-cyan/25 bg-brand-cyan/8 px-6 py-3.5 text-base font-semibold text-brand-cyan transition-all duration-300 hover:border-brand-cyan/40 hover:bg-brand-cyan/15 hover:shadow-[0_0_30px_rgba(6,182,212,0.15)]"
             >
               <div className="absolute inset-0 bg-gradient-to-r from-transparent via-brand-cyan/10 to-transparent 
                 motion-safe:-translate-x-full motion-safe:transition-transform motion-safe:duration-700 motion-safe:group-hover:translate-x-full
@@ -104,14 +104,14 @@ export default function SignInPrompt() {
             {!DEVELOPMENT && (
               <button
                 onClick={signInAsDemo}
-                className="group relative mt-3 flex w-full items-center justify-center gap-2 overflow-hidden rounded-full border border-white/[0.08] bg-white/[0.03] px-6 py-3 text-sm font-medium text-muted-dark transition-all duration-300 hover:border-white/[0.15] hover:bg-white/[0.06] hover:text-foreground/80"
+                className="group relative mt-3 flex w-full items-center justify-center gap-2 overflow-hidden rounded-full border border-white/[0.08] bg-white/[0.03] px-6 py-3 text-base font-medium text-muted-dark transition-all duration-300 hover:border-white/[0.15] hover:bg-white/[0.06] hover:text-foreground/80"
               >
                 <FlaskConical className="relative h-4 w-4" />
                 <span className="relative">Try Demo</span>
               </button>
             )}
 
-            <p className="mt-4 text-[11px] text-muted-dark/60">
+            <p className="mt-4 text-sm text-muted-dark/60">
               {DEVELOPMENT
                 ? "No authentication required in development mode"
                 : "Secured by Supabase Authentication"}

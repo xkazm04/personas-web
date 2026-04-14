@@ -755,3 +755,18 @@ img {
 [data-theme="light-news"] body {
   background: linear-gradient(168deg, #e0ded9 0%, #dcdad4 50%, #e2e0db 100%);
 }
+
+/* ══════════════════════════════════════════════════════════════════════════
+   Force-dark islands — used on panels with dark interior content
+   (Leonardo illustrations, terminal visualizations) so their interior
+   text stays readable regardless of the page theme.
+   ══════════════════════════════════════════════════════════════════════════ */
+.force-dark {
+  --background: #0a0e14;
+  --foreground: #e0f2fe;
+  --muted: #a8ccd8;
+  --muted-dark: #8ab8c8;
+  --muted-foreground: #7da5b8;
+  --surface-overlay: 255, 255, 255;
+  color: #e0f2fe;
+}

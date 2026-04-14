@@ -69,7 +69,7 @@ export default function GuideSidebar() {
             onChange={(e) => setQuery(e.target.value)}
             placeholder="Search topics..."
             aria-label="Search sidebar topics"
-            className="w-full rounded-lg border border-white/[0.08] bg-white/[0.03] py-2 pl-9 pr-3 text-sm text-foreground placeholder:text-muted-dark outline-none transition-colors focus:border-brand-cyan/30"
+            className="w-full rounded-lg border border-white/[0.08] bg-white/[0.03] py-2 pl-9 pr-3 text-base text-foreground placeholder:text-muted-dark outline-none transition-colors focus:border-brand-cyan/30"
           />
         </div>
       </div>
@@ -88,7 +88,7 @@ export default function GuideSidebar() {
                 onClick={() => toggle(cat.id)}
                 aria-expanded={isExpanded}
                 aria-controls={`topics-${cat.id}`}
-                className={`flex w-full items-center gap-2.5 rounded-lg px-3 py-2 text-left text-sm font-semibold transition-colors hover:bg-white/[0.04] ${
+                className={`flex w-full items-center gap-2.5 rounded-lg px-3 py-2 text-left text-base font-semibold transition-colors hover:bg-white/[0.04] ${
                   isActiveCategory && !activeTopic ? "bg-white/[0.06] text-foreground" : "text-muted"
                 }`}
               >
@@ -98,7 +98,7 @@ export default function GuideSidebar() {
                   aria-hidden="true"
                 />
                 <span className="flex-1 truncate">{cat.name}</span>
-                <span className="text-sm text-muted-dark tabular-nums">{topics.length}</span>
+                <span className="text-base text-muted-dark tabular-nums">{topics.length}</span>
                 <ChevronRight
                   className={`h-3 w-3 text-muted-dark transition-transform duration-200 ${
                     isExpanded ? "rotate-90" : ""
@@ -127,7 +127,7 @@ export default function GuideSidebar() {
                             key={topic.id}
                             href={`/guide/${cat.id}/${topic.id}`}
                             onClick={() => setMobileOpen(false)}
-                            className={`block rounded-md px-2.5 py-1.5 text-sm transition-colors ${
+                            className={`block rounded-md px-2.5 py-1.5 text-base transition-colors ${
                               isActive
                                 ? "bg-white/[0.06] text-foreground border-l-2 -ml-[calc(0.5rem+1px)] pl-[calc(0.625rem+1px)]"
                                 : "text-muted-dark hover:text-muted hover:bg-white/[0.03]"
@@ -147,7 +147,7 @@ export default function GuideSidebar() {
         })}
 
         {filteredCategories.length === 0 && query.trim() && (
-          <p className="px-3 py-6 text-center text-sm text-muted-dark">
+          <p className="px-3 py-6 text-center text-base text-muted-dark">
             No topics match &ldquo;{query}&rdquo;
           </p>
         )}

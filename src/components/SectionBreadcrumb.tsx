@@ -42,7 +42,7 @@ export default function SectionBreadcrumb({
                   <a
                     key={item.href}
                     href={item.href}
-                    className={`relative flex h-11 -my-1.5 items-center text-sm font-mono uppercase tracking-wider transition-colors duration-200 focus-ring ${
+                    className={`relative flex h-11 -my-1.5 items-center text-base font-mono uppercase tracking-wider transition-colors duration-200 focus-ring ${
                       isActive
                         ? "text-foreground"
                         : "text-muted hover:text-foreground"

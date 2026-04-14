@@ -12,8 +12,9 @@ export interface LandingSection {
 export const LANDING_SECTIONS: LandingSection[] = [
   { id: "hero", label: "Hero" },
   { id: "use-cases", label: "Tools" },
-  { id: "playground-split", label: "Playground" },
-  { id: "pipelines", label: "Pipelines" },
+  { id: "playground-split", label: "Agent Mind" },
+  { id: "get-started", label: "Get Started" },
+  { id: "pipelines", label: "Orchestration" },
   { id: "vision", label: "Platform" },
   { id: "pricing", label: "Compare" },
   { id: "faq", label: "FAQ" },

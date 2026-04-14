@@ -58,7 +58,7 @@ export default function SettingsPage() {
         <h1 className="text-2xl font-bold tracking-tight">
           <GradientText variant="silver">{t.settingsPage.title}</GradientText>
         </h1>
-        <p className="mt-1 text-sm text-muted-dark">
+        <p className="mt-1 text-base text-muted-dark">
           {t.settingsPage.subtitle}
         </p>
       </motion.div>
@@ -84,14 +84,14 @@ export default function SettingsPage() {
               </div>
             )}
             <div>
-              <p className="text-sm font-medium text-foreground">{displayName}</p>
-              <p className="text-xs text-muted-dark">{email}</p>
+              <p className="text-base font-medium text-foreground">{displayName}</p>
+              <p className="text-sm text-muted-dark">{email}</p>
             </div>
           </div>
 
           <button
             onClick={signOut}
-            className="mt-6 flex items-center gap-2 rounded-xl border border-white/[0.08] bg-white/[0.03] px-4 py-2.5 text-sm text-muted transition-all hover:bg-white/[0.06] hover:text-foreground"
+            className="mt-6 flex items-center gap-2 rounded-xl border border-white/[0.08] bg-white/[0.03] px-4 py-2.5 text-base text-muted transition-all hover:bg-white/[0.06] hover:text-foreground"
           >
             <LogOut className="h-4 w-4" />
             {t.common.signOut}
@@ -109,33 +109,33 @@ export default function SettingsPage() {
 
           <div className="space-y-4">
             <div className="flex items-center justify-between">
-              <span className="text-sm text-muted">{t.common.status}</span>
+              <span className="text-base text-muted">{t.common.status}</span>
               <div className="flex items-center gap-2">
                 {isConnected ? (
                   <>
                     <Wifi className="h-4 w-4 text-emerald-400" />
-                    <span className="text-sm text-emerald-400">{t.common.connected}</span>
+                    <span className="text-base text-emerald-400">{t.common.connected}</span>
                   </>
                 ) : (
                   <>
                     <WifiOff className="h-4 w-4 text-red-400" />
-                    <span className="text-sm text-red-400">{t.common.disconnected}</span>
+                    <span className="text-base text-red-400">{t.common.disconnected}</span>
                   </>
                 )}
               </div>
             </div>
 
             <div className="flex items-center justify-between">
-              <span className="text-sm text-muted">{t.settingsPage.orchestrator}</span>
-              <code className="text-xs text-muted-dark font-mono">
+              <span className="text-base text-muted">{t.settingsPage.orchestrator}</span>
+              <code className="text-sm text-muted-dark font-mono">
                 {isDemo ? "mock://demo-data" : (process.env.NEXT_PUBLIC_ORCHESTRATOR_URL ?? t.settingsPage.notConfigured)}
               </code>
             </div>
 
             {health && (
               <div className="flex items-center justify-between">
-                <span className="text-sm text-muted">{t.settingsPage.totalWorkers}</span>
-                <span className="text-sm text-foreground tabular-nums">
+                <span className="text-base text-muted">{t.settingsPage.totalWorkers}</span>
+                <span className="text-base text-foreground tabular-nums">
                   {health.workers.executing} {t.common.active} / {health.workers.idle} {t.common.idle} /{" "}
                   {health.workers.total} {t.common.total}
                 </span>
@@ -159,25 +159,25 @@ export default function SettingsPage() {
                 <p className="text-4xl font-bold tracking-tight tabular-nums">
                   <GradientText>{status.workerCounts.total}</GradientText>
                 </p>
-                <p className="mt-2 text-xs font-medium uppercase tracking-wider text-muted-dark">{t.settingsPage.totalWorkers}</p>
+                <p className="mt-2 text-sm font-medium uppercase tracking-wider text-muted-dark">{t.settingsPage.totalWorkers}</p>
               </div>
               <div className="rounded-xl border border-white/[0.06] bg-white/[0.02] p-4 text-center shadow-[inset_0_1px_0_0_rgba(255,255,255,0.05)]">
                 <p className="text-4xl font-bold tracking-tight tabular-nums">
                   <GradientText>{status.queueLength}</GradientText>
                 </p>
-                <p className="mt-2 text-xs font-medium uppercase tracking-wider text-muted-dark">{t.settingsPage.queueLength}</p>
+                <p className="mt-2 text-sm font-medium uppercase tracking-wider text-muted-dark">{t.settingsPage.queueLength}</p>
               </div>
               <div className="rounded-xl border border-white/[0.06] bg-white/[0.02] p-4 text-center shadow-[inset_0_1px_0_0_rgba(255,255,255,0.05)]">
                 <p className="text-4xl font-bold tracking-tight tabular-nums">
                   <GradientText>{status.activeExecutions.length}</GradientText>
                 </p>
-                <p className="mt-2 text-xs font-medium uppercase tracking-wider text-muted-dark">
+                <p className="mt-2 text-sm font-medium uppercase tracking-wider text-muted-dark">
                   {t.settingsPage.activeExecutions}
                 </p>
               </div>
             </div>
           ) : (
-            <div className="flex items-center gap-2 text-sm text-muted-dark">
+            <div className="flex items-center gap-2 text-base text-muted-dark">
               <Settings className="h-4 w-4 animate-spin" />
               {t.settingsPage.loadingStatus}
             </div>

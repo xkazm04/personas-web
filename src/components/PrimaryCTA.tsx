@@ -60,7 +60,7 @@ export default function PrimaryCTA({
   );
 
   const commonProps = {
-    className: `group relative flex w-[min(100%,20rem)] items-center justify-center gap-3 overflow-hidden rounded-full px-8 py-4 text-sm font-semibold transition-all duration-300 sm:w-auto ${v.inner} focus-ring`,
+    className: `group relative flex w-[min(100%,20rem)] items-center justify-center gap-3 overflow-hidden rounded-full px-8 py-4 text-base font-semibold transition-all duration-300 sm:w-auto ${v.inner} focus-ring`,
   };
 
   return (

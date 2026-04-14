@@ -140,7 +140,7 @@ function ChartCardSkeleton({ height }: { height: number }) {
 
 function InsightBadge({ text }: { text: string }) {
   return (
-    <div className="mt-3 flex items-start gap-2 rounded-lg border border-purple-500/15 bg-purple-500/5 px-3 py-2 text-[11px] text-purple-300">
+    <div className="mt-3 flex items-start gap-2 rounded-lg border border-purple-500/15 bg-purple-500/5 px-3 py-2 text-sm text-purple-300">
       <Lightbulb className="mt-0.5 h-3 w-3 flex-shrink-0 text-purple-400" />
       <span>{text}</span>
     </div>
@@ -269,13 +269,13 @@ export default function UsagePage() {
         <h1 className="text-2xl font-bold tracking-tight">
           <GradientText variant="silver">Usage Analytics</GradientText>
         </h1>
-        <p className="mt-1 text-sm text-muted-dark">
+        <p className="mt-1 text-base text-muted-dark">
           Tool utilization patterns across your agent fleet
         </p>
       </motion.div>
 
       {!hasRealData && (
-        <motion.div variants={fadeUp} className="mb-6 flex items-center gap-2 rounded-xl border border-amber-500/20 bg-amber-500/5 px-4 py-2.5 text-xs text-amber-400">
+        <motion.div variants={fadeUp} className="mb-6 flex items-center gap-2 rounded-xl border border-amber-500/20 bg-amber-500/5 px-4 py-2.5 text-sm text-amber-400">
           <Lightbulb className="h-3.5 w-3.5 flex-shrink-0" />
           Showing example data. Real analytics will appear once agents start running executions.
         </motion.div>
@@ -285,7 +285,7 @@ export default function UsagePage() {
       <div className="grid gap-6 lg:grid-cols-5 mb-8">
         {/* Tool invocations ranking */}
         <GlowCard accent="cyan" variants={fadeUp} className="p-5 lg:col-span-3">
-          <h3 className="text-sm font-semibold text-foreground mb-4 flex items-center gap-2">
+          <h3 className="text-base font-semibold text-foreground mb-4 flex items-center gap-2">
             <Wrench className="h-4 w-4 text-brand-cyan" />
             Tool Invocations
           </h3>
@@ -295,7 +295,7 @@ export default function UsagePage() {
 
         {/* Distribution pie */}
         <GlowCard accent="purple" variants={fadeUp} className="p-5 lg:col-span-2">
-          <h3 className="text-sm font-semibold text-foreground mb-4 flex items-center gap-2">
+          <h3 className="text-base font-semibold text-foreground mb-4 flex items-center gap-2">
             <BarChart3 className="h-4 w-4 text-brand-purple" />
             Distribution
           </h3>
@@ -310,10 +310,10 @@ export default function UsagePage() {
       {/* Middle: Usage over time */}
       <div ref={overTimeRef}>
         <GlowCard accent="emerald" variants={fadeUp} className="p-5 mb-8">
-          <h3 className="text-sm font-semibold text-foreground mb-4 flex items-center gap-2">
+          <h3 className="text-base font-semibold text-foreground mb-4 flex items-center gap-2">
             <BarChart3 className="h-4 w-4 text-emerald-400" />
             Usage Over Time
-            <span className="text-[11px] text-muted-dark font-normal ml-auto">Last 14 days</span>
+            <span className="text-sm text-muted-dark font-normal ml-auto">Last 14 days</span>
           </h3>
           {overTimeMounted ? (
             <UsageOverTimeAreaChart
@@ -330,7 +330,7 @@ export default function UsagePage() {
       {/* Bottom: Per-persona usage */}
       <div ref={byPersonaRef}>
         <GlowCard accent="amber" variants={fadeUp} className="p-5">
-          <h3 className="text-sm font-semibold text-foreground mb-4 flex items-center gap-2">
+          <h3 className="text-base font-semibold text-foreground mb-4 flex items-center gap-2">
             <Wrench className="h-4 w-4 text-amber-400" />
             Tool Usage by Agent
           </h3>

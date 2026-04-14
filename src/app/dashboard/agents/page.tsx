@@ -121,7 +121,7 @@ export default function AgentsPage() {
         <h1 className="text-2xl font-bold tracking-tight">
           <GradientText variant="silver">Agents</GradientText>
         </h1>
-        <div className="mt-2 flex items-center gap-3 text-sm text-muted-dark">
+        <div className="mt-2 flex items-center gap-3 text-base text-muted-dark">
           <span>{personas.length} agent{personas.length !== 1 ? "s" : ""} deployed</span>
           {health && (
             <>
@@ -167,11 +167,11 @@ export default function AgentsPage() {
                       size="md"
                     />
                     <div>
-                      <h3 className="text-sm font-semibold text-foreground">
+                      <h3 className="text-base font-semibold text-foreground">
                         {persona.name}
                       </h3>
                       {persona.description && (
-                        <p className="mt-0.5 line-clamp-1 text-xs text-muted-dark">
+                        <p className="mt-0.5 line-clamp-1 text-sm text-muted-dark">
                           {persona.description}
                         </p>
                       )}
@@ -188,7 +188,7 @@ export default function AgentsPage() {
                 </div>
 
                 {/* Stats */}
-                <div className="mt-4 flex flex-wrap items-center gap-2 sm:gap-4 text-xs text-muted-dark">
+                <div className="mt-4 flex flex-wrap items-center gap-2 sm:gap-4 text-sm text-muted-dark">
                   <span className="font-mono">{persona.maxConcurrent} max</span>
                   <span className="font-mono">
                     {(persona.timeoutMs / 1000).toFixed(0)}s timeout
@@ -207,7 +207,7 @@ export default function AgentsPage() {
                       e.stopPropagation();
                       void handleExecute(persona.id);
                     }}
-                    className="group relative flex items-center gap-1.5 overflow-hidden rounded-lg border border-brand-cyan/20 bg-brand-cyan/10 px-3 py-1.5 text-[11px] font-medium text-brand-cyan transition-all hover:bg-brand-cyan/20"
+                    className="group relative flex items-center gap-1.5 overflow-hidden rounded-lg border border-brand-cyan/20 bg-brand-cyan/10 px-3 py-1.5 text-sm font-medium text-brand-cyan transition-all hover:bg-brand-cyan/20"
                   >
                     <div className="absolute inset-0 -translate-x-full bg-gradient-to-r from-transparent via-white/10 to-transparent transition-transform duration-500 group-hover:translate-x-full" />
                     <Play className="relative z-10 h-3 w-3" />
@@ -217,7 +217,7 @@ export default function AgentsPage() {
                     onClick={() =>
                       setExpandedId(isExpanded ? null : persona.id)
                     }
-                    className="flex items-center gap-1 rounded-lg border border-white/[0.06] bg-white/[0.03] px-3 py-1.5 text-[11px] font-medium text-muted transition-all hover:bg-white/[0.06] hover:text-foreground"
+                    className="flex items-center gap-1 rounded-lg border border-white/[0.06] bg-white/[0.03] px-3 py-1.5 text-sm font-medium text-muted transition-all hover:bg-white/[0.06] hover:text-foreground"
                   >
                     Details
                     <ChevronDown

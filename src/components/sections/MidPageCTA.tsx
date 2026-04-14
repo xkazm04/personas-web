@@ -37,11 +37,11 @@ export default function MidPageCTA() {
             <button
               key={p.label}
               onClick={() => setWaitlistPlatform(p)}
-              className="flex items-center gap-2 rounded-full border border-white/[0.06] bg-white/[0.02] px-6 py-3 text-sm font-medium text-muted-dark transition-colors duration-300 hover:border-brand-purple/20 hover:bg-brand-purple/5 hover:text-brand-purple/80"
+              className="flex items-center gap-2 rounded-full border border-white/[0.06] bg-white/[0.02] px-6 py-3 text-base font-medium text-muted-dark transition-colors duration-300 hover:border-brand-purple/20 hover:bg-brand-purple/5 hover:text-brand-purple/80"
             >
               <p.icon className="h-4 w-4" />
               <span>{p.label}</span>
-              <span className="text-sm text-muted-dark">notify me</span>
+              <span className="text-base text-muted-dark">notify me</span>
             </button>
           ))}
         </motion.div>
@@ -49,7 +49,7 @@ export default function MidPageCTA() {
         <motion.div variants={fadeUp}>
           <Link
             href="/guide"
-            className="flex items-center gap-2 rounded-full border border-white/[0.06] bg-white/[0.02] px-6 py-3 text-sm font-medium text-muted-dark transition-colors duration-300 hover:border-brand-cyan/20 hover:bg-brand-cyan/5 hover:text-brand-cyan/80"
+            className="flex items-center gap-2 rounded-full border border-white/[0.06] bg-white/[0.02] px-6 py-3 text-base font-medium text-muted-dark transition-colors duration-300 hover:border-brand-cyan/20 hover:bg-brand-cyan/5 hover:text-brand-cyan/80"
           >
             <BookOpen className="h-4 w-4" />
             Browse the Guide

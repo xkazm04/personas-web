@@ -12,7 +12,7 @@ export default function ReviewsPage() {
         <h1 className="text-2xl font-bold tracking-tight">
           <GradientText variant="silver">Manual Reviews</GradientText>
         </h1>
-        <p className="mt-1 text-sm text-muted-dark">
+        <p className="mt-1 text-base text-muted-dark">
           Review and approve agent decisions requiring human oversight
         </p>
       </motion.div>

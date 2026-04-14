@@ -161,8 +161,7 @@ const PlaygroundSplitSection = createLazySection(() => import("@/components/sect
 const DownloadCTASection = createLazySection(() => import("@/components/sections/DownloadCTA"));
 const PipelineShowcaseSection = createLazySection(() => import("@/components/sections/PipelineShowcase"));
 const ChangelogSection = createLazySection(() => import("@/components/sections/Changelog"));
-const SocialProofSection = createLazySection(() => import("@/components/sections/SocialProof"));
-const ModeSelectorSection = createLazySection(() => import("@/components/sections/ModeSelector"));
+const GetStartedSection = createLazySection(() => import("@/components/sections/GetStarted"));
 
 export function LazyUseCases() {
   return <UseCasesSection />;
@@ -184,10 +183,6 @@ export function LazyChangelog() {
   return <ChangelogSection />;
 }
 
-export function LazySocialProof() {
-  return <SocialProofSection />;
-}
-
-export function LazyModeSelector() {
-  return <ModeSelectorSection />;
+export function LazyGetStarted() {
+  return <GetStartedSection />;
 }

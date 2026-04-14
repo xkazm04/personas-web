@@ -123,10 +123,10 @@ export default function EventDetailDrawer({ node, onClose }: EventDetailDrawerPr
                   <span className="text-lg">{node.icon}</span>
                 )}
                 <div>
-                  <h3 className="text-sm font-semibold text-foreground">
+                  <h3 className="text-base font-semibold text-foreground">
                     {node.label}
                   </h3>
-                  <p className="text-[11px] text-muted-dark capitalize">
+                  <p className="text-sm text-muted-dark capitalize">
                     {node.type} node
                   </p>
                 </div>
@@ -142,9 +142,9 @@ export default function EventDetailDrawer({ node, onClose }: EventDetailDrawerPr
             <div className="space-y-5 p-5">
               {/* Flow direction */}
               <div className="flex items-center gap-3 rounded-xl border border-white/[0.06] bg-white/[0.02] p-3">
-                <div className="flex items-center gap-2 text-xs">
+                <div className="flex items-center gap-2 text-sm">
                   <span
-                    className="inline-flex h-6 w-6 items-center justify-center rounded-md text-[10px]"
+                    className="inline-flex h-6 w-6 items-center justify-center rounded-md text-sm"
                     style={{
                       backgroundColor: `${node.color}15`,
                       border: `1px solid ${node.color}30`,
@@ -155,8 +155,8 @@ export default function EventDetailDrawer({ node, onClose }: EventDetailDrawerPr
                   <span className="font-medium text-foreground">{node.label}</span>
                 </div>
                 <ArrowRight className="h-3.5 w-3.5 text-muted-dark" />
-                <div className="flex items-center gap-2 text-xs">
-                  <span className="inline-flex h-6 w-6 items-center justify-center rounded-md bg-cyan-500/10 border border-cyan-500/25 text-[9px] font-mono text-cyan-400">
+                <div className="flex items-center gap-2 text-sm">
+                  <span className="inline-flex h-6 w-6 items-center justify-center rounded-md bg-cyan-500/10 border border-cyan-500/25 text-sm font-mono text-cyan-400">
                     BUS
                   </span>
                   <span className="text-muted">Event Bus</span>
@@ -165,10 +165,10 @@ export default function EventDetailDrawer({ node, onClose }: EventDetailDrawerPr
 
               {/* Event type badge */}
               <div>
-                <label className="mb-1.5 block text-[10px] font-medium uppercase tracking-wider text-muted-dark">
+                <label className="mb-1.5 block text-sm font-medium uppercase tracking-wider text-muted-dark">
                   Event Type
                 </label>
-                <span className="inline-flex items-center gap-1.5 rounded-lg border border-cyan-500/25 bg-cyan-500/10 px-3 py-1.5 text-xs font-mono text-cyan-400">
+                <span className="inline-flex items-center gap-1.5 rounded-lg border border-cyan-500/25 bg-cyan-500/10 px-3 py-1.5 text-sm font-mono text-cyan-400">
                   <Tag className="h-3 w-3" />
                   {eventType}
                 </span>
@@ -177,27 +177,27 @@ export default function EventDetailDrawer({ node, onClose }: EventDetailDrawerPr
               {/* Metadata grid */}
               <div className="grid grid-cols-2 gap-3">
                 <div className="rounded-xl border border-white/[0.06] bg-white/[0.02] p-3">
-                  <div className="flex items-center gap-1.5 text-[10px] text-muted-dark">
+                  <div className="flex items-center gap-1.5 text-sm text-muted-dark">
                     <Clock className="h-3 w-3" />
                     Timestamp
                   </div>
-                  <p className="mt-1 text-xs font-mono text-foreground">
+                  <p className="mt-1 text-sm font-mono text-foreground">
                     {new Date(timestamp).toLocaleTimeString()}
                   </p>
-                  <p className="text-[10px] text-muted-dark">
+                  <p className="text-sm text-muted-dark">
                     {new Date(timestamp).toLocaleDateString()}
                   </p>
                 </div>
 
                 <div className="rounded-xl border border-white/[0.06] bg-white/[0.02] p-3">
-                  <div className="flex items-center gap-1.5 text-[10px] text-muted-dark">
+                  <div className="flex items-center gap-1.5 text-sm text-muted-dark">
                     <Timer className="h-3 w-3" />
                     Duration
                   </div>
-                  <p className="mt-1 text-xs font-mono text-foreground">
+                  <p className="mt-1 text-sm font-mono text-foreground">
                     {durationMs.toLocaleString()}ms
                   </p>
-                  <p className="text-[10px] text-muted-dark">
+                  <p className="text-sm text-muted-dark">
                     {durationMs < 500 ? "Fast" : durationMs < 2000 ? "Normal" : "Slow"}
                   </p>
                 </div>
@@ -205,7 +205,7 @@ export default function EventDetailDrawer({ node, onClose }: EventDetailDrawerPr
 
               {/* Volume indicator */}
               <div>
-                <label className="mb-1.5 block text-[10px] font-medium uppercase tracking-wider text-muted-dark">
+                <label className="mb-1.5 block text-sm font-medium uppercase tracking-wider text-muted-dark">
                   Traffic Volume
                 </label>
                 <div className="flex items-center gap-3">
@@ -219,7 +219,7 @@ export default function EventDetailDrawer({ node, onClose }: EventDetailDrawerPr
                       }}
                     />
                   </div>
-                  <span className="text-xs tabular-nums font-mono text-muted">
+                  <span className="text-sm tabular-nums font-mono text-muted">
                     {Math.round(node.volume * 100)}%
                   </span>
                 </div>
@@ -227,7 +227,7 @@ export default function EventDetailDrawer({ node, onClose }: EventDetailDrawerPr
 
               {/* Status */}
               <div>
-                <label className="mb-1.5 block text-[10px] font-medium uppercase tracking-wider text-muted-dark">
+                <label className="mb-1.5 block text-sm font-medium uppercase tracking-wider text-muted-dark">
                   Status
                 </label>
                 <div className="flex items-center gap-2">
@@ -235,17 +235,17 @@ export default function EventDetailDrawer({ node, onClose }: EventDetailDrawerPr
                     <span className="absolute inset-0 animate-ping rounded-full bg-emerald-400/60" />
                     <span className="relative inline-flex h-2 w-2 rounded-full bg-emerald-400" />
                   </span>
-                  <span className="text-xs font-medium text-emerald-400">Active</span>
+                  <span className="text-sm font-medium text-emerald-400">Active</span>
                 </div>
               </div>
 
               {/* Payload */}
               <div>
-                <label className="mb-1.5 block text-[10px] font-medium uppercase tracking-wider text-muted-dark">
+                <label className="mb-1.5 block text-sm font-medium uppercase tracking-wider text-muted-dark">
                   Sample Payload
                 </label>
                 <div className="relative max-h-64 overflow-auto rounded-xl bg-background p-4 border border-white/[0.08] shadow-inner">
-                  <pre className="font-mono text-[11px] leading-relaxed text-white/30 whitespace-pre-wrap break-all">
+                  <pre className="font-mono text-sm leading-relaxed text-white/30 whitespace-pre-wrap break-all">
                     {highlightJson(mockPayloadForNode(node))}
                   </pre>
                 </div>

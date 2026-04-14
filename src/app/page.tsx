@@ -8,19 +8,17 @@ import {
   LazyDownloadCTA,
   LazyFAQ,
   LazyMidPageCTA,
-  LazyModeSelector,
   LazyPipelineShowcase,
   LazyPricing,
   LazyUseCases,
   LazyVision,
   LazyPlaygroundSplit,
-  LazySocialProof,
+  LazyGetStarted,
 } from "@/components/sections/lazy";
 import StageSection from "@/components/StageSection";
 import SectionDivider from "@/components/SectionDivider";
 import PageShell from "@/components/PageShell";
 import { SCROLL_MAP_SECTIONS } from "@/lib/constants";
-import { PRICING_TIERS } from "@/data/pricing";
 import { SectionObserverProvider } from "@/contexts/SectionObserverContext";
 
 const scrollMapItems = SCROLL_MAP_SECTIONS.map((s) => ({
@@ -59,7 +57,7 @@ const softwareJsonLd = {
   featureList: [
     "Multi-agent visual pipeline builder",
     "AES-256-GCM encrypted credential vault with OS keyring",
-    "Multi-provider AI: Claude, OpenAI, Gemini, Ollama",
+    "Multi-provider AI: Claude and Ollama",
     "Self-healing execution with automatic recovery",
     "Evolutionary prompt optimization (Genome system)",
     "40+ built-in integrations (Slack, GitHub, Jira, Notion, etc.)",
@@ -124,29 +122,6 @@ const faqJsonLd = {
   ],
 };
 
-const pricingJsonLd = {
-  "@context": "https://schema.org",
-  "@type": "WebPage",
-  mainEntity: {
-    "@type": "ItemList",
-    itemListElement: PRICING_TIERS.map((tier, i) => ({
-      "@type": "ListItem",
-      position: i + 1,
-      item: {
-        "@type": "Product",
-        name: `Personas ${tier.name}`,
-        description: tier.bestFor,
-        offers: {
-          "@type": "Offer",
-          price: tier.price === "Custom" ? undefined : tier.price.replace("$", ""),
-          priceCurrency: tier.price === "Custom" ? undefined : "USD",
-          ...(tier.price === "Custom" ? { priceSpecification: { "@type": "PriceSpecification", name: "Custom pricing" } } : {}),
-        },
-      },
-    })),
-  },
-};
-
 interface SectionConfig {
   Component: ComponentType;
   glow: "cyan" | "purple" | "emerald";
@@ -160,9 +135,9 @@ interface SectionConfig {
 const sections: SectionConfig[] = [
   { Component: LazyUseCases,           glow: "emerald", fromColor: "cyan",    toColor: "emerald", dividerFrom: "cyan",    dividerTo: "emerald" },
   { Component: LazyPlaygroundSplit,    glow: "cyan",    fromColor: "emerald", toColor: "cyan",    dividerFrom: "emerald", dividerTo: "cyan" },
-  { Component: LazySocialProof,       glow: "purple",  fromColor: "cyan",    toColor: "purple",  dividerFrom: "cyan",    dividerTo: "purple", wrapperId: "social-proof" },
-  { Component: LazyPipelineShowcase,   glow: "emerald", fromColor: "purple",  toColor: "emerald", dividerFrom: "purple",  dividerTo: "emerald", wrapperId: "pipelines" },
-  { Component: LazyVision,            glow: "purple",  fromColor: "emerald", toColor: "purple",  dividerFrom: "emerald", dividerTo: "purple", wrapperId: "vision" },
+  { Component: LazyGetStarted,         glow: "emerald", fromColor: "cyan",    toColor: "emerald", dividerFrom: "cyan",    dividerTo: "emerald", wrapperId: "get-started" },
+  { Component: LazyPipelineShowcase,   glow: "cyan",    fromColor: "emerald", toColor: "cyan",    dividerFrom: "emerald", dividerTo: "cyan",    wrapperId: "pipelines" },
+  { Component: LazyVision,            glow: "purple",  fromColor: "cyan",    toColor: "purple",  dividerFrom: "cyan",    dividerTo: "purple", wrapperId: "vision" },
   { Component: LazyPricing,           glow: "purple",  fromColor: "purple",  toColor: "purple",  dividerFrom: "purple",  dividerTo: "purple", wrapperId: "pricing" },
   { Component: LazyFAQ,               glow: "cyan",    fromColor: "purple",  toColor: "cyan",    dividerFrom: "purple",  dividerTo: "cyan" },
   { Component: LazyDownloadCTA,        glow: "cyan",    fromColor: "cyan",                        dividerFrom: "cyan",    dividerTo: "cyan" },
@@ -200,19 +175,11 @@ export default function Home() {
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(faqJsonLd) }}
       />
-      <script
-        type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(pricingJsonLd) }}
-      />
       <PageShell scrollMapItems={scrollMapItems}>
 
         <div id="hero">
           <Hero />
         </div>
-
-        <SectionDivider from="cyan" to="amber" />
-        <LazyModeSelector />
-        <SectionDivider from="amber" to="cyan" />
 
         {sections.map(({ Component, glow, fromColor, toColor, dividerFrom, dividerTo, wrapperId }, i) => {
           const stage = (

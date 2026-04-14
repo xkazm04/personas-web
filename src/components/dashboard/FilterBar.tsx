@@ -27,12 +27,12 @@ export default function FilterBar({
             onClick={() => onChange(opt.key)}
             className={`relative flex items-center gap-1.5 transition-all duration-200 ${
               compact
-                ? `rounded-md px-2 py-1 text-[11px] font-medium ${
+                ? `rounded-md px-2 py-1 text-sm font-medium ${
                     isActive
                       ? "bg-white/[0.08] text-foreground shadow-sm"
                       : "text-muted-dark hover:text-muted hover:bg-white/[0.04]"
                   }`
-                : `rounded-lg px-3 py-1.5 text-xs font-medium ${
+                : `rounded-lg px-3 py-1.5 text-sm font-medium ${
                     isActive
                       ? "bg-white/[0.08] text-foreground shadow-sm"
                       : "text-muted hover:text-foreground hover:bg-white/[0.04]"
@@ -43,7 +43,7 @@ export default function FilterBar({
             {opt.count !== undefined && (
               <span
                 className={`rounded-full px-1.5 py-px tabular-nums ${
-                  compact ? "text-[9px]" : "text-[10px]"
+                  compact ? "text-sm" : "text-sm"
                 } ${
                   isActive
                     ? "bg-brand-cyan/15 text-brand-cyan"

@@ -125,7 +125,7 @@ export default function BlogArticle({
             {/* Back link */}
             <Link
               href="/blog"
-              className="inline-flex items-center gap-1.5 text-sm text-muted hover:text-foreground transition-colors mb-8"
+              className="inline-flex items-center gap-1.5 text-base text-muted hover:text-foreground transition-colors mb-8"
             >
               <ArrowLeft className="h-4 w-4" />
               Back to blog
@@ -134,7 +134,7 @@ export default function BlogArticle({
             {/* Meta */}
             <div className="flex items-center gap-3 mb-6">
               <span
-                className="rounded-full px-3 py-1 text-xs font-medium uppercase tracking-wider"
+                className="rounded-full px-3 py-1 text-sm font-medium uppercase tracking-wider"
                 style={{
                   backgroundColor: `${categoryColor}15`,
                   color: categoryColor,
@@ -142,8 +142,8 @@ export default function BlogArticle({
               >
                 {categoryLabel}
               </span>
-              <span className="text-sm text-muted">{formatDate(post.date)}</span>
-              <span className="flex items-center gap-1 text-sm text-muted">
+              <span className="text-base text-muted">{formatDate(post.date)}</span>
+              <span className="flex items-center gap-1 text-base text-muted">
                 <Clock className="h-3.5 w-3.5" />
                 {post.readingTime} min read
               </span>
@@ -163,37 +163,37 @@ export default function BlogArticle({
 
             {/* Author */}
             <div className="mt-12 pt-8 border-t border-white/[0.06] flex items-center gap-3">
-              <div className="flex h-10 w-10 items-center justify-center rounded-full bg-brand-cyan/10 text-brand-cyan text-sm font-bold">
+              <div className="flex h-10 w-10 items-center justify-center rounded-full bg-brand-cyan/10 text-brand-cyan text-base font-bold">
                 {post.author[0]}
               </div>
               <div>
-                <p className="text-sm font-medium text-foreground">{post.author}</p>
-                <p className="text-xs text-muted">{formatDate(post.date)}</p>
+                <p className="text-base font-medium text-foreground">{post.author}</p>
+                <p className="text-sm text-muted">{formatDate(post.date)}</p>
               </div>
             </div>
             {/* Cross-links */}
             <div className="mt-12 pt-8 border-t border-white/[0.06]">
-              <h3 className="text-sm font-semibold text-foreground uppercase tracking-wider mb-4">
+              <h3 className="text-base font-semibold text-foreground uppercase tracking-wider mb-4">
                 Continue exploring
               </h3>
               <div className="grid gap-3 sm:grid-cols-3">
                 <Link
-                  href="/tour"
-                  className="group flex items-center gap-2 rounded-lg border border-white/[0.06] bg-white/[0.02] px-4 py-3 text-sm text-muted hover:border-white/[0.1] hover:text-foreground transition-colors"
+                  href="/#get-started"
+                  className="group flex items-center gap-2 rounded-lg border border-white/[0.06] bg-white/[0.02] px-4 py-3 text-base text-muted hover:border-white/[0.1] hover:text-foreground transition-colors"
                 >
                   See it in action
                   <ArrowRight className="h-3.5 w-3.5 ml-auto opacity-0 group-hover:opacity-100 transition-opacity" />
                 </Link>
                 <Link
                   href="/use-cases"
-                  className="group flex items-center gap-2 rounded-lg border border-white/[0.06] bg-white/[0.02] px-4 py-3 text-sm text-muted hover:border-white/[0.1] hover:text-foreground transition-colors"
+                  className="group flex items-center gap-2 rounded-lg border border-white/[0.06] bg-white/[0.02] px-4 py-3 text-base text-muted hover:border-white/[0.1] hover:text-foreground transition-colors"
                 >
                   Explore use cases
                   <ArrowRight className="h-3.5 w-3.5 ml-auto opacity-0 group-hover:opacity-100 transition-opacity" />
                 </Link>
                 <Link
                   href="/compare"
-                  className="group flex items-center gap-2 rounded-lg border border-white/[0.06] bg-white/[0.02] px-4 py-3 text-sm text-muted hover:border-white/[0.1] hover:text-foreground transition-colors"
+                  className="group flex items-center gap-2 rounded-lg border border-white/[0.06] bg-white/[0.02] px-4 py-3 text-base text-muted hover:border-white/[0.1] hover:text-foreground transition-colors"
                 >
                   Compare platforms
                   <ArrowRight className="h-3.5 w-3.5 ml-auto opacity-0 group-hover:opacity-100 transition-opacity" />

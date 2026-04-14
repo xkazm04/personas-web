@@ -42,7 +42,7 @@ export default function Changelog() {
   return (
     <SectionWrapper id="changelog" className="py-16 md:py-20">
       <motion.div variants={fadeUp} className="mx-auto max-w-2xl">
-        <div className="flex items-center gap-2 text-xs font-mono uppercase tracking-wider text-muted-dark/70 mb-5">
+        <div className="flex items-center gap-2 text-sm font-mono uppercase tracking-wider text-muted-dark/70 mb-5">
           <Tag className="h-3.5 w-3.5 text-brand-cyan/50" />
           Recent updates
         </div>
@@ -54,13 +54,13 @@ export default function Changelog() {
               variants={fadeUp}
               className="flex items-baseline gap-3 py-3 first:pt-0 last:pb-0"
             >
-              <span className="shrink-0 rounded-md border border-brand-cyan/15 bg-brand-cyan/5 px-2 py-0.5 text-[11px] font-mono font-medium text-brand-cyan/80">
+              <span className="shrink-0 rounded-md border border-brand-cyan/15 bg-brand-cyan/5 px-2 py-0.5 text-sm font-mono font-medium text-brand-cyan/80">
                 v{r.version}
               </span>
-              <span className="shrink-0 text-[11px] text-muted-dark/50 tabular-nums">
+              <span className="shrink-0 text-sm text-muted-dark/50 tabular-nums">
                 {formatDate(r.date)}
               </span>
-              <span className="text-sm text-muted-dark leading-snug">
+              <span className="text-base text-muted-dark leading-snug">
                 {r.summary}
               </span>
             </motion.div>

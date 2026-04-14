@@ -60,7 +60,7 @@ export default function DataTable<T>({
           {columns.map((col) => (
             <div
               key={col.key}
-              className={`text-[11px] font-medium uppercase tracking-wider text-muted-dark ${col.className ?? "flex-1"}`}
+              className={`text-sm font-medium uppercase tracking-wider text-muted-dark ${col.className ?? "flex-1"}`}
             >
               {col.header}
             </div>

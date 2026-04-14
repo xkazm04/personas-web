@@ -32,7 +32,7 @@ function TemplateCard({ template }: { template: AgentTemplate }) {
         {/* Service flow pills */}
         <div className="mb-3 flex flex-wrap gap-1.5">
           {template.serviceFlow.map((svc) => (
-            <span key={svc} className="rounded-full border border-white/10 bg-white/[0.05] px-2.5 py-0.5 text-[11px] font-medium text-muted">
+            <span key={svc} className="rounded-full border border-white/10 bg-white/[0.05] px-2.5 py-0.5 text-sm font-medium text-muted">
               {svc}
             </span>
           ))}
@@ -43,10 +43,10 @@ function TemplateCard({ template }: { template: AgentTemplate }) {
 
         {/* Bottom: complexity + difficulty + trigger icons */}
         <div className="flex items-center gap-2 flex-wrap">
-          <span className="rounded-full border px-2.5 py-0.5 text-[10px] font-medium capitalize bg-white/[0.04] border-white/10 text-muted">
+          <span className="rounded-full border px-2.5 py-0.5 text-sm font-medium capitalize bg-white/[0.04] border-white/10 text-muted">
             {template.complexity}
           </span>
-          <span className={`rounded-full border px-2.5 py-0.5 text-[10px] font-medium ${difficultyColors[template.difficulty]}`}>
+          <span className={`rounded-full border px-2.5 py-0.5 text-sm font-medium ${difficultyColors[template.difficulty]}`}>
             {template.difficulty}
           </span>
           <span className="flex-1" />
@@ -58,7 +58,7 @@ function TemplateCard({ template }: { template: AgentTemplate }) {
 
         {/* Hover overlay */}
         <span className="absolute inset-0 flex items-center justify-center rounded-2xl bg-black/40 opacity-0 transition-opacity group-hover:opacity-100 pointer-events-none">
-          <span className="flex items-center gap-1 text-sm font-medium text-white">
+          <span className="flex items-center gap-1 text-base font-medium text-white">
             View Details <ChevronRight className="h-4 w-4" />
           </span>
         </span>
@@ -117,12 +117,12 @@ export default function TemplatesPage() {
                 role="tab"
                 aria-selected={activeCategory === null}
                 onClick={() => setActiveCategory(null)}
-                className={`shrink-0 px-4 py-2.5 text-sm font-medium transition-colors border-b-2 ${
+                className={`shrink-0 px-4 py-2.5 text-base font-medium transition-colors border-b-2 ${
                   activeCategory === null ? "border-white text-foreground" : "border-transparent text-muted-dark hover:text-foreground"
                 }`}
               >
                 All
-                <span className="ml-1.5 rounded-full bg-white/[0.08] px-2 py-0.5 text-[10px] font-semibold">{templates.length}</span>
+                <span className="ml-1.5 rounded-full bg-white/[0.08] px-2 py-0.5 text-sm font-semibold">{templates.length}</span>
               </button>
               {categories.map((cat) => (
                 <button
@@ -130,14 +130,14 @@ export default function TemplatesPage() {
                   role="tab"
                   aria-selected={activeCategory === cat}
                   onClick={() => setActiveCategory(activeCategory === cat ? null : cat)}
-                  className={`shrink-0 px-4 py-2.5 text-sm font-medium transition-colors border-b-2 ${
+                  className={`shrink-0 px-4 py-2.5 text-base font-medium transition-colors border-b-2 ${
                     activeCategory === cat
                       ? `${categoryAccent[cat]} text-foreground`
                       : "border-transparent text-muted-dark hover:text-foreground"
                   }`}
                 >
                   {cat}
-                  <span className="ml-1.5 rounded-full bg-white/[0.08] px-2 py-0.5 text-[10px] font-semibold">{categoryCounts[cat]}</span>
+                  <span className="ml-1.5 rounded-full bg-white/[0.08] px-2 py-0.5 text-sm font-semibold">{categoryCounts[cat]}</span>
                 </button>
               ))}
             </div>
@@ -151,7 +151,7 @@ export default function TemplatesPage() {
                   key={label}
                   aria-pressed={activeComplexity === value}
                   onClick={() => setActiveComplexity(value)}
-                  className={`rounded-lg px-4 py-1.5 text-xs font-medium transition-all ${
+                  className={`rounded-lg px-4 py-1.5 text-sm font-medium transition-all ${
                     activeComplexity === value
                       ? "bg-white/[0.1] text-foreground shadow-[0_0_12px_rgba(255,255,255,0.06)]"
                       : "text-muted-dark hover:text-foreground"
@@ -169,13 +169,13 @@ export default function TemplatesPage() {
                 value={search}
                 onChange={(e) => setSearch(e.target.value)}
                 aria-label="Search templates"
-                className="w-full rounded-xl border border-white/10 bg-white/[0.03] py-2.5 pl-10 pr-4 text-sm text-foreground placeholder:text-muted-dark outline-none transition-colors focus:border-brand-cyan/40 focus:bg-white/[0.05]"
+                className="w-full rounded-xl border border-white/10 bg-white/[0.03] py-2.5 pl-10 pr-4 text-base text-foreground placeholder:text-muted-dark outline-none transition-colors focus:border-brand-cyan/40 focus:bg-white/[0.05]"
               />
             </div>
           </motion.div>
 
           {/* Results summary */}
-          <motion.p variants={fadeUp} className="mb-6 text-xs text-muted-dark" aria-live="polite" aria-atomic="true">
+          <motion.p variants={fadeUp} className="mb-6 text-sm text-muted-dark" aria-live="polite" aria-atomic="true">
             Showing {filtered.length} of {templates.length} templates
             {activeFilterLabels.length > 0 && (
               <> &mdash; {activeFilterLabels.map((f, i) => (
@@ -194,7 +194,7 @@ export default function TemplatesPage() {
               <p className="text-lg font-medium text-muted-dark">No templates match your filters</p>
               <button
                 onClick={() => { setSearch(""); setActiveCategory(null); setActiveComplexity(null); }}
-                className="text-sm text-brand-cyan hover:underline"
+                className="text-base text-brand-cyan hover:underline"
               >
                 Clear all filters
               </button>

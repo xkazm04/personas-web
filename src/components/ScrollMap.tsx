@@ -22,10 +22,10 @@ export default function ScrollMap({ items }: { items: ScrollMapItem[] }) {
 
   return (
     <aside aria-label="Page navigation" className="pointer-events-none fixed right-5 top-1/2 z-40 hidden -translate-y-1/2 lg:flex flex-col items-end gap-2">
-      <div className="rounded-full border border-white/6 bg-black/20 px-2.5 py-1 text-sm uppercase tracking-[0.2em] text-muted-dark backdrop-blur-sm">
+      <div className="rounded-full border border-white/6 bg-black/20 px-2.5 py-1 text-base uppercase tracking-[0.2em] text-muted-dark backdrop-blur-sm">
         Scroll Map
       </div>
-      <div className="flex flex-col text-sm font-mono tracking-wider">
+      <div className="flex flex-col text-base font-mono tracking-wider">
         {items.map((item, i) => (
           <button
             key={item.href}

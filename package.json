@@ -9,27 +9,27 @@
     "lint": "eslint"
   },
   "dependencies": {
-    "@sentry/nextjs": "^10.39.0",
-    "@supabase/supabase-js": "^2.97.0",
-    "framer-motion": "^12.34.0",
+    "@sentry/nextjs": "^10.48.0",
+    "@supabase/supabase-js": "^2.103.0",
+    "framer-motion": "^12.38.0",
     "geist": "^1.7.0",
-    "lucide-react": "^0.568.0",
-    "next": "16.1.6",
-    "react": "19.2.3",
-    "react-dom": "19.2.3",
-    "recharts": "^3.7.0",
+    "lucide-react": "^1.8.0",
+    "next": "^16.2.3",
+    "react": "^19.2.5",
+    "react-dom": "^19.2.5",
+    "recharts": "^3.8.1",
     "swr": "^2.4.1",
-    "zustand": "^5.0.11"
+    "zustand": "^5.0.12"
   },
   "devDependencies": {
     "@playwright/test": "^1.59.1",
-    "@tailwindcss/postcss": "^4",
-    "@types/node": "^20",
+    "@tailwindcss/postcss": "^4.2.2",
+    "@types/node": "^20.19.39",
     "@types/react": "^19",
     "@types/react-dom": "^19",
-    "eslint": "^9",
-    "eslint-config-next": "16.1.6",
-    "tailwindcss": "^4",
-    "typescript": "^5"
+    "eslint": "^9.39.4",
+    "eslint-config-next": "^16.2.3",
+    "tailwindcss": "^4.2.2",
+    "typescript": "^6.0.2"
   }
 }

@@ -17,6 +17,29 @@ The encryption uses AES-256, the same standard used by banks and governments. Ev
 
 When you store a credential, it's immediately encrypted and saved to a local vault file. When an agent needs that credential (like an API key to call a service), it's decrypted just long enough to make the call, then locked again. The raw key is never displayed or logged.
 
+### See It In Action
+
+:::usecases
+**Team API Management**
+Your team uses 15 different services
+---
+Each team member stores their own credentials locally. Agents use them without ever exposing secrets in logs, code, or chat.
+===
+**Credential Rotation**
+An API token expires
+---
+Personas detects the expiry, alerts you, and can automatically refresh OAuth tokens — no manual work needed.
+===
+**Multi-Service Workflows**
+An agent needs access to Slack, GitHub, and Jira
+---
+Each credential is stored separately, encrypted independently, and injected only when the agent needs it.
+:::
+
+:::info
+If you lose your computer, your credentials remain protected by your OS login. Without your system password, the encrypted vault file is unreadable — it cannot be extracted and decrypted on another machine.
+:::
+
 :::warning
 Never share your master password or vault file with anyone. These are the keys to all your stored credentials. If you suspect either has been compromised, rotate all stored secrets immediately.
 :::

@@ -31,7 +31,7 @@ export default function PhaseCard({
       className="group relative flex-none w-[160px] snap-start rounded-xl border border-white/[0.04] bg-gradient-to-br from-white/[0.02] to-transparent p-4 transition-all duration-300 hover:border-white/[0.08] hover:bg-white/[0.025]"
     >
       {/* Phase number */}
-      <div className="absolute top-2.5 right-3 text-[10px] font-mono text-muted-dark">
+      <div className="absolute top-2.5 right-3 text-sm font-mono text-muted-dark">
         {String(data.phase).padStart(2, "0")}
       </div>
 
@@ -50,8 +50,8 @@ export default function PhaseCard({
       </div>
 
       {/* Name */}
-      <h4 className="text-sm font-medium leading-tight">{data.name}</h4>
-      <p className="mt-1 text-[10px] leading-relaxed text-muted-dark line-clamp-2">{data.scope}</p>
+      <h4 className="text-base font-medium leading-tight">{data.name}</h4>
+      <p className="mt-1 text-sm leading-relaxed text-muted-dark line-clamp-2">{data.scope}</p>
     </motion.div>
   );
 }

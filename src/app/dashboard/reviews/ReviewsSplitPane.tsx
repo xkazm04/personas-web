@@ -115,17 +115,17 @@ function ReviewRow({
       <StatusDot status={review.status} />
 
       {/* Agent name */}
-      <span className="text-[11px] font-medium text-foreground truncate w-20 flex-shrink-0">
+      <span className="text-sm font-medium text-foreground truncate w-20 flex-shrink-0">
         {review.personaName ?? "Unknown"}
       </span>
 
       {/* Content preview */}
-      <span className="flex-1 min-w-0 text-[11px] text-muted truncate">
+      <span className="flex-1 min-w-0 text-sm text-muted truncate">
         {review.content.split("\n")[0]}
       </span>
 
       {/* Time */}
-      <span className="text-[9px] text-muted-dark flex-shrink-0 tabular-nums">
+      <span className="text-sm text-muted-dark flex-shrink-0 tabular-nums">
         {relativeTime(review.createdAt)}
       </span>
 
@@ -164,13 +164,13 @@ function DetailPanel({
         <div className="flex h-14 w-14 items-center justify-center rounded-2xl border border-white/[0.06] bg-white/[0.03]">
           <ClipboardCheck className="h-6 w-6 text-muted-dark" />
         </div>
-        <h3 className="mt-4 text-sm font-medium text-foreground">
+        <h3 className="mt-4 text-base font-medium text-foreground">
           Select a review
         </h3>
-        <p className="mt-1.5 text-xs text-muted-dark max-w-[200px]">
+        <p className="mt-1.5 text-sm text-muted-dark max-w-[200px]">
           Choose a review from the list to see details and take action
         </p>
-        <div className="mt-4 flex flex-wrap gap-2 justify-center text-[10px] text-muted-dark">
+        <div className="mt-4 flex flex-wrap gap-2 justify-center text-sm text-muted-dark">
           <kbd className="rounded border border-white/[0.1] bg-white/[0.04] px-1.5 py-0.5">J</kbd>
           <span>/ </span>
           <kbd className="rounded border border-white/[0.1] bg-white/[0.04] px-1.5 py-0.5">K</kbd>
@@ -210,21 +210,21 @@ function DetailPanel({
           />
           <div className="flex-1 min-w-0">
             <div className="flex items-center gap-2">
-              <span className="text-sm font-medium text-foreground">
+              <span className="text-base font-medium text-foreground">
                 {review.personaName ?? "Unknown Agent"}
               </span>
               <StatusBadge status={review.status} />
             </div>
             <div className="flex items-center gap-2 mt-0.5">
               <SevIcon className={`h-3 w-3 ${sev.color}`} />
-              <span className={`text-[11px] font-medium capitalize ${sev.color}`}>
+              <span className={`text-sm font-medium capitalize ${sev.color}`}>
                 {review.severity}
               </span>
-              <span className="text-[11px] text-muted-dark">
+              <span className="text-sm text-muted-dark">
                 {relativeTime(review.createdAt)}
               </span>
               {review.resolvedAt && (
-                <span className="text-[11px] text-muted-dark">
+                <span className="text-sm text-muted-dark">
                   Resolved {relativeTime(review.resolvedAt)}
                   {review.resolvedBy && ` by ${review.resolvedBy}`}
                 </span>
@@ -240,12 +240,12 @@ function DetailPanel({
         <div>
           <div className="flex items-center gap-1.5 mb-1.5">
             <Terminal className="h-3 w-3 text-muted-dark" />
-            <span className="text-[10px] font-medium uppercase tracking-wider text-muted-dark">
+            <span className="text-sm font-medium uppercase tracking-wider text-muted-dark">
               Content
             </span>
           </div>
           <div className="rounded-lg bg-black/40 border border-white/[0.06] p-3 overflow-auto max-h-[40vh]">
-            <pre className="whitespace-pre-wrap wrap-break-word font-mono text-[11px] leading-relaxed text-slate-300">
+            <pre className="whitespace-pre-wrap wrap-break-word font-mono text-sm leading-relaxed text-slate-300">
               {review.content}
             </pre>
           </div>
@@ -256,10 +256,10 @@ function DetailPanel({
           <div className="rounded-lg border border-white/[0.06] bg-white/[0.02] p-2.5">
             <div className="flex items-center gap-1.5">
               <Clock className="h-3 w-3 text-muted-dark" />
-              <span className="text-[10px] font-medium uppercase tracking-wider text-muted-dark">
+              <span className="text-sm font-medium uppercase tracking-wider text-muted-dark">
                 Execution
               </span>
-              <span className="ml-auto font-mono text-[10px] text-muted-dark">
+              <span className="ml-auto font-mono text-sm text-muted-dark">
                 {review.executionId.slice(0, 16)}
               </span>
             </div>
@@ -271,7 +271,7 @@ function DetailPanel({
           <div>
             <div className="flex items-center gap-1.5 mb-1.5">
               <Bookmark className="h-3 w-3 text-muted-dark" />
-              <span className="text-[10px] font-medium uppercase tracking-wider text-muted-dark">
+              <span className="text-sm font-medium uppercase tracking-wider text-muted-dark">
                 Reviewer Notes
               </span>
             </div>
@@ -281,7 +281,7 @@ function DetailPanel({
               onChange={(e) => setNotes(e.target.value)}
               placeholder="Add optional notes before resolving..."
               rows={3}
-              className="w-full rounded-lg border border-white/[0.08] bg-white/[0.03] px-3 py-2 text-sm text-foreground placeholder:text-muted-dark/50 focus:border-brand-cyan/30 focus:outline-none resize-none"
+              className="w-full rounded-lg border border-white/[0.08] bg-white/[0.03] px-3 py-2 text-base text-foreground placeholder:text-muted-dark/50 focus:border-brand-cyan/30 focus:outline-none resize-none"
             />
           </div>
         )}
@@ -291,11 +291,11 @@ function DetailPanel({
           <div>
             <div className="flex items-center gap-1.5 mb-1.5">
               <Bookmark className="h-3 w-3 text-muted-dark" />
-              <span className="text-[10px] font-medium uppercase tracking-wider text-muted-dark">
+              <span className="text-sm font-medium uppercase tracking-wider text-muted-dark">
                 Reviewer Notes
               </span>
             </div>
-            <div className="rounded-lg border border-white/[0.06] bg-white/[0.02] px-3 py-2 text-xs text-muted">
+            <div className="rounded-lg border border-white/[0.06] bg-white/[0.02] px-3 py-2 text-sm text-muted">
               {review.reviewerNotes}
             </div>
           </div>
@@ -308,7 +308,7 @@ function DetailPanel({
           <button
             onClick={() => void handleResolve("approved")}
             disabled={resolving}
-            className="flex-1 flex items-center justify-center gap-1.5 rounded-lg border border-emerald-500/30 bg-emerald-500/10 px-4 py-2 text-xs font-medium text-emerald-400 transition-all hover:bg-emerald-500/20 disabled:opacity-50"
+            className="flex-1 flex items-center justify-center gap-1.5 rounded-lg border border-emerald-500/30 bg-emerald-500/10 px-4 py-2 text-sm font-medium text-emerald-400 transition-all hover:bg-emerald-500/20 disabled:opacity-50"
           >
             {resolving ? (
               <Loader2 className="h-3.5 w-3.5 animate-spin" />
@@ -316,14 +316,14 @@ function DetailPanel({
               <Check className="h-3.5 w-3.5" />
             )}
             Approve
-            <kbd className="ml-1 rounded border border-emerald-500/20 bg-emerald-500/5 px-1 py-px text-[9px]">
+            <kbd className="ml-1 rounded border border-emerald-500/20 bg-emerald-500/5 px-1 py-px text-sm">
               A
             </kbd>
           </button>
           <button
             onClick={() => void handleResolve("rejected")}
             disabled={resolving}
-            className="flex-1 flex items-center justify-center gap-1.5 rounded-lg border border-red-500/30 bg-red-500/10 px-4 py-2 text-xs font-medium text-red-400 transition-all hover:bg-red-500/20 disabled:opacity-50"
+            className="flex-1 flex items-center justify-center gap-1.5 rounded-lg border border-red-500/30 bg-red-500/10 px-4 py-2 text-sm font-medium text-red-400 transition-all hover:bg-red-500/20 disabled:opacity-50"
           >
             {resolving ? (
               <Loader2 className="h-3.5 w-3.5 animate-spin" />
@@ -331,7 +331,7 @@ function DetailPanel({
               <X className="h-3.5 w-3.5" />
             )}
             Reject
-            <kbd className="ml-1 rounded border border-red-500/20 bg-red-500/5 px-1 py-px text-[9px]">
+            <kbd className="ml-1 rounded border border-red-500/20 bg-red-500/5 px-1 py-px text-sm">
               R
             </kbd>
           </button>
@@ -487,7 +487,7 @@ export default function ReviewsSplitPane() {
             className="flex-1 overflow-y-auto divide-y divide-white/[0.04] scrollbar-thin scrollbar-thumb-white/10 scrollbar-track-transparent"
           >
             {filtered.length === 0 ? (
-              <div className="flex items-center justify-center py-12 text-[11px] text-muted-dark/50">
+              <div className="flex items-center justify-center py-12 text-sm text-muted-dark/50">
                 No reviews in this filter
               </div>
             ) : (
@@ -507,7 +507,7 @@ export default function ReviewsSplitPane() {
           {reviewsLoading && (
             <div className="flex-shrink-0 flex items-center justify-center gap-1.5 py-1.5 border-t border-white/[0.06] bg-white/[0.02]">
               <Loader2 className="h-3 w-3 animate-spin text-muted-dark" />
-              <span className="text-[10px] text-muted-dark">Refreshing...</span>
+              <span className="text-sm text-muted-dark">Refreshing...</span>
             </div>
           )}
         </div>

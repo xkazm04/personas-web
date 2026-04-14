@@ -26,7 +26,7 @@ export default function StatBadge({ icon: Icon, label, value, accent, href }: St
       <Icon className="h-4 w-4 flex-shrink-0" />
       <div className="flex items-baseline gap-1.5">
         <span className="text-lg font-bold tabular-nums">{value}</span>
-        <span className="text-[11px] text-muted-dark">{label}</span>
+        <span className="text-sm text-muted-dark">{label}</span>
       </div>
       {href && (
         <ArrowUpRight className="ml-auto h-3 w-3 opacity-0 transition-opacity group-hover:opacity-100" />

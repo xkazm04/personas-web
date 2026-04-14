@@ -206,7 +206,7 @@ function SortHeader({
   return (
     <button
       onClick={() => onSort(column.key)}
-      className={`flex items-center gap-1 ${align} ${column.width} px-2 py-2 text-[10px] font-semibold uppercase tracking-wider transition-colors ${
+      className={`flex items-center gap-1 ${align} ${column.width} px-2 py-2 text-sm font-semibold uppercase tracking-wider transition-colors ${
         isActive
           ? "text-foreground"
           : "text-muted-dark hover:text-foreground/70"
@@ -278,49 +278,49 @@ function TableRow({
 
       {/* Pattern Key */}
       <div className="flex-1 min-w-[140px] px-2 py-2.5">
-        <p className="text-xs font-medium text-foreground truncate">
+        <p className="text-sm font-medium text-foreground truncate">
           {pattern.patternKey}
         </p>
       </div>
 
       {/* Agent */}
       <div className="w-28 px-2 py-2.5">
-        <p className="text-[11px] text-foreground/70 truncate">
+        <p className="text-sm text-foreground/70 truncate">
           {pattern.personaName}
         </p>
       </div>
 
       {/* Success */}
       <div className="w-18 px-2 py-2.5 text-right">
-        <span className="text-xs font-mono font-medium tabular-nums text-emerald-400">
+        <span className="text-sm font-mono font-medium tabular-nums text-emerald-400">
           {pattern.successCount}
         </span>
       </div>
 
       {/* Failures */}
       <div className="w-16 px-2 py-2.5 text-right">
-        <span className="text-xs font-mono font-medium tabular-nums text-rose-400">
+        <span className="text-sm font-mono font-medium tabular-nums text-rose-400">
           {pattern.failureCount}
         </span>
       </div>
 
       {/* Success Rate */}
       <div className="w-16 px-2 py-2.5 text-right">
-        <span className="text-xs font-mono font-medium tabular-nums text-foreground">
+        <span className="text-sm font-mono font-medium tabular-nums text-foreground">
           {(rate * 100).toFixed(0)}%
         </span>
       </div>
 
       {/* Cost */}
       <div className="w-18 px-2 py-2.5 text-right">
-        <span className="text-xs font-mono font-medium tabular-nums text-foreground/70">
+        <span className="text-sm font-mono font-medium tabular-nums text-foreground/70">
           {formatCost(pattern.avgCostUsd)}
         </span>
       </div>
 
       {/* Duration */}
       <div className="w-20 px-2 py-2.5 text-right">
-        <span className="text-xs font-mono font-medium tabular-nums text-foreground/70">
+        <span className="text-sm font-mono font-medium tabular-nums text-foreground/70">
           {formatDuration(pattern.avgDurationMs)}
         </span>
       </div>
@@ -337,7 +337,7 @@ function TableRow({
               }}
             />
           </div>
-          <span className="text-[10px] font-mono font-medium tabular-nums text-foreground/60 w-7 text-right">
+          <span className="text-sm font-mono font-medium tabular-nums text-foreground/60 w-7 text-right">
             {confPercent}%
           </span>
         </div>
@@ -345,7 +345,7 @@ function TableRow({
 
       {/* Last Seen */}
       <div className="w-20 px-2 py-2.5 text-right">
-        <span className="text-[11px] font-mono tabular-nums text-muted-dark">
+        <span className="text-sm font-mono tabular-nums text-muted-dark">
           {relativeTime(pattern.lastSeen)}
         </span>
       </div>
@@ -383,17 +383,17 @@ function BottomDetailPanel({
             <Icon className={`h-4 w-4 ${config.textColor}`} />
           </div>
           <div>
-            <p className="text-xs font-semibold text-foreground">
+            <p className="text-sm font-semibold text-foreground">
               {pattern.patternKey}
             </p>
-            <p className="text-[10px] text-muted-dark">
+            <p className="text-sm text-muted-dark">
               {pattern.personaName} / {config.label}
             </p>
           </div>
         </div>
 
         {/* Center: Stats */}
-        <div className="flex items-center gap-5 text-xs flex-1">
+        <div className="flex items-center gap-5 text-sm flex-1">
           <div className="flex items-center gap-1.5">
             <CheckCircle2 className="h-3 w-3 text-emerald-400" />
             <span className="font-mono tabular-nums text-foreground">
@@ -437,7 +437,7 @@ function BottomDetailPanel({
 
         {/* Right: Description + Close */}
         <div className="flex items-start gap-3 max-w-sm shrink-0">
-          <p className="text-[11px] leading-relaxed text-foreground/60 line-clamp-2">
+          <p className="text-sm leading-relaxed text-foreground/60 line-clamp-2">
             {pattern.description}
           </p>
           <button
@@ -574,7 +574,7 @@ export default function KnowledgeDenseTable() {
         className="flex items-center gap-4 flex-wrap mb-2 shrink-0"
       >
         {/* Inline stats */}
-        <div className="flex items-center gap-4 text-xs mr-auto">
+        <div className="flex items-center gap-4 text-sm mr-auto">
           <span className="text-muted-dark">
             Patterns{" "}
             <span className="text-foreground font-bold tabular-nums">
@@ -622,7 +622,7 @@ export default function KnowledgeDenseTable() {
                 key={type}
                 onClick={() => toggleTypeFilter(type)}
                 title={cfg.label}
-                className={`flex items-center gap-1 rounded-full px-2.5 py-1 text-[10px] font-medium transition-all duration-200 ${
+                className={`flex items-center gap-1 rounded-full px-2.5 py-1 text-sm font-medium transition-all duration-200 ${
                   active
                     ? `${cfg.bgClass} ${cfg.textColor} ring-1 ring-white/[0.1]`
                     : "text-muted-dark hover:text-foreground/70 hover:bg-white/[0.04]"
@@ -636,7 +636,7 @@ export default function KnowledgeDenseTable() {
           {typeFilters.size > 0 && (
             <button
               onClick={() => setTypeFilters(new Set())}
-              className="text-[10px] text-muted-dark hover:text-foreground/70 px-2 py-1 transition-colors"
+              className="text-sm text-muted-dark hover:text-foreground/70 px-2 py-1 transition-colors"
             >
               Clear
             </button>
@@ -677,7 +677,7 @@ export default function KnowledgeDenseTable() {
           </AnimatePresence>
 
           {sortedPatterns.length === 0 && (
-            <div className="flex items-center justify-center py-12 text-sm text-muted-dark">
+            <div className="flex items-center justify-center py-12 text-base text-muted-dark">
               No patterns match current filters
             </div>
           )}

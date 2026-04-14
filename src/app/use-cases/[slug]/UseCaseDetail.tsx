@@ -49,7 +49,7 @@ export default function UseCaseDetail({ useCase }: { useCase: UseCase }) {
           <motion.div variants={fadeUp}>
             <Link
               href="/use-cases"
-              className="inline-flex items-center gap-1.5 text-sm text-muted hover:text-foreground transition-colors mb-8"
+              className="inline-flex items-center gap-1.5 text-base text-muted hover:text-foreground transition-colors mb-8"
             >
               <ArrowLeft className="h-4 w-4" />
               All use cases
@@ -77,12 +77,12 @@ export default function UseCaseDetail({ useCase }: { useCase: UseCase }) {
 
             <motion.div variants={fadeUp}>
               <div className="rounded-xl border border-white/[0.06] bg-white/[0.02] backdrop-blur-sm p-6">
-                <h3 className="text-sm font-semibold text-foreground uppercase tracking-wider mb-4">
+                <h3 className="text-base font-semibold text-foreground uppercase tracking-wider mb-4">
                   Key Benefits
                 </h3>
                 <ul className="space-y-3">
                   {useCase.benefits.map((b, i) => (
-                    <li key={i} className="flex items-start gap-2.5 text-sm text-muted">
+                    <li key={i} className="flex items-start gap-2.5 text-base text-muted">
                       <Check
                         className="h-4 w-4 shrink-0 mt-0.5"
                         style={{ color: useCase.color }}
@@ -94,14 +94,14 @@ export default function UseCaseDetail({ useCase }: { useCase: UseCase }) {
 
                 <div className="mt-6 pt-4 border-t border-white/[0.06] grid grid-cols-2 gap-4">
                   <div>
-                    <h4 className="text-xs font-medium text-muted uppercase tracking-wider mb-2 flex items-center gap-1.5">
+                    <h4 className="text-sm font-medium text-muted uppercase tracking-wider mb-2 flex items-center gap-1.5">
                       <Zap className="h-3 w-3" /> Triggers
                     </h4>
                     <div className="flex flex-wrap gap-1.5">
                       {useCase.triggers.map((t) => (
                         <span
                           key={t}
-                          className="rounded-full border border-white/8 bg-white/3 px-2.5 py-0.5 text-[10px] text-muted"
+                          className="rounded-full border border-white/8 bg-white/3 px-2.5 py-0.5 text-sm text-muted"
                         >
                           {t}
                         </span>
@@ -109,20 +109,20 @@ export default function UseCaseDetail({ useCase }: { useCase: UseCase }) {
                     </div>
                   </div>
                   <div>
-                    <h4 className="text-xs font-medium text-muted uppercase tracking-wider mb-2 flex items-center gap-1.5">
+                    <h4 className="text-sm font-medium text-muted uppercase tracking-wider mb-2 flex items-center gap-1.5">
                       <Link2 className="h-3 w-3" /> Connectors
                     </h4>
                     <div className="flex flex-wrap gap-1.5">
                       {useCase.connectors.slice(0, 5).map((c) => (
                         <span
                           key={c}
-                          className="rounded-full border border-white/8 bg-white/3 px-2.5 py-0.5 text-[10px] text-muted"
+                          className="rounded-full border border-white/8 bg-white/3 px-2.5 py-0.5 text-sm text-muted"
                         >
                           {c}
                         </span>
                       ))}
                       {useCase.connectors.length > 5 && (
-                        <span className="rounded-full border border-white/8 bg-white/3 px-2.5 py-0.5 text-[10px] text-muted">
+                        <span className="rounded-full border border-white/8 bg-white/3 px-2.5 py-0.5 text-sm text-muted">
                           +{useCase.connectors.length - 5}
                         </span>
                       )}
@@ -153,20 +153,20 @@ export default function UseCaseDetail({ useCase }: { useCase: UseCase }) {
                 <h3 className="text-base font-semibold text-foreground mb-2">
                   {wf.title}
                 </h3>
-                <p className="text-sm text-muted leading-relaxed flex-1 mb-4">
+                <p className="text-base text-muted leading-relaxed flex-1 mb-4">
                   {wf.description}
                 </p>
                 <div className="space-y-2 pt-3 border-t border-white/[0.04]">
-                  <div className="flex items-center gap-2 text-xs text-muted">
+                  <div className="flex items-center gap-2 text-sm text-muted">
                     <Zap className="h-3 w-3 shrink-0" style={{ color: useCase.color }} />
                     <span className="font-medium">Trigger:</span> {wf.trigger}
                   </div>
-                  <div className="flex items-center gap-2 text-xs text-muted">
+                  <div className="flex items-center gap-2 text-sm text-muted">
                     <Link2 className="h-3 w-3 shrink-0" style={{ color: useCase.color }} />
                     <span className="font-medium">Connectors:</span>{" "}
                     {wf.connectors.join(", ")}
                   </div>
-                  <div className="flex items-center gap-2 text-xs text-muted">
+                  <div className="flex items-center gap-2 text-sm text-muted">
                     <Users className="h-3 w-3 shrink-0" style={{ color: useCase.color }} />
                     <span className="font-medium">Agents:</span> {wf.agentCount}
                   </div>
@@ -190,19 +190,19 @@ export default function UseCaseDetail({ useCase }: { useCase: UseCase }) {
             <div className="mt-10 flex flex-wrap items-center justify-center gap-4">
               <Link
                 href="/#download"
-                className="inline-flex items-center gap-2 rounded-full bg-brand-cyan/15 border border-brand-cyan/30 px-8 py-3 text-sm font-semibold text-brand-cyan transition-colors hover:bg-brand-cyan/25"
+                className="inline-flex items-center gap-2 rounded-full bg-brand-cyan/15 border border-brand-cyan/30 px-8 py-3 text-base font-semibold text-brand-cyan transition-colors hover:bg-brand-cyan/25"
               >
                 <Download className="h-4 w-4" />
                 Download Free
               </Link>
               <Link
-                href="/tour"
-                className="inline-flex items-center gap-2 rounded-full border border-white/10 px-8 py-3 text-sm font-medium text-muted transition-colors hover:border-white/20 hover:text-foreground"
+                href="/#get-started"
+                className="inline-flex items-center gap-2 rounded-full border border-white/10 px-8 py-3 text-base font-medium text-muted transition-colors hover:border-white/20 hover:text-foreground"
               >
-                Take the Tour
+                Get started
               </Link>
             </div>
-            <div className="mt-6 flex flex-wrap items-center justify-center gap-4 text-sm text-muted">
+            <div className="mt-6 flex flex-wrap items-center justify-center gap-4 text-base text-muted">
               <Link href="/blog" className="hover:text-foreground transition-colors">
                 Read the blog &rarr;
               </Link>

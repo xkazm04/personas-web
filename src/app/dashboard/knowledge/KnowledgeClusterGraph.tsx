@@ -218,10 +218,10 @@ function DetailPanel({
             <Icon className={`h-3.5 w-3.5 ${config.textColor}`} />
           </div>
           <div>
-            <p className="text-xs font-semibold text-foreground leading-tight">
+            <p className="text-sm font-semibold text-foreground leading-tight">
               {pattern.patternKey}
             </p>
-            <p className="text-[10px] text-muted-dark">{pattern.personaName}</p>
+            <p className="text-sm text-muted-dark">{pattern.personaName}</p>
           </div>
         </div>
         <button
@@ -234,26 +234,26 @@ function DetailPanel({
 
       <div className="grid grid-cols-3 gap-2 mb-3">
         <div className="rounded-lg bg-white/[0.03] px-2 py-1.5 text-center">
-          <p className="text-[9px] text-muted-dark uppercase tracking-wider">
+          <p className="text-sm text-muted-dark uppercase tracking-wider">
             Success
           </p>
-          <p className="text-sm font-bold tabular-nums text-emerald-400">
+          <p className="text-base font-bold tabular-nums text-emerald-400">
             {pattern.successCount}
           </p>
         </div>
         <div className="rounded-lg bg-white/[0.03] px-2 py-1.5 text-center">
-          <p className="text-[9px] text-muted-dark uppercase tracking-wider">
+          <p className="text-sm text-muted-dark uppercase tracking-wider">
             Failures
           </p>
-          <p className="text-sm font-bold tabular-nums text-rose-400">
+          <p className="text-base font-bold tabular-nums text-rose-400">
             {pattern.failureCount}
           </p>
         </div>
         <div className="rounded-lg bg-white/[0.03] px-2 py-1.5 text-center">
-          <p className="text-[9px] text-muted-dark uppercase tracking-wider">
+          <p className="text-sm text-muted-dark uppercase tracking-wider">
             Rate
           </p>
-          <p className="text-sm font-bold tabular-nums text-foreground">
+          <p className="text-base font-bold tabular-nums text-foreground">
             {(rate * 100).toFixed(1)}%
           </p>
         </div>
@@ -261,26 +261,26 @@ function DetailPanel({
 
       <div className="grid grid-cols-3 gap-2 mb-3">
         <div className="rounded-lg bg-white/[0.03] px-2 py-1.5 text-center">
-          <p className="text-[9px] text-muted-dark uppercase tracking-wider">
+          <p className="text-sm text-muted-dark uppercase tracking-wider">
             Cost
           </p>
-          <p className="text-xs font-semibold tabular-nums text-foreground">
+          <p className="text-sm font-semibold tabular-nums text-foreground">
             {formatCost(pattern.avgCostUsd)}
           </p>
         </div>
         <div className="rounded-lg bg-white/[0.03] px-2 py-1.5 text-center">
-          <p className="text-[9px] text-muted-dark uppercase tracking-wider">
+          <p className="text-sm text-muted-dark uppercase tracking-wider">
             Duration
           </p>
-          <p className="text-xs font-semibold tabular-nums text-foreground">
+          <p className="text-sm font-semibold tabular-nums text-foreground">
             {formatDuration(pattern.avgDurationMs)}
           </p>
         </div>
         <div className="rounded-lg bg-white/[0.03] px-2 py-1.5 text-center">
-          <p className="text-[9px] text-muted-dark uppercase tracking-wider">
+          <p className="text-sm text-muted-dark uppercase tracking-wider">
             Confidence
           </p>
-          <p className={`text-xs font-semibold tabular-nums ${config.textColor}`}>
+          <p className={`text-sm font-semibold tabular-nums ${config.textColor}`}>
             {Math.round(pattern.confidence * 100)}%
           </p>
         </div>
@@ -297,11 +297,11 @@ function DetailPanel({
         />
       </div>
 
-      <p className="text-[11px] leading-relaxed text-foreground/60">
+      <p className="text-sm leading-relaxed text-foreground/60">
         {pattern.description}
       </p>
 
-      <div className="mt-2 flex items-center gap-1 text-[10px] text-muted-dark">
+      <div className="mt-2 flex items-center gap-1 text-sm text-muted-dark">
         <Clock className="h-2.5 w-2.5" />
         Last seen {relativeTime(pattern.lastSeen)}
       </div>
@@ -388,7 +388,7 @@ function GraphNode({
         x={position.x}
         y={position.y + size / 2 + 12}
         textAnchor="middle"
-        className="text-[8px] fill-current text-foreground/60"
+        className="text-sm fill-current text-foreground/60"
         style={{ fontSize: "8px" }}
       >
         {pattern.patternKey.length > 18
@@ -491,7 +491,7 @@ export default function KnowledgeClusterGraph() {
         variants={fadeUp}
         className="flex items-center gap-4 flex-wrap mb-3 shrink-0"
       >
-        <div className="flex items-center gap-4 text-xs mr-auto">
+        <div className="flex items-center gap-4 text-sm mr-auto">
           <span className="text-muted-dark">
             Nodes{" "}
             <span className="text-foreground font-bold tabular-nums">
@@ -528,7 +528,7 @@ export default function KnowledgeClusterGraph() {
               setActiveFilter("all");
               setSelectedPattern(null);
             }}
-            className={`rounded-full px-3 py-1 text-[11px] font-medium transition-all duration-200 ${
+            className={`rounded-full px-3 py-1 text-sm font-medium transition-all duration-200 ${
               activeFilter === "all"
                 ? "bg-white/[0.1] text-foreground"
                 : "text-muted-dark hover:text-foreground/70 hover:bg-white/[0.04]"
@@ -546,7 +546,7 @@ export default function KnowledgeClusterGraph() {
                   setActiveFilter(type);
                   setSelectedPattern(null);
                 }}
-                className={`flex items-center gap-1 rounded-full px-2.5 py-1 text-[10px] font-medium transition-all duration-200 ${
+                className={`flex items-center gap-1 rounded-full px-2.5 py-1 text-sm font-medium transition-all duration-200 ${
                   activeFilter === type
                     ? `${cfg.bgClass} ${cfg.textColor} ring-1 ring-white/[0.1]`
                     : "text-muted-dark hover:text-foreground/70 hover:bg-white/[0.04]"
@@ -595,7 +595,7 @@ export default function KnowledgeClusterGraph() {
                   }}
                 >
                   <span
-                    className={`text-[10px] font-semibold uppercase tracking-wider ${config.textColor} opacity-40`}
+                    className={`text-sm font-semibold uppercase tracking-wider ${config.textColor} opacity-40`}
                   >
                     {config.label}
                   </span>
@@ -672,7 +672,7 @@ export default function KnowledgeClusterGraph() {
 
         {/* Legend */}
         <div className="absolute left-3 bottom-3 flex items-center gap-3 bg-background/80 backdrop-blur-sm rounded-lg border border-white/[0.06] px-3 py-2">
-          <span className="text-[9px] text-muted-dark uppercase tracking-wider font-semibold">
+          <span className="text-sm text-muted-dark uppercase tracking-wider font-semibold">
             Agent Links
           </span>
           {Object.entries(PERSONA_COLORS).map(([name, color]) => (
@@ -681,28 +681,28 @@ export default function KnowledgeClusterGraph() {
                 className="h-2 w-2 rounded-full"
                 style={{ backgroundColor: color }}
               />
-              <span className="text-[9px] text-foreground/50">{name}</span>
+              <span className="text-sm text-foreground/50">{name}</span>
             </div>
           ))}
         </div>
 
         {/* Node size legend */}
         <div className="absolute left-3 top-3 flex items-center gap-2 bg-background/80 backdrop-blur-sm rounded-lg border border-white/[0.06] px-3 py-2">
-          <span className="text-[9px] text-muted-dark uppercase tracking-wider font-semibold">
+          <span className="text-sm text-muted-dark uppercase tracking-wider font-semibold">
             Node Size
           </span>
-          <span className="text-[9px] text-foreground/40">= confidence</span>
+          <span className="text-sm text-foreground/40">= confidence</span>
           <div className="flex items-center gap-1 ml-2">
             <svg width="10" height="10">
               <circle cx="5" cy="5" r="3" fill="white" opacity={0.15} />
             </svg>
-            <span className="text-[8px] text-foreground/30">low</span>
+            <span className="text-sm text-foreground/30">low</span>
           </div>
           <div className="flex items-center gap-1">
             <svg width="14" height="14">
               <circle cx="7" cy="7" r="6" fill="white" opacity={0.15} />
             </svg>
-            <span className="text-[8px] text-foreground/30">high</span>
+            <span className="text-sm text-foreground/30">high</span>
           </div>
         </div>
 

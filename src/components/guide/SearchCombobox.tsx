@@ -122,7 +122,7 @@ export default function SearchCombobox({
           onKeyDown={onKeyDown}
           onFocus={() => query.length >= 2 && results.length > 0 && setIsOpen(true)}
           placeholder={placeholder}
-          className="w-full rounded-xl border border-white/[0.08] bg-white/[0.04] py-2.5 pl-10 pr-4 text-sm text-foreground placeholder:text-muted-dark outline-none transition-colors focus:border-white/[0.16] focus:bg-white/[0.06]"
+          className="w-full rounded-xl border border-white/[0.08] bg-white/[0.04] py-2.5 pl-10 pr-4 text-base text-foreground placeholder:text-muted-dark outline-none transition-colors focus:border-white/[0.16] focus:bg-white/[0.06]"
         />
       </div>
 
@@ -140,7 +140,7 @@ export default function SearchCombobox({
             className="absolute left-0 right-0 top-full z-50 mt-2 max-h-80 overflow-y-auto rounded-xl border border-white/[0.08] bg-surface/95 shadow-2xl backdrop-blur-xl"
           >
             {results.length === 0 ? (
-              <p className="px-4 py-6 text-center text-sm text-muted-dark">
+              <p className="px-4 py-6 text-center text-base text-muted-dark">
                 No topics found for &ldquo;{query}&rdquo;
               </p>
             ) : (
@@ -149,7 +149,7 @@ export default function SearchCombobox({
                   <div key={group.category.id}>
                     <div className="sticky top-0 z-10 flex items-center gap-2 bg-surface/90 px-3 py-1.5 backdrop-blur-md">
                       <span className="h-2 w-2 rounded-full" style={{ backgroundColor: group.category.color }} aria-hidden="true" />
-                      <span className="text-xs font-medium text-muted-dark">{group.category.name}</span>
+                      <span className="text-sm font-medium text-muted-dark">{group.category.name}</span>
                     </div>
                     {group.results.map((result) => {
                       const idx = flatIndexMap.get(result.topic.id) ?? -1;
@@ -163,14 +163,14 @@ export default function SearchCombobox({
                           aria-selected={isActive}
                           data-index={idx}
                           onClick={() => navigate(result)}
-                          className={`flex w-full items-center gap-2.5 px-3 py-2 text-left text-sm transition-colors ${
+                          className={`flex w-full items-center gap-2.5 px-3 py-2 text-left text-base transition-colors ${
                             isActive ? "bg-white/[0.06]" : "hover:bg-white/[0.04]"
                           }`}
                         >
                           <span className="h-1.5 w-1.5 shrink-0 rounded-full" style={{ backgroundColor: group.category.color }} />
                           <span className="min-w-0 flex-1 truncate text-foreground">{result.topic.title}</span>
                           {badge && (
-                            <span className="shrink-0 rounded bg-white/[0.06] px-1.5 py-0.5 text-sm leading-none text-muted-dark">
+                            <span className="shrink-0 rounded bg-white/[0.06] px-1.5 py-0.5 text-base leading-none text-muted-dark">
                               {badge}
                             </span>
                           )}
@@ -180,7 +180,7 @@ export default function SearchCombobox({
                     })}
                   </div>
                 ))}
-                <div className="border-t border-white/[0.06] px-3 py-1.5 text-right text-sm text-muted-dark" aria-live="polite">
+                <div className="border-t border-white/[0.06] px-3 py-1.5 text-right text-base text-muted-dark" aria-live="polite">
                   {results.length} result{results.length !== 1 && "s"}
                 </div>
               </>

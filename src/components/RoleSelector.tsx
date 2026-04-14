@@ -47,7 +47,7 @@ export default function RoleSelector({
 }) {
   return (
     <div className="flex flex-wrap items-center justify-center gap-2">
-      <span className="text-[10px] font-mono uppercase tracking-wider text-muted-dark/50 mr-1">
+      <span className="text-sm font-mono uppercase tracking-wider text-muted-dark/50 mr-1">
         I am a
       </span>
       {roles.map((role) => {
@@ -57,7 +57,7 @@ export default function RoleSelector({
           <button
             key={role.id}
             onClick={() => onChange(role.id)}
-            className={`relative cursor-pointer rounded-full border px-3.5 py-1.5 text-[11px] font-mono tracking-wider transition-all duration-300 flex items-center gap-1.5 ${
+            className={`relative cursor-pointer rounded-full border px-3.5 py-1.5 text-sm font-mono tracking-wider transition-all duration-300 flex items-center gap-1.5 ${
               isActive
                 ? role.activeClasses
                 : "border-white/[0.06] bg-white/[0.02] text-muted-dark hover:border-white/[0.12] hover:text-muted"

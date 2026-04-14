@@ -33,7 +33,7 @@ export default function RelatedTopics({ related }: RelatedTopicsProps) {
             >
               <div className="flex items-center justify-between">
                 <span
-                  className="rounded-full px-2.5 py-0.5 text-xs font-medium"
+                  className="rounded-full px-2.5 py-0.5 text-sm font-medium"
                   style={{ backgroundColor: `${category.color}15`, color: category.color }}
                 >
                   {category.name}
@@ -42,13 +42,13 @@ export default function RelatedTopics({ related }: RelatedTopicsProps) {
               </div>
 
               <p className="text-base font-semibold text-foreground">{topic.title}</p>
-              <p className="line-clamp-2 text-sm text-muted-dark">{topic.description}</p>
+              <p className="line-clamp-2 text-base text-muted-dark">{topic.description}</p>
 
               <div className="mt-auto flex flex-wrap gap-1 pt-2">
                 {sharedTags.map((tag) => (
                   <span
                     key={tag}
-                    className="rounded-full bg-white/[0.06] px-2 py-0.5 text-xs text-muted-dark"
+                    className="rounded-full bg-white/[0.06] px-2 py-0.5 text-sm text-muted-dark"
                   >
                     {tag}
                   </span>

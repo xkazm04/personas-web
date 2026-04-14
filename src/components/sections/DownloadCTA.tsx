@@ -57,7 +57,7 @@ export default function DownloadCTA() {
 
       <div className="mx-auto max-w-2xl text-center">
         <motion.div variants={fadeUp}>
-          <span className={`inline-block rounded-full border border-brand-cyan/20 bg-brand-cyan/5 px-3.5 py-1 text-sm font-medium tracking-wider uppercase text-brand-cyan/70 font-mono mb-6${isFresh ? " animate-badge-pulse" : ""}`}>
+          <span className={`inline-block rounded-full border border-brand-cyan/20 bg-brand-cyan/5 px-3.5 py-1 text-base font-medium tracking-wider uppercase text-brand-cyan/70 font-mono mb-6${isFresh ? " animate-badge-pulse" : ""}`}>
             v{APP_VERSION} — {RELEASE_TITLE}
           </span>
         </motion.div>
@@ -126,8 +126,8 @@ export default function DownloadCTA() {
                   },
                 }}
               >
-                <p className="text-sm font-mono uppercase tracking-wider text-muted-dark">{t.common.step} {index + 1}</p>
-                <p className="mt-1 text-sm text-muted">{step}</p>
+                <p className="text-base font-mono uppercase tracking-wider text-muted-dark">{t.common.step} {index + 1}</p>
+                <p className="mt-1 text-base text-muted">{step}</p>
               </motion.div>
             );
           })}
@@ -141,20 +141,20 @@ export default function DownloadCTA() {
                 href="/api/download"
                 onClick={() => trackDownloadClick("windows")}
                 icon={Download}
-                label={t.hero.downloadForWindows}
+                label="Download for Windows"
                 variant="solid"
               />
             ) : (
               <PrimaryCTA
                 onClick={() => setWaitlistPlatform(platforms[0])}
                 icon={Download}
-                label={t.hero.joinWaitlist}
+                label="Download for Windows"
                 variant="solid"
               />
             )}
             <a
               href="#features"
-              className="inline-flex w-[min(100%,20rem)] items-center justify-center rounded-full border border-white/[0.08] bg-white/[0.015] px-6 py-3 text-sm font-medium text-muted transition-colors duration-300 hover:border-white/[0.15] hover:text-foreground sm:w-auto focus-visible:ring-2 focus-visible:ring-brand-cyan/40 focus-visible:outline-none"
+              className="inline-flex w-[min(100%,20rem)] items-center justify-center rounded-full border border-white/[0.08] bg-white/[0.015] px-6 py-3 text-base font-medium text-muted transition-colors duration-300 hover:border-white/[0.15] hover:text-foreground sm:w-auto focus-visible:ring-2 focus-visible:ring-brand-cyan/40 focus-visible:outline-none"
             >
               {t.downloadSection.exploreFirst}
             </a>
@@ -167,7 +167,7 @@ export default function DownloadCTA() {
             p.available ? (
               <div
                 key={p.label}
-                className="flex items-center gap-2 rounded-full border border-brand-cyan/20 bg-brand-cyan/5 px-4 py-2 text-sm font-medium text-brand-cyan shadow-[0_0_15px_rgba(6,182,212,0.06)] transition-all duration-300"
+                className="flex items-center gap-2 rounded-full border border-brand-cyan/20 bg-brand-cyan/5 px-4 py-2 text-base font-medium text-brand-cyan shadow-[0_0_15px_rgba(6,182,212,0.06)] transition-all duration-300"
               >
                 <p.icon className="h-3.5 w-3.5" />
                 {p.label}
@@ -177,42 +177,30 @@ export default function DownloadCTA() {
               <button
                 key={p.label}
                 onClick={() => setWaitlistPlatform(p)}
-                className="flex cursor-pointer items-center gap-2 rounded-full border border-white/[0.04] bg-white/[0.01] px-4 py-2 text-sm font-medium text-muted-dark transition-all duration-300 hover:border-brand-purple/20 hover:bg-brand-purple/5 hover:text-brand-purple/80 focus-visible:ring-2 focus-visible:ring-brand-cyan/40 focus-visible:outline-none"
+                className="flex cursor-pointer items-center gap-2 rounded-full border border-white/[0.04] bg-white/[0.01] px-4 py-2 text-base font-medium text-muted-dark transition-all duration-300 hover:border-brand-purple/20 hover:bg-brand-purple/5 hover:text-brand-purple/80 focus-visible:ring-2 focus-visible:ring-brand-cyan/40 focus-visible:outline-none"
               >
                 <p.icon className="h-3.5 w-3.5" />
                 {p.label}
-                <span className="text-sm">{t.common.notifyMe}</span>
+                <span className="text-base">{t.common.notifyMe}</span>
               </button>
             )
           )}
         </motion.div>
 
         {/* Trust signals */}
-        <motion.div variants={fadeUp} className="mt-8 flex flex-wrap items-center justify-center gap-3 text-sm text-muted-dark sm:gap-6">
-          {DOWNLOAD_URL && (
-            <>
-              <span className="flex items-center gap-1.5">
-                <div className="h-1 w-1 rounded-full bg-brand-cyan/40" />
-                {t.downloadSection.requiresCli}
-              </span>
-              <span className="hidden h-3 w-px bg-white/[0.06] sm:inline-block" />
-              <span className="flex items-center gap-1.5">
-                <div className="h-1 w-1 rounded-full bg-brand-cyan/40" />
-                {t.downloadSection.installerSize}
-              </span>
-              <span className="hidden h-3 w-px bg-white/[0.06] sm:inline-block" />
-            </>
-          )}
-          <span className="flex items-center gap-1.5">
-            <div className="h-1 w-1 rounded-full bg-brand-cyan/40" />
-            {t.downloadSection.noTelemetry}
-          </span>
-          <span className="hidden h-3 w-px bg-white/[0.06] sm:inline-block" />
-          <span className="flex items-center gap-1.5">
-            <div className="h-1 w-1 rounded-full bg-brand-cyan/40" />
-            {t.downloadSection.localFirst}
-          </span>
-        </motion.div>
+        {DOWNLOAD_URL && (
+          <motion.div variants={fadeUp} className="mt-8 flex flex-wrap items-center justify-center gap-3 text-base text-muted-dark sm:gap-6">
+            <span className="flex items-center gap-1.5">
+              <div className="h-1 w-1 rounded-full bg-brand-cyan/40" />
+              {t.downloadSection.requiresCli}
+            </span>
+            <span className="hidden h-3 w-px bg-white/[0.06] sm:inline-block" />
+            <span className="flex items-center gap-1.5">
+              <div className="h-1 w-1 rounded-full bg-brand-cyan/40" />
+              {t.downloadSection.installerSize}
+            </span>
+          </motion.div>
+        )}
       </div>
 
       {/* Waitlist modal */}

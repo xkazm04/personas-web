@@ -19,12 +19,12 @@ export default function GlobalError({
       <body className="flex min-h-screen items-center justify-center bg-background text-foreground">
         <div className="text-center px-6">
           <h1 className="text-2xl font-bold mb-2">Something went wrong</h1>
-          <p className="text-sm text-[#94a3b8] mb-6">
+          <p className="text-base text-[#94a3b8] mb-6">
             {error.message || "An unexpected error occurred"}
           </p>
           <button
             onClick={reset}
-            className="rounded-full border border-brand-cyan/25 bg-brand-cyan/8 px-4 py-2 text-sm font-medium text-brand-cyan transition-all hover:border-brand-cyan/40 hover:bg-brand-cyan/12"
+            className="rounded-full border border-brand-cyan/25 bg-brand-cyan/8 px-4 py-2 text-base font-medium text-brand-cyan transition-all hover:border-brand-cyan/40 hover:bg-brand-cyan/12"
           >
             Try again
           </button>

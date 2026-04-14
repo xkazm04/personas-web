@@ -15,7 +15,7 @@ export default function CompareToggle({
       whileTap={{ scale: 0.95 }}
       onClick={onToggle}
       className={`
-        flex items-center gap-1.5 rounded-full border px-3 py-1.5 text-[11px] font-medium
+        flex items-center gap-1.5 rounded-full border px-3 py-1.5 text-sm font-medium
         transition-all duration-200 cursor-pointer
         ${
           enabled

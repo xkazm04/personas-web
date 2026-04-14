@@ -28,7 +28,7 @@ export default function NotifyInput({
 
   if (saved) {
     return (
-      <div className="flex items-center gap-1.5 text-[11px] text-brand-emerald/70 font-mono">
+      <div className="flex items-center gap-1.5 text-sm text-brand-emerald/70 font-mono">
         <Check className="h-3 w-3" />
         <span>We&apos;ll email you when this ships</span>
       </div>
@@ -44,12 +44,12 @@ export default function NotifyInput({
         onChange={(e) => setEmail(e.target.value)}
         onKeyDown={(e) => { if (e.key === "Enter") handleSave(); }}
         placeholder="Email to get notified"
-        className="min-w-0 flex-1 bg-transparent py-1.5 text-[11px] text-muted-dark placeholder:text-muted-dark/30 outline-none border-b border-transparent focus:border-brand-cyan/20 transition-colors duration-200"
+        className="min-w-0 flex-1 bg-transparent py-1.5 text-sm text-muted-dark placeholder:text-muted-dark/30 outline-none border-b border-transparent focus:border-brand-cyan/20 transition-colors duration-200"
       />
       <button
         onClick={handleSave}
         disabled={!isValidEmail(email)}
-        className="text-[11px] font-medium text-brand-cyan/70 hover:text-brand-cyan disabled:text-muted-dark/20 transition-colors duration-200"
+        className="text-sm font-medium text-brand-cyan/70 hover:text-brand-cyan disabled:text-muted-dark/20 transition-colors duration-200"
       >
         Notify me
       </button>

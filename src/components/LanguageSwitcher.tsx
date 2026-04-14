@@ -55,14 +55,14 @@ export default function LanguageSwitcher() {
     <div ref={ref} className="relative">
       <button
         onClick={() => setOpen((v) => !v)}
-        className="flex items-center gap-1.5 rounded-full border border-white/[0.06] bg-white/[0.03] px-3 py-1.5 text-sm text-muted hover:text-foreground hover:bg-white/[0.06] transition-all duration-200 focus-ring min-h-11"
+        className="flex items-center gap-1.5 rounded-full border border-white/[0.06] bg-white/[0.03] px-3 py-1.5 text-base text-muted hover:text-foreground hover:bg-white/[0.06] transition-all duration-200 focus-ring min-h-11"
         aria-label="Change language"
         aria-expanded={open}
         aria-haspopup="listbox"
       >
         <Languages className="h-3.5 w-3.5" />
         <span className="hidden sm:inline">{current.flag}</span>
-        <span className="hidden sm:inline text-xs">{current.label}</span>
+        <span className="hidden sm:inline text-sm">{current.label}</span>
       </button>
 
       <AnimatePresence>
@@ -87,7 +87,7 @@ export default function LanguageSwitcher() {
                     setLanguage(lang.code);
                     setOpen(false);
                   }}
-                  className={`flex w-full items-center gap-2.5 px-4 py-2.5 text-sm transition-colors duration-150 ${
+                  className={`flex w-full items-center gap-2.5 px-4 py-2.5 text-base transition-colors duration-150 ${
                     isActive
                       ? "bg-brand-cyan/8 text-foreground"
                       : "text-muted hover:text-foreground hover:bg-white/[0.04]"

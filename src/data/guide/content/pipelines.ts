@@ -25,6 +25,29 @@ Multi-step workflows where each agent is a specialist. Data flows between agents
 
 You design a pipeline on the team canvas by placing agents and drawing connections between them. When you run the pipeline, data flows through each agent in order. If a step fails, the pipeline stops and shows you exactly where the problem occurred.
 
+### See It In Action
+
+:::usecases
+**DevOps Pipeline**
+A pull request is opened on GitHub
+---
+PR Reviewer agent analyzes the code, Test Runner verifies it passes, Release Notes agent drafts the changelog, and Slack Notifier tells the team — all automatically.
+===
+**Content Workflow**
+You need to publish a blog post
+---
+Research agent gathers sources, Writer agent creates a draft, Editor agent polishes it, and Publisher formats it for your platform.
+===
+**Customer Support**
+A support ticket arrives
+---
+Classifier agent determines urgency, Knowledge agent finds relevant docs, Drafter writes a response, and Router escalates if needed.
+:::
+
+:::info
+There is no hard limit on how many agents you can chain together. Start with two agents, verify the data flow works end to end, then grow your pipeline one agent at a time. Pipelines with 10+ agents work just as reliably as two-agent pipelines.
+:::
+
 :::tip
 Start with a simple two-agent pipeline to learn the basics. You can always add more agents as your workflow grows.
 :::

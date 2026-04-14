@@ -23,6 +23,18 @@ export interface ComparisonCategory {
   features: ComparisonRow[];
 }
 
+/* Accent colors per category — drives theme-based section headers */
+export const CATEGORY_ACCENTS: Record<string, string> = {
+  "Pricing & Licensing": "#06b6d4",
+  "Agent Creation": "#a855f7",
+  "Execution Engine": "#34d399",
+  "Triggers & Scheduling": "#fbbf24",
+  "Security & Credentials": "#f43f5e",
+  "Observability": "#60a5fa",
+  "Deployment": "#ec4899",
+  "Developer Experience": "#14b8a6",
+};
+
 export const COMPETITORS: Competitor[] = [
   {
     id: "personas",
@@ -130,7 +142,7 @@ export const COMPARISON_CATEGORIES: ComparisonCategory[] = [
     name: "Execution Engine",
     features: [
       {
-        label: "Multi-provider AI (Claude, GPT, Gemini)",
+        label: "Multi-provider AI (Claude, Ollama)",
         values: { personas: true, crewai: true, langchain: true, n8n: "Via plugins", autogen: true },
       },
       {
@@ -254,7 +266,7 @@ export const COMPARISON_CATEGORIES: ComparisonCategory[] = [
     features: [
       {
         label: "Desktop-native app",
-        values: { personas: "macOS, Windows, Linux", crewai: false, langchain: false, n8n: false, autogen: "AutoGen Studio (web)" },
+        values: { personas: "Windows (Mac + Linux soon)", crewai: false, langchain: false, n8n: false, autogen: "AutoGen Studio (web)" },
         highlight: true,
       },
       {

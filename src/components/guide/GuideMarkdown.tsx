@@ -11,6 +11,7 @@ import {
   FeatureHighlight,
   Checklist,
   CodeCompare,
+  UseCaseGrid,
 } from "./GuideBlocks";
 
 interface GuideMarkdownProps {
@@ -98,7 +99,7 @@ function parseBlocks(lines: string[]): ReactNode[] {
       i++; // skip closing ```
       emit(
         <div className="relative rounded-xl bg-white/[0.03] border border-white/[0.06] mb-4 overflow-x-auto">
-          {lang && <div className="px-4 pt-2 text-sm text-muted-dark/60 font-mono select-none">{lang}</div>}
+          {lang && <div className="px-4 pt-2 text-base text-muted-dark/60 font-mono select-none">{lang}</div>}
           <pre className="p-4 font-mono text-base leading-relaxed text-muted-dark">
             <code>{codeLines.join("\n")}</code>
           </pre>
@@ -294,6 +295,49 @@ function parseBlocks(lines: string[]): ReactNode[] {
           else if (cl.trim()) items.push(cl.trim());
         }
         if (items.length > 0) emit(<Checklist items={items} />);
+      } else if (blockType === "usecases") {
+        // Items split by "===", within each item:
+        //   **Title**
+        //   Scenario text (first non-title, non-separator lines)
+        //   ---
+        //   Outcome text
+        const items: { title: string; scenario: string; outcome: string }[] = [];
+        let cur: { title: string; scenario: string; outcome: string; phase: "scenario" | "outcome" } = {
+          title: "",
+          scenario: "",
+          outcome: "",
+          phase: "scenario",
+        };
+        const flush = () => {
+          if (cur.title || cur.scenario || cur.outcome) {
+            items.push({ title: cur.title, scenario: cur.scenario, outcome: cur.outcome });
+          }
+          cur = { title: "", scenario: "", outcome: "", phase: "scenario" };
+        };
+        for (const ul of innerLines) {
+          const trimmed = ul.trim();
+          if (!trimmed) continue;
+          if (/^===+$/.test(trimmed)) {
+            flush();
+            continue;
+          }
+          if (/^---+$/.test(trimmed)) {
+            cur.phase = "outcome";
+            continue;
+          }
+          const titleMatch = trimmed.match(/^\*\*(.+?)\*\*\s*$/);
+          if (titleMatch && !cur.title) {
+            cur.title = titleMatch[1];
+            continue;
+          }
+          if (cur.phase === "scenario") {
+            cur.scenario += (cur.scenario ? " " : "") + trimmed;
+          } else {
+            cur.outcome += (cur.outcome ? " " : "") + trimmed;
+          }
+        }
+        flush();
+        if (items.length > 0) emit(<UseCaseGrid items={items} />);
       } else if (blockType === "code-compare") {
         // Split by "### Before" / "### After" headers (or "---" separator)
         let section: "before" | "after" = "before";

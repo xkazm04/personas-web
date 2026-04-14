@@ -56,20 +56,20 @@ export default function ConfirmDialog({
                 <AlertTriangle className="h-4.5 w-4.5 text-red-400" />
               </div>
               <div>
-                <h3 className="text-sm font-semibold text-foreground">{title}</h3>
-                <div className="mt-1.5 text-xs text-muted leading-relaxed">{children}</div>
+                <h3 className="text-base font-semibold text-foreground">{title}</h3>
+                <div className="mt-1.5 text-sm text-muted leading-relaxed">{children}</div>
               </div>
             </div>
             <div className="mt-5 flex items-center justify-end gap-2">
               <button
                 onClick={onCancel}
-                className="rounded-lg border border-white/[0.08] px-4 py-2 text-xs font-medium text-muted hover:text-foreground transition-colors"
+                className="rounded-lg border border-white/[0.08] px-4 py-2 text-sm font-medium text-muted hover:text-foreground transition-colors"
               >
                 Cancel
               </button>
               <button
                 onClick={onConfirm}
-                className="rounded-lg border border-red-500/30 bg-red-500/10 px-4 py-2 text-xs font-medium text-red-400 transition-all hover:bg-red-500/20"
+                className="rounded-lg border border-red-500/30 bg-red-500/10 px-4 py-2 text-sm font-medium text-red-400 transition-all hover:bg-red-500/20"
               >
                 {confirmLabel}
               </button>

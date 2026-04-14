@@ -113,31 +113,31 @@ function MockHealthIssueRow({ issue }: { issue: MockHealthIssue }) {
         <SevIcon className={`mt-0.5 h-4 w-4 flex-shrink-0 ${sev.color}`} />
         <div className="flex-1 min-w-0">
           <div className="flex items-center gap-2 flex-wrap">
-            <p className="text-sm font-medium text-foreground truncate">
+            <p className="text-base font-medium text-foreground truncate">
               {issue.title}
             </p>
             {issue.isCircuitBreaker && (
-              <span className="flex items-center gap-1 rounded-full border border-red-500/20 bg-red-500/10 px-2 py-0.5 text-[10px] font-medium text-red-400">
+              <span className="flex items-center gap-1 rounded-full border border-red-500/20 bg-red-500/10 px-2 py-0.5 text-sm font-medium text-red-400">
                 <ZapIcon className="h-2.5 w-2.5" />
                 Circuit Breaker
               </span>
             )}
             {issue.status === "auto_fixed" && (
-              <span className="flex items-center gap-1 rounded-full border border-emerald-500/20 bg-emerald-500/8 px-2 py-0.5 text-[10px] text-emerald-400">
+              <span className="flex items-center gap-1 rounded-full border border-emerald-500/20 bg-emerald-500/8 px-2 py-0.5 text-sm text-emerald-400">
                 <ShieldCheck className="h-2.5 w-2.5" />
                 Auto-fixed
               </span>
             )}
             {issue.status === "resolved" && (
-              <span className="flex items-center gap-1 rounded-full border border-blue-500/20 bg-blue-500/8 px-2 py-0.5 text-[10px] text-blue-400">
+              <span className="flex items-center gap-1 rounded-full border border-blue-500/20 bg-blue-500/8 px-2 py-0.5 text-sm text-blue-400">
                 Resolved
               </span>
             )}
           </div>
-          <p className="mt-1 text-xs text-muted-dark line-clamp-2">
+          <p className="mt-1 text-sm text-muted-dark line-clamp-2">
             {issue.description}
           </p>
-          <div className="mt-2 flex items-center gap-3 text-[10px] text-muted-dark">
+          <div className="mt-2 flex items-center gap-3 text-sm text-muted-dark">
             <span>{issue.personaName}</span>
             <span>{age}</span>
             <span className={`uppercase font-medium ${sev.color}`}>
@@ -150,7 +150,7 @@ function MockHealthIssueRow({ issue }: { issue: MockHealthIssue }) {
             <div className="mt-2">
               <button
                 onClick={() => setExpanded(!expanded)}
-                className="flex items-center gap-1 text-[10px] text-emerald-400/70 hover:text-emerald-400 transition-colors cursor-pointer"
+                className="flex items-center gap-1 text-sm text-emerald-400/70 hover:text-emerald-400 transition-colors cursor-pointer"
               >
                 {expanded ? (
                   <ChevronUp className="h-3 w-3" />
@@ -168,7 +168,7 @@ function MockHealthIssueRow({ issue }: { issue: MockHealthIssue }) {
                     transition={{ duration: 0.2 }}
                     className="overflow-hidden"
                   >
-                    <div className="mt-1.5 rounded-lg border border-emerald-500/10 bg-emerald-500/5 px-3 py-2 text-[11px] text-emerald-300/80">
+                    <div className="mt-1.5 rounded-lg border border-emerald-500/10 bg-emerald-500/5 px-3 py-2 text-sm text-emerald-300/80">
                       {issue.autoFixApplied}
                     </div>
                   </motion.div>
@@ -222,7 +222,7 @@ function CostAnomalyBanner({
             >
               <AlertTriangle className="h-4 w-4 text-amber-400 flex-shrink-0" />
             </motion.div>
-            <p className="flex-1 text-sm text-amber-300">
+            <p className="flex-1 text-base text-amber-300">
               Cost anomaly detected on{" "}
               <span className="font-medium">{anomaly.date}</span>:{" "}
               <span className="font-semibold text-amber-200">
@@ -281,7 +281,7 @@ function SeverityFilterChips({
           key={f}
           onClick={() => onSelect(f)}
           className={`
-            rounded-full border px-2.5 py-0.5 text-[10px] font-medium capitalize transition-all cursor-pointer
+            rounded-full border px-2.5 py-0.5 text-sm font-medium capitalize transition-all cursor-pointer
             ${filterColors[f]}
             ${active === f ? filterActiveBg[f] : "bg-transparent hover:bg-white/[0.04]"}
           `}
@@ -438,7 +438,7 @@ export default function ObservabilityPage() {
           <h1 className="text-2xl font-bold tracking-tight">
             <GradientText variant="silver">Observability</GradientText>
           </h1>
-          <p className="mt-1 text-sm text-muted-dark">
+          <p className="mt-1 text-base text-muted-dark">
             Performance metrics, cost tracking, and system health
           </p>
         </div>
@@ -458,7 +458,7 @@ export default function ObservabilityPage() {
           className="mb-6 flex items-center gap-3 rounded-xl border border-amber-500/20 bg-amber-500/5 px-4 py-3"
         >
           <AlertTriangle className="h-4 w-4 text-amber-400 flex-shrink-0" />
-          <p className="text-sm text-amber-300">
+          <p className="text-base text-amber-300">
             Budget threshold exceeded for{" "}
             {overBudgetPersonas.map((p) => p.personaName).join(", ")}
           </p>
@@ -507,11 +507,11 @@ export default function ObservabilityPage() {
       <div className="grid gap-6 lg:grid-cols-2 mb-8">
         {/* Cost over time with compare */}
         <GlowCard accent="cyan" variants={fadeUp} className="p-5">
-          <h3 className="text-sm font-semibold text-foreground mb-4 flex items-center gap-2">
+          <h3 className="text-base font-semibold text-foreground mb-4 flex items-center gap-2">
             <DollarSign className="h-4 w-4 text-brand-cyan" />
             Cost Over Time
             {compareEnabled && (
-              <span className="ml-auto text-[10px] text-purple-400/70 font-normal">
+              <span className="ml-auto text-sm text-purple-400/70 font-normal">
                 vs previous period
               </span>
             )}
@@ -521,11 +521,11 @@ export default function ObservabilityPage() {
 
         {/* Execution health with compare */}
         <GlowCard accent="emerald" variants={fadeUp} className="p-5">
-          <h3 className="text-sm font-semibold text-foreground mb-4 flex items-center gap-2">
+          <h3 className="text-base font-semibold text-foreground mb-4 flex items-center gap-2">
             <Activity className="h-4 w-4 text-emerald-400" />
             Execution Health
             {compareEnabled && (
-              <span className="ml-auto text-[10px] text-purple-400/70 font-normal">
+              <span className="ml-auto text-sm text-purple-400/70 font-normal">
                 vs previous period
               </span>
             )}
@@ -537,10 +537,10 @@ export default function ObservabilityPage() {
       {/* Latency chart row */}
       <div className="mb-8">
         <GlowCard accent="amber" variants={fadeUp} className="p-5">
-          <h3 className="text-sm font-semibold text-foreground mb-4 flex items-center gap-2">
+          <h3 className="text-base font-semibold text-foreground mb-4 flex items-center gap-2">
             <Clock className="h-4 w-4 text-amber-400" />
             Latency Distribution
-            <span className="ml-auto text-[10px] text-muted-dark font-normal">
+            <span className="ml-auto text-sm text-muted-dark font-normal">
               P50 / P95 / P99
             </span>
           </h3>
@@ -556,7 +556,7 @@ export default function ObservabilityPage() {
           variants={fadeUp}
           className="p-5 lg:col-span-2"
         >
-          <h3 className="text-sm font-semibold text-foreground mb-4 flex items-center gap-2">
+          <h3 className="text-base font-semibold text-foreground mb-4 flex items-center gap-2">
             <Users className="h-4 w-4 text-brand-purple" />
             Spend by Agent
           </h3>
@@ -569,7 +569,7 @@ export default function ObservabilityPage() {
                 {personaSpend.map((p) => (
                   <div
                     key={p.personaId}
-                    className="flex items-center gap-2 text-xs"
+                    className="flex items-center gap-2 text-sm"
                   >
                     <span
                       className="h-2.5 w-2.5 rounded-full flex-shrink-0"
@@ -602,7 +602,7 @@ export default function ObservabilityPage() {
               </div>
             </>
           ) : (
-            <p className="text-xs text-muted-dark py-8 text-center">
+            <p className="text-sm text-muted-dark py-8 text-center">
               No spend data
             </p>
           )}
@@ -615,13 +615,13 @@ export default function ObservabilityPage() {
             className="p-5 h-full"
           >
             <div className="flex items-center justify-between mb-3">
-              <h3 className="text-sm font-semibold text-foreground flex items-center gap-2">
+              <h3 className="text-base font-semibold text-foreground flex items-center gap-2">
                 <ShieldAlert className="h-4 w-4 text-amber-400" />
                 Health Issues
               </h3>
               <div className="flex items-center gap-2">
                 {openIssues.length > 0 && (
-                  <span className="rounded-full border border-amber-500/20 bg-amber-500/8 px-2 py-0.5 text-[10px] font-medium text-amber-400">
+                  <span className="rounded-full border border-amber-500/20 bg-amber-500/8 px-2 py-0.5 text-sm font-medium text-amber-400">
                     {openIssues.length} open
                   </span>
                 )}
@@ -629,7 +629,7 @@ export default function ObservabilityPage() {
                   onClick={handleRunAnalysis}
                   disabled={healingActive}
                   className={`
-                    flex items-center gap-1.5 rounded-full border px-3 py-1 text-[10px] font-medium transition-all cursor-pointer
+                    flex items-center gap-1.5 rounded-full border px-3 py-1 text-sm font-medium transition-all cursor-pointer
                     ${
                       healingActive
                         ? "border-cyan-500/30 bg-cyan-500/10 text-cyan-400"
@@ -680,7 +680,7 @@ export default function ObservabilityPage() {
                   >
                     <Activity className="h-3.5 w-3.5 text-cyan-400" />
                   </motion.div>
-                  <p className="text-[11px] text-cyan-300/80">
+                  <p className="text-sm text-cyan-300/80">
                     Running health analysis across all monitored services...
                   </p>
                 </motion.div>
@@ -690,16 +690,16 @@ export default function ObservabilityPage() {
             {filteredHealthIssues.length === 0 && severityFilter === "all" ? (
               <div className="flex flex-col items-center justify-center py-6 text-center">
                 <HealthyShieldIllustration />
-                <p className="mt-3 text-xs font-medium text-emerald-400/70">
+                <p className="mt-3 text-sm font-medium text-emerald-400/70">
                   All systems healthy
                 </p>
-                <p className="mt-0.5 text-[10px] text-muted-dark">
+                <p className="mt-0.5 text-sm text-muted-dark">
                   No issues detected across monitored services
                 </p>
               </div>
             ) : filteredHealthIssues.length === 0 ? (
               <div className="flex flex-col items-center justify-center py-6 text-center">
-                <p className="text-xs text-muted-dark">
+                <p className="text-sm text-muted-dark">
                   No {severityFilter} severity issues
                 </p>
               </div>

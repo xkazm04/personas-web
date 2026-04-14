@@ -28,10 +28,10 @@ export default function UndoToast({
       className="fixed bottom-20 left-1/2 z-[70] -translate-x-1/2"
     >
       <div className="flex items-center gap-3 rounded-xl border border-white/[0.08] bg-surface/95 backdrop-blur-xl px-4 py-3 shadow-2xl">
-        <span className="text-xs text-foreground">{message}</span>
+        <span className="text-sm text-foreground">{message}</span>
         <button
           onClick={onUndo}
-          className="flex items-center gap-1 rounded-lg border border-brand-cyan/30 bg-brand-cyan/10 px-3 py-1.5 text-[11px] font-medium text-brand-cyan transition-all hover:bg-brand-cyan/20"
+          className="flex items-center gap-1 rounded-lg border border-brand-cyan/30 bg-brand-cyan/10 px-3 py-1.5 text-sm font-medium text-brand-cyan transition-all hover:bg-brand-cyan/20"
         >
           <Undo2 className="h-3 w-3" />
           Undo

@@ -29,7 +29,7 @@ export default function KnowledgeGraphPage() {
           <h1 className="text-2xl font-bold tracking-tight">
             <GradientText variant="silver">Knowledge Graph</GradientText>
           </h1>
-          <p className="mt-1 text-sm text-muted-dark">
+          <p className="mt-1 text-base text-muted-dark">
             Patterns learned from agent executions
           </p>
         </div>
@@ -41,7 +41,7 @@ export default function KnowledgeGraphPage() {
               <button
                 key={v.key}
                 onClick={() => setActiveVariant(v.key)}
-                className={`flex items-center gap-1.5 rounded-lg px-3 py-1.5 text-xs font-medium transition-all duration-200 ${
+                className={`flex items-center gap-1.5 rounded-lg px-3 py-1.5 text-sm font-medium transition-all duration-200 ${
                   activeVariant === v.key
                     ? "bg-white/[0.08] text-foreground shadow-sm"
                     : "text-muted-dark hover:text-foreground/70 hover:bg-white/[0.04]"

@@ -145,7 +145,7 @@ export default function DashboardHomePage() {
             {getGreeting()}, {displayName}
           </GradientText>
         </h1>
-        <p className="mt-1 text-sm text-muted-dark">
+        <p className="mt-1 text-base text-muted-dark">
           {t.dashboard.agentsStatus}
         </p>
       </motion.div>
@@ -210,11 +210,11 @@ export default function DashboardHomePage() {
           <GlowCard accent="cyan" className="p-5 h-full">
             <div className="flex items-center gap-2 mb-4">
               <Activity className="h-4 w-4 text-brand-cyan" />
-              <h2 className="text-sm font-semibold text-foreground">
+              <h2 className="text-base font-semibold text-foreground">
                 {t.dashboard.recentActivity}
               </h2>
               {stats.running > 0 && (
-                <span className="ml-auto flex items-center gap-1.5 rounded-full border border-cyan-500/20 bg-cyan-500/8 px-2 py-0.5 text-[10px] font-medium text-cyan-400">
+                <span className="ml-auto flex items-center gap-1.5 rounded-full border border-cyan-500/20 bg-cyan-500/8 px-2 py-0.5 text-sm font-medium text-cyan-400">
                   <span className="h-1.5 w-1.5 animate-pulse rounded-full bg-cyan-400" />
                   {stats.running} {t.dashboard.running}
                 </span>
@@ -222,7 +222,7 @@ export default function DashboardHomePage() {
             </div>
 
             {recentExecs.length === 0 ? (
-              <p className="text-xs text-muted-dark py-8 text-center">
+              <p className="text-sm text-muted-dark py-8 text-center">
                 {t.dashboard.noExecutionsYet} {t.dashboard.executeToSee}
               </p>
             ) : (
@@ -238,10 +238,10 @@ export default function DashboardHomePage() {
                       name={exec.personaName}
                     />
                     <div className="flex-1 min-w-0">
-                      <p className="text-xs font-medium text-foreground truncate">
+                      <p className="text-sm font-medium text-foreground truncate">
                         {exec.personaName ?? exec.personaId.slice(0, 8)}
                       </p>
-                      <p className="text-[10px] text-muted-dark">
+                      <p className="text-sm text-muted-dark">
                         {relativeTime(exec.startedAt ?? exec.createdAt)}
                         {exec.durationMs && ` · ${(exec.durationMs / 1000).toFixed(1)}s`}
                         {exec.costUsd > 0 && ` · $${exec.costUsd.toFixed(4)}`}
@@ -261,11 +261,11 @@ export default function DashboardHomePage() {
             <div className="flex items-center justify-between mb-4">
               <div className="flex items-center gap-2">
                 <TrendingUp className="h-4 w-4 text-brand-purple" />
-                <h2 className="text-sm font-semibold text-foreground">
+                <h2 className="text-base font-semibold text-foreground">
                   {t.dashboard.trafficErrors}
                 </h2>
               </div>
-              <span className="text-[11px] text-muted-dark">{t.dashboard.last14Days}</span>
+              <span className="text-sm text-muted-dark">{t.dashboard.last14Days}</span>
             </div>
 
             {loadObservability ? (
@@ -297,10 +297,10 @@ export default function DashboardHomePage() {
                   <link.icon className="h-4 w-4 text-muted" />
                 </div>
                 <div>
-                  <p className="text-sm font-medium text-foreground">
+                  <p className="text-base font-medium text-foreground">
                     {link.label}
                   </p>
-                  <p className="text-[11px] text-muted-dark">{link.desc}</p>
+                  <p className="text-sm text-muted-dark">{link.desc}</p>
                 </div>
                 <ArrowUpRight className="ml-auto h-4 w-4 text-muted-dark opacity-0 transition-opacity group-hover:opacity-100" />
               </div>

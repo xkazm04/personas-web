@@ -17,10 +17,8 @@ function useColumns() {
       links: [
         { label: t.sections.features, href: "/features" },
         { label: t.nav.useCases, href: "/use-cases" },
-        { label: t.nav.pricing, href: "/pricing" },
         { label: t.nav.templates, href: "/templates" },
         { label: t.sections.download, href: "/download" },
-        { label: t.nav.tour, href: "/tour" },
       ],
     },
     {
@@ -61,7 +59,7 @@ function FooterLinkColumn({ title, links }: { title: string; links: { label: str
         onClick={() => setOpen((v) => !v)}
         className="flex w-full items-center justify-between md:pointer-events-none md:cursor-default focus-visible:ring-2 focus-visible:ring-brand-cyan/40 focus-visible:outline-none focus-visible:rounded-lg"
       >
-        <h4 className="text-sm font-medium uppercase tracking-wider text-muted-dark">
+        <h4 className="text-base font-medium uppercase tracking-wider text-muted-dark">
           {title}
         </h4>
         <ChevronDown
@@ -73,7 +71,7 @@ function FooterLinkColumn({ title, links }: { title: string; links: { label: str
       {/* Desktop: always visible */}
       <ul className="mt-3 hidden md:block space-y-1">
         {links.map((link) => {
-          const cls = "group/link flex min-h-[44px] items-center gap-1.5 text-sm text-muted-dark transition-colors duration-300 hover:text-foreground";
+          const cls = "group/link flex min-h-[44px] items-center gap-1.5 text-base text-muted-dark transition-colors duration-300 hover:text-foreground";
           const dot = <div className="h-1 w-1 rounded-full bg-white/8 transition-all duration-300 group-hover/link:bg-brand-cyan/40 group-hover/link:shadow-[0_0_4px_rgba(6,182,212,0.3)]" />;
           return (
             <li key={link.label}>
@@ -99,7 +97,7 @@ function FooterLinkColumn({ title, links }: { title: string; links: { label: str
               className="overflow-hidden mt-2 space-y-0.5"
             >
               {links.map((link) => {
-                const cls = "group/link flex min-h-[44px] items-center gap-1.5 text-sm text-muted-dark transition-colors duration-300 hover:text-foreground";
+                const cls = "group/link flex min-h-[44px] items-center gap-1.5 text-base text-muted-dark transition-colors duration-300 hover:text-foreground";
                 const dot = <div className="h-1 w-1 rounded-full bg-white/8 transition-all duration-300 group-hover/link:bg-brand-cyan/40 group-hover/link:shadow-[0_0_4px_rgba(6,182,212,0.3)]" />;
                 return (
                   <li key={link.label}>
@@ -141,7 +139,7 @@ export default function Footer() {
               />
               <span className="font-semibold tracking-tight">Personas</span>
             </div>
-            <p className="mt-4 max-w-sm text-sm leading-relaxed text-muted-dark">
+            <p className="mt-4 max-w-sm text-base leading-relaxed text-muted-dark">
               {t.footer.motto}
             </p>
             {/* Social */}
@@ -167,7 +165,7 @@ export default function Footer() {
         </div>
 
         {/* Copyright */}
-        <div className="mt-16 flex flex-col items-center justify-between gap-4 border-t border-white/3 pt-6 text-sm text-muted-dark md:flex-row">
+        <div className="mt-16 flex flex-col items-center justify-between gap-4 border-t border-white/3 pt-6 text-base text-muted-dark md:flex-row">
           <span>&copy; {new Date().getFullYear()} {t.footer.copyright}</span>
           <ThemeSwitcher />
           <span className="text-muted-dark flex items-center gap-2">

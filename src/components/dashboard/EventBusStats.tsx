@@ -45,9 +45,9 @@ function StatItem({
   return (
     <div className="flex items-center gap-2 px-3 py-1.5">
       <Icon className="h-3.5 w-3.5 text-muted-dark" />
-      <span className="text-[11px] text-muted-dark whitespace-nowrap">{label}</span>
+      <span className="text-sm text-muted-dark whitespace-nowrap">{label}</span>
       <span
-        className={`text-sm font-semibold tabular-nums text-foreground ${
+        className={`text-base font-semibold tabular-nums text-foreground ${
           pulse ? "animate-pulse" : ""
         }`}
       >
@@ -113,7 +113,7 @@ export default function EventBusStats({ className = "" }: { className?: string }
               }`}
             />
           </span>
-          <span className="text-[11px] font-medium text-emerald-400">
+          <span className="text-sm font-medium text-emerald-400">
             {connected ? "Connected" : "Disconnected"}
           </span>
         </span>

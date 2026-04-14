@@ -21,7 +21,7 @@ export default function MobileBottomNav() {
             <Link
               key={item.key}
               href={item.href}
-              className={`relative flex min-h-[44px] min-w-[44px] flex-col items-center justify-center gap-0.5 rounded-xl px-2 py-1.5 text-[10px] font-medium transition-colors ${
+              className={`relative flex min-h-[44px] min-w-[44px] flex-col items-center justify-center gap-0.5 rounded-xl px-2 py-1.5 text-sm font-medium transition-colors ${
                 active
                   ? "text-brand-cyan"
                   : "text-muted-dark"
@@ -30,7 +30,7 @@ export default function MobileBottomNav() {
               <Icon className="h-5 w-5" />
               <span className="leading-none">{item.label}</span>
               {badge !== null && (
-                <span className="absolute right-0.5 top-0.5 flex h-4 min-w-4 items-center justify-center rounded-full bg-brand-cyan/20 px-1 text-[9px] font-bold text-brand-cyan">
+                <span className="absolute right-0.5 top-0.5 flex h-4 min-w-4 items-center justify-center rounded-full bg-brand-cyan/20 px-1 text-sm font-bold text-brand-cyan">
                   {badge}
                 </span>
               )}
@@ -56,7 +56,7 @@ function MobileMoreMenu({
     <div className="relative">
       <button
         onClick={() => setOpen(!open)}
-        className={`flex min-h-[44px] min-w-[44px] flex-col items-center justify-center gap-0.5 rounded-xl px-2 py-1.5 text-[10px] font-medium transition-colors ${
+        className={`flex min-h-[44px] min-w-[44px] flex-col items-center justify-center gap-0.5 rounded-xl px-2 py-1.5 text-sm font-medium transition-colors ${
           items.some(getActive) ? "text-brand-cyan" : "text-muted-dark"
         }`}
       >
@@ -76,7 +76,7 @@ function MobileMoreMenu({
                   key={item.key}
                   href={item.href}
                   onClick={() => setOpen(false)}
-                  className={`flex min-h-[44px] items-center gap-3 rounded-lg px-3 py-2.5 text-sm font-medium transition-colors ${
+                  className={`flex min-h-[44px] items-center gap-3 rounded-lg px-3 py-2.5 text-base font-medium transition-colors ${
                     active
                       ? "bg-brand-cyan/8 text-brand-cyan"
                       : "text-muted hover:text-foreground hover:bg-white/[0.04]"

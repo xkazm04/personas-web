@@ -60,7 +60,7 @@ function FAQCard({
       >
         <div className="rounded-2xl border border-white/[0.04] bg-gradient-to-br from-white/[0.02] to-transparent p-4 transition-all duration-300 hover:border-white/[0.08] hover:bg-white/[0.025]">
           <div className="flex items-start justify-between gap-4">
-            <h3 className="text-sm font-medium leading-relaxed sm:text-base">
+            <h3 className="text-base font-medium leading-relaxed sm:text-lg">
               {item.question}
             </h3>
             <motion.div
@@ -87,12 +87,12 @@ function FAQCard({
             className="overflow-hidden"
           >
             <div className="px-4 pb-1 pt-3">
-              <div className="mb-4 overflow-hidden rounded-xl border border-white/6 bg-white/3">
+              <div className="mb-4 overflow-hidden rounded-xl border border-white/8">
                 <div className="aspect-video w-full">
                   {item.illustration}
                 </div>
               </div>
-              <p className="text-sm text-muted leading-relaxed">
+              <p className="text-base text-foreground/75 leading-relaxed">
                 {item.answer}
               </p>
             </div>
@@ -195,14 +195,14 @@ export default function FAQ() {
             <MessageCircle className="h-5 w-5 text-brand-purple" />
           </div>
           <div className="text-center sm:text-left">
-            <p className="text-sm font-medium">{t.faqSection.stillQuestions}</p>
-            <p className="mt-1 text-sm text-muted-dark">
+            <p className="text-base font-medium">{t.faqSection.stillQuestions}</p>
+            <p className="mt-1 text-base text-muted-dark">
               {t.faqSection.discordSubtitle}
             </p>
           </div>
           <a
             href="#"
-            className="inline-flex items-center rounded-full border border-brand-purple/20 bg-brand-purple/10 px-6 py-2 text-sm font-medium text-brand-purple transition-all duration-300 hover:border-brand-purple/30 hover:bg-brand-purple/15 focus-visible:ring-2 focus-visible:ring-brand-purple/40 focus-visible:outline-none"
+            className="inline-flex items-center rounded-full border border-brand-purple/20 bg-brand-purple/10 px-6 py-2 text-base font-medium text-brand-purple transition-all duration-300 hover:border-brand-purple/30 hover:bg-brand-purple/15 focus-visible:ring-2 focus-visible:ring-brand-purple/40 focus-visible:outline-none"
           >
             {t.faqSection.joinDiscord}
           </a>

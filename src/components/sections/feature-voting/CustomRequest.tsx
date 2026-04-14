@@ -47,8 +47,8 @@ export default function CustomRequest() {
               <Lightbulb className="h-4 w-4 text-brand-cyan/70" />
             </div>
             <div>
-              <h4 className="text-sm font-semibold">Something else in mind?</h4>
-              <p className="text-[11px] text-muted-dark/60 font-mono tracking-wide">
+              <h4 className="text-base font-semibold">Something else in mind?</h4>
+              <p className="text-sm text-muted-dark/60 font-mono tracking-wide">
                 Suggest a feature
               </p>
             </div>
@@ -68,14 +68,14 @@ export default function CustomRequest() {
                   if (e.key === "Enter") void handleSubmit();
                 }}
                 placeholder="Describe the feature you'd like to see..."
-                className="w-full rounded-xl border border-white/[0.06] bg-white/[0.02] px-4 py-2.5 text-sm text-foreground placeholder:text-muted-dark/40 outline-none transition-all duration-300 focus:border-brand-cyan/25 focus:bg-white/[0.03] focus:shadow-[0_0_20px_rgba(6,182,212,0.06)]"
+                className="w-full rounded-xl border border-white/[0.06] bg-white/[0.02] px-4 py-2.5 text-base text-foreground placeholder:text-muted-dark/40 outline-none transition-all duration-300 focus:border-brand-cyan/25 focus:bg-white/[0.03] focus:shadow-[0_0_20px_rgba(6,182,212,0.06)]"
               />
               {/* Focus glow accent under the input */}
               <div className="pointer-events-none absolute inset-x-4 -bottom-px h-px bg-gradient-to-r from-transparent via-brand-cyan/0 to-transparent transition-all duration-300 peer-focus:via-brand-cyan/20" />
               {/* Character count — appears after 60% of max */}
               {value.length > MAX_LENGTH * COUNT_THRESHOLD && (
                 <span
-                  className={`absolute right-3 top-1/2 -translate-y-1/2 text-[10px] font-mono tabular-nums transition-colors duration-200 ${
+                  className={`absolute right-3 top-1/2 -translate-y-1/2 text-sm font-mono tabular-nums transition-colors duration-200 ${
                     value.length >= MAX_LENGTH
                       ? "text-brand-amber"
                       : value.length >= MAX_LENGTH * 0.85
@@ -113,7 +113,7 @@ export default function CustomRequest() {
             <motion.p
               initial={{ opacity: 0, y: 4 }}
               animate={{ opacity: 1, y: 0 }}
-              className="mt-3 text-xs text-brand-emerald/70 font-mono tracking-wide"
+              className="mt-3 text-sm text-brand-emerald/70 font-mono tracking-wide"
             >
               Thanks! Your suggestion has been recorded.
             </motion.p>

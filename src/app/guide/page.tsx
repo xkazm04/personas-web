@@ -5,7 +5,7 @@ import { useSearchParams } from "next/navigation";
 import Link from "next/link";
 import Image from "next/image";
 import { motion } from "framer-motion";
-import { MessageCircle, Sparkles, Zap } from "lucide-react";
+import { MessageCircle, Sparkles, Zap, BookOpen, ArrowRight } from "lucide-react";
 import GradientText from "@/components/GradientText";
 import SearchCombobox from "@/components/guide/SearchCombobox";
 import { GUIDE_CATEGORIES } from "@/data/guide/categories";
@@ -14,17 +14,26 @@ import { GUIDE_ILLUSTRATIONS } from "@/data/guide/illustrations";
 import { fadeUp, staggerContainer } from "@/lib/animations";
 import { isTopicVisibleForMode, isCategoryVisibleForMode } from "@/lib/guide-utils";
 import type { GuideMode } from "@/data/guide/types";
+import { BRAND_VAR, tint, brandShadow, hexToBrand, type BrandKey } from "@/lib/brand-theme";
+import { ThemedChip } from "@/components/primitives";
 
 /* ── Helpers ─────────────────────────────────────────────────────────── */
 
 function topicCountFor(categoryId: string, modeFilter: GuideMode | null) {
-  return GUIDE_TOPICS.filter((t) => t.categoryId === categoryId && isTopicVisibleForMode(t, modeFilter)).length;
+  return GUIDE_TOPICS.filter(
+    (t) => t.categoryId === categoryId && isTopicVisibleForMode(t, modeFilter),
+  ).length;
 }
 
-const MODE_OPTIONS: Array<{ value: GuideMode | null; label: string; icon: typeof Sparkles; color: string }> = [
-  { value: null, label: "All", icon: Zap, color: "#94a3b8" },
-  { value: "simple", label: "Simple", icon: Sparkles, color: "#F59E0B" },
-  { value: "power", label: "Power", icon: Zap, color: "#06b6d4" },
+const MODE_OPTIONS: Array<{
+  value: GuideMode | null;
+  label: string;
+  icon: typeof Sparkles;
+  brand: BrandKey;
+}> = [
+  { value: null, label: "All modes", icon: BookOpen, brand: "cyan" },
+  { value: "simple", label: "Simple", icon: Sparkles, brand: "amber" },
+  { value: "power", label: "Power", icon: Zap, brand: "blue" },
 ];
 
 /* ── Page ─────────────────────────────────────────────────────────────── */
@@ -34,21 +43,37 @@ function GuidePageInner() {
   const initialMode = searchParams.get("mode") as GuideMode | null;
   const [modeFilter, setModeFilter] = useState<GuideMode | null>(initialMode);
 
+  const visibleCategories = GUIDE_CATEGORIES.filter((cat) =>
+    isCategoryVisibleForMode(cat.id, modeFilter),
+  );
+
+  const totalTopics = visibleCategories.reduce(
+    (sum, c) => sum + topicCountFor(c.id, modeFilter),
+    0,
+  );
+
   return (
     <div className="px-6 pb-24">
       <script
         type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify({
-          "@context": "https://schema.org",
-          "@type": "CollectionPage",
-          name: "Personas User Guide",
-          description: "Everything you need to know about Personas — from your first agent to advanced multi-agent pipelines. 102 topics across 10 categories.",
-          url: "https://personas.ai/guide",
-          isPartOf: { "@type": "WebSite", name: "Personas", url: "https://personas.ai" },
-          numberOfItems: 102,
-        }) }}
+        dangerouslySetInnerHTML={{
+          __html: JSON.stringify({
+            "@context": "https://schema.org",
+            "@type": "CollectionPage",
+            name: "Personas User Guide",
+            description:
+              "Everything you need to know about Personas — from your first agent to advanced multi-agent pipelines. 102 topics across 10 categories.",
+            url: "https://personas.ai/guide",
+            isPartOf: {
+              "@type": "WebSite",
+              name: "Personas",
+              url: "https://personas.ai",
+            },
+            numberOfItems: 102,
+          }),
+        }}
       />
-      <div className="mx-auto max-w-5xl">
+      <div className="mx-auto max-w-6xl">
         {/* ── Hero ──────────────────────────────────────────────── */}
         <motion.div
           initial="hidden"
@@ -56,44 +81,58 @@ function GuidePageInner() {
           variants={staggerContainer}
           className="pt-12 text-center"
         >
+          <motion.p
+            variants={fadeUp}
+            className="mb-4 text-base font-semibold uppercase tracking-widest"
+            style={{ color: BRAND_VAR.purple }}
+          >
+            Guide
+          </motion.p>
           <motion.h1
             variants={fadeUp}
-            className="text-3xl font-extrabold tracking-tight sm:text-4xl md:text-5xl drop-shadow-md"
+            className="text-4xl font-extrabold tracking-tight sm:text-5xl md:text-6xl drop-shadow-md"
           >
-            User <GradientText className="drop-shadow-lg">Guide</GradientText>
+            User{" "}
+            <GradientText className="drop-shadow-lg">Guide</GradientText>
           </motion.h1>
           <motion.p
             variants={fadeUp}
-            className="mx-auto mt-4 max-w-2xl text-base text-muted-dark leading-relaxed font-light"
+            className="mx-auto mt-6 max-w-2xl text-base text-muted leading-relaxed font-light"
           >
             Everything you need to know about Personas — from your first agent
-            to advanced multi-agent pipelines.
+            to advanced multi-agent pipelines.{" "}
+            <span className="font-semibold text-foreground/80">
+              {totalTopics} topics
+            </span>{" "}
+            across {visibleCategories.length} categories.
           </motion.p>
 
           {/* ── Search combobox ──────────────────────────────────── */}
-          <motion.div variants={fadeUp} className="mx-auto mt-8 max-w-xl">
+          <motion.div variants={fadeUp} className="mx-auto mt-10 max-w-xl">
             <SearchCombobox placeholder="Search 100+ topics..." />
           </motion.div>
 
           {/* ── Mode filter toggle ──────────────────────────────── */}
-          <motion.div variants={fadeUp} className="mt-6 flex items-center justify-center gap-2">
+          <motion.div
+            variants={fadeUp}
+            className="mt-8 inline-flex items-center gap-1 rounded-full border p-1"
+            style={{
+              borderColor: "rgba(var(--surface-overlay), 0.08)",
+              backgroundColor: "rgba(var(--surface-overlay), 0.02)",
+            }}
+          >
             {MODE_OPTIONS.map((opt) => {
               const Icon = opt.icon;
-              const isActive = modeFilter === opt.value;
               return (
-                <button
+                <ThemedChip
                   key={opt.label}
+                  brand={opt.brand}
+                  active={modeFilter === opt.value}
                   onClick={() => setModeFilter(opt.value)}
-                  className={`inline-flex items-center gap-1.5 rounded-full px-4 py-2 text-sm font-medium transition-all duration-200 ${
-                    isActive
-                      ? "border bg-white/[0.06] shadow-sm"
-                      : "border border-transparent text-muted-dark hover:text-foreground hover:bg-white/[0.03]"
-                  }`}
-                  style={isActive ? { borderColor: `${opt.color}40`, color: opt.color } : undefined}
+                  icon={<Icon className="h-4 w-4" />}
                 >
-                  <Icon className="h-3.5 w-3.5" />
                   {opt.label}
-                </button>
+                </ThemedChip>
               );
             })}
           </motion.div>
@@ -101,67 +140,98 @@ function GuidePageInner() {
 
         {/* ── Category grid ─────────────────────────────────────── */}
         <motion.div
-            initial="hidden"
-            whileInView="visible"
-            viewport={{ once: true, margin: "-40px" }}
-            variants={staggerContainer}
-            className="mt-12 grid gap-4 sm:grid-cols-2"
-          >
-            {GUIDE_CATEGORIES.filter((cat) => isCategoryVisibleForMode(cat.id, modeFilter)).map((cat) => {
-              const count = topicCountFor(cat.id, modeFilter);
-              const illus = GUIDE_ILLUSTRATIONS[cat.id];
-              return (
-                <motion.div key={cat.id} variants={fadeUp}>
-                  <Link
-                    href={`/guide/${cat.id}`}
-                    className="group block overflow-hidden rounded-2xl border border-white/[0.06] bg-white/[0.02] backdrop-blur-sm transition-all duration-300 hover:scale-[1.01] hover:border-white/[0.12]"
-                  >
-                    {/* Illustration header — dark/light variants swap via CSS */}
-                    {illus && (
-                      <div className="relative aspect-video w-full overflow-hidden bg-white/[0.02]">
-                        <Image
-                          src={illus.dark}
-                          alt={cat.name}
-                          width={800}
-                          height={400}
-                          aria-hidden="true"
-                          className="hidden dark:block h-full w-full object-cover transition-transform duration-500 group-hover:scale-105"
-                        />
-                        <Image
-                          src={illus.light}
-                          alt={cat.name}
-                          width={800}
-                          height={400}
-                          className="block dark:hidden h-full w-full object-cover transition-transform duration-500 group-hover:scale-105"
-                        />
-                      </div>
-                    )}
-
-                    {/* Text content */}
-                    <div className="p-5">
-                      <div className="flex items-center justify-between gap-3">
-                        <h3 className="text-lg font-semibold group-hover:text-foreground transition-colors">
-                          {cat.name}
-                        </h3>
-                        <span
-                          className="shrink-0 rounded-full px-2 py-0.5 text-sm font-semibold"
-                          style={{
-                            backgroundColor: `${cat.color}15`,
-                            color: cat.color,
-                          }}
-                        >
-                          {count} topic{count !== 1 && "s"}
-                        </span>
-                      </div>
-                      <p className="mt-1.5 text-sm text-muted-dark leading-relaxed line-clamp-2">
-                        {cat.description}
-                      </p>
+          initial="hidden"
+          whileInView="visible"
+          viewport={{ once: true, margin: "-40px" }}
+          variants={staggerContainer}
+          className="mt-14 grid gap-5 sm:grid-cols-2 lg:grid-cols-3"
+        >
+          {visibleCategories.map((cat) => {
+            const count = topicCountFor(cat.id, modeFilter);
+            const illus = GUIDE_ILLUSTRATIONS[cat.id];
+            const brand = hexToBrand(cat.color);
+            const bv = BRAND_VAR[brand];
+            return (
+              <motion.div key={cat.id} variants={fadeUp}>
+                <Link
+                  href={`/guide/${cat.id}`}
+                  className="group relative block overflow-hidden rounded-2xl border transition-all duration-500 hover:scale-[1.01]"
+                  style={{
+                    borderColor: "rgba(var(--surface-overlay), 0.08)",
+                    backgroundColor: "rgba(var(--surface-overlay), 0.02)",
+                    backgroundImage: `linear-gradient(180deg, transparent 0%, ${tint(brand, 8)} 100%)`,
+                  }}
+                >
+                  {/* Illustration header — dark/light variants */}
+                  {illus && (
+                    <div
+                      className="relative aspect-video w-full overflow-hidden"
+                      style={{ backgroundColor: tint(brand, 6) }}
+                    >
+                      <Image
+                        src={illus.dark}
+                        alt={cat.name}
+                        width={800}
+                        height={400}
+                        aria-hidden="true"
+                        className="hidden dark:block h-full w-full object-cover transition-transform duration-500 group-hover:scale-105"
+                      />
+                      <Image
+                        src={illus.light}
+                        alt={cat.name}
+                        width={800}
+                        height={400}
+                        className="block dark:hidden h-full w-full object-cover transition-transform duration-500 group-hover:scale-105"
+                      />
+                      {/* Bottom gradient fade into card */}
+                      <div
+                        className="absolute inset-x-0 bottom-0 h-1/2"
+                        style={{
+                          backgroundImage:
+                            "linear-gradient(180deg, transparent 0%, rgba(var(--background-rgb, 10,10,18), 0.85) 100%)",
+                        }}
+                      />
                     </div>
-                  </Link>
-                </motion.div>
-              );
-            })}
-          </motion.div>
+                  )}
+
+                  {/* Text content */}
+                  <div className="relative p-6">
+                    <div className="flex items-start justify-between gap-3 mb-3">
+                      <h3
+                        className="text-xl font-extrabold tracking-tight leading-tight"
+                        style={{
+                          color: bv,
+                          textShadow: `0 0 24px ${tint(brand, 30)}`,
+                        }}
+                      >
+                        {cat.name}
+                      </h3>
+                      <span
+                        className="shrink-0 rounded-full px-3 py-1 text-base font-semibold tabular-nums"
+                        style={{
+                          backgroundColor: tint(brand, 16),
+                          color: bv,
+                        }}
+                      >
+                        {count}
+                      </span>
+                    </div>
+                    <p className="text-base text-foreground/75 leading-relaxed line-clamp-2 mb-4">
+                      {cat.description}
+                    </p>
+                    <div
+                      className="inline-flex items-center gap-1.5 text-base font-semibold transition-transform group-hover:translate-x-0.5"
+                      style={{ color: bv }}
+                    >
+                      Explore
+                      <ArrowRight className="h-4 w-4" />
+                    </div>
+                  </div>
+                </Link>
+              </motion.div>
+            );
+          })}
+        </motion.div>
 
         {/* ── Discord CTA ───────────────────────────────────────── */}
         <motion.div
@@ -169,23 +239,49 @@ function GuidePageInner() {
           whileInView="visible"
           viewport={{ once: true }}
           variants={fadeUp}
-          className="mt-16 text-center"
+          className="mt-16 mx-auto max-w-3xl"
         >
-          <div className="mx-auto inline-flex flex-col items-center gap-4 rounded-2xl border border-white/[0.04] bg-gradient-to-br from-white/[0.02] to-transparent px-8 py-6 sm:flex-row sm:gap-6">
-            <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-brand-purple/15 ring-1 ring-brand-purple/20">
-              <MessageCircle className="h-5 w-5 text-brand-purple" />
+          <div
+            className="flex flex-col items-center gap-5 rounded-2xl border p-8 sm:flex-row sm:gap-6"
+            style={{
+              borderColor: "rgba(var(--surface-overlay), 0.08)",
+              backgroundColor: "rgba(var(--surface-overlay), 0.02)",
+              backgroundImage: `linear-gradient(135deg, ${tint("purple", 10)} 0%, transparent 60%)`,
+            }}
+          >
+            <div
+              className="flex h-12 w-12 shrink-0 items-center justify-center rounded-2xl"
+              style={{
+                backgroundColor: tint("purple", 18),
+                boxShadow: brandShadow("purple", 32, 28),
+              }}
+            >
+              <MessageCircle
+                className="h-5 w-5"
+                style={{ color: BRAND_VAR.purple }}
+              />
             </div>
-            <div className="text-center sm:text-left">
-              <p className="text-base font-medium">Still have questions?</p>
-              <p className="mt-1 text-base text-muted-dark">
-                Our community is happy to help.
+            <div className="flex-1 text-center sm:text-left">
+              <p className="text-lg font-bold" style={{ color: BRAND_VAR.purple }}>
+                Still have questions?
+              </p>
+              <p className="mt-1 text-base text-foreground/75">
+                Our community is happy to help — real answers from real builders.
               </p>
             </div>
             <a
-              href="#"
-              className="inline-flex items-center rounded-full border border-brand-purple/20 bg-brand-purple/10 px-6 py-2 text-base font-medium text-brand-purple transition-all duration-300 hover:border-brand-purple/30 hover:bg-brand-purple/15 focus-visible:ring-2 focus-visible:ring-brand-purple/40 focus-visible:outline-none"
+              href="https://discord.gg/personas"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="inline-flex items-center gap-1.5 rounded-full px-6 py-3 text-base font-semibold transition-colors"
+              style={{
+                color: BRAND_VAR.purple,
+                backgroundColor: tint("purple", 14),
+                border: `1px solid ${tint("purple", 35)}`,
+              }}
             >
               Join our Discord
+              <ArrowRight className="h-4 w-4" />
             </a>
           </div>
         </motion.div>

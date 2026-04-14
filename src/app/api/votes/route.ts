@@ -1,123 +1,27 @@
-// ── PII Policy ──────────────────────────────────────────────────────────
-// This route collects:
-// - voter_id: a client-generated anonymous identifier (not PII)
-// - email (optional): provided voluntarily by the user for notifications
-// IP addresses are used ONLY for transient in-memory rate limiting and
-// are NEVER persisted to the database or filesystem.
-// ────────────────────────────────────────────────────────────────────────
+/**
+ * ── PII Policy ──────────────────────────────────────────────────────
+ * This route collects:
+ * - voter_id: a client-generated anonymous identifier (not PII)
+ * - email (optional): provided voluntarily for notifications
+ * IP addresses are used ONLY for transient in-memory rate limiting and
+ * are NEVER persisted to the database or filesystem.
+ */
 
 import { NextRequest, NextResponse } from "next/server";
-import { promises as fs } from "fs";
-import path from "path";
-import { randomBytes } from "crypto";
 import { isValidEmail } from "@/lib/validation";
 import { withWriteLock } from "@/lib/fileLock";
+import { isRateLimited } from "./rate-limit";
+import {
+  ALLOWED_FEATURES,
+  hasSupabase,
+  getSupabaseClient,
+  readVotes,
+  writeVotes,
+  readShipped,
+  type ShippedEntry,
+} from "./storage";
 
-// ---------------------------------------------------------------------------
-// Validation
-// ---------------------------------------------------------------------------
-
-const ALLOWED_FEATURES = new Set(["macos", "i18n", "dashboard", "enterprise"]);
-
-// ---------------------------------------------------------------------------
-// Rate limiting (in-memory, per-IP, resets on deploy)
-// ---------------------------------------------------------------------------
-
-const RATE_WINDOW_MS = 60_000;
-const RATE_MAX = 20;
-
-const hits = new Map<string, { count: number; resetAt: number }>();
-
-function isRateLimited(ip: string): boolean {
-  const now = Date.now();
-  const entry = hits.get(ip);
-  if (!entry || now > entry.resetAt) {
-    hits.set(ip, { count: 1, resetAt: now + RATE_WINDOW_MS });
-    return false;
-  }
-  entry.count++;
-  return entry.count > RATE_MAX;
-}
-
-// ---------------------------------------------------------------------------
-// Supabase helpers (production)
-// ---------------------------------------------------------------------------
-
-function hasSupabase(): boolean {
-  return !!(
-    process.env.NEXT_PUBLIC_SUPABASE_URL &&
-    process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY
-  );
-}
-
-async function getSupabaseClient() {
-  const { getSupabase } = await import("@/lib/supabase");
-  return getSupabase();
-}
-
-// ---------------------------------------------------------------------------
-// Filesystem fallback (local dev only)
-// ---------------------------------------------------------------------------
-
-const DATA_DIR = path.join(process.cwd(), ".data");
-const VOTES_FILE = path.join(DATA_DIR, "votes.json");
-
-interface VoteEntry {
-  feature_id: string;
-  voter_id: string;
-  email?: string;
-  created_at: string;
-}
-
-interface VotesData {
-  entries: VoteEntry[];
-}
-
-async function readVotes(): Promise<VotesData> {
-  try {
-    const raw = await fs.readFile(VOTES_FILE, "utf-8");
-    return JSON.parse(raw) as VotesData;
-  } catch {
-    return { entries: [] };
-  }
-}
-
-async function writeVotes(data: VotesData): Promise<void> {
-  await fs.mkdir(DATA_DIR, { recursive: true });
-  const tmpFile = path.join(DATA_DIR, `.votes-${randomBytes(6).toString("hex")}.tmp`);
-  await fs.writeFile(tmpFile, JSON.stringify(data, null, 2));
-  await fs.rename(tmpFile, VOTES_FILE);
-}
-
-// ---------------------------------------------------------------------------
-// Shipped features registry (filesystem)
-// ---------------------------------------------------------------------------
-
-const SHIPPED_FILE = path.join(DATA_DIR, "shipped.json");
-
-export interface ShippedEntry {
-  feature_id: string;
-  changelog: string;
-  link: string;
-  shipped_at: string;
-}
-
-interface ShippedData {
-  entries: ShippedEntry[];
-}
-
-async function readShipped(): Promise<ShippedData> {
-  try {
-    const raw = await fs.readFile(SHIPPED_FILE, "utf-8");
-    return JSON.parse(raw) as ShippedData;
-  } catch {
-    return { entries: [] };
-  }
-}
-
-// ---------------------------------------------------------------------------
-// GET — return vote counts per feature + user's votes + shipped features
-// ---------------------------------------------------------------------------
+/* ── GET — vote counts per feature + user's votes + shipped features ── */
 
 export async function GET(req: NextRequest) {
   const voterId = req.nextUrl.searchParams.get("voterId") ?? "";
@@ -127,7 +31,9 @@ export async function GET(req: NextRequest) {
 
     const [votesResult, shippedResult] = await Promise.all([
       sb.from("feature_votes").select("feature_id, voter_id, email"),
-      sb.from("shipped_features").select("feature_id, changelog, link, shipped_at"),
+      sb
+        .from("shipped_features")
+        .select("feature_id, changelog, link, shipped_at"),
     ]);
 
     if (votesResult.error) {
@@ -137,9 +43,9 @@ export async function GET(req: NextRequest) {
       );
     }
 
-    // Vote counts reflect real engagement only. The client-side features array
-    // in FeatureVoting.tsx holds seed display values that are shown until the
-    // API responds, and are added on top of the real counts from this endpoint.
+    // Vote counts reflect real engagement only. The client-side features
+    // array in FeatureVoting.tsx holds seed display values shown until the
+    // API responds, added on top of the real counts from this endpoint.
     const counts: Record<string, number> = {};
     const userVotes: string[] = [];
     let userEmail: string | null = null;
@@ -179,9 +85,7 @@ export async function GET(req: NextRequest) {
   });
 }
 
-// ---------------------------------------------------------------------------
-// POST — toggle a vote for a feature
-// ---------------------------------------------------------------------------
+/* ── POST — toggle a vote for a feature ──────────────────────────── */
 
 export async function POST(req: NextRequest) {
   const ip =
@@ -204,10 +108,7 @@ export async function POST(req: NextRequest) {
       : undefined;
 
   if (!featureId || !ALLOWED_FEATURES.has(featureId)) {
-    return NextResponse.json(
-      { error: "Invalid feature ID" },
-      { status: 400 },
-    );
+    return NextResponse.json({ error: "Invalid feature ID" }, { status: 400 });
   }
 
   if (!voterId || typeof voterId !== "string" || voterId.length < 8) {
@@ -221,7 +122,6 @@ export async function POST(req: NextRequest) {
   if (hasSupabase()) {
     const sb = await getSupabaseClient();
 
-    // Check if already voted
     const { data: existing } = await sb
       .from("feature_votes")
       .select("id")
@@ -231,7 +131,6 @@ export async function POST(req: NextRequest) {
       .single();
 
     if (existing) {
-      // If email provided, update it on existing vote instead of removing
       if (normalizedEmail) {
         await sb
           .from("feature_votes")
@@ -240,7 +139,6 @@ export async function POST(req: NextRequest) {
           .eq("voter_id", voterId);
         return NextResponse.json({ action: "email_saved" });
       }
-      // Remove vote (toggle off)
       await sb
         .from("feature_votes")
         .delete()
@@ -250,7 +148,6 @@ export async function POST(req: NextRequest) {
       return NextResponse.json({ action: "removed" });
     }
 
-    // Add vote
     const { error } = await sb.from("feature_votes").insert({
       feature_id: featureId,
       voter_id: voterId,
@@ -267,8 +164,7 @@ export async function POST(req: NextRequest) {
     return NextResponse.json({ action: "added" });
   }
 
-  // --- Filesystem fallback ---
-  // Serialize read-modify-write to prevent TOCTOU race conditions.
+  // --- Filesystem fallback (serialize to prevent TOCTOU) ---
   return withWriteLock("votes", async () => {
     const data = await readVotes();
 
@@ -277,19 +173,16 @@ export async function POST(req: NextRequest) {
     );
 
     if (existingIdx !== -1) {
-      // If email provided, update it on existing vote instead of removing
       if (normalizedEmail) {
         data.entries[existingIdx].email = normalizedEmail;
         await writeVotes(data);
         return NextResponse.json({ action: "email_saved" });
       }
-      // Remove vote (toggle off)
       data.entries.splice(existingIdx, 1);
       await writeVotes(data);
       return NextResponse.json({ action: "removed" });
     }
 
-    // Add vote
     data.entries.push({
       feature_id: featureId,
       voter_id: voterId,

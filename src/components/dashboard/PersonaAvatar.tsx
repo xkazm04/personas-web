@@ -3,8 +3,8 @@
 import { Bot } from "lucide-react";
 
 const sizeMap = {
-  sm: "h-7 w-7 text-xs",
-  md: "h-9 w-9 text-sm",
+  sm: "h-7 w-7 text-sm",
+  md: "h-9 w-9 text-base",
   lg: "h-11 w-11 text-base",
 };
 

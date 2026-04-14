@@ -48,7 +48,7 @@ function ExecCompareTooltipContent({
 }) {
   if (!active || !payload?.length) return null;
   return (
-    <div className="rounded-xl border border-white/[0.1] bg-background/95 px-3 py-2 text-xs shadow-xl backdrop-blur-md">
+    <div className="rounded-xl border border-white/[0.1] bg-background/95 px-3 py-2 text-sm shadow-xl backdrop-blur-md">
       <p className="mb-1 text-muted-dark">{label}</p>
       {payload.map((entry) => {
         let displayName = entry.dataKey;
