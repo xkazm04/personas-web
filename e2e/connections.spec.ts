@@ -28,17 +28,15 @@ test.describe("Connections Page", () => {
 
   test("connector card opens modal with details", async ({ page }) => {
     await page.goto("/connections");
-    // Connector cards are rendered as clickable elements
-    const slackText = page.locator("text=Slack").first();
-    await slackText.click();
-    // Modal should appear with use case content
+    // Click the Slack connector-card heading (scoped to h3 to avoid
+    // text= matching metadata/JSON injected for hydration).
+    await page.locator("h3", { hasText: "Slack" }).first().click();
     await expect(page.locator("body")).toContainText("What you can do");
   });
 
   test("connector modal has try-it-now section", async ({ page }) => {
     await page.goto("/connections");
-    const slackText = page.locator("text=Slack").first();
-    await slackText.click();
+    await page.locator("h3", { hasText: "Slack" }).first().click();
     await expect(page.locator("body")).toContainText("Try it now");
   });
 

@@ -154,14 +154,14 @@ test.describe("User Guide", () => {
     await expect(article).toContainText("encrypt");
   });
 
-  test("guide topic renders table component", async ({ page }) => {
-    // "what-is-an-ai-agent" has a chatbot vs agent comparison table
+  test("guide topic renders chatbot vs agent comparison", async ({ page }) => {
+    // "what-is-an-ai-agent" has a Chatbot vs AI Agent comparison.
+    // Used to render as <table>; now renders via the custom CompareBlock
+    // component (divs). Test the visible content rather than the tag.
     await page.goto("/guide/getting-started/what-is-an-ai-agent");
     const article = page.locator("article");
-    const table = article.locator("table");
-    await expect(table).toBeVisible();
-    await expect(table).toContainText("Chatbot");
-    await expect(table).toContainText("AI Agent");
+    await expect(article).toContainText("Chatbot");
+    await expect(article).toContainText("AI Agent");
   });
 
   test("guide topic renders keyboard grid", async ({ page }) => {
@@ -191,11 +191,14 @@ test.describe("User Guide", () => {
 
   test("module badge popover opens on click", async ({ page }) => {
     await page.goto("/guide/getting-started/installing-personas");
-    const badge = page.getByText("In app");
+    const badge = page.getByRole("button", { name: /In app/i });
     await badge.click();
-    // Popover should show "Find in app" and the navigation path
-    await expect(page.getByText("Find in app")).toBeVisible();
-    await expect(page.getByText("Home")).toBeVisible();
+    // Popover is role="dialog" — scope assertions to it so "Home" doesn't
+    // collide with the navbar Home link.
+    const popover = page.getByRole("dialog", { name: /Desktop app location/i });
+    await expect(popover).toBeVisible();
+    await expect(popover).toContainText("Find in app");
+    await expect(popover).toContainText("Home");
   });
 
   test("compact module badge renders on category topic cards", async ({ page }) => {
