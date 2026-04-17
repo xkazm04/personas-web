@@ -75,7 +75,7 @@ export default function PlaygroundSplit() {
                   <motion.span
                     initial={{ opacity: 0 }}
                     animate={{ opacity: 1 }}
-                    className="text-brand-cyan/50"
+                    className="text-brand-cyan/60"
                   >
                     Executing...
                   </motion.span>

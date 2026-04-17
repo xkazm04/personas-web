@@ -46,8 +46,8 @@ export default function ObsidianBrowser() {
           </div>
           <div className="p-2">
             <div className="flex items-center gap-1.5 rounded-md bg-foreground/[0.02] px-2 py-1.5 mb-2">
-              <Search className="h-4 w-4 text-foreground/55" />
-              <span className="text-base font-mono text-foreground/55">
+              <Search className="h-4 w-4 text-foreground/60" />
+              <span className="text-base font-mono text-foreground/60">
                 Filter files…
               </span>
             </div>
@@ -68,9 +68,9 @@ export default function ObsidianBrowser() {
                   {item.isDir ? (
                     <>
                       {item.open ? (
-                        <ChevronDown className="h-3.5 w-3.5 shrink-0 text-foreground/55" />
+                        <ChevronDown className="h-3.5 w-3.5 shrink-0 text-foreground/60" />
                       ) : (
-                        <ChevronRight className="h-3.5 w-3.5 shrink-0 text-foreground/55" />
+                        <ChevronRight className="h-3.5 w-3.5 shrink-0 text-foreground/60" />
                       )}
                       <Folder className="h-4 w-4 shrink-0 text-foreground/60" />
                     </>
@@ -103,7 +103,7 @@ export default function ObsidianBrowser() {
                 daily/2026-04-12.md
               </span>
             </div>
-            <span className="text-base font-mono text-foreground/55">
+            <span className="text-base font-mono text-foreground/60">
               12 backlinks
             </span>
           </div>
@@ -163,7 +163,7 @@ export default function ObsidianBrowser() {
                   <span className="text-brand-emerald">✓</span> Leonardo tiles
                 </div>
                 <div className="flex items-center gap-2 text-foreground/60">
-                  <span className="text-foreground/40">○</span> Plugins redesign
+                  <span className="text-foreground/60">○</span> Plugins redesign
                 </div>
               </div>
             </motion.div>

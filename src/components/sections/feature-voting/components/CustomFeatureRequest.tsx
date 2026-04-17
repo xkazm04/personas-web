@@ -96,7 +96,7 @@ export default function CustomFeatureRequest() {
                 href={`https://ko-fi.com/${KOFI_USERNAME}`}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="flex items-center gap-1.5 text-base font-mono text-muted-dark/50 hover:text-brand-cyan/70 transition-colors"
+                className="flex items-center gap-1.5 text-base font-mono text-muted-dark/60 hover:text-brand-cyan/70 transition-colors"
               >
                 <Rocket className="h-3 w-3" />
                 Sponsor this request

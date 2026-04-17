@@ -134,7 +134,7 @@ export default function ChatTab() {
       </div>
 
       <div className="flex items-center gap-3 border-t border-foreground/[0.06] px-5 py-3">
-        <div className="flex-1 rounded-lg border border-foreground/[0.08] bg-foreground/[0.02] px-4 py-2 text-base text-foreground/50 font-mono">
+        <div className="flex-1 rounded-lg border border-foreground/[0.08] bg-foreground/[0.02] px-4 py-2 text-base text-foreground/60 font-mono">
           Tell the agent what to change…
         </div>
         <button

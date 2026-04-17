@@ -123,7 +123,7 @@ export default function VisionGlobe() {
                 return (
                   <span
                     key={label}
-                    className="absolute text-base font-mono tracking-widest text-white/20 pointer-events-none select-none"
+                    className="absolute text-base font-mono tracking-widest text-white/60 pointer-events-none select-none"
                     style={{ left: x, top: y, transform: "translate(-50%, -50%)" }}
                   >
                     {label}
@@ -135,7 +135,7 @@ export default function VisionGlobe() {
                 <div className="text-2xl font-bold font-mono text-white/90 tabular-nums tracking-tight drop-shadow-lg">
                   <AnimatedCounter value={totalExec} />
                 </div>
-                <div className="text-base font-mono text-white/30 mt-0.5 uppercase tracking-widest">executions</div>
+                <div className="text-base font-mono text-white/60 mt-0.5 uppercase tracking-widest">executions</div>
               </div>
 
               {agents.map((agent, i) => (

@@ -23,13 +23,13 @@ export default function ChatComparisonSummary({
         >
           <div className="grid grid-cols-3 gap-4 items-center">
             <div className="text-center">
-              <div className="text-base font-mono uppercase tracking-wider text-brand-rose/50 mb-1">
+              <div className="text-base font-mono uppercase tracking-wider text-brand-rose/60 mb-1">
                 Workflow
               </div>
               <div className="text-lg font-bold text-brand-rose/70">
                 {scenario.workflow.messages.length} msgs
               </div>
-              <div className="text-base text-brand-rose/40 font-mono">
+              <div className="text-base text-brand-rose/60 font-mono">
                 {scenario.workflow.messages[scenario.workflow.messages.length - 1].timestamp}{" "}
                 elapsed
               </div>
@@ -48,13 +48,13 @@ export default function ChatComparisonSummary({
             </div>
 
             <div className="text-center">
-              <div className="text-base font-mono uppercase tracking-wider text-brand-emerald/50 mb-1">
+              <div className="text-base font-mono uppercase tracking-wider text-brand-emerald/60 mb-1">
                 Agent
               </div>
               <div className="text-lg font-bold text-brand-emerald/70">
                 {scenario.agent.messages.length} msgs
               </div>
-              <div className="text-base text-brand-emerald/40 font-mono">
+              <div className="text-base text-brand-emerald/60 font-mono">
                 {scenario.agent.messages[scenario.agent.messages.length - 1].timestamp}{" "}
                 elapsed
               </div>

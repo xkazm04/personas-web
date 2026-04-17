@@ -45,7 +45,7 @@ export default function TimelineControls({
           </button>
         ))}
       </div>
-      <div className="mt-2 flex items-center justify-between text-base font-mono text-muted-dark/50">
+      <div className="mt-2 flex items-center justify-between text-base font-mono text-muted-dark/60">
         <span>
           Race {activeIndex + 1} of {scenarios.length}
         </span>

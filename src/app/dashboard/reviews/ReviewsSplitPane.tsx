@@ -297,7 +297,7 @@ function DetailPanel({
               onChange={(e) => setNotes(e.target.value)}
               placeholder="Add optional notes before resolving..."
               rows={3}
-              className="w-full rounded-lg border border-glass-hover bg-white/[0.03] px-3 py-2 text-base text-foreground placeholder:text-muted-dark/50 focus:border-brand-cyan/30 focus:outline-none resize-none"
+              className="w-full rounded-lg border border-glass-hover bg-white/[0.03] px-3 py-2 text-base text-foreground placeholder:text-muted-dark/60 focus:border-brand-cyan/30 focus:outline-none resize-none"
             />
           </div>
         )}
@@ -588,7 +588,7 @@ export default function ReviewsSplitPane() {
             className="flex-1 overflow-y-auto divide-y divide-white/[0.04] scrollbar-thin scrollbar-thumb-white/10 scrollbar-track-transparent"
           >
             {filtered.length === 0 ? (
-              <div className="flex items-center justify-center py-12 text-sm text-muted-dark/50">
+              <div className="flex items-center justify-center py-12 text-sm text-muted-dark/60">
                 No reviews in this filter
               </div>
             ) : (

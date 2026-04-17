@@ -66,7 +66,7 @@ export default function ObsidianCloudSync() {
                 </div>
               </div>
             </div>
-            <span className="text-base font-mono text-foreground/55">
+            <span className="text-base font-mono text-foreground/60">
               last sync · 32s ago
             </span>
           </div>
@@ -126,7 +126,7 @@ export default function ObsidianCloudSync() {
               >
                 {s.value}
               </div>
-              <div className="text-base font-mono uppercase tracking-widest text-foreground/55">
+              <div className="text-base font-mono uppercase tracking-widest text-foreground/60">
                 {s.label}
               </div>
             </motion.div>
@@ -157,7 +157,7 @@ export default function ObsidianCloudSync() {
                 transition={{ delay: 0.2 + i * 0.08 }}
                 className="flex items-start gap-2"
               >
-                <span className="text-foreground/45 shrink-0">
+                <span className="text-foreground/60 shrink-0">
                   {entry.time}
                 </span>
                 <span

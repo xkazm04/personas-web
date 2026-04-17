@@ -179,7 +179,7 @@ export default function VoteCard({
           <h3 className="text-base font-semibold leading-tight flex-1 text-center">{feature.title}</h3>
 
           <ChevronDown
-            className={`h-4 w-4 text-muted-dark/50 shrink-0 transition-transform duration-300 ${expanded ? "rotate-180" : ""}`}
+            className={`h-4 w-4 text-muted-dark/60 shrink-0 transition-transform duration-300 ${expanded ? "rotate-180" : ""}`}
           />
         </div>
       </div>

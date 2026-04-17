@@ -234,7 +234,7 @@ function CostAnomalyBanner({
             </p>
             <button
               onClick={() => handleDismiss(anomaly.date)}
-              className="rounded-lg p-1 text-amber-400/50 hover:bg-amber-500/10 hover:text-amber-400 transition-colors cursor-pointer"
+              className="rounded-lg p-1 text-amber-400/60 hover:bg-amber-500/10 hover:text-amber-400 transition-colors cursor-pointer"
             >
               <X className="h-3.5 w-3.5" />
             </button>

@@ -73,7 +73,7 @@ export default function GeologicalLayer({
           </div>
 
           {memories.length === 0 && (
-            <div className="text-base font-mono text-foreground/45 py-2">
+            <div className="text-base font-mono text-foreground/60 py-2">
               no memories in this layer yet
             </div>
           )}

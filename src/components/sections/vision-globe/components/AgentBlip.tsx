@@ -90,7 +90,7 @@ export default function AgentBlip({
               <span className="text-base font-semibold text-white/90">{agent.name}</span>
               <span className={`text-base font-mono ${st.text}`}>{st.label}</span>
             </div>
-            <div className="text-base font-mono text-white/50 space-y-0.5">
+            <div className="text-base font-mono text-white/60 space-y-0.5">
               <div>{agent.executions.toLocaleString()} executions</div>
               <div>Success rate: {agent.rate}%</div>
             </div>

@@ -56,7 +56,7 @@ export default function MemoryPill({
             <span className="text-base font-mono" style={{ color: `${meta.color}aa` }}>
               {mem.source}
             </span>
-            <span className="text-base font-mono text-foreground/45">
+            <span className="text-base font-mono text-foreground/60">
               · imp {mem.importance}
             </span>
           </div>

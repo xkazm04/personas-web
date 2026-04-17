@@ -68,7 +68,7 @@ export default function CustomRequest() {
                   if (e.key === "Enter") void handleSubmit();
                 }}
                 placeholder="Describe the feature you'd like to see..."
-                className="w-full rounded-xl border border-white/[0.06] bg-white/[0.02] px-4 py-2.5 text-base text-foreground placeholder:text-muted-dark/40 outline-none transition-all duration-300 focus:border-brand-cyan/25 focus:bg-white/[0.03] focus:shadow-[0_0_20px_rgba(6,182,212,0.06)]"
+                className="w-full rounded-xl border border-white/[0.06] bg-white/[0.02] px-4 py-2.5 text-base text-foreground placeholder:text-muted-dark/60 outline-none transition-all duration-300 focus:border-brand-cyan/25 focus:bg-white/[0.03] focus:shadow-[0_0_20px_rgba(6,182,212,0.06)]"
               />
               {/* Focus glow accent under the input */}
               <div className="pointer-events-none absolute inset-x-4 -bottom-px h-px bg-gradient-to-r from-transparent via-brand-cyan/0 to-transparent transition-all duration-300 peer-focus:via-brand-cyan/20" />
@@ -80,7 +80,7 @@ export default function CustomRequest() {
                       ? "text-brand-amber"
                       : value.length >= MAX_LENGTH * 0.85
                         ? "text-brand-amber/60"
-                        : "text-brand-cyan/50"
+                        : "text-brand-cyan/60"
                   }`}
                 >
                   {value.length}/{MAX_LENGTH}
@@ -95,7 +95,7 @@ export default function CustomRequest() {
                   ? "border-brand-emerald/30 bg-brand-emerald/15 text-brand-emerald shadow-[0_0_15px_rgba(52,211,153,0.15)]"
                   : value.trim()
                     ? "border-brand-cyan/25 bg-brand-cyan/10 text-brand-cyan hover:bg-brand-cyan/15 hover:shadow-[0_0_15px_rgba(6,182,212,0.15)]"
-                    : "border-white/[0.06] bg-white/[0.02] text-muted-dark/30"
+                    : "border-white/[0.06] bg-white/[0.02] text-muted-dark/60"
               }`}
             >
               {saving ? (

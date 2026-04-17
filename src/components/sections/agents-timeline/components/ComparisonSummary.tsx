@@ -34,7 +34,7 @@ export default function ComparisonSummary({
               <div className="text-2xl font-bold text-brand-rose/80 tabular-nums">
                 {(scenario.workflow.totalMs / 1000).toFixed(1)}s
               </div>
-              <div className="text-base text-brand-rose/40 font-mono mt-1">FAILED</div>
+              <div className="text-base text-brand-rose/60 font-mono mt-1">FAILED</div>
             </div>
 
             <div className="text-center">
@@ -49,7 +49,7 @@ export default function ComparisonSummary({
               <div className="text-2xl font-bold text-brand-emerald/80 tabular-nums">
                 {(scenario.agent.totalMs / 1000).toFixed(1)}s
               </div>
-              <div className="text-base text-brand-emerald/40 font-mono mt-1">RESOLVED</div>
+              <div className="text-base text-brand-emerald/60 font-mono mt-1">RESOLVED</div>
             </div>
           </div>
 

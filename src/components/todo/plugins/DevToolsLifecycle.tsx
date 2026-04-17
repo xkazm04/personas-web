@@ -138,13 +138,13 @@ export default function DevToolsLifecycle() {
             <div className="text-base font-semibold text-foreground leading-tight">
               personas-web
             </div>
-            <div className="text-base font-mono text-foreground/55">
+            <div className="text-base font-mono text-foreground/60">
               10 goals · 3 active
             </div>
           </div>
         </div>
         <div className="flex items-center gap-2 text-base font-mono">
-          <span className="text-foreground/55 uppercase tracking-widest">
+          <span className="text-foreground/60 uppercase tracking-widest">
             Lifecycle
           </span>
           <span className="rounded-full border border-cyan-400/30 bg-cyan-500/[0.08] px-2 py-0.5 text-cyan-300">

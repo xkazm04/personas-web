@@ -69,14 +69,14 @@ export default function OcrScanner() {
                   style={{ backgroundColor: e.color }}
                 />
               </div>
-              <div className="mt-2 text-base font-mono text-foreground/55 uppercase tracking-widest">
+              <div className="mt-2 text-base font-mono text-foreground/60 uppercase tracking-widest">
                 accuracy
               </div>
             </div>
           ))}
         </div>
         <div className="mt-3 rounded-lg border border-foreground/[0.06] bg-background/30 px-3 py-2 font-mono text-base text-foreground/75 leading-relaxed">
-          <span className="text-foreground/55">&gt;</span> Invoice #2026-0412 ·
+          <span className="text-foreground/60">&gt;</span> Invoice #2026-0412 ·
           Acme Corp · Total{" "}
           <span className="text-amber-400">$4,280.00</span> · Due 2026-05-12
         </div>

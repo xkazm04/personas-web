@@ -47,7 +47,7 @@ export default function RoleSelector({
 }) {
   return (
     <div className="flex flex-wrap items-center justify-center gap-2">
-      <span className="text-sm font-mono uppercase tracking-wider text-muted-dark/50 mr-1">
+      <span className="text-sm font-mono uppercase tracking-wider text-muted-dark/60 mr-1">
         I am a
       </span>
       {roles.map((role) => {

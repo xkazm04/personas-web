@@ -112,7 +112,7 @@ export function Checklist({ items, id }: ChecklistProps) {
               <span
                 className={`text-base leading-relaxed transition-all duration-200 ${
                   isChecked
-                    ? "text-muted-dark/50 line-through decoration-emerald-400/30"
+                    ? "text-muted-dark/60 line-through decoration-emerald-400/30"
                     : "text-muted-dark"
                 }`}
               >

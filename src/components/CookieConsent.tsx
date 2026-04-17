@@ -32,7 +32,7 @@ export default function CookieConsent() {
           <div className="relative w-full max-w-4xl rounded-2xl bg-surface/95 backdrop-blur-xl border border-white/[0.08] px-6 py-4 shadow-2xl">
             <button
               onClick={() => accept("essential")}
-              className="absolute top-3 right-3 text-white/40 hover:text-white/70 transition-colors"
+              className="absolute top-3 right-3 text-white/60 hover:text-white/70 transition-colors"
               aria-label="Close"
             >
               <X size={16} />

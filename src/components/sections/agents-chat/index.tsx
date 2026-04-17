@@ -77,7 +77,7 @@ export default function AgentsChat() {
                 <div className="flex h-5 w-5 items-center justify-center rounded-full bg-brand-cyan/15 ring-1 ring-brand-cyan/20">
                   <User className="h-3 w-3 text-brand-cyan/70" />
                 </div>
-                <span className="text-base font-mono uppercase tracking-wider text-brand-cyan/50">
+                <span className="text-base font-mono uppercase tracking-wider text-brand-cyan/60">
                   Customer message
                 </span>
               </div>

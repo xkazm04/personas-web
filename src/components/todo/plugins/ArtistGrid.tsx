@@ -107,7 +107,7 @@ export default function ArtistGrid() {
             <div className="text-base font-mono font-bold text-pink-200">
               Cinematic
             </div>
-            <div className="text-base font-mono text-foreground/55">
+            <div className="text-base font-mono text-foreground/60">
               1 of 6 selected
             </div>
           </div>
@@ -120,7 +120,7 @@ export default function ArtistGrid() {
           <div className="text-base font-mono text-pink-200">
             Lucid Origin · 1024×1024
           </div>
-          <div className="text-base font-mono text-foreground/55 mt-0.5">
+          <div className="text-base font-mono text-foreground/60 mt-0.5">
             ~8s per render
           </div>
         </div>

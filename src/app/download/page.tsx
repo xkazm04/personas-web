@@ -109,11 +109,11 @@ export default function DownloadPage() {
               <Shield className="h-3.5 w-3.5 text-brand-emerald/60" />
               AES-256 encrypted
             </span>
-            <span className="text-white/10">·</span>
+            <span className="text-white/60">·</span>
             <span>Zero telemetry</span>
-            <span className="text-white/10">·</span>
+            <span className="text-white/60">·</span>
             <span>Free forever</span>
-            <span className="text-white/10">·</span>
+            <span className="text-white/60">·</span>
             <Link
               href="/changelog"
               className="text-brand-cyan/60 hover:text-brand-cyan transition-colors"

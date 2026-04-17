@@ -33,7 +33,7 @@ export default function CommentThread({
   return (
     <div className="space-y-1">
       {topLevel.length === 0 && (
-        <p className="text-base text-muted-dark/40 font-mono py-1">
+        <p className="text-base text-muted-dark/60 font-mono py-1">
           No comments yet. Be the first to share your thoughts.
         </p>
       )}
@@ -65,8 +65,8 @@ export default function CommentThread({
                   className="overflow-hidden ml-4 pl-3 border-l border-white/[0.04]"
                 >
                   <div className="flex items-center gap-1 mb-1.5 mt-1">
-                    <CornerDownRight className="h-2.5 w-2.5 text-muted-dark/30" />
-                    <span className="text-base text-muted-dark/40 font-mono">
+                    <CornerDownRight className="h-2.5 w-2.5 text-muted-dark/60" />
+                    <span className="text-base text-muted-dark/60 font-mono">
                       Replying
                     </span>
                   </div>

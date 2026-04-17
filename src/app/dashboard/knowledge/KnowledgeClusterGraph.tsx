@@ -675,7 +675,7 @@ export default function KnowledgeClusterGraph() {
                 className="h-2 w-2 rounded-full"
                 style={{ backgroundColor: color }}
               />
-              <span className="text-sm text-foreground/50">{name}</span>
+              <span className="text-sm text-foreground/60">{name}</span>
             </div>
           ))}
         </div>
@@ -685,18 +685,18 @@ export default function KnowledgeClusterGraph() {
           <span className="text-sm text-muted-dark uppercase tracking-wider font-semibold">
             Node Size
           </span>
-          <span className="text-sm text-foreground/40">= confidence</span>
+          <span className="text-sm text-foreground/60">= confidence</span>
           <div className="flex items-center gap-1 ml-2">
             <svg width="10" height="10">
               <circle cx="5" cy="5" r="3" fill="white" opacity={0.15} />
             </svg>
-            <span className="text-sm text-foreground/30">low</span>
+            <span className="text-sm text-foreground/60">low</span>
           </div>
           <div className="flex items-center gap-1">
             <svg width="14" height="14">
               <circle cx="7" cy="7" r="6" fill="white" opacity={0.15} />
             </svg>
-            <span className="text-sm text-foreground/30">high</span>
+            <span className="text-sm text-foreground/60">high</span>
           </div>
         </div>
 

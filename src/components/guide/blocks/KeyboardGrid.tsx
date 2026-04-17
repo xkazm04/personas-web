@@ -13,7 +13,7 @@ function KeyBadge({ combo }: { combo: string }) {
       {parts.map((key, i) => (
         <React.Fragment key={i}>
           {i > 0 && (
-            <span className="text-muted-dark/50 text-base mx-0.5">+</span>
+            <span className="text-muted-dark/60 text-base mx-0.5">+</span>
           )}
           <kbd className="inline-flex items-center justify-center rounded-md border border-white/[0.12] bg-white/[0.06] px-2 py-0.5 text-base font-mono font-medium text-foreground shadow-[0_1px_0_1px_rgba(255,255,255,0.03)] min-w-[28px] text-center">
             {key}

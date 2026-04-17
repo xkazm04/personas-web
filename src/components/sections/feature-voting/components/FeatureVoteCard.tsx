@@ -193,8 +193,8 @@ export default function FeatureVoteCard({
                         }}
                       />
                       <div className="flex items-center gap-1.5 mb-2">
-                        <MessageCircle className="h-3 w-3 text-muted-dark/50" />
-                        <span className="text-base font-semibold text-muted-dark/50 font-mono tracking-wider uppercase">
+                        <MessageCircle className="h-3 w-3 text-muted-dark/60" />
+                        <span className="text-base font-semibold text-muted-dark/60 font-mono tracking-wider uppercase">
                           Discussion
                         </span>
                       </div>

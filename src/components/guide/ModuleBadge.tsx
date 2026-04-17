@@ -94,7 +94,7 @@ export default function ModuleBadge({ moduleRef, categoryColor = "#06b6d4", comp
               <span key={i} className="inline-flex items-center gap-1">
                 {i > 0 && (
                   <ChevronRight
-                    className="h-3 w-3 shrink-0 text-muted-dark/50"
+                    className="h-3 w-3 shrink-0 text-muted-dark/60"
                     aria-hidden="true"
                   />
                 )}

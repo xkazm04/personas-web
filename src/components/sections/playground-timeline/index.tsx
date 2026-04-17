@@ -99,7 +99,7 @@ export default function PlaygroundTimeline() {
                   <motion.span
                     initial={{ opacity: 0 }}
                     animate={{ opacity: 1 }}
-                    className="text-brand-cyan/50"
+                    className="text-brand-cyan/60"
                   >
                     Stage {activeStageIdx + 1} of {totalStages}
                   </motion.span>

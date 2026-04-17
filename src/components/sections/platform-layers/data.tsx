@@ -22,7 +22,7 @@ export const layers: Layer[] = [
     visual: (
       <div className="flex items-center gap-2 font-mono text-base">
         <span className="text-emerald-400/60">local</span>
-        <svg width="32" height="8" className="text-emerald-500/40">
+        <svg width="32" height="8" className="text-emerald-500/60">
           <line x1="0" y1="4" x2="28" y2="4" stroke="currentColor" strokeWidth="1" strokeDasharray="3 3" />
           <polygon points="26,1 30,4 26,7" fill="currentColor" />
         </svg>

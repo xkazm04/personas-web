@@ -245,7 +245,7 @@ export default function EventDetailDrawer({ node, onClose }: EventDetailDrawerPr
                   Sample Payload
                 </label>
                 <div className="relative max-h-64 overflow-auto rounded-xl bg-background p-4 border border-white/[0.08] shadow-inner">
-                  <pre className="font-mono text-sm leading-relaxed text-white/30 whitespace-pre-wrap break-all">
+                  <pre className="font-mono text-sm leading-relaxed text-white/60 whitespace-pre-wrap break-all">
                     {highlightJson(mockPayloadForNode(node))}
                   </pre>
                 </div>

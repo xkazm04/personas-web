@@ -133,7 +133,7 @@ function DocCard({ doc, delay }: { doc: SignedDoc; delay: number }) {
 
         {/* Timestamp + status */}
         <div className="flex flex-col items-end gap-1.5 shrink-0">
-          <span className="text-base font-mono text-foreground/55">
+          <span className="text-base font-mono text-foreground/60">
             {doc.signedAt}
           </span>
           {isVerified ? (

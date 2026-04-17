@@ -144,7 +144,7 @@ export default function ResearchLifecycle() {
                     <div className="text-base font-semibold text-foreground leading-tight truncate">
                       {project.name}
                     </div>
-                    <div className="flex items-center gap-3 mt-1 text-base font-mono text-foreground/55">
+                    <div className="flex items-center gap-3 mt-1 text-base font-mono text-foreground/60">
                       <span>{project.papers} papers</span>
                       <span>·</span>
                       <span>{project.hypotheses} hypotheses</span>

@@ -25,14 +25,14 @@ export default function CommentBubble({
           >
             {comment.author}
           </span>
-          <span className="text-base text-muted-dark/50 font-mono">
+          <span className="text-base text-muted-dark/60 font-mono">
             {formatTimeAgo(comment.timestamp)}
           </span>
         </div>
         <p className="text-base leading-relaxed text-muted-dark">{comment.text}</p>
         <button
           onClick={() => onReply(comment.id)}
-          className="mt-1 flex items-center gap-1 text-base text-muted-dark/40 hover:text-muted-dark/70 transition-colors cursor-pointer"
+          className="mt-1 flex items-center gap-1 text-base text-muted-dark/60 hover:text-muted-dark/70 transition-colors cursor-pointer"
         >
           <Reply className="h-2.5 w-2.5" />
           Reply

@@ -239,7 +239,7 @@ function buildColumns(
                 className={`flex items-center gap-1 rounded-md px-1.5 py-0.5 text-sm font-mono transition-colors ${
                   isInActiveChain
                     ? "bg-brand-cyan/15 text-brand-cyan border border-brand-cyan/25"
-                    : "text-muted-dark/50 hover:text-muted-dark hover:bg-white/[0.04]"
+                    : "text-muted-dark/60 hover:text-muted-dark hover:bg-white/[0.04]"
                 }`}
                 aria-label={`Show ${chainSize} related events`}
               >
@@ -461,19 +461,19 @@ export default function EventsListPanel() {
       {/* Search bar */}
       <motion.div variants={fadeUp} className="mb-3">
         <div className="relative">
-          <Search className="pointer-events-none absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-dark/50" />
+          <Search className="pointer-events-none absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-dark/60" />
           <input
             type="text"
             value={query}
             onChange={(e) => setQuery(e.target.value)}
             placeholder="Search payloads, event types, sources, errors..."
-            className="w-full rounded-xl border border-glass bg-white/[0.03] py-2 pl-9 pr-9 text-base text-foreground placeholder:text-muted-dark/40 transition-colors focus:border-brand-cyan/30 focus:outline-none focus:ring-1 focus:ring-brand-cyan/20"
+            className="w-full rounded-xl border border-glass bg-white/[0.03] py-2 pl-9 pr-9 text-base text-foreground placeholder:text-muted-dark/60 transition-colors focus:border-brand-cyan/30 focus:outline-none focus:ring-1 focus:ring-brand-cyan/20"
           />
           {query && (
             <button
               onClick={() => setQuery("")}
               aria-label="Clear search"
-              className="absolute right-2.5 top-1/2 -translate-y-1/2 rounded p-0.5 text-muted-dark/50 transition-colors hover:text-foreground"
+              className="absolute right-2.5 top-1/2 -translate-y-1/2 rounded p-0.5 text-muted-dark/60 transition-colors hover:text-foreground"
             >
               <X className="h-3.5 w-3.5" />
             </button>

@@ -26,7 +26,7 @@ export default function HoverDetail({ hoveredIdx, agents }: { hoveredIdx: number
                   <span className="text-base font-semibold text-white/90">{agent.name}</span>
                   <span className={`text-base font-mono ${st.text}`}>{st.label}</span>
                 </div>
-                <div className="flex items-center gap-4 text-base font-mono text-white/40 ml-auto">
+                <div className="flex items-center gap-4 text-base font-mono text-white/60 ml-auto">
                   <span>{agent.executions.toLocaleString()} executions</span>
                   <span>Rate: {agent.rate}%</span>
                   <span>Last: {(agent.executions % 8) + 1}s ago</span>

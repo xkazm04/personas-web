@@ -83,7 +83,7 @@ export default function PluginCard({
                 );
               })}
             </div>
-            <div className="text-base font-mono uppercase tracking-widest text-foreground/55 hidden sm:block">
+            <div className="text-base font-mono uppercase tracking-widest text-foreground/60 hidden sm:block">
               {activeVariant.blurb}
             </div>
           </div>

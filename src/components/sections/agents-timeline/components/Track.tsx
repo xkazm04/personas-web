@@ -60,7 +60,7 @@ export default function Track({
     : "border-brand-emerald/10 bg-brand-emerald/[0.02]";
 
   const headerColor = isWorkflow ? "text-brand-rose/70" : "text-brand-emerald/70";
-  const timerColor = isWorkflow ? "text-brand-rose/50" : "text-brand-emerald/50";
+  const timerColor = isWorkflow ? "text-brand-rose/60" : "text-brand-emerald/60";
 
   return (
     <div className={`rounded-xl border p-4 ${themeColor} relative overflow-hidden`}>

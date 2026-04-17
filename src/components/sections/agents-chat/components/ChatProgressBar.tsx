@@ -45,7 +45,7 @@ export default function ChatProgressBar({
           </button>
         ))}
       </div>
-      <div className="mt-2 flex items-center justify-between text-base font-mono text-muted-dark/50">
+      <div className="mt-2 flex items-center justify-between text-base font-mono text-muted-dark/60">
         <span>
           Chat {activeIndex + 1} of {scenarios.length}
         </span>

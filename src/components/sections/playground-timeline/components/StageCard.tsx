@@ -89,7 +89,7 @@ export default function StageCard({
               status === "active"
                 ? "text-brand-cyan/70"
                 : status === "done"
-                  ? "text-brand-emerald/50"
+                  ? "text-brand-emerald/60"
                   : "text-muted-dark"
             }`}
           >

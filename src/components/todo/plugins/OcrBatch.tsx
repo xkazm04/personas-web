@@ -122,7 +122,7 @@ export default function OcrBatch() {
                 transition={{ delay: 0.2 + i * 0.06 }}
                 className="flex items-baseline gap-2"
               >
-                <span className="text-foreground/55">{e.key}:</span>
+                <span className="text-foreground/60">{e.key}:</span>
                 <span
                   className={
                     e.highlight

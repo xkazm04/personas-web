@@ -221,14 +221,14 @@ function CreateSubscriptionForm({ onClose }: { onClose: () => void }) {
 
           <div>
             <label className="text-sm font-medium uppercase tracking-wider text-muted-dark">
-              Source Filter <span className="normal-case text-muted-dark/50">(optional)</span>
+              Source Filter <span className="normal-case text-muted-dark/60">(optional)</span>
             </label>
             <input
               type="text"
               value={sourceFilter}
               onChange={(e) => setSourceFilter(e.target.value)}
               placeholder="e.g. github, pagerduty..."
-              className="mt-1 w-full rounded-xl border border-glass-hover bg-white/[0.03] px-3 py-2 text-base text-foreground placeholder:text-muted-dark/50 focus:border-brand-cyan/30 focus:outline-none"
+              className="mt-1 w-full rounded-xl border border-glass-hover bg-white/[0.03] px-3 py-2 text-base text-foreground placeholder:text-muted-dark/60 focus:border-brand-cyan/30 focus:outline-none"
             />
           </div>
 

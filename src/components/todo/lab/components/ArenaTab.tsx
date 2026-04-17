@@ -67,7 +67,7 @@ export default function ArenaTab() {
       </div>
 
       <div className="border-b border-foreground/[0.06] px-5 py-3 bg-foreground/[0.02]">
-        <div className="text-base font-mono uppercase tracking-widest text-foreground/55 mb-1">
+        <div className="text-base font-mono uppercase tracking-widest text-foreground/60 mb-1">
           Input
         </div>
         <div className="font-mono text-base text-foreground/90">&gt; {round.input}</div>
@@ -118,7 +118,7 @@ export default function ArenaTab() {
                 <div className="text-3xl font-bold font-mono tabular-nums" style={{ color }}>
                   {phase === "fighting" ? "…" : score}
                 </div>
-                <div className="text-base font-mono uppercase tracking-widest text-foreground/55 mt-0.5">
+                <div className="text-base font-mono uppercase tracking-widest text-foreground/60 mt-0.5">
                   fitness score
                 </div>
                 <div className="mt-3 h-1 w-full rounded-full bg-foreground/[0.04] overflow-hidden">

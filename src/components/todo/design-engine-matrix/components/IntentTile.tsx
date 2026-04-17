@@ -89,7 +89,7 @@ export default function IntentTile({
       <div className="relative z-10 px-5 pb-5 space-y-3">
         <div className="rounded-lg border border-foreground/[0.1] bg-background/60 backdrop-blur-sm px-3 py-2.5 font-mono text-base text-foreground leading-relaxed h-[60px] overflow-hidden">
           {userTyped || (
-            <span className="text-foreground/40 italic">
+            <span className="text-foreground/60 italic">
               Describe what your agent should do…
             </span>
           )}

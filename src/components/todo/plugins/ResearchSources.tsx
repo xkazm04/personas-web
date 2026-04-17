@@ -79,8 +79,8 @@ export default function ResearchSources() {
       {/* Search bar + stats */}
       <div className="flex flex-col md:flex-row md:items-center gap-3">
         <div className="flex-1 flex items-center gap-2 rounded-lg border border-foreground/[0.08] bg-foreground/[0.02] px-3 py-2">
-          <BookOpen className="h-4 w-4 text-foreground/55" />
-          <span className="text-base font-mono text-foreground/55 flex-1">
+          <BookOpen className="h-4 w-4 text-foreground/60" />
+          <span className="text-base font-mono text-foreground/60 flex-1">
             Search 101 sources · DOI, arXiv, Semantic Scholar
           </span>
           <button className="flex items-center gap-1.5 rounded-md border border-blue-400/30 bg-blue-500/10 px-2.5 py-1 text-base font-mono text-blue-300">
@@ -91,12 +91,12 @@ export default function ResearchSources() {
           <span className="flex items-center gap-1.5 text-foreground/70">
             <Database className="h-4 w-4" />
             <span className="text-foreground font-semibold tabular-nums">101</span>
-            <span className="text-foreground/55">indexed</span>
+            <span className="text-foreground/60">indexed</span>
           </span>
           <span className="flex items-center gap-1.5 text-foreground/70">
             <Tag className="h-4 w-4" />
             <span className="text-foreground font-semibold tabular-nums">42</span>
-            <span className="text-foreground/55">annotated</span>
+            <span className="text-foreground/60">annotated</span>
           </span>
         </div>
       </div>
@@ -136,7 +136,7 @@ export default function ResearchSources() {
                   >
                     {status.label}
                   </span>
-                  <span className="text-base font-mono text-foreground/55">
+                  <span className="text-base font-mono text-foreground/60">
                     {source.venue} · {source.year}
                   </span>
                 </div>
@@ -176,7 +176,7 @@ export default function ResearchSources() {
                         #{tag}
                       </span>
                     ))}
-                    <ExternalLink className="h-3.5 w-3.5 text-foreground/40 ml-1 group-hover:text-foreground/80 transition-colors" />
+                    <ExternalLink className="h-3.5 w-3.5 text-foreground/60 ml-1 group-hover:text-foreground/80 transition-colors" />
                   </div>
                 </div>
               </div>

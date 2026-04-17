@@ -57,7 +57,7 @@ function ExecutionOutput({ executionId }: { executionId: string }) {
             <div className="space-y-1">
               {output.map((line, i) => (
                 <div key={i} className="whitespace-pre-wrap break-all text-emerald-400/90">
-                  <span className="mr-2 text-white/20 select-none">{">"}</span>
+                  <span className="mr-2 text-white/60 select-none">{">"}</span>
                   {line}
                 </div>
               ))}

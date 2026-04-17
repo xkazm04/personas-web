@@ -37,19 +37,19 @@ export default function NotifyInput({
 
   return (
     <div className="flex items-center gap-2">
-      <Mail className="h-3 w-3 text-muted-dark/40 shrink-0" />
+      <Mail className="h-3 w-3 text-muted-dark/60 shrink-0" />
       <input
         type="email"
         value={email}
         onChange={(e) => setEmail(e.target.value)}
         onKeyDown={(e) => { if (e.key === "Enter") handleSave(); }}
         placeholder="Email to get notified"
-        className="min-w-0 flex-1 bg-transparent py-1.5 text-sm text-muted-dark placeholder:text-muted-dark/30 outline-none border-b border-transparent focus:border-brand-cyan/20 transition-colors duration-200"
+        className="min-w-0 flex-1 bg-transparent py-1.5 text-sm text-muted-dark placeholder:text-muted-dark/60 outline-none border-b border-transparent focus:border-brand-cyan/20 transition-colors duration-200"
       />
       <button
         onClick={handleSave}
         disabled={!isValidEmail(email)}
-        className="text-sm font-medium text-brand-cyan/70 hover:text-brand-cyan disabled:text-muted-dark/20 transition-colors duration-200"
+        className="text-sm font-medium text-brand-cyan/70 hover:text-brand-cyan disabled:text-muted-dark/60 transition-colors duration-200"
       >
         Notify me
       </button>

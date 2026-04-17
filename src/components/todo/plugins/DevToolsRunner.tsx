@@ -137,7 +137,7 @@ export default function DevToolsRunner() {
                       {task.label}
                     </span>
                   </div>
-                  <div className="flex items-center justify-between mt-1 text-base font-mono text-foreground/55">
+                  <div className="flex items-center justify-between mt-1 text-base font-mono text-foreground/60">
                     <span className="truncate">{task.project}</span>
                     {task.durationMs && (
                       <span className="tabular-nums">
@@ -162,7 +162,7 @@ export default function DevToolsRunner() {
               <div className="h-2 w-2 rounded-full bg-rose-400/60" />
               <div className="h-2 w-2 rounded-full bg-amber-400/60" />
               <div className="h-2 w-2 rounded-full bg-emerald-400/60" />
-              <span className="ml-2 text-base font-mono text-foreground/55">
+              <span className="ml-2 text-base font-mono text-foreground/60">
                 output.stream
               </span>
               <span className="ml-auto flex items-center gap-1 text-base font-mono text-cyan-300">

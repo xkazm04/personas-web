@@ -206,11 +206,11 @@ export default function UseCaseDetail({ useCase }: { useCase: UseCase }) {
               <Link href="/blog" className="hover:text-foreground transition-colors">
                 Read the blog &rarr;
               </Link>
-              <span className="text-white/10">|</span>
+              <span className="text-white/60">|</span>
               <Link href="/compare" className="hover:text-foreground transition-colors">
                 Compare platforms &rarr;
               </Link>
-              <span className="text-white/10">|</span>
+              <span className="text-white/60">|</span>
               <Link href="/security" className="hover:text-foreground transition-colors">
                 Security &amp; Privacy &rarr;
               </Link>

@@ -18,7 +18,7 @@ export function ArchitectureDiagram({ nodes }: ArchitectureDiagramProps) {
         <React.Fragment key={i}>
           {node.arrow && (
             <ArrowRight
-              className="h-4 w-4 shrink-0 text-brand-cyan/50"
+              className="h-4 w-4 shrink-0 text-brand-cyan/60"
               aria-hidden="true"
             />
           )}
