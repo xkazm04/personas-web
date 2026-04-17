@@ -74,7 +74,10 @@ export default function DashboardHomePage() {
       focusThrottleInterval: 60_000,
     },
   );
-  const dailyMetrics = observabilityData?.dailyMetrics ?? [];
+  const dailyMetrics = useMemo(
+    () => observabilityData?.dailyMetrics ?? [],
+    [observabilityData],
+  );
 
   useEffect(() => {
     const target = chartSectionRef.current;

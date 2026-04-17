@@ -158,8 +158,14 @@ export default function UsagePage() {
   });
   const hasRealData = (data?.toolUsage ?? []).length > 0;
   const toolUsage = hasRealData ? data!.toolUsage : MOCK_TOOL_USAGE;
-  const toolUsageOverTime = hasRealData ? (data!.toolUsageOverTime ?? []) : MOCK_TOOL_USAGE_OVER_TIME;
-  const toolUsageByPersona = hasRealData ? (data!.toolUsageByPersona ?? []) : MOCK_TOOL_USAGE_BY_PERSONA;
+  const toolUsageOverTime = useMemo(
+    () => (hasRealData ? (data!.toolUsageOverTime ?? []) : MOCK_TOOL_USAGE_OVER_TIME),
+    [hasRealData, data],
+  );
+  const toolUsageByPersona = useMemo(
+    () => (hasRealData ? (data!.toolUsageByPersona ?? []) : MOCK_TOOL_USAGE_BY_PERSONA),
+    [hasRealData, data],
+  );
 
   // Bar chart data: sorted by invocations desc, capped at top 15 + "Other"
   const MAX_BAR_TOOLS = 15;

@@ -28,7 +28,9 @@ export function Checklist({ items, id }: ChecklistProps) {
         const saved = localStorage.getItem(storageKey);
         if (saved) {
           const parsed: boolean[] = JSON.parse(saved);
-          setChecked(items.map((_, i) => parsed[i] ?? false));
+          setChecked(
+            Array.from({ length: items.length }, (_, i) => parsed[i] ?? false),
+          );
         }
       } catch {
         // ignore corrupt data

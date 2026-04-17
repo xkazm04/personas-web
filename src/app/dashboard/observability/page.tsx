@@ -316,9 +316,9 @@ export default function ObservabilityPage() {
     },
   );
   const metrics = data?.metrics ?? null;
-  const dailyMetrics = data?.dailyMetrics ?? [];
-  const personaSpend = data?.personaSpend ?? [];
-  const healthIssues = data?.healthIssues ?? [];
+  const dailyMetrics = useMemo(() => data?.dailyMetrics ?? [], [data]);
+  const personaSpend = useMemo(() => data?.personaSpend ?? [], [data]);
+  const healthIssues = useMemo(() => data?.healthIssues ?? [], [data]);
 
   const costChartData = useMemo(
     () =>
