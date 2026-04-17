@@ -121,7 +121,7 @@ export default function BlogArticle({
         <div className="h-24" />
 
         <SectionWrapper id="article" aria-label={post.title}>
-          <motion.div variants={fadeUp} className="mx-auto max-w-3xl">
+          <motion.article variants={fadeUp} className="mx-auto max-w-3xl">
             {/* Back link */}
             <Link
               href="/blog"
@@ -200,7 +200,7 @@ export default function BlogArticle({
                 </Link>
               </div>
             </div>
-          </motion.div>
+          </motion.article>
         </SectionWrapper>
       </PageShell>
       <Footer />

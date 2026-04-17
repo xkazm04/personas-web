@@ -212,6 +212,18 @@ export interface Translations {
     toolUtilization: string;
     workers: string;
     usageAnalytics: string;
+    scope: {
+      allPersonas: string;
+      personaLabel: string;
+      compare: string;
+      dateRange: {
+        last24h: string;
+        last7d: string;
+        last30d: string;
+        last90d: string;
+        custom: string;
+      };
+    };
   };
   agentsPage: {
     title: string;
@@ -243,6 +255,11 @@ export interface Translations {
     tabEvents: string;
     tabSubscriptions: string;
     tabVisualization: string;
+    connectionStatus: {
+      connected: string;
+      reconnecting: string;
+      polling: string;
+    };
   };
   settingsPage: {
     title: string;
@@ -332,6 +349,37 @@ export interface Translations {
     security: { headline: string; description: string; cta: string };
     "multi-provider": { headline: string; description: string; cta: string };
     genome: { headline: string; description: string; cta: string };
+  };
+  accessibility: {
+    changeLanguage: string;
+    selectLanguage: string;
+    selectTheme: string;
+  };
+  themes: {
+    midnight: string;
+    cyan: string;
+    bronze: string;
+    frost: string;
+    purple: string;
+    pink: string;
+    red: string;
+    matrix: string;
+    light: string;
+    ice: string;
+    news: string;
+  };
+  themeDescriptions: {
+    midnight: string;
+    cyan: string;
+    bronze: string;
+    frost: string;
+    purple: string;
+    pink: string;
+    red: string;
+    matrix: string;
+    light: string;
+    ice: string;
+    news: string;
   };
 }
 
@@ -637,6 +685,18 @@ export const en: Translations = {
     toolUtilization: 'Tool utilization',
     workers: 'workers',
     usageAnalytics: 'Usage Analytics',
+    scope: {
+      allPersonas: 'All personas',
+      personaLabel: 'Persona filter',
+      compare: 'Compare',
+      dateRange: {
+        last24h: '24h',
+        last7d: '7d',
+        last30d: '30d',
+        last90d: '90d',
+        custom: 'Custom',
+      },
+    },
   },
   agentsPage: {
     title: 'Agents',
@@ -668,6 +728,11 @@ export const en: Translations = {
     tabEvents: 'Events',
     tabSubscriptions: 'Subscriptions',
     tabVisualization: 'Visualization',
+    connectionStatus: {
+      connected: 'Real-time: connected',
+      reconnecting: 'Reconnecting to event stream…',
+      polling: 'Polling for updates (delayed)',
+    },
   },
   settingsPage: {
     title: 'Settings',
@@ -773,5 +838,36 @@ export const en: Translations = {
       description: "Instead of manually tweaking prompts for hours, let the Genome system do it for you. It tests variations, keeps what works, and discards the rest — like natural selection for your AI agents.",
       cta: "Evolve your agents",
     },
+  },
+  accessibility: {
+    changeLanguage: 'Change language',
+    selectLanguage: 'Select language',
+    selectTheme: 'Select theme: {name}',
+  },
+  themes: {
+    midnight: 'Midnight',
+    cyan: 'Cyan',
+    bronze: 'Bronze',
+    frost: 'Frost',
+    purple: 'Purple',
+    pink: 'Pink',
+    red: 'Red',
+    matrix: 'Matrix',
+    light: 'Light',
+    ice: 'Ice',
+    news: 'News',
+  },
+  themeDescriptions: {
+    midnight: 'Deep navy dark theme',
+    cyan: 'Teal accent dark theme',
+    bronze: 'Warm amber dark theme',
+    frost: 'Silver cool dark theme',
+    purple: 'Violet accent dark theme',
+    pink: 'Magenta accent dark theme',
+    red: 'Crimson accent dark theme',
+    matrix: 'Neon green dark theme',
+    light: 'Classic bright theme',
+    ice: 'Cool blue light theme',
+    news: 'High contrast light theme',
   },
 };
