@@ -8,10 +8,23 @@ import type { ChatMsg } from "../types";
 
 export default function ChatTab() {
   const reduced = useReducedMotion() ?? false;
-  const [visible, setVisible] = useState<ChatMsg[]>([]);
-  const [phase, setPhase] = useState<"idle" | "running" | "done">("idle");
+  const [visible, setVisible] = useState<ChatMsg[]>(() =>
+    reduced ? CHAT_SCRIPT : [],
+  );
+  const [phase, setPhase] = useState<"idle" | "running" | "done">(() =>
+    reduced ? "done" : "idle",
+  );
+  const [prevReduced, setPrevReduced] = useState(reduced);
   const timeoutsRef = useRef<ReturnType<typeof setTimeout>[]>([]);
   const containerRef = useRef<HTMLDivElement>(null);
+
+  if (reduced !== prevReduced) {
+    setPrevReduced(reduced);
+    if (reduced) {
+      setVisible(CHAT_SCRIPT);
+      setPhase("done");
+    }
+  }
 
   const run = useCallback(() => {
     timeoutsRef.current.forEach(clearTimeout);
@@ -36,13 +49,12 @@ export default function ChatTab() {
   }, []);
 
   useEffect(() => {
-    if (reduced) {
-      setVisible(CHAT_SCRIPT);
-      setPhase("done");
-      return;
-    }
-    run();
-    return () => timeoutsRef.current.forEach(clearTimeout);
+    if (reduced) return;
+    const start = setTimeout(run, 0);
+    return () => {
+      clearTimeout(start);
+      timeoutsRef.current.forEach(clearTimeout);
+    };
   }, [reduced, run]);
 
   return (
