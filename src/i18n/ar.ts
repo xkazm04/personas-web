@@ -272,7 +272,12 @@ export const ar: Translations = {
     usage: '\u0627\u0644\u0627\u0633\u062A\u062E\u062F\u0627\u0645',
     knowledge: '\u0627\u0644\u0645\u0639\u0631\u0641\u0629',
     settings: '\u0627\u0644\u0625\u0639\u062F\u0627\u062F\u0627\u062A',
-    more: '\u0627\u0644\u0645\u0632\u064A\u062F',
+    memories: 'Memories',
+    health: 'Health',
+    leaderboard: 'Leaderboard',
+    sla: 'SLA',
+    messages: 'Messages',
+    more:'\u0627\u0644\u0645\u0632\u064A\u062F',
     greeting: {
       morning: '\u0635\u0628\u0627\u062D \u0627\u0644\u062E\u064A\u0631',
       afternoon: '\u0645\u0633\u0627\u0621 \u0627\u0644\u062E\u064A\u0631',

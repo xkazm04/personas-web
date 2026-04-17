@@ -272,7 +272,12 @@ export const de: Translations = {
     usage: 'Nutzung',
     knowledge: 'Wissen',
     settings: 'Einstellungen',
-    more: 'Mehr',
+    memories: 'Memories',
+    health: 'Health',
+    leaderboard: 'Leaderboard',
+    sla: 'SLA',
+    messages: 'Messages',
+    more:'Mehr',
     greeting: {
       morning: 'Guten Morgen',
       afternoon: 'Guten Tag',

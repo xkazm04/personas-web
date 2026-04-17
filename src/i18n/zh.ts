@@ -272,7 +272,12 @@ export const zh: Translations = {
     usage: '\u7528\u91CF',
     knowledge: '\u77E5\u8BC6\u5E93',
     settings: '\u8BBE\u7F6E',
-    more: '\u66F4\u591A',
+    memories: 'Memories',
+    health: 'Health',
+    leaderboard: 'Leaderboard',
+    sla: 'SLA',
+    messages: 'Messages',
+    more:'\u66F4\u591A',
     greeting: {
       morning: '\u65E9\u4E0A\u597D',
       afternoon: '\u4E0B\u5348\u597D',

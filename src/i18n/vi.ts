@@ -272,7 +272,12 @@ export const vi: Translations = {
     usage: 'S\u1eed d\u1ee5ng',
     knowledge: 'Ki\u1ebfn th\u1ee9c',
     settings: 'C\u00e0i \u0111\u1eb7t',
-    more: 'Th\u00eam',
+    memories: 'Memories',
+    health: 'Health',
+    leaderboard: 'Leaderboard',
+    sla: 'SLA',
+    messages: 'Messages',
+    more:'Th\u00eam',
     greeting: {
       morning: 'Ch\u00e0o bu\u1ed5i s\u00e1ng',
       afternoon: 'Ch\u00e0o bu\u1ed5i chi\u1ec1u',

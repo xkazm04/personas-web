@@ -190,6 +190,11 @@ export interface Translations {
     usage: string;
     knowledge: string;
     settings: string;
+    memories: string;
+    health: string;
+    leaderboard: string;
+    sla: string;
+    messages: string;
     more: string;
     greeting: {
       morning: string;
@@ -826,6 +831,11 @@ export const en: Translations = {
     usage: 'Usage',
     knowledge: 'Knowledge',
     settings: 'Settings',
+    memories: 'Memories',
+    health: 'Health',
+    leaderboard: 'Leaderboard',
+    sla: 'SLA',
+    messages: 'Messages',
     more: 'More',
     greeting: {
       morning: 'Good Morning',

@@ -272,7 +272,12 @@ export const hi: Translations = {
     usage: '\u0909\u092A\u092F\u094B\u0917',
     knowledge: '\u091C\u094D\u091E\u093E\u0928',
     settings: '\u0938\u0947\u091F\u093F\u0902\u0917\u094D\u0938',
-    more: '\u0914\u0930',
+    memories: 'Memories',
+    health: 'Health',
+    leaderboard: 'Leaderboard',
+    sla: 'SLA',
+    messages: 'Messages',
+    more:'\u0914\u0930',
     greeting: {
       morning: '\u0938\u0941\u092A\u094D\u0930\u092D\u093E\u0924',
       afternoon: '\u0928\u092E\u0938\u094D\u0915\u093E\u0930',

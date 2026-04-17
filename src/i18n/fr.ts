@@ -272,7 +272,12 @@ export const fr: Translations = {
     usage: 'Utilisation',
     knowledge: 'Connaissances',
     settings: 'Param\u00e8tres',
-    more: 'Plus',
+    memories: 'Memories',
+    health: 'Health',
+    leaderboard: 'Leaderboard',
+    sla: 'SLA',
+    messages: 'Messages',
+    more:'Plus',
     greeting: {
       morning: 'Bonjour',
       afternoon: 'Bon apr\u00e8s-midi',

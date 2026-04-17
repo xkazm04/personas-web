@@ -272,7 +272,12 @@ export const ko: Translations = {
     usage: '\uc0ac\uc6a9\ub7c9',
     knowledge: '\uc9c0\uc2dd',
     settings: '\uc124\uc815',
-    more: '\ub354 \ubcf4\uae30',
+    memories: 'Memories',
+    health: 'Health',
+    leaderboard: 'Leaderboard',
+    sla: 'SLA',
+    messages: 'Messages',
+    more:'\ub354 \ubcf4\uae30',
     greeting: {
       morning: '\uc88b\uc740 \uc544\uce68\uc785\ub2c8\ub2e4',
       afternoon: '\uc88b\uc740 \uc624\ud6c4\uc785\ub2c8\ub2e4',

@@ -272,7 +272,12 @@ export const id: Translations = {
     usage: 'Penggunaan',
     knowledge: 'Pengetahuan',
     settings: 'Pengaturan',
-    more: 'Lainnya',
+    memories: 'Memories',
+    health: 'Health',
+    leaderboard: 'Leaderboard',
+    sla: 'SLA',
+    messages: 'Messages',
+    more:'Lainnya',
     greeting: {
       morning: 'Selamat Pagi',
       afternoon: 'Selamat Siang',

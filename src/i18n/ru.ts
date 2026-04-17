@@ -272,7 +272,12 @@ export const ru: Translations = {
     usage: '\u0418\u0441\u043F\u043E\u043B\u044C\u0437\u043E\u0432\u0430\u043D\u0438\u0435',
     knowledge: '\u0411\u0430\u0437\u0430 \u0437\u043D\u0430\u043D\u0438\u0439',
     settings: '\u041D\u0430\u0441\u0442\u0440\u043E\u0439\u043A\u0438',
-    more: '\u0415\u0449\u0451',
+    memories: 'Memories',
+    health: 'Health',
+    leaderboard: 'Leaderboard',
+    sla: 'SLA',
+    messages: 'Messages',
+    more:'\u0415\u0449\u0451',
     greeting: {
       morning: '\u0414\u043E\u0431\u0440\u043E\u0435 \u0443\u0442\u0440\u043E',
       afternoon: '\u0414\u043E\u0431\u0440\u044B\u0439 \u0434\u0435\u043D\u044C',

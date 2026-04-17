@@ -272,7 +272,12 @@ export const cs: Translations = {
     usage: 'Vyu\u017eit\u00ed',
     knowledge: 'Znalosti',
     settings: 'Nastaven\u00ed',
-    more: 'V\u00edce',
+    memories: 'Memories',
+    health: 'Health',
+    leaderboard: 'Leaderboard',
+    sla: 'SLA',
+    messages: 'Messages',
+    more:'V\u00edce',
     greeting: {
       morning: 'Dobr\u00e9 r\u00e1no',
       afternoon: 'Dobr\u00e9 odpoledne',

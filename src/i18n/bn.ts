@@ -272,7 +272,12 @@ export const bn: Translations = {
     usage: '\u09ac\u09cd\u09af\u09ac\u09b9\u09be\u09b0',
     knowledge: '\u099c\u09cd\u099e\u09be\u09a8',
     settings: '\u09b8\u09c7\u099f\u09bf\u0982\u09b8',
-    more: '\u0986\u09b0\u09cb',
+    memories: 'Memories',
+    health: 'Health',
+    leaderboard: 'Leaderboard',
+    sla: 'SLA',
+    messages: 'Messages',
+    more:'\u0986\u09b0\u09cb',
     greeting: {
       morning: '\u09b8\u09c1\u09aa\u09cd\u09b0\u09ad\u09be\u09a4',
       afternoon: '\u09b6\u09c1\u09ad \u0985\u09aa\u09b0\u09be\u09b9\u09cd\u09a8',

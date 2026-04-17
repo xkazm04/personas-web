@@ -272,7 +272,12 @@ export const ja: Translations = {
     usage: '\u5229\u7528\u72b6\u6cc1',
     knowledge: '\u30ca\u30ec\u30c3\u30b8',
     settings: '\u8a2d\u5b9a',
-    more: '\u305d\u306e\u4ed6',
+    memories: 'Memories',
+    health: 'Health',
+    leaderboard: 'Leaderboard',
+    sla: 'SLA',
+    messages: 'Messages',
+    more:'\u305d\u306e\u4ed6',
     greeting: {
       morning: '\u304a\u306f\u3088\u3046\u3054\u3056\u3044\u307e\u3059',
       afternoon: '\u3053\u3093\u306b\u3061\u306f',
