@@ -7,15 +7,24 @@ import { ARENA_ROUNDS } from "../data";
 
 export default function ArenaTab() {
   const reduced = useReducedMotion() ?? false;
-  const [currentRound, setCurrentRound] = useState(0);
-  const [phase, setPhase] = useState<"fighting" | "result">("fighting");
+  const [currentRound, setCurrentRound] = useState(() =>
+    reduced ? ARENA_ROUNDS.length - 1 : 0,
+  );
+  const [phase, setPhase] = useState<"fighting" | "result">(() =>
+    reduced ? "result" : "fighting",
+  );
+  const [prevReduced, setPrevReduced] = useState(reduced);
 
-  useEffect(() => {
+  if (reduced !== prevReduced) {
+    setPrevReduced(reduced);
     if (reduced) {
       setCurrentRound(ARENA_ROUNDS.length - 1);
       setPhase("result");
-      return;
     }
+  }
+
+  useEffect(() => {
+    if (reduced) return;
     const id = setInterval(() => {
       setCurrentRound((r) => (r + 1) % ARENA_ROUNDS.length);
       setPhase("fighting");
@@ -64,7 +73,7 @@ export default function ArenaTab() {
         <div className="font-mono text-base text-foreground/90">&gt; {round.input}</div>
       </div>
 
-      <div className="grid grid-cols-2 divide-x divide-white/[0.06]">
+      <div className="grid grid-cols-1 sm:grid-cols-2 divide-y sm:divide-y-0 sm:divide-x divide-white/[0.06]">
         {(["A", "B"] as const).map((side) => {
           const isWinner = phase === "result" && round.winner === side;
           const isLoser = phase === "result" && round.winner !== side;
