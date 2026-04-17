@@ -423,6 +423,32 @@ export const vi: Translations = {
       flat: 'Flat',
     },
   },
+  slaPage: {
+    title: 'SLA',
+    subtitle: 'Service-level objectives, compliance, and breach history',
+    compliance: 'Compliance',
+    activeBreaches: 'Active breaches',
+    objectives: 'Objectives',
+    target: 'Target',
+    current: 'Current',
+    timeInSla: 'Time in SLA',
+    metricType: {
+      availability: 'Availability',
+      latency: 'Latency p95',
+      successRate: 'Success rate',
+    },
+    severity: {
+      minor: 'Minor',
+      major: 'Major',
+      critical: 'Critical',
+    },
+    breachLog: {
+      title: 'Breach log',
+      empty: 'No breaches in the last 7 days.',
+      ongoing: 'Ongoing',
+      duration: '{n} min',
+    },
+  },
   agentsPage: {
     title: 'T\u00e1c nh\u00e2n',
     noAgents: 'Ch\u01b0a c\u00f3 t\u00e1c nh\u00e2n n\u00e0o \u0111\u01b0\u1ee3c tri\u1ec3n khai',

@@ -423,6 +423,32 @@ export const ar: Translations = {
       flat: 'Flat',
     },
   },
+  slaPage: {
+    title: 'SLA',
+    subtitle: 'Service-level objectives, compliance, and breach history',
+    compliance: 'Compliance',
+    activeBreaches: 'Active breaches',
+    objectives: 'Objectives',
+    target: 'Target',
+    current: 'Current',
+    timeInSla: 'Time in SLA',
+    metricType: {
+      availability: 'Availability',
+      latency: 'Latency p95',
+      successRate: 'Success rate',
+    },
+    severity: {
+      minor: 'Minor',
+      major: 'Major',
+      critical: 'Critical',
+    },
+    breachLog: {
+      title: 'Breach log',
+      empty: 'No breaches in the last 7 days.',
+      ongoing: 'Ongoing',
+      duration: '{n} min',
+    },
+  },
   agentsPage: {
     title: '\u0627\u0644\u0648\u0643\u0644\u0627\u0621',
     noAgents: '\u0644\u0627 \u062A\u0648\u062C\u062F \u0648\u0643\u0644\u0627\u0621 \u0645\u0646\u0634\u0648\u0631\u0648\u0646',

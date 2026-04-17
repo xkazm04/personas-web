@@ -740,6 +740,141 @@ export const MOCK_LEADERBOARD: LeaderboardPersona[] = (() => {
     .sort((a, b) => b.composite - a.composite);
 })();
 
+// ── SLA monitoring ──────────────────────────────────────────────────
+
+export type SLAMetricType = "availability" | "latency" | "successRate";
+export type SLASeverity = "minor" | "major" | "critical";
+
+export interface SLATarget {
+  id: string;
+  persona: string;
+  personaColor: string;
+  metric: SLAMetricType;
+  target: number;
+  current: number;
+  unit: string; // "%" | "ms"
+  timeInSLA: number; // 0-1
+  direction: "higher" | "lower"; // "higher is better" vs "lower is better"
+  activeBreach: boolean;
+}
+
+export const MOCK_SLA_TARGETS: SLATarget[] = [
+  {
+    id: "sla_1",
+    persona: "ResearchAgent",
+    personaColor: "#06b6d4",
+    metric: "availability",
+    target: 99.9,
+    current: 99.97,
+    unit: "%",
+    timeInSLA: 0.9987,
+    direction: "higher",
+    activeBreach: false,
+  },
+  {
+    id: "sla_2",
+    persona: "CodeReviewer",
+    personaColor: "#34d399",
+    metric: "latency",
+    target: 500,
+    current: 312,
+    unit: "ms",
+    timeInSLA: 0.998,
+    direction: "lower",
+    activeBreach: false,
+  },
+  {
+    id: "sla_3",
+    persona: "DataProcessor",
+    personaColor: "#fbbf24",
+    metric: "successRate",
+    target: 98,
+    current: 96.4,
+    unit: "%",
+    timeInSLA: 0.943,
+    direction: "higher",
+    activeBreach: true,
+  },
+  {
+    id: "sla_4",
+    persona: "ReportGen",
+    personaColor: "#f43f5e",
+    metric: "latency",
+    target: 30_000,
+    current: 34_800,
+    unit: "ms",
+    timeInSLA: 0.882,
+    direction: "lower",
+    activeBreach: true,
+  },
+  {
+    id: "sla_5",
+    persona: "NotifyBot",
+    personaColor: "#a855f7",
+    metric: "availability",
+    target: 99.5,
+    current: 97.1,
+    unit: "%",
+    timeInSLA: 0.915,
+    direction: "higher",
+    activeBreach: true,
+  },
+];
+
+export interface SLABreach {
+  id: string;
+  persona: string;
+  metric: SLAMetricType;
+  startedAt: string; // ISO
+  resolvedAt: string | null; // null = ongoing
+  durationMinutes: number;
+  severity: SLASeverity;
+  summary: string;
+}
+
+export const MOCK_SLA_BREACHES: SLABreach[] = [
+  {
+    id: "br_1",
+    persona: "NotifyBot",
+    metric: "availability",
+    startedAt: new Date(Date.now() - 45 * 60_000).toISOString(),
+    resolvedAt: null,
+    durationMinutes: 45,
+    severity: "critical",
+    summary: "Slack webhook circuit-broken; 3 retries exhausted.",
+  },
+  {
+    id: "br_2",
+    persona: "ReportGen",
+    metric: "latency",
+    startedAt: new Date(Date.now() - 3 * 3600_000).toISOString(),
+    resolvedAt: null,
+    durationMinutes: 180,
+    severity: "major",
+    summary: "P95 latency sustained above 30s target.",
+  },
+  {
+    id: "br_3",
+    persona: "DataProcessor",
+    metric: "successRate",
+    startedAt: new Date(Date.now() - 6 * 3600_000).toISOString(),
+    resolvedAt: new Date(Date.now() - 4 * 3600_000).toISOString(),
+    durationMinutes: 120,
+    severity: "major",
+    summary: "Success rate fell to 94% during CSV parser regression.",
+  },
+  {
+    id: "br_4",
+    persona: "ResearchAgent",
+    metric: "latency",
+    startedAt: new Date(Date.now() - 24 * 3600_000).toISOString(),
+    resolvedAt: new Date(Date.now() - 23 * 3600_000).toISOString(),
+    durationMinutes: 60,
+    severity: "minor",
+    summary: "Upstream search-API latency spike, recovered autonomously.",
+  },
+];
+
 // ── Health digest for home page ─────────────────────────────────────
 
 export interface HealthDigest {

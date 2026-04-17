@@ -341,6 +341,32 @@ export interface Translations {
       flat: string;
     };
   };
+  slaPage: {
+    title: string;
+    subtitle: string;
+    compliance: string;
+    activeBreaches: string;
+    objectives: string;
+    target: string;
+    current: string;
+    timeInSla: string;
+    metricType: {
+      availability: string;
+      latency: string;
+      successRate: string;
+    };
+    severity: {
+      minor: string;
+      major: string;
+      critical: string;
+    };
+    breachLog: {
+      title: string;
+      empty: string;
+      ongoing: string;
+      duration: string;
+    };
+  };
   agentsPage: {
     title: string;
     noAgents: string;
@@ -928,6 +954,32 @@ export const en: Translations = {
       up: 'Up',
       down: 'Down',
       flat: 'Flat',
+    },
+  },
+  slaPage: {
+    title: 'SLA',
+    subtitle: 'Service-level objectives, compliance, and breach history',
+    compliance: 'Compliance',
+    activeBreaches: 'Active breaches',
+    objectives: 'Objectives',
+    target: 'Target',
+    current: 'Current',
+    timeInSla: 'Time in SLA',
+    metricType: {
+      availability: 'Availability',
+      latency: 'Latency p95',
+      successRate: 'Success rate',
+    },
+    severity: {
+      minor: 'Minor',
+      major: 'Major',
+      critical: 'Critical',
+    },
+    breachLog: {
+      title: 'Breach log',
+      empty: 'No breaches in the last 7 days.',
+      ongoing: 'Ongoing',
+      duration: '{n} min',
     },
   },
   agentsPage: {
