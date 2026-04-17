@@ -1,7 +1,7 @@
 "use client";
 
-import { useMemo } from "react";
-import { motion } from "framer-motion";
+import { useMemo, useState } from "react";
+import { motion, useReducedMotion } from "framer-motion";
 import { type Memory, type Category, CATEGORY_META } from "../../memoryShared";
 import {
   ARM_ANGLES,
@@ -20,6 +20,7 @@ export default function NeuralArm({
   memories: Memory[];
   freshId: number | null;
 }) {
+  const reduced = useReducedMotion();
   const meta = CATEGORY_META[category];
   const angle = ARM_ANGLES[category];
 
@@ -27,6 +28,7 @@ export default function NeuralArm({
     () => memories.slice().sort((a, b) => b.importance - a.importance),
     [memories],
   );
+  const [particleDelay] = useState(() => Math.random() * 2);
 
   const armStart = HUB_RADIUS + 15;
   const nodeCount = Math.max(sorted.length, 1);
@@ -59,23 +61,33 @@ export default function NeuralArm({
         transition={{ duration: 0.8, delay: 0.3 }}
       />
 
-      <motion.circle
-        r={3}
-        fill={meta.color}
-        opacity={0.8}
-        initial={{ cx: armStartPoint.x, cy: armStartPoint.y }}
-        animate={{
-          cx: [armStartPoint.x, endPoint.x, armStartPoint.x],
-          cy: [armStartPoint.y, endPoint.y, armStartPoint.y],
-          opacity: [0, 1, 0],
-        }}
-        transition={{
-          duration: 3,
-          repeat: Infinity,
-          ease: "easeInOut",
-          delay: Math.random() * 2,
-        }}
-      />
+      {reduced ? (
+        <circle
+          r={3}
+          cx={(armStartPoint.x + endPoint.x) / 2}
+          cy={(armStartPoint.y + endPoint.y) / 2}
+          fill={meta.color}
+          opacity={0.6}
+        />
+      ) : (
+        <motion.circle
+          r={3}
+          fill={meta.color}
+          opacity={0.8}
+          initial={{ cx: armStartPoint.x, cy: armStartPoint.y }}
+          animate={{
+            cx: [armStartPoint.x, endPoint.x, armStartPoint.x],
+            cy: [armStartPoint.y, endPoint.y, armStartPoint.y],
+            opacity: [0, 1, 0],
+          }}
+          transition={{
+            duration: 3,
+            repeat: Infinity,
+            ease: "easeInOut",
+            delay: particleDelay,
+          }}
+        />
+      )}
 
       {sorted.map((mem, i) => {
         const r = armStart + nodeSpacing * (i + 1);
@@ -85,7 +97,7 @@ export default function NeuralArm({
 
         return (
           <g key={`${category}-${mem.id}`}>
-            {isFresh && (
+            {isFresh && !reduced && (
               <motion.circle
                 cx={x}
                 cy={y}
@@ -111,9 +123,9 @@ export default function NeuralArm({
               cy={y}
               r={size}
               fill={meta.color}
-              initial={{ scale: 0, opacity: 0 }}
+              initial={reduced ? false : { scale: 0, opacity: 0 }}
               animate={{ scale: 1, opacity: 1 }}
-              transition={{
+              transition={reduced ? { duration: 0 } : {
                 type: "spring",
                 stiffness: 300,
                 damping: 22,
