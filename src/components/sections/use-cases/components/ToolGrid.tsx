@@ -27,7 +27,6 @@ export default function ToolGrid({
   return (
     <>
       {/* Desktop grid */}
-      {/* eslint-disable-next-line jsx-a11y/interactive-supports-focus */}
       <motion.div
         variants={fadeUp}
         className="hidden md:grid grid-cols-4 gap-3 mx-auto max-w-2xl lg:grid-cols-8 lg:max-w-4xl"
@@ -61,7 +60,6 @@ export default function ToolGrid({
           WebkitMaskImage: "linear-gradient(to right, black 85%, transparent)",
         }}
       >
-        {/* eslint-disable-next-line jsx-a11y/interactive-supports-focus */}
         <div
           className="flex gap-3 overflow-x-auto snap-x snap-mandatory pb-4 scrollbar-hide"
           role="toolbar"
