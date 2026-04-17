@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
+import Link from "next/link";
 import {
   Brain,
   Clock,
@@ -10,6 +11,7 @@ import {
   Calendar,
   Settings,
   X,
+  ArrowUpRight,
 } from "lucide-react";
 import { fadeUp, staggerContainer } from "@/lib/animations";
 import {
@@ -17,6 +19,7 @@ import {
   type MemoryAction,
 } from "@/lib/mock-dashboard-data";
 import StalenessIndicator from "./StalenessIndicator";
+import { useTranslation } from "@/i18n/useTranslation";
 
 /** Map action type to icon + color badge classes. */
 const typeConfig: Record<
@@ -70,6 +73,7 @@ function ScoreDots({ score, type }: { score: number; type: MemoryAction["type"] 
 }
 
 export default function MemoryActionsPanel() {
+  const { t } = useTranslation();
   const [actions, setActions] = useState<MemoryAction[]>(MOCK_MEMORY_ACTIONS);
   const [fetchedAt] = useState(() => Date.now());
 
@@ -171,6 +175,14 @@ export default function MemoryActionsPanel() {
           </motion.p>
         )}
       </div>
+
+      <Link
+        href="/dashboard/memories"
+        className="mt-3 inline-flex items-center gap-1 text-sm font-medium text-brand-purple transition-colors hover:text-purple-300"
+      >
+        {t.memoriesPage.seeAll}
+        <ArrowUpRight className="h-3 w-3" />
+      </Link>
     </motion.div>
   );
 }

@@ -400,6 +400,124 @@ export const MOCK_MEMORY_ACTIONS: MemoryAction[] = [
   },
 ];
 
+// ── Memory library (dashboard/memories route) ───────────────────────
+// Richer than MOCK_MEMORY_ACTIONS: stores persistent, accepted-or-pending
+// patterns the fleet has learned over time. Mirrors desktop's sub_memories.
+
+export type MemoryStatus = "active" | "pending" | "archived";
+
+export interface MemoryItem {
+  id: string;
+  type: MemoryAction["type"];
+  title: string;
+  description: string;
+  persona: string;
+  score: number; // 1-10
+  status: MemoryStatus;
+  usageCount: number;
+  acceptedAt: string; // ISO
+  lastUsed: string; // ISO
+  hasConflict: boolean;
+}
+
+const MEMORY_PERSONAS = [
+  "ResearchAgent",
+  "NotifyBot",
+  "CodeReviewer",
+  "DataProcessor",
+  "ReportGen",
+];
+
+const MEMORY_TYPES: MemoryAction["type"][] = [
+  "throttle",
+  "schedule",
+  "alert",
+  "config",
+  "routing",
+];
+
+const MEMORY_TITLE_POOL: Record<MemoryAction["type"], string[]> = {
+  throttle: [
+    "Back off after 3 rapid failures",
+    "Weekend cadence drop to hourly",
+    "Peak-hour rate limit awareness",
+    "Circuit break on 5xx spike",
+  ],
+  schedule: [
+    "Pre-warm cache at 06:00 UTC",
+    "Nightly snapshot window 02:00-04:00",
+    "Shift load to off-peak EU hours",
+    "Delay non-critical runs during deploys",
+  ],
+  alert: [
+    "Page on cost deviation > 2σ",
+    "Escalate after 30min unresolved critical",
+    "Notify when token budget reaches 80%",
+    "Silence known flaky dependency alerts",
+  ],
+  config: [
+    "Trim system prompt for simple tasks",
+    "Increase max_tokens for long-form output",
+    "Enable structured-output mode for API calls",
+    "Pin model version for reproducibility",
+  ],
+  routing: [
+    "Route lint checks to Haiku",
+    "Fall back to Sonnet on Opus timeout",
+    "Prefer streaming for latency-sensitive requests",
+    "Split large payloads across 2 workers",
+  ],
+};
+
+function pickTitle(
+  type: MemoryAction["type"],
+  seed: number,
+): string {
+  const pool = MEMORY_TITLE_POOL[type];
+  return pool[seed % pool.length];
+}
+
+export const MOCK_MEMORIES: MemoryItem[] = (() => {
+  const rng = seededRandom(555);
+  const items: MemoryItem[] = [];
+  const total = 60;
+  for (let i = 0; i < total; i++) {
+    const type = MEMORY_TYPES[i % MEMORY_TYPES.length];
+    const persona = MEMORY_PERSONAS[i % MEMORY_PERSONAS.length];
+    const statusRoll = rng();
+    const status: MemoryStatus =
+      statusRoll < 0.65
+        ? "active"
+        : statusRoll < 0.88
+          ? "pending"
+          : "archived";
+    const score = 4 + Math.floor(rng() * 7); // 4-10
+    const usageCount = status === "archived" ? Math.floor(rng() * 50) : Math.floor(rng() * 900) + 20;
+    const ageDays = Math.floor(rng() * 120) + 1;
+    const acceptedAt = new Date(
+      Date.now() - ageDays * 86_400_000,
+    ).toISOString();
+    const lastUsedHours = Math.floor(rng() * Math.min(ageDays * 24, 480)) + 1;
+    const lastUsed = new Date(
+      Date.now() - lastUsedHours * 3_600_000,
+    ).toISOString();
+    items.push({
+      id: `mem_${i + 1}`,
+      type,
+      title: pickTitle(type, i),
+      description: `Learned from ${usageCount} ${persona} executions. Confidence ${score}/10 with consistent positive outcomes across the observed window.`,
+      persona,
+      score,
+      status,
+      usageCount,
+      acceptedAt,
+      lastUsed,
+      hasConflict: rng() < 0.12,
+    });
+  }
+  return items;
+})();
+
 // ── Health digest for home page ─────────────────────────────────────
 
 export interface HealthDigest {

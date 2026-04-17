@@ -328,6 +328,27 @@ export const hi: Translations = {
       },
     },
   },
+  memoriesPage: {
+    title: 'Memories',
+    subtitle: 'Learned patterns your agents apply automatically',
+    totalCount: '{n} memories',
+    filters: {
+      all: 'All',
+      throttle: 'Throttle',
+      schedule: 'Schedule',
+      alert: 'Alert',
+      config: 'Config',
+      routing: 'Routing',
+    },
+    status: {
+      active: 'Active',
+      pending: 'Pending',
+      archived: 'Archived',
+    },
+    uses: '{n} uses',
+    empty: 'No memories match this filter',
+    seeAll: 'See all',
+  },
   agentsPage: {
     title: '\u090F\u091C\u0947\u0902\u091F',
     noAgents: '\u0915\u094B\u0908 \u090F\u091C\u0947\u0902\u091F \u0921\u093F\u092A\u094D\u0932\u0949\u092F \u0928\u0939\u0940\u0902',

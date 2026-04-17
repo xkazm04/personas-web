@@ -328,6 +328,27 @@ export const zh: Translations = {
       },
     },
   },
+  memoriesPage: {
+    title: 'Memories',
+    subtitle: 'Learned patterns your agents apply automatically',
+    totalCount: '{n} memories',
+    filters: {
+      all: 'All',
+      throttle: 'Throttle',
+      schedule: 'Schedule',
+      alert: 'Alert',
+      config: 'Config',
+      routing: 'Routing',
+    },
+    status: {
+      active: 'Active',
+      pending: 'Pending',
+      archived: 'Archived',
+    },
+    uses: '{n} uses',
+    empty: 'No memories match this filter',
+    seeAll: 'See all',
+  },
   agentsPage: {
     title: '\u667A\u80FD\u4F53',
     noAgents: '\u672A\u90E8\u7F72\u667A\u80FD\u4F53',

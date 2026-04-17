@@ -246,6 +246,27 @@ export interface Translations {
       };
     };
   };
+  memoriesPage: {
+    title: string;
+    subtitle: string;
+    totalCount: string;
+    filters: {
+      all: string;
+      throttle: string;
+      schedule: string;
+      alert: string;
+      config: string;
+      routing: string;
+    };
+    status: {
+      active: string;
+      pending: string;
+      archived: string;
+    };
+    uses: string;
+    empty: string;
+    seeAll: string;
+  };
   agentsPage: {
     title: string;
     noAgents: string;
@@ -739,6 +760,27 @@ export const en: Translations = {
         custom: 'Custom',
       },
     },
+  },
+  memoriesPage: {
+    title: 'Memories',
+    subtitle: 'Learned patterns your agents apply automatically',
+    totalCount: '{n} memories',
+    filters: {
+      all: 'All',
+      throttle: 'Throttle',
+      schedule: 'Schedule',
+      alert: 'Alert',
+      config: 'Config',
+      routing: 'Routing',
+    },
+    status: {
+      active: 'Active',
+      pending: 'Pending',
+      archived: 'Archived',
+    },
+    uses: '{n} uses',
+    empty: 'No memories match this filter',
+    seeAll: 'See all',
   },
   agentsPage: {
     title: 'Agents',
