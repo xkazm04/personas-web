@@ -449,6 +449,21 @@ export const ru: Translations = {
       duration: '{n} min',
     },
   },
+  messagesPage: {
+    title: 'Messages',
+    subtitle: 'Async feedback from every persona in the fleet',
+    unread: 'Unread',
+    read: 'Read',
+    empty: 'No messages in this page.',
+    expand: 'Show payload',
+    collapse: 'Hide payload',
+    pagination: {
+      prev: 'Previous',
+      next: 'Next',
+      page: 'Page {n} of {total}',
+    },
+    markAllRead: 'Mark all read',
+  },
   agentsPage: {
     title: '\u0410\u0433\u0435\u043D\u0442\u044B',
     noAgents: '\u0410\u0433\u0435\u043D\u0442\u044B \u043D\u0435 \u0440\u0430\u0437\u0432\u0451\u0440\u043D\u0443\u0442\u044B',

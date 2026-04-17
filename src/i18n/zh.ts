@@ -449,6 +449,21 @@ export const zh: Translations = {
       duration: '{n} min',
     },
   },
+  messagesPage: {
+    title: 'Messages',
+    subtitle: 'Async feedback from every persona in the fleet',
+    unread: 'Unread',
+    read: 'Read',
+    empty: 'No messages in this page.',
+    expand: 'Show payload',
+    collapse: 'Hide payload',
+    pagination: {
+      prev: 'Previous',
+      next: 'Next',
+      page: 'Page {n} of {total}',
+    },
+    markAllRead: 'Mark all read',
+  },
   agentsPage: {
     title: '\u667A\u80FD\u4F53',
     noAgents: '\u672A\u90E8\u7F72\u667A\u80FD\u4F53',

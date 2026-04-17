@@ -875,6 +875,87 @@ export const MOCK_SLA_BREACHES: SLABreach[] = [
   },
 ];
 
+// ── Async feedback messages ─────────────────────────────────────────
+// Mirrors desktop sub_messages: persisted async feedback from personas
+// (user-directed reports, prompts, prompts-to-review). Includes JSON payload.
+
+export type MessageStatus = "unread" | "read";
+
+export interface FeedbackMessage {
+  id: string;
+  persona: string;
+  personaColor: string;
+  timestamp: string; // ISO
+  subject: string;
+  status: MessageStatus;
+  payload: string; // JSON string (for JsonViewer)
+}
+
+const MESSAGE_SUBJECTS = [
+  "Execution completed — batch #4821",
+  "Retry budget exceeded, escalating to human",
+  "Learned new pattern: webhook.incoming → categorize → route",
+  "Cost spike detected on last run",
+  "Tool deprecation warning for GitHub REST v3",
+  "Model downgrade recommended for simple CSV tasks",
+  "Slack API returned 429 — backoff applied",
+  "Memory pruned: 3 stale conversation threads dropped",
+  "New prompt candidate ready for A/B testing",
+  "Rate limit window reset; queue drained",
+];
+
+const MESSAGE_PERSONAS = [
+  { name: "ResearchAgent", color: "#06b6d4" },
+  { name: "CodeReviewer", color: "#34d399" },
+  { name: "DataProcessor", color: "#fbbf24" },
+  { name: "ReportGen", color: "#f43f5e" },
+  { name: "NotifyBot", color: "#a855f7" },
+];
+
+export const MOCK_MESSAGES: FeedbackMessage[] = (() => {
+  const rng = seededRandom(711);
+  const items: FeedbackMessage[] = [];
+  const total = 42;
+  for (let i = 0; i < total; i++) {
+    const persona = MESSAGE_PERSONAS[i % MESSAGE_PERSONAS.length];
+    const minutesAgo = Math.floor(i * 37 + rng() * 90);
+    const timestamp = new Date(
+      Date.now() - minutesAgo * 60_000,
+    ).toISOString();
+    const subject = MESSAGE_SUBJECTS[i % MESSAGE_SUBJECTS.length];
+    const payload = JSON.stringify(
+      {
+        executionId: `exec_${String(40000 + i).padStart(6, "0")}`,
+        persona: persona.name,
+        durationMs: Math.floor(400 + rng() * 9500),
+        model: rng() < 0.4 ? "haiku-4-5" : "sonnet-4-6",
+        tokens: {
+          input: Math.floor(200 + rng() * 2200),
+          output: Math.floor(80 + rng() * 1200),
+        },
+        costUsd: +(0.001 + rng() * 0.18).toFixed(4),
+        tags: rng() < 0.5 ? ["scheduled", "batch"] : ["ad-hoc"],
+        metadata: {
+          ranOn: "worker-" + (Math.floor(rng() * 8) + 1),
+          attempt: Math.floor(rng() * 3) + 1,
+        },
+      },
+      null,
+      0,
+    );
+    items.push({
+      id: `msg_${i + 1}`,
+      persona: persona.name,
+      personaColor: persona.color,
+      timestamp,
+      subject,
+      status: i < 7 ? "unread" : "read",
+      payload,
+    });
+  }
+  return items;
+})();
+
 // ── Health digest for home page ─────────────────────────────────────
 
 export interface HealthDigest {

@@ -367,6 +367,21 @@ export interface Translations {
       duration: string;
     };
   };
+  messagesPage: {
+    title: string;
+    subtitle: string;
+    unread: string;
+    read: string;
+    empty: string;
+    expand: string;
+    collapse: string;
+    pagination: {
+      prev: string;
+      next: string;
+      page: string;
+    };
+    markAllRead: string;
+  };
   agentsPage: {
     title: string;
     noAgents: string;
@@ -981,6 +996,21 @@ export const en: Translations = {
       ongoing: 'Ongoing',
       duration: '{n} min',
     },
+  },
+  messagesPage: {
+    title: 'Messages',
+    subtitle: 'Async feedback from every persona in the fleet',
+    unread: 'Unread',
+    read: 'Read',
+    empty: 'No messages in this page.',
+    expand: 'Show payload',
+    collapse: 'Hide payload',
+    pagination: {
+      prev: 'Previous',
+      next: 'Next',
+      page: 'Page {n} of {total}',
+    },
+    markAllRead: 'Mark all read',
   },
   agentsPage: {
     title: 'Agents',

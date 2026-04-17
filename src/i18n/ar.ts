@@ -449,6 +449,21 @@ export const ar: Translations = {
       duration: '{n} min',
     },
   },
+  messagesPage: {
+    title: 'Messages',
+    subtitle: 'Async feedback from every persona in the fleet',
+    unread: 'Unread',
+    read: 'Read',
+    empty: 'No messages in this page.',
+    expand: 'Show payload',
+    collapse: 'Hide payload',
+    pagination: {
+      prev: 'Previous',
+      next: 'Next',
+      page: 'Page {n} of {total}',
+    },
+    markAllRead: 'Mark all read',
+  },
   agentsPage: {
     title: '\u0627\u0644\u0648\u0643\u0644\u0627\u0621',
     noAgents: '\u0644\u0627 \u062A\u0648\u062C\u062F \u0648\u0643\u0644\u0627\u0621 \u0645\u0646\u0634\u0648\u0631\u0648\u0646',

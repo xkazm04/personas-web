@@ -449,6 +449,21 @@ export const fr: Translations = {
       duration: '{n} min',
     },
   },
+  messagesPage: {
+    title: 'Messages',
+    subtitle: 'Async feedback from every persona in the fleet',
+    unread: 'Unread',
+    read: 'Read',
+    empty: 'No messages in this page.',
+    expand: 'Show payload',
+    collapse: 'Hide payload',
+    pagination: {
+      prev: 'Previous',
+      next: 'Next',
+      page: 'Page {n} of {total}',
+    },
+    markAllRead: 'Mark all read',
+  },
   agentsPage: {
     title: 'Agents',
     noAgents: 'Aucun agent d\u00e9ploy\u00e9',
