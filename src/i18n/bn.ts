@@ -494,6 +494,12 @@ export const bn: Translations = {
     tabEvents: '\u0987\u09ad\u09c7\u09a8\u09cd\u099f',
     tabSubscriptions: '\u09b8\u09be\u09ac\u09b8\u09cd\u0995\u09cd\u09b0\u09bf\u09aa\u09b6\u09a8',
     tabVisualization: '\u09ad\u09bf\u099c\u09c1\u09af\u09bc\u09be\u09b2\u09be\u0987\u099c\u09c7\u09b6\u09a8',
+    tabSwimlane: 'Timeline',
+    swimlane: {
+      title: 'Event swim-lanes',
+      subtitle: 'Time-ordered per-persona event trace',
+      empty: 'No events in the selected window',
+    },
     connectionStatus: {
       connected: 'রিয়েল-টাইম: সংযুক্ত',
       reconnecting: 'ইভেন্ট স্ট্রিমে পুনরায় সংযোগ হচ্ছে…',

@@ -956,6 +956,40 @@ export const MOCK_MESSAGES: FeedbackMessage[] = (() => {
   return items;
 })();
 
+// ── Event swim-lane ─────────────────────────────────────────────────
+// Time-ordered per-persona trace rendered on the Events page.
+
+export interface SwimlaneEvent {
+  id: string;
+  personaId: string; // matches SWARM_PERSONAS id
+  timestamp: number; // epoch ms
+  eventType: string;
+  status: "success" | "failure" | "processing";
+}
+
+export const SWIMLANE_WINDOW_MS = 15 * 60_000;
+
+export const MOCK_SWIMLANE_EVENTS: SwimlaneEvent[] = (() => {
+  const rng = seededRandom(909);
+  const events: SwimlaneEvent[] = [];
+  const windowStart = Date.now() - SWIMLANE_WINDOW_MS;
+  const total = 38;
+  for (let i = 0; i < total; i++) {
+    const persona = SWARM_PERSONAS[i % SWARM_PERSONAS.length];
+    const roll = rng();
+    const status: SwimlaneEvent["status"] =
+      roll < 0.82 ? "success" : roll < 0.95 ? "failure" : "processing";
+    events.push({
+      id: `sw_${i + 1}`,
+      personaId: persona.id,
+      timestamp: windowStart + Math.floor(rng() * SWIMLANE_WINDOW_MS),
+      eventType: EVENT_TYPES[Math.floor(rng() * EVENT_TYPES.length)],
+      status,
+    });
+  }
+  return events.sort((a, b) => a.timestamp - b.timestamp);
+})();
+
 // ── Health digest for home page ─────────────────────────────────────
 
 export interface HealthDigest {

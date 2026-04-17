@@ -494,6 +494,12 @@ export const id: Translations = {
     tabEvents: 'Event',
     tabSubscriptions: 'Langganan',
     tabVisualization: 'Visualisasi',
+    tabSwimlane: 'Timeline',
+    swimlane: {
+      title: 'Event swim-lanes',
+      subtitle: 'Time-ordered per-persona event trace',
+      empty: 'No events in the selected window',
+    },
     connectionStatus: {
       connected: 'Real-time: terhubung',
       reconnecting: 'Menghubungkan ulang ke aliran event…',

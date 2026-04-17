@@ -494,6 +494,12 @@ export const cs: Translations = {
     tabEvents: 'Ud\u00e1losti',
     tabSubscriptions: 'Odeb\u00edr\u00e1n\u00ed',
     tabVisualization: 'Vizualizace',
+    tabSwimlane: 'Timeline',
+    swimlane: {
+      title: 'Event swim-lanes',
+      subtitle: 'Time-ordered per-persona event trace',
+      empty: 'No events in the selected window',
+    },
     connectionStatus: {
       connected: 'V reálném čase: připojeno',
       reconnecting: 'Opětovné připojování k proudu událostí…',

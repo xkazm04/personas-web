@@ -494,6 +494,12 @@ export const ru: Translations = {
     tabEvents: '\u0421\u043E\u0431\u044B\u0442\u0438\u044F',
     tabSubscriptions: '\u041F\u043E\u0434\u043F\u0438\u0441\u043A\u0438',
     tabVisualization: '\u0412\u0438\u0437\u0443\u0430\u043B\u0438\u0437\u0430\u0446\u0438\u044F',
+    tabSwimlane: 'Timeline',
+    swimlane: {
+      title: 'Event swim-lanes',
+      subtitle: 'Time-ordered per-persona event trace',
+      empty: 'No events in the selected window',
+    },
     connectionStatus: {
       connected: 'В реальном времени: подключено',
       reconnecting: 'Переподключение к потоку событий…',

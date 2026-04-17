@@ -494,6 +494,12 @@ export const vi: Translations = {
     tabEvents: 'S\u1ef1 ki\u1ec7n',
     tabSubscriptions: '\u0110\u0103ng k\u00fd',
     tabVisualization: 'Tr\u1ef1c quan h\u00f3a',
+    tabSwimlane: 'Timeline',
+    swimlane: {
+      title: 'Event swim-lanes',
+      subtitle: 'Time-ordered per-persona event trace',
+      empty: 'No events in the selected window',
+    },
     connectionStatus: {
       connected: 'Thời gian thực: đã kết nối',
       reconnecting: 'Đang kết nối lại luồng sự kiện…',

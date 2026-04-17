@@ -494,6 +494,12 @@ export const zh: Translations = {
     tabEvents: '\u4E8B\u4EF6',
     tabSubscriptions: '\u8BA2\u9605',
     tabVisualization: '\u53EF\u89C6\u5316',
+    tabSwimlane: 'Timeline',
+    swimlane: {
+      title: 'Event swim-lanes',
+      subtitle: 'Time-ordered per-persona event trace',
+      empty: 'No events in the selected window',
+    },
     connectionStatus: {
       connected: '实时：已连接',
       reconnecting: '正在重新连接事件流…',

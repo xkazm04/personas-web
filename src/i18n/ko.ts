@@ -494,6 +494,12 @@ export const ko: Translations = {
     tabEvents: '\uc774\ubca4\ud2b8',
     tabSubscriptions: '\uad6c\ub3c5',
     tabVisualization: '\uc2dc\uac01\ud654',
+    tabSwimlane: 'Timeline',
+    swimlane: {
+      title: 'Event swim-lanes',
+      subtitle: 'Time-ordered per-persona event trace',
+      empty: 'No events in the selected window',
+    },
     connectionStatus: {
       connected: '실시간: 연결됨',
       reconnecting: '이벤트 스트림에 재연결 중…',

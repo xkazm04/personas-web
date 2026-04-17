@@ -494,6 +494,12 @@ export const ja: Translations = {
     tabEvents: '\u30a4\u30d9\u30f3\u30c8',
     tabSubscriptions: '\u30b5\u30d6\u30b9\u30af\u30ea\u30d7\u30b7\u30e7\u30f3',
     tabVisualization: '\u30d3\u30b8\u30e5\u30a2\u30e9\u30a4\u30bc\u30fc\u30b7\u30e7\u30f3',
+    tabSwimlane: 'Timeline',
+    swimlane: {
+      title: 'Event swim-lanes',
+      subtitle: 'Time-ordered per-persona event trace',
+      empty: 'No events in the selected window',
+    },
     connectionStatus: {
       connected: 'リアルタイム: 接続中',
       reconnecting: 'イベントストリームに再接続中…',

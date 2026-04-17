@@ -3,7 +3,7 @@
 import { useState } from "react";
 import Image from "next/image";
 import { motion } from "framer-motion";
-import { Radio, Zap, Orbit, Play } from "lucide-react";
+import { Radio, Zap, Orbit, Play, GanttChart } from "lucide-react";
 import { fadeUp, staggerContainer } from "@/lib/animations";
 import GradientText from "@/components/GradientText";
 import ConnectionStatusIndicator from "@/components/dashboard/ConnectionStatusIndicator";
@@ -12,11 +12,12 @@ import EventsListPanel from "@/components/dashboard/EventsListPanel";
 import EventBusVisualization from "@/components/dashboard/EventBusVisualization";
 import EventBusStats from "@/components/dashboard/EventBusStats";
 import EventDetailDrawer from "@/components/dashboard/EventDetailDrawer";
+import EventSwimlane from "@/components/dashboard/EventSwimlane";
 import { useEventStore } from "@/stores/eventStore";
 import { useTranslation } from "@/i18n/useTranslation";
 import { SWARM_PERSONAS, EVENT_TYPES, type SwarmNode } from "@/lib/mock-dashboard-data";
 
-type PageTab = "events" | "subscriptions" | "visualization";
+type PageTab = "events" | "subscriptions" | "visualization" | "swimlane";
 
 // ── Event type legend colors ──────────────────────────────────────────
 
@@ -108,12 +109,27 @@ export default function EventsPage() {
             <Orbit className="h-3.5 w-3.5" />
             {t.eventsPage.tabVisualization}
           </button>
+          <button
+            onClick={() => setPageTab("swimlane")}
+            className={`flex items-center gap-1.5 rounded-md px-4 py-2 text-sm font-medium transition-all ${
+              pageTab === "swimlane"
+                ? "bg-white/[0.08] text-foreground shadow-sm"
+                : "text-muted-dark hover:text-muted"
+            }`}
+          >
+            <GanttChart className="h-3.5 w-3.5" />
+            {t.eventsPage.tabSwimlane}
+          </button>
         </div>
       </motion.div>
 
       {pageTab === "subscriptions" ? (
         <motion.div variants={fadeUp}>
           <SubscriptionsPanel />
+        </motion.div>
+      ) : pageTab === "swimlane" ? (
+        <motion.div variants={fadeUp}>
+          <EventSwimlane />
         </motion.div>
       ) : pageTab === "visualization" ? (
         <motion.div variants={fadeUp} className="space-y-4">

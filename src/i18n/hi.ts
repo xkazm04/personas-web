@@ -494,6 +494,12 @@ export const hi: Translations = {
     tabEvents: '\u0907\u0935\u0947\u0902\u091F',
     tabSubscriptions: '\u0938\u092C\u094D\u0938\u0915\u094D\u0930\u093F\u092A\u094D\u0936\u0928',
     tabVisualization: '\u0935\u093F\u091C\u093C\u0941\u0905\u0932\u093E\u0907\u091C\u093C\u0947\u0936\u0928',
+    tabSwimlane: 'Timeline',
+    swimlane: {
+      title: 'Event swim-lanes',
+      subtitle: 'Time-ordered per-persona event trace',
+      empty: 'No events in the selected window',
+    },
     connectionStatus: {
       connected: 'रियल-टाइम: कनेक्टेड',
       reconnecting: 'इवेंट स्ट्रीम से पुनः कनेक्ट हो रहा है…',

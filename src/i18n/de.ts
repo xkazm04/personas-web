@@ -494,6 +494,12 @@ export const de: Translations = {
     tabEvents: 'Events',
     tabSubscriptions: 'Abonnements',
     tabVisualization: 'Visualisierung',
+    tabSwimlane: 'Timeline',
+    swimlane: {
+      title: 'Event swim-lanes',
+      subtitle: 'Time-ordered per-persona event trace',
+      empty: 'No events in the selected window',
+    },
     connectionStatus: {
       connected: 'Echtzeit: verbunden',
       reconnecting: 'Verbindung zum Event-Stream wird wiederhergestellt…',

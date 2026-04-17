@@ -494,6 +494,12 @@ export const ar: Translations = {
     tabEvents: '\u0627\u0644\u0623\u062D\u062F\u0627\u062B',
     tabSubscriptions: '\u0627\u0644\u0627\u0634\u062A\u0631\u0627\u0643\u0627\u062A',
     tabVisualization: '\u0627\u0644\u062A\u0635\u0648\u0631',
+    tabSwimlane: 'Timeline',
+    swimlane: {
+      title: 'Event swim-lanes',
+      subtitle: 'Time-ordered per-persona event trace',
+      empty: 'No events in the selected window',
+    },
     connectionStatus: {
       connected: 'الوقت الفعلي: متصل',
       reconnecting: 'إعادة الاتصال بتدفق الأحداث…',

@@ -412,6 +412,12 @@ export interface Translations {
     tabEvents: string;
     tabSubscriptions: string;
     tabVisualization: string;
+    tabSwimlane: string;
+    swimlane: {
+      title: string;
+      subtitle: string;
+      empty: string;
+    };
     connectionStatus: {
       connected: string;
       reconnecting: string;
@@ -1042,6 +1048,12 @@ export const en: Translations = {
     tabEvents: 'Events',
     tabSubscriptions: 'Subscriptions',
     tabVisualization: 'Visualization',
+    tabSwimlane: 'Timeline',
+    swimlane: {
+      title: 'Event swim-lanes',
+      subtitle: 'Time-ordered per-persona event trace',
+      empty: 'No events in the selected window',
+    },
     connectionStatus: {
       connected: 'Real-time: connected',
       reconnecting: 'Reconnecting to event stream…',
