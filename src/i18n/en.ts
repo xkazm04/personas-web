@@ -89,6 +89,14 @@ export interface Translations {
     executions: string;
     templates: string;
   };
+  heroTransition: {
+    ariaLabel: string;
+    speed: string;
+    privacy: string;
+    scale: string;
+    value: string;
+    cta: string;
+  };
   sections: {
     vision: string;
     pricing: string;
@@ -417,6 +425,14 @@ export const en: Translations = {
     agents: 'Agents',
     executions: 'Executions',
     templates: 'Templates',
+  },
+  heroTransition: {
+    ariaLabel: 'Core product pillars',
+    speed: 'Fast',
+    privacy: 'Private',
+    scale: 'Scalable',
+    value: 'Agents that run where your data lives, scale when you need them, and stay under your control.',
+    cta: 'See it in action',
   },
   sections: {
     vision: 'Vision',

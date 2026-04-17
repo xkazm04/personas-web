@@ -431,4 +431,12 @@ export const ko: Translations = {
       cta: "에이전트 진화시키기",
     },
   },
+  heroTransition: {
+    ariaLabel: 'Core product pillars',
+    speed: 'Fast',
+    privacy: 'Private',
+    scale: 'Scalable',
+    value: 'Agents that run where your data lives, scale when you need them, and stay under your control.',
+    cta: 'See it in action',
+  },
 };
