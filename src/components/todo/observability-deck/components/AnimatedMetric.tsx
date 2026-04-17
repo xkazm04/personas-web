@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
-import { useInView } from "framer-motion";
+import { useInView, useReducedMotion } from "framer-motion";
 
 interface AnimatedMetricProps {
   target: number;
@@ -20,12 +20,22 @@ export default function AnimatedMetric({
   label,
   trend,
 }: AnimatedMetricProps) {
+  const reduced = useReducedMotion();
   const ref = useRef<HTMLDivElement>(null);
   const inView = useInView(ref, { once: true, margin: "-40px" });
-  const [value, setValue] = useState(0);
+  const [value, setValue] = useState(() => (reduced ? target : 0));
+  const [prevReducedTarget, setPrevReducedTarget] = useState<string>(
+    reduced ? `r:${target}` : "anim",
+  );
+
+  const nextReducedKey = reduced ? `r:${target}` : "anim";
+  if (nextReducedKey !== prevReducedTarget) {
+    setPrevReducedTarget(nextReducedKey);
+    if (reduced) setValue(target);
+  }
 
   useEffect(() => {
-    if (!inView) return;
+    if (!inView || reduced) return;
     let raf = 0;
     const start = performance.now();
     const dur = 1400;
@@ -36,7 +46,7 @@ export default function AnimatedMetric({
     };
     raf = requestAnimationFrame(tick);
     return () => cancelAnimationFrame(raf);
-  }, [inView, target]);
+  }, [inView, target, reduced]);
 
   const formatted = target >= 10 ? Math.round(value).toString() : value.toFixed(1);
 
