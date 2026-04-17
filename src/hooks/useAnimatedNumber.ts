@@ -17,7 +17,7 @@ export default function useAnimatedNumber(target: number, duration = 600): numbe
     const from = current;
     if (from === target) return;
     if (reduced) {
-      setCurrent(target);
+      queueMicrotask(() => setCurrent(target));
       return;
     }
 

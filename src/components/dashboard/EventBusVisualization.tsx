@@ -1,5 +1,13 @@
 "use client";
 
+/* 60fps SVG particle simulation: particles/bursts are kept in refs and the
+   tick function recurses via requestAnimationFrame(tick). Promoting to
+   state would allocate a new array each frame and thrash the reconciler;
+   the tick self-reference is closed over at call time, not declaration
+   time. Both patterns are intentional — disable the two React 19 rules
+   that assume pure-React data flow. */
+/* eslint-disable react-hooks/refs, react-hooks/immutability */
+
 import { useEffect, useRef, useState, useCallback, useMemo } from "react";
 import { useReducedMotion } from "framer-motion";
 import {
@@ -161,27 +169,6 @@ export default function EventBusVisualization({
     }
   }, [triggerBurst, spawnBurst]);
 
-  // Visibility gating — pause RAF when SVG is off-screen
-  useEffect(() => {
-    const svg = svgRef.current;
-    if (!svg) return;
-    const io = new IntersectionObserver(
-      ([entry]) => {
-        const wasInView = inViewRef.current;
-        inViewRef.current = entry.isIntersecting;
-        // Resume RAF when scrolling back into view
-        if (entry.isIntersecting && !wasInView && !prefersReduced) {
-          lastTimeRef.current = 0;
-          rafRef.current = requestAnimationFrame(tick);
-        }
-      },
-      { threshold: 0.05 },
-    );
-    io.observe(svg);
-    return () => io.disconnect();
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [prefersReduced]);
-
   // Animation loop
   const tick = useCallback((now: number) => {
     if (!inViewRef.current || document.hidden) {
@@ -246,6 +233,26 @@ export default function EventBusVisualization({
     forceRender((n) => n + 1);
     rafRef.current = requestAnimationFrame(tick);
   }, [spawnParticle]);
+
+  // Visibility gating — pause RAF when SVG is off-screen
+  useEffect(() => {
+    const svg = svgRef.current;
+    if (!svg) return;
+    const io = new IntersectionObserver(
+      ([entry]) => {
+        const wasInView = inViewRef.current;
+        inViewRef.current = entry.isIntersecting;
+        // Resume RAF when scrolling back into view
+        if (entry.isIntersecting && !wasInView && !prefersReduced) {
+          lastTimeRef.current = 0;
+          rafRef.current = requestAnimationFrame(tick);
+        }
+      },
+      { threshold: 0.05 },
+    );
+    io.observe(svg);
+    return () => io.disconnect();
+  }, [prefersReduced, tick]);
 
   useEffect(() => {
     if (prefersReduced) return;

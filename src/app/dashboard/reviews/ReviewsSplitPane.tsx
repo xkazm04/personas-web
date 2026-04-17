@@ -164,15 +164,20 @@ function DetailPanel({
   review: ManualReviewItem | null;
   onResolve: (id: string, status: "approved" | "rejected", notes?: string) => void;
 }) {
-  const [notes, setNotes] = useState("");
+  const [notes, setNotes] = useState(review?.reviewerNotes ?? "");
   const [resolving, setResolving] = useState(false);
+  const [prevReviewKey, setPrevReviewKey] = useState<string>(
+    `${review?.id ?? ""}|${review?.reviewerNotes ?? ""}`,
+  );
   const notesRef = useRef<HTMLTextAreaElement>(null);
 
-  // Reset notes when review changes
-  useEffect(() => {
+  // Reset notes when review changes — render-phase prev-state pattern
+  const nextReviewKey = `${review?.id ?? ""}|${review?.reviewerNotes ?? ""}`;
+  if (nextReviewKey !== prevReviewKey) {
+    setPrevReviewKey(nextReviewKey);
     setNotes(review?.reviewerNotes ?? "");
     setResolving(false);
-  }, [review?.id, review?.reviewerNotes]);
+  }
 
   if (!review) {
     return (

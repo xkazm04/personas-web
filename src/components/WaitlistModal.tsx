@@ -49,6 +49,18 @@ export default function WaitlistModal({
     }
   }, [platform]);
 
+  // Reset form state on open transition — render-phase prev-state pattern
+  const [prevOpen, setPrevOpen] = useState(open);
+  if (open !== prevOpen) {
+    setPrevOpen(open);
+    if (open) {
+      setStatus("idle");
+      setEmail("");
+      setEarlyBeta(false);
+      setErrorMsg("");
+    }
+  }
+
   useEffect(() => {
     if (!open) {
       if (previousFocusRef.current) {
@@ -60,11 +72,7 @@ export default function WaitlistModal({
 
     previousFocusRef.current = document.activeElement as HTMLElement;
     const controller = new AbortController();
-    fetchCount(controller.signal);
-    setStatus("idle");
-    setEmail("");
-    setEarlyBeta(false);
-    setErrorMsg("");
+    queueMicrotask(() => fetchCount(controller.signal));
     return () => controller.abort();
   }, [open, fetchCount]);
 
