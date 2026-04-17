@@ -418,7 +418,15 @@ export interface MemoryItem {
   acceptedAt: string; // ISO
   lastUsed: string; // ISO
   hasConflict: boolean;
+  conflictReason?: string;
 }
+
+const CONFLICT_REASONS = [
+  "Contradicts an older throttle policy that is still active",
+  "Overlaps scope with a more specific routing rule",
+  "Disagrees with a user-pinned config from last week",
+  "Same trigger window as a scheduled memory",
+];
 
 const MEMORY_PERSONAS = [
   "ResearchAgent",
@@ -501,6 +509,7 @@ export const MOCK_MEMORIES: MemoryItem[] = (() => {
     const lastUsed = new Date(
       Date.now() - lastUsedHours * 3_600_000,
     ).toISOString();
+    const hasConflict = rng() < 0.12;
     items.push({
       id: `mem_${i + 1}`,
       type,
@@ -512,7 +521,10 @@ export const MOCK_MEMORIES: MemoryItem[] = (() => {
       usageCount,
       acceptedAt,
       lastUsed,
-      hasConflict: rng() < 0.12,
+      hasConflict,
+      conflictReason: hasConflict
+        ? CONFLICT_REASONS[Math.floor(rng() * CONFLICT_REASONS.length)]
+        : undefined,
     });
   }
   return items;

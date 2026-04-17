@@ -348,6 +348,17 @@ export const es: Translations = {
     uses: '{n} uses',
     empty: 'No memories match this filter',
     seeAll: 'See all',
+    conflicts: {
+      count: '{n} conflicts',
+      resolveButton: 'Resolve conflicts',
+      modalTitle: 'Resolve {n} conflicts',
+      modalSubtitle: 'Accept or reject each to keep your memory store consistent.',
+      accept: 'Accept',
+      reject: 'Reject',
+      cancel: 'Cancel',
+      apply: 'Apply',
+      allResolved: 'All conflicts resolved',
+    },
   },
   agentsPage: {
     title: 'Agentes',

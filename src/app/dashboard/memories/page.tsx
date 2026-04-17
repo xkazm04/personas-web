@@ -14,6 +14,9 @@ import {
 import GradientText from "@/components/GradientText";
 import FilterBar from "@/components/dashboard/FilterBar";
 import StalenessIndicator from "@/components/dashboard/StalenessIndicator";
+import BatchReviewModal, {
+  type BatchDecision,
+} from "@/components/dashboard/BatchReviewModal";
 import { fadeUp, staggerContainer } from "@/lib/animations";
 import {
   MOCK_MEMORIES,
@@ -157,14 +160,45 @@ export default function MemoriesPage() {
   const { t } = useTranslation();
   const [filter, setFilter] = useState<FilterKey>("all");
   const [fetchedAt] = useState(() => Date.now());
+  const [resolvedIds, setResolvedIds] = useState<Set<string>>(
+    () => new Set<string>(),
+  );
+  const [modalOpen, setModalOpen] = useState(false);
+
+  const visibleMemories = useMemo(
+    () =>
+      MOCK_MEMORIES.map((m) =>
+        resolvedIds.has(m.id) ? { ...m, hasConflict: false } : m,
+      ),
+    [resolvedIds],
+  );
 
   const filtered = useMemo(
     () =>
       filter === "all"
-        ? MOCK_MEMORIES
-        : MOCK_MEMORIES.filter((m) => m.type === filter),
-    [filter],
+        ? visibleMemories
+        : visibleMemories.filter((m) => m.type === filter),
+    [filter, visibleMemories],
   );
+
+  const activeConflicts = useMemo(
+    () => visibleMemories.filter((m) => m.hasConflict),
+    [visibleMemories],
+  );
+
+  const conflictCountLabel = t.memoriesPage.conflicts.count.replace(
+    "{n}",
+    String(activeConflicts.length),
+  );
+
+  function handleApply(decisions: Record<string, BatchDecision>) {
+    setResolvedIds((prev) => {
+      const next = new Set(prev);
+      for (const id of Object.keys(decisions)) next.add(id);
+      return next;
+    });
+    setModalOpen(false);
+  }
 
   const filterOptions = useMemo(
     () => [
@@ -204,12 +238,27 @@ export default function MemoriesPage() {
         <StalenessIndicator fetchedAt={fetchedAt} className="mt-2" />
       </motion.div>
 
-      <motion.div variants={fadeUp} className="mb-3">
+      <motion.div
+        variants={fadeUp}
+        className="mb-3 flex flex-wrap items-center gap-2"
+      >
         <FilterBar
           options={filterOptions}
           active={filter}
           onChange={(key) => setFilter(key as FilterKey)}
         />
+        {activeConflicts.length > 0 && (
+          <button
+            type="button"
+            onClick={() => setModalOpen(true)}
+            className="ml-auto flex items-center gap-1.5 rounded-lg border border-rose-500/30 bg-rose-500/10 px-3 py-1.5 text-sm font-medium text-rose-300 transition-all hover:bg-rose-500/15"
+          >
+            <AlertTriangle className="h-3.5 w-3.5" />
+            <span className="tabular-nums">{conflictCountLabel}</span>
+            <span aria-hidden>·</span>
+            {t.memoriesPage.conflicts.resolveButton}
+          </button>
+        )}
       </motion.div>
 
       <motion.p variants={fadeUp} className="mb-4 text-sm text-muted-dark tabular-nums">
@@ -230,6 +279,13 @@ export default function MemoriesPage() {
           ))}
         </motion.div>
       )}
+
+      <BatchReviewModal
+        open={modalOpen}
+        conflicts={activeConflicts}
+        onClose={() => setModalOpen(false)}
+        onApply={handleApply}
+      />
     </motion.div>
   );
 }
