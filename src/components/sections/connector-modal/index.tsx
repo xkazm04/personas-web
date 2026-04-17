@@ -17,6 +17,13 @@ export default function ConnectorModal({
 }) {
   const [showSimulator, setShowSimulator] = useState(false);
   const [simKey, setSimKey] = useState(0);
+  const [prevConnector, setPrevConnector] = useState(connector);
+
+  if (connector !== prevConnector) {
+    setPrevConnector(connector);
+    setShowSimulator(false);
+    setSimKey((k) => k + 1);
+  }
 
   const handleEscape = useCallback(
     (e: KeyboardEvent) => {
@@ -29,11 +36,6 @@ export default function ConnectorModal({
     document.addEventListener("keydown", handleEscape);
     return () => document.removeEventListener("keydown", handleEscape);
   }, [handleEscape]);
-
-  useEffect(() => {
-    setShowSimulator(false);
-    setSimKey((k) => k + 1);
-  }, [connector]);
 
   useEffect(() => {
     if (connector) {
@@ -67,12 +69,12 @@ export default function ConnectorModal({
             exit={{ opacity: 0, scale: 0.92, y: 30 }}
             transition={{ type: "spring", damping: 28, stiffness: 340 }}
             onClick={(e) => e.stopPropagation()}
-            className="relative w-full max-w-2xl max-h-[90vh] overflow-y-auto rounded-2xl border border-white/[0.08] bg-background shadow-2xl shadow-black/50"
+            className="relative w-full max-w-2xl max-h-[90vh] overflow-y-auto rounded-2xl border border-glass-hover bg-background shadow-2xl shadow-black/50"
           >
             <button
               onClick={onClose}
               aria-label="Close connector details"
-              className="absolute top-4 right-4 z-10 flex h-8 w-8 items-center justify-center rounded-lg border border-white/[0.06] bg-white/[0.03] text-muted-dark transition-colors hover:bg-white/[0.08] hover:text-white cursor-pointer"
+              className="absolute top-4 right-4 z-10 flex h-8 w-8 items-center justify-center rounded-lg border border-glass bg-white/[0.03] text-muted-dark transition-colors hover:bg-white/[0.08] hover:text-white cursor-pointer"
             >
               <X className="h-4 w-4" />
             </button>
