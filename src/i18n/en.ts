@@ -322,6 +322,25 @@ export interface Translations {
       shortcuts: string;
     };
   };
+  leaderboardPage: {
+    title: string;
+    subtitle: string;
+    rank: string;
+    composite: string;
+    radarTitle: string;
+    metrics: {
+      reliability: string;
+      cost: string;
+      speed: string;
+      quality: string;
+      volume: string;
+    };
+    trend: {
+      up: string;
+      down: string;
+      flat: string;
+    };
+  };
   agentsPage: {
     title: string;
     noAgents: string;
@@ -890,6 +909,25 @@ export const en: Translations = {
       approve: 'Approve',
       reject: 'Reject',
       shortcuts: 'A approve · R reject · S skip · Esc exit',
+    },
+  },
+  leaderboardPage: {
+    title: 'Leaderboard',
+    subtitle: 'Fleet ranking by composite performance',
+    rank: 'Rank',
+    composite: 'Composite',
+    radarTitle: 'Metrics profile',
+    metrics: {
+      reliability: 'Reliability',
+      cost: 'Cost',
+      speed: 'Speed',
+      quality: 'Quality',
+      volume: 'Volume',
+    },
+    trend: {
+      up: 'Up',
+      down: 'Down',
+      flat: 'Flat',
     },
   },
   agentsPage: {

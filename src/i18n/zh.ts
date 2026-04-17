@@ -404,6 +404,25 @@ export const zh: Translations = {
       shortcuts: 'A approve · R reject · S skip · Esc exit',
     },
   },
+  leaderboardPage: {
+    title: 'Leaderboard',
+    subtitle: 'Fleet ranking by composite performance',
+    rank: 'Rank',
+    composite: 'Composite',
+    radarTitle: 'Metrics profile',
+    metrics: {
+      reliability: 'Reliability',
+      cost: 'Cost',
+      speed: 'Speed',
+      quality: 'Quality',
+      volume: 'Volume',
+    },
+    trend: {
+      up: 'Up',
+      down: 'Down',
+      flat: 'Flat',
+    },
+  },
   agentsPage: {
     title: '\u667A\u80FD\u4F53',
     noAgents: '\u672A\u90E8\u7F72\u667A\u80FD\u4F53',

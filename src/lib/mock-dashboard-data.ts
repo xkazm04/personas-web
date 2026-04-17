@@ -665,6 +665,81 @@ export const MOCK_PREDICTIVE_ALERTS: PredictiveAlert[] = [
   },
 ];
 
+// ── Leaderboard scores ──────────────────────────────────────────────
+// Composite score + 5-axis metrics profile per persona for radar chart.
+
+export type LeaderboardTrend = "up" | "down" | "flat";
+
+export interface LeaderboardPersona {
+  id: string;
+  name: string;
+  color: string;
+  metrics: {
+    reliability: number; // 0-100
+    cost: number;
+    speed: number;
+    quality: number;
+    volume: number;
+  };
+  composite: number; // derived average, also exposed
+  trend: LeaderboardTrend;
+  delta: number; // +/- vs last period
+}
+
+function computeComposite(m: LeaderboardPersona["metrics"]): number {
+  const avg =
+    (m.reliability + m.cost + m.speed + m.quality + m.volume) / 5;
+  return Math.round(avg);
+}
+
+export const MOCK_LEADERBOARD: LeaderboardPersona[] = (() => {
+  const base: Omit<LeaderboardPersona, "composite">[] = [
+    {
+      id: "research",
+      name: "ResearchAgent",
+      color: "#06b6d4",
+      metrics: { reliability: 95, cost: 82, speed: 78, quality: 92, volume: 88 },
+      trend: "up",
+      delta: 4,
+    },
+    {
+      id: "code",
+      name: "CodeReviewer",
+      color: "#34d399",
+      metrics: { reliability: 91, cost: 88, speed: 72, quality: 94, volume: 66 },
+      trend: "up",
+      delta: 2,
+    },
+    {
+      id: "report",
+      name: "ReportGen",
+      color: "#f43f5e",
+      metrics: { reliability: 88, cost: 74, speed: 54, quality: 90, volume: 48 },
+      trend: "flat",
+      delta: 0,
+    },
+    {
+      id: "data",
+      name: "DataProcessor",
+      color: "#fbbf24",
+      metrics: { reliability: 68, cost: 78, speed: 84, quality: 72, volume: 94 },
+      trend: "down",
+      delta: -6,
+    },
+    {
+      id: "notify",
+      name: "NotifyBot",
+      color: "#a855f7",
+      metrics: { reliability: 42, cost: 90, speed: 96, quality: 64, volume: 82 },
+      trend: "down",
+      delta: -12,
+    },
+  ];
+  return base
+    .map((p) => ({ ...p, composite: computeComposite(p.metrics) }))
+    .sort((a, b) => b.composite - a.composite);
+})();
+
 // ── Health digest for home page ─────────────────────────────────────
 
 export interface HealthDigest {

@@ -404,6 +404,25 @@ export const hi: Translations = {
       shortcuts: 'A approve · R reject · S skip · Esc exit',
     },
   },
+  leaderboardPage: {
+    title: 'Leaderboard',
+    subtitle: 'Fleet ranking by composite performance',
+    rank: 'Rank',
+    composite: 'Composite',
+    radarTitle: 'Metrics profile',
+    metrics: {
+      reliability: 'Reliability',
+      cost: 'Cost',
+      speed: 'Speed',
+      quality: 'Quality',
+      volume: 'Volume',
+    },
+    trend: {
+      up: 'Up',
+      down: 'Down',
+      flat: 'Flat',
+    },
+  },
   agentsPage: {
     title: '\u090F\u091C\u0947\u0902\u091F',
     noAgents: '\u0915\u094B\u0908 \u090F\u091C\u0947\u0902\u091F \u0921\u093F\u092A\u094D\u0932\u0949\u092F \u0928\u0939\u0940\u0902',
