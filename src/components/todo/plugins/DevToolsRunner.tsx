@@ -63,15 +63,20 @@ const HEALING_ACTIONS = [
 
 export default function DevToolsRunner() {
   const reduced = useReducedMotion() ?? false;
-  const [visibleOutputCount, setVisibleOutputCount] = useState(0);
+  const [visibleOutputCount, setVisibleOutputCount] = useState(() =>
+    reduced ? OUTPUT_LINES.length : 0,
+  );
   const [tick, setTick] = useState(0);
+  const [prevReduced, setPrevReduced] = useState(reduced);
+
+  if (reduced !== prevReduced) {
+    setPrevReduced(reduced);
+    if (reduced) setVisibleOutputCount(OUTPUT_LINES.length);
+  }
 
   /* Stream output lines line-by-line */
   useEffect(() => {
-    if (reduced) {
-      setVisibleOutputCount(OUTPUT_LINES.length);
-      return;
-    }
+    if (reduced) return;
     const id = setInterval(() => {
       setVisibleOutputCount((c) => {
         if (c >= OUTPUT_LINES.length) return 0; // loop
