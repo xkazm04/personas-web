@@ -19,7 +19,6 @@ import EmptyState from "@/components/dashboard/EmptyState";
 import { usePersonaStore } from "@/stores/personaStore";
 import { useSystemStore } from "@/stores/systemStore";
 import { api } from "@/lib/api";
-import type { Persona } from "@/lib/types";
 
 const colorToAccent: Record<string, "cyan" | "purple" | "emerald" | "amber"> = {
   "#06b6d4": "cyan",
@@ -217,7 +216,7 @@ export default function AgentsPage() {
                     onClick={() =>
                       setExpandedId(isExpanded ? null : persona.id)
                     }
-                    className="flex items-center gap-1 rounded-lg border border-white/[0.06] bg-white/[0.03] px-3 py-1.5 text-sm font-medium text-muted transition-all hover:bg-white/[0.06] hover:text-foreground"
+                    className="flex items-center gap-1 rounded-lg border border-glass bg-white/[0.03] px-3 py-1.5 text-sm font-medium text-muted transition-all hover:bg-white/[0.06] hover:text-foreground"
                   >
                     Details
                     <ChevronDown

@@ -12,7 +12,6 @@ import {
 import { fadeUp, staggerContainer } from "@/lib/animations";
 import GlowCard from "@/components/GlowCard";
 import GradientText from "@/components/GradientText";
-import EmptyState from "@/components/dashboard/EmptyState";
 import useSWR from "swr";
 import { api } from "@/lib/api";
 import { CHART_COLORS } from "@/lib/constants";

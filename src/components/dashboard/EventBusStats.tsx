@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect, useRef } from "react";
+import { useState, useEffect } from "react";
 import { motion } from "framer-motion";
 import { Activity, Radio, Wifi, Zap } from "lucide-react";
 import useAnimatedNumber from "@/hooks/useAnimatedNumber";
@@ -70,7 +70,7 @@ export default function EventBusStats({ className = "" }: { className?: string }
       initial={{ opacity: 0, y: -8 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.3 }}
-      className={`flex flex-wrap items-center gap-1 rounded-xl border border-white/[0.06] bg-white/[0.02] backdrop-blur-sm ${className}`}
+      className={`flex flex-wrap items-center gap-1 rounded-xl border border-glass bg-white/[0.02] backdrop-blur-sm ${className}`}
     >
       <StatItem
         icon={Zap}

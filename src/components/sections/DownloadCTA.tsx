@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useMemo } from "react";
+import { useState } from "react";
 import { motion } from "framer-motion";
 import { Download, Monitor, Apple, Terminal } from "lucide-react";
 import { fadeUp } from "@/lib/animations";
@@ -97,7 +97,7 @@ export default function DownloadCTA() {
             return (
               <motion.div
                 key={step}
-                className="rounded-xl border border-white/[0.05] bg-white/[0.015] px-3 py-2"
+                className="rounded-xl border border-glass bg-white/[0.015] px-3 py-2"
                 variants={{
                   hidden: {
                     opacity: 0,
@@ -154,7 +154,7 @@ export default function DownloadCTA() {
             )}
             <a
               href="#features"
-              className="inline-flex w-[min(100%,20rem)] items-center justify-center rounded-full border border-white/[0.08] bg-white/[0.015] px-6 py-3 text-base font-medium text-muted transition-colors duration-300 hover:border-white/[0.15] hover:text-foreground sm:w-auto focus-visible:ring-2 focus-visible:ring-brand-cyan/40 focus-visible:outline-none"
+              className="inline-flex w-[min(100%,20rem)] items-center justify-center rounded-full border border-glass-hover bg-white/[0.015] px-6 py-3 text-base font-medium text-muted transition-colors duration-300 hover:border-glass-strong hover:text-foreground sm:w-auto focus-visible:ring-2 focus-visible:ring-brand-cyan/40 focus-visible:outline-none"
             >
               {t.downloadSection.exploreFirst}
             </a>
@@ -177,7 +177,7 @@ export default function DownloadCTA() {
               <button
                 key={p.label}
                 onClick={() => setWaitlistPlatform(p)}
-                className="flex cursor-pointer items-center gap-2 rounded-full border border-white/[0.04] bg-white/[0.01] px-4 py-2 text-base font-medium text-muted-dark transition-all duration-300 hover:border-brand-purple/20 hover:bg-brand-purple/5 hover:text-brand-purple/80 focus-visible:ring-2 focus-visible:ring-brand-cyan/40 focus-visible:outline-none"
+                className="flex cursor-pointer items-center gap-2 rounded-full border border-glass bg-white/[0.01] px-4 py-2 text-base font-medium text-muted-dark transition-all duration-300 hover:border-brand-purple/20 hover:bg-brand-purple/5 hover:text-brand-purple/80 focus-visible:ring-2 focus-visible:ring-brand-cyan/40 focus-visible:outline-none"
               >
                 <p.icon className="h-3.5 w-3.5" />
                 {p.label}

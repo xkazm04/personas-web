@@ -83,7 +83,7 @@ export const mockApi: ApiClient = {
     return { executionId: id, status: "cancelled" };
   },
 
-  executePersona: async (personaId: string, _prompt: string): Promise<{ executionId: string; status: PersonaExecutionStatus }> => {
+  executePersona: async (_personaId: string, _prompt: string): Promise<{ executionId: string; status: PersonaExecutionStatus }> => {
     await delay(500);
     resetMockOutputOffset();
     return { executionId: `e-new-${Date.now()}`, status: "queued" };

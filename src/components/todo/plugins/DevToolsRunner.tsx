@@ -1,7 +1,7 @@
 "use client";
 
-import { useState, useEffect, useRef } from "react";
-import { motion, AnimatePresence, useReducedMotion } from "framer-motion";
+import { useState, useEffect } from "react";
+import { motion, useReducedMotion } from "framer-motion";
 import {
   Play,
   CheckCircle2,

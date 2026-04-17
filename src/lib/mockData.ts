@@ -1,6 +1,5 @@
 import type {
   Persona,
-  PersonaExecution,
   PersonaEvent,
   PersonaEventSubscription,
   PersonaTrigger,

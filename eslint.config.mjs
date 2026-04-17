@@ -31,6 +31,15 @@ const eslintConfig = defineConfig([
     rules: {
       "custom-a11y/no-low-text-opacity": "warn",
       "custom-animation/require-animation-gating": "warn",
+      "@typescript-eslint/no-unused-vars": [
+        "warn",
+        {
+          argsIgnorePattern: "^_",
+          varsIgnorePattern: "^_",
+          caughtErrorsIgnorePattern: "^_",
+          destructuredArrayIgnorePattern: "^_",
+        },
+      ],
     },
   },
 ]);

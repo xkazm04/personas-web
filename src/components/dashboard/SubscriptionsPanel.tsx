@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState, useMemo, useCallback } from "react";
+import { useEffect, useState, useMemo } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import {
   Plus,
@@ -68,7 +68,7 @@ function SubscriptionCard({
             <span className={`inline-flex items-center rounded-full px-2 py-0.5 text-sm font-medium ${
               sub.enabled
                 ? "bg-emerald-500/10 text-emerald-400 border border-emerald-500/20"
-                : "bg-white/[0.04] text-muted-dark border border-white/[0.08]"
+                : "bg-white/[0.04] text-muted-dark border border-glass-hover"
             }`}>
               {sub.enabled ? "Active" : "Disabled"}
             </span>
@@ -193,7 +193,7 @@ function CreateSubscriptionForm({ onClose }: { onClose: () => void }) {
               value={personaId}
               onChange={(e) => setPersonaId(e.target.value)}
               required
-              className="mt-1 w-full rounded-xl border border-white/[0.08] bg-white/[0.03] px-3 py-2 text-base text-foreground focus:border-brand-cyan/30 focus:outline-none appearance-none cursor-pointer"
+              className="mt-1 w-full rounded-xl border border-glass-hover bg-white/[0.03] px-3 py-2 text-base text-foreground focus:border-brand-cyan/30 focus:outline-none appearance-none cursor-pointer"
             >
               <option value="">Select a persona...</option>
               {personas.map((p) => (
@@ -210,7 +210,7 @@ function CreateSubscriptionForm({ onClose }: { onClose: () => void }) {
               value={eventType}
               onChange={(e) => setEventType(e.target.value)}
               required
-              className="mt-1 w-full rounded-xl border border-white/[0.08] bg-white/[0.03] px-3 py-2 text-base text-foreground focus:border-brand-cyan/30 focus:outline-none appearance-none cursor-pointer"
+              className="mt-1 w-full rounded-xl border border-glass-hover bg-white/[0.03] px-3 py-2 text-base text-foreground focus:border-brand-cyan/30 focus:outline-none appearance-none cursor-pointer"
             >
               <option value="">Select event type...</option>
               {knownEventTypes.map((t) => (
@@ -228,7 +228,7 @@ function CreateSubscriptionForm({ onClose }: { onClose: () => void }) {
               value={sourceFilter}
               onChange={(e) => setSourceFilter(e.target.value)}
               placeholder="e.g. github, pagerduty..."
-              className="mt-1 w-full rounded-xl border border-white/[0.08] bg-white/[0.03] px-3 py-2 text-base text-foreground placeholder:text-muted-dark/50 focus:border-brand-cyan/30 focus:outline-none"
+              className="mt-1 w-full rounded-xl border border-glass-hover bg-white/[0.03] px-3 py-2 text-base text-foreground placeholder:text-muted-dark/50 focus:border-brand-cyan/30 focus:outline-none"
             />
           </div>
 
@@ -315,7 +315,7 @@ export default function SubscriptionsPanel() {
     <div className="space-y-4">
       <div className="flex items-center justify-between">
         <div className="flex items-center gap-2">
-          <div className="flex rounded-lg border border-white/[0.06] bg-white/[0.02] p-0.5">
+          <div className="flex rounded-lg border border-glass bg-white/[0.02] p-0.5">
             {(["all", "active", "disabled"] as const).map((key) => (
               <button
                 key={key}

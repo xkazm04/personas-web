@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState, useMemo, useRef, useCallback, useDeferredValue } from "react";
+import { useEffect, useState, useMemo, useCallback, useDeferredValue } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import {
   Radio,
@@ -15,7 +15,6 @@ import {
   Search,
   X,
   Link2,
-  Zap,
   RotateCcw,
   Inbox,
 } from "lucide-react";
@@ -51,7 +50,7 @@ const eventTypeConfig: Record<string, { icon: React.ElementType; bg: string; bor
   manual_review:      { icon: Hand,    bg: "bg-rose-500/10",   border: "border-rose-500/25",   text: "text-rose-400" },
 };
 
-const defaultEventType = { icon: Radio, bg: "bg-white/[0.04]", border: "border-white/[0.08]", text: "text-muted" };
+const defaultEventType = { icon: Radio, bg: "bg-white/[0.04]", border: "border-glass-hover", text: "text-muted" };
 
 function EventTypeBadge({ eventType }: { eventType: string }) {
   const config = eventTypeConfig[eventType] ?? defaultEventType;
@@ -134,7 +133,7 @@ function DropdownFilter({
       value={value}
       onChange={(e) => onChange(e.target.value)}
       aria-label={label}
-      className="h-10 sm:h-8 rounded-lg border border-white/[0.06] bg-white/[0.03] px-3 sm:px-2 text-base sm:text-sm text-muted transition-colors hover:border-white/[0.12] focus:border-brand-cyan/30 focus:outline-none focus:ring-1 focus:ring-brand-cyan/20 appearance-none cursor-pointer"
+      className="h-10 sm:h-8 rounded-lg border border-glass bg-white/[0.03] px-3 sm:px-2 text-base sm:text-sm text-muted transition-colors hover:border-glass-strong focus:border-brand-cyan/30 focus:outline-none focus:ring-1 focus:ring-brand-cyan/20 appearance-none cursor-pointer"
     >
       <option value="">{label}</option>
       {options.map((opt) => (
@@ -172,7 +171,7 @@ function buildColumns(
             className={`flex h-4 w-4 items-center justify-center rounded border transition-colors ${
               selected
                 ? "border-brand-cyan bg-brand-cyan/20 text-brand-cyan"
-                : "border-white/[0.15] hover:border-white/[0.3]"
+                : "border-glass-strong hover:border-white/[0.3]"
             }`}
           >
             {selected && <Check className="h-2.5 w-2.5" />}
@@ -274,7 +273,7 @@ function buildColumns(
         const count = retryCounts[event.id];
         if (!count) return null;
         return (
-          <span className="flex items-center gap-0.5 text-sm font-mono text-amber-400/70" title={`Retried ${count} time${count !== 1 ? "s" : ""}`}>
+          <span className="flex items-center gap-0.5 text-sm font-mono text-amber-400/90" title={`Retried ${count} time${count !== 1 ? "s" : ""}`}>
             <RotateCcw className="h-2.5 w-2.5" />
             {count}
           </span>
@@ -468,7 +467,7 @@ export default function EventsListPanel() {
             value={query}
             onChange={(e) => setQuery(e.target.value)}
             placeholder="Search payloads, event types, sources, errors..."
-            className="w-full rounded-xl border border-white/[0.06] bg-white/[0.03] py-2 pl-9 pr-9 text-base text-foreground placeholder:text-muted-dark/40 transition-colors focus:border-brand-cyan/30 focus:outline-none focus:ring-1 focus:ring-brand-cyan/20"
+            className="w-full rounded-xl border border-glass bg-white/[0.03] py-2 pl-9 pr-9 text-base text-foreground placeholder:text-muted-dark/40 transition-colors focus:border-brand-cyan/30 focus:outline-none focus:ring-1 focus:ring-brand-cyan/20"
           />
           {query && (
             <button
@@ -514,7 +513,7 @@ export default function EventsListPanel() {
         {hasActiveFilters && (
           <button
             onClick={() => { setQuery(""); setEventTypeFilter(""); setSourceTypeFilter(""); setFilter("all"); }}
-            className="flex items-center gap-1 rounded-lg border border-white/[0.06] bg-white/[0.03] px-2.5 py-1.5 text-sm text-muted-dark transition-colors hover:border-white/[0.12] hover:text-foreground"
+            className="flex items-center gap-1 rounded-lg border border-glass bg-white/[0.03] px-2.5 py-1.5 text-sm text-muted-dark transition-colors hover:border-glass-strong hover:text-foreground"
           >
             <X className="h-3 w-3" />
             Clear filters
@@ -576,7 +575,7 @@ export default function EventsListPanel() {
             onClick={() => {
               setVisibleCount((prev) => Math.min(filtered.length, prev + EVENTS_LOAD_STEP));
             }}
-            className="rounded-lg border border-white/[0.08] bg-white/[0.03] px-3 py-1.5 text-sm text-muted transition-colors hover:border-white/[0.14] hover:text-foreground"
+            className="rounded-lg border border-glass-hover bg-white/[0.03] px-3 py-1.5 text-sm text-muted transition-colors hover:border-glass-strong hover:text-foreground"
           >
             Load more events ({visibleEvents.length}/{filtered.length})
           </button>
@@ -590,7 +589,7 @@ export default function EventsListPanel() {
             initial={{ y: 100, opacity: 0 }}
             animate={{ y: 0, opacity: 1 }}
             exit={{ y: 100, opacity: 0 }}
-            className="fixed inset-x-0 bottom-0 z-50 border-t border-white/[0.08] bg-background/95 backdrop-blur-xl pb-safe"
+            className="fixed inset-x-0 bottom-0 z-50 border-t border-glass-hover bg-background/95 backdrop-blur-xl pb-safe"
           >
             <div className="mx-auto flex max-w-7xl items-center justify-between gap-2 px-4 py-3 sm:px-6">
               <div className="flex items-center gap-3">

@@ -5,7 +5,6 @@ import { useReducedMotion } from "framer-motion";
 import {
   SWARM_PERSONAS,
   SWARM_SOURCES,
-  EVENT_TYPES,
   type SwarmNode,
 } from "@/lib/mock-dashboard-data";
 

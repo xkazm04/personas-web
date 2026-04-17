@@ -1,17 +1,9 @@
 "use client";
 
 import { useMemo, type ReactNode } from "react";
-import dynamic from "next/dynamic";
 import ScrollMap from "@/components/ScrollMap";
 import AnimationPauseObserver from "@/components/AnimationPauseObserver";
 import { SectionObserverProvider } from "@/contexts/SectionObserverContext";
-
-const TopoBackground = dynamic(() => import("@/components/TopoBackground"), {
-  ssr: false,
-});
-const ParallaxAccents = dynamic(() => import("@/components/ParallaxAccents"), {
-  ssr: false,
-});
 
 interface ScrollMapItem {
   label: string;

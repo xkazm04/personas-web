@@ -10,12 +10,6 @@ import {
   ArrowRightLeft,
   X,
   Clock,
-  CheckCircle2,
-  XCircle,
-  Zap,
-  BarChart3,
-  Maximize2,
-  Minimize2,
 } from "lucide-react";
 import { fadeUp, staggerContainer } from "@/lib/animations";
 import {
@@ -208,7 +202,7 @@ function DetailPanel({
       animate={{ opacity: 1, x: 0 }}
       exit={{ opacity: 0, x: 20 }}
       transition={{ duration: 0.2, ease: [0.22, 1, 0.36, 1] }}
-      className="absolute right-3 top-3 z-50 w-72 rounded-xl border border-white/[0.08] bg-background/95 backdrop-blur-xl p-4 shadow-2xl"
+      className="absolute right-3 top-3 z-50 w-72 rounded-xl border border-glass-hover bg-background/95 backdrop-blur-xl p-4 shadow-2xl"
     >
       <div className="flex items-start justify-between mb-3">
         <div className="flex items-center gap-2">
@@ -563,7 +557,7 @@ export default function KnowledgeClusterGraph() {
       {/* Graph Area */}
       <motion.div
         variants={fadeUp}
-        className="relative flex-1 min-h-0 rounded-xl border border-white/[0.06] bg-white/[0.01] overflow-hidden grid-texture"
+        className="relative flex-1 min-h-0 rounded-xl border border-glass bg-white/[0.01] overflow-hidden grid-texture"
         ref={containerRef}
       >
         {/* Radial gradient backdrop */}
@@ -671,7 +665,7 @@ export default function KnowledgeClusterGraph() {
         </svg>
 
         {/* Legend */}
-        <div className="absolute left-3 bottom-3 flex items-center gap-3 bg-background/80 backdrop-blur-sm rounded-lg border border-white/[0.06] px-3 py-2">
+        <div className="absolute left-3 bottom-3 flex items-center gap-3 bg-background/80 backdrop-blur-sm rounded-lg border border-glass px-3 py-2">
           <span className="text-sm text-muted-dark uppercase tracking-wider font-semibold">
             Agent Links
           </span>
@@ -687,7 +681,7 @@ export default function KnowledgeClusterGraph() {
         </div>
 
         {/* Node size legend */}
-        <div className="absolute left-3 top-3 flex items-center gap-2 bg-background/80 backdrop-blur-sm rounded-lg border border-white/[0.06] px-3 py-2">
+        <div className="absolute left-3 top-3 flex items-center gap-2 bg-background/80 backdrop-blur-sm rounded-lg border border-glass px-3 py-2">
           <span className="text-sm text-muted-dark uppercase tracking-wider font-semibold">
             Node Size
           </span>

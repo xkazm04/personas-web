@@ -1907,8 +1907,24 @@ steps:
 ];
 
 /** Lightweight template list without YAML configs — use for gallery/search pages */
-export const templateList = templates.map(({ config, ...rest }) => rest);
+export const templateList = templates.map(({ config: _config, ...rest }) => rest);
 export type TemplateListItem = Omit<AgentTemplate, "config">;
+
+export const beginnerPickIds = [
+  "gmail-inbox-triage",
+  "slack-channel-summarizer",
+  "drive-doc-organizer",
+  "calendar-schedule-optimizer",
+] as const;
+
+export const beginnerPickReasons: Record<string, string> = {
+  "gmail-inbox-triage": "Everyone uses email — this template shows how an agent can triage your inbox in seconds.",
+  "slack-channel-summarizer": "Tame noisy Slack channels with a daily digest of what actually matters.",
+  "drive-doc-organizer": "Stop filing documents manually — let an agent sort them by project and type.",
+  "calendar-schedule-optimizer": "Protect your focus time by automatically detecting meeting-heavy days.",
+};
+
+export const beginnerPicks = templateList.filter((t) => beginnerPickIds.includes(t.id as typeof beginnerPickIds[number]));
 
 export const difficultyColors: Record<Difficulty, string> = {
   Beginner: "text-green-400 border-green-400/30 bg-green-400/10",
