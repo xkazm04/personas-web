@@ -1,12 +1,14 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
+import { useReducedMotion } from "framer-motion";
 
 function easeOut(t: number): number {
   return 1 - Math.pow(1 - t, 3);
 }
 
 export default function useAnimatedNumber(target: number, duration = 600): number {
+  const reduced = useReducedMotion();
   const [current, setCurrent] = useState(target);
   const rafRef = useRef<number>(0);
   const startRef = useRef({ value: target, time: 0 });
@@ -14,6 +16,10 @@ export default function useAnimatedNumber(target: number, duration = 600): numbe
   useEffect(() => {
     const from = current;
     if (from === target) return;
+    if (reduced) {
+      setCurrent(target);
+      return;
+    }
 
     startRef.current = { value: from, time: performance.now() };
 
@@ -33,7 +39,7 @@ export default function useAnimatedNumber(target: number, duration = 600): numbe
     rafRef.current = requestAnimationFrame(animate);
     return () => cancelAnimationFrame(rafRef.current);
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [target, duration]);
+  }, [target, duration, reduced]);
 
   return current;
 }

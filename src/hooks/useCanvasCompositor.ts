@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useRef } from "react";
+import { useReducedMotion } from "framer-motion";
 
 /**
  * Render function called each frame for a registered canvas layer.
@@ -161,7 +162,8 @@ export function useCanvasCompositor(
     onResizeRef.current = options?.onResize;
   });
 
-  const enabled = options?.enabled ?? true;
+  const reduced = useReducedMotion();
+  const enabled = (options?.enabled ?? true) && !reduced;
 
   useEffect(() => {
     if (!enabled) return;

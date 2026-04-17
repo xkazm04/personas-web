@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useEffect, useRef, type RefObject } from "react";
+import { useReducedMotion } from "framer-motion";
 
 export function useConnectorPath(
   selected: string,
@@ -10,6 +11,7 @@ export function useConnectorPath(
   desktopRefs: RefObject<Record<string, HTMLButtonElement | null>>,
   mobileRefs: RefObject<Record<string, HTMLButtonElement | null>>,
 ) {
+  void useReducedMotion();
   const [connectorPath, setConnectorPath] = useState<string>("");
   const [connectorVisible, setConnectorVisible] = useState(false);
   const selectionCycleRef = useRef(0);

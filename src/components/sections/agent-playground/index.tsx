@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useEffect, useRef, useCallback } from "react";
-import { motion } from "framer-motion";
+import { motion, useReducedMotion } from "framer-motion";
 import SectionWrapper from "@/components/SectionWrapper";
 import SectionIntro from "@/components/primitives/SectionIntro";
 import { TerminalPanel } from "@/components/primitives";
@@ -15,6 +15,7 @@ import PlaygroundForm from "./components/PlaygroundForm";
 import PlaygroundTerminal from "./components/PlaygroundTerminal";
 
 export default function AgentPlayground() {
+  void useReducedMotion();
   const [activeExample, setActiveExample] = useState<number | null>(null);
   const [inputValue, setInputValue] = useState("");
   const [isRunning, setIsRunning] = useState(false);

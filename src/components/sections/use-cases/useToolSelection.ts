@@ -1,11 +1,13 @@
 "use client";
 
 import { useState, useEffect, useRef, useCallback } from "react";
+import { useReducedMotion } from "framer-motion";
 import { tools, AUTOPLAY_INTERVAL } from "./data";
 
 export function useToolSelection(initiallyAutoplay: boolean) {
+  const reduced = useReducedMotion();
   const [selected, setSelected] = useState<string>(tools[0].id);
-  const [autoplay, setAutoplay] = useState(initiallyAutoplay);
+  const [autoplay, setAutoplay] = useState(initiallyAutoplay && !reduced);
   const [progress, setProgress] = useState(0);
   const [isMobile, setIsMobile] = useState(false);
   const userClickedRef = useRef(false);

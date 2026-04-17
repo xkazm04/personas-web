@@ -77,6 +77,9 @@ export function useFlowComposer() {
       if (!dragNode || rafPending.current) return;
       const clientX = e.clientX;
       rafPending.current = true;
+      /* rAF here is a pointer-move throttle (one update per paint for drag),
+         not an animation — reduced-motion gating doesn't apply. */
+      // eslint-disable-next-line custom-animation/require-animation-gating
       requestAnimationFrame(() => {
         rafPending.current = false;
         const x = toSvgX(clientX);

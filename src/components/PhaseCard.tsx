@@ -1,7 +1,7 @@
 "use client";
 
 import { useRef, useState, useEffect, useCallback } from "react";
-import { motion } from "framer-motion";
+import { motion, useReducedMotion } from "framer-motion";
 import { ChevronLeft, ChevronRight } from "lucide-react";
 import type { LucideIcon } from "lucide-react";
 
@@ -57,6 +57,7 @@ export default function PhaseCard({
 }
 
 export function PhaseCardStrip({ phases }: { phases: PhaseCardData[] }) {
+  const reduced = useReducedMotion();
   const scrollRef = useRef<HTMLDivElement>(null);
   const scrollRafRef = useRef<number>(0);
   const [canScrollLeft, setCanScrollLeft] = useState(false);
@@ -96,7 +97,7 @@ export function PhaseCardStrip({ phases }: { phases: PhaseCardData[] }) {
   // Mobile peek animation on first view
   useEffect(() => {
     const el = scrollRef.current;
-    if (!el || peeked) return;
+    if (!el || peeked || reduced) return;
     const mq = window.matchMedia("(max-width: 640px)");
     if (!mq.matches) return;
 
@@ -112,7 +113,7 @@ export function PhaseCardStrip({ phases }: { phases: PhaseCardData[] }) {
     );
     observer.observe(el);
     return () => observer.disconnect();
-  }, [peeked]);
+  }, [peeked, reduced]);
 
   const scroll = (direction: "left" | "right") => {
     const el = scrollRef.current;

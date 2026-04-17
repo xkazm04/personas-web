@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
+import { useReducedMotion } from "framer-motion";
 import { Timer } from "lucide-react";
 
 export default function RaceTimer({
@@ -14,6 +15,7 @@ export default function RaceTimer({
   label: string;
   color: string;
 }) {
+  const reduced = useReducedMotion();
   const [elapsed, setElapsed] = useState(0);
   const startRef = useRef<number | null>(null);
   const rafRef = useRef<number>(0);
@@ -22,6 +24,10 @@ export default function RaceTimer({
     if (!isRunning) {
       queueMicrotask(() => setElapsed(0));
       startRef.current = null;
+      return;
+    }
+    if (reduced) {
+      queueMicrotask(() => setElapsed(durationMs));
       return;
     }
 
@@ -37,7 +43,7 @@ export default function RaceTimer({
     };
     rafRef.current = requestAnimationFrame(tick);
     return () => cancelAnimationFrame(rafRef.current);
-  }, [isRunning, durationMs]);
+  }, [isRunning, durationMs, reduced]);
 
   const seconds = (elapsed / 1000).toFixed(1);
 
