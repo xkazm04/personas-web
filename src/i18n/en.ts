@@ -225,6 +225,14 @@ export interface Translations {
       collapse: string;
       dismiss: string;
     };
+    staleness: {
+      justNow: string;
+      secondsAgo: string;
+      minutesAgo: string;
+      hoursAgo: string;
+      daysAgo: string;
+      error: string;
+    };
     scope: {
       allPersonas: string;
       personaLabel: string;
@@ -710,6 +718,14 @@ export const en: Translations = {
       expand: 'Details',
       collapse: 'Hide',
       dismiss: 'Dismiss',
+    },
+    staleness: {
+      justNow: 'Just now',
+      secondsAgo: '{n}s ago',
+      minutesAgo: '{n}m ago',
+      hoursAgo: '{n}h ago',
+      daysAgo: '{n}d ago',
+      error: 'Failed to load',
     },
     scope: {
       allPersonas: 'All personas',

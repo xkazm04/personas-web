@@ -35,6 +35,7 @@ import SkeletonCard from "@/components/dashboard/SkeletonCard";
 import HealthDigestPanel from "@/components/dashboard/HealthDigestPanel";
 import MemoryActionsPanel from "@/components/dashboard/MemoryActionsPanel";
 import FleetOptimizationCard from "@/components/dashboard/FleetOptimizationCard";
+import StalenessIndicator from "@/components/dashboard/StalenessIndicator";
 import {
   MOCK_FLEET_RECOMMENDATION,
   MOCK_GLOBAL_EXECUTIONS,
@@ -72,6 +73,9 @@ export default function DashboardHomePage() {
   const chartSectionRef = useRef<HTMLDivElement | null>(null);
   const [loadObservability, setLoadObservability] = useState(false);
   const [panelsReady, setPanelsReady] = useState(false);
+  const [observabilityFetchedAt, setObservabilityFetchedAt] = useState<
+    number | null
+  >(null);
 
   const { data: observabilityData } = useSWR(
     loadObservability ? "observability" : null,
@@ -81,6 +85,7 @@ export default function DashboardHomePage() {
       revalidateOnReconnect: false,
       dedupingInterval: 60_000,
       focusThrottleInterval: 60_000,
+      onSuccess: () => setObservabilityFetchedAt(Date.now()),
     },
   );
   const dailyMetrics = useMemo(
@@ -299,7 +304,10 @@ export default function DashboardHomePage() {
                   {t.dashboard.trafficErrors}
                 </h2>
               </div>
-              <span className="text-sm text-muted-dark">{t.dashboard.last14Days}</span>
+              <div className="flex items-center gap-3">
+                <span className="text-sm text-muted-dark">{t.dashboard.last14Days}</span>
+                <StalenessIndicator fetchedAt={observabilityFetchedAt} />
+              </div>
             </div>
 
             {loadObservability ? (

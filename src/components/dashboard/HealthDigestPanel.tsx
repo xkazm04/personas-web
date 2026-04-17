@@ -6,6 +6,7 @@ import { Heart, CheckCircle, AlertCircle } from "lucide-react";
 import { fadeUp, staggerContainer } from "@/lib/animations";
 import { MOCK_HEALTH_DIGEST } from "@/lib/mock-dashboard-data";
 import { relativeTime } from "@/lib/format";
+import StalenessIndicator from "./StalenessIndicator";
 
 /** Resolve score to a Tailwind color token class. */
 function scoreColor(score: number): {
@@ -48,6 +49,7 @@ export default function HealthDigestPanel() {
 
   // Animate the ring fill on mount
   const [offset, setOffset] = useState(CIRCUMFERENCE);
+  const [fetchedAt] = useState(() => Date.now());
 
   useEffect(() => {
     // Small delay so the animation is visible after mount
@@ -67,12 +69,13 @@ export default function HealthDigestPanel() {
       {/* Header */}
       <motion.div
         variants={fadeUp}
-        className="flex items-center gap-2 self-start mb-4"
+        className="flex w-full items-center gap-2 self-start mb-4"
       >
         <Heart className="h-4 w-4 text-brand-cyan" />
         <h2 className="text-base font-semibold text-foreground">
           System Health
         </h2>
+        <StalenessIndicator fetchedAt={fetchedAt} className="ml-auto" />
       </motion.div>
 
       {/* Score Ring */}

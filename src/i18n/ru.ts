@@ -307,6 +307,14 @@ export const ru: Translations = {
       collapse: 'Hide',
       dismiss: 'Dismiss',
     },
+    staleness: {
+      justNow: 'Just now',
+      secondsAgo: '{n}s ago',
+      minutesAgo: '{n}m ago',
+      hoursAgo: '{n}h ago',
+      daysAgo: '{n}d ago',
+      error: 'Failed to load',
+    },
     scope: {
       allPersonas: 'All personas',
       personaLabel: 'Persona filter',

@@ -16,6 +16,7 @@ import {
   MOCK_MEMORY_ACTIONS,
   type MemoryAction,
 } from "@/lib/mock-dashboard-data";
+import StalenessIndicator from "./StalenessIndicator";
 
 /** Map action type to icon + color badge classes. */
 const typeConfig: Record<
@@ -70,6 +71,7 @@ function ScoreDots({ score, type }: { score: number; type: MemoryAction["type"] 
 
 export default function MemoryActionsPanel() {
   const [actions, setActions] = useState<MemoryAction[]>(MOCK_MEMORY_ACTIONS);
+  const [fetchedAt] = useState(() => Date.now());
 
   const dismiss = (id: string) => {
     setActions((prev) => prev.filter((a) => a.id !== id));
@@ -95,6 +97,10 @@ export default function MemoryActionsPanel() {
             {actions.length} suggestion{actions.length !== 1 ? "s" : ""}
           </span>
         )}
+        <StalenessIndicator
+          fetchedAt={fetchedAt}
+          className={actions.length > 0 ? "" : "ml-auto"}
+        />
       </motion.div>
 
       {/* Action Cards */}
@@ -111,7 +117,7 @@ export default function MemoryActionsPanel() {
                 animate={{ opacity: 1, y: 0 }}
                 exit={{ opacity: 0, x: 40, transition: { duration: 0.2 } }}
                 layout
-                className="group relative rounded-xl border border-white/[0.06] bg-white/[0.02] p-3 transition-colors hover:bg-white/[0.04]"
+                className="group relative rounded-xl border border-glass bg-white/[0.02] p-3 transition-colors hover:bg-white/[0.04]"
               >
                 <div className="flex items-start gap-2.5">
                   {/* Type icon */}
@@ -143,7 +149,7 @@ export default function MemoryActionsPanel() {
 
                     {/* Bottom row: persona badge + score dots */}
                     <div className="mt-2 flex items-center gap-2">
-                      <span className="rounded-md border border-white/[0.06] bg-white/[0.03] px-1.5 py-0.5 text-sm font-medium text-muted-dark">
+                      <span className="rounded-md border border-glass bg-white/[0.03] px-1.5 py-0.5 text-sm font-medium text-muted-dark">
                         {action.persona}
                       </span>
                       <ScoreDots score={action.score} type={action.type} />
