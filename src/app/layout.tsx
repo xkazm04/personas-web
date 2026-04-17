@@ -98,6 +98,11 @@ export default function RootLayout({
     <html lang="en" className="dark" suppressHydrationWarning>
       <head>
         {/* Random theme applied client-side on mount via ThemeInit */}
+        {/* App Router root layout persists this across pages; the `no-page-custom-font`
+            rule is pages-dir-oriented. Migrating 6 Noto CJK/RTL/Indic families to
+            next/font would bloat every client bundle regardless of active locale,
+            so we keep the single runtime stylesheet request. */}
+        {/* eslint-disable-next-line @next/next/no-page-custom-font */}
         <link
           rel="stylesheet"
           href="https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@300;400;500;600;700&family=Noto+Sans+JP:wght@300;400;500;600;700&family=Noto+Sans+KR:wght@300;400;500;600;700&family=Noto+Sans+Arabic:wght@300;400;500;600;700&family=Noto+Sans+Devanagari:wght@300;400;500;600;700&family=Noto+Sans+Bengali:wght@300;400;500;600;700&display=swap"

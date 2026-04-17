@@ -11,6 +11,7 @@ import {
   Wifi,
   WifiOff,
   LogOut,
+  Loader2,
 } from "lucide-react";
 import { fadeUp, staggerContainer } from "@/lib/animations";
 import GradientText from "@/components/GradientText";
@@ -23,6 +24,7 @@ export default function SettingsPage() {
   const user = useAuthStore((s) => s.user);
   const signOut = useAuthStore((s) => s.signOut);
   const isDemo = useAuthStore((s) => s.isDemo);
+  const isSigningOut = useAuthStore((s) => s.isSigningOut);
   const health = useSystemStore((s) => s.health);
   const status = useSystemStore((s) => s.status);
   const fetchStatus = useSystemStore((s) => s.fetchStatus);
@@ -73,13 +75,16 @@ export default function SettingsPage() {
 
           <div className="flex items-center gap-4">
             {avatarUrl ? (
-              <img
+              <Image
                 src={avatarUrl}
                 alt=""
-                className="h-14 w-14 rounded-2xl border border-white/[0.1]"
+                width={56}
+                height={56}
+                unoptimized
+                className="h-14 w-14 rounded-2xl border border-glass-hover object-cover"
               />
             ) : (
-              <div className="flex h-14 w-14 items-center justify-center rounded-2xl border border-white/[0.1] bg-brand-cyan/10 text-lg font-bold text-brand-cyan">
+              <div className="flex h-14 w-14 items-center justify-center rounded-2xl border border-glass-hover bg-brand-cyan/10 text-lg font-bold text-brand-cyan">
                 {displayName.charAt(0).toUpperCase()}
               </div>
             )}
@@ -91,10 +96,15 @@ export default function SettingsPage() {
 
           <button
             onClick={signOut}
-            className="mt-6 flex items-center gap-2 rounded-xl border border-white/[0.08] bg-white/[0.03] px-4 py-2.5 text-base text-muted transition-all hover:bg-white/[0.06] hover:text-foreground"
+            disabled={isSigningOut}
+            className="mt-6 flex items-center gap-2 rounded-xl border border-glass-hover bg-white/[0.03] px-4 py-2.5 text-base text-muted transition-all hover:bg-white/[0.06] hover:text-foreground disabled:opacity-60 disabled:pointer-events-none"
           >
-            <LogOut className="h-4 w-4" />
-            {t.common.signOut}
+            {isSigningOut ? (
+              <Loader2 className="h-4 w-4 animate-spin" />
+            ) : (
+              <LogOut className="h-4 w-4" />
+            )}
+            {isSigningOut ? "Signing out…" : t.common.signOut}
           </button>
         </GlowCard>
 
@@ -155,19 +165,19 @@ export default function SettingsPage() {
 
           {status ? (
             <div className="grid gap-6 sm:grid-cols-3">
-              <div className="rounded-xl border border-white/[0.06] bg-white/[0.02] p-4 text-center shadow-[inset_0_1px_0_0_rgba(255,255,255,0.05)]">
+              <div className="rounded-xl border border-glass bg-white/[0.02] p-4 text-center shadow-[inset_0_1px_0_0_rgba(255,255,255,0.05)]">
                 <p className="text-4xl font-bold tracking-tight tabular-nums">
                   <GradientText>{status.workerCounts.total}</GradientText>
                 </p>
                 <p className="mt-2 text-sm font-medium uppercase tracking-wider text-muted-dark">{t.settingsPage.totalWorkers}</p>
               </div>
-              <div className="rounded-xl border border-white/[0.06] bg-white/[0.02] p-4 text-center shadow-[inset_0_1px_0_0_rgba(255,255,255,0.05)]">
+              <div className="rounded-xl border border-glass bg-white/[0.02] p-4 text-center shadow-[inset_0_1px_0_0_rgba(255,255,255,0.05)]">
                 <p className="text-4xl font-bold tracking-tight tabular-nums">
                   <GradientText>{status.queueLength}</GradientText>
                 </p>
                 <p className="mt-2 text-sm font-medium uppercase tracking-wider text-muted-dark">{t.settingsPage.queueLength}</p>
               </div>
-              <div className="rounded-xl border border-white/[0.06] bg-white/[0.02] p-4 text-center shadow-[inset_0_1px_0_0_rgba(255,255,255,0.05)]">
+              <div className="rounded-xl border border-glass bg-white/[0.02] p-4 text-center shadow-[inset_0_1px_0_0_rgba(255,255,255,0.05)]">
                 <p className="text-4xl font-bold tracking-tight tabular-nums">
                   <GradientText>{status.activeExecutions.length}</GradientText>
                 </p>

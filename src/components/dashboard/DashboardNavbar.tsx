@@ -1,7 +1,7 @@
 "use client";
 
 import { motion } from "framer-motion";
-import { LogOut, ChevronRight, FlaskConical } from "lucide-react";
+import { LogOut, ChevronRight, FlaskConical, Loader2 } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
 import GradientText from "@/components/GradientText";
@@ -13,6 +13,7 @@ export default function DashboardNavbar() {
   const user = useAuthStore((s) => s.user);
   const signOut = useAuthStore((s) => s.signOut);
   const isDemo = useAuthStore((s) => s.isDemo);
+  const isSigningOut = useAuthStore((s) => s.isSigningOut);
 
   const avatarUrl = user?.user_metadata?.avatar_url;
   const displayName =
@@ -23,7 +24,7 @@ export default function DashboardNavbar() {
       initial={{ y: -20, opacity: 0 }}
       animate={{ y: 0, opacity: 1 }}
       transition={{ duration: 0.5, ease: "easeOut" }}
-      className="sticky top-0 z-50 border-b border-white/[0.06] bg-black/20 backdrop-blur-3xl"
+      className="sticky top-0 z-50 border-b border-glass bg-black/20 backdrop-blur-3xl"
     >
       <nav className="mx-auto flex items-center justify-between px-4 py-3 sm:px-6">
         {/* Left: Logo + breadcrumb */}
@@ -56,13 +57,16 @@ export default function DashboardNavbar() {
         <div className="flex items-center gap-3">
           <div className="flex items-center gap-2.5">
             {avatarUrl ? (
-              <img
+              <Image
                 src={avatarUrl}
                 alt=""
-                className="h-7 w-7 rounded-full border border-white/[0.1]"
+                width={28}
+                height={28}
+                unoptimized
+                className="h-7 w-7 rounded-full border border-glass-hover object-cover"
               />
             ) : (
-              <div className="flex h-7 w-7 items-center justify-center rounded-full border border-white/[0.1] bg-brand-cyan/10 text-sm font-medium text-brand-cyan">
+              <div className="flex h-7 w-7 items-center justify-center rounded-full border border-glass-hover bg-brand-cyan/10 text-sm font-medium text-brand-cyan">
                 {displayName.charAt(0).toUpperCase()}
               </div>
             )}
@@ -73,10 +77,17 @@ export default function DashboardNavbar() {
 
           <button
             onClick={signOut}
-            className="flex min-h-[44px] min-w-[44px] items-center justify-center gap-1.5 rounded-full border border-white/[0.06] bg-white/[0.03] px-2 py-1.5 text-sm text-muted transition-all duration-200 hover:bg-white/[0.06] hover:text-foreground sm:px-3"
+            disabled={isSigningOut}
+            className="flex min-h-[44px] min-w-[44px] items-center justify-center gap-1.5 rounded-full border border-glass bg-white/[0.03] px-2 py-1.5 text-sm text-muted transition-all duration-200 hover:bg-white/[0.06] hover:text-foreground disabled:opacity-60 disabled:pointer-events-none sm:px-3"
           >
-            <LogOut className="h-4 w-4 sm:h-3 sm:w-3" />
-            <span className="hidden sm:inline">{t.common.signOut}</span>
+            {isSigningOut ? (
+              <Loader2 className="h-4 w-4 animate-spin sm:h-3 sm:w-3" />
+            ) : (
+              <LogOut className="h-4 w-4 sm:h-3 sm:w-3" />
+            )}
+            <span className="hidden sm:inline">
+              {isSigningOut ? "Signing out…" : t.common.signOut}
+            </span>
           </button>
         </div>
       </nav>
