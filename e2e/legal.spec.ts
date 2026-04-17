@@ -4,7 +4,8 @@ test.describe("Legal Page", () => {
   test("legal page renders with privacy tab active by default", async ({ page }) => {
     await page.goto("/legal");
     await expect(page.locator("main")).toContainText("Privacy Policy");
-    await expect(page.locator("main")).toContainText("Your Privacy Matters");
+    // Copy changed from "Your Privacy Matters" → "Our Commitment to Privacy".
+    await expect(page.locator("main")).toContainText("Our Commitment to Privacy");
   });
 
   test("clicking Terms tab switches content", async ({ page }) => {

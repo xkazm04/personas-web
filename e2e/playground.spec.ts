@@ -35,11 +35,13 @@ test.describe("Playground Page", () => {
   test("has download CTA at bottom", async ({ page }) => {
     await page.goto("/playground");
     await expect(page.locator("main")).toContainText("Ready to build your own");
-    await expect(page.locator("a[href*='download']")).toBeVisible();
+    // Scope to main content — navbar + footer also contain /download links
+    await expect(page.locator("main a[href*='download']").first()).toBeVisible();
   });
 
   test("has link to templates", async ({ page }) => {
     await page.goto("/playground");
-    await expect(page.locator("a[href='/templates']")).toBeVisible();
+    // Scope to main content — footer also contains a /templates link
+    await expect(page.locator("main a[href='/templates']").first()).toBeVisible();
   });
 });

@@ -52,8 +52,11 @@ test.describe("Templates", () => {
     await expect(page.locator("main")).toContainText("Design Highlights");
     // Config section with copy button
     await expect(page.locator("button", { hasText: "Copy" }).first()).toBeVisible();
-    // Download CTA
-    await expect(page.locator("a[href*='personas://']")).toBeVisible();
+    // "Open in Personas" button (handler triggers personas:// deep link via
+    // window.location.href rather than an <a href> — test the button).
+    await expect(
+      page.locator("button", { hasText: "Open in Personas" }).first(),
+    ).toBeVisible();
   });
 
   test("template detail has back link", async ({ page }) => {

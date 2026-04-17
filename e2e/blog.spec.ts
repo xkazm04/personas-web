@@ -20,7 +20,11 @@ test.describe("Blog", () => {
 
   test("blog has category filters", async ({ page }) => {
     await page.goto("/blog");
-    // Category filter buttons or tabs
-    await expect(page.getByText("Announcements")).toBeVisible();
+    // Category filter renders Announcements as a button; featured post badge
+    // uses the same label, so scope to the button role to avoid strict-mode
+    // multi-match.
+    await expect(
+      page.getByRole("button", { name: "Announcements" }),
+    ).toBeVisible();
   });
 });
