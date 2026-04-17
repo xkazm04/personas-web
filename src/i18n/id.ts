@@ -294,6 +294,19 @@ export const id: Translations = {
     toolUtilization: 'Utilisasi alat',
     workers: 'worker',
     usageAnalytics: 'Analitik Penggunaan',
+    unreadMessages: 'unread messages',
+    fleetHealth: 'fleet health',
+    fleet: {
+      title: 'Fleet optimization',
+      severity: {
+        urgent: 'Urgent',
+        suggested: 'Suggested',
+        insight: 'Insight',
+      },
+      expand: 'Details',
+      collapse: 'Hide',
+      dismiss: 'Dismiss',
+    },
     scope: {
       allPersonas: 'All personas',
       personaLabel: 'Persona filter',

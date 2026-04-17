@@ -294,6 +294,19 @@ export const zh: Translations = {
     toolUtilization: '\u5DE5\u5177\u5229\u7528\u7387',
     workers: '\u5DE5\u4F5C\u8282\u70B9',
     usageAnalytics: '\u7528\u91CF\u5206\u6790',
+    unreadMessages: 'unread messages',
+    fleetHealth: 'fleet health',
+    fleet: {
+      title: 'Fleet optimization',
+      severity: {
+        urgent: 'Urgent',
+        suggested: 'Suggested',
+        insight: 'Insight',
+      },
+      expand: 'Details',
+      collapse: 'Hide',
+      dismiss: 'Dismiss',
+    },
     scope: {
       allPersonas: 'All personas',
       personaLabel: 'Persona filter',

@@ -294,6 +294,19 @@ export const bn: Translations = {
     toolUtilization: '\u099f\u09c1\u09b2 \u09ac\u09cd\u09af\u09ac\u09b9\u09be\u09b0',
     workers: '\u0993\u09af\u09bc\u09be\u09b0\u09cd\u0995\u09be\u09b0',
     usageAnalytics: '\u09ac\u09cd\u09af\u09ac\u09b9\u09be\u09b0\u09c7\u09b0 \u09ac\u09bf\u09b6\u09cd\u09b2\u09c7\u09b7\u09a3',
+    unreadMessages: 'unread messages',
+    fleetHealth: 'fleet health',
+    fleet: {
+      title: 'Fleet optimization',
+      severity: {
+        urgent: 'Urgent',
+        suggested: 'Suggested',
+        insight: 'Insight',
+      },
+      expand: 'Details',
+      collapse: 'Hide',
+      dismiss: 'Dismiss',
+    },
     scope: {
       allPersonas: 'All personas',
       personaLabel: 'Persona filter',

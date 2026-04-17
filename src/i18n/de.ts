@@ -294,6 +294,19 @@ export const de: Translations = {
     toolUtilization: 'Tool-Auslastung',
     workers: 'Worker',
     usageAnalytics: 'Nutzungsanalysen',
+    unreadMessages: 'unread messages',
+    fleetHealth: 'fleet health',
+    fleet: {
+      title: 'Fleet optimization',
+      severity: {
+        urgent: 'Urgent',
+        suggested: 'Suggested',
+        insight: 'Insight',
+      },
+      expand: 'Details',
+      collapse: 'Hide',
+      dismiss: 'Dismiss',
+    },
     scope: {
       allPersonas: 'All personas',
       personaLabel: 'Persona filter',

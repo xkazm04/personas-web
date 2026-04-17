@@ -294,6 +294,19 @@ export const ko: Translations = {
     toolUtilization: '\ub3c4\uad6c \ud65c\uc6a9\ub960',
     workers: '\uc6cc\ucee4',
     usageAnalytics: '\uc0ac\uc6a9\ub7c9 \ubd84\uc11d',
+    unreadMessages: 'unread messages',
+    fleetHealth: 'fleet health',
+    fleet: {
+      title: 'Fleet optimization',
+      severity: {
+        urgent: 'Urgent',
+        suggested: 'Suggested',
+        insight: 'Insight',
+      },
+      expand: 'Details',
+      collapse: 'Hide',
+      dismiss: 'Dismiss',
+    },
     scope: {
       allPersonas: 'All personas',
       personaLabel: 'Persona filter',

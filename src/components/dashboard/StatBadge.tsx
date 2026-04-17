@@ -7,7 +7,7 @@ interface StatBadgeProps {
   icon: React.ElementType;
   label: string;
   value: string | number;
-  accent: "cyan" | "purple" | "emerald" | "amber";
+  accent: "cyan" | "purple" | "emerald" | "amber" | "rose" | "blue";
   href?: string;
 }
 
@@ -16,6 +16,8 @@ const colorMap = {
   purple: "border-purple-500/20 bg-purple-500/8 text-purple-400",
   emerald: "border-emerald-500/20 bg-emerald-500/8 text-emerald-400",
   amber: "border-amber-500/20 bg-amber-500/8 text-amber-400",
+  rose: "border-rose-500/20 bg-rose-500/8 text-rose-400",
+  blue: "border-blue-500/20 bg-blue-500/8 text-blue-400",
 };
 
 export default function StatBadge({ icon: Icon, label, value, accent, href }: StatBadgeProps) {

@@ -294,6 +294,19 @@ export const cs: Translations = {
     toolUtilization: 'Vyu\u017eit\u00ed n\u00e1stroj\u016f',
     workers: 'workery',
     usageAnalytics: 'Analytika vyu\u017eit\u00ed',
+    unreadMessages: 'unread messages',
+    fleetHealth: 'fleet health',
+    fleet: {
+      title: 'Fleet optimization',
+      severity: {
+        urgent: 'Urgent',
+        suggested: 'Suggested',
+        insight: 'Insight',
+      },
+      expand: 'Details',
+      collapse: 'Hide',
+      dismiss: 'Dismiss',
+    },
     scope: {
       allPersonas: 'All personas',
       personaLabel: 'Persona filter',

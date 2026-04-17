@@ -294,6 +294,19 @@ export const hi: Translations = {
     toolUtilization: '\u091F\u0942\u0932 \u0909\u092A\u092F\u094B\u0917',
     workers: '\u0935\u0930\u094D\u0915\u0930',
     usageAnalytics: '\u0909\u092A\u092F\u094B\u0917 \u090F\u0928\u093E\u0932\u093F\u091F\u093F\u0915\u094D\u0938',
+    unreadMessages: 'unread messages',
+    fleetHealth: 'fleet health',
+    fleet: {
+      title: 'Fleet optimization',
+      severity: {
+        urgent: 'Urgent',
+        suggested: 'Suggested',
+        insight: 'Insight',
+      },
+      expand: 'Details',
+      collapse: 'Hide',
+      dismiss: 'Dismiss',
+    },
     scope: {
       allPersonas: 'All personas',
       personaLabel: 'Persona filter',

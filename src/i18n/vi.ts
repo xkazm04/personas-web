@@ -294,6 +294,19 @@ export const vi: Translations = {
     toolUtilization: 'S\u1eed d\u1ee5ng c\u00f4ng c\u1ee5',
     workers: 'worker',
     usageAnalytics: 'Ph\u00e2n t\u00edch s\u1eed d\u1ee5ng',
+    unreadMessages: 'unread messages',
+    fleetHealth: 'fleet health',
+    fleet: {
+      title: 'Fleet optimization',
+      severity: {
+        urgent: 'Urgent',
+        suggested: 'Suggested',
+        insight: 'Insight',
+      },
+      expand: 'Details',
+      collapse: 'Hide',
+      dismiss: 'Dismiss',
+    },
     scope: {
       allPersonas: 'All personas',
       personaLabel: 'Persona filter',

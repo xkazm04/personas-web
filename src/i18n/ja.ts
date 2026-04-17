@@ -294,6 +294,19 @@ export const ja: Translations = {
     toolUtilization: '\u30c4\u30fc\u30eb\u5229\u7528\u7387',
     workers: '\u30ef\u30fc\u30ab\u30fc',
     usageAnalytics: '\u5229\u7528\u5206\u6790',
+    unreadMessages: 'unread messages',
+    fleetHealth: 'fleet health',
+    fleet: {
+      title: 'Fleet optimization',
+      severity: {
+        urgent: 'Urgent',
+        suggested: 'Suggested',
+        insight: 'Insight',
+      },
+      expand: 'Details',
+      collapse: 'Hide',
+      dismiss: 'Dismiss',
+    },
     scope: {
       allPersonas: 'All personas',
       personaLabel: 'Persona filter',

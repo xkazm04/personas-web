@@ -413,6 +413,51 @@ export interface HealthDigest {
   }[];
 }
 
+// ── Home badge metrics (desktop parity) ─────────────────────────────
+
+export const MOCK_UNREAD_MESSAGES = 7;
+
+// Cumulative global execution count (larger than the loaded list).
+export const MOCK_GLOBAL_EXECUTIONS = 12_847;
+
+// ── Fleet optimization recommendation ───────────────────────────────
+// Mirrors desktop's single-top-recommendation panel. Surfaced on /dashboard/home.
+
+export type FleetRecommendationSeverity = "urgent" | "suggested" | "insight";
+export type FleetRecommendationCategory =
+  | "cost"
+  | "reliability"
+  | "retry"
+  | "model";
+
+export interface FleetRecommendation {
+  id: string;
+  severity: FleetRecommendationSeverity;
+  category: FleetRecommendationCategory;
+  title: string;
+  summary: string;
+  detail: string;
+  impact: string;
+  personaName?: string;
+  actionLabel: string;
+  actionHref?: string;
+}
+
+export const MOCK_FLEET_RECOMMENDATION: FleetRecommendation = {
+  id: "fr_1",
+  severity: "suggested",
+  category: "cost",
+  title: "Downgrade DataProcessor to Haiku for CSV tasks",
+  summary:
+    "72% of DataProcessor runs are simple CSV parses — Haiku matches Sonnet quality at 1/8th the cost.",
+  detail:
+    "Observed 89 CSV-parsing executions over the last 30 days. Haiku achieved 92% task success vs Sonnet's 94% on the same prompts, while using 12% of the token spend. Recommended to route `knowledge_type=cost_quality` patterns tagged `haiku_vs_sonnet_csv` through Haiku by default, with Sonnet reserved for nested-schema fallbacks.",
+  impact: "≈ $48/month saved",
+  personaName: "DataProcessor",
+  actionLabel: "Review routing policy",
+  actionHref: "/dashboard/agents",
+};
+
 export const MOCK_HEALTH_DIGEST: HealthDigest = {
   overallScore: 87,
   agents: [

@@ -294,6 +294,19 @@ export const es: Translations = {
     toolUtilization: 'Utilizaci\u00f3n de herramientas',
     workers: 'workers',
     usageAnalytics: 'Anal\u00edticas de Uso',
+    unreadMessages: 'unread messages',
+    fleetHealth: 'fleet health',
+    fleet: {
+      title: 'Fleet optimization',
+      severity: {
+        urgent: 'Urgent',
+        suggested: 'Suggested',
+        insight: 'Insight',
+      },
+      expand: 'Details',
+      collapse: 'Hide',
+      dismiss: 'Dismiss',
+    },
     scope: {
       allPersonas: 'All personas',
       personaLabel: 'Persona filter',

@@ -10,6 +10,8 @@ import {
   Bot,
   Activity,
   ArrowUpRight,
+  Mail,
+  ShieldCheck,
 } from "lucide-react";
 
 const TrafficChart = dynamic(
@@ -18,7 +20,7 @@ const TrafficChart = dynamic(
     ssr: false,
     loading: () => (
       <div className="flex items-center justify-center h-[200px] sm:h-[280px] lg:h-[320px]">
-        <div className="h-4 w-4 animate-spin rounded-full border-2 border-white/10 border-t-brand-cyan" />
+        <div className="h-4 w-4 animate-spin rounded-full border-2 border-glass-hover border-t-brand-cyan" />
       </div>
     ),
   },
@@ -32,6 +34,13 @@ import PersonaAvatar from "@/components/dashboard/PersonaAvatar";
 import SkeletonCard from "@/components/dashboard/SkeletonCard";
 import HealthDigestPanel from "@/components/dashboard/HealthDigestPanel";
 import MemoryActionsPanel from "@/components/dashboard/MemoryActionsPanel";
+import FleetOptimizationCard from "@/components/dashboard/FleetOptimizationCard";
+import {
+  MOCK_FLEET_RECOMMENDATION,
+  MOCK_GLOBAL_EXECUTIONS,
+  MOCK_HEALTH_DIGEST,
+  MOCK_UNREAD_MESSAGES,
+} from "@/lib/mock-dashboard-data";
 import { usePersonaStore } from "@/stores/personaStore";
 import { useExecutionStore, useEnrichedExecutions } from "@/stores/executionStore";
 import { useReviewStore } from "@/stores/reviewStore";
@@ -186,6 +195,28 @@ export default function DashboardHomePage() {
           accent="purple"
           href="/dashboard/agents"
         />
+        <StatBadge
+          icon={Mail}
+          label={t.dashboard.unreadMessages}
+          value={MOCK_UNREAD_MESSAGES}
+          accent="rose"
+          href="/dashboard/messages"
+        />
+        <StatBadge
+          icon={ShieldCheck}
+          label={t.dashboard.fleetHealth}
+          value={`${MOCK_HEALTH_DIGEST.overallScore}%`}
+          accent="blue"
+          href="/dashboard/health"
+        />
+      </motion.div>
+
+      {/* Fleet optimization — top recommendation */}
+      <motion.div variants={fadeUp} className="mb-6">
+        <FleetOptimizationCard
+          recommendation={MOCK_FLEET_RECOMMENDATION}
+          executionCount={Math.max(stats.total, MOCK_GLOBAL_EXECUTIONS)}
+        />
       </motion.div>
 
       {/* Health Digest + Memory Actions row */}
@@ -275,7 +306,7 @@ export default function DashboardHomePage() {
               <TrafficChart chartData={chartData} />
             ) : (
               <div className="flex items-center justify-center h-[200px] sm:h-[280px] lg:h-[320px]">
-                <div className="h-4 w-4 animate-spin rounded-full border-2 border-white/10 border-t-brand-cyan" />
+                <div className="h-4 w-4 animate-spin rounded-full border-2 border-glass-hover border-t-brand-cyan" />
               </div>
             )}
           </GlowCard>

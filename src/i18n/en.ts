@@ -212,6 +212,19 @@ export interface Translations {
     toolUtilization: string;
     workers: string;
     usageAnalytics: string;
+    unreadMessages: string;
+    fleetHealth: string;
+    fleet: {
+      title: string;
+      severity: {
+        urgent: string;
+        suggested: string;
+        insight: string;
+      };
+      expand: string;
+      collapse: string;
+      dismiss: string;
+    };
     scope: {
       allPersonas: string;
       personaLabel: string;
@@ -685,6 +698,19 @@ export const en: Translations = {
     toolUtilization: 'Tool utilization',
     workers: 'workers',
     usageAnalytics: 'Usage Analytics',
+    unreadMessages: 'unread messages',
+    fleetHealth: 'fleet health',
+    fleet: {
+      title: 'Fleet optimization',
+      severity: {
+        urgent: 'Urgent',
+        suggested: 'Suggested',
+        insight: 'Insight',
+      },
+      expand: 'Details',
+      collapse: 'Hide',
+      dismiss: 'Dismiss',
+    },
     scope: {
       allPersonas: 'All personas',
       personaLabel: 'Persona filter',
