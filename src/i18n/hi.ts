@@ -360,6 +360,38 @@ export const hi: Translations = {
       allResolved: 'All conflicts resolved',
     },
   },
+  healthPage: {
+    title: 'Fleet Health',
+    subtitle: 'Monitoring, cascade risk, and predictive incidents',
+    cascade: {
+      title: 'Cascade risk',
+      subtitle: 'Dependency graph with failure propagation weight',
+      legend: {
+        healthy: 'Healthy',
+        degraded: 'Degraded',
+        failing: 'Failing',
+      },
+    },
+    burnRate: {
+      title: 'Burn rate',
+      subtitle: 'Cumulative spend vs. projection',
+      actual: 'Actual',
+      projected: 'Projected',
+      target: 'Target',
+    },
+    predictive: {
+      title: 'Predictive alerts',
+      subtitle: 'Forward-looking incidents ranked by probability',
+      probability: '{n}% likely',
+      etaLabel: 'in {t}',
+      severity: {
+        info: 'Info',
+        warning: 'Warning',
+        critical: 'Critical',
+      },
+      empty: 'No predicted incidents — fleet trending stable.',
+    },
+  },
   agentsPage: {
     title: '\u090F\u091C\u0947\u0902\u091F',
     noAgents: '\u0915\u094B\u0908 \u090F\u091C\u0947\u0902\u091F \u0921\u093F\u092A\u094D\u0932\u0949\u092F \u0928\u0939\u0940\u0902',
