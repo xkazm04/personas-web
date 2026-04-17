@@ -6,7 +6,7 @@ import { useEffect, useRef, useCallback, useState } from "react";
 import { useReducedMotion } from "framer-motion";
 import TerminalChrome from "@/components/TerminalChrome";
 import { TerminalPanel } from "@/components/primitives";
-import { LINE_COLORS, PROMPTS, type OutputLine } from "./data";
+import { LINE_COLORS, LINE_ICONS, PROMPTS, type OutputLine } from "./data";
 
 interface TerminalSimProps {
   active: number | null;
@@ -18,8 +18,16 @@ export default function TerminalSim({ active, onReset }: TerminalSimProps) {
   const [lines, setLines] = useState<OutputLine[]>([]);
   const [isRunning, setIsRunning] = useState(false);
   const [isDone, setIsDone] = useState(false);
+  const [prevActive, setPrevActive] = useState(active);
   const terminalRef = useRef<HTMLDivElement>(null);
   const timeoutsRef = useRef<ReturnType<typeof setTimeout>[]>([]);
+
+  if (active !== prevActive) {
+    setPrevActive(active);
+    setLines([]);
+    setIsRunning(active !== null);
+    setIsDone(false);
+  }
 
   const clearTimeouts = useCallback(() => {
     timeoutsRef.current.forEach(clearTimeout);
@@ -40,17 +48,8 @@ export default function TerminalSim({ active, onReset }: TerminalSimProps) {
   }, [prefersReducedMotion]);
 
   useEffect(() => {
-    if (active === null) {
-      clearTimeouts();
-      setLines([]);
-      setIsRunning(false);
-      setIsDone(false);
-      return;
-    }
     clearTimeouts();
-    setLines([]);
-    setIsRunning(true);
-    setIsDone(false);
+    if (active === null) return;
 
     const promptLines = PROMPTS[active].lines;
     let cumulative = 0;
@@ -130,7 +129,7 @@ export default function TerminalSim({ active, onReset }: TerminalSimProps) {
                 paddingLeft: line.indent ? `${line.indent * 12}px` : undefined,
               }}
             >
-              {line.text || "\u00A0"}
+              {line.text ? `${LINE_ICONS[line.type]} ${line.text}` : "\u00A0"}
             </motion.div>
           ))}
         </AnimatePresence>
@@ -140,7 +139,7 @@ export default function TerminalSim({ active, onReset }: TerminalSimProps) {
             initial={{ opacity: 0 }}
             animate={{ opacity: [0.3, 1, 0.3] }}
             transition={{ duration: 1, repeat: Infinity }}
-            className="mt-1 font-mono text-base text-brand-cyan/60"
+            className="mt-1 font-mono text-base text-brand-cyan/80"
           >
             _
           </motion.div>
