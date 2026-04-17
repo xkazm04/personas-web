@@ -38,6 +38,8 @@ interface SectionIntroProps {
   className?: string;
   /** id attached to the heading element for aria-labelledby linking. */
   id?: string;
+  /** Heading level — "h1" for page-level uses, defaults to "h2" for sections. */
+  as?: "h1" | "h2";
 }
 
 export default function SectionIntro({
@@ -51,6 +53,7 @@ export default function SectionIntro({
   align = "center",
   className = "mb-12",
   id,
+  as,
 }: SectionIntroProps) {
   const alignClass = align === "center" ? "text-center" : "text-left";
   const mxClass = align === "center" ? "mx-auto" : "";
@@ -65,7 +68,7 @@ export default function SectionIntro({
           {eyebrow}
         </p>
       )}
-      <SectionHeading id={id}>
+      <SectionHeading id={id} as={as}>
         {heading}
         {gradient && (
           <>

@@ -50,7 +50,7 @@ export default function DownloadPage() {
             <span className="inline-block rounded-full border border-brand-cyan/20 bg-brand-cyan/5 px-3.5 py-1 text-base font-medium tracking-wider uppercase text-brand-cyan/70 font-mono mb-6">
               v{APP_VERSION}
             </span>
-            <SectionHeading>
+            <SectionHeading as="h1">
               Download{" "}
               <GradientText className="drop-shadow-lg">Personas</GradientText>
             </SectionHeading>

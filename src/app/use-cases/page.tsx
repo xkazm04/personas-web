@@ -41,6 +41,7 @@ export default function UseCasesPage() {
 
         <SectionWrapper id="use-cases" aria-label="Use cases">
           <SectionIntro
+            as="h1"
             eyebrow="Use Cases"
             heading="What will you"
             gradient="automate"

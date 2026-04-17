@@ -33,6 +33,7 @@ export default function BlogPage() {
 
         <SectionWrapper id="blog" aria-label="Blog">
           <SectionIntro
+            as="h1"
             eyebrow="Blog"
             heading="Updates &"
             gradient="insights"

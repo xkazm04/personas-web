@@ -27,7 +27,7 @@ export default function PlaygroundPage() {
           >
             {/* Hero */}
             <motion.div variants={fadeUp} className="text-center mb-14">
-              <SectionHeading>
+              <SectionHeading as="h1">
                 See agents in{" "}
                 <GradientText>action</GradientText>
               </SectionHeading>

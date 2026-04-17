@@ -28,6 +28,7 @@ export default function CommunityPage() {
         {/* ── Hero + Channels ────────────────────────────────── */}
         <SectionWrapper id="community" aria-label="Community">
           <SectionIntro
+            as="h1"
             eyebrow="Community"
             eyebrowBrand="purple"
             heading="Built by"
