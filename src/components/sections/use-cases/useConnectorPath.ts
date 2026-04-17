@@ -13,6 +13,13 @@ export function useConnectorPath(
   const [connectorPath, setConnectorPath] = useState<string>("");
   const [connectorVisible, setConnectorVisible] = useState(false);
   const selectionCycleRef = useRef(0);
+  const [prevKey, setPrevKey] = useState(`${selected}|${isMobile}`);
+
+  const currentKey = `${selected}|${isMobile}`;
+  if (currentKey !== prevKey) {
+    setPrevKey(currentKey);
+    setConnectorVisible(false);
+  }
 
   useEffect(() => {
     const updatePath = () => {
@@ -42,7 +49,6 @@ export function useConnectorPath(
 
     selectionCycleRef.current += 1;
     const currentCycle = selectionCycleRef.current;
-    setConnectorVisible(false);
 
     const timer = window.setTimeout(() => {
       if (selectionCycleRef.current !== currentCycle) return;
