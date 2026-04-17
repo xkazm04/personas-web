@@ -392,6 +392,18 @@ export const zh: Translations = {
       empty: 'No predicted incidents — fleet trending stable.',
     },
   },
+  reviewsPage: {
+    focus: {
+      enter: 'Focus flow',
+      exit: 'Exit focus',
+      progress: '{n} of {total}',
+      skip: 'Skip',
+      empty: 'All caught up — no pending reviews',
+      approve: 'Approve',
+      reject: 'Reject',
+      shortcuts: 'A approve · R reject · S skip · Esc exit',
+    },
+  },
   agentsPage: {
     title: '\u667A\u80FD\u4F53',
     noAgents: '\u672A\u90E8\u7F72\u667A\u80FD\u4F53',

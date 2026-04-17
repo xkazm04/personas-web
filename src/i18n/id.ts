@@ -392,6 +392,18 @@ export const id: Translations = {
       empty: 'No predicted incidents — fleet trending stable.',
     },
   },
+  reviewsPage: {
+    focus: {
+      enter: 'Focus flow',
+      exit: 'Exit focus',
+      progress: '{n} of {total}',
+      skip: 'Skip',
+      empty: 'All caught up — no pending reviews',
+      approve: 'Approve',
+      reject: 'Reject',
+      shortcuts: 'A approve · R reject · S skip · Esc exit',
+    },
+  },
   agentsPage: {
     title: 'Agen',
     noAgents: 'Tidak ada agen yang dideploy',

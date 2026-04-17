@@ -392,6 +392,18 @@ export const ja: Translations = {
       empty: 'No predicted incidents — fleet trending stable.',
     },
   },
+  reviewsPage: {
+    focus: {
+      enter: 'Focus flow',
+      exit: 'Exit focus',
+      progress: '{n} of {total}',
+      skip: 'Skip',
+      empty: 'All caught up — no pending reviews',
+      approve: 'Approve',
+      reject: 'Reject',
+      shortcuts: 'A approve · R reject · S skip · Esc exit',
+    },
+  },
   agentsPage: {
     title: '\u30a8\u30fc\u30b8\u30a7\u30f3\u30c8',
     noAgents: '\u30c7\u30d7\u30ed\u30a4\u6e08\u307f\u306e\u30a8\u30fc\u30b8\u30a7\u30f3\u30c8\u306a\u3057',

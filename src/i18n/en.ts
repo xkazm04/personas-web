@@ -310,6 +310,18 @@ export interface Translations {
       empty: string;
     };
   };
+  reviewsPage: {
+    focus: {
+      enter: string;
+      exit: string;
+      progress: string;
+      skip: string;
+      empty: string;
+      approve: string;
+      reject: string;
+      shortcuts: string;
+    };
+  };
   agentsPage: {
     title: string;
     noAgents: string;
@@ -866,6 +878,18 @@ export const en: Translations = {
         critical: 'Critical',
       },
       empty: 'No predicted incidents — fleet trending stable.',
+    },
+  },
+  reviewsPage: {
+    focus: {
+      enter: 'Focus flow',
+      exit: 'Exit focus',
+      progress: '{n} of {total}',
+      skip: 'Skip',
+      empty: 'All caught up — no pending reviews',
+      approve: 'Approve',
+      reject: 'Reject',
+      shortcuts: 'A approve · R reject · S skip · Esc exit',
     },
   },
   agentsPage: {
