@@ -270,9 +270,9 @@ export const ko: Translations = {
     observability: '\uad00\uce21\uc131',
     knowledge: '\uc9c0\uc2dd',
     settings: '\uc124\uc815',
-    leaderboard: 'Leaderboard',
+    leaderboard: '리더보드',
     sla: 'SLA',
-    messages: 'Messages',
+    messages: '메시지',
     more:'\ub354 \ubcf4\uae30',
     greeting: {
       morning: '\uc88b\uc740 \uc544\uce68\uc785\ub2c8\ub2e4',
@@ -330,8 +330,8 @@ export const ko: Translations = {
     },
   },
   memoriesPage: {
-    title: 'Memories',
-    subtitle: 'Learned patterns your agents apply automatically',
+    title: '메모리',
+    subtitle: '에이전트가 자동으로 적용하는 학습된 패턴',
     totalCount: '{n} memories',
     filters: {
       all: 'All',
@@ -374,8 +374,8 @@ export const ko: Translations = {
     },
   },
   leaderboardPage: {
-    title: 'Leaderboard',
-    subtitle: 'Fleet ranking by composite performance',
+    title: '리더보드',
+    subtitle: '종합 성능에 따른 플릿 순위',
     rank: 'Rank',
     composite: 'Composite',
     radarTitle: 'Metrics profile',
@@ -394,7 +394,7 @@ export const ko: Translations = {
   },
   slaPage: {
     title: 'SLA',
-    subtitle: 'Service-level objectives, compliance, and breach history',
+    subtitle: '서비스 수준 목표, 준수, 위반 이력',
     compliance: 'Compliance',
     activeBreaches: 'Active breaches',
     objectives: 'Objectives',
@@ -419,8 +419,8 @@ export const ko: Translations = {
     },
   },
   messagesPage: {
-    title: 'Messages',
-    subtitle: 'Async feedback from every persona in the fleet',
+    title: '메시지',
+    subtitle: '플릿의 모든 페르소나에서 받은 비동기 피드백',
     unread: 'Unread',
     read: 'Read',
     empty: 'No messages in this page.',
@@ -434,10 +434,10 @@ export const ko: Translations = {
     markAllRead: 'Mark all read',
   },
   observabilityPage: {
-    title: 'Observability',
-    subtitle: 'Performance metrics, cost tracking, and tool utilization',
-    tabPerformance: 'Performance',
-    tabUsage: 'Tool Usage',
+    title: '가시성',
+    subtitle: '성능 지표, 비용 추적, 도구 사용량',
+    tabPerformance: '성능',
+    tabUsage: '도구 사용량',
   },
   agentsPage: {
     title: '\uc5d0\uc774\uc804\ud2b8',

@@ -270,9 +270,9 @@ export const ja: Translations = {
     observability: '\u30aa\u30d6\u30b6\u30fc\u30d0\u30d3\u30ea\u30c6\u30a3',
     knowledge: '\u30ca\u30ec\u30c3\u30b8',
     settings: '\u8a2d\u5b9a',
-    leaderboard: 'Leaderboard',
+    leaderboard: 'リーダーボード',
     sla: 'SLA',
-    messages: 'Messages',
+    messages: 'メッセージ',
     more:'\u305d\u306e\u4ed6',
     greeting: {
       morning: '\u304a\u306f\u3088\u3046\u3054\u3056\u3044\u307e\u3059',
@@ -330,8 +330,8 @@ export const ja: Translations = {
     },
   },
   memoriesPage: {
-    title: 'Memories',
-    subtitle: 'Learned patterns your agents apply automatically',
+    title: '記憶',
+    subtitle: 'エージェントが自動的に適用する学習済みパターン',
     totalCount: '{n} memories',
     filters: {
       all: 'All',
@@ -374,8 +374,8 @@ export const ja: Translations = {
     },
   },
   leaderboardPage: {
-    title: 'Leaderboard',
-    subtitle: 'Fleet ranking by composite performance',
+    title: 'リーダーボード',
+    subtitle: '複合パフォーマンスによるフリートランキング',
     rank: 'Rank',
     composite: 'Composite',
     radarTitle: 'Metrics profile',
@@ -394,7 +394,7 @@ export const ja: Translations = {
   },
   slaPage: {
     title: 'SLA',
-    subtitle: 'Service-level objectives, compliance, and breach history',
+    subtitle: 'サービスレベル目標、コンプライアンス、違反履歴',
     compliance: 'Compliance',
     activeBreaches: 'Active breaches',
     objectives: 'Objectives',
@@ -419,8 +419,8 @@ export const ja: Translations = {
     },
   },
   messagesPage: {
-    title: 'Messages',
-    subtitle: 'Async feedback from every persona in the fleet',
+    title: 'メッセージ',
+    subtitle: 'フリート内のすべてのペルソナからの非同期フィードバック',
     unread: 'Unread',
     read: 'Read',
     empty: 'No messages in this page.',
@@ -434,10 +434,10 @@ export const ja: Translations = {
     markAllRead: 'Mark all read',
   },
   observabilityPage: {
-    title: 'Observability',
-    subtitle: 'Performance metrics, cost tracking, and tool utilization',
-    tabPerformance: 'Performance',
-    tabUsage: 'Tool Usage',
+    title: 'オブザーバビリティ',
+    subtitle: 'パフォーマンス指標、コスト追跡、ツール使用状況',
+    tabPerformance: 'パフォーマンス',
+    tabUsage: 'ツール使用状況',
   },
   agentsPage: {
     title: '\u30a8\u30fc\u30b8\u30a7\u30f3\u30c8',

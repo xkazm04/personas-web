@@ -270,9 +270,9 @@ export const zh: Translations = {
     observability: '\u53EF\u89C2\u6D4B\u6027',
     knowledge: '\u77E5\u8BC6\u5E93',
     settings: '\u8BBE\u7F6E',
-    leaderboard: 'Leaderboard',
+    leaderboard: '排行榜',
     sla: 'SLA',
-    messages: 'Messages',
+    messages: '消息',
     more:'\u66F4\u591A',
     greeting: {
       morning: '\u65E9\u4E0A\u597D',
@@ -330,8 +330,8 @@ export const zh: Translations = {
     },
   },
   memoriesPage: {
-    title: 'Memories',
-    subtitle: 'Learned patterns your agents apply automatically',
+    title: '记忆',
+    subtitle: '您的代理自动应用的学习模式',
     totalCount: '{n} memories',
     filters: {
       all: 'All',
@@ -374,8 +374,8 @@ export const zh: Translations = {
     },
   },
   leaderboardPage: {
-    title: 'Leaderboard',
-    subtitle: 'Fleet ranking by composite performance',
+    title: '排行榜',
+    subtitle: '按综合性能的舰队排名',
     rank: 'Rank',
     composite: 'Composite',
     radarTitle: 'Metrics profile',
@@ -394,7 +394,7 @@ export const zh: Translations = {
   },
   slaPage: {
     title: 'SLA',
-    subtitle: 'Service-level objectives, compliance, and breach history',
+    subtitle: '服务级别目标、合规性和违规历史',
     compliance: 'Compliance',
     activeBreaches: 'Active breaches',
     objectives: 'Objectives',
@@ -419,8 +419,8 @@ export const zh: Translations = {
     },
   },
   messagesPage: {
-    title: 'Messages',
-    subtitle: 'Async feedback from every persona in the fleet',
+    title: '消息',
+    subtitle: '来自舰队中每个角色的异步反馈',
     unread: 'Unread',
     read: 'Read',
     empty: 'No messages in this page.',
@@ -434,10 +434,10 @@ export const zh: Translations = {
     markAllRead: 'Mark all read',
   },
   observabilityPage: {
-    title: 'Observability',
-    subtitle: 'Performance metrics, cost tracking, and tool utilization',
-    tabPerformance: 'Performance',
-    tabUsage: 'Tool Usage',
+    title: '可观测性',
+    subtitle: '性能指标、成本跟踪和工具使用情况',
+    tabPerformance: '性能',
+    tabUsage: '工具使用',
   },
   agentsPage: {
     title: '\u667A\u80FD\u4F53',

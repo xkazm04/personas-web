@@ -270,9 +270,9 @@ export const ar: Translations = {
     observability: '\u0627\u0644\u0645\u0631\u0627\u0642\u0628\u0629',
     knowledge: '\u0627\u0644\u0645\u0639\u0631\u0641\u0629',
     settings: '\u0627\u0644\u0625\u0639\u062F\u0627\u062F\u0627\u062A',
-    leaderboard: 'Leaderboard',
+    leaderboard: 'لوحة المتصدرين',
     sla: 'SLA',
-    messages: 'Messages',
+    messages: 'الرسائل',
     more:'\u0627\u0644\u0645\u0632\u064A\u062F',
     greeting: {
       morning: '\u0635\u0628\u0627\u062D \u0627\u0644\u062E\u064A\u0631',
@@ -330,8 +330,8 @@ export const ar: Translations = {
     },
   },
   memoriesPage: {
-    title: 'Memories',
-    subtitle: 'Learned patterns your agents apply automatically',
+    title: 'الذكريات',
+    subtitle: 'الأنماط المكتسبة التي يطبقها الوكلاء تلقائيًا',
     totalCount: '{n} memories',
     filters: {
       all: 'All',
@@ -374,8 +374,8 @@ export const ar: Translations = {
     },
   },
   leaderboardPage: {
-    title: 'Leaderboard',
-    subtitle: 'Fleet ranking by composite performance',
+    title: 'لوحة المتصدرين',
+    subtitle: 'ترتيب الأسطول حسب الأداء المجمع',
     rank: 'Rank',
     composite: 'Composite',
     radarTitle: 'Metrics profile',
@@ -394,7 +394,7 @@ export const ar: Translations = {
   },
   slaPage: {
     title: 'SLA',
-    subtitle: 'Service-level objectives, compliance, and breach history',
+    subtitle: 'أهداف مستوى الخدمة والامتثال وسجل الانتهاكات',
     compliance: 'Compliance',
     activeBreaches: 'Active breaches',
     objectives: 'Objectives',
@@ -419,8 +419,8 @@ export const ar: Translations = {
     },
   },
   messagesPage: {
-    title: 'Messages',
-    subtitle: 'Async feedback from every persona in the fleet',
+    title: 'الرسائل',
+    subtitle: 'ملاحظات غير متزامنة من كل شخصية في الأسطول',
     unread: 'Unread',
     read: 'Read',
     empty: 'No messages in this page.',
@@ -434,10 +434,10 @@ export const ar: Translations = {
     markAllRead: 'Mark all read',
   },
   observabilityPage: {
-    title: 'Observability',
-    subtitle: 'Performance metrics, cost tracking, and tool utilization',
-    tabPerformance: 'Performance',
-    tabUsage: 'Tool Usage',
+    title: 'قابلية الملاحظة',
+    subtitle: 'مقاييس الأداء وتتبع التكلفة واستخدام الأدوات',
+    tabPerformance: 'الأداء',
+    tabUsage: 'استخدام الأدوات',
   },
   agentsPage: {
     title: '\u0627\u0644\u0648\u0643\u0644\u0627\u0621',

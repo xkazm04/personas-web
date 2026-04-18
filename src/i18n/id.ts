@@ -270,9 +270,9 @@ export const id: Translations = {
     observability: 'Observabilitas',
     knowledge: 'Pengetahuan',
     settings: 'Pengaturan',
-    leaderboard: 'Leaderboard',
+    leaderboard: 'Papan Peringkat',
     sla: 'SLA',
-    messages: 'Messages',
+    messages: 'Pesan',
     more:'Lainnya',
     greeting: {
       morning: 'Selamat Pagi',
@@ -330,8 +330,8 @@ export const id: Translations = {
     },
   },
   memoriesPage: {
-    title: 'Memories',
-    subtitle: 'Learned patterns your agents apply automatically',
+    title: 'Memori',
+    subtitle: 'Pola yang dipelajari dan diterapkan otomatis oleh agen Anda',
     totalCount: '{n} memories',
     filters: {
       all: 'All',
@@ -374,8 +374,8 @@ export const id: Translations = {
     },
   },
   leaderboardPage: {
-    title: 'Leaderboard',
-    subtitle: 'Fleet ranking by composite performance',
+    title: 'Papan Peringkat',
+    subtitle: 'Peringkat armada berdasarkan kinerja komposit',
     rank: 'Rank',
     composite: 'Composite',
     radarTitle: 'Metrics profile',
@@ -394,7 +394,7 @@ export const id: Translations = {
   },
   slaPage: {
     title: 'SLA',
-    subtitle: 'Service-level objectives, compliance, and breach history',
+    subtitle: 'Sasaran tingkat layanan, kepatuhan, dan riwayat pelanggaran',
     compliance: 'Compliance',
     activeBreaches: 'Active breaches',
     objectives: 'Objectives',
@@ -419,8 +419,8 @@ export const id: Translations = {
     },
   },
   messagesPage: {
-    title: 'Messages',
-    subtitle: 'Async feedback from every persona in the fleet',
+    title: 'Pesan',
+    subtitle: 'Umpan balik asinkron dari setiap persona di armada',
     unread: 'Unread',
     read: 'Read',
     empty: 'No messages in this page.',
@@ -434,10 +434,10 @@ export const id: Translations = {
     markAllRead: 'Mark all read',
   },
   observabilityPage: {
-    title: 'Observability',
-    subtitle: 'Performance metrics, cost tracking, and tool utilization',
-    tabPerformance: 'Performance',
-    tabUsage: 'Tool Usage',
+    title: 'Observabilitas',
+    subtitle: 'Metrik kinerja, pelacakan biaya, dan pemanfaatan alat',
+    tabPerformance: 'Kinerja',
+    tabUsage: 'Penggunaan Alat',
   },
   agentsPage: {
     title: 'Agen',

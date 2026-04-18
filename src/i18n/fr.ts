@@ -270,7 +270,7 @@ export const fr: Translations = {
     observability: 'Observabilit\u00e9',
     knowledge: 'Connaissances',
     settings: 'Param\u00e8tres',
-    leaderboard: 'Leaderboard',
+    leaderboard: 'Classement',
     sla: 'SLA',
     messages: 'Messages',
     more:'Plus',
@@ -330,8 +330,8 @@ export const fr: Translations = {
     },
   },
   memoriesPage: {
-    title: 'Memories',
-    subtitle: 'Learned patterns your agents apply automatically',
+    title: 'Mémoires',
+    subtitle: 'Schémas appris appliqués automatiquement par vos agents',
     totalCount: '{n} memories',
     filters: {
       all: 'All',
@@ -374,8 +374,8 @@ export const fr: Translations = {
     },
   },
   leaderboardPage: {
-    title: 'Leaderboard',
-    subtitle: 'Fleet ranking by composite performance',
+    title: 'Classement',
+    subtitle: 'Classement de la flotte par performance composite',
     rank: 'Rank',
     composite: 'Composite',
     radarTitle: 'Metrics profile',
@@ -394,7 +394,7 @@ export const fr: Translations = {
   },
   slaPage: {
     title: 'SLA',
-    subtitle: 'Service-level objectives, compliance, and breach history',
+    subtitle: 'Objectifs de niveau de service, conformité et historique des violations',
     compliance: 'Compliance',
     activeBreaches: 'Active breaches',
     objectives: 'Objectives',
@@ -420,7 +420,7 @@ export const fr: Translations = {
   },
   messagesPage: {
     title: 'Messages',
-    subtitle: 'Async feedback from every persona in the fleet',
+    subtitle: 'Retours asynchrones de chaque persona de la flotte',
     unread: 'Unread',
     read: 'Read',
     empty: 'No messages in this page.',
@@ -434,10 +434,10 @@ export const fr: Translations = {
     markAllRead: 'Mark all read',
   },
   observabilityPage: {
-    title: 'Observability',
-    subtitle: 'Performance metrics, cost tracking, and tool utilization',
+    title: 'Observabilité',
+    subtitle: 'Métriques de performance, suivi des coûts et utilisation des outils',
     tabPerformance: 'Performance',
-    tabUsage: 'Tool Usage',
+    tabUsage: 'Utilisation des outils',
   },
   agentsPage: {
     title: 'Agents',

@@ -270,9 +270,9 @@ export const hi: Translations = {
     observability: '\u0911\u092C\u094D\u091C\u093C\u0930\u094D\u0935\u0947\u092C\u093F\u0932\u093F\u091F\u0940',
     knowledge: '\u091C\u094D\u091E\u093E\u0928',
     settings: '\u0938\u0947\u091F\u093F\u0902\u0917\u094D\u0938',
-    leaderboard: 'Leaderboard',
+    leaderboard: 'लीडरबोर्ड',
     sla: 'SLA',
-    messages: 'Messages',
+    messages: 'संदेश',
     more:'\u0914\u0930',
     greeting: {
       morning: '\u0938\u0941\u092A\u094D\u0930\u092D\u093E\u0924',
@@ -330,8 +330,8 @@ export const hi: Translations = {
     },
   },
   memoriesPage: {
-    title: 'Memories',
-    subtitle: 'Learned patterns your agents apply automatically',
+    title: 'स्मृतियाँ',
+    subtitle: 'सीखे गए पैटर्न जिन्हें आपके एजेंट स्वचालित रूप से लागू करते हैं',
     totalCount: '{n} memories',
     filters: {
       all: 'All',
@@ -374,8 +374,8 @@ export const hi: Translations = {
     },
   },
   leaderboardPage: {
-    title: 'Leaderboard',
-    subtitle: 'Fleet ranking by composite performance',
+    title: 'लीडरबोर्ड',
+    subtitle: 'संयुक्त प्रदर्शन द्वारा फ्लीट रैंकिंग',
     rank: 'Rank',
     composite: 'Composite',
     radarTitle: 'Metrics profile',
@@ -394,7 +394,7 @@ export const hi: Translations = {
   },
   slaPage: {
     title: 'SLA',
-    subtitle: 'Service-level objectives, compliance, and breach history',
+    subtitle: 'सेवा-स्तर के उद्देश्य, अनुपालन, और उल्लंघन इतिहास',
     compliance: 'Compliance',
     activeBreaches: 'Active breaches',
     objectives: 'Objectives',
@@ -419,8 +419,8 @@ export const hi: Translations = {
     },
   },
   messagesPage: {
-    title: 'Messages',
-    subtitle: 'Async feedback from every persona in the fleet',
+    title: 'संदेश',
+    subtitle: 'फ्लीट में हर व्यक्तित्व से अतुल्यकालिक फीडबैक',
     unread: 'Unread',
     read: 'Read',
     empty: 'No messages in this page.',
@@ -434,10 +434,10 @@ export const hi: Translations = {
     markAllRead: 'Mark all read',
   },
   observabilityPage: {
-    title: 'Observability',
-    subtitle: 'Performance metrics, cost tracking, and tool utilization',
-    tabPerformance: 'Performance',
-    tabUsage: 'Tool Usage',
+    title: 'अवलोकनीयता',
+    subtitle: 'प्रदर्शन मीट्रिक्स, लागत ट्रैकिंग और टूल उपयोग',
+    tabPerformance: 'प्रदर्शन',
+    tabUsage: 'टूल उपयोग',
   },
   agentsPage: {
     title: '\u090F\u091C\u0947\u0902\u091F',

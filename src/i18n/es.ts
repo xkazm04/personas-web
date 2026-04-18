@@ -270,9 +270,9 @@ export const es: Translations = {
     observability: 'Observabilidad',
     knowledge: 'Conocimiento',
     settings: 'Configuraci\u00f3n',
-    leaderboard: 'Leaderboard',
+    leaderboard: 'Clasificación',
     sla: 'SLA',
-    messages: 'Messages',
+    messages: 'Mensajes',
     more:'M\u00e1s',
     greeting: {
       morning: 'Buenos D\u00edas',
@@ -330,8 +330,8 @@ export const es: Translations = {
     },
   },
   memoriesPage: {
-    title: 'Memories',
-    subtitle: 'Learned patterns your agents apply automatically',
+    title: 'Memorias',
+    subtitle: 'Patrones aprendidos que tus agentes aplican automáticamente',
     totalCount: '{n} memories',
     filters: {
       all: 'All',
@@ -374,8 +374,8 @@ export const es: Translations = {
     },
   },
   leaderboardPage: {
-    title: 'Leaderboard',
-    subtitle: 'Fleet ranking by composite performance',
+    title: 'Clasificación',
+    subtitle: 'Ranking de flota por rendimiento compuesto',
     rank: 'Rank',
     composite: 'Composite',
     radarTitle: 'Metrics profile',
@@ -394,7 +394,7 @@ export const es: Translations = {
   },
   slaPage: {
     title: 'SLA',
-    subtitle: 'Service-level objectives, compliance, and breach history',
+    subtitle: 'Objetivos de nivel de servicio, cumplimiento e historial de incumplimientos',
     compliance: 'Compliance',
     activeBreaches: 'Active breaches',
     objectives: 'Objectives',
@@ -419,8 +419,8 @@ export const es: Translations = {
     },
   },
   messagesPage: {
-    title: 'Messages',
-    subtitle: 'Async feedback from every persona in the fleet',
+    title: 'Mensajes',
+    subtitle: 'Comentarios asíncronos de cada persona en la flota',
     unread: 'Unread',
     read: 'Read',
     empty: 'No messages in this page.',
@@ -434,10 +434,10 @@ export const es: Translations = {
     markAllRead: 'Mark all read',
   },
   observabilityPage: {
-    title: 'Observability',
-    subtitle: 'Performance metrics, cost tracking, and tool utilization',
-    tabPerformance: 'Performance',
-    tabUsage: 'Tool Usage',
+    title: 'Observabilidad',
+    subtitle: 'Métricas de rendimiento, seguimiento de costos y uso de herramientas',
+    tabPerformance: 'Rendimiento',
+    tabUsage: 'Uso de herramientas',
   },
   agentsPage: {
     title: 'Agentes',

@@ -270,9 +270,9 @@ export const de: Translations = {
     observability: 'Observability',
     knowledge: 'Wissen',
     settings: 'Einstellungen',
-    leaderboard: 'Leaderboard',
+    leaderboard: 'Rangliste',
     sla: 'SLA',
-    messages: 'Messages',
+    messages: 'Nachrichten',
     more:'Mehr',
     greeting: {
       morning: 'Guten Morgen',
@@ -330,8 +330,8 @@ export const de: Translations = {
     },
   },
   memoriesPage: {
-    title: 'Memories',
-    subtitle: 'Learned patterns your agents apply automatically',
+    title: 'Erinnerungen',
+    subtitle: 'Gelernte Muster, die Ihre Agenten automatisch anwenden',
     totalCount: '{n} memories',
     filters: {
       all: 'All',
@@ -374,8 +374,8 @@ export const de: Translations = {
     },
   },
   leaderboardPage: {
-    title: 'Leaderboard',
-    subtitle: 'Fleet ranking by composite performance',
+    title: 'Rangliste',
+    subtitle: 'Flotten-Ranking nach Gesamtleistung',
     rank: 'Rank',
     composite: 'Composite',
     radarTitle: 'Metrics profile',
@@ -394,7 +394,7 @@ export const de: Translations = {
   },
   slaPage: {
     title: 'SLA',
-    subtitle: 'Service-level objectives, compliance, and breach history',
+    subtitle: 'Service-Level-Ziele, Compliance und Verletzungshistorie',
     compliance: 'Compliance',
     activeBreaches: 'Active breaches',
     objectives: 'Objectives',
@@ -419,8 +419,8 @@ export const de: Translations = {
     },
   },
   messagesPage: {
-    title: 'Messages',
-    subtitle: 'Async feedback from every persona in the fleet',
+    title: 'Nachrichten',
+    subtitle: 'Asynchrones Feedback von jeder Persona in der Flotte',
     unread: 'Unread',
     read: 'Read',
     empty: 'No messages in this page.',
@@ -435,9 +435,9 @@ export const de: Translations = {
   },
   observabilityPage: {
     title: 'Observability',
-    subtitle: 'Performance metrics, cost tracking, and tool utilization',
-    tabPerformance: 'Performance',
-    tabUsage: 'Tool Usage',
+    subtitle: 'Leistungsmetriken, Kostenverfolgung und Werkzeugnutzung',
+    tabPerformance: 'Leistung',
+    tabUsage: 'Werkzeugnutzung',
   },
   agentsPage: {
     title: 'Agenten',

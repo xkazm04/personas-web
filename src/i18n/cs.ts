@@ -270,9 +270,9 @@ export const cs: Translations = {
     observability: 'Pozorovatelnost',
     knowledge: 'Znalosti',
     settings: 'Nastaven\u00ed',
-    leaderboard: 'Leaderboard',
+    leaderboard: 'Žebříček',
     sla: 'SLA',
-    messages: 'Messages',
+    messages: 'Zprávy',
     more:'V\u00edce',
     greeting: {
       morning: 'Dobr\u00e9 r\u00e1no',
@@ -330,8 +330,8 @@ export const cs: Translations = {
     },
   },
   memoriesPage: {
-    title: 'Memories',
-    subtitle: 'Learned patterns your agents apply automatically',
+    title: 'Paměti',
+    subtitle: 'Naučené vzory, které vaši agenti aplikují automaticky',
     totalCount: '{n} memories',
     filters: {
       all: 'All',
@@ -374,8 +374,8 @@ export const cs: Translations = {
     },
   },
   leaderboardPage: {
-    title: 'Leaderboard',
-    subtitle: 'Fleet ranking by composite performance',
+    title: 'Žebříček',
+    subtitle: 'Žebříček flotily podle souhrnného výkonu',
     rank: 'Rank',
     composite: 'Composite',
     radarTitle: 'Metrics profile',
@@ -394,7 +394,7 @@ export const cs: Translations = {
   },
   slaPage: {
     title: 'SLA',
-    subtitle: 'Service-level objectives, compliance, and breach history',
+    subtitle: 'Cíle na úrovni služeb, soulad a historie porušení',
     compliance: 'Compliance',
     activeBreaches: 'Active breaches',
     objectives: 'Objectives',
@@ -419,8 +419,8 @@ export const cs: Translations = {
     },
   },
   messagesPage: {
-    title: 'Messages',
-    subtitle: 'Async feedback from every persona in the fleet',
+    title: 'Zprávy',
+    subtitle: 'Asynchronní zpětná vazba od každé persony ve flotile',
     unread: 'Unread',
     read: 'Read',
     empty: 'No messages in this page.',
@@ -434,10 +434,10 @@ export const cs: Translations = {
     markAllRead: 'Mark all read',
   },
   observabilityPage: {
-    title: 'Observability',
-    subtitle: 'Performance metrics, cost tracking, and tool utilization',
-    tabPerformance: 'Performance',
-    tabUsage: 'Tool Usage',
+    title: 'Pozorovatelnost',
+    subtitle: 'Metriky výkonu, sledování nákladů a využití nástrojů',
+    tabPerformance: 'Výkon',
+    tabUsage: 'Využití nástrojů',
   },
   agentsPage: {
     title: 'Agenti',

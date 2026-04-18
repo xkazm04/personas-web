@@ -270,9 +270,9 @@ export const ru: Translations = {
     observability: '\u041D\u0430\u0431\u043B\u044E\u0434\u0430\u0435\u043C\u043E\u0441\u0442\u044C',
     knowledge: '\u0411\u0430\u0437\u0430 \u0437\u043D\u0430\u043D\u0438\u0439',
     settings: '\u041D\u0430\u0441\u0442\u0440\u043E\u0439\u043A\u0438',
-    leaderboard: 'Leaderboard',
+    leaderboard: 'Рейтинг',
     sla: 'SLA',
-    messages: 'Messages',
+    messages: 'Сообщения',
     more:'\u0415\u0449\u0451',
     greeting: {
       morning: '\u0414\u043E\u0431\u0440\u043E\u0435 \u0443\u0442\u0440\u043E',
@@ -330,8 +330,8 @@ export const ru: Translations = {
     },
   },
   memoriesPage: {
-    title: 'Memories',
-    subtitle: 'Learned patterns your agents apply automatically',
+    title: 'Память',
+    subtitle: 'Выученные шаблоны, которые агенты применяют автоматически',
     totalCount: '{n} memories',
     filters: {
       all: 'All',
@@ -374,8 +374,8 @@ export const ru: Translations = {
     },
   },
   leaderboardPage: {
-    title: 'Leaderboard',
-    subtitle: 'Fleet ranking by composite performance',
+    title: 'Рейтинг',
+    subtitle: 'Рейтинг флота по совокупной производительности',
     rank: 'Rank',
     composite: 'Composite',
     radarTitle: 'Metrics profile',
@@ -394,7 +394,7 @@ export const ru: Translations = {
   },
   slaPage: {
     title: 'SLA',
-    subtitle: 'Service-level objectives, compliance, and breach history',
+    subtitle: 'Цели уровня обслуживания, соответствие и история нарушений',
     compliance: 'Compliance',
     activeBreaches: 'Active breaches',
     objectives: 'Objectives',
@@ -419,8 +419,8 @@ export const ru: Translations = {
     },
   },
   messagesPage: {
-    title: 'Messages',
-    subtitle: 'Async feedback from every persona in the fleet',
+    title: 'Сообщения',
+    subtitle: 'Асинхронные отзывы от каждой персоны во флоте',
     unread: 'Unread',
     read: 'Read',
     empty: 'No messages in this page.',
@@ -434,10 +434,10 @@ export const ru: Translations = {
     markAllRead: 'Mark all read',
   },
   observabilityPage: {
-    title: 'Observability',
-    subtitle: 'Performance metrics, cost tracking, and tool utilization',
-    tabPerformance: 'Performance',
-    tabUsage: 'Tool Usage',
+    title: 'Наблюдаемость',
+    subtitle: 'Метрики производительности, отслеживание расходов и использование инструментов',
+    tabPerformance: 'Производительность',
+    tabUsage: 'Использование инструментов',
   },
   agentsPage: {
     title: '\u0410\u0433\u0435\u043D\u0442\u044B',

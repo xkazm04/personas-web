@@ -270,9 +270,9 @@ export const vi: Translations = {
     observability: 'Gi\u00e1m s\u00e1t',
     knowledge: 'Ki\u1ebfn th\u1ee9c',
     settings: 'C\u00e0i \u0111\u1eb7t',
-    leaderboard: 'Leaderboard',
+    leaderboard: 'Bảng xếp hạng',
     sla: 'SLA',
-    messages: 'Messages',
+    messages: 'Tin nhắn',
     more:'Th\u00eam',
     greeting: {
       morning: 'Ch\u00e0o bu\u1ed5i s\u00e1ng',
@@ -330,8 +330,8 @@ export const vi: Translations = {
     },
   },
   memoriesPage: {
-    title: 'Memories',
-    subtitle: 'Learned patterns your agents apply automatically',
+    title: 'Bộ nhớ',
+    subtitle: 'Các mẫu đã học mà tác nhân của bạn áp dụng tự động',
     totalCount: '{n} memories',
     filters: {
       all: 'All',
@@ -374,8 +374,8 @@ export const vi: Translations = {
     },
   },
   leaderboardPage: {
-    title: 'Leaderboard',
-    subtitle: 'Fleet ranking by composite performance',
+    title: 'Bảng xếp hạng',
+    subtitle: 'Xếp hạng đội ngũ theo hiệu suất tổng hợp',
     rank: 'Rank',
     composite: 'Composite',
     radarTitle: 'Metrics profile',
@@ -394,7 +394,7 @@ export const vi: Translations = {
   },
   slaPage: {
     title: 'SLA',
-    subtitle: 'Service-level objectives, compliance, and breach history',
+    subtitle: 'Mục tiêu mức dịch vụ, tuân thủ và lịch sử vi phạm',
     compliance: 'Compliance',
     activeBreaches: 'Active breaches',
     objectives: 'Objectives',
@@ -419,8 +419,8 @@ export const vi: Translations = {
     },
   },
   messagesPage: {
-    title: 'Messages',
-    subtitle: 'Async feedback from every persona in the fleet',
+    title: 'Tin nhắn',
+    subtitle: 'Phản hồi không đồng bộ từ mỗi persona trong đội',
     unread: 'Unread',
     read: 'Read',
     empty: 'No messages in this page.',
@@ -434,10 +434,10 @@ export const vi: Translations = {
     markAllRead: 'Mark all read',
   },
   observabilityPage: {
-    title: 'Observability',
-    subtitle: 'Performance metrics, cost tracking, and tool utilization',
-    tabPerformance: 'Performance',
-    tabUsage: 'Tool Usage',
+    title: 'Khả năng quan sát',
+    subtitle: 'Chỉ số hiệu suất, theo dõi chi phí và sử dụng công cụ',
+    tabPerformance: 'Hiệu suất',
+    tabUsage: 'Sử dụng công cụ',
   },
   agentsPage: {
     title: 'T\u00e1c nh\u00e2n',
