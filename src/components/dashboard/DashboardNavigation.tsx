@@ -15,7 +15,6 @@ import {
   Mail,
   Shield,
   Trophy,
-  Heart,
 } from "lucide-react";
 import { useSystemStore } from "@/stores/systemStore";
 import { useReviewStore } from "@/stores/reviewStore";
@@ -33,7 +32,6 @@ export const navItemDefs = [
   { key: "reviews", labelKey: "reviews" as const, icon: ClipboardCheck, href: "/dashboard/reviews" },
   { key: "messages", labelKey: "messages" as const, icon: Mail, href: "/dashboard/messages" },
   { key: "observability", labelKey: "observability" as const, icon: Activity, href: "/dashboard/observability" },
-  { key: "health", labelKey: "health" as const, icon: Heart, href: "/dashboard/health" },
   { key: "leaderboard", labelKey: "leaderboard" as const, icon: Trophy, href: "/dashboard/leaderboard" },
   { key: "sla", labelKey: "sla" as const, icon: Shield, href: "/dashboard/sla" },
   { key: "usage", labelKey: "usage" as const, icon: BarChart3, href: "/dashboard/usage" },

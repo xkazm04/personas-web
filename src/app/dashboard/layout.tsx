@@ -17,7 +17,6 @@ const SCOPED_ROUTE_PREFIXES = [
   "/dashboard/usage",
   "/dashboard/knowledge",
   "/dashboard/memories",
-  "/dashboard/health",
   "/dashboard/leaderboard",
   "/dashboard/sla",
   "/dashboard/messages",

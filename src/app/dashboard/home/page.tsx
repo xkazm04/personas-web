@@ -11,7 +11,6 @@ import {
   Activity,
   ArrowUpRight,
   Mail,
-  ShieldCheck,
 } from "lucide-react";
 
 const TrafficChart = dynamic(
@@ -39,7 +38,6 @@ import StalenessIndicator from "@/components/dashboard/StalenessIndicator";
 import {
   MOCK_FLEET_RECOMMENDATION,
   MOCK_GLOBAL_EXECUTIONS,
-  MOCK_HEALTH_DIGEST,
   MOCK_UNREAD_MESSAGES,
 } from "@/lib/mock-dashboard-data";
 import { usePersonaStore } from "@/stores/personaStore";
@@ -206,13 +204,6 @@ export default function DashboardHomePage() {
           value={MOCK_UNREAD_MESSAGES}
           accent="rose"
           href="/dashboard/messages"
-        />
-        <StatBadge
-          icon={ShieldCheck}
-          label={t.dashboard.fleetHealth}
-          value={`${MOCK_HEALTH_DIGEST.overallScore}%`}
-          accent="blue"
-          href="/dashboard/health"
         />
       </motion.div>
 

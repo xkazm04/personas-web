@@ -190,7 +190,6 @@ export interface Translations {
     knowledge: string;
     settings: string;
     memories: string;
-    health: string;
     leaderboard: string;
     sla: string;
     messages: string;
@@ -280,38 +279,6 @@ export interface Translations {
       cancel: string;
       apply: string;
       allResolved: string;
-    };
-  };
-  healthPage: {
-    title: string;
-    subtitle: string;
-    cascade: {
-      title: string;
-      subtitle: string;
-      legend: {
-        healthy: string;
-        degraded: string;
-        failing: string;
-      };
-    };
-    burnRate: {
-      title: string;
-      subtitle: string;
-      actual: string;
-      projected: string;
-      target: string;
-    };
-    predictive: {
-      title: string;
-      subtitle: string;
-      probability: string;
-      etaLabel: string;
-      severity: {
-        info: string;
-        warning: string;
-        critical: string;
-      };
-      empty: string;
     };
   };
   reviewsPage: {
@@ -830,7 +797,6 @@ export const en: Translations = {
     knowledge: 'Knowledge',
     settings: 'Settings',
     memories: 'Memories',
-    health: 'Health',
     leaderboard: 'Leaderboard',
     sla: 'SLA',
     messages: 'Messages',
@@ -920,38 +886,6 @@ export const en: Translations = {
       cancel: 'Cancel',
       apply: 'Apply',
       allResolved: 'All conflicts resolved',
-    },
-  },
-  healthPage: {
-    title: 'Fleet Health',
-    subtitle: 'Monitoring, cascade risk, and predictive incidents',
-    cascade: {
-      title: 'Cascade risk',
-      subtitle: 'Dependency graph with failure propagation weight',
-      legend: {
-        healthy: 'Healthy',
-        degraded: 'Degraded',
-        failing: 'Failing',
-      },
-    },
-    burnRate: {
-      title: 'Burn rate',
-      subtitle: 'Cumulative spend vs. projection',
-      actual: 'Actual',
-      projected: 'Projected',
-      target: 'Target',
-    },
-    predictive: {
-      title: 'Predictive alerts',
-      subtitle: 'Forward-looking incidents ranked by probability',
-      probability: '{n}% likely',
-      etaLabel: 'in {t}',
-      severity: {
-        info: 'Info',
-        warning: 'Warning',
-        critical: 'Critical',
-      },
-      empty: 'No predicted incidents — fleet trending stable.',
     },
   },
   reviewsPage: {

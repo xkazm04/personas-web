@@ -272,7 +272,6 @@ export const ru: Translations = {
     knowledge: '\u0411\u0430\u0437\u0430 \u0437\u043D\u0430\u043D\u0438\u0439',
     settings: '\u041D\u0430\u0441\u0442\u0440\u043E\u0439\u043A\u0438',
     memories: 'Memories',
-    health: 'Health',
     leaderboard: 'Leaderboard',
     sla: 'SLA',
     messages: 'Messages',
@@ -362,38 +361,6 @@ export const ru: Translations = {
       cancel: 'Cancel',
       apply: 'Apply',
       allResolved: 'All conflicts resolved',
-    },
-  },
-  healthPage: {
-    title: 'Fleet Health',
-    subtitle: 'Monitoring, cascade risk, and predictive incidents',
-    cascade: {
-      title: 'Cascade risk',
-      subtitle: 'Dependency graph with failure propagation weight',
-      legend: {
-        healthy: 'Healthy',
-        degraded: 'Degraded',
-        failing: 'Failing',
-      },
-    },
-    burnRate: {
-      title: 'Burn rate',
-      subtitle: 'Cumulative spend vs. projection',
-      actual: 'Actual',
-      projected: 'Projected',
-      target: 'Target',
-    },
-    predictive: {
-      title: 'Predictive alerts',
-      subtitle: 'Forward-looking incidents ranked by probability',
-      probability: '{n}% likely',
-      etaLabel: 'in {t}',
-      severity: {
-        info: 'Info',
-        warning: 'Warning',
-        critical: 'Critical',
-      },
-      empty: 'No predicted incidents — fleet trending stable.',
     },
   },
   reviewsPage: {
