@@ -267,7 +267,6 @@ export const ko: Translations = {
     executions: '\uc2e4\ud589',
     events: '\uc774\ubca4\ud2b8',
     reviews: '\ub9ac\ubdf0',
-    playground: 'Playground',
     observability: '\uad00\uce21\uc131',
     usage: '\uc0ac\uc6a9\ub7c9',
     knowledge: '\uc9c0\uc2dd',

@@ -267,7 +267,6 @@ export const es: Translations = {
     executions: 'Ejecuciones',
     events: 'Eventos',
     reviews: 'Revisiones',
-    playground: 'Playground',
     observability: 'Observabilidad',
     usage: 'Uso',
     knowledge: 'Conocimiento',

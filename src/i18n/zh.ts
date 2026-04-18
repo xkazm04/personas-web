@@ -267,7 +267,6 @@ export const zh: Translations = {
     executions: '\u6267\u884C',
     events: '\u4E8B\u4EF6',
     reviews: '\u5BA1\u67E5',
-    playground: '\u6F14\u7EC3\u573A',
     observability: '\u53EF\u89C2\u6D4B\u6027',
     usage: '\u7528\u91CF',
     knowledge: '\u77E5\u8BC6\u5E93',

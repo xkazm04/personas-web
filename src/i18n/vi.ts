@@ -267,7 +267,6 @@ export const vi: Translations = {
     executions: 'Th\u1ef1c thi',
     events: 'S\u1ef1 ki\u1ec7n',
     reviews: '\u0110\u00e1nh gi\u00e1',
-    playground: 'Playground',
     observability: 'Gi\u00e1m s\u00e1t',
     usage: 'S\u1eed d\u1ee5ng',
     knowledge: 'Ki\u1ebfn th\u1ee9c',

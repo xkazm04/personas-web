@@ -185,7 +185,6 @@ export interface Translations {
     executions: string;
     events: string;
     reviews: string;
-    playground: string;
     observability: string;
     usage: string;
     knowledge: string;
@@ -826,7 +825,6 @@ export const en: Translations = {
     executions: 'Executions',
     events: 'Events',
     reviews: 'Reviews',
-    playground: 'Playground',
     observability: 'Observability',
     usage: 'Usage',
     knowledge: 'Knowledge',

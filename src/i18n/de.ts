@@ -267,7 +267,6 @@ export const de: Translations = {
     executions: 'Ausf\u00fchrungen',
     events: 'Events',
     reviews: 'Reviews',
-    playground: 'Playground',
     observability: 'Observability',
     usage: 'Nutzung',
     knowledge: 'Wissen',

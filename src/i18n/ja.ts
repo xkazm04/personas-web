@@ -267,7 +267,6 @@ export const ja: Translations = {
     executions: '\u5b9f\u884c',
     events: '\u30a4\u30d9\u30f3\u30c8',
     reviews: '\u30ec\u30d3\u30e5\u30fc',
-    playground: '\u30d7\u30ec\u30a4\u30b0\u30e9\u30a6\u30f3\u30c9',
     observability: '\u30aa\u30d6\u30b6\u30fc\u30d0\u30d3\u30ea\u30c6\u30a3',
     usage: '\u5229\u7528\u72b6\u6cc1',
     knowledge: '\u30ca\u30ec\u30c3\u30b8',

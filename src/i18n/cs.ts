@@ -267,7 +267,6 @@ export const cs: Translations = {
     executions: 'Spou\u0161t\u011bn\u00ed',
     events: 'Ud\u00e1losti',
     reviews: 'Recenze',
-    playground: 'Playground',
     observability: 'Pozorovatelnost',
     usage: 'Vyu\u017eit\u00ed',
     knowledge: 'Znalosti',

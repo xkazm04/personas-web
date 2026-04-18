@@ -267,7 +267,6 @@ export const id: Translations = {
     executions: 'Eksekusi',
     events: 'Event',
     reviews: 'Tinjauan',
-    playground: 'Playground',
     observability: 'Observabilitas',
     usage: 'Penggunaan',
     knowledge: 'Pengetahuan',

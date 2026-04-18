@@ -267,7 +267,6 @@ export const fr: Translations = {
     executions: 'Ex\u00e9cutions',
     events: '\u00c9v\u00e9nements',
     reviews: 'Revues',
-    playground: 'Bac \u00e0 sable',
     observability: 'Observabilit\u00e9',
     usage: 'Utilisation',
     knowledge: 'Connaissances',
