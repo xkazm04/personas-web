@@ -270,7 +270,6 @@ export const ar: Translations = {
     observability: '\u0627\u0644\u0645\u0631\u0627\u0642\u0628\u0629',
     knowledge: '\u0627\u0644\u0645\u0639\u0631\u0641\u0629',
     settings: '\u0627\u0644\u0625\u0639\u062F\u0627\u062F\u0627\u062A',
-    memories: 'Memories',
     leaderboard: 'Leaderboard',
     sla: 'SLA',
     messages: 'Messages',

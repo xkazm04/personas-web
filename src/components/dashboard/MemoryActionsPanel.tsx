@@ -177,7 +177,7 @@ export default function MemoryActionsPanel() {
       </div>
 
       <Link
-        href="/dashboard/memories"
+        href="/dashboard/knowledge"
         className="mt-3 inline-flex items-center gap-1 text-sm font-medium text-brand-purple transition-colors hover:text-purple-300"
       >
         {t.memoriesPage.seeAll}

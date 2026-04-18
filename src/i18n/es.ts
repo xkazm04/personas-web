@@ -270,7 +270,6 @@ export const es: Translations = {
     observability: 'Observabilidad',
     knowledge: 'Conocimiento',
     settings: 'Configuraci\u00f3n',
-    memories: 'Memories',
     leaderboard: 'Leaderboard',
     sla: 'SLA',
     messages: 'Messages',

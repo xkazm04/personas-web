@@ -270,7 +270,6 @@ export const bn: Translations = {
     observability: '\u0985\u09ac\u099c\u09be\u09b0\u09cd\u09ad\u09c7\u09ac\u09bf\u09b2\u09bf\u099f\u09bf',
     knowledge: '\u099c\u09cd\u099e\u09be\u09a8',
     settings: '\u09b8\u09c7\u099f\u09bf\u0982\u09b8',
-    memories: 'Memories',
     leaderboard: 'Leaderboard',
     sla: 'SLA',
     messages: 'Messages',

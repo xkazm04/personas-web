@@ -188,7 +188,6 @@ export interface Translations {
     observability: string;
     knowledge: string;
     settings: string;
-    memories: string;
     leaderboard: string;
     sla: string;
     messages: string;
@@ -800,7 +799,6 @@ export const en: Translations = {
     observability: 'Observability',
     knowledge: 'Knowledge',
     settings: 'Settings',
-    memories: 'Memories',
     leaderboard: 'Leaderboard',
     sla: 'SLA',
     messages: 'Messages',

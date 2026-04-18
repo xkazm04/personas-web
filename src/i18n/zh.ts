@@ -270,7 +270,6 @@ export const zh: Translations = {
     observability: '\u53EF\u89C2\u6D4B\u6027',
     knowledge: '\u77E5\u8BC6\u5E93',
     settings: '\u8BBE\u7F6E',
-    memories: 'Memories',
     leaderboard: 'Leaderboard',
     sla: 'SLA',
     messages: 'Messages',

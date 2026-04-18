@@ -270,7 +270,6 @@ export const id: Translations = {
     observability: 'Observabilitas',
     knowledge: 'Pengetahuan',
     settings: 'Pengaturan',
-    memories: 'Memories',
     leaderboard: 'Leaderboard',
     sla: 'SLA',
     messages: 'Messages',

@@ -270,7 +270,6 @@ export const ru: Translations = {
     observability: '\u041D\u0430\u0431\u043B\u044E\u0434\u0430\u0435\u043C\u043E\u0441\u0442\u044C',
     knowledge: '\u0411\u0430\u0437\u0430 \u0437\u043D\u0430\u043D\u0438\u0439',
     settings: '\u041D\u0430\u0441\u0442\u0440\u043E\u0439\u043A\u0438',
-    memories: 'Memories',
     leaderboard: 'Leaderboard',
     sla: 'SLA',
     messages: 'Messages',

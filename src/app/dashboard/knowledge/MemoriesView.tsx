@@ -5,19 +5,16 @@ import { motion } from "framer-motion";
 import {
   AlertTriangle,
   Bell,
-  Brain,
   Calendar,
   Clock,
   GitBranch,
   Settings,
 } from "lucide-react";
-import GradientText from "@/components/GradientText";
 import FilterBar from "@/components/dashboard/FilterBar";
-import StalenessIndicator from "@/components/dashboard/StalenessIndicator";
 import BatchReviewModal, {
   type BatchDecision,
 } from "@/components/dashboard/BatchReviewModal";
-import { fadeUp, staggerContainer } from "@/lib/animations";
+import { fadeUp } from "@/lib/animations";
 import {
   MOCK_MEMORIES,
   type MemoryItem,
@@ -156,10 +153,9 @@ function MemoryCard({ item }: { item: MemoryItem }) {
   );
 }
 
-export default function MemoriesPage() {
+export default function MemoriesView() {
   const { t } = useTranslation();
   const [filter, setFilter] = useState<FilterKey>("all");
-  const [fetchedAt] = useState(() => Date.now());
   const [resolvedIds, setResolvedIds] = useState<Set<string>>(
     () => new Set<string>(),
   );
@@ -222,24 +218,11 @@ export default function MemoriesPage() {
   );
 
   return (
-    <motion.div initial="hidden" animate="visible" variants={staggerContainer}>
-      <motion.div variants={fadeUp} className="mb-6 flex items-start gap-3">
-        <div className="flex h-10 w-10 items-center justify-center rounded-xl border border-brand-purple/25 bg-brand-purple/10">
-          <Brain className="h-5 w-5 text-brand-purple" />
-        </div>
-        <div className="flex-1">
-          <h1 className="text-2xl font-bold tracking-tight">
-            <GradientText variant="silver">{t.memoriesPage.title}</GradientText>
-          </h1>
-          <p className="mt-1 text-base text-muted-dark">
-            {t.memoriesPage.subtitle}
-          </p>
-        </div>
-        <StalenessIndicator fetchedAt={fetchedAt} className="mt-2" />
-      </motion.div>
-
+    <div>
       <motion.div
         variants={fadeUp}
+        initial="hidden"
+        animate="visible"
         className="mb-3 flex flex-wrap items-center gap-2"
       >
         <FilterBar
@@ -261,23 +244,18 @@ export default function MemoriesPage() {
         )}
       </motion.div>
 
-      <motion.p variants={fadeUp} className="mb-4 text-sm text-muted-dark tabular-nums">
-        {totalLabel}
-      </motion.p>
+      <p className="mb-4 text-sm text-muted-dark tabular-nums">{totalLabel}</p>
 
       {filtered.length === 0 ? (
         <p className="py-12 text-center text-sm text-muted-dark">
           {t.memoriesPage.empty}
         </p>
       ) : (
-        <motion.div
-          variants={fadeUp}
-          className="max-h-[calc(100vh-320px)] space-y-2 overflow-y-auto pr-2"
-        >
+        <div className="max-h-[calc(100vh-320px)] space-y-2 overflow-y-auto pr-2">
           {filtered.map((item) => (
             <MemoryCard key={item.id} item={item} />
           ))}
-        </motion.div>
+        </div>
       )}
 
       <BatchReviewModal
@@ -286,6 +264,6 @@ export default function MemoriesPage() {
         onClose={() => setModalOpen(false)}
         onApply={handleApply}
       />
-    </motion.div>
+    </div>
   );
 }

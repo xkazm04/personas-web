@@ -34,7 +34,6 @@ export const navItemDefs = [
   { key: "leaderboard", labelKey: "leaderboard" as const, icon: Trophy, href: "/dashboard/leaderboard" },
   { key: "sla", labelKey: "sla" as const, icon: Shield, href: "/dashboard/sla" },
   { key: "knowledge", labelKey: "knowledge" as const, icon: Brain, href: "/dashboard/knowledge" },
-  { key: "memories", labelKey: "memories" as const, icon: Brain, href: "/dashboard/memories" },
   { key: "settings", labelKey: "settings" as const, icon: Settings, href: "/dashboard/settings" },
 ] as const;
 

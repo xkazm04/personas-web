@@ -270,7 +270,6 @@ export const vi: Translations = {
     observability: 'Gi\u00e1m s\u00e1t',
     knowledge: 'Ki\u1ebfn th\u1ee9c',
     settings: 'C\u00e0i \u0111\u1eb7t',
-    memories: 'Memories',
     leaderboard: 'Leaderboard',
     sla: 'SLA',
     messages: 'Messages',

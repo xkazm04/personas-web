@@ -270,7 +270,6 @@ export const ko: Translations = {
     observability: '\uad00\uce21\uc131',
     knowledge: '\uc9c0\uc2dd',
     settings: '\uc124\uc815',
-    memories: 'Memories',
     leaderboard: 'Leaderboard',
     sla: 'SLA',
     messages: 'Messages',

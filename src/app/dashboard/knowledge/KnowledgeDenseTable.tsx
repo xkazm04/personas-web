@@ -264,7 +264,7 @@ function TableRow({
         group flex items-center w-full text-left transition-all duration-150
         ${index % 2 === 0 ? "bg-transparent" : "bg-white/[0.015]"}
         ${isSelected ? "bg-white/[0.05] ring-1 ring-cyan-500/20" : "hover:bg-white/[0.04]"}
-        border-b border-white/[0.03]
+        border-b border-glass
       `}
     >
       {/* Type Icon */}
@@ -372,7 +372,7 @@ function BottomDetailPanel({
       animate={{ height: "auto", opacity: 1 }}
       exit={{ height: 0, opacity: 0 }}
       transition={{ duration: 0.25, ease: [0.22, 1, 0.36, 1] }}
-      className="overflow-hidden border-t border-white/[0.06] bg-white/[0.02] shrink-0"
+      className="overflow-hidden border-t border-glass bg-white/[0.02] shrink-0"
     >
       <div className="p-3 flex items-start gap-4">
         {/* Left: Identity */}
@@ -647,10 +647,10 @@ export default function KnowledgeDenseTable() {
       {/* Table Container */}
       <motion.div
         variants={fadeUp}
-        className="flex-1 min-h-0 flex flex-col rounded-xl border border-white/[0.06] overflow-hidden bg-white/[0.01] dot-grid"
+        className="flex-1 min-h-0 flex flex-col rounded-xl border border-glass overflow-hidden bg-white/[0.01] dot-grid"
       >
         {/* Table Header */}
-        <div className="flex items-center border-b border-white/[0.06] bg-white/[0.02] shrink-0">
+        <div className="flex items-center border-b border-glass bg-white/[0.02] shrink-0">
           {COLUMNS.map((col) => (
             <SortHeader
               key={col.key}

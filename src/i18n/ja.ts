@@ -270,7 +270,6 @@ export const ja: Translations = {
     observability: '\u30aa\u30d6\u30b6\u30fc\u30d0\u30d3\u30ea\u30c6\u30a3',
     knowledge: '\u30ca\u30ec\u30c3\u30b8',
     settings: '\u8a2d\u5b9a',
-    memories: 'Memories',
     leaderboard: 'Leaderboard',
     sla: 'SLA',
     messages: 'Messages',

@@ -2,16 +2,18 @@
 
 import { useState } from "react";
 import { motion } from "framer-motion";
-import { Table2, GitFork } from "lucide-react";
+import { Table2, GitFork, Brain } from "lucide-react";
 import GradientText from "@/components/GradientText";
 import KnowledgeDenseTable from "./KnowledgeDenseTable";
 import KnowledgeClusterGraph from "./KnowledgeClusterGraph";
+import MemoriesView from "./MemoriesView";
 
-type ViewVariant = "dense-table" | "cluster-graph";
+type ViewVariant = "dense-table" | "cluster-graph" | "memories";
 
 const VIEW_VARIANTS: { key: ViewVariant; label: string; icon: React.ElementType }[] = [
   { key: "dense-table", label: "Dense Table", icon: Table2 },
   { key: "cluster-graph", label: "Graph", icon: GitFork },
+  { key: "memories", label: "Memories", icon: Brain },
 ];
 
 export default function KnowledgeGraphPage() {
@@ -34,7 +36,7 @@ export default function KnowledgeGraphPage() {
           </p>
         </div>
 
-        <div className="flex items-center gap-1 rounded-xl border border-white/[0.06] bg-white/[0.02] p-1">
+        <div className="flex items-center gap-1 rounded-xl border border-glass bg-white/[0.02] p-1">
           {VIEW_VARIANTS.map((v) => {
             const VIcon = v.icon;
             return (
@@ -55,7 +57,9 @@ export default function KnowledgeGraphPage() {
         </div>
       </motion.div>
 
-      {activeVariant === "dense-table" ? <KnowledgeDenseTable /> : <KnowledgeClusterGraph />}
+      {activeVariant === "dense-table" && <KnowledgeDenseTable />}
+      {activeVariant === "cluster-graph" && <KnowledgeClusterGraph />}
+      {activeVariant === "memories" && <MemoriesView />}
     </div>
   );
 }
