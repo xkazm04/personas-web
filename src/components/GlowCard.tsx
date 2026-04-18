@@ -64,7 +64,6 @@ export default function GlowCard({
         bg-gradient-to-br from-white/[0.035] to-white/[0.008]
         ${colors.border} ${colors.glow}
         transition-[border-color,box-shadow] duration-500
-        hover:-translate-y-1.5 will-change-transform
         ${highlighted ? "ring-1 ring-brand-purple/20 scale-[1.02]" : ""}
         ${textureClass[texture]}
         ${className}
