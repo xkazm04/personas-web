@@ -18,6 +18,8 @@
   --color-muted: var(--muted);
   --color-muted-dark: var(--muted-dark);
   --color-muted-foreground: var(--muted-foreground);
+  --color-text-secondary: var(--text-secondary);
+  --color-text-disabled: var(--text-disabled);
   --color-primary: var(--primary);
   --color-secondary: var(--secondary);
   --color-accent: var(--accent);
@@ -27,6 +29,9 @@
   --color-status-warning: var(--status-warning);
   --color-status-error: var(--status-error);
   --color-status-info: var(--status-info);
+  --color-glass: var(--border-glass);
+  --color-glass-hover: var(--border-glass-hover);
+  --color-glass-strong: var(--border-glass-strong);
   --font-sans: var(--font-sans);
   --font-mono: var(--font-mono);
 
@@ -620,6 +625,10 @@ html {
   @apply focus-visible:ring-2 focus-visible:ring-brand-cyan/50 focus-visible:ring-offset-2 focus-visible:ring-offset-black focus:outline-none focus-visible:rounded-sm;
 }
 
+.svg-focus-parent:focus-visible > .svg-focus-ring {
+  opacity: 1;
+}
+
 /* Focus visible ring for accessibility */
 *:focus-visible {
   outline: 2px solid rgba(6, 182, 212, 0.4);
@@ -757,16 +766,58 @@ img {
 }
 
 /* ══════════════════════════════════════════════════════════════════════════
+   Windows High Contrast Mode — map semantic tokens to system colors so all
+   text remains visible regardless of user-chosen contrast scheme.
+   ══════════════════════════════════════════════════════════════════════════ */
+
+@media (forced-colors: active) {
+  :root {
+    --foreground: CanvasText;
+    --muted: GrayText;
+    --muted-dark: GrayText;
+    --muted-foreground: GrayText;
+    --text-secondary: GrayText;
+    --text-disabled: GrayText;
+    --background: Canvas;
+    --border: ButtonBorder;
+    --primary: LinkText;
+    --accent: Highlight;
+    --brand-cyan: LinkText;
+    --brand-purple: Highlight;
+    --brand-emerald: LinkText;
+  }
+
+  .glass,
+  .glow-card,
+  .noise::before,
+  .shimmer-surface::before {
+    border: 1px solid ButtonBorder;
+    background: Canvas;
+  }
+
+  .glow-card::before,
+  .glow-card::after {
+    display: none;
+  }
+
+  svg text {
+    fill: CanvasText;
+  }
+}
+
+/* ══════════════════════════════════════════════════════════════════════════
    Force-dark islands — used on panels with dark interior content
    (Leonardo illustrations, terminal visualizations) so their interior
    text stays readable regardless of the page theme.
    ══════════════════════════════════════════════════════════════════════════ */
 .force-dark {
   --background: #0a0e14;
-  --foreground: #e0f2fe;
-  --muted: #a8ccd8;
-  --muted-dark: #8ab8c8;
-  --muted-foreground: #7da5b8;
+  --foreground: #e8f5fc;
+  --muted: #c8dfea;
+  --muted-dark: #b0d0de;
+  --muted-foreground: #a0c2d0;
+  --text-secondary: #8cb0c2;
+  --text-disabled: #7898aa;
   --surface-overlay: 255, 255, 255;
-  color: #e0f2fe;
+  color: #e8f5fc;
 }
