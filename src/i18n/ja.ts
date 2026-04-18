@@ -268,7 +268,6 @@ export const ja: Translations = {
     events: '\u30a4\u30d9\u30f3\u30c8',
     reviews: '\u30ec\u30d3\u30e5\u30fc',
     observability: '\u30aa\u30d6\u30b6\u30fc\u30d0\u30d3\u30ea\u30c6\u30a3',
-    usage: '\u5229\u7528\u72b6\u6cc1',
     knowledge: '\u30ca\u30ec\u30c3\u30b8',
     settings: '\u8a2d\u5b9a',
     memories: 'Memories',
@@ -434,6 +433,12 @@ export const ja: Translations = {
       page: 'Page {n} of {total}',
     },
     markAllRead: 'Mark all read',
+  },
+  observabilityPage: {
+    title: 'Observability',
+    subtitle: 'Performance metrics, cost tracking, and tool utilization',
+    tabPerformance: 'Performance',
+    tabUsage: 'Tool Usage',
   },
   agentsPage: {
     title: '\u30a8\u30fc\u30b8\u30a7\u30f3\u30c8',

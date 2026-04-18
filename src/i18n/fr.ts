@@ -268,7 +268,6 @@ export const fr: Translations = {
     events: '\u00c9v\u00e9nements',
     reviews: 'Revues',
     observability: 'Observabilit\u00e9',
-    usage: 'Utilisation',
     knowledge: 'Connaissances',
     settings: 'Param\u00e8tres',
     memories: 'Memories',
@@ -434,6 +433,12 @@ export const fr: Translations = {
       page: 'Page {n} of {total}',
     },
     markAllRead: 'Mark all read',
+  },
+  observabilityPage: {
+    title: 'Observability',
+    subtitle: 'Performance metrics, cost tracking, and tool utilization',
+    tabPerformance: 'Performance',
+    tabUsage: 'Tool Usage',
   },
   agentsPage: {
     title: 'Agents',

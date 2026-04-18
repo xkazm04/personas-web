@@ -268,7 +268,6 @@ export const de: Translations = {
     events: 'Events',
     reviews: 'Reviews',
     observability: 'Observability',
-    usage: 'Nutzung',
     knowledge: 'Wissen',
     settings: 'Einstellungen',
     memories: 'Memories',
@@ -434,6 +433,12 @@ export const de: Translations = {
       page: 'Page {n} of {total}',
     },
     markAllRead: 'Mark all read',
+  },
+  observabilityPage: {
+    title: 'Observability',
+    subtitle: 'Performance metrics, cost tracking, and tool utilization',
+    tabPerformance: 'Performance',
+    tabUsage: 'Tool Usage',
   },
   agentsPage: {
     title: 'Agenten',

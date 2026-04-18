@@ -9,9 +9,8 @@ import {
   Loader2,
   Lightbulb,
 } from "lucide-react";
-import { fadeUp, staggerContainer } from "@/lib/animations";
+import { fadeUp } from "@/lib/animations";
 import GlowCard from "@/components/GlowCard";
-import GradientText from "@/components/GradientText";
 import useSWR from "swr";
 import { api } from "@/lib/api";
 import { CHART_COLORS } from "@/lib/constants";
@@ -48,10 +47,6 @@ const UsageByPersonaBarChart = dynamic(
   { ssr: false },
 );
 
-// ---------------------------------------------------------------------------
-// Mock data (shown when no real usage data exists)
-// ---------------------------------------------------------------------------
-
 const MOCK_TOOL_USAGE = [
   { toolName: "slack", invocations: 342 },
   { toolName: "github", invocations: 287 },
@@ -71,7 +66,9 @@ const MOCK_TOOL_USAGE_OVER_TIME = (() => {
     const date = d.toISOString().slice(0, 10);
     const t: Record<string, number> = {};
     tools.forEach((tool, idx) => {
-      t[tool] = Math.round(12 + Math.sin((i + idx) * 0.7) * 8 + Math.random() * 6 + (5 - idx) * 3);
+      t[tool] = Math.round(
+        12 + Math.sin((i + idx) * 0.7) * 8 + Math.random() * 6 + (5 - idx) * 3,
+      );
     });
     days.push({ date, tools: t });
   }
@@ -84,10 +81,6 @@ const MOCK_TOOL_USAGE_BY_PERSONA = [
   { personaName: "Data Pipeline", tools: { slack: 22, postgres: 140, redis: 55, notion: 8 } },
   { personaName: "Alert Monitor", tools: { slack: 155, sentry: 45, github: 22, redis: 11 } },
 ];
-
-// ---------------------------------------------------------------------------
-// Helpers
-// ---------------------------------------------------------------------------
 
 const _toolNameCache = new Map<string, string>();
 function formatToolName(name: string): string {
@@ -106,7 +99,6 @@ function useDeferredMount(rootMargin = "220px"): [(el: HTMLDivElement | null) =>
 
   const callbackRef = useCallback(
     (element: HTMLDivElement | null) => {
-      // Clean up previous observer
       if (observerRef.current) {
         observerRef.current.disconnect();
         observerRef.current = null;
@@ -146,11 +138,7 @@ function InsightBadge({ text }: { text: string }) {
   );
 }
 
-// ---------------------------------------------------------------------------
-// Page
-// ---------------------------------------------------------------------------
-
-export default function UsagePage() {
+export default function UsageView() {
   const { data, isLoading: loading } = useSWR("usage", api.getUsageAnalytics, {
     dedupingInterval: 8_000,
     revalidateOnFocus: false,
@@ -167,7 +155,6 @@ export default function UsagePage() {
     [hasRealData, data],
   );
 
-  // Bar chart data: sorted by invocations desc, capped at top 15 + "Other"
   const MAX_BAR_TOOLS = 15;
   const barData = useMemo(() => {
     const sorted = [...toolUsage].sort((a, b) => b.invocations - a.invocations);
@@ -180,16 +167,11 @@ export default function UsagePage() {
       const otherTotal = sorted
         .slice(MAX_BAR_TOOLS)
         .reduce((sum, t) => sum + t.invocations, 0);
-      top.push({
-        name: "Other",
-        invocations: otherTotal,
-        fill: "#64748b",
-      });
+      top.push({ name: "Other", invocations: otherTotal, fill: "#64748b" });
     }
     return top;
   }, [toolUsage]);
 
-  // Pie chart data
   const pieData = useMemo(
     () =>
       toolUsage.map((t, i) => ({
@@ -214,7 +196,6 @@ export default function UsagePage() {
     [toolUsage],
   );
 
-  // Stacked area data — references topTools to avoid duplicate sort+slice
   const areaData = useMemo(() => {
     return toolUsageOverTime.map((d) => {
       const row: Record<string, string | number> = { date: d.date.slice(5) };
@@ -225,7 +206,6 @@ export default function UsagePage() {
     });
   }, [toolUsageOverTime, topTools]);
 
-  // Per-persona bar data
   const personaBarData = useMemo(
     () =>
       toolUsageByPersona.map((p) => {
@@ -246,7 +226,6 @@ export default function UsagePage() {
     return Array.from(names);
   }, [toolUsageByPersona]);
 
-  // Insight text
   const insight = useMemo(() => {
     if (toolUsage.length < 2) return null;
     const top = toolUsage[0];
@@ -268,17 +247,7 @@ export default function UsagePage() {
   }
 
   return (
-    <motion.div initial="hidden" animate="visible" variants={staggerContainer}>
-      {/* Header */}
-      <motion.div variants={fadeUp} className="mb-8">
-        <h1 className="text-2xl font-bold tracking-tight">
-          <GradientText variant="silver">Usage Analytics</GradientText>
-        </h1>
-        <p className="mt-1 text-base text-muted-dark">
-          Tool utilization patterns across your agent fleet
-        </p>
-      </motion.div>
-
+    <div>
       {!hasRealData && (
         <motion.div variants={fadeUp} className="mb-6 flex items-center gap-2 rounded-xl border border-amber-500/20 bg-amber-500/5 px-4 py-2.5 text-sm text-amber-400">
           <Lightbulb className="h-3.5 w-3.5 flex-shrink-0" />
@@ -286,9 +255,7 @@ export default function UsagePage() {
         </motion.div>
       )}
 
-      {/* Top row: invocations bar + distribution pie */}
       <div className="grid gap-6 lg:grid-cols-5 mb-8">
-        {/* Tool invocations ranking */}
         <GlowCard accent="cyan" variants={fadeUp} className="p-5 lg:col-span-3">
           <h3 className="text-base font-semibold text-foreground mb-4 flex items-center gap-2">
             <Wrench className="h-4 w-4 text-brand-cyan" />
@@ -298,7 +265,6 @@ export default function UsagePage() {
           {insight && <InsightBadge text={insight} />}
         </GlowCard>
 
-        {/* Distribution pie */}
         <GlowCard accent="purple" variants={fadeUp} className="p-5 lg:col-span-2">
           <h3 className="text-base font-semibold text-foreground mb-4 flex items-center gap-2">
             <BarChart3 className="h-4 w-4 text-brand-purple" />
@@ -312,7 +278,6 @@ export default function UsagePage() {
         </GlowCard>
       </div>
 
-      {/* Middle: Usage over time */}
       <div ref={overTimeRef}>
         <GlowCard accent="emerald" variants={fadeUp} className="p-5 mb-8">
           <h3 className="text-base font-semibold text-foreground mb-4 flex items-center gap-2">
@@ -332,7 +297,6 @@ export default function UsagePage() {
         </GlowCard>
       </div>
 
-      {/* Bottom: Per-persona usage */}
       <div ref={byPersonaRef}>
         <GlowCard accent="amber" variants={fadeUp} className="p-5">
           <h3 className="text-base font-semibold text-foreground mb-4 flex items-center gap-2">
@@ -350,6 +314,6 @@ export default function UsagePage() {
           )}
         </GlowCard>
       </div>
-    </motion.div>
+    </div>
   );
 }

@@ -268,7 +268,6 @@ export const ko: Translations = {
     events: '\uc774\ubca4\ud2b8',
     reviews: '\ub9ac\ubdf0',
     observability: '\uad00\uce21\uc131',
-    usage: '\uc0ac\uc6a9\ub7c9',
     knowledge: '\uc9c0\uc2dd',
     settings: '\uc124\uc815',
     memories: 'Memories',
@@ -434,6 +433,12 @@ export const ko: Translations = {
       page: 'Page {n} of {total}',
     },
     markAllRead: 'Mark all read',
+  },
+  observabilityPage: {
+    title: 'Observability',
+    subtitle: 'Performance metrics, cost tracking, and tool utilization',
+    tabPerformance: 'Performance',
+    tabUsage: 'Tool Usage',
   },
   agentsPage: {
     title: '\uc5d0\uc774\uc804\ud2b8',

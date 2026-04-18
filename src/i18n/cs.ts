@@ -268,7 +268,6 @@ export const cs: Translations = {
     events: 'Ud\u00e1losti',
     reviews: 'Recenze',
     observability: 'Pozorovatelnost',
-    usage: 'Vyu\u017eit\u00ed',
     knowledge: 'Znalosti',
     settings: 'Nastaven\u00ed',
     memories: 'Memories',
@@ -434,6 +433,12 @@ export const cs: Translations = {
       page: 'Page {n} of {total}',
     },
     markAllRead: 'Mark all read',
+  },
+  observabilityPage: {
+    title: 'Observability',
+    subtitle: 'Performance metrics, cost tracking, and tool utilization',
+    tabPerformance: 'Performance',
+    tabUsage: 'Tool Usage',
   },
   agentsPage: {
     title: 'Agenti',

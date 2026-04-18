@@ -268,7 +268,6 @@ export const vi: Translations = {
     events: 'S\u1ef1 ki\u1ec7n',
     reviews: '\u0110\u00e1nh gi\u00e1',
     observability: 'Gi\u00e1m s\u00e1t',
-    usage: 'S\u1eed d\u1ee5ng',
     knowledge: 'Ki\u1ebfn th\u1ee9c',
     settings: 'C\u00e0i \u0111\u1eb7t',
     memories: 'Memories',
@@ -434,6 +433,12 @@ export const vi: Translations = {
       page: 'Page {n} of {total}',
     },
     markAllRead: 'Mark all read',
+  },
+  observabilityPage: {
+    title: 'Observability',
+    subtitle: 'Performance metrics, cost tracking, and tool utilization',
+    tabPerformance: 'Performance',
+    tabUsage: 'Tool Usage',
   },
   agentsPage: {
     title: 'T\u00e1c nh\u00e2n',

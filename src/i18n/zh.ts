@@ -268,7 +268,6 @@ export const zh: Translations = {
     events: '\u4E8B\u4EF6',
     reviews: '\u5BA1\u67E5',
     observability: '\u53EF\u89C2\u6D4B\u6027',
-    usage: '\u7528\u91CF',
     knowledge: '\u77E5\u8BC6\u5E93',
     settings: '\u8BBE\u7F6E',
     memories: 'Memories',
@@ -434,6 +433,12 @@ export const zh: Translations = {
       page: 'Page {n} of {total}',
     },
     markAllRead: 'Mark all read',
+  },
+  observabilityPage: {
+    title: 'Observability',
+    subtitle: 'Performance metrics, cost tracking, and tool utilization',
+    tabPerformance: 'Performance',
+    tabUsage: 'Tool Usage',
   },
   agentsPage: {
     title: '\u667A\u80FD\u4F53',

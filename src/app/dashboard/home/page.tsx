@@ -317,7 +317,7 @@ export default function DashboardHomePage() {
         {[
           { label: t.dashboard.agents, desc: `${personas.length} ${t.dashboard.deployed}`, icon: Bot, href: "/dashboard/agents", accent: "cyan" as const },
           { label: t.dashboard.observability, desc: t.dashboard.metricsHealth, icon: Activity, href: "/dashboard/observability", accent: "emerald" as const },
-          { label: t.dashboard.usageAnalytics, desc: t.dashboard.toolUtilization, icon: TrendingUp, href: "/dashboard/usage", accent: "purple" as const },
+          { label: t.dashboard.usageAnalytics, desc: t.dashboard.toolUtilization, icon: TrendingUp, href: "/dashboard/observability", accent: "purple" as const },
           { label: t.dashboard.settings, desc: `${health?.workers.total ?? 0} ${t.dashboard.workers}`, icon: Activity, href: "/dashboard/settings", accent: "amber" as const },
         ].map((link) => (
           <Link key={link.href} href={link.href}>

@@ -268,7 +268,6 @@ export const es: Translations = {
     events: 'Eventos',
     reviews: 'Revisiones',
     observability: 'Observabilidad',
-    usage: 'Uso',
     knowledge: 'Conocimiento',
     settings: 'Configuraci\u00f3n',
     memories: 'Memories',
@@ -434,6 +433,12 @@ export const es: Translations = {
       page: 'Page {n} of {total}',
     },
     markAllRead: 'Mark all read',
+  },
+  observabilityPage: {
+    title: 'Observability',
+    subtitle: 'Performance metrics, cost tracking, and tool utilization',
+    tabPerformance: 'Performance',
+    tabUsage: 'Tool Usage',
   },
   agentsPage: {
     title: 'Agentes',

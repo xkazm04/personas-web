@@ -268,7 +268,6 @@ export const id: Translations = {
     events: 'Event',
     reviews: 'Tinjauan',
     observability: 'Observabilitas',
-    usage: 'Penggunaan',
     knowledge: 'Pengetahuan',
     settings: 'Pengaturan',
     memories: 'Memories',
@@ -434,6 +433,12 @@ export const id: Translations = {
       page: 'Page {n} of {total}',
     },
     markAllRead: 'Mark all read',
+  },
+  observabilityPage: {
+    title: 'Observability',
+    subtitle: 'Performance metrics, cost tracking, and tool utilization',
+    tabPerformance: 'Performance',
+    tabUsage: 'Tool Usage',
   },
   agentsPage: {
     title: 'Agen',

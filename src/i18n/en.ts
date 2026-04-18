@@ -186,7 +186,6 @@ export interface Translations {
     events: string;
     reviews: string;
     observability: string;
-    usage: string;
     knowledge: string;
     settings: string;
     memories: string;
@@ -352,6 +351,12 @@ export interface Translations {
       page: string;
     };
     markAllRead: string;
+  };
+  observabilityPage: {
+    title: string;
+    subtitle: string;
+    tabPerformance: string;
+    tabUsage: string;
   };
   agentsPage: {
     title: string;
@@ -793,7 +798,6 @@ export const en: Translations = {
     events: 'Events',
     reviews: 'Reviews',
     observability: 'Observability',
-    usage: 'Usage',
     knowledge: 'Knowledge',
     settings: 'Settings',
     memories: 'Memories',
@@ -959,6 +963,12 @@ export const en: Translations = {
       page: 'Page {n} of {total}',
     },
     markAllRead: 'Mark all read',
+  },
+  observabilityPage: {
+    title: 'Observability',
+    subtitle: 'Performance metrics, cost tracking, and tool utilization',
+    tabPerformance: 'Performance',
+    tabUsage: 'Tool Usage',
   },
   agentsPage: {
     title: 'Agents',
