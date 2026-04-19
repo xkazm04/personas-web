@@ -7,7 +7,6 @@ import Footer from "@/components/sections/Footer";
 import {
   LazyDownloadCTA,
   LazyFAQ,
-  LazyMidPageCTA,
   LazyPipelineShowcase,
   LazyPricing,
   LazyUseCases,
@@ -195,8 +194,6 @@ export default function Home() {
             </div>
           );
         })}
-
-        <LazyMidPageCTA />
       </PageShell>
       <Footer />
     </SectionObserverProvider>

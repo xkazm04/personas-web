@@ -109,19 +109,6 @@ function FAQSkeleton() {
   );
 }
 
-/* ── MidPageCTA skeleton: horizontal button row ── */
-function MidPageCTASkeleton() {
-  return (
-    <section className="relative border-t border-primary/5 py-12">
-      <div className="mx-auto flex max-w-2xl items-center justify-center gap-4 px-6">
-        <div className={`${Pm} h-12 w-52 !rounded-full`} />
-        <div className={`${Pm} h-12 w-28 !rounded-full`} />
-        <div className={`${Pm} h-12 w-24 !rounded-full`} />
-      </div>
-    </section>
-  );
-}
-
 /* ── Dynamic imports with section-specific skeletons ─────────── */
 
 const VisionSection = dynamic(() => import("@/components/sections/Vision"), {
@@ -136,7 +123,6 @@ const FAQSection = dynamic(() => import("@/components/sections/FAQ"), {
   ssr: true,
   loading: () => <FAQSkeleton />,
 });
-const MidPageCTASection = createLazySection(() => import("@/components/sections/MidPageCTA"), MidPageCTASkeleton);
 
 export function LazyVision() {
   return <VisionSection />;
@@ -148,10 +134,6 @@ export function LazyPricing() {
 
 export function LazyFAQ() {
   return <FAQSection />;
-}
-
-export function LazyMidPageCTA() {
-  return <MidPageCTASection />;
 }
 
 /* ── Generic lazy sections (use shared SectionSkeleton) ──────── */
