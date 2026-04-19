@@ -2,7 +2,6 @@
 
 import { useId } from "react";
 import { motion, useReducedMotion } from "framer-motion";
-import { Bot } from "lucide-react";
 import { BRAND_VAR, tint } from "@/lib/brand-theme";
 import { TRIGGERS, CENTER, RADIUS, NODE_SIZE, nodePosition } from "./data";
 
@@ -75,7 +74,7 @@ export default function HubRing({ active, onSelect }: HubRingProps) {
         );
       })}
 
-      {/* Central persona node */}
+      {/* Central persona node — dual-theme image inside a circular mask */}
       <g>
         <circle
           cx={CENTER}
@@ -85,18 +84,20 @@ export default function HubRing({ active, onSelect }: HubRingProps) {
           stroke="rgba(var(--surface-overlay), 0.14)"
           strokeWidth="1.5"
         />
-        <foreignObject x={CENTER - 58} y={CENTER - 58} width={116} height={116}>
-          <div className="flex h-full w-full flex-col items-center justify-center gap-1">
-            <div
-              className="flex h-12 w-12 items-center justify-center rounded-xl ring-1"
-              style={{
-                backgroundColor: tint("cyan", 14),
-                borderColor: tint("cyan", 30),
-              }}
-            >
-              <Bot className="h-6 w-6" style={{ color: BRAND_VAR.cyan }} />
-            </div>
-            <div className="text-base font-semibold text-foreground">Personas</div>
+        <foreignObject x={CENTER - 60} y={CENTER - 60} width={120} height={120}>
+          <div className="h-full w-full overflow-hidden rounded-full">
+            <img
+              src="/imgs/guide/agents-prompts-dark.png"
+              alt=""
+              aria-hidden="true"
+              className="hidden dark:block h-full w-full object-cover"
+            />
+            <img
+              src="/imgs/guide/agents-prompts-light.png"
+              alt=""
+              aria-hidden="true"
+              className="block dark:hidden h-full w-full object-cover"
+            />
           </div>
         </foreignObject>
       </g>

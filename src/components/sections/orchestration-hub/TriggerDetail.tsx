@@ -1,7 +1,8 @@
 "use client";
 
+import Link from "next/link";
 import { AnimatePresence, motion } from "framer-motion";
-import { Bot } from "lucide-react";
+import { ArrowRight, Bot, BookOpen } from "lucide-react";
 import { BRAND_VAR, tint } from "@/lib/brand-theme";
 import { TRIGGERS } from "./data";
 
@@ -10,8 +11,9 @@ interface TriggerDetailProps {
 }
 
 /**
- * Side panel that describes the currently active trigger — what fires it,
- * what persona it wakes, and a static blurb about combining triggers.
+ * Side panel that describes the currently active trigger — label, description,
+ * concrete firing condition, the persona it wakes, and a deep-link into the
+ * guide for that trigger type.
  */
 
 export default function TriggerDetail({ activeId }: TriggerDetailProps) {
@@ -24,7 +26,7 @@ export default function TriggerDetail({ activeId }: TriggerDetailProps) {
       <div
         className="rounded-2xl border p-6"
         style={{
-          borderColor: "rgba(var(--surface-overlay), 0.08)",
+          borderColor: "var(--border-glass-hover)",
           backgroundColor: "rgba(var(--surface-overlay), 0.02)",
         }}
       >
@@ -56,6 +58,10 @@ export default function TriggerDetail({ activeId }: TriggerDetailProps) {
               </div>
             </div>
 
+            <p className="text-base text-foreground/80 leading-relaxed mb-4">
+              {activeTrigger.description}
+            </p>
+
             <div className="mb-4">
               <div className="text-base font-mono uppercase tracking-wider text-muted-dark mb-1">
                 Fires when
@@ -67,7 +73,7 @@ export default function TriggerDetail({ activeId }: TriggerDetailProps) {
 
             <div
               className="flex items-center gap-2 pt-4 border-t"
-              style={{ borderColor: "rgba(var(--surface-overlay), 0.08)" }}
+              style={{ borderColor: "var(--border-glass-hover)" }}
             >
               <span className="text-base font-mono uppercase tracking-wider text-muted-dark">
                 →
@@ -85,14 +91,21 @@ export default function TriggerDetail({ activeId }: TriggerDetailProps) {
                 </span>
               </div>
             </div>
+
+            {activeTrigger.doc && (
+              <Link
+                href={activeTrigger.doc.href}
+                className="mt-5 inline-flex items-center gap-1.5 text-base font-medium transition-opacity hover:opacity-80"
+                style={{ color: activeVar }}
+              >
+                <BookOpen className="h-4 w-4" />
+                <span>{activeTrigger.doc.label}</span>
+                <ArrowRight className="h-3.5 w-3.5" />
+              </Link>
+            )}
           </motion.div>
         </AnimatePresence>
       </div>
-
-      <p className="text-base text-muted leading-relaxed">
-        Any trigger can start any persona. Combine them with composite
-        conditions, or chain the events they emit.
-      </p>
     </div>
   );
 }
