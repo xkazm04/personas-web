@@ -32,11 +32,15 @@ npm run test:e2e    # Playwright (12 specs under e2e/)
 
 1. **i18n**: every user-facing string lives in `src/i18n/en.ts`. Access via
    `useTranslation()` → `t.namespace.key`. Other locales mirror the `Translations`
-   interface shape. When adding new keys:
+   interface shape. Keep all 14 locales in lockstep — add, update, and remove
+   keys together to prevent translation gaps. When changing keys:
    - Add to `en.ts` first (the source of truth).
-   - Add the same keys with English placeholder content to all 13 non-en
-     locales (`ar`, `bn`, `cs`, `de`, `es`, `fr`, `hi`, `id`, `ja`, `ko`, `ru`,
-     `vi`, `zh`) — otherwise `tsc` fails the `Translations` shape check.
+   - Translate into all 13 non-en locales (`ar`, `bn`, `cs`, `de`, `es`, `fr`,
+     `hi`, `id`, `ja`, `ko`, `ru`, `vi`, `zh`). Do **not** use English
+     placeholders — every user-visible string ships translated. `tsc` enforces
+     the shape, but translation completeness is a hard requirement here too.
+   - On rename/update: update every locale in the same commit.
+   - On deletion: remove the key from every locale in the same commit.
    - Never introduce hardcoded English in JSX, `aria-label`, `alt`, or
      page `metadata`.
 
