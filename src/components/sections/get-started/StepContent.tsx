@@ -34,7 +34,7 @@ export default function StepContent({
       {/* Left: text content */}
       <div
         className="flex flex-col justify-center gap-5 border-b lg:border-b-0 lg:border-r p-8 sm:p-10"
-        style={{ borderColor: "rgba(var(--surface-overlay), 0.06)" }}
+        style={{ borderColor: "var(--border-glass)" }}
       >
         <div className="flex items-center gap-3">
           <div
@@ -48,7 +48,7 @@ export default function StepContent({
               className="text-base font-mono uppercase tracking-wider"
               style={{ color: bv }}
             >
-              Step {step.number} · {step.timeEstimate}
+              Step {step.number}{step.timeEstimate ? ` · ${step.timeEstimate}` : ""}
             </div>
             <h3 className="text-2xl font-bold text-foreground leading-tight mt-1">
               {step.title}

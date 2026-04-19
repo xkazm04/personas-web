@@ -8,7 +8,7 @@ export interface TourStep {
   description: string;
   details: string[];
   color: string;
-  timeEstimate: string;
+  timeEstimate?: string;
 }
 
 export const TOUR_STEPS: TourStep[] = [
@@ -16,16 +16,15 @@ export const TOUR_STEPS: TourStep[] = [
     id: "download-launch",
     number: 1,
     title: "Download & Launch",
-    subtitle: "30 seconds to your first window",
+    subtitle: "Install Claude CLI, then launch Personas",
     description:
-      "Grab the Personas installer, run it, and you're in. No account, no email, no cloud signup \u2014 everything runs on your machine from the first click.",
+      "Prerequisite: an active Claude subscription and the Claude CLI installed on your machine. Once those are in place, grab the Personas installer, run it, and you're in \u2014 no Personas account or email required.",
     details: [
+      "Claude CLI + active subscription required before first run",
       "One-click installer for Windows (Mac and Linux coming soon)",
-      "No registration or email verification required",
       "Launches straight into the Command Center",
     ],
     color: "#06b6d4",
-    timeEstimate: "30 sec",
   },
   {
     id: "connect-tools",
@@ -36,7 +35,7 @@ export const TOUR_STEPS: TourStep[] = [
       "Personas ships with 40+ connectors. Open the Credential Vault, pick Slack, GitHub, Jira, Gmail, or any other integration and complete the guided OAuth flow. Credentials are encrypted locally.",
     details: [
       "40+ pre-built connectors out of the box",
-      "AES-256-GCM vault backed by your OS keyring",
+      "Keys stay on your machine in the OS keyring \u2014 never sent to the cloud",
       "AI-assisted OAuth \u2014 no manual token copy-paste",
     ],
     color: "#a855f7",
