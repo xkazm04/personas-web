@@ -116,13 +116,41 @@ export function SectionObserverProvider({
     visibleRef.current.delete(id);
   }, []);
 
-  // Auto-observe sections by ID on mount
+  // Auto-observe sections by ID. Several landing sections (UseCases,
+  // PlaygroundSplit, FAQ, DownloadCTA, …) are lazy-loaded on the client so
+  // their IDs aren't in the DOM when this provider mounts. A one-shot
+  // getElementById sweep misses them, breaking the scroll-map for those
+  // dots. Watch the DOM with a MutationObserver so new sections are picked
+  // up as soon as their lazy chunks hydrate.
   useEffect(() => {
-    for (const id of sectionIds) {
-      const el = document.getElementById(id);
-      if (el) observe(id, el);
+    const pending = new Set(sectionIds);
+    const tryRegister = () => {
+      for (const id of Array.from(pending)) {
+        const el = document.getElementById(id);
+        if (el) {
+          observe(id, el);
+          pending.delete(id);
+        }
+      }
+    };
+
+    tryRegister();
+
+    let mutationObs: MutationObserver | null = null;
+    if (pending.size > 0) {
+      mutationObs = new MutationObserver(() => {
+        if (pending.size === 0) {
+          mutationObs?.disconnect();
+          return;
+        }
+        tryRegister();
+        if (pending.size === 0) mutationObs?.disconnect();
+      });
+      mutationObs.observe(document.body, { childList: true, subtree: true });
     }
+
     return () => {
+      mutationObs?.disconnect();
       for (const id of sectionIds) {
         unobserve(id);
       }
