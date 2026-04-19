@@ -87,8 +87,10 @@ export const ar: Translations = {
     adoptionSnapshot: '\u0644\u0645\u062D\u0629 \u0639\u0646 \u0627\u0644\u0627\u0639\u062A\u0645\u0627\u062F',
     scroll: '\u062A\u0645\u0631\u064A\u0631',
     phases: '\u0627\u0644\u0645\u0631\u0627\u062D\u0644',
+    publicBeta: 'إصدار تجريبي عام',
     agents: '\u0627\u0644\u0648\u0643\u0644\u0627\u0621',
     executions: '\u0627\u0644\u062A\u0646\u0641\u064A\u0630\u0627\u062A',
+    connectors: 'موصلات',
     templates: '\u0627\u0644\u0642\u0648\u0627\u0644\u0628',
   },
   sections: {

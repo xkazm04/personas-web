@@ -87,8 +87,10 @@ export const hi: Translations = {
     adoptionSnapshot: '\u0905\u092A\u0928\u093E\u0928\u0947 \u0915\u0940 \u091D\u0932\u0915',
     scroll: '\u0938\u094D\u0915\u094D\u0930\u0949\u0932',
     phases: '\u091A\u0930\u0923',
+    publicBeta: 'पब्लिक बीटा',
     agents: '\u090F\u091C\u0947\u0902\u091F',
     executions: '\u090F\u0917\u094D\u091C\u093C\u0940\u0915\u094D\u092F\u0942\u0936\u0928',
+    connectors: 'कनेक्टर',
     templates: '\u091F\u0947\u092E\u094D\u092A\u0932\u0947\u091F',
   },
   sections: {

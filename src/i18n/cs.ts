@@ -87,8 +87,10 @@ export const cs: Translations = {
     adoptionSnapshot: 'P\u0159ehled adopce',
     scroll: 'Posuv',
     phases: 'F\u00c1ZE',
+    publicBeta: 'VEŘEJNÁ BETA',
     agents: 'Agenti',
     executions: 'Spou\u0161t\u011bn\u00ed',
+    connectors: 'Konektory',
     templates: '\u0160ablony',
   },
   sections: {

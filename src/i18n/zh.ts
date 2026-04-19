@@ -87,8 +87,10 @@ export const zh: Translations = {
     adoptionSnapshot: '\u91C7\u7528\u6982\u89C8',
     scroll: '\u6EDA\u52A8',
     phases: '\u9636\u6BB5',
+    publicBeta: '公测版',
     agents: '\u667A\u80FD\u4F53',
     executions: '\u6267\u884C',
+    connectors: '连接器',
     templates: '\u6A21\u677F',
   },
   sections: {

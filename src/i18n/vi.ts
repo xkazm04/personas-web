@@ -87,8 +87,10 @@ export const vi: Translations = {
     adoptionSnapshot: 'T\u1ed5ng quan s\u1eed d\u1ee5ng',
     scroll: 'Cu\u1ed9n',
     phases: 'GIAI \u0110O\u1ea0N',
+    publicBeta: 'BETA CÔNG KHAI',
     agents: 'T\u00e1c nh\u00e2n',
     executions: 'Th\u1ef1c thi',
+    connectors: 'Đầu nối',
     templates: 'M\u1eabu',
   },
   sections: {

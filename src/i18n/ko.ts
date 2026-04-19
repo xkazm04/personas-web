@@ -87,8 +87,10 @@ export const ko: Translations = {
     adoptionSnapshot: '\ucc44\ud0dd \ud604\ud669',
     scroll: '\uc2a4\ud06c\ub864',
     phases: '\ub2e8\uacc4',
+    publicBeta: '퍼블릭 베타',
     agents: '\uc5d0\uc774\uc804\ud2b8',
     executions: '\uc2e4\ud589',
+    connectors: '커넥터',
     templates: '\ud15c\ud50c\ub9bf',
   },
   sections: {

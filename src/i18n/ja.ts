@@ -87,8 +87,10 @@ export const ja: Translations = {
     adoptionSnapshot: '\u5c0e\u5165\u72b6\u6cc1\u30b9\u30ca\u30c3\u30d7\u30b7\u30e7\u30c3\u30c8',
     scroll: '\u30b9\u30af\u30ed\u30fc\u30eb',
     phases: '\u30d5\u30a7\u30fc\u30ba',
+    publicBeta: 'パブリックベータ',
     agents: '\u30a8\u30fc\u30b8\u30a7\u30f3\u30c8',
     executions: '\u5b9f\u884c',
+    connectors: 'コネクター',
     templates: '\u30c6\u30f3\u30d7\u30ec\u30fc\u30c8',
   },
   sections: {

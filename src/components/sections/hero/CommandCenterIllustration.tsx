@@ -2,18 +2,20 @@
 
 import { useId } from "react";
 import { motion } from "framer-motion";
-import { completedCount, totalPhases, progressPercent } from "@/data/roadmap-phases";
+import { completedCount, totalPhases } from "@/data/roadmap-phases";
 
 const phases = Array.from({ length: totalPhases }, (_, i) => ({
   index: i + 1,
   completed: i < completedCount,
 }));
 
+const APP_VERSION = process.env.NEXT_PUBLIC_APP_VERSION ?? "0.1.0";
+
 interface Props {
-  phasesLabel: string;
+  publicBetaLabel: string;
 }
 
-export default function CommandCenterIllustration({ phasesLabel }: Props) {
+export default function CommandCenterIllustration({ publicBetaLabel }: Props) {
   const uid = useId();
   const arcGradientId = `${uid}-arcGrad`;
   const arcGlowId = `${uid}-arcGlow`;
@@ -83,11 +85,11 @@ export default function CommandCenterIllustration({ phasesLabel }: Props) {
       </svg>
 
       <div className="absolute inset-0 flex flex-col items-center justify-center">
-        <span className="text-4xl font-bold tracking-tight text-white drop-shadow-[0_0_10px_rgba(255,255,255,0.3)]">
-          {progressPercent}%
+        <span className="text-3xl font-bold tracking-tight text-white drop-shadow-[0_0_10px_rgba(255,255,255,0.3)]">
+          {APP_VERSION}
         </span>
         <span className="text-base text-muted-dark font-mono tracking-wider mt-1">
-          {completedCount}/{totalPhases} {phasesLabel}
+          {publicBetaLabel}
         </span>
       </div>
     </div>

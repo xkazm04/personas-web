@@ -87,8 +87,10 @@ export const ru: Translations = {
     adoptionSnapshot: '\u0421\u043D\u0438\u043C\u043E\u043A \u0432\u043D\u0435\u0434\u0440\u0435\u043D\u0438\u044F',
     scroll: '\u041F\u0440\u043E\u043A\u0440\u0443\u0442\u043A\u0430',
     phases: '\u0424\u0410\u0417\u042B',
+    publicBeta: 'ПУБЛИЧНАЯ БЕТА',
     agents: '\u0410\u0433\u0435\u043D\u0442\u044B',
     executions: '\u0412\u044B\u043F\u043E\u043B\u043D\u0435\u043D\u0438\u044F',
+    connectors: 'Коннекторы',
     templates: '\u0428\u0430\u0431\u043B\u043E\u043D\u044B',
   },
   sections: {

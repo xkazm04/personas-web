@@ -87,8 +87,10 @@ export const de: Translations = {
     adoptionSnapshot: 'Nutzungs\u00fcberblick',
     scroll: 'Scrollen',
     phases: 'PHASEN',
+    publicBeta: 'ÖFFENTLICHE BETA',
     agents: 'Agenten',
     executions: 'Ausf\u00fchrungen',
+    connectors: 'Konnektoren',
     templates: 'Vorlagen',
   },
   sections: {

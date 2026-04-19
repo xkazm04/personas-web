@@ -11,15 +11,11 @@ import FloatingParticles from "@/components/FloatingParticles";
 import PrimaryCTA from "@/components/PrimaryCTA";
 import { useLiveStats } from "@/hooks/useLiveStats";
 import { useAnimationPauseRegister } from "@/hooks/useAnimationPause";
-import { progressPercent } from "@/data/roadmap-phases";
+import { connectors } from "@/data/connectors";
 import { useTranslation } from "@/i18n/useTranslation";
 import CommandCenterIllustration from "./hero/CommandCenterIllustration";
 
-function formatCompact(n: number): string {
-  if (n >= 1_000_000) return `${(n / 1_000_000).toFixed(1).replace(/\.0$/, "")}M`;
-  if (n >= 1_000) return `${(n / 1_000).toFixed(1).replace(/\.0$/, "")}k`;
-  return String(n);
-}
+const CONNECTOR_COUNT = connectors.length;
 
 export default function HeroClient() {
   const { t } = useTranslation();
@@ -36,10 +32,10 @@ export default function HeroClient() {
   const heroStats = useMemo(
     () => [
       { value: String(liveStats.totalAgents), label: t.hero.agents },
-      { value: formatCompact(liveStats.totalExecutions), label: t.hero.executions },
+      { value: String(CONNECTOR_COUNT), label: t.hero.connectors },
       { value: `${liveStats.totalTemplates}+`, label: t.hero.templates },
     ],
-    [liveStats.totalAgents, liveStats.totalExecutions, liveStats.totalTemplates, t],
+    [liveStats.totalAgents, liveStats.totalTemplates, t],
   );
 
   // 3D tilt for the right card
@@ -120,7 +116,7 @@ export default function HeroClient() {
               <motion.span
                 key={label}
                 whileHover={{ scale: 1.05 }}
-                className="flex items-center gap-2 rounded-full border border-white/8 bg-white/3 px-4 py-2 text-base font-mono tracking-wide text-muted-dark transition-colors duration-300 hover:bg-white/6 hover:text-white hover:border-white/15 cursor-default"
+                className="flex items-center gap-2 rounded-full border border-glass-hover bg-white/3 px-4 py-2 text-base font-mono tracking-wide text-muted-dark transition-colors duration-300 hover:bg-white/6 hover:text-white hover:border-glass-strong cursor-default"
               >
                 <Icon className="h-3.5 w-3.5 opacity-60" />
                 {label}
@@ -134,7 +130,7 @@ export default function HeroClient() {
               href="https://github.com"
               target="_blank"
               rel="noopener noreferrer"
-              className="group relative flex w-[min(100%,20rem)] items-center justify-center gap-3 rounded-full border border-white/10 bg-white/2 px-8 py-4 text-base font-medium text-muted transition-all duration-300 hover:border-white/20 hover:text-white hover:bg-white/5 hover:shadow-[0_0_20px_rgba(255,255,255,0.05)] sm:w-auto overflow-hidden focus-visible:ring-2 focus-visible:ring-brand-cyan/40 focus-visible:outline-none"
+              className="group relative flex w-[min(100%,20rem)] items-center justify-center gap-3 rounded-full border border-glass-hover bg-white/2 px-8 py-4 text-base font-medium text-muted transition-all duration-300 hover:border-white/20 hover:text-white hover:bg-white/5 hover:shadow-[0_0_20px_rgba(255,255,255,0.05)] sm:w-auto overflow-hidden focus-visible:ring-2 focus-visible:ring-brand-cyan/40 focus-visible:outline-none"
             >
               <span className="absolute inset-0 w-full h-full bg-linear-to-r from-transparent via-white/10 to-transparent -translate-x-full group-hover:animate-[shimmer_1.5s_infinite]" />
               <GithubIcon className="h-5 w-5 transition-transform duration-300 group-hover:scale-110 group-hover:drop-shadow-[0_0_8px_rgba(255,255,255,0.8)]" />
@@ -144,13 +140,10 @@ export default function HeroClient() {
 
           <motion.div
             variants={fadeUp}
-            className="mt-6 flex flex-col items-center gap-3 rounded-xl border border-white/6 bg-white/2 px-4 py-3 lg:hidden"
+            className="mt-6 flex flex-col items-center gap-3 rounded-xl border border-glass bg-white/2 px-4 py-3 lg:hidden"
             data-testid="mock-stats"
           >
             <div className="text-base font-mono uppercase tracking-wider text-muted-dark">{t.hero.adoptionSnapshot}</div>
-            <div className="h-1 w-full max-w-xs overflow-hidden rounded-full bg-white/6">
-              <div className="h-full rounded-full bg-linear-to-r from-brand-cyan to-brand-purple" style={{ width: `${progressPercent}%` }} />
-            </div>
             <div className="flex justify-center gap-6 text-center">
               {heroStats.map((stat) => (
                 <div key={stat.label}>
@@ -171,12 +164,12 @@ export default function HeroClient() {
           style={{ rotateX, rotateY, transformStyle: "preserve-3d" }}
         >
           <div
-            className="relative p-8 rounded-3xl border border-white/5 bg-white/2 backdrop-blur-md shadow-2xl transition-all duration-300 hover:border-white/10 hover:bg-white/5"
+            className="relative p-8 rounded-3xl border border-glass bg-white/2 backdrop-blur-md shadow-2xl transition-all duration-300 hover:border-glass-hover hover:bg-white/5"
             style={{ transform: "translateZ(50px)" }}
           >
-            <CommandCenterIllustration phasesLabel={t.hero.phases} />
+            <CommandCenterIllustration publicBetaLabel={t.hero.publicBeta} />
             <div className="mt-6 flex flex-col items-center gap-4">
-              <div className="rounded-full border border-white/6 bg-white/2 px-4 py-1.5 text-base font-mono tracking-wider text-muted-dark uppercase shadow-[0_0_10px_rgba(0,0,0,0.5)]">
+              <div className="rounded-full border border-glass bg-white/2 px-4 py-1.5 text-base font-mono tracking-wider text-muted-dark uppercase shadow-[0_0_10px_rgba(0,0,0,0.5)]">
                 {t.hero.commandCenter}
               </div>
               <div className="flex gap-6 text-center" data-testid="mock-stats">

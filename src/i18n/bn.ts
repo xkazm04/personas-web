@@ -87,8 +87,10 @@ export const bn: Translations = {
     adoptionSnapshot: '\u0997\u09cd\u09b0\u09b9\u09a3\u09c7\u09b0 \u09b8\u09cd\u09a8\u09cd\u09af\u09be\u09aa\u09b6\u099f',
     scroll: '\u09b8\u09cd\u0995\u09cd\u09b0\u09b2',
     phases: '\u09ab\u09c7\u099c',
+    publicBeta: 'পাবলিক বিটা',
     agents: '\u098f\u099c\u09c7\u09a8\u09cd\u099f',
     executions: '\u098f\u0995\u09cd\u09b8\u09bf\u0995\u09bf\u0989\u09b6\u09a8',
+    connectors: 'কানেক্টর',
     templates: '\u099f\u09c7\u09ae\u09aa\u09cd\u09b2\u09c7\u099f',
   },
   sections: {

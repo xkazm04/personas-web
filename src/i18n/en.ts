@@ -85,8 +85,10 @@ export interface Translations {
     adoptionSnapshot: string;
     scroll: string;
     phases: string;
+    publicBeta: string;
     agents: string;
     executions: string;
+    connectors: string;
     templates: string;
   };
   heroTransition: {
@@ -608,8 +610,10 @@ export const en: Translations = {
     adoptionSnapshot: 'Adoption snapshot',
     scroll: 'Scroll',
     phases: 'PHASES',
+    publicBeta: 'PUBLIC BETA',
     agents: 'Agents',
     executions: 'Executions',
+    connectors: 'Connectors',
     templates: 'Templates',
   },
   heroTransition: {

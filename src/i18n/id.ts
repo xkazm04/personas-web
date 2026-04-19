@@ -87,8 +87,10 @@ export const id: Translations = {
     adoptionSnapshot: 'Ringkasan adopsi',
     scroll: 'Gulir',
     phases: 'FASE',
+    publicBeta: 'BETA PUBLIK',
     agents: 'Agen',
     executions: 'Eksekusi',
+    connectors: 'Konektor',
     templates: 'Templat',
   },
   sections: {
