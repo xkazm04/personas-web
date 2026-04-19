@@ -436,6 +436,22 @@ export interface Translations {
     peopleWaiting: string;
     errorGeneric: string;
   };
+  templatesPage: {
+    title: string;
+    subtitle: string;
+    gridHeading: string;
+    gridDescription: string;
+    changeCategory: string;
+    complexityAll: string;
+    complexityBasic: string;
+    complexityProfessional: string;
+    complexityEnterprise: string;
+    searchPlaceholder: string;
+    searchAriaLabel: string;
+    showingCount: string;
+    noMatches: string;
+    clearFilters: string;
+  };
   roadmapSection: {
     inProgress: string;
     next: string;
@@ -1048,6 +1064,22 @@ export const en: Translations = {
     copyLink: 'Copy link',
     peopleWaiting: 'people waiting',
     errorGeneric: 'Something went wrong. Please try again.',
+  },
+  templatesPage: {
+    title: 'Agent Templates',
+    subtitle: 'Browse {count} ready-made agent templates grouped by the kind of work they do. Pick a category to see the templates inside.',
+    gridHeading: 'Browse templates by category',
+    gridDescription: 'Templates are pre-configured Personas you can adopt with one click. Each template already has the prompt, tools, and triggers wired up for a specific job — no setup required.',
+    changeCategory: 'Change category',
+    complexityAll: 'All',
+    complexityBasic: 'Basic',
+    complexityProfessional: 'Professional',
+    complexityEnterprise: 'Enterprise',
+    searchPlaceholder: 'Search templates, tools, services...',
+    searchAriaLabel: 'Search templates',
+    showingCount: 'Showing {shown} of {total} templates',
+    noMatches: 'No templates match your filters',
+    clearFilters: 'Clear filters',
   },
   roadmapSection: {
     inProgress: 'In Progress',
