@@ -2,7 +2,7 @@
 
 import { useMemo, useRef } from "react";
 import { motion, useTransform, useMotionValue, useSpring } from "framer-motion";
-import { Download, ChevronDown, Puzzle, ShieldCheck, HeartPulse } from "lucide-react";
+import { Download, ChevronDown, Wand2, Gift, Sparkles } from "lucide-react";
 import { GithubIcon } from "@/components/icons/brand-icons";
 import { fadeUp, staggerContainer } from "@/lib/animations";
 import GradientText from "@/components/GradientText";
@@ -24,9 +24,9 @@ function formatCompact(n: number): string {
 export default function HeroClient() {
   const { t } = useTranslation();
   const differentiators = [
-    { label: t.hero.mode2, Icon: Puzzle },
-    { label: t.hero.mode3, Icon: ShieldCheck },
-    { label: t.hero.mode5, Icon: HeartPulse },
+    { label: t.hero.mode2, Icon: Wand2 },
+    { label: t.hero.mode3, Icon: Gift },
+    { label: t.hero.mode5, Icon: Sparkles },
   ];
   const liveStats = useLiveStats();
   const DOWNLOAD_URL = process.env.NEXT_PUBLIC_DOWNLOAD_URL;
