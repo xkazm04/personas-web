@@ -19,7 +19,7 @@ export interface PlatformCard {
 export const PLATFORM_CARDS: PlatformCard[] = [
   {
     id: "credential-vault",
-    title: "Credential Vault",
+    title: "Vault",
     brand: "purple",
     image: "/imgs/platform/credential-vault.png",
     description:
