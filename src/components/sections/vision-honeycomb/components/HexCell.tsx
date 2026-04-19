@@ -3,6 +3,7 @@
 import { motion } from "framer-motion";
 import type { AgentData } from "../types";
 import { statusStyles, hexPath } from "../data";
+import { FLASH_DURATION_S } from "../../vision-shared/constants";
 
 interface HexCellProps {
   agent: AgentData;
@@ -41,7 +42,7 @@ export default function HexCell({ agent, x, y, index, isFlashing, isHovered, onH
             strokeWidth={1.5}
             initial={{ opacity: 0.8 }}
             animate={{ opacity: 0, scale: 1.15 }}
-            transition={{ duration: 0.7 }}
+            transition={{ duration: FLASH_DURATION_S }}
           />
         )}
 

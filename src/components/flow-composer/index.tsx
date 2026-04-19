@@ -138,7 +138,7 @@ export default function FlowComposer({ onClose }: { onClose: () => void }) {
               y="50"
               textAnchor="middle"
               dominantBaseline="middle"
-              fill="rgba(255,255,255,0.2)"
+              fill="var(--text-disabled)"
               fontSize="3"
               fontFamily="var(--font-geist-mono)"
             >

@@ -2,7 +2,11 @@
 
 export function DesignVisual() {
   return (
-    <div className="mt-6 space-y-2.5 rounded-xl border border-purple-500/8 bg-purple-500/2 p-4 font-mono text-base relative overflow-hidden">
+    <div
+      role="img"
+      aria-label="Agent configuration preview showing: role set to Email triage assistant, tools including gmail, slack, and jira, trigger every 15 minutes, and self-healing enabled"
+      className="mt-6 space-y-2.5 rounded-xl border border-purple-500/8 bg-purple-500/2 p-4 font-mono text-base relative overflow-hidden"
+    >
       <div
         className="pointer-events-none absolute inset-0 opacity-[0.015]"
         style={{
@@ -11,8 +15,7 @@ export function DesignVisual() {
         }}
       />
       <div className="relative">
-        {/* eslint-disable-next-line custom-a11y/no-low-text-opacity -- decorative code visual */}
-        <div className="flex items-center gap-2 text-purple-400/40">
+        <div className="flex items-center gap-2 text-purple-400/60">
           <div className="h-2 w-2 rounded-full bg-purple-400/30 shadow-[0_0_4px_rgba(168,85,247,0.3)]" />
           <span>agent.config</span>
         </div>
@@ -45,7 +48,11 @@ export function DesignVisual() {
 
 export function CoordinateVisual() {
   return (
-    <div className="mt-6 flex items-center justify-center gap-2 py-3 relative">
+    <div
+      role="img"
+      aria-label="Agent coordination chain: Email connects to Slack, then Slack connects to GitHub, showing automated multi-service workflow"
+      className="mt-6 flex items-center justify-center gap-2 py-3 relative"
+    >
       <div className="pointer-events-none absolute top-1/2 left-[15%] right-[15%] h-px bg-linear-to-r from-transparent via-cyan-500/8 to-transparent -translate-y-1/2" />
       {["Email", "Slack", "GitHub"].map((name, i) => (
         <div key={name} className="flex items-center gap-2">
@@ -69,25 +76,26 @@ export function CoordinateVisual() {
 
 export function DeployVisual() {
   return (
-    <div className="mt-6 flex items-center justify-center gap-3 py-3 relative">
+    <div
+      role="img"
+      aria-label="Deployment flow diagram: local Desktop app deploys to cloud for 24/7 availability"
+      className="mt-6 flex items-center justify-center gap-3 py-3 relative"
+    >
       <div className="pointer-events-none absolute top-1/2 left-[10%] right-[10%] h-8 -translate-y-1/2 rounded-full bg-linear-to-r from-transparent via-emerald-500/2 to-transparent" />
       <div className="relative rounded-xl border border-emerald-500/12 bg-emerald-500/5 px-4 py-2.5 text-base font-mono text-emerald-400">
-        {/* eslint-disable-next-line custom-a11y/no-low-text-opacity -- decorative label in visual */}
-        <div className="text-base text-emerald-400/40 mb-0.5">local</div>
+        <div className="text-base text-emerald-400/60 mb-0.5">local</div>
         Desktop
         <div className="absolute -top-1 -right-1 h-2 w-2 rounded-full bg-emerald-400/70 shadow-[0_0_6px_rgba(52,211,153,0.5)]" />
       </div>
       <div className="flex flex-col items-center gap-1">
-        {/* eslint-disable-next-line custom-a11y/no-low-text-opacity -- decorative SVG arrow */}
-        <svg width="48" height="8" className="text-emerald-500/30">
+        <svg width="48" height="8" className="text-emerald-500/60">
           <line x1="0" y1="4" x2="48" y2="4" stroke="currentColor" strokeWidth="1" strokeDasharray="3 3" />
           <polygon points="44,1 48,4 44,7" fill="currentColor" />
         </svg>
         <span className="text-base text-muted-dark font-mono">deploy</span>
       </div>
       <div className="relative rounded-xl border border-emerald-400/20 bg-emerald-500/10 px-4 py-2.5 text-base font-mono text-emerald-300 shadow-[0_0_25px_rgba(52,211,153,0.10)]">
-        {/* eslint-disable-next-line custom-a11y/no-low-text-opacity -- decorative label in visual */}
-        <div className="text-base text-emerald-400/40 mb-0.5">cloud</div>
+        <div className="text-base text-emerald-400/60 mb-0.5">cloud</div>
         24/7
         <div className="absolute inset-0 rounded-xl border border-emerald-400/10 animate-glow-border" />
       </div>
@@ -97,7 +105,14 @@ export function DeployVisual() {
 
 export function TelemetryVisual() {
   return (
-    <div className="mt-6 relative">
+    <div
+      role="img"
+      aria-label="Real-time telemetry bar chart showing 12 metrics with varying activity levels, indicating live agent performance monitoring"
+      className="mt-6 relative"
+    >
+      <span className="sr-only">
+        Bar chart displaying agent telemetry data across 12 time intervals. Activity ranges from low to high, with peak performance spikes visible, demonstrating continuous real-time monitoring capability.
+      </span>
       <div className="absolute bottom-0 left-0 right-0 h-px bg-linear-to-r from-transparent via-amber-500/10 to-transparent" />
       <div className="flex items-end justify-center gap-1.25 py-3">
         {[30, 55, 40, 70, 45, 80, 60, 90, 50, 75, 65, 85].map((h, i) => (

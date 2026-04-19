@@ -3,9 +3,7 @@ import type { LucideIcon } from "lucide-react";
 export type PluginKey =
   | "artist"
   | "dev-tools"
-  | "doc-signing"
   | "obsidian-brain"
-  | "ocr"
   | "research-lab";
 
 export interface VariantDef {

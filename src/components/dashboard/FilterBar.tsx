@@ -18,7 +18,7 @@ export default function FilterBar({
   compact?: boolean;
 }) {
   return (
-    <div className={`flex items-center gap-1 overflow-x-auto rounded-xl border border-white/[0.06] bg-white/[0.03] backdrop-blur-sm scrollbar-hide ${compact ? "p-0.5" : "p-1"}`}>
+    <div className={`flex items-center gap-1 overflow-x-auto rounded-xl border border-glass bg-white/[0.03] backdrop-blur-sm scrollbar-hide ${compact ? "p-0.5" : "p-1"}`}>
       {options.map((opt) => {
         const isActive = opt.key === active;
         return (

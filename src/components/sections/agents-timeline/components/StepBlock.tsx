@@ -26,7 +26,7 @@ export default function StepBlock({
     : isWarn
       ? "bg-yellow-400/15 border-yellow-400/25"
       : isWorkflow
-        ? "bg-white/5 border-white/10"
+        ? "bg-white/5 border-glass-hover"
         : "bg-brand-emerald/10 border-brand-emerald/20";
 
   const iconColor = isError
@@ -54,7 +54,7 @@ export default function StepBlock({
       }
       transition={{
         delay: isActive ? index * 0.35 : 0,
-        duration: prefersReduced ? 0.1 : 0.4,
+        duration: prefersReduced ? 0.1 : 0.35,
         ease: "easeOut",
       }}
       className={`relative flex items-center gap-2 rounded-lg border px-3 py-2 ${bgColor} shrink-0`}
@@ -63,7 +63,7 @@ export default function StepBlock({
       <span
         className={`text-base font-mono whitespace-nowrap ${
           isError
-            ? "text-brand-rose line-through decoration-brand-rose/40"
+            ? "text-brand-rose line-through decoration-brand-rose/70"
             : "text-muted"
         }`}
       >

@@ -18,7 +18,7 @@ export default function PromptEditorPanel({
   reduced: boolean;
 }) {
   return (
-    <div className="border-b lg:border-b-0 lg:border-r border-white/[0.06]">
+    <div className="border-b lg:border-b-0 lg:border-r border-glass">
       <TerminalChrome
         title="prompt-editor"
         status={
@@ -28,7 +28,7 @@ export default function PromptEditorPanel({
       />
 
       <div className="p-5 space-y-5">
-        <div className="rounded-xl border border-white/[0.06] bg-white/[0.02] p-4">
+        <div className="rounded-xl border border-glass bg-white/[0.02] p-4">
           <div className="flex gap-4">
             <div className="flex flex-col items-end font-mono text-base text-muted-dark leading-relaxed select-none pt-[2px]">
               {[1, 2, 3, 4, 5].map((n) => (
@@ -102,7 +102,7 @@ export default function PromptEditorPanel({
                       type: "spring",
                       stiffness: 300,
                     }}
-                    className="flex items-center gap-1.5 rounded-lg border border-white/10 bg-white/[0.03] px-3 py-1.5 text-base font-mono text-muted"
+                    className="flex items-center gap-1.5 rounded-lg border border-glass-hover bg-white/[0.03] px-3 py-1.5 text-base font-mono text-muted"
                   >
                     <tool.icon className="h-3 w-3 text-brand-purple/70" />
                     {tool.label}

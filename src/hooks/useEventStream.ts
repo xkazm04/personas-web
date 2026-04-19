@@ -23,17 +23,21 @@ function isPageVisible(): boolean {
 export function useEventStream() {
   const appendEvent = useEventStore((s) => s.appendEvent);
   const fetchEvents = useEventStore((s) => s.fetchEvents);
+  const setConnectionStatus = useEventStore((s) => s.setConnectionStatus);
   const isDemo = useAuthStore((s) => s.isDemo);
   const appendRef = useRef(appendEvent);
   const fetchRef = useRef(fetchEvents);
+  const setStatusRef = useRef(setConnectionStatus);
   useEffect(() => {
     appendRef.current = appendEvent;
     fetchRef.current = fetchEvents;
+    setStatusRef.current = setConnectionStatus;
   });
 
   useEffect(() => {
     // In dev/demo mode, SSE endpoint doesn't exist — fall back to polling
     if (DEVELOPMENT || isDemo) {
+      setStatusRef.current("polling");
       let pollTimer: ReturnType<typeof setTimeout> | null = null;
       let disposed = false;
 
@@ -112,18 +116,17 @@ export function useEventStream() {
       });
 
       es.onopen = () => {
-        // Reset backoff on successful connection
         reconnectMs = RECONNECT_BASE_MS;
+        setStatusRef.current("connected");
       };
 
       es.onerror = () => {
-        // Close and schedule reconnect
         es?.close();
         es = null;
 
         if (disposed) return;
 
-        // Start fallback polling immediately so we don't go blind
+        setStatusRef.current("reconnecting");
         scheduleFallbackPolling();
 
         // Schedule SSE reconnect with exponential backoff

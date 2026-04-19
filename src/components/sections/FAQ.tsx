@@ -58,7 +58,7 @@ function FAQCard({
         aria-controls={panelId}
         className="w-full text-left cursor-pointer group focus-visible:ring-2 focus-visible:ring-brand-cyan/40 focus-visible:outline-none focus-visible:rounded-2xl"
       >
-        <div className="rounded-2xl border border-white/[0.04] bg-gradient-to-br from-white/[0.02] to-transparent p-4 transition-all duration-300 hover:border-white/[0.08] hover:bg-white/[0.025]">
+        <div className="rounded-2xl border border-glass bg-gradient-to-br from-white/[0.02] to-transparent p-4 transition-all duration-300 hover:border-glass-hover hover:bg-white/[0.025]">
           <div className="flex items-start justify-between gap-4">
             <h3 className="text-base font-medium leading-relaxed sm:text-lg">
               {item.question}
@@ -87,7 +87,7 @@ function FAQCard({
             className="overflow-hidden"
           >
             <div className="px-4 pb-1 pt-3">
-              <div className="mb-4 overflow-hidden rounded-xl border border-white/8">
+              <div className="mb-4 overflow-hidden rounded-xl border border-glass-hover">
                 <div className="aspect-video w-full">
                   {item.illustration}
                 </div>
@@ -190,7 +190,7 @@ export default function FAQ() {
 
       {/* Discord CTA */}
       <motion.div variants={fadeUp} className="mt-14 text-center">
-        <div className="mx-auto inline-flex flex-col items-center gap-4 rounded-2xl border border-white/[0.04] bg-gradient-to-br from-white/[0.02] to-transparent px-8 py-6 sm:flex-row sm:gap-6">
+        <div className="mx-auto inline-flex flex-col items-center gap-4 rounded-2xl border border-glass bg-gradient-to-br from-white/[0.02] to-transparent px-8 py-6 sm:flex-row sm:gap-6">
           <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-brand-purple/15 ring-1 ring-brand-purple/20">
             <MessageCircle className="h-5 w-5 text-brand-purple" />
           </div>

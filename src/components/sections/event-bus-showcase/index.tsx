@@ -1,6 +1,6 @@
 "use client";
 
-import { useId, useRef, useState, useEffect, useMemo } from "react";
+import { useId, useRef, useState, useEffect, useMemo, useCallback } from "react";
 import { motion, useInView, AnimatePresence } from "framer-motion";
 import { Wand2 } from "lucide-react";
 import dynamic from "next/dynamic";
@@ -31,8 +31,26 @@ const FlowComposer = dynamic(() => import("@/components/FlowComposer"), {
 export default function EventBusShowcase({ telemetryAdapter }: { telemetryAdapter?: QueueTelemetryAdapter }) {
   const uid = useId();
   const containerRef = useRef<HTMLDivElement>(null);
+  const tabRefs = useRef<(HTMLButtonElement | null)[]>([]);
   const inView = useInView(containerRef, { margin: "200px", once: false });
   const [variant, setVariant] = useState<QueueVariant>("swarm");
+
+  const handleTabKeyDown = useCallback(
+    (e: React.KeyboardEvent<HTMLButtonElement>) => {
+      const currentIndex = variantTabs.findIndex((t) => t.id === variant);
+      let nextIndex: number | null = null;
+
+      if (e.key === "ArrowRight") nextIndex = (currentIndex + 1) % variantTabs.length;
+      else if (e.key === "ArrowLeft") nextIndex = (currentIndex - 1 + variantTabs.length) % variantTabs.length;
+
+      if (nextIndex !== null) {
+        e.preventDefault();
+        setVariant(variantTabs[nextIndex].id);
+        tabRefs.current[nextIndex]?.focus();
+      }
+    },
+    [variant],
+  );
   const [snapshot, setSnapshot] = useState(() => createSnapshot("bootstrap", queueRouteSeeds));
 
   useEffect(() => {
@@ -116,29 +134,42 @@ export default function EventBusShowcase({ telemetryAdapter }: { telemetryAdapte
               exit={{ opacity: 0, y: -20 }}
               transition={{ duration: 0.3 }}
             >
-              <div className="mb-4 flex flex-wrap items-center justify-center gap-2">
-                {variantTabs.map((tab) => {
+              <div
+                role="tablist"
+                aria-label="Event bus visualization"
+                className="mb-4 flex items-center justify-center gap-1"
+              >
+                {variantTabs.map((tab, index) => {
                   const isActive = variant === tab.id;
                   return (
                     <button
                       key={tab.id}
+                      ref={(el) => { tabRefs.current[index] = el; }}
+                      role="tab"
+                      id={`${uid}-tab-${tab.id}`}
+                      aria-selected={isActive}
+                      aria-controls={`${uid}-panel-${tab.id}`}
+                      tabIndex={isActive ? 0 : -1}
                       onClick={() => setVariant(tab.id)}
-                      className="group rounded-full border px-4 py-2 text-base font-mono uppercase tracking-wider transition-all duration-300"
-                      style={
-                        isActive
-                          ? {
-                              borderColor: tint("cyan", 35),
-                              backgroundColor: tint("cyan", 12),
-                              color: BRAND_VAR.cyan,
-                              boxShadow: `0 0 18px ${tint("cyan", 14)}`,
-                            }
-                          : undefined
-                      }
+                      onKeyDown={handleTabKeyDown}
+                      className="group relative px-5 py-2.5 text-base font-mono uppercase tracking-wider transition-colors duration-200"
+                      style={isActive ? { color: BRAND_VAR.cyan } : undefined}
                     >
                       <span>{tab.label}</span>
                       <span className="ml-2 text-base normal-case tracking-normal text-muted group-hover:text-foreground/80">
                         {tab.hint}
                       </span>
+                      {isActive && (
+                        <motion.div
+                          layoutId={`${uid}-tab-indicator`}
+                          className="absolute bottom-0 left-2 right-2 h-0.5 rounded-full"
+                          style={{
+                            backgroundColor: BRAND_VAR.cyan,
+                            boxShadow: `0 0 12px ${tint("cyan", 40)}, 0 0 4px ${tint("cyan", 60)}`,
+                          }}
+                          transition={{ type: "spring", stiffness: 400, damping: 30 }}
+                        />
+                      )}
                     </button>
                   );
                 })}
@@ -156,8 +187,14 @@ export default function EventBusShowcase({ telemetryAdapter }: { telemetryAdapte
                   className="mb-4 pb-3"
                 />
 
-                {variant === "swarm" && <SwarmView uid={uid} />}
-                {variant === "lanes" && <LanesView laneMetrics={laneMetrics} inView={inView} />}
+                <div
+                  role="tabpanel"
+                  id={`${uid}-panel-${variant}`}
+                  aria-labelledby={`${uid}-tab-${variant}`}
+                >
+                  {variant === "swarm" && <SwarmView uid={uid} />}
+                  {variant === "lanes" && <LanesView laneMetrics={laneMetrics} inView={inView} />}
+                </div>
               </TerminalPanel>
 
               <div

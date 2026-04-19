@@ -1,5 +1,6 @@
 "use client";
 
+import { useState, useCallback } from "react";
 import { motion } from "framer-motion";
 import SectionWrapper from "@/components/SectionWrapper";
 import TerminalChrome from "@/components/TerminalChrome";
@@ -13,7 +14,12 @@ import ActivityFeed from "./components/ActivityFeed";
 import { useActivityFeed } from "./useActivityFeed";
 
 export default function ObservabilityDeck() {
-  const { activity, newRow } = useActivityFeed();
+  const [filterPrefix, setFilterPrefix] = useState<string | null>(null);
+  const { activity, newRow } = useActivityFeed(filterPrefix);
+
+  const handleTagClick = useCallback((prefix: string) => {
+    setFilterPrefix((prev) => (prev === prefix ? null : prefix));
+  }, []);
 
   return (
     <SectionWrapper id="observe">
@@ -41,7 +47,12 @@ export default function ObservabilityDeck() {
       >
         <div className="flex flex-col gap-3">
           {leftModules.map((m) => (
-            <ModuleTag key={m.title} mod={m} />
+            <ModuleTag
+              key={m.title}
+              mod={m}
+              active={filterPrefix === m.filterPrefix}
+              onClick={() => handleTagClick(m.filterPrefix)}
+            />
           ))}
         </div>
 
@@ -63,14 +74,29 @@ export default function ObservabilityDeck() {
           <ActivityFeed activity={activity} newRow={newRow} />
 
           <div className="flex items-center justify-between border-t border-foreground/[0.04] px-5 py-2.5 text-base font-mono tracking-wider uppercase text-foreground/70">
-            <span>Live event stream</span>
+            {filterPrefix ? (
+              <button
+                type="button"
+                onClick={() => setFilterPrefix(null)}
+                className="text-brand-cyan hover:text-brand-cyan/80 transition-colors cursor-pointer"
+              >
+                ← Show all
+              </button>
+            ) : (
+              <span>Live event stream</span>
+            )}
             <span className="text-brand-emerald">auto-refreshing</span>
           </div>
         </div>
 
         <div className="flex flex-col gap-3">
           {rightModules.map((m) => (
-            <ModuleTag key={m.title} mod={m} />
+            <ModuleTag
+              key={m.title}
+              mod={m}
+              active={filterPrefix === m.filterPrefix}
+              onClick={() => handleTagClick(m.filterPrefix)}
+            />
           ))}
         </div>
       </motion.div>

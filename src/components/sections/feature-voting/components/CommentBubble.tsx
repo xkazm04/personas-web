@@ -16,7 +16,7 @@ export default function CommentBubble({
   depth?: number;
 }) {
   return (
-    <div className={depth > 0 ? "ml-4 pl-3 border-l border-white/[0.04]" : ""}>
+    <div className={depth > 0 ? "ml-4 pl-3 border-l border-glass" : ""}>
       <div className="py-1.5">
         <div className="flex items-center gap-2 mb-0.5">
           <span

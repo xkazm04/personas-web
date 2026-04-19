@@ -34,7 +34,7 @@ export default function ResultCard({
             )}
             <span
               className={`text-base font-mono uppercase tracking-wider ${
-                isWorkflow ? "text-brand-rose/60" : "text-brand-emerald/60"
+                isWorkflow ? "text-brand-rose/80" : "text-brand-emerald/80"
               }`}
             >
               {isWorkflow ? "FAILED" : "RESOLVED"}

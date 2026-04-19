@@ -1,8 +1,8 @@
 "use client";
 
-import { motion, AnimatePresence } from "framer-motion";
-import { Shield, Wrench } from "lucide-react";
-import { connections, nodes, healingStages } from "../data";
+import { motion, useReducedMotion } from "framer-motion";
+import { Shield } from "lucide-react";
+import { connections, nodes } from "../data";
 import type { ConnectionStatus } from "../types";
 
 const statusColorFor = (status: ConnectionStatus) =>
@@ -24,12 +24,11 @@ const statusLabelFor = (status: ConnectionStatus) =>
         : "FIX";
 
 export default function StatusPanel({
-  activeStage,
   getConnectionStatus,
 }: {
-  activeStage: number;
   getConnectionStatus: (connId: string) => ConnectionStatus;
 }) {
+  const reduced = useReducedMotion();
   return (
     <div className="lg:w-64 border-t lg:border-t-0 lg:border-l border-foreground/6 bg-background/30 p-4">
       <div className="flex items-center gap-1.5 mb-4">
@@ -67,12 +66,12 @@ export default function StatusPanel({
                   className="h-1.5 w-1.5 rounded-full"
                   style={{ backgroundColor: statusColor }}
                   animate={
-                    status !== "healthy"
+                    status !== "healthy" && !reduced
                       ? { opacity: [1, 0.3, 1] }
-                      : { opacity: 0.6 }
+                      : { opacity: status !== "healthy" ? 1 : 0.6 }
                   }
                   transition={
-                    status !== "healthy"
+                    status !== "healthy" && !reduced
                       ? { duration: 0.6, repeat: Infinity }
                       : {}
                   }
@@ -93,33 +92,6 @@ export default function StatusPanel({
         })}
       </div>
 
-      <AnimatePresence mode="wait">
-        {activeStage >= 0 && (
-          <motion.div
-            key={activeStage}
-            initial={{ opacity: 0, y: 10 }}
-            animate={{ opacity: 1, y: 0 }}
-            exit={{ opacity: 0, y: -10 }}
-            className="mt-4 rounded-lg border border-foreground/6 bg-background/40 p-3"
-          >
-            <div className="flex items-center gap-1.5 mb-1.5">
-              <Wrench
-                className="h-3 w-3"
-                style={{ color: healingStages[activeStage].color }}
-              />
-              <span
-                className="text-base font-mono font-semibold uppercase tracking-wider"
-                style={{ color: healingStages[activeStage].color }}
-              >
-                {healingStages[activeStage].label}
-              </span>
-            </div>
-            <p className="text-base text-foreground font-mono leading-relaxed">
-              {healingStages[activeStage].desc}
-            </p>
-          </motion.div>
-        )}
-      </AnimatePresence>
     </div>
   );
 }

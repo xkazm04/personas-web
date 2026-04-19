@@ -15,7 +15,7 @@ export default function SkeletonCard({
   );
   return (
     <div
-      className={`relative overflow-hidden rounded-2xl border border-white/[0.06] bg-gradient-to-br from-white/[0.035] to-white/[0.008] p-5 ${className}`}
+      className={`relative overflow-hidden rounded-2xl border border-glass bg-gradient-to-br from-white/[0.035] to-white/[0.008] p-5 ${className}`}
     >
       {/* Shimmer overlay */}
       <motion.div
@@ -56,7 +56,7 @@ export function SkeletonChart({ className = "" }: { className?: string }) {
   );
   return (
     <div
-      className={`relative overflow-hidden rounded-2xl border border-white/[0.06] bg-gradient-to-br from-white/[0.035] to-white/[0.008] p-5 ${className}`}
+      className={`relative overflow-hidden rounded-2xl border border-glass bg-gradient-to-br from-white/[0.035] to-white/[0.008] p-5 ${className}`}
     >
       <motion.div
         className="absolute inset-0"

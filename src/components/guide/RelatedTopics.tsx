@@ -15,7 +15,7 @@ export default function RelatedTopics({ related }: RelatedTopicsProps) {
 
   return (
     <section className="mt-16" aria-label="Related guide topics">
-      <hr className="mb-6 border-white/[0.06]" />
+      <hr className="mb-6 border-glass" />
       <h2 className="mb-4 text-lg font-semibold text-foreground">Related Topics</h2>
 
       <motion.div
@@ -29,7 +29,7 @@ export default function RelatedTopics({ related }: RelatedTopicsProps) {
           <motion.div key={topic.id} variants={fadeUp}>
             <Link
               href={`/guide/${category.id}/${topic.id}`}
-              className="group flex h-full flex-col gap-2 rounded-xl border border-white/[0.06] bg-white/[0.02] p-4 backdrop-blur-sm transition-colors hover:border-white/[0.12] hover:bg-white/[0.04]"
+              className="group flex h-full flex-col gap-2 rounded-xl border border-glass bg-white/[0.02] p-4 backdrop-blur-sm transition-colors hover:border-glass-strong hover:bg-white/[0.04] outline-none focus-visible:ring-2 focus-visible:ring-brand-cyan/50 focus-visible:ring-offset-2 focus-visible:ring-offset-black"
             >
               <div className="flex items-center justify-between">
                 <span

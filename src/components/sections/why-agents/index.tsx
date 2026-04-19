@@ -85,7 +85,7 @@ export default function WhyAgents({ role }: { role?: ViewerRole }) {
             exit={{ opacity: 0, y: -10 }}
             transition={{ duration: 0.3 }}
           >
-            <div className="rounded-xl border border-white/[0.06] bg-white/[0.02] px-4 py-3 text-center backdrop-blur-sm">
+            <div className="rounded-xl border border-glass bg-white/[0.02] px-4 py-3 text-center backdrop-blur-sm">
               <div className="flex items-center justify-center gap-2 mb-1.5">
                 <Mail className="h-3 w-3 text-muted-dark" aria-hidden="true" />
                 <span className="text-base font-mono uppercase tracking-wider text-muted-dark">

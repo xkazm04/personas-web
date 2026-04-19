@@ -1,6 +1,27 @@
 export default function TermsOfService() {
   return (
     <div className="space-y-8">
+      <div className="rounded-xl border border-brand-cyan/20 bg-brand-cyan/[0.05] p-5">
+        <p className="text-xs font-semibold uppercase tracking-wider text-brand-cyan">
+          TL;DR
+        </p>
+        <ul className="mt-3 space-y-2 text-sm leading-relaxed text-foreground/80">
+          <li>The core app is free and runs entirely on your machine.</li>
+          <li>
+            You own everything you create — agents, pipelines, prompts, all
+            yours.
+          </li>
+          <li>
+            You&apos;re responsible for your own AI provider subscriptions and
+            what your agents do.
+          </li>
+          <li>
+            You can stop anytime; your local data stays with you, cloud data
+            deleted on request.
+          </li>
+        </ul>
+      </div>
+
       <p className="text-base text-muted-dark">Last updated: April 2026</p>
 
       <section className="space-y-3">

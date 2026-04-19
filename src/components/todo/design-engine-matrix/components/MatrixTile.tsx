@@ -4,7 +4,7 @@ import Image from "next/image";
 import { motion } from "framer-motion";
 import { Check, Loader2 } from "lucide-react";
 import type { CellDef, CellStatus } from "../../designMatrixShared";
-import { CELL_IMAGE, CELL_MIN_HEIGHT } from "../data";
+import { CELL_IMAGE, CELL_HEIGHT_CLASS, FLUID_DIMENSION } from "../data";
 import TileValue from "./TileValue";
 
 export default function MatrixTile({
@@ -23,10 +23,8 @@ export default function MatrixTile({
       whileInView={{ opacity: 1, scale: 1 }}
       viewport={{ once: true }}
       transition={{ duration: 0.5 }}
-      className="relative flex flex-col rounded-2xl border backdrop-blur-sm overflow-hidden"
+      className={`relative flex flex-col rounded-2xl border backdrop-blur-sm overflow-hidden ${CELL_HEIGHT_CLASS}`}
       style={{
-        minHeight: CELL_MIN_HEIGHT,
-        height: CELL_MIN_HEIGHT,
         borderColor: isActive ? `${def.color}55` : "rgba(255,255,255,0.08)",
         boxShadow: isActive ? `0 0 36px ${def.color}25` : undefined,
       }}
@@ -64,7 +62,7 @@ export default function MatrixTile({
 
       <div className="relative z-10 flex items-start justify-between px-5 pt-5">
         <div
-          className="text-base font-mono uppercase tracking-widest font-bold drop-shadow-[0_2px_6px_rgba(0,0,0,0.85)]"
+          className={`${FLUID_DIMENSION} font-mono uppercase tracking-widest font-bold leading-tight drop-shadow-[0_2px_6px_rgba(0,0,0,0.85)]`}
           style={{
             color: isActive ? def.color : "rgba(255,255,255,0.75)",
           }}

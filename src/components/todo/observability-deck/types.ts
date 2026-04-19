@@ -14,4 +14,5 @@ export interface OverviewModule {
   title: string;
   blurb: string;
   color: string;
+  filterPrefix: string;
 }

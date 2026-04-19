@@ -7,7 +7,7 @@ import { BRAND_VAR, tint } from "@/lib/brand-theme";
 
 export default function RoadmapProgress() {
   return (
-    <motion.div variants={fadeUp} className="mt-14 mx-auto max-w-2xl">
+    <motion.div variants={fadeUp} className="mt-10 mx-auto max-w-2xl">
       <div className="flex flex-wrap items-center justify-between gap-3 text-base font-mono text-muted mb-4">
         <span className="font-medium tracking-wide">11 of 15 phases complete</span>
         <span

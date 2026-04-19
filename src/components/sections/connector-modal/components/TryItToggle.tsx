@@ -17,7 +17,7 @@ export default function TryItToggle({ connector, showSimulator, simKey, onToggle
     <div className="px-8 py-6">
       <button
         onClick={onToggle}
-        className="flex items-center gap-3 rounded-xl border border-white/[0.06] bg-white/[0.02] px-5 py-3 text-base font-medium transition-all hover:border-white/[0.12] hover:bg-white/[0.04] cursor-pointer w-full"
+        className="flex items-center gap-3 rounded-xl border border-glass bg-white/[0.02] px-5 py-3 text-base font-medium transition-all hover:border-glass-strong hover:bg-white/[0.04] cursor-pointer w-full"
       >
         <div
           className="flex h-8 w-8 items-center justify-center rounded-lg"

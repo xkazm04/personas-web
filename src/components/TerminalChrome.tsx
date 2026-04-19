@@ -13,7 +13,7 @@ export default function TerminalChrome({
 }: TerminalChromeProps) {
   return (
     <div
-      className={`flex flex-wrap items-center justify-between gap-2 border-b border-white/[0.04] ${className}`}
+      className={`flex flex-wrap items-center justify-between gap-2 border-b border-glass ${className}`}
     >
       <div className="flex items-center gap-2.5">
         <div className="flex gap-1.5" aria-hidden="true">

@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from "react";
 import { AnimatePresence, motion } from "framer-motion";
-import { ChevronDown, ChevronUp, MessageCircle } from "lucide-react";
+import { ChevronUp, MessageCircle } from "lucide-react";
 import { fadeUp } from "@/lib/animations";
 import { trackFeatureVote } from "@/lib/analytics";
 import type { Comment, Feature } from "../local-types";
@@ -34,7 +34,6 @@ export default function FeatureVoteCard({
   const [count, setCount] = useState(feature.votes + (initialVoted ? 1 : 0));
   const [showTiers, setShowTiers] = useState(false);
   const [imgLoaded, setImgLoaded] = useState(false);
-  const [expanded, setExpanded] = useState(false);
   const [showComments, setShowComments] = useState(false);
 
   useEffect(() => {
@@ -61,8 +60,15 @@ export default function FeatureVoteCard({
     <motion.div
       variants={fadeUp}
       whileHover={{ y: -4, transition: { duration: 0.35, ease: "easeOut" } }}
-      className="group relative flex flex-col overflow-hidden rounded-2xl border border-white/[0.05] bg-gradient-to-b from-white/[0.03] to-transparent backdrop-blur-sm transition-all duration-500 hover:border-white/[0.1] hover:shadow-[0_8px_60px_rgba(0,0,0,0.35)]"
+      className="group relative flex flex-col overflow-hidden rounded-2xl border border-glass bg-gradient-to-b from-white/[0.03] to-transparent backdrop-blur-sm transition-all duration-500 hover:border-glass-hover hover:shadow-[0_8px_60px_rgba(0,0,0,0.35)]"
     >
+      <div className="px-4 pt-4 pb-2">
+        <h3 className="text-lg font-semibold leading-snug">{feature.title}</h3>
+        <p className="mt-1 text-sm leading-relaxed text-muted-dark line-clamp-2">
+          {feature.description}
+        </p>
+      </div>
+
       <FeatureVoteIllustration
         feature={feature}
         rgba={rgba}
@@ -70,10 +76,7 @@ export default function FeatureVoteCard({
         onImgLoad={() => setImgLoaded(true)}
       />
 
-      <div
-        className="relative z-10 cursor-pointer"
-        onClick={() => setExpanded((v) => !v)}
-      >
+      <div className="relative z-10">
         <div
           className="absolute inset-x-0 top-0 h-px opacity-60"
           style={{
@@ -108,15 +111,12 @@ export default function FeatureVoteCard({
             <span className="tabular-nums">{count}</span>
           </button>
 
-          <h3 className="text-base font-semibold leading-tight flex-1 text-center">
-            {feature.title}
-          </h3>
+          <span className="flex-1" />
 
           <button
             onClick={(e) => {
               e.stopPropagation();
               setShowComments((v) => !v);
-              if (!showComments) setExpanded(true);
             }}
             className="flex items-center gap-1 rounded-full border px-2 py-1 text-base font-medium transition-all duration-300 cursor-pointer shrink-0"
             style={
@@ -149,16 +149,10 @@ export default function FeatureVoteCard({
               rgba={rgba}
             />
           )}
-
-          <ChevronDown
-            className={`h-4 w-4 text-muted-dark shrink-0 transition-transform duration-300 ${
-              expanded ? "rotate-180" : ""
-            }`}
-          />
         </div>
 
         <AnimatePresence>
-          {expanded && (
+          {showComments && (
             <motion.div
               initial={{ height: 0, opacity: 0 }}
               animate={{ height: "auto", opacity: 1 }}
@@ -173,40 +167,18 @@ export default function FeatureVoteCard({
                     background: `linear-gradient(90deg, transparent, ${rgba(0.15)}, transparent)`,
                   }}
                 />
-                <p className="text-base leading-relaxed text-muted-dark">
-                  {feature.description}
-                </p>
-
-                <AnimatePresence>
-                  {showComments && (
-                    <motion.div
-                      initial={{ height: 0, opacity: 0 }}
-                      animate={{ height: "auto", opacity: 1 }}
-                      exit={{ height: 0, opacity: 0 }}
-                      transition={{ duration: 0.25, ease: "easeOut" }}
-                      className="overflow-hidden"
-                    >
-                      <div
-                        className="h-px mt-3 mb-3 opacity-30"
-                        style={{
-                          background: `linear-gradient(90deg, transparent, ${rgba(0.15)}, transparent)`,
-                        }}
-                      />
-                      <div className="flex items-center gap-1.5 mb-2">
-                        <MessageCircle className="h-3 w-3 text-muted-dark/60" />
-                        <span className="text-base font-semibold text-muted-dark/60 font-mono tracking-wider uppercase">
-                          Discussion
-                        </span>
-                      </div>
-                      <CommentThread
-                        featureId={feature.id}
-                        comments={comments}
-                        onAddComment={onAddComment}
-                        accentRgba={rgba}
-                      />
-                    </motion.div>
-                  )}
-                </AnimatePresence>
+                <div className="flex items-center gap-1.5 mb-2">
+                  <MessageCircle className="h-3 w-3 text-muted-dark/60" />
+                  <span className="text-base font-semibold text-muted-dark/60 font-mono tracking-wider uppercase">
+                    Discussion
+                  </span>
+                </div>
+                <CommentThread
+                  featureId={feature.id}
+                  comments={comments}
+                  onAddComment={onAddComment}
+                  accentRgba={rgba}
+                />
               </div>
             </motion.div>
           )}

@@ -61,7 +61,7 @@ export default function ModuleBadge({ moduleRef, categoryColor = "#06b6d4", comp
         onClick={() => setOpen((v) => !v)}
         aria-expanded={open}
         aria-haspopup="dialog"
-        className="inline-flex items-center gap-1.5 rounded-full px-2.5 py-0.5 text-sm font-medium transition-colors border border-white/[0.08] bg-white/[0.03] hover:bg-white/[0.06] hover:border-white/[0.14] text-muted-dark hover:text-foreground"
+        className="inline-flex items-center gap-1.5 rounded-full px-2.5 py-0.5 text-sm font-medium transition-colors border border-glass-hover bg-white/[0.03] hover:bg-white/[0.06] hover:border-glass-strong text-muted-dark hover:text-foreground outline-none focus-visible:ring-2 focus-visible:ring-brand-cyan/50 focus-visible:ring-offset-2 focus-visible:ring-offset-black"
       >
         <Monitor className="h-3 w-3 shrink-0" aria-hidden="true" />
         <span>In app</span>
@@ -73,7 +73,7 @@ export default function ModuleBadge({ moduleRef, categoryColor = "#06b6d4", comp
           role="dialog"
           aria-modal="true"
           aria-label="Desktop app location"
-          className="absolute left-0 top-full z-50 mt-2 w-64 rounded-xl border border-white/[0.08] bg-[#0a0a0f]/95 backdrop-blur-md p-4 shadow-xl shadow-black/40"
+          className="absolute left-0 top-full z-50 mt-2 w-64 rounded-xl border border-glass-hover bg-[#0a0a0f]/95 backdrop-blur-md p-4 shadow-xl shadow-black/40"
         >
           <div className="flex items-start justify-between gap-2">
             <p className="text-sm text-muted-dark font-medium uppercase tracking-wider">
@@ -82,7 +82,7 @@ export default function ModuleBadge({ moduleRef, categoryColor = "#06b6d4", comp
             <button
               type="button"
               onClick={() => setOpen(false)}
-              className="rounded p-0.5 text-muted-dark hover:text-foreground transition-colors"
+              className="rounded p-0.5 text-muted-dark hover:text-foreground transition-colors outline-none focus-visible:ring-2 focus-visible:ring-brand-cyan/50 focus-visible:ring-offset-2 focus-visible:ring-offset-black"
               aria-label="Close"
             >
               <X className="h-3 w-3" />

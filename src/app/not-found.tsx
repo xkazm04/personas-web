@@ -42,7 +42,7 @@ export default function NotFound() {
                 <Link
                   key={page.href}
                   href={page.href}
-                  className="group flex flex-col items-center gap-2 rounded-xl border border-white/[0.06] bg-white/[0.02] p-4 transition-colors hover:border-white/[0.12] hover:bg-white/[0.04]"
+                  className="group flex flex-col items-center gap-2 rounded-xl border border-glass bg-white/[0.02] p-4 transition-colors hover:border-glass-strong hover:bg-white/[0.04]"
                 >
                   <div
                     className="flex h-9 w-9 items-center justify-center rounded-lg"

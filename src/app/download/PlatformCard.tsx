@@ -24,7 +24,7 @@ export default function PlatformCard({
       className={`flex flex-col items-center gap-3 rounded-xl border p-6 transition-all duration-200 text-center ${
         selected
           ? "border-brand-cyan/30 bg-brand-cyan/5 shadow-[0_0_30px_rgba(6,182,212,0.08)]"
-          : "border-white/[0.06] bg-white/[0.02] hover:border-white/[0.1]"
+          : "border-glass bg-white/[0.02] hover:border-glass-hover"
       }`}
     >
       <Icon

@@ -30,7 +30,7 @@ export default function DesktopNav() {
   return (
     <>
       {/* Route tabs */}
-      <div className="hidden items-center gap-1 rounded-full border border-white/6 bg-white/2 p-1 backdrop-blur-sm md:flex">
+      <div className="hidden items-center gap-1 rounded-full border border-glass bg-white/2 p-1 backdrop-blur-sm md:flex">
         {routes.map((route) => {
           const isActive = pathname === route.href;
           return (

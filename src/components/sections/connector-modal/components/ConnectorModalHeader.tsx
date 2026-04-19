@@ -1,10 +1,15 @@
 "use client";
 
+import { useState } from "react";
+import Image from "next/image";
 import type { Connector } from "@/data/connectors";
 import { categories } from "@/data/connectors";
 
 export default function ConnectorModalHeader({ connector }: { connector: Connector }) {
   const categoryMeta = categories.find((c) => c.key === connector.category);
+  const iconName = connector.icon ?? connector.name;
+  const [imgError, setImgError] = useState(false);
+
   return (
     <div className="px-8 pt-8 pb-6">
       <div className="flex items-start gap-4">
@@ -16,7 +21,17 @@ export default function ConnectorModalHeader({ connector }: { connector: Connect
             color: connector.color,
           }}
         >
-          {connector.monogram}
+          {imgError ? (
+            connector.monogram
+          ) : (
+            <Image
+              src={`/tools/${iconName}.svg`}
+              alt={connector.label}
+              width={32}
+              height={32}
+              onError={() => setImgError(true)}
+            />
+          )}
         </div>
 
         <div className="min-w-0 flex-1">
@@ -32,7 +47,7 @@ export default function ConnectorModalHeader({ connector }: { connector: Connect
             >
               {categoryMeta?.label ?? connector.category}
             </span>
-            <span className="rounded-full border border-white/[0.06] bg-white/[0.03] px-2.5 py-0.5 text-base font-mono text-muted-dark">
+            <span className="rounded-full border border-glass bg-white/[0.03] px-2.5 py-0.5 text-base font-mono text-muted-dark">
               Connects via {connector.authType}
             </span>
           </div>

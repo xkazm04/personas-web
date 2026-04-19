@@ -90,7 +90,7 @@ export default function AgentMindPanel({
         {phase === "idle" ? (
           <div className="flex h-full items-center justify-center min-h-[400px]">
             <div className="text-center space-y-3">
-              <div className="mx-auto w-16 h-16 rounded-2xl border border-white/[0.06] bg-white/[0.02] flex items-center justify-center">
+              <div className="mx-auto w-16 h-16 rounded-2xl border border-glass bg-white/[0.02] flex items-center justify-center">
                 <Cpu className="h-7 w-7 text-foreground" />
               </div>
               <p className="text-base text-foreground font-mono">

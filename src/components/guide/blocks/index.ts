@@ -1,3 +1,4 @@
+export { CopyButton } from "./CopyButton";
 export { Callout } from "./Callout";
 export { StepWizard } from "./StepWizard";
 export { KeyboardGrid } from "./KeyboardGrid";

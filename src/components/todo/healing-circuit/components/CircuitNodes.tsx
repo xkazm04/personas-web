@@ -1,6 +1,6 @@
 "use client";
 
-import { motion } from "framer-motion";
+import { motion, useReducedMotion } from "framer-motion";
 import { nodes, nodeStatusColor } from "../data";
 import type { NodeStatus } from "../types";
 
@@ -9,6 +9,7 @@ export default function CircuitNodes({
 }: {
   getNodeStatus: (nodeId: string) => NodeStatus;
 }) {
+  const reduced = useReducedMotion();
   return (
     <>
       {nodes.map((node) => {
@@ -37,10 +38,10 @@ export default function CircuitNodes({
               stroke={color}
               strokeWidth={1.75}
               animate={{
-                strokeOpacity: isAffected ? [0.7, 1, 0.7] : 0.45,
+                strokeOpacity: isAffected && !reduced ? [0.7, 1, 0.7] : isAffected ? 0.85 : 0.45,
               }}
               transition={
-                isAffected
+                isAffected && !reduced
                   ? { duration: 0.8, repeat: Infinity }
                   : { duration: 0.5 }
               }
@@ -80,8 +81,8 @@ export default function CircuitNodes({
                 stroke={color}
                 strokeWidth={1.25}
                 filter="url(#nodeGlow)"
-                animate={{ opacity: [0.5, 0.9, 0.5] }}
-                transition={{ duration: 1, repeat: Infinity }}
+                animate={reduced ? { opacity: 0.7 } : { opacity: [0.5, 0.9, 0.5] }}
+                transition={reduced ? { duration: 0 } : { duration: 1, repeat: Infinity }}
               />
             )}
 
@@ -90,9 +91,9 @@ export default function CircuitNodes({
               cy={node.y - 26}
               r={3}
               fill={color}
-              animate={isAffected ? { opacity: [1, 0.3, 1] } : { opacity: 1 }}
+              animate={isAffected && !reduced ? { opacity: [1, 0.3, 1] } : { opacity: 1 }}
               transition={
-                isAffected
+                isAffected && !reduced
                   ? { duration: 0.5, repeat: Infinity }
                   : { duration: 0.3 }
               }

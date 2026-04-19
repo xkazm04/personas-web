@@ -1,7 +1,8 @@
 "use client";
 
-import { motion } from "framer-motion";
-import { Monitor, Shield, EyeOff, Wifi, Check, ArrowRight } from "lucide-react";
+import { motion, AnimatePresence } from "framer-motion";
+import { useState } from "react";
+import { Monitor, Shield, EyeOff, Wifi, Check, ArrowRight, ChevronDown, CircleCheck } from "lucide-react";
 import Link from "next/link";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/sections/Footer";
@@ -14,21 +15,120 @@ import { fadeUp } from "@/lib/animations";
 import {
   SECURITY_PILLARS,
   COMPLIANCE_POINTS,
-  ARCHITECTURE_LAYERS,
+  SECURITY_FAQS,
 } from "@/data/security";
+import ArchitectureFlow from "./ArchitectureFlow";
 
 const PILLAR_ICONS = { Monitor, Shield, EyeOff, Wifi } as Record<string, typeof Monitor>;
 
+function SecurityFAQItem({ question, answer }: { question: string; answer: string }) {
+  const [open, setOpen] = useState(false);
+  return (
+    <div className="border-b border-glass last:border-b-0">
+      <button
+        onClick={() => setOpen((v) => !v)}
+        className="flex w-full items-center justify-between py-4 text-left cursor-pointer"
+      >
+        <span className="text-base font-medium text-foreground pr-4">
+          {question}
+        </span>
+        <ChevronDown
+          className={`h-4 w-4 text-muted shrink-0 transition-transform duration-200 ${
+            open ? "rotate-180" : ""
+          }`}
+        />
+      </button>
+      {open && (
+        <p className="pb-4 text-base text-muted leading-relaxed">{answer}</p>
+      )}
+    </div>
+  );
+}
+
 const STATUS_STYLES = {
-  simplified: { label: "Simplified", color: "#34d399" },
-  "not-applicable": { label: "N/A", color: "#fbbf24" },
-  "built-in": { label: "Built-in", color: "#06b6d4" },
+  simplified: { label: "Simplified", color: "#34d399", meaning: "Requirement exists but is dramatically easier to meet" },
+  "not-applicable": { label: "N/A", color: "#fbbf24", meaning: "Requirement does not apply to local-first software" },
+  "built-in": { label: "Built-in", color: "#06b6d4", meaning: "Handled automatically by the local architecture" },
 };
+
+function ComplianceRow({ point }: { point: (typeof COMPLIANCE_POINTS)[number] }) {
+  const [open, setOpen] = useState(false);
+  const status = STATUS_STYLES[point.status];
+  return (
+    <div className="border-b border-glass last:border-b-0">
+      <button
+        onClick={() => setOpen((v) => !v)}
+        className="flex w-full items-start gap-4 px-6 py-5 text-left cursor-pointer group"
+      >
+        <span
+          className="shrink-0 mt-0.5 rounded px-2 py-0.5 text-sm font-semibold uppercase tracking-wider"
+          style={{
+            backgroundColor: `${status.color}15`,
+            color: status.color,
+          }}
+        >
+          {status.label}
+        </span>
+        <div className="flex-1 min-w-0">
+          <h4 className="text-base font-semibold text-foreground">
+            {point.label}
+          </h4>
+          <p className="text-sm text-muted leading-relaxed mt-1">
+            {point.description}
+          </p>
+        </div>
+        <ChevronDown
+          className={`h-4 w-4 text-muted shrink-0 mt-1.5 transition-transform duration-200 ${
+            open ? "rotate-180" : ""
+          }`}
+        />
+      </button>
+      <AnimatePresence initial={false}>
+        {open && (
+          <motion.div
+            key="detail"
+            initial={{ height: 0, opacity: 0 }}
+            animate={{ height: "auto", opacity: 1 }}
+            exit={{ height: 0, opacity: 0 }}
+            transition={{ duration: 0.25, ease: "easeInOut" }}
+            className="overflow-hidden"
+          >
+            <div className="px-6 pb-5 pt-0">
+              <div
+                className="rounded-lg border px-5 py-4"
+                style={{
+                  borderColor: `${status.color}20`,
+                  backgroundColor: `${status.color}08`,
+                }}
+              >
+                <p className="text-xs font-medium uppercase tracking-wider text-muted mb-3">
+                  What you don&apos;t need to worry about
+                </p>
+                <ul className="space-y-2">
+                  {point.checklist.map((item, i) => (
+                    <li key={i} className="flex items-start gap-2.5 text-sm text-muted">
+                      <CircleCheck
+                        className="h-4 w-4 shrink-0 mt-0.5"
+                        style={{ color: status.color }}
+                      />
+                      <span>{item}</span>
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            </div>
+          </motion.div>
+        )}
+      </AnimatePresence>
+    </div>
+  );
+}
 
 const scrollMapItems = [
   { label: "SECURITY", href: "#security" },
   { label: "ARCHITECTURE", href: "#architecture" },
   { label: "COMPLIANCE", href: "#compliance" },
+  { label: "FAQ", href: "#security-faq" },
   { label: "CTA", href: "#security-cta" },
 ];
 
@@ -65,7 +165,7 @@ export default function SecurityPage() {
                 <motion.div
                   key={pillar.title}
                   variants={fadeUp}
-                  className="rounded-xl border border-white/[0.06] bg-white/[0.02] backdrop-blur-sm p-6 sm:p-8"
+                  className="rounded-xl border border-glass bg-white/[0.02] backdrop-blur-sm p-6 sm:p-8"
                 >
                   <div
                     className="mb-4 flex h-10 w-10 items-center justify-center rounded-lg"
@@ -109,34 +209,7 @@ export default function SecurityPage() {
             </p>
           </motion.div>
 
-          <motion.div variants={fadeUp} className="mx-auto max-w-2xl space-y-0">
-            {ARCHITECTURE_LAYERS.map((layer, i) => (
-              <div key={layer.name} className="relative">
-                {/* Connector line */}
-                {i > 0 && (
-                  <div className="mx-auto h-8 w-px bg-gradient-to-b from-white/10 to-white/5" />
-                )}
-                <div
-                  className="rounded-xl border bg-white/[0.02] backdrop-blur-sm px-6 py-5 flex items-center gap-4"
-                  style={{ borderColor: `${layer.color}20` }}
-                >
-                  <div
-                    className="shrink-0 h-3 w-3 rounded-full"
-                    style={{ backgroundColor: layer.color }}
-                  />
-                  <div>
-                    <h4
-                      className="text-base font-semibold"
-                      style={{ color: layer.color }}
-                    >
-                      {layer.name}
-                    </h4>
-                    <p className="text-sm text-muted mt-0.5">{layer.description}</p>
-                  </div>
-                </div>
-              </div>
-            ))}
-          </motion.div>
+          <ArchitectureFlow />
         </SectionWrapper>
 
         {/* ── Compliance ────────────────────────────────────────── */}
@@ -152,35 +225,51 @@ export default function SecurityPage() {
             </p>
           </motion.div>
 
+          {/* Status legend */}
+          <motion.div
+            variants={fadeUp}
+            className="mx-auto max-w-3xl mb-4 flex flex-wrap items-center justify-center gap-x-6 gap-y-2"
+          >
+            {Object.values(STATUS_STYLES).map((s) => (
+              <div key={s.label} className="flex items-center gap-2 text-sm">
+                <span
+                  className="inline-block h-2.5 w-2.5 rounded-full"
+                  style={{ backgroundColor: s.color }}
+                />
+                <span className="font-medium text-foreground">{s.label}</span>
+                <span className="text-muted">{s.meaning}</span>
+              </div>
+            ))}
+          </motion.div>
+
           <motion.div variants={fadeUp} className="mx-auto max-w-3xl">
             <TerminalPanel bg={40} shadow="none">
-            {COMPLIANCE_POINTS.map((point) => {
-              const status = STATUS_STYLES[point.status];
-              return (
-                <div
-                  key={point.label}
-                  className="flex items-start gap-4 px-6 py-5 border-b border-white/5 last:border-b-0"
-                >
-                  <span
-                    className="shrink-0 mt-0.5 rounded px-2 py-0.5 text-sm font-semibold uppercase tracking-wider"
-                    style={{
-                      backgroundColor: `${status.color}15`,
-                      color: status.color,
-                    }}
-                  >
-                    {status.label}
-                  </span>
-                  <div>
-                    <h4 className="text-base font-semibold text-foreground">
-                      {point.label}
-                    </h4>
-                    <p className="text-sm text-muted leading-relaxed mt-1">
-                      {point.description}
-                    </p>
-                  </div>
-                </div>
-              );
-            })}
+              {COMPLIANCE_POINTS.map((point) => (
+                <ComplianceRow key={point.label} point={point} />
+              ))}
+            </TerminalPanel>
+          </motion.div>
+        </SectionWrapper>
+
+        {/* ── FAQ ───────────────────────────────────────────────── */}
+        <SectionWrapper id="security-faq" aria-label="Security FAQ">
+          <motion.div variants={fadeUp} className="text-center mb-12">
+            <SectionHeading>
+              Common{" "}
+              <GradientText className="drop-shadow-lg">questions</GradientText>
+            </SectionHeading>
+            <p className="mx-auto mt-6 max-w-2xl text-base text-muted leading-relaxed font-light">
+              Direct answers to the security and privacy questions we hear most often.
+            </p>
+          </motion.div>
+
+          <motion.div variants={fadeUp} className="mx-auto max-w-2xl">
+            <TerminalPanel bg={40} shadow="none">
+              <div className="px-6">
+                {SECURITY_FAQS.map((faq) => (
+                  <SecurityFAQItem key={faq.question} {...faq} />
+                ))}
+              </div>
             </TerminalPanel>
           </motion.div>
         </SectionWrapper>
@@ -206,7 +295,7 @@ export default function SecurityPage() {
               </Link>
               <Link
                 href="/compare"
-                className="inline-flex items-center gap-2 rounded-full border border-white/10 px-8 py-3 text-base font-medium text-muted transition-colors hover:border-white/20 hover:text-foreground"
+                className="inline-flex items-center gap-2 rounded-full border border-glass-hover px-8 py-3 text-base font-medium text-muted transition-colors hover:border-white/20 hover:text-foreground"
               >
                 Compare Security
                 <ArrowRight className="h-4 w-4" />

@@ -1,7 +1,7 @@
 "use client";
 
 import { motion } from "framer-motion";
-import { LogIn, FlaskConical } from "lucide-react";
+import { LogIn, FlaskConical, Loader2 } from "lucide-react";
 import { fadeUp, staggerContainer } from "@/lib/animations";
 import GradientText from "@/components/GradientText";
 import AuthLayout from "@/components/dashboard/AuthLayout";
@@ -11,6 +11,7 @@ import { DEVELOPMENT } from "@/lib/dev";
 export default function SignInPrompt() {
   const signInWithGoogle = useAuthStore((s) => s.signInWithGoogle);
   const signInAsDemo = useAuthStore((s) => s.signInAsDemo);
+  const isSigningIn = useAuthStore((s) => s.isSigningIn);
 
   return (
     <AuthLayout>
@@ -34,7 +35,7 @@ export default function SignInPrompt() {
         {/* Card */}
         <motion.div
           variants={fadeUp}
-          className="relative overflow-hidden rounded-2xl border border-white/[0.06] bg-white/[0.03] p-8 backdrop-blur-xl"
+          className="relative overflow-hidden rounded-2xl border border-glass bg-white/[0.03] p-8 backdrop-blur-xl"
         >
           {/* Top shine */}
           <div className="pointer-events-none absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-white/[0.06] to-transparent" />
@@ -62,13 +63,19 @@ export default function SignInPrompt() {
             {/* Sign-In Button */}
             <button
               onClick={signInWithGoogle}
-              className="group relative mt-8 flex w-full items-center justify-center gap-3 overflow-hidden rounded-full border border-brand-cyan/25 bg-brand-cyan/8 px-6 py-3.5 text-base font-semibold text-brand-cyan transition-all duration-300 hover:border-brand-cyan/40 hover:bg-brand-cyan/15 hover:shadow-[0_0_30px_rgba(6,182,212,0.15)]"
+              disabled={isSigningIn}
+              className="group relative mt-8 flex w-full items-center justify-center gap-3 overflow-hidden rounded-full border border-brand-cyan/25 bg-brand-cyan/8 px-6 py-3.5 text-base font-semibold text-brand-cyan transition-all duration-300 hover:border-brand-cyan/40 hover:bg-brand-cyan/15 hover:shadow-[0_0_30px_rgba(6,182,212,0.15)] disabled:opacity-60 disabled:pointer-events-none"
             >
               <div className="absolute inset-0 bg-gradient-to-r from-transparent via-brand-cyan/10 to-transparent 
                 motion-safe:-translate-x-full motion-safe:transition-transform motion-safe:duration-700 motion-safe:group-hover:translate-x-full
                 motion-reduce:opacity-0 motion-reduce:group-hover:opacity-100 motion-reduce:transition-opacity motion-reduce:duration-300" 
               />
-              {DEVELOPMENT ? (
+              {isSigningIn ? (
+                <>
+                  <Loader2 className="relative h-5 w-5 animate-spin" />
+                  <span className="relative">Signing in…</span>
+                </>
+              ) : DEVELOPMENT ? (
                 <>
                   <FlaskConical className="relative h-5 w-5" />
                   <span className="relative">Enter Demo Dashboard</span>
@@ -104,7 +111,7 @@ export default function SignInPrompt() {
             {!DEVELOPMENT && (
               <button
                 onClick={signInAsDemo}
-                className="group relative mt-3 flex w-full items-center justify-center gap-2 overflow-hidden rounded-full border border-white/[0.08] bg-white/[0.03] px-6 py-3 text-base font-medium text-muted-dark transition-all duration-300 hover:border-white/[0.15] hover:bg-white/[0.06] hover:text-foreground/80"
+                className="group relative mt-3 flex w-full items-center justify-center gap-2 overflow-hidden rounded-full border border-glass-hover bg-white/[0.03] px-6 py-3 text-base font-medium text-muted-dark transition-all duration-300 hover:border-glass-strong hover:bg-white/[0.06] hover:text-foreground/80"
               >
                 <FlaskConical className="relative h-4 w-4" />
                 <span className="relative">Try Demo</span>

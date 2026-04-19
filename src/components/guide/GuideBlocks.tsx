@@ -5,6 +5,7 @@
  */
 
 export {
+  CopyButton,
   Callout,
   StepWizard,
   KeyboardGrid,

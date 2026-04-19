@@ -39,23 +39,28 @@ export default function ComparisonTable() {
 
       <motion.div
         variants={fadeUp}
-        className="overflow-x-auto rounded-2xl border border-white/8 bg-black/40 backdrop-blur-xl shadow-[0_0_60px_rgba(0,0,0,0.3)]"
+        role="table"
+        aria-label="Feature comparison across AI agent platforms"
+        className="overflow-x-auto rounded-2xl border border-glass-hover bg-black/40 backdrop-blur-xl shadow-[0_0_60px_rgba(0,0,0,0.3)]"
       >
         <div
-          className="grid items-center gap-2 px-4 sm:px-6 py-5 border-b border-white/8 bg-white/[0.02]"
+          role="row"
+          className="grid items-center gap-2 px-4 sm:px-6 py-5 border-b border-glass-hover bg-white/[0.02]"
           style={{
             gridTemplateColumns: `minmax(140px, 1.5fr) repeat(${colCount - 1}, minmax(80px, 1fr))`,
           }}
         >
-          <div className="text-base font-medium text-muted">Feature</div>
+          <div role="columnheader" className="text-base font-medium text-muted">Feature</div>
           {activeCompetitors.map((comp) => (
             <CompetitorHeader key={comp.id} competitor={comp} isPersonas={comp.id === "personas"} />
           ))}
         </div>
 
-        {COMPARISON_CATEGORIES.map((cat, i) => (
-          <CategoryBlock key={cat.name} category={cat} activeCompetitors={activeCompetitors} defaultOpen={i < 3} />
-        ))}
+        <div role="rowgroup">
+          {COMPARISON_CATEGORIES.map((cat, i) => (
+            <CategoryBlock key={cat.name} category={cat} activeCompetitors={activeCompetitors} defaultOpen={i < 3} />
+          ))}
+        </div>
       </motion.div>
 
       <motion.div variants={fadeUp} className="mt-4 flex flex-wrap gap-4 justify-center">

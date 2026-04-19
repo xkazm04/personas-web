@@ -16,7 +16,7 @@ export default function ToolSidebar({
       initial={{ opacity: 0, x: 20 }}
       animate={{ opacity: 1, x: 0 }}
       exit={{ opacity: 0, x: 20 }}
-      className="absolute right-0 top-14 z-20 w-56 max-h-80 overflow-y-auto rounded-xl border border-white/10 bg-black/90 backdrop-blur-xl p-3 shadow-2xl"
+      className="absolute right-0 top-14 z-20 w-56 max-h-80 overflow-y-auto rounded-xl border border-glass-hover bg-black/90 backdrop-blur-xl p-3 shadow-2xl"
     >
       <p className="text-base font-mono text-muted uppercase tracking-wider mb-2">
         Available Integrations

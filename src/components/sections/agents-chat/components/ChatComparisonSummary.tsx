@@ -19,17 +19,17 @@ export default function ChatComparisonSummary({
           animate={{ opacity: 1, y: 0, scale: 1 }}
           exit={{ opacity: 0, y: -8 }}
           transition={{ duration: 0.5, ease: "easeOut", delay: 0.2 }}
-          className="mt-5 rounded-xl border border-white/10 bg-white/[0.03] p-4 backdrop-blur-sm"
+          className="mt-5 rounded-xl border border-glass-hover bg-white/[0.03] p-4 backdrop-blur-sm"
         >
           <div className="grid grid-cols-3 gap-4 items-center">
             <div className="text-center">
-              <div className="text-base font-mono uppercase tracking-wider text-brand-rose/60 mb-1">
+              <div className="text-base font-mono uppercase tracking-wider text-brand-rose/80 mb-1">
                 Workflow
               </div>
-              <div className="text-lg font-bold text-brand-rose/70">
+              <div className="text-lg font-bold text-brand-rose/90">
                 {scenario.workflow.messages.length} msgs
               </div>
-              <div className="text-base text-brand-rose/60 font-mono">
+              <div className="text-base text-brand-rose/70 font-mono">
                 {scenario.workflow.messages[scenario.workflow.messages.length - 1].timestamp}{" "}
                 elapsed
               </div>
@@ -48,13 +48,13 @@ export default function ChatComparisonSummary({
             </div>
 
             <div className="text-center">
-              <div className="text-base font-mono uppercase tracking-wider text-brand-emerald/60 mb-1">
+              <div className="text-base font-mono uppercase tracking-wider text-brand-emerald/80 mb-1">
                 Agent
               </div>
-              <div className="text-lg font-bold text-brand-emerald/70">
+              <div className="text-lg font-bold text-brand-emerald/90">
                 {scenario.agent.messages.length} msgs
               </div>
-              <div className="text-base text-brand-emerald/60 font-mono">
+              <div className="text-base text-brand-emerald/70 font-mono">
                 {scenario.agent.messages[scenario.agent.messages.length - 1].timestamp}{" "}
                 elapsed
               </div>

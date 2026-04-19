@@ -4,6 +4,7 @@ import { motion } from "framer-motion";
 import { Dna, Play } from "lucide-react";
 import { GENOME_NODES } from "../data";
 import type { GenomeNode } from "../types";
+import TabBackdrop from "./TabBackdrop";
 
 export default function EvolutionTab() {
   const width = 600;
@@ -16,8 +17,9 @@ export default function EvolutionTab() {
   });
 
   return (
-    <div className="force-dark flex flex-col rounded-xl border border-foreground/[0.08] bg-background/80 backdrop-blur-xl overflow-hidden">
-      <div className="flex items-center justify-between border-b border-foreground/[0.06] px-5 py-3">
+    <div className="force-dark relative flex flex-col rounded-xl border border-foreground/[0.08] bg-background/80 backdrop-blur-xl overflow-hidden">
+      <TabBackdrop tab="evolution" />
+      <div className="relative flex items-center justify-between border-b border-foreground/[0.06] px-5 py-3">
         <div className="flex items-center gap-2">
           <Dna className="h-4 w-4 text-amber-400" />
           <span className="text-base font-mono font-semibold text-foreground uppercase tracking-wider">
@@ -133,7 +135,7 @@ export default function EvolutionTab() {
         </svg>
       </div>
 
-      <div className="flex items-center justify-between border-t border-foreground/[0.06] px-5 py-3 text-base font-mono">
+      <div className="relative flex items-center justify-between border-t border-foreground/[0.06] px-5 py-3 text-base font-mono">
         <span className="flex items-center gap-3">
           <span className="flex items-center gap-1.5">
             <div className="h-2 w-2 rounded-full bg-amber-400" />

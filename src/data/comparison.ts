@@ -25,6 +25,7 @@ export interface ComparisonCategory {
 
 /* Accent colors per category — drives theme-based section headers */
 export const CATEGORY_ACCENTS: Record<string, string> = {
+  "Architecture": "#a855f7",
   "Pricing & Licensing": "#06b6d4",
   "Agent Creation": "#a855f7",
   "Execution Engine": "#34d399",
@@ -84,6 +85,65 @@ export const COMPETITORS: Competitor[] = [
 ];
 
 export const COMPARISON_CATEGORIES: ComparisonCategory[] = [
+  {
+    name: "Architecture",
+    features: [
+      {
+        label: "Persona = identity + composable capabilities",
+        values: {
+          personas: true,
+          crewai: "Agent swarms",
+          langchain: "Framework primitives",
+          n8n: "Linear workflows",
+          autogen: "Agent conversations",
+        },
+        highlight: true,
+      },
+      {
+        label: "Stable identity across every job",
+        values: {
+          personas: true,
+          crewai: "Fragmented per agent",
+          langchain: "You assemble it",
+          n8n: "No identity",
+          autogen: "Fragmented per agent",
+        },
+        highlight: true,
+      },
+      {
+        label: "Toggle a capability without rebuilding",
+        values: { personas: true, crewai: false, langchain: false, n8n: false, autogen: false },
+        highlight: true,
+      },
+      {
+        label: "Capabilities share memory, tools, and voice",
+        values: {
+          personas: true,
+          crewai: "Memory is per-agent",
+          langchain: "You wire it yourself",
+          n8n: "No agent memory",
+          autogen: "Memory is per-agent",
+        },
+        highlight: true,
+      },
+      {
+        label: "New job = new capability, not a new agent",
+        values: {
+          personas: true,
+          crewai: "Spawn a new agent",
+          langchain: "Write a new chain",
+          n8n: "Build a new workflow",
+          autogen: "Spawn a new agent",
+        },
+        highlight: true,
+      },
+      {
+        label: "Per-capability triggers, delivery, model",
+        values: { personas: true, crewai: false, langchain: false, n8n: "Per-workflow only", autogen: false },
+        highlight: true,
+      },
+    ],
+  },
   {
     name: "Pricing & Licensing",
     features: [

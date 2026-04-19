@@ -27,6 +27,8 @@ export const NAVBAR_SECTIONS = LANDING_SECTIONS.filter((s) => s.navbar !== false
 /** Sections shown in the scroll-map dots (scrollMap !== false). */
 export const SCROLL_MAP_SECTIONS = LANDING_SECTIONS.filter((s) => s.scrollMap !== false);
 
+export const COOKIE_CONSENT_KEY = "personas-cookie-consent";
+
 export const CHART_COLORS = [
   "#06b6d4",
   "#a855f7",

@@ -70,7 +70,7 @@ export default function AgentDetail({ persona }: { persona: Persona }) {
 
   if (error) {
     return (
-      <div className="mt-4 border-t border-white/[0.06] pt-4">
+      <div className="mt-4 border-t border-glass pt-4">
         <p className="flex items-center gap-1.5 text-sm text-red-400">
           <AlertCircle className="h-3 w-3" />
           Failed to load agent details
@@ -81,7 +81,7 @@ export default function AgentDetail({ persona }: { persona: Persona }) {
 
   if (!data) {
     return (
-      <div className="mt-4 space-y-3 border-t border-white/[0.06] pt-4">
+      <div className="mt-4 space-y-3 border-t border-glass pt-4">
         <div className="flex animate-pulse space-x-4">
           <div className="flex-1 space-y-3 py-1">
             <div className="h-3 w-24 rounded bg-white/[0.05]" />
@@ -96,7 +96,7 @@ export default function AgentDetail({ persona }: { persona: Persona }) {
   }
 
   return (
-    <div className="mt-4 space-y-3 border-t border-white/[0.06] pt-4">
+    <div className="mt-4 space-y-3 border-t border-glass pt-4">
       {/* Recent executions */}
       <div>
         <h4 className="text-sm font-medium uppercase tracking-wider text-muted-dark">

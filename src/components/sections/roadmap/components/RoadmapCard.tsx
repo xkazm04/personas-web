@@ -55,7 +55,7 @@ const RoadmapCard = memo(function RoadmapCard({
       {/* Card content */}
       <div className="flex-1 pb-10">
         <div className="relative">
-          <div className="rounded-2xl border border-white/[0.04] bg-gradient-to-br from-white/[0.02] to-transparent p-6 transition-all duration-300 hover:border-white/[0.08] hover:bg-white/[0.025]">
+          <div className="rounded-2xl border border-glass bg-gradient-to-br from-white/[0.02] to-transparent p-6 transition-all duration-300 hover:border-glass-hover hover:bg-white/[0.025]">
             <div className="flex items-start justify-between gap-4">
               <div className="flex items-center gap-3">
                 <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-white/[0.04] ring-1 ring-white/[0.06] font-mono text-base font-bold text-muted shrink-0">

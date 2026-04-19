@@ -1,6 +1,6 @@
 "use client";
 
-import { motion } from "framer-motion";
+import { motion, useReducedMotion } from "framer-motion";
 import SectionWrapper from "@/components/SectionWrapper";
 import SectionIntro from "@/components/primitives/SectionIntro";
 import GlowCard from "@/components/GlowCard";
@@ -9,13 +9,17 @@ import { cardOrchestrator, heroSlideIn, gridCardVariants, connectorDraw, feature
 import FeatureCardHeader from "./components/FeatureCardHeader";
 import GuideLinks from "./components/GuideLinks";
 import ProgressionThread from "./components/ProgressionThread";
+import FeatureBridge from "./components/FeatureBridge";
 
 export default function Features() {
+  const shouldReduceMotion = useReducedMotion();
+
   return (
     <SectionWrapper id="features">
+      <FeatureBridge />
+
       <motion.div variants={fadeUp} className="relative">
-        {/* eslint-disable-next-line custom-a11y/no-low-text-opacity -- decorative ghost number, not readable text */}
-        <span className="pointer-events-none absolute -top-6 -left-2 select-none font-mono font-bold text-[6rem] sm:text-[8rem] leading-none text-white/3">
+        <span className="pointer-events-none absolute -top-6 -left-2 select-none font-mono font-bold text-[6rem] sm:text-[8rem] leading-none text-white/60">
           01–04
         </span>
 
@@ -69,7 +73,7 @@ export default function Features() {
               <motion.div
                 key={f.title}
                 variants={gridCardVariants[i]}
-                whileHover={{ scale: 1.02, boxShadow: `0 0 20px rgba(255,255,255,0.05)` }}
+                whileHover={shouldReduceMotion ? undefined : { scale: 1.02, boxShadow: `0 0 20px rgba(255,255,255,0.05)` }}
                 transition={TRANSITION_NORMAL}
               >
                 <GlowCard accent={f.accent} className="p-6 md:p-8 h-full">

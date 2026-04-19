@@ -1,8 +1,36 @@
 "use client";
 
+import Image from "next/image";
 import { motion, AnimatePresence } from "framer-motion";
 import { Check } from "lucide-react";
 import type { CellDef, CellStatus } from "../../designMatrixShared";
+import { FLUID_MONO } from "../data";
+
+function AppsValue() {
+  return (
+    <span className="flex items-center gap-2 drop-shadow-[0_2px_6px_rgba(0,0,0,0.95)]">
+      <Image
+        src="/tools/gmail.svg"
+        alt=""
+        width={18}
+        height={18}
+        className="shrink-0"
+        aria-hidden="true"
+      />
+      <span>Gmail</span>
+      <span className="text-foreground/60">·</span>
+      <Image
+        src="/tools/slack.svg"
+        alt=""
+        width={18}
+        height={18}
+        className="shrink-0"
+        aria-hidden="true"
+      />
+      <span>Slack</span>
+    </span>
+  );
+}
 
 export default function TileValue({
   def,
@@ -13,7 +41,7 @@ export default function TileValue({
 }) {
   return (
     <div className="relative z-10 px-5 pb-5">
-      <div className="relative h-[78px]">
+      <div className="relative h-[60px] sm:h-[78px]">
         <AnimatePresence mode="wait">
           {status.state === "pending" && (
             <motion.div
@@ -34,7 +62,7 @@ export default function TileValue({
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               exit={{ opacity: 0 }}
-              className="absolute inset-0 flex items-end text-base font-mono"
+              className={`absolute inset-0 flex items-end ${FLUID_MONO} font-mono`}
               style={{ color: `${def.color}cc` }}
             >
               analyzing intent…
@@ -49,7 +77,7 @@ export default function TileValue({
               exit={{ opacity: 0, y: -4 }}
               className="absolute inset-0 flex flex-col justify-end gap-2"
             >
-              <div className="text-base text-foreground font-medium leading-snug drop-shadow-[0_2px_4px_rgba(0,0,0,0.9)]">
+              <div className={`${FLUID_MONO} text-foreground font-medium leading-snug drop-shadow-[0_2px_4px_rgba(0,0,0,0.9)]`}>
                 {def.question.prompt}
               </div>
               <div className="flex flex-wrap gap-1.5">
@@ -58,7 +86,7 @@ export default function TileValue({
                   return (
                     <span
                       key={opt}
-                      className="rounded-full border px-3 py-1 text-base font-mono backdrop-blur-sm"
+                      className={`rounded-full border px-2 sm:px-3 py-1 ${FLUID_MONO} font-mono backdrop-blur-sm`}
                       style={{
                         borderColor: isPicked
                           ? def.color
@@ -83,7 +111,7 @@ export default function TileValue({
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               exit={{ opacity: 0 }}
-              className="absolute inset-0 flex items-end gap-2 text-base font-mono"
+              className={`absolute inset-0 flex items-end gap-2 ${FLUID_MONO} font-mono`}
               style={{ color: def.color }}
             >
               <Check className="h-5 w-5" />
@@ -99,9 +127,9 @@ export default function TileValue({
               initial={{ opacity: 0, y: 6 }}
               animate={{ opacity: 1, y: 0 }}
               exit={{ opacity: 0 }}
-              className="absolute inset-0 flex items-end text-base leading-snug text-foreground font-medium drop-shadow-[0_2px_6px_rgba(0,0,0,0.95)]"
+              className={`absolute inset-0 flex items-end ${FLUID_MONO} leading-snug text-foreground font-medium drop-shadow-[0_2px_6px_rgba(0,0,0,0.95)]`}
             >
-              {def.finalValue}
+              {def.key === "apps" ? <AppsValue /> : def.finalValue}
             </motion.div>
           )}
         </AnimatePresence>

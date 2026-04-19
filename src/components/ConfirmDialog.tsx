@@ -49,7 +49,7 @@ export default function ConfirmDialog({
             animate={{ scale: 1, opacity: 1 }}
             exit={{ scale: 0.95, opacity: 0 }}
             transition={{ duration: 0.15 }}
-            className="relative z-10 w-full max-w-sm rounded-2xl border border-white/[0.08] bg-surface p-6 shadow-2xl"
+            className="relative z-10 w-full max-w-sm rounded-2xl border border-glass-hover bg-surface p-6 shadow-2xl"
           >
             <div className="flex items-start gap-3">
               <div className="flex h-9 w-9 flex-shrink-0 items-center justify-center rounded-xl border border-red-500/20 bg-red-500/10">
@@ -63,7 +63,7 @@ export default function ConfirmDialog({
             <div className="mt-5 flex items-center justify-end gap-2">
               <button
                 onClick={onCancel}
-                className="rounded-lg border border-white/[0.08] px-4 py-2 text-sm font-medium text-muted hover:text-foreground transition-colors"
+                className="rounded-lg border border-glass-hover px-4 py-2 text-sm font-medium text-muted hover:text-foreground transition-colors"
               >
                 Cancel
               </button>

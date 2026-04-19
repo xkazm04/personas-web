@@ -154,7 +154,7 @@ export default function BlogArticle({
               {post.title}
             </h1>
 
-            <p className="text-lg text-muted leading-relaxed mb-8 pb-8 border-b border-white/[0.06]">
+            <p className="text-lg text-muted leading-relaxed mb-8 pb-8 border-b border-glass">
               {post.description}
             </p>
 
@@ -162,7 +162,7 @@ export default function BlogArticle({
             <div className="prose-custom">{renderContent(post.content)}</div>
 
             {/* Author */}
-            <div className="mt-12 pt-8 border-t border-white/[0.06] flex items-center gap-3">
+            <div className="mt-12 pt-8 border-t border-glass flex items-center gap-3">
               <div className="flex h-10 w-10 items-center justify-center rounded-full bg-brand-cyan/10 text-brand-cyan text-base font-bold">
                 {post.author[0]}
               </div>
@@ -172,28 +172,28 @@ export default function BlogArticle({
               </div>
             </div>
             {/* Cross-links */}
-            <div className="mt-12 pt-8 border-t border-white/[0.06]">
+            <div className="mt-12 pt-8 border-t border-glass">
               <h3 className="text-base font-semibold text-foreground uppercase tracking-wider mb-4">
                 Continue exploring
               </h3>
               <div className="grid gap-3 sm:grid-cols-3">
                 <Link
                   href="/#get-started"
-                  className="group flex items-center gap-2 rounded-lg border border-white/[0.06] bg-white/[0.02] px-4 py-3 text-base text-muted hover:border-white/[0.1] hover:text-foreground transition-colors"
+                  className="group flex items-center gap-2 rounded-lg border border-glass bg-white/[0.02] px-4 py-3 text-base text-muted hover:border-glass-hover hover:text-foreground transition-colors"
                 >
                   See it in action
                   <ArrowRight className="h-3.5 w-3.5 ml-auto opacity-0 group-hover:opacity-100 transition-opacity" />
                 </Link>
                 <Link
                   href="/use-cases"
-                  className="group flex items-center gap-2 rounded-lg border border-white/[0.06] bg-white/[0.02] px-4 py-3 text-base text-muted hover:border-white/[0.1] hover:text-foreground transition-colors"
+                  className="group flex items-center gap-2 rounded-lg border border-glass bg-white/[0.02] px-4 py-3 text-base text-muted hover:border-glass-hover hover:text-foreground transition-colors"
                 >
                   Explore use cases
                   <ArrowRight className="h-3.5 w-3.5 ml-auto opacity-0 group-hover:opacity-100 transition-opacity" />
                 </Link>
                 <Link
                   href="/compare"
-                  className="group flex items-center gap-2 rounded-lg border border-white/[0.06] bg-white/[0.02] px-4 py-3 text-base text-muted hover:border-white/[0.1] hover:text-foreground transition-colors"
+                  className="group flex items-center gap-2 rounded-lg border border-glass bg-white/[0.02] px-4 py-3 text-base text-muted hover:border-glass-hover hover:text-foreground transition-colors"
                 >
                   Compare platforms
                   <ArrowRight className="h-3.5 w-3.5 ml-auto opacity-0 group-hover:opacity-100 transition-opacity" />

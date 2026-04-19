@@ -4,7 +4,7 @@ import Image from "next/image";
 import { motion } from "framer-motion";
 import { Sparkles } from "lucide-react";
 import { USER_PROMPT } from "../../designMatrixShared";
-import { INTENT_IMAGE, CELL_MIN_HEIGHT } from "../data";
+import { INTENT_IMAGE, CELL_HEIGHT_CLASS, FLUID_MONO } from "../data";
 
 export default function IntentTile({
   userTyped,
@@ -20,10 +20,8 @@ export default function IntentTile({
 
   return (
     <motion.div
-      className="relative flex flex-col rounded-2xl border-2 overflow-hidden"
+      className={`relative flex flex-col rounded-2xl border-2 overflow-hidden ${CELL_HEIGHT_CLASS}`}
       style={{
-        minHeight: CELL_MIN_HEIGHT,
-        height: CELL_MIN_HEIGHT,
         borderColor: `${accent}60`,
         boxShadow: `0 0 56px ${accent}25, inset 0 0 56px ${accent}10`,
       }}
@@ -62,7 +60,7 @@ export default function IntentTile({
 
       <div className="relative z-10 flex items-start justify-between px-5 pt-5">
         <div
-          className="text-base font-mono uppercase tracking-widest font-bold drop-shadow-[0_2px_6px_rgba(0,0,0,0.85)]"
+          className={`${FLUID_MONO} font-mono uppercase tracking-widest font-bold drop-shadow-[0_2px_6px_rgba(0,0,0,0.85)]`}
           style={{ color: accent }}
         >
           Intent
@@ -87,7 +85,7 @@ export default function IntentTile({
       <div className="flex-1" />
 
       <div className="relative z-10 px-5 pb-5 space-y-3">
-        <div className="rounded-lg border border-foreground/[0.1] bg-background/60 backdrop-blur-sm px-3 py-2.5 font-mono text-base text-foreground leading-relaxed h-[60px] overflow-hidden">
+        <div className={`rounded-lg border border-foreground/[0.1] bg-background/60 backdrop-blur-sm px-3 py-2 sm:py-2.5 font-mono ${FLUID_MONO} text-foreground leading-relaxed h-[48px] sm:h-[60px] overflow-hidden`}>
           {userTyped || (
             <span className="text-foreground/60 italic">
               Describe what your agent should do…
@@ -100,7 +98,7 @@ export default function IntentTile({
 
         <div className="flex items-center justify-between">
           <span
-            className="text-base font-mono uppercase tracking-wider font-semibold drop-shadow-[0_2px_4px_rgba(0,0,0,0.9)]"
+            className={`${FLUID_MONO} font-mono uppercase tracking-wider font-semibold drop-shadow-[0_2px_4px_rgba(0,0,0,0.9)]`}
             style={{ color: accent }}
           >
             {filledCount}/8 resolved

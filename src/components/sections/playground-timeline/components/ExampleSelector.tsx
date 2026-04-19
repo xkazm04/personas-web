@@ -49,7 +49,7 @@ export default function ExampleSelector({
       <div className="flex items-center gap-2 ml-2">
         <button
           onClick={onToggleSpeed}
-          className="flex items-center gap-1.5 rounded-full border border-white/10 px-3 py-2 text-base font-mono text-muted-dark hover:border-white/20 hover:text-foreground hover:bg-white/5 transition-all"
+          className="flex items-center gap-1.5 rounded-full border border-glass-hover px-3 py-2 text-base font-mono text-muted-dark hover:border-white/20 hover:text-foreground hover:bg-white/5 transition-all"
         >
           <Gauge className="h-3.5 w-3.5" />
           {speed}x
@@ -57,7 +57,7 @@ export default function ExampleSelector({
         {phase === "done" && (
           <button
             onClick={onReplay}
-            className="flex items-center gap-1.5 rounded-full border border-white/10 px-3 py-2 text-base font-medium text-muted-dark hover:border-white/20 hover:text-foreground hover:bg-white/5 transition-all"
+            className="flex items-center gap-1.5 rounded-full border border-glass-hover px-3 py-2 text-base font-medium text-muted-dark hover:border-white/20 hover:text-foreground hover:bg-white/5 transition-all"
           >
             <RotateCcw className="h-3.5 w-3.5" />
             Replay
@@ -67,7 +67,7 @@ export default function ExampleSelector({
           <button
             onClick={onReset}
             disabled={isRunning}
-            className="flex items-center gap-1.5 rounded-full border border-white/10 px-3 py-2 text-base font-medium text-muted-dark hover:border-white/20 hover:text-foreground hover:bg-white/5 transition-all disabled:opacity-40"
+            className="flex items-center gap-1.5 rounded-full border border-glass-hover px-3 py-2 text-base font-medium text-muted-dark hover:border-white/20 hover:text-foreground hover:bg-white/5 transition-all disabled:opacity-40"
           >
             Reset
           </button>

@@ -1,6 +1,20 @@
 export default function CookiePolicy() {
   return (
     <div className="space-y-8">
+      <div className="rounded-xl border border-brand-cyan/20 bg-brand-cyan/[0.05] p-5">
+        <p className="text-xs font-semibold uppercase tracking-wider text-brand-cyan">
+          TL;DR
+        </p>
+        <ul className="mt-3 space-y-2 text-sm leading-relaxed text-foreground/80">
+          <li>
+            We only use two essential cookies — sign-in session and theme
+            preference.
+          </li>
+          <li>No advertising, tracking, or fingerprinting of any kind.</li>
+          <li>You can clear cookies anytime in your browser settings.</li>
+        </ul>
+      </div>
+
       <p className="text-base text-muted-dark">Last updated: April 2026</p>
 
       <section className="space-y-3">

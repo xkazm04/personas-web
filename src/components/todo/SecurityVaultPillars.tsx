@@ -7,7 +7,6 @@ import {
   Fingerprint,
   CloudOff,
   Shield,
-  Check,
   type LucideIcon,
 } from "lucide-react";
 
@@ -20,7 +19,6 @@ interface Pillar {
   detail: string;
   color: string;
   illustration: string;
-  metrics: string[];
 }
 
 const pillars: Pillar[] = [
@@ -32,7 +30,6 @@ const pillars: Pillar[] = [
       "The gold standard used by governments and financial institutions — applied to every credential on your device.",
     color: "#f43f5e",
     illustration: "/imgs/features/security/vault-door.png",
-    metrics: ["256-bit keys", "Authenticated", "Per-field sealed"],
   },
   {
     icon: Fingerprint,
@@ -42,7 +39,6 @@ const pillars: Pillar[] = [
       "Credentials are stored in Windows Credential Manager, macOS Keychain, or Linux Secret Service — the same place your OS already trusts.",
     color: "#ec4899",
     illustration: "/imgs/features/security/os-keyring.png",
-    metrics: ["DPAPI", "Keychain", "Secret Service"],
   },
   {
     icon: CloudOff,
@@ -52,7 +48,6 @@ const pillars: Pillar[] = [
       "No cloud sync, no telemetry, no third-party access. Your secrets exist only on your device — there is no remote copy to compromise.",
     color: "#a855f7",
     illustration: "/imgs/features/security/local-shield.png",
-    metrics: ["0 bytes uploaded", "No telemetry", "Air-gapped capable"],
   },
 ];
 
@@ -70,7 +65,7 @@ function PillarCard({ p, i }: { p: Pillar; i: number }) {
       whileHover={{ y: -4 }}
       className="force-dark group relative flex flex-col overflow-hidden rounded-2xl"
       style={{
-        height: 460,
+        height: 400,
         background:
           "linear-gradient(180deg, rgba(12,14,22,0.7) 0%, rgba(8,10,16,0.92) 100%)",
         border: `1px solid ${p.color}33`,
@@ -134,24 +129,6 @@ function PillarCard({ p, i }: { p: Pillar; i: number }) {
         <p className="text-base leading-relaxed text-foreground/75 flex-1">
           {p.detail}
         </p>
-
-        {/* Metric strip — aligned at the bottom of every card */}
-        <div className="mt-auto flex flex-wrap gap-1.5 pt-4 border-t border-foreground/[0.08]">
-          {p.metrics.map((m) => (
-            <span
-              key={m}
-              className="inline-flex items-center gap-1 rounded-full border px-2.5 py-1 text-base font-mono"
-              style={{
-                borderColor: `${p.color}30`,
-                backgroundColor: `${p.color}0d`,
-                color: `${p.color}`,
-              }}
-            >
-              <Check className="h-3.5 w-3.5 opacity-80" strokeWidth={3} />
-              {m}
-            </span>
-          ))}
-        </div>
       </div>
 
       {/* Left accent rail — strong color signature */}

@@ -19,7 +19,7 @@ export default function ExtendCard({
       animate={{ opacity: 1, y: 0 }}
       transition={{ delay: 0.6, duration: 0.35 }}
       whileHover={{ y: -4, transition: { duration: 0.25 } }}
-      className="group relative flex flex-col items-center justify-center overflow-hidden rounded-2xl border border-dashed border-white/[0.08] bg-white/[0.01] p-5 text-center backdrop-blur-sm transition-all duration-500 hover:border-white/[0.15] hover:bg-white/[0.02]"
+      className="group relative flex flex-col items-center justify-center overflow-hidden rounded-2xl border border-dashed border-glass-hover bg-white/[0.01] p-5 text-center backdrop-blur-sm transition-all duration-500 hover:border-glass-strong hover:bg-white/[0.02]"
     >
       <div
         className="flex h-11 w-11 items-center justify-center rounded-xl border transition-colors duration-300 group-hover:bg-white/[0.03]"

@@ -68,7 +68,7 @@ export default function TopicView({ category, topic, content, prevTopic, nextTop
           {prevTopic ? (
             <Link
               href={`/guide/${category.id}/${prevTopic.id}`}
-              className="group flex items-center gap-3 rounded-xl border border-white/[0.06] bg-white/[0.02] px-5 py-4 transition-colors hover:border-white/[0.12] hover:bg-white/[0.04]"
+              className="group flex items-center gap-3 rounded-xl border border-glass bg-white/[0.02] px-5 py-4 transition-colors hover:border-glass-strong hover:bg-white/[0.04]"
             >
               <ChevronLeft aria-hidden="true" className="h-4 w-4 shrink-0 text-muted-dark transition-transform group-hover:-translate-x-0.5" />
               <div className="min-w-0">
@@ -79,7 +79,7 @@ export default function TopicView({ category, topic, content, prevTopic, nextTop
           ) : (
             <Link
               href={`/guide/${category.id}`}
-              className="group flex items-center gap-3 rounded-xl border border-white/[0.06] bg-white/[0.02] px-5 py-4 transition-colors hover:border-white/[0.12] hover:bg-white/[0.04]"
+              className="group flex items-center gap-3 rounded-xl border border-glass bg-white/[0.02] px-5 py-4 transition-colors hover:border-glass-strong hover:bg-white/[0.04]"
             >
               <ChevronLeft aria-hidden="true" className="h-4 w-4 shrink-0 text-muted-dark transition-transform group-hover:-translate-x-0.5" />
               <div className="min-w-0">
@@ -92,7 +92,7 @@ export default function TopicView({ category, topic, content, prevTopic, nextTop
           {nextTopic ? (
             <Link
               href={`/guide/${category.id}/${nextTopic.id}`}
-              className="group flex items-center justify-end gap-3 rounded-xl border border-white/[0.06] bg-white/[0.02] px-5 py-4 text-right transition-colors hover:border-white/[0.12] hover:bg-white/[0.04]"
+              className="group flex items-center justify-end gap-3 rounded-xl border border-glass bg-white/[0.02] px-5 py-4 text-right transition-colors hover:border-glass-strong hover:bg-white/[0.04]"
             >
               <div className="min-w-0">
                 <div className="text-base text-muted-dark">Next</div>

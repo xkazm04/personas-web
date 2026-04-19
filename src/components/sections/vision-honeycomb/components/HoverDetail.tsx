@@ -13,7 +13,7 @@ export default function HoverDetail({ hoveredIdx, agents }: { hoveredIdx: number
           animate={{ opacity: 1, y: 0 }}
           exit={{ opacity: 0, y: 4 }}
           transition={{ duration: 0.15 }}
-          className="border-t border-white/6 px-4 py-3 sm:px-5 bg-white/[0.02]"
+          className="border-t border-glass px-4 py-3 sm:px-5 bg-white/[0.02]"
         >
           {(() => {
             const agent = agents[hoveredIdx];

@@ -3,6 +3,14 @@
 import { swarmTools } from "../data";
 
 export default function SwarmView({ uid }: { uid: string }) {
+  if (swarmTools.length === 0) {
+    return (
+      <div className="flex min-h-90 items-center justify-center text-base font-mono text-muted">
+        No connected tools
+      </div>
+    );
+  }
+
   return (
     <svg viewBox="0 0 100 100" className="w-full min-h-90">
       <defs>

@@ -1,11 +1,11 @@
 "use client";
 
-import { useState, useEffect, useCallback } from "react";
+import { useState, useEffect, useCallback, useMemo } from "react";
 import { useReducedMotion } from "framer-motion";
 import { baseActivity, agentPool, eventPool, colorPool } from "./data";
 import type { ActivityRow } from "./types";
 
-export function useActivityFeed() {
+export function useActivityFeed(filterPrefix: string | null) {
   const prefersReducedMotion = useReducedMotion();
   const [activity, setActivity] = useState<ActivityRow[]>(baseActivity);
   const [newRow, setNewRow] = useState<string | null>(null);
@@ -39,5 +39,13 @@ export function useActivityFeed() {
     return () => clearInterval(id);
   }, [addRow, prefersReducedMotion]);
 
-  return { activity, newRow };
+  const filtered = useMemo(
+    () =>
+      filterPrefix
+        ? activity.filter((row) => row.event.startsWith(filterPrefix))
+        : activity,
+    [activity, filterPrefix],
+  );
+
+  return { activity: filtered, newRow };
 }

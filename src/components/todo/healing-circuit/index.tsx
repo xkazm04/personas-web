@@ -9,6 +9,7 @@ import { useHealingCycle } from "./useHealingCycle";
 import CircuitHeader from "./components/CircuitHeader";
 import CircuitBoard from "./components/CircuitBoard";
 import StatusPanel from "./components/StatusPanel";
+import StageDescription from "./components/StageDescription";
 import StageTimeline from "./components/StageTimeline";
 
 export default function HealingCircuit() {
@@ -60,11 +61,10 @@ export default function HealingCircuit() {
               brokenConnectionId={brokenConnectionId}
               breakPoint={breakPoint}
             />
-            <StatusPanel
-              activeStage={activeStage}
-              getConnectionStatus={getConnectionStatus}
-            />
+            <StatusPanel getConnectionStatus={getConnectionStatus} />
           </div>
+
+          <StageDescription activeStage={activeStage} />
 
           <StageTimeline
             activeStage={activeStage}

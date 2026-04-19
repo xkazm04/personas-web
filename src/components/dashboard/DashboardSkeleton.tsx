@@ -14,7 +14,7 @@ export default function DashboardSkeleton() {
   return (
     <div className="flex min-h-screen bg-[var(--background)]">
       {/* Sidebar skeleton */}
-      <div className="hidden w-56 flex-shrink-0 border-r border-white/[0.06] bg-white/[0.02] p-4 md:block">
+      <div className="hidden w-56 flex-shrink-0 border-r border-glass bg-white/[0.02] p-4 md:block">
         <Shimmer className="mb-8 h-8 w-32" />
         <div className="space-y-2">
           {Array.from({ length: 5 }).map((_, i) => (

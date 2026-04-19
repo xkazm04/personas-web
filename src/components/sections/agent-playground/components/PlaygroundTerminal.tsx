@@ -1,7 +1,7 @@
 "use client";
 
 import { forwardRef } from "react";
-import { motion, AnimatePresence } from "framer-motion";
+import { motion, AnimatePresence, useReducedMotion } from "framer-motion";
 import { tint } from "@/lib/brand-theme";
 import type { SimLine } from "../types";
 
@@ -15,6 +15,8 @@ const PlaygroundTerminal = forwardRef<HTMLDivElement, Props>(function Playground
   { phase, visibleLines, isRunning },
   ref,
 ) {
+  const prefersReduced = useReducedMotion();
+
   return (
     <div ref={ref} className="h-[280px] overflow-y-auto px-4 py-4 sm:px-5 scrollbar-hide">
       {phase === "idle" && (
@@ -29,9 +31,9 @@ const PlaygroundTerminal = forwardRef<HTMLDivElement, Props>(function Playground
         {visibleLines.map((line, i) => (
           <motion.div
             key={i}
-            initial={{ opacity: 0, y: 6 }}
+            initial={prefersReduced ? { opacity: 0 } : { opacity: 0, y: 6 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.2 }}
+            transition={{ duration: prefersReduced ? 0 : 0.2 }}
             className={`font-mono text-base leading-relaxed ${line.color || "text-muted"}`}
             style={{ paddingLeft: line.indent ? `${line.indent * 8}px` : undefined }}
           >
@@ -40,13 +42,13 @@ const PlaygroundTerminal = forwardRef<HTMLDivElement, Props>(function Playground
         ))}
       </AnimatePresence>
 
-      {isRunning && (
+      {isRunning && phase === "running" && (
         <motion.div
           initial={{ opacity: 0 }}
-          animate={{ opacity: [0.3, 1, 0.3] }}
-          transition={{ duration: 1, repeat: Infinity }}
+          animate={prefersReduced ? { opacity: 1 } : { opacity: [0.3, 1, 0.3] }}
+          transition={prefersReduced ? { duration: 0 } : { duration: 1, repeat: Infinity }}
           className="mt-1 font-mono text-base"
-          style={{ color: tint("cyan", 50) }}
+          style={{ color: tint("cyan", 80) }}
         >
           _
         </motion.div>

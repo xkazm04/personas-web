@@ -47,7 +47,7 @@ export default function OrchestrationHub() {
         <div
           className="rounded-3xl border p-6 sm:p-10 overflow-hidden"
           style={{
-            borderColor: "rgba(var(--surface-overlay), 0.08)",
+            borderColor: "var(--border-glass-hover)",
             backgroundColor: "rgba(var(--surface-overlay), 0.02)",
           }}
         >

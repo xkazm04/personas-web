@@ -3,7 +3,7 @@
 import { useState, useMemo } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { motion, AnimatePresence } from "framer-motion";
+import { motion, AnimatePresence, useReducedMotion } from "framer-motion";
 import { Search, ChevronRight, Menu, X } from "lucide-react";
 import type { Variants } from "framer-motion";
 import { GUIDE_CATEGORIES } from "@/data/guide/categories";
@@ -16,31 +16,54 @@ function topicsFor(categoryId: string) {
   return GUIDE_TOPICS.filter((t) => t.categoryId === categoryId);
 }
 
-const collapseVariants: Variants = {
-  hidden: { height: 0, opacity: 0 },
-  visible: { height: "auto", opacity: 1, transition: { duration: 0.2, ease: [0.22, 1, 0.36, 1] } },
-  exit: { height: 0, opacity: 0, transition: { duration: 0.15, ease: [0.22, 1, 0.36, 1] } },
-};
+const FOCUS_RING = "outline-none focus-visible:ring-2 focus-visible:ring-brand-cyan/50 focus-visible:ring-offset-2 focus-visible:ring-offset-black";
 
 /* ── Component ───────────────────────────────────────────────────────── */
 
 export default function GuideSidebar() {
   const pathname = usePathname();
-  const segments = pathname.split("/").filter(Boolean); // ["guide"] or ["guide","credentials"] or ["guide","credentials","topic-id"]
+  const segments = pathname.split("/").filter(Boolean);
   const activeCategory = segments[1] ?? "";
   const activeTopic = segments[2] ?? "";
+  const shouldReduceMotion = useReducedMotion();
 
   const [expanded, setExpanded] = useState<Record<string, boolean>>(() => {
-    // Auto-expand the active category
     const init: Record<string, boolean> = {};
     if (activeCategory) init[activeCategory] = true;
     return init;
   });
   const [query, setQuery] = useState("");
   const [mobileOpen, setMobileOpen] = useState(false);
+  const [announcement, setAnnouncement] = useState("");
+
+  const collapseVariants: Variants = shouldReduceMotion
+    ? {
+        hidden: { height: 0, overflow: "hidden" },
+        visible: { height: "auto", overflow: "hidden" },
+        exit: { height: 0, overflow: "hidden" },
+      }
+    : {
+        hidden: { height: 0, opacity: 0 },
+        visible: { height: "auto", opacity: 1, transition: { duration: 0.2, ease: [0.22, 1, 0.36, 1] } },
+        exit: { height: 0, opacity: 0, transition: { duration: 0.15, ease: [0.22, 1, 0.36, 1] } },
+      };
+
+  const mobileTransition = shouldReduceMotion
+    ? { duration: 0 }
+    : { duration: 0.25, ease: [0.22, 1, 0.36, 1] as const };
 
   const toggle = (id: string) =>
-    setExpanded((prev) => ({ ...prev, [id]: !prev[id] }));
+    setExpanded((prev) => {
+      const willExpand = !prev[id];
+      const topics = topicsFor(id);
+      const cat = GUIDE_CATEGORIES.find((c) => c.id === id);
+      setAnnouncement(
+        willExpand
+          ? `${cat?.name}: ${topics.length} topic${topics.length !== 1 ? "s" : ""} shown`
+          : `${cat?.name}: collapsed`,
+      );
+      return { ...prev, [id]: willExpand };
+    });
 
   /* ── Filtered categories/topics based on search ─────────────────── */
   const filteredCategories = useMemo(() => {
@@ -56,9 +79,14 @@ export default function GuideSidebar() {
     }).filter((cat) => cat.topics.length > 0 || cat.name.toLowerCase().includes(q));
   }, [query]);
 
+  const totalFilteredTopics = filteredCategories.reduce((sum, c) => sum + c.topics.length, 0);
+
   /* ── Sidebar content (shared between desktop & mobile) ──────────── */
   const sidebarContent = (
     <nav className="flex h-full flex-col">
+      {/* Announcements for screen readers */}
+      <div aria-live="polite" className="sr-only">{announcement}</div>
+
       {/* Search */}
       <div className="p-4 pb-2">
         <div className="relative">
@@ -69,9 +97,14 @@ export default function GuideSidebar() {
             onChange={(e) => setQuery(e.target.value)}
             placeholder="Search topics..."
             aria-label="Search sidebar topics"
-            className="w-full rounded-lg border border-white/[0.08] bg-white/[0.03] py-2 pl-9 pr-3 text-base text-foreground placeholder:text-muted-dark outline-none transition-colors focus:border-brand-cyan/30"
+            className={`w-full rounded-lg border border-glass-hover bg-white/[0.03] py-2 pl-9 pr-3 text-base text-foreground placeholder:text-muted-dark transition-colors focus-visible:border-brand-cyan/30 ${FOCUS_RING}`}
           />
         </div>
+        {query.trim() && (
+          <div aria-live="polite" className="sr-only">
+            {totalFilteredTopics} result{totalFilteredTopics !== 1 ? "s" : ""} for {query}
+          </div>
+        )}
       </div>
 
       {/* Category list */}
@@ -88,7 +121,7 @@ export default function GuideSidebar() {
                 onClick={() => toggle(cat.id)}
                 aria-expanded={isExpanded}
                 aria-controls={`topics-${cat.id}`}
-                className={`flex w-full items-center gap-2.5 rounded-lg px-3 py-2 text-left text-base font-semibold transition-colors hover:bg-white/[0.04] ${
+                className={`flex w-full items-center gap-2.5 rounded-lg px-3 py-2 text-left text-base font-semibold transition-colors hover:bg-white/[0.04] ${FOCUS_RING} ${
                   isActiveCategory && !activeTopic ? "bg-white/[0.06] text-foreground" : "text-muted"
                 }`}
               >
@@ -119,7 +152,7 @@ export default function GuideSidebar() {
                     exit="exit"
                     className="overflow-hidden"
                   >
-                    <div className="ml-4 border-l border-white/[0.06] pl-2 py-0.5">
+                    <div className="ml-4 border-l border-glass pl-2 py-0.5">
                       {topics.map((topic) => {
                         const isActive = activeTopic === topic.id;
                         return (
@@ -127,7 +160,7 @@ export default function GuideSidebar() {
                             key={topic.id}
                             href={`/guide/${cat.id}/${topic.id}`}
                             onClick={() => setMobileOpen(false)}
-                            className={`block rounded-md px-2.5 py-1.5 text-base transition-colors ${
+                            className={`block rounded-md px-2.5 py-1.5 text-base transition-colors ${FOCUS_RING} ${
                               isActive
                                 ? "bg-white/[0.06] text-foreground border-l-2 -ml-[calc(0.5rem+1px)] pl-[calc(0.625rem+1px)]"
                                 : "text-muted-dark hover:text-muted hover:bg-white/[0.03]"
@@ -160,7 +193,7 @@ export default function GuideSidebar() {
       {/* ── Mobile toggle button ──────────────────────────────────────── */}
       <button
         onClick={() => setMobileOpen(true)}
-        className="fixed left-4 top-20 z-40 flex h-9 w-9 items-center justify-center rounded-lg border border-white/[0.08] bg-surface/80 backdrop-blur-sm text-muted-dark transition-colors hover:text-foreground lg:hidden"
+        className={`fixed left-4 top-20 z-40 flex h-9 w-9 items-center justify-center rounded-lg border border-glass-hover bg-surface/80 backdrop-blur-sm text-muted-dark transition-colors hover:text-foreground lg:hidden ${FOCUS_RING}`}
         aria-label="Open guide navigation"
       >
         <Menu className="h-4 w-4" />
@@ -174,6 +207,7 @@ export default function GuideSidebar() {
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               exit={{ opacity: 0 }}
+              transition={shouldReduceMotion ? { duration: 0 } : undefined}
               className="fixed inset-0 z-40 bg-black/60 backdrop-blur-sm lg:hidden"
               onClick={() => setMobileOpen(false)}
             />
@@ -183,12 +217,12 @@ export default function GuideSidebar() {
               initial={{ x: -288 }}
               animate={{ x: 0 }}
               exit={{ x: -288 }}
-              transition={{ duration: 0.25, ease: [0.22, 1, 0.36, 1] }}
-              className="fixed left-0 top-0 z-50 h-dvh w-72 border-r border-white/[0.06] bg-surface pt-16 lg:hidden"
+              transition={mobileTransition}
+              className="fixed left-0 top-0 z-50 h-dvh w-72 border-r border-glass bg-surface pt-16 lg:hidden"
             >
               <button
                 onClick={() => setMobileOpen(false)}
-                className="absolute right-3 top-[1.125rem] flex h-8 w-8 items-center justify-center rounded-lg text-muted-dark transition-colors hover:text-foreground"
+                className={`absolute right-3 top-[1.125rem] flex h-8 w-8 items-center justify-center rounded-lg text-muted-dark transition-colors hover:text-foreground ${FOCUS_RING}`}
                 aria-label="Close navigation"
               >
                 <X className="h-4 w-4" />
@@ -200,7 +234,7 @@ export default function GuideSidebar() {
       </AnimatePresence>
 
       {/* ── Desktop sidebar ───────────────────────────────────────────── */}
-      <aside className="hidden lg:block w-72 shrink-0 border-r border-white/[0.06] bg-white/[0.02] sticky top-16 h-[calc(100dvh-4rem)]">
+      <aside className="hidden lg:block w-72 shrink-0 border-r border-glass bg-white/[0.02] sticky top-16 h-[calc(100dvh-4rem)]">
         {sidebarContent}
       </aside>
     </>

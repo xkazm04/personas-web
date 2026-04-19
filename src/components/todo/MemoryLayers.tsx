@@ -2,15 +2,16 @@
 
 import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { Layers, Radar } from "lucide-react";
+import { Layers, Radar, GitBranch } from "lucide-react";
 import GradientText from "@/components/GradientText";
 import SectionHeading from "@/components/SectionHeading";
 import SectionWrapper from "@/components/SectionWrapper";
 import { fadeUp, staggerContainer } from "@/lib/animations";
 import MemoryLayersStack from "./MemoryLayersStack";
 import MemoryLayersNeural from "./MemoryLayersNeural";
+import MemoryLayersGraph from "./memory-layers-graph";
 
-type Variant = "stack" | "neural";
+type Variant = "stack" | "neural" | "graph";
 
 const VARIANTS: {
   key: Variant;
@@ -29,6 +30,12 @@ const VARIANTS: {
     label: "Neural Hub",
     icon: Radar,
     blurb: "Central brain with four cortical arms radiating outward",
+  },
+  {
+    key: "graph",
+    label: "Memory Graph",
+    icon: GitBranch,
+    blurb: "Stacking nodes around category hubs, bridged by shared tags",
   },
 ];
 
@@ -112,7 +119,13 @@ export default function MemoryLayers() {
           transition={{ duration: 0.35 }}
           className="mt-10"
         >
-          {active === "stack" ? <MemoryLayersStack /> : <MemoryLayersNeural />}
+          {active === "stack" ? (
+            <MemoryLayersStack />
+          ) : active === "neural" ? (
+            <MemoryLayersNeural />
+          ) : (
+            <MemoryLayersGraph />
+          )}
         </motion.div>
       </AnimatePresence>
 

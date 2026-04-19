@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from "react";
 import { motion } from "framer-motion";
-import { Rocket, Loader2 } from "lucide-react";
+import { Loader2 } from "lucide-react";
 import SectionWrapper from "@/components/SectionWrapper";
 import SectionIntro from "@/components/primitives/SectionIntro";
 import { fadeUp, staggerContainer } from "@/lib/animations";
@@ -48,8 +48,11 @@ export default function Roadmap() {
         </div>
       )}
 
+      {/* Progress bar — most informative element first */}
+      <RoadmapProgress />
+
       {/* Summary pills */}
-      <motion.div variants={fadeUp} className="mt-10 flex flex-wrap items-center justify-center gap-4">
+      <motion.div variants={fadeUp} className="mt-8 flex flex-wrap items-center justify-center gap-4">
         <div
           className="flex items-center gap-2 rounded-full border px-4 py-2"
           style={{ borderColor: tint("cyan", 20), backgroundColor: tint("cyan", 5) }}
@@ -70,45 +73,8 @@ export default function Roadmap() {
         </div>
       </motion.div>
 
-      {/* Milestone callout */}
-      <motion.div
-        variants={fadeUp}
-        className="mt-10 mx-auto max-w-3xl rounded-2xl border px-6 py-6 backdrop-blur-md relative overflow-hidden"
-        style={{
-          borderColor: tint("cyan", 30),
-          backgroundImage: `linear-gradient(90deg, ${tint("cyan", 10)}, ${tint("purple", 10)})`,
-          boxShadow: brandShadow("cyan", 30, 15),
-        }}
-      >
-        <div className="absolute inset-0 bg-[url('/imgs/noise.png')] opacity-20 mix-blend-overlay pointer-events-none" />
-        <div className="relative z-10 flex flex-col sm:flex-row items-start sm:items-center gap-4">
-          <div
-            className="flex h-12 w-12 shrink-0 items-center justify-center rounded-full ring-1"
-            style={{
-              backgroundColor: tint("cyan", 20),
-              boxShadow: brandShadow("cyan", 15, 30),
-              borderColor: tint("cyan", 40),
-            }}
-          >
-            <Rocket className="h-6 w-6" style={{ color: BRAND_VAR.cyan }} />
-          </div>
-          <div>
-            <p className="text-base font-mono font-bold uppercase tracking-widest drop-shadow-sm" style={{ color: BRAND_VAR.cyan }}>
-              Current focus
-            </p>
-            <p className="mt-1.5 text-base text-foreground font-medium leading-relaxed">
-              Building <span className="text-white font-bold">cloud execution</span> so your agents run 24/7, plus{" "}
-              <span className="text-white font-bold">this website</span> and support for{" "}
-              <span className="text-white font-bold">15+ languages</span>.
-            </p>
-          </div>
-        </div>
-      </motion.div>
-
-      <RoadmapProgress />
-
       {/* Timeline */}
-      <motion.div variants={staggerContainer} className="mt-20 mx-auto max-w-4xl">
+      <motion.div variants={staggerContainer} className="mt-16 mx-auto max-w-4xl">
         {items.map((item, i) => (
           <RoadmapCard key={item.id} item={item} index={i} total={items.length} />
         ))}

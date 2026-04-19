@@ -27,7 +27,7 @@ export default function ConnectorCard({
       transition={{ delay: Math.min(index * 0.03, 0.6), duration: 0.35 }}
       whileHover={{ y: -4, transition: { duration: 0.25 } }}
       onClick={onClick}
-      className="group relative overflow-hidden rounded-2xl border border-white/[0.06] bg-gradient-to-br from-white/[0.035] to-white/[0.008] transition-[border-color] duration-500 hover:border-white/[0.12] cursor-pointer will-change-transform"
+      className="group relative overflow-hidden rounded-2xl border border-glass bg-gradient-to-br from-white/[0.035] to-white/[0.008] transition-[border-color] duration-500 hover:border-glass-strong cursor-pointer will-change-transform"
     >
       <div className="pointer-events-none absolute inset-0 flex items-center justify-center overflow-hidden">
         <Image
@@ -64,10 +64,30 @@ export default function ConnectorCard({
       />
 
       <div className="relative z-10 p-5">
-        <h3 className="text-base font-semibold leading-tight">{c.label}</h3>
-        <span className="mt-1 inline-block text-base font-mono uppercase tracking-wider text-muted-dark">
-          {categoryMeta?.label ?? c.category}
-        </span>
+        <div className="flex items-center gap-3">
+          <div
+            className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full"
+            style={{ backgroundColor: `${c.color}18` }}
+          >
+            <Image
+              src={`/tools/${iconName}.svg`}
+              alt={`${c.label} logo`}
+              width={28}
+              height={28}
+              className="h-[28px] w-[28px] object-contain drop-shadow-[0_0_1px_rgba(255,255,255,0.15)]"
+              onError={(e) => {
+                const img = e.target as HTMLImageElement;
+                img.style.display = "none";
+              }}
+            />
+          </div>
+          <div className="min-w-0">
+            <h3 className="text-base font-semibold leading-tight">{c.label}</h3>
+            <span className="mt-0.5 inline-block text-base font-mono uppercase tracking-wider text-muted-dark">
+              {categoryMeta?.label ?? c.category}
+            </span>
+          </div>
+        </div>
         <p className="mt-2.5 text-base leading-relaxed text-muted line-clamp-2">{c.summary}</p>
         <div className="mt-3 flex items-center gap-1.5">
           <div className="h-1 w-1 rounded-full" style={{ backgroundColor: `${c.color}80` }} />

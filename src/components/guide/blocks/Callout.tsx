@@ -1,6 +1,6 @@
 "use client";
 
-import type { ReactNode } from "react";
+import { useId, type ReactNode } from "react";
 import {
   Lightbulb,
   AlertTriangle,
@@ -55,8 +55,11 @@ interface CalloutProps {
 export function Callout({ type, children }: CalloutProps) {
   const style = CALLOUT_STYLES[type] ?? CALLOUT_STYLES.info;
   const Icon = style.icon;
+  const labelId = useId();
   return (
     <div
+      role={type === "warning" ? "alert" : "note"}
+      aria-labelledby={labelId}
       className={`my-5 rounded-xl border ${style.border} ${style.bg} px-4 py-3.5 backdrop-blur-sm`}
     >
       <div className="flex gap-3">
@@ -66,6 +69,7 @@ export function Callout({ type, children }: CalloutProps) {
         />
         <div className="min-w-0 flex-1">
           <p
+            id={labelId}
             className={`text-base font-semibold uppercase tracking-wider ${style.iconColor} mb-1.5`}
           >
             {style.label}

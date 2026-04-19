@@ -192,7 +192,7 @@ export function getStatusColor(status: NodeStatus): string {
     case "done":
       return "border-brand-emerald/50 bg-brand-emerald/5";
     default:
-      return "border-white/10";
+      return "border-glass-hover";
   }
 }
 

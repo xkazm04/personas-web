@@ -21,7 +21,7 @@ export function ConnectVisual({ brand }: VisualProps) {
       <div
         className="mx-auto flex items-center gap-2 rounded-full border px-4 py-2"
         style={{
-          borderColor: "rgba(var(--surface-overlay), 0.08)",
+          borderColor: "var(--border-glass-hover)",
           backgroundColor: "rgba(var(--surface-overlay), 0.02)",
         }}
       >
@@ -39,7 +39,7 @@ export function ConnectVisual({ brand }: VisualProps) {
             transition={{ delay: 0.1 + i * 0.08, type: "spring", stiffness: 220 }}
             className="flex flex-col items-center gap-2 rounded-xl border p-3"
             style={{
-              borderColor: "rgba(var(--surface-overlay), 0.06)",
+              borderColor: "var(--border-glass)",
               backgroundColor: "rgba(var(--surface-overlay), 0.02)",
             }}
           >

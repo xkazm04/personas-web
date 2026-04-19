@@ -5,6 +5,7 @@ import { motion, AnimatePresence, useReducedMotion } from "framer-motion";
 import { MessageCircle, Bot, User, RotateCcw } from "lucide-react";
 import { CHAT_SCRIPT } from "../data";
 import type { ChatMsg } from "../types";
+import TabBackdrop from "./TabBackdrop";
 
 export default function ChatTab() {
   const reduced = useReducedMotion() ?? false;
@@ -58,8 +59,9 @@ export default function ChatTab() {
   }, [reduced, run]);
 
   return (
-    <div className="force-dark flex flex-col rounded-xl border border-foreground/[0.08] bg-background/80 backdrop-blur-xl overflow-hidden">
-      <div className="flex items-center justify-between border-b border-foreground/[0.06] px-5 py-3">
+    <div className="force-dark relative flex flex-col rounded-xl border border-foreground/[0.08] bg-background/80 backdrop-blur-xl overflow-hidden">
+      <TabBackdrop tab="chat" />
+      <div className="relative flex items-center justify-between border-b border-foreground/[0.06] px-5 py-3">
         <div className="flex items-center gap-2">
           <MessageCircle className="h-4 w-4 text-brand-cyan" />
           <span className="text-base font-mono font-semibold text-foreground uppercase tracking-wider">
@@ -78,7 +80,7 @@ export default function ChatTab() {
 
       <div
         ref={containerRef}
-        className="h-[340px] overflow-y-auto px-5 py-4 space-y-3 scrollbar-hide"
+        className="relative h-[340px] overflow-y-auto px-5 py-4 space-y-3 scrollbar-hide"
       >
         <AnimatePresence initial={false}>
           {visible.map((msg, i) => {
@@ -133,7 +135,7 @@ export default function ChatTab() {
         </AnimatePresence>
       </div>
 
-      <div className="flex items-center gap-3 border-t border-foreground/[0.06] px-5 py-3">
+      <div className="relative flex items-center gap-3 border-t border-foreground/[0.06] px-5 py-3">
         <div className="flex-1 rounded-lg border border-foreground/[0.08] bg-foreground/[0.02] px-4 py-2 text-base text-foreground/60 font-mono">
           Tell the agent what to change…
         </div>

@@ -11,7 +11,7 @@ import { DOWNLOAD_FAQS } from "@/data/download";
 function FAQItem({ question, answer }: { question: string; answer: string }) {
   const [open, setOpen] = useState(false);
   return (
-    <div className="border-b border-white/5 last:border-b-0">
+    <div className="border-b border-glass last:border-b-0">
       <button
         onClick={() => setOpen((v) => !v)}
         className="flex w-full items-center justify-between py-4 text-left"

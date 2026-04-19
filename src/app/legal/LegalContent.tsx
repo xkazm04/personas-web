@@ -75,7 +75,7 @@ export default function LegalContent() {
               className={`inline-flex items-center gap-2 rounded-full border px-5 py-2 text-base font-medium transition-colors ${
                 isActive
                   ? "border-brand-cyan/40 bg-brand-cyan/10 text-brand-cyan"
-                  : "border-white/[0.08] bg-white/[0.02] text-muted-dark hover:border-white/[0.15] hover:text-foreground"
+                  : "border-glass-hover bg-white/[0.02] text-muted-dark hover:border-glass-strong hover:text-foreground"
               }`}
             >
               <Icon className="h-4 w-4" />
@@ -86,7 +86,7 @@ export default function LegalContent() {
       </div>
 
       {/* Tab content */}
-      <div className="mt-10 rounded-2xl border border-white/[0.06] bg-white/[0.02] p-8 backdrop-blur-sm sm:p-10">
+      <div className="mt-10 rounded-2xl border border-glass bg-white/[0.02] p-8 backdrop-blur-sm sm:p-10">
         <AnimatePresence mode="wait">
           <motion.div
             key={activeTab}
@@ -104,7 +104,7 @@ export default function LegalContent() {
       <div className="mt-8 text-center">
         <a
           href="mailto:legal@personas.ai"
-          className="inline-flex items-center gap-2 rounded-full border border-white/[0.08] bg-white/[0.02] px-6 py-2.5 text-base font-medium text-muted-dark transition-colors hover:border-white/[0.15] hover:text-foreground"
+          className="inline-flex items-center gap-2 rounded-full border border-glass-hover bg-white/[0.02] px-6 py-2.5 text-base font-medium text-muted-dark transition-colors hover:border-glass-strong hover:text-foreground"
         >
           <Mail className="h-4 w-4" />
           legal@personas.ai

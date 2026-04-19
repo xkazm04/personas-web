@@ -76,7 +76,7 @@ export default function DesignEngineMatrix() {
             </div>
           </div>
 
-          <div className="p-5 md:p-6 grid grid-cols-1 md:grid-cols-3 gap-4 md:gap-5">
+          <div className="p-5 md:p-6 grid grid-cols-1 md:grid-cols-3 gap-3 sm:gap-4 md:gap-5">
             <MatrixTile def={CELL_BY_KEY.tasks} status={statuses.tasks} />
             <MatrixTile def={CELL_BY_KEY.apps} status={statuses.apps} />
             <MatrixTile def={CELL_BY_KEY.triggers} status={statuses.triggers} />

@@ -1,6 +1,6 @@
 "use client";
 
-import { motion } from "framer-motion";
+import { motion, useReducedMotion } from "framer-motion";
 import { type Memory, CATEGORIES } from "../../memoryShared";
 import { HUB_CX, HUB_CY, HUB_RADIUS, HUB_SIZE, ARM_OUTER } from "../geometry";
 import NeuralArm from "./NeuralArm";
@@ -12,6 +12,7 @@ export default function NeuralHub({
   memories: Memory[];
   freshId: number | null;
 }) {
+  const reduced = useReducedMotion();
   const grouped = CATEGORIES.map((cat) => ({
     category: cat,
     memories: memories.filter((m) => m.category === cat),
@@ -51,8 +52,8 @@ export default function NeuralHub({
         fill="none"
         stroke="rgba(168, 85, 247, 0.4)"
         strokeWidth={2}
-        animate={{ r: [HUB_RADIUS + 6, HUB_RADIUS + 10, HUB_RADIUS + 6] }}
-        transition={{ duration: 3, repeat: Infinity, ease: "easeInOut" }}
+        animate={reduced ? { r: HUB_RADIUS + 8 } : { r: [HUB_RADIUS + 6, HUB_RADIUS + 10, HUB_RADIUS + 6] }}
+        transition={reduced ? { duration: 0 } : { duration: 3, repeat: Infinity, ease: "easeInOut" }}
       />
       <circle
         cx={HUB_CX}

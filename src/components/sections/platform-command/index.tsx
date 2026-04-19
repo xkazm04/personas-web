@@ -71,7 +71,7 @@ export default function PlatformCommand() {
       </motion.div>
 
       <motion.div ref={terminalRef} variants={fadeUp} className="mx-auto max-w-3xl">
-        <div className="rounded-2xl border border-white/[0.06] bg-gradient-to-br from-white/[0.03] to-white/[0.005] backdrop-blur-md shadow-[0_0_60px_rgba(0,0,0,0.3)] overflow-hidden">
+        <div className="rounded-2xl border border-glass bg-gradient-to-br from-white/[0.03] to-white/[0.005] backdrop-blur-md shadow-[0_0_60px_rgba(0,0,0,0.3)] overflow-hidden">
           <div className="px-4 py-3">
             <TerminalChrome
               title="personas-cli"
@@ -86,6 +86,9 @@ export default function PlatformCommand() {
 
           <div
             ref={scrollRef}
+            role="log"
+            aria-live="polite"
+            aria-label="Terminal output"
             className="px-4 sm:px-6 pb-6 pt-2 max-h-[480px] overflow-y-auto scroll-smooth"
             style={{
               scrollbarWidth: "thin",

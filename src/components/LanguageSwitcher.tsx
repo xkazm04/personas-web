@@ -4,6 +4,7 @@ import { useState, useRef, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { Languages } from "lucide-react";
 import { useI18nStore, type Language } from "@/stores/i18nStore";
+import { useTranslation } from "@/i18n/useTranslation";
 
 const languages: { code: Language; flag: string; label: string }[] = [
   { code: "ar", flag: "\uD83C\uDDF8\uD83C\uDDE6", label: "\u0627\u0644\u0639\u0631\u0628\u064A\u0629" },
@@ -24,6 +25,7 @@ const languages: { code: Language; flag: string; label: string }[] = [
 
 export default function LanguageSwitcher() {
   const { language, setLanguage } = useI18nStore();
+  const { t } = useTranslation();
   const [open, setOpen] = useState(false);
   const ref = useRef<HTMLDivElement>(null);
 
@@ -55,8 +57,8 @@ export default function LanguageSwitcher() {
     <div ref={ref} className="relative">
       <button
         onClick={() => setOpen((v) => !v)}
-        className="flex items-center gap-1.5 rounded-full border border-white/[0.06] bg-white/[0.03] px-3 py-1.5 text-base text-muted hover:text-foreground hover:bg-white/[0.06] transition-all duration-200 focus-ring min-h-11"
-        aria-label="Change language"
+        className="flex items-center gap-1.5 rounded-full border border-glass bg-white/[0.03] px-3 py-1.5 text-base text-muted hover:text-foreground hover:bg-white/[0.06] transition-all duration-200 focus-ring min-h-11"
+        aria-label={t.accessibility.changeLanguage}
         aria-expanded={open}
         aria-haspopup="listbox"
       >
@@ -73,8 +75,8 @@ export default function LanguageSwitcher() {
             exit={{ opacity: 0, y: -8, scale: 0.95 }}
             transition={{ duration: 0.15, ease: "easeOut" }}
             role="listbox"
-            aria-label="Select language"
-            className="absolute right-0 top-full mt-2 z-50 min-w-[160px] overflow-hidden rounded-xl border border-white/[0.06] bg-background shadow-2xl backdrop-blur-xl"
+            aria-label={t.accessibility.selectLanguage}
+            className="absolute right-0 top-full mt-2 z-50 min-w-[160px] overflow-hidden rounded-xl border border-glass bg-background shadow-2xl backdrop-blur-xl"
           >
             {languages.map((lang) => {
               const isActive = lang.code === language;

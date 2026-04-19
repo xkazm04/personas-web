@@ -27,7 +27,7 @@ export default function StepChip({
       className={`flex items-center gap-2 rounded-full border px-4 py-2 text-base font-medium transition-all ${
         isActive
           ? "border-white/20 bg-white/[0.06] text-foreground"
-          : "border-white/[0.08] text-muted-dark hover:border-white/[0.15] hover:text-foreground hover:bg-white/[0.03]"
+          : "border-glass-hover text-muted-dark hover:border-glass-strong hover:text-foreground hover:bg-white/[0.03]"
       }`}
       style={
         isActive

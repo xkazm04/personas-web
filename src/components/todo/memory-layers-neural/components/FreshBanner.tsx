@@ -1,9 +1,10 @@
 "use client";
 
-import { motion, AnimatePresence } from "framer-motion";
+import { motion, AnimatePresence, useReducedMotion } from "framer-motion";
 import { type Memory, CATEGORY_META } from "../../memoryShared";
 
 export default function FreshBanner({ freshMemory }: { freshMemory: Memory | null }) {
+  const reduced = useReducedMotion();
   return (
     <div className="mt-4 h-[54px] relative">
       <AnimatePresence mode="wait">
@@ -20,7 +21,7 @@ export default function FreshBanner({ freshMemory }: { freshMemory: Memory | nul
             }}
           >
             <div
-              className="h-2 w-2 rounded-full animate-pulse"
+              className={`h-2 w-2 rounded-full${reduced ? "" : " animate-pulse"}`}
               style={{ backgroundColor: CATEGORY_META[freshMemory.category].color }}
             />
             <span

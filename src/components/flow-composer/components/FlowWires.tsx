@@ -3,6 +3,7 @@
 import { motion } from "framer-motion";
 import { NODE_R, QUEUE_Y } from "../data";
 import type { Wire } from "../types";
+import { SVGFocusRingCircle } from "@/components/SVGFocusRing";
 
 export default function FlowWires({
   wires,
@@ -52,15 +53,11 @@ export default function FlowWires({
             >
               {wire.label}
             </text>
-            <circle
-              cx={midX}
-              cy={QUEUE_Y - 6}
-              r="2.5"
-              fill="transparent"
+            <g
               role="button"
               tabIndex={0}
               aria-label={`Remove wire ${wire.label}`}
-              className="cursor-pointer focus-visible:outline-none focus-visible:stroke-brand-cyan focus-visible:stroke-[0.5]"
+              className="svg-focus-parent cursor-pointer focus-visible:outline-none"
               onClick={() => onRemoveWire(wire.from, wire.to)}
               onKeyDown={(e) => {
                 if (e.key === "Enter" || e.key === " ") {
@@ -69,8 +66,16 @@ export default function FlowWires({
                 }
               }}
             >
-              <title>Remove wire</title>
-            </circle>
+              <SVGFocusRingCircle cx={midX} cy={QUEUE_Y - 6} r={2.5} offset={1.5} strokeWidth={0.4} />
+              <circle
+                cx={midX}
+                cy={QUEUE_Y - 6}
+                r="2.5"
+                fill="transparent"
+              >
+                <title>Remove wire</title>
+              </circle>
+            </g>
           </g>
         );
       })}

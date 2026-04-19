@@ -228,7 +228,7 @@ export const statusConfig = {
   blocked: {
     label: "Blocked",
     dotClass: "bg-white/20",
-    badgeClass: "border-white/[0.06] bg-white/[0.02] text-muted-dark",
+    badgeClass: "border-glass bg-white/[0.02] text-muted-dark",
     lineClass: "bg-white/[0.04]",
   },
 };
@@ -236,7 +236,7 @@ export const statusConfig = {
 export const priorityClass: Record<Phase["priority"], string> = {
   Now: "border-brand-cyan/20 bg-brand-cyan/5 text-brand-cyan/70",
   Next: "border-brand-purple/20 bg-brand-purple/5 text-brand-purple/70",
-  Later: "border-white/[0.08] bg-white/[0.02] text-muted-dark",
+  Later: "border-glass-hover bg-white/[0.02] text-muted-dark",
 };
 
 export const phaseCardData: PhaseCardData[] = [

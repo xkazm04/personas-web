@@ -10,7 +10,7 @@ export default function MobileBottomNav() {
   const { getActive, getBadge } = useNavState();
 
   return (
-    <nav className="fixed inset-x-0 bottom-0 z-40 border-t border-white/[0.06] bg-background/95 backdrop-blur-xl md:hidden safe-bottom">
+    <nav className="fixed inset-x-0 bottom-0 z-40 border-t border-glass bg-background/95 backdrop-blur-xl md:hidden safe-bottom">
       <div className="flex items-center justify-around px-1 py-1">
         {navItems.slice(0, 5).map((item) => {
           const active = getActive(item);
@@ -67,7 +67,7 @@ function MobileMoreMenu({
       {open && (
         <>
           <div className="fixed inset-0 z-40" onClick={() => setOpen(false)} />
-          <div className="absolute bottom-full right-0 z-50 mb-2 w-48 rounded-xl border border-white/[0.08] bg-background/95 backdrop-blur-xl p-1.5 shadow-2xl">
+          <div className="absolute bottom-full right-0 z-50 mb-2 w-48 rounded-xl border border-glass-hover bg-background/95 backdrop-blur-xl p-1.5 shadow-2xl">
             {items.map((item) => {
               const active = getActive(item);
               const Icon = item.icon;

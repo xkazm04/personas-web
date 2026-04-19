@@ -3,7 +3,6 @@ import StageSection from "@/components/StageSection";
 import DesignEngine from "@/components/todo/DesignEngine";
 import MemoryLayers from "@/components/todo/MemoryLayers";
 import HealingCircuit from "@/components/todo/HealingCircuit";
-import TriggerSystem from "@/components/todo/TriggerSystem";
 import ObservabilityDeck from "@/components/todo/ObservabilityDeck";
 import Lab from "@/components/todo/Lab";
 import Plugins from "@/components/todo/Plugins";
@@ -14,7 +13,6 @@ const scrollMapItems = [
   { label: "DESIGN", href: "#design" },
   { label: "MEMORY", href: "#memory-layers" },
   { label: "HEALING", href: "#healing-circuit" },
-  { label: "TRIGGERS", href: "#triggers" },
   { label: "SECURITY", href: "#security" },
   { label: "AI MODELS", href: "#multi-provider" },
   { label: "OBSERVE", href: "#observe" },
@@ -26,7 +24,6 @@ const breadcrumbItems = [
   { label: "DESIGN", href: "#design", color: "#a855f7" },
   { label: "MEMORY", href: "#memory-layers", color: "#a855f7" },
   { label: "HEALING", href: "#healing-circuit", color: "#f43f5e" },
-  { label: "TRIGGERS", href: "#triggers", color: "#fbbf24" },
   { label: "SECURITY", href: "#security", color: "#f43f5e" },
   { label: "AI MODELS", href: "#multi-provider", color: "#3b82f6" },
   { label: "OBSERVE", href: "#observe", color: "#34d399" },
@@ -49,11 +46,7 @@ export default function FeaturesPage() {
         <HealingCircuit />
       </StageSection>
 
-      <StageSection glow="cyan" fromColor="rose" toColor="cyan">
-        <TriggerSystem />
-      </StageSection>
-
-      <StageSection glow="emerald" fromColor="cyan" toColor="rose">
+      <StageSection glow="emerald" fromColor="rose" toColor="rose">
         <SecurityVault />
       </StageSection>
 

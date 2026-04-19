@@ -16,7 +16,7 @@ function EventBusShowcaseSkeleton() {
 
         <div className="relative mx-auto mt-16 max-w-3xl">
           <TerminalPanel shadow="hero" bodyClassName="p-4 md:p-6">
-            <div className="flex items-center gap-2 mb-4 pb-3 border-b border-white/4">
+            <div className="flex items-center gap-2 mb-4 pb-3 border-b border-glass">
               <div className="flex gap-1.5">
                 <div className="h-2 w-2 rounded-full bg-white/6" />
                 <div className="h-2 w-2 rounded-full bg-white/6" />

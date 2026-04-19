@@ -44,7 +44,7 @@ function CompareTooltipContent({
 }) {
   if (!active || !payload?.length) return null;
   return (
-    <div className="rounded-xl border border-white/[0.1] bg-background/95 px-3 py-2 text-sm shadow-xl backdrop-blur-md">
+    <div className="rounded-xl border border-glass-hover bg-background/95 px-3 py-2 text-sm shadow-xl backdrop-blur-md">
       <p className="mb-1 text-muted-dark">{label}</p>
       {payload.map((entry) => (
         <p key={entry.dataKey} style={{ color: entry.color }} className="flex items-center gap-2">

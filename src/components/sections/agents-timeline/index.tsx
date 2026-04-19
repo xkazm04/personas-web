@@ -101,7 +101,7 @@ export default function AgentsTimeline() {
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: -8 }}
             transition={{ duration: 0.3 }}
-            className="mx-auto max-w-3xl rounded-xl border border-white/[0.06] bg-white/[0.02] px-4 py-3 text-center backdrop-blur-sm"
+            className="mx-auto max-w-3xl rounded-xl border border-glass bg-white/[0.02] px-4 py-3 text-center backdrop-blur-sm"
           >
             <span className="text-base font-mono uppercase tracking-wider text-muted-dark/60">
               Scenario trigger
@@ -115,7 +115,7 @@ export default function AgentsTimeline() {
 
       <motion.div
         variants={fadeUp}
-        className="rounded-2xl border border-white/[0.06] bg-white/[0.02] backdrop-blur-lg overflow-hidden"
+        className="rounded-2xl border border-glass bg-white/[0.02] backdrop-blur-lg overflow-hidden"
         onMouseEnter={() => setPaused(true)}
         onMouseLeave={() => setPaused(false)}
       >
@@ -154,7 +154,7 @@ export default function AgentsTimeline() {
 
           <div className="flex items-center gap-3">
             <div className="h-px flex-1 bg-gradient-to-r from-brand-rose/20 via-white/5 to-brand-emerald/20" />
-            <div className="flex h-8 w-8 items-center justify-center rounded-full border border-white/10 bg-background/80">
+            <div className="flex h-8 w-8 items-center justify-center rounded-full border border-glass-hover bg-background/80">
               <Zap className="h-3.5 w-3.5 text-brand-cyan" />
             </div>
             <div className="h-px flex-1 bg-gradient-to-r from-brand-rose/20 via-white/5 to-brand-emerald/20" />

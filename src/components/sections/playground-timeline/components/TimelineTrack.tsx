@@ -30,9 +30,9 @@ export default function TimelineTrack({
               {[ArrowRight, Search, Cpu, Wrench, Zap, FileOutput].map((Icon, i) => (
                 <div
                   key={i}
-                  className="w-10 h-10 rounded-xl border border-white/[0.06] bg-white/[0.02] flex items-center justify-center"
+                  className="w-10 h-10 rounded-xl border border-glass bg-white/[0.02] flex items-center justify-center"
                 >
-                  <Icon className="h-4 w-4 text-white/60" />
+                  <Icon className="h-4 w-4 text-text-disabled" />
                 </div>
               ))}
             </div>

@@ -91,7 +91,7 @@ export default function AgentsChat() {
 
       <motion.div
         variants={fadeUp}
-        className="rounded-2xl border border-white/[0.06] bg-white/[0.02] backdrop-blur-lg overflow-hidden"
+        className="rounded-2xl border border-glass bg-white/[0.02] backdrop-blur-lg overflow-hidden"
         onMouseEnter={() => setHovered(true)}
         onMouseLeave={() => setHovered(false)}
       >

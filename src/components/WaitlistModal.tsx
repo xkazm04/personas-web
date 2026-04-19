@@ -2,7 +2,7 @@
 
 import { useState, useEffect, useRef, useCallback, type FormEvent } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { X, Bell, CheckCircle2, Users, Sparkles, Share2, AlertCircle, Info } from "lucide-react";
+import { X, Bell, Users, Sparkles, Share2, AlertCircle, Info, Mail } from "lucide-react";
 import { TRANSITION_FAST, TRANSITION_NORMAL } from "@/lib/animations";
 import * as Sentry from "@sentry/nextjs";
 
@@ -10,6 +10,52 @@ const FETCH_TIMEOUT_MS = 15_000;
 
 /** Basic RFC 5322 email pattern — intentionally simple to avoid ReDoS */
 const EMAIL_RE = /^[^\s@<>'"`;(){}[\]\\]+@[^\s@<>'"`;(){}[\]\\]+\.[a-zA-Z]{2,}$/;
+
+const PLATFORM_LABELS: Record<string, string> = {
+  macos: "macOS",
+  windows: "Windows",
+  linux: "Linux",
+};
+
+function AnimatedCheckmark() {
+  return (
+    <motion.svg
+      viewBox="0 0 52 52"
+      className="h-12 w-12"
+      initial="hidden"
+      animate="visible"
+    >
+      <motion.circle
+        cx="26"
+        cy="26"
+        r="24"
+        fill="none"
+        stroke="currentColor"
+        strokeWidth="2"
+        className="text-brand-emerald/60"
+        variants={{
+          hidden: { pathLength: 0, opacity: 0 },
+          visible: { pathLength: 1, opacity: 1 },
+        }}
+        transition={{ duration: 0.4, ease: "easeOut" }}
+      />
+      <motion.path
+        fill="none"
+        stroke="currentColor"
+        strokeWidth="3"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+        d="M16 27l7 7 13-13"
+        className="text-brand-emerald"
+        variants={{
+          hidden: { pathLength: 0, opacity: 0 },
+          visible: { pathLength: 1, opacity: 1 },
+        }}
+        transition={{ duration: 0.35, delay: 0.3, ease: "easeOut" }}
+      />
+    </motion.svg>
+  );
+}
 
 interface WaitlistModalProps {
   platform: string;
@@ -25,6 +71,7 @@ export default function WaitlistModal({
   onClose,
 }: WaitlistModalProps) {
   const [email, setEmail] = useState("");
+  const [submittedEmail, setSubmittedEmail] = useState("");
   const [earlyBeta, setEarlyBeta] = useState(false);
   const [status, setStatus] = useState<"idle" | "loading" | "success" | "duplicate" | "error">("idle");
   const [errorMsg, setErrorMsg] = useState("");
@@ -56,6 +103,7 @@ export default function WaitlistModal({
     if (open) {
       setStatus("idle");
       setEmail("");
+      setSubmittedEmail("");
       setEarlyBeta(false);
       setErrorMsg("");
     }
@@ -124,9 +172,11 @@ export default function WaitlistModal({
       return;
     }
 
+    setSubmittedEmail(email.trim());
+
     // Capture previous state for potential revert
     const prevCount = waitlistCount;
-    
+
     // Optimistic update: show success and increment count immediately
     setStatus("success");
     setWaitlistCount(prev => (prev !== null ? prev + 1 : 1));
@@ -210,7 +260,7 @@ export default function WaitlistModal({
             exit={{ opacity: 0, scale: 0.95, y: 10 }}
             transition={TRANSITION_NORMAL}
             onClick={(e) => e.stopPropagation()}
-            className="relative w-full max-w-[440px] rounded-2xl border border-white/[0.06] bg-background p-6 shadow-[0_0_80px_rgba(0,0,0,0.5)]"
+            className="relative w-full max-w-[440px] rounded-2xl border border-glass bg-background p-6 shadow-[0_0_80px_rgba(0,0,0,0.5)]"
           >
             {/* Close button */}
             <button
@@ -236,7 +286,7 @@ export default function WaitlistModal({
 
             {/* Social proof */}
             {waitlistCount !== null && waitlistCount > 0 && (
-              <div className="mt-5 flex items-center gap-2 rounded-lg border border-white/[0.04] bg-white/[0.02] px-3 py-2">
+              <div className="mt-5 flex items-center gap-2 rounded-lg border border-glass bg-white/[0.02] px-3 py-2">
                 <Users className="h-3.5 w-3.5 text-brand-cyan/60" />
                 <span className="text-sm text-muted-dark">
                   Join <span className="font-medium text-brand-cyan">{waitlistCount}</span>{" "}
@@ -254,28 +304,53 @@ export default function WaitlistModal({
                 animate={{ opacity: 1, y: 0 }}
                 className="mt-6 text-center"
               >
-                <div className={`mx-auto mb-3 flex h-12 w-12 items-center justify-center rounded-full ring-1 ${
-                  status === "duplicate" 
-                    ? "bg-brand-cyan/15 ring-brand-cyan/20" 
-                    : "bg-brand-emerald/15 ring-brand-emerald/20"
-                }`}>
-                  {status === "duplicate" ? (
+                {status === "duplicate" ? (
+                  <div className="mx-auto mb-3 flex h-12 w-12 items-center justify-center rounded-full bg-brand-cyan/15 ring-1 ring-brand-cyan/20">
                     <Info className="h-6 w-6 text-brand-cyan" />
-                  ) : (
-                    <CheckCircle2 className="h-6 w-6 text-brand-emerald" />
-                  )}
-                </div>
+                  </div>
+                ) : (
+                  <div className="mx-auto mb-3">
+                    <AnimatedCheckmark />
+                  </div>
+                )}
                 <p className="text-base font-medium text-foreground">
-                  {status === "duplicate" ? "Already on the list!" : "You're on the list!"}
+                  {status === "duplicate" ? "Already on the list!" : "You\u2019re on the list!"}
                 </p>
-                <p className="mt-1 text-sm text-muted-dark">
-                  {status === "duplicate" 
-                    ? `No action needed — we already have your request for Personas for ${platform}.`
-                    : `We'll notify you when Personas for ${platform} is ready.`}
-                </p>
+
+                {/* Email echo */}
+                <div className="mx-auto mt-3 flex items-center justify-center gap-2 rounded-lg border border-glass bg-white/[0.02] px-3 py-2">
+                  <Mail className="h-3.5 w-3.5 shrink-0 text-muted-dark" />
+                  <span className="truncate text-sm font-medium text-foreground/80">{submittedEmail}</span>
+                  <span className="shrink-0 rounded-md bg-brand-purple/15 px-1.5 py-0.5 text-xs font-medium text-brand-purple">
+                    {PLATFORM_LABELS[platform] ?? platform}
+                  </span>
+                </div>
+
+                {/* What happens next */}
+                <div className="mt-4 space-y-2.5 text-left">
+                  <p className="text-sm font-medium text-foreground/70">What happens next</p>
+                  <div className="space-y-2">
+                    {[
+                      status === "duplicate"
+                        ? `We already have your spot saved for ${PLATFORM_LABELS[platform] ?? platform}.`
+                        : `We\u2019ll email you at this address when the ${PLATFORM_LABELS[platform] ?? platform} beta is ready.`,
+                      earlyBeta
+                        ? "You opted into early beta \u2014 you\u2019ll be among the first to get access."
+                        : "No spam, just one email when it\u2019s time.",
+                    ].map((step, i) => (
+                      <div key={i} className="flex items-start gap-2.5">
+                        <span className="mt-0.5 flex h-5 w-5 shrink-0 items-center justify-center rounded-full bg-white/[0.06] text-xs font-medium text-muted-dark">
+                          {i + 1}
+                        </span>
+                        <p className="text-sm leading-relaxed text-muted-dark">{step}</p>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+
                 <button
                   onClick={onClose}
-                  className="mt-4 w-full rounded-full border border-white/[0.08] bg-white/[0.02] px-4 py-2.5 text-base font-medium text-muted transition-colors hover:border-white/[0.15] hover:text-foreground"
+                  className="mt-5 w-full rounded-full border border-glass-hover bg-white/[0.02] px-4 py-2.5 text-base font-medium text-muted transition-colors hover:border-glass-strong hover:text-foreground"
                 >
                   Close
                 </button>
@@ -286,7 +361,7 @@ export default function WaitlistModal({
                 >
                   <Share2 className="h-3.5 w-3.5" />
                   <span>Share with a friend</span>
-                  
+
                   <AnimatePresence>
                     {copied && (
                       <motion.div
@@ -316,7 +391,7 @@ export default function WaitlistModal({
                     placeholder="you@example.com"
                     required
                     autoFocus
-                    className="w-full rounded-xl border border-white/[0.06] bg-white/[0.03] px-4 py-3 text-base text-foreground placeholder:text-muted-dark focus:border-brand-cyan/30 focus:outline-none focus:ring-1 focus:ring-brand-cyan/20 transition-colors"
+                    className="w-full rounded-xl border border-glass bg-white/[0.03] px-4 py-3 text-base text-foreground placeholder:text-muted-dark focus:border-brand-cyan/30 focus:outline-none focus:ring-1 focus:ring-brand-cyan/20 transition-colors"
                   />
                   <AnimatePresence>
                     {errorMsg && (
@@ -336,12 +411,12 @@ export default function WaitlistModal({
                 </div>
 
                 {/* Early beta checkbox */}
-                <label className="flex cursor-pointer items-start gap-3 rounded-xl border border-white/[0.04] bg-white/[0.015] px-3.5 py-3 transition-all hover:border-white/[0.08] focus-within:ring-1 focus-within:ring-white/[0.04]">
+                <label className="flex cursor-pointer items-start gap-3 rounded-xl border border-glass bg-white/[0.015] px-3.5 py-3 transition-all hover:border-glass-hover focus-within:ring-1 focus-within:ring-white/[0.04]">
                   <input
                     type="checkbox"
                     checked={earlyBeta}
                     onChange={(e) => setEarlyBeta(e.target.checked)}
-                    className="mt-0.5 h-4 w-4 rounded border-white/10 bg-white/[0.05] accent-brand-cyan"
+                    className="mt-0.5 h-4 w-4 rounded border-glass-hover bg-white/[0.05] accent-brand-cyan"
                   />
                   <div>
                     <div className="flex items-center gap-1.5">

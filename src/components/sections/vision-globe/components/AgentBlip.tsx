@@ -3,6 +3,7 @@
 import { motion, AnimatePresence } from "framer-motion";
 import type { AgentData } from "../types";
 import { statusStyles, agentPosition } from "../data";
+import { FLASH_DURATION_S } from "../../vision-shared/constants";
 
 interface Props {
   agent: AgentData;
@@ -49,7 +50,7 @@ export default function AgentBlip({
           style={{ width: 36, height: 36, left: -18, top: -18, border: `1.5px solid ${agent.color}` }}
           initial={{ opacity: 0.7, scale: 0.5 }}
           animate={{ opacity: 0, scale: 1.8 }}
-          transition={{ duration: 0.8, ease: "easeOut" }}
+          transition={{ duration: FLASH_DURATION_S, ease: "easeOut" }}
         />
       )}
 
@@ -83,7 +84,7 @@ export default function AgentBlip({
             animate={{ opacity: 1, y: 0, scale: 1 }}
             exit={{ opacity: 0, y: 4, scale: 0.95 }}
             transition={{ duration: 0.18 }}
-            className="absolute left-1/2 -translate-x-1/2 bottom-full mb-3 whitespace-nowrap rounded-lg border border-white/10 bg-black/80 backdrop-blur-lg px-3 py-2 shadow-xl z-40"
+            className="absolute left-1/2 -translate-x-1/2 bottom-full mb-3 whitespace-nowrap rounded-lg border border-glass-hover bg-black/80 backdrop-blur-lg px-3 py-2 shadow-xl z-40"
           >
             <div className="flex items-center gap-2 mb-1">
               <agent.icon className="h-3 w-3" style={{ color: agent.color }} />

@@ -49,7 +49,7 @@ export default function PlaygroundPage() {
 
             {/* Bottom CTA */}
             <motion.div variants={fadeUp} className="mx-auto max-w-xl">
-              <div className="relative rounded-2xl border border-white/[0.08] bg-white/[0.02] backdrop-blur-xl p-8 text-center overflow-hidden">
+              <div className="relative rounded-2xl border border-glass-hover bg-white/[0.02] backdrop-blur-xl p-8 text-center overflow-hidden">
                 <div className="absolute inset-0 rounded-2xl bg-gradient-to-br from-brand-cyan/[0.04] via-transparent to-purple-500/[0.04] pointer-events-none" />
 
                 <h3 className="relative text-xl font-bold text-foreground mb-3">
@@ -69,7 +69,7 @@ export default function PlaygroundPage() {
                   </Link>
                   <Link
                     href="/templates"
-                    className="inline-flex items-center gap-2 rounded-lg border border-white/10 bg-white/[0.04] px-5 py-2.5 text-base font-medium text-muted hover:text-foreground hover:border-white/20 transition-all"
+                    className="inline-flex items-center gap-2 rounded-lg border border-glass-hover bg-white/[0.04] px-5 py-2.5 text-base font-medium text-muted hover:text-foreground hover:border-white/20 transition-all"
                   >
                     <LayoutGrid className="h-4 w-4" />
                     Browse Templates

@@ -6,6 +6,7 @@ import { AnimatePresence, motion } from "framer-motion";
 import { Search, ArrowRight } from "lucide-react";
 import { searchGuide, groupResultsByCategory } from "@/lib/guide-search";
 import type { SearchResult } from "@/lib/guide-search";
+import { highlightMatch } from "@/lib/highlight-match";
 import { TRANSITION_FAST } from "@/lib/animations";
 
 interface SearchComboboxProps {
@@ -106,6 +107,13 @@ export default function SearchCombobox({
 
   return (
     <div ref={wrapperRef} className={`relative ${className}`}>
+      <div aria-live="polite" className="sr-only">
+        {isOpen && results.length > 0
+          ? `${results.length} result${results.length !== 1 ? "s" : ""} for ${query}`
+          : isOpen && results.length === 0 && query.length >= 2
+            ? `No topics found for ${query}`
+            : ""}
+      </div>
       <div className="relative">
         <Search className="pointer-events-none absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-dark" />
         <input
@@ -122,7 +130,7 @@ export default function SearchCombobox({
           onKeyDown={onKeyDown}
           onFocus={() => query.length >= 2 && results.length > 0 && setIsOpen(true)}
           placeholder={placeholder}
-          className="w-full rounded-xl border border-white/[0.08] bg-white/[0.04] py-2.5 pl-10 pr-4 text-base text-foreground placeholder:text-muted-dark outline-none transition-colors focus:border-white/[0.16] focus:bg-white/[0.06]"
+          className="w-full rounded-xl border border-glass-hover bg-white/[0.04] py-2.5 pl-10 pr-4 text-base text-foreground placeholder:text-muted-dark outline-none transition-colors focus-visible:border-glass-strong focus-visible:bg-white/[0.06] focus-visible:ring-2 focus-visible:ring-brand-cyan/50 focus-visible:ring-offset-2 focus-visible:ring-offset-black"
         />
       </div>
 
@@ -137,7 +145,7 @@ export default function SearchCombobox({
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: -6 }}
             transition={TRANSITION_FAST}
-            className="absolute left-0 right-0 top-full z-50 mt-2 max-h-80 overflow-y-auto rounded-xl border border-white/[0.08] bg-surface/95 shadow-2xl backdrop-blur-xl"
+            className="absolute left-0 right-0 top-full z-50 mt-2 max-h-80 overflow-y-auto rounded-xl border border-glass-hover bg-surface/95 shadow-2xl backdrop-blur-xl"
           >
             {results.length === 0 ? (
               <p className="px-4 py-6 text-center text-base text-muted-dark">
@@ -163,12 +171,14 @@ export default function SearchCombobox({
                           aria-selected={isActive}
                           data-index={idx}
                           onClick={() => navigate(result)}
-                          className={`flex w-full items-center gap-2.5 px-3 py-2 text-left text-base transition-colors ${
+                          className={`flex w-full items-center gap-2.5 px-3 py-2 text-left text-base transition-colors outline-none focus-visible:ring-2 focus-visible:ring-brand-cyan/50 focus-visible:ring-offset-2 focus-visible:ring-offset-black ${
                             isActive ? "bg-white/[0.06]" : "hover:bg-white/[0.04]"
                           }`}
                         >
                           <span className="h-1.5 w-1.5 shrink-0 rounded-full" style={{ backgroundColor: group.category.color }} />
-                          <span className="min-w-0 flex-1 truncate text-foreground">{result.topic.title}</span>
+                          <span className="min-w-0 flex-1 truncate text-foreground">
+                            {highlightMatch(result.topic.title, query, result.matchType, group.category.color)}
+                          </span>
                           {badge && (
                             <span className="shrink-0 rounded bg-white/[0.06] px-1.5 py-0.5 text-base leading-none text-muted-dark">
                               {badge}
@@ -180,7 +190,7 @@ export default function SearchCombobox({
                     })}
                   </div>
                 ))}
-                <div className="border-t border-white/[0.06] px-3 py-1.5 text-right text-base text-muted-dark" aria-live="polite">
+                <div className="border-t border-glass px-3 py-1.5 text-right text-base text-muted-dark">
                   {results.length} result{results.length !== 1 && "s"}
                 </div>
               </>

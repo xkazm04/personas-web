@@ -5,6 +5,7 @@ import { mockInitialize, mockSignIn, mockSignOut } from "@/lib/mockAuth";
 import type { User } from "@supabase/supabase-js";
 
 let authSubscriptionCleanup: (() => void) | null = null;
+let userSignOutInProgress = false;
 
 interface AuthState {
   user: User | null;
@@ -13,10 +14,14 @@ interface AuthState {
   isLoading: boolean;
   initialized: boolean;
   isDemo: boolean;
+  isSigningIn: boolean;
+  isSigningOut: boolean;
+  sessionExpired: boolean;
   signInWithGoogle: () => Promise<void>;
   signInAsDemo: () => void;
   signOut: () => Promise<void>;
   initialize: () => (() => void) | undefined;
+  clearSessionExpired: () => void;
 }
 
 export const useAuthStore = create<AuthState>((set, get) => ({
@@ -26,6 +31,9 @@ export const useAuthStore = create<AuthState>((set, get) => ({
   isLoading: true,
   initialized: false,
   isDemo: false,
+  isSigningIn: false,
+  isSigningOut: false,
+  sessionExpired: false,
 
   initialize: () => {
     if (get().initialized) return authSubscriptionCleanup ?? undefined;
@@ -73,11 +81,15 @@ export const useAuthStore = create<AuthState>((set, get) => ({
 
     // Validate session with server (updates or clears optimistic state)
     supabase.auth.getSession().then(({ data: { session } }) => {
+      const wasAuthenticated = get().isAuthenticated;
+      const nowAuthenticated = !!session?.user;
       set({
         user: session?.user ?? null,
         accessToken: session?.access_token ?? null,
-        isAuthenticated: !!session?.user,
+        isAuthenticated: nowAuthenticated,
         isLoading: false,
+        sessionExpired:
+          wasAuthenticated && !nowAuthenticated && !userSignOutInProgress,
       });
     });
 
@@ -85,11 +97,17 @@ export const useAuthStore = create<AuthState>((set, get) => ({
     const {
       data: { subscription },
     } = supabase.auth.onAuthStateChange((_event, session) => {
+      const wasAuthenticated = get().isAuthenticated;
+      const nowAuthenticated = !!session?.user;
       set({
         user: session?.user ?? null,
         accessToken: session?.access_token ?? null,
-        isAuthenticated: !!session?.user,
+        isAuthenticated: nowAuthenticated,
         isLoading: false,
+        sessionExpired:
+          wasAuthenticated && !nowAuthenticated && !userSignOutInProgress
+            ? true
+            : get().sessionExpired,
       });
     });
 
@@ -113,32 +131,50 @@ export const useAuthStore = create<AuthState>((set, get) => ({
       return;
     }
 
-    const supabase = getSupabase();
-    await supabase.auth.signInWithOAuth({
-      provider: "google",
-      options: {
-        redirectTo: `${window.location.origin}/dashboard`,
-      },
-    });
+    set({ isSigningIn: true });
+    try {
+      const supabase = getSupabase();
+      await supabase.auth.signInWithOAuth({
+        provider: "google",
+        options: {
+          redirectTo: `${window.location.origin}/dashboard`,
+        },
+      });
+    } finally {
+      set({ isSigningIn: false });
+    }
   },
 
   signOut: async () => {
-    if (authSubscriptionCleanup) {
-      authSubscriptionCleanup();
-    }
+    set({ isSigningOut: true });
+    userSignOutInProgress = true;
 
-    if (DEVELOPMENT || get().isDemo) {
-      mockSignOut(set);
-      set({ isDemo: false });
-      return;
-    }
+    try {
+      if (authSubscriptionCleanup) {
+        authSubscriptionCleanup();
+      }
 
-    const supabase = getSupabase();
-    await supabase.auth.signOut();
-    set({
-      user: null,
-      accessToken: null,
-      isAuthenticated: false,
-    });
+      if (DEVELOPMENT || get().isDemo) {
+        mockSignOut(set);
+        set({ isDemo: false, isSigningOut: false });
+        userSignOutInProgress = false;
+        return;
+      }
+
+      const supabase = getSupabase();
+      await supabase.auth.signOut();
+      set({
+        user: null,
+        accessToken: null,
+        isAuthenticated: false,
+        isSigningOut: false,
+      });
+    } catch {
+      set({ isSigningOut: false });
+    } finally {
+      userSignOutInProgress = false;
+    }
   },
+
+  clearSessionExpired: () => set({ sessionExpired: false }),
 }));

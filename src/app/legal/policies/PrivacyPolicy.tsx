@@ -1,6 +1,20 @@
 export default function PrivacyPolicy() {
   return (
     <div className="space-y-8">
+      <div className="rounded-xl border border-brand-cyan/20 bg-brand-cyan/[0.05] p-5">
+        <p className="text-xs font-semibold uppercase tracking-wider text-brand-cyan">
+          TL;DR
+        </p>
+        <ul className="mt-3 space-y-2 text-sm leading-relaxed text-foreground/80">
+          <li>Your data stays on your device — zero telemetry by default.</li>
+          <li>
+            API keys are encrypted with AES-256 and never leave your machine.
+          </li>
+          <li>We only collect your email if you opt into cloud features.</li>
+          <li>You can export or delete everything anytime — just ask.</li>
+        </ul>
+      </div>
+
       <p className="text-base text-muted-dark">Last updated: April 2026</p>
 
       <section className="space-y-3">

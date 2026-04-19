@@ -21,7 +21,7 @@ export default function DesktopSidebar() {
   };
 
   return (
-    <aside className="hidden w-56 flex-shrink-0 border-r border-white/[0.06] bg-white/[0.02] md:flex md:flex-col">
+    <aside className="hidden w-56 flex-shrink-0 border-r border-glass bg-white/[0.02] md:flex md:flex-col">
       <nav className="flex-1 px-3 py-4">
         <div className="space-y-0.5">
           {navItems.map((item, index) => {
@@ -64,7 +64,7 @@ export default function DesktopSidebar() {
       </nav>
 
       {/* Connection status */}
-      <div className="border-t border-white/[0.06] px-4 py-3">
+      <div className="border-t border-glass px-4 py-3">
         <div className="flex items-center gap-2 text-sm">
           {isConnected ? (
             <>

@@ -33,6 +33,16 @@ const jsonLd = {
       name: "Does Personas collect telemetry?",
       acceptedAnswer: { "@type": "Answer", text: "No. Zero analytics, crash reports, or phone-home behavior." },
     },
+    {
+      "@type": "Question",
+      name: "Can my employer see my agent data?",
+      acceptedAnswer: { "@type": "Answer", text: "Only if they have access to your machine. Personas stores everything locally with no admin console or centralized server." },
+    },
+    {
+      "@type": "Question",
+      name: "What happens if I uninstall Personas?",
+      acceptedAnswer: { "@type": "Answer", text: "All data is removed with the application. No cloud accounts, no remote backups, no residual data on external servers." },
+    },
   ],
 };
 

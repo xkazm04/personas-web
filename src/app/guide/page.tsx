@@ -117,7 +117,7 @@ function GuidePageInner() {
             variants={fadeUp}
             className="mt-8 inline-flex items-center gap-1 rounded-full border p-1"
             style={{
-              borderColor: "rgba(var(--surface-overlay), 0.08)",
+              borderColor: "var(--border-glass-hover)",
               backgroundColor: "rgba(var(--surface-overlay), 0.02)",
             }}
           >
@@ -155,9 +155,9 @@ function GuidePageInner() {
               <motion.div key={cat.id} variants={fadeUp}>
                 <Link
                   href={`/guide/${cat.id}`}
-                  className="group relative block overflow-hidden rounded-2xl border transition-all duration-500 hover:scale-[1.01]"
+                  className="group relative block overflow-hidden rounded-2xl border transition-all duration-500 hover:scale-[1.01] outline-none focus-visible:ring-2 focus-visible:ring-brand-cyan/50 focus-visible:ring-offset-2 focus-visible:ring-offset-black"
                   style={{
-                    borderColor: "rgba(var(--surface-overlay), 0.08)",
+                    borderColor: "var(--border-glass-hover)",
                     backgroundColor: "rgba(var(--surface-overlay), 0.02)",
                     backgroundImage: `linear-gradient(180deg, transparent 0%, ${tint(brand, 8)} 100%)`,
                   }}
@@ -244,7 +244,7 @@ function GuidePageInner() {
           <div
             className="flex flex-col items-center gap-5 rounded-2xl border p-8 sm:flex-row sm:gap-6"
             style={{
-              borderColor: "rgba(var(--surface-overlay), 0.08)",
+              borderColor: "var(--border-glass-hover)",
               backgroundColor: "rgba(var(--surface-overlay), 0.02)",
               backgroundImage: `linear-gradient(135deg, ${tint("purple", 10)} 0%, transparent 60%)`,
             }}
@@ -273,7 +273,7 @@ function GuidePageInner() {
               href="https://discord.gg/personas"
               target="_blank"
               rel="noopener noreferrer"
-              className="inline-flex items-center gap-1.5 rounded-full px-6 py-3 text-base font-semibold transition-colors"
+              className="inline-flex items-center gap-1.5 rounded-full px-6 py-3 text-base font-semibold transition-colors outline-none focus-visible:ring-2 focus-visible:ring-brand-cyan/50 focus-visible:ring-offset-2 focus-visible:ring-offset-black"
               style={{
                 color: BRAND_VAR.purple,
                 backgroundColor: tint("purple", 14),

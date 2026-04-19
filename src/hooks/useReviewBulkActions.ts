@@ -7,12 +7,20 @@ import type { ManualReviewItem } from "@/lib/types";
 interface BulkProgress {
   done: number;
   total: number;
+  failed: number;
 }
 
 interface UndoState {
   ids: string[];
   status: "approved" | "rejected";
   message: string;
+}
+
+export interface BulkResult {
+  total: number;
+  successCount: number;
+  failedIds: string[];
+  status: "approved" | "rejected";
 }
 
 export function useReviewBulkActions(filtered: ManualReviewItem[]) {
@@ -23,8 +31,10 @@ export function useReviewBulkActions(filtered: ManualReviewItem[]) {
   const [bulkProgress, setBulkProgress] = useState<BulkProgress | null>(null);
   const [showRejectConfirm, setShowRejectConfirm] = useState(false);
   const [undoState, setUndoState] = useState<UndoState | null>(null);
+  const [bulkResult, setBulkResult] = useState<BulkResult | null>(null);
   const lastSelectedRef = useRef<number>(-1);
   const undoTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const resultTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 
   const pendingInFiltered = filtered.filter((r) => r.status === "pending");
 
@@ -67,21 +77,63 @@ export function useReviewBulkActions(filtered: ManualReviewItem[]) {
     setSelectedIds(new Set(pendingInFiltered.map((r) => r.id)));
   }, [pendingInFiltered]);
 
+  const dismissBulkResult = useCallback(() => {
+    setBulkResult(null);
+    if (resultTimerRef.current) {
+      clearTimeout(resultTimerRef.current);
+      resultTimerRef.current = null;
+    }
+  }, []);
+
   const executeBulkAction = useCallback(
     async (ids: string[], status: "approved" | "rejected") => {
       setBulkResolving(true);
-      setBulkProgress({ done: 0, total: ids.length });
-      let done = 0;
+      setBulkProgress({ done: 0, total: ids.length, failed: 0 });
+      let doneCount = 0;
+      let failCount = 0;
+
       const results = await Promise.allSettled(
         ids.map((id) =>
-          resolveReview(id, status).finally(() => {
-            done++;
-            setBulkProgress({ done, total: ids.length });
-          }),
+          resolveReview(id, status)
+            .catch((err) => {
+              failCount++;
+              throw err;
+            })
+            .finally(() => {
+              doneCount++;
+              setBulkProgress({ done: doneCount, total: ids.length, failed: failCount });
+            }),
         ),
       );
-      const failed = results.filter((r) => r.status === "rejected").length;
-      if (failed === 0) setSelectedIds(new Set());
+
+      const failedIds = ids.filter((_, i) => results[i].status === "rejected");
+
+      if (failedIds.length > 0) {
+        useReviewStore.setState((s) => ({
+          reviews: s.reviews.map((r) =>
+            failedIds.includes(r.id)
+              ? { ...r, status: "pending" as const, resolvedAt: null, resolvedBy: null }
+              : r,
+          ),
+          pendingReviewCount: s.reviews.filter(
+            (r) => r.status === "pending" || failedIds.includes(r.id),
+          ).length,
+        }));
+        setSelectedIds(new Set(failedIds));
+        setBulkResult({
+          total: ids.length,
+          successCount: ids.length - failedIds.length,
+          failedIds,
+          status,
+        });
+        resultTimerRef.current = setTimeout(() => {
+          setBulkResult(null);
+          resultTimerRef.current = null;
+        }, 10_000);
+      } else {
+        setSelectedIds(new Set());
+      }
+
       setBulkResolving(false);
       setBulkProgress(null);
     },
@@ -92,7 +144,6 @@ export function useReviewBulkActions(filtered: ManualReviewItem[]) {
     (ids: string[], status: "approved" | "rejected") => {
       const count = ids.length;
 
-      // Optimistic UI: mark immediately
       useReviewStore.setState((s) => ({
         reviews: s.reviews.map((r) =>
           ids.includes(r.id) ? { ...r, status, resolvedAt: new Date().toISOString(), resolvedBy: "You" } : r,
@@ -157,10 +208,17 @@ export function useReviewBulkActions(filtered: ManualReviewItem[]) {
     setUndoState(null);
   }, []);
 
-  // Cleanup undo timer on unmount
+  const retryFailed = useCallback(() => {
+    if (!bulkResult) return;
+    const { failedIds, status } = bulkResult;
+    dismissBulkResult();
+    startBulkWithUndo(failedIds, status);
+  }, [bulkResult, dismissBulkResult, startBulkWithUndo]);
+
   useEffect(() => {
     return () => {
       if (undoTimerRef.current) clearTimeout(undoTimerRef.current);
+      if (resultTimerRef.current) clearTimeout(resultTimerRef.current);
     };
   }, []);
 
@@ -179,5 +237,8 @@ export function useReviewBulkActions(filtered: ManualReviewItem[]) {
     undoState,
     handleUndo,
     handleUndoExpire,
+    bulkResult,
+    dismissBulkResult,
+    retryFailed,
   };
 }

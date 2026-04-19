@@ -15,7 +15,7 @@ interface FeatureHighlightProps {
 export function FeatureHighlight({ title, body, color }: FeatureHighlightProps) {
   const accentColor = color ?? "#06b6d4";
   return (
-    <div className="my-6 rounded-xl border border-white/[0.08] bg-gradient-to-br from-white/[0.03] to-transparent px-5 py-4 backdrop-blur-sm">
+    <div className="my-6 rounded-xl border border-glass-hover bg-gradient-to-br from-white/[0.03] to-transparent px-5 py-4 backdrop-blur-sm">
       <div className="flex items-start gap-3">
         <div
           className="mt-0.5 flex h-8 w-8 shrink-0 items-center justify-center rounded-lg"

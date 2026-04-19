@@ -19,10 +19,14 @@ export default function CategoryBlock({
   const colCount = activeCompetitors.length + 1;
   const accent = CATEGORY_ACCENTS[category.name] ?? "#ffffff";
 
+  const blockId = `category-${category.name.toLowerCase().replace(/[^a-z0-9]+/g, "-")}`;
+
   return (
-    <div className="border-b border-white/5 last:border-b-0">
+    <div className="border-b border-glass last:border-b-0">
       <button
         onClick={() => setOpen((v) => !v)}
+        aria-expanded={open}
+        aria-controls={blockId}
         className="flex w-full items-center justify-between px-4 sm:px-6 py-5 text-left transition-colors hover:bg-white/[0.02]"
         style={{ backgroundImage: `linear-gradient(90deg, ${accent}0f 0%, transparent 60%)` }}
       >
@@ -38,7 +42,7 @@ export default function CategoryBlock({
       </button>
 
       {open && (
-        <div className="pb-2">
+        <div id={blockId} className="pb-2">
           {category.features.map((row) => (
             <FeatureRow key={row.label} row={row} activeCompetitors={activeCompetitors} colCount={colCount} />
           ))}

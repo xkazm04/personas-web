@@ -20,7 +20,7 @@ export function WorkVisual({ brand }: VisualProps) {
       <div
         className="rounded-xl border p-4"
         style={{
-          borderColor: "rgba(var(--surface-overlay), 0.08)",
+          borderColor: "var(--border-glass-hover)",
           backgroundColor: "rgba(0,0,0,0.4)",
         }}
       >

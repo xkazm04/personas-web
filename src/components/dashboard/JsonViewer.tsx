@@ -66,16 +66,16 @@ export default function JsonViewer({ payload }: { payload: string | null }) {
   const formatted = formatPayload(payload);
 
   return (
-    <div className="relative max-h-60 overflow-auto rounded-xl bg-background p-4 border border-white/[0.08] shadow-inner">
+    <div className="relative max-h-60 overflow-auto rounded-xl bg-background p-4 border border-glass-hover shadow-inner">
       <button
         onClick={() => {
           void navigator.clipboard.writeText(formatted).then(() => {
             setCopied(true);
             setTimeout(() => setCopied(false), 1500);
-          });
+          }).catch(() => {});
         }}
         aria-label="Copy payload"
-        className="absolute right-2 top-2 rounded-md border border-white/[0.08] bg-white/[0.04] p-1.5 text-muted-dark transition-colors hover:border-white/[0.15] hover:text-foreground"
+        className="absolute right-2 top-2 rounded-md border border-glass-hover bg-white/[0.04] p-1.5 text-muted-dark transition-colors hover:border-glass-strong hover:text-foreground"
       >
         {copied ? <Check className="h-3.5 w-3.5 text-emerald-400" /> : <ClipboardCopy className="h-3.5 w-3.5" />}
       </button>

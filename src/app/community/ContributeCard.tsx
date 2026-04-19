@@ -18,7 +18,7 @@ export default function ContributeCard({ way }: ContributeCardProps) {
       variants={fadeUp}
       className="relative overflow-hidden rounded-2xl border p-6 transition-all duration-500 hover:scale-[1.01]"
       style={{
-        borderColor: "rgba(var(--surface-overlay), 0.08)",
+        borderColor: "var(--border-glass-hover)",
         backgroundColor: "rgba(var(--surface-overlay), 0.02)",
       }}
     >
@@ -40,7 +40,7 @@ export default function ContributeCard({ way }: ContributeCardProps) {
           {way.title}
         </h3>
       </div>
-      <p className="relative text-base text-foreground/70 leading-relaxed">
+      <p className="relative text-base text-muted-foreground leading-relaxed">
         {way.description}
       </p>
     </motion.div>

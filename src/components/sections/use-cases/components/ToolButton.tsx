@@ -35,7 +35,7 @@ const ToolButton = forwardRef<HTMLButtonElement, Props>(function ToolButton(
       tabIndex={isActive ? 0 : -1}
       aria-pressed={isActive}
       onClick={onClick}
-      className={`${baseClass} ${isActive ? activeClass : "border-white/5 bg-white/1.5 hover:border-white/10 hover:bg-white/3"}`}
+      className={`${baseClass} ${isActive ? activeClass : "border-glass bg-white/1.5 hover:border-glass-hover hover:bg-white/3"}`}
       style={{ boxShadow: isActive ? `0 0 40px ${tool.color}30` : undefined }}
       whileHover={variant === "desktop" ? { scale: isActive ? 1.1 : 1.06 } : undefined}
       whileTap={{ scale: 0.95 }}

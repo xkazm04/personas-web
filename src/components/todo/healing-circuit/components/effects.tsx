@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useMemo } from "react";
-import { motion } from "framer-motion";
+import { motion, useReducedMotion } from "framer-motion";
 import { sparkSeeds } from "../data";
 
 export function DataParticle({
@@ -15,6 +15,16 @@ export function DataParticle({
   delay: number;
   duration: number;
 }) {
+  const reduced = useReducedMotion();
+  if (reduced) {
+    return (
+      <circle r={2.5} fill={color} filter="url(#particleGlow)" opacity={0.6}>
+        <animateMotion dur={`${duration}s`} begin={`${delay}s`} repeatCount="1" fill="freeze">
+          <mpath href={`#${pathId}`} />
+        </animateMotion>
+      </circle>
+    );
+  }
   return (
     <motion.circle
       r={2.5}
@@ -37,6 +47,7 @@ export function DataParticle({
 }
 
 export function SparkEffect({ x, y }: { x: number; y: number }) {
+  const reduced = useReducedMotion();
   const sparks = useMemo(
     () =>
       sparkSeeds.map((seed, i) => ({
@@ -46,6 +57,14 @@ export function SparkEffect({ x, y }: { x: number; y: number }) {
       })),
     [],
   );
+
+  if (reduced) {
+    return (
+      <g>
+        <circle cx={x} cy={y} r={6} fill="#f43f5e" opacity={0.7} />
+      </g>
+    );
+  }
 
   return (
     <g>
@@ -84,6 +103,15 @@ export function SparkEffect({ x, y }: { x: number; y: number }) {
 }
 
 export function WeldFlash({ x, y }: { x: number; y: number }) {
+  const reduced = useReducedMotion();
+  if (reduced) {
+    return (
+      <g>
+        <circle cx={x} cy={y} r={8} fill="none" stroke="#06b6d4" strokeWidth={2} opacity={0.6} />
+        <circle cx={x} cy={y} r={3} fill="#06b6d4" filter="url(#weldGlow)" />
+      </g>
+    );
+  }
   return (
     <g>
       <motion.circle
@@ -126,6 +154,7 @@ export function RepairBot({
   duration: number;
   onComplete?: () => void;
 }) {
+  const reduced = useReducedMotion();
   useEffect(() => {
     const timer = setTimeout(() => onComplete?.(), duration * 1000);
     return () => clearTimeout(timer);
@@ -143,18 +172,20 @@ export function RepairBot({
           <mpath href={`#${pathId}`} />
         </animateMotion>
       </circle>
-      <motion.circle
-        r={8}
-        fill="none"
-        stroke="#fbbf24"
-        strokeWidth={1}
-        animate={{ r: [5, 12], opacity: [0.6, 0] }}
-        transition={{ duration: 0.5, repeat: Infinity }}
-      >
-        <animateMotion dur={`${duration}s`} fill="freeze" repeatCount="1">
-          <mpath href={`#${pathId}`} />
-        </animateMotion>
-      </motion.circle>
+      {!reduced && (
+        <motion.circle
+          r={8}
+          fill="none"
+          stroke="#fbbf24"
+          strokeWidth={1}
+          animate={{ r: [5, 12], opacity: [0.6, 0] }}
+          transition={{ duration: 0.5, repeat: Infinity }}
+        >
+          <animateMotion dur={`${duration}s`} fill="freeze" repeatCount="1">
+            <mpath href={`#${pathId}`} />
+          </animateMotion>
+        </motion.circle>
+      )}
     </g>
   );
 }

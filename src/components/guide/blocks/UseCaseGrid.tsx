@@ -22,7 +22,7 @@ export function UseCaseGrid({ items }: UseCaseGridProps) {
       {items.map((uc, i) => (
         <div
           key={i}
-          className="flex flex-col rounded-xl border border-white/[0.08] bg-white/[0.02] p-5 backdrop-blur-sm"
+          className="flex flex-col rounded-xl border border-glass-hover bg-white/[0.02] p-5 backdrop-blur-sm"
         >
           <h4 className="mb-3 text-base font-semibold text-foreground">
             {uc.title}

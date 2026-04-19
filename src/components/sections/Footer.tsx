@@ -45,8 +45,8 @@ function useColumns() {
   ];
 }
 
-function isExternal(href: string) {
-  return href.startsWith("http") || href.startsWith("//");
+function isExternal(href: string | null | undefined) {
+  return Boolean(href) && (href!.startsWith("http") || href!.startsWith("//"));
 }
 
 function FooterLinkColumn({ title, links }: { title: string; links: { label: string; href: string }[] }) {
@@ -121,7 +121,7 @@ export default function Footer() {
   const { t } = useTranslation();
   const columns = useColumns();
   return (
-    <footer className="relative border-t border-white/3 px-6 pb-8 pt-16">
+    <footer className="relative border-t border-glass px-6 pb-8 pt-16">
       {/* Top gradient accent */}
       <div className="pointer-events-none absolute inset-x-0 top-0 h-px bg-linear-to-r from-transparent via-brand-cyan/15 to-transparent" />
 
@@ -144,13 +144,13 @@ export default function Footer() {
             </p>
             {/* Social */}
             <div className="mt-4 flex items-center gap-3">
-              <a href="https://github.com/personas-ai" target="_blank" rel="noopener noreferrer" aria-label="GitHub" className="group flex min-h-11 min-w-11 items-center justify-center rounded-lg border border-white/4 bg-white/2 text-muted-dark transition-all duration-300 hover:border-white/10 hover:text-muted hover:bg-white/4 hover:shadow-[0_0_10px_rgba(255,255,255,0.02)] focus-visible:ring-2 focus-visible:ring-brand-cyan/40 focus-visible:outline-none">
+              <a href="https://github.com/personas-ai" target="_blank" rel="noopener noreferrer" aria-label="GitHub" className="group flex min-h-11 min-w-11 items-center justify-center rounded-lg border border-glass bg-white/2 text-muted-dark transition-all duration-300 hover:border-glass-hover hover:text-muted hover:bg-white/4 hover:shadow-[0_0_10px_rgba(255,255,255,0.02)] focus-visible:ring-2 focus-visible:ring-brand-cyan/40 focus-visible:outline-none">
                 <GithubIcon className="h-4 w-4 transition-transform duration-300 group-hover:scale-110" />
               </a>
-              <a href="https://twitter.com/personas_ai" target="_blank" rel="noopener noreferrer" aria-label="Twitter" className="group flex min-h-11 min-w-11 items-center justify-center rounded-lg border border-white/4 bg-white/2 text-muted-dark transition-all duration-300 hover:border-white/10 hover:text-muted hover:bg-white/4 hover:shadow-[0_0_10px_rgba(255,255,255,0.02)] focus-visible:ring-2 focus-visible:ring-brand-cyan/40 focus-visible:outline-none">
+              <a href="https://twitter.com/personas_ai" target="_blank" rel="noopener noreferrer" aria-label="Twitter" className="group flex min-h-11 min-w-11 items-center justify-center rounded-lg border border-glass bg-white/2 text-muted-dark transition-all duration-300 hover:border-glass-hover hover:text-muted hover:bg-white/4 hover:shadow-[0_0_10px_rgba(255,255,255,0.02)] focus-visible:ring-2 focus-visible:ring-brand-cyan/40 focus-visible:outline-none">
                 <TwitterIcon className="h-4 w-4 transition-transform duration-300 group-hover:scale-110" />
               </a>
-              <a href="https://discord.gg/personas" target="_blank" rel="noopener noreferrer" aria-label="Discord" className="group flex min-h-11 min-w-11 items-center justify-center rounded-lg border border-white/4 bg-white/2 text-muted-dark transition-all duration-300 hover:border-white/10 hover:text-muted hover:bg-white/4 hover:shadow-[0_0_10px_rgba(255,255,255,0.02)] focus-visible:ring-2 focus-visible:ring-brand-cyan/40 focus-visible:outline-none">
+              <a href="https://discord.gg/personas" target="_blank" rel="noopener noreferrer" aria-label="Discord" className="group flex min-h-11 min-w-11 items-center justify-center rounded-lg border border-glass bg-white/2 text-muted-dark transition-all duration-300 hover:border-glass-hover hover:text-muted hover:bg-white/4 hover:shadow-[0_0_10px_rgba(255,255,255,0.02)] focus-visible:ring-2 focus-visible:ring-brand-cyan/40 focus-visible:outline-none">
                 <MessageCircle className="h-4 w-4 transition-transform duration-300 group-hover:scale-110" />
               </a>
             </div>
@@ -165,7 +165,7 @@ export default function Footer() {
         </div>
 
         {/* Copyright */}
-        <div className="mt-16 flex flex-col items-center justify-between gap-4 border-t border-white/3 pt-6 text-base text-muted-dark md:flex-row">
+        <div className="mt-16 flex flex-col items-center justify-between gap-4 border-t border-glass pt-6 text-base text-muted-dark md:flex-row">
           <span>&copy; {new Date().getFullYear()} {t.footer.copyright}</span>
           <ThemeSwitcher />
           <span className="text-muted-dark flex items-center gap-2">

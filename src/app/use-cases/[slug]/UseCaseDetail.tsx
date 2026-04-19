@@ -76,7 +76,7 @@ export default function UseCaseDetail({ useCase }: { useCase: UseCase }) {
             </motion.div>
 
             <motion.div variants={fadeUp}>
-              <div className="rounded-xl border border-white/[0.06] bg-white/[0.02] backdrop-blur-sm p-6">
+              <div className="rounded-xl border border-glass bg-white/[0.02] backdrop-blur-sm p-6">
                 <h3 className="text-base font-semibold text-foreground uppercase tracking-wider mb-4">
                   Key Benefits
                 </h3>
@@ -92,7 +92,7 @@ export default function UseCaseDetail({ useCase }: { useCase: UseCase }) {
                   ))}
                 </ul>
 
-                <div className="mt-6 pt-4 border-t border-white/[0.06] grid grid-cols-2 gap-4">
+                <div className="mt-6 pt-4 border-t border-glass grid grid-cols-2 gap-4">
                   <div>
                     <h4 className="text-sm font-medium text-muted uppercase tracking-wider mb-2 flex items-center gap-1.5">
                       <Zap className="h-3 w-3" /> Triggers
@@ -101,7 +101,7 @@ export default function UseCaseDetail({ useCase }: { useCase: UseCase }) {
                       {useCase.triggers.map((t) => (
                         <span
                           key={t}
-                          className="rounded-full border border-white/8 bg-white/3 px-2.5 py-0.5 text-sm text-muted"
+                          className="rounded-full border border-glass-hover bg-white/3 px-2.5 py-0.5 text-sm text-muted"
                         >
                           {t}
                         </span>
@@ -116,13 +116,13 @@ export default function UseCaseDetail({ useCase }: { useCase: UseCase }) {
                       {useCase.connectors.slice(0, 5).map((c) => (
                         <span
                           key={c}
-                          className="rounded-full border border-white/8 bg-white/3 px-2.5 py-0.5 text-sm text-muted"
+                          className="rounded-full border border-glass-hover bg-white/3 px-2.5 py-0.5 text-sm text-muted"
                         >
                           {c}
                         </span>
                       ))}
                       {useCase.connectors.length > 5 && (
-                        <span className="rounded-full border border-white/8 bg-white/3 px-2.5 py-0.5 text-sm text-muted">
+                        <span className="rounded-full border border-glass-hover bg-white/3 px-2.5 py-0.5 text-sm text-muted">
                           +{useCase.connectors.length - 5}
                         </span>
                       )}
@@ -148,7 +148,7 @@ export default function UseCaseDetail({ useCase }: { useCase: UseCase }) {
               <motion.div
                 key={wf.title}
                 variants={fadeUp}
-                className="rounded-xl border border-white/[0.06] bg-white/[0.02] backdrop-blur-sm p-6 flex flex-col"
+                className="rounded-xl border border-glass bg-white/[0.02] backdrop-blur-sm p-6 flex flex-col"
               >
                 <h3 className="text-base font-semibold text-foreground mb-2">
                   {wf.title}
@@ -156,7 +156,7 @@ export default function UseCaseDetail({ useCase }: { useCase: UseCase }) {
                 <p className="text-base text-muted leading-relaxed flex-1 mb-4">
                   {wf.description}
                 </p>
-                <div className="space-y-2 pt-3 border-t border-white/[0.04]">
+                <div className="space-y-2 pt-3 border-t border-glass">
                   <div className="flex items-center gap-2 text-sm text-muted">
                     <Zap className="h-3 w-3 shrink-0" style={{ color: useCase.color }} />
                     <span className="font-medium">Trigger:</span> {wf.trigger}
@@ -197,7 +197,7 @@ export default function UseCaseDetail({ useCase }: { useCase: UseCase }) {
               </Link>
               <Link
                 href="/#get-started"
-                className="inline-flex items-center gap-2 rounded-full border border-white/10 px-8 py-3 text-base font-medium text-muted transition-colors hover:border-white/20 hover:text-foreground"
+                className="inline-flex items-center gap-2 rounded-full border border-glass-hover px-8 py-3 text-base font-medium text-muted transition-colors hover:border-white/20 hover:text-foreground"
               >
                 Get started
               </Link>

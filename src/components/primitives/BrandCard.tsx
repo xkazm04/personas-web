@@ -42,7 +42,7 @@ export function BrandCard({
         interactive ? "hover:scale-[1.01]" : ""
       } ${className}`}
       style={{
-        borderColor: "rgba(var(--surface-overlay), 0.08)",
+        borderColor: "var(--border-glass-hover)",
         backgroundColor: "rgba(var(--surface-overlay), 0.02)",
         ...washBrand,
         ...style,

@@ -11,10 +11,10 @@ interface MarkdownTableProps {
 
 export function MarkdownTable({ headers, rows }: MarkdownTableProps) {
   return (
-    <div className="my-6 overflow-x-auto rounded-xl border border-white/[0.06]">
+    <div className="my-6 overflow-x-auto rounded-xl border border-glass">
       <table className="w-full text-base">
         <thead>
-          <tr className="border-b border-white/[0.08] bg-white/[0.03]">
+          <tr className="border-b border-glass-hover bg-white/[0.03]">
             {headers.map((h, i) => (
               <th
                 key={i}
@@ -28,7 +28,7 @@ export function MarkdownTable({ headers, rows }: MarkdownTableProps) {
         </thead>
         <tbody className="divide-y divide-white/[0.04]">
           {rows.map((row, ri) => (
-            <tr key={ri} className="transition-colors hover:bg-white/[0.02]">
+            <tr key={ri} className="transition-colors hover:bg-white/[0.02] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-cyan/50" tabIndex={0}>
               {row.map((cell, ci) => (
                 <td
                   key={ci}

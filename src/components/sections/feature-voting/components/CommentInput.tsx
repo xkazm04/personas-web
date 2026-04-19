@@ -35,7 +35,7 @@ export default function CommentInput({
         placeholder={placeholder}
         autoFocus={autoFocus}
         maxLength={280}
-        className="flex-1 rounded-lg border border-white/[0.06] bg-white/[0.02] px-3 py-1.5 text-base text-foreground placeholder:text-muted-dark outline-none transition-all duration-300 focus:border-white/[0.12] focus:bg-white/[0.03]"
+        className="flex-1 rounded-lg border border-glass bg-white/[0.02] px-3 py-1.5 text-base text-foreground placeholder:text-muted-dark outline-none transition-all duration-300 focus:border-glass-strong focus:bg-white/[0.03]"
       />
       <button
         onClick={handleSubmit}

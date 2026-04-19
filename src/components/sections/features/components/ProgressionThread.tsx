@@ -10,7 +10,7 @@ export default function ProgressionThread({ features }: { features: Feature[] })
       style={{ width: 32 }}
     >
       <motion.div
-        className="absolute inset-x-3.75 top-6 bottom-6 w-px border-l border-dashed border-white/6"
+        className="absolute inset-x-3.75 top-6 bottom-6 w-px border-l border-dashed border-glass"
         variants={{
           hidden: { scaleY: 0 },
           visible: { scaleY: 1, transition: { duration: 1.2, delay: 0.3, ease: "easeOut" } },
@@ -35,7 +35,7 @@ export default function ProgressionThread({ features }: { features: Feature[] })
             className={`flex items-center justify-center rounded-full border text-base font-mono font-bold tabular-nums ${
               i === 0
                 ? "h-7 w-7 border-brand-purple/30 bg-brand-purple/10 text-brand-purple shadow-[0_0_12px_rgba(168,85,247,0.15)]"
-                : "h-5 w-5 border-white/8 bg-white/3 text-white/70"
+                : "h-5 w-5 border-glass-hover bg-white/3 text-white/70"
             }`}
           >
             {f.number}

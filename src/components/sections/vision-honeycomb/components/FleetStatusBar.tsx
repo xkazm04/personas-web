@@ -14,7 +14,7 @@ export default function FleetStatusBar({ agents, totalExec }: { agents: AgentDat
   );
 
   return (
-    <div className="flex flex-wrap items-center justify-between gap-2 border-t border-white/4 px-4 py-3 sm:px-5">
+    <div className="flex flex-wrap items-center justify-between gap-2 border-t border-glass px-4 py-3 sm:px-5">
       <div className="flex items-center gap-1.5">
         <div className="h-1.5 w-1.5 rounded-full bg-brand-emerald shadow-[0_0_6px_rgba(52,211,153,0.5)]" />
         <span className="text-base font-mono tracking-wider uppercase text-white/60">Fleet Status</span>

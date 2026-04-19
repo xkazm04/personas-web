@@ -82,7 +82,7 @@ export default function FeatureVoting() {
         <span className="inline-block rounded-full border border-brand-purple/30 bg-brand-purple/10 px-4 py-1.5 text-base font-semibold tracking-widest uppercase text-brand-purple shadow-[0_0_15px_rgba(168,85,247,0.2)] font-mono mb-6">
           Community
         </span>
-        <span className="ml-2 inline-block rounded-full border border-white/[0.08] bg-white/[0.04] px-2.5 py-1 text-base font-mono tracking-wider uppercase text-muted-dark/60 mb-6">
+        <span className="ml-2 inline-block rounded-full border border-glass-hover bg-white/[0.04] px-2.5 py-1 text-base font-mono tracking-wider uppercase text-muted-dark/60 mb-6">
           Demo
         </span>
         <h2 className="text-3xl font-extrabold tracking-tight sm:text-4xl md:text-6xl drop-shadow-md">

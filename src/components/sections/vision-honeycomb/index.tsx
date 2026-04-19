@@ -1,58 +1,25 @@
 "use client";
 
-import { useState, useEffect, useCallback, useMemo } from "react";
-import { motion, useReducedMotion } from "framer-motion";
+import { useState, useMemo } from "react";
+import { motion } from "framer-motion";
 import SectionWrapper from "@/components/SectionWrapper";
 import SectionIntro from "@/components/primitives/SectionIntro";
 import { TerminalPanel } from "@/components/primitives";
 import TerminalChrome from "@/components/TerminalChrome";
 import { fadeUp } from "@/lib/animations";
 import { initialAgents, getHexPositions } from "./data";
-import AnimatedCounter from "./components/AnimatedCounter";
+import AnimatedCounter from "../vision-shared/AnimatedCounter";
+import { useAgentTicker } from "../vision-shared/useAgentTicker";
 import HiveCanvas from "./components/HiveCanvas";
 import HoverDetail from "./components/HoverDetail";
 import FleetStatusBar from "./components/FleetStatusBar";
 
 export default function VisionHoneycomb() {
-  const prefersReducedMotion = useReducedMotion();
-  const [agents, setAgents] = useState(initialAgents);
-  const [flashIdx, setFlashIdx] = useState<number | null>(null);
+  const { agents, flashIdx } = useAgentTicker(initialAgents);
   const [hoveredIdx, setHoveredIdx] = useState<number | null>(null);
 
   const totalExec = agents.reduce((s, a) => s + a.executions, 0);
   const hexPositions = useMemo(() => getHexPositions(), []);
-
-  const tick = useCallback(() => {
-    const idx = Math.floor(Math.random() * initialAgents.length);
-    const bump = 1 + Math.floor(Math.random() * 3);
-    setAgents((prev) => {
-      const next = [...prev];
-      const agent = { ...next[idx] };
-      agent.executions += bump;
-      if (agent.status !== "healing" && Math.random() < 0.2) {
-        agent.status = agent.status === "running" ? "idle" : "running";
-      }
-      next[idx] = agent;
-      return next;
-    });
-    if (!prefersReducedMotion) {
-      setFlashIdx(idx);
-      setTimeout(() => setFlashIdx(null), 800);
-    }
-  }, [prefersReducedMotion]);
-
-  useEffect(() => {
-    if (prefersReducedMotion) return;
-    const schedule = () => {
-      const delay = 2500 + Math.random() * 2000;
-      return setTimeout(() => {
-        tick();
-        timerRef = schedule();
-      }, delay);
-    };
-    let timerRef = schedule();
-    return () => clearTimeout(timerRef);
-  }, [tick, prefersReducedMotion]);
 
   return (
     <SectionWrapper id="vision-honeycomb" className="relative overflow-hidden">

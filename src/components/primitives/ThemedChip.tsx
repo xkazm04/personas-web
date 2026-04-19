@@ -54,7 +54,7 @@ export default function ThemedChip({
         boxShadow: glow ? brandShadow(brand, 16, 18) : undefined,
       }
     : {
-        borderColor: "rgba(var(--surface-overlay), 0.08)",
+        borderColor: "var(--border-glass-hover)",
         backgroundColor: "rgba(var(--surface-overlay), 0.02)",
         color: "var(--muted)",
       };
@@ -64,7 +64,7 @@ export default function ThemedChip({
       type="button"
       aria-pressed={active}
       className={`cursor-pointer rounded-full border transition-all duration-200 ${sizeClass} ${fontClass} ${
-        active ? "" : "hover:border-white/[0.15] hover:text-foreground"
+        active ? "" : "hover:border-glass-strong hover:text-foreground"
       } ${className}`}
       style={activeStyle}
       {...buttonProps}

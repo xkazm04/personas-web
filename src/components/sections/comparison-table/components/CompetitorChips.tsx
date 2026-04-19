@@ -22,6 +22,8 @@ export default function CompetitorChips({
             key={comp.id}
             onClick={() => !isPersonas && onToggle(comp.id)}
             disabled={isPersonas}
+            aria-pressed={isPersonas ? undefined : active}
+            aria-label={isPersonas ? `${comp.name} (always shown)` : `Toggle ${comp.name} in comparison`}
             className="flex items-center gap-2 rounded-full border px-4 py-2 text-base font-medium transition-all duration-200"
             style={
               isPersonas

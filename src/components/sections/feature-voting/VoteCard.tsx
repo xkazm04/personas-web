@@ -42,7 +42,7 @@ export default function VoteCard({
     <motion.div
       variants={fadeUp}
       whileHover={{ y: -4, transition: { duration: 0.35, ease: "easeOut" } }}
-      className={`group relative flex flex-col rounded-2xl border border-white/[0.05] bg-gradient-to-b from-white/[0.03] to-transparent backdrop-blur-sm transition-all duration-500 hover:border-white/[0.1] hover:shadow-[0_8px_60px_rgba(0,0,0,0.35)] ${expanded ? "z-20" : "z-0"}`}
+      className={`group relative flex flex-col rounded-2xl border border-glass bg-gradient-to-b from-white/[0.03] to-transparent backdrop-blur-sm transition-all duration-500 hover:border-glass-hover hover:shadow-[0_8px_60px_rgba(0,0,0,0.35)] ${expanded ? "z-20" : "z-0"}`}
     >
       {/* Shipped badge */}
       {isShipped && (
@@ -193,7 +193,7 @@ export default function VoteCard({
             exit={{ opacity: 0, scaleY: 0.95 }}
             transition={{ duration: 0.2, ease: "easeOut" }}
             style={{ transformOrigin: "top" }}
-            className="absolute left-0 right-0 bottom-0 translate-y-full z-30 rounded-b-2xl border border-t-0 border-white/[0.08] bg-[var(--bg-secondary,#0d0d12)] backdrop-blur-xl shadow-[0_12px_40px_rgba(0,0,0,0.5)]"
+            className="absolute left-0 right-0 bottom-0 translate-y-full z-30 rounded-b-2xl border border-t-0 border-glass-hover bg-[var(--bg-secondary,#0d0d12)] backdrop-blur-xl shadow-[0_12px_40px_rgba(0,0,0,0.5)]"
           >
             <div className="px-4 py-4">
               <div
@@ -230,7 +230,7 @@ export default function VoteCard({
               )}
 
               {voted && !isShipped && voterId && (
-                <div className="mt-3 rounded-lg border border-white/[0.04] bg-white/[0.015] px-3 py-2.5">
+                <div className="mt-3 rounded-lg border border-glass bg-white/[0.015] px-3 py-2.5">
                   <NotifyInput
                     featureId={feature.id}
                     voterId={voterId}

@@ -25,23 +25,25 @@ export default function ChatProgressBar({
           <button
             key={s.id}
             onClick={() => onSelect(i)}
-            className="relative h-1 flex-1 cursor-pointer rounded-full bg-white/[0.06] overflow-hidden"
+            className="flex-1 cursor-pointer flex items-center min-h-[44px]"
           >
-            {i === activeIndex && !paused && !hovered && (
-              <motion.div
-                className="absolute inset-y-0 left-0 rounded-full bg-gradient-to-r from-brand-cyan to-brand-purple"
-                initial={{ width: "0%" }}
-                animate={{ width: "100%" }}
-                transition={{ duration: CYCLE_MS / 1000, ease: "linear" }}
-                key={`progress-${s.id}`}
-              />
-            )}
-            {i === activeIndex && (paused || hovered) && (
-              <div className="absolute inset-0 rounded-full bg-gradient-to-r from-brand-cyan to-brand-purple" />
-            )}
-            {i < activeIndex && (
-              <div className="absolute inset-0 rounded-full bg-white/[0.12]" />
-            )}
+            <div className="relative h-1 w-full rounded-full bg-white/[0.06] overflow-hidden">
+              {i === activeIndex && !paused && !hovered && (
+                <motion.div
+                  className="absolute inset-y-0 left-0 rounded-full bg-gradient-to-r from-brand-cyan to-brand-purple"
+                  initial={{ width: "0%" }}
+                  animate={{ width: "100%" }}
+                  transition={{ duration: CYCLE_MS / 1000, ease: "linear" }}
+                  key={`progress-${s.id}`}
+                />
+              )}
+              {i === activeIndex && (paused || hovered) && (
+                <div className="absolute inset-0 rounded-full bg-gradient-to-r from-brand-cyan to-brand-purple" />
+              )}
+              {i < activeIndex && (
+                <div className="absolute inset-0 rounded-full bg-white/[0.12]" />
+              )}
+            </div>
           </button>
         ))}
       </div>
@@ -51,7 +53,7 @@ export default function ChatProgressBar({
         </span>
         <button
           onClick={onTogglePause}
-          className="cursor-pointer flex items-center gap-1.5 transition-colors hover:text-muted-dark"
+          className="cursor-pointer flex items-center gap-1.5 min-h-[44px] transition-colors hover:text-muted-dark"
         >
           {paused ? (
             <>

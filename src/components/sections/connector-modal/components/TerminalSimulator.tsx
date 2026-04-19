@@ -51,8 +51,8 @@ export default function TerminalSimulator({ connector }: { connector: Connector 
   }, [lines]);
 
   return (
-    <div className="mt-4 overflow-hidden rounded-xl border border-white/[0.06] bg-black/60">
-      <div className="flex items-center gap-2 border-b border-white/[0.06] px-4 py-2.5">
+    <div className="mt-4 overflow-hidden rounded-xl border border-glass bg-black/60">
+      <div className="flex items-center gap-2 border-b border-glass px-4 py-2.5">
         <Terminal className="h-3.5 w-3.5" style={{ color: connector.color }} />
         <span className="text-base font-mono text-muted-dark">Live preview</span>
         <div className="ml-auto flex gap-1.5">

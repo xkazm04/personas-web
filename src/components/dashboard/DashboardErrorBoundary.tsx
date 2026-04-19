@@ -42,7 +42,7 @@ export default class DashboardErrorBoundary extends Component<Props, State> {
         <button
           type="button"
           onClick={this.handleRetry}
-          className="mt-4 inline-flex items-center gap-2 rounded-lg border border-white/[0.12] bg-white/[0.04] px-4 py-2 text-base text-foreground transition-colors hover:bg-white/[0.08]"
+          className="mt-4 inline-flex items-center gap-2 rounded-lg border border-glass-strong bg-white/[0.04] px-4 py-2 text-base text-foreground transition-colors hover:bg-white/[0.08]"
         >
           <RotateCcw className="h-4 w-4" />
           Retry

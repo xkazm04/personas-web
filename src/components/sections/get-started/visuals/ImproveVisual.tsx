@@ -20,7 +20,7 @@ export function ImproveVisual({ brand }: VisualProps) {
       <div
         className="flex items-center gap-2 rounded-full border px-4 py-2 w-fit mx-auto"
         style={{
-          borderColor: "rgba(var(--surface-overlay), 0.08)",
+          borderColor: "var(--border-glass-hover)",
           backgroundColor: "rgba(var(--surface-overlay), 0.02)",
         }}
       >

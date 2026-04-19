@@ -1,6 +1,6 @@
 "use client";
 
-import { motion, AnimatePresence } from "framer-motion";
+import { motion, AnimatePresence, useReducedMotion } from "framer-motion";
 import { Cpu } from "lucide-react";
 import { healingStages } from "../data";
 
@@ -11,6 +11,7 @@ export default function CircuitHeader({
   activeStage: number;
   cycleIndex: number;
 }) {
+  const reduced = useReducedMotion();
   return (
     <div className="flex items-center justify-between px-5 py-3 border-b border-foreground/6 bg-background/40">
       <div className="flex items-center gap-2">
@@ -35,8 +36,8 @@ export default function CircuitHeader({
               <motion.div
                 className="h-1.5 w-1.5 rounded-full"
                 style={{ backgroundColor: healingStages[activeStage].color }}
-                animate={{ opacity: [1, 0.3, 1] }}
-                transition={{ duration: 0.6, repeat: Infinity }}
+                animate={reduced ? { opacity: 1 } : { opacity: [1, 0.3, 1] }}
+                transition={reduced ? { duration: 0 } : { duration: 0.6, repeat: Infinity }}
               />
               <span
                 className="text-base font-mono uppercase tracking-wider"

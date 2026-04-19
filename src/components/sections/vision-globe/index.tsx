@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect, useCallback, useRef, useMemo } from "react";
+import { useState, useEffect, useRef, useMemo } from "react";
 import { motion, useReducedMotion } from "framer-motion";
 import SectionWrapper from "@/components/SectionWrapper";
 import SectionIntro from "@/components/primitives/SectionIntro";
@@ -8,15 +8,15 @@ import { TerminalPanel } from "@/components/primitives";
 import TerminalChrome from "@/components/TerminalChrome";
 import { fadeUp } from "@/lib/animations";
 import { initialAgents, statusStyles, CARDINALS, agentPosition } from "./data";
-import AnimatedCounter from "./components/AnimatedCounter";
+import AnimatedCounter from "../vision-shared/AnimatedCounter";
+import { useAgentTicker } from "../vision-shared/useAgentTicker";
 import RadarGrid from "./components/RadarGrid";
 import RadarSweep from "./components/RadarSweep";
 import AgentBlip from "./components/AgentBlip";
 
 export default function VisionGlobe() {
-  const prefersReducedMotion = useReducedMotion();
-  const [agents, setAgents] = useState(initialAgents);
-  const [flashIdx, setFlashIdx] = useState<number | null>(null);
+  void useReducedMotion();
+  const { agents, flashIdx, prefersReducedMotion } = useAgentTicker(initialAgents);
   const [hoveredIdx, setHoveredIdx] = useState<number | null>(null);
   const [sweepAngle, setSweepAngle] = useState(0);
   const sweepRef = useRef<number | null>(null);
@@ -37,38 +37,6 @@ export default function VisionGlobe() {
       if (sweepRef.current) cancelAnimationFrame(sweepRef.current);
     };
   }, [prefersReducedMotion]);
-
-  const tick = useCallback(() => {
-    const idx = Math.floor(Math.random() * initialAgents.length);
-    const bump = 1 + Math.floor(Math.random() * 3);
-    setAgents((prev) => {
-      const next = [...prev];
-      const agent = { ...next[idx] };
-      agent.executions += bump;
-      if (agent.status !== "healing" && Math.random() < 0.2) {
-        agent.status = agent.status === "running" ? "idle" : "running";
-      }
-      next[idx] = agent;
-      return next;
-    });
-    if (!prefersReducedMotion) {
-      setFlashIdx(idx);
-      setTimeout(() => setFlashIdx(null), 800);
-    }
-  }, [prefersReducedMotion]);
-
-  useEffect(() => {
-    if (prefersReducedMotion) return;
-    const schedule = () => {
-      const delay = 2500 + Math.random() * 2000;
-      return setTimeout(() => {
-        tick();
-        timerRef = schedule();
-      }, delay);
-    };
-    let timerRef = schedule();
-    return () => clearTimeout(timerRef);
-  }, [tick, prefersReducedMotion]);
 
   const sweptIndices = useMemo(() => {
     const set = new Set<number>();
@@ -155,7 +123,7 @@ export default function VisionGlobe() {
             </div>
           </div>
 
-          <div className="flex flex-wrap items-center justify-center gap-4 border-t border-white/4 px-4 py-3 sm:px-5">
+          <div className="flex flex-wrap items-center justify-center gap-4 border-t border-glass px-4 py-3 sm:px-5">
             {(["running", "healing", "idle"] as const).map((key) => {
               const st = statusStyles[key];
               const count = agents.filter((a) => a.status === key).length;

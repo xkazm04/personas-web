@@ -14,7 +14,7 @@ interface Props {
 
 export default function PlaygroundForm({ inputValue, setInputValue, isRunning, phase, onSubmit, onReset }: Props) {
   return (
-    <form onSubmit={onSubmit} className="border-b border-white/[0.04] px-4 py-3 sm:px-5">
+    <form onSubmit={onSubmit} className="border-b border-glass px-4 py-3 sm:px-5">
       <div className="flex items-center gap-3">
         <ChevronRight className="h-4 w-4 shrink-0" style={{ color: tint("cyan", 60) }} />
         <input
@@ -29,7 +29,7 @@ export default function PlaygroundForm({ inputValue, setInputValue, isRunning, p
           <button
             type="button"
             onClick={onReset}
-            className="flex items-center gap-1.5 rounded-lg border border-white/10 bg-white/5 px-3 py-1.5 text-base font-medium text-muted-dark transition-colors hover:bg-white/10 hover:text-foreground"
+            className="flex items-center gap-1.5 rounded-lg border border-glass-hover bg-white/5 px-3 py-1.5 min-h-[44px] text-base font-medium text-muted-dark transition-colors hover:bg-white/10 hover:text-foreground"
           >
             <RotateCcw className="h-3.5 w-3.5" />
             Reset
@@ -38,7 +38,7 @@ export default function PlaygroundForm({ inputValue, setInputValue, isRunning, p
           <button
             type="submit"
             disabled={isRunning || !inputValue.trim()}
-            className="flex items-center gap-1.5 rounded-lg border px-3 py-1.5 text-base font-medium transition-all disabled:opacity-40 disabled:cursor-not-allowed"
+            className="flex items-center gap-1.5 rounded-lg border px-3 py-1.5 min-h-[44px] text-base font-medium transition-all disabled:opacity-40 disabled:cursor-not-allowed"
             style={{
               borderColor: tint("cyan", 30),
               backgroundColor: tint("cyan", 10),

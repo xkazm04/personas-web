@@ -23,7 +23,7 @@ export default function BlogPostCard({ post }: BlogPostCardProps) {
         href={`/blog/${post.slug}`}
         className="group relative flex flex-col h-full overflow-hidden rounded-2xl border p-6 transition-all duration-500 hover:scale-[1.01]"
         style={{
-          borderColor: "rgba(var(--surface-overlay), 0.08)",
+          borderColor: "var(--border-glass-hover)",
           backgroundColor: "rgba(var(--surface-overlay), 0.02)",
           backgroundImage: `linear-gradient(180deg, ${tint(meta.brand, 8)} 0%, transparent 70%)`,
         }}
@@ -52,12 +52,12 @@ export default function BlogPostCard({ post }: BlogPostCardProps) {
         >
           {post.title}
         </h3>
-        <p className="relative text-base text-foreground/75 leading-relaxed flex-1 mb-5">
+        <p className="relative text-base text-muted-foreground leading-relaxed flex-1 mb-5">
           {post.description}
         </p>
         <div
           className="relative flex items-center justify-between gap-3 pt-4 border-t"
-          style={{ borderColor: "rgba(var(--surface-overlay), 0.06)" }}
+          style={{ borderColor: "var(--border-glass)" }}
         >
           <div className="flex items-center gap-3 text-base text-muted-dark">
             <span className="flex items-center gap-1.5">

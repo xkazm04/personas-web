@@ -62,7 +62,7 @@ export default function ComparePage() {
               </Link>
               <Link
                 href="/features"
-                className="inline-flex items-center gap-2 rounded-full border border-white/10 px-8 py-3 text-base font-medium text-muted transition-colors hover:border-white/20 hover:text-foreground"
+                className="inline-flex items-center gap-2 rounded-full border border-glass-hover px-8 py-3 text-base font-medium text-muted transition-colors hover:border-white/20 hover:text-foreground"
               >
                 Explore Features
               </Link>

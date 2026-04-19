@@ -60,7 +60,7 @@ export default function RoleSelector({
             className={`relative cursor-pointer rounded-full border px-3.5 py-1.5 text-sm font-mono tracking-wider transition-all duration-300 flex items-center gap-1.5 ${
               isActive
                 ? role.activeClasses
-                : "border-white/[0.06] bg-white/[0.02] text-muted-dark hover:border-white/[0.12] hover:text-muted"
+                : "border-glass bg-white/[0.02] text-muted-dark hover:border-glass-strong hover:text-muted"
             }`}
           >
             <Icon className="h-3 w-3" />

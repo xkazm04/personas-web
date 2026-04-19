@@ -13,11 +13,22 @@ interface LaneMetric {
 }
 
 export default function LanesView({ laneMetrics, inView }: { laneMetrics: LaneMetric[]; inView: boolean }) {
+  if (!laneMetrics || laneMetrics.length === 0) {
+    return (
+      <div className="flex min-h-40 items-center justify-center text-base font-mono text-muted">
+        No lane metrics available
+      </div>
+    );
+  }
+
   return (
     <div className="space-y-3">
       {laneMetrics.map((lane, i) => {
-        const depthRatio = Math.min(lane.queueDepth / 50, 1);
-        const latencyRatio = Math.min(lane.latencyMs / 600, 1);
+        const queueDepth = Number.isFinite(lane.queueDepth) ? lane.queueDepth : 0;
+        const latencyMs = Number.isFinite(lane.latencyMs) ? lane.latencyMs : 0;
+        const eps = Number.isFinite(lane.eps) ? lane.eps : 0;
+        const depthRatio = Math.min(queueDepth / 50, 1);
+        const latencyRatio = Math.min(latencyMs / 600, 1);
         return (
           <motion.div
             key={lane.id}
@@ -25,21 +36,21 @@ export default function LanesView({ laneMetrics, inView }: { laneMetrics: LaneMe
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
             transition={{ delay: i * 0.06, duration: 0.25 }}
-            className="rounded-xl border border-white/8 bg-white/2 px-3 py-3 md:px-4"
+            className="rounded-xl border border-glass-hover bg-white/2 px-3 py-3 md:px-4"
           >
             <div className="mb-2 flex flex-wrap items-center justify-between gap-2">
               <div className="flex items-center gap-2 text-base font-mono text-foreground/80">
-                <span className="rounded-full border border-white/10 px-2 py-0.5">{lane.producer}</span>
+                <span className="rounded-full border border-glass-hover px-2 py-0.5">{lane.producer}</span>
                 <span className="text-muted">→</span>
-                <span className="rounded-full border border-white/10 px-2 py-0.5">{lane.consumer}</span>
+                <span className="rounded-full border border-glass-hover px-2 py-0.5">{lane.consumer}</span>
               </div>
               <div className="flex items-center gap-2 text-base font-mono text-muted">
-                <span className="rounded-full border border-white/10 px-2 py-0.5">{lane.eps} msgs/s</span>
-                <span className="rounded-full border border-white/10 px-2 py-0.5">{lane.latencyMs} ms</span>
+                <span className="rounded-full border border-glass-hover px-2 py-0.5">{eps} msgs/s</span>
+                <span className="rounded-full border border-glass-hover px-2 py-0.5">{latencyMs} ms</span>
               </div>
             </div>
 
-            <div className="relative h-3 overflow-hidden rounded-full border border-white/10 bg-white/4">
+            <div className="relative h-3 overflow-hidden rounded-full border border-glass-hover bg-white/4">
               <motion.div
                 className="absolute inset-y-0 left-0 rounded-full"
                 style={{
@@ -59,10 +70,10 @@ export default function LanesView({ laneMetrics, inView }: { laneMetrics: LaneMe
             </div>
 
             <div className="mt-2 grid grid-cols-2 gap-2 text-base font-mono text-muted">
-              <div className="rounded-lg border border-white/8 bg-white/2 px-2 py-1">
-                Waiting: <span className="text-foreground/80">{lane.queueDepth}</span>
+              <div className="rounded-lg border border-glass-hover bg-white/2 px-2 py-1">
+                Waiting: <span className="text-foreground/80">{queueDepth}</span>
               </div>
-              <div className="rounded-lg border border-white/8 bg-white/2 px-2 py-1">
+              <div className="rounded-lg border border-glass-hover bg-white/2 px-2 py-1">
                 Delivery time: <span className="text-foreground/80">{Math.round(latencyRatio * 100)}%</span>
               </div>
             </div>

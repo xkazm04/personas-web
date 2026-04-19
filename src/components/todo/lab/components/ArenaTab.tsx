@@ -4,6 +4,7 @@ import { useState, useEffect } from "react";
 import { motion, useReducedMotion } from "framer-motion";
 import { Swords, Trophy } from "lucide-react";
 import { ARENA_ROUNDS } from "../data";
+import TabBackdrop from "./TabBackdrop";
 
 export default function ArenaTab() {
   const reduced = useReducedMotion() ?? false;
@@ -48,8 +49,9 @@ export default function ArenaTab() {
   }
 
   return (
-    <div className="force-dark flex flex-col rounded-xl border border-foreground/[0.08] bg-background/80 backdrop-blur-xl overflow-hidden">
-      <div className="flex items-center justify-between border-b border-foreground/[0.06] px-5 py-3">
+    <div className="force-dark relative flex flex-col rounded-xl border border-foreground/[0.08] bg-background/80 backdrop-blur-xl overflow-hidden">
+      <TabBackdrop tab="arena" />
+      <div className="relative flex items-center justify-between border-b border-foreground/[0.06] px-5 py-3">
         <div className="flex items-center gap-2">
           <Swords className="h-4 w-4 text-brand-purple" />
           <span className="text-base font-mono font-semibold text-foreground uppercase tracking-wider">
@@ -66,14 +68,14 @@ export default function ArenaTab() {
         </div>
       </div>
 
-      <div className="border-b border-foreground/[0.06] px-5 py-3 bg-foreground/[0.02]">
+      <div className="relative border-b border-foreground/[0.06] px-5 py-3 bg-foreground/[0.02]">
         <div className="text-base font-mono uppercase tracking-widest text-foreground/60 mb-1">
           Input
         </div>
         <div className="font-mono text-base text-foreground/90">&gt; {round.input}</div>
       </div>
 
-      <div className="grid grid-cols-1 sm:grid-cols-2 divide-y sm:divide-y-0 sm:divide-x divide-white/[0.06]">
+      <div className="relative grid grid-cols-1 sm:grid-cols-2 divide-y sm:divide-y-0 sm:divide-x divide-white/[0.06]">
         {(["A", "B"] as const).map((side) => {
           const isWinner = phase === "result" && round.winner === side;
           const isLoser = phase === "result" && round.winner !== side;
@@ -137,7 +139,7 @@ export default function ArenaTab() {
         })}
       </div>
 
-      <div className="flex items-center justify-between border-t border-foreground/[0.06] px-5 py-3 text-base font-mono">
+      <div className="relative flex items-center justify-between border-t border-foreground/[0.06] px-5 py-3 text-base font-mono">
         <span className="flex items-center gap-4">
           <span className="flex items-center gap-1.5">
             <div className="h-2 w-2 rounded-full bg-brand-cyan" />

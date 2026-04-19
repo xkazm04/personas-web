@@ -30,7 +30,7 @@ export default function EventBusLegend({ averageLatency }: { averageLatency: num
         </svg>
         <span>Connection to hub</span>
       </div>
-      <div className="rounded-full border border-white/8 bg-white/2 px-3 py-1.5 font-mono tracking-wide text-muted">
+      <div className="rounded-full border border-glass-hover bg-white/2 px-3 py-1.5 font-mono tracking-wide text-muted">
         Typical delivery time: {averageLatency}ms
       </div>
     </motion.div>

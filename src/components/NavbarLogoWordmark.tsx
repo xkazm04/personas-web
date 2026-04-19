@@ -25,7 +25,7 @@ export default function NavbarLogoWordmark({ scrolled }: { scrolled?: boolean })
     <Link href="/" className="group flex items-center gap-2.5 focus-ring">
       {/* Small icon accent */}
       <motion.div
-        className="relative flex h-7 w-7 items-center justify-center rounded-md bg-white/[0.04] border border-white/[0.06]"
+        className="relative flex h-7 w-7 items-center justify-center rounded-md bg-white/[0.04] border border-glass"
         whileHover={{ rotate: 12, scale: 1.1 }}
         transition={{ type: "spring", stiffness: 300, damping: 15 }}
       >

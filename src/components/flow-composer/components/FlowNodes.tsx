@@ -2,6 +2,7 @@
 
 import { CONSUMER_Y, NODE_R, PRODUCER_Y, TOOL_MAP } from "../data";
 import type { CanvasNode } from "../types";
+import { SVGFocusRingCircle } from "@/components/SVGFocusRing";
 
 export default function FlowNodes({
   nodes,
@@ -32,11 +33,13 @@ export default function FlowNodes({
             role="button"
             tabIndex={0}
             aria-label={`${tool.name} ${node.side} node`}
-            className="cursor-grab focus-visible:outline-none [&:focus-visible>circle:nth-of-type(1)]:stroke-[1] [&:focus-visible>circle:nth-of-type(1)]:stroke-brand-cyan"
+            className="svg-focus-parent cursor-grab focus-visible:outline-none"
             onPointerDown={(e) => onNodePointerDown(e, node.id)}
             onClick={(e) => onNodeClick(e, node.id)}
             onKeyDown={(e) => onNodeKeyDown(e, node.id)}
           >
+            <SVGFocusRingCircle cx={node.x} cy={y} r={NODE_R} offset={2} strokeWidth={0.5} />
+
             {isWiringSource && (
               <circle
                 cx={node.x}
@@ -71,7 +74,7 @@ export default function FlowNodes({
               x={node.x}
               y={node.side === "producer" ? y - NODE_R - 2 : y + NODE_R + 4}
               textAnchor="middle"
-              fill="rgba(255,255,255,0.55)"
+              fill="var(--text-secondary)"
               fontSize="2.2"
               fontFamily="var(--font-geist-mono)"
               letterSpacing="0.04em"
@@ -82,7 +85,7 @@ export default function FlowNodes({
               x={node.x}
               y={node.side === "producer" ? y + NODE_R + 3.5 : y - NODE_R - 1}
               textAnchor="middle"
-              fill="rgba(255,255,255,0.18)"
+              fill="var(--text-disabled)"
               fontSize="1.3"
               fontFamily="var(--font-geist-mono)"
               letterSpacing="0.08em"
@@ -94,7 +97,7 @@ export default function FlowNodes({
               role="button"
               tabIndex={0}
               aria-label={`Remove ${tool.name} node`}
-              className="cursor-pointer opacity-0 hover:opacity-100 focus-visible:opacity-100 transition-opacity focus-visible:outline-none [&:focus-visible>circle]:stroke-[0.5] [&:focus-visible>circle]:stroke-brand-cyan"
+              className="svg-focus-parent cursor-pointer opacity-0 hover:opacity-100 focus-visible:opacity-100 transition-opacity focus-visible:outline-none"
               onClick={(e) => {
                 e.stopPropagation();
                 onRemoveNode(node.id);
@@ -107,6 +110,7 @@ export default function FlowNodes({
                 }
               }}
             >
+              <SVGFocusRingCircle cx={node.x + NODE_R} cy={y - NODE_R} r={1.5} offset={1.5} strokeWidth={0.4} />
               <circle
                 cx={node.x + NODE_R}
                 cy={y - NODE_R}

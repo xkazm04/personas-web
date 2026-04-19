@@ -1,6 +1,6 @@
 "use client";
 
-import { motion, AnimatePresence } from "framer-motion";
+import { motion, AnimatePresence, useReducedMotion } from "framer-motion";
 import { type Memory, type Category, CATEGORY_META } from "../../memoryShared";
 import MemoryPill from "./MemoryPill";
 
@@ -17,6 +17,7 @@ export default function GeologicalLayer({
   index: number;
   total: number;
 }) {
+  const reduced = useReducedMotion();
   const meta = CATEGORY_META[category];
   const depthInset = index * 2;
   const depthOpacity = 1 - (index / total) * 0.15;
@@ -47,8 +48,8 @@ export default function GeologicalLayer({
                 backgroundColor: meta.color,
                 boxShadow: `0 0 10px ${meta.color}60`,
               }}
-              animate={{ opacity: [0.6, 1, 0.6] }}
-              transition={{ duration: 3, repeat: Infinity, ease: "easeInOut" }}
+              animate={reduced ? { opacity: 1 } : { opacity: [0.6, 1, 0.6] }}
+              transition={reduced ? { duration: 0 } : { duration: 3, repeat: Infinity, ease: "easeInOut" }}
             />
             <span
               className="text-base font-mono uppercase tracking-widest font-semibold"

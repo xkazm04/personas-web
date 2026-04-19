@@ -14,7 +14,7 @@ export default function CompetitorHeader({
 }) {
   const Mark = COMPETITOR_MARKS[competitor.id];
   return (
-    <div className="flex flex-col items-center gap-2 min-w-0">
+    <div role="columnheader" className="flex flex-col items-center gap-2 min-w-0">
       {isPersonas ? (
         <div
           className="flex h-10 w-10 items-center justify-center rounded-xl ring-1"

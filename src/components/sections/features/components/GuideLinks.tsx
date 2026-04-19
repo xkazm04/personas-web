@@ -12,7 +12,7 @@ export default function GuideLinks({ topics, layout }: { topics: GuideLink[]; la
       ? "inline-flex items-center gap-1.5 text-base text-muted-dark hover:text-brand-cyan transition-colors"
       : "flex items-center gap-1.5 text-base text-muted-dark hover:text-brand-cyan transition-colors";
   return (
-    <div className={`mt-3 pt-3 border-t border-white/[0.06] ${wrap}`}>
+    <div className={`mt-3 pt-3 border-t border-glass ${wrap}`}>
       {topics.map((gt) => (
         <Link key={gt.topic} href={`/guide/${gt.category}/${gt.topic}`} className={itemCls}>
           <BookOpen className="h-3 w-3 shrink-0" />

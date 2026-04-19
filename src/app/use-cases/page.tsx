@@ -69,7 +69,7 @@ export default function UseCasesPage() {
                     href={`/use-cases/${uc.slug}`}
                     className="group relative flex flex-col h-full overflow-hidden rounded-2xl border p-6 transition-all duration-500 hover:scale-[1.01]"
                     style={{
-                      borderColor: "rgba(var(--surface-overlay), 0.08)",
+                      borderColor: "var(--border-glass-hover)",
                       backgroundColor: "rgba(var(--surface-overlay), 0.02)",
                       backgroundImage: `linear-gradient(160deg, ${tint(brand, 12)} 0%, transparent 55%)`,
                     }}
@@ -137,7 +137,7 @@ export default function UseCasesPage() {
                     {/* Meta footer */}
                     <div
                       className="relative flex items-center justify-between gap-3 pt-4 border-t"
-                      style={{ borderColor: "rgba(var(--surface-overlay), 0.06)" }}
+                      style={{ borderColor: "var(--border-glass)" }}
                     >
                       <div className="flex items-center gap-4 text-base text-muted-dark">
                         <span className="flex items-center gap-1.5">

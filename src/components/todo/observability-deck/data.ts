@@ -73,24 +73,28 @@ export const leftModules: OverviewModule[] = [
     title: "Executions",
     blurb: "Every run, timed and traced",
     color: BRAND_VAR.emerald,
+    filterPrefix: "execution",
   },
   {
     icon: MessageSquare,
     title: "Messages",
     blurb: "Full I/O transcripts per step",
     color: BRAND_VAR.cyan,
+    filterPrefix: "message",
   },
   {
     icon: Radio,
     title: "Events",
     blurb: "Bus stream + replay + retries",
     color: BRAND_VAR.purple,
+    filterPrefix: "event",
   },
   {
     icon: Brain,
     title: "Memories",
     blurb: "What agents learned, searchable",
     color: BRAND_VAR.amber,
+    filterPrefix: "memory",
   },
 ];
 
@@ -100,23 +104,27 @@ export const rightModules: OverviewModule[] = [
     title: "Activity",
     blurb: "Live lanes across all personas",
     color: BRAND_VAR.rose,
+    filterPrefix: "review",
   },
   {
     icon: HeartPulse,
     title: "Health",
     blurb: "Status, healing, dead-letters",
     color: BRAND_VAR.blue,
+    filterPrefix: "health",
   },
   {
     icon: Gauge,
     title: "Analytics",
     blurb: "Success rate, duration, cost",
     color: BRAND_VAR.rose,
+    filterPrefix: "execution",
   },
   {
     icon: BookOpen,
     title: "Knowledge",
     blurb: "Cross-persona semantic search",
     color: BRAND_VAR.amber,
+    filterPrefix: "knowledge",
   },
 ];

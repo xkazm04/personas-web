@@ -2,6 +2,7 @@
 
 import React, { type ReactNode } from "react";
 import {
+  CopyButton,
   Callout,
   StepWizard,
   KeyboardGrid,
@@ -97,11 +98,15 @@ function parseBlocks(lines: string[]): ReactNode[] {
         i++;
       }
       i++; // skip closing ```
+      const codeText = codeLines.join("\n");
       emit(
-        <div className="relative rounded-xl bg-white/[0.03] border border-white/[0.06] mb-4 overflow-x-auto">
-          {lang && <div className="px-4 pt-2 text-base text-muted-dark/60 font-mono select-none">{lang}</div>}
-          <pre className="p-4 font-mono text-base leading-relaxed text-muted-dark">
-            <code>{codeLines.join("\n")}</code>
+        <div className="group relative rounded-xl bg-white/[0.03] border border-glass mb-4 overflow-x-auto">
+          <div className="flex items-center justify-between px-4 pt-2">
+            {lang ? <div className="text-base text-muted-dark/60 font-mono select-none">{lang}</div> : <div />}
+            <CopyButton text={codeText} />
+          </div>
+          <pre className="p-4 pt-2 font-mono text-base leading-relaxed text-muted-dark">
+            <code>{codeText}</code>
           </pre>
         </div>,
       );
@@ -126,7 +131,7 @@ function parseBlocks(lines: string[]): ReactNode[] {
 
     // ── Horizontal rule
     if (/^---+$/.test(line.trim())) {
-      emit(<hr className="border-t border-white/[0.06] my-8" />);
+      emit(<hr className="border-t border-glass my-8" />);
       i++;
       continue;
     }

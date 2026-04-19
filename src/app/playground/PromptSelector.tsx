@@ -25,7 +25,7 @@ export default function PromptSelector({ active, onSelect }: PromptSelectorProps
             className={`group relative text-left rounded-xl border p-4 transition-all duration-300 cursor-pointer backdrop-blur-sm ${
               isActive
                 ? "border-brand-cyan/40 bg-brand-cyan/[0.06] shadow-[0_0_30px_rgba(6,182,212,0.08)]"
-                : "border-white/[0.06] bg-white/[0.02] hover:border-white/15 hover:bg-white/[0.04]"
+                : "border-glass bg-white/[0.02] hover:border-glass-strong hover:bg-white/[0.04]"
             }`}
           >
             <div className="flex items-start gap-3">

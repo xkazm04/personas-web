@@ -52,10 +52,10 @@ export default function DataTable<T>({
   }
 
   return (
-    <div className="overflow-hidden rounded-2xl border border-white/[0.06] bg-white/[0.02]">
+    <div className="overflow-hidden rounded-2xl border border-glass bg-white/[0.02]">
       <div className="overflow-x-auto">
         {/* Header */}
-        <div className="flex min-w-[600px] items-center border-b border-white/[0.06] bg-white/[0.02] px-4 py-2.5">
+        <div className="flex min-w-[600px] items-center border-b border-glass bg-white/[0.02] px-4 py-2.5">
           {expandable && <div className="w-8" />}
           {columns.map((col) => (
             <div
@@ -73,7 +73,7 @@ export default function DataTable<T>({
           const isExpanded = expandedId === id;
           const extraClass = rowClassName?.(row) ?? "";
           return (
-            <div key={id} className={`border-b border-white/[0.04] last:border-0 ${extraClass}`}>
+            <div key={id} className={`border-b border-glass last:border-0 ${extraClass}`}>
               <div
                 className={`flex min-w-[600px] items-center px-4 py-3 transition-colors duration-150 ${
                   expandable || onRowClick
@@ -109,7 +109,7 @@ export default function DataTable<T>({
                     animate={{ height: "auto", opacity: 1 }}
                     exit={{ height: 0, opacity: 0 }}
                     transition={{ duration: 0.2, ease: [0.22, 1, 0.36, 1] }}
-                    className="overflow-hidden border-t border-white/[0.04]"
+                    className="overflow-hidden border-t border-glass"
                   >
                     <div className="px-4 py-4">{expandable(row)}</div>
                   </motion.div>

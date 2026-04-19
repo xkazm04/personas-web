@@ -55,7 +55,7 @@ export default function ChangelogPage() {
                   key={t}
                   className="flex items-center gap-3 rounded-xl border px-4 py-3"
                   style={{
-                    borderColor: "rgba(var(--surface-overlay), 0.08)",
+                    borderColor: "var(--border-glass-hover)",
                     backgroundColor: tint(meta.brand, 8),
                   }}
                 >
@@ -117,7 +117,7 @@ export default function ChangelogPage() {
                 <div
                   className="relative rounded-2xl border p-6 sm:p-7"
                   style={{
-                    borderColor: "rgba(var(--surface-overlay), 0.08)",
+                    borderColor: "var(--border-glass-hover)",
                     backgroundColor: "rgba(var(--surface-overlay), 0.02)",
                     backgroundImage: i === 0
                       ? `linear-gradient(135deg, ${tint("cyan", 10)} 0%, transparent 55%)`

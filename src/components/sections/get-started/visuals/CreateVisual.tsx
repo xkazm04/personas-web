@@ -22,7 +22,7 @@ export function CreateVisual({ brand }: VisualProps) {
       <div
         className="rounded-xl border p-4"
         style={{
-          borderColor: "rgba(var(--surface-overlay), 0.08)",
+          borderColor: "var(--border-glass-hover)",
           backgroundColor: "rgba(var(--surface-overlay), 0.02)",
         }}
       >

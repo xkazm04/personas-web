@@ -9,7 +9,7 @@ export default function UseCaseList({ connector }: { connector: Connector }) {
       {connector.useCases.map((uc, i) => (
         <div
           key={i}
-          className="group rounded-xl border border-white/[0.05] bg-white/[0.02] p-4 transition-colors hover:border-white/[0.1] hover:bg-white/[0.03]"
+          className="group rounded-xl border border-glass bg-white/[0.02] p-4 transition-colors hover:border-glass-hover hover:bg-white/[0.03]"
         >
           <div className="flex items-start gap-3">
             <div

@@ -3,6 +3,7 @@
 import { motion, useReducedMotion } from "framer-motion";
 import { Radar } from "lucide-react";
 import { EVAL_DIMENSIONS } from "../data";
+import TabBackdrop from "./TabBackdrop";
 
 export default function EvalTab() {
   const reduced = useReducedMotion() ?? false;
@@ -34,8 +35,9 @@ export default function EvalTab() {
   const avgBaseline = Math.round(baselineValues.reduce((s, v) => s + v, 0) / n);
 
   return (
-    <div className="force-dark flex flex-col rounded-xl border border-foreground/[0.08] bg-background/80 backdrop-blur-xl overflow-hidden">
-      <div className="flex items-center justify-between border-b border-foreground/[0.06] px-5 py-3">
+    <div className="force-dark relative flex flex-col rounded-xl border border-foreground/[0.08] bg-background/80 backdrop-blur-xl overflow-hidden">
+      <TabBackdrop tab="eval" />
+      <div className="relative flex items-center justify-between border-b border-foreground/[0.06] px-5 py-3">
         <div className="flex items-center gap-2">
           <Radar className="h-4 w-4 text-brand-emerald" />
           <span className="text-base font-mono font-semibold text-foreground uppercase tracking-wider">
@@ -58,7 +60,7 @@ export default function EvalTab() {
         </div>
       </div>
 
-      <div className="grid md:grid-cols-[1fr_220px] gap-4 p-5">
+      <div className="relative grid md:grid-cols-[1fr_220px] gap-4 p-5">
         <div className="flex items-center justify-center">
           <svg viewBox="0 0 400 400" className="w-full max-w-[340px] h-auto">
             {[0.25, 0.5, 0.75, 1].map((f) => (
@@ -159,7 +161,7 @@ export default function EvalTab() {
         </div>
       </div>
 
-      <div className="flex items-center justify-between border-t border-foreground/[0.06] px-5 py-3 text-base font-mono">
+      <div className="relative flex items-center justify-between border-t border-foreground/[0.06] px-5 py-3 text-base font-mono">
         <span className="flex items-center gap-3 text-foreground/70">
           <span className="flex items-center gap-1.5">
             <div className="h-2 w-2 rounded-full bg-brand-emerald" /> current

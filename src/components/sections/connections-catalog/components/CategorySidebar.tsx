@@ -23,7 +23,7 @@ export default function CategorySidebar({
 
   return (
     <aside className="pointer-events-none fixed left-5 top-1/2 z-40 hidden -translate-y-1/2 lg:flex flex-col items-start gap-1">
-      <div className="pointer-events-auto rounded-full border border-white/6 bg-black/20 px-2.5 py-1 text-base uppercase tracking-[0.2em] text-muted-dark backdrop-blur-sm font-mono mb-2">
+      <div className="pointer-events-auto rounded-full border border-glass bg-black/20 px-2.5 py-1 text-base uppercase tracking-[0.2em] text-muted-dark backdrop-blur-sm font-mono mb-2">
         Categories
       </div>
 

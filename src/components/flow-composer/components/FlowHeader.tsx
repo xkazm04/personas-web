@@ -32,7 +32,7 @@ export default function FlowHeader({
         </button>
         <button
           onClick={onShare}
-          className="flex items-center gap-1.5 rounded-full border border-white/10 bg-white/5 px-3 py-1.5 text-base font-mono text-foreground/80 hover:bg-white/10 transition-colors focus-visible:ring-2 focus-visible:ring-brand-cyan/60 focus-visible:outline-none"
+          className="flex items-center gap-1.5 rounded-full border border-glass-hover bg-white/5 px-3 py-1.5 text-base font-mono text-foreground/80 hover:bg-white/10 transition-colors focus-visible:ring-2 focus-visible:ring-brand-cyan/60 focus-visible:outline-none"
         >
           <Link2 className="w-3 h-3" />
           Share
@@ -40,7 +40,7 @@ export default function FlowHeader({
         <button
           onClick={onClose}
           aria-label="Close Flow Composer"
-          className="flex items-center gap-1.5 rounded-full border border-white/10 bg-white/5 px-3 py-1.5 text-base font-mono text-foreground/80 hover:bg-white/10 transition-colors focus-visible:ring-2 focus-visible:ring-brand-cyan/60 focus-visible:outline-none"
+          className="flex items-center gap-1.5 rounded-full border border-glass-hover bg-white/5 px-3 py-1.5 text-base font-mono text-foreground/80 hover:bg-white/10 transition-colors focus-visible:ring-2 focus-visible:ring-brand-cyan/60 focus-visible:outline-none"
         >
           <X className="w-3 h-3" />
         </button>

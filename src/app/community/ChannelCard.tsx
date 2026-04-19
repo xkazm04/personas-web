@@ -18,7 +18,7 @@ export default function ChannelCard({ channel }: ChannelCardProps) {
   const cardClass =
     "group relative flex flex-col h-full overflow-hidden rounded-2xl border p-7 transition-all duration-500 hover:scale-[1.01]";
   const cardStyle = {
-    borderColor: "rgba(var(--surface-overlay), 0.08)",
+    borderColor: "var(--border-glass-hover)",
     backgroundColor: "rgba(var(--surface-overlay), 0.02)",
     backgroundImage: `linear-gradient(135deg, ${tint(channel.brand, 14)} 0%, transparent 55%)`,
   };
@@ -68,7 +68,7 @@ export default function ChannelCard({ channel }: ChannelCardProps) {
         )}
       </h3>
 
-      <p className="relative text-base text-foreground/80 leading-relaxed flex-1 mb-5">
+      <p className="relative text-base text-muted-dark leading-relaxed flex-1 mb-5">
         {channel.description}
       </p>
 

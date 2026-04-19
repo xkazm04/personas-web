@@ -32,14 +32,14 @@ export default function CatalogFilters({
           placeholder="Search services..."
           value={search}
           onChange={(e) => setSearch(e.target.value)}
-          className="w-full rounded-xl border border-white/6 bg-white/[0.03] pl-11 pr-4 py-3 text-base text-foreground placeholder:text-muted-dark backdrop-blur-sm transition-all duration-300 focus:border-brand-cyan/30 focus:bg-white/[0.05] focus:outline-none focus:ring-1 focus:ring-brand-cyan/20"
+          className="w-full rounded-xl border border-glass bg-white/[0.03] pl-11 pr-4 py-3 text-base text-foreground placeholder:text-muted-dark backdrop-blur-sm transition-all duration-300 focus:border-brand-cyan/30 focus:bg-white/[0.05] focus:outline-none focus:ring-1 focus:ring-brand-cyan/20"
         />
       </div>
 
       <div className="mt-6 flex flex-wrap items-center justify-center gap-2 lg:hidden">
         <button
           onClick={() => setActiveCategory("all")}
-          className="rounded-full px-4 py-1.5 text-base font-medium transition-all duration-300 cursor-pointer border border-white/6 bg-white/[0.03] text-muted hover:text-foreground hover:bg-white/[0.05]"
+          className="rounded-full px-4 py-1.5 text-base font-medium transition-all duration-300 cursor-pointer border border-glass bg-white/[0.03] text-muted hover:text-foreground hover:bg-white/[0.05]"
           style={
             activeCategory === "all"
               ? { borderColor: tint("cyan", 30), backgroundColor: tint("cyan", 10), color: BRAND_VAR.cyan }
@@ -57,7 +57,7 @@ export default function CatalogFilters({
             <button
               key={cat.key}
               onClick={() => setActiveCategory(cat.key)}
-              className="group/pill flex items-center gap-1.5 rounded-full px-4 py-1.5 text-base font-medium transition-all duration-300 cursor-pointer border border-white/6 bg-white/[0.03] text-muted hover:text-foreground hover:bg-white/[0.05]"
+              className="group/pill flex items-center gap-1.5 rounded-full px-4 py-1.5 text-base font-medium transition-all duration-300 cursor-pointer border border-glass bg-white/[0.03] text-muted hover:text-foreground hover:bg-white/[0.05]"
               style={
                 isActive
                   ? { borderColor: tint(brand, 30), backgroundColor: tint(brand, 10), color: BRAND_VAR[brand] }

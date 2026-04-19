@@ -20,7 +20,7 @@ export default function InstallGuide({ platform }: InstallGuideProps) {
           <h3 className="text-base font-semibold text-foreground uppercase tracking-wider mb-4">
             System Requirements — {platform.name}
           </h3>
-          <div className="rounded-xl border border-white/[0.06] bg-white/[0.02] backdrop-blur-sm p-6">
+          <div className="rounded-xl border border-glass bg-white/[0.02] backdrop-blur-sm p-6">
             <ul className="space-y-3">
               {platform.requirements.map((req, i) => (
                 <li
@@ -40,7 +40,7 @@ export default function InstallGuide({ platform }: InstallGuideProps) {
           <h3 className="text-base font-semibold text-foreground uppercase tracking-wider mb-4">
             Installation Steps
           </h3>
-          <div className="rounded-xl border border-white/[0.06] bg-white/[0.02] backdrop-blur-sm p-6">
+          <div className="rounded-xl border border-glass bg-white/[0.02] backdrop-blur-sm p-6">
             <ol className="space-y-4">
               {platform.installSteps.map((step, i) => (
                 <li
@@ -66,7 +66,7 @@ export default function InstallGuide({ platform }: InstallGuideProps) {
               <Link
                 key={link.href}
                 href={link.href}
-                className="inline-flex items-center gap-1.5 rounded-full border border-white/[0.06] bg-white/[0.02] px-4 py-2 text-base text-muted hover:border-white/[0.1] hover:text-foreground transition-colors"
+                className="inline-flex items-center gap-1.5 rounded-full border border-glass bg-white/[0.02] px-4 py-2 text-base text-muted hover:border-glass-hover hover:text-foreground transition-colors"
               >
                 {link.label}
                 <ArrowRight className="h-3 w-3" />

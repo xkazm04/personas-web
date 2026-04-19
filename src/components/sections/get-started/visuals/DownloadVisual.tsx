@@ -35,7 +35,7 @@ export function DownloadVisual({ brand }: VisualProps) {
             transition={{ delay: 0.2 + i * 0.12 }}
             className="flex items-center gap-3 rounded-xl border px-4 py-3"
             style={{
-              borderColor: "rgba(var(--surface-overlay), 0.08)",
+              borderColor: "var(--border-glass-hover)",
               backgroundColor: "rgba(var(--surface-overlay), 0.02)",
             }}
           >

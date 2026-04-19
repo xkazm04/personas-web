@@ -28,7 +28,7 @@ export default function StageCard({
             ? isOutput
               ? "w-48 border-brand-emerald/30 bg-brand-emerald/[0.06]"
               : "w-48 border-brand-emerald/20 bg-white/[0.02]"
-            : "w-44 border-white/[0.06] bg-white/[0.01]"
+            : "w-44 border-glass bg-white/[0.01]"
       }`}
       style={{ zIndex: status === "active" ? 10 : 1 }}
     >
@@ -71,7 +71,7 @@ export default function StageCard({
                 ? "border-brand-cyan/30 bg-brand-cyan/10"
                 : status === "done"
                   ? "border-brand-emerald/20 bg-brand-emerald/[0.06]"
-                  : "border-white/[0.06] bg-white/[0.02]"
+                  : "border-glass bg-white/[0.02]"
             }`}
           >
             {status === "done" ? (
@@ -89,7 +89,7 @@ export default function StageCard({
               status === "active"
                 ? "text-brand-cyan/70"
                 : status === "done"
-                  ? "text-brand-emerald/60"
+                  ? "text-brand-emerald/80"
                   : "text-muted-dark"
             }`}
           >

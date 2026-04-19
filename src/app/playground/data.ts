@@ -33,9 +33,18 @@ export const LINE_COLORS: Record<OutputLineType, string> = {
   header: "text-foreground",
   info: "text-muted-dark",
   tool: "text-brand-cyan",
-  process: "text-amber-400",
+  process: "text-amber-400/90",
   success: "text-brand-emerald",
   result: "text-muted",
+};
+
+export const LINE_ICONS: Record<OutputLineType, string> = {
+  header: "\u25B6",
+  info: "\u2022",
+  tool: "\u2692",
+  process: "\u21BB",
+  success: "\u2714",
+  result: "\u2500",
 };
 
 export const PROMPTS: PromptCard[] = [

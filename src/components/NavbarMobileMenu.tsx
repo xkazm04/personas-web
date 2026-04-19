@@ -1,7 +1,7 @@
 "use client";
 
 import { AnimatePresence, motion } from "framer-motion";
-import { Download, LayoutDashboard, X } from "lucide-react";
+import { Download, LayoutDashboard, Loader2, X } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
 
@@ -15,6 +15,7 @@ interface NavbarMobileMenuProps {
   routes: RouteItem[];
   pathname: string;
   isAuthenticated: boolean;
+  isSigningIn?: boolean;
   signInWithGoogle: () => Promise<void>;
   onClose: () => void;
 }
@@ -24,6 +25,7 @@ export default function NavbarMobileMenu({
   routes,
   pathname,
   isAuthenticated,
+  isSigningIn,
   signInWithGoogle,
   onClose,
 }: NavbarMobileMenuProps) {
@@ -45,9 +47,9 @@ export default function NavbarMobileMenu({
             animate={{ x: 0 }}
             exit={{ x: "100%" }}
             transition={{ duration: 0.3, ease: [0.22, 1, 0.36, 1] }}
-            className="fixed right-0 top-0 z-[70] flex h-full w-72 flex-col border-l border-white/6 bg-background/95 backdrop-blur-2xl sm:hidden"
+            className="fixed right-0 top-0 z-[70] flex h-full w-72 flex-col border-l border-glass bg-background/95 backdrop-blur-2xl sm:hidden"
           >
-            <div className="flex items-center justify-between border-b border-white/6 px-5 py-4">
+            <div className="flex items-center justify-between border-b border-glass px-5 py-4">
               <Link
                 href="/"
                 onClick={onClose}
@@ -64,7 +66,7 @@ export default function NavbarMobileMenu({
               </Link>
               <button
                 onClick={onClose}
-                className="flex items-center justify-center rounded-lg border border-white/10 bg-white/2 p-1.5 text-muted transition-colors hover:text-foreground"
+                className="flex items-center justify-center rounded-lg border border-glass-hover bg-white/2 p-1.5 text-muted transition-colors hover:text-foreground"
                 aria-label="Close menu"
               >
                 <X className="h-4 w-4" />
@@ -93,7 +95,7 @@ export default function NavbarMobileMenu({
               </nav>
             </div>
 
-            <div className="border-t border-white/6 px-5 py-5 space-y-3">
+            <div className="border-t border-glass px-5 py-5 space-y-3">
               {isAuthenticated ? (
                 <Link
                   href="/dashboard"
@@ -110,9 +112,17 @@ export default function NavbarMobileMenu({
                       onClose();
                       void signInWithGoogle();
                     }}
-                    className="flex w-full items-center justify-center gap-2 rounded-xl border border-white/10 bg-white/4 px-4 py-3 text-base font-medium text-foreground transition-all duration-200 hover:border-white/20 hover:bg-white/8"
+                    disabled={isSigningIn}
+                    className="flex w-full items-center justify-center gap-2 rounded-xl border border-glass-hover bg-white/4 px-4 py-3 text-base font-medium text-foreground transition-all duration-200 hover:border-white/20 hover:bg-white/8 disabled:opacity-60 disabled:pointer-events-none"
                   >
-                    Sign in
+                    {isSigningIn ? (
+                      <>
+                        <Loader2 className="h-4 w-4 animate-spin" />
+                        Signing in…
+                      </>
+                    ) : (
+                      "Sign in"
+                    )}
                   </button>
                   <Link
                     href="/#download"

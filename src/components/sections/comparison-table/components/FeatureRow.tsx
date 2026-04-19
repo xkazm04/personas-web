@@ -15,16 +15,18 @@ export default function FeatureRow({
 }) {
   return (
     <div
+      role="row"
       className="grid items-center gap-2 px-4 sm:px-6 py-3 transition-colors hover:bg-white/[0.015]"
       style={{
         gridTemplateColumns: `minmax(140px, 1.5fr) repeat(${colCount - 1}, minmax(80px, 1fr))`,
         backgroundColor: row.highlight ? tint("cyan", 3) : undefined,
       }}
     >
-      <span className={`text-base ${row.highlight ? "text-foreground font-medium" : "text-muted"}`}>{row.label}</span>
+      <span role="rowheader" className={`text-base ${row.highlight ? "text-foreground font-medium" : "text-muted"}`}>{row.label}</span>
       {activeCompetitors.map((comp) => (
         <div
           key={comp.id}
+          role="cell"
           className={
             comp.id === "personas"
               ? "relative before:absolute before:inset-y-[-12px] before:inset-x-[-8px] before:rounded-md before:pointer-events-none"
@@ -36,7 +38,7 @@ export default function FeatureRow({
               : undefined
           }
         >
-          <CellValue value={row.values[comp.id]} />
+          <CellValue value={row.values[comp.id]} featureLabel={row.label} competitorName={comp.name} />
         </div>
       ))}
     </div>

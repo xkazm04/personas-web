@@ -1,7 +1,7 @@
 "use client";
 
 import { memo, useMemo } from "react";
-import { AnimatePresence, motion } from "framer-motion";
+import { AnimatePresence, motion, useReducedMotion } from "framer-motion";
 import { ArrowDown, ArrowRight, GitBranch, Sparkles } from "lucide-react";
 import { slideInLeft, slideInRight } from "@/lib/animations";
 import { scenarios } from "../data";
@@ -18,6 +18,8 @@ const WorkflowContent = memo(function WorkflowContent({
   minHeight: number;
 }) {
   const scenario = scenarios[activeIndex];
+  const shouldReduceMotion = useReducedMotion();
+  const dur = shouldReduceMotion ? 0 : 0.2;
   return (
     <AnimatePresence mode="wait">
       <motion.div
@@ -25,7 +27,7 @@ const WorkflowContent = memo(function WorkflowContent({
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
         exit={{ opacity: 0 }}
-        transition={{ duration: 0.2 }}
+        transition={{ duration: dur }}
         className="relative"
         style={{ minHeight: minHeight || undefined }}
       >
@@ -43,6 +45,8 @@ const AgentContent = memo(function AgentContent({
   minHeight: number;
 }) {
   const scenario = scenarios[activeIndex];
+  const shouldReduceMotion = useReducedMotion();
+  const dur = shouldReduceMotion ? 0 : 0.2;
   return (
     <AnimatePresence mode="wait">
       <motion.div
@@ -50,7 +54,7 @@ const AgentContent = memo(function AgentContent({
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
         exit={{ opacity: 0 }}
-        transition={{ duration: 0.2 }}
+        transition={{ duration: dur }}
         className="relative"
         style={{ minHeight: minHeight || undefined }}
       >
@@ -93,7 +97,7 @@ export default function ScenarioDuel({
       onMouseLeave={onMouseLeave}
     >
       <div className="hidden md:flex absolute left-1/2 top-1/2 z-10 -translate-x-1/2 -translate-y-1/2">
-        <div className="relative flex h-14 w-14 items-center justify-center rounded-full border border-white/8 bg-background shadow-[0_0_40px_rgba(0,0,0,0.6)]">
+        <div className="relative flex h-14 w-14 items-center justify-center rounded-full border border-glass-hover bg-background shadow-[0_0_40px_rgba(0,0,0,0.6)]">
           <div className="absolute inset-0 rounded-full border border-brand-cyan/10 animate-glow-border" />
           <ArrowRight className="h-4 w-4 text-brand-cyan" />
         </div>
@@ -104,7 +108,7 @@ export default function ScenarioDuel({
       <ComparisonCard
         variant={slideInLeft}
         texture="stripes"
-        className="border border-white/8 bg-linear-to-br from-white/6 to-white/2 backdrop-blur-lg hover:border-white/12"
+        className="border border-glass-hover bg-linear-to-br from-white/6 to-white/2 backdrop-blur-lg hover:border-glass-strong"
         color={{
           orb: "-right-20 -top-20 bg-brand-rose/4",
           line: "via-brand-rose/8",
@@ -125,7 +129,7 @@ export default function ScenarioDuel({
 
       <div className="mt-2 mb-2 flex items-center gap-3 md:hidden">
         <div className="h-px flex-1 bg-linear-to-r from-transparent via-white/6 to-transparent" />
-        <div className="flex h-8 w-8 items-center justify-center rounded-full border border-white/8 bg-background/80">
+        <div className="flex h-8 w-8 items-center justify-center rounded-full border border-glass-hover bg-background/80">
           <ArrowDown className="h-3.5 w-3.5 text-brand-cyan" />
         </div>
         <div className="h-px flex-1 bg-linear-to-r from-transparent via-white/6 to-transparent" />

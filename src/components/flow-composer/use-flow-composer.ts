@@ -61,7 +61,7 @@ export function useFlowComposer() {
     navigator.clipboard.writeText(url).then(() => {
       setShareToast(true);
       setTimeout(() => setShareToast(false), 2000);
-    });
+    }).catch(() => {});
   }, [nodes, wires]);
 
   const toSvgX = useCallback((clientX: number): number => {

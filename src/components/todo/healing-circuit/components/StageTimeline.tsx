@@ -1,6 +1,6 @@
 "use client";
 
-import { motion } from "framer-motion";
+import { motion, useReducedMotion } from "framer-motion";
 import { CheckCircle, Wifi } from "lucide-react";
 import { connections, healingStages } from "../data";
 import type { ConnectionStatus } from "../types";
@@ -12,6 +12,7 @@ export default function StageTimeline({
   activeStage: number;
   getConnectionStatus: (connId: string) => ConnectionStatus;
 }) {
+  const reduced = useReducedMotion();
   return (
     <div className="border-t border-foreground/6 bg-background/40 px-5 py-3">
       <div className="flex items-center justify-between">
@@ -54,8 +55,8 @@ export default function StageTimeline({
                     <motion.div
                       className="h-1.5 w-1.5 rounded-full"
                       style={{ backgroundColor: stage.color }}
-                      animate={{ opacity: [1, 0.3, 1] }}
-                      transition={{ duration: 0.6, repeat: Infinity }}
+                      animate={reduced ? { opacity: 1 } : { opacity: [1, 0.3, 1] }}
+                      transition={reduced ? { duration: 0 } : { duration: 0.6, repeat: Infinity }}
                     />
                   )}
                   {isDone && (

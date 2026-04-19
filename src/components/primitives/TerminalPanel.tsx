@@ -76,15 +76,15 @@ const TerminalPanel = forwardRef<HTMLDivElement, TerminalPanelProps>(
     return (
       <div
         ref={ref}
-        className={`rounded-2xl border border-white/[0.08] backdrop-blur-xl overflow-hidden ${BG_CLASS[bg]} ${SHADOW_CLASS[shadow]} ${className}`}
+        className={`rounded-2xl border border-glass-hover backdrop-blur-xl overflow-hidden ${BG_CLASS[bg]} ${SHADOW_CLASS[shadow]} ${className}`}
         style={style}
       >
         {header && (
-          <div className="border-b border-white/[0.06]">{header}</div>
+          <div className="border-b border-glass">{header}</div>
         )}
         <div className={bodyClassName}>{children}</div>
         {footer && (
-          <div className="flex items-center justify-between border-t border-white/[0.04] px-4 py-2.5 sm:px-5 bg-white/[0.01]">
+          <div className="flex items-center justify-between border-t border-glass px-4 py-2.5 sm:px-5 bg-white/[0.01]">
             {footer}
           </div>
         )}

@@ -16,7 +16,7 @@ export default function FeatureVoteIllustration({
   onImgLoad: () => void;
 }) {
   return (
-    <div className="relative flex flex-1 items-center justify-center py-20 sm:py-24 overflow-hidden">
+    <div className="relative flex items-center justify-center py-12 sm:py-14 overflow-hidden">
       <div
         className="pointer-events-none absolute inset-0 transition-opacity duration-700"
         style={{

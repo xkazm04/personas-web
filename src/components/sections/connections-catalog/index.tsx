@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useMemo } from "react";
+import { useMemo } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { Plug, Download } from "lucide-react";
 import SectionWrapper from "@/components/SectionWrapper";
@@ -15,12 +15,18 @@ import CategorySidebar from "./components/CategorySidebar";
 import CatalogFilters from "./components/CatalogFilters";
 
 export default function ConnectionsCatalog({
+  activeCategory,
+  search,
+  onCategoryChange,
+  onSearchChange,
   onConnectorClick,
 }: {
+  activeCategory: string;
+  search: string;
+  onCategoryChange: (category: string) => void;
+  onSearchChange: (search: string) => void;
   onConnectorClick?: (connector: Connector) => void;
 }) {
-  const [activeCategory, setActiveCategory] = useState("all");
-  const [search, setSearch] = useState("");
 
   const categoryCount = useMemo(() => {
     const counts: Record<string, number> = {};
@@ -47,7 +53,7 @@ export default function ConnectionsCatalog({
     <SectionWrapper id="connections-catalog" aria-label="Connections catalog">
       <CategorySidebar
         activeCategory={activeCategory}
-        onSelect={setActiveCategory}
+        onSelect={onCategoryChange}
         categoryCount={categoryCount}
         total={connectors.length}
       />
@@ -66,10 +72,10 @@ export default function ConnectionsCatalog({
         />
 
         <div className="mt-8 flex flex-wrap items-center justify-center gap-3">
-          <span className="rounded-full border border-white/8 bg-white/[0.03] px-4 py-1.5 text-base font-mono text-muted backdrop-blur-sm">
+          <span className="rounded-full border border-glass-hover bg-white/[0.03] px-4 py-1.5 text-base font-mono text-muted backdrop-blur-sm">
             {connectors.length} services ready
           </span>
-          <span className="rounded-full border border-white/8 bg-white/[0.03] px-4 py-1.5 text-base font-mono text-muted backdrop-blur-sm">
+          <span className="rounded-full border border-glass-hover bg-white/[0.03] px-4 py-1.5 text-base font-mono text-muted backdrop-blur-sm">
             {categories.length} categories
           </span>
           <span
@@ -87,9 +93,9 @@ export default function ConnectionsCatalog({
 
       <CatalogFilters
         activeCategory={activeCategory}
-        setActiveCategory={setActiveCategory}
+        setActiveCategory={onCategoryChange}
         search={search}
-        setSearch={setSearch}
+        setSearch={onSearchChange}
         categoryCount={categoryCount}
         filteredCount={filteredConnectors.length}
       />

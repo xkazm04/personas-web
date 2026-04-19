@@ -114,10 +114,10 @@ export default function EventDetailDrawer({ node, onClose }: EventDetailDrawerPr
             animate={{ x: 0 }}
             exit={{ x: "100%" }}
             transition={{ type: "spring", damping: 30, stiffness: 300 }}
-            className="fixed right-0 top-0 z-50 h-full w-full max-w-md overflow-y-auto border-l border-white/[0.06] bg-background/95 backdrop-blur-xl"
+            className="fixed right-0 top-0 z-50 h-full w-full max-w-md overflow-y-auto border-l border-glass bg-background/95 backdrop-blur-xl"
           >
             {/* Header */}
-            <div className="sticky top-0 z-10 flex items-center justify-between border-b border-white/[0.06] bg-background/80 px-5 py-4 backdrop-blur-md">
+            <div className="sticky top-0 z-10 flex items-center justify-between border-b border-glass bg-background/80 px-5 py-4 backdrop-blur-md">
               <div className="flex items-center gap-3">
                 {node.icon && (
                   <span className="text-lg">{node.icon}</span>
@@ -141,7 +141,7 @@ export default function EventDetailDrawer({ node, onClose }: EventDetailDrawerPr
 
             <div className="space-y-5 p-5">
               {/* Flow direction */}
-              <div className="flex items-center gap-3 rounded-xl border border-white/[0.06] bg-white/[0.02] p-3">
+              <div className="flex items-center gap-3 rounded-xl border border-glass bg-white/[0.02] p-3">
                 <div className="flex items-center gap-2 text-sm">
                   <span
                     className="inline-flex h-6 w-6 items-center justify-center rounded-md text-sm"
@@ -176,7 +176,7 @@ export default function EventDetailDrawer({ node, onClose }: EventDetailDrawerPr
 
               {/* Metadata grid */}
               <div className="grid grid-cols-2 gap-3">
-                <div className="rounded-xl border border-white/[0.06] bg-white/[0.02] p-3">
+                <div className="rounded-xl border border-glass bg-white/[0.02] p-3">
                   <div className="flex items-center gap-1.5 text-sm text-muted-dark">
                     <Clock className="h-3 w-3" />
                     Timestamp
@@ -189,7 +189,7 @@ export default function EventDetailDrawer({ node, onClose }: EventDetailDrawerPr
                   </p>
                 </div>
 
-                <div className="rounded-xl border border-white/[0.06] bg-white/[0.02] p-3">
+                <div className="rounded-xl border border-glass bg-white/[0.02] p-3">
                   <div className="flex items-center gap-1.5 text-sm text-muted-dark">
                     <Timer className="h-3 w-3" />
                     Duration
@@ -244,7 +244,7 @@ export default function EventDetailDrawer({ node, onClose }: EventDetailDrawerPr
                 <label className="mb-1.5 block text-sm font-medium uppercase tracking-wider text-muted-dark">
                   Sample Payload
                 </label>
-                <div className="relative max-h-64 overflow-auto rounded-xl bg-background p-4 border border-white/[0.08] shadow-inner">
+                <div className="relative max-h-64 overflow-auto rounded-xl bg-background p-4 border border-glass-hover shadow-inner">
                   <pre className="font-mono text-sm leading-relaxed text-white/60 whitespace-pre-wrap break-all">
                     {highlightJson(mockPayloadForNode(node))}
                   </pre>

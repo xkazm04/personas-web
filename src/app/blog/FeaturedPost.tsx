@@ -23,7 +23,7 @@ export default function FeaturedPost({ post }: FeaturedPostProps) {
         href={`/blog/${post.slug}`}
         className="group relative block overflow-hidden rounded-2xl border p-8 sm:p-12 transition-all duration-500 hover:scale-[1.005]"
         style={{
-          borderColor: "rgba(var(--surface-overlay), 0.08)",
+          borderColor: "var(--border-glass-hover)",
           backgroundColor: "rgba(var(--surface-overlay), 0.02)",
           backgroundImage: `linear-gradient(135deg, ${tint(meta.brand, 14)} 0%, transparent 60%)`,
         }}
@@ -72,7 +72,7 @@ export default function FeaturedPost({ post }: FeaturedPostProps) {
         >
           {post.title}
         </h2>
-        <p className="relative text-lg text-foreground/80 leading-relaxed max-w-3xl">
+        <p className="relative text-lg text-muted-dark leading-relaxed max-w-3xl">
           {post.description}
         </p>
         <div

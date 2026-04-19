@@ -15,6 +15,7 @@ import { fadeUp } from "@/lib/animations";
 import { trackDownloadClick } from "@/lib/analytics";
 import { PLATFORMS, APP_VERSION, type PlatformId } from "@/data/download";
 import PlatformCard from "./PlatformCard";
+import PlatformPill from "./PlatformPill";
 import InstallGuide from "./InstallGuide";
 import DownloadFaq from "./DownloadFaq";
 
@@ -60,10 +61,25 @@ export default function DownloadPage() {
             </p>
           </motion.div>
 
-          {/* Platform selector */}
+          {/* Platform selector – mobile pills */}
           <motion.div
             variants={fadeUp}
-            className="grid grid-cols-3 gap-4 max-w-lg mx-auto mb-10"
+            className="flex gap-2 max-w-lg mx-auto mb-10 sm:hidden"
+          >
+            {PLATFORMS.map((p) => (
+              <PlatformPill
+                key={p.id}
+                platform={p}
+                selected={p.id === selectedOS}
+                onSelect={() => setSelectedOS(p.id)}
+              />
+            ))}
+          </motion.div>
+
+          {/* Platform selector – desktop cards */}
+          <motion.div
+            variants={fadeUp}
+            className="hidden sm:grid grid-cols-3 gap-4 max-w-lg mx-auto mb-10"
           >
             {PLATFORMS.map((p) => (
               <PlatformCard

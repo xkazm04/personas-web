@@ -24,12 +24,15 @@ export function CompareBlock({ items }: CompareBlockProps) {
             key={i}
             className={`relative rounded-xl border px-5 py-4 backdrop-blur-sm transition-colors ${
               item.highlight
-                ? "border-white/[0.12] bg-white/[0.04]"
-                : "border-white/[0.06] bg-white/[0.02]"
+                ? "border-glass-strong bg-white/[0.04]"
+                : "border-glass bg-white/[0.02]"
             }`}
           >
             {item.highlight && (
-              <span className="absolute -top-2.5 right-3 inline-flex items-center gap-1 rounded-full bg-brand-cyan/15 border border-brand-cyan/20 px-2 py-0.5 text-sm font-semibold uppercase tracking-wider text-brand-cyan">
+              <span
+                aria-label="Recommended option"
+                className="absolute -top-2.5 right-3 inline-flex items-center gap-1 rounded-full bg-brand-cyan/15 border border-brand-cyan/20 px-2 py-0.5 text-sm font-semibold uppercase tracking-wider text-brand-cyan"
+              >
                 <Star className="h-2.5 w-2.5" aria-hidden="true" />
                 Recommended
               </span>

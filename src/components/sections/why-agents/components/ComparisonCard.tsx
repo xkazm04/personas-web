@@ -1,7 +1,8 @@
 "use client";
 
 import { memo, type ElementType, type ReactNode } from "react";
-import { motion, type Variants } from "framer-motion";
+import { motion, useReducedMotion, type Variants } from "framer-motion";
+import { fadeIn } from "@/lib/animations";
 
 export type ComparisonCardColor = {
   orb: string;
@@ -39,11 +40,13 @@ const ComparisonCard = memo(function ComparisonCard({
   subtitle,
   children,
 }: ComparisonCardProps) {
+  const shouldReduceMotion = useReducedMotion();
+
   return (
     <motion.div
-      variants={variant}
-      transition={{ duration: 0.6 }}
-      whileHover={{ scale: 1.02 }}
+      variants={shouldReduceMotion ? fadeIn : variant}
+      transition={{ duration: shouldReduceMotion ? 0.15 : 0.6 }}
+      whileHover={shouldReduceMotion ? undefined : { scale: 1.02 }}
       className={`${texture} group rounded-2xl p-4 md:p-6 relative overflow-hidden transition-[border-color,opacity] duration-500 will-change-transform ${className}`}
     >
       <div className={`pointer-events-none absolute h-40 w-40 rounded-full blur-3xl ${color.orb}`} />
@@ -71,13 +74,21 @@ const ComparisonCard = memo(function ComparisonCard({
       )}
 
       <div className="relative flex items-center gap-3 mb-4">
-        <motion.div
-          animate={{ scale: [1, 1.1, 1] }}
-          transition={{ duration: 2, repeat: Infinity, ease: "easeInOut" }}
-          className={`flex h-10 w-10 items-center justify-center rounded-xl ${color.iconBg} ring-1 ${color.iconRing}`}
-        >
-          <Icon className={`h-5 w-5 ${color.iconText}`} />
-        </motion.div>
+        {shouldReduceMotion ? (
+          <div
+            className={`flex h-10 w-10 items-center justify-center rounded-xl ${color.iconBg} ring-1 ${color.iconRing}`}
+          >
+            <Icon className={`h-5 w-5 ${color.iconText}`} />
+          </div>
+        ) : (
+          <motion.div
+            animate={{ scale: [1, 1.1, 1] }}
+            transition={{ duration: 2, repeat: Infinity, ease: "easeInOut" }}
+            className={`flex h-10 w-10 items-center justify-center rounded-xl ${color.iconBg} ring-1 ${color.iconRing}`}
+          >
+            <Icon className={`h-5 w-5 ${color.iconText}`} />
+          </motion.div>
+        )}
         <div>
           <h3 className="text-base font-semibold text-foreground">{title}</h3>
           <p className={`text-base font-mono uppercase tracking-wider mt-0.5 ${color.subtitle}`}>
