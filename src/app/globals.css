@@ -3,6 +3,12 @@
 @import "../styles/themes.css";
 @import "../styles/typography.css";
 
+/* ── Tailwind dark variant bridge ──
+   Themes are selected via html[data-theme], and every dark preset is prefixed
+   `dark-…`. Map Tailwind's `dark:` variant onto that scheme so `dark:block`
+   et al. flip with manual theme switches, not only OS `prefers-color-scheme`. */
+@custom-variant dark (&:where([data-theme^="dark-"] *, [data-theme^="dark-"]));
+
 /* ── Bridge shared tokens into Tailwind @theme ──
    Raw values live in packages/tokens/tokens.css — do NOT duplicate here. */
 @theme inline {
@@ -820,4 +826,17 @@ img {
   --text-disabled: #7898aa;
   --surface-overlay: 255, 255, 255;
   color: #e8f5fc;
+}
+
+/* ══════════════════════════════════════════════════════════════════════════
+   Connector / tool glyph colouring — SVGs ship with their brand palette but
+   we flatten them for visual rhythm. Light themes → solid black; dark themes
+   → solid white. The filter chain uses brightness(0) to zero the colour,
+   then optionally invert(1) to flip to white on dark backgrounds.
+   ══════════════════════════════════════════════════════════════════════════ */
+.connector-icon {
+  filter: brightness(0) drop-shadow(0 0 2px rgba(0, 0, 0, 0.25));
+}
+[data-theme^="dark-"] .connector-icon {
+  filter: brightness(0) invert(1) drop-shadow(0 0 2px rgba(255, 255, 255, 0.4));
 }

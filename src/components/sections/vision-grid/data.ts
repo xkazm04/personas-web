@@ -135,7 +135,7 @@ export const PLATFORM_CARDS: PlatformCard[] = [
   {
     id: "orchestration",
     title: "Orchestration",
-    brand: "blue",
+    brand: "cyan",
     images: {
       dark: "/imgs/platform/orchestration-dark.png",
       light: "/imgs/platform/orchestration-light.png",

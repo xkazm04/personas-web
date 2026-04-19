@@ -21,7 +21,7 @@ export function WorkVisual({ brand }: VisualProps) {
         className="rounded-xl border p-4"
         style={{
           borderColor: "var(--border-glass-hover)",
-          backgroundColor: "rgba(0,0,0,0.4)",
+          backgroundColor: "color-mix(in srgb, var(--background) 60%, transparent)",
         }}
       >
         <div className="mb-3 flex items-center justify-between">
