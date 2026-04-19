@@ -1,8 +1,8 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useRef, useEffect, useCallback } from "react";
 import { motion } from "framer-motion";
-import { ArrowRight, BookOpen } from "lucide-react";
+import { ArrowRight, BookOpen, X } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
 import { BRAND_VAR, tint } from "@/lib/brand-theme";
@@ -25,38 +25,106 @@ interface PlatformCardTileProps {
 export default function PlatformCardTile({ card }: PlatformCardTileProps) {
   const [open, setOpen] = useState(false);
   const brandVar = BRAND_VAR[card.brand];
+  const cardRef = useRef<HTMLDivElement>(null);
+  const panelRef = useRef<HTMLDivElement>(null);
+  const closeRef = useRef<HTMLButtonElement>(null);
+
+  const close = useCallback(() => {
+    setOpen(false);
+    cardRef.current?.focus();
+  }, []);
+
+  useEffect(() => {
+    if (open) {
+      const timer = setTimeout(() => closeRef.current?.focus(), 100);
+      return () => clearTimeout(timer);
+    }
+  }, [open]);
+
+  useEffect(() => {
+    if (!open) return;
+
+    function handleKeyDown(e: KeyboardEvent) {
+      if (e.key === "Escape") {
+        e.preventDefault();
+        close();
+        return;
+      }
+
+      if (e.key === "Tab" && panelRef.current) {
+        const focusable = panelRef.current.querySelectorAll<HTMLElement>(
+          'button, a[href], [tabindex]:not([tabindex="-1"])'
+        );
+        if (focusable.length === 0) return;
+
+        const first = focusable[0];
+        const last = focusable[focusable.length - 1];
+
+        if (e.shiftKey && document.activeElement === first) {
+          e.preventDefault();
+          last.focus();
+        } else if (!e.shiftKey && document.activeElement === last) {
+          e.preventDefault();
+          first.focus();
+        }
+      }
+    }
+
+    document.addEventListener("keydown", handleKeyDown);
+    return () => document.removeEventListener("keydown", handleKeyDown);
+  }, [open, close]);
 
   return (
-    <motion.button
+    <motion.div
+      ref={cardRef}
       variants={cardVariants}
-      type="button"
+      role="button"
+      tabIndex={0}
       onClick={() => setOpen((v) => !v)}
+      onKeyDown={(e) => {
+        if (
+          (e.key === "Enter" || e.key === " ") &&
+          e.target === e.currentTarget
+        ) {
+          e.preventDefault();
+          setOpen((v) => !v);
+        }
+      }}
       aria-expanded={open}
       className="group relative block w-full overflow-hidden rounded-2xl border text-left h-[380px] cursor-pointer transition-all duration-500 hover:scale-[1.01] focus-visible:outline-none focus-visible:ring-2"
       style={{
-        borderColor: "rgba(var(--surface-overlay), 0.08)",
-        backgroundColor: "rgba(0, 0, 0, 0.4)",
+        borderColor: "var(--border-glass-hover)",
+        backgroundColor: "color-mix(in srgb, var(--background) 70%, transparent)",
       }}
     >
-      {/* Branded illustration — semi-transparent, full on hover, faded when info open */}
+      {/* Branded illustration */}
       <div
         className={`absolute inset-0 transition-opacity duration-500 ${
           open ? "opacity-10" : "opacity-60 group-hover:opacity-100"
         }`}
       >
         <Image
-          src={card.image}
+          src={card.images.dark}
           alt=""
           fill
           sizes="(min-width: 1024px) 33vw, (min-width: 640px) 50vw, 100vw"
-          className="object-cover"
+          className="hidden dark:block object-cover"
           aria-hidden="true"
         />
+        <Image
+          src={card.images.light}
+          alt=""
+          fill
+          sizes="(min-width: 1024px) 33vw, (min-width: 640px) 50vw, 100vw"
+          className="block dark:hidden object-cover"
+          aria-hidden="true"
+        />
+        {/* Theme-aware readability gradient: fades to current --background at bottom */}
         <div
           className="absolute inset-0"
           style={{
             background:
-              "linear-gradient(180deg, rgba(0,0,0,0.25) 0%, rgba(0,0,0,0.55) 55%, rgba(0,0,0,0.88) 100%)",
+              "linear-gradient(180deg, color-mix(in srgb, var(--background) 20%, transparent) 0%, color-mix(in srgb, var(--background) 55%, transparent) 55%, color-mix(in srgb, var(--background) 88%, transparent) 100%)",
           }}
         />
       </div>
@@ -76,7 +144,7 @@ export default function PlatformCardTile({ card }: PlatformCardTileProps) {
             className="text-4xl sm:text-5xl font-extrabold tracking-tight text-center"
             style={{
               color: brandVar,
-              textShadow: `0 0 24px ${tint(card.brand, 65)}, 0 2px 12px rgba(0,0,0,0.8)`,
+              textShadow: `0 0 24px ${tint(card.brand, 65)}, 0 2px 12px color-mix(in srgb, var(--background) 80%, transparent)`,
             }}
           >
             {card.title}
@@ -97,8 +165,11 @@ export default function PlatformCardTile({ card }: PlatformCardTileProps) {
         </div>
       </div>
 
-      {/* Info panel — uncovered on click */}
+      {/* Info panel */}
       <div
+        ref={panelRef}
+        role="region"
+        aria-label={`${card.title} details`}
         className={`absolute inset-x-0 bottom-0 z-20 transition-all duration-500 ease-out ${
           open
             ? "translate-y-0 opacity-100"
@@ -106,13 +177,27 @@ export default function PlatformCardTile({ card }: PlatformCardTileProps) {
         }`}
       >
         <div
-          className="m-3 rounded-xl border backdrop-blur-xl p-5"
+          className="m-3 rounded-xl border backdrop-blur-xl p-5 relative"
           style={{
-            borderColor: "rgba(var(--surface-overlay), 0.10)",
-            backgroundColor: "rgba(var(--background-rgb, 10,10,18), 0.9)",
+            borderColor: "var(--border-glass-hover)",
+            backgroundColor: "color-mix(in srgb, var(--background) 90%, transparent)",
           }}
         >
-          <p className="text-base text-foreground/90 leading-relaxed mb-4">
+          <button
+            ref={closeRef}
+            type="button"
+            onClick={(e) => {
+              e.stopPropagation();
+              close();
+            }}
+            className="absolute top-3 right-3 p-1.5 rounded-lg transition-colors hover:bg-white/10 focus-visible:outline-none focus-visible:ring-2"
+            style={{ color: brandVar }}
+            aria-label={`Close ${card.title} details`}
+          >
+            <X className="h-4 w-4" />
+          </button>
+
+          <p className="text-base text-foreground/90 leading-relaxed mb-4 pr-8">
             {card.description}
           </p>
           <ul className="space-y-2 mb-4">
@@ -144,6 +229,6 @@ export default function PlatformCardTile({ card }: PlatformCardTileProps) {
           ))}
         </div>
       </div>
-    </motion.button>
+    </motion.div>
   );
 }

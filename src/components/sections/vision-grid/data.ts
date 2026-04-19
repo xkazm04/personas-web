@@ -10,7 +10,7 @@ export interface PlatformCard {
   id: string;
   title: string;
   brand: BrandKey;
-  image: string;
+  images: { dark: string; light: string };
   description: string;
   details: string[];
   guideTopics?: GuideLink[];
@@ -21,7 +21,10 @@ export const PLATFORM_CARDS: PlatformCard[] = [
     id: "credential-vault",
     title: "Vault",
     brand: "purple",
-    image: "/imgs/platform/credential-vault.png",
+    images: {
+      dark: "/imgs/platform/credential-vault-dark.png",
+      light: "/imgs/platform/credential-vault-light.png",
+    },
     description:
       "AES-256-GCM encryption with OS-native keyring integration. Your secrets never leave your device.",
     details: [
@@ -41,7 +44,10 @@ export const PLATFORM_CARDS: PlatformCard[] = [
     id: "templates",
     title: "Templates",
     brand: "cyan",
-    image: "/imgs/platform/templates.png",
+    images: {
+      dark: "/imgs/platform/templates-dark.png",
+      light: "/imgs/platform/templates-light.png",
+    },
     description:
       "Dozens of ready-made personas you can adopt with one click — from PR reviewer to morning brief.",
     details: [
@@ -61,7 +67,10 @@ export const PLATFORM_CARDS: PlatformCard[] = [
     id: "byom",
     title: "BYOM",
     brand: "emerald",
-    image: "/imgs/platform/byom.png",
+    images: {
+      dark: "/imgs/platform/byom-dark.png",
+      light: "/imgs/platform/byom-light.png",
+    },
     description:
       "Bring your own model. Run personas against Claude or local Ollama — your machine, your choice.",
     details: [
@@ -81,7 +90,10 @@ export const PLATFORM_CARDS: PlatformCard[] = [
     id: "monitoring",
     title: "Monitoring",
     brand: "rose",
-    image: "/imgs/platform/monitoring.png",
+    images: {
+      dark: "/imgs/platform/monitoring-dark.png",
+      light: "/imgs/platform/monitoring-light.png",
+    },
     description:
       "Self-healing execution, human review queues, and persistent agent memory — watch every run in real time.",
     details: [
@@ -101,7 +113,10 @@ export const PLATFORM_CARDS: PlatformCard[] = [
     id: "lab",
     title: "Lab",
     brand: "amber",
-    image: "/imgs/platform/lab.png",
+    images: {
+      dark: "/imgs/platform/lab-dark.png",
+      light: "/imgs/platform/lab-light.png",
+    },
     description:
       "Experiment with prompt variants, run A/B arenas, and let breeding cycles evolve higher-performing personas.",
     details: [
@@ -121,7 +136,10 @@ export const PLATFORM_CARDS: PlatformCard[] = [
     id: "orchestration",
     title: "Orchestration",
     brand: "blue",
-    image: "/imgs/platform/orchestration.png",
+    images: {
+      dark: "/imgs/platform/orchestration-dark.png",
+      light: "/imgs/platform/orchestration-light.png",
+    },
     description:
       "Eight trigger types wake personas in parallel — schedule, webhook, file watcher, clipboard, event, and more.",
     details: [

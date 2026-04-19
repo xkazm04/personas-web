@@ -60,7 +60,7 @@ const ToolDetailCard = forwardRef<HTMLDivElement, Props>(function ToolDetailCard
             >
               <div className="flex items-center gap-2 mb-3">
                 <div className="h-1.5 w-1.5 rounded-full bg-brand-cyan shadow-[0_0_8px_rgba(6,182,212,0.8)]" />
-                <h4 className="text-base font-semibold text-foreground group-hover:text-white transition-colors">
+                <h4 className="text-base font-semibold text-foreground transition-colors">
                   {uc.title}
                 </h4>
               </div>

@@ -57,13 +57,22 @@ export default function StepContent({
               src={bg.light}
               alt=""
               aria-hidden="true"
-              className="block dark:hidden absolute inset-0 h-full w-full object-cover opacity-25"
+              className="block dark:hidden absolute inset-0 h-full w-full object-cover opacity-35"
             />
+            {/* Dark theme: right-edge fade into background */}
             <div
-              className="absolute inset-0"
+              className="hidden dark:block absolute inset-0"
               style={{
                 background:
-                  "linear-gradient(90deg, rgba(var(--surface-overlay), 0.0) 0%, rgba(var(--surface-overlay), 0.0) 40%, var(--background) 100%)",
+                  "linear-gradient(90deg, rgba(0,0,0,0) 0%, rgba(0,0,0,0) 40%, var(--background) 100%)",
+              }}
+            />
+            {/* Light theme: lighter wash so the illustration stays airy, plus right-edge fade */}
+            <div
+              className="block dark:hidden absolute inset-0"
+              style={{
+                background:
+                  "linear-gradient(90deg, color-mix(in srgb, var(--background) 55%, transparent) 0%, color-mix(in srgb, var(--background) 35%, transparent) 40%, var(--background) 100%)",
               }}
             />
           </div>

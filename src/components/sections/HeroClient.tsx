@@ -116,7 +116,7 @@ export default function HeroClient() {
               <motion.span
                 key={label}
                 whileHover={{ scale: 1.05 }}
-                className="flex items-center gap-2 rounded-full border border-glass-hover bg-white/3 px-4 py-2 text-base font-mono tracking-wide text-muted-dark transition-colors duration-300 hover:bg-white/6 hover:text-white hover:border-glass-strong cursor-default"
+                className="flex items-center gap-2 rounded-full border border-glass-hover bg-white/3 px-4 py-2 text-base font-mono tracking-wide text-muted-dark transition-colors duration-300 hover:bg-white/6 hover:text-foreground hover:border-glass-strong cursor-default"
               >
                 <Icon className="h-3.5 w-3.5 opacity-60" />
                 {label}
@@ -130,7 +130,7 @@ export default function HeroClient() {
               href="https://github.com"
               target="_blank"
               rel="noopener noreferrer"
-              className="group relative flex w-[min(100%,20rem)] items-center justify-center gap-3 rounded-full border border-glass-hover bg-white/2 px-8 py-4 text-base font-medium text-muted transition-all duration-300 hover:border-white/20 hover:text-white hover:bg-white/5 hover:shadow-[0_0_20px_rgba(255,255,255,0.05)] sm:w-auto overflow-hidden focus-visible:ring-2 focus-visible:ring-brand-cyan/40 focus-visible:outline-none"
+              className="group relative flex w-[min(100%,20rem)] items-center justify-center gap-3 rounded-full border border-glass-hover bg-white/2 px-8 py-4 text-base font-medium text-muted transition-all duration-300 hover:border-glass-strong hover:text-foreground hover:bg-white/5 hover:shadow-[0_0_20px_color-mix(in_srgb,var(--foreground)_10%,transparent)] sm:w-auto overflow-hidden focus-visible:ring-2 focus-visible:ring-brand-cyan/40 focus-visible:outline-none"
             >
               <span className="absolute inset-0 w-full h-full bg-linear-to-r from-transparent via-white/10 to-transparent -translate-x-full group-hover:animate-[shimmer_1.5s_infinite]" />
               <GithubIcon className="h-5 w-5 transition-transform duration-300 group-hover:scale-110 group-hover:drop-shadow-[0_0_8px_rgba(255,255,255,0.8)]" />
@@ -178,7 +178,7 @@ export default function HeroClient() {
                     <div className="text-xl font-bold tracking-tight transition-colors group-hover:text-brand-cyan drop-shadow-[0_0_5px_rgba(255,255,255,0.2)]">
                       {stat.value}
                     </div>
-                    <div className="text-base text-muted-dark font-mono tracking-wider transition-colors group-hover:text-white/70">
+                    <div className="text-base text-muted-dark font-mono tracking-wider transition-colors group-hover:text-foreground/70">
                       {stat.label}
                     </div>
                   </div>

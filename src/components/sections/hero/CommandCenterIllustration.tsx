@@ -85,7 +85,7 @@ export default function CommandCenterIllustration({ publicBetaLabel }: Props) {
       </svg>
 
       <div className="absolute inset-0 flex flex-col items-center justify-center">
-        <span className="text-3xl font-bold tracking-tight text-white drop-shadow-[0_0_10px_rgba(255,255,255,0.3)]">
+        <span className="text-3xl font-bold tracking-tight text-foreground drop-shadow-[0_0_10px_color-mix(in_srgb,var(--foreground)_30%,transparent)]">
           {APP_VERSION}
         </span>
         <span className="text-base text-muted-dark font-mono tracking-wider mt-1">
