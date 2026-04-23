@@ -17,7 +17,7 @@ export default function EvolutionTab() {
   });
 
   return (
-    <div className="force-dark relative flex flex-col rounded-xl border border-foreground/[0.08] bg-background/80 backdrop-blur-xl overflow-hidden">
+    <div className="relative flex flex-col rounded-xl border border-foreground/[0.10] bg-background/80 backdrop-blur-xl overflow-hidden">
       <TabBackdrop tab="evolution" />
       <div className="relative flex items-center justify-between border-b border-foreground/[0.06] px-5 py-3">
         <div className="flex items-center gap-2">
@@ -42,7 +42,7 @@ export default function EvolutionTab() {
       <div className="relative">
         <svg
           viewBox={`0 0 ${width} ${height}`}
-          className="w-full h-[340px]"
+          className="w-full h-[340px] text-foreground"
           preserveAspectRatio="xMidYMid meet"
         >
           {[0, 1, 2, 3, 4, 5].map((g) => {
@@ -54,13 +54,15 @@ export default function EvolutionTab() {
                   y1={y}
                   x2={width - 30}
                   y2={y}
-                  stroke="rgba(255,255,255,0.04)"
+                  stroke="currentColor"
+                  strokeOpacity={0.12}
                   strokeDasharray="2 4"
                 />
                 <text
                   x={12}
                   y={y + 3}
-                  fill="rgba(255,255,255,0.35)"
+                  fill="currentColor"
+                  fillOpacity={0.55}
                   fontSize={16}
                   fontFamily="monospace"
                 >
@@ -80,7 +82,8 @@ export default function EvolutionTab() {
                 key={`b-${n.id}`}
                 d={`M ${p1.cx} ${p1.cy} C ${p1.cx} ${(p1.cy + p2.cy) / 2}, ${p2.cx} ${(p1.cy + p2.cy) / 2}, ${p2.cx} ${p2.cy}`}
                 fill="none"
-                stroke={isBestPath ? "#fbbf24" : "rgba(255,255,255,0.15)"}
+                stroke={isBestPath ? "#f59e0b" : "currentColor"}
+                strokeOpacity={isBestPath ? 1 : 0.28}
                 strokeWidth={isBestPath ? 2 : 1}
                 initial={{ pathLength: 0, opacity: 0 }}
                 animate={{ pathLength: 1, opacity: 1 }}
@@ -91,13 +94,15 @@ export default function EvolutionTab() {
 
           {GENOME_NODES.map((n) => {
             const { cx, cy } = nodeCoord(n);
+            const culledColor = "rgba(127,127,127,0.45)";
             const fill = !n.alive
-              ? "rgba(100, 100, 100, 0.3)"
+              ? culledColor
               : n.best
-                ? "#fbbf24"
+                ? "#f59e0b"
                 : n.fitness > 80
-                  ? "#34d399"
+                  ? "#10b981"
                   : "#06b6d4";
+            const labelFill = !n.alive ? "currentColor" : "#ffffff";
             return (
               <motion.g
                 key={n.id}
@@ -111,7 +116,7 @@ export default function EvolutionTab() {
                     cy={cy}
                     r={14}
                     fill="none"
-                    stroke="#fbbf24"
+                    stroke="#f59e0b"
                     strokeWidth={1.5}
                     animate={{ opacity: [0.3, 0.8, 0.3], r: [14, 18, 14] }}
                     transition={{ duration: 2, repeat: Infinity }}
@@ -122,7 +127,7 @@ export default function EvolutionTab() {
                   x={cx}
                   y={cy + 3}
                   textAnchor="middle"
-                  fill="white"
+                  fill={labelFill}
                   fontSize={16}
                   fontFamily="monospace"
                   fontWeight={700}
@@ -150,7 +155,7 @@ export default function EvolutionTab() {
             <span className="text-foreground/85">culled</span>
           </span>
         </span>
-        <button className="flex items-center gap-1.5 rounded-lg border border-amber-400/30 bg-amber-400/10 px-3 py-1 text-amber-300 uppercase tracking-wider">
+        <button className="flex items-center gap-1.5 rounded-lg border border-amber-500/40 bg-amber-500/15 px-3 py-1 text-amber-700 dark:text-amber-300 uppercase tracking-wider">
           <Play className="h-3 w-3" /> breed next gen
         </button>
       </div>

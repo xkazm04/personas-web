@@ -185,10 +185,10 @@ export default function BlogArticle({
                   <ArrowRight className="h-3.5 w-3.5 ml-auto opacity-0 group-hover:opacity-100 transition-opacity" />
                 </Link>
                 <Link
-                  href="/use-cases"
+                  href="/templates"
                   className="group flex items-center gap-2 rounded-lg border border-glass bg-white/[0.02] px-4 py-3 text-base text-muted hover:border-glass-hover hover:text-foreground transition-colors"
                 >
-                  Explore use cases
+                  Browse templates
                   <ArrowRight className="h-3.5 w-3.5 ml-auto opacity-0 group-hover:opacity-100 transition-opacity" />
                 </Link>
                 <Link

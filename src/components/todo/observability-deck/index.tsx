@@ -3,19 +3,14 @@
 import { useState, useCallback } from "react";
 import { motion } from "framer-motion";
 import SectionWrapper from "@/components/SectionWrapper";
-import TerminalChrome from "@/components/TerminalChrome";
 import SectionIntro from "@/components/primitives/SectionIntro";
-import { BRAND_VAR } from "@/lib/brand-theme";
 import { staggerContainer } from "@/lib/animations";
 import { leftModules, rightModules } from "./data";
 import ModuleTag from "./components/ModuleTag";
-import AnimatedMetric from "./components/AnimatedMetric";
-import ActivityFeed from "./components/ActivityFeed";
-import { useActivityFeed } from "./useActivityFeed";
+import PulseGridDeck from "./variants/PulseGridDeck";
 
 export default function ObservabilityDeck() {
   const [filterPrefix, setFilterPrefix] = useState<string | null>(null);
-  const { activity, newRow } = useActivityFeed(filterPrefix);
 
   const handleTagClick = useCallback((prefix: string) => {
     setFilterPrefix((prev) => (prev === prefix ? null : prefix));
@@ -56,38 +51,10 @@ export default function ObservabilityDeck() {
           ))}
         </div>
 
-        <div className="force-dark rounded-2xl border border-foreground/[0.08] bg-background/80 backdrop-blur-xl overflow-hidden shadow-[0_0_60px_rgba(0,0,0,0.3)]">
-          <TerminalChrome
-            title="observability-deck"
-            status="streaming"
-            info="real-time"
-            className="px-5 py-3"
-          />
-
-          <div className="grid grid-cols-2 sm:grid-cols-4 divide-x divide-white/[0.04] border-b border-foreground/[0.04]">
-            <AnimatedMetric target={96.2} suffix="%" color={BRAND_VAR.emerald} label="Success rate" trend="+2.1%" />
-            <AnimatedMetric target={3.4} suffix="s" color={BRAND_VAR.cyan} label="Avg duration" trend="-0.8s" />
-            <AnimatedMetric target={0.14} prefix="$" suffix="" color={BRAND_VAR.amber} label="Avg cost" trend="-12%" />
-            <AnimatedMetric target={12} suffix="" color={BRAND_VAR.purple} label="Active agents" trend="+3" />
-          </div>
-
-          <ActivityFeed activity={activity} newRow={newRow} />
-
-          <div className="flex items-center justify-between border-t border-foreground/[0.04] px-5 py-2.5 text-base font-mono tracking-wider uppercase text-foreground/70">
-            {filterPrefix ? (
-              <button
-                type="button"
-                onClick={() => setFilterPrefix(null)}
-                className="text-brand-cyan hover:text-brand-cyan/80 transition-colors cursor-pointer"
-              >
-                ← Show all
-              </button>
-            ) : (
-              <span>Live event stream</span>
-            )}
-            <span className="text-brand-emerald">auto-refreshing</span>
-          </div>
-        </div>
+        <PulseGridDeck
+          filterPrefix={filterPrefix}
+          onClearFilter={() => setFilterPrefix(null)}
+        />
 
         <div className="flex flex-col gap-3">
           {rightModules.map((m) => (

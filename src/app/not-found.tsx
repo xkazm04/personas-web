@@ -9,7 +9,7 @@ const POPULAR_PAGES = [
   { label: "Get Started", href: "/#get-started", icon: ArrowRight, color: "#34d399" },
   { label: "Guide", href: "/guide", icon: BookOpen, color: "#fbbf24" },
   { label: "Templates", href: "/templates", icon: Puzzle, color: "#06b6d4" },
-  { label: "Download", href: "/download", icon: Download, color: "#34d399" },
+  { label: "Download", href: "/#download", icon: Download, color: "#34d399" },
   { label: "Compare", href: "/compare", icon: Search, color: "#a855f7" },
   { label: "Security", href: "/security", icon: Shield, color: "#f43f5e" },
 ];

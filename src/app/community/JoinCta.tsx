@@ -66,7 +66,7 @@ export default function JoinCta() {
               Join Discord
             </a>
             <Link
-              href="/download"
+              href="/#download"
               className="inline-flex items-center gap-2 rounded-full border px-8 py-3 text-base font-medium transition-colors"
               style={{
                 borderColor: "var(--border-glass-strong)",

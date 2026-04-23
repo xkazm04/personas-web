@@ -1,5 +1,6 @@
 "use client";
 
+import Link from "next/link";
 import { Download, Key, Zap, ArrowRight } from "lucide-react";
 import type { Connector } from "@/data/connectors";
 
@@ -32,8 +33,8 @@ export default function SetupCTA({ connector }: { connector: Connector }) {
           ))}
         </div>
 
-        <a
-          href="/download"
+        <Link
+          href="/#download"
           className="group flex w-full items-center justify-center gap-2.5 rounded-xl px-6 py-3.5 text-sm font-semibold text-white transition-all duration-200 hover:brightness-110"
           style={{
             backgroundColor: `${connector.color}dd`,
@@ -42,7 +43,7 @@ export default function SetupCTA({ connector }: { connector: Connector }) {
         >
           Set up {connector.label} in Personas
           <ArrowRight className="h-4 w-4 transition-transform duration-200 group-hover:translate-x-0.5" />
-        </a>
+        </Link>
       </div>
     </div>
   );

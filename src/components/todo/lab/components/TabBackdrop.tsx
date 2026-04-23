@@ -17,14 +17,14 @@ export default function TabBackdrop({ tab }: { tab: TabKey }) {
           alt=""
           fill
           sizes="(min-width: 1024px) 896px, 100vw"
-          className="object-cover opacity-[0.18]"
+          className="object-cover opacity-[0.22]"
           priority={false}
         />
         <div
           className="absolute inset-0"
           style={{
             background:
-              "linear-gradient(180deg, rgba(8,10,16,0.35) 0%, rgba(8,10,16,0.8) 85%, rgba(8,10,16,0.95) 100%)",
+              "linear-gradient(180deg, rgba(8,10,16,0.55) 0%, rgba(8,10,16,0.85) 70%, rgba(8,10,16,0.96) 100%)",
           }}
         />
       </div>
@@ -36,14 +36,14 @@ export default function TabBackdrop({ tab }: { tab: TabKey }) {
           alt=""
           fill
           sizes="(min-width: 1024px) 896px, 100vw"
-          className="object-cover opacity-[0.22]"
+          className="object-cover opacity-[0.28]"
           priority={false}
         />
         <div
           className="absolute inset-0"
           style={{
             background:
-              "linear-gradient(180deg, rgba(255,255,255,0.55) 0%, rgba(255,255,255,0.88) 85%, rgba(255,255,255,0.96) 100%)",
+              "linear-gradient(180deg, rgba(255,255,255,0.75) 0%, rgba(255,255,255,0.92) 70%, rgba(255,255,255,0.98) 100%)",
           }}
         />
       </div>

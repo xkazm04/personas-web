@@ -1,5 +1,6 @@
 "use client";
 
+import { useMemo } from "react";
 import { motion } from "framer-motion";
 import { Tag, Sparkles, Wrench, Bug, AlertTriangle, type LucideIcon } from "lucide-react";
 import Navbar from "@/components/Navbar";
@@ -22,14 +23,26 @@ const CHANGE_META: Record<
   breaking: { label: "Breaking", brand: "rose", icon: AlertTriangle },
 };
 
+const releaseSectionId = (version: string) =>
+  `release-${version.replace(/\./g, "-")}`;
+
 export default function ChangelogPage() {
+  const scrollMapItems = useMemo(
+    () =>
+      RELEASES.map((r) => ({
+        label: `v${r.version}`,
+        href: `#${releaseSectionId(r.version)}`,
+      })),
+    [],
+  );
+
   return (
     <>
       <Navbar />
-      <PageShell scrollMapItems={[{ label: "CHANGELOG", href: "#changelog" }]}>
+      <PageShell scrollMapItems={scrollMapItems}>
         <div className="h-24" />
 
-        <SectionWrapper id="changelog" aria-label="Changelog">
+        <SectionWrapper aria-label="Changelog">
           <SectionIntro
             eyebrow="Changelog"
             heading="What's"
@@ -37,49 +50,6 @@ export default function ChangelogPage() {
             description="Version history and release notes for the Personas desktop app — every update, every improvement, every fix."
             className="mb-16"
           />
-
-          {/* Highlights strip — shows counts across all change types */}
-          <motion.div
-            variants={fadeUp}
-            className="mx-auto max-w-4xl mb-14 grid grid-cols-2 sm:grid-cols-4 gap-3"
-          >
-            {(Object.keys(CHANGE_META) as ChangeType[]).map((t) => {
-              const meta = CHANGE_META[t];
-              const Icon = meta.icon;
-              const count = RELEASES.flatMap((r) => r.changes).filter(
-                (c) => c.type === t
-              ).length;
-              const bv = BRAND_VAR[meta.brand];
-              return (
-                <div
-                  key={t}
-                  className="flex items-center gap-3 rounded-xl border px-4 py-3"
-                  style={{
-                    borderColor: "var(--border-glass-hover)",
-                    backgroundColor: tint(meta.brand, 8),
-                  }}
-                >
-                  <div
-                    className="flex h-10 w-10 items-center justify-center rounded-lg"
-                    style={{ backgroundColor: tint(meta.brand, 18) }}
-                  >
-                    <Icon className="h-4 w-4" style={{ color: bv }} />
-                  </div>
-                  <div className="min-w-0">
-                    <div
-                      className="text-2xl font-extrabold tabular-nums tracking-tight"
-                      style={{ color: bv }}
-                    >
-                      {count}
-                    </div>
-                    <div className="text-base font-medium text-muted-dark leading-none mt-0.5">
-                      {meta.label}
-                    </div>
-                  </div>
-                </div>
-              );
-            })}
-          </motion.div>
 
           {/* Timeline */}
           <motion.div
@@ -98,8 +68,9 @@ export default function ChangelogPage() {
             {RELEASES.map((release, i) => (
               <motion.div
                 key={release.version}
+                id={releaseSectionId(release.version)}
                 variants={fadeUp}
-                className="relative pl-16 pb-14 last:pb-0"
+                className="relative pl-16 pb-14 last:pb-0 scroll-mt-28"
               >
                 {/* Version bubble */}
                 <div

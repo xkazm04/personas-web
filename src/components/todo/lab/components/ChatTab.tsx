@@ -59,7 +59,7 @@ export default function ChatTab() {
   }, [reduced, run]);
 
   return (
-    <div className="force-dark relative flex flex-col rounded-xl border border-foreground/[0.08] bg-background/80 backdrop-blur-xl overflow-hidden">
+    <div className="relative flex flex-col rounded-xl border border-foreground/[0.10] bg-background/80 backdrop-blur-xl overflow-hidden">
       <TabBackdrop tab="chat" />
       <div className="relative flex items-center justify-between border-b border-foreground/[0.06] px-5 py-3">
         <div className="flex items-center gap-2">
@@ -90,12 +90,12 @@ export default function ChatTab() {
                   key={`diff-${i}`}
                   initial={{ opacity: 0, scale: 0.95 }}
                   animate={{ opacity: 1, scale: 1 }}
-                  className="ml-10 rounded-lg border border-emerald-400/20 bg-emerald-500/5 px-3 py-2"
+                  className="ml-10 rounded-lg border border-emerald-500/35 bg-emerald-500/10 px-3 py-2"
                 >
-                  <div className="text-base font-mono uppercase tracking-widest text-emerald-400/80 mb-1">
+                  <div className="text-base font-mono uppercase tracking-widest text-emerald-700 dark:text-emerald-400 mb-1">
                     applied diff
                   </div>
-                  <pre className="font-mono text-base text-emerald-300/90 leading-relaxed whitespace-pre-wrap">
+                  <pre className="font-mono text-base text-emerald-800 dark:text-emerald-300 leading-relaxed whitespace-pre-wrap">
                     {msg.content}
                   </pre>
                 </motion.div>
@@ -123,8 +123,8 @@ export default function ChatTab() {
                 <div
                   className={`max-w-[78%] rounded-xl border px-4 py-2 ${
                     isUser
-                      ? "rounded-tr-sm border-brand-cyan/20 bg-brand-cyan/[0.06] text-foreground"
-                      : "rounded-tl-sm border-foreground/[0.08] bg-foreground/[0.03] text-foreground/90"
+                      ? "rounded-tr-sm border-brand-cyan/40 bg-brand-cyan/15 text-foreground"
+                      : "rounded-tl-sm border-foreground/15 bg-foreground/[0.06] text-foreground/90"
                   }`}
                 >
                   <p className="text-base leading-relaxed">{msg.content}</p>

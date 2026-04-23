@@ -35,7 +35,7 @@ export default function ConnectorCard({
           alt=""
           width={120}
           height={120}
-          className="opacity-[0.04] transition-[opacity,transform] duration-500 group-hover:opacity-[0.12] group-hover:scale-110"
+          className="opacity-[0.04] transition-[opacity,transform] duration-500 group-hover:opacity-100 group-hover:scale-110"
           onError={(e) => {
             (e.target as HTMLImageElement).style.display = "none";
           }}

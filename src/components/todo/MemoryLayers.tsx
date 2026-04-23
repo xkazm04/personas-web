@@ -1,47 +1,13 @@
 "use client";
 
-import { useState } from "react";
-import { motion, AnimatePresence } from "framer-motion";
-import { Layers, Radar, GitBranch } from "lucide-react";
+import { motion } from "framer-motion";
 import GradientText from "@/components/GradientText";
 import SectionHeading from "@/components/SectionHeading";
 import SectionWrapper from "@/components/SectionWrapper";
 import { fadeUp, staggerContainer } from "@/lib/animations";
 import MemoryLayersStack from "./MemoryLayersStack";
-import MemoryLayersNeural from "./MemoryLayersNeural";
-import MemoryLayersGraph from "./memory-layers-graph";
-
-type Variant = "stack" | "neural" | "graph";
-
-const VARIANTS: {
-  key: Variant;
-  label: string;
-  icon: typeof Layers;
-  blurb: string;
-}[] = [
-  {
-    key: "stack",
-    label: "Cortical Layers",
-    icon: Layers,
-    blurb: "Geological strata by category — most important at the surface",
-  },
-  {
-    key: "neural",
-    label: "Neural Hub",
-    icon: Radar,
-    blurb: "Central brain with four cortical arms radiating outward",
-  },
-  {
-    key: "graph",
-    label: "Memory Graph",
-    icon: GitBranch,
-    blurb: "Stacking nodes around category hubs, bridged by shared tags",
-  },
-];
 
 export default function MemoryLayers() {
-  const [active, setActive] = useState<Variant>("stack");
-
   return (
     <SectionWrapper id="memory-layers" className="relative overflow-hidden">
       {/* Atmospheric background */}
@@ -75,59 +41,15 @@ export default function MemoryLayers() {
         </motion.p>
       </motion.div>
 
-      {/* Variant tab switcher */}
       <motion.div
-        variants={fadeUp}
-        initial="hidden"
-        whileInView="visible"
+        initial={{ opacity: 0, y: 12 }}
+        whileInView={{ opacity: 1, y: 0 }}
         viewport={{ once: true }}
-        className="mt-10 mx-auto max-w-lg relative z-10"
+        transition={{ duration: 0.35 }}
+        className="mt-10"
       >
-        <div className="flex items-center gap-1 rounded-xl border border-foreground/[0.08] bg-foreground/[0.02] p-1">
-          {VARIANTS.map((v) => {
-            const VIcon = v.icon;
-            const isActive = active === v.key;
-            return (
-              <button
-                key={v.key}
-                onClick={() => setActive(v.key)}
-                aria-pressed={isActive}
-                className={`flex-1 flex items-center justify-center gap-2 rounded-lg px-4 py-2.5 text-base font-medium transition-all duration-200 ${
-                  isActive
-                    ? "bg-foreground/[0.08] text-foreground shadow-sm"
-                    : "text-foreground/60 hover:text-foreground/85 hover:bg-foreground/[0.04]"
-                }`}
-              >
-                <VIcon className="h-4 w-4" />
-                {v.label}
-              </button>
-            );
-          })}
-        </div>
-        <div className="mt-3 text-center text-base font-mono text-foreground/60 uppercase tracking-widest">
-          {VARIANTS.find((v) => v.key === active)?.blurb}
-        </div>
+        <MemoryLayersStack />
       </motion.div>
-
-      {/* Active variant */}
-      <AnimatePresence mode="wait">
-        <motion.div
-          key={active}
-          initial={{ opacity: 0, y: 12 }}
-          animate={{ opacity: 1, y: 0 }}
-          exit={{ opacity: 0, y: -12 }}
-          transition={{ duration: 0.35 }}
-          className="mt-10"
-        >
-          {active === "stack" ? (
-            <MemoryLayersStack />
-          ) : active === "neural" ? (
-            <MemoryLayersNeural />
-          ) : (
-            <MemoryLayersGraph />
-          )}
-        </motion.div>
-      </AnimatePresence>
 
       {/* Capability pills */}
       <motion.div

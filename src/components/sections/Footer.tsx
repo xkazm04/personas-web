@@ -16,9 +16,7 @@ function useColumns() {
       title: t.footer.product,
       links: [
         { label: t.sections.features, href: "/features" },
-        { label: t.nav.useCases, href: "/use-cases" },
         { label: t.nav.templates, href: "/templates" },
-        { label: t.sections.download, href: "/download" },
       ],
     },
     {

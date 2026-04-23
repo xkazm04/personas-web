@@ -49,7 +49,7 @@ export default function ArenaTab() {
   }
 
   return (
-    <div className="force-dark relative flex flex-col rounded-xl border border-foreground/[0.08] bg-background/80 backdrop-blur-xl overflow-hidden">
+    <div className="relative flex flex-col rounded-xl border border-foreground/[0.10] bg-background/80 backdrop-blur-xl overflow-hidden">
       <TabBackdrop tab="arena" />
       <div className="relative flex items-center justify-between border-b border-foreground/[0.06] px-5 py-3">
         <div className="flex items-center gap-2">
@@ -75,7 +75,7 @@ export default function ArenaTab() {
         <div className="font-mono text-base text-foreground/90">&gt; {round.input}</div>
       </div>
 
-      <div className="relative grid grid-cols-1 sm:grid-cols-2 divide-y sm:divide-y-0 sm:divide-x divide-white/[0.06]">
+      <div className="relative grid grid-cols-1 sm:grid-cols-2 divide-y sm:divide-y-0 sm:divide-x divide-foreground/[0.10]">
         {(["A", "B"] as const).map((side) => {
           const isWinner = phase === "result" && round.winner === side;
           const isLoser = phase === "result" && round.winner !== side;
@@ -86,10 +86,10 @@ export default function ArenaTab() {
               key={`${side}-${currentRound}`}
               animate={{
                 backgroundColor: isWinner
-                  ? `${color}0e`
+                  ? `${color}1f`
                   : isLoser
-                    ? "rgba(244,63,94,0.04)"
-                    : "rgba(255,255,255,0)",
+                    ? "rgba(244,63,94,0.10)"
+                    : "transparent",
               }}
               className="relative px-5 py-6 min-h-[160px] flex flex-col"
             >

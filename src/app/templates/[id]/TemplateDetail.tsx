@@ -5,7 +5,7 @@ import Link from "next/link";
 import { motion, AnimatePresence } from "framer-motion";
 import {
   ArrowLeft, Download, Copy, Check, Clock, Webhook,
-  Mouse, Zap, Radio, ChevronRight, ExternalLink, X,
+  Mouse, Zap, Radio, ChevronRight, ExternalLink, X, Link2,
 } from "lucide-react";
 import { templates, categoryColors, difficultyColors } from "@/lib/templates";
 import { fadeUp, staggerContainer } from "@/lib/animations";
@@ -134,66 +134,97 @@ export default function TemplateDetail({ templateId }: { templateId: string }) {
             </Link>
           </motion.div>
 
-          {/* Hero */}
+          {/* Hero — 2-col with Key Benefits side panel */}
           <motion.section variants={fadeUp} className="mb-12">
-            <div className="flex items-start gap-5 mb-4">
-              <div
-                className="flex h-16 w-16 shrink-0 items-center justify-center rounded-2xl"
-                style={{ backgroundColor: `${template.toolColor}15` }}
-              >
-                <ToolIcon className="h-8 w-8" style={{ color: iconColor }} />
-              </div>
+            <div className="grid gap-8 lg:grid-cols-[1fr_1fr] items-start">
+              {/* Left: identity + description + meta pills */}
               <div>
-                <h1 className="text-3xl font-bold text-foreground">{template.title}</h1>
-                <p className="mt-1 text-base text-muted-dark">{template.tool}</p>
+                <div
+                  className="mb-4 flex h-14 w-14 items-center justify-center rounded-2xl"
+                  style={{ backgroundColor: `${template.toolColor}15` }}
+                >
+                  <ToolIcon className="h-7 w-7" style={{ color: iconColor }} />
+                </div>
+                <h1 className="text-3xl sm:text-4xl font-extrabold tracking-tight text-foreground mb-2">
+                  {template.title}
+                </h1>
+                <p className="text-lg text-muted/80 italic mb-4">{template.tool}</p>
+                <p className="text-base text-muted leading-relaxed mb-6">
+                  {template.description}
+                </p>
+                <div className="flex flex-wrap gap-2">
+                  <span className={`rounded-full border px-3 py-1 text-sm font-medium ${categoryColors[template.category]}`}>{template.category}</span>
+                  <span className={`rounded-full border px-3 py-1 text-sm font-medium ${difficultyColors[template.difficulty]}`}>{template.difficulty}</span>
+                  <span className={`rounded-full border px-3 py-1 text-sm font-medium ${complexityColors[template.complexity]}`}>{template.complexity}</span>
+                </div>
               </div>
-            </div>
-            <p className="mb-5 text-lg leading-relaxed text-muted-dark">{template.description}</p>
-            <div className="mb-6 flex flex-wrap gap-2">
-              <span className={`rounded-full border px-3 py-1 text-sm font-medium ${categoryColors[template.category]}`}>{template.category}</span>
-              <span className={`rounded-full border px-3 py-1 text-sm font-medium ${difficultyColors[template.difficulty]}`}>{template.difficulty}</span>
-              <span className={`rounded-full border px-3 py-1 text-sm font-medium ${complexityColors[template.complexity]}`}>{template.complexity}</span>
-            </div>
-            <div className="flex flex-wrap gap-2">
-              {template.serviceFlow.map((s) => (
-                <span key={s} className="rounded-full border border-glass-hover bg-white/[0.04] px-4 py-1.5 text-base font-medium text-foreground">
-                  {s}
-                </span>
-              ))}
-            </div>
-          </motion.section>
 
-          {/* Design Highlights */}
-          {template.designHighlights.length > 0 && (
-            <motion.section variants={fadeUp} className="mb-12">
-              <h2 className="mb-4 text-xl font-semibold text-foreground">Design Highlights</h2>
-              <div className="grid gap-3 sm:grid-cols-2">
-                {template.designHighlights.map((h) => (
-                  <div key={h} className="flex items-start gap-3 rounded-xl border border-glass bg-white/[0.02] p-4 backdrop-blur-sm">
-                    <Check className="mt-0.5 h-4 w-4 shrink-0 text-brand-emerald" />
-                    <span className="text-base text-muted-dark">{h}</span>
-                  </div>
-                ))}
-              </div>
-            </motion.section>
-          )}
+              {/* Right: Key Benefits + Triggers/Services chips */}
+              <div className="rounded-xl border border-glass bg-white/[0.02] backdrop-blur-sm p-6">
+                {template.designHighlights.length > 0 && (
+                  <>
+                    <h3 className="text-base font-semibold text-foreground uppercase tracking-wider mb-4">
+                      Key Benefits
+                    </h3>
+                    <ul className="space-y-3">
+                      {template.designHighlights.map((h) => (
+                        <li key={h} className="flex items-start gap-2.5 text-base text-muted">
+                          <Check
+                            className="h-4 w-4 shrink-0 mt-0.5"
+                            style={{ color: iconColor }}
+                          />
+                          <span>{h}</span>
+                        </li>
+                      ))}
+                    </ul>
+                  </>
+                )}
 
-          {/* Triggers */}
-          <motion.section variants={fadeUp} className="mb-12">
-            <h2 className="mb-4 text-xl font-semibold text-foreground">Triggers</h2>
-            <div className="flex flex-col gap-3">
-              {template.triggers.map((t) => {
-                const Icon = triggerIcons[t] ?? Zap;
-                return (
-                  <div key={t} className="flex items-center gap-3 rounded-xl border border-glass bg-white/[0.02] p-4 backdrop-blur-sm">
-                    <Icon className="h-5 w-5 shrink-0" style={{ color: iconColor }} />
-                    <div>
-                      <span className="text-base font-medium capitalize text-foreground">{t}</span>
-                      <p className="text-sm text-muted-dark">{triggerDescriptions[t] ?? "Custom trigger"}</p>
+                <div
+                  className={`grid grid-cols-2 gap-4 ${template.designHighlights.length > 0 ? "mt-6 pt-4 border-t border-glass" : ""}`}
+                >
+                  <div>
+                    <h4 className="text-sm font-medium text-muted uppercase tracking-wider mb-2 flex items-center gap-1.5">
+                      <Zap className="h-3 w-3" /> Triggers
+                    </h4>
+                    <div className="flex flex-wrap gap-1.5">
+                      {template.triggers.map((t) => {
+                        const Icon = triggerIcons[t] ?? Zap;
+                        return (
+                          <span
+                            key={t}
+                            className="inline-flex items-center gap-1.5 rounded-full border border-glass-hover bg-white/3 px-2.5 py-0.5 text-sm text-muted capitalize"
+                            title={triggerDescriptions[t] ?? "Custom trigger"}
+                          >
+                            <Icon className="h-3 w-3" style={{ color: iconColor }} />
+                            {t}
+                          </span>
+                        );
+                      })}
                     </div>
                   </div>
-                );
-              })}
+                  <div>
+                    <h4 className="text-sm font-medium text-muted uppercase tracking-wider mb-2 flex items-center gap-1.5">
+                      <Link2 className="h-3 w-3" /> Services
+                    </h4>
+                    <div className="flex flex-wrap gap-1.5">
+                      {template.serviceFlow.slice(0, 5).map((s) => (
+                        <span
+                          key={s}
+                          className="rounded-full border border-glass-hover bg-white/3 px-2.5 py-0.5 text-sm text-muted"
+                        >
+                          {s}
+                        </span>
+                      ))}
+                      {template.serviceFlow.length > 5 && (
+                        <span className="rounded-full border border-glass-hover bg-white/3 px-2.5 py-0.5 text-sm text-muted">
+                          +{template.serviceFlow.length - 5}
+                        </span>
+                      )}
+                    </div>
+                  </div>
+                </div>
+              </div>
             </div>
           </motion.section>
 

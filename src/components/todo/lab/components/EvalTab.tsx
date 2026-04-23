@@ -35,7 +35,7 @@ export default function EvalTab() {
   const avgBaseline = Math.round(baselineValues.reduce((s, v) => s + v, 0) / n);
 
   return (
-    <div className="force-dark relative flex flex-col rounded-xl border border-foreground/[0.08] bg-background/80 backdrop-blur-xl overflow-hidden">
+    <div className="relative flex flex-col rounded-xl border border-foreground/[0.10] bg-background/80 backdrop-blur-xl overflow-hidden">
       <TabBackdrop tab="eval" />
       <div className="relative flex items-center justify-between border-b border-foreground/[0.06] px-5 py-3">
         <div className="flex items-center gap-2">
@@ -62,7 +62,7 @@ export default function EvalTab() {
 
       <div className="relative grid md:grid-cols-[1fr_220px] gap-4 p-5">
         <div className="flex items-center justify-center">
-          <svg viewBox="0 0 400 400" className="w-full max-w-[340px] h-auto">
+          <svg viewBox="0 0 400 400" className="w-full max-w-[340px] h-auto text-foreground">
             {[0.25, 0.5, 0.75, 1].map((f) => (
               <circle
                 key={f}
@@ -70,7 +70,8 @@ export default function EvalTab() {
                 cy={cy}
                 r={rMax * f}
                 fill="none"
-                stroke="rgba(255,255,255,0.05)"
+                stroke="currentColor"
+                strokeOpacity={0.12}
                 strokeWidth={1}
               />
             ))}
@@ -83,15 +84,18 @@ export default function EvalTab() {
                   y1={cy}
                   x2={p.x}
                   y2={p.y}
-                  stroke="rgba(255,255,255,0.06)"
+                  stroke="currentColor"
+                  strokeOpacity={0.15}
                   strokeWidth={1}
                 />
               );
             })}
             <motion.path
               d={scorePath(baselineValues)}
-              fill="rgba(255,255,255,0.04)"
-              stroke="rgba(255,255,255,0.25)"
+              fill="currentColor"
+              fillOpacity={0.08}
+              stroke="currentColor"
+              strokeOpacity={0.4}
               strokeWidth={1.25}
               strokeDasharray="4 4"
               initial={{ opacity: 0 }}
@@ -100,8 +104,8 @@ export default function EvalTab() {
             />
             <motion.path
               d={scorePath(scoreValues)}
-              fill="rgba(52, 211, 153, 0.18)"
-              stroke="#34d399"
+              fill="rgba(16, 185, 129, 0.28)"
+              stroke="#10b981"
               strokeWidth={2}
               initial={{ opacity: 0, scale: 0.6 }}
               animate={{ opacity: 1, scale: 1 }}
@@ -117,7 +121,7 @@ export default function EvalTab() {
                     cx={p.x}
                     cy={p.y}
                     r={4}
-                    fill="#34d399"
+                    fill="#10b981"
                     initial={{ opacity: 0 }}
                     animate={{ opacity: 1 }}
                     transition={{ delay: 0.8 + i * 0.08 }}
@@ -126,7 +130,7 @@ export default function EvalTab() {
                     x={labelP.x}
                     y={labelP.y}
                     textAnchor="middle"
-                    fill="white"
+                    fill="currentColor"
                     fontSize={16}
                     fontFamily="monospace"
                     opacity={0.85}
