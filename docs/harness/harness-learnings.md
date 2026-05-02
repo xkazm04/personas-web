@@ -54,6 +54,9 @@
 - `extractSteps()` in topic page.tsx only parses the first `:::steps` block's structure. Topics with multiple `:::steps` blocks generate HowTo with steps from all blocks concatenated — verify this produces valid schema.org data.
 - Category-level pages (`/guide/[category]`) don't have HowTo or enhanced meta yet — only individual topics do. Consider adding ItemList JSON-LD to category pages.
 
+## Resolved phantoms (2026-05-02)
+- `src/components/sections/MidPageCTA.tsx` was listed in the Conversion & Onboarding context's `filePaths` but never existed on disk. Removed from the Vibeman context (id `ctx_1776164915188_4gzhnzf`) so future scans don't re-flag. If a real mid-page CTA is wanted, the Wave 1 finding's recommendation was to factor `DownloadCTA.tsx` into a reusable `<DownloadCTA variant="full" | "compact">` rather than create a new component.
+
 ## Open follow-ups (from Run #12, 2026-04-10)
 - ~~`/compare` page has no structured data~~ DONE (Run #32) — Enhanced JSON-LD with SoftwareApplication types + applicationCategory per competitor
 - Competitor data in `comparison.ts` should be periodically verified against live competitor sites for accuracy
