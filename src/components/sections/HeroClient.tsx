@@ -77,7 +77,10 @@ export default function HeroClient() {
         {/* Left — text */}
         <div className="text-center lg:text-left">
           <motion.div variants={fadeUp}>
-            <span className="ml-[500px] relative inline-flex items-center overflow-hidden rounded-full border border-brand-cyan/80 bg-brand-cyan/5 px-4 py-1.5 text-lg font-bold tracking-wider uppercase text-brand-cyan font-mono shadow-[0_0_15px_color-mix(in_srgb,var(--brand-cyan)_20%,transparent)]">
+            {/* The lg:ml-[500px] gates the desktop-only horizontal nudge that
+                positions the badge over the right command-center card. Below
+                lg, the badge sits inline within the centered text column. */}
+            <span className="lg:ml-[500px] relative inline-flex items-center overflow-hidden rounded-full border border-brand-cyan/80 bg-brand-cyan/5 px-4 py-1.5 text-lg font-bold tracking-wider uppercase text-brand-cyan font-mono shadow-[0_0_15px_color-mix(in_srgb,var(--brand-cyan)_20%,transparent)]">
               <span
                 className="absolute inset-0 animate-shimmer bg-linear-to-r from-transparent via-brand-cyan/10 to-transparent"
                 style={{ animationDuration: "3s" }}
