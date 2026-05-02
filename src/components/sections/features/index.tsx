@@ -69,10 +69,10 @@ export default function Features() {
           </svg>
 
           <div className="grid gap-6 md:grid-cols-3">
-            {features.slice(1).map((f, i) => (
+            {features.slice(1).map((f) => (
               <motion.div
                 key={f.title}
-                variants={gridCardVariants[i]}
+                variants={gridCardVariants[f.entrance]}
                 whileHover={shouldReduceMotion ? undefined : { scale: 1.02, boxShadow: `0 0 20px rgba(255,255,255,0.05)` }}
                 transition={TRANSITION_NORMAL}
               >

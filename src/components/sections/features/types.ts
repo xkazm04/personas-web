@@ -10,6 +10,14 @@ import type { GuideTopicRef } from "@/lib/guide-link";
  */
 export type GuideLink = GuideTopicRef;
 
+/**
+ * Animation entrance for a feature card. Decoupled from card position
+ * so reordering features doesn't silently re-shuffle entrance variants
+ * (the previous gridCardVariants[i] index lookup would). The hero card
+ * uses heroSlideIn directly and ignores this field.
+ */
+export type FeatureEntrance = "slideLeft" | "fadeUp" | "slideRight";
+
 export interface Feature {
   icon: LucideIcon;
   /**
@@ -18,6 +26,8 @@ export interface Feature {
    * @/lib/brand-theme.
    */
   accent: BrandAccent;
+  /** Grid-card entrance animation. Hero card ignores this. */
+  entrance: FeatureEntrance;
   number: string;
   title: string;
   proof: string;

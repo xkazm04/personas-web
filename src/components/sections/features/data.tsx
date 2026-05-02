@@ -1,6 +1,6 @@
 import type { Variants } from "framer-motion";
 import { Wand2, Zap, Cloud, Activity } from "lucide-react";
-import type { Feature } from "./types";
+import type { Feature, FeatureEntrance } from "./types";
 import { DesignVisual, CoordinateVisual, DeployVisual, TelemetryVisual } from "./components/visuals";
 
 export const cardOrchestrator: Variants = {
@@ -18,8 +18,13 @@ export const heroSlideIn: Variants = {
   },
 };
 
-export const gridCardVariants: Variants[] = [
-  {
+/**
+ * Grid-card entrance variants keyed by the FeatureEntrance discriminator
+ * on each Feature. Adding a 5th feature is `entrance: "fadeUp"` (or any
+ * existing key); no parallel array to keep in sync, no silent index drift.
+ */
+export const gridCardVariants: Record<FeatureEntrance, Variants> = {
+  slideLeft: {
     hidden: { opacity: 0, x: -40, rotate: -2 },
     visible: {
       opacity: 1,
@@ -28,7 +33,7 @@ export const gridCardVariants: Variants[] = [
       transition: { duration: 0.6, ease: [0.22, 1, 0.36, 1] },
     },
   },
-  {
+  fadeUp: {
     hidden: { opacity: 0, y: 40, rotate: -1 },
     visible: {
       opacity: 1,
@@ -37,7 +42,7 @@ export const gridCardVariants: Variants[] = [
       transition: { duration: 0.6, ease: [0.22, 1, 0.36, 1] },
     },
   },
-  {
+  slideRight: {
     hidden: { opacity: 0, x: 40, rotate: 2 },
     visible: {
       opacity: 1,
@@ -46,7 +51,7 @@ export const gridCardVariants: Variants[] = [
       transition: { duration: 0.6, ease: [0.22, 1, 0.36, 1] },
     },
   },
-];
+};
 
 export const connectorDraw: Variants = {
   hidden: { pathLength: 0, opacity: 0 },
@@ -61,6 +66,7 @@ export const features: Feature[] = [
   {
     icon: Wand2,
     accent: "purple",
+    entrance: "fadeUp",
     number: "01",
     title: "Design with natural language",
     proof: "Prompt scaffolding",
@@ -75,6 +81,7 @@ export const features: Feature[] = [
   {
     icon: Zap,
     accent: "cyan",
+    entrance: "slideLeft",
     number: "02",
     title: "Agents that coordinate",
     proof: "Event-driven chaining",
@@ -89,6 +96,7 @@ export const features: Feature[] = [
   {
     icon: Cloud,
     accent: "emerald",
+    entrance: "fadeUp",
     number: "03",
     title: "One-click cloud deployment",
     proof: "Hybrid execution",
@@ -103,6 +111,7 @@ export const features: Feature[] = [
   {
     icon: Activity,
     accent: "amber",
+    entrance: "slideRight",
     number: "04",
     title: "Full visibility",
     proof: "Operational telemetry",
