@@ -5,6 +5,49 @@ import { useInView, useReducedMotion } from "framer-motion";
 import { commands, getTypingDelay } from "./data";
 import type { OutputLine, TerminalPhase } from "./types";
 
+/* ── Phase machine ────────────────────────────────────────────────────
+ *
+ *           in-view? ─ no ─→ stays idle
+ *              │
+ *             yes (after 600ms warm-up)
+ *              ↓
+ *   ┌──→  typing  ─ per-char setTimeout, advances typedText
+ *   │       │
+ *   │      done typing (or reduced-motion: instant)
+ *   │       ↓
+ *   │     output  ─ per-line setTimeout, advances outputLines
+ *   │       │
+ *   │      done outputting → advanceToNext()
+ *   │       │
+ *   │       ├─ more commands? ─→ typing  (next command)
+ *   │       └─ last command   ─→ summary
+ *   │                              │
+ *   │                          show summary lines, wait 3s
+ *   │                              ↓
+ *   │                            done   (cursor blink)
+ *   │                              │
+ *   │                          wait 4s
+ *   │                              ↓
+ *   └─────────────────────── restart() resets everything
+ *
+ * Cleanup: every setTimeout is parked in timeoutRef so it can be
+ * cleared on unmount, on Skip, or on Restart. isActiveRef is a mount
+ * guard so a setTimeout that fires after unmount doesn't call setState.
+ *
+ * Skip jumps the current command straight to "fully output" without
+ * waiting for the typing/output timers; behavior matches normal
+ * advancement otherwise.
+ *
+ * NOTE (deferred follow-up): the state machine is spread across 4
+ * useEffect blocks plus 3 callbacks. A pure reducer + thin hook would
+ * isolate the transitions so they could be unit-tested. Deferred
+ * because (a) the project has no unit-test runner configured today
+ * (only Playwright e2e), so the "testability win" wouldn't be realized
+ * immediately, and (b) any rewrite of this state machine carries
+ * behavioral risk that needs visual verification. See harness finding
+ * platform-showcase.md #7 when a test runner is added.
+ * ───────────────────────────────────────────────────────────────────── */
+
 export function useTerminalSequence(
   terminalRef: React.RefObject<HTMLDivElement | null>
 ) {
@@ -23,6 +66,7 @@ export function useTerminalSequence(
   const timeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
   const isActiveRef = useRef(true);
 
+  /* ── Mount guard + timeout cleanup on unmount ────────────────────── */
   useEffect(() => {
     return () => {
       isActiveRef.current = false;
@@ -30,6 +74,7 @@ export function useTerminalSequence(
     };
   }, []);
 
+  /* ── idle → typing  (warm-up after the section enters viewport) ──── */
   useEffect(() => {
     if (isInView && phase === "idle") {
       timeoutRef.current = setTimeout(() => {
@@ -38,6 +83,7 @@ export function useTerminalSequence(
     }
   }, [isInView, phase]);
 
+  /* ── typing phase: advance typedText one char at a time ──────────── */
   useEffect(() => {
     if (phase !== "typing" || !isActiveRef.current) return;
 
@@ -68,6 +114,8 @@ export function useTerminalSequence(
     }
   }, [phase, typedText, currentCommandIndex, prefersReducedMotion]);
 
+  /* ── advanceToNext: snapshot current command into history, then
+        either move to the next typing cycle or transition to summary */
   const advanceToNext = useCallback(() => {
     const cmd = commands[currentCommandIndex];
 
@@ -87,6 +135,7 @@ export function useTerminalSequence(
     }
   }, [currentCommandIndex, outputLines]);
 
+  /* ── Skip: jumps the current command to its full output and advances */
   const skipCommand = useCallback(() => {
     if (timeoutRef.current) clearTimeout(timeoutRef.current);
 
@@ -107,6 +156,7 @@ export function useTerminalSequence(
     }
   }, [phase, currentCommandIndex]);
 
+  /* ── Restart: reset to first command, clear history and summary ──── */
   const restart = useCallback(() => {
     if (timeoutRef.current) clearTimeout(timeoutRef.current);
     setCurrentCommandIndex(0);
@@ -117,6 +167,7 @@ export function useTerminalSequence(
     setPhase("typing");
   }, []);
 
+  /* ── output phase: append output lines one at a time ─────────────── */
   useEffect(() => {
     if (phase !== "output" || !isActiveRef.current) return;
 
@@ -146,6 +197,7 @@ export function useTerminalSequence(
     }
   }, [phase, outputLines, currentCommandIndex, prefersReducedMotion, advanceToNext]);
 
+  /* ── summary → done → restart cycle ──────────────────────────────── */
   useEffect(() => {
     if (phase !== "summary" || !isActiveRef.current) return;
 
