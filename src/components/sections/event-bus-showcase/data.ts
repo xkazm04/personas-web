@@ -56,8 +56,13 @@ export const queueRouteSeeds = [
 
 export const defaultTelemetryAdapter = createMockQueueTelemetryAdapter(queueRouteSeeds, 1400);
 
-const SWARM_TOOL_IDS = ["gmail", "slack", "github", "jira", "figma", "discord", "notion", "docker", "python", "redis"];
-export const swarmTools = EXTENDED_TOOLS.filter((t) => SWARM_TOOL_IDS.includes(t.id));
+/**
+ * The swarm visualization picks up any tool tagged `swarmFeatured: true`
+ * in the central tool catalogue (src/lib/tool-catalogue.ts). Single source
+ * of truth — adding a new featured tool means flipping a flag there, not
+ * updating a hardcoded id list here too.
+ */
+export const swarmTools = EXTENDED_TOOLS.filter((t) => t.swarmFeatured);
 
 export const variantTabs: { id: QueueVariant; label: string; hint: string }[] = [
   { id: "swarm", label: "Live Connections", hint: "Real-time activity" },
