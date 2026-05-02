@@ -55,6 +55,7 @@ export default function WhyAgents({ role }: { role?: ViewerRole }) {
       <ScenarioHeader copy={copy} role={role} />
 
       <ScenarioSelector
+        scenarios={scenarios}
         activeIndex={activeIndex}
         onSelect={(i) => {
           setActiveIndex(i);
@@ -88,6 +89,7 @@ export default function WhyAgents({ role }: { role?: ViewerRole }) {
 
       <ScenarioDuel
         activeIndex={activeIndex}
+        total={scenarios.length}
         scenario={scenario}
         wfMinH={measuredWfHeight}
         agMinH={measuredAgHeight}
@@ -96,6 +98,7 @@ export default function WhyAgents({ role }: { role?: ViewerRole }) {
       />
 
       <ScenarioProgress
+        scenarios={scenarios}
         activeIndex={activeIndex}
         paused={paused}
         scenarioId={scenario.id}

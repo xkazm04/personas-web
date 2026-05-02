@@ -3,12 +3,14 @@
 import { motion } from "framer-motion";
 import { fadeUp } from "@/lib/animations";
 import { ThemedChip } from "@/components/primitives";
-import { scenarios } from "../data";
+import type { Scenario } from "../types";
 
 export default function ScenarioSelector({
+  scenarios,
   activeIndex,
   onSelect,
 }: {
+  scenarios: Scenario[];
   activeIndex: number;
   onSelect: (i: number) => void;
 }) {
