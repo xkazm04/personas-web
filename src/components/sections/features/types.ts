@@ -1,12 +1,14 @@
 import type { LucideIcon } from "lucide-react";
 import type { ReactNode } from "react";
 import type { BrandAccent } from "@/lib/brand-theme";
+import type { GuideTopicRef } from "@/lib/guide-link";
 
-export interface GuideLink {
-  label: string;
-  category: string;
-  topic: string;
-}
+/**
+ * Re-export so older imports `import type { GuideLink } from "../types"`
+ * continue to work; new code should import GuideTopicRef from
+ * @/lib/guide-link directly.
+ */
+export type GuideLink = GuideTopicRef;
 
 export interface Feature {
   icon: LucideIcon;
@@ -21,5 +23,5 @@ export interface Feature {
   proof: string;
   description: string;
   visual: ReactNode;
-  guideTopics: GuideLink[];
+  guideTopics: GuideTopicRef[];
 }

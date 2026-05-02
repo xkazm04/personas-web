@@ -29,3 +29,25 @@ export function openGuideLink(url: string): void {
 
   window.open(url, "_blank", "noopener,noreferrer");
 }
+
+/**
+ * Canonical reference to a guide topic. Use this type wherever a
+ * marketing surface (feature card, vision tile, scenario duel) wants to
+ * link into the guide system. Centralizes the {category, topic} shape
+ * so renames/locale prefixes only touch one place.
+ */
+export interface GuideTopicRef {
+  label: string;
+  category: string;
+  topic: string;
+}
+
+/**
+ * Build the canonical guide URL for a topic ref. Pair with openGuideLink
+ * for the desktop-aware navigation:
+ *
+ *   <button onClick={() => openGuideLink(guideHref(ref))}>...</button>
+ */
+export function guideHref(ref: GuideTopicRef): string {
+  return `/guide/${ref.category}/${ref.topic}`;
+}
