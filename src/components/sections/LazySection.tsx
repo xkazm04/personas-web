@@ -23,15 +23,28 @@ export function SectionSkeleton() {
 }
 
 /**
- * Shared helper to create a client-side-only lazy section with a skeleton.
- * Standardizes the ssr: false and loading pattern across the app.
+ * Create a lazy-loaded section.
+ *
+ * SSR decision tree:
+ *   - Use ssr: true (default) for sections that:
+ *       * Are above the fold or near it (Vision, Pricing, FAQ).
+ *       * Render meaningful content for crawlers / first paint.
+ *       * Have no browser-only dependencies (window, IntersectionObserver, canvas/SMIL, etc).
+ *   - Use ssr: false for sections that:
+ *       * Use browser-only APIs (canvas-driven visualizations, framer-motion in-view triggers).
+ *       * Mount heavy framer-motion subtrees that bloat first paint.
+ *       * Are below the fold AND fully decorative.
+ *     Common ssr: false: AgentsTimeline, AgentsChat, PlatformLayers — all far below the fold
+ *     with framer-motion entry animations triggered by IntersectionObserver.
  */
-export function createLazySection<T>(
+export function createLazySection<T = unknown>(
   importFunc: () => Promise<{ default: React.ComponentType<T> }>,
-  Skeleton: React.ComponentType = SectionSkeleton
+  Skeleton: React.ComponentType = SectionSkeleton,
+  options: { ssr?: boolean } = {}
 ) {
+  const { ssr = true } = options;
   return dynamic(importFunc, {
-    ssr: false,
+    ssr,
     loading: () => <Skeleton />,
   });
 }
