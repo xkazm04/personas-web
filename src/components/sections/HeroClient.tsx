@@ -14,6 +14,7 @@ import { useAnimationPauseRegister } from "@/hooks/useAnimationPause";
 import { connectors } from "@/data/connectors";
 import { useTranslation } from "@/i18n/useTranslation";
 import CommandCenterIllustration from "./hero/CommandCenterIllustration";
+import HeroStatRow from "./hero/HeroStatRow";
 
 const CONNECTOR_COUNT = connectors.length;
 
@@ -141,17 +142,9 @@ export default function HeroClient() {
           <motion.div
             variants={fadeUp}
             className="mt-6 flex flex-col items-center gap-3 rounded-xl border border-glass bg-white/2 px-4 py-3 lg:hidden"
-            data-testid="mock-stats"
           >
             <div className="text-base font-mono uppercase tracking-wider text-muted-dark">{t.hero.adoptionSnapshot}</div>
-            <div className="flex justify-center gap-6 text-center">
-              {heroStats.map((stat) => (
-                <div key={stat.label}>
-                  <div className="text-base font-bold tracking-tight font-mono">{stat.value}</div>
-                  <div className="text-base text-muted-dark font-mono tracking-wider">{stat.label}</div>
-                </div>
-              ))}
-            </div>
+            <HeroStatRow stats={heroStats} variant="mobile" />
           </motion.div>
         </div>
 
@@ -172,18 +165,7 @@ export default function HeroClient() {
               <div className="rounded-full border border-glass bg-white/2 px-4 py-1.5 text-base font-mono tracking-wider text-muted-dark uppercase shadow-[0_0_10px_rgba(0,0,0,0.5)]">
                 {t.hero.commandCenter}
               </div>
-              <div className="flex gap-6 text-center" data-testid="mock-stats">
-                {heroStats.map((stat) => (
-                  <div key={stat.label} className="group">
-                    <div className="text-xl font-bold tracking-tight transition-colors group-hover:text-brand-cyan drop-shadow-[0_0_5px_rgba(255,255,255,0.2)]">
-                      {stat.value}
-                    </div>
-                    <div className="text-base text-muted-dark font-mono tracking-wider transition-colors group-hover:text-foreground/70">
-                      {stat.label}
-                    </div>
-                  </div>
-                ))}
-              </div>
+              <HeroStatRow stats={heroStats} variant="desktop" />
             </div>
           </div>
         </motion.div>
