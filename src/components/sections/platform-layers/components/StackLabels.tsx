@@ -6,7 +6,7 @@ import { layers } from "../data";
 
 type Spring = ReturnType<typeof useSpring>;
 
-export default function StackLabelsAnimated({ spread }: { spread: Spring }) {
+export default function StackLabels({ spread }: { spread: Spring }) {
   const opacity = useTransform(spread, [0.3, 0.7], [0, 1]);
 
   return (

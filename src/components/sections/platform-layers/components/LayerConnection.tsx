@@ -6,7 +6,7 @@ import ConnectionPillar from "./ConnectionPillar";
 
 type Spring = ReturnType<typeof useSpring>;
 
-export default function LayerConnectionAnimated({
+export default function LayerConnection({
   index,
   from,
   to,

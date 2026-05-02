@@ -3,11 +3,11 @@
 import { motion, AnimatePresence, useTransform, type useSpring } from "framer-motion";
 import { BRAND_VAR, tint, brandShadow } from "@/lib/brand-theme";
 import { LAYER_VISUALS_BY_ID } from "../visuals";
-import type { Layer } from "../types";
+import type { Layer as LayerData } from "../types";
 
 type Spring = ReturnType<typeof useSpring>;
 
-export default function LayerAnimated({
+export default function Layer({
   layer,
   index,
   isHovered,
@@ -18,7 +18,7 @@ export default function LayerAnimated({
   stackHeight,
   prefersReducedMotion,
 }: {
-  layer: Layer;
+  layer: LayerData;
   index: number;
   isHovered: boolean;
   onHover: () => void;
