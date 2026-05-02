@@ -111,7 +111,7 @@ function FAQSkeleton() {
 
 /* ── Dynamic imports with section-specific skeletons ─────────── */
 
-const VisionSection = dynamic(() => import("@/components/sections/Vision"), {
+const VisionSection = dynamic(() => import("@/components/sections/vision-grid"), {
   ssr: true,
   loading: () => <VisionSkeleton />,
 });
