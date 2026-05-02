@@ -1,19 +1,20 @@
 "use client";
 
 import { motion, useTransform, type useSpring } from "framer-motion";
+import type { BrandKey } from "@/lib/brand-theme";
 import ConnectionPillar from "./ConnectionPillar";
 
 type Spring = ReturnType<typeof useSpring>;
 
 export default function LayerConnectionAnimated({
   index,
-  fromRgb,
-  toRgb,
+  from,
+  to,
   spread,
 }: {
   index: number;
-  fromRgb: string;
-  toRgb: string;
+  from: BrandKey;
+  to: BrandKey;
   spread: Spring;
 }) {
   const gap = 120;
@@ -29,7 +30,7 @@ export default function LayerConnectionAnimated({
 
   return (
     <motion.div className="absolute left-1/2 -translate-x-1/2 z-0" style={{ top: y, height, opacity }}>
-      <ConnectionPillar fromRgb={fromRgb} toRgb={toRgb} progress={1} />
+      <ConnectionPillar from={from} to={to} progress={1} />
     </motion.div>
   );
 }

@@ -1,6 +1,7 @@
 "use client";
 
 import { motion, AnimatePresence, useTransform, type useSpring } from "framer-motion";
+import { BRAND_VAR, tint, brandShadow } from "@/lib/brand-theme";
 import type { Layer } from "../types";
 
 type Spring = ReturnType<typeof useSpring>;
@@ -37,10 +38,15 @@ export default function LayerAnimated({
   const hoverLift = isHovered ? -12 : 0;
   const hoverScale = isHovered ? 1.03 : 1;
   const hoverGlow = isHovered
-    ? `0 0 60px rgba(${layer.rgb}, 0.15), 0 8px 32px rgba(0,0,0,0.3)`
+    ? `${brandShadow(layer.brand, 60, 15)}, 0 8px 32px rgba(0,0,0,0.3)`
     : `0 4px 20px rgba(0,0,0,0.15)`;
 
   const Icon = layer.icon;
+  const brandColor = BRAND_VAR[layer.brand];
+  const bgGradient = `linear-gradient(135deg, ${tint(layer.brand, 6)}, ${tint(layer.brand, 2)})`;
+  const borderTint = tint(layer.brand, 20);
+  const labelBgTint = tint(layer.brand, 10);
+  const overlayTint = tint(layer.brand, 30);
 
   return (
     <motion.div
@@ -48,8 +54,13 @@ export default function LayerAnimated({
       style={{ zIndex: index + 1, top: y, perspective: "1200px" }}
     >
       <motion.div
-        className={`relative mx-auto w-full max-w-2xl rounded-2xl border backdrop-blur-md bg-gradient-to-br ${layer.tw.bg} ${layer.tw.border} cursor-pointer overflow-hidden`}
-        style={{ transformStyle: "preserve-3d", boxShadow: hoverGlow }}
+        className="relative mx-auto w-full max-w-2xl rounded-2xl border backdrop-blur-md cursor-pointer overflow-hidden"
+        style={{
+          transformStyle: "preserve-3d",
+          boxShadow: hoverGlow,
+          background: bgGradient,
+          borderColor: borderTint,
+        }}
         animate={{
           y: hoverLift,
           scale: hoverScale,
@@ -64,20 +75,21 @@ export default function LayerAnimated({
         <div
           className="pointer-events-none absolute inset-0 opacity-[0.02]"
           style={{
-            backgroundImage: `repeating-linear-gradient(90deg, rgba(${layer.rgb},0.3) 0px, transparent 1px, transparent 20px), repeating-linear-gradient(0deg, rgba(${layer.rgb},0.3) 0px, transparent 1px, transparent 20px)`,
+            backgroundImage: `repeating-linear-gradient(90deg, ${overlayTint} 0px, transparent 1px, transparent 20px), repeating-linear-gradient(0deg, ${overlayTint} 0px, transparent 1px, transparent 20px)`,
           }}
         />
 
         <div className="relative z-10 px-5 py-4 sm:px-8 sm:py-5 flex items-center gap-4 sm:gap-6">
           <div
-            className={`flex h-10 w-10 shrink-0 items-center justify-center rounded-xl border ${layer.tw.labelBorder} ${layer.tw.labelBg}`}
+            className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl border"
+            style={{ borderColor: borderTint, backgroundColor: labelBgTint }}
           >
-            <Icon className={`h-5 w-5 ${layer.tw.text}`} />
+            <Icon className="h-5 w-5" style={{ color: brandColor }} />
           </div>
 
           <div className="flex-1 min-w-0">
             <div className="flex items-center gap-2 mb-1">
-              <h3 className={`text-base font-semibold ${layer.tw.text}`}>{layer.pillar}</h3>
+              <h3 className="text-base font-semibold" style={{ color: brandColor }}>{layer.pillar}</h3>
               <span className="text-base font-mono text-muted-dark uppercase tracking-wider">{layer.label}</span>
             </div>
             <p className="text-base text-muted-dark leading-relaxed line-clamp-2">{layer.description}</p>
@@ -90,7 +102,7 @@ export default function LayerAnimated({
           {isHovered && (
             <motion.div
               className="pointer-events-none absolute inset-0 rounded-2xl border-2"
-              style={{ borderColor: `rgba(${layer.rgb}, 0.3)` }}
+              style={{ borderColor: tint(layer.brand, 30) }}
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               exit={{ opacity: 0 }}

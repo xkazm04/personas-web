@@ -7,16 +7,7 @@ export const layers: Layer[] = [
     label: "Infrastructure",
     pillar: "Deploy",
     icon: Cloud,
-    color: "emerald",
-    rgb: "52,211,153",
-    tw: {
-      border: "border-brand-emerald/20",
-      bg: "from-emerald-500/[0.06] to-emerald-900/[0.02]",
-      text: "text-emerald-400",
-      glow: "shadow-[0_0_40px_rgba(52,211,153,0.08)]",
-      labelBg: "bg-emerald-500/10",
-      labelBorder: "border-emerald-500/20",
-    },
+    brand: "emerald",
     description:
       "Run agents on your computer or in the cloud — or both at once. Deploy with a single click, and use your own servers if you prefer.",
     visual: (
@@ -35,16 +26,7 @@ export const layers: Layer[] = [
     label: "Execution",
     pillar: "Coordinate",
     icon: Zap,
-    color: "cyan",
-    rgb: "6,182,212",
-    tw: {
-      border: "border-brand-cyan/20",
-      bg: "from-cyan-500/[0.06] to-cyan-900/[0.02]",
-      text: "text-cyan-400",
-      glow: "shadow-[0_0_40px_rgba(6,182,212,0.08)]",
-      labelBg: "bg-cyan-500/10",
-      labelBorder: "border-cyan-500/20",
-    },
+    brand: "cyan",
     description:
       "One action triggers the next automatically. An email arrives, Slack gets notified, GitHub gets updated — all without you lifting a finger.",
     visual: (
@@ -65,16 +47,7 @@ export const layers: Layer[] = [
     label: "Intelligence",
     pillar: "Design",
     icon: Wand2,
-    color: "purple",
-    rgb: "168,85,247",
-    tw: {
-      border: "border-brand-purple/20",
-      bg: "from-purple-500/[0.06] to-purple-900/[0.02]",
-      text: "text-purple-400",
-      glow: "shadow-[0_0_40px_rgba(168,85,247,0.08)]",
-      labelBg: "bg-purple-500/10",
-      labelBorder: "border-purple-500/20",
-    },
+    brand: "purple",
     description:
       "Describe what you want in plain English. Personas helps you build the right agent with step-by-step guidance and smart suggestions.",
     visual: (
@@ -102,16 +75,7 @@ export const layers: Layer[] = [
     label: "Observability",
     pillar: "Monitor",
     icon: Activity,
-    color: "amber",
-    rgb: "251,191,36",
-    tw: {
-      border: "border-brand-amber/20",
-      bg: "from-amber-500/[0.06] to-amber-900/[0.02]",
-      text: "text-amber-400",
-      glow: "shadow-[0_0_40px_rgba(251,191,36,0.08)]",
-      labelBg: "bg-amber-500/10",
-      labelBorder: "border-amber-500/20",
-    },
+    brand: "amber",
     description:
       "See everything your agents do in real time. Track performance, review activity logs, and let the system fix problems automatically.",
     visual: (

@@ -61,8 +61,8 @@ export default function PlatformLayers() {
               <LayerConnectionAnimated
                 key={`conn-${layer.id}`}
                 index={i}
-                fromRgb={layer.rgb}
-                toRgb={nextLayer.rgb}
+                from={layer.brand}
+                to={nextLayer.brand}
                 spread={spread}
               />
             );
