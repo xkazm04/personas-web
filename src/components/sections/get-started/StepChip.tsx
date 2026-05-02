@@ -1,24 +1,20 @@
 "use client";
 
-import type { LucideIcon } from "lucide-react";
-import { BRAND_VAR, tint, type BrandKey } from "@/lib/brand-theme";
+import { BRAND_VAR, tint } from "@/lib/brand-theme";
 import type { TourStep } from "@/data/tour";
 
 interface StepChipProps {
   step: TourStep;
-  brand: BrandKey;
-  icon: LucideIcon;
   isActive: boolean;
   onClick: () => void;
 }
 
 export default function StepChip({
   step,
-  brand,
-  icon: Icon,
   isActive,
   onClick,
 }: StepChipProps) {
+  const { brand, icon: Icon } = step;
   const bv = BRAND_VAR[brand];
   return (
     <button
