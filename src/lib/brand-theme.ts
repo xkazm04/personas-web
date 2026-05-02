@@ -51,6 +51,22 @@ export function brandTextShadow(
   return `0 0 ${size}px ${tint(key, alpha)}`;
 }
 
+/**
+ * Semantic state colors. Use these instead of BRAND_VAR.<color> when the
+ * intent is "this dot/icon means success/warning/error" rather than "this
+ * piece of UI is purple/cyan/etc." Lets the success palette change once
+ * (e.g. switch success from emerald to a more accessible green) without
+ * hunting for hardcoded BRAND_VAR.emerald usages across the codebase.
+ *
+ *   style={{ color: STATE_COLORS.success }}
+ *   style={{ backgroundColor: STATE_COLORS.warning }}
+ */
+export const STATE_COLORS = {
+  success: BRAND_VAR.emerald,
+  warning: BRAND_VAR.amber,
+  error: BRAND_VAR.rose,
+} as const;
+
 /** Map a legacy hex color to the closest brand key. */
 export function hexToBrand(hex: string): BrandKey {
   const h = hex.toLowerCase();

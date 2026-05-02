@@ -2,7 +2,7 @@
 
 import { motion } from "framer-motion";
 import { Check } from "lucide-react";
-import { BRAND_VAR } from "@/lib/brand-theme";
+import { BRAND_VAR, STATE_COLORS } from "@/lib/brand-theme";
 import type { VisualProps } from "./types";
 
 const EVENTS = [
@@ -40,7 +40,7 @@ export function WorkVisual({ brand }: VisualProps) {
           {EVENTS.map((e, i) => {
             const dotColor =
               e.state === "done"
-                ? BRAND_VAR.emerald
+                ? STATE_COLORS.success
                 : e.state === "active"
                   ? color
                   : "rgba(var(--surface-overlay), 0.15)";
@@ -66,7 +66,7 @@ export function WorkVisual({ brand }: VisualProps) {
                 {e.state === "done" && (
                   <Check
                     className="ml-auto h-3.5 w-3.5 shrink-0"
-                    style={{ color: BRAND_VAR.emerald }}
+                    style={{ color: STATE_COLORS.success }}
                   />
                 )}
               </motion.div>
