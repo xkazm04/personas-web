@@ -2,6 +2,11 @@
 
 import { motion } from "framer-motion";
 
+/**
+ * Blinking block cursor for terminal-style UIs. Use after a typed-text
+ * span (`<span>{typed}</span><BlinkingCursor />`) or as the standalone
+ * "ready for input" prompt.
+ */
 export default function BlinkingCursor() {
   return (
     <motion.span
