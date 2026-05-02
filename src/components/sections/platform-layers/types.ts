@@ -1,5 +1,4 @@
 import type { LucideIcon } from "lucide-react";
-import type { ReactNode } from "react";
 import type { BrandKey } from "@/lib/brand-theme";
 
 export interface Layer {
@@ -14,5 +13,4 @@ export interface Layer {
    */
   brand: BrandKey;
   description: string;
-  visual: ReactNode;
 }

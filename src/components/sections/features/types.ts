@@ -1,7 +1,7 @@
 import type { LucideIcon } from "lucide-react";
-import type { ReactNode } from "react";
 import type { BrandAccent } from "@/lib/brand-theme";
 import type { GuideTopicRef } from "@/lib/guide-link";
+import type { FeatureVisualKey } from "./components/visuals";
 
 /**
  * Re-export so older imports `import type { GuideLink } from "../types"`
@@ -32,6 +32,7 @@ export interface Feature {
   title: string;
   proof: string;
   description: string;
-  visual: ReactNode;
+  /** Key into FEATURE_VISUALS_BY_KEY (see components/visuals.tsx). */
+  visualKey: FeatureVisualKey;
   guideTopics: GuideTopicRef[];
 }

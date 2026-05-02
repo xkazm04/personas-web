@@ -1,7 +1,6 @@
 import type { Variants } from "framer-motion";
 import { Wand2, Zap, Cloud, Activity } from "lucide-react";
 import type { Feature, FeatureEntrance } from "./types";
-import { DesignVisual, CoordinateVisual, DeployVisual, TelemetryVisual } from "./components/visuals";
 
 export const cardOrchestrator: Variants = {
   hidden: {},
@@ -72,7 +71,7 @@ export const features: Feature[] = [
     proof: "Prompt scaffolding",
     description:
       "Describe what you want your agent to do. The design engine analyzes feasibility, suggests tools, and generates the optimal prompt structure.",
-    visual: <DesignVisual />,
+    visualKey: "design",
     guideTopics: [
       { label: "Creating a new agent", category: "agents-prompts", topic: "creating-a-new-agent" },
       { label: "Writing effective prompts", category: "agents-prompts", topic: "writing-effective-prompts" },
@@ -87,7 +86,7 @@ export const features: Feature[] = [
     proof: "Event-driven chaining",
     description:
       "Built-in event bus lets agents trigger each other. Email agent → Slack agent → GitHub agent. Runs locally, no cloud required.",
-    visual: <CoordinateVisual />,
+    visualKey: "coordinate",
     guideTopics: [
       { label: "Event-based triggers", category: "triggers", topic: "event-based-triggers" },
       { label: "Chain triggers", category: "triggers", topic: "chain-triggers" },
@@ -102,7 +101,7 @@ export const features: Feature[] = [
     proof: "Hybrid execution",
     description:
       "When you need 24/7 operation, deploy your agents to the cloud with one click. Bring your own infrastructure or use ours.",
-    visual: <DeployVisual />,
+    visualKey: "deploy",
     guideTopics: [
       { label: "Local vs cloud execution", category: "deployment", topic: "local-vs-cloud-execution" },
       { label: "Cloud orchestrator setup", category: "deployment", topic: "connecting-to-the-cloud-orchestrator" },
@@ -117,7 +116,7 @@ export const features: Feature[] = [
     proof: "Operational telemetry",
     description:
       "Real-time execution streaming, event audit trails, healing engine, and usage analytics. Know exactly what your agents are doing.",
-    visual: <TelemetryVisual />,
+    visualKey: "telemetry",
     guideTopics: [
       { label: "Cost tracking per model", category: "monitoring", topic: "cost-tracking-per-model" },
       { label: "Success rate metrics", category: "monitoring", topic: "success-rate-metrics" },

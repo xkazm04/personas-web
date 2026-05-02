@@ -1,1 +1,3 @@
-export const AUTO_ADVANCE_MS = 7000;
+import { CAROUSEL_INTERVAL_MS } from "@/lib/timings";
+
+export const AUTO_ADVANCE_MS = CAROUSEL_INTERVAL_MS.default;

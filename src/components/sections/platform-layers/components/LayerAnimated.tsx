@@ -2,6 +2,7 @@
 
 import { motion, AnimatePresence, useTransform, type useSpring } from "framer-motion";
 import { BRAND_VAR, tint, brandShadow } from "@/lib/brand-theme";
+import { LAYER_VISUALS_BY_ID } from "../visuals";
 import type { Layer } from "../types";
 
 type Spring = ReturnType<typeof useSpring>;
@@ -95,7 +96,12 @@ export default function LayerAnimated({
             <p className="text-base text-muted-dark leading-relaxed line-clamp-2">{layer.description}</p>
           </div>
 
-          <div className="hidden sm:block shrink-0">{layer.visual}</div>
+          <div className="hidden sm:block shrink-0">
+            {(() => {
+              const Visual = LAYER_VISUALS_BY_ID[layer.id];
+              return Visual ? <Visual /> : null;
+            })()}
+          </div>
         </div>
 
         <AnimatePresence>
