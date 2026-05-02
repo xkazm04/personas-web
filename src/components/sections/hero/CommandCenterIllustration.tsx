@@ -16,6 +16,11 @@ interface Props {
 }
 
 export default function CommandCenterIllustration({ publicBetaLabel }: Props) {
+  // useId() namespaces the SVG <linearGradient> / <filter> definition IDs
+  // so this component can mount multiple times on a page without ID
+  // collisions, and so the IDs stay stable across SSR/CSR (avoiding
+  // hydration warnings). Don't simplify to a hardcoded string — that
+  // breaks both invariants.
   const uid = useId();
   const arcGradientId = `${uid}-arcGrad`;
   const arcGlowId = `${uid}-arcGlow`;
