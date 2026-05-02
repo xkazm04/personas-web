@@ -113,3 +113,27 @@ export const revealFromBelow: Variants = {
     transition: { duration: 0.8, ease: "easeOut" },
   },
 };
+
+/* ── Stagger helpers ─────────────────────────────────────────────────
+   Use these instead of inline `delay: i * 0.15` / `delay: prev.length *
+   0.2 + i * 0.12 + 0.1` arithmetic when you need a list of items to
+   appear in sequence and then trigger a follow-up. Centralising the
+   math means a global rhythm tweak is one edit instead of N. */
+
+/**
+ * Per-item delay for a staggered list.
+ *   transition={{ delay: staggerDelay(i, 0.15), duration: 0.3 }}
+ */
+export function staggerDelay(index: number, perItem: number): number {
+  return index * perItem;
+}
+
+/**
+ * Delay for the element that follows a staggered list. `prevCount` is
+ * the list length, `perItem` is the per-step interval used for the list
+ * itself, `gap` is extra time after the last item (default 0).
+ *   transition={{ delay: nextDelay(steps.length, 0.15, 0.1), duration: 0.3 }}
+ */
+export function nextDelay(prevCount: number, perItem: number, gap = 0): number {
+  return prevCount * perItem + gap;
+}
