@@ -4,8 +4,8 @@ import { useState, useRef, useEffect, useCallback } from "react";
 import { motion } from "framer-motion";
 import { ArrowRight, BookOpen, X } from "lucide-react";
 import Image from "next/image";
-import Link from "next/link";
 import { BRAND_VAR, tint } from "@/lib/brand-theme";
+import { guideHref, openGuideLink } from "@/lib/guide-link";
 import type { PlatformCard } from "./data";
 
 const cardVariants = {
@@ -215,17 +215,20 @@ export default function PlatformCardTile({ card }: PlatformCardTileProps) {
             ))}
           </ul>
           {card.guideTopics?.map((gt) => (
-            <Link
+            <button
               key={gt.topic}
-              href={`/guide/${gt.category}/${gt.topic}`}
-              onClick={(e) => e.stopPropagation()}
-              className="inline-flex items-center gap-1.5 text-base font-medium transition-opacity hover:opacity-80"
+              type="button"
+              onClick={(e) => {
+                e.stopPropagation();
+                openGuideLink(guideHref(gt));
+              }}
+              className="inline-flex items-center gap-1.5 text-base font-medium transition-opacity hover:opacity-80 bg-transparent border-none p-0 cursor-pointer"
               style={{ color: brandVar }}
             >
               <BookOpen className="h-4 w-4" />
               <span>{gt.label}</span>
               <span aria-hidden="true">→</span>
-            </Link>
+            </button>
           ))}
         </div>
       </div>
