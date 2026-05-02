@@ -8,9 +8,18 @@ import Image from "next/image";
 import Link from "next/link";
 import ThemeSwitcher from "@/components/ThemeSwitcher";
 import { useTranslation } from "@/i18n/useTranslation";
+import type { Translations } from "@/i18n/en";
 
-function useColumns() {
-  const { t } = useTranslation();
+/**
+ * Pure helper — takes a translations object, returns the column data.
+ * Was previously a `useColumns()` "hook" that wrapped a single
+ * useTranslation() call, but it didn't follow hook semantics (no state,
+ * no effects). The `use` prefix was satisfying React's rules-of-hooks
+ * lint but misleading readers. Inverting the dependency keeps the
+ * translation lookup honest (Footer calls useTranslation; this stays
+ * a pure function over t).
+ */
+function getColumns(t: Translations) {
   return [
     {
       title: t.footer.product,
@@ -117,7 +126,7 @@ function FooterLinkColumn({ title, links }: { title: string; links: { label: str
 
 export default function Footer() {
   const { t } = useTranslation();
-  const columns = useColumns();
+  const columns = getColumns(t);
   return (
     <footer className="relative border-t border-glass px-6 pb-8 pt-16">
       {/* Top gradient accent */}
