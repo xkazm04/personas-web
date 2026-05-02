@@ -41,19 +41,19 @@ function EventBusShowcaseSkeleton() {
   );
 }
 
-const EventBusShowcaseSection = createLazySection(() => import("@/components/sections/EventBusShowcase"), EventBusShowcaseSkeleton);
+const EventBusShowcaseSection = createLazySection(() => import("@/components/sections/event-bus-showcase"), EventBusShowcaseSkeleton);
 
-const AgentsTimelineSection = dynamic(() => import("@/components/sections/AgentsTimeline"), {
+const AgentsTimelineSection = dynamic(() => import("@/components/sections/agents-timeline"), {
   ssr: false,
   loading: () => <SectionSkeleton />,
 });
 
-const AgentsChatSection = dynamic(() => import("@/components/sections/AgentsChat"), {
+const AgentsChatSection = dynamic(() => import("@/components/sections/agents-chat"), {
   ssr: false,
   loading: () => <SectionSkeleton />,
 });
 
-const PlatformLayersSection = dynamic(() => import("@/components/sections/PlatformLayers"), {
+const PlatformLayersSection = dynamic(() => import("@/components/sections/platform-layers"), {
   ssr: false,
   loading: () => <SectionSkeleton />,
 });

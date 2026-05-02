@@ -115,7 +115,7 @@ const VisionSection = dynamic(() => import("@/components/sections/vision-grid"),
   ssr: true,
   loading: () => <VisionSkeleton />,
 });
-const PricingSection = dynamic(() => import("@/components/sections/Pricing"), {
+const PricingSection = dynamic(() => import("@/components/sections/pricing"), {
   ssr: true,
   loading: () => <PricingSkeleton />,
 });
@@ -138,12 +138,12 @@ export function LazyFAQ() {
 
 /* ── Generic lazy sections (use shared SectionSkeleton) ──────── */
 
-const UseCasesSection = createLazySection(() => import("@/components/sections/UseCases"));
-const PlaygroundSplitSection = createLazySection(() => import("@/components/sections/PlaygroundSplit"));
+const UseCasesSection = createLazySection(() => import("@/components/sections/use-cases"));
+const PlaygroundSplitSection = createLazySection(() => import("@/components/sections/playground-split"));
 const DownloadCTASection = createLazySection(() => import("@/components/sections/DownloadCTA"));
-const OrchestrationHubSection = createLazySection(() => import("@/components/sections/OrchestrationHub"));
+const OrchestrationHubSection = createLazySection(() => import("@/components/sections/orchestration-hub"));
 const ChangelogSection = createLazySection(() => import("@/components/sections/Changelog"));
-const GetStartedSection = createLazySection(() => import("@/components/sections/GetStarted"));
+const GetStartedSection = createLazySection(() => import("@/components/sections/get-started"));
 
 export function LazyUseCases() {
   return <UseCasesSection />;

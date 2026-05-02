@@ -6,8 +6,8 @@ import Navbar from "@/components/Navbar";
 import Footer from "@/components/sections/Footer";
 import StageSection from "@/components/StageSection";
 import PageShell from "@/components/PageShell";
-import ConnectionsCatalog from "@/components/sections/ConnectionsCatalog";
-import ConnectorModal from "@/components/sections/ConnectorModal";
+import ConnectionsCatalog from "@/components/sections/connections-catalog";
+import ConnectorModal from "@/components/sections/connector-modal";
 import { connectors, type Connector } from "@/data/connectors";
 
 const scrollMapItems = [

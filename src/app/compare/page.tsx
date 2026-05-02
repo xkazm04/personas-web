@@ -9,7 +9,7 @@ import PageShell from "@/components/PageShell";
 import SectionWrapper from "@/components/SectionWrapper";
 import SectionHeading from "@/components/SectionHeading";
 import GradientText from "@/components/GradientText";
-import ComparisonTable from "@/components/sections/ComparisonTable";
+import ComparisonTable from "@/components/sections/comparison-table";
 import { SectionIntro } from "@/components/primitives";
 import { fadeUp } from "@/lib/animations";
 

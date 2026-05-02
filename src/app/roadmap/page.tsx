@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
-import Roadmap from "@/components/sections/Roadmap";
-import FeatureVoting from "@/components/sections/FeatureVoting";
+import Roadmap from "@/components/sections/roadmap";
+import FeatureVoting from "@/components/sections/feature-voting";
 import Changelog from "@/components/sections/Changelog";
 import StageSection from "@/components/StageSection";
 import InfoPageLayout from "@/components/InfoPageLayout";
