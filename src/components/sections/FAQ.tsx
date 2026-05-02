@@ -23,7 +23,21 @@ type FAQItem = {
 
 /* ── FAQ data ─────────────────────────────────────────────────────────── */
 
-const illustrations = [
+/**
+ * Illustrations paired to FAQ questions BY POSITION in the i18n
+ * questions array. The i18n schema currently has no stable id/key per
+ * question, so this list must stay aligned with the order of
+ * t.faqSection.questions across all 14 locale files.
+ *
+ * The runtime assertion below catches drift in dev — adding a new
+ * question or reordering for any locale will fire a console warning.
+ *
+ * Follow-up: extend the i18n shape with a stable `id` (or
+ * `illustrationKey`) per question so the pairing becomes locale-safe
+ * by construction. Tracked in docs/harness/dev-experience-2026-05-02/
+ * conversion-onboarding.md finding #10.
+ */
+const FAQ_ILLUSTRATIONS_BY_POSITION = [
   <TerminalIllustration key="terminal" />,
   <ShieldIllustration key="shield" />,
   <PricingIllustration key="pricing" />,
@@ -31,6 +45,8 @@ const illustrations = [
   <LocalCloudIllustration key="local" />,
   <AgentGridIllustration key="grid" />,
 ];
+
+const FALLBACK_ILLUSTRATION = <TerminalIllustration key="fallback" />;
 
 function FAQCard({
   item,
@@ -106,10 +122,19 @@ function FAQCard({
 export default function FAQ() {
   const { t } = useTranslation();
 
+  if (
+    process.env.NODE_ENV !== "production" &&
+    t.faqSection.questions.length !== FAQ_ILLUSTRATIONS_BY_POSITION.length
+  ) {
+    // eslint-disable-next-line no-console
+    console.warn(
+      `[FAQ] questions.length (${t.faqSection.questions.length}) does not match FAQ_ILLUSTRATIONS_BY_POSITION.length (${FAQ_ILLUSTRATIONS_BY_POSITION.length}). Some questions will get a fallback illustration. Update src/components/sections/FAQ.tsx when adding/removing FAQ questions in the i18n source.`,
+    );
+  }
   const faqs: FAQItem[] = t.faqSection.questions.map((q, i) => ({
     question: q.q,
     answer: q.a,
-    illustration: illustrations[i],
+    illustration: FAQ_ILLUSTRATIONS_BY_POSITION[i] ?? FALLBACK_ILLUSTRATION,
   }));
   const midpoint = Math.ceil(faqs.length / 2);
   const leftColumn = faqs.slice(0, midpoint);
