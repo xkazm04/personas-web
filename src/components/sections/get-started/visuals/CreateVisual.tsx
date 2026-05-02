@@ -3,6 +3,7 @@
 import { motion } from "framer-motion";
 import { Sparkles } from "lucide-react";
 import { BRAND_VAR, tint } from "@/lib/brand-theme";
+import { SURFACE_GLASS, VisualFrame } from "./chrome";
 import type { VisualProps } from "./types";
 
 const PROMPT =
@@ -18,14 +19,8 @@ const PERSONA_FIELDS = [
 export function CreateVisual({ brand }: VisualProps) {
   const color = BRAND_VAR[brand];
   return (
-    <div className="flex h-full flex-col justify-center gap-4">
-      <div
-        className="rounded-xl border p-4"
-        style={{
-          borderColor: "var(--border-glass-hover)",
-          backgroundColor: "rgba(var(--surface-overlay), 0.02)",
-        }}
-      >
+    <VisualFrame>
+      <div className="rounded-xl border p-4" style={SURFACE_GLASS}>
         <div className="mb-2 flex items-center gap-2 text-base font-mono uppercase tracking-wider text-muted-dark">
           <Sparkles className="h-3.5 w-3.5" style={{ color }} />
           New persona
@@ -74,6 +69,6 @@ export function CreateVisual({ brand }: VisualProps) {
           ))}
         </div>
       </motion.div>
-    </div>
+    </VisualFrame>
   );
 }

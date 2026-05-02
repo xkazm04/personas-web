@@ -3,6 +3,7 @@
 import { motion } from "framer-motion";
 import { Check } from "lucide-react";
 import { BRAND_VAR, STATE_COLORS } from "@/lib/brand-theme";
+import { SURFACE_GLASS, VisualFrame } from "./chrome";
 import type { VisualProps } from "./types";
 
 const EVENTS = [
@@ -16,14 +17,8 @@ const EVENTS = [
 export function WorkVisual({ brand }: VisualProps) {
   const color = BRAND_VAR[brand];
   return (
-    <div className="flex h-full flex-col justify-center">
-      <div
-        className="rounded-xl border p-4"
-        style={{
-          borderColor: "var(--border-glass-hover)",
-          backgroundColor: "color-mix(in srgb, var(--background) 60%, transparent)",
-        }}
-      >
+    <VisualFrame gap="gap-0">
+      <div className="rounded-xl border p-4" style={SURFACE_GLASS}>
         <div className="mb-3 flex items-center justify-between">
           <div className="flex items-center gap-2">
             <div
@@ -74,6 +69,6 @@ export function WorkVisual({ brand }: VisualProps) {
           })}
         </div>
       </div>
-    </div>
+    </VisualFrame>
   );
 }
