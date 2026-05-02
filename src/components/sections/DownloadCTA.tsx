@@ -5,6 +5,15 @@ import { motion } from "framer-motion";
 import { Download, Monitor, Apple, Terminal } from "lucide-react";
 import { fadeUp } from "@/lib/animations";
 import { trackDownloadClick } from "@/lib/analytics";
+import { tint, type BrandKey } from "@/lib/brand-theme";
+
+/**
+ * Cyan → blue → purple sequence reflects the install flow's "early-step
+ * starts cool, late-step warms toward action." If the step count changes,
+ * extend this array — STEP_BRANDS.length is the source of truth, not the
+ * 3-card layout below.
+ */
+const STEP_BRANDS: BrandKey[] = ["cyan", "blue", "purple"];
 import GradientText from "@/components/GradientText";
 import SectionHeading from "@/components/SectionHeading";
 import PrimaryCTA from "@/components/PrimaryCTA";
@@ -89,11 +98,11 @@ export default function DownloadCTA() {
             t.downloadSection.connectCli,
             t.downloadSection.launchAgent,
           ].map((step, index) => {
-            const glowColor = index === 0
-              ? "rgba(6,182,212,0.5)"
-              : index === 1
-                ? "rgba(109,133,224,0.5)"
-                : "rgba(168,85,247,0.5)";
+            const brand = STEP_BRANDS[index] ?? "cyan";
+            const glowStrong = tint(brand, 50);
+            const glowInset = tint(brand, 8);
+            const glowOff = tint(brand, 0);
+            const borderOn = tint(brand, 40);
             return (
               <motion.div
                 key={step}
@@ -108,13 +117,13 @@ export default function DownloadCTA() {
                     opacity: 1,
                     y: 0,
                     boxShadow: [
-                      `0 0 0px ${glowColor.replace("0.5", "0")}`,
-                      `0 0 20px ${glowColor}, inset 0 0 12px ${glowColor.replace("0.5", "0.08")}`,
-                      `0 0 0px ${glowColor.replace("0.5", "0")}`,
+                      `0 0 0px ${glowOff}`,
+                      `0 0 20px ${glowStrong}, inset 0 0 12px ${glowInset}`,
+                      `0 0 0px ${glowOff}`,
                     ],
                     borderColor: [
                       "rgba(255,255,255,0.05)",
-                      glowColor.replace("0.5", "0.4"),
+                      borderOn,
                       "rgba(255,255,255,0.05)",
                     ],
                     transition: {
