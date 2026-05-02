@@ -61,10 +61,6 @@ export const features: Feature[] = [
   {
     icon: Wand2,
     accent: "purple",
-    iconBg: "bg-purple-500/10",
-    iconColor: "text-purple-400",
-    iconRing: "ring-purple-500/8",
-    iconGlow: "shadow-[0_0_12px_rgba(168,85,247,0.08)]",
     number: "01",
     title: "Design with natural language",
     proof: "Prompt scaffolding",
@@ -79,10 +75,6 @@ export const features: Feature[] = [
   {
     icon: Zap,
     accent: "cyan",
-    iconBg: "bg-cyan-500/10",
-    iconColor: "text-cyan-400",
-    iconRing: "ring-cyan-500/8",
-    iconGlow: "shadow-[0_0_12px_rgba(6,182,212,0.08)]",
     number: "02",
     title: "Agents that coordinate",
     proof: "Event-driven chaining",
@@ -97,10 +89,6 @@ export const features: Feature[] = [
   {
     icon: Cloud,
     accent: "emerald",
-    iconBg: "bg-emerald-500/10",
-    iconColor: "text-emerald-400",
-    iconRing: "ring-emerald-500/8",
-    iconGlow: "shadow-[0_0_12px_rgba(52,211,153,0.08)]",
     number: "03",
     title: "One-click cloud deployment",
     proof: "Hybrid execution",
@@ -115,10 +103,6 @@ export const features: Feature[] = [
   {
     icon: Activity,
     accent: "amber",
-    iconBg: "bg-amber-500/10",
-    iconColor: "text-amber-400",
-    iconRing: "ring-amber-500/8",
-    iconGlow: "shadow-[0_0_12px_rgba(251,191,36,0.08)]",
     number: "04",
     title: "Full visibility",
     proof: "Operational telemetry",

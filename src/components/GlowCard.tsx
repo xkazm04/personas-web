@@ -3,10 +3,9 @@
 import { motion, type Variants } from "framer-motion";
 import { fadeUp } from "@/lib/animations";
 import { BRAND_COLORS, rgba } from "@/lib/colors";
+import type { BrandAccent } from "@/lib/brand-theme";
 
-type AccentColor = "cyan" | "purple" | "emerald" | "amber";
-
-const accentMap: Record<AccentColor, { border: string; glow: string; accentRgb: string }> = {
+const accentMap: Record<BrandAccent, { border: string; glow: string; accentRgb: string }> = {
   cyan: {
     border: "border-brand-cyan/12 hover:border-brand-cyan/25",
     glow: `hover:shadow-[0_0_50px_${rgba(BRAND_COLORS.cyan, 0.08)}]`,
@@ -47,7 +46,7 @@ export default function GlowCard({
   texture = "none",
   variants,
 }: {
-  accent?: AccentColor;
+  accent?: BrandAccent;
   children: React.ReactNode;
   className?: string;
   highlighted?: boolean;

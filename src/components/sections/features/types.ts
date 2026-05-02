@@ -1,5 +1,6 @@
 import type { LucideIcon } from "lucide-react";
 import type { ReactNode } from "react";
+import type { BrandAccent } from "@/lib/brand-theme";
 
 export interface GuideLink {
   label: string;
@@ -9,11 +10,12 @@ export interface GuideLink {
 
 export interface Feature {
   icon: LucideIcon;
-  accent: "purple" | "cyan" | "emerald" | "amber";
-  iconBg: string;
-  iconColor: string;
-  iconRing: string;
-  iconGlow: string;
+  /**
+   * Single source of truth for this feature's color identity.
+   * Resolves to icon bg/text/ring/glow via ACCENT_ICON_CLASSES from
+   * @/lib/brand-theme.
+   */
+  accent: BrandAccent;
   number: string;
   title: string;
   proof: string;
