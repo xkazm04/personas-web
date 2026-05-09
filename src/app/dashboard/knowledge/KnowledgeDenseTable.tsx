@@ -18,10 +18,12 @@ import {
   BarChart3,
 } from "lucide-react";
 import { fadeUp, staggerContainer } from "@/lib/animations";
+import { type KnowledgePattern } from "@/lib/mock-dashboard-data";
 import {
-  MOCK_KNOWLEDGE_PATTERNS,
-  type KnowledgePattern,
-} from "@/lib/mock-dashboard-data";
+  DERIVED_KNOWLEDGE_PATTERNS,
+  relativeFromNow,
+  type DerivedKnowledgePattern,
+} from "./derived";
 
 // ── Types ────────────────────────────────────────────────────────────
 
@@ -91,31 +93,6 @@ const TYPE_CONFIG: Record<
 };
 
 // ── Helpers ──────────────────────────────────────────────────────────
-
-function relativeTime(iso: string): string {
-  const diff = Date.now() - new Date(iso).getTime();
-  const minutes = Math.floor(diff / 60_000);
-  if (minutes < 1) return "now";
-  if (minutes < 60) return `${minutes}m ago`;
-  const hours = Math.floor(minutes / 60);
-  if (hours < 24) return `${hours}h ago`;
-  return `${Math.floor(hours / 24)}d ago`;
-}
-
-function formatDuration(ms: number): string {
-  if (ms < 1_000) return `${ms}ms`;
-  if (ms < 60_000) return `${(ms / 1_000).toFixed(1)}s`;
-  return `${(ms / 60_000).toFixed(1)}m`;
-}
-
-function formatCost(usd: number): string {
-  return `$${usd.toFixed(3)}`;
-}
-
-function successRate(p: KnowledgePattern): number {
-  const total = p.successCount + p.failureCount;
-  return total > 0 ? p.successCount / total : 0;
-}
 
 function confidenceColor(c: number): string {
   if (c >= 0.7) return "#10b981";
@@ -239,16 +216,17 @@ function TableRow({
   pattern,
   index,
   isSelected,
+  nowMs,
   onSelect,
 }: {
-  pattern: KnowledgePattern;
+  pattern: DerivedKnowledgePattern;
   index: number;
   isSelected: boolean;
-  onSelect: (p: KnowledgePattern) => void;
+  nowMs: number;
+  onSelect: (p: DerivedKnowledgePattern) => void;
 }) {
   const config = TYPE_CONFIG[pattern.knowledgeType];
   const Icon = config.icon;
-  const rate = successRate(pattern);
   const confPercent = Math.round(pattern.confidence * 100);
   const confColor = confidenceColor(pattern.confidence);
 
@@ -307,21 +285,21 @@ function TableRow({
       {/* Success Rate */}
       <div className="w-16 px-2 py-2.5 text-right">
         <span className="text-xs font-mono font-medium tabular-nums text-foreground">
-          {(rate * 100).toFixed(0)}%
+          {(pattern.__successRate * 100).toFixed(0)}%
         </span>
       </div>
 
       {/* Cost */}
       <div className="w-18 px-2 py-2.5 text-right">
         <span className="text-xs font-mono font-medium tabular-nums text-foreground/70">
-          {formatCost(pattern.avgCostUsd)}
+          {pattern.__costFormatted}
         </span>
       </div>
 
       {/* Duration */}
       <div className="w-20 px-2 py-2.5 text-right">
         <span className="text-xs font-mono font-medium tabular-nums text-foreground/70">
-          {formatDuration(pattern.avgDurationMs)}
+          {pattern.__durationFormatted}
         </span>
       </div>
 
@@ -346,7 +324,7 @@ function TableRow({
       {/* Last Seen */}
       <div className="w-20 px-2 py-2.5 text-right">
         <span className="text-[11px] font-mono tabular-nums text-muted-dark">
-          {relativeTime(pattern.lastSeen)}
+          {relativeFromNow(nowMs, pattern.__lastSeenMs)}
         </span>
       </div>
     </motion.button>
@@ -357,14 +335,15 @@ function TableRow({
 
 function BottomDetailPanel({
   pattern,
+  nowMs,
   onClose,
 }: {
-  pattern: KnowledgePattern;
+  pattern: DerivedKnowledgePattern;
+  nowMs: number;
   onClose: () => void;
 }) {
   const config = TYPE_CONFIG[pattern.knowledgeType];
   const Icon = config.icon;
-  const rate = successRate(pattern);
 
   return (
     <motion.div
@@ -411,26 +390,26 @@ function BottomDetailPanel({
           <div className="flex items-center gap-1.5">
             <BarChart3 className="h-3 w-3 text-cyan-400" />
             <span className="font-mono tabular-nums text-foreground">
-              {(rate * 100).toFixed(1)}%
+              {(pattern.__successRate * 100).toFixed(1)}%
             </span>
             <span className="text-muted-dark">rate</span>
           </div>
           <div className="flex items-center gap-1.5">
             <DollarSign className="h-3 w-3 text-amber-400" />
             <span className="font-mono tabular-nums text-foreground">
-              {formatCost(pattern.avgCostUsd)}
+              {pattern.__costFormatted}
             </span>
           </div>
           <div className="flex items-center gap-1.5">
             <Zap className="h-3 w-3 text-purple-400" />
             <span className="font-mono tabular-nums text-foreground">
-              {formatDuration(pattern.avgDurationMs)}
+              {pattern.__durationFormatted}
             </span>
           </div>
           <div className="flex items-center gap-1.5">
             <Clock className="h-3 w-3 text-muted-dark" />
             <span className="font-mono tabular-nums text-muted-dark">
-              {relativeTime(pattern.lastSeen)}
+              {relativeFromNow(nowMs, pattern.__lastSeenMs)}
             </span>
           </div>
         </div>
@@ -461,7 +440,11 @@ export default function KnowledgeDenseTable() {
     new Set()
   );
   const [selectedPattern, setSelectedPattern] =
-    useState<KnowledgePattern | null>(null);
+    useState<DerivedKnowledgePattern | null>(null);
+
+  // Freeze "now" once per mount so every row in the same render uses the same
+  // reference point and the labels don't drift between rows.
+  const nowMs = useMemo(() => Date.now(), []);
 
   // Toggle type filter
   const toggleTypeFilter = useCallback((type: KnowledgeType) => {
@@ -486,34 +469,37 @@ export default function KnowledgeDenseTable() {
     [sortField]
   );
 
-  // Summary stats
+  // Summary stats — collapsed into a single pass so we don't traverse the
+  // patterns array four times for what's just a sum-and-count.
   const stats = useMemo(() => {
-    const total = MOCK_KNOWLEDGE_PATTERNS.length;
-    const avgConfidence =
-      MOCK_KNOWLEDGE_PATTERNS.reduce((s, p) => s + p.confidence, 0) / total;
-    const totalSuccess = MOCK_KNOWLEDGE_PATTERNS.reduce(
-      (s, p) => s + p.successCount,
-      0
-    );
-    const totalFailure = MOCK_KNOWLEDGE_PATTERNS.reduce(
-      (s, p) => s + p.failureCount,
-      0
-    );
-    const avgCost =
-      MOCK_KNOWLEDGE_PATTERNS.reduce((s, p) => s + p.avgCostUsd, 0) / total;
-    return { total, avgConfidence, totalSuccess, totalFailure, avgCost };
+    const total = DERIVED_KNOWLEDGE_PATTERNS.length;
+    let confSum = 0;
+    let totalSuccess = 0;
+    let totalFailure = 0;
+    let costSum = 0;
+    for (const p of DERIVED_KNOWLEDGE_PATTERNS) {
+      confSum += p.confidence;
+      totalSuccess += p.successCount;
+      totalFailure += p.failureCount;
+      costSum += p.avgCostUsd;
+    }
+    return {
+      total,
+      avgConfidence: total > 0 ? confSum / total : 0,
+      totalSuccess,
+      totalFailure,
+      avgCost: total > 0 ? costSum / total : 0,
+    };
   }, []);
 
-  // Filtered + sorted
+  // Filtered + sorted. Sort comparator now reads precomputed __successRate /
+  // __lastSeenMs fields, eliminating per-comparison Date allocation.
   const sortedPatterns = useMemo(() => {
-    let patterns = [...MOCK_KNOWLEDGE_PATTERNS];
+    const patterns =
+      typeFilters.size > 0
+        ? DERIVED_KNOWLEDGE_PATTERNS.filter((p) => typeFilters.has(p.knowledgeType))
+        : DERIVED_KNOWLEDGE_PATTERNS.slice();
 
-    // Filter
-    if (typeFilters.size > 0) {
-      patterns = patterns.filter((p) => typeFilters.has(p.knowledgeType));
-    }
-
-    // Sort
     const dir = sortDir === "asc" ? 1 : -1;
     patterns.sort((a, b) => {
       switch (sortField) {
@@ -528,7 +514,7 @@ export default function KnowledgeDenseTable() {
         case "failureCount":
           return dir * (a.failureCount - b.failureCount);
         case "successRate":
-          return dir * (successRate(a) - successRate(b));
+          return dir * (a.__successRate - b.__successRate);
         case "avgCostUsd":
           return dir * (a.avgCostUsd - b.avgCostUsd);
         case "avgDurationMs":
@@ -536,10 +522,7 @@ export default function KnowledgeDenseTable() {
         case "confidence":
           return dir * (a.confidence - b.confidence);
         case "lastSeen":
-          return (
-            dir *
-            (new Date(a.lastSeen).getTime() - new Date(b.lastSeen).getTime())
-          );
+          return dir * (a.__lastSeenMs - b.__lastSeenMs);
         default:
           return 0;
       }
@@ -548,7 +531,7 @@ export default function KnowledgeDenseTable() {
     return patterns;
   }, [sortField, sortDir, typeFilters]);
 
-  const handleSelect = (p: KnowledgePattern) => {
+  const handleSelect = (p: DerivedKnowledgePattern) => {
     setSelectedPattern((prev) => (prev?.id === p.id ? null : p));
   };
 
@@ -671,6 +654,7 @@ export default function KnowledgeDenseTable() {
                 pattern={pattern}
                 index={i}
                 isSelected={selectedPattern?.id === pattern.id}
+                nowMs={nowMs}
                 onSelect={handleSelect}
               />
             ))}
@@ -690,6 +674,7 @@ export default function KnowledgeDenseTable() {
           <BottomDetailPanel
             key={selectedPattern.id}
             pattern={selectedPattern}
+            nowMs={nowMs}
             onClose={() => setSelectedPattern(null)}
           />
         )}

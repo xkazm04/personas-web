@@ -282,6 +282,14 @@ export const vi: Translations = {
     toolUtilization: 'S\u1eed d\u1ee5ng c\u00f4ng c\u1ee5',
     workers: 'worker',
     usageAnalytics: 'Ph\u00e2n t\u00edch s\u1eed d\u1ee5ng',
+    errorBoundary: {
+      title: 'Kh\u00f4ng th\u1ec3 hi\u1ec3n th\u1ecb b\u1ea3ng dashboard',
+      description: 'Ph\u1ea7n n\u00e0y g\u1eb7p l\u1ed7i kh\u00f4ng mong mu\u1ed1n. B\u1ea1n c\u00f3 th\u1ec3 th\u1eed l\u1ea1i m\u00e0 kh\u00f4ng c\u1ea7n r\u1eddi kh\u1ecfi trang.',
+      retry: 'Th\u1eed l\u1ea1i',
+      errorIdLabel: 'ID l\u1ed7i',
+      copyErrorId: 'Sao ch\u00e9p ID l\u1ed7i',
+      copied: '\u0110\u00e3 sao ch\u00e9p',
+    },
   },
   agentsPage: {
     title: 'T\u00e1c nh\u00e2n',

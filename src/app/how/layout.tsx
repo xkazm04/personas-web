@@ -1,6 +1,9 @@
 import type { Metadata } from "next";
 import { SITE_URL } from "@/lib/seo";
 
+export const dynamic = "force-static";
+export const revalidate = 3600;
+
 export const metadata: Metadata = {
   title: "How It Works",
   description:

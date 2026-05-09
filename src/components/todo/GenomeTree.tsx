@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useEffect, useCallback, useRef, useMemo } from "react";
-import { motion, AnimatePresence, useReducedMotion } from "framer-motion";
+import { motion, AnimatePresence } from "framer-motion";
 import {
   GitBranch,
   Trophy,
@@ -16,6 +16,10 @@ import SectionHeading from "@/components/SectionHeading";
 import SectionWrapper from "@/components/SectionWrapper";
 import TerminalChrome from "@/components/TerminalChrome";
 import { fadeUp, staggerContainer } from "@/lib/animations";
+import {
+  SectionPauseProvider,
+  useSectionPauseController,
+} from "@/hooks/useSectionPause";
 
 /* ------------------------------------------------------------------ */
 /*  Types & data                                                       */
@@ -150,12 +154,25 @@ function buildTree(): { nodes: TreeNode[]; branches: Branch[]; bestPath: string[
     bestLeaf = nodes.reduce((best, n) => (n.fitness > best.fitness ? n : best), nodes[0]);
   }
 
+  // Pre-build an id → node index so the parent walk is O(depth) instead of
+  // O(n*depth) and so a future mistake in buildTree can't degrade silently.
+  const nodesById = new Map(nodes.map((n) => [n.id, n]));
+
   const bestPath: string[] = [];
+  // Defensive cycle guard: if a future refactor of `parents` ever produces
+  // a self-reference or cycle, fall through instead of hanging the tab.
+  const visited = new Set<string>();
   let current: TreeNode | undefined = bestLeaf;
   while (current) {
+    if (visited.has(current.id)) {
+      // Cycle detected — bail. Sentry would normally pick this up via the
+      // global handler if we logged; here we just stop walking.
+      break;
+    }
+    visited.add(current.id);
     bestPath.unshift(current.id);
     current.isBestPath = true;
-    current = current.parentId ? nodes.find((n) => n.id === current!.parentId) : undefined;
+    current = current.parentId ? nodesById.get(current.parentId) : undefined;
   }
 
   return { nodes, branches, bestPath };
@@ -184,7 +201,9 @@ function getNodePos(node: TreeNode): { x: number; y: number } {
 /* ------------------------------------------------------------------ */
 
 export default function GenomeTree() {
-  const prefersReducedMotion = useReducedMotion();
+  const sectionRef = useRef<HTMLDivElement>(null);
+  const pauseValue = useSectionPauseController({ ref: sectionRef });
+  const { paused, reducedMotion: prefersReducedMotion } = pauseValue;
   const [treeData, setTreeData] = useState(() => buildTree());
   const [nodes, setNodes] = useState<TreeNode[]>(treeData.nodes);
   const [branchesState, setBranches] = useState<Branch[]>(treeData.branches);
@@ -198,6 +217,15 @@ export default function GenomeTree() {
     () => Math.max(...nodes.map((n) => n.generation)),
     [nodes]
   );
+
+  // O(1) id lookup: branch render and bestPath chip render previously did
+  // nodes.find() per item, which is O(n*m) for ~50 lookups on every state
+  // tick (growStep, selection, hover). One Map per nodes change instead.
+  const nodesById = useMemo(() => {
+    const map = new Map<string, TreeNode>();
+    for (const n of nodes) map.set(n.id, n);
+    return map;
+  }, [nodes]);
 
   // Reset and regrow tree
   const resetTree = useCallback(() => {
@@ -237,9 +265,10 @@ export default function GenomeTree() {
         prev.map((n) => (n.generation <= currentGen ? { ...n, visible: true } : n))
       );
       // Reveal branches that connect to this generation
+      const treeNodesById = new Map(treeData.nodes.map((n) => [n.id, n]));
       setBranches((prev) =>
         prev.map((b) => {
-          const toNode = treeData.nodes.find((n) => n.id === b.toId);
+          const toNode = treeNodesById.get(b.toId);
           return toNode && toNode.generation <= currentGen
             ? { ...b, visible: true }
             : b;
@@ -254,20 +283,24 @@ export default function GenomeTree() {
 
   useEffect(() => () => clearTimeout(growRef.current), []);
 
-  // Auto-start grow on mount
+  // Auto-start grow on mount, skip while paused (off-screen, reduced
+  // motion, or user-paused).
   useEffect(() => {
+    if (paused) return;
     if (!hasGrown && !growing) {
       const timeout = setTimeout(startGrow, 800);
       return () => clearTimeout(timeout);
     }
-  }, [hasGrown, growing, startGrow]);
+  }, [hasGrown, growing, startGrow, paused]);
 
   const selectedNodeData = selectedNode
-    ? nodes.find((n) => n.id === selectedNode)
+    ? nodesById.get(selectedNode) ?? null
     : null;
 
   return (
+    <SectionPauseProvider value={pauseValue}>
     <SectionWrapper id="genome-tree" className="relative overflow-hidden">
+      <div ref={sectionRef} aria-hidden="true" />
       {/* Ambient glow */}
       <div className="absolute inset-0 pointer-events-none">
         <div className="absolute bottom-0 left-1/2 -translate-x-1/2 w-[800px] h-[400px] rounded-full bg-brand-purple/[0.03] blur-[120px]" />
@@ -373,8 +406,8 @@ export default function GenomeTree() {
 
               {/* Branches */}
               {branchesState.map((branch) => {
-                const fromNode = nodes.find((n) => n.id === branch.fromId);
-                const toNode = nodes.find((n) => n.id === branch.toId);
+                const fromNode = nodesById.get(branch.fromId);
+                const toNode = nodesById.get(branch.toId);
                 if (!fromNode || !toNode) return null;
                 const from = getNodePos(fromNode);
                 const to = getNodePos(toNode);
@@ -467,14 +500,16 @@ export default function GenomeTree() {
                         initial={{ scale: 0.8, opacity: 0 }}
                         animate={{ scale: 1, opacity: 0.6 }}
                       >
-                        <animateTransform
-                          attributeName="transform"
-                          type="rotate"
-                          from={`0 ${pos.x} ${pos.y}`}
-                          to={`360 ${pos.x} ${pos.y}`}
-                          dur="8s"
-                          repeatCount="indefinite"
-                        />
+                        {!paused && (
+                          <animateTransform
+                            attributeName="transform"
+                            type="rotate"
+                            from={`0 ${pos.x} ${pos.y}`}
+                            to={`360 ${pos.x} ${pos.y}`}
+                            dur="8s"
+                            repeatCount="indefinite"
+                          />
+                        )}
                       </motion.circle>
                     )}
 
@@ -853,7 +888,7 @@ export default function GenomeTree() {
             </div>
             <div className="flex items-center gap-1 overflow-x-auto pb-1">
               {treeData.bestPath.map((nodeId, i) => {
-                const node = nodes.find((n) => n.id === nodeId);
+                const node = nodesById.get(nodeId);
                 if (!node) return null;
                 const isVisible = node.visible;
                 return (
@@ -886,6 +921,7 @@ export default function GenomeTree() {
         </motion.div>
       </div>
     </SectionWrapper>
+    </SectionPauseProvider>
   );
 }
 

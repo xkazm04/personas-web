@@ -21,7 +21,8 @@ export default function MobileBottomNav() {
             <Link
               key={item.key}
               href={item.href}
-              className={`relative flex min-h-[44px] min-w-[44px] flex-col items-center justify-center gap-0.5 rounded-xl px-2 py-1.5 text-[10px] font-medium transition-colors ${
+              aria-current={active ? "page" : undefined}
+              className={`relative flex min-h-[44px] min-w-[44px] flex-col items-center justify-center gap-0.5 rounded-xl px-2 py-1.5 text-[10px] font-medium outline-none transition-colors focus-visible:ring-2 focus-visible:ring-brand-cyan/40 focus-visible:ring-offset-0 ${
                 active
                   ? "text-brand-cyan"
                   : "text-muted-dark"
@@ -56,7 +57,7 @@ function MobileMoreMenu({
     <div className="relative">
       <button
         onClick={() => setOpen(!open)}
-        className={`flex min-h-[44px] min-w-[44px] flex-col items-center justify-center gap-0.5 rounded-xl px-2 py-1.5 text-[10px] font-medium transition-colors ${
+        className={`flex min-h-[44px] min-w-[44px] flex-col items-center justify-center gap-0.5 rounded-xl px-2 py-1.5 text-[10px] font-medium outline-none transition-colors focus-visible:ring-2 focus-visible:ring-brand-cyan/40 focus-visible:ring-offset-0 ${
           items.some(getActive) ? "text-brand-cyan" : "text-muted-dark"
         }`}
       >
@@ -76,7 +77,8 @@ function MobileMoreMenu({
                   key={item.key}
                   href={item.href}
                   onClick={() => setOpen(false)}
-                  className={`flex min-h-[44px] items-center gap-3 rounded-lg px-3 py-2.5 text-sm font-medium transition-colors ${
+                  aria-current={active ? "page" : undefined}
+                  className={`flex min-h-[44px] items-center gap-3 rounded-lg px-3 py-2.5 text-sm font-medium outline-none transition-colors focus-visible:ring-2 focus-visible:ring-brand-cyan/40 focus-visible:ring-offset-0 ${
                     active
                       ? "bg-brand-cyan/8 text-brand-cyan"
                       : "text-muted hover:text-foreground hover:bg-white/[0.04]"

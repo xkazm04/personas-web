@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect, useCallback } from "react";
+import { useState, useEffect, useCallback, useMemo } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import {
   ChevronUp,
@@ -305,24 +305,31 @@ function CommentBubble({
 
 /* ── Threaded comments for a feature ── */
 
+interface CommentBucket {
+  topLevel: Comment[];
+  repliesByParent: Map<string, Comment[]>;
+  total: number;
+}
+
+const EMPTY_BUCKET: CommentBucket = {
+  topLevel: [],
+  repliesByParent: new Map(),
+  total: 0,
+};
+
 function CommentThread({
   featureId,
-  comments,
+  bucket,
   onAddComment,
   accentRgba,
 }: {
   featureId: string;
-  comments: Comment[];
+  bucket: CommentBucket;
   onAddComment: (featureId: string, text: string, parentId: string | null) => void;
   accentRgba: (a: number) => string;
 }) {
   const [replyingTo, setReplyingTo] = useState<string | null>(null);
-  const featureComments = comments.filter((c) => c.featureId === featureId);
-  const topLevel = featureComments.filter((c) => c.parentId === null);
-  const replies = featureComments.filter((c) => c.parentId !== null);
-
-  const getReplies = (parentId: string) =>
-    replies.filter((c) => c.parentId === parentId).sort((a, b) => a.timestamp - b.timestamp);
+  const { topLevel, repliesByParent } = bucket;
 
   const handleReply = (parentId: string) => {
     setReplyingTo((prev) => (prev === parentId ? null : parentId));
@@ -335,7 +342,7 @@ function CommentThread({
           No comments yet. Be the first to share your thoughts.
         </p>
       )}
-      {topLevel.sort((a, b) => a.timestamp - b.timestamp).map((comment) => (
+      {topLevel.map((comment) => (
         <div key={comment.id}>
           <CommentBubble
             comment={comment}
@@ -343,7 +350,7 @@ function CommentThread({
             onReply={handleReply}
           />
           {/* Replies */}
-          {getReplies(comment.id).map((reply) => (
+          {(repliesByParent.get(comment.id) ?? []).map((reply) => (
             <CommentBubble
               key={reply.id}
               comment={reply}
@@ -399,20 +406,22 @@ function VoteCard({
   feature,
   initialVoted,
   onToggleVote,
-  comments,
+  commentBucket,
   onAddComment,
   boostCount,
   onBoost,
   showBoostUI,
+  priority = false,
 }: {
   feature: Feature;
   initialVoted: boolean;
   onToggleVote: (featureId: string, voted: boolean) => void;
-  comments: Comment[];
+  commentBucket: CommentBucket;
   onAddComment: (featureId: string, text: string, parentId: string | null) => void;
   boostCount: number;
   onBoost: (featureId: string, tier: number) => void;
   showBoostUI: boolean;
+  priority?: boolean;
 }) {
   const [voted, setVoted] = useState(initialVoted);
   const [count, setCount] = useState(feature.votes + (initialVoted ? 1 : 0));
@@ -428,7 +437,7 @@ function VoteCard({
   const [showComments, setShowComments] = useState(false);
   const t = accentTokens[feature.accent];
   const rgba = (a: number) => `rgba(${t.r},${t.g},${t.b},${a})`;
-  const commentCount = comments.filter((c) => c.featureId === feature.id).length;
+  const commentCount = commentBucket.total;
 
   const handleVote = (e: React.MouseEvent) => {
     e.stopPropagation();
@@ -466,8 +475,11 @@ function VoteCard({
               src={featureIllustrations[feature.id]}
               alt={feature.title}
               fill
-              sizes="(max-width: 640px) 100vw, 50vw"
-              loading="lazy"
+              // Section is max-w-6xl (1152px) with sm:grid-cols-2 + gap-6, so
+              // each card is ~564px on desktop. Tighten the descriptor so the
+              // browser picks a smaller srcset variant rather than full-width.
+              sizes="(max-width: 640px) 100vw, (max-width: 1200px) 50vw, 600px"
+              {...(priority ? { priority: true } : { loading: "lazy" as const })}
               className="object-cover opacity-60 group-hover:opacity-90 transition-opacity duration-700"
               onLoad={() => setImgLoaded(true)}
             />
@@ -648,7 +660,7 @@ function VoteCard({
                       </div>
                       <CommentThread
                         featureId={feature.id}
-                        comments={comments}
+                        bucket={commentBucket}
                         onAddComment={onAddComment}
                         accentRgba={rgba}
                       />
@@ -827,6 +839,36 @@ export default function FeatureVoting() {
   const totalBoosts = Object.values(boosts).reduce((s, v) => s + v, 0);
   const sorted = [...features].sort((a, b) => b.votes - a.votes);
 
+  // Pre-group comments by feature once per change to comments. Each bucket
+  // holds top-level comments and a Map of replies keyed by parent (both
+  // pre-sorted by timestamp). This avoids the O(N*M) filter chain that ran
+  // per parent re-render in CommentThread.
+  const commentsByFeature = useMemo(() => {
+    const map = new Map<string, CommentBucket>();
+    for (const c of comments) {
+      let bucket = map.get(c.featureId);
+      if (!bucket) {
+        bucket = { topLevel: [], repliesByParent: new Map(), total: 0 };
+        map.set(c.featureId, bucket);
+      }
+      bucket.total++;
+      if (c.parentId === null) {
+        bucket.topLevel.push(c);
+      } else {
+        const arr = bucket.repliesByParent.get(c.parentId);
+        if (arr) arr.push(c);
+        else bucket.repliesByParent.set(c.parentId, [c]);
+      }
+    }
+    for (const bucket of map.values()) {
+      bucket.topLevel.sort((a, b) => a.timestamp - b.timestamp);
+      for (const arr of bucket.repliesByParent.values()) {
+        arr.sort((a, b) => a.timestamp - b.timestamp);
+      }
+    }
+    return map;
+  }, [comments]);
+
   return (
     <SectionWrapper id="vote">
       {/* Header */}
@@ -852,17 +894,18 @@ export default function FeatureVoting() {
         variants={staggerContainer}
         className="mt-16 grid gap-6 sm:grid-cols-2"
       >
-        {sorted.map((feature) => (
+        {sorted.map((feature, i) => (
           <VoteCard
             key={feature.id}
             feature={feature}
             initialVoted={votedIds.has(feature.id)}
             onToggleVote={handleToggleVote}
-            comments={comments}
+            commentBucket={commentsByFeature.get(feature.id) ?? EMPTY_BUCKET}
             onAddComment={handleAddComment}
             boostCount={boosts[feature.id] ?? 0}
             onBoost={handleBoost}
             showBoostUI={!!KOFI_USERNAME}
+            priority={i < 2}
           />
         ))}
       </motion.div>

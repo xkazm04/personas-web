@@ -1,9 +1,39 @@
 "use client";
 
+import { useMemo } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { X, ArrowRight, Clock, Timer, Tag } from "lucide-react";
 import { type SwarmNode, EVENT_TYPES } from "@/lib/mock-dashboard-data";
-import { highlightJson } from "@/components/dashboard/JsonViewer";
+import JsonViewer from "@/components/dashboard/JsonViewer";
+
+// Deterministic metadata derived from node.id so the same node always renders
+// the same eventType / duration / timestamp across re-renders and re-opens.
+function hashString(str: string): number {
+  let h = 0;
+  for (let i = 0; i < str.length; i++) {
+    h = (Math.imul(h, 31) + str.charCodeAt(i)) | 0;
+  }
+  return Math.abs(h);
+}
+
+function seededRandom(seed: number): () => number {
+  let s = seed % 2147483647;
+  if (s <= 0) s += 2147483646;
+  return () => {
+    s = (s * 16807) % 2147483647;
+    return (s - 1) / 2147483646;
+  };
+}
+
+function deriveStableMetadata(nodeId: string) {
+  const rng = seededRandom(hashString(nodeId) + 1);
+  const eventType = EVENT_TYPES[Math.floor(rng() * EVENT_TYPES.length)];
+  const durationMs = Math.floor(200 + rng() * 4800);
+  // Anchor mock timestamps to a stable origin so they don't drift on re-render.
+  const timestampOrigin = 1715000000000;
+  const timestamp = new Date(timestampOrigin - Math.floor(rng() * 3600_000)).toISOString();
+  return { eventType, durationMs, timestamp };
+}
 
 // ── Mock payload generator ────────────────────────────────────────────
 
@@ -89,9 +119,15 @@ interface EventDetailDrawerProps {
 }
 
 export default function EventDetailDrawer({ node, onClose }: EventDetailDrawerProps) {
-  const eventType = EVENT_TYPES[Math.floor(Math.random() * EVENT_TYPES.length)];
-  const durationMs = Math.floor(200 + Math.random() * 4800);
-  const timestamp = new Date(Date.now() - Math.floor(Math.random() * 3600_000)).toISOString();
+  const { eventType, durationMs, timestamp } = useMemo(
+    () =>
+      node
+        ? deriveStableMetadata(node.id)
+        : { eventType: "", durationMs: 0, timestamp: new Date(0).toISOString() },
+    [node?.id],
+  );
+
+  const payload = useMemo(() => (node ? mockPayloadForNode(node) : null), [node]);
 
   return (
     <AnimatePresence>
@@ -243,11 +279,7 @@ export default function EventDetailDrawer({ node, onClose }: EventDetailDrawerPr
                 <label className="mb-1.5 block text-[10px] font-medium uppercase tracking-wider text-muted-dark">
                   Sample Payload
                 </label>
-                <div className="relative max-h-64 overflow-auto rounded-xl bg-background p-4 border border-white/[0.08] shadow-inner">
-                  <pre className="font-mono text-[11px] leading-relaxed text-white/30 whitespace-pre-wrap break-all">
-                    {highlightJson(mockPayloadForNode(node))}
-                  </pre>
-                </div>
+                <JsonViewer payload={payload} />
               </div>
             </div>
           </motion.div>

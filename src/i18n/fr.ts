@@ -282,6 +282,14 @@ export const fr: Translations = {
     toolUtilization: 'Utilisation des outils',
     workers: 'workers',
     usageAnalytics: 'Analyses d\u2019utilisation',
+    errorBoundary: {
+      title: 'Le panneau du tableau de bord n\u2019a pas pu s\u2019afficher',
+      description: 'Cette section a rencontr\u00e9 une erreur inattendue. Vous pouvez r\u00e9essayer sans quitter la page.',
+      retry: 'R\u00e9essayer',
+      errorIdLabel: 'ID d\u2019erreur',
+      copyErrorId: 'Copier l\u2019ID d\u2019erreur',
+      copied: 'Copi\u00e9',
+    },
   },
   agentsPage: {
     title: 'Agents',

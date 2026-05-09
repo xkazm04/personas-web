@@ -282,6 +282,14 @@ export const id: Translations = {
     toolUtilization: 'Utilisasi alat',
     workers: 'worker',
     usageAnalytics: 'Analitik Penggunaan',
+    errorBoundary: {
+      title: 'Panel dasbor gagal dirender',
+      description: 'Bagian ini mengalami kesalahan tak terduga. Anda dapat mencoba lagi tanpa meninggalkan halaman.',
+      retry: 'Coba lagi',
+      errorIdLabel: 'ID kesalahan',
+      copyErrorId: 'Salin ID kesalahan',
+      copied: 'Tersalin',
+    },
   },
   agentsPage: {
     title: 'Agen',

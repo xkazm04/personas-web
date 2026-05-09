@@ -8,6 +8,10 @@ import SectionHeading from "@/components/SectionHeading";
 import SectionWrapper from "@/components/SectionWrapper";
 import TerminalChrome from "@/components/TerminalChrome";
 import { fadeUp } from "@/lib/animations";
+import {
+  SectionPauseProvider,
+  useSectionPauseController,
+} from "@/hooks/useSectionPause";
 
 /* ------------------------------------------------------------------ */
 /*  Types                                                              */
@@ -215,6 +219,9 @@ function CommandBadge({ command, index }: { command: CommandSequence; index: num
 
 export default function PlatformCommand() {
   const prefersReducedMotion = useReducedMotion() ?? false;
+  const sectionRef = useRef<HTMLElement>(null);
+  const pauseValue = useSectionPauseController({ ref: sectionRef });
+  const sectionPaused = pauseValue.paused;
   const terminalRef = useRef<HTMLDivElement>(null);
   const scrollRef = useRef<HTMLDivElement>(null);
   const isInView = useInView(terminalRef, { once: false, margin: "-100px" });
@@ -248,16 +255,16 @@ export default function PlatformCommand() {
 
   /* Start animation when in view */
   useEffect(() => {
-    if (isInView && phase === "idle") {
+    if (isInView && phase === "idle" && !sectionPaused) {
       timeoutRef.current = setTimeout(() => {
         if (isActiveRef.current) setPhase("typing");
       }, 600);
     }
-  }, [isInView, phase]);
+  }, [isInView, phase, sectionPaused]);
 
   /* Typing effect */
   useEffect(() => {
-    if (phase !== "typing" || !isActiveRef.current) return;
+    if (phase !== "typing" || !isActiveRef.current || sectionPaused) return;
 
     const cmd = commands[currentCommandIndex];
     if (!cmd) return;
@@ -284,11 +291,11 @@ export default function PlatformCommand() {
         if (isActiveRef.current) setPhase("output");
       }, 300);
     }
-  }, [phase, typedText, currentCommandIndex, prefersReducedMotion]);
+  }, [phase, typedText, currentCommandIndex, prefersReducedMotion, sectionPaused]);
 
   /* Output reveal */
   useEffect(() => {
-    if (phase !== "output" || !isActiveRef.current) return;
+    if (phase !== "output" || !isActiveRef.current || sectionPaused) return;
 
     const cmd = commands[currentCommandIndex];
     if (!cmd) return;
@@ -316,11 +323,11 @@ export default function PlatformCommand() {
         if (isActiveRef.current) advanceToNext();
       }, 1200);
     }
-  }, [phase, outputLines, currentCommandIndex, prefersReducedMotion]);
+  }, [phase, outputLines, currentCommandIndex, prefersReducedMotion, sectionPaused]);
 
   /* Summary phase */
   useEffect(() => {
-    if (phase !== "summary" || !isActiveRef.current) return;
+    if (phase !== "summary" || !isActiveRef.current || sectionPaused) return;
 
     setShowSummary(true);
 
@@ -334,7 +341,7 @@ export default function PlatformCommand() {
         }, 4000);
       }
     }, 3000);
-  }, [phase]);
+  }, [phase, sectionPaused]);
 
   /* Advance to the next command */
   const advanceToNext = useCallback(() => {
@@ -399,7 +406,8 @@ export default function PlatformCommand() {
   const completedCount = history.length;
 
   return (
-    <SectionWrapper id="platform-command" dotGrid>
+    <SectionPauseProvider value={pauseValue}>
+    <SectionWrapper id="platform-command" dotGrid ref={sectionRef}>
       {/* Background accents */}
       <div className="pointer-events-none absolute inset-0 overflow-hidden">
         <div
@@ -599,5 +607,6 @@ export default function PlatformCommand() {
         </div>
       </motion.div>
     </SectionWrapper>
+    </SectionPauseProvider>
   );
 }

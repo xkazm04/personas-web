@@ -101,6 +101,11 @@ export function useReviewBulkActions(filtered: ManualReviewItem[]) {
           (r) => !ids.includes(r.id) && r.status === "pending",
         ).length,
       }));
+      // Pause polling for the duration of the undo window: a poll that resolves
+      // mid-window would replace the optimistic store with the still-pending
+      // server snapshot, producing a visible status flicker and — if the user
+      // clicks Undo during that flicker — divergent local state.
+      useReviewStore.getState().setPollPaused(true);
       setSelectedIds(new Set());
 
       const label = status === "approved" ? "Approved" : "Rejected";
@@ -113,6 +118,7 @@ export function useReviewBulkActions(filtered: ManualReviewItem[]) {
       undoTimerRef.current = setTimeout(() => {
         setUndoState(null);
         undoTimerRef.current = null;
+        useReviewStore.getState().setPollPaused(false);
         void executeBulkAction(ids, status);
       }, 5000);
     },
@@ -150,17 +156,23 @@ export function useReviewBulkActions(filtered: ManualReviewItem[]) {
         (r) => r.status === "pending" || ids.includes(r.id),
       ).length,
     }));
+    useReviewStore.getState().setPollPaused(false);
     setUndoState(null);
   }, [undoState]);
 
   const handleUndoExpire = useCallback(() => {
+    useReviewStore.getState().setPollPaused(false);
     setUndoState(null);
   }, []);
 
-  // Cleanup undo timer on unmount
+  // Cleanup undo timer on unmount + release the polling pause so an unmount
+  // mid-window doesn't strand the store in the paused state.
   useEffect(() => {
     return () => {
-      if (undoTimerRef.current) clearTimeout(undoTimerRef.current);
+      if (undoTimerRef.current) {
+        clearTimeout(undoTimerRef.current);
+        useReviewStore.getState().setPollPaused(false);
+      }
     };
   }, []);
 

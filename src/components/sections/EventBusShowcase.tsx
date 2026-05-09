@@ -2,6 +2,7 @@
 
 import { useId, useRef, useState, useEffect, useMemo } from "react";
 import { motion, useInView, AnimatePresence } from "framer-motion";
+import { usePageVisibility } from "@/hooks/usePageVisibility";
 import { Wand2 } from "lucide-react";
 import dynamic from "next/dynamic";
 import SectionWrapper from "@/components/SectionWrapper";
@@ -87,14 +88,15 @@ export default function EventBusShowcase({ telemetryAdapter }: { telemetryAdapte
 
   const containerRef = useRef<HTMLDivElement>(null);
   const inView = useInView(containerRef, { margin: "200px", once: false });
+  const tabHidden = usePageVisibility();
   const [variant, setVariant] = useState<QueueVariant>("swarm");
   const [snapshot, setSnapshot] = useState(() => createSnapshot("bootstrap", queueRouteSeeds));
 
   useEffect(() => {
-    if (!inView) return;
+    if (!inView || tabHidden) return;
     const adapter = telemetryAdapter ?? defaultTelemetryAdapter;
     return adapter.subscribe(setSnapshot);
-  }, [telemetryAdapter, inView]);
+  }, [telemetryAdapter, inView, tabHidden]);
 
   // Auto-open composer if URL has a #flow= hash
   const [composerOpen, setComposerOpen] = useState(() => {

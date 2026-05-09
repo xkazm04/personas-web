@@ -3,6 +3,10 @@
 import { useState, useEffect, useCallback, useRef } from "react";
 import { motion, AnimatePresence, useReducedMotion } from "framer-motion";
 import {
+  SectionPauseProvider,
+  useSectionPauseController,
+} from "@/hooks/useSectionPause";
+import {
   X,
   Check,
   AlertTriangle,
@@ -563,6 +567,9 @@ function Track({
 
 export default function AgentsTimeline() {
   const prefersReduced = useReducedMotion();
+  const sectionRef = useRef<HTMLElement>(null);
+  const pauseValue = useSectionPauseController({ ref: sectionRef });
+  const sectionPaused = pauseValue.paused;
   const [activeIndex, setActiveIndex] = useState(0);
   const [isPlaying, setIsPlaying] = useState(false);
   const [showResults, setShowResults] = useState(false);
@@ -595,7 +602,7 @@ export default function AgentsTimeline() {
 
   // Auto-cycle
   useEffect(() => {
-    if (paused) return;
+    if (paused || sectionPaused) return;
     if (cycleTimerRef.current) clearTimeout(cycleTimerRef.current);
     cycleTimerRef.current = setTimeout(() => {
       advanceScenario();
@@ -603,7 +610,7 @@ export default function AgentsTimeline() {
     return () => {
       if (cycleTimerRef.current) clearTimeout(cycleTimerRef.current);
     };
-  }, [activeIndex, paused, advanceScenario]);
+  }, [activeIndex, paused, sectionPaused, advanceScenario]);
 
   // Cleanup on unmount
   useEffect(() => {
@@ -614,9 +621,11 @@ export default function AgentsTimeline() {
   }, []);
 
   return (
+    <SectionPauseProvider value={pauseValue}>
     <SectionWrapper
       id="agents-timeline"
       aria-label="Agents vs Workflows racing timeline comparison"
+      ref={sectionRef}
     >
       {/* Header */}
       <motion.div variants={fadeUp} className="text-center mb-14">
@@ -879,5 +888,6 @@ export default function AgentsTimeline() {
         </div>
       </motion.div>
     </SectionWrapper>
+    </SectionPauseProvider>
   );
 }

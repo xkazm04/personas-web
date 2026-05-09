@@ -1,15 +1,23 @@
 "use client";
 
 import { useState, useEffect, useCallback, useRef } from "react";
-import { motion, AnimatePresence, useReducedMotion, useInView } from "framer-motion";
+import { motion, AnimatePresence, useInView, useReducedMotion } from "framer-motion";
 import { Activity, Eye, DollarSign, Gauge, FileText, BarChart3 } from "lucide-react";
 import GradientText from "@/components/GradientText";
 import SectionHeading from "@/components/SectionHeading";
 import SectionWrapper from "@/components/SectionWrapper";
 import TerminalChrome from "@/components/TerminalChrome";
 import { fadeUp, staggerContainer } from "@/lib/animations";
+import {
+  SectionPauseProvider,
+  useSectionPauseController,
+} from "@/hooks/useSectionPause";
 
 interface ActivityRow {
+  /** Monotonic id so AnimatePresence keys never collide, even when the
+   *  same agent + event fires within a single second or addRow batches
+   *  after a tab-throttle catch-up. */
+  id: number;
   time: string;
   agent: string;
   event: string;
@@ -19,9 +27,9 @@ interface ActivityRow {
 }
 
 const baseActivity: ActivityRow[] = [
-  { time: "09:14:22", agent: "PR Reviewer", event: "execution.completed", duration: "2.1s", cost: "$0.11", color: "#34d399" },
-  { time: "09:14:18", agent: "Email Triage", event: "tool.gmail_read", duration: "340ms", cost: "$0.00", color: "#06b6d4" },
-  { time: "09:14:15", agent: "Slack Digest", event: "execution.started", duration: "—", cost: "—", color: "#a855f7" },
+  { id: -3, time: "09:14:22", agent: "PR Reviewer", event: "execution.completed", duration: "2.1s", cost: "$0.11", color: "#34d399" },
+  { id: -2, time: "09:14:18", agent: "Email Triage", event: "tool.gmail_read", duration: "340ms", cost: "$0.00", color: "#06b6d4" },
+  { id: -1, time: "09:14:15", agent: "Slack Digest", event: "execution.started", duration: "—", cost: "—", color: "#a855f7" },
 ];
 
 const agentPool = ["PR Reviewer", "Email Triage", "Slack Digest", "Deploy Monitor", "Doc Indexer", "Meeting Notes"];
@@ -40,10 +48,11 @@ const observFeatures = [
 function AnimatedMetric({ target, prefix, suffix, color, label, trend }: { target: number; prefix?: string; suffix?: string; color: string; label: string; trend: string }) {
   const ref = useRef<HTMLDivElement>(null);
   const inView = useInView(ref, { once: true, margin: "-40px" });
+  const reducedMotion = useReducedMotion();
   const [value, setValue] = useState(0);
 
   useEffect(() => {
-    if (!inView) return;
+    if (!inView || reducedMotion) return;
     let raf = 0;
     const start = performance.now();
     const dur = 1400;
@@ -54,9 +63,11 @@ function AnimatedMetric({ target, prefix, suffix, color, label, trend }: { targe
     };
     raf = requestAnimationFrame(tick);
     return () => cancelAnimationFrame(raf);
-  }, [inView, target]);
+  }, [inView, target, reducedMotion]);
 
-  const formatted = target >= 10 ? Math.round(value).toString() : value.toFixed(1);
+  // Reduced motion: skip the count-up and render the final value directly.
+  const display = reducedMotion ? target : value;
+  const formatted = target >= 10 ? Math.round(display).toString() : display.toFixed(1);
 
   return (
     <div ref={ref} className="p-5 text-center">
@@ -68,9 +79,12 @@ function AnimatedMetric({ target, prefix, suffix, color, label, trend }: { targe
 }
 
 export default function ObservabilityDeck() {
-  const prefersReducedMotion = useReducedMotion();
+  const sectionRef = useRef<HTMLDivElement>(null);
+  const pauseValue = useSectionPauseController({ ref: sectionRef });
+  const { paused } = pauseValue;
   const [activity, setActivity] = useState(baseActivity);
-  const [newRow, setNewRow] = useState<string | null>(null);
+  const [newRowId, setNewRowId] = useState<number | null>(null);
+  const rowIdRef = useRef(0);
 
   const addRow = useCallback(() => {
     const now = new Date();
@@ -80,21 +94,24 @@ export default function ObservabilityDeck() {
     const color = colorPool[Math.floor(Math.random() * colorPool.length)];
     const duration = event.includes("completed") ? `${(Math.random() * 4 + 0.5).toFixed(1)}s` : event.includes("started") ? "—" : `${Math.floor(Math.random() * 800 + 50)}ms`;
     const cost = event.includes("execution") ? `$${(Math.random() * 0.3).toFixed(2)}` : "$0.00";
-    const row: ActivityRow = { time, agent, event, duration, cost, color };
+    const id = ++rowIdRef.current;
+    const row: ActivityRow = { id, time, agent, event, duration, cost, color };
 
     setActivity(prev => [row, ...prev.slice(0, 5)]);
-    setNewRow(time);
-    setTimeout(() => setNewRow(null), 800);
+    setNewRowId(id);
+    setTimeout(() => setNewRowId((curr) => (curr === id ? null : curr)), 800);
   }, []);
 
   useEffect(() => {
-    if (prefersReducedMotion) return;
+    if (paused) return;
     const id = setInterval(addRow, 3000 + Math.random() * 2000);
     return () => clearInterval(id);
-  }, [addRow, prefersReducedMotion]);
+  }, [addRow, paused]);
 
   return (
+    <SectionPauseProvider value={pauseValue}>
     <SectionWrapper id="observe">
+      <div ref={sectionRef} aria-hidden="true" />
       <motion.div initial="hidden" whileInView="visible" viewport={{ once: true }} variants={staggerContainer} className="text-center">
         <motion.div variants={fadeUp}>
           <SectionHeading>
@@ -131,14 +148,14 @@ export default function ObservabilityDeck() {
             <AnimatePresence mode="popLayout" initial={false}>
               {activity.map((row) => (
                 <motion.div
-                  key={row.time + row.agent + row.event}
+                  key={row.id}
                   layout
                   initial={{ opacity: 0, x: -20, height: 0 }}
                   animate={{ opacity: 1, x: 0, height: "auto" }}
                   exit={{ opacity: 0, height: 0 }}
                   transition={{ type: "spring", bounce: 0.15, duration: 0.4 }}
                   className={`flex items-center justify-between text-sm font-mono py-1 rounded px-1 transition-colors duration-500 ${
-                    newRow === row.time ? "bg-brand-cyan/5" : ""
+                    newRowId === row.id ? "bg-brand-cyan/5" : ""
                   }`}
                 >
                   <div className="flex items-center gap-3">
@@ -184,5 +201,6 @@ export default function ObservabilityDeck() {
         ))}
       </div>
     </SectionWrapper>
+    </SectionPauseProvider>
   );
 }

@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect, useCallback, useMemo } from "react";
+import { useState, useEffect, useCallback, useMemo, useRef } from "react";
 import {
   motion,
   AnimatePresence,
@@ -9,6 +9,10 @@ import {
   useTransform,
   animate,
 } from "framer-motion";
+import {
+  SectionPauseProvider,
+  useSectionPauseController,
+} from "@/hooks/useSectionPause";
 import {
   Mail,
   MessageSquare,
@@ -298,6 +302,9 @@ function HexCell({ agent, x, y, index, isFlashing, isHovered, onHover }: HexCell
 
 export default function VisionHoneycomb() {
   const prefersReducedMotion = useReducedMotion();
+  const sectionRef = useRef<HTMLElement>(null);
+  const pauseValue = useSectionPauseController({ ref: sectionRef });
+  const { paused } = pauseValue;
   const [agents, setAgents] = useState(initialAgents);
   const [flashIdx, setFlashIdx] = useState<number | null>(null);
   const [hoveredIdx, setHoveredIdx] = useState<number | null>(null);
@@ -326,7 +333,7 @@ export default function VisionHoneycomb() {
   }, [prefersReducedMotion]);
 
   useEffect(() => {
-    if (prefersReducedMotion) return;
+    if (paused) return;
     const schedule = () => {
       const delay = 2500 + Math.random() * 2000;
       return setTimeout(() => {
@@ -336,7 +343,7 @@ export default function VisionHoneycomb() {
     };
     let timerRef = schedule();
     return () => clearTimeout(timerRef);
-  }, [tick, prefersReducedMotion]);
+  }, [tick, paused]);
 
   const statusCounts = agents.reduce(
     (acc, a) => { acc[a.status] = (acc[a.status] || 0) + 1; return acc; },
@@ -350,7 +357,8 @@ export default function VisionHoneycomb() {
   const CENTER_Y = SVG_H / 2;
 
   return (
-    <SectionWrapper id="vision-honeycomb" className="relative overflow-hidden">
+    <SectionPauseProvider value={pauseValue}>
+    <SectionWrapper id="vision-honeycomb" className="relative overflow-hidden" ref={sectionRef}>
       {/* Subtle honeycomb background pattern */}
       <div className="absolute inset-0 pointer-events-none opacity-[0.03]" aria-hidden>
         <svg width="100%" height="100%" xmlns="http://www.w3.org/2000/svg">
@@ -575,5 +583,6 @@ export default function VisionHoneycomb() {
         </div>
       </motion.div>
     </SectionWrapper>
+    </SectionPauseProvider>
   );
 }

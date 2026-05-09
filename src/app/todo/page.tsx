@@ -1,6 +1,10 @@
 import InfoPageLayout from "@/components/InfoPageLayout";
 import StageSection from "@/components/StageSection";
 import DesignEngine from "@/components/todo/DesignEngine";
+
+export const dynamic = "force-static";
+export const revalidate = 3600;
+
 import LabHeatmap from "@/components/todo/LabHeatmap";
 import GenomeTree from "@/components/todo/GenomeTree";
 import MemoryLayers from "@/components/todo/MemoryLayers";

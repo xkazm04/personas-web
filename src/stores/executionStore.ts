@@ -40,17 +40,34 @@ function enrichWithPersona(
 
 /* ── Store (normalized — no persona metadata) ── */
 
+/**
+ * Pre-aggregate the running count alongside the raw list so that the
+ * dashboard nav (and anything else that only cares about the count) can
+ * subscribe to a primitive selector. Without this, every list mutation
+ * — including unrelated field edits — would re-render the nav even when
+ * the count didn't change.
+ */
+function countRunning(execs: PersonaExecution[]): number {
+  let n = 0;
+  for (const e of execs) if (e.status === "running") n++;
+  return n;
+}
+
 interface ExecutionState {
   /** Raw executions without persona enrichment */
   rawExecutions: PersonaExecution[];
+  /** Pre-aggregated count of running executions; consume via primitive selector. */
+  runningCount: number;
   executionsLoading: boolean;
   executionsError: string | null;
   fetchExecutions: (opts?: ExecFilterOpts) => Promise<void>;
   cancelExecution: (id: string) => Promise<void>;
+  reset: () => void;
 }
 
 export const useExecutionStore = create<ExecutionState>((set) => ({
   rawExecutions: [],
+  runningCount: 0,
   executionsLoading: false,
   executionsError: null,
   fetchExecutions: async (opts) => {
@@ -59,7 +76,11 @@ export const useExecutionStore = create<ExecutionState>((set) => ({
     try {
       const raw = await api.listExecutions({ limit: 50, ...opts });
       if (seq === executionFetchSeq) {
-        set({ rawExecutions: raw, executionsError: null });
+        set({
+          rawExecutions: raw,
+          runningCount: countRunning(raw),
+          executionsError: null,
+        });
       }
     } catch (err) {
       if (seq === executionFetchSeq) {
@@ -76,11 +97,22 @@ export const useExecutionStore = create<ExecutionState>((set) => ({
   },
   cancelExecution: async (id) => {
     await api.cancelExecution(id);
-    set((s) => ({
-      rawExecutions: s.rawExecutions.map((e) =>
+    set((s) => {
+      const rawExecutions = s.rawExecutions.map((e) =>
         e.id === id ? { ...e, status: "cancelled" as const } : e,
-      ),
-    }));
+      );
+      return { rawExecutions, runningCount: countRunning(rawExecutions) };
+    });
+  },
+  reset: () => {
+    // Bump the seq so any in-flight fetch from the previous user can't write back.
+    executionFetchSeq++;
+    set({
+      rawExecutions: [],
+      runningCount: 0,
+      executionsLoading: false,
+      executionsError: null,
+    });
   },
 }));
 

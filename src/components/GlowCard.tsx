@@ -2,7 +2,7 @@
 
 import { motion, type Variants } from "framer-motion";
 import { fadeUp } from "@/lib/animations";
-import { BRAND_COLORS, rgba } from "@/lib/colors";
+import { BRAND_COLORS, hexToRgbTriplet, rgba } from "@/lib/colors";
 
 type AccentColor = "cyan" | "purple" | "emerald" | "amber";
 
@@ -41,6 +41,7 @@ const textureClass: Record<TextureType, string> = {
 
 export default function GlowCard({
   accent = "cyan",
+  color,
   children,
   className = "",
   highlighted = false,
@@ -48,13 +49,20 @@ export default function GlowCard({
   variants,
 }: {
   accent?: AccentColor;
+  color?: string | null;
   children: React.ReactNode;
   className?: string;
   highlighted?: boolean;
   texture?: TextureType;
   variants?: Variants;
 }) {
+  const customRgb = hexToRgbTriplet(color);
   const colors = accentMap[accent];
+  const accentRgb = customRgb ?? colors.accentRgb;
+  // When a custom color is supplied, drive border + hover-glow from the
+  // --gc-accent custom property via the .glow-card-dynamic class. Otherwise
+  // keep the per-accent Tailwind utilities so existing usage is unchanged.
+  const accentClasses = customRgb ? "glow-card-dynamic" : `${colors.border} ${colors.glow}`;
 
   return (
     <motion.div
@@ -62,7 +70,7 @@ export default function GlowCard({
       className={`
         glow-card group relative overflow-hidden rounded-2xl border
         bg-gradient-to-br from-white/[0.035] to-white/[0.008]
-        ${colors.border} ${colors.glow}
+        ${accentClasses}
         transition-[border-color,box-shadow] duration-500
         hover:-translate-y-1.5 will-change-transform
         ${highlighted ? "ring-1 ring-brand-purple/20 scale-[1.02]" : ""}
@@ -70,7 +78,7 @@ export default function GlowCard({
         ${className}
       `}
       style={{
-        "--gc-accent": colors.accentRgb,
+        "--gc-accent": accentRgb,
         "--gc-grid-size": texture === "dense-grid" ? "12px" : "24px",
         "--gc-grid-opacity": texture === "dense-grid" ? "0.025" : "0.015",
       } as React.CSSProperties}

@@ -6,7 +6,12 @@ import { Layers, Brain, Search, ArrowDown } from "lucide-react";
 import GradientText from "@/components/GradientText";
 import SectionHeading from "@/components/SectionHeading";
 import SectionWrapper from "@/components/SectionWrapper";
+import TerminalChrome from "@/components/TerminalChrome";
 import { fadeUp, staggerContainer } from "@/lib/animations";
+import {
+  SectionPauseProvider,
+  useSectionPauseController,
+} from "@/hooks/useSectionPause";
 
 /* ------------------------------------------------------------------ */
 /*  Types & data                                                       */
@@ -355,6 +360,9 @@ function ParallaxLayer({
 /* ------------------------------------------------------------------ */
 
 export default function MemoryLayers() {
+  const sectionRef = useRef<HTMLDivElement>(null);
+  const pauseValue = useSectionPauseController({ ref: sectionRef });
+  const { paused } = pauseValue;
   const prefersReducedMotion = useReducedMotion();
   const [memories, setMemories] = useState<Memory[]>(initialMemories);
   const [droppingMem, setDroppingMem] = useState<Memory | null>(null);
@@ -404,10 +412,10 @@ export default function MemoryLayers() {
   }, [droppingMem]);
 
   useEffect(() => {
-    if (prefersReducedMotion) return;
+    if (paused) return;
     const id = setInterval(addMemory, 5500 + Math.random() * 2500);
     return () => clearInterval(id);
-  }, [addMemory, prefersReducedMotion]);
+  }, [addMemory, paused]);
 
   // Group memories by category
   const grouped = CATEGORIES.map((cat) => ({
@@ -420,7 +428,9 @@ export default function MemoryLayers() {
     : 0;
 
   return (
+    <SectionPauseProvider value={pauseValue}>
     <SectionWrapper id="memory-layers" className="relative overflow-hidden">
+      <div ref={sectionRef} aria-hidden="true" />
       {/* Atmospheric background */}
       <div className="absolute inset-0 pointer-events-none" aria-hidden>
         <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top,rgba(168,85,247,0.04)_0%,transparent_60%)]" />
@@ -466,22 +476,25 @@ export default function MemoryLayers() {
       >
         <div className="mx-auto max-w-4xl rounded-2xl border border-white/8 bg-black/50 backdrop-blur-xl overflow-hidden shadow-[0_0_80px_rgba(0,0,0,0.4)]">
           {/* Header bar */}
-          <div className="flex items-center justify-between border-b border-white/5 px-5 py-3">
-            <div className="flex items-center gap-2">
-              <Layers className="h-4 w-4 text-brand-purple/60" />
-              <span className="text-sm font-mono text-muted">
-                cortical-layers-view
+          <TerminalChrome
+            title="cortical-layers-view"
+            status="settling"
+            info={
+              <span className="flex items-center gap-3">
+                <span className="flex items-center gap-1">
+                  <Layers className="h-3 w-3 text-brand-purple/60" />
+                  layers
+                </span>
+                <span className="flex items-center gap-1">
+                  <Brain className="h-3 w-3" /> {memories.length}
+                </span>
+                <span className="hidden sm:flex items-center gap-1">
+                  <Search className="h-3 w-3" /> semantic
+                </span>
               </span>
-            </div>
-            <div className="flex items-center gap-3 text-sm font-mono text-muted-dark">
-              <span className="flex items-center gap-1">
-                <Brain className="h-3 w-3" /> {memories.length} memories
-              </span>
-              <span className="flex items-center gap-1">
-                <Search className="h-3 w-3" /> semantic search
-              </span>
-            </div>
-          </div>
+            }
+            className="px-5 py-3"
+          />
 
           <div className="flex">
             {/* Depth scale sidebar */}
@@ -558,5 +571,6 @@ export default function MemoryLayers() {
         ))}
       </motion.div>
     </SectionWrapper>
+    </SectionPauseProvider>
   );
 }

@@ -282,6 +282,14 @@ export const de: Translations = {
     toolUtilization: 'Tool-Auslastung',
     workers: 'Worker',
     usageAnalytics: 'Nutzungsanalysen',
+    errorBoundary: {
+      title: 'Dashboard-Panel konnte nicht geladen werden',
+      description: 'In diesem Bereich ist ein unerwarteter Fehler aufgetreten. Sie können es erneut versuchen, ohne die Seite zu verlassen.',
+      retry: 'Erneut versuchen',
+      errorIdLabel: 'Fehler-ID',
+      copyErrorId: 'Fehler-ID kopieren',
+      copied: 'Kopiert',
+    },
   },
   agentsPage: {
     title: 'Agenten',

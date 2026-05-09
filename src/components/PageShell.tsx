@@ -4,6 +4,7 @@ import { useMemo, type ReactNode } from "react";
 import dynamic from "next/dynamic";
 import ScrollMap from "@/components/ScrollMap";
 import AnimationPauseObserver from "@/components/AnimationPauseObserver";
+import { ParticleHost } from "@/components/ParticleHost";
 import { SectionObserverProvider } from "@/contexts/SectionObserverContext";
 
 const TopoBackground = dynamic(() => import("@/components/TopoBackground"), {
@@ -34,6 +35,7 @@ export default function PageShell({
     <SectionObserverProvider sectionIds={sectionIds}>
       <main id="main-content" className="relative isolate overflow-hidden">
         <AnimationPauseObserver />
+        <ParticleHost />
         <ScrollMap items={scrollMapItems} />
         {children}
       </main>

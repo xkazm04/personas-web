@@ -34,10 +34,11 @@ export default function DesktopSidebar() {
                 key={item.key}
                 href={item.href}
                 onMouseEnter={() => prefetchAdjacent(index)}
-                className={`group flex items-center gap-3 rounded-xl px-3 py-2.5 text-sm font-medium transition-all duration-200 ${
+                aria-current={active ? "page" : undefined}
+                className={`group relative flex items-center gap-3 rounded-xl px-3 py-2.5 text-sm font-medium outline-none transition-all duration-200 focus-visible:ring-2 focus-visible:ring-brand-cyan/40 focus-visible:ring-offset-0 before:absolute before:inset-y-1 before:left-0 before:w-[2px] before:rounded-full before:bg-brand-cyan before:transition-opacity ${
                   active
-                    ? "bg-brand-cyan/8 text-brand-cyan border-l-2 border-brand-cyan -ml-px"
-                    : "text-muted hover:text-foreground hover:bg-white/[0.04]"
+                    ? "bg-brand-cyan/8 text-brand-cyan before:opacity-100"
+                    : "text-muted hover:text-foreground hover:bg-white/[0.04] before:opacity-0"
                 }`}
               >
                 <Icon

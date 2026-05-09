@@ -3,6 +3,7 @@
 import { useEffect } from "react";
 import Image from "next/image";
 import { motion } from "framer-motion";
+import { useShallow } from "zustand/react/shallow";
 import {
   Settings,
   User,
@@ -18,11 +19,16 @@ import GlowCard from "@/components/GlowCard";
 import { useAuthStore } from "@/stores/authStore";
 import { useSystemStore } from "@/stores/systemStore";
 import { useTranslation } from "@/i18n/useTranslation";
+import { nonBlank } from "@/lib/format";
 
 export default function SettingsPage() {
-  const user = useAuthStore((s) => s.user);
-  const signOut = useAuthStore((s) => s.signOut);
-  const isDemo = useAuthStore((s) => s.isDemo);
+  const { user, signOut, isDemo } = useAuthStore(
+    useShallow((s) => ({
+      user: s.user,
+      signOut: s.signOut,
+      isDemo: s.isDemo,
+    })),
+  );
   const health = useSystemStore((s) => s.health);
   const status = useSystemStore((s) => s.status);
   const fetchStatus = useSystemStore((s) => s.fetchStatus);
@@ -34,9 +40,9 @@ export default function SettingsPage() {
     void fetchHealth();
   }, [fetchStatus, fetchHealth]);
 
-  const avatarUrl = user?.user_metadata?.avatar_url;
-  const displayName = user?.user_metadata?.full_name ?? "User";
-  const email = user?.email ?? "-";
+  const avatarUrl = nonBlank(user?.user_metadata?.avatar_url);
+  const displayName = nonBlank(user?.user_metadata?.full_name) ?? "User";
+  const email = nonBlank(user?.email) ?? "-";
   const isConnected = health?.status === "ok";
 
   return (
@@ -44,7 +50,7 @@ export default function SettingsPage() {
       {/* Background illustration */}
       <div className="pointer-events-none absolute inset-x-0 top-0 h-80 overflow-hidden">
         <Image
-          src="/gen/backgrounds/bg-settings.png"
+          src="/gen/backgrounds/bg-settings.avif"
           alt=""
           fill
           sizes="100vw"

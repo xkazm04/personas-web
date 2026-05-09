@@ -1,7 +1,7 @@
 "use client";
 
-import { useId, useMemo, useRef } from "react";
-import { motion, useTransform, useMotionValue, useSpring } from "framer-motion";
+import { useEffect, useId, useMemo, useRef, useState } from "react";
+import { motion, useReducedMotion } from "framer-motion";
 import { Download, Github, ChevronDown } from "lucide-react";
 import { fadeUp, staggerContainer } from "@/lib/animations";
 import GradientText from "@/components/GradientText";
@@ -17,6 +17,83 @@ function formatCompact(n: number): string {
   if (n >= 1_000_000) return `${(n / 1_000_000).toFixed(1).replace(/\.0$/, "")}M`;
   if (n >= 1_000) return `${(n / 1_000).toFixed(1).replace(/\.0$/, "")}k`;
   return String(n);
+}
+
+function formatDelta(n: number): string {
+  const abs = Math.abs(n);
+  return n > 0 ? `+${formatCompact(abs)}` : `-${formatCompact(abs)}`;
+}
+
+type Direction = "up" | "down" | "flat";
+
+function directionOf(delta: number): Direction {
+  if (delta > 0) return "up";
+  if (delta < 0) return "down";
+  return "flat";
+}
+
+/**
+ * 18px-tall sparkline showing the last 7 daily snapshots of a metric.
+ * Y axis is normalized within the series window so a flat-but-low series
+ * still renders as a flat line in the middle of the box.
+ */
+function Sparkline({ values, direction }: { values: number[]; direction: Direction }) {
+  const width = 36;
+  const height = 18;
+  const padY = 2;
+
+  if (values.length < 2) return <div style={{ width, height }} aria-hidden />;
+
+  const min = Math.min(...values);
+  const max = Math.max(...values);
+  const range = max - min;
+  const stepX = width / (values.length - 1);
+
+  const points = values
+    .map((v, i) => {
+      const x = i * stepX;
+      const y = range === 0 ? height / 2 : padY + (height - padY * 2) * (1 - (v - min) / range);
+      return `${x.toFixed(1)},${y.toFixed(1)}`;
+    })
+    .join(" ");
+
+  const stroke =
+    direction === "up" ? "rgb(52 211 153)" :
+    direction === "down" ? "rgb(251 113 133)" :
+    "rgba(255,255,255,0.4)";
+
+  return (
+    <svg width={width} height={height} viewBox={`0 0 ${width} ${height}`} aria-hidden className="overflow-visible">
+      <polyline
+        points={points}
+        fill="none"
+        stroke={stroke}
+        strokeWidth={1.25}
+        strokeLinecap="round"
+        strokeLinejoin="round"
+        style={{ filter: `drop-shadow(0 0 3px ${stroke})` }}
+      />
+    </svg>
+  );
+}
+
+function DeltaPill({ delta, direction, label }: { delta: number; direction: Direction; label: string }) {
+  if (direction === "flat") return null;
+  const arrow = direction === "up" ? "↑" : "↓";
+  const cls =
+    direction === "up"
+      ? "border-emerald-400/30 bg-emerald-400/10 text-emerald-300"
+      : "border-rose-400/30 bg-rose-400/10 text-rose-300";
+
+  return (
+    <span
+      className={`inline-flex items-center gap-0.5 rounded-full border px-1.5 py-px text-[10px] font-mono font-semibold leading-none tabular-nums ${cls}`}
+      title={`${formatDelta(delta)} ${label} this week`}
+    >
+      <span aria-hidden>{arrow}</span>
+      {formatDelta(delta)}
+    </span>
+  );
 }
 
 const percentage = progressPercent;
@@ -96,36 +173,126 @@ export default function HeroClient() {
   const sectionRef = useRef<HTMLElement>(null);
   useAnimationPauseRegister(sectionRef);
 
-  const heroStats = useMemo(() => [
-    { value: String(liveStats.totalAgents), label: t.hero.agents },
-    { value: formatCompact(liveStats.totalExecutions), label: t.hero.executions },
-    { value: `${liveStats.totalTemplates}+`, label: t.hero.templates },
-  ], [liveStats.totalAgents, liveStats.totalExecutions, liveStats.totalTemplates, t]);
+  const heroStats = useMemo(() => {
+    const build = (
+      raw: number,
+      formatted: string,
+      label: string,
+      series: number[],
+      prev: number,
+    ) => {
+      const delta = raw - prev;
+      return {
+        value: formatted,
+        label,
+        series,
+        delta,
+        direction: directionOf(delta),
+      };
+    };
+    return [
+      build(
+        liveStats.totalAgents,
+        String(liveStats.totalAgents),
+        t.hero.agents,
+        liveStats.series.totalAgents,
+        liveStats.trend7d.totalAgents,
+      ),
+      build(
+        liveStats.totalExecutions,
+        formatCompact(liveStats.totalExecutions),
+        t.hero.executions,
+        liveStats.series.totalExecutions,
+        liveStats.trend7d.totalExecutions,
+      ),
+      build(
+        liveStats.totalTemplates,
+        `${liveStats.totalTemplates}+`,
+        t.hero.templates,
+        liveStats.series.totalTemplates,
+        liveStats.trend7d.totalTemplates,
+      ),
+    ];
+  }, [
+    liveStats.totalAgents,
+    liveStats.totalExecutions,
+    liveStats.totalTemplates,
+    liveStats.trend7d.totalAgents,
+    liveStats.trend7d.totalExecutions,
+    liveStats.trend7d.totalTemplates,
+    liveStats.series.totalAgents,
+    liveStats.series.totalExecutions,
+    liveStats.series.totalTemplates,
+    t,
+  ]);
 
-  // 3D Tilt effect for the right card
-  const x = useMotionValue(0);
-  const y = useMotionValue(0);
-  const mouseXSpring = useSpring(x);
-  const mouseYSpring = useSpring(y);
-  const rotateX = useTransform(mouseYSpring, [-0.5, 0.5], ["10deg", "-10deg"]);
-  const rotateY = useTransform(mouseXSpring, [-0.5, 0.5], ["-10deg", "10deg"]);
+  // 3D Tilt effect for the right card.
+  // Skipped on coarse pointers and when the user prefers reduced motion;
+  // updates are coalesced to one write per animation frame, the bounding
+  // rect is cached on enter (avoiding forced layout per mousemove), and
+  // CSS transition handles damping so we don't pay for spring interpolation.
+  const reducedMotion = useReducedMotion();
+  const [coarsePointer, setCoarsePointer] = useState(false);
 
-  const handleMouseMove = (e: React.MouseEvent<HTMLDivElement>) => {
-    const rect = e.currentTarget.getBoundingClientRect();
-    const width = rect.width;
-    const height = rect.height;
-    const mouseX = e.clientX - rect.left;
-    const mouseY = e.clientY - rect.top;
-    const xPct = mouseX / width - 0.5;
-    const yPct = mouseY / height - 0.5;
-    x.set(xPct);
-    y.set(yPct);
+  useEffect(() => {
+    if (typeof window === "undefined" || !window.matchMedia) return;
+    const mql = window.matchMedia("(pointer: coarse)");
+    setCoarsePointer(mql.matches);
+    const listener = (e: MediaQueryListEvent) => setCoarsePointer(e.matches);
+    mql.addEventListener("change", listener);
+    return () => mql.removeEventListener("change", listener);
+  }, []);
+
+  const tiltDisabled = !!reducedMotion || coarsePointer;
+
+  const tiltCardRef = useRef<HTMLDivElement>(null);
+  const tiltRectRef = useRef<DOMRect | null>(null);
+  const tiltRafRef = useRef<number | null>(null);
+  const tiltTargetRef = useRef<{ xPct: number; yPct: number }>({ xPct: 0, yPct: 0 });
+
+  const writeTiltTransform = (xPct: number, yPct: number) => {
+    const el = tiltCardRef.current;
+    if (!el) return;
+    const rotateX = (-yPct) * 20; // [-0.5,0.5] -> [10deg,-10deg]
+    const rotateY = xPct * 20;    // [-0.5,0.5] -> [-10deg,10deg]
+    el.style.transform = `perspective(1000px) rotateX(${rotateX}deg) rotateY(${rotateY}deg)`;
   };
 
-  const handleMouseLeave = () => {
-    x.set(0);
-    y.set(0);
+  const handleTiltEnter = (e: React.MouseEvent<HTMLDivElement>) => {
+    if (tiltDisabled) return;
+    tiltRectRef.current = e.currentTarget.getBoundingClientRect();
   };
+
+  const handleTiltMove = (e: React.MouseEvent<HTMLDivElement>) => {
+    if (tiltDisabled) return;
+    const rect = tiltRectRef.current;
+    if (!rect) return;
+    tiltTargetRef.current = {
+      xPct: (e.clientX - rect.left) / rect.width - 0.5,
+      yPct: (e.clientY - rect.top) / rect.height - 0.5,
+    };
+    if (tiltRafRef.current !== null) return;
+    tiltRafRef.current = requestAnimationFrame(() => {
+      tiltRafRef.current = null;
+      const { xPct, yPct } = tiltTargetRef.current;
+      writeTiltTransform(xPct, yPct);
+    });
+  };
+
+  const handleTiltLeave = () => {
+    tiltRectRef.current = null;
+    if (tiltRafRef.current !== null) {
+      cancelAnimationFrame(tiltRafRef.current);
+      tiltRafRef.current = null;
+    }
+    writeTiltTransform(0, 0);
+  };
+
+  useEffect(() => {
+    return () => {
+      if (tiltRafRef.current !== null) cancelAnimationFrame(tiltRafRef.current);
+    };
+  }, []);
 
   return (
     <section ref={sectionRef} aria-labelledby="hero-heading" className="noise relative flex min-h-screen items-center justify-center overflow-hidden px-4 sm:px-6" style={{ contain: "layout style paint" }} data-animate-when-visible>
@@ -142,7 +309,7 @@ export default function HeroClient() {
         {/* Left — text */}
         <div className="text-center lg:text-left">
           <motion.div variants={fadeUp}>
-            <span className="ml-[500px] relative inline-flex items-center overflow-hidden rounded-full border border-brand-cyan/80 bg-brand-cyan/5 px-4 py-1.5 text-lg font-bold tracking-wider uppercase text-brand-cyan font-mono shadow-[0_0_15px_color-mix(in_srgb,var(--brand-cyan)_20%,transparent)]">
+            <span className="relative inline-flex items-center overflow-hidden rounded-full border border-brand-cyan/80 bg-brand-cyan/5 px-4 py-1.5 text-lg font-bold tracking-wider uppercase text-brand-cyan font-mono shadow-[0_0_15px_color-mix(in_srgb,var(--brand-cyan)_20%,transparent)]">
               <span className="absolute inset-0 animate-shimmer bg-linear-to-r from-transparent via-brand-cyan/10 to-transparent" style={{ animationDuration: "3s" }} />
               <span className="relative">{t.hero.badge}</span>
             </span>
@@ -198,8 +365,14 @@ export default function HeroClient() {
             <div className="flex justify-center gap-6 text-center">
               {heroStats.map((stat) => (
                 <div key={stat.label}>
-                  <div className="text-sm font-bold tracking-tight font-mono">{stat.value}</div>
-                  <div className="text-sm text-muted-dark font-mono tracking-wider">{stat.label}</div>
+                  <div className="flex items-center justify-center gap-1.5">
+                    <div className="text-sm font-bold tracking-tight font-mono">{stat.value}</div>
+                    <Sparkline values={stat.series} direction={stat.direction} />
+                  </div>
+                  <div className="mt-0.5 flex items-center justify-center gap-1.5">
+                    <div className="text-sm text-muted-dark font-mono tracking-wider">{stat.label}</div>
+                    <DeltaPill delta={stat.delta} direction={stat.direction} label={stat.label} />
+                  </div>
                 </div>
               ))}
             </div>
@@ -210,10 +383,19 @@ export default function HeroClient() {
         <motion.div
           variants={fadeUp}
           className="hidden lg:flex flex-col items-center gap-4 perspective-1000"
-          onMouseMove={handleMouseMove}
-          onMouseLeave={handleMouseLeave}
-          style={{ rotateX, rotateY, transformStyle: "preserve-3d" }}
         >
+          <div
+            ref={tiltCardRef}
+            onMouseEnter={tiltDisabled ? undefined : handleTiltEnter}
+            onMouseMove={tiltDisabled ? undefined : handleTiltMove}
+            onMouseLeave={tiltDisabled ? undefined : handleTiltLeave}
+            style={{
+              transformStyle: "preserve-3d",
+              transition: tiltDisabled ? undefined : "transform 200ms ease-out",
+              transform: "perspective(1000px) rotateX(0deg) rotateY(0deg)",
+              willChange: tiltDisabled ? undefined : "transform",
+            }}
+          >
           <div className="relative p-8 rounded-3xl border border-white/5 bg-white/2 backdrop-blur-md shadow-2xl transition-all duration-300 hover:border-white/10 hover:bg-white/5" style={{ transform: "translateZ(50px)" }}>
             <CommandCenterIllustration phasesLabel={t.hero.phases} />
             <div className="mt-6 flex flex-col items-center gap-4">
@@ -223,12 +405,19 @@ export default function HeroClient() {
               <div className="flex gap-6 text-center" data-testid="mock-stats">
                 {heroStats.map((stat) => (
                   <div key={stat.label} className="group">
-                    <div className="text-xl font-bold tracking-tight transition-colors group-hover:text-brand-cyan drop-shadow-[0_0_5px_rgba(255,255,255,0.2)]">{stat.value}</div>
-                    <div className="text-sm text-muted-dark font-mono tracking-wider transition-colors group-hover:text-white/70">{stat.label}</div>
+                    <div className="flex items-center justify-center gap-1.5">
+                      <div className="text-xl font-bold tracking-tight transition-colors group-hover:text-brand-cyan drop-shadow-[0_0_5px_rgba(255,255,255,0.2)]">{stat.value}</div>
+                      <Sparkline values={stat.series} direction={stat.direction} />
+                    </div>
+                    <div className="mt-0.5 flex items-center justify-center gap-1.5">
+                      <div className="text-sm text-muted-dark font-mono tracking-wider transition-colors group-hover:text-white/70">{stat.label}</div>
+                      <DeltaPill delta={stat.delta} direction={stat.direction} label={stat.label} />
+                    </div>
                   </div>
                 ))}
               </div>
             </div>
+          </div>
           </div>
         </motion.div>
       </motion.div>

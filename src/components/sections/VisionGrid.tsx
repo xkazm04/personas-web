@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect, useCallback } from "react";
+import { useState, useEffect, useCallback, useRef } from "react";
 import { motion, useReducedMotion } from "framer-motion";
 import {
   Mail,
@@ -61,6 +61,7 @@ export default function VisionGrid() {
   const prefersReducedMotion = useReducedMotion();
   const [agents, setAgents] = useState(initialAgents);
   const [flashIdx, setFlashIdx] = useState<number | null>(null);
+  const flashTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 
   /* ── Activity tick (3-5s random interval) ── */
   const tick = useCallback(() => {
@@ -79,10 +80,22 @@ export default function VisionGrid() {
     });
 
     if (!prefersReducedMotion) {
+      // Cancel pending flash so a new tick doesn't get truncated by the
+      // earlier timer, and so unmount doesn't setState on a torn-down node.
+      if (flashTimerRef.current) clearTimeout(flashTimerRef.current);
       setFlashIdx(idx);
-      setTimeout(() => setFlashIdx(null), 600);
+      flashTimerRef.current = setTimeout(() => {
+        setFlashIdx(null);
+        flashTimerRef.current = null;
+      }, 600);
     }
   }, [prefersReducedMotion]);
+
+  useEffect(() => {
+    return () => {
+      if (flashTimerRef.current) clearTimeout(flashTimerRef.current);
+    };
+  }, []);
 
   useEffect(() => {
     if (prefersReducedMotion) return;

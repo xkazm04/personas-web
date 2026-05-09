@@ -1,13 +1,17 @@
 "use client";
 
 import { useState, useEffect, useCallback, useRef, useMemo } from "react";
-import { motion, AnimatePresence, useReducedMotion } from "framer-motion";
+import { motion, AnimatePresence } from "framer-motion";
 import { Grid3X3, Crown, Info, Zap } from "lucide-react";
 import GradientText from "@/components/GradientText";
 import SectionHeading from "@/components/SectionHeading";
 import SectionWrapper from "@/components/SectionWrapper";
 import TerminalChrome from "@/components/TerminalChrome";
 import { fadeUp, staggerContainer } from "@/lib/animations";
+import {
+  SectionPauseProvider,
+  useSectionPauseController,
+} from "@/hooks/useSectionPause";
 
 /* ─── data ─── */
 
@@ -75,7 +79,9 @@ interface Tooltip {
 /* ─── component ─── */
 
 export default function LabHeatmap() {
-  const prefersReducedMotion = useReducedMotion();
+  const sectionRef = useRef<HTMLDivElement>(null);
+  const pauseValue = useSectionPauseController({ ref: sectionRef });
+  const { paused } = pauseValue;
   const [scores, setScores] = useState<ScoreGrid>(initScores);
   const [tick, setTick] = useState(0);
   const [tooltip, setTooltip] = useState<Tooltip | null>(null);
@@ -97,7 +103,7 @@ export default function LabHeatmap() {
   }, []);
 
   useEffect(() => {
-    if (prefersReducedMotion) return;
+    if (paused) return;
     const schedule = () => {
       timerRef.current = setTimeout(
         () => {
@@ -109,7 +115,7 @@ export default function LabHeatmap() {
     };
     schedule();
     return () => clearTimeout(timerRef.current);
-  }, [driftScores, prefersReducedMotion]);
+  }, [driftScores, paused]);
 
   // Best model calculation
   const bestModel = useMemo(() => {
@@ -138,7 +144,9 @@ export default function LabHeatmap() {
   };
 
   return (
+    <SectionPauseProvider value={pauseValue}>
     <SectionWrapper id="lab-heatmap" className="relative overflow-hidden">
+      <div ref={sectionRef} aria-hidden="true" />
       <motion.div
         initial="hidden"
         whileInView="visible"
@@ -284,7 +292,7 @@ export default function LabHeatmap() {
                       style={{ backgroundColor: color }}
                     >
                       {/* Pulse overlay */}
-                      {!prefersReducedMotion && (
+                      {!paused && (
                         <motion.div
                           className="absolute inset-0 rounded-md"
                           animate={{
@@ -457,5 +465,6 @@ export default function LabHeatmap() {
         })}
       </div>
     </SectionWrapper>
+    </SectionPauseProvider>
   );
 }

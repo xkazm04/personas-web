@@ -27,11 +27,13 @@ async function loadAgentDetail(personaId: string): Promise<AgentDetailData> {
   return data;
 }
 
-export async function prefetchAgentDetail(personaId: string) {
+export async function prefetchAgentDetail(personaId: string): Promise<boolean> {
   try {
     await loadAgentDetail(personaId);
+    return true;
   } catch {
-    // Best effort prefetch.
+    // Best effort prefetch — caller decides whether to retry.
+    return false;
   }
 }
 

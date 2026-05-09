@@ -18,6 +18,9 @@ import {
   Zap,
   RotateCcw,
   Inbox,
+  Play,
+  Pause,
+  ArrowUp,
 } from "lucide-react";
 import { fadeUp } from "@/lib/animations";
 import DataTable from "@/components/dashboard/DataTable";
@@ -27,7 +30,7 @@ import StatusBadge from "@/components/dashboard/StatusBadge";
 import PersonaAvatar from "@/components/dashboard/PersonaAvatar";
 import EmptyState from "@/components/dashboard/EmptyState";
 import JsonViewer from "@/components/dashboard/JsonViewer";
-import { useEventStore } from "@/stores/eventStore";
+import { useEventStore, MAX_REPLAY_RETRIES, isReplayLocked } from "@/stores/eventStore";
 import { usePersonaStore } from "@/stores/personaStore";
 import { useEventStream } from "@/hooks/useEventStream";
 import type { PersonaEvent, Persona } from "@/lib/types";
@@ -100,7 +103,21 @@ function EventExpandedContent({ event }: { event: PersonaEvent }) {
 function RetryButton({ event }: { event: PersonaEvent }) {
   const replayEvent = useEventStore((s) => s.replayEvent);
   const replayingIds = useEventStore((s) => s.replayingIds);
+  const retryCounts = useEventStore((s) => s.retryCounts);
   const isReplaying = replayingIds.has(event.id);
+  const locked = isReplayLocked(retryCounts, event.id);
+
+  if (locked) {
+    return (
+      <span
+        className="flex items-center gap-1.5 rounded-lg border border-red-500/25 bg-red-500/10 px-3 py-1.5 text-[11px] font-medium text-red-400 flex-shrink-0"
+        title={`Replay locked: reached the maximum of ${MAX_REPLAY_RETRIES} retries`}
+      >
+        <RotateCcw className="h-3 w-3" />
+        Replay locked
+      </span>
+    );
+  }
 
   return (
     <button
@@ -162,6 +179,7 @@ function buildColumns(
       className: "w-6 flex-shrink-0",
       render: (event) => {
         if (event.status !== "failed") return null;
+        if (isReplayLocked(retryCounts, event.id)) return null;
         const selected = selectedIds.has(event.id);
         return (
           <button
@@ -273,10 +291,18 @@ function buildColumns(
       render: (event) => {
         const count = retryCounts[event.id];
         if (!count) return null;
+        const locked = count >= MAX_REPLAY_RETRIES;
         return (
-          <span className="flex items-center gap-0.5 text-[10px] font-mono text-amber-400/70" title={`Retried ${count} time${count !== 1 ? "s" : ""}`}>
+          <span
+            className={`flex items-center gap-0.5 text-[10px] font-mono ${locked ? "text-red-400" : "text-amber-400/70"}`}
+            title={
+              locked
+                ? `Replay locked: ${count}/${MAX_REPLAY_RETRIES} retries used`
+                : `Retried ${count} time${count !== 1 ? "s" : ""}`
+            }
+          >
             <RotateCcw className="h-2.5 w-2.5" />
-            {count}
+            {count}/{MAX_REPLAY_RETRIES}
           </span>
         );
       },
@@ -296,12 +322,17 @@ function buildColumns(
       render: (event) => {
         if (event.status !== "failed") return null;
         const isReplaying = replayingIds.has(event.id);
+        const locked = isReplayLocked(retryCounts, event.id);
         return (
           <button
-            onClick={(e) => { e.stopPropagation(); onReplay(event); }}
-            disabled={isReplaying}
-            title="Retry event"
-            className="flex items-center justify-center rounded-md border border-amber-500/30 bg-amber-500/10 p-1 text-amber-400 transition-all hover:bg-amber-500/20 disabled:opacity-50"
+            onClick={(e) => { e.stopPropagation(); if (!locked) onReplay(event); }}
+            disabled={isReplaying || locked}
+            title={locked ? `Replay locked: reached ${MAX_REPLAY_RETRIES}-retry limit` : "Retry event"}
+            className={`flex items-center justify-center rounded-md border p-1 transition-all disabled:opacity-50 ${
+              locked
+                ? "border-red-500/30 bg-red-500/10 text-red-400 cursor-not-allowed"
+                : "border-amber-500/30 bg-amber-500/10 text-amber-400 hover:bg-amber-500/20"
+            }`}
           >
             {isReplaying ? (
               <Loader2 className="h-3 w-3 animate-spin" />
@@ -333,6 +364,49 @@ export default function EventsListPanel() {
   const [eventTypeFilter, setEventTypeFilter] = useState("");
   const [sourceTypeFilter, setSourceTypeFilter] = useState("");
   const [visibleCount, setVisibleCount] = useState(INITIAL_VISIBLE_EVENTS);
+
+  // Follow-live state: when paused, freeze the visible window at a high water
+  // mark and surface incoming events as a "+N new" pill instead of letting
+  // them shift the row the user is reading.
+  const [followLive, setFollowLive] = useState(true);
+  const [hovered, setHovered] = useState(false);
+  const [expandedEventId, setExpandedEventId] = useState<string | null>(null);
+  const [scrolledBelowTop, setScrolledBelowTop] = useState(false);
+  const [highWaterMarkId, setHighWaterMarkId] = useState<string | null>(null);
+  const isPaused = !followLive || hovered || expandedEventId !== null || scrolledBelowTop;
+
+  useEffect(() => {
+    const onScroll = () => setScrolledBelowTop(window.scrollY > 64);
+    onScroll();
+    window.addEventListener("scroll", onScroll, { passive: true });
+    return () => window.removeEventListener("scroll", onScroll);
+  }, []);
+
+  // While unpaused, snap the high water mark to the latest event so the next
+  // pause starts counting from "now."
+  useEffect(() => {
+    if (isPaused) return;
+    setHighWaterMarkId(events[0]?.id ?? null);
+  }, [events, isPaused]);
+
+  const pendingCount = useMemo(() => {
+    if (!isPaused || !highWaterMarkId) return 0;
+    const idx = events.findIndex((e) => e.id === highWaterMarkId);
+    return idx > 0 ? idx : 0;
+  }, [events, highWaterMarkId, isPaused]);
+
+  const sourceEvents = useMemo(() => {
+    if (!isPaused || pendingCount === 0) return events;
+    return events.slice(pendingCount);
+  }, [events, pendingCount, isPaused]);
+
+  const handleResumeFollow = useCallback(() => {
+    setHighWaterMarkId(events[0]?.id ?? null);
+    setFollowLive(true);
+    if (typeof window !== "undefined") {
+      window.scrollTo({ top: 0, behavior: "smooth" });
+    }
+  }, [events]);
 
   const uniqueSourceTypes = useMemo(
     () => [...new Set(events.map((e) => e.sourceType))].sort(),
@@ -371,7 +445,7 @@ export default function EventsListPanel() {
 
   const filtered = useMemo(() => {
     const q = deferredQuery.toLowerCase().trim();
-    return events.filter((e) => {
+    return sourceEvents.filter((e) => {
       if (filter === "dead_letter") {
         if (e.status !== "failed" || !e.errorMessage) return false;
       } else if (filter !== "all" && e.status !== filter) return false;
@@ -380,7 +454,7 @@ export default function EventsListPanel() {
       if (q && !searchIndex.get(e.id)!.includes(q)) return false;
       return true;
     });
-  }, [events, filter, eventTypeFilter, sourceTypeFilter, deferredQuery, searchIndex]);
+  }, [sourceEvents, filter, eventTypeFilter, sourceTypeFilter, deferredQuery, searchIndex]);
 
   const visibleEvents = useMemo(
     () => filtered.slice(0, visibleCount),
@@ -419,13 +493,15 @@ export default function EventsListPanel() {
   }, []);
 
   const handleBulkRetry = useCallback(async () => {
-    const selected = events.filter((e) => selectedIds.has(e.id) && e.status === "failed");
+    const selected = events.filter(
+      (e) => selectedIds.has(e.id) && e.status === "failed" && !isReplayLocked(retryCounts, e.id),
+    );
     if (selected.length === 0) return;
     setBulkRetrying(true);
     await replayEvents(selected);
     setSelectedIds(new Set());
     setBulkRetrying(false);
-  }, [events, selectedIds, replayEvents]);
+  }, [events, selectedIds, replayEvents, retryCounts]);
 
   useEffect(() => {
     setSelectedIds(new Set());
@@ -533,6 +609,20 @@ export default function EventsListPanel() {
         )}
 
         <div className="ml-auto flex items-center gap-2">
+          <button
+            type="button"
+            onClick={() => setFollowLive((v) => !v)}
+            aria-pressed={followLive}
+            title={followLive ? "Pause live updates" : "Resume live updates"}
+            className={`flex items-center gap-1.5 rounded-lg border px-2.5 py-1.5 text-[11px] font-medium transition-colors ${
+              followLive
+                ? "border-emerald-500/25 bg-emerald-500/10 text-emerald-300 hover:bg-emerald-500/15"
+                : "border-amber-500/25 bg-amber-500/10 text-amber-300 hover:bg-amber-500/15"
+            }`}
+          >
+            {followLive ? <Play className="h-3 w-3" /> : <Pause className="h-3 w-3" />}
+            Follow live
+          </button>
           {hasActiveFilters && (
             <span className="text-xs text-muted-dark tabular-nums">
               {filtered.length} result{filtered.length !== 1 ? "s" : ""}
@@ -544,12 +634,34 @@ export default function EventsListPanel() {
         </div>
       </motion.div>
 
-      <motion.div variants={fadeUp}>
+      <motion.div
+        variants={fadeUp}
+        className="relative"
+        onMouseEnter={() => setHovered(true)}
+        onMouseLeave={() => setHovered(false)}
+      >
+        <AnimatePresence>
+          {pendingCount > 0 && (
+            <motion.button
+              type="button"
+              initial={{ opacity: 0, y: -8 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: -8 }}
+              transition={{ duration: 0.15 }}
+              onClick={handleResumeFollow}
+              className="sticky top-2 z-30 mx-auto mb-2 flex items-center gap-2 rounded-full border border-brand-cyan/30 bg-brand-cyan/15 px-3.5 py-1.5 text-[11px] font-semibold text-brand-cyan shadow-lg shadow-brand-cyan/10 backdrop-blur-md transition-colors hover:bg-brand-cyan/25"
+            >
+              <ArrowUp className="h-3 w-3" />
+              {pendingCount} new event{pendingCount !== 1 ? "s" : ""} — click to load
+            </motion.button>
+          )}
+        </AnimatePresence>
         <DataTable<PersonaEvent>
           columns={columns}
           data={visibleEvents}
           keyExtractor={(e) => e.id}
           expandable={expandableRenderer}
+          onExpandedChange={setExpandedEventId}
           rowClassName={rowClassName}
           emptyState={
             filter === "dead_letter" ? (
@@ -599,7 +711,11 @@ export default function EventsListPanel() {
                 </span>
                 <button
                   onClick={() => {
-                    const failedIds = new Set(visibleEvents.filter((e) => e.status === "failed").map((e) => e.id));
+                    const failedIds = new Set(
+                      visibleEvents
+                        .filter((e) => e.status === "failed" && !isReplayLocked(retryCounts, e.id))
+                        .map((e) => e.id),
+                    );
                     setSelectedIds(failedIds);
                   }}
                   className="text-xs text-brand-cyan hover:underline"

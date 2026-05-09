@@ -69,7 +69,7 @@ export default function EventsPage() {
       {/* Background illustration */}
       <div className="pointer-events-none absolute inset-x-0 top-0 h-80 overflow-hidden">
         <Image
-          src="/gen/backgrounds/bg-events.png"
+          src="/gen/backgrounds/bg-events.avif"
           alt=""
           fill
           sizes="100vw"

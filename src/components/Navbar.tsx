@@ -1,6 +1,6 @@
 "use client";
 
-import { motion, useMotionValueEvent, useScroll, AnimatePresence } from "framer-motion";
+import { motion, AnimatePresence } from "framer-motion";
 import { useState, useEffect, useRef, useCallback } from "react";
 import { Download, Menu, X } from "lucide-react";
 import { usePathname } from "next/navigation";
@@ -32,7 +32,7 @@ export default function Navbar() {
   const { t } = useTranslation();
   const routes = useRoutes();
   const [scrolled, setScrolled] = useState(false);
-  const { scrollY } = useScroll();
+  const sentinelRef = useRef<HTMLDivElement>(null);
   const pathname = usePathname();
 
   // Mobile menu
@@ -89,9 +89,27 @@ export default function Navbar() {
     }
   }, [mobileOpen]);
 
-  useMotionValueEvent(scrollY, "change", (v) => setScrolled(v > 40));
+  // Drive `scrolled` from a 40px-tall absolutely-positioned sentinel anchored
+  // to the document top. IntersectionObserver fires once at the threshold
+  // crossing instead of on every scroll frame.
+  useEffect(() => {
+    const sentinel = sentinelRef.current;
+    if (!sentinel) return;
+    const observer = new IntersectionObserver(
+      ([entry]) => setScrolled(!entry.isIntersecting),
+      { threshold: 0 },
+    );
+    observer.observe(sentinel);
+    return () => observer.disconnect();
+  }, []);
 
   return (
+    <>
+      <div
+        ref={sentinelRef}
+        aria-hidden="true"
+        className="absolute top-0 left-0 h-10 w-px pointer-events-none"
+      />
     <motion.header
       initial={{ y: -20, opacity: 0 }}
       animate={{ y: 0, opacity: 1 }}
@@ -249,5 +267,6 @@ export default function Navbar() {
         )}
       </AnimatePresence>
     </motion.header>
+    </>
   );
 }

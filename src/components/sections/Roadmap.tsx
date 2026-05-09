@@ -1,6 +1,6 @@
 "use client";
 
-import { memo, useState, useEffect } from "react";
+import { memo, useMemo, useState, useEffect } from "react";
 import { motion } from "framer-motion";
 import {
   Circle, CheckCircle2, Rocket, Loader2,
@@ -163,6 +163,26 @@ export default function Roadmap() {
   const inProgressCount = items.filter((i) => i.status === "in_progress").length;
   const nextCount = items.filter((i) => i.status === "next").length;
 
+  const { totalPhases, completedCount, progressPercent, nextUpName } = useMemo(() => {
+    const sorted = [...items].sort((a, b) => a.sort_order - b.sort_order);
+    const total = sorted.length;
+    const completed = sorted.filter((i) => i.status === "completed").length;
+    const percent = total === 0 ? 0 : Math.round((completed / total) * 100);
+    const upcoming =
+      sorted.find((i) => i.status === "in_progress") ??
+      sorted.find((i) => i.status === "next") ??
+      sorted.find((i) => i.status === "planned") ??
+      null;
+    return {
+      totalPhases: total,
+      completedCount: completed,
+      progressPercent: percent,
+      nextUpName: upcoming?.name ?? null,
+    };
+  }, [items]);
+
+  const remainingCount = Math.max(0, totalPhases - completedCount);
+
   return (
     <SectionWrapper id="roadmap">
       <motion.div variants={fadeUp} className="text-center relative">
@@ -206,14 +226,18 @@ export default function Roadmap() {
       {/* Progress bar */}
       <motion.div variants={fadeUp} className="mt-14 mx-auto max-w-2xl">
         <div className="flex flex-wrap items-center justify-between gap-3 text-sm font-mono text-muted mb-4">
-          <span className="font-medium tracking-wide">11 of 15 phases complete</span>
-          <span className="text-brand-cyan font-bold text-sm drop-shadow-[0_0_8px_rgba(6,182,212,0.8)]">73%</span>
+          <span className="font-medium tracking-wide">
+            {completedCount} of {totalPhases} phases complete
+          </span>
+          <span className="text-brand-cyan font-bold text-sm drop-shadow-[0_0_8px_rgba(6,182,212,0.8)]">
+            {progressPercent}%
+          </span>
         </div>
         <div className="relative h-2.5 rounded-full bg-white/[0.06] shadow-inner">
           <motion.div
             className="relative h-full rounded-full bg-gradient-to-r from-brand-cyan via-blue-400 to-brand-purple shadow-[0_0_15px_rgba(168,85,247,0.5)] overflow-hidden"
             initial={{ width: 0 }}
-            whileInView={{ width: "73%" }}
+            whileInView={{ width: `${progressPercent}%` }}
             viewport={{ once: true }}
             transition={{ duration: 1.2, ease: "easeOut", delay: 0.4 }}
           >
@@ -226,22 +250,39 @@ export default function Roadmap() {
             />
           </motion.div>
           <motion.div
-            className="absolute top-1/2 -translate-y-1/2 -translate-x-1/2 h-1 w-1 rounded-full bg-brand-cyan animate-progress-dot-breathe"
+            className="group absolute top-1/2 -translate-y-1/2 -translate-x-1/2 h-1 w-1 rounded-full bg-brand-cyan animate-progress-dot-breathe"
             style={{ boxShadow: "0 0 6px rgba(6,182,212,0.8), 0 0 12px rgba(6,182,212,0.4)" }}
             initial={{ left: "0%" }}
-            whileInView={{ left: "73%" }}
+            whileInView={{ left: `${progressPercent}%` }}
             viewport={{ once: true }}
             transition={{ duration: 1.2, ease: "easeOut", delay: 0.4 }}
-          />
+          >
+            {nextUpName && (
+              <span
+                role="tooltip"
+                className="pointer-events-none absolute bottom-full left-1/2 mb-2 -translate-x-1/2 whitespace-nowrap rounded-md border border-brand-cyan/30 bg-background/95 px-2 py-1 text-[10px] font-mono uppercase tracking-wider text-brand-cyan opacity-0 shadow-[0_0_10px_rgba(6,182,212,0.25)] transition-opacity duration-200 group-hover:opacity-100"
+              >
+                Next up · {nextUpName}
+              </span>
+            )}
+          </motion.div>
         </div>
         <div className="mt-4 flex flex-wrap items-center justify-between gap-3 text-sm font-mono text-muted font-medium">
           <div className="flex items-center gap-2">
             <CheckCircle2 className="h-4 w-4 text-brand-emerald drop-shadow-[0_0_5px_rgba(52,211,153,0.6)]" />
-            <span>Phases 1-11 shipped</span>
+            <span>
+              {completedCount === 0
+                ? "No phases shipped yet"
+                : `${completedCount} phase${completedCount === 1 ? "" : "s"} shipped`}
+            </span>
           </div>
           <div className="flex items-center gap-2">
             <Circle className="h-4 w-4 text-muted" />
-            <span>Phases 12-15 remaining</span>
+            <span>
+              {remainingCount === 0
+                ? "All phases shipped"
+                : `${remainingCount} phase${remainingCount === 1 ? "" : "s"} remaining`}
+            </span>
           </div>
         </div>
       </motion.div>

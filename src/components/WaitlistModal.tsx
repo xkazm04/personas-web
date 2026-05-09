@@ -11,15 +11,19 @@ const FETCH_TIMEOUT_MS = 15_000;
 /** Basic RFC 5322 email pattern — intentionally simple to avoid ReDoS */
 const EMAIL_RE = /^[^\s@<>'"`;(){}[\]\\]+@[^\s@<>'"`;(){}[\]\\]+\.[a-zA-Z]{2,}$/;
 
+export type PlatformId = "windows" | "macos" | "linux";
+
 interface WaitlistModalProps {
-  platform: string;
+  platformId: PlatformId;
+  platformLabel: string;
   platformIcon: React.ComponentType<{ className?: string }>;
   open: boolean;
   onClose: () => void;
 }
 
 export default function WaitlistModal({
-  platform,
+  platformId,
+  platformLabel,
   platformIcon: PlatformIcon,
   open,
   onClose,
@@ -40,14 +44,14 @@ export default function WaitlistModal({
       const res = await fetch("/api/waitlist", { signal });
       if (res.ok) {
         const data = await res.json();
-        const count = data.counts?.[platform] ?? 0;
+        const count = data.counts?.[platformId] ?? 0;
         setWaitlistCount(count);
       }
     } catch (err) {
       if (err instanceof DOMException && err.name === "AbortError") return;
       // Non-critical — just hide the count
     }
-  }, [platform]);
+  }, [platformId]);
 
   useEffect(() => {
     if (!open) {
@@ -109,6 +113,34 @@ export default function WaitlistModal({
     }
   }, [open]);
 
+  // Lock body scroll while open so the page can't drift behind the backdrop
+  // (especially on iOS where the modal would otherwise feel unanchored). Save
+  // the scroll position and restore it on close.
+  useEffect(() => {
+    if (!open) return;
+    const html = document.documentElement;
+    const body = document.body;
+    const scrollY = window.scrollY;
+    const prevHtmlOverflow = html.style.overflow;
+    const prevBodyOverflow = body.style.overflow;
+    const prevBodyPosition = body.style.position;
+    const prevBodyTop = body.style.top;
+    const prevBodyWidth = body.style.width;
+    html.style.overflow = "hidden";
+    body.style.overflow = "hidden";
+    body.style.position = "fixed";
+    body.style.top = `-${scrollY}px`;
+    body.style.width = "100%";
+    return () => {
+      html.style.overflow = prevHtmlOverflow;
+      body.style.overflow = prevBodyOverflow;
+      body.style.position = prevBodyPosition;
+      body.style.top = prevBodyTop;
+      body.style.width = prevBodyWidth;
+      window.scrollTo(0, scrollY);
+    };
+  }, [open]);
+
   const handleSubmit = async (e: FormEvent) => {
     e.preventDefault();
     if (!EMAIL_RE.test(email.trim())) {
@@ -134,7 +166,7 @@ export default function WaitlistModal({
       const res = await fetch("/api/waitlist", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ email, platform, earlyBeta }),
+        body: JSON.stringify({ email, platform: platformId, earlyBeta }),
         signal: controller.signal,
       });
 
@@ -167,7 +199,7 @@ export default function WaitlistModal({
   };
 
   const handleShare = async () => {
-    const url = `${window.location.origin}?ref=waitlist&platform=${platform.toLowerCase()}`;
+    const url = `${window.location.origin}?ref=waitlist&platform=${platformId}`;
     try {
       await navigator.clipboard.writeText(url);
       setCopied(true);
@@ -185,24 +217,24 @@ export default function WaitlistModal({
           animate={{ opacity: 1 }}
           exit={{ opacity: 0 }}
           transition={TRANSITION_FAST}
-          className="fixed inset-0 z-50 flex items-center justify-center px-4"
+          className="fixed inset-0 z-50 flex items-end justify-center sm:items-center sm:px-4"
           onClick={onClose}
         >
           {/* Backdrop */}
           <div className="absolute inset-0 bg-black/60 backdrop-blur-sm" />
 
-          {/* Modal */}
+          {/* Modal — bottom sheet on mobile, centered card on sm+ */}
           <motion.div
             ref={modalRef}
             role="dialog"
             aria-modal="true"
             aria-labelledby="waitlist-modal-title"
-            initial={{ opacity: 0, scale: 0.95, y: 10 }}
-            animate={{ opacity: 1, scale: 1, y: 0 }}
-            exit={{ opacity: 0, scale: 0.95, y: 10 }}
+            initial={{ opacity: 0, y: "100%" }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: "100%" }}
             transition={TRANSITION_NORMAL}
             onClick={(e) => e.stopPropagation()}
-            className="relative w-full max-w-[440px] rounded-2xl border border-white/[0.06] bg-background p-6 shadow-[0_0_80px_rgba(0,0,0,0.5)]"
+            className="relative w-full max-w-[440px] rounded-t-2xl border border-white/[0.06] border-b-0 bg-background p-6 pb-[calc(env(safe-area-inset-bottom)+1.5rem)] shadow-[0_0_80px_rgba(0,0,0,0.5)] max-h-[90vh] overflow-y-auto sm:rounded-2xl sm:border-b sm:pb-6 sm:max-h-none sm:overflow-visible"
           >
             {/* Close button */}
             <button
@@ -220,7 +252,7 @@ export default function WaitlistModal({
               </div>
               <div>
                 <h3 id="waitlist-modal-title" className="text-base font-semibold text-foreground">
-                  Personas for {platform}
+                  Personas for {platformLabel}
                 </h3>
                 <p className="text-xs text-muted-dark">Coming soon</p>
               </div>
@@ -232,7 +264,7 @@ export default function WaitlistModal({
                 <Users className="h-3.5 w-3.5 text-brand-cyan/60" />
                 <span className="text-xs text-muted-dark">
                   Join <span className="font-medium text-brand-cyan">{waitlistCount}</span>{" "}
-                  {waitlistCount === 1 ? "person" : "others"} waiting for {platform}
+                  {waitlistCount === 1 ? "person" : "others"} waiting for {platformLabel}
                 </span>
               </div>
             )}
@@ -261,9 +293,9 @@ export default function WaitlistModal({
                   {status === "duplicate" ? "Already on the list!" : "You're on the list!"}
                 </p>
                 <p className="mt-1 text-xs text-muted-dark">
-                  {status === "duplicate" 
-                    ? `No action needed — we already have your request for Personas for ${platform}.`
-                    : `We'll notify you when Personas for ${platform} is ready.`}
+                  {status === "duplicate"
+                    ? `No action needed — we already have your request for Personas for ${platformLabel}.`
+                    : `We'll notify you when Personas for ${platformLabel} is ready.`}
                 </p>
                 <button
                   onClick={onClose}

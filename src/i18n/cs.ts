@@ -282,6 +282,14 @@ export const cs: Translations = {
     toolUtilization: 'Vyu\u017eit\u00ed n\u00e1stroj\u016f',
     workers: 'workery',
     usageAnalytics: 'Analytika vyu\u017eit\u00ed',
+    errorBoundary: {
+      title: 'Panel n\u00e1st\u011bnky se nepoda\u0159ilo na\u010d\u00edst',
+      description: 'V t\u00e9to sekci do\u0161lo k neo\u010dek\u00e1van\u00e9 chyb\u011b. M\u016f\u017eete to zkusit znovu bez opu\u0161t\u011bn\u00ed str\u00e1nky.',
+      retry: 'Zkusit znovu',
+      errorIdLabel: 'ID chyby',
+      copyErrorId: 'Kop\u00edrovat ID chyby',
+      copied: 'Zkop\u00edrov\u00e1no',
+    },
   },
   agentsPage: {
     title: 'Agenti',

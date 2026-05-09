@@ -282,6 +282,14 @@ export const zh: Translations = {
     toolUtilization: '\u5DE5\u5177\u5229\u7528\u7387',
     workers: '\u5DE5\u4F5C\u8282\u70B9',
     usageAnalytics: '\u7528\u91CF\u5206\u6790',
+    errorBoundary: {
+      title: '\u4EEA\u8868\u677F\u9762\u677F\u6E32\u67D3\u5931\u8D25',
+      description: '\u6B64\u90E8\u5206\u9047\u5230\u610F\u5916\u9519\u8BEF\u3002\u60A8\u53EF\u4EE5\u91CD\u8BD5\u800C\u65E0\u9700\u79BB\u5F00\u9875\u9762\u3002',
+      retry: '\u91CD\u8BD5',
+      errorIdLabel: '\u9519\u8BEF ID',
+      copyErrorId: '\u590D\u5236\u9519\u8BEF ID',
+      copied: '\u5DF2\u590D\u5236',
+    },
   },
   agentsPage: {
     title: '\u667A\u80FD\u4F53',

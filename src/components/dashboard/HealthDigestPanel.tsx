@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { motion } from "framer-motion";
+import { motion, useMotionValue, useTransform, animate } from "framer-motion";
 import { Heart, CheckCircle, AlertCircle } from "lucide-react";
 import { fadeUp, staggerContainer } from "@/lib/animations";
 import { MOCK_HEALTH_DIGEST } from "@/lib/mock-dashboard-data";
@@ -42,9 +42,44 @@ const STROKE_WIDTH = 6;
 const RADIUS = (RING_SIZE - STROKE_WIDTH) / 2;
 const CIRCUMFERENCE = 2 * Math.PI * RADIUS;
 
+// Animation timings
+const RING_ANIMATION_DELAY = 0.2;
+const RING_DURATION = 1;
+const BAR_DURATION = 0.7;
+
+/** Score number that climbs in lockstep with its accompanying ring/bar fill. */
+function AnimatedScoreNumber({
+  value,
+  duration,
+  delay = 0,
+  className,
+}: {
+  value: number;
+  duration: number;
+  delay?: number;
+  className?: string;
+}) {
+  const mv = useMotionValue(0);
+  const rounded = useTransform(mv, (latest) => Math.round(latest));
+
+  useEffect(() => {
+    const controls = animate(mv, value, { duration, delay, ease: "easeOut" });
+    return () => controls.stop();
+  }, [value, duration, delay, mv]);
+
+  return <motion.span className={className}>{rounded}</motion.span>;
+}
+
+/** Clamp an upstream score to [0,100] and substitute 0 for non-finite input. */
+function safeScore(score: number): number {
+  if (!Number.isFinite(score)) return 0;
+  return Math.max(0, Math.min(100, score));
+}
+
 export default function HealthDigestPanel() {
   const { overallScore, agents } = MOCK_HEALTH_DIGEST;
-  const colors = scoreColor(overallScore);
+  const safeOverall = safeScore(overallScore);
+  const colors = scoreColor(safeOverall);
 
   // Animate the ring fill on mount
   const [offset, setOffset] = useState(CIRCUMFERENCE);
@@ -52,10 +87,10 @@ export default function HealthDigestPanel() {
   useEffect(() => {
     // Small delay so the animation is visible after mount
     const timer = setTimeout(() => {
-      setOffset(CIRCUMFERENCE - (overallScore / 100) * CIRCUMFERENCE);
-    }, 200);
+      setOffset(CIRCUMFERENCE - (safeOverall / 100) * CIRCUMFERENCE);
+    }, RING_ANIMATION_DELAY * 1000);
     return () => clearTimeout(timer);
-  }, [overallScore]);
+  }, [safeOverall]);
 
   return (
     <motion.div
@@ -111,9 +146,12 @@ export default function HealthDigestPanel() {
 
         {/* Center text */}
         <div className="absolute inset-0 flex flex-col items-center justify-center">
-          <span className={`text-2xl font-bold tabular-nums ${colors.text}`}>
-            {overallScore}
-          </span>
+          <AnimatedScoreNumber
+            value={safeOverall}
+            duration={RING_DURATION}
+            delay={RING_ANIMATION_DELAY}
+            className={`text-2xl font-bold tabular-nums ${colors.text}`}
+          />
         </div>
 
         <span className="mt-1.5 text-[10px] font-medium uppercase tracking-wider text-muted-dark">
@@ -124,7 +162,8 @@ export default function HealthDigestPanel() {
       {/* Agent Rows */}
       <div className="w-full space-y-1.5">
         {agents.map((agent) => {
-          const agentColors = scoreColor(agent.score);
+          const agentSafeScore = safeScore(agent.score);
+          const agentColors = scoreColor(agentSafeScore);
           return (
             <motion.div
               key={agent.name}
@@ -144,18 +183,21 @@ export default function HealthDigestPanel() {
 
               {/* Score bar */}
               <div className="flex-1 h-1.5 rounded-full bg-white/[0.06] overflow-hidden">
-                <div
-                  className={`h-full rounded-full ${agentColors.bg} transition-all duration-700 ease-out`}
-                  style={{ width: `${agent.score}%`, opacity: 0.8 }}
+                <motion.div
+                  className={`h-full rounded-full ${agentColors.bg}`}
+                  initial={{ width: 0 }}
+                  animate={{ width: `${agentSafeScore}%` }}
+                  transition={{ duration: BAR_DURATION, ease: "easeOut" }}
+                  style={{ opacity: 0.8 }}
                 />
               </div>
 
               {/* Score number */}
-              <span
+              <AnimatedScoreNumber
+                value={agentSafeScore}
+                duration={BAR_DURATION}
                 className={`text-[10px] font-medium tabular-nums w-6 text-right ${agentColors.text}`}
-              >
-                {agent.score}
-              </span>
+              />
 
               {/* Issue count badge */}
               {agent.issues > 0 ? (

@@ -22,6 +22,10 @@ import SectionHeading from "@/components/SectionHeading";
 import GradientText from "@/components/GradientText";
 import TerminalChrome from "@/components/TerminalChrome";
 import { fadeUp } from "@/lib/animations";
+import {
+  SectionPauseProvider,
+  useSectionPauseController,
+} from "@/hooks/useSectionPause";
 
 /* ── Types ── */
 
@@ -613,6 +617,9 @@ function ChatChannel({
 
 export default function AgentsChat() {
   const prefersReduced = useReducedMotion();
+  const sectionRef = useRef<HTMLElement>(null);
+  const pauseValue = useSectionPauseController({ ref: sectionRef });
+  const sectionPaused = pauseValue.paused;
   const [activeIndex, setActiveIndex] = useState(0);
   const [wfVisibleCount, setWfVisibleCount] = useState(0);
   const [agVisibleCount, setAgVisibleCount] = useState(0);
@@ -692,14 +699,14 @@ export default function AgentsChat() {
 
   // Auto-cycle
   useEffect(() => {
-    if (paused || hovered) return;
+    if (paused || hovered || sectionPaused) return;
     cycleTimerRef.current = setTimeout(() => {
       setActiveIndex((prev) => (prev + 1) % scenarios.length);
     }, CYCLE_MS);
     return () => {
       if (cycleTimerRef.current) clearTimeout(cycleTimerRef.current);
     };
-  }, [activeIndex, paused, hovered]);
+  }, [activeIndex, paused, hovered, sectionPaused]);
 
   // Cleanup on unmount
   useEffect(() => {
@@ -707,9 +714,11 @@ export default function AgentsChat() {
   }, [clearAllTimers]);
 
   return (
+    <SectionPauseProvider value={pauseValue}>
     <SectionWrapper
       id="agents-chat"
       aria-label="Agents vs Workflows chat comparison"
+      ref={sectionRef}
     >
       {/* Header */}
       <motion.div variants={fadeUp} className="text-center mb-14">
@@ -963,5 +972,6 @@ export default function AgentsChat() {
         </div>
       </motion.div>
     </SectionWrapper>
+    </SectionPauseProvider>
   );
 }

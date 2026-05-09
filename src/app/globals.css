@@ -243,6 +243,38 @@ html {
   100% { background-position: -200% 0; }
 }
 
+@keyframes heartbeat {
+  0%, 100% { opacity: 0.4; transform: scale(1); }
+  50%      { opacity: 1;   transform: scale(1.25); }
+}
+
+@keyframes border-pulse {
+  0%   { border-color: rgba(52, 211, 153, 0.0); }
+  40%  { border-color: rgba(52, 211, 153, 0.7); }
+  100% { border-color: rgba(52, 211, 153, 0.4); }
+}
+
+@keyframes vote-card-pulse {
+  0%   { border-color: rgba(255, 255, 255, 0.05); box-shadow: 0 0 0 0 var(--vote-pulse-color, rgba(6, 182, 212, 0)); }
+  35%  { border-color: var(--vote-pulse-color, rgba(6, 182, 212, 0.4)); box-shadow: 0 0 28px 0 var(--vote-pulse-shadow, rgba(6, 182, 212, 0.15)); }
+  100% { border-color: rgba(255, 255, 255, 0.05); box-shadow: 0 0 0 0 var(--vote-pulse-color, rgba(6, 182, 212, 0)); }
+}
+
+.vote-card-pulse {
+  animation: vote-card-pulse 600ms ease-out 1;
+}
+
+.animate-heartbeat {
+  animation: heartbeat 1.5s ease-in-out infinite;
+}
+
+/* When the page is hidden, freeze the heartbeat so peripheral motion
+   doesn't run unnecessarily in background tabs. The polling hook already
+   pauses fetches under the same condition. */
+.animate-heartbeat[data-paused="true"] {
+  animation-play-state: paused;
+}
+
 @keyframes progress-dot-breathe {
   0%, 100% { opacity: 0.7; transform: translateY(-50%) translateX(-50%) scale(1); box-shadow: 0 0 6px color-mix(in srgb, var(--brand-cyan) 60%, transparent), 0 0 12px color-mix(in srgb, var(--brand-cyan) 30%, transparent); }
   50% { opacity: 1; transform: translateY(-50%) translateX(-50%) scale(1.8); box-shadow: 0 0 10px var(--brand-cyan), 0 0 20px color-mix(in srgb, var(--brand-cyan) 60%, transparent); }
@@ -270,6 +302,11 @@ html {
   .animate-breathe-glow { animation: breathe-glow 4s ease-in-out infinite; }
   .shimmer-surface::before { animation: shimmer 5s ease-in-out infinite; }
   .animated-conic-border { animation: conic-rotate 4s linear infinite; }
+  .animate-radar-sweep { animation: radar-sweep 12s linear infinite; will-change: transform; }
+}
+
+@keyframes radar-sweep {
+  to { transform: rotate(360deg); }
 }
 
 @keyframes badge-pulse {
@@ -345,6 +382,26 @@ html {
 .glow-card.texture-lines::after {
   background: none;
   box-shadow: none;
+}
+
+/* Dynamic-accent variant: border + hover-glow read --gc-accent at runtime,
+   so any persona color can drive the card without precompiled Tailwind classes. */
+.glow-card-dynamic {
+  border-color: rgba(var(--gc-accent, 6,182,212), 0.12);
+}
+.glow-card-dynamic:hover {
+  border-color: rgba(var(--gc-accent, 6,182,212), 0.25);
+  box-shadow: 0 0 50px rgba(var(--gc-accent, 6,182,212), 0.08);
+}
+
+/* Persona-tinted pill button — pairs with style={{ '--btn-accent': '<r,g,b>' }} */
+.btn-persona-accent {
+  border-color: rgba(var(--btn-accent, 6,182,212), 0.2);
+  background-color: rgba(var(--btn-accent, 6,182,212), 0.1);
+  color: rgb(var(--btn-accent, 6,182,212));
+}
+.btn-persona-accent:hover {
+  background-color: rgba(var(--btn-accent, 6,182,212), 0.2);
 }
 
 /* ── Dot Grid (from Personas desktop) ────────────── */
@@ -507,6 +564,7 @@ html {
 .tw-char-reveal {
   opacity: 0;
   animation: tw-char-reveal 0.18s ease-out forwards;
+  will-change: transform, opacity;
 }
 
 @keyframes tw-pulse {
@@ -561,6 +619,7 @@ html {
 
 .topo-bg {
   animation: topo-drift 80s ease-in-out infinite;
+  will-change: transform;
 }
 
 /* ── Cinematic Section (Direction 10) ─────────────── */
@@ -575,6 +634,16 @@ html {
   );
   background-size: 300% 300%;
   animation: gradient-sweep 16s ease infinite;
+}
+
+/* Static fallback used on low quality tier — no animation, no oversized
+   background, dramatically reduces compositing cost on mid-range Android. */
+.cinematic-gradient-static {
+  background: linear-gradient(
+    135deg,
+    color-mix(in srgb, var(--brand-cyan) 4%, transparent) 0%,
+    color-mix(in srgb, var(--brand-purple) 3%, transparent) 100%
+  );
 }
 
 /* ── Parallax Accents (CSS scroll-driven) ────────── */

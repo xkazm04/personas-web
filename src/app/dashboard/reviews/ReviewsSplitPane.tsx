@@ -1,7 +1,8 @@
 "use client";
 
-import { useEffect, useState, useMemo, useCallback, useRef } from "react";
+import { memo, useEffect, useState, useMemo, useCallback, useRef } from "react";
 import { motion, AnimatePresence } from "framer-motion";
+import { Virtuoso, type VirtuosoHandle } from "react-virtuoso";
 import {
   AlertTriangle,
   AlertCircle,
@@ -28,6 +29,7 @@ import { relativeTime } from "@/lib/format";
 import {
   getUrgencyLevel,
 } from "@/lib/reviewUtils";
+import { ShortcutsFooter, ShortcutsOverlay } from "./ShortcutsHud";
 
 // ---------------------------------------------------------------------------
 // Severity config
@@ -88,20 +90,24 @@ function StatusDot({ status }: { status: ManualReviewItem["status"] }) {
 // Left panel row
 // ---------------------------------------------------------------------------
 
-function ReviewRow({
+// Memoized so a selectedId change in the parent only re-renders the two rows
+// whose isActive flips, instead of every visible row in the list.
+const ReviewRow = memo(function ReviewRow({
   review,
   isActive,
-  onClick,
+  onSelect,
 }: {
   review: ManualReviewItem;
   isActive: boolean;
-  onClick: () => void;
+  // Stable per-id callback: parent passes the same function reference for the
+  // same id across renders so memo can short-circuit when only siblings change.
+  onSelect: (id: string) => void;
 }) {
   const sev = severityConfig[review.severity];
 
   return (
     <button
-      onClick={onClick}
+      onClick={() => onSelect(review.id)}
       className={`w-full flex items-center gap-2 px-3 py-2 text-left transition-all duration-150 border-l-2 ${
         isActive
           ? "bg-brand-cyan/[0.08] border-l-brand-cyan"
@@ -135,7 +141,7 @@ function ReviewRow({
       )}
     </button>
   );
-}
+});
 
 // ---------------------------------------------------------------------------
 // Detail panel
@@ -352,22 +358,25 @@ export default function ReviewsSplitPane() {
   const resolveReview = useReviewStore((s) => s.resolveReview);
   const checkEscalations = useReviewStore((s) => s.checkEscalations);
   const escalationEnabled = useReviewStore((s) => s.escalationEnabled);
+  const pollPaused = useReviewStore((s) => s.pollPaused);
 
   const [filter, setFilter] = useState("all");
   const [selectedId, setSelectedId] = useState<string | null>(null);
+  const [shortcutsOpen, setShortcutsOpen] = useState(false);
 
-  useEffect(() => {
-    void fetchReviews();
-  }, [fetchReviews]);
+  // Coalesce data refresh + escalation pass into the same tick: escalations
+  // can only change after data does, so a separate 30s timer is duplicate work
+  // and creates an awkward race against pre-fetch stale data. usePolling
+  // already fires immediately on mount and gates on document.visibility, so
+  // background tabs skip both and we don't need a separate effect to fetch.
+  const refreshAndCheckEscalations = useCallback(async () => {
+    await fetchReviews();
+    if (escalationEnabled) {
+      await checkEscalations();
+    }
+  }, [fetchReviews, checkEscalations, escalationEnabled]);
 
-  usePolling(fetchReviews, 15_000, true);
-
-  useEffect(() => {
-    if (!escalationEnabled) return;
-    const id = setInterval(checkEscalations, 30_000);
-    checkEscalations();
-    return () => clearInterval(id);
-  }, [escalationEnabled, checkEscalations]);
+  usePolling(refreshAndCheckEscalations, 15_000, !pollPaused);
 
   // Group and sort reviews: pending first, then by creation date
   const filtered = useMemo(() => {
@@ -393,21 +402,39 @@ export default function ReviewsSplitPane() {
     return c;
   }, [reviews]);
 
-  const selectedReview = useMemo(
-    () => filtered.find((r) => r.id === selectedId) ?? null,
-    [filtered, selectedId]
-  );
+  // Single index for O(1) lookups of selectedReview / selectedIndex —
+  // previously every selectedId change ran two linear scans (find + findIndex)
+  // on top of N row re-renders, which dominated the j/k hot path past ~50 items.
+  const filteredIndex = useMemo(() => {
+    const map = new Map<string, { item: ManualReviewItem; index: number }>();
+    filtered.forEach((item, index) => map.set(item.id, { item, index }));
+    return map;
+  }, [filtered]);
 
-  const selectedIndex = useMemo(
-    () => filtered.findIndex((r) => r.id === selectedId),
-    [filtered, selectedId]
-  );
+  const selectedEntry = selectedId ? filteredIndex.get(selectedId) : undefined;
+  const selectedReview = selectedEntry?.item ?? null;
+  const selectedIndex = selectedEntry?.index ?? -1;
+
+  // Stable callback: same reference every render so memo'd rows can skip
+  // re-rendering when the *parent* re-renders (e.g. j/k changing selectedId).
+  const handleSelectRow = useCallback((id: string) => {
+    setSelectedId(id);
+  }, []);
 
   // Keyboard navigation
   useEffect(() => {
     const handler = (e: KeyboardEvent) => {
       const tag = (e.target as HTMLElement)?.tagName;
       if (tag === "INPUT" || tag === "TEXTAREA" || tag === "SELECT") return;
+
+      if (e.key === "?" || (e.key === "/" && e.shiftKey)) {
+        e.preventDefault();
+        setShortcutsOpen((prev) => !prev);
+        return;
+      }
+      // While the shortcuts overlay is up, don't fall through to navigation
+      // — the overlay's own handler manages Escape and its search field.
+      if (shortcutsOpen) return;
 
       if (e.key === "j") {
         e.preventDefault();
@@ -427,7 +454,7 @@ export default function ReviewsSplitPane() {
     };
     window.addEventListener("keydown", handler);
     return () => window.removeEventListener("keydown", handler);
-  }, [selectedIndex, filtered, selectedReview, resolveReview]);
+  }, [selectedIndex, filtered, selectedReview, resolveReview, shortcutsOpen]);
 
   // Auto-select first review if nothing selected
   useEffect(() => {
@@ -438,10 +465,10 @@ export default function ReviewsSplitPane() {
 
   // Clear selection on filter change if the current selection is no longer visible
   useEffect(() => {
-    if (selectedId && !filtered.find((r) => r.id === selectedId)) {
+    if (selectedId && !filteredIndex.has(selectedId)) {
       setSelectedId(filtered[0]?.id ?? null);
     }
-  }, [filter, filtered, selectedId]);
+  }, [filter, filtered, filteredIndex, selectedId]);
 
   const handleResolve = useCallback(
     (id: string, status: "approved" | "rejected", notes?: string) => {
@@ -450,12 +477,15 @@ export default function ReviewsSplitPane() {
     [resolveReview]
   );
 
-  // Scroll the active row into view
-  const listRef = useRef<HTMLDivElement>(null);
+  // Scroll the active row into view via Virtuoso
+  const virtuosoRef = useRef<VirtuosoHandle>(null);
   useEffect(() => {
-    if (!listRef.current || selectedIndex < 0) return;
-    const rows = listRef.current.querySelectorAll("[data-review-row]");
-    rows[selectedIndex]?.scrollIntoView({ behavior: "smooth", block: "nearest" });
+    if (selectedIndex < 0) return;
+    virtuosoRef.current?.scrollToIndex({
+      index: selectedIndex,
+      behavior: "smooth",
+      align: "center",
+    });
   }, [selectedIndex]);
 
   return (
@@ -487,25 +517,34 @@ export default function ReviewsSplitPane() {
             />
           </div>
 
-          {/* Review list */}
-          <div
-            ref={listRef}
-            className="flex-1 overflow-y-auto divide-y divide-white/[0.04] scrollbar-thin scrollbar-thumb-white/10 scrollbar-track-transparent"
-          >
+          {/* Review list (virtualized) */}
+          <div className="flex-1 min-h-0">
             {filtered.length === 0 ? (
               <div className="flex items-center justify-center py-12 text-[11px] text-muted-dark/50">
                 No reviews in this filter
               </div>
             ) : (
-              filtered.map((review) => (
-                <div key={review.id} data-review-row>
-                  <ReviewRow
-                    review={review}
-                    isActive={review.id === selectedId}
-                    onClick={() => setSelectedId(review.id)}
-                  />
-                </div>
-              ))
+              <Virtuoso
+                ref={virtuosoRef}
+                data={filtered}
+                computeItemKey={(_index, review) => review.id}
+                overscan={200}
+                style={{ height: "100%" }}
+                className="scrollbar-thin scrollbar-thumb-white/10 scrollbar-track-transparent"
+                itemContent={(index, review) => (
+                  <div
+                    className={
+                      index > 0 ? "border-t border-white/[0.04]" : undefined
+                    }
+                  >
+                    <ReviewRow
+                      review={review}
+                      isActive={review.id === selectedId}
+                      onSelect={handleSelectRow}
+                    />
+                  </div>
+                )}
+              />
             )}
           </div>
 
@@ -537,6 +576,12 @@ export default function ReviewsSplitPane() {
           </AnimatePresence>
         </div>
       </motion.div>
+
+      <ShortcutsFooter onOpenAll={() => setShortcutsOpen(true)} />
+      <ShortcutsOverlay
+        open={shortcutsOpen}
+        onClose={() => setShortcutsOpen(false)}
+      />
     </motion.div>
   );
 }

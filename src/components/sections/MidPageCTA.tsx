@@ -6,12 +6,16 @@ import { Download, Apple, Terminal } from "lucide-react";
 import { fadeUp } from "@/lib/animations";
 import { trackDownloadClick } from "@/lib/analytics";
 import PrimaryCTA from "@/components/PrimaryCTA";
-import WaitlistModal from "@/components/WaitlistModal";
+import WaitlistModal, { type PlatformId } from "@/components/WaitlistModal";
 
-const waitlistPlatforms = [
-  { icon: Apple, label: "macOS" },
-  { icon: Terminal, label: "Linux" },
-] as const;
+const waitlistPlatforms: ReadonlyArray<{
+  id: PlatformId;
+  icon: typeof Apple;
+  label: string;
+}> = [
+  { id: "macos", icon: Apple, label: "macOS" },
+  { id: "linux", icon: Terminal, label: "Linux" },
+];
 
 export default function MidPageCTA() {
   const [waitlistPlatform, setWaitlistPlatform] = useState<
@@ -35,7 +39,7 @@ export default function MidPageCTA() {
         <motion.div variants={fadeUp} className="flex items-center gap-3">
           {waitlistPlatforms.map((p) => (
             <button
-              key={p.label}
+              key={p.id}
               onClick={() => setWaitlistPlatform(p)}
               className="flex items-center gap-2 rounded-full border border-white/[0.06] bg-white/[0.02] px-6 py-3 text-sm font-medium text-muted-dark transition-colors duration-300 hover:border-brand-purple/20 hover:bg-brand-purple/5 hover:text-brand-purple/80"
             >
@@ -49,7 +53,8 @@ export default function MidPageCTA() {
 
       {waitlistPlatform && (
         <WaitlistModal
-          platform={waitlistPlatform.label}
+          platformId={waitlistPlatform.id}
+          platformLabel={waitlistPlatform.label}
           platformIcon={waitlistPlatform.icon}
           open={!!waitlistPlatform}
           onClose={() => setWaitlistPlatform(null)}

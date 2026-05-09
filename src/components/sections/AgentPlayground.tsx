@@ -123,24 +123,32 @@ export default function AgentPlayground() {
   const [isRunning, setIsRunning] = useState(false);
   const [visibleLines, setVisibleLines] = useState<SimLine[]>([]);
   const [phase, setPhase] = useState<"idle" | "running" | "done">("idle");
+  const [noMatch, setNoMatch] = useState(false);
   const terminalRef = useRef<HTMLDivElement>(null);
   const timeoutsRef = useRef<ReturnType<typeof setTimeout>[]>([]);
+  // Synchronous lock. `isRunning` state can lag a frame behind a click,
+  // letting two near-simultaneous chip clicks (or a chip + Enter) both pass
+  // the guard, interleave their setTimeouts, and clobber `visibleLines`.
+  // The ref flips immediately on the first event so the second one is
+  // dropped before any state churn happens.
+  const runningRef = useRef(false);
 
   const clearTimeouts = useCallback(() => {
     timeoutsRef.current.forEach(clearTimeout);
     timeoutsRef.current = [];
   }, []);
 
-  const scrollTerminal = useCallback(() => {
-    if (terminalRef.current) {
-      terminalRef.current.scrollTop = terminalRef.current.scrollHeight;
-    }
-  }, []);
+  // Auto-scroll only when the user was already pinned to the bottom; if they
+  // scrolled up to read an earlier line, don't yank them back down.
+  const SCROLL_PIN_THRESHOLD_PX = 16;
 
   const runSimulation = useCallback(
     (lines: SimLine[]) => {
+      // Defensive: cancel any in-flight ticks and clear lines so a stale
+      // run from a previous simulation can't bleed into this one.
       clearTimeouts();
       setVisibleLines([]);
+      runningRef.current = true;
       setIsRunning(true);
       setPhase("running");
 
@@ -148,9 +156,21 @@ export default function AgentPlayground() {
       lines.forEach((line, i) => {
         cumulative += line.delay;
         const t = setTimeout(() => {
+          // Snapshot scroll position BEFORE the new line lands.
+          const el = terminalRef.current;
+          const wasAtBottom = el
+            ? el.scrollHeight - el.scrollTop - el.clientHeight <= SCROLL_PIN_THRESHOLD_PX
+            : true;
           setVisibleLines((prev) => [...prev, line]);
-          requestAnimationFrame(scrollTerminal);
+          if (wasAtBottom) {
+            requestAnimationFrame(() => {
+              if (terminalRef.current) {
+                terminalRef.current.scrollTop = terminalRef.current.scrollHeight;
+              }
+            });
+          }
           if (i === lines.length - 1) {
+            runningRef.current = false;
             setIsRunning(false);
             setPhase("done");
           }
@@ -158,41 +178,67 @@ export default function AgentPlayground() {
         timeoutsRef.current.push(t);
       });
     },
-    [clearTimeouts, scrollTerminal]
+    [clearTimeouts]
   );
 
   const handleExampleClick = useCallback(
     (idx: number) => {
-      if (isRunning) return;
+      if (runningRef.current) return;
       setActiveExample(idx);
       setInputValue(examples[idx].prompt);
       runSimulation(examples[idx].lines);
     },
-    [isRunning, runSimulation]
+    [runSimulation]
   );
 
   const handleSubmit = useCallback(
     (e: React.FormEvent) => {
       e.preventDefault();
-      if (isRunning || !inputValue.trim()) return;
-      // Find matching example or use first
-      const match = examples.findIndex((ex) =>
-        inputValue.toLowerCase().includes(ex.label.toLowerCase().split(" ")[0])
-      );
-      const idx = match >= 0 ? match : 0;
-      setActiveExample(idx);
-      runSimulation(examples[idx].lines);
+      if (runningRef.current) return;
+      // Normalize whitespace: trim ends and collapse internal runs to a
+      // single space so "review   my PR  " matches the same as "review my PR".
+      const normalized = inputValue.trim().replace(/\s+/g, " ").toLowerCase();
+      if (!normalized) return;
+      // Score each example by how many of its meaningful label tokens (> 2
+      // chars, to skip "my"/"a") appear in the prompt. Pick the highest score.
+      // First-match findIndex would lock onto whichever example happened to
+      // share a single token, even when a later example fits better.
+      let bestIdx = -1;
+      let bestScore = 0;
+      for (let i = 0; i < examples.length; i++) {
+        const tokens = examples[i].label.toLowerCase().split(/\s+/);
+        let score = 0;
+        for (const token of tokens) {
+          if (token.length > 2 && normalized.includes(token)) score += 1;
+        }
+        if (score > bestScore) {
+          bestScore = score;
+          bestIdx = i;
+        }
+      }
+      if (bestIdx < 0) {
+        // Don't silently run an unrelated example — the agent appearing to
+        // hallucinate a Gmail response for "do my taxes" damages trust more
+        // than telling the user we don't recognize the intent.
+        setNoMatch(true);
+        return;
+      }
+      setNoMatch(false);
+      setActiveExample(bestIdx);
+      runSimulation(examples[bestIdx].lines);
     },
-    [isRunning, inputValue, runSimulation]
+    [inputValue, runSimulation]
   );
 
   const handleReset = useCallback(() => {
     clearTimeouts();
+    runningRef.current = false;
     setActiveExample(null);
     setInputValue("");
     setVisibleLines([]);
     setIsRunning(false);
     setPhase("idle");
+    setNoMatch(false);
   }, [clearTimeouts]);
 
   // Cleanup on unmount
@@ -249,7 +295,10 @@ export default function AgentPlayground() {
               <input
                 type="text"
                 value={inputValue}
-                onChange={(e) => setInputValue(e.target.value)}
+                onChange={(e) => {
+                  setInputValue(e.target.value);
+                  if (noMatch) setNoMatch(false);
+                }}
                 placeholder="Describe what your agent should do..."
                 disabled={isRunning}
                 className="flex-1 bg-transparent text-sm text-foreground placeholder:text-muted-dark outline-none font-mono disabled:opacity-60"
@@ -285,10 +334,21 @@ export default function AgentPlayground() {
             ref={terminalRef}
             className="h-[280px] overflow-y-auto px-4 py-4 sm:px-5 scrollbar-hide"
           >
-            {phase === "idle" && (
+            {phase === "idle" && !noMatch && (
               <div className="flex h-full items-center justify-center">
                 <p className="text-sm text-muted-dark font-mono text-center">
                   Pick an example above or type your own instruction to begin
+                </p>
+              </div>
+            )}
+
+            {phase === "idle" && noMatch && (
+              <div className="flex h-full flex-col items-center justify-center gap-2 px-4">
+                <p className="text-sm text-brand-amber/80 font-mono text-center">
+                  No matching example for that prompt.
+                </p>
+                <p className="text-xs text-muted-dark font-mono text-center max-w-sm">
+                  This is a simulated playground — pick one of the example chips above to see how a real Personas agent would handle it.
                 </p>
               </div>
             )}

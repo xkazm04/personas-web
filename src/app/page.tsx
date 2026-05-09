@@ -110,28 +110,49 @@ const faqJsonLd = {
   ],
 };
 
+/**
+ * Extract a Schema.org-valid numeric price from any tier price string.
+ * "$0", "$20/mo", "From $99", "€20" all resolve to the first numeric run;
+ * "Custom" or anything without digits returns null so the Offer falls back
+ * to a PriceSpecification instead of emitting an invalid `price` field.
+ */
+function extractNumericPrice(price: string): string | null {
+  if (price === "Custom") return null;
+  return price.match(/[0-9]+(?:\.[0-9]+)?/)?.[0] ?? null;
+}
+
 const pricingJsonLd = {
   "@context": "https://schema.org",
   "@type": "WebPage",
   mainEntity: {
     "@type": "ItemList",
-    itemListElement: PRICING_TIERS.map((tier, i) => ({
-      "@type": "ListItem",
-      position: i + 1,
-      item: {
-        "@type": "Product",
-        name: `Personas ${tier.name}`,
-        description: tier.bestFor,
-        offers: {
-          "@type": "Offer",
-          price: tier.price === "Custom" ? undefined : tier.price.replace("$", ""),
-          priceCurrency: tier.price === "Custom" ? undefined : "USD",
-          ...(tier.price === "Custom" ? { priceSpecification: { "@type": "PriceSpecification", name: "Custom pricing" } } : {}),
+    itemListElement: PRICING_TIERS.map((tier, i) => {
+      const numericPrice = extractNumericPrice(tier.price);
+      return {
+        "@type": "ListItem",
+        position: i + 1,
+        item: {
+          "@type": "Product",
+          name: `Personas ${tier.name}`,
+          description: tier.bestFor,
+          offers: {
+            "@type": "Offer",
+            ...(numericPrice !== null
+              ? { price: numericPrice, priceCurrency: "USD" }
+              : { priceSpecification: { "@type": "PriceSpecification", name: "Custom pricing" } }),
+          },
         },
-      },
-    })),
+      };
+    }),
   },
 };
+
+// Pre-stringify schema.org blobs at module-eval time so we don't redo
+// JSON.stringify on every server render and client hydration.
+const ORG_JSONLD_STR = JSON.stringify(organizationJsonLd);
+const SOFTWARE_JSONLD_STR = JSON.stringify(softwareJsonLd);
+const FAQ_JSONLD_STR = JSON.stringify(faqJsonLd);
+const PRICING_JSONLD_STR = JSON.stringify(pricingJsonLd);
 
 interface SectionConfig {
   Component: ComponentType;
@@ -174,19 +195,19 @@ export default function Home() {
       <Navbar />
       <script
         type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(organizationJsonLd) }}
+        dangerouslySetInnerHTML={{ __html: ORG_JSONLD_STR }}
       />
       <script
         type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(softwareJsonLd) }}
+        dangerouslySetInnerHTML={{ __html: SOFTWARE_JSONLD_STR }}
       />
       <script
         type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(faqJsonLd) }}
+        dangerouslySetInnerHTML={{ __html: FAQ_JSONLD_STR }}
       />
       <script
         type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(pricingJsonLd) }}
+        dangerouslySetInnerHTML={{ __html: PRICING_JSONLD_STR }}
       />
       <PageShell scrollMapItems={scrollMapItems}>
 

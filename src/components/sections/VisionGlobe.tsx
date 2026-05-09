@@ -10,6 +10,10 @@ import {
   animate,
 } from "framer-motion";
 import {
+  SectionPauseProvider,
+  useSectionPauseController,
+} from "@/hooks/useSectionPause";
+import {
   Mail,
   MessageSquare,
   Github,
@@ -95,29 +99,74 @@ function AnimatedCounter({ value }: { value: number }) {
 
 export default function VisionGlobe() {
   const prefersReducedMotion = useReducedMotion();
+  const sectionRef = useRef<HTMLElement>(null);
+  const pauseValue = useSectionPauseController({ ref: sectionRef });
+  const { paused } = pauseValue;
   const [agents, setAgents] = useState(initialAgents);
   const [flashIdx, setFlashIdx] = useState<number | null>(null);
   const [hoveredIdx, setHoveredIdx] = useState<number | null>(null);
-  const [sweepAngle, setSweepAngle] = useState(0);
-  const sweepRef = useRef<number | null>(null);
+  const rotorRef = useRef<HTMLDivElement | null>(null);
+  const ringRefs = useRef<(HTMLDivElement | null)[]>([]);
+  const flashTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 
   const totalExec = agents.reduce((s, a) => s + a.executions, 0);
 
-  /* ── Sweep rotation ── */
+  // Precompute each agent's normalized radar angle once. Rate / position are
+  // fixed for the lifetime of the component, so this never re-runs after mount.
+  const agentAngles = useMemo(
+    () =>
+      initialAgents.map((a, i) => {
+        const { angleDeg } = agentPosition(i, initialAgents.length, a.rate, 1);
+        return ((angleDeg % 360) + 360) % 360;
+      }),
+    [],
+  );
+
+  /* ── Sweep rotor + sweep-detection ── */
+  // The rotor itself rotates via CSS keyframes (no React state per frame).
+  // A ref-driven RAF reads the elapsed time, derives swept-agent indices,
+  // and imperatively plays a pulse animation on each newly-swept ring —
+  // no setState, no React render cycle at 60 fps.
   useEffect(() => {
-    if (prefersReducedMotion) return;
-    let lastTime = performance.now();
-    const step = (now: number) => {
-      const delta = now - lastTime;
-      lastTime = now;
-      setSweepAngle((prev) => (prev + delta * 0.03) % 360);
-      sweepRef.current = requestAnimationFrame(step);
+    const rotor = rotorRef.current;
+    if (rotor) {
+      rotor.style.animationPlayState = paused ? "paused" : "running";
+    }
+    if (paused) return;
+
+    const start = performance.now();
+    const sweptState = new Array<boolean>(initialAgents.length).fill(false);
+    let rafId = 0;
+
+    const tick = () => {
+      const angle = ((performance.now() - start) * 0.03) % 360;
+
+      for (let i = 0; i < initialAgents.length; i++) {
+        const normalised = agentAngles[i];
+        const diff = Math.abs(((angle - normalised + 540) % 360) - 180);
+        const isSweptNow = diff < 18;
+        if (isSweptNow !== sweptState[i]) {
+          sweptState[i] = isSweptNow;
+          if (isSweptNow) {
+            const ring = ringRefs.current[i];
+            if (ring && typeof ring.animate === "function") {
+              ring.style.borderColor = initialAgents[i].color;
+              ring.animate(
+                [
+                  { opacity: 0.7, transform: "scale(0.5)" },
+                  { opacity: 0, transform: "scale(1.8)" },
+                ],
+                { duration: 800, easing: "ease-out", fill: "forwards" },
+              );
+            }
+          }
+        }
+      }
+      rafId = requestAnimationFrame(tick);
     };
-    sweepRef.current = requestAnimationFrame(step);
-    return () => {
-      if (sweepRef.current) cancelAnimationFrame(sweepRef.current);
-    };
-  }, [prefersReducedMotion]);
+    rafId = requestAnimationFrame(tick);
+    return () => cancelAnimationFrame(rafId);
+  }, [agentAngles, paused]);
 
   /* ── Activity tick ── */
   const tick = useCallback(() => {
@@ -134,13 +183,26 @@ export default function VisionGlobe() {
       return next;
     });
     if (!prefersReducedMotion) {
+      // Cancel any pending flash so a new tick mid-flight doesn't get cleared
+      // by the prior timer, and so unmount-while-pending doesn't setState on
+      // a torn-down component.
+      if (flashTimerRef.current) clearTimeout(flashTimerRef.current);
       setFlashIdx(idx);
-      setTimeout(() => setFlashIdx(null), 800);
+      flashTimerRef.current = setTimeout(() => {
+        setFlashIdx(null);
+        flashTimerRef.current = null;
+      }, 800);
     }
   }, [prefersReducedMotion]);
 
   useEffect(() => {
-    if (prefersReducedMotion) return;
+    return () => {
+      if (flashTimerRef.current) clearTimeout(flashTimerRef.current);
+    };
+  }, []);
+
+  useEffect(() => {
+    if (paused) return;
     const schedule = () => {
       const delay = 2500 + Math.random() * 2000;
       return setTimeout(() => {
@@ -150,19 +212,7 @@ export default function VisionGlobe() {
     };
     let timerRef = schedule();
     return () => clearTimeout(timerRef);
-  }, [tick, prefersReducedMotion]);
-
-  /* ── Detect sweep-over ── */
-  const sweptIndices = useMemo(() => {
-    const set = new Set<number>();
-    agents.forEach((agent, i) => {
-      const { angleDeg } = agentPosition(i, agents.length, agent.rate, 1);
-      const normalised = ((angleDeg % 360) + 360) % 360;
-      const diff = Math.abs(((sweepAngle - normalised + 540) % 360) - 180);
-      if (diff < 18) set.add(i);
-    });
-    return set;
-  }, [sweepAngle, agents]);
+  }, [tick, paused]);
 
   /* ── Radar constants ── */
   const RADAR_SIZE = 420;
@@ -170,7 +220,8 @@ export default function VisionGlobe() {
   const RING_COUNT = 4;
 
   return (
-    <SectionWrapper id="vision-globe" className="relative overflow-hidden">
+    <SectionPauseProvider value={pauseValue}>
+    <SectionWrapper id="vision-globe" className="relative overflow-hidden" ref={sectionRef}>
       {/* ── Heading ── */}
       <div className="mx-auto max-w-3xl text-center relative z-10 mb-14">
         <motion.div variants={revealFromBelow}>
@@ -226,13 +277,13 @@ export default function VisionGlobe() {
                 <line x1={RADAR_R + (RADAR_R - 10) * 0.707} y1={RADAR_R - (RADAR_R - 10) * 0.707} x2={RADAR_R - (RADAR_R - 10) * 0.707} y2={RADAR_R + (RADAR_R - 10) * 0.707} stroke="rgba(255,255,255,0.025)" strokeWidth={1} />
               </svg>
 
-              {/* ── Sweep line (rotating) ── */}
+              {/* ── Sweep line (rotating) ──
+                  CSS keyframe animation handles the rotation off the React
+                  render loop. The companion ref-driven RAF only mutates DOM
+                  on per-agent sweep transitions. */}
               <div
-                className="absolute inset-0 pointer-events-none"
-                style={{
-                  transform: `rotate(${sweepAngle}deg)`,
-                  willChange: "transform",
-                }}
+                ref={rotorRef}
+                className="absolute inset-0 pointer-events-none animate-radar-sweep"
               >
                 {/* Sweep cone gradient */}
                 <div
@@ -306,9 +357,10 @@ export default function VisionGlobe() {
                 );
                 const st = statusStyles[agent.status];
                 const isFlashing = flashIdx === i;
-                const isSwept = sweptIndices.has(i);
                 const isHovered = hoveredIdx === i;
-                const blipBrightness = isFlashing || isSwept ? 1 : agent.status === "idle" ? 0.4 : 0.7;
+                // Sweep brightening lives in the imperative RAF; here we only
+                // model status + the (rare) flash event in React.
+                const blipBrightness = isFlashing ? 1 : agent.status === "idle" ? 0.4 : 0.7;
 
                 return (
                   <div
@@ -323,10 +375,26 @@ export default function VisionGlobe() {
                     onMouseEnter={() => setHoveredIdx(i)}
                     onMouseLeave={() => setHoveredIdx(null)}
                   >
-                    {/* Pulse ring */}
-                    {(isFlashing || isSwept) && (
+                    {/* Pulse ring — always mounted, animated imperatively
+                        via WAAPI when the radar sweeps over this agent.
+                        The flash ring still goes through React (rare event). */}
+                    <div
+                      ref={(el) => {
+                        ringRefs.current[i] = el;
+                      }}
+                      className="absolute rounded-full pointer-events-none"
+                      style={{
+                        width: 36,
+                        height: 36,
+                        left: -18,
+                        top: -18,
+                        border: `1.5px solid ${agent.color}`,
+                        opacity: 0,
+                      }}
+                    />
+                    {isFlashing && (
                       <motion.div
-                        className="absolute rounded-full"
+                        className="absolute rounded-full pointer-events-none"
                         style={{
                           width: 36,
                           height: 36,
@@ -349,7 +417,7 @@ export default function VisionGlobe() {
                         left: -14,
                         top: -14,
                         backgroundColor: `${agent.color}${Math.round(blipBrightness * 30).toString(16).padStart(2, "0")}`,
-                        boxShadow: isFlashing || isSwept
+                        boxShadow: isFlashing
                           ? `0 0 14px ${agent.color}80, 0 0 30px ${agent.color}40`
                           : `0 0 6px ${agent.color}30`,
                       }}
@@ -416,5 +484,6 @@ export default function VisionGlobe() {
         </div>
       </motion.div>
     </SectionWrapper>
+    </SectionPauseProvider>
   );
 }

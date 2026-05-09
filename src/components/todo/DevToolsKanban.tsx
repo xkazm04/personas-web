@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useEffect, useCallback, useRef } from "react";
-import { motion, AnimatePresence, useReducedMotion } from "framer-motion";
+import { motion, AnimatePresence } from "framer-motion";
 import {
   Lightbulb, ListChecks, Shield, Play, CheckCircle,
 } from "lucide-react";
@@ -9,6 +9,10 @@ import GradientText from "@/components/GradientText";
 import SectionHeading from "@/components/SectionHeading";
 import SectionWrapper from "@/components/SectionWrapper";
 import { fadeUp, staggerContainer } from "@/lib/animations";
+import {
+  SectionPauseProvider,
+  useSectionPauseController,
+} from "@/hooks/useSectionPause";
 
 /* ── Types ─────────────────────────────────────────────────── */
 
@@ -144,7 +148,9 @@ function ColumnHeader({ column, count }: { column: Column; count: number }) {
 /* ── Main component ─────────────────────────────────────────── */
 
 export default function DevToolsKanban() {
-  const reducedMotion = useReducedMotion();
+  const sectionRef = useRef<HTMLDivElement>(null);
+  const pauseValue = useSectionPauseController({ ref: sectionRef });
+  const { paused } = pauseValue;
   const [items, setItems] = useState<WorkItem[]>(() =>
     INITIAL_ITEMS.map((it) => ({ ...it, progress: it.column === "executing" ? 42 : 0, flashGreen: false })),
   );
@@ -175,6 +181,7 @@ export default function DevToolsKanban() {
 
   /* Progress bar animation for executing items */
   useEffect(() => {
+    if (paused) return;
     const progressTimer = setInterval(() => {
       setItems((prev) =>
         prev.map((it) =>
@@ -185,7 +192,7 @@ export default function DevToolsKanban() {
       );
     }, 800);
     return () => clearInterval(progressTimer);
-  }, []);
+  }, [paused]);
 
   /* Clear green flash after 1.2s */
   useEffect(() => {
@@ -197,17 +204,19 @@ export default function DevToolsKanban() {
 
   /* Main cycle timer */
   useEffect(() => {
-    if (reducedMotion) return;
+    if (paused) return;
     intervalRef.current = setInterval(tick, 4000);
     return () => {
       if (intervalRef.current) clearInterval(intervalRef.current);
     };
-  }, [tick, reducedMotion]);
+  }, [tick, paused]);
 
   const itemsInColumn = (colId: ColumnId) => items.filter((it) => it.column === colId);
 
   return (
+    <SectionPauseProvider value={pauseValue}>
     <SectionWrapper id="dev-tools-kanban" aria-label="Developer tools kanban board">
+      <div ref={sectionRef} aria-hidden="true" />
       <motion.div variants={fadeUp} className="text-center mb-12">
         <SectionHeading>
           Built-in <GradientText>developer tools</GradientText>
@@ -259,8 +268,12 @@ export default function DevToolsKanban() {
               <motion.div
                 key={i}
                 className="flex items-center gap-1"
-                animate={{ opacity: [0.3, 0.7, 0.3] }}
-                transition={{ duration: 2, repeat: Infinity, delay: i * 0.5 }}
+                animate={paused ? { opacity: 0.5 } : { opacity: [0.3, 0.7, 0.3] }}
+                transition={
+                  paused
+                    ? { duration: 0.2 }
+                    : { duration: 2, repeat: Infinity, delay: i * 0.5 }
+                }
               >
                 <div className="h-px w-10 bg-gradient-to-r from-transparent via-white/30 to-transparent" />
                 <svg width="8" height="10" viewBox="0 0 8 10" className="text-muted-dark">
@@ -291,5 +304,6 @@ export default function DevToolsKanban() {
         </div>
       </motion.div>
     </SectionWrapper>
+    </SectionPauseProvider>
   );
 }

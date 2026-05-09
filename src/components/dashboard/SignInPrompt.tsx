@@ -1,6 +1,7 @@
 "use client";
 
 import { motion } from "framer-motion";
+import { useShallow } from "zustand/react/shallow";
 import { LogIn, FlaskConical } from "lucide-react";
 import { fadeUp, staggerContainer } from "@/lib/animations";
 import GradientText from "@/components/GradientText";
@@ -9,8 +10,12 @@ import { useAuthStore } from "@/stores/authStore";
 import { DEVELOPMENT } from "@/lib/dev";
 
 export default function SignInPrompt() {
-  const signInWithGoogle = useAuthStore((s) => s.signInWithGoogle);
-  const signInAsDemo = useAuthStore((s) => s.signInAsDemo);
+  const { signInWithGoogle, signInAsDemo } = useAuthStore(
+    useShallow((s) => ({
+      signInWithGoogle: s.signInWithGoogle,
+      signInAsDemo: s.signInAsDemo,
+    })),
+  );
 
   return (
     <AuthLayout>
@@ -24,9 +29,11 @@ export default function SignInPrompt() {
         {DEVELOPMENT && (
           <motion.div
             variants={fadeUp}
+            role="status"
+            aria-live="polite"
             className="mb-4 flex items-center justify-center gap-2 rounded-xl border border-amber-500/20 bg-amber-500/5 px-4 py-2.5 text-xs text-amber-400"
           >
-            <FlaskConical className="h-3.5 w-3.5" />
+            <FlaskConical className="h-3.5 w-3.5" aria-hidden="true" />
             <span>Development Mode — using mock data</span>
           </motion.div>
         )}
@@ -62,7 +69,7 @@ export default function SignInPrompt() {
             {/* Sign-In Button */}
             <button
               onClick={signInWithGoogle}
-              className="group relative mt-8 flex w-full items-center justify-center gap-3 overflow-hidden rounded-full border border-brand-cyan/25 bg-brand-cyan/8 px-6 py-3.5 text-sm font-semibold text-brand-cyan transition-all duration-300 hover:border-brand-cyan/40 hover:bg-brand-cyan/15 hover:shadow-[0_0_30px_rgba(6,182,212,0.15)]"
+              className="group relative z-10 mt-8 flex w-full items-center justify-center gap-3 overflow-hidden rounded-full border border-brand-cyan/25 bg-brand-cyan/8 px-6 py-3.5 text-sm font-semibold text-brand-cyan transition-all duration-300 hover:border-brand-cyan/40 hover:bg-brand-cyan/15 hover:shadow-[0_0_30px_rgba(6,182,212,0.15)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-cyan/60 focus-visible:ring-offset-2 focus-visible:ring-offset-[var(--background)]"
             >
               <div className="absolute inset-0 bg-gradient-to-r from-transparent via-brand-cyan/10 to-transparent 
                 motion-safe:-translate-x-full motion-safe:transition-transform motion-safe:duration-700 motion-safe:group-hover:translate-x-full
@@ -75,7 +82,12 @@ export default function SignInPrompt() {
                 </>
               ) : (
                 <>
-                  <svg className="relative h-5 w-5" viewBox="0 0 24 24">
+                  <svg
+                    className="relative h-5 w-5"
+                    viewBox="0 0 24 24"
+                    role="img"
+                    aria-label="Google logo"
+                  >
                     <path
                       fill="currentColor"
                       d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92a5.06 5.06 0 0 1-2.2 3.32v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.1z"
@@ -104,7 +116,7 @@ export default function SignInPrompt() {
             {!DEVELOPMENT && (
               <button
                 onClick={signInAsDemo}
-                className="group relative mt-3 flex w-full items-center justify-center gap-2 overflow-hidden rounded-full border border-white/[0.08] bg-white/[0.03] px-6 py-3 text-sm font-medium text-muted-dark transition-all duration-300 hover:border-white/[0.15] hover:bg-white/[0.06] hover:text-foreground/80"
+                className="group relative z-10 mt-3 flex w-full items-center justify-center gap-2 overflow-hidden rounded-full border border-white/[0.08] bg-white/[0.03] px-6 py-3 text-sm font-medium text-muted-dark transition-all duration-300 hover:border-white/[0.15] hover:bg-white/[0.06] hover:text-foreground/80 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-cyan/60 focus-visible:ring-offset-2 focus-visible:ring-offset-[var(--background)]"
               >
                 <FlaskConical className="relative h-4 w-4" />
                 <span className="relative">Try Demo</span>

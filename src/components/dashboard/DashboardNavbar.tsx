@@ -1,22 +1,94 @@
 "use client";
 
-import { motion } from "framer-motion";
+import { motion, AnimatePresence } from "framer-motion";
 import { LogOut, ChevronRight, FlaskConical } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
+import { usePathname } from "next/navigation";
+import { useMemo } from "react";
+import { useShallow } from "zustand/react/shallow";
 import GradientText from "@/components/GradientText";
 import { useAuthStore } from "@/stores/authStore";
+import { usePersonaStore } from "@/stores/personaStore";
 import { useTranslation } from "@/i18n/useTranslation";
+import { nonBlank } from "@/lib/format";
+import { navItemDefs } from "./DashboardNavigation";
+
+interface BreadcrumbSegment {
+  /** Visible label (translated nav label, resolved entity title, or slug). */
+  label: string;
+  /** Link target; null on the trailing segment so it renders as plain text. */
+  href: string | null;
+  /** Stable key for AnimatePresence — segment index + slug. */
+  key: string;
+}
+
+/**
+ * Derives the breadcrumb trail from the current pathname using `navItemDefs`
+ * for the top-level page label. Detail segments (e.g. a persona id under
+ * /dashboard/agents/) resolve through the relevant store and fall back to
+ * the URL slug when no record matches.
+ */
+function useBreadcrumbSegments(): BreadcrumbSegment[] {
+  const pathname = usePathname();
+  const { t } = useTranslation();
+  const personasById = usePersonaStore((s) => s.personasById);
+
+  return useMemo(() => {
+    if (!pathname || !pathname.startsWith("/dashboard")) return [];
+
+    const tail = pathname.replace(/^\/dashboard\/?/, "");
+    if (!tail || tail === "home") {
+      return [{ label: t.dashboard.overview, href: null, key: "home" }];
+    }
+
+    const parts = tail.split("/").filter(Boolean);
+    const segments: BreadcrumbSegment[] = [];
+
+    const topHref = `/dashboard/${parts[0]}`;
+    const navDef = navItemDefs.find((d) => d.href === topHref);
+    const topLabel = navDef ? t.dashboard[navDef.labelKey] : parts[0];
+    const topIsLast = parts.length === 1;
+    segments.push({
+      label: topLabel,
+      href: topIsLast ? null : topHref,
+      key: parts[0],
+    });
+
+    for (let i = 1; i < parts.length; i++) {
+      const slug = parts[i];
+      const isLast = i === parts.length - 1;
+      // Resolve the trailing entity slug via the relevant store; otherwise the
+      // raw slug remains visible so URLs are never silent dead-ends.
+      let label = slug;
+      if (parts[0] === "agents") {
+        label = personasById[slug]?.name ?? slug;
+      }
+      segments.push({
+        label,
+        href: isLast ? null : `/dashboard/${parts.slice(0, i + 1).join("/")}`,
+        key: `${i}:${slug}`,
+      });
+    }
+
+    return segments;
+  }, [pathname, t, personasById]);
+}
 
 export default function DashboardNavbar() {
   const { t } = useTranslation();
-  const user = useAuthStore((s) => s.user);
-  const signOut = useAuthStore((s) => s.signOut);
-  const isDemo = useAuthStore((s) => s.isDemo);
+  const { user, signOut, isDemo } = useAuthStore(
+    useShallow((s) => ({
+      user: s.user,
+      signOut: s.signOut,
+      isDemo: s.isDemo,
+    })),
+  );
+  const segments = useBreadcrumbSegments();
 
-  const avatarUrl = user?.user_metadata?.avatar_url;
+  const avatarUrl = nonBlank(user?.user_metadata?.avatar_url);
   const displayName =
-    user?.user_metadata?.full_name ?? user?.email ?? "User";
+    nonBlank(user?.user_metadata?.full_name) ?? nonBlank(user?.email) ?? "User";
 
   return (
     <motion.header
@@ -25,10 +97,13 @@ export default function DashboardNavbar() {
       transition={{ duration: 0.5, ease: "easeOut" }}
       className="sticky top-0 z-50 border-b border-white/[0.06] bg-black/20 backdrop-blur-3xl"
     >
-      <nav className="mx-auto flex items-center justify-between px-4 py-3 sm:px-6">
+      <nav
+        className="mx-auto flex items-center justify-between px-4 py-3 sm:px-6"
+        aria-label="Primary"
+      >
         {/* Left: Logo + breadcrumb */}
-        <div className="flex items-center gap-3">
-          <Link href="/" className="flex items-center gap-2">
+        <div className="flex items-center gap-3 min-w-0">
+          <Link href="/" className="flex items-center gap-2 flex-shrink-0">
             <Image
               src="/imgs/logo.png"
               alt="Personas"
@@ -40,12 +115,51 @@ export default function DashboardNavbar() {
               Personas
             </span>
           </Link>
-          <ChevronRight className="h-3.5 w-3.5 text-muted-dark" />
-          <GradientText variant="silver" className="text-sm font-medium">
-            {t.dashboard.title}
-          </GradientText>
+          <ol
+            className="flex items-center gap-3 min-w-0 overflow-hidden"
+            aria-label="Breadcrumb"
+          >
+            <AnimatePresence initial={false} mode="popLayout">
+              {segments.map((segment, i) => {
+                const isLast = i === segments.length - 1;
+                return (
+                  <motion.li
+                    key={segment.key}
+                    layout
+                    initial={{ opacity: 0, y: -2 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    exit={{ opacity: 0, y: 2 }}
+                    transition={{ duration: 0.12, ease: "easeOut" }}
+                    className="flex items-center gap-3 min-w-0"
+                  >
+                    <ChevronRight
+                      aria-hidden="true"
+                      className="h-3.5 w-3.5 text-muted-dark flex-shrink-0"
+                    />
+                    {segment.href && !isLast ? (
+                      <Link
+                        href={segment.href}
+                        className="text-sm font-medium text-muted-dark transition-colors hover:text-foreground truncate"
+                      >
+                        {segment.label}
+                      </Link>
+                    ) : (
+                      <GradientText
+                        variant="silver"
+                        className="text-sm font-medium truncate"
+                      >
+                        <span aria-current={isLast ? "page" : undefined}>
+                          {segment.label}
+                        </span>
+                      </GradientText>
+                    )}
+                  </motion.li>
+                );
+              })}
+            </AnimatePresence>
+          </ol>
           {isDemo && (
-            <span className="flex items-center gap-1 rounded-full border border-amber-500/20 bg-amber-500/5 px-2.5 py-0.5 text-[10px] font-medium text-amber-400">
+            <span className="flex items-center gap-1 rounded-full border border-amber-500/20 bg-amber-500/5 px-2.5 py-0.5 text-[10px] font-medium text-amber-400 flex-shrink-0">
               <FlaskConical className="h-3 w-3" />
               {t.common.demo}
             </span>

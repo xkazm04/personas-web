@@ -7,6 +7,10 @@ import GradientText from "@/components/GradientText";
 import SectionHeading from "@/components/SectionHeading";
 import SectionWrapper from "@/components/SectionWrapper";
 import { fadeUp, staggerContainer } from "@/lib/animations";
+import {
+  SectionPauseProvider,
+  useSectionPauseController,
+} from "@/hooks/useSectionPause";
 
 interface ChatMessage {
   role: "user" | "assistant" | "system";
@@ -37,6 +41,8 @@ export default function DesignEngine() {
   const timeoutsRef = useRef<ReturnType<typeof setTimeout>[]>([]);
   const hasRun = useRef(false);
   const sectionRef = useRef<HTMLDivElement>(null);
+  const pauseValue = useSectionPauseController({ ref: sectionRef });
+  const { paused } = pauseValue;
 
   const scrollChat = useCallback(() => {
     if (chatRef.current) chatRef.current.scrollTop = chatRef.current.scrollHeight;
@@ -94,8 +100,9 @@ export default function DesignEngine() {
   useEffect(() => () => timeoutsRef.current.forEach(clearTimeout), []);
 
   return (
+    <SectionPauseProvider value={pauseValue}>
     <SectionWrapper id="design">
-      <div ref={sectionRef} />
+      <div ref={sectionRef} aria-hidden="true" />
       <motion.div initial="hidden" whileInView="visible" viewport={{ once: true }} variants={staggerContainer} className="text-center">
         <motion.div variants={fadeUp}>
           <SectionHeading>
@@ -160,7 +167,15 @@ export default function DesignEngine() {
                         <Bot className="h-3.5 w-3.5 text-brand-purple/70" />
                       </div>
                       <div className="rounded-xl rounded-tl-sm border border-white/6 bg-white/3 px-4 py-2.5">
-                        <motion.div className="flex gap-1" animate={{ opacity: [0.3, 1, 0.3] }} transition={{ duration: 1.2, repeat: Infinity }}>
+                        <motion.div
+                          className="flex gap-1"
+                          animate={paused ? { opacity: 0.7 } : { opacity: [0.3, 1, 0.3] }}
+                          transition={
+                            paused
+                              ? { duration: 0.2 }
+                              : { duration: 1.2, repeat: Infinity }
+                          }
+                        >
                           <div className="h-1.5 w-1.5 rounded-full bg-brand-purple/50" />
                           <div className="h-1.5 w-1.5 rounded-full bg-brand-purple/40" style={{ animationDelay: "0.2s" }} />
                           <div className="h-1.5 w-1.5 rounded-full bg-brand-purple/30" style={{ animationDelay: "0.4s" }} />
@@ -251,5 +266,6 @@ export default function DesignEngine() {
         </div>
       </motion.div>
     </SectionWrapper>
+    </SectionPauseProvider>
   );
 }

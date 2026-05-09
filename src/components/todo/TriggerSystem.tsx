@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useEffect, useRef, useCallback } from "react";
-import { motion, AnimatePresence, useReducedMotion } from "framer-motion";
+import { motion, AnimatePresence } from "framer-motion";
 import {
   Clock, Globe, Clipboard, FolderOpen, Link, Radio, Timer, MousePointerClick, Zap,
 } from "lucide-react";
@@ -9,6 +9,10 @@ import GradientText from "@/components/GradientText";
 import SectionHeading from "@/components/SectionHeading";
 import SectionWrapper from "@/components/SectionWrapper";
 import { fadeUp, staggerContainer } from "@/lib/animations";
+import {
+  SectionPauseProvider,
+  useSectionPauseController,
+} from "@/hooks/useSectionPause";
 
 import type { LucideIcon } from "lucide-react";
 
@@ -33,7 +37,9 @@ const triggers: Trigger[] = [
 ];
 
 export default function TriggerSystem() {
-  const prefersReducedMotion = useReducedMotion();
+  const sectionRef = useRef<HTMLDivElement>(null);
+  const pauseValue = useSectionPauseController({ ref: sectionRef });
+  const { paused } = pauseValue;
   const [activeTrigger, setActiveTrigger] = useState<number>(0);
   const [firing, setFiring] = useState<number | null>(null);
   const timerRef = useRef<ReturnType<typeof setTimeout> | undefined>(undefined);
@@ -47,18 +53,20 @@ export default function TriggerSystem() {
   }, []);
 
   useEffect(() => {
-    if (prefersReducedMotion) return;
+    if (paused) return;
     const schedule = () => {
       timerRef.current = setTimeout(() => { fire(); schedule(); }, 3000 + Math.random() * 2000);
     };
     schedule();
     return () => clearTimeout(timerRef.current);
-  }, [fire, prefersReducedMotion]);
+  }, [fire, paused]);
 
   const active = triggers[activeTrigger];
 
   return (
+    <SectionPauseProvider value={pauseValue}>
     <SectionWrapper id="triggers">
+      <div ref={sectionRef} aria-hidden="true" />
       <motion.div initial="hidden" whileInView="visible" viewport={{ once: true }} variants={staggerContainer} className="text-center">
         <motion.div variants={fadeUp}>
           <SectionHeading>
@@ -225,5 +233,6 @@ export default function TriggerSystem() {
         </div>
       </div>
     </SectionWrapper>
+    </SectionPauseProvider>
   );
 }

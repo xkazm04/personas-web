@@ -282,6 +282,14 @@ export const ko: Translations = {
     toolUtilization: '\ub3c4\uad6c \ud65c\uc6a9\ub960',
     workers: '\uc6cc\ucee4',
     usageAnalytics: '\uc0ac\uc6a9\ub7c9 \ubd84\uc11d',
+    errorBoundary: {
+      title: '\ub300\uc2dc\ubcf4\ub4dc \ud328\ub110\uc744 \ub80c\ub354\ub9c1\ud558\uc9c0 \ubabb\ud588\uc2b5\ub2c8\ub2e4',
+      description: '\uc774 \uc139\uc158\uc5d0\uc11c \uc608\uc0c1\uce58 \ubabb\ud55c \uc624\ub958\uac00 \ubc1c\uc0dd\ud588\uc2b5\ub2c8\ub2e4. \ud398\uc774\uc9c0\ub97c \ub5a0\ub098\uc9c0 \uc54a\uace0 \ub2e4\uc2dc \uc2dc\ub3c4\ud560 \uc218 \uc788\uc2b5\ub2c8\ub2e4.',
+      retry: '\ub2e4\uc2dc \uc2dc\ub3c4',
+      errorIdLabel: '\uc624\ub958 ID',
+      copyErrorId: '\uc624\ub958 ID \ubcf5\uc0ac',
+      copied: '\ubcf5\uc0ac\ub428',
+    },
   },
   agentsPage: {
     title: '\uc5d0\uc774\uc804\ud2b8',

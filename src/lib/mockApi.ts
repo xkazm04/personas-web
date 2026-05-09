@@ -206,6 +206,28 @@ export const mockApi: ApiClient = {
     };
   },
 
+  // Tiered field-selected variants — fastest (metrics) → slowest (joins)
+  // so the progressive-reveal page can render each tier as it arrives.
+  getObservabilityMetrics: async (): Promise<ObservabilityMetrics> => {
+    await delay(100);
+    return { ...MOCK_OBSERVABILITY_METRICS };
+  },
+
+  getObservabilityDaily: async (): Promise<DailyMetric[]> => {
+    await delay(300);
+    return [...MOCK_DAILY_METRICS];
+  },
+
+  getObservabilityPersonaSpend: async (): Promise<PersonaSpend[]> => {
+    await delay(600);
+    return [...MOCK_PERSONA_SPEND];
+  },
+
+  getObservabilityHealthIssues: async (): Promise<HealthIssue[]> => {
+    await delay(600);
+    return [...MOCK_HEALTH_ISSUES];
+  },
+
   getUsageAnalytics: async (): Promise<{
     toolUsage: ToolUsageSummary[];
     toolUsageOverTime: ToolUsageOverTime[];

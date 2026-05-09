@@ -20,6 +20,11 @@ const annotationStyles: Record<ChartAnnotation["type"], { stroke: string; emoji:
   milestone: { stroke: "#34d399", emoji: "\u{1F3AF}" },
 };
 
+// Hoisted to module scope so we don't rebuild this Map on every compare-toggle render.
+const COST_COMPARE_MAP: ReadonlyMap<string, number> = new Map(
+  MOCK_COST_COMPARE.map((c) => [c.date, c.previous]),
+);
+
 interface CostPoint {
   date: string;
   Cost: number;
@@ -66,10 +71,9 @@ export default memo(function CostChartWithCompare({
 }) {
   const mergedData: MergedCostPoint[] = useMemo(() => {
     if (!compare) return data;
-    const compareMap = new Map(MOCK_COST_COMPARE.map((c) => [c.date, c.previous]));
     return data.map((d) => ({
       ...d,
-      Previous: compareMap.get(d.date),
+      Previous: COST_COMPARE_MAP.get(d.date),
     }));
   }, [data, compare]);
 

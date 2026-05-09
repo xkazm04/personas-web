@@ -649,6 +649,15 @@ steps:
   },
 ];
 
+(() => {
+  const ids = templates.map((t) => t.id);
+  if (new Set(ids).size !== ids.length) {
+    const seen = new Set<string>();
+    const duplicates = ids.filter((id) => (seen.has(id) ? true : (seen.add(id), false)));
+    throw new Error(`templates contains duplicate ids: ${[...new Set(duplicates)].join(", ")}`);
+  }
+})();
+
 export const difficultyColors: Record<Difficulty, string> = {
   Beginner: "text-green-400 border-green-400/30 bg-green-400/10",
   Intermediate: "text-yellow-400 border-yellow-400/30 bg-yellow-400/10",

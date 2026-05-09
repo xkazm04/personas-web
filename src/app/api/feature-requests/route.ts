@@ -8,6 +8,8 @@
 import { NextRequest, NextResponse } from "next/server";
 import { promises as fs } from "fs";
 import path from "path";
+import { randomBytes } from "crypto";
+import { withWriteLock } from "@/lib/fileLock";
 
 // ---------------------------------------------------------------------------
 // Rate limiting (in-memory, per-IP, resets on deploy)
@@ -72,7 +74,13 @@ async function readRequests(): Promise<RequestsData> {
 
 async function writeRequests(data: RequestsData): Promise<void> {
   await fs.mkdir(DATA_DIR, { recursive: true });
-  await fs.writeFile(REQUESTS_FILE, JSON.stringify(data, null, 2));
+  // Atomic temp-file + rename so a crash mid-write can't truncate the file.
+  const tmpFile = path.join(
+    DATA_DIR,
+    `.feature-requests-${randomBytes(6).toString("hex")}.tmp`,
+  );
+  await fs.writeFile(tmpFile, JSON.stringify(data, null, 2));
+  await fs.rename(tmpFile, REQUESTS_FILE);
 }
 
 // ---------------------------------------------------------------------------
@@ -119,12 +127,14 @@ export async function POST(req: NextRequest) {
   }
 
   // --- Filesystem fallback ---
-  const data = await readRequests();
-  data.entries.push({
-    text,
-    created_at: new Date().toISOString(),
+  // Serialize read-modify-write so concurrent POSTs can't overwrite each other.
+  return withWriteLock("feature-requests", async () => {
+    const data = await readRequests();
+    data.entries.push({
+      text,
+      created_at: new Date().toISOString(),
+    });
+    await writeRequests(data);
+    return NextResponse.json({ saved: true });
   });
-  await writeRequests(data);
-
-  return NextResponse.json({ saved: true });
 }

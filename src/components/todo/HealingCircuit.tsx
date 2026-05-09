@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useEffect, useRef, useCallback, useMemo } from "react";
-import { motion, AnimatePresence, useReducedMotion } from "framer-motion";
+import { motion, AnimatePresence } from "framer-motion";
 import {
   AlertTriangle,
   Activity,
@@ -19,7 +19,12 @@ import {
 import GradientText from "@/components/GradientText";
 import SectionHeading from "@/components/SectionHeading";
 import SectionWrapper from "@/components/SectionWrapper";
+import TerminalChrome from "@/components/TerminalChrome";
 import { fadeUp, staggerContainer } from "@/lib/animations";
+import {
+  SectionPauseProvider,
+  useSectionPauseController,
+} from "@/hooks/useSectionPause";
 
 /* ── Healing stage data ─────────────────────────────────────── */
 const healingStages = [
@@ -133,12 +138,17 @@ function DataParticle({
   color,
   delay,
   duration,
+  paused,
 }: {
   pathId: string;
   color: string;
   delay: number;
   duration: number;
+  paused: boolean;
 }) {
+  // When paused, drop the particle entirely — freezing an animateMotion
+  // mid-flight would just leave a dot floating awkwardly off the trace.
+  if (paused) return null;
   return (
     <motion.circle
       r={2.5}
@@ -171,7 +181,15 @@ const sparkSeeds = [
   { angleOff: 0.31, distOff: 8, sizeOff: 1.2 },
 ];
 
-function SparkEffect({ x, y }: { x: number; y: number }) {
+function SparkEffect({
+  x,
+  y,
+  paused,
+}: {
+  x: number;
+  y: number;
+  paused: boolean;
+}) {
   const sparks = useMemo(
     () =>
       sparkSeeds.map((seed, i) => ({
@@ -181,6 +199,25 @@ function SparkEffect({ x, y }: { x: number; y: number }) {
       })),
     [],
   );
+
+  // Paused: render a static "fault" indicator at the break point instead
+  // of mid-spark. Conveys the same meaning without burning frames.
+  if (paused) {
+    return (
+      <g>
+        <circle cx={x} cy={y} r={4} fill="#f43f5e" opacity={0.8} />
+        <circle
+          cx={x}
+          cy={y}
+          r={8}
+          fill="none"
+          stroke="#f43f5e"
+          strokeWidth={1}
+          opacity={0.4}
+        />
+      </g>
+    );
+  }
 
   return (
     <g>
@@ -223,7 +260,39 @@ function SparkEffect({ x, y }: { x: number; y: number }) {
 }
 
 /* ── Welding / repair flash effect ──────────────────────────── */
-function WeldFlash({ x, y }: { x: number; y: number }) {
+function WeldFlash({
+  x,
+  y,
+  paused,
+}: {
+  x: number;
+  y: number;
+  paused: boolean;
+}) {
+  if (paused) {
+    return (
+      <g>
+        <circle cx={x} cy={y} r={3} fill="white" opacity={0.85} />
+        <circle
+          cx={x}
+          cy={y}
+          r={6}
+          fill="none"
+          stroke="#06b6d4"
+          strokeWidth={1.5}
+          opacity={0.6}
+        />
+        <circle
+          cx={x}
+          cy={y}
+          r={3}
+          fill="#06b6d4"
+          filter="url(#weldGlow)"
+          opacity={0.8}
+        />
+      </g>
+    );
+  }
   return (
     <g>
       <motion.circle
@@ -267,16 +336,22 @@ function WeldFlash({ x, y }: { x: number; y: number }) {
 function RepairBot({
   pathId,
   duration,
+  paused,
   onComplete,
 }: {
   pathId: string;
   duration: number;
+  paused: boolean;
   onComplete?: () => void;
 }) {
   useEffect(() => {
+    if (paused) return;
     const timer = setTimeout(() => onComplete?.(), duration * 1000);
     return () => clearTimeout(timer);
-  }, [duration, onComplete]);
+  }, [duration, onComplete, paused]);
+
+  // When paused, hide the in-flight bot rather than freeze it mid-trace.
+  if (paused) return null;
 
   return (
     <g>
@@ -337,7 +412,9 @@ function getPathMidpoint(pathD: string): { x: number; y: number } {
 
 /* ── Main component ─────────────────────────────────────────── */
 export default function HealingCircuit() {
-  const prefersReducedMotion = useReducedMotion();
+  const sectionRef = useRef<HTMLDivElement>(null);
+  const pauseValue = useSectionPauseController({ ref: sectionRef });
+  const { paused } = pauseValue;
   const [activeStage, setActiveStage] = useState(-1);
   const [brokenConnectionId, setBrokenConnectionId] = useState(breakableConnections[0]);
   const [cycleIndex, setCycleIndex] = useState(0);
@@ -345,8 +422,8 @@ export default function HealingCircuit() {
 
   /* ── Auto-cycling stages ──────────────────────────────────── */
   useEffect(() => {
-    if (prefersReducedMotion) return;
-    let currentCycle = 0;
+    if (paused) return;
+    let currentCycle = cycleIndex;
 
     const cycle = () => {
       const nextConnection =
@@ -375,7 +452,10 @@ export default function HealingCircuit() {
     };
     cycle();
     return () => clearTimeout(timerRef.current);
-  }, [prefersReducedMotion]);
+    // cycleIndex is intentionally excluded — we use it only to seed the
+    // starting cycle so resuming after pause continues the count.
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [paused]);
 
   const brokenConn = connections.find((c) => c.id === brokenConnectionId);
   const breakPoint = brokenConn
@@ -420,7 +500,9 @@ export default function HealingCircuit() {
   };
 
   return (
+    <SectionPauseProvider value={pauseValue}>
     <SectionWrapper id="healing-circuit" className="relative overflow-hidden">
+      <div ref={sectionRef} aria-hidden="true" />
       <motion.div
         initial="hidden"
         whileInView="visible"
@@ -455,14 +537,23 @@ export default function HealingCircuit() {
         className="mt-16 mx-auto max-w-4xl relative z-10"
       >
         <div className="rounded-2xl border border-white/8 bg-black/70 backdrop-blur-xl overflow-hidden shadow-[0_0_80px_rgba(0,0,0,0.4)]">
-          {/* Top bar */}
-          <div className="flex items-center justify-between px-5 py-3 border-b border-white/6 bg-black/40">
-            <div className="flex items-center gap-2">
-              <Cpu className="h-4 w-4 text-brand-cyan" />
-              <span className="text-sm font-mono text-muted tracking-wider uppercase">
-                Circuit Board — Infrastructure
+          {/* Top bar with pause toggle */}
+          <TerminalChrome
+            title="circuit-board"
+            status={
+              activeStage >= 0 && activeStage < 3
+                ? healingStages[activeStage].statusLabel
+                : "healthy"
+            }
+            info={
+              <span className="flex items-center gap-2">
+                <Cpu className="h-3 w-3 text-brand-cyan/70" />
+                <span>Cycle #{cycleIndex + 1}</span>
               </span>
-            </div>
+            }
+            className="px-5 py-3"
+          />
+          <div className="flex items-center justify-end px-5 py-2 border-b border-white/6 bg-black/40 min-h-[28px]">
             <div className="flex items-center gap-3">
               <AnimatePresence>
                 {activeStage >= 0 && activeStage < 3 && (
@@ -481,8 +572,12 @@ export default function HealingCircuit() {
                       style={{
                         backgroundColor: healingStages[activeStage].color,
                       }}
-                      animate={{ opacity: [1, 0.3, 1] }}
-                      transition={{ duration: 0.6, repeat: Infinity }}
+                      animate={paused ? { opacity: 0.7 } : { opacity: [1, 0.3, 1] }}
+                      transition={
+                        paused
+                          ? { duration: 0.2 }
+                          : { duration: 0.6, repeat: Infinity }
+                      }
                     />
                     <span
                       className="text-sm font-mono uppercase tracking-wider"
@@ -493,9 +588,6 @@ export default function HealingCircuit() {
                   </motion.div>
                 )}
               </AnimatePresence>
-              <span className="text-sm font-mono text-muted-dark">
-                Cycle #{cycleIndex + 1}
-              </span>
             </div>
           </div>
 
@@ -618,12 +710,17 @@ export default function HealingCircuit() {
                             color={traceColor}
                             delay={pi * (2 / conn.particles)}
                             duration={2}
+                            paused={paused}
                           />
                         ))}
 
                       {/* Broken: spark effects */}
                       {status === "broken" && conn.id === brokenConnectionId && (
-                        <SparkEffect x={breakPoint.x} y={breakPoint.y} />
+                        <SparkEffect
+                          x={breakPoint.x}
+                          y={breakPoint.y}
+                          paused={paused}
+                        />
                       )}
 
                       {/* Diagnosing: repair bot traveling */}
@@ -632,13 +729,18 @@ export default function HealingCircuit() {
                           <RepairBot
                             pathId={conn.id}
                             duration={2}
+                            paused={paused}
                           />
                         )}
 
                       {/* Repairing: welding flash at the break point */}
                       {status === "repairing" &&
                         conn.id === brokenConnectionId && (
-                          <WeldFlash x={breakPoint.x} y={breakPoint.y} />
+                          <WeldFlash
+                            x={breakPoint.x}
+                            y={breakPoint.y}
+                            paused={paused}
+                          />
                         )}
                     </g>
                   );
@@ -674,10 +776,11 @@ export default function HealingCircuit() {
                         stroke={color}
                         strokeWidth={1.5}
                         animate={{
-                          strokeOpacity: isAffected ? [0.6, 1, 0.6] : 0.3,
+                          strokeOpacity:
+                            isAffected && !paused ? [0.6, 1, 0.6] : 0.3,
                         }}
                         transition={
-                          isAffected
+                          isAffected && !paused
                             ? { duration: 0.8, repeat: Infinity }
                             : { duration: 0.5 }
                         }
@@ -719,8 +822,12 @@ export default function HealingCircuit() {
                           stroke={color}
                           strokeWidth={1}
                           filter="url(#nodeGlow)"
-                          animate={{ opacity: [0.4, 0.8, 0.4] }}
-                          transition={{ duration: 1, repeat: Infinity }}
+                          animate={paused ? { opacity: 0.6 } : { opacity: [0.4, 0.8, 0.4] }}
+                          transition={
+                            paused
+                              ? { duration: 0.2 }
+                              : { duration: 1, repeat: Infinity }
+                          }
                         />
                       )}
 
@@ -731,12 +838,12 @@ export default function HealingCircuit() {
                         r={2.5}
                         fill={color}
                         animate={
-                          isAffected
+                          isAffected && !paused
                             ? { opacity: [1, 0.3, 1] }
-                            : { opacity: 0.7 }
+                            : { opacity: isAffected ? 0.85 : 0.7 }
                         }
                         transition={
-                          isAffected
+                          isAffected && !paused
                             ? { duration: 0.5, repeat: Infinity }
                             : { duration: 0.3 }
                         }
@@ -813,12 +920,12 @@ export default function HealingCircuit() {
                           className="h-1.5 w-1.5 rounded-full"
                           style={{ backgroundColor: statusColor }}
                           animate={
-                            status !== "healthy"
+                            status !== "healthy" && !paused
                               ? { opacity: [1, 0.3, 1] }
-                              : { opacity: 0.6 }
+                              : { opacity: status !== "healthy" ? 0.85 : 0.6 }
                           }
                           transition={
-                            status !== "healthy"
+                            status !== "healthy" && !paused
                               ? { duration: 0.6, repeat: Infinity }
                               : {}
                           }
@@ -922,8 +1029,12 @@ export default function HealingCircuit() {
                           <motion.div
                             className="h-1.5 w-1.5 rounded-full"
                             style={{ backgroundColor: stage.color }}
-                            animate={{ opacity: [1, 0.3, 1] }}
-                            transition={{ duration: 0.6, repeat: Infinity }}
+                            animate={paused ? { opacity: 0.85 } : { opacity: [1, 0.3, 1] }}
+                            transition={
+                              paused
+                                ? { duration: 0.2 }
+                                : { duration: 0.6, repeat: Infinity }
+                            }
                           />
                         )}
                         {isDone && (
@@ -961,5 +1072,6 @@ export default function HealingCircuit() {
         </div>
       </motion.div>
     </SectionWrapper>
+    </SectionPauseProvider>
   );
 }

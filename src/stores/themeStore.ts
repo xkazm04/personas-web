@@ -35,21 +35,23 @@ export const THEMES: ThemeMeta[] = [
   { id: "light-news",    label: "News",      primary: "#1a1a1a", isLight: true  },
 ];
 
+export const THEME_STORAGE_KEY = "personas-theme";
+const VALID_THEME_IDS = new Set<ThemeId>(THEMES.map((t) => t.id));
+
+let pendingTransitionTimeout: ReturnType<typeof setTimeout> | null = null;
+
 function applyThemeToDOM(themeId: ThemeId) {
   if (typeof document === "undefined") return;
   const el = document.documentElement;
 
-  // Add transition class for smooth crossfade
   el.classList.add("theme-transitioning");
 
-  // Default (dark-midnight) uses :root — remove data-theme attribute
   if (themeId === "dark-midnight") {
     el.removeAttribute("data-theme");
   } else {
     el.setAttribute("data-theme", themeId);
   }
 
-  // Toggle Tailwind dark class
   const meta = THEMES.find((t) => t.id === themeId);
   if (meta?.isLight) {
     el.classList.remove("dark");
@@ -57,11 +59,17 @@ function applyThemeToDOM(themeId: ThemeId) {
     el.classList.add("dark");
   }
 
-  // Remove transition class after animation completes
-  setTimeout(() => el.classList.remove("theme-transitioning"), 300);
+  // Cancel any pending removal so rapid theme switches don't cut the
+  // currently-running transition short.
+  if (pendingTransitionTimeout !== null) {
+    clearTimeout(pendingTransitionTimeout);
+  }
+  pendingTransitionTimeout = setTimeout(() => {
+    el.classList.remove("theme-transitioning");
+    pendingTransitionTimeout = null;
+  }, 300);
 }
 
-/** Pick a random theme on every fresh page load. */
 function pickRandomTheme(): ThemeId {
   const ids = THEMES.map((t) => t.id);
   return ids[Math.floor(Math.random() * ids.length)];
@@ -70,18 +78,46 @@ function pickRandomTheme(): ThemeId {
 interface ThemeState {
   themeId: ThemeId;
   setTheme: (id: ThemeId) => void;
+  shuffleTheme: () => void;
 }
 
-export const useThemeStore = create<ThemeState>()((set) => ({
-  themeId: "dark-midnight",
-  setTheme: (themeId) => {
-    applyThemeToDOM(themeId);
-    set({ themeId });
-  },
-}));
+export const useThemeStore = create<ThemeState>()(
+  persist(
+    (set) => ({
+      themeId: "dark-midnight",
+      setTheme: (themeId) => {
+        applyThemeToDOM(themeId);
+        set({ themeId });
+      },
+      shuffleTheme: () => {
+        const id = pickRandomTheme();
+        applyThemeToDOM(id);
+        set({ themeId: id });
+      },
+    }),
+    {
+      name: THEME_STORAGE_KEY,
+      partialize: (state) => ({ themeId: state.themeId }),
+      onRehydrateStorage: () => (state) => {
+        if (!state) return;
+        if (!VALID_THEME_IDS.has(state.themeId)) {
+          state.themeId = "dark-midnight";
+        }
+        applyThemeToDOM(state.themeId);
+      },
+    }
+  )
+);
 
-/** Initialise once on app mount — random theme each visit. */
+/**
+ * Initialise the theme on first-ever visit.
+ * If the user has already chosen (or shuffled) a theme it lives in
+ * localStorage and persist's rehydration handles applying it; we no-op here.
+ */
 export function initRandomTheme() {
+  if (typeof window === "undefined") return;
+  if (window.localStorage.getItem(THEME_STORAGE_KEY) !== null) return;
+
   const id = pickRandomTheme();
   applyThemeToDOM(id);
   useThemeStore.setState({ themeId: id });

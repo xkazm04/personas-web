@@ -282,6 +282,14 @@ export const es: Translations = {
     toolUtilization: 'Utilizaci\u00f3n de herramientas',
     workers: 'workers',
     usageAnalytics: 'Anal\u00edticas de Uso',
+    errorBoundary: {
+      title: 'No se pudo cargar el panel del dashboard',
+      description: 'Esta secci\u00f3n encontr\u00f3 un error inesperado. Puedes reintentar sin salir de la p\u00e1gina.',
+      retry: 'Reintentar',
+      errorIdLabel: 'ID de error',
+      copyErrorId: 'Copiar ID de error',
+      copied: 'Copiado',
+    },
   },
   agentsPage: {
     title: 'Agentes',

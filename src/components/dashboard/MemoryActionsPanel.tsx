@@ -49,21 +49,22 @@ const typeConfig: Record<
   },
 };
 
-/** Render filled/empty dots for score indicator (max 10). */
-function ScoreDots({ score, type }: { score: number; type: MemoryAction["type"] }) {
-  const maxDots = 5;
-  // Map 1-10 score into 1-5 filled dots
-  const filled = Math.max(1, Math.round((score / 10) * maxDots));
+/** Render a precise 1-10 score as a fill-bar with a numeric "n/10" micro-label. */
+function ScoreIndicator({ score, type }: { score: number; type: MemoryAction["type"] }) {
   const { dot } = typeConfig[type];
+  const clamped = Math.max(0, Math.min(10, score));
 
   return (
-    <div className="flex items-center gap-0.5">
-      {Array.from({ length: maxDots }, (_, i) => (
-        <span
-          key={i}
-          className={`h-1 w-1 rounded-full ${i < filled ? dot : "bg-white/10"}`}
+    <div className="flex items-center gap-1.5">
+      <div className="h-1 w-12 rounded-full bg-white/10 overflow-hidden">
+        <div
+          className={`h-full rounded-full ${dot}`}
+          style={{ width: `${clamped * 10}%` }}
         />
-      ))}
+      </div>
+      <span className="text-[9px] font-medium tabular-nums text-muted-dark">
+        {clamped}/10
+      </span>
     </div>
   );
 }
@@ -146,7 +147,7 @@ export default function MemoryActionsPanel() {
                       <span className="rounded-md border border-white/[0.06] bg-white/[0.03] px-1.5 py-0.5 text-[9px] font-medium text-muted-dark">
                         {action.persona}
                       </span>
-                      <ScoreDots score={action.score} type={action.type} />
+                      <ScoreIndicator score={action.score} type={action.type} />
                     </div>
                   </div>
                 </div>

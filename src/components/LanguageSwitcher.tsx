@@ -27,7 +27,10 @@ export default function LanguageSwitcher() {
   const [open, setOpen] = useState(false);
   const ref = useRef<HTMLDivElement>(null);
 
-  const current = languages.find((l) => l.code === language) ?? languages[2];
+  const current =
+    languages.find((l) => l.code === language) ??
+    languages.find((l) => l.code === "en") ??
+    languages[0];
 
   // Close on outside click
   useEffect(() => {
@@ -74,7 +77,7 @@ export default function LanguageSwitcher() {
             transition={{ duration: 0.15, ease: "easeOut" }}
             role="listbox"
             aria-label="Select language"
-            className="absolute right-0 top-full mt-2 z-50 min-w-[160px] overflow-hidden rounded-xl border border-white/[0.06] bg-background shadow-2xl backdrop-blur-xl"
+            className="absolute end-0 top-full mt-2 z-50 min-w-[160px] overflow-hidden rounded-xl border border-white/[0.06] bg-background shadow-2xl backdrop-blur-xl"
           >
             {languages.map((lang) => {
               const isActive = lang.code === language;
@@ -96,7 +99,7 @@ export default function LanguageSwitcher() {
                   <span className="text-base">{lang.flag}</span>
                   <span className="font-medium">{lang.label}</span>
                   {isActive && (
-                    <span className="ml-auto h-1.5 w-1.5 rounded-full bg-brand-cyan/70" />
+                    <span className="ms-auto h-1.5 w-1.5 rounded-full bg-brand-cyan/70" />
                   )}
                 </button>
               );

@@ -3,6 +3,7 @@ import nextVitals from "eslint-config-next/core-web-vitals";
 import nextTs from "eslint-config-next/typescript";
 import noLowTextOpacity from "./eslint-rules/no-low-text-opacity.js";
 import requireAnimationGating from "./eslint-rules/require-animation-gating.js";
+import noMultiZustandSelector from "./eslint-rules/no-multi-zustand-selector.js";
 
 const eslintConfig = defineConfig([
   ...nextVitals,
@@ -27,10 +28,19 @@ const eslintConfig = defineConfig([
           "require-animation-gating": requireAnimationGating,
         },
       },
+      "custom-zustand": {
+        rules: {
+          "no-multi-zustand-selector": noMultiZustandSelector,
+        },
+      },
     },
     rules: {
       "custom-a11y/no-low-text-opacity": "warn",
       "custom-animation/require-animation-gating": "warn",
+      "custom-zustand/no-multi-zustand-selector": [
+        "warn",
+        { hooks: ["useAuthStore"] },
+      ],
     },
   },
 ]);
