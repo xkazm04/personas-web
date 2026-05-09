@@ -193,7 +193,7 @@ export default function GuideSidebar() {
       {/* ── Mobile toggle button ──────────────────────────────────────── */}
       <button
         onClick={() => setMobileOpen(true)}
-        className={`fixed left-4 top-20 z-40 flex h-9 w-9 items-center justify-center rounded-lg border border-glass-hover bg-surface/80 backdrop-blur-sm text-muted-dark transition-colors hover:text-foreground lg:hidden ${FOCUS_RING}`}
+        className={`fixed left-3 top-20 z-40 flex h-10 w-10 items-center justify-center rounded-lg border border-glass-hover bg-surface/90 backdrop-blur-sm text-muted-dark transition-colors hover:text-foreground sm:left-4 lg:hidden ${FOCUS_RING}`}
         aria-label="Open guide navigation"
       >
         <Menu className="h-4 w-4" />
@@ -218,7 +218,7 @@ export default function GuideSidebar() {
               animate={{ x: 0 }}
               exit={{ x: -288 }}
               transition={mobileTransition}
-              className="fixed left-0 top-0 z-50 h-dvh w-72 border-r border-glass bg-surface pt-16 lg:hidden"
+              className="fixed left-0 top-0 z-50 h-dvh w-[min(20rem,calc(100vw-1rem))] border-r border-glass bg-surface pb-safe pt-16 lg:hidden"
             >
               <button
                 onClick={() => setMobileOpen(false)}

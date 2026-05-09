@@ -34,7 +34,7 @@ const MobilePanel = forwardRef<HTMLDivElement, MobilePanelProps>(
               animate={{ opacity: 1 }}
               exit={{ opacity: 0 }}
               transition={{ duration: 0.2 }}
-              className="fixed inset-0 z-40 bg-black/60 backdrop-blur-sm md:hidden"
+              className="fixed inset-0 z-40 bg-black/60 backdrop-blur-sm lg:hidden"
               onClick={onClose}
               aria-hidden="true"
             />
@@ -49,7 +49,7 @@ const MobilePanel = forwardRef<HTMLDivElement, MobilePanelProps>(
               role="dialog"
               aria-modal="true"
               aria-label="Navigation menu"
-              className="fixed top-0 right-0 z-50 flex h-full w-72 flex-col border-l border-glass bg-background shadow-2xl md:hidden"
+              className="fixed top-0 right-0 z-50 flex h-dvh w-[min(20rem,calc(100vw-1rem))] flex-col border-l border-glass bg-background pb-safe shadow-2xl lg:hidden"
             >
               <div className="flex items-center justify-between px-5 py-4 border-b border-glass">
                 <span className="text-base font-semibold tracking-tight text-foreground/80">

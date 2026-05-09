@@ -33,7 +33,7 @@ export default function BulkResultToast({
       exit={{ y: 80, opacity: 0 }}
       className="fixed bottom-20 left-1/2 z-[70] -translate-x-1/2"
     >
-      <div className="flex flex-col gap-2 rounded-xl border border-red-500/30 bg-surface/95 backdrop-blur-xl px-4 py-3 shadow-2xl min-w-[300px]">
+      <div className="flex w-[min(calc(100vw-2rem),24rem)] flex-col gap-2 rounded-xl border border-red-500/30 bg-surface/95 backdrop-blur-xl px-4 py-3 shadow-2xl">
         <div className="flex items-center gap-3">
           <AlertTriangle className="h-4 w-4 text-red-400 flex-shrink-0" />
           <div className="flex flex-col gap-0.5 min-w-0">

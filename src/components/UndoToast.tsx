@@ -43,7 +43,7 @@ export default function UndoToast({
       exit={{ y: 80, opacity: 0 }}
       className="fixed bottom-20 left-1/2 z-[70] -translate-x-1/2"
     >
-      <div className="flex flex-col gap-2 rounded-xl border border-glass-hover bg-surface/95 backdrop-blur-xl px-4 py-3 shadow-2xl min-w-[280px]">
+      <div className="flex w-[min(calc(100vw-2rem),24rem)] flex-col gap-2 rounded-xl border border-glass-hover bg-surface/95 backdrop-blur-xl px-4 py-3 shadow-2xl">
         <div className="flex items-center gap-3">
           <span className="text-sm text-foreground">{message}</span>
           <span className="ml-auto text-xs tabular-nums text-muted-dark">

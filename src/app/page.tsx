@@ -146,7 +146,7 @@ export default function Home() {
   return (
     <SectionObserverProvider sectionIds={sectionIds}>
       {/* Decorative cinematic illustration — top-left ambient layer */}
-      <div className="pointer-events-none absolute top-0 left-0 z-0 w-[560px] h-[420px] md:w-[720px] md:h-[540px]">
+      <div className="pointer-events-none absolute left-0 top-0 z-0 h-[360px] w-full max-w-[560px] overflow-hidden md:h-[540px] md:max-w-[720px]">
         <Image
           src="/imgs/illustration_cyber_cinematic.png"
           alt=""

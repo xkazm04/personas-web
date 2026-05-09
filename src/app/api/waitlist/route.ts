@@ -23,14 +23,13 @@
  */
 
 import { NextRequest, NextResponse } from "next/server";
-import { promises as fs } from "fs";
-import path from "path";
-import { randomBytes } from "crypto";
 import { isValidEmail } from "@/lib/validation";
 import { withWriteLock } from "@/lib/fileLock";
+import { readJsonFile, writeJsonFile } from "@/lib/server/json-file-store";
+import { getClientIp, jsonError, parseJsonBody } from "@/lib/server/request";
+import { isRateLimited as isSharedRateLimited } from "@/lib/server/rate-limit";
 
-const DATA_DIR = path.join(process.cwd(), ".data");
-const WAITLIST_FILE = path.join(DATA_DIR, "waitlist.json");
+const WAITLIST_FILE = "waitlist.json";
 
 interface WaitlistEntry {
   email: string;
@@ -53,45 +52,13 @@ const RATE_WINDOW_MS = 60_000; // 1 minute
 const RATE_LIMIT_POST = 5;     // max 5 signups per minute per IP
 const RATE_LIMIT_GET = 30;     // max 30 reads per minute per IP
 
-const rateBuckets = new Map<string, number[]>();
-
 function rateLimit(ip: string, limit: number): boolean {
-  const now = Date.now();
-  let timestamps = rateBuckets.get(ip);
-  if (!timestamps) {
-    timestamps = [];
-    rateBuckets.set(ip, timestamps);
-  }
-  // Prune old entries
-  const filtered = timestamps.filter((t) => now - t < RATE_WINDOW_MS);
-  rateBuckets.set(ip, filtered);
-
-  if (filtered.length >= limit) return false;
-  filtered.push(now);
-  return true;
-}
-
-// Periodic cleanup every 5 minutes
-if (typeof setInterval !== "undefined") {
-  setInterval(() => {
-    const now = Date.now();
-    for (const [ip, timestamps] of rateBuckets) {
-      const filtered = timestamps.filter((t) => now - t < RATE_WINDOW_MS);
-      if (filtered.length === 0) {
-        rateBuckets.delete(ip);
-      } else {
-        rateBuckets.set(ip, filtered);
-      }
-    }
-  }, 5 * 60_000).unref();
-}
-
-function getClientIp(req: NextRequest): string {
-  return (
-    req.headers.get("x-forwarded-for")?.split(",")[0]?.trim() ||
-    req.headers.get("x-real-ip") ||
-    "unknown"
-  );
+  return isSharedRateLimited({
+    namespace: "waitlist",
+    key: ip,
+    limit,
+    windowMs: RATE_WINDOW_MS,
+  });
 }
 
 // --- O(1) indices (populated on first read, kept in sync on writes) ---
@@ -104,43 +71,28 @@ function dedupKey(email: string, platform: string): string {
 }
 
 async function readWaitlist(): Promise<WaitlistData> {
-  try {
-    const raw = await fs.readFile(WAITLIST_FILE, "utf-8");
-    const data = JSON.parse(raw) as WaitlistData;
-    // Build indices on first read
-    if (!dedupIndex || !platformCounts) {
-      dedupIndex = new Set();
-      platformCounts = new Map();
-      for (const e of data.entries) {
-        dedupIndex.add(dedupKey(e.email, e.platform));
-        platformCounts.set(e.platform, (platformCounts.get(e.platform) || 0) + 1);
-      }
+  const data = await readJsonFile<WaitlistData>(WAITLIST_FILE, { entries: [] });
+  // Build indices on first read
+  if (!dedupIndex || !platformCounts) {
+    dedupIndex = new Set();
+    platformCounts = new Map();
+    for (const e of data.entries) {
+      dedupIndex.add(dedupKey(e.email, e.platform));
+      platformCounts.set(e.platform, (platformCounts.get(e.platform) || 0) + 1);
     }
-    return data;
-  } catch {
-    if (!dedupIndex) dedupIndex = new Set();
-    if (!platformCounts) platformCounts = new Map();
-    return { entries: [] };
   }
+  return data;
 }
 
 async function writeWaitlist(data: WaitlistData): Promise<void> {
-  await fs.mkdir(DATA_DIR, { recursive: true });
-  // Atomic write: write to a temp file then rename, so readers never see
-  // a partially-written file and a crash mid-write won't corrupt the data.
-  const tmpFile = path.join(DATA_DIR, `.waitlist-${randomBytes(6).toString("hex")}.tmp`);
-  await fs.writeFile(tmpFile, JSON.stringify(data, null, 2));
-  await fs.rename(tmpFile, WAITLIST_FILE);
+  await writeJsonFile(WAITLIST_FILE, data);
 }
 
 // GET — return counts per platform
 export async function GET(req: NextRequest) {
   const ip = getClientIp(req);
   if (!rateLimit(ip, RATE_LIMIT_GET)) {
-    return NextResponse.json(
-      { error: "Too many requests" },
-      { status: 429, headers: { "Retry-After": "60" } }
-    );
+    return jsonError("Too many requests", 429, { "Retry-After": "60" });
   }
 
   // Use in-memory counts if available to avoid disk I/O and O(n) scan
@@ -160,42 +112,29 @@ export async function GET(req: NextRequest) {
 export async function POST(req: NextRequest) {
   const ip = getClientIp(req);
   if (!rateLimit(ip, RATE_LIMIT_POST)) {
-    return NextResponse.json(
-      { error: "Too many requests" },
-      { status: 429, headers: { "Retry-After": "60" } }
-    );
+    return jsonError("Too many requests", 429, { "Retry-After": "60" });
   }
 
-  let body: { email?: string; platform?: string; earlyBeta?: boolean };
-  try {
-    body = await req.json();
-  } catch {
-    return NextResponse.json({ error: "Invalid JSON" }, { status: 400 });
-  }
+  const parsed = await parseJsonBody<{ email?: string; platform?: string; earlyBeta?: boolean }>(req);
+  if (!parsed.ok) return parsed.response;
 
-  const { email, platform, earlyBeta } = body;
+  const { email, platform, earlyBeta } = parsed.data;
 
   // Email validation
   if (!email || typeof email !== "string") {
-    return NextResponse.json({ error: "Email is required" }, { status: 400 });
+    return jsonError("Email is required", 400);
   }
   const trimmedEmail = email.trim().toLowerCase();
   if (!isValidEmail(trimmedEmail)) {
-    return NextResponse.json(
-      { error: "Invalid email format" },
-      { status: 400 }
-    );
+    return jsonError("Invalid email format", 400);
   }
 
   // Platform validation — whitelist
   if (!platform || typeof platform !== "string") {
-    return NextResponse.json({ error: "Platform is required" }, { status: 400 });
+    return jsonError("Platform is required", 400);
   }
   if (!VALID_PLATFORMS.has(platform)) {
-    return NextResponse.json(
-      { error: `Platform must be one of: ${[...VALID_PLATFORMS].join(", ")}` },
-      { status: 400 }
-    );
+    return jsonError(`Platform must be one of: ${[...VALID_PLATFORMS].join(", ")}`, 400);
   }
 
   // Serialize read-modify-write to prevent TOCTOU race conditions.

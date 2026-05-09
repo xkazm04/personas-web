@@ -53,7 +53,7 @@ function GuidePageInner() {
   );
 
   return (
-    <div className="px-6 pb-24">
+    <div className="px-4 pb-24 sm:px-6">
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{

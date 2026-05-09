@@ -14,7 +14,7 @@ export default function GuideLayout({ children }: { children: React.ReactNode })
       <Navbar />
       <div className="flex min-h-screen pt-16">
         <GuideSidebar />
-        <main className="flex-1 min-w-0 overflow-y-auto">
+        <main id="main-content" className="flex-1 min-w-0 overflow-y-auto">
           {children}
         </main>
       </div>

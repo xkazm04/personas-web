@@ -21,7 +21,7 @@ export default async function PreviewSection({
 
   if (!Section) {
     return (
-      <main className="mx-auto max-w-3xl px-6 py-16">
+      <main id="main-content" className="mx-auto max-w-3xl px-4 py-16 sm:px-6">
         <h1 className="text-2xl font-semibold mb-2">Unknown section</h1>
         <p className="text-base text-muted-dark mb-4">
           No registry entry for <code className="font-mono">{section}</code>.

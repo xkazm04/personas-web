@@ -13,7 +13,7 @@ export default function PreviewIndex() {
   }
 
   return (
-    <main className="mx-auto max-w-3xl px-6 py-16">
+    <main id="main-content" className="mx-auto max-w-3xl px-4 py-16 sm:px-6">
       <h1 className="text-2xl font-semibold mb-2">Section preview</h1>
       <p className="text-base text-muted-dark mb-8">
         Dev-only route. Each link mounts a single section in isolation for

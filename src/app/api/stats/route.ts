@@ -1,10 +1,9 @@
 import { NextResponse } from "next/server";
-import { promises as fs } from "fs";
-import path from "path";
+import { readJsonFile, writeJsonFile } from "@/lib/server/json-file-store";
 
-const DATA_DIR = path.join(process.cwd(), ".data");
-const WAITLIST_FILE = path.join(DATA_DIR, "waitlist.json");
-const STATS_CACHE_FILE = path.join(DATA_DIR, "stats-cache.json");
+const WAITLIST_FILE = "waitlist.json";
+const STATS_CACHE_FILE = "stats-cache.json";
+const PLATFORM_COUNTERS_FILE = "platform-counters.json";
 const CACHE_TTL_MS = 60 * 60 * 1000; // 1 hour
 
 /**
@@ -48,32 +47,21 @@ interface CachedStats {
 }
 
 async function getWaitlistCount(): Promise<number> {
-  try {
-    const raw = await fs.readFile(WAITLIST_FILE, "utf-8");
-    const data = JSON.parse(raw) as { entries: unknown[] };
-    return data.entries.length;
-  } catch {
-    return 0;
-  }
+  const data = await readJsonFile<{ entries: unknown[] }>(WAITLIST_FILE, { entries: [] });
+  return data.entries.length;
 }
 
 async function readCache(): Promise<CachedStats | null> {
-  try {
-    const raw = await fs.readFile(STATS_CACHE_FILE, "utf-8");
-    const cached = JSON.parse(raw) as CachedStats;
-    if (Date.now() - cached.cachedAt < CACHE_TTL_MS) {
-      return cached;
-    }
-    return null;
-  } catch {
-    return null;
+  const cached = await readJsonFile<CachedStats | null>(STATS_CACHE_FILE, null);
+  if (cached && Date.now() - cached.cachedAt < CACHE_TTL_MS) {
+    return cached;
   }
+  return null;
 }
 
 async function writeCache(stats: PlatformStats): Promise<void> {
-  await fs.mkdir(DATA_DIR, { recursive: true });
   const cached: CachedStats = { stats, cachedAt: Date.now() };
-  await fs.writeFile(STATS_CACHE_FILE, JSON.stringify(cached, null, 2));
+  await writeJsonFile(STATS_CACHE_FILE, cached);
 }
 
 async function aggregateStats(): Promise<PlatformStats> {
@@ -92,22 +80,16 @@ async function aggregateStats(): Promise<PlatformStats> {
   // process (background job, admin CLI, or CI pipeline) that does NOT yet
   // exist. Until that process is built, stats will always equal the floor
   // values above. This is intentional — do not remove as "dead code".
-  try {
-    const countersFile = path.join(DATA_DIR, "platform-counters.json");
-    const raw = await fs.readFile(countersFile, "utf-8");
-    const counters = JSON.parse(raw) as Partial<PlatformStats>;
-    if (counters.totalUsers !== undefined) stats.totalUsers = Math.max(stats.totalUsers, counters.totalUsers);
-    if (counters.totalExecutions !== undefined) stats.totalExecutions = counters.totalExecutions;
-    if (counters.totalTemplates !== undefined) stats.totalTemplates = counters.totalTemplates;
-    if (counters.totalToolsConnected !== undefined) stats.totalToolsConnected = counters.totalToolsConnected;
-    if (counters.totalAgents !== undefined) stats.totalAgents = counters.totalAgents;
-    if (counters.totalCliCommands !== undefined) stats.totalCliCommands = counters.totalCliCommands;
-    if (counters.coldStartSeconds !== undefined) stats.coldStartSeconds = counters.coldStartSeconds;
-    if (counters.roadmapCompleted !== undefined) stats.roadmapCompleted = counters.roadmapCompleted;
-    if (counters.roadmapTotal !== undefined) stats.roadmapTotal = counters.roadmapTotal;
-  } catch {
-    // No external counters file — use floor values from MINIMUM_DISPLAY_VALUES
-  }
+  const counters = await readJsonFile<Partial<PlatformStats>>(PLATFORM_COUNTERS_FILE, {});
+  if (counters.totalUsers !== undefined) stats.totalUsers = Math.max(stats.totalUsers, counters.totalUsers);
+  if (counters.totalExecutions !== undefined) stats.totalExecutions = counters.totalExecutions;
+  if (counters.totalTemplates !== undefined) stats.totalTemplates = counters.totalTemplates;
+  if (counters.totalToolsConnected !== undefined) stats.totalToolsConnected = counters.totalToolsConnected;
+  if (counters.totalAgents !== undefined) stats.totalAgents = counters.totalAgents;
+  if (counters.totalCliCommands !== undefined) stats.totalCliCommands = counters.totalCliCommands;
+  if (counters.coldStartSeconds !== undefined) stats.coldStartSeconds = counters.coldStartSeconds;
+  if (counters.roadmapCompleted !== undefined) stats.roadmapCompleted = counters.roadmapCompleted;
+  if (counters.roadmapTotal !== undefined) stats.roadmapTotal = counters.roadmapTotal;
 
   return stats;
 }

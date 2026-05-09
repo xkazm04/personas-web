@@ -1,7 +1,8 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
+import { useRef } from "react";
 import { useInView, useReducedMotion } from "framer-motion";
+import { useTweenedNumber } from "@/hooks/useTweenedNumber";
 
 interface AnimatedMetricProps {
   target: number;
@@ -23,30 +24,7 @@ export default function AnimatedMetric({
   const reduced = useReducedMotion();
   const ref = useRef<HTMLDivElement>(null);
   const inView = useInView(ref, { once: true, margin: "-40px" });
-  const [value, setValue] = useState(() => (reduced ? target : 0));
-  const [prevReducedTarget, setPrevReducedTarget] = useState<string>(
-    reduced ? `r:${target}` : "anim",
-  );
-
-  const nextReducedKey = reduced ? `r:${target}` : "anim";
-  if (nextReducedKey !== prevReducedTarget) {
-    setPrevReducedTarget(nextReducedKey);
-    if (reduced) setValue(target);
-  }
-
-  useEffect(() => {
-    if (!inView || reduced) return;
-    let raf = 0;
-    const start = performance.now();
-    const dur = 1400;
-    const tick = (ts: number) => {
-      const t = Math.min((ts - start) / dur, 1);
-      setValue(target * (1 - Math.pow(1 - t, 3)));
-      if (t < 1) raf = requestAnimationFrame(tick);
-    };
-    raf = requestAnimationFrame(tick);
-    return () => cancelAnimationFrame(raf);
-  }, [inView, target, reduced]);
+  const value = useTweenedNumber(target, { enabled: inView && !reduced });
 
   const formatted = target >= 10 ? Math.round(value).toString() : value.toFixed(1);
 

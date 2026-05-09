@@ -1,8 +1,8 @@
 import type { ReactNode } from "react";
 
 const scaleClasses = {
-  h1: "text-5xl sm:text-6xl md:text-7xl lg:text-[5.5rem]",
-  h2: "text-4xl sm:text-5xl md:text-6xl lg:text-7xl",
+  h1: "text-[clamp(2.75rem,11vw,5.5rem)]",
+  h2: "text-[clamp(2.25rem,8vw,4.5rem)]",
 } as const;
 
 export default function SectionHeading({
@@ -19,7 +19,7 @@ export default function SectionHeading({
   return (
     <Tag
       id={id}
-      className={`font-extrabold tracking-tight drop-shadow-md ${scaleClasses[Tag]} ${className}`}
+      className={`text-balance break-words font-extrabold tracking-tight drop-shadow-md ${scaleClasses[Tag]} ${className}`}
     >
       {children}
     </Tag>

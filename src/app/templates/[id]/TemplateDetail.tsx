@@ -7,7 +7,8 @@ import {
   ArrowLeft, Download, Copy, Check, Clock, Webhook,
   Mouse, Zap, Radio, ChevronRight, ExternalLink, X, Link2,
 } from "lucide-react";
-import { templates, categoryColors, difficultyColors } from "@/lib/templates";
+import { categoryColors, difficultyColors } from "@/lib/templates";
+import { getRelatedTemplates, getTemplateById } from "@/lib/template-queries";
 import { fadeUp, staggerContainer } from "@/lib/animations";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/sections/Footer";
@@ -53,10 +54,8 @@ export default function TemplateDetail({ templateId }: { templateId: string }) {
   const [copyFailed, setCopyFailed] = useState(false);
   const [showFallback, setShowFallback] = useState(false);
 
-  const template = templates.find((t) => t.id === templateId)!;
-  const related = templates
-    .filter((t) => t.category === template.category && t.id !== template.id)
-    .slice(0, 3);
+  const template = getTemplateById(templateId)!;
+  const related = getRelatedTemplates(templateId);
 
   const handleCopy = async () => {
     try {
@@ -122,7 +121,7 @@ export default function TemplateDetail({ templateId }: { templateId: string }) {
         }) }}
       />
       <Navbar />
-      <main className="mx-auto max-w-4xl px-6 pb-24 pt-32">
+      <main id="main-content" className="mx-auto max-w-4xl px-4 pb-24 pt-28 sm:px-6 sm:pt-32">
         <motion.div variants={staggerContainer} initial="hidden" animate="visible">
           {/* Back link */}
           <motion.div variants={fadeUp}>

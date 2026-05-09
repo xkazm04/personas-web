@@ -24,7 +24,7 @@ export default function PageShell({
 
   return (
     <SectionObserverProvider sectionIds={sectionIds}>
-      <main id="main-content" className="relative isolate overflow-hidden">
+      <main id="main-content" className="relative isolate overflow-hidden scroll-mt-24">
         <AnimationPauseObserver />
         <ScrollMap items={scrollMapItems} />
         {children}

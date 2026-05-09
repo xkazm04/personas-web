@@ -1,4 +1,5 @@
 import { NextRequest } from "next/server";
+import { getOptionalEnv } from "@/lib/server/env";
 
 /**
  * SSE proxy endpoint that connects to the orchestrator's event stream
@@ -7,7 +8,7 @@ import { NextRequest } from "next/server";
  * the client mock handles it.
  */
 export async function GET(req: NextRequest) {
-  const orchestratorUrl = process.env.NEXT_PUBLIC_ORCHESTRATOR_URL;
+  const orchestratorUrl = getOptionalEnv("NEXT_PUBLIC_ORCHESTRATOR_URL");
   if (!orchestratorUrl) {
     return new Response("Orchestrator URL not configured", { status: 503 });
   }
@@ -15,7 +16,7 @@ export async function GET(req: NextRequest) {
   const streamUrl = new URL("/api/events/stream", orchestratorUrl);
 
   // Forward auth headers
-  const apiKey = process.env.NEXT_PUBLIC_TEAM_API_KEY;
+  const apiKey = getOptionalEnv("NEXT_PUBLIC_TEAM_API_KEY");
   const userToken = req.headers.get("x-user-token");
   const headers: Record<string, string> = { Accept: "text/event-stream" };
   if (apiKey) headers["Authorization"] = `Bearer ${apiKey}`;

@@ -1,7 +1,8 @@
 import { create } from "zustand";
 import { api } from "@/lib/api";
 import type { PersonaEvent, PersonaEventSubscription } from "@/lib/types";
-import { invalidateAgentDetailCache } from "@/lib/agentDetailCache";
+import { mutate } from "swr";
+import { dashboardKeys } from "@/lib/dashboard-queries";
 
 const REPLAY_BATCH_SIZE = 10;
 const MAX_EVENTS_BUFFER = 1_000;
@@ -124,7 +125,7 @@ export const useEventStore = create<EventState>((set, get) => ({
   createSubscription: async (input) => {
     const sub = await api.createSubscription(input);
     set((s) => ({ subscriptions: [...s.subscriptions, sub] }));
-    invalidateAgentDetailCache(input.personaId);
+    void mutate(dashboardKeys.agentDetail(input.personaId));
   },
   updateSubscription: async (personaId, subId, body) => {
     const updated = await api.updateSubscription(personaId, subId, body);
@@ -133,13 +134,13 @@ export const useEventStore = create<EventState>((set, get) => ({
         sub.id === subId ? updated : sub,
       ),
     }));
-    invalidateAgentDetailCache(personaId);
+    void mutate(dashboardKeys.agentDetail(personaId));
   },
   deleteSubscription: async (personaId, subId) => {
     await api.deleteSubscription(personaId, subId);
     set((s) => ({
       subscriptions: s.subscriptions.filter((sub) => sub.id !== subId),
     }));
-    invalidateAgentDetailCache(personaId);
+    void mutate(dashboardKeys.agentDetail(personaId));
   },
 }));

@@ -28,7 +28,7 @@ export default function MobileBottomNav() {
               }`}
             >
               <Icon className="h-5 w-5" />
-              <span className="leading-none">{item.label}</span>
+              <span className="max-w-[3.75rem] truncate leading-none">{item.label}</span>
               {badge !== null && (
                 <span className="absolute right-0.5 top-0.5 flex h-4 min-w-4 items-center justify-center rounded-full bg-brand-cyan/20 px-1 text-sm font-bold text-brand-cyan">
                   {badge}
@@ -56,6 +56,8 @@ function MobileMoreMenu({
     <div className="relative">
       <button
         onClick={() => setOpen(!open)}
+        aria-expanded={open}
+        aria-haspopup="menu"
         className={`flex min-h-[44px] min-w-[44px] flex-col items-center justify-center gap-0.5 rounded-xl px-2 py-1.5 text-sm font-medium transition-colors ${
           items.some(getActive) ? "text-brand-cyan" : "text-muted-dark"
         }`}
@@ -67,7 +69,7 @@ function MobileMoreMenu({
       {open && (
         <>
           <div className="fixed inset-0 z-40" onClick={() => setOpen(false)} />
-          <div className="absolute bottom-full right-0 z-50 mb-2 w-48 rounded-xl border border-glass-hover bg-background/95 backdrop-blur-xl p-1.5 shadow-2xl">
+          <div role="menu" className="absolute bottom-full right-0 z-50 mb-2 w-48 rounded-xl border border-glass-hover bg-background/95 backdrop-blur-xl p-1.5 shadow-2xl">
             {items.map((item) => {
               const active = getActive(item);
               const Icon = item.icon;
@@ -76,6 +78,7 @@ function MobileMoreMenu({
                   key={item.key}
                   href={item.href}
                   onClick={() => setOpen(false)}
+                  role="menuitem"
                   className={`flex min-h-[44px] items-center gap-3 rounded-lg px-3 py-2.5 text-base font-medium transition-colors ${
                     active
                       ? "bg-brand-cyan/8 text-brand-cyan"
@@ -96,7 +99,7 @@ function MobileMoreMenu({
 
 function MoreLabel() {
   const { t } = useTranslation();
-  return <span className="leading-none">{t.dashboard.more}</span>;
+  return <span className="max-w-[3.75rem] truncate leading-none">{t.dashboard.more}</span>;
 }
 
 function MoreHorizontalIcon({ className }: { className?: string }) {

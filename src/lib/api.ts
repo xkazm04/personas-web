@@ -41,12 +41,23 @@ export class ApiError extends Error {
 // Core fetch wrapper
 // ---------------------------------------------------------------------------
 
+const DEFAULT_TIMEOUT_MS = 15_000;
+
+function getOrchestratorBaseUrl(): string {
+  const base = process.env.NEXT_PUBLIC_ORCHESTRATOR_URL;
+  if (!base) {
+    throw new Error("NEXT_PUBLIC_ORCHESTRATOR_URL is not configured");
+  }
+  return base;
+}
+
 async function orchestratorFetch<T>(
   path: string,
   options?: {
     method?: string;
     body?: unknown;
     params?: Record<string, string | undefined>;
+    timeoutMs?: number;
   },
 ): Promise<T> {
   const { accessToken, initialized } = useAuthStore.getState();
@@ -59,8 +70,7 @@ async function orchestratorFetch<T>(
     );
   }
 
-  const base = process.env.NEXT_PUBLIC_ORCHESTRATOR_URL;
-  const url = new URL(path, base);
+  const url = new URL(path, getOrchestratorBaseUrl());
 
   if (options?.params) {
     for (const [k, v] of Object.entries(options.params)) {
@@ -80,11 +90,28 @@ async function orchestratorFetch<T>(
     headers["X-User-Token"] = accessToken;
   }
 
-  const res = await fetch(url.toString(), {
-    method: options?.method ?? "GET",
-    headers,
-    body: options?.body ? JSON.stringify(options.body) : undefined,
-  });
+  const controller = new AbortController();
+  const timeout = setTimeout(
+    () => controller.abort(),
+    options?.timeoutMs ?? DEFAULT_TIMEOUT_MS,
+  );
+
+  let res: Response;
+  try {
+    res = await fetch(url.toString(), {
+      method: options?.method ?? "GET",
+      headers,
+      body: options?.body ? JSON.stringify(options.body) : undefined,
+      signal: controller.signal,
+    });
+  } catch (err) {
+    if (err instanceof DOMException && err.name === "AbortError") {
+      throw new Error(`API request timed out: ${path}`);
+    }
+    throw err;
+  } finally {
+    clearTimeout(timeout);
+  }
 
   if (!res.ok) {
     throw new ApiError(res.status, await res.text());

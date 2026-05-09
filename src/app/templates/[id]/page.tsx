@@ -1,14 +1,14 @@
 import { notFound } from "next/navigation";
-import { templates } from "@/lib/templates";
+import { getTemplateById, getTemplateStaticParams } from "@/lib/template-queries";
 import TemplateDetail from "./TemplateDetail";
 
 export function generateStaticParams() {
-  return templates.map((t) => ({ id: t.id }));
+  return getTemplateStaticParams();
 }
 
 export async function generateMetadata({ params }: { params: Promise<{ id: string }> }) {
   const { id } = await params;
-  const t = templates.find((tpl) => tpl.id === id);
+  const t = getTemplateById(id);
   return {
     title: t ? `${t.title} — Template` : "Template",
     description: t?.description,
@@ -17,7 +17,7 @@ export async function generateMetadata({ params }: { params: Promise<{ id: strin
 
 export default async function TemplatePage({ params }: { params: Promise<{ id: string }> }) {
   const { id } = await params;
-  if (!templates.some((t) => t.id === id)) notFound();
+  if (!getTemplateById(id)) notFound();
 
   // Pass only the ID — TemplateDetail is a client component that imports
   // templates directly, avoiding server→client serialization of React components (toolIcon).

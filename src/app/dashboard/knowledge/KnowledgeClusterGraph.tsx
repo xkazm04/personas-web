@@ -16,6 +16,7 @@ import {
   MOCK_KNOWLEDGE_PATTERNS,
   type KnowledgePattern,
 } from "@/lib/mock-dashboard-data";
+import { formatCost, formatDuration, relativeTime } from "@/lib/format";
 
 // -- Types --
 
@@ -90,26 +91,6 @@ const PERSONA_COLORS: Record<string, string> = {
 };
 
 // -- Helpers --
-
-function relativeTime(iso: string): string {
-  const diff = Date.now() - new Date(iso).getTime();
-  const minutes = Math.floor(diff / 60_000);
-  if (minutes < 1) return "now";
-  if (minutes < 60) return `${minutes}m ago`;
-  const hours = Math.floor(minutes / 60);
-  if (hours < 24) return `${hours}h ago`;
-  return `${Math.floor(hours / 24)}d ago`;
-}
-
-function formatDuration(ms: number): string {
-  if (ms < 1_000) return `${ms}ms`;
-  if (ms < 60_000) return `${(ms / 1_000).toFixed(1)}s`;
-  return `${(ms / 60_000).toFixed(1)}m`;
-}
-
-function formatCost(usd: number): string {
-  return `$${usd.toFixed(3)}`;
-}
 
 function successRate(p: KnowledgePattern): number {
   const total = p.successCount + p.failureCount;

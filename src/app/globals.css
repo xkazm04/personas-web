@@ -61,6 +61,13 @@ body {
   overflow-x: hidden;
 }
 
+img,
+svg,
+video,
+canvas {
+  max-width: 100%;
+}
+
 html {
   scroll-behavior: smooth;
 }

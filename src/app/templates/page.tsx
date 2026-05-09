@@ -87,7 +87,7 @@ function CategoryTile({ category, count, onSelect }: CategoryTileProps) {
     <motion.button
       variants={fadeUp}
       onClick={onSelect}
-      className={`group relative flex items-end overflow-hidden rounded-2xl border text-left h-[280px] cursor-pointer transition-all duration-500 hover:scale-[1.01] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-cyan/40 border-l-2 ${categoryAccent[category]} border-glass-hover`}
+      className={`group relative flex h-52 cursor-pointer items-end overflow-hidden rounded-2xl border border-l-2 text-left transition-all duration-500 hover:scale-[1.01] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-cyan/40 sm:h-[260px] ${categoryAccent[category]} border-glass-hover`}
     >
       <div className="absolute inset-0 transition-opacity duration-500 opacity-60 group-hover:opacity-100">
         <Image
@@ -115,9 +115,9 @@ function CategoryTile({ category, count, onSelect }: CategoryTileProps) {
         />
       </div>
 
-      <div className="relative z-10 p-6 w-full">
+      <div className="relative z-10 w-full p-4 sm:p-6">
         <div className="flex items-end justify-between gap-3">
-          <h3 className="text-2xl font-bold text-white drop-shadow-[0_2px_12px_rgba(0,0,0,0.8)]">
+          <h3 className="text-xl font-bold text-white drop-shadow-[0_2px_12px_rgba(0,0,0,0.8)] sm:text-2xl">
             {category}
           </h3>
           <span className="rounded-full border border-white/20 bg-black/40 backdrop-blur-sm px-3 py-0.5 text-sm font-medium text-white">
@@ -166,7 +166,7 @@ export default function TemplatesPage() {
   return (
     <>
       <Navbar />
-      <main className="min-h-screen bg-background pt-24 pb-20 px-6">
+      <main id="main-content" className="min-h-screen bg-background px-4 pb-20 pt-24 sm:px-6">
         <motion.div initial="hidden" animate="visible" variants={staggerContainer} className="mx-auto max-w-6xl">
           <motion.div variants={fadeUp} className="mb-10">
             <h1 className="text-4xl font-extrabold tracking-tight sm:text-5xl">{t.templatesPage.title}</h1>
@@ -219,14 +219,14 @@ export default function TemplatesPage() {
                 </h2>
               </motion.div>
 
-              <motion.div variants={fadeUp} className="mb-8 flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
-                <div role="group" aria-label="Filter by complexity" className="flex rounded-xl border border-glass-hover bg-white/[0.02] p-1 backdrop-blur-sm">
+              <motion.div variants={fadeUp} className="mb-8 flex flex-col gap-4 lg:flex-row lg:items-center lg:justify-between">
+                <div role="group" aria-label="Filter by complexity" className="scrollbar-hide flex overflow-x-auto rounded-xl border border-glass-hover bg-white/[0.02] p-1 backdrop-blur-sm">
                   {complexities.map(({ value, label }) => (
                     <button
                       key={label}
                       aria-pressed={activeComplexity === value}
                       onClick={() => setActiveComplexity(value)}
-                      className={`rounded-lg px-4 py-1.5 text-sm font-medium transition-all ${
+                      className={`shrink-0 rounded-lg px-4 py-1.5 text-sm font-medium transition-all ${
                         activeComplexity === value
                           ? "bg-white/[0.1] text-foreground shadow-[0_0_12px_rgba(255,255,255,0.06)]"
                           : "text-muted-dark hover:text-foreground"
@@ -236,7 +236,7 @@ export default function TemplatesPage() {
                     </button>
                   ))}
                 </div>
-                <div className="relative w-full sm:w-80">
+                <div className="relative w-full lg:w-80">
                   <Search className="absolute left-3.5 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-dark" />
                   <input
                     type="text"

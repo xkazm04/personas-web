@@ -1,31 +1,10 @@
 "use client";
 
-import { useEffect, useState } from "react";
 import { Radio, Clock, AlertCircle } from "lucide-react";
 import StatusBadge from "@/components/dashboard/StatusBadge";
-import { api } from "@/lib/api";
 import type { Persona } from "@/lib/types";
 import { relativeTime, formatDuration } from "@/lib/format";
-import {
-  getCachedAgentDetail,
-  setCachedAgentDetail,
-  type AgentDetailData,
-} from "@/lib/agentDetailCache";
-
-async function loadAgentDetail(personaId: string): Promise<AgentDetailData> {
-  const cached = getCachedAgentDetail(personaId);
-  if (cached) return cached;
-
-  const [executions, subscriptions, triggers] = await Promise.all([
-    api.listExecutions({ personaId, limit: 5 }),
-    api.listSubscriptions(personaId),
-    api.listTriggers(personaId),
-  ]);
-
-  const data = { executions, subscriptions, triggers };
-  setCachedAgentDetail(personaId, data);
-  return data;
-}
+import { loadAgentDetail, useAgentDetail } from "@/lib/dashboard-queries";
 
 export async function prefetchAgentDetail(personaId: string) {
   try {
@@ -36,37 +15,7 @@ export async function prefetchAgentDetail(personaId: string) {
 }
 
 export default function AgentDetail({ persona }: { persona: Persona }) {
-  const [data, setData] = useState<AgentDetailData | null>(null);
-  const [error, setError] = useState(false);
-
-  useEffect(() => {
-    let cancelled = false;
-    const cached = getCachedAgentDetail(persona.id);
-    if (cached) {
-      queueMicrotask(() => {
-        setData(cached);
-        setError(false);
-      });
-      return () => {
-        cancelled = true;
-      };
-    }
-
-    queueMicrotask(() => {
-      setData(null);
-      setError(false);
-    });
-
-    loadAgentDetail(persona.id)
-      .then((next) => {
-        if (!cancelled) setData(next);
-      })
-      .catch(() => {
-        if (!cancelled) setError(true);
-      });
-
-    return () => { cancelled = true; };
-  }, [persona.id]);
+  const { data, error } = useAgentDetail(persona.id);
 
   if (error) {
     return (

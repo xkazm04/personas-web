@@ -48,13 +48,13 @@ const SectionWrapper = forwardRef<
       whileInView="visible"
       viewport={{ once: true, margin: "-80px" }}
       variants={staggerContainer}
-      className={`relative px-6 py-32 md:py-40 ${dotGrid ? "dot-grid" : ""} ${className}`}
+      className={`relative px-4 py-20 sm:px-6 sm:py-28 md:py-36 ${dotGrid ? "dot-grid" : ""} ${className}`}
       aria-label={ariaLabel}
       aria-labelledby={ariaLabelledBy}
       aria-roledescription={ariaRoleDescription}
       data-animate-when-visible
     >
-      <div className="mx-auto max-w-6xl">{children}</div>
+      <div className="mx-auto w-full max-w-6xl">{children}</div>
     </motion.section>
   );
 });
