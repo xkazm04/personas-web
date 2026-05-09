@@ -79,7 +79,6 @@ export default function ExecutionsPage() {
   const fetchExecutions = useExecutionStore((s) => s.fetchExecutions);
   const cancelExecution = useExecutionStore((s) => s.cancelExecution);
   const [filter, setFilter] = useState("all");
-  const [expandedExecutionId, setExpandedExecutionId] = useState<string | null>(null);
   const [visibleCount, setVisibleCount] = useState(INITIAL_VISIBLE_EXECUTIONS);
 
   // Initial fetch
@@ -87,12 +86,14 @@ export default function ExecutionsPage() {
     void fetchExecutions();
   }, [fetchExecutions]);
 
-  // Poll while any running
+  // Poll while any execution is still active. The expanded row has its own
+  // SSE/polling channel, but other rows still need updates so we don't gate
+  // list polling on whether something is expanded.
   const hasRunning = useMemo(
     () => executions.some((e) => e.status === "running" || e.status === "queued"),
     [executions],
   );
-  usePolling(fetchExecutions, 3_000, hasRunning && !expandedExecutionId);
+  usePolling(fetchExecutions, 3_000, hasRunning);
 
   const filtered = useMemo(() => {
     if (filter === "all") return executions;
@@ -192,14 +193,14 @@ export default function ExecutionsPage() {
         header: "",
         className: "w-14 text-right",
         render: (row: GlobalExecution) =>
-          row.status === "running" ? (
+          row.status === "running" || row.status === "queued" ? (
             <button
               onClick={(e) => {
                 e.stopPropagation();
                 void handleCancel(row.id);
               }}
               className="text-red-400 hover:text-red-300 transition-colors"
-              title="Cancel"
+              title={row.status === "queued" ? "Cancel queued run" : "Cancel"}
             >
               <XCircle className="h-4 w-4" />
             </button>
@@ -237,7 +238,7 @@ export default function ExecutionsPage() {
         <FilterBar
           options={[
             { key: "all", label: "All", count: counts.all },
-            { key: "running", label: "Active", count: counts.running },
+            { key: "running", label: "Active", count: counts.running, pulse: counts.running > 0 },
             { key: "completed", label: "Completed", count: counts.completed },
             { key: "failed", label: "Failed", count: counts.failed },
             { key: "cancelled", label: "Cancelled", count: counts.cancelled },
@@ -256,7 +257,6 @@ export default function ExecutionsPage() {
           data={visibleExecutions}
           keyExtractor={(row) => row.id}
           expandable={(row) => <ExecutionOutput executionId={row.id} />}
-          onExpandedChange={setExpandedExecutionId}
           rowClassName={(row) => {
             switch (row.status) {
               case "running":

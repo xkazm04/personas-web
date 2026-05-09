@@ -297,6 +297,14 @@ export const ja: Translations = {
     toolUtilization: '\u30c4\u30fc\u30eb\u5229\u7528\u7387',
     workers: '\u30ef\u30fc\u30ab\u30fc',
     usageAnalytics: '\u5229\u7528\u5206\u6790',
+    errorBoundary: {
+      title: 'Dashboard panel failed to render',
+      description: 'This section hit an unexpected error. You can retry without leaving the page.',
+      retry: 'Retry',
+      errorIdLabel: 'Error ID',
+      copyErrorId: 'Copy error ID',
+      copied: 'Copied',
+    },
     unreadMessages: '未読メッセージ',
     fleetHealth: 'フリート健全性',
     fleet: {

@@ -32,3 +32,7 @@ export function setCachedAgentDetail(personaId: string, data: AgentDetailData): 
 export function invalidateAgentDetailCache(personaId: string): void {
   detailCache.delete(personaId);
 }
+
+export function clearAgentDetailCache(): void {
+  detailCache.clear();
+}

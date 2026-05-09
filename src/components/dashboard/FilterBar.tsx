@@ -4,6 +4,7 @@ interface FilterOption {
   key: string;
   label: string;
   count?: number;
+  pulse?: boolean;
 }
 
 export default function FilterBar({
@@ -39,6 +40,9 @@ export default function FilterBar({
                   }`
             }`}
           >
+            {opt.pulse && (
+              <span className="h-1.5 w-1.5 rounded-full bg-emerald-400 shadow-[0_0_8px_rgba(52,211,153,0.8)]" />
+            )}
             {opt.label}
             {opt.count !== undefined && (
               <span

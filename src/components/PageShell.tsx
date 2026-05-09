@@ -3,6 +3,7 @@
 import { useMemo, type ReactNode } from "react";
 import ScrollMap from "@/components/ScrollMap";
 import AnimationPauseObserver from "@/components/AnimationPauseObserver";
+import { ParticleHost } from "@/components/ParticleHost";
 import { SectionObserverProvider } from "@/contexts/SectionObserverContext";
 
 interface ScrollMapItem {
@@ -26,6 +27,7 @@ export default function PageShell({
     <SectionObserverProvider sectionIds={sectionIds}>
       <main id="main-content" className="relative isolate overflow-hidden scroll-mt-24">
         <AnimationPauseObserver />
+        <ParticleHost />
         <ScrollMap items={scrollMapItems} />
         {children}
       </main>

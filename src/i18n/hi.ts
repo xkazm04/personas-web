@@ -297,6 +297,14 @@ export const hi: Translations = {
     toolUtilization: '\u091F\u0942\u0932 \u0909\u092A\u092F\u094B\u0917',
     workers: '\u0935\u0930\u094D\u0915\u0930',
     usageAnalytics: '\u0909\u092A\u092F\u094B\u0917 \u090F\u0928\u093E\u0932\u093F\u091F\u093F\u0915\u094D\u0938',
+    errorBoundary: {
+      title: 'Dashboard panel failed to render',
+      description: 'This section hit an unexpected error. You can retry without leaving the page.',
+      retry: 'Retry',
+      errorIdLabel: 'Error ID',
+      copyErrorId: 'Copy error ID',
+      copied: 'Copied',
+    },
     unreadMessages: 'अपठित संदेश',
     fleetHealth: 'फ्लीट स्वास्थ्य',
     fleet: {

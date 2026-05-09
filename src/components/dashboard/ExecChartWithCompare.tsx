@@ -22,6 +22,11 @@ const annotationStyles: Record<ChartAnnotation["type"], { stroke: string; emoji:
   milestone: { stroke: "#34d399", emoji: "\u{1F3AF}" },
 };
 
+// Hoisted to module scope so we don't rebuild this Map on every compare-toggle render.
+const EXEC_COMPARE_MAP: ReadonlyMap<string, number> = new Map(
+  MOCK_EXEC_COMPARE.map((c) => [c.date, c.previous]),
+);
+
 interface ExecPoint {
   date: string;
   Successes: number;
@@ -75,10 +80,9 @@ export default memo(function ExecChartWithCompare({
 }) {
   const mergedData: MergedExecPoint[] = useMemo(() => {
     if (!compare) return data;
-    const compareMap = new Map(MOCK_EXEC_COMPARE.map((c) => [c.date, c.previous]));
     return data.map((d) => ({
       ...d,
-      PreviousTotal: compareMap.get(d.date),
+      PreviousTotal: EXEC_COMPARE_MAP.get(d.date),
     }));
   }, [data, compare]);
 

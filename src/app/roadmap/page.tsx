@@ -6,6 +6,9 @@ import StageSection from "@/components/StageSection";
 import InfoPageLayout from "@/components/InfoPageLayout";
 import { SITE_URL } from "@/lib/seo";
 
+export const dynamic = "force-static";
+export const revalidate = 3600;
+
 export const metadata: Metadata = {
   title: "Roadmap",
   description:

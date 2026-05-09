@@ -1,5 +1,9 @@
 import InfoPageLayout from "@/components/InfoPageLayout";
 import StageSection from "@/components/StageSection";
+
+export const dynamic = "force-static";
+export const revalidate = 3600;
+
 import DesignEngine from "@/components/todo/DesignEngine";
 import MemoryLayers from "@/components/todo/MemoryLayers";
 import HealingCircuit from "@/components/todo/HealingCircuit";

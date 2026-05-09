@@ -215,6 +215,14 @@ export interface Translations {
     toolUtilization: string;
     workers: string;
     usageAnalytics: string;
+    errorBoundary: {
+      title: string;
+      description: string;
+      retry: string;
+      errorIdLabel: string;
+      copyErrorId: string;
+      copied: string;
+    };
     unreadMessages: string;
     fleetHealth: string;
     fleet: {
@@ -844,6 +852,14 @@ export const en: Translations = {
     toolUtilization: 'Tool utilization',
     workers: 'workers',
     usageAnalytics: 'Usage Analytics',
+    errorBoundary: {
+      title: 'Dashboard panel failed to render',
+      description: 'This section hit an unexpected error. You can retry without leaving the page.',
+      retry: 'Retry',
+      errorIdLabel: 'Error ID',
+      copyErrorId: 'Copy error ID',
+      copied: 'Copied',
+    },
     unreadMessages: 'unread messages',
     fleetHealth: 'fleet health',
     fleet: {

@@ -297,6 +297,14 @@ export const ko: Translations = {
     toolUtilization: '\ub3c4\uad6c \ud65c\uc6a9\ub960',
     workers: '\uc6cc\ucee4',
     usageAnalytics: '\uc0ac\uc6a9\ub7c9 \ubd84\uc11d',
+    errorBoundary: {
+      title: 'Dashboard panel failed to render',
+      description: 'This section hit an unexpected error. You can retry without leaving the page.',
+      retry: 'Retry',
+      errorIdLabel: 'Error ID',
+      copyErrorId: 'Copy error ID',
+      copied: 'Copied',
+    },
     unreadMessages: '읽지 않은 메시지',
     fleetHealth: '플릿 상태',
     fleet: {

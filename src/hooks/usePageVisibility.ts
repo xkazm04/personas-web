@@ -27,8 +27,17 @@ function handleVisibilityChange() {
   for (const listener of listeners) listener();
 }
 
+// Use a globalThis-keyed singleton so HMR / Fast Refresh re-evaluating this
+// module doesn't stack additional `visibilitychange` listeners on each cycle.
+const REGISTRY_KEY = Symbol.for("personas.usePageVisibility.registered");
+type GlobalRegistry = { [REGISTRY_KEY]?: boolean };
+
 if (typeof document !== "undefined") {
-  document.addEventListener("visibilitychange", handleVisibilityChange);
+  const g = globalThis as GlobalRegistry;
+  if (!g[REGISTRY_KEY]) {
+    g[REGISTRY_KEY] = true;
+    document.addEventListener("visibilitychange", handleVisibilityChange);
+  }
 }
 
 /**
@@ -38,4 +47,17 @@ if (typeof document !== "undefined") {
  */
 export function usePageVisibility(): boolean {
   return useSyncExternalStore(subscribe, getSnapshot, getServerSnapshot);
+}
+
+/**
+ * Tear down the document-level listener. Intended for tests; production code
+ * should never call this — the listener is a process-lifetime singleton.
+ */
+export function __teardownPageVisibilityForTests(): void {
+  const g = globalThis as GlobalRegistry;
+  if (typeof document !== "undefined" && g[REGISTRY_KEY]) {
+    document.removeEventListener("visibilitychange", handleVisibilityChange);
+    g[REGISTRY_KEY] = false;
+  }
+  listeners = [];
 }

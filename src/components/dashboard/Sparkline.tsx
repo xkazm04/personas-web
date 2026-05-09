@@ -21,17 +21,20 @@ export default function Sparkline({
   accent?: string;
   strokeWidth?: number;
 }) {
-  if (data.length < 2) return null;
+  // Drop NaN/Infinity at the boundary; one bad sample would otherwise
+  // poison every coordinate computed below and render a broken SVG.
+  const cleaned = data.filter((v) => Number.isFinite(v));
+  if (cleaned.length < 2) return null;
 
-  const min = Math.min(...data);
-  const max = Math.max(...data);
+  const min = Math.min(...cleaned);
+  const max = Math.max(...cleaned);
   const range = max - min || 1;
   const pad = 2;
   const h = height - pad * 2;
   const w = width - pad * 2;
 
-  const points = data.map((v, i) => {
-    const x = pad + (i / (data.length - 1)) * w;
+  const points = cleaned.map((v, i) => {
+    const x = pad + (i / (cleaned.length - 1)) * w;
     const y = pad + h - ((v - min) / range) * h;
     return `${x},${y}`;
   });
@@ -65,7 +68,7 @@ export default function Sparkline({
       {/* End dot */}
       <circle
         cx={pad + w}
-        cy={pad + h - ((data[data.length - 1] - min) / range) * h}
+        cy={pad + h - ((cleaned[cleaned.length - 1] - min) / range) * h}
         r={2}
         fill={colors.stroke}
       />

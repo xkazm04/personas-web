@@ -34,7 +34,8 @@ export default function VoteCard({
   const handleVote = (e: React.MouseEvent) => {
     e.stopPropagation();
     if (isShipped) return;
-    setVoteBurst((n) => n + 1);
+    // Celebrate only on vote-up, not on undo.
+    if (!voted) setVoteBurst((n) => n + 1);
     onVote(feature.id);
   };
 
@@ -44,6 +45,22 @@ export default function VoteCard({
       whileHover={{ y: -4, transition: { duration: 0.35, ease: "easeOut" } }}
       className={`group relative flex flex-col rounded-2xl border border-glass bg-gradient-to-b from-white/[0.03] to-transparent backdrop-blur-sm transition-all duration-500 hover:border-glass-hover hover:shadow-[0_8px_60px_rgba(0,0,0,0.35)] ${expanded ? "z-20" : "z-0"}`}
     >
+      {/* Vote celebration ring — keyed on voteBurst so each upvote restarts the CSS animation */}
+      {voteBurst > 0 && (
+        <span
+          key={voteBurst}
+          aria-hidden="true"
+          className="vote-card-pulse pointer-events-none absolute inset-0 z-30 rounded-2xl border motion-reduce:hidden"
+          style={
+            {
+              borderColor: "rgba(255,255,255,0.05)",
+              "--vote-pulse-color": rgba(0.4),
+              "--vote-pulse-shadow": rgba(0.15),
+            } as React.CSSProperties
+          }
+        />
+      )}
+
       {/* Shipped badge */}
       {isShipped && (
         <div className="absolute top-3 right-3 z-20 flex items-center gap-1 rounded-full border border-brand-emerald/30 bg-brand-emerald/10 px-2.5 py-1 text-sm font-semibold uppercase tracking-wider text-brand-emerald shadow-[0_0_12px_rgba(52,211,153,0.15)]">

@@ -47,9 +47,6 @@ const securityHeaders = [
 ];
 
 const nextConfig: NextConfig = {
-  images: {
-    formats: ["image/avif", "image/webp"],
-  },
   turbopack: {
     root: __dirname,
   },
@@ -57,6 +54,12 @@ const nextConfig: NextConfig = {
     NEXT_PUBLIC_APP_VERSION: pkg.version,
     NEXT_PUBLIC_RELEASE_TITLE: process.env.RELEASE_TITLE ?? "",
     NEXT_PUBLIC_RELEASE_DATE: process.env.RELEASE_DATE ?? "",
+  },
+  // Prefer AVIF, then WebP for `next/image` requests; the browser receives
+  // whichever modern format it advertises support for and falls back to the
+  // source PNG/JPG only when neither is acceptable.
+  images: {
+    formats: ["image/avif", "image/webp"],
   },
   async headers() {
     return [

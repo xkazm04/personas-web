@@ -12,8 +12,20 @@ export function formatCost(usd: number | null): string {
   return `$${usd.toFixed(4)}`;
 }
 
+/**
+ * Normalize blank/whitespace strings to undefined so `??` chains fall through.
+ * Empty `full_name` from partial OAuth profiles otherwise produces an empty avatar.
+ */
+export function nonBlank(value: string | null | undefined): string | undefined {
+  if (value == null) return undefined;
+  const trimmed = value.trim();
+  return trimmed === "" ? undefined : value;
+}
+
 export function relativeTime(iso: string): string {
-  const diff = Date.now() - new Date(iso).getTime();
+  const ts = new Date(iso).getTime();
+  if (!Number.isFinite(ts)) return "-";
+  const diff = Math.max(0, Date.now() - ts);
   const mins = Math.floor(diff / 60_000);
   if (mins < 1) return "just now";
   if (mins < 60) return `${mins}m ago`;

@@ -5,6 +5,9 @@ import LegalContent from "./LegalContent";
 import type { Metadata } from "next";
 import { SITE_URL } from "@/lib/seo";
 
+export const dynamic = "force-static";
+export const revalidate = 86400;
+
 export const metadata: Metadata = {
   title: "Privacy & Terms",
   description:

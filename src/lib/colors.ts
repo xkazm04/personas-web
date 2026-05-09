@@ -31,3 +31,22 @@ export function resolveStageColor(
     edge === "from" ? STAGE_FROM_ALPHA : STAGE_TO_ALPHA,
   );
 }
+
+/**
+ * Parse a #RRGGBB or #RGB hex string into an "r,g,b" triplet for use with
+ * CSS variables consumed via rgba(var(--token), alpha). Returns null on
+ * malformed input so callers can fall back to a brand default.
+ */
+export function hexToRgbTriplet(hex: string | null | undefined): string | null {
+  if (!hex) return null;
+  const cleaned = hex.trim().replace(/^#/, "");
+  const full =
+    cleaned.length === 3
+      ? cleaned.split("").map((c) => c + c).join("")
+      : cleaned;
+  if (full.length !== 6 || !/^[0-9a-fA-F]{6}$/.test(full)) return null;
+  const r = parseInt(full.slice(0, 2), 16);
+  const g = parseInt(full.slice(2, 4), 16);
+  const b = parseInt(full.slice(4, 6), 16);
+  return `${r},${g},${b}`;
+}

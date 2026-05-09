@@ -58,11 +58,34 @@ export const TOOL_CATALOGUE: readonly ToolEntry[] = [
   { id: "trello", name: "Trello", color: "#0052CC" },
 ] as const;
 
+(() => {
+  const ids = TOOL_CATALOGUE.map((t) => t.id);
+  if (new Set(ids).size !== ids.length) {
+    const seen = new Set<string>();
+    const duplicates = ids.filter((id) => (seen.has(id) ? true : (seen.add(id), false)));
+    throw new Error(`TOOL_CATALOGUE contains duplicate ids: ${[...new Set(duplicates)].join(", ")}`);
+  }
+})();
+
 /** Lookup a tool by id */
 export const TOOL_MAP = new Map(TOOL_CATALOGUE.map((t) => [t.id, t]));
 
-/** The first 20 tools — the core set used by FlowComposer */
-export const CORE_TOOLS = TOOL_CATALOGUE.slice(0, 20);
+/** Explicit ids of the core set used by FlowComposer (replaces a magic slice). */
+export const CORE_TOOL_IDS: readonly string[] = [
+  "gmail", "slack", "github", "calendar", "stripe", "jira", "drive", "figma",
+  "webhook", "api", "database", "notify", "docs", "s3", "rss", "auth",
+  "cli", "agent", "plugin", "pubsub",
+] as const;
+
+(() => {
+  const missing = CORE_TOOL_IDS.filter((id) => !TOOL_MAP.has(id));
+  if (missing.length) {
+    throw new Error(`CORE_TOOL_IDS references unknown tool ids: ${missing.join(", ")}`);
+  }
+})();
+
+/** The core set used by FlowComposer, resolved from CORE_TOOL_IDS. */
+export const CORE_TOOLS: readonly ToolEntry[] = CORE_TOOL_IDS.map((id) => TOOL_MAP.get(id)!);
 
 /** All tools including extended integrations — used by EventBusShowcase swarm */
 export const EXTENDED_TOOLS = TOOL_CATALOGUE;

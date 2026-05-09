@@ -5,6 +5,9 @@ import { GUIDE_TOPICS } from "@/data/guide/topics";
 import { templateList as templates } from "@/lib/templates";
 import { BLOG_POSTS } from "@/data/blog";
 
+export const dynamic = "force-static";
+export const revalidate = 86400;
+
 export default function sitemap(): MetadataRoute.Sitemap {
   const now = new Date();
 

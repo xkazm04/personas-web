@@ -1,3 +1,4 @@
+import * as Sentry from "@sentry/nextjs";
 import { useAuthStore } from "@/stores/authStore";
 import { DEVELOPMENT } from "./dev";
 import { mockApi } from "./mockApi";
@@ -37,19 +38,29 @@ export class ApiError extends Error {
   }
 }
 
+export class OrchestratorConfigError extends Error {
+  constructor() {
+    super(
+      "Missing NEXT_PUBLIC_ORCHESTRATOR_URL. Set this env var to the orchestrator's base URL " +
+        "(e.g. https://orchestrator.example.com) in your deployment environment, then redeploy.",
+    );
+    this.name = "OrchestratorConfigError";
+  }
+}
+
+function getOrchestratorBase(): string {
+  const base = process.env.NEXT_PUBLIC_ORCHESTRATOR_URL;
+  if (!base || base.trim() === "") {
+    throw new OrchestratorConfigError();
+  }
+  return base;
+}
+
 // ---------------------------------------------------------------------------
 // Core fetch wrapper
 // ---------------------------------------------------------------------------
 
 const DEFAULT_TIMEOUT_MS = 15_000;
-
-function getOrchestratorBaseUrl(): string {
-  const base = process.env.NEXT_PUBLIC_ORCHESTRATOR_URL;
-  if (!base) {
-    throw new Error("NEXT_PUBLIC_ORCHESTRATOR_URL is not configured");
-  }
-  return base;
-}
 
 async function orchestratorFetch<T>(
   path: string,
@@ -70,7 +81,8 @@ async function orchestratorFetch<T>(
     );
   }
 
-  const url = new URL(path, getOrchestratorBaseUrl());
+  const base = getOrchestratorBase();
+  const url = new URL(path, base);
 
   if (options?.params) {
     for (const [k, v] of Object.entries(options.params)) {
@@ -147,6 +159,10 @@ export interface ApiClient {
   getHealth(): Promise<HealthResponse>;
   getStatus(): Promise<StatusResponse>;
   getObservability(): Promise<{ metrics: ObservabilityMetrics; dailyMetrics: DailyMetric[]; personaSpend: PersonaSpend[]; healthIssues: HealthIssue[] }>;
+  getObservabilityMetrics(): Promise<ObservabilityMetrics>;
+  getObservabilityDaily(): Promise<DailyMetric[]>;
+  getObservabilityPersonaSpend(): Promise<PersonaSpend[]>;
+  getObservabilityHealthIssues(): Promise<HealthIssue[]>;
   getUsageAnalytics(): Promise<{ toolUsage: ToolUsageSummary[]; toolUsageOverTime: ToolUsageOverTime[]; toolUsageByPersona: ToolUsageByPersona[] }>;
 }
 
@@ -236,14 +252,27 @@ const realApi: ApiClient = {
 
       listAllSubscriptions: async () => {
         const personas = await orchestratorFetch<Persona[]>("/api/personas");
-        const results = await Promise.all(
+        const settled = await Promise.allSettled(
           personas.map((p) =>
             orchestratorFetch<PersonaEventSubscription[]>(
               `/api/personas/${p.id}/subscriptions`,
             ),
           ),
         );
-        return results.flat();
+        const fulfilled: PersonaEventSubscription[] = [];
+        for (let i = 0; i < settled.length; i++) {
+          const result = settled[i];
+          if (result.status === "fulfilled") {
+            fulfilled.push(...result.value);
+          } else {
+            const personaId = personas[i]?.id;
+            Sentry.captureException(result.reason, {
+              tags: { scope: "listAllSubscriptions" },
+              contexts: { persona: { id: personaId } },
+            });
+          }
+        }
+        return fulfilled;
       },
 
       createSubscription: (input: {
@@ -283,7 +312,8 @@ const realApi: ApiClient = {
 
       getStatus: () => orchestratorFetch<StatusResponse>("/api/status"),
 
-      // Observability
+      // Observability — full payload (legacy; prefer the field-selected calls
+      // below so the page can stream tiers independently)
       getObservability: () =>
         orchestratorFetch<{
           metrics: ObservabilityMetrics;
@@ -291,6 +321,26 @@ const realApi: ApiClient = {
           personaSpend: PersonaSpend[];
           healthIssues: HealthIssue[];
         }>("/api/observability"),
+
+      getObservabilityMetrics: () =>
+        orchestratorFetch<ObservabilityMetrics>("/api/observability", {
+          params: { fields: "metrics" },
+        }),
+
+      getObservabilityDaily: () =>
+        orchestratorFetch<DailyMetric[]>("/api/observability", {
+          params: { fields: "daily" },
+        }),
+
+      getObservabilityPersonaSpend: () =>
+        orchestratorFetch<PersonaSpend[]>("/api/observability", {
+          params: { fields: "personaSpend" },
+        }),
+
+      getObservabilityHealthIssues: () =>
+        orchestratorFetch<HealthIssue[]>("/api/observability", {
+          params: { fields: "healthIssues" },
+        }),
 
       // Usage analytics
       getUsageAnalytics: () =>

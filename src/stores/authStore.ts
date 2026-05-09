@@ -17,10 +17,12 @@ interface AuthState {
   isSigningIn: boolean;
   isSigningOut: boolean;
   sessionExpired: boolean;
+  error: string | null;
   signInWithGoogle: () => Promise<void>;
   signInAsDemo: () => void;
   signOut: () => Promise<void>;
   initialize: () => (() => void) | undefined;
+  retry: () => void;
   clearSessionExpired: () => void;
 }
 
@@ -34,10 +36,11 @@ export const useAuthStore = create<AuthState>((set, get) => ({
   isSigningIn: false,
   isSigningOut: false,
   sessionExpired: false,
+  error: null,
 
   initialize: () => {
     if (get().initialized) return authSubscriptionCleanup ?? undefined;
-    set({ initialized: true });
+    set({ initialized: true, error: null });
 
     if (DEVELOPMENT) {
       mockInitialize(set);
@@ -49,7 +52,10 @@ export const useAuthStore = create<AuthState>((set, get) => ({
       supabase = getSupabase();
     } catch {
       // Supabase not configured — stay in unauthenticated state
-      set({ isLoading: false });
+      set({
+        error: "Authentication is not configured for this environment.",
+        isLoading: false,
+      });
       return;
     }
 
@@ -80,18 +86,27 @@ export const useAuthStore = create<AuthState>((set, get) => ({
     }
 
     // Validate session with server (updates or clears optimistic state)
-    supabase.auth.getSession().then(({ data: { session } }) => {
-      const wasAuthenticated = get().isAuthenticated;
-      const nowAuthenticated = !!session?.user;
-      set({
-        user: session?.user ?? null,
-        accessToken: session?.access_token ?? null,
-        isAuthenticated: nowAuthenticated,
-        isLoading: false,
-        sessionExpired:
-          wasAuthenticated && !nowAuthenticated && !userSignOutInProgress,
+    supabase.auth
+      .getSession()
+      .then(({ data: { session } }) => {
+        const wasAuthenticated = get().isAuthenticated;
+        const nowAuthenticated = !!session?.user;
+        set({
+          user: session?.user ?? null,
+          accessToken: session?.access_token ?? null,
+          isAuthenticated: nowAuthenticated,
+          isLoading: false,
+          error: null,
+          sessionExpired:
+            wasAuthenticated && !nowAuthenticated && !userSignOutInProgress,
+        });
+      })
+      .catch(() => {
+        set({
+          error: "Could not verify your session. Check your connection and try again.",
+          isLoading: false,
+        });
       });
-    });
 
     // Listen for auth changes (sign-in, sign-out, token refresh)
     const {
@@ -104,6 +119,7 @@ export const useAuthStore = create<AuthState>((set, get) => ({
         accessToken: session?.access_token ?? null,
         isAuthenticated: nowAuthenticated,
         isLoading: false,
+        error: null,
         sessionExpired:
           wasAuthenticated && !nowAuthenticated && !userSignOutInProgress
             ? true
@@ -174,6 +190,12 @@ export const useAuthStore = create<AuthState>((set, get) => ({
     } finally {
       userSignOutInProgress = false;
     }
+  },
+
+  retry: () => {
+    authSubscriptionCleanup?.();
+    set({ initialized: false, isLoading: true, error: null });
+    get().initialize();
   },
 
   clearSessionExpired: () => set({ sessionExpired: false }),

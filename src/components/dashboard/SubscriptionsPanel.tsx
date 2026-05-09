@@ -270,20 +270,41 @@ export default function SubscriptionsPanel() {
     if (personas.length === 0) void fetchPersonas();
   }, [fetchSubscriptions, fetchPersonas, personas.length]);
 
-  // Count matching events per subscription
+  // Build a single index of events bucketed by (eventType, sourceType) so each
+  // subscription resolves its match count in O(1) instead of scanning every
+  // event. Stored as Map<eventType, { total, bySource: Map<sourceType, count> }>
+  // so an unfiltered subscription can read `total` directly while a filtered
+  // one reads from `bySource`.
+  const eventIndex = useMemo(() => {
+    const index = new Map<string, { total: number; bySource: Map<string, number> }>();
+    for (const ev of events) {
+      let bucket = index.get(ev.eventType);
+      if (!bucket) {
+        bucket = { total: 0, bySource: new Map() };
+        index.set(ev.eventType, bucket);
+      }
+      bucket.total++;
+      bucket.bySource.set(ev.sourceType, (bucket.bySource.get(ev.sourceType) ?? 0) + 1);
+    }
+    return index;
+  }, [events]);
+
+  // Count matching events per subscription via the prebuilt index.
   const matchCounts = useMemo(() => {
     const counts = new Map<string, number>();
     for (const sub of subscriptions) {
-      let count = 0;
-      for (const ev of events) {
-        if (ev.eventType !== sub.eventType) continue;
-        if (sub.sourceFilter && ev.sourceType !== sub.sourceFilter) continue;
-        count++;
+      const bucket = eventIndex.get(sub.eventType);
+      if (!bucket) {
+        counts.set(sub.id, 0);
+        continue;
       }
+      const count = sub.sourceFilter
+        ? bucket.bySource.get(sub.sourceFilter) ?? 0
+        : bucket.total;
       counts.set(sub.id, count);
     }
     return counts;
-  }, [subscriptions, events]);
+  }, [subscriptions, eventIndex]);
 
   // Enrich subscriptions with persona info
   const enriched = useMemo(() => {

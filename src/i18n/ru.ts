@@ -297,6 +297,14 @@ export const ru: Translations = {
     toolUtilization: '\u0418\u0441\u043F\u043E\u043B\u044C\u0437\u043E\u0432\u0430\u043D\u0438\u0435 \u0438\u043D\u0441\u0442\u0440\u0443\u043C\u0435\u043D\u0442\u043E\u0432',
     workers: '\u0432\u043E\u0440\u043A\u0435\u0440\u044B',
     usageAnalytics: '\u0410\u043D\u0430\u043B\u0438\u0442\u0438\u043A\u0430 \u0438\u0441\u043F\u043E\u043B\u044C\u0437\u043E\u0432\u0430\u043D\u0438\u044F',
+    errorBoundary: {
+      title: 'Dashboard panel failed to render',
+      description: 'This section hit an unexpected error. You can retry without leaving the page.',
+      retry: 'Retry',
+      errorIdLabel: 'Error ID',
+      copyErrorId: 'Copy error ID',
+      copied: 'Copied',
+    },
     unreadMessages: 'непрочитанных сообщений',
     fleetHealth: 'состояние флота',
     fleet: {

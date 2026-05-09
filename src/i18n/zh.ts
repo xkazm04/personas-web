@@ -297,6 +297,14 @@ export const zh: Translations = {
     toolUtilization: '\u5DE5\u5177\u5229\u7528\u7387',
     workers: '\u5DE5\u4F5C\u8282\u70B9',
     usageAnalytics: '\u7528\u91CF\u5206\u6790',
+    errorBoundary: {
+      title: 'Dashboard panel failed to render',
+      description: 'This section hit an unexpected error. You can retry without leaving the page.',
+      retry: 'Retry',
+      errorIdLabel: 'Error ID',
+      copyErrorId: 'Copy error ID',
+      copied: 'Copied',
+    },
     unreadMessages: '未读消息',
     fleetHealth: '舰队健康',
     fleet: {

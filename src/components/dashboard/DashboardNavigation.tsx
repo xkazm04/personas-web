@@ -1,7 +1,6 @@
 "use client";
 
 import { usePathname } from "next/navigation";
-import { useMemo } from "react";
 import {
   LayoutDashboard,
   Bot,
@@ -52,12 +51,9 @@ export function useNavState() {
   const pathname = usePathname();
   const health = useSystemStore((s) => s.health);
   const pendingReviewCount = useReviewStore((s) => s.pendingReviewCount);
-  const rawExecutions = useExecutionStore((s) => s.rawExecutions);
-
-  const runningCount = useMemo(
-    () => rawExecutions.filter((e) => e.status === "running").length,
-    [rawExecutions],
-  );
+  // Subscribe to the pre-aggregated count; the nav re-renders only when the
+  // count itself changes, not on every unrelated execution-list mutation.
+  const runningCount = useExecutionStore((s) => s.runningCount);
 
   const isConnected = health?.status === "ok";
 

@@ -297,6 +297,14 @@ export const vi: Translations = {
     toolUtilization: 'S\u1eed d\u1ee5ng c\u00f4ng c\u1ee5',
     workers: 'worker',
     usageAnalytics: 'Ph\u00e2n t\u00edch s\u1eed d\u1ee5ng',
+    errorBoundary: {
+      title: 'Dashboard panel failed to render',
+      description: 'This section hit an unexpected error. You can retry without leaving the page.',
+      retry: 'Retry',
+      errorIdLabel: 'Error ID',
+      copyErrorId: 'Copy error ID',
+      copied: 'Copied',
+    },
     unreadMessages: 'tin nhắn chưa đọc',
     fleetHealth: 'sức khỏe đội',
     fleet: {

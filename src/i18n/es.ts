@@ -297,6 +297,14 @@ export const es: Translations = {
     toolUtilization: 'Utilizaci\u00f3n de herramientas',
     workers: 'workers',
     usageAnalytics: 'Anal\u00edticas de Uso',
+    errorBoundary: {
+      title: 'Dashboard panel failed to render',
+      description: 'This section hit an unexpected error. You can retry without leaving the page.',
+      retry: 'Retry',
+      errorIdLabel: 'Error ID',
+      copyErrorId: 'Copy error ID',
+      copied: 'Copied',
+    },
     unreadMessages: 'mensajes sin leer',
     fleetHealth: 'salud de la flota',
     fleet: {

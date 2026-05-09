@@ -297,6 +297,14 @@ export const cs: Translations = {
     toolUtilization: 'Vyu\u017eit\u00ed n\u00e1stroj\u016f',
     workers: 'workery',
     usageAnalytics: 'Analytika vyu\u017eit\u00ed',
+    errorBoundary: {
+      title: 'Dashboard panel failed to render',
+      description: 'This section hit an unexpected error. You can retry without leaving the page.',
+      retry: 'Retry',
+      errorIdLabel: 'Error ID',
+      copyErrorId: 'Copy error ID',
+      copied: 'Copied',
+    },
     unreadMessages: 'nepřečtených zpráv',
     fleetHealth: 'stav flotily',
     fleet: {

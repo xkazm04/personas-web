@@ -6,11 +6,13 @@ import type { Persona } from "@/lib/types";
 import { relativeTime, formatDuration } from "@/lib/format";
 import { loadAgentDetail, useAgentDetail } from "@/lib/dashboard-queries";
 
-export async function prefetchAgentDetail(personaId: string) {
+export async function prefetchAgentDetail(personaId: string): Promise<boolean> {
   try {
     await loadAgentDetail(personaId);
+    return true;
   } catch {
-    // Best effort prefetch.
+    // Best effort prefetch — caller decides whether to retry.
+    return false;
   }
 }
 

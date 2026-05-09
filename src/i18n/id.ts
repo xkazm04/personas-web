@@ -297,6 +297,14 @@ export const id: Translations = {
     toolUtilization: 'Utilisasi alat',
     workers: 'worker',
     usageAnalytics: 'Analitik Penggunaan',
+    errorBoundary: {
+      title: 'Dashboard panel failed to render',
+      description: 'This section hit an unexpected error. You can retry without leaving the page.',
+      retry: 'Retry',
+      errorIdLabel: 'Error ID',
+      copyErrorId: 'Copy error ID',
+      copied: 'Copied',
+    },
     unreadMessages: 'pesan belum dibaca',
     fleetHealth: 'kesehatan armada',
     fleet: {
