@@ -26,7 +26,7 @@ function ExecutionOutput({ executionId }: { executionId: string }) {
   return (
     <div className="space-y-3">
       {/* Metadata */}
-      <div className="flex flex-wrap gap-4 text-xs text-muted-dark">
+      <div className="flex flex-wrap gap-4 text-sm text-muted-dark">
         <span>
           Status: <StatusBadge status={status} />
         </span>
@@ -39,13 +39,13 @@ function ExecutionOutput({ executionId }: { executionId: string }) {
       </div>
 
       {/* Output stream */}
-      <div className="relative mt-2 max-h-80 overflow-auto rounded-xl border border-white/[0.08] bg-background p-4 font-mono text-xs leading-relaxed text-slate-300 shadow-inner">
+      <div className="relative mt-2 max-h-80 overflow-auto rounded-xl border border-glass-hover bg-background p-4 font-mono text-sm leading-relaxed text-slate-300 shadow-inner">
         {/* Decorative terminal header */}
-        <div className="absolute left-0 top-0 flex w-full items-center gap-1.5 bg-white/[0.02] px-3 py-2 border-b border-white/[0.05]">
+        <div className="absolute left-0 top-0 flex w-full items-center gap-1.5 bg-white/[0.02] px-3 py-2 border-b border-glass">
           <div className="h-2 w-2 rounded-full bg-red-500/80"></div>
           <div className="h-2 w-2 rounded-full bg-amber-500/80"></div>
           <div className="h-2 w-2 rounded-full bg-emerald-500/80"></div>
-          <span className="ml-2 text-[10px] text-muted-dark">stdout</span>
+          <span className="ml-2 text-sm text-muted-dark">stdout</span>
         </div>
         <div className="mt-6">
           {output.length === 0 ? (
@@ -57,7 +57,7 @@ function ExecutionOutput({ executionId }: { executionId: string }) {
             <div className="space-y-1">
               {output.map((line, i) => (
                 <div key={i} className="whitespace-pre-wrap break-all text-emerald-400/90">
-                  <span className="mr-2 text-white/20 select-none">{">"}</span>
+                  <span className="mr-2 text-white/60 select-none">{">"}</span>
                   {line}
                 </div>
               ))}
@@ -106,9 +106,10 @@ export default function ExecutionsPage() {
     [filtered, visibleCount],
   );
 
-  useEffect(() => {
+  const handleFilterChange = useCallback((newFilter: string) => {
+    setFilter(newFilter);
     setVisibleCount(INITIAL_VISIBLE_EXECUTIONS);
-  }, [filter]);
+  }, []);
 
   const counts = useMemo(() => {
     const c = { all: executions.length, running: 0, completed: 0, failed: 0, cancelled: 0 };
@@ -145,7 +146,7 @@ export default function ExecutionsPage() {
               color={row.personaColor}
               name={row.personaName}
             />
-            <span className="truncate text-sm text-foreground">
+            <span className="truncate text-base text-foreground">
               {row.personaName ?? row.personaId.slice(0, 8)}
             </span>
           </div>
@@ -162,7 +163,7 @@ export default function ExecutionsPage() {
         header: "Duration",
         className: "w-24 text-right hidden sm:block",
         render: (row: GlobalExecution) => (
-          <span className="font-mono text-xs text-muted tabular-nums">
+          <span className="font-mono text-sm text-muted tabular-nums">
             {formatDuration(row.durationMs)}
           </span>
         ),
@@ -172,7 +173,7 @@ export default function ExecutionsPage() {
         header: "Cost",
         className: "w-20 text-right hidden sm:block",
         render: (row: GlobalExecution) => (
-          <span className="font-mono text-xs text-muted tabular-nums">
+          <span className="font-mono text-sm text-muted tabular-nums">
             {formatCost(row.costUsd)}
           </span>
         ),
@@ -182,7 +183,7 @@ export default function ExecutionsPage() {
         header: "Started",
         className: "w-24 text-right",
         render: (row: GlobalExecution) => (
-          <span className="text-xs text-muted-dark">
+          <span className="text-sm text-muted-dark">
             {relativeTime(row.startedAt ?? row.createdAt)}
           </span>
         ),
@@ -215,7 +216,7 @@ export default function ExecutionsPage() {
         <h1 className="text-2xl font-bold tracking-tight">
           <GradientText variant="silver">Executions</GradientText>
         </h1>
-        <p className="mt-1 text-sm text-muted-dark">
+        <p className="mt-1 text-base text-muted-dark">
           Monitor agent execution runs in real-time
         </p>
       </motion.div>
@@ -226,9 +227,9 @@ export default function ExecutionsPage() {
           className="mb-4 flex items-center gap-3 rounded-xl border border-amber-500/20 bg-amber-500/5 px-4 py-3"
         >
           <AlertTriangle className="h-4 w-4 text-amber-400 flex-shrink-0" />
-          <p className="text-sm text-amber-300">
+          <p className="text-base text-amber-300">
             Failed to refresh executions — showing last known data.{" "}
-            <span className="text-amber-300/60">{executionsError}</span>
+            <span className="text-amber-300/80">{executionsError}</span>
           </p>
         </motion.div>
       )}
@@ -243,7 +244,7 @@ export default function ExecutionsPage() {
             { key: "cancelled", label: "Cancelled", count: counts.cancelled },
           ]}
           active={filter}
-          onChange={setFilter}
+          onChange={handleFilterChange}
         />
         {executionsLoading && (
           <Loader2 className="h-4 w-4 animate-spin text-muted-dark" />
@@ -289,7 +290,7 @@ export default function ExecutionsPage() {
                   Math.min(filtered.length, prev + EXECUTIONS_LOAD_STEP),
                 );
               }}
-              className="rounded-lg border border-white/[0.08] bg-white/[0.03] px-3 py-1.5 text-xs text-muted transition-colors hover:border-white/[0.14] hover:text-foreground"
+              className="rounded-lg border border-glass-hover bg-white/[0.03] px-3 py-1.5 text-sm text-muted transition-colors hover:border-glass-strong hover:text-foreground"
             >
               Load more executions ({visibleExecutions.length}/{filtered.length})
             </button>

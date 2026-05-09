@@ -18,7 +18,7 @@ export interface TrafficChartProps {
 export default function TrafficChart({ chartData }: TrafficChartProps) {
   if (chartData.length === 0) {
     return (
-      <div className="flex items-center justify-center h-64 text-xs text-muted-dark">
+      <div className="flex items-center justify-center h-64 text-sm text-muted-dark">
         No data available yet
       </div>
     );
@@ -74,7 +74,7 @@ export default function TrafficChart({ chartData }: TrafficChartProps) {
       </ResponsiveContainer>
 
       {/* Legend */}
-      <div className="mt-3 flex items-center gap-4 text-[11px] text-muted-dark">
+      <div className="mt-3 flex items-center gap-4 text-sm text-muted-dark">
         <span className="flex items-center gap-1.5">
           <span className="h-2 w-2 rounded-full bg-cyan-400" />
           Executions

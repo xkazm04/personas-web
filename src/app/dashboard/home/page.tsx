@@ -10,6 +10,7 @@ import {
   Bot,
   Activity,
   ArrowUpRight,
+  Mail,
 } from "lucide-react";
 
 const TrafficChart = dynamic(
@@ -18,7 +19,7 @@ const TrafficChart = dynamic(
     ssr: false,
     loading: () => (
       <div className="flex items-center justify-center h-[200px] sm:h-[280px] lg:h-[320px]">
-        <div className="h-4 w-4 animate-spin rounded-full border-2 border-white/10 border-t-brand-cyan" />
+        <div className="h-4 w-4 animate-spin rounded-full border-2 border-glass-hover border-t-brand-cyan" />
       </div>
     ),
   },
@@ -32,6 +33,13 @@ import PersonaAvatar from "@/components/dashboard/PersonaAvatar";
 import SkeletonCard from "@/components/dashboard/SkeletonCard";
 import HealthDigestPanel from "@/components/dashboard/HealthDigestPanel";
 import MemoryActionsPanel from "@/components/dashboard/MemoryActionsPanel";
+import FleetOptimizationCard from "@/components/dashboard/FleetOptimizationCard";
+import StalenessIndicator from "@/components/dashboard/StalenessIndicator";
+import {
+  MOCK_FLEET_RECOMMENDATION,
+  MOCK_GLOBAL_EXECUTIONS,
+  MOCK_UNREAD_MESSAGES,
+} from "@/lib/mock-dashboard-data";
 import { usePersonaStore } from "@/stores/personaStore";
 import { useExecutionStore, useEnrichedExecutions } from "@/stores/executionStore";
 import { useReviewStore } from "@/stores/reviewStore";
@@ -63,6 +71,9 @@ export default function DashboardHomePage() {
   const chartSectionRef = useRef<HTMLDivElement | null>(null);
   const [loadObservability, setLoadObservability] = useState(false);
   const [panelsReady, setPanelsReady] = useState(false);
+  const [observabilityFetchedAt, setObservabilityFetchedAt] = useState<
+    number | null
+  >(null);
 
   const { data: observabilityData } = useSWR(
     loadObservability ? "observability" : null,
@@ -72,9 +83,13 @@ export default function DashboardHomePage() {
       revalidateOnReconnect: false,
       dedupingInterval: 60_000,
       focusThrottleInterval: 60_000,
+      onSuccess: () => setObservabilityFetchedAt(Date.now()),
     },
   );
-  const dailyMetrics = observabilityData?.dailyMetrics ?? [];
+  const dailyMetrics = useMemo(
+    () => observabilityData?.dailyMetrics ?? [],
+    [observabilityData],
+  );
 
   useEffect(() => {
     const target = chartSectionRef.current;
@@ -145,7 +160,7 @@ export default function DashboardHomePage() {
             {getGreeting()}, {displayName}
           </GradientText>
         </h1>
-        <p className="mt-1 text-sm text-muted-dark">
+        <p className="mt-1 text-base text-muted-dark">
           {t.dashboard.agentsStatus}
         </p>
       </motion.div>
@@ -183,6 +198,21 @@ export default function DashboardHomePage() {
           accent="purple"
           href="/dashboard/agents"
         />
+        <StatBadge
+          icon={Mail}
+          label={t.dashboard.unreadMessages}
+          value={MOCK_UNREAD_MESSAGES}
+          accent="rose"
+          href="/dashboard/messages"
+        />
+      </motion.div>
+
+      {/* Fleet optimization — top recommendation */}
+      <motion.div variants={fadeUp} className="mb-6">
+        <FleetOptimizationCard
+          recommendation={MOCK_FLEET_RECOMMENDATION}
+          executionCount={Math.max(stats.total, MOCK_GLOBAL_EXECUTIONS)}
+        />
       </motion.div>
 
       {/* Health Digest + Memory Actions row */}
@@ -210,11 +240,11 @@ export default function DashboardHomePage() {
           <GlowCard accent="cyan" className="p-5 h-full">
             <div className="flex items-center gap-2 mb-4">
               <Activity className="h-4 w-4 text-brand-cyan" />
-              <h2 className="text-sm font-semibold text-foreground">
+              <h2 className="text-base font-semibold text-foreground">
                 {t.dashboard.recentActivity}
               </h2>
               {stats.running > 0 && (
-                <span className="ml-auto flex items-center gap-1.5 rounded-full border border-cyan-500/20 bg-cyan-500/8 px-2 py-0.5 text-[10px] font-medium text-cyan-400">
+                <span className="ml-auto flex items-center gap-1.5 rounded-full border border-cyan-500/20 bg-cyan-500/8 px-2 py-0.5 text-sm font-medium text-cyan-400">
                   <span className="h-1.5 w-1.5 animate-pulse rounded-full bg-cyan-400" />
                   {stats.running} {t.dashboard.running}
                 </span>
@@ -222,7 +252,7 @@ export default function DashboardHomePage() {
             </div>
 
             {recentExecs.length === 0 ? (
-              <p className="text-xs text-muted-dark py-8 text-center">
+              <p className="text-sm text-muted-dark py-8 text-center">
                 {t.dashboard.noExecutionsYet} {t.dashboard.executeToSee}
               </p>
             ) : (
@@ -238,10 +268,10 @@ export default function DashboardHomePage() {
                       name={exec.personaName}
                     />
                     <div className="flex-1 min-w-0">
-                      <p className="text-xs font-medium text-foreground truncate">
+                      <p className="text-sm font-medium text-foreground truncate">
                         {exec.personaName ?? exec.personaId.slice(0, 8)}
                       </p>
-                      <p className="text-[10px] text-muted-dark">
+                      <p className="text-sm text-muted-dark">
                         {relativeTime(exec.startedAt ?? exec.createdAt)}
                         {exec.durationMs && ` · ${(exec.durationMs / 1000).toFixed(1)}s`}
                         {exec.costUsd > 0 && ` · $${exec.costUsd.toFixed(4)}`}
@@ -261,18 +291,21 @@ export default function DashboardHomePage() {
             <div className="flex items-center justify-between mb-4">
               <div className="flex items-center gap-2">
                 <TrendingUp className="h-4 w-4 text-brand-purple" />
-                <h2 className="text-sm font-semibold text-foreground">
+                <h2 className="text-base font-semibold text-foreground">
                   {t.dashboard.trafficErrors}
                 </h2>
               </div>
-              <span className="text-[11px] text-muted-dark">{t.dashboard.last14Days}</span>
+              <div className="flex items-center gap-3">
+                <span className="text-sm text-muted-dark">{t.dashboard.last14Days}</span>
+                <StalenessIndicator fetchedAt={observabilityFetchedAt} />
+              </div>
             </div>
 
             {loadObservability ? (
               <TrafficChart chartData={chartData} />
             ) : (
               <div className="flex items-center justify-center h-[200px] sm:h-[280px] lg:h-[320px]">
-                <div className="h-4 w-4 animate-spin rounded-full border-2 border-white/10 border-t-brand-cyan" />
+                <div className="h-4 w-4 animate-spin rounded-full border-2 border-glass-hover border-t-brand-cyan" />
               </div>
             )}
           </GlowCard>
@@ -284,7 +317,7 @@ export default function DashboardHomePage() {
         {[
           { label: t.dashboard.agents, desc: `${personas.length} ${t.dashboard.deployed}`, icon: Bot, href: "/dashboard/agents", accent: "cyan" as const },
           { label: t.dashboard.observability, desc: t.dashboard.metricsHealth, icon: Activity, href: "/dashboard/observability", accent: "emerald" as const },
-          { label: t.dashboard.usageAnalytics, desc: t.dashboard.toolUtilization, icon: TrendingUp, href: "/dashboard/usage", accent: "purple" as const },
+          { label: t.dashboard.usageAnalytics, desc: t.dashboard.toolUtilization, icon: TrendingUp, href: "/dashboard/observability", accent: "purple" as const },
           { label: t.dashboard.settings, desc: `${health?.workers.total ?? 0} ${t.dashboard.workers}`, icon: Activity, href: "/dashboard/settings", accent: "amber" as const },
         ].map((link) => (
           <Link key={link.href} href={link.href}>
@@ -297,10 +330,10 @@ export default function DashboardHomePage() {
                   <link.icon className="h-4 w-4 text-muted" />
                 </div>
                 <div>
-                  <p className="text-sm font-medium text-foreground">
+                  <p className="text-base font-medium text-foreground">
                     {link.label}
                   </p>
-                  <p className="text-[11px] text-muted-dark">{link.desc}</p>
+                  <p className="text-sm text-muted-dark">{link.desc}</p>
                 </div>
                 <ArrowUpRight className="ml-auto h-4 w-4 text-muted-dark opacity-0 transition-opacity group-hover:opacity-100" />
               </div>

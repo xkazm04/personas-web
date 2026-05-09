@@ -7,15 +7,17 @@ import {
   Zap,
   Radio,
   ClipboardCheck,
-  Terminal,
   Activity,
-  BarChart3,
   Brain,
   Settings,
+  Mail,
+  Shield,
+  Trophy,
 } from "lucide-react";
 import { useSystemStore } from "@/stores/systemStore";
 import { useReviewStore } from "@/stores/reviewStore";
 import { useExecutionStore } from "@/stores/executionStore";
+import { MOCK_UNREAD_MESSAGES } from "@/lib/mock-dashboard-data";
 import DesktopSidebar from "./DesktopSidebar";
 import MobileBottomNav from "./MobileBottomNav";
 import { useTranslation } from "@/i18n/useTranslation";
@@ -26,9 +28,10 @@ export const navItemDefs = [
   { key: "executions", labelKey: "executions" as const, icon: Zap, href: "/dashboard/executions" },
   { key: "events", labelKey: "events" as const, icon: Radio, href: "/dashboard/events" },
   { key: "reviews", labelKey: "reviews" as const, icon: ClipboardCheck, href: "/dashboard/reviews" },
-  { key: "playground", labelKey: "playground" as const, icon: Terminal, href: "/dashboard/playground" },
+  { key: "messages", labelKey: "messages" as const, icon: Mail, href: "/dashboard/messages" },
   { key: "observability", labelKey: "observability" as const, icon: Activity, href: "/dashboard/observability" },
-  { key: "usage", labelKey: "usage" as const, icon: BarChart3, href: "/dashboard/usage" },
+  { key: "leaderboard", labelKey: "leaderboard" as const, icon: Trophy, href: "/dashboard/leaderboard" },
+  { key: "sla", labelKey: "sla" as const, icon: Shield, href: "/dashboard/sla" },
   { key: "knowledge", labelKey: "knowledge" as const, icon: Brain, href: "/dashboard/knowledge" },
   { key: "settings", labelKey: "settings" as const, icon: Settings, href: "/dashboard/settings" },
 ] as const;
@@ -67,6 +70,7 @@ export function useNavState() {
   const getBadge = (item: NavItem) => {
     if (item.key === "reviews" && pendingReviewCount > 0) return pendingReviewCount;
     if (item.key === "executions" && runningCount > 0) return runningCount;
+    if (item.key === "messages" && MOCK_UNREAD_MESSAGES > 0) return MOCK_UNREAD_MESSAGES;
     return null;
   };
 

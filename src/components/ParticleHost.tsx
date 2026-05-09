@@ -226,11 +226,14 @@ export function useParticleLayer(
   },
 ) {
   const renderRef = useRef(render);
-  renderRef.current = render;
   const updateRef = useRef(options?.update);
-  updateRef.current = options?.update;
   const onResizeRef = useRef(options?.onResize);
-  onResizeRef.current = options?.onResize;
+
+  useEffect(() => {
+    renderRef.current = render;
+    updateRef.current = options?.update;
+    onResizeRef.current = options?.onResize;
+  }, [render, options?.update, options?.onResize]);
 
   const enabled = options?.enabled ?? true;
 

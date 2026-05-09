@@ -7,7 +7,7 @@ interface StatBadgeProps {
   icon: React.ElementType;
   label: string;
   value: string | number;
-  accent: "cyan" | "purple" | "emerald" | "amber";
+  accent: "cyan" | "purple" | "emerald" | "amber" | "rose" | "blue";
   href?: string;
 }
 
@@ -16,6 +16,8 @@ const colorMap = {
   purple: "border-purple-500/20 bg-purple-500/8 text-purple-400",
   emerald: "border-emerald-500/20 bg-emerald-500/8 text-emerald-400",
   amber: "border-amber-500/20 bg-amber-500/8 text-amber-400",
+  rose: "border-rose-500/20 bg-rose-500/8 text-rose-400",
+  blue: "border-blue-500/20 bg-blue-500/8 text-blue-400",
 };
 
 export default function StatBadge({ icon: Icon, label, value, accent, href }: StatBadgeProps) {
@@ -26,7 +28,7 @@ export default function StatBadge({ icon: Icon, label, value, accent, href }: St
       <Icon className="h-4 w-4 flex-shrink-0" />
       <div className="flex items-baseline gap-1.5">
         <span className="text-lg font-bold tabular-nums">{value}</span>
-        <span className="text-[11px] text-muted-dark">{label}</span>
+        <span className="text-sm text-muted-dark">{label}</span>
       </div>
       {href && (
         <ArrowUpRight className="ml-auto h-3 w-3 opacity-0 transition-opacity group-hover:opacity-100" />

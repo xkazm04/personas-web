@@ -18,12 +18,10 @@ import {
   BarChart3,
 } from "lucide-react";
 import { fadeUp, staggerContainer } from "@/lib/animations";
-import { type KnowledgePattern } from "@/lib/mock-dashboard-data";
 import {
-  DERIVED_KNOWLEDGE_PATTERNS,
-  relativeFromNow,
-  type DerivedKnowledgePattern,
-} from "./derived";
+  MOCK_KNOWLEDGE_PATTERNS,
+  type KnowledgePattern,
+} from "@/lib/mock-dashboard-data";
 
 // ── Types ────────────────────────────────────────────────────────────
 
@@ -93,6 +91,31 @@ const TYPE_CONFIG: Record<
 };
 
 // ── Helpers ──────────────────────────────────────────────────────────
+
+function relativeTime(iso: string): string {
+  const diff = Date.now() - new Date(iso).getTime();
+  const minutes = Math.floor(diff / 60_000);
+  if (minutes < 1) return "now";
+  if (minutes < 60) return `${minutes}m ago`;
+  const hours = Math.floor(minutes / 60);
+  if (hours < 24) return `${hours}h ago`;
+  return `${Math.floor(hours / 24)}d ago`;
+}
+
+function formatDuration(ms: number): string {
+  if (ms < 1_000) return `${ms}ms`;
+  if (ms < 60_000) return `${(ms / 1_000).toFixed(1)}s`;
+  return `${(ms / 60_000).toFixed(1)}m`;
+}
+
+function formatCost(usd: number): string {
+  return `$${usd.toFixed(3)}`;
+}
+
+function successRate(p: KnowledgePattern): number {
+  const total = p.successCount + p.failureCount;
+  return total > 0 ? p.successCount / total : 0;
+}
 
 function confidenceColor(c: number): string {
   if (c >= 0.7) return "#10b981";
@@ -183,7 +206,7 @@ function SortHeader({
   return (
     <button
       onClick={() => onSort(column.key)}
-      className={`flex items-center gap-1 ${align} ${column.width} px-2 py-2 text-[10px] font-semibold uppercase tracking-wider transition-colors ${
+      className={`flex items-center gap-1 ${align} ${column.width} px-2 py-2 text-sm font-semibold uppercase tracking-wider transition-colors ${
         isActive
           ? "text-foreground"
           : "text-muted-dark hover:text-foreground/70"
@@ -216,17 +239,16 @@ function TableRow({
   pattern,
   index,
   isSelected,
-  nowMs,
   onSelect,
 }: {
-  pattern: DerivedKnowledgePattern;
+  pattern: KnowledgePattern;
   index: number;
   isSelected: boolean;
-  nowMs: number;
-  onSelect: (p: DerivedKnowledgePattern) => void;
+  onSelect: (p: KnowledgePattern) => void;
 }) {
   const config = TYPE_CONFIG[pattern.knowledgeType];
   const Icon = config.icon;
+  const rate = successRate(pattern);
   const confPercent = Math.round(pattern.confidence * 100);
   const confColor = confidenceColor(pattern.confidence);
 
@@ -242,7 +264,7 @@ function TableRow({
         group flex items-center w-full text-left transition-all duration-150
         ${index % 2 === 0 ? "bg-transparent" : "bg-white/[0.015]"}
         ${isSelected ? "bg-white/[0.05] ring-1 ring-cyan-500/20" : "hover:bg-white/[0.04]"}
-        border-b border-white/[0.03]
+        border-b border-glass
       `}
     >
       {/* Type Icon */}
@@ -256,50 +278,50 @@ function TableRow({
 
       {/* Pattern Key */}
       <div className="flex-1 min-w-[140px] px-2 py-2.5">
-        <p className="text-xs font-medium text-foreground truncate">
+        <p className="text-sm font-medium text-foreground truncate">
           {pattern.patternKey}
         </p>
       </div>
 
       {/* Agent */}
       <div className="w-28 px-2 py-2.5">
-        <p className="text-[11px] text-foreground/70 truncate">
+        <p className="text-sm text-foreground/70 truncate">
           {pattern.personaName}
         </p>
       </div>
 
       {/* Success */}
       <div className="w-18 px-2 py-2.5 text-right">
-        <span className="text-xs font-mono font-medium tabular-nums text-emerald-400">
+        <span className="text-sm font-mono font-medium tabular-nums text-emerald-400">
           {pattern.successCount}
         </span>
       </div>
 
       {/* Failures */}
       <div className="w-16 px-2 py-2.5 text-right">
-        <span className="text-xs font-mono font-medium tabular-nums text-rose-400">
+        <span className="text-sm font-mono font-medium tabular-nums text-rose-400">
           {pattern.failureCount}
         </span>
       </div>
 
       {/* Success Rate */}
       <div className="w-16 px-2 py-2.5 text-right">
-        <span className="text-xs font-mono font-medium tabular-nums text-foreground">
-          {(pattern.__successRate * 100).toFixed(0)}%
+        <span className="text-sm font-mono font-medium tabular-nums text-foreground">
+          {(rate * 100).toFixed(0)}%
         </span>
       </div>
 
       {/* Cost */}
       <div className="w-18 px-2 py-2.5 text-right">
-        <span className="text-xs font-mono font-medium tabular-nums text-foreground/70">
-          {pattern.__costFormatted}
+        <span className="text-sm font-mono font-medium tabular-nums text-foreground/70">
+          {formatCost(pattern.avgCostUsd)}
         </span>
       </div>
 
       {/* Duration */}
       <div className="w-20 px-2 py-2.5 text-right">
-        <span className="text-xs font-mono font-medium tabular-nums text-foreground/70">
-          {pattern.__durationFormatted}
+        <span className="text-sm font-mono font-medium tabular-nums text-foreground/70">
+          {formatDuration(pattern.avgDurationMs)}
         </span>
       </div>
 
@@ -315,7 +337,7 @@ function TableRow({
               }}
             />
           </div>
-          <span className="text-[10px] font-mono font-medium tabular-nums text-foreground/60 w-7 text-right">
+          <span className="text-sm font-mono font-medium tabular-nums text-foreground/60 w-7 text-right">
             {confPercent}%
           </span>
         </div>
@@ -323,8 +345,8 @@ function TableRow({
 
       {/* Last Seen */}
       <div className="w-20 px-2 py-2.5 text-right">
-        <span className="text-[11px] font-mono tabular-nums text-muted-dark">
-          {relativeFromNow(nowMs, pattern.__lastSeenMs)}
+        <span className="text-sm font-mono tabular-nums text-muted-dark">
+          {relativeTime(pattern.lastSeen)}
         </span>
       </div>
     </motion.button>
@@ -335,15 +357,14 @@ function TableRow({
 
 function BottomDetailPanel({
   pattern,
-  nowMs,
   onClose,
 }: {
-  pattern: DerivedKnowledgePattern;
-  nowMs: number;
+  pattern: KnowledgePattern;
   onClose: () => void;
 }) {
   const config = TYPE_CONFIG[pattern.knowledgeType];
   const Icon = config.icon;
+  const rate = successRate(pattern);
 
   return (
     <motion.div
@@ -351,7 +372,7 @@ function BottomDetailPanel({
       animate={{ height: "auto", opacity: 1 }}
       exit={{ height: 0, opacity: 0 }}
       transition={{ duration: 0.25, ease: [0.22, 1, 0.36, 1] }}
-      className="overflow-hidden border-t border-white/[0.06] bg-white/[0.02] shrink-0"
+      className="overflow-hidden border-t border-glass bg-white/[0.02] shrink-0"
     >
       <div className="p-3 flex items-start gap-4">
         {/* Left: Identity */}
@@ -362,17 +383,17 @@ function BottomDetailPanel({
             <Icon className={`h-4 w-4 ${config.textColor}`} />
           </div>
           <div>
-            <p className="text-xs font-semibold text-foreground">
+            <p className="text-sm font-semibold text-foreground">
               {pattern.patternKey}
             </p>
-            <p className="text-[10px] text-muted-dark">
+            <p className="text-sm text-muted-dark">
               {pattern.personaName} / {config.label}
             </p>
           </div>
         </div>
 
         {/* Center: Stats */}
-        <div className="flex items-center gap-5 text-xs flex-1">
+        <div className="flex items-center gap-5 text-sm flex-1">
           <div className="flex items-center gap-1.5">
             <CheckCircle2 className="h-3 w-3 text-emerald-400" />
             <span className="font-mono tabular-nums text-foreground">
@@ -390,33 +411,33 @@ function BottomDetailPanel({
           <div className="flex items-center gap-1.5">
             <BarChart3 className="h-3 w-3 text-cyan-400" />
             <span className="font-mono tabular-nums text-foreground">
-              {(pattern.__successRate * 100).toFixed(1)}%
+              {(rate * 100).toFixed(1)}%
             </span>
             <span className="text-muted-dark">rate</span>
           </div>
           <div className="flex items-center gap-1.5">
             <DollarSign className="h-3 w-3 text-amber-400" />
             <span className="font-mono tabular-nums text-foreground">
-              {pattern.__costFormatted}
+              {formatCost(pattern.avgCostUsd)}
             </span>
           </div>
           <div className="flex items-center gap-1.5">
             <Zap className="h-3 w-3 text-purple-400" />
             <span className="font-mono tabular-nums text-foreground">
-              {pattern.__durationFormatted}
+              {formatDuration(pattern.avgDurationMs)}
             </span>
           </div>
           <div className="flex items-center gap-1.5">
             <Clock className="h-3 w-3 text-muted-dark" />
             <span className="font-mono tabular-nums text-muted-dark">
-              {relativeFromNow(nowMs, pattern.__lastSeenMs)}
+              {relativeTime(pattern.lastSeen)}
             </span>
           </div>
         </div>
 
         {/* Right: Description + Close */}
         <div className="flex items-start gap-3 max-w-sm shrink-0">
-          <p className="text-[11px] leading-relaxed text-foreground/60 line-clamp-2">
+          <p className="text-sm leading-relaxed text-foreground/60 line-clamp-2">
             {pattern.description}
           </p>
           <button
@@ -440,11 +461,7 @@ export default function KnowledgeDenseTable() {
     new Set()
   );
   const [selectedPattern, setSelectedPattern] =
-    useState<DerivedKnowledgePattern | null>(null);
-
-  // Freeze "now" once per mount so every row in the same render uses the same
-  // reference point and the labels don't drift between rows.
-  const nowMs = useMemo(() => Date.now(), []);
+    useState<KnowledgePattern | null>(null);
 
   // Toggle type filter
   const toggleTypeFilter = useCallback((type: KnowledgeType) => {
@@ -469,37 +486,34 @@ export default function KnowledgeDenseTable() {
     [sortField]
   );
 
-  // Summary stats — collapsed into a single pass so we don't traverse the
-  // patterns array four times for what's just a sum-and-count.
+  // Summary stats
   const stats = useMemo(() => {
-    const total = DERIVED_KNOWLEDGE_PATTERNS.length;
-    let confSum = 0;
-    let totalSuccess = 0;
-    let totalFailure = 0;
-    let costSum = 0;
-    for (const p of DERIVED_KNOWLEDGE_PATTERNS) {
-      confSum += p.confidence;
-      totalSuccess += p.successCount;
-      totalFailure += p.failureCount;
-      costSum += p.avgCostUsd;
-    }
-    return {
-      total,
-      avgConfidence: total > 0 ? confSum / total : 0,
-      totalSuccess,
-      totalFailure,
-      avgCost: total > 0 ? costSum / total : 0,
-    };
+    const total = MOCK_KNOWLEDGE_PATTERNS.length;
+    const avgConfidence =
+      MOCK_KNOWLEDGE_PATTERNS.reduce((s, p) => s + p.confidence, 0) / total;
+    const totalSuccess = MOCK_KNOWLEDGE_PATTERNS.reduce(
+      (s, p) => s + p.successCount,
+      0
+    );
+    const totalFailure = MOCK_KNOWLEDGE_PATTERNS.reduce(
+      (s, p) => s + p.failureCount,
+      0
+    );
+    const avgCost =
+      MOCK_KNOWLEDGE_PATTERNS.reduce((s, p) => s + p.avgCostUsd, 0) / total;
+    return { total, avgConfidence, totalSuccess, totalFailure, avgCost };
   }, []);
 
-  // Filtered + sorted. Sort comparator now reads precomputed __successRate /
-  // __lastSeenMs fields, eliminating per-comparison Date allocation.
+  // Filtered + sorted
   const sortedPatterns = useMemo(() => {
-    const patterns =
-      typeFilters.size > 0
-        ? DERIVED_KNOWLEDGE_PATTERNS.filter((p) => typeFilters.has(p.knowledgeType))
-        : DERIVED_KNOWLEDGE_PATTERNS.slice();
+    let patterns = [...MOCK_KNOWLEDGE_PATTERNS];
 
+    // Filter
+    if (typeFilters.size > 0) {
+      patterns = patterns.filter((p) => typeFilters.has(p.knowledgeType));
+    }
+
+    // Sort
     const dir = sortDir === "asc" ? 1 : -1;
     patterns.sort((a, b) => {
       switch (sortField) {
@@ -514,7 +528,7 @@ export default function KnowledgeDenseTable() {
         case "failureCount":
           return dir * (a.failureCount - b.failureCount);
         case "successRate":
-          return dir * (a.__successRate - b.__successRate);
+          return dir * (successRate(a) - successRate(b));
         case "avgCostUsd":
           return dir * (a.avgCostUsd - b.avgCostUsd);
         case "avgDurationMs":
@@ -522,7 +536,10 @@ export default function KnowledgeDenseTable() {
         case "confidence":
           return dir * (a.confidence - b.confidence);
         case "lastSeen":
-          return dir * (a.__lastSeenMs - b.__lastSeenMs);
+          return (
+            dir *
+            (new Date(a.lastSeen).getTime() - new Date(b.lastSeen).getTime())
+          );
         default:
           return 0;
       }
@@ -531,7 +548,7 @@ export default function KnowledgeDenseTable() {
     return patterns;
   }, [sortField, sortDir, typeFilters]);
 
-  const handleSelect = (p: DerivedKnowledgePattern) => {
+  const handleSelect = (p: KnowledgePattern) => {
     setSelectedPattern((prev) => (prev?.id === p.id ? null : p));
   };
 
@@ -557,7 +574,7 @@ export default function KnowledgeDenseTable() {
         className="flex items-center gap-4 flex-wrap mb-2 shrink-0"
       >
         {/* Inline stats */}
-        <div className="flex items-center gap-4 text-xs mr-auto">
+        <div className="flex items-center gap-4 text-sm mr-auto">
           <span className="text-muted-dark">
             Patterns{" "}
             <span className="text-foreground font-bold tabular-nums">
@@ -605,7 +622,7 @@ export default function KnowledgeDenseTable() {
                 key={type}
                 onClick={() => toggleTypeFilter(type)}
                 title={cfg.label}
-                className={`flex items-center gap-1 rounded-full px-2.5 py-1 text-[10px] font-medium transition-all duration-200 ${
+                className={`flex items-center gap-1 rounded-full px-2.5 py-1 text-sm font-medium transition-all duration-200 ${
                   active
                     ? `${cfg.bgClass} ${cfg.textColor} ring-1 ring-white/[0.1]`
                     : "text-muted-dark hover:text-foreground/70 hover:bg-white/[0.04]"
@@ -619,7 +636,7 @@ export default function KnowledgeDenseTable() {
           {typeFilters.size > 0 && (
             <button
               onClick={() => setTypeFilters(new Set())}
-              className="text-[10px] text-muted-dark hover:text-foreground/70 px-2 py-1 transition-colors"
+              className="text-sm text-muted-dark hover:text-foreground/70 px-2 py-1 transition-colors"
             >
               Clear
             </button>
@@ -630,10 +647,10 @@ export default function KnowledgeDenseTable() {
       {/* Table Container */}
       <motion.div
         variants={fadeUp}
-        className="flex-1 min-h-0 flex flex-col rounded-xl border border-white/[0.06] overflow-hidden bg-white/[0.01] dot-grid"
+        className="flex-1 min-h-0 flex flex-col rounded-xl border border-glass overflow-hidden bg-white/[0.01] dot-grid"
       >
         {/* Table Header */}
-        <div className="flex items-center border-b border-white/[0.06] bg-white/[0.02] shrink-0">
+        <div className="flex items-center border-b border-glass bg-white/[0.02] shrink-0">
           {COLUMNS.map((col) => (
             <SortHeader
               key={col.key}
@@ -654,14 +671,13 @@ export default function KnowledgeDenseTable() {
                 pattern={pattern}
                 index={i}
                 isSelected={selectedPattern?.id === pattern.id}
-                nowMs={nowMs}
                 onSelect={handleSelect}
               />
             ))}
           </AnimatePresence>
 
           {sortedPatterns.length === 0 && (
-            <div className="flex items-center justify-center py-12 text-sm text-muted-dark">
+            <div className="flex items-center justify-center py-12 text-base text-muted-dark">
               No patterns match current filters
             </div>
           )}
@@ -674,7 +690,6 @@ export default function KnowledgeDenseTable() {
           <BottomDetailPanel
             key={selectedPattern.id}
             pattern={selectedPattern}
-            nowMs={nowMs}
             onClose={() => setSelectedPattern(null)}
           />
         )}

@@ -16,9 +16,20 @@
   /* ── Core palette ───────────────────────────────────────────────────── */
   --background: #0a0a12;
   --foreground: #f0f0f5;
+
+  /* WCAG AA contrast-safe text tokens (min ratios across all 11 themes):
+     --muted-dark       ≥ 7.5:1  — descriptions, secondary body text
+     --muted-foreground ≥ 6.6:1  — tertiary/de-emphasized text
+     --muted            ≥ 4.8:1  — captions, metadata (passes AA normal text)
+     --text-secondary   ≥ 5.5:1  — inactive labels, SVG node names
+     --text-disabled    ≥ 4.5:1  — disabled/locked UI, decorative text at AA floor
+     Prefer these over text-foreground/NN opacity classes which don't adapt
+     per-theme and can dip below thresholds over gradient surfaces. */
   --muted: #d0d0dd;
   --muted-dark: #c0c0d0;
   --muted-foreground: #b4bfcc;
+  --text-secondary: #9098a6;
+  --text-disabled: #787e8a;
 
   /* ── Semantic ────────────────────────────────────────────────────────── */
   --primary: #3b82f6;
@@ -45,6 +56,11 @@
   --glass-bg: rgba(255, 255, 255, 0.02);
   --glass-blur: 12px;
   --glass-border: rgba(255, 255, 255, 0.04);
+
+  /* ── Semantic glass border tiers ───────────────────────────────────── */
+  --border-glass: rgba(255, 255, 255, 0.06);
+  --border-glass-hover: rgba(255, 255, 255, 0.10);
+  --border-glass-strong: rgba(255, 255, 255, 0.12);
 
   /* ── Status (semantic) ─────────────────────────────────────────────── */
   --status-success: #34d399;

@@ -11,6 +11,7 @@ import {
   TWITTER_HANDLE,
 } from "@/lib/seo";
 import ThemeInit from "@/components/ThemeInit";
+import CookieConsent from "@/components/CookieConsent";
 import "./globals.css";
 
 const geistSans = Geist({
@@ -40,14 +41,18 @@ export const metadata: Metadata = {
   keywords: [
     "AI agents",
     "AI automation",
-    "Claude Code",
+    "multi-agent pipelines",
     "agent orchestration",
-    "event bus",
-    "no-code AI",
+    "AI workflow builder",
     "local AI agents",
     "cloud AI agents",
     "natural language automation",
-    "AI workflow",
+    "Claude AI",
+    "OpenAI agents",
+    "self-healing AI",
+    "credential vault",
+    "event bus",
+    "no-code AI",
   ],
   authors: [{ name: SITE_NAME, url: SITE_URL }],
   creator: SITE_NAME,
@@ -93,6 +98,11 @@ export default function RootLayout({
     <html lang="en" className="dark" suppressHydrationWarning>
       <head>
         {/* Random theme applied client-side on mount via ThemeInit */}
+        {/* App Router root layout persists this across pages; the `no-page-custom-font`
+            rule is pages-dir-oriented. Migrating 6 Noto CJK/RTL/Indic families to
+            next/font would bloat every client bundle regardless of active locale,
+            so we keep the single runtime stylesheet request. */}
+        {/* eslint-disable-next-line @next/next/no-page-custom-font */}
         <link
           rel="stylesheet"
           href="https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@300;400;500;600;700&family=Noto+Sans+JP:wght@300;400;500;600;700&family=Noto+Sans+KR:wght@300;400;500;600;700&family=Noto+Sans+Arabic:wght@300;400;500;600;700&family=Noto+Sans+Devanagari:wght@300;400;500;600;700&family=Noto+Sans+Bengali:wght@300;400;500;600;700&display=swap"
@@ -103,7 +113,7 @@ export default function RootLayout({
       >
         <a
           href="#main-content"
-          className="sr-only focus:not-sr-only focus:fixed focus:top-4 focus:left-4 focus:z-[100] focus:rounded-lg focus:bg-brand-cyan/90 focus:px-4 focus:py-2 focus:text-sm focus:font-semibold focus:text-black focus:shadow-lg focus:outline-none"
+          className="sr-only focus:not-sr-only focus:fixed focus:top-4 focus:left-4 focus:z-[100] focus:rounded-lg focus:bg-brand-cyan/90 focus:px-4 focus:py-2 focus:text-base focus:font-semibold focus:text-black focus:shadow-lg focus:outline-none"
         >
           Skip to main content
         </a>
@@ -114,6 +124,7 @@ export default function RootLayout({
             {children}
           </QualityProvider>
         </AuthProvider>
+        <CookieConsent />
       </body>
     </html>
   );

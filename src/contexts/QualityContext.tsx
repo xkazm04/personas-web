@@ -1,6 +1,7 @@
 "use client";
 
 import { createContext, useContext, useEffect, useRef, useState, type ReactNode } from "react";
+import { useReducedMotion } from "framer-motion";
 
 export type QualityTier = "high" | "medium" | "low";
 
@@ -34,6 +35,7 @@ function percentile90(sorted: Float64Array, len: number): number {
 }
 
 export function QualityProvider({ children }: { children: ReactNode }) {
+  const framerReduced = useReducedMotion();
   const [tier, setTier] = useState<QualityTier>("high");
   const [reducedMotion, setReducedMotion] = useState(false);
   const [canHover, setCanHover] = useState(true);
@@ -48,6 +50,7 @@ export function QualityProvider({ children }: { children: ReactNode }) {
   useEffect(() => {
     // Skip measurement in SSR or when reduced-motion is preferred
     if (typeof window === "undefined") return;
+    if (framerReduced) return;
     if (window.matchMedia?.("(prefers-reduced-motion: reduce)").matches) return;
 
     let startTime = 0;
@@ -141,7 +144,7 @@ export function QualityProvider({ children }: { children: ReactNode }) {
       if (fallbackTimer !== undefined) clearTimeout(fallbackTimer);
       cancelAnimationFrame(rafRef.current);
     };
-  }, []);
+  }, [framerReduced]);
 
   useEffect(() => {
     if (typeof window === "undefined" || !window.matchMedia) return;

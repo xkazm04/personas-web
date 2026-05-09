@@ -43,7 +43,7 @@ export default function VoteCard({
     <motion.div
       variants={fadeUp}
       whileHover={{ y: -4, transition: { duration: 0.35, ease: "easeOut" } }}
-      className={`group relative flex flex-col rounded-2xl border border-white/[0.05] bg-gradient-to-b from-white/[0.03] to-transparent backdrop-blur-sm transition-all duration-500 hover:border-white/[0.1] hover:shadow-[0_8px_60px_rgba(0,0,0,0.35)] ${expanded ? "z-20" : "z-0"}`}
+      className={`group relative flex flex-col rounded-2xl border border-glass bg-gradient-to-b from-white/[0.03] to-transparent backdrop-blur-sm transition-all duration-500 hover:border-glass-hover hover:shadow-[0_8px_60px_rgba(0,0,0,0.35)] ${expanded ? "z-20" : "z-0"}`}
     >
       {/* Vote celebration ring — keyed on voteBurst so each upvote restarts the CSS animation */}
       {voteBurst > 0 && (
@@ -63,7 +63,7 @@ export default function VoteCard({
 
       {/* Shipped badge */}
       {isShipped && (
-        <div className="absolute top-3 right-3 z-20 flex items-center gap-1 rounded-full border border-brand-emerald/30 bg-brand-emerald/10 px-2.5 py-1 text-[10px] font-semibold uppercase tracking-wider text-brand-emerald shadow-[0_0_12px_rgba(52,211,153,0.15)]">
+        <div className="absolute top-3 right-3 z-20 flex items-center gap-1 rounded-full border border-brand-emerald/30 bg-brand-emerald/10 px-2.5 py-1 text-sm font-semibold uppercase tracking-wider text-brand-emerald shadow-[0_0_12px_rgba(52,211,153,0.15)]">
           <Rocket className="h-3 w-3" />
           Shipped
         </div>
@@ -149,7 +149,7 @@ export default function VoteCard({
             aria-pressed={voted}
             aria-label={`Vote for ${feature.title}, ${count} votes`}
             disabled={isShipped}
-            className="relative flex items-center gap-1.5 rounded-full border px-3 py-1.5 text-xs font-medium transition-all duration-300 cursor-pointer shrink-0 disabled:cursor-default disabled:opacity-60"
+            className="relative flex items-center gap-1.5 rounded-full border px-3 py-1.5 text-sm font-medium transition-all duration-300 cursor-pointer shrink-0 disabled:cursor-default disabled:opacity-60"
             style={
               isShipped
                 ? {
@@ -193,10 +193,10 @@ export default function VoteCard({
             </AnimatePresence>
           </motion.button>
 
-          <h3 className="text-sm font-semibold leading-tight flex-1 text-center">{feature.title}</h3>
+          <h3 className="text-base font-semibold leading-tight flex-1 text-center">{feature.title}</h3>
 
           <ChevronDown
-            className={`h-4 w-4 text-muted-dark/50 shrink-0 transition-transform duration-300 ${expanded ? "rotate-180" : ""}`}
+            className={`h-4 w-4 text-muted-dark/60 shrink-0 transition-transform duration-300 ${expanded ? "rotate-180" : ""}`}
           />
         </div>
       </div>
@@ -210,25 +210,25 @@ export default function VoteCard({
             exit={{ opacity: 0, scaleY: 0.95 }}
             transition={{ duration: 0.2, ease: "easeOut" }}
             style={{ transformOrigin: "top" }}
-            className="absolute left-0 right-0 bottom-0 translate-y-full z-30 rounded-b-2xl border border-t-0 border-white/[0.08] bg-[var(--bg-secondary,#0d0d12)] backdrop-blur-xl shadow-[0_12px_40px_rgba(0,0,0,0.5)]"
+            className="absolute left-0 right-0 bottom-0 translate-y-full z-30 rounded-b-2xl border border-t-0 border-glass-hover bg-[var(--bg-secondary,#0d0d12)] backdrop-blur-xl shadow-[0_12px_40px_rgba(0,0,0,0.5)]"
           >
             <div className="px-4 py-4">
               <div
                 className="h-px mb-3 opacity-30"
                 style={{ background: `linear-gradient(90deg, transparent, ${rgba(0.15)}, transparent)` }}
               />
-              <p className="text-[13px] leading-relaxed text-muted-dark">
+              <p className="text-sm leading-relaxed text-muted-dark">
                 {feature.description}
               </p>
 
               {isShipped && shippedInfo && (
                 <div className="mt-3 rounded-lg border border-brand-emerald/10 bg-brand-emerald/[0.04] p-3">
                   {voted && (
-                    <p className="text-[11px] font-semibold text-brand-emerald mb-1.5">
+                    <p className="text-sm font-semibold text-brand-emerald mb-1.5">
                       You asked for this — and we built it!
                     </p>
                   )}
-                  <p className="text-[12px] leading-relaxed text-muted-dark">
+                  <p className="text-sm leading-relaxed text-muted-dark">
                     {shippedInfo.changelog}
                   </p>
                   {shippedInfo.link && (
@@ -237,7 +237,7 @@ export default function VoteCard({
                       target="_blank"
                       rel="noopener noreferrer"
                       onClick={(e) => e.stopPropagation()}
-                      className="mt-2 inline-flex items-center gap-1 text-[11px] font-medium text-brand-emerald hover:text-brand-emerald/80 transition-colors"
+                      className="mt-2 inline-flex items-center gap-1 text-sm font-medium text-brand-emerald hover:text-brand-emerald/80 transition-colors"
                     >
                       Try it now
                       <ExternalLink className="h-3 w-3" />
@@ -247,7 +247,7 @@ export default function VoteCard({
               )}
 
               {voted && !isShipped && voterId && (
-                <div className="mt-3 rounded-lg border border-white/[0.04] bg-white/[0.015] px-3 py-2.5">
+                <div className="mt-3 rounded-lg border border-glass bg-white/[0.015] px-3 py-2.5">
                   <NotifyInput
                     featureId={feature.id}
                     voterId={voterId}

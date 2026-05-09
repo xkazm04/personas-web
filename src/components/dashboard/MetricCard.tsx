@@ -18,7 +18,6 @@ export default function MetricCard({
   trendLabel,
   accent,
   sparklineData,
-  trendDirection = "up-good",
 }: {
   icon: React.ElementType;
   label: string;
@@ -27,29 +26,14 @@ export default function MetricCard({
   trendLabel?: string;
   accent: "cyan" | "purple" | "emerald" | "amber";
   sparklineData?: number[];
-  /**
-   * Maps the sign of `trend` to good/bad coloring.
-   * - "up-good" (default): increases are emerald, decreases are red.
-   * - "down-good": flipped, for metrics where lower is better (cost, failures).
-   */
-  trendDirection?: "up-good" | "down-good";
 }) {
-  const isPositive = trend !== undefined && trend >= 0;
-  const isGood =
-    trend === undefined
-      ? false
-      : trendDirection === "up-good"
-        ? isPositive
-        : !isPositive;
-  const trendColor = isGood ? "text-emerald-400" : "text-red-400";
-
   return (
     <GlowCard accent={accent} variants={fadeUp} className="p-5">
       <div className="flex items-center gap-2 mb-3">
         <div className="flex h-8 w-8 items-center justify-center rounded-xl bg-white/[0.04]">
           <Icon className={`h-4 w-4 ${accentMap[accent]}`} />
         </div>
-        <span className="text-xs font-medium text-muted-dark uppercase tracking-wider">
+        <span className="text-sm font-medium text-muted-dark uppercase tracking-wider">
           {label}
         </span>
         {sparklineData && sparklineData.length > 1 && (
@@ -62,14 +46,14 @@ export default function MetricCard({
         {value}
       </p>
       {trend !== undefined && (
-        <div className="mt-2 flex items-center gap-1 text-[11px]">
-          {isPositive ? (
-            <TrendingUp className={`h-3 w-3 ${trendColor}`} />
+        <div className="mt-2 flex items-center gap-1 text-sm">
+          {trend >= 0 ? (
+            <TrendingUp className="h-3 w-3 text-emerald-400" />
           ) : (
-            <TrendingDown className={`h-3 w-3 ${trendColor}`} />
+            <TrendingDown className="h-3 w-3 text-red-400" />
           )}
-          <span className={trendColor}>
-            {isPositive ? "+" : ""}
+          <span className={trend >= 0 ? "text-emerald-400" : "text-red-400"}>
+            {trend >= 0 ? "+" : ""}
             {trend.toFixed(1)}%
           </span>
           {trendLabel && <span className="text-muted-dark">{trendLabel}</span>}

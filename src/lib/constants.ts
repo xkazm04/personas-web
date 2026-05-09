@@ -12,8 +12,10 @@ export interface LandingSection {
 export const LANDING_SECTIONS: LandingSection[] = [
   { id: "hero", label: "Hero" },
   { id: "use-cases", label: "Tools" },
-  { id: "playground-split", label: "Playground" },
-  { id: "vision", label: "Vision" },
+  { id: "playground-split", label: "Agent Mind" },
+  { id: "get-started", label: "Get Started" },
+  { id: "pipelines", label: "Orchestration" },
+  { id: "vision", label: "Platform" },
   { id: "pricing", label: "Compare" },
   { id: "faq", label: "FAQ" },
   { id: "download", label: "Download" },
@@ -24,6 +26,8 @@ export const NAVBAR_SECTIONS = LANDING_SECTIONS.filter((s) => s.navbar !== false
 
 /** Sections shown in the scroll-map dots (scrollMap !== false). */
 export const SCROLL_MAP_SECTIONS = LANDING_SECTIONS.filter((s) => s.scrollMap !== false);
+
+export const COOKIE_CONSENT_KEY = "personas-cookie-consent";
 
 export const CHART_COLORS = [
   "#06b6d4",

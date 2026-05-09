@@ -1,6 +1,7 @@
 "use client";
 
 import * as Sentry from "@sentry/nextjs";
+import Link from "next/link";
 import { useEffect, useState } from "react";
 import { Compass, Home, Activity, RefreshCcw, Copy, Check } from "lucide-react";
 
@@ -121,13 +122,13 @@ export default function GlobalError({
                   <RefreshCcw className="h-4 w-4 transition-transform duration-300 group-hover:rotate-[-90deg]" />
                   Try again
                 </button>
-                <a
+                <Link
                   href="/"
                   className="inline-flex items-center justify-center gap-2 rounded-full border border-white/[0.08] bg-white/[0.03] px-5 py-2.5 text-sm font-medium text-muted transition-all duration-200 hover:border-white/[0.18] hover:bg-white/[0.06] hover:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-cyan/40 focus-visible:ring-offset-2 focus-visible:ring-offset-[#09090b]"
                 >
                   <Home className="h-4 w-4" />
                   Go home
-                </a>
+                </Link>
                 <a
                   href="https://status.personas.ai"
                   target="_blank"

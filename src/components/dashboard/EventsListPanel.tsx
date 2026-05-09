@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState, useMemo, useRef, useCallback, useDeferredValue } from "react";
+import { useEffect, useState, useMemo, useCallback, useDeferredValue } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import {
   Radio,
@@ -15,12 +15,8 @@ import {
   Search,
   X,
   Link2,
-  Zap,
   RotateCcw,
   Inbox,
-  Play,
-  Pause,
-  ArrowUp,
 } from "lucide-react";
 import { fadeUp } from "@/lib/animations";
 import DataTable from "@/components/dashboard/DataTable";
@@ -30,7 +26,7 @@ import StatusBadge from "@/components/dashboard/StatusBadge";
 import PersonaAvatar from "@/components/dashboard/PersonaAvatar";
 import EmptyState from "@/components/dashboard/EmptyState";
 import JsonViewer from "@/components/dashboard/JsonViewer";
-import { useEventStore, MAX_REPLAY_RETRIES, isReplayLocked } from "@/stores/eventStore";
+import { useEventStore } from "@/stores/eventStore";
 import { usePersonaStore } from "@/stores/personaStore";
 import { useEventStream } from "@/hooks/useEventStream";
 import type { PersonaEvent, Persona } from "@/lib/types";
@@ -54,13 +50,13 @@ const eventTypeConfig: Record<string, { icon: React.ElementType; bg: string; bor
   manual_review:      { icon: Hand,    bg: "bg-rose-500/10",   border: "border-rose-500/25",   text: "text-rose-400" },
 };
 
-const defaultEventType = { icon: Radio, bg: "bg-white/[0.04]", border: "border-white/[0.08]", text: "text-muted" };
+const defaultEventType = { icon: Radio, bg: "bg-white/[0.04]", border: "border-glass-hover", text: "text-muted" };
 
 function EventTypeBadge({ eventType }: { eventType: string }) {
   const config = eventTypeConfig[eventType] ?? defaultEventType;
   const Icon = config.icon;
   return (
-    <span className={`inline-flex items-center gap-1.5 rounded-md border ${config.border} ${config.bg} px-2 py-0.5 text-[11px] font-mono ${config.text}`}>
+    <span className={`inline-flex items-center gap-1.5 rounded-md border ${config.border} ${config.bg} px-2 py-0.5 text-sm font-mono ${config.text}`}>
       <Icon className="h-3 w-3" />
       {eventType}
     </span>
@@ -70,7 +66,7 @@ function EventTypeBadge({ eventType }: { eventType: string }) {
 function EventExpandedContent({ event }: { event: PersonaEvent }) {
   return (
     <div className="space-y-3">
-      <div className="flex flex-wrap gap-x-6 gap-y-1 text-xs text-muted-dark">
+      <div className="flex flex-wrap gap-x-6 gap-y-1 text-sm text-muted-dark">
         <span>
           ID: <code className="text-muted">{event.id.slice(0, 12)}...</code>
         </span>
@@ -89,7 +85,7 @@ function EventExpandedContent({ event }: { event: PersonaEvent }) {
       {event.errorMessage && (
         <div className="rounded-xl border border-red-500/20 bg-red-500/5 p-3">
           <div className="flex items-start justify-between gap-3">
-            <p className="text-xs text-red-400">{event.errorMessage}</p>
+            <p className="text-sm text-red-400">{event.errorMessage}</p>
             {event.status === "failed" && (
               <RetryButton event={event} />
             )}
@@ -103,27 +99,13 @@ function EventExpandedContent({ event }: { event: PersonaEvent }) {
 function RetryButton({ event }: { event: PersonaEvent }) {
   const replayEvent = useEventStore((s) => s.replayEvent);
   const replayingIds = useEventStore((s) => s.replayingIds);
-  const retryCounts = useEventStore((s) => s.retryCounts);
   const isReplaying = replayingIds.has(event.id);
-  const locked = isReplayLocked(retryCounts, event.id);
-
-  if (locked) {
-    return (
-      <span
-        className="flex items-center gap-1.5 rounded-lg border border-red-500/25 bg-red-500/10 px-3 py-1.5 text-[11px] font-medium text-red-400 flex-shrink-0"
-        title={`Replay locked: reached the maximum of ${MAX_REPLAY_RETRIES} retries`}
-      >
-        <RotateCcw className="h-3 w-3" />
-        Replay locked
-      </span>
-    );
-  }
 
   return (
     <button
       onClick={() => void replayEvent(event)}
       disabled={isReplaying}
-      className="flex items-center gap-1.5 rounded-lg border border-amber-500/30 bg-amber-500/10 px-3 py-1.5 text-[11px] font-medium text-amber-400 transition-all hover:bg-amber-500/20 disabled:opacity-50 flex-shrink-0"
+      className="flex items-center gap-1.5 rounded-lg border border-amber-500/30 bg-amber-500/10 px-3 py-1.5 text-sm font-medium text-amber-400 transition-all hover:bg-amber-500/20 disabled:opacity-50 flex-shrink-0"
     >
       {isReplaying ? (
         <Loader2 className="h-3 w-3 animate-spin" />
@@ -151,7 +133,7 @@ function DropdownFilter({
       value={value}
       onChange={(e) => onChange(e.target.value)}
       aria-label={label}
-      className="h-10 sm:h-8 rounded-lg border border-white/[0.06] bg-white/[0.03] px-3 sm:px-2 text-sm sm:text-xs text-muted transition-colors hover:border-white/[0.12] focus:border-brand-cyan/30 focus:outline-none focus:ring-1 focus:ring-brand-cyan/20 appearance-none cursor-pointer"
+      className="h-10 sm:h-8 rounded-lg border border-glass bg-white/[0.03] px-3 sm:px-2 text-base sm:text-sm text-muted transition-colors hover:border-glass-strong focus:border-brand-cyan/30 focus:outline-none focus:ring-1 focus:ring-brand-cyan/20 appearance-none cursor-pointer"
     >
       <option value="">{label}</option>
       {options.map((opt) => (
@@ -179,7 +161,6 @@ function buildColumns(
       className: "w-6 flex-shrink-0",
       render: (event) => {
         if (event.status !== "failed") return null;
-        if (isReplayLocked(retryCounts, event.id)) return null;
         const selected = selectedIds.has(event.id);
         return (
           <button
@@ -190,7 +171,7 @@ function buildColumns(
             className={`flex h-4 w-4 items-center justify-center rounded border transition-colors ${
               selected
                 ? "border-brand-cyan bg-brand-cyan/20 text-brand-cyan"
-                : "border-white/[0.15] hover:border-white/[0.3]"
+                : "border-glass-strong hover:border-white/[0.3]"
             }`}
           >
             {selected && <Check className="h-2.5 w-2.5" />}
@@ -255,10 +236,10 @@ function buildColumns(
                     setActiveChain(chain ?? null);
                   }
                 }}
-                className={`flex items-center gap-1 rounded-md px-1.5 py-0.5 text-[10px] font-mono transition-colors ${
+                className={`flex items-center gap-1 rounded-md px-1.5 py-0.5 text-sm font-mono transition-colors ${
                   isInActiveChain
                     ? "bg-brand-cyan/15 text-brand-cyan border border-brand-cyan/25"
-                    : "text-muted-dark/50 hover:text-muted-dark hover:bg-white/[0.04]"
+                    : "text-muted-dark/60 hover:text-muted-dark hover:bg-white/[0.04]"
                 }`}
                 aria-label={`Show ${chainSize} related events`}
               >
@@ -275,7 +256,7 @@ function buildColumns(
       header: "Source",
       className: "w-24 flex-shrink-0 hidden sm:block",
       render: (event) => (
-        <span className="text-xs text-muted-dark">{event.sourceType}</span>
+        <span className="text-sm text-muted-dark">{event.sourceType}</span>
       ),
     },
     {
@@ -291,18 +272,10 @@ function buildColumns(
       render: (event) => {
         const count = retryCounts[event.id];
         if (!count) return null;
-        const locked = count >= MAX_REPLAY_RETRIES;
         return (
-          <span
-            className={`flex items-center gap-0.5 text-[10px] font-mono ${locked ? "text-red-400" : "text-amber-400/70"}`}
-            title={
-              locked
-                ? `Replay locked: ${count}/${MAX_REPLAY_RETRIES} retries used`
-                : `Retried ${count} time${count !== 1 ? "s" : ""}`
-            }
-          >
+          <span className="flex items-center gap-0.5 text-sm font-mono text-amber-400/90" title={`Retried ${count} time${count !== 1 ? "s" : ""}`}>
             <RotateCcw className="h-2.5 w-2.5" />
-            {count}/{MAX_REPLAY_RETRIES}
+            {count}
           </span>
         );
       },
@@ -312,7 +285,7 @@ function buildColumns(
       header: "Time",
       className: "w-16 flex-shrink-0 text-right",
       render: (event) => (
-        <span className="text-xs text-muted-dark">{relativeTime(event.createdAt)}</span>
+        <span className="text-sm text-muted-dark">{relativeTime(event.createdAt)}</span>
       ),
     },
     {
@@ -322,17 +295,12 @@ function buildColumns(
       render: (event) => {
         if (event.status !== "failed") return null;
         const isReplaying = replayingIds.has(event.id);
-        const locked = isReplayLocked(retryCounts, event.id);
         return (
           <button
-            onClick={(e) => { e.stopPropagation(); if (!locked) onReplay(event); }}
-            disabled={isReplaying || locked}
-            title={locked ? `Replay locked: reached ${MAX_REPLAY_RETRIES}-retry limit` : "Retry event"}
-            className={`flex items-center justify-center rounded-md border p-1 transition-all disabled:opacity-50 ${
-              locked
-                ? "border-red-500/30 bg-red-500/10 text-red-400 cursor-not-allowed"
-                : "border-amber-500/30 bg-amber-500/10 text-amber-400 hover:bg-amber-500/20"
-            }`}
+            onClick={(e) => { e.stopPropagation(); onReplay(event); }}
+            disabled={isReplaying}
+            title="Retry event"
+            className="flex items-center justify-center rounded-md border border-amber-500/30 bg-amber-500/10 p-1 text-amber-400 transition-all hover:bg-amber-500/20 disabled:opacity-50"
           >
             {isReplaying ? (
               <Loader2 className="h-3 w-3 animate-spin" />
@@ -364,49 +332,6 @@ export default function EventsListPanel() {
   const [eventTypeFilter, setEventTypeFilter] = useState("");
   const [sourceTypeFilter, setSourceTypeFilter] = useState("");
   const [visibleCount, setVisibleCount] = useState(INITIAL_VISIBLE_EVENTS);
-
-  // Follow-live state: when paused, freeze the visible window at a high water
-  // mark and surface incoming events as a "+N new" pill instead of letting
-  // them shift the row the user is reading.
-  const [followLive, setFollowLive] = useState(true);
-  const [hovered, setHovered] = useState(false);
-  const [expandedEventId, setExpandedEventId] = useState<string | null>(null);
-  const [scrolledBelowTop, setScrolledBelowTop] = useState(false);
-  const [highWaterMarkId, setHighWaterMarkId] = useState<string | null>(null);
-  const isPaused = !followLive || hovered || expandedEventId !== null || scrolledBelowTop;
-
-  useEffect(() => {
-    const onScroll = () => setScrolledBelowTop(window.scrollY > 64);
-    onScroll();
-    window.addEventListener("scroll", onScroll, { passive: true });
-    return () => window.removeEventListener("scroll", onScroll);
-  }, []);
-
-  // While unpaused, snap the high water mark to the latest event so the next
-  // pause starts counting from "now."
-  useEffect(() => {
-    if (isPaused) return;
-    setHighWaterMarkId(events[0]?.id ?? null);
-  }, [events, isPaused]);
-
-  const pendingCount = useMemo(() => {
-    if (!isPaused || !highWaterMarkId) return 0;
-    const idx = events.findIndex((e) => e.id === highWaterMarkId);
-    return idx > 0 ? idx : 0;
-  }, [events, highWaterMarkId, isPaused]);
-
-  const sourceEvents = useMemo(() => {
-    if (!isPaused || pendingCount === 0) return events;
-    return events.slice(pendingCount);
-  }, [events, pendingCount, isPaused]);
-
-  const handleResumeFollow = useCallback(() => {
-    setHighWaterMarkId(events[0]?.id ?? null);
-    setFollowLive(true);
-    if (typeof window !== "undefined") {
-      window.scrollTo({ top: 0, behavior: "smooth" });
-    }
-  }, [events]);
 
   const uniqueSourceTypes = useMemo(
     () => [...new Set(events.map((e) => e.sourceType))].sort(),
@@ -445,7 +370,7 @@ export default function EventsListPanel() {
 
   const filtered = useMemo(() => {
     const q = deferredQuery.toLowerCase().trim();
-    return sourceEvents.filter((e) => {
+    return events.filter((e) => {
       if (filter === "dead_letter") {
         if (e.status !== "failed" || !e.errorMessage) return false;
       } else if (filter !== "all" && e.status !== filter) return false;
@@ -454,7 +379,7 @@ export default function EventsListPanel() {
       if (q && !searchIndex.get(e.id)!.includes(q)) return false;
       return true;
     });
-  }, [sourceEvents, filter, eventTypeFilter, sourceTypeFilter, deferredQuery, searchIndex]);
+  }, [events, filter, eventTypeFilter, sourceTypeFilter, deferredQuery, searchIndex]);
 
   const visibleEvents = useMemo(
     () => filtered.slice(0, visibleCount),
@@ -493,22 +418,20 @@ export default function EventsListPanel() {
   }, []);
 
   const handleBulkRetry = useCallback(async () => {
-    const selected = events.filter(
-      (e) => selectedIds.has(e.id) && e.status === "failed" && !isReplayLocked(retryCounts, e.id),
-    );
+    const selected = events.filter((e) => selectedIds.has(e.id) && e.status === "failed");
     if (selected.length === 0) return;
     setBulkRetrying(true);
     await replayEvents(selected);
     setSelectedIds(new Set());
     setBulkRetrying(false);
-  }, [events, selectedIds, replayEvents, retryCounts]);
+  }, [events, selectedIds, replayEvents]);
 
   useEffect(() => {
-    setSelectedIds(new Set());
+    queueMicrotask(() => setSelectedIds(new Set()));
   }, [filter]);
 
   useEffect(() => {
-    setVisibleCount(INITIAL_VISIBLE_EVENTS);
+    queueMicrotask(() => setVisibleCount(INITIAL_VISIBLE_EVENTS));
   }, [filter, query, eventTypeFilter, sourceTypeFilter]);
 
   const columns = useMemo(
@@ -538,19 +461,19 @@ export default function EventsListPanel() {
       {/* Search bar */}
       <motion.div variants={fadeUp} className="mb-3">
         <div className="relative">
-          <Search className="pointer-events-none absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-dark/50" />
+          <Search className="pointer-events-none absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-dark/60" />
           <input
             type="text"
             value={query}
             onChange={(e) => setQuery(e.target.value)}
             placeholder="Search payloads, event types, sources, errors..."
-            className="w-full rounded-xl border border-white/[0.06] bg-white/[0.03] py-2 pl-9 pr-9 text-sm text-foreground placeholder:text-muted-dark/40 transition-colors focus:border-brand-cyan/30 focus:outline-none focus:ring-1 focus:ring-brand-cyan/20"
+            className="w-full rounded-xl border border-glass bg-white/[0.03] py-2 pl-9 pr-9 text-base text-foreground placeholder:text-muted-dark/60 transition-colors focus:border-brand-cyan/30 focus:outline-none focus:ring-1 focus:ring-brand-cyan/20"
           />
           {query && (
             <button
               onClick={() => setQuery("")}
               aria-label="Clear search"
-              className="absolute right-2.5 top-1/2 -translate-y-1/2 rounded p-0.5 text-muted-dark/50 transition-colors hover:text-foreground"
+              className="absolute right-2.5 top-1/2 -translate-y-1/2 rounded p-0.5 text-muted-dark/60 transition-colors hover:text-foreground"
             >
               <X className="h-3.5 w-3.5" />
             </button>
@@ -590,7 +513,7 @@ export default function EventsListPanel() {
         {hasActiveFilters && (
           <button
             onClick={() => { setQuery(""); setEventTypeFilter(""); setSourceTypeFilter(""); setFilter("all"); }}
-            className="flex items-center gap-1 rounded-lg border border-white/[0.06] bg-white/[0.03] px-2.5 py-1.5 text-[11px] text-muted-dark transition-colors hover:border-white/[0.12] hover:text-foreground"
+            className="flex items-center gap-1 rounded-lg border border-glass bg-white/[0.03] px-2.5 py-1.5 text-sm text-muted-dark transition-colors hover:border-glass-strong hover:text-foreground"
           >
             <X className="h-3 w-3" />
             Clear filters
@@ -600,7 +523,7 @@ export default function EventsListPanel() {
         {activeChain && (
           <button
             onClick={() => setActiveChain(null)}
-            className="flex items-center gap-1 rounded-lg border border-brand-cyan/20 bg-brand-cyan/5 px-2.5 py-1.5 text-[11px] text-brand-cyan transition-colors hover:border-brand-cyan/30 hover:bg-brand-cyan/10"
+            className="flex items-center gap-1 rounded-lg border border-brand-cyan/20 bg-brand-cyan/5 px-2.5 py-1.5 text-sm text-brand-cyan transition-colors hover:border-brand-cyan/30 hover:bg-brand-cyan/10"
           >
             <Link2 className="h-3 w-3" />
             Chain: {activeChain.size} events
@@ -609,22 +532,8 @@ export default function EventsListPanel() {
         )}
 
         <div className="ml-auto flex items-center gap-2">
-          <button
-            type="button"
-            onClick={() => setFollowLive((v) => !v)}
-            aria-pressed={followLive}
-            title={followLive ? "Pause live updates" : "Resume live updates"}
-            className={`flex items-center gap-1.5 rounded-lg border px-2.5 py-1.5 text-[11px] font-medium transition-colors ${
-              followLive
-                ? "border-emerald-500/25 bg-emerald-500/10 text-emerald-300 hover:bg-emerald-500/15"
-                : "border-amber-500/25 bg-amber-500/10 text-amber-300 hover:bg-amber-500/15"
-            }`}
-          >
-            {followLive ? <Play className="h-3 w-3" /> : <Pause className="h-3 w-3" />}
-            Follow live
-          </button>
           {hasActiveFilters && (
-            <span className="text-xs text-muted-dark tabular-nums">
+            <span className="text-sm text-muted-dark tabular-nums">
               {filtered.length} result{filtered.length !== 1 ? "s" : ""}
             </span>
           )}
@@ -634,34 +543,12 @@ export default function EventsListPanel() {
         </div>
       </motion.div>
 
-      <motion.div
-        variants={fadeUp}
-        className="relative"
-        onMouseEnter={() => setHovered(true)}
-        onMouseLeave={() => setHovered(false)}
-      >
-        <AnimatePresence>
-          {pendingCount > 0 && (
-            <motion.button
-              type="button"
-              initial={{ opacity: 0, y: -8 }}
-              animate={{ opacity: 1, y: 0 }}
-              exit={{ opacity: 0, y: -8 }}
-              transition={{ duration: 0.15 }}
-              onClick={handleResumeFollow}
-              className="sticky top-2 z-30 mx-auto mb-2 flex items-center gap-2 rounded-full border border-brand-cyan/30 bg-brand-cyan/15 px-3.5 py-1.5 text-[11px] font-semibold text-brand-cyan shadow-lg shadow-brand-cyan/10 backdrop-blur-md transition-colors hover:bg-brand-cyan/25"
-            >
-              <ArrowUp className="h-3 w-3" />
-              {pendingCount} new event{pendingCount !== 1 ? "s" : ""} — click to load
-            </motion.button>
-          )}
-        </AnimatePresence>
+      <motion.div variants={fadeUp}>
         <DataTable<PersonaEvent>
           columns={columns}
           data={visibleEvents}
           keyExtractor={(e) => e.id}
           expandable={expandableRenderer}
-          onExpandedChange={setExpandedEventId}
           rowClassName={rowClassName}
           emptyState={
             filter === "dead_letter" ? (
@@ -688,7 +575,7 @@ export default function EventsListPanel() {
             onClick={() => {
               setVisibleCount((prev) => Math.min(filtered.length, prev + EVENTS_LOAD_STEP));
             }}
-            className="rounded-lg border border-white/[0.08] bg-white/[0.03] px-3 py-1.5 text-xs text-muted transition-colors hover:border-white/[0.14] hover:text-foreground"
+            className="rounded-lg border border-glass-hover bg-white/[0.03] px-3 py-1.5 text-sm text-muted transition-colors hover:border-glass-strong hover:text-foreground"
           >
             Load more events ({visibleEvents.length}/{filtered.length})
           </button>
@@ -702,29 +589,25 @@ export default function EventsListPanel() {
             initial={{ y: 100, opacity: 0 }}
             animate={{ y: 0, opacity: 1 }}
             exit={{ y: 100, opacity: 0 }}
-            className="fixed inset-x-0 bottom-0 z-50 border-t border-white/[0.08] bg-background/95 backdrop-blur-xl pb-safe"
+            className="fixed inset-x-0 bottom-0 z-50 border-t border-glass-hover bg-background/95 backdrop-blur-xl pb-safe"
           >
             <div className="mx-auto flex max-w-7xl items-center justify-between gap-2 px-4 py-3 sm:px-6">
               <div className="flex items-center gap-3">
-                <span className="text-sm text-foreground">
+                <span className="text-base text-foreground">
                   {selectedIds.size} failed event{selectedIds.size !== 1 ? "s" : ""} selected
                 </span>
                 <button
                   onClick={() => {
-                    const failedIds = new Set(
-                      visibleEvents
-                        .filter((e) => e.status === "failed" && !isReplayLocked(retryCounts, e.id))
-                        .map((e) => e.id),
-                    );
+                    const failedIds = new Set(visibleEvents.filter((e) => e.status === "failed").map((e) => e.id));
                     setSelectedIds(failedIds);
                   }}
-                  className="text-xs text-brand-cyan hover:underline"
+                  className="text-sm text-brand-cyan hover:underline"
                 >
                   Select all failed
                 </button>
                 <button
                   onClick={() => setSelectedIds(new Set())}
-                  className="text-xs text-muted-dark hover:text-muted"
+                  className="text-sm text-muted-dark hover:text-muted"
                 >
                   Clear
                 </button>
@@ -732,7 +615,7 @@ export default function EventsListPanel() {
               <button
                 onClick={() => void handleBulkRetry()}
                 disabled={bulkRetrying}
-                className="flex items-center gap-1.5 rounded-lg border border-amber-500/30 bg-amber-500/10 px-4 py-2 text-xs font-medium text-amber-400 transition-all hover:bg-amber-500/20 disabled:opacity-50"
+                className="flex items-center gap-1.5 rounded-lg border border-amber-500/30 bg-amber-500/10 px-4 py-2 text-sm font-medium text-amber-400 transition-all hover:bg-amber-500/20 disabled:opacity-50"
               >
                 {bulkRetrying ? (
                   <Loader2 className="h-3.5 w-3.5 animate-spin" />

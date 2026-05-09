@@ -6,7 +6,7 @@ export const SITE_URL =
 export const SITE_NAME = "Personas";
 
 export const SITE_DESCRIPTION =
-  "Build intelligent AI agents in natural language. Orchestrate them locally or in the cloud. No workflow diagrams. No code.";
+  "Build and orchestrate multi-agent AI pipelines locally or in the cloud. Multi-provider AI, AES-256 encrypted credential vault, self-healing execution, and 40+ integrations — no code required.";
 
 export const SITE_LOCALE = "en_US";
 

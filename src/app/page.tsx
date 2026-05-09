@@ -7,17 +7,17 @@ import Footer from "@/components/sections/Footer";
 import {
   LazyDownloadCTA,
   LazyFAQ,
-  LazyMidPageCTA,
+  LazyPipelineShowcase,
   LazyPricing,
   LazyUseCases,
   LazyVision,
   LazyPlaygroundSplit,
+  LazyGetStarted,
 } from "@/components/sections/lazy";
 import StageSection from "@/components/StageSection";
 import SectionDivider from "@/components/SectionDivider";
 import PageShell from "@/components/PageShell";
 import { SCROLL_MAP_SECTIONS } from "@/lib/constants";
-import { PRICING_TIERS } from "@/data/pricing";
 import { SectionObserverProvider } from "@/contexts/SectionObserverContext";
 
 const scrollMapItems = SCROLL_MAP_SECTIONS.map((s) => ({
@@ -47,12 +47,23 @@ const softwareJsonLd = {
   applicationCategory: "DeveloperApplication",
   operatingSystem: "macOS, Windows, Linux",
   description:
-    "Build intelligent AI agents in natural language. Orchestrate them locally or in the cloud. No workflow diagrams. No code.",
+    "Build and orchestrate multi-agent AI pipelines locally or in the cloud. Multi-provider AI, AES-256 encrypted credential vault, self-healing execution, and 40+ integrations — no code required.",
   offers: {
     "@type": "Offer",
     price: "0",
     priceCurrency: "USD",
   },
+  featureList: [
+    "Multi-agent visual pipeline builder",
+    "AES-256-GCM encrypted credential vault with OS keyring",
+    "Multi-provider AI: Claude and Ollama",
+    "Self-healing execution with automatic recovery",
+    "Evolutionary prompt optimization (Genome system)",
+    "40+ built-in integrations (Slack, GitHub, Jira, Notion, etc.)",
+    "6 trigger types: schedule, webhook, clipboard, file watcher, chain, event",
+    "Real-time event bus and observability dashboard",
+    "Local-first architecture with optional cloud deployment",
+  ],
 };
 
 const faqJsonLd = {
@@ -110,50 +121,6 @@ const faqJsonLd = {
   ],
 };
 
-/**
- * Extract a Schema.org-valid numeric price from any tier price string.
- * "$0", "$20/mo", "From $99", "€20" all resolve to the first numeric run;
- * "Custom" or anything without digits returns null so the Offer falls back
- * to a PriceSpecification instead of emitting an invalid `price` field.
- */
-function extractNumericPrice(price: string): string | null {
-  if (price === "Custom") return null;
-  return price.match(/[0-9]+(?:\.[0-9]+)?/)?.[0] ?? null;
-}
-
-const pricingJsonLd = {
-  "@context": "https://schema.org",
-  "@type": "WebPage",
-  mainEntity: {
-    "@type": "ItemList",
-    itemListElement: PRICING_TIERS.map((tier, i) => {
-      const numericPrice = extractNumericPrice(tier.price);
-      return {
-        "@type": "ListItem",
-        position: i + 1,
-        item: {
-          "@type": "Product",
-          name: `Personas ${tier.name}`,
-          description: tier.bestFor,
-          offers: {
-            "@type": "Offer",
-            ...(numericPrice !== null
-              ? { price: numericPrice, priceCurrency: "USD" }
-              : { priceSpecification: { "@type": "PriceSpecification", name: "Custom pricing" } }),
-          },
-        },
-      };
-    }),
-  },
-};
-
-// Pre-stringify schema.org blobs at module-eval time so we don't redo
-// JSON.stringify on every server render and client hydration.
-const ORG_JSONLD_STR = JSON.stringify(organizationJsonLd);
-const SOFTWARE_JSONLD_STR = JSON.stringify(softwareJsonLd);
-const FAQ_JSONLD_STR = JSON.stringify(faqJsonLd);
-const PRICING_JSONLD_STR = JSON.stringify(pricingJsonLd);
-
 interface SectionConfig {
   Component: ComponentType;
   glow: "cyan" | "purple" | "emerald";
@@ -165,12 +132,14 @@ interface SectionConfig {
 }
 
 const sections: SectionConfig[] = [
-  { Component: LazyUseCases,        glow: "emerald", fromColor: "cyan",    toColor: "emerald", dividerFrom: "cyan",    dividerTo: "emerald" },
-  { Component: LazyPlaygroundSplit, glow: "cyan",    fromColor: "emerald", toColor: "cyan",    dividerFrom: "emerald", dividerTo: "cyan" },
-  { Component: LazyVision,         glow: "purple",  fromColor: "cyan",    toColor: "purple",  dividerFrom: "cyan",    dividerTo: "purple", wrapperId: "vision" },
-  { Component: LazyPricing,        glow: "purple",  fromColor: "purple",  toColor: "purple",  dividerFrom: "purple",  dividerTo: "purple", wrapperId: "pricing" },
-  { Component: LazyFAQ,            glow: "cyan",    fromColor: "purple",  toColor: "cyan",    dividerFrom: "purple",  dividerTo: "cyan" },
-  { Component: LazyDownloadCTA,    glow: "cyan",    fromColor: "cyan",                        dividerFrom: "cyan",    dividerTo: "cyan" },
+  { Component: LazyUseCases,           glow: "emerald", fromColor: "cyan",    toColor: "emerald", dividerFrom: "cyan",    dividerTo: "emerald" },
+  { Component: LazyPlaygroundSplit,    glow: "cyan",    fromColor: "emerald", toColor: "cyan",    dividerFrom: "emerald", dividerTo: "cyan" },
+  { Component: LazyGetStarted,         glow: "emerald", fromColor: "cyan",    toColor: "emerald", dividerFrom: "cyan",    dividerTo: "emerald", wrapperId: "get-started" },
+  { Component: LazyPipelineShowcase,   glow: "cyan",    fromColor: "emerald", toColor: "cyan",    dividerFrom: "emerald", dividerTo: "cyan",    wrapperId: "pipelines" },
+  { Component: LazyVision,            glow: "purple",  fromColor: "cyan",    toColor: "purple",  dividerFrom: "cyan",    dividerTo: "purple", wrapperId: "vision" },
+  { Component: LazyPricing,           glow: "purple",  fromColor: "purple",  toColor: "purple",  dividerFrom: "purple",  dividerTo: "purple", wrapperId: "pricing" },
+  { Component: LazyFAQ,               glow: "cyan",    fromColor: "purple",  toColor: "cyan",    dividerFrom: "purple",  dividerTo: "cyan" },
+  { Component: LazyDownloadCTA,        glow: "cyan",    fromColor: "cyan",                        dividerFrom: "cyan",    dividerTo: "cyan" },
 ];
 
 export default function Home() {
@@ -195,19 +164,15 @@ export default function Home() {
       <Navbar />
       <script
         type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: ORG_JSONLD_STR }}
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(organizationJsonLd) }}
       />
       <script
         type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: SOFTWARE_JSONLD_STR }}
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(softwareJsonLd) }}
       />
       <script
         type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: FAQ_JSONLD_STR }}
-      />
-      <script
-        type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: PRICING_JSONLD_STR }}
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(faqJsonLd) }}
       />
       <PageShell scrollMapItems={scrollMapItems}>
 
@@ -229,8 +194,6 @@ export default function Home() {
             </div>
           );
         })}
-
-        <LazyMidPageCTA />
       </PageShell>
       <Footer />
     </SectionObserverProvider>

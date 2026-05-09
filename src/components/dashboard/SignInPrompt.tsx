@@ -1,8 +1,7 @@
 "use client";
 
 import { motion } from "framer-motion";
-import { useShallow } from "zustand/react/shallow";
-import { LogIn, FlaskConical } from "lucide-react";
+import { LogIn, FlaskConical, Loader2 } from "lucide-react";
 import { fadeUp, staggerContainer } from "@/lib/animations";
 import GradientText from "@/components/GradientText";
 import AuthLayout from "@/components/dashboard/AuthLayout";
@@ -10,12 +9,9 @@ import { useAuthStore } from "@/stores/authStore";
 import { DEVELOPMENT } from "@/lib/dev";
 
 export default function SignInPrompt() {
-  const { signInWithGoogle, signInAsDemo } = useAuthStore(
-    useShallow((s) => ({
-      signInWithGoogle: s.signInWithGoogle,
-      signInAsDemo: s.signInAsDemo,
-    })),
-  );
+  const signInWithGoogle = useAuthStore((s) => s.signInWithGoogle);
+  const signInAsDemo = useAuthStore((s) => s.signInAsDemo);
+  const isSigningIn = useAuthStore((s) => s.isSigningIn);
 
   return (
     <AuthLayout>
@@ -29,11 +25,9 @@ export default function SignInPrompt() {
         {DEVELOPMENT && (
           <motion.div
             variants={fadeUp}
-            role="status"
-            aria-live="polite"
-            className="mb-4 flex items-center justify-center gap-2 rounded-xl border border-amber-500/20 bg-amber-500/5 px-4 py-2.5 text-xs text-amber-400"
+            className="mb-4 flex items-center justify-center gap-2 rounded-xl border border-amber-500/20 bg-amber-500/5 px-4 py-2.5 text-sm text-amber-400"
           >
-            <FlaskConical className="h-3.5 w-3.5" aria-hidden="true" />
+            <FlaskConical className="h-3.5 w-3.5" />
             <span>Development Mode — using mock data</span>
           </motion.div>
         )}
@@ -41,7 +35,7 @@ export default function SignInPrompt() {
         {/* Card */}
         <motion.div
           variants={fadeUp}
-          className="relative overflow-hidden rounded-2xl border border-white/[0.06] bg-white/[0.03] p-8 backdrop-blur-xl"
+          className="relative overflow-hidden rounded-2xl border border-glass bg-white/[0.03] p-8 backdrop-blur-xl"
         >
           {/* Top shine */}
           <div className="pointer-events-none absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-white/[0.06] to-transparent" />
@@ -60,7 +54,7 @@ export default function SignInPrompt() {
               <GradientText variant="silver">Dashboard</GradientText>
             </h1>
 
-            <p className="mt-3 text-sm text-muted-dark leading-relaxed">
+            <p className="mt-3 text-base text-muted-dark leading-relaxed">
               {DEVELOPMENT
                 ? "Click below to enter the dashboard with example data and explore the UI."
                 : "Monitor your cloud agents, review executions, and manage events from one place."}
@@ -69,25 +63,26 @@ export default function SignInPrompt() {
             {/* Sign-In Button */}
             <button
               onClick={signInWithGoogle}
-              className="group relative z-10 mt-8 flex w-full items-center justify-center gap-3 overflow-hidden rounded-full border border-brand-cyan/25 bg-brand-cyan/8 px-6 py-3.5 text-sm font-semibold text-brand-cyan transition-all duration-300 hover:border-brand-cyan/40 hover:bg-brand-cyan/15 hover:shadow-[0_0_30px_rgba(6,182,212,0.15)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-cyan/60 focus-visible:ring-offset-2 focus-visible:ring-offset-[var(--background)]"
+              disabled={isSigningIn}
+              className="group relative mt-8 flex w-full items-center justify-center gap-3 overflow-hidden rounded-full border border-brand-cyan/25 bg-brand-cyan/8 px-6 py-3.5 text-base font-semibold text-brand-cyan transition-all duration-300 hover:border-brand-cyan/40 hover:bg-brand-cyan/15 hover:shadow-[0_0_30px_rgba(6,182,212,0.15)] disabled:opacity-60 disabled:pointer-events-none"
             >
               <div className="absolute inset-0 bg-gradient-to-r from-transparent via-brand-cyan/10 to-transparent 
                 motion-safe:-translate-x-full motion-safe:transition-transform motion-safe:duration-700 motion-safe:group-hover:translate-x-full
                 motion-reduce:opacity-0 motion-reduce:group-hover:opacity-100 motion-reduce:transition-opacity motion-reduce:duration-300" 
               />
-              {DEVELOPMENT ? (
+              {isSigningIn ? (
+                <>
+                  <Loader2 className="relative h-5 w-5 animate-spin" />
+                  <span className="relative">Signing in…</span>
+                </>
+              ) : DEVELOPMENT ? (
                 <>
                   <FlaskConical className="relative h-5 w-5" />
                   <span className="relative">Enter Demo Dashboard</span>
                 </>
               ) : (
                 <>
-                  <svg
-                    className="relative h-5 w-5"
-                    viewBox="0 0 24 24"
-                    role="img"
-                    aria-label="Google logo"
-                  >
+                  <svg className="relative h-5 w-5" viewBox="0 0 24 24">
                     <path
                       fill="currentColor"
                       d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92a5.06 5.06 0 0 1-2.2 3.32v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.1z"
@@ -116,14 +111,14 @@ export default function SignInPrompt() {
             {!DEVELOPMENT && (
               <button
                 onClick={signInAsDemo}
-                className="group relative z-10 mt-3 flex w-full items-center justify-center gap-2 overflow-hidden rounded-full border border-white/[0.08] bg-white/[0.03] px-6 py-3 text-sm font-medium text-muted-dark transition-all duration-300 hover:border-white/[0.15] hover:bg-white/[0.06] hover:text-foreground/80 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-cyan/60 focus-visible:ring-offset-2 focus-visible:ring-offset-[var(--background)]"
+                className="group relative mt-3 flex w-full items-center justify-center gap-2 overflow-hidden rounded-full border border-glass-hover bg-white/[0.03] px-6 py-3 text-base font-medium text-muted-dark transition-all duration-300 hover:border-glass-strong hover:bg-white/[0.06] hover:text-foreground/80"
               >
                 <FlaskConical className="relative h-4 w-4" />
                 <span className="relative">Try Demo</span>
               </button>
             )}
 
-            <p className="mt-4 text-[11px] text-muted-dark/60">
+            <p className="mt-4 text-sm text-muted-dark/60">
               {DEVELOPMENT
                 ? "No authentication required in development mode"
                 : "Secured by Supabase Authentication"}

@@ -3,7 +3,6 @@
 import { useEffect } from "react";
 import Image from "next/image";
 import { motion } from "framer-motion";
-import { useShallow } from "zustand/react/shallow";
 import {
   Settings,
   User,
@@ -12,6 +11,7 @@ import {
   Wifi,
   WifiOff,
   LogOut,
+  Loader2,
 } from "lucide-react";
 import { fadeUp, staggerContainer } from "@/lib/animations";
 import GradientText from "@/components/GradientText";
@@ -19,16 +19,12 @@ import GlowCard from "@/components/GlowCard";
 import { useAuthStore } from "@/stores/authStore";
 import { useSystemStore } from "@/stores/systemStore";
 import { useTranslation } from "@/i18n/useTranslation";
-import { nonBlank } from "@/lib/format";
 
 export default function SettingsPage() {
-  const { user, signOut, isDemo } = useAuthStore(
-    useShallow((s) => ({
-      user: s.user,
-      signOut: s.signOut,
-      isDemo: s.isDemo,
-    })),
-  );
+  const user = useAuthStore((s) => s.user);
+  const signOut = useAuthStore((s) => s.signOut);
+  const isDemo = useAuthStore((s) => s.isDemo);
+  const isSigningOut = useAuthStore((s) => s.isSigningOut);
   const health = useSystemStore((s) => s.health);
   const status = useSystemStore((s) => s.status);
   const fetchStatus = useSystemStore((s) => s.fetchStatus);
@@ -40,9 +36,9 @@ export default function SettingsPage() {
     void fetchHealth();
   }, [fetchStatus, fetchHealth]);
 
-  const avatarUrl = nonBlank(user?.user_metadata?.avatar_url);
-  const displayName = nonBlank(user?.user_metadata?.full_name) ?? "User";
-  const email = nonBlank(user?.email) ?? "-";
+  const avatarUrl = user?.user_metadata?.avatar_url;
+  const displayName = user?.user_metadata?.full_name ?? "User";
+  const email = user?.email ?? "-";
   const isConnected = health?.status === "ok";
 
   return (
@@ -50,7 +46,7 @@ export default function SettingsPage() {
       {/* Background illustration */}
       <div className="pointer-events-none absolute inset-x-0 top-0 h-80 overflow-hidden">
         <Image
-          src="/gen/backgrounds/bg-settings.avif"
+          src="/gen/backgrounds/bg-settings.png"
           alt=""
           fill
           sizes="100vw"
@@ -64,7 +60,7 @@ export default function SettingsPage() {
         <h1 className="text-2xl font-bold tracking-tight">
           <GradientText variant="silver">{t.settingsPage.title}</GradientText>
         </h1>
-        <p className="mt-1 text-sm text-muted-dark">
+        <p className="mt-1 text-base text-muted-dark">
           {t.settingsPage.subtitle}
         </p>
       </motion.div>
@@ -79,28 +75,36 @@ export default function SettingsPage() {
 
           <div className="flex items-center gap-4">
             {avatarUrl ? (
-              <img
+              <Image
                 src={avatarUrl}
                 alt=""
-                className="h-14 w-14 rounded-2xl border border-white/[0.1]"
+                width={56}
+                height={56}
+                unoptimized
+                className="h-14 w-14 rounded-2xl border border-glass-hover object-cover"
               />
             ) : (
-              <div className="flex h-14 w-14 items-center justify-center rounded-2xl border border-white/[0.1] bg-brand-cyan/10 text-lg font-bold text-brand-cyan">
+              <div className="flex h-14 w-14 items-center justify-center rounded-2xl border border-glass-hover bg-brand-cyan/10 text-lg font-bold text-brand-cyan">
                 {displayName.charAt(0).toUpperCase()}
               </div>
             )}
             <div>
-              <p className="text-sm font-medium text-foreground">{displayName}</p>
-              <p className="text-xs text-muted-dark">{email}</p>
+              <p className="text-base font-medium text-foreground">{displayName}</p>
+              <p className="text-sm text-muted-dark">{email}</p>
             </div>
           </div>
 
           <button
             onClick={signOut}
-            className="mt-6 flex items-center gap-2 rounded-xl border border-white/[0.08] bg-white/[0.03] px-4 py-2.5 text-sm text-muted transition-all hover:bg-white/[0.06] hover:text-foreground"
+            disabled={isSigningOut}
+            className="mt-6 flex items-center gap-2 rounded-xl border border-glass-hover bg-white/[0.03] px-4 py-2.5 text-base text-muted transition-all hover:bg-white/[0.06] hover:text-foreground disabled:opacity-60 disabled:pointer-events-none"
           >
-            <LogOut className="h-4 w-4" />
-            {t.common.signOut}
+            {isSigningOut ? (
+              <Loader2 className="h-4 w-4 animate-spin" />
+            ) : (
+              <LogOut className="h-4 w-4" />
+            )}
+            {isSigningOut ? "Signing out…" : t.common.signOut}
           </button>
         </GlowCard>
 
@@ -115,33 +119,33 @@ export default function SettingsPage() {
 
           <div className="space-y-4">
             <div className="flex items-center justify-between">
-              <span className="text-sm text-muted">{t.common.status}</span>
+              <span className="text-base text-muted">{t.common.status}</span>
               <div className="flex items-center gap-2">
                 {isConnected ? (
                   <>
                     <Wifi className="h-4 w-4 text-emerald-400" />
-                    <span className="text-sm text-emerald-400">{t.common.connected}</span>
+                    <span className="text-base text-emerald-400">{t.common.connected}</span>
                   </>
                 ) : (
                   <>
                     <WifiOff className="h-4 w-4 text-red-400" />
-                    <span className="text-sm text-red-400">{t.common.disconnected}</span>
+                    <span className="text-base text-red-400">{t.common.disconnected}</span>
                   </>
                 )}
               </div>
             </div>
 
             <div className="flex items-center justify-between">
-              <span className="text-sm text-muted">{t.settingsPage.orchestrator}</span>
-              <code className="text-xs text-muted-dark font-mono">
+              <span className="text-base text-muted">{t.settingsPage.orchestrator}</span>
+              <code className="text-sm text-muted-dark font-mono">
                 {isDemo ? "mock://demo-data" : (process.env.NEXT_PUBLIC_ORCHESTRATOR_URL ?? t.settingsPage.notConfigured)}
               </code>
             </div>
 
             {health && (
               <div className="flex items-center justify-between">
-                <span className="text-sm text-muted">{t.settingsPage.totalWorkers}</span>
-                <span className="text-sm text-foreground tabular-nums">
+                <span className="text-base text-muted">{t.settingsPage.totalWorkers}</span>
+                <span className="text-base text-foreground tabular-nums">
                   {health.workers.executing} {t.common.active} / {health.workers.idle} {t.common.idle} /{" "}
                   {health.workers.total} {t.common.total}
                 </span>
@@ -161,29 +165,29 @@ export default function SettingsPage() {
 
           {status ? (
             <div className="grid gap-6 sm:grid-cols-3">
-              <div className="rounded-xl border border-white/[0.06] bg-white/[0.02] p-4 text-center shadow-[inset_0_1px_0_0_rgba(255,255,255,0.05)]">
+              <div className="rounded-xl border border-glass bg-white/[0.02] p-4 text-center shadow-[inset_0_1px_0_0_rgba(255,255,255,0.05)]">
                 <p className="text-4xl font-bold tracking-tight tabular-nums">
                   <GradientText>{status.workerCounts.total}</GradientText>
                 </p>
-                <p className="mt-2 text-xs font-medium uppercase tracking-wider text-muted-dark">{t.settingsPage.totalWorkers}</p>
+                <p className="mt-2 text-sm font-medium uppercase tracking-wider text-muted-dark">{t.settingsPage.totalWorkers}</p>
               </div>
-              <div className="rounded-xl border border-white/[0.06] bg-white/[0.02] p-4 text-center shadow-[inset_0_1px_0_0_rgba(255,255,255,0.05)]">
+              <div className="rounded-xl border border-glass bg-white/[0.02] p-4 text-center shadow-[inset_0_1px_0_0_rgba(255,255,255,0.05)]">
                 <p className="text-4xl font-bold tracking-tight tabular-nums">
                   <GradientText>{status.queueLength}</GradientText>
                 </p>
-                <p className="mt-2 text-xs font-medium uppercase tracking-wider text-muted-dark">{t.settingsPage.queueLength}</p>
+                <p className="mt-2 text-sm font-medium uppercase tracking-wider text-muted-dark">{t.settingsPage.queueLength}</p>
               </div>
-              <div className="rounded-xl border border-white/[0.06] bg-white/[0.02] p-4 text-center shadow-[inset_0_1px_0_0_rgba(255,255,255,0.05)]">
+              <div className="rounded-xl border border-glass bg-white/[0.02] p-4 text-center shadow-[inset_0_1px_0_0_rgba(255,255,255,0.05)]">
                 <p className="text-4xl font-bold tracking-tight tabular-nums">
                   <GradientText>{status.activeExecutions.length}</GradientText>
                 </p>
-                <p className="mt-2 text-xs font-medium uppercase tracking-wider text-muted-dark">
+                <p className="mt-2 text-sm font-medium uppercase tracking-wider text-muted-dark">
                   {t.settingsPage.activeExecutions}
                 </p>
               </div>
             </div>
           ) : (
-            <div className="flex items-center gap-2 text-sm text-muted-dark">
+            <div className="flex items-center gap-2 text-base text-muted-dark">
               <Settings className="h-4 w-4 animate-spin" />
               {t.settingsPage.loadingStatus}
             </div>

@@ -33,7 +33,7 @@ export default function SectionBreadcrumb({
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: -8 }}
             transition={{ duration: 0.2 }}
-            className="h-8 bg-background/80 backdrop-blur-xl border-b border-white/4"
+            className="h-8 bg-background/80 backdrop-blur-xl border-b border-glass"
           >
             <div className="mx-auto flex h-full max-w-6xl items-center gap-4 px-6">
               {items.map((item, i) => {
@@ -42,7 +42,7 @@ export default function SectionBreadcrumb({
                   <a
                     key={item.href}
                     href={item.href}
-                    className={`relative flex h-11 -my-1.5 items-center text-sm font-mono uppercase tracking-wider transition-colors duration-200 focus-ring ${
+                    className={`relative flex h-11 -my-1.5 items-center text-base font-mono uppercase tracking-wider transition-colors duration-200 focus-ring ${
                       isActive
                         ? "text-foreground"
                         : "text-muted hover:text-foreground"

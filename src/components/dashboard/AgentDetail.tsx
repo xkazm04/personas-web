@@ -45,15 +45,19 @@ export default function AgentDetail({ persona }: { persona: Persona }) {
     let cancelled = false;
     const cached = getCachedAgentDetail(persona.id);
     if (cached) {
-      setData(cached);
-      setError(false);
+      queueMicrotask(() => {
+        setData(cached);
+        setError(false);
+      });
       return () => {
         cancelled = true;
       };
     }
 
-    setData(null);
-    setError(false);
+    queueMicrotask(() => {
+      setData(null);
+      setError(false);
+    });
 
     loadAgentDetail(persona.id)
       .then((next) => {
@@ -68,8 +72,8 @@ export default function AgentDetail({ persona }: { persona: Persona }) {
 
   if (error) {
     return (
-      <div className="mt-4 border-t border-white/[0.06] pt-4">
-        <p className="flex items-center gap-1.5 text-xs text-red-400">
+      <div className="mt-4 border-t border-glass pt-4">
+        <p className="flex items-center gap-1.5 text-sm text-red-400">
           <AlertCircle className="h-3 w-3" />
           Failed to load agent details
         </p>
@@ -79,7 +83,7 @@ export default function AgentDetail({ persona }: { persona: Persona }) {
 
   if (!data) {
     return (
-      <div className="mt-4 space-y-3 border-t border-white/[0.06] pt-4">
+      <div className="mt-4 space-y-3 border-t border-glass pt-4">
         <div className="flex animate-pulse space-x-4">
           <div className="flex-1 space-y-3 py-1">
             <div className="h-3 w-24 rounded bg-white/[0.05]" />
@@ -94,23 +98,23 @@ export default function AgentDetail({ persona }: { persona: Persona }) {
   }
 
   return (
-    <div className="mt-4 space-y-3 border-t border-white/[0.06] pt-4">
+    <div className="mt-4 space-y-3 border-t border-glass pt-4">
       {/* Recent executions */}
       <div>
-        <h4 className="text-[11px] font-medium uppercase tracking-wider text-muted-dark">
+        <h4 className="text-sm font-medium uppercase tracking-wider text-muted-dark">
           Recent Executions
         </h4>
         {data.executions.length === 0 ? (
-          <p className="mt-1 text-xs text-muted-dark">No executions yet</p>
+          <p className="mt-1 text-sm text-muted-dark">No executions yet</p>
         ) : (
           <div className="mt-1.5 space-y-1">
             {data.executions.map((exec) => (
               <div
                 key={exec.id}
-                className="flex items-center gap-2 text-xs text-muted"
+                className="flex items-center gap-2 text-sm text-muted"
               >
                 <StatusBadge status={exec.status} />
-                <span className="flex-1 truncate font-mono text-[11px] text-muted-dark">
+                <span className="flex-1 truncate font-mono text-sm text-muted-dark">
                   {exec.id.slice(0, 8)}
                 </span>
                 {exec.durationMs && (
@@ -128,7 +132,7 @@ export default function AgentDetail({ persona }: { persona: Persona }) {
       </div>
 
       {/* Subscriptions & Triggers summary */}
-      <div className="flex gap-4 text-xs text-muted-dark">
+      <div className="flex gap-4 text-sm text-muted-dark">
         <span className="flex items-center gap-1">
           <Radio className="h-3 w-3" />
           {data.subscriptions.length} subscription{data.subscriptions.length !== 1 ? "s" : ""}

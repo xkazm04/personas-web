@@ -1,7 +1,7 @@
 "use client";
 
 import { useRef, useState, useEffect, useCallback } from "react";
-import { motion } from "framer-motion";
+import { motion, useReducedMotion } from "framer-motion";
 import { ChevronLeft, ChevronRight } from "lucide-react";
 import type { LucideIcon } from "lucide-react";
 
@@ -28,10 +28,10 @@ export default function PhaseCard({
       whileInView={{ opacity: 1, y: 0 }}
       viewport={{ once: true }}
       transition={{ delay: index * 0.04, duration: 0.35 }}
-      className="group relative flex-none w-[160px] snap-start rounded-xl border border-white/[0.04] bg-gradient-to-br from-white/[0.02] to-transparent p-4 transition-all duration-300 hover:border-white/[0.08] hover:bg-white/[0.025]"
+      className="group relative flex-none w-[160px] snap-start rounded-xl border border-glass bg-gradient-to-br from-white/[0.02] to-transparent p-4 transition-all duration-300 hover:border-glass-hover hover:bg-white/[0.025]"
     >
       {/* Phase number */}
-      <div className="absolute top-2.5 right-3 text-[10px] font-mono text-muted-dark">
+      <div className="absolute top-2.5 right-3 text-sm font-mono text-muted-dark">
         {String(data.phase).padStart(2, "0")}
       </div>
 
@@ -50,13 +50,14 @@ export default function PhaseCard({
       </div>
 
       {/* Name */}
-      <h4 className="text-sm font-medium leading-tight">{data.name}</h4>
-      <p className="mt-1 text-[10px] leading-relaxed text-muted-dark line-clamp-2">{data.scope}</p>
+      <h4 className="text-base font-medium leading-tight">{data.name}</h4>
+      <p className="mt-1 text-sm leading-relaxed text-muted-dark line-clamp-2">{data.scope}</p>
     </motion.div>
   );
 }
 
 export function PhaseCardStrip({ phases }: { phases: PhaseCardData[] }) {
+  const reduced = useReducedMotion();
   const scrollRef = useRef<HTMLDivElement>(null);
   const scrollRafRef = useRef<number>(0);
   const [canScrollLeft, setCanScrollLeft] = useState(false);
@@ -96,7 +97,7 @@ export function PhaseCardStrip({ phases }: { phases: PhaseCardData[] }) {
   // Mobile peek animation on first view
   useEffect(() => {
     const el = scrollRef.current;
-    if (!el || peeked) return;
+    if (!el || peeked || reduced) return;
     const mq = window.matchMedia("(max-width: 640px)");
     if (!mq.matches) return;
 
@@ -112,7 +113,7 @@ export function PhaseCardStrip({ phases }: { phases: PhaseCardData[] }) {
     );
     observer.observe(el);
     return () => observer.disconnect();
-  }, [peeked]);
+  }, [peeked, reduced]);
 
   const scroll = (direction: "left" | "right") => {
     const el = scrollRef.current;
@@ -136,7 +137,7 @@ export function PhaseCardStrip({ phases }: { phases: PhaseCardData[] }) {
         <button
           onClick={() => scroll("left")}
           aria-label="Scroll left"
-          className="absolute left-1 top-1/2 z-20 -translate-y-1/2 hidden sm:flex h-8 w-8 items-center justify-center rounded-full border border-white/[0.08] bg-background/80 text-muted-dark backdrop-blur-sm opacity-0 transition-opacity duration-200 group-hover/strip:opacity-100 hover:border-white/[0.15] hover:text-foreground"
+          className="absolute left-1 top-1/2 z-20 -translate-y-1/2 hidden sm:flex h-8 w-8 items-center justify-center rounded-full border border-glass-hover bg-background/80 text-muted-dark backdrop-blur-sm opacity-0 transition-opacity duration-200 group-hover/strip:opacity-100 hover:border-glass-strong hover:text-foreground"
         >
           <ChevronLeft className="h-4 w-4" />
         </button>
@@ -145,7 +146,7 @@ export function PhaseCardStrip({ phases }: { phases: PhaseCardData[] }) {
         <button
           onClick={() => scroll("right")}
           aria-label="Scroll right"
-          className="absolute right-1 top-1/2 z-20 -translate-y-1/2 hidden sm:flex h-8 w-8 items-center justify-center rounded-full border border-white/[0.08] bg-background/80 text-muted-dark backdrop-blur-sm opacity-0 transition-opacity duration-200 group-hover/strip:opacity-100 hover:border-white/[0.15] hover:text-foreground"
+          className="absolute right-1 top-1/2 z-20 -translate-y-1/2 hidden sm:flex h-8 w-8 items-center justify-center rounded-full border border-glass-hover bg-background/80 text-muted-dark backdrop-blur-sm opacity-0 transition-opacity duration-200 group-hover/strip:opacity-100 hover:border-glass-strong hover:text-foreground"
         >
           <ChevronRight className="h-4 w-4" />
         </button>

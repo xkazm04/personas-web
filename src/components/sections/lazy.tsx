@@ -109,19 +109,6 @@ function FAQSkeleton() {
   );
 }
 
-/* ── MidPageCTA skeleton: horizontal button row ── */
-function MidPageCTASkeleton() {
-  return (
-    <section className="relative border-t border-primary/5 py-12">
-      <div className="mx-auto flex max-w-2xl items-center justify-center gap-4 px-6">
-        <div className={`${Pm} h-12 w-52 !rounded-full`} />
-        <div className={`${Pm} h-12 w-28 !rounded-full`} />
-        <div className={`${Pm} h-12 w-24 !rounded-full`} />
-      </div>
-    </section>
-  );
-}
-
 /* ── Dynamic imports with section-specific skeletons ─────────── */
 
 const VisionSection = dynamic(() => import("@/components/sections/Vision"), {
@@ -136,7 +123,6 @@ const FAQSection = dynamic(() => import("@/components/sections/FAQ"), {
   ssr: true,
   loading: () => <FAQSkeleton />,
 });
-const MidPageCTASection = createLazySection(() => import("@/components/sections/MidPageCTA"), MidPageCTASkeleton);
 
 export function LazyVision() {
   return <VisionSection />;
@@ -150,16 +136,14 @@ export function LazyFAQ() {
   return <FAQSection />;
 }
 
-export function LazyMidPageCTA() {
-  return <MidPageCTASection />;
-}
-
 /* ── Generic lazy sections (use shared SectionSkeleton) ──────── */
 
 const UseCasesSection = createLazySection(() => import("@/components/sections/UseCases"));
 const PlaygroundSplitSection = createLazySection(() => import("@/components/sections/PlaygroundSplit"));
 const DownloadCTASection = createLazySection(() => import("@/components/sections/DownloadCTA"));
+const PipelineShowcaseSection = createLazySection(() => import("@/components/sections/PipelineShowcase"));
 const ChangelogSection = createLazySection(() => import("@/components/sections/Changelog"));
+const GetStartedSection = createLazySection(() => import("@/components/sections/GetStarted"));
 
 export function LazyUseCases() {
   return <UseCasesSection />;
@@ -173,6 +157,14 @@ export function LazyDownloadCTA() {
   return <DownloadCTASection />;
 }
 
+export function LazyPipelineShowcase() {
+  return <PipelineShowcaseSection />;
+}
+
 export function LazyChangelog() {
   return <ChangelogSection />;
+}
+
+export function LazyGetStarted() {
+  return <GetStartedSection />;
 }

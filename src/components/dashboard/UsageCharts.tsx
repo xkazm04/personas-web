@@ -122,13 +122,13 @@ export function UsageDistributionPieChart({
             <p className="text-xl font-bold tabular-nums text-foreground">
               {totalInvocations}
             </p>
-            <p className="text-[10px] text-muted-dark">total</p>
+            <p className="text-sm text-muted-dark">total</p>
           </div>
         </div>
       </div>
       <div className="mt-2 space-y-1.5">
         {pieData.slice(0, 5).map((entry) => (
-          <div key={entry.name} className="flex items-center gap-2 text-[11px]">
+          <div key={entry.name} className="flex items-center gap-2 text-sm">
             <span className="h-2 w-2 rounded-full flex-shrink-0" style={{ backgroundColor: entry.color }} />
             <span className="flex-1 text-muted truncate">{entry.name}</span>
             <span className="tabular-nums text-muted-dark">{entry.value}</span>
@@ -167,7 +167,7 @@ export function UsageOverTimeAreaChart({
           iconType="circle"
           iconSize={6}
           formatter={(value: string) => (
-            <span className="text-[10px] text-muted-dark">{formatToolName(value)}</span>
+            <span className="text-sm text-muted-dark">{formatToolName(value)}</span>
           )}
         />
         {topTools.map((tool, i) => (
@@ -206,7 +206,7 @@ export function UsageByPersonaBarChart({
           iconType="circle"
           iconSize={6}
           formatter={(value: string) => (
-            <span className="text-[10px] text-muted-dark">{formatToolName(value)}</span>
+            <span className="text-sm text-muted-dark">{formatToolName(value)}</span>
           )}
         />
         {allToolNames.map((tool, i) => (

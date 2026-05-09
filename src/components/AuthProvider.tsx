@@ -2,7 +2,9 @@
 
 import { useEffect } from "react";
 import { usePathname } from "next/navigation";
+import { AnimatePresence } from "framer-motion";
 import { useAuthStore } from "@/stores/authStore";
+import AuthToast from "@/components/AuthToast";
 
 export default function AuthProvider({ children }: { children: React.ReactNode }) {
   const initialize = useAuthStore((s) => s.initialize);
@@ -15,5 +17,12 @@ export default function AuthProvider({ children }: { children: React.ReactNode }
     return cleanup;
   }, [initialize, shouldInitializeAuth]);
 
-  return <>{children}</>;
+  return (
+    <>
+      {children}
+      <AnimatePresence>
+        <AuthToast />
+      </AnimatePresence>
+    </>
+  );
 }

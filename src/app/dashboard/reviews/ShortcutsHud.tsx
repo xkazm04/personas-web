@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useMemo, useState } from "react";
+import { useCallback, useEffect, useMemo, useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { X, Keyboard, Search } from "lucide-react";
 
@@ -8,11 +8,9 @@ import { X, Keyboard, Search } from "lucide-react";
 // Ctrl on other platforms. Only set client-side; SSR sees `null` and renders
 // the Ctrl variant by default to avoid hydration mismatch.
 function usePlatformMod(): "⌘" | "Ctrl" {
-  const [isMac, setIsMac] = useState(false);
-  useEffect(() => {
-    if (typeof navigator === "undefined") return;
-    setIsMac(/Mac|iPod|iPhone|iPad/.test(navigator.platform));
-  }, []);
+  const [isMac] = useState(
+    () => typeof navigator !== "undefined" && /Mac|iPod|iPhone|iPad/.test(navigator.platform),
+  );
   return isMac ? "⌘" : "Ctrl";
 }
 
@@ -109,9 +107,10 @@ export function ShortcutsOverlay({
   const mod = usePlatformMod();
   const [query, setQuery] = useState("");
 
-  useEffect(() => {
-    if (!open) setQuery("");
-  }, [open]);
+  const handleClose = useCallback(() => {
+    setQuery("");
+    onClose();
+  }, [onClose]);
 
   // Esc closes; bound only while open.
   useEffect(() => {
@@ -119,12 +118,12 @@ export function ShortcutsOverlay({
     const handler = (e: KeyboardEvent) => {
       if (e.key === "Escape") {
         e.preventDefault();
-        onClose();
+        handleClose();
       }
     };
     window.addEventListener("keydown", handler);
     return () => window.removeEventListener("keydown", handler);
-  }, [open, onClose]);
+  }, [open, handleClose]);
 
   const grouped = useMemo(() => {
     const q = query.trim().toLowerCase();
@@ -156,7 +155,7 @@ export function ShortcutsOverlay({
             exit={{ opacity: 0 }}
             transition={{ duration: 0.15 }}
             className="fixed inset-0 z-[80] bg-black/60 backdrop-blur-sm"
-            onClick={onClose}
+            onClick={handleClose}
           />
           <motion.div
             initial={{ opacity: 0, scale: 0.96, y: 12 }}
@@ -175,7 +174,7 @@ export function ShortcutsOverlay({
                 </h3>
               </div>
               <button
-                onClick={onClose}
+                onClick={handleClose}
                 aria-label="Close"
                 className="rounded-md p-1.5 text-muted-dark transition-colors hover:bg-white/[0.06] hover:text-foreground"
               >

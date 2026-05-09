@@ -1,21 +1,23 @@
 "use client";
 
-import { useState, useEffect, useRef, useCallback } from "react";
+import { useState } from "react";
 import Image from "next/image";
 import { motion } from "framer-motion";
-import { Radio, Zap, Orbit, Play } from "lucide-react";
+import { Radio, Zap, Orbit, Play, GanttChart } from "lucide-react";
 import { fadeUp, staggerContainer } from "@/lib/animations";
 import GradientText from "@/components/GradientText";
+import ConnectionStatusIndicator from "@/components/dashboard/ConnectionStatusIndicator";
 import SubscriptionsPanel from "@/components/dashboard/SubscriptionsPanel";
 import EventsListPanel from "@/components/dashboard/EventsListPanel";
 import EventBusVisualization from "@/components/dashboard/EventBusVisualization";
 import EventBusStats from "@/components/dashboard/EventBusStats";
 import EventDetailDrawer from "@/components/dashboard/EventDetailDrawer";
+import EventSwimlane from "@/components/dashboard/EventSwimlane";
 import { useEventStore } from "@/stores/eventStore";
 import { useTranslation } from "@/i18n/useTranslation";
-import { SWARM_PERSONAS, SWARM_SOURCES, EVENT_TYPES, type SwarmNode } from "@/lib/mock-dashboard-data";
+import { SWARM_PERSONAS, EVENT_TYPES, type SwarmNode } from "@/lib/mock-dashboard-data";
 
-type PageTab = "events" | "subscriptions" | "visualization";
+type PageTab = "events" | "subscriptions" | "visualization" | "swimlane";
 
 // ── Event type legend colors ──────────────────────────────────────────
 
@@ -42,27 +44,6 @@ export default function EventsPage() {
   const [selectedNode, setSelectedNode] = useState<SwarmNode | null>(null);
   const [burstTrigger, setBurstTrigger] = useState(0);
 
-  // Live activity pulse
-  const [alive, setAlive] = useState(false);
-  const prevCountRef = useRef(events.length);
-  const dimTimerRef = useRef<ReturnType<typeof setTimeout>>(undefined);
-
-  const markAlive = useCallback(() => {
-    setAlive(true);
-    clearTimeout(dimTimerRef.current);
-    dimTimerRef.current = setTimeout(() => setAlive(false), 30_000);
-  }, []);
-
-  useEffect(() => {
-    return () => clearTimeout(dimTimerRef.current);
-  }, []);
-
-  useEffect(() => {
-    if (events.length > prevCountRef.current) {
-      markAlive();
-    }
-    prevCountRef.current = events.length;
-  }, [events.length, markAlive]);
 
   return (
     <motion.div initial="hidden" animate="visible" variants={staggerContainer} className="relative">
@@ -82,21 +63,16 @@ export default function EventsPage() {
       <motion.div variants={fadeUp} className="mb-6">
         <h1 className="flex items-center gap-2.5 text-2xl font-bold tracking-tight">
           <GradientText variant="silver">{t.eventsPage.title}</GradientText>
-          <span className="relative flex h-2.5 w-2.5">
-            {alive && (
-              <span className="absolute inset-0 animate-ping rounded-full bg-emerald-400/60" />
-            )}
-            <span className={`relative inline-flex h-2.5 w-2.5 rounded-full transition-colors duration-500 ${alive ? "bg-emerald-400 shadow-[0_0_6px_rgba(52,211,153,0.6)]" : "bg-white/20"}`} />
-          </span>
+          <ConnectionStatusIndicator />
         </h1>
-        <p className="mt-1 text-sm text-muted-dark">
+        <p className="mt-1 text-base text-muted-dark">
           {t.eventsPage.subtitle}
         </p>
         {/* Page tab switcher */}
-        <div className="mt-4 flex overflow-x-auto rounded-lg border border-white/[0.06] bg-white/[0.02] p-0.5 w-fit max-w-full scrollbar-hide">
+        <div className="mt-4 flex overflow-x-auto rounded-lg border border-glass bg-white/[0.02] p-0.5 w-fit max-w-full scrollbar-hide">
           <button
             onClick={() => setPageTab("events")}
-            className={`flex items-center gap-1.5 rounded-md px-4 py-2 text-xs font-medium transition-all ${
+            className={`flex items-center gap-1.5 rounded-md px-4 py-2 text-sm font-medium transition-all ${
               pageTab === "events"
                 ? "bg-white/[0.08] text-foreground shadow-sm"
                 : "text-muted-dark hover:text-muted"
@@ -104,13 +80,13 @@ export default function EventsPage() {
           >
             <Radio className="h-3.5 w-3.5" />
             {t.eventsPage.tabEvents}
-            <span className="ml-1 rounded-full bg-white/[0.06] px-1.5 py-0.5 text-[10px] tabular-nums">
+            <span className="ml-1 rounded-full bg-white/[0.06] px-1.5 py-0.5 text-sm tabular-nums">
               {events.length}
             </span>
           </button>
           <button
             onClick={() => setPageTab("subscriptions")}
-            className={`flex items-center gap-1.5 rounded-md px-4 py-2 text-xs font-medium transition-all ${
+            className={`flex items-center gap-1.5 rounded-md px-4 py-2 text-sm font-medium transition-all ${
               pageTab === "subscriptions"
                 ? "bg-white/[0.08] text-foreground shadow-sm"
                 : "text-muted-dark hover:text-muted"
@@ -118,13 +94,13 @@ export default function EventsPage() {
           >
             <Zap className="h-3.5 w-3.5" />
             {t.eventsPage.tabSubscriptions}
-            <span className="ml-1 rounded-full bg-white/[0.06] px-1.5 py-0.5 text-[10px] tabular-nums">
+            <span className="ml-1 rounded-full bg-white/[0.06] px-1.5 py-0.5 text-sm tabular-nums">
               {subscriptions.length}
             </span>
           </button>
           <button
             onClick={() => setPageTab("visualization")}
-            className={`flex items-center gap-1.5 rounded-md px-4 py-2 text-xs font-medium transition-all ${
+            className={`flex items-center gap-1.5 rounded-md px-4 py-2 text-sm font-medium transition-all ${
               pageTab === "visualization"
                 ? "bg-white/[0.08] text-foreground shadow-sm"
                 : "text-muted-dark hover:text-muted"
@@ -133,12 +109,27 @@ export default function EventsPage() {
             <Orbit className="h-3.5 w-3.5" />
             {t.eventsPage.tabVisualization}
           </button>
+          <button
+            onClick={() => setPageTab("swimlane")}
+            className={`flex items-center gap-1.5 rounded-md px-4 py-2 text-sm font-medium transition-all ${
+              pageTab === "swimlane"
+                ? "bg-white/[0.08] text-foreground shadow-sm"
+                : "text-muted-dark hover:text-muted"
+            }`}
+          >
+            <GanttChart className="h-3.5 w-3.5" />
+            {t.eventsPage.tabSwimlane}
+          </button>
         </div>
       </motion.div>
 
       {pageTab === "subscriptions" ? (
         <motion.div variants={fadeUp}>
           <SubscriptionsPanel />
+        </motion.div>
+      ) : pageTab === "swimlane" ? (
+        <motion.div variants={fadeUp}>
+          <EventSwimlane />
         </motion.div>
       ) : pageTab === "visualization" ? (
         <motion.div variants={fadeUp} className="space-y-4">
@@ -149,7 +140,7 @@ export default function EventsPage() {
           <div className="flex flex-wrap items-center gap-3">
             <button
               onClick={() => setBurstTrigger((n) => n + 1)}
-              className="flex items-center gap-1.5 rounded-lg border border-brand-cyan/30 bg-brand-cyan/10 px-3 py-1.5 text-xs font-medium text-brand-cyan transition-all hover:bg-brand-cyan/20 active:scale-95"
+              className="flex items-center gap-1.5 rounded-lg border border-brand-cyan/30 bg-brand-cyan/10 px-3 py-1.5 text-sm font-medium text-brand-cyan transition-all hover:bg-brand-cyan/20 active:scale-95"
             >
               <Play className="h-3.5 w-3.5" />
               Test Flow
@@ -157,11 +148,11 @@ export default function EventsPage() {
 
             {/* Event type legend */}
             <div className="flex flex-wrap items-center gap-x-3 gap-y-1.5 ml-auto">
-              <span className="text-[10px] uppercase tracking-wider text-muted-dark font-medium">
+              <span className="text-sm uppercase tracking-wider text-muted-dark font-medium">
                 Event Types
               </span>
               {EVENT_TYPES.slice(0, 6).map((type) => (
-                <span key={type} className="flex items-center gap-1.5 text-[10px] text-muted-dark">
+                <span key={type} className="flex items-center gap-1.5 text-sm text-muted-dark">
                   <span
                     className="inline-block h-1.5 w-1.5 rounded-full"
                     style={{
@@ -176,7 +167,7 @@ export default function EventsPage() {
           </div>
 
           {/* Main visualization */}
-          <div className="relative rounded-2xl border border-white/[0.06] bg-white/[0.01] backdrop-blur-sm overflow-hidden">
+          <div className="relative rounded-2xl border border-glass bg-white/[0.01] backdrop-blur-sm overflow-hidden">
             {/* Subtle radial gradient background */}
             <div
               className="pointer-events-none absolute inset-0"
@@ -198,11 +189,11 @@ export default function EventsPage() {
               <button
                 key={p.id}
                 onClick={() => setSelectedNode(p)}
-                className="group flex items-center gap-2 rounded-xl border border-white/[0.06] bg-white/[0.02] p-2.5 text-left transition-all hover:border-white/[0.12] hover:bg-white/[0.04]"
+                className="group flex items-center gap-2 rounded-xl border border-glass bg-white/[0.02] p-2.5 text-left transition-all hover:border-glass-strong hover:bg-white/[0.04]"
               >
                 <span className="text-base">{p.icon}</span>
                 <div className="min-w-0 flex-1">
-                  <p className="text-[11px] font-medium text-foreground truncate">
+                  <p className="text-sm font-medium text-foreground truncate">
                     {p.label}
                   </p>
                   <div className="mt-0.5 flex items-center gap-1.5">
@@ -215,7 +206,7 @@ export default function EventsPage() {
                         }}
                       />
                     </div>
-                    <span className="text-[9px] tabular-nums text-muted-dark">
+                    <span className="text-sm tabular-nums text-muted-dark">
                       {Math.round(p.volume * 100)}%
                     </span>
                   </div>

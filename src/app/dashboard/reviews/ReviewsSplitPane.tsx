@@ -1,8 +1,7 @@
 "use client";
 
-import { memo, useEffect, useState, useMemo, useCallback, useRef } from "react";
+import { useEffect, useState, useMemo, useCallback, useRef } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { Virtuoso, type VirtuosoHandle } from "react-virtuoso";
 import {
   AlertTriangle,
   AlertCircle,
@@ -15,21 +14,23 @@ import {
   Clock,
   ChevronRight,
   Bookmark,
+  CheckSquare,
+  Square,
+  MinusSquare,
 } from "lucide-react";
 import { fadeUp, staggerContainer } from "@/lib/animations";
-import GlowCard from "@/components/GlowCard";
 import FilterBar from "@/components/dashboard/FilterBar";
 import PersonaAvatar from "@/components/dashboard/PersonaAvatar";
 import StatusBadge from "@/components/dashboard/StatusBadge";
-import EmptyState from "@/components/dashboard/EmptyState";
+import UndoToast from "@/components/UndoToast";
+import BulkProgressBar from "@/components/BulkProgressBar";
+import BulkResultToast from "@/components/BulkResultToast";
+import ConfirmDialog from "@/components/ConfirmDialog";
 import { useReviewStore } from "@/stores/reviewStore";
 import { usePolling } from "@/hooks/usePolling";
+import { useReviewBulkActions } from "@/hooks/useReviewBulkActions";
 import type { ManualReviewItem, ReviewSeverity } from "@/lib/types";
 import { relativeTime } from "@/lib/format";
-import {
-  getUrgencyLevel,
-} from "@/lib/reviewUtils";
-import { ShortcutsFooter, ShortcutsOverlay } from "./ShortcutsHud";
 
 // ---------------------------------------------------------------------------
 // Severity config
@@ -90,58 +91,67 @@ function StatusDot({ status }: { status: ManualReviewItem["status"] }) {
 // Left panel row
 // ---------------------------------------------------------------------------
 
-// Memoized so a selectedId change in the parent only re-renders the two rows
-// whose isActive flips, instead of every visible row in the list.
-const ReviewRow = memo(function ReviewRow({
+function ReviewRow({
   review,
   isActive,
-  onSelect,
+  isSelected,
+  onToggleSelect,
+  onClick,
 }: {
   review: ManualReviewItem;
   isActive: boolean;
-  // Stable per-id callback: parent passes the same function reference for the
-  // same id across renders so memo can short-circuit when only siblings change.
-  onSelect: (id: string) => void;
+  isSelected: boolean;
+  onToggleSelect: (e: React.MouseEvent) => void;
+  onClick: () => void;
 }) {
   const sev = severityConfig[review.severity];
 
   return (
-    <button
-      onClick={() => onSelect(review.id)}
-      className={`w-full flex items-center gap-2 px-3 py-2 text-left transition-all duration-150 border-l-2 ${
+    <div
+      className={`w-full flex items-center gap-2 px-3 py-2 text-left transition-all duration-150 border-l-2 cursor-pointer ${
         isActive
           ? "bg-brand-cyan/[0.08] border-l-brand-cyan"
           : "border-l-transparent hover:bg-white/[0.03]"
       }`}
+      onClick={onClick}
     >
-      {/* Severity dot */}
-      <span className={`h-1.5 w-1.5 rounded-full flex-shrink-0 ${sev.dotColor}`} />
+      {review.status === "pending" && (
+        <button
+          onClick={(e) => {
+            e.stopPropagation();
+            onToggleSelect(e);
+          }}
+          className="flex-shrink-0 text-muted-dark hover:text-brand-cyan transition-colors"
+        >
+          {isSelected ? (
+            <CheckSquare className="h-4 w-4 text-brand-cyan" />
+          ) : (
+            <Square className="h-4 w-4" />
+          )}
+        </button>
+      )}
 
-      {/* Status indicator */}
+      <span className={`h-1.5 w-1.5 rounded-full flex-shrink-0 ${sev.dotColor}`} />
       <StatusDot status={review.status} />
 
-      {/* Agent name */}
-      <span className="text-[11px] font-medium text-foreground truncate w-20 flex-shrink-0">
+      <span className="text-sm font-medium text-foreground truncate w-20 flex-shrink-0">
         {review.personaName ?? "Unknown"}
       </span>
 
-      {/* Content preview */}
-      <span className="flex-1 min-w-0 text-[11px] text-muted truncate">
+      <span className="flex-1 min-w-0 text-sm text-muted truncate">
         {review.content.split("\n")[0]}
       </span>
 
-      {/* Time */}
-      <span className="text-[9px] text-muted-dark flex-shrink-0 tabular-nums">
+      <span className="text-sm text-muted-dark flex-shrink-0 tabular-nums">
         {relativeTime(review.createdAt)}
       </span>
 
-      {/* Active indicator */}
       {isActive && (
         <ChevronRight className="h-3 w-3 text-brand-cyan flex-shrink-0" />
       )}
-    </button>
+    </div>
   );
-});
+}
 
 // ---------------------------------------------------------------------------
 // Detail panel
@@ -154,36 +164,41 @@ function DetailPanel({
   review: ManualReviewItem | null;
   onResolve: (id: string, status: "approved" | "rejected", notes?: string) => void;
 }) {
-  const [notes, setNotes] = useState("");
+  const [notes, setNotes] = useState(review?.reviewerNotes ?? "");
   const [resolving, setResolving] = useState(false);
+  const [prevReviewKey, setPrevReviewKey] = useState<string>(
+    `${review?.id ?? ""}|${review?.reviewerNotes ?? ""}`,
+  );
   const notesRef = useRef<HTMLTextAreaElement>(null);
 
-  // Reset notes when review changes
-  useEffect(() => {
+  // Reset notes when review changes — render-phase prev-state pattern
+  const nextReviewKey = `${review?.id ?? ""}|${review?.reviewerNotes ?? ""}`;
+  if (nextReviewKey !== prevReviewKey) {
+    setPrevReviewKey(nextReviewKey);
     setNotes(review?.reviewerNotes ?? "");
     setResolving(false);
-  }, [review?.id, review?.reviewerNotes]);
+  }
 
   if (!review) {
     return (
       <div className="flex flex-col items-center justify-center h-full text-center px-8">
-        <div className="flex h-14 w-14 items-center justify-center rounded-2xl border border-white/[0.06] bg-white/[0.03]">
+        <div className="flex h-14 w-14 items-center justify-center rounded-2xl border border-glass bg-white/[0.03]">
           <ClipboardCheck className="h-6 w-6 text-muted-dark" />
         </div>
-        <h3 className="mt-4 text-sm font-medium text-foreground">
+        <h3 className="mt-4 text-base font-medium text-foreground">
           Select a review
         </h3>
-        <p className="mt-1.5 text-xs text-muted-dark max-w-[200px]">
+        <p className="mt-1.5 text-sm text-muted-dark max-w-[200px]">
           Choose a review from the list to see details and take action
         </p>
-        <div className="mt-4 flex flex-wrap gap-2 justify-center text-[10px] text-muted-dark">
-          <kbd className="rounded border border-white/[0.1] bg-white/[0.04] px-1.5 py-0.5">J</kbd>
+        <div className="mt-4 flex flex-wrap gap-2 justify-center text-sm text-muted-dark">
+          <kbd className="rounded border border-glass-hover bg-white/[0.04] px-1.5 py-0.5">J</kbd>
           <span>/ </span>
-          <kbd className="rounded border border-white/[0.1] bg-white/[0.04] px-1.5 py-0.5">K</kbd>
+          <kbd className="rounded border border-glass-hover bg-white/[0.04] px-1.5 py-0.5">K</kbd>
           <span>navigate</span>
-          <kbd className="rounded border border-white/[0.1] bg-white/[0.04] px-1.5 py-0.5 ml-2">A</kbd>
+          <kbd className="rounded border border-glass-hover bg-white/[0.04] px-1.5 py-0.5 ml-2">A</kbd>
           <span>approve</span>
-          <kbd className="rounded border border-white/[0.1] bg-white/[0.04] px-1.5 py-0.5 ml-2">R</kbd>
+          <kbd className="rounded border border-glass-hover bg-white/[0.04] px-1.5 py-0.5 ml-2">R</kbd>
           <span>reject</span>
         </div>
       </div>
@@ -206,7 +221,7 @@ function DetailPanel({
   return (
     <div className="flex flex-col h-full overflow-hidden">
       {/* Detail header */}
-      <div className="flex-shrink-0 border-b border-white/[0.06] px-4 py-3">
+      <div className="flex-shrink-0 border-b border-glass px-4 py-3">
         <div className="flex items-center gap-2">
           <PersonaAvatar
             icon={review.personaIcon}
@@ -216,21 +231,21 @@ function DetailPanel({
           />
           <div className="flex-1 min-w-0">
             <div className="flex items-center gap-2">
-              <span className="text-sm font-medium text-foreground">
+              <span className="text-base font-medium text-foreground">
                 {review.personaName ?? "Unknown Agent"}
               </span>
               <StatusBadge status={review.status} />
             </div>
             <div className="flex items-center gap-2 mt-0.5">
               <SevIcon className={`h-3 w-3 ${sev.color}`} />
-              <span className={`text-[11px] font-medium capitalize ${sev.color}`}>
+              <span className={`text-sm font-medium capitalize ${sev.color}`}>
                 {review.severity}
               </span>
-              <span className="text-[11px] text-muted-dark">
+              <span className="text-sm text-muted-dark">
                 {relativeTime(review.createdAt)}
               </span>
               {review.resolvedAt && (
-                <span className="text-[11px] text-muted-dark">
+                <span className="text-sm text-muted-dark">
                   Resolved {relativeTime(review.resolvedAt)}
                   {review.resolvedBy && ` by ${review.resolvedBy}`}
                 </span>
@@ -246,12 +261,12 @@ function DetailPanel({
         <div>
           <div className="flex items-center gap-1.5 mb-1.5">
             <Terminal className="h-3 w-3 text-muted-dark" />
-            <span className="text-[10px] font-medium uppercase tracking-wider text-muted-dark">
+            <span className="text-sm font-medium uppercase tracking-wider text-muted-dark">
               Content
             </span>
           </div>
-          <div className="rounded-lg bg-black/40 border border-white/[0.06] p-3 overflow-auto max-h-[40vh]">
-            <pre className="whitespace-pre-wrap break-words font-mono text-[11px] leading-relaxed text-slate-300">
+          <div className="rounded-lg bg-black/40 border border-glass p-3 overflow-auto max-h-[40vh]">
+            <pre className="whitespace-pre-wrap wrap-break-word font-mono text-sm leading-relaxed text-slate-300">
               {review.content}
             </pre>
           </div>
@@ -259,13 +274,13 @@ function DetailPanel({
 
         {/* Execution context */}
         {review.executionId && (
-          <div className="rounded-lg border border-white/[0.06] bg-white/[0.02] p-2.5">
+          <div className="rounded-lg border border-glass bg-white/[0.02] p-2.5">
             <div className="flex items-center gap-1.5">
               <Clock className="h-3 w-3 text-muted-dark" />
-              <span className="text-[10px] font-medium uppercase tracking-wider text-muted-dark">
+              <span className="text-sm font-medium uppercase tracking-wider text-muted-dark">
                 Execution
               </span>
-              <span className="ml-auto font-mono text-[10px] text-muted-dark">
+              <span className="ml-auto font-mono text-sm text-muted-dark">
                 {review.executionId.slice(0, 16)}
               </span>
             </div>
@@ -277,7 +292,7 @@ function DetailPanel({
           <div>
             <div className="flex items-center gap-1.5 mb-1.5">
               <Bookmark className="h-3 w-3 text-muted-dark" />
-              <span className="text-[10px] font-medium uppercase tracking-wider text-muted-dark">
+              <span className="text-sm font-medium uppercase tracking-wider text-muted-dark">
                 Reviewer Notes
               </span>
             </div>
@@ -287,7 +302,7 @@ function DetailPanel({
               onChange={(e) => setNotes(e.target.value)}
               placeholder="Add optional notes before resolving..."
               rows={3}
-              className="w-full rounded-lg border border-white/[0.08] bg-white/[0.03] px-3 py-2 text-sm text-foreground placeholder:text-muted-dark/50 focus:border-brand-cyan/30 focus:outline-none resize-none"
+              className="w-full rounded-lg border border-glass-hover bg-white/[0.03] px-3 py-2 text-base text-foreground placeholder:text-muted-dark/60 focus:border-brand-cyan/30 focus:outline-none resize-none"
             />
           </div>
         )}
@@ -297,11 +312,11 @@ function DetailPanel({
           <div>
             <div className="flex items-center gap-1.5 mb-1.5">
               <Bookmark className="h-3 w-3 text-muted-dark" />
-              <span className="text-[10px] font-medium uppercase tracking-wider text-muted-dark">
+              <span className="text-sm font-medium uppercase tracking-wider text-muted-dark">
                 Reviewer Notes
               </span>
             </div>
-            <div className="rounded-lg border border-white/[0.06] bg-white/[0.02] px-3 py-2 text-xs text-muted">
+            <div className="rounded-lg border border-glass bg-white/[0.02] px-3 py-2 text-sm text-muted">
               {review.reviewerNotes}
             </div>
           </div>
@@ -310,11 +325,11 @@ function DetailPanel({
 
       {/* Action buttons fixed at bottom */}
       {isPending && (
-        <div className="flex-shrink-0 border-t border-white/[0.06] px-4 py-3 flex items-center gap-2">
+        <div className="flex-shrink-0 border-t border-glass px-4 py-3 flex items-center gap-2">
           <button
             onClick={() => void handleResolve("approved")}
             disabled={resolving}
-            className="flex-1 flex items-center justify-center gap-1.5 rounded-lg border border-emerald-500/30 bg-emerald-500/10 px-4 py-2 text-xs font-medium text-emerald-400 transition-all hover:bg-emerald-500/20 disabled:opacity-50"
+            className="flex-1 flex items-center justify-center gap-1.5 rounded-lg border border-emerald-500/30 bg-emerald-500/10 px-4 py-2 text-sm font-medium text-emerald-400 transition-all hover:bg-emerald-500/20 disabled:opacity-50"
           >
             {resolving ? (
               <Loader2 className="h-3.5 w-3.5 animate-spin" />
@@ -322,14 +337,14 @@ function DetailPanel({
               <Check className="h-3.5 w-3.5" />
             )}
             Approve
-            <kbd className="ml-1 rounded border border-emerald-500/20 bg-emerald-500/5 px-1 py-px text-[9px]">
+            <kbd className="ml-1 rounded border border-emerald-500/20 bg-emerald-500/5 px-1 py-px text-sm">
               A
             </kbd>
           </button>
           <button
             onClick={() => void handleResolve("rejected")}
             disabled={resolving}
-            className="flex-1 flex items-center justify-center gap-1.5 rounded-lg border border-red-500/30 bg-red-500/10 px-4 py-2 text-xs font-medium text-red-400 transition-all hover:bg-red-500/20 disabled:opacity-50"
+            className="flex-1 flex items-center justify-center gap-1.5 rounded-lg border border-red-500/30 bg-red-500/10 px-4 py-2 text-sm font-medium text-red-400 transition-all hover:bg-red-500/20 disabled:opacity-50"
           >
             {resolving ? (
               <Loader2 className="h-3.5 w-3.5 animate-spin" />
@@ -337,7 +352,7 @@ function DetailPanel({
               <X className="h-3.5 w-3.5" />
             )}
             Reject
-            <kbd className="ml-1 rounded border border-red-500/20 bg-red-500/5 px-1 py-px text-[9px]">
+            <kbd className="ml-1 rounded border border-red-500/20 bg-red-500/5 px-1 py-px text-sm">
               R
             </kbd>
           </button>
@@ -358,39 +373,56 @@ export default function ReviewsSplitPane() {
   const resolveReview = useReviewStore((s) => s.resolveReview);
   const checkEscalations = useReviewStore((s) => s.checkEscalations);
   const escalationEnabled = useReviewStore((s) => s.escalationEnabled);
-  const pollPaused = useReviewStore((s) => s.pollPaused);
 
   const [filter, setFilter] = useState("all");
-  const [selectedId, setSelectedId] = useState<string | null>(null);
-  const [shortcutsOpen, setShortcutsOpen] = useState(false);
+  const [selectedIdRaw, setSelectedId] = useState<string | null>(null);
 
-  // Coalesce data refresh + escalation pass into the same tick: escalations
-  // can only change after data does, so a separate 30s timer is duplicate work
-  // and creates an awkward race against pre-fetch stale data. usePolling
-  // already fires immediately on mount and gates on document.visibility, so
-  // background tabs skip both and we don't need a separate effect to fetch.
-  const refreshAndCheckEscalations = useCallback(async () => {
-    await fetchReviews();
-    if (escalationEnabled) {
-      await checkEscalations();
-    }
-  }, [fetchReviews, checkEscalations, escalationEnabled]);
+  useEffect(() => {
+    void fetchReviews();
+  }, [fetchReviews]);
 
-  usePolling(refreshAndCheckEscalations, 15_000, !pollPaused);
+  usePolling(fetchReviews, 15_000, true);
 
-  // Group and sort reviews: pending first, then by creation date
+  useEffect(() => {
+    if (!escalationEnabled) return;
+    const id = setInterval(checkEscalations, 30_000);
+    checkEscalations();
+    return () => clearInterval(id);
+  }, [escalationEnabled, checkEscalations]);
+
   const filtered = useMemo(() => {
     let list = reviews;
     if (filter !== "all") {
       list = reviews.filter((r) => r.status === filter);
     }
-    // Sort: pending first, then by createdAt descending
     return [...list].sort((a, b) => {
       if (a.status === "pending" && b.status !== "pending") return -1;
       if (a.status !== "pending" && b.status === "pending") return 1;
       return new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime();
     });
   }, [reviews, filter]);
+
+  const {
+    selectedIds: bulkSelectedIds,
+    clearSelection,
+    toggleSelect,
+    selectAll,
+    bulkResolving,
+    bulkProgress,
+    pendingInFiltered,
+    handleBulkAction,
+    showRejectConfirm,
+    setShowRejectConfirm,
+    handleBulkRejectConfirm,
+    undoState,
+    handleUndo,
+    handleUndoExpire,
+    bulkResult,
+    dismissBulkResult,
+    retryFailed,
+  } = useReviewBulkActions(filtered);
+
+  const bulkCount = bulkSelectedIds.size;
 
   const counts = useMemo(() => {
     const c = { all: reviews.length, pending: 0, approved: 0, rejected: 0 };
@@ -402,39 +434,27 @@ export default function ReviewsSplitPane() {
     return c;
   }, [reviews]);
 
-  // Single index for O(1) lookups of selectedReview / selectedIndex —
-  // previously every selectedId change ran two linear scans (find + findIndex)
-  // on top of N row re-renders, which dominated the j/k hot path past ~50 items.
-  const filteredIndex = useMemo(() => {
-    const map = new Map<string, { item: ManualReviewItem; index: number }>();
-    filtered.forEach((item, index) => map.set(item.id, { item, index }));
-    return map;
-  }, [filtered]);
+  const selectedId = useMemo(() => {
+    if (selectedIdRaw && filtered.find((r) => r.id === selectedIdRaw)) {
+      return selectedIdRaw;
+    }
+    return filtered[0]?.id ?? null;
+  }, [selectedIdRaw, filtered]);
 
-  const selectedEntry = selectedId ? filteredIndex.get(selectedId) : undefined;
-  const selectedReview = selectedEntry?.item ?? null;
-  const selectedIndex = selectedEntry?.index ?? -1;
+  const selectedReview = useMemo(
+    () => filtered.find((r) => r.id === selectedId) ?? null,
+    [filtered, selectedId]
+  );
 
-  // Stable callback: same reference every render so memo'd rows can skip
-  // re-rendering when the *parent* re-renders (e.g. j/k changing selectedId).
-  const handleSelectRow = useCallback((id: string) => {
-    setSelectedId(id);
-  }, []);
+  const selectedIndex = useMemo(
+    () => filtered.findIndex((r) => r.id === selectedId),
+    [filtered, selectedId]
+  );
 
-  // Keyboard navigation
   useEffect(() => {
     const handler = (e: KeyboardEvent) => {
       const tag = (e.target as HTMLElement)?.tagName;
       if (tag === "INPUT" || tag === "TEXTAREA" || tag === "SELECT") return;
-
-      if (e.key === "?" || (e.key === "/" && e.shiftKey)) {
-        e.preventDefault();
-        setShortcutsOpen((prev) => !prev);
-        return;
-      }
-      // While the shortcuts overlay is up, don't fall through to navigation
-      // — the overlay's own handler manages Escape and its search field.
-      if (shortcutsOpen) return;
 
       if (e.key === "j") {
         e.preventDefault();
@@ -450,25 +470,14 @@ export default function ReviewsSplitPane() {
       } else if (e.key === "r" && selectedReview?.status === "pending") {
         e.preventDefault();
         void resolveReview(selectedReview.id, "rejected");
+      } else if (e.key === "Escape" && bulkCount > 0) {
+        e.preventDefault();
+        clearSelection();
       }
     };
     window.addEventListener("keydown", handler);
     return () => window.removeEventListener("keydown", handler);
-  }, [selectedIndex, filtered, selectedReview, resolveReview, shortcutsOpen]);
-
-  // Auto-select first review if nothing selected
-  useEffect(() => {
-    if (!selectedId && filtered.length > 0) {
-      setSelectedId(filtered[0].id);
-    }
-  }, [filtered, selectedId]);
-
-  // Clear selection on filter change if the current selection is no longer visible
-  useEffect(() => {
-    if (selectedId && !filteredIndex.has(selectedId)) {
-      setSelectedId(filtered[0]?.id ?? null);
-    }
-  }, [filter, filtered, filteredIndex, selectedId]);
+  }, [selectedIndex, filtered, selectedReview, resolveReview, bulkCount, clearSelection]);
 
   const handleResolve = useCallback(
     (id: string, status: "approved" | "rejected", notes?: string) => {
@@ -477,15 +486,11 @@ export default function ReviewsSplitPane() {
     [resolveReview]
   );
 
-  // Scroll the active row into view via Virtuoso
-  const virtuosoRef = useRef<VirtuosoHandle>(null);
+  const listRef = useRef<HTMLDivElement>(null);
   useEffect(() => {
-    if (selectedIndex < 0) return;
-    virtuosoRef.current?.scrollToIndex({
-      index: selectedIndex,
-      behavior: "smooth",
-      align: "center",
-    });
+    if (!listRef.current || selectedIndex < 0) return;
+    const rows = listRef.current.querySelectorAll("[data-review-row]");
+    rows[selectedIndex]?.scrollIntoView({ behavior: "smooth", block: "nearest" });
   }, [selectedIndex]);
 
   return (
@@ -498,12 +503,12 @@ export default function ReviewsSplitPane() {
       {/* Split pane container */}
       <motion.div
         variants={fadeUp}
-        className="flex-1 min-h-0 flex rounded-xl border border-white/[0.06] bg-white/[0.01] overflow-hidden"
+        className="flex-1 min-h-0 flex rounded-xl border border-glass bg-white/[0.01] overflow-hidden"
       >
         {/* Left panel - list */}
-        <div className="w-[40%] flex flex-col border-r border-white/[0.06]">
+        <div className="w-[40%] flex flex-col border-r border-glass">
           {/* Filter tabs */}
-          <div className="flex-shrink-0 px-2 pt-2 pb-1 border-b border-white/[0.06]">
+          <div className="flex-shrink-0 px-2 pt-2 pb-1 border-b border-glass">
             <FilterBar
               options={[
                 { key: "all", label: "All", count: counts.all },
@@ -517,42 +522,100 @@ export default function ReviewsSplitPane() {
             />
           </div>
 
-          {/* Review list (virtualized) */}
-          <div className="flex-1 min-h-0">
+          {/* Bulk action toolbar */}
+          <AnimatePresence>
+            {pendingInFiltered.length > 0 && (
+              <motion.div
+                initial={{ height: 0, opacity: 0 }}
+                animate={{ height: "auto", opacity: 1 }}
+                exit={{ height: 0, opacity: 0 }}
+                className="flex-shrink-0 overflow-hidden border-b border-glass"
+              >
+                <div className="flex items-center gap-2 px-3 py-1.5 bg-white/[0.02]">
+                  <button
+                    onClick={() => {
+                      if (bulkCount === pendingInFiltered.length) clearSelection();
+                      else selectAll();
+                    }}
+                    className="flex-shrink-0 text-muted-dark hover:text-brand-cyan transition-colors"
+                  >
+                    {bulkCount === 0 ? (
+                      <Square className="h-4 w-4" />
+                    ) : bulkCount === pendingInFiltered.length ? (
+                      <CheckSquare className="h-4 w-4 text-brand-cyan" />
+                    ) : (
+                      <MinusSquare className="h-4 w-4 text-brand-cyan" />
+                    )}
+                  </button>
+                  {bulkCount > 0 ? (
+                    <>
+                      <span className="text-xs text-muted-dark tabular-nums">
+                        {bulkCount} selected
+                      </span>
+                      <div className="ml-auto flex items-center gap-1.5">
+                        <button
+                          onClick={() => handleBulkAction("approved")}
+                          disabled={bulkResolving}
+                          className="rounded-md border border-emerald-500/30 bg-emerald-500/10 px-2.5 py-1 text-xs font-medium text-emerald-400 transition-all hover:bg-emerald-500/20 disabled:opacity-50"
+                        >
+                          <Check className="inline h-3 w-3 mr-1" />
+                          Approve
+                        </button>
+                        <button
+                          onClick={() => handleBulkAction("rejected")}
+                          disabled={bulkResolving}
+                          className="rounded-md border border-red-500/30 bg-red-500/10 px-2.5 py-1 text-xs font-medium text-red-400 transition-all hover:bg-red-500/20 disabled:opacity-50"
+                        >
+                          <X className="inline h-3 w-3 mr-1" />
+                          Reject
+                        </button>
+                        <button
+                          onClick={clearSelection}
+                          className="rounded-md px-2 py-1 text-xs text-muted-dark hover:text-foreground transition-colors"
+                        >
+                          Cancel
+                        </button>
+                      </div>
+                    </>
+                  ) : (
+                    <span className="text-xs text-muted-dark">
+                      Select reviews for bulk actions
+                    </span>
+                  )}
+                </div>
+              </motion.div>
+            )}
+          </AnimatePresence>
+
+          {/* Review list */}
+          <div
+            ref={listRef}
+            className="flex-1 overflow-y-auto divide-y divide-white/[0.04] scrollbar-thin scrollbar-thumb-white/10 scrollbar-track-transparent"
+          >
             {filtered.length === 0 ? (
-              <div className="flex items-center justify-center py-12 text-[11px] text-muted-dark/50">
+              <div className="flex items-center justify-center py-12 text-sm text-muted-dark/60">
                 No reviews in this filter
               </div>
             ) : (
-              <Virtuoso
-                ref={virtuosoRef}
-                data={filtered}
-                computeItemKey={(_index, review) => review.id}
-                overscan={200}
-                style={{ height: "100%" }}
-                className="scrollbar-thin scrollbar-thumb-white/10 scrollbar-track-transparent"
-                itemContent={(index, review) => (
-                  <div
-                    className={
-                      index > 0 ? "border-t border-white/[0.04]" : undefined
-                    }
-                  >
-                    <ReviewRow
-                      review={review}
-                      isActive={review.id === selectedId}
-                      onSelect={handleSelectRow}
-                    />
-                  </div>
-                )}
-              />
+              filtered.map((review) => (
+                <div key={review.id} data-review-row>
+                  <ReviewRow
+                    review={review}
+                    isActive={review.id === selectedId}
+                    isSelected={bulkSelectedIds.has(review.id)}
+                    onToggleSelect={(e) => toggleSelect(review.id, e.shiftKey)}
+                    onClick={() => setSelectedId(review.id)}
+                  />
+                </div>
+              ))
             )}
           </div>
 
           {/* Loading indicator */}
           {reviewsLoading && (
-            <div className="flex-shrink-0 flex items-center justify-center gap-1.5 py-1.5 border-t border-white/[0.06] bg-white/[0.02]">
+            <div className="flex-shrink-0 flex items-center justify-center gap-1.5 py-1.5 border-t border-glass bg-white/[0.02]">
               <Loader2 className="h-3 w-3 animate-spin text-muted-dark" />
-              <span className="text-[10px] text-muted-dark">Refreshing...</span>
+              <span className="text-sm text-muted-dark">Refreshing...</span>
             </div>
           )}
         </div>
@@ -577,11 +640,54 @@ export default function ReviewsSplitPane() {
         </div>
       </motion.div>
 
-      <ShortcutsFooter onOpenAll={() => setShortcutsOpen(true)} />
-      <ShortcutsOverlay
-        open={shortcutsOpen}
-        onClose={() => setShortcutsOpen(false)}
-      />
+      {/* Bulk action undo toast */}
+      <AnimatePresence>
+        {undoState && (
+          <UndoToast
+            message={undoState.message}
+            durationMs={5000}
+            onUndo={handleUndo}
+            onExpire={handleUndoExpire}
+          />
+        )}
+      </AnimatePresence>
+
+      {/* Bulk progress toast */}
+      <AnimatePresence>
+        {bulkProgress && !undoState && (
+          <BulkProgressBar
+            done={bulkProgress.done}
+            total={bulkProgress.total}
+            failed={bulkProgress.failed}
+            label={`Processing ${bulkProgress.total} review${bulkProgress.total !== 1 ? "s" : ""}`}
+          />
+        )}
+      </AnimatePresence>
+
+      {/* Partial failure result toast */}
+      <AnimatePresence>
+        {bulkResult && bulkResult.failedIds.length > 0 && (
+          <BulkResultToast
+            total={bulkResult.total}
+            successCount={bulkResult.successCount}
+            failedCount={bulkResult.failedIds.length}
+            action={bulkResult.status}
+            onDismiss={dismissBulkResult}
+            onRetry={retryFailed}
+          />
+        )}
+      </AnimatePresence>
+
+      {/* Bulk reject confirmation */}
+      <ConfirmDialog
+        open={showRejectConfirm}
+        title="Reject selected reviews?"
+        confirmLabel={`Reject ${bulkCount} review${bulkCount !== 1 ? "s" : ""}`}
+        onConfirm={handleBulkRejectConfirm}
+        onCancel={() => setShowRejectConfirm(false)}
+      >
+        This will reject {bulkCount} selected review{bulkCount !== 1 ? "s" : ""}. You will have 5 seconds to undo this action.
+      </ConfirmDialog>
     </motion.div>
   );
 }

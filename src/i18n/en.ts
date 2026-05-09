@@ -8,6 +8,15 @@ export interface Translations {
     download: string;
     dashboard: string;
     features: string;
+    guide: string;
+    community: string;
+    useCases: string;
+    tour: string;
+    security: string;
+    blog: string;
+    changelog: string;
+    compare: string;
+    pricing: string;
     menu: string;
   };
   footer: {
@@ -67,6 +76,8 @@ export interface Translations {
     mode1: string;
     mode2: string;
     mode3: string;
+    mode4: string;
+    mode5: string;
     viewOnGithub: string;
     downloadForWindows: string;
     joinWaitlist: string;
@@ -74,15 +85,26 @@ export interface Translations {
     adoptionSnapshot: string;
     scroll: string;
     phases: string;
+    publicBeta: string;
     agents: string;
     executions: string;
+    connectors: string;
     templates: string;
+  };
+  heroTransition: {
+    ariaLabel: string;
+    speed: string;
+    privacy: string;
+    scale: string;
+    value: string;
+    cta: string;
   };
   sections: {
     vision: string;
     pricing: string;
     faq: string;
     features: string;
+    community: string;
     useCases: string;
     eventBus: string;
     download: string;
@@ -165,11 +187,12 @@ export interface Translations {
     executions: string;
     events: string;
     reviews: string;
-    playground: string;
     observability: string;
-    usage: string;
     knowledge: string;
     settings: string;
+    leaderboard: string;
+    sla: string;
+    messages: string;
     more: string;
     greeting: {
       morning: string;
@@ -200,6 +223,149 @@ export interface Translations {
       copyErrorId: string;
       copied: string;
     };
+    unreadMessages: string;
+    fleetHealth: string;
+    fleet: {
+      title: string;
+      severity: {
+        urgent: string;
+        suggested: string;
+        insight: string;
+      };
+      expand: string;
+      collapse: string;
+      dismiss: string;
+    };
+    staleness: {
+      justNow: string;
+      secondsAgo: string;
+      minutesAgo: string;
+      hoursAgo: string;
+      daysAgo: string;
+      error: string;
+    };
+    scope: {
+      allPersonas: string;
+      personaLabel: string;
+      compare: string;
+      dateRange: {
+        last24h: string;
+        last7d: string;
+        last30d: string;
+        last90d: string;
+        custom: string;
+      };
+    };
+  };
+  memoriesPage: {
+    title: string;
+    subtitle: string;
+    totalCount: string;
+    filters: {
+      all: string;
+      throttle: string;
+      schedule: string;
+      alert: string;
+      config: string;
+      routing: string;
+    };
+    status: {
+      active: string;
+      pending: string;
+      archived: string;
+    };
+    uses: string;
+    empty: string;
+    seeAll: string;
+    conflicts: {
+      count: string;
+      resolveButton: string;
+      modalTitle: string;
+      modalSubtitle: string;
+      accept: string;
+      reject: string;
+      cancel: string;
+      apply: string;
+      allResolved: string;
+    };
+  };
+  reviewsPage: {
+    focus: {
+      enter: string;
+      exit: string;
+      progress: string;
+      skip: string;
+      empty: string;
+      approve: string;
+      reject: string;
+      shortcuts: string;
+    };
+  };
+  leaderboardPage: {
+    title: string;
+    subtitle: string;
+    rank: string;
+    composite: string;
+    radarTitle: string;
+    metrics: {
+      reliability: string;
+      cost: string;
+      speed: string;
+      quality: string;
+      volume: string;
+    };
+    trend: {
+      up: string;
+      down: string;
+      flat: string;
+    };
+  };
+  slaPage: {
+    title: string;
+    subtitle: string;
+    compliance: string;
+    activeBreaches: string;
+    objectives: string;
+    target: string;
+    current: string;
+    timeInSla: string;
+    metricType: {
+      availability: string;
+      latency: string;
+      successRate: string;
+    };
+    severity: {
+      minor: string;
+      major: string;
+      critical: string;
+    };
+    breachLog: {
+      title: string;
+      empty: string;
+      ongoing: string;
+      duration: string;
+    };
+  };
+  messagesPage: {
+    title: string;
+    subtitle: string;
+    unread: string;
+    read: string;
+    empty: string;
+    expand: string;
+    collapse: string;
+    pagination: {
+      prev: string;
+      next: string;
+      page: string;
+    };
+    markAllRead: string;
+  };
+  observabilityPage: {
+    title: string;
+    subtitle: string;
+    tabPerformance: string;
+    tabUsage: string;
   };
   agentsPage: {
     title: string;
@@ -231,6 +397,17 @@ export interface Translations {
     tabEvents: string;
     tabSubscriptions: string;
     tabVisualization: string;
+    tabSwimlane: string;
+    swimlane: {
+      title: string;
+      subtitle: string;
+      empty: string;
+    };
+    connectionStatus: {
+      connected: string;
+      reconnecting: string;
+      polling: string;
+    };
   };
   settingsPage: {
     title: string;
@@ -267,6 +444,22 @@ export interface Translations {
     peopleWaiting: string;
     errorGeneric: string;
   };
+  templatesPage: {
+    title: string;
+    subtitle: string;
+    gridHeading: string;
+    gridDescription: string;
+    changeCategory: string;
+    complexityAll: string;
+    complexityBasic: string;
+    complexityProfessional: string;
+    complexityEnterprise: string;
+    searchPlaceholder: string;
+    searchAriaLabel: string;
+    showingCount: string;
+    noMatches: string;
+    clearFilters: string;
+  };
   roadmapSection: {
     inProgress: string;
     next: string;
@@ -278,6 +471,79 @@ export interface Translations {
     latencyLanes: string;
     ephemeralConnections: string;
     queueDepth: string;
+  };
+  guide: {
+    title: string;
+    subtitle: string;
+    searchPlaceholder: string;
+    searchInCategory: string;
+    topics: string;
+    backToGuide: string;
+    showAllResults: string;
+    noResults: string;
+    stillQuestions: string;
+    joinDiscord: string;
+    categories: {
+      "getting-started": string;
+      "agents-prompts": string;
+      triggers: string;
+      credentials: string;
+      pipelines: string;
+      testing: string;
+      memories: string;
+      monitoring: string;
+      deployment: string;
+      troubleshooting: string;
+    };
+    categoryDescriptions: {
+      "getting-started": string;
+      credentials: string;
+      "agents-prompts": string;
+      triggers: string;
+      pipelines: string;
+      memories: string;
+      monitoring: string;
+      testing: string;
+      deployment: string;
+      troubleshooting: string;
+    };
+  };
+  featurePages: {
+    orchestration: { headline: string; description: string; cta: string };
+    security: { headline: string; description: string; cta: string };
+    "multi-provider": { headline: string; description: string; cta: string };
+    genome: { headline: string; description: string; cta: string };
+  };
+  accessibility: {
+    changeLanguage: string;
+    selectLanguage: string;
+    selectTheme: string;
+  };
+  themes: {
+    midnight: string;
+    cyan: string;
+    bronze: string;
+    frost: string;
+    purple: string;
+    pink: string;
+    red: string;
+    matrix: string;
+    light: string;
+    ice: string;
+    news: string;
+  };
+  themeDescriptions: {
+    midnight: string;
+    cyan: string;
+    bronze: string;
+    frost: string;
+    purple: string;
+    pink: string;
+    red: string;
+    matrix: string;
+    light: string;
+    ice: string;
+    news: string;
   };
 }
 
@@ -291,6 +557,15 @@ export const en: Translations = {
     download: 'Download',
     dashboard: 'Dashboard',
     features: 'Features',
+    guide: 'Guide',
+    community: 'Community',
+    useCases: 'Use Cases',
+    tour: 'Tour',
+    security: 'Security',
+    blog: 'Blog',
+    changelog: 'Changelog',
+    compare: 'Compare',
+    pricing: 'Pricing',
     menu: 'Menu',
   },
   footer: {
@@ -340,16 +615,18 @@ export const en: Translations = {
   },
   hero: {
     title: 'AI agents that run on your machine',
-    subtitle: 'Build autonomous workflows that connect your tools, process your data, and take action \u2014 all running locally.',
+    subtitle: 'One persona, many capabilities. Build an assistant with a stable identity and compose the jobs it does \u2014 add, toggle, or retire capabilities without starting over.',
     cta: 'Get Started',
     badge: 'AI Agent Platform',
     headingLine1: 'Intelligent agents',
     headingLine2: 'that work for you',
     description: 'Design agents in natural language. Orchestrate them locally or in the cloud.',
-    descriptionBold: 'No workflow diagrams. No code.',
-    mode1: 'Design in one sentence',
-    mode2: 'Run locally for free',
-    mode3: 'Scale to cloud when needed',
+    descriptionBold: 'No workflow diagrams. No agent swarms. No code.',
+    mode1: 'Composable Capabilities',
+    mode2: 'Simple setup',
+    mode3: 'Free',
+    mode4: 'Multi-Provider AI',
+    mode5: 'Self-improving',
     viewOnGithub: 'View on GitHub',
     downloadForWindows: 'Download for Windows',
     joinWaitlist: 'Join Windows Waitlist',
@@ -357,15 +634,26 @@ export const en: Translations = {
     adoptionSnapshot: 'Adoption snapshot',
     scroll: 'Scroll',
     phases: 'PHASES',
+    publicBeta: 'PUBLIC BETA',
     agents: 'Agents',
     executions: 'Executions',
+    connectors: 'Connectors',
     templates: 'Templates',
+  },
+  heroTransition: {
+    ariaLabel: 'Core product pillars',
+    speed: 'Fast',
+    privacy: 'Private',
+    scale: 'Scalable',
+    value: 'One persona, many capabilities \u2014 a stable identity with a composable set of jobs, running where your data lives and staying under your control.',
+    cta: 'See it in action',
   },
   sections: {
     vision: 'Vision',
     pricing: 'Pricing',
     faq: 'FAQ',
     features: 'Features',
+    community: 'Community',
     useCases: 'Use Cases',
     eventBus: 'Event Bus',
     download: 'Download',
@@ -397,11 +685,11 @@ export const en: Translations = {
     demo: 'Demo',
   },
   useCasesSection: {
-    heading: 'One agent per tool.',
-    headingGradient: 'Infinite possibilities',
+    heading: 'One persona,',
+    headingGradient: 'many capabilities',
     integrations: 'integrations',
-    patterns: 'patterns',
-    description: 'Click any integration to explore what a Personas agent can automate.',
+    patterns: 'capabilities',
+    description: 'Each persona carries a stable identity and a composable set of capabilities \u2014 click any integration to explore the jobs a persona can do.',
     autoplayHint: 'Auto-cycling \u2014 click to stop.',
     browseTemplates: 'Browse All Templates',
     whatCanAutomate: 'What Personas can automate',
@@ -536,11 +824,12 @@ export const en: Translations = {
     executions: 'Executions',
     events: 'Events',
     reviews: 'Reviews',
-    playground: 'Playground',
     observability: 'Observability',
-    usage: 'Usage',
     knowledge: 'Knowledge',
     settings: 'Settings',
+    leaderboard: 'Leaderboard',
+    sla: 'SLA',
+    messages: 'Messages',
     more: 'More',
     greeting: {
       morning: 'Good Morning',
@@ -571,6 +860,149 @@ export const en: Translations = {
       copyErrorId: 'Copy error ID',
       copied: 'Copied',
     },
+    unreadMessages: 'unread messages',
+    fleetHealth: 'fleet health',
+    fleet: {
+      title: 'Fleet optimization',
+      severity: {
+        urgent: 'Urgent',
+        suggested: 'Suggested',
+        insight: 'Insight',
+      },
+      expand: 'Details',
+      collapse: 'Hide',
+      dismiss: 'Dismiss',
+    },
+    staleness: {
+      justNow: 'Just now',
+      secondsAgo: '{n}s ago',
+      minutesAgo: '{n}m ago',
+      hoursAgo: '{n}h ago',
+      daysAgo: '{n}d ago',
+      error: 'Failed to load',
+    },
+    scope: {
+      allPersonas: 'All personas',
+      personaLabel: 'Persona filter',
+      compare: 'Compare',
+      dateRange: {
+        last24h: '24h',
+        last7d: '7d',
+        last30d: '30d',
+        last90d: '90d',
+        custom: 'Custom',
+      },
+    },
+  },
+  memoriesPage: {
+    title: 'Memories',
+    subtitle: 'Learned patterns your agents apply automatically',
+    totalCount: '{n} memories',
+    filters: {
+      all: 'All',
+      throttle: 'Throttle',
+      schedule: 'Schedule',
+      alert: 'Alert',
+      config: 'Config',
+      routing: 'Routing',
+    },
+    status: {
+      active: 'Active',
+      pending: 'Pending',
+      archived: 'Archived',
+    },
+    uses: '{n} uses',
+    empty: 'No memories match this filter',
+    seeAll: 'See all',
+    conflicts: {
+      count: '{n} conflicts',
+      resolveButton: 'Resolve conflicts',
+      modalTitle: 'Resolve {n} conflicts',
+      modalSubtitle: 'Accept or reject each to keep your memory store consistent.',
+      accept: 'Accept',
+      reject: 'Reject',
+      cancel: 'Cancel',
+      apply: 'Apply',
+      allResolved: 'All conflicts resolved',
+    },
+  },
+  reviewsPage: {
+    focus: {
+      enter: 'Focus flow',
+      exit: 'Exit focus',
+      progress: '{n} of {total}',
+      skip: 'Skip',
+      empty: 'All caught up — no pending reviews',
+      approve: 'Approve',
+      reject: 'Reject',
+      shortcuts: 'A approve · R reject · S skip · Esc exit',
+    },
+  },
+  leaderboardPage: {
+    title: 'Leaderboard',
+    subtitle: 'Fleet ranking by composite performance',
+    rank: 'Rank',
+    composite: 'Composite',
+    radarTitle: 'Metrics profile',
+    metrics: {
+      reliability: 'Reliability',
+      cost: 'Cost',
+      speed: 'Speed',
+      quality: 'Quality',
+      volume: 'Volume',
+    },
+    trend: {
+      up: 'Up',
+      down: 'Down',
+      flat: 'Flat',
+    },
+  },
+  slaPage: {
+    title: 'SLA',
+    subtitle: 'Service-level objectives, compliance, and breach history',
+    compliance: 'Compliance',
+    activeBreaches: 'Active breaches',
+    objectives: 'Objectives',
+    target: 'Target',
+    current: 'Current',
+    timeInSla: 'Time in SLA',
+    metricType: {
+      availability: 'Availability',
+      latency: 'Latency p95',
+      successRate: 'Success rate',
+    },
+    severity: {
+      minor: 'Minor',
+      major: 'Major',
+      critical: 'Critical',
+    },
+    breachLog: {
+      title: 'Breach log',
+      empty: 'No breaches in the last 7 days.',
+      ongoing: 'Ongoing',
+      duration: '{n} min',
+    },
+  },
+  messagesPage: {
+    title: 'Messages',
+    subtitle: 'Async feedback from every persona in the fleet',
+    unread: 'Unread',
+    read: 'Read',
+    empty: 'No messages in this page.',
+    expand: 'Show payload',
+    collapse: 'Hide payload',
+    pagination: {
+      prev: 'Previous',
+      next: 'Next',
+      page: 'Page {n} of {total}',
+    },
+    markAllRead: 'Mark all read',
+  },
+  observabilityPage: {
+    title: 'Observability',
+    subtitle: 'Performance metrics, cost tracking, and tool utilization',
+    tabPerformance: 'Performance',
+    tabUsage: 'Tool Usage',
   },
   agentsPage: {
     title: 'Agents',
@@ -602,6 +1034,17 @@ export const en: Translations = {
     tabEvents: 'Events',
     tabSubscriptions: 'Subscriptions',
     tabVisualization: 'Visualization',
+    tabSwimlane: 'Timeline',
+    swimlane: {
+      title: 'Event swim-lanes',
+      subtitle: 'Time-ordered per-persona event trace',
+      empty: 'No events in the selected window',
+    },
+    connectionStatus: {
+      connected: 'Real-time: connected',
+      reconnecting: 'Reconnecting to event stream…',
+      polling: 'Polling for updates (delayed)',
+    },
   },
   settingsPage: {
     title: 'Settings',
@@ -638,6 +1081,22 @@ export const en: Translations = {
     peopleWaiting: 'people waiting',
     errorGeneric: 'Something went wrong. Please try again.',
   },
+  templatesPage: {
+    title: 'Agent Templates',
+    subtitle: 'Browse {count} ready-made agent templates grouped by the kind of work they do. Pick a category to see the templates inside.',
+    gridHeading: 'Browse templates by category',
+    gridDescription: 'Templates are pre-configured Personas you can adopt with one click. Each template already has the prompt, tools, and triggers wired up for a specific job — no setup required.',
+    changeCategory: 'Change category',
+    complexityAll: 'All',
+    complexityBasic: 'Basic',
+    complexityProfessional: 'Professional',
+    complexityEnterprise: 'Enterprise',
+    searchPlaceholder: 'Search templates, tools, services...',
+    searchAriaLabel: 'Search templates',
+    showingCount: 'Showing {shown} of {total} templates',
+    noMatches: 'No templates match your filters',
+    clearFilters: 'Clear filters',
+  },
   roadmapSection: {
     inProgress: 'In Progress',
     next: 'Next',
@@ -649,5 +1108,94 @@ export const en: Translations = {
     latencyLanes: 'Latency Lanes',
     ephemeralConnections: 'Ephemeral connections',
     queueDepth: 'Queue depth + throughput',
+  },
+  guide: {
+    title: 'User',
+    subtitle: 'Everything you need to know about Personas — from your first agent to advanced multi-agent pipelines.',
+    searchPlaceholder: 'Search 100+ topics...',
+    searchInCategory: 'Search in this category...',
+    topics: 'topics',
+    backToGuide: 'Back to Guide',
+    showAllResults: 'Show all results',
+    noResults: 'No topics found. Try a different search term.',
+    stillQuestions: 'Still have questions?',
+    joinDiscord: 'Join our Discord',
+    categories: {
+      "getting-started": 'Getting Started',
+      "agents-prompts": 'Agents & Prompts',
+      triggers: 'Triggers & Scheduling',
+      credentials: 'Credentials & Security',
+      pipelines: 'Pipelines & Teams',
+      testing: 'Testing & Optimization',
+      memories: 'Memories & Knowledge',
+      monitoring: 'Monitoring & Costs',
+      deployment: 'Deployment & Integrations',
+      troubleshooting: 'Troubleshooting',
+    },
+    categoryDescriptions: {
+      "getting-started": "Install Personas, create your first agent, and learn the basics in under 10 minutes.",
+      credentials: "Connect to services securely. Understand the encrypted vault and how your data stays safe.",
+      "agents-prompts": "Create, configure, and fine-tune your AI agents. Master simple and structured prompt modes.",
+      triggers: "Set up when and how your agents run — schedules, webhooks, file watchers, and more.",
+      pipelines: "Wire agents together into visual pipelines. Build multi-agent workflows on the team canvas.",
+      memories: "Your agents learn and remember. Manage what they know and how they use past experience.",
+      monitoring: "Track every execution in real time. See what your agents do, how well they perform, and what they cost.",
+      testing: "Run arena tests, A/B comparisons, and let the genome system evolve your best prompts.",
+      deployment: "Deploy agents to the cloud, connect to GitHub Actions, GitLab CI, and n8n workflows.",
+      troubleshooting: "Fix common issues, understand error messages, and get your agents back on track.",
+    },
+  },
+  featurePages: {
+    orchestration: {
+      headline: "Agents that work together",
+      description: "Build visual pipelines where multiple agents collaborate on complex tasks. One agent's output feeds into the next — no glue code, no manual steps, no limits on what you can orchestrate.",
+      cta: "Build your first pipeline",
+    },
+    security: {
+      headline: "Your secrets stay yours",
+      description: "Every password, API key, and access token is encrypted on your device using bank-grade AES-256 encryption. Your credentials are stored in your operating system's own secure vault — nothing is ever sent to the cloud.",
+      cta: "Secure your connections",
+    },
+    "multi-provider": {
+      headline: "Not locked to one AI",
+      description: "Use Claude, OpenAI, Gemini, or run models locally with Ollama. Switch between providers freely, assign different models to different agents, and if one provider goes down — your agents automatically switch to another.",
+      cta: "Choose your AI",
+    },
+    genome: {
+      headline: "Your agents get smarter automatically",
+      description: "Instead of manually tweaking prompts for hours, let the Genome system do it for you. It tests variations, keeps what works, and discards the rest — like natural selection for your AI agents.",
+      cta: "Evolve your agents",
+    },
+  },
+  accessibility: {
+    changeLanguage: 'Change language',
+    selectLanguage: 'Select language',
+    selectTheme: 'Select theme: {name}',
+  },
+  themes: {
+    midnight: 'Midnight',
+    cyan: 'Cyan',
+    bronze: 'Bronze',
+    frost: 'Frost',
+    purple: 'Purple',
+    pink: 'Pink',
+    red: 'Red',
+    matrix: 'Matrix',
+    light: 'Light',
+    ice: 'Ice',
+    news: 'News',
+  },
+  themeDescriptions: {
+    midnight: 'Deep navy dark theme',
+    cyan: 'Teal accent dark theme',
+    bronze: 'Warm amber dark theme',
+    frost: 'Silver cool dark theme',
+    purple: 'Violet accent dark theme',
+    pink: 'Magenta accent dark theme',
+    red: 'Crimson accent dark theme',
+    matrix: 'Neon green dark theme',
+    light: 'Classic bright theme',
+    ice: 'Cool blue light theme',
+    news: 'High contrast light theme',
   },
 };

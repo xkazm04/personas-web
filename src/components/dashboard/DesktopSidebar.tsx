@@ -21,7 +21,7 @@ export default function DesktopSidebar() {
   };
 
   return (
-    <aside className="hidden w-56 flex-shrink-0 border-r border-white/[0.06] bg-white/[0.02] md:flex md:flex-col">
+    <aside className="hidden w-56 flex-shrink-0 border-r border-glass bg-white/[0.02] md:flex md:flex-col">
       <nav className="flex-1 px-3 py-4">
         <div className="space-y-0.5">
           {navItems.map((item, index) => {
@@ -34,11 +34,10 @@ export default function DesktopSidebar() {
                 key={item.key}
                 href={item.href}
                 onMouseEnter={() => prefetchAdjacent(index)}
-                aria-current={active ? "page" : undefined}
-                className={`group relative flex items-center gap-3 rounded-xl px-3 py-2.5 text-sm font-medium outline-none transition-all duration-200 focus-visible:ring-2 focus-visible:ring-brand-cyan/40 focus-visible:ring-offset-0 before:absolute before:inset-y-1 before:left-0 before:w-[2px] before:rounded-full before:bg-brand-cyan before:transition-opacity ${
+                className={`group flex items-center gap-3 rounded-xl px-3 py-2.5 text-base font-medium transition-all duration-200 ${
                   active
-                    ? "bg-brand-cyan/8 text-brand-cyan before:opacity-100"
-                    : "text-muted hover:text-foreground hover:bg-white/[0.04] before:opacity-0"
+                    ? "bg-brand-cyan/8 text-brand-cyan border-l-2 border-brand-cyan -ml-px"
+                    : "text-muted hover:text-foreground hover:bg-white/[0.04]"
                 }`}
               >
                 <Icon
@@ -49,7 +48,7 @@ export default function DesktopSidebar() {
                 <span className="flex-1">{item.label}</span>
                 {badge !== null && (
                   <span
-                    className={`rounded-full px-1.5 py-px text-[10px] font-medium tabular-nums ${
+                    className={`rounded-full px-1.5 py-px text-sm font-medium tabular-nums ${
                       active
                         ? "bg-brand-cyan/20 text-brand-cyan"
                         : "bg-white/[0.08] text-muted-dark"
@@ -65,8 +64,8 @@ export default function DesktopSidebar() {
       </nav>
 
       {/* Connection status */}
-      <div className="border-t border-white/[0.06] px-4 py-3">
-        <div className="flex items-center gap-2 text-[11px]">
+      <div className="border-t border-glass px-4 py-3">
+        <div className="flex items-center gap-2 text-sm">
           {isConnected ? (
             <>
               <div className="relative flex h-3 w-3 items-center justify-center">

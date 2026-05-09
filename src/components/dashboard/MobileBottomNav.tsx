@@ -10,7 +10,7 @@ export default function MobileBottomNav() {
   const { getActive, getBadge } = useNavState();
 
   return (
-    <nav className="fixed inset-x-0 bottom-0 z-40 border-t border-white/[0.06] bg-background/95 backdrop-blur-xl md:hidden safe-bottom">
+    <nav className="fixed inset-x-0 bottom-0 z-40 border-t border-glass bg-background/95 backdrop-blur-xl md:hidden safe-bottom">
       <div className="flex items-center justify-around px-1 py-1">
         {navItems.slice(0, 5).map((item) => {
           const active = getActive(item);
@@ -21,8 +21,7 @@ export default function MobileBottomNav() {
             <Link
               key={item.key}
               href={item.href}
-              aria-current={active ? "page" : undefined}
-              className={`relative flex min-h-[44px] min-w-[44px] flex-col items-center justify-center gap-0.5 rounded-xl px-2 py-1.5 text-[10px] font-medium outline-none transition-colors focus-visible:ring-2 focus-visible:ring-brand-cyan/40 focus-visible:ring-offset-0 ${
+              className={`relative flex min-h-[44px] min-w-[44px] flex-col items-center justify-center gap-0.5 rounded-xl px-2 py-1.5 text-sm font-medium transition-colors ${
                 active
                   ? "text-brand-cyan"
                   : "text-muted-dark"
@@ -31,7 +30,7 @@ export default function MobileBottomNav() {
               <Icon className="h-5 w-5" />
               <span className="leading-none">{item.label}</span>
               {badge !== null && (
-                <span className="absolute right-0.5 top-0.5 flex h-4 min-w-4 items-center justify-center rounded-full bg-brand-cyan/20 px-1 text-[9px] font-bold text-brand-cyan">
+                <span className="absolute right-0.5 top-0.5 flex h-4 min-w-4 items-center justify-center rounded-full bg-brand-cyan/20 px-1 text-sm font-bold text-brand-cyan">
                   {badge}
                 </span>
               )}
@@ -57,7 +56,7 @@ function MobileMoreMenu({
     <div className="relative">
       <button
         onClick={() => setOpen(!open)}
-        className={`flex min-h-[44px] min-w-[44px] flex-col items-center justify-center gap-0.5 rounded-xl px-2 py-1.5 text-[10px] font-medium outline-none transition-colors focus-visible:ring-2 focus-visible:ring-brand-cyan/40 focus-visible:ring-offset-0 ${
+        className={`flex min-h-[44px] min-w-[44px] flex-col items-center justify-center gap-0.5 rounded-xl px-2 py-1.5 text-sm font-medium transition-colors ${
           items.some(getActive) ? "text-brand-cyan" : "text-muted-dark"
         }`}
       >
@@ -68,7 +67,7 @@ function MobileMoreMenu({
       {open && (
         <>
           <div className="fixed inset-0 z-40" onClick={() => setOpen(false)} />
-          <div className="absolute bottom-full right-0 z-50 mb-2 w-48 rounded-xl border border-white/[0.08] bg-background/95 backdrop-blur-xl p-1.5 shadow-2xl">
+          <div className="absolute bottom-full right-0 z-50 mb-2 w-48 rounded-xl border border-glass-hover bg-background/95 backdrop-blur-xl p-1.5 shadow-2xl">
             {items.map((item) => {
               const active = getActive(item);
               const Icon = item.icon;
@@ -77,8 +76,7 @@ function MobileMoreMenu({
                   key={item.key}
                   href={item.href}
                   onClick={() => setOpen(false)}
-                  aria-current={active ? "page" : undefined}
-                  className={`flex min-h-[44px] items-center gap-3 rounded-lg px-3 py-2.5 text-sm font-medium outline-none transition-colors focus-visible:ring-2 focus-visible:ring-brand-cyan/40 focus-visible:ring-offset-0 ${
+                  className={`flex min-h-[44px] items-center gap-3 rounded-lg px-3 py-2.5 text-base font-medium transition-colors ${
                     active
                       ? "bg-brand-cyan/8 text-brand-cyan"
                       : "text-muted hover:text-foreground hover:bg-white/[0.04]"

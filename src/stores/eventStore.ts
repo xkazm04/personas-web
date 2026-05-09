@@ -54,10 +54,14 @@ export function isReplayLocked(retryCounts: Record<string, number>, eventId: str
   return (retryCounts[eventId] ?? 0) >= MAX_REPLAY_RETRIES;
 }
 
+export type ConnectionStatus = "connected" | "reconnecting" | "polling";
+
 interface EventState {
   events: PersonaEvent[];
   eventIds: Set<string>;
   eventsLoading: boolean;
+  connectionStatus: ConnectionStatus;
+  setConnectionStatus: (status: ConnectionStatus) => void;
   fetchEvents: () => Promise<void>;
   appendEvent: (event: PersonaEvent) => void;
 
@@ -81,6 +85,8 @@ export const useEventStore = create<EventState>((set, get) => ({
   events: [],
   eventIds: new Set(),
   eventsLoading: false,
+  connectionStatus: "polling" as ConnectionStatus,
+  setConnectionStatus: (status) => set({ connectionStatus: status }),
   fetchEvents: async () => {
     set({ eventsLoading: true });
     try {

@@ -1,0 +1,4 @@
+export const FLASH_DURATION_MS = 800;
+export const FLASH_DURATION_S = FLASH_DURATION_MS / 1000;
+export const TICK_BASE_DELAY_MS = 2500;
+export const TICK_RANDOM_RANGE_MS = 2000;

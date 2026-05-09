@@ -43,11 +43,15 @@ const EASE_CURVE = [0.22, 1, 0.36, 1] as [number, number, number, number];
 // ── Framer Motion transition presets ─────────────────────────────────
 // instant (100ms) → tooltips, micro-interactions
 // fast    (150ms) → dropdowns, toggles, small state changes
+// micro   (200ms) → terminal lines, typing dots, small element entrances
 // normal  (250ms) → panels, modals, drawers, standard transitions
+// macro   (350ms) → chat bubbles, step blocks, larger element transitions
 // slow    (400ms) → page transitions, wizard steps, large reveals
 export const TRANSITION_INSTANT = { duration: 0.1, ease: EASE_CURVE };
 export const TRANSITION_FAST = { duration: 0.15, ease: EASE_CURVE };
+export const TRANSITION_MICRO = { duration: 0.2, ease: EASE_CURVE };
 export const TRANSITION_NORMAL = { duration: 0.25, ease: EASE_CURVE };
+export const TRANSITION_MACRO = { duration: 0.35, ease: EASE_CURVE };
 export const TRANSITION_SLOW = { duration: 0.4, ease: EASE_CURVE };
 
 export const fadeUp: Variants = {

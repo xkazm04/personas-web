@@ -12,11 +12,11 @@ export const revalidate = 3600;
 export const metadata: Metadata = {
   title: "Roadmap",
   description:
-    "See what's next for Personas. Explore the product roadmap, vote on upcoming features, and browse the changelog.",
+    "See what we're building and what's coming next. Follow our progress from local agent tools to cloud execution, team collaboration, and beyond.",
   openGraph: {
     title: "Roadmap — Personas",
     description:
-      "Product roadmap, feature voting, and changelog for Personas.",
+      "See what we're building and what's coming next. Follow our progress from local agent tools to cloud execution, team collaboration, and beyond.",
     url: `${SITE_URL}/roadmap`,
   },
   alternates: {
