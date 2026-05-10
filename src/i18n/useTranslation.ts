@@ -64,9 +64,15 @@ export function useTranslation() {
       };
     }
 
-    queueMicrotask(() => {
-      if (!cancelled) setTranslations(en);
-    });
+    // Don't flash the user with English while the requested locale is
+    // loading. The previous shape unconditionally set en in a
+    // microtask, then replaced it once the loader resolved — so a
+    // user switching from de to ja saw the entire UI flicker through
+    // English for one frame on first switch (and on every cold visit
+    // until the bundle was cached). Keep the current translations
+    // visible until the new locale resolves; it's a network round-trip
+    // either way and the brief stale view of the prior locale is
+    // strictly less jarring than English-flicker.
     loaders[language as Exclude<Language, "en">]?.().then((next) => {
       const merged = mergeWithEnglishFallback(next);
       cache[language] = merged;
