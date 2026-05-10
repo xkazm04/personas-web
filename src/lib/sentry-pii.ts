@@ -7,7 +7,10 @@
  * - Full URLs → domain-only
  * - Sensitive breadcrumb data fields
  */
+import * as Sentry from "@sentry/nextjs";
 import type { ErrorEvent, Breadcrumb } from "@sentry/nextjs";
+
+type CaptureExceptionHint = Parameters<typeof Sentry.captureException>[1];
 
 // ── Regex patterns (match the Rust pii module) ──────────────────────────────
 
@@ -58,13 +61,43 @@ export function scrubPii(input: string): string {
   return result;
 }
 
+/**
+ * Recursively scrub a free-form object payload (`contexts`, `extra`, `tags`,
+ * stack-frame `vars`, etc.). Strings get the regex pass; objects/arrays get
+ * walked; sensitive-field keys get deleted outright. Capped depth prevents
+ * pathological structures (cyclic refs, very deep trees) from stalling the
+ * beforeSend hook on the request thread.
+ */
+const MAX_SCRUB_DEPTH = 6;
+
+function scrubData(value: unknown, depth = 0): unknown {
+  if (depth > MAX_SCRUB_DEPTH) return value;
+  if (typeof value === "string") return scrubPii(value);
+  if (Array.isArray(value)) {
+    return value.map((item) => scrubData(item, depth + 1));
+  }
+  if (value && typeof value === "object") {
+    const out: Record<string, unknown> = {};
+    for (const [key, v] of Object.entries(value as Record<string, unknown>)) {
+      if (SENSITIVE_FIELDS.has(key)) continue;
+      out[key] = scrubData(v, depth + 1);
+    }
+    return out;
+  }
+  return value;
+}
+
 /** Scrub PII from a Sentry event (used as beforeSend hook). */
 export function scrubEvent(event: ErrorEvent): ErrorEvent {
-  // Strip user fields
+  // Strip user fields. user.id is often a Supabase UUID; reduce to a short
+  // correlation prefix instead of leaking the whole identifier.
   if (event.user) {
     delete event.user.email;
     delete event.user.ip_address;
     delete event.user.username;
+    if (typeof event.user.id === "string") {
+      event.user.id = scrubPii(event.user.id);
+    }
   }
   // Strip request body and headers
   if (event.request) {
@@ -75,13 +108,48 @@ export function scrubEvent(event: ErrorEvent): ErrorEvent {
   if (event.message) {
     event.message = scrubPii(event.message);
   }
-  // Scrub PII from exception values
+  // Scrub PII from exception values + their stack-frame variables.
   if (event.exception?.values) {
     for (const exc of event.exception.values) {
       if (exc.value) {
         exc.value = scrubPii(exc.value);
       }
+      const frames = exc.stacktrace?.frames;
+      if (frames) {
+        for (const frame of frames) {
+          if (frame.vars) {
+            frame.vars = scrubData(frame.vars) as Record<string, unknown>;
+          }
+        }
+      }
     }
+  }
+  // Scrub PII from `contexts` — the most common leak path because
+  // Sentry.captureException(err, { contexts: { persona: { id } } }) passes
+  // raw UUIDs that the message-only scrubber never sees.
+  if (event.contexts) {
+    const next: Record<string, Record<string, unknown>> = {};
+    for (const [name, ctx] of Object.entries(event.contexts)) {
+      if (ctx && typeof ctx === "object") {
+        next[name] = scrubData(ctx) as Record<string, unknown>;
+      }
+    }
+    event.contexts = next;
+  }
+  // Scrub PII from `extra`
+  if (event.extra) {
+    event.extra = scrubData(event.extra) as Record<string, unknown>;
+  }
+  // Scrub PII from `tags` — tag values are strings; sensitive-field keys
+  // are dropped wholesale.
+  if (event.tags) {
+    const tags = event.tags as Record<string, unknown>;
+    const next: Record<string, unknown> = {};
+    for (const [key, v] of Object.entries(tags)) {
+      if (SENSITIVE_FIELDS.has(key)) continue;
+      next[key] = typeof v === "string" ? scrubPii(v) : v;
+    }
+    event.tags = next as ErrorEvent["tags"];
   }
   // Scrub PII from breadcrumbs attached to the event
   if (event.breadcrumbs) {
@@ -93,12 +161,45 @@ export function scrubEvent(event: ErrorEvent): ErrorEvent {
         for (const key of Object.keys(bc.data)) {
           if (SENSITIVE_FIELDS.has(key)) {
             delete bc.data[key];
+            continue;
+          }
+          const val = bc.data[key];
+          if (typeof val === "string") {
+            bc.data[key] = scrubPii(val);
+          } else if (val && typeof val === "object") {
+            bc.data[key] = scrubData(val);
           }
         }
       }
     }
   }
   return event;
+}
+
+/**
+ * Pre-scrubs the error message and stack at the call site before handing it
+ * to Sentry. The global `beforeSend` hook (`scrubEvent`) already runs on
+ * every event, but it only touches `event.message` / `exception.values[].value`
+ * / breadcrumbs — it does NOT touch the original error.message or
+ * error.stack strings, and it does NOT scrub `extra` / `contexts` payloads
+ * the caller passes in. Top-level error boundaries are the highest-volume
+ * Sentry path on the site and the one most likely to fire on real user
+ * sessions, so an explicit scrubbing wrapper here closes a privacy /
+ * compliance gap that CLAUDE.md mandates.
+ */
+export function captureExceptionScrubbed(
+  error: unknown,
+  hint?: CaptureExceptionHint,
+): string {
+  let scrubbed: unknown = error;
+  if (error instanceof Error) {
+    scrubbed = new Error(scrubPii(error.message));
+    if (error.stack) (scrubbed as Error).stack = scrubPii(error.stack);
+    (scrubbed as Error).name = error.name;
+  } else if (typeof error === "string") {
+    scrubbed = scrubPii(error);
+  }
+  return Sentry.captureException(scrubbed, hint);
 }
 
 /** Scrub PII from a standalone breadcrumb (used as beforeBreadcrumb hook). */
