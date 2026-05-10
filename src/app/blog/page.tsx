@@ -20,16 +20,46 @@ export default function BlogPage() {
   );
   const [search, setSearch] = useState("");
 
+  // Hide future-dated posts on every render. Authors stage upcoming
+  // articles in the data file; without this filter, merging a post
+  // with a future `date` immediately publishes it (the freshness
+  // clock is the user's, not the build's). Use UTC midnight cutoff so
+  // a post dated "today" reliably appears regardless of TZ.
+  const visiblePosts = useMemo(() => {
+    const todayUtc = new Date();
+    todayUtc.setUTCHours(0, 0, 0, 0);
+    const cutoff = todayUtc.getTime();
+    const dated = BLOG_POSTS.filter((p) => {
+      const t = new Date(p.date).getTime();
+      return Number.isFinite(t) && t <= cutoff;
+    });
+    // Sort by date desc — array order in the source file is informal
+    // editorial state, not a publish manifest.
+    return dated.slice().sort(
+      (a, b) => new Date(b.date).getTime() - new Date(a.date).getTime(),
+    );
+  }, []);
+
   const filtered = useMemo(() => {
     const q = search.toLowerCase().trim();
-    return BLOG_POSTS.filter((p) => {
+    return visiblePosts.filter((p) => {
       if (activeCategory !== "all" && p.category !== activeCategory) return false;
       if (q && !p.title.toLowerCase().includes(q) && !p.description.toLowerCase().includes(q)) return false;
       return true;
     });
-  }, [activeCategory, search]);
+  }, [activeCategory, search, visiblePosts]);
 
-  const featured = BLOG_POSTS.find((p) => p.featured);
+  const countsByCategory = useMemo(() => {
+    const counts: Partial<Record<BlogCategory | "all", number>> = {
+      all: visiblePosts.length,
+    };
+    for (const post of visiblePosts) {
+      counts[post.category] = (counts[post.category] ?? 0) + 1;
+    }
+    return counts;
+  }, [visiblePosts]);
+
+  const featured = visiblePosts.find((p) => p.featured);
   const showFeatured = activeCategory === "all" && !search.trim() && featured;
 
   return (
@@ -68,9 +98,22 @@ export default function BlogPage() {
             )}
           </motion.div>
 
+          <motion.p
+            variants={fadeUp}
+            className="mb-6 text-center text-sm text-muted-dark"
+            aria-live="polite"
+          >
+            Showing{" "}
+            <motion.span layout className="tabular-nums text-foreground">
+              {filtered.length}
+            </motion.span>{" "}
+            of {visiblePosts.length} posts
+          </motion.p>
+
           <CategoryFilter
             active={activeCategory}
             onChange={setActiveCategory}
+            countsByCategory={countsByCategory}
           />
 
           {showFeatured && (
@@ -96,7 +139,7 @@ export default function BlogPage() {
               className="grid gap-5 sm:grid-cols-2 lg:grid-cols-3"
             >
               {filtered
-                .filter((p) => !showFeatured || !p.featured)
+                .filter((p) => !showFeatured || p.slug !== featured.slug)
                 .map((post) => (
                   <BlogPostCard key={post.slug} post={post} />
                 ))}
