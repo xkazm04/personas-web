@@ -21,3 +21,17 @@
  */
 export const DEVELOPMENT =
   process.env.NEXT_PUBLIC_USE_MOCK_API === "true";
+
+/**
+ * Marketing-side "Try Demo" button gate.
+ *
+ * `signInAsDemo` writes `isAuthenticated: true` directly into the auth store
+ * without any real session, so the dashboard mounts with mock-data fallbacks
+ * masquerading as real data. Default-deny in production: the button is only
+ * rendered (and the action only succeeds) when this flag is explicitly on.
+ *
+ * Always on in DEVELOPMENT/mock mode. In a real deploy, set
+ * `NEXT_PUBLIC_DEMO_ENABLED=true` to opt in.
+ */
+export const DEMO_ENABLED =
+  DEVELOPMENT || process.env.NEXT_PUBLIC_DEMO_ENABLED === "true";

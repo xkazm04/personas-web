@@ -1,17 +1,18 @@
 "use client";
 
 import { motion } from "framer-motion";
-import { LogIn, FlaskConical, Loader2 } from "lucide-react";
+import { LogIn, FlaskConical, Loader2, AlertTriangle } from "lucide-react";
 import { fadeUp, staggerContainer } from "@/lib/animations";
 import GradientText from "@/components/GradientText";
 import AuthLayout from "@/components/dashboard/AuthLayout";
 import { useAuthStore } from "@/stores/authStore";
-import { DEVELOPMENT } from "@/lib/dev";
+import { DEMO_ENABLED, DEVELOPMENT } from "@/lib/dev";
 
 export default function SignInPrompt() {
   const signInWithGoogle = useAuthStore((s) => s.signInWithGoogle);
   const signInAsDemo = useAuthStore((s) => s.signInAsDemo);
   const isSigningIn = useAuthStore((s) => s.isSigningIn);
+  const signInError = useAuthStore((s) => s.signInError);
 
   return (
     <AuthLayout>
@@ -59,6 +60,23 @@ export default function SignInPrompt() {
                 ? "Click below to enter the dashboard with example data and explore the UI."
                 : "Monitor your cloud agents, review executions, and manage events from one place."}
             </p>
+
+            {/* Sign-In failure banner */}
+            {signInError && !isSigningIn && (
+              <div
+                role="alert"
+                aria-live="polite"
+                className="mt-6 flex w-full items-start gap-2.5 rounded-xl border border-red-500/25 bg-red-500/[0.06] px-4 py-3 text-left"
+              >
+                <AlertTriangle
+                  className="mt-0.5 h-4 w-4 flex-shrink-0 text-red-400"
+                  aria-hidden="true"
+                />
+                <p className="text-sm leading-relaxed text-red-300">
+                  {signInError}
+                </p>
+              </div>
+            )}
 
             {/* Sign-In Button */}
             <button
@@ -108,7 +126,7 @@ export default function SignInPrompt() {
               )}
             </button>
 
-            {!DEVELOPMENT && (
+            {!DEVELOPMENT && DEMO_ENABLED && (
               <button
                 onClick={signInAsDemo}
                 className="group relative mt-3 flex w-full items-center justify-center gap-2 overflow-hidden rounded-full border border-glass-hover bg-white/[0.03] px-6 py-3 text-base font-medium text-muted-dark transition-all duration-300 hover:border-glass-strong hover:bg-white/[0.06] hover:text-foreground/80"
