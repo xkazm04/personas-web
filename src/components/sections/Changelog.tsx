@@ -4,39 +4,19 @@ import { motion } from "framer-motion";
 import { Tag } from "lucide-react";
 import { fadeUp } from "@/lib/animations";
 import SectionWrapper from "@/components/SectionWrapper";
+import { formatDateShort as formatDate } from "@/lib/format-date";
+import { RELEASES } from "@/data/changelog";
 
-interface Release {
-  version: string;
-  date: string;
-  summary: string;
-}
+// The 3 most recent releases by date. Reading from the canonical
+// data/changelog.ts source instead of a hardcoded copy means a new
+// release shipped to /changelog also surfaces here automatically;
+// previously the homepage advertised stale "latest" versions for
+// weeks until someone remembered to bump this file too.
+const RECENT_COUNT = 3;
+const releases = [...RELEASES]
+  .sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime())
+  .slice(0, RECENT_COUNT);
 
-const releases: Release[] = [
-  {
-    version: "0.12.0",
-    date: "2026-02-28",
-    summary: "Cloud execution engine with live event streaming",
-  },
-  {
-    version: "0.11.2",
-    date: "2026-02-14",
-    summary: "Dashboard polish — status badges, filter bar, and empty states",
-  },
-  {
-    version: "0.11.0",
-    date: "2026-01-30",
-    summary: "Event bus subscriptions and webhook trigger support",
-  },
-];
-
-function formatDate(iso: string): string {
-  const d = new Date(iso + "T00:00:00");
-  return d.toLocaleDateString("en-US", {
-    month: "short",
-    day: "numeric",
-    year: "numeric",
-  });
-}
 
 export default function Changelog() {
   return (
