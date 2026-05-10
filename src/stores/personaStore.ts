@@ -48,6 +48,31 @@ const PERSONA_STALE_MS = 300_000;
 
 let inflight: Promise<void> | null = null;
 
+// Per-id mutex for optimistic updates. Two rapid clicks on the same toggle
+// (or two panels writing to the same persona concurrently) used to capture
+// overlapping snapshots — snapshot B was taken *after* A's optimistic patch
+// landed, so a rollback of B reverted to A's patched value rather than the
+// original, leaving the UI showing a state the server never agreed to. By
+// serializing per id we make snapshot N always reflect the post-mutation
+// store of snapshot N-1.
+const personaMutationInflight = new Map<string, Promise<unknown>>();
+
+/**
+ * Cheap structural equality for the optimistic-patch CAS: did the field-set we
+ * wrote at optimistic-update time still hold at rollback time? If a later
+ * commit overwrote any of these keys, we don't revert — the later commit is
+ * now source of truth.
+ */
+function patchStillApplied(
+  current: Persona,
+  applied: Partial<Persona>,
+): boolean {
+  for (const key of Object.keys(applied) as (keyof Persona)[]) {
+    if (current[key] !== applied[key]) return false;
+  }
+  return true;
+}
+
 function buildById(list: Persona[]): Record<string, Persona> {
   const out: Record<string, Persona> = {};
   for (const p of list) out[p.id] = p;
@@ -137,18 +162,54 @@ export const usePersonaStore = create<PersonaState>((set) => ({
     });
   },
   commitOptimisticUpdate: async (id, patch, mutate) => {
-    const snapshot = usePersonaStore.getState().optimisticUpdatePersona(id, patch);
-    try {
-      return await mutate();
-    } catch (err) {
-      if (snapshot) {
-        usePersonaStore.getState().rollbackPersona(id, snapshot);
+    // Serialize per id: if a previous mutation for this persona is still in
+    // flight, wait for it to settle (success OR failure) before capturing
+    // our snapshot. Without this, two concurrent commits would each snapshot
+    // the partially-mutated store and a later rollback would revert to a
+    // state that was already itself an optimistic patch.
+    const previous = personaMutationInflight.get(id);
+    if (previous) {
+      try {
+        await previous;
+      } catch {
+        // Don't propagate — each commit's caller surfaces its own error.
       }
-      throw err;
+    }
+
+    const snapshot = usePersonaStore.getState().optimisticUpdatePersona(id, patch);
+
+    const run = (async () => {
+      try {
+        return await mutate();
+      } catch (err) {
+        // CAS rollback: only revert when the field-set we wrote is still in
+        // place. If a later commit (or a refetch) has already changed the
+        // optimistic value, we leave the newer state alone — clobbering it
+        // would resurrect a stale snapshot over the agreed-upon truth.
+        if (snapshot) {
+          const current = usePersonaStore.getState().personasById[id];
+          if (current && patchStillApplied(current, patch)) {
+            usePersonaStore.getState().rollbackPersona(id, snapshot);
+          }
+        }
+        throw err;
+      }
+    })();
+
+    personaMutationInflight.set(id, run);
+    try {
+      return await run;
+    } finally {
+      // Only clear the slot if we still own it — a reset() between schedule
+      // and finally could already have wiped the map.
+      if (personaMutationInflight.get(id) === run) {
+        personaMutationInflight.delete(id);
+      }
     }
   },
   reset: () => {
     inflight = null;
+    personaMutationInflight.clear();
     set({
       personas: [],
       personasById: {},
