@@ -11,11 +11,27 @@ const FETCH_TIMEOUT_MS = 15_000;
 /** Basic RFC 5322 email pattern — intentionally simple to avoid ReDoS */
 const EMAIL_RE = /^[^\s@<>'"`;(){}[\]\\]+@[^\s@<>'"`;(){}[\]\\]+\.[a-zA-Z]{2,}$/;
 
-const PLATFORM_LABELS: Record<string, string> = {
-  macos: "macOS",
-  windows: "Windows",
-  linux: "Linux",
-};
+type PlatformKey = "windows" | "macos" | "linux";
+
+// Legacy textarea + execCommand fallback for clipboard.writeText() rejections
+// (HTTP previews, sandboxed iframes, Safari without an active gesture chain).
+function legacyCopyToClipboard(text: string): boolean {
+  try {
+    const ta = document.createElement("textarea");
+    ta.value = text;
+    ta.setAttribute("readonly", "");
+    ta.style.position = "absolute";
+    ta.style.left = "-9999px";
+    ta.style.top = "0";
+    document.body.appendChild(ta);
+    ta.select();
+    const ok = document.execCommand("copy");
+    document.body.removeChild(ta);
+    return ok;
+  } catch {
+    return false;
+  }
+}
 
 function AnimatedCheckmark() {
   return (
@@ -58,14 +74,16 @@ function AnimatedCheckmark() {
 }
 
 interface WaitlistModalProps {
-  platform: string;
+  platformKey: PlatformKey;
+  platformLabel: string;
   platformIcon: React.ComponentType<{ className?: string }>;
   open: boolean;
   onClose: () => void;
 }
 
 export default function WaitlistModal({
-  platform,
+  platformKey,
+  platformLabel,
   platformIcon: PlatformIcon,
   open,
   onClose,
@@ -76,7 +94,8 @@ export default function WaitlistModal({
   const [status, setStatus] = useState<"idle" | "loading" | "success" | "duplicate" | "error">("idle");
   const [errorMsg, setErrorMsg] = useState("");
   const [waitlistCount, setWaitlistCount] = useState<number | null>(null);
-  const [copied, setCopied] = useState(false);
+  const [shareState, setShareState] = useState<"idle" | "copied" | "manual">("idle");
+  const [shareFallbackUrl, setShareFallbackUrl] = useState("");
 
   const submitAbortRef = useRef<AbortController | null>(null);
   const modalRef = useRef<HTMLDivElement>(null);
@@ -87,14 +106,14 @@ export default function WaitlistModal({
       const res = await fetch("/api/waitlist", { signal });
       if (res.ok) {
         const data = await res.json();
-        const count = data.counts?.[platform] ?? 0;
+        const count = data.counts?.[platformKey] ?? 0;
         setWaitlistCount(count);
       }
     } catch (err) {
       if (err instanceof DOMException && err.name === "AbortError") return;
       // Non-critical — just hide the count
     }
-  }, [platform]);
+  }, [platformKey]);
 
   // Reset form state on open transition — render-phase prev-state pattern
   const [prevOpen, setPrevOpen] = useState(open);
@@ -106,6 +125,8 @@ export default function WaitlistModal({
       setSubmittedEmail("");
       setEarlyBeta(false);
       setErrorMsg("");
+      setShareState("idle");
+      setShareFallbackUrl("");
     }
   }
 
@@ -172,14 +193,12 @@ export default function WaitlistModal({
       return;
     }
 
-    setSubmittedEmail(email.trim());
-
-    // Capture previous state for potential revert
-    const prevCount = waitlistCount;
-
-    // Optimistic update: show success and increment count immediately
-    setStatus("success");
-    setWaitlistCount(prev => (prev !== null ? prev + 1 : 1));
+    // Show the loading spinner branch (the existing disabled+spinner UI is
+    // already wired to status === "loading"). Don't set submittedEmail or
+    // increment the count until the server confirms — otherwise a 4xx /
+    // 429 / network failure would leave the user with a "You're on the
+    // list" panel they can screenshot/share even though no row was written.
+    setStatus("loading");
     setErrorMsg("");
 
     // Abort any previous in-flight submit
@@ -192,32 +211,33 @@ export default function WaitlistModal({
       const res = await fetch("/api/waitlist", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ email, platform, earlyBeta }),
+        body: JSON.stringify({ email, platform: platformKey, earlyBeta }),
         signal: controller.signal,
       });
 
-      const data = await res.json();
+      const data = await res.json().catch(() => ({}));
 
       if (!res.ok) {
-        throw new Error(data.error || "Failed to join waitlist");
+        throw new Error(
+          (typeof data.error === "string" && data.error) ||
+            "Failed to join waitlist",
+        );
       }
 
-      // If it was a duplicate, revert the optimistic increment and show duplicate state
+      // Server confirmed — only now flip to the success/duplicate panel.
+      setSubmittedEmail(email.trim());
       if (data.duplicate) {
-        setWaitlistCount(prevCount);
         setStatus("duplicate");
+      } else {
+        setStatus("success");
+        setWaitlistCount((prev) => (prev !== null ? prev + 1 : 1));
       }
-      
-      // We explicitly DON'T call fetchCount() here anymore because we've 
-      // already updated the UI optimistically.
     } catch (err) {
       if (err instanceof DOMException && err.name === "AbortError") return;
-      
+
       Sentry.captureException(err, { tags: { component: "WaitlistModal" } });
-      
-      // Revert optimistic update on error
+
       setStatus("error");
-      setWaitlistCount(prevCount);
       setErrorMsg(err instanceof Error ? err.message : "Something went wrong");
     } finally {
       clearTimeout(timeout);
@@ -225,14 +245,37 @@ export default function WaitlistModal({
   };
 
   const handleShare = async () => {
-    const url = `${window.location.origin}?ref=waitlist&platform=${platform.toLowerCase()}`;
+    const url = `${window.location.origin}?ref=waitlist&platform=${platformKey}`;
+
+    // 1) Modern async Clipboard API (https + secure context).
     try {
       await navigator.clipboard.writeText(url);
-      setCopied(true);
-      setTimeout(() => setCopied(false), 2000);
-    } catch (err) {
-      console.error("Failed to copy:", err);
+      setShareState("copied");
+      setShareFallbackUrl("");
+      setTimeout(
+        () => setShareState((s) => (s === "copied" ? "idle" : s)),
+        2000,
+      );
+      return;
+    } catch {
+      // Fall through — insecure context, denied permission, or Safari without
+      // an active gesture chain. Try the legacy path before giving up.
     }
+
+    // 2) Legacy textarea + execCommand("copy").
+    if (legacyCopyToClipboard(url)) {
+      setShareState("copied");
+      setShareFallbackUrl("");
+      setTimeout(
+        () => setShareState((s) => (s === "copied" ? "idle" : s)),
+        2000,
+      );
+      return;
+    }
+
+    // 3) Both failed — surface the URL so the user can copy it manually.
+    setShareFallbackUrl(url);
+    setShareState("manual");
   };
 
   return (
@@ -278,7 +321,7 @@ export default function WaitlistModal({
               </div>
               <div>
                 <h3 id="waitlist-modal-title" className="text-base font-semibold text-foreground">
-                  Personas for {platform}
+                  Personas for {platformLabel}
                 </h3>
                 <p className="text-sm text-muted-dark">Coming soon</p>
               </div>
@@ -290,7 +333,7 @@ export default function WaitlistModal({
                 <Users className="h-3.5 w-3.5 text-brand-cyan/60" />
                 <span className="text-sm text-muted-dark">
                   Join <span className="font-medium text-brand-cyan">{waitlistCount}</span>{" "}
-                  {waitlistCount === 1 ? "person" : "others"} waiting for {platform}
+                  {waitlistCount === 1 ? "person" : "others"} waiting for {platformLabel}
                 </span>
               </div>
             )}
@@ -322,7 +365,7 @@ export default function WaitlistModal({
                   <Mail className="h-3.5 w-3.5 shrink-0 text-muted-dark" />
                   <span className="truncate text-sm font-medium text-foreground/80">{submittedEmail}</span>
                   <span className="shrink-0 rounded-md bg-brand-purple/15 px-1.5 py-0.5 text-xs font-medium text-brand-purple">
-                    {PLATFORM_LABELS[platform] ?? platform}
+                    {platformLabel}
                   </span>
                 </div>
 
@@ -332,8 +375,8 @@ export default function WaitlistModal({
                   <div className="space-y-2">
                     {[
                       status === "duplicate"
-                        ? `We already have your spot saved for ${PLATFORM_LABELS[platform] ?? platform}.`
-                        : `We\u2019ll email you at this address when the ${PLATFORM_LABELS[platform] ?? platform} beta is ready.`,
+                        ? `We already have your spot saved for ${platformLabel}.`
+                        : `We\u2019ll email you at this address when the ${platformLabel} beta is ready.`,
                       earlyBeta
                         ? "You opted into early beta \u2014 you\u2019ll be among the first to get access."
                         : "No spam, just one email when it\u2019s time.",
@@ -363,7 +406,7 @@ export default function WaitlistModal({
                   <span>Share with a friend</span>
 
                   <AnimatePresence>
-                    {copied && (
+                    {shareState === "copied" && (
                       <motion.div
                         initial={{ opacity: 0, y: 10, scale: 0.9 }}
                         animate={{ opacity: 1, y: 0, scale: 1 }}
@@ -376,6 +419,31 @@ export default function WaitlistModal({
                     )}
                   </AnimatePresence>
                 </button>
+
+                <AnimatePresence>
+                  {shareState === "manual" && shareFallbackUrl && (
+                    <motion.div
+                      initial={{ opacity: 0, y: -4 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      exit={{ opacity: 0, y: -4 }}
+                      role="alert"
+                      className="mt-2 flex flex-col gap-1.5 rounded-xl border border-brand-amber/40 bg-brand-amber/10 px-3 py-2 text-left"
+                    >
+                      <span className="flex items-center gap-1.5 text-sm font-medium text-brand-amber">
+                        <AlertCircle className="h-3.5 w-3.5 shrink-0" />
+                        Couldn’t copy automatically — copy this link
+                      </span>
+                      <input
+                        readOnly
+                        value={shareFallbackUrl}
+                        autoFocus
+                        onFocus={(e) => e.currentTarget.select()}
+                        onClick={(e) => e.currentTarget.select()}
+                        className="w-full truncate rounded-md border border-glass bg-background/60 px-2 py-1 text-sm font-mono text-foreground outline-none focus:border-brand-amber"
+                      />
+                    </motion.div>
+                  )}
+                </AnimatePresence>
               </motion.div>
             ) : (
               <form onSubmit={handleSubmit} className="mt-4 space-y-4">
