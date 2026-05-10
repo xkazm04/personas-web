@@ -126,7 +126,24 @@ export const useEventStore = create<EventState>((set, get) => ({
     if (isReplayLocked(get().retryCounts, event.id)) {
       throw new ReplayLockedError(event.id);
     }
-    set((s) => ({ replayingIds: new Set(s.replayingIds).add(event.id) }));
+    // Count the attempt up front, not the success. The previous shape only
+    // incremented retryCounts inside the success branch, so a permanently
+    // broken handler (always-throwing downstream) never tripped
+    // MAX_REPLAY_RETRIES — Retry / Retry All could pump poison messages at
+    // the bus indefinitely. Counting attempts means after MAX_REPLAY_RETRIES
+    // calls the event becomes replay-locked regardless of outcome, which is
+    // the actual semantics of "retry budget".
+    set((s) => {
+      const nextRetryCounts = {
+        ...s.retryCounts,
+        [event.id]: (s.retryCounts[event.id] ?? 0) + 1,
+      };
+      saveRetryCounts(nextRetryCounts);
+      return {
+        replayingIds: new Set(s.replayingIds).add(event.id),
+        retryCounts: nextRetryCounts,
+      };
+    });
     try {
       const newEvent = await api.publishEvent({
         eventType: event.eventType,
@@ -135,20 +152,11 @@ export const useEventStore = create<EventState>((set, get) => ({
         targetPersonaId: event.targetPersonaId ?? undefined,
         payload: event.payload ?? undefined,
       });
+      get().appendEvent(newEvent);
       set((s) => {
         const nextReplayingIds = new Set(s.replayingIds);
         nextReplayingIds.delete(event.id);
-        const nextRetryCounts = {
-          ...s.retryCounts,
-          [event.id]: (s.retryCounts[event.id] ?? 0) + 1,
-        };
-        saveRetryCounts(nextRetryCounts);
-        return {
-          replayingIds: nextReplayingIds,
-          retryCounts: nextRetryCounts,
-          events: [newEvent, ...s.events],
-          eventIds: new Set(s.eventIds).add(newEvent.id),
-        };
+        return { replayingIds: nextReplayingIds };
       });
     } catch (err) {
       set((s) => {
