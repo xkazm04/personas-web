@@ -12,11 +12,21 @@ interface I18nState {
   setLanguage: (lang: Language) => void;
 }
 
+// Locales whose script flows right-to-left. The pre-paint inline script
+// in layout.tsx mirrors this list — keep them in sync if more RTL
+// languages are added to SUPPORTED_LANGUAGES.
+const RTL_LANGUAGES: ReadonlySet<Language> = new Set<Language>(['ar']);
+
 function applyLangAttributes(lang: Language) {
   if (typeof document === 'undefined') return;
   const html = document.documentElement;
   html.setAttribute('data-lang', lang);
   html.setAttribute('lang', lang);
+  if (RTL_LANGUAGES.has(lang)) {
+    html.setAttribute('dir', 'rtl');
+  } else {
+    html.removeAttribute('dir');
+  }
 }
 
 function detectBrowserLanguage(): Language {
