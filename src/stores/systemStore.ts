@@ -7,6 +7,7 @@ interface SystemState {
   status: StatusResponse | null;
   fetchHealth: () => Promise<void>;
   fetchStatus: () => Promise<void>;
+  reset: () => void;
 }
 
 export const useSystemStore = create<SystemState>((set) => ({
@@ -28,4 +29,5 @@ export const useSystemStore = create<SystemState>((set) => ({
       // leave null
     }
   },
+  reset: () => set({ health: null, status: null }),
 }));
