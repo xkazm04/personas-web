@@ -91,8 +91,30 @@ export const useEventStore = create<EventState>((set, get) => ({
   fetchEvents: async () => {
     set({ eventsLoading: true });
     try {
-      const events = await api.listEvents({ limit: 100 });
-      set({ events, eventIds: new Set(events.map((e) => e.id)) });
+      const fetched = await api.listEvents({ limit: 100 });
+      set((s) => {
+        // Merge instead of replacing the array. A fetch issued at t=0
+        // with limit=100 doesn't include events that the SSE stream
+        // delivered at t=0.5 (still in flight at the orchestrator when
+        // the listEvents query ran), so a destructive `set({ events })`
+        // dropped any events that arrived locally between the dispatch
+        // and the response — most painfully during reconnect, when the
+        // SSE-arrived events were the *only* signal of what happened
+        // while disconnected.
+        const fetchedIds = new Set(fetched.map((e) => e.id));
+        const preserved = s.events.filter((e) => !fetchedIds.has(e.id));
+        const merged = [...fetched, ...preserved]
+          .sort((a, b) => {
+            const ta = new Date(a.createdAt).getTime();
+            const tb = new Date(b.createdAt).getTime();
+            return tb - ta; // newest first
+          })
+          .slice(0, MAX_EVENTS_BUFFER);
+        return {
+          events: merged,
+          eventIds: new Set(merged.map((e) => e.id)),
+        };
+      });
     } catch {
       // leave stale
     } finally {
