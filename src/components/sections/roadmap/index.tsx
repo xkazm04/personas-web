@@ -9,14 +9,10 @@ import { fadeUp, staggerContainer } from "@/lib/animations";
 import { BRAND_VAR, tint, brandShadow } from "@/lib/brand-theme";
 import { useTranslation } from "@/i18n/useTranslation";
 import type { RoadmapItem } from "./types";
+import type { RoadmapResponse } from "@/app/api/roadmap/types";
 import { FALLBACK_ITEMS } from "./data";
 import RoadmapCard from "./components/RoadmapCard";
 import RoadmapProgress from "./components/RoadmapProgress";
-
-interface RoadmapResponse {
-  items?: RoadmapItem[];
-  source?: "supabase" | "none" | "error";
-}
 
 export default function Roadmap() {
   const { t } = useTranslation();

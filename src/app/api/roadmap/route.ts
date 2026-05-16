@@ -1,9 +1,11 @@
 import { NextResponse } from "next/server";
 import { hasSupabaseEnv } from "@/lib/server/env";
+import type { RoadmapResponse } from "./types";
 
 export async function GET() {
   if (!hasSupabaseEnv()) {
-    return NextResponse.json({ items: [], source: "none" });
+    const body: RoadmapResponse = { items: [], source: "none" };
+    return NextResponse.json(body);
   }
 
   const { getSupabase } = await import("@/lib/supabase");
@@ -21,8 +23,10 @@ export async function GET() {
       hint: error.hint,
       details: error.details,
     });
-    return NextResponse.json({ items: [], source: "error" }, { status: 502 });
+    const body: RoadmapResponse = { items: [], source: "error" };
+    return NextResponse.json(body, { status: 502 });
   }
 
-  return NextResponse.json({ items: data ?? [], source: "supabase" });
+  const body: RoadmapResponse = { items: data ?? [], source: "supabase" };
+  return NextResponse.json(body);
 }
