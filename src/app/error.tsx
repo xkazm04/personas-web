@@ -18,6 +18,8 @@ export default function RouteError({
     Sentry.captureException(error);
   }, [error]);
 
+  const isDev = process.env.NODE_ENV !== "production";
+
   return (
     <>
       <Navbar />
@@ -31,8 +33,13 @@ export default function RouteError({
             Something went wrong
           </h1>
 
+          {/* In production never expose error.message: it can leak file paths,
+              env-var names, third-party stack hints, or upstream API bodies.
+              Sentry already captured the full error above (see useEffect). */}
           <p className="mt-4 text-base text-muted leading-relaxed">
-            {error.message || "An unexpected error occurred while loading this page."}
+            {isDev && error.message
+              ? error.message
+              : "An unexpected error occurred while loading this page."}
           </p>
 
           {error.digest && (
