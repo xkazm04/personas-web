@@ -93,7 +93,7 @@ export default function GlobalError({
                   paths, env var names, third-party stack hints, or upstream API
                   messages. Sentry already captured the full error above. */}
               {isDev && error.message && (
-                <pre className="mt-5 max-h-32 overflow-auto rounded-lg border border-amber-500/20 bg-amber-500/5 p-3 text-[11px] font-mono leading-relaxed text-amber-300/80 whitespace-pre-wrap break-all">
+                <pre className="mt-5 max-h-32 overflow-auto rounded-lg border border-amber-500/20 bg-amber-500/5 p-3 text-xs font-mono leading-relaxed text-amber-300/80 whitespace-pre-wrap break-all">
                   {error.message}
                 </pre>
               )}
@@ -101,14 +101,14 @@ export default function GlobalError({
               {/* Digest — small copyable chip for support */}
               {digest && (
                 <div className="mt-5 flex items-center gap-2">
-                  <span className="text-[11px] font-mono uppercase tracking-wider text-muted-dark/60">
+                  <span className="text-xs font-mono uppercase tracking-wider text-muted-dark/60">
                     Error reference
                   </span>
                   <button
                     type="button"
                     onClick={handleCopyDigest}
                     aria-label="Copy error reference"
-                    className="group inline-flex items-center gap-1.5 rounded-md border border-white/[0.08] bg-white/[0.03] px-2 py-1 font-mono text-[11px] text-muted-dark transition-colors hover:border-white/[0.18] hover:text-foreground"
+                    className="group inline-flex items-center gap-1.5 rounded-md border border-white/[0.08] bg-white/[0.03] px-2 py-1 font-mono text-xs text-muted-dark transition-colors hover:border-white/[0.18] hover:text-foreground"
                   >
                     <code className="select-all">{digest}</code>
                     {copied ? (
