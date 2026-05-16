@@ -4,6 +4,7 @@ import Navbar from "@/components/Navbar";
 import Footer from "@/components/sections/Footer";
 import PageShell from "@/components/PageShell";
 import SectionBreadcrumb from "@/components/SectionBreadcrumb";
+import MobilePageTOC from "@/components/MobilePageTOC";
 import type { ScrollMapItem } from "@/lib/types";
 
 interface BreadcrumbItem {
@@ -28,6 +29,7 @@ export default function InfoPageLayout({
         {breadcrumbItems && breadcrumbItems.length > 0 && (
           <SectionBreadcrumb items={breadcrumbItems} />
         )}
+        <MobilePageTOC items={scrollMapItems} />
         {/* Spacer for fixed navbar */}
         <div className="h-24" />
         {children}

@@ -891,6 +891,10 @@ export const zh: Translations = {
     selectLanguage: 'é€‰ć‹©čŻ­č¨€',
     selectTheme: 'é€‰ć‹©ä¸»é˘ďĽš{name}',
   },
+  pageNav: {
+    onThisPage: '本页内容',
+    closeMenu: '关闭菜单',
+  },
   themes: {
     midnight: 'ĺŤĺ¤ś',
     cyan: 'éť’č‰˛',

@@ -891,6 +891,10 @@ export const fr: Translations = {
     selectLanguage: 'SĂ©lectionner la langue',
     selectTheme: 'SĂ©lectionner le thĂ¨me : {name}',
   },
+  pageNav: {
+    onThisPage: 'Sur cette page',
+    closeMenu: 'Fermer le menu',
+  },
   themes: {
     midnight: 'Minuit',
     cyan: 'Cyan',

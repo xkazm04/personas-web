@@ -891,6 +891,10 @@ export const ru: Translations = {
     selectLanguage: 'Đ’Ń‹Đ±Ń€Đ°Ń‚ŃŚ ŃŹĐ·Ń‹Đş',
     selectTheme: 'Đ’Ń‹Đ±Ń€Đ°Ń‚ŃŚ Ń‚ĐµĐĽŃ: {name}',
   },
+  pageNav: {
+    onThisPage: 'На этой странице',
+    closeMenu: 'Закрыть меню',
+  },
   themes: {
     midnight: 'ĐźĐľĐ»Đ˝ĐľŃ‡ŃŚ',
     cyan: 'Đ¦Đ¸Đ°Đ˝',

@@ -891,6 +891,10 @@ export const ja: Translations = {
     selectLanguage: 'č¨€čŞžă‚’é¸ćŠž',
     selectTheme: 'ă†ăĽăžă‚’é¸ćŠž: {name}',
   },
+  pageNav: {
+    onThisPage: 'このページの内容',
+    closeMenu: 'メニューを閉じる',
+  },
   themes: {
     midnight: 'ăźăă‰ăŠă‚¤ă',
     cyan: 'ă‚·ă‚˘ăł',

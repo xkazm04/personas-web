@@ -891,6 +891,10 @@ export const vi: Translations = {
     selectLanguage: 'Chá»Ťn ngĂ´n ngá»Ż',
     selectTheme: 'Chá»Ťn giao diá»‡n: {name}',
   },
+  pageNav: {
+    onThisPage: 'Trên trang này',
+    closeMenu: 'Đóng menu',
+  },
   themes: {
     midnight: 'Ná»­a Ä‘ĂŞm',
     cyan: 'Xanh lĆˇ',

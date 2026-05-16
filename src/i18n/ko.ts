@@ -891,6 +891,10 @@ export const ko: Translations = {
     selectLanguage: 'ě–¸ě–´ ě„ íť',
     selectTheme: 'í…Śë§ ě„ íť: {name}',
   },
+  pageNav: {
+    onThisPage: '이 페이지에서',
+    closeMenu: '메뉴 닫기',
+  },
   themes: {
     midnight: 'ëŻ¸ë“śë‚ěť´íŠ¸',
     cyan: 'ě‹śě•',

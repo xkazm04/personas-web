@@ -891,6 +891,10 @@ export const ar: Translations = {
     selectLanguage: 'Ř§Ř®ŘŞŮŠŘ§Ř± Ř§Ů„Ů„ŘşŘ©',
     selectTheme: 'Ř§Ř®ŘŞŮŠŘ§Ř± Ř§Ů„Ů…Ř¸Ů‡Ř±: {name}',
   },
+  pageNav: {
+    onThisPage: 'في هذه الصفحة',
+    closeMenu: 'إغلاق القائمة',
+  },
   themes: {
     midnight: 'Ů…Ů†ŘŞŘµŮ Ř§Ů„Ů„ŮŠŮ„',
     cyan: 'ŘłŮ…Ř§ŮŮŠ',

@@ -891,6 +891,10 @@ export const hi: Translations = {
     selectLanguage: 'ŕ¤­ŕ¤ľŕ¤·ŕ¤ľ ŕ¤šŕĄŕ¤¨ŕĄ‡ŕ¤‚',
     selectTheme: 'ŕ¤ĄŕĄ€ŕ¤® ŕ¤šŕĄŕ¤¨ŕĄ‡ŕ¤‚: {name}',
   },
+  pageNav: {
+    onThisPage: 'इस पृष्ठ पर',
+    closeMenu: 'मेनू बंद करें',
+  },
   themes: {
     midnight: 'ŕ¤®ŕ¤żŕ¤ˇŕ¤¨ŕ¤ľŕ¤‡ŕ¤ź',
     cyan: 'ŕ¤¸ŕ¤ľŕ¤Żŕ¤¨',
