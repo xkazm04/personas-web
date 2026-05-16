@@ -46,7 +46,9 @@ export default function NotFound() {
                 >
                   <div
                     className="flex h-9 w-9 items-center justify-center rounded-lg"
-                    style={{ backgroundColor: `${page.color}12` }}
+                    style={{
+                      backgroundColor: `color-mix(in srgb, ${page.color} 7%, transparent)`,
+                    }}
                   >
                     <Icon
                       className="h-4 w-4 transition-transform group-hover:scale-110"
