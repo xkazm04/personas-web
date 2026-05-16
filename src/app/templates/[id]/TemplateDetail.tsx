@@ -52,15 +52,15 @@ export default function TemplateDetail({ templateId }: { templateId: string }) {
     };
   }, []);
 
-  const scheduleReset = (ms: number, fn: () => void) => {
+  const scheduleReset = useCallback((ms: number, fn: () => void) => {
     if (resetTimerRef.current) clearTimeout(resetTimerRef.current);
     resetTimerRef.current = setTimeout(() => {
       resetTimerRef.current = null;
       fn();
     }, ms);
-  };
+  }, []);
 
-  const handleCopy = async () => {
+  const handleCopy = useCallback(async () => {
     try {
       await navigator.clipboard.writeText(template.config);
       setCopyFailed(false);
@@ -77,7 +77,7 @@ export default function TemplateDetail({ templateId }: { templateId: string }) {
         scheduleReset(3000, () => setCopyFailed(false));
       }
     }
-  };
+  }, [template.config, scheduleReset]);
 
   const handleOpenInPersonas = useCallback(() => {
     const deepLink = `personas://template/${template.id}`;
