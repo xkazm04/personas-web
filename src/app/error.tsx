@@ -23,7 +23,7 @@ export default function RouteError({
   return (
     <>
       <Navbar />
-      <main className="flex min-h-[70vh] flex-col items-center justify-center px-6 py-32">
+      <main id="main-content" className="flex min-h-[70vh] flex-col items-center justify-center px-6 py-32">
         <div className="mx-auto max-w-2xl text-center">
           <div className="mb-6 inline-flex items-center gap-2 rounded-full border border-red-500/25 bg-red-500/5 px-4 py-1.5 text-base font-mono font-medium text-red-400/80">
             Error

@@ -18,7 +18,7 @@ export default function NotFound() {
   return (
     <>
       <Navbar />
-      <main className="flex min-h-[70vh] flex-col items-center justify-center px-6 py-32">
+      <main id="main-content" className="flex min-h-[70vh] flex-col items-center justify-center px-6 py-32">
         <div className="mx-auto max-w-2xl text-center">
           {/* 404 badge */}
           <div className="mb-6 inline-flex items-center gap-2 rounded-full border border-brand-cyan/20 bg-brand-cyan/5 px-4 py-1.5 text-base font-mono font-medium text-brand-cyan/70">
