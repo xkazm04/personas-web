@@ -29,10 +29,10 @@ const breadcrumbItems = [
 
 /* ── Glow colors per persona ── */
 
-const stageGlows: Record<ViewerRole, { events: "cyan" | "purple" | "emerald" }> = {
-  developer: { events: "cyan" },
-  "product-manager": { events: "purple" },
-  enterprise: { events: "cyan" },
+const stageGlow: Record<ViewerRole, "cyan" | "purple" | "emerald"> = {
+  developer: "cyan",
+  "product-manager": "purple",
+  enterprise: "cyan",
 };
 
 const stageColors: Record<ViewerRole, { evFrom: StageColor; evTo: StageColor }> = {
@@ -43,7 +43,7 @@ const stageColors: Record<ViewerRole, { evFrom: StageColor; evTo: StageColor }> 
 
 export default function HowItWorks() {
   const [role, setRole] = useState<ViewerRole>("developer");
-  const glows = stageGlows[role];
+  const glow = stageGlow[role];
   const colors = stageColors[role];
 
   return (
@@ -69,7 +69,7 @@ export default function HowItWorks() {
 
       <CinematicBreather />
 
-      <StageSection glow={glows.events} fromColor={colors.evFrom} toColor={colors.evTo}>
+      <StageSection glow={glow} fromColor={colors.evFrom} toColor={colors.evTo}>
         <LazyEventBusShowcase />
       </StageSection>
     </InfoPageLayout>
