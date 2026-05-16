@@ -1,12 +1,8 @@
 import { NextResponse } from "next/server";
 import { hasSupabaseEnv } from "@/lib/server/env";
 
-function hasSupabase(): boolean {
-  return hasSupabaseEnv();
-}
-
 export async function GET() {
-  if (!hasSupabase()) {
+  if (!hasSupabaseEnv()) {
     return NextResponse.json({ items: [], source: "none" });
   }
 
