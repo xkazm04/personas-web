@@ -212,7 +212,7 @@ export const phases: Phase[] = [
   },
 ];
 
-export const statusConfig = {
+export const phaseStatusConfig = {
   "in-progress": {
     label: "In Progress",
     dotClass: "bg-brand-cyan shadow-[0_0_8px_rgba(6,182,212,0.5)]",
@@ -233,7 +233,7 @@ export const statusConfig = {
   },
 };
 
-export const priorityClass: Record<Phase["priority"], string> = {
+export const phasePriorityClass: Record<Phase["priority"], string> = {
   Now: "border-brand-cyan/20 bg-brand-cyan/5 text-brand-cyan/70",
   Next: "border-brand-purple/20 bg-brand-purple/5 text-brand-purple/70",
   Later: "border-glass-hover bg-white/[0.02] text-muted-dark",
