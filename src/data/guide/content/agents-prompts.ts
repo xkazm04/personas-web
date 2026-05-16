@@ -2,22 +2,22 @@ export const content: Record<string, string> = {
   "creating-a-new-agent": `
 ## Creating a New Agent
 
-Setting up a new agent is like hiring a new team member — you give them a name, a role, and a set of instructions. Click \`Create Agent\`, pick a name that describes what the agent does (like "Invoice Processor" or "Weekly Reporter"), and choose an icon to make it easy to spot.
+You have two ways to create a new agent. **From scratch** — click \`Create Agent\`, name it, and write instructions yourself. **From a template** — browse the template gallery, pick one that matches what you want to do (invoice processing, daily reports, social posting…), answer a few short questions about your specific use case, and let the build engine assemble the agent for you. Most people start with a template and tweak from there.
 
-You'll also select which AI model powers your agent and what tools it can access. These choices shape your agent's capabilities, but don't worry about getting everything perfect on the first try — you can change any setting later.
+Either way, you'll pick a name and icon, select which AI model powers the agent, and choose which tools (email, web search, file access, etc.) it can use. None of these choices are permanent — you can change any setting later.
 
 :::steps
 1. **Click Create Agent** — from the sidebar or home screen
-2. **Enter a descriptive name** — and pick an icon
-3. **Choose the AI model** — that will power this agent
-4. **Write your instructions** — in the prompt editor
-5. **Assign any tools** — your agent needs (email, web search, file access, etc.)
-6. **Click Save** — to finish
+2. **Pick a path** — start blank, or pick a template from the gallery
+3. **Answer the build questions** — if you went the template route; the build engine adapts the agent to your answers
+4. **Name your agent** — and choose an icon
+5. **Adjust the prompt and tools** — fine-tune the instructions the template produced (or write them from scratch)
+6. **Promote when ready** — the agent moves from draft to active once you confirm
 :::
 
 ### How It Works
 
-The name and icon are just for you — they help you stay organized as your collection grows. The real magic is in the instructions and tool selection, which tell the AI exactly what to do and what it's allowed to use.
+The template path runs an interactive build session: the engine asks clarifying questions about your use case, proposes parameters (input shape, output channels, schedule cadence), and shows a live preview of the agent it's about to assemble. You approve at the end, and the agent lands ready to test. The from-scratch path skips all that — useful when you already know exactly what you want the agent to do.
 
 :::tip
 Good agent names describe the task, not the technology. "Morning Email Summary" is more useful than "GPT Agent 3."
@@ -147,15 +147,16 @@ This is also a safety feature. An agent can't accidentally modify files if it do
 - **File access** — read and write files on your computer or cloud storage
 - **API calls** — interact with external services and databases
 - **Clipboard** — read from and write to your clipboard
+- **Messaging channels** — send results to Slack, Discord, Teams, or any generic webhook endpoint as part of the agent's output
 
 ### How to Assign Tools
 
 :::steps
-1. **Open your agent's settings** — click the gear icon or open the agent detail page
-2. **Find the Tools section** — you'll see a list of available tools
-3. **Toggle on the tools you need** — and leave the rest off
-4. **Connect credentials if prompted** — some tools require authentication (like an email password)
-5. **Save your changes** — the agent can now use the assigned tools
+1. **Open the Connectors tab** — on the agent editor; it shows every capability your agent needs against your vault
+2. **Pick a category, not a specific service** — choose "email" or "cloud storage" and the picker shows matching credentials you already have plus suggested connectors if you don't
+3. **Authorize anything new** — for OAuth services, you'll click through a one-time consent screen; the resulting credential lands in your vault and is reusable across agents
+4. **Pre-flight check** — before you promote the agent, the build engine cross-checks every required capability against the vault and flags anything missing
+5. **Save the configuration** — the agent uses the assigned tools on its next run; if a credential later expires, you'll see it in the agent's health indicator
 :::
 
 :::tip
@@ -306,17 +307,21 @@ Personas continuously tracks execution results, credential expiry, and configura
 
 | Color | Status | Meaning |
 |---|---|---|
-| **Green** | Healthy | All recent runs succeeded, no issues detected |
-| **Yellow** | Warning | Something may need attention soon (expiring credential, slow performance) |
+| **Green** | Healthy | All recent runs succeeded, no issues detected, setup complete |
+| **Yellow** | Warning | Something may need attention soon (expiring credential, slow performance, setup partially complete) |
 | **Red** | Error | The agent failed recently or has a configuration problem |
 | **Gray** | Inactive | Disabled or never run |
 
+### Setup Status
+
+Alongside health, every agent has a **setup status** indicating how ready it is to run autonomously. A freshly-promoted agent often has setup gaps — a missing credential, an unconfigured trigger, an output channel still being wired up. The setup status badge surfaces exactly what's left to do, in priority order, so you don't have to hunt through tabs to find out what's blocking. Agents with persistent setup problems are automatically pulled out of any scheduled or triggered rotation by a circuit-breaker, so you'll never have a half-configured agent running silently against bad data.
+
 ### How It Works
 
-Health is calculated automatically based on recent execution results, credential status, and configuration completeness. Click on the indicator to see a summary of what's causing the current status. From there, you can jump directly to the settings or logs that need attention.
+Health is calculated automatically based on recent execution results, credential status, and configuration completeness. Click on the indicator to see a summary of what's causing the current status — including any setup gaps. From there, you can jump directly to the settings, logs, or specific tab that needs attention.
 
 :::tip
-Make it a habit to scan your sidebar colors once a day. Catching a yellow indicator early prevents it from becoming a red one.
+Make it a habit to scan your sidebar colors once a day. Catching a yellow indicator early prevents it from becoming a red one — and resolving setup gaps right after promotion is the cheapest moment to do it.
 :::
   `,
 };
