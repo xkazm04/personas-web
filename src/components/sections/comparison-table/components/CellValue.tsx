@@ -2,13 +2,16 @@
 
 import { Check, X } from "lucide-react";
 import { BRAND_VAR, tint } from "@/lib/brand-theme";
+import { captureExceptionScrubbed } from "@/lib/sentry-pii";
+
+const reportedMissingCells = new Set<string>();
 
 export default function CellValue({
   value,
   featureLabel,
   competitorName,
 }: {
-  value: string | boolean;
+  value: string | boolean | undefined;
   featureLabel: string;
   competitorName: string;
 }) {
@@ -39,5 +42,28 @@ export default function CellValue({
       </div>
     );
   }
-  return <span className="text-base text-muted text-center block leading-snug">{value}</span>;
+  if (typeof value === "string") {
+    return <span className="text-base text-muted text-center block leading-snug">{value}</span>;
+  }
+
+  // Fallback: missing/unknown value. Render an em-dash with an a11y label so
+  // the cell never collapses to a silent blank, and surface to Sentry once
+  // per (competitor, feature) so the data gap is observable in production.
+  const cellKey = `${competitorName}::${featureLabel}`;
+  if (typeof window !== "undefined" && !reportedMissingCells.has(cellKey)) {
+    reportedMissingCells.add(cellKey);
+    captureExceptionScrubbed(
+      new Error(`ComparisonTable: missing value for ${cellKey}`),
+      { tags: { scope: "ComparisonTable", reason: "missing-cell-value" } },
+    );
+  }
+  return (
+    <span
+      className="text-base text-muted text-center block leading-snug"
+      role="img"
+      aria-label={`${competitorName}: ${featureLabel} — No data`}
+    >
+      —
+    </span>
+  );
 }

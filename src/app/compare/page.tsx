@@ -10,6 +10,7 @@ import SectionWrapper from "@/components/SectionWrapper";
 import SectionHeading from "@/components/SectionHeading";
 import GradientText from "@/components/GradientText";
 import ComparisonTable from "@/components/sections/comparison-table";
+import ComparisonErrorBoundary from "@/components/sections/comparison-table/ComparisonErrorBoundary";
 import { SectionIntro } from "@/components/primitives";
 import { fadeUp } from "@/lib/animations";
 
@@ -35,7 +36,9 @@ export default function ComparePage() {
             description="Desktop-first agent orchestration, free forever. See exactly where Personas leads — and where others have strengths — across pricing, security, triggers, observability, and developer experience."
           />
 
-          <ComparisonTable />
+          <ComparisonErrorBoundary>
+            <ComparisonTable />
+          </ComparisonErrorBoundary>
         </SectionWrapper>
 
         {/* ── Download CTA ──────────────────────────────────────── */}

@@ -1,112 +1,20 @@
 "use client";
 
-import { useState, useEffect, useRef, useCallback } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import { useReducedMotion } from "framer-motion";
+
 import {
-  Target,
-  Plug,
-  Clock,
-  UserCheck,
-  MessageSquare,
-  Brain,
-  ShieldAlert,
-  Radio,
-  type LucideIcon,
-} from "lucide-react";
+  CELLS,
+  USER_PROMPT,
+  type CellKey,
+} from "./design-matrix/designMatrixCells";
 
-/* ── Matrix cell vocabulary — mirrors personas/src/features/agents/components/matrix/cellVocabulary.ts ── */
-
-export type CellKey =
-  | "tasks"
-  | "apps"
-  | "triggers"
-  | "review"
-  | "messages"
-  | "memory"
-  | "errors"
-  | "events";
-
-export interface CellDef {
-  key: CellKey;
-  label: string;
-  icon: LucideIcon;
-  color: string;
-  finalValue: string;
-  question?: {
-    prompt: string;
-    options: string[];
-    picked: number;
-  };
-}
-
-export const CELLS: CellDef[] = [
-  {
-    key: "tasks",
-    label: "Tasks",
-    icon: Target,
-    color: "#06b6d4",
-    finalValue: "Triage inbox + draft replies for urgent",
-  },
-  {
-    key: "apps",
-    label: "Apps & Services",
-    icon: Plug,
-    color: "#a855f7",
-    finalValue: "Gmail · Slack",
-  },
-  {
-    key: "triggers",
-    label: "When It Runs",
-    icon: Clock,
-    color: "#34d399",
-    finalValue: "Every 15 minutes",
-    question: {
-      prompt: "How often should I check?",
-      options: ["Every 15 min", "Every hour", "Real-time webhook"],
-      picked: 0,
-    },
-  },
-  {
-    key: "review",
-    label: "Human Review",
-    icon: UserCheck,
-    color: "#fbbf24",
-    finalValue: "Approve drafts before sending",
-    question: {
-      prompt: "Send automatically or wait for approval?",
-      options: ["Auto-send", "Approve first", "Ask only for urgent"],
-      picked: 1,
-    },
-  },
-  {
-    key: "messages",
-    label: "Messages",
-    icon: MessageSquare,
-    color: "#60a5fa",
-    finalValue: "Post digest to #triage-inbox",
-  },
-  {
-    key: "memory",
-    label: "Memory",
-    icon: Brain,
-    color: "#ec4899",
-    finalValue: "Learns sender priorities over time",
-  },
-  {
-    key: "errors",
-    label: "Errors",
-    icon: ShieldAlert,
-    color: "#f43f5e",
-    finalValue: "Retry 3× then alert on Slack",
-  },
-  {
-    key: "events",
-    label: "Events",
-    icon: Radio,
-    color: "#f97316",
-    finalValue: "Emits email.processed",
-  },
-];
+export {
+  CELLS,
+  USER_PROMPT,
+  type CellDef,
+  type CellKey,
+} from "./design-matrix/designMatrixCells";
 
 export type CellState = "pending" | "thinking" | "asking" | "answered" | "filled";
 
@@ -114,11 +22,6 @@ export interface CellStatus {
   state: CellState;
   answer?: number;
 }
-
-export const USER_PROMPT =
-  "Triage my Gmail inbox and draft replies for urgent emails.";
-
-/* ── Shared animation state machine ──────────────────────────────── */
 
 export interface PersonaMatrixState {
   statuses: Record<CellKey, CellStatus>;
@@ -128,13 +31,15 @@ export interface PersonaMatrixState {
   sectionRef: React.RefObject<HTMLDivElement | null>;
 }
 
+function createPendingStatuses(): Record<CellKey, CellStatus> {
+  return Object.fromEntries(
+    CELLS.map((cell) => [cell.key, { state: "pending" as CellState }]),
+  ) as Record<CellKey, CellStatus>;
+}
+
 export function usePersonaMatrixBuild(): PersonaMatrixState {
   const prefersReducedMotion = useReducedMotion();
-  const [statuses, setStatuses] = useState<Record<CellKey, CellStatus>>(() =>
-    Object.fromEntries(
-      CELLS.map((c) => [c.key, { state: "pending" as CellState }]),
-    ) as Record<CellKey, CellStatus>,
-  );
+  const [statuses, setStatuses] = useState<Record<CellKey, CellStatus>>(createPendingStatuses);
   const [phase, setPhase] = useState<"idle" | "running" | "done">("idle");
   const [userTyped, setUserTyped] = useState("");
   const timeoutsRef = useRef<ReturnType<typeof setTimeout>[]>([]);
@@ -154,72 +59,66 @@ export function usePersonaMatrixBuild(): PersonaMatrixState {
     clearAll();
     setPhase("running");
     setUserTyped("");
-    setStatuses(
-      Object.fromEntries(
-        CELLS.map((c) => [c.key, { state: "pending" as CellState }]),
-      ) as Record<CellKey, CellStatus>,
-    );
+    setStatuses(createPendingStatuses());
 
-    /* 1. Type the user prompt (3× slower so users can follow it) */
     let cumulative = 0;
     const typeSpeed = 90;
     for (let i = 1; i <= USER_PROMPT.length; i++) {
-      const t = setTimeout(
+      const timeout = setTimeout(
         () => setUserTyped(USER_PROMPT.slice(0, i)),
         cumulative,
       );
-      timeoutsRef.current.push(t);
+      timeoutsRef.current.push(timeout);
       cumulative += typeSpeed;
     }
     cumulative += 1200;
 
-    /* 2. Fill each cell in sequence — every transition 3× longer */
     CELLS.forEach((cell) => {
-      const thinkT = setTimeout(
+      const thinkTimeout = setTimeout(
         () => setCell(cell.key, "thinking"),
         cumulative,
       );
-      timeoutsRef.current.push(thinkT);
+      timeoutsRef.current.push(thinkTimeout);
       cumulative += 1650;
 
       if (cell.question) {
-        const askT = setTimeout(() => setCell(cell.key, "asking"), cumulative);
-        timeoutsRef.current.push(askT);
+        const askTimeout = setTimeout(() => setCell(cell.key, "asking"), cumulative);
+        timeoutsRef.current.push(askTimeout);
         cumulative += 4200;
 
-        const answerT = setTimeout(
+        const answerTimeout = setTimeout(
           () => setCell(cell.key, "answered"),
           cumulative,
         );
-        timeoutsRef.current.push(answerT);
+        timeoutsRef.current.push(answerTimeout);
         cumulative += 1800;
       }
 
-      const fillT = setTimeout(() => setCell(cell.key, "filled"), cumulative);
-      timeoutsRef.current.push(fillT);
+      const fillTimeout = setTimeout(() => setCell(cell.key, "filled"), cumulative);
+      timeoutsRef.current.push(fillTimeout);
       cumulative += 1200;
     });
 
-    const doneT = setTimeout(() => setPhase("done"), cumulative + 600);
-    timeoutsRef.current.push(doneT);
+    const doneTimeout = setTimeout(() => setPhase("done"), cumulative + 600);
+    timeoutsRef.current.push(doneTimeout);
   }, [clearAll, setCell]);
 
   useEffect(() => {
     if (prefersReducedMotion || hasRun.current) return;
     const el = sectionRef.current;
     if (!el) return;
-    const obs = new IntersectionObserver(
+    const observer = new IntersectionObserver(
       ([entry]) => {
         if (entry.isIntersecting && !hasRun.current) {
           hasRun.current = true;
           runBuild();
-          obs.disconnect();
+          observer.disconnect();
         }
       },
       { rootMargin: "-80px" },
     );
-    obs.observe(el);
-    return () => obs.disconnect();
+    observer.observe(el);
+    return () => observer.disconnect();
   }, [runBuild, prefersReducedMotion]);
 
   useEffect(() => () => timeoutsRef.current.forEach(clearTimeout), []);

@@ -1,5 +1,6 @@
 "use client";
 
+import { SVG_EYEBROW } from "@/lib/typography";
 import { swarmTools } from "../data";
 
 const RADIUS = 35;
@@ -114,9 +115,9 @@ export default function SwarmView({ uid }: { uid: string }) {
         dominantBaseline="middle"
         fill="var(--foreground)"
         fillOpacity="0.8"
-        fontSize="2.5"
-        fontFamily="var(--font-geist-mono)"
-        letterSpacing="0.1em"
+        fontSize={SVG_EYEBROW.fontSize}
+        fontFamily={SVG_EYEBROW.fontFamily}
+        letterSpacing={SVG_EYEBROW.letterSpacing}
       >
         BUS
       </text>

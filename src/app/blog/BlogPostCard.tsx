@@ -8,12 +8,14 @@ import { fadeUp } from "@/lib/animations";
 import { formatDateShort } from "@/lib/format-date";
 import type { BlogPost } from "@/data/blog";
 import { categoryOf } from "./category-meta";
+import { useTranslation } from "@/i18n/useTranslation";
 
 interface BlogPostCardProps {
   post: BlogPost;
 }
 
 export default function BlogPostCard({ post }: BlogPostCardProps) {
+  const { t } = useTranslation();
   const meta = categoryOf(post.category);
   const bv = BRAND_VAR[meta.brand];
 
@@ -62,14 +64,14 @@ export default function BlogPostCard({ post }: BlogPostCardProps) {
           <div className="flex items-center gap-3 text-base text-muted-dark">
             <span className="flex items-center gap-1.5">
               <Clock className="h-3.5 w-3.5" />
-              {post.readingTime} min
+              {post.readingTime} {t.blogPage.min}
             </span>
           </div>
           <span
             className="flex items-center gap-1 text-base font-semibold transition-transform group-hover:translate-x-0.5"
             style={{ color: bv }}
           >
-            Read
+            {t.blogPage.read}
             <ArrowRight className="h-4 w-4" />
           </span>
         </div>

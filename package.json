@@ -20,7 +20,12 @@
     "start": "next start",
     "lint": "eslint",
     "typecheck": "tsc --noEmit",
-    "test:e2e": "playwright test"
+    "test:e2e": "playwright test",
+    "check:guide-content": "node scripts/check-guide-content.mjs",
+    "check:i18n-coverage": "node scripts/check-i18n-coverage.mjs",
+    "report:i18n-hardcoded": "node scripts/report-hardcoded-ui-strings.mjs",
+    "db:migrate": "node scripts/run-voting-migration.mjs",
+    "prepare": "node scripts/install-git-hooks.mjs"
   },
   "dependencies": {
     "@sentry/nextjs": "^10.52.0",
@@ -44,6 +49,7 @@
     "@types/react-dom": "^19",
     "eslint": "^9.39.4",
     "eslint-config-next": "^16.2.6",
+    "pg": "^8.20.0",
     "tailwindcss": "^4.3.0",
     "typescript": "^6.0.2"
   }

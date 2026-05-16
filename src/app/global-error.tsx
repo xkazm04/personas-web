@@ -1,9 +1,9 @@
 "use client";
 
-import * as Sentry from "@sentry/nextjs";
 import Link from "next/link";
 import { useEffect, useState } from "react";
 import { Compass, Home, Activity, RefreshCcw, Copy, Check } from "lucide-react";
+import { captureExceptionScrubbed } from "@/lib/sentry-pii";
 
 export default function GlobalError({
   error,
@@ -15,7 +15,12 @@ export default function GlobalError({
   const [copied, setCopied] = useState(false);
 
   useEffect(() => {
-    Sentry.captureException(error);
+    // Top-level errors carry the most leaky payloads (URLs with query/path
+    // PII, file paths from server stacks, env-var names, third-party API
+    // bodies). Route through the scrubber so message + stack are sanitized
+    // before they ever reach Sentry — the global beforeSend hook still
+    // runs on top of this for defense in depth.
+    captureExceptionScrubbed(error, { tags: { scope: "GlobalError" } });
   }, [error]);
 
   const isDev = process.env.NODE_ENV !== "production";
@@ -65,8 +70,10 @@ export default function GlobalError({
                 className="pointer-events-none absolute -inset-px rounded-2xl ring-1 ring-inset ring-brand-cyan/15"
               />
 
-              {/* Icon */}
-              <div className="flex h-14 w-14 items-center justify-center rounded-2xl border border-brand-cyan/25 bg-brand-cyan/10 shadow-[0_0_20px_rgba(6,182,212,0.15)]">
+              {/* Soft breathing aura signals the system is still alive and
+                  listening. Animation is automatically suppressed by the
+                  global `prefers-reduced-motion` rule in globals.css. */}
+              <div className="animate-breathe-glow flex h-14 w-14 items-center justify-center rounded-2xl border border-brand-cyan/25 bg-brand-cyan/10">
                 <Compass className="h-6 w-6 text-brand-cyan" />
               </div>
 

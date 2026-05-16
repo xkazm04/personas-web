@@ -158,6 +158,10 @@ export interface ManualReviewItem extends WithPersonaInfo {
   resolvedAt: string | null;
   resolvedBy: string | null;
   escalatedAt: string | null;
+  /** True when the event payload failed JSON.parse or omitted/used an invalid
+   *  severity. Such reviews are fail-loud escalated to "critical" so a
+   *  malformed payload can never widen the SLA via the info default. */
+  parseError?: boolean;
 }
 
 // ---------------------------------------------------------------------------

@@ -153,8 +153,7 @@ function ErrorBoundaryFallback({
 
       {retriesExhausted ? (
         <p className="mt-4 max-w-sm text-sm text-muted-dark">
-          This view keeps failing. Please refresh the page or contact
-          support with the error ID above.
+          {t.dashboardUi.errorBoundaryFallback}
         </p>
       ) : (
         <button

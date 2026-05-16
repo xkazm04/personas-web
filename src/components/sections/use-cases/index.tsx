@@ -17,7 +17,11 @@ import AgentArmyGrid from "./components/AgentArmyGrid";
 
 export default function UseCases() {
   const { t } = useTranslation();
-  const uid = useId();
+  // useId() returns ":r5:" / ":R7:" — valid HTML ids but invalid in CSS
+  // selectors used by SVG url(#…) refs, so the gradient resolves to none in
+  // strict browsers and the connector renders unstyled. Strip the colons
+  // before composing the gradient id.
+  const gradientId = `usecases-connector-${useId().replace(/:/g, "")}`;
   const prefersReducedMotion = useReducedMotion();
   const containerRef = useRef<HTMLDivElement | null>(null);
   const detailCardRef = useRef<HTMLDivElement | null>(null);
@@ -51,7 +55,7 @@ export default function UseCases() {
       <div ref={containerRef} className="mt-16 relative">
         <svg className="pointer-events-none absolute inset-0 z-5 h-full w-full overflow-visible">
           <defs>
-            <linearGradient id={`${uid}-connectorGrad`} x1="0%" y1="0%" x2="100%" y2="100%">
+            <linearGradient id={gradientId} x1="0%" y1="0%" x2="100%" y2="100%">
               <stop offset="0%" stopColor={activeTool?.color || "rgba(6,182,212,0.5)"} stopOpacity="0.8" />
               <stop offset="100%" stopColor="rgba(168,85,247,0.5)" stopOpacity="0.2" />
             </linearGradient>
@@ -62,10 +66,14 @@ export default function UseCases() {
             animate={{ opacity: connectorVisible && connectorPath ? 1 : 0 }}
             transition={{ duration: 0.2 }}
             fill="none"
-            stroke={`url(#${uid}-connectorGrad)`}
+            stroke={`url(#${gradientId})`}
             strokeWidth="2"
             strokeDasharray="6 6"
-            style={{ animation: "dash-flow 1.4s linear infinite" }}
+            style={{
+              animation: prefersReducedMotion
+                ? undefined
+                : "dash-flow 1.4s linear infinite",
+            }}
           />
         </svg>
 

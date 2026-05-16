@@ -1,4 +1,6 @@
-export default function PrivacyPolicy() {
+type Props = { changelog?: React.ReactNode };
+
+export default function PrivacyPolicy({ changelog }: Props) {
   return (
     <div className="space-y-8">
       <div className="rounded-xl border border-brand-cyan/20 bg-brand-cyan/[0.05] p-5">
@@ -16,6 +18,8 @@ export default function PrivacyPolicy() {
       </div>
 
       <p className="text-base text-muted-dark">Last updated: April 2026</p>
+
+      {changelog}
 
       <section className="space-y-3">
         <h2 className="text-xl font-semibold text-foreground">

@@ -4,8 +4,7 @@ import { useCallback, useRef, useState } from "react";
 import { motion } from "framer-motion";
 import * as Sentry from "@sentry/nextjs";
 import SectionWrapper from "@/components/SectionWrapper";
-import GradientText from "@/components/GradientText";
-import { fadeUp, staggerContainer } from "@/lib/animations";
+import { staggerContainer } from "@/lib/animations";
 import { trackFeatureComment } from "@/lib/analytics";
 import { useAbortableEffect } from "@/hooks/useAbortableEffect";
 import type { Comment } from "./local-types";
@@ -23,6 +22,8 @@ import {
 } from "./data";
 import FeatureVoteCard from "./components/FeatureVoteCard";
 import CustomFeatureRequest from "./components/CustomFeatureRequest";
+import { FeatureVotingHeader } from "./components/FeatureVotingHeader";
+import { FeatureVotingSummary } from "./components/FeatureVotingSummary";
 
 export default function FeatureVoting() {
   const [votedIds, setVotedIds] = useState<Set<string>>(new Set());
@@ -157,19 +158,7 @@ export default function FeatureVoting() {
 
   return (
     <SectionWrapper id="vote">
-      <motion.div variants={fadeUp} className="text-center relative">
-        <span className="inline-block rounded-full border border-brand-purple/30 bg-brand-purple/10 px-4 py-1.5 text-base font-semibold tracking-widest uppercase text-brand-purple shadow-[0_0_15px_rgba(168,85,247,0.2)] font-mono mb-6">
-          Community
-        </span>
-        <h2 className="text-3xl font-extrabold tracking-tight sm:text-4xl md:text-6xl drop-shadow-md">
-          Vote for{" "}
-          <GradientText className="drop-shadow-lg">what&apos;s next</GradientText>
-        </h2>
-        <p className="mx-auto mt-6 max-w-2xl text-lg text-muted-dark leading-relaxed font-light">
-          Help us prioritize. Pick the features that matter most to you and shape the
-          future of Personas.
-        </p>
-      </motion.div>
+      <FeatureVotingHeader />
 
       <motion.div
         variants={staggerContainer}
@@ -193,19 +182,7 @@ export default function FeatureVoting() {
 
       <CustomFeatureRequest />
 
-      <motion.div variants={fadeUp} className="mt-8 text-center">
-        <p className="text-base font-mono text-muted-dark tracking-wide">
-          {(sorted.reduce((s, f) => s + f.votes, 0) + realVotesTotal).toLocaleString()}{" "}
-          total votes&ensp;·&ensp;{comments.length} comment
-          {comments.length !== 1 ? "s" : ""}
-          {totalBoosts > 0 && (
-            <>
-              &ensp;·&ensp;{totalBoosts} boost{totalBoosts !== 1 ? "s" : ""}
-            </>
-          )}
-          {loaded && <>&ensp;·&ensp;Live</>}
-        </p>
-      </motion.div>
+      <FeatureVotingSummary totalVotes={sorted.reduce((s, f) => s + f.votes, 0) + realVotesTotal} commentsCount={comments.length} totalBoosts={totalBoosts} loaded={loaded} />
     </SectionWrapper>
   );
 }

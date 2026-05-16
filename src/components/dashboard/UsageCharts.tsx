@@ -16,44 +16,9 @@ import {
   YAxis,
 } from "recharts";
 import { CHART_COLORS } from "@/lib/constants";
-import { ChartTooltipContent } from "@/components/dashboard/ObservabilityCharts";
-
-interface BarDatum {
-  name: string;
-  invocations: number;
-}
-
-interface PieDatum {
-  name: string;
-  value: number;
-  color?: string;
-}
-
-interface AreaDatum {
-  [key: string]: string | number;
-}
-
-interface PersonaBarDatum {
-  [key: string]: string | number;
-}
-
-interface UsageTooltipProps {
-  active?: boolean;
-  payload?: Array<{ value: number; name: string; color: string }>;
-  label?: string;
-  formatToolName: (name: string) => string;
-}
-
-function UsageTooltip({ active, payload, label, formatToolName }: UsageTooltipProps) {
-  return (
-    <ChartTooltipContent
-      active={active}
-      payload={payload}
-      label={label}
-      nameFormatter={formatToolName}
-    />
-  );
-}
+import { useTranslation } from "@/i18n/useTranslation";
+import { UsageTooltip } from "./usage-charts/UsageTooltip";
+import type { AreaDatum, BarDatum, PersonaBarDatum, PieDatum } from "./usage-charts/usageChartTypes";
 
 export function UsageInvocationsBarChart({
   barData,
@@ -95,6 +60,7 @@ export function UsageDistributionPieChart({
   totalInvocations: number;
   formatToolName: (name: string) => string;
 }) {
+  const { t } = useTranslation();
   return (
     <>
       <div className="relative">
@@ -122,7 +88,7 @@ export function UsageDistributionPieChart({
             <p className="text-xl font-bold tabular-nums text-foreground">
               {totalInvocations}
             </p>
-            <p className="text-sm text-muted-dark">total</p>
+            <p className="text-sm text-muted-dark">{t.dashboardUi.totalLower}</p>
           </div>
         </div>
       </div>

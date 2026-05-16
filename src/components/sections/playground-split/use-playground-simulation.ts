@@ -44,11 +44,14 @@ export function usePlaygroundSimulation() {
   useEffect(() => {
     if (isHidden && isRunning) {
       clearAll();
-      setIsRunning(false);
-      setPhase("idle");
-      setElapsedMs(0);
-      setNodes([]);
-      setActiveExample(null);
+      const reset = setTimeout(() => {
+        setIsRunning(false);
+        setPhase("idle");
+        setElapsedMs(0);
+        setNodes([]);
+        setActiveExample(null);
+      }, 0);
+      return () => clearTimeout(reset);
     }
   }, [isHidden, isRunning, clearAll]);
 

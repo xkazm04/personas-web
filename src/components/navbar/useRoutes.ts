@@ -13,7 +13,6 @@ export function useRoutes(): NavRoute[] {
   return [
     { label: t.nav.home, href: "/" },
     { label: t.nav.features, href: "/features" },
-    { label: t.nav.templates, href: "/templates" },
     { label: t.nav.roadmap, href: "/roadmap" },
   ];
 }

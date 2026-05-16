@@ -4,6 +4,7 @@ import { useState } from "react";
 import { motion } from "framer-motion";
 import { ExternalLink } from "lucide-react";
 import { fadeUp, staggerContainer } from "@/lib/animations";
+import { sanitizeExternalUrl } from "@/lib/url";
 import type { CompetitorId } from "@/data/comparison";
 import { COMPETITORS, COMPARISON_CATEGORIES } from "@/data/comparison";
 import CompetitorChips from "./components/CompetitorChips";
@@ -69,7 +70,7 @@ export default function ComparisonTable() {
           .map((comp) => (
             <a
               key={comp.id}
-              href={comp.url}
+              href={sanitizeExternalUrl(comp.url)}
               target="_blank"
               rel="noopener noreferrer"
               className="flex items-center gap-1.5 text-base text-muted hover:text-foreground transition-colors"

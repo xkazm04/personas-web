@@ -14,28 +14,38 @@ export default function AgentArmyGrid() {
 
   useEffect(() => {
     if (prefersReducedMotion) return;
+    const flashTimers = new Set<ReturnType<typeof setTimeout>>();
     const schedule = () => {
       const delay = 3000 + Math.random() * 2000;
       return setTimeout(() => {
         const idx = Math.floor(Math.random() * initialAgents.length);
         const bump = 1 + Math.floor(Math.random() * 3);
+        const shouldFlipStatus = Math.random() < 0.2;
         setAgents((prev) => {
           const next = [...prev];
           const agent = { ...next[idx] };
-          agent.executions += bump;
-          if (agent.status !== "healing" && Math.random() < 0.2) {
+          agent.executions = agent.executions + bump;
+          if (agent.status !== "healing" && shouldFlipStatus) {
             agent.status = agent.status === "running" ? "idle" : "running";
           }
           next[idx] = agent;
           return next;
         });
         setFlashIdx(idx);
-        setTimeout(() => setFlashIdx(null), 600);
-        timerRef2 = schedule();
+        const flashTimer = setTimeout(() => {
+          flashTimers.delete(flashTimer);
+          setFlashIdx(null);
+        }, 600);
+        flashTimers.add(flashTimer);
+        scheduleTimer = schedule();
       }, delay);
     };
-    let timerRef2 = schedule();
-    return () => clearTimeout(timerRef2);
+    let scheduleTimer = schedule();
+    return () => {
+      clearTimeout(scheduleTimer);
+      flashTimers.forEach(clearTimeout);
+      flashTimers.clear();
+    };
   }, [prefersReducedMotion]);
 
   return (
@@ -47,7 +57,10 @@ export default function AgentArmyGrid() {
       className="mt-16 mx-auto max-w-5xl grid grid-cols-2 sm:grid-cols-3 xl:grid-cols-6 gap-3"
     >
       {agents.map((agent, i) => {
-        const st = statusStyles[agent.status];
+        // Runtime fallback so a future status not yet wired into statusStyles
+        // (or stale persisted state) renders as "idle" instead of crashing
+        // the whole framer-motion grid into the section error boundary.
+        const st = statusStyles[agent.status] ?? statusStyles.idle;
         const isFlashing = flashIdx === i;
         const rateColor = agent.rate >= 90 ? "#34d399" : agent.rate >= 80 ? "#fbbf24" : "#f43f5e";
 

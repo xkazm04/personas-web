@@ -1,6 +1,5 @@
 "use client";
 
-import { useEffect, useState } from "react";
 import { motion, useReducedMotion } from "framer-motion";
 import {
   Cloud,
@@ -34,16 +33,6 @@ const KIND_COLOR: Record<LogEntry["kind"], string> = {
 
 export default function ObsidianCloudSync() {
   const reduced = useReducedMotion() ?? false;
-  const [pushPulse, setPushPulse] = useState(false);
-
-  /* Gently pulse the push button to show it's "live" */
-  useEffect(() => {
-    if (reduced) return;
-    const id = setInterval(() => {
-      setPushPulse((v) => !v);
-    }, 3200);
-    return () => clearInterval(id);
-  }, [reduced]);
 
   return (
     <div className="p-5 grid md:grid-cols-[1.3fr_1fr] gap-4">
@@ -74,18 +63,24 @@ export default function ObsidianCloudSync() {
           {/* Push / Pull buttons */}
           <div className="grid grid-cols-2 gap-2">
             <motion.div
-              animate={
-                pushPulse
-                  ? {
+              whileInView={
+                reduced
+                  ? undefined
+                  : {
                       boxShadow: [
                         "0 0 0 rgba(168,85,247,0)",
                         "0 0 24px rgba(168,85,247,0.35)",
                         "0 0 0 rgba(168,85,247,0)",
                       ],
                     }
-                  : {}
               }
-              transition={{ duration: 2.4, ease: "easeInOut" }}
+              viewport={{ once: false, amount: 0.3 }}
+              transition={{
+                duration: 2.4,
+                ease: "easeInOut",
+                repeat: Infinity,
+                repeatDelay: 4,
+              }}
               className="flex items-center justify-center gap-2 rounded-lg border border-purple-400/40 bg-purple-500/15 px-3 py-2.5"
             >
               <ArrowUpFromLine className="h-4 w-4 text-purple-200" />

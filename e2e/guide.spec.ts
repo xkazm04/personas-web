@@ -1,6 +1,17 @@
 import { test, expect } from "@playwright/test";
+import { GUIDE_TOPICS } from "../src/data/guide/topics";
 
 test.describe("User Guide", () => {
+  test("guide JSON-LD numberOfItems matches GUIDE_TOPICS.length", async ({ page }) => {
+    await page.goto("/guide");
+    const ldJson = await page.locator('script[type="application/ld+json"]').first().textContent();
+    expect(ldJson).not.toBeNull();
+    const data = JSON.parse(ldJson!);
+    expect(data["@type"]).toBe("CollectionPage");
+    expect(data.numberOfItems).toBe(GUIDE_TOPICS.length);
+    expect(data.description).toContain(`${GUIDE_TOPICS.length} topics`);
+  });
+
   test("landing page navbar has Guide link that navigates to /guide", async ({ page }) => {
     await page.goto("/");
     // Desktop navbar should have a "Guide" link

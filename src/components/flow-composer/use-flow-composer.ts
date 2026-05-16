@@ -12,14 +12,24 @@ import {
   decodeFlow,
   encodeFlow,
   nextId,
+  seedNextId,
 } from "./data";
 import type { CanvasNode, Wire } from "./types";
+
+export type ShareToast =
+  | { kind: "success" }
+  | { kind: "manual"; url: string };
 
 export function useFlowComposer() {
   const [nodes, setNodes] = useState<CanvasNode[]>(() => {
     if (typeof window !== "undefined" && window.location.hash.startsWith("#flow=")) {
       const decoded = decodeFlow(window.location.hash.slice(6));
-      if (decoded) return decoded.nodes;
+      if (decoded) {
+        // Bump module-level _nextId past any hash-supplied id so addNode()
+        // can never produce an id that collides with a decoded node.
+        seedNextId(decoded.nodes);
+        return decoded.nodes;
+      }
     }
     return DEFAULT_NODES;
   });
@@ -34,7 +44,7 @@ export function useFlowComposer() {
 
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const [wiringFrom, setWiringFrom] = useState<string | null>(null);
-  const [shareToast, setShareToast] = useState(false);
+  const [shareToast, setShareToast] = useState<ShareToast | null>(null);
   const [dragNode, setDragNode] = useState<string | null>(null);
   const svgRef = useRef<SVGSVGElement>(null);
   const rafPending = useRef(false);
@@ -57,11 +67,26 @@ export function useFlowComposer() {
 
   const shareUrl = useCallback(() => {
     const encoded = encodeFlow({ nodes, wires });
+    if (!encoded) {
+      // Encoder bailed (no btoa / SSR) — refuse to copy a broken
+      // ".../#flow=" URL and surface the failure instead.
+      setShareToast({ kind: "manual", url: "" });
+      setTimeout(() => setShareToast(null), 4000);
+      return;
+    }
     const url = `${window.location.origin}${window.location.pathname}#flow=${encoded}`;
-    navigator.clipboard.writeText(url).then(() => {
-      setShareToast(true);
-      setTimeout(() => setShareToast(false), 2000);
-    }).catch(() => {});
+    navigator.clipboard
+      .writeText(url)
+      .then(() => {
+        setShareToast({ kind: "success" });
+        setTimeout(() => setShareToast(null), 2000);
+      })
+      .catch(() => {
+        // http://, in-iframe demos, or denied permission — show the URL so
+        // the user can manually Ctrl+C instead of pretending we copied it.
+        setShareToast({ kind: "manual", url });
+        setTimeout(() => setShareToast(null), 8000);
+      });
   }, [nodes, wires]);
 
   const toSvgX = useCallback((clientX: number): number => {
@@ -95,16 +120,21 @@ export function useFlowComposer() {
 
   const addNode = useCallback(
     (toolId: string, side: "producer" | "consumer") => {
-      const existing = nodes.filter((n) => n.side === side);
-      const x =
-        existing.length === 0
-          ? 50
-          : Math.min(92, (existing[existing.length - 1]?.x ?? 50) + 18);
+      // nextId() must run outside the updater; React 19 strict mode
+      // double-invokes setState updaters in dev to verify purity, which
+      // would otherwise burn a spare id per call.
       const id = nextId();
-      setNodes((prev) => [...prev, { id, toolId, side, x }]);
+      setNodes((prev) => {
+        const existing = prev.filter((n) => n.side === side);
+        const x =
+          existing.length === 0
+            ? 50
+            : Math.min(92, (existing[existing.length - 1]?.x ?? 50) + 18);
+        return [...prev, { id, toolId, side, x }];
+      });
       setSidebarOpen(false);
     },
-    [nodes]
+    []
   );
 
   const removeNode = useCallback(
@@ -128,20 +158,22 @@ export function useFlowComposer() {
       }
 
       if (node.side === "consumer" && wiringFrom !== nodeId) {
-        const exists = wires.some((w) => w.from === wiringFrom && w.to === nodeId);
-        if (!exists) {
-          const fromTool = TOOL_MAP.get(
-            nodes.find((n) => n.id === wiringFrom)?.toolId ?? ""
-          );
-          setWires((prev) => [
-            ...prev,
-            { from: wiringFrom, to: nodeId, label: `${fromTool?.name ?? "event"}.trigger` },
-          ]);
-        }
+        const fromTool = TOOL_MAP.get(
+          nodes.find((n) => n.id === wiringFrom)?.toolId ?? ""
+        );
+        const from = wiringFrom;
+        const label = `${fromTool?.name ?? "event"}.trigger`;
+        // Dedup against the freshest wires, not the closure snapshot — two
+        // queued wire-completion clicks must not both pass the existence
+        // check and create duplicate wires.
+        setWires((prev) => {
+          if (prev.some((w) => w.from === from && w.to === nodeId)) return prev;
+          return [...prev, { from, to: nodeId, label }];
+        });
       }
       setWiringFrom(null);
     },
-    [wiringFrom, nodes, wires, dragNode]
+    [wiringFrom, nodes, dragNode]
   );
 
   const removeWire = useCallback((from: string, to: string) => {

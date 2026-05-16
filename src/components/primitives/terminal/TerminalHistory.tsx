@@ -2,6 +2,9 @@
 
 import type { TerminalOutputLine } from "./types";
 
+const FALLBACK_COLOR_CLASS = "text-muted";
+const warnedKeys = new Set<string>();
+
 /**
  * Renders an executed-command history block: each entry is a
  * `~/agents $ <command>` prompt followed by the command's output lines.
@@ -29,18 +32,31 @@ export default function TerminalHistory<L extends TerminalOutputLine>({
             <span className="text-muted-dark">{prompt}</span>
             <span className="text-muted">{entry.command}</span>
           </div>
-          {entry.output.map((line, lIdx) => (
-            <div
-              key={lIdx}
-              className={`font-mono text-base leading-relaxed ${colorClasses[line.color]}`}
-              style={{
-                paddingLeft: line.indent ? `${line.indent * indentPx}px` : undefined,
-                whiteSpace: "pre",
-              }}
-            >
-              {line.text || " "}
-            </div>
-          ))}
+          {entry.output.map((line, lIdx) => {
+            const colorClass = colorClasses[line.color];
+            if (
+              process.env.NODE_ENV !== "production" &&
+              !colorClass &&
+              !warnedKeys.has(line.color)
+            ) {
+              warnedKeys.add(line.color);
+              console.warn(
+                `[TerminalHistory] unknown color "${line.color}" — falling back to "${FALLBACK_COLOR_CLASS}". Add it to colorClasses to silence this warning.`,
+              );
+            }
+            return (
+              <div
+                key={lIdx}
+                className={`font-mono text-base leading-relaxed ${colorClass ?? FALLBACK_COLOR_CLASS}`}
+                style={{
+                  paddingLeft: line.indent ? `${line.indent * indentPx}px` : undefined,
+                  whiteSpace: "pre",
+                }}
+              >
+                {line.text || " "}
+              </div>
+            );
+          })}
         </div>
       ))}
     </>

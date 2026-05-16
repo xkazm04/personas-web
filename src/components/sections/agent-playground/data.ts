@@ -1,6 +1,13 @@
 import { Mail, MessageSquare, Calendar } from "lucide-react";
 import { Github } from "@/components/icons/brand-icons";
-import type { ExamplePrompt } from "./types";
+import type { ExamplePrompt, SimLine } from "./types";
+
+export const noMatchLines: SimLine[] = [
+  { text: "Parsing instruction...", color: "text-muted-dark", delay: 400 },
+  { text: "No scripted simulation matches this prompt.", color: "text-brand-amber", delay: 600 },
+  { text: "This playground only ships canned demos for the examples above.", color: "text-muted", delay: 500 },
+  { text: "Pick an example to see a full agent run, or download the app to point a live agent at this task.", color: "text-brand-cyan", delay: 600 },
+];
 
 export const examples: ExamplePrompt[] = [
   {

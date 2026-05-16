@@ -1,7 +1,7 @@
 "use client";
 
 import Image from "next/image";
-import { motion } from "framer-motion";
+import { motion, useReducedMotion } from "framer-motion";
 import { Check, Loader2 } from "lucide-react";
 import type { CellDef, CellStatus } from "../../designMatrixShared";
 import { CELL_IMAGE, CELL_HEIGHT_CLASS, FLUID_DIMENSION } from "../data";
@@ -14,6 +14,7 @@ export default function MatrixTile({
   def: CellDef;
   status: CellStatus;
 }) {
+  const prefersReducedMotion = useReducedMotion();
   const isActive = status.state !== "pending";
   const isAsking = status.state === "asking";
 
@@ -46,7 +47,7 @@ export default function MatrixTile({
           className="absolute inset-0"
           style={{
             background: isActive
-              ? `linear-gradient(180deg, rgba(8,8,14,0.15) 0%, rgba(8,8,14,0.6) 55%, rgba(8,8,14,0.92) 100%)`
+              ? `linear-gradient(180deg, rgba(8,8,14,0.12) 0%, rgba(8,8,14,0.55) 70%, rgba(8,8,14,0.92) 100%)`
               : `linear-gradient(180deg, rgba(8,8,14,0.45) 0%, rgba(8,8,14,0.78) 55%, rgba(8,8,14,0.96) 100%)`,
           }}
         />
@@ -94,9 +95,9 @@ export default function MatrixTile({
       {isAsking && (
         <motion.div
           className="absolute inset-0 rounded-2xl border-2 pointer-events-none z-20"
-          style={{ borderColor: def.color }}
-          animate={{ opacity: [0.4, 0.9, 0.4] }}
-          transition={{ duration: 1.2, repeat: Infinity }}
+          style={{ borderColor: def.color, opacity: prefersReducedMotion ? 0.7 : undefined }}
+          animate={prefersReducedMotion ? undefined : { opacity: [0.4, 0.9, 0.4] }}
+          transition={prefersReducedMotion ? undefined : { duration: 1.2, repeat: Infinity }}
         />
       )}
     </motion.div>

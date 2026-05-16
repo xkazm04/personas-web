@@ -1,7 +1,21 @@
 import type { ChatScenario } from "./types";
 
-export const CYCLE_MS = 6000;
 export const MSG_INTERVAL_MS = 800;
+export const SATISFACTION_REVEAL_MS = 400;
+export const SATISFACTION_DWELL_MS = 1600;
+
+export function getScenarioCycleMs(
+  scenario: ChatScenario,
+  interval: number,
+): number {
+  const maxMsgs = Math.max(
+    scenario.workflow.messages.length,
+    scenario.agent.messages.length,
+  );
+  return Math.ceil(
+    maxMsgs * interval + SATISFACTION_REVEAL_MS + SATISFACTION_DWELL_MS,
+  );
+}
 
 export const scenarios: ChatScenario[] = [
   {

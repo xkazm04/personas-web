@@ -19,6 +19,7 @@ import GlowCard from "@/components/GlowCard";
 import { useAuthStore } from "@/stores/authStore";
 import { useSystemStore } from "@/stores/systemStore";
 import { useTranslation } from "@/i18n/useTranslation";
+import { SettingsHeader } from "./SettingsHeader";
 
 export default function SettingsPage() {
   const user = useAuthStore((s) => s.user);
@@ -56,14 +57,7 @@ export default function SettingsPage() {
         <div className="absolute inset-0 bg-gradient-to-b from-transparent via-transparent to-[var(--background)]" />
       </div>
 
-      <motion.div variants={fadeUp} className="mb-8">
-        <h1 className="text-2xl font-bold tracking-tight">
-          <GradientText variant="silver">{t.settingsPage.title}</GradientText>
-        </h1>
-        <p className="mt-1 text-base text-muted-dark">
-          {t.settingsPage.subtitle}
-        </p>
-      </motion.div>
+      <SettingsHeader title={t.settingsPage.title} subtitle={t.settingsPage.subtitle} />
 
       <div className="grid gap-6 lg:grid-cols-2">
         {/* Account */}

@@ -1,19 +1,19 @@
 "use client";
 
 import { useCallback, useEffect, useRef, useState } from "react";
-import { AnimatePresence, motion } from "framer-motion";
-import { GitBranch, Sparkles, Zap } from "lucide-react";
+import { motion, useReducedMotion } from "framer-motion";
 import SectionWrapper from "@/components/SectionWrapper";
 import TerminalChrome from "@/components/TerminalChrome";
 import SectionIntro from "@/components/primitives/SectionIntro";
 import { ThemedChip } from "@/components/primitives";
 import { fadeUp } from "@/lib/animations";
 import { ANIMATION_DURATION_MS, CYCLE_MS, scenarios } from "./data";
-import Track from "./components/Track";
-import ComparisonSummary from "./components/ComparisonSummary";
 import TimelineControls from "./components/TimelineControls";
+import { ScenarioTrigger } from "./components/ScenarioTrigger";
+import { TimelineRaceBody } from "./components/TimelineRaceBody";
 
 export default function AgentsTimeline() {
+  const prefersReduced = useReducedMotion();
   const [activeIndex, setActiveIndex] = useState(0);
   const [isPlaying, setIsPlaying] = useState(false);
   const [showResults, setShowResults] = useState(false);
@@ -43,7 +43,7 @@ export default function AgentsTimeline() {
   }, [activeIndex, startAnimation]);
 
   useEffect(() => {
-    if (paused) return;
+    if (paused || prefersReduced) return;
     if (cycleTimerRef.current) clearTimeout(cycleTimerRef.current);
     cycleTimerRef.current = setTimeout(() => {
       advanceScenario();
@@ -51,7 +51,7 @@ export default function AgentsTimeline() {
     return () => {
       if (cycleTimerRef.current) clearTimeout(cycleTimerRef.current);
     };
-  }, [activeIndex, paused, advanceScenario]);
+  }, [activeIndex, paused, prefersReduced, advanceScenario]);
 
   useEffect(() => {
     return () => {
@@ -94,23 +94,7 @@ export default function AgentsTimeline() {
       </motion.div>
 
       <motion.div variants={fadeUp} className="mb-8">
-        <AnimatePresence mode="wait">
-          <motion.div
-            key={scenario.id}
-            initial={{ opacity: 0, y: 8 }}
-            animate={{ opacity: 1, y: 0 }}
-            exit={{ opacity: 0, y: -8 }}
-            transition={{ duration: 0.3 }}
-            className="mx-auto max-w-3xl rounded-xl border border-glass bg-white/[0.02] px-4 py-3 text-center backdrop-blur-sm"
-          >
-            <span className="text-base font-mono uppercase tracking-wider text-muted-dark/60">
-              Scenario trigger
-            </span>
-            <p className="mt-1 text-base text-muted leading-relaxed">
-              {scenario.trigger}
-            </p>
-          </motion.div>
-        </AnimatePresence>
+        <ScenarioTrigger id={scenario.id} trigger={scenario.trigger} />
       </motion.div>
 
       <motion.div
@@ -130,59 +114,7 @@ export default function AgentsTimeline() {
           className="px-4 py-2.5"
         />
 
-        <div className="p-4 md:p-6 space-y-4">
-          <AnimatePresence mode="wait">
-            <motion.div
-              key={`wf-${scenario.id}`}
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              exit={{ opacity: 0 }}
-              transition={{ duration: 0.2 }}
-            >
-              <Track
-                steps={scenario.workflow.steps}
-                isWorkflow={true}
-                isActive={isPlaying}
-                result={scenario.workflow.result}
-                totalMs={scenario.workflow.totalMs}
-                showResult={showResults}
-                label="Workflow"
-                icon={GitBranch}
-              />
-            </motion.div>
-          </AnimatePresence>
-
-          <div className="flex items-center gap-3">
-            <div className="h-px flex-1 bg-gradient-to-r from-brand-rose/20 via-white/5 to-brand-emerald/20" />
-            <div className="flex h-8 w-8 items-center justify-center rounded-full border border-glass-hover bg-background/80">
-              <Zap className="h-3.5 w-3.5 text-brand-cyan" />
-            </div>
-            <div className="h-px flex-1 bg-gradient-to-r from-brand-rose/20 via-white/5 to-brand-emerald/20" />
-          </div>
-
-          <AnimatePresence mode="wait">
-            <motion.div
-              key={`ag-${scenario.id}`}
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              exit={{ opacity: 0 }}
-              transition={{ duration: 0.2 }}
-            >
-              <Track
-                steps={scenario.agent.steps}
-                isWorkflow={false}
-                isActive={isPlaying}
-                result={scenario.agent.result}
-                totalMs={scenario.agent.totalMs}
-                showResult={showResults}
-                label="Agent"
-                icon={Sparkles}
-              />
-            </motion.div>
-          </AnimatePresence>
-
-          <ComparisonSummary scenario={scenario} showResults={showResults} />
-        </div>
+        <TimelineRaceBody scenario={scenario} isPlaying={isPlaying} showResults={showResults} />
       </motion.div>
 
       <TimelineControls

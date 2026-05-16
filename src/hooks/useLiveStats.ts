@@ -1,11 +1,13 @@
 "use client";
 
+import * as Sentry from "@sentry/nextjs";
 import { useEffect, useState } from "react";
 import type {
   PlatformStats,
   PlatformStatsResponse,
   PlatformStatsSeries,
 } from "@/app/api/stats/route";
+import { captureExceptionScrubbed } from "@/lib/sentry-pii";
 
 const FALLBACK_STATS: PlatformStats = {
   totalUsers: 228,
@@ -41,6 +43,9 @@ const FALLBACK_RESPONSE: PlatformStatsResponse = {
 };
 
 let cachedResult: PlatformStatsResponse | null = null;
+// Warn-once gate: prevents Sentry flooding under React 19 strict-mode double
+// effects and across remounts that share the same module-level cache miss.
+let warnedOnce = false;
 
 /**
  * Fetches and manages platform-wide statistics for the marketing site.
@@ -65,21 +70,53 @@ export function useLiveStats(): PlatformStatsResponse {
     if (cachedResult) return;
 
     let cancelled = false;
+    let responseStatus: number | null = null;
 
     fetch("/api/stats")
       .then((res) => {
-        if (!res.ok) throw new Error("stats fetch failed");
+        responseStatus = res.status;
+        if (!res.ok) throw new Error(`stats fetch failed: ${res.status}`);
         return res.json() as Promise<PlatformStatsResponse>;
       })
       .then((data) => {
         if (cancelled) return;
         // Defensive: older cached server responses may lack trend fields.
-        if (!data.series || !data.trend7d) return;
+        if (!data.series || !data.trend7d) {
+          if (!warnedOnce) {
+            warnedOnce = true;
+            const shapeKeys = Object.keys(data);
+            Sentry.captureMessage(
+              "useLiveStats: /api/stats response missing series/trend7d",
+              {
+                level: "warning",
+                tags: { scope: "useLiveStats", reason: "malformed-shape" },
+                extra: { status: responseStatus, shapeKeys },
+              },
+            );
+            if (process.env.NODE_ENV !== "production") {
+              console.warn(
+                `[useLiveStats] /api/stats returned ${responseStatus} but missing series/trend7d. keys=${shapeKeys.join(",")}`,
+              );
+            }
+          }
+          return;
+        }
         cachedResult = data;
         setStats(data);
       })
-      .catch(() => {
-        // Silently fall back to hardcoded values
+      .catch((err: unknown) => {
+        if (warnedOnce) return;
+        warnedOnce = true;
+        captureExceptionScrubbed(err, {
+          tags: { scope: "useLiveStats", reason: "fetch-failed" },
+          extra: { status: responseStatus },
+        });
+        if (process.env.NODE_ENV !== "production") {
+          console.warn(
+            "[useLiveStats] /api/stats fetch failed; using fallback",
+            err,
+          );
+        }
       });
 
     return () => {

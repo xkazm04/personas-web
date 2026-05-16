@@ -60,6 +60,22 @@ export function nextId() {
   return `n${++_nextId}`;
 }
 
+// Bump _nextId past the highest n<digits> id in `nodes`, so addNode() after
+// a hash-restored flow cannot collide with an attacker-chosen id (n101, etc.).
+export function seedNextId(nodes: { id: string }[]): void {
+  let max = _nextId;
+  for (const node of nodes) {
+    const m = /^n(\d+)$/.exec(node.id);
+    if (m) {
+      const n = Number(m[1]);
+      if (Number.isFinite(n) && n > max) max = n;
+    }
+  }
+  _nextId = max;
+}
+
+const NODE_ID_RE = /^n\d+$/;
+
 export function encodeFlow(state: { nodes: CanvasNode[]; wires: Wire[] }): string {
   const json = JSON.stringify(state);
   if (typeof window !== "undefined" && typeof btoa === "function") {
@@ -74,9 +90,19 @@ export function decodeFlow(
   try {
     const json = decodeURIComponent(atob(hash));
     const parsed = JSON.parse(json);
-    if (Array.isArray(parsed.nodes) && Array.isArray(parsed.wires)) {
-      return parsed as { nodes: CanvasNode[]; wires: Wire[] };
+    if (!Array.isArray(parsed.nodes) || !Array.isArray(parsed.wires)) return null;
+
+    // Reject decoded states with non-conforming or duplicate node ids — these
+    // would otherwise corrupt the React key set, drag math, and wire lookups.
+    const seen = new Set<string>();
+    for (const node of parsed.nodes) {
+      if (!node || typeof node.id !== "string" || !NODE_ID_RE.test(node.id)) {
+        return null;
+      }
+      if (seen.has(node.id)) return null;
+      seen.add(node.id);
     }
+    return parsed as { nodes: CanvasNode[]; wires: Wire[] };
   } catch {
     /* invalid hash */
   }

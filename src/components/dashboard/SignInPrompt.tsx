@@ -7,8 +7,10 @@ import GradientText from "@/components/GradientText";
 import AuthLayout from "@/components/dashboard/AuthLayout";
 import { useAuthStore } from "@/stores/authStore";
 import { DEMO_ENABLED, DEVELOPMENT } from "@/lib/dev";
+import { useTranslation } from "@/i18n/useTranslation";
 
 export default function SignInPrompt() {
+  const { t } = useTranslation();
   const signInWithGoogle = useAuthStore((s) => s.signInWithGoogle);
   const signInAsDemo = useAuthStore((s) => s.signInAsDemo);
   const isSigningIn = useAuthStore((s) => s.isSigningIn);
@@ -29,7 +31,7 @@ export default function SignInPrompt() {
             className="mb-4 flex items-center justify-center gap-2 rounded-xl border border-amber-500/20 bg-amber-500/5 px-4 py-2.5 text-sm text-amber-400"
           >
             <FlaskConical className="h-3.5 w-3.5" />
-            <span>Development Mode — using mock data</span>
+            <span>{t.dashboardUi.devModeMock}</span>
           </motion.div>
         )}
 
@@ -51,14 +53,14 @@ export default function SignInPrompt() {
             </div>
 
             <h1 className="mt-6 text-2xl font-bold tracking-tight">
-              Sign in to your{" "}
-              <GradientText variant="silver">Dashboard</GradientText>
+              {t.dashboardUi.signInTitlePrefix}{" "}
+              <GradientText variant="silver">{t.dashboardUi.signInTitleDashboard}</GradientText>
             </h1>
 
             <p className="mt-3 text-base text-muted-dark leading-relaxed">
               {DEVELOPMENT
-                ? "Click below to enter the dashboard with example data and explore the UI."
-                : "Monitor your cloud agents, review executions, and manage events from one place."}
+                ? t.dashboardUi.devSignInDesc
+                : t.dashboardUi.prodSignInDesc}
             </p>
 
             {/* Sign-In failure banner */}
@@ -91,12 +93,12 @@ export default function SignInPrompt() {
               {isSigningIn ? (
                 <>
                   <Loader2 className="relative h-5 w-5 animate-spin" />
-                  <span className="relative">Signing in…</span>
+                  <span className="relative">{t.dashboardUi.signingIn}</span>
                 </>
               ) : DEVELOPMENT ? (
                 <>
                   <FlaskConical className="relative h-5 w-5" />
-                  <span className="relative">Enter Demo Dashboard</span>
+                  <span className="relative">{t.dashboardUi.enterDemoDashboard}</span>
                 </>
               ) : (
                 <>
@@ -121,7 +123,7 @@ export default function SignInPrompt() {
                       opacity={0.8}
                     />
                   </svg>
-                  <span className="relative">Continue with Google</span>
+                  <span className="relative">{t.dashboardUi.continueWithGoogle}</span>
                 </>
               )}
             </button>
@@ -132,14 +134,14 @@ export default function SignInPrompt() {
                 className="group relative mt-3 flex w-full items-center justify-center gap-2 overflow-hidden rounded-full border border-glass-hover bg-white/[0.03] px-6 py-3 text-base font-medium text-muted-dark transition-all duration-300 hover:border-glass-strong hover:bg-white/[0.06] hover:text-foreground/80"
               >
                 <FlaskConical className="relative h-4 w-4" />
-                <span className="relative">Try Demo</span>
+                <span className="relative">{t.dashboardUi.tryDemo}</span>
               </button>
             )}
 
             <p className="mt-4 text-sm text-muted-dark/60">
               {DEVELOPMENT
-                ? "No authentication required in development mode"
-                : "Secured by Supabase Authentication"}
+                ? t.dashboardUi.devNoAuth
+                : t.dashboardUi.securedBySupabase}
             </p>
           </div>
         </motion.div>

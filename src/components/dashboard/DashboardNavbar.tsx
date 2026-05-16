@@ -32,13 +32,13 @@ export default function DashboardNavbar() {
           <Link href="/" className="flex items-center gap-2">
             <Image
               src="/imgs/logo.png"
-              alt="Personas"
+              alt={t.dashboardUi.brandName}
               width={28}
               height={28}
               className="h-7 w-7 object-contain drop-shadow-[0_0_8px_rgba(6,182,212,0.3)]"
             />
             <span className="text-base font-semibold tracking-tight text-foreground">
-              Personas
+              {t.dashboardUi.brandName}
             </span>
           </Link>
           <ChevronRight className="h-3.5 w-3.5 text-muted-dark" />

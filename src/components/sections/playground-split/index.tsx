@@ -1,7 +1,7 @@
 "use client";
 
 import { motion, useReducedMotion } from "framer-motion";
-import { Clock, RotateCcw } from "lucide-react";
+import { Clock, Hourglass, RotateCcw } from "lucide-react";
 import SectionWrapper from "@/components/SectionWrapper";
 import SectionIntro from "@/components/primitives/SectionIntro";
 import { ThemedChip, TerminalPanel } from "@/components/primitives";
@@ -20,12 +20,19 @@ export default function PlaygroundSplit() {
     phase,
     isRunning,
     elapsedMs,
+    totalDurationMs,
     handleExampleClick,
     handleReset,
   } = usePlaygroundSimulation();
 
   const activeExampleData =
     activeExample !== null ? examples[activeExample] : null;
+
+  const progressPercent =
+    totalDurationMs > 0
+      ? Math.min(100, (elapsedMs / totalDurationMs) * 100)
+      : 0;
+  const remainingMs = Math.max(0, totalDurationMs - elapsedMs);
 
   return (
     <SectionWrapper id="playground-split">
@@ -86,18 +93,28 @@ export default function PlaygroundSplit() {
                   <motion.div
                     initial={{ opacity: 0 }}
                     animate={{ opacity: 1 }}
-                    className="flex items-center gap-1.5"
+                    className="flex items-center gap-3"
                   >
-                    <Clock className="h-3 w-3 text-muted-dark" />
-                    <span
-                      className={`text-base font-mono tabular-nums ${
-                        phase === "done"
-                          ? "text-brand-emerald/60"
-                          : "text-muted-dark"
-                      }`}
-                    >
-                      {(elapsedMs / 1000).toFixed(1)}s
-                    </span>
+                    <div className="flex items-center gap-1.5">
+                      <Clock className="h-3 w-3 text-muted-dark" />
+                      <span
+                        className={`text-base font-mono tabular-nums ${
+                          phase === "done"
+                            ? "text-brand-emerald/60"
+                            : "text-muted-dark"
+                        }`}
+                      >
+                        {(elapsedMs / 1000).toFixed(1)}s
+                      </span>
+                    </div>
+                    {isRunning && remainingMs > 0 && (
+                      <div className="flex items-center gap-1.5">
+                        <Hourglass className="h-3 w-3 text-brand-cyan/60" />
+                        <span className="text-base font-mono tabular-nums text-brand-cyan/60">
+                          ~{(remainingMs / 1000).toFixed(1)}s
+                        </span>
+                      </div>
+                    )}
                   </motion.div>
                 )}
                 {phase === "done" && (
@@ -113,6 +130,38 @@ export default function PlaygroundSplit() {
             </>
           }
         >
+          {phase !== "idle" && (
+            <div
+              className="relative h-1 bg-white/[0.03]"
+              role="progressbar"
+              aria-valuenow={Math.round(progressPercent)}
+              aria-valuemin={0}
+              aria-valuemax={100}
+            >
+              <div
+                className="absolute inset-y-0 left-0"
+                style={{
+                  width: `${progressPercent}%`,
+                  background:
+                    "linear-gradient(90deg, #06b6d4, #a855f7, #34d399)",
+                  transition: reduced ? "none" : "width 0.1s linear",
+                }}
+              />
+              {isRunning && !reduced && (
+                <motion.div
+                  className="absolute top-1/2 -translate-y-1/2 w-2.5 h-2.5 rounded-full bg-brand-cyan"
+                  style={{
+                    left: `${progressPercent}%`,
+                    boxShadow: "0 0 10px 3px rgba(6,182,212,0.5)",
+                    marginLeft: "-5px",
+                    transition: "left 0.1s linear",
+                  }}
+                  animate={{ opacity: [0.6, 1, 0.6] }}
+                  transition={{ duration: 0.8, repeat: Infinity }}
+                />
+              )}
+            </div>
+          )}
           <div className="grid grid-cols-1 lg:grid-cols-2 min-h-[520px]">
             <PromptEditorPanel
               activeExample={activeExample}

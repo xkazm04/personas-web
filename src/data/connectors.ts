@@ -14,7 +14,7 @@ export interface Connector {
   authType: string;
   /** SVG filename in /public/tools/ (without extension). Defaults to `name`. */
   icon?: string;
-  useCases: ConnectorUseCase[];
+  useCases: [ConnectorUseCase, ...ConnectorUseCase[]];
 }
 
 export interface ConnectorCategory {

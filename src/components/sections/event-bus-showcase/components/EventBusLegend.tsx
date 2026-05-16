@@ -3,6 +3,7 @@
 import { motion } from "framer-motion";
 import { fadeUp } from "@/lib/animations";
 import { BRAND_VAR, tint } from "@/lib/brand-theme";
+import { EYEBROW } from "@/lib/typography";
 
 export default function EventBusLegend({ averageLatency }: { averageLatency: number }) {
   return (
@@ -30,7 +31,9 @@ export default function EventBusLegend({ averageLatency }: { averageLatency: num
         </svg>
         <span>Connection to hub</span>
       </div>
-      <div className="rounded-full border border-glass-hover bg-white/2 px-3 py-1.5 font-mono tracking-wide text-muted">
+      <div
+        className={`${EYEBROW} rounded-full border border-glass-hover bg-white/2 px-3 py-1.5`}
+      >
         Typical delivery time: {averageLatency}ms
       </div>
     </motion.div>

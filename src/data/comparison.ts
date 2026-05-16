@@ -389,6 +389,40 @@ export interface VerdictPoint {
   color: string;
 }
 
+/**
+ * Build-time exhaustiveness check: every ComparisonRow must define a value
+ * for every CompetitorId. The Record<CompetitorId, ...> type only catches
+ * gaps at literal-construction time — spreads, dynamic builds, or future
+ * external loads can leave keys undefined and silently render blank cells.
+ * This assertion runs at module load, so any incomplete data fails the
+ * Next.js build during SSG/SSR rather than reaching production.
+ */
+function assertComparisonDataComplete(): void {
+  const expectedIds = COMPETITORS.map((c) => c.id);
+  const missing: string[] = [];
+  for (const category of COMPARISON_CATEGORIES) {
+    for (const row of category.features) {
+      for (const id of expectedIds) {
+        if (!Object.prototype.hasOwnProperty.call(row.values, id)) {
+          missing.push(`${category.name} / "${row.label}": missing "${id}"`);
+          continue;
+        }
+        const v = row.values[id];
+        if (typeof v !== "string" && typeof v !== "boolean") {
+          missing.push(`${category.name} / "${row.label}": invalid value for "${id}"`);
+        }
+      }
+    }
+  }
+  if (missing.length > 0) {
+    throw new Error(
+      `ComparisonTable data is incomplete:\n  - ${missing.join("\n  - ")}`,
+    );
+  }
+}
+
+assertComparisonDataComplete();
+
 export const VERDICT_POINTS: VerdictPoint[] = [
   {
     title: "Your data never leaves your machine",

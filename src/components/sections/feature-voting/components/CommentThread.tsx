@@ -62,7 +62,7 @@ export default function CommentThread({
                   animate={{ height: "auto", opacity: 1 }}
                   exit={{ height: 0, opacity: 0 }}
                   transition={{ duration: 0.2 }}
-                  className="overflow-hidden ml-4 pl-3 border-l border-glass"
+                  className="overflow-hidden ms-[clamp(12px,2vw,16px)] ps-3 border-s border-glass"
                 >
                   <div className="flex items-center gap-1 mb-1.5 mt-1">
                     <CornerDownRight className="h-2.5 w-2.5 text-muted-dark/60" />

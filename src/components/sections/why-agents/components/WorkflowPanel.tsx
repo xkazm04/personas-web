@@ -11,12 +11,12 @@ const RESULT_GAP = 0.1;
 export default function WorkflowPanel({ scenario }: { scenario: Scenario }) {
   const statusColor = {
     ok: "text-brand-emerald/70",
-    warn: "text-yellow-400/70",
+    warn: "text-brand-amber/70",
     error: "text-brand-rose/70",
   };
   const statusBg = {
     ok: "bg-brand-emerald/10 ring-brand-emerald/10",
-    warn: "bg-yellow-400/10 ring-yellow-400/10",
+    warn: "bg-brand-amber/10 ring-brand-amber/10",
     error: "bg-brand-rose/10 ring-brand-rose/10",
   };
   const statusIcon = { ok: Check, warn: AlertTriangle, error: X };

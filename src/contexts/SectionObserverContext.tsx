@@ -137,6 +137,9 @@ export function SectionObserverProvider({
     tryRegister();
 
     let mutationObs: MutationObserver | null = null;
+    // Hard cap so a missing/never-hydrating ID can't keep the observer
+    // attached forever, firing on every dynamic mutation in the app.
+    let timeoutId: ReturnType<typeof setTimeout> | null = null;
     if (pending.size > 0) {
       mutationObs = new MutationObserver(() => {
         if (pending.size === 0) {
@@ -144,13 +147,30 @@ export function SectionObserverProvider({
           return;
         }
         tryRegister();
-        if (pending.size === 0) mutationObs?.disconnect();
+        if (pending.size === 0) {
+          mutationObs?.disconnect();
+          if (timeoutId) {
+            clearTimeout(timeoutId);
+            timeoutId = null;
+          }
+        }
       });
       mutationObs.observe(document.body, { childList: true, subtree: true });
+      timeoutId = setTimeout(() => {
+        mutationObs?.disconnect();
+        timeoutId = null;
+        if (process.env.NODE_ENV !== "production" && pending.size > 0) {
+          console.warn(
+            "[SectionObserver] giving up on unresolved section IDs:",
+            Array.from(pending),
+          );
+        }
+      }, 30000);
     }
 
     return () => {
       mutationObs?.disconnect();
+      if (timeoutId) clearTimeout(timeoutId);
       for (const id of sectionIds) {
         unobserve(id);
       }

@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import { useReducedMotion } from "framer-motion";
 
 interface UseAutoCycleOptions {
@@ -43,17 +43,71 @@ export function useAutoCycle({
 }: UseAutoCycleOptions) {
   const reducedMotion = useReducedMotion() ?? false;
   const [active, setActive] = useState(initial);
+  const [prevCount, setPrevCount] = useState(count);
   const [internalPaused, setInternalPaused] = useState(false);
+  const resumeTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+
+  // Clamp the active index when the source list shrinks (e.g. items removed
+  // by a hot reload or upstream data change). Using the prev-state pattern
+  // here is required — calling setActive inside a useEffect is forbidden by
+  // the React 19 compiler rules in this repo.
+  if (count !== prevCount) {
+    setPrevCount(count);
+    if (count > 0 && active >= count) {
+      setActive(count - 1);
+    }
+  }
 
   const isPaused = paused || internalPaused || (respectReducedMotion && reducedMotion);
 
   useEffect(() => {
     if (isPaused || count <= 1) return;
+    if (!Number.isFinite(intervalMs)) {
+      if (process.env.NODE_ENV !== "production") {
+        console.warn(
+          `[useAutoCycle] non-finite intervalMs (${String(intervalMs)}); skipping cycle.`,
+        );
+      }
+      return;
+    }
+    const safeInterval = Math.max(intervalMs, 16);
+    if (process.env.NODE_ENV !== "production" && safeInterval !== intervalMs) {
+      console.warn(
+        `[useAutoCycle] intervalMs=${intervalMs} clamped to ${safeInterval}ms (likely seconds-vs-ms confusion).`,
+      );
+    }
     const t = setInterval(() => {
       setActive((i) => (i + 1) % count);
-    }, intervalMs);
+    }, safeInterval);
     return () => clearInterval(t);
   }, [isPaused, count, intervalMs]);
+
+  useEffect(() => {
+    return () => {
+      if (resumeTimerRef.current) {
+        clearTimeout(resumeTimerRef.current);
+        resumeTimerRef.current = null;
+      }
+    };
+  }, []);
+
+  const setPaused = useCallback<typeof setInternalPaused>((value) => {
+    if (resumeTimerRef.current) {
+      clearTimeout(resumeTimerRef.current);
+      resumeTimerRef.current = null;
+    }
+    setInternalPaused(value);
+  }, []);
+
+  const pauseFor = useCallback((ms: number) => {
+    if (resumeTimerRef.current) clearTimeout(resumeTimerRef.current);
+    setInternalPaused(true);
+    if (!Number.isFinite(ms) || ms <= 0) return;
+    resumeTimerRef.current = setTimeout(() => {
+      setInternalPaused(false);
+      resumeTimerRef.current = null;
+    }, ms);
+  }, []);
 
   return {
     active,
@@ -61,6 +115,13 @@ export function useAutoCycle({
     /** True when the cycle is currently halted (external pause OR reduced motion). */
     paused: isPaused,
     /** Toggle the internal pause flag (use this for click-to-pause behavior). */
-    setPaused: setInternalPaused,
+    setPaused,
+    /**
+     * Pause the cycle, then auto-resume after `ms`. Use this when a tap/click
+     * should pause briefly (so the user can read) but must not get stuck
+     * paused on touch devices, where there is no `mouseleave`/`pointerleave`
+     * paired with the tap that selected an item.
+     */
+    pauseFor,
   };
 }

@@ -2,7 +2,6 @@ import { GUIDE_CATEGORIES } from "@/data/guide/categories";
 import { GUIDE_TOPICS } from "@/data/guide/topics";
 import { ogCard, OG_SIZE } from "@/lib/og";
 
-export const runtime = "edge";
 export const alt = "Personas Guide";
 export const size = OG_SIZE;
 export const contentType = "image/png";

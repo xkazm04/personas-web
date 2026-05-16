@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from "react";
 import { motion, useReducedMotion } from "framer-motion";
-import { Swords, Trophy } from "lucide-react";
+import { Swords, Check, X } from "lucide-react";
 import { ARENA_ROUNDS } from "../data";
 import TabBackdrop from "./TabBackdrop";
 
@@ -82,15 +82,8 @@ export default function ArenaTab() {
           const score = side === "A" ? round.scoreA : round.scoreB;
           const color = side === "A" ? "#06b6d4" : "#a855f7";
           return (
-            <motion.div
+            <div
               key={`${side}-${currentRound}`}
-              animate={{
-                backgroundColor: isWinner
-                  ? `${color}1f`
-                  : isLoser
-                    ? "rgba(244,63,94,0.10)"
-                    : "transparent",
-              }}
               className="relative px-5 py-6 min-h-[160px] flex flex-col"
             >
               <div className="flex items-center justify-between mb-3">
@@ -107,12 +100,36 @@ export default function ArenaTab() {
                 </div>
                 {isWinner && (
                   <motion.div
-                    initial={{ scale: 0, rotate: -20 }}
-                    animate={{ scale: 1, rotate: 0 }}
+                    key={`win-${side}-${currentRound}`}
+                    initial={{ scale: 0, rotate: -20, opacity: 0 }}
+                    animate={{ scale: 1, rotate: 0, opacity: 1 }}
+                    transition={{ type: "spring", stiffness: 320, damping: 18 }}
+                    aria-label={`Version ${side} wins this round`}
                     className="flex items-center gap-1 rounded-full border px-2 py-0.5 text-base font-mono uppercase tracking-widest"
                     style={{ borderColor: color, color }}
                   >
-                    <Trophy className="h-3 w-3" /> win
+                    <motion.span
+                      initial={{ pathLength: 0 }}
+                      animate={{ pathLength: 1 }}
+                      transition={{ delay: 0.15, duration: 0.3, ease: "easeOut" }}
+                      className="inline-flex"
+                    >
+                      <Check className="h-3 w-3" strokeWidth={3} />
+                    </motion.span>
+                    win
+                  </motion.div>
+                )}
+                {isLoser && (
+                  <motion.div
+                    key={`lose-${side}-${currentRound}`}
+                    initial={{ scale: 0, rotate: 20, opacity: 0 }}
+                    animate={{ scale: 1, rotate: 0, opacity: 1 }}
+                    transition={{ type: "spring", stiffness: 320, damping: 18 }}
+                    aria-label={`Version ${side} loses this round`}
+                    className="flex items-center gap-1 rounded-full border border-brand-rose/60 px-2 py-0.5 text-base font-mono uppercase tracking-widest text-brand-rose/90"
+                  >
+                    <X className="h-3 w-3" strokeWidth={3} />
+                    lose
                   </motion.div>
                 )}
               </div>
@@ -134,7 +151,7 @@ export default function ArenaTab() {
                   />
                 </div>
               </div>
-            </motion.div>
+            </div>
           );
         })}
       </div>

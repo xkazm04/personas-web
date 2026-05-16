@@ -575,3 +575,53 @@ We believe the best architecture gives you both options without forcing a choice
 Your data, your infrastructure, your choice.`,
   },
 ];
+
+// ── Build-time validation ────────────────────────────────────────────
+// Runs at module load (i.e. at build time when Next.js bundles the data).
+// Fails the build instead of silently shipping content errors:
+//   - Duplicate or empty slugs would orphan a post (last-write-wins in
+//     generateStaticParams + opengraph-image route segments).
+//   - Invalid slug characters would break URL routing.
+//   - Malformed dates render as "Invalid Date" in the article header AND
+//     corrupt the JSON-LD `datePublished` SEO signal.
+{
+  const SLUG_PATTERN = /^[a-z0-9]+(?:-[a-z0-9]+)*$/;
+  const DATE_PATTERN = /^\d{4}-\d{2}-\d{2}$/;
+  const seenSlugs = new Set<string>();
+
+  for (const post of BLOG_POSTS) {
+    if (!post.slug) {
+      throw new Error(
+        `[blog.ts] Empty slug for post titled "${post.title}"`,
+      );
+    }
+    if (!SLUG_PATTERN.test(post.slug)) {
+      throw new Error(
+        `[blog.ts] Invalid slug "${post.slug}" — must be lowercase ASCII letters/digits with single hyphens (no leading, trailing, or doubled hyphens)`,
+      );
+    }
+    if (seenSlugs.has(post.slug)) {
+      throw new Error(
+        `[blog.ts] Duplicate slug "${post.slug}" — slugs must be unique across BLOG_POSTS`,
+      );
+    }
+    seenSlugs.add(post.slug);
+
+    if (!DATE_PATTERN.test(post.date)) {
+      throw new Error(
+        `[blog.ts] Invalid date "${post.date}" for slug "${post.slug}" — must match YYYY-MM-DD`,
+      );
+    }
+    // Round-trip through Date to reject impossible calendar dates like
+    // "2026-02-30" or "2026-13-45" that match the regex but don't exist.
+    const parsed = new Date(`${post.date}T00:00:00Z`);
+    if (
+      Number.isNaN(parsed.getTime()) ||
+      parsed.toISOString().slice(0, 10) !== post.date
+    ) {
+      throw new Error(
+        `[blog.ts] Date "${post.date}" for slug "${post.slug}" is not a real calendar date`,
+      );
+    }
+  }
+}

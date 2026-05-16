@@ -2,25 +2,16 @@
 
 import { useState, useRef, useEffect, useCallback, useMemo } from "react";
 import { useRouter } from "next/navigation";
-import { AnimatePresence, motion } from "framer-motion";
-import { Search, ArrowRight } from "lucide-react";
+import { AnimatePresence } from "framer-motion";
+import { Search } from "lucide-react";
 import { searchGuide, groupResultsByCategory } from "@/lib/guide-search";
 import type { SearchResult } from "@/lib/guide-search";
-import { highlightMatch } from "@/lib/highlight-match";
-import { TRANSITION_FAST } from "@/lib/animations";
+import { SearchResultsPopover } from "./search-combobox/SearchResultsPopover";
 
 interface SearchComboboxProps {
   placeholder?: string;
   className?: string;
 }
-
-const BADGE_LABEL: Record<SearchResult["matchType"], string | null> = {
-  "exact-title": null,
-  "exact-tag": "tag",
-  "fuzzy-title": "~",
-  "fuzzy-tag": "~tag",
-  description: "desc",
-};
 
 export default function SearchCombobox({
   placeholder = "Search topics\u2026",
@@ -33,18 +24,32 @@ export default function SearchCombobox({
   const wrapperRef = useRef<HTMLDivElement>(null);
   const inputRef = useRef<HTMLInputElement>(null);
   const listRef = useRef<HTMLDivElement>(null);
+  // Tracks the active debounce timer so Enter can flush it synchronously
+  const debounceTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+  // Tracks which query the current `results` correspond to (vs. lagging during debounce)
+  const resultsForQueryRef = useRef<string>("");
   const router = useRouter();
 
   // Debounced search
   useEffect(() => {
-    if (query.length < 2) { queueMicrotask(() => { setResults([]); setIsOpen(false); }); return; }
+    if (query.length < 2) {
+      queueMicrotask(() => { setResults([]); setIsOpen(false); });
+      resultsForQueryRef.current = query;
+      return;
+    }
     const timer = setTimeout(() => {
       const r = searchGuide(query);
       setResults(r);
       setIsOpen(r.length > 0 || query.length >= 2);
       setActiveIndex(-1);
+      resultsForQueryRef.current = query;
+      if (debounceTimerRef.current === timer) debounceTimerRef.current = null;
     }, 150);
-    return () => clearTimeout(timer);
+    debounceTimerRef.current = timer;
+    return () => {
+      clearTimeout(timer);
+      if (debounceTimerRef.current === timer) debounceTimerRef.current = null;
+    };
   }, [query]);
 
   // Close on outside click
@@ -79,14 +84,39 @@ export default function SearchCombobox({
       } else if (e.key === "ArrowUp") {
         e.preventDefault();
         setActiveIndex((i) => Math.max(i - 1, -1));
-      } else if (e.key === "Enter" && activeIndex >= 0) {
+      } else if (e.key === "Enter") {
+        // Already-highlighted result wins
+        if (activeIndex >= 0 && results[activeIndex]) {
+          e.preventDefault();
+          navigate(results[activeIndex]);
+          return;
+        }
+        // Otherwise: flush any pending debounce so Enter never sits in dead air
+        if (query.trim().length < 2) return;
         e.preventDefault();
-        navigate(results[activeIndex]);
+        let liveResults = results;
+        const isStale = resultsForQueryRef.current !== query;
+        if (isStale || debounceTimerRef.current) {
+          if (debounceTimerRef.current) {
+            clearTimeout(debounceTimerRef.current);
+            debounceTimerRef.current = null;
+          }
+          liveResults = searchGuide(query);
+          setResults(liveResults);
+          setActiveIndex(-1);
+          resultsForQueryRef.current = query;
+        }
+        if (liveResults.length > 0) {
+          navigate(liveResults[0]);
+        } else {
+          // 0 results: ensure dropdown is visible so the "No matches" row gives feedback
+          setIsOpen(true);
+        }
       } else if (e.key === "Escape" || e.key === "Tab") {
         setIsOpen(false);
       }
     },
-    [activeIndex, results, navigate],
+    [activeIndex, results, navigate, query],
   );
 
   const grouped = useMemo(() => groupResultsByCategory(results), [results]);
@@ -136,66 +166,15 @@ export default function SearchCombobox({
 
       <AnimatePresence>
         {isOpen && (
-          <motion.div
-            id="search-listbox"
-            role="listbox"
-            aria-label="Search results"
-            ref={listRef}
-            initial={{ opacity: 0, y: -6 }}
-            animate={{ opacity: 1, y: 0 }}
-            exit={{ opacity: 0, y: -6 }}
-            transition={TRANSITION_FAST}
-            className="absolute left-0 right-0 top-full z-50 mt-2 max-h-80 overflow-y-auto rounded-xl border border-glass-hover bg-surface/95 shadow-2xl backdrop-blur-xl"
-          >
-            {results.length === 0 ? (
-              <p className="px-4 py-6 text-center text-base text-muted-dark">
-                No topics found for &ldquo;{query}&rdquo;
-              </p>
-            ) : (
-              <>
-                {grouped.map((group) => (
-                  <div key={group.category.id}>
-                    <div className="sticky top-0 z-10 flex items-center gap-2 bg-surface/90 px-3 py-1.5 backdrop-blur-md">
-                      <span className="h-2 w-2 rounded-full" style={{ backgroundColor: group.category.color }} aria-hidden="true" />
-                      <span className="text-sm font-medium text-muted-dark">{group.category.name}</span>
-                    </div>
-                    {group.results.map((result) => {
-                      const idx = flatIndexMap.get(result.topic.id) ?? -1;
-                      const isActive = idx === activeIndex;
-                      const badge = BADGE_LABEL[result.matchType];
-                      return (
-                        <button
-                          key={result.topic.id}
-                          id={`search-option-${idx}`}
-                          role="option"
-                          aria-selected={isActive}
-                          data-index={idx}
-                          onClick={() => navigate(result)}
-                          className={`flex w-full items-center gap-2.5 px-3 py-2 text-left text-base transition-colors outline-none focus-visible:ring-2 focus-visible:ring-brand-cyan/50 focus-visible:ring-offset-2 focus-visible:ring-offset-black ${
-                            isActive ? "bg-white/[0.06]" : "hover:bg-white/[0.04]"
-                          }`}
-                        >
-                          <span className="h-1.5 w-1.5 shrink-0 rounded-full" style={{ backgroundColor: group.category.color }} />
-                          <span className="min-w-0 flex-1 truncate text-foreground">
-                            {highlightMatch(result.topic.title, query, result.matchType, group.category.color)}
-                          </span>
-                          {badge && (
-                            <span className="shrink-0 rounded bg-white/[0.06] px-1.5 py-0.5 text-base leading-none text-muted-dark">
-                              {badge}
-                            </span>
-                          )}
-                          {isActive && <ArrowRight className="h-3.5 w-3.5 shrink-0 text-muted-dark" />}
-                        </button>
-                      );
-                    })}
-                  </div>
-                ))}
-                <div className="border-t border-glass px-3 py-1.5 text-right text-base text-muted-dark">
-                  {results.length} result{results.length !== 1 && "s"}
-                </div>
-              </>
-            )}
-          </motion.div>
+          <SearchResultsPopover
+            query={query}
+            results={results}
+            grouped={grouped}
+            activeIndex={activeIndex}
+            flatIndexMap={flatIndexMap}
+            listRef={listRef}
+            onNavigate={navigate}
+          />
         )}
       </AnimatePresence>
     </div>

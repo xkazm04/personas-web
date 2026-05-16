@@ -2,7 +2,12 @@
 
 import { useCallback, useEffect, useRef, useState } from "react";
 import { useReducedMotion } from "framer-motion";
-import { CYCLE_MS, MSG_INTERVAL_MS, scenarios } from "./data";
+import {
+  MSG_INTERVAL_MS,
+  SATISFACTION_REVEAL_MS,
+  getScenarioCycleMs,
+  scenarios,
+} from "./data";
 
 export function useChatSequence() {
   const prefersReduced = useReducedMotion();
@@ -68,7 +73,7 @@ export function useChatSequence() {
     const maxMsgs = Math.max(wfMsgs.length, agMsgs.length);
     const satTimer = setTimeout(() => {
       setShowSatisfaction(true);
-    }, maxMsgs * interval + 400);
+    }, maxMsgs * interval + SATISFACTION_REVEAL_MS);
     timerRefs.current.push(satTimer);
   }, [activeIndex, prefersReduced, clearAllTimers]);
 
@@ -76,15 +81,18 @@ export function useChatSequence() {
     queueMicrotask(() => playScenario());
   }, [activeIndex, playScenario]);
 
+  const interval = prefersReduced ? 200 : MSG_INTERVAL_MS;
+  const cycleMs = getScenarioCycleMs(scenarios[activeIndex], interval);
+
   useEffect(() => {
-    if (paused || hovered) return;
+    if (paused || hovered || prefersReduced) return;
     cycleTimerRef.current = setTimeout(() => {
       setActiveIndex((prev) => (prev + 1) % scenarios.length);
-    }, CYCLE_MS);
+    }, cycleMs);
     return () => {
       if (cycleTimerRef.current) clearTimeout(cycleTimerRef.current);
     };
-  }, [activeIndex, paused, hovered]);
+  }, [activeIndex, paused, hovered, prefersReduced, cycleMs]);
 
   useEffect(() => {
     return () => clearAllTimers();
@@ -102,5 +110,6 @@ export function useChatSequence() {
     setPaused,
     hovered,
     setHovered,
+    cycleMs,
   };
 }

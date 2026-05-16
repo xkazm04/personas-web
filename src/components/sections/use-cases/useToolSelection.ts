@@ -33,10 +33,16 @@ export function useToolSelection(initiallyAutoplay: boolean) {
 
     const frame = (timestamp: number) => {
       if (document.hidden) {
+        rafStartRef.current = null;
         rafId = requestAnimationFrame(frame);
         return;
       }
-      if (rafStartRef.current === null) rafStartRef.current = timestamp;
+      if (rafStartRef.current === null) {
+        // Resume from the currently-shown progress so the bar continues smoothly
+        // after the tab regains visibility (browsers pause rAF while hidden, so
+        // a stale start would let elapsed snap past AUTOPLAY_INTERVAL on resume).
+        rafStartRef.current = timestamp - progressRef.current * AUTOPLAY_INTERVAL;
+      }
       const elapsed = timestamp - rafStartRef.current;
       const pct = Math.min(elapsed / AUTOPLAY_INTERVAL, 1);
 
@@ -52,8 +58,16 @@ export function useToolSelection(initiallyAutoplay: boolean) {
       }
     };
 
+    const handleVisibility = () => {
+      if (!document.hidden) rafStartRef.current = null;
+    };
+
+    document.addEventListener("visibilitychange", handleVisibility);
     rafId = requestAnimationFrame(frame);
-    return () => cancelAnimationFrame(rafId);
+    return () => {
+      document.removeEventListener("visibilitychange", handleVisibility);
+      cancelAnimationFrame(rafId);
+    };
   }, [autoplay, selected, advanceToNext]);
 
   useEffect(() => {

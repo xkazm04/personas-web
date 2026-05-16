@@ -4,8 +4,10 @@ import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { Wifi, WifiOff } from "lucide-react";
 import { useNavItems, useNavState } from "./DashboardNavigation";
+import { useTranslation } from "@/i18n/useTranslation";
 
 export default function DesktopSidebar() {
+  const { t } = useTranslation();
   const navItems = useNavItems();
   const { isConnected, health, getActive, getBadge } = useNavState();
   const router = useRouter();
@@ -72,17 +74,17 @@ export default function DesktopSidebar() {
                 <Wifi className="absolute h-3 w-3 text-emerald-400" />
                 <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-emerald-400 opacity-40"></span>
               </div>
-              <span className="text-emerald-400">Connected</span>
+              <span className="text-emerald-400">{t.dashboardUi.connected}</span>
               {health?.workers && (
                 <span className="ml-auto text-muted-dark tabular-nums">
-                  {health.workers.total}w
+                  {health.workers.total}{t.dashboardUi.weekAbbr}
                 </span>
               )}
             </>
           ) : (
             <>
               <WifiOff className="h-3 w-3 text-red-400" />
-              <span className="text-red-400">Disconnected</span>
+              <span className="text-red-400">{t.dashboardUi.disconnected}</span>
             </>
           )}
         </div>

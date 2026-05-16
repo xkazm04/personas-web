@@ -9,7 +9,7 @@ import { BRAND_VAR } from "@/lib/brand-theme";
 import ArtistGrid from "./ArtistGrid";
 import DevToolsRunner from "./DevToolsRunner";
 import DevToolsLifecycle from "./DevToolsLifecycle";
-import ObsidianBrowser from "./ObsidianBrowser";
+import SecondBrain from "./SecondBrain";
 import ObsidianCloudSync from "./ObsidianCloudSync";
 import ResearchLifecycle from "./ResearchLifecycle";
 import ResearchSources from "./ResearchSources";
@@ -61,10 +61,10 @@ export const PLUGINS: PluginDef[] = [
     color: BRAND_VAR.purple,
     variants: [
       {
-        key: "browser",
-        label: "Vault Browser",
-        blurb: "Tree + markdown preview with live backlinks",
-        component: ObsidianBrowser,
+        key: "brain",
+        label: "Second Brain",
+        blurb: "Knowledge graph view — your notes, connected and alive",
+        component: SecondBrain,
       },
       {
         key: "cloud",

@@ -1,5 +1,6 @@
 "use client";
 
+import { useState } from "react";
 import { motion } from "framer-motion";
 import SectionWrapper from "@/components/SectionWrapper";
 import { SectionIntro } from "@/components/primitives";
@@ -12,22 +13,29 @@ import TriggerDetail from "./TriggerDetail";
 /**
  * Landing section — redesigned from the old single-chain "Pipelines" concept
  * into a radial hub showing how 8 real trigger types all wake Personas.
- * Auto-cycles the active trigger, pausing on hover.
+ * Auto-cycles the active trigger, pausing on hover and briefly on tap/click.
  */
 
+const TAP_PAUSE_MS = AUTO_CYCLE_MS * 2;
+
 export default function OrchestrationHub() {
-  const { active, setActive, setPaused } = useAutoCycle({
+  const [hovering, setHovering] = useState(false);
+  const { active, setActive, pauseFor } = useAutoCycle({
     count: TRIGGERS.length,
     intervalMs: AUTO_CYCLE_MS,
+    paused: hovering,
   });
 
-  const activeTrigger = TRIGGERS[active];
+  const activeTrigger = TRIGGERS[active] ?? TRIGGERS[0];
 
   const handleSelect = (id: string) => {
     const idx = TRIGGERS.findIndex((t) => t.id === id);
     if (idx !== -1) {
       setActive(idx);
-      setPaused(true);
+      // Pause briefly so the user can read, then auto-resume. Touch devices
+      // never fire pointerleave paired with the tap that triggered the
+      // selection, so a permanent pause here would freeze the cycle.
+      pauseFor(TAP_PAUSE_MS);
     }
   };
 
@@ -54,8 +62,8 @@ export default function OrchestrationHub() {
           <div className="grid grid-cols-1 lg:grid-cols-[1.2fr_1fr] gap-8 items-center">
             <div
               className="relative mx-auto w-full max-w-[560px] aspect-square"
-              onMouseEnter={() => setPaused(true)}
-              onMouseLeave={() => setPaused(false)}
+              onPointerEnter={() => setHovering(true)}
+              onPointerLeave={() => setHovering(false)}
             >
               <HubRing active={activeTrigger.id} onSelect={handleSelect} />
             </div>

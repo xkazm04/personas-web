@@ -62,7 +62,9 @@ export async function POST(req: NextRequest) {
     return jsonError("Too many requests", 429, { "Retry-After": "60" });
   }
 
-  const parsed = await parseJsonBody<{ text?: string }>(req);
+  const parsed = await parseJsonBody<{ text?: string }>(req, {
+    maxBytes: 4 * 1024,
+  });
   if (!parsed.ok) return parsed.response;
 
   const text = typeof parsed.data.text === "string" ? parsed.data.text.trim() : "";

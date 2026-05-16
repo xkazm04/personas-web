@@ -1,7 +1,7 @@
 "use client";
 
 import Image from "next/image";
-import { motion } from "framer-motion";
+import { motion, useReducedMotion } from "framer-motion";
 import { Sparkles } from "lucide-react";
 import { USER_PROMPT } from "../../designMatrixShared";
 import { INTENT_IMAGE, CELL_HEIGHT_CLASS, FLUID_MONO } from "../data";
@@ -15,8 +15,10 @@ export default function IntentTile({
   phase: "idle" | "running" | "done";
   filledCount: number;
 }) {
+  const prefersReducedMotion = useReducedMotion();
   const accent = phase === "done" ? "#34d399" : "#a855f7";
   const isActive = phase !== "idle";
+  const animateGlow = phase === "running" && !prefersReducedMotion;
 
   return (
     <motion.div
@@ -26,16 +28,15 @@ export default function IntentTile({
         boxShadow: `0 0 56px ${accent}25, inset 0 0 56px ${accent}10`,
       }}
       animate={{
-        boxShadow:
-          phase === "running"
-            ? [
-                `0 0 40px ${accent}25, inset 0 0 40px ${accent}10`,
-                `0 0 64px ${accent}40, inset 0 0 64px ${accent}18`,
-                `0 0 40px ${accent}25, inset 0 0 40px ${accent}10`,
-              ]
-            : `0 0 56px ${accent}25, inset 0 0 56px ${accent}10`,
+        boxShadow: animateGlow
+          ? [
+              `0 0 40px ${accent}25, inset 0 0 40px ${accent}10`,
+              `0 0 64px ${accent}40, inset 0 0 64px ${accent}18`,
+              `0 0 40px ${accent}25, inset 0 0 40px ${accent}10`,
+            ]
+          : `0 0 56px ${accent}25, inset 0 0 56px ${accent}10`,
       }}
-      transition={{ duration: 2.4, repeat: phase === "running" ? Infinity : 0 }}
+      transition={{ duration: 2.4, repeat: animateGlow ? Infinity : 0 }}
     >
       <div
         className={`absolute inset-0 transition-opacity duration-700 ${
@@ -66,10 +67,14 @@ export default function IntentTile({
           Intent
         </div>
         <motion.div
-          animate={phase === "running" ? { rotate: 360 } : { rotate: 0 }}
+          animate={
+            phase === "running" && !prefersReducedMotion
+              ? { rotate: 360 }
+              : { rotate: 0 }
+          }
           transition={{
             duration: 6,
-            repeat: phase === "running" ? Infinity : 0,
+            repeat: phase === "running" && !prefersReducedMotion ? Infinity : 0,
             ease: "linear",
           }}
           className="flex h-8 w-8 items-center justify-center rounded-full"

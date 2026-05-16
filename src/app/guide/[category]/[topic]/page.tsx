@@ -2,7 +2,7 @@ import { notFound } from "next/navigation";
 import { GUIDE_CATEGORIES } from "@/data/guide/categories";
 import { GUIDE_TOPICS } from "@/data/guide/topics";
 import { getRelatedTopics } from "@/lib/guide-utils";
-import { SITE_URL, SITE_NAME } from "@/lib/seo";
+import { SITE_URL, SITE_NAME, safeJsonLd } from "@/lib/seo";
 import TopicView from "./TopicView";
 
 /* ── Helpers for structured data ────────────────────────────────────── */
@@ -47,18 +47,18 @@ function buildHowToJsonLd(
 
 /* ── Load only the single category file needed (≈14 KB vs 136 KB) ──── */
 
-const contentModules: Record<string, () => Promise<{ content: Record<string, string> }>> = {
-  "getting-started": () => import("@/data/guide/content/getting-started"),
-  "credentials": () => import("@/data/guide/content/credentials"),
-  "agents-prompts": () => import("@/data/guide/content/agents-prompts"),
-  "triggers": () => import("@/data/guide/content/triggers"),
-  "pipelines": () => import("@/data/guide/content/pipelines"),
-  "memories": () => import("@/data/guide/content/memories"),
-  "monitoring": () => import("@/data/guide/content/monitoring"),
-  "testing": () => import("@/data/guide/content/testing"),
-  "deployment": () => import("@/data/guide/content/deployment"),
-  "troubleshooting": () => import("@/data/guide/content/troubleshooting"),
-};
+// Derived from GUIDE_CATEGORIES so a new category cannot be added without
+// also wiring its content module — the template-literal dynamic import is
+// statically analyzable by Turbopack, which emits one chunk per file in
+// src/data/guide/content/. The CI guard in scripts/check-guide-content.mjs
+// asserts every category here has a matching content/<id>.ts module.
+const contentModules: Record<string, () => Promise<{ content: Record<string, string> }>> =
+  Object.fromEntries(
+    GUIDE_CATEGORIES.map((c) => [
+      c.id,
+      () => import(`@/data/guide/content/${c.id}`) as Promise<{ content: Record<string, string> }>,
+    ]),
+  );
 
 /* ── Dynamic rendering (102 pages exceed SSG memory budget) ──────────── */
 
@@ -135,16 +135,16 @@ export default async function TopicPage({ params }: { params: Promise<{ category
     <>
       <script
         type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(articleJsonLd) }}
+        dangerouslySetInnerHTML={{ __html: safeJsonLd(articleJsonLd) }}
       />
       <script
         type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbJsonLd) }}
+        dangerouslySetInnerHTML={{ __html: safeJsonLd(breadcrumbJsonLd) }}
       />
       {howToJsonLd && (
         <script
           type="application/ld+json"
-          dangerouslySetInnerHTML={{ __html: JSON.stringify(howToJsonLd) }}
+          dangerouslySetInnerHTML={{ __html: safeJsonLd(howToJsonLd) }}
         />
       )}
       <TopicView

@@ -26,6 +26,7 @@ export default function AgentsChat() {
     setPaused,
     hovered,
     setHovered,
+    cycleMs,
   } = useChatSequence();
 
   const scenario = scenarios[activeIndex];
@@ -160,6 +161,7 @@ export default function AgentsChat() {
         activeIndex={activeIndex}
         paused={paused}
         hovered={hovered}
+        cycleMs={cycleMs}
         onSelect={(i) => {
           setActiveIndex(i);
           setPaused(true);

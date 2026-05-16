@@ -1,8 +1,6 @@
 import { ImageResponse } from "next/og";
 import { OgFrame, OG_SIZE, OG_CONTENT_TYPE } from "@/lib/og-frame";
 
-export const runtime = "edge";
-export const dynamic = "force-static";
 export const revalidate = 86400;
 
 export const alt = "How It Works — Personas";

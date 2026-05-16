@@ -36,6 +36,22 @@ export default function ChangelogPage() {
     [],
   );
 
+  // Pick "Latest" by max(date), not by array index — RELEASES has no
+  // sort-order invariant, so a contributor adding a 0.12.1 hotfix at the
+  // bottom would otherwise silently mislabel the wrong row.
+  const latestVersion = useMemo(() => {
+    let bestVersion: string | null = null;
+    let bestTs = -Infinity;
+    for (const r of RELEASES) {
+      const ts = Date.parse(r.date);
+      if (!Number.isNaN(ts) && ts > bestTs) {
+        bestTs = ts;
+        bestVersion = r.version;
+      }
+    }
+    return bestVersion;
+  }, []);
+
   return (
     <>
       <Navbar />
@@ -65,7 +81,9 @@ export default function ChangelogPage() {
               style={{ backgroundColor: "rgba(var(--surface-overlay), 0.08)" }}
             />
 
-            {RELEASES.map((release, i) => (
+            {RELEASES.map((release) => {
+              const isLatest = release.version === latestVersion;
+              return (
               <motion.div
                 key={release.version}
                 id={releaseSectionId(release.version)}
@@ -90,7 +108,7 @@ export default function ChangelogPage() {
                   style={{
                     borderColor: "var(--border-glass-hover)",
                     backgroundColor: "rgba(var(--surface-overlay), 0.02)",
-                    backgroundImage: i === 0
+                    backgroundImage: isLatest
                       ? `linear-gradient(135deg, ${tint("cyan", 10)} 0%, transparent 55%)`
                       : undefined,
                   }}
@@ -110,7 +128,7 @@ export default function ChangelogPage() {
                     <span className="text-base text-muted-dark">
                       {formatDate(release.date)}
                     </span>
-                    {i === 0 && (
+                    {isLatest && (
                       <span
                         className="rounded-full px-2.5 py-0.5 text-base font-semibold uppercase tracking-wider"
                         style={{
@@ -125,7 +143,7 @@ export default function ChangelogPage() {
 
                   <h3
                     className="text-2xl font-extrabold tracking-tight text-foreground mb-5 leading-tight"
-                    style={{ textShadow: i === 0 ? `0 0 32px ${tint("cyan", 22)}` : undefined }}
+                    style={{ textShadow: isLatest ? `0 0 32px ${tint("cyan", 22)}` : undefined }}
                   >
                     {release.summary}
                   </h3>
@@ -163,7 +181,8 @@ export default function ChangelogPage() {
                   </ul>
                 </div>
               </motion.div>
-            ))}
+              );
+            })}
           </motion.div>
         </SectionWrapper>
       </PageShell>

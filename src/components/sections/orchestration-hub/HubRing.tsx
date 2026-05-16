@@ -19,7 +19,7 @@ interface HubRingProps {
 export default function HubRing({ active, onSelect }: HubRingProps) {
   const reduced = useReducedMotion() ?? false;
   const uid = useId();
-  const activeTrigger = TRIGGERS.find((t) => t.id === active)!;
+  const activeTrigger = TRIGGERS.find((t) => t.id === active) ?? TRIGGERS[0];
   const activeVar = BRAND_VAR[activeTrigger.brand];
 
   return (

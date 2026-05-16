@@ -1,7 +1,6 @@
 import type { Metadata } from "next";
 import Roadmap from "@/components/sections/roadmap";
 import FeatureVoting from "@/components/sections/feature-voting";
-import Changelog from "@/components/sections/Changelog";
 import StageSection from "@/components/StageSection";
 import InfoPageLayout from "@/components/InfoPageLayout";
 import { SITE_URL } from "@/lib/seo";
@@ -27,7 +26,6 @@ export const metadata: Metadata = {
 const scrollMapItems = [
   { label: "ROADMAP", href: "#roadmap" },
   { label: "VOTE", href: "#vote" },
-  { label: "CHANGELOG", href: "#changelog" },
 ];
 
 export default function RoadmapPage() {
@@ -39,10 +37,6 @@ export default function RoadmapPage() {
 
       <StageSection glow="purple" fromColor="emerald" toColor="purple">
         <FeatureVoting />
-      </StageSection>
-
-      <StageSection glow="cyan" fromColor="purple" toColor="cyan">
-        <Changelog />
       </StageSection>
     </InfoPageLayout>
   );

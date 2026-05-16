@@ -7,6 +7,7 @@ import { X } from "lucide-react";
 import PersonaAvatar from "@/components/dashboard/PersonaAvatar";
 import AgentDetail from "@/components/dashboard/AgentDetail";
 import type { Persona } from "@/lib/types";
+import { useTranslation } from "@/i18n/useTranslation";
 
 interface AgentDetailDrawerProps {
   persona: Persona | null;
@@ -14,8 +15,16 @@ interface AgentDetailDrawerProps {
 }
 
 export default function AgentDetailDrawer({ persona, onClose }: AgentDetailDrawerProps) {
+  const { t } = useTranslation();
   const panelRef = useRef<HTMLDivElement>(null);
   const previousFocusRef = useRef<HTMLElement | null>(null);
+  // Pin onClose to a ref so an inline-arrow callback at the call site doesn't
+  // re-run the effect (which would tear down the focus trap and Esc handler
+  // on every parent render).
+  const onCloseRef = useRef(onClose);
+  useEffect(() => {
+    onCloseRef.current = onClose;
+  });
 
   // Esc key + Tab focus trap
   useEffect(() => {
@@ -26,7 +35,7 @@ export default function AgentDetailDrawer({ persona, onClose }: AgentDetailDrawe
     const handler = (e: KeyboardEvent) => {
       if (e.key === "Escape") {
         e.stopPropagation();
-        onClose();
+        onCloseRef.current();
         return;
       }
 
@@ -60,10 +69,35 @@ export default function AgentDetailDrawer({ persona, onClose }: AgentDetailDrawe
     return () => {
       window.removeEventListener("keydown", handler);
       window.clearTimeout(focusTimer);
-      previousFocusRef.current?.focus?.();
+      // Guard against restoring focus to a node that was unmounted while the
+      // drawer was open (e.g. a refetch dropped the persona card, or the user
+      // navigated). Without this, focus() lands on a detached node and
+      // keyboard/SR users lose focus to <body> with no announcement.
+      const prev = previousFocusRef.current;
       previousFocusRef.current = null;
+      if (prev instanceof HTMLElement && document.contains(prev)) {
+        prev.focus();
+        return;
+      }
+      // Fallback: focus the page heading so a SR announces "<page name>"
+      // and keyboard users land somewhere sensible. Headings aren't
+      // focusable by default — set tabIndex temporarily so focus() works.
+      const fallback = document.querySelector<HTMLElement>("main h1, h1");
+      if (fallback) {
+        const hadTabIndex = fallback.hasAttribute("tabindex");
+        if (!hadTabIndex) fallback.tabIndex = -1;
+        fallback.focus({ preventScroll: true });
+        if (!hadTabIndex) {
+          // Remove the synthetic tabindex once focus has moved off it.
+          fallback.addEventListener(
+            "blur",
+            () => fallback.removeAttribute("tabindex"),
+            { once: true },
+          );
+        }
+      }
     };
-  }, [persona, onClose]);
+  }, [persona]);
 
   if (typeof document === "undefined") return null;
 
@@ -119,7 +153,7 @@ export default function AgentDetailDrawer({ persona, onClose }: AgentDetailDrawe
               <button
                 data-drawer-close
                 onClick={onClose}
-                aria-label="Close agent details"
+                aria-label={t.dashboardUi.closeAgentDetails}
                 className="shrink-0 rounded-lg p-1.5 text-muted-dark transition-colors hover:bg-white/[0.06] hover:text-foreground focus:outline-none focus:ring-1 focus:ring-white/20"
               >
                 <X className="h-4 w-4" />
@@ -130,13 +164,13 @@ export default function AgentDetailDrawer({ persona, onClose }: AgentDetailDrawe
             <div className="flex-1 overflow-y-auto px-5 pb-6">
               {/* Stats row */}
               <div className="mt-4 flex flex-wrap items-center gap-x-4 gap-y-1.5 text-xs text-muted-dark">
-                <span className="font-mono">{persona.maxConcurrent} max</span>
+                <span className="font-mono">{persona.maxConcurrent} {t.dashboardUi.max}</span>
                 <span className="font-mono">
-                  {(persona.timeoutMs / 1000).toFixed(0)}s timeout
+                  {(persona.timeoutMs / 1000).toFixed(0)}{t.dashboardUi.timeoutSuffix}
                 </span>
                 {persona.maxBudgetUsd && (
                   <span className="font-mono">
-                    ${persona.maxBudgetUsd.toFixed(2)} budget
+                    ${persona.maxBudgetUsd.toFixed(2)} {t.dashboardUi.budget}
                   </span>
                 )}
               </div>

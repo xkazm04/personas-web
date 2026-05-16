@@ -7,6 +7,7 @@ import { fadeUp, staggerContainer } from "@/lib/animations";
 import { MOCK_HEALTH_DIGEST } from "@/lib/mock-dashboard-data";
 import { relativeTime } from "@/lib/format";
 import StalenessIndicator from "./StalenessIndicator";
+import { useTranslation } from "@/i18n/useTranslation";
 
 /** Resolve score to a Tailwind color token class. */
 function scoreColor(score: number): {
@@ -44,6 +45,7 @@ const RADIUS = (RING_SIZE - STROKE_WIDTH) / 2;
 const CIRCUMFERENCE = 2 * Math.PI * RADIUS;
 
 export default function HealthDigestPanel() {
+  const { t } = useTranslation();
   const { overallScore, agents } = MOCK_HEALTH_DIGEST;
   const colors = scoreColor(overallScore);
 
@@ -73,7 +75,7 @@ export default function HealthDigestPanel() {
       >
         <Heart className="h-4 w-4 text-brand-cyan" />
         <h2 className="text-base font-semibold text-foreground">
-          System Health
+          {t.dashboardUi.systemHealth}
         </h2>
         <StalenessIndicator fetchedAt={fetchedAt} className="ml-auto" />
       </motion.div>
@@ -120,7 +122,7 @@ export default function HealthDigestPanel() {
         </div>
 
         <span className="mt-1.5 text-sm font-medium uppercase tracking-wider text-muted-dark">
-          Health
+          {t.dashboardUi.health}
         </span>
       </motion.div>
 

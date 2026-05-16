@@ -30,22 +30,45 @@ export function useMaxScrollHeight(
     const el = containerRef.current;
     if (!el) return;
 
+    let scheduled = false;
+    let timerId: ReturnType<typeof setTimeout> | null = null;
+
     const measure = () => {
       const elements = el.querySelectorAll<HTMLElement>(selector);
       let max = 0;
       elements.forEach((e) => {
         max = Math.max(max, e.scrollHeight);
       });
-      if (max > 0) setMaxHeight(max);
+      if (max > 0) {
+        // Bail out if unchanged — breaks any parent↔child resize feedback.
+        setMaxHeight((prev) => (prev === max ? prev : max));
+      }
     };
 
     measure();
 
-    const observer = new ResizeObserver(measure);
+    // Defer RO-driven setState to a fresh task. Writing state synchronously
+    // inside a ResizeObserver callback can trigger "ResizeObserver loop
+    // completed with undelivered notifications" warnings (and oscillating
+    // layouts) when the resulting height drives an ancestor of the
+    // measured nodes. Coalescing through setTimeout breaks the
+    // synchronous feedback path without registering as an animation.
+    const observer = new ResizeObserver(() => {
+      if (scheduled) return;
+      scheduled = true;
+      timerId = setTimeout(() => {
+        scheduled = false;
+        timerId = null;
+        measure();
+      }, 0);
+    });
     observer.observe(el);
     el.querySelectorAll<HTMLElement>(selector).forEach((e) => observer.observe(e));
 
-    return () => observer.disconnect();
+    return () => {
+      if (timerId !== null) clearTimeout(timerId);
+      observer.disconnect();
+    };
   }, [containerRef, selector]);
 
   return maxHeight;

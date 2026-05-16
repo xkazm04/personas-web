@@ -2,6 +2,12 @@ import * as Sentry from "@sentry/nextjs";
 import { useAuthStore } from "@/stores/authStore";
 import { DEVELOPMENT } from "./dev";
 import { mockApi } from "./mockApi";
+import {
+  OrchestratorConfigError,
+  validateOrchestratorUrl,
+} from "./orchestrator-config";
+
+export { OrchestratorConfigError };
 import type {
   Persona,
   PersonaExecution,
@@ -38,22 +44,8 @@ export class ApiError extends Error {
   }
 }
 
-export class OrchestratorConfigError extends Error {
-  constructor() {
-    super(
-      "Missing NEXT_PUBLIC_ORCHESTRATOR_URL. Set this env var to the orchestrator's base URL " +
-        "(e.g. https://orchestrator.example.com) in your deployment environment, then redeploy.",
-    );
-    this.name = "OrchestratorConfigError";
-  }
-}
-
 function getOrchestratorBase(): string {
-  const base = process.env.NEXT_PUBLIC_ORCHESTRATOR_URL;
-  if (!base || base.trim() === "") {
-    throw new OrchestratorConfigError();
-  }
-  return base;
+  return validateOrchestratorUrl(process.env.NEXT_PUBLIC_ORCHESTRATOR_URL);
 }
 
 // ---------------------------------------------------------------------------

@@ -14,11 +14,11 @@ export const CELL_IMAGE: Record<CellKey, string> = {
 
 export const INTENT_IMAGE = "/imgs/features/matrix/intent.png";
 
-/* Responsive cell height classes — taller to accommodate doubled dimension typography */
-export const CELL_HEIGHT_CLASS = "min-h-[260px] sm:min-h-[320px] h-[260px] sm:h-[320px]";
+/* Responsive cell height classes — min-h only so content can grow without forcing overflow */
+export const CELL_HEIGHT_CLASS = "min-h-[260px] sm:min-h-[320px]";
 
-/* Fluid monospace type that scales between 12px and 16px */
-export const FLUID_MONO = "text-[clamp(0.75rem,2vw,1rem)]";
+/* Fluid monospace type that scales between ~11.2px and ~14.4px */
+export const FLUID_MONO = "text-[clamp(0.7rem,1.6vw,0.9rem)]";
 
-/* Doubled dimension label type — scales 24px to 32px */
-export const FLUID_DIMENSION = "text-[clamp(1.5rem,4vw,2rem)]";
+/* Dimension label type — scales 18px to 30px for calmer mobile rhythm */
+export const FLUID_DIMENSION = "text-[clamp(1.125rem,3.2vw,1.875rem)]";

@@ -13,8 +13,10 @@ import { BLOG_POSTS, type BlogCategory } from "@/data/blog";
 import CategoryFilter from "./CategoryFilter";
 import FeaturedPost from "./FeaturedPost";
 import BlogPostCard from "./BlogPostCard";
+import { useTranslation } from "@/i18n/useTranslation";
 
 export default function BlogPage() {
+  const { t } = useTranslation();
   const [activeCategory, setActiveCategory] = useState<BlogCategory | "all">(
     "all",
   );
@@ -65,32 +67,32 @@ export default function BlogPage() {
   return (
     <>
       <Navbar />
-      <PageShell scrollMapItems={[{ label: "BLOG", href: "#blog" }]}>
+      <PageShell scrollMapItems={[{ label: t.blogPage.eyebrow.toUpperCase(), href: "#blog" }]}>
         <div className="h-24" />
 
-        <SectionWrapper id="blog" aria-label="Blog">
+        <SectionWrapper id="blog" aria-label={t.blogPage.eyebrow}>
           <SectionIntro
             as="h1"
-            eyebrow="Blog"
-            heading="Updates &"
-            gradient="insights"
-            description="Product announcements, engineering deep-dives, tutorials, and real-world use cases from the Personas team."
+            eyebrow={t.blogPage.eyebrow}
+            heading={t.blogPage.heading}
+            gradient={t.blogPage.headingGradient}
+            description={t.blogPage.description}
           />
 
           <motion.div variants={fadeUp} className="relative mx-auto mb-8 w-full max-w-md">
             <Search className="absolute left-3.5 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-dark" />
             <input
               type="text"
-              placeholder="Search posts..."
+              placeholder={t.blogPage.searchPlaceholder}
               value={search}
               onChange={(e) => setSearch(e.target.value)}
-              aria-label="Search blog posts"
+              aria-label={t.blogPage.searchAriaLabel}
               className="w-full rounded-xl border border-glass-hover bg-white/[0.03] py-2.5 pl-10 pr-10 text-base text-foreground placeholder:text-muted-dark outline-none transition-colors focus:border-brand-cyan/40 focus:bg-white/[0.05]"
             />
             {search && (
               <button
                 onClick={() => setSearch("")}
-                aria-label="Clear search"
+                aria-label={t.blogPage.clearSearch}
                 className="absolute right-3 top-1/2 -translate-y-1/2 text-muted-dark hover:text-foreground transition-colors"
               >
                 <X className="h-4 w-4" />
@@ -103,17 +105,18 @@ export default function BlogPage() {
             className="mb-6 text-center text-sm text-muted-dark"
             aria-live="polite"
           >
-            Showing{" "}
+            {t.blogPage.showing}{" "}
             <motion.span layout className="tabular-nums text-foreground">
               {filtered.length}
             </motion.span>{" "}
-            of {visiblePosts.length} posts
+            {t.blogPage.of} {visiblePosts.length} {t.blogPage.posts}
           </motion.p>
 
           <CategoryFilter
             active={activeCategory}
             onChange={setActiveCategory}
             countsByCategory={countsByCategory}
+            allPostsLabel={t.blogPage.allPosts}
           />
 
           {showFeatured && (
@@ -122,12 +125,12 @@ export default function BlogPage() {
 
           {filtered.length === 0 ? (
             <motion.div variants={fadeUp} className="mt-16 flex flex-col items-center gap-3 text-center">
-              <p className="text-lg font-medium text-muted-dark">No posts match your search</p>
+              <p className="text-lg font-medium text-muted-dark">{t.blogPage.noMatches}</p>
               <button
                 onClick={() => { setSearch(""); setActiveCategory("all"); }}
                 className="text-base text-brand-cyan hover:underline"
               >
-                Clear all filters
+                {t.blogPage.clearFilters}
               </button>
             </motion.div>
           ) : (

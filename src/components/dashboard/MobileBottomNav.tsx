@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import Link from "next/link";
+import { usePathname } from "next/navigation";
 import { useNavItems, useNavState, type NavItem } from "./DashboardNavigation";
 import { useTranslation } from "@/i18n/useTranslation";
 
@@ -10,7 +11,10 @@ export default function MobileBottomNav() {
   const { getActive, getBadge } = useNavState();
 
   return (
-    <nav className="fixed inset-x-0 bottom-0 z-40 border-t border-glass bg-background/95 backdrop-blur-xl md:hidden safe-bottom">
+    // z-50 so the nav buttons sit above the More-menu overlay (z-30) — without
+    // this, taps on bottom-nav links while the More menu is open hit the
+    // overlay instead, the menu closes silently and the user has to tap twice.
+    <nav className="fixed inset-x-0 bottom-0 z-50 border-t border-glass bg-background/95 backdrop-blur-xl md:hidden safe-bottom">
       <div className="flex items-center justify-around px-1 py-1">
         {navItems.slice(0, 5).map((item) => {
           const active = getActive(item);
@@ -50,7 +54,10 @@ function MobileMoreMenu({
   items: readonly NavItem[];
   getActive: (item: NavItem) => boolean;
 }) {
-  const [open, setOpen] = useState(false);
+  const pathname = usePathname();
+  const [menuState, setMenuState] = useState({ open: false, pathname });
+  const open = menuState.pathname === pathname && menuState.open;
+  const setOpen = (nextOpen: boolean) => setMenuState({ open: nextOpen, pathname });
 
   return (
     <div className="relative">
@@ -68,7 +75,9 @@ function MobileMoreMenu({
 
       {open && (
         <>
-          <div className="fixed inset-0 z-40" onClick={() => setOpen(false)} />
+          {/* z-30 — sits below the bottom-nav (z-50) so taps on other nav
+              buttons dismiss the menu *and* fire navigation, not just one. */}
+          <div className="fixed inset-0 z-30" onClick={() => setOpen(false)} />
           <div role="menu" className="absolute bottom-full right-0 z-50 mb-2 w-48 rounded-xl border border-glass-hover bg-background/95 backdrop-blur-xl p-1.5 shadow-2xl">
             {items.map((item) => {
               const active = getActive(item);

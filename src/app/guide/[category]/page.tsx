@@ -5,7 +5,7 @@ import { ArrowLeft } from "lucide-react";
 import { GUIDE_CATEGORIES } from "@/data/guide/categories";
 import { GUIDE_TOPICS } from "@/data/guide/topics";
 import { GUIDE_ILLUSTRATIONS } from "@/data/guide/illustrations";
-import { SITE_URL } from "@/lib/seo";
+import { SITE_URL, safeJsonLd } from "@/lib/seo";
 import CategoryTopics from "./CategoryTopics";
 
 /* ── Static generation ───────────────────────────────────────────────── */
@@ -67,11 +67,11 @@ export default async function CategoryPage({ params }: { params: Promise<{ categ
     <>
       <script
         type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(itemListJsonLd) }}
+        dangerouslySetInnerHTML={{ __html: safeJsonLd(itemListJsonLd) }}
       />
       <script
         type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbJsonLd) }}
+        dangerouslySetInnerHTML={{ __html: safeJsonLd(breadcrumbJsonLd) }}
       />
     <div className="px-6 pb-24">
       <div className="mx-auto max-w-4xl">

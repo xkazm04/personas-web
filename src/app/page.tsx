@@ -1,5 +1,6 @@
 import type { ComponentType } from "react";
 import type { StageColor } from "@/lib/colors";
+import { safeJsonLd } from "@/lib/seo";
 import Image from "next/image";
 import Navbar from "@/components/Navbar";
 import Hero from "@/components/sections/Hero";
@@ -19,6 +20,7 @@ import SectionDivider from "@/components/SectionDivider";
 import PageShell from "@/components/PageShell";
 import { SCROLL_MAP_SECTIONS } from "@/lib/constants";
 import { SectionObserverProvider } from "@/contexts/SectionObserverContext";
+import { faqJsonLd, organizationJsonLd, softwareJsonLd } from "./homeJsonLd";
 
 const scrollMapItems = SCROLL_MAP_SECTIONS.map((s) => ({
   label: s.label.toUpperCase(),
@@ -29,18 +31,7 @@ const sectionIds = scrollMapItems.map((item) => item.href.replace("#", ""));
 
 /* ── JSON-LD structured data for SEO ──────────────────────────────── */
 
-const organizationJsonLd = {
-  "@context": "https://schema.org",
-  "@type": "Organization",
-  name: "Personas",
-  url: "https://personas.ai",
-  logo: "https://personas.ai/imgs/logo.png",
-  description:
-    "Build intelligent AI agents in natural language. Orchestrate them locally or in the cloud.",
-  sameAs: [],
-};
-
-const softwareJsonLd = {
+const _unusedSoftwareJsonLd = {
   "@context": "https://schema.org",
   "@type": "SoftwareApplication",
   name: "Personas",
@@ -66,7 +57,7 @@ const softwareJsonLd = {
   ],
 };
 
-const faqJsonLd = {
+const _unusedFaqJsonLd = {
   "@context": "https://schema.org",
   "@type": "FAQPage",
   mainEntity: [
@@ -164,15 +155,15 @@ export default function Home() {
       <Navbar />
       <script
         type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(organizationJsonLd) }}
+        dangerouslySetInnerHTML={{ __html: safeJsonLd(organizationJsonLd) }}
       />
       <script
         type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(softwareJsonLd) }}
+        dangerouslySetInnerHTML={{ __html: safeJsonLd(softwareJsonLd) }}
       />
       <script
         type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(faqJsonLd) }}
+        dangerouslySetInnerHTML={{ __html: safeJsonLd(faqJsonLd) }}
       />
       <PageShell scrollMapItems={scrollMapItems}>
 

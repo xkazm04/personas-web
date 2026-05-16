@@ -5,13 +5,13 @@ import { motion, AnimatePresence } from "framer-motion";
 import { Download, X } from "lucide-react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import LanguageSwitcher from "@/components/LanguageSwitcher";
 import { useTranslation } from "@/i18n/useTranslation";
 import { useRoutes } from "./useRoutes";
 
 interface MobilePanelProps {
   open: boolean;
   onClose: () => void;
+  onDownloadClick: () => void;
 }
 
 /**
@@ -19,7 +19,7 @@ interface MobilePanelProps {
  * Focus trap + scroll lock handled by useMobileMenu hook in parent.
  */
 const MobilePanel = forwardRef<HTMLDivElement, MobilePanelProps>(
-  function MobilePanel({ open, onClose }, ref) {
+  function MobilePanel({ open, onClose, onDownloadClick }, ref) {
     const { t } = useTranslation();
     const routes = useRoutes();
     const pathname = usePathname();
@@ -90,22 +90,18 @@ const MobilePanel = forwardRef<HTMLDivElement, MobilePanelProps>(
                 })}
               </div>
 
-              <div className="px-4 mt-4">
-                <LanguageSwitcher />
-              </div>
-
               <div className="flex-1" />
 
               <div className="px-4 pb-6">
-                <Link
-                  href="/#download"
-                  onClick={onClose}
+                <button
+                  type="button"
+                  onClick={onDownloadClick}
                   className="group relative flex items-center justify-center gap-2 overflow-hidden rounded-full border border-brand-cyan/25 bg-brand-cyan/8 px-6 py-2.5 text-base font-medium text-brand-cyan transition-all duration-300 hover:border-brand-cyan/40 hover:bg-brand-cyan/12 w-full focus-ring"
                 >
                   <div className="absolute inset-0 -translate-x-full bg-linear-to-r from-transparent via-brand-cyan/10 to-transparent transition-transform duration-700 group-hover:translate-x-full" />
                   <Download className="relative h-3.5 w-3.5" />
                   <span className="relative">{t.nav.download}</span>
-                </Link>
+                </button>
               </div>
             </motion.div>
           </>

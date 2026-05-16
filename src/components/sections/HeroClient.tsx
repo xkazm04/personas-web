@@ -9,6 +9,7 @@ import GradientText from "@/components/GradientText";
 import SectionHeading from "@/components/SectionHeading";
 import FloatingParticles from "@/components/FloatingParticles";
 import PrimaryCTA from "@/components/PrimaryCTA";
+import HoneycombMark from "@/components/HoneycombMark";
 import { useLiveStats } from "@/hooks/useLiveStats";
 import { useAnimationPauseRegister } from "@/hooks/useAnimationPause";
 import { connectors } from "@/data/connectors";
@@ -80,11 +81,12 @@ export default function HeroClient() {
             {/* The lg:ml-[500px] gates the desktop-only horizontal nudge that
                 positions the badge over the right command-center card. Below
                 lg, the badge sits inline within the centered text column. */}
-            <span className="lg:ml-[500px] relative inline-flex items-center overflow-hidden rounded-full border border-brand-cyan/80 bg-brand-cyan/5 px-4 py-1.5 text-lg font-bold tracking-wider uppercase text-brand-cyan font-mono shadow-[0_0_15px_color-mix(in_srgb,var(--brand-cyan)_20%,transparent)]">
+            <span className="lg:ml-[500px] relative inline-flex items-center gap-2 overflow-hidden rounded-full border border-brand-cyan/80 bg-brand-cyan/5 px-4 py-1.5 text-lg font-bold tracking-wider uppercase text-brand-cyan font-mono shadow-[0_0_15px_color-mix(in_srgb,var(--brand-cyan)_20%,transparent)]">
               <span
                 className="absolute inset-0 animate-shimmer bg-linear-to-r from-transparent via-brand-cyan/10 to-transparent"
                 style={{ animationDuration: "3s" }}
               />
+              <HoneycombMark className="relative shrink-0" />
               <span className="relative">{t.hero.badge}</span>
             </span>
           </motion.div>
