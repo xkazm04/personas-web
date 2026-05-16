@@ -8,16 +8,6 @@ import ObservabilityDeck from "@/components/todo/ObservabilityDeck";
 import Lab from "@/components/todo/Lab";
 import Plugins from "@/components/todo/Plugins";
 
-const scrollMapItems = [
-  { label: "DESIGN", href: "#design" },
-  { label: "MEMORY", href: "#memory-layers" },
-  { label: "HEALING", href: "#healing-circuit" },
-  { label: "TRIGGERS", href: "#triggers" },
-  { label: "OBSERVE", href: "#observe" },
-  { label: "LAB", href: "#lab" },
-  { label: "PLUGINS", href: "#plugins" },
-];
-
 const breadcrumbItems = [
   { label: "DESIGN", href: "#design", color: "#a855f7" },
   { label: "MEMORY", href: "#memory-layers", color: "#a855f7" },
@@ -27,6 +17,8 @@ const breadcrumbItems = [
   { label: "LAB", href: "#lab", color: "#06b6d4" },
   { label: "PLUGINS", href: "#plugins", color: "#a855f7" },
 ];
+
+const scrollMapItems = breadcrumbItems.map(({ label, href }) => ({ label, href }));
 
 export default function TodoPage() {
   return (
