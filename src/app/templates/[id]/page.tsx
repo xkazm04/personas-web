@@ -21,10 +21,9 @@ export async function generateMetadata(
   }
   // Canonical and OG were missing; previews on social and Slack
   // unfurled with the parent layout's defaults, and search indexers
-  // had no per-template signal. The TemplateDetail client component
-  // also hardcodes "https://personas.ai/..." in its JSON-LD — both
-  // sources should agree, so canonicals here use the same SITE_URL
-  // helper the JSON-LD would consume if updated.
+  // had no per-template signal. Both this metadata and the JSON-LD
+  // emitted by TemplateDetail share SITE_URL so canonical, OG, and
+  // schema.org agree on every deployment.
   const url = `${SITE_URL}/templates/${id}`;
   const title = `${t.title} — Template`;
   const description = t.description;
