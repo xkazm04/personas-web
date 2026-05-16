@@ -63,10 +63,10 @@ This is especially useful when you have many agents running simultaneously or wh
 
 ### How It Works
 
-Open the activity feed from the monitoring dashboard or the sidebar. Updates stream in automatically as your agents work. Each entry shows the agent name, action, timestamp, and result. Click any entry to jump to the full execution details. The feed is scrollable and searchable.
+Open the activity feed from the monitoring dashboard or the sidebar. Updates stream in automatically as your agents work. Each entry shows the agent name, action, timestamp, and result. Click any entry — or the notification bell in the title bar — to open the full execution detail modal directly on the Overview › Activity tab, where you can see the trace, the rendered prompt, the input, the output, and any errors. The feed itself is scrollable and searchable.
 
 :::tip
-Keep the activity feed open in a side panel while testing new agents. Watching the live output helps you spot issues immediately and iterate faster.
+Keep the activity feed open in a side panel while testing new agents. Watching the live output helps you spot issues immediately and iterate faster. For everyday use, the title-bar notification bell is the fastest path — it always opens the freshest execution detail without you having to navigate.
 :::
   `,
 
