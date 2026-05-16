@@ -1,12 +1,12 @@
 import InfoPageLayout from "@/components/InfoPageLayout";
 import StageSection from "@/components/StageSection";
-import DesignEngine from "@/components/todo/DesignEngine";
-import MemoryLayers from "@/components/todo/MemoryLayers";
-import HealingCircuit from "@/components/todo/HealingCircuit";
-import TriggerSystem from "@/components/todo/TriggerSystem";
-import ObservabilityDeck from "@/components/todo/ObservabilityDeck";
-import Lab from "@/components/todo/Lab";
-import Plugins from "@/components/todo/Plugins";
+import DesignEngine from "@/components/feature-sections/DesignEngine";
+import MemoryLayers from "@/components/feature-sections/MemoryLayers";
+import HealingCircuit from "@/components/feature-sections/HealingCircuit";
+import TriggerSystem from "@/components/feature-sections/TriggerSystem";
+import ObservabilityDeck from "@/components/feature-sections/ObservabilityDeck";
+import Lab from "@/components/feature-sections/Lab";
+import Plugins from "@/components/feature-sections/Plugins";
 
 const breadcrumbItems = [
   { label: "DESIGN", href: "#design", color: "#a855f7" },

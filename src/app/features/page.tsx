@@ -4,14 +4,14 @@ import StageSection from "@/components/StageSection";
 export const dynamic = "force-static";
 export const revalidate = 3600;
 
-import DesignEngine from "@/components/todo/DesignEngine";
-import MemoryLayers from "@/components/todo/MemoryLayers";
-import HealingCircuit from "@/components/todo/HealingCircuit";
-import ObservabilityDeck from "@/components/todo/ObservabilityDeck";
-import Lab from "@/components/todo/Lab";
-import Plugins from "@/components/todo/Plugins";
-import SecurityVault from "@/components/todo/SecurityVault";
-import MultiProviderAI from "@/components/todo/MultiProviderAI";
+import DesignEngine from "@/components/feature-sections/DesignEngine";
+import MemoryLayers from "@/components/feature-sections/MemoryLayers";
+import HealingCircuit from "@/components/feature-sections/HealingCircuit";
+import ObservabilityDeck from "@/components/feature-sections/ObservabilityDeck";
+import Lab from "@/components/feature-sections/Lab";
+import Plugins from "@/components/feature-sections/Plugins";
+import SecurityVault from "@/components/feature-sections/SecurityVault";
+import MultiProviderAI from "@/components/feature-sections/MultiProviderAI";
 
 const breadcrumbItems = [
   { label: "DESIGN", href: "#design", color: "#a855f7" },
