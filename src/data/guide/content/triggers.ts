@@ -123,6 +123,15 @@ This is powerful because it means your agents can react to real-world events in 
 5. **Test the connection** — Use the built-in \`Send Test\` button to verify everything is wired up
 :::
 
+### Inbound vs Outbound Webhooks
+
+Webhooks come in two flavors and it's worth keeping them straight:
+
+- **Inbound webhooks (this topic)** — an external service calls *you* to start an agent. Stripe pings you when a charge succeeds; GitHub pings you when a PR opens.
+- **Outbound webhooks (a separate feature)** — *your* agent sends its result out to a channel after it finishes. Personas ships first-class outbound delivery to Slack, Discord, Microsoft Teams, and generic webhook URLs, configured per-agent in the Connectors tab. The agent's output gets formatted appropriately for each channel (rich Slack blocks, Discord embeds, Teams cards) and dispatched once the run completes.
+
+Most automations end up using both: an inbound webhook starts the agent, the agent does its work, and an outbound channel delivers the result to wherever your team is watching.
+
 :::tip
 Test your webhook by using the built-in \`Send Test\` button before connecting the real service. This confirms everything is wired up correctly.
 :::
