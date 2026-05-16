@@ -617,6 +617,10 @@ export const ko: Translations = {
     selectLanguage: '언어 선택',
     selectTheme: '테마 선택: {name}',
   },
+  pageNav: {
+    onThisPage: '이 페이지에서',
+    closeMenu: '메뉴 닫기',
+  },
   themes: {
     midnight: '미드나이트',
     cyan: '시안',

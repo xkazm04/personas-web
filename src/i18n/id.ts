@@ -617,6 +617,10 @@ export const id: Translations = {
     selectLanguage: 'Pilih bahasa',
     selectTheme: 'Pilih tema: {name}',
   },
+  pageNav: {
+    onThisPage: 'Di halaman ini',
+    closeMenu: 'Tutup menu',
+  },
   themes: {
     midnight: 'Tengah Malam',
     cyan: 'Sian',

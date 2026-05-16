@@ -617,6 +617,10 @@ export const ru: Translations = {
     selectLanguage: 'Выбрать язык',
     selectTheme: 'Выбрать тему: {name}',
   },
+  pageNav: {
+    onThisPage: 'На этой странице',
+    closeMenu: 'Закрыть меню',
+  },
   themes: {
     midnight: 'Полночь',
     cyan: 'Циан',

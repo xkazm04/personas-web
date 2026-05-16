@@ -617,6 +617,10 @@ export const bn: Translations = {
     selectLanguage: 'ভাষা নির্বাচন করুন',
     selectTheme: 'থিম নির্বাচন করুন: {name}',
   },
+  pageNav: {
+    onThisPage: 'এই পৃষ্ঠায়',
+    closeMenu: 'মেনু বন্ধ করুন',
+  },
   themes: {
     midnight: 'মিডনাইট',
     cyan: 'সায়ান',

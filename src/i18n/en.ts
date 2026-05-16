@@ -519,6 +519,10 @@ export interface Translations {
     selectLanguage: string;
     selectTheme: string;
   };
+  pageNav: {
+    onThisPage: string;
+    closeMenu: string;
+  };
   themes: {
     midnight: string;
     cyan: string;
@@ -1171,6 +1175,10 @@ export const en: Translations = {
     changeLanguage: 'Change language',
     selectLanguage: 'Select language',
     selectTheme: 'Select theme: {name}',
+  },
+  pageNav: {
+    onThisPage: 'On this page',
+    closeMenu: 'Close menu',
   },
   themes: {
     midnight: 'Midnight',

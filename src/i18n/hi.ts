@@ -617,6 +617,10 @@ export const hi: Translations = {
     selectLanguage: 'भाषा चुनें',
     selectTheme: 'थीम चुनें: {name}',
   },
+  pageNav: {
+    onThisPage: 'इस पृष्ठ पर',
+    closeMenu: 'मेनू बंद करें',
+  },
   themes: {
     midnight: 'मिडनाइट',
     cyan: 'सायन',

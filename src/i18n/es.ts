@@ -617,6 +617,10 @@ export const es: Translations = {
     selectLanguage: 'Seleccionar idioma',
     selectTheme: 'Seleccionar tema: {name}',
   },
+  pageNav: {
+    onThisPage: 'En esta página',
+    closeMenu: 'Cerrar menú',
+  },
   themes: {
     midnight: 'Medianoche',
     cyan: 'Cian',

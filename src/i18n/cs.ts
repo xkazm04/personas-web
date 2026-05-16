@@ -617,6 +617,10 @@ export const cs: Translations = {
     selectLanguage: 'Vybrat jazyk',
     selectTheme: 'Vybrat motiv: {name}',
   },
+  pageNav: {
+    onThisPage: 'Na této stránce',
+    closeMenu: 'Zavřít nabídku',
+  },
   themes: {
     midnight: 'Půlnoc',
     cyan: 'Azurová',

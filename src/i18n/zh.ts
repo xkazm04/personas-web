@@ -617,6 +617,10 @@ export const zh: Translations = {
     selectLanguage: '选择语言',
     selectTheme: '选择主题：{name}',
   },
+  pageNav: {
+    onThisPage: '本页内容',
+    closeMenu: '关闭菜单',
+  },
   themes: {
     midnight: '午夜',
     cyan: '青色',

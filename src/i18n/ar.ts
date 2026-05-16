@@ -617,6 +617,10 @@ export const ar: Translations = {
     selectLanguage: 'اختيار اللغة',
     selectTheme: 'اختيار المظهر: {name}',
   },
+  pageNav: {
+    onThisPage: 'في هذه الصفحة',
+    closeMenu: 'إغلاق القائمة',
+  },
   themes: {
     midnight: 'منتصف الليل',
     cyan: 'سماوي',

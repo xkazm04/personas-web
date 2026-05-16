@@ -617,6 +617,10 @@ export const ja: Translations = {
     selectLanguage: '言語を選択',
     selectTheme: 'テーマを選択: {name}',
   },
+  pageNav: {
+    onThisPage: 'このページの内容',
+    closeMenu: 'メニューを閉じる',
+  },
   themes: {
     midnight: 'ミッドナイト',
     cyan: 'シアン',

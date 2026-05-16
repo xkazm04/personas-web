@@ -617,6 +617,10 @@ export const vi: Translations = {
     selectLanguage: 'Chọn ngôn ngữ',
     selectTheme: 'Chọn giao diện: {name}',
   },
+  pageNav: {
+    onThisPage: 'Trên trang này',
+    closeMenu: 'Đóng menu',
+  },
   themes: {
     midnight: 'Nửa đêm',
     cyan: 'Xanh lơ',
