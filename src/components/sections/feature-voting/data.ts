@@ -1,3 +1,4 @@
+import { apiFetch } from "@/lib/api-fetch";
 import type { AccentToken, Comment, Feature } from "./local-types";
 
 export const featureIllustrations: Record<string, string> = {
@@ -116,10 +117,10 @@ export interface VotesSnapshot {
 }
 
 export async function fetchVotes(voterId: string, signal?: AbortSignal): Promise<VotesSnapshot> {
-  const url = `/api/votes?voterId=${encodeURIComponent(voterId)}`;
-  const res = await fetch(url, { signal });
-  if (!res.ok) throw new Error(`GET ${url} failed: ${res.status} ${res.statusText}`);
-  const data: { counts?: Record<string, number>; userVotes?: string[] } = await res.json();
+  const data = await apiFetch<{ counts?: Record<string, number>; userVotes?: string[] }>(
+    `/api/votes?voterId=${encodeURIComponent(voterId)}`,
+    { signal },
+  );
   return {
     counts: data.counts ?? {},
     userVotes: new Set(data.userVotes ?? []),
@@ -131,21 +132,15 @@ export async function postVoteToggle(
   voterId: string,
   signal?: AbortSignal,
 ): Promise<"added" | "removed" | "email_saved"> {
-  const res = await fetch("/api/votes", {
-    method: "POST",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({ featureId, voterId }),
-    signal,
-  });
-  if (!res.ok) throw new Error(`POST /api/votes failed: ${res.status} ${res.statusText}`);
-  const data: { action?: "added" | "removed" | "email_saved" } = await res.json();
+  const data = await apiFetch<{ action?: "added" | "removed" | "email_saved" }>(
+    "/api/votes",
+    { method: "POST", body: { featureId, voterId }, signal },
+  );
   return data.action ?? "added";
 }
 
 export async function fetchComments(signal?: AbortSignal): Promise<Comment[]> {
-  const res = await fetch("/api/feature-comments", { signal });
-  if (!res.ok) throw new Error(`GET /api/feature-comments failed: ${res.status} ${res.statusText}`);
-  const data: { comments?: Comment[] } = await res.json();
+  const data = await apiFetch<{ comments?: Comment[] }>("/api/feature-comments", { signal });
   return data.comments ?? [];
 }
 
@@ -153,22 +148,17 @@ export async function postComment(
   input: { featureId: string; parentId: string | null; text: string; author: string },
   signal?: AbortSignal,
 ): Promise<Comment> {
-  const res = await fetch("/api/feature-comments", {
+  const data = await apiFetch<{ comment?: Comment }>("/api/feature-comments", {
     method: "POST",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify(input),
+    body: input,
     signal,
   });
-  if (!res.ok) throw new Error(`POST /api/feature-comments failed: ${res.status} ${res.statusText}`);
-  const data: { comment?: Comment } = await res.json();
   if (!data.comment) throw new Error("POST /api/feature-comments returned malformed body (no .comment)");
   return data.comment;
 }
 
 export async function fetchBoostTotals(signal?: AbortSignal): Promise<Record<string, number>> {
-  const res = await fetch("/api/feature-boosts", { signal });
-  if (!res.ok) throw new Error(`GET /api/feature-boosts failed: ${res.status} ${res.statusText}`);
-  const data: { totals?: Record<string, number> } = await res.json();
+  const data = await apiFetch<{ totals?: Record<string, number> }>("/api/feature-boosts", { signal });
   return data.totals ?? {};
 }
 
@@ -176,13 +166,11 @@ export async function postBoost(
   input: { featureId: string; voterId: string; weight: number; tierValue: number },
   signal?: AbortSignal,
 ): Promise<void> {
-  const res = await fetch("/api/feature-boosts", {
+  await apiFetch<unknown>("/api/feature-boosts", {
     method: "POST",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify(input),
+    body: input,
     signal,
   });
-  if (!res.ok) throw new Error(`POST /api/feature-boosts failed: ${res.status} ${res.statusText}`);
 }
 
 export function formatTimeAgo(timestamp: number): string {
