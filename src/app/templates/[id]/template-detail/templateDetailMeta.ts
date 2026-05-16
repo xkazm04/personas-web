@@ -17,7 +17,7 @@ export const triggerDescriptions: Record<string, string> = {
 };
 
 export const complexityColors: Record<string, string> = {
-  basic: "text-green-400 border-green-400/30 bg-green-400/10",
-  professional: "text-yellow-400 border-yellow-400/30 bg-yellow-400/10",
+  basic: "text-emerald-400 border-emerald-400/30 bg-emerald-400/10",
+  professional: "text-amber-400 border-amber-400/30 bg-amber-400/10",
   enterprise: "text-red-400 border-red-400/30 bg-red-400/10",
 };

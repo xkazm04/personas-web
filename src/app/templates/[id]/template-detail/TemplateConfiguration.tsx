@@ -23,7 +23,7 @@ export function TemplateConfiguration({ code, copied, copyFailed, onCopy }: Temp
           onClick={onCopy}
           className="inline-flex items-center gap-1.5 rounded-lg border border-glass-hover bg-white/5 px-3 py-1.5 text-sm text-muted-dark transition-colors hover:bg-white/10 hover:text-foreground"
         >
-          {copied ? <Check className="h-3.5 w-3.5 text-green-400" /> : <Copy className="h-3.5 w-3.5" />}
+          {copied ? <Check className="h-3.5 w-3.5 text-emerald-400" /> : <Copy className="h-3.5 w-3.5" />}
           {copied ? t.templatesPage.copied : copyFailed ? t.templatesPage.copyFailed : t.templatesPage.copy}
         </button>
       </div>
