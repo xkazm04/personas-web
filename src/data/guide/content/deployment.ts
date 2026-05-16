@@ -2,259 +2,276 @@ export const content: Record<string, string> = {
   "local-vs-cloud-execution": `
 ## Local vs Cloud Execution
 
-Personas agents can run in two places: on your own computer (local) or on a remote server (cloud). **Local execution** is great for testing, private data, and tasks you want to supervise. Your agent runs right on your machine, and you can watch everything in real time.
+Personas agents run in two places: on your local machine (the desktop app's own engine) or on a remote orchestrator (cloud-managed by us, or BYOI on your own infrastructure). Local is the default and works out of the box; cloud is opt-in (Team / Builder tier) and enables 24/7 availability without your machine being on. The same agent prompt, tools, and credentials work in either environment — switching is a deployment decision, not a redesign.
 
-**Cloud execution** keeps your agents running 24/7, even when your computer is off or you're away. This is ideal for scheduled tasks, webhook-triggered automations, and anything that needs to be always available.
+The deciding factors are typically uptime and observability requirements. Local works great for development, testing, exploratory agents, and anything where you're around to watch the work. Cloud is the right choice for scheduled overnight runs, webhook agents that need to be reachable while you sleep, and any production-grade automation where "my laptop was closed" can't be a failure mode.
 
 :::compare
-**Local Execution**
-Runs on your machine. Available when your computer is on. Works out of the box with zero setup. Data stays private on your device. Full real-time visibility. Best for testing, private data, and supervised tasks.
+**Local Execution** [default]
+Runs in the desktop app's engine. Available while the app is open. Zero setup. Data and credentials never leave your machine. Full live observability in the same UI you build with. Best for development, testing, supervised work, and anything privacy-sensitive.
 ---
-**Cloud Execution** [recommended]
-Runs 24/7 on remote servers. Available even when your computer is off. Requires cloud orchestrator connection. Managed hosting or Bring Your Own Infrastructure. Best for schedules, webhooks, and always-on automation.
+**Cloud Execution**
+Runs on the orchestrator (managed cloud or BYOI). Available 24/7 regardless of your local machine. Setup is one-time. Data and credentials are encrypted in transit to the orchestrator and at rest on it. Results sync to your desktop. Best for schedules, webhooks, and production-grade unattended work.
 :::
 
 ### How It Works
 
-By default, agents run locally. To enable cloud execution, connect to a cloud orchestrator in \`Settings > Deployment\`. Once connected, you can deploy any agent to the cloud with a few clicks. Local and cloud executions use the same prompts, tools, and settings.
+Local agents are dispatched by the in-app execution engine — same path everything else in the app uses. Cloud agents are deployed: the agent's full configuration (prompt, tools, credentials by reference, triggers) is sent to the orchestrator, which runs a long-lived agent process that handles triggers server-side. Results stream back to the desktop app and appear in the same monitoring views as local runs.
 
 :::tip
-Develop and test locally, then deploy to the cloud once your agent is working well. This gives you the best of both worlds — hands-on control during development and always-on reliability in production.
+Develop and test locally, then deploy what works to the cloud. The local engine has the fastest edit-test loop; the cloud is where you put agents whose schedule or availability matters. You don't have to pick one or the other globally — typical setups have most agents local and a handful of production ones in the cloud.
 :::
   `,
 
   "connecting-to-the-cloud-orchestrator": `
 ## Connecting to the Cloud Orchestrator
 
-The cloud orchestrator is the service that runs your agents around the clock on remote servers. Connecting once gives your agents the ability to work 24/7 without needing your computer turned on. It's like plugging your agents into a power source that never turns off.
+Open Deployment → Cloud Deploy to connect to an orchestrator. Two paths: the **managed orchestrator** (we host it; you authenticate with your account and you're done in 30 seconds) or **BYOI** (you host the orchestrator on your own infrastructure; you point the desktop app at your endpoint and provide an auth key). Either way, connection is one-time per machine and persists across app restarts.
 
-The setup is straightforward — enter your orchestrator credentials and Personas handles the rest.
+Once connected, every agent's Settings tab gains a "Deploy to cloud" option. Triggering deployment uploads the agent's configuration to the orchestrator and starts a long-lived server-side process for it. Cloud agents appear in the same monitoring views as local ones, tagged with a small cloud icon.
 
 :::steps
-1. **Open deployment settings** — go to \`Settings > Deployment\`
-2. **Click Connect Cloud Orchestrator** — the connection dialog opens
-3. **Enter your orchestrator URL** — paste the server address provided by your orchestrator
-4. **Enter your authentication key** — paste the secret key for secure access
-5. **Click Test Connection** — verify the server is reachable and credentials are valid
-6. **Click Save** — your cloud environment is ready for deployments
+1. **Open Deployment → Cloud Deploy** — sidebar → Deployment → Cloud Deploy
+2. **Pick environment** — Managed Cloud (one-click sign-in) or BYOI (enter your orchestrator URL + auth key)
+3. **For BYOI**: paste the orchestrator URL and the auth token; the wizard runs a connection test and verifies orchestrator version compatibility
+4. **For Managed**: click "Sign in"; OAuth flow opens to authenticate against your Personas account
+5. **Save** — connection persists; agents now show a "Deploy to cloud" option in their Settings tab
 :::
 
 :::warning
-Keep your authentication key secret. Anyone with this key can deploy agents to your cloud orchestrator. Never share it in chat, email, or version control.
+Treat the BYOI auth token like any other credential: store it in the vault (Connections → Credentials → Custom), don't paste it into chat or commit it to version control. Whoever holds the token can deploy and undeploy any agent on the orchestrator.
 :::
 
 ### How It Works
 
-The orchestrator is a server that receives your agent configurations and executes them on your schedule. When you deploy an agent, its prompt, tools, and trigger settings are securely transmitted to the orchestrator. Execution results are synced back to your desktop app automatically.
+The orchestrator is a long-running server process (one per environment) that holds deployed agent configurations and runs them on schedule, on webhook event, or on demand. Communication between the desktop app and orchestrator is over TLS with mutual auth. Deployed agents' credentials are encrypted at deploy time using the orchestrator's per-tenant key and decrypted only inside the orchestrator process at run time.
 
 :::tip
-Test the connection before deploying any agents. The test button verifies that your credentials are correct and the server is reachable, saving you from troubleshooting deployment issues later.
+Test the connection before deploying anything. The wizard's connection test verifies version compatibility and reachability — if it fails, the failure is much easier to diagnose now than after you've tried to deploy three agents.
 :::
   `,
 
   "deploying-an-agent-to-the-cloud": `
 ## Deploying an Agent to the Cloud
 
-Publishing an agent to the cloud takes just a few clicks. Select an agent, choose your cloud settings (like which region to run in and what resources to allocate), and hit deploy. Within seconds, your agent is live and will keep working on its schedule even when you close the app.
+With an orchestrator connected, deploying any agent is one button on its Settings tab. The deploy action packages the agent's full configuration (prompt, tools, credential references, trigger definitions, settings) and sends it to the orchestrator over TLS. The orchestrator validates, sets up the agent, and starts handling its triggers server-side. The first run typically happens within seconds.
 
-Deployment doesn't remove the agent from your local setup — you can still test and modify it on your desktop.
+Local and cloud copies of the same agent stay in sync via the same auto-sync system that handles all desktop ↔ cloud coordination. You can keep iterating on the agent locally and re-deploy when ready; you don't have to choose between the two environments.
 
 :::steps
-1. **Verify cloud connection** — make sure your cloud orchestrator is connected (check \`Settings > Deployment\`)
-2. **Open the agent** — navigate to the agent you want to deploy
-3. **Click Deploy to Cloud** — find this option in the agent's menu bar
-4. **Review deployment settings** — confirm the region, resource allocation, and schedule
-5. **Click Deploy** — your agent is packaged and sent to the cloud within seconds
-6. **Verify it's live** — check the monitoring dashboard for a cloud icon next to the agent
+1. **Verify orchestrator connection** — Deployment → Cloud Deploy should show "Connected"
+2. **Open the agent** — Agents page → the one you want to deploy
+3. **Settings tab → Deploy to Cloud** — button in the deployment section
+4. **Review the deployment summary** — credentials being shipped, triggers being armed, model selection, failover settings; everything should match what you tested locally
+5. **Confirm Deploy** — the orchestrator receives the configuration, validates, sets up the agent; status flips to "Deployed" in seconds
+6. **Verify in the dashboard** — Overview → Activity shows the agent with a cloud icon; the next scheduled / webhook event will route to the cloud instance
 :::
 
 :::warning
-Double-check that any credentials your agent uses are configured for cloud access. Local-only credentials will not work after deployment and will cause authentication errors on the first cloud run.
+Cloud agents use credentials from the cloud-side vault, not your local vault directly. The deploy action ships credential *references* (encrypted) and the orchestrator resolves them server-side. If a credential is local-only or hasn't been replicated, the deploy will surface a "credential not available in cloud" warning and ask you to either replicate or pick a substitute before completing.
 :::
 
 ### How It Works
 
-When you deploy, Personas packages your agent's configuration — prompt, tools, credentials, and triggers — and sends it to the cloud orchestrator. The orchestrator creates a running instance of your agent that operates independently. Any changes you make locally can be pushed to the cloud with a single click.
+Deployment is atomic: either the orchestrator accepts the entire configuration and the agent goes live, or it rejects (with a specific reason) and nothing changes server-side. Once deployed, the orchestrator owns trigger evaluation — your local app no longer fires schedules / webhooks for that agent (you'd get duplicates otherwise). Manual runs from the desktop app are routed to the cloud instance over the same connection.
 
 :::tip
-Deploy agents that need to run on a schedule first. These benefit the most from cloud execution because they need to be available at specific times regardless of whether your computer is on.
+Deploy scheduled agents first when starting with cloud. They benefit most from 24/7 uptime, and they're the easiest to verify (you'll see the run land on its expected schedule whether your laptop is open or not).
 :::
   `,
 
   "cloud-execution-monitoring": `
 ## Cloud Execution Monitoring
 
-Even though your agents run in the cloud, you can monitor them from the comfort of the Personas desktop app. See live status, costs, execution history, and results — the same information you'd have for local agents. The cloud is just another place your agents live, not a black box.
+Cloud agents are visible from the same Overview pages as local agents — same Activity feed, same Health tab, same Usage breakdowns. A small cloud icon distinguishes cloud agents from local. Click into any cloud execution and you get the full trace just like a local run: rendered prompt, model call, tool calls, output, cost.
 
-Everything is synced automatically, so you always see the latest data without any manual refreshing.
+The desktop app polls the orchestrator continuously while open and subscribes to live event streams while connected, so what you see is the live state with a delay measured in seconds, not minutes. When the app is closed, the orchestrator keeps everything going on its own; opening the app later catches up the local state from the orchestrator's authoritative store.
 
 ### Key Points
 
-- **Same monitoring experience** — cloud and local agents show identical information
-- **Live status** — see which cloud agents are currently running
-- **Synced results** — execution outputs and logs sync to your desktop automatically
-- **Cost tracking** — cloud execution costs are included in your per-agent and per-model views
+- **Unified monitoring surface** — local and cloud agents share the same Activity / Health / Usage views
+- **Live event streaming** while the desktop is connected; orchestrator-side persistence guarantees nothing is lost when you're offline
+- **Cloud icon** distinguishes cloud-resident agents
+- **Cost attribution to cloud** — usage charts include both local and cloud spending, broken down by environment
+- **Catch-up on reconnect** — opening the app after extended offline time syncs all missed events from the orchestrator
 
 ### How It Works
 
-Open the monitoring dashboard and your cloud agents appear alongside local ones. A small cloud icon distinguishes them. Click any cloud agent to see its full execution history, logs, and costs — everything syncs from the orchestrator to your desktop in real time.
+Cloud agents emit the same execution and event records as local ones; the orchestrator stores them server-side and replicates to the desktop app on connect. The Activity feed merges local and cloud event streams in chronological order, so a mixed local + cloud setup looks like one unified view rather than two parallel ones.
 
 :::tip
-Set up budget limits for cloud agents just like you would for local ones. Cloud agents running 24/7 can accumulate costs faster than agents you run manually.
+Set per-day budget caps on cloud agents from day one. Cloud agents have no implicit "I'm watching this happen" check that local manual runs have; the per-day cap is your safety net against a runaway prompt overnight.
 :::
   `,
 
   "github-actions-integration": `
 ## GitHub Actions Integration
 
-If your team uses GitHub, your Personas agents can trigger GitHub Actions workflows automatically. This bridges the gap between AI-powered decision-making and your team's existing development processes. Your agent could review a pull request, decide it's ready, and kick off the deployment pipeline — all without human intervention.
+Agents can trigger GitHub Actions workflows via the GitHub tool on their Connectors tab, and GitHub Actions can trigger agents via the standard webhook trigger. The two patterns combine well: a GitHub event (PR opened, push to main, release tagged) fires a webhook that starts a Personas agent, the agent does its thing, and (if needed) the agent triggers a workflow as part of its output.
 
-It's like giving your agent a button that starts your team's standard processes.
+The GitHub connector ships in the Catalog (Connections → Catalog → Developer Tools → GitHub). Auth is OAuth or a fine-grained PAT — OAuth is preferred when the agent only needs read access; PATs work well for write operations like dispatching workflows.
 
 ### Key Points
 
-- **Trigger workflows** — your agents can start any GitHub Actions workflow
-- **Pass data** — send information from your agent to the workflow as parameters
-- **Monitor status** — see the workflow's progress and results from within Personas
-- **Bi-directional** — GitHub can also trigger your Personas agents via webhooks
+- **GitHub → Personas via inbound webhook** — standard webhook trigger; configure GitHub to POST to the agent's URL
+- **Personas → GitHub via the GitHub tool** — agent can dispatch workflows, comment on PRs, open issues, anything the GitHub API exposes
+- **Scoped auth** — OAuth for read-mostly agents, fine-grained PAT for write operations; minimum scopes per agent
+- **Live status sync** — agent traces show the workflow_dispatch request and GitHub's response; the agent can wait for the workflow to complete if needed
 
 ### How It Works
 
 :::diagram
-[Agent detects event] --> [Evaluates condition] --> [Calls GitHub API] --> [Workflow starts] --> [Results sync back]
+[GitHub event] --> [Inbound webhook] --> [Agent decides] --> [GitHub tool dispatches workflow] --> [Workflow result back into trace]
 :::
 
-Add the GitHub Actions tool to your agent and connect it with your GitHub credentials. In your agent's instructions, describe when and how to trigger workflows. For example: "When you find a critical bug, trigger the hotfix-deploy workflow." The agent uses the GitHub API to start the workflow and can pass along relevant data.
+The GitHub tool wraps the GitHub REST/GraphQL APIs and exposes high-level actions to the agent: "dispatch workflow", "comment on PR", "open issue", "merge PR", etc. The agent's prompt names the action it should take based on the trigger; the tool handles auth, payload construction, and response handling.
 
 :::warning
-Never store GitHub tokens in your agent's prompt text. Use the Personas credential vault to store tokens securely and grant your agent access through the tool configuration.
+Use fine-grained PATs over classic PATs whenever your GitHub plan supports them. Classic PATs grant broad org-wide permissions; fine-grained PATs restrict to specific repositories and specific permission scopes, which dramatically tightens the blast radius if the token ever leaks.
 :::
 
 :::tip
-Start with a non-critical workflow for testing — like a notification pipeline — before connecting agents to production deployment workflows.
+Start with a low-stakes workflow as the target — like a "notify Slack" workflow that just posts a message. Once the agent → GitHub Actions handoff is proven, graduate to higher-stakes targets (deploy, release-cut, etc.).
 :::
   `,
 
   "gitlab-ci-cd-integration": `
 ## GitLab CI/CD Integration
 
-Personas can export your agent configurations as GitLab-compatible pipeline YAML files. This means your AI agent setups can run within your existing GitLab CI/CD infrastructure. It bridges the gap between your AI agents and your team's development workflow without requiring anyone to learn a new system.
+Personas integrates with GitLab in two ways: a direct GitLab plugin that gives agents API-level access (pipeline status, MR comments, issue management), and a GitLab CI YAML export that runs Personas agents as steps inside your existing pipelines. Both ship; pick the one that fits your team's workflow shape.
 
-Your agents and your CI/CD pipelines can work hand-in-hand, each doing what it does best.
+The plugin (Plugins → GitLab) handles the API-side integration: install, authenticate, and your agents get a \`gitlab\` tool surface with the high-level actions (start pipeline, comment on MR, manage issues). The CI YAML export goes the other direction — your agents become steps in your GitLab CI pipelines, executed by GitLab runners, with results passed forward to subsequent steps.
 
 ### Key Points
 
-- **Export as YAML** — convert agent configurations to GitLab pipeline format
-- **Run in your infrastructure** — agents execute within your existing GitLab runners
-- **Version controlled** — pipeline files live in your Git repository like any other code
-- **Trigger agents from GitLab** — merge events, pipeline completions, or schedules can start your agents
+- **GitLab plugin** — API-level integration; agent uses GitLab as a tool from its Connectors tab
+- **CI YAML export** — agent becomes a step in your GitLab pipeline; runs on your GitLab runners
+- **Bi-directional** — GitLab events can trigger agents (webhook), and agents can trigger GitLab pipelines (plugin)
+- **Token scopes** — use project access tokens or group access tokens scoped to minimum needed permissions
+- **Pipeline events as triggers** — \`Pipeline succeeded\`, \`Pipeline failed\`, \`MR merged\` are all consumable via webhook trigger
 
 ### How It Works
 
-Open an agent and click \`Export > GitLab CI/CD\`. Personas generates a YAML file that defines a GitLab pipeline stage for your agent. Add this file to your repository's CI/CD configuration. When the pipeline runs, your agent executes as a step in the larger workflow.
+The plugin uses GitLab API tokens stored in the credential vault. When an agent invokes a GitLab tool action, the engine dispatches the API call, captures the response, and feeds it back as the tool result for the model's next turn.
+
+For CI export: open the agent's Settings tab → Export → GitLab CI YAML. The wizard generates a job definition that wraps the agent in a CI-runnable shape (typically a Docker image with the Personas CLI plus the agent's reference). Commit the generated YAML to your repository's \`.gitlab-ci.yml\`; the agent runs as part of your pipeline alongside any other CI jobs.
 
 :::warning
-The exported YAML may reference credential variables. Make sure these are defined as protected CI/CD variables in GitLab — never hardcode secrets in pipeline files committed to your repository.
+The exported CI YAML references credential variables for things like AI provider keys. Define these as **masked, protected** GitLab CI/CD variables in your project settings — never hardcode secrets in the YAML file itself, since pipeline YAML lives in your repo and is visible to anyone with read access.
 :::
 
 :::tip
-Use GitLab CI/CD integration for agents that are part of your development process — code review helpers, documentation generators, or test automation agents.
+The plugin is the lighter-weight option for most teams. CI YAML export is most useful when the agent has to run inside a GitLab runner anyway (network isolation, internal-network resources, compliance-mandated infrastructure) — otherwise the plugin lets you keep the agent in Personas where its observability and debugging are richest.
 :::
   `,
 
   "n8n-workflow-integration": `
 ## n8n Workflow Integration
 
-If you already use n8n for automation, your Personas agents can plug right in. n8n is a popular workflow automation tool with hundreds of integrations, and connecting it with Personas gives you AI-powered decision-making within your existing automation flows.
+n8n is a popular open-source workflow automation tool, and Personas integrates with it bidirectionally. You can import existing n8n workflows into Personas as templates (Templates → n8n Import) — the import wizard parses the workflow JSON and maps n8n nodes to equivalent Personas agents, connectors, and triggers. You can also call Personas agents *from* n8n by using HTTP/webhook nodes to invoke an agent's inbound webhook URL.
 
-This combination is powerful — n8n handles the plumbing (moving data between services), and your Personas agents handle the thinking (analyzing, deciding, writing).
+The n8n import is one-way and one-time: it brings the workflow's *shape* into Personas, but it doesn't keep the n8n original synced. After import, the imported pipeline is yours to edit independently.
 
 ### Key Points
 
-- **Seamless connection** — Personas agents appear as nodes in your n8n workflows
-- **Data exchange** — pass data between n8n and your agents in both directions
-- **Trigger agents from n8n** — any n8n workflow step can start a Personas agent
-- **Return results to n8n** — your agent's output feeds back into the n8n workflow
+- **n8n → Personas import** — Templates → n8n Import; parses workflow JSON, maps nodes to Personas equivalents
+- **Personas → n8n trigger** — n8n's HTTP/webhook nodes can POST to an agent's webhook trigger URL
+- **n8n → Personas trigger** — n8n can call a Personas agent webhook as part of an n8n workflow; the agent's response (configurable) flows back to n8n
+- **Not synced** — imported pipelines diverge from their n8n source; treat the import as a one-time starting point
+- **Mapped node coverage** — the importer handles common nodes (HTTP, function, IF, switch); exotic / community nodes may import as placeholders for manual completion
 
 ### How It Works
 
-Install the Personas node in your n8n instance. Configure it with your Personas connection details. In your n8n workflow, add a Personas node wherever you need AI processing. The node sends data to your agent, waits for the result, and passes it along to the next step in your n8n workflow.
+The import wizard reads the n8n workflow JSON (export from n8n → "Download" on the workflow), maps each node to its closest Personas equivalent (HTTP nodes → tools, function nodes → agents, IF/switch → conditional routing, etc.), and stages the result as a pipeline you preview before accepting. The mapping is best-effort: anything the importer can't map confidently becomes a placeholder with a note for you to fill in.
+
+For the reverse direction, the Personas agent's webhook URL is just a URL — any n8n HTTP node can call it. Pass input as the request body; the agent processes and (optionally) replies synchronously with its output.
 
 :::tip
-Use Personas agents for the "thinking" steps in your n8n workflows — analyzing data, making decisions, writing text — and let n8n handle the "doing" steps like sending emails or updating databases.
+n8n excels at the "moving data between services" plumbing; Personas excels at the "thinking" — analyzing, deciding, writing. The strongest combined workflows use n8n for orchestration plus Personas agents for AI-powered decision points, rather than trying to do all of one in the other.
 :::
   `,
 
   "byoi-bring-your-own-infrastructure": `
 ## BYOI — Bring Your Own Infrastructure
 
-If you prefer to run everything on your own servers — for compliance, cost, or control reasons — BYOI gives you that option. Instead of using the managed cloud orchestrator, you host the execution environment on your own infrastructure. You get all the benefits of cloud execution with none of the vendor lock-in.
+BYOI (Builder tier) means you run the orchestrator yourself instead of using our managed cloud. You install the orchestrator software (provided as a Docker image and a Kubernetes Helm chart) on your own infrastructure, configure it to your preferences (auth, storage, networking), and point the desktop app at your orchestrator URL. From that point, deploying agents works identically to managed cloud — they just run on your hardware.
 
-This is ideal for organizations with strict data handling requirements or teams that want maximum control over where their agents run.
+BYOI is the right choice when data sovereignty matters (regulatory environments, customer-data isolation, air-gapped networks), when you have existing infrastructure you want to leverage (rather than paying for managed hosting in addition), or when you want full control over the runtime environment (custom networking, specific availability guarantees, integration with your existing observability stack).
 
 ### Key Points
 
-- **Full control** — run agents on your own servers, your own cloud account, your own rules
-- **Data sovereignty** — your data never leaves your infrastructure
-- **Same features** — everything works the same as managed cloud, just on your hardware
-- **Cost flexibility** — use your existing server capacity instead of paying for managed hosting
+- **Self-hosted orchestrator** — Docker image + Helm chart published per release
+- **Data sovereignty** — execution data, credentials, and traces never leave your infrastructure
+- **Same agent semantics** — agents deployed to a BYOI orchestrator behave identically to managed cloud
+- **Your auth, your storage, your network** — orchestrator integrates with your existing identity provider, database, and network policies
+- **Builder-tier feature** — requires Builder subscription for the orchestrator software license
 
 ### How It Works
 
-Follow the BYOI setup guide in \`Settings > Deployment > Self-Hosted\`. You'll install the orchestrator software on your server, configure it with your preferred settings, and connect it to your Personas desktop app. From that point on, deploying agents works exactly the same — the only difference is where they run.
+The orchestrator runs as a long-lived server process. The Docker image is self-contained for single-node deployments; the Helm chart supports HA multi-node setups with shared storage. Auth integrates with OIDC providers so you can use your existing SSO; storage uses Postgres (managed or self-hosted); credential vault encryption keys live in your KMS of choice (Vault, AWS KMS, GCP KMS, Azure Key Vault).
+
+Deploying an agent to a BYOI orchestrator is identical to managed cloud from the desktop app's perspective — same UI, same flow, same observability. The orchestrator endpoint is just configured to point at your installation instead of ours.
 
 :::info
-BYOI requires some server administration knowledge. If you're not comfortable managing servers, the managed cloud orchestrator is the easier path and works great for most users.
+BYOI is genuinely infrastructure work. The orchestrator software is well-documented and the Helm chart handles most setup, but you'll still need someone comfortable with running production server software. For teams without that capacity, managed cloud is the better starting point — switch to BYOI later if requirements change.
+:::
+
+:::tip
+Run BYOI in a staging environment first if you're new to it. The setup guide includes a "minimal local stack" Docker Compose that runs the orchestrator + Postgres + Vault on a single machine — perfect for getting the moving parts working before deploying production hardware.
 :::
   `,
 
   "syncing-desktop-and-cloud": `
 ## Syncing Desktop and Cloud
 
-When you make changes to an agent on your desktop, those changes need to reach the cloud version too. Personas handles this syncing automatically — when you save changes locally, they're pushed to the cloud in the background. This ensures the version running remotely is always up to date.
+When you have agents deployed to a cloud orchestrator, the desktop app keeps state synced between the two automatically. Local edits to a deployed agent (prompt change, settings tweak, credential rotation) push to the orchestrator on save. Cloud-side events (execution results, trigger fires, health changes) sync back to the desktop and appear in monitoring views.
 
-You can also pull the latest cloud execution results to your desktop, giving you a complete picture of what your agents have been doing while you were away.
+Sync runs in the background continuously while the desktop is connected. When the app is offline, local changes queue and push when reconnected; cloud events accumulate server-side and stream down on reconnect. The status bar shows the sync state with a small indicator (green = fully synced, amber = sync in progress / queued changes, red = sync error needs attention).
 
 ### Key Points
 
-- **Automatic sync** — local changes push to the cloud when you save
-- **Results sync back** — cloud execution results appear in your local monitoring
-- **Conflict detection** — if changes are made in both places, you're alerted to resolve them
-- **Offline support** — changes queue up and sync when your connection is restored
+- **Bidirectional, automatic** — local changes push on save; cloud events stream down continuously
+- **Offline-tolerant** — local changes queue while offline and push on reconnect; cloud preserves events for catch-up
+- **Conflict detection** — if the same agent is edited locally and remotely (e.g. by a teammate using the same orchestrator), the desktop prompts to resolve before committing
+- **Status indicator** — bottom-bar element shows live sync state
+- **Manual sync** — click the indicator for explicit sync trigger; useful right before disconnecting
 
 ### How It Works
 
-Syncing happens in the background whenever your computer is connected to the internet. A small sync indicator in the status bar shows the current state — green means everything is up to date, yellow means syncing is in progress. Click the indicator to see details or manually trigger a sync.
+Sync uses a per-resource version vector. Each agent, credential, trigger, and execution record carries a version that increments on change. Sync is "send my versions, receive any newer ones" — efficient, conflict-aware. Conflicts (rare, but possible in shared-orchestrator setups) surface as a resolution prompt; you pick which version wins or merge manually.
 
 :::tip
-Check the sync indicator after making important changes. A quick glance confirms that your cloud agents have received the latest updates.
+Glance at the sync indicator after meaningful changes. Green means it's safe to close the app and trust the cloud has the latest. Amber means changes are in flight — wait a few seconds before disconnecting if you want to be sure.
 :::
   `,
 
   "cloud-troubleshooting": `
 ## Cloud Troubleshooting
 
-If your cloud agent isn't behaving as expected, don't worry — most issues have simple solutions. The most common problems are connection issues (your desktop can't reach the orchestrator), credential problems (a cloud-stored credential has expired), and configuration mismatches (the local and cloud versions are out of sync).
+Most cloud issues fall into a small set: orchestrator unreachable (network / firewall / orchestrator down), credential mismatch (a credential the agent uses isn't replicated to the orchestrator side), version mismatch (orchestrator on an older release than the desktop, missing features), or out-of-sync configuration (local has unsaved changes that haven't pushed). The Deployment → Cloud Deploy status page is the single best diagnostic surface — it shows orchestrator health, sync state, and per-agent deployment status with specific failure reasons.
 
-This guide walks you through diagnosing and fixing the most frequent cloud deployment issues.
+For agent-level issues (agent deployed but not running, runs failing in cloud but succeeding locally), the agent's Health tab shows the same diagnostics for cloud as for local — credential status, recent failure reasons, configuration completeness. The execution trace also shows whether a run executed on cloud or local, so you can isolate "cloud-only" issues quickly.
 
 ### Common Issues and Fixes
 
-- **Agent not running** — check that the cloud orchestrator is connected and the agent is deployed
-- **Results not syncing** — verify your internet connection and check the sync indicator
-- **Credential errors** — re-authenticate credentials that are marked as expired in the cloud
-- **Performance issues** — review the cloud execution logs to identify slow steps
+| Symptom | Likely cause | Fix |
+|---|---|---|
+| Agent not running on schedule | Orchestrator unreachable, or trigger disabled cloud-side | Check Deployment status; redeploy if trigger state is stale |
+| Credential error on first cloud run | Credential not replicated to orchestrator | Deployment → Cloud Deploy → "Sync credentials"; verify agent's Connectors tab |
+| Results not appearing on desktop | Sync paused or app offline when run happened | Click sync indicator; events stream down on reconnect |
+| Cloud agent slower than local | Different model / provider configured at deploy; or network latency from agent to AI provider | Check the agent's effective config in Cloud Deploy detail view |
+| "Version mismatch" error on deploy | Orchestrator on older release | Upgrade orchestrator (BYOI) or wait for managed-cloud rollout |
 
 ### How It Works
 
-Start by checking the \`Deployment\` status page, which shows the health of your cloud connection and all deployed agents. Most issues are visible here — a red indicator tells you something needs attention. Click the indicator for a specific diagnosis and recommended fix.
+The Deployment status page polls the orchestrator continuously while the desktop is connected and renders the result as a single dashboard. Each deployed agent has a per-resource status (healthy / degraded / unreachable) with the specific issue named. Most issues have a one-click resolution offered directly from the status row.
 
 :::warning
-If you need to redeploy an agent, make sure the local version is up to date first. Redeploying an outdated local version will overwrite the cloud configuration with older settings.
+"Redeploy" is the easiest fix for many cloud issues, but it pushes the *current local state* to the orchestrator. If you have local changes you haven't reviewed (or, on a shared orchestrator, the cloud has changes that haven't reached local), redeploying may overwrite them. Always check sync state first — if amber, resolve sync before redeploying.
 :::
 
 :::tip
-When in doubt, try redeploying the problematic agent. This pushes a fresh copy to the cloud and resolves most configuration-related issues.
+The most common cloud issue by far is "I forgot to replicate a credential to the cloud vault". Before deploying any agent, the deploy wizard pre-checks credential availability and warns; pay attention to that warning rather than dismissing it, and most cloud-side credential errors disappear.
 :::
   `,
 };
