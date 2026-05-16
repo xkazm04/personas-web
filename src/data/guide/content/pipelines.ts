@@ -2,283 +2,296 @@ export const content: Record<string, string> = {
   "what-are-pipelines": `
 ## What Are Pipelines?
 
-A pipeline is a group of agents working together to handle a complex task. Think of it like an assembly line in a factory — each agent does one job and passes the result to the next. This lets you break big problems into small, manageable steps where each agent is a specialist.
+A pipeline is a coordinated group of agents that pass work between each other to handle a multi-step task. Instead of one big do-everything agent, you build small focused agents and wire them together — each one specializes, the pipeline handles the orchestration. The Pipeline section in the sidebar is where pipelines live; the Team Canvas inside it is where you compose them.
 
-For example, a content pipeline might have one agent that researches a topic, another that writes a draft, a third that edits for grammar, and a fourth that formats the final output. Each agent focuses on what it does best.
+Pipelines in Personas are first-class — they have their own execution history, their own observability surfaces, their own team memory (shared context that all agents in the pipeline can read), and they can be triggered just like a single agent (schedule, webhook, manual, chain). The difference is that one trigger fires a whole pipeline rather than one agent.
 
 :::compare
 **Single Agent**
-Handles one task at a time with one set of instructions. Input goes in, output comes out. If something fails, the whole task fails. Simple to set up, but limited for complex workflows.
+One prompt, one tool set, one output. Simple to set up; limited when the task naturally decomposes into stages.
 ---
-**Pipeline** [recommended]
-Multi-step workflows where each agent is a specialist. Data flows between agents — the output of one feeds the next. Failing steps are pinpointed instantly. Reuse the entire workflow with different inputs.
+**Pipeline** [recommended for multi-stage work]
+Several focused agents, wired into a flow. Each agent is small and easy to debug; the pipeline composes them into a larger capability. Shared team memory lets agents pass structured context, not just text. Visible on the team canvas end-to-end.
 :::
 
 ### Key Points
 
-- **Multi-agent workflows** — combine multiple agents into one cohesive process
-- **Data flows between agents** — the output of one step becomes the input of the next
-- **Visual editor** — build pipelines by dragging and connecting agents on a canvas
-- **Reusable** — run the same pipeline with different inputs anytime
+- **Multi-agent flow** — agents pass output to inputs along defined connections
+- **Team memory** — a shared context store all pipeline agents can read and write, separate from per-agent memory
+- **Visual editor** — the Team Canvas; place agents, draw connections, configure routing
+- **Reusable** — same pipeline runs for any matching trigger payload; pipelines are also clonable
+- **Observable** — full pipeline-level execution history with per-agent breakdown
 
 ### How It Works
 
-You design a pipeline on the team canvas by placing agents and drawing connections between them. When you run the pipeline, data flows through each agent in order. If a step fails, the pipeline stops and shows you exactly where the problem occurred.
+You compose a pipeline on the Team Canvas: drop agents, draw connections, configure conditional branches if needed. When the pipeline runs, data flows along the connections — each agent's output becomes input to whichever downstream agent the canvas wired it to. The engine tracks the run end-to-end so you see one pipeline execution rather than N disjoint agent runs.
 
 ### See It In Action
 
 :::usecases
-**DevOps Pipeline**
-A pull request is opened on GitHub
+**DevOps automation**
+A pull request opens on GitHub
 ---
-PR Reviewer agent analyzes the code, Test Runner verifies it passes, Release Notes agent drafts the changelog, and Slack Notifier tells the team — all automatically.
+PR Reviewer agent analyzes the diff, Test Runner verifies builds, Release Notes drafts a changelog, Slack Notifier posts the summary to your team channel — single pipeline triggered by the GitHub webhook.
 ===
-**Content Workflow**
-You need to publish a blog post
+**Content workflow**
+You need a published blog post from a topic
 ---
-Research agent gathers sources, Writer agent creates a draft, Editor agent polishes it, and Publisher formats it for your platform.
+Research agent gathers sources, Writer drafts the piece, Editor polishes, Publisher formats for your CMS — pipeline manages the handoffs and team memory carries shared style guidance.
 ===
-**Customer Support**
-A support ticket arrives
+**Customer support triage**
+A new ticket arrives
 ---
-Classifier agent determines urgency, Knowledge agent finds relevant docs, Drafter writes a response, and Router escalates if needed.
+Classifier determines urgency and category, Knowledge agent retrieves relevant docs, Drafter writes a candidate response, Router escalates to a human if confidence is low.
 :::
 
 :::info
-There is no hard limit on how many agents you can chain together. Start with two agents, verify the data flow works end to end, then grow your pipeline one agent at a time. Pipelines with 10+ agents work just as reliably as two-agent pipelines.
+No hard upper limit on pipeline size. Start with two agents to validate the data flow, grow by adding one specialist at a time. Pipelines with 10+ agents work as reliably as small ones; the engine handles orchestration identically.
 :::
 
 :::tip
-Start with a simple two-agent pipeline to learn the basics. You can always add more agents as your workflow grows.
+Treat each agent in the pipeline like a single-purpose function: one specific input shape, one specific output shape. The smaller and more focused each agent is, the easier the whole pipeline is to debug and the more reusable the individual pieces are across pipelines.
 :::
   `,
 
   "the-team-canvas": `
 ## The Team Canvas
 
-The team canvas is your visual workspace for building pipelines. It works like a digital whiteboard — you drag agents from your library, place them where you want, and draw connections between them. It's as intuitive as arranging sticky notes.
+The Team Canvas is the visual editor for pipelines. Open Pipeline → Team Canvas and you see your pipeline as a graph: agent nodes connected by directed edges. Drop agents from the library panel on the left, draw connections by dragging from an agent's output port to another agent's input port, configure branches with conditional nodes. The canvas supports pan, zoom, multi-select, auto-layout, and keyboard navigation.
 
-The canvas gives you a bird's-eye view of your entire workflow. You can zoom in on details, zoom out to see the big picture, and rearrange agents until the flow makes sense. Everything is visual, so you never lose track of how your agents connect.
+The canvas isn't just visualization — it's the editor. Every change you make on the canvas (placing an agent, drawing a connection, adding a conditional node) immediately updates the pipeline's definition. Save to commit; the pipeline is version-controlled in the same way agent prompts are.
 
 ### Key Points
 
-- **Drag-and-drop** agents onto the canvas from your agent library
-- **Draw connections** by clicking and dragging from one agent to another
-- **Zoom and pan** to navigate large pipelines comfortably
-- **Auto-layout** option to tidy up your canvas with one click
+- **Drag-and-drop** agents from the library onto the canvas
+- **Connection drawing** — click-and-drag from output port to input port; data flows along the connection at run time
+- **Conditional nodes** — add a routing node between agents to branch based on data
+- **Auto-layout** — one click tidies the canvas into a left-to-right or top-to-bottom flow
+- **Versioned** — canvas snapshots are saved with the pipeline; restore prior layouts and topologies
 
 ### Building Your First Pipeline
 
 :::steps
-1. **Open the Pipelines section** — click \`Pipelines\` in the sidebar and then \`New Pipeline\`
-2. **Browse your agent library** — the sidebar panel shows all available agents
-3. **Drag agents onto the canvas** — place them in the order they should execute
-4. **Draw connections** — click and drag from one agent's output port to the next agent's input port
-5. **Arrange left to right** — position agents in execution order for a clear visual flow
-6. **Save your pipeline** — click \`Save\` and your pipeline is ready to run
+1. **Open Pipeline → Team Canvas** — sidebar → Pipeline → New Pipeline (or open an existing one)
+2. **Browse the agent library** — left panel; filter by group or search
+3. **Drag agents onto the canvas** — place them roughly in execution order
+4. **Draw connections** — output port (right edge) to input port (left edge)
+5. **Add conditional nodes if needed** — toolbar → Conditional; configure branches
+6. **Save** — Ctrl+S; the pipeline is committed and runnable immediately
 :::
 
 :::tip
-Arrange your agents from left to right in the order they execute. This visual flow makes pipelines easy to understand at a glance.
+Left-to-right top-to-bottom is the most readable convention. Use auto-layout (toolbar button) once the topology is set; it produces a clean visual flow that helps anyone reading the canvas — including future-you — understand the pipeline at a glance.
 :::
   `,
 
   "adding-agents-to-a-pipeline": `
 ## Adding Agents to a Pipeline
 
-Adding agents to a pipeline is as simple as dragging them from your library onto the canvas. Once placed, you can adjust each agent's settings for this specific pipeline — like giving a team member slightly different instructions depending on the project.
+Agents are added to pipelines from the library panel on the left of the Team Canvas. Drag any agent onto the canvas to place it; the agent's default settings carry over (prompt, tools, model, credentials), but you can override per-pipeline if you want this agent to behave slightly differently here than elsewhere.
 
-An agent can appear in multiple pipelines, and its behavior in each one is independent. This means your "Email Writer" agent can work differently in your marketing pipeline versus your customer support pipeline.
+The same agent can participate in multiple pipelines, each with its own override settings. Changes to the underlying agent (e.g. a prompt revision in the agent's own editor) propagate to all pipelines using it; per-pipeline overrides don't, they live only in the pipeline.
 
 ### Key Points
 
-- **Drag from library** — pick any of your existing agents and place it on the canvas
-- **Pipeline-specific settings** — customize behavior for each pipeline without changing the original agent
-- **Position freely** — place agents anywhere on the canvas and rearrange anytime
-- **One agent, many pipelines** — the same agent can participate in different workflows
+- **Drag from library** — any agent you've created is available
+- **Per-pipeline overrides** — input mapping, output transformer, model preference (if you want this pipeline to use a cheaper model for this stage), failover provider
+- **Multi-pipeline reuse** — an agent in pipeline A and pipeline B has independent override sets per pipeline
+- **Underlying agent changes propagate** — prompt edits, tool changes, etc., flow through to every pipeline using the agent (per-pipeline overrides don't)
+- **Replace an agent in place** — right-click → Replace; the new agent inherits the connections of the old one if input/output shapes match
 
 ### How It Works
 
-With the canvas open, find the agent you want in the sidebar library panel. Drag it onto the canvas and drop it in position. Click the placed agent to open its pipeline settings, where you can adjust inputs, outputs, and any pipeline-specific behavior.
+Placing an agent on the canvas creates a *pipeline-scoped reference* to that agent. The reference includes the override set (any per-pipeline customizations) and the position on the canvas. At run time, the engine resolves the reference, applies the overrides on top of the agent's base configuration, and dispatches the run.
 
 :::tip
-If you need a slightly different version of an agent for a pipeline, use the pipeline-specific settings instead of modifying the original. This keeps your base agent clean.
+Resist the temptation to bake heavy per-pipeline customizations into the override set. If you find yourself overriding many things in one pipeline, it's usually cleaner to clone the agent (giving the clone a clear name like "Email Writer - Pipeline B") and use the clone — keeps the per-pipeline customizations explicit instead of hidden inside override panels.
 :::
   `,
 
   "connecting-agents-with-data-flow": `
 ## Connecting Agents with Data Flow
 
-Connections are the lines you draw between agents on the canvas. They tell the pipeline how data should flow — which agent's output feeds into which agent's input. Click on an agent's output port and drag to another agent's input port. A line appears showing the path data will take.
+Connections on the canvas are directed edges from an agent's output port to another agent's input port. Each connection carries the upstream agent's output to the downstream agent as input — verbatim by default, or transformed by an inline transformer (a small expression that reshapes the output before passing it on).
 
-Data flows along these connections like water through pipes. The first agent produces a result, and that result automatically becomes the starting material for the next agent in line.
+Connections are configured: you can add transformers, label them (useful in complex pipelines), and toggle them off temporarily for debugging without removing them. Multiple connections can fan out from one output (broadcast: downstream agents all receive the same data) or fan in to one input (the engine combines inputs from multiple upstream agents into one input object for the downstream).
 
 ### Key Points
 
-- **Click and drag** from an output port to an input port to create a connection
-- **Data transforms** as it moves — each agent processes what it receives and produces new output
-- **Multiple connections** — one agent's output can feed several downstream agents
-- **Delete connections** by clicking on the line and pressing Delete
+- **Click-drag** from output port to input port to create a connection
+- **Optional transformer** — inline expression that reshapes the data on its way through
+- **Fan-out** — one output to many downstream inputs (parallel branching)
+- **Fan-in** — many upstream outputs into one downstream input (combined object)
+- **Toggle on/off** — disable a connection without deleting it (useful for staged rollouts)
+- **Labeled** — name connections for clarity in complex pipelines
+- **Delete** — click connection → Delete key
 
 ### Connecting Two Agents
 
 :::steps
-1. **Locate the output port** — find the small circle on the right edge of the source agent
-2. **Click and drag** — hold the mouse button and drag from the output port toward the target agent
-3. **Drop on the input port** — release on the small circle on the left edge of the target agent
-4. **Verify the connection** — a line appears showing the data path between the two agents
-5. **Test the flow** — run the pipeline and click any connection to inspect the data passing through it
+1. **Find the output port** — small circle on the right edge of the source agent
+2. **Click-and-drag** to the input port — small circle on the left edge of the target
+3. **Drop on the input port** — line drawn; connection committed
+4. **Optionally add a transformer** — right-click connection → Add transformer; write a small expression to reshape data
+5. **Test by running the pipeline** — click any connection during a run to inspect the data passing through
 :::
 
 :::tip
-Keep your connections clean and avoid crossing lines when possible. A well-organized canvas is much easier to debug and modify later.
+Use connection labels and transformers liberally in any pipeline with more than 3-4 agents. Labels make the topology self-documenting; transformers let you keep agents reusable across pipelines (one agent doesn't have to know what format a different pipeline upstream might produce — the transformer adapts it).
 :::
   `,
 
   "pipeline-execution": `
 ## Pipeline Execution
 
-Running a pipeline sends data through your chain of agents from start to finish. When you hit the \`Run\` button, each agent lights up as it processes its step. You can watch the data flow in real time, like watching dominoes fall in sequence.
+Running a pipeline dispatches the trigger payload into the first agent (or agents, if multiple start nodes), and each downstream agent runs as its inputs become available. The canvas shows execution live — agents glow when running, connections animate with the data flowing, and conditional nodes show which branch was taken.
 
-If everything goes smoothly, you get your final result at the end of the pipeline. If a step fails, the pipeline pauses at that point and shows you exactly what went wrong so you can fix it.
+The engine handles parallelism automatically: if two agents have no dependency between them, they run in parallel. If an agent depends on outputs from multiple upstream agents, it waits for all to complete. The total wall-clock time is determined by the critical path through the graph, not the sum of all agent durations.
 
 ### Key Points
 
-- **Real-time visualization** — watch each agent activate as the pipeline progresses
-- **Step-by-step progress** — see the data at each stage of the workflow
-- **Error handling** — the pipeline stops at the first failure and highlights the problem
-- **Execution time** — see how long each step takes and where bottlenecks are
+- **Live canvas animation** — see which agents are running, which connections are flowing, which conditional branches are taken
+- **Automatic parallelism** — independent agents run concurrently; dependent agents wait for prerequisites
+- **Critical path determines wall time** — pipeline duration = longest dependency chain, not sum of agents
+- **Stop-at-first-failure** — by default; configurable per pipeline if you want fault-tolerant execution
+- **Re-run from any step** — pick up after a fix without re-running successful upstream stages
 
 ### How It Works
 
 :::diagram
-[Start] --> [Agent 1 processes] --> [Agent 2 processes] --> [Agent 3 processes] --> [Final Result]
+[Trigger] --> [Agent A] --> [Conditional] --> [Agent B or Agent C] --> [Agent D] --> [Output]
 :::
 
-Click the green \`Run\` button on the canvas toolbar. Data enters at your starting agent and flows through each connection. Each agent's icon pulses while it's working and turns green when done. The final result appears at the end of the pipeline. Click any step to inspect its input and output.
+Click \`Run\` (or wait for the trigger to fire automatically). The engine builds an execution plan from the canvas topology, dispatches start nodes, and processes the graph by topological order. As each agent completes, downstream agents become eligible and dispatch automatically. Failure pauses the pipeline at the failing step with the error visible in the inspector; fix the underlying issue and click \`Retry Step\` to resume.
 
 :::tip
-If your pipeline is taking too long, check the execution times for each step. The slowest step is your bottleneck — consider optimizing that agent or switching it to a faster model.
+The slowest agent on the critical path determines pipeline duration. If your pipeline feels slow, run it once, look at per-agent durations in the trace, identify the longest path, and optimize whichever agent on that path has the highest duration. Parallel branches don't help if your critical path is slow.
 :::
   `,
 
   "conditional-routing": `
 ## Conditional Routing
 
-Sometimes your pipeline needs to take different paths depending on the data. Conditional routing lets you set rules that direct data to different agents based on conditions — like sorting mail into different boxes. If the data meets condition A, it goes one way; if condition B, it goes another.
+Conditional routing nodes let a pipeline branch on the data it's processing. Drop a conditional node on the canvas, define one or more rules ("if amount > 1000", "if email contains 'urgent'", "if classifier output = 'support'"), and wire each branch to a different downstream path. At run time the conditional evaluates and routes to the matching branch — only that branch runs.
 
-This transforms simple linear pipelines into smart decision-making workflows that handle different scenarios appropriately.
+Rules are expression-based: a small DSL of comparisons and logical operators evaluated against the upstream agent's output. No code; the expression editor has autocomplete for the upstream output shape so you discover the available fields as you type.
 
 :::feature
-**Smart Decision Nodes**
-Conditional routing uses plain-language rules — no code required. Write conditions like "if the text contains 'urgent'" and data flows to the right agent automatically.
+**Expression-based routing**
+Conditional rules are evaluated as expressions against the upstream output. Compare fields, combine with AND/OR, fall through to a default branch when nothing matches. No code required, but full expressiveness when you need it.
 :::
 
 ### Key Points
 
-- **If-then branching** — send data to different agents based on conditions you define
-- **Multiple paths** — create two, three, or more branches from a single decision point
-- **Default path** — always define a fallback for data that doesn't match any condition
-- **Conditions are readable** — written in plain language, not code
+- **Multiple branches** — one conditional node, N rule-defined branches, plus a default fallback
+- **Default branch is mandatory** — guarantees data never gets stuck on unmatched conditions
+- **Expression DSL** — comparisons (\`>\`, \`<\`, \`==\`, \`contains\`, \`matches\`), boolean operators (\`and\`, \`or\`, \`not\`)
+- **Autocomplete on upstream shape** — the expression editor knows the output schema of the upstream agent
+- **Live evaluation in trace** — see which branch was taken on each pipeline run
 
 ### How It Works
 
-On the canvas, add a conditional node between agents. Define your conditions using simple rules like "if the text contains 'urgent'" or "if the amount is greater than 100." Each condition connects to a different downstream agent. When data arrives, the conditional node evaluates it and sends it down the matching path.
+Drop a Conditional node between agents. Configure each branch's rule in the rule editor; the default branch needs no rule (it's the fallback). At run time the engine evaluates rules in order; the first match wins; if no rule matches the default branch runs. The branch that runs sees the upstream output as input; the others remain idle for this run.
 
 :::warning
-Always include a default path for data that doesn't match any condition. Without one, unmatched data gets stuck in your pipeline with no way to proceed.
+Always define a default branch. Without one, an unmatched input gets stuck mid-pipeline and produces a hung run — annoying to debug. The default branch can simply route to a terminal "log and stop" agent if you really want unmatched inputs to fail loudly, but the branch needs to exist.
 :::
   `,
 
   "team-members-and-roles": `
 ## Team Members and Roles
 
-In a pipeline, each agent has a specific role — like members of a project team. One might be the researcher, another the writer, another the reviewer. Defining clear roles helps your agents work together without stepping on each other's toes and makes your pipeline easier to understand.
+Each agent in a pipeline can carry a role label — "Researcher", "Writer", "Editor", "Classifier" — that describes its function within the pipeline. Roles are purely organizational; the engine doesn't enforce or use them. Their value is human: when you (or someone else) opens the canvas a month later, role labels make the pipeline self-documenting.
 
-Roles also help when you're troubleshooting. If the final output has a research error, you know to look at the researcher agent, not the writer.
+Beyond the label, roles are also useful for agent substitution. If you have multiple agents that could fill the "Editor" role (with different prompt styles or specialties), the role label makes it obvious which slot to swap when you change your mind. The Team Canvas supports drag-replace on a role: drop a different agent on the existing role and the canvas asks whether to substitute, preserving the connections.
 
 ### Key Points
 
-- **Named roles** — give each agent a descriptive role within the pipeline (researcher, writer, reviewer, etc.)
-- **Clear responsibilities** — each role handles a specific part of the workflow
-- **Role labels** appear on the canvas so you can see the team structure at a glance
-- **Swap agents** — replace one team member with another without rewiring the pipeline
+- **Free-text role labels** — anything human-readable; common ones get autocomplete suggestions
+- **Canvas-visible** — role labels appear above each agent node so the team structure is at-a-glance
+- **Drag-replace by role** — drop a new agent on a role slot to substitute, preserving connections
+- **Filter library by role** — when you have many similar agents, filter the library by role to find candidates quickly
+- **Pipeline templates use roles** — the template defines roles to fill, you bring agents that fit each role
 
 ### How It Works
 
-When you place an agent on the canvas, you can assign it a role label. This label appears above the agent icon and describes its function in this pipeline. Roles are purely organizational — they help you and others understand the workflow but don't change how the agent works.
+Right-click any agent on the canvas → Set role. The label appears above the agent node. Roles live in the pipeline definition alongside the agent reference; they don't modify the agent itself. Pipeline templates ship with roles pre-defined; instantiating a template prompts you to pick an agent for each role.
 
 :::tip
-Name roles by what they do, not by which agent fills them. This makes it easy to swap in a different agent later if you find a better option.
+Name roles by responsibility, not by current agent. "Editor" is better than "Claude Sonnet Editor"; the role description outlives whichever specific agent currently fills it. If you switch from Claude to GPT for that role, the role label is still accurate.
 :::
   `,
 
   "pipeline-run-history": `
 ## Pipeline Run History
 
-Every time a pipeline runs, a complete record is saved — timestamps, inputs, outputs, status for each step, and total execution time. This history is your audit trail, letting you review what happened in any past run and understand how your pipeline performed.
+Pipeline runs are first-class executions in the same store that individual agent runs go to. The Pipeline → Run History tab shows every run with its trigger, input, status, total duration, total cost, and per-agent breakdown. Click any run to expand the full trace: per-agent traces, conditional decisions, transformer outputs, the final result.
 
-Run history is invaluable for troubleshooting ("what went wrong last Tuesday?") and for tracking improvement over time ("are results getting better?").
+Run history persists indefinitely (subject to retention settings in Settings → Data) and supports the same filtering and search as per-agent activity views. Each run is immutable — once captured, the trace is frozen, useful for after-the-fact audits.
 
 ### Key Points
 
-- **Complete records** — every run is saved with full details for every step
-- **Status tracking** — see whether each step succeeded, failed, or was skipped
-- **Input/output inspection** — review the data at every point in the pipeline
-- **Search and filter** — find specific runs by date, status, or keyword
+- **Complete capture** — input, per-agent traces (prompt, tool calls, response), conditional decisions, transformer outputs, final result
+- **Per-agent status** within the pipeline trace — success / failure / skipped / pending
+- **Total + per-agent timing** — see the critical path and identify bottlenecks
+- **Total + per-agent cost** — pipeline cost = sum of per-agent costs
+- **Searchable and filterable** — by date, trigger, status, cost, duration, agent
+- **Two-run compare** — pick two runs to diff per-agent outputs (useful for "what changed?")
 
 ### How It Works
 
-Open your pipeline and click the \`History\` tab. You'll see a list of all past runs sorted by date. Click any run to expand it and see each step's details. You can compare two runs side by side to understand what's different when results vary.
+Pipeline runs use the same execution store as single-agent runs but with an additional pipeline-level wrapper that links to all the child agent executions. The history view queries this store, joins to the agent execution records for per-agent breakdowns, and renders the trace tree.
 
 :::tip
-After making changes to a pipeline, compare the next run's results to a previous run. This confirms whether your changes had the intended effect.
+After a meaningful pipeline change (new conditional rule, swapped agent, prompt revision on a member agent), pick a "before" run from history and the "after" run from the new run, then use Compare to see exactly what's different. The diff at the pipeline level often reveals impact you'd miss looking at any single agent in isolation.
 :::
   `,
 
   "pipeline-templates": `
 ## Pipeline Templates
 
-Templates are pre-built pipelines that give you a working starting point. Instead of designing a workflow from scratch, browse the template library, pick one that matches your goal, and customize it to fit your needs. It's like using a recipe as a starting point and adjusting the ingredients to your taste.
+Pipeline templates are pre-built pipeline shapes you can adopt as a starting point. The template defines the topology — what roles exist, what conditional branches, what transformers — but doesn't bind specific agents to each role. When you instantiate a template, the canvas opens with the topology in place and prompts you to fill each role from your own agent library.
 
-Templates cover common use cases like content creation, data processing, customer support, and reporting. Each one comes with pre-configured agents and connections.
+Templates cover common shapes: content workflows (research → write → edit → publish), support triage (classify → route → respond → escalate), data processing (ingest → validate → transform → store). The template library is in Pipelines → New Pipeline → Browse Templates.
 
 ### Key Points
 
-- **Ready-made workflows** for common automation scenarios
-- **Fully customizable** — use as-is or modify to fit your needs
-- **Best practices built in** — templates follow proven patterns and include error handling
-- **Growing library** — new templates are added regularly
+- **Topology-defined, role-flexible** — the template knows the shape; you bring the agents
+- **Pre-configured conditional rules and transformers** — common-case routing logic is baked in
+- **Customizable after instantiation** — once instantiated, the canvas is yours to modify
+- **Best-practice patterns** — templates ship with error handling and fallback branches as standard
+- **Growing library** — new templates are added based on user demand; you can also save your own pipelines as templates for reuse
 
 ### How It Works
 
-Open the \`Pipelines\` section and click \`Templates\`. Browse or search for a template that matches your use case. Click \`Use Template\` to create a new pipeline based on it. The canvas opens with all agents and connections pre-configured. Customize any part and save.
+A template is a canvas definition with role slots instead of agent references. Instantiating creates a new pipeline, copies the template's canvas, and asks you to fill each role from the agent library. Once filled, the pipeline is fully editable — it's not linked back to the template, so updates to the template don't propagate (and edits to the pipeline don't affect the template).
 
 :::tip
-Even if no template matches your exact use case, find the closest one. It's usually faster to modify a template than to build from scratch.
+Even when no template is an exact fit, picking the closest one and modifying it is usually faster than building from scratch. Templates pre-solve the orchestration shape (conditional placement, transformer locations, fan-out/fan-in topology); the work that remains is agent selection and prompt tuning, which is the work you wanted to focus on anyway.
 :::
   `,
 
   "debugging-pipeline-issues": `
 ## Debugging Pipeline Issues
 
-When a pipeline doesn't work as expected, the debugger helps you pinpoint exactly where things went wrong. It highlights the failing step, shows you the data that caused the problem, and lets you inspect every detail of the execution without guesswork.
+When a pipeline run fails, the canvas marks the failing agent with a red indicator and the run pauses at that step. Open the failing run from history (or click the indicator on the live canvas) and the debug panel shows the agent's input, the error, the trace up to the failure, and any partial output the agent produced before failing. From the same panel you can retry just the failing step or rerun the whole pipeline from the start.
 
-Most pipeline issues fall into a few categories: bad data flowing between steps, a misconfigured agent, or a connection that's wired incorrectly. The debugger makes all of these easy to identify and fix.
+The most common pipeline failures are data-shape mismatches — an upstream agent produces output in a slightly different format than the downstream agent expects. The connection inspector (click any connection) shows the data passing through it on the most recent run, which is usually enough to spot the mismatch.
 
 ### Key Points
 
-- **Failing step highlighted** — the problem area is marked in red on the canvas
-- **Data inspection** — see exactly what data entered and left each step
-- **Re-run from failure** — fix the issue and restart from the failed step, not the beginning
-- **Connection validation** — check that data shapes match between connected agents
+- **Failing step highlighted** — red indicator on the canvas, full error in the debug panel
+- **Connection inspector** — click any connection to see live or last-run data passing through
+- **Retry from failed step** — fix the issue and resume; successful upstream stages don't re-run
+- **Step-by-step replay** — re-run any past pipeline execution with the same input to reproduce a failure deterministically
+- **Connection validation** — the canvas can pre-check whether upstream and downstream agents have compatible input/output shapes (catches mismatches before run time)
 
 ### How It Works
 
-When a pipeline fails, click the red-highlighted step on the canvas. The debug panel shows the input data it received, the error message, and the agent's full output. Fix the issue — whether it's a prompt change, a credential problem, or a data format mismatch — and click \`Retry Step\` to resume from that point.
+The pipeline engine emits structured failure events when an agent run errors. The debug panel subscribes to these events and renders the relevant trace + inspector. Retry-from-step is supported by the engine: it re-dispatches the failed agent with the same upstream context, preserving the rest of the pipeline run.
 
 :::tip
-Use the data inspection feature even on successful runs. Seeing what flows between agents helps you optimize your pipeline and catch subtle issues before they become failures.
+Most pipeline failures are connection issues, not agent issues. When something breaks, first inspect the connections feeding the failing agent — what shape did it actually receive? It's much more often "the data was wrong" than "the agent was wrong"; the connection inspector tells you which case it is in under a minute.
 :::
   `,
 };
