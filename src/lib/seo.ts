@@ -21,6 +21,14 @@ export const TWITTER_HANDLE = "@PersonasAI";
 export const SITE_STATUS_URL = process.env.NEXT_PUBLIC_SITE_STATUS_URL ?? "";
 
 /**
+ * Near-black background used by the PWA install screen (manifest.ts)
+ * and the global error UI (global-error.tsx). Kept here as the
+ * canonical value so the two surfaces never drift. Lighter than pure
+ * black so subtle glass borders remain visible.
+ */
+export const BG_NEAR_BLACK = "#09090b";
+
+/**
  * Stringify a JSON-LD payload safely for embedding inside a
  * `<script type="application/ld+json">` block.
  *

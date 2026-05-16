@@ -4,7 +4,7 @@ import Link from "next/link";
 import { useEffect, useState } from "react";
 import { Compass, Home, Activity, RefreshCcw, Copy, Check } from "lucide-react";
 import { captureExceptionScrubbed } from "@/lib/sentry-pii";
-import { SITE_STATUS_URL } from "@/lib/seo";
+import { BG_NEAR_BLACK, SITE_STATUS_URL } from "@/lib/seo";
 
 export default function GlobalError({
   error,
@@ -40,7 +40,14 @@ export default function GlobalError({
 
   return (
     <html lang="en" className="dark">
-      <body className="relative min-h-screen overflow-hidden bg-[#09090b] text-foreground antialiased">
+      {/* bg-color is BG_NEAR_BLACK (matches PWA manifest's background_color
+          so the install-screen → app-error transition is seamless). The
+          button focus-ring-offset values below repeat the same hex via
+          Tailwind arbitrary syntax — keep all four sites in sync. */}
+      <body
+        style={{ backgroundColor: BG_NEAR_BLACK }}
+        className="relative min-h-screen overflow-hidden text-foreground antialiased"
+      >
         {/* Ambient gradient glow */}
         <div
           aria-hidden="true"

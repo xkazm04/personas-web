@@ -1,4 +1,5 @@
 import type { MetadataRoute } from "next";
+import { BG_NEAR_BLACK } from "@/lib/seo";
 
 export const dynamic = "force-static";
 export const revalidate = false;
@@ -11,7 +12,7 @@ export default function manifest(): MetadataRoute.Manifest {
       "Build intelligent AI agents in natural language. Orchestrate them locally or in the cloud.",
     start_url: "/",
     display: "standalone",
-    background_color: "#09090b",
+    background_color: BG_NEAR_BLACK,
     theme_color: "#06b6d4",
     icons: [
       {
