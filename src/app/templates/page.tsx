@@ -17,6 +17,13 @@ import { CategoryTile } from "./templates-page/CategoryTile";
 import { TemplateCard } from "./templates-page/TemplateCard";
 import type { Complexity } from "./templates-page/templatePageConfig";
 
+const categoryCounts: Record<string, number> = Object.fromEntries(
+  categories.map((category) => [
+    category,
+    templates.filter((template) => template.category === category).length,
+  ]),
+);
+
 export default function TemplatesPage() {
   const { t } = useTranslation();
   const [search, setSearch] = useState("");
@@ -29,14 +36,6 @@ export default function TemplatesPage() {
     { value: "professional", label: t.templatesPage.complexityProfessional },
     { value: "enterprise", label: t.templatesPage.complexityEnterprise },
   ];
-
-  const categoryCounts = useMemo(() => {
-    const counts: Record<string, number> = {};
-    for (const category of categories) {
-      counts[category] = templates.filter((template) => template.category === category).length;
-    }
-    return counts;
-  }, []);
 
   const filtered = useMemo(() => {
     return templates.filter((template) => {
