@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { motion } from "framer-motion";
 import { Loader2, Compass } from "lucide-react";
 import SectionWrapper from "@/components/SectionWrapper";
@@ -8,6 +8,7 @@ import SectionIntro from "@/components/primitives/SectionIntro";
 import { fadeUp, staggerContainer } from "@/lib/animations";
 import { BRAND_VAR, tint, brandShadow } from "@/lib/brand-theme";
 import { useTranslation } from "@/i18n/useTranslation";
+import { useAbortableEffect } from "@/hooks/useAbortableEffect";
 import type { RoadmapItem } from "./types";
 import type { RoadmapResponse } from "@/app/api/roadmap/types";
 import { FALLBACK_ITEMS } from "./data";
@@ -25,47 +26,32 @@ export default function Roadmap() {
   const [emptyFromSource, setEmptyFromSource] = useState(false);
   const [loading, setLoading] = useState(true);
 
-  useEffect(() => {
-    // AbortController so unmount / fast-refresh / strict-mode double-invoke
-    // actually tears down the request, plus an 8s timeout so a hung Supabase
-    // pool can't dangle the socket for the full edge timeout.
-    const controller = new AbortController();
-    let unmounted = false;
-    const timeoutId = setTimeout(() => controller.abort(), 8000);
-
-    fetch("/api/roadmap", { signal: controller.signal })
-      .then((r) => r.json())
-      .then((data: RoadmapResponse) => {
-        if (unmounted) return;
-        if (data.items?.length) {
-          setItems(data.items);
-          setEmptyFromSource(false);
-        } else if (data.source === "supabase") {
-          // Supabase responded successfully with an empty array — surface
-          // the empty state instead of silently keeping stale fallback copy.
-          setEmptyFromSource(true);
-        }
-      })
-      .catch(() => {
-        // AbortError on unmount / timeout is expected; other errors fall
-        // back to FALLBACK_ITEMS already in state.
-      })
-      .finally(() => {
-        clearTimeout(timeoutId);
-        // Always release the spinner. The previous gate was
-        // `!controller.signal.aborted`, but the 8s timeout also aborts
-        // the controller — which left the loader spinning forever above
-        // the FALLBACK_ITEMS content on slow Supabase. The unmount path
-        // separately suppresses the setState via the `unmounted` flag.
-        if (!unmounted) setLoading(false);
-      });
-
-    return () => {
-      unmounted = true;
-      clearTimeout(timeoutId);
-      controller.abort();
-    };
-  }, []);
+  // 8s timeout: a hung Supabase pool shouldn't dangle the socket for the full
+  // edge timeout. setLoading(false) in finally always fires — on abort the
+  // setState is a no-op against the unmounted component (React 19).
+  useAbortableEffect(
+    (signal) => {
+      fetch("/api/roadmap", { signal })
+        .then((r) => r.json())
+        .then((data: RoadmapResponse) => {
+          if (data.items?.length) {
+            setItems(data.items);
+            setEmptyFromSource(false);
+          } else if (data.source === "supabase") {
+            // Supabase responded successfully with an empty array — surface
+            // the empty state instead of silently keeping stale fallback copy.
+            setEmptyFromSource(true);
+          }
+        })
+        .catch(() => {
+          // AbortError on unmount / timeout is expected; other errors fall
+          // back to FALLBACK_ITEMS already in state.
+        })
+        .finally(() => setLoading(false));
+    },
+    [],
+    { timeoutMs: 8000 },
+  );
 
   const inProgressCount = items.filter((i) => i.status === "in_progress").length;
   const nextCount = items.filter((i) => i.status === "next").length;
