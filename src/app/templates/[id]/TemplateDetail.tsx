@@ -79,6 +79,12 @@ export default function TemplateDetail({ templateId }: { templateId: string }) {
     }
   }, [template.config, scheduleReset]);
 
+  // Deep-link-installed-app detection: setting window.location.href to
+  // a personas:// URL navigates to the app if installed (OS yanks focus
+  // → window 'blur' fires → cancel the fallback). If no blur arrives
+  // within 1500ms we assume the app isn't installed and surface the
+  // "install Personas" modal. document.hidden guards against tab
+  // visibility changes that aren't an app-launch.
   const handleOpenInPersonas = useCallback(() => {
     const deepLink = `personas://template/${template.id}`;
     const start = Date.now();
