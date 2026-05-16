@@ -55,10 +55,8 @@ export const localAccentTokens: Record<Feature["accent"], AccentToken> = {
   amber: { r: 251, g: 191, b: 36, tw: "brand-amber" },
 };
 
-export const LS_KEY = "personas-voted-features";
-export const LS_COMMENTS_KEY = "personas-feature-comments";
 export const LS_AUTHOR_KEY = "personas-comment-author";
-export const LS_BOOSTS_KEY = "personas-boosted-features";
+export const LS_VOTER_ID_KEY = "personas-voter-id";
 
 export const KOFI_USERNAME = process.env.NEXT_PUBLIC_KOFI_USERNAME ?? "";
 
@@ -71,25 +69,29 @@ export const BOOST_TIERS = [
   { label: "$25", value: 25, weight: 25 },
 ] as const;
 
-export function readVotedIds(): Set<string> {
+/**
+ * Anonymous voter id. Generated once per browser, stored in localStorage.
+ * Used to pair "who voted for what" without requiring auth — both the
+ * server (UNIQUE constraint on feature_id + voter_id) and the API
+ * validator (`isValidVoterId`) accept the format we mint here.
+ */
+export function getOrCreateVoterId(): string {
   try {
-    const raw = localStorage.getItem(LS_KEY);
-    if (!raw) return new Set();
-    const parsed: unknown = JSON.parse(raw);
-    if (Array.isArray(parsed))
-      return new Set(parsed.filter((v): v is string => typeof v === "string"));
+    const existing = localStorage.getItem(LS_VOTER_ID_KEY);
+    if (existing && existing.length >= 16) return existing;
   } catch {
-    /* corrupt or unavailable */
+    /* unavailable */
   }
-  return new Set();
-}
-
-export function writeVotedIds(ids: Set<string>) {
+  const id =
+    typeof crypto !== "undefined" && typeof crypto.randomUUID === "function"
+      ? crypto.randomUUID()
+      : `${Date.now().toString(36)}-${Math.random().toString(36).slice(2, 18)}`;
   try {
-    localStorage.setItem(LS_KEY, JSON.stringify([...ids]));
+    localStorage.setItem(LS_VOTER_ID_KEY, id);
   } catch {
     /* storage full */
   }
+  return id;
 }
 
 export function getOrCreateAuthor(): string {
@@ -106,58 +108,81 @@ export function getOrCreateAuthor(): string {
   }
 }
 
-function isValidComment(c: unknown): c is Comment {
-  if (typeof c !== "object" || c === null) return false;
-  const obj = c as Record<string, unknown>;
-  return (
-    typeof obj.id === "string" &&
-    typeof obj.featureId === "string" &&
-    (obj.parentId === null || typeof obj.parentId === "string") &&
-    typeof obj.text === "string" &&
-    typeof obj.author === "string" &&
-    typeof obj.timestamp === "number"
-  );
+/* ── API helpers ───────────────────────────────────────────────────── */
+
+export interface VotesSnapshot {
+  counts: Record<string, number>;
+  userVotes: Set<string>;
 }
 
-export function readComments(): Comment[] {
-  try {
-    const raw = localStorage.getItem(LS_COMMENTS_KEY);
-    if (!raw) return [];
-    const parsed: unknown = JSON.parse(raw);
-    if (Array.isArray(parsed)) return parsed.filter(isValidComment);
-  } catch {
-    /* corrupt */
-  }
-  return [];
+export async function fetchVotes(voterId: string, signal?: AbortSignal): Promise<VotesSnapshot> {
+  const url = `/api/votes?voterId=${encodeURIComponent(voterId)}`;
+  const res = await fetch(url, { signal });
+  if (!res.ok) throw new Error(`GET ${url} failed: ${res.status} ${res.statusText}`);
+  const data: { counts?: Record<string, number>; userVotes?: string[] } = await res.json();
+  return {
+    counts: data.counts ?? {},
+    userVotes: new Set(data.userVotes ?? []),
+  };
 }
 
-export function writeComments(comments: Comment[]) {
-  try {
-    localStorage.setItem(LS_COMMENTS_KEY, JSON.stringify(comments));
-  } catch {
-    /* storage full */
-  }
+export async function postVoteToggle(
+  featureId: string,
+  voterId: string,
+  signal?: AbortSignal,
+): Promise<"added" | "removed" | "email_saved"> {
+  const res = await fetch("/api/votes", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ featureId, voterId }),
+    signal,
+  });
+  if (!res.ok) throw new Error(`POST /api/votes failed: ${res.status} ${res.statusText}`);
+  const data: { action?: "added" | "removed" | "email_saved" } = await res.json();
+  return data.action ?? "added";
 }
 
-export function readBoosts(): Record<string, number> {
-  try {
-    const raw = localStorage.getItem(LS_BOOSTS_KEY);
-    if (!raw) return {};
-    const parsed: unknown = JSON.parse(raw);
-    if (typeof parsed === "object" && parsed !== null)
-      return parsed as Record<string, number>;
-  } catch {
-    /* corrupt */
-  }
-  return {};
+export async function fetchComments(signal?: AbortSignal): Promise<Comment[]> {
+  const res = await fetch("/api/feature-comments", { signal });
+  if (!res.ok) throw new Error(`GET /api/feature-comments failed: ${res.status} ${res.statusText}`);
+  const data: { comments?: Comment[] } = await res.json();
+  return data.comments ?? [];
 }
 
-export function writeBoosts(boosts: Record<string, number>) {
-  try {
-    localStorage.setItem(LS_BOOSTS_KEY, JSON.stringify(boosts));
-  } catch {
-    /* storage full */
-  }
+export async function postComment(
+  input: { featureId: string; parentId: string | null; text: string; author: string },
+  signal?: AbortSignal,
+): Promise<Comment> {
+  const res = await fetch("/api/feature-comments", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify(input),
+    signal,
+  });
+  if (!res.ok) throw new Error(`POST /api/feature-comments failed: ${res.status} ${res.statusText}`);
+  const data: { comment?: Comment } = await res.json();
+  if (!data.comment) throw new Error("POST /api/feature-comments returned malformed body (no .comment)");
+  return data.comment;
+}
+
+export async function fetchBoostTotals(signal?: AbortSignal): Promise<Record<string, number>> {
+  const res = await fetch("/api/feature-boosts", { signal });
+  if (!res.ok) throw new Error(`GET /api/feature-boosts failed: ${res.status} ${res.statusText}`);
+  const data: { totals?: Record<string, number> } = await res.json();
+  return data.totals ?? {};
+}
+
+export async function postBoost(
+  input: { featureId: string; voterId: string; weight: number; tierValue: number },
+  signal?: AbortSignal,
+): Promise<void> {
+  const res = await fetch("/api/feature-boosts", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify(input),
+    signal,
+  });
+  if (!res.ok) throw new Error(`POST /api/feature-boosts failed: ${res.status} ${res.statusText}`);
 }
 
 export function formatTimeAgo(timestamp: number): string {
