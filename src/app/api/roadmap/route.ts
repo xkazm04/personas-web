@@ -15,7 +15,12 @@ export async function GET() {
     .order("sort_order", { ascending: true });
 
   if (error) {
-    console.error("[roadmap] Supabase error:", error.message);
+    console.error("[roadmap] Supabase error:", {
+      code: error.code,
+      message: error.message,
+      hint: error.hint,
+      details: error.details,
+    });
     return NextResponse.json({ items: [], source: "error" }, { status: 502 });
   }
 
