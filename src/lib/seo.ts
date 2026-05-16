@@ -13,6 +13,14 @@ export const SITE_LOCALE = "en_US";
 export const TWITTER_HANDLE = "@PersonasAI";
 
 /**
+ * Public status page URL — surfaced from the global error UI. Empty
+ * string means no status page is configured for this deployment; the
+ * consumer should hide the related link rather than render a broken
+ * one. Override per environment via NEXT_PUBLIC_SITE_STATUS_URL.
+ */
+export const SITE_STATUS_URL = process.env.NEXT_PUBLIC_SITE_STATUS_URL ?? "";
+
+/**
  * Stringify a JSON-LD payload safely for embedding inside a
  * `<script type="application/ld+json">` block.
  *

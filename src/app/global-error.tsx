@@ -4,6 +4,7 @@ import Link from "next/link";
 import { useEffect, useState } from "react";
 import { Compass, Home, Activity, RefreshCcw, Copy, Check } from "lucide-react";
 import { captureExceptionScrubbed } from "@/lib/sentry-pii";
+import { SITE_STATUS_URL } from "@/lib/seo";
 
 export default function GlobalError({
   error,
@@ -136,15 +137,17 @@ export default function GlobalError({
                   <Home className="h-4 w-4" />
                   Go home
                 </Link>
-                <a
-                  href="https://status.personas.ai"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="inline-flex items-center justify-center gap-2 rounded-full border border-white/[0.06] bg-transparent px-5 py-2.5 text-sm font-medium text-muted-dark transition-all duration-200 hover:border-white/[0.16] hover:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-cyan/40 focus-visible:ring-offset-2 focus-visible:ring-offset-[#09090b]"
-                >
-                  <Activity className="h-4 w-4" />
-                  View status
-                </a>
+                {SITE_STATUS_URL && (
+                  <a
+                    href={SITE_STATUS_URL}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="inline-flex items-center justify-center gap-2 rounded-full border border-white/[0.06] bg-transparent px-5 py-2.5 text-sm font-medium text-muted-dark transition-all duration-200 hover:border-white/[0.16] hover:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-cyan/40 focus-visible:ring-offset-2 focus-visible:ring-offset-[#09090b]"
+                  >
+                    <Activity className="h-4 w-4" />
+                    View status
+                  </a>
+                )}
               </div>
             </div>
           </div>
