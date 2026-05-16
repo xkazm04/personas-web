@@ -1,11 +1,14 @@
 "use client";
 
+import { useEffect, useState } from "react";
 import Link from "next/link";
 import { ChevronLeft, ChevronRight } from "lucide-react";
 import GuideMarkdown from "@/components/guide/GuideMarkdown";
 import RelatedTopics from "@/components/guide/RelatedTopics";
 import ModuleBadge from "@/components/guide/ModuleBadge";
 import { TOPIC_MODULE_MAP } from "@/data/guide/desktop-modules";
+import { getLocalizedTopic } from "@/data/guide/getLocalized";
+import { useI18nStore } from "@/stores/i18nStore";
 import type { GuideCategory, GuideTopic } from "@/data/guide/types";
 import type { RelatedTopic } from "@/lib/guide-utils";
 
@@ -19,6 +22,34 @@ interface TopicViewProps {
 }
 
 export default function TopicView({ category, topic, content, prevTopic, nextTopic, related }: TopicViewProps) {
+  // Locale-aware swap. The server renders the English content (no locale
+  // signal in the URL or cookie today), and once the i18nStore hydrates on
+  // the client we re-resolve through getLocalizedTopic. Currently the
+  // i18nStore is hard-locked to 'en' (setLanguage is a no-op) — so this
+  // hook is dormant infrastructure until the locale switcher is wired up.
+  // When that day comes, no further change is needed here: the title,
+  // description, and body will swap independently with English fallback.
+  const language = useI18nStore((s) => s.language);
+  const [localized, setLocalized] = useState({
+    title: topic.title,
+    description: topic.description,
+    body: content,
+  });
+
+  useEffect(() => {
+    if (language === "en") {
+      setLocalized({ title: topic.title, description: topic.description, body: content });
+      return;
+    }
+    let cancelled = false;
+    getLocalizedTopic(language, topic.id, content).then((next) => {
+      if (!cancelled) setLocalized(next);
+    });
+    return () => {
+      cancelled = true;
+    };
+  }, [language, topic.id, topic.title, topic.description, content]);
+
   return (
     <div className="px-6 pb-24">
       <div className="mx-auto max-w-3xl">
@@ -30,7 +61,7 @@ export default function TopicView({ category, topic, content, prevTopic, nextTop
             {category.name}
           </Link>
           <span>/</span>
-          <span className="text-foreground" aria-current="page">{topic.title}</span>
+          <span className="text-foreground" aria-current="page">{localized.title}</span>
         </nav>
 
         {/* Desktop app reference + Tags */}
@@ -57,7 +88,7 @@ export default function TopicView({ category, topic, content, prevTopic, nextTop
 
         {/* Content */}
         <article className="mt-8">
-          <GuideMarkdown content={content} />
+          <GuideMarkdown content={localized.body} />
         </article>
 
         {/* Related topics */}
