@@ -9,7 +9,7 @@ import { RELEASES } from "@/data/changelog";
 
 // The 3 most recent releases by date. Reading from the canonical
 // data/changelog.ts source instead of a hardcoded copy means a new
-// release shipped to /changelog also surfaces here automatically;
+// release shipped to /roadmap#changelog also surfaces here automatically;
 // previously the homepage advertised stale "latest" versions for
 // weeks until someone remembered to bump this file too.
 const RECENT_COUNT = 3;
