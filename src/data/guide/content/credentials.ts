@@ -72,6 +72,24 @@ For OAuth-supporting services, the flow opens a browser window to the provider's
 
 When you click Save, the credential's raw value is encrypted with the vault key derived from the OS keyring, then committed to the credential store. The save returns only the credential ID and label — the raw value is wiped from memory immediately. From this point on, the agent editor's Connectors tab can reference the credential by ID.
 
+### AI Provider Quick Start
+
+The four most-common AI providers use plain API keys. Once you have a key, the flow is paste-and-save — Personas recognizes the prefix shape and pre-fills the auth type:
+
+:::tabs
+### OpenAI
+Generate a key at \`platform.openai.com/api-keys\`. Keys start with \`sk-\` (project-scoped keys start with \`sk-proj-\`). Personas validates the key against the OpenAI \`/models\` endpoint on save so you'll know immediately if the paste was off by a character.
+
+### Anthropic
+Generate a key at \`console.anthropic.com\` under **Settings → API Keys**. Keys start with \`sk-ant-\`. Anthropic offers both user-level and workspace-scoped keys; workspace-scoped is the recommended choice for production agents because revocation is independent of your account.
+
+### Google
+Generate a key at \`aistudio.google.com/apikey\`. Keys start with \`AIza\`. The same key works for every Gemini variant — Personas exposes the model picker once the credential is saved so you can switch between Pro / Flash without re-keying.
+
+### Ollama (local)
+No API key needed. Pick **Ollama** in the picker and paste your local server URL (\`http://localhost:11434\` by default). Personas connects, lists the locally-installed models, and lets you use any of them without sending data over the network.
+:::
+
 :::warning
 Never paste credentials into agent prompts, code comments, or chat windows. Use the secure credential input field only — anything else risks the raw value being captured in a log, sync, or screenshot.
 :::
