@@ -29,11 +29,6 @@ export const topics: Record<string, { title: string; description: string }> = {
     description:
       "에이전트를 구동하기 위해 Claude, OpenAI, 또는 다른 AI 서비스를 연결하는 방법. 각 제공자는 다른 강점을 가지며 언제든지 전환할 수 있습니다. 필요와 예산에 가장 적합한 것을 선택하는 데 도움을 드립니다.",
   },
-  "starter-vs-team-vs-builder-tiers": {
-    title: "Starter, Team, Builder 등급 비교",
-    description:
-      "각 등급이 무엇을 잠금 해제하고 그 사이를 전환하는 방법. Starter는 무료이며 시도해보기에 좋고, Team은 협업을 추가하며, Builder는 고급 자동화 기능을 잠금 해제합니다. 언제든지 업그레이드하거나 다운그레이드할 수 있습니다.",
-  },
   "system-requirements": {
     title: "시스템 요구사항",
     description:

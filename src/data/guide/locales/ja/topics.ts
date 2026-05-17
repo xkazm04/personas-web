@@ -23,10 +23,6 @@ export const topics: Record<string, { title: string; description: string }> = {
     title: "AI プロバイダーを選択する",
     description: "Claude、OpenAI などの AI サービスを接続してエージェントを動かす方法。プロバイダーごとに強みが異なり、いつでも切り替えできます。あなたのニーズと予算に最適なものを選ぶお手伝いをします。",
   },
-  "starter-vs-team-vs-builder-tiers": {
-    title: "Starter、Team、Builder ティアの比較",
-    description: "各ティアで使える機能と切り替え方法。Starter は無料で試用に最適、Team はコラボレーションを追加、Builder は高度な自動化機能をアンロックします。いつでもアップグレード・ダウングレード可能です。",
-  },
   "system-requirements": {
     title: "システム要件",
     description: "Personas をスムーズに動作させるために必要なコンピュータ環境。アプリは軽量で、ほとんどの最新のコンピュータで動作します。最小スペックと、最高の体験のために推奨される構成をお伝えします。",

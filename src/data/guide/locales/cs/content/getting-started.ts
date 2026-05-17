@@ -182,32 +182,6 @@ Většina poskytovatelů nabízí kredity pro bezplatnou zkušební verzi. Přip
 :::
   `,
 
-  "starter-vs-team-vs-builder-tiers": `
-## Tarify Starter vs Team vs Builder
-
-Personas se dodávají ve třech tarifech. **Starter** je zdarma, pouze lokální a stačí na stavbu reálných agentů a naučení se systému. **Team** přidává funkce spolupráce, cloudové nasazení a plnou testovací laboratoř. **Builder** odemyká nejpokročilejší plochy — plnou orchestraci pipelin, evoluci genomu pro optimalizaci promptů a BYOI (bring your own infrastructure) pro cloudové nasazení do vlastního gateway.
-
-Tarif můžeš kdykoli změnit. Existující agenti zůstávají nedotčeni, když downgraduješ; funkce vázané na tarif se vypnou, dokud znovu neupgraduješ. Žádní agenti ani přihlašovací údaje se nikdy nemažou.
-
-:::compare
-**Starter (Free)**
-Až 5 agentů. Manuální + plánované + spouštěče ze schránky. Spouštění pouze lokálně. Základní lab (běhy s jedním promptem, žádná aréna). Jeden uživatel. Perfektní pro učení a osobní automatizaci.
----
-**Team**
-Neomezeně agentů. Všechny typy spouštěčů včetně webhooků a file watcherů. Cloudové nasazení přes spravovaný orchestrátor. Plný Lab (aréna, A-B, eval grid). Sdílení agentů v týmu. Prioritní podpora.
----
-**Builder** [recommended]
-Vše z Teamu plus pokročilé pipeliny (podmíněné směrování, týmová paměť), evoluce genomu (auto-optimalizace promptů z historie běhů) a BYOI cloudové nasazení (hostuj orchestrátor sám/sama).
-:::
-
-### Jak to funguje
-
-Otevři Settings → Account a podívej se na svůj aktuální tarif, využití proti limitům tarifu a cestu k upgradu. Upgrady se aktivují okamžitě; downgrady nabývají účinnosti v dalším fakturačním cyklu, takže nepřijdeš o přístup uprostřed období.
-
-:::tip
-Začni na Starter. Ve chvíli, kdy zjistíš, že narážíš na limit počtu agentů nebo chceš webhook spouštěč, jsi našel/našla skutečný případ pro upgrade — a budeš přesně vědět, které funkce stojí za zaplacení.
-:::
-  `,
 
   "system-requirements": `
 ## Systémové požadavky

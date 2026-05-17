@@ -182,32 +182,6 @@ La plupart des fournisseurs offrent des crédits d'essai gratuits. Connectez-en 
 :::
   `,
 
-  "starter-vs-team-vs-builder-tiers": `
-## Niveaux Starter, Team et Builder
-
-Personas est livré en trois niveaux. **Starter** est gratuit, local uniquement, et suffisant pour construire de vrais agents et apprendre le système. **Team** ajoute des fonctionnalités de collaboration, le déploiement cloud et le laboratoire de tests complet. **Builder** débloque les surfaces les plus avancées — orchestration complète de pipelines, évolution génomique pour l'optimisation des prompts, et BYOI (apportez votre propre infrastructure) pour le déploiement cloud sur votre propre passerelle.
-
-Vous pouvez changer de niveau à tout moment. Les agents existants restent intacts lorsque vous rétrogradez ; les fonctionnalités verrouillées par niveau sont désactivées jusqu'à ce que vous mettiez à niveau à nouveau. Aucun agent ni identifiant n'est jamais supprimé.
-
-:::compare
-**Starter (gratuit)**
-Jusqu'à 5 agents. Déclencheurs manuels + planifiés + presse-papiers. Exécution locale uniquement. Lab basique (exécutions de prompts uniques, pas d'arène). Mono-utilisateur. Parfait pour l'apprentissage et l'automatisation personnelle.
----
-**Team**
-Agents illimités. Tous les types de déclencheurs y compris webhooks et surveillances de fichiers. Déploiement cloud via l'orchestrateur géré. Lab complet (arène, A-B, grille eval). Agents partagés en équipe. Support prioritaire.
----
-**Builder** [recommended]
-Tout ce qui est dans Team plus les pipelines avancés (routage conditionnel, mémoire d'équipe), l'évolution génomique (optimisation automatique des prompts à partir de l'historique d'exécution), et le déploiement cloud BYOI (hébergez l'orchestrateur vous-même).
-:::
-
-### Comment ça marche
-
-Ouvrez Paramètres → Compte pour voir votre niveau actuel, votre utilisation par rapport aux limites du niveau et le chemin de mise à niveau. Les mises à niveau s'activent immédiatement ; les rétrogradations prennent effet au prochain cycle de facturation pour que vous ne perdiez pas l'accès en cours de période.
-
-:::tip
-Commencez sur Starter. Au moment où vous atteignez une limite de nombre d'agents ou vous voulez un déclencheur webhook, vous avez trouvé un vrai cas d'utilisation pour passer au niveau supérieur — et vous saurez exactement quelles fonctionnalités amortissent le coût.
-:::
-  `,
 
   "system-requirements": `
 ## Configuration système requise

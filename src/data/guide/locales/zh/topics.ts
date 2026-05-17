@@ -23,10 +23,6 @@ export const topics: Record<string, { title: string; description: string }> = {
     title: "选择你的 AI 提供商",
     description: "如何连接 Claude、OpenAI 或其他 AI 服务来为你的 agent 提供动力。每个提供商都有不同的优势,你可以随时切换。我们将帮助你选择最适合你需求和预算的提供商。",
   },
-  "starter-vs-team-vs-builder-tiers": {
-    title: "Starter、Team 与 Builder 层级对比",
-    description: "每个层级解锁什么以及如何在它们之间切换。Starter 是免费的,非常适合尝试,Team 添加协作,Builder 解锁高级自动化功能。你可以随时升级或降级。",
-  },
   "system-requirements": {
     title: "系统要求",
     description: "你的电脑流畅运行 Personas 需要什么。该应用轻量且适用于大多数现代计算机。我们会告诉你最低规格以及获得最佳体验所推荐的配置。",

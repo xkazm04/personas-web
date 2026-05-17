@@ -182,32 +182,6 @@ Hầu hết các nhà cung cấp đều cung cấp tín dụng dùng thử miễ
 :::
   `,
 
-  "starter-vs-team-vs-builder-tiers": `
-## So Sánh Các Gói Starter, Team và Builder
-
-Personas ship trong ba gói. **Starter** miễn phí, chỉ chạy cục bộ và đủ để xây dựng các agent thực sự và học hệ thống. **Team** thêm các tính năng cộng tác, triển khai đám mây và testing lab đầy đủ. **Builder** mở khóa các bề mặt tiên tiến nhất — điều phối pipeline đầy đủ, genome evolution để tối ưu prompt và BYOI (bring your own infrastructure) để triển khai đám mây lên gateway của riêng bạn.
-
-Bạn có thể thay đổi gói bất cứ lúc nào. Các agent hiện có vẫn nguyên vẹn khi bạn hạ cấp; các tính năng bị giới hạn theo gói sẽ bị vô hiệu hóa cho đến khi bạn nâng cấp lại. Không có agent hoặc credential nào bị xóa.
-
-:::compare
-**Starter (Miễn phí)**
-Tối đa 5 agent. Các trigger thủ công + schedule + clipboard. Chỉ thực thi cục bộ. Lab cơ bản (chạy prompt đơn, không có arena). Một người dùng. Hoàn hảo để học và tự động hóa cá nhân.
----
-**Team**
-Không giới hạn agent. Tất cả các loại trigger bao gồm webhook và file watcher. Triển khai đám mây thông qua orchestrator được quản lý. Lab đầy đủ (arena, A-B, eval grid). Các agent được chia sẻ trong team. Hỗ trợ ưu tiên.
----
-**Builder** [recommended]
-Mọi thứ trong Team cộng với các pipeline nâng cao (định tuyến có điều kiện, bộ nhớ team), genome evolution (tự động tối ưu prompt từ lịch sử thực thi) và triển khai đám mây BYOI (tự lưu trữ orchestrator).
-:::
-
-### Cách Hoạt Động
-
-Mở Settings → Account để xem gói hiện tại của bạn, mức sử dụng so với giới hạn gói và lộ trình nâng cấp. Nâng cấp kích hoạt ngay lập tức; hạ cấp có hiệu lực vào chu kỳ thanh toán tiếp theo để bạn không mất quyền truy cập giữa kỳ.
-
-:::tip
-Bắt đầu với Starter. Khoảnh khắc bạn phát hiện mình đang chạm đến giới hạn số lượng agent hoặc muốn có webhook trigger, bạn đã tìm thấy một trường hợp sử dụng thực sự để nâng cấp — và bạn sẽ biết chính xác những tính năng nào trả lại chi phí.
-:::
-  `,
 
   "system-requirements": `
 ## Yêu Cầu Hệ Thống

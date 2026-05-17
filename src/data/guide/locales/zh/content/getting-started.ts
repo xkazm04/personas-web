@@ -182,32 +182,6 @@ Overview → Usage 显示哪些 agent 和模型在开支中占主导地位。将
 :::
   `,
 
-  "starter-vs-team-vs-builder-tiers": `
-## Starter、Team 与 Builder 层级对比
-
-Personas 有三个层级。**Starter** 是免费的、仅本地的,足以构建真实的 agent 并学习系统。**Team** 增加了协作功能、云部署和完整的测试实验室。**Builder** 解锁最高级的功能 — 完整的 pipeline 编排、用于 prompt 优化的 genome evolution,以及用于将云部署到你自己的网关的 BYOI(自带基础设施)。
-
-你可以随时更改层级。降级时现有的 agent 保持完好;层级限制的功能在升级前禁用。从不删除任何 agent 或凭证。
-
-:::compare
-**Starter(免费)**
-最多 5 个 agent。Manual + schedule + clipboard 触发器。仅本地执行。基础 lab(单 prompt 运行,无 arena)。单用户。非常适合学习和个人自动化。
----
-**Team**
-无限 agent。所有触发器类型,包括 webhook 和 file watcher。通过托管的 orchestrator 进行云部署。完整的 Lab(arena、A-B、eval grid)。团队共享 agent。优先支持。
----
-**Builder** [recommended]
-包括 Team 的一切,加上高级 pipeline(条件路由、团队 memory)、genome evolution(从执行历史中自动优化 prompt),以及 BYOI 云部署(自己托管 orchestrator)。
-:::
-
-### 工作原理
-
-打开 Settings → Account 查看当前层级、相对于层级限制的用量,以及升级路径。升级立即生效;降级在下一个计费周期生效,这样你不会在期间失去访问权限。
-
-:::tip
-从 Starter 开始。一旦你发现自己达到了 agent 数量限制或想要 webhook 触发器,你就找到了升级的真正用例 — 并且你会准确知道哪些功能值得为之付费。
-:::
-  `,
 
   "system-requirements": `
 ## 系统要求

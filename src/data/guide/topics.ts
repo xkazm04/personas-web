@@ -61,14 +61,6 @@ export const GUIDE_TOPICS: GuideTopic[] = [
     },
   },
   {
-    id: "starter-vs-team-vs-builder-tiers",
-    categoryId: "getting-started",
-    title: "Starter vs Team vs Builder tiers",
-    description:
-      "What each tier unlocks and how to switch between them. Starter is free and great for trying things out, Team adds collaboration, and Builder unlocks advanced automation features. You can upgrade or downgrade anytime.",
-    tags: ["getting-started", "tiers", "pricing", "plans", "upgrade"],
-  },
-  {
     id: "system-requirements",
     categoryId: "getting-started",
     title: "System requirements",

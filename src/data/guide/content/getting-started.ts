@@ -220,33 +220,6 @@ Most providers offer free trial credits. Connect two or three and run the same p
 :::
   `,
 
-  "starter-vs-team-vs-builder-tiers": `
-## Starter vs Team vs Builder Tiers
-
-Personas ships in three tiers. **Starter** is free, local-only, and enough to build real agents and learn the system. **Team** adds collaboration features, cloud deployment, and the full testing lab. **Builder** unlocks the most advanced surfaces — full pipeline orchestration, genome evolution for prompt optimization, and BYOI (bring your own infrastructure) for cloud deployment to your own gateway.
-
-You can change tier at any time. Existing agents stay intact when you downgrade; tier-gated features disable until you upgrade again. No agents or credentials are ever deleted.
-
-:::compare
-**Starter (Free)**
-Up to 5 agents. Manual + schedule + clipboard triggers. Local-only execution. Basic lab (single-prompt runs, no arena). Single-user. Perfect for learning and personal automation.
----
-**Team**
-Unlimited agents. All trigger types including webhooks and file watchers. Cloud deployment via the managed orchestrator. Full Lab (arena, A-B, eval grid). Team shared agents. Priority support.
----
-**Builder** [recommended]
-Everything in Team plus advanced pipelines (conditional routing, team memory), genome evolution (auto-optimize prompts from execution history), and BYOI cloud deploy (host the orchestrator yourself).
-:::
-
-### How It Works
-
-Open Settings → Account to see your current tier, usage against tier limits, and the upgrade path. Upgrades activate immediately; downgrades take effect at the next billing cycle so you don't lose access mid-period.
-
-:::tip
-Start on Starter. The moment you find yourself hitting an agent-count limit or wanting a webhook trigger, you've found a real use case for upgrading — and you'll know exactly what features pay back the cost.
-:::
-  `,
-
   "system-requirements": `
 ## System Requirements
 

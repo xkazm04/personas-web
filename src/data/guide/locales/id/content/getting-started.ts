@@ -182,32 +182,6 @@ Sebagian besar penyedia menawarkan kredit uji coba gratis. Hubungkan dua atau ti
 :::
   `,
 
-  "starter-vs-team-vs-builder-tiers": `
-## Tier Starter vs Team vs Builder
-
-Personas hadir dalam tiga tier. **Starter** gratis, hanya-lokal, dan cukup untuk membangun agen nyata dan mempelajari sistem. **Team** menambahkan fitur kolaborasi, deployment cloud, dan testing lab lengkap. **Builder** membuka permukaan paling canggih — orkestrasi pipeline lengkap, genome evolution untuk optimasi prompt, dan BYOI (bring your own infrastructure) untuk deployment cloud ke gateway Anda sendiri.
-
-Anda dapat mengubah tier kapan saja. Agen yang ada tetap utuh saat Anda menurunkan tier; fitur yang dibatasi tier dinonaktifkan hingga Anda meningkatkan lagi. Tidak ada agen atau kredensial yang pernah dihapus.
-
-:::compare
-**Starter (Gratis)**
-Hingga 5 agen. Trigger Manual + schedule + clipboard. Eksekusi hanya-lokal. Lab dasar (run prompt tunggal, tanpa arena). Pengguna tunggal. Sempurna untuk belajar dan otomatisasi pribadi.
----
-**Team**
-Agen tak terbatas. Semua jenis trigger termasuk webhook dan file watcher. Deployment cloud melalui orkestrator terkelola. Lab lengkap (arena, A-B, eval grid). Agen bersama tim. Dukungan prioritas.
----
-**Builder** [recommended]
-Semua di Team plus pipeline tingkat lanjut (conditional routing, team memory), genome evolution (otomatis mengoptimalkan prompt dari riwayat eksekusi), dan BYOI cloud deploy (host orkestrator sendiri).
-:::
-
-### Cara Kerjanya
-
-Buka Settings → Account untuk melihat tier Anda saat ini, penggunaan terhadap batasan tier, dan jalur peningkatan. Peningkatan diaktifkan segera; penurunan berlaku pada siklus penagihan berikutnya sehingga Anda tidak kehilangan akses di tengah-tengah periode.
-
-:::tip
-Mulailah dari Starter. Saat Anda mendapati diri Anda mencapai batas jumlah agen atau menginginkan webhook trigger, Anda telah menemukan kasus penggunaan nyata untuk meningkatkan — dan Anda akan tahu persis fitur apa yang sepadan dengan biayanya.
-:::
-  `,
 
   "system-requirements": `
 ## Persyaratan Sistem

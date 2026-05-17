@@ -29,11 +29,6 @@ export const topics: Record<string, { title: string; description: string }> = {
     description:
       "Jak připojit Claude, OpenAI nebo jiné AI služby, které pohánějí tvé agenty. Každý poskytovatel má jiné silné stránky a kdykoli můžeš přepnout. Pomůžeme ti vybrat to nejlepší pro tvé potřeby a rozpočet.",
   },
-  "starter-vs-team-vs-builder-tiers": {
-    title: "Tarify Starter vs Team vs Builder",
-    description:
-      "Co každý tarif odemyká a jak mezi nimi přepínat. Starter je zdarma a skvělý pro vyzkoušení, Team přidává spolupráci a Builder odemyká pokročilé funkce automatizace. Můžeš kdykoli upgradovat nebo downgradovat.",
-  },
   "system-requirements": {
     title: "Systémové požadavky",
     description:

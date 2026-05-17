@@ -29,11 +29,6 @@ export const topics: Record<string, { title: string; description: string }> = {
     description:
       "كيفية ربط Claude أو OpenAI أو خدمات ذكاء اصطناعي أخرى لتشغيل وكلائك. لكل مزوّد نقاط قوة مختلفة، ويمكنك التبديل في أي وقت. سنساعدك على اختيار الأنسب لاحتياجاتك وميزانيتك.",
   },
-  "starter-vs-team-vs-builder-tiers": {
-    title: "مقارنة بين فئات Starter وTeam وBuilder",
-    description:
-      "ما تتيحه كل فئة وكيفية التبديل بينها. فئة Starter مجانية ومناسبة لتجربة الميزات، وفئة Team تضيف التعاون، وفئة Builder تفتح ميزات الأتمتة المتقدمة. يمكنك الترقية أو التراجع في أي وقت.",
-  },
   "system-requirements": {
     title: "متطلبات النظام",
     description:

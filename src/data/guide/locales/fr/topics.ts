@@ -29,11 +29,6 @@ export const topics: Record<string, { title: string; description: string }> = {
     description:
       "Comment connecter Claude, OpenAI ou d'autres services d'IA pour alimenter vos agents. Chaque fournisseur a ses propres atouts, et vous pouvez changer à tout moment. Nous vous aiderons à choisir celui qui correspond le mieux à vos besoins et à votre budget.",
   },
-  "starter-vs-team-vs-builder-tiers": {
-    title: "Niveaux Starter, Team et Builder",
-    description:
-      "Ce que chaque niveau débloque et comment passer de l'un à l'autre. Starter est gratuit et idéal pour essayer, Team ajoute la collaboration, et Builder débloque les fonctionnalités d'automatisation avancées. Vous pouvez changer de niveau à tout moment.",
-  },
   "system-requirements": {
     title: "Configuration système requise",
     description:

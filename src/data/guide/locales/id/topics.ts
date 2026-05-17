@@ -29,11 +29,6 @@ export const topics: Record<string, { title: string; description: string }> = {
     description:
       "Cara menghubungkan Claude, OpenAI, atau layanan AI lain untuk menjalankan agen Anda. Setiap penyedia memiliki kekuatan yang berbeda, dan Anda dapat beralih kapan saja. Kami akan membantu Anda memilih yang paling cocok untuk kebutuhan dan anggaran Anda.",
   },
-  "starter-vs-team-vs-builder-tiers": {
-    title: "Tier Starter vs Team vs Builder",
-    description:
-      "Apa yang dibuka setiap tier dan cara beralih di antaranya. Starter gratis dan bagus untuk mencoba hal-hal, Team menambahkan kolaborasi, dan Builder membuka fitur otomatisasi tingkat lanjut. Anda dapat meningkatkan atau menurunkan kapan saja.",
-  },
   "system-requirements": {
     title: "Persyaratan sistem",
     description:

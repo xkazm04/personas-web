@@ -29,11 +29,6 @@ export const topics: Record<string, { title: string; description: string }> = {
     description:
       "Cách kết nối Claude, OpenAI hoặc các dịch vụ AI khác để hỗ trợ agent của bạn. Mỗi nhà cung cấp có thế mạnh khác nhau và bạn có thể chuyển đổi bất cứ lúc nào. Chúng tôi sẽ giúp bạn chọn lựa chọn phù hợp nhất với nhu cầu và ngân sách của bạn.",
   },
-  "starter-vs-team-vs-builder-tiers": {
-    title: "So sánh các gói Starter, Team và Builder",
-    description:
-      "Mỗi gói mở khóa những gì và cách chuyển đổi giữa chúng. Starter miễn phí và tuyệt vời để thử nghiệm, Team thêm tính năng cộng tác và Builder mở khóa các tính năng tự động hóa nâng cao. Bạn có thể nâng cấp hoặc hạ cấp bất cứ lúc nào.",
-  },
   "system-requirements": {
     title: "Yêu cầu hệ thống",
     description:

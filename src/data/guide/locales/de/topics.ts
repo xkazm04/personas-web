@@ -29,11 +29,6 @@ export const topics: Record<string, { title: string; description: string }> = {
     description:
       "So verbindest du Claude, OpenAI oder andere KI-Dienste, um deine Agenten anzutreiben. Jeder Anbieter hat unterschiedliche Stärken, und du kannst jederzeit wechseln. Wir helfen dir, den besten für deine Anforderungen und dein Budget zu finden.",
   },
-  "starter-vs-team-vs-builder-tiers": {
-    title: "Starter vs. Team vs. Builder Tiers",
-    description:
-      "Was jeder Tier freischaltet und wie du zwischen ihnen wechselst. Starter ist kostenlos und ideal zum Ausprobieren, Team fügt Zusammenarbeit hinzu, und Builder schaltet erweiterte Automatisierungsfunktionen frei. Du kannst jederzeit upgraden oder downgraden.",
-  },
   "system-requirements": {
     title: "Systemanforderungen",
     description:
