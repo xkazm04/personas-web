@@ -66,7 +66,7 @@ function ScoreIndicator({ score, type }: { score: number; type: MemoryAction["ty
           style={{ width: `${clamped * 10}%` }}
         />
       </div>
-      <span className="text-[9px] font-medium tabular-nums text-muted-dark">
+      <span className="text-xs font-medium tabular-nums text-muted-dark">
         {clamped}/10
       </span>
     </div>
