@@ -1,5 +1,14 @@
 import type { ReactNode } from "react";
 
+function typography(text: string): string {
+  return text
+    .replace(/---/g, "—")
+    .replace(/(^|[\s(])--(?=[\s).,;:!?]|$)/g, "$1–")
+    .replace(/\(c\)/gi, "©")
+    .replace(/\(tm\)/gi, "™")
+    .replace(/\(r\)/gi, "®");
+}
+
 export function parseInline(text: string, keyBase: string): ReactNode[] {
   const re =
     /!\[([^\]]*)\]\(([^)]+)\)|\[([^\]]*)\]\(([^)]+)\)|\*\*\*(.+?)\*\*\*|\*\*(.+?)\*\*|\*(.+?)\*|`([^`]+)`|==(.+?)==/g;
@@ -9,7 +18,7 @@ export function parseInline(text: string, keyBase: string): ReactNode[] {
   let match: RegExpExecArray | null;
 
   while ((match = re.exec(text)) !== null) {
-    if (match.index > last) nodes.push(text.slice(last, match.index));
+    if (match.index > last) nodes.push(typography(text.slice(last, match.index)));
 
     const key = `${keyBase}-i${keyIndex++}`;
     if (match[1] !== undefined || match[2] !== undefined) {
@@ -69,6 +78,6 @@ export function parseInline(text: string, keyBase: string): ReactNode[] {
     last = match.index + match[0].length;
   }
 
-  if (last < text.length) nodes.push(text.slice(last));
+  if (last < text.length) nodes.push(typography(text.slice(last)));
   return nodes;
 }
