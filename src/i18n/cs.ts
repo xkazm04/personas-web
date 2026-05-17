@@ -294,6 +294,7 @@ export const cs: Translations = {
     executeToSee: 'Spus\u0165te agenta a uvid\u00edte aktivitu zde.',
     trafficErrors: 'Provoz & Chyby',
     last14Days: 'Posledn\u00edch 14 dn\u00ed',
+    noTrafficYet: 'Zat\u00edm \u017e\u00e1dn\u00e1 aktivita',
     deployed: 'nasazeno',
     metricsHealth: 'Metriky & zdrav\u00ed',
     toolUtilization: 'Vyu\u017eit\u00ed n\u00e1stroj\u016f',

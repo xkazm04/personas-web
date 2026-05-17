@@ -294,6 +294,7 @@ export const ko: Translations = {
     executeToSee: '\uc5d0\uc774\uc804\ud2b8\ub97c \uc2e4\ud589\ud558\uba74 \uc5ec\uae30\uc5d0 \ud65c\ub3d9\uc774 \ud45c\uc2dc\ub429\ub2c8\ub2e4.',
     trafficErrors: '\ud2b8\ub798\ud53d & \uc624\ub958',
     last14Days: '\ucd5c\uadfc 14\uc77c',
+    noTrafficYet: '\uc544\uc9c1 \ud2b8\ub798\ud53d\uc774 \uc5c6\uc2b5\ub2c8\ub2e4',
     deployed: '\ubc30\ud3ec\ub428',
     metricsHealth: '\uc9c0\ud45c & \uc0c1\ud0dc',
     toolUtilization: '\ub3c4\uad6c \ud65c\uc6a9\ub960',

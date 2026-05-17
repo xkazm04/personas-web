@@ -294,6 +294,7 @@ export const fr: Translations = {
     executeToSee: 'Ex\u00e9cutez un agent pour voir l\u2019activit\u00e9 ici.',
     trafficErrors: 'Trafic et erreurs',
     last14Days: '14 derniers jours',
+    noTrafficYet: 'Aucun trafic pour l\'instant',
     deployed: 'd\u00e9ploy\u00e9',
     metricsHealth: 'M\u00e9triques et sant\u00e9',
     toolUtilization: 'Utilisation des outils',

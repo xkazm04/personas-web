@@ -212,6 +212,7 @@
     executeToSee: string;
     trafficErrors: string;
     last14Days: string;
+    noTrafficYet: string;
     deployed: string;
     metricsHealth: string;
     toolUtilization: string;
@@ -1129,6 +1130,7 @@ export const en: Translations = {
     executeToSee: 'Execute an agent to see activity here.',
     trafficErrors: 'Traffic & Errors',
     last14Days: 'Last 14 days',
+    noTrafficYet: 'No traffic yet',
     deployed: 'deployed',
     metricsHealth: 'Metrics & health',
     toolUtilization: 'Tool utilization',

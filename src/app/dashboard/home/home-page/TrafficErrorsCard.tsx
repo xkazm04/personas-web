@@ -1,7 +1,8 @@
 import dynamic from "next/dynamic";
-import { TrendingUp } from "lucide-react";
+import { LineChart, TrendingUp } from "lucide-react";
 
 import GlowCard from "@/components/GlowCard";
+import EmptyState from "@/components/dashboard/EmptyState";
 import StalenessIndicator from "@/components/dashboard/StalenessIndicator";
 
 const TrafficChart = dynamic(
@@ -29,8 +30,10 @@ export function TrafficErrorsCard({
   chartData: { date: string; Executions: number; Errors: number }[];
   loadObservability: boolean;
   fetchedAt: number | null;
-  labels: { title: string; last14Days: string };
+  labels: { title: string; last14Days: string; noTrafficYet: string };
 }) {
+  const hasTraffic = chartData.some((d) => d.Executions > 0 || d.Errors > 0);
+
   return (
     <GlowCard accent="purple" className="p-5 h-full">
       <div className="flex items-center justify-between mb-4">
@@ -46,10 +49,12 @@ export function TrafficErrorsCard({
         </div>
       </div>
 
-      {loadObservability ? (
+      {!loadObservability ? (
+        <TrafficChartSpinner />
+      ) : hasTraffic ? (
         <TrafficChart chartData={chartData} />
       ) : (
-        <TrafficChartSpinner />
+        <EmptyState icon={LineChart} title={labels.noTrafficYet} />
       )}
     </GlowCard>
   );

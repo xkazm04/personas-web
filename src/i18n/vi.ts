@@ -294,6 +294,7 @@ export const vi: Translations = {
     executeToSee: 'Th\u1ef1c thi m\u1ed9t t\u00e1c nh\u00e2n \u0111\u1ec3 xem ho\u1ea1t \u0111\u1ed9ng t\u1ea1i \u0111\u00e2y.',
     trafficErrors: 'L\u01b0u l\u01b0\u1ee3ng & L\u1ed7i',
     last14Days: '14 ng\u00e0y g\u1ea7n nh\u1ea5t',
+    noTrafficYet: 'Ch\u01b0a c\u00f3 l\u01b0u l\u01b0\u1ee3ng truy c\u1eadp',
     deployed: '\u0111\u00e3 tri\u1ec3n khai',
     metricsHealth: 'S\u1ed1 li\u1ec7u & s\u1ee9c kh\u1ecfe',
     toolUtilization: 'S\u1eed d\u1ee5ng c\u00f4ng c\u1ee5',

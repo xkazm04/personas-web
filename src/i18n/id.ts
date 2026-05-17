@@ -294,6 +294,7 @@ export const id: Translations = {
     executeToSee: 'Jalankan agen untuk melihat aktivitas di sini.',
     trafficErrors: 'Trafik & Error',
     last14Days: '14 hari terakhir',
+    noTrafficYet: 'Belum ada lalu lintas',
     deployed: 'dideploy',
     metricsHealth: 'Metrik & kesehatan',
     toolUtilization: 'Utilisasi alat',

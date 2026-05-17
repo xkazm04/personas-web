@@ -175,6 +175,7 @@ export default function DashboardHomePage() {
             labels={{
               title: t.dashboard.trafficErrors,
               last14Days: t.dashboard.last14Days,
+              noTrafficYet: t.dashboard.noTrafficYet,
             }}
           />
         </motion.div>

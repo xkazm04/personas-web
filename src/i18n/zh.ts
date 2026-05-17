@@ -294,6 +294,7 @@ export const zh: Translations = {
     executeToSee: '\u6267\u884C\u4E00\u4E2A\u667A\u80FD\u4F53\u4EE5\u67E5\u770B\u6B64\u5904\u7684\u6D3B\u52A8\u3002',
     trafficErrors: '\u6D41\u91CF\u4E0E\u9519\u8BEF',
     last14Days: '\u8FC7\u53BB 14 \u5929',
+    noTrafficYet: '\u6682\u65E0\u6D41\u91CF',
     deployed: '\u5DF2\u90E8\u7F72',
     metricsHealth: '\u6307\u6807\u4E0E\u5065\u5EB7',
     toolUtilization: '\u5DE5\u5177\u5229\u7528\u7387',
