@@ -5,12 +5,12 @@ export const topics: Record<string, { title: string; description: string }> = {
       "Jak stáhnout a nainstalovat na Windows, macOS nebo Linux. Instalátor je jediný soubor — stáhneš ho, spustíš a za necelou minutu můžeš začít.",
   },
   "creating-your-first-agent": {
-    title: "Vytvoření prvního agenta",
+    title: "Váš první agent",
     description:
       "Postupný průvodce sestavením tvého úplně prvního AI agenta. Od prázdného plátna k funkčnímu agentovi se dostaneš asi za pět minut. Na konci budeš mít osobního asistenta, který za tebe dokáže vykonat skutečný úkol.",
   },
   "understanding-the-interface": {
-    title: "Orientace v rozhraní",
+    title: "Rozhraní aplikace",
     description:
       "Prohlídka hlavní obrazovky, postranního panelu a navigace. Zjisti, kde co najdeš, abys mohl/a aplikací procházet s jistotou. Ber to jako rychlou orientaci, než se pustíš do tvorby.",
   },

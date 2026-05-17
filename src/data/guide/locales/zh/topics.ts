@@ -4,11 +4,11 @@ export const topics: Record<string, { title: string; description: string }> = {
     description: "如何在 Windows、macOS 或 Linux 上下载和安装。安装包是单个文件 — 下载它,运行它,你在一分钟内就准备好了。",
   },
   "creating-your-first-agent": {
-    title: "创建你的第一个 agent",
+    title: "你的第一个 agent",
     description: "构建你第一个 AI agent 的分步演练。你将在大约五分钟内从空白状态到一个可工作的 agent。最后,你将拥有一个可以为你执行真实任务的个人助手。",
   },
   "understanding-the-interface": {
-    title: "了解界面",
+    title: "应用界面",
     description: "主屏幕、侧边栏和导航的浏览。了解一切的位置,这样你就可以自信地在应用中移动。把它想象成在开始构建之前的快速定向。",
   },
   "what-is-an-ai-agent": {

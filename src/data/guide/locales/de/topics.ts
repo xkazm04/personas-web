@@ -5,12 +5,12 @@ export const topics: Record<string, { title: string; description: string }> = {
       "So lädst du Personas unter Windows, macOS oder Linux herunter und installierst es. Das Installationsprogramm ist eine einzige Datei — herunterladen, ausführen und in weniger als einer Minute startklar.",
   },
   "creating-your-first-agent": {
-    title: "Deinen ersten Agenten erstellen",
+    title: "Dein erster Agent",
     description:
       "Eine Schritt-für-Schritt-Anleitung zum Erstellen deines allerersten KI-Agenten. Du gehst in etwa fünf Minuten von null auf einen funktionierenden Agenten. Am Ende hast du einen persönlichen Assistenten, der eine echte Aufgabe für dich erledigen kann.",
   },
   "understanding-the-interface": {
-    title: "Die Oberfläche verstehen",
+    title: "App-Oberfläche",
     description:
       "Eine Tour durch den Hauptbildschirm, die Seitenleiste und die Navigation. Lerne, wo alles zu finden ist, damit du dich sicher in der App bewegen kannst. Stell dir das wie eine kurze Einführung vor, bevor du loslegst.",
   },

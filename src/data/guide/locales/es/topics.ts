@@ -5,12 +5,12 @@ export const topics: Record<string, { title: string; description: string }> = {
       "Cómo descargar e instalar en Windows, macOS o Linux. El instalador es un único archivo: descárgalo, ejecútalo y estarás listo en menos de un minuto.",
   },
   "creating-your-first-agent": {
-    title: "Crear tu primer agente",
+    title: "Tu primer agente",
     description:
       "Un recorrido paso a paso para construir tu primer agente de IA. Pasarás de cero a un agente funcional en unos cinco minutos. Al terminar tendrás un asistente personal capaz de realizar una tarea real por ti.",
   },
   "understanding-the-interface": {
-    title: "Entender la interfaz",
+    title: "Interfaz de la app",
     description:
       "Un recorrido por la pantalla principal, la barra lateral y la navegación. Aprende dónde está cada cosa para moverte por la app con confianza. Piénsalo como una orientación rápida antes de empezar a construir.",
   },

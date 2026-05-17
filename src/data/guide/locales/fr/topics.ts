@@ -5,12 +5,12 @@ export const topics: Record<string, { title: string; description: string }> = {
       "Comment télécharger et installer sur Windows, macOS ou Linux. L'installateur est un fichier unique — téléchargez-le, exécutez-le, et vous êtes prêt en moins d'une minute.",
   },
   "creating-your-first-agent": {
-    title: "Créer votre premier agent",
+    title: "Votre premier agent",
     description:
       "Un guide pas à pas pour construire votre tout premier agent IA. Vous passerez d'une page blanche à un agent fonctionnel en environ cinq minutes. À la fin, vous aurez un assistant personnel capable d'exécuter une tâche réelle pour vous.",
   },
   "understanding-the-interface": {
-    title: "Comprendre l'interface",
+    title: "Interface de l'app",
     description:
       "Une visite de l'écran principal, de la barre latérale et de la navigation. Apprenez où tout se trouve afin de vous déplacer dans l'application avec confiance. Considérez cela comme une orientation rapide avant de commencer à construire.",
   },

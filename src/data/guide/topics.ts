@@ -13,7 +13,7 @@ export const GUIDE_TOPICS: GuideTopic[] = [
   {
     id: "creating-your-first-agent",
     categoryId: "getting-started",
-    title: "Creating your first agent",
+    title: "Your first agent",
     description:
       "A step-by-step walkthrough of building your very first AI agent. You'll go from a blank slate to a working agent in about five minutes. By the end, you'll have a personal assistant that can carry out a real task for you.",
     tags: ["getting-started", "first-agent", "tutorial", "walkthrough", "beginner"],
@@ -24,7 +24,7 @@ export const GUIDE_TOPICS: GuideTopic[] = [
   {
     id: "understanding-the-interface",
     categoryId: "getting-started",
-    title: "Understanding the interface",
+    title: "App interface",
     description:
       "A tour of the main screen, sidebar, and navigation. Learn where everything lives so you can move around the app with confidence. Think of it like a quick orientation before you start building.",
     tags: ["getting-started", "interface", "navigation", "sidebar", "tour"],

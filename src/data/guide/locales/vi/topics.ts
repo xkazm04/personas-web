@@ -5,12 +5,12 @@ export const topics: Record<string, { title: string; description: string }> = {
       "Cách tải và cài đặt trên Windows, macOS hoặc Linux. Trình cài đặt chỉ là một tệp duy nhất — tải về, chạy lên và bạn đã sẵn sàng trong chưa đầy một phút.",
   },
   "creating-your-first-agent": {
-    title: "Tạo agent đầu tiên của bạn",
+    title: "Tác nhân đầu tiên của bạn",
     description:
       "Hướng dẫn từng bước để xây dựng agent AI đầu tiên của bạn. Bạn sẽ đi từ một trang trắng đến một agent hoạt động trong khoảng năm phút. Đến cuối, bạn sẽ có một trợ lý cá nhân có thể thực hiện một tác vụ thực tế cho bạn.",
   },
   "understanding-the-interface": {
-    title: "Tìm hiểu giao diện",
+    title: "Giao diện ứng dụng",
     description:
       "Một chuyến tham quan màn hình chính, thanh bên và điều hướng. Tìm hiểu mọi thứ ở đâu để bạn có thể di chuyển trong ứng dụng một cách tự tin. Hãy coi đây như một buổi định hướng nhanh trước khi bạn bắt đầu xây dựng.",
   },

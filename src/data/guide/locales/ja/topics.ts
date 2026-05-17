@@ -4,11 +4,11 @@ export const topics: Record<string, { title: string; description: string }> = {
     description: "Windows、macOS、Linux でのダウンロードとインストール方法。インストーラーは 1 つのファイルだけ — ダウンロードして実行すれば、1 分以内に準備が整います。",
   },
   "creating-your-first-agent": {
-    title: "最初のエージェントを作成する",
+    title: "最初のエージェント",
     description: "初めての AI エージェントを構築するためのステップバイステップのガイドです。約 5 分で白紙の状態から動くエージェントが完成します。最後には実際のタスクを実行できるパーソナルアシスタントが手に入ります。",
   },
   "understanding-the-interface": {
-    title: "インターフェースを理解する",
+    title: "アプリのインターフェース",
     description: "メイン画面、サイドバー、ナビゲーションのツアー。すべてがどこにあるかを把握すれば、アプリ内を自信を持って移動できるようになります。構築を始める前のクイックオリエンテーションだと考えてください。",
   },
   "what-is-an-ai-agent": {

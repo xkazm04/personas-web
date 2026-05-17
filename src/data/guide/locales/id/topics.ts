@@ -5,12 +5,12 @@ export const topics: Record<string, { title: string; description: string }> = {
       "Cara mengunduh dan memasang di Windows, macOS, atau Linux. Installer adalah satu file — unduh, jalankan, dan Anda siap dalam waktu kurang dari satu menit.",
   },
   "creating-your-first-agent": {
-    title: "Membuat agen pertama Anda",
+    title: "Agen pertama Anda",
     description:
       "Walkthrough langkah-demi-langkah membangun agen AI pertama Anda. Anda akan beralih dari keadaan kosong menjadi agen yang berfungsi dalam waktu sekitar lima menit. Pada akhirnya, Anda akan memiliki asisten pribadi yang dapat melaksanakan tugas nyata untuk Anda.",
   },
   "understanding-the-interface": {
-    title: "Memahami antarmuka",
+    title: "Antarmuka aplikasi",
     description:
       "Tur layar utama, sidebar, dan navigasi. Pelajari di mana semuanya berada sehingga Anda dapat berpindah di aplikasi dengan percaya diri. Pikirkan seperti orientasi cepat sebelum Anda mulai membangun.",
   },

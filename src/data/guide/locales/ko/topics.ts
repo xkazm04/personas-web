@@ -5,12 +5,12 @@ export const topics: Record<string, { title: string; description: string }> = {
       "Windows, macOS, 또는 Linux에서 다운로드하고 설치하는 방법. 설치 파일은 단일 파일입니다 — 다운로드하고, 실행하면, 1분 안에 사용할 준비가 됩니다.",
   },
   "creating-your-first-agent": {
-    title: "첫 번째 에이전트 만들기",
+    title: "첫 에이전트",
     description:
       "첫 번째 AI 에이전트를 구축하는 단계별 워크스루. 빈 상태에서 작동하는 에이전트까지 약 5분이 걸립니다. 끝나면 실제 작업을 수행할 수 있는 개인 어시스턴트를 갖게 됩니다.",
   },
   "understanding-the-interface": {
-    title: "인터페이스 이해하기",
+    title: "앱 인터페이스",
     description:
       "메인 화면, 사이드바, 탐색 투어. 자신 있게 앱을 돌아다닐 수 있도록 모든 것이 어디에 있는지 배웁니다. 구축을 시작하기 전 빠른 오리엔테이션처럼 생각하세요.",
   },
