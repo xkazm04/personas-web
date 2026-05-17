@@ -138,7 +138,7 @@ Start with \`Ctrl+K\`. Type a few letters of an agent name and hit Enter — tha
   "what-is-an-ai-agent": `
 ## What Is an AI Agent?
 
-An AI agent is a configured AI model with a job. You give it instructions ("read my unread emails and summarize the important ones"), tell it which tools it can use, and trigger it — manually with a button, on a schedule, on an event, or as a step in a pipeline. The agent reads the trigger payload, follows your instructions, calls any tools it needs, and produces an output. Unlike a chatbot, the agent acts: sends the email, writes the file, posts to Slack.
+An AI agent is a configured AI model with a job. You give it instructions ("read my unread emails and summarize the important ones"), tell it which tools it can use, and trigger it — manually with a button, on a schedule, on an event, or as a step in a pipeline. The agent reads the trigger payload, follows your instructions, calls any tools it needs, and produces an output. Unlike a chatbot, ==the agent acts==: sends the email, writes the file, posts to Slack.
 
 Each agent in Personas is durable — it remembers its setup, its history, its credentials, and (optionally) memories from past runs. You can clone it, version-control its prompt, run it in an arena against alternative prompts to see which performs better, and chain it to other agents to build multi-step workflows.
 
@@ -235,12 +235,9 @@ Monthly AI spend creeps up
 Overview → Usage shows which agents and models dominate the spend. Swap the top-cost agents to a cheaper tier (Sonnet → Haiku, GPT-4o → GPT-4o-mini); the Lab can A-B them first to confirm quality holds.
 :::
 
-:::info
-Default provider for new agents is set in Settings → Engine. You can override on every agent.
-:::
-
-:::tip
-Most providers offer free trial credits. Connect two or three and run the same prompt against each in the Lab arena — you'll feel the personality differences and pick a default that fits your style.
+:::callout-stack
+[info] Default provider for new agents is set in **Settings → Engine**. You can override on every agent.
+[tip] Most providers offer free trial credits. Connect two or three and run the same prompt against each in the Lab arena — you'll feel the personality differences and pick a default that fits your style.
 :::
   `,
 
