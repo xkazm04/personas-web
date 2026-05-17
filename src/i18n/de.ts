@@ -283,6 +283,7 @@ export const de: Translations = {
     },
     agentsStatus: 'Das passiert mit Ihren Agenten',
     lastSeen: 'Zuletzt gesehen',
+    greetingFallback: 'willkommen',
     pendingReviews: 'ausstehende Reviews',
     totalExecutions: 'Ausf\u00fchrungen gesamt',
     successRate: 'Erfolgsrate',

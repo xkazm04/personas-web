@@ -88,7 +88,7 @@ export default function DashboardHomePage() {
 
   const greeting = useGreeting(t.dashboard.greeting);
   const lastVisitedAt = useLastVisit();
-  const displayName = user?.user_metadata?.full_name?.split(" ")[0] ?? "there";
+  const displayName = user?.user_metadata?.full_name?.split(" ")[0] ?? t.dashboard.greetingFallback;
 
   const recentExecs = useMemo(() => executions.slice(0, 12), [executions]);
   const stats = useMemo(() => {

@@ -283,6 +283,7 @@ export const id: Translations = {
     },
     agentsStatus: 'Berikut yang terjadi dengan agen Anda',
     lastSeen: 'Terakhir dilihat',
+    greetingFallback: 'teman',
     pendingReviews: 'tinjauan tertunda',
     totalExecutions: 'total eksekusi',
     successRate: 'tingkat keberhasilan',

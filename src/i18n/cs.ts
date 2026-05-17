@@ -283,6 +283,7 @@ export const cs: Translations = {
     },
     agentsStatus: 'Zde je co se d\u011bje s va\u0161imi agenty',
     lastSeen: 'Naposledy zde',
+    greetingFallback: 'kamaráde',
     pendingReviews: '\u010dekaj\u00edc\u00ed recenze',
     totalExecutions: 'celkov\u00e1 spou\u0161t\u011bn\u00ed',
     successRate: '\u00fasp\u011b\u0161nost',
