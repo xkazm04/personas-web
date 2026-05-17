@@ -59,10 +59,9 @@ export const connectors: Connector[] = [
     summary: "Crisp customer messaging platform for live chat, helpdesk, and knowledge base via the Crisp REST API.",
     monogram: "CR",
     authType: "Token Pair",
-    useCases: [
-      { title: "Send Updates to a Channel", description: "Post status updates, alerts, or daily digests to a Crisp channel automatically.", command: "personas run \"Post daily standup summary to Crisp\"" },
-      { title: "Route Notifications by Priority", description: "Direct high-severity alerts to on-call and low-priority chatter to a quiet channel.", command: "personas run \"Send critical alerts to oncall via Crisp\"" },
-    ],
+    icon: "crisp",
+    useCases: [{ title: "Send Updates to a Channel", description: "Post status updates, alerts, or daily digests to a Crisp channel automatically.", command: "personas run \"Post daily standup summary to Crisp\"" },
+      { title: "Route Notifications by Priority", description: "Direct high-severity alerts to on-call and low-priority chatter to a quiet channel.", command: "personas run \"Send critical alerts to oncall via Crisp\"" },],
   },
   {
     name: "discord",
@@ -72,6 +71,7 @@ export const connectors: Connector[] = [
     summary: "Discord bot integration for server messaging, moderation, and notifications.",
     monogram: "DI",
     authType: "Bot Token",
+    icon: "discord",
     useCases: [{ title: "Welcome New Members", description: "Greet new members with a personalized message and assign them the right roles.", command: "personas run \"Welcome new members and assign roles in personas-community\"" },
       { title: "Summarize Moderation Activity", description: "Get a daily recap of flagged messages and moderation actions across all channels.", command: "personas run \"Post moderation summary to #mod-log\"" },
       { title: "Announce New Releases", description: "Automatically share formatted release notes whenever you deploy.", command: "personas run \"Post release notes to #releases\"" },],
@@ -84,11 +84,8 @@ export const connectors: Connector[] = [
     summary: "Built-in in-app messaging channel. Agents can send notifications and messages to the Personas inbox without external services.",
     monogram: "LM",
     authType: "Built-in (Local)",
-    icon: "personas",
-    useCases: [
-      { title: "Send Updates to a Channel", description: "Post status updates, alerts, or daily digests to a Local Messaging channel automatically.", command: "personas run \"Post daily standup summary to Local Messaging\"" },
-      { title: "Route Notifications by Priority", description: "Direct high-severity alerts to on-call and low-priority chatter to a quiet channel.", command: "personas run \"Send critical alerts to oncall via Local Messaging\"" },
-    ],
+    useCases: [{ title: "Send Updates to a Channel", description: "Post status updates, alerts, or daily digests to a Local Messaging channel automatically.", command: "personas run \"Post daily standup summary to Local Messaging\"" },
+      { title: "Route Notifications by Priority", description: "Direct high-severity alerts to on-call and low-priority chatter to a quiet channel.", command: "personas run \"Send critical alerts to oncall via Local Messaging\"" },],
   },
   {
     name: "microsoft_teams",
@@ -98,11 +95,9 @@ export const connectors: Connector[] = [
     summary: "Microsoft Teams messaging for sending messages, managing channels, and team collaboration via the Microsoft Graph API.",
     monogram: "MT",
     authType: "OAuth",
-    icon: "teams",
-    useCases: [
-      { title: "Send Updates to a Channel", description: "Post status updates, alerts, or daily digests to a Microsoft Teams channel automatically.", command: "personas run \"Post daily standup summary to Microsoft Teams\"" },
-      { title: "Route Notifications by Priority", description: "Direct high-severity alerts to on-call and low-priority chatter to a quiet channel.", command: "personas run \"Send critical alerts to oncall via Microsoft Teams\"" },
-    ],
+    icon: "microsoft-teams",
+    useCases: [{ title: "Send Updates to a Channel", description: "Post status updates, alerts, or daily digests to a Microsoft Teams channel automatically.", command: "personas run \"Post daily standup summary to Microsoft Teams\"" },
+      { title: "Route Notifications by Priority", description: "Direct high-severity alerts to on-call and low-priority chatter to a quiet channel.", command: "personas run \"Send critical alerts to oncall via Microsoft Teams\"" },],
   },
   {
     name: "slack",
@@ -112,6 +107,7 @@ export const connectors: Connector[] = [
     summary: "Slack workspace messaging for channels, DMs, and workflow notifications.",
     monogram: "SL",
     authType: "Bot Token",
+    icon: "slack",
     useCases: [{ title: "Summarize Daily Standups", description: "Gather standup updates from your team and post a clean summary to a channel every morning.", command: "personas run \"Summarize today's standup and post to #general\"" },
       { title: "Alert the Team on Incidents", description: "Forward monitoring alerts to a dedicated channel and tag whoever is on call.", command: "personas run \"Send incident alerts to #incidents and tag @oncall\"" },
       { title: "Remind Reviewers About PRs", description: "Nudge reviewers in Slack when a pull request has been waiting longer than 4 hours.", command: "personas run \"Remind reviewers about PRs older than 4 hours in #engineering\"" },],
@@ -124,6 +120,7 @@ export const connectors: Connector[] = [
     summary: "Telegram bot for messaging, notifications, and group automation.",
     monogram: "TE",
     authType: "Bot Token",
+    icon: "telegram",
     useCases: [{ title: "Get Server Health Alerts", description: "Receive instant notifications when your server's CPU or memory gets too high.", command: "personas run \"Alert ops-team on Telegram when CPU exceeds 90%\"" },
       { title: "Deliver Daily Reports", description: "Send a formatted summary of business metrics to stakeholders every day.", command: "personas run \"Send daily metrics report to leadership group\"" },
       { title: "Collect User Feedback", description: "Run a survey bot that gathers responses and saves them to a spreadsheet.", command: "personas run \"Survey beta-testers and save responses\"" },],
@@ -151,10 +148,9 @@ export const connectors: Connector[] = [
     summary: "Gmail email automation for reading, sending, and managing messages via the Gmail API v1.",
     monogram: "GM",
     authType: "OAuth",
-    useCases: [
-      { title: "Send Transactional Emails", description: "Deliver receipts, password resets, and notifications through Gmail.", command: "personas run \"Send a welcome email via Gmail\"" },
-      { title: "Run Weekly Digests", description: "Compile this week's highlights and email the team or your subscribers.", command: "personas run \"Send weekly digest via Gmail\"" },
-    ],
+    icon: "gmail",
+    useCases: [{ title: "Send Transactional Emails", description: "Deliver receipts, password resets, and notifications through Gmail.", command: "personas run \"Send a welcome email via Gmail\"" },
+      { title: "Run Weekly Digests", description: "Compile this week's highlights and email the team or your subscribers.", command: "personas run \"Send weekly digest via Gmail\"" },],
   },
   {
     name: "microsoft_outlook",
@@ -164,11 +160,9 @@ export const connectors: Connector[] = [
     summary: "Microsoft Outlook email, calendar, and contacts automation via the Microsoft Graph API.",
     monogram: "MO",
     authType: "OAuth",
-    icon: "outlook",
-    useCases: [
-      { title: "Send Transactional Emails", description: "Deliver receipts, password resets, and notifications through Microsoft Outlook.", command: "personas run \"Send a welcome email via Microsoft Outlook\"" },
-      { title: "Run Weekly Digests", description: "Compile this week's highlights and email the team or your subscribers.", command: "personas run \"Send weekly digest via Microsoft Outlook\"" },
-    ],
+    icon: "microsoft-outlook",
+    useCases: [{ title: "Send Transactional Emails", description: "Deliver receipts, password resets, and notifications through Microsoft Outlook.", command: "personas run \"Send a welcome email via Microsoft Outlook\"" },
+      { title: "Run Weekly Digests", description: "Compile this week's highlights and email the team or your subscribers.", command: "personas run \"Send weekly digest via Microsoft Outlook\"" },],
   },
   {
     name: "resend",
@@ -178,6 +172,7 @@ export const connectors: Connector[] = [
     summary: "Resend modern email API for developers with React Email support.",
     monogram: "RE",
     authType: "API Key",
+    icon: "resend",
     useCases: [{ title: "Send Purchase Receipts", description: "Deliver styled receipt emails automatically after every purchase.", command: "personas run \"Send a receipt email for each new purchase\"" },
       { title: "Send Magic Sign-In Links", description: "Let users log in with a single click instead of typing a password.", command: "personas run \"Send magic link to user@example.com\"" },
       { title: "Share a Weekly Changelog", description: "Compile recent product changes and send a styled update to subscribers.", command: "personas run \"Send weekly changelog to subscribers\"" },],
@@ -190,6 +185,7 @@ export const connectors: Connector[] = [
     summary: "SendGrid transactional and marketing email delivery at scale.",
     monogram: "SE",
     authType: "API Key",
+    icon: "sendgrid",
     useCases: [{ title: "Run a Welcome Email Series", description: "Automatically send a sequence of onboarding emails when someone signs up.", command: "personas run \"Start onboarding emails for new signups\"" },
       { title: "Email Monthly Invoices", description: "Generate and send invoices with PDF attachments at the end of each month.", command: "personas run \"Send this month's invoices\"" },
       { title: "Warn About At-Risk Customers", description: "Email account managers when a customer hasn't been active in two weeks.", command: "personas run \"Alert account managers about inactive customers\"" },],
@@ -204,11 +200,9 @@ export const connectors: Connector[] = [
     summary: "One-way outbound Discord notifications via channel webhook URL. Posts only to the channel that owns the webhook; cannot read messages or list channels.",
     monogram: "DC",
     authType: "Webhook URL",
-    icon: "discord-webhook",
-    useCases: [
-      { title: "Pipe Alerts Anywhere", description: "Forward agent events to Discord (channel webhook) so monitoring and on-call see the same signal.", command: "personas run \"Send incident alert via Discord (channel webhook)\"" },
-      { title: "Trigger Webhooks on Completion", description: "Fire a Discord (channel webhook) call when a long-running agent finishes.", command: "personas run \"Notify Discord (channel webhook) when nightly job completes\"" },
-    ],
+    icon: "discord",
+    useCases: [{ title: "Pipe Alerts Anywhere", description: "Forward agent events to Discord (channel webhook) so monitoring and on-call see the same signal.", command: "personas run \"Send incident alert via Discord (channel webhook)\"" },
+      { title: "Trigger Webhooks on Completion", description: "Fire a Discord (channel webhook) call when a long-running agent finishes.", command: "personas run \"Notify Discord (channel webhook) when nightly job completes\"" },],
   },
   {
     name: "generic_webhook",
@@ -218,11 +212,8 @@ export const connectors: Connector[] = [
     summary: "Generic JSON outbound webhook. POSTs `{ text: <rendered template>, event: <full event payload> }` to any user-supplied HTTPS URL. Use for PagerDuty Events v2, custom Zapier hooks, or any in-house alert pipeline.",
     monogram: "GJ",
     authType: "Webhook URL",
-    icon: "generic-webhook",
-    useCases: [
-      { title: "Pipe Alerts Anywhere", description: "Forward agent events to Generic JSON webhook so monitoring and on-call see the same signal.", command: "personas run \"Send incident alert via Generic JSON webhook\"" },
-      { title: "Trigger Webhooks on Completion", description: "Fire a Generic JSON webhook call when a long-running agent finishes.", command: "personas run \"Notify Generic JSON webhook when nightly job completes\"" },
-    ],
+    useCases: [{ title: "Pipe Alerts Anywhere", description: "Forward agent events to Generic JSON webhook so monitoring and on-call see the same signal.", command: "personas run \"Send incident alert via Generic JSON webhook\"" },
+      { title: "Trigger Webhooks on Completion", description: "Fire a Generic JSON webhook call when a long-running agent finishes.", command: "personas run \"Notify Generic JSON webhook when nightly job completes\"" },],
   },
   {
     name: "knock",
@@ -232,10 +223,9 @@ export const connectors: Connector[] = [
     summary: "Knock notification infrastructure for orchestrating cross-channel notifications with preferences and workflows.",
     monogram: "KN",
     authType: "API Key",
-    useCases: [
-      { title: "Pipe Alerts Anywhere", description: "Forward agent events to Knock so monitoring and on-call see the same signal.", command: "personas run \"Send incident alert via Knock\"" },
-      { title: "Trigger Webhooks on Completion", description: "Fire a Knock call when a long-running agent finishes.", command: "personas run \"Notify Knock when nightly job completes\"" },
-    ],
+    icon: "knock",
+    useCases: [{ title: "Pipe Alerts Anywhere", description: "Forward agent events to Knock so monitoring and on-call see the same signal.", command: "personas run \"Send incident alert via Knock\"" },
+      { title: "Trigger Webhooks on Completion", description: "Fire a Knock call when a long-running agent finishes.", command: "personas run \"Notify Knock when nightly job completes\"" },],
   },
   {
     name: "teams_webhook",
@@ -245,11 +235,9 @@ export const connectors: Connector[] = [
     summary: "One-way outbound Microsoft Teams notifications via channel incoming webhook URL. Posts only to the channel that owns the connector; cannot read messages.",
     monogram: "MT",
     authType: "Webhook URL",
-    icon: "teams-webhook",
-    useCases: [
-      { title: "Pipe Alerts Anywhere", description: "Forward agent events to Microsoft Teams (incoming webhook) so monitoring and on-call see the same signal.", command: "personas run \"Send incident alert via Microsoft Teams (incoming webhook)\"" },
-      { title: "Trigger Webhooks on Completion", description: "Fire a Microsoft Teams (incoming webhook) call when a long-running agent finishes.", command: "personas run \"Notify Microsoft Teams (incoming webhook) when nightly job completes\"" },
-    ],
+    icon: "microsoft-teams",
+    useCases: [{ title: "Pipe Alerts Anywhere", description: "Forward agent events to Microsoft Teams (incoming webhook) so monitoring and on-call see the same signal.", command: "personas run \"Send incident alert via Microsoft Teams (incoming webhook)\"" },
+      { title: "Trigger Webhooks on Completion", description: "Fire a Microsoft Teams (incoming webhook) call when a long-running agent finishes.", command: "personas run \"Notify Microsoft Teams (incoming webhook) when nightly job completes\"" },],
   },
   {
     name: "novu",
@@ -259,10 +247,9 @@ export const connectors: Connector[] = [
     summary: "Novu open-source notification infrastructure for in-app, email, SMS, push, and chat notifications via the Novu API.",
     monogram: "NO",
     authType: "API Key",
-    useCases: [
-      { title: "Pipe Alerts Anywhere", description: "Forward agent events to Novu so monitoring and on-call see the same signal.", command: "personas run \"Send incident alert via Novu\"" },
-      { title: "Trigger Webhooks on Completion", description: "Fire a Novu call when a long-running agent finishes.", command: "personas run \"Notify Novu when nightly job completes\"" },
-    ],
+    icon: "novu",
+    useCases: [{ title: "Pipe Alerts Anywhere", description: "Forward agent events to Novu so monitoring and on-call see the same signal.", command: "personas run \"Send incident alert via Novu\"" },
+      { title: "Trigger Webhooks on Completion", description: "Fire a Novu call when a long-running agent finishes.", command: "personas run \"Notify Novu when nightly job completes\"" },],
   },
   {
     name: "ntfy",
@@ -272,10 +259,9 @@ export const connectors: Connector[] = [
     summary: "ntfy open-source push notification service for sending notifications to phones and desktops via simple HTTP.",
     monogram: "NT",
     authType: "Access Token",
-    useCases: [
-      { title: "Pipe Alerts Anywhere", description: "Forward agent events to ntfy so monitoring and on-call see the same signal.", command: "personas run \"Send incident alert via ntfy\"" },
-      { title: "Trigger Webhooks on Completion", description: "Fire a ntfy call when a long-running agent finishes.", command: "personas run \"Notify ntfy when nightly job completes\"" },
-    ],
+    icon: "ntfy",
+    useCases: [{ title: "Pipe Alerts Anywhere", description: "Forward agent events to ntfy so monitoring and on-call see the same signal.", command: "personas run \"Send incident alert via ntfy\"" },
+      { title: "Trigger Webhooks on Completion", description: "Fire a ntfy call when a long-running agent finishes.", command: "personas run \"Notify ntfy when nightly job completes\"" },],
   },
   {
     name: "slack_webhook",
@@ -285,11 +271,9 @@ export const connectors: Connector[] = [
     summary: "One-way outbound Slack notifications via incoming webhook URL. Posts only to the channel the webhook was provisioned for; cannot read messages, list channels, or perform bot actions.",
     monogram: "SI",
     authType: "Webhook URL",
-    icon: "slack-webhook",
-    useCases: [
-      { title: "Pipe Alerts Anywhere", description: "Forward agent events to Slack (incoming webhook) so monitoring and on-call see the same signal.", command: "personas run \"Send incident alert via Slack (incoming webhook)\"" },
-      { title: "Trigger Webhooks on Completion", description: "Fire a Slack (incoming webhook) call when a long-running agent finishes.", command: "personas run \"Notify Slack (incoming webhook) when nightly job completes\"" },
-    ],
+    icon: "slack",
+    useCases: [{ title: "Pipe Alerts Anywhere", description: "Forward agent events to Slack (incoming webhook) so monitoring and on-call see the same signal.", command: "personas run \"Send incident alert via Slack (incoming webhook)\"" },
+      { title: "Trigger Webhooks on Completion", description: "Fire a Slack (incoming webhook) call when a long-running agent finishes.", command: "personas run \"Notify Slack (incoming webhook) when nightly job completes\"" },],
   },
 
   // ── Development ─────────────────────────────────────────────────
@@ -301,11 +285,9 @@ export const connectors: Connector[] = [
     summary: "Azure DevOps for repositories, work items, pipelines, and CI/CD.",
     monogram: "AD",
     authType: "PAT",
-    icon: "azure",
-    useCases: [
-      { title: "Triage Issues Automatically", description: "Read open work in Azure DevOps, label by area, and route to the right team.", command: "personas run \"Triage new issues in Azure DevOps\"" },
-      { title: "Generate Release Notes", description: "Summarize merged work in Azure DevOps since the last release.", command: "personas run \"Draft release notes from Azure DevOps\"" },
-    ],
+    icon: "azure-devops",
+    useCases: [{ title: "Triage Issues Automatically", description: "Read open work in Azure DevOps, label by area, and route to the right team.", command: "personas run \"Triage new issues in Azure DevOps\"" },
+      { title: "Generate Release Notes", description: "Summarize merged work in Azure DevOps since the last release.", command: "personas run \"Draft release notes from Azure DevOps\"" },],
   },
   {
     name: "azure_devops_org",
@@ -315,11 +297,9 @@ export const connectors: Connector[] = [
     summary: "Azure DevOps with org-level scoping. Pick which organization(s) and projects this credential should operate against.",
     monogram: "AD",
     authType: "PAT",
-    icon: "azure",
-    useCases: [
-      { title: "Triage Issues Automatically", description: "Read open work in Azure DevOps (org-aware), label by area, and route to the right team.", command: "personas run \"Triage new issues in Azure DevOps (org-aware)\"" },
-      { title: "Generate Release Notes", description: "Summarize merged work in Azure DevOps (org-aware) since the last release.", command: "personas run \"Draft release notes from Azure DevOps (org-aware)\"" },
-    ],
+    icon: "azure-devops",
+    useCases: [{ title: "Triage Issues Automatically", description: "Read open work in Azure DevOps (org-aware), label by area, and route to the right team.", command: "personas run \"Triage new issues in Azure DevOps (org-aware)\"" },
+      { title: "Generate Release Notes", description: "Summarize merged work in Azure DevOps (org-aware) since the last release.", command: "personas run \"Draft release notes from Azure DevOps (org-aware)\"" },],
   },
   {
     name: "circleci",
@@ -329,6 +309,7 @@ export const connectors: Connector[] = [
     summary: "CircleCI continuous integration and delivery platform.",
     monogram: "CI",
     authType: "PAT",
+    icon: "circleci",
     useCases: [{ title: "Find Flaky Tests", description: "Spot tests that pass and fail randomly so you can fix them.", command: "personas run \"Find flaky tests in personas/app from the last 50 runs\"" },
       { title: "Speed Up Slow Builds", description: "Identify the slowest steps in your pipeline and suggest ways to parallelize them.", command: "personas run \"Find build steps slower than 5 minutes in personas/app\"" },
       { title: "Auto-Rollback Failed Deploys", description: "Automatically roll back when a production deploy fails its health checks.", command: "personas run \"Roll back personas/app if the main branch deploy fails\"" },],
@@ -341,10 +322,9 @@ export const connectors: Connector[] = [
     summary: "Access local codebases registered in Dev Tools. Provides file access, context maps for quick orientation, and idea/task management for backlog tracking. Enables agents to read, search, analyze project files, create and triage ideas, and execute implementation tasks.",
     monogram: "CO",
     authType: "Project",
-    useCases: [
-      { title: "Triage Issues Automatically", description: "Read open work in Codebase, label by area, and route to the right team.", command: "personas run \"Triage new issues in Codebase\"" },
-      { title: "Generate Release Notes", description: "Summarize merged work in Codebase since the last release.", command: "personas run \"Draft release notes from Codebase\"" },
-    ],
+    icon: "codebase",
+    useCases: [{ title: "Triage Issues Automatically", description: "Read open work in Codebase, label by area, and route to the right team.", command: "personas run \"Triage new issues in Codebase\"" },
+      { title: "Generate Release Notes", description: "Summarize merged work in Codebase since the last release.", command: "personas run \"Draft release notes from Codebase\"" },],
   },
   {
     name: "codebases",
@@ -354,10 +334,9 @@ export const connectors: Connector[] = [
     summary: "Aggregate view across all Dev Tools projects. Provides cross-project impact analysis, unified code search, dependency graph comparison, an agent-driven implementation pipeline (branching, diffing, testing, committing), and portfolio-level intelligence (health scores, tech radar, risk matrix). Designed as a composable puzzle piece for agentic workflows.",
     monogram: "CO",
     authType: "All Projects",
-    useCases: [
-      { title: "Triage Issues Automatically", description: "Read open work in Codebases, label by area, and route to the right team.", command: "personas run \"Triage new issues in Codebases\"" },
-      { title: "Generate Release Notes", description: "Summarize merged work in Codebases since the last release.", command: "personas run \"Draft release notes from Codebases\"" },
-    ],
+    icon: "codebases",
+    useCases: [{ title: "Triage Issues Automatically", description: "Read open work in Codebases, label by area, and route to the right team.", command: "personas run \"Triage new issues in Codebases\"" },
+      { title: "Generate Release Notes", description: "Summarize merged work in Codebases since the last release.", command: "personas run \"Draft release notes from Codebases\"" },],
   },
   {
     name: "github",
@@ -367,6 +346,7 @@ export const connectors: Connector[] = [
     summary: "GitHub for repositories, issues, pull requests, and CI/CD.",
     monogram: "GI",
     authType: "PAT",
+    icon: "github",
     useCases: [{ title: "Clean Up Stale Issues", description: "Find issues that have been inactive for 30+ days and notify their authors.", command: "personas run \"Label stale issues in personas/app older than 30 days\"" },
       { title: "Review PR Complexity", description: "Comment on large pull requests with size metrics and suggest breaking them up.", command: "personas run \"Analyze PR sizes in personas/app and flag large ones\"" },
       { title: "Generate a Release Changelog", description: "Create a formatted changelog from all pull requests merged since the last release.", command: "personas run \"Generate changelog for personas/app since last release\"" },],
@@ -379,11 +359,9 @@ export const connectors: Connector[] = [
     summary: "GitHub Actions CI/CD -- dispatch workflows, check run status, and manage automations from your agent.",
     monogram: "GA",
     authType: "PAT",
-    icon: "github-actions",
-    useCases: [
-      { title: "Triage Issues Automatically", description: "Read open work in GitHub Actions, label by area, and route to the right team.", command: "personas run \"Triage new issues in GitHub Actions\"" },
-      { title: "Generate Release Notes", description: "Summarize merged work in GitHub Actions since the last release.", command: "personas run \"Draft release notes from GitHub Actions\"" },
-    ],
+    icon: "github",
+    useCases: [{ title: "Triage Issues Automatically", description: "Read open work in GitHub Actions, label by area, and route to the right team.", command: "personas run \"Triage new issues in GitHub Actions\"" },
+      { title: "Generate Release Notes", description: "Summarize merged work in GitHub Actions since the last release.", command: "personas run \"Draft release notes from GitHub Actions\"" },],
   },
   {
     name: "gitlab",
@@ -393,10 +371,9 @@ export const connectors: Connector[] = [
     summary: "GitLab for repositories, CI/CD pipelines, issues, and merge requests.",
     monogram: "GI",
     authType: "PAT",
-    useCases: [
-      { title: "Triage Issues Automatically", description: "Read open work in GitLab, label by area, and route to the right team.", command: "personas run \"Triage new issues in GitLab\"" },
-      { title: "Generate Release Notes", description: "Summarize merged work in GitLab since the last release.", command: "personas run \"Draft release notes from GitLab\"" },
-    ],
+    icon: "gitlab",
+    useCases: [{ title: "Triage Issues Automatically", description: "Read open work in GitLab, label by area, and route to the right team.", command: "personas run \"Triage new issues in GitLab\"" },
+      { title: "Generate Release Notes", description: "Summarize merged work in GitLab since the last release.", command: "personas run \"Draft release notes from GitLab\"" },],
   },
 
   // ── Project Management ──────────────────────────────────────────
@@ -408,10 +385,9 @@ export const connectors: Connector[] = [
     summary: "Asana project management for tasks, projects, and team collaboration.",
     monogram: "AS",
     authType: "PAT",
-    useCases: [
-      { title: "Roll Up Sprint Progress", description: "Pull status from Asana and post a single-screen view of where everything stands.", command: "personas run \"Summarize current sprint in Asana\"" },
-      { title: "Find Blocked Work", description: "Surface tasks stuck in blocked or waiting for too long.", command: "personas run \"Find blocked tasks in Asana\"" },
-    ],
+    icon: "asana",
+    useCases: [{ title: "Roll Up Sprint Progress", description: "Pull status from Asana and post a single-screen view of where everything stands.", command: "personas run \"Summarize current sprint in Asana\"" },
+      { title: "Find Blocked Work", description: "Surface tasks stuck in blocked or waiting for too long.", command: "personas run \"Find blocked tasks in Asana\"" },],
   },
   {
     name: "clickup",
@@ -421,6 +397,7 @@ export const connectors: Connector[] = [
     summary: "ClickUp project management with tasks, docs, goals, and time tracking.",
     monogram: "CL",
     authType: "PAT",
+    icon: "clickup",
     useCases: [{ title: "Find Overdue Tasks", description: "Spot all overdue tasks across workspaces and nudge the people responsible.", command: "personas run \"Find overdue tasks and notify assignees\"" },
       { title: "Summarize Time Tracking", description: "See how each team member's logged hours compare to their estimates this week.", command: "personas run \"Show weekly time tracking summary for the team\"" },
       { title: "Update Goal Progress", description: "Recalculate goal completion based on the tasks that have been finished.", command: "personas run \"Update Q1 OKR progress based on completed tasks\"" },],
@@ -433,6 +410,7 @@ export const connectors: Connector[] = [
     summary: "Jira issue tracking and project management for agile software teams.",
     monogram: "JI",
     authType: "API Token",
+    icon: "jira",
     useCases: [{ title: "Report Sprint Velocity", description: "Show how your team's velocity has trended over the last five sprints.", command: "personas run \"Show velocity trends for CORE over the last 5 sprints\"" },
       { title: "Escalate Blocked Issues", description: "Flag issues stuck in 'blocked' for more than 2 days and notify the project lead.", command: "personas run \"Escalate CORE issues blocked longer than 2 days\"" },
       { title: "Auto-Triage Bug Reports", description: "Classify incoming bugs by severity and route them to the right team automatically.", command: "personas run \"Triage new bug reports in CORE project\"" },],
@@ -445,6 +423,7 @@ export const connectors: Connector[] = [
     summary: "Linear issue tracking for software teams with cycles, projects, and triage.",
     monogram: "LI",
     authType: "PAT",
+    icon: "linear",
     useCases: [{ title: "Show Cycle Progress", description: "Get a burndown summary for the current cycle and share it with the team.", command: "personas run \"Show burndown for the current engineering cycle\"" },
       { title: "Process the Triage Inbox", description: "Automatically label and prioritize new issues based on keywords and past patterns.", command: "personas run \"Triage new issues in the engineering inbox\"" },
       { title: "Find Cross-Team Blockers", description: "Identify issues that are blocking other teams and surface them for action.", command: "personas run \"Find blocked issues affecting engineering and product\"" },],
@@ -457,6 +436,7 @@ export const connectors: Connector[] = [
     summary: "Monday.com work management platform for projects, workflows, and CRM.",
     monogram: "MC",
     authType: "PAT",
+    icon: "monday",
     useCases: [{ title: "Send a Morning Status Digest", description: "Share a summary of item statuses, blockers, and deadlines every morning.", command: "personas run \"Post sprint board status digest to #standups\"" },
       { title: "Sync Client Project Boards", description: "Keep client-facing boards up to date when internal engineering milestones are hit.", command: "personas run \"Sync engineering milestones to client portal board\"" },
       { title: "Check Team Workloads", description: "Spot team members who are overloaded and suggest how to rebalance work.", command: "personas run \"Check workload balance on the sprint board\"" },],
@@ -471,11 +451,8 @@ export const connectors: Connector[] = [
     summary: "Local SQLite database managed by Personas. Available on first launch -- agents can create tables, store data, and run SQL queries without any external service.",
     monogram: "BI",
     authType: "Built-in",
-    icon: "personas",
-    useCases: [
-      { title: "Run Saved Queries", description: "Execute SQL or queries against Built-in Database and return readable results.", command: "personas run \"Run last week's revenue query on Built-in Database\"" },
-      { title: "Audit Schema or Indexes", description: "Find missing indexes, orphan tables, or unused columns in Built-in Database.", command: "personas run \"Audit Built-in Database schema for issues\"" },
-    ],
+    useCases: [{ title: "Run Saved Queries", description: "Execute SQL or queries against Built-in Database and return readable results.", command: "personas run \"Run last week's revenue query on Built-in Database\"" },
+      { title: "Audit Schema or Indexes", description: "Find missing indexes, orphan tables, or unused columns in Built-in Database.", command: "personas run \"Audit Built-in Database schema for issues\"" },],
   },
   {
     name: "convex",
@@ -485,6 +462,7 @@ export const connectors: Connector[] = [
     summary: "Convex real-time backend-as-a-service with document database, serverless functions, and scheduling.",
     monogram: "CO",
     authType: "Deploy Key",
+    icon: "convex",
     useCases: [{ title: "Monitor Function Performance", description: "Track how fast your Convex functions run and get alerted when they slow down.", command: "personas run \"Alert when any function takes longer than 500ms\"" },
       { title: "Audit Scheduled Jobs", description: "See all your scheduled jobs, how often they run, and whether they're succeeding.", command: "personas run \"List all scheduled jobs and their status\"" },
       { title: "Sync Data to a Warehouse", description: "Set up a live sync from Convex tables to your analytics warehouse.", command: "personas run \"Sync the events table to the analytics warehouse\"" },],
@@ -497,6 +475,7 @@ export const connectors: Connector[] = [
     summary: "DuckDB embedded analytical database for OLAP workloads, Parquet, CSV, and JSON.",
     monogram: "DU",
     authType: "Database Path",
+    icon: "duckdb",
     useCases: [{ title: "Analyze CSV Reports", description: "Load CSV files and run analytical queries for weekly business reports.", command: "personas run \"Analyze sales.csv and show revenue by region\"" },
       { title: "Explore Parquet Files", description: "Scan Parquet files and generate summary statistics across all columns.", command: "personas run \"Summarize all columns in the events Parquet dataset\"" },
       { title: "Join Multiple Data Sources", description: "Combine data from CSV, JSON, and Parquet files into a single result set.", command: "personas run \"Join sales.csv with products.json and export as Parquet\"" },],
@@ -509,11 +488,9 @@ export const connectors: Connector[] = [
     summary: "Local vector knowledge base powered by sqlite-vec. Store documents, create embeddings locally, and run semantic search — entirely offline, no API keys needed.",
     monogram: "LV",
     authType: "Built-in (Local)",
-    icon: "personas",
-    useCases: [
-      { title: "Run Saved Queries", description: "Execute SQL or queries against Local Vector DB and return readable results.", command: "personas run \"Run last week's revenue query on Local Vector DB\"" },
-      { title: "Audit Schema or Indexes", description: "Find missing indexes, orphan tables, or unused columns in Local Vector DB.", command: "personas run \"Audit Local Vector DB schema for issues\"" },
-    ],
+    icon: "vector-db",
+    useCases: [{ title: "Run Saved Queries", description: "Execute SQL or queries against Local Vector DB and return readable results.", command: "personas run \"Run last week's revenue query on Local Vector DB\"" },
+      { title: "Audit Schema or Indexes", description: "Find missing indexes, orphan tables, or unused columns in Local Vector DB.", command: "personas run \"Audit Local Vector DB schema for issues\"" },],
   },
   {
     name: "mongodb",
@@ -523,6 +500,7 @@ export const connectors: Connector[] = [
     summary: "MongoDB document database with flexible schemas, aggregation pipelines, and Atlas cloud.",
     monogram: "MO",
     authType: "Connection String",
+    icon: "mongodb",
     useCases: [{ title: "Monitor Collection Sizes", description: "Track how fast your collections are growing and get alerts before they hit storage limits.", command: "personas run \"Alert when any collection exceeds 10 GB\"" },
       { title: "Build Aggregation Pipelines", description: "Describe what you want in plain English and get an optimized aggregation pipeline.", command: "personas run \"Build a pipeline for monthly active users by region\"" },
       { title: "Audit Index Usage", description: "Find indexes that are never used so you can drop them and free up storage.", command: "personas run \"Find unused indexes in the app database\"" },],
@@ -535,6 +513,7 @@ export const connectors: Connector[] = [
     summary: "Neon serverless Postgres with branching, autoscaling, and bottomless storage.",
     monogram: "NE",
     authType: "API Key",
+    icon: "neon",
     useCases: [{ title: "Sync Preview Branches", description: "Spin up a database branch for each preview deployment with sanitized production data.", command: "personas run \"Create a preview branch from main with sample data\"" },
       { title: "Track Compute Usage", description: "Monitor serverless compute hours across branches and catch unexpected spikes.", command: "personas run \"Show compute usage across branches for the last 7 days\"" },
       { title: "Test Migrations Safely", description: "Run pending migrations on a temporary branch to verify they work before touching production.", command: "personas run \"Test pending migrations on a temporary branch\"" },],
@@ -547,6 +526,7 @@ export const connectors: Connector[] = [
     summary: "PlanetScale serverless MySQL platform with branching and non-blocking schema changes.",
     monogram: "PL",
     authType: "Service Token",
+    icon: "planetscale",
     useCases: [{ title: "Automate Deploy Requests", description: "Create a deploy request automatically when a migration PR gets merged.", command: "personas run \"Create a deploy request for the feature-auth branch\"" },
       { title: "Review Schema Changes", description: "Check pending deploy requests for risky schema changes before they go live.", command: "personas run \"Review schema changes in deploy request #42\"" },
       { title: "Monitor Connection Pools", description: "Track connection pool usage and suggest when to scale up or down.", command: "personas run \"Show connection pool usage for the last 24 hours\"" },],
@@ -559,7 +539,7 @@ export const connectors: Connector[] = [
     summary: "PostgreSQL open-source relational database with advanced SQL, JSONB, and extensibility.",
     monogram: "PO",
     authType: "Connection String",
-    icon: "postgresql",
+    icon: "postgres",
     useCases: [{ title: "Detect Schema Changes", description: "Compare your live database against migration files and spot any untracked changes.", command: "personas run \"Compare production schema against migration files\"" },
       { title: "Find Slow Queries", description: "Surface the 10 slowest queries and suggest indexes that could speed them up.", command: "personas run \"Find the 10 slowest queries and suggest fixes\"" },
       { title: "Export Data to CSV", description: "Run a query, save the results as CSV, and upload to cloud storage on a schedule.", command: "personas run \"Export yesterday's orders to CSV\"" },],
@@ -572,6 +552,7 @@ export const connectors: Connector[] = [
     summary: "Redis in-memory data store for caching, queues, sessions, and real-time pub/sub.",
     monogram: "RE",
     authType: "Connection URL",
+    icon: "redis",
     useCases: [{ title: "Check Cache Performance", description: "See your cache hit/miss ratios and find opportunities to improve them.", command: "personas run \"Show cache hit rates for production over the last 24 hours\"" },
       { title: "Monitor Queue Backlogs", description: "Track queue depths and get alerted when backlogs start piling up.", command: "personas run \"Alert when any queue exceeds 1000 pending items\"" },
       { title: "Find Memory-Heavy Keys", description: "Discover which keys are using the most memory so you can optimize storage.", command: "personas run \"Find the top 20 largest keys in production Redis\"" },],
@@ -584,6 +565,7 @@ export const connectors: Connector[] = [
     summary: "Supabase open-source Firebase alternative with Postgres, auth, and realtime.",
     monogram: "SU",
     authType: "API Key",
+    icon: "supabase",
     useCases: [{ title: "Review Auth Trends", description: "See how sign-ups, active sessions, and login methods are trending.", command: "personas run \"Show auth usage trends for my-app over 30 days\"" },
       { title: "Audit Security Policies", description: "Check all tables for missing or overly permissive Row Level Security rules.", command: "personas run \"Audit RLS policies for my-app\"" },
       { title: "Clean Up Orphaned Files", description: "Find files in storage that are no longer referenced by any database record.", command: "personas run \"Find orphaned files in the uploads bucket\"" },],
@@ -596,6 +578,7 @@ export const connectors: Connector[] = [
     summary: "Upstash serverless Redis and Kafka for low-latency data at the edge.",
     monogram: "UP",
     authType: "REST Token",
+    icon: "upstash",
     useCases: [{ title: "Review Rate Limiting", description: "See which API endpoints are hitting rate limits and spot abusive traffic.", command: "personas run \"Show rate limit stats for the last 24 hours\"" },
       { title: "Monitor Kafka Lag", description: "Track consumer lag across topics and get alerted when processing falls behind.", command: "personas run \"Alert when Kafka consumer lag exceeds 10,000\"" },
       { title: "Pre-Warm the Cache", description: "Load frequently accessed data into edge caches before a traffic spike.", command: "personas run \"Warm up edge cache with popular routes\"" },],
@@ -610,11 +593,9 @@ export const connectors: Connector[] = [
     summary: "AWS S3 object storage for uploading, downloading, and managing files and buckets.",
     monogram: "AS",
     authType: "Access Key",
-    icon: "aws",
-    useCases: [
-      { title: "Sync or Mirror Folders", description: "Move files between AWS S3 and your local or cloud workspace.", command: "personas run \"Sync project assets to AWS S3\"" },
-      { title: "Audit Sharing & Access", description: "Find publicly shared files and links and report what's exposed.", command: "personas run \"Audit shared links in AWS S3\"" },
-    ],
+    icon: "aws-s3",
+    useCases: [{ title: "Sync or Mirror Folders", description: "Move files between AWS S3 and your local or cloud workspace.", command: "personas run \"Sync project assets to AWS S3\"" },
+      { title: "Audit Sharing & Access", description: "Find publicly shared files and links and report what's exposed.", command: "personas run \"Audit shared links in AWS S3\"" },],
   },
   {
     name: "backblaze_b2",
@@ -625,10 +606,8 @@ export const connectors: Connector[] = [
     monogram: "BB",
     authType: "Application Key",
     icon: "backblaze-b2",
-    useCases: [
-      { title: "Sync or Mirror Folders", description: "Move files between Backblaze B2 and your local or cloud workspace.", command: "personas run \"Sync project assets to Backblaze B2\"" },
-      { title: "Audit Sharing & Access", description: "Find publicly shared files and links and report what's exposed.", command: "personas run \"Audit shared links in Backblaze B2\"" },
-    ],
+    useCases: [{ title: "Sync or Mirror Folders", description: "Move files between Backblaze B2 and your local or cloud workspace.", command: "personas run \"Sync project assets to Backblaze B2\"" },
+      { title: "Audit Sharing & Access", description: "Find publicly shared files and links and report what's exposed.", command: "personas run \"Audit shared links in Backblaze B2\"" },],
   },
   {
     name: "cloudflare_r2",
@@ -638,11 +617,9 @@ export const connectors: Connector[] = [
     summary: "Cloudflare R2 S3-compatible object storage with zero egress fees for storing and serving files.",
     monogram: "CR",
     authType: "API Token",
-    icon: "cloudflare",
-    useCases: [
-      { title: "Sync or Mirror Folders", description: "Move files between Cloudflare R2 and your local or cloud workspace.", command: "personas run \"Sync project assets to Cloudflare R2\"" },
-      { title: "Audit Sharing & Access", description: "Find publicly shared files and links and report what's exposed.", command: "personas run \"Audit shared links in Cloudflare R2\"" },
-    ],
+    icon: "cloudflare-r2",
+    useCases: [{ title: "Sync or Mirror Folders", description: "Move files between Cloudflare R2 and your local or cloud workspace.", command: "personas run \"Sync project assets to Cloudflare R2\"" },
+      { title: "Audit Sharing & Access", description: "Find publicly shared files and links and report what's exposed.", command: "personas run \"Audit shared links in Cloudflare R2\"" },],
   },
   {
     name: "dropbox",
@@ -652,6 +629,7 @@ export const connectors: Connector[] = [
     summary: "Dropbox cloud storage for file sync, sharing, and collaboration.",
     monogram: "DR",
     authType: "Access Token",
+    icon: "dropbox",
     useCases: [{ title: "Auto-Organize Uploads", description: "Sort uploaded files into the right folders based on their type and content.", command: "personas run \"Organize uploads by file type\"" },
       { title: "Audit Shared Links", description: "Find shared links with too-broad access and revoke ones that have expired.", command: "personas run \"Audit shared links and revoke expired ones\"" },
       { title: "Verify Backups", description: "Confirm critical folders are synced and flag any missing or corrupted files.", command: "personas run \"Verify backup integrity for critical folders\"" },],
@@ -664,11 +642,9 @@ export const connectors: Connector[] = [
     summary: "Google Drive storage — read/write files and folders via the Drive v3 API. Use as a persona's storage target for generated artifacts (reports, sprite sheets, videos, exports).",
     monogram: "GD",
     authType: "OAuth",
-    icon: "drive",
-    useCases: [
-      { title: "Sync or Mirror Folders", description: "Move files between Google Drive and your local or cloud workspace.", command: "personas run \"Sync project assets to Google Drive\"" },
-      { title: "Audit Sharing & Access", description: "Find publicly shared files and links and report what's exposed.", command: "personas run \"Audit shared links in Google Drive\"" },
-    ],
+    icon: "google-drive",
+    useCases: [{ title: "Sync or Mirror Folders", description: "Move files between Google Drive and your local or cloud workspace.", command: "personas run \"Sync project assets to Google Drive\"" },
+      { title: "Audit Sharing & Access", description: "Find publicly shared files and links and report what's exposed.", command: "personas run \"Audit shared links in Google Drive\"" },],
   },
   {
     name: "local_drive",
@@ -678,11 +654,8 @@ export const connectors: Connector[] = [
     summary: "Managed local filesystem for agent exports. Files survive app upgrades, live in the OS app-data directory, and are browsable via the Drive plugin.",
     monogram: "LD",
     authType: "Built-in",
-    icon: "local-drive",
-    useCases: [
-      { title: "Sync or Mirror Folders", description: "Move files between Local Drive and your local or cloud workspace.", command: "personas run \"Sync project assets to Local Drive\"" },
-      { title: "Audit Sharing & Access", description: "Find publicly shared files and links and report what's exposed.", command: "personas run \"Audit shared links in Local Drive\"" },
-    ],
+    useCases: [{ title: "Sync or Mirror Folders", description: "Move files between Local Drive and your local or cloud workspace.", command: "personas run \"Sync project assets to Local Drive\"" },
+      { title: "Audit Sharing & Access", description: "Find publicly shared files and links and report what's exposed.", command: "personas run \"Audit shared links in Local Drive\"" },],
   },
   {
     name: "onedrive",
@@ -692,10 +665,9 @@ export const connectors: Connector[] = [
     summary: "OneDrive file storage and document management for uploading, downloading, and organizing files via the Microsoft Graph API.",
     monogram: "ON",
     authType: "OAuth",
-    useCases: [
-      { title: "Sync or Mirror Folders", description: "Move files between OneDrive and your local or cloud workspace.", command: "personas run \"Sync project assets to OneDrive\"" },
-      { title: "Audit Sharing & Access", description: "Find publicly shared files and links and report what's exposed.", command: "personas run \"Audit shared links in OneDrive\"" },
-    ],
+    icon: "onedrive",
+    useCases: [{ title: "Sync or Mirror Folders", description: "Move files between OneDrive and your local or cloud workspace.", command: "personas run \"Sync project assets to OneDrive\"" },
+      { title: "Audit Sharing & Access", description: "Find publicly shared files and links and report what's exposed.", command: "personas run \"Audit shared links in OneDrive\"" },],
   },
 
   // ── Cloud & Hosting ─────────────────────────────────────────────
@@ -707,11 +679,9 @@ export const connectors: Connector[] = [
     summary: "Amazon Web Services access for compute, billing, storage, and other AWS services.",
     monogram: "AW",
     authType: "Access Key",
-    icon: "aws",
-    useCases: [
-      { title: "Deploy or Roll Back", description: "Trigger Amazon Web Services deploys from a chat command or revert on failure.", command: "personas run \"Deploy main to Amazon Web Services\"" },
-      { title: "Track Cost & Health", description: "Watch your Amazon Web Services bill and surface anomalies before they balloon.", command: "personas run \"Show Amazon Web Services spend over the last 7 days\"" },
-    ],
+    icon: "aws-s3",
+    useCases: [{ title: "Deploy or Roll Back", description: "Trigger Amazon Web Services deploys from a chat command or revert on failure.", command: "personas run \"Deploy main to Amazon Web Services\"" },
+      { title: "Track Cost & Health", description: "Watch your Amazon Web Services bill and surface anomalies before they balloon.", command: "personas run \"Show Amazon Web Services spend over the last 7 days\"" },],
   },
   {
     name: "cloudflare",
@@ -721,6 +691,7 @@ export const connectors: Connector[] = [
     summary: "Cloudflare CDN, DNS, Workers, and security services.",
     monogram: "CL",
     authType: "API Token",
+    icon: "cloudflare",
     useCases: [{ title: "Audit DNS Records", description: "Find misconfigured or orphaned DNS records and get a cleanup plan.", command: "personas run \"Audit DNS records for example.com\"" },
       { title: "Check Worker Performance", description: "See which Workers are slow or throwing errors and get optimization tips.", command: "personas run \"Show Worker performance stats for example.com over 7 days\"" },
       { title: "Monitor Security Threats", description: "Watch for blocked threats and escalate serious patterns to your security team.", command: "personas run \"Alert on high-severity security events for example.com\"" },],
@@ -733,10 +704,9 @@ export const connectors: Connector[] = [
     summary: "DigitalOcean cloud platform for Droplets, Kubernetes, Spaces, and App Platform.",
     monogram: "DI",
     authType: "PAT",
-    useCases: [
-      { title: "Deploy or Roll Back", description: "Trigger DigitalOcean deploys from a chat command or revert on failure.", command: "personas run \"Deploy main to DigitalOcean\"" },
-      { title: "Track Cost & Health", description: "Watch your DigitalOcean bill and surface anomalies before they balloon.", command: "personas run \"Show DigitalOcean spend over the last 7 days\"" },
-    ],
+    icon: "digitalocean",
+    useCases: [{ title: "Deploy or Roll Back", description: "Trigger DigitalOcean deploys from a chat command or revert on failure.", command: "personas run \"Deploy main to DigitalOcean\"" },
+      { title: "Track Cost & Health", description: "Watch your DigitalOcean bill and surface anomalies before they balloon.", command: "personas run \"Show DigitalOcean spend over the last 7 days\"" },],
   },
   {
     name: "desktop_docker",
@@ -747,10 +717,8 @@ export const connectors: Connector[] = [
     monogram: "DO",
     authType: "Desktop Bridge",
     icon: "docker",
-    useCases: [
-      { title: "Deploy or Roll Back", description: "Trigger Docker deploys from a chat command or revert on failure.", command: "personas run \"Deploy main to Docker\"" },
-      { title: "Track Cost & Health", description: "Watch your Docker bill and surface anomalies before they balloon.", command: "personas run \"Show Docker spend over the last 7 days\"" },
-    ],
+    useCases: [{ title: "Deploy or Roll Back", description: "Trigger Docker deploys from a chat command or revert on failure.", command: "personas run \"Deploy main to Docker\"" },
+      { title: "Track Cost & Health", description: "Watch your Docker bill and surface anomalies before they balloon.", command: "personas run \"Show Docker spend over the last 7 days\"" },],
   },
   {
     name: "fly_io",
@@ -760,11 +728,9 @@ export const connectors: Connector[] = [
     summary: "Fly.io global application platform for running containerized apps close to users.",
     monogram: "FI",
     authType: "API Token",
-    icon: "fly",
-    useCases: [
-      { title: "Deploy or Roll Back", description: "Trigger Fly.io deploys from a chat command or revert on failure.", command: "personas run \"Deploy main to Fly.io\"" },
-      { title: "Track Cost & Health", description: "Watch your Fly.io bill and surface anomalies before they balloon.", command: "personas run \"Show Fly.io spend over the last 7 days\"" },
-    ],
+    icon: "fly-io",
+    useCases: [{ title: "Deploy or Roll Back", description: "Trigger Fly.io deploys from a chat command or revert on failure.", command: "personas run \"Deploy main to Fly.io\"" },
+      { title: "Track Cost & Health", description: "Watch your Fly.io bill and surface anomalies before they balloon.", command: "personas run \"Show Fly.io spend over the last 7 days\"" },],
   },
   {
     name: "gcp_cloud",
@@ -774,11 +740,9 @@ export const connectors: Connector[] = [
     summary: "Google Cloud Platform access for compute, storage, billing, and other GCP services.",
     monogram: "GC",
     authType: "Service Account",
-    icon: "gcp-cloud",
-    useCases: [
-      { title: "Deploy or Roll Back", description: "Trigger Google Cloud Platform deploys from a chat command or revert on failure.", command: "personas run \"Deploy main to Google Cloud Platform\"" },
-      { title: "Track Cost & Health", description: "Watch your Google Cloud Platform bill and surface anomalies before they balloon.", command: "personas run \"Show Google Cloud Platform spend over the last 7 days\"" },
-    ],
+    icon: "google",
+    useCases: [{ title: "Deploy or Roll Back", description: "Trigger Google Cloud Platform deploys from a chat command or revert on failure.", command: "personas run \"Deploy main to Google Cloud Platform\"" },
+      { title: "Track Cost & Health", description: "Watch your Google Cloud Platform bill and surface anomalies before they balloon.", command: "personas run \"Show Google Cloud Platform spend over the last 7 days\"" },],
   },
   {
     name: "kubernetes",
@@ -788,10 +752,9 @@ export const connectors: Connector[] = [
     summary: "Kubernetes container orchestration for managing clusters, pods, and deployments.",
     monogram: "KU",
     authType: "Bearer Token",
-    useCases: [
-      { title: "Deploy or Roll Back", description: "Trigger Kubernetes deploys from a chat command or revert on failure.", command: "personas run \"Deploy main to Kubernetes\"" },
-      { title: "Track Cost & Health", description: "Watch your Kubernetes bill and surface anomalies before they balloon.", command: "personas run \"Show Kubernetes spend over the last 7 days\"" },
-    ],
+    icon: "kubernetes",
+    useCases: [{ title: "Deploy or Roll Back", description: "Trigger Kubernetes deploys from a chat command or revert on failure.", command: "personas run \"Deploy main to Kubernetes\"" },
+      { title: "Track Cost & Health", description: "Watch your Kubernetes bill and surface anomalies before they balloon.", command: "personas run \"Show Kubernetes spend over the last 7 days\"" },],
   },
   {
     name: "azure_cloud",
@@ -801,11 +764,9 @@ export const connectors: Connector[] = [
     summary: "Microsoft Azure access for compute, billing, storage, and other Azure services.",
     monogram: "MA",
     authType: "Client Credentials",
-    icon: "azure",
-    useCases: [
-      { title: "Deploy or Roll Back", description: "Trigger Microsoft Azure deploys from a chat command or revert on failure.", command: "personas run \"Deploy main to Microsoft Azure\"" },
-      { title: "Track Cost & Health", description: "Watch your Microsoft Azure bill and surface anomalies before they balloon.", command: "personas run \"Show Microsoft Azure spend over the last 7 days\"" },
-    ],
+    icon: "azure-devops",
+    useCases: [{ title: "Deploy or Roll Back", description: "Trigger Microsoft Azure deploys from a chat command or revert on failure.", command: "personas run \"Deploy main to Microsoft Azure\"" },
+      { title: "Track Cost & Health", description: "Watch your Microsoft Azure bill and surface anomalies before they balloon.", command: "personas run \"Show Microsoft Azure spend over the last 7 days\"" },],
   },
   {
     name: "netlify",
@@ -815,6 +776,7 @@ export const connectors: Connector[] = [
     summary: "Netlify web deployment platform with serverless functions and form handling.",
     monogram: "NE",
     authType: "PAT",
+    icon: "netlify",
     useCases: [{ title: "Alert on Build Failures", description: "Get notified with detailed logs when a deploy build fails.", command: "personas run \"Alert #deploys when my-site builds fail\"" },
       { title: "Export Form Submissions", description: "Save form submissions to a spreadsheet automatically every day.", command: "personas run \"Export contact form submissions to CSV daily\"" },
       { title: "Track Bandwidth Usage", description: "Monitor bandwidth across all sites and get warned before hitting plan limits.", command: "personas run \"Alert when bandwidth reaches 80% of plan limit\"" },],
@@ -827,10 +789,9 @@ export const connectors: Connector[] = [
     summary: "Railway deployment platform for running services, databases, and cron jobs.",
     monogram: "RA",
     authType: "API Token",
-    useCases: [
-      { title: "Deploy or Roll Back", description: "Trigger Railway deploys from a chat command or revert on failure.", command: "personas run \"Deploy main to Railway\"" },
-      { title: "Track Cost & Health", description: "Watch your Railway bill and surface anomalies before they balloon.", command: "personas run \"Show Railway spend over the last 7 days\"" },
-    ],
+    icon: "railway",
+    useCases: [{ title: "Deploy or Roll Back", description: "Trigger Railway deploys from a chat command or revert on failure.", command: "personas run \"Deploy main to Railway\"" },
+      { title: "Track Cost & Health", description: "Watch your Railway bill and surface anomalies before they balloon.", command: "personas run \"Show Railway spend over the last 7 days\"" },],
   },
   {
     name: "vercel",
@@ -840,6 +801,7 @@ export const connectors: Connector[] = [
     summary: "Vercel frontend deployment platform with serverless functions and edge network.",
     monogram: "VE",
     authType: "PAT",
+    icon: "vercel",
     useCases: [{ title: "Share Preview Links", description: "Post preview deployment URLs to your PR and Slack when builds finish.", command: "personas run \"Share preview links for my-app in #deploys\"" },
       { title: "Check Performance Scores", description: "Run Lighthouse audits on preview deployments and block merging if scores drop.", command: "personas run \"Check Lighthouse scores for my-app previews (min 90)\"" },
       { title: "Sync Environment Variables", description: "Keep environment variables in sync across preview, staging, and production.", command: "personas run \"Sync env vars from production to staging for my-app\"" },],
@@ -854,6 +816,7 @@ export const connectors: Connector[] = [
     summary: "Airtable spreadsheet-database for project tracking and data management.",
     monogram: "AI",
     authType: "PAT",
+    icon: "airtable",
     useCases: [{ title: "Sync Your Content Calendar", description: "Push content calendar entries to scheduling tools and remind writers of deadlines.", command: "personas run \"Sync content calendar and notify writers\"" },
       { title: "Track Inventory Levels", description: "Update stock levels from supplier feeds and flag items that are running low.", command: "personas run \"Update inventory and flag items below 10 in stock\"" },
       { title: "Move Applicants Through Hiring", description: "Advance candidates through hiring stages and send automated status emails.", command: "personas run \"Process hiring pipeline for new candidates\"" },],
@@ -866,11 +829,9 @@ export const connectors: Connector[] = [
     summary: "Cal.com open-source scheduling platform for availability and bookings.",
     monogram: "CC",
     authType: "API Key",
-    icon: "cal",
-    useCases: [
-      { title: "Capture & Organize", description: "Pull notes, events, or tasks from Cal.com into the right place automatically.", command: "personas run \"Pull this week's Cal.com entries\"" },
-      { title: "Generate Reports", description: "Summarize work logged or scheduled in Cal.com.", command: "personas run \"Build a weekly report from Cal.com\"" },
-    ],
+    icon: "cal-com",
+    useCases: [{ title: "Capture & Organize", description: "Pull notes, events, or tasks from Cal.com into the right place automatically.", command: "personas run \"Pull this week's Cal.com entries\"" },
+      { title: "Generate Reports", description: "Summarize work logged or scheduled in Cal.com.", command: "personas run \"Build a weekly report from Cal.com\"" },],
   },
   {
     name: "calendly",
@@ -880,6 +841,7 @@ export const connectors: Connector[] = [
     summary: "Calendly scheduling for meetings and appointment automation.",
     monogram: "CA",
     authType: "PAT",
+    icon: "calendly",
     useCases: [{ title: "Prepare for Meetings", description: "Get a brief with attendee info and context before each meeting.", command: "personas run \"Prep briefing for sales calls in the next 24 hours\"" },
       { title: "Follow Up on No-Shows", description: "Automatically send a rescheduling link when someone misses their appointment.", command: "personas run \"Send rescheduling links for missed consultations\"" },
       { title: "Find Your Best Meeting Times", description: "Analyze booking patterns and suggest the times that work best for you.", command: "personas run \"Suggest optimal meeting times based on last 30 days\"" },],
@@ -892,10 +854,9 @@ export const connectors: Connector[] = [
     summary: "Clockify time tracking for teams with projects, reports, and timesheets.",
     monogram: "CL",
     authType: "API Key",
-    useCases: [
-      { title: "Capture & Organize", description: "Pull notes, events, or tasks from Clockify into the right place automatically.", command: "personas run \"Pull this week's Clockify entries\"" },
-      { title: "Generate Reports", description: "Summarize work logged or scheduled in Clockify.", command: "personas run \"Build a weekly report from Clockify\"" },
-    ],
+    icon: "clockify",
+    useCases: [{ title: "Capture & Organize", description: "Pull notes, events, or tasks from Clockify into the right place automatically.", command: "personas run \"Pull this week's Clockify entries\"" },
+      { title: "Generate Reports", description: "Summarize work logged or scheduled in Clockify.", command: "personas run \"Build a weekly report from Clockify\"" },],
   },
   {
     name: "confluence",
@@ -905,6 +866,7 @@ export const connectors: Connector[] = [
     summary: "Confluence wiki and knowledge base for team documentation and collaboration.",
     monogram: "CO",
     authType: "API Token",
+    icon: "confluence",
     useCases: [{ title: "Publish Meeting Notes", description: "Turn meeting recordings into structured notes and save them to your team's space.", command: "personas run \"Publish standup notes to the TEAM space\"" },
       { title: "Find Outdated Docs", description: "Flag documentation pages that haven't been updated in 90+ days.", command: "personas run \"Find stale docs in ENGINEERING older than 90 days\"" },
       { title: "Build an Onboarding Guide", description: "Pull together relevant wiki pages into a personalized guide for new hires.", command: "personas run \"Create onboarding guide for new engineers\"" },],
@@ -917,10 +879,9 @@ export const connectors: Connector[] = [
     summary: "Formbricks open-source survey and feedback platform for in-app surveys, links, and website pop-ups.",
     monogram: "FO",
     authType: "API Key",
-    useCases: [
-      { title: "Capture & Organize", description: "Pull notes, events, or tasks from Formbricks into the right place automatically.", command: "personas run \"Pull this week's Formbricks entries\"" },
-      { title: "Generate Reports", description: "Summarize work logged or scheduled in Formbricks.", command: "personas run \"Build a weekly report from Formbricks\"" },
-    ],
+    icon: "formbricks",
+    useCases: [{ title: "Capture & Organize", description: "Pull notes, events, or tasks from Formbricks into the right place automatically.", command: "personas run \"Pull this week's Formbricks entries\"" },
+      { title: "Generate Reports", description: "Summarize work logged or scheduled in Formbricks.", command: "personas run \"Build a weekly report from Formbricks\"" },],
   },
   {
     name: "google_calendar",
@@ -930,11 +891,9 @@ export const connectors: Connector[] = [
     summary: "Google Calendar scheduling for creating, reading, and managing calendar events via the Calendar API v3.",
     monogram: "GC",
     authType: "OAuth",
-    icon: "calendar",
-    useCases: [
-      { title: "Capture & Organize", description: "Pull notes, events, or tasks from Google Calendar into the right place automatically.", command: "personas run \"Pull this week's Google Calendar entries\"" },
-      { title: "Generate Reports", description: "Summarize work logged or scheduled in Google Calendar.", command: "personas run \"Build a weekly report from Google Calendar\"" },
-    ],
+    icon: "google-calendar",
+    useCases: [{ title: "Capture & Organize", description: "Pull notes, events, or tasks from Google Calendar into the right place automatically.", command: "personas run \"Pull this week's Google Calendar entries\"" },
+      { title: "Generate Reports", description: "Summarize work logged or scheduled in Google Calendar.", command: "personas run \"Build a weekly report from Google Calendar\"" },],
   },
   {
     name: "google_sheets",
@@ -945,10 +904,8 @@ export const connectors: Connector[] = [
     monogram: "GS",
     authType: "OAuth",
     icon: "google-sheets",
-    useCases: [
-      { title: "Capture & Organize", description: "Pull notes, events, or tasks from Google Sheets into the right place automatically.", command: "personas run \"Pull this week's Google Sheets entries\"" },
-      { title: "Generate Reports", description: "Summarize work logged or scheduled in Google Sheets.", command: "personas run \"Build a weekly report from Google Sheets\"" },
-    ],
+    useCases: [{ title: "Capture & Organize", description: "Pull notes, events, or tasks from Google Sheets into the right place automatically.", command: "personas run \"Pull this week's Google Sheets entries\"" },
+      { title: "Generate Reports", description: "Summarize work logged or scheduled in Google Sheets.", command: "personas run \"Build a weekly report from Google Sheets\"" },],
   },
   {
     name: "harvest",
@@ -958,10 +915,9 @@ export const connectors: Connector[] = [
     summary: "Harvest time tracking, invoicing, and project billing for agencies and freelancers.",
     monogram: "HA",
     authType: "PAT",
-    useCases: [
-      { title: "Capture & Organize", description: "Pull notes, events, or tasks from Harvest into the right place automatically.", command: "personas run \"Pull this week's Harvest entries\"" },
-      { title: "Generate Reports", description: "Summarize work logged or scheduled in Harvest.", command: "personas run \"Build a weekly report from Harvest\"" },
-    ],
+    icon: "harvest",
+    useCases: [{ title: "Capture & Organize", description: "Pull notes, events, or tasks from Harvest into the right place automatically.", command: "personas run \"Pull this week's Harvest entries\"" },
+      { title: "Generate Reports", description: "Summarize work logged or scheduled in Harvest.", command: "personas run \"Build a weekly report from Harvest\"" },],
   },
   {
     name: "microsoft_excel",
@@ -971,11 +927,9 @@ export const connectors: Connector[] = [
     summary: "Microsoft Excel spreadsheet automation for reading, writing, and managing workbook data via the Microsoft Graph API.",
     monogram: "ME",
     authType: "OAuth",
-    icon: "excel",
-    useCases: [
-      { title: "Capture & Organize", description: "Pull notes, events, or tasks from Microsoft Excel into the right place automatically.", command: "personas run \"Pull this week's Microsoft Excel entries\"" },
-      { title: "Generate Reports", description: "Summarize work logged or scheduled in Microsoft Excel.", command: "personas run \"Build a weekly report from Microsoft Excel\"" },
-    ],
+    icon: "microsoft-excel",
+    useCases: [{ title: "Capture & Organize", description: "Pull notes, events, or tasks from Microsoft Excel into the right place automatically.", command: "personas run \"Pull this week's Microsoft Excel entries\"" },
+      { title: "Generate Reports", description: "Summarize work logged or scheduled in Microsoft Excel.", command: "personas run \"Build a weekly report from Microsoft Excel\"" },],
   },
   {
     name: "microsoft_calendar",
@@ -985,11 +939,9 @@ export const connectors: Connector[] = [
     summary: "Microsoft Outlook Calendar scheduling for creating, reading, and managing calendar events via the Microsoft Graph API.",
     monogram: "MO",
     authType: "OAuth",
-    icon: "calendar",
-    useCases: [
-      { title: "Capture & Organize", description: "Pull notes, events, or tasks from Microsoft Outlook Calendar into the right place automatically.", command: "personas run \"Pull this week's Microsoft Outlook Calendar entries\"" },
-      { title: "Generate Reports", description: "Summarize work logged or scheduled in Microsoft Outlook Calendar.", command: "personas run \"Build a weekly report from Microsoft Outlook Calendar\"" },
-    ],
+    icon: "microsoft-calendar",
+    useCases: [{ title: "Capture & Organize", description: "Pull notes, events, or tasks from Microsoft Outlook Calendar into the right place automatically.", command: "personas run \"Pull this week's Microsoft Outlook Calendar entries\"" },
+      { title: "Generate Reports", description: "Summarize work logged or scheduled in Microsoft Outlook Calendar.", command: "personas run \"Build a weekly report from Microsoft Outlook Calendar\"" },],
   },
   {
     name: "notion",
@@ -999,6 +951,7 @@ export const connectors: Connector[] = [
     summary: "Notion workspace for knowledge bases, wikis, and project management.",
     monogram: "NO",
     authType: "PAT",
+    icon: "notion",
     useCases: [{ title: "Auto-Create Meeting Pages", description: "Generate a Notion page with an agenda template for each upcoming meeting.", command: "personas run \"Create meeting pages from tomorrow's calendar\"" },
       { title: "Build a Sprint Board", description: "Turn your Linear issues into a Notion kanban board for sprint planning.", command: "personas run \"Create a sprint board from the current Linear cycle\"" },
       { title: "Search Your Knowledge Base", description: "Find relevant documentation across all your Notion workspaces instantly.", command: "personas run \"Search engineering docs for deployment process\"" },],
@@ -1012,10 +965,8 @@ export const connectors: Connector[] = [
     monogram: "OB",
     authType: "Desktop Bridge",
     icon: "obsidian",
-    useCases: [
-      { title: "Capture & Organize", description: "Pull notes, events, or tasks from Obsidian into the right place automatically.", command: "personas run \"Pull this week's Obsidian entries\"" },
-      { title: "Generate Reports", description: "Summarize work logged or scheduled in Obsidian.", command: "personas run \"Build a weekly report from Obsidian\"" },
-    ],
+    useCases: [{ title: "Capture & Organize", description: "Pull notes, events, or tasks from Obsidian into the right place automatically.", command: "personas run \"Pull this week's Obsidian entries\"" },
+      { title: "Generate Reports", description: "Summarize work logged or scheduled in Obsidian.", command: "personas run \"Build a weekly report from Obsidian\"" },],
   },
   {
     name: "obsidian",
@@ -1025,10 +976,9 @@ export const connectors: Connector[] = [
     summary: "Obsidian vault access via the Local REST API plugin for reading, writing, and searching notes.",
     monogram: "OB",
     authType: "API Key",
-    useCases: [
-      { title: "Capture & Organize", description: "Pull notes, events, or tasks from Obsidian into the right place automatically.", command: "personas run \"Pull this week's Obsidian entries\"" },
-      { title: "Generate Reports", description: "Summarize work logged or scheduled in Obsidian.", command: "personas run \"Build a weekly report from Obsidian\"" },
-    ],
+    icon: "obsidian",
+    useCases: [{ title: "Capture & Organize", description: "Pull notes, events, or tasks from Obsidian into the right place automatically.", command: "personas run \"Pull this week's Obsidian entries\"" },
+      { title: "Generate Reports", description: "Summarize work logged or scheduled in Obsidian.", command: "personas run \"Build a weekly report from Obsidian\"" },],
   },
   {
     name: "obsidian_memory",
@@ -1039,10 +989,8 @@ export const connectors: Connector[] = [
     monogram: "OM",
     authType: "Vault",
     icon: "obsidian",
-    useCases: [
-      { title: "Capture & Organize", description: "Pull notes, events, or tasks from Obsidian Memory into the right place automatically.", command: "personas run \"Pull this week's Obsidian Memory entries\"" },
-      { title: "Generate Reports", description: "Summarize work logged or scheduled in Obsidian Memory.", command: "personas run \"Build a weekly report from Obsidian Memory\"" },
-    ],
+    useCases: [{ title: "Capture & Organize", description: "Pull notes, events, or tasks from Obsidian Memory into the right place automatically.", command: "personas run \"Pull this week's Obsidian Memory entries\"" },
+      { title: "Generate Reports", description: "Summarize work logged or scheduled in Obsidian Memory.", command: "personas run \"Build a weekly report from Obsidian Memory\"" },],
   },
   {
     name: "sharepoint",
@@ -1052,10 +1000,9 @@ export const connectors: Connector[] = [
     summary: "SharePoint document management and team sites for storing, organizing, and collaborating on content via the Microsoft Graph API.",
     monogram: "SH",
     authType: "OAuth",
-    useCases: [
-      { title: "Capture & Organize", description: "Pull notes, events, or tasks from SharePoint into the right place automatically.", command: "personas run \"Pull this week's SharePoint entries\"" },
-      { title: "Generate Reports", description: "Summarize work logged or scheduled in SharePoint.", command: "personas run \"Build a weekly report from SharePoint\"" },
-    ],
+    icon: "sharepoint",
+    useCases: [{ title: "Capture & Organize", description: "Pull notes, events, or tasks from SharePoint into the right place automatically.", command: "personas run \"Pull this week's SharePoint entries\"" },
+      { title: "Generate Reports", description: "Summarize work logged or scheduled in SharePoint.", command: "personas run \"Build a weekly report from SharePoint\"" },],
   },
   {
     name: "tally",
@@ -1065,10 +1012,9 @@ export const connectors: Connector[] = [
     summary: "Tally free-first form builder for creating forms, surveys, and collecting responses via the Tally API.",
     monogram: "TA",
     authType: "PAT",
-    useCases: [
-      { title: "Capture & Organize", description: "Pull notes, events, or tasks from Tally into the right place automatically.", command: "personas run \"Pull this week's Tally entries\"" },
-      { title: "Generate Reports", description: "Summarize work logged or scheduled in Tally.", command: "personas run \"Build a weekly report from Tally\"" },
-    ],
+    icon: "tally",
+    useCases: [{ title: "Capture & Organize", description: "Pull notes, events, or tasks from Tally into the right place automatically.", command: "personas run \"Pull this week's Tally entries\"" },
+      { title: "Generate Reports", description: "Summarize work logged or scheduled in Tally.", command: "personas run \"Build a weekly report from Tally\"" },],
   },
   {
     name: "toggl",
@@ -1078,10 +1024,9 @@ export const connectors: Connector[] = [
     summary: "Toggl Track time tracking with one-click timers, projects, clients, and reports.",
     monogram: "TT",
     authType: "API Token",
-    useCases: [
-      { title: "Capture & Organize", description: "Pull notes, events, or tasks from Toggl Track into the right place automatically.", command: "personas run \"Pull this week's Toggl Track entries\"" },
-      { title: "Generate Reports", description: "Summarize work logged or scheduled in Toggl Track.", command: "personas run \"Build a weekly report from Toggl Track\"" },
-    ],
+    icon: "toggl",
+    useCases: [{ title: "Capture & Organize", description: "Pull notes, events, or tasks from Toggl Track into the right place automatically.", command: "personas run \"Pull this week's Toggl Track entries\"" },
+      { title: "Generate Reports", description: "Summarize work logged or scheduled in Toggl Track.", command: "personas run \"Build a weekly report from Toggl Track\"" },],
   },
 
   // ── Analytics ───────────────────────────────────────────────────
@@ -1093,10 +1038,9 @@ export const connectors: Connector[] = [
     summary: "Humbalytics web analytics with built-in A/B experimentation, traffic attribution, heat maps, and scroll-depth tracking. Runs experiments that dynamically rewrite page content without redeploying code.",
     monogram: "HU",
     authType: "API Key",
-    useCases: [
-      { title: "Investigate Drop-Offs", description: "Find where users disengage in Humbalytics and rank the biggest leaks.", command: "personas run \"Find funnel drop-offs in Humbalytics\"" },
-      { title: "Compare Cohorts or Releases", description: "Spot meaningful shifts between time windows or builds in Humbalytics.", command: "personas run \"Compare last 2 releases in Humbalytics\"" },
-    ],
+    icon: "humbalytics",
+    useCases: [{ title: "Investigate Drop-Offs", description: "Find where users disengage in Humbalytics and rank the biggest leaks.", command: "personas run \"Find funnel drop-offs in Humbalytics\"" },
+      { title: "Compare Cohorts or Releases", description: "Spot meaningful shifts between time windows or builds in Humbalytics.", command: "personas run \"Compare last 2 releases in Humbalytics\"" },],
   },
   {
     name: "metabase",
@@ -1106,10 +1050,9 @@ export const connectors: Connector[] = [
     summary: "Metabase open-source BI -- execute saved questions (cards), read dashboards, and manage alerts/pulses across your connected databases.",
     monogram: "ME",
     authType: "API Key",
-    useCases: [
-      { title: "Investigate Drop-Offs", description: "Find where users disengage in Metabase and rank the biggest leaks.", command: "personas run \"Find funnel drop-offs in Metabase\"" },
-      { title: "Compare Cohorts or Releases", description: "Spot meaningful shifts between time windows or builds in Metabase.", command: "personas run \"Compare last 2 releases in Metabase\"" },
-    ],
+    icon: "metabase",
+    useCases: [{ title: "Investigate Drop-Offs", description: "Find where users disengage in Metabase and rank the biggest leaks.", command: "personas run \"Find funnel drop-offs in Metabase\"" },
+      { title: "Compare Cohorts or Releases", description: "Spot meaningful shifts between time windows or builds in Metabase.", command: "personas run \"Compare last 2 releases in Metabase\"" },],
   },
   {
     name: "mixpanel",
@@ -1119,6 +1062,7 @@ export const connectors: Connector[] = [
     summary: "Mixpanel product analytics with GDPR-compliant data access.",
     monogram: "MI",
     authType: "Service Account",
+    icon: "mixpanel",
     useCases: [{ title: "Generate Retention Reports", description: "See how well you're keeping users over time with weekly cohort tables.", command: "personas run \"Show weekly retention cohorts for the last 12 weeks\"" },
       { title: "Audit Event Naming", description: "Find inconsistencies in your event names and suggest a cleaner taxonomy.", command: "personas run \"Audit event naming consistency\"" },
       { title: "Map User Journeys", description: "Trace the most common paths users take through your product.", command: "personas run \"Show the top 10 most common user journeys\"" },],
@@ -1131,6 +1075,7 @@ export const connectors: Connector[] = [
     summary: "PostHog product analytics, feature flags, session replay, and A/B testing.",
     monogram: "PO",
     authType: "API Key",
+    icon: "posthog",
     useCases: [{ title: "Clean Up Old Feature Flags", description: "Find feature flags that have been fully rolled out for 30+ days and should be removed from code.", command: "personas run \"Find stale feature flags rolled out for 30+ days\"" },
       { title: "Analyze Funnel Drop-Offs", description: "See where users are dropping off in your funnels and which steps need attention.", command: "personas run \"Analyze the signup funnel for drop-off points\"" },
       { title: "Summarize A/B Test Results", description: "Get a statistical summary of running experiments with a recommendation on the winner.", command: "personas run \"Summarize the onboarding-v2 experiment results\"" },],
@@ -1143,10 +1088,9 @@ export const connectors: Connector[] = [
     summary: "Redash open-source BI -- execute saved SQL queries, read dashboards, and manage alerts across any connected database.",
     monogram: "RE",
     authType: "API Key",
-    useCases: [
-      { title: "Investigate Drop-Offs", description: "Find where users disengage in Redash and rank the biggest leaks.", command: "personas run \"Find funnel drop-offs in Redash\"" },
-      { title: "Compare Cohorts or Releases", description: "Spot meaningful shifts between time windows or builds in Redash.", command: "personas run \"Compare last 2 releases in Redash\"" },
-    ],
+    icon: "redash",
+    useCases: [{ title: "Investigate Drop-Offs", description: "Find where users disengage in Redash and rank the biggest leaks.", command: "personas run \"Find funnel drop-offs in Redash\"" },
+      { title: "Compare Cohorts or Releases", description: "Spot meaningful shifts between time windows or builds in Redash.", command: "personas run \"Compare last 2 releases in Redash\"" },],
   },
   {
     name: "twilio_segment",
@@ -1156,7 +1100,7 @@ export const connectors: Connector[] = [
     summary: "Twilio Segment customer data platform for event tracking and routing.",
     monogram: "TS",
     authType: "Write Key",
-    icon: "segment",
+    icon: "twilio",
     useCases: [{ title: "Check Source Health", description: "Make sure all your data sources are sending events and get alerted when they stop.", command: "personas run \"Alert when any source stops sending events for 1 hour\"" },
       { title: "Find Schema Violations", description: "Catch events that don't match your tracking plan and see what needs fixing.", command: "personas run \"Show events violating the tracking plan schema\"" },
       { title: "Verify Destination Delivery", description: "Confirm all destinations are receiving events correctly and flag any failures.", command: "personas run \"Check delivery status for all destinations\"" },],
@@ -1171,6 +1115,7 @@ export const connectors: Connector[] = [
     summary: "Better Stack uptime monitoring, incident management, and status pages.",
     monogram: "BS",
     authType: "PAT",
+    icon: "betterstack",
     useCases: [{ title: "Generate SLA Reports", description: "Create monthly uptime reports showing SLA compliance for all your services.", command: "personas run \"Generate monthly SLA report\"" },
       { title: "Write Post-Mortems", description: "Compile incident timelines, screenshots, and resolution steps into a structured report.", command: "personas run \"Create post-mortem for incident #1234\"" },
       { title: "Auto-Update Status Page", description: "Automatically update your public status page when monitors detect an outage.", command: "personas run \"Sync monitor status to the public status page\"" },],
@@ -1183,6 +1128,7 @@ export const connectors: Connector[] = [
     summary: "Sentry application monitoring for errors, performance, and session replay.",
     monogram: "SE",
     authType: "PAT",
+    icon: "sentry",
     useCases: [{ title: "Catch Error Spikes", description: "Detect sudden jumps in errors and automatically create a ticket with the stack trace.", command: "personas run \"Alert and create a Jira ticket when error rate spikes 200%\"" },
       { title: "Compare Release Health", description: "See if the latest release is crashing more than the previous one.", command: "personas run \"Compare crash rates between the latest and previous releases\"" },
       { title: "Send a Daily Bug Digest", description: "Get a daily summary of new unhandled exceptions grouped by issue.", command: "personas run \"Send daily exception digest to #bugs\"" },],
@@ -1197,10 +1143,9 @@ export const connectors: Connector[] = [
     summary: "Attio next-gen CRM for managing people, companies, deals, and custom objects via the Attio API v2.",
     monogram: "AT",
     authType: "PAT",
-    useCases: [
-      { title: "Score & Route Leads", description: "Rescore contacts in Attio from latest activity and assign to the right rep.", command: "personas run \"Rescore stale leads in Attio\"" },
-      { title: "Pipeline Health Report", description: "Get a weekly view of deal stages, slip risk, and forecast from Attio.", command: "personas run \"Show Attio pipeline weekly report\"" },
-    ],
+    icon: "attio",
+    useCases: [{ title: "Score & Route Leads", description: "Rescore contacts in Attio from latest activity and assign to the right rep.", command: "personas run \"Rescore stale leads in Attio\"" },
+      { title: "Pipeline Health Report", description: "Get a weekly view of deal stages, slip risk, and forecast from Attio.", command: "personas run \"Show Attio pipeline weekly report\"" },],
   },
   {
     name: "hubspot",
@@ -1210,6 +1155,7 @@ export const connectors: Connector[] = [
     summary: "HubSpot CRM for contacts, deals, marketing automation, and sales pipelines.",
     monogram: "HU",
     authType: "PAT",
+    icon: "hubspot",
     useCases: [{ title: "Update Lead Scores", description: "Recalculate lead scores based on recent engagement so your team focuses on the right contacts.", command: "personas run \"Recalculate lead scores based on recent engagement\"" },
       { title: "Report on the Sales Pipeline", description: "Get a weekly summary of deal stages, progress, and forecasted revenue.", command: "personas run \"Show weekly pipeline report with revenue forecast\"" },
       { title: "Find Duplicate Contacts", description: "Scan for duplicate contacts using fuzzy matching and merge them.", command: "personas run \"Find and merge duplicate contacts (dry run)\"" },],
@@ -1222,10 +1168,9 @@ export const connectors: Connector[] = [
     summary: "Pipedrive CRM for managing deals, contacts, activities, and sales pipelines via the Pipedrive REST API.",
     monogram: "PI",
     authType: "API Key",
-    useCases: [
-      { title: "Score & Route Leads", description: "Rescore contacts in Pipedrive from latest activity and assign to the right rep.", command: "personas run \"Rescore stale leads in Pipedrive\"" },
-      { title: "Pipeline Health Report", description: "Get a weekly view of deal stages, slip risk, and forecast from Pipedrive.", command: "personas run \"Show Pipedrive pipeline weekly report\"" },
-    ],
+    icon: "pipedrive",
+    useCases: [{ title: "Score & Route Leads", description: "Rescore contacts in Pipedrive from latest activity and assign to the right rep.", command: "personas run \"Rescore stale leads in Pipedrive\"" },
+      { title: "Pipeline Health Report", description: "Get a weekly view of deal stages, slip risk, and forecast from Pipedrive.", command: "personas run \"Show Pipedrive pipeline weekly report\"" },],
   },
 
   // ── Design ──────────────────────────────────────────────────────
@@ -1237,10 +1182,9 @@ export const connectors: Connector[] = [
     summary: "Canva design platform for creating, managing, and exporting designs via the Canva Connect API.",
     monogram: "CA",
     authType: "PAT",
-    useCases: [
-      { title: "Export Tokens & Assets", description: "Pull colors, type, and components out of Canva and into code.", command: "personas run \"Export design tokens from Canva\"" },
-      { title: "Audit Component Usage", description: "Find detached or outdated instances across files in Canva.", command: "personas run \"Audit Canva component drift\"" },
-    ],
+    icon: "canva",
+    useCases: [{ title: "Export Tokens & Assets", description: "Pull colors, type, and components out of Canva and into code.", command: "personas run \"Export design tokens from Canva\"" },
+      { title: "Audit Component Usage", description: "Find detached or outdated instances across files in Canva.", command: "personas run \"Audit Canva component drift\"" },],
   },
   {
     name: "figma",
@@ -1250,6 +1194,7 @@ export const connectors: Connector[] = [
     summary: "Figma collaborative design tool for UI/UX, prototyping, and design systems.",
     monogram: "FI",
     authType: "PAT",
+    icon: "figma",
     useCases: [{ title: "Export Design Tokens", description: "Pull colors, spacing, and typography from Figma and sync them to your codebase.", command: "personas run \"Export design tokens from design-system as CSS variables\"" },
       { title: "Audit Component Usage", description: "Find detached or outdated component instances across all your Figma files.", command: "personas run \"Audit component usage in the design system project\"" },
       { title: "Compare Design Versions", description: "Highlight visual differences between the current and previous design versions.", command: "personas run \"Compare app-screens against the previous version\"" },],
@@ -1262,10 +1207,9 @@ export const connectors: Connector[] = [
     summary: "Penpot open-source design platform for prototyping, components, and design tokens.",
     monogram: "PE",
     authType: "PAT",
-    useCases: [
-      { title: "Export Tokens & Assets", description: "Pull colors, type, and components out of Penpot and into code.", command: "personas run \"Export design tokens from Penpot\"" },
-      { title: "Audit Component Usage", description: "Find detached or outdated instances across files in Penpot.", command: "personas run \"Audit Penpot component drift\"" },
-    ],
+    icon: "penpot",
+    useCases: [{ title: "Export Tokens & Assets", description: "Pull colors, type, and components out of Penpot and into code.", command: "personas run \"Export design tokens from Penpot\"" },
+      { title: "Audit Component Usage", description: "Find detached or outdated instances across files in Penpot.", command: "personas run \"Audit Penpot component drift\"" },],
   },
 
   // ── Social ──────────────────────────────────────────────────────
@@ -1277,6 +1221,7 @@ export const connectors: Connector[] = [
     summary: "Buffer social media management for scheduling and publishing.",
     monogram: "BU",
     authType: "PAT",
+    icon: "buffer",
     useCases: [{ title: "Fill Your Post Queue", description: "Automatically add approved content to your publishing queue for the week.", command: "personas run \"Add 7 posts from the content database to the queue\"" },
       { title: "Get an Engagement Report", description: "See how your posts performed across all connected social profiles this week.", command: "personas run \"Show weekly engagement across all profiles\"" },
       { title: "Optimize Posting Times", description: "Analyze past performance and reschedule queued posts to the best times for engagement.", command: "personas run \"Reschedule queued posts to optimal times based on 90-day data\"" },],
@@ -1290,10 +1235,8 @@ export const connectors: Connector[] = [
     monogram: "GA",
     authType: "OAuth",
     icon: "google-ads",
-    useCases: [
-      { title: "Schedule a Batch", description: "Queue up posts on Google Ads for the week or month with the right timing.", command: "personas run \"Schedule next 10 posts on Google Ads\"" },
-      { title: "Track Engagement", description: "See what's working on Google Ads and what's not, ranked.", command: "personas run \"Show top performing posts on Google Ads\"" },
-    ],
+    useCases: [{ title: "Schedule a Batch", description: "Queue up posts on Google Ads for the week or month with the right timing.", command: "personas run \"Schedule next 10 posts on Google Ads\"" },
+      { title: "Track Engagement", description: "See what's working on Google Ads and what's not, ranked.", command: "personas run \"Show top performing posts on Google Ads\"" },],
   },
   {
     name: "linkedin",
@@ -1303,10 +1246,9 @@ export const connectors: Connector[] = [
     summary: "LinkedIn professional network for profile, connections, and social posts.",
     monogram: "LI",
     authType: "OAuth",
-    useCases: [
-      { title: "Schedule a Batch", description: "Queue up posts on LinkedIn for the week or month with the right timing.", command: "personas run \"Schedule next 10 posts on LinkedIn\"" },
-      { title: "Track Engagement", description: "See what's working on LinkedIn and what's not, ranked.", command: "personas run \"Show top performing posts on LinkedIn\"" },
-    ],
+    icon: "linkedin",
+    useCases: [{ title: "Schedule a Batch", description: "Queue up posts on LinkedIn for the week or month with the right timing.", command: "personas run \"Schedule next 10 posts on LinkedIn\"" },
+      { title: "Track Engagement", description: "See what's working on LinkedIn and what's not, ranked.", command: "personas run \"Show top performing posts on LinkedIn\"" },],
   },
   {
     name: "linkedin_ads",
@@ -1317,10 +1259,8 @@ export const connectors: Connector[] = [
     monogram: "LA",
     authType: "OAuth",
     icon: "linkedin-ads",
-    useCases: [
-      { title: "Schedule a Batch", description: "Queue up posts on LinkedIn Ads for the week or month with the right timing.", command: "personas run \"Schedule next 10 posts on LinkedIn Ads\"" },
-      { title: "Track Engagement", description: "See what's working on LinkedIn Ads and what's not, ranked.", command: "personas run \"Show top performing posts on LinkedIn Ads\"" },
-    ],
+    useCases: [{ title: "Schedule a Batch", description: "Queue up posts on LinkedIn Ads for the week or month with the right timing.", command: "personas run \"Schedule next 10 posts on LinkedIn Ads\"" },
+      { title: "Track Engagement", description: "See what's working on LinkedIn Ads and what's not, ranked.", command: "personas run \"Show top performing posts on LinkedIn Ads\"" },],
   },
   {
     name: "meta_ads",
@@ -1331,10 +1271,8 @@ export const connectors: Connector[] = [
     monogram: "MA",
     authType: "OAuth",
     icon: "meta-ads",
-    useCases: [
-      { title: "Schedule a Batch", description: "Queue up posts on Meta Ads for the week or month with the right timing.", command: "personas run \"Schedule next 10 posts on Meta Ads\"" },
-      { title: "Track Engagement", description: "See what's working on Meta Ads and what's not, ranked.", command: "personas run \"Show top performing posts on Meta Ads\"" },
-    ],
+    useCases: [{ title: "Schedule a Batch", description: "Queue up posts on Meta Ads for the week or month with the right timing.", command: "personas run \"Schedule next 10 posts on Meta Ads\"" },
+      { title: "Track Engagement", description: "See what's working on Meta Ads and what's not, ranked.", command: "personas run \"Show top performing posts on Meta Ads\"" },],
   },
   {
     name: "reddit",
@@ -1344,10 +1282,9 @@ export const connectors: Connector[] = [
     summary: "Reddit social network for fetching subreddit posts, comments, and trends via the Reddit OAuth API.",
     monogram: "RE",
     authType: "OAuth",
-    useCases: [
-      { title: "Schedule a Batch", description: "Queue up posts on Reddit for the week or month with the right timing.", command: "personas run \"Schedule next 10 posts on Reddit\"" },
-      { title: "Track Engagement", description: "See what's working on Reddit and what's not, ranked.", command: "personas run \"Show top performing posts on Reddit\"" },
-    ],
+    icon: "reddit",
+    useCases: [{ title: "Schedule a Batch", description: "Queue up posts on Reddit for the week or month with the right timing.", command: "personas run \"Schedule next 10 posts on Reddit\"" },
+      { title: "Track Engagement", description: "See what's working on Reddit and what's not, ranked.", command: "personas run \"Show top performing posts on Reddit\"" },],
   },
   {
     name: "x_twitter",
@@ -1357,11 +1294,9 @@ export const connectors: Connector[] = [
     summary: "X (formerly Twitter) API v2 for reading tweets, searching content, tracking trends, and publishing posts.",
     monogram: "XT",
     authType: "Bearer Token",
-    icon: "x",
-    useCases: [
-      { title: "Schedule a Batch", description: "Queue up posts on X (Twitter) for the week or month with the right timing.", command: "personas run \"Schedule next 10 posts on X (Twitter)\"" },
-      { title: "Track Engagement", description: "See what's working on X (Twitter) and what's not, ranked.", command: "personas run \"Show top performing posts on X (Twitter)\"" },
-    ],
+    icon: "x-twitter",
+    useCases: [{ title: "Schedule a Batch", description: "Queue up posts on X (Twitter) for the week or month with the right timing.", command: "personas run \"Schedule next 10 posts on X (Twitter)\"" },
+      { title: "Track Engagement", description: "See what's working on X (Twitter) and what's not, ranked.", command: "personas run \"Show top performing posts on X (Twitter)\"" },],
   },
   {
     name: "youtube_data",
@@ -1372,10 +1307,8 @@ export const connectors: Connector[] = [
     monogram: "YD",
     authType: "API Key",
     icon: "youtube-data",
-    useCases: [
-      { title: "Schedule a Batch", description: "Queue up posts on YouTube Data API for the week or month with the right timing.", command: "personas run \"Schedule next 10 posts on YouTube Data API\"" },
-      { title: "Track Engagement", description: "See what's working on YouTube Data API and what's not, ranked.", command: "personas run \"Show top performing posts on YouTube Data API\"" },
-    ],
+    useCases: [{ title: "Schedule a Batch", description: "Queue up posts on YouTube Data API for the week or month with the right timing.", command: "personas run \"Schedule next 10 posts on YouTube Data API\"" },
+      { title: "Track Engagement", description: "See what's working on YouTube Data API and what's not, ranked.", command: "personas run \"Show top performing posts on YouTube Data API\"" },],
   },
 
   // ── AI ──────────────────────────────────────────────────────────
@@ -1387,10 +1320,9 @@ export const connectors: Connector[] = [
     summary: "Deepgram speech-to-text, text-to-speech, and audio intelligence API for transcription, diarization, and voice AI.",
     monogram: "DE",
     authType: "API Key",
-    useCases: [
-      { title: "Generate Content", description: "Use Deepgram to produce text, audio, images, or video from a prompt.", command: "personas run \"Generate intro VO via Deepgram\"" },
-      { title: "Plug Into a Workflow", description: "Route inputs through Deepgram as one step of a larger agent flow.", command: "personas run \"Pipe transcript through Deepgram\"" },
-    ],
+    icon: "deepgram",
+    useCases: [{ title: "Generate Content", description: "Use Deepgram to produce text, audio, images, or video from a prompt.", command: "personas run \"Generate intro VO via Deepgram\"" },
+      { title: "Plug Into a Workflow", description: "Route inputs through Deepgram as one step of a larger agent flow.", command: "personas run \"Pipe transcript through Deepgram\"" },],
   },
   {
     name: "elevenlabs",
@@ -1400,10 +1332,9 @@ export const connectors: Connector[] = [
     summary: "ElevenLabs AI voice generation, text-to-speech, and audio processing platform.",
     monogram: "EL",
     authType: "API Key",
-    useCases: [
-      { title: "Generate Content", description: "Use ElevenLabs to produce text, audio, images, or video from a prompt.", command: "personas run \"Generate intro VO via ElevenLabs\"" },
-      { title: "Plug Into a Workflow", description: "Route inputs through ElevenLabs as one step of a larger agent flow.", command: "personas run \"Pipe transcript through ElevenLabs\"" },
-    ],
+    icon: "elevenlabs",
+    useCases: [{ title: "Generate Content", description: "Use ElevenLabs to produce text, audio, images, or video from a prompt.", command: "personas run \"Generate intro VO via ElevenLabs\"" },
+      { title: "Plug Into a Workflow", description: "Route inputs through ElevenLabs as one step of a larger agent flow.", command: "personas run \"Pipe transcript through ElevenLabs\"" },],
   },
   {
     name: "gemini_vision",
@@ -1414,10 +1345,8 @@ export const connectors: Connector[] = [
     monogram: "GV",
     authType: "API Key",
     icon: "gemini-vision",
-    useCases: [
-      { title: "Generate Content", description: "Use Gemini Vision to produce text, audio, images, or video from a prompt.", command: "personas run \"Generate intro VO via Gemini Vision\"" },
-      { title: "Plug Into a Workflow", description: "Route inputs through Gemini Vision as one step of a larger agent flow.", command: "personas run \"Pipe transcript through Gemini Vision\"" },
-    ],
+    useCases: [{ title: "Generate Content", description: "Use Gemini Vision to produce text, audio, images, or video from a prompt.", command: "personas run \"Generate intro VO via Gemini Vision\"" },
+      { title: "Plug Into a Workflow", description: "Route inputs through Gemini Vision as one step of a larger agent flow.", command: "personas run \"Pipe transcript through Gemini Vision\"" },],
   },
   {
     name: "google_gemini",
@@ -1428,10 +1357,8 @@ export const connectors: Connector[] = [
     monogram: "GG",
     authType: "API Key",
     icon: "google-gemini",
-    useCases: [
-      { title: "Generate Content", description: "Use Google Gemini to produce text, audio, images, or video from a prompt.", command: "personas run \"Generate intro VO via Google Gemini\"" },
-      { title: "Plug Into a Workflow", description: "Route inputs through Google Gemini as one step of a larger agent flow.", command: "personas run \"Pipe transcript through Google Gemini\"" },
-    ],
+    useCases: [{ title: "Generate Content", description: "Use Google Gemini to produce text, audio, images, or video from a prompt.", command: "personas run \"Generate intro VO via Google Gemini\"" },
+      { title: "Plug Into a Workflow", description: "Route inputs through Google Gemini as one step of a larger agent flow.", command: "personas run \"Pipe transcript through Google Gemini\"" },],
   },
   {
     name: "higgsfield",
@@ -1441,10 +1368,9 @@ export const connectors: Connector[] = [
     summary: "Higgsfield AI generative image and video platform with hosted models including Soul 2.0, Nano Banana Pro, Sora 2, Veo 3.1, Kling 3.0, and 30+ more. Supports REST API access (programmatic) and a hosted MCP server (account OAuth, no API key).",
     monogram: "HI",
     authType: "API Key (KEY_ID:KEY_SECRET)",
-    useCases: [
-      { title: "Generate Content", description: "Use Higgsfield to produce text, audio, images, or video from a prompt.", command: "personas run \"Generate intro VO via Higgsfield\"" },
-      { title: "Plug Into a Workflow", description: "Route inputs through Higgsfield as one step of a larger agent flow.", command: "personas run \"Pipe transcript through Higgsfield\"" },
-    ],
+    icon: "higgsfield",
+    useCases: [{ title: "Generate Content", description: "Use Higgsfield to produce text, audio, images, or video from a prompt.", command: "personas run \"Generate intro VO via Higgsfield\"" },
+      { title: "Plug Into a Workflow", description: "Route inputs through Higgsfield as one step of a larger agent flow.", command: "personas run \"Pipe transcript through Higgsfield\"" },],
   },
   {
     name: "leonardo_ai",
@@ -1455,10 +1381,8 @@ export const connectors: Connector[] = [
     monogram: "LA",
     authType: "API Key",
     icon: "leonardo-ai",
-    useCases: [
-      { title: "Generate Content", description: "Use Leonardo AI to produce text, audio, images, or video from a prompt.", command: "personas run \"Generate intro VO via Leonardo AI\"" },
-      { title: "Plug Into a Workflow", description: "Route inputs through Leonardo AI as one step of a larger agent flow.", command: "personas run \"Pipe transcript through Leonardo AI\"" },
-    ],
+    useCases: [{ title: "Generate Content", description: "Use Leonardo AI to produce text, audio, images, or video from a prompt.", command: "personas run \"Generate intro VO via Leonardo AI\"" },
+      { title: "Plug Into a Workflow", description: "Route inputs through Leonardo AI as one step of a larger agent flow.", command: "personas run \"Pipe transcript through Leonardo AI\"" },],
   },
   {
     name: "twin",
@@ -1468,10 +1392,8 @@ export const connectors: Connector[] = [
     summary: "Speak as the user. Provides identity, per-channel tone, memory recall, and interaction tracking to any persona. The active twin is resolved automatically — no per-persona attach step needed.",
     monogram: "TW",
     authType: "Twin",
-    useCases: [
-      { title: "Generate Content", description: "Use Twin to produce text, audio, images, or video from a prompt.", command: "personas run \"Generate intro VO via Twin\"" },
-      { title: "Plug Into a Workflow", description: "Route inputs through Twin as one step of a larger agent flow.", command: "personas run \"Pipe transcript through Twin\"" },
-    ],
+    useCases: [{ title: "Generate Content", description: "Use Twin to produce text, audio, images, or video from a prompt.", command: "personas run \"Generate intro VO via Twin\"" },
+      { title: "Plug Into a Workflow", description: "Route inputs through Twin as one step of a larger agent flow.", command: "personas run \"Pipe transcript through Twin\"" },],
   },
 
   // ── Research ────────────────────────────────────────────────────
@@ -1483,10 +1405,9 @@ export const connectors: Connector[] = [
     summary: "Apify web scraping and automation platform with actors for YouTube scraping, Twitter/X scraping, and browser automation.",
     monogram: "AP",
     authType: "API Token",
-    useCases: [
-      { title: "Search & Summarize", description: "Query Apify on a topic and pull the highest-signal results.", command: "personas run \"Search Apify for recent papers on agents\"" },
-      { title: "Save Sources to a Notebook", description: "Persist Apify results into your local knowledge base for later.", command: "personas run \"Save top Apify results to notes\"" },
-    ],
+    icon: "apify",
+    useCases: [{ title: "Search & Summarize", description: "Query Apify on a topic and pull the highest-signal results.", command: "personas run \"Search Apify for recent papers on agents\"" },
+      { title: "Save Sources to a Notebook", description: "Persist Apify results into your local knowledge base for later.", command: "personas run \"Save top Apify results to notes\"" },],
   },
   {
     name: "arxiv",
@@ -1496,10 +1417,9 @@ export const connectors: Connector[] = [
     summary: "Access arXiv preprint repository for scientific papers across physics, mathematics, computer science, and more.",
     monogram: "AR",
     authType: "None",
-    useCases: [
-      { title: "Search & Summarize", description: "Query arXiv on a topic and pull the highest-signal results.", command: "personas run \"Search arXiv for recent papers on agents\"" },
-      { title: "Save Sources to a Notebook", description: "Persist arXiv results into your local knowledge base for later.", command: "personas run \"Save top arXiv results to notes\"" },
-    ],
+    icon: "arxiv",
+    useCases: [{ title: "Search & Summarize", description: "Query arXiv on a topic and pull the highest-signal results.", command: "personas run \"Search arXiv for recent papers on agents\"" },
+      { title: "Save Sources to a Notebook", description: "Persist arXiv results into your local knowledge base for later.", command: "personas run \"Save top arXiv results to notes\"" },],
   },
   {
     name: "bright_data",
@@ -1509,11 +1429,9 @@ export const connectors: Connector[] = [
     summary: "Bright Data web data infrastructure -- SERP API, Web Unlocker (bypass bot detection / CAPTCHAs / geo-blocks), Web Scraper API (660+ pre-built scrapers including LinkedIn, Amazon, Instagram), Scraping Browser (managed Puppeteer/Playwright), and a 400M+ IP proxy network. Distinct from Firecrawl in offering structured per-site scrapers + production-grade unblocking + global proxies.",
     monogram: "BD",
     authType: "API Token",
-    icon: "bright-data",
-    useCases: [
-      { title: "Search & Summarize", description: "Query Bright Data on a topic and pull the highest-signal results.", command: "personas run \"Search Bright Data for recent papers on agents\"" },
-      { title: "Save Sources to a Notebook", description: "Persist Bright Data results into your local knowledge base for later.", command: "personas run \"Save top Bright Data results to notes\"" },
-    ],
+    icon: "bright_data",
+    useCases: [{ title: "Search & Summarize", description: "Query Bright Data on a topic and pull the highest-signal results.", command: "personas run \"Search Bright Data for recent papers on agents\"" },
+      { title: "Save Sources to a Notebook", description: "Persist Bright Data results into your local knowledge base for later.", command: "personas run \"Save top Bright Data results to notes\"" },],
   },
   {
     name: "firecrawl",
@@ -1523,10 +1441,9 @@ export const connectors: Connector[] = [
     summary: "Firecrawl agent-friendly web crawling API. Converts any URL into clean markdown or structured JSON, handles JS-rendered sites, and respects robots.txt. Distinct from desktop_browser in that it runs in the cloud with no local headless browser dependency.",
     monogram: "FI",
     authType: "API Key",
-    useCases: [
-      { title: "Search & Summarize", description: "Query Firecrawl on a topic and pull the highest-signal results.", command: "personas run \"Search Firecrawl for recent papers on agents\"" },
-      { title: "Save Sources to a Notebook", description: "Persist Firecrawl results into your local knowledge base for later.", command: "personas run \"Save top Firecrawl results to notes\"" },
-    ],
+    icon: "firecrawl",
+    useCases: [{ title: "Search & Summarize", description: "Query Firecrawl on a topic and pull the highest-signal results.", command: "personas run \"Search Firecrawl for recent papers on agents\"" },
+      { title: "Save Sources to a Notebook", description: "Persist Firecrawl results into your local knowledge base for later.", command: "personas run \"Save top Firecrawl results to notes\"" },],
   },
   {
     name: "news_api",
@@ -1537,10 +1454,8 @@ export const connectors: Connector[] = [
     monogram: "NA",
     authType: "API Key",
     icon: "news-api",
-    useCases: [
-      { title: "Search & Summarize", description: "Query News API on a topic and pull the highest-signal results.", command: "personas run \"Search News API for recent papers on agents\"" },
-      { title: "Save Sources to a Notebook", description: "Persist News API results into your local knowledge base for later.", command: "personas run \"Save top News API results to notes\"" },
-    ],
+    useCases: [{ title: "Search & Summarize", description: "Query News API on a topic and pull the highest-signal results.", command: "personas run \"Search News API for recent papers on agents\"" },
+      { title: "Save Sources to a Notebook", description: "Persist News API results into your local knowledge base for later.", command: "personas run \"Save top News API results to notes\"" },],
   },
   {
     name: "pubmed",
@@ -1550,10 +1465,9 @@ export const connectors: Connector[] = [
     summary: "Access PubMed biomedical and life sciences literature from the National Center for Biotechnology Information (NCBI).",
     monogram: "PU",
     authType: "API Key",
-    useCases: [
-      { title: "Search & Summarize", description: "Query PubMed on a topic and pull the highest-signal results.", command: "personas run \"Search PubMed for recent papers on agents\"" },
-      { title: "Save Sources to a Notebook", description: "Persist PubMed results into your local knowledge base for later.", command: "personas run \"Save top PubMed results to notes\"" },
-    ],
+    icon: "pubmed",
+    useCases: [{ title: "Search & Summarize", description: "Query PubMed on a topic and pull the highest-signal results.", command: "personas run \"Search PubMed for recent papers on agents\"" },
+      { title: "Save Sources to a Notebook", description: "Persist PubMed results into your local knowledge base for later.", command: "personas run \"Save top PubMed results to notes\"" },],
   },
   {
     name: "semantic_scholar",
@@ -1564,10 +1478,8 @@ export const connectors: Connector[] = [
     monogram: "SS",
     authType: "API Key",
     icon: "semantic-scholar",
-    useCases: [
-      { title: "Search & Summarize", description: "Query Semantic Scholar on a topic and pull the highest-signal results.", command: "personas run \"Search Semantic Scholar for recent papers on agents\"" },
-      { title: "Save Sources to a Notebook", description: "Persist Semantic Scholar results into your local knowledge base for later.", command: "personas run \"Save top Semantic Scholar results to notes\"" },
-    ],
+    useCases: [{ title: "Search & Summarize", description: "Query Semantic Scholar on a topic and pull the highest-signal results.", command: "personas run \"Search Semantic Scholar for recent papers on agents\"" },
+      { title: "Save Sources to a Notebook", description: "Persist Semantic Scholar results into your local knowledge base for later.", command: "personas run \"Save top Semantic Scholar results to notes\"" },],
   },
 
   // ── Finance ─────────────────────────────────────────────────────
@@ -1580,10 +1492,8 @@ export const connectors: Connector[] = [
     monogram: "AV",
     authType: "API Key",
     icon: "alpha-vantage",
-    useCases: [
-      { title: "Reconcile Transactions", description: "Match payments, refunds, and payouts across Alpha Vantage and your ledger.", command: "personas run \"Reconcile yesterday's Alpha Vantage transactions\"" },
-      { title: "Watch For Anomalies", description: "Flag unusual charges, failed payments, or unexpected spend in Alpha Vantage.", command: "personas run \"Flag Alpha Vantage anomalies in last 24h\"" },
-    ],
+    useCases: [{ title: "Reconcile Transactions", description: "Match payments, refunds, and payouts across Alpha Vantage and your ledger.", command: "personas run \"Reconcile yesterday's Alpha Vantage transactions\"" },
+      { title: "Watch For Anomalies", description: "Flag unusual charges, failed payments, or unexpected spend in Alpha Vantage.", command: "personas run \"Flag Alpha Vantage anomalies in last 24h\"" },],
   },
   {
     name: "kalshi",
@@ -1593,10 +1503,9 @@ export const connectors: Connector[] = [
     summary: "Kalshi prediction market platform for reading markets, events, order books, and settlement data.",
     monogram: "KA",
     authType: "API Key",
-    useCases: [
-      { title: "Reconcile Transactions", description: "Match payments, refunds, and payouts across Kalshi and your ledger.", command: "personas run \"Reconcile yesterday's Kalshi transactions\"" },
-      { title: "Watch For Anomalies", description: "Flag unusual charges, failed payments, or unexpected spend in Kalshi.", command: "personas run \"Flag Kalshi anomalies in last 24h\"" },
-    ],
+    icon: "kalshi",
+    useCases: [{ title: "Reconcile Transactions", description: "Match payments, refunds, and payouts across Kalshi and your ledger.", command: "personas run \"Reconcile yesterday's Kalshi transactions\"" },
+      { title: "Watch For Anomalies", description: "Flag unusual charges, failed payments, or unexpected spend in Kalshi.", command: "personas run \"Flag Kalshi anomalies in last 24h\"" },],
   },
   {
     name: "lemonsqueezy",
@@ -1606,10 +1515,9 @@ export const connectors: Connector[] = [
     summary: "Lemon Squeezy digital commerce platform for selling digital products, subscriptions, and SaaS via the Lemon Squeezy API v1.",
     monogram: "LS",
     authType: "API Key",
-    useCases: [
-      { title: "Reconcile Transactions", description: "Match payments, refunds, and payouts across Lemon Squeezy and your ledger.", command: "personas run \"Reconcile yesterday's Lemon Squeezy transactions\"" },
-      { title: "Watch For Anomalies", description: "Flag unusual charges, failed payments, or unexpected spend in Lemon Squeezy.", command: "personas run \"Flag Lemon Squeezy anomalies in last 24h\"" },
-    ],
+    icon: "lemonsqueezy",
+    useCases: [{ title: "Reconcile Transactions", description: "Match payments, refunds, and payouts across Lemon Squeezy and your ledger.", command: "personas run \"Reconcile yesterday's Lemon Squeezy transactions\"" },
+      { title: "Watch For Anomalies", description: "Flag unusual charges, failed payments, or unexpected spend in Lemon Squeezy.", command: "personas run \"Flag Lemon Squeezy anomalies in last 24h\"" },],
   },
   {
     name: "ramp",
@@ -1619,10 +1527,9 @@ export const connectors: Connector[] = [
     summary: "Ramp corporate cards, expense management, and accounting automation.",
     monogram: "RA",
     authType: "OAuth",
-    useCases: [
-      { title: "Reconcile Transactions", description: "Match payments, refunds, and payouts across Ramp and your ledger.", command: "personas run \"Reconcile yesterday's Ramp transactions\"" },
-      { title: "Watch For Anomalies", description: "Flag unusual charges, failed payments, or unexpected spend in Ramp.", command: "personas run \"Flag Ramp anomalies in last 24h\"" },
-    ],
+    icon: "ramp",
+    useCases: [{ title: "Reconcile Transactions", description: "Match payments, refunds, and payouts across Ramp and your ledger.", command: "personas run \"Reconcile yesterday's Ramp transactions\"" },
+      { title: "Watch For Anomalies", description: "Flag unusual charges, failed payments, or unexpected spend in Ramp.", command: "personas run \"Flag Ramp anomalies in last 24h\"" },],
   },
   {
     name: "stripe",
@@ -1632,10 +1539,9 @@ export const connectors: Connector[] = [
     summary: "Stripe payment processing platform -- charges, subscriptions, invoices, and Connect.",
     monogram: "ST",
     authType: "Secret Key",
-    useCases: [
-      { title: "Reconcile Transactions", description: "Match payments, refunds, and payouts across Stripe and your ledger.", command: "personas run \"Reconcile yesterday's Stripe transactions\"" },
-      { title: "Watch For Anomalies", description: "Flag unusual charges, failed payments, or unexpected spend in Stripe.", command: "personas run \"Flag Stripe anomalies in last 24h\"" },
-    ],
+    icon: "stripe",
+    useCases: [{ title: "Reconcile Transactions", description: "Match payments, refunds, and payouts across Stripe and your ledger.", command: "personas run \"Reconcile yesterday's Stripe transactions\"" },
+      { title: "Watch For Anomalies", description: "Flag unusual charges, failed payments, or unexpected spend in Stripe.", command: "personas run \"Flag Stripe anomalies in last 24h\"" },],
   },
   {
     name: "woocommerce",
@@ -1645,10 +1551,9 @@ export const connectors: Connector[] = [
     summary: "WooCommerce open-source e-commerce platform for managing orders, products, and customers via the WooCommerce REST API v3.",
     monogram: "WO",
     authType: "API Key",
-    useCases: [
-      { title: "Reconcile Transactions", description: "Match payments, refunds, and payouts across WooCommerce and your ledger.", command: "personas run \"Reconcile yesterday's WooCommerce transactions\"" },
-      { title: "Watch For Anomalies", description: "Flag unusual charges, failed payments, or unexpected spend in WooCommerce.", command: "personas run \"Flag WooCommerce anomalies in last 24h\"" },
-    ],
+    icon: "woocommerce",
+    useCases: [{ title: "Reconcile Transactions", description: "Match payments, refunds, and payouts across WooCommerce and your ledger.", command: "personas run \"Reconcile yesterday's WooCommerce transactions\"" },
+      { title: "Watch For Anomalies", description: "Flag unusual charges, failed payments, or unexpected spend in WooCommerce.", command: "personas run \"Flag WooCommerce anomalies in last 24h\"" },],
   },
 
   // ── Automation ──────────────────────────────────────────────────
@@ -1660,10 +1565,9 @@ export const connectors: Connector[] = [
     summary: "Arcade hosted MCP gateway providing thousands of enterprise-ready tools with managed OAuth and just-in-time authorization.",
     monogram: "AR",
     authType: "API Key",
-    useCases: [
-      { title: "Orchestrate Cross-Tool Flows", description: "Trigger Arcade jobs from agent decisions, and bring results back.", command: "personas run \"Trigger Arcade workflow on review approved\"" },
-      { title: "Listen for External Events", description: "React to events arriving from Arcade as agent triggers.", command: "personas run \"Subscribe to Arcade new-event webhook\"" },
-    ],
+    icon: "arcade",
+    useCases: [{ title: "Orchestrate Cross-Tool Flows", description: "Trigger Arcade jobs from agent decisions, and bring results back.", command: "personas run \"Trigger Arcade workflow on review approved\"" },
+      { title: "Listen for External Events", description: "React to events arriving from Arcade as agent triggers.", command: "personas run \"Subscribe to Arcade new-event webhook\"" },],
   },
   {
     name: "desktop_browser",
@@ -1674,10 +1578,8 @@ export const connectors: Connector[] = [
     monogram: "BC",
     authType: "Local App",
     icon: "chrome",
-    useCases: [
-      { title: "Orchestrate Cross-Tool Flows", description: "Trigger Browser (Chrome/Edge/Lightpanda) jobs from agent decisions, and bring results back.", command: "personas run \"Trigger Browser (Chrome/Edge/Lightpanda) workflow on review approved\"" },
-      { title: "Listen for External Events", description: "React to events arriving from Browser (Chrome/Edge/Lightpanda) as agent triggers.", command: "personas run \"Subscribe to Browser (Chrome/Edge/Lightpanda) new-event webhook\"" },
-    ],
+    useCases: [{ title: "Orchestrate Cross-Tool Flows", description: "Trigger Browser (Chrome/Edge/Lightpanda) jobs from agent decisions, and bring results back.", command: "personas run \"Trigger Browser (Chrome/Edge/Lightpanda) workflow on review approved\"" },
+      { title: "Listen for External Events", description: "React to events arriving from Browser (Chrome/Edge/Lightpanda) as agent triggers.", command: "personas run \"Subscribe to Browser (Chrome/Edge/Lightpanda) new-event webhook\"" },],
   },
   {
     name: "mcp_gateway",
@@ -1687,11 +1589,9 @@ export const connectors: Connector[] = [
     summary: "Bundle multiple MCP servers under one credential. Attach the gateway to a persona once and inherit every member tool.",
     monogram: "MG",
     authType: "Built-in",
-    icon: "mcp-gateway",
-    useCases: [
-      { title: "Orchestrate Cross-Tool Flows", description: "Trigger MCP Gateway jobs from agent decisions, and bring results back.", command: "personas run \"Trigger MCP Gateway workflow on review approved\"" },
-      { title: "Listen for External Events", description: "React to events arriving from MCP Gateway as agent triggers.", command: "personas run \"Subscribe to MCP Gateway new-event webhook\"" },
-    ],
+    icon: "mcp_gateway",
+    useCases: [{ title: "Orchestrate Cross-Tool Flows", description: "Trigger MCP Gateway jobs from agent decisions, and bring results back.", command: "personas run \"Trigger MCP Gateway workflow on review approved\"" },
+      { title: "Listen for External Events", description: "React to events arriving from MCP Gateway as agent triggers.", command: "personas run \"Subscribe to MCP Gateway new-event webhook\"" },],
   },
   {
     name: "n8n",
@@ -1701,10 +1601,9 @@ export const connectors: Connector[] = [
     summary: "n8n workflow automation platform -- connect to push, activate, and trigger workflows directly from your agent.",
     monogram: "N8",
     authType: "API Key",
-    useCases: [
-      { title: "Orchestrate Cross-Tool Flows", description: "Trigger n8n jobs from agent decisions, and bring results back.", command: "personas run \"Trigger n8n workflow on review approved\"" },
-      { title: "Listen for External Events", description: "React to events arriving from n8n as agent triggers.", command: "personas run \"Subscribe to n8n new-event webhook\"" },
-    ],
+    icon: "n8n",
+    useCases: [{ title: "Orchestrate Cross-Tool Flows", description: "Trigger n8n jobs from agent decisions, and bring results back.", command: "personas run \"Trigger n8n workflow on review approved\"" },
+      { title: "Listen for External Events", description: "React to events arriving from n8n as agent triggers.", command: "personas run \"Subscribe to n8n new-event webhook\"" },],
   },
   {
     name: "zapier",
@@ -1714,9 +1613,8 @@ export const connectors: Connector[] = [
     summary: "Zapier automation platform -- trigger Zaps via webhooks and manage workflows from your agent.",
     monogram: "ZA",
     authType: "API Key",
-    useCases: [
-      { title: "Orchestrate Cross-Tool Flows", description: "Trigger Zapier jobs from agent decisions, and bring results back.", command: "personas run \"Trigger Zapier workflow on review approved\"" },
-      { title: "Listen for External Events", description: "React to events arriving from Zapier as agent triggers.", command: "personas run \"Subscribe to Zapier new-event webhook\"" },
-    ],
+    icon: "zapier",
+    useCases: [{ title: "Orchestrate Cross-Tool Flows", description: "Trigger Zapier jobs from agent decisions, and bring results back.", command: "personas run \"Trigger Zapier workflow on review approved\"" },
+      { title: "Listen for External Events", description: "React to events arriving from Zapier as agent triggers.", command: "personas run \"Subscribe to Zapier new-event webhook\"" },],
   },
 ];

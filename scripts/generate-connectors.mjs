@@ -137,42 +137,43 @@ function makeMonogram(label) {
 }
 
 // ── 6. Icon mapper ───────────────────────────────────────────────────
-// Map app icon URL or name to the slug that should live in public/tools/.
-// We don't know which icons actually exist on disk; the catalog gracefully
-// hides missing images and the modal falls back to the monogram, so it's
-// safe to emit a plausible icon name for every connector.
-const ICON_OVERRIDES = {
-  twilio_sms: "twilio",
-  twilio_segment: "segment",
-  postgres: "postgresql",
-  aws_s3: "aws",
-  aws_cloud: "aws",
-  azure_cloud: "azure",
-  azure_devops: "azure",
-  azure_devops_org: "azure",
-  desktop_docker: "docker",
-  desktop_obsidian: "obsidian",
-  desktop_browser: "chrome",
-  google_drive: "drive",
-  google_calendar: "calendar",
-  microsoft_calendar: "calendar",
-  microsoft_outlook: "outlook",
-  microsoft_teams: "teams",
-  microsoft_excel: "excel",
-  x_twitter: "x",
-  cal_com: "cal",
-  personas_messages: "personas",
-  personas_database: "personas",
-  personas_vector_db: "personas",
-  obsidian_memory: "obsidian",
-  google_workspace_oauth_template: "google-workspace",
-  fly_io: "fly",
-  cloudflare_r2: "cloudflare",
+// Use the app's `icon_url` field as the source of truth — it points to
+// `/icons/connectors/<slug>.svg` in the desktop app. We mirror that
+// filename into personas-web's `/tools/<slug>.svg`. Connectors with no
+// `icon_url`, an external CDN URL, or a non-SVG asset (e.g. the personas
+// internal logo PNG) return null and fall through to the monogram. We
+// also try to copy the file from the app's public/icons/connectors/ and
+// only emit a slug if the SVG actually exists there.
+const PERSONAS_ICONS_DIR = "C:/Users/kazda/kiro/personas/public/icons/connectors";
+const WEB_TOOLS_DIR = join(REPO, "public/tools");
+// Connectors whose app icon_url is an external simpleicons CDN URL —
+// the SVGs were fetched and committed to public/tools/<slug>.svg.
+const CDN_SLUGS = {
+  clockify: "clockify",
+  toggl: "toggl",
 };
-function iconSlug(name) {
-  if (ICON_OVERRIDES[name]) return ICON_OVERRIDES[name];
-  // App connector names use snake_case; web icon files use kebab-case.
-  return name.replace(/_/g, "-");
+
+function iconSlugFromUrl(name, iconUrl) {
+  if (CDN_SLUGS[name]) return CDN_SLUGS[name];
+  if (!iconUrl) return null;
+  // Reject external (http/https) URLs we don't have local copies of.
+  if (/^https?:/.test(iconUrl)) return null;
+  // Reject non-SVG assets (e.g. /illustrations/logo-v1-geometric-nobg.png).
+  if (!iconUrl.endsWith(".svg")) return null;
+  // Only accept paths under /icons/connectors/ so we don't accidentally
+  // reference an app-internal asset that won't exist in personas-web.
+  if (!iconUrl.startsWith("/icons/connectors/")) return null;
+  const m = iconUrl.match(/([^/]+?)\.svg$/);
+  if (!m) return null;
+  const slug = m[1];
+  // Drop the slug if the source file doesn't exist on disk — keeps the
+  // generated data file honest about what will actually render.
+  try {
+    readFileSync(join(PERSONAS_ICONS_DIR, `${slug}.svg`));
+    return slug;
+  } catch {
+    return null;
+  }
 }
 
 // ── 7. useCases templates by consolidated category ───────────────────
@@ -277,7 +278,7 @@ const built = raw
     const auth = data.metadata?.auth_type_label || data.metadata?.auth_type || "API key";
     const summary = data.metadata?.summary || `Integrate ${data.label}.`;
     const monogram = makeMonogram(data.label);
-    const icon = iconSlug(data.name);
+    const icon = iconSlugFromUrl(data.name, data.icon_url);
     const useCases = existingUseCases[data.name] ||
       JSON.stringify(placeholderUseCases(webCategory, data.label, data.name))
         // pretty-print the inline array as multi-line useCases lines
@@ -362,7 +363,7 @@ for (const c of built) {
   lines.push(`    summary: ${JSON.stringify(c.summary)},`);
   lines.push(`    monogram: "${c.monogram}",`);
   lines.push(`    authType: ${JSON.stringify(c.authType)},`);
-  if (c.icon && c.icon !== c.name) lines.push(`    icon: "${c.icon}",`);
+  if (c.icon) lines.push(`    icon: "${c.icon}",`);
   if (c.useCasesRaw) {
     lines.push(`    useCases: [${c.useCasesRaw}],`);
   } else {
