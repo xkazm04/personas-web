@@ -3,12 +3,17 @@
 import { useState } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
+import { motion, useReducedMotion } from "framer-motion";
 import { useNavItems, useNavState, type NavItem } from "./DashboardNavigation";
 import { useTranslation } from "@/i18n/useTranslation";
+
+const MotionLink = motion.create(Link);
 
 export default function MobileBottomNav() {
   const navItems = useNavItems();
   const { getActive, getBadge } = useNavState();
+  const reducedMotion = useReducedMotion();
+  const tapProps = reducedMotion ? undefined : { whileTap: { scale: 0.95 } };
 
   return (
     // z-50 so the nav buttons sit above the More-menu overlay (z-30) — without
@@ -22,15 +27,22 @@ export default function MobileBottomNav() {
           const badge = getBadge(item);
 
           return (
-            <Link
+            <MotionLink
               key={item.key}
               href={item.href}
+              {...tapProps}
               className={`relative flex min-h-[44px] min-w-[44px] flex-col items-center justify-center gap-0.5 rounded-xl px-2 py-1.5 text-sm font-medium transition-colors ${
                 active
                   ? "text-brand-cyan"
                   : "text-muted-dark"
               }`}
             >
+              {active && (
+                <span
+                  aria-hidden
+                  className="absolute top-0 left-1/2 h-0.5 w-8 -translate-x-1/2 rounded-b-full bg-brand-cyan"
+                />
+              )}
               <Icon className="h-5 w-5" />
               <span className="max-w-[3.75rem] truncate leading-none">{item.label}</span>
               {badge !== null && (
@@ -38,10 +50,10 @@ export default function MobileBottomNav() {
                   {badge}
                 </span>
               )}
-            </Link>
+            </MotionLink>
           );
         })}
-        <MobileMoreMenu items={navItems.slice(5)} getActive={getActive} />
+        <MobileMoreMenu items={navItems.slice(5)} getActive={getActive} tapProps={tapProps} />
       </div>
     </nav>
   );
@@ -50,28 +62,38 @@ export default function MobileBottomNav() {
 function MobileMoreMenu({
   items,
   getActive,
+  tapProps,
 }: {
   items: readonly NavItem[];
   getActive: (item: NavItem) => boolean;
+  tapProps: { whileTap: { scale: number } } | undefined;
 }) {
   const pathname = usePathname();
   const [menuState, setMenuState] = useState({ open: false, pathname });
   const open = menuState.pathname === pathname && menuState.open;
   const setOpen = (nextOpen: boolean) => setMenuState({ open: nextOpen, pathname });
+  const moreActive = items.some(getActive);
 
   return (
     <div className="relative">
-      <button
+      <motion.button
         onClick={() => setOpen(!open)}
         aria-expanded={open}
         aria-haspopup="menu"
-        className={`flex min-h-[44px] min-w-[44px] flex-col items-center justify-center gap-0.5 rounded-xl px-2 py-1.5 text-sm font-medium transition-colors ${
-          items.some(getActive) ? "text-brand-cyan" : "text-muted-dark"
+        {...tapProps}
+        className={`relative flex min-h-[44px] min-w-[44px] flex-col items-center justify-center gap-0.5 rounded-xl px-2 py-1.5 text-sm font-medium transition-colors ${
+          moreActive ? "text-brand-cyan" : "text-muted-dark"
         }`}
       >
+        {moreActive && (
+          <span
+            aria-hidden
+            className="absolute top-0 left-1/2 h-0.5 w-8 -translate-x-1/2 rounded-b-full bg-brand-cyan"
+          />
+        )}
         <MoreHorizontalIcon className="h-5 w-5" />
         <MoreLabel />
-      </button>
+      </motion.button>
 
       {open && (
         <>
