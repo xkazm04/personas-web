@@ -275,14 +275,6 @@ export const GUIDE_TOPICS: GuideTopic[] = [
     tags: ["credentials", "add", "api-key", "password", "store"],
   },
   {
-    id: "oauth-setup-walkthrough",
-    categoryId: "credentials",
-    title: "OAuth setup walkthrough",
-    description:
-      "Connecting services like Google, GitHub, and Slack with one click. OAuth lets you log in to a service and grant access without sharing your password. It's the same secure sign-in flow you use when you click \"Sign in with Google\" on a website.",
-    tags: ["credentials", "oauth", "google", "github", "slack", "connect"],
-  },
-  {
     id: "credential-health-checks",
     categoryId: "credentials",
     title: "Credential health checks",

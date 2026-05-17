@@ -159,11 +159,6 @@ export const topics: Record<string, { title: string; description: string }> = {
     description:
       "에이전트가 사용할 수 있도록 API 키와 비밀번호를 저장하는 단계별 가이드. 프로세스는 약 30초 걸립니다 — 키를 붙여넣고, 이름을 주면 끝입니다. 자격 증명은 즉시 암호화되어 에이전트가 사용할 준비가 됩니다.",
   },
-  "oauth-setup-walkthrough": {
-    title: "OAuth 설정 워크스루",
-    description:
-      "Google, GitHub, Slack과 같은 서비스를 한 번의 클릭으로 연결합니다. OAuth는 비밀번호를 공유하지 않고 서비스에 로그인하고 액세스를 부여할 수 있게 합니다. 웹사이트에서 \"Sign in with Google\"을 클릭할 때 사용하는 동일한 안전한 로그인 흐름입니다.",
-  },
   "credential-health-checks": {
     title: "자격 증명 상태 확인",
     description:

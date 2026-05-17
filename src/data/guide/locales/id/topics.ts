@@ -159,11 +159,6 @@ export const topics: Record<string, { title: string; description: string }> = {
     description:
       "Panduan langkah demi langkah untuk menyimpan API key dan password sehingga agen Anda dapat menggunakannya. Proses ini membutuhkan waktu sekitar 30 detik — tempel key Anda, beri nama, dan selesai. Kredensial Anda segera dienkripsi dan siap untuk digunakan agen Anda.",
   },
-  "oauth-setup-walkthrough": {
-    title: "Walkthrough setup OAuth",
-    description:
-      "Menghubungkan layanan seperti Google, GitHub, dan Slack dengan satu klik. OAuth memungkinkan Anda masuk ke layanan dan memberikan akses tanpa berbagi password. Ini adalah alur sign-in aman yang sama yang Anda gunakan saat mengklik \"Sign in with Google\" di situs web.",
-  },
   "credential-health-checks": {
     title: "Pemeriksaan kesehatan kredensial",
     description:

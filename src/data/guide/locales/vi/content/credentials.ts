@@ -81,39 +81,6 @@ Quy ước đặt tên quan trọng khi bạn có 20+ credential. \`<service>-<e
 :::
   `,
 
-  "oauth-setup-walkthrough": `
-## Hướng Dẫn Thiết Lập OAuth
-
-OAuth là luồng auth ưa thích cho các dịch vụ hỗ trợ nó (Google, GitHub, Slack, Linear, HubSpot, Twitter/X, Discord, v.v.). Thay vì bạn gõ hoặc dán API key, Personas mở một cửa sổ trình duyệt đến màn hình đồng thuận chính thức của nhà cung cấp — bạn đăng nhập ở đó bằng các credential hiện có, phê duyệt các scope cụ thể mà Personas đang yêu cầu, và nhà cung cấp trả về một access token có scope cho ứng dụng. Token được mã hóa nằm trong vault; mật khẩu của bạn không bao giờ chạm vào Personas.
-
-Hầu hết các token OAuth là ngắn hạn và được ghép với một refresh token. Personas sử dụng refresh token để giữ access token hiện tại trong nền — bạn thường sẽ không bao giờ thấy các thông báo hết hạn từ các credential OAuth trừ khi nhà cung cấp vô hiệu refresh token (đồng thuận bị thu hồi, mật khẩu thay đổi, sự kiện bảo mật).
-
-### Từng Bước
-
-:::steps
-1. **Mở Connections → Credentials** — thanh bên → Connections → Credentials, sau đó \`Add Credential\`
-2. **Chọn dịch vụ** — catalog lọc theo danh mục; các dịch vụ hỗ trợ OAuth hiển thị huy hiệu auth-type "OAuth"
-3. **Nhấp Connect** — một cửa sổ trình duyệt mở đến màn hình đồng thuận của nhà cung cấp
-4. **Đăng nhập và phê duyệt scope** — xem xét các quyền chính xác được yêu cầu; phê duyệt để cấp token, hoặc từ chối để hủy
-5. **Xác nhận đến** — cửa sổ trình duyệt tự động đóng; credential xuất hiện trong vault của bạn với các scope được cấp được liệt kê; bạn có thể sử dụng nó ngay trong agent
-:::
-
-### Cách Hoạt Động
-
-:::diagram
-[Click Connect] --> [Browser opens] --> [Sign in to provider] --> [Approve specific scopes] --> [Token + refresh stored encrypted]
-:::
-
-OAuth cung cấp cho Personas một token *có scope* — nó có thể làm chính xác những gì bạn đã phê duyệt và không gì khác. Mỗi connector yêu cầu các scope tối thiểu cho chức năng đã nêu của tích hợp (Gmail chỉ đọc cho một agent tóm tắt, Gmail đọc+gửi cho một agent tự động trả lời, v.v.). Bạn có thể xem lại các scope được cấp trên thẻ credential và thu hồi chúng hoàn toàn từ cài đặt bảo mật của chính nhà cung cấp nếu bạn muốn.
-
-:::info
-Các token OAuth thường là ngắn hạn (phút đến giờ) và Personas làm mới chúng tự động bằng cách sử dụng refresh token dài hạn. Nếu chính refresh token hết hạn (cụ thể theo nhà cung cấp, thường là 90 ngày đến không bao giờ), Personas nhắc bạn xác thực lại — một cú nhấp chuột chạy lại luồng đồng thuận.
-:::
-
-:::tip
-Đối với các dịch vụ mà bạn có cả tùy chọn OAuth và API-key (ví dụ: OpenAI, Anthropic), OAuth được ưu tiên khi có sẵn vì các scope chặt chẽ hơn và các token có thể bị thu hồi từ phía nhà cung cấp mà không cần xoay vòng API key. API key vẫn ổn cho việc sử dụng headless / lập trình.
-:::
-  `,
 
 
   "credential-health-checks": `

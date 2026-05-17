@@ -81,39 +81,6 @@ La convención de nombres importa una vez que tienes más de 20 credenciales. \`
 :::
   `,
 
-  "oauth-setup-walkthrough": `
-## Recorrido por la configuración OAuth
-
-OAuth es el flujo de autenticación preferido para los servicios que lo soportan (Google, GitHub, Slack, Linear, HubSpot, Twitter/X, Discord, etc.). En lugar de que tú escribas o pegues una clave de API, Personas abre una ventana del navegador en la pantalla de consentimiento oficial del proveedor: inicias sesión ahí con tus credenciales existentes, apruebas los scopes específicos que Personas solicita, y el proveedor devuelve un token de acceso con esos scopes a la app. El token aterriza cifrado en la bóveda; tu contraseña nunca toca Personas.
-
-La mayoría de los tokens OAuth son de corta vida y van acompañados de un refresh token. Personas usa el refresh token para mantener el token de acceso al día en segundo plano: normalmente nunca verás mensajes de caducidad de credenciales OAuth a menos que el proveedor invalide el refresh token (consentimiento revocado, contraseña cambiada, evento de seguridad).
-
-### Paso a paso
-
-:::steps
-1. **Abre Connections → Credentials** — barra lateral → Connections → Credentials, luego \`Add Credential\`
-2. **Elige el servicio** — el catálogo filtra por categoría; los servicios con OAuth muestran una insignia de tipo "OAuth"
-3. **Haz clic en Connect** — se abre una ventana del navegador en la pantalla de consentimiento del proveedor
-4. **Inicia sesión y aprueba los scopes** — revisa los permisos exactos solicitados; aprueba para emitir el token, o niega para cancelar
-5. **Llega la confirmación** — la ventana del navegador se cierra automáticamente; la credencial aparece en tu bóveda con los scopes otorgados listados; puedes usarla en agentes de inmediato
-:::
-
-### Cómo funciona
-
-:::diagram
-[Click Connect] --> [Browser opens] --> [Sign in to provider] --> [Approve specific scopes] --> [Token + refresh stored encrypted]
-:::
-
-OAuth le da a Personas un token *con scope*: puede hacer exactamente lo que aprobaste y nada más. Cada conector solicita los scopes mínimos para la funcionalidad declarada de la integración (Gmail solo lectura para un agente resumidor, Gmail lectura+envío para un agente de auto-respuesta, etc.). Puedes revisar los scopes otorgados en la tarjeta de la credencial y revocarlos por completo desde los propios ajustes de seguridad del proveedor en cualquier momento.
-
-:::info
-Los tokens OAuth normalmente son de corta vida (minutos u horas) y Personas los refresca automáticamente usando el refresh token de larga vida. Si el propio refresh token caduca (depende del proveedor, normalmente de 90 días a nunca), Personas te pide volver a autenticarte: un solo clic para volver a ejecutar el flujo de consentimiento.
-:::
-
-:::tip
-Para servicios donde tienes opción de OAuth y clave de API (por ejemplo, OpenAI, Anthropic), OAuth es preferible cuando está disponible porque los scopes son más estrictos y los tokens pueden revocarse del lado del proveedor sin rotar una clave de API. Las claves de API siguen siendo válidas para uso headless / programático.
-:::
-  `,
 
 
   "credential-health-checks": `

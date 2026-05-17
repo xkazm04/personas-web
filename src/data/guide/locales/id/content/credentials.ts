@@ -81,39 +81,6 @@ Konvensi penamaan penting setelah Anda memiliki 20+ kredensial. \`<layanan>-<env
 :::
   `,
 
-  "oauth-setup-walkthrough": `
-## Walkthrough Setup OAuth
-
-OAuth adalah alur auth yang lebih disukai untuk layanan yang mendukungnya (Google, GitHub, Slack, Linear, HubSpot, Twitter/X, Discord, dll.). Alih-alih Anda mengetik atau menempel API key, Personas membuka jendela browser ke layar persetujuan resmi penyedia — Anda masuk di sana menggunakan kredensial yang ada, menyetujui scope spesifik yang diminta Personas, dan penyedia mengembalikan token akses bercakupan kembali ke aplikasi. Token tiba dalam keadaan terenkripsi di vault; password Anda tidak pernah menyentuh Personas.
-
-Sebagian besar token OAuth berumur pendek dan dipasangkan dengan refresh token. Personas menggunakan refresh token untuk menjaga token akses tetap terkini di latar belakang — Anda biasanya tidak akan pernah melihat pesan kedaluwarsa dari kredensial OAuth kecuali penyedia membatalkan refresh token (persetujuan dicabut, password diubah, event keamanan).
-
-### Langkah demi Langkah
-
-:::steps
-1. **Buka Connections → Credentials** — sidebar → Connections → Credentials, lalu \`Add Credential\`
-2. **Pilih layanan** — katalog menyaring berdasarkan kategori; layanan yang mendukung OAuth menampilkan badge jenis auth "OAuth"
-3. **Klik Connect** — jendela browser terbuka ke layar persetujuan penyedia
-4. **Masuk dan setujui scope** — tinjau izin spesifik yang diminta; setujui untuk mengeluarkan token, atau tolak untuk membatalkan
-5. **Konfirmasi tiba** — jendela browser menutup secara otomatis; kredensial muncul di vault Anda dengan scope yang diberikan terdaftar; Anda dapat segera menggunakannya di agen
-:::
-
-### Cara Kerjanya
-
-:::diagram
-[Klik Connect] --> [Browser terbuka] --> [Masuk ke penyedia] --> [Setujui scope spesifik] --> [Token + refresh disimpan terenkripsi]
-:::
-
-OAuth memberi Personas token *bercakupan* — ia dapat melakukan persis apa yang Anda setujui dan tidak lebih. Setiap connector meminta scope minimum untuk fungsionalitas integrasi yang dinyatakan (Gmail read-only untuk agen peringkas, Gmail read+send untuk agen auto-reply, dll.). Anda dapat meninjau scope yang diberikan pada kartu kredensial dan mencabutnya seluruhnya dari pengaturan keamanan penyedia sendiri jika Anda pernah ingin.
-
-:::info
-Token OAuth biasanya berumur pendek (menit hingga jam) dan Personas menyegarkannya secara otomatis menggunakan refresh token yang berumur panjang. Jika refresh token itu sendiri kedaluwarsa (spesifik-penyedia, biasanya 90 hari hingga tidak pernah), Personas meminta Anda untuk mengotentikasi ulang — alur persetujuan satu klik.
-:::
-
-:::tip
-Untuk layanan di mana Anda memiliki opsi OAuth dan API-key (misalnya OpenAI, Anthropic), OAuth lebih disukai bila tersedia karena scope lebih ketat dan token dapat dicabut dari sisi penyedia tanpa merotasi API key. API key masih baik-baik saja untuk penggunaan headless / programatis.
-:::
-  `,
 
 
   "credential-health-checks": `

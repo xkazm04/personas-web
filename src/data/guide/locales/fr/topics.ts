@@ -159,11 +159,6 @@ export const topics: Record<string, { title: string; description: string }> = {
     description:
       "Un guide pas à pas pour stocker les clés API et mots de passe afin que vos agents puissent les utiliser. Le processus prend environ 30 secondes — collez votre clé, donnez-lui un nom, et c'est terminé. Votre identifiant est chiffré immédiatement et prêt à être utilisé par vos agents.",
   },
-  "oauth-setup-walkthrough": {
-    title: "Guide de configuration OAuth",
-    description:
-      "Connecter des services comme Google, GitHub et Slack en un clic. OAuth vous permet de vous connecter à un service et d'accorder l'accès sans partager votre mot de passe. C'est le même flux de connexion sécurisé que vous utilisez quand vous cliquez sur \"Se connecter avec Google\" sur un site web.",
-  },
   "credential-health-checks": {
     title: "Vérifications de santé des identifiants",
     description:

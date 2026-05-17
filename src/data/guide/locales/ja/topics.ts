@@ -127,10 +127,6 @@ export const topics: Record<string, { title: string; description: string }> = {
     title: "新しい認証情報を追加する",
     description: "エージェントが使えるように API キーやパスワードを保存するステップバイステップガイド。プロセスには約 30 秒かかります — キーを貼り付け、名前を付けるだけで完了です。認証情報は即座に暗号化され、エージェントが使用できるようになります。",
   },
-  "oauth-setup-walkthrough": {
-    title: "OAuth セットアップガイド",
-    description: "Google、GitHub、Slack などのサービスをワンクリックで接続。OAuth はパスワードを共有せずにサービスにログインしアクセスを許可することを可能にします。Web サイトで「Google でサインイン」をクリックするときと同じ安全なサインインフローです。",
-  },
   "credential-health-checks": {
     title: "認証情報のヘルスチェック",
     description: "保存された認証情報がまだ機能していることを確認します。時間が経つと、API キーは失効したり権限が変更されたりする可能性があります。ヘルスチェックは各認証情報を自動的にテストし、問題を引き起こす前に注意が必要なものをフラグ付けします。",

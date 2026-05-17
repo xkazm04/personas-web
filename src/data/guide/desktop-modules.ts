@@ -325,11 +325,6 @@ export const TOPIC_MODULE_MAP: Record<string, TopicModuleRef> = {
     path: ["Connections", "Add New"],
     label: "Add credential",
   },
-  "oauth-setup-walkthrough": {
-    moduleId: "connections",
-    path: ["Connections", "Add New"],
-    label: "OAuth setup",
-  },
   "credential-health-checks": {
     moduleId: "connections",
     path: ["Connections", "Credentials"],

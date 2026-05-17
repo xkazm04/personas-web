@@ -81,39 +81,6 @@ Konvence pojmenování záleží, jakmile máš 20+ přihlašovacích údajů. \
 :::
   `,
 
-  "oauth-setup-walkthrough": `
-## Průvodce nastavením OAuth
-
-OAuth je preferovaný autentizační tok pro služby, které ho podporují (Google, GitHub, Slack, Linear, HubSpot, Twitter/X, Discord atd.). Místo abys psal/a nebo vkládal/a API klíč, Personas otevřou okno prohlížeče na oficiální obrazovku souhlasu poskytovatele — přihlásíš se tam svými existujícími přihlašovacími údaji, schválíš konkrétní scopy, které Personas žádají, a poskytovatel vrátí scopovaný přístupový token zpět aplikaci. Token přistane zašifrovaný v trezoru; tvé heslo se Personas nikdy nedotkne.
-
-Většina OAuth tokenů je krátkodobá a spárovaná s refresh tokenem. Personas používají refresh token, aby drželi přístupový token aktuální na pozadí — typicky nikdy neuvidíš zprávy o vypršení od OAuth přihlašovacích údajů, pokud poskytovatel neinvaliduje refresh token (odvolaný souhlas, změněné heslo, bezpečnostní událost).
-
-### Krok za krokem
-
-:::steps
-1. **Otevři Connections → Credentials** — postranní panel → Connections → Credentials, pak \`Add Credential\`
-2. **Vyber službu** — katalog filtruje podle kategorie; služby podporující OAuth zobrazují odznak typu „OAuth"
-3. **Klikni Connect** — otevře se okno prohlížeče na obrazovku souhlasu poskytovatele
-4. **Přihlas se a schval scopy** — zkontroluj přesné požadovaná oprávnění; schval pro vydání tokenu nebo zamítni pro zrušení
-5. **Potvrzení přistane** — okno prohlížeče se automaticky zavře; přihlašovací údaj se objeví ve tvém trezoru s vypsanými udělenými scopy; můžeš ho okamžitě použít v agentech
-:::
-
-### Jak to funguje
-
-:::diagram
-[Klikni Connect] --> [Prohlížeč se otevře] --> [Přihlaš se k poskytovateli] --> [Schval konkrétní scopy] --> [Token + refresh uloženy zašifrovaně]
-:::
-
-OAuth dává Personas *scopovaný* token — může dělat přesně to, co jsi schválil/a, a nic víc. Každý konektor žádá minimální scopy pro deklarovanou funkcionalitu integrace (Gmail read-only pro agenta-shrnovače, Gmail read+send pro agenta auto-reply atd.). Udělené scopy můžeš zkontrolovat na kartě přihlašovacího údaje a kdykoli je odvolat ze samotného bezpečnostního nastavení poskytovatele.
-
-:::info
-OAuth tokeny jsou typicky krátkodobé (minuty až hodiny) a Personas je automaticky obnovují pomocí dlouhotrvajícího refresh tokenu. Pokud vyprší sám refresh token (závisí na poskytovateli, obvykle 90 dní až nikdy), Personas tě vyzvou k opětovné autentizaci — jednokliknutí znovu spustí tok souhlasu.
-:::
-
-:::tip
-Pro služby, kde máš jak OAuth, tak možnost API klíče (např. OpenAI, Anthropic), je OAuth preferován, když je dostupný, protože scopy jsou těsnější a tokeny lze odvolat ze strany poskytovatele bez rotace API klíče. API klíče jsou stále v pořádku pro headless / programatické použití.
-:::
-  `,
 
 
   "credential-health-checks": `

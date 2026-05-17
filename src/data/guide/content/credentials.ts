@@ -112,40 +112,6 @@ Naming convention matters once you have 20+ credentials. \`<service>-<env>-<acco
 :::
   `,
 
-  "oauth-setup-walkthrough": `
-## OAuth Setup Walkthrough
-
-OAuth is the preferred auth flow for services that support it (Google, GitHub, Slack, Linear, HubSpot, Twitter/X, Discord, etc.). Instead of you typing or pasting an API key, Personas opens a browser window to the provider's official consent screen — you sign in there using your existing credentials, approve the specific scopes Personas is requesting, and the provider returns a scoped access token back to the app. The token lands encrypted in the vault; your password never touches Personas.
-
-Most OAuth tokens are short-lived and paired with a refresh token. Personas uses the refresh token to keep the access token current in the background — you'll typically never see expiry messages from OAuth credentials unless the provider invalidates the refresh token (consent revoked, password changed, security event).
-
-### Step by Step
-
-:::steps
-1. **Open Connections → Credentials** — sidebar → Connections → Credentials, then \`Add Credential\`
-2. **Pick the service** — the catalog filters by category; OAuth-supporting services show an "OAuth" auth-type badge
-3. **Click Connect** — a browser window opens to the provider's consent screen
-4. **Sign in and approve scopes** — review the exact permissions requested; approve to issue the token, or deny to cancel
-5. **Confirmation lands** — the browser window closes automatically; the credential appears in your vault with the granted scopes listed; you can immediately use it in agents
-:::
-
-### How It Works
-
-:::diagram
-[Click Connect] --> [Browser opens] --> [Sign in to provider] --> [Approve specific scopes] --> [Token + refresh stored encrypted]
-:::
-
-OAuth gives Personas a *scoped* token — it can do exactly what you approved and nothing else. Each connector requests the minimum scopes for the integration's stated functionality (Gmail read-only for a summarizer agent, Gmail read+send for an auto-reply agent, etc.). You can review the granted scopes on the credential card and revoke them entirely from the provider's own security settings if you ever want to.
-
-:::info
-OAuth tokens are typically short-lived (minutes to hours) and Personas refreshes them automatically using the long-lived refresh token. If the refresh token itself expires (provider-specific, usually 90 days to never), Personas prompts you to re-authenticate — a one-click re-run of the consent flow.
-:::
-
-:::tip
-For services where you have both OAuth and API-key options (e.g. OpenAI, Anthropic), OAuth is preferred when available because scopes are tighter and tokens can be revoked from the provider side without rotating an API key. API keys are still fine for headless / programmatic use.
-:::
-  `,
-
   "credential-health-checks": `
 ## Credential Health Checks
 

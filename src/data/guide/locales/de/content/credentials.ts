@@ -81,39 +81,6 @@ Die Benennungskonvention zählt, sobald du 20+ Zugangsdaten hast. \`<Dienst>-<Um
 :::
   `,
 
-  "oauth-setup-walkthrough": `
-## OAuth-Einrichtungs-Walkthrough
-
-OAuth ist der bevorzugte Auth-Flow für Dienste, die ihn unterstützen (Google, GitHub, Slack, Linear, HubSpot, Twitter/X, Discord usw.). Statt einen API-Schlüssel zu tippen oder einzufügen, öffnet Personas ein Browserfenster zum offiziellen Zustimmungsbildschirm des Anbieters — du meldest dich dort mit deinen bestehenden Anmeldedaten an, genehmigst die spezifischen Scopes, die Personas anfordert, und der Anbieter gibt ein eingeschränktes Access-Token zurück an die App. Das Token landet verschlüsselt im Tresor; dein Passwort berührt Personas nie.
-
-Die meisten OAuth-Tokens sind kurzlebig und mit einem Refresh-Token gekoppelt. Personas nutzt das Refresh-Token, um das Access-Token im Hintergrund aktuell zu halten — du wirst typischerweise nie Ablaufmeldungen von OAuth-Zugangsdaten sehen, es sei denn, der Anbieter macht das Refresh-Token ungültig (Zustimmung widerrufen, Passwort geändert, Sicherheitsereignis).
-
-### Schritt für Schritt
-
-:::steps
-1. **Öffne Connections → Credentials** — Seitenleiste → Connections → Credentials, dann \`Add Credential\`
-2. **Wähle den Dienst** — der Katalog filtert nach Kategorie; OAuth-unterstützende Dienste zeigen ein "OAuth"-Auth-Typ-Badge
-3. **Klicke Connect** — ein Browserfenster öffnet sich zum Zustimmungsbildschirm des Anbieters
-4. **Melde dich an und genehmige Scopes** — überprüfe die genau angeforderten Berechtigungen; genehmige, um das Token auszustellen, oder lehne ab, um abzubrechen
-5. **Bestätigung landet** — das Browserfenster schließt automatisch; die Zugangsdaten erscheint in deinem Tresor mit den gewährten Scopes aufgelistet; du kannst sie sofort in Agenten verwenden
-:::
-
-### So funktioniert es
-
-:::diagram
-[Click Connect] --> [Browser opens] --> [Sign in to provider] --> [Approve specific scopes] --> [Token + refresh stored encrypted]
-:::
-
-OAuth gibt Personas ein *eingeschränktes* Token — es kann genau das tun, was du genehmigt hast, und nichts anderes. Jeder Konnektor fordert die minimalen Scopes für die angegebene Funktionalität der Integration an (Gmail read-only für einen Zusammenfasser-Agenten, Gmail read+send für einen Auto-Reply-Agenten usw.). Du kannst die gewährten Scopes auf der Zugangsdaten-Karte überprüfen und sie jederzeit komplett über die eigenen Sicherheitseinstellungen des Anbieters widerrufen.
-
-:::info
-OAuth-Tokens sind typischerweise kurzlebig (Minuten bis Stunden), und Personas erneuert sie automatisch mit dem langlebigen Refresh-Token. Wenn das Refresh-Token selbst abläuft (anbieterspezifisch, meist 90 Tage bis nie), fordert Personas dich zur erneuten Authentifizierung auf — ein Ein-Klick-Wiederholen des Zustimmungs-Flows.
-:::
-
-:::tip
-Für Dienste, bei denen du sowohl OAuth- als auch API-Schlüssel-Optionen hast (z. B. OpenAI, Anthropic), ist OAuth bevorzugt, wenn verfügbar, weil Scopes enger sind und Tokens vom Anbieter aus widerrufen werden können, ohne einen API-Schlüssel zu rotieren. API-Schlüssel sind weiterhin gut für Headless-/programmatische Nutzung.
-:::
-  `,
 
 
   "credential-health-checks": `

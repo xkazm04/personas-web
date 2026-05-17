@@ -159,11 +159,6 @@ export const topics: Record<string, { title: string; description: string }> = {
     description:
       "Hướng dẫn từng bước về cách lưu trữ API key và mật khẩu để agent của bạn có thể sử dụng chúng. Quá trình mất khoảng 30 giây — dán khóa của bạn, đặt tên cho nó và bạn đã xong. Credential của bạn được mã hóa ngay lập tức và sẵn sàng cho agent sử dụng.",
   },
-  "oauth-setup-walkthrough": {
-    title: "Hướng dẫn thiết lập OAuth",
-    description:
-      "Kết nối các dịch vụ như Google, GitHub và Slack chỉ với một cú nhấp chuột. OAuth cho phép bạn đăng nhập vào dịch vụ và cấp quyền truy cập mà không cần chia sẻ mật khẩu. Đó là cùng quy trình đăng nhập an toàn bạn dùng khi nhấp \"Đăng nhập với Google\" trên một trang web.",
-  },
   "credential-health-checks": {
     title: "Kiểm tra sức khỏe credential",
     description:

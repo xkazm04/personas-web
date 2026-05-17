@@ -159,11 +159,6 @@ export const topics: Record<string, { title: string; description: string }> = {
     description:
       "Eine Schritt-für-Schritt-Anleitung zum Speichern von API-Schlüsseln und Passwörtern, damit deine Agenten sie nutzen können. Der Vorgang dauert etwa 30 Sekunden — Schlüssel einfügen, Namen vergeben, fertig. Deine Zugangsdaten werden sofort verschlüsselt und sind einsatzbereit.",
   },
-  "oauth-setup-walkthrough": {
-    title: "OAuth-Einrichtungs-Walkthrough",
-    description:
-      "Verbinde Dienste wie Google, GitHub und Slack mit einem Klick. OAuth lässt dich dich bei einem Dienst anmelden und Zugriff gewähren, ohne dein Passwort zu teilen. Es ist derselbe sichere Anmeldevorgang wie bei \"Mit Google anmelden\" auf einer Website.",
-  },
   "credential-health-checks": {
     title: "Zugangsdaten-Gesundheitschecks",
     description:

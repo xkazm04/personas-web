@@ -81,39 +81,6 @@ Vault 通过 OS keyring 绑定到你的 OS 用户账户。将 vault 文件复制
 :::
   `,
 
-  "oauth-setup-walkthrough": `
-## OAuth 设置演练
-
-OAuth 是支持它的服务(Google、GitHub、Slack、Linear、HubSpot、Twitter/X、Discord 等)的首选认证流程。Personas 不是让你输入或粘贴 API key,而是打开浏览器窗口到提供商的官方同意屏幕 — 你使用现有凭证在那里登录,批准 Personas 请求的特定范围,提供商将范围限定的访问令牌返回给应用。令牌加密保存到 vault 中;你的密码从未接触 Personas。
-
-大多数 OAuth 令牌是短期的,与 refresh token 配对。Personas 在后台使用 refresh token 保持访问令牌为最新 — 通常你不会看到来自 OAuth 凭证的过期消息,除非提供商使 refresh token 失效(撤销同意、更改密码、安全事件)。
-
-### 一步一步
-
-:::steps
-1. **打开 Connections → Credentials** — 侧边栏 → Connections → Credentials,然后是 \`Add Credential\`
-2. **选择服务** — 目录按类别过滤;支持 OAuth 的服务显示 "OAuth" 认证类型徽章
-3. **点击 Connect** — 浏览器窗口打开到提供商的同意屏幕
-4. **登录并批准范围** — 审查请求的确切权限;批准以发出令牌,或拒绝以取消
-5. **确认保存** — 浏览器窗口自动关闭;凭证出现在你的 vault 中,列出授予的范围;你可以立即在 agent 中使用它
-:::
-
-### 工作原理
-
-:::diagram
-[Click Connect] --> [Browser opens] --> [Sign in to provider] --> [Approve specific scopes] --> [Token + refresh stored encrypted]
-:::
-
-OAuth 给 Personas 一个 *范围限定的* 令牌 — 它只能做你批准的事情,别的什么都不行。每个连接器请求集成所声明功能的最低范围(摘要 agent 的 Gmail 只读,自动回复 agent 的 Gmail 读+发送等)。你可以在凭证卡上审查授予的范围,如果你想完全撤销它们,可以从提供商自己的安全设置中撤销。
-
-:::info
-OAuth 令牌通常是短期的(几分钟到几小时),Personas 使用长期 refresh token 自动刷新它们。如果 refresh token 本身过期(因提供商而异,通常 90 天到永不),Personas 提示你重新认证 — 一键重新运行同意流程。
-:::
-
-:::tip
-对于你有 OAuth 和 API key 选项的服务(例如 OpenAI、Anthropic),当可用时首选 OAuth,因为范围更紧,令牌可以从提供商端撤销而无需轮换 API key。API key 仍然适用于无头/编程使用。
-:::
-  `,
 
 
   "credential-health-checks": `

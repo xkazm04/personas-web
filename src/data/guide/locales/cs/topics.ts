@@ -159,11 +159,6 @@ export const topics: Record<string, { title: string; description: string }> = {
     description:
       "Krok za krokem, jak uložit API klíče a hesla, aby je tví agenti mohli používat. Proces trvá asi 30 sekund — vložíš klíč, pojmenuješ ho a hotovo. Tvůj přihlašovací údaj je okamžitě zašifrován a připraven k použití pro tvé agenty.",
   },
-  "oauth-setup-walkthrough": {
-    title: "Průvodce nastavením OAuth",
-    description:
-      "Připojení služeb jako Google, GitHub a Slack jedním kliknutím. OAuth ti umožní přihlásit se ke službě a udělit přístup, aniž bys musel/a sdílet heslo. Je to stejný bezpečný přihlašovací postup, který používáš, když klikneš na „Přihlásit přes Google\" na webu.",
-  },
   "credential-health-checks": {
     title: "Kontroly stavu přihlašovacích údajů",
     description:

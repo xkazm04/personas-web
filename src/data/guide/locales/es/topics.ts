@@ -159,11 +159,6 @@ export const topics: Record<string, { title: string; description: string }> = {
     description:
       "Guía paso a paso para almacenar claves de API y contraseñas para que tus agentes puedan usarlas. El proceso lleva unos 30 segundos: pega tu clave, ponle un nombre y listo. Tu credencial se cifra al instante y queda lista para que tus agentes la usen.",
   },
-  "oauth-setup-walkthrough": {
-    title: "Recorrido por la configuración OAuth",
-    description:
-      "Conectar servicios como Google, GitHub y Slack con un solo clic. OAuth te permite iniciar sesión en un servicio y otorgar acceso sin compartir tu contraseña. Es el mismo flujo de inicio de sesión seguro que usas al pulsar \"Iniciar sesión con Google\" en un sitio web.",
-  },
   "credential-health-checks": {
     title: "Comprobaciones de salud de credenciales",
     description:

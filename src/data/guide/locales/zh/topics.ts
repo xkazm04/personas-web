@@ -127,10 +127,6 @@ export const topics: Record<string, { title: string; description: string }> = {
     title: "添加新凭证",
     description: "存储 API key 和密码以便你的 agent 可以使用它们的分步指南。该过程大约需要 30 秒 — 粘贴你的密钥,给它一个名称,完成。你的凭证立即加密,并准备好供你的 agent 使用。",
   },
-  "oauth-setup-walkthrough": {
-    title: "OAuth 设置演练",
-    description: "一键连接 Google、GitHub 和 Slack 等服务。OAuth 让你登录服务并授予访问权限,而无需共享密码。这是你在网站上点击 \"Sign in with Google\" 时使用的相同安全登录流程。",
-  },
   "credential-health-checks": {
     title: "凭证健康检查",
     description: "确保你存储的凭证仍然有效。随着时间推移,API key 可能过期或权限可能更改。健康检查自动测试每个凭证,并在它们引起问题之前标记任何需要你注意的凭证。",

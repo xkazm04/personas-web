@@ -81,39 +81,6 @@ La convention de nommage compte une fois que vous avez 20+ identifiants. \`<serv
 :::
   `,
 
-  "oauth-setup-walkthrough": `
-## Guide de configuration OAuth
-
-OAuth est le flux d'authentification préféré pour les services qui le prennent en charge (Google, GitHub, Slack, Linear, HubSpot, Twitter/X, Discord, etc.). Au lieu que vous tapiez ou colliez une clé API, Personas ouvre une fenêtre de navigateur vers l'écran de consentement officiel du fournisseur — vous vous y connectez en utilisant vos identifiants existants, approuvez les scopes spécifiques que Personas demande, et le fournisseur renvoie un jeton d'accès scopé à l'application. Le jeton arrive chiffré dans le coffre ; votre mot de passe ne touche jamais Personas.
-
-La plupart des jetons OAuth sont de courte durée et associés à un jeton de rafraîchissement. Personas utilise le jeton de rafraîchissement pour maintenir le jeton d'accès à jour en arrière-plan — vous ne verrez généralement jamais de messages d'expiration des identifiants OAuth sauf si le fournisseur invalide le jeton de rafraîchissement (consentement révoqué, mot de passe changé, événement de sécurité).
-
-### Étape par étape
-
-:::steps
-1. **Ouvrez Connexions → Identifiants** — barre latérale → Connexions → Identifiants, puis \`Ajouter un identifiant\`
-2. **Choisissez le service** — le catalogue filtre par catégorie ; les services prenant en charge OAuth affichent un badge "OAuth" de type d'authentification
-3. **Cliquez sur Connecter** — une fenêtre de navigateur s'ouvre vers l'écran de consentement du fournisseur
-4. **Connectez-vous et approuvez les scopes** — examinez les permissions exactes demandées ; approuvez pour émettre le jeton, ou refusez pour annuler
-5. **La confirmation arrive** — la fenêtre du navigateur se ferme automatiquement ; l'identifiant apparaît dans votre coffre avec les scopes accordés listés ; vous pouvez immédiatement l'utiliser dans des agents
-:::
-
-### Comment ça marche
-
-:::diagram
-[Cliquer sur Connecter] --> [Ouverture du navigateur] --> [Connexion au fournisseur] --> [Approbation de scopes spécifiques] --> [Jeton + rafraîchissement stockés chiffrés]
-:::
-
-OAuth donne à Personas un jeton *scopé* — il peut faire exactement ce que vous avez approuvé et rien d'autre. Chaque connecteur demande les scopes minimums pour la fonctionnalité déclarée de l'intégration (Gmail lecture seule pour un agent résumeur, Gmail lecture+envoi pour un agent de réponse automatique, etc.). Vous pouvez examiner les scopes accordés sur la carte d'identifiant et les révoquer entièrement depuis les paramètres de sécurité du fournisseur si vous le souhaitez.
-
-:::info
-Les jetons OAuth sont généralement de courte durée (minutes à heures) et Personas les rafraîchit automatiquement en utilisant le jeton de rafraîchissement à longue durée. Si le jeton de rafraîchissement lui-même expire (spécifique au fournisseur, généralement 90 jours à jamais), Personas vous demande de vous réauthentifier — une réexécution en un clic du flux de consentement.
-:::
-
-:::tip
-Pour les services où vous avez à la fois OAuth et clé API (par ex. OpenAI, Anthropic), OAuth est préféré quand disponible parce que les scopes sont plus serrés et les jetons peuvent être révoqués côté fournisseur sans renouveler une clé API. Les clés API restent bien pour une utilisation sans tête / programmatique.
-:::
-  `,
 
 
   "credential-health-checks": `
