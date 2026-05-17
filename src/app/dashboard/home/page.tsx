@@ -127,9 +127,14 @@ export default function DashboardHomePage() {
           {t.dashboard.agentsStatus}
         </p>
         {lastVisitedAt !== null && (
-          <p className="mt-1 text-sm text-muted-dark">
+          <motion.p
+            initial={{ opacity: 0, y: -4 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.3, ease: "easeOut" }}
+            className="mt-1 text-sm text-muted-dark"
+          >
             {t.dashboard.lastSeen} {relativeTime(new Date(lastVisitedAt).toISOString())}
-          </p>
+          </motion.p>
         )}
       </motion.div>
 
