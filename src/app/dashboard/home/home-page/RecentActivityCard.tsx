@@ -1,3 +1,6 @@
+"use client";
+
+import { useEffect, useState } from "react";
 import { Activity } from "lucide-react";
 
 import GlowCard from "@/components/GlowCard";
@@ -5,6 +8,8 @@ import PersonaAvatar from "@/components/dashboard/PersonaAvatar";
 import StatusBadge from "@/components/dashboard/StatusBadge";
 import { relativeTime } from "@/lib/format";
 import type { GlobalExecution } from "@/lib/types";
+
+const REL_TIME_TICK_MS = 30_000;
 
 type RecentExecution = GlobalExecution & {
   personaIcon?: string | null;
@@ -26,6 +31,14 @@ export function RecentActivityCard({
     executeToSee: string;
   };
 }) {
+  // Force re-render every 30s so relativeTime() doesn't stay frozen on
+  // "just now" while the user watches the page.
+  const [, setTick] = useState(0);
+  useEffect(() => {
+    const interval = setInterval(() => setTick((n) => n + 1), REL_TIME_TICK_MS);
+    return () => clearInterval(interval);
+  }, []);
+
   return (
     <GlowCard accent="cyan" className="p-5 h-full">
       <div className="flex items-center gap-2 mb-4">
