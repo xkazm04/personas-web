@@ -150,7 +150,7 @@ export const topics: Record<string, { title: string; description: string }> = {
       "Đảm bảo trigger của bạn kích hoạt chính xác trước khi bạn dựa vào chúng. Trình kiểm thử trigger cho phép bạn mô phỏng sự kiện và xem chính xác điều gì sẽ xảy ra. Phát hiện sớm các vấn đề giúp bạn tránh các tự động hóa bị bỏ lỡ và hành vi bất ngờ.",
   },
   "how-personas-keeps-your-data-safe": {
-    title: "Cách Personas giữ an toàn dữ liệu của bạn",
+    title: "An toàn dữ liệu",
     description:
       "Tổng quan về mô hình mã hóa và bảo mật bảo vệ thông tin của bạn. Mật khẩu và khóa của bạn được khóa trong vault mã hóa trên chính máy tính của bạn — chúng không bao giờ rời khỏi thiết bị. Bạn hoàn toàn kiểm soát dữ liệu của mình mọi lúc.",
   },

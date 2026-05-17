@@ -150,7 +150,7 @@ export const topics: Record<string, { title: string; description: string }> = {
       "S'assurer que vos déclencheurs se déclenchent correctement avant de vous y fier. Le testeur de déclencheurs vous permet de simuler des événements et de voir exactement ce qui se passerait. Repérer les problèmes tôt vous évite les automatisations manquées et les comportements inattendus.",
   },
   "how-personas-keeps-your-data-safe": {
-    title: "Comment Personas protège vos données",
+    title: "Sécurité des données",
     description:
       "Un aperçu du modèle de chiffrement et de sécurité qui protège vos informations. Vos mots de passe et clés sont verrouillés dans un coffre chiffré sur votre propre ordinateur — ils ne quittent jamais votre appareil. Vous gardez le contrôle total de vos données à tout moment.",
   },

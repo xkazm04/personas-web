@@ -150,7 +150,7 @@ export const topics: Record<string, { title: string; description: string }> = {
       "의존하기 전에 트리거가 올바르게 발사되는지 확인하기. 트리거 테스터는 이벤트를 시뮬레이션하고 정확히 무엇이 일어날지 볼 수 있게 합니다. 문제를 일찍 잡으면 놓친 자동화와 예상치 못한 동작에서 구해줍니다.",
   },
   "how-personas-keeps-your-data-safe": {
-    title: "Personas가 데이터를 안전하게 유지하는 방법",
+    title: "데이터 보안",
     description:
       "정보를 보호하는 암호화 및 보안 모델의 개요. 비밀번호와 키는 자체 컴퓨터의 암호화된 보관소에 잠겨 있습니다 — 기기를 떠나지 않습니다. 항상 데이터에 대한 완전한 통제권을 가집니다.",
   },

@@ -120,7 +120,7 @@ export const topics: Record<string, { title: string; description: string }> = {
     description: "依存する前にトリガーが正しく発火することを確認しましょう。トリガーテスターを使えば、イベントをシミュレートして何が起こるかを正確に確認できます。早期に問題を発見することで、自動化の見逃しや予期しない動作を防げます。",
   },
   "how-personas-keeps-your-data-safe": {
-    title: "Personas があなたのデータを守る方法",
+    title: "データの安全性",
     description: "情報を保護する暗号化およびセキュリティモデルの概要。パスワードとキーは自分のコンピュータ上の暗号化されたボールトに保存され、デバイスから離れることはありません。常にデータを完全にコントロールできます。",
   },
   "adding-a-new-credential": {

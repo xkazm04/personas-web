@@ -120,7 +120,7 @@ export const topics: Record<string, { title: string; description: string }> = {
     description: "在你依赖触发器之前确保它们正确触发。触发器测试器让你模拟事件并查看会发生什么。及早捕获问题可以让你免于错过自动化和意外行为。",
   },
   "how-personas-keeps-your-data-safe": {
-    title: "Personas 如何保护你的数据安全",
+    title: "数据安全",
     description: "保护你信息的加密和安全模型概述。你的密码和密钥锁定在你自己电脑上的加密 vault 中 — 它们永远不会离开你的设备。你始终完全控制你的数据。",
   },
   "adding-a-new-credential": {

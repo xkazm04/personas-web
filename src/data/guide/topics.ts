@@ -261,7 +261,7 @@ export const GUIDE_TOPICS: GuideTopic[] = [
   {
     id: "how-personas-keeps-your-data-safe",
     categoryId: "credentials",
-    title: "How Personas keeps your data safe",
+    title: "Data safety",
     description:
       "An overview of the encryption and security model that protects your information. Your passwords and keys are locked in an encrypted vault on your own computer — they never leave your device. You're in full control of your data at all times.",
     tags: ["credentials", "security", "encryption", "privacy", "safety"],

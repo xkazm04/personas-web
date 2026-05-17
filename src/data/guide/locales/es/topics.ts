@@ -150,7 +150,7 @@ export const topics: Record<string, { title: string; description: string }> = {
       "Asegurarte de que tus disparadores se activan correctamente antes de depender de ellos. El probador de disparadores te permite simular eventos y ver exactamente qué pasaría. Detectar problemas pronto evita automatizaciones perdidas y comportamientos inesperados.",
   },
   "how-personas-keeps-your-data-safe": {
-    title: "Cómo Personas mantiene tus datos a salvo",
+    title: "Seguridad de datos",
     description:
       "Un repaso del modelo de cifrado y seguridad que protege tu información. Tus contraseñas y claves quedan guardadas en una bóveda cifrada en tu propia computadora: nunca salen de tu dispositivo. Mantienes el control total de tus datos en todo momento.",
   },

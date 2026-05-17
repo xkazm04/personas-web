@@ -150,7 +150,7 @@ export const topics: Record<string, { title: string; description: string }> = {
       "Stelle sicher, dass deine Trigger korrekt feuern, bevor du dich auf sie verlässt. Der Trigger-Tester lässt dich Ereignisse simulieren und genau sehen, was passieren würde. Wenn du Probleme früh entdeckst, vermeidest du verpasste Automatisierungen und unerwartetes Verhalten.",
   },
   "how-personas-keeps-your-data-safe": {
-    title: "Wie Personas deine Daten sicher hält",
+    title: "Datensicherheit",
     description:
       "Ein Überblick über das Verschlüsselungs- und Sicherheitsmodell, das deine Informationen schützt. Deine Passwörter und Schlüssel sind in einem verschlüsselten Tresor auf deinem eigenen Computer eingeschlossen — sie verlassen dein Gerät nie. Du hast jederzeit die volle Kontrolle über deine Daten.",
   },

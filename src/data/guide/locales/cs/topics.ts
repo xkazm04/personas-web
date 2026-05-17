@@ -150,7 +150,7 @@ export const topics: Record<string, { title: string; description: string }> = {
       "Ověř, že tvé spouštěče správně spustí, než se na ně spolehneš. Tester spouštěčů ti umožní simulovat události a přesně vidět, co by se stalo. Včasné odhalení problémů tě zachrání od zmeškaných automatizací a nečekaného chování.",
   },
   "how-personas-keeps-your-data-safe": {
-    title: "Jak Personas chrání tvá data",
+    title: "Bezpečnost dat",
     description:
       "Přehled modelu šifrování a zabezpečení, který chrání tvé informace. Tvá hesla a klíče jsou uzamčeny v zašifrovaném trezoru ve tvém vlastním počítači — nikdy neopustí tvé zařízení. Vždy máš plnou kontrolu nad svými daty.",
   },

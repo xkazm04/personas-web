@@ -150,7 +150,7 @@ export const topics: Record<string, { title: string; description: string }> = {
       "Memastikan trigger Anda menyala dengan benar sebelum Anda mengandalkannya. Penguji trigger memungkinkan Anda mensimulasikan event dan melihat persis apa yang akan terjadi. Menangkap masalah lebih awal menyelamatkan Anda dari otomatisasi yang terlewat dan perilaku tak terduga.",
   },
   "how-personas-keeps-your-data-safe": {
-    title: "Bagaimana Personas menjaga data Anda tetap aman",
+    title: "Keamanan data",
     description:
       "Ikhtisar model enkripsi dan keamanan yang melindungi informasi Anda. Password dan key Anda dikunci dalam vault terenkripsi di komputer Anda sendiri — mereka tidak pernah meninggalkan perangkat Anda. Anda memiliki kontrol penuh atas data Anda setiap saat.",
   },
