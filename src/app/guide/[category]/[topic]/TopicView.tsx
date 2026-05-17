@@ -7,6 +7,7 @@ import GuideMarkdown from "@/components/guide/GuideMarkdown";
 import RelatedTopics from "@/components/guide/RelatedTopics";
 import ModuleBadge from "@/components/guide/ModuleBadge";
 import TopicTOC from "@/components/guide/TopicTOC";
+import MobileTopicTOC from "@/components/guide/MobileTopicTOC";
 import { extractHeadings } from "@/components/guide/guide-markdown/extractHeadings";
 import { TOPIC_MODULE_MAP } from "@/data/guide/desktop-modules";
 import { getLocalizedTopic } from "@/data/guide/getLocalized";
@@ -57,7 +58,8 @@ export default function TopicView({ category, topic, content, prevTopic, nextTop
   }, [language, topic.id, topic.title, topic.description, content]);
 
   return (
-    <div className="px-6 pb-24">
+    <div className="px-6 pb-24 pt-9 lg:pt-0">
+      <MobileTopicTOC headings={headings} />
       <div className="mx-auto max-w-3xl lg:max-w-6xl lg:grid lg:grid-cols-[minmax(0,1fr)_14rem] lg:gap-12">
         <div className="min-w-0 lg:max-w-3xl">
         {/* Breadcrumb */}

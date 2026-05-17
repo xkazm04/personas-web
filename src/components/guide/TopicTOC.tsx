@@ -1,7 +1,8 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useMemo } from "react";
 
+import { useActiveHeading } from "./useActiveHeading";
 import type { GuideHeading } from "./guide-markdown/extractHeadings";
 
 interface TopicTOCProps {
@@ -10,33 +11,11 @@ interface TopicTOCProps {
 }
 
 export default function TopicTOC({ headings, label }: TopicTOCProps) {
-  const tocHeadings = headings.filter((h) => h.depth === 2 || h.depth === 3);
-  const [activeId, setActiveId] = useState<string | null>(tocHeadings[0]?.id ?? null);
-
-  useEffect(() => {
-    if (tocHeadings.length === 0 || typeof window === "undefined") return;
-    const observer = new IntersectionObserver(
-      (entries) => {
-        const visible = entries
-          .filter((entry) => entry.isIntersecting)
-          .sort((a, b) => a.boundingClientRect.top - b.boundingClientRect.top);
-        if (visible[0]?.target.id) setActiveId(visible[0].target.id);
-      },
-      { rootMargin: "-96px 0px -65% 0px", threshold: 0 },
-    );
-    const observed: HTMLElement[] = [];
-    for (const heading of tocHeadings) {
-      const el = document.getElementById(heading.id);
-      if (el) {
-        observer.observe(el);
-        observed.push(el);
-      }
-    }
-    return () => {
-      observed.forEach((el) => observer.unobserve(el));
-      observer.disconnect();
-    };
-  }, [tocHeadings]);
+  const tocHeadings = useMemo(
+    () => headings.filter((h) => h.depth === 2 || h.depth === 3),
+    [headings],
+  );
+  const activeId = useActiveHeading(tocHeadings);
 
   if (tocHeadings.length === 0) return null;
 
