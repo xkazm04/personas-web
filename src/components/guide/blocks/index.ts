@@ -13,3 +13,4 @@ export { TabBlock } from "./TabBlock";
 export { CliBlock } from "./CliBlock";
 export { CodeFence } from "./CodeFence";
 export { CalloutStack } from "./CalloutStack";
+export { CardsBlock, type CardItem } from "./CardsBlock";

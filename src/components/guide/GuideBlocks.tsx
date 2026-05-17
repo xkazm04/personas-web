@@ -20,4 +20,6 @@ export {
   CliBlock,
   CodeFence,
   CalloutStack,
+  CardsBlock,
 } from "./blocks";
+export type { CardItem } from "./blocks";

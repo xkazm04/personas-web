@@ -14,13 +14,10 @@ import {
   UseCaseGrid,
 } from "../GuideBlocks";
 import { parseCalloutStack } from "./parseCalloutStack";
+import { parseCards } from "./parseCards";
 import { parseInline } from "./parseInline";
 
-export function parseCustomBlock(
-  blockType: string,
-  innerLines: string[],
-  keyBase: string,
-): ReactNode | null {
+export function parseCustomBlock(blockType: string, innerLines: string[], keyBase: string): ReactNode | null {
   if (blockType === "steps") return parseSteps(innerLines);
   if (blockType === "keys") return parseKeys(innerLines);
   if (blockType === "compare") return parseCompare(innerLines);
@@ -32,6 +29,7 @@ export function parseCustomBlock(
   if (blockType === "tabs") return parseTabs(innerLines, keyBase);
   if (blockType === "cli") return <CliBlock lines={innerLines} />;
   if (blockType === "callout-stack") return parseCalloutStack(innerLines, keyBase);
+  if (blockType === "cards") return parseCards(innerLines, keyBase);
   if (["tip", "warning", "info", "success"].includes(blockType)) {
     const content = innerLines.filter((line) => line.trim()).join(" ").trim();
     return <Callout type={blockType}><p>{parseInline(content, keyBase)}</p></Callout>;
