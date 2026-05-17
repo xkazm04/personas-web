@@ -35,14 +35,22 @@ export function parseBlocks(lines: string[], opts: { copyAnchorLabel?: string } 
     }
 
     if (line.trimStart().startsWith("```")) {
-      const lang = line.trim().slice(3).trim();
+      const fence = line.trim().slice(3).trim();
+      const [rawLang, ...modifiers] = fence.split(":");
+      const lineNumbers = modifiers.some((m) => m === "line-numbers" || m === "ln");
       const codeLines: string[] = [];
       index++;
       while (index < lines.length && !lines[index].trimStart().startsWith("```")) {
         codeLines.push(lines[index++]);
       }
       index++;
-      emit(<CodeFence text={codeLines.join("\n")} lang={lang || undefined} />);
+      emit(
+        <CodeFence
+          text={codeLines.join("\n")}
+          lang={rawLang || undefined}
+          lineNumbers={lineNumbers || undefined}
+        />,
+      );
       continue;
     }
 

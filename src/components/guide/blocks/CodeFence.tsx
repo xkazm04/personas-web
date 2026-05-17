@@ -8,6 +8,7 @@ import { CopyButton } from "./CopyButton";
 interface CodeFenceProps {
   text: string;
   lang?: string;
+  lineNumbers?: boolean;
 }
 
 const SUPPORTED_LANGS = new Set([
@@ -66,7 +67,24 @@ function normalizeLang(lang?: string): string | null {
   return l;
 }
 
-export function CodeFence({ text, lang }: CodeFenceProps) {
+const LINE_NUMBER_CSS = `
+.shiki-ln pre code { counter-reset: ln; padding-left: 0; }
+.shiki-ln pre code .line { counter-increment: ln; display: block; padding-left: 3.5rem; position: relative; }
+.shiki-ln pre code .line::before {
+  content: counter(ln);
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 2.5rem;
+  padding-right: 1rem;
+  text-align: right;
+  color: rgba(255, 255, 255, 0.28);
+  user-select: none;
+  pointer-events: none;
+}
+`;
+
+export function CodeFence({ text, lang, lineNumbers }: CodeFenceProps) {
   const [html, setHtml] = useState<string | null>(null);
   const normalized = normalizeLang(lang);
 
@@ -94,17 +112,32 @@ export function CodeFence({ text, lang }: CodeFenceProps) {
     };
   }, [text, normalized]);
 
+  const plainLines = text.split("\n");
+
   return (
     <div className="group relative mb-4 overflow-x-auto rounded-xl border border-glass bg-white/[0.03]">
+      {lineNumbers ? <style>{LINE_NUMBER_CSS}</style> : null}
       <div className="flex items-center justify-between px-4 pt-2">
         {lang ? <div className="select-none font-mono text-base text-muted-dark/60">{lang}</div> : <div />}
         <CopyButton text={text} />
       </div>
       {html ? (
         <div
-          className="shiki-output [&_pre]:!bg-transparent [&_pre]:!p-4 [&_pre]:!pt-2 [&_pre]:font-mono [&_pre]:text-base [&_pre]:leading-relaxed [&_pre]:overflow-x-auto"
+          className={`shiki-output [&_pre]:!bg-transparent [&_pre]:!p-4 [&_pre]:!pt-2 [&_pre]:font-mono [&_pre]:text-base [&_pre]:leading-relaxed [&_pre]:overflow-x-auto${
+            lineNumbers ? " shiki-ln" : ""
+          }`}
           dangerouslySetInnerHTML={{ __html: html }}
         />
+      ) : lineNumbers ? (
+        <div className={`shiki-ln`}>
+          <pre className="p-4 pt-2 font-mono text-base leading-relaxed text-muted-dark">
+            <code>
+              {plainLines.map((line, i) => (
+                <span key={i} className="line">{line || " "}</span>
+              ))}
+            </code>
+          </pre>
+        </div>
       ) : (
         <pre className="p-4 pt-2 font-mono text-base leading-relaxed text-muted-dark">
           <code>{text}</code>
