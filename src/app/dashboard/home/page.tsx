@@ -8,6 +8,7 @@ import FleetOptimizationCard from "@/components/dashboard/FleetOptimizationCard"
 import { useTranslation } from "@/i18n/useTranslation";
 import { api } from "@/lib/api";
 import { fadeUp, staggerContainer } from "@/lib/animations";
+import { relativeTime } from "@/lib/format";
 import {
   MOCK_FLEET_RECOMMENDATION,
   MOCK_GLOBAL_EXECUTIONS,
@@ -25,6 +26,8 @@ import { DashboardIntelligencePanels } from "./home-page/DashboardIntelligencePa
 import { DashboardStatsBadges } from "./home-page/DashboardStatsBadges";
 import { RecentActivityCard } from "./home-page/RecentActivityCard";
 import { TrafficErrorsCard } from "./home-page/TrafficErrorsCard";
+import { useGreeting } from "./home-page/useGreeting";
+import { useLastVisit } from "./home-page/useLastVisit";
 
 export default function DashboardHomePage() {
   const { t } = useTranslation();
@@ -83,14 +86,9 @@ export default function DashboardHomePage() {
     return () => clearTimeout(timer);
   }, []);
 
-  const displayName = user?.user_metadata?.full_name?.split(" ")[0] ?? "there";
-  const hour = new Date().getHours();
-  const greeting =
-    hour < 12
-      ? t.dashboard.greeting.morning
-      : hour < 18
-        ? t.dashboard.greeting.afternoon
-        : t.dashboard.greeting.evening;
+  const greeting = useGreeting(t.dashboard.greeting);
+  const lastVisitedAt = useLastVisit();
+  const displayName = user?.user_metadata?.full_name?.split(" ")[0] ?? t.dashboard.greetingFallback;
 
   const recentExecs = useMemo(() => executions.slice(0, 12), [executions]);
   const stats = useMemo(() => {
@@ -128,6 +126,16 @@ export default function DashboardHomePage() {
         <p className="mt-1 text-base text-muted-dark">
           {t.dashboard.agentsStatus}
         </p>
+        {lastVisitedAt !== null && (
+          <motion.p
+            initial={{ opacity: 0, y: -4 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.3, ease: "easeOut" }}
+            className="mt-1 text-sm text-muted-dark"
+          >
+            {t.dashboard.lastSeen} {relativeTime(new Date(lastVisitedAt).toISOString())}
+          </motion.p>
+        )}
       </motion.div>
 
       <motion.div variants={fadeUp} className="mb-8 flex flex-wrap gap-3">
@@ -172,6 +180,7 @@ export default function DashboardHomePage() {
             labels={{
               title: t.dashboard.trafficErrors,
               last14Days: t.dashboard.last14Days,
+              noTrafficYet: t.dashboard.noTrafficYet,
             }}
           />
         </motion.div>

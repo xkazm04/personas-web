@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import { AlertCircle, Clock } from "lucide-react";
 import { useTranslation } from "@/i18n/useTranslation";
 import type { Translations } from "@/i18n/en";
+import { usePageVisibility } from "@/hooks/usePageVisibility";
 
 function formatStaleness(seconds: number, t: Translations): string {
   if (seconds < 10) return t.dashboard.staleness.justNow;
@@ -35,11 +36,18 @@ export default function StalenessIndicator({
 }: Props) {
   const { t } = useTranslation();
   const [now, setNow] = useState(() => Date.now());
+  const hidden = usePageVisibility();
 
+  // The dashboard mounts ~5 of these in parallel; pausing while the
+  // tab is hidden keeps the 10s tick from waking the page off-screen.
+  // Resume with an immediate `now` update so the chip catches up to
+  // any time that passed in the background.
   useEffect(() => {
+    if (hidden) return;
+    queueMicrotask(() => setNow(Date.now()));
     const id = setInterval(() => setNow(Date.now()), 10_000);
     return () => clearInterval(id);
-  }, []);
+  }, [hidden]);
 
   if (error) {
     return (

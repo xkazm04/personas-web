@@ -122,6 +122,7 @@
     search: string;
     noResults: string;
     signOut: string;
+    signingOut: string;
     signIn: string;
     notifyMe: string;
     step: string;
@@ -200,6 +201,8 @@
       evening: string;
     };
     agentsStatus: string;
+    lastSeen: string;
+    greetingFallback: string;
     pendingReviews: string;
     totalExecutions: string;
     successRate: string;
@@ -210,6 +213,7 @@
     executeToSee: string;
     trafficErrors: string;
     last14Days: string;
+    noTrafficYet: string;
     deployed: string;
     metricsHealth: string;
     toolUtilization: string;
@@ -327,6 +331,8 @@
     health: string;
     memoryInsights: string;
     suggestion: string;
+    suggestions: string;
+    dismissAction: string;
     allSuggestionsDismissed: string;
     noDataAvailable: string;
     errors: string;
@@ -949,6 +955,7 @@ export const en: Translations = {
     search: 'Search',
     noResults: 'No results found',
     signOut: 'Sign out',
+    signingOut: 'Signing out…',
     signIn: 'Sign in',
     notifyMe: 'notify me',
     step: 'Step',
@@ -1115,6 +1122,8 @@ export const en: Translations = {
       evening: 'Good Evening',
     },
     agentsStatus: "Here's what's happening with your agents",
+    lastSeen: 'Last seen',
+    greetingFallback: 'there',
     pendingReviews: 'pending reviews',
     totalExecutions: 'total executions',
     successRate: 'success rate',
@@ -1125,6 +1134,7 @@ export const en: Translations = {
     executeToSee: 'Execute an agent to see activity here.',
     trafficErrors: 'Traffic & Errors',
     last14Days: 'Last 14 days',
+    noTrafficYet: 'No traffic yet',
     deployed: 'deployed',
     metricsHealth: 'Metrics & health',
     toolUtilization: 'Tool utilization',
@@ -1242,6 +1252,8 @@ export const en: Translations = {
     health: "Health",
     memoryInsights: "Memory Insights",
     suggestion: "suggestion",
+    suggestions: "suggestions",
+    dismissAction: "Dismiss: {title}",
     allSuggestionsDismissed: "All suggestions dismissed. Check back later.",
     noDataAvailable: "No data available yet",
     errors: "Errors",
