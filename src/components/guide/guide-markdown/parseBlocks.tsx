@@ -1,6 +1,7 @@
 import React, { type ReactNode } from "react";
 
 import { CopyButton, MarkdownTable } from "../GuideBlocks";
+import { HeadingAnchor, slugifyHeading } from "./HeadingAnchor";
 import { parseCustomBlock } from "./parseCustomBlock";
 import { parseInline } from "./parseInline";
 
@@ -18,10 +19,11 @@ function isBlockStart(line: string): boolean {
   );
 }
 
-export function parseBlocks(lines: string[]): ReactNode[] {
+export function parseBlocks(lines: string[], opts: { copyAnchorLabel?: string } = {}): ReactNode[] {
   const elements: ReactNode[] = [];
   let index = 0;
   let key = 0;
+  const usedSlugs = new Map<string, number>();
   const emit = (node: ReactNode) =>
     elements.push(React.cloneElement(node as React.ReactElement, { key: `b${key++}` }));
 
@@ -58,14 +60,21 @@ export function parseBlocks(lines: string[]): ReactNode[] {
     const headingMatch = line.match(/^(#{1,4})\s+(.+)$/);
     if (headingMatch) {
       const depth = headingMatch[1].length as 1 | 2 | 3 | 4;
-      const classes = {
-        1: "text-3xl font-bold tracking-tight mt-8 mb-4 text-foreground",
-        2: "text-2xl font-semibold tracking-tight mt-8 mb-3 text-foreground",
-        3: "text-xl font-semibold mt-6 mb-2 text-foreground",
-        4: "text-lg font-medium mt-4 mb-2 text-foreground",
-      };
-      const Tag = `h${depth}` as const;
-      emit(<Tag className={classes[depth]}>{parseInline(headingMatch[2], `h${key}`)}</Tag>);
+      const rawText = headingMatch[2];
+      const baseSlug = slugifyHeading(rawText) || `section-${key}`;
+      const count = usedSlugs.get(baseSlug) ?? 0;
+      usedSlugs.set(baseSlug, count + 1);
+      const id = count === 0 ? baseSlug : `${baseSlug}-${count + 1}`;
+      emit(
+        <HeadingAnchor
+          depth={depth}
+          id={id}
+          rawText={rawText}
+          copyLabel={opts.copyAnchorLabel ?? "Copy link to section"}
+        >
+          {parseInline(rawText, `h${key}`)}
+        </HeadingAnchor>,
+      );
       index++;
       continue;
     }

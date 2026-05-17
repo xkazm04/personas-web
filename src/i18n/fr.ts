@@ -808,6 +808,7 @@ export const fr: Translations = {
     noResults: 'Aucun sujet trouvĂ©. Essayez un autre terme de recherche.',
     stillQuestions: 'Encore des questions ?',
     joinDiscord: 'Rejoignez notre Discord',
+    copyAnchor: 'Copier le lien de la section',
     categories: {
       "getting-started": 'Prise en main',
       "agents-prompts": 'Agents et Prompts',

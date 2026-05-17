@@ -1,5 +1,6 @@
 "use client";
 
+import { useTranslation } from "@/i18n/useTranslation";
 import { parseBlocks } from "./guide-markdown/parseBlocks";
 
 interface GuideMarkdownProps {
@@ -7,5 +8,10 @@ interface GuideMarkdownProps {
 }
 
 export default function GuideMarkdown({ content }: GuideMarkdownProps) {
-  return <div className="prose-custom max-w-none">{parseBlocks(content.split("\n"))}</div>;
+  const { t } = useTranslation();
+  return (
+    <div className="prose-custom max-w-none">
+      {parseBlocks(content.split("\n"), { copyAnchorLabel: t.guide.copyAnchor })}
+    </div>
+  );
 }

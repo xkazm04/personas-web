@@ -726,6 +726,7 @@
     noResults: string;
     stillQuestions: string;
     joinDiscord: string;
+    copyAnchor: string;
     categories: {
       "getting-started": string;
       "agents-prompts": string;
@@ -1641,6 +1642,7 @@ export const en: Translations = {
     noResults: 'No topics found. Try a different search term.',
     stillQuestions: 'Still have questions?',
     joinDiscord: 'Join our Discord',
+    copyAnchor: 'Copy link to section',
     categories: {
       "getting-started": 'Getting Started',
       "agents-prompts": 'Agents & Prompts',

@@ -808,6 +808,7 @@ export const ko: Translations = {
     noResults: '\uc8fc\uc81c\ub97c \ucc3e\uc744 \uc218 \uc5c6\uc2b5\ub2c8\ub2e4. \ub2e4\ub978 \uac80\uc0c9\uc5b4\ub97c \uc2dc\ub3c4\ud574 \ubcf4\uc138\uc694.',
     stillQuestions: '\uc544\uc9c1 \uad81\uae08\ud55c \uc810\uc774 \uc788\uc73c\uc2e0\uac00\uc694?',
     joinDiscord: 'Discord\uc5d0 \ucc38\uc5ec\ud558\uae30',
+    copyAnchor: '\uc139\uc158 \ub9c1\ud06c \ubcf5\uc0ac',
     categories: {
       "getting-started": '\uc2dc\uc791\ud558\uae30',
       "agents-prompts": '\uc5d0\uc774\uc804\ud2b8 & \ud504\ub86c\ud504\ud2b8',

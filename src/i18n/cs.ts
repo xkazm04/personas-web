@@ -808,6 +808,7 @@ export const cs: Translations = {
     noResults: '\u017d\u00e1dn\u00e1 t\u00e9mata nenalezena. Zkuste jin\u00fd hledan\u00fd v\u00fdraz.',
     stillQuestions: 'M\u00e1te je\u0161t\u011b ot\u00e1zky?',
     joinDiscord: 'P\u0159idejte se na n\u00e1\u0161 Discord',
+    copyAnchor: 'Zkop\u00edrovat odkaz na sekci',
     categories: {
       "getting-started": 'Za\u010d\u00edn\u00e1me',
       "agents-prompts": 'Agenti a prompty',

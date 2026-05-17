@@ -808,6 +808,7 @@ export const es: Translations = {
     noResults: 'No se encontraron temas. Prueba con otro tĂ©rmino de bĂşsqueda.',
     stillQuestions: 'ÂżAĂşn tienes preguntas?',
     joinDiscord: 'Ăšnete a nuestro Discord',
+    copyAnchor: 'Copiar enlace a la sección',
     categories: {
       "getting-started": 'Primeros Pasos',
       "agents-prompts": 'Agentes y Prompts',
