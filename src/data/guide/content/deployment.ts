@@ -212,6 +212,39 @@ The orchestrator runs as a long-lived server process. The Docker image is self-c
 
 Deploying an agent to a BYOI orchestrator is identical to managed cloud from the desktop app's perspective — same UI, same flow, same observability. The orchestrator endpoint is just configured to point at your installation instead of ours.
 
+### Minimal Local Stack Setup
+
+The fastest way to validate BYOI is the bundled Docker Compose stack — orchestrator, Postgres, and Vault on a single machine, no Kubernetes, no DNS, no TLS. Useful for confirming your network and storage assumptions before standing up real infrastructure.
+
+:::cli
+$ curl -L https://download.personas.ai/byoi/docker-compose.yml -o docker-compose.yml
+$ docker compose up -d
+✓ Network personas-byoi created
+✓ Container personas-postgres started
+✓ Container personas-vault started
+✓ Container personas-orchestrator started
+:::
+
+The orchestrator listens on port 8080 by default. Confirm the stack came up healthy:
+
+:::cli
+$ curl http://localhost:8080/health
+{"status":"ok","version":"1.4.2","postgres":"ok","vault":"ok"}
+:::
+
+If every component reports "ok", point the desktop app at \`http://localhost:8080\` from **Settings → Cloud → BYOI** and deploy your first agent. To override defaults — different port, an external Postgres, your own Vault — set environment variables before bringing the stack up:
+
+:::cli
+$ export PERSONAS_DB_URL=postgres://localhost:5432/personas
+$ export PERSONAS_VAULT_ENDPOINT=https://vault.internal:8200
+$ export PERSONAS_LISTEN_PORT=4000
+$ docker compose up -d
+:::
+
+:::warning
+The minimal stack runs Vault with default tokens on the same network as the orchestrator — fine for local testing, **never** for production. Production BYOI swaps Vault for your real KMS (AWS KMS, GCP KMS, Azure Key Vault) configured during Helm install.
+:::
+
 :::info
 BYOI is genuinely infrastructure work. The orchestrator software is well-documented and the Helm chart handles most setup, but you'll still need someone comfortable with running production server software. For teams without that capacity, managed cloud is the better starting point — switch to BYOI later if requirements change.
 :::
