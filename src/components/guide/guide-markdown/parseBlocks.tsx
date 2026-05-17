@@ -121,7 +121,7 @@ export function parseBlocks(lines: string[], opts: { copyAnchorLabel?: string } 
       continue;
     }
 
-    const customMatch = line.trimStart().match(/^:::(\w+)$/);
+    const customMatch = line.trimStart().match(/^:::([\w-]+)$/);
     if (customMatch) {
       const innerLines: string[] = [];
       index++;
