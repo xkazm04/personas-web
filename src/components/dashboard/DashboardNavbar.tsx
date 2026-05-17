@@ -24,7 +24,7 @@ export default function DashboardNavbar() {
       initial={{ y: -20, opacity: 0 }}
       animate={{ y: 0, opacity: 1 }}
       transition={{ duration: 0.5, ease: "easeOut" }}
-      className="sticky top-0 z-50 border-b border-glass bg-black/20 backdrop-blur-3xl"
+      className="sticky top-0 z-50 border-b border-glass bg-background/30 backdrop-blur-3xl"
     >
       <nav className="mx-auto flex items-center justify-between px-4 py-3 sm:px-6">
         {/* Left: Logo + breadcrumb */}
