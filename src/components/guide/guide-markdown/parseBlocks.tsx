@@ -2,7 +2,8 @@ import React, { type ReactNode } from "react";
 
 import { CodeFence, MarkdownTable } from "../GuideBlocks";
 import { expandLineRanges } from "./expandLineRanges";
-import { HeadingAnchor, slugifyHeading } from "./HeadingAnchor";
+import { HeadingAnchor } from "./HeadingAnchor";
+import { slugifyHeading } from "./slugify";
 import { parseCustomBlock } from "./parseCustomBlock";
 import { parseInline } from "./parseInline";
 

@@ -2,21 +2,6 @@
 
 import type { ReactNode } from "react";
 
-export function slugifyHeading(text: string): string {
-  const stripped = text
-    .replace(/\*\*\*(.+?)\*\*\*/g, "$1")
-    .replace(/\*\*(.+?)\*\*/g, "$1")
-    .replace(/\*(.+?)\*/g, "$1")
-    .replace(/`([^`]+)`/g, "$1")
-    .replace(/\[([^\]]*)\]\([^)]+\)/g, "$1")
-    .normalize("NFKD")
-    .replace(/[̀-ͯ]/g, "");
-  return stripped
-    .toLowerCase()
-    .replace(/[^a-z0-9]+/g, "-")
-    .replace(/^-+|-+$/g, "");
-}
-
 const DEPTH_CLASSES: Record<1 | 2 | 3 | 4, string> = {
   1: "text-3xl font-bold tracking-tight mt-8 mb-4 text-foreground scroll-mt-24 group relative",
   2: "text-2xl font-semibold tracking-tight mt-8 mb-3 text-foreground scroll-mt-24 group relative",

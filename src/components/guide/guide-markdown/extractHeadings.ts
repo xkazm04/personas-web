@@ -1,4 +1,4 @@
-import { slugifyHeading } from "./HeadingAnchor";
+import { slugifyHeading } from "./slugify";
 
 export interface GuideHeading {
   id: string;
