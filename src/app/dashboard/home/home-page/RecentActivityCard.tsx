@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import Link from "next/link";
 import { Activity } from "lucide-react";
 
 import GlowCard from "@/components/GlowCard";
@@ -61,9 +62,10 @@ export function RecentActivityCard({
       ) : (
         <div className="space-y-1.5 max-h-[420px] overflow-y-auto pr-1">
           {executions.map((execution) => (
-            <div
+            <Link
               key={execution.id}
-              className="flex items-center gap-2.5 rounded-lg px-2.5 py-2 transition-colors hover:bg-white/[0.03]"
+              href="/dashboard/executions"
+              className="flex items-center gap-2.5 rounded-lg px-2.5 py-2 transition-colors hover:bg-white/[0.03] focus-ring focus-visible:ring-offset-0"
             >
               <PersonaAvatar
                 icon={execution.personaIcon}
@@ -81,7 +83,7 @@ export function RecentActivityCard({
                 </p>
               </div>
               <StatusBadge status={execution.status} />
-            </div>
+            </Link>
           ))}
         </div>
       )}
