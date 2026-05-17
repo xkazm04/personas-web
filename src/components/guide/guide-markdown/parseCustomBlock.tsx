@@ -13,6 +13,7 @@ import {
   TabBlock,
   UseCaseGrid,
 } from "../GuideBlocks";
+import { parseCalloutStack } from "./parseCalloutStack";
 import { parseInline } from "./parseInline";
 
 export function parseCustomBlock(
@@ -30,6 +31,7 @@ export function parseCustomBlock(
   if (blockType === "code-compare") return parseCodeCompare(innerLines);
   if (blockType === "tabs") return parseTabs(innerLines, keyBase);
   if (blockType === "cli") return <CliBlock lines={innerLines} />;
+  if (blockType === "callout-stack") return parseCalloutStack(innerLines, keyBase);
   if (["tip", "warning", "info", "success"].includes(blockType)) {
     const content = innerLines.filter((line) => line.trim()).join(" ").trim();
     return <Callout type={blockType}><p>{parseInline(content, keyBase)}</p></Callout>;

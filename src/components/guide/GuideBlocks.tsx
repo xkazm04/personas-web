@@ -19,4 +19,5 @@ export {
   TabBlock,
   CliBlock,
   CodeFence,
+  CalloutStack,
 } from "./blocks";
