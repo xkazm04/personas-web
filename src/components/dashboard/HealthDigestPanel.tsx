@@ -4,48 +4,12 @@ import { useEffect, useState } from "react";
 import { motion } from "framer-motion";
 import { Heart, CheckCircle, AlertCircle } from "lucide-react";
 import { fadeUp, staggerContainer } from "@/lib/animations";
+import useAnimatedNumber from "@/hooks/useAnimatedNumber";
 import { MOCK_HEALTH_DIGEST } from "@/lib/mock-dashboard-data";
 import { relativeTime } from "@/lib/format";
 import StalenessIndicator from "./StalenessIndicator";
+import { healthScoreColor } from "./healthScoreColor";
 import { useTranslation } from "@/i18n/useTranslation";
-
-/** Resolve score to a Tailwind color token class.
- * Follows the canonical 4-tier score band recipe in `.claude/design.md` §2
- * so the home page's fleet health reads the same as leaderboard/SLA scores. */
-function scoreColor(score: number): {
-  text: string;
-  stroke: string;
-  bg: string;
-  hex: string;
-} {
-  if (score >= 80)
-    return {
-      text: "text-emerald-400",
-      stroke: "stroke-emerald-400",
-      bg: "bg-emerald-400",
-      hex: "#34d399",
-    };
-  if (score >= 60)
-    return {
-      text: "text-cyan-400",
-      stroke: "stroke-cyan-400",
-      bg: "bg-cyan-400",
-      hex: "#06b6d4",
-    };
-  if (score >= 40)
-    return {
-      text: "text-amber-400",
-      stroke: "stroke-amber-400",
-      bg: "bg-amber-400",
-      hex: "#fbbf24",
-    };
-  return {
-    text: "text-rose-400",
-    stroke: "stroke-rose-400",
-    bg: "bg-rose-400",
-    hex: "#f43f5e",
-  };
-}
 
 // SVG circle math
 const RING_SIZE = 80;
@@ -56,16 +20,23 @@ const CIRCUMFERENCE = 2 * Math.PI * RADIUS;
 export default function HealthDigestPanel() {
   const { t } = useTranslation();
   const { overallScore, agents } = MOCK_HEALTH_DIGEST;
-  const colors = scoreColor(overallScore);
+  const colors = healthScoreColor(overallScore);
 
   // Animate the ring fill on mount
   const [offset, setOffset] = useState(CIRCUMFERENCE);
   const [fetchedAt] = useState(() => Date.now());
 
+  // Count the displayed score from 0 to overallScore, coordinated with the
+  // ring fill (200ms initial delay, 1000ms duration via the SVG's CSS
+  // transition). useAnimatedNumber honors prefers-reduced-motion.
+  const [countTarget, setCountTarget] = useState(0);
+  const animatedScore = useAnimatedNumber(countTarget, 1000);
+
   useEffect(() => {
     // Small delay so the animation is visible after mount
     const timer = setTimeout(() => {
       setOffset(CIRCUMFERENCE - (overallScore / 100) * CIRCUMFERENCE);
+      setCountTarget(overallScore);
     }, 200);
     return () => clearTimeout(timer);
   }, [overallScore]);
@@ -126,7 +97,7 @@ export default function HealthDigestPanel() {
         {/* Center text */}
         <div className="absolute inset-0 flex flex-col items-center justify-center">
           <span className={`text-2xl font-bold tabular-nums ${colors.text}`}>
-            {overallScore}
+            {Math.round(animatedScore)}
           </span>
         </div>
 
@@ -138,7 +109,7 @@ export default function HealthDigestPanel() {
       {/* Agent Rows */}
       <div className="w-full space-y-1.5">
         {agents.map((agent) => {
-          const agentColors = scoreColor(agent.score);
+          const agentColors = healthScoreColor(agent.score);
           return (
             <motion.div
               key={agent.name}
