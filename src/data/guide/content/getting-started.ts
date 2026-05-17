@@ -14,8 +14,25 @@ The first time the app opens, you land on the welcome screen. From there you can
 5. **Optional: connect a provider** — paste an API key on the Connections page if you want to be ready to build immediately
 :::
 
+:::tabs
+### Windows
+**Requirements:** Windows 10 or newer, 64-bit. **Installer:** 53 MB NSIS \`.exe\`. Double-click to run; SmartScreen may ask you to confirm the publisher the first time — the installer is code-signed, so this is just your OS being cautious with new software.
+
+After install, the bundled binary is around 90 MB. Auto-updates run silently in the background.
+
+### macOS
+**Requirements:** macOS 12 (Monterey) or newer. Runs natively on Intel and Apple Silicon. **Installer:** universal \`.dmg\`. Open the disk image, drag Personas to your Applications folder, eject the disk.
+
+The first launch goes through Gatekeeper — confirm and Personas opens. Auto-updates use Apple's standard signed-package flow.
+
+### Linux
+**Requirements:** glibc 2.28+. Tested on Ubuntu, Debian, Fedora, and Arch. **Installer:** \`.AppImage\` (universal, works everywhere) or \`.deb\` (Debian / Ubuntu).
+
+For AppImage: \`chmod +x Personas-*.AppImage\` then run it. For deb: \`sudo dpkg -i Personas-*.deb\`. Launch from your application menu or by running \`personas\` in a terminal.
+:::
+
 :::info
-Works on **Windows 10+**, **macOS 12+**, and most modern **Linux** distributions. The Windows installer is a 53 MB NSIS \`.exe\`; the bundled binary is around 90 MB after install. Auto-updates are delta-only, so they're typically much smaller.
+Auto-updates are delta-only on every platform, so they're typically much smaller than the original installer.
 :::
 
 :::tip

@@ -9,6 +9,7 @@ import {
   FeatureHighlight,
   KeyboardGrid,
   StepWizard,
+  TabBlock,
   UseCaseGrid,
 } from "../GuideBlocks";
 import { parseInline } from "./parseInline";
@@ -26,6 +27,7 @@ export function parseCustomBlock(
   if (blockType === "checklist") return parseChecklist(innerLines);
   if (blockType === "usecases") return parseUseCases(innerLines);
   if (blockType === "code-compare") return parseCodeCompare(innerLines);
+  if (blockType === "tabs") return parseTabs(innerLines, keyBase);
   if (["tip", "warning", "info", "success"].includes(blockType)) {
     const content = innerLines.filter((line) => line.trim()).join(" ").trim();
     return (
@@ -145,6 +147,32 @@ function parseUseCases(lines: string[]) {
   }
   flush();
   return items.length > 0 ? <UseCaseGrid items={items} /> : null;
+}
+
+function parseTabs(lines: string[], keyBase: string): ReactNode | null {
+  const tabs: { label: string; content: string[] }[] = [];
+  for (const line of lines) {
+    const head = line.match(/^###?\s+(.+)$/);
+    if (head) tabs.push({ label: head[1].trim(), content: [] });
+    else if (tabs.length > 0) tabs[tabs.length - 1].content.push(line);
+  }
+  if (tabs.length === 0) return null;
+  const built = tabs.map((tab, i) => {
+    const paragraphs = tab.content.join("\n").trim().split(/\n{2,}/).filter((p) => p.trim());
+    return {
+      label: tab.label,
+      panel: (
+        <>
+          {paragraphs.map((p, pi) => (
+            <p key={`${keyBase}-t${i}-p${pi}`} className="mb-3 text-base leading-relaxed text-muted-dark last:mb-0">
+              {parseInline(p.trim(), `${keyBase}-t${i}-p${pi}`)}
+            </p>
+          ))}
+        </>
+      ),
+    };
+  });
+  return <TabBlock tabs={built} />;
 }
 
 function parseCodeCompare(lines: string[]) {

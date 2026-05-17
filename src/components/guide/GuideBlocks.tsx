@@ -16,4 +16,5 @@ export {
   Checklist,
   CodeCompare,
   UseCaseGrid,
+  TabBlock,
 } from "./blocks";

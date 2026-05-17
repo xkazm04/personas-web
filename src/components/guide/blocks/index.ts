@@ -9,3 +9,4 @@ export { FeatureHighlight } from "./FeatureHighlight";
 export { Checklist } from "./Checklist";
 export { CodeCompare } from "./CodeCompare";
 export { UseCaseGrid } from "./UseCaseGrid";
+export { TabBlock } from "./TabBlock";
