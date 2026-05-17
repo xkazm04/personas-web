@@ -128,9 +128,7 @@ A persistent configuration with a job. Triggered manually or automatically; uses
 
 ### How It Works
 
-:::diagram
-[Trigger fires] --> [Agent reads input] --> [Model + tools execute] --> [Output dispatched]
-:::
+![Agent orchestration overview: trigger fires, agent reads input, model and tools execute, output dispatched](/imgs/features/orchestration.png)
 
 The trigger packs an input payload (a webhook body, a clipboard string, a file path, an event from another agent…). The agent reads its prompt, feeds it to the AI model along with the input, and lets the model call attached tools as needed. The final output is dispatched through whatever output channel you configured — back to a UI, written to a file, posted to Slack, or chained as input to the next agent.
 
@@ -155,6 +153,8 @@ For repeating work, add a schedule trigger, a webhook trigger, a file-watcher tr
 :::
 
 ### How It Works
+
+![Lab view of a single execution trace showing prompt construction, model call, tool calls, and output](/imgs/features/lab.png)
 
 A run is a single execution: trigger → prompt-construction → model-call → tool-calls → output. Every step is captured in the execution trace, and the run lands in the Activity tab of the Overview page (the global view across all agents) and in the agent's own Activity tab. From either place you can click into the run for the full detail modal.
 
