@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import Link from "next/link";
 import { motion } from "framer-motion";
 import { Heart, CheckCircle, AlertCircle } from "lucide-react";
 import { fadeUp, staggerContainer } from "@/lib/animations";
@@ -111,11 +112,11 @@ export default function HealthDigestPanel() {
         {agents.map((agent) => {
           const agentColors = healthScoreColor(agent.score);
           return (
-            <motion.div
-              key={agent.name}
-              variants={fadeUp}
-              className="group flex items-center gap-2.5 rounded-lg px-2.5 py-2 transition-colors hover:bg-white/[0.03] cursor-pointer"
-            >
+            <motion.div key={agent.name} variants={fadeUp}>
+              <Link
+                href="/dashboard/agents"
+                className="group flex items-center gap-2.5 rounded-lg px-2.5 py-2 transition-colors hover:bg-white/[0.03] focus-ring focus-visible:ring-offset-0"
+              >
               {/* Color dot */}
               <span
                 className="h-2 w-2 rounded-full flex-shrink-0"
@@ -158,6 +159,7 @@ export default function HealthDigestPanel() {
               <span className="text-sm text-muted-dark whitespace-nowrap w-12 text-right">
                 {relativeTime(agent.lastRun)}
               </span>
+              </Link>
             </motion.div>
           );
         })}
