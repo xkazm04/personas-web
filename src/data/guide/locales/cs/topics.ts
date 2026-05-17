@@ -179,11 +179,6 @@ export const topics: Record<string, { title: string; description: string }> = {
     description:
       "Co se stane, když přihlašovací údaje vyprší, a jak to opravit. Některé služby vyžadují, abys přístup pravidelně obnovoval/a, jako prodloužení knihovní průkazky. Personas tě upozorní před vypršením a obnovení je tak snadné jako kliknutí na tlačítko.",
   },
-  "deleting-credentials-safely": {
-    title: "Bezpečné mazání přihlašovacích údajů",
-    description:
-      "Odebrání uložených tajemství, aniž bys rozbil/a své agenty. Před smazáním ti Personas ukážou, kteří agenti na tom přihlašovacím údaji závisí. Můžeš je nejprve přiřadit jinam, aby po odebrání starého údaje nic nepřestalo fungovat.",
-  },
   "connector-catalog": {
     title: "Katalog konektorů",
     description:

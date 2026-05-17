@@ -179,11 +179,6 @@ export const topics: Record<string, { title: string; description: string }> = {
     description:
       "Was passiert, wenn Zugangsdaten ablaufen und wie du es behebst. Manche Dienste verlangen, dass du deinen Zugang regelmäßig erneuerst — wie das Verlängern einer Bibliothekskarte. Personas warnt dich vor Ablauf und macht das Erneuern so einfach wie einen Klick.",
   },
-  "deleting-credentials-safely": {
-    title: "Zugangsdaten sicher löschen",
-    description:
-      "Entferne gespeicherte Geheimnisse, ohne deine Agenten zu zerstören. Vor dem Löschen zeigt Personas dir, welche Agenten von dieser Zugangsdaten abhängen. Du kannst sie zuerst neu zuweisen, sodass nichts aufhört zu funktionieren, wenn die alten Zugangsdaten entfernt werden.",
-  },
   "connector-catalog": {
     title: "Konnektor-Katalog",
     description:

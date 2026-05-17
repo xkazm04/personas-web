@@ -345,11 +345,6 @@ export const TOPIC_MODULE_MAP: Record<string, TopicModuleRef> = {
     path: ["Connections", "Credentials"],
     label: "Token refresh",
   },
-  "deleting-credentials-safely": {
-    moduleId: "connections",
-    path: ["Connections", "Credentials"],
-    label: "Credential cleanup",
-  },
   "connector-catalog": {
     moduleId: "connections",
     path: ["Connections", "Catalog"],

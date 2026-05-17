@@ -183,33 +183,6 @@ Cuando se dispara una advertencia amarilla de caducidad, refresca de inmediato e
 :::
   `,
 
-  "deleting-credentials-safely": `
-## Eliminar credenciales de forma segura
-
-Eliminar una credencial es permanente: el registro cifrado se borra de la bóveda y no hay recuperación desde dentro de Personas. Antes de eliminar, la tarjeta de la credencial muestra la comprobación de dependencias: cada agente que referencia la credencial, en qué cupo de capacidad, con cuál sería el impacto. Puedes usar el diálogo de eliminación para reasignar cada agente dependiente a una credencial distinta antes de confirmar, así que la eliminación real es atómica con la reasignación.
-
-Para credenciales OAuth, la eliminación solo quita el token almacenado localmente: no revoca el acceso del lado del proveedor. Si también quieres revocar del lado del proveedor, hazlo en la página de ajustes de seguridad del proveedor (se ofrece un enlace en el diálogo de eliminación para los principales proveedores).
-
-### Puntos clave
-
-- **Permanente e inmediato** — sin deshacer; el registro cifrado se borra al confirmar
-- **Comprobación de dependencias por adelantado** — ve cada agente dependiente antes de confirmar
-- **Reasignación en línea** — apunta los agentes dependientes a una credencial de reemplazo como parte del diálogo de eliminación
-- **Proveedores OAuth: por defecto solo eliminación local** — la revocación del lado del proveedor es un paso aparte (enlace proporcionado)
-- **Seguro como no-op para credenciales ya rotas** — eliminar una credencial caducada / revocada siempre es seguro; nada depende de un estado funcional
-
-### Cómo funciona
-
-El diálogo de eliminación lee el mismo grafo de dependencias que la vista Dependencies. Cuando confirmas, el motor escribe primero cualquier reasignación que hayas especificado y luego elimina el registro de la credencial de la bóveda en una sola transacción. Si las reasignaciones fallan la validación (por ejemplo, intentaste apuntar a una credencial de la categoría equivocada), la eliminación se revierte y nada cambia.
-
-:::warning
-Permanente significa permanente. El registro cifrado se borra, y si no anotaste el secreto en bruto en otro lugar, se acabó. Si pudieras necesitar la credencial otra vez, respalda externamente el valor en bruto antes de eliminar.
-:::
-
-:::tip
-El patrón de rotación más seguro es "añadir nueva, reasignar todos los agentes, luego eliminar la vieja". Añade primero la credencial de reemplazo, recorre el mapa de dependencias para reasignar agentes dependientes uno por uno (o todos a la vez en el diálogo de reasignación), verifica que todo está saludable y luego elimina la credencial antigua. Esta secuencia garantiza cero tiempo de inactividad.
-:::
-  `,
 
   "connector-catalog": `
 ## Catálogo de conectores

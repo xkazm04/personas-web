@@ -183,33 +183,6 @@ Když se spustí žluté varování o vypršení, obnov okamžitě místo čeká
 :::
   `,
 
-  "deleting-credentials-safely": `
-## Bezpečné mazání přihlašovacích údajů
-
-Smazání přihlašovacího údaje je trvalé — zašifrovaný záznam je vymazán z trezoru a zevnitř Personas neexistuje obnovení. Než smažeš, karta přihlašovacího údaje ti ukáže kontrolu závislostí: každého agenta odkazujícího na přihlašovací údaj, v jakém slotu schopnosti, s jakým by byl dopad. Můžeš použít dialog mazání pro přiřazení každého závislého agenta k jinému přihlašovacímu údaji před potvrzením, takže skutečné mazání je atomické s přiřazením.
-
-Pro OAuth přihlašovací údaje mazání pouze odstraňuje lokálně uložený token — neodvolává přístup na straně poskytovatele. Pokud chceš také odvolat na straně poskytovatele, udělej to na stránce bezpečnostního nastavení poskytovatele (v dialogu mazání je nabízen odkaz pro hlavní poskytovatele).
-
-### Klíčové body
-
-- **Trvalé a okamžité** — žádné undo; zašifrovaný záznam je vymazán při potvrzení
-- **Kontrola závislostí dopředu** — viz každého závislého agenta před potvrzením
-- **Inline přiřazení** — namiř závislé agenty na náhradní přihlašovací údaj jako součást dialogu mazání
-- **OAuth poskytovatelé: pouze lokální mazání ve výchozím nastavení** — odvolání na straně poskytovatele je samostatný krok (odkaz poskytnut)
-- **No-op bezpečné pro již rozbité přihlašovací údaje** — mazání vypršelého / odvolaného přihlašovacího údaje je vždy bezpečné; nic nezávisí na funkčním stavu
-
-### Jak to funguje
-
-Dialog mazání čte stejný graf závislostí jako pohled Dependencies. Když potvrdíš, engine nejprve zapíše libovolná přiřazení, která jsi specifikoval/a, pak odstraní záznam přihlašovacího údaje z trezoru v jediné transakci. Pokud přiřazení selžou ve validaci (např. jsi se pokusil/a namířit na přihlašovací údaj špatné kategorie), mazání se rolluje zpět a nic se nemění.
-
-:::warning
-Trvalé znamená trvalé. Zašifrovaný záznam je vymazán a pokud jsi si surové tajemství nezapsal/a jinde, je pryč. Pokud bys mohl/a přihlašovací údaj znovu potřebovat, zazálohuj surovou hodnotu externě před smazáním.
-:::
-
-:::tip
-Nejbezpečnější vzor rotace je „přidej nový, přiřaď všechny agenty, pak smaž starý". Přidej náhradní přihlašovací údaj nejprve, projdi mapu závislostí pro přiřazení závislých agentů jeden po druhém (nebo všechny najednou v dialogu přiřazení), ověř, že je vše zdravé, pak smaž starý přihlašovací údaj. Tato sekvence garantuje nulový downtime.
-:::
-  `,
 
   "connector-catalog": `
 ## Katalog konektorů

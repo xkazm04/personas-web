@@ -183,33 +183,6 @@ Quand un avertissement d'expiration jaune se déclenche, rafraîchissez immédia
 :::
   `,
 
-  "deleting-credentials-safely": `
-## Supprimer les identifiants en toute sécurité
-
-Supprimer un identifiant est permanent — l'enregistrement chiffré est effacé du coffre et il n'y a pas de récupération depuis Personas. Avant que vous ne supprimiez, la carte d'identifiant affiche la vérification de dépendance : chaque agent référençant l'identifiant, dans quel emplacement de capacité, avec ce que serait l'impact. Vous pouvez utiliser le dialogue de suppression pour réaffecter chaque agent dépendant à un identifiant différent avant de confirmer, de sorte que la suppression réelle soit atomique avec la réaffectation.
-
-Pour les identifiants OAuth, la suppression ne supprime que le jeton stocké localement — elle ne révoque pas l'accès côté fournisseur. Si vous voulez également révoquer chez le fournisseur, faites-le sur la page des paramètres de sécurité du fournisseur (un lien est offert dans le dialogue de suppression pour les principaux fournisseurs).
-
-### Points clés
-
-- **Permanent et immédiat** — pas d'annulation ; l'enregistrement chiffré est effacé à la confirmation
-- **Vérification de dépendance en amont** — voyez chaque agent dépendant avant de confirmer
-- **Réaffectation en ligne** — pointez les agents dépendants vers un identifiant de remplacement dans le cadre du dialogue de suppression
-- **Fournisseurs OAuth : suppression locale uniquement par défaut** — la révocation côté fournisseur est une étape séparée (lien fourni)
-- **Sans effet sûr pour les identifiants déjà cassés** — supprimer un identifiant expiré / révoqué est toujours sûr ; rien ne dépend de son état fonctionnel
-
-### Comment ça marche
-
-Le dialogue de suppression lit le même graphe de dépendances que la vue Dépendances. Quand vous confirmez, le moteur écrit d'abord toutes les réaffectations que vous avez spécifiées, puis supprime l'enregistrement d'identifiant du coffre en une seule transaction. Si les réaffectations échouent à la validation (par ex. vous avez essayé de pointer vers un identifiant de la mauvaise catégorie), la suppression est annulée et rien ne change.
-
-:::warning
-Permanent signifie permanent. L'enregistrement chiffré est effacé, et si vous n'avez pas noté le secret brut ailleurs, il est parti. Si vous pourriez avoir besoin de l'identifiant à nouveau, sauvegardez la valeur brute en externe avant la suppression.
-:::
-
-:::tip
-Le modèle de rotation le plus sûr est "ajouter le nouveau, réaffecter tous les agents, puis supprimer l'ancien". Ajoutez d'abord l'identifiant de remplacement, parcourez la carte de dépendances pour réaffecter les agents dépendants un par un (ou tous en même temps dans le dialogue de réaffectation), vérifiez que tout est sain, puis supprimez l'ancien identifiant. Cette séquence garantit zéro temps d'arrêt.
-:::
-  `,
 
   "connector-catalog": `
 ## Catalogue de connecteurs

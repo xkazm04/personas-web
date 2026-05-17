@@ -179,11 +179,6 @@ export const topics: Record<string, { title: string; description: string }> = {
     description:
       "Điều gì xảy ra khi credential hết hạn và cách khắc phục. Một số dịch vụ yêu cầu bạn gia hạn quyền truy cập định kỳ, giống như gia hạn thẻ thư viện. Personas cảnh báo bạn trước khi hết hạn và làm cho việc làm mới dễ như nhấp một nút.",
   },
-  "deleting-credentials-safely": {
-    title: "Xóa credential một cách an toàn",
-    description:
-      "Loại bỏ bí mật đã lưu mà không làm hỏng agent của bạn. Trước khi xóa, Personas cho bạn thấy các agent phụ thuộc vào credential đó. Bạn có thể gán lại chúng trước để không có gì ngừng hoạt động khi credential cũ bị xóa.",
-  },
   "connector-catalog": {
     title: "Catalog connector",
     description:

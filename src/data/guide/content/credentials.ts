@@ -212,34 +212,6 @@ When a yellow expiry warning fires, refresh immediately rather than waiting. Ref
 :::
   `,
 
-  "deleting-credentials-safely": `
-## Deleting Credentials Safely
-
-Deleting a credential is permanent — the encrypted record is wiped from the vault and there's no recovery from inside Personas. Before you delete, the credential card shows the dependency check: every agent referencing the credential, in what capability slot, with what the impact would be. You can use the deletion dialog to reassign each dependent agent to a different credential before confirming, so the actual deletion is atomic with the reassignment.
-
-For OAuth credentials, deletion only removes the local stored token — it doesn't revoke access on the provider side. If you also want to revoke on the provider, do that on the provider's security settings page (a link is offered in the deletion dialog for major providers).
-
-### Key Points
-
-- **Permanent and immediate** — no undo; the encrypted record is wiped on confirm
-- **Dependency check up front** — see every dependent agent before you confirm
-- **Inline reassignment** — point dependent agents at a replacement credential as part of the deletion dialog
-- **OAuth providers: local-only delete by default** — provider-side revocation is a separate step (link provided)
-- **No-op safe for already-broken credentials** — deleting an expired / revoked credential is always safe; nothing depends on functional state
-
-### How It Works
-
-The deletion dialog reads the same dependency graph as the Dependencies view. When you confirm, the engine first writes any reassignments you specified, then removes the credential record from the vault in a single transaction. If reassignments fail validation (e.g. you tried to point at a credential of the wrong category), the deletion is rolled back and nothing changes.
-
-:::warning
-Permanent means permanent. The encrypted record is wiped, and if you didn't write down the raw secret elsewhere, it's gone. If you might need the credential again, back up the raw value externally before deletion.
-:::
-
-:::tip
-The safest rotation pattern is "add new, reassign all agents, then delete old". Add the replacement credential first, walk the dependency map to reassign dependent agents one by one (or all at once in the reassign dialog), verify everything is healthy, then delete the old credential. This sequence guarantees zero downtime.
-:::
-  `,
-
   "connector-catalog": `
 ## Connector Catalog
 

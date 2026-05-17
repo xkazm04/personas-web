@@ -307,14 +307,6 @@ export const GUIDE_TOPICS: GuideTopic[] = [
     tags: ["credentials", "refresh", "expired", "token", "renew"],
   },
   {
-    id: "deleting-credentials-safely",
-    categoryId: "credentials",
-    title: "Deleting credentials safely",
-    description:
-      "Removing stored secrets without breaking your agents. Before deleting, Personas shows you which agents depend on that credential. You can reassign them first so nothing stops working when the old credential is removed.",
-    tags: ["credentials", "delete", "remove", "safe", "cleanup"],
-  },
-  {
     id: "connector-catalog",
     categoryId: "credentials",
     title: "Connector catalog",

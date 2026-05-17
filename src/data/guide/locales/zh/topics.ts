@@ -143,10 +143,6 @@ export const topics: Record<string, { title: string; description: string }> = {
     title: "刷新过期的令牌",
     description: "当凭证过期时会发生什么以及如何修复。某些服务要求你定期续订访问,就像续订借书证一样。Personas 在过期前警告你,并通过点击按钮使刷新变得容易。",
   },
-  "deleting-credentials-safely": {
-    title: "安全删除凭证",
-    description: "在不破坏 agent 的情况下删除存储的密钥。在删除之前,Personas 会显示哪些 agent 依赖该凭证。你可以先重新分配它们,这样在删除旧凭证时不会停止工作。",
-  },
   "connector-catalog": {
     title: "连接器目录",
     description: "浏览 40+ 个内置服务集成,可以立即使用。从邮件提供商到云存储,每个连接器都预配置好了,所以你不必弄清楚技术细节。只需选择服务,登录,你的 agent 就可以开始使用它。",

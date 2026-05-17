@@ -183,33 +183,6 @@ Ketika peringatan kuning kedaluwarsa menyala, segarkan segera daripada menunggu.
 :::
   `,
 
-  "deleting-credentials-safely": `
-## Menghapus Kredensial dengan Aman
-
-Menghapus kredensial bersifat permanen — record terenkripsi dihapus dari vault dan tidak ada pemulihan dari dalam Personas. Sebelum Anda menghapus, kartu kredensial menampilkan pemeriksaan dependensi: setiap agen yang mereferensikan kredensial, dalam slot kapabilitas apa, dengan apa dampaknya. Anda dapat menggunakan dialog penghapusan untuk menetapkan kembali setiap agen dependen ke kredensial yang berbeda sebelum mengonfirmasi, sehingga penghapusan aktual bersifat atomik dengan penetapan ulang.
-
-Untuk kredensial OAuth, penghapusan hanya menghapus token yang disimpan lokal — tidak mencabut akses di sisi penyedia. Jika Anda juga ingin mencabut di penyedia, lakukan itu di halaman pengaturan keamanan penyedia (tautan ditawarkan dalam dialog penghapusan untuk penyedia utama).
-
-### Poin Kunci
-
-- **Permanen dan langsung** — tidak ada undo; record terenkripsi dihapus pada konfirmasi
-- **Pemeriksaan dependensi di depan** — lihat setiap agen dependen sebelum Anda mengonfirmasi
-- **Penetapan ulang inline** — arahkan agen dependen ke kredensial pengganti sebagai bagian dari dialog penghapusan
-- **Penyedia OAuth: penghapusan-hanya-lokal secara default** — pencabutan sisi-penyedia adalah langkah terpisah (tautan disediakan)
-- **No-op aman untuk kredensial yang sudah rusak** — menghapus kredensial yang kedaluwarsa / dicabut selalu aman; tidak ada yang bergantung pada status fungsional
-
-### Cara Kerjanya
-
-Dialog penghapusan membaca grafik dependensi yang sama dengan tampilan Dependencies. Ketika Anda mengonfirmasi, engine terlebih dahulu menulis setiap penetapan ulang yang Anda tentukan, lalu menghapus record kredensial dari vault dalam satu transaksi. Jika penetapan ulang gagal validasi (misalnya Anda mencoba menunjuk ke kredensial dari kategori yang salah), penghapusan di-rollback dan tidak ada yang berubah.
-
-:::warning
-Permanen berarti permanen. Record terenkripsi dihapus, dan jika Anda tidak menulis rahasia mentah di tempat lain, itu hilang. Jika Anda mungkin membutuhkan kredensial lagi, backup nilai mentah secara eksternal sebelum penghapusan.
-:::
-
-:::tip
-Pola rotasi teraman adalah "tambah baru, tetapkan ulang semua agen, lalu hapus yang lama". Tambahkan kredensial pengganti terlebih dahulu, jelajahi peta dependensi untuk menetapkan ulang agen dependen satu per satu (atau semuanya sekaligus dalam dialog penetapan ulang), verifikasi semuanya sehat, kemudian hapus kredensial lama. Urutan ini menjamin nol downtime.
-:::
-  `,
 
   "connector-catalog": `
 ## Katalog Connector

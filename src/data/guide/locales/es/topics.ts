@@ -179,11 +179,6 @@ export const topics: Record<string, { title: string; description: string }> = {
     description:
       "Qué sucede cuando las credenciales caducan y cómo solucionarlo. Algunos servicios requieren que renueves tu acceso periódicamente, como renovar el carné de una biblioteca. Personas te avisa antes de la caducidad y hace que renovar sea tan fácil como pulsar un botón.",
   },
-  "deleting-credentials-safely": {
-    title: "Eliminar credenciales de forma segura",
-    description:
-      "Quitar secretos almacenados sin romper tus agentes. Antes de eliminarlos, Personas te muestra qué agentes dependen de esa credencial. Puedes reasignarlos primero para que nada deje de funcionar cuando se quite la credencial antigua.",
-  },
   "connector-catalog": {
     title: "Catálogo de conectores",
     description:

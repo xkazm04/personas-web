@@ -183,33 +183,6 @@ Wenn eine gelbe Ablaufwarnung feuert, erneuere sofort, statt zu warten. Jetzt zu
 :::
   `,
 
-  "deleting-credentials-safely": `
-## Zugangsdaten sicher löschen
-
-Eine Zugangsdaten zu löschen ist endgültig — der verschlüsselte Datensatz wird aus dem Tresor gewischt, und es gibt keine Wiederherstellung von innerhalb von Personas. Vor dem Löschen zeigt die Zugangsdaten-Karte den Abhängigkeitscheck: jeden Agenten, der die Zugangsdaten referenziert, in welchem Capability-Slot, mit welcher Auswirkung. Du kannst den Löschdialog verwenden, um jeden abhängigen Agenten vor der Bestätigung einer anderen Zugangsdaten zuzuweisen, sodass die eigentliche Löschung atomar mit der Neuzuweisung ist.
-
-Bei OAuth-Zugangsdaten entfernt das Löschen nur das lokal gespeicherte Token — es widerruft den Zugriff anbieterseitig nicht. Wenn du auch anbieterseitig widerrufen willst, tu das auf der Sicherheitseinstellungsseite des Anbieters (ein Link wird im Löschdialog für wichtige Anbieter angeboten).
-
-### Wichtige Punkte
-
-- **Endgültig und sofort** — kein Rückgängig; der verschlüsselte Datensatz wird beim Bestätigen gewischt
-- **Abhängigkeitscheck im Voraus** — sieh jeden abhängigen Agenten vor dem Bestätigen
-- **Inline-Neuzuweisung** — zeige abhängige Agenten als Teil des Löschdialogs auf eine Ersatz-Zugangsdaten
-- **OAuth-Anbieter: standardmäßig nur lokales Löschen** — Anbieterseitiger Widerruf ist ein separater Schritt (Link bereitgestellt)
-- **No-op-sicher bei bereits kaputten Zugangsdaten** — das Löschen einer abgelaufenen / widerrufenen Zugangsdaten ist immer sicher; nichts hängt vom funktionalen Zustand ab
-
-### So funktioniert es
-
-Der Löschdialog liest denselben Abhängigkeitsgraphen wie die Dependencies-Ansicht. Wenn du bestätigst, schreibt die Engine zuerst alle von dir angegebenen Neuzuweisungen und entfernt dann den Zugangsdaten-Datensatz in einer einzigen Transaktion aus dem Tresor. Wenn Neuzuweisungen die Validierung nicht bestehen (z. B. wenn du versuchst, auf eine Zugangsdaten der falschen Kategorie zu zeigen), wird die Löschung zurückgerollt, und nichts ändert sich.
-
-:::warning
-Endgültig heißt endgültig. Der verschlüsselte Datensatz wird gewischt, und wenn du das Rohgeheimnis nicht anderswo aufgeschrieben hast, ist es weg. Wenn du die Zugangsdaten vielleicht wieder brauchst, sichere den Rohwert extern vor dem Löschen.
-:::
-
-:::tip
-Das sicherste Rotationsmuster ist "neu hinzufügen, alle Agenten neu zuweisen, dann alt löschen". Füge zuerst die Ersatz-Zugangsdaten hinzu, gehe die Abhängigkeitskarte durch, um abhängige Agenten einen nach dem anderen neu zuzuweisen (oder alle auf einmal im Neuzuweisungs-Dialog), verifiziere, dass alles gesund ist, dann lösche die alte Zugangsdaten. Diese Sequenz garantiert null Ausfallzeit.
-:::
-  `,
 
   "connector-catalog": `
 ## Konnektor-Katalog

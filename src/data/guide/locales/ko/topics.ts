@@ -179,11 +179,6 @@ export const topics: Record<string, { title: string; description: string }> = {
     description:
       "자격 증명이 만료되면 무엇이 일어나고 어떻게 수정할지. 일부 서비스는 도서관 카드를 갱신하는 것처럼 액세스를 주기적으로 갱신하도록 요구합니다. Personas는 만료 전에 경고하고 새로 고침을 버튼 클릭만큼 쉽게 만듭니다.",
   },
-  "deleting-credentials-safely": {
-    title: "자격 증명 안전하게 삭제하기",
-    description:
-      "에이전트를 깨뜨리지 않고 저장된 비밀 제거하기. 삭제 전에 Personas는 어떤 에이전트가 그 자격 증명에 의존하는지 보여줍니다. 먼저 재할당할 수 있으므로 이전 자격 증명이 제거되어도 아무것도 작동이 멈추지 않습니다.",
-  },
   "connector-catalog": {
     title: "커넥터 카탈로그",
     description:

@@ -179,11 +179,6 @@ export const topics: Record<string, { title: string; description: string }> = {
     description:
       "Ce qui se passe quand les identifiants expirent et comment y remédier. Certains services exigent que vous renouveliez votre accès périodiquement, comme renouveler une carte de bibliothèque. Personas vous avertit avant l'expiration et rend le renouvellement aussi simple qu'un clic sur un bouton.",
   },
-  "deleting-credentials-safely": {
-    title: "Supprimer les identifiants en toute sécurité",
-    description:
-      "Supprimer des secrets stockés sans casser vos agents. Avant la suppression, Personas vous montre quels agents dépendent de cet identifiant. Vous pouvez les réaffecter d'abord pour que rien ne cesse de fonctionner quand l'ancien identifiant est supprimé.",
-  },
   "connector-catalog": {
     title: "Catalogue de connecteurs",
     description:

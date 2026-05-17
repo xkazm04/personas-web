@@ -179,11 +179,6 @@ export const topics: Record<string, { title: string; description: string }> = {
     description:
       "Apa yang terjadi ketika kredensial kedaluwarsa dan cara memperbaikinya. Beberapa layanan mengharuskan Anda memperbarui akses secara berkala, seperti memperbarui kartu perpustakaan. Personas memperingatkan Anda sebelum kedaluwarsa dan membuat penyegaran semudah mengklik tombol.",
   },
-  "deleting-credentials-safely": {
-    title: "Menghapus kredensial dengan aman",
-    description:
-      "Menghapus rahasia yang tersimpan tanpa merusak agen Anda. Sebelum menghapus, Personas menunjukkan agen mana yang bergantung pada kredensial tersebut. Anda dapat menetapkan ulang terlebih dahulu sehingga tidak ada yang berhenti bekerja saat kredensial lama dihapus.",
-  },
   "connector-catalog": {
     title: "Katalog connector",
     description:
