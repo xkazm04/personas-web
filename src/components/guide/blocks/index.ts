@@ -11,3 +11,4 @@ export { CodeCompare } from "./CodeCompare";
 export { UseCaseGrid } from "./UseCaseGrid";
 export { TabBlock } from "./TabBlock";
 export { CliBlock } from "./CliBlock";
+export { CodeFence } from "./CodeFence";

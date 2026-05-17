@@ -18,4 +18,5 @@ export {
   UseCaseGrid,
   TabBlock,
   CliBlock,
+  CodeFence,
 } from "./blocks";

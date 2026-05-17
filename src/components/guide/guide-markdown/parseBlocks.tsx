@@ -1,6 +1,6 @@
 import React, { type ReactNode } from "react";
 
-import { CopyButton, MarkdownTable } from "../GuideBlocks";
+import { CodeFence, MarkdownTable } from "../GuideBlocks";
 import { HeadingAnchor, slugifyHeading } from "./HeadingAnchor";
 import { parseCustomBlock } from "./parseCustomBlock";
 import { parseInline } from "./parseInline";
@@ -42,18 +42,7 @@ export function parseBlocks(lines: string[], opts: { copyAnchorLabel?: string } 
         codeLines.push(lines[index++]);
       }
       index++;
-      const codeText = codeLines.join("\n");
-      emit(
-        <div className="group relative rounded-xl bg-white/[0.03] border border-glass mb-4 overflow-x-auto">
-          <div className="flex items-center justify-between px-4 pt-2">
-            {lang ? <div className="text-base text-muted-dark/60 font-mono select-none">{lang}</div> : <div />}
-            <CopyButton text={codeText} />
-          </div>
-          <pre className="p-4 pt-2 font-mono text-base leading-relaxed text-muted-dark">
-            <code>{codeText}</code>
-          </pre>
-        </div>,
-      );
+      emit(<CodeFence text={codeLines.join("\n")} lang={lang || undefined} />);
       continue;
     }
 
