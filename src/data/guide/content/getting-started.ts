@@ -35,6 +35,26 @@ For AppImage: \`chmod +x Personas-*.AppImage\` then run it. For deb: \`sudo dpkg
 Auto-updates are delta-only on every platform, so they're typically much smaller than the original installer.
 :::
 
+### Verifying Your Install
+
+Once Personas is installed, you can confirm it's reachable from your terminal. This is handy for scripting, CI integration, or just a quick sanity check after a fresh install.
+
+:::cli
+$ personas --version
+:::
+
+Print the available flags:
+
+:::cli
+$ personas --help
+:::
+
+If your shell can't find the \`personas\` command, the desktop launcher still works — the CLI is an optional convenience that the installer wires up on Linux automatically and on Windows when you tick "Add to PATH" during setup. On **macOS**, you can also launch the app from any terminal with the standard \`open\` command:
+
+:::cli
+$ open -a Personas
+:::
+
 :::tip
 If you run into a Windows SmartScreen or macOS Gatekeeper warning, it's your OS being cautious with new software. Approve it and you're all set — the installer is code-signed.
 :::
