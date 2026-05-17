@@ -1,6 +1,7 @@
 import { notFound } from "next/navigation";
 import { GUIDE_CATEGORIES } from "@/data/guide/categories";
 import { GUIDE_TOPICS } from "@/data/guide/topics";
+import { extractHeadings } from "@/components/guide/guide-markdown/extractHeadings";
 import { getRelatedTopics } from "@/lib/guide-utils";
 import { SITE_URL, SITE_NAME, safeJsonLd } from "@/lib/seo";
 import TopicView from "./TopicView";
@@ -109,6 +110,7 @@ export default async function TopicPage({ params }: { params: Promise<{ category
   const related = getRelatedTopics(topicId);
   const steps = extractSteps(content);
   const howToJsonLd = buildHowToJsonLd(topic, categoryId, topicId, steps);
+  const initialHeadings = extractHeadings(content);
 
   const articleJsonLd = {
     "@context": "https://schema.org",
@@ -151,6 +153,7 @@ export default async function TopicPage({ params }: { params: Promise<{ category
         category={category}
         topic={topic}
         content={content}
+        initialHeadings={initialHeadings}
         prevTopic={prevTopic}
         nextTopic={nextTopic}
         related={related}

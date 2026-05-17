@@ -9,6 +9,7 @@ import ModuleBadge from "@/components/guide/ModuleBadge";
 import TopicTOC from "@/components/guide/TopicTOC";
 import MobileTopicTOC from "@/components/guide/MobileTopicTOC";
 import { extractHeadings } from "@/components/guide/guide-markdown/extractHeadings";
+import type { GuideHeading } from "@/components/guide/guide-markdown/extractHeadings";
 import { TOPIC_MODULE_MAP } from "@/data/guide/desktop-modules";
 import { getLocalizedTopic } from "@/data/guide/getLocalized";
 import { useTranslation } from "@/i18n/useTranslation";
@@ -20,12 +21,13 @@ interface TopicViewProps {
   category: GuideCategory;
   topic: GuideTopic;
   content: string;
+  initialHeadings: GuideHeading[];
   prevTopic: GuideTopic | null;
   nextTopic: GuideTopic | null;
   related: RelatedTopic[];
 }
 
-export default function TopicView({ category, topic, content, prevTopic, nextTopic, related }: TopicViewProps) {
+export default function TopicView({ category, topic, content, initialHeadings, prevTopic, nextTopic, related }: TopicViewProps) {
   const { t } = useTranslation();
   // Locale-aware swap. The server renders the English content (no locale
   // signal in the URL or cookie today), and once the i18nStore hydrates on
@@ -41,7 +43,14 @@ export default function TopicView({ category, topic, content, prevTopic, nextTop
     body: content,
   });
 
-  const headings = useMemo(() => extractHeadings(localized.body), [localized.body]);
+  // Skip the client parse on the initial render — page.tsx already extracted
+  // headings from the same `content` string and passed them in. The useMemo
+  // only re-parses when localized.body diverges (locale switch — currently
+  // dormant; see comment above on the i18nStore).
+  const headings = useMemo(
+    () => (localized.body === content ? initialHeadings : extractHeadings(localized.body)),
+    [localized.body, content, initialHeadings],
+  );
 
   useEffect(() => {
     if (language === "en") {
