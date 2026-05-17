@@ -1,22 +1,27 @@
 export const content: Record<string, string> = {
   "how-personas-keeps-your-data-safe": `
-## How Personas Keeps Your Data Safe
+## Data Safety
 
 Security is built into Personas from the ground up. API keys, tokens, and passwords live in a local encrypted vault on your own machine — they never leave the device unless an agent explicitly sends them to an AI provider or third-party service during a run. The vault file itself is encrypted with **AES-256-GCM**, and the key that unlocks it is wrapped by your OS-native keyring (Windows DPAPI, macOS Keychain, Linux Secret Service) so plaintext keys never sit on disk.
 
 When you run an agent, the engine decrypts only the specific credentials that agent needs, holds them in memory for the duration of the call, then wipes the plaintext. Logs, traces, and exports never contain raw credential values — anywhere a credential would appear, you see a token reference (\`cred:gmail-work\`) instead.
 
+The vault is browsable from **Connections → Credentials**: each credential shows its label, category, health status, and dependencies. Raw values are never visible after the initial entry — there's ==no "show password" toggle, by design==. If you forget a value, rotate it at the provider and add the new one; the old record can be removed without revealing what it held.
+
 ### Key Points
 
-- **AES-256-GCM** — authenticated encryption (every credential's ciphertext is integrity-checked, so a tampered vault file is detected, not silently decrypted)
-- **OS keyring–wrapped master key** — DPAPI on Windows, Keychain on macOS, Secret Service on Linux; no master password to type each session
+- **AES-256-GCM** — authenticated encryption with field-level isolation; every credential's ciphertext has its own nonce, so a compromise of one record doesn't cascade to others
+- **OS keyring–wrapped master key** — DPAPI on Windows, Keychain on macOS, Secret Service on Linux; no master password to type each session, protection comes from your OS account login
+- **Tamper-evident** — GCM authentication tags catch any modification; a tampered vault file fails to decrypt with a clear error instead of silently returning garbage
 - **Local-only by default** — nothing is uploaded; cloud deploy is opt-in and encrypts in transit via TLS to your chosen orchestrator
 - **Token references in logs** — agent traces and exports use credential IDs, not raw secrets
-- **Tamper-evident** — GCM authentication tags catch any modification to the vault file
+- **Bound to OS account** — copying the vault file to another machine or user account won't make it usable
 
 ### How It Works
 
-Storing a credential encrypts it with the vault key (the per-vault AES-256-GCM key, itself wrapped by OS keyring) and writes the ciphertext to local SQLite. Using a credential during an agent run decrypts it in memory, passes it to the relevant tool or HTTP client, and releases the buffer immediately. The raw value is never logged, never displayed after the initial entry, and never serialized anywhere outside the encrypted vault.
+When the app starts, it asks the OS keyring for the wrapped vault key. The keyring decrypts the wrapping using OS-account-level protections (DPAPI / Keychain / Secret Service) and hands the vault key to the app process in memory. The vault key is never written to disk in plaintext, and the OS keyring is the only place that can produce it.
+
+From there, storing a credential encrypts it with the vault key and writes the ciphertext to local SQLite — each field stored separately, not as one bulk blob. Using a credential during an agent run decrypts it in memory, passes it to the relevant tool or HTTP client, and releases the buffer immediately. The raw value is never logged, never displayed after the initial entry, and never serialized anywhere outside the encrypted vault.
 
 ### See It In Action
 
@@ -41,6 +46,10 @@ Every run's trace records the credential ID it used. The actual value never appe
 [info] The vault is bound to your OS user account via the OS keyring. Copying the vault file to a different machine, even with the same OS, won't make it decryptable — the wrapping key lives in the OS keyring and isn't portable.
 [warning] If you change your OS account password on macOS or Linux, the keyring may relock the wrapping key. Personas will prompt for the new credential on first run after the change. If the keyring is wiped (factory reset, account deletion), the vault becomes unrecoverable — back up the raw secrets externally if you need disaster recovery beyond the local machine.
 [tip] The local-only model is the right default for personal automation. For team / production work where multiple machines need the same credentials, the cloud deploy (Team / Builder tier) replicates vault state via the orchestrator with end-to-end encryption.
+:::
+
+:::tip
+Vault security is binary: it's either intact (OS account valid, keyring readable) or broken (cannot decrypt). There's no "weak" intermediate state. The most impactful thing you can do beyond Personas itself is run a modern OS version with full-disk encryption — BitLocker on Windows, FileVault on macOS, LUKS on Linux — so the device-level threat model is bounded.
 :::
   `,
 
