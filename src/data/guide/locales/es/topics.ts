@@ -164,11 +164,6 @@ export const topics: Record<string, { title: string; description: string }> = {
     description:
       "Conectar servicios como Google, GitHub y Slack con un solo clic. OAuth te permite iniciar sesión en un servicio y otorgar acceso sin compartir tu contraseña. Es el mismo flujo de inicio de sesión seguro que usas al pulsar \"Iniciar sesión con Google\" en un sitio web.",
   },
-  "understanding-the-credential-vault": {
-    title: "Entender la bóveda de credenciales",
-    description:
-      "Cómo el cifrado AES-256 protege tus secretos en tu dispositivo. Piensa en la bóveda como una caja fuerte de banco: incluso si alguien tuviera tu computadora, no podría leer tus claves guardadas sin tu contraseña maestra. Tus secretos se cifran con el mismo estándar que usan los bancos.",
-  },
   "credential-health-checks": {
     title: "Comprobaciones de salud de credenciales",
     description:

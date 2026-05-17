@@ -115,38 +115,6 @@ Pro služby, kde máš jak OAuth, tak možnost API klíče (např. OpenAI, Anthr
 :::
   `,
 
-  "understanding-the-credential-vault": `
-## Co je trezor přihlašovacích údajů
-
-Trezor je zašifrované lokální úložiště, kde žije každý přihlašovací údaj. Mechanicky je to AES-256-GCM-zašifrovaný blob uvnitř SQLite databáze aplikace, se sám šifrovacím klíčem obaleným OS-nativním keyringem. Trezor nikdy neexistuje v plně dešifrovaném stavu — jednotlivé přihlašovací údaje se dešifrují jeden po druhém, v paměti, jen když je běh agenta potřebuje.
-
-Trezor je procházitelný z Connections → Credentials. Vidíš štítek přihlašovacího údaje, kategorii, stav (zdravý / brzy vyprší / vypršel / rozbitý) a závislosti (kteří agenti ho používají). Surové hodnoty nejsou nikdy viditelné po počátečním zadání — neexistuje přepínač „show password", záměrně.
-
-:::feature
-**AES-256-GCM + OS-nativní keyring** color=#a855f7
-GCM poskytuje jak důvěrnost, tak autentizovanou integritu — pozměněný soubor trezoru je detekován, ne tiše dešifrován s odpadem. Obalovací klíč žije v DPAPI (Windows) / Keychain (macOS) / Secret Service (Linux), takže je chráněn tvým OS uživatelským účtem, ne samostatným hlavním heslem, které bys musel/a psát.
-:::
-
-### Klíčové body
-
-- **Per-credential AES-256-GCM** — každý přihlašovací údaj je zašifrován s vlastním nonce; jeden kompromis nezkaskáduje
-- **OS keyring obaluje klíč trezoru** — žádné samostatné hlavní heslo na správu; ochrana přichází z přihlášení tvého OS účtu
-- **Detekce pozměnění** — GCM autentizační tagy zachytí jakoukoli modifikaci; pozměněné záznamy selžou v dešifrování s jasnou chybou
-- **Přátelské k auditu** — každý přístup k přihlašovacímu údaji je logován s časovou značkou, agentem a ID běhu; surové hodnoty se nikdy nelogují
-- **Vázáno k OS účtu** — kopírování souboru trezoru na jiný stroj nebo uživatelský účet ho neudělá použitelným
-
-### Jak to funguje
-
-Když aplikace startuje, ptá se OS keyringu na obalený klíč trezoru. Keyring dešifruje obal (s použitím ochran na úrovni OS účtu — DPAPI, Keychain, Secret Service) a předá klíč trezoru procesu aplikace v paměti. Odtud může aplikace dešifrovat jednotlivé přihlašovací údaje na vyžádání. Klíč trezoru nikdy není zapisován na disk v prostém textu a OS keyring je jediné místo, které ho může vyprodukovat.
-
-:::warning
-Pokud změníš heslo svého macOS nebo Linux uživatele, keyring může obalovací klíč znovu zamknout a vyzvat ho k re-derivaci při dalším přístupu. To je normální a obnovitelné. Pokud je OS účet smazán nebo keyring resetován (např. tovární reset), trezor se stane neobnovitelným — zazálohuj jakákoli nenahraditelná tajemství externě.
-:::
-
-:::tip
-Bezpečnost trezoru je binární: buď je nedotčen (OS účet platný, keyring čitelný), nebo rozbit (nelze dešifrovat). Neexistuje „slabý" mezistav. Nejdůležitější věc, kterou můžeš udělat pro bezpečnost trezoru, je provozovat moderní verze OS a používat full-disk šifrování (BitLocker, FileVault, LUKS), aby byl threat model na úrovni zařízení ohraničený.
-:::
-  `,
 
   "credential-health-checks": `
 ## Kontroly stavu přihlašovacích údajů

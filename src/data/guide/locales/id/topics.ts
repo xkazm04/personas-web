@@ -164,11 +164,6 @@ export const topics: Record<string, { title: string; description: string }> = {
     description:
       "Menghubungkan layanan seperti Google, GitHub, dan Slack dengan satu klik. OAuth memungkinkan Anda masuk ke layanan dan memberikan akses tanpa berbagi password. Ini adalah alur sign-in aman yang sama yang Anda gunakan saat mengklik \"Sign in with Google\" di situs web.",
   },
-  "understanding-the-credential-vault": {
-    title: "Memahami credential vault",
-    description:
-      "Bagaimana enkripsi AES-256 melindungi rahasia Anda di perangkat Anda. Pikirkan vault seperti brankas bank — bahkan jika seseorang mendapatkan komputer Anda, mereka tidak dapat membaca key yang tersimpan tanpa master password Anda. Rahasia Anda diacak menggunakan standar yang sama yang digunakan bank.",
-  },
   "credential-health-checks": {
     title: "Pemeriksaan kesehatan kredensial",
     description:

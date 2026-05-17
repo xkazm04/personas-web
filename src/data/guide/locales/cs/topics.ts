@@ -164,11 +164,6 @@ export const topics: Record<string, { title: string; description: string }> = {
     description:
       "Připojení služeb jako Google, GitHub a Slack jedním kliknutím. OAuth ti umožní přihlásit se ke službě a udělit přístup, aniž bys musel/a sdílet heslo. Je to stejný bezpečný přihlašovací postup, který používáš, když klikneš na „Přihlásit přes Google\" na webu.",
   },
-  "understanding-the-credential-vault": {
-    title: "Co je trezor přihlašovacích údajů",
-    description:
-      "Jak šifrování AES-256 chrání tvá tajemství v tvém zařízení. Představ si trezor jako bankovní sejf — i kdyby ti někdo vzal počítač, bez tvého hlavního hesla by uložené klíče nepřečetl. Tvá tajemství jsou zašifrovaná stejným standardem, jaký používají banky.",
-  },
   "credential-health-checks": {
     title: "Kontroly stavu přihlašovacích údajů",
     description:

@@ -115,38 +115,6 @@ OAuth tokens সাধারণত স্বল্প-জীবিত (মিন
 :::
   `,
 
-  "understanding-the-credential-vault": `
-## ক্রেডেনশিয়াল ভল্ট বোঝা
-
-ভল্ট হল এনক্রিপ্টেড স্থানীয় স্টোর যেখানে প্রতিটি ক্রেডেনশিয়াল থাকে। যান্ত্রিকভাবে এটি অ্যাপের SQLite database-এর ভিতরে একটি AES-256-GCM-এনক্রিপ্টেড blob, যেখানে encryption key নিজেই OS-নেটিভ keyring দ্বারা মোড়ানো। ভল্ট কখনই সম্পূর্ণ-ডিক্রিপ্টেড অবস্থায় থাকে না — পৃথক ক্রেডেনশিয়ালগুলি এক-এ-এক, মেমরিতে, শুধুমাত্র যখন একটি এজেন্ট রানের প্রয়োজন তখন ডিক্রিপ্ট হয়।
-
-ভল্টটি Connections → Credentials থেকে browseযোগ্য। আপনি ক্রেডেনশিয়ালের label, category, status (healthy / expiring soon / expired / broken), এবং dependencies (কোন এজেন্ট এটি ব্যবহার করে) দেখেন। প্রাথমিক এন্ট্রির পরে raw values কখনই দৃশ্যমান নয় — কোনো "show password" toggle নেই, ডিজাইন দ্বারা।
-
-:::feature
-**AES-256-GCM + OS-native keyring** color=#a855f7
-GCM confidentiality এবং authenticated integrity উভয়ই প্রদান করে — একটি tampered vault file সনাক্ত করা হয়, garbage দিয়ে নীরবে ডিক্রিপ্ট হয় না। wrapping key DPAPI (Windows) / Keychain (macOS) / Secret Service (Linux)-এ থাকে, তাই এটি আপনার OS user account দ্বারা সুরক্ষিত, একটি পৃথক master password দ্বারা নয় যা আপনাকে টাইপ করতে হবে।
-:::
-
-### মূল পয়েন্ট
-
-- **Per-credential AES-256-GCM** — প্রতিটি ক্রেডেনশিয়াল তার নিজস্ব nonce দিয়ে এনক্রিপ্ট করা হয়; একটি সমঝোতা cascade করে না
-- **OS keyring vault key মোড়ায়** — পরিচালনা করার জন্য পৃথক master password নেই; সুরক্ষা আপনার OS account login থেকে আসে
-- **Tamper detection** — GCM authentication tags যেকোনো সংশোধন ধরে; tampered records একটি স্পষ্ট error দিয়ে ডিক্রিপ্ট করতে ব্যর্থ হয়
-- **Audit-friendly** — প্রতিটি ক্রেডেনশিয়াল অ্যাক্সেস timestamp, agent, এবং execution ID সহ logged হয়; raw values কখনই logged হয় না
-- **OS account-এ আবদ্ধ** — ভল্ট ফাইলকে অন্য মেশিন বা user account-এ কপি করা এটি ব্যবহারযোগ্য করবে না
-
-### এটি কীভাবে কাজ করে
-
-যখন অ্যাপটি শুরু হয়, এটি OS keyring থেকে wrapped vault key চায়। keyring wrapping ডিক্রিপ্ট করে (OS-account-level protections ব্যবহার করে — DPAPI, Keychain, Secret Service) এবং মেমরিতে অ্যাপ প্রক্রিয়ায় vault key হস্তান্তর করে। সেখান থেকে, অ্যাপ চাহিদা অনুযায়ী পৃথক ক্রেডেনশিয়ালগুলি ডিক্রিপ্ট করতে পারে। vault key কখনই plaintext-এ ডিস্কে লেখা হয় না, এবং OS keyring একমাত্র জায়গা যা এটি তৈরি করতে পারে।
-
-:::warning
-আপনি যদি আপনার macOS বা Linux user password পরিবর্তন করেন, keyring wrapping key পুনরায় লক করতে পারে এবং পরবর্তী অ্যাক্সেসে এটিকে পুনরায় উদ্ভূত করতে প্রম্পট করতে পারে। এটি স্বাভাবিক এবং পুনরুদ্ধারযোগ্য। যদি OS account মুছে ফেলা হয় বা keyring রিসেট করা হয় (যেমন factory reset), ভল্টটি পুনরুদ্ধারের অযোগ্য হয়ে যায় — যেকোনো অপরিবর্তনীয় secrets বাহ্যিকভাবে ব্যাকআপ করুন।
-:::
-
-:::tip
-ভল্ট সুরক্ষা binary: এটি হয় অক্ষত (OS account valid, keyring readable) বা ভাঙা (decrypt করতে পারে না)। কোনো "weak" মধ্যবর্তী অবস্থা নেই। ভল্ট সুরক্ষার জন্য আপনি যা করতে পারেন সবচেয়ে গুরুত্বপূর্ণ জিনিস হল আধুনিক OS সংস্করণ চালান এবং full-disk encryption ব্যবহার করুন (BitLocker, FileVault, LUKS) যাতে device-level threat model আবদ্ধ থাকে।
-:::
-  `,
 
   "credential-health-checks": `
 ## ক্রেডেনশিয়াল স্বাস্থ্য পরীক্ষা

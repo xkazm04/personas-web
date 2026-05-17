@@ -164,11 +164,6 @@ export const topics: Record<string, { title: string; description: string }> = {
     description:
       "Kết nối các dịch vụ như Google, GitHub và Slack chỉ với một cú nhấp chuột. OAuth cho phép bạn đăng nhập vào dịch vụ và cấp quyền truy cập mà không cần chia sẻ mật khẩu. Đó là cùng quy trình đăng nhập an toàn bạn dùng khi nhấp \"Đăng nhập với Google\" trên một trang web.",
   },
-  "understanding-the-credential-vault": {
-    title: "Tìm hiểu vault credential",
-    description:
-      "Cách mã hóa AES-256 bảo vệ bí mật của bạn trên thiết bị. Hãy coi vault như két ngân hàng — ngay cả khi ai đó lấy được máy tính của bạn, họ cũng không thể đọc các khóa được lưu trữ mà không có mật khẩu chính của bạn. Bí mật của bạn được mã hóa bằng cùng tiêu chuẩn mà các ngân hàng sử dụng.",
-  },
   "credential-health-checks": {
     title: "Kiểm tra sức khỏe credential",
     description:

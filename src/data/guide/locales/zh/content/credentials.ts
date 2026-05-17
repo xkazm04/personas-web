@@ -115,38 +115,6 @@ OAuth 令牌通常是短期的(几分钟到几小时),Personas 使用长期 refr
 :::
   `,
 
-  "understanding-the-credential-vault": `
-## 了解凭证 vault
-
-Vault 是每个凭证存放的加密本地存储。从机制上讲,它是应用的 SQLite 数据库内的 AES-256-GCM 加密 blob,加密密钥本身由 OS 原生 keyring 包装。Vault 永远不会以完全解密的状态存在 — 单个凭证一次一个、在内存中、仅在 agent 运行需要时解密。
-
-Vault 可以从 Connections → Credentials 浏览。你看到凭证的标签、类别、状态(healthy / expiring soon / expired / broken)和依赖项(哪些 agent 使用它)。原始值在初次输入后永远不可见 — 按设计没有"显示密码"切换。
-
-:::feature
-**AES-256-GCM + OS 原生 keyring** color=#a855f7
-GCM 提供机密性和经过认证的完整性 — 被篡改的 vault 文件会被检测到,而不是静默地用垃圾解密。包装密钥位于 DPAPI(Windows)/ Keychain(macOS)/ Secret Service(Linux)中,所以它由你的 OS 用户账户保护,而不是由你必须输入的单独主密码保护。
-:::
-
-### 关键点
-
-- **每凭证 AES-256-GCM** — 每个凭证都用自己的 nonce 加密;一次泄露不会级联
-- **OS keyring 包装 vault 密钥** — 无需管理单独的主密码;保护来自你的 OS 账户登录
-- **篡改检测** — GCM 认证标签捕获任何修改;被篡改的记录无法解密并显示清晰错误
-- **审计友好** — 每次凭证访问都记录了时间戳、agent 和执行 ID;原始值从不记录
-- **绑定到 OS 账户** — 将 vault 文件复制到另一台机器或用户账户不会使其可用
-
-### 工作原理
-
-当应用启动时,它向 OS keyring 询问包装的 vault 密钥。Keyring 解密包装(使用 OS 账户级别的保护 — DPAPI、Keychain、Secret Service)并将 vault 密钥交给内存中的应用进程。从那里,应用可以按需解密单个凭证。Vault 密钥永远不会以明文形式写入磁盘,OS keyring 是唯一可以生成它的地方。
-
-:::warning
-如果你更改 macOS 或 Linux 用户密码,keyring 可能会重新锁定包装密钥,并在下次访问时提示重新派生它。这是正常且可恢复的。如果 OS 账户被删除或 keyring 被重置(例如出厂重置),vault 将变得不可恢复 — 在外部备份任何无法替换的密钥。
-:::
-
-:::tip
-Vault 安全是二元的:要么完好无损(OS 账户有效,keyring 可读),要么损坏(无法解密)。没有"弱"的中间状态。你可以为 vault 安全做的最重要的事情是运行现代 OS 版本并使用全盘加密(BitLocker、FileVault、LUKS),这样设备级别的威胁模型是有界的。
-:::
-  `,
 
   "credential-health-checks": `
 ## 凭证健康检查

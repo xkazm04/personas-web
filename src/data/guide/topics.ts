@@ -283,14 +283,6 @@ export const GUIDE_TOPICS: GuideTopic[] = [
     tags: ["credentials", "oauth", "google", "github", "slack", "connect"],
   },
   {
-    id: "understanding-the-credential-vault",
-    categoryId: "credentials",
-    title: "Understanding the credential vault",
-    description:
-      "How AES-256 encryption protects your secrets on your device. Think of the vault like a bank safe — even if someone got your computer, they couldn't read your stored keys without your master password. Your secrets are scrambled using the same standard that banks use.",
-    tags: ["credentials", "vault", "aes-256", "encryption", "storage"],
-  },
-  {
     id: "credential-health-checks",
     categoryId: "credentials",
     title: "Credential health checks",

@@ -164,11 +164,6 @@ export const topics: Record<string, { title: string; description: string }> = {
     description:
       "Google, GitHub, Slack과 같은 서비스를 한 번의 클릭으로 연결합니다. OAuth는 비밀번호를 공유하지 않고 서비스에 로그인하고 액세스를 부여할 수 있게 합니다. 웹사이트에서 \"Sign in with Google\"을 클릭할 때 사용하는 동일한 안전한 로그인 흐름입니다.",
   },
-  "understanding-the-credential-vault": {
-    title: "자격 증명 보관소 이해하기",
-    description:
-      "AES-256 암호화가 기기의 비밀을 보호하는 방법. 보관소를 은행 금고처럼 생각하세요 — 누군가 컴퓨터를 가져가도 마스터 비밀번호 없이는 저장된 키를 읽을 수 없습니다. 비밀은 은행이 사용하는 동일한 표준을 사용하여 스크램블됩니다.",
-  },
   "credential-health-checks": {
     title: "자격 증명 상태 확인",
     description:

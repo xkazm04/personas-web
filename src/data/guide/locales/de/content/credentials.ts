@@ -115,38 +115,6 @@ Für Dienste, bei denen du sowohl OAuth- als auch API-Schlüssel-Optionen hast (
 :::
   `,
 
-  "understanding-the-credential-vault": `
-## Den Zugangsdaten-Tresor verstehen
-
-Der Tresor ist der verschlüsselte lokale Speicher, in dem jede Zugangsdaten lebt. Mechanisch ist es ein AES-256-GCM-verschlüsselter Blob in der SQLite-Datenbank der App, wobei der Verschlüsselungsschlüssel selbst vom OS-nativen Keyring umhüllt ist. Der Tresor existiert nie in einem vollständig entschlüsselten Zustand — einzelne Zugangsdaten werden eine nach der anderen, im Speicher, nur dann entschlüsselt, wenn eine Agentenausführung sie benötigt.
-
-Der Tresor ist über Connections → Credentials durchstöberbar. Du siehst das Label, die Kategorie, den Status (healthy / expiring soon / expired / broken) und die Abhängigkeiten (welche Agenten ihn nutzen) der Zugangsdaten. Rohwerte sind nach der ersten Eingabe nie sichtbar — es gibt absichtlich keinen "Passwort anzeigen"-Schalter.
-
-:::feature
-**AES-256-GCM + OS-natives Keyring** color=#a855f7
-GCM bietet sowohl Vertraulichkeit als auch authentifizierte Integrität — eine manipulierte Tresor-Datei wird erkannt, nicht still mit Müll entschlüsselt. Der umhüllende Schlüssel lebt in DPAPI (Windows) / Keychain (macOS) / Secret Service (Linux), sodass er durch dein OS-Benutzerkonto geschützt ist, nicht durch ein separates Master-Passwort, das du tippen müsstest.
-:::
-
-### Wichtige Punkte
-
-- **AES-256-GCM pro Zugangsdaten** — jede Zugangsdaten wird mit eigenem Nonce verschlüsselt; eine Kompromittierung kaskadiert nicht
-- **OS-Keyring umhüllt den Tresor-Schlüssel** — kein separates Master-Passwort zu verwalten; Schutz kommt von deinem OS-Konto-Login
-- **Manipulationserkennung** — GCM-Authentifizierungs-Tags fangen jede Modifikation ab; manipulierte Datensätze scheitern bei der Entschlüsselung mit einem klaren Fehler
-- **Audit-freundlich** — jeder Zugangsdaten-Zugriff wird mit Zeitstempel, Agent und Ausführungs-ID protokolliert; Rohwerte werden nie protokolliert
-- **An OS-Konto gebunden** — das Kopieren der Tresor-Datei auf eine andere Maschine oder ein anderes Benutzerkonto macht sie unbrauchbar
-
-### So funktioniert es
-
-Wenn die App startet, fragt sie das OS-Keyring nach dem umhüllten Tresor-Schlüssel. Das Keyring entschlüsselt die Umhüllung (mit Schutzmechanismen auf OS-Kontoebene — DPAPI, Keychain, Secret Service) und übergibt den Tresor-Schlüssel an den App-Prozess im Speicher. Von dort kann die App einzelne Zugangsdaten auf Anfrage entschlüsseln. Der Tresor-Schlüssel wird nie im Klartext auf die Festplatte geschrieben, und das OS-Keyring ist der einzige Ort, der ihn produzieren kann.
-
-:::warning
-Wenn du dein macOS- oder Linux-Benutzerpasswort änderst, kann das Keyring den umhüllenden Schlüssel neu sperren und beim nächsten Zugriff zur Neuableitung auffordern. Das ist normal und behebbar. Wenn das OS-Konto gelöscht oder das Keyring zurückgesetzt wird (z. B. Werksreset), wird der Tresor unwiederherstellbar — sichere unersetzliche Geheimnisse extern.
-:::
-
-:::tip
-Tresor-Sicherheit ist binär: entweder intakt (OS-Konto gültig, Keyring lesbar) oder kaputt (kann nicht entschlüsseln). Es gibt keinen "schwachen" Zwischenzustand. Das Wichtigste, was du für die Tresor-Sicherheit tun kannst, ist, moderne OS-Versionen zu nutzen und vollständige Festplattenverschlüsselung (BitLocker, FileVault, LUKS) zu verwenden, sodass das Bedrohungsmodell auf Geräteebene begrenzt ist.
-:::
-  `,
 
   "credential-health-checks": `
 ## Zugangsdaten-Gesundheitschecks

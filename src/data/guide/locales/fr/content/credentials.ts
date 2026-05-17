@@ -115,38 +115,6 @@ Pour les services où vous avez à la fois OAuth et clé API (par ex. OpenAI, An
 :::
   `,
 
-  "understanding-the-credential-vault": `
-## Comprendre le coffre d'identifiants
-
-Le coffre est le magasin local chiffré où vit chaque identifiant. Mécaniquement, c'est un blob chiffré AES-256-GCM à l'intérieur de la base de données SQLite de l'application, avec la clé de chiffrement elle-même enveloppée par le porte-clés natif de l'OS. Le coffre n'existe jamais dans un état entièrement déchiffré — les identifiants individuels sont déchiffrés un à la fois, en mémoire, uniquement quand une exécution d'agent en a besoin.
-
-Le coffre est navigable depuis Connexions → Identifiants. Vous voyez l'étiquette de l'identifiant, la catégorie, le statut (sain / expirant bientôt / expiré / cassé) et les dépendances (quels agents l'utilisent). Les valeurs brutes ne sont jamais visibles après la saisie initiale — il n'y a pas de bascule "afficher le mot de passe", par conception.
-
-:::feature
-**AES-256-GCM + porte-clés natif OS** color=#a855f7
-GCM fournit à la fois la confidentialité et l'intégrité authentifiée — un fichier coffre altéré est détecté, pas silencieusement déchiffré avec des ordures. La clé d'enveloppement vit dans DPAPI (Windows) / Keychain (macOS) / Secret Service (Linux), donc elle est protégée par votre compte utilisateur OS, pas par un mot de passe maître séparé que vous devriez taper.
-:::
-
-### Points clés
-
-- **AES-256-GCM par identifiant** — chaque identifiant est chiffré avec son propre nonce ; un compromis ne se cascade pas
-- **Le porte-clés OS enveloppe la clé du coffre** — pas de mot de passe maître séparé à gérer ; la protection vient de votre connexion au compte OS
-- **Détection d'altération** — les tags d'authentification GCM détectent toute modification ; les enregistrements altérés échouent à déchiffrer avec une erreur claire
-- **Favorable à l'audit** — chaque accès aux identifiants est journalisé avec horodatage, agent et ID d'exécution ; les valeurs brutes ne sont jamais journalisées
-- **Lié au compte OS** — copier le fichier coffre sur une autre machine ou compte utilisateur ne le rendra pas utilisable
-
-### Comment ça marche
-
-Au démarrage de l'application, elle demande au porte-clés OS la clé du coffre enveloppée. Le porte-clés déchiffre l'enveloppement (en utilisant les protections au niveau du compte OS — DPAPI, Keychain, Secret Service) et remet la clé du coffre au processus de l'application en mémoire. À partir de là, l'application peut déchiffrer les identifiants individuels à la demande. La clé du coffre n'est jamais écrite sur disque en clair, et le porte-clés OS est le seul endroit qui peut la produire.
-
-:::warning
-Si vous changez votre mot de passe utilisateur macOS ou Linux, le porte-clés peut reverrouiller la clé d'enveloppement et demander à la redériver au prochain accès. C'est normal et récupérable. Si le compte OS est supprimé ou le porte-clés réinitialisé (par ex. réinitialisation d'usine), le coffre devient irrécupérable — sauvegardez tout secret irremplaçable en externe.
-:::
-
-:::tip
-La sécurité du coffre est binaire : elle est soit intacte (compte OS valide, porte-clés lisible) soit cassée (impossible de déchiffrer). Il n'y a pas d'état intermédiaire "faible". La chose la plus importante que vous puissiez faire pour la sécurité du coffre est d'exécuter des versions modernes d'OS et d'utiliser le chiffrement complet du disque (BitLocker, FileVault, LUKS) pour que le modèle de menace au niveau de l'appareil soit borné.
-:::
-  `,
 
   "credential-health-checks": `
 ## Vérifications de santé des identifiants

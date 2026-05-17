@@ -131,10 +131,6 @@ export const topics: Record<string, { title: string; description: string }> = {
     title: "OAuth セットアップガイド",
     description: "Google、GitHub、Slack などのサービスをワンクリックで接続。OAuth はパスワードを共有せずにサービスにログインしアクセスを許可することを可能にします。Web サイトで「Google でサインイン」をクリックするときと同じ安全なサインインフローです。",
   },
-  "understanding-the-credential-vault": {
-    title: "認証情報ボールトを理解する",
-    description: "AES-256 暗号化があなたのデバイス上のシークレットを守る仕組み。ボールトは銀行の金庫のようなもの — 誰かがあなたのコンピュータを手に入れても、マスターパスワードなしでは保存されたキーを読めません。シークレットは銀行と同じ標準でスクランブルされます。",
-  },
   "credential-health-checks": {
     title: "認証情報のヘルスチェック",
     description: "保存された認証情報がまだ機能していることを確認します。時間が経つと、API キーは失効したり権限が変更されたりする可能性があります。ヘルスチェックは各認証情報を自動的にテストし、問題を引き起こす前に注意が必要なものをフラグ付けします。",

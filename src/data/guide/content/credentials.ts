@@ -136,39 +136,6 @@ For services where you have both OAuth and API-key options (e.g. OpenAI, Anthrop
 :::
   `,
 
-  "understanding-the-credential-vault": `
-## Understanding the Credential Vault
-
-The vault is the encrypted local store where every credential lives. Mechanically it's an AES-256-GCM-encrypted blob inside the app's SQLite database, with the encryption key itself wrapped by the OS-native keyring. The vault never exists in a fully-decrypted state — individual credentials are decrypted one-at-a-time, in memory, only when an agent run needs them.
-
-The vault is browsable from Connections → Credentials. You see the credential's label, category, status (healthy / expiring soon / expired / broken), and dependencies (which agents use it). Raw values are never visible after the initial entry — there's no "show password" toggle, by design.
-
-:::feature
-**AES-256-GCM + OS-native keyring** color=#a855f7
-GCM provides both confidentiality and authenticated integrity — a tampered vault file is detected, not silently decrypted with garbage. The wrapping key lives in DPAPI (Windows) / Keychain (macOS) / Secret Service (Linux), so it's protected by your OS user account, not by a separate master password you'd have to type.
-:::
-
-### Key Points
-
-- **Per-credential AES-256-GCM** — every credential is encrypted with its own nonce; one compromise doesn't cascade
-- **OS keyring wraps the vault key** — no separate master password to manage; protection comes from your OS account login
-- **Tamper detection** — GCM authentication tags catch any modification; tampered records fail to decrypt with a clear error
-- **Audit-friendly** — every credential access is logged with timestamp, agent, and execution ID; raw values are never logged
-- **Bound to OS account** — copying the vault file to another machine or user account won't make it usable
-
-### How It Works
-
-When the app starts, it asks the OS keyring for the wrapped vault key. The keyring decrypts the wrapping (using OS-account-level protections — DPAPI, Keychain, Secret Service) and hands the vault key to the app process in memory. From there, the app can decrypt individual credentials on demand. The vault key is never written to disk in plaintext, and the OS keyring is the only place that can produce it.
-
-:::warning
-If you change your macOS or Linux user password, the keyring may relock the wrapping key and prompt to re-derive it on next access. This is normal and recoverable. If the OS account is deleted or the keyring is reset (e.g. factory reset), the vault becomes unrecoverable — back up any irreplaceable secrets externally.
-:::
-
-:::tip
-Vault security is binary: it's either intact (OS account valid, keyring readable) or broken (cannot decrypt). There's no "weak" intermediate state. The most important thing you can do for vault security is run modern OS versions and use full-disk encryption (BitLocker, FileVault, LUKS) so the device-level threat model is bounded.
-:::
-  `,
-
   "credential-health-checks": `
 ## Credential Health Checks
 

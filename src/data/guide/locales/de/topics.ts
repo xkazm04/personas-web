@@ -164,11 +164,6 @@ export const topics: Record<string, { title: string; description: string }> = {
     description:
       "Verbinde Dienste wie Google, GitHub und Slack mit einem Klick. OAuth lässt dich dich bei einem Dienst anmelden und Zugriff gewähren, ohne dein Passwort zu teilen. Es ist derselbe sichere Anmeldevorgang wie bei \"Mit Google anmelden\" auf einer Website.",
   },
-  "understanding-the-credential-vault": {
-    title: "Den Zugangsdaten-Tresor verstehen",
-    description:
-      "Wie AES-256-Verschlüsselung deine Geheimnisse auf deinem Gerät schützt. Stell dir den Tresor wie einen Banksafe vor — selbst wenn jemand deinen Computer hätte, könnte er deine gespeicherten Schlüssel ohne dein Master-Passwort nicht lesen. Deine Geheimnisse sind nach demselben Standard verschlüsselt, den Banken verwenden.",
-  },
   "credential-health-checks": {
     title: "Zugangsdaten-Gesundheitschecks",
     description:

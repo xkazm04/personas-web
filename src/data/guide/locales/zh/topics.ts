@@ -131,10 +131,6 @@ export const topics: Record<string, { title: string; description: string }> = {
     title: "OAuth 设置演练",
     description: "一键连接 Google、GitHub 和 Slack 等服务。OAuth 让你登录服务并授予访问权限,而无需共享密码。这是你在网站上点击 \"Sign in with Google\" 时使用的相同安全登录流程。",
   },
-  "understanding-the-credential-vault": {
-    title: "了解凭证 vault",
-    description: "AES-256 加密如何在你的设备上保护你的密钥。把 vault 想象成银行保险箱 — 即使有人获得了你的电脑,他们也不能在没有你的主密码的情况下读取你存储的密钥。你的密钥使用银行所用的相同标准加扰。",
-  },
   "credential-health-checks": {
     title: "凭证健康检查",
     description: "确保你存储的凭证仍然有效。随着时间推移,API key 可能过期或权限可能更改。健康检查自动测试每个凭证,并在它们引起问题之前标记任何需要你注意的凭证。",

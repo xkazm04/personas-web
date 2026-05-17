@@ -330,11 +330,6 @@ export const TOPIC_MODULE_MAP: Record<string, TopicModuleRef> = {
     path: ["Connections", "Add New"],
     label: "OAuth setup",
   },
-  "understanding-the-credential-vault": {
-    moduleId: "connections",
-    path: ["Connections", "Credentials"],
-    label: "Credential vault",
-  },
   "credential-health-checks": {
     moduleId: "connections",
     path: ["Connections", "Credentials"],

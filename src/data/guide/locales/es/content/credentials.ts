@@ -115,38 +115,6 @@ Para servicios donde tienes opción de OAuth y clave de API (por ejemplo, OpenAI
 :::
   `,
 
-  "understanding-the-credential-vault": `
-## Entender la bóveda de credenciales
-
-La bóveda es el almacén local cifrado donde vive cada credencial. Mecánicamente es un blob cifrado con AES-256-GCM dentro de la base de datos SQLite de la app, con la clave de cifrado misma envuelta por el keyring nativo del SO. La bóveda nunca existe en estado totalmente descifrado: las credenciales individuales se descifran una a la vez, en memoria, solo cuando una ejecución de agente las necesita.
-
-La bóveda es explorable desde Connections → Credentials. Ves la etiqueta de la credencial, su categoría, su estado (saludable / por caducar / caducada / rota) y sus dependencias (qué agentes la usan). Los valores en bruto nunca son visibles tras la entrada inicial: no hay un interruptor de "mostrar contraseña", por diseño.
-
-:::feature
-**AES-256-GCM + keyring nativo del SO** color=#a855f7
-GCM proporciona tanto confidencialidad como integridad autenticada: un archivo de bóveda alterado se detecta, no se descifra silenciosamente con basura. La clave envolvente vive en DPAPI (Windows) / Keychain (macOS) / Secret Service (Linux), así que está protegida por tu cuenta de usuario del SO, no por una contraseña maestra separada que tendrías que teclear.
-:::
-
-### Puntos clave
-
-- **AES-256-GCM por credencial** — cada credencial se cifra con su propio nonce; un compromiso no se propaga
-- **El keyring del SO envuelve la clave de la bóveda** — sin contraseña maestra separada que gestionar; la protección viene del inicio de sesión de tu cuenta del SO
-- **Detección de manipulación** — las etiquetas de autenticación GCM detectan cualquier modificación; los registros alterados fallan al descifrar con un error claro
-- **Amigable con auditoría** — cada acceso a credencial se registra con marca de tiempo, agente e ID de ejecución; los valores en bruto nunca se registran
-- **Atada a la cuenta del SO** — copiar el archivo de la bóveda a otra máquina o cuenta de usuario no lo hará utilizable
-
-### Cómo funciona
-
-Cuando la app arranca, le pide al keyring del SO la clave de la bóveda envuelta. El keyring descifra la envoltura (usando las protecciones a nivel de cuenta del SO: DPAPI, Keychain, Secret Service) y entrega la clave de la bóveda al proceso de la app en memoria. Desde ahí, la app puede descifrar credenciales individuales bajo demanda. La clave de la bóveda nunca se escribe en disco en texto plano, y el keyring del SO es el único lugar que puede producirla.
-
-:::warning
-Si cambias tu contraseña de usuario de macOS o Linux, el keyring puede volver a bloquear la clave envolvente y pedir re-derivarla en el próximo acceso. Es normal y recuperable. Si la cuenta del SO se elimina o el keyring se restablece (por ejemplo, restablecimiento de fábrica), la bóveda se vuelve irrecuperable: respalda externamente cualquier secreto irremplazable.
-:::
-
-:::tip
-La seguridad de la bóveda es binaria: o está intacta (cuenta del SO válida, keyring legible) o está rota (no se puede descifrar). No hay un estado intermedio "débil". Lo más importante que puedes hacer por la seguridad de la bóveda es ejecutar versiones modernas del SO y usar cifrado de disco completo (BitLocker, FileVault, LUKS) para que el modelo de amenazas a nivel de dispositivo esté acotado.
-:::
-  `,
 
   "credential-health-checks": `
 ## Comprobaciones de salud de credenciales

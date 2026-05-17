@@ -115,38 +115,6 @@ Untuk layanan di mana Anda memiliki opsi OAuth dan API-key (misalnya OpenAI, Ant
 :::
   `,
 
-  "understanding-the-credential-vault": `
-## Memahami Credential Vault
-
-Vault adalah penyimpanan lokal terenkripsi tempat setiap kredensial tinggal. Secara mekanis, ini adalah blob terenkripsi AES-256-GCM di dalam database SQLite aplikasi, dengan kunci enkripsi itu sendiri dibungkus oleh keyring native OS. Vault tidak pernah ada dalam keadaan sepenuhnya didekripsi — kredensial individual didekripsi satu-per-satu, di memori, hanya ketika run agen membutuhkannya.
-
-Vault dapat dijelajahi dari Connections → Credentials. Anda melihat label kredensial, kategori, status (sehat / segera kedaluwarsa / kedaluwarsa / rusak), dan dependensi (agen mana yang menggunakannya). Nilai mentah tidak pernah terlihat setelah entri awal — tidak ada toggle "show password", secara desain.
-
-:::feature
-**AES-256-GCM + OS-native keyring** color=#a855f7
-GCM menyediakan kerahasiaan dan integritas terotentikasi — file vault yang dirusak terdeteksi, tidak didekripsi secara diam-diam dengan sampah. Wrapping key tinggal di DPAPI (Windows) / Keychain (macOS) / Secret Service (Linux), jadi dilindungi oleh akun pengguna OS Anda, bukan oleh master password terpisah yang harus Anda ketik.
-:::
-
-### Poin Kunci
-
-- **AES-256-GCM per-kredensial** — setiap kredensial dienkripsi dengan nonce-nya sendiri; satu kompromi tidak mengalir
-- **OS keyring membungkus vault key** — tidak ada master password terpisah untuk dikelola; perlindungan datang dari login akun OS Anda
-- **Deteksi gangguan** — tag autentikasi GCM menangkap setiap modifikasi; record yang dirusak gagal didekripsi dengan error yang jelas
-- **Ramah-audit** — setiap akses kredensial dicatat dengan timestamp, agen, dan ID eksekusi; nilai mentah tidak pernah dicatat
-- **Terikat ke akun OS** — menyalin file vault ke mesin lain atau akun pengguna tidak akan membuatnya dapat digunakan
-
-### Cara Kerjanya
-
-Ketika aplikasi dimulai, ia meminta OS keyring untuk vault key yang dibungkus. Keyring mendekripsi pembungkus (menggunakan perlindungan tingkat-akun-OS — DPAPI, Keychain, Secret Service) dan menyerahkan vault key ke proses aplikasi di memori. Dari sana, aplikasi dapat mendekripsi kredensial individual sesuai permintaan. Vault key tidak pernah ditulis ke disk dalam plaintext, dan OS keyring adalah satu-satunya tempat yang dapat menghasilkannya.
-
-:::warning
-Jika Anda mengubah password pengguna macOS atau Linux, keyring mungkin mengunci ulang wrapping key dan meminta untuk menurunkannya lagi pada akses berikutnya. Ini normal dan dapat dipulihkan. Jika akun OS dihapus atau keyring di-reset (misalnya reset pabrik), vault menjadi tidak dapat dipulihkan — backup rahasia yang tidak dapat digantikan secara eksternal.
-:::
-
-:::tip
-Keamanan vault bersifat biner: utuh (akun OS valid, keyring dapat dibaca) atau rusak (tidak dapat mendekripsi). Tidak ada keadaan perantara "lemah". Hal terpenting yang dapat Anda lakukan untuk keamanan vault adalah menjalankan versi OS modern dan menggunakan enkripsi disk penuh (BitLocker, FileVault, LUKS) sehingga model ancaman tingkat-perangkat dibatasi.
-:::
-  `,
 
   "credential-health-checks": `
 ## Pemeriksaan Kesehatan Kredensial

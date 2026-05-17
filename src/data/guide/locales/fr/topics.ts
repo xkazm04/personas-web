@@ -164,11 +164,6 @@ export const topics: Record<string, { title: string; description: string }> = {
     description:
       "Connecter des services comme Google, GitHub et Slack en un clic. OAuth vous permet de vous connecter à un service et d'accorder l'accès sans partager votre mot de passe. C'est le même flux de connexion sécurisé que vous utilisez quand vous cliquez sur \"Se connecter avec Google\" sur un site web.",
   },
-  "understanding-the-credential-vault": {
-    title: "Comprendre le coffre d'identifiants",
-    description:
-      "Comment le chiffrement AES-256 protège vos secrets sur votre appareil. Considérez le coffre comme un coffre-fort de banque — même si quelqu'un obtenait votre ordinateur, il ne pourrait pas lire vos clés stockées sans votre mot de passe principal. Vos secrets sont brouillés avec le même standard que celui utilisé par les banques.",
-  },
   "credential-health-checks": {
     title: "Vérifications de santé des identifiants",
     description:
