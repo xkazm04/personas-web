@@ -2,7 +2,7 @@ import type { ReactNode } from "react";
 
 export function parseInline(text: string, keyBase: string): ReactNode[] {
   const re =
-    /!\[([^\]]*)\]\(([^)]+)\)|\[([^\]]*)\]\(([^)]+)\)|\*\*\*(.+?)\*\*\*|\*\*(.+?)\*\*|\*(.+?)\*|`([^`]+)`/g;
+    /!\[([^\]]*)\]\(([^)]+)\)|\[([^\]]*)\]\(([^)]+)\)|\*\*\*(.+?)\*\*\*|\*\*(.+?)\*\*|\*(.+?)\*|`([^`]+)`|==(.+?)==/g;
   const nodes: ReactNode[] = [];
   let last = 0;
   let keyIndex = 0;
@@ -58,6 +58,12 @@ export function parseInline(text: string, keyBase: string): ReactNode[] {
         <code key={key} className="px-1.5 py-0.5 rounded bg-white/[0.06] text-base font-mono text-brand-cyan">
           {match[8]}
         </code>,
+      );
+    } else if (match[9] !== undefined) {
+      nodes.push(
+        <mark key={key} className="rounded bg-amber-300/15 px-1 py-0.5 text-amber-200">
+          {parseInline(match[9], key)}
+        </mark>,
       );
     }
     last = match.index + match[0].length;
