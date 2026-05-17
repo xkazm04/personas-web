@@ -7,6 +7,7 @@ import { Activity } from "lucide-react";
 import GlowCard from "@/components/GlowCard";
 import PersonaAvatar from "@/components/dashboard/PersonaAvatar";
 import StatusBadge from "@/components/dashboard/StatusBadge";
+import { usePageVisibility } from "@/hooks/usePageVisibility";
 import { relativeTime } from "@/lib/format";
 import type { GlobalExecution } from "@/lib/types";
 
@@ -33,12 +34,17 @@ export function RecentActivityCard({
   };
 }) {
   // Force re-render every 30s so relativeTime() doesn't stay frozen on
-  // "just now" while the user watches the page.
+  // "just now" while the user watches the page. Suspended while the tab
+  // is hidden; resumes with an immediate refresh so timestamps catch up
+  // to any time that passed in the background.
   const [, setTick] = useState(0);
+  const hidden = usePageVisibility();
   useEffect(() => {
+    if (hidden) return;
+    queueMicrotask(() => setTick((n) => n + 1));
     const interval = setInterval(() => setTick((n) => n + 1), REL_TIME_TICK_MS);
     return () => clearInterval(interval);
-  }, []);
+  }, [hidden]);
 
   return (
     <GlowCard accent="cyan" className="p-5 h-full">
