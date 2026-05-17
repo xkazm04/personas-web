@@ -5,12 +5,12 @@ export const topics: Record<string, { title: string; description: string }> = {
       "So lädst du Personas unter Windows, macOS oder Linux herunter und installierst es. Das Installationsprogramm ist eine einzige Datei — herunterladen, ausführen und in weniger als einer Minute startklar.",
   },
   "creating-your-first-agent": {
-    title: "Deinen ersten Agenten erstellen",
+    title: "Dein erster Agent",
     description:
       "Eine Schritt-für-Schritt-Anleitung zum Erstellen deines allerersten KI-Agenten. Du gehst in etwa fünf Minuten von null auf einen funktionierenden Agenten. Am Ende hast du einen persönlichen Assistenten, der eine echte Aufgabe für dich erledigen kann.",
   },
   "understanding-the-interface": {
-    title: "Die Oberfläche verstehen",
+    title: "App-Oberfläche",
     description:
       "Eine Tour durch den Hauptbildschirm, die Seitenleiste und die Navigation. Lerne, wo alles zu finden ist, damit du dich sicher in der App bewegen kannst. Stell dir das wie eine kurze Einführung vor, bevor du loslegst.",
   },
@@ -29,20 +29,10 @@ export const topics: Record<string, { title: string; description: string }> = {
     description:
       "So verbindest du Claude, OpenAI oder andere KI-Dienste, um deine Agenten anzutreiben. Jeder Anbieter hat unterschiedliche Stärken, und du kannst jederzeit wechseln. Wir helfen dir, den besten für deine Anforderungen und dein Budget zu finden.",
   },
-  "starter-vs-team-vs-builder-tiers": {
-    title: "Starter vs. Team vs. Builder Tiers",
-    description:
-      "Was jeder Tier freischaltet und wie du zwischen ihnen wechselst. Starter ist kostenlos und ideal zum Ausprobieren, Team fügt Zusammenarbeit hinzu, und Builder schaltet erweiterte Automatisierungsfunktionen frei. Du kannst jederzeit upgraden oder downgraden.",
-  },
   "system-requirements": {
     title: "Systemanforderungen",
     description:
       "Was dein Computer braucht, um Personas reibungslos auszuführen. Die App ist schlank und läuft auf den meisten modernen Computern. Wir nennen dir die Mindestanforderungen und was für die beste Erfahrung empfohlen wird.",
-  },
-  "keyboard-shortcuts-and-tips": {
-    title: "Tastenkürzel und Tipps",
-    description:
-      "Beschleunige deinen Workflow mit eingebauten Tastenkürzeln. Wenn du ein paar wichtige Tastenkombinationen kennst, sind häufige Aufgaben fast sofort erledigt. Diese Anleitung deckt die nützlichsten Kürzel ab, sortiert nach Häufigkeit der Nutzung.",
   },
   "where-to-get-help": {
     title: "Wo du Hilfe bekommst",

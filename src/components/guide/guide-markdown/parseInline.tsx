@@ -1,15 +1,24 @@
 import type { ReactNode } from "react";
 
+function typography(text: string): string {
+  return text
+    .replace(/---/g, "—")
+    .replace(/(^|[\s(])--(?=[\s).,;:!?]|$)/g, "$1–")
+    .replace(/\(c\)/gi, "©")
+    .replace(/\(tm\)/gi, "™")
+    .replace(/\(r\)/gi, "®");
+}
+
 export function parseInline(text: string, keyBase: string): ReactNode[] {
   const re =
-    /!\[([^\]]*)\]\(([^)]+)\)|\[([^\]]*)\]\(([^)]+)\)|\*\*\*(.+?)\*\*\*|\*\*(.+?)\*\*|\*(.+?)\*|`([^`]+)`/g;
+    /!\[([^\]]*)\]\(([^)]+)\)|\[([^\]]*)\]\(([^)]+)\)|\*\*\*(.+?)\*\*\*|\*\*(.+?)\*\*|\*(.+?)\*|`([^`]+)`|==(.+?)==/g;
   const nodes: ReactNode[] = [];
   let last = 0;
   let keyIndex = 0;
   let match: RegExpExecArray | null;
 
   while ((match = re.exec(text)) !== null) {
-    if (match.index > last) nodes.push(text.slice(last, match.index));
+    if (match.index > last) nodes.push(typography(text.slice(last, match.index)));
 
     const key = `${keyBase}-i${keyIndex++}`;
     if (match[1] !== undefined || match[2] !== undefined) {
@@ -59,10 +68,16 @@ export function parseInline(text: string, keyBase: string): ReactNode[] {
           {match[8]}
         </code>,
       );
+    } else if (match[9] !== undefined) {
+      nodes.push(
+        <mark key={key} className="rounded bg-amber-300/15 px-1 py-0.5 text-amber-200">
+          {parseInline(match[9], key)}
+        </mark>,
+      );
     }
     last = match.index + match[0].length;
   }
 
-  if (last < text.length) nodes.push(text.slice(last));
+  if (last < text.length) nodes.push(typography(text.slice(last)));
   return nodes;
 }

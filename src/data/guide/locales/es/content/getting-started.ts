@@ -182,32 +182,6 @@ La mayoría de los proveedores ofrecen créditos de prueba gratis. Conecta dos o
 :::
   `,
 
-  "starter-vs-team-vs-builder-tiers": `
-## Niveles Starter, Team y Builder
-
-Personas se ofrece en tres niveles. **Starter** es gratuito, solo local y suficiente para construir agentes reales y aprender el sistema. **Team** añade funciones de colaboración, despliegue en la nube y el laboratorio de pruebas completo. **Builder** desbloquea las superficies más avanzadas: orquestación completa de pipelines, evolución de genoma para optimización de prompts y BYOI (bring your own infrastructure) para desplegar en tu propio gateway en la nube.
-
-Puedes cambiar de nivel en cualquier momento. Los agentes existentes permanecen intactos al bajar de nivel; las funciones bloqueadas por nivel se desactivan hasta que vuelvas a subir. Nunca se eliminan agentes ni credenciales.
-
-:::compare
-**Starter (Gratis)**
-Hasta 5 agentes. Disparadores manuales + programados + de portapapeles. Ejecución solo local. Lab básico (ejecuciones de prompt único, sin arena). Usuario único. Perfecto para aprender y automatización personal.
----
-**Team**
-Agentes ilimitados. Todos los tipos de disparadores incluyendo webhooks y observadores de archivos. Despliegue en la nube vía el orquestador gestionado. Lab completo (arena, A-B, cuadrícula eval). Agentes compartidos en equipo. Soporte prioritario.
----
-**Builder** [recommended]
-Todo lo de Team más pipelines avanzados (enrutamiento condicional, memoria de equipo), evolución de genoma (auto-optimiza prompts a partir del historial de ejecución) y despliegue en la nube BYOI (alojas tú mismo el orquestador).
-:::
-
-### Cómo funciona
-
-Abre Settings → Account para ver tu nivel actual, el uso frente a los límites del nivel y el camino de actualización. Las actualizaciones se activan de inmediato; las bajadas surten efecto en el próximo ciclo de facturación, así no pierdes acceso a mitad de periodo.
-
-:::tip
-Empieza en Starter. En cuanto te encuentres alcanzando el límite de agentes o quieras un disparador de webhook, habrás encontrado un caso de uso real para actualizar, y sabrás exactamente qué funciones justifican el coste.
-:::
-  `,
 
   "system-requirements": `
 ## Requisitos del sistema
@@ -235,46 +209,6 @@ Si notas la app lenta durante una ejecución multi-agente, abre la pestaña Heal
 :::
   `,
 
-  "keyboard-shortcuts-and-tips": `
-## Atajos de teclado y consejos
-
-Unos pocos atajos de teclado cubren la mayor parte de la fricción en la app. \`Ctrl+K\` abre la búsqueda global (encuentra cualquier agente, página o ajuste por nombre). \`Ctrl+1\`–\`Ctrl+9\` saltan a las secciones de primer nivel de la barra lateral. \`Ctrl+Enter\` ejecuta el agente enfocado. \`Ctrl+N\` abre el flujo de creación de agente.
-
-Puedes personalizar cualquier asignación en Settings → Appearance → Keyboard Shortcuts; los predeterminados siguen las convenciones del SO siempre que es posible.
-
-### Atajos esenciales
-
-:::keys
-Ctrl+K — Búsqueda global (encuentra cualquier cosa por nombre)
-Ctrl+N — Crear un nuevo agente
-Ctrl+Enter — Ejecutar el agente enfocado
-Ctrl+S — Guardar cambios en el editor actual
-Ctrl+/ — Alternar la barra lateral abierta/cerrada
-Ctrl+, — Abrir Settings
-Ctrl+? — Mostrar la chuleta de atajos de teclado
-:::
-
-### Atajos de navegación
-
-:::keys
-Ctrl+1 — Home
-Ctrl+2 — Overview
-Ctrl+3 — Agents
-Ctrl+4 — Events
-Ctrl+5 — Connections
-Ctrl+6 — Templates
-Ctrl+7 — Plugins
-Ctrl+Shift+P — Abrir la paleta de comandos (ejecuta cualquier acción por nombre)
-:::
-
-### Cómo funciona
-
-La paleta de comandos (\`Ctrl+Shift+P\`) es la superficie para usuarios avanzados. Escribe un verbo (\`run\`, \`clone\`, \`disable\`, \`open\`) más el nombre del objetivo, y la paleta muestra acciones coincidentes en todo tu espacio de trabajo. Es más rápida que navegar manualmente una vez que conoces los nombres de las cosas.
-
-:::tip
-Empieza con \`Ctrl+K\`. Escribe unas pocas letras del nombre de un agente y pulsa Enter: ese único atajo cubre quizás el 60 % de la navegación cotidiana.
-:::
-  `,
 
   "where-to-get-help": `
 ## Dónde obtener ayuda

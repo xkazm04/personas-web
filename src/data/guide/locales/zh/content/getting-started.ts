@@ -182,32 +182,6 @@ Overview → Usage 显示哪些 agent 和模型在开支中占主导地位。将
 :::
   `,
 
-  "starter-vs-team-vs-builder-tiers": `
-## Starter、Team 与 Builder 层级对比
-
-Personas 有三个层级。**Starter** 是免费的、仅本地的,足以构建真实的 agent 并学习系统。**Team** 增加了协作功能、云部署和完整的测试实验室。**Builder** 解锁最高级的功能 — 完整的 pipeline 编排、用于 prompt 优化的 genome evolution,以及用于将云部署到你自己的网关的 BYOI(自带基础设施)。
-
-你可以随时更改层级。降级时现有的 agent 保持完好;层级限制的功能在升级前禁用。从不删除任何 agent 或凭证。
-
-:::compare
-**Starter(免费)**
-最多 5 个 agent。Manual + schedule + clipboard 触发器。仅本地执行。基础 lab(单 prompt 运行,无 arena)。单用户。非常适合学习和个人自动化。
----
-**Team**
-无限 agent。所有触发器类型,包括 webhook 和 file watcher。通过托管的 orchestrator 进行云部署。完整的 Lab(arena、A-B、eval grid)。团队共享 agent。优先支持。
----
-**Builder** [recommended]
-包括 Team 的一切,加上高级 pipeline(条件路由、团队 memory)、genome evolution(从执行历史中自动优化 prompt),以及 BYOI 云部署(自己托管 orchestrator)。
-:::
-
-### 工作原理
-
-打开 Settings → Account 查看当前层级、相对于层级限制的用量,以及升级路径。升级立即生效;降级在下一个计费周期生效,这样你不会在期间失去访问权限。
-
-:::tip
-从 Starter 开始。一旦你发现自己达到了 agent 数量限制或想要 webhook 触发器,你就找到了升级的真正用例 — 并且你会准确知道哪些功能值得为之付费。
-:::
-  `,
 
   "system-requirements": `
 ## 系统要求
@@ -235,46 +209,6 @@ Personas 是一个 Tauri 桌面应用 — Rust 后端、React 前端、本地 SQ
 :::
   `,
 
-  "keyboard-shortcuts-and-tips": `
-## 键盘快捷键和技巧
-
-几个键盘快捷键可以覆盖应用中大部分的摩擦。\`Ctrl+K\` 打开全局搜索(按名称查找任何 agent、页面或设置)。\`Ctrl+1\`–\`Ctrl+9\` 跳转到顶层侧边栏部分。\`Ctrl+Enter\` 运行当前聚焦的 agent。\`Ctrl+N\` 打开 Create Agent 流程。
-
-你可以在 Settings → Appearance → Keyboard Shortcuts 中自定义任何快捷键绑定;默认设置尽可能遵循操作系统约定。
-
-### 必备快捷键
-
-:::keys
-Ctrl+K — 全局搜索(按名称查找任何内容)
-Ctrl+N — 创建新 agent
-Ctrl+Enter — 运行聚焦的 agent
-Ctrl+S — 保存当前编辑器中的更改
-Ctrl+/ — 切换侧边栏开/关
-Ctrl+, — 打开 Settings
-Ctrl+? — 显示键盘快捷键速查表
-:::
-
-### 导航快捷键
-
-:::keys
-Ctrl+1 — Home
-Ctrl+2 — Overview
-Ctrl+3 — Agents
-Ctrl+4 — Events
-Ctrl+5 — Connections
-Ctrl+6 — Templates
-Ctrl+7 — Plugins
-Ctrl+Shift+P — 打开命令面板(按名称运行任何操作)
-:::
-
-### 工作原理
-
-命令面板(\`Ctrl+Shift+P\`)是高级用户的界面。输入一个动词(\`run\`、\`clone\`、\`disable\`、\`open\`)加上目标名称,面板会显示整个工作区中匹配的操作。一旦你了解了事物的名称,这比手动导航更快。
-
-:::tip
-从 \`Ctrl+K\` 开始。输入 agent 名称的几个字母并按 Enter — 这一个快捷键覆盖了大约 60% 的日常导航。
-:::
-  `,
 
   "where-to-get-help": `
 ## 在哪里获取帮助

@@ -182,32 +182,6 @@ Většina poskytovatelů nabízí kredity pro bezplatnou zkušební verzi. Přip
 :::
   `,
 
-  "starter-vs-team-vs-builder-tiers": `
-## Tarify Starter vs Team vs Builder
-
-Personas se dodávají ve třech tarifech. **Starter** je zdarma, pouze lokální a stačí na stavbu reálných agentů a naučení se systému. **Team** přidává funkce spolupráce, cloudové nasazení a plnou testovací laboratoř. **Builder** odemyká nejpokročilejší plochy — plnou orchestraci pipelin, evoluci genomu pro optimalizaci promptů a BYOI (bring your own infrastructure) pro cloudové nasazení do vlastního gateway.
-
-Tarif můžeš kdykoli změnit. Existující agenti zůstávají nedotčeni, když downgraduješ; funkce vázané na tarif se vypnou, dokud znovu neupgraduješ. Žádní agenti ani přihlašovací údaje se nikdy nemažou.
-
-:::compare
-**Starter (Free)**
-Až 5 agentů. Manuální + plánované + spouštěče ze schránky. Spouštění pouze lokálně. Základní lab (běhy s jedním promptem, žádná aréna). Jeden uživatel. Perfektní pro učení a osobní automatizaci.
----
-**Team**
-Neomezeně agentů. Všechny typy spouštěčů včetně webhooků a file watcherů. Cloudové nasazení přes spravovaný orchestrátor. Plný Lab (aréna, A-B, eval grid). Sdílení agentů v týmu. Prioritní podpora.
----
-**Builder** [recommended]
-Vše z Teamu plus pokročilé pipeliny (podmíněné směrování, týmová paměť), evoluce genomu (auto-optimalizace promptů z historie běhů) a BYOI cloudové nasazení (hostuj orchestrátor sám/sama).
-:::
-
-### Jak to funguje
-
-Otevři Settings → Account a podívej se na svůj aktuální tarif, využití proti limitům tarifu a cestu k upgradu. Upgrady se aktivují okamžitě; downgrady nabývají účinnosti v dalším fakturačním cyklu, takže nepřijdeš o přístup uprostřed období.
-
-:::tip
-Začni na Starter. Ve chvíli, kdy zjistíš, že narážíš na limit počtu agentů nebo chceš webhook spouštěč, jsi našel/našla skutečný případ pro upgrade — a budeš přesně vědět, které funkce stojí za zaplacení.
-:::
-  `,
 
   "system-requirements": `
 ## Systémové požadavky
@@ -235,46 +209,6 @@ Pokud při víceagentovém běhu cítíš, že je aplikace pomalá, otevři kart
 :::
   `,
 
-  "keyboard-shortcuts-and-tips": `
-## Klávesové zkratky a tipy
-
-Pár klávesových zkratek pokrývá většinu třecích bodů v aplikaci. \`Ctrl+K\` otevře globální vyhledávání (najdi libovolného agenta, stránku nebo nastavení podle názvu). \`Ctrl+1\`–\`Ctrl+9\` skočí do sekcí nejvyšší úrovně postranního panelu. \`Ctrl+Enter\` spustí zaměřeného agenta. \`Ctrl+N\` otevře tok Create Agent.
-
-Libovolnou klávesovou kombinaci si můžeš přizpůsobit v Settings → Appearance → Keyboard Shortcuts; výchozí kombinace tam, kde je to možné, sledují konvence OS.
-
-### Základní zkratky
-
-:::keys
-Ctrl+K — Globální vyhledávání (najdi cokoli podle názvu)
-Ctrl+N — Vytvořit nového agenta
-Ctrl+Enter — Spustit zaměřeného agenta
-Ctrl+S — Uložit změny v aktuálním editoru
-Ctrl+/ — Přepnout postranní panel otevřeno/zavřeno
-Ctrl+, — Otevřít Settings
-Ctrl+? — Zobrazit přehled klávesových zkratek
-:::
-
-### Navigační zkratky
-
-:::keys
-Ctrl+1 — Home
-Ctrl+2 — Overview
-Ctrl+3 — Agents
-Ctrl+4 — Events
-Ctrl+5 — Connections
-Ctrl+6 — Templates
-Ctrl+7 — Plugins
-Ctrl+Shift+P — Otevřít command paletu (spusť libovolnou akci podle názvu)
-:::
-
-### Jak to funguje
-
-Command paleta (\`Ctrl+Shift+P\`) je plocha pro mocné uživatele. Napiš sloveso (\`run\`, \`clone\`, \`disable\`, \`open\`) plus název cíle a paleta ti ukáže odpovídající akce napříč celým tvým pracovním prostorem. Je to rychlejší než manuální navigace, jakmile znáš názvy věcí.
-
-:::tip
-Začni s \`Ctrl+K\`. Napiš pár písmen jména agenta a stiskni Enter — tahle jedna zkratka pokrývá asi 60 % každodenní navigace.
-:::
-  `,
 
   "where-to-get-help": `
 ## Kde získat pomoc

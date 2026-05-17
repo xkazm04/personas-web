@@ -182,32 +182,6 @@ Die meisten Anbieter bieten kostenlose Testguthaben an. Verbinde zwei oder drei 
 :::
   `,
 
-  "starter-vs-team-vs-builder-tiers": `
-## Starter vs. Team vs. Builder Tiers
-
-Personas wird in drei Tiers ausgeliefert. **Starter** ist kostenlos, nur lokal und reicht aus, um echte Agenten zu bauen und das System zu lernen. **Team** fügt Kollaborationsfunktionen, Cloud-Deployment und das vollständige Testing-Lab hinzu. **Builder** schaltet die fortschrittlichsten Oberflächen frei — vollständige Pipeline-Orchestrierung, Genome-Evolution für Prompt-Optimierung und BYOI (bring your own infrastructure) für Cloud-Deployment auf dein eigenes Gateway.
-
-Du kannst den Tier jederzeit ändern. Bestehende Agenten bleiben beim Downgrade unversehrt; tier-gebundene Funktionen werden deaktiviert, bis du wieder upgradest. Keine Agenten oder Zugangsdaten werden jemals gelöscht.
-
-:::compare
-**Starter (Kostenlos)**
-Bis zu 5 Agenten. Manuelle + Schedule- + Clipboard-Trigger. Nur lokale Ausführung. Grundlegendes Lab (Single-Prompt-Läufe, keine Arena). Einzelnutzer. Perfekt zum Lernen und für persönliche Automatisierung.
----
-**Team**
-Unbegrenzte Agenten. Alle Trigger-Typen einschließlich Webhooks und File Watchers. Cloud-Deployment über den verwalteten Orchestrator. Vollständiges Lab (Arena, A-B, Eval-Grid). Im Team geteilte Agenten. Priority-Support.
----
-**Builder** [recommended]
-Alles in Team plus erweiterte Pipelines (bedingtes Routing, Team-Memory), Genome-Evolution (automatische Prompt-Optimierung aus dem Ausführungsverlauf) und BYOI Cloud-Deploy (hoste den Orchestrator selbst).
-:::
-
-### So funktioniert es
-
-Öffne Settings → Account, um deinen aktuellen Tier, die Nutzung gegenüber den Tier-Limits und den Upgrade-Pfad zu sehen. Upgrades werden sofort aktiviert; Downgrades werden zum nächsten Abrechnungszyklus wirksam, damit du nicht mitten in der Periode den Zugriff verlierst.
-
-:::tip
-Starte mit Starter. In dem Moment, in dem du an ein Agenten-Anzahl-Limit stößt oder einen Webhook-Trigger willst, hast du einen echten Anwendungsfall fürs Upgraden gefunden — und du weißt genau, welche Features die Kosten zurückzahlen.
-:::
-  `,
 
   "system-requirements": `
 ## Systemanforderungen
@@ -235,46 +209,6 @@ Wenn sich die App während eines Multi-Agenten-Laufs langsam anfühlt, öffne de
 :::
   `,
 
-  "keyboard-shortcuts-and-tips": `
-## Tastenkürzel und Tipps
-
-Ein paar Tastenkürzel decken die meiste Reibung in der App ab. \`Ctrl+K\` öffnet die globale Suche (finde jeden Agenten, jede Seite oder Einstellung per Name). \`Ctrl+1\`–\`Ctrl+9\` springen zu Top-Level-Seitenleisten-Bereichen. \`Ctrl+Enter\` führt den fokussierten Agenten aus. \`Ctrl+N\` öffnet den Create-Agent-Flow.
-
-Du kannst jede Tastenbelegung in Settings → Appearance → Keyboard Shortcuts anpassen; Standardwerte folgen wo möglich den OS-Konventionen.
-
-### Essenzielle Shortcuts
-
-:::keys
-Ctrl+K — Globale Suche (alles per Name finden)
-Ctrl+N — Einen neuen Agenten erstellen
-Ctrl+Enter — Den fokussierten Agenten ausführen
-Ctrl+S — Änderungen im aktuellen Editor speichern
-Ctrl+/ — Seitenleiste auf-/zuklappen
-Ctrl+, — Settings öffnen
-Ctrl+? — Tastenkürzel-Spickzettel zeigen
-:::
-
-### Navigations-Shortcuts
-
-:::keys
-Ctrl+1 — Home
-Ctrl+2 — Overview
-Ctrl+3 — Agents
-Ctrl+4 — Events
-Ctrl+5 — Connections
-Ctrl+6 — Templates
-Ctrl+7 — Plugins
-Ctrl+Shift+P — Command-Palette öffnen (jede Aktion per Name ausführen)
-:::
-
-### So funktioniert es
-
-Die Command-Palette (\`Ctrl+Shift+P\`) ist die Power-User-Oberfläche. Tippe ein Verb (\`run\`, \`clone\`, \`disable\`, \`open\`) plus den Zielnamen, und die Palette zeigt passende Aktionen über deinen gesamten Workspace. Sobald du die Namen der Dinge kennst, ist das schneller als manuelle Navigation.
-
-:::tip
-Beginne mit \`Ctrl+K\`. Tippe ein paar Buchstaben eines Agentennamens und drücke Enter — dieser eine Shortcut deckt vielleicht 60 % der alltäglichen Navigation ab.
-:::
-  `,
 
   "where-to-get-help": `
 ## Wo du Hilfe bekommst

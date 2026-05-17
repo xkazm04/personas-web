@@ -5,12 +5,12 @@ export const topics: Record<string, { title: string; description: string }> = {
       "Windows, macOS, 또는 Linux에서 다운로드하고 설치하는 방법. 설치 파일은 단일 파일입니다 — 다운로드하고, 실행하면, 1분 안에 사용할 준비가 됩니다.",
   },
   "creating-your-first-agent": {
-    title: "첫 번째 에이전트 만들기",
+    title: "첫 에이전트",
     description:
       "첫 번째 AI 에이전트를 구축하는 단계별 워크스루. 빈 상태에서 작동하는 에이전트까지 약 5분이 걸립니다. 끝나면 실제 작업을 수행할 수 있는 개인 어시스턴트를 갖게 됩니다.",
   },
   "understanding-the-interface": {
-    title: "인터페이스 이해하기",
+    title: "앱 인터페이스",
     description:
       "메인 화면, 사이드바, 탐색 투어. 자신 있게 앱을 돌아다닐 수 있도록 모든 것이 어디에 있는지 배웁니다. 구축을 시작하기 전 빠른 오리엔테이션처럼 생각하세요.",
   },
@@ -29,20 +29,10 @@ export const topics: Record<string, { title: string; description: string }> = {
     description:
       "에이전트를 구동하기 위해 Claude, OpenAI, 또는 다른 AI 서비스를 연결하는 방법. 각 제공자는 다른 강점을 가지며 언제든지 전환할 수 있습니다. 필요와 예산에 가장 적합한 것을 선택하는 데 도움을 드립니다.",
   },
-  "starter-vs-team-vs-builder-tiers": {
-    title: "Starter, Team, Builder 등급 비교",
-    description:
-      "각 등급이 무엇을 잠금 해제하고 그 사이를 전환하는 방법. Starter는 무료이며 시도해보기에 좋고, Team은 협업을 추가하며, Builder는 고급 자동화 기능을 잠금 해제합니다. 언제든지 업그레이드하거나 다운그레이드할 수 있습니다.",
-  },
   "system-requirements": {
     title: "시스템 요구사항",
     description:
       "Personas를 원활하게 실행하기 위해 컴퓨터에 필요한 것. 앱은 가볍고 대부분의 최신 컴퓨터에서 작동합니다. 최소 사양과 최고의 경험을 위해 권장되는 것을 알려드립니다.",
-  },
-  "keyboard-shortcuts-and-tips": {
-    title: "키보드 단축키와 팁",
-    description:
-      "내장된 단축키로 워크플로를 가속하세요. 몇 가지 키 조합을 알면 일반적인 작업이 거의 즉각적이 됩니다. 이 가이드는 가장 많이 하는 일을 기준으로 조직된 가장 유용한 단축키를 다룹니다.",
   },
   "where-to-get-help": {
     title: "도움받는 곳",

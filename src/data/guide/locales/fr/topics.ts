@@ -5,12 +5,12 @@ export const topics: Record<string, { title: string; description: string }> = {
       "Comment télécharger et installer sur Windows, macOS ou Linux. L'installateur est un fichier unique — téléchargez-le, exécutez-le, et vous êtes prêt en moins d'une minute.",
   },
   "creating-your-first-agent": {
-    title: "Créer votre premier agent",
+    title: "Votre premier agent",
     description:
       "Un guide pas à pas pour construire votre tout premier agent IA. Vous passerez d'une page blanche à un agent fonctionnel en environ cinq minutes. À la fin, vous aurez un assistant personnel capable d'exécuter une tâche réelle pour vous.",
   },
   "understanding-the-interface": {
-    title: "Comprendre l'interface",
+    title: "Interface de l'app",
     description:
       "Une visite de l'écran principal, de la barre latérale et de la navigation. Apprenez où tout se trouve afin de vous déplacer dans l'application avec confiance. Considérez cela comme une orientation rapide avant de commencer à construire.",
   },
@@ -29,20 +29,10 @@ export const topics: Record<string, { title: string; description: string }> = {
     description:
       "Comment connecter Claude, OpenAI ou d'autres services d'IA pour alimenter vos agents. Chaque fournisseur a ses propres atouts, et vous pouvez changer à tout moment. Nous vous aiderons à choisir celui qui correspond le mieux à vos besoins et à votre budget.",
   },
-  "starter-vs-team-vs-builder-tiers": {
-    title: "Niveaux Starter, Team et Builder",
-    description:
-      "Ce que chaque niveau débloque et comment passer de l'un à l'autre. Starter est gratuit et idéal pour essayer, Team ajoute la collaboration, et Builder débloque les fonctionnalités d'automatisation avancées. Vous pouvez changer de niveau à tout moment.",
-  },
   "system-requirements": {
     title: "Configuration système requise",
     description:
       "Ce dont votre ordinateur a besoin pour exécuter Personas sans problème. L'application est légère et fonctionne sur la plupart des ordinateurs modernes. Nous vous indiquerons les spécifications minimales et recommandées pour la meilleure expérience.",
-  },
-  "keyboard-shortcuts-and-tips": {
-    title: "Raccourcis clavier et astuces",
-    description:
-      "Accélérez votre flux de travail grâce aux raccourcis intégrés. Une fois que vous connaissez quelques combinaisons clés, les tâches courantes deviennent presque instantanées. Ce guide couvre les raccourcis les plus utiles, organisés selon ce que vous faites le plus.",
   },
   "where-to-get-help": {
     title: "Où obtenir de l'aide",

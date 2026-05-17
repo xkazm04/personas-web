@@ -12,7 +12,7 @@ import type { GuideMode } from "@/data/guide/types";
 import { useTranslation } from "@/i18n/useTranslation";
 import { fadeUp, staggerContainer } from "@/lib/animations";
 import { BRAND_VAR } from "@/lib/brand-theme";
-import { isCategoryVisibleForMode, isTopicVisibleForMode } from "@/lib/guide-utils";
+import { isCategoryVisibleForMode, isTopicVisible, isTopicVisibleForMode } from "@/lib/guide-utils";
 import { safeJsonLd } from "@/lib/seo";
 
 import { GuideCategoryGrid } from "./guide-page/GuideCategoryGrid";
@@ -21,7 +21,10 @@ import { GuideModeToggle } from "./guide-page/GuideModeToggle";
 
 function topicCountFor(categoryId: string, modeFilter: GuideMode | null) {
   return GUIDE_TOPICS.filter(
-    (topic) => topic.categoryId === categoryId && isTopicVisibleForMode(topic, modeFilter),
+    (topic) =>
+      topic.categoryId === categoryId &&
+      isTopicVisible(topic) &&
+      isTopicVisibleForMode(topic, modeFilter),
   ).length;
 }
 

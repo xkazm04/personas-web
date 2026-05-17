@@ -813,6 +813,7 @@ export const vi: Translations = {
     noResults: 'Kh\u00f4ng t\u00ecm th\u1ea5y ch\u1ee7 \u0111\u1ec1 n\u00e0o. H\u00e3y th\u1eed t\u1eeb kh\u00f3a t\u00ecm ki\u1ebfm kh\u00e1c.',
     stillQuestions: 'V\u1eabn c\u00f2n c\u00e2u h\u1ecfi?',
     joinDiscord: 'Tham gia Discord c\u1ee7a ch\u00fang t\u00f4i',
+    copyAnchor: 'Sao ch\u00e9p li\u00ean k\u1ebft ph\u1ea7n n\u00e0y',
     categories: {
       "getting-started": 'B\u1eaft \u0111\u1ea7u',
       "agents-prompts": 'T\u00e1c nh\u00e2n & Prompt',

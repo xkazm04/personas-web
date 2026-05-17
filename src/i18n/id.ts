@@ -813,6 +813,7 @@ export const id: Translations = {
     noResults: 'Tidak ada topik ditemukan. Coba istilah pencarian lain.',
     stillQuestions: 'Masih punya pertanyaan?',
     joinDiscord: 'Gabung Discord kami',
+    copyAnchor: 'Salin tautan ke bagian',
     categories: {
       "getting-started": 'Memulai',
       "agents-prompts": 'Agen & Prompt',

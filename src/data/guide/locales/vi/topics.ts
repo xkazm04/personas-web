@@ -5,12 +5,12 @@ export const topics: Record<string, { title: string; description: string }> = {
       "Cách tải và cài đặt trên Windows, macOS hoặc Linux. Trình cài đặt chỉ là một tệp duy nhất — tải về, chạy lên và bạn đã sẵn sàng trong chưa đầy một phút.",
   },
   "creating-your-first-agent": {
-    title: "Tạo agent đầu tiên của bạn",
+    title: "Tác nhân đầu tiên của bạn",
     description:
       "Hướng dẫn từng bước để xây dựng agent AI đầu tiên của bạn. Bạn sẽ đi từ một trang trắng đến một agent hoạt động trong khoảng năm phút. Đến cuối, bạn sẽ có một trợ lý cá nhân có thể thực hiện một tác vụ thực tế cho bạn.",
   },
   "understanding-the-interface": {
-    title: "Tìm hiểu giao diện",
+    title: "Giao diện ứng dụng",
     description:
       "Một chuyến tham quan màn hình chính, thanh bên và điều hướng. Tìm hiểu mọi thứ ở đâu để bạn có thể di chuyển trong ứng dụng một cách tự tin. Hãy coi đây như một buổi định hướng nhanh trước khi bạn bắt đầu xây dựng.",
   },
@@ -29,20 +29,10 @@ export const topics: Record<string, { title: string; description: string }> = {
     description:
       "Cách kết nối Claude, OpenAI hoặc các dịch vụ AI khác để hỗ trợ agent của bạn. Mỗi nhà cung cấp có thế mạnh khác nhau và bạn có thể chuyển đổi bất cứ lúc nào. Chúng tôi sẽ giúp bạn chọn lựa chọn phù hợp nhất với nhu cầu và ngân sách của bạn.",
   },
-  "starter-vs-team-vs-builder-tiers": {
-    title: "So sánh các gói Starter, Team và Builder",
-    description:
-      "Mỗi gói mở khóa những gì và cách chuyển đổi giữa chúng. Starter miễn phí và tuyệt vời để thử nghiệm, Team thêm tính năng cộng tác và Builder mở khóa các tính năng tự động hóa nâng cao. Bạn có thể nâng cấp hoặc hạ cấp bất cứ lúc nào.",
-  },
   "system-requirements": {
     title: "Yêu cầu hệ thống",
     description:
       "Máy tính của bạn cần gì để chạy Personas mượt mà. Ứng dụng nhẹ và hoạt động trên hầu hết các máy tính hiện đại. Chúng tôi sẽ cho bạn biết thông số tối thiểu và những gì được khuyến nghị để có trải nghiệm tốt nhất.",
-  },
-  "keyboard-shortcuts-and-tips": {
-    title: "Phím tắt và mẹo",
-    description:
-      "Tăng tốc quy trình làm việc của bạn với các phím tắt tích hợp sẵn. Khi bạn biết một vài tổ hợp phím, các tác vụ thông thường trở nên gần như tức thì. Hướng dẫn này bao gồm các phím tắt hữu ích nhất được sắp xếp theo những gì bạn làm nhiều nhất.",
   },
   "where-to-get-help": {
     title: "Nơi để nhận trợ giúp",

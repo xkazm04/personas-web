@@ -1,13 +1,19 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import Link from "next/link";
 import { ChevronLeft, ChevronRight } from "lucide-react";
 import GuideMarkdown from "@/components/guide/GuideMarkdown";
 import RelatedTopics from "@/components/guide/RelatedTopics";
 import ModuleBadge from "@/components/guide/ModuleBadge";
+import TopicTOC from "@/components/guide/TopicTOC";
+import MobileTopicTOC from "@/components/guide/MobileTopicTOC";
+import ReadingProgress from "@/components/guide/ReadingProgress";
+import { extractHeadings } from "@/components/guide/guide-markdown/extractHeadings";
+import type { GuideHeading } from "@/components/guide/guide-markdown/extractHeadings";
 import { TOPIC_MODULE_MAP } from "@/data/guide/desktop-modules";
 import { getLocalizedTopic } from "@/data/guide/getLocalized";
+import { useTranslation } from "@/i18n/useTranslation";
 import { useI18nStore } from "@/stores/i18nStore";
 import type { GuideCategory, GuideTopic } from "@/data/guide/types";
 import type { RelatedTopic } from "@/lib/guide-utils";
@@ -16,12 +22,14 @@ interface TopicViewProps {
   category: GuideCategory;
   topic: GuideTopic;
   content: string;
+  initialHeadings: GuideHeading[];
   prevTopic: GuideTopic | null;
   nextTopic: GuideTopic | null;
   related: RelatedTopic[];
 }
 
-export default function TopicView({ category, topic, content, prevTopic, nextTopic, related }: TopicViewProps) {
+export default function TopicView({ category, topic, content, initialHeadings, prevTopic, nextTopic, related }: TopicViewProps) {
+  const { t } = useTranslation();
   // Locale-aware swap. The server renders the English content (no locale
   // signal in the URL or cookie today), and once the i18nStore hydrates on
   // the client we re-resolve through getLocalizedTopic. Currently the
@@ -35,6 +43,15 @@ export default function TopicView({ category, topic, content, prevTopic, nextTop
     description: topic.description,
     body: content,
   });
+
+  // Skip the client parse on the initial render — page.tsx already extracted
+  // headings from the same `content` string and passed them in. The useMemo
+  // only re-parses when localized.body diverges (locale switch — currently
+  // dormant; see comment above on the i18nStore).
+  const headings = useMemo(
+    () => (localized.body === content ? initialHeadings : extractHeadings(localized.body)),
+    [localized.body, content, initialHeadings],
+  );
 
   useEffect(() => {
     if (language === "en") {
@@ -51,8 +68,11 @@ export default function TopicView({ category, topic, content, prevTopic, nextTop
   }, [language, topic.id, topic.title, topic.description, content]);
 
   return (
-    <div className="px-6 pb-24">
-      <div className="mx-auto max-w-3xl">
+    <div className="px-6 pb-24 pt-9 lg:pt-0">
+      <ReadingProgress />
+      <MobileTopicTOC headings={headings} />
+      <div className="mx-auto max-w-3xl lg:max-w-6xl lg:grid lg:grid-cols-[minmax(0,1fr)_14rem] lg:gap-12">
+        <div className="min-w-0 lg:max-w-3xl">
         {/* Breadcrumb */}
         <nav aria-label="Breadcrumb" className="mt-8 flex items-center gap-1.5 text-base text-muted-dark">
           <Link href="/guide" className="transition-colors hover:text-brand-cyan">Guide</Link>
@@ -135,6 +155,12 @@ export default function TopicView({ category, topic, content, prevTopic, nextTop
             <div />
           )}
         </nav>
+        </div>
+        <aside className="hidden lg:block">
+          <div className="sticky top-24">
+            <TopicTOC headings={headings} label={t.pageNav.onThisPage} />
+          </div>
+        </aside>
       </div>
     </div>
   );

@@ -182,32 +182,6 @@ Sebagian besar penyedia menawarkan kredit uji coba gratis. Hubungkan dua atau ti
 :::
   `,
 
-  "starter-vs-team-vs-builder-tiers": `
-## Tier Starter vs Team vs Builder
-
-Personas hadir dalam tiga tier. **Starter** gratis, hanya-lokal, dan cukup untuk membangun agen nyata dan mempelajari sistem. **Team** menambahkan fitur kolaborasi, deployment cloud, dan testing lab lengkap. **Builder** membuka permukaan paling canggih — orkestrasi pipeline lengkap, genome evolution untuk optimasi prompt, dan BYOI (bring your own infrastructure) untuk deployment cloud ke gateway Anda sendiri.
-
-Anda dapat mengubah tier kapan saja. Agen yang ada tetap utuh saat Anda menurunkan tier; fitur yang dibatasi tier dinonaktifkan hingga Anda meningkatkan lagi. Tidak ada agen atau kredensial yang pernah dihapus.
-
-:::compare
-**Starter (Gratis)**
-Hingga 5 agen. Trigger Manual + schedule + clipboard. Eksekusi hanya-lokal. Lab dasar (run prompt tunggal, tanpa arena). Pengguna tunggal. Sempurna untuk belajar dan otomatisasi pribadi.
----
-**Team**
-Agen tak terbatas. Semua jenis trigger termasuk webhook dan file watcher. Deployment cloud melalui orkestrator terkelola. Lab lengkap (arena, A-B, eval grid). Agen bersama tim. Dukungan prioritas.
----
-**Builder** [recommended]
-Semua di Team plus pipeline tingkat lanjut (conditional routing, team memory), genome evolution (otomatis mengoptimalkan prompt dari riwayat eksekusi), dan BYOI cloud deploy (host orkestrator sendiri).
-:::
-
-### Cara Kerjanya
-
-Buka Settings → Account untuk melihat tier Anda saat ini, penggunaan terhadap batasan tier, dan jalur peningkatan. Peningkatan diaktifkan segera; penurunan berlaku pada siklus penagihan berikutnya sehingga Anda tidak kehilangan akses di tengah-tengah periode.
-
-:::tip
-Mulailah dari Starter. Saat Anda mendapati diri Anda mencapai batas jumlah agen atau menginginkan webhook trigger, Anda telah menemukan kasus penggunaan nyata untuk meningkatkan — dan Anda akan tahu persis fitur apa yang sepadan dengan biayanya.
-:::
-  `,
 
   "system-requirements": `
 ## Persyaratan Sistem
@@ -235,46 +209,6 @@ Jika Anda melihat aplikasi terasa lambat selama run multi-agen, buka tab Health 
 :::
   `,
 
-  "keyboard-shortcuts-and-tips": `
-## Pintasan Keyboard dan Tips
-
-Beberapa pintasan keyboard mencakup sebagian besar gesekan di aplikasi. \`Ctrl+K\` membuka pencarian global (temukan agen, halaman, atau pengaturan apa pun berdasarkan nama). \`Ctrl+1\`–\`Ctrl+9\` melompat ke bagian sidebar tingkat atas. \`Ctrl+Enter\` menjalankan agen yang difokuskan. \`Ctrl+N\` membuka alur Create Agent.
-
-Anda dapat menyesuaikan binding apa pun di Settings → Appearance → Keyboard Shortcuts; default mengikuti konvensi OS jika memungkinkan.
-
-### Pintasan Penting
-
-:::keys
-Ctrl+K — Pencarian global (temukan apa saja berdasarkan nama)
-Ctrl+N — Buat agen baru
-Ctrl+Enter — Jalankan agen yang difokuskan
-Ctrl+S — Simpan perubahan di editor saat ini
-Ctrl+/ — Toggle sidebar buka/tutup
-Ctrl+, — Buka Settings
-Ctrl+? — Tampilkan lembar contekan pintasan keyboard
-:::
-
-### Pintasan Navigasi
-
-:::keys
-Ctrl+1 — Home
-Ctrl+2 — Overview
-Ctrl+3 — Agents
-Ctrl+4 — Events
-Ctrl+5 — Connections
-Ctrl+6 — Templates
-Ctrl+7 — Plugins
-Ctrl+Shift+P — Buka command palette (jalankan tindakan apa pun berdasarkan nama)
-:::
-
-### Cara Kerjanya
-
-Command palette (\`Ctrl+Shift+P\`) adalah permukaan power-user. Ketik kata kerja (\`run\`, \`clone\`, \`disable\`, \`open\`) plus nama target, dan palette menampilkan tindakan yang cocok di seluruh workspace Anda. Ini lebih cepat daripada navigasi manual setelah Anda mengetahui nama dari hal-hal tersebut.
-
-:::tip
-Mulai dengan \`Ctrl+K\`. Ketik beberapa huruf dari nama agen dan tekan Enter — pintasan tunggal itu mencakup mungkin 60% navigasi sehari-hari.
-:::
-  `,
 
   "where-to-get-help": `
 ## Tempat Mendapatkan Bantuan

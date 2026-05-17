@@ -7,13 +7,13 @@ export const GUIDE_TOPICS: GuideTopic[] = [
     categoryId: "getting-started",
     title: "Installing Personas",
     description:
-      "How to download and install on Windows, macOS, or Linux. The installer is a single file — download it, run it, and you're ready to go in under a minute.",
-    tags: ["getting-started", "install", "setup", "download", "windows", "mac", "linux"],
+      "How to download and install Personas on Windows. The installer is a single file — install Claude Code first, then run the Personas installer and you're ready to go in under a minute. macOS and Linux builds are on the roadmap.",
+    tags: ["getting-started", "install", "setup", "download", "windows", "claude-code", "roadmap"],
   },
   {
     id: "creating-your-first-agent",
     categoryId: "getting-started",
-    title: "Creating your first agent",
+    title: "Your first agent",
     description:
       "A step-by-step walkthrough of building your very first AI agent. You'll go from a blank slate to a working agent in about five minutes. By the end, you'll have a personal assistant that can carry out a real task for you.",
     tags: ["getting-started", "first-agent", "tutorial", "walkthrough", "beginner"],
@@ -24,10 +24,10 @@ export const GUIDE_TOPICS: GuideTopic[] = [
   {
     id: "understanding-the-interface",
     categoryId: "getting-started",
-    title: "Understanding the interface",
+    title: "App interface",
     description:
-      "A tour of the main screen, sidebar, and navigation. Learn where everything lives so you can move around the app with confidence. Think of it like a quick orientation before you start building.",
-    tags: ["getting-started", "interface", "navigation", "sidebar", "tour"],
+      "A tour of the main screen, sidebar, and navigation, plus the keyboard shortcuts that speed up everyday work. Learn where everything lives so you can move around the app with confidence — and once you know a few key combinations, most tasks become almost instant.",
+    tags: ["getting-started", "interface", "navigation", "sidebar", "tour", "keyboard", "shortcuts", "productivity"],
     coverage: {
       screenshotRecipe: "tools/guide-screenshots/recipes/understanding-the-interface.yaml",
     },
@@ -55,17 +55,10 @@ export const GUIDE_TOPICS: GuideTopic[] = [
     description:
       "How to connect Claude, OpenAI, or other AI services to power your agents. Each provider has different strengths, and you can switch anytime. We'll help you pick the best fit for your needs and budget.",
     tags: ["getting-started", "provider", "claude", "openai", "ai-model", "setup"],
+    devOnly: true,
     coverage: {
       screenshotRecipe: "tools/guide-screenshots/recipes/choosing-your-ai-provider.yaml",
     },
-  },
-  {
-    id: "starter-vs-team-vs-builder-tiers",
-    categoryId: "getting-started",
-    title: "Starter vs Team vs Builder tiers",
-    description:
-      "What each tier unlocks and how to switch between them. Starter is free and great for trying things out, Team adds collaboration, and Builder unlocks advanced automation features. You can upgrade or downgrade anytime.",
-    tags: ["getting-started", "tiers", "pricing", "plans", "upgrade"],
   },
   {
     id: "system-requirements",
@@ -74,14 +67,6 @@ export const GUIDE_TOPICS: GuideTopic[] = [
     description:
       "What your computer needs to run Personas smoothly. The app is lightweight and works on most modern computers. We'll tell you the minimum specs and what's recommended for the best experience.",
     tags: ["getting-started", "requirements", "hardware", "compatibility", "performance"],
-  },
-  {
-    id: "keyboard-shortcuts-and-tips",
-    categoryId: "getting-started",
-    title: "Keyboard shortcuts and tips",
-    description:
-      "Speed up your workflow with built-in shortcuts. Once you know a few key combinations, common tasks become almost instant. This guide covers the most useful shortcuts organized by what you do most.",
-    tags: ["getting-started", "keyboard", "shortcuts", "productivity", "tips"],
   },
   {
     id: "where-to-get-help",

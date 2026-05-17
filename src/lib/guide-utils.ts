@@ -22,6 +22,21 @@ export function isCategoryVisibleForMode(categoryId: string, modeFilter: GuideMo
   return GUIDE_TOPICS.some((t) => t.categoryId === categoryId && isTopicVisibleForMode(t, modeFilter));
 }
 
+/**
+ * Whether dev-only topics are surfaced. Controlled by the
+ * NEXT_PUBLIC_SHOW_DEV_GUIDE_TOPICS env var (inlined at build time).
+ * Production builds without this set leave devOnly topics hidden from
+ * the sidebar, category lists, search results, and direct URL access.
+ */
+export function isDevTopicsVisible(): boolean {
+  return process.env.NEXT_PUBLIC_SHOW_DEV_GUIDE_TOPICS === "true";
+}
+
+/** Whether a topic is visible — honors the devOnly flag. */
+export function isTopicVisible(topic: GuideTopic): boolean {
+  return !topic.devOnly || isDevTopicsVisible();
+}
+
 export interface RelatedTopic {
   topic: GuideTopic;
   category: GuideCategory;

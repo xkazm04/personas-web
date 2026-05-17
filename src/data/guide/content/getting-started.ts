@@ -2,24 +2,62 @@ export const content: Record<string, string> = {
   "installing-personas": `
 ## Installing Personas
 
-Getting Personas on your computer takes about a minute. Grab the installer for your operating system — Windows, macOS, or Linux — from the download page and run it. The installer is a single file with no setup wizard; double-click, approve the security prompt, and the app launches. Updates are delivered automatically in the background, so you'll always have the latest version without doing anything.
+Personas runs on **Windows** today. macOS and Linux builds are on the roadmap — see the cards below for current platform availability.
 
-The first time the app opens, you land on the welcome screen. From there you can either jump straight into building an agent (Personas will offer to set up an AI provider when you need one) or open the credential vault first if you already have API keys you want to store. Both paths work.
+Getting Personas on your Windows machine takes about a minute. Download the installer, run it, approve the SmartScreen prompt, and the app launches. Updates are delivered automatically in the background, so you'll always have the latest version without doing anything.
+
+:::cards
+[available] Windows | The Windows installer is a 53 MB NSIS \`.exe\`. Code-signed, auto-updating, runs on Windows 10 or newer (64-bit). | /imgs/get-started/platform/windows
+[roadmap] macOS | Native universal \`.dmg\` for Apple Silicon and Intel is in development. Track progress on the roadmap. | /imgs/get-started/platform/mac
+[roadmap] Linux | \`.AppImage\` and \`.deb\` builds for Ubuntu, Debian, Fedora, and Arch are in development. Track progress on the roadmap. | /imgs/get-started/platform/linux
+:::
+
+### Precondition: Install Claude Code
+
+Personas builds on top of **Claude Code** for its agent execution engine, so Claude Code needs to be installed first. The Claude Code installer is a single file from Anthropic and takes under a minute.
 
 :::steps
-1. **Download the installer** — pick the right file for your OS (NSIS \`.exe\` on Windows, \`.dmg\` on macOS, \`.AppImage\` or \`.deb\` on Linux)
-2. **Run the installer** — double-click on Windows, drag to Applications on macOS, execute on Linux
-3. **Approve security prompts** — your OS may ask you to confirm; this is normal for new desktop software
-4. **Launch Personas** — the welcome screen opens with a guided tour you can take or skip
-5. **Optional: connect a provider** — paste an API key on the Connections page if you want to be ready to build immediately
+1. **Open the Claude Code installer page** — head to [claude.com/claude-code](https://claude.com/claude-code) and follow the install flow for your platform
+2. **Confirm the install** — run \`claude --version\` in a terminal to verify the binary is on your PATH
+3. **Continue with Personas below** — Claude Code only needs to be installed once; subsequent Personas updates don't require reinstalling it
 :::
 
 :::info
-Works on **Windows 10+**, **macOS 12+**, and most modern **Linux** distributions. The Windows installer is a 53 MB NSIS \`.exe\`; the bundled binary is around 90 MB after install. Auto-updates are delta-only, so they're typically much smaller.
+If you already have Claude Code installed for other work, skip this section — Personas will pick up your existing install automatically.
 :::
 
+### Windows install
+
+:::steps
+1. **Download the installer** — grab the NSIS \`.exe\` from the download page
+2. **Double-click to run** — SmartScreen may ask you to confirm the publisher the first time; the installer is code-signed, so it's safe to approve
+3. **Approve security prompts** — Windows may ask you to allow the install; this is standard for new desktop software
+4. **Tick "Add to PATH"** — optional but recommended so you can launch and script Personas from a terminal
+5. **Launch Personas** — the welcome screen opens with a guided tour you can take or skip
+:::
+
+After install, the bundled binary is around 90 MB. Auto-updates run silently in the background, delta-only — typically much smaller than the original installer.
+
+The first time the app opens, you land on the welcome screen. From there you can either jump straight into building an agent (Personas will offer to set up an AI provider when you need one) or open the credential vault first if you already have API keys you want to store. Both paths work.
+
+### Verifying your install
+
+Once Personas is installed, you can confirm it's reachable from your terminal. This is handy for scripting, CI integration, or just a quick sanity check after a fresh install.
+
+:::cli
+$ personas --version
+:::
+
+Print the available flags:
+
+:::cli
+$ personas --help
+:::
+
+If your shell can't find the \`personas\` command, the desktop launcher still works — the CLI is an optional convenience that the installer wires up only when you tick "Add to PATH" during setup. Re-run the installer and tick that option if you want it later.
+
 :::tip
-If you run into a Windows SmartScreen or macOS Gatekeeper warning, it's your OS being cautious with new software. Approve it and you're all set — the installer is code-signed.
+If you run into a Windows SmartScreen warning, it's your OS being cautious with new software. Approve it and you're all set — the installer is code-signed.
 :::
   `,
 
@@ -68,15 +106,39 @@ The center area is the **workspace** where everything actually happens — editi
 
 Most of what you do happens by clicking a sidebar item and editing in the workspace. The title-bar notification bell is the one universal shortcut worth memorizing — it always opens the most recent execution detail, no matter where you are. The cockpit shortcut ("Talk to Athena") opens an in-app chat with the companion that can help you build, debug, or just answer questions about your setup.
 
+### Keyboard shortcuts
+
+A handful of shortcuts cover most everyday navigation. \`Ctrl+K\` opens global search (find any agent, page, or setting by name). \`Ctrl+1\`–\`Ctrl+9\` jump directly to top-level sidebar sections. \`Ctrl+Enter\` runs the focused agent. \`Ctrl+Shift+P\` opens the command palette — type a verb (\`run\`, \`clone\`, \`disable\`, \`open\`) plus a target name to act on anything without navigating.
+
+You can customize any binding in **Settings → Appearance → Keyboard Shortcuts**; defaults follow OS conventions where possible.
+
+:::keys
+Ctrl+K — Global search (find anything by name)
+Ctrl+N — Create a new agent
+Ctrl+Enter — Run the focused agent
+Ctrl+S — Save changes in the current editor
+Ctrl+/ — Toggle the sidebar open/closed
+Ctrl+, — Open Settings
+Ctrl+? — Show the keyboard shortcut cheat sheet
+Ctrl+Shift+P — Open the command palette
+Ctrl+1 — Home
+Ctrl+2 — Overview
+Ctrl+3 — Agents
+Ctrl+4 — Events
+Ctrl+5 — Connections
+Ctrl+6 — Templates
+Ctrl+7 — Plugins
+:::
+
 :::tip
-Hover any sidebar icon for a tooltip with the keyboard shortcut. \`Ctrl+1\` through \`Ctrl+9\` jump directly to top-level sections, and \`Ctrl+K\` opens global search so you can find anything by name.
+Start with \`Ctrl+K\`. Type a few letters of an agent name and hit Enter — that one shortcut covers maybe 60% of everyday navigation.
 :::
   `,
 
   "what-is-an-ai-agent": `
 ## What Is an AI Agent?
 
-An AI agent is a configured AI model with a job. You give it instructions ("read my unread emails and summarize the important ones"), tell it which tools it can use, and trigger it — manually with a button, on a schedule, on an event, or as a step in a pipeline. The agent reads the trigger payload, follows your instructions, calls any tools it needs, and produces an output. Unlike a chatbot, the agent acts: sends the email, writes the file, posts to Slack.
+An AI agent is a configured AI model with a job. You give it instructions ("read my unread emails and summarize the important ones"), tell it which tools it can use, and trigger it — manually with a button, on a schedule, on an event, or as a step in a pipeline. The agent reads the trigger payload, follows your instructions, calls any tools it needs, and produces an output. Unlike a chatbot, ==the agent acts==: sends the email, writes the file, posts to Slack.
 
 Each agent in Personas is durable — it remembers its setup, its history, its credentials, and (optionally) memories from past runs. You can clone it, version-control its prompt, run it in an arena against alternative prompts to see which performs better, and chain it to other agents to build multi-step workflows.
 
@@ -90,9 +152,7 @@ A persistent configuration with a job. Triggered manually or automatically; uses
 
 ### How It Works
 
-:::diagram
-[Trigger fires] --> [Agent reads input] --> [Model + tools execute] --> [Output dispatched]
-:::
+![Agent orchestration overview: trigger fires, agent reads input, model and tools execute, output dispatched](/imgs/features/orchestration.png)
 
 The trigger packs an input payload (a webhook body, a clipboard string, a file path, an event from another agent…). The agent reads its prompt, feeds it to the AI model along with the input, and lets the model call attached tools as needed. The final output is dispatched through whatever output channel you configured — back to a UI, written to a file, posted to Slack, or chained as input to the next agent.
 
@@ -117,6 +177,8 @@ For repeating work, add a schedule trigger, a webhook trigger, a file-watcher tr
 :::
 
 ### How It Works
+
+![Lab view of a single execution trace showing prompt construction, model call, tool calls, and output](/imgs/features/lab.png)
 
 A run is a single execution: trigger → prompt-construction → model-call → tool-calls → output. Every step is captured in the execution trace, and the run lands in the Activity tab of the Overview page (the global view across all agents) and in the agent's own Activity tab. From either place you can click into the run for the full detail modal.
 
@@ -173,39 +235,9 @@ Monthly AI spend creeps up
 Overview → Usage shows which agents and models dominate the spend. Swap the top-cost agents to a cheaper tier (Sonnet → Haiku, GPT-4o → GPT-4o-mini); the Lab can A-B them first to confirm quality holds.
 :::
 
-:::info
-Default provider for new agents is set in Settings → Engine. You can override on every agent.
-:::
-
-:::tip
-Most providers offer free trial credits. Connect two or three and run the same prompt against each in the Lab arena — you'll feel the personality differences and pick a default that fits your style.
-:::
-  `,
-
-  "starter-vs-team-vs-builder-tiers": `
-## Starter vs Team vs Builder Tiers
-
-Personas ships in three tiers. **Starter** is free, local-only, and enough to build real agents and learn the system. **Team** adds collaboration features, cloud deployment, and the full testing lab. **Builder** unlocks the most advanced surfaces — full pipeline orchestration, genome evolution for prompt optimization, and BYOI (bring your own infrastructure) for cloud deployment to your own gateway.
-
-You can change tier at any time. Existing agents stay intact when you downgrade; tier-gated features disable until you upgrade again. No agents or credentials are ever deleted.
-
-:::compare
-**Starter (Free)**
-Up to 5 agents. Manual + schedule + clipboard triggers. Local-only execution. Basic lab (single-prompt runs, no arena). Single-user. Perfect for learning and personal automation.
----
-**Team**
-Unlimited agents. All trigger types including webhooks and file watchers. Cloud deployment via the managed orchestrator. Full Lab (arena, A-B, eval grid). Team shared agents. Priority support.
----
-**Builder** [recommended]
-Everything in Team plus advanced pipelines (conditional routing, team memory), genome evolution (auto-optimize prompts from execution history), and BYOI cloud deploy (host the orchestrator yourself).
-:::
-
-### How It Works
-
-Open Settings → Account to see your current tier, usage against tier limits, and the upgrade path. Upgrades activate immediately; downgrades take effect at the next billing cycle so you don't lose access mid-period.
-
-:::tip
-Start on Starter. The moment you find yourself hitting an agent-count limit or wanting a webhook trigger, you've found a real use case for upgrading — and you'll know exactly what features pay back the cost.
+:::callout-stack
+[info] Default provider for new agents is set in **Settings → Engine**. You can override on every agent.
+[tip] Most providers offer free trial credits. Connect two or three and run the same prompt against each in the Lab arena — you'll feel the personality differences and pick a default that fits your style.
 :::
   `,
 
@@ -232,47 +264,6 @@ The Windows build uses ONNX Runtime for embedding when the vector-knowledge-base
 
 :::tip
 If you see the app feel slow during a multi-agent run, open the Health tab — it shows which agents and which dependencies (model calls, tool calls, ONNX inference) are contributing to the load.
-:::
-  `,
-
-  "keyboard-shortcuts-and-tips": `
-## Keyboard Shortcuts and Tips
-
-A few keyboard shortcuts cover most of the friction in the app. \`Ctrl+K\` opens global search (find any agent, page, or setting by name). \`Ctrl+1\`–\`Ctrl+9\` jump to top-level sidebar sections. \`Ctrl+Enter\` runs the focused agent. \`Ctrl+N\` opens the Create Agent flow.
-
-You can customize any binding in Settings → Appearance → Keyboard Shortcuts; defaults follow OS conventions where possible.
-
-### Essential Shortcuts
-
-:::keys
-Ctrl+K — Global search (find anything by name)
-Ctrl+N — Create a new agent
-Ctrl+Enter — Run the focused agent
-Ctrl+S — Save changes in the current editor
-Ctrl+/ — Toggle the sidebar open/closed
-Ctrl+, — Open Settings
-Ctrl+? — Show the keyboard shortcut cheat sheet
-:::
-
-### Navigation Shortcuts
-
-:::keys
-Ctrl+1 — Home
-Ctrl+2 — Overview
-Ctrl+3 — Agents
-Ctrl+4 — Events
-Ctrl+5 — Connections
-Ctrl+6 — Templates
-Ctrl+7 — Plugins
-Ctrl+Shift+P — Open the command palette (run any action by name)
-:::
-
-### How It Works
-
-The command palette (\`Ctrl+Shift+P\`) is the power-user surface. Type a verb (\`run\`, \`clone\`, \`disable\`, \`open\`) plus the target name, and the palette shows matching actions across your whole workspace. It's faster than navigating manually once you know the names of things.
-
-:::tip
-Start with \`Ctrl+K\`. Type a few letters of an agent name and hit Enter — that one shortcut covers maybe 60% of everyday navigation.
 :::
   `,
 

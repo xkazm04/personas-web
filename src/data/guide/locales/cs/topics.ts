@@ -5,12 +5,12 @@ export const topics: Record<string, { title: string; description: string }> = {
       "Jak stáhnout a nainstalovat na Windows, macOS nebo Linux. Instalátor je jediný soubor — stáhneš ho, spustíš a za necelou minutu můžeš začít.",
   },
   "creating-your-first-agent": {
-    title: "Vytvoření prvního agenta",
+    title: "Váš první agent",
     description:
       "Postupný průvodce sestavením tvého úplně prvního AI agenta. Od prázdného plátna k funkčnímu agentovi se dostaneš asi za pět minut. Na konci budeš mít osobního asistenta, který za tebe dokáže vykonat skutečný úkol.",
   },
   "understanding-the-interface": {
-    title: "Orientace v rozhraní",
+    title: "Rozhraní aplikace",
     description:
       "Prohlídka hlavní obrazovky, postranního panelu a navigace. Zjisti, kde co najdeš, abys mohl/a aplikací procházet s jistotou. Ber to jako rychlou orientaci, než se pustíš do tvorby.",
   },
@@ -29,20 +29,10 @@ export const topics: Record<string, { title: string; description: string }> = {
     description:
       "Jak připojit Claude, OpenAI nebo jiné AI služby, které pohánějí tvé agenty. Každý poskytovatel má jiné silné stránky a kdykoli můžeš přepnout. Pomůžeme ti vybrat to nejlepší pro tvé potřeby a rozpočet.",
   },
-  "starter-vs-team-vs-builder-tiers": {
-    title: "Tarify Starter vs Team vs Builder",
-    description:
-      "Co každý tarif odemyká a jak mezi nimi přepínat. Starter je zdarma a skvělý pro vyzkoušení, Team přidává spolupráci a Builder odemyká pokročilé funkce automatizace. Můžeš kdykoli upgradovat nebo downgradovat.",
-  },
   "system-requirements": {
     title: "Systémové požadavky",
     description:
       "Co tvůj počítač potřebuje, aby Personas běžely hladce. Aplikace je nenáročná a funguje na většině moderních počítačů. Řekneme ti minimální specifikace i doporučené pro nejlepší zážitek.",
-  },
-  "keyboard-shortcuts-and-tips": {
-    title: "Klávesové zkratky a tipy",
-    description:
-      "Zrychli si práci s vestavěnými zkratkami. Jakmile si osvojíš pár klíčových kombinací, běžné úkoly budou téměř okamžité. Tento průvodce pokrývá nejužitečnější zkratky uspořádané podle toho, co děláš nejčastěji.",
   },
   "where-to-get-help": {
     title: "Kde získat pomoc",

@@ -4,11 +4,11 @@ export const topics: Record<string, { title: string; description: string }> = {
     description: "Windows、macOS、Linux でのダウンロードとインストール方法。インストーラーは 1 つのファイルだけ — ダウンロードして実行すれば、1 分以内に準備が整います。",
   },
   "creating-your-first-agent": {
-    title: "最初のエージェントを作成する",
+    title: "最初のエージェント",
     description: "初めての AI エージェントを構築するためのステップバイステップのガイドです。約 5 分で白紙の状態から動くエージェントが完成します。最後には実際のタスクを実行できるパーソナルアシスタントが手に入ります。",
   },
   "understanding-the-interface": {
-    title: "インターフェースを理解する",
+    title: "アプリのインターフェース",
     description: "メイン画面、サイドバー、ナビゲーションのツアー。すべてがどこにあるかを把握すれば、アプリ内を自信を持って移動できるようになります。構築を始める前のクイックオリエンテーションだと考えてください。",
   },
   "what-is-an-ai-agent": {
@@ -23,17 +23,9 @@ export const topics: Record<string, { title: string; description: string }> = {
     title: "AI プロバイダーを選択する",
     description: "Claude、OpenAI などの AI サービスを接続してエージェントを動かす方法。プロバイダーごとに強みが異なり、いつでも切り替えできます。あなたのニーズと予算に最適なものを選ぶお手伝いをします。",
   },
-  "starter-vs-team-vs-builder-tiers": {
-    title: "Starter、Team、Builder ティアの比較",
-    description: "各ティアで使える機能と切り替え方法。Starter は無料で試用に最適、Team はコラボレーションを追加、Builder は高度な自動化機能をアンロックします。いつでもアップグレード・ダウングレード可能です。",
-  },
   "system-requirements": {
     title: "システム要件",
     description: "Personas をスムーズに動作させるために必要なコンピュータ環境。アプリは軽量で、ほとんどの最新のコンピュータで動作します。最小スペックと、最高の体験のために推奨される構成をお伝えします。",
-  },
-  "keyboard-shortcuts-and-tips": {
-    title: "キーボードショートカットとヒント",
-    description: "組み込みのショートカットでワークフローを高速化。いくつかのキーの組み合わせを覚えるだけで、よく使うタスクがほぼ瞬時に完了するようになります。このガイドでは、目的別に整理された最も便利なショートカットを紹介します。",
   },
   "where-to-get-help": {
     title: "ヘルプを得る場所",

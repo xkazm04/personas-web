@@ -813,6 +813,7 @@ export const de: Translations = {
     noResults: 'Keine Themen gefunden. Versuchen Sie einen anderen Suchbegriff.',
     stillQuestions: 'Noch Fragen?',
     joinDiscord: 'Unserem Discord beitreten',
+    copyAnchor: 'Link zum Abschnitt kopieren',
     categories: {
       "getting-started": 'Erste Schritte',
       "agents-prompts": 'Agenten & Prompts',

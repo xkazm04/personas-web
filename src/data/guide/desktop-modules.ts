@@ -189,20 +189,10 @@ export const TOPIC_MODULE_MAP: Record<string, TopicModuleRef> = {
     path: ["Connections", "Add New"],
     label: "Provider setup",
   },
-  "starter-vs-team-vs-builder-tiers": {
-    moduleId: "settings",
-    path: ["Settings", "Account"],
-    label: "Account tiers",
-  },
   "system-requirements": {
     moduleId: "home",
     path: ["Home", "System Check"],
     label: "System diagnostics",
-  },
-  "keyboard-shortcuts-and-tips": {
-    moduleId: "settings",
-    path: ["Settings", "Appearance"],
-    label: "Keyboard config",
   },
   "where-to-get-help": {
     moduleId: "home",

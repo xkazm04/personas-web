@@ -8,11 +8,12 @@ import type { Variants } from "framer-motion";
 
 import { GUIDE_CATEGORIES } from "@/data/guide/categories";
 import { GUIDE_TOPICS } from "@/data/guide/topics";
+import { isTopicVisible } from "@/lib/guide-utils";
 
 import { FOCUS_RING, GuideSidebarContent } from "./guide-sidebar/GuideSidebarContent";
 
 function topicsFor(categoryId: string) {
-  return GUIDE_TOPICS.filter((topic) => topic.categoryId === categoryId);
+  return GUIDE_TOPICS.filter((topic) => topic.categoryId === categoryId && isTopicVisible(topic));
 }
 
 export default function GuideSidebar() {

@@ -1,7 +1,8 @@
 import { notFound } from "next/navigation";
 import { GUIDE_CATEGORIES } from "@/data/guide/categories";
 import { GUIDE_TOPICS } from "@/data/guide/topics";
-import { getRelatedTopics } from "@/lib/guide-utils";
+import { extractHeadings } from "@/components/guide/guide-markdown/extractHeadings";
+import { getRelatedTopics, isTopicVisible } from "@/lib/guide-utils";
 import { SITE_URL, SITE_NAME, safeJsonLd } from "@/lib/seo";
 import TopicView from "./TopicView";
 
@@ -97,6 +98,7 @@ export default async function TopicPage({ params }: { params: Promise<{ category
 
   const loader = contentModules[categoryId];
   if (!category || !topic || !loader) notFound();
+  if (!isTopicVisible(topic)) notFound();
 
   const { content: categoryContent } = await loader();
   const content = categoryContent[topicId];
@@ -109,6 +111,7 @@ export default async function TopicPage({ params }: { params: Promise<{ category
   const related = getRelatedTopics(topicId);
   const steps = extractSteps(content);
   const howToJsonLd = buildHowToJsonLd(topic, categoryId, topicId, steps);
+  const initialHeadings = extractHeadings(content);
 
   const articleJsonLd = {
     "@context": "https://schema.org",
@@ -151,6 +154,7 @@ export default async function TopicPage({ params }: { params: Promise<{ category
         category={category}
         topic={topic}
         content={content}
+        initialHeadings={initialHeadings}
         prevTopic={prevTopic}
         nextTopic={nextTopic}
         related={related}

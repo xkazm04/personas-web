@@ -5,12 +5,12 @@ export const topics: Record<string, { title: string; description: string }> = {
       "Cara mengunduh dan memasang di Windows, macOS, atau Linux. Installer adalah satu file — unduh, jalankan, dan Anda siap dalam waktu kurang dari satu menit.",
   },
   "creating-your-first-agent": {
-    title: "Membuat agen pertama Anda",
+    title: "Agen pertama Anda",
     description:
       "Walkthrough langkah-demi-langkah membangun agen AI pertama Anda. Anda akan beralih dari keadaan kosong menjadi agen yang berfungsi dalam waktu sekitar lima menit. Pada akhirnya, Anda akan memiliki asisten pribadi yang dapat melaksanakan tugas nyata untuk Anda.",
   },
   "understanding-the-interface": {
-    title: "Memahami antarmuka",
+    title: "Antarmuka aplikasi",
     description:
       "Tur layar utama, sidebar, dan navigasi. Pelajari di mana semuanya berada sehingga Anda dapat berpindah di aplikasi dengan percaya diri. Pikirkan seperti orientasi cepat sebelum Anda mulai membangun.",
   },
@@ -29,20 +29,10 @@ export const topics: Record<string, { title: string; description: string }> = {
     description:
       "Cara menghubungkan Claude, OpenAI, atau layanan AI lain untuk menjalankan agen Anda. Setiap penyedia memiliki kekuatan yang berbeda, dan Anda dapat beralih kapan saja. Kami akan membantu Anda memilih yang paling cocok untuk kebutuhan dan anggaran Anda.",
   },
-  "starter-vs-team-vs-builder-tiers": {
-    title: "Tier Starter vs Team vs Builder",
-    description:
-      "Apa yang dibuka setiap tier dan cara beralih di antaranya. Starter gratis dan bagus untuk mencoba hal-hal, Team menambahkan kolaborasi, dan Builder membuka fitur otomatisasi tingkat lanjut. Anda dapat meningkatkan atau menurunkan kapan saja.",
-  },
   "system-requirements": {
     title: "Persyaratan sistem",
     description:
       "Apa yang dibutuhkan komputer Anda untuk menjalankan Personas dengan lancar. Aplikasi ini ringan dan berfungsi di sebagian besar komputer modern. Kami akan memberi tahu Anda spesifikasi minimum dan apa yang direkomendasikan untuk pengalaman terbaik.",
-  },
-  "keyboard-shortcuts-and-tips": {
-    title: "Pintasan keyboard dan tips",
-    description:
-      "Percepat alur kerja Anda dengan pintasan bawaan. Setelah Anda mengetahui beberapa kombinasi kunci, tugas umum menjadi hampir instan. Panduan ini mencakup pintasan paling berguna yang diorganisasikan berdasarkan apa yang paling sering Anda lakukan.",
   },
   "where-to-get-help": {
     title: "Tempat mendapatkan bantuan",

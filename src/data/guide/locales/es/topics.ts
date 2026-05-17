@@ -5,12 +5,12 @@ export const topics: Record<string, { title: string; description: string }> = {
       "Cómo descargar e instalar en Windows, macOS o Linux. El instalador es un único archivo: descárgalo, ejecútalo y estarás listo en menos de un minuto.",
   },
   "creating-your-first-agent": {
-    title: "Crear tu primer agente",
+    title: "Tu primer agente",
     description:
       "Un recorrido paso a paso para construir tu primer agente de IA. Pasarás de cero a un agente funcional en unos cinco minutos. Al terminar tendrás un asistente personal capaz de realizar una tarea real por ti.",
   },
   "understanding-the-interface": {
-    title: "Entender la interfaz",
+    title: "Interfaz de la app",
     description:
       "Un recorrido por la pantalla principal, la barra lateral y la navegación. Aprende dónde está cada cosa para moverte por la app con confianza. Piénsalo como una orientación rápida antes de empezar a construir.",
   },
@@ -29,20 +29,10 @@ export const topics: Record<string, { title: string; description: string }> = {
     description:
       "Cómo conectar Claude, OpenAI u otros servicios de IA para impulsar a tus agentes. Cada proveedor tiene fortalezas distintas y puedes cambiar cuando quieras. Te ayudaremos a elegir el que mejor se adapte a tus necesidades y presupuesto.",
   },
-  "starter-vs-team-vs-builder-tiers": {
-    title: "Niveles Starter, Team y Builder",
-    description:
-      "Lo que desbloquea cada nivel y cómo cambiar entre ellos. Starter es gratis y perfecto para probar, Team añade colaboración y Builder desbloquea funciones avanzadas de automatización. Puedes subir o bajar de nivel cuando quieras.",
-  },
   "system-requirements": {
     title: "Requisitos del sistema",
     description:
       "Lo que necesita tu computadora para ejecutar Personas con fluidez. La app es ligera y funciona en la mayoría de equipos modernos. Te indicamos las especificaciones mínimas y las recomendadas para la mejor experiencia.",
-  },
-  "keyboard-shortcuts-and-tips": {
-    title: "Atajos de teclado y consejos",
-    description:
-      "Acelera tu flujo de trabajo con atajos integrados. En cuanto memorices unas pocas combinaciones, las tareas comunes se vuelven casi instantáneas. Esta guía cubre los atajos más útiles organizados por lo que sueles hacer.",
   },
   "where-to-get-help": {
     title: "Dónde obtener ayuda",

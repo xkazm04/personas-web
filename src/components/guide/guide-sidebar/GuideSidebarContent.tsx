@@ -106,17 +106,21 @@ export function GuideSidebarContent({
                     <div className="ml-4 border-l border-glass pl-2 py-0.5">
                       {category.topics.map((topic) => {
                         const isActive = activeTopic === topic.id;
+                        const isDevOnly = !!topic.devOnly;
                         return (
                           <Link
                             key={topic.id}
                             href={`/guide/${category.id}/${topic.id}`}
                             onClick={onNavigateTopic}
+                            title={isDevOnly ? "Dev-only — hidden in production" : undefined}
                             className={`block rounded-md px-2.5 py-1.5 text-base transition-colors ${FOCUS_RING} ${
                               isActive
                                 ? "bg-white/[0.06] text-foreground border-l-2 -ml-[calc(0.5rem+1px)] pl-[calc(0.625rem+1px)]"
-                                : "text-muted-dark hover:text-muted hover:bg-white/[0.03]"
+                                : isDevOnly
+                                  ? "border-l-2 -ml-[calc(0.5rem+1px)] pl-[calc(0.625rem+1px)] border-amber-400 text-amber-200/90 hover:bg-amber-400/[0.04]"
+                                  : "text-muted-dark hover:text-muted hover:bg-white/[0.03]"
                             }`}
-                            style={isActive ? { borderLeftColor: category.color } : undefined}
+                            style={isActive ? { borderLeftColor: isDevOnly ? "rgb(251 191 36)" : category.color } : undefined}
                           >
                             {topic.title}
                           </Link>

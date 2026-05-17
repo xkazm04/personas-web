@@ -4,11 +4,11 @@ export const topics: Record<string, { title: string; description: string }> = {
     description: "如何在 Windows、macOS 或 Linux 上下载和安装。安装包是单个文件 — 下载它,运行它,你在一分钟内就准备好了。",
   },
   "creating-your-first-agent": {
-    title: "创建你的第一个 agent",
+    title: "你的第一个 agent",
     description: "构建你第一个 AI agent 的分步演练。你将在大约五分钟内从空白状态到一个可工作的 agent。最后,你将拥有一个可以为你执行真实任务的个人助手。",
   },
   "understanding-the-interface": {
-    title: "了解界面",
+    title: "应用界面",
     description: "主屏幕、侧边栏和导航的浏览。了解一切的位置,这样你就可以自信地在应用中移动。把它想象成在开始构建之前的快速定向。",
   },
   "what-is-an-ai-agent": {
@@ -23,17 +23,9 @@ export const topics: Record<string, { title: string; description: string }> = {
     title: "选择你的 AI 提供商",
     description: "如何连接 Claude、OpenAI 或其他 AI 服务来为你的 agent 提供动力。每个提供商都有不同的优势,你可以随时切换。我们将帮助你选择最适合你需求和预算的提供商。",
   },
-  "starter-vs-team-vs-builder-tiers": {
-    title: "Starter、Team 与 Builder 层级对比",
-    description: "每个层级解锁什么以及如何在它们之间切换。Starter 是免费的,非常适合尝试,Team 添加协作,Builder 解锁高级自动化功能。你可以随时升级或降级。",
-  },
   "system-requirements": {
     title: "系统要求",
     description: "你的电脑流畅运行 Personas 需要什么。该应用轻量且适用于大多数现代计算机。我们会告诉你最低规格以及获得最佳体验所推荐的配置。",
-  },
-  "keyboard-shortcuts-and-tips": {
-    title: "键盘快捷键和技巧",
-    description: "使用内置快捷键加速你的工作流。一旦你了解几个关键组合,常见任务就会几乎瞬间完成。本指南按你最常做的事情组织最有用的快捷键。",
   },
   "where-to-get-help": {
     title: "在哪里获取帮助",

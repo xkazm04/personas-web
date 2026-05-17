@@ -37,16 +37,10 @@ You need to prove which credential was used where
 Every run's trace records the credential ID it used. The actual value never appears; the ID is enough to demonstrate provenance.
 :::
 
-:::info
-The vault is bound to your OS user account via the OS keyring. Copying the vault file to a different machine, even with the same OS, won't make it decryptable — the wrapping key lives in the OS keyring and isn't portable.
-:::
-
-:::warning
-If you change your OS account password on macOS or Linux, the keyring may relock the wrapping key. Personas will prompt for the new credential on first run after the change. If the keyring is wiped (factory reset, account deletion), the vault becomes unrecoverable — back up the raw secrets externally if you need disaster recovery beyond the local machine.
-:::
-
-:::tip
-The local-only model is the right default for personal automation. For team / production work where multiple machines need the same credentials, the cloud deploy (Team / Builder tier) replicates vault state via the orchestrator with end-to-end encryption.
+:::callout-stack
+[info] The vault is bound to your OS user account via the OS keyring. Copying the vault file to a different machine, even with the same OS, won't make it decryptable — the wrapping key lives in the OS keyring and isn't portable.
+[warning] If you change your OS account password on macOS or Linux, the keyring may relock the wrapping key. Personas will prompt for the new credential on first run after the change. If the keyring is wiped (factory reset, account deletion), the vault becomes unrecoverable — back up the raw secrets externally if you need disaster recovery beyond the local machine.
+[tip] The local-only model is the right default for personal automation. For team / production work where multiple machines need the same credentials, the cloud deploy (Team / Builder tier) replicates vault state via the orchestrator with end-to-end encryption.
 :::
   `,
 
@@ -71,6 +65,24 @@ For OAuth-supporting services, the flow opens a browser window to the provider's
 ### How It Works
 
 When you click Save, the credential's raw value is encrypted with the vault key derived from the OS keyring, then committed to the credential store. The save returns only the credential ID and label — the raw value is wiped from memory immediately. From this point on, the agent editor's Connectors tab can reference the credential by ID.
+
+### AI Provider Quick Start
+
+The four most-common AI providers use plain API keys. Once you have a key, the flow is paste-and-save — Personas recognizes the prefix shape and pre-fills the auth type:
+
+:::tabs
+### OpenAI
+Generate a key at \`platform.openai.com/api-keys\`. Keys start with \`sk-\` (project-scoped keys start with \`sk-proj-\`). Personas validates the key against the OpenAI \`/models\` endpoint on save so you'll know immediately if the paste was off by a character.
+
+### Anthropic
+Generate a key at \`console.anthropic.com\` under **Settings → API Keys**. Keys start with \`sk-ant-\`. Anthropic offers both user-level and workspace-scoped keys; workspace-scoped is the recommended choice for production agents because revocation is independent of your account.
+
+### Google
+Generate a key at \`aistudio.google.com/apikey\`. Keys start with \`AIza\`. The same key works for every Gemini variant — Personas exposes the model picker once the credential is saved so you can switch between Pro / Flash without re-keying.
+
+### Ollama (local)
+No API key needed. Pick **Ollama** in the picker and paste your local server URL (\`http://localhost:11434\` by default). Personas connects, lists the locally-installed models, and lets you use any of them without sending data over the network.
+:::
 
 :::warning
 Never paste credentials into agent prompts, code comments, or chat windows. Use the secure credential input field only — anything else risks the raw value being captured in a log, sync, or screenshot.
@@ -285,17 +297,52 @@ When an agent's Connectors tab needs a capability ("email-send", "cloud-storage-
 
 ### Connector Categories
 
-| Category | Example services | Auth |
-|---|---|---|
-| Email | Gmail, Outlook, IMAP/SMTP | OAuth / API |
-| Cloud Storage | Google Drive, Dropbox, OneDrive, S3, Local Drive | OAuth / API |
-| Payments | Stripe, PayPal, Square | API key |
-| Social | Twitter/X, LinkedIn, Facebook, Mastodon | OAuth |
-| Developer Tools | GitHub, GitLab, Jira, Linear, Sentry | OAuth / API |
-| Communication | Slack, Discord, Microsoft Teams, Telegram, generic webhook | OAuth / bot token |
-| CRM | Salesforce, HubSpot, Pipedrive | OAuth / API |
-| AI Providers | Anthropic, OpenAI, Google, local Ollama, custom OpenAI-compatible | API |
-| Data | Postgres, Snowflake, BigQuery, generic SQL/HTTP | URL + credentials |
+:::tabs
+### Email
+Receive, parse, send, and search messages. Triage inboxes, summarize threads, file invoices, route replies.
+
+Supported: **Gmail** (OAuth or app password), **Outlook / Microsoft 365** (OAuth), and any **IMAP / SMTP** provider (server URL + username + password).
+
+### Cloud Storage
+Read and write files for agents that ingest documents, save outputs, or sync results to a shared drive.
+
+Supported: **Google Drive**, **Dropbox**, **OneDrive** (OAuth), any **S3-compatible** store like AWS S3, R2, B2, or MinIO (access key + secret), and **Local Drive** for files already on this machine (filesystem path, no credential required).
+
+### Payments
+Read transactions, watch for new charges, refund or capture, generate reports.
+
+Supported: **Stripe** with live and test segregation, **PayPal**, **Square** — all via API key.
+
+### Social
+Post, schedule, read engagement, run analytics on social accounts.
+
+Supported: **Twitter / X**, **LinkedIn**, **Facebook**, **Mastodon** — all via OAuth.
+
+### Developer Tools
+Watch issues, open PRs, attach builds, mirror Sentry alerts into your agent flow.
+
+Supported: **GitHub** and **GitLab** (OAuth or fine-grained PAT), **Jira** and **Linear** (OAuth), and **Sentry** (auth token).
+
+### Communication
+Inbound webhooks for triggers, outbound channel-delivery for agent outputs, two-way bot interactions.
+
+Supported: **Slack** and **Microsoft Teams** (OAuth + bot token), **Discord** and **Telegram** (bot token), and the **Generic Webhook** type for any HTTP endpoint (URL only, no credential required).
+
+### CRM
+Read contacts, sync deals, automate stage transitions, watch for new leads.
+
+Supported: **Salesforce**, **HubSpot**, **Pipedrive** — OAuth (recommended) or API key.
+
+### AI Providers
+The model endpoints your agents call. See **Adding a New Credential** → **AI Provider Quick Start** for per-provider setup detail.
+
+Supported: **Anthropic**, **OpenAI**, **Google Gemini** (API key); **Ollama** for local models (server URL, no key); and **Custom OpenAI-compatible** for vLLM, LM Studio, OpenRouter, and similar (base URL + API key).
+
+### Data
+Query databases or arbitrary REST endpoints; results land in agent context as structured input.
+
+Supported: **Postgres**, **Snowflake**, **BigQuery** (connection string or service-account key), **Generic SQL** for any JDBC-style URL, and **Generic HTTP** for REST APIs (base URL + auth headers or bearer token).
+:::
 
 ### Key Points
 
