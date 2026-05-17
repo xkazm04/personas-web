@@ -17,4 +17,5 @@ export {
   CodeCompare,
   UseCaseGrid,
   TabBlock,
+  CliBlock,
 } from "./blocks";

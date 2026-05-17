@@ -4,6 +4,7 @@ import {
   ArchitectureDiagram,
   Callout,
   Checklist,
+  CliBlock,
   CodeCompare,
   CompareBlock,
   FeatureHighlight,
@@ -28,13 +29,10 @@ export function parseCustomBlock(
   if (blockType === "usecases") return parseUseCases(innerLines);
   if (blockType === "code-compare") return parseCodeCompare(innerLines);
   if (blockType === "tabs") return parseTabs(innerLines, keyBase);
+  if (blockType === "cli") return <CliBlock lines={innerLines} />;
   if (["tip", "warning", "info", "success"].includes(blockType)) {
     const content = innerLines.filter((line) => line.trim()).join(" ").trim();
-    return (
-      <Callout type={blockType}>
-        <p>{parseInline(content, keyBase)}</p>
-      </Callout>
-    );
+    return <Callout type={blockType}><p>{parseInline(content, keyBase)}</p></Callout>;
   }
   return null;
 }
