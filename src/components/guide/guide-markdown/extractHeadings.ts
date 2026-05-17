@@ -4,6 +4,7 @@ export interface GuideHeading {
   id: string;
   text: string;
   depth: 1 | 2 | 3 | 4;
+  tabLabels?: string[];
 }
 
 export function extractHeadings(content: string): GuideHeading[] {
@@ -11,8 +12,15 @@ export function extractHeadings(content: string): GuideHeading[] {
   const headings: GuideHeading[] = [];
   const usedSlugs = new Map<string, number>();
   let inCodeFence = false;
-  let inCustomBlock = false;
+  let blockType: string | null = null;
   let fallbackKey = 0;
+
+  const attachTab = (label: string) => {
+    if (headings.length === 0) return;
+    const last = headings[headings.length - 1];
+    if (!last.tabLabels) last.tabLabels = [];
+    last.tabLabels.push(label);
+  };
 
   for (const line of lines) {
     const trimmed = line.trimStart();
@@ -21,11 +29,26 @@ export function extractHeadings(content: string): GuideHeading[] {
       continue;
     }
     if (inCodeFence) continue;
-    if (trimmed.startsWith(":::")) {
-      inCustomBlock = !inCustomBlock;
+    const openMatch = trimmed.match(/^:::(\w[\w-]*)$/);
+    if (openMatch && blockType === null) {
+      blockType = openMatch[1];
       continue;
     }
-    if (inCustomBlock) continue;
+    if (trimmed === ":::" && blockType !== null) {
+      blockType = null;
+      continue;
+    }
+    if (blockType !== null) {
+      // Inside any custom block. For :::tabs, capture tab-label headings so
+      // the TOC can surface them as informational chips on the parent
+      // heading. Other block types (steps/keys/callouts/etc.) intentionally
+      // produce no TOC entries.
+      if (blockType === "tabs") {
+        const tabMatch = line.match(/^###?\s+(.+)$/);
+        if (tabMatch) attachTab(tabMatch[1].trim());
+      }
+      continue;
+    }
 
     const match = line.match(/^(#{1,4})\s+(.+)$/);
     if (!match) continue;

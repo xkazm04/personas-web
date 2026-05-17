@@ -41,6 +41,16 @@ export default function TopicTOC({ headings, label }: TopicTOCProps) {
               >
                 {heading.text}
               </a>
+              {heading.tabLabels && heading.tabLabels.length > 0 && (
+                <p
+                  className={`pb-1 text-xs italic text-muted-dark/60 ${
+                    heading.depth === 3 ? "pl-6" : "pl-3"
+                  }`}
+                  aria-hidden="true"
+                >
+                  tabs: {heading.tabLabels.join(" · ")}
+                </p>
+              )}
             </li>
           );
         })}

@@ -128,6 +128,16 @@ export default function MobileTopicTOC({ headings }: MobileTopicTOCProps) {
                           aria-hidden
                         />
                       </button>
+                      {heading.tabLabels && heading.tabLabels.length > 0 && (
+                        <p
+                          className={`pb-2 text-xs italic text-muted-dark/60 ${
+                            heading.depth === 3 ? "pl-8" : "pl-4"
+                          }`}
+                          aria-hidden="true"
+                        >
+                          tabs: {heading.tabLabels.join(" · ")}
+                        </p>
+                      )}
                     </li>
                   );
                 })}
