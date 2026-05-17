@@ -34,7 +34,6 @@ export const PREVIEW_REGISTRY: Record<string, ComponentType> = {
   changelog: dynamic(() => import("@/components/sections/Changelog")),
   roadmap: dynamic(() => import("@/components/sections/roadmap")),
   "feature-voting": dynamic(() => import("@/components/sections/feature-voting")),
-  comparison: dynamic(() => import("@/components/sections/comparison-table")),
   footer: dynamic(() => import("@/components/sections/Footer")),
 };
 // Sections that require runtime props (e.g. connections-catalog needs

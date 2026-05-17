@@ -83,7 +83,6 @@ export default function BlogArticle({
               labels={{
                 seeItInAction: t.blogPage.seeItInAction,
                 browseTemplates: t.blogPage.browseTemplates,
-                comparePlatforms: t.blogPage.comparePlatforms,
               }}
             />
           </motion.article>

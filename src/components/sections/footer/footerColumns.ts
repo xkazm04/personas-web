@@ -19,7 +19,6 @@ export function getFooterColumns(t: Translations) {
               { label: t.nav.how, href: "/how" },
               { label: t.nav.blog, href: "/blog" },
               { label: t.nav.connections, href: "/connections" },
-              { label: t.nav.compare, href: "/compare" },
               { label: t.nav.community, href: "/community" },
               { label: t.nav.roadmap, href: "/roadmap" },
             ],

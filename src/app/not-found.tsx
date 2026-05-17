@@ -1,7 +1,7 @@
 import Link from "next/link";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/sections/Footer";
-import { Search, Home, BookOpen, Download, ArrowRight, Puzzle, BarChart3, Shield } from "lucide-react";
+import { Home, BookOpen, Download, ArrowRight, Puzzle, BarChart3, Shield } from "lucide-react";
 
 const POPULAR_PAGES = [
   { label: "Home", href: "/", icon: Home, color: "#06b6d4" },
@@ -10,7 +10,6 @@ const POPULAR_PAGES = [
   { label: "Guide", href: "/guide", icon: BookOpen, color: "#fbbf24" },
   { label: "Templates", href: "/templates", icon: Puzzle, color: "#06b6d4" },
   { label: "Download", href: "/#download", icon: Download, color: "#34d399" },
-  { label: "Compare", href: "/compare", icon: Search, color: "#a855f7" },
   { label: "Security", href: "/security", icon: Shield, color: "#f43f5e" },
 ];
 

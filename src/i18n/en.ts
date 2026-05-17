@@ -15,7 +15,6 @@
     security: string;
     blog: string;
     changelog: string;
-    compare: string;
     pricing: string;
     menu: string;
   };
@@ -788,7 +787,6 @@
     continueExploring: string;
     seeItInAction: string;
     browseTemplates: string;
-    comparePlatforms: string;
     postNotFound: string;
     postNotFoundDescription: string;
     browseAllPosts: string;
@@ -848,7 +846,6 @@ export const en: Translations = {
     security: 'Security',
     blog: 'Blog',
     changelog: 'Changelog',
-    compare: 'Compare',
     pricing: 'Pricing',
     menu: 'Menu',
   },
@@ -1725,7 +1722,6 @@ export const en: Translations = {
     continueExploring: 'Continue exploring',
     seeItInAction: 'See it in action',
     browseTemplates: 'Browse templates',
-    comparePlatforms: 'Compare platforms',
     postNotFound: 'Blog post not found',
     postNotFoundDescription: "We couldn't find the article you're looking for. It may have been renamed or moved.",
     browseAllPosts: 'Browse all posts',

@@ -1,7 +1,7 @@
 "use client";
 
 import { motion } from "framer-motion";
-import { ArrowRight, Shield } from "lucide-react";
+import { Shield } from "lucide-react";
 import Link from "next/link";
 
 import GradientText from "@/components/GradientText";
@@ -141,13 +141,6 @@ export default function SecurityPage() {
               >
                 <Shield className="h-4 w-4" />
                 Download Free
-              </Link>
-              <Link
-                href="/compare"
-                className="inline-flex items-center gap-2 rounded-full border border-glass-hover px-8 py-3 text-base font-medium text-muted transition-colors hover:border-white/20 hover:text-foreground"
-              >
-                Compare Security
-                <ArrowRight className="h-4 w-4" />
               </Link>
             </div>
           </motion.div>

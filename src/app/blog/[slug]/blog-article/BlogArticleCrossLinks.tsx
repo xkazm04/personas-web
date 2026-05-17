@@ -4,7 +4,6 @@ import Link from "next/link";
 const CROSS_LINKS = [
   { href: "/#get-started", key: "seeItInAction" },
   { href: "/templates", key: "browseTemplates" },
-  { href: "/compare", key: "comparePlatforms" },
 ] as const;
 
 type CrossLinkLabels = Record<(typeof CROSS_LINKS)[number]["key"], string>;
