@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useId, useMemo, useState } from "react";
 import type { HighlighterGeneric } from "shiki/core";
 
 import { CopyButton } from "./CopyButton";
@@ -9,6 +9,7 @@ interface CodeFenceProps {
   text: string;
   lang?: string;
   lineNumbers?: boolean;
+  highlightLines?: number[];
 }
 
 const SUPPORTED_LANGS = new Set([
@@ -84,9 +85,22 @@ const LINE_NUMBER_CSS = `
 }
 `;
 
-export function CodeFence({ text, lang, lineNumbers }: CodeFenceProps) {
+function buildHighlightCss(scope: string, lines: number[]): string {
+  if (lines.length === 0) return "";
+  const selectors = lines.map((n) => `.${scope} pre code .line:nth-of-type(${n})`).join(", ");
+  return `${selectors} { background: rgba(245, 158, 11, 0.08); box-shadow: inset 3px 0 rgba(245, 158, 11, 0.6); }`;
+}
+
+export function CodeFence({ text, lang, lineNumbers, highlightLines }: CodeFenceProps) {
   const [html, setHtml] = useState<string | null>(null);
   const normalized = normalizeLang(lang);
+  const rawScope = useId();
+  // useId returns ":r0:" style identifiers — strip non-class-safe chars.
+  const scope = useMemo(() => `cf-${rawScope.replace(/[^a-zA-Z0-9_-]/g, "")}`, [rawScope]);
+  const highlightCss = useMemo(
+    () => buildHighlightCss(scope, highlightLines ?? []),
+    [scope, highlightLines],
+  );
 
   useEffect(() => {
     if (!normalized) return;
@@ -113,23 +127,28 @@ export function CodeFence({ text, lang, lineNumbers }: CodeFenceProps) {
   }, [text, normalized]);
 
   const plainLines = text.split("\n");
+  const wrapperClass = [
+    scope,
+    lineNumbers ? "shiki-ln" : null,
+  ]
+    .filter(Boolean)
+    .join(" ");
 
   return (
     <div className="group relative mb-4 overflow-x-auto rounded-xl border border-glass bg-white/[0.03]">
       {lineNumbers ? <style>{LINE_NUMBER_CSS}</style> : null}
+      {highlightCss ? <style>{highlightCss}</style> : null}
       <div className="flex items-center justify-between px-4 pt-2">
         {lang ? <div className="select-none font-mono text-base text-muted-dark/60">{lang}</div> : <div />}
         <CopyButton text={text} />
       </div>
       {html ? (
         <div
-          className={`shiki-output [&_pre]:!bg-transparent [&_pre]:!p-4 [&_pre]:!pt-2 [&_pre]:font-mono [&_pre]:text-base [&_pre]:leading-relaxed [&_pre]:overflow-x-auto${
-            lineNumbers ? " shiki-ln" : ""
-          }`}
+          className={`shiki-output ${wrapperClass} [&_pre]:!bg-transparent [&_pre]:!p-4 [&_pre]:!pt-2 [&_pre]:font-mono [&_pre]:text-base [&_pre]:leading-relaxed [&_pre]:overflow-x-auto`}
           dangerouslySetInnerHTML={{ __html: html }}
         />
-      ) : lineNumbers ? (
-        <div className={`shiki-ln`}>
+      ) : (
+        <div className={wrapperClass}>
           <pre className="p-4 pt-2 font-mono text-base leading-relaxed text-muted-dark">
             <code>
               {plainLines.map((line, i) => (
@@ -138,10 +157,6 @@ export function CodeFence({ text, lang, lineNumbers }: CodeFenceProps) {
             </code>
           </pre>
         </div>
-      ) : (
-        <pre className="p-4 pt-2 font-mono text-base leading-relaxed text-muted-dark">
-          <code>{text}</code>
-        </pre>
       )}
     </div>
   );

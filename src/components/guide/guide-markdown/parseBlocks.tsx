@@ -1,6 +1,7 @@
 import React, { type ReactNode } from "react";
 
 import { CodeFence, MarkdownTable } from "../GuideBlocks";
+import { expandLineRanges } from "./expandLineRanges";
 import { HeadingAnchor, slugifyHeading } from "./HeadingAnchor";
 import { parseCustomBlock } from "./parseCustomBlock";
 import { parseInline } from "./parseInline";
@@ -36,21 +37,18 @@ export function parseBlocks(lines: string[], opts: { copyAnchorLabel?: string } 
 
     if (line.trimStart().startsWith("```")) {
       const fence = line.trim().slice(3).trim();
-      const [rawLang, ...modifiers] = fence.split(":");
+      const hlMatch = fence.match(/\{hl=([^}]+)\}/);
+      const stripped = hlMatch ? fence.replace(hlMatch[0], "").trim() : fence;
+      const [rawLang, ...modifiers] = stripped.split(":");
       const lineNumbers = modifiers.some((m) => m === "line-numbers" || m === "ln");
+      const highlightLines = hlMatch ? expandLineRanges(hlMatch[1]) : undefined;
       const codeLines: string[] = [];
       index++;
       while (index < lines.length && !lines[index].trimStart().startsWith("```")) {
         codeLines.push(lines[index++]);
       }
       index++;
-      emit(
-        <CodeFence
-          text={codeLines.join("\n")}
-          lang={rawLang || undefined}
-          lineNumbers={lineNumbers || undefined}
-        />,
-      );
+      emit(<CodeFence text={codeLines.join("\n")} lang={rawLang || undefined} lineNumbers={lineNumbers || undefined} highlightLines={highlightLines} />);
       continue;
     }
 
