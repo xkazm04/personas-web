@@ -71,8 +71,8 @@ export default function TopicView({ category, topic, content, initialHeadings, p
     <div className="px-6 pb-24 pt-9 lg:pt-0">
       <ReadingProgress />
       <MobileTopicTOC headings={headings} />
-      <div className="mx-auto max-w-3xl lg:max-w-6xl lg:grid lg:grid-cols-[minmax(0,1fr)_14rem] lg:gap-12">
-        <div className="min-w-0 lg:max-w-3xl">
+      <div className="mx-auto max-w-3xl lg:max-w-[80rem] lg:grid lg:grid-cols-[minmax(0,1fr)_14rem] lg:gap-12">
+        <div className="min-w-0 lg:max-w-[52rem]">
         {/* Breadcrumb */}
         <nav aria-label="Breadcrumb" className="mt-8 flex items-center gap-1.5 text-base text-muted-dark">
           <Link href="/guide" className="transition-colors hover:text-brand-cyan">Guide</Link>
