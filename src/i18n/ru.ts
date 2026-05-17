@@ -412,6 +412,8 @@ export const ru: Translations = {
     health: "Health",
     memoryInsights: "Memory Insights",
     suggestion: "suggestion",
+    suggestions: "предложений",
+    dismissAction: "Отклонить: {title}",
     allSuggestionsDismissed: "All suggestions dismissed. Check back later.",
     noDataAvailable: "No data available yet",
     errors: "Errors",

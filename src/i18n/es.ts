@@ -412,6 +412,8 @@ export const es: Translations = {
     health: "Health",
     memoryInsights: "Memory Insights",
     suggestion: "suggestion",
+    suggestions: "sugerencias",
+    dismissAction: "Descartar: {title}",
     allSuggestionsDismissed: "All suggestions dismissed. Check back later.",
     noDataAvailable: "No data available yet",
     errors: "Errors",

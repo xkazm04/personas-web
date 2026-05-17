@@ -412,6 +412,8 @@ export const bn: Translations = {
     health: "Health",
     memoryInsights: "Memory Insights",
     suggestion: "suggestion",
+    suggestions: "পরামর্শ",
+    dismissAction: "বাতিল করুন: {title}",
     allSuggestionsDismissed: "All suggestions dismissed. Check back later.",
     noDataAvailable: "No data available yet",
     errors: "Errors",

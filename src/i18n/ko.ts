@@ -412,6 +412,8 @@ export const ko: Translations = {
     health: "Health",
     memoryInsights: "Memory Insights",
     suggestion: "suggestion",
+    suggestions: "제안",
+    dismissAction: "닫기: {title}",
     allSuggestionsDismissed: "All suggestions dismissed. Check back later.",
     noDataAvailable: "No data available yet",
     errors: "Errors",

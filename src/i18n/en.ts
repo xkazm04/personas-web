@@ -330,6 +330,8 @@
     health: string;
     memoryInsights: string;
     suggestion: string;
+    suggestions: string;
+    dismissAction: string;
     allSuggestionsDismissed: string;
     noDataAvailable: string;
     errors: string;
@@ -1248,6 +1250,8 @@ export const en: Translations = {
     health: "Health",
     memoryInsights: "Memory Insights",
     suggestion: "suggestion",
+    suggestions: "suggestions",
+    dismissAction: "Dismiss: {title}",
     allSuggestionsDismissed: "All suggestions dismissed. Check back later.",
     noDataAvailable: "No data available yet",
     errors: "Errors",
