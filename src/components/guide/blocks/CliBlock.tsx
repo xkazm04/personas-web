@@ -7,9 +7,20 @@ interface CliBlockProps {
   shell?: string;
 }
 
+type OutputKind = "neutral" | "success" | "error" | "warning";
+
 interface CliLine {
   kind: "command" | "output";
   text: string;
+  output?: OutputKind;
+}
+
+function detectOutputKind(text: string): OutputKind {
+  const trimmed = text.trimStart();
+  if (trimmed.startsWith("✓") || /^success:/i.test(trimmed)) return "success";
+  if (trimmed.startsWith("✗") || /^(error|err):/i.test(trimmed)) return "error";
+  if (trimmed.startsWith("⚠") || /^(warning|warn):/i.test(trimmed)) return "warning";
+  return "neutral";
 }
 
 function classify(lines: string[]): CliLine[] {
@@ -17,9 +28,16 @@ function classify(lines: string[]): CliLine[] {
     const trimmed = line.trimStart();
     if (trimmed.startsWith("$ ")) return { kind: "command", text: trimmed.slice(2) };
     if (trimmed === "$") return { kind: "command", text: "" };
-    return { kind: "output", text: line };
+    return { kind: "output", text: line, output: detectOutputKind(line) };
   });
 }
+
+const OUTPUT_CLASS: Record<OutputKind, string> = {
+  neutral: "text-muted-dark/80",
+  success: "text-emerald-400",
+  error: "text-rose-400",
+  warning: "text-amber-400",
+};
 
 export function CliBlock({ lines, shell }: CliBlockProps) {
   const classified = classify(lines);
@@ -42,13 +60,11 @@ export function CliBlock({ lines, shell }: CliBlockProps) {
             <span key={i} className="flex">
               {line.kind === "command" ? (
                 <>
-                  <span aria-hidden="true" className="mr-2 select-none text-muted-dark/60">
-                    $
-                  </span>
+                  <span aria-hidden="true" className="mr-2 shrink-0 select-none text-muted-dark/60">$</span>
                   <span className="text-brand-cyan">{line.text}</span>
                 </>
               ) : (
-                <span className="text-muted-dark/80">{line.text || " "}</span>
+                <span className={OUTPUT_CLASS[line.output ?? "neutral"]}>{line.text || " "}</span>
               )}
             </span>
           ))}
