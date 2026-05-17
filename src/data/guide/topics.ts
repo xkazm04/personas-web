@@ -7,8 +7,8 @@ export const GUIDE_TOPICS: GuideTopic[] = [
     categoryId: "getting-started",
     title: "Installing Personas",
     description:
-      "How to download and install on Windows, macOS, or Linux. The installer is a single file — download it, run it, and you're ready to go in under a minute.",
-    tags: ["getting-started", "install", "setup", "download", "windows", "mac", "linux"],
+      "How to download and install Personas on Windows. The installer is a single file — install Claude Code first, then run the Personas installer and you're ready to go in under a minute. macOS and Linux builds are on the roadmap.",
+    tags: ["getting-started", "install", "setup", "download", "windows", "claude-code", "roadmap"],
   },
   {
     id: "creating-your-first-agent",

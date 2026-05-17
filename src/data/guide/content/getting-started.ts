@@ -2,40 +2,45 @@ export const content: Record<string, string> = {
   "installing-personas": `
 ## Installing Personas
 
-Getting Personas on your computer takes about a minute. Grab the installer for your operating system — Windows, macOS, or Linux — from the download page and run it. The installer is a single file with no setup wizard; double-click, approve the security prompt, and the app launches. Updates are delivered automatically in the background, so you'll always have the latest version without doing anything.
+Personas runs on **Windows** today. macOS and Linux builds are on the roadmap — see the cards below for current platform availability.
 
-The first time the app opens, you land on the welcome screen. From there you can either jump straight into building an agent (Personas will offer to set up an AI provider when you need one) or open the credential vault first if you already have API keys you want to store. Both paths work.
+Getting Personas on your Windows machine takes about a minute. Download the installer, run it, approve the SmartScreen prompt, and the app launches. Updates are delivered automatically in the background, so you'll always have the latest version without doing anything.
 
-:::steps
-1. **Download the installer** — pick the right file for your OS (NSIS \`.exe\` on Windows, \`.dmg\` on macOS, \`.AppImage\` or \`.deb\` on Linux)
-2. **Run the installer** — double-click on Windows, drag to Applications on macOS, execute on Linux
-3. **Approve security prompts** — your OS may ask you to confirm; this is normal for new desktop software
-4. **Launch Personas** — the welcome screen opens with a guided tour you can take or skip
-5. **Optional: connect a provider** — paste an API key on the Connections page if you want to be ready to build immediately
+:::cards
+[available] Windows | The Windows installer is a 53 MB NSIS \`.exe\`. Code-signed, auto-updating, runs on Windows 10 or newer (64-bit). | /imgs/get-started/platform/windows
+[roadmap] macOS | Native universal \`.dmg\` for Apple Silicon and Intel is in development. Track progress on the roadmap. | /imgs/get-started/platform/mac
+[roadmap] Linux | \`.AppImage\` and \`.deb\` builds for Ubuntu, Debian, Fedora, and Arch are in development. Track progress on the roadmap. | /imgs/get-started/platform/linux
 :::
 
-:::tabs
-### Windows
-**Requirements:** Windows 10 or newer, 64-bit. **Installer:** 53 MB NSIS \`.exe\`. Double-click to run; SmartScreen may ask you to confirm the publisher the first time — the installer is code-signed, so this is just your OS being cautious with new software.
+### Precondition: Install Claude Code
 
-After install, the bundled binary is around 90 MB. Auto-updates run silently in the background.
+Personas builds on top of **Claude Code** for its agent execution engine, so Claude Code needs to be installed first. The Claude Code installer is a single file from Anthropic and takes under a minute.
 
-### macOS
-**Requirements:** macOS 12 (Monterey) or newer. Runs natively on Intel and Apple Silicon. **Installer:** universal \`.dmg\`. Open the disk image, drag Personas to your Applications folder, eject the disk.
-
-The first launch goes through Gatekeeper — confirm and Personas opens. Auto-updates use Apple's standard signed-package flow.
-
-### Linux
-**Requirements:** glibc 2.28+. Tested on Ubuntu, Debian, Fedora, and Arch. **Installer:** \`.AppImage\` (universal, works everywhere) or \`.deb\` (Debian / Ubuntu).
-
-For AppImage: \`chmod +x Personas-*.AppImage\` then run it. For deb: \`sudo dpkg -i Personas-*.deb\`. Launch from your application menu or by running \`personas\` in a terminal.
+:::steps
+1. **Open the Claude Code installer page** — head to [claude.com/claude-code](https://claude.com/claude-code) and follow the install flow for your platform
+2. **Confirm the install** — run \`claude --version\` in a terminal to verify the binary is on your PATH
+3. **Continue with Personas below** — Claude Code only needs to be installed once; subsequent Personas updates don't require reinstalling it
 :::
 
 :::info
-Auto-updates are delta-only on every platform, so they're typically much smaller than the original installer.
+If you already have Claude Code installed for other work, skip this section — Personas will pick up your existing install automatically.
 :::
 
-### Verifying Your Install
+### Windows install
+
+:::steps
+1. **Download the installer** — grab the NSIS \`.exe\` from the download page
+2. **Double-click to run** — SmartScreen may ask you to confirm the publisher the first time; the installer is code-signed, so it's safe to approve
+3. **Approve security prompts** — Windows may ask you to allow the install; this is standard for new desktop software
+4. **Tick "Add to PATH"** — optional but recommended so you can launch and script Personas from a terminal
+5. **Launch Personas** — the welcome screen opens with a guided tour you can take or skip
+:::
+
+After install, the bundled binary is around 90 MB. Auto-updates run silently in the background, delta-only — typically much smaller than the original installer.
+
+The first time the app opens, you land on the welcome screen. From there you can either jump straight into building an agent (Personas will offer to set up an AI provider when you need one) or open the credential vault first if you already have API keys you want to store. Both paths work.
+
+### Verifying your install
 
 Once Personas is installed, you can confirm it's reachable from your terminal. This is handy for scripting, CI integration, or just a quick sanity check after a fresh install.
 
@@ -49,14 +54,10 @@ Print the available flags:
 $ personas --help
 :::
 
-If your shell can't find the \`personas\` command, the desktop launcher still works — the CLI is an optional convenience that the installer wires up on Linux automatically and on Windows when you tick "Add to PATH" during setup. On **macOS**, you can also launch the app from any terminal with the standard \`open\` command:
-
-:::cli
-$ open -a Personas
-:::
+If your shell can't find the \`personas\` command, the desktop launcher still works — the CLI is an optional convenience that the installer wires up only when you tick "Add to PATH" during setup. Re-run the installer and tick that option if you want it later.
 
 :::tip
-If you run into a Windows SmartScreen or macOS Gatekeeper warning, it's your OS being cautious with new software. Approve it and you're all set — the installer is code-signed.
+If you run into a Windows SmartScreen warning, it's your OS being cautious with new software. Approve it and you're all set — the installer is code-signed.
 :::
   `,
 
