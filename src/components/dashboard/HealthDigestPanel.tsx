@@ -9,7 +9,9 @@ import { relativeTime } from "@/lib/format";
 import StalenessIndicator from "./StalenessIndicator";
 import { useTranslation } from "@/i18n/useTranslation";
 
-/** Resolve score to a Tailwind color token class. */
+/** Resolve score to a Tailwind color token class.
+ * Follows the canonical 4-tier score band recipe in `.claude/design.md` §2
+ * so the home page's fleet health reads the same as leaderboard/SLA scores. */
 function scoreColor(score: number): {
   text: string;
   stroke: string;
@@ -25,15 +27,22 @@ function scoreColor(score: number): {
     };
   if (score >= 60)
     return {
+      text: "text-cyan-400",
+      stroke: "stroke-cyan-400",
+      bg: "bg-cyan-400",
+      hex: "#06b6d4",
+    };
+  if (score >= 40)
+    return {
       text: "text-amber-400",
       stroke: "stroke-amber-400",
       bg: "bg-amber-400",
       hex: "#fbbf24",
     };
   return {
-    text: "text-red-400",
-    stroke: "stroke-red-400",
-    bg: "bg-red-400",
+    text: "text-rose-400",
+    stroke: "stroke-rose-400",
+    bg: "bg-rose-400",
     hex: "#f43f5e",
   };
 }
@@ -164,7 +173,7 @@ export default function HealthDigestPanel() {
 
               {/* Issue count badge */}
               {agent.issues > 0 ? (
-                <span className="flex items-center gap-0.5 rounded-full border border-red-500/20 bg-red-500/8 px-1.5 py-0.5 text-sm font-medium text-red-400">
+                <span className="flex items-center gap-0.5 rounded-full border border-rose-500/20 bg-rose-500/8 px-1.5 py-0.5 text-sm font-medium text-rose-400">
                   <AlertCircle className="h-2.5 w-2.5" />
                   {agent.issues}
                 </span>
