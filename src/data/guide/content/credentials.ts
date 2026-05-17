@@ -56,42 +56,52 @@ Vault security is binary: it's either intact (OS account valid, keyring readable
   "adding-a-new-credential": `
 ## Adding a New Credential
 
-Open Connections → Credentials and click \`Add Credential\`. Pick a category (email, cloud storage, payments, communication, developer tools, CRM, AI provider, generic) — the picker shows matching pre-built connectors that auto-configure auth type, required fields, and label hints. If your service isn't in the catalog, pick "Custom" and define the credential yourself (name, type, fields).
+Open **Connections → Credentials** and click \`Add Credential\`. The picker shows the connector catalog — 40+ pre-configured services across roles like source control, CI/CD, cloud storage, email delivery, payment processing, chat messaging, CRM, AI platforms, error monitoring, incident management, browser automation, and more. Each connector auto-configures its required auth type, fields, validation endpoint, and any service-specific quirks.
 
-For OAuth-supporting services, the flow opens a browser window to the provider's consent screen. For API-key services, paste the key into the secure input. Either way, the credential lands encrypted and the picker offers to apply it to any agents that have an open capability slot in the matching category.
+If your service isn't in the catalog, **AI Discovery** generates a schema for it on the fly — give it the service name (and optionally a docs URL) and it returns an inferred connector definition you can review, edit, and save. Discovered schemas are cached for reuse, so the second time someone adds the same service it's an instant match.
 
-### Step by Step
+### Authentication methods
+
+Personas picks the auth flow automatically based on the connector you choose. Four distinct types are supported:
+
+- **API credentials** — the everyday case: API key, personal access token, bot token, or basic auth. Paste the secret into the secure input and save. For connectors that declare one, Personas runs a no-op healthcheck call right after save to confirm the credential works.
+- **OAuth** — browser consent flow for services that support it (Google, GitHub, Slack, Linear, HubSpot, Twitter/X, Discord, and many more). Click Connect, sign in to the provider, approve specific scopes, and a scoped token + refresh token land encrypted in the vault. Your password never touches Personas.
+- **MCP (Model Context Protocol)** — first-class support for MCP servers as credentials, with \`stdio\` or \`sse\` transport, optional environment variables, and automatic tool discovery from the server's \`tools/list\`.
+- **CLI** — shell-based auth for tools that use their own login command (e.g. \`gcloud auth login\`, \`gh auth login\`). Personas drives the command in a subshell and stores the resulting session token.
+
+### Step by step
 
 :::steps
 1. **Navigate to Connections → Credentials** — sidebar → Connections, then the Credentials tab
 2. **Click Add Credential** — top-right button on the credential list
-3. **Pick a category** — email / storage / payments / etc.; the matching connector catalog filters automatically
-4. **Run the auth flow** — OAuth opens a consent window; API-key services use the secure input field
-5. **Name and save** — give the credential a label you'll recognize ("Stripe Live", "Gmail Personal"); the credential is encrypted with AES-256-GCM and persisted
-6. **Optional: bind to agents now** — the picker shows agents with matching open capabilities; one-click bind avoids hunting them down later
+3. **Pick a connector** — search the catalog by name or filter by role; the picker filters to matches and shows the auth method as a badge
+4. **Run the auth flow** — paste the secret, click Connect for OAuth, wire up the MCP server, or run the CLI command depending on the connector's auth method
+5. **Name and save** — give the credential a label you'll recognize ("Stripe Live", "Gmail Personal"); the credential is encrypted with AES-256-GCM and persisted (one nonce per field, see [Data safety](/guide/credentials/how-personas-keeps-your-data-safe))
+6. **Healthcheck runs automatically** — for connectors that declare one, Personas pings the service with a lightweight no-op call to confirm the credential is live before exposing it to agents
+7. **Optional: bind to agents now** — the picker shows agents with matching open capability slots; one-click bind avoids hunting them down later
 :::
 
-### How It Works
+### OAuth flow in detail
 
-When you click Save, the credential's raw value is encrypted with the vault key derived from the OS keyring, then committed to the credential store. The save returns only the credential ID and label — the raw value is wiped from memory immediately. From this point on, the agent editor's Connectors tab can reference the credential by ID.
+OAuth-supporting services get a one-click **Connect** button instead of a paste-the-key form. The button opens your default browser to the provider's official consent screen — you sign in there using your existing account, review the specific scopes Personas is requesting, and approve to issue a token. The browser window closes automatically, the credential card lists the granted scopes, and you can immediately use it in agents.
 
-### AI Provider Quick Start
+Personas requests **scoped tokens** (the minimum permission set for the integration's stated capability — e.g. Gmail read-only for a summarizer agent, Gmail read+send for an auto-reply agent) and refreshes them in the background using long-lived refresh tokens. You'll typically never see expiry messages from OAuth credentials unless the provider invalidates the refresh token (consent revoked, password changed, security event). When that happens, Personas prompts to re-authenticate; one click re-runs the consent flow.
 
-The four most-common AI providers use plain API keys. Once you have a key, the flow is paste-and-save — Personas recognizes the prefix shape and pre-fills the auth type:
-
-:::tabs
-### OpenAI
-Generate a key at \`platform.openai.com/api-keys\`. Keys start with \`sk-\` (project-scoped keys start with \`sk-proj-\`). Personas validates the key against the OpenAI \`/models\` endpoint on save so you'll know immediately if the paste was off by a character.
-
-### Anthropic
-Generate a key at \`console.anthropic.com\` under **Settings → API Keys**. Keys start with \`sk-ant-\`. Anthropic offers both user-level and workspace-scoped keys; workspace-scoped is the recommended choice for production agents because revocation is independent of your account.
-
-### Google
-Generate a key at \`aistudio.google.com/apikey\`. Keys start with \`AIza\`. The same key works for every Gemini variant — Personas exposes the model picker once the credential is saved so you can switch between Pro / Flash without re-keying.
-
-### Ollama (local)
-No API key needed. Pick **Ollama** in the picker and paste your local server URL (\`http://localhost:11434\` by default). Personas connects, lists the locally-installed models, and lets you use any of them without sending data over the network.
+:::tip
+For services that offer both OAuth and API-key options (e.g. GitHub, Linear), prefer ==OAuth== when available — scopes are tighter, revocation works from the provider side without rotating an API key, and the consent screen documents exactly what the integration can do.
 :::
+
+### MCP servers
+
+Personas treats **Model Context Protocol** servers as first-class credentials. If you already have MCP servers configured in Claude Desktop, Personas auto-discovers them on first run — name, command, args, and env are imported as MCP credentials you can pick up in agent Connectors.
+
+To add a new MCP server manually, pick **MCP** in the Add Credential picker and provide:
+
+- **Package or command** — the npm package name (most servers) or an executable path
+- **Transport** — \`stdio\` for local subprocess (the common case) or \`sse\` for HTTP server-sent events
+- **Environment variables** — any secrets or config the server expects in its env, stored encrypted alongside the credential
+
+Once saved, the server's \`tools/list\` is queried automatically and the resulting tools appear both in the credential playground (so you can call them by hand to verify) and in the agent's Connectors tab as bindable capabilities.
 
 :::warning
 Never paste credentials into agent prompts, code comments, or chat windows. Use the secure credential input field only — anything else risks the raw value being captured in a log, sync, or screenshot.
