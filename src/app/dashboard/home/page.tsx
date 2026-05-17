@@ -83,8 +83,16 @@ export default function DashboardHomePage() {
     return () => clearTimeout(timer);
   }, []);
 
+  // Lazy init keeps new Date() out of the render path (React 19 purity).
+  // The hourly tick lets the greeting cross noon/6pm boundaries without a
+  // page reload — a user who opens at 11:50am sees "Good Afternoon" at 12:00.
+  const [hour, setHour] = useState(() => new Date().getHours());
+  useEffect(() => {
+    const interval = setInterval(() => setHour(new Date().getHours()), 60_000);
+    return () => clearInterval(interval);
+  }, []);
+
   const displayName = user?.user_metadata?.full_name?.split(" ")[0] ?? "there";
-  const hour = new Date().getHours();
   const greeting =
     hour < 12
       ? t.dashboard.greeting.morning
