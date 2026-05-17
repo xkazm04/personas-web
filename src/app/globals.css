@@ -7,7 +7,7 @@
    Themes are selected via html[data-theme], and every dark preset is prefixed
    `dark-…`. Map Tailwind's `dark:` variant onto that scheme so `dark:block`
    et al. flip with manual theme switches, not only OS `prefers-color-scheme`. */
-@custom-variant dark (&:where([data-theme^="dark-"] *, [data-theme^="dark-"]));
+@custom-variant dark (&:where([data-theme^="dark-"] *, [data-theme^="dark-"], .dark *, .dark));
 
 /* ── Bridge shared tokens into Tailwind @theme ──
    Raw values live in packages/tokens/tokens.css — do NOT duplicate here. */
