@@ -83,9 +83,10 @@ export function RecentActivityCard({
               <MotionLink
                 key={execution.id}
                 href="/dashboard/executions"
+                layout={reducedMotion ? false : "position"}
                 initial={pulseInitial}
                 animate={pulseAnimate}
-                transition={{ duration: PULSE_DURATION_S, ease: "easeOut" }}
+                transition={{ duration: PULSE_DURATION_S, ease: "easeOut", layout: { duration: 0.3, ease: "easeOut" } }}
                 className="flex items-center gap-2.5 rounded-lg px-2.5 py-2 transition-colors hover:bg-white/[0.03] focus-ring focus-visible:ring-offset-0"
               >
                 <PersonaAvatar
