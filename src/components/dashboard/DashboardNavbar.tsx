@@ -86,7 +86,7 @@ export default function DashboardNavbar() {
               <LogOut className="h-4 w-4 sm:h-3 sm:w-3" />
             )}
             <span className="hidden sm:inline">
-              {isSigningOut ? "Signing out…" : t.common.signOut}
+              {isSigningOut ? t.common.signingOut : t.common.signOut}
             </span>
           </button>
         </div>

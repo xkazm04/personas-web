@@ -116,6 +116,7 @@ export const fr: Translations = {
     search: 'Rechercher',
     noResults: 'Aucun r\u00e9sultat trouv\u00e9',
     signOut: 'Se d\u00e9connecter',
+    signingOut: 'D\u00e9connexion en cours\u2026',
     signIn: 'Se connecter',
     notifyMe: 'me notifier',
     step: '\u00c9tape',

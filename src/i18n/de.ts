@@ -116,6 +116,7 @@ export const de: Translations = {
     search: 'Suchen',
     noResults: 'Keine Ergebnisse gefunden',
     signOut: 'Abmelden',
+    signingOut: 'Wird abgemeldet…',
     signIn: 'Anmelden',
     notifyMe: 'Benachrichtigen',
     step: 'Schritt',

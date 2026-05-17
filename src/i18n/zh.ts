@@ -116,6 +116,7 @@ export const zh: Translations = {
     search: '\u641C\u7D22',
     noResults: '\u672A\u627E\u5230\u7ED3\u679C',
     signOut: '\u9000\u51FA\u767B\u5F55',
+    signingOut: '\u6B63\u5728\u9000\u51FA\u767B\u5F55\u2026',
     signIn: '\u767B\u5F55',
     notifyMe: '\u901A\u77E5\u6211',
     step: '\u6B65\u9AA4',

@@ -116,6 +116,7 @@ export const cs: Translations = {
     search: 'Hledat',
     noResults: '\u017d\u00e1dn\u00e9 v\u00fdsledky',
     signOut: 'Odhl\u00e1sit se',
+    signingOut: 'Odhla\u0161ov\u00e1n\u00ed\u2026',
     signIn: 'P\u0159ihl\u00e1sit se',
     notifyMe: 'upozornit m\u011b',
     step: 'Krok',

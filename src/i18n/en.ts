@@ -122,6 +122,7 @@
     search: string;
     noResults: string;
     signOut: string;
+    signingOut: string;
     signIn: string;
     notifyMe: string;
     step: string;
@@ -954,6 +955,7 @@ export const en: Translations = {
     search: 'Search',
     noResults: 'No results found',
     signOut: 'Sign out',
+    signingOut: 'Signing out…',
     signIn: 'Sign in',
     notifyMe: 'notify me',
     step: 'Step',

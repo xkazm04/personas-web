@@ -116,6 +116,7 @@ export const id: Translations = {
     search: 'Cari',
     noResults: 'Tidak ada hasil ditemukan',
     signOut: 'Keluar',
+    signingOut: 'Sedang keluar…',
     signIn: 'Masuk',
     notifyMe: 'beritahu saya',
     step: 'Langkah',

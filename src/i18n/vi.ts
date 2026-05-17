@@ -116,6 +116,7 @@ export const vi: Translations = {
     search: 'T\u00ecm ki\u1ebfm',
     noResults: 'Kh\u00f4ng t\u00ecm th\u1ea5y k\u1ebft qu\u1ea3',
     signOut: '\u0110\u0103ng xu\u1ea5t',
+    signingOut: '\u0110ang \u0111\u0103ng xu\u1ea5t\u2026',
     signIn: '\u0110\u0103ng nh\u1eadp',
     notifyMe: 'th\u00f4ng b\u00e1o cho t\u00f4i',
     step: 'B\u01b0\u1edbc',

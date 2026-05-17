@@ -116,6 +116,7 @@ export const ko: Translations = {
     search: '\uac80\uc0c9',
     noResults: '\uacb0\uacfc\ub97c \ucc3e\uc744 \uc218 \uc5c6\uc2b5\ub2c8\ub2e4',
     signOut: '\ub85c\uadf8\uc544\uc6c3',
+    signingOut: '\ub85c\uadf8\uc544\uc6c3 \uc911\u2026',
     signIn: '\ub85c\uadf8\uc778',
     notifyMe: '\uc54c\ub9bc \ubc1b\uae30',
     step: '\ub2e8\uacc4',

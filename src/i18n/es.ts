@@ -116,6 +116,7 @@ export const es: Translations = {
     search: 'Buscar',
     noResults: 'No se encontraron resultados',
     signOut: 'Cerrar sesi\u00f3n',
+    signingOut: 'Cerrando sesi\u00f3n\u2026',
     signIn: 'Iniciar sesi\u00f3n',
     notifyMe: 'notif\u00edcame',
     step: 'Paso',

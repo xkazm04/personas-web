@@ -116,6 +116,7 @@ export const ja: Translations = {
     search: '\u691c\u7d22',
     noResults: '\u7d50\u679c\u304c\u898b\u3064\u304b\u308a\u307e\u305b\u3093',
     signOut: '\u30b5\u30a4\u30f3\u30a2\u30a6\u30c8',
+    signingOut: '\u30b5\u30a4\u30f3\u30a2\u30a6\u30c8\u4e2d\u2026',
     signIn: '\u30b5\u30a4\u30f3\u30a4\u30f3',
     notifyMe: '\u901a\u77e5\u3059\u308b',
     step: '\u30b9\u30c6\u30c3\u30d7',
