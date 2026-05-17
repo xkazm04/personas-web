@@ -303,17 +303,52 @@ When an agent's Connectors tab needs a capability ("email-send", "cloud-storage-
 
 ### Connector Categories
 
-| Category | Example services | Auth |
-|---|---|---|
-| Email | Gmail, Outlook, IMAP/SMTP | OAuth / API |
-| Cloud Storage | Google Drive, Dropbox, OneDrive, S3, Local Drive | OAuth / API |
-| Payments | Stripe, PayPal, Square | API key |
-| Social | Twitter/X, LinkedIn, Facebook, Mastodon | OAuth |
-| Developer Tools | GitHub, GitLab, Jira, Linear, Sentry | OAuth / API |
-| Communication | Slack, Discord, Microsoft Teams, Telegram, generic webhook | OAuth / bot token |
-| CRM | Salesforce, HubSpot, Pipedrive | OAuth / API |
-| AI Providers | Anthropic, OpenAI, Google, local Ollama, custom OpenAI-compatible | API |
-| Data | Postgres, Snowflake, BigQuery, generic SQL/HTTP | URL + credentials |
+:::tabs
+### Email
+Receive, parse, send, and search messages. Triage inboxes, summarize threads, file invoices, route replies.
+
+Supported: **Gmail** (OAuth or app password), **Outlook / Microsoft 365** (OAuth), and any **IMAP / SMTP** provider (server URL + username + password).
+
+### Cloud Storage
+Read and write files for agents that ingest documents, save outputs, or sync results to a shared drive.
+
+Supported: **Google Drive**, **Dropbox**, **OneDrive** (OAuth), any **S3-compatible** store like AWS S3, R2, B2, or MinIO (access key + secret), and **Local Drive** for files already on this machine (filesystem path, no credential required).
+
+### Payments
+Read transactions, watch for new charges, refund or capture, generate reports.
+
+Supported: **Stripe** with live and test segregation, **PayPal**, **Square** — all via API key.
+
+### Social
+Post, schedule, read engagement, run analytics on social accounts.
+
+Supported: **Twitter / X**, **LinkedIn**, **Facebook**, **Mastodon** — all via OAuth.
+
+### Developer Tools
+Watch issues, open PRs, attach builds, mirror Sentry alerts into your agent flow.
+
+Supported: **GitHub** and **GitLab** (OAuth or fine-grained PAT), **Jira** and **Linear** (OAuth), and **Sentry** (auth token).
+
+### Communication
+Inbound webhooks for triggers, outbound channel-delivery for agent outputs, two-way bot interactions.
+
+Supported: **Slack** and **Microsoft Teams** (OAuth + bot token), **Discord** and **Telegram** (bot token), and the **Generic Webhook** type for any HTTP endpoint (URL only, no credential required).
+
+### CRM
+Read contacts, sync deals, automate stage transitions, watch for new leads.
+
+Supported: **Salesforce**, **HubSpot**, **Pipedrive** — OAuth (recommended) or API key.
+
+### AI Providers
+The model endpoints your agents call. See **Adding a New Credential** → **AI Provider Quick Start** for per-provider setup detail.
+
+Supported: **Anthropic**, **OpenAI**, **Google Gemini** (API key); **Ollama** for local models (server URL, no key); and **Custom OpenAI-compatible** for vLLM, LM Studio, OpenRouter, and similar (base URL + API key).
+
+### Data
+Query databases or arbitrary REST endpoints; results land in agent context as structured input.
+
+Supported: **Postgres**, **Snowflake**, **BigQuery** (connection string or service-account key), **Generic SQL** for any JDBC-style URL, and **Generic HTTP** for REST APIs (base URL + auth headers or bearer token).
+:::
 
 ### Key Points
 
