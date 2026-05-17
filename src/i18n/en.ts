@@ -200,6 +200,7 @@
       evening: string;
     };
     agentsStatus: string;
+    lastSeen: string;
     pendingReviews: string;
     totalExecutions: string;
     successRate: string;
@@ -1115,6 +1116,7 @@ export const en: Translations = {
       evening: 'Good Evening',
     },
     agentsStatus: "Here's what's happening with your agents",
+    lastSeen: 'Last seen',
     pendingReviews: 'pending reviews',
     totalExecutions: 'total executions',
     successRate: 'success rate',

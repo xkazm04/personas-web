@@ -282,6 +282,7 @@ export const vi: Translations = {
       evening: 'Ch\u00e0o bu\u1ed5i t\u1ed1i',
     },
     agentsStatus: '\u0110\u00e2y l\u00e0 nh\u1eefng g\u00ec \u0111ang x\u1ea3y ra v\u1edbi c\u00e1c t\u00e1c nh\u00e2n c\u1ee7a b\u1ea1n',
+    lastSeen: 'L\u1ea7n truy c\u1eadp g\u1ea7n nh\u1ea5t',
     pendingReviews: '\u0111\u00e1nh gi\u00e1 ch\u1edd x\u1eed l\u00fd',
     totalExecutions: 't\u1ed5ng s\u1ed1 l\u1ea7n th\u1ef1c thi',
     successRate: 't\u1ef7 l\u1ec7 th\u00e0nh c\u00f4ng',

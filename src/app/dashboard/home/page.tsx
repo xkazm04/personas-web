@@ -8,6 +8,7 @@ import FleetOptimizationCard from "@/components/dashboard/FleetOptimizationCard"
 import { useTranslation } from "@/i18n/useTranslation";
 import { api } from "@/lib/api";
 import { fadeUp, staggerContainer } from "@/lib/animations";
+import { relativeTime } from "@/lib/format";
 import {
   MOCK_FLEET_RECOMMENDATION,
   MOCK_GLOBAL_EXECUTIONS,
@@ -25,6 +26,8 @@ import { DashboardIntelligencePanels } from "./home-page/DashboardIntelligencePa
 import { DashboardStatsBadges } from "./home-page/DashboardStatsBadges";
 import { RecentActivityCard } from "./home-page/RecentActivityCard";
 import { TrafficErrorsCard } from "./home-page/TrafficErrorsCard";
+import { useGreeting } from "./home-page/useGreeting";
+import { useLastVisit } from "./home-page/useLastVisit";
 
 export default function DashboardHomePage() {
   const { t } = useTranslation();
@@ -83,22 +86,9 @@ export default function DashboardHomePage() {
     return () => clearTimeout(timer);
   }, []);
 
-  // Lazy init keeps new Date() out of the render path (React 19 purity).
-  // The hourly tick lets the greeting cross noon/6pm boundaries without a
-  // page reload — a user who opens at 11:50am sees "Good Afternoon" at 12:00.
-  const [hour, setHour] = useState(() => new Date().getHours());
-  useEffect(() => {
-    const interval = setInterval(() => setHour(new Date().getHours()), 60_000);
-    return () => clearInterval(interval);
-  }, []);
-
+  const greeting = useGreeting(t.dashboard.greeting);
+  const lastVisitedAt = useLastVisit();
   const displayName = user?.user_metadata?.full_name?.split(" ")[0] ?? "there";
-  const greeting =
-    hour < 12
-      ? t.dashboard.greeting.morning
-      : hour < 18
-        ? t.dashboard.greeting.afternoon
-        : t.dashboard.greeting.evening;
 
   const recentExecs = useMemo(() => executions.slice(0, 12), [executions]);
   const stats = useMemo(() => {
@@ -136,6 +126,11 @@ export default function DashboardHomePage() {
         <p className="mt-1 text-base text-muted-dark">
           {t.dashboard.agentsStatus}
         </p>
+        {lastVisitedAt !== null && (
+          <p className="mt-1 text-sm text-muted-dark">
+            {t.dashboard.lastSeen} {relativeTime(new Date(lastVisitedAt).toISOString())}
+          </p>
+        )}
       </motion.div>
 
       <motion.div variants={fadeUp} className="mb-8 flex flex-wrap gap-3">

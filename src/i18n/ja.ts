@@ -282,6 +282,7 @@ export const ja: Translations = {
       evening: '\u3053\u3093\u3070\u3093\u306f',
     },
     agentsStatus: '\u30a8\u30fc\u30b8\u30a7\u30f3\u30c8\u306e\u72b6\u6cc1\u306f\u3053\u3061\u3089\u3067\u3059',
+    lastSeen: '\u6700\u7d42\u30a2\u30af\u30bb\u30b9',
     pendingReviews: '\u4fdd\u7559\u4e2d\u306e\u30ec\u30d3\u30e5\u30fc',
     totalExecutions: '\u7dcf\u5b9f\u884c\u6570',
     successRate: '\u6210\u529f\u7387',

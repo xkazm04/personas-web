@@ -282,6 +282,7 @@ export const zh: Translations = {
       evening: '\u665A\u4E0A\u597D',
     },
     agentsStatus: '\u4EE5\u4E0B\u662F\u60A8\u667A\u80FD\u4F53\u7684\u8FD0\u884C\u72B6\u6001',
+    lastSeen: '\u4E0A\u6B21\u8BBF\u95EE',
     pendingReviews: '\u5F85\u5BA1\u67E5',
     totalExecutions: '\u603B\u6267\u884C\u6B21\u6570',
     successRate: '\u6210\u529F\u7387',

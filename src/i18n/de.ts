@@ -282,6 +282,7 @@ export const de: Translations = {
       evening: 'Guten Abend',
     },
     agentsStatus: 'Das passiert mit Ihren Agenten',
+    lastSeen: 'Zuletzt gesehen',
     pendingReviews: 'ausstehende Reviews',
     totalExecutions: 'Ausf\u00fchrungen gesamt',
     successRate: 'Erfolgsrate',

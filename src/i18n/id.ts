@@ -282,6 +282,7 @@ export const id: Translations = {
       evening: 'Selamat Malam',
     },
     agentsStatus: 'Berikut yang terjadi dengan agen Anda',
+    lastSeen: 'Terakhir dilihat',
     pendingReviews: 'tinjauan tertunda',
     totalExecutions: 'total eksekusi',
     successRate: 'tingkat keberhasilan',

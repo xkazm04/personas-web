@@ -282,6 +282,7 @@ export const ko: Translations = {
       evening: '\uc88b\uc740 \uc800\ub141\uc785\ub2c8\ub2e4',
     },
     agentsStatus: '\uc5d0\uc774\uc804\ud2b8 \ud604\ud669\uc785\ub2c8\ub2e4',
+    lastSeen: '\ub9c8\uc9c0\ub9c9 \uc811\uc18d',
     pendingReviews: '\ub300\uae30 \uc911\uc778 \ub9ac\ubdf0',
     totalExecutions: '\ucd1d \uc2e4\ud589 \ud69f\uc218',
     successRate: '\uc131\uacf5\ub960',

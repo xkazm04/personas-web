@@ -282,6 +282,7 @@ export const cs: Translations = {
       evening: 'Dobr\u00fd ve\u010der',
     },
     agentsStatus: 'Zde je co se d\u011bje s va\u0161imi agenty',
+    lastSeen: 'Naposledy zde',
     pendingReviews: '\u010dekaj\u00edc\u00ed recenze',
     totalExecutions: 'celkov\u00e1 spou\u0161t\u011bn\u00ed',
     successRate: '\u00fasp\u011b\u0161nost',
