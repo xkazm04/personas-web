@@ -2,7 +2,7 @@ import { notFound } from "next/navigation";
 import { GUIDE_CATEGORIES } from "@/data/guide/categories";
 import { GUIDE_TOPICS } from "@/data/guide/topics";
 import { extractHeadings } from "@/components/guide/guide-markdown/extractHeadings";
-import { getRelatedTopics } from "@/lib/guide-utils";
+import { getRelatedTopics, isTopicVisible } from "@/lib/guide-utils";
 import { SITE_URL, SITE_NAME, safeJsonLd } from "@/lib/seo";
 import TopicView from "./TopicView";
 
@@ -98,6 +98,7 @@ export default async function TopicPage({ params }: { params: Promise<{ category
 
   const loader = contentModules[categoryId];
   if (!category || !topic || !loader) notFound();
+  if (!isTopicVisible(topic)) notFound();
 
   const { content: categoryContent } = await loader();
   const content = categoryContent[topicId];

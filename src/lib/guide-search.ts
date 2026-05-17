@@ -1,5 +1,6 @@
 import { GUIDE_TOPICS } from "@/data/guide/topics";
 import { GUIDE_CATEGORIES } from "@/data/guide/categories";
+import { isTopicVisible } from "@/lib/guide-utils";
 import type { GuideTopic, GuideCategory } from "@/data/guide/types";
 
 export interface SearchResult {
@@ -53,6 +54,7 @@ export function searchGuide(query: string, limit = 15): SearchResult[] {
   const results: SearchResult[] = [];
 
   for (const topic of GUIDE_TOPICS) {
+    if (!isTopicVisible(topic)) continue;
     const category = GUIDE_CATEGORIES.find((c) => c.id === topic.categoryId)!;
     let bestScore = 0;
     let bestMatch: SearchResult["matchType"] = "description";

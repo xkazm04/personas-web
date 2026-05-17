@@ -5,6 +5,7 @@ import { ArrowLeft } from "lucide-react";
 import { GUIDE_CATEGORIES } from "@/data/guide/categories";
 import { GUIDE_TOPICS } from "@/data/guide/topics";
 import { GUIDE_ILLUSTRATIONS } from "@/data/guide/illustrations";
+import { isTopicVisible } from "@/lib/guide-utils";
 import { SITE_URL, safeJsonLd } from "@/lib/seo";
 import CategoryTopics from "./CategoryTopics";
 
@@ -17,7 +18,7 @@ export function generateStaticParams() {
 export async function generateMetadata({ params }: { params: Promise<{ category: string }> }) {
   const { category } = await params;
   const cat = GUIDE_CATEGORIES.find((c) => c.id === category);
-  const topicCount = GUIDE_TOPICS.filter((t) => t.categoryId === category).length;
+  const topicCount = GUIDE_TOPICS.filter((t) => t.categoryId === category && isTopicVisible(t)).length;
   return {
     title: cat ? `${cat.name} — ${topicCount} Topics` : "Guide",
     description: cat?.description,
@@ -34,7 +35,7 @@ export default async function CategoryPage({ params }: { params: Promise<{ categ
   const cat = GUIDE_CATEGORIES.find((c) => c.id === category);
   if (!cat) notFound();
 
-  const topics = GUIDE_TOPICS.filter((t) => t.categoryId === cat.id);
+  const topics = GUIDE_TOPICS.filter((t) => t.categoryId === cat.id && isTopicVisible(t));
   const illus = GUIDE_ILLUSTRATIONS[cat.id];
 
   const itemListJsonLd = {

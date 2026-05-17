@@ -55,6 +55,7 @@ export const GUIDE_TOPICS: GuideTopic[] = [
     description:
       "How to connect Claude, OpenAI, or other AI services to power your agents. Each provider has different strengths, and you can switch anytime. We'll help you pick the best fit for your needs and budget.",
     tags: ["getting-started", "provider", "claude", "openai", "ai-model", "setup"],
+    devOnly: true,
     coverage: {
       screenshotRecipe: "tools/guide-screenshots/recipes/choosing-your-ai-provider.yaml",
     },

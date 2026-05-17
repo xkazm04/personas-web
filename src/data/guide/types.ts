@@ -18,6 +18,14 @@ export interface GuideTopic {
   tags: string[];
   /** Which UI mode this topic is relevant to. Defaults to "both" if omitted. */
   mode?: GuideMode;
+  /**
+   * If true, the topic is hidden in production but visible when
+   * NEXT_PUBLIC_SHOW_DEV_GUIDE_TOPICS=true (gated by isDevTopicsVisible in
+   * guide-utils). Used for drafts and not-yet-ready content. The sidebar
+   * renders dev-visible entries with a golden left border as a reminder
+   * they won't ship.
+   */
+  devOnly?: boolean;
   /** Documentation coverage metadata — used by check-guide-coverage.mjs. */
   coverage?: TopicCoverage;
 }
