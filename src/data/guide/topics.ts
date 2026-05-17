@@ -26,8 +26,8 @@ export const GUIDE_TOPICS: GuideTopic[] = [
     categoryId: "getting-started",
     title: "App interface",
     description:
-      "A tour of the main screen, sidebar, and navigation. Learn where everything lives so you can move around the app with confidence. Think of it like a quick orientation before you start building.",
-    tags: ["getting-started", "interface", "navigation", "sidebar", "tour"],
+      "A tour of the main screen, sidebar, and navigation, plus the keyboard shortcuts that speed up everyday work. Learn where everything lives so you can move around the app with confidence — and once you know a few key combinations, most tasks become almost instant.",
+    tags: ["getting-started", "interface", "navigation", "sidebar", "tour", "keyboard", "shortcuts", "productivity"],
     coverage: {
       screenshotRecipe: "tools/guide-screenshots/recipes/understanding-the-interface.yaml",
     },
@@ -67,14 +67,6 @@ export const GUIDE_TOPICS: GuideTopic[] = [
     description:
       "What your computer needs to run Personas smoothly. The app is lightweight and works on most modern computers. We'll tell you the minimum specs and what's recommended for the best experience.",
     tags: ["getting-started", "requirements", "hardware", "compatibility", "performance"],
-  },
-  {
-    id: "keyboard-shortcuts-and-tips",
-    categoryId: "getting-started",
-    title: "Keyboard shortcuts and tips",
-    description:
-      "Speed up your workflow with built-in shortcuts. Once you know a few key combinations, common tasks become almost instant. This guide covers the most useful shortcuts organized by what you do most.",
-    tags: ["getting-started", "keyboard", "shortcuts", "productivity", "tips"],
   },
   {
     id: "where-to-get-help",

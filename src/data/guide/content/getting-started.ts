@@ -106,8 +106,32 @@ The center area is the **workspace** where everything actually happens — editi
 
 Most of what you do happens by clicking a sidebar item and editing in the workspace. The title-bar notification bell is the one universal shortcut worth memorizing — it always opens the most recent execution detail, no matter where you are. The cockpit shortcut ("Talk to Athena") opens an in-app chat with the companion that can help you build, debug, or just answer questions about your setup.
 
+### Keyboard shortcuts
+
+A handful of shortcuts cover most everyday navigation. \`Ctrl+K\` opens global search (find any agent, page, or setting by name). \`Ctrl+1\`–\`Ctrl+9\` jump directly to top-level sidebar sections. \`Ctrl+Enter\` runs the focused agent. \`Ctrl+Shift+P\` opens the command palette — type a verb (\`run\`, \`clone\`, \`disable\`, \`open\`) plus a target name to act on anything without navigating.
+
+You can customize any binding in **Settings → Appearance → Keyboard Shortcuts**; defaults follow OS conventions where possible.
+
+:::keys
+Ctrl+K — Global search (find anything by name)
+Ctrl+N — Create a new agent
+Ctrl+Enter — Run the focused agent
+Ctrl+S — Save changes in the current editor
+Ctrl+/ — Toggle the sidebar open/closed
+Ctrl+, — Open Settings
+Ctrl+? — Show the keyboard shortcut cheat sheet
+Ctrl+Shift+P — Open the command palette
+Ctrl+1 — Home
+Ctrl+2 — Overview
+Ctrl+3 — Agents
+Ctrl+4 — Events
+Ctrl+5 — Connections
+Ctrl+6 — Templates
+Ctrl+7 — Plugins
+:::
+
 :::tip
-Hover any sidebar icon for a tooltip with the keyboard shortcut. \`Ctrl+1\` through \`Ctrl+9\` jump directly to top-level sections, and \`Ctrl+K\` opens global search so you can find anything by name.
+Start with \`Ctrl+K\`. Type a few letters of an agent name and hit Enter — that one shortcut covers maybe 60% of everyday navigation.
 :::
   `,
 
@@ -243,47 +267,6 @@ The Windows build uses ONNX Runtime for embedding when the vector-knowledge-base
 
 :::tip
 If you see the app feel slow during a multi-agent run, open the Health tab — it shows which agents and which dependencies (model calls, tool calls, ONNX inference) are contributing to the load.
-:::
-  `,
-
-  "keyboard-shortcuts-and-tips": `
-## Keyboard Shortcuts and Tips
-
-A few keyboard shortcuts cover most of the friction in the app. \`Ctrl+K\` opens global search (find any agent, page, or setting by name). \`Ctrl+1\`–\`Ctrl+9\` jump to top-level sidebar sections. \`Ctrl+Enter\` runs the focused agent. \`Ctrl+N\` opens the Create Agent flow.
-
-You can customize any binding in Settings → Appearance → Keyboard Shortcuts; defaults follow OS conventions where possible.
-
-### Essential Shortcuts
-
-:::keys
-Ctrl+K — Global search (find anything by name)
-Ctrl+N — Create a new agent
-Ctrl+Enter — Run the focused agent
-Ctrl+S — Save changes in the current editor
-Ctrl+/ — Toggle the sidebar open/closed
-Ctrl+, — Open Settings
-Ctrl+? — Show the keyboard shortcut cheat sheet
-:::
-
-### Navigation Shortcuts
-
-:::keys
-Ctrl+1 — Home
-Ctrl+2 — Overview
-Ctrl+3 — Agents
-Ctrl+4 — Events
-Ctrl+5 — Connections
-Ctrl+6 — Templates
-Ctrl+7 — Plugins
-Ctrl+Shift+P — Open the command palette (run any action by name)
-:::
-
-### How It Works
-
-The command palette (\`Ctrl+Shift+P\`) is the power-user surface. Type a verb (\`run\`, \`clone\`, \`disable\`, \`open\`) plus the target name, and the palette shows matching actions across your whole workspace. It's faster than navigating manually once you know the names of things.
-
-:::tip
-Start with \`Ctrl+K\`. Type a few letters of an agent name and hit Enter — that one shortcut covers maybe 60% of everyday navigation.
 :::
   `,
 

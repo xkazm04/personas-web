@@ -27,10 +27,6 @@ export const topics: Record<string, { title: string; description: string }> = {
     title: "系统要求",
     description: "你的电脑流畅运行 Personas 需要什么。该应用轻量且适用于大多数现代计算机。我们会告诉你最低规格以及获得最佳体验所推荐的配置。",
   },
-  "keyboard-shortcuts-and-tips": {
-    title: "键盘快捷键和技巧",
-    description: "使用内置快捷键加速你的工作流。一旦你了解几个关键组合,常见任务就会几乎瞬间完成。本指南按你最常做的事情组织最有用的快捷键。",
-  },
   "where-to-get-help": {
     title: "在哪里获取帮助",
     description: "Discord 社区、文档和支持资源都集中在一处。无论你喜欢与其他用户聊天、阅读指南还是提交支持请求,我们都为你提供。你永远不会一个人被困住。",

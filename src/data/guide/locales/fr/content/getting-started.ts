@@ -209,46 +209,6 @@ Si vous sentez l'application lente pendant une exécution multi-agents, ouvrez l
 :::
   `,
 
-  "keyboard-shortcuts-and-tips": `
-## Raccourcis clavier et astuces
-
-Quelques raccourcis clavier couvrent la plupart des frictions dans l'application. \`Ctrl+K\` ouvre la recherche globale (trouvez n'importe quel agent, page ou paramètre par son nom). \`Ctrl+1\`–\`Ctrl+9\` sautent aux sections de premier niveau de la barre latérale. \`Ctrl+Enter\` exécute l'agent focalisé. \`Ctrl+N\` ouvre le flux de création d'agent.
-
-Vous pouvez personnaliser n'importe quelle liaison dans Paramètres → Apparence → Raccourcis clavier ; les valeurs par défaut suivent les conventions de l'OS lorsque c'est possible.
-
-### Raccourcis essentiels
-
-:::keys
-Ctrl+K — Recherche globale (trouver n'importe quoi par nom)
-Ctrl+N — Créer un nouvel agent
-Ctrl+Enter — Exécuter l'agent focalisé
-Ctrl+S — Enregistrer les modifications dans l'éditeur actuel
-Ctrl+/ — Basculer la barre latérale ouverte/fermée
-Ctrl+, — Ouvrir les Paramètres
-Ctrl+? — Afficher la fiche des raccourcis clavier
-:::
-
-### Raccourcis de navigation
-
-:::keys
-Ctrl+1 — Accueil
-Ctrl+2 — Vue d'ensemble
-Ctrl+3 — Agents
-Ctrl+4 — Événements
-Ctrl+5 — Connexions
-Ctrl+6 — Modèles
-Ctrl+7 — Plugins
-Ctrl+Shift+P — Ouvrir la palette de commandes (exécuter n'importe quelle action par nom)
-:::
-
-### Comment ça marche
-
-La palette de commandes (\`Ctrl+Shift+P\`) est la surface utilisateur avancé. Tapez un verbe (\`run\`, \`clone\`, \`disable\`, \`open\`) plus le nom de la cible, et la palette affiche les actions correspondantes dans tout votre espace de travail. C'est plus rapide que la navigation manuelle une fois que vous connaissez les noms des choses.
-
-:::tip
-Commencez avec \`Ctrl+K\`. Tapez quelques lettres d'un nom d'agent et appuyez sur Entrée — ce seul raccourci couvre peut-être 60 % de la navigation quotidienne.
-:::
-  `,
 
   "where-to-get-help": `
 ## Où obtenir de l'aide

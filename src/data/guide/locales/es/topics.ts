@@ -34,11 +34,6 @@ export const topics: Record<string, { title: string; description: string }> = {
     description:
       "Lo que necesita tu computadora para ejecutar Personas con fluidez. La app es ligera y funciona en la mayoría de equipos modernos. Te indicamos las especificaciones mínimas y las recomendadas para la mejor experiencia.",
   },
-  "keyboard-shortcuts-and-tips": {
-    title: "Atajos de teclado y consejos",
-    description:
-      "Acelera tu flujo de trabajo con atajos integrados. En cuanto memorices unas pocas combinaciones, las tareas comunes se vuelven casi instantáneas. Esta guía cubre los atajos más útiles organizados por lo que sueles hacer.",
-  },
   "where-to-get-help": {
     title: "Dónde obtener ayuda",
     description:

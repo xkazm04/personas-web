@@ -34,11 +34,6 @@ export const topics: Record<string, { title: string; description: string }> = {
     description:
       "Ce dont votre ordinateur a besoin pour exécuter Personas sans problème. L'application est légère et fonctionne sur la plupart des ordinateurs modernes. Nous vous indiquerons les spécifications minimales et recommandées pour la meilleure expérience.",
   },
-  "keyboard-shortcuts-and-tips": {
-    title: "Raccourcis clavier et astuces",
-    description:
-      "Accélérez votre flux de travail grâce aux raccourcis intégrés. Une fois que vous connaissez quelques combinaisons clés, les tâches courantes deviennent presque instantanées. Ce guide couvre les raccourcis les plus utiles, organisés selon ce que vous faites le plus.",
-  },
   "where-to-get-help": {
     title: "Où obtenir de l'aide",
     description:

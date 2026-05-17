@@ -209,46 +209,6 @@ Personas 是一个 Tauri 桌面应用 — Rust 后端、React 前端、本地 SQ
 :::
   `,
 
-  "keyboard-shortcuts-and-tips": `
-## 键盘快捷键和技巧
-
-几个键盘快捷键可以覆盖应用中大部分的摩擦。\`Ctrl+K\` 打开全局搜索(按名称查找任何 agent、页面或设置)。\`Ctrl+1\`–\`Ctrl+9\` 跳转到顶层侧边栏部分。\`Ctrl+Enter\` 运行当前聚焦的 agent。\`Ctrl+N\` 打开 Create Agent 流程。
-
-你可以在 Settings → Appearance → Keyboard Shortcuts 中自定义任何快捷键绑定;默认设置尽可能遵循操作系统约定。
-
-### 必备快捷键
-
-:::keys
-Ctrl+K — 全局搜索(按名称查找任何内容)
-Ctrl+N — 创建新 agent
-Ctrl+Enter — 运行聚焦的 agent
-Ctrl+S — 保存当前编辑器中的更改
-Ctrl+/ — 切换侧边栏开/关
-Ctrl+, — 打开 Settings
-Ctrl+? — 显示键盘快捷键速查表
-:::
-
-### 导航快捷键
-
-:::keys
-Ctrl+1 — Home
-Ctrl+2 — Overview
-Ctrl+3 — Agents
-Ctrl+4 — Events
-Ctrl+5 — Connections
-Ctrl+6 — Templates
-Ctrl+7 — Plugins
-Ctrl+Shift+P — 打开命令面板(按名称运行任何操作)
-:::
-
-### 工作原理
-
-命令面板(\`Ctrl+Shift+P\`)是高级用户的界面。输入一个动词(\`run\`、\`clone\`、\`disable\`、\`open\`)加上目标名称,面板会显示整个工作区中匹配的操作。一旦你了解了事物的名称,这比手动导航更快。
-
-:::tip
-从 \`Ctrl+K\` 开始。输入 agent 名称的几个字母并按 Enter — 这一个快捷键覆盖了大约 60% 的日常导航。
-:::
-  `,
 
   "where-to-get-help": `
 ## 在哪里获取帮助

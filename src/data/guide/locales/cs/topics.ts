@@ -34,11 +34,6 @@ export const topics: Record<string, { title: string; description: string }> = {
     description:
       "Co tvůj počítač potřebuje, aby Personas běžely hladce. Aplikace je nenáročná a funguje na většině moderních počítačů. Řekneme ti minimální specifikace i doporučené pro nejlepší zážitek.",
   },
-  "keyboard-shortcuts-and-tips": {
-    title: "Klávesové zkratky a tipy",
-    description:
-      "Zrychli si práci s vestavěnými zkratkami. Jakmile si osvojíš pár klíčových kombinací, běžné úkoly budou téměř okamžité. Tento průvodce pokrývá nejužitečnější zkratky uspořádané podle toho, co děláš nejčastěji.",
-  },
   "where-to-get-help": {
     title: "Kde získat pomoc",
     description:

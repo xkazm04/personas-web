@@ -34,11 +34,6 @@ export const topics: Record<string, { title: string; description: string }> = {
     description:
       "Máy tính của bạn cần gì để chạy Personas mượt mà. Ứng dụng nhẹ và hoạt động trên hầu hết các máy tính hiện đại. Chúng tôi sẽ cho bạn biết thông số tối thiểu và những gì được khuyến nghị để có trải nghiệm tốt nhất.",
   },
-  "keyboard-shortcuts-and-tips": {
-    title: "Phím tắt và mẹo",
-    description:
-      "Tăng tốc quy trình làm việc của bạn với các phím tắt tích hợp sẵn. Khi bạn biết một vài tổ hợp phím, các tác vụ thông thường trở nên gần như tức thì. Hướng dẫn này bao gồm các phím tắt hữu ích nhất được sắp xếp theo những gì bạn làm nhiều nhất.",
-  },
   "where-to-get-help": {
     title: "Nơi để nhận trợ giúp",
     description:

@@ -209,46 +209,6 @@ Si notas la app lenta durante una ejecución multi-agente, abre la pestaña Heal
 :::
   `,
 
-  "keyboard-shortcuts-and-tips": `
-## Atajos de teclado y consejos
-
-Unos pocos atajos de teclado cubren la mayor parte de la fricción en la app. \`Ctrl+K\` abre la búsqueda global (encuentra cualquier agente, página o ajuste por nombre). \`Ctrl+1\`–\`Ctrl+9\` saltan a las secciones de primer nivel de la barra lateral. \`Ctrl+Enter\` ejecuta el agente enfocado. \`Ctrl+N\` abre el flujo de creación de agente.
-
-Puedes personalizar cualquier asignación en Settings → Appearance → Keyboard Shortcuts; los predeterminados siguen las convenciones del SO siempre que es posible.
-
-### Atajos esenciales
-
-:::keys
-Ctrl+K — Búsqueda global (encuentra cualquier cosa por nombre)
-Ctrl+N — Crear un nuevo agente
-Ctrl+Enter — Ejecutar el agente enfocado
-Ctrl+S — Guardar cambios en el editor actual
-Ctrl+/ — Alternar la barra lateral abierta/cerrada
-Ctrl+, — Abrir Settings
-Ctrl+? — Mostrar la chuleta de atajos de teclado
-:::
-
-### Atajos de navegación
-
-:::keys
-Ctrl+1 — Home
-Ctrl+2 — Overview
-Ctrl+3 — Agents
-Ctrl+4 — Events
-Ctrl+5 — Connections
-Ctrl+6 — Templates
-Ctrl+7 — Plugins
-Ctrl+Shift+P — Abrir la paleta de comandos (ejecuta cualquier acción por nombre)
-:::
-
-### Cómo funciona
-
-La paleta de comandos (\`Ctrl+Shift+P\`) es la superficie para usuarios avanzados. Escribe un verbo (\`run\`, \`clone\`, \`disable\`, \`open\`) más el nombre del objetivo, y la paleta muestra acciones coincidentes en todo tu espacio de trabajo. Es más rápida que navegar manualmente una vez que conoces los nombres de las cosas.
-
-:::tip
-Empieza con \`Ctrl+K\`. Escribe unas pocas letras del nombre de un agente y pulsa Enter: ese único atajo cubre quizás el 60 % de la navegación cotidiana.
-:::
-  `,
 
   "where-to-get-help": `
 ## Dónde obtener ayuda

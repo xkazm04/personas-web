@@ -34,11 +34,6 @@ export const topics: Record<string, { title: string; description: string }> = {
     description:
       "Apa yang dibutuhkan komputer Anda untuk menjalankan Personas dengan lancar. Aplikasi ini ringan dan berfungsi di sebagian besar komputer modern. Kami akan memberi tahu Anda spesifikasi minimum dan apa yang direkomendasikan untuk pengalaman terbaik.",
   },
-  "keyboard-shortcuts-and-tips": {
-    title: "Pintasan keyboard dan tips",
-    description:
-      "Percepat alur kerja Anda dengan pintasan bawaan. Setelah Anda mengetahui beberapa kombinasi kunci, tugas umum menjadi hampir instan. Panduan ini mencakup pintasan paling berguna yang diorganisasikan berdasarkan apa yang paling sering Anda lakukan.",
-  },
   "where-to-get-help": {
     title: "Tempat mendapatkan bantuan",
     description:

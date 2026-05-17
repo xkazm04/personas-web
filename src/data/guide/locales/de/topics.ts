@@ -34,11 +34,6 @@ export const topics: Record<string, { title: string; description: string }> = {
     description:
       "Was dein Computer braucht, um Personas reibungslos auszuführen. Die App ist schlank und läuft auf den meisten modernen Computern. Wir nennen dir die Mindestanforderungen und was für die beste Erfahrung empfohlen wird.",
   },
-  "keyboard-shortcuts-and-tips": {
-    title: "Tastenkürzel und Tipps",
-    description:
-      "Beschleunige deinen Workflow mit eingebauten Tastenkürzeln. Wenn du ein paar wichtige Tastenkombinationen kennst, sind häufige Aufgaben fast sofort erledigt. Diese Anleitung deckt die nützlichsten Kürzel ab, sortiert nach Häufigkeit der Nutzung.",
-  },
   "where-to-get-help": {
     title: "Wo du Hilfe bekommst",
     description:

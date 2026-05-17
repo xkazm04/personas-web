@@ -209,46 +209,6 @@ Pokud při víceagentovém běhu cítíš, že je aplikace pomalá, otevři kart
 :::
   `,
 
-  "keyboard-shortcuts-and-tips": `
-## Klávesové zkratky a tipy
-
-Pár klávesových zkratek pokrývá většinu třecích bodů v aplikaci. \`Ctrl+K\` otevře globální vyhledávání (najdi libovolného agenta, stránku nebo nastavení podle názvu). \`Ctrl+1\`–\`Ctrl+9\` skočí do sekcí nejvyšší úrovně postranního panelu. \`Ctrl+Enter\` spustí zaměřeného agenta. \`Ctrl+N\` otevře tok Create Agent.
-
-Libovolnou klávesovou kombinaci si můžeš přizpůsobit v Settings → Appearance → Keyboard Shortcuts; výchozí kombinace tam, kde je to možné, sledují konvence OS.
-
-### Základní zkratky
-
-:::keys
-Ctrl+K — Globální vyhledávání (najdi cokoli podle názvu)
-Ctrl+N — Vytvořit nového agenta
-Ctrl+Enter — Spustit zaměřeného agenta
-Ctrl+S — Uložit změny v aktuálním editoru
-Ctrl+/ — Přepnout postranní panel otevřeno/zavřeno
-Ctrl+, — Otevřít Settings
-Ctrl+? — Zobrazit přehled klávesových zkratek
-:::
-
-### Navigační zkratky
-
-:::keys
-Ctrl+1 — Home
-Ctrl+2 — Overview
-Ctrl+3 — Agents
-Ctrl+4 — Events
-Ctrl+5 — Connections
-Ctrl+6 — Templates
-Ctrl+7 — Plugins
-Ctrl+Shift+P — Otevřít command paletu (spusť libovolnou akci podle názvu)
-:::
-
-### Jak to funguje
-
-Command paleta (\`Ctrl+Shift+P\`) je plocha pro mocné uživatele. Napiš sloveso (\`run\`, \`clone\`, \`disable\`, \`open\`) plus název cíle a paleta ti ukáže odpovídající akce napříč celým tvým pracovním prostorem. Je to rychlejší než manuální navigace, jakmile znáš názvy věcí.
-
-:::tip
-Začni s \`Ctrl+K\`. Napiš pár písmen jména agenta a stiskni Enter — tahle jedna zkratka pokrývá asi 60 % každodenní navigace.
-:::
-  `,
 
   "where-to-get-help": `
 ## Kde získat pomoc

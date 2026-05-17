@@ -34,11 +34,6 @@ export const topics: Record<string, { title: string; description: string }> = {
     description:
       "Personas를 원활하게 실행하기 위해 컴퓨터에 필요한 것. 앱은 가볍고 대부분의 최신 컴퓨터에서 작동합니다. 최소 사양과 최고의 경험을 위해 권장되는 것을 알려드립니다.",
   },
-  "keyboard-shortcuts-and-tips": {
-    title: "키보드 단축키와 팁",
-    description:
-      "내장된 단축키로 워크플로를 가속하세요. 몇 가지 키 조합을 알면 일반적인 작업이 거의 즉각적이 됩니다. 이 가이드는 가장 많이 하는 일을 기준으로 조직된 가장 유용한 단축키를 다룹니다.",
-  },
   "where-to-get-help": {
     title: "도움받는 곳",
     description:

@@ -209,46 +209,6 @@ Jika Anda melihat aplikasi terasa lambat selama run multi-agen, buka tab Health 
 :::
   `,
 
-  "keyboard-shortcuts-and-tips": `
-## Pintasan Keyboard dan Tips
-
-Beberapa pintasan keyboard mencakup sebagian besar gesekan di aplikasi. \`Ctrl+K\` membuka pencarian global (temukan agen, halaman, atau pengaturan apa pun berdasarkan nama). \`Ctrl+1\`–\`Ctrl+9\` melompat ke bagian sidebar tingkat atas. \`Ctrl+Enter\` menjalankan agen yang difokuskan. \`Ctrl+N\` membuka alur Create Agent.
-
-Anda dapat menyesuaikan binding apa pun di Settings → Appearance → Keyboard Shortcuts; default mengikuti konvensi OS jika memungkinkan.
-
-### Pintasan Penting
-
-:::keys
-Ctrl+K — Pencarian global (temukan apa saja berdasarkan nama)
-Ctrl+N — Buat agen baru
-Ctrl+Enter — Jalankan agen yang difokuskan
-Ctrl+S — Simpan perubahan di editor saat ini
-Ctrl+/ — Toggle sidebar buka/tutup
-Ctrl+, — Buka Settings
-Ctrl+? — Tampilkan lembar contekan pintasan keyboard
-:::
-
-### Pintasan Navigasi
-
-:::keys
-Ctrl+1 — Home
-Ctrl+2 — Overview
-Ctrl+3 — Agents
-Ctrl+4 — Events
-Ctrl+5 — Connections
-Ctrl+6 — Templates
-Ctrl+7 — Plugins
-Ctrl+Shift+P — Buka command palette (jalankan tindakan apa pun berdasarkan nama)
-:::
-
-### Cara Kerjanya
-
-Command palette (\`Ctrl+Shift+P\`) adalah permukaan power-user. Ketik kata kerja (\`run\`, \`clone\`, \`disable\`, \`open\`) plus nama target, dan palette menampilkan tindakan yang cocok di seluruh workspace Anda. Ini lebih cepat daripada navigasi manual setelah Anda mengetahui nama dari hal-hal tersebut.
-
-:::tip
-Mulai dengan \`Ctrl+K\`. Ketik beberapa huruf dari nama agen dan tekan Enter — pintasan tunggal itu mencakup mungkin 60% navigasi sehari-hari.
-:::
-  `,
 
   "where-to-get-help": `
 ## Tempat Mendapatkan Bantuan

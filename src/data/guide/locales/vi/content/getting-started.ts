@@ -209,46 +209,6 @@ Nếu bạn thấy ứng dụng chậm trong một lần chạy đa agent, mở 
 :::
   `,
 
-  "keyboard-shortcuts-and-tips": `
-## Phím Tắt Và Mẹo
-
-Một vài phím tắt bao trùm hầu hết các trở ngại trong ứng dụng. \`Ctrl+K\` mở tìm kiếm toàn cục (tìm bất kỳ agent, trang hoặc cài đặt nào theo tên). \`Ctrl+1\`–\`Ctrl+9\` chuyển đến các phần thanh bên cấp cao nhất. \`Ctrl+Enter\` chạy agent đang tập trung. \`Ctrl+N\` mở luồng Create Agent.
-
-Bạn có thể tùy chỉnh bất kỳ phím tắt nào trong Settings → Appearance → Keyboard Shortcuts; mặc định tuân theo các quy ước của hệ điều hành khi có thể.
-
-### Phím Tắt Thiết Yếu
-
-:::keys
-Ctrl+K — Tìm kiếm toàn cục (tìm bất cứ thứ gì theo tên)
-Ctrl+N — Tạo một agent mới
-Ctrl+Enter — Chạy agent đang tập trung
-Ctrl+S — Lưu thay đổi trong trình chỉnh sửa hiện tại
-Ctrl+/ — Bật/tắt thanh bên
-Ctrl+, — Mở Settings
-Ctrl+? — Hiển thị bảng phím tắt
-:::
-
-### Phím Tắt Điều Hướng
-
-:::keys
-Ctrl+1 — Home
-Ctrl+2 — Overview
-Ctrl+3 — Agents
-Ctrl+4 — Events
-Ctrl+5 — Connections
-Ctrl+6 — Templates
-Ctrl+7 — Plugins
-Ctrl+Shift+P — Mở command palette (chạy bất kỳ hành động nào theo tên)
-:::
-
-### Cách Hoạt Động
-
-Command palette (\`Ctrl+Shift+P\`) là bề mặt cho người dùng power. Gõ một động từ (\`run\`, \`clone\`, \`disable\`, \`open\`) cộng với tên đích, và palette hiển thị các hành động phù hợp trên toàn bộ workspace của bạn. Nó nhanh hơn điều hướng thủ công khi bạn biết tên của các thứ.
-
-:::tip
-Bắt đầu với \`Ctrl+K\`. Gõ vài chữ cái của tên agent và nhấn Enter — phím tắt đó bao quát khoảng 60% điều hướng hàng ngày.
-:::
-  `,
 
   "where-to-get-help": `
 ## Nơi Để Nhận Trợ Giúp

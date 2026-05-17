@@ -194,11 +194,6 @@ export const TOPIC_MODULE_MAP: Record<string, TopicModuleRef> = {
     path: ["Home", "System Check"],
     label: "System diagnostics",
   },
-  "keyboard-shortcuts-and-tips": {
-    moduleId: "settings",
-    path: ["Settings", "Appearance"],
-    label: "Keyboard config",
-  },
   "where-to-get-help": {
     moduleId: "home",
     path: ["Home", "Learning"],
