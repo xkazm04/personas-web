@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from "react";
 import Link from "next/link";
+import { AnimatePresence, motion, useReducedMotion } from "framer-motion";
 import { Activity } from "lucide-react";
 
 import GlowCard from "@/components/GlowCard";
@@ -12,6 +13,9 @@ import { relativeTime } from "@/lib/format";
 import type { GlobalExecution } from "@/lib/types";
 
 const REL_TIME_TICK_MS = 30_000;
+const PULSE_DURATION_S = 1.4;
+
+const MotionLink = motion.create(Link);
 
 type RecentExecution = GlobalExecution & {
   personaIcon?: string | null;
@@ -46,6 +50,13 @@ export function RecentActivityCard({
     return () => clearInterval(interval);
   }, [hidden]);
 
+  // AnimatePresence with initial={false} suppresses the entrance animation
+  // on first paint, so only NEW execution ids that arrive afterward get
+  // the cyan-tinted pulse. Honors prefers-reduced-motion.
+  const reducedMotion = useReducedMotion();
+  const pulseInitial = reducedMotion ? false : { backgroundColor: "rgba(6,182,212,0.14)" };
+  const pulseAnimate = reducedMotion ? undefined : { backgroundColor: "rgba(6,182,212,0)" };
+
   return (
     <GlowCard accent="cyan" className="p-5 h-full">
       <div className="flex items-center gap-2 mb-4">
@@ -67,30 +78,35 @@ export function RecentActivityCard({
         </p>
       ) : (
         <div className="space-y-1.5 max-h-[420px] overflow-y-auto pr-1">
-          {executions.map((execution) => (
-            <Link
-              key={execution.id}
-              href="/dashboard/executions"
-              className="flex items-center gap-2.5 rounded-lg px-2.5 py-2 transition-colors hover:bg-white/[0.03] focus-ring focus-visible:ring-offset-0"
-            >
-              <PersonaAvatar
-                icon={execution.personaIcon}
-                color={execution.personaColor}
-                name={execution.personaName}
-              />
-              <div className="flex-1 min-w-0">
-                <p className="text-sm font-medium text-foreground truncate">
-                  {execution.personaName ?? execution.personaId.slice(0, 8)}
-                </p>
-                <p className="text-sm text-muted-dark">
-                  {relativeTime(execution.startedAt ?? execution.createdAt)}
-                  {execution.durationMs && ` - ${(execution.durationMs / 1000).toFixed(1)}s`}
-                  {execution.costUsd > 0 && ` - $${execution.costUsd.toFixed(4)}`}
-                </p>
-              </div>
-              <StatusBadge status={execution.status} />
-            </Link>
-          ))}
+          <AnimatePresence initial={false}>
+            {executions.map((execution) => (
+              <MotionLink
+                key={execution.id}
+                href="/dashboard/executions"
+                initial={pulseInitial}
+                animate={pulseAnimate}
+                transition={{ duration: PULSE_DURATION_S, ease: "easeOut" }}
+                className="flex items-center gap-2.5 rounded-lg px-2.5 py-2 transition-colors hover:bg-white/[0.03] focus-ring focus-visible:ring-offset-0"
+              >
+                <PersonaAvatar
+                  icon={execution.personaIcon}
+                  color={execution.personaColor}
+                  name={execution.personaName}
+                />
+                <div className="flex-1 min-w-0">
+                  <p className="text-sm font-medium text-foreground truncate">
+                    {execution.personaName ?? execution.personaId.slice(0, 8)}
+                  </p>
+                  <p className="text-sm text-muted-dark">
+                    {relativeTime(execution.startedAt ?? execution.createdAt)}
+                    {execution.durationMs && ` - ${(execution.durationMs / 1000).toFixed(1)}s`}
+                    {execution.costUsd > 0 && ` - $${execution.costUsd.toFixed(4)}`}
+                  </p>
+                </div>
+                <StatusBadge status={execution.status} />
+              </MotionLink>
+            ))}
+          </AnimatePresence>
         </div>
       )}
     </GlowCard>
