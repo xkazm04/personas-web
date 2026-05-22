@@ -934,5 +934,16 @@ export const es: Translations = {
     value: 'Una persona, muchas capacidades \u2014 una identidad estable con un conjunto componible de tareas, ejecut\u00e1ndose donde viven tus datos y bajo tu control.',
     cta: 'See it in action',
   },
+  tour: {
+    launch: 'Iniciar el recorrido',
+    play: 'Reproducir',
+    pause: 'Pausar',
+    next: 'Paso siguiente',
+    previous: 'Paso anterior',
+    exit: 'Salir del recorrido',
+    step1: 'Personas convierte objetivos en lenguaje natural en pipelines de IA multiagente que se ejecutan de forma privada en tu propia máquina.',
+    step2: 'Combina agentes en un pipeline y observa cómo el orquestador distribuye el trabajo entre ellos — con autorreparación y en tiempo real.',
+    step3: 'Ejecuta agentes ilimitados de forma local y gratuita, y escala a la ejecución en la nube 24/7 cuando quieras.',
+  },
 };
 

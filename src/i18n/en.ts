@@ -828,6 +828,17 @@
     ice: string;
     news: string;
   };
+  tour: {
+    launch: string;
+    play: string;
+    pause: string;
+    next: string;
+    previous: string;
+    exit: string;
+    step1: string;
+    step2: string;
+    step3: string;
+  };
 }
 
 export const en: Translations = {
@@ -1763,6 +1774,17 @@ export const en: Translations = {
     light: 'Classic bright theme',
     ice: 'Cool blue light theme',
     news: 'High contrast light theme',
+  },
+  tour: {
+    launch: 'Take the tour',
+    play: 'Play',
+    pause: 'Pause',
+    next: 'Next step',
+    previous: 'Previous step',
+    exit: 'Exit tour',
+    step1: 'Personas turns plain-language goals into multi-agent AI pipelines that run privately on your own machine.',
+    step2: 'Compose agents into a pipeline and watch the orchestrator route work between them — self-healing, in real time.',
+    step3: 'Run unlimited agents locally for free, then scale to 24/7 cloud execution whenever you are ready.',
   },
 };
 

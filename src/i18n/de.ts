@@ -934,5 +934,16 @@ export const de: Translations = {
     value: 'Eine Persona, viele FĂ¤higkeiten â€” eine stabile IdentitĂ¤t mit kombinierbaren Aufgaben, die dort lĂ¤uft, wo Ihre Daten liegen, und die unter Ihrer Kontrolle bleibt.',
     cta: 'See it in action',
   },
+  tour: {
+    launch: 'Tour starten',
+    play: 'Abspielen',
+    pause: 'Pause',
+    next: 'Nächster Schritt',
+    previous: 'Vorheriger Schritt',
+    exit: 'Tour beenden',
+    step1: 'Personas verwandelt Ziele in einfacher Sprache in Multi-Agenten-KI-Pipelines, die privat auf Ihrem eigenen Rechner laufen.',
+    step2: 'Fügen Sie Agenten zu einer Pipeline zusammen und sehen Sie zu, wie der Orchestrator die Arbeit zwischen ihnen verteilt — selbstheilend und in Echtzeit.',
+    step3: 'Führen Sie unbegrenzt viele Agenten lokal kostenlos aus und skalieren Sie bei Bedarf auf eine durchgehende Cloud-Ausführung.',
+  },
 };
 

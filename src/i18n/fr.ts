@@ -934,5 +934,16 @@ export const fr: Translations = {
     value: 'Un persona, plusieurs capacit\u00e9s \u2014 une identit\u00e9 stable avec un ensemble composable de t\u00e2ches, s\u2019ex\u00e9cutant l\u00e0 o\u00f9 vivent vos donn\u00e9es et restant sous votre contr\u00f4le.',
     cta: 'See it in action',
   },
+  tour: {
+    launch: 'Lancer la visite',
+    play: 'Lecture',
+    pause: 'Pause',
+    next: 'Étape suivante',
+    previous: 'Étape précédente',
+    exit: 'Quitter la visite',
+    step1: 'Personas transforme des objectifs en langage naturel en pipelines d’IA multi-agents qui s’exécutent en toute confidentialité sur votre propre machine.',
+    step2: 'Assemblez des agents dans un pipeline et regardez l’orchestrateur répartir le travail entre eux — auto-réparateur, en temps réel.',
+    step3: 'Exécutez un nombre illimité d’agents en local gratuitement, puis passez à l’exécution cloud 24h/24 et 7j/7 quand vous le souhaitez.',
+  },
 };
 

@@ -934,5 +934,16 @@ export const vi: Translations = {
     value: 'Má»™t persona, nhiá»u kháşŁ nÄng â€” danh tĂ­nh á»•n Ä‘á»‹nh vá»›i bá»™ cĂ´ng viá»‡c linh hoáşˇt káşżt há»Łp, cháşˇy ngay nĆˇi dá»Ż liá»‡u cá»§a báşˇn vĂ  luĂ´n náş±m trong táş§m kiá»m soĂˇt.',
     cta: 'See it in action',
   },
+  tour: {
+    launch: 'Bắt đầu tham quan',
+    play: 'Phát',
+    pause: 'Tạm dừng',
+    next: 'Bước tiếp theo',
+    previous: 'Bước trước',
+    exit: 'Thoát tham quan',
+    step1: 'Personas biến các mục tiêu bằng ngôn ngữ thông thường thành các pipeline AI đa tác nhân chạy riêng tư trên máy của bạn.',
+    step2: 'Kết hợp các tác nhân thành một pipeline và xem trình điều phối phân chia công việc giữa chúng — tự phục hồi, theo thời gian thực.',
+    step3: 'Chạy không giới hạn số tác nhân tại máy của bạn miễn phí, rồi mở rộng lên thực thi đám mây 24/7 bất cứ khi nào bạn sẵn sàng.',
+  },
 };
 

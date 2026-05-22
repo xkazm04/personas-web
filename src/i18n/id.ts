@@ -934,5 +934,16 @@ export const id: Translations = {
     value: 'Satu persona, banyak kemampuan â€” identitas yang stabil dengan sekumpulan pekerjaan yang dapat disusun, berjalan di mana data Anda berada dan tetap di bawah kendali Anda.',
     cta: 'See it in action',
   },
+  tour: {
+    launch: 'Mulai tur',
+    play: 'Putar',
+    pause: 'Jeda',
+    next: 'Langkah berikutnya',
+    previous: 'Langkah sebelumnya',
+    exit: 'Keluar dari tur',
+    step1: 'Personas mengubah tujuan dalam bahasa sehari-hari menjadi pipeline AI multi-agen yang berjalan secara privat di komputer Anda sendiri.',
+    step2: 'Susun agen menjadi sebuah pipeline dan lihat orkestrator mengarahkan pekerjaan di antara mereka — memperbaiki diri sendiri, secara real-time.',
+    step3: 'Jalankan agen tanpa batas secara lokal dan gratis, lalu tingkatkan ke eksekusi cloud 24/7 kapan pun Anda siap.',
+  },
 };
 
