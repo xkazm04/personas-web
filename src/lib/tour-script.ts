@@ -13,8 +13,16 @@ export type TourNarrationKey = "step1" | "step2" | "step3";
 export interface TourStep {
   /** Stable id — used for React keys and progress tracking. */
   id: string;
-  /** CSS selector of the element to scroll to and spotlight. */
-  target: string;
+  /**
+   * Selector scrolled into view. Must always be in the DOM (a section
+   * wrapper), so the scroll fires even before lazy section content hydrates.
+   */
+  scrollTarget: string;
+  /**
+   * Selector the spotlight hugs — a focused element inside the section. May
+   * appear only after lazy hydration; the spotlight polls until it exists.
+   */
+  spotlightTarget: string;
   /** Key into `t.tour` for the on-screen narration line. */
   narration: TourNarrationKey;
   /** ms to dwell before auto-advancing. Used until `audioSrc` is set. */
@@ -24,7 +32,25 @@ export interface TourStep {
 }
 
 export const TOUR_STEPS: TourStep[] = [
-  { id: "hero", target: "#hero", narration: "step1", dwellMs: 7000 },
-  { id: "pipelines", target: "#pipelines", narration: "step2", dwellMs: 8500 },
-  { id: "pricing", target: "#pricing", narration: "step3", dwellMs: 7500 },
+  {
+    id: "hero",
+    scrollTarget: "#hero",
+    spotlightTarget: "#hero-heading",
+    narration: "step1",
+    dwellMs: 7000,
+  },
+  {
+    id: "pipelines",
+    scrollTarget: "#pipelines",
+    spotlightTarget: "#orchestration-hub-heading",
+    narration: "step2",
+    dwellMs: 8500,
+  },
+  {
+    id: "pricing",
+    scrollTarget: "#pricing",
+    spotlightTarget: "#compare-heading",
+    narration: "step3",
+    dwellMs: 7500,
+  },
 ];

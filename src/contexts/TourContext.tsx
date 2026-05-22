@@ -75,14 +75,34 @@ export function TourProvider({ children }: { children: ReactNode }) {
     return () => window.clearTimeout(id);
   }, [active, playing, stepIndex, next]);
 
-  // Scroll the current step's target into view when the step changes.
+  // Centre the current step's spotlight target when the step changes. The
+  // target lives inside a (possibly lazy) section, so if it isn't in the DOM
+  // yet we scroll the always-present section wrapper into view to trigger
+  // hydration, then retry until the real target can be centred.
   useEffect(() => {
     if (!active) return;
-    const el = document.querySelector<HTMLElement>(TOUR_STEPS[stepIndex].target);
-    el?.scrollIntoView({
-      behavior: prefersReducedMotion ? "auto" : "smooth",
-      block: "center",
-    });
+    const step = TOUR_STEPS[stepIndex];
+    const behavior: ScrollBehavior = prefersReducedMotion ? "auto" : "smooth";
+
+    const center = () => {
+      const spot = document.querySelector<HTMLElement>(step.spotlightTarget);
+      if (spot) {
+        spot.scrollIntoView({ behavior, block: "center" });
+        return true;
+      }
+      document
+        .querySelector<HTMLElement>(step.scrollTarget)
+        ?.scrollIntoView({ behavior, block: "center" });
+      return false;
+    };
+
+    if (center()) return;
+    let tries = 0;
+    const id = window.setInterval(() => {
+      tries += 1;
+      if (center() || tries > 12) window.clearInterval(id);
+    }, 200);
+    return () => window.clearInterval(id);
   }, [active, stepIndex, prefersReducedMotion]);
 
   // Keyboard control: Escape exits, arrows step.
