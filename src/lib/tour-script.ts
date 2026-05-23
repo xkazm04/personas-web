@@ -26,6 +26,21 @@ export type TourNarrationKey =
   | "roadmap2"
   | "roadmap3";
 
+/**
+ * A timed side effect fired while a step is on screen — used to drive a
+ * diagram's animation in sync with the narration (click "Triage my Gmail",
+ * highlight each trigger in turn, open each platform card, …). Scheduled
+ * relative to the moment the step becomes active and cancelled on step
+ * change / exit. Keep `run` resilient: the target may not be mounted yet, so
+ * guard DOM lookups (see the `click*` helpers below).
+ */
+export interface TourAction {
+  /** ms after the step becomes active to fire `run`. */
+  atMs: number;
+  /** Side effect — typically a click that drives the focused diagram. */
+  run: () => void;
+}
+
 export interface TourStep {
   /** Stable id — used for React keys and progress tracking. */
   id: string;
@@ -43,8 +58,41 @@ export interface TourStep {
   narration: TourNarrationKey;
   /** ms to dwell before auto-advancing. Used until `audioSrc` is set. */
   dwellMs: number;
+  /**
+   * Optional timed manipulations of the focused diagram, fired on a timeline
+   * across the step's dwell (click-driven, so a diagram may auto-play on its
+   * own until the tour reaches it). Cleared on step change / exit.
+   */
+  actions?: TourAction[];
   /** Pre-generated narration audio. Undefined until the final build phase. */
   audioSrc?: string;
+}
+
+/**
+ * Click the first element matching `selector`, if present. Safe to call when
+ * the target hasn't mounted yet — it's a no-op then. Used by step `actions`.
+ */
+export function clickTarget(selector: string): void {
+  if (typeof document === "undefined") return;
+  document.querySelector<HTMLElement>(selector)?.click();
+}
+
+/**
+ * Click the first clickable element (button / [role=button] / [data-*]) whose
+ * trimmed text contains `text`. Used when a control has no stable selector but
+ * a unique label (e.g. the "Triage my Gmail" example chip).
+ */
+export function clickByText(text: string): void {
+  if (typeof document === "undefined") return;
+  const nodes = document.querySelectorAll<HTMLElement>(
+    'button, [role="button"]',
+  );
+  for (const el of nodes) {
+    if ((el.textContent ?? "").trim().includes(text)) {
+      el.click();
+      return;
+    }
+  }
 }
 
 // Homepage — "Watch a goal become work": command center → live agent mind →

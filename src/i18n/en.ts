@@ -835,6 +835,9 @@
     next: string;
     previous: string;
     exit: string;
+    bridgePrompt: string;
+    bridgeConfirm: string;
+    bridgeDismiss: string;
     step1: string;
     step2: string;
     step3: string;
@@ -1789,6 +1792,9 @@ export const en: Translations = {
     next: 'Next step',
     previous: 'Previous step',
     exit: 'Exit tour',
+    bridgePrompt: 'That is Personas at a glance. Want to go deeper and see how each piece actually works, feature by feature?',
+    bridgeConfirm: 'Show me the features',
+    bridgeDismiss: 'Maybe later',
     step1: 'This is Personas — your local command center. Everything here runs on your own machine, under your control.',
     step2: 'Describe a goal in plain words, and watch the agent parse it, plan its steps, and execute — live.',
     step3: 'Any of eight trigger types can wake an agent, and the orchestrator routes work between them, healing itself as it goes.',

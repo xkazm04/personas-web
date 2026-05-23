@@ -17,7 +17,14 @@ const STORAGE_KEY = "personas-tour-seen";
  * flag remembers that a visitor has seen the tour so the first-time pulse
  * only shows once.
  */
-export default function TourLauncher({ steps }: { steps: TourStep[] }) {
+export default function TourLauncher({
+  steps,
+  bridgeHref,
+}: {
+  steps: TourStep[];
+  /** When set, the tour offers to continue here after its last step. */
+  bridgeHref?: string;
+}) {
   const { t } = useTranslation();
   const { active, start } = useTour();
   // Default to "seen" so returning visitors don't see a one-frame pulse
@@ -49,9 +56,9 @@ export default function TourLauncher({ steps }: { steps: TourStep[] }) {
       } catch {
         /* ignored */
       }
-      start(steps);
+      start(steps, { bridgeHref });
     }
-  }, [start, steps]);
+  }, [start, steps, bridgeHref]);
 
   if (active) return null;
 
@@ -62,7 +69,7 @@ export default function TourLauncher({ steps }: { steps: TourStep[] }) {
       /* localStorage may be blocked; proceed regardless. */
     }
     setSeen(true);
-    start(steps);
+    start(steps, { bridgeHref });
   };
 
   return (
