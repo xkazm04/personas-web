@@ -119,6 +119,28 @@ test.describe("Guided tour — stage 2 (/features)", () => {
   });
 });
 
+test.describe("Guided tour — deep link & seen memory", () => {
+  const LAUNCH = "Take the tour";
+
+  test("?tour=1 auto-starts the homepage tour", async ({ page }) => {
+    await page.goto("/?tour=1");
+    const caption = page.getByRole("dialog", { name: LAUNCH });
+    await expect(caption).toBeVisible();
+    await expect(caption).toContainText("multi-agent AI pipelines");
+    await page.screenshot({ path: "test-results/tour/12-deeplink.png" });
+  });
+
+  test("starting the tour persists the seen flag", async ({ page }) => {
+    await page.goto("/");
+    // Fresh visitor — no flag yet.
+    const before = await page.evaluate(() => localStorage.getItem("personas-tour-seen"));
+    expect(before).toBeNull();
+    await page.getByRole("button", { name: LAUNCH }).click();
+    const after = await page.evaluate(() => localStorage.getItem("personas-tour-seen"));
+    expect(after).toBe("1");
+  });
+});
+
 test.describe("Guided tour — mobile viewport", () => {
   const LAUNCH = "Take the tour";
 
