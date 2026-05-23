@@ -944,6 +944,12 @@ export const id: Translations = {
     step1: 'Personas mengubah tujuan dalam bahasa sehari-hari menjadi pipeline AI multi-agen yang berjalan secara privat di komputer Anda sendiri.',
     step2: 'Susun agen menjadi sebuah pipeline dan lihat orkestrator mengarahkan pekerjaan di antara mereka — memperbaiki diri sendiri, secara real-time.',
     step3: 'Jalankan agen tanpa batas secara lokal dan gratis, lalu tingkatkan ke eksekusi cloud 24/7 kapan pun Anda siap.',
+    features1: 'Jelaskan apa yang Anda inginkan dalam bahasa sehari-hari — Personas mengubahnya menjadi agen yang dapat dijalankan di komputer Anda.',
+    features2: 'Pipeline memperbaiki dirinya sendiri: ketika sebuah langkah gagal, agen mendiagnosis penyebabnya dan mencoba lagi, agar alur kerja Anda terus berjalan.',
+    features3: 'Kredensial tetap terenkripsi di keyring OS Anda; rahasia dan prompt tidak pernah meninggalkan perangkat Anda kecuali Anda memilih demikian.',
+    roadmap1: 'Pantau apa yang sedang dirilis sekarang dan apa yang akan datang berikutnya — setiap fase di sini diberi label sesuai status begitu tiba.',
+    roadmap2: 'Pilih fitur yang paling Anda inginkan. Ide dengan suara terbanyak menentukan apa yang kami bangun selanjutnya.',
+    roadmap3: 'Setiap rilis hadir di sini dengan perubahan-perubahan penting — pantau ritme rilis kami.',
   },
 };
 

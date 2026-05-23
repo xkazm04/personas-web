@@ -3,7 +3,6 @@
 import { motion, AnimatePresence } from "framer-motion";
 import { Play, Pause, ChevronLeft, ChevronRight, X } from "lucide-react";
 import { useTour } from "@/contexts/TourContext";
-import { TOUR_STEPS } from "@/lib/tour-script";
 import { useTranslation } from "@/i18n/useTranslation";
 import { TRANSITION_NORMAL } from "@/lib/animations";
 
@@ -16,10 +15,11 @@ const BTN_BASE =
  */
 export default function TourCaptionCard() {
   const { t } = useTranslation();
-  const { stepIndex, playing, next, prev, goTo, togglePlay, exit } = useTour();
-  const step = TOUR_STEPS[stepIndex];
+  const { steps, stepIndex, playing, next, prev, goTo, togglePlay, exit } = useTour();
+  if (steps.length === 0) return null;
+  const step = steps[stepIndex];
   const isFirst = stepIndex === 0;
-  const isLast = stepIndex === TOUR_STEPS.length - 1;
+  const isLast = stepIndex === steps.length - 1;
 
   return (
     <motion.div
@@ -50,12 +50,12 @@ export default function TourCaptionCard() {
 
       {/* Progress dots — also jump-to controls. */}
       <div className="flex items-center justify-center gap-2">
-        {TOUR_STEPS.map((s, i) => (
+        {steps.map((s, i) => (
           <button
             key={s.id}
             type="button"
             onClick={() => goTo(i)}
-            aria-label={`${i + 1} / ${TOUR_STEPS.length}`}
+            aria-label={`${i + 1} / ${steps.length}`}
             aria-current={i === stepIndex}
             className={`h-1.5 rounded-full transition-all duration-300 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-cyan/40 ${
               i === stepIndex

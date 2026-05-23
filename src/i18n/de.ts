@@ -944,6 +944,12 @@ export const de: Translations = {
     step1: 'Personas verwandelt Ziele in einfacher Sprache in Multi-Agenten-KI-Pipelines, die privat auf Ihrem eigenen Rechner laufen.',
     step2: 'Fügen Sie Agenten zu einer Pipeline zusammen und sehen Sie zu, wie der Orchestrator die Arbeit zwischen ihnen verteilt — selbstheilend und in Echtzeit.',
     step3: 'Führen Sie unbegrenzt viele Agenten lokal kostenlos aus und skalieren Sie bei Bedarf auf eine durchgehende Cloud-Ausführung.',
+    features1: 'Beschreiben Sie in einfacher Sprache, was Sie möchten — Personas verwandelt es in einen ausführbaren Agenten, der auf Ihrem Rechner läuft.',
+    features2: 'Pipelines heilen sich selbst: Wenn ein Schritt fehlschlägt, diagnostizieren die Agenten die Ursache und versuchen es erneut, sodass Ihr Workflow weiterläuft.',
+    features3: 'Anmeldedaten bleiben verschlüsselt im OS-Schlüsselbund — Secrets und Prompts verlassen Ihr Gerät nicht, es sei denn, Sie entscheiden sich dafür.',
+    roadmap1: 'Verfolgen Sie, was gerade ausgeliefert wird und was als Nächstes kommt — jede Phase hier wird mit ihrem aktuellen Status gekennzeichnet, sobald sie eintrifft.',
+    roadmap2: 'Stimmen Sie für die Funktionen, die Sie sich am meisten wünschen. Die meistgewählten Ideen bestimmen, was wir als Nächstes bauen.',
+    roadmap3: 'Jedes Release landet hier mit den wichtigsten Änderungen — behalten Sie unser Auslieferungstempo im Auge.',
   },
 };
 

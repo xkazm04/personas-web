@@ -944,6 +944,12 @@ export const fr: Translations = {
     step1: 'Personas transforme des objectifs en langage naturel en pipelines d’IA multi-agents qui s’exécutent en toute confidentialité sur votre propre machine.',
     step2: 'Assemblez des agents dans un pipeline et regardez l’orchestrateur répartir le travail entre eux — auto-réparateur, en temps réel.',
     step3: 'Exécutez un nombre illimité d’agents en local gratuitement, puis passez à l’exécution cloud 24h/24 et 7j/7 quand vous le souhaitez.',
+    features1: 'Décrivez ce que vous voulez en langage naturel — Personas en fait un agent exécutable qui tourne sur votre machine.',
+    features2: 'Les pipelines s’auto-réparent : si une étape échoue, les agents diagnostiquent la cause et relancent, et votre workflow continue d’avancer.',
+    features3: 'Les identifiants restent chiffrés dans le trousseau de l’OS ; secrets et prompts ne quittent jamais votre appareil sauf si vous le décidez.',
+    roadmap1: 'Suivez ce qui est livré maintenant et ce qui arrive ensuite — chaque phase est ici étiquetée par son statut dès qu’elle arrive.',
+    roadmap2: 'Votez pour les fonctionnalités que vous voulez le plus. Les idées les plus votées orientent ce que nous construisons ensuite.',
+    roadmap3: 'Chaque version atterrit ici avec les changements qui comptent — gardez un œil sur notre rythme de livraison.',
   },
 };
 

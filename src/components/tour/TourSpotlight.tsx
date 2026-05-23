@@ -3,7 +3,6 @@
 import { useEffect, useRef } from "react";
 import { motion } from "framer-motion";
 import { useTour } from "@/contexts/TourContext";
-import { TOUR_STEPS } from "@/lib/tour-script";
 
 /** Breathing room (px) drawn around the spotlit element. */
 const PADDING = 22;
@@ -28,11 +27,12 @@ const clamp = (v: number, lo: number, hi: number) => Math.min(Math.max(v, lo), h
  * card and the rest of the active theme.
  */
 export default function TourSpotlight() {
-  const { stepIndex } = useTour();
+  const { stepIndex, steps } = useTour();
   const cutoutRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
-    const { spotlightTarget } = TOUR_STEPS[stepIndex];
+    if (steps.length === 0) return;
+    const { spotlightTarget } = steps[stepIndex];
 
     const sync = () => {
       const el = document.querySelector<HTMLElement>(spotlightTarget);
@@ -63,7 +63,7 @@ export default function TourSpotlight() {
       window.removeEventListener("resize", sync);
       window.clearInterval(poll);
     };
-  }, [stepIndex]);
+  }, [stepIndex, steps]);
 
   return (
     <motion.div

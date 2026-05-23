@@ -15,6 +15,7 @@ import { useAnimationPauseRegister } from "@/hooks/useAnimationPause";
 import { connectors } from "@/data/connectors";
 import { useTranslation } from "@/i18n/useTranslation";
 import TourLauncher from "@/components/tour/TourLauncher";
+import { HOME_TOUR_STEPS } from "@/lib/tour-script";
 import CommandCenterIllustration from "./hero/CommandCenterIllustration";
 import HeroStatRow from "./hero/HeroStatRow";
 
@@ -146,7 +147,7 @@ export default function HeroClient() {
           </motion.div>
 
           <motion.div variants={fadeUp} className="mt-6 flex justify-center lg:justify-start">
-            <TourLauncher />
+            <TourLauncher steps={HOME_TOUR_STEPS} />
           </motion.div>
 
           <motion.div

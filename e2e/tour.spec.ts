@@ -95,3 +95,49 @@ test.describe("Guided tour — stage 1 (homepage engine)", () => {
     await expect(caption).toBeHidden();
   });
 });
+
+test.describe("Guided tour — stage 2 (/features)", () => {
+  const LAUNCH = "Take the tour";
+
+  test("launcher is rendered on /features", async ({ page }) => {
+    await page.goto("/features");
+    await expect(page.getByRole("button", { name: LAUNCH })).toBeVisible();
+    await page.screenshot({ path: "test-results/tour/05-features-launcher.png" });
+  });
+
+  test("launching plays the features narration", async ({ page }) => {
+    await page.goto("/features");
+    await page.getByRole("button", { name: LAUNCH }).click();
+    const caption = page.getByRole("dialog", { name: LAUNCH });
+    await expect(caption).toBeVisible();
+    await expect(caption).toContainText("executable agent");
+    await page.screenshot({ path: "test-results/tour/06-features-step1.png" });
+
+    await caption.getByRole("button", { name: "Next step" }).click();
+    await expect(caption).toContainText("self-heal");
+    await page.screenshot({ path: "test-results/tour/07-features-step2.png" });
+  });
+});
+
+test.describe("Guided tour — stage 2 (/roadmap)", () => {
+  const LAUNCH = "Take the tour";
+
+  test("launcher is rendered on /roadmap", async ({ page }) => {
+    await page.goto("/roadmap");
+    await expect(page.getByRole("button", { name: LAUNCH })).toBeVisible();
+    await page.screenshot({ path: "test-results/tour/08-roadmap-launcher.png" });
+  });
+
+  test("launching plays the roadmap narration", async ({ page }) => {
+    await page.goto("/roadmap");
+    await page.getByRole("button", { name: LAUNCH }).click();
+    const caption = page.getByRole("dialog", { name: LAUNCH });
+    await expect(caption).toBeVisible();
+    await expect(caption).toContainText("shipping now");
+    await page.screenshot({ path: "test-results/tour/09-roadmap-step1.png" });
+
+    await caption.getByRole("button", { name: "Next step" }).click();
+    await expect(caption).toContainText("Vote");
+    await page.screenshot({ path: "test-results/tour/10-roadmap-step2.png" });
+  });
+});

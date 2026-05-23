@@ -944,6 +944,12 @@ export const vi: Translations = {
     step1: 'Personas biến các mục tiêu bằng ngôn ngữ thông thường thành các pipeline AI đa tác nhân chạy riêng tư trên máy của bạn.',
     step2: 'Kết hợp các tác nhân thành một pipeline và xem trình điều phối phân chia công việc giữa chúng — tự phục hồi, theo thời gian thực.',
     step3: 'Chạy không giới hạn số tác nhân tại máy của bạn miễn phí, rồi mở rộng lên thực thi đám mây 24/7 bất cứ khi nào bạn sẵn sàng.',
+    features1: 'Mô tả những gì bạn muốn bằng ngôn ngữ thông thường — Personas biến nó thành một tác nhân có thể chạy ngay trên máy của bạn.',
+    features2: 'Pipeline tự phục hồi: khi một bước thất bại, các tác nhân chẩn đoán nguyên nhân và thử lại, để luồng công việc của bạn tiếp tục chạy.',
+    features3: 'Thông tin xác thực được mã hoá ngay trong keyring của hệ điều hành; bí mật và prompt không bao giờ rời khỏi thiết bị của bạn trừ khi bạn cho phép.',
+    roadmap1: 'Theo dõi những gì đang ra mắt và những gì sẽ đến tiếp theo — mỗi giai đoạn ở đây được gắn nhãn theo trạng thái ngay khi xuất hiện.',
+    roadmap2: 'Hãy bình chọn cho những tính năng bạn muốn nhất. Những ý tưởng được bình chọn nhiều nhất sẽ định hình những gì chúng tôi xây dựng tiếp theo.',
+    roadmap3: 'Mỗi bản phát hành xuất hiện tại đây cùng những thay đổi quan trọng — hãy theo dõi nhịp triển khai của chúng tôi.',
   },
 };
 
