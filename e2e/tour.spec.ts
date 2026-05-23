@@ -9,9 +9,9 @@ import { test, expect } from "@playwright/test";
  */
 test.describe("Guided tour — stage 1 (homepage engine)", () => {
   const LAUNCH = "Take the tour";
-  const STEP1 = "multi-agent AI pipelines";
-  const STEP2 = "orchestrator route work";
-  const STEP3 = "cloud execution";
+  const STEP1 = "command center";
+  const STEP2 = "plan its steps";
+  const STEP3 = "eight trigger types";
 
   test("launcher is present in the hero", async ({ page }) => {
     await page.goto("/");
@@ -110,11 +110,11 @@ test.describe("Guided tour — stage 2 (/features)", () => {
     await page.getByRole("button", { name: LAUNCH }).click();
     const caption = page.getByRole("dialog", { name: LAUNCH });
     await expect(caption).toBeVisible();
-    await expect(caption).toContainText("executable agent");
+    await expect(caption).toContainText("persona matrix");
     await page.screenshot({ path: "test-results/tour/06-features-step1.png" });
 
     await caption.getByRole("button", { name: "Next step" }).click();
-    await expect(caption).toContainText("self-heal");
+    await expect(caption).toContainText("memory layers");
     await page.screenshot({ path: "test-results/tour/07-features-step2.png" });
   });
 });
@@ -126,18 +126,20 @@ test.describe("Guided tour — DOM manipulation", () => {
     await page.goto("/");
     await page.getByRole("button", { name: LAUNCH }).click();
     const caption = page.getByRole("dialog", { name: LAUNCH });
-    await expect(caption).toContainText("multi-agent AI pipelines");
-    // Step 1 — #hero-heading should carry the live marker.
-    await expect(page.locator("#hero-heading")).toHaveAttribute("data-tour-active", "true");
+    await expect(caption).toContainText("command center");
+    // Step 1 — the command-center diagram should carry the live marker.
+    const commandCenter = page.locator('[data-tour-diagram="command-center"]');
+    const agentMind = page.locator('[data-tour-diagram="agent-mind"]');
+    await expect(commandCenter).toHaveAttribute("data-tour-active", "true");
 
     await caption.getByRole("button", { name: "Next step" }).click();
-    // Step 2 marker hops to #orchestration-hub-heading; the previous target
-    // is no longer marked.
-    await expect(page.locator("#orchestration-hub-heading")).toHaveAttribute("data-tour-active", "true");
-    await expect(page.locator("#hero-heading")).not.toHaveAttribute("data-tour-active", "true");
+    // Step 2 marker hops to the agent-mind diagram; the previous target is no
+    // longer marked.
+    await expect(agentMind).toHaveAttribute("data-tour-active", "true");
+    await expect(commandCenter).not.toHaveAttribute("data-tour-active", "true");
 
     await caption.getByRole("button", { name: "Exit tour" }).click();
-    await expect(page.locator("#orchestration-hub-heading")).not.toHaveAttribute("data-tour-active", "true");
+    await expect(agentMind).not.toHaveAttribute("data-tour-active", "true");
   });
 });
 
@@ -148,7 +150,7 @@ test.describe("Guided tour — deep link & seen memory", () => {
     await page.goto("/?tour=1");
     const caption = page.getByRole("dialog", { name: LAUNCH });
     await expect(caption).toBeVisible();
-    await expect(caption).toContainText("multi-agent AI pipelines");
+    await expect(caption).toContainText("command center");
     await page.screenshot({ path: "test-results/tour/12-deeplink.png" });
   });
 
@@ -174,7 +176,7 @@ test.describe("Guided tour — mobile viewport", () => {
     await page.getByRole("button", { name: LAUNCH }).click();
     const caption = page.getByRole("dialog", { name: LAUNCH });
     await expect(caption).toBeVisible();
-    await expect(caption).toContainText("multi-agent AI pipelines");
+    await expect(caption).toContainText("command center");
     await page.screenshot({ path: "test-results/tour/11-mobile-step1.png" });
   });
 });
@@ -193,11 +195,11 @@ test.describe("Guided tour — stage 2 (/roadmap)", () => {
     await page.getByRole("button", { name: LAUNCH }).click();
     const caption = page.getByRole("dialog", { name: LAUNCH });
     await expect(caption).toBeVisible();
-    await expect(caption).toContainText("shipping now");
+    await expect(caption).toContainText("where we are now");
     await page.screenshot({ path: "test-results/tour/09-roadmap-step1.png" });
 
     await caption.getByRole("button", { name: "Next step" }).click();
-    await expect(caption).toContainText("Vote");
+    await expect(caption).toContainText("vote on the features");
     await page.screenshot({ path: "test-results/tour/10-roadmap-step2.png" });
   });
 });

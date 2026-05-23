@@ -51,7 +51,7 @@ export default function HealingCircuit() {
         transition={{ duration: 0.6, delay: 0.2 }}
         className="mt-16 mx-auto max-w-4xl relative z-10"
       >
-        <div className="force-dark rounded-2xl border border-foreground/8 bg-background/85 backdrop-blur-xl overflow-hidden shadow-[0_0_80px_rgba(0,0,0,0.4)]">
+        <div data-tour-diagram="healing" className="force-dark rounded-2xl border border-foreground/8 bg-background/85 backdrop-blur-xl overflow-hidden shadow-[0_0_80px_rgba(0,0,0,0.4)]">
           <CircuitHeader activeStage={activeStage} cycleIndex={cycleIndex} />
 
           <div className="flex flex-col lg:flex-row">

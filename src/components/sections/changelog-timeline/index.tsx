@@ -52,6 +52,7 @@ export default function ChangelogTimeline() {
 
       {/* Timeline */}
       <motion.div
+        data-tour-diagram="changelog"
         variants={staggerContainer}
         initial="hidden"
         whileInView="visible"

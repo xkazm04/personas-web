@@ -61,6 +61,7 @@ export default function OrchestrationHub() {
         >
           <div className="grid grid-cols-1 lg:grid-cols-[1.2fr_1fr] gap-8 items-center">
             <div
+              data-tour-diagram="orchestration"
               className="relative mx-auto w-full max-w-[560px] aspect-square"
               onPointerEnter={() => setHovering(true)}
               onPointerLeave={() => setHovering(false)}

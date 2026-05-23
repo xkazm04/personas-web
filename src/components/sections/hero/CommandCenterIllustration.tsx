@@ -30,7 +30,7 @@ export default function CommandCenterIllustration({ publicBetaLabel }: Props) {
   const segmentAngle = (360 - gap * totalPhases) / totalPhases;
 
   return (
-    <div className="relative flex items-center justify-center group">
+    <div data-tour-diagram="command-center" className="relative flex items-center justify-center group">
       <svg
         width="220"
         height="220"

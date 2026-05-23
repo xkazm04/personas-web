@@ -26,7 +26,7 @@ export default function RoadmapProgress() {
   const phasesRemainingLabel = `${remainingCount} phase${remainingCount === 1 ? "" : "s"} to go`;
 
   return (
-    <motion.div variants={fadeUp} className="mt-10 mx-auto max-w-2xl">
+    <motion.div data-tour-diagram="roadmap-progress" variants={fadeUp} className="mt-10 mx-auto max-w-2xl">
       <div className="flex flex-wrap items-center justify-between gap-3 text-base font-mono text-muted mb-4">
         <span className="font-medium tracking-wide">{phasesCompleteLabel}</span>
         <span
