@@ -975,3 +975,18 @@ img {
     animation: tour-cutout-pulse 2.6s ease-in-out infinite;
   }
 }
+
+/* Mark the live spotlight target on the page so it lifts subtly while the
+   tour is on it — a real DOM-level manipulation alongside the overlay's
+   visual spotlight. Gated by reduced-motion. */
+[data-tour-active="true"] {
+  transition:
+    transform 0.6s cubic-bezier(0.22, 1, 0.36, 1),
+    filter 0.6s cubic-bezier(0.22, 1, 0.36, 1);
+  filter: drop-shadow(0 0 18px color-mix(in srgb, var(--brand-cyan) 35%, transparent));
+}
+@media (prefers-reduced-motion: no-preference) {
+  [data-tour-active="true"] {
+    transform: scale(1.025);
+  }
+}

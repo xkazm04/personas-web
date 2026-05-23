@@ -119,6 +119,28 @@ test.describe("Guided tour — stage 2 (/features)", () => {
   });
 });
 
+test.describe("Guided tour — DOM manipulation", () => {
+  const LAUNCH = "Take the tour";
+
+  test("spotlight target gets data-tour-active while focused", async ({ page }) => {
+    await page.goto("/");
+    await page.getByRole("button", { name: LAUNCH }).click();
+    const caption = page.getByRole("dialog", { name: LAUNCH });
+    await expect(caption).toContainText("multi-agent AI pipelines");
+    // Step 1 — #hero-heading should carry the live marker.
+    await expect(page.locator("#hero-heading")).toHaveAttribute("data-tour-active", "true");
+
+    await caption.getByRole("button", { name: "Next step" }).click();
+    // Step 2 marker hops to #orchestration-hub-heading; the previous target
+    // is no longer marked.
+    await expect(page.locator("#orchestration-hub-heading")).toHaveAttribute("data-tour-active", "true");
+    await expect(page.locator("#hero-heading")).not.toHaveAttribute("data-tour-active", "true");
+
+    await caption.getByRole("button", { name: "Exit tour" }).click();
+    await expect(page.locator("#orchestration-hub-heading")).not.toHaveAttribute("data-tour-active", "true");
+  });
+});
+
 test.describe("Guided tour — deep link & seen memory", () => {
   const LAUNCH = "Take the tour";
 

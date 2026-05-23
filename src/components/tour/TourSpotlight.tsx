@@ -46,6 +46,29 @@ export default function TourSpotlight() {
   const tweenStartRef = useRef<number>(0);
   const prefersReducedMotion = useReducedMotion();
 
+  // Mark the live spotlight target with `data-tour-active="true"` so the
+  // element itself can react to being in focus (subtle scale + glow lift in
+  // globals.css). Retries for lazy-hydrated targets.
+  useEffect(() => {
+    if (!active || steps.length === 0) return;
+    const selector = steps[stepIndex].spotlightTarget;
+    let marked: HTMLElement | null = null;
+    const apply = () => {
+      const el = document.querySelector<HTMLElement>(selector);
+      if (el && el !== marked) {
+        marked?.removeAttribute("data-tour-active");
+        el.setAttribute("data-tour-active", "true");
+        marked = el;
+      }
+    };
+    apply();
+    const id = window.setInterval(apply, 200);
+    return () => {
+      window.clearInterval(id);
+      marked?.removeAttribute("data-tour-active");
+    };
+  }, [active, stepIndex, steps]);
+
   useEffect(() => {
     if (!active || steps.length === 0) return;
 
