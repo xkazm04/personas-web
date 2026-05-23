@@ -42,11 +42,15 @@ export default function TourSpotlight() {
       if (r.width === 0 && r.height === 0) return;
       const vw = window.innerWidth;
       const vh = window.innerHeight;
+      // Narrow viewports need tighter margins so the frame doesn't crush
+      // the visible content area.
+      const m = vw < 480 ? 18 : MARGIN;
+      const bg = vw < 480 ? 180 : BOTTOM_GAP;
       // Clamp into the viewport so an oversized target still frames cleanly.
-      const left = clamp(r.left - PADDING, MARGIN, vw - MARGIN);
-      const top = clamp(r.top - PADDING, MARGIN, vh - MARGIN);
-      const right = clamp(r.right + PADDING, MARGIN, vw - MARGIN);
-      const bottom = clamp(r.bottom + PADDING, MARGIN, vh - BOTTOM_GAP);
+      const left = clamp(r.left - PADDING, m, vw - m);
+      const top = clamp(r.top - PADDING, m, vh - m);
+      const right = clamp(r.right + PADDING, m, vw - m);
+      const bottom = clamp(r.bottom + PADDING, m, vh - bg);
       cutout.style.transform = `translate(${left}px, ${top}px)`;
       cutout.style.width = `${Math.max(0, right - left)}px`;
       cutout.style.height = `${Math.max(0, bottom - top)}px`;
@@ -75,7 +79,7 @@ export default function TourSpotlight() {
     >
       <div
         ref={cutoutRef}
-        className="absolute left-0 top-0 rounded-2xl opacity-0"
+        className="tour-cutout-pulse absolute left-0 top-0 rounded-2xl opacity-0"
         style={{
           border: "2px solid color-mix(in srgb, var(--brand-cyan) 80%, transparent)",
           // No CSS transition: the cutout is repositioned on every scroll

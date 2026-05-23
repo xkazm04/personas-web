@@ -119,6 +119,22 @@ test.describe("Guided tour — stage 2 (/features)", () => {
   });
 });
 
+test.describe("Guided tour — mobile viewport", () => {
+  const LAUNCH = "Take the tour";
+
+  test("homepage tour runs on a 375 × 667 viewport", async ({ page }) => {
+    await page.setViewportSize({ width: 375, height: 667 });
+    await page.goto("/");
+    await expect(page.getByRole("button", { name: LAUNCH })).toBeVisible();
+
+    await page.getByRole("button", { name: LAUNCH }).click();
+    const caption = page.getByRole("dialog", { name: LAUNCH });
+    await expect(caption).toBeVisible();
+    await expect(caption).toContainText("multi-agent AI pipelines");
+    await page.screenshot({ path: "test-results/tour/11-mobile-step1.png" });
+  });
+});
+
 test.describe("Guided tour — stage 2 (/roadmap)", () => {
   const LAUNCH = "Take the tour";
 

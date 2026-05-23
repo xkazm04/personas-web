@@ -947,3 +947,31 @@ img {
 [data-theme^="dark-"] .connector-icon {
   filter: brightness(0) invert(1) drop-shadow(0 0 2px rgba(255, 255, 255, 0.4));
 }
+
+/* ══════════════════════════════════════════════════════════════════════════
+   Guided tour spotlight — the cutout's box-shadow has two layers that
+   matter: a constant page-dim (first shadow) and an accent glow (second +
+   inset). The pulse only modulates the glow so the page never gets darker
+   than the static state; under prefers-reduced-motion the animation drops
+   and the inline static box-shadow on the element wins.
+   ══════════════════════════════════════════════════════════════════════════ */
+@keyframes tour-cutout-pulse {
+  0%, 100% {
+    box-shadow:
+      0 0 0 100vmax rgba(8, 11, 20, 0.8),
+      0 0 64px color-mix(in srgb, var(--brand-cyan) 45%, transparent),
+      inset 0 0 30px color-mix(in srgb, var(--brand-cyan) 14%, transparent);
+  }
+  50% {
+    box-shadow:
+      0 0 0 100vmax rgba(8, 11, 20, 0.8),
+      0 0 96px color-mix(in srgb, var(--brand-cyan) 65%, transparent),
+      inset 0 0 40px color-mix(in srgb, var(--brand-cyan) 20%, transparent);
+  }
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .tour-cutout-pulse {
+    animation: tour-cutout-pulse 2.6s ease-in-out infinite;
+  }
+}
