@@ -341,6 +341,52 @@ export const ja: Translations = {
         custom: 'ă‚«ă‚ąă‚żă ',
       },
     },
+    home: {
+      vitals: {
+        title: 'フリートの稼働状況',
+        runs: '実行数',
+        alerts: 'アラート',
+      },
+      triage: {
+        title: 'トリアージキュー',
+        empty: 'すべて対応済み — 対応が必要な項目はありません。',
+        review: 'レビュー',
+        alert: 'アラート',
+        message: 'メッセージ',
+      },
+      heatmap: {
+        title: '実行アクティビティ',
+        subtitle: 'エージェント別の実行数 · 過去7日間',
+        less: '少',
+        more: '多',
+        empty: 'まだ実行がありません。',
+      },
+      topPerformers: {
+        title: 'トップパフォーマー',
+      },
+      upcomingRoutines: {
+        title: '予定されたルーティン',
+        subtitle: '次回の予定実行',
+        empty: '予定されたルーティンはありません。',
+        triggers: {
+          schedule: 'スケジュール',
+          polling: 'ポーリング',
+          webhook: 'Webhook',
+          event: 'イベント',
+        },
+      },
+      vaultChanges: {
+        title: '認証情報ボールト',
+        subtitle: '最近の変更',
+        empty: '最近の変更はありません。',
+        actions: {
+          rotated: 'ローテーション',
+          added: '追加',
+          revoked: '失効',
+          synced: '同期',
+        },
+      },
+    },
   },
   dashboardUi: {
     testFlow: "Test Flow",

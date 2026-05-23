@@ -341,6 +341,52 @@ export const ko: Translations = {
         custom: 'ě‚¬ěš©ěž ě •ěť',
       },
     },
+    home: {
+      vitals: {
+        title: '플릿 바이탈',
+        runs: '실행 수',
+        alerts: '알림',
+      },
+      triage: {
+        title: '분류 대기열',
+        empty: '모두 처리됨 — 주의가 필요한 항목이 없습니다.',
+        review: '검토',
+        alert: '경고',
+        message: '메시지',
+      },
+      heatmap: {
+        title: '실행 활동',
+        subtitle: '에이전트별 실행 · 최근 7일',
+        less: '적음',
+        more: '많음',
+        empty: '아직 실행이 없습니다.',
+      },
+      topPerformers: {
+        title: '상위 성과자',
+      },
+      upcomingRoutines: {
+        title: '예정된 루틴',
+        subtitle: '다음 예약 실행',
+        empty: '예약된 루틴이 없습니다.',
+        triggers: {
+          schedule: '스케줄',
+          polling: '폴링',
+          webhook: '웹훅',
+          event: '이벤트',
+        },
+      },
+      vaultChanges: {
+        title: '자격 증명 볼트',
+        subtitle: '최근 변경',
+        empty: '최근 변경 사항이 없습니다.',
+        actions: {
+          rotated: '교체됨',
+          added: '추가됨',
+          revoked: '취소됨',
+          synced: '동기화됨',
+        },
+      },
+    },
   },
   dashboardUi: {
     testFlow: "Test Flow",

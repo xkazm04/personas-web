@@ -341,6 +341,52 @@ export const ru: Translations = {
         custom: 'ĐˇĐ˛ĐľĐą',
       },
     },
+    home: {
+      vitals: {
+        title: 'Состояние флота',
+        runs: 'Запуски',
+        alerts: 'Оповещения',
+      },
+      triage: {
+        title: 'Очередь триажа',
+        empty: 'Всё в порядке — ничего не требует внимания.',
+        review: 'Проверка',
+        alert: 'Оповещение',
+        message: 'Сообщение',
+      },
+      heatmap: {
+        title: 'Активность выполнения',
+        subtitle: 'Запуски по агентам · за 7 дней',
+        less: 'Меньше',
+        more: 'Больше',
+        empty: 'Пока нет запусков.',
+      },
+      topPerformers: {
+        title: 'Лучшие агенты',
+      },
+      upcomingRoutines: {
+        title: 'Предстоящие задания',
+        subtitle: 'Следующие запланированные запуски',
+        empty: 'Нет запланированных заданий.',
+        triggers: {
+          schedule: 'Расписание',
+          polling: 'Опрос',
+          webhook: 'Вебхук',
+          event: 'Событие',
+        },
+      },
+      vaultChanges: {
+        title: 'Хранилище учётных данных',
+        subtitle: 'Недавние изменения',
+        empty: 'Нет недавних изменений.',
+        actions: {
+          rotated: 'Ротация',
+          added: 'Добавлено',
+          revoked: 'Отозвано',
+          synced: 'Синхронизировано',
+        },
+      },
+    },
   },
   dashboardUi: {
     testFlow: "Test Flow",

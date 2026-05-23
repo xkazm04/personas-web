@@ -341,6 +341,52 @@ export const cs: Translations = {
         custom: 'VlastnĂ­',
       },
     },
+    home: {
+      vitals: {
+        title: 'Stav flotily',
+        runs: 'Spuštění',
+        alerts: 'Upozornění',
+      },
+      triage: {
+        title: 'Fronta třídění',
+        empty: 'Vše v pořádku — nic nevyžaduje vaši pozornost.',
+        review: 'Kontrola',
+        alert: 'Upozornění',
+        message: 'Zpráva',
+      },
+      heatmap: {
+        title: 'Aktivita spuštění',
+        subtitle: 'Spuštění na agenta · posledních 7 dní',
+        less: 'Méně',
+        more: 'Více',
+        empty: 'Zatím žádná spuštění.',
+      },
+      topPerformers: {
+        title: 'Nejlepší agenti',
+      },
+      upcomingRoutines: {
+        title: 'Nadcházející rutiny',
+        subtitle: 'Další naplánovaná spuštění',
+        empty: 'Žádné naplánované rutiny.',
+        triggers: {
+          schedule: 'Plán',
+          polling: 'Dotazování',
+          webhook: 'Webhook',
+          event: 'Událost',
+        },
+      },
+      vaultChanges: {
+        title: 'Trezor přihlašovacích údajů',
+        subtitle: 'Nedávné změny',
+        empty: 'Žádné nedávné změny.',
+        actions: {
+          rotated: 'Rotováno',
+          added: 'Přidáno',
+          revoked: 'Odvoláno',
+          synced: 'Synchronizováno',
+        },
+      },
+    },
   },
   dashboardUi: {
     testFlow: "Test Flow",

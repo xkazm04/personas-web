@@ -341,6 +341,52 @@ export const vi: Translations = {
         custom: 'TĂąy chá»‰nh',
       },
     },
+    home: {
+      vitals: {
+        title: 'Tình trạng đội tác nhân',
+        runs: 'Lần chạy',
+        alerts: 'Cảnh báo',
+      },
+      triage: {
+        title: 'Hàng đợi phân loại',
+        empty: 'Mọi thứ ổn — không có gì cần bạn chú ý.',
+        review: 'Đánh giá',
+        alert: 'Cảnh báo',
+        message: 'Tin nhắn',
+      },
+      heatmap: {
+        title: 'Hoạt động thực thi',
+        subtitle: 'Lần chạy mỗi tác nhân · 7 ngày qua',
+        less: 'Ít',
+        more: 'Nhiều',
+        empty: 'Chưa có lần thực thi nào.',
+      },
+      topPerformers: {
+        title: 'Hiệu suất hàng đầu',
+      },
+      upcomingRoutines: {
+        title: 'Quy trình sắp tới',
+        subtitle: 'Lần chạy theo lịch tiếp theo',
+        empty: 'Không có quy trình theo lịch.',
+        triggers: {
+          schedule: 'Lịch',
+          polling: 'Thăm dò',
+          webhook: 'Webhook',
+          event: 'Sự kiện',
+        },
+      },
+      vaultChanges: {
+        title: 'Kho thông tin xác thực',
+        subtitle: 'Thay đổi gần đây',
+        empty: 'Không có thay đổi gần đây.',
+        actions: {
+          rotated: 'Đã xoay',
+          added: 'Đã thêm',
+          revoked: 'Đã thu hồi',
+          synced: 'Đã đồng bộ',
+        },
+      },
+    },
   },
   dashboardUi: {
     testFlow: "Test Flow",

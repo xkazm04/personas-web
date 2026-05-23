@@ -341,6 +341,52 @@ export const zh: Translations = {
         custom: 'č‡Şĺ®šäą‰',
       },
     },
+    home: {
+      vitals: {
+        title: '集群运行状况',
+        runs: '运行次数',
+        alerts: '告警',
+      },
+      triage: {
+        title: '处理队列',
+        empty: '一切就绪 — 暂无需要处理的事项。',
+        review: '审核',
+        alert: '告警',
+        message: '消息',
+      },
+      heatmap: {
+        title: '执行活动',
+        subtitle: '各智能体运行次数 · 最近 7 天',
+        less: '少',
+        more: '多',
+        empty: '暂无执行记录。',
+      },
+      topPerformers: {
+        title: '最佳表现',
+      },
+      upcomingRoutines: {
+        title: '即将运行的例程',
+        subtitle: '下次计划运行',
+        empty: '暂无计划例程。',
+        triggers: {
+          schedule: '计划',
+          polling: '轮询',
+          webhook: 'Webhook',
+          event: '事件',
+        },
+      },
+      vaultChanges: {
+        title: '凭据保险库',
+        subtitle: '最近更改',
+        empty: '暂无最近更改。',
+        actions: {
+          rotated: '已轮换',
+          added: '已添加',
+          revoked: '已吊销',
+          synced: '已同步',
+        },
+      },
+    },
   },
   dashboardUi: {
     testFlow: "Test Flow",

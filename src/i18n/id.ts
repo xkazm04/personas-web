@@ -341,6 +341,52 @@ export const id: Translations = {
         custom: 'Kustom',
       },
     },
+    home: {
+      vitals: {
+        title: 'Vital armada',
+        runs: 'Eksekusi',
+        alerts: 'Peringatan',
+      },
+      triage: {
+        title: 'Antrean triase',
+        empty: 'Semua beres — tidak ada yang perlu perhatian Anda.',
+        review: 'Tinjauan',
+        alert: 'Peringatan',
+        message: 'Pesan',
+      },
+      heatmap: {
+        title: 'Aktivitas eksekusi',
+        subtitle: 'Eksekusi per agen · 7 hari terakhir',
+        less: 'Sedikit',
+        more: 'Banyak',
+        empty: 'Belum ada eksekusi.',
+      },
+      topPerformers: {
+        title: 'Performa terbaik',
+      },
+      upcomingRoutines: {
+        title: 'Rutinitas mendatang',
+        subtitle: 'Eksekusi terjadwal berikutnya',
+        empty: 'Tidak ada rutinitas terjadwal.',
+        triggers: {
+          schedule: 'Jadwal',
+          polling: 'Polling',
+          webhook: 'Webhook',
+          event: 'Peristiwa',
+        },
+      },
+      vaultChanges: {
+        title: 'Brankas kredensial',
+        subtitle: 'Perubahan terbaru',
+        empty: 'Tidak ada perubahan terbaru.',
+        actions: {
+          rotated: 'Dirotasi',
+          added: 'Ditambahkan',
+          revoked: 'Dicabut',
+          synced: 'Disinkronkan',
+        },
+      },
+    },
   },
   dashboardUi: {
     testFlow: "Test Flow",

@@ -341,6 +341,52 @@ export const ar: Translations = {
         custom: 'Ů…Ř®ŘµŘµ',
       },
     },
+    home: {
+      vitals: {
+        title: 'الحالة الحيوية للأسطول',
+        runs: 'عمليات التشغيل',
+        alerts: 'التنبيهات',
+      },
+      triage: {
+        title: 'قائمة الفرز',
+        empty: 'كل شيء على ما يرام — لا شيء يتطلب انتباهك.',
+        review: 'مراجعة',
+        alert: 'تنبيه',
+        message: 'رسالة',
+      },
+      heatmap: {
+        title: 'نشاط التنفيذ',
+        subtitle: 'عمليات التشغيل لكل وكيل · آخر 7 أيام',
+        less: 'أقل',
+        more: 'أكثر',
+        empty: 'لا توجد عمليات تنفيذ بعد.',
+      },
+      topPerformers: {
+        title: 'الأفضل أداءً',
+      },
+      upcomingRoutines: {
+        title: 'الإجراءات القادمة',
+        subtitle: 'عمليات التشغيل المجدولة التالية',
+        empty: 'لا توجد إجراءات مجدولة.',
+        triggers: {
+          schedule: 'جدولة',
+          polling: 'استطلاع',
+          webhook: 'Webhook',
+          event: 'حدث',
+        },
+      },
+      vaultChanges: {
+        title: 'خزنة بيانات الاعتماد',
+        subtitle: 'التغييرات الأخيرة',
+        empty: 'لا توجد تغييرات حديثة.',
+        actions: {
+          rotated: 'تم التدوير',
+          added: 'تمت الإضافة',
+          revoked: 'تم الإلغاء',
+          synced: 'تمت المزامنة',
+        },
+      },
+    },
   },
   dashboardUi: {
     testFlow: "Test Flow",

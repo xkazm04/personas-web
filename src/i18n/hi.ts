@@ -341,6 +341,52 @@ export const hi: Translations = {
         custom: 'ŕ¤•ŕ¤¸ŕĄŤŕ¤źŕ¤®',
       },
     },
+    home: {
+      vitals: {
+        title: 'फ़्लीट विटल्स',
+        runs: 'रन',
+        alerts: 'अलर्ट',
+      },
+      triage: {
+        title: 'ट्रायेज क़तार',
+        empty: 'सब ठीक है — किसी चीज़ पर ध्यान देने की ज़रूरत नहीं।',
+        review: 'समीक्षा',
+        alert: 'अलर्ट',
+        message: 'संदेश',
+      },
+      heatmap: {
+        title: 'निष्पादन गतिविधि',
+        subtitle: 'प्रति एजेंट रन · पिछले 7 दिन',
+        less: 'कम',
+        more: 'ज़्यादा',
+        empty: 'अभी तक कोई निष्पादन नहीं।',
+      },
+      topPerformers: {
+        title: 'शीर्ष प्रदर्शक',
+      },
+      upcomingRoutines: {
+        title: 'आगामी रूटीन',
+        subtitle: 'अगले निर्धारित रन',
+        empty: 'कोई निर्धारित रूटीन नहीं।',
+        triggers: {
+          schedule: 'शेड्यूल',
+          polling: 'पोलिंग',
+          webhook: 'वेबहुक',
+          event: 'इवेंट',
+        },
+      },
+      vaultChanges: {
+        title: 'क्रेडेंशियल वॉल्ट',
+        subtitle: 'हाल के बदलाव',
+        empty: 'कोई हाल का बदलाव नहीं।',
+        actions: {
+          rotated: 'रोटेट किया',
+          added: 'जोड़ा',
+          revoked: 'रद्द किया',
+          synced: 'सिंक किया',
+        },
+      },
+    },
   },
   dashboardUi: {
     testFlow: "Test Flow",

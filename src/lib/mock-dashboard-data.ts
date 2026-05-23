@@ -923,3 +923,74 @@ export const MOCK_HEALTH_DIGEST: HealthDigest = {
     { name: "ReportGen", score: 88, issues: 0, lastRun: new Date(Date.now() - 3600_000).toISOString(), color: "#f43f5e" },
   ],
 };
+
+// ── Execution heatmap (home: per-agent activity, last 7 days) ────────
+// Mirrors the desktop ExecutionHeatmap as a compact agent × day grid:
+// one row per persona, one cell per day (oldest → newest). Counts are
+// seeded so the grid is deterministic across renders.
+
+export const HEATMAP_DAYS = 7;
+
+export interface HeatmapRow {
+  persona: string;
+  color: string;
+  /** Execution counts, one per day, oldest → newest (length HEATMAP_DAYS). */
+  days: number[];
+}
+
+export const MOCK_EXECUTION_HEATMAP: HeatmapRow[] = (() => {
+  const rng = seededRandom(7);
+  return MOCK_HEALTH_DIGEST.agents.map((agent, idx) => ({
+    persona: agent.name,
+    color: agent.color,
+    days: Array.from({ length: HEATMAP_DAYS }, (_, d) =>
+      Math.round(Math.max(0, agent.score / 9 + Math.sin((d + idx) * 0.8) * 4 + rng() * 7)),
+    ),
+  }));
+})();
+
+// ── Upcoming scheduled routines (home) ──────────────────────────────
+// Mirrors the desktop UpcomingRoutinesCard: the next scheduled runs across
+// the fleet. `eta` is a pre-computed, demo-static label (no live clock).
+
+export type RoutineTrigger = "schedule" | "polling" | "webhook" | "event";
+
+export interface UpcomingRoutine {
+  id: string;
+  persona: string;
+  color: string;
+  trigger: RoutineTrigger;
+  /** Time until the next run, e.g. "6m", "1h", "1d" (demo-static). */
+  eta: string;
+}
+
+export const MOCK_UPCOMING_ROUTINES: UpcomingRoutine[] = [
+  { id: "ur_1", persona: "ResearchAgent", color: "#06b6d4", trigger: "schedule", eta: "6m" },
+  { id: "ur_2", persona: "NotifyBot", color: "#a855f7", trigger: "polling", eta: "23m" },
+  { id: "ur_3", persona: "DataProcessor", color: "#fbbf24", trigger: "schedule", eta: "1h" },
+  { id: "ur_4", persona: "CodeReviewer", color: "#34d399", trigger: "webhook", eta: "3h" },
+  { id: "ur_5", persona: "ReportGen", color: "#f43f5e", trigger: "schedule", eta: "1d" },
+];
+
+// ── Credential vault recent changes (home) ──────────────────────────
+// Mirrors the desktop VaultRecentChangesCard. `secret` names are technical
+// identifiers shown verbatim; `ago` is a pre-computed, demo-static label.
+
+export type VaultAction = "rotated" | "added" | "revoked" | "synced";
+
+export interface VaultChange {
+  id: string;
+  /** Credential identifier — shown verbatim (not translated). */
+  secret: string;
+  action: VaultAction;
+  /** How long ago the change happened, e.g. "4m", "2h" (demo-static). */
+  ago: string;
+}
+
+export const MOCK_VAULT_CHANGES: VaultChange[] = [
+  { id: "vc_1", secret: "GITHUB_OAUTH_TOKEN", action: "rotated", ago: "4m" },
+  { id: "vc_2", secret: "SLACK_WEBHOOK_URL", action: "synced", ago: "31m" },
+  { id: "vc_3", secret: "OPENAI_API_KEY", action: "added", ago: "2h" },
+  { id: "vc_4", secret: "STRIPE_SECRET_KEY", action: "revoked", ago: "5h" },
+  { id: "vc_5", secret: "GCAL_REFRESH_TOKEN", action: "rotated", ago: "1d" },
+];

@@ -341,6 +341,52 @@ export const de: Translations = {
         custom: 'Benutzerdefiniert',
       },
     },
+    home: {
+      vitals: {
+        title: 'Flotten-Vitalwerte',
+        runs: 'Läufe',
+        alerts: 'Warnungen',
+      },
+      triage: {
+        title: 'Triage-Warteschlange',
+        empty: 'Alles erledigt – nichts erfordert Ihre Aufmerksamkeit.',
+        review: 'Prüfung',
+        alert: 'Warnung',
+        message: 'Nachricht',
+      },
+      heatmap: {
+        title: 'Ausführungsaktivität',
+        subtitle: 'Läufe pro Agent · letzte 7 Tage',
+        less: 'Weniger',
+        more: 'Mehr',
+        empty: 'Noch keine Ausführungen.',
+      },
+      topPerformers: {
+        title: 'Top-Performer',
+      },
+      upcomingRoutines: {
+        title: 'Anstehende Routinen',
+        subtitle: 'Nächste geplante Läufe',
+        empty: 'Keine geplanten Routinen.',
+        triggers: {
+          schedule: 'Zeitplan',
+          polling: 'Abfrage',
+          webhook: 'Webhook',
+          event: 'Ereignis',
+        },
+      },
+      vaultChanges: {
+        title: 'Anmeldedaten-Tresor',
+        subtitle: 'Letzte Änderungen',
+        empty: 'Keine aktuellen Änderungen.',
+        actions: {
+          rotated: 'Rotiert',
+          added: 'Hinzugefügt',
+          revoked: 'Widerrufen',
+          synced: 'Synchronisiert',
+        },
+      },
+    },
   },
   dashboardUi: {
     testFlow: "Test Flow",

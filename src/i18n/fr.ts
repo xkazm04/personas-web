@@ -341,6 +341,52 @@ export const fr: Translations = {
         custom: 'PersonnalisĂ©',
       },
     },
+    home: {
+      vitals: {
+        title: 'Constantes de la flotte',
+        runs: 'Exécutions',
+        alerts: 'Alertes',
+      },
+      triage: {
+        title: 'File de triage',
+        empty: 'Tout est en ordre — rien ne requiert votre attention.',
+        review: 'Révision',
+        alert: 'Alerte',
+        message: 'Message',
+      },
+      heatmap: {
+        title: "Activité d'exécution",
+        subtitle: 'Exécutions par agent · 7 derniers jours',
+        less: 'Moins',
+        more: 'Plus',
+        empty: 'Aucune exécution pour le moment.',
+      },
+      topPerformers: {
+        title: 'Meilleurs agents',
+      },
+      upcomingRoutines: {
+        title: 'Routines à venir',
+        subtitle: 'Prochaines exécutions planifiées',
+        empty: 'Aucune routine planifiée.',
+        triggers: {
+          schedule: 'Planification',
+          polling: 'Sondage',
+          webhook: 'Webhook',
+          event: 'Événement',
+        },
+      },
+      vaultChanges: {
+        title: "Coffre d'identifiants",
+        subtitle: 'Changements récents',
+        empty: 'Aucun changement récent.',
+        actions: {
+          rotated: 'Pivotée',
+          added: 'Ajoutée',
+          revoked: 'Révoquée',
+          synced: 'Synchronisée',
+        },
+      },
+    },
   },
   dashboardUi: {
     testFlow: "Test Flow",

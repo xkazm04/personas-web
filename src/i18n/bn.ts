@@ -341,6 +341,52 @@ export const bn: Translations = {
         custom: 'ŕ¦•ŕ¦ľŕ¦¸ŕ§Ťŕ¦źŕ¦®',
       },
     },
+    home: {
+      vitals: {
+        title: 'ফ্লিট ভাইটালস',
+        runs: 'রান',
+        alerts: 'সতর্কতা',
+      },
+      triage: {
+        title: 'ট্রায়াজ সারি',
+        empty: 'সব ঠিক আছে — কোনো কিছুতে আপনার মনোযোগ প্রয়োজন নেই।',
+        review: 'পর্যালোচনা',
+        alert: 'সতর্কতা',
+        message: 'বার্তা',
+      },
+      heatmap: {
+        title: 'নির্বাহ কার্যকলাপ',
+        subtitle: 'প্রতি এজেন্ট রান · গত ৭ দিন',
+        less: 'কম',
+        more: 'বেশি',
+        empty: 'এখনও কোনো নির্বাহ নেই।',
+      },
+      topPerformers: {
+        title: 'শীর্ষ পারফরমার',
+      },
+      upcomingRoutines: {
+        title: 'আসন্ন রুটিন',
+        subtitle: 'পরবর্তী নির্ধারিত রান',
+        empty: 'কোনো নির্ধারিত রুটিন নেই।',
+        triggers: {
+          schedule: 'সময়সূচি',
+          polling: 'পোলিং',
+          webhook: 'ওয়েবহুক',
+          event: 'ইভেন্ট',
+        },
+      },
+      vaultChanges: {
+        title: 'ক্রেডেনশিয়াল ভল্ট',
+        subtitle: 'সাম্প্রতিক পরিবর্তন',
+        empty: 'কোনো সাম্প্রতিক পরিবর্তন নেই।',
+        actions: {
+          rotated: 'রোটেট করা',
+          added: 'যোগ করা',
+          revoked: 'প্রত্যাহার করা',
+          synced: 'সিঙ্ক করা',
+        },
+      },
+    },
   },
   dashboardUi: {
     testFlow: "Test Flow",

@@ -259,6 +259,52 @@
         custom: string;
       };
     };
+    home: {
+      vitals: {
+        title: string;
+        runs: string;
+        alerts: string;
+      };
+      triage: {
+        title: string;
+        empty: string;
+        review: string;
+        alert: string;
+        message: string;
+      };
+      heatmap: {
+        title: string;
+        subtitle: string;
+        less: string;
+        more: string;
+        empty: string;
+      };
+      topPerformers: {
+        title: string;
+      };
+      upcomingRoutines: {
+        title: string;
+        subtitle: string;
+        empty: string;
+        triggers: {
+          schedule: string;
+          polling: string;
+          webhook: string;
+          event: string;
+        };
+      };
+      vaultChanges: {
+        title: string;
+        subtitle: string;
+        empty: string;
+        actions: {
+          rotated: string;
+          added: string;
+          revoked: string;
+          synced: string;
+        };
+      };
+    };
   };
   dashboardUi: {
     testFlow: string;
@@ -1206,6 +1252,52 @@ export const en: Translations = {
         last30d: '30d',
         last90d: '90d',
         custom: 'Custom',
+      },
+    },
+    home: {
+      vitals: {
+        title: 'Fleet vitals',
+        runs: 'Runs',
+        alerts: 'Alerts',
+      },
+      triage: {
+        title: 'Triage queue',
+        empty: 'All clear — nothing needs your attention.',
+        review: 'Review',
+        alert: 'Alert',
+        message: 'Message',
+      },
+      heatmap: {
+        title: 'Execution activity',
+        subtitle: 'Runs per agent · last 7 days',
+        less: 'Less',
+        more: 'More',
+        empty: 'No executions yet.',
+      },
+      topPerformers: {
+        title: 'Top performers',
+      },
+      upcomingRoutines: {
+        title: 'Upcoming routines',
+        subtitle: 'Next scheduled runs',
+        empty: 'No scheduled routines.',
+        triggers: {
+          schedule: 'Schedule',
+          polling: 'Polling',
+          webhook: 'Webhook',
+          event: 'Event',
+        },
+      },
+      vaultChanges: {
+        title: 'Credential vault',
+        subtitle: 'Recent changes',
+        empty: 'No recent changes.',
+        actions: {
+          rotated: 'Rotated',
+          added: 'Added',
+          revoked: 'Revoked',
+          synced: 'Synced',
+        },
       },
     },
   },
