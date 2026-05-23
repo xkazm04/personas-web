@@ -36,6 +36,7 @@ export default function DesignEngine() {
       </motion.div>
 
       <motion.div
+        data-tour-diagram="design"
         initial={{ opacity: 0, y: 20 }}
         whileInView={{ opacity: 1, y: 0 }}
         viewport={{ once: true }}

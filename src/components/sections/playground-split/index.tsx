@@ -71,7 +71,7 @@ export default function PlaygroundSplit() {
         )}
       </motion.div>
 
-      <motion.div variants={fadeUp} className="mx-auto max-w-5xl">
+      <motion.div data-tour-diagram="agent-mind" variants={fadeUp} className="mx-auto max-w-5xl">
         <TerminalPanel
           shadow="hero"
           footer={

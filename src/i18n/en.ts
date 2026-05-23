@@ -841,6 +841,7 @@
     features1: string;
     features2: string;
     features3: string;
+    features4: string;
     roadmap1: string;
     roadmap2: string;
     roadmap3: string;
@@ -1788,15 +1789,16 @@ export const en: Translations = {
     next: 'Next step',
     previous: 'Previous step',
     exit: 'Exit tour',
-    step1: 'Personas turns plain-language goals into multi-agent AI pipelines that run privately on your own machine.',
-    step2: 'Compose agents into a pipeline and watch the orchestrator route work between them — self-healing, in real time.',
-    step3: 'Run unlimited agents locally for free, then scale to 24/7 cloud execution whenever you are ready.',
-    features1: 'Describe what you want in plain language — Personas turns it into an executable agent that runs on your machine.',
-    features2: 'Pipelines self-heal: when a step fails, agents diagnose the cause and retry, so your workflow keeps moving.',
-    features3: 'Credentials stay encrypted in your OS keyring; secrets and prompts never leave your device unless you choose.',
-    roadmap1: 'Track what is shipping now and what is coming next — every phase here is graded by status as it lands.',
-    roadmap2: 'Vote on the features you want most. The most-voted ideas shape what we build next.',
-    roadmap3: 'Every release lands here with the changes that matter — keep an eye on shipping momentum.',
+    step1: 'This is Personas — your local command center. Everything here runs on your own machine, under your control.',
+    step2: 'Describe a goal in plain words, and watch the agent parse it, plan its steps, and execute — live.',
+    step3: 'Any of eight trigger types can wake an agent, and the orchestrator routes work between them, healing itself as it goes.',
+    features1: 'Every agent begins as intent: one sentence fills an eight-dimension persona matrix — tasks, memory, triggers, and more.',
+    features2: 'It learns as it works — lessons and patterns settle into memory layers, so the agent sharpens with every task.',
+    features3: 'When a step breaks, the circuit does not stop: it diagnoses the failure, repairs the path, and retries on its own.',
+    features4: 'And you see all of it — every execution, message, and event streams live through one observability deck.',
+    roadmap1: 'Here is where we are now: each phase on the roadmap is graded by status as it ships.',
+    roadmap2: 'What comes next is up to you — vote on the features you want most, and the top ideas shape what we build.',
+    roadmap3: 'And here is everything already shipped — every release laid out in order, newest first.',
   },
 };
 

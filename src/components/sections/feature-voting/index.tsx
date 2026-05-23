@@ -161,6 +161,7 @@ export default function FeatureVoting() {
       <FeatureVotingHeader />
 
       <motion.div
+        data-tour-diagram="vote"
         variants={staggerContainer}
         className="mt-16 grid gap-6 sm:grid-cols-2"
       >
