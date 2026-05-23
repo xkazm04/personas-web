@@ -354,7 +354,15 @@ export const GUIDE_TOPICS: GuideTopic[] = [
     tags: ["credentials", "connectors", "integrations", "catalog", "services"],
   },
 
-  // ─── Pipelines & Teams (10) ─────────────────────────────────────────
+  // ─── Pipelines & Teams (11) ─────────────────────────────────────────
+  {
+    id: "team-assignments",
+    categoryId: "pipelines",
+    title: "Team assignments",
+    description:
+      "Give a team a goal in plain language and let it organize the work itself. Instead of wiring every step by hand, you describe what you want; the team breaks it into a checklist, picks the right agent for each part, and runs them in parallel — pausing for your review only when something needs a decision.",
+    tags: ["pipelines", "assignments", "goals", "orchestration", "delegation"],
+  },
   {
     id: "what-are-pipelines",
     categoryId: "pipelines",

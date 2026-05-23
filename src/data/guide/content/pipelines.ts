@@ -259,6 +259,32 @@ Even if no template matches your exact use case, find the closest one. It's usua
 :::
   `,
 
+  "team-assignments": `
+## Team Assignments
+
+Pipelines wire every step by hand. Assignments flip that around: you hand the team a **goal** in plain language, and the team figures out the steps itself. It breaks the goal into a checklist, picks the best agent for each step, and runs them in parallel — only stopping to ask you when a step fails or needs a decision.
+
+Think of it as the difference between drawing a flowchart and briefing a project manager. With a pipeline you design the flow; with an assignment you state the outcome and let the team organize around it.
+
+### Key Points
+
+- **Goal-first** — describe what you want; the team decomposes it into ordered steps
+- **Smart matching** — each step is routed to the agent best suited to it (you can pin agents manually, use fast local matching, or let the model decide)
+- **Auto-decompose** — one click turns a goal into an editable step list you can tweak before running
+- **Parallel execution** — independent steps run at the same time; dependent steps wait their turn
+- **Human review on failure** — a failed step pauses just that assignment and offers you Edit / Reassign / Skip, with a notification in the title bar
+- **Reusable templates** — save a goal + step layout as a template and stamp out new assignments from it
+- **Chat dispatch** — ask Athena to "have the research team handle this" and she'll set it up for your approval
+
+### How It Works
+
+Open a team's canvas and click the **Assignments** badge (bottom-left). Hit **New**, type a goal, and either fill in the steps yourself or click **Auto-decompose** to have the assistant propose them. Choose how agents get matched to steps, set how many run at once, and click **Create & start**. Watch the checklist update live; if a step fails, resolve it inline. Save anything you'll run again as a template.
+
+:::tip
+Use an assignment when you know the outcome but not the exact steps. Use a pipeline when you want precise, repeatable control over every connection. Templates bridge the two — a saved assignment becomes a one-click starting point.
+:::
+  \`,
+
   "debugging-pipeline-issues": `
 ## Debugging Pipeline Issues
 
