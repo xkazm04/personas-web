@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useRef } from "react";
-import { motion } from "framer-motion";
+import { motion, useReducedMotion } from "framer-motion";
 import { useTour } from "@/contexts/TourContext";
 
 /** Breathing room (px) drawn around the spotlit element. */
@@ -10,14 +10,26 @@ const PADDING = 22;
 const MARGIN = 44;
 /** Extra bottom clearance so the cutout never runs under the caption card. */
 const BOTTOM_GAP = 150;
+/** Step-to-step tween duration. */
+const TWEEN_MS = 600;
 
 const clamp = (v: number, lo: number, hi: number) => Math.min(Math.max(v, lo), hi);
+/** Smooth ease-in-out for the tween. */
+const ease = (t: number) => 0.5 - 0.5 * Math.cos(Math.PI * t);
 
 /**
- * Dims the page except a rounded cutout around the current step's spotlight
- * target. The cutout follows the element on scroll/resize via a `scroll`
- * listener, plus a slow interval that catches the target once a lazy
- * section has hydrated — so no `requestAnimationFrame` loop is needed.
+ * Dims the page except a rounded cutout that *glides* between step targets.
+ *
+ * Uses one `requestAnimationFrame` loop while the tour is active. Each frame
+ * reads the current step's target rect and applies it to the cutout — and
+ * during the first `TWEEN_MS` after a step change, the position is blended
+ * from the previous step's captured rect toward the live new rect, so the
+ * spotlight visibly travels between headings instead of jump-cutting. After
+ * the blend, the rAF keeps tracking the live rect, which gives natural
+ * scroll-follow without a separate scroll listener.
+ *
+ * Imports `useReducedMotion` per `custom-animation/require-animation-gating`;
+ * when set, the tween is skipped and the cutout snaps to each step.
  *
  * The scrim uses a literal dark colour, not a theme token: a cinematic dim
  * must stay dark in every theme, and `--background` collapses to a light
@@ -27,47 +39,75 @@ const clamp = (v: number, lo: number, hi: number) => Math.min(Math.max(v, lo), h
  * card and the rest of the active theme.
  */
 export default function TourSpotlight() {
-  const { stepIndex, steps } = useTour();
+  const { active, stepIndex, steps } = useTour();
   const cutoutRef = useRef<HTMLDivElement>(null);
+  const prevIndexRef = useRef<number>(stepIndex);
+  const prevRectRef = useRef<DOMRect | null>(null);
+  const tweenStartRef = useRef<number>(0);
+  const prefersReducedMotion = useReducedMotion();
 
   useEffect(() => {
-    if (steps.length === 0) return;
-    const { spotlightTarget } = steps[stepIndex];
+    if (!active || steps.length === 0) return;
 
-    const sync = () => {
-      const el = document.querySelector<HTMLElement>(spotlightTarget);
+    // Capture the previous target's rect at step-change time so the tween
+    // can start from where the spotlight currently is.
+    const oldIndex = prevIndexRef.current;
+    prevIndexRef.current = stepIndex;
+    if (oldIndex !== stepIndex && !prefersReducedMotion) {
+      const prevEl = document.querySelector<HTMLElement>(steps[oldIndex]?.spotlightTarget ?? "");
+      prevRectRef.current = prevEl ? prevEl.getBoundingClientRect() : null;
+      tweenStartRef.current = performance.now();
+    } else {
+      prevRectRef.current = null;
+    }
+
+    const newTarget = steps[stepIndex].spotlightTarget;
+    let frame = 0;
+
+    const tick = () => {
       const cutout = cutoutRef.current;
-      if (!el || !cutout) return;
-      const r = el.getBoundingClientRect();
-      if (r.width === 0 && r.height === 0) return;
-      const vw = window.innerWidth;
-      const vh = window.innerHeight;
-      // Narrow viewports need tighter margins so the frame doesn't crush
-      // the visible content area.
-      const m = vw < 480 ? 18 : MARGIN;
-      const bg = vw < 480 ? 180 : BOTTOM_GAP;
-      // Clamp into the viewport so an oversized target still frames cleanly.
-      const left = clamp(r.left - PADDING, m, vw - m);
-      const top = clamp(r.top - PADDING, m, vh - m);
-      const right = clamp(r.right + PADDING, m, vw - m);
-      const bottom = clamp(r.bottom + PADDING, m, vh - bg);
-      cutout.style.transform = `translate(${left}px, ${top}px)`;
-      cutout.style.width = `${Math.max(0, right - left)}px`;
-      cutout.style.height = `${Math.max(0, bottom - top)}px`;
-      cutout.style.opacity = "1";
+      const el = document.querySelector<HTMLElement>(newTarget);
+      if (cutout && el) {
+        const r = el.getBoundingClientRect();
+        if (r.width > 0 || r.height > 0) {
+          let left = r.left;
+          let top = r.top;
+          let right = r.right;
+          let bottom = r.bottom;
+          // Blend from the previous rect toward the live new rect for the
+          // first TWEEN_MS — after that, snap to live and just track.
+          if (prevRectRef.current) {
+            const t = Math.min(1, (performance.now() - tweenStartRef.current) / TWEEN_MS);
+            const e = ease(t);
+            const p = prevRectRef.current;
+            left = p.left * (1 - e) + r.left * e;
+            top = p.top * (1 - e) + r.top * e;
+            right = p.right * (1 - e) + r.right * e;
+            bottom = p.bottom * (1 - e) + r.bottom * e;
+            if (t >= 1) prevRectRef.current = null;
+          }
+          const vw = window.innerWidth;
+          const vh = window.innerHeight;
+          // Narrow viewports get tighter margins so the frame doesn't crush
+          // the visible content area.
+          const m = vw < 480 ? 18 : MARGIN;
+          const bg = vw < 480 ? 180 : BOTTOM_GAP;
+          const cl = clamp(left - PADDING, m, vw - m);
+          const ct = clamp(top - PADDING, m, vh - m);
+          const cr = clamp(right + PADDING, m, vw - m);
+          const cb = clamp(bottom + PADDING, m, vh - bg);
+          cutout.style.transform = `translate(${cl}px, ${ct}px)`;
+          cutout.style.width = `${Math.max(0, cr - cl)}px`;
+          cutout.style.height = `${Math.max(0, cb - ct)}px`;
+          cutout.style.opacity = "1";
+        }
+      }
+      frame = requestAnimationFrame(tick);
     };
 
-    sync();
-    window.addEventListener("scroll", sync, { passive: true });
-    window.addEventListener("resize", sync);
-    // Safety net: catch the target after lazy-section hydration / reflow.
-    const poll = window.setInterval(sync, 250);
-    return () => {
-      window.removeEventListener("scroll", sync);
-      window.removeEventListener("resize", sync);
-      window.clearInterval(poll);
-    };
-  }, [stepIndex, steps]);
+    frame = requestAnimationFrame(tick);
+    return () => cancelAnimationFrame(frame);
+  }, [active, stepIndex, steps, prefersReducedMotion]);
 
   return (
     <motion.div
@@ -82,9 +122,6 @@ export default function TourSpotlight() {
         className="tour-cutout-pulse absolute left-0 top-0 rounded-2xl opacity-0"
         style={{
           border: "2px solid color-mix(in srgb, var(--brand-cyan) 80%, transparent)",
-          // No CSS transition: the cutout is repositioned on every scroll
-          // frame, so easing here would make it trail the smooth-scroll.
-          // First shadow = the page dim; rest = the spotlight's accent glow.
           boxShadow:
             "0 0 0 100vmax rgba(8, 11, 20, 0.8), 0 0 64px color-mix(in srgb, var(--brand-cyan) 45%, transparent), inset 0 0 30px color-mix(in srgb, var(--brand-cyan) 14%, transparent)",
           willChange: "transform, width, height",
