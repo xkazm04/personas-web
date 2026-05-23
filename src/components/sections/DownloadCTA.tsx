@@ -49,7 +49,7 @@ export default function DownloadCTA() {
 
       <div className="pointer-events-none absolute inset-x-0 top-0 section-line" />
 
-      <div className="mx-auto max-w-2xl text-center">
+      <div data-tour-diagram="download" className="mx-auto max-w-2xl text-center">
         <motion.div variants={fadeUp}>
           <span className={`inline-block rounded-full border border-brand-cyan/20 bg-brand-cyan/5 px-3.5 py-1 text-base font-medium tracking-wider uppercase text-brand-cyan/70 font-mono mb-6${isFresh ? " animate-badge-pulse" : ""}`}>
             v{APP_VERSION} - {RELEASE_TITLE}

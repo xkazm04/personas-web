@@ -59,9 +59,13 @@ export default function OrchestrationHub() {
             backgroundColor: "rgba(var(--surface-overlay), 0.02)",
           }}
         >
-          <div className="grid grid-cols-1 lg:grid-cols-[1.2fr_1fr] gap-8 items-center">
+          {/* data-tour-diagram spans both the ring and the trigger detail
+              panel so the tour spotlight frames the description too. */}
+          <div
+            data-tour-diagram="orchestration"
+            className="grid grid-cols-1 lg:grid-cols-[1.2fr_1fr] gap-8 items-center"
+          >
             <div
-              data-tour-diagram="orchestration"
               className="relative mx-auto w-full max-w-[560px] aspect-square"
               onPointerEnter={() => setHovering(true)}
               onPointerLeave={() => setHovering(false)}

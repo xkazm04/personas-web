@@ -5,7 +5,7 @@ import { motion } from "framer-motion";
 import { Play } from "lucide-react";
 import { useTour } from "@/contexts/TourContext";
 import { useTranslation } from "@/i18n/useTranslation";
-import type { TourStep } from "@/lib/tour-script";
+import { TOURS_BY_ID, type TourId } from "@/lib/tour-script";
 
 const STORAGE_KEY = "personas-tour-seen";
 
@@ -18,15 +18,18 @@ const STORAGE_KEY = "personas-tour-seen";
  * only shows once.
  */
 export default function TourLauncher({
-  steps,
+  tourId,
   bridgeHref,
 }: {
-  steps: TourStep[];
+  /** Which tour to run — resolved to its step array client-side, so the
+   *  function-bearing `actions` never cross the Server→Client boundary. */
+  tourId: TourId;
   /** When set, the tour offers to continue here after its last step. */
   bridgeHref?: string;
 }) {
   const { t } = useTranslation();
   const { active, start } = useTour();
+  const steps = TOURS_BY_ID[tourId];
   // Default to "seen" so returning visitors don't see a one-frame pulse
   // before the effect below flips state.
   const [seen, setSeen] = useState(true);

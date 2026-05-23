@@ -28,6 +28,7 @@ export default function PluginTabs({
           return (
             <button
               key={p.key}
+              data-plugin-key={p.key}
               onClick={() => onSelect(p.key)}
               aria-pressed={isActive}
               className={`flex items-center gap-2 rounded-full border px-4 py-2 text-base font-medium transition-all duration-300 ${

@@ -13,6 +13,7 @@ test.describe("Guided tour — stage 1 (homepage engine)", () => {
   const STEP2 = "real time";
   const STEP3 = "triggered eight ways";
   const STEP4 = "six pillars";
+  const STEP5 = "Windows 11";
 
   test("launcher is present in the hero", async ({ page }) => {
     await page.goto("/");
@@ -48,11 +49,13 @@ test.describe("Guided tour — stage 1 (homepage engine)", () => {
     await page.getByRole("button", { name: LAUNCH }).click();
     const caption = page.getByRole("dialog", { name: LAUNCH });
 
-    await caption.getByRole("button", { name: "3 / 4" }).click();
+    await caption.getByRole("button", { name: "3 / 5" }).click();
     await expect(caption).toContainText(STEP3);
-    await caption.getByRole("button", { name: "4 / 4" }).click();
+    await caption.getByRole("button", { name: "4 / 5" }).click();
     await expect(caption).toContainText(STEP4);
-    await page.screenshot({ path: "test-results/tour/04-step4.png" });
+    await caption.getByRole("button", { name: "5 / 5" }).click();
+    await expect(caption).toContainText(STEP5);
+    await page.screenshot({ path: "test-results/tour/04-step5.png" });
   });
 
   test("play / pause toggles the auto-advance control", async ({ page }) => {
@@ -119,6 +122,22 @@ test.describe("Guided tour — stage 2 (/features)", () => {
     await caption.getByRole("button", { name: "Next step" }).click();
     await expect(caption).toContainText("memory layers");
     await page.screenshot({ path: "test-results/tour/07-features-step2.png" });
+  });
+
+  test("steps reach the Lab and Plugins (Dev Tools) beats", async ({ page }) => {
+    await page.goto("/features");
+    await page.getByRole("button", { name: LAUNCH }).click();
+    const caption = page.getByRole("dialog", { name: LAUNCH });
+    // design → memory → healing → observe → lab (the 5th beat).
+    for (let i = 0; i < 4; i++) {
+      await caption.getByRole("button", { name: "Next step" }).click();
+    }
+    await expect(caption).toContainText("in the arena");
+    await page.screenshot({ path: "test-results/tour/14-features-lab.png" });
+
+    await caption.getByRole("button", { name: "Next step" }).click();
+    await expect(caption).toContainText("Dev Tools");
+    await page.screenshot({ path: "test-results/tour/15-features-plugins.png" });
   });
 });
 
@@ -194,8 +213,8 @@ test.describe("Guided tour — bridge to /features", () => {
     const caption = page.getByRole("dialog", { name: LAUNCH });
     await expect(caption).toBeVisible();
 
-    // Step through all four homepage beats; the 4th "Next" reaches the bridge.
-    for (let i = 0; i < 4; i++) {
+    // Step through all five homepage beats; the 5th "Next" reaches the bridge.
+    for (let i = 0; i < 5; i++) {
       await caption.getByRole("button", { name: "Next step" }).click();
     }
 
@@ -207,7 +226,7 @@ test.describe("Guided tour — bridge to /features", () => {
     await page.goto("/");
     await page.getByRole("button", { name: LAUNCH }).click();
     const caption = page.getByRole("dialog", { name: LAUNCH });
-    for (let i = 0; i < 4; i++) {
+    for (let i = 0; i < 5; i++) {
       await caption.getByRole("button", { name: "Next step" }).click();
     }
     await page.getByRole("button", { name: "Maybe later" }).click();

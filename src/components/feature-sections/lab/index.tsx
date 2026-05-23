@@ -34,6 +34,7 @@ export default function Lab() {
       <TabSwitcher active={active} onSelect={setActive} />
 
       <motion.div
+        data-tour-diagram="lab"
         key={active}
         initial={{ opacity: 0, y: 12 }}
         animate={{ opacity: 1, y: 0 }}

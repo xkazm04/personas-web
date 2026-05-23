@@ -7,7 +7,7 @@ import SectionBreadcrumb from "@/components/SectionBreadcrumb";
 import MobilePageTOC from "@/components/MobilePageTOC";
 import TourLauncher from "@/components/tour/TourLauncher";
 import type { ScrollMapItem } from "@/lib/types";
-import type { TourStep } from "@/lib/tour-script";
+import type { TourId } from "@/lib/tour-script";
 
 interface BreadcrumbItem {
   label: string;
@@ -18,13 +18,14 @@ interface BreadcrumbItem {
 export default function InfoPageLayout({
   scrollMapItems,
   breadcrumbItems,
-  tourSteps,
+  tourId,
   children,
 }: {
   scrollMapItems: ScrollMapItem[];
   breadcrumbItems?: BreadcrumbItem[];
-  /** Optional per-page tour script — renders a `TourLauncher` when set. */
-  tourSteps?: TourStep[];
+  /** Optional tour to offer — id only (serializable across the RSC boundary);
+   *  renders a `TourLauncher` when set. */
+  tourId?: TourId;
   children: React.ReactNode;
 }) {
   return (
@@ -37,9 +38,9 @@ export default function InfoPageLayout({
         <MobilePageTOC items={scrollMapItems} />
         {/* Spacer for fixed navbar */}
         <div className="h-24" />
-        {tourSteps && tourSteps.length > 0 && (
+        {tourId && (
           <div className="mb-10 flex justify-center">
-            <TourLauncher steps={tourSteps} />
+            <TourLauncher tourId={tourId} />
           </div>
         )}
         {children}

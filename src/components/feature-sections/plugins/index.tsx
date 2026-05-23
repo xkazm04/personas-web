@@ -67,16 +67,18 @@ export default function Plugins() {
         />
       </motion.div>
 
-      <PluginTabs plugins={PLUGINS} active={active} onSelect={handleSelect} />
+      <div data-tour-diagram="plugins">
+        <PluginTabs plugins={PLUGINS} active={active} onSelect={handleSelect} />
 
-      <PluginCard
-        plugins={PLUGINS}
-        activePlugin={activePlugin}
-        active={active}
-        activeVariant={activeVariant}
-        activeVariantKey={activeVariantKey}
-        setVariantFor={setVariantFor}
-      />
+        <PluginCard
+          plugins={PLUGINS}
+          activePlugin={activePlugin}
+          active={active}
+          activeVariant={activeVariant}
+          activeVariantKey={activeVariantKey}
+          setVariantFor={setVariantFor}
+        />
+      </div>
     </SectionWrapper>
   );
 }

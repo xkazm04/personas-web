@@ -36,15 +36,21 @@ each lighting its node and detail panel. The point: any of eight signals can
 wake an agent, and the orchestrator routes each one to the right agent, healing
 itself if a step fails.
 
-**4. Platform** *(diagram: the six platform cards — opens each in sequence)*
-The final homepage beat reveals the foundation. The tour opens the six platform
-cards one at a time as they're named: the encrypted Vault, ready-made
-Templates, bring-your-own-model (BYOM), live Monitoring, the experimentation
-Lab, and team Orchestration. The message: everything rests on one platform
-built for trust and scale — six pillars, one place.
+**4. Platform** *(diagram: all six platform cards — opens each in sequence)*
+This beat reveals the foundation. The spotlight frames the full 3×2 card grid,
+and the tour opens the six cards one at a time as they're named: the encrypted
+Vault, ready-made Templates, bring-your-own-model (BYOM), live Monitoring, the
+experimentation Lab, and team Orchestration. The message: everything rests on
+one platform built for trust and scale — six pillars, one place.
+
+**5. Download** *(diagram: the Download call-to-action)*
+The closing beat is the call to action: Personas runs on your own machine
+through Claude Code — Anthropic's command-line tool — so you stay private and
+in control. Download the installer for Windows 11, connect the CLI, and the
+first agent is live in minutes.
 
 **Bridge** *(no diagram — a confirm prompt)*
-After the four beats, the tour asks whether the visitor wants to go deeper,
+After the five beats, the tour asks whether the visitor wants to go deeper,
 feature by feature. "Show me the features" navigates to `/features?tour=1`,
 which auto-starts the features tour; "Maybe later" ends the tour.
 
@@ -52,39 +58,51 @@ which auto-starts the features tour; "Maybe later" ends the tour.
 
 ## /features — "The life of an agent"
 
-**5. Born (design matrix)** *(diagram: the eight-dimension persona matrix)*
+**6. Born (design matrix)** *(diagram: the eight-dimension persona matrix)*
 The features story is a life cycle, beginning at birth: a single sentence of
 intent fills an eight-dimension persona matrix — tasks, memory, triggers,
 review, and more — and a vague idea becomes a structured, executable agent.
 
-**6. Learns (memory layers)** *(diagram: the stacked memory layers)*
+**7. Learns (memory layers)** *(diagram: the stacked memory layers)*
 Next the agent grows. Each task leaves a trace; the lessons that matter rise
 into its memory layers while noise settles to the bottom, so the agent gets
 sharper and more context-aware the more it works.
 
-**7. Heals (healing circuit)** *(diagram: the self-repairing circuit board)*
+**8. Heals (healing circuit)** *(diagram: the self-repairing circuit board)*
 Then comes resilience. When a step fails, the circuit diagnoses what went
 wrong, repairs the path, and retries on its own — no 3 a.m. alerts, no manual
 restarts, the workflow simply keeps moving.
 
-**8. Observed (observability deck)** *(diagram: the live pulse-grid dashboard)*
-The features arc closes on visibility: every execution, message, event, and
+**9. Observed (observability deck)** *(diagram: the live pulse-grid dashboard)*
+The agent's working life is on view: every execution, message, event, and
 memory streams live through one observability deck, with sparklines, costs, and
 status in real time — full transparency, zero setup.
+
+**10. Refined in the Lab (refinement workspace)** *(diagram: the Lab tabs)*
+Great agents are rarely right the first time, so the Lab is where you refine
+them — chat to coach, fight two versions in the arena, evolve across
+generations, or score on the dimensions that matter. Every kept improvement is
+versioned and reversible.
+
+**11. Extended with Plugins (Dev Tools)** *(diagram: the plugin card — selects Dev Tools)*
+The closing features beat shows the six bundled plugins; the tour selects Dev
+Tools so its card is on screen — a persona turned coding teammate that runs
+tasks, reads output, and iterates. Switching a tab meets another specialist,
+all sharing the same credentials and memory.
 
 ---
 
 ## /roadmap — "Now → Next → Shipped"
 
-**9. Now (progress bar)** *(diagram: the phase progress bar)*
+**12. Now (progress bar)** *(diagram: the phase progress bar)*
 The roadmap opens on the present: where the product is right now, with each
 phase graded by status as it ships.
 
-**10. Next (vote grid)** *(diagram: the feature-voting grid)*
+**13. Next (vote grid)** *(diagram: the feature-voting grid)*
 The middle beat hands agency to the visitor — vote on the features you want
 most, and the top ideas shape what gets built.
 
-**11. Shipped (changelog timeline)** *(diagram: the changelog timeline)*
+**14. Shipped (changelog timeline)** *(diagram: the changelog timeline)*
 The journey ends in the past tense: everything already shipped, laid out in
 order, newest first — proof the momentum is real.
 

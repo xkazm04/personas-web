@@ -19,10 +19,13 @@ export type TourNarrationKey =
   | "step2"
   | "step3"
   | "step4"
+  | "step5"
   | "features1"
   | "features2"
   | "features3"
   | "features4"
+  | "features5"
+  | "features6"
   | "roadmap1"
   | "roadmap2"
   | "roadmap3";
@@ -186,9 +189,19 @@ export const HOME_TOUR_STEPS: TourStep[] = [
       },
     ],
   },
+  // 5. Download — the call to action: grab the Windows 11 installer and the
+  //    Claude Code CLI that powers local agents.
+  {
+    id: "download",
+    scrollTarget: "#download-section",
+    spotlightTarget: '[data-tour-diagram="download"]',
+    narration: "step5",
+    dwellMs: 12000,
+  },
 ];
 
-// /features — "The life of an agent": born → learns → heals → observed.
+// /features — "The life of an agent": born → learns → heals → observed →
+// refined in the Lab → extended with Plugins.
 export const FEATURES_TOUR_STEPS: TourStep[] = [
   {
     id: "design",
@@ -218,6 +231,24 @@ export const FEATURES_TOUR_STEPS: TourStep[] = [
     narration: "features4",
     dwellMs: 8500,
   },
+  // 5. Lab — the six ways to make a persona better.
+  {
+    id: "lab",
+    scrollTarget: "#lab",
+    spotlightTarget: '[data-tour-diagram="lab"]',
+    narration: "features5",
+    dwellMs: 9000,
+  },
+  // 6. Plugins — the bundled specialists; select Dev Tools so the card shows
+  //    that plugin while it's narrated.
+  {
+    id: "plugins",
+    scrollTarget: "#plugins",
+    spotlightTarget: '[data-tour-diagram="plugins"]',
+    narration: "features6",
+    dwellMs: 9500,
+    actions: [{ atMs: 1800, run: () => clickTarget('[data-plugin-key="dev-tools"]') }],
+  },
 ];
 
 // /roadmap — "Now → Next → Shipped".
@@ -244,3 +275,17 @@ export const ROADMAP_TOUR_STEPS: TourStep[] = [
     dwellMs: 7500,
   },
 ];
+
+/**
+ * Tour registry keyed by a serializable id. Server components (the
+ * force-static /features and /roadmap pages) pass only this string to the
+ * client launcher — the step arrays contain function `actions`, which cannot
+ * cross the Server→Client boundary, so they must be resolved client-side.
+ */
+export const TOURS_BY_ID = {
+  home: HOME_TOUR_STEPS,
+  features: FEATURES_TOUR_STEPS,
+  roadmap: ROADMAP_TOUR_STEPS,
+} as const;
+
+export type TourId = keyof typeof TOURS_BY_ID;
