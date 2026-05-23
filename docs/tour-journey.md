@@ -1,90 +1,104 @@
 # Guided Tour — Journey Script
 
-The "Take the tour" walkthrough drives visitors through three marketing pages.
-Each step spotlights a section's **animated diagram** (not its heading) and the
-narration reads as one continuous, chronological story. This document is the
-review surface for that narration — one paragraph per step. The exact strings
-live in `src/i18n/en.ts` under `tour.*` (and are translated into all 14
-locales); the step order, targets, and timing live in `src/lib/tour-script.ts`.
+The "Take the tour" walkthrough is a self-driving, narrated story. Each step
+spotlights a section's **animated diagram** and, where useful, **manipulates
+that diagram live** (clicking buttons / triggers / cards in time with the
+words). The homepage tour ends by offering to **continue into /features**.
 
-Narration audio will be generated from these English lines via ElevenLabs (see
-`scripts/tour-audio.config.mjs`).
+This document is the review surface for the narration — one paragraph per step.
+The exact strings live in `src/i18n/en.ts` under `tour.*` (translated into all
+14 locales); step order, targets, timings, and the per-step `actions` live in
+`src/lib/tour-script.ts`. Narration audio is generated from these English lines
+via ElevenLabs (`scripts/tour-audio.config.mjs`).
 
 ---
 
-## Homepage — "Watch a goal become work"
+## Homepage — "Meet a persona, then watch it work"
 
-**1. Command center** *(diagram: the version arc in the hero card)*
-This opening beat sets the frame: Personas is the visitor's local command
-center for AI agents. The emphasis is on ownership and privacy — everything
-runs on their own machine, under their control — establishing the local-first
-promise before any mechanics are shown.
+**1. Tools** *(diagram: the use-cases tool web; auto-cycling)*
+The opening beat introduces the core idea: a persona is a single AI agent with
+one stable identity and a composable set of skills. Give it the tools it needs
+— Gmail, Slack, GitHub, your calendar — and it learns to act across all of
+them. The diagram cycles through those tools on its own: one persona, many
+jobs, all working together.
 
-**2. Agent mind** *(diagram: the live "Agent Mind" split-view terminal)*
-The story moves from *what it is* to *what it does*. The visitor describes a
-goal in plain language and watches the agent parse the request, plan its steps,
-and execute — live, in real time. This is the "show, don't tell" moment: the
-product visibly thinking.
+**2. Agent Mind** *(diagram: the Agent-Mind split terminal — clicks "Triage my Gmail")*
+Now the persona is given a goal in plain language. As this step opens, the tour
+clicks the "Triage my Gmail" example so the simulation runs live: the agent
+reads the request, detects intent, breaks it into steps, plans its approach,
+and then executes — showing every move (Select Tools → Execute → Verify →
+Result) as it goes. Narration walks through that thought process in real time.
 
-**3. Orchestration** *(diagram: the radial trigger hub ring)*
-The final homepage beat widens the lens to how work actually starts and flows.
-Any of eight trigger types can wake an agent, and the orchestrator routes work
-between agents, healing itself as it goes. It closes the homepage on the idea
-of an autonomous, resilient system rather than a single bot.
+**3. Orchestration** *(diagram: the radial trigger hub — highlights four triggers in turn)*
+This beat explains how agents wake up. As the narration names them, the tour
+highlights four trigger types in sequence — Schedule, Event, Polling, Webhook —
+each lighting its node and detail panel. The point: any of eight signals can
+wake an agent, and the orchestrator routes each one to the right agent, healing
+itself if a step fails.
+
+**4. Platform** *(diagram: the six platform cards — opens each in sequence)*
+The final homepage beat reveals the foundation. The tour opens the six platform
+cards one at a time as they're named: the encrypted Vault, ready-made
+Templates, bring-your-own-model (BYOM), live Monitoring, the experimentation
+Lab, and team Orchestration. The message: everything rests on one platform
+built for trust and scale — six pillars, one place.
+
+**Bridge** *(no diagram — a confirm prompt)*
+After the four beats, the tour asks whether the visitor wants to go deeper,
+feature by feature. "Show me the features" navigates to `/features?tour=1`,
+which auto-starts the features tour; "Maybe later" ends the tour.
 
 ---
 
 ## /features — "The life of an agent"
 
-**4. Born (design matrix)** *(diagram: the eight-dimension persona matrix)*
-The features story is framed as a life cycle. It begins at birth: a single
-sentence of intent fills an eight-dimension persona matrix — tasks, memory,
-triggers, and more — turning a plain description into a structured, executable
-agent.
+**5. Born (design matrix)** *(diagram: the eight-dimension persona matrix)*
+The features story is a life cycle, beginning at birth: a single sentence of
+intent fills an eight-dimension persona matrix — tasks, memory, triggers,
+review, and more — and a vague idea becomes a structured, executable agent.
 
-**5. Learns (memory layers)** *(diagram: the stacked memory layers)*
-Next, the agent grows. As it works, lessons and patterns settle into memory
-layers, and the agent sharpens with every task. The beat conveys that Personas
-agents improve over time rather than staying static.
+**6. Learns (memory layers)** *(diagram: the stacked memory layers)*
+Next the agent grows. Each task leaves a trace; the lessons that matter rise
+into its memory layers while noise settles to the bottom, so the agent gets
+sharper and more context-aware the more it works.
 
-**6. Heals (healing circuit)** *(diagram: the self-repairing circuit board)*
-Then comes resilience. When a step breaks, the circuit doesn't stop — it
-diagnoses the failure, repairs the path, and retries on its own. This is the
-reassurance beat: failures are handled automatically, without a human in the
-loop.
+**7. Heals (healing circuit)** *(diagram: the self-repairing circuit board)*
+Then comes resilience. When a step fails, the circuit diagnoses what went
+wrong, repairs the path, and retries on its own — no 3 a.m. alerts, no manual
+restarts, the workflow simply keeps moving.
 
-**7. Observed (observability deck)** *(diagram: the live pulse-grid dashboard)*
-The features arc closes on visibility. Everything the agents do — every
-execution, message, and event — streams live through a single observability
-deck, so the visitor is never in the dark about what their agents are doing.
+**8. Observed (observability deck)** *(diagram: the live pulse-grid dashboard)*
+The features arc closes on visibility: every execution, message, event, and
+memory streams live through one observability deck, with sparklines, costs, and
+status in real time — full transparency, zero setup.
 
 ---
 
 ## /roadmap — "Now → Next → Shipped"
 
-**8. Now (progress bar)** *(diagram: the phase progress bar)*
-The roadmap story is ordered by time. It opens on the present: where the product
-is right now, with each phase on the roadmap graded by status as it ships. It
-signals active, transparent progress.
+**9. Now (progress bar)** *(diagram: the phase progress bar)*
+The roadmap opens on the present: where the product is right now, with each
+phase graded by status as it ships.
 
-**9. Next (vote grid)** *(diagram: the feature-voting grid)*
-The middle beat hands agency to the visitor. What comes next is up to them —
-they vote on the features they want most, and the top ideas shape what gets
-built. This positions the roadmap as participatory, not top-down.
+**10. Next (vote grid)** *(diagram: the feature-voting grid)*
+The middle beat hands agency to the visitor — vote on the features you want
+most, and the top ideas shape what gets built.
 
-**10. Shipped (changelog timeline)** *(diagram: the changelog timeline)*
-The journey ends in the past tense, completing the now → next → shipped arc.
-Everything already shipped is laid out in order, newest first — proof that the
-momentum shown in the earlier beats is real and ongoing.
+**11. Shipped (changelog timeline)** *(diagram: the changelog timeline)*
+The journey ends in the past tense: everything already shipped, laid out in
+order, newest first — proof the momentum is real.
 
 ---
 
 ## Notes for adjustment
 
-- Each line is intentionally ~10–18 words to keep narration clips short and the
-  spotlight dwell times comfortable (7–8.5s per step).
-- The homepage **command center** diagram is desktop-only; on mobile that beat
-  scrolls to the hero without a tight spotlight, but the narration still plays.
-- If you reorder or reword any beat, update `src/i18n/en.ts` (English source of
-  truth) first, then keep the other 13 locales in lockstep, and re-generate the
-  affected audio clip.
+- Homepage lines run ~3 sentences (≈12–15s of narration); the dwell timers in
+  `tour-script.ts` (12–15s) are placeholders until audio lands, at which point
+  auto-advance switches to the audio `ended` event.
+- The homepage manipulations are **click-driven**: a diagram may auto-play on
+  its own until the tour reaches it and (re)starts it. The Tools and
+  Orchestration diagrams auto-cycle; Agent Mind and Platform are driven purely
+  by the tour's clicks.
+- If you reorder/reword a beat, update `src/i18n/en.ts` first, keep the other
+  13 locales in lockstep, adjust the matching `actions`/`dwellMs` in
+  `tour-script.ts`, and re-generate the affected audio clip.
