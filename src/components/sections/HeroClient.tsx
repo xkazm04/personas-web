@@ -65,6 +65,9 @@ export default function HeroClient() {
       className="noise relative flex min-h-screen items-center justify-center overflow-hidden px-4 sm:px-6"
       style={{ contain: "layout style paint" }}
       data-animate-when-visible
+      // useAnimationPause toggles .animations-paused via classList; suppress
+      // hydration warnings caused by observer-driven class mutations
+      suppressHydrationWarning
     >
       <FloatingParticles />
       <div className="hero-vignette pointer-events-none absolute inset-0" />

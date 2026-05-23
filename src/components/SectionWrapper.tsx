@@ -53,6 +53,9 @@ const SectionWrapper = forwardRef<
       aria-labelledby={ariaLabelledBy}
       aria-roledescription={ariaRoleDescription}
       data-animate-when-visible
+      // useAnimationPause toggles .animations-paused via classList; lazy
+      // sections can be mutated by the observer before client hydration completes
+      suppressHydrationWarning
     >
       <div className="mx-auto w-full max-w-6xl">{children}</div>
     </motion.section>

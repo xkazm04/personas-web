@@ -53,37 +53,53 @@ export function useAnimationPause() {
   useEffect(() => {
     if (typeof IntersectionObserver === "undefined") return;
 
-    const observer = new IntersectionObserver(
-      (entries) => {
-        for (const entry of entries) {
-          if (entry.isIntersecting) {
-            entry.target.classList.remove(PAUSED_CLASS);
-          } else {
-            entry.target.classList.add(PAUSED_CLASS);
+    let observer: IntersectionObserver | null = null;
+    let timer: ReturnType<typeof setTimeout> | null = null;
+
+    const setup = () => {
+      observer = new IntersectionObserver(
+        (entries) => {
+          for (const entry of entries) {
+            if (entry.isIntersecting) {
+              entry.target.classList.remove(PAUSED_CLASS);
+            } else {
+              entry.target.classList.add(PAUSED_CLASS);
+            }
           }
-        }
-      },
-      {
-        // Trigger when element is within one viewport height of the visible area
-        rootMargin: "100% 0px",
-      },
-    );
+        },
+        {
+          // Trigger when element is within one viewport height of the visible area
+          rootMargin: "100% 0px",
+        },
+      );
 
-    // Expose the observer to the registry so late-mounting components
-    // can be observed immediately on register.
-    _observer = observer;
+      // Expose the observer to the registry so late-mounting components
+      // can be observed immediately on register.
+      _observer = observer;
 
-    // One-time scan for server-rendered elements
-    const elements = document.querySelectorAll(SELECTOR);
-    elements.forEach((el) => observer.observe(el));
+      // One-time scan for server-rendered elements
+      const elements = document.querySelectorAll(SELECTOR);
+      elements.forEach((el) => observer!.observe(el));
 
-    // Observe any elements that registered before the observer was created
-    for (const el of _registered) {
-      observer.observe(el);
-    }
+      // Observe any elements that registered before the observer was created
+      for (const el of _registered) {
+        observer.observe(el);
+      }
+    };
+
+    // Defer observer setup past hydration. Lazy-loaded sections
+    // (next/dynamic with ssr: true) are SSR'd into the DOM but their chunks
+    // may still be hydrating when AnimationPauseObserver's effect first runs.
+    // Mutating their classList synchronously (which the observer does on its
+    // initial callback for off-screen elements) corrupts React's hydration
+    // comparison, producing the "tree hydrated but attributes didn't match"
+    // warning. A macrotask defer lets React finish its commit + lazy-chunk
+    // hydration first.
+    timer = setTimeout(setup, 0);
 
     return () => {
-      observer.disconnect();
+      if (timer !== null) clearTimeout(timer);
+      observer?.disconnect();
       _observer = null;
     };
   }, []);

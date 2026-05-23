@@ -569,9 +569,11 @@ Next? (Enter = 1)
 
 If the user picks 1 (or Enter), append to `Patterns/friend-web-preferences.md` with the rule + the source-session backlinks. This is the slow loop that makes Phase 2 better over weeks of use.
 
-### 6h — Print the exit summary
+### 6h — Merge (if requested) and print the exit summary
 
-**Do NOT auto-merge to master.** Do NOT delete the worktree or branch. The user owns the merge decision. Print:
+There are two cases:
+
+**Case A — default: user did NOT ask to merge.** Do NOT auto-merge. Do NOT delete the worktree or branch. The user owns the merge decision. Print:
 
 ```
 Session done.
@@ -597,6 +599,39 @@ Files updated:
   ~ Obsidian/personas/Patterns/friend-web-preferences.md (if pattern promoted)
   ~ Obsidian/personas/Friend/web/state.md                (claim released)
 ```
+
+**Case B — user asked to merge as part of the exit** (e.g. "stop and merge", "wrap and merge", "stop, wrap and merge", `/friend ... then merge`). Run the merge AND clean up:
+
+1. From the main checkout: `git merge --no-ff worktree-{slug}` with a merge message that names the cycle commits.
+2. **If the merge has conflicts:** stop, surface the conflicts, and let the user resolve them manually. Do NOT auto-resolve. Do NOT remove the worktree or branch — the branch is still needed for conflict resolution. Print only the inspect/discard instructions from Case A.
+3. **If the merge succeeds cleanly:** immediately remove the worktree and delete the branch — every time, no exceptions. The worktree's job ends when its commits are in master; leaving it accumulates clutter in `.claude/worktrees/`.
+
+   ```bash
+   git worktree remove .claude/worktrees/{slug}
+   git branch -D worktree-{slug}
+   ```
+
+   Then print:
+
+   ```
+   Session done — merged into master and worktree cleaned up.
+     Merge:     {merge-sha}  on master
+     Cycles:    {count}  ({first-sha}..{last-sha})
+     Area:      {area}
+     Acceptance: {picked}/{proposed}  ({pct}%)
+     Worktree:  removed (.claude/worktrees/{slug}/ deleted)
+     Branch:    removed (worktree-{slug} deleted)
+
+   Files updated:
+     + Obsidian/personas/Friend/web/sessions/{date}-{slug}.md
+     + Obsidian/personas/Lessons/{date}-friend-web.md       (if Lessons/ exists)
+     ~ Obsidian/personas/Friend/web/coverage.md
+     ~ Obsidian/personas/Friend/web/passes.md               (if any hard rejects)
+     ~ Obsidian/personas/Patterns/friend-web-preferences.md (if pattern promoted)
+     ~ Obsidian/personas/Friend/web/state.md                (claim released)
+   ```
+
+This Case-B clean-up is a hard rule, not a suggestion — the user has explicitly preferred it after observing stale-worktree accumulation in `.claude/worktrees/`.
 
 ---
 
@@ -632,7 +667,7 @@ If the user expects "/friend will adapt to my taste by cycle 2," they'll be disa
 - **No stabilization.** If a direction reduces to lint cleanup, dead-code removal, type tightening, or test addition without behavior change, drop it from the Phase 2 menu. Suggest the user run `/explorer` for that area.
 - **No multi-commit directions.** If a direction can't be done in one atomic commit while keeping the worktree compiling, lint-clean, and locale-locked, split it (stages-of-N) or reject it.
 - **No cross-area scope creep.** If executing a chosen direction reveals it needs to touch files outside the area, Phase 3's risk gate should trip and ask the user.
-- **No auto-merge.** The worktree and branch are left for the user to inspect and merge on their own time.
+- **No auto-merge by default.** The worktree and branch are left for the user to inspect and merge on their own time — unless they explicitly request a merge as part of the exit (e.g. "stop and merge", "wrap and merge"). In that case the merge runs and the worktree + branch are removed once the merge succeeds (see Phase 6h Case B).
 - **No silent stash, reset, or restore.** Per CLAUDE.md and the parallel-CLI shared-tree reality: never `git stash`, `git reset --hard`, `git restore` on paths the cycle didn't author, or `git clean -f`. Use `git add <path>` per file in Phase 4 and verify the staged count.
 - **No `--no-verify` / `--no-gpg-sign` / `--amend`.** If a hook fails on commit, fix the underlying issue and write a new commit.
 - **No English placeholders in non-en locales.** If a direction requires translation work the model can't do confidently, defer it — don't ship `en.ts` strings copied into `de.ts`. Locale lockstep means *translated* lockstep.
@@ -659,6 +694,8 @@ LOOP:
                                                   │ user picks number → Phase 3
 EXIT (stop word / interrupt / context wrap):
   →  Phase 6  capture rejections → session note → Lessons → passes → coverage
-              → pattern-promotion check → release claim → exit summary
-              (worktree + branch left intact for user merge)
+              → pattern-promotion check → release claim → maybe merge → exit
+              (default: worktree + branch left intact for user merge)
+              (if user asked to merge: do the merge, then `git worktree remove`
+               + `git branch -D` on success; on conflict, leave intact)
 ```

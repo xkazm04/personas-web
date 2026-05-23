@@ -27,7 +27,14 @@ export default function StageSection({
   const toRgba = toColor ? resolveStageColor(toColor, "to") : undefined;
 
   return (
-    <section id={id} className="relative overflow-hidden" data-animate-when-visible>
+    <section
+      id={id}
+      className="relative overflow-hidden"
+      data-animate-when-visible
+      // useAnimationPause toggles .animations-paused via classList; lazy
+      // sections can be mutated by the observer before client hydration completes
+      suppressHydrationWarning
+    >
       {showTopLine && !fromColor && (
         <div className="pointer-events-none absolute inset-x-0 top-0 z-[1] section-line" />
       )}
