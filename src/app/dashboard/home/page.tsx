@@ -12,7 +12,6 @@ import { relativeTime } from "@/lib/format";
 import {
   MOCK_FLEET_RECOMMENDATION,
   MOCK_GLOBAL_EXECUTIONS,
-  MOCK_UNREAD_MESSAGES,
 } from "@/lib/mock-dashboard-data";
 import { useAuthStore } from "@/stores/authStore";
 import { useExecutionStore, useEnrichedExecutions } from "@/stores/executionStore";
@@ -21,9 +20,10 @@ import { useReviewStore } from "@/stores/reviewStore";
 import { useSystemStore } from "@/stores/systemStore";
 import useSWR from "swr";
 
+import { DashboardInstruments } from "./home-page/DashboardInstruments";
 import { DashboardQuickLinks } from "./home-page/DashboardQuickLinks";
 import { DashboardIntelligencePanels } from "./home-page/DashboardIntelligencePanels";
-import { DashboardStatsBadges } from "./home-page/DashboardStatsBadges";
+import { DashboardVitalsRow } from "./home-page/DashboardVitalsRow";
 import { RecentActivityCard } from "./home-page/RecentActivityCard";
 import { TrafficErrorsCard } from "./home-page/TrafficErrorsCard";
 import { useGreeting } from "./home-page/useGreeting";
@@ -138,14 +138,12 @@ export default function DashboardHomePage() {
         )}
       </motion.div>
 
-      <motion.div variants={fadeUp} className="mb-8 flex flex-wrap gap-3">
-        <DashboardStatsBadges
-          labels={t.dashboard}
-          stats={stats}
-          pendingReviewCount={pendingReviewCount}
-          unreadMessages={MOCK_UNREAD_MESSAGES}
-        />
-      </motion.div>
+      <DashboardVitalsRow
+        successRate={stats.successRate}
+        runs={stats.total}
+        agents={stats.activeAgents}
+        reviews={pendingReviewCount}
+      />
 
       <motion.div variants={fadeUp} className="mb-6">
         <FleetOptimizationCard
@@ -185,6 +183,8 @@ export default function DashboardHomePage() {
           />
         </motion.div>
       </div>
+
+      <DashboardInstruments />
 
       <motion.div variants={fadeUp} className="mt-6 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
         <DashboardQuickLinks
