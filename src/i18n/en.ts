@@ -828,6 +828,23 @@
     ice: string;
     news: string;
   };
+  tour: {
+    launch: string;
+    play: string;
+    pause: string;
+    next: string;
+    previous: string;
+    exit: string;
+    step1: string;
+    step2: string;
+    step3: string;
+    features1: string;
+    features2: string;
+    features3: string;
+    roadmap1: string;
+    roadmap2: string;
+    roadmap3: string;
+  };
 }
 
 export const en: Translations = {
@@ -1763,6 +1780,23 @@ export const en: Translations = {
     light: 'Classic bright theme',
     ice: 'Cool blue light theme',
     news: 'High contrast light theme',
+  },
+  tour: {
+    launch: 'Take the tour',
+    play: 'Play',
+    pause: 'Pause',
+    next: 'Next step',
+    previous: 'Previous step',
+    exit: 'Exit tour',
+    step1: 'Personas turns plain-language goals into multi-agent AI pipelines that run privately on your own machine.',
+    step2: 'Compose agents into a pipeline and watch the orchestrator route work between them — self-healing, in real time.',
+    step3: 'Run unlimited agents locally for free, then scale to 24/7 cloud execution whenever you are ready.',
+    features1: 'Describe what you want in plain language — Personas turns it into an executable agent that runs on your machine.',
+    features2: 'Pipelines self-heal: when a step fails, agents diagnose the cause and retry, so your workflow keeps moving.',
+    features3: 'Credentials stay encrypted in your OS keyring; secrets and prompts never leave your device unless you choose.',
+    roadmap1: 'Track what is shipping now and what is coming next — every phase here is graded by status as it lands.',
+    roadmap2: 'Vote on the features you want most. The most-voted ideas shape what we build next.',
+    roadmap3: 'Every release lands here with the changes that matter — keep an eye on shipping momentum.',
   },
 };
 

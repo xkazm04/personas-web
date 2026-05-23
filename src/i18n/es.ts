@@ -934,5 +934,22 @@ export const es: Translations = {
     value: 'Una persona, muchas capacidades \u2014 una identidad estable con un conjunto componible de tareas, ejecut\u00e1ndose donde viven tus datos y bajo tu control.',
     cta: 'See it in action',
   },
+  tour: {
+    launch: 'Iniciar el recorrido',
+    play: 'Reproducir',
+    pause: 'Pausar',
+    next: 'Paso siguiente',
+    previous: 'Paso anterior',
+    exit: 'Salir del recorrido',
+    step1: 'Personas convierte objetivos en lenguaje natural en pipelines de IA multiagente que se ejecutan de forma privada en tu propia máquina.',
+    step2: 'Combina agentes en un pipeline y observa cómo el orquestador distribuye el trabajo entre ellos — con autorreparación y en tiempo real.',
+    step3: 'Ejecuta agentes ilimitados de forma local y gratuita, y escala a la ejecución en la nube 24/7 cuando quieras.',
+    features1: 'Describe lo que quieres en lenguaje natural y Personas lo convierte en un agente ejecutable que se ejecuta en tu máquina.',
+    features2: 'Los pipelines se autorreparan: si un paso falla, los agentes diagnostican la causa y lo reintentan, para que tu flujo siga avanzando.',
+    features3: 'Las credenciales permanecen cifradas en el llavero del sistema; los secretos y prompts no salen de tu dispositivo a menos que tú lo decidas.',
+    roadmap1: 'Sigue lo que se está lanzando ahora y lo que viene después — cada fase aparece marcada con su estado a medida que aterriza.',
+    roadmap2: 'Vota por las funciones que más quieres. Las ideas más votadas marcan lo que construimos a continuación.',
+    roadmap3: 'Cada versión aterriza aquí con los cambios que importan — sigue el ritmo de nuestros lanzamientos.',
+  },
 };
 

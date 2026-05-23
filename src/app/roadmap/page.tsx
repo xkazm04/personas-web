@@ -5,6 +5,7 @@ import ChangelogTimeline from "@/components/sections/changelog-timeline";
 import StageSection from "@/components/StageSection";
 import InfoPageLayout from "@/components/InfoPageLayout";
 import { SITE_URL } from "@/lib/seo";
+import { ROADMAP_TOUR_STEPS } from "@/lib/tour-script";
 
 export const dynamic = "force-static";
 export const revalidate = 3600;
@@ -32,7 +33,7 @@ const scrollMapItems = [
 
 export default function RoadmapPage() {
   return (
-    <InfoPageLayout scrollMapItems={scrollMapItems}>
+    <InfoPageLayout scrollMapItems={scrollMapItems} tourSteps={ROADMAP_TOUR_STEPS}>
       <StageSection glow="emerald" showTopLine={false} toColor="emerald">
         <Roadmap />
       </StageSection>

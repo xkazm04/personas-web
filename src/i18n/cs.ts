@@ -934,5 +934,22 @@ export const cs: Translations = {
     value: 'Jedna persona, mnoho schopnost\u00ed \u2014 stabiln\u00ed identita se slo\u017eitelnou sadou \u00fakol\u016f, b\u011b\u017e\u00edc\u00ed tam, kde \u017eij\u00ed va\u0161e data, a z\u016fst\u00e1vaj\u00edc\u00ed pod va\u0161\u00ed kontrolou.',
     cta: 'See it in action',
   },
+  tour: {
+    launch: 'Spustit prohlídku',
+    play: 'Přehrát',
+    pause: 'Pozastavit',
+    next: 'Další krok',
+    previous: 'Předchozí krok',
+    exit: 'Ukončit prohlídku',
+    step1: 'Personas mění cíle zadané běžným jazykem na multiagentní AI pipeline, které běží soukromě na vašem vlastním počítači.',
+    step2: 'Poskládejte agenty do pipeline a sledujte, jak mezi nimi orchestrátor rozděluje práci — samoopravně a v reálném čase.',
+    step3: 'Spouštějte neomezeně agentů lokálně zdarma a kdykoli budete připraveni, přejděte na nepřetržitý běh v cloudu.',
+    features1: 'Popište, co chcete, běžným jazykem — Personas to promění ve spustitelného agenta, který běží na vašem počítači.',
+    features2: 'Pipeline se opravují samy: když některý krok selže, agenti diagnostikují příčinu a zkusí to znovu — váš workflow tedy běží dál.',
+    features3: 'Přihlašovací údaje zůstávají zašifrované v klíčence OS — tajemství ani prompty neopouštějí vaše zařízení, dokud to sami nedovolíte.',
+    roadmap1: 'Sledujte, co se právě vydává a co přijde dál — každá fáze tady je značená podle stavu, jakmile dorazí.',
+    roadmap2: 'Hlasujte pro funkce, které chcete nejvíc. Nápady s nejvíce hlasy určují, co postavíme dál.',
+    roadmap3: 'Každé vydání tu přistává s tím, co se opravdu změnilo — sledujte tempo, jakým posíláme novinky.',
+  },
 };
 

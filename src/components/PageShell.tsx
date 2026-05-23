@@ -5,6 +5,8 @@ import ScrollMap from "@/components/ScrollMap";
 import AnimationPauseObserver from "@/components/AnimationPauseObserver";
 import { ParticleHost } from "@/components/ParticleHost";
 import { SectionObserverProvider } from "@/contexts/SectionObserverContext";
+import { TourProvider } from "@/contexts/TourContext";
+import TourOverlay from "@/components/tour/TourOverlay";
 
 interface ScrollMapItem {
   label: string;
@@ -25,12 +27,15 @@ export default function PageShell({
 
   return (
     <SectionObserverProvider sectionIds={sectionIds}>
-      <main id="main-content" className="relative isolate overflow-hidden scroll-mt-24">
-        <AnimationPauseObserver />
-        <ParticleHost />
-        <ScrollMap items={scrollMapItems} />
-        {children}
-      </main>
+      <TourProvider>
+        <main id="main-content" className="relative isolate overflow-hidden scroll-mt-24">
+          <AnimationPauseObserver />
+          <ParticleHost />
+          <ScrollMap items={scrollMapItems} />
+          {children}
+        </main>
+        <TourOverlay />
+      </TourProvider>
     </SectionObserverProvider>
   );
 }

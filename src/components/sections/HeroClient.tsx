@@ -14,6 +14,8 @@ import { useLiveStats } from "@/hooks/useLiveStats";
 import { useAnimationPauseRegister } from "@/hooks/useAnimationPause";
 import { connectors } from "@/data/connectors";
 import { useTranslation } from "@/i18n/useTranslation";
+import TourLauncher from "@/components/tour/TourLauncher";
+import { HOME_TOUR_STEPS } from "@/lib/tour-script";
 import CommandCenterIllustration from "./hero/CommandCenterIllustration";
 import HeroStatRow from "./hero/HeroStatRow";
 
@@ -145,6 +147,10 @@ export default function HeroClient() {
               <GithubIcon className="h-5 w-5 transition-transform duration-300 group-hover:scale-110 group-hover:drop-shadow-[0_0_8px_rgba(255,255,255,0.8)]" />
               <span className="relative z-10">{t.hero.viewOnGithub}</span>
             </a>
+          </motion.div>
+
+          <motion.div variants={fadeUp} className="mt-6 flex justify-center lg:justify-start">
+            <TourLauncher steps={HOME_TOUR_STEPS} />
           </motion.div>
 
           <motion.div

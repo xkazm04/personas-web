@@ -1,5 +1,6 @@
 import InfoPageLayout from "@/components/InfoPageLayout";
 import StageSection from "@/components/StageSection";
+import { FEATURES_TOUR_STEPS } from "@/lib/tour-script";
 
 export const dynamic = "force-static";
 export const revalidate = 3600;
@@ -28,7 +29,7 @@ const scrollMapItems = breadcrumbItems.map(({ label, href }) => ({ label, href }
 
 export default function FeaturesPage() {
   return (
-    <InfoPageLayout scrollMapItems={scrollMapItems} breadcrumbItems={breadcrumbItems}>
+    <InfoPageLayout scrollMapItems={scrollMapItems} breadcrumbItems={breadcrumbItems} tourSteps={FEATURES_TOUR_STEPS}>
       <StageSection glow="purple" showTopLine={false} toColor="purple">
         <DesignEngine />
       </StageSection>
