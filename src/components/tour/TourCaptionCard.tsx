@@ -5,6 +5,7 @@ import { Play, Pause, ChevronLeft, ChevronRight, X } from "lucide-react";
 import { useTour } from "@/contexts/TourContext";
 import { useTranslation } from "@/i18n/useTranslation";
 import { TRANSITION_NORMAL } from "@/lib/animations";
+import AthenaCompanion from "./AthenaCompanion";
 
 const BTN_BASE =
   "flex h-9 w-9 items-center justify-center rounded-full border transition-colors duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-cyan/40 disabled:cursor-not-allowed disabled:opacity-40";
@@ -31,20 +32,23 @@ export default function TourCaptionCard() {
       transition={TRANSITION_NORMAL}
       className="fixed inset-x-0 bottom-6 z-[90] mx-auto flex w-[min(92vw,30rem)] flex-col gap-4 rounded-2xl border border-glass-hover bg-surface/95 p-5 shadow-2xl backdrop-blur-md"
     >
-      {/* Narration — announced to assistive tech as it changes. */}
-      <div className="min-h-[3.75rem]" aria-live="polite">
-        <AnimatePresence mode="wait">
-          <motion.p
-            key={step.id}
-            initial={{ opacity: 0, y: 6 }}
-            animate={{ opacity: 1, y: 0 }}
-            exit={{ opacity: 0, y: -6 }}
-            transition={TRANSITION_NORMAL}
-            className="text-base leading-relaxed text-foreground"
-          >
-            {t.tour[step.narration]}
-          </motion.p>
-        </AnimatePresence>
+      {/* Companion + narration — announced to assistive tech as it changes. */}
+      <div className="flex items-start gap-3">
+        <AthenaCompanion size={52} className="mt-0.5" />
+        <div className="min-h-[3.75rem] flex-1" aria-live="polite">
+          <AnimatePresence mode="wait">
+            <motion.p
+              key={step.id}
+              initial={{ opacity: 0, y: 6 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: -6 }}
+              transition={TRANSITION_NORMAL}
+              className="text-base leading-relaxed text-foreground"
+            >
+              {t.tour[step.narration]}
+            </motion.p>
+          </AnimatePresence>
+        </div>
       </div>
 
       {/* Progress dots — also jump-to controls. */}

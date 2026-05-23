@@ -149,7 +149,7 @@ export default function HeroClient() {
           </motion.div>
 
           <motion.div variants={fadeUp} className="mt-6 flex justify-center lg:justify-start">
-            <TourLauncher tourId="home" bridgeHref="/features?tour=1" />
+            <TourLauncher tourId="home" bridgeHref="/features?tour=1" intro />
           </motion.div>
 
           <motion.div

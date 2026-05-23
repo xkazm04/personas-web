@@ -20,12 +20,15 @@ const STORAGE_KEY = "personas-tour-seen";
 export default function TourLauncher({
   tourId,
   bridgeHref,
+  intro = false,
 }: {
   /** Which tour to run — resolved to its step array client-side, so the
    *  function-bearing `actions` never cross the Server→Client boundary. */
   tourId: TourId;
   /** When set, the tour offers to continue here after its last step. */
   bridgeHref?: string;
+  /** Show the welcome intro pop-up before the first step. */
+  intro?: boolean;
 }) {
   const { t } = useTranslation();
   const { active, start } = useTour();
@@ -59,9 +62,9 @@ export default function TourLauncher({
       } catch {
         /* ignored */
       }
-      start(steps, { bridgeHref });
+      start(steps, { bridgeHref, intro });
     }
-  }, [start, steps, bridgeHref]);
+  }, [start, steps, bridgeHref, intro]);
 
   if (active) return null;
 
@@ -72,7 +75,7 @@ export default function TourLauncher({
       /* localStorage may be blocked; proceed regardless. */
     }
     setSeen(true);
-    start(steps, { bridgeHref });
+    start(steps, { bridgeHref, intro });
   };
 
   return (

@@ -24,6 +24,7 @@ test.describe("Guided tour — stage 1 (homepage engine)", () => {
   test("launching opens the spotlight + caption with step 1 narration", async ({ page }) => {
     await page.goto("/");
     await page.getByRole("button", { name: LAUNCH }).click();
+    await page.getByRole("button", { name: "Begin" }).click();
 
     const caption = page.getByRole("dialog", { name: LAUNCH });
     await expect(caption).toBeVisible();
@@ -34,6 +35,7 @@ test.describe("Guided tour — stage 1 (homepage engine)", () => {
   test("next / previous move between steps", async ({ page }) => {
     await page.goto("/");
     await page.getByRole("button", { name: LAUNCH }).click();
+    await page.getByRole("button", { name: "Begin" }).click();
     const caption = page.getByRole("dialog", { name: LAUNCH });
 
     await caption.getByRole("button", { name: "Next step" }).click();
@@ -47,6 +49,7 @@ test.describe("Guided tour — stage 1 (homepage engine)", () => {
   test("progress dots jump to a step", async ({ page }) => {
     await page.goto("/");
     await page.getByRole("button", { name: LAUNCH }).click();
+    await page.getByRole("button", { name: "Begin" }).click();
     const caption = page.getByRole("dialog", { name: LAUNCH });
 
     await caption.getByRole("button", { name: "3 / 5" }).click();
@@ -61,6 +64,7 @@ test.describe("Guided tour — stage 1 (homepage engine)", () => {
   test("play / pause toggles the auto-advance control", async ({ page }) => {
     await page.goto("/");
     await page.getByRole("button", { name: LAUNCH }).click();
+    await page.getByRole("button", { name: "Begin" }).click();
     const caption = page.getByRole("dialog", { name: LAUNCH });
 
     // The tour starts playing, so the control offers "Pause".
@@ -73,6 +77,7 @@ test.describe("Guided tour — stage 1 (homepage engine)", () => {
   test("auto-advance progresses to the next step on its own", async ({ page }) => {
     await page.goto("/");
     await page.getByRole("button", { name: LAUNCH }).click();
+    await page.getByRole("button", { name: "Begin" }).click();
     const caption = page.getByRole("dialog", { name: LAUNCH });
 
     await expect(caption).toContainText(STEP1);
@@ -84,6 +89,7 @@ test.describe("Guided tour — stage 1 (homepage engine)", () => {
   test("exit button closes the tour and restores the launcher", async ({ page }) => {
     await page.goto("/");
     await page.getByRole("button", { name: LAUNCH }).click();
+    await page.getByRole("button", { name: "Begin" }).click();
     const caption = page.getByRole("dialog", { name: LAUNCH });
 
     await expect(caption).toBeVisible();
@@ -95,6 +101,7 @@ test.describe("Guided tour — stage 1 (homepage engine)", () => {
   test("Escape key exits the tour", async ({ page }) => {
     await page.goto("/");
     await page.getByRole("button", { name: LAUNCH }).click();
+    await page.getByRole("button", { name: "Begin" }).click();
     const caption = page.getByRole("dialog", { name: LAUNCH });
 
     await expect(caption).toBeVisible();
@@ -148,6 +155,7 @@ test.describe("Guided tour — DOM manipulation", () => {
   test("spotlight target gets data-tour-active while focused", async ({ page }) => {
     await page.goto("/");
     await page.getByRole("button", { name: LAUNCH }).click();
+    await page.getByRole("button", { name: "Begin" }).click();
     const caption = page.getByRole("dialog", { name: LAUNCH });
     await expect(caption).toContainText("stable identity");
     // Step 1 — the Tools diagram should carry the live marker.
@@ -171,6 +179,8 @@ test.describe("Guided tour — deep link & seen memory", () => {
 
   test("?tour=1 auto-starts the homepage tour", async ({ page }) => {
     await page.goto("/?tour=1");
+    // The homepage tour opens with the intro pop-up; begin to reach the steps.
+    await page.getByRole("button", { name: "Begin" }).click();
     const caption = page.getByRole("dialog", { name: LAUNCH });
     await expect(caption).toBeVisible();
     await expect(caption).toContainText("stable identity");
@@ -197,6 +207,7 @@ test.describe("Guided tour — mobile viewport", () => {
     await expect(page.getByRole("button", { name: LAUNCH })).toBeVisible();
 
     await page.getByRole("button", { name: LAUNCH }).click();
+    await page.getByRole("button", { name: "Begin" }).click();
     const caption = page.getByRole("dialog", { name: LAUNCH });
     await expect(caption).toBeVisible();
     await expect(caption).toContainText("stable identity");
@@ -211,6 +222,7 @@ test.describe("Guided tour — bridge to /features", () => {
   test("finishing the homepage tour offers to continue into /features", async ({ page }) => {
     await page.goto("/");
     await page.getByRole("button", { name: LAUNCH }).click();
+    await page.getByRole("button", { name: "Begin" }).click();
     const caption = page.getByRole("dialog", { name: LAUNCH });
     await expect(caption).toBeVisible();
 
@@ -226,6 +238,7 @@ test.describe("Guided tour — bridge to /features", () => {
   test("declining the bridge ends the tour", async ({ page }) => {
     await page.goto("/");
     await page.getByRole("button", { name: LAUNCH }).click();
+    await page.getByRole("button", { name: "Begin" }).click();
     const caption = page.getByRole("dialog", { name: LAUNCH });
     for (let i = 0; i < 5; i++) {
       await caption.getByRole("button", { name: "Next step" }).click();
@@ -256,5 +269,37 @@ test.describe("Guided tour — stage 2 (/roadmap)", () => {
     await caption.getByRole("button", { name: "Next step" }).click();
     await expect(caption).toContainText("vote on the features");
     await page.screenshot({ path: "test-results/tour/10-roadmap-step2.png" });
+  });
+});
+
+test.describe("Guided tour — intro pop-up (Athena)", () => {
+  const LAUNCH = "Take the tour";
+  const INTRO = "Meet Athena, your guide";
+
+  test("launching shows the intro before any step", async ({ page }) => {
+    await page.goto("/");
+    await page.getByRole("button", { name: LAUNCH }).click();
+    const intro = page.getByRole("dialog", { name: INTRO });
+    await expect(intro).toBeVisible();
+    await expect(intro).toContainText("Athena");
+    // Steps haven't started — the caption isn't mounted yet.
+    await expect(page.getByRole("dialog", { name: LAUNCH })).toBeHidden();
+    await page.screenshot({ path: "test-results/tour/00-intro.png" });
+  });
+
+  test("Begin starts the steps", async ({ page }) => {
+    await page.goto("/");
+    await page.getByRole("button", { name: LAUNCH }).click();
+    await page.getByRole("button", { name: "Begin" }).click();
+    await expect(page.getByRole("dialog", { name: LAUNCH })).toContainText("stable identity");
+  });
+
+  test("Skip exits without starting", async ({ page }) => {
+    await page.goto("/");
+    await page.getByRole("button", { name: LAUNCH }).click();
+    await page.getByRole("button", { name: "Skip" }).click();
+    await expect(page.getByRole("dialog", { name: INTRO })).toBeHidden();
+    await expect(page.getByRole("dialog", { name: LAUNCH })).toBeHidden();
+    await expect(page.getByRole("button", { name: LAUNCH })).toBeVisible();
   });
 });

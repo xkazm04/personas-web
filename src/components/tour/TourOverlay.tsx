@@ -5,18 +5,21 @@ import { useTour } from "@/contexts/TourContext";
 import TourSpotlight from "./TourSpotlight";
 import TourCaptionCard from "./TourCaptionCard";
 import TourBridgeCard from "./TourBridgeCard";
+import TourIntroCard from "./TourIntroCard";
 
 /**
- * Mounts the spotlight + caption card while a tour is running, or the bridge
- * prompt at the end. Rendered once by `PageShell`, so every page wrapped in it
- * inherits the tour surface.
+ * Mounts the tour surface: the welcome intro pop-up, then the spotlight +
+ * caption while stepping, then the bridge prompt at the end. Rendered once by
+ * `PageShell`, so every page wrapped in it inherits the tour.
  */
 export default function TourOverlay() {
-  const { active, atBridge } = useTour();
+  const { active, atBridge, atIntro } = useTour();
+  const stepping = active && !atBridge && !atIntro;
   return (
     <AnimatePresence>
-      {active && !atBridge && <TourSpotlight key="tour-spotlight" />}
-      {active && !atBridge && <TourCaptionCard key="tour-caption" />}
+      {active && atIntro && <TourIntroCard key="tour-intro" />}
+      {stepping && <TourSpotlight key="tour-spotlight" />}
+      {stepping && <TourCaptionCard key="tour-caption" />}
       {active && atBridge && <TourBridgeCard key="tour-bridge" />}
     </AnimatePresence>
   );

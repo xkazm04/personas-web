@@ -12,6 +12,7 @@ import {
 import { useReducedMotion } from "framer-motion";
 import type { TourStep } from "@/lib/tour-script";
 import { useTourAudio } from "@/hooks/useTourAudio";
+import { useTourScroll } from "@/hooks/useTourScroll";
 
 /** Options for a tour run. */
 interface TourStartOptions {
@@ -20,6 +21,8 @@ interface TourStartOptions {
    * of exiting; confirming navigates here (e.g. "/features?tour=1").
    */
   bridgeHref?: string;
+  /** Show the welcome intro pop-up before the first step. */
+  intro?: boolean;
 }
 
 interface TourContextValue {
@@ -33,12 +36,18 @@ interface TourContextValue {
   playing: boolean;
   /** Whether the end-of-tour bridge prompt is showing. */
   atBridge: boolean;
+  /** Whether the welcome intro pop-up is showing (before step 0). */
+  atIntro: boolean;
+  /** Live AnalyserNode for the current narration audio (companion reactivity). */
+  audioAnalyser: AnalyserNode | null;
   start: (steps: TourStep[], options?: TourStartOptions) => void;
   exit: () => void;
   next: () => void;
   prev: () => void;
   goTo: (index: number) => void;
   togglePlay: () => void;
+  /** Leave the intro and start the guided steps. */
+  beginTour: () => void;
   /** Accept the bridge prompt — navigates to the bridge href. */
   confirmBridge: () => void;
   /** Decline the bridge prompt — ends the tour. */
@@ -54,6 +63,7 @@ export function TourProvider({ children }: { children: ReactNode }) {
   const [playing, setPlaying] = useState(false);
   const [bridgeHref, setBridgeHref] = useState<string | null>(null);
   const [atBridge, setAtBridge] = useState(false);
+  const [atIntro, setAtIntro] = useState(false);
   const prefersReducedMotion = useReducedMotion();
 
   const start = useCallback((nextSteps: TourStep[], options?: TourStartOptions) => {
@@ -61,6 +71,7 @@ export function TourProvider({ children }: { children: ReactNode }) {
     setStepIndex(0);
     setBridgeHref(options?.bridgeHref ?? null);
     setAtBridge(false);
+    setAtIntro(options?.intro ?? false);
     setActive(true);
     setPlaying(true);
   }, []);
@@ -69,7 +80,10 @@ export function TourProvider({ children }: { children: ReactNode }) {
     setActive(false);
     setPlaying(false);
     setAtBridge(false);
+    setAtIntro(false);
   }, []);
+
+  const beginTour = useCallback(() => setAtIntro(false), []);
 
   // Advancing past the final step ends the tour — unless a bridge href is set,
   // in which case we show the "continue?" prompt instead. The dwell timer and
@@ -118,54 +132,35 @@ export function TourProvider({ children }: { children: ReactNode }) {
   // advanced on the clip's `ended` by useTourAudio). Timeout callback mutates
   // state, not the effect body (React 19 "no setState in effect").
   useEffect(() => {
-    if (!active || !playing || atBridge || steps.length === 0) return;
+    if (!active || !playing || atBridge || atIntro || steps.length === 0) return;
     if (steps[stepIndex].audioSrc) return;
     const id = window.setTimeout(next, steps[stepIndex].dwellMs);
     return () => window.clearTimeout(id);
-  }, [active, playing, atBridge, stepIndex, next, steps]);
+  }, [active, playing, atBridge, atIntro, stepIndex, next, steps]);
 
-  // Narration audio: plays audioSrc and advances on `ended`.
-  useTourAudio({ active, atBridge, playing, stepIndex, steps, next });
+  // Narration audio (gated off during the intro): plays audioSrc, advances on
+  // `ended`, and returns the AnalyserNode that drives the companion.
+  const audioAnalyser = useTourAudio({
+    active: active && !atIntro,
+    atBridge,
+    playing,
+    stepIndex,
+    steps,
+    next,
+  });
 
   // Timed in-step manipulations: fire each action's `run` on its own timer
   // relative to step entry; all pending timers cleared on step change / exit.
   useEffect(() => {
-    if (!active || steps.length === 0) return;
+    if (!active || atIntro || steps.length === 0) return;
     const actions = steps[stepIndex].actions;
     if (!actions || actions.length === 0) return;
     const ids = actions.map((a) => window.setTimeout(a.run, a.atMs));
     return () => ids.forEach((id) => window.clearTimeout(id));
-  }, [active, stepIndex, steps]);
+  }, [active, atIntro, stepIndex, steps]);
 
-  // Centre the current step's spotlight target when the step changes. The
-  // target lives inside a (possibly lazy) section, so if it isn't in the DOM
-  // yet we scroll the always-present section wrapper into view to trigger
-  // hydration, then retry until the real target can be centred.
-  useEffect(() => {
-    if (!active || steps.length === 0) return;
-    const step = steps[stepIndex];
-    const behavior: ScrollBehavior = prefersReducedMotion ? "auto" : "smooth";
-
-    const center = () => {
-      const spot = document.querySelector<HTMLElement>(step.spotlightTarget);
-      if (spot) {
-        spot.scrollIntoView({ behavior, block: "center" });
-        return true;
-      }
-      document
-        .querySelector<HTMLElement>(step.scrollTarget)
-        ?.scrollIntoView({ behavior, block: "center" });
-      return false;
-    };
-
-    if (center()) return;
-    let tries = 0;
-    const id = window.setInterval(() => {
-      tries += 1;
-      if (center() || tries > 12) window.clearInterval(id);
-    }, 200);
-    return () => window.clearInterval(id);
-  }, [active, stepIndex, prefersReducedMotion, steps]);
+  // Scroll the current step's spotlight target into view (paused during intro).
+  useTourScroll(active && !atIntro, stepIndex, steps, prefersReducedMotion);
 
   // Keyboard control: Escape exits, arrows step.
   useEffect(() => {
@@ -181,11 +176,11 @@ export function TourProvider({ children }: { children: ReactNode }) {
 
   const value = useMemo<TourContextValue>(
     () => ({
-      active, steps, stepIndex, playing, atBridge,
-      start, exit, next, prev, goTo, togglePlay, confirmBridge, dismissBridge,
+      active, steps, stepIndex, playing, atBridge, atIntro, audioAnalyser,
+      start, exit, next, prev, goTo, togglePlay, beginTour, confirmBridge, dismissBridge,
     }),
-    [active, steps, stepIndex, playing, atBridge,
-     start, exit, next, prev, goTo, togglePlay, confirmBridge, dismissBridge],
+    [active, steps, stepIndex, playing, atBridge, atIntro, audioAnalyser,
+     start, exit, next, prev, goTo, togglePlay, beginTour, confirmBridge, dismissBridge],
   );
 
   return <TourContext.Provider value={value}>{children}</TourContext.Provider>;

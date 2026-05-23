@@ -835,6 +835,10 @@
     next: string;
     previous: string;
     exit: string;
+    begin: string;
+    skip: string;
+    introTitle: string;
+    introBody: string;
     bridgePrompt: string;
     bridgeConfirm: string;
     bridgeDismiss: string;
@@ -1796,6 +1800,10 @@ export const en: Translations = {
     next: 'Next step',
     previous: 'Previous step',
     exit: 'Exit tour',
+    begin: 'Begin',
+    skip: 'Skip',
+    introTitle: 'Meet Athena, your guide',
+    introBody: 'Athena will walk you through Personas in about a minute — what a persona is, how it works, and how to get started. Pause, skip, or replay any step.',
     bridgePrompt: 'That is Personas at a glance. Want to go deeper and see how each piece actually works, feature by feature?',
     bridgeConfirm: 'Show me the features',
     bridgeDismiss: 'Maybe later',
