@@ -111,6 +111,7 @@ export default function HubRing({ active, onSelect }: HubRingProps) {
         return (
           <g
             key={trigger.id}
+            data-trigger-id={trigger.id}
             style={{ cursor: "pointer" }}
             onClick={() => onSelect(trigger.id)}
           >

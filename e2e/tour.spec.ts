@@ -9,9 +9,10 @@ import { test, expect } from "@playwright/test";
  */
 test.describe("Guided tour — stage 1 (homepage engine)", () => {
   const LAUNCH = "Take the tour";
-  const STEP1 = "command center";
-  const STEP2 = "plan its steps";
-  const STEP3 = "eight trigger types";
+  const STEP1 = "stable identity";
+  const STEP2 = "real time";
+  const STEP3 = "triggered eight ways";
+  const STEP4 = "six pillars";
 
   test("launcher is present in the hero", async ({ page }) => {
     await page.goto("/");
@@ -47,9 +48,11 @@ test.describe("Guided tour — stage 1 (homepage engine)", () => {
     await page.getByRole("button", { name: LAUNCH }).click();
     const caption = page.getByRole("dialog", { name: LAUNCH });
 
-    await caption.getByRole("button", { name: "3 / 3" }).click();
+    await caption.getByRole("button", { name: "3 / 4" }).click();
     await expect(caption).toContainText(STEP3);
-    await page.screenshot({ path: "test-results/tour/04-step3.png" });
+    await caption.getByRole("button", { name: "4 / 4" }).click();
+    await expect(caption).toContainText(STEP4);
+    await page.screenshot({ path: "test-results/tour/04-step4.png" });
   });
 
   test("play / pause toggles the auto-advance control", async ({ page }) => {
@@ -70,8 +73,8 @@ test.describe("Guided tour — stage 1 (homepage engine)", () => {
     const caption = page.getByRole("dialog", { name: LAUNCH });
 
     await expect(caption).toContainText(STEP1);
-    // Step 1 dwell is 7s — wait it out and confirm the engine advances.
-    await expect(caption).toContainText(STEP2, { timeout: 12_000 });
+    // Step 1 dwell is 12s — wait it out and confirm the engine advances.
+    await expect(caption).toContainText(STEP2, { timeout: 16_000 });
   });
 
   test("exit button closes the tour and restores the launcher", async ({ page }) => {
@@ -126,17 +129,17 @@ test.describe("Guided tour — DOM manipulation", () => {
     await page.goto("/");
     await page.getByRole("button", { name: LAUNCH }).click();
     const caption = page.getByRole("dialog", { name: LAUNCH });
-    await expect(caption).toContainText("command center");
-    // Step 1 — the command-center diagram should carry the live marker.
-    const commandCenter = page.locator('[data-tour-diagram="command-center"]');
+    await expect(caption).toContainText("stable identity");
+    // Step 1 — the Tools diagram should carry the live marker.
+    const tools = page.locator('[data-tour-diagram="tools"]');
     const agentMind = page.locator('[data-tour-diagram="agent-mind"]');
-    await expect(commandCenter).toHaveAttribute("data-tour-active", "true");
+    await expect(tools).toHaveAttribute("data-tour-active", "true");
 
     await caption.getByRole("button", { name: "Next step" }).click();
     // Step 2 marker hops to the agent-mind diagram; the previous target is no
     // longer marked.
     await expect(agentMind).toHaveAttribute("data-tour-active", "true");
-    await expect(commandCenter).not.toHaveAttribute("data-tour-active", "true");
+    await expect(tools).not.toHaveAttribute("data-tour-active", "true");
 
     await caption.getByRole("button", { name: "Exit tour" }).click();
     await expect(agentMind).not.toHaveAttribute("data-tour-active", "true");
@@ -150,7 +153,7 @@ test.describe("Guided tour — deep link & seen memory", () => {
     await page.goto("/?tour=1");
     const caption = page.getByRole("dialog", { name: LAUNCH });
     await expect(caption).toBeVisible();
-    await expect(caption).toContainText("command center");
+    await expect(caption).toContainText("stable identity");
     await page.screenshot({ path: "test-results/tour/12-deeplink.png" });
   });
 
@@ -176,8 +179,40 @@ test.describe("Guided tour — mobile viewport", () => {
     await page.getByRole("button", { name: LAUNCH }).click();
     const caption = page.getByRole("dialog", { name: LAUNCH });
     await expect(caption).toBeVisible();
-    await expect(caption).toContainText("command center");
+    await expect(caption).toContainText("stable identity");
     await page.screenshot({ path: "test-results/tour/11-mobile-step1.png" });
+  });
+});
+
+test.describe("Guided tour — bridge to /features", () => {
+  const LAUNCH = "Take the tour";
+  const CONTINUE = "Show me the features";
+
+  test("finishing the homepage tour offers to continue into /features", async ({ page }) => {
+    await page.goto("/");
+    await page.getByRole("button", { name: LAUNCH }).click();
+    const caption = page.getByRole("dialog", { name: LAUNCH });
+    await expect(caption).toBeVisible();
+
+    // Step through all four homepage beats; the 4th "Next" reaches the bridge.
+    for (let i = 0; i < 4; i++) {
+      await caption.getByRole("button", { name: "Next step" }).click();
+    }
+
+    await expect(page.getByRole("button", { name: CONTINUE })).toBeVisible();
+    await page.screenshot({ path: "test-results/tour/13-bridge.png" });
+  });
+
+  test("declining the bridge ends the tour", async ({ page }) => {
+    await page.goto("/");
+    await page.getByRole("button", { name: LAUNCH }).click();
+    const caption = page.getByRole("dialog", { name: LAUNCH });
+    for (let i = 0; i < 4; i++) {
+      await caption.getByRole("button", { name: "Next step" }).click();
+    }
+    await page.getByRole("button", { name: "Maybe later" }).click();
+    await expect(page.getByRole("button", { name: CONTINUE })).toBeHidden();
+    await expect(page.getByRole("button", { name: LAUNCH })).toBeVisible();
   });
 });
 

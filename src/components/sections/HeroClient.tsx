@@ -150,7 +150,7 @@ export default function HeroClient() {
           </motion.div>
 
           <motion.div variants={fadeUp} className="mt-6 flex justify-center lg:justify-start">
-            <TourLauncher steps={HOME_TOUR_STEPS} />
+            <TourLauncher steps={HOME_TOUR_STEPS} bridgeHref="/features?tour=1" />
           </motion.div>
 
           <motion.div

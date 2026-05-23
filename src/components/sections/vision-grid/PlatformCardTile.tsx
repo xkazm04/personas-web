@@ -34,6 +34,7 @@ export default function PlatformCardTile({ card }: { card: PlatformCard }) {
   return (
     <motion.div
       ref={cardRef}
+      data-card-id={card.id}
       variants={cardVariants}
       role="button"
       tabIndex={0}

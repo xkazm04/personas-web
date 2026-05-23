@@ -123,7 +123,7 @@ interface SectionConfig {
 }
 
 const sections: SectionConfig[] = [
-  { Component: LazyUseCases,           glow: "emerald", fromColor: "cyan",    toColor: "emerald", dividerFrom: "cyan",    dividerTo: "emerald" },
+  { Component: LazyUseCases,           glow: "emerald", fromColor: "cyan",    toColor: "emerald", dividerFrom: "cyan",    dividerTo: "emerald", wrapperId: "tools" },
   { Component: LazyPlaygroundSplit,    glow: "cyan",    fromColor: "emerald", toColor: "cyan",    dividerFrom: "emerald", dividerTo: "cyan", wrapperId: "playground" },
   { Component: LazyGetStarted,         glow: "emerald", fromColor: "cyan",    toColor: "emerald", dividerFrom: "cyan",    dividerTo: "emerald", wrapperId: "get-started" },
   { Component: LazyOrchestrationHub,   glow: "cyan",    fromColor: "emerald", toColor: "cyan",    dividerFrom: "emerald", dividerTo: "cyan",    wrapperId: "pipelines" },

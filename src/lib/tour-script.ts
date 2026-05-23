@@ -18,6 +18,7 @@ export type TourNarrationKey =
   | "step1"
   | "step2"
   | "step3"
+  | "step4"
   | "features1"
   | "features2"
   | "features3"
@@ -74,7 +75,12 @@ export interface TourStep {
  */
 export function clickTarget(selector: string): void {
   if (typeof document === "undefined") return;
-  document.querySelector<HTMLElement>(selector)?.click();
+  const el = document.querySelector<HTMLElement>(selector);
+  if (!el) return;
+  // Dispatch a bubbling MouseEvent rather than el.click(): the orchestration
+  // trigger targets are SVG <g> nodes (no reliable .click()), and a bubbling
+  // event still reaches React's delegated onClick handler either way.
+  el.dispatchEvent(new MouseEvent("click", { bubbles: true, cancelable: true }));
 }
 
 /**
@@ -95,29 +101,90 @@ export function clickByText(text: string): void {
   }
 }
 
-// Homepage — "Watch a goal become work": command center → live agent mind →
-// trigger-driven orchestration.
+// Homepage — "Meet a persona, then watch it work": what a persona is (Tools)
+// → its mind, live (Agent Mind) → how it's triggered (Orchestration) → the
+// platform it stands on (Platform). Each step drives its diagram via timed,
+// click-based actions, then bridges into /features.
 export const HOME_TOUR_STEPS: TourStep[] = [
+  // 1. Tools — introduce the persona + its composable skills. The use-cases
+  //    diagram auto-cycles its tools, so no action is needed here.
   {
-    id: "command-center",
-    scrollTarget: "#hero",
-    spotlightTarget: '[data-tour-diagram="command-center"]',
+    id: "tools",
+    scrollTarget: "#tools",
+    spotlightTarget: '[data-tour-diagram="tools"]',
     narration: "step1",
-    dwellMs: 7000,
+    dwellMs: 12000,
   },
+  // 2. Agent mind — start the "Triage my Gmail" run so the agent visibly
+  //    parses, plans, and executes while it's narrated.
   {
     id: "agent-mind",
     scrollTarget: "#playground",
     spotlightTarget: '[data-tour-diagram="agent-mind"]',
     narration: "step2",
-    dwellMs: 8500,
+    dwellMs: 13000,
+    actions: [{ atMs: 2200, run: () => clickByText("Triage my Gmail") }],
   },
+  // 3. Orchestration — highlight four trigger types in turn as they're named.
   {
     id: "orchestration",
     scrollTarget: "#pipelines",
     spotlightTarget: '[data-tour-diagram="orchestration"]',
     narration: "step3",
-    dwellMs: 8500,
+    dwellMs: 14000,
+    actions: [
+      { atMs: 2500, run: () => clickTarget('[data-trigger-id="schedule"]') },
+      { atMs: 5000, run: () => clickTarget('[data-trigger-id="event"]') },
+      { atMs: 7500, run: () => clickTarget('[data-trigger-id="polling"]') },
+      { atMs: 10000, run: () => clickTarget('[data-trigger-id="webhook"]') },
+    ],
+  },
+  // 4. Platform — open the six platform cards one at a time (each action
+  //    toggles the previous closed, then opens the next).
+  {
+    id: "platform",
+    scrollTarget: "#vision",
+    spotlightTarget: '[data-tour-diagram="platform"]',
+    narration: "step4",
+    dwellMs: 15000,
+    actions: [
+      { atMs: 1500, run: () => clickTarget('[data-card-id="credential-vault"]') },
+      {
+        atMs: 3700,
+        run: () => {
+          clickTarget('[data-card-id="credential-vault"]');
+          clickTarget('[data-card-id="templates"]');
+        },
+      },
+      {
+        atMs: 5900,
+        run: () => {
+          clickTarget('[data-card-id="templates"]');
+          clickTarget('[data-card-id="byom"]');
+        },
+      },
+      {
+        atMs: 8100,
+        run: () => {
+          clickTarget('[data-card-id="byom"]');
+          clickTarget('[data-card-id="monitoring"]');
+        },
+      },
+      {
+        atMs: 10300,
+        run: () => {
+          clickTarget('[data-card-id="monitoring"]');
+          clickTarget('[data-card-id="lab"]');
+        },
+      },
+      {
+        atMs: 12500,
+        run: () => {
+          clickTarget('[data-card-id="lab"]');
+          clickTarget('[data-card-id="orchestration"]');
+        },
+      },
+    ],
   },
 ];
 

@@ -52,7 +52,7 @@ export default function UseCases() {
     <SectionWrapper id="use-cases">
       <SectionIntro heading={t.useCasesSection.heading} gradient={t.useCasesSection.headingGradient} />
 
-      <div ref={containerRef} className="mt-16 relative">
+      <div ref={containerRef} data-tour-diagram="tools" className="mt-16 relative">
         <svg className="pointer-events-none absolute inset-0 z-5 h-full w-full overflow-visible">
           <defs>
             <linearGradient id={gradientId} x1="0%" y1="0%" x2="100%" y2="100%">

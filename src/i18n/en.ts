@@ -841,6 +841,7 @@
     step1: string;
     step2: string;
     step3: string;
+    step4: string;
     features1: string;
     features2: string;
     features3: string;
@@ -1795,9 +1796,10 @@ export const en: Translations = {
     bridgePrompt: 'That is Personas at a glance. Want to go deeper and see how each piece actually works, feature by feature?',
     bridgeConfirm: 'Show me the features',
     bridgeDismiss: 'Maybe later',
-    step1: 'This is Personas — your local command center. Everything here runs on your own machine, under your control.',
-    step2: 'Describe a goal in plain words, and watch the agent parse it, plan its steps, and execute — live.',
-    step3: 'Any of eight trigger types can wake an agent, and the orchestrator routes work between them, healing itself as it goes.',
+    step1: 'Meet a persona — a single AI agent with one stable identity and a composable set of skills. Give it the tools it needs, from Gmail and Slack to GitHub and your calendar, and it learns to act across all of them. One persona, many jobs, all working together.',
+    step2: 'Now hand that persona a goal in plain language, like "triage my Gmail." Watch its mind work in real time: it reads the request, breaks it into steps, and plans its approach before touching a thing. Then it executes — and shows you every move as it goes.',
+    step3: 'An agent is only as useful as the moments it wakes up for. Personas can be triggered eight ways — on a schedule, by an event, by polling a source, or from an incoming webhook. The orchestrator routes each signal to the right agent and keeps everything moving, healing itself if a step ever fails.',
+    step4: 'All of this rests on one platform built for trust and scale. An encrypted vault guards your credentials, ready-made templates get you moving fast, and bring-your-own-model keeps you in control of the AI. Live monitoring, an experimentation lab, and team orchestration round it out — six pillars, one place.',
     features1: 'Every agent begins as intent: one sentence fills an eight-dimension persona matrix — tasks, memory, triggers, and more.',
     features2: 'It learns as it works — lessons and patterns settle into memory layers, so the agent sharpens with every task.',
     features3: 'When a step breaks, the circuit does not stop: it diagnoses the failure, repairs the path, and retries on its own.',

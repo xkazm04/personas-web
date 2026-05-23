@@ -19,7 +19,6 @@ export default function TourCaptionCard() {
   if (steps.length === 0) return null;
   const step = steps[stepIndex];
   const isFirst = stepIndex === 0;
-  const isLast = stepIndex === steps.length - 1;
 
   return (
     <motion.div
@@ -94,7 +93,7 @@ export default function TourCaptionCard() {
         <button
           type="button"
           onClick={next}
-          aria-label={isLast ? t.tour.exit : t.tour.next}
+          aria-label={t.tour.next}
           className={`${BTN_BASE} border-glass text-muted-dark hover:border-glass-hover hover:text-foreground`}
         >
           <ChevronRight className="h-4 w-4" />
