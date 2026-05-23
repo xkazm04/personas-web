@@ -11,6 +11,7 @@ import {
 } from "react";
 import { useReducedMotion } from "framer-motion";
 import type { TourStep } from "@/lib/tour-script";
+import { useTourAudio } from "@/hooks/useTourAudio";
 
 /** Options for a tour run. */
 interface TourStartOptions {
@@ -113,18 +114,21 @@ export function TourProvider({ children }: { children: ReactNode }) {
 
   const togglePlay = useCallback(() => setPlaying((p) => !p), []);
 
-  // Auto-advance. The timeout callback (not the effect body) mutates state,
-  // so this stays clear of the React 19 "no setState in effect" rule.
+  // Dwell-timer auto-advance — only for steps with NO audio (audio steps are
+  // advanced on the clip's `ended` by useTourAudio). Timeout callback mutates
+  // state, not the effect body (React 19 "no setState in effect").
   useEffect(() => {
     if (!active || !playing || atBridge || steps.length === 0) return;
+    if (steps[stepIndex].audioSrc) return;
     const id = window.setTimeout(next, steps[stepIndex].dwellMs);
     return () => window.clearTimeout(id);
   }, [active, playing, atBridge, stepIndex, next, steps]);
 
-  // Timed in-step manipulations: fire each action's `run` on its own timer,
-  // relative to the moment the step becomes active. Re-armed on every step
-  // entry; all pending timers cleared on step change / exit. Keyed on
-  // stepIndex (not playing) so a manipulation fires once per entry.
+  // Narration audio: plays audioSrc and advances on `ended`.
+  useTourAudio({ active, atBridge, playing, stepIndex, steps, next });
+
+  // Timed in-step manipulations: fire each action's `run` on its own timer
+  // relative to step entry; all pending timers cleared on step change / exit.
   useEffect(() => {
     if (!active || steps.length === 0) return;
     const actions = steps[stepIndex].actions;

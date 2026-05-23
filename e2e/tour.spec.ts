@@ -76,8 +76,9 @@ test.describe("Guided tour — stage 1 (homepage engine)", () => {
     const caption = page.getByRole("dialog", { name: LAUNCH });
 
     await expect(caption).toContainText(STEP1);
-    // Step 1 dwell is 12s — wait it out and confirm the engine advances.
-    await expect(caption).toContainText(STEP2, { timeout: 16_000 });
+    // Step 1 is audio-driven now (advances on the clip's `ended`, ~15s), with
+    // the dwell timer as a fallback — allow generous time for either path.
+    await expect(caption).toContainText(STEP2, { timeout: 25_000 });
   });
 
   test("exit button closes the tour and restores the launcher", async ({ page }) => {

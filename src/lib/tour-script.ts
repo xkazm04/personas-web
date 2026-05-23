@@ -117,6 +117,7 @@ export const HOME_TOUR_STEPS: TourStep[] = [
     spotlightTarget: '[data-tour-diagram="tools"]',
     narration: "step1",
     dwellMs: 12000,
+    audioSrc: "/tour/step1.mp3",
   },
   // 2. Agent mind — start the "Triage my Gmail" run so the agent visibly
   //    parses, plans, and executes while it's narrated.
@@ -126,6 +127,7 @@ export const HOME_TOUR_STEPS: TourStep[] = [
     spotlightTarget: '[data-tour-diagram="agent-mind"]',
     narration: "step2",
     dwellMs: 13000,
+    audioSrc: "/tour/step2.mp3",
     actions: [{ atMs: 2200, run: () => clickByText("Triage my Gmail") }],
   },
   // 3. Orchestration — highlight four trigger types in turn as they're named.
@@ -135,6 +137,7 @@ export const HOME_TOUR_STEPS: TourStep[] = [
     spotlightTarget: '[data-tour-diagram="orchestration"]',
     narration: "step3",
     dwellMs: 14000,
+    audioSrc: "/tour/step3.mp3",
     actions: [
       { atMs: 2500, run: () => clickTarget('[data-trigger-id="schedule"]') },
       { atMs: 5000, run: () => clickTarget('[data-trigger-id="event"]') },
@@ -150,6 +153,7 @@ export const HOME_TOUR_STEPS: TourStep[] = [
     spotlightTarget: '[data-tour-diagram="platform"]',
     narration: "step4",
     dwellMs: 15000,
+    audioSrc: "/tour/step4.mp3",
     actions: [
       { atMs: 1500, run: () => clickTarget('[data-card-id="credential-vault"]') },
       {
@@ -197,6 +201,7 @@ export const HOME_TOUR_STEPS: TourStep[] = [
     spotlightTarget: '[data-tour-diagram="download"]',
     narration: "step5",
     dwellMs: 12000,
+    audioSrc: "/tour/step5.mp3",
   },
 ];
 
