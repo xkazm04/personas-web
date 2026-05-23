@@ -104,6 +104,9 @@ export function clickByText(text: string): void {
   }
 }
 
+/** Athena's spoken greeting, played while the intro pop-up is shown. */
+export const INTRO_AUDIO_SRC = "/tour/intro.mp3";
+
 // Homepage — "Meet a persona, then watch it work": what a persona is (Tools)
 // → its mind, live (Agent Mind) → how it's triggered (Orchestration) → the
 // platform it stands on (Platform). Each step drives its diagram via timed,
@@ -214,6 +217,7 @@ export const FEATURES_TOUR_STEPS: TourStep[] = [
     spotlightTarget: '[data-tour-diagram="design"]',
     narration: "features1",
     dwellMs: 8000,
+    audioSrc: "/tour/features1.mp3",
   },
   {
     id: "memory",
@@ -221,6 +225,7 @@ export const FEATURES_TOUR_STEPS: TourStep[] = [
     spotlightTarget: '[data-tour-diagram="memory"]',
     narration: "features2",
     dwellMs: 8000,
+    audioSrc: "/tour/features2.mp3",
   },
   {
     id: "healing",
@@ -228,6 +233,7 @@ export const FEATURES_TOUR_STEPS: TourStep[] = [
     spotlightTarget: '[data-tour-diagram="healing"]',
     narration: "features3",
     dwellMs: 8500,
+    audioSrc: "/tour/features3.mp3",
   },
   {
     id: "observe",
@@ -235,6 +241,7 @@ export const FEATURES_TOUR_STEPS: TourStep[] = [
     spotlightTarget: '[data-tour-diagram="observe"]',
     narration: "features4",
     dwellMs: 8500,
+    audioSrc: "/tour/features4.mp3",
   },
   // 5. Lab — the six ways to make a persona better.
   {
@@ -243,6 +250,7 @@ export const FEATURES_TOUR_STEPS: TourStep[] = [
     spotlightTarget: '[data-tour-diagram="lab"]',
     narration: "features5",
     dwellMs: 9000,
+    audioSrc: "/tour/features5.mp3",
   },
   // 6. Plugins — the bundled specialists; select Dev Tools so the card shows
   //    that plugin while it's narrated.
@@ -252,6 +260,7 @@ export const FEATURES_TOUR_STEPS: TourStep[] = [
     spotlightTarget: '[data-tour-diagram="plugins"]',
     narration: "features6",
     dwellMs: 9500,
+    audioSrc: "/tour/features6.mp3",
     actions: [{ atMs: 1800, run: () => clickTarget('[data-plugin-key="dev-tools"]') }],
   },
 ];

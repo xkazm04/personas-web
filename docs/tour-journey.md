@@ -9,7 +9,21 @@ This document is the review surface for the narration — one paragraph per step
 The exact strings live in `src/i18n/en.ts` under `tour.*` (translated into all
 14 locales); step order, targets, timings, and the per-step `actions` live in
 `src/lib/tour-script.ts`. Narration audio is generated from these English lines
-via ElevenLabs (`scripts/tour-audio.config.mjs`).
+via ElevenLabs (`scripts/tour-audio.config.mjs`) into `public/tour/`. The intro
+greeting and all homepage + /features clips are generated; /roadmap is still on
+its dwell timers.
+
+---
+
+## Intro — Athena's greeting *(welcome pop-up, no diagram)*
+
+Before the first step, a welcome pop-up introduces the guide. Athena's
+companion visualization reacts to her spoken greeting (`public/tour/intro.mp3`):
+"Project loaded. Hello, Commander — my name is Athena, and I'll assist you in
+getting familiar with Personas." The greeting plays once and waits — it never
+auto-advances; the visitor clicks **Begin** to start the steps or **Skip** to
+dismiss. The greeting line is audio-only; the pop-up's on-screen copy is
+`tour.introTitle` / `tour.introBody`.
 
 ---
 
@@ -110,9 +124,10 @@ order, newest first — proof the momentum is real.
 
 ## Notes for adjustment
 
-- Homepage lines run ~3 sentences (≈12–15s of narration); the dwell timers in
-  `tour-script.ts` (12–15s) are placeholders until audio lands, at which point
-  auto-advance switches to the audio `ended` event.
+- Homepage and /features steps now auto-advance on their audio clip's `ended`
+  event; the `dwellMs` values in `tour-script.ts` remain as the fallback used
+  when a clip fails to load (or autoplay is blocked). /roadmap has no audio yet
+  and still advances purely on its dwell timers.
 - The homepage manipulations are **click-driven**: a diagram may auto-play on
   its own until the tour reaches it and (re)starts it. The Tools and
   Orchestration diagrams auto-cycle; Agent Mind and Platform are driven purely

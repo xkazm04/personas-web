@@ -45,6 +45,24 @@ const LINES = {
     "All of this rests on one platform built for trust and scale. An encrypted vault guards your credentials, ready-made templates get you moving fast, and bring-your-own-model keeps you in control of the AI. Live monitoring, an experimentation lab, and team orchestration round it out — six pillars, one place.",
   step5:
     "Ready to put a persona to work? Personas runs on your own machine through Claude Code — Anthropic's command-line tool — so you stay private and in control. Download the installer for Windows 11, connect the CLI, and your first agent is live in minutes.",
+
+  // Athena's spoken greeting for the intro pop-up.
+  intro:
+    "Project loaded. Hello, Commander — my name is Athena, and I'll assist you in getting familiar with Personas. I'll walk you through it in about a minute; pause or skip anytime.",
+
+  // /features narration (matches tour.features1-6 in src/i18n/en.ts).
+  features1:
+    "Every agent is born from a single sentence of intent. Personas reads what you want and fills an eight-dimension persona matrix — tasks, memory, triggers, review, and more — asking you only when it truly needs a decision. In moments, a vague idea becomes a structured, executable agent.",
+  features2:
+    "Then it starts to learn. Every task it runs leaves a trace, and the lessons that matter rise into its memory layers while noise settles to the bottom. The more your agent works, the sharper and more context-aware it becomes.",
+  features3:
+    "Real work breaks, so Personas is built to recover. When a step fails, the circuit does not stall — it diagnoses what went wrong, repairs the path, and retries on its own. No 3 a.m. alerts, no manual restarts; the workflow simply keeps moving.",
+  features4:
+    "And you never lose sight of any of it. Every execution, message, event, and memory streams live through one observability deck — sparklines, costs, and status, all in real time. Full transparency, zero setup.",
+  features5:
+    "Great agents are rarely right the first time, so the Lab is where you refine them. Chat with a persona to coach it, pit two versions against each other in the arena, evolve it across generations, or score it on the dimensions that matter. Every improvement you keep is versioned and reversible.",
+  features6:
+    "Personas ships with six purpose-built plugins, each a self-contained workspace your agents can drive. Take Dev Tools: it turns a persona into a coding teammate that runs tasks, reads the output, and iterates. Switch a tab and you meet another specialist — all sharing the same credentials and memory.",
 };
 
 const keys = process.argv.slice(2).length ? process.argv.slice(2) : Object.keys(LINES);

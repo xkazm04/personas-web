@@ -10,7 +10,7 @@ import {
   type ReactNode,
 } from "react";
 import { useReducedMotion } from "framer-motion";
-import type { TourStep } from "@/lib/tour-script";
+import { INTRO_AUDIO_SRC, type TourStep } from "@/lib/tour-script";
 import { useTourAudio } from "@/hooks/useTourAudio";
 import { useTourScroll } from "@/hooks/useTourScroll";
 
@@ -138,11 +138,14 @@ export function TourProvider({ children }: { children: ReactNode }) {
     return () => window.clearTimeout(id);
   }, [active, playing, atBridge, atIntro, stepIndex, next, steps]);
 
-  // Narration audio (gated off during the intro): plays audioSrc, advances on
-  // `ended`, and returns the AnalyserNode that drives the companion.
+  // Narration audio: plays the intro greeting during the intro, then each
+  // step's clip (advancing on `ended`). Returns the AnalyserNode that drives
+  // the Athena companion's glow / mouth.
   const audioAnalyser = useTourAudio({
-    active: active && !atIntro,
+    active,
+    atIntro,
     atBridge,
+    introSrc: INTRO_AUDIO_SRC,
     playing,
     stepIndex,
     steps,

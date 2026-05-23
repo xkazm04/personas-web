@@ -5,17 +5,23 @@ import type { TourStep } from "@/lib/tour-script";
 
 interface UseTourAudioArgs {
   active: boolean;
+  /** Intro phase — plays the greeting clip and does NOT auto-advance. */
+  atIntro: boolean;
   atBridge: boolean;
+  /** Greeting clip played during the intro phase. */
+  introSrc: string;
   playing: boolean;
   stepIndex: number;
   steps: TourStep[];
-  /** Advance to the next step — called on the clip's `ended` event. */
+  /** Advance to the next step — called on a step clip's `ended` event. */
   next: () => void;
 }
 
 /**
- * Plays a step's pre-generated narration audio (`step.audioSrc`) and advances
- * the tour when the clip ends, with the dwell timer as an error fallback.
+ * Plays the tour's pre-generated narration. During the intro phase it plays
+ * Athena's greeting (`introSrc`) and does NOT advance; once stepping, it plays
+ * each `step.audioSrc` and advances the tour when the clip ends, with the
+ * dwell timer as an error fallback.
  *
  * Also routes each clip through a Web Audio `AnalyserNode` and returns it, so
  * the Athena companion can drive its glow / mouth from the live voice level.
@@ -24,7 +30,9 @@ interface UseTourAudioArgs {
  */
 export function useTourAudio({
   active,
+  atIntro,
   atBridge,
+  introSrc,
   playing,
   stepIndex,
   steps,
@@ -36,10 +44,12 @@ export function useTourAudio({
   const [analyser, setAnalyser] = useState<AnalyserNode | null>(null);
 
   useEffect(() => {
-    if (!active || atBridge || steps.length === 0) return;
-    const step = steps[stepIndex];
-    if (!step.audioSrc) return;
-    const audio = new Audio(step.audioSrc);
+    if (!active || atBridge) return;
+    // Intro plays the greeting (no auto-advance); steps play their own clip.
+    const step = atIntro ? null : steps[stepIndex];
+    const src = atIntro ? introSrc : step?.audioSrc;
+    if (!src) return;
+    const audio = new Audio(src);
     audioRef.current = audio;
 
     // Lazy Web Audio graph (source → analyser → destination) so the companion
@@ -70,9 +80,12 @@ export function useTourAudio({
     }
 
     let fallbackId = 0;
-    const onEnded = () => next();
+    // The intro greeting just plays; only step clips auto-advance the tour.
+    const onEnded = () => {
+      if (!atIntro) next();
+    };
     const onError = () => {
-      fallbackId = window.setTimeout(next, step.dwellMs);
+      if (!atIntro && step) fallbackId = window.setTimeout(next, step.dwellMs);
     };
     audio.addEventListener("ended", onEnded);
     audio.addEventListener("error", onError);
@@ -88,14 +101,14 @@ export function useTourAudio({
       if (fallbackId) window.clearTimeout(fallbackId);
       if (audioRef.current === audio) audioRef.current = null;
     };
-  }, [active, atBridge, stepIndex, next, steps]);
+  }, [active, atIntro, atBridge, introSrc, stepIndex, next, steps]);
 
   useEffect(() => {
     const audio = audioRef.current;
     if (!audio) return;
     if (active && playing && !atBridge) audio.play().catch(() => {});
     else audio.pause();
-  }, [active, playing, atBridge, stepIndex, steps]);
+  }, [active, playing, atBridge, atIntro, stepIndex, steps]);
 
   return analyser;
 }
