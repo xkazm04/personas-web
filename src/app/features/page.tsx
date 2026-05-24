@@ -28,7 +28,13 @@ const scrollMapItems = breadcrumbItems.map(({ label, href }) => ({ label, href }
 
 export default function FeaturesPage() {
   return (
-    <InfoPageLayout scrollMapItems={scrollMapItems} breadcrumbItems={breadcrumbItems} tourId="features">
+    <InfoPageLayout
+      scrollMapItems={scrollMapItems}
+      breadcrumbItems={breadcrumbItems}
+      tourId="features"
+      tourBridgeHref="/demo"
+      tourBridgeKey="dashboard"
+    >
       <StageSection glow="purple" showTopLine={false} toColor="purple">
         <DesignEngine />
       </StageSection>

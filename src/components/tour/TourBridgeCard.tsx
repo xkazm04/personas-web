@@ -13,29 +13,31 @@ import { TRANSITION_NORMAL } from "@/lib/animations";
  */
 export default function TourBridgeCard() {
   const { t } = useTranslation();
-  const { confirmBridge, dismissBridge } = useTour();
+  const { confirmBridge, dismissBridge, bridge } = useTour();
+  // Per-tour overrides win; otherwise fall back to the default (features) copy.
+  const prompt = bridge?.prompt ?? t.tour.bridgePrompt;
+  const confirm = bridge?.confirm ?? t.tour.bridgeConfirm;
+  const dismiss = bridge?.dismiss ?? t.tour.bridgeDismiss;
 
   return (
     <motion.div
       role="dialog"
       aria-modal="true"
-      aria-label={t.tour.bridgePrompt}
+      aria-label={prompt}
       initial={{ opacity: 0, y: 24, scale: 0.98 }}
       animate={{ opacity: 1, y: 0, scale: 1 }}
       exit={{ opacity: 0, y: 24, scale: 0.98 }}
       transition={TRANSITION_NORMAL}
       className="fixed inset-x-0 bottom-6 z-[90] mx-auto flex w-[min(92vw,30rem)] flex-col gap-5 rounded-2xl border border-glass-hover bg-surface/95 p-6 shadow-2xl backdrop-blur-md"
     >
-      <p className="text-lg font-medium leading-relaxed text-foreground">
-        {t.tour.bridgePrompt}
-      </p>
+      <p className="text-lg font-medium leading-relaxed text-foreground">{prompt}</p>
       <div className="flex items-center gap-3">
         <button
           type="button"
           onClick={confirmBridge}
           className="group inline-flex flex-1 items-center justify-center gap-2 rounded-full border border-brand-cyan/50 bg-brand-cyan/10 px-5 py-2.5 text-base font-medium text-brand-cyan transition-colors duration-200 hover:bg-brand-cyan/20 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-cyan/40"
         >
-          {t.tour.bridgeConfirm}
+          {confirm}
           <ArrowRight className="h-4 w-4 transition-transform duration-200 group-hover:translate-x-0.5" />
         </button>
         <button
@@ -44,7 +46,7 @@ export default function TourBridgeCard() {
           className="inline-flex items-center justify-center gap-2 rounded-full border border-glass px-5 py-2.5 text-base text-muted-dark transition-colors duration-200 hover:border-glass-hover hover:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-cyan/40"
         >
           <X className="h-4 w-4" />
-          {t.tour.bridgeDismiss}
+          {dismiss}
         </button>
       </div>
     </motion.div>

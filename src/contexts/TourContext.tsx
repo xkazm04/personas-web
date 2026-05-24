@@ -15,13 +15,19 @@ import { useTourAudio } from "@/hooks/useTourAudio";
 import { useTourScroll } from "@/hooks/useTourScroll";
 import { useTourVolume } from "@/hooks/useTourVolume";
 
+/** Translated copy for the end-of-tour bridge prompt. */
+export interface TourBridgeStrings {
+  prompt: string;
+  confirm: string;
+  dismiss: string;
+}
+
 /** Options for a tour run. */
 interface TourStartOptions {
-  /**
-   * If set, finishing the last step shows a "continue?" bridge prompt instead
-   * of exiting; confirming navigates here (e.g. "/features?tour=1").
-   */
+  /** Finishing the last step navigates here (e.g. "/features?tour=1"). */
   bridgeHref?: string;
+  /** Per-tour bridge copy; falls back to t.tour defaults when unset. */
+  bridge?: TourBridgeStrings;
   /** Show the welcome intro pop-up before the first step. */
   intro?: boolean;
 }
@@ -39,22 +45,20 @@ interface TourContextValue {
   atBridge: boolean;
   /** Whether the welcome intro pop-up is showing (before step 0). */
   atIntro: boolean;
-  /** Live AnalyserNode for the current narration audio (companion reactivity). */
   audioAnalyser: AnalyserNode | null;
   /** Narration output level (0..1). Persists via localStorage. */
   volume: number;
   setVolume: (value: number) => void;
+  /** Per-tour bridge copy override; null = use the t.tour defaults. */
+  bridge: TourBridgeStrings | null;
   start: (steps: TourStep[], options?: TourStartOptions) => void;
   exit: () => void;
   next: () => void;
   prev: () => void;
   goTo: (index: number) => void;
   togglePlay: () => void;
-  /** Leave the intro and start the guided steps. */
   beginTour: () => void;
-  /** Accept the bridge prompt — navigates to the bridge href. */
   confirmBridge: () => void;
-  /** Decline the bridge prompt — ends the tour. */
   dismissBridge: () => void;
 }
 
@@ -66,6 +70,7 @@ export function TourProvider({ children }: { children: ReactNode }) {
   const [stepIndex, setStepIndex] = useState(0);
   const [playing, setPlaying] = useState(false);
   const [bridgeHref, setBridgeHref] = useState<string | null>(null);
+  const [bridge, setBridge] = useState<TourBridgeStrings | null>(null);
   const [atBridge, setAtBridge] = useState(false);
   const [atIntro, setAtIntro] = useState(false);
   const [volume, setVolume] = useTourVolume();
@@ -75,6 +80,7 @@ export function TourProvider({ children }: { children: ReactNode }) {
     setSteps(nextSteps);
     setStepIndex(0);
     setBridgeHref(options?.bridgeHref ?? null);
+    setBridge(options?.bridge ?? null);
     setAtBridge(false);
     setAtIntro(options?.intro ?? false);
     setActive(true);
@@ -178,14 +184,8 @@ export function TourProvider({ children }: { children: ReactNode }) {
   }, [active, exit, next, prev]);
 
   const value = useMemo<TourContextValue>(
-    () => ({
-      active, steps, stepIndex, playing, atBridge, atIntro, audioAnalyser,
-      volume, setVolume,
-      start, exit, next, prev, goTo, togglePlay, beginTour, confirmBridge, dismissBridge,
-    }),
-    [active, steps, stepIndex, playing, atBridge, atIntro, audioAnalyser,
-     volume, setVolume,
-     start, exit, next, prev, goTo, togglePlay, beginTour, confirmBridge, dismissBridge],
+    () => ({ active, steps, stepIndex, playing, atBridge, atIntro, audioAnalyser, volume, setVolume, bridge, start, exit, next, prev, goTo, togglePlay, beginTour, confirmBridge, dismissBridge }),
+    [active, steps, stepIndex, playing, atBridge, atIntro, audioAnalyser, volume, setVolume, bridge, start, exit, next, prev, goTo, togglePlay, beginTour, confirmBridge, dismissBridge],
   );
 
   return <TourContext.Provider value={value}>{children}</TourContext.Provider>;
