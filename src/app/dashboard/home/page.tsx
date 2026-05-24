@@ -3,12 +3,10 @@
 import { useEffect, useMemo, useRef, useState } from "react";
 import { motion } from "framer-motion";
 
-import GradientText from "@/components/GradientText";
 import FleetOptimizationCard from "@/components/dashboard/FleetOptimizationCard";
 import { useTranslation } from "@/i18n/useTranslation";
 import { api } from "@/lib/api";
 import { fadeUp, staggerContainer } from "@/lib/animations";
-import { relativeTime } from "@/lib/format";
 import {
   MOCK_FLEET_RECOMMENDATION,
   MOCK_GLOBAL_EXECUTIONS,
@@ -20,10 +18,10 @@ import { useReviewStore } from "@/stores/reviewStore";
 import { useSystemStore } from "@/stores/systemStore";
 import useSWR from "swr";
 
+import { DashboardGreetingHeader } from "./home-page/DashboardGreetingHeader";
 import { DashboardInstruments } from "./home-page/DashboardInstruments";
 import { DashboardQuickLinks } from "./home-page/DashboardQuickLinks";
 import { DashboardIntelligencePanels } from "./home-page/DashboardIntelligencePanels";
-import { DashboardVitalsRow } from "./home-page/DashboardVitalsRow";
 import { RecentActivityCard } from "./home-page/RecentActivityCard";
 import { TrafficErrorsCard } from "./home-page/TrafficErrorsCard";
 import { useGreeting } from "./home-page/useGreeting";
@@ -117,28 +115,10 @@ export default function DashboardHomePage() {
 
   return (
     <motion.div initial="hidden" animate="visible" variants={staggerContainer}>
-      <motion.div variants={fadeUp} className="mb-8">
-        <h1 className="text-2xl font-bold tracking-tight">
-          <GradientText variant="silver">
-            {greeting}, {displayName}
-          </GradientText>
-        </h1>
-        <p className="mt-1 text-base text-muted-dark">
-          {t.dashboard.agentsStatus}
-        </p>
-        {lastVisitedAt !== null && (
-          <motion.p
-            initial={{ opacity: 0, y: -4 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.3, ease: "easeOut" }}
-            className="mt-1 text-sm text-muted-dark"
-          >
-            {t.dashboard.lastSeen} {relativeTime(new Date(lastVisitedAt).toISOString())}
-          </motion.p>
-        )}
-      </motion.div>
-
-      <DashboardVitalsRow
+      <DashboardGreetingHeader
+        greeting={greeting}
+        displayName={displayName}
+        lastVisitedAt={lastVisitedAt}
         successRate={stats.successRate}
         runs={stats.total}
         agents={stats.activeAgents}
