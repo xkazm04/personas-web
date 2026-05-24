@@ -5,7 +5,7 @@ import { motion } from "framer-motion";
 import { Loader2, Compass } from "lucide-react";
 import SectionWrapper from "@/components/SectionWrapper";
 import SectionIntro from "@/components/primitives/SectionIntro";
-import { fadeUp, staggerContainer } from "@/lib/animations";
+import { fadeUp } from "@/lib/animations";
 import { BRAND_VAR, tint, brandShadow } from "@/lib/brand-theme";
 import { useTranslation } from "@/i18n/useTranslation";
 import { useAbortableEffect } from "@/hooks/useAbortableEffect";
@@ -118,12 +118,17 @@ export default function Roadmap() {
             </div>
           </motion.div>
 
-          {/* Timeline */}
-          <motion.div variants={staggerContainer} className="mt-16 mx-auto max-w-4xl">
+          {/* Timeline — plain wrapper so the cards inherit the staggerContainer
+              from SectionWrapper directly. Nesting another motion.div with
+              variants={staggerContainer} here breaks the variant-inheritance
+              chain (its `hidden: {}` empty variant short-circuits propagation)
+              and leaves each card stuck at fadeUp.hidden (opacity 0, y 30),
+              which is what produced the large empty space below the pills. */}
+          <div className="mt-8 mx-auto max-w-4xl">
             {items.map((item, i) => (
               <RoadmapCard key={item.id} item={item} index={i} total={items.length} />
             ))}
-          </motion.div>
+          </div>
         </>
       )}
     </SectionWrapper>

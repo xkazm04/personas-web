@@ -31,7 +31,20 @@ const RoadmapCard = memo(function RoadmapCard({
   const priority = priorityBrand[item.priority];
 
   return (
-    <motion.div variants={fadeUp} className="relative flex gap-6 md:gap-8">
+    // Self-driven whileInView so each card fades up as it scrolls into view.
+    // Cannot rely on the parent SectionWrapper's variant chain here — the
+    // staggerContainer at the section root doesn't reliably propagate its
+    // `visible` state through to deeply-nested motion children (memoised
+    // RoadmapCard inside intermediate wrappers), so the cards stay stuck at
+    // fadeUp.hidden. Triggering per-card is also a nicer effect than batch.
+    <motion.div
+      variants={fadeUp}
+      initial="hidden"
+      whileInView="visible"
+      viewport={{ once: true, margin: "-60px" }}
+      transition={{ duration: 0.45, ease: [0.22, 1, 0.36, 1] }}
+      className="relative flex gap-6 md:gap-8"
+    >
       {/* Timeline spine */}
       <div className="relative flex flex-col items-center pt-1">
         <div
