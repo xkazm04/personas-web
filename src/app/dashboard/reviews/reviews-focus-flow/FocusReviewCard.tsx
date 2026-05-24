@@ -2,7 +2,6 @@ import { motion } from "framer-motion";
 import {
   AlertOctagon,
   Check,
-  ChevronsRight,
   SkipForward,
   Terminal,
   X,
@@ -29,7 +28,6 @@ export function FocusReviewCard({
     approve: string;
     reject: string;
     skip: string;
-    shortcuts: string;
   };
   onApprove: () => void;
   onReject: () => void;
@@ -135,10 +133,6 @@ export function FocusReviewCard({
             S
           </kbd>
         </button>
-        <span className="ml-auto flex items-center gap-1 text-sm text-muted-dark">
-          <ChevronsRight className="h-3 w-3" />
-          {labels.shortcuts}
-        </span>
       </div>
     </motion.div>
   );

@@ -127,7 +127,6 @@ export default function ReviewsFocusFlow({ onExit }: Props) {
             approve: t.reviewsPage.focus.approve,
             reject: t.reviewsPage.focus.reject,
             skip: t.reviewsPage.focus.skip,
-            shortcuts: t.reviewsPage.focus.shortcuts,
           }}
           onApprove={handleApprove}
           onReject={handleReject}
