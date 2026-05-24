@@ -44,6 +44,17 @@ export default function TopicView({ category, topic, content, initialHeadings, p
     body: content,
   });
 
+  // Reset to the English content whenever the locale or topic changes. Done in
+  // render via the prev-state pattern (not in an effect) to satisfy React 19's
+  // "no synchronous setState in an effect" rule. For non-en locales this is the
+  // fallback shown until the async swap below resolves.
+  const resetKey = `${language}|${topic.id}`;
+  const [prevResetKey, setPrevResetKey] = useState(resetKey);
+  if (resetKey !== prevResetKey) {
+    setPrevResetKey(resetKey);
+    setLocalized({ title: topic.title, description: topic.description, body: content });
+  }
+
   // Skip the client parse on the initial render — page.tsx already extracted
   // headings from the same `content` string and passed them in. The useMemo
   // only re-parses when localized.body diverges (locale switch — currently
@@ -54,10 +65,7 @@ export default function TopicView({ category, topic, content, initialHeadings, p
   );
 
   useEffect(() => {
-    if (language === "en") {
-      setLocalized({ title: topic.title, description: topic.description, body: content });
-      return;
-    }
+    if (language === "en") return;
     let cancelled = false;
     getLocalizedTopic(language, topic.id, content).then((next) => {
       if (!cancelled) setLocalized(next);
@@ -65,7 +73,7 @@ export default function TopicView({ category, topic, content, initialHeadings, p
     return () => {
       cancelled = true;
     };
-  }, [language, topic.id, topic.title, topic.description, content]);
+  }, [language, topic.id, content]);
 
   return (
     <div className="px-6 pb-24 pt-9 lg:pt-0">
