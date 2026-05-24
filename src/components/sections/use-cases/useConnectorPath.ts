@@ -11,7 +11,7 @@ export function useConnectorPath(
   desktopRefs: RefObject<Record<string, HTMLButtonElement | null>>,
   mobileRefs: RefObject<Record<string, HTMLButtonElement | null>>,
 ) {
-  void useReducedMotion();
+  const prefersReducedMotion = useReducedMotion() ?? false;
   const [connectorPath, setConnectorPath] = useState<string>("");
   const [connectorVisible, setConnectorVisible] = useState(false);
   const selectionCycleRef = useRef(0);
@@ -56,13 +56,21 @@ export function useConnectorPath(
       if (selectionCycleRef.current !== currentCycle) return;
       updatePath();
       setConnectorVisible(true);
-    }, 200);
+    }, prefersReducedMotion ? 0 : 200);
 
     const container = containerRef.current;
-    if (!container) return;
+    if (!container) {
+      return () => {
+        window.clearTimeout(timer);
+      };
+    }
 
     const ro = new ResizeObserver(() => {
-      requestAnimationFrame(updatePath);
+      if (prefersReducedMotion) {
+        updatePath();
+      } else {
+        requestAnimationFrame(updatePath);
+      }
     });
     ro.observe(container);
 
@@ -70,7 +78,7 @@ export function useConnectorPath(
       window.clearTimeout(timer);
       ro.disconnect();
     };
-  }, [selected, isMobile, containerRef, detailCardRef, desktopRefs, mobileRefs]);
+  }, [selected, isMobile, containerRef, detailCardRef, desktopRefs, mobileRefs, prefersReducedMotion]);
 
   return { connectorPath, connectorVisible };
 }

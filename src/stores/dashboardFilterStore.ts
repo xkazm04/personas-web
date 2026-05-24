@@ -39,10 +39,14 @@ function hydrate(): Partial<DashboardFilterState> {
       parsed.dateRange === "24h" ||
       parsed.dateRange === "7d" ||
       parsed.dateRange === "30d" ||
-      parsed.dateRange === "90d" ||
-      parsed.dateRange === "custom"
+      parsed.dateRange === "90d"
     ) {
       next.dateRange = parsed.dateRange;
+    } else if (parsed.dateRange === "custom") {
+      // Bounds aren't persisted, so a hydrated "custom" range has no
+      // start/end and would silently widen the user's filter to all-time.
+      // Coerce back to the default preset instead.
+      next.dateRange = "7d";
     }
     if (typeof parsed.compareEnabled === "boolean") {
       next.compareEnabled = parsed.compareEnabled;
@@ -78,6 +82,14 @@ export const useDashboardFilterStore = create<DashboardFilterState>((set, get) =
     persist(get());
   },
   setDateRange: (r) => {
+    if (r === "custom") {
+      // Custom mode requires start/end bounds — callers must use
+      // setCustomRange(start, end). Throw to surface the bug instead of
+      // landing the store in an inconsistent dateRange="custom"+null state.
+      throw new Error(
+        "[dashboardFilterStore] setDateRange('custom') is not allowed; call setCustomRange(start, end) instead",
+      );
+    }
     set({ dateRange: r });
     persist(get());
   },

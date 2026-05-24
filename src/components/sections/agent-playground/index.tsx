@@ -9,13 +9,13 @@ import TerminalChrome from "@/components/TerminalChrome";
 import { fadeUp } from "@/lib/animations";
 import { tint } from "@/lib/brand-theme";
 import type { SimLine } from "./types";
-import { examples } from "./data";
+import { examples, noMatchLines } from "./data";
 import ExampleChips from "./components/ExampleChips";
 import PlaygroundForm from "./components/PlaygroundForm";
 import PlaygroundTerminal from "./components/PlaygroundTerminal";
 
 export default function AgentPlayground() {
-  void useReducedMotion();
+  const prefersReduced = useReducedMotion();
   const [activeExample, setActiveExample] = useState<number | null>(null);
   const [inputValue, setInputValue] = useState("");
   const [isRunning, setIsRunning] = useState(false);
@@ -47,7 +47,11 @@ export default function AgentPlayground() {
         cumulative += line.delay;
         const t = setTimeout(() => {
           setVisibleLines((prev) => [...prev, line]);
-          requestAnimationFrame(scrollTerminal);
+          if (prefersReduced) {
+            scrollTerminal();
+          } else {
+            requestAnimationFrame(scrollTerminal);
+          }
           if (i === lines.length - 1) {
             setIsRunning(false);
             setPhase("done");
@@ -56,7 +60,7 @@ export default function AgentPlayground() {
         timeoutsRef.current.push(t);
       });
     },
-    [clearTimeouts, scrollTerminal],
+    [clearTimeouts, scrollTerminal, prefersReduced],
   );
 
   const handleExampleClick = useCallback(
@@ -76,9 +80,13 @@ export default function AgentPlayground() {
       const match = examples.findIndex((ex) =>
         inputValue.toLowerCase().includes(ex.label.toLowerCase().split(" ")[0]),
       );
-      const idx = match >= 0 ? match : 0;
-      setActiveExample(idx);
-      runSimulation(examples[idx].lines);
+      if (match >= 0) {
+        setActiveExample(match);
+        runSimulation(examples[match].lines);
+      } else {
+        setActiveExample(null);
+        runSimulation(noMatchLines);
+      }
     },
     [isRunning, inputValue, runSimulation],
   );

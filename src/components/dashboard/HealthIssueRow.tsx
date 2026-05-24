@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { AlertTriangle, ShieldAlert, ShieldCheck, CircleDot } from "lucide-react";
 import type { HealthIssue } from "@/lib/types";
+import { useTranslation } from "@/i18n/useTranslation";
 
 const severityStyles: Record<string, { color: string; bgColor: string; icon: React.ElementType }> = {
   critical: { color: "text-red-400", bgColor: "bg-red-500/10 border-red-500/20", icon: AlertTriangle },
@@ -10,6 +11,7 @@ const severityStyles: Record<string, { color: string; bgColor: string; icon: Rea
 };
 
 export default function HealthIssueRow({ issue }: { issue: HealthIssue }) {
+  const { t } = useTranslation();
   const sev = severityStyles[issue.severity] ?? severityStyles.low;
   const SevIcon = sev.icon;
   const [age] = useState(() => {
@@ -29,12 +31,12 @@ export default function HealthIssueRow({ issue }: { issue: HealthIssue }) {
           {issue.status === "auto_fixed" && (
             <span className="flex items-center gap-1 rounded-full border border-emerald-500/20 bg-emerald-500/8 px-2 py-0.5 text-sm text-emerald-400">
               <ShieldCheck className="h-2.5 w-2.5" />
-              Auto-fixed
+              {t.observabilityPage.autoFixed}
             </span>
           )}
           {issue.status === "resolved" && (
             <span className="flex items-center gap-1 rounded-full border border-blue-500/20 bg-blue-500/8 px-2 py-0.5 text-sm text-blue-400">
-              Resolved
+              {t.observabilityPage.resolved}
             </span>
           )}
         </div>

@@ -1,6 +1,7 @@
 "use client";
 
 import { BRAND_VAR, tint, type BrandKey } from "@/lib/brand-theme";
+import { EYEBROW } from "@/lib/typography";
 import type { CommandSequence } from "../types";
 import { commandBrands } from "../data";
 
@@ -25,10 +26,7 @@ export default function CommandBadge({
       <span style={{ color: BRAND_VAR[brand] }}>
         <Icon className="h-3 w-3" />
       </span>
-      <span
-        className="text-base font-mono font-medium"
-        style={{ color: BRAND_VAR[brand] }}
-      >
+      <span className={EYEBROW} style={{ color: BRAND_VAR[brand] }}>
         {command.pillar}
       </span>
     </div>

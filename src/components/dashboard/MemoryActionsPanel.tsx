@@ -66,7 +66,7 @@ function ScoreIndicator({ score, type }: { score: number; type: MemoryAction["ty
           style={{ width: `${clamped * 10}%` }}
         />
       </div>
-      <span className="text-[9px] font-medium tabular-nums text-muted-dark">
+      <span className="text-xs font-medium tabular-nums text-muted-dark">
         {clamped}/10
       </span>
     </div>
@@ -95,11 +95,11 @@ export default function MemoryActionsPanel() {
       >
         <Brain className="h-4 w-4 text-brand-purple" />
         <h2 className="text-base font-semibold text-foreground">
-          Memory Insights
+          {t.dashboardUi.memoryInsights}
         </h2>
         {actions.length > 0 && (
           <span className="ml-auto flex items-center gap-1 rounded-full border border-purple-500/20 bg-purple-500/8 px-2 py-0.5 text-sm font-medium text-purple-400">
-            {actions.length} suggestion{actions.length !== 1 ? "s" : ""}
+            {actions.length} {actions.length === 1 ? t.dashboardUi.suggestion : t.dashboardUi.suggestions}
           </span>
         )}
         <StalenessIndicator
@@ -141,7 +141,7 @@ export default function MemoryActionsPanel() {
                       <button
                         onClick={() => dismiss(action.id)}
                         className="ml-auto flex-shrink-0 rounded-md p-0.5 text-muted-dark opacity-0 transition-opacity hover:text-foreground group-hover:opacity-100"
-                        aria-label={`Dismiss: ${action.title}`}
+                        aria-label={t.dashboardUi.dismissAction.replace("{title}", action.title)}
                       >
                         <X className="h-3 w-3" />
                       </button>
@@ -172,7 +172,7 @@ export default function MemoryActionsPanel() {
             animate={{ opacity: 1 }}
             className="py-8 text-center text-sm text-muted-dark"
           >
-            All suggestions dismissed. Check back later.
+            {t.dashboardUi.allSuggestionsDismissed}
           </motion.p>
         )}
       </div>

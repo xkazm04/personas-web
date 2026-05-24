@@ -18,7 +18,7 @@ export default function PlaygroundPage() {
   return (
     <>
       <Navbar />
-      <main className="relative min-h-screen bg-[var(--background)] overflow-hidden">
+      <main id="main-content" className="relative min-h-screen overflow-hidden bg-[var(--background)]">
         <div className="mx-auto max-w-6xl px-4 sm:px-6 lg:px-8 pt-28 pb-20">
           <motion.div
             initial="hidden"

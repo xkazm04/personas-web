@@ -1,41 +1,16 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import Link from "next/link";
 import { motion } from "framer-motion";
 import { Heart, CheckCircle, AlertCircle } from "lucide-react";
 import { fadeUp, staggerContainer } from "@/lib/animations";
+import useAnimatedNumber from "@/hooks/useAnimatedNumber";
 import { MOCK_HEALTH_DIGEST } from "@/lib/mock-dashboard-data";
 import { relativeTime } from "@/lib/format";
 import StalenessIndicator from "./StalenessIndicator";
-
-/** Resolve score to a Tailwind color token class. */
-function scoreColor(score: number): {
-  text: string;
-  stroke: string;
-  bg: string;
-  hex: string;
-} {
-  if (score >= 80)
-    return {
-      text: "text-emerald-400",
-      stroke: "stroke-emerald-400",
-      bg: "bg-emerald-400",
-      hex: "#34d399",
-    };
-  if (score >= 60)
-    return {
-      text: "text-amber-400",
-      stroke: "stroke-amber-400",
-      bg: "bg-amber-400",
-      hex: "#fbbf24",
-    };
-  return {
-    text: "text-red-400",
-    stroke: "stroke-red-400",
-    bg: "bg-red-400",
-    hex: "#f43f5e",
-  };
-}
+import { healthScoreColor } from "./healthScoreColor";
+import { useTranslation } from "@/i18n/useTranslation";
 
 // SVG circle math
 const RING_SIZE = 80;
@@ -44,17 +19,25 @@ const RADIUS = (RING_SIZE - STROKE_WIDTH) / 2;
 const CIRCUMFERENCE = 2 * Math.PI * RADIUS;
 
 export default function HealthDigestPanel() {
+  const { t } = useTranslation();
   const { overallScore, agents } = MOCK_HEALTH_DIGEST;
-  const colors = scoreColor(overallScore);
+  const colors = healthScoreColor(overallScore);
 
   // Animate the ring fill on mount
   const [offset, setOffset] = useState(CIRCUMFERENCE);
   const [fetchedAt] = useState(() => Date.now());
 
+  // Count the displayed score from 0 to overallScore, coordinated with the
+  // ring fill (200ms initial delay, 1000ms duration via the SVG's CSS
+  // transition). useAnimatedNumber honors prefers-reduced-motion.
+  const [countTarget, setCountTarget] = useState(0);
+  const animatedScore = useAnimatedNumber(countTarget, 1000);
+
   useEffect(() => {
     // Small delay so the animation is visible after mount
     const timer = setTimeout(() => {
       setOffset(CIRCUMFERENCE - (overallScore / 100) * CIRCUMFERENCE);
+      setCountTarget(overallScore);
     }, 200);
     return () => clearTimeout(timer);
   }, [overallScore]);
@@ -73,7 +56,7 @@ export default function HealthDigestPanel() {
       >
         <Heart className="h-4 w-4 text-brand-cyan" />
         <h2 className="text-base font-semibold text-foreground">
-          System Health
+          {t.dashboardUi.systemHealth}
         </h2>
         <StalenessIndicator fetchedAt={fetchedAt} className="ml-auto" />
       </motion.div>
@@ -115,25 +98,25 @@ export default function HealthDigestPanel() {
         {/* Center text */}
         <div className="absolute inset-0 flex flex-col items-center justify-center">
           <span className={`text-2xl font-bold tabular-nums ${colors.text}`}>
-            {overallScore}
+            {Math.round(animatedScore)}
           </span>
         </div>
 
         <span className="mt-1.5 text-sm font-medium uppercase tracking-wider text-muted-dark">
-          Health
+          {t.dashboardUi.health}
         </span>
       </motion.div>
 
       {/* Agent Rows */}
       <div className="w-full space-y-1.5">
         {agents.map((agent) => {
-          const agentColors = scoreColor(agent.score);
+          const agentColors = healthScoreColor(agent.score);
           return (
-            <motion.div
-              key={agent.name}
-              variants={fadeUp}
-              className="group flex items-center gap-2.5 rounded-lg px-2.5 py-2 transition-colors hover:bg-white/[0.03] cursor-pointer"
-            >
+            <motion.div key={agent.name} variants={fadeUp}>
+              <Link
+                href="/dashboard/agents"
+                className="group flex items-center gap-2.5 rounded-lg px-2.5 py-2 transition-colors hover:bg-white/[0.03] focus-ring focus-visible:ring-offset-0"
+              >
               {/* Color dot */}
               <span
                 className="h-2 w-2 rounded-full flex-shrink-0"
@@ -162,7 +145,7 @@ export default function HealthDigestPanel() {
 
               {/* Issue count badge */}
               {agent.issues > 0 ? (
-                <span className="flex items-center gap-0.5 rounded-full border border-red-500/20 bg-red-500/8 px-1.5 py-0.5 text-sm font-medium text-red-400">
+                <span className="flex items-center gap-0.5 rounded-full border border-rose-500/20 bg-rose-500/8 px-1.5 py-0.5 text-sm font-medium text-rose-400">
                   <AlertCircle className="h-2.5 w-2.5" />
                   {agent.issues}
                 </span>
@@ -176,6 +159,7 @@ export default function HealthDigestPanel() {
               <span className="text-sm text-muted-dark whitespace-nowrap w-12 text-right">
                 {relativeTime(agent.lastRun)}
               </span>
+              </Link>
             </motion.div>
           );
         })}

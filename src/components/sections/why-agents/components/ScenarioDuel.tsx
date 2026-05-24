@@ -4,20 +4,18 @@ import { memo, useMemo } from "react";
 import { AnimatePresence, motion, useReducedMotion } from "framer-motion";
 import { ArrowDown, ArrowRight, GitBranch, Sparkles } from "lucide-react";
 import { slideInLeft, slideInRight } from "@/lib/animations";
-import { scenarios } from "../data";
 import type { Scenario } from "../types";
 import ComparisonCard from "./ComparisonCard";
 import WorkflowPanel from "./WorkflowPanel";
 import AgentPanel from "./AgentPanel";
 
 const WorkflowContent = memo(function WorkflowContent({
-  activeIndex,
+  scenario,
   minHeight,
 }: {
-  activeIndex: number;
+  scenario: Scenario;
   minHeight: number;
 }) {
-  const scenario = scenarios[activeIndex];
   const shouldReduceMotion = useReducedMotion();
   const dur = shouldReduceMotion ? 0 : 0.2;
   return (
@@ -38,13 +36,12 @@ const WorkflowContent = memo(function WorkflowContent({
 });
 
 const AgentContent = memo(function AgentContent({
-  activeIndex,
+  scenario,
   minHeight,
 }: {
-  activeIndex: number;
+  scenario: Scenario;
   minHeight: number;
 }) {
-  const scenario = scenarios[activeIndex];
   const shouldReduceMotion = useReducedMotion();
   const dur = shouldReduceMotion ? 0 : 0.2;
   return (
@@ -66,6 +63,7 @@ const AgentContent = memo(function AgentContent({
 
 export default function ScenarioDuel({
   activeIndex,
+  total,
   scenario,
   wfMinH,
   agMinH,
@@ -73,6 +71,7 @@ export default function ScenarioDuel({
   onMouseLeave,
 }: {
   activeIndex: number;
+  total: number;
   scenario: Scenario;
   wfMinH: number;
   agMinH: number;
@@ -80,19 +79,19 @@ export default function ScenarioDuel({
   onMouseLeave: () => void;
 }) {
   const workflowChildren = useMemo(
-    () => <WorkflowContent activeIndex={activeIndex} minHeight={wfMinH} />,
-    [activeIndex, wfMinH]
+    () => <WorkflowContent scenario={scenario} minHeight={wfMinH} />,
+    [scenario, wfMinH]
   );
   const agentChildren = useMemo(
-    () => <AgentContent activeIndex={activeIndex} minHeight={agMinH} />,
-    [activeIndex, agMinH]
+    () => <AgentContent scenario={scenario} minHeight={agMinH} />,
+    [scenario, agMinH]
   );
 
   return (
     <div
       className="mt-8 grid gap-6 md:grid-cols-2 md:gap-8 relative"
       role="group"
-      aria-label={`Scenario ${activeIndex + 1} of ${scenarios.length}: ${scenario.label}`}
+      aria-label={`Scenario ${activeIndex + 1} of ${total}: ${scenario.label}`}
       onMouseEnter={onMouseEnter}
       onMouseLeave={onMouseLeave}
     >

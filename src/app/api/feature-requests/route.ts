@@ -6,29 +6,22 @@
 // ────────────────────────────────────────────────────────────────────────
 
 import { NextRequest, NextResponse } from "next/server";
-import { promises as fs } from "fs";
-import path from "path";
-import { randomBytes } from "crypto";
-import { withWriteLock } from "@/lib/fileLock";
+import { hasSupabaseEnv } from "@/lib/server/env";
+import { updateJsonFile } from "@/lib/server/json-file-store";
+import { getClientIp, jsonError, parseJsonBody } from "@/lib/server/request";
+import { isRateLimited as isSharedRateLimited } from "@/lib/server/rate-limit";
 
 // ---------------------------------------------------------------------------
 // Rate limiting (in-memory, per-IP, resets on deploy)
 // ---------------------------------------------------------------------------
 
-const RATE_WINDOW_MS = 60_000;
-const RATE_MAX = 10;
-
-const hits = new Map<string, { count: number; resetAt: number }>();
-
 function isRateLimited(ip: string): boolean {
-  const now = Date.now();
-  const entry = hits.get(ip);
-  if (!entry || now > entry.resetAt) {
-    hits.set(ip, { count: 1, resetAt: now + RATE_WINDOW_MS });
-    return false;
-  }
-  entry.count++;
-  return entry.count > RATE_MAX;
+  return isSharedRateLimited({
+    namespace: "feature-requests",
+    key: ip,
+    limit: 10,
+    windowMs: 60_000,
+  });
 }
 
 // ---------------------------------------------------------------------------
@@ -36,10 +29,7 @@ function isRateLimited(ip: string): boolean {
 // ---------------------------------------------------------------------------
 
 function hasSupabase(): boolean {
-  return !!(
-    process.env.NEXT_PUBLIC_SUPABASE_URL &&
-    process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY
-  );
+  return hasSupabaseEnv();
 }
 
 async function getSupabaseClient() {
@@ -51,8 +41,7 @@ async function getSupabaseClient() {
 // Filesystem fallback (local dev only)
 // ---------------------------------------------------------------------------
 
-const DATA_DIR = path.join(process.cwd(), ".data");
-const REQUESTS_FILE = path.join(DATA_DIR, "feature-requests.json");
+const REQUESTS_FILE = "feature-requests.json";
 
 interface FeatureRequestEntry {
   text: string;
@@ -63,50 +52,24 @@ interface RequestsData {
   entries: FeatureRequestEntry[];
 }
 
-async function readRequests(): Promise<RequestsData> {
-  try {
-    const raw = await fs.readFile(REQUESTS_FILE, "utf-8");
-    return JSON.parse(raw) as RequestsData;
-  } catch {
-    return { entries: [] };
-  }
-}
-
-async function writeRequests(data: RequestsData): Promise<void> {
-  await fs.mkdir(DATA_DIR, { recursive: true });
-  // Atomic temp-file + rename so a crash mid-write can't truncate the file.
-  const tmpFile = path.join(
-    DATA_DIR,
-    `.feature-requests-${randomBytes(6).toString("hex")}.tmp`,
-  );
-  await fs.writeFile(tmpFile, JSON.stringify(data, null, 2));
-  await fs.rename(tmpFile, REQUESTS_FILE);
-}
-
 // ---------------------------------------------------------------------------
 // POST — save a feature request
 // ---------------------------------------------------------------------------
 
 export async function POST(req: NextRequest) {
-  const ip =
-    req.headers.get("x-forwarded-for")?.split(",")[0]?.trim() ?? "unknown";
+  const ip = getClientIp(req);
   if (isRateLimited(ip)) {
-    return NextResponse.json({ error: "Too many requests" }, { status: 429 });
+    return jsonError("Too many requests", 429, { "Retry-After": "60" });
   }
 
-  let body: { text?: string };
-  try {
-    body = await req.json();
-  } catch {
-    return NextResponse.json({ error: "Invalid JSON" }, { status: 400 });
-  }
+  const parsed = await parseJsonBody<{ text?: string }>(req, {
+    maxBytes: 4 * 1024,
+  });
+  if (!parsed.ok) return parsed.response;
 
-  const text = typeof body.text === "string" ? body.text.trim() : "";
+  const text = typeof parsed.data.text === "string" ? parsed.data.text.trim() : "";
   if (!text || text.length > 1000) {
-    return NextResponse.json(
-      { error: "Text is required (max 1000 chars)" },
-      { status: 400 },
-    );
+    return jsonError("Text is required (max 1000 chars)", 400);
   }
 
   // --- Supabase path (production) ---
@@ -127,14 +90,20 @@ export async function POST(req: NextRequest) {
   }
 
   // --- Filesystem fallback ---
-  // Serialize read-modify-write so concurrent POSTs can't overwrite each other.
-  return withWriteLock("feature-requests", async () => {
-    const data = await readRequests();
-    data.entries.push({
-      text,
-      created_at: new Date().toISOString(),
-    });
-    await writeRequests(data);
-    return NextResponse.json({ saved: true });
-  });
+  await updateJsonFile<RequestsData>(
+    "feature-requests",
+    REQUESTS_FILE,
+    { entries: [] },
+    (data) => ({
+      entries: [
+        ...data.entries,
+        {
+          text,
+          created_at: new Date().toISOString(),
+        },
+      ],
+    }),
+  );
+
+  return NextResponse.json({ saved: true });
 }

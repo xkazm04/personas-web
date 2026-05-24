@@ -2,20 +2,62 @@
 
 import { useState } from "react";
 import { motion } from "framer-motion";
-import { Check, ExternalLink, Lightbulb, Rocket, Send } from "lucide-react";
+import {
+  AlertCircle,
+  Check,
+  ExternalLink,
+  Lightbulb,
+  Loader2,
+  Rocket,
+  Send,
+} from "lucide-react";
 import { fadeUp } from "@/lib/animations";
 import { trackFeatureRequest } from "@/lib/analytics";
 import { KOFI_USERNAME } from "../data";
 
+const MAX_LENGTH = 1000;
+
 export default function CustomFeatureRequest() {
   const [value, setValue] = useState("");
   const [submitted, setSubmitted] = useState(false);
+  const [saving, setSaving] = useState(false);
+  const [error, setError] = useState<string | null>(null);
 
-  const handleSubmit = () => {
-    if (!value.trim()) return;
-    trackFeatureRequest(value.trim());
+  const handleSubmit = async () => {
+    const text = value.trim();
+    if (!text || saving) return;
+    setSaving(true);
+    setError(null);
+
+    let res: Response;
+    try {
+      res = await fetch("/api/feature-requests", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ text }),
+      });
+    } catch {
+      setSaving(false);
+      setError("Network error — please check your connection and try again.");
+      return;
+    }
+
+    if (!res.ok) {
+      setSaving(false);
+      if (res.status === 429) {
+        setError("You're sending suggestions too quickly. Please wait a moment.");
+      } else if (res.status === 400) {
+        setError("Please enter a valid suggestion (1–1000 characters).");
+      } else {
+        setError("Something went wrong saving your suggestion. Please try again.");
+      }
+      return;
+    }
+
+    trackFeatureRequest(text);
     setSubmitted(true);
     setValue("");
+    setSaving(false);
   };
 
   return (
@@ -49,22 +91,25 @@ export default function CustomFeatureRequest() {
               <input
                 type="text"
                 value={value}
+                maxLength={MAX_LENGTH}
+                disabled={saving}
                 onChange={(e) => {
                   setValue(e.target.value);
                   if (submitted) setSubmitted(false);
+                  if (error) setError(null);
                 }}
                 onKeyDown={(e) => {
-                  if (e.key === "Enter") handleSubmit();
+                  if (e.key === "Enter") void handleSubmit();
                 }}
                 placeholder="Describe the feature you'd like to see..."
-                className="w-full rounded-xl border border-glass bg-white/[0.02] px-4 py-2.5 text-base text-foreground placeholder:text-muted-dark outline-none transition-all duration-300 focus:border-brand-cyan/25 focus:bg-white/[0.03] focus:shadow-[0_0_20px_rgba(6,182,212,0.06)]"
+                className="w-full rounded-xl border border-glass bg-white/[0.02] px-4 py-2.5 text-base text-foreground placeholder:text-muted-dark outline-none transition-all duration-300 focus:border-brand-cyan/25 focus:bg-white/[0.03] focus:shadow-[0_0_20px_rgba(6,182,212,0.06)] disabled:opacity-60"
               />
               <div className="pointer-events-none absolute inset-x-4 -bottom-px h-px bg-gradient-to-r from-transparent via-brand-cyan/0 to-transparent transition-all duration-300 peer-focus:via-brand-cyan/20" />
             </div>
             <button
-              onClick={handleSubmit}
-              disabled={!value.trim() && !submitted}
-              className={`flex h-[42px] w-[42px] shrink-0 items-center justify-center rounded-xl border transition-all duration-300 cursor-pointer ${
+              onClick={() => void handleSubmit()}
+              disabled={saving || (!value.trim() && !submitted)}
+              className={`flex h-[42px] w-[42px] shrink-0 items-center justify-center rounded-xl border transition-all duration-300 cursor-pointer disabled:cursor-not-allowed ${
                 submitted
                   ? "border-brand-emerald/30 bg-brand-emerald/15 text-brand-emerald shadow-[0_0_15px_rgba(52,211,153,0.15)]"
                   : value.trim()
@@ -72,7 +117,9 @@ export default function CustomFeatureRequest() {
                     : "border-glass bg-white/[0.02] text-muted-dark"
               }`}
             >
-              {submitted ? (
+              {saving ? (
+                <Loader2 className="h-4 w-4 animate-spin" />
+              ) : submitted ? (
                 <Check className="h-4 w-4" />
               ) : (
                 <Send className="h-4 w-4" />
@@ -80,13 +127,25 @@ export default function CustomFeatureRequest() {
             </button>
           </div>
 
-          {submitted && (
+          {submitted && !error && (
             <motion.p
               initial={{ opacity: 0, y: 4 }}
               animate={{ opacity: 1, y: 0 }}
               className="mt-3 text-base text-brand-emerald/70 font-mono tracking-wide"
             >
               Thanks! Your suggestion has been recorded.
+            </motion.p>
+          )}
+
+          {error && (
+            <motion.p
+              role="alert"
+              initial={{ opacity: 0, y: 4 }}
+              animate={{ opacity: 1, y: 0 }}
+              className="mt-3 flex items-center gap-1.5 text-base text-brand-amber/80 font-mono tracking-wide"
+            >
+              <AlertCircle className="h-3.5 w-3.5 shrink-0" />
+              {error}
             </motion.p>
           )}
 

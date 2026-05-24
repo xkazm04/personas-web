@@ -1,11 +1,20 @@
 "use client";
 
+import { useEffect, useMemo, useState } from "react";
 import Link from "next/link";
 import { ChevronLeft, ChevronRight } from "lucide-react";
 import GuideMarkdown from "@/components/guide/GuideMarkdown";
 import RelatedTopics from "@/components/guide/RelatedTopics";
 import ModuleBadge from "@/components/guide/ModuleBadge";
+import TopicTOC from "@/components/guide/TopicTOC";
+import MobileTopicTOC from "@/components/guide/MobileTopicTOC";
+import ReadingProgress from "@/components/guide/ReadingProgress";
+import { extractHeadings } from "@/components/guide/guide-markdown/extractHeadings";
+import type { GuideHeading } from "@/components/guide/guide-markdown/extractHeadings";
 import { TOPIC_MODULE_MAP } from "@/data/guide/desktop-modules";
+import { getLocalizedTopic } from "@/data/guide/getLocalized";
+import { useTranslation } from "@/i18n/useTranslation";
+import { useI18nStore } from "@/stores/i18nStore";
 import type { GuideCategory, GuideTopic } from "@/data/guide/types";
 import type { RelatedTopic } from "@/lib/guide-utils";
 
@@ -13,15 +22,65 @@ interface TopicViewProps {
   category: GuideCategory;
   topic: GuideTopic;
   content: string;
+  initialHeadings: GuideHeading[];
   prevTopic: GuideTopic | null;
   nextTopic: GuideTopic | null;
   related: RelatedTopic[];
 }
 
-export default function TopicView({ category, topic, content, prevTopic, nextTopic, related }: TopicViewProps) {
+export default function TopicView({ category, topic, content, initialHeadings, prevTopic, nextTopic, related }: TopicViewProps) {
+  const { t } = useTranslation();
+  // Locale-aware swap. The server renders the English content (no locale
+  // signal in the URL or cookie today), and once the i18nStore hydrates on
+  // the client we re-resolve through getLocalizedTopic. Currently the
+  // i18nStore is hard-locked to 'en' (setLanguage is a no-op) — so this
+  // hook is dormant infrastructure until the locale switcher is wired up.
+  // When that day comes, no further change is needed here: the title,
+  // description, and body will swap independently with English fallback.
+  const language = useI18nStore((s) => s.language);
+  const [localized, setLocalized] = useState({
+    title: topic.title,
+    description: topic.description,
+    body: content,
+  });
+
+  // Reset to the English content whenever the locale or topic changes. Done in
+  // render via the prev-state pattern (not in an effect) to satisfy React 19's
+  // "no synchronous setState in an effect" rule. For non-en locales this is the
+  // fallback shown until the async swap below resolves.
+  const resetKey = `${language}|${topic.id}`;
+  const [prevResetKey, setPrevResetKey] = useState(resetKey);
+  if (resetKey !== prevResetKey) {
+    setPrevResetKey(resetKey);
+    setLocalized({ title: topic.title, description: topic.description, body: content });
+  }
+
+  // Skip the client parse on the initial render — page.tsx already extracted
+  // headings from the same `content` string and passed them in. The useMemo
+  // only re-parses when localized.body diverges (locale switch — currently
+  // dormant; see comment above on the i18nStore).
+  const headings = useMemo(
+    () => (localized.body === content ? initialHeadings : extractHeadings(localized.body)),
+    [localized.body, content, initialHeadings],
+  );
+
+  useEffect(() => {
+    if (language === "en") return;
+    let cancelled = false;
+    getLocalizedTopic(language, topic.id, content).then((next) => {
+      if (!cancelled) setLocalized(next);
+    });
+    return () => {
+      cancelled = true;
+    };
+  }, [language, topic.id, content]);
+
   return (
-    <div className="px-6 pb-24">
-      <div className="mx-auto max-w-3xl">
+    <div className="px-6 pb-24 pt-9 lg:pt-0">
+      <ReadingProgress />
+      <MobileTopicTOC headings={headings} />
+      <div className="mx-auto max-w-3xl lg:max-w-[80rem] lg:grid lg:grid-cols-[minmax(0,1fr)_14rem] lg:gap-12">
+        <div className="min-w-0 lg:max-w-[52rem]">
         {/* Breadcrumb */}
         <nav aria-label="Breadcrumb" className="mt-8 flex items-center gap-1.5 text-base text-muted-dark">
           <Link href="/guide" className="transition-colors hover:text-brand-cyan">Guide</Link>
@@ -30,7 +89,7 @@ export default function TopicView({ category, topic, content, prevTopic, nextTop
             {category.name}
           </Link>
           <span>/</span>
-          <span className="text-foreground" aria-current="page">{topic.title}</span>
+          <span className="text-foreground" aria-current="page">{localized.title}</span>
         </nav>
 
         {/* Desktop app reference + Tags */}
@@ -57,7 +116,7 @@ export default function TopicView({ category, topic, content, prevTopic, nextTop
 
         {/* Content */}
         <article className="mt-8">
-          <GuideMarkdown content={content} />
+          <GuideMarkdown content={localized.body} />
         </article>
 
         {/* Related topics */}
@@ -104,6 +163,12 @@ export default function TopicView({ category, topic, content, prevTopic, nextTop
             <div />
           )}
         </nav>
+        </div>
+        <aside className="hidden lg:block">
+          <div className="sticky top-24">
+            <TopicTOC headings={headings} label={t.pageNav.onThisPage} />
+          </div>
+        </aside>
       </div>
     </div>
   );

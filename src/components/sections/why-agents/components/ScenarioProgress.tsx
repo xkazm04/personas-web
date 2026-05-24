@@ -3,15 +3,18 @@
 import { motion } from "framer-motion";
 import { MessageSquare, RefreshCw } from "lucide-react";
 import { fadeUp } from "@/lib/animations";
-import { CYCLE_MS, scenarios } from "../data";
+import { CYCLE_MS } from "../data";
+import type { Scenario } from "../types";
 
 export default function ScenarioProgress({
+  scenarios,
   activeIndex,
   paused,
   scenarioId,
   onSelect,
   onTogglePause,
 }: {
+  scenarios: Scenario[];
   activeIndex: number;
   paused: boolean;
   scenarioId: string;

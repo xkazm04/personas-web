@@ -12,6 +12,14 @@ interface LaneMetric {
   color: string;
 }
 
+function clamp(value: number, min: number, max: number) {
+  return Math.max(min, Math.min(max, value));
+}
+
+function sanitize(value: number): number {
+  return Number.isFinite(value) ? Math.max(0, value) : 0;
+}
+
 export default function LanesView({ laneMetrics, inView }: { laneMetrics: LaneMetric[]; inView: boolean }) {
   if (!laneMetrics || laneMetrics.length === 0) {
     return (
@@ -24,11 +32,11 @@ export default function LanesView({ laneMetrics, inView }: { laneMetrics: LaneMe
   return (
     <div className="space-y-3">
       {laneMetrics.map((lane, i) => {
-        const queueDepth = Number.isFinite(lane.queueDepth) ? lane.queueDepth : 0;
-        const latencyMs = Number.isFinite(lane.latencyMs) ? lane.latencyMs : 0;
-        const eps = Number.isFinite(lane.eps) ? lane.eps : 0;
-        const depthRatio = Math.min(queueDepth / 50, 1);
-        const latencyRatio = Math.min(latencyMs / 600, 1);
+        const queueDepth = sanitize(lane.queueDepth);
+        const latencyMs = sanitize(lane.latencyMs);
+        const eps = sanitize(lane.eps);
+        const depthRatio = clamp(queueDepth / 50, 0, 1);
+        const latencyRatio = clamp(latencyMs / 600, 0, 1);
         return (
           <motion.div
             key={lane.id}

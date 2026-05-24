@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { AnimatePresence, motion } from "framer-motion";
 import { ChevronUp, MessageCircle } from "lucide-react";
 import { fadeUp } from "@/lib/animations";
@@ -13,6 +13,7 @@ import FeatureBoostButton from "./FeatureBoostButton";
 
 export default function FeatureVoteCard({
   feature,
+  apiCount,
   initialVoted,
   onToggleVote,
   comments,
@@ -22,6 +23,8 @@ export default function FeatureVoteCard({
   showBoostUI,
 }: {
   feature: Feature;
+  /** Live vote count from /api/votes for this feature (excludes the marketing seed). */
+  apiCount: number;
   initialVoted: boolean;
   onToggleVote: (featureId: string, voted: boolean) => void;
   comments: Comment[];
@@ -31,17 +34,22 @@ export default function FeatureVoteCard({
   showBoostUI: boolean;
 }) {
   const [voted, setVoted] = useState(initialVoted);
-  const [count, setCount] = useState(feature.votes + (initialVoted ? 1 : 0));
   const [showTiers, setShowTiers] = useState(false);
   const [imgLoaded, setImgLoaded] = useState(false);
   const [showComments, setShowComments] = useState(false);
 
-  useEffect(() => {
-    queueMicrotask(() => {
-      setVoted(initialVoted);
-      setCount(feature.votes + (initialVoted ? 1 : 0));
-    });
-  }, [initialVoted, feature.votes]);
+  // Prev-state reset pattern: when the parent re-syncs the voted flag from
+  // the API response, mirror it locally so the toggle button reflects truth.
+  const [prevInitialVoted, setPrevInitialVoted] = useState(initialVoted);
+  if (initialVoted !== prevInitialVoted) {
+    setPrevInitialVoted(initialVoted);
+    setVoted(initialVoted);
+  }
+
+  // apiCount already reflects every voter currently in the DB, including
+  // this user when initialVoted is true. The total displayed number is
+  // the marketing seed + the live API count.
+  const count = feature.votes + apiCount;
 
   const t = localAccentTokens[feature.accent];
   const rgba = (a: number) => `rgba(${t.r},${t.g},${t.b},${a})`;
@@ -52,7 +60,6 @@ export default function FeatureVoteCard({
     trackFeatureVote(feature.id, voted ? "undo" : "upvote");
     const newVoted = !voted;
     setVoted(newVoted);
-    setCount((c) => c + (newVoted ? 1 : -1));
     onToggleVote(feature.id, newVoted);
   };
 
@@ -162,10 +169,8 @@ export default function FeatureVoteCard({
             >
               <div className="px-4 pb-4">
                 <div
-                  className="h-px mb-3 opacity-30"
-                  style={{
-                    background: `linear-gradient(90deg, transparent, ${rgba(0.15)}, transparent)`,
-                  }}
+                  className="comment-divider mb-3"
+                  style={{ color: rgba(0.15) }}
                 />
                 <div className="flex items-center gap-1.5 mb-2">
                   <MessageCircle className="h-3 w-3 text-muted-dark/60" />

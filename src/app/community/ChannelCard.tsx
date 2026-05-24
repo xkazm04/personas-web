@@ -1,6 +1,6 @@
 "use client";
 
-import { motion } from "framer-motion";
+import { motion, useReducedMotion } from "framer-motion";
 import Link from "next/link";
 import { ArrowRight, ExternalLink } from "lucide-react";
 import { BRAND_VAR, tint, brandShadow } from "@/lib/brand-theme";
@@ -14,6 +14,7 @@ interface ChannelCardProps {
 export default function ChannelCard({ channel }: ChannelCardProps) {
   const Icon = channel.icon;
   const bv = BRAND_VAR[channel.brand];
+  const prefersReducedMotion = useReducedMotion();
 
   const cardClass =
     "group relative flex flex-col h-full overflow-hidden rounded-2xl border p-7 transition-all duration-500 hover:scale-[1.01]";
@@ -42,12 +43,26 @@ export default function ChannelCard({ channel }: ChannelCardProps) {
           <Icon className="h-6 w-6" style={{ color: bv }} />
         </div>
         <span
-          className="rounded-full px-3 py-1 text-base font-semibold uppercase tracking-wider"
+          className="inline-flex items-center gap-2 rounded-full px-3 py-1 text-base font-semibold uppercase tracking-wider"
           style={{
             backgroundColor: tint(channel.brand, 12),
             color: bv,
           }}
         >
+          {channel.isLive && (
+            <span className="relative inline-flex h-1.5 w-1.5" aria-hidden="true">
+              <span
+                className="relative inline-flex h-1.5 w-1.5 rounded-full"
+                style={{ backgroundColor: BRAND_VAR.purple }}
+              />
+              {!prefersReducedMotion && (
+                <span
+                  className="live-dot-ping absolute inset-0 inline-flex h-1.5 w-1.5 rounded-full"
+                  style={{ backgroundColor: BRAND_VAR.purple }}
+                />
+              )}
+            </span>
+          )}
           {channel.stat}
         </span>
       </div>

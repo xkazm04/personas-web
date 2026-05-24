@@ -1,10 +1,14 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { AnimatePresence, motion } from "framer-motion";
-import { AlertTriangle, Check, X, XCircle } from "lucide-react";
+
 import { useTranslation } from "@/i18n/useTranslation";
 import type { MemoryItem } from "@/lib/mock-dashboard-data";
+
+import { BatchReviewDiscardDialog } from "./batch-review-modal/BatchReviewDiscardDialog";
+import { BatchReviewHeader } from "./batch-review-modal/BatchReviewHeader";
+import { ConflictDecisionCard } from "./batch-review-modal/ConflictDecisionCard";
 
 export type BatchDecision = "accept" | "reject";
 
@@ -24,28 +28,48 @@ export default function BatchReviewModal({
   const { t } = useTranslation();
   const [decisions, setDecisions] = useState<Record<string, BatchDecision>>({});
   const [prevOpen, setPrevOpen] = useState(open);
+  const [showDiscardConfirm, setShowDiscardConfirm] = useState(false);
 
-  // Reset local decisions whenever the modal transitions open. React 19
-  // prev-state pattern — avoids setState-in-effect.
   if (open !== prevOpen) {
     setPrevOpen(open);
-    if (open) setDecisions({});
+    if (open) {
+      setDecisions({});
+      setShowDiscardConfirm(false);
+    }
   }
+
+  const pending = Object.keys(decisions).length;
+
+  const requestClose = useCallback(() => {
+    if (pending > 0) {
+      setShowDiscardConfirm(true);
+      return;
+    }
+    onClose();
+  }, [pending, onClose]);
+
+  const confirmDiscard = useCallback(() => {
+    setShowDiscardConfirm(false);
+    onClose();
+  }, [onClose]);
+
+  const cancelDiscard = useCallback(() => {
+    setShowDiscardConfirm(false);
+  }, []);
 
   useEffect(() => {
     if (!open) return;
     function onEsc(e: KeyboardEvent) {
-      if (e.key === "Escape") onClose();
+      if (e.key !== "Escape") return;
+      if (showDiscardConfirm) {
+        cancelDiscard();
+        return;
+      }
+      requestClose();
     }
     document.addEventListener("keydown", onEsc);
     return () => document.removeEventListener("keydown", onEsc);
-  }, [open, onClose]);
-
-  const pending = Object.keys(decisions).length;
-  const modalTitle = t.memoriesPage.conflicts.modalTitle.replace(
-    "{n}",
-    String(conflicts.length),
-  );
+  }, [open, showDiscardConfirm, requestClose, cancelDiscard]);
 
   function setDecision(id: string, decision: BatchDecision) {
     setDecisions((prev) => ({ ...prev, [id]: decision }));
@@ -59,6 +83,15 @@ export default function BatchReviewModal({
     });
   }
 
+  const modalTitle = t.memoriesPage.conflicts.modalTitle.replace(
+    "{n}",
+    String(conflicts.length),
+  );
+  const discardBody = t.memoriesPage.conflicts.discardBody.replace(
+    "{n}",
+    String(pending),
+  );
+
   return (
     <AnimatePresence>
       {open && (
@@ -68,7 +101,7 @@ export default function BatchReviewModal({
           exit={{ opacity: 0 }}
           transition={{ duration: 0.15 }}
           className="fixed inset-0 z-50 flex items-center justify-center p-4"
-          onClick={onClose}
+          onClick={requestClose}
         >
           <div className="absolute inset-0 bg-black/60 backdrop-blur-sm" />
           <motion.div
@@ -82,30 +115,12 @@ export default function BatchReviewModal({
             className="relative z-10 flex max-h-[80vh] w-full max-w-2xl flex-col overflow-hidden rounded-2xl border border-glass bg-[#0a0f1a]/95 shadow-2xl backdrop-blur-xl"
             onClick={(e) => e.stopPropagation()}
           >
-            <header className="flex items-start gap-3 border-b border-glass px-5 py-4">
-              <div className="flex h-9 w-9 flex-shrink-0 items-center justify-center rounded-xl border border-rose-500/25 bg-rose-500/10">
-                <AlertTriangle className="h-4 w-4 text-rose-400" />
-              </div>
-              <div className="min-w-0 flex-1">
-                <h2
-                  id="batch-review-title"
-                  className="text-base font-semibold text-foreground"
-                >
-                  {modalTitle}
-                </h2>
-                <p className="mt-0.5 text-sm text-muted-dark">
-                  {t.memoriesPage.conflicts.modalSubtitle}
-                </p>
-              </div>
-              <button
-                type="button"
-                onClick={onClose}
-                aria-label={t.memoriesPage.conflicts.cancel}
-                className="flex h-7 w-7 items-center justify-center rounded-lg text-muted-dark transition-colors hover:bg-white/[0.04] hover:text-foreground"
-              >
-                <X className="h-3.5 w-3.5" />
-              </button>
-            </header>
+            <BatchReviewHeader
+              title={modalTitle}
+              subtitle={t.memoriesPage.conflicts.modalSubtitle}
+              cancelLabel={t.memoriesPage.conflicts.cancel}
+              onClose={requestClose}
+            />
 
             <div className="flex-1 space-y-2 overflow-y-auto p-5">
               {conflicts.length === 0 ? (
@@ -113,67 +128,19 @@ export default function BatchReviewModal({
                   {t.memoriesPage.conflicts.allResolved}
                 </p>
               ) : (
-                conflicts.map((item) => {
-                  const decision = decisions[item.id];
-                  return (
-                    <div
-                      key={item.id}
-                      className="rounded-xl border border-glass bg-white/[0.02] p-3"
-                    >
-                      <div className="flex items-start gap-2">
-                        <div className="min-w-0 flex-1">
-                          <p className="text-sm font-semibold text-foreground">
-                            {item.title}
-                          </p>
-                          <p className="mt-0.5 text-sm text-muted-dark">
-                            {item.persona} · {item.type}
-                          </p>
-                          {item.conflictReason && (
-                            <p className="mt-1.5 text-sm italic text-rose-300/90">
-                              {item.conflictReason}
-                            </p>
-                          )}
-                        </div>
-                        <div className="flex gap-1">
-                          <button
-                            type="button"
-                            onClick={() =>
-                              decision === "accept"
-                                ? clearDecision(item.id)
-                                : setDecision(item.id, "accept")
-                            }
-                            aria-pressed={decision === "accept"}
-                            className={`flex items-center gap-1 rounded-lg border px-2.5 py-1 text-sm font-medium transition-all ${
-                              decision === "accept"
-                                ? "border-emerald-500/30 bg-emerald-500/15 text-emerald-300"
-                                : "border-glass-hover bg-white/[0.03] text-muted hover:bg-white/[0.06]"
-                            }`}
-                          >
-                            <Check className="h-3 w-3" />
-                            {t.memoriesPage.conflicts.accept}
-                          </button>
-                          <button
-                            type="button"
-                            onClick={() =>
-                              decision === "reject"
-                                ? clearDecision(item.id)
-                                : setDecision(item.id, "reject")
-                            }
-                            aria-pressed={decision === "reject"}
-                            className={`flex items-center gap-1 rounded-lg border px-2.5 py-1 text-sm font-medium transition-all ${
-                              decision === "reject"
-                                ? "border-rose-500/30 bg-rose-500/15 text-rose-300"
-                                : "border-glass-hover bg-white/[0.03] text-muted hover:bg-white/[0.06]"
-                            }`}
-                          >
-                            <XCircle className="h-3 w-3" />
-                            {t.memoriesPage.conflicts.reject}
-                          </button>
-                        </div>
-                      </div>
-                    </div>
-                  );
-                })
+                conflicts.map((item) => (
+                  <ConflictDecisionCard
+                    key={item.id}
+                    item={item}
+                    decision={decisions[item.id]}
+                    labels={{
+                      accept: t.memoriesPage.conflicts.accept,
+                      reject: t.memoriesPage.conflicts.reject,
+                    }}
+                    onSetDecision={setDecision}
+                    onClearDecision={clearDecision}
+                  />
+                ))
               )}
             </div>
 
@@ -184,7 +151,7 @@ export default function BatchReviewModal({
               <div className="flex gap-2">
                 <button
                   type="button"
-                  onClick={onClose}
+                  onClick={requestClose}
                   className="rounded-lg border border-glass-hover bg-white/[0.03] px-3 py-1.5 text-sm font-medium text-muted transition-colors hover:bg-white/[0.06] hover:text-foreground"
                 >
                   {t.memoriesPage.conflicts.cancel}
@@ -199,6 +166,19 @@ export default function BatchReviewModal({
                 </button>
               </div>
             </footer>
+
+            <AnimatePresence>
+              {showDiscardConfirm && (
+                <BatchReviewDiscardDialog
+                  title={t.memoriesPage.conflicts.discardTitle}
+                  body={discardBody}
+                  keepLabel={t.memoriesPage.conflicts.discardKeep}
+                  confirmLabel={t.memoriesPage.conflicts.discardConfirm}
+                  onCancel={cancelDiscard}
+                  onConfirm={confirmDiscard}
+                />
+              )}
+            </AnimatePresence>
           </motion.div>
         </motion.div>
       )}

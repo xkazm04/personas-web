@@ -9,6 +9,16 @@ export default function ConnectorModalHeader({ connector }: { connector: Connect
   const categoryMeta = categories.find((c) => c.key === connector.category);
   const iconName = connector.icon ?? connector.name;
   const [imgError, setImgError] = useState(false);
+  // Reset imgError when the connector switches: without this, opening any
+  // connector with a missing /tools/<icon>.svg permanently latches imgError
+  // to true, so every subsequent connector loses its branded SVG.
+  // Prev-state pattern (per CLAUDE.md React 19 rules) — never call setState
+  // synchronously inside a useEffect body.
+  const [prevConnector, setPrevConnector] = useState(connector.name);
+  if (prevConnector !== connector.name) {
+    setPrevConnector(connector.name);
+    setImgError(false);
+  }
 
   return (
     <div className="px-8 pt-8 pb-6">

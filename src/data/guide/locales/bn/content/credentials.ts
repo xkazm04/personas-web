@@ -1,0 +1,224 @@
+export const content: Record<string, string> = {
+  "how-personas-keeps-your-data-safe": `
+## Personas কীভাবে আপনার ডেটা নিরাপদ রাখে
+
+সুরক্ষা গোড়া থেকে Personas-এ তৈরি করা হয়েছে। API keys, tokens, এবং passwords আপনার নিজের মেশিনে একটি স্থানীয় এনক্রিপ্টেড ভল্টে থাকে — তারা একটি রান চলাকালীন এজেন্ট স্পষ্টভাবে একটি AI প্রোভাইডার বা তৃতীয়-পক্ষের পরিষেবায় না পাঠানো পর্যন্ত ডিভাইস ছেড়ে যায় না। ভল্ট ফাইলটি নিজেই **AES-256-GCM** দিয়ে এনক্রিপ্ট করা হয়েছে, এবং যে কীটি এটি আনলক করে তা আপনার OS-নেটিভ keyring (Windows DPAPI, macOS Keychain, Linux Secret Service) দ্বারা মোড়ানো হয় তাই plaintext keys কখনই ডিস্কে বসে না।
+
+আপনি যখন একটি এজেন্ট চালান, ইঞ্জিন শুধুমাত্র সেই নির্দিষ্ট ক্রেডেনশিয়ালগুলি ডিক্রিপ্ট করে যা এজেন্টের প্রয়োজন, কলের সময়কালের জন্য মেমরিতে ধরে রাখে, তারপর plaintext মুছে দেয়। Logs, traces, এবং exports কখনও raw credential values ধারণ করে না — যেখানেই একটি ক্রেডেনশিয়াল প্রদর্শিত হবে, আপনি পরিবর্তে একটি token reference (\`cred:gmail-work\`) দেখতে পান।
+
+### মূল পয়েন্ট
+
+- **AES-256-GCM** — authenticated encryption (প্রতিটি ক্রেডেনশিয়ালের ciphertext integrity-checked, তাই একটি tampered vault file সনাক্ত করা হয়, নীরবে ডিক্রিপ্ট করা হয় না)
+- **OS keyring–wrapped master key** — Windows-এ DPAPI, macOS-এ Keychain, Linux-এ Secret Service; প্রতিটি সেশনে টাইপ করার কোনো master password নেই
+- **Local-only by default** — কিছুই আপলোড করা হয় না; cloud deploy opt-in এবং আপনার বেছে নেওয়া orchestrator-এ TLS-এর মাধ্যমে transit-এ এনক্রিপ্ট করে
+- **logs-এ token references** — agent traces এবং exports raw secrets নয়, credential IDs ব্যবহার করে
+- **Tamper-evident** — GCM authentication tags vault file-এর যেকোনো সংশোধন ধরে
+
+### এটি কীভাবে কাজ করে
+
+একটি ক্রেডেনশিয়াল সংরক্ষণ করা vault key (per-vault AES-256-GCM key, নিজেই OS keyring দ্বারা মোড়ানো) দিয়ে এটিকে এনক্রিপ্ট করে এবং ciphertext-কে local SQLite-এ লেখে। একটি এজেন্ট রানের সময় একটি ক্রেডেনশিয়াল ব্যবহার করা মেমরিতে এটি ডিক্রিপ্ট করে, এটি প্রাসঙ্গিক tool বা HTTP client-এ পাস করে এবং অবিলম্বে buffer ছেড়ে দেয়। raw value কখনই logged হয় না, প্রাথমিক এন্ট্রির পরে কখনই প্রদর্শিত হয় না, এবং এনক্রিপ্টেড ভল্টের বাইরে কোথাও serialized হয় না।
+
+### এটি কার্যকর দেখুন
+
+:::usecases
+**Multiple services, isolated credentials**
+আপনার এজেন্টরা Slack, GitHub, এবং Jira-এর সাথে কথা বলে
+---
+প্রতিটি ক্রেডেনশিয়াল তার নিজস্ব random nonce দিয়ে স্বাধীনভাবে এনক্রিপ্ট করা হয়। একটি record-এর সমঝোতা অন্যদের প্রকাশ করে না।
+===
+**Credential rotation**
+একটি token মেয়াদ শেষ হয় বা ঘুরানো হয়
+---
+OAuth credentials provider-এর refresh token-এর মাধ্যমে স্বয়ংক্রিয়ভাবে রিফ্রেশ হয়। ম্যানুয়ালি-ঘুরানো keys আপনি কিছু পুনরায় শুরু না করে ক্রেডেনশিয়াল record-এ অদলবদল করেন।
+===
+**Audit-friendly traces**
+আপনার প্রমাণ করতে হবে কোন ক্রেডেনশিয়াল কোথায় ব্যবহার করা হয়েছিল
+---
+প্রতিটি রানের trace যে credential ID ব্যবহার করেছে তা রেকর্ড করে। প্রকৃত মান কখনই প্রদর্শিত হয় না; provenance প্রদর্শন করার জন্য ID যথেষ্ট।
+:::
+
+:::info
+ভল্টটি OS keyring-এর মাধ্যমে আপনার OS user account-এ আবদ্ধ। ভল্ট ফাইলটিকে একই OS সহ একটি ভিন্ন মেশিনে কপি করা এটি ডিক্রিপ্টযোগ্য করবে না — wrapping key OS keyring-এ থাকে এবং পোর্টেবল নয়।
+:::
+
+:::warning
+আপনি যদি macOS বা Linux-এ আপনার OS account password পরিবর্তন করেন, keyring wrapping key পুনরায় লক করতে পারে। পরিবর্তনের পরে প্রথম রানে Personas নতুন ক্রেডেনশিয়ালের জন্য প্রম্পট করবে। যদি keyring মুছে ফেলা হয় (factory reset, account deletion), ভল্টটি পুনরুদ্ধারের অযোগ্য হয়ে যায় — স্থানীয় মেশিনের বাইরে disaster recovery প্রয়োজন হলে raw secrets বাহ্যিকভাবে ব্যাকআপ করুন।
+:::
+
+:::tip
+local-only মডেল ব্যক্তিগত অটোমেশনের জন্য সঠিক ডিফল্ট। team / production কাজের জন্য যেখানে একাধিক মেশিনের একই ক্রেডেনশিয়াল প্রয়োজন, cloud deploy (Team / Builder tier) end-to-end এনক্রিপশন সহ orchestrator-এর মাধ্যমে vault state প্রতিলিপি করে।
+:::
+  `,
+
+  "adding-a-new-credential": `
+## একটি নতুন ক্রেডেনশিয়াল যোগ করা
+
+Connections → Credentials খুলুন এবং \`Add Credential\` ক্লিক করুন। একটি category বাছুন (email, cloud storage, payments, communication, developer tools, CRM, AI provider, generic) — picker auth type, প্রয়োজনীয় fields, এবং label hints স্বয়ংক্রিয়ভাবে কনফিগার করা মিল-প্রি-নির্মিত কানেক্টর দেখায়। যদি আপনার পরিষেবাটি catalog-এ না থাকে, "Custom" বাছুন এবং নিজেই ক্রেডেনশিয়াল সংজ্ঞায়িত করুন (name, type, fields)।
+
+OAuth-সমর্থনকারী পরিষেবাগুলির জন্য, ফ্লো provider-এর consent screen-এ একটি browser উইন্ডো খোলে। API-key পরিষেবাগুলির জন্য, secure input-এ key পেস্ট করুন। যেভাবেই হোক, ক্রেডেনশিয়াল এনক্রিপ্ট করা অবতরণ করে এবং picker matching category-এ একটি open capability slot সহ যেকোনো এজেন্টে এটি প্রয়োগ করার অফার দেয়।
+
+### ধাপে ধাপে
+
+:::steps
+1. **Connections → Credentials-এ নেভিগেট করুন** — সাইডবার → Connections, তারপর Credentials ট্যাব
+2. **Add Credential ক্লিক করুন** — credential তালিকার উপরের-ডানে বোতাম
+3. **একটি category বাছুন** — email / storage / payments / ইত্যাদি; মিল connector catalog স্বয়ংক্রিয়ভাবে ফিল্টার হয়
+4. **auth flow চালান** — OAuth একটি consent উইন্ডো খোলে; API-key পরিষেবাগুলি secure input field ব্যবহার করে
+5. **নাম দিন এবং সংরক্ষণ করুন** — ক্রেডেনশিয়ালকে একটি label দিন যা আপনি চিনবেন ("Stripe Live", "Gmail Personal"); ক্রেডেনশিয়ালটি AES-256-GCM দিয়ে এনক্রিপ্ট করা হয় এবং স্থায়ী হয়
+6. **ঐচ্ছিক: এখন এজেন্টে আবদ্ধ করুন** — picker matching open capabilities সহ এজেন্ট দেখায়; one-click bind তাদের পরে শিকার এড়ায়
+:::
+
+### এটি কীভাবে কাজ করে
+
+আপনি যখন Save ক্লিক করেন, ক্রেডেনশিয়ালের raw value OS keyring থেকে নেওয়া vault key দিয়ে এনক্রিপ্ট করা হয়, তারপর credential store-এ কমিট করা হয়। save শুধুমাত্র credential ID এবং label ফেরত দেয় — raw value অবিলম্বে মেমরি থেকে মুছে ফেলা হয়। এই বিন্দু থেকে, agent editor-এর Connectors ট্যাব ID দ্বারা ক্রেডেনশিয়ালকে রেফারেন্স করতে পারে।
+
+:::warning
+agent prompts, code comments, বা chat windows-এ কখনও ক্রেডেনশিয়াল পেস্ট করবেন না। শুধুমাত্র secure credential input field ব্যবহার করুন — অন্য কিছু একটি log, sync, বা screenshot-এ raw value ক্যাপচার হওয়ার ঝুঁকি নেয়।
+:::
+
+:::tip
+20+ ক্রেডেনশিয়াল থাকলে নামকরণ কনভেনশন গুরুত্বপূর্ণ। \`<service>-<env>-<account>\` ("stripe-live-main", "gmail-prod-support") অবিলম্বে স্পষ্ট করে যে আপনি একটি এজেন্টের Connectors ট্যাব কনফিগার করার সময় কোন ক্রেডেনশিয়াল বাছাই করবেন।
+:::
+  `,
+
+
+
+  "credential-health-checks": `
+## ক্রেডেনশিয়াল স্বাস্থ্য পরীক্ষা
+
+ক্রেডেনশিয়ালগুলি সময়ের সাথে সাথে drift হয় — tokens মেয়াদ শেষ হয়, keys upstream-এ ঘুরানো হয়, OAuth scopes পরিবর্তিত হয়। ক্রেডেনশিয়াল স্বাস্থ্য পরীক্ষা একটি হালকা পরীক্ষা কল দিয়ে পর্যায়ক্রমে প্রতিটি সংরক্ষিত ক্রেডেনশিয়াল পিং করে (একটি no-op API অনুরোধ যা কোনো খরচ করে না এবং আপনাকে বলে ক্রেডেনশিয়ালটি এখনও বৈধ কিনা)। ফলাফলগুলি ক্রেডেনশিয়াল কার্ডে একটি স্ট্যাটাস সূচক হিসাবে এবং একটি ক্রেডেনশিয়াল হ্রাস পেলে alerts হিসাবে সারফেস করে।
+
+পরীক্ষা শিডিউল কনফিগারযোগ্য। ডিফল্টভাবে, OAuth credentials দৈনিক পরীক্ষা করে (কারণ refresh-token flow-এর যেভাবেই হোক পর্যায়ক্রমে ক্রেডেনশিয়াল ব্যবহার করতে হবে), API-key credentials সাপ্তাহিক পরীক্ষা করে। ক্রেডেনশিয়াল কার্ড থেকে যেকোনো সময় Manual পরীক্ষা চালানো যেতে পারে।
+
+### মূল পয়েন্ট
+
+- **Per-credential status** — green (healthy), yellow (expiring soon / scope changed), red (broken / revoked)
+- **Configurable cadence** — per-credential overrides যদি একটি পরিষেবা aggressive checking rate-limit করে
+- **Manual check** — ক্রেডেনশিয়াল কার্ড থেকে one-click test; একটি নতুন এজেন্ট deploy করার আগে দরকারী
+- **Expiry projection** — পরিচিত expiry তারিখ সহ ক্রেডেনশিয়ালগুলির জন্য (signed JWTs, scoped tokens), স্ট্যাটাস expiry-এর N দিন আগে yellow-এ ফ্লিপ হয় (configurable, default 7)
+- **Alert routing** — failures আপনার agents-এর জন্য কনফিগার করা একই notification channels-এর মাধ্যমে route হয়
+
+### এটি কীভাবে কাজ করে
+
+প্রতিটি connector তার নিজস্ব স্বাস্থ্য পরীক্ষা কল সংজ্ঞায়িত করে (সম্ভব সবচেয়ে হালকা অনুরোধ যা ক্রেডেনশিয়াল ব্যবহার করে)। পরীক্ষাটি কনফিগার করা cadence-এ ব্যাকগ্রাউন্ডে চলে; ফলাফল স্থায়ী হয় এবং ক্রেডেনশিয়ালের স্ট্যাটাস আপডেট করে। যদি একটি পরীক্ষা ব্যর্থ হয়, স্ট্যাটাস ফ্লিপ হয়, ক্রেডেনশিয়াল কার্ড হাইলাইট হয়, এবং নির্ভরশীল এজেন্টগুলি তাদের নিজস্ব স্বাস্থ্য সূচকগুলিতে সতর্কতা উত্তরাধিকারী হয় — তাই একটি ভাঙা Gmail credential প্রতিটি Gmail-ব্যবহারকারী এজেন্টকে আপনি এটি ঠিক না করা পর্যন্ত yellow দেখায়।
+
+:::tip
+যেকোনো production deploy বা scheduled overnight রানের আগে একটি ম্যানুয়াল স্বাস্থ্য পরীক্ষা চালান। 3am-এ একটি token নীরবে ঘুরে যাওয়ার কারণে একটি ব্যর্থ রানের বিরুদ্ধে এখন পাঁচ সেকেন্ড।
+:::
+  `,
+
+  "auto-credential-browser": `
+## অটো-ক্রেডেনশিয়াল ব্রাউজার
+
+auto-credential browser হল নতুন ক্রেডেনশিয়ালের জন্য catalog-চালিত onboarding। Connections → Catalog খুলুন এবং আপনি Personas যে প্রতিটি connector প্রি-কনফিগার করা শিপ করে দেখতে পাবেন: এই লেখার সময় 60+ পরিষেবা, category দ্বারা সংগঠিত (email, storage, payments, communication, developer tools, CRM, AI providers, ইত্যাদি)। প্রতিটি connector সঠিক auth type, প্রয়োজনীয় fields, OAuth scopes, API endpoints, এবং যেকোনো পরিষেবা-নির্দিষ্ট quirks জানে।
+
+আপনি যখন একটি connector বাছেন, wizard সেই পরিষেবার জন্য সঠিক পদক্ষেপগুলির মধ্য দিয়ে আপনাকে নিয়ে যায় — পরিষেবার UI-তে নির্দিষ্ট পৃষ্ঠাগুলির লিঙ্ক সহ যেখানে আপনি একটি API key খুঁজে পাবেন, বা কোন OAuth scopes অনুমোদন করতে হবে, বা কোন অনুমতিগুলি গুরুত্বপূর্ণ। যেসব পরিষেবার জন্য Personas একটি সফল সংযোগ সনাক্ত করতে পারে (তাদের বেশিরভাগ), wizard সংরক্ষণ করার আগে রিয়েল-টাইমে যাচাই করে।
+
+### মূল পয়েন্ট
+
+- **60+ পূর্ব-কনফিগার করা connectors** — auth type, fields, scopes, endpoints বেক করা
+- **পরিষেবা-নির্দিষ্ট গাইডেন্স** — সঠিক API-key পৃষ্ঠা বা settings ট্যাবের সরাসরি লিঙ্ক
+- **Live validation** — wizard বেশিরভাগ পরিষেবার জন্য সংরক্ষণ করার আগে ক্রেডেনশিয়াল পরীক্ষা করে
+- **Suggested-for-agent flow** — catalog একটি এজেন্টের Connectors ট্যাব থেকেও প্রবেশ করা যেতে পারে, যেখানে এটি open capability slot-এর সাথে মেলে এমন connectors-এ ফিল্টার করা হয়
+- **নতুন connectors অনুরোধ করুন** — catalog-এ এখনও নেই এমন পরিষেবার অনুরোধ করা যেতে পারে; one-offs-এর জন্য, Generic / Custom connector type ব্যবহার করুন
+
+### এটি কীভাবে কাজ করে
+
+Connector definitions অ্যাপের সাথে শিপ করা হয় এবং নিয়মিত release cycle-এর মাধ্যমে আপডেট হয়। প্রতিটি definition তার auth flow, প্রয়োজনীয় fields, validation endpoint, এবং scope list ঘোষণা করে। আপনি যখন একটি connector বাছেন, wizard definition পড়ে, মিল form রেন্ডার করে, OAuth বা API-key flow চালায় এবং সংরক্ষণের আগে যাচাই করে। প্রকৃত ক্রেডেনশিয়াল value save time-এ একটি ম্যানুয়ালি-যোগ করা ক্রেডেনশিয়ালের একই পথ ব্যবহার করে এনক্রিপ্ট করা হয়।
+
+:::tip
+catalog কী একীভূত তা আবিষ্কার করার দ্রুততম উপায়ও। আপনি যদি বিবেচনা করছেন Personas পরিষেবা Y-এর সাথে X করতে পারে কিনা, প্রথমে catalog অনুসন্ধান করুন — যদি Y একটি প্রাসঙ্গিক ক্ষমতা সহ সেখানে থাকে, একীকরণ one-click।
+:::
+  `,
+
+  "which-agents-use-which-credentials": `
+## কোন এজেন্ট কোন ক্রেডেনশিয়াল ব্যবহার করে
+
+Connections-এ Dependencies ট্যাব credential → agent গ্রাফ দেখায়। বাম দিকে একটি ক্রেডেনশিয়াল বাছুন এবং আপনি ডানদিকে এটি রেফারেন্স করা প্রতিটি এজেন্ট দেখতে পাবেন, নির্দিষ্ট capability slot নামকরণ সহ ("email-summary agent-এর জন্য Gmail account")। একটি এজেন্ট বাছুন এবং আপনি প্রতিটি ক্রেডেনশিয়াল যা এটি নির্ভর করে তা দেখতে পাবেন। গ্রাফটি দ্বিদিকীয় — উভয় "এই key ঘুরালে কী ভাঙে?" এবং "এই এজেন্টের promote করার আগে কোন ক্রেডেনশিয়াল প্রয়োজন?"-এর জন্য দরকারী।
+
+একই dependency map build-engine pre-flight check চালায়: আপনি যখন একটি এজেন্ট promote করেন, ইঞ্জিন ভল্টের বিরুদ্ধে প্রতিটি প্রয়োজনীয় capability ক্রস-চেক করে এবং promote অনুমতি দেওয়ার আগে অনুপস্থিত বা মেয়াদোত্তীর্ণ ক্রেডেনশিয়াল ফ্ল্যাগ করে। এই কারণেই আপনি নতুন তৈরি করা এজেন্টদের রানটাইমে প্রায় কখনই "credential not found" error পান না — dependency check promote time-এ চলেছিল এবং এটি ধরেছিল।
+
+### মূল পয়েন্ট
+
+- **দ্বিদিকীয় গ্রাফ** — credential → agents এবং agent → credentials
+- **Capability-slot নামকরণ** — dependency আপনাকে শুধু "এই ক্রেডেনশিয়াল ব্যবহৃত হয়" নয়, "email-send capability হিসাবে ব্যবহৃত" বলে
+- **Pre-flight check** — একই graph ব্যবহার করে promote-time validation
+- **Impact preview** — একটি ক্রেডেনশিয়াল নির্বাচন করলে এটি অপসারণ দ্বারা প্রভাবিত হবে এমন প্রতিটি এজেন্ট হাইলাইট হয়
+- **Unused-credential detection** — শূন্য agent dependencies সহ ক্রেডেনশিয়ালগুলি Connections summary-তে সারফেস করা হয় যাতে আপনি সেগুলি পরিষ্কার করতে পারেন
+
+### এটি কীভাবে কাজ করে
+
+প্রতিটি এজেন্টের Connectors ট্যাব প্রতি capability slot-এ credential reference সংরক্ষণ করে। Dependencies ভিউ গ্রাফ রেন্ডার করতে উভয় দিকে এই স্টোরেজ query করে। Credential rotation, expiration, বা অপসারণ ইভেন্টগুলি গ্রাফের মাধ্যমে প্রচার করে: একটি ক্ষীণ ক্রেডেনশিয়ালের উপর নির্ভরশীল যেকোনো এজেন্ট তার স্বাস্থ্য সূচকে warning state উত্তরাধিকারী করে, তাই গ্রাফটি শুধু একটি স্থির রেফারেন্স নয় — এটি একটি live propagation path।
+
+:::warning
+একটি unattended (scheduled / webhook / chain) এজেন্ট দ্বারা ব্যবহৃত যেকোনো ক্রেডেনশিয়াল ঘুরানো বা মুছে ফেলার আগে, dependency map চেক করুন এবং এজেন্টদের প্রথমে replacement ক্রেডেনশিয়ালে নির্দেশ করতে আপডেট করুন। pre-flight check আপনাকে promote time-এ ধরে; ইতিমধ্যেই-promoted এজেন্টদের জন্য, runtime failure একমাত্র সংকেত।
+:::
+
+:::tip
+একটি মাসিক "credential audit" রুটিন: Connections → Dependencies খুলুন, oldest দ্বারা সাজান, এবং নীচের ডজনের জন্য জিজ্ঞাসা করুন "আমি কি এখনও এই ক্রেডেনশিয়াল ব্যবহার করি?"। অব্যবহৃত ক্রেডেনশিয়াল কিছুর জন্য পৃষ্ঠ এলাকা, তাই সেগুলি অপসারণ বিশুদ্ধ পরিষ্কার।
+:::
+  `,
+
+  "refreshing-expired-tokens": `
+## মেয়াদোত্তীর্ণ টোকেন রিফ্রেশ করা
+
+কিছু ক্রেডেনশিয়াল ডিজাইন দ্বারা সময়-আবদ্ধ — OAuth access tokens মিনিট থেকে ঘন্টায় মেয়াদ শেষ হয়; পরিষেবা-ইস্যু করা tokens (Slack bot tokens, GitHub PATs) প্রায়শই N-দিন বা N-বছরের expiries থাকে। Personas যেখানে provider প্রকাশ করে সেখানে expiry ট্র্যাক করে এবং কাটঅফের কিছু দিন আগে একটি "expiring soon" yellow status সারফেস করে (configurable, default 7 দিন)।
+
+একটি refresh token সহ OAuth ক্রেডেনশিয়ালের জন্য, refresh ব্যাকগ্রাউন্ডে স্বয়ংক্রিয় এবং নীরব। API keys এবং tokens যা refresh হয় না, আপনি yellow warning দেখবেন এবং ক্রেডেনশিয়াল কার্ড একটি "Reconnect" বা "Replace" বোতাম অফার করবে — এটিতে ক্লিক করা একই wizard খোলে যা ক্রেডেনশিয়াল তৈরি করেছিল।
+
+### মূল পয়েন্ট
+
+- **OAuth-এর জন্য স্বয়ংক্রিয় refresh** — refresh token নীরবে ব্যবহৃত হয়; আপনি এটি ঘটতে দেখেন না
+- **non-refresh creds-এর জন্য অগ্রিম warning** — expiry-এর N দিন আগে yellow status; configurable warning window
+- **One-click reconnect** — ক্রেডেনশিয়াল কার্ডে একটি Reconnect বোতাম রয়েছে যা auth flow পুনরায় চালায়
+- **Zero-downtime swap** — সক্রিয় নির্ভরশীল এজেন্ট সহ ক্রেডেনশিয়ালের জন্য, নতুন token পুরানোটি জায়গায় প্রতিস্থাপন করে; এজেন্টরা তাদের পরবর্তী রানে নতুন মান গ্রহণ করে
+- **Failure agent health-এ সারফেস হয়** — যে ক্রেডেনশিয়ালগুলি refresh হতে ব্যর্থ হয় সেগুলি তাদের নির্ভরশীল এজেন্টদের Health ট্যাবে yellow / red করে
+
+### এটি কীভাবে কাজ করে
+
+Refresh একই ব্যাকগ্রাউন্ড task-এর অংশ হিসাবে চলে যা health checks করে। OAuth-এর জন্য, task refresh token ব্যবহার করে provider থেকে একটি নতুন access token তৈরি করে এবং credential record আপডেট করে। Non-refreshable tokens-এর জন্য, task শুধুমাত্র expiry projection আপডেট করে (তাই yellow warning সঠিক সময়ে প্রদর্শিত হয়); প্রকৃত প্রতিস্থাপন হল একটি manual action যা আপনি warning fires হলে নেন।
+
+:::tip
+যখন একটি yellow expiry warning fires, অপেক্ষা করার পরিবর্তে অবিলম্বে refresh করুন। এখন refresh করা একটি এক-মিনিটের কাজ। 3am-এ একটি scheduled এজেন্ট ব্যর্থ হতে দেওয়া কারণ token রাতারাতি মেয়াদ শেষ হয়েছে মিস হওয়া রানগুলি আনওয়াইন্ড করতে অনেক বেশি ব্যয়বহুল।
+:::
+  `,
+
+
+  "connector-catalog": `
+## কানেক্টর ক্যাটালগ
+
+Connections → Catalog-এ catalog হল Personas যে পরিষেবাগুলির সাথে box-এর বাইরে একীভূত হয় তার কিউরেটেড তালিকা। এই লেখার সময়, 9 categories জুড়ে 60+ connectors, প্রতিটি release-এ user demand-এর উপর ভিত্তি করে নতুন connectors যোগ করা হয়েছে। প্রতিটি connector তার auth type (OAuth, API key, basic auth, bot token), প্রয়োজনীয় scopes / capabilities, এবং এটি যে agent-side tool surface প্রকাশ করে তা ঘোষণা করে।
+
+যখন একটি এজেন্টের Connectors ট্যাবের একটি capability প্রয়োজন ("email-send", "cloud-storage-write", "chat-message-send"), এটি সেই capability সন্তুষ্ট করে এমন connectors-এর জন্য catalog query করে, তারপর আপনার ভল্টের বিরুদ্ধে মিলিয়ে দেয়। যদি আপনার ইতিমধ্যেই সেই connectors-এর একটির জন্য একটি ক্রেডেনশিয়াল থাকে, এটি একটি তাৎক্ষণিক মিল। যদি না হয়, catalog একটি যোগ করার অফার দেয় — Auto-Credential Browser বিষয়ে বর্ণিত একই wizard খোলে।
+
+### Connector Categories
+
+| Category | Example services | Auth |
+|---|---|---|
+| Email | Gmail, Outlook, IMAP/SMTP | OAuth / API |
+| Cloud Storage | Google Drive, Dropbox, OneDrive, S3, Local Drive | OAuth / API |
+| Payments | Stripe, PayPal, Square | API key |
+| Social | Twitter/X, LinkedIn, Facebook, Mastodon | OAuth |
+| Developer Tools | GitHub, GitLab, Jira, Linear, Sentry | OAuth / API |
+| Communication | Slack, Discord, Microsoft Teams, Telegram, generic webhook | OAuth / bot token |
+| CRM | Salesforce, HubSpot, Pipedrive | OAuth / API |
+| AI Providers | Anthropic, OpenAI, Google, local Ollama, custom OpenAI-compatible | API |
+| Data | Postgres, Snowflake, BigQuery, generic SQL/HTTP | URL + credentials |
+
+### মূল পয়েন্ট
+
+- **Capability-based matching** — connectors capabilities প্রকাশ করে; এজেন্টদের capabilities প্রয়োজন; catalog তাদের মেলায়
+- **পরিষেবা-নির্দিষ্ট quirks বেক করা** — Slack workspace IDs, GitHub PAT scopes, OAuth callback URLs, ইত্যাদি, সবই প্রি-কনফিগার করা
+- **Auth-type indicators** — এক নজরে, দেখুন কোন connectors OAuth বনাম API-key বনাম local
+- **Generic / Custom fallback** — catalog-এ নেই এমন পরিষেবার জন্য, Generic connector type raw HTTP/REST কনফিগারেশন গ্রহণ করে
+- **Channel-delivery connectors** — Slack, Discord, Teams, generic webhook এখানে outbound agent output-এর জন্যও দেখা যায় (Connectors ট্যাবে প্রতি-এজেন্ট কনফিগার করা)
+
+### এটি কীভাবে কাজ করে
+
+Connector definitions অ্যাপে থাকে এবং binary-এর সাথে versioned। প্রতিটি এজেন্টে Connectors ট্যাব dynamically catalog query করে — catalog-এ একটি connector যোগ করা (একটি release-এ) এটিকে কোনো per-agent migration ছাড়াই বিদ্যমান এজেন্টদের কাছে উপলব্ধ করে। Custom / Generic connectors আপনি স্থানীয়ভাবে কনফিগার করেন vault-scoped এবং catalog-এর মধ্য দিয়ে যায় না।
+
+:::tip
+catalog একটি discovery surface-ও। মাঝে মাঝে browse করুন এমনকি যখন আপনার একটি নির্দিষ্ট প্রয়োজন নেই — আপনি প্রায়শই একটি integration খুঁজে পাবেন যা একটি নতুন automation প্রস্তাব করে। বিশেষ করে Communication category output-side ব্যবহারের ক্ষেত্রে সমৃদ্ধ (Slack / Discord / Teams-এ এজেন্ট ফলাফল সরবরাহ করা)।
+:::
+  `,
+};

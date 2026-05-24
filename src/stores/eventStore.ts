@@ -1,7 +1,8 @@
 import { create } from "zustand";
 import { api } from "@/lib/api";
 import type { PersonaEvent, PersonaEventSubscription } from "@/lib/types";
-import { invalidateAgentDetailCache } from "@/lib/agentDetailCache";
+import { mutate } from "swr";
+import { dashboardKeys } from "@/lib/dashboard-queries";
 
 const REPLAY_BATCH_SIZE = 10;
 const MAX_EVENTS_BUFFER = 1_000;
@@ -90,8 +91,30 @@ export const useEventStore = create<EventState>((set, get) => ({
   fetchEvents: async () => {
     set({ eventsLoading: true });
     try {
-      const events = await api.listEvents({ limit: 100 });
-      set({ events, eventIds: new Set(events.map((e) => e.id)) });
+      const fetched = await api.listEvents({ limit: 100 });
+      set((s) => {
+        // Merge instead of replacing the array. A fetch issued at t=0
+        // with limit=100 doesn't include events that the SSE stream
+        // delivered at t=0.5 (still in flight at the orchestrator when
+        // the listEvents query ran), so a destructive `set({ events })`
+        // dropped any events that arrived locally between the dispatch
+        // and the response — most painfully during reconnect, when the
+        // SSE-arrived events were the *only* signal of what happened
+        // while disconnected.
+        const fetchedIds = new Set(fetched.map((e) => e.id));
+        const preserved = s.events.filter((e) => !fetchedIds.has(e.id));
+        const merged = [...fetched, ...preserved]
+          .sort((a, b) => {
+            const ta = new Date(a.createdAt).getTime();
+            const tb = new Date(b.createdAt).getTime();
+            return tb - ta; // newest first
+          })
+          .slice(0, MAX_EVENTS_BUFFER);
+        return {
+          events: merged,
+          eventIds: new Set(merged.map((e) => e.id)),
+        };
+      });
     } catch {
       // leave stale
     } finally {
@@ -125,7 +148,24 @@ export const useEventStore = create<EventState>((set, get) => ({
     if (isReplayLocked(get().retryCounts, event.id)) {
       throw new ReplayLockedError(event.id);
     }
-    set((s) => ({ replayingIds: new Set(s.replayingIds).add(event.id) }));
+    // Count the attempt up front, not the success. The previous shape only
+    // incremented retryCounts inside the success branch, so a permanently
+    // broken handler (always-throwing downstream) never tripped
+    // MAX_REPLAY_RETRIES — Retry / Retry All could pump poison messages at
+    // the bus indefinitely. Counting attempts means after MAX_REPLAY_RETRIES
+    // calls the event becomes replay-locked regardless of outcome, which is
+    // the actual semantics of "retry budget".
+    set((s) => {
+      const nextRetryCounts = {
+        ...s.retryCounts,
+        [event.id]: (s.retryCounts[event.id] ?? 0) + 1,
+      };
+      saveRetryCounts(nextRetryCounts);
+      return {
+        replayingIds: new Set(s.replayingIds).add(event.id),
+        retryCounts: nextRetryCounts,
+      };
+    });
     try {
       const newEvent = await api.publishEvent({
         eventType: event.eventType,
@@ -134,20 +174,11 @@ export const useEventStore = create<EventState>((set, get) => ({
         targetPersonaId: event.targetPersonaId ?? undefined,
         payload: event.payload ?? undefined,
       });
+      get().appendEvent(newEvent);
       set((s) => {
         const nextReplayingIds = new Set(s.replayingIds);
         nextReplayingIds.delete(event.id);
-        const nextRetryCounts = {
-          ...s.retryCounts,
-          [event.id]: (s.retryCounts[event.id] ?? 0) + 1,
-        };
-        saveRetryCounts(nextRetryCounts);
-        return {
-          replayingIds: nextReplayingIds,
-          retryCounts: nextRetryCounts,
-          events: [newEvent, ...s.events],
-          eventIds: new Set(s.eventIds).add(newEvent.id),
-        };
+        return { replayingIds: nextReplayingIds };
       });
     } catch (err) {
       set((s) => {
@@ -217,7 +248,7 @@ export const useEventStore = create<EventState>((set, get) => ({
   createSubscription: async (input) => {
     const sub = await api.createSubscription(input);
     set((s) => ({ subscriptions: [...s.subscriptions, sub] }));
-    invalidateAgentDetailCache(input.personaId);
+    void mutate(dashboardKeys.agentDetail(input.personaId));
   },
   updateSubscription: async (personaId, subId, body) => {
     const updated = await api.updateSubscription(personaId, subId, body);
@@ -226,14 +257,14 @@ export const useEventStore = create<EventState>((set, get) => ({
         sub.id === subId ? updated : sub,
       ),
     }));
-    invalidateAgentDetailCache(personaId);
+    void mutate(dashboardKeys.agentDetail(personaId));
   },
   deleteSubscription: async (personaId, subId) => {
     await api.deleteSubscription(personaId, subId);
     set((s) => ({
       subscriptions: s.subscriptions.filter((sub) => sub.id !== subId),
     }));
-    invalidateAgentDetailCache(personaId);
+    void mutate(dashboardKeys.agentDetail(personaId));
   },
 
   reset: () => {

@@ -2,6 +2,12 @@ import * as Sentry from "@sentry/nextjs";
 import { useAuthStore } from "@/stores/authStore";
 import { DEVELOPMENT } from "./dev";
 import { mockApi } from "./mockApi";
+import {
+  OrchestratorConfigError,
+  validateOrchestratorUrl,
+} from "./orchestrator-config";
+
+export { OrchestratorConfigError };
 import type {
   Persona,
   PersonaExecution,
@@ -38,27 +44,15 @@ export class ApiError extends Error {
   }
 }
 
-export class OrchestratorConfigError extends Error {
-  constructor() {
-    super(
-      "Missing NEXT_PUBLIC_ORCHESTRATOR_URL. Set this env var to the orchestrator's base URL " +
-        "(e.g. https://orchestrator.example.com) in your deployment environment, then redeploy.",
-    );
-    this.name = "OrchestratorConfigError";
-  }
-}
-
 function getOrchestratorBase(): string {
-  const base = process.env.NEXT_PUBLIC_ORCHESTRATOR_URL;
-  if (!base || base.trim() === "") {
-    throw new OrchestratorConfigError();
-  }
-  return base;
+  return validateOrchestratorUrl(process.env.NEXT_PUBLIC_ORCHESTRATOR_URL);
 }
 
 // ---------------------------------------------------------------------------
 // Core fetch wrapper
 // ---------------------------------------------------------------------------
+
+const DEFAULT_TIMEOUT_MS = 15_000;
 
 async function orchestratorFetch<T>(
   path: string,
@@ -66,6 +60,7 @@ async function orchestratorFetch<T>(
     method?: string;
     body?: unknown;
     params?: Record<string, string | undefined>;
+    timeoutMs?: number;
   },
 ): Promise<T> {
   const { accessToken, initialized } = useAuthStore.getState();
@@ -99,11 +94,28 @@ async function orchestratorFetch<T>(
     headers["X-User-Token"] = accessToken;
   }
 
-  const res = await fetch(url.toString(), {
-    method: options?.method ?? "GET",
-    headers,
-    body: options?.body ? JSON.stringify(options.body) : undefined,
-  });
+  const controller = new AbortController();
+  const timeout = setTimeout(
+    () => controller.abort(),
+    options?.timeoutMs ?? DEFAULT_TIMEOUT_MS,
+  );
+
+  let res: Response;
+  try {
+    res = await fetch(url.toString(), {
+      method: options?.method ?? "GET",
+      headers,
+      body: options?.body ? JSON.stringify(options.body) : undefined,
+      signal: controller.signal,
+    });
+  } catch (err) {
+    if (err instanceof DOMException && err.name === "AbortError") {
+      throw new Error(`API request timed out: ${path}`);
+    }
+    throw err;
+  } finally {
+    clearTimeout(timeout);
+  }
 
   if (!res.ok) {
     throw new ApiError(res.status, await res.text());

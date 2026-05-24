@@ -2,20 +2,25 @@
 
 import { motion } from "framer-motion";
 import { AlertTriangle, Check, ShieldAlert, X } from "lucide-react";
+import { staggerDelay, nextDelay } from "@/lib/animations";
 import type { Scenario } from "../types";
+
+const STEP_STAGGER = 0.15;
+const RESULT_GAP = 0.1;
 
 export default function WorkflowPanel({ scenario }: { scenario: Scenario }) {
   const statusColor = {
     ok: "text-brand-emerald/70",
-    warn: "text-yellow-400/70",
+    warn: "text-brand-amber/70",
     error: "text-brand-rose/70",
   };
   const statusBg = {
     ok: "bg-brand-emerald/10 ring-brand-emerald/10",
-    warn: "bg-yellow-400/10 ring-yellow-400/10",
+    warn: "bg-brand-amber/10 ring-brand-amber/10",
     error: "bg-brand-rose/10 ring-brand-rose/10",
   };
   const statusIcon = { ok: Check, warn: AlertTriangle, error: X };
+  const resultDelay = nextDelay(scenario.workflow.steps.length, STEP_STAGGER, RESULT_GAP);
 
   return (
     <div className="space-y-3">
@@ -27,7 +32,7 @@ export default function WorkflowPanel({ scenario }: { scenario: Scenario }) {
             initial={{ opacity: 0, x: -12 }}
             animate={{ opacity: 1, x: 0 }}
             exit={{ opacity: 0, x: -12 }}
-            transition={{ delay: i * 0.15, duration: 0.3 }}
+            transition={{ delay: staggerDelay(i, STEP_STAGGER), duration: 0.3 }}
             className="flex items-start gap-2.5"
           >
             <div
@@ -52,10 +57,7 @@ export default function WorkflowPanel({ scenario }: { scenario: Scenario }) {
         initial={{ opacity: 0, y: 8 }}
         animate={{ opacity: 1, y: 0 }}
         exit={{ opacity: 0 }}
-        transition={{
-          delay: scenario.workflow.steps.length * 0.15 + 0.1,
-          duration: 0.3,
-        }}
+        transition={{ delay: resultDelay, duration: 0.3 }}
         className="mt-4 rounded-xl border border-brand-rose/10 bg-brand-rose/5 px-3 py-2.5"
       >
         <div className="flex items-center gap-2 mb-1">

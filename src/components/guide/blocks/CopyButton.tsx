@@ -1,50 +1,72 @@
 "use client";
 
 import { useState, useCallback } from "react";
-import { Copy, Check } from "lucide-react";
+import { Copy, Check, X } from "lucide-react";
 
 interface CopyButtonProps {
   text: string;
   className?: string;
 }
 
+type CopyState = "idle" | "copied" | "failed";
+
+function legacyCopy(text: string): boolean {
+  const textarea = document.createElement("textarea");
+  textarea.value = text;
+  textarea.style.position = "fixed";
+  textarea.style.opacity = "0";
+  document.body.appendChild(textarea);
+  try {
+    textarea.select();
+    return document.execCommand("copy");
+  } catch {
+    return false;
+  } finally {
+    document.body.removeChild(textarea);
+  }
+}
+
 export function CopyButton({ text, className = "" }: CopyButtonProps) {
-  const [copied, setCopied] = useState(false);
+  const [state, setState] = useState<CopyState>("idle");
 
   const handleCopy = useCallback(async () => {
+    let ok = false;
     try {
       await navigator.clipboard.writeText(text);
-      setCopied(true);
-      setTimeout(() => setCopied(false), 1500);
+      ok = true;
     } catch {
-      const textarea = document.createElement("textarea");
-      textarea.value = text;
-      textarea.style.position = "fixed";
-      textarea.style.opacity = "0";
-      document.body.appendChild(textarea);
-      textarea.select();
-      document.execCommand("copy");
-      document.body.removeChild(textarea);
-      setCopied(true);
-      setTimeout(() => setCopied(false), 1500);
+      ok = legacyCopy(text);
     }
+    setState(ok ? "copied" : "failed");
+    setTimeout(() => setState("idle"), ok ? 1500 : 2500);
   }, [text]);
+
+  const copied = state === "copied";
+  const failed = state === "failed";
 
   return (
     <button
       type="button"
       onClick={handleCopy}
-      aria-label={copied ? "Copied" : "Copy to clipboard"}
-      className={`inline-flex items-center gap-1.5 rounded-lg border border-glass-hover bg-white/[0.05] px-2 py-1 text-xs font-medium backdrop-blur-sm transition-all duration-200 hover:bg-white/[0.1] hover:border-glass-strong ${
+      aria-label={copied ? "Copied" : failed ? "Copy failed — press Ctrl+C" : "Copy to clipboard"}
+      title={failed ? "Copy failed — press Ctrl+C" : undefined}
+      className={`inline-flex items-center gap-1.5 rounded-lg border bg-white/[0.05] px-2 py-1 text-xs font-medium backdrop-blur-sm transition-all duration-200 hover:bg-white/[0.1] ${
         copied
           ? "text-emerald-400 border-emerald-400/20 bg-emerald-400/[0.08]"
-          : "text-muted-dark/70 sm:opacity-0 sm:group-hover:opacity-100"
+          : failed
+          ? "text-rose-400 border-rose-400/20 bg-rose-400/[0.08]"
+          : "border-glass-hover text-muted-dark/70 hover:border-glass-strong sm:opacity-0 sm:group-hover:opacity-100"
       } ${className}`}
     >
       {copied ? (
         <>
           <Check className="h-3 w-3" />
           <span>Copied!</span>
+        </>
+      ) : failed ? (
+        <>
+          <X className="h-3 w-3" />
+          <span>Press Ctrl+C</span>
         </>
       ) : (
         <>

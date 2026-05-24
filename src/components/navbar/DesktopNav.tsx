@@ -4,7 +4,6 @@ import { motion } from "framer-motion";
 import { Download } from "lucide-react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import LanguageSwitcher from "@/components/LanguageSwitcher";
 import { useTranslation } from "@/i18n/useTranslation";
 import { useRoutes } from "./useRoutes";
 
@@ -18,11 +17,15 @@ const preloadHowImage = () => {
   document.head.appendChild(link);
 };
 
+interface DesktopNavProps {
+  onDownloadClick: () => void;
+}
+
 /**
- * Desktop-only navigation — pill tab bar, language switcher, download CTA.
+ * Desktop-only navigation — pill tab bar + download CTA.
  * Mobile uses MobilePanel instead.
  */
-export default function DesktopNav() {
+export default function DesktopNav({ onDownloadClick }: DesktopNavProps) {
   const { t } = useTranslation();
   const routes = useRoutes();
   const pathname = usePathname();
@@ -30,7 +33,7 @@ export default function DesktopNav() {
   return (
     <>
       {/* Route tabs */}
-      <div className="hidden items-center gap-1 rounded-full border border-glass bg-white/2 p-1 backdrop-blur-sm md:flex">
+      <div className="hidden items-center gap-1 rounded-full border border-glass bg-white/2 p-1 backdrop-blur-sm lg:flex">
         {routes.map((route) => {
           const isActive = pathname === route.href;
           return (
@@ -57,20 +60,16 @@ export default function DesktopNav() {
         })}
       </div>
 
-      {/* Language switcher — desktop */}
-      <div className="hidden md:flex">
-        <LanguageSwitcher />
-      </div>
-
       {/* Download CTA — desktop only */}
-      <Link
-        href="/#download"
-        className="group relative hidden items-center gap-2 overflow-hidden rounded-full border border-brand-cyan/25 bg-brand-cyan/8 px-6 py-2 text-base font-medium text-brand-cyan transition-all duration-300 hover:border-brand-cyan/40 hover:bg-brand-cyan/12 md:flex focus-ring"
+      <button
+        type="button"
+        onClick={onDownloadClick}
+        className="group relative hidden items-center gap-2 overflow-hidden rounded-full border border-brand-cyan/25 bg-brand-cyan/8 px-6 py-2 text-base font-medium text-brand-cyan transition-all duration-300 hover:border-brand-cyan/40 hover:bg-brand-cyan/12 lg:flex focus-ring"
       >
         <div className="absolute inset-0 -translate-x-full bg-linear-to-r from-transparent via-brand-cyan/10 to-transparent transition-transform duration-700 group-hover:translate-x-full" />
         <Download className="relative h-3.5 w-3.5" />
         <span className="relative">{t.nav.download}</span>
-      </Link>
+      </button>
     </>
   );
 }

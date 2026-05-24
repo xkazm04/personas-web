@@ -1,4 +1,4 @@
-import type { Tool, AgentData } from "./types";
+import type { Tool, AgentData, AgentStatus } from "./types";
 
 export const tools: Tool[] = [
   {
@@ -100,7 +100,10 @@ export const initialAgents: AgentData[] = [
   { name: "Doc Indexer", iconSrc: "/icons/connectors/google.svg", status: "running", executions: 1_456, rate: 91, color: "#60a5fa" },
 ];
 
-export const statusStyles: Record<string, { dot: string; label: string }> = {
+// Exhaustive Record so adding a new AgentStatus without a style entry
+// becomes a tsc error rather than a runtime "cannot read property dot of
+// undefined" crash that blanks the whole AgentArmyGrid section.
+export const statusStyles: Record<AgentStatus, { dot: string; label: string }> = {
   running: { dot: "bg-brand-emerald shadow-[0_0_6px_rgba(52,211,153,0.6)]", label: "Running" },
   healing: { dot: "bg-brand-amber shadow-[0_0_6px_rgba(251,191,36,0.6)]", label: "Healing" },
   idle: { dot: "bg-white/20", label: "Idle" },

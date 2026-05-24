@@ -2,22 +2,22 @@ export const content: Record<string, string> = {
   "creating-a-new-agent": `
 ## Creating a New Agent
 
-Setting up a new agent is like hiring a new team member — you give them a name, a role, and a set of instructions. Click \`Create Agent\`, pick a name that describes what the agent does (like "Invoice Processor" or "Weekly Reporter"), and choose an icon to make it easy to spot.
+You have two ways to create a new agent. **From scratch** — click \`Create Agent\`, name it, and write instructions yourself. **From a template** — browse the template gallery, pick one that matches what you want to do (invoice processing, daily reports, social posting…), answer a few short questions about your specific use case, and let the build engine assemble the agent for you. Most people start with a template and tweak from there.
 
-You'll also select which AI model powers your agent and what tools it can access. These choices shape your agent's capabilities, but don't worry about getting everything perfect on the first try — you can change any setting later.
+Either way, you'll pick a name and icon, select which AI model powers the agent, and choose which tools (email, web search, file access, etc.) it can use. None of these choices are permanent — you can change any setting later.
 
 :::steps
 1. **Click Create Agent** — from the sidebar or home screen
-2. **Enter a descriptive name** — and pick an icon
-3. **Choose the AI model** — that will power this agent
-4. **Write your instructions** — in the prompt editor
-5. **Assign any tools** — your agent needs (email, web search, file access, etc.)
-6. **Click Save** — to finish
+2. **Pick a path** — start blank, or pick a template from the gallery
+3. **Answer the build questions** — if you went the template route; the build engine adapts the agent to your answers
+4. **Name your agent** — and choose an icon
+5. **Adjust the prompt and tools** — fine-tune the instructions the template produced (or write them from scratch)
+6. **Promote when ready** — the agent moves from draft to active once you confirm
 :::
 
 ### How It Works
 
-The name and icon are just for you — they help you stay organized as your collection grows. The real magic is in the instructions and tool selection, which tell the AI exactly what to do and what it's allowed to use.
+The template path runs an interactive build session: the engine asks clarifying questions about your use case, proposes parameters (input shape, output channels, schedule cadence), and shows a live preview of the agent it's about to assemble. You approve at the end, and the agent lands ready to test. The from-scratch path skips all that — useful when you already know exactly what you want the agent to do.
 
 :::tip
 Good agent names describe the task, not the technology. "Morning Email Summary" is more useful than "GPT Agent 3."
@@ -27,63 +27,62 @@ Good agent names describe the task, not the technology. "Morning Email Summary" 
   "writing-effective-prompts": `
 ## Writing Effective Prompts
 
-A prompt is the set of instructions you give your agent. Good prompts are like good recipes — clear, specific, and in the right order. The difference between a mediocre agent and a great one often comes down to how well the prompt is written.
+A prompt is the set of instructions you give your agent. Good prompts are specific, concrete, and ordered: define the agent's role, state the task, describe the input shape, specify the output format, and call out edge cases. Vague prompts produce vague output — "summarize my emails" works much worse than "read my five most recent unread emails and write a two-sentence summary of each, ordered by sender importance."
 
-Small changes in wording can have a big impact. Being specific ("summarize in exactly 3 bullet points") works much better than being vague ("give me a summary"). Tell your agent what to do, how to do it, and what the result should look like.
+The build engine helps you here. When you adopt a template, the engine asks clarifying questions in batches per capability (input source, output channel, format, frequency) and weaves your answers into a structured prompt. If you write from scratch, you're doing that weaving yourself — but the same five inputs are what produce reliable agents.
 
 ### Prompt Quality Checklist
 
 :::checklist
-- Be specific — say exactly what you want, not roughly what you want
-- Give examples — show your agent what good output looks like
-- Set the format — tell it whether you want bullets, paragraphs, tables, etc.
-- Define boundaries — explain what to skip or avoid, not just what to include
-- Use simple language — clear instructions work better than fancy wording
+- Define the role — "You are an X that does Y." Anchors the model's behavior.
+- State the task concretely — verbs, counts, time windows. Avoid "help me with…"
+- Describe the input — what shape, what fields, what the agent should ignore
+- Specify the output — bullets vs. paragraphs vs. JSON, with field names if structured
+- Handle edge cases — what to do when input is empty, malformed, or unexpected
+- Use examples — even one input/output pair dramatically improves consistency
 :::
 
 ### How It Works
 
-Your prompt is sent to the AI model every time the agent runs. The model treats your instructions like a detailed brief and tries to follow them precisely. The more clearly you communicate, the more accurate the results.
+Every run constructs the prompt from your stored template, the trigger payload, and any agent memory the model is allowed to consult. The model sees the same prompt you wrote (in the order you wrote it) plus the input — what comes back is its honest attempt to follow your instructions. The trace tab in the execution detail shows the exact prompt that was sent, so when output drifts you can see whether the prompt or the input is at fault.
 
 :::tip
-Write your prompt as if you're explaining the task to a smart but brand-new intern. Assume nothing, explain everything.
+Write the prompt as if briefing a smart but brand-new contractor. Assume nothing. The first time the agent produces output, look at the trace and ask: "would a human contractor have understood what I wanted from this prompt?"
 :::
   `,
 
   "simple-vs-structured-prompt-mode": `
 ## Simple vs Structured Prompt Mode
 
-Personas gives you two ways to write agent instructions. **Simple mode** is a single text box — just type what you want, like writing a note. It's perfect for quick tasks and straightforward agents. Most people start here.
+The prompt editor offers two modes. **Simple mode** is a single freeform text box — you type the prompt as one block of prose. Fast for small or experimental agents. **Structured mode** breaks the prompt into five named sections (Identity, Instructions, Tools, Examples, Error Handling) so you can think about each concern separately and edit one without affecting the others.
 
-**Structured mode** breaks your prompt into separate sections: identity, instructions, tools, examples, and error handling. This is like filling out a detailed form instead of writing a free-form letter. It helps you think through each aspect of your agent's behavior and produces more reliable results for complex tasks.
+You can switch between modes at any time without losing work. The editor parses simple-mode prose into structured sections when you switch up, and concatenates structured sections back into a single block when you switch down.
 
 :::compare
 **Simple Mode**
-A single text box — write freely, like typing a note. Fast to create and edit. Best for quick tasks and simple agents where you want flexibility. Good for beginners and experimentation.
+Single text box. Free-form prose. Fast to draft, fast to iterate. Best for experimentation and personal agents where you're the only reader.
 ---
-**Structured Mode** [recommended]
-Multiple dedicated sections: identity, instructions, tools, examples, error handling. Takes more time upfront but produces more reliable, consistent results. Best for complex agents and production use.
+**Structured Mode** [recommended for shared/production agents]
+Five named sections — Identity, Instructions, Tools, Examples, Error Handling. Slower to draft but easier to maintain. Each section can be reviewed and changed independently, which matters when you (or someone else) revisits the agent months later.
 :::
 
 :::info
-You can switch between modes at any time without losing your work. Structured mode reorganizes your simple prompt into sections, and simple mode combines sections back into one text box.
+Both modes produce the same prompt under the hood at runtime. Structured mode is a UX overlay that helps you organize your thinking; the model sees the rendered prompt either way.
 :::
 
 ### How It Works
 
-In simple mode, everything goes in one place. In structured mode, each section has a specific purpose — identity defines who the agent is, instructions say what to do, examples show what good output looks like, and error handling covers what to do when things go wrong.
+Switching modes is non-destructive: the editor stores the structured representation internally, and simple-mode is a flattened view of it. The version history preserves whichever mode you saved in, so restoring an old version brings back the mode it was authored in too.
 
 :::tip
-Start with simple mode for your first few agents. Once you want more control, switch to structured mode and explore the extra sections.
+Start in simple mode while you're figuring out what the agent should do. Once you're happy with the behavior, switch to structured mode for the long-term — it pays off the first time you need to tweak just the Examples section without re-reading the whole prompt.
 :::
   `,
 
   "structured-prompt-sections-explained": `
 ## Structured Prompt Sections Explained
 
-When you use structured mode, your prompt is split into five sections, each giving your agent a different kind of guidance. Think of it like writing a handbook for a new employee — each chapter covers a different aspect of the job.
-
-This separation makes it easier to update one part without accidentally breaking another. It also helps the AI model understand your intentions more clearly.
+Structured mode splits the prompt into five sections. Each one has a specific job, and the build engine uses the same five buckets when it generates prompts from templates — so the sections aren't a UI quirk, they're a stable contract between your authoring and how the model sees the agent.
 
 ### The Five Sections
 
@@ -91,43 +90,43 @@ This separation makes it easier to update one part without accidentally breaking
 [Identity] --> [Instructions] --> [Tools] --> [Examples] --> [Error Handling]
 :::
 
-- **Identity** — who is this agent? Define its personality, expertise, and communication style
-- **Instructions** — the core task. What should the agent do, step by step?
-- **Tools** — which capabilities does the agent have access to? (email, web search, files, etc.)
-- **Examples** — show the agent what great output looks like with real samples
-- **Error handling** — what should the agent do when something goes wrong or input is unexpected?
+- **Identity** — who the agent is. Role, personality, expertise area, communication style. The "you are a…" line.
+- **Instructions** — what the agent does, step by step. The core task and any sub-tasks, in the order they should happen.
+- **Tools** — which capabilities the agent uses and how to use them. When to call which tool, what arguments matter, what to do with results.
+- **Examples** — input/output pairs that show "good" looks like. The single most underused section and one of the most impactful — one solid example beats three more sentences of instruction.
+- **Error Handling** — what to do when input is missing, malformed, or unexpected. Where to stop, what to retry, what to escalate to a manual review.
 
 ### How It Works
 
-Each section is sent to the AI model as part of a structured prompt. The model reads all sections together but treats each one as a distinct set of guidance. This means you can update your error handling without touching your core instructions.
+The renderer concatenates the sections in the order shown, with clear delimiters. Some models pay more attention to early sections; the order is designed to put role and core task first, with examples and error handling at the bottom where they're still in context but don't dilute the headline. If you're using structured prompts for the first time, fill Identity and Instructions immediately and leave the others empty — the model will work fine, and you can add Examples / Error Handling as edge cases come up.
 
 :::tip
-The examples section is the most underused but one of the most powerful. Even one good example can dramatically improve your agent's output quality.
+When an agent starts producing edge-case failures, look at the trace and ask: "could I have prevented this with an example?" Most "the agent is bad at X" problems are really "I never showed it what good X looks like."
 :::
   `,
 
   "agent-settings-and-limits": `
 ## Agent Settings and Limits
 
-Settings and limits act as guardrails for your agents — they keep things running smoothly without unexpected surprises. You can control how long an agent runs, how much it's allowed to spend, and how many tasks it can handle at once.
+The Settings tab on the agent editor is where you put guardrails. Every agent has limits on how long it runs, how much it costs per run, how many model turns it can take, and how many copies can run in parallel. Defaults are conservative — enough to let real work happen, low enough that a misbehaving agent can't run up a bill before you notice.
 
-:::info
-These are especially important once you start running agents automatically on schedules or triggers. Setting a budget cap, for example, means your agent will never accidentally run up a big bill.
-:::
+The limits are especially important for unattended agents (scheduled, webhook-triggered, chain-triggered). Manual runs you see happen; scheduled runs you don't, so a runaway prompt could fire hourly for a week before you check.
 
 ### Key Settings
 
-- **Timeout** — how long the agent is allowed to run before it stops (e.g., 2 minutes)
-- **Budget cap** — the maximum amount the agent can spend per run
-- **Max turns** — how many back-and-forth exchanges the agent can have with the AI model
-- **Concurrency** — how many instances of this agent can run at the same time
+- **Timeout** — total wall-clock time before the run is killed. Default 2 minutes, raise for slow models or long tool-use chains.
+- **Budget cap** — maximum cost per run, evaluated against the live cost meter; the run aborts gracefully when it crosses the cap.
+- **Max turns** — number of model ↔ tool round-trips allowed in one run. Prevents tool-call loops where the model never converges.
+- **Concurrency** — how many parallel executions of this agent are allowed. Set to 1 for stateful agents (so they don't overlap on the same input); raise for parallel batch work.
+- **Memory access** — whether the agent reads from its memory store at runtime (default on for agents that have memories enabled).
+- **Failover provider** — alternate AI provider to use when the primary returns errors above a threshold. Set on agents you care about uptime for.
 
 ### How It Works
 
-Open your agent's settings panel and adjust the sliders or enter values. These limits are enforced every time the agent runs. If an agent hits a limit, it stops gracefully and reports what happened — no data is lost.
+Limits are enforced by the execution engine, not the model. When a run hits a limit, it stops cleanly — the partial trace is preserved, the run is marked with the reason (\`timeout\`, \`budget_exceeded\`, \`turns_exceeded\`), and no charge or state mutation persists for the cut-off portion. The Health tab surfaces limit-stops as warnings so you can decide whether to raise the limit or fix the underlying prompt.
 
 :::tip
-Start with conservative limits and loosen them as you gain confidence. It's easier to increase a limit than to undo an expensive mistake.
+Start with conservative limits on every new agent. The cheapest moment to discover a runaway prompt is on the third manual run, not the third scheduled overnight run.
 :::
   `,
 
@@ -147,15 +146,16 @@ This is also a safety feature. An agent can't accidentally modify files if it do
 - **File access** — read and write files on your computer or cloud storage
 - **API calls** — interact with external services and databases
 - **Clipboard** — read from and write to your clipboard
+- **Messaging channels** — send results to Slack, Discord, Teams, or any generic webhook endpoint as part of the agent's output
 
 ### How to Assign Tools
 
 :::steps
-1. **Open your agent's settings** — click the gear icon or open the agent detail page
-2. **Find the Tools section** — you'll see a list of available tools
-3. **Toggle on the tools you need** — and leave the rest off
-4. **Connect credentials if prompted** — some tools require authentication (like an email password)
-5. **Save your changes** — the agent can now use the assigned tools
+1. **Open the Connectors tab** — on the agent editor; it shows every capability your agent needs against your vault
+2. **Pick a category, not a specific service** — choose "email" or "cloud storage" and the picker shows matching credentials you already have plus suggested connectors if you don't
+3. **Authorize anything new** — for OAuth services, you'll click through a one-time consent screen; the resulting credential lands in your vault and is reusable across agents
+4. **Pre-flight check** — before you promote the agent, the build engine cross-checks every required capability against the vault and flags anything missing
+5. **Save the configuration** — the agent uses the assigned tools on its next run; if a credential later expires, you'll see it in the agent's health indicator
 :::
 
 :::tip
@@ -166,32 +166,32 @@ Only assign the tools your agent actually needs. Fewer tools means fewer things 
   "prompt-version-history": `
 ## Prompt Version History
 
-Every time you save your agent's prompt, a snapshot is automatically created. This means you have a complete history of every change you've ever made — like an unlimited undo button. If a tweak makes things worse, you can go back to any previous version with a single click.
+Every save of an agent's prompt creates an immutable version. The history lives next to the prompt editor on the Prompt tab — open it and you see every save, timestamped, with the diff against the previous version visible inline. There's no limit; the very first version is preserved indefinitely.
 
-You never have to worry about losing a prompt that was working well. Experiment freely, knowing that the version history has your back.
+The system also auto-versions when the build engine modifies a prompt (e.g. during template adoption or parameter rebuilds), so changes from the engine show up alongside your manual edits with a clear "auto-generated" label.
 
 ### Key Points
 
-- **Automatic snapshots** — every save creates a new version, no extra steps needed
-- **One-click restore** — go back to any previous version instantly
-- **Unlimited history** — every version is kept, from the very first save
-- Each version is **timestamped** so you know exactly when changes were made
+- **Automatic snapshots** on every save — manual edits and engine edits alike
+- **One-click restore** — picks any version and makes it the current prompt; the current version is saved first, so restores are never lossy
+- **Inline diff** — see what changed between two versions without leaving the tab
+- **Unlimited retention** — versions never expire or get garbage-collected
 
 ### How It Works
 
-Open your agent and click the \`Version History\` tab. You'll see a list of every saved version with timestamps. Click any version to preview it, and click \`Restore\` to make it the active prompt. The current version is saved before restoring, so you can always switch back.
+The history is stored in the local SQLite database (alongside the agent itself), so it's immediately searchable and works offline. When you restore a version, the editor switches to it but the previously-current version is also preserved — you can flip back without redoing your work.
 
 :::tip
-Before making a big change to a working prompt, make a small "checkpoint" save first. This gives you a clean version to return to if the experiment doesn't work out.
+Before a risky prompt change, make a no-op save so the current state is checkpointed in history. Then experiment freely — restoring is one click if the experiment fails.
 :::
   `,
 
   "comparing-prompt-versions": `
 ## Comparing Prompt Versions
 
-When you're trying to understand why your agent started behaving differently, comparing prompt versions shows you exactly what changed. The side-by-side view highlights additions in green and removals in red — just like tracking changes in a document.
+When an agent's behavior changes and you want to know why, the diff view on the version history shows exactly which characters of the prompt are different between any two versions. Additions are highlighted green, removals red. This is the fastest way to localize a regression — you can usually see the offending change in seconds.
 
-This is especially helpful when you've made several edits over time and can't remember which one caused a particular improvement or problem.
+The diff respects the structured-prompt sections too: if you're comparing two structured-mode versions, the diff is segmented per section so you can ignore irrelevant sections and focus on the one that changed.
 
 :::code-compare
 ### Original
@@ -207,86 +207,87 @@ Format as a numbered list.
 
 ### Key Points
 
-- **Side-by-side view** — see both versions next to each other with changes highlighted
-- **Green highlights** — text that was added in the newer version
-- **Red highlights** — text that was removed from the older version
-- Compare **any two versions**, not just consecutive ones
+- **Side-by-side view** — both versions visible at once with character-level highlighting
+- **Per-section diff** for structured prompts — jump straight to the changed section
+- **Compare any two versions** — not just consecutive ones; useful for "what changed since the working version three weeks ago"
+- **Quick restore** — restore either version directly from the diff view
 
 ### How It Works
 
-Open \`Version History\`, select two versions by checking their boxes, and click \`Compare\`. The diff view appears showing every difference between them. You can use this to understand what changed, decide which version is better, and make informed decisions about future edits.
+Open the version history on the Prompt tab, check the boxes next to two versions, and click Compare. The diff renders in a side-by-side panel. Click Restore on either side to make it current; the diff stays open so you can see exactly what you reverted to.
 
 :::tip
-If your agent suddenly got worse, compare the current version to the last known good version. The highlighted differences will point you straight to the cause.
+When you find the offending change in a diff, copy the *new* (broken) version into the prompt and keep editing — that way the version history records your intent ("tried X, rolled back to Y, then refined to Z"). Restoring without leaving a trail loses the lesson.
 :::
   `,
 
   "cloning-and-duplicating-agents": `
 ## Cloning and Duplicating Agents
 
-Cloning creates an exact copy of an agent — same instructions, same tools, same settings. This is the safest way to experiment with changes because your original agent stays completely untouched. If the experiment works, great. If not, just delete the clone.
+Cloning copies an agent's full configuration into a new agent: prompt (including version history), tools, triggers, settings, memory access flags, failover provider, everything except runtime state (executions, costs, and live triggers don't carry over). The clone is fully independent — edits on either side don't affect the other.
 
-It's also useful when you want to create a similar agent for a different purpose. Instead of starting from scratch, clone an existing agent and modify just the parts that need to change.
+The most common use is forking a working agent to experiment safely. The original keeps producing; the clone is your sandbox. If the experiment is good, you can either replace the original or keep the clone as a specialization.
 
 ### Key Points
 
-- **Exact copy** — everything is duplicated including prompt, settings, tools, and triggers
-- **Independent** — changes to the clone don't affect the original, and vice versa
-- **Quick setup** — save time by starting from a proven agent instead of building from zero
-- Cloned agents get a **"(Copy)" suffix** so you can tell them apart
+- **Full configuration carries over** — prompt, tools, triggers, settings, memory, failover
+- **Runtime state does not** — executions, costs, live triggers belong to one agent at a time
+- **Triggers are cloned but disabled** — so the clone doesn't immediately start firing on the same schedule/webhook as the original
+- **Cloned agents get a "(Copy)" suffix** by default; rename before promoting
 
 ### How It Works
 
-Right-click on any agent in the sidebar (or use the three-dot menu) and select \`Clone\`. A new agent appears with the same configuration and a "(Copy)" label. Rename it, make your changes, and you have a new agent ready to go.
+Right-click an agent in the sidebar or use the three-dot menu in the editor toolbar, and pick \`Clone\`. The new agent appears in the same group with disabled triggers. Re-enable them deliberately (and update their configuration if you don't want the clone listening to the same webhook URL as the original, for instance).
 
 :::tip
-Use cloning to create A/B test candidates. Clone your agent, change one thing in the clone, and compare their results to see which performs better.
+Cloning is the safest way to A-B a prompt change without disrupting an agent that's already in production. Make the change in the clone, run both in the Lab arena on the same inputs, and only swap the production agent once the clone wins.
 :::
   `,
 
   "agent-groups-and-organization": `
 ## Agent Groups and Organization
 
-As your agent collection grows, groups help you stay organized. Think of groups like folders on your computer — they let you categorize agents by project, function, or any system that makes sense to you. You might have a "Marketing" group, a "Finance" group, and a "Personal" group.
+Agents in the sidebar are organized by groups — your own folders for arranging things by team, project, function, or whatever you find useful. Empty by default; you add groups as your collection grows and the flat list stops scaling.
 
-You can drag and drop agents between groups, collapse sections you're not using, and rename groups anytime. A well-organized sidebar saves time and reduces confusion.
+The sidebar also supports nested groups (one level of nesting), drag-and-drop reordering, collapse/expand state that persists across sessions, and per-group icons for fast visual recognition.
 
 ### Key Points
 
-- **Create groups** to categorize agents by project, team, or purpose
-- **Drag and drop** agents between groups to reorganize quickly
-- **Collapse groups** you're not currently using to keep the sidebar clean
-- **Rename groups** anytime — your agents stay exactly where they are
+- **Create groups** as needed — no limit on count
+- **Drag to reorganize** — drop an agent on a group to move it, or rearrange the list by dropping between siblings
+- **Per-group icons and colors** — pick an icon that hints at the group's theme so you find the right group at a glance
+- **Collapse to declutter** — collapsed groups stay collapsed across sessions so a long list doesn't fight you on startup
+- **Nest one level** — useful for "Personal > Email", "Work > Research", etc.
 
 ### How It Works
 
-Right-click in the sidebar and select \`New Group\`. Give it a name and drag agents into it. You can nest groups, reorder them, and rename them freely. Agents can only belong to one group at a time, but you can move them whenever you like.
+Right-click in the agent sidebar to add a group, or drag an existing group onto another to nest it. Groups are persisted in the local database and don't affect agent execution — they're purely an organization layer. Agents can be in one group at a time but move freely between them.
 
 :::tip
-Create a "Testing" group for agents you're still experimenting with. This keeps your production agents separate from works-in-progress.
+A "Drafts" or "Experimental" group at the top of your sidebar is a useful pattern. Anything you're still iterating on lives there, and your production agents stay in clearly-named groups below. Visual separation reduces the chance of editing the wrong agent.
 :::
   `,
 
   "disabling-and-archiving-agents": `
 ## Disabling and Archiving Agents
 
-Sometimes you need to stop an agent without deleting it. **Disabling** pauses an agent — all its triggers stop firing and it won't run until you re-enable it. Everything else stays intact: instructions, history, settings. It's like putting an agent on vacation.
+Two ways to pause an agent without deleting it. **Disable** stops all triggers from firing and blocks manual runs; the agent stays visible in the sidebar with a muted icon so you remember it exists. **Archive** moves the agent into a hidden archive section out of the way of daily use; it stops triggering, doesn't count against tier limits, and can be restored at any time.
 
-**Archiving** goes a step further. It removes the agent from your active sidebar and tucks it away in the archive section. You can restore an archived agent at any time, so nothing is ever truly lost.
+Neither operation touches executions, settings, or version history. Archive is heavier — use it for agents you're done with for now but might want back. Disable is lighter — use it when you need to stop an agent temporarily without losing it from view.
 
 ### Key Points
 
-- **Disable** — stops all triggers and manual runs; settings and history preserved
-- **Archive** — hides the agent from your sidebar; fully restorable at any time
-- **Neither option deletes** anything — your work is always safe
-- Archived agents don't count toward your active agent limit on lower tiers
+- **Disable** — pauses execution; agent still visible in the sidebar; one-click re-enable
+- **Archive** — hides the agent and frees up its slot against your tier limit; restorable forever
+- **Neither deletes** — settings, prompt history, and past executions are preserved
+- **Triggers respect disable** — a disabled agent ignores schedule/webhook/file-watcher events; they don't queue up for replay on re-enable
 
 ### How It Works
 
-Open an agent's three-dot menu and select \`Disable\` or \`Archive\`. Disabled agents show a muted icon in the sidebar. Archived agents move to the \`Archive\` section, accessible from the bottom of the sidebar. To bring one back, find it in the archive and click \`Restore\`.
+Open the three-dot menu in the agent editor toolbar or right-click the agent in the sidebar. Disable / Archive / Restore all live there. Archived agents are accessible from the Archive section at the bottom of the agent sidebar; restoring puts the agent back in its original group (or in an "Ungrouped" bucket if the group has been deleted in the meantime).
 
 :::tip
-Archive seasonal agents instead of deleting them. When the season comes around again, just restore and they're ready to go.
+Archive seasonal agents (quarterly reports, holiday workflows, end-of-month reconciliations) instead of deleting. Restore them when the season comes back around and they're ready to run immediately.
 :::
   `,
 
@@ -306,17 +307,21 @@ Personas continuously tracks execution results, credential expiry, and configura
 
 | Color | Status | Meaning |
 |---|---|---|
-| **Green** | Healthy | All recent runs succeeded, no issues detected |
-| **Yellow** | Warning | Something may need attention soon (expiring credential, slow performance) |
+| **Green** | Healthy | All recent runs succeeded, no issues detected, setup complete |
+| **Yellow** | Warning | Something may need attention soon (expiring credential, slow performance, setup partially complete) |
 | **Red** | Error | The agent failed recently or has a configuration problem |
 | **Gray** | Inactive | Disabled or never run |
 
+### Setup Status
+
+Alongside health, every agent has a **setup status** indicating how ready it is to run autonomously. A freshly-promoted agent often has setup gaps — a missing credential, an unconfigured trigger, an output channel still being wired up. The setup status badge surfaces exactly what's left to do, in priority order, so you don't have to hunt through tabs to find out what's blocking. Agents with persistent setup problems are automatically pulled out of any scheduled or triggered rotation by a circuit-breaker, so you'll never have a half-configured agent running silently against bad data.
+
 ### How It Works
 
-Health is calculated automatically based on recent execution results, credential status, and configuration completeness. Click on the indicator to see a summary of what's causing the current status. From there, you can jump directly to the settings or logs that need attention.
+Health is calculated automatically based on recent execution results, credential status, and configuration completeness. Click on the indicator to see a summary of what's causing the current status — including any setup gaps. From there, you can jump directly to the settings, logs, or specific tab that needs attention.
 
 :::tip
-Make it a habit to scan your sidebar colors once a day. Catching a yellow indicator early prevents it from becoming a red one.
+Make it a habit to scan your sidebar colors once a day. Catching a yellow indicator early prevents it from becoming a red one — and resolving setup gaps right after promotion is the cheapest moment to do it.
 :::
   `,
 };

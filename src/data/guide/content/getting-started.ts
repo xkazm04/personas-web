@@ -2,287 +2,293 @@ export const content: Record<string, string> = {
   "installing-personas": `
 ## Installing Personas
 
-Getting Personas on your computer takes about a minute. Head to the download page, grab the installer for your operating system — Windows, macOS, or Linux — and run it. The installer is a single file with no complicated setup wizard. Just double-click, follow the prompts, and you're done.
+Personas runs on **Windows** today. macOS and Linux builds are on the roadmap — see the cards below for current platform availability.
 
-Once installed, Personas opens to a welcome screen that walks you through connecting your first AI provider. You can skip this step and do it later, but having a provider connected right away means you can start building agents immediately.
+Getting Personas on your Windows machine takes about a minute. Download the installer, run it, approve the SmartScreen prompt, and the app launches. Updates are delivered automatically in the background, so you'll always have the latest version without doing anything.
+
+:::cards
+[available] Windows | The Windows installer is a 53 MB NSIS \`.exe\`. Code-signed, auto-updating, runs on Windows 10 or newer (64-bit). | /imgs/get-started/platform/windows
+[roadmap] macOS | Native universal \`.dmg\` for Apple Silicon and Intel is in development. Track progress on the roadmap. | /imgs/get-started/platform/mac
+[roadmap] Linux | \`.AppImage\` and \`.deb\` builds for Ubuntu, Debian, Fedora, and Arch are in development. Track progress on the roadmap. | /imgs/get-started/platform/linux
+:::
+
+### Precondition: Install Claude Code
+
+Personas builds on top of **Claude Code** for its agent execution engine, so Claude Code needs to be installed first. The Claude Code installer is a single file from Anthropic and takes under a minute.
 
 :::steps
-1. **Download the installer** — grab the single-file installer for your OS from the official website
-2. **Run the installer** — double-click on Windows, drag to Applications on macOS
-3. **Approve security prompts** — your OS may ask you to confirm running new software
-4. **Launch Personas** — the app opens to a welcome screen with a provider setup wizard
-5. **Connect a provider (optional)** — paste an API key to start building agents immediately
+1. **Open the Claude Code installer page** — head to [claude.com/claude-code](https://claude.com/claude-code) and follow the install flow for your platform
+2. **Confirm the install** — run \`claude --version\` in a terminal to verify the binary is on your PATH
+3. **Continue with Personas below** — Claude Code only needs to be installed once; subsequent Personas updates don't require reinstalling it
 :::
 
 :::info
-Works on **Windows 10+**, **macOS 12+**, and most modern **Linux** distributions. Updates are automatic — you'll always have the latest version.
+If you already have Claude Code installed for other work, skip this section — Personas will pick up your existing install automatically.
 :::
 
+### Windows install
+
+:::steps
+1. **Download the installer** — grab the NSIS \`.exe\` from the download page
+2. **Double-click to run** — SmartScreen may ask you to confirm the publisher the first time; the installer is code-signed, so it's safe to approve
+3. **Approve security prompts** — Windows may ask you to allow the install; this is standard for new desktop software
+4. **Tick "Add to PATH"** — optional but recommended so you can launch and script Personas from a terminal
+5. **Launch Personas** — the welcome screen opens with a guided tour you can take or skip
+:::
+
+After install, the bundled binary is around 90 MB. Auto-updates run silently in the background, delta-only — typically much smaller than the original installer.
+
+The first time the app opens, you land on the welcome screen. From there you can either jump straight into building an agent (Personas will offer to set up an AI provider when you need one) or open the credential vault first if you already have API keys you want to store. Both paths work.
+
+### Verifying your install
+
+Once Personas is installed, you can confirm it's reachable from your terminal. This is handy for scripting, CI integration, or just a quick sanity check after a fresh install.
+
+:::cli
+$ personas --version
+:::
+
+Print the available flags:
+
+:::cli
+$ personas --help
+:::
+
+If your shell can't find the \`personas\` command, the desktop launcher still works — the CLI is an optional convenience that the installer wires up only when you tick "Add to PATH" during setup. Re-run the installer and tick that option if you want it later.
+
 :::tip
-If you run into a security warning, it's just your operating system being cautious with new software. Approve it and you're all set.
+If you run into a Windows SmartScreen warning, it's your OS being cautious with new software. Approve it and you're all set — the installer is code-signed.
 :::
   `,
 
   "creating-your-first-agent": `
 ## Creating Your First Agent
 
-Building your first agent is a five-minute journey from a blank slate to a working assistant. Click \`Create Agent\` on the main screen, give your agent a name (like "Email Summarizer" or "Daily Reporter"), and write a short description of what you want it to do.
+Your first agent takes about five minutes from blank slate to working assistant. You have two paths: **start from a template** (recommended for your first agent — the build engine assembles a working configuration from your answers) or **start from scratch** (full manual control). Both end up at the same place: an agent you can run.
 
-Next, you'll write your agent's instructions — think of this as explaining a task to a helpful colleague. Be clear and specific. For example: "Read my latest 5 emails and write a one-paragraph summary of each." That's all it takes to get started.
+If you pick the template path, the build engine kicks off an interactive session. It asks clarifying questions in batches ("what kind of input do you expect?", "where should the output go?", "how often should this run?"), proposes parameters based on your answers, and shows a live preview of the agent it's about to build. You approve at the end, and the agent lands ready to test.
+
+If you pick the from-scratch path, you write the prompt yourself, pick the AI model, attach any tools, and save.
 
 :::steps
-1. **Click \`Create Agent\`** — find the button on the home screen or press \`Ctrl+N\`
-2. **Name your agent** — choose a name and icon that helps you recognize it at a glance
-3. **Write your instructions** — tell the agent what to do in plain language
-4. **Select an AI model** — Claude is a great default choice for most tasks
-5. **Hit \`Save\`** — your agent is ready to run
+1. **Open the Agents page** — sidebar → Agents, or press \`Ctrl+1\` to jump there
+2. **Click Create Agent** — pick a path: pick a template, or start blank
+3. **Answer the build questions (template path)** — the build engine batches clarifying questions per capability and shows a live preview as your answers shape the agent
+4. **Adjust the prompt and tools** — fine-tune the instructions the template produced (or write them from scratch)
+5. **Promote when ready** — moves the agent from draft to active; setup-status checks run automatically to flag any unconnected credentials or unconfigured triggers before you can promote
 :::
 
 ### How It Works
 
-When you create an agent, you're essentially writing a job description. The AI model reads your instructions and follows them each time the agent runs. The better your instructions, the better the results.
+The template path is the fastest way to get a *good* agent (templates are designed and tested by us), but you'll outgrow it. Once you've shipped a couple of template-based agents, you'll start writing prompts directly and treating templates as starting points rather than full solutions.
 
 :::tip
-Start simple. You can always add more detail to your instructions later as you see how your agent performs.
+Don't worry about perfecting your first agent. The version history (covered later) means you can experiment freely — every save is a checkpoint you can return to.
 :::
   `,
 
   "understanding-the-interface": `
 ## Understanding the Interface
 
-The Personas interface is designed to feel familiar, even if you've never used an AI tool before. On the left, you'll find the **sidebar** — your main navigation hub. It lists your agents, pipelines, and key sections like credentials and monitoring. The center area is your **workspace**, where you build and configure things.
+The Personas interface has three main regions. The **sidebar** on the left is your top-level navigation — Home, Overview, Agents, Events, Connections, Templates, Plugins, Schedules, Pipeline, Deployment, and Settings. Click a top-level section and a second-level nav appears showing its sub-pages (e.g. clicking Agents reveals All Agents, plus the Editor tabs for the currently-selected agent: Prompt, Connectors, Lab, Activity, Health, Settings).
 
-At the top, you'll see a search bar and quick-action buttons. The bottom bar shows system status and any running agents. Everything is organized so the things you use most are never more than one or two clicks away.
+The center area is the **workspace** where everything actually happens — editing prompts, watching executions, browsing the credential catalog. The **title bar** at the top holds the notification bell (click for the freshest execution detail), the cockpit access ("Talk to Athena"), and the global search. The **bottom strip** shows active executions and any urgent system events.
 
-| Area | What It Does | Where to Find It |
-|------|-------------|-------------------|
-| Sidebar | Navigate between agents, pipelines, testing, and settings | Left edge of the window |
-| Workspace | Build, configure, and view content | Center of the screen |
-| Top bar | Search, notifications, and quick actions | Top edge |
-| Status bar | Running agents and system health | Bottom edge |
+| Region | What it does |
+|------|-------------|
+| Sidebar Level 1 | Top-level sections — Home, Overview, Agents, Events, Connections, Templates, Plugins, Schedules, Pipeline, Deployment, Settings |
+| Sidebar Level 2 | Context-sensitive sub-nav for the active section |
+| Workspace | The main editor / browser / dashboard for whatever section you're on |
+| Title bar | Notification bell, cockpit shortcut, global search, app controls |
+| Bottom strip | Active executions, system status |
 
 ### How It Works
 
-Think of the sidebar as a table of contents and the workspace as the page you're reading. Click something in the sidebar, and it opens in the workspace. You can resize the sidebar or collapse it to get more room. Most actions are also available through keyboard shortcuts.
+Most of what you do happens by clicking a sidebar item and editing in the workspace. The title-bar notification bell is the one universal shortcut worth memorizing — it always opens the most recent execution detail, no matter where you are. The cockpit shortcut ("Talk to Athena") opens an in-app chat with the companion that can help you build, debug, or just answer questions about your setup.
+
+### Keyboard shortcuts
+
+A handful of shortcuts cover most everyday navigation. \`Ctrl+K\` opens global search (find any agent, page, or setting by name). \`Ctrl+1\`–\`Ctrl+9\` jump directly to top-level sidebar sections. \`Ctrl+Enter\` runs the focused agent. \`Ctrl+Shift+P\` opens the command palette — type a verb (\`run\`, \`clone\`, \`disable\`, \`open\`) plus a target name to act on anything without navigating.
+
+You can customize any binding in **Settings → Appearance → Keyboard Shortcuts**; defaults follow OS conventions where possible.
+
+:::keys
+Ctrl+K — Global search (find anything by name)
+Ctrl+N — Create a new agent
+Ctrl+Enter — Run the focused agent
+Ctrl+S — Save changes in the current editor
+Ctrl+/ — Toggle the sidebar open/closed
+Ctrl+, — Open Settings
+Ctrl+? — Show the keyboard shortcut cheat sheet
+Ctrl+Shift+P — Open the command palette
+Ctrl+1 — Home
+Ctrl+2 — Overview
+Ctrl+3 — Agents
+Ctrl+4 — Events
+Ctrl+5 — Connections
+Ctrl+6 — Templates
+Ctrl+7 — Plugins
+:::
 
 :::tip
-Hover over any icon to see a tooltip explaining what it does. This is a great way to learn the interface as you go.
+Start with \`Ctrl+K\`. Type a few letters of an agent name and hit Enter — that one shortcut covers maybe 60% of everyday navigation.
 :::
   `,
 
   "what-is-an-ai-agent": `
 ## What Is an AI Agent?
 
-An AI agent is like a smart assistant that follows your instructions to complete tasks automatically. You tell it what to do, give it the tools it needs, and it handles the rest. Unlike a simple chatbot that just answers questions, an agent can take actions — send emails, process files, search the web, and more.
+An AI agent is a configured AI model with a job. You give it instructions ("read my unread emails and summarize the important ones"), tell it which tools it can use, and trigger it — manually with a button, on a schedule, on an event, or as a step in a pipeline. The agent reads the trigger payload, follows your instructions, calls any tools it needs, and produces an output. Unlike a chatbot, ==the agent acts==: sends the email, writes the file, posts to Slack.
 
-Think of it this way: a chatbot is like asking a friend for advice, while an agent is like hiring an assistant who actually does the work for you. You write the instructions once, and your agent can repeat that task as many times as you need.
+Each agent in Personas is durable — it remembers its setup, its history, its credentials, and (optionally) memories from past runs. You can clone it, version-control its prompt, run it in an arena against alternative prompts to see which performs better, and chain it to other agents to build multi-step workflows.
 
 :::compare
 **Chatbot**
-Answers questions and makes suggestions. You type, it responds. Interaction is manual and one-off — the chatbot doesn't take actions or remember across sessions. Great for quick lookups, but you do all the work.
+You type a question, it replies. Each turn is one-shot. Useful for quick lookups, brainstorming, drafting. No actions, no memory across sessions, no automation.
 ---
 **AI Agent** [recommended]
-Completes tasks from start to finish. You write instructions once, and the agent executes them — sending emails, processing files, searching the web. Runs on schedules, triggers, or manually. The agent does the work for you.
+A persistent configuration with a job. Triggered manually or automatically; uses tools to act; has version-controlled prompt, attached credentials, execution history, and a health indicator. The model is the engine, but the agent is the whole assembly around it.
 :::
 
 ### How It Works
 
-:::diagram
-[You write instructions] --> [Agent reads them] --> [AI model processes] --> [Tools execute actions] --> [Results delivered]
-:::
+![Agent orchestration overview: trigger fires, agent reads input, model and tools execute, output dispatched](/imgs/features/orchestration.png)
 
-You create an agent by describing a task in everyday language. The AI model reads your instructions and carries them out using the tools you've provided. For example, an agent with email access can read your inbox, draft replies, and send them — all based on the rules you set.
+The trigger packs an input payload (a webhook body, a clipboard string, a file path, an event from another agent…). The agent reads its prompt, feeds it to the AI model along with the input, and lets the model call attached tools as needed. The final output is dispatched through whatever output channel you configured — back to a UI, written to a file, posted to Slack, or chained as input to the next agent.
 
 :::tip
-Start by thinking about a repetitive task you do every week. That's usually the perfect first job for an agent.
+The fastest way to understand agents is to look at your repetitive weekly tasks and ask: "could this be triggered, instructed, and automated?" If yes, that task is an agent.
 :::
   `,
 
   "running-your-first-automation": `
 ## Running Your First Automation
 
-You've built your agent — now it's time to see it in action. Open your agent and click the **\`Run\`** button. Your agent will start processing, and you'll see a live feed of what it's doing. Within seconds (or minutes, depending on the task), you'll have results.
+Once you've created an agent, you have several ways to start it. The simplest is the manual **Run** button at the top of the agent editor — click it and you'll see the live execution stream in the activity panel. Within a few seconds (or a couple of minutes for slower providers or longer prompts), the output appears.
 
-It's like pressing play on a recipe — your agent does the cooking while you watch. The results appear in the output panel, where you can read, copy, or save them. If something doesn't look right, you can tweak your instructions and run again.
+For repeating work, add a schedule trigger, a webhook trigger, a file-watcher trigger, or a chain trigger so the agent runs on its own. You set the trigger once, the agent does the rest.
 
 :::steps
-1. **Open your agent** — find it in the sidebar and click to select it
-2. **Click the green \`Run\` button** — at the top of the workspace
-3. **Watch the live feed** — see your agent work through the task in real time
-4. **Review the results** — read, copy, or save the output
-5. **Iterate if needed** — adjust your instructions and run again
+1. **Open the agent** — find it on the Agents page; the editor opens with the Prompt tab focused
+2. **Click Run** — the workspace switches to the Activity tab automatically; you see the prompt being constructed, the model call going out, and tokens streaming back
+3. **Watch the live feed** — each agent has its own stream so you can run multiple in parallel without confusion
+4. **Review the output** — the activity row expands to show the full prompt, the model response, any tool calls made, the duration, and the cost
+5. **Iterate** — change the prompt or settings, save, run again; every run is checkpointed
 :::
 
 ### How It Works
 
-When you hit run, your instructions are sent to the AI model along with any data or tools the agent needs. The model processes everything and returns the result. The whole cycle typically takes a few seconds to a couple of minutes.
+![Lab view of a single execution trace showing prompt construction, model call, tool calls, and output](/imgs/features/lab.png)
+
+A run is a single execution: trigger → prompt-construction → model-call → tool-calls → output. Every step is captured in the execution trace, and the run lands in the Activity tab of the Overview page (the global view across all agents) and in the agent's own Activity tab. From either place you can click into the run for the full detail modal.
+
+If a run fails (model error, expired credential, network blip), the agent's health indicator turns yellow or red and the failure is preserved in the trace so you can debug.
 
 :::tip
-Your first run is a learning experience. Don't worry if the output isn't perfect — small adjustments to your instructions usually make a big difference.
+Your first run is partly about learning what your prompt actually does in practice. If the output isn't what you wanted, the trace shows you exactly what the model received — usually the fix is to clarify or constrain the prompt rather than retry.
 :::
   `,
 
   "choosing-your-ai-provider": `
 ## Choosing Your AI Provider
 
-AI providers are the engines that power your agents. Personas supports several providers — including Claude (by Anthropic), OpenAI, Google Gemini, and others. Each has different strengths: some are better at creative writing, others excel at analysis or following complex instructions.
+Personas supports the major AI providers — **Anthropic** (Claude family), **OpenAI** (GPT family), **Google** (Gemini), and **local models** via Ollama or any OpenAI-compatible endpoint. You can also configure custom providers in Settings → Custom Models. Each agent picks its provider/model independently, so you can run cheap models on routine work and reserve expensive ones for tasks that need them.
 
-You're not locked into one choice. You can assign different providers to different agents, and switch anytime. Most users start with one provider and experiment with others as they get comfortable.
+Connect a provider once on the Connections page (you'll paste an API key — encrypted in the local vault — or run through OAuth for providers that support it). After that, every agent's model picker shows the configured providers and their models.
 
 :::compare
-**Claude (Anthropic)** [recommended]
-Best for following detailed instructions. Excels at nuance, safety-aware responses, and working with long documents. A great default choice for most agent tasks.
+**Anthropic Claude** [recommended]
+Strong instruction-following, long-context reasoning, structured output. Sonnet 4.6 is the default for new agents. Opus models for hardest reasoning, Haiku for speed/cost. Excellent at tool-use loops.
 ---
-**OpenAI (GPT)**
-Best for general-purpose tasks. Offers versatility and a wide ecosystem of integrations. Strong all-rounder with the largest community.
+**OpenAI GPT**
+Broadest ecosystem and the most-tested for many use cases. Solid all-rounder; GPT-4o-class models are strong for general assistant work.
 ---
 **Google Gemini**
-Best for research and processing large text. Fast responses and multimodal input support (text, images, code).
+Multimodal, large context windows, fast first-token latency. Strong for research / document-processing agents.
 ---
-**Local Models (Ollama)**
-Best for privacy-sensitive work. Your data never leaves your machine. Trade-off: smaller models may be less capable than cloud providers.
+**Local (Ollama / OpenAI-compatible)**
+Runs on your machine — zero data leaves the device. Smaller models, but for low-stakes or private work the trade-off is often worth it.
 :::
 
 ### How It Works
 
-Go to \`Settings\` and add your provider's API key (a special password that connects your account). Once connected, you'll see the provider as an option when creating or editing agents. You can also set a default provider so new agents use it automatically.
+Once multiple providers are connected, Personas can do automatic failover at the agent level: if your primary provider returns errors above a threshold, the agent's next run uses the configured fallback provider. When the primary recovers, normal rotation resumes. This is configured per-agent in the Editor → Settings tab.
+
+For cost tracking, every run is tagged with provider, model, and token count, so the Overview → Usage tab can break down spending by provider, model, or agent.
 
 ### See It In Action
 
 :::usecases
-**Model-Per-Agent Strategy**
-You have agents with different needs
+**Model-per-agent strategy**
+Your agents have different needs
 ---
-Code review agent uses Claude (best at reasoning), email summarizer uses GPT-4o-mini (fast and cheap), and your private data agent runs on Ollama locally.
+Code-review agent uses Claude Opus (best reasoning); email summarizer uses Haiku (fast and cheap); a personal/private agent runs on Ollama locally.
 ===
-**Provider Outage Recovery**
-OpenAI goes down during a critical batch
+**Provider outage failover**
+A provider has a regional outage
 ---
-Your agents automatically switch to Claude, finish the batch, and switch back when OpenAI recovers. Zero manual intervention.
+Affected agents automatically route to the configured fallback; the Health tab shows which agents are running on fallback and surfaces the recovery once the primary comes back.
 ===
-**Cost Control**
-Monthly AI costs are climbing
+**Cost reduction**
+Monthly AI spend creeps up
 ---
-The cost dashboard shows which agents spend the most. You reassign expensive agents to cheaper models and cut costs significantly.
+Overview → Usage shows which agents and models dominate the spend. Swap the top-cost agents to a cheaper tier (Sonnet → Haiku, GPT-4o → GPT-4o-mini); the Lab can A-B them first to confirm quality holds.
 :::
 
-:::info
-Failover works through a per-provider health score. When a provider's error rate crosses a threshold, Personas seamlessly routes new runs to the next healthy provider in your priority list. When the failed provider recovers, it automatically rejoins rotation.
-:::
-
-:::tip
-Most providers offer free credits for new users. Try a couple before committing to find the best fit for your typical tasks.
-:::
-  `,
-
-  "starter-vs-team-vs-builder-tiers": `
-## Starter vs Team vs Builder Tiers
-
-Personas offers three tiers to match different needs. **Starter** is free and perfect for trying things out — you get access to basic agents, a handful of triggers, and enough features to automate simple tasks. It's a great way to explore without any commitment.
-
-**Team** adds collaboration features, letting multiple people share agents and work together. **Builder** unlocks the most advanced features — complex pipelines, genome evolution, and unlimited triggers. You can upgrade or downgrade anytime, and your agents stay intact.
-
-:::compare
-**Starter (Free)**
-Up to 5 agents with manual + schedule triggers. Local-only deployment. Basic testing capabilities and community support. Perfect for learning and personal automation.
----
-**Team**
-Unlimited agents with all trigger types. Team pipelines and full testing lab. Cloud deployment with priority support. Built for collaboration.
----
-**Builder** [recommended]
-Everything in Team plus advanced pipelines, genome evolution, and BYOI (Bring Your Own Infrastructure). The full power of Personas, unrestricted.
-:::
-
-### How It Works
-
-Your tier is managed in \`Settings > Subscription\`. Upgrading takes effect immediately — new features appear right away. Downgrading keeps your existing agents but disables tier-specific features until you upgrade again. No data is ever deleted when changing tiers.
-
-:::tip
-Start with Starter to learn the basics. You'll know when you need more — that's the right time to upgrade.
+:::callout-stack
+[info] Default provider for new agents is set in **Settings → Engine**. You can override on every agent.
+[tip] Most providers offer free trial credits. Connect two or three and run the same prompt against each in the Lab arena — you'll feel the personality differences and pick a default that fits your style.
 :::
   `,
 
   "system-requirements": `
 ## System Requirements
 
-Personas is designed to be lightweight and run on most modern computers. You don't need a powerful gaming machine or a fancy setup — if your computer can run a web browser smoothly, it can run Personas.
+Personas is a Tauri desktop app — Rust backend, React frontend, local SQLite database — and it's intentionally lightweight. Most of the heavy compute happens on the AI provider's servers, not your machine. The app idles at near-zero CPU and uses a few hundred megabytes of RAM; it scales up only when agents are actively running locally.
 
-The app uses minimal resources when idle and scales up only when agents are actively running. Most of the heavy lifting happens on the AI provider's servers, not on your computer.
+The bundled binary is about 90 MB after install. Plugins (Artist for image generation, Obsidian Brain for vector search) can add to that footprint if you enable them.
 
 :::checklist
 - Windows 10+, macOS 12+, or Ubuntu 20.04+ (latest version recommended)
-- At least 4 GB RAM (8 GB+ recommended)
-- 500 MB free disk space (1 GB+ recommended)
-- Stable internet connection (broadband recommended)
-- Any modern dual-core CPU (quad-core recommended)
+- 4 GB RAM minimum (8 GB+ recommended if you use the embeddings / vector-search plugins)
+- 1 GB free disk space (more if you enable the Artist plugin's local models)
+- Stable broadband — agent execution is bound by the AI provider's API latency
+- Any modern dual-core CPU; quad-core or better recommended for parallel multi-agent runs
 :::
 
 ### How It Works
 
-Personas runs as a desktop application with a local database that stores your agents, credentials, and settings on your own machine. When an agent runs, it communicates with your chosen AI provider over the internet. The results come back and are stored locally.
+The app stores its database (\`personas.db\`), credential vault, execution history, and configuration locally in your OS-specific app-data directory. Nothing is uploaded unless you explicitly enable cloud deployment or use a cloud AI provider. Plugins that ship local models (e.g. the Artist plugin's image-gen + Gemini vision) download the model files on first use.
+
+The Windows build uses ONNX Runtime for embedding when the vector-knowledge-base feature is enabled; this is the largest single dependency in that case.
 
 :::tip
-If you notice slowness, check that other apps aren't using too much memory. Closing unused browser tabs is often the quickest fix.
-:::
-  `,
-
-  "keyboard-shortcuts-and-tips": `
-## Keyboard Shortcuts and Tips
-
-Once you learn a few key shortcuts, everyday tasks become almost instant. Instead of clicking through menus, you can create agents, run tasks, and navigate the app with quick key combinations. It's like learning to touch-type — awkward at first, but soon it's second nature.
-
-The shortcuts are designed to be intuitive. Most follow standard patterns you already know from other apps, like \`Ctrl+N\` for new and \`Ctrl+S\` for save.
-
-### Essential Shortcuts
-
-:::keys
-Ctrl+N — Create a new agent
-Ctrl+Enter — Run the current agent
-Ctrl+S — Save your changes
-Ctrl+K — Open quick search to find anything
-Ctrl+/ — Toggle the sidebar open or closed
-Ctrl+, — Open settings
-:::
-
-### Navigation Shortcuts
-
-:::keys
-Ctrl+1 — Go to Home
-Ctrl+2 — Go to Agents
-Ctrl+3 — Go to Events
-Ctrl+Shift+P — Open command palette
-:::
-
-### How It Works
-
-Shortcuts work anywhere in the app. You can also customize them in \`Settings > Keyboard Shortcuts\` if you prefer different combinations. A handy cheat sheet is available anytime by pressing \`Ctrl+?\`.
-
-:::tip
-You don't need to memorize everything at once. Start with \`Ctrl+K\` (quick search) — it lets you find and open anything by typing a few letters.
+If you see the app feel slow during a multi-agent run, open the Health tab — it shows which agents and which dependencies (model calls, tool calls, ONNX inference) are contributing to the load.
 :::
   `,
 
   "where-to-get-help": `
 ## Where to Get Help
 
-You're never stuck alone with Personas. There are several ways to get help, whether you prefer reading guides, chatting with other users, or reaching out to the support team directly. Most questions have already been answered somewhere — the trick is knowing where to look.
+You're never stuck. **In-app help** is the fastest path: the cockpit chat ("Talk to Athena" in the title bar) is an LLM-powered companion that knows your setup, your recent executions, and the product. Ask it questions in plain English and it can also propose configuration changes, link you to the right tab, or open a debug session on a failing run.
 
-The community is friendly and active, and the documentation covers everything from beginner basics to advanced techniques.
+For things the in-app companion can't answer, the **guide** (this site) is the long-form reference, the **community Discord** is where you ask other users and the team, and **email support** is for account or billing issues.
 
-| Resource | Best For | Response Time |
+| Resource | Best for | Response time |
 |----------|----------|---------------|
-| This Guide | Feature explanations, how-tos | Instant |
-| Discord Community | Quick questions, tips | Minutes |
-| Documentation Site | Detailed articles, tutorials | Instant |
-| Support Email | Account or technical issues | Hours |
-| Video Tutorials | Visual walkthroughs | Instant |
+| Cockpit / Athena (in-app) | Setup questions, debugging, "where is X?" | Instant |
+| This Guide | Feature reference and how-tos | Instant |
+| Documentation site | Architecture, schema, advanced integrations | Instant |
+| Discord community | Tips, recipes, "is anyone else seeing…?" | Minutes |
+| Support email | Account, billing, security | Hours |
+| Video tutorials | Visual walkthroughs of key flows | Instant |
 
 ### How It Works
 
-For quick questions, start with the built-in guide or search the Discord community — chances are someone has asked the same thing. For bugs or account issues, the support team typically responds within a few hours.
+The cockpit has access to a doctrine — a curated body of knowledge about the product — and to your local state (anonymized). It can search your executions, recommend changes, and even compose inline UI cards to walk you through a fix step by step. If it can't answer, it'll suggest the right external resource.
 
 :::tip
-The Discord community is the fastest way to get help. Other users often reply within minutes, and the team monitors it daily.
+For "I think something's broken" questions, open Athena first and ask "diagnose the last failing run of agent X". The cockpit's debug flow is built for this and usually beats reading logs manually.
 :::
   `,
 };

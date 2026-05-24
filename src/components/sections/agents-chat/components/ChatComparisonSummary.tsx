@@ -1,8 +1,10 @@
 "use client";
 
-import { AnimatePresence, motion } from "framer-motion";
+import { AnimatePresence, motion, useReducedMotion } from "framer-motion";
 import { Zap } from "lucide-react";
 import type { ChatScenario } from "../types";
+
+const FALLBACK_TIMESTAMP = "—";
 
 export default function ChatComparisonSummary({
   scenario,
@@ -11,6 +13,15 @@ export default function ChatComparisonSummary({
   scenario: ChatScenario;
   showSatisfaction: boolean;
 }) {
+  const prefersReduced = useReducedMotion();
+  // Guard: an empty messages array (data-edit slip, partial i18n migration,
+  // future async load) would otherwise crash the whole chat section because
+  // arr[arr.length - 1].timestamp dereferences `undefined`.
+  const workflowLast = scenario.workflow.messages.at(-1);
+  const agentLast = scenario.agent.messages.at(-1);
+  const workflowElapsed = workflowLast?.timestamp ?? FALLBACK_TIMESTAMP;
+  const agentElapsed = agentLast?.timestamp ?? FALLBACK_TIMESTAMP;
+
   return (
     <AnimatePresence>
       {showSatisfaction && (
@@ -30,16 +41,19 @@ export default function ChatComparisonSummary({
                 {scenario.workflow.messages.length} msgs
               </div>
               <div className="text-base text-brand-rose/70 font-mono">
-                {scenario.workflow.messages[scenario.workflow.messages.length - 1].timestamp}{" "}
-                elapsed
+                {workflowElapsed} elapsed
               </div>
             </div>
 
             <div className="text-center">
               <motion.div
                 initial={{ rotate: 0 }}
-                animate={{ rotate: 360 }}
-                transition={{ duration: 2, repeat: Infinity, ease: "linear" }}
+                animate={prefersReduced ? { rotate: 0 } : { rotate: 360 }}
+                transition={
+                  prefersReduced
+                    ? { duration: 0 }
+                    : { duration: 2, repeat: Infinity, ease: "linear" }
+                }
                 className="mx-auto h-8 w-8 rounded-full border border-brand-cyan/20 flex items-center justify-center mb-1"
               >
                 <Zap className="h-4 w-4 text-brand-cyan" />
@@ -55,8 +69,7 @@ export default function ChatComparisonSummary({
                 {scenario.agent.messages.length} msgs
               </div>
               <div className="text-base text-brand-emerald/70 font-mono">
-                {scenario.agent.messages[scenario.agent.messages.length - 1].timestamp}{" "}
-                elapsed
+                {agentElapsed} elapsed
               </div>
             </div>
           </div>

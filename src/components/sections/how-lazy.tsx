@@ -1,6 +1,5 @@
 "use client";
 
-import dynamic from "next/dynamic";
 import { TerminalPanel } from "@/components/primitives";
 import { createLazySection, SectionSkeleton, Ps, Pm } from "./LazySection";
 
@@ -41,35 +40,26 @@ function EventBusShowcaseSkeleton() {
   );
 }
 
-const EventBusShowcaseSection = createLazySection(() => import("@/components/sections/EventBusShowcase"), EventBusShowcaseSkeleton);
+export const LazyEventBusShowcase = createLazySection(
+  () => import("@/components/sections/event-bus-showcase"),
+  EventBusShowcaseSkeleton,
+  { ssr: false },
+);
 
-const AgentsTimelineSection = dynamic(() => import("@/components/sections/AgentsTimeline"), {
-  ssr: false,
-  loading: () => <SectionSkeleton />,
-});
+export const LazyAgentsTimeline = createLazySection(
+  () => import("@/components/sections/agents-timeline"),
+  SectionSkeleton,
+  { ssr: false },
+);
 
-const AgentsChatSection = dynamic(() => import("@/components/sections/AgentsChat"), {
-  ssr: false,
-  loading: () => <SectionSkeleton />,
-});
+export const LazyAgentsChat = createLazySection(
+  () => import("@/components/sections/agents-chat"),
+  SectionSkeleton,
+  { ssr: false },
+);
 
-const PlatformLayersSection = dynamic(() => import("@/components/sections/PlatformLayers"), {
-  ssr: false,
-  loading: () => <SectionSkeleton />,
-});
-
-export function LazyAgentsTimeline() {
-  return <AgentsTimelineSection />;
-}
-
-export function LazyAgentsChat() {
-  return <AgentsChatSection />;
-}
-
-export function LazyPlatformLayers() {
-  return <PlatformLayersSection />;
-}
-
-export function LazyEventBusShowcase() {
-  return <EventBusShowcaseSection />;
-}
+export const LazyPlatformLayers = createLazySection(
+  () => import("@/components/sections/platform-layers"),
+  SectionSkeleton,
+  { ssr: false },
+);

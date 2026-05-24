@@ -1,12 +1,13 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
+import { useRef } from "react";
 import { AnimatePresence, motion } from "framer-motion";
 import { Mail } from "lucide-react";
 import SectionWrapper from "@/components/SectionWrapper";
 import ImageBackground from "@/components/ImageBackground";
 import type { ViewerRole } from "@/components/RoleSelector";
 import { useAutoCycle } from "@/hooks/useAutoCycle";
+import { useMaxScrollHeight } from "@/hooks/useMaxScrollHeight";
 import { CYCLE_MS, defaultCopy, roleCopy, scenarios } from "./data";
 import ScenarioHeader from "./components/ScenarioHeader";
 import ScenarioSelector from "./components/ScenarioSelector";
@@ -27,28 +28,13 @@ export default function WhyAgents({ role }: { role?: ViewerRole }) {
     intervalMs: CYCLE_MS,
     respectReducedMotion: false,
   });
-  const [measuredWfHeight, setMeasuredWfHeight] = useState(0);
-  const [measuredAgHeight, setMeasuredAgHeight] = useState(0);
   const measureRef = useRef<HTMLDivElement>(null);
-
-  useEffect(() => {
-    const el = measureRef.current;
-    if (!el) return;
-    const wfPanels = el.querySelectorAll<HTMLElement>("[data-measure-wf]");
-    const agPanels = el.querySelectorAll<HTMLElement>("[data-measure-ag]");
-    let maxWf = 0;
-    let maxAg = 0;
-    wfPanels.forEach((p) => {
-      maxWf = Math.max(maxWf, p.scrollHeight);
-    });
-    agPanels.forEach((p) => {
-      maxAg = Math.max(maxAg, p.scrollHeight);
-    });
-    queueMicrotask(() => {
-      if (maxWf > 0) setMeasuredWfHeight(maxWf);
-      if (maxAg > 0) setMeasuredAgHeight(maxAg);
-    });
-  }, []);
+  // Measure the tallest workflow/agent panel across all scenarios so the
+  // visible duel reserves enough vertical space and doesn't jump on
+  // scenario change. ResizeObserver-backed so font-load and viewport
+  // zoom keep heights fresh.
+  const measuredWfHeight = useMaxScrollHeight(measureRef, "[data-measure-wf]");
+  const measuredAgHeight = useMaxScrollHeight(measureRef, "[data-measure-ag]");
 
   const scenario = scenarios[activeIndex];
 
@@ -69,6 +55,7 @@ export default function WhyAgents({ role }: { role?: ViewerRole }) {
       <ScenarioHeader copy={copy} role={role} />
 
       <ScenarioSelector
+        scenarios={scenarios}
         activeIndex={activeIndex}
         onSelect={(i) => {
           setActiveIndex(i);
@@ -102,6 +89,7 @@ export default function WhyAgents({ role }: { role?: ViewerRole }) {
 
       <ScenarioDuel
         activeIndex={activeIndex}
+        total={scenarios.length}
         scenario={scenario}
         wfMinH={measuredWfHeight}
         agMinH={measuredAgHeight}
@@ -110,6 +98,7 @@ export default function WhyAgents({ role }: { role?: ViewerRole }) {
       />
 
       <ScenarioProgress
+        scenarios={scenarios}
         activeIndex={activeIndex}
         paused={paused}
         scenarioId={scenario.id}

@@ -39,6 +39,20 @@ export function usePolling(
 
   useEffect(() => {
     if (!enabled || isHidden) return;
+    if (!Number.isFinite(intervalMs)) {
+      if (process.env.NODE_ENV !== "production") {
+        console.warn(
+          `[usePolling] non-finite intervalMs (${String(intervalMs)}); polling disabled.`,
+        );
+      }
+      return;
+    }
+    const safeInterval = Math.max(intervalMs, 16);
+    if (process.env.NODE_ENV !== "production" && safeInterval !== intervalMs) {
+      console.warn(
+        `[usePolling] intervalMs=${intervalMs} clamped to ${safeInterval}ms (likely seconds-vs-ms confusion).`,
+      );
+    }
 
     let cancelled = false;
     let timeoutId: ReturnType<typeof setTimeout> | null = null;
@@ -46,7 +60,7 @@ export function usePolling(
     const scheduleNext = () => {
       timeoutId = setTimeout(() => {
         void run();
-      }, intervalMs);
+      }, safeInterval);
     };
 
     const run = async () => {

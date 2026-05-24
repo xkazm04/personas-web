@@ -5,9 +5,8 @@
  * by withWriteLock at the call site to prevent TOCTOU races.
  */
 
-import { promises as fs } from "fs";
-import path from "path";
-import { randomBytes } from "crypto";
+import { hasSupabaseEnv } from "@/lib/server/env";
+import { readJsonFile, writeJsonFile } from "@/lib/server/json-file-store";
 
 export const ALLOWED_FEATURES = new Set([
   "macos",
@@ -43,10 +42,7 @@ export interface ShippedData {
 /* ── Supabase helpers ──────────────────────────────────────────────── */
 
 export function hasSupabase(): boolean {
-  return !!(
-    process.env.NEXT_PUBLIC_SUPABASE_URL &&
-    process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY
-  );
+  return hasSupabaseEnv();
 }
 
 export async function getSupabaseClient() {
@@ -56,34 +52,14 @@ export async function getSupabaseClient() {
 
 /* ── Filesystem fallback ───────────────────────────────────────────── */
 
-const DATA_DIR = path.join(process.cwd(), ".data");
-const VOTES_FILE = path.join(DATA_DIR, "votes.json");
-const SHIPPED_FILE = path.join(DATA_DIR, "shipped.json");
-
 export async function readVotes(): Promise<VotesData> {
-  try {
-    const raw = await fs.readFile(VOTES_FILE, "utf-8");
-    return JSON.parse(raw) as VotesData;
-  } catch {
-    return { entries: [] };
-  }
+  return readJsonFile<VotesData>("votes.json", { entries: [] });
 }
 
 export async function writeVotes(data: VotesData): Promise<void> {
-  await fs.mkdir(DATA_DIR, { recursive: true });
-  const tmpFile = path.join(
-    DATA_DIR,
-    `.votes-${randomBytes(6).toString("hex")}.tmp`,
-  );
-  await fs.writeFile(tmpFile, JSON.stringify(data, null, 2));
-  await fs.rename(tmpFile, VOTES_FILE);
+  await writeJsonFile("votes.json", data);
 }
 
 export async function readShipped(): Promise<ShippedData> {
-  try {
-    const raw = await fs.readFile(SHIPPED_FILE, "utf-8");
-    return JSON.parse(raw) as ShippedData;
-  } catch {
-    return { entries: [] };
-  }
+  return readJsonFile<ShippedData>("shipped.json", { entries: [] });
 }

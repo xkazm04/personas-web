@@ -1,6 +1,6 @@
 "use client";
 
-import { motion } from "framer-motion";
+import { motion, useReducedMotion } from "framer-motion";
 import { Pause, Play, RotateCcw } from "lucide-react";
 import { fadeUp } from "@/lib/animations";
 import { CYCLE_MS, scenarios } from "../data";
@@ -18,6 +18,7 @@ export default function TimelineControls({
   onReplay: () => void;
   onTogglePause: () => void;
 }) {
+  const prefersReduced = useReducedMotion();
   return (
     <motion.div variants={fadeUp} className="mt-6 mx-auto max-w-3xl">
       <div className="flex gap-1.5">
@@ -28,7 +29,7 @@ export default function TimelineControls({
             className="flex-1 cursor-pointer flex items-center min-h-[44px]"
           >
             <div className="relative h-1 w-full rounded-full bg-white/[0.06] overflow-hidden">
-              {i === activeIndex && !paused && (
+              {i === activeIndex && !paused && !prefersReduced && (
                 <motion.div
                   className="absolute inset-y-0 left-0 rounded-full bg-gradient-to-r from-brand-cyan to-brand-purple"
                   initial={{ width: "0%" }}
@@ -37,7 +38,7 @@ export default function TimelineControls({
                   key={`progress-${s.id}`}
                 />
               )}
-              {i === activeIndex && paused && (
+              {i === activeIndex && (paused || prefersReduced) && (
                 <div className="absolute inset-0 rounded-full bg-gradient-to-r from-brand-cyan to-brand-purple" />
               )}
               {i < activeIndex && (

@@ -1,9 +1,10 @@
 "use client";
 
-import * as Sentry from "@sentry/nextjs";
 import Link from "next/link";
 import { useEffect, useState } from "react";
 import { Compass, Home, Activity, RefreshCcw, Copy, Check } from "lucide-react";
+import { captureExceptionScrubbed } from "@/lib/sentry-pii";
+import { BG_NEAR_BLACK, SITE_STATUS_URL } from "@/lib/seo";
 
 export default function GlobalError({
   error,
@@ -15,7 +16,12 @@ export default function GlobalError({
   const [copied, setCopied] = useState(false);
 
   useEffect(() => {
-    Sentry.captureException(error);
+    // Top-level errors carry the most leaky payloads (URLs with query/path
+    // PII, file paths from server stacks, env-var names, third-party API
+    // bodies). Route through the scrubber so message + stack are sanitized
+    // before they ever reach Sentry — the global beforeSend hook still
+    // runs on top of this for defense in depth.
+    captureExceptionScrubbed(error, { tags: { scope: "GlobalError" } });
   }, [error]);
 
   const isDev = process.env.NODE_ENV !== "production";
@@ -34,7 +40,14 @@ export default function GlobalError({
 
   return (
     <html lang="en" className="dark">
-      <body className="relative min-h-screen overflow-hidden bg-[#09090b] text-foreground antialiased">
+      {/* bg-color is BG_NEAR_BLACK (matches PWA manifest's background_color
+          so the install-screen → app-error transition is seamless). The
+          button focus-ring-offset values below repeat the same hex via
+          Tailwind arbitrary syntax — keep all four sites in sync. */}
+      <body
+        style={{ backgroundColor: BG_NEAR_BLACK }}
+        className="relative min-h-screen overflow-hidden text-foreground antialiased"
+      >
         {/* Ambient gradient glow */}
         <div
           aria-hidden="true"
@@ -65,8 +78,10 @@ export default function GlobalError({
                 className="pointer-events-none absolute -inset-px rounded-2xl ring-1 ring-inset ring-brand-cyan/15"
               />
 
-              {/* Icon */}
-              <div className="flex h-14 w-14 items-center justify-center rounded-2xl border border-brand-cyan/25 bg-brand-cyan/10 shadow-[0_0_20px_rgba(6,182,212,0.15)]">
+              {/* Soft breathing aura signals the system is still alive and
+                  listening. Animation is automatically suppressed by the
+                  global `prefers-reduced-motion` rule in globals.css. */}
+              <div className="animate-breathe-glow flex h-14 w-14 items-center justify-center rounded-2xl border border-brand-cyan/25 bg-brand-cyan/10">
                 <Compass className="h-6 w-6 text-brand-cyan" />
               </div>
 
@@ -85,7 +100,7 @@ export default function GlobalError({
                   paths, env var names, third-party stack hints, or upstream API
                   messages. Sentry already captured the full error above. */}
               {isDev && error.message && (
-                <pre className="mt-5 max-h-32 overflow-auto rounded-lg border border-amber-500/20 bg-amber-500/5 p-3 text-[11px] font-mono leading-relaxed text-amber-300/80 whitespace-pre-wrap break-all">
+                <pre className="mt-5 max-h-32 overflow-auto rounded-lg border border-amber-500/20 bg-amber-500/5 p-3 text-xs font-mono leading-relaxed text-amber-300/80 whitespace-pre-wrap break-all">
                   {error.message}
                 </pre>
               )}
@@ -93,14 +108,14 @@ export default function GlobalError({
               {/* Digest — small copyable chip for support */}
               {digest && (
                 <div className="mt-5 flex items-center gap-2">
-                  <span className="text-[11px] font-mono uppercase tracking-wider text-muted-dark/60">
+                  <span className="text-xs font-mono uppercase tracking-wider text-muted-dark/60">
                     Error reference
                   </span>
                   <button
                     type="button"
                     onClick={handleCopyDigest}
                     aria-label="Copy error reference"
-                    className="group inline-flex items-center gap-1.5 rounded-md border border-white/[0.08] bg-white/[0.03] px-2 py-1 font-mono text-[11px] text-muted-dark transition-colors hover:border-white/[0.18] hover:text-foreground"
+                    className="group inline-flex items-center gap-1.5 rounded-md border border-white/[0.08] bg-white/[0.03] px-2 py-1 font-mono text-xs text-muted-dark transition-colors hover:border-white/[0.18] hover:text-foreground"
                   >
                     <code className="select-all">{digest}</code>
                     {copied ? (
@@ -129,15 +144,17 @@ export default function GlobalError({
                   <Home className="h-4 w-4" />
                   Go home
                 </Link>
-                <a
-                  href="https://status.personas.ai"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="inline-flex items-center justify-center gap-2 rounded-full border border-white/[0.06] bg-transparent px-5 py-2.5 text-sm font-medium text-muted-dark transition-all duration-200 hover:border-white/[0.16] hover:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-cyan/40 focus-visible:ring-offset-2 focus-visible:ring-offset-[#09090b]"
-                >
-                  <Activity className="h-4 w-4" />
-                  View status
-                </a>
+                {SITE_STATUS_URL && (
+                  <a
+                    href={SITE_STATUS_URL}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="inline-flex items-center justify-center gap-2 rounded-full border border-white/[0.06] bg-transparent px-5 py-2.5 text-sm font-medium text-muted-dark transition-all duration-200 hover:border-white/[0.16] hover:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-cyan/40 focus-visible:ring-offset-2 focus-visible:ring-offset-[#09090b]"
+                  >
+                    <Activity className="h-4 w-4" />
+                    View status
+                  </a>
+                )}
               </div>
             </div>
           </div>

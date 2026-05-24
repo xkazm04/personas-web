@@ -18,10 +18,10 @@ export default function ReviewsPage() {
       <motion.div variants={fadeUp} className="mb-4 flex items-start gap-3">
         <div className="flex-1">
           <h1 className="text-2xl font-bold tracking-tight">
-            <GradientText variant="silver">Manual Reviews</GradientText>
+            <GradientText variant="silver">{t.dashboardUi.manualReviews}</GradientText>
           </h1>
           <p className="mt-1 text-base text-muted-dark">
-            Review and approve agent decisions requiring human oversight
+            {t.dashboardUi.manualReviewsSubtitle}
           </p>
         </div>
         {mode === "split" && (

@@ -4,6 +4,7 @@ import { useState, useEffect, useCallback } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { X } from "lucide-react";
 import type { Connector } from "@/data/connectors";
+import { lockBodyScroll, unlockBodyScroll } from "@/lib/bodyScrollLock";
 import ConnectorModalHeader from "./components/ConnectorModalHeader";
 import UseCaseList from "./components/UseCaseList";
 import TryItToggle from "./components/TryItToggle";
@@ -38,13 +39,10 @@ export default function ConnectorModal({
   }, [handleEscape]);
 
   useEffect(() => {
-    if (connector) {
-      document.body.style.overflow = "hidden";
-    } else {
-      document.body.style.overflow = "";
-    }
+    if (!connector) return;
+    lockBodyScroll();
     return () => {
-      document.body.style.overflow = "";
+      unlockBodyScroll();
     };
   }, [connector]);
 

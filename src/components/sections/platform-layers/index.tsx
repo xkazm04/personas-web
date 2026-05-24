@@ -6,9 +6,9 @@ import SectionWrapper from "@/components/SectionWrapper";
 import SectionIntro from "@/components/primitives/SectionIntro";
 import { fadeUp } from "@/lib/animations";
 import { layers } from "./data";
-import StackLabelsAnimated from "./components/StackLabelsAnimated";
-import LayerConnectionAnimated from "./components/LayerConnectionAnimated";
-import LayerAnimated from "./components/LayerAnimated";
+import StackLabels from "./components/StackLabels";
+import LayerConnection from "./components/LayerConnection";
+import Layer from "./components/Layer";
 
 export default function PlatformLayers() {
   const containerRef = useRef<HTMLDivElement>(null);
@@ -53,23 +53,23 @@ export default function PlatformLayers() {
 
       <div ref={containerRef} className="relative mx-auto max-w-3xl">
         <div className="relative" style={{ height: `${layers.length * 120 + 140}px` }}>
-          <StackLabelsAnimated spread={spread} />
+          <StackLabels spread={spread} />
 
           {layers.slice(0, -1).map((layer, i) => {
             const nextLayer = layers[i + 1];
             return (
-              <LayerConnectionAnimated
+              <LayerConnection
                 key={`conn-${layer.id}`}
                 index={i}
-                fromRgb={layer.rgb}
-                toRgb={nextLayer.rgb}
+                from={layer.brand}
+                to={nextLayer.brand}
                 spread={spread}
               />
             );
           })}
 
           {layers.map((layer, i) => (
-            <LayerAnimated
+            <Layer
               key={layer.id}
               layer={layer}
               index={i}

@@ -1,36 +1,16 @@
 "use client";
 
-import { useState, useRef, useCallback, type ReactNode } from "react";
+import { useState, useRef, useCallback } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { ChevronDown, MessageCircle } from "lucide-react";
+import { ChevronDown } from "lucide-react";
 import SectionWrapper from "@/components/SectionWrapper";
-import GradientText from "@/components/GradientText";
 import { fadeUp, staggerContainer, TRANSITION_FAST, TRANSITION_NORMAL } from "@/lib/animations";
 
 import { useTranslation } from "@/i18n/useTranslation";
-import TerminalIllustration from "@/components/illustrations/TerminalIllustration";
-import ShieldIllustration from "@/components/illustrations/ShieldIllustration";
-import PricingIllustration from "@/components/illustrations/PricingIllustration";
-import CloudInfraIllustration from "@/components/illustrations/CloudInfraIllustration";
-import LocalCloudIllustration from "@/components/illustrations/LocalCloudIllustration";
-import AgentGridIllustration from "@/components/illustrations/AgentGridIllustration";
+import { FAQDiscordCTA } from "./faq/FAQDiscordCTA";
+import { FAQHeader } from "./faq/FAQHeader";
+import { FALLBACK_ILLUSTRATION, FAQ_ILLUSTRATIONS_BY_POSITION, warnOnFaqIllustrationDrift, type FAQItem } from "./faq/faqIllustrations";
 
-type FAQItem = {
-  question: string;
-  answer: string;
-  illustration: ReactNode;
-};
-
-/* ── FAQ data ─────────────────────────────────────────────────────────── */
-
-const illustrations = [
-  <TerminalIllustration key="terminal" />,
-  <ShieldIllustration key="shield" />,
-  <PricingIllustration key="pricing" />,
-  <CloudInfraIllustration key="cloud" />,
-  <LocalCloudIllustration key="local" />,
-  <AgentGridIllustration key="grid" />,
-];
 
 function FAQCard({
   item,
@@ -106,10 +86,11 @@ function FAQCard({
 export default function FAQ() {
   const { t } = useTranslation();
 
+  warnOnFaqIllustrationDrift(t.faqSection.questions.length);
   const faqs: FAQItem[] = t.faqSection.questions.map((q, i) => ({
     question: q.q,
     answer: q.a,
-    illustration: illustrations[i],
+    illustration: FAQ_ILLUSTRATIONS_BY_POSITION[i] ?? FALLBACK_ILLUSTRATION,
   }));
   const midpoint = Math.ceil(faqs.length / 2);
   const leftColumn = faqs.slice(0, midpoint);
@@ -149,15 +130,7 @@ export default function FAQ() {
 
   return (
     <SectionWrapper id="faq" aria-labelledby="faq-heading">
-      <motion.div variants={fadeUp} className="text-center relative">
-        <h2 id="faq-heading" className="text-4xl font-extrabold tracking-tight sm:text-5xl md:text-7xl drop-shadow-md">
-          {t.faqSection.heading}{" "}
-          <GradientText className="drop-shadow-lg">{t.faqSection.headingGradient}</GradientText>
-        </h2>
-        <p className="mx-auto mt-8 max-w-3xl text-lg text-muted-dark leading-relaxed font-light">
-          {t.faqSection.subtitle}
-        </p>
-      </motion.div>
+      <FAQHeader heading={t.faqSection.heading} headingGradient={t.faqSection.headingGradient} subtitle={t.faqSection.subtitle} />
 
       {/* Two-column FAQ grid */}
       <motion.div
@@ -188,26 +161,7 @@ export default function FAQ() {
         </div>
       </motion.div>
 
-      {/* Discord CTA */}
-      <motion.div variants={fadeUp} className="mt-14 text-center">
-        <div className="mx-auto inline-flex flex-col items-center gap-4 rounded-2xl border border-glass bg-gradient-to-br from-white/[0.02] to-transparent px-8 py-6 sm:flex-row sm:gap-6">
-          <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-brand-purple/15 ring-1 ring-brand-purple/20">
-            <MessageCircle className="h-5 w-5 text-brand-purple" />
-          </div>
-          <div className="text-center sm:text-left">
-            <p className="text-base font-medium">{t.faqSection.stillQuestions}</p>
-            <p className="mt-1 text-base text-muted-dark">
-              {t.faqSection.discordSubtitle}
-            </p>
-          </div>
-          <a
-            href="#"
-            className="inline-flex items-center rounded-full border border-brand-purple/20 bg-brand-purple/10 px-6 py-2 text-base font-medium text-brand-purple transition-all duration-300 hover:border-brand-purple/30 hover:bg-brand-purple/15 focus-visible:ring-2 focus-visible:ring-brand-purple/40 focus-visible:outline-none"
-          >
-            {t.faqSection.joinDiscord}
-          </a>
-        </div>
-      </motion.div>
+      <FAQDiscordCTA stillQuestions={t.faqSection.stillQuestions} discordSubtitle={t.faqSection.discordSubtitle} joinDiscord={t.faqSection.joinDiscord} />
     </SectionWrapper>
   );
 }

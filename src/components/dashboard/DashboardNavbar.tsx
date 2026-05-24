@@ -24,7 +24,7 @@ export default function DashboardNavbar() {
       initial={{ y: -20, opacity: 0 }}
       animate={{ y: 0, opacity: 1 }}
       transition={{ duration: 0.5, ease: "easeOut" }}
-      className="sticky top-0 z-50 border-b border-glass bg-black/20 backdrop-blur-3xl"
+      className="sticky top-0 z-50 border-b border-glass bg-background/30 backdrop-blur-3xl"
     >
       <nav className="mx-auto flex items-center justify-between px-4 py-3 sm:px-6">
         {/* Left: Logo + breadcrumb */}
@@ -32,13 +32,13 @@ export default function DashboardNavbar() {
           <Link href="/" className="flex items-center gap-2">
             <Image
               src="/imgs/logo.png"
-              alt="Personas"
+              alt={t.dashboardUi.brandName}
               width={28}
               height={28}
               className="h-7 w-7 object-contain drop-shadow-[0_0_8px_rgba(6,182,212,0.3)]"
             />
             <span className="text-base font-semibold tracking-tight text-foreground">
-              Personas
+              {t.dashboardUi.brandName}
             </span>
           </Link>
           <ChevronRight className="h-3.5 w-3.5 text-muted-dark" />
@@ -86,7 +86,7 @@ export default function DashboardNavbar() {
               <LogOut className="h-4 w-4 sm:h-3 sm:w-3" />
             )}
             <span className="hidden sm:inline">
-              {isSigningOut ? "Signing out…" : t.common.signOut}
+              {isSigningOut ? t.common.signingOut : t.common.signOut}
             </span>
           </button>
         </div>

@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { SITE_URL } from "@/lib/seo";
+import { SITE_URL, safeJsonLd } from "@/lib/seo";
 
 export const metadata: Metadata = {
   title: "Blog",
@@ -26,7 +26,7 @@ const jsonLd = {
 export default function BlogLayout({ children }: { children: React.ReactNode }) {
   return (
     <>
-      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }} />
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: safeJsonLd(jsonLd) }} />
       {children}
     </>
   );

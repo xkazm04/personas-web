@@ -2,6 +2,13 @@ export interface ToolEntry {
   id: string;
   name: string;
   color: string;
+  /**
+   * Whether this tool appears in the EventBusShowcase swarm visualization.
+   * Set on the 10 most-recognizable integrations so the swarm reads as a
+   * curated highlight rather than a dump of every tool. New tools default
+   * to false; flip to true to add them to the swarm.
+   */
+  swarmFeatured?: boolean;
 }
 
 /**
@@ -10,14 +17,14 @@ export interface ToolEntry {
  */
 export const TOOL_CATALOGUE: readonly ToolEntry[] = [
   // Core integrations (used by FlowComposer + EventBusShowcase)
-  { id: "gmail", name: "Gmail", color: "#ea4335" },
-  { id: "slack", name: "Slack", color: "#4a154b" },
-  { id: "github", name: "GitHub", color: "#8b5cf6" },
+  { id: "gmail", name: "Gmail", color: "#ea4335", swarmFeatured: true },
+  { id: "slack", name: "Slack", color: "#4a154b", swarmFeatured: true },
+  { id: "github", name: "GitHub", color: "#8b5cf6", swarmFeatured: true },
   { id: "calendar", name: "Calendar", color: "#06b6d4" },
   { id: "stripe", name: "Stripe", color: "#635bff" },
-  { id: "jira", name: "Jira", color: "#0052cc" },
+  { id: "jira", name: "Jira", color: "#0052cc", swarmFeatured: true },
   { id: "drive", name: "Drive", color: "#34a853" },
-  { id: "figma", name: "Figma", color: "#f24e1e" },
+  { id: "figma", name: "Figma", color: "#f24e1e", swarmFeatured: true },
   { id: "webhook", name: "Webhook", color: "#f59e0b" },
   { id: "api", name: "REST API", color: "#3b82f6" },
   { id: "database", name: "Database", color: "#14b8a6" },
@@ -33,20 +40,20 @@ export const TOOL_CATALOGUE: readonly ToolEntry[] = [
 
   // Extended integrations (used by EventBusShowcase swarm)
   { id: "react", name: "React", color: "#61DAFB" },
-  { id: "notion", name: "Notion", color: "#ffffff" },
+  { id: "notion", name: "Notion", color: "#ffffff", swarmFeatured: true },
   { id: "nextjs", name: "Next.js", color: "#ffffff" },
-  { id: "discord", name: "Discord", color: "#5865F2" },
+  { id: "discord", name: "Discord", color: "#5865F2", swarmFeatured: true },
   { id: "nodejs", name: "Node.js", color: "#339933" },
   { id: "datadog", name: "Datadog", color: "#632CA6" },
   { id: "typescript", name: "TypeScript", color: "#3178C6" },
   { id: "aws", name: "AWS", color: "#FF9900" },
   { id: "vercel", name: "Vercel", color: "#ffffff" },
   { id: "salesforce", name: "Salesforce", color: "#00A1E0" },
-  { id: "python", name: "Python", color: "#3776AB" },
-  { id: "docker", name: "Docker", color: "#2496ED" },
+  { id: "python", name: "Python", color: "#3776AB", swarmFeatured: true },
+  { id: "docker", name: "Docker", color: "#2496ED", swarmFeatured: true },
   { id: "kubernetes", name: "Kubernetes", color: "#326CE5" },
   { id: "postgresql", name: "PostgreSQL", color: "#4169E1" },
-  { id: "redis", name: "Redis", color: "#DC382D" },
+  { id: "redis", name: "Redis", color: "#DC382D", swarmFeatured: true },
   { id: "mongodb", name: "MongoDB", color: "#47A248" },
   { id: "trello", name: "Trello", color: "#0052CC" },
 ] as const;

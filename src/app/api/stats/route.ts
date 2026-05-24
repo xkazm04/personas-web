@@ -202,6 +202,7 @@ async function readCache(): Promise<CachedStats | null> {
   } catch {
     return null;
   }
+  return null;
 }
 
 /**

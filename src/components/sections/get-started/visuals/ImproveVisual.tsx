@@ -3,6 +3,7 @@
 import { motion } from "framer-motion";
 import { Dna } from "lucide-react";
 import { BRAND_VAR, tint } from "@/lib/brand-theme";
+import { VisualBadge, VisualFrame } from "./chrome";
 import type { VisualProps } from "./types";
 
 const FITNESS_BARS = [
@@ -16,19 +17,8 @@ const FITNESS_BARS = [
 export function ImproveVisual({ brand }: VisualProps) {
   const color = BRAND_VAR[brand];
   return (
-    <div className="flex h-full flex-col justify-center gap-5">
-      <div
-        className="flex items-center gap-2 rounded-full border px-4 py-2 w-fit mx-auto"
-        style={{
-          borderColor: "var(--border-glass-hover)",
-          backgroundColor: "rgba(var(--surface-overlay), 0.02)",
-        }}
-      >
-        <Dna className="h-4 w-4" style={{ color }} />
-        <span className="text-base font-mono uppercase tracking-wider text-foreground/80">
-          Breeding cycle · fitness ↑
-        </span>
-      </div>
+    <VisualFrame gap="gap-5">
+      <VisualBadge icon={Dna} label="Breeding cycle · fitness ↑" color={color} align="fit" />
       <div className="flex items-end justify-center gap-4 h-44">
         {FITNESS_BARS.map((b, i) => (
           <div key={b.label} className="flex flex-col items-center gap-2">
@@ -49,6 +39,6 @@ export function ImproveVisual({ brand }: VisualProps) {
           </div>
         ))}
       </div>
-    </div>
+    </VisualFrame>
   );
 }

@@ -1,4 +1,5 @@
 import { create } from "zustand";
+import * as Sentry from "@sentry/nextjs";
 import { api } from "@/lib/api";
 import { usePersonaStore } from "./personaStore";
 import type {
@@ -7,6 +8,8 @@ import type {
   ManualReviewItem,
   ReviewSeverity,
   ReviewStatus,
+  EscalationAction,
+  EscalationRule,
   EscalationPolicy,
 } from "@/lib/types";
 
@@ -29,18 +32,29 @@ function parseManualReview(
 ): ManualReviewItem | null {
   if (event.eventType !== "manual_review") return null;
   const p = event.targetPersonaId ? personaMap.get(event.targetPersonaId) : undefined;
+  // Fail-loud defaults: if JSON.parse throws or payload.severity is missing
+  // or invalid, we promote the review to "critical" and tag parseError. The
+  // old behavior defaulted to "info" — under DEFAULT_ESCALATION_POLICY that
+  // silently widens the SLA to 8h and routes the row to auto_approve, so a
+  // malformed payload of a real critical event would be quietly waved through.
   let content = "";
-  let severity: ReviewSeverity = "info";
+  let severity: ReviewSeverity = "critical";
   let reviewerNotes: string | null = null;
+  let parseError = false;
   try {
     const payload = JSON.parse(event.payload ?? "{}");
     content = payload.title
       ? `${payload.title}\n${payload.description ?? ""}`
       : (payload.content ?? "");
-    severity = isReviewSeverity(payload.severity) ? payload.severity : "info";
+    if (isReviewSeverity(payload.severity)) {
+      severity = payload.severity;
+    } else {
+      parseError = true;
+    }
     reviewerNotes = payload.reviewerNotes ?? null;
   } catch {
     content = event.payload ?? "";
+    parseError = true;
   }
   const status = toReviewStatus(event.status);
   return {
@@ -59,6 +73,7 @@ function parseManualReview(
     personaName: p?.name,
     personaIcon: p?.icon ?? undefined,
     personaColor: p?.color ?? undefined,
+    parseError: parseError || undefined,
   };
 }
 
@@ -74,14 +89,123 @@ export const DEFAULT_ESCALATION_POLICY: EscalationPolicy = {
   info: { slaMinutes: 480, action: "auto_approve" },
 };
 
+const VALID_ESCALATION_ACTIONS: ReadonlySet<string> = new Set<EscalationAction>([
+  "auto_approve",
+  "escalate",
+  "none",
+]);
+
+function isEscalationAction(v: unknown): v is EscalationAction {
+  return typeof v === "string" && VALID_ESCALATION_ACTIONS.has(v);
+}
+
+function isFinitePositive(v: unknown): v is number {
+  return typeof v === "number" && Number.isFinite(v) && v > 0;
+}
+
+// Field-by-field validator. Missing fields silently fall back to the default;
+// explicitly invalid values fall back AND get added to `rejections` so the
+// caller can emit a single aggregated Sentry warning. This is the safety net
+// the bug description called out: a partial/corrupt persisted policy like
+// `{"critical":{}}` used to spread over the defaults, leaving rule.action
+// undefined and rule.slaMinutes NaN, which silently disabled escalation
+// across all severities.
+function validateEscalationRule(
+  raw: unknown,
+  defaults: EscalationRule,
+  severity: ReviewSeverity,
+  rejections: string[],
+): EscalationRule {
+  if (raw === undefined || raw === null) return defaults;
+  if (typeof raw !== "object") {
+    rejections.push(`${severity}: stored as ${typeof raw}, expected object`);
+    return defaults;
+  }
+  const rec = raw as Record<string, unknown>;
+  let action: EscalationAction = defaults.action;
+  let slaMinutes: number = defaults.slaMinutes;
+  if (rec.action !== undefined) {
+    if (isEscalationAction(rec.action)) {
+      action = rec.action;
+    } else {
+      rejections.push(`${severity}.action: invalid value`);
+    }
+  }
+  if (rec.slaMinutes !== undefined) {
+    if (isFinitePositive(rec.slaMinutes)) {
+      slaMinutes = rec.slaMinutes;
+    } else {
+      rejections.push(`${severity}.slaMinutes: not finite positive`);
+    }
+  }
+  return { action, slaMinutes };
+}
+
 function loadEscalationPolicy(): EscalationPolicy {
+  let raw: string | null;
   try {
-    const raw = localStorage.getItem(ESCALATION_POLICY_KEY);
-    if (!raw) return DEFAULT_ESCALATION_POLICY;
-    return { ...DEFAULT_ESCALATION_POLICY, ...JSON.parse(raw) };
+    raw = localStorage.getItem(ESCALATION_POLICY_KEY);
   } catch {
     return DEFAULT_ESCALATION_POLICY;
   }
+  if (!raw) return DEFAULT_ESCALATION_POLICY;
+  let parsed: unknown;
+  try {
+    parsed = JSON.parse(raw);
+  } catch {
+    Sentry.captureMessage(
+      "reviewStore: escalation policy in localStorage is not valid JSON; using defaults",
+      {
+        level: "warning",
+        tags: { scope: "reviewStore", reason: "policy-parse-error" },
+      },
+    );
+    return DEFAULT_ESCALATION_POLICY;
+  }
+  if (!parsed || typeof parsed !== "object") {
+    Sentry.captureMessage(
+      "reviewStore: escalation policy in localStorage is not an object; using defaults",
+      {
+        level: "warning",
+        tags: { scope: "reviewStore", reason: "policy-shape-error" },
+        extra: { storedType: Array.isArray(parsed) ? "array" : typeof parsed },
+      },
+    );
+    return DEFAULT_ESCALATION_POLICY;
+  }
+  const rec = parsed as Record<string, unknown>;
+  const rejections: string[] = [];
+  const policy: EscalationPolicy = {
+    critical: validateEscalationRule(
+      rec.critical,
+      DEFAULT_ESCALATION_POLICY.critical,
+      "critical",
+      rejections,
+    ),
+    warning: validateEscalationRule(
+      rec.warning,
+      DEFAULT_ESCALATION_POLICY.warning,
+      "warning",
+      rejections,
+    ),
+    info: validateEscalationRule(
+      rec.info,
+      DEFAULT_ESCALATION_POLICY.info,
+      "info",
+      rejections,
+    ),
+  };
+  if (rejections.length > 0) {
+    Sentry.captureMessage(
+      "reviewStore: escalation policy in localStorage failed field validation; rejected fields fell back to defaults",
+      {
+        level: "warning",
+        tags: { scope: "reviewStore", reason: "policy-field-validation" },
+        extra: { rejections },
+      },
+    );
+  }
+  return policy;
 }
 
 function saveEscalationPolicy(policy: EscalationPolicy): void {
@@ -157,6 +281,13 @@ export const useReviewStore = create<ReviewState>((set, get) => ({
   escalationEnabled: typeof window !== "undefined" && localStorage.getItem("review-escalation-enabled") === "true",
   pollPaused: false,
   fetchReviews: async () => {
+    // Skip the fetch entirely while an optimistic-undo window is open — a
+    // mid-window poll otherwise replaces the optimistic "approved"/"rejected"
+    // rows with the server's still-pending shape and produces a visible
+    // status flicker (and worse, lets a click on Undo race against a fresh
+    // array). Manual fetches that *want* to bypass the pause should use a
+    // separate path; the polling consumer respects it.
+    if (get().pollPaused) return;
     const seq = ++reviewFetchSeq;
     set({ reviewsLoading: true });
     try {

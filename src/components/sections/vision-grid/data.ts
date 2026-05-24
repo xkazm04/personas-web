@@ -1,10 +1,5 @@
 import type { BrandKey } from "@/lib/brand-theme";
-
-export interface GuideLink {
-  label: string;
-  category: string;
-  topic: string;
-}
+import type { GuideTopicRef } from "@/lib/guide-link";
 
 export interface PlatformCard {
   id: string;
@@ -13,7 +8,7 @@ export interface PlatformCard {
   images: { dark: string; light: string };
   description: string;
   details: string[];
-  guideTopics?: GuideLink[];
+  guideTopics?: GuideTopicRef[];
 }
 
 export const PLATFORM_CARDS: PlatformCard[] = [

@@ -130,3 +130,16 @@ export function TelemetryVisual() {
     </div>
   );
 }
+
+/**
+ * Lookup keyed by Feature.visualKey so features/data.ts can stay free
+ * of JSX (under the convention "data files contain no JSX").
+ */
+export const FEATURE_VISUALS_BY_KEY = {
+  design: DesignVisual,
+  coordinate: CoordinateVisual,
+  deploy: DeployVisual,
+  telemetry: TelemetryVisual,
+} as const;
+
+export type FeatureVisualKey = keyof typeof FEATURE_VISUALS_BY_KEY;

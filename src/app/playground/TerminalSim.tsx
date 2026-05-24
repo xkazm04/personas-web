@@ -5,7 +5,7 @@ import { RotateCcw } from "lucide-react";
 import { useEffect, useRef, useCallback, useState } from "react";
 import { useReducedMotion } from "framer-motion";
 import TerminalChrome from "@/components/TerminalChrome";
-import { TerminalPanel } from "@/components/primitives";
+import { BlinkingCursor, TerminalPanel } from "@/components/primitives";
 import { LINE_COLORS, LINE_ICONS, PROMPTS, type OutputLine } from "./data";
 
 interface TerminalSimProps {
@@ -135,14 +135,9 @@ export default function TerminalSim({ active, onReset }: TerminalSimProps) {
         </AnimatePresence>
 
         {isRunning && (
-          <motion.div
-            initial={{ opacity: 0 }}
-            animate={{ opacity: [0.3, 1, 0.3] }}
-            transition={{ duration: 1, repeat: Infinity }}
-            className="mt-1 font-mono text-base text-brand-cyan/80"
-          >
-            _
-          </motion.div>
+          <div className="mt-1">
+            <BlinkingCursor />
+          </div>
         )}
       </div>
     </TerminalPanel>

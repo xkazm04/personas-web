@@ -4,6 +4,7 @@ import nextTs from "eslint-config-next/typescript";
 import noLowTextOpacity from "./eslint-rules/no-low-text-opacity.js";
 import requireAnimationGating from "./eslint-rules/require-animation-gating.js";
 import noMultiZustandSelector from "./eslint-rules/no-multi-zustand-selector.js";
+import maxTsxLines from "./eslint-rules/max-tsx-lines.js";
 
 const eslintConfig = defineConfig([
   ...nextVitals,
@@ -12,8 +13,15 @@ const eslintConfig = defineConfig([
   globalIgnores([
     // Default ignores of eslint-config-next:
     ".next/**",
+    "**/.next/**",
     "out/**",
     "build/**",
+    "node_modules/**",
+    ".claude/**",
+    "test-results/**",
+    "playwright-report/**",
+    "coverage/**",
+    "tsconfig.tsbuildinfo",
     "next-env.d.ts",
   ]),
   {
@@ -33,6 +41,11 @@ const eslintConfig = defineConfig([
           "no-multi-zustand-selector": noMultiZustandSelector,
         },
       },
+      "custom-quality": {
+        rules: {
+          "max-tsx-lines": maxTsxLines,
+        },
+      },
     },
     rules: {
       "custom-a11y/no-low-text-opacity": "warn",
@@ -41,6 +54,7 @@ const eslintConfig = defineConfig([
         "warn",
         { hooks: ["useAuthStore"] },
       ],
+      "custom-quality/max-tsx-lines": ["warn", { max: 200 }],
       "@typescript-eslint/no-unused-vars": [
         "warn",
         {

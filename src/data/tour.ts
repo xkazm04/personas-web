@@ -1,5 +1,9 @@
 /* ── Product tour step data ─────────────────────────────────────────── */
 
+import { Download, ShieldCheck, Sparkles, Zap, Dna } from "lucide-react";
+import type { LucideIcon } from "lucide-react";
+import type { BrandKey } from "@/lib/brand-theme";
+
 export interface TourStep {
   id: string;
   number: number;
@@ -7,7 +11,10 @@ export interface TourStep {
   subtitle: string;
   description: string;
   details: string[];
-  color: string;
+  /** Brand color identity for theme-adaptive rendering. */
+  brand: BrandKey;
+  /** Step's lucide icon. */
+  icon: LucideIcon;
   timeEstimate?: string;
 }
 
@@ -18,13 +25,14 @@ export const TOUR_STEPS: TourStep[] = [
     title: "Download & Launch",
     subtitle: "Install Claude CLI, then launch Personas",
     description:
-      "Prerequisite: an active Claude subscription and the Claude CLI installed on your machine. Once those are in place, grab the Personas installer, run it, and you're in \u2014 no Personas account or email required.",
+      "Prerequisite: an active Claude subscription and the Claude CLI installed on your machine. Once those are in place, grab the Personas installer, run it, and you're in — no Personas account or email required.",
     details: [
       "Claude CLI + active subscription required before first run",
       "One-click installer for Windows (Mac and Linux coming soon)",
       "Launches straight into the Command Center",
     ],
-    color: "#06b6d4",
+    brand: "cyan",
+    icon: Download,
   },
   {
     id: "connect-tools",
@@ -35,10 +43,11 @@ export const TOUR_STEPS: TourStep[] = [
       "Personas ships with 40+ connectors. Open the Credential Vault, pick Slack, GitHub, Jira, Gmail, or any other integration and complete the guided OAuth flow. Credentials are encrypted locally.",
     details: [
       "40+ pre-built connectors out of the box",
-      "Keys stay on your machine in the OS keyring \u2014 never sent to the cloud",
-      "AI-assisted OAuth \u2014 no manual token copy-paste",
+      "Keys stay on your machine in the OS keyring — never sent to the cloud",
+      "AI-assisted OAuth — no manual token copy-paste",
     ],
-    color: "#a855f7",
+    brand: "purple",
+    icon: ShieldCheck,
     timeEstimate: "1 min",
   },
   {
@@ -49,11 +58,12 @@ export const TOUR_STEPS: TourStep[] = [
     description:
       "Click New Persona and describe what you want in plain English. Personas generates the system prompt, picks the right tools, configures triggers, and drops the agent on your canvas.",
     details: [
-      "Natural-language agent authoring \u2014 no code required",
+      "Natural-language agent authoring — no code required",
       "Start from a template or from scratch",
       "Automatic tool + trigger selection based on intent",
     ],
-    color: "#34d399",
+    brand: "emerald",
+    icon: Sparkles,
     timeEstimate: "2 min",
   },
   {
@@ -62,13 +72,14 @@ export const TOUR_STEPS: TourStep[] = [
     title: "Let it work",
     subtitle: "Triggers fire, agents run, events flow",
     description:
-      "Your persona listens for triggers \u2014 schedule, webhook, file watcher, event, or manual run \u2014 and executes locally. Watch the event bus light up and monitor every step in real time.",
+      "Your persona listens for triggers — schedule, webhook, file watcher, event, or manual run — and executes locally. Watch the event bus light up and monitor every step in real time.",
     details: [
       "Six trigger types cover every automation pattern",
       "Live event bus and span tracing per execution",
       "Self-healing engine recovers from transient failures",
     ],
-    color: "#fbbf24",
+    brand: "amber",
+    icon: Zap,
     timeEstimate: "Live",
   },
   {
@@ -83,7 +94,8 @@ export const TOUR_STEPS: TourStep[] = [
       "A/B test prompt variants in the arena",
       "Evolutionary prompt optimization in the Lab",
     ],
-    color: "#f43f5e",
+    brand: "rose",
+    icon: Dna,
     timeEstimate: "Ongoing",
   },
 ];

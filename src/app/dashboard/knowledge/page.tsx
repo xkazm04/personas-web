@@ -4,19 +4,25 @@ import { useState } from "react";
 import { motion } from "framer-motion";
 import { Table2, GitFork, Brain } from "lucide-react";
 import GradientText from "@/components/GradientText";
+import { useTranslation } from "@/i18n/useTranslation";
 import KnowledgeDenseTable from "./KnowledgeDenseTable";
 import KnowledgeClusterGraph from "./KnowledgeClusterGraph";
 import MemoriesView from "./MemoriesView";
 
 type ViewVariant = "dense-table" | "cluster-graph" | "memories";
 
-const VIEW_VARIANTS: { key: ViewVariant; label: string; icon: React.ElementType }[] = [
-  { key: "dense-table", label: "Dense Table", icon: Table2 },
-  { key: "cluster-graph", label: "Graph", icon: GitFork },
-  { key: "memories", label: "Memories", icon: Brain },
+const VIEW_VARIANTS: {
+  key: ViewVariant;
+  labelKey: "denseTable" | "graph" | "memories";
+  icon: React.ElementType;
+}[] = [
+  { key: "dense-table", labelKey: "denseTable", icon: Table2 },
+  { key: "cluster-graph", labelKey: "graph", icon: GitFork },
+  { key: "memories", labelKey: "memories", icon: Brain },
 ];
 
 export default function KnowledgeGraphPage() {
+  const { t } = useTranslation();
   const [activeVariant, setActiveVariant] = useState<ViewVariant>("dense-table");
 
   return (
@@ -29,10 +35,10 @@ export default function KnowledgeGraphPage() {
       >
         <div>
           <h1 className="text-2xl font-bold tracking-tight">
-            <GradientText variant="silver">Knowledge Graph</GradientText>
+            <GradientText variant="silver">{t.knowledgePage.title}</GradientText>
           </h1>
           <p className="mt-1 text-base text-muted-dark">
-            Patterns learned from agent executions
+            {t.knowledgePage.subtitle}
           </p>
         </div>
 
@@ -50,7 +56,7 @@ export default function KnowledgeGraphPage() {
                 }`}
               >
                 <VIcon className="h-3.5 w-3.5" />
-                {v.label}
+                {t.knowledgePage[v.labelKey]}
               </button>
             );
           })}

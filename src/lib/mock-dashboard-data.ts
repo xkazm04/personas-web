@@ -753,7 +753,143 @@ export interface FeedbackMessage {
   timestamp: string; // ISO
   subject: string;
   status: MessageStatus;
-  payload: string; // JSON string (for JsonViewer)
+  payload: string; // JSON string (raw view)
+  body: string; // Markdown report (rendered as the message detail)
+}
+
+interface MessageFacts {
+  executionId: string;
+  persona: string;
+  durationMs: number;
+  model: string;
+  inputTokens: number;
+  outputTokens: number;
+  costUsd: number;
+  worker: string;
+  attempt: number;
+}
+
+function fmtMsgDuration(ms: number): string {
+  return ms < 1000 ? `${ms}ms` : `${(ms / 1000).toFixed(1)}s`;
+}
+
+// Markdown report bodies, one per subject (round-robined in the generator).
+// English-only mock content (like the report copy elsewhere), interpolating
+// each run's facts. Authored to stay within MarkdownReport's supported subset.
+function messageReportBody(idx: number, f: MessageFacts): string {
+  const dur = fmtMsgDuration(f.durationMs);
+  const cost = `$${f.costUsd.toFixed(4)}`;
+  const tokens = `${f.inputTokens.toLocaleString()} in / ${f.outputTokens.toLocaleString()} out`;
+  switch (idx) {
+    case 0:
+      return `## Run summary
+**${f.persona}** completed \`${f.executionId}\` on \`${f.worker}\` in **${dur}**.
+
+| Metric | Value |
+| --- | --- |
+| Model | ${f.model} |
+| Tokens | ${tokens} |
+| Cost | ${cost} |
+| Attempt | ${f.attempt} |
+
+### Notes
+- All items processed; no retries required.
+- Results written to the shared output bucket.
+
+> Next scheduled run in ~6 minutes.`;
+    case 1:
+      return `## Escalation required
+**${f.persona}** exhausted its retry budget on \`${f.executionId}\` and is handing off for human review.
+
+### What happened
+- 3 attempts, each failing at the *publish* step.
+- Last error: \`HTTP 503 from downstream\`.
+
+### Suggested action
+1. Confirm the downstream service is healthy.
+2. Approve a manual retry, or skip this item.
+
+> Paused after ${dur} on \`${f.worker}\`.`;
+    case 2:
+      return `## New pattern learned
+\`${f.persona}\` promoted a recurring tool sequence into memory:
+
+\`\`\`
+webhook.incoming → categorize → route
+\`\`\`
+
+- Observed **17 times** over the last 7 days with a 96% success rate.
+- Confidence is now high enough to apply it automatically.
+
+This should cut median latency on inbound webhooks.`;
+    case 3:
+      return `## Cost spike detected
+The last run of **${f.persona}** cost **${cost}** — well above its trailing average.
+
+| Driver | Impact |
+| --- | --- |
+| Model | ${f.model} |
+| Tokens | ${tokens} |
+| Duration | ${dur} |
+
+### Recommendation
+- Route simple inputs to \`haiku-4-5\`.
+- Cap context to the last 8 turns.`;
+    case 4:
+      return `## Tool deprecation warning
+**GitHub REST v3** is being retired, and \`${f.persona}\` still calls it on \`${f.executionId}\`.
+
+- Migrate to the GraphQL API before the cutoff.
+- Affected calls: \`issues.list\`, \`pulls.get\`.
+
+See the [migration guide](https://docs.github.com) for details.`;
+    case 5:
+      return `## Model downgrade recommended
+For simple CSV tasks, **${f.persona}** matches quality on a cheaper model.
+
+| Option | Quality | Cost |
+| --- | --- | --- |
+| sonnet-4-6 | 94% | ${cost} |
+| haiku-4-5 | 92% | ~1/8 |
+
+> Estimated savings are significant at the current volume.`;
+    case 6:
+      return `## Rate limit handled
+Slack API returned **429** during \`${f.executionId}\`. \`${f.persona}\` applied exponential backoff and recovered.
+
+- Backoff schedule: \`2s -> 8s -> 32s\`
+- Recovered on attempt **${f.attempt}** after ${dur}.
+
+No items were dropped.`;
+    case 7:
+      return `## Memory pruned
+\`${f.persona}\` dropped **3 stale conversation threads** to keep its working set sharp.
+
+- Freed context for higher-signal memories.
+- No active tasks referenced the pruned threads.
+
+Routine maintenance — no action needed.`;
+    case 8:
+      return `## A/B candidate ready
+A new prompt candidate for **${f.persona}** is ready for testing.
+
+1. Run baseline vs. candidate over the last 50 executions.
+2. Score on reliability, cost, and latency.
+3. Promote the winner.
+
+> Open the **Lab** to start the comparison.`;
+    default:
+      return `## Queue drained
+The rate-limit window reset and **${f.persona}** drained its backlog.
+
+| Metric | Value |
+| --- | --- |
+| Cleared on | \`${f.worker}\` |
+| Duration | ${dur} |
+| Cost | ${cost} |
+
+All pending items are now processed.`;
+  }
 }
 
 const MESSAGE_SUBJECTS = [
@@ -784,26 +920,30 @@ export const MOCK_MESSAGES: FeedbackMessage[] = (() => {
   for (let i = 0; i < total; i++) {
     const persona = MESSAGE_PERSONAS[i % MESSAGE_PERSONAS.length];
     const minutesAgo = Math.floor(i * 37 + rng() * 90);
-    const timestamp = new Date(
-      Date.now() - minutesAgo * 60_000,
-    ).toISOString();
-    const subject = MESSAGE_SUBJECTS[i % MESSAGE_SUBJECTS.length];
+    const timestamp = new Date(Date.now() - minutesAgo * 60_000).toISOString();
+    const subjectIdx = i % MESSAGE_SUBJECTS.length;
+    const subject = MESSAGE_SUBJECTS[subjectIdx];
+    const facts: MessageFacts = {
+      executionId: `exec_${String(40000 + i).padStart(6, "0")}`,
+      persona: persona.name,
+      durationMs: Math.floor(400 + rng() * 9500),
+      model: rng() < 0.4 ? "haiku-4-5" : "sonnet-4-6",
+      inputTokens: Math.floor(200 + rng() * 2200),
+      outputTokens: Math.floor(80 + rng() * 1200),
+      costUsd: +(0.001 + rng() * 0.18).toFixed(4),
+      worker: "worker-" + (Math.floor(rng() * 8) + 1),
+      attempt: Math.floor(rng() * 3) + 1,
+    };
     const payload = JSON.stringify(
       {
-        executionId: `exec_${String(40000 + i).padStart(6, "0")}`,
-        persona: persona.name,
-        durationMs: Math.floor(400 + rng() * 9500),
-        model: rng() < 0.4 ? "haiku-4-5" : "sonnet-4-6",
-        tokens: {
-          input: Math.floor(200 + rng() * 2200),
-          output: Math.floor(80 + rng() * 1200),
-        },
-        costUsd: +(0.001 + rng() * 0.18).toFixed(4),
+        executionId: facts.executionId,
+        persona: facts.persona,
+        durationMs: facts.durationMs,
+        model: facts.model,
+        tokens: { input: facts.inputTokens, output: facts.outputTokens },
+        costUsd: facts.costUsd,
         tags: rng() < 0.5 ? ["scheduled", "batch"] : ["ad-hoc"],
-        metadata: {
-          ranOn: "worker-" + (Math.floor(rng() * 8) + 1),
-          attempt: Math.floor(rng() * 3) + 1,
-        },
+        metadata: { ranOn: facts.worker, attempt: facts.attempt },
       },
       null,
       0,
@@ -816,6 +956,7 @@ export const MOCK_MESSAGES: FeedbackMessage[] = (() => {
       subject,
       status: i < 7 ? "unread" : "read",
       payload,
+      body: messageReportBody(subjectIdx, facts),
     });
   }
   return items;
@@ -923,3 +1064,113 @@ export const MOCK_HEALTH_DIGEST: HealthDigest = {
     { name: "ReportGen", score: 88, issues: 0, lastRun: new Date(Date.now() - 3600_000).toISOString(), color: "#f43f5e" },
   ],
 };
+
+// ── Execution heatmap (home: per-agent activity, last 7 days) ────────
+// Mirrors the desktop ExecutionHeatmap as a compact agent × day grid:
+// one row per persona, one cell per day (oldest → newest). Counts are
+// seeded so the grid is deterministic across renders.
+
+export const HEATMAP_DAYS = 7;
+
+export interface HeatmapRow {
+  persona: string;
+  color: string;
+  /** Execution counts, one per day, oldest → newest (length HEATMAP_DAYS). */
+  days: number[];
+}
+
+export const MOCK_EXECUTION_HEATMAP: HeatmapRow[] = (() => {
+  const rng = seededRandom(7);
+  return MOCK_HEALTH_DIGEST.agents.map((agent, idx) => ({
+    persona: agent.name,
+    color: agent.color,
+    days: Array.from({ length: HEATMAP_DAYS }, (_, d) =>
+      Math.round(Math.max(0, agent.score / 9 + Math.sin((d + idx) * 0.8) * 4 + rng() * 7)),
+    ),
+  }));
+})();
+
+// ── Upcoming scheduled routines (home) ──────────────────────────────
+// Mirrors the desktop UpcomingRoutinesCard: the next scheduled runs across
+// the fleet. `eta` is a pre-computed, demo-static label (no live clock).
+
+export type RoutineTrigger = "schedule" | "polling" | "webhook" | "event";
+
+export interface UpcomingRoutine {
+  id: string;
+  persona: string;
+  color: string;
+  trigger: RoutineTrigger;
+  /** Time until the next run, e.g. "6m", "1h", "1d" (demo-static). */
+  eta: string;
+}
+
+export const MOCK_UPCOMING_ROUTINES: UpcomingRoutine[] = [
+  { id: "ur_1", persona: "ResearchAgent", color: "#06b6d4", trigger: "schedule", eta: "6m" },
+  { id: "ur_2", persona: "NotifyBot", color: "#a855f7", trigger: "polling", eta: "23m" },
+  { id: "ur_3", persona: "DataProcessor", color: "#fbbf24", trigger: "schedule", eta: "1h" },
+  { id: "ur_4", persona: "CodeReviewer", color: "#34d399", trigger: "webhook", eta: "3h" },
+  { id: "ur_5", persona: "ReportGen", color: "#f43f5e", trigger: "schedule", eta: "1d" },
+];
+
+// ── Credential vault recent changes (home) ──────────────────────────
+// Mirrors the desktop VaultRecentChangesCard. `secret` names are technical
+// identifiers shown verbatim; `ago` is a pre-computed, demo-static label.
+
+export type VaultAction = "rotated" | "added" | "revoked" | "synced";
+
+export interface VaultChange {
+  id: string;
+  /** Credential identifier — shown verbatim (not translated). */
+  secret: string;
+  action: VaultAction;
+  /** How long ago the change happened, e.g. "4m", "2h" (demo-static). */
+  ago: string;
+}
+
+export const MOCK_VAULT_CHANGES: VaultChange[] = [
+  { id: "vc_1", secret: "GITHUB_OAUTH_TOKEN", action: "rotated", ago: "4m" },
+  { id: "vc_2", secret: "SLACK_WEBHOOK_URL", action: "synced", ago: "31m" },
+  { id: "vc_3", secret: "OPENAI_API_KEY", action: "added", ago: "2h" },
+  { id: "vc_4", secret: "STRIPE_SECRET_KEY", action: "revoked", ago: "5h" },
+  { id: "vc_5", secret: "GCAL_REFRESH_TOKEN", action: "rotated", ago: "1d" },
+];
+
+// ── Settings: model providers (BYOM policy) ─────────────────────────
+// Which model providers the fleet may use, with rough usage. Provider/model
+// names are proper nouns shown verbatim (not translated).
+
+export interface ModelProvider {
+  id: string;
+  name: string;
+  model: string;
+  allowed: boolean;
+  requests: number;
+  costUsd: number;
+}
+
+export const MOCK_MODEL_PROVIDERS: ModelProvider[] = [
+  { id: "claude-sonnet", name: "Anthropic Claude", model: "sonnet-4-6", allowed: true, requests: 8421, costUsd: 142.18 },
+  { id: "claude-haiku", name: "Anthropic Haiku", model: "haiku-4-5", allowed: true, requests: 3120, costUsd: 11.4 },
+  { id: "openai", name: "OpenAI", model: "gpt-4o", allowed: true, requests: 1894, costUsd: 63.72 },
+  { id: "gemini", name: "Google Gemini", model: "gemini-2.0", allowed: false, requests: 0, costUsd: 0 },
+  { id: "llama", name: "Meta Llama", model: "llama-3.3-70b", allowed: false, requests: 0, costUsd: 0 },
+];
+
+// ── Settings: API keys (for CLI / MCP clients) ──────────────────────
+// `prefix` and `scopes` are technical identifiers shown verbatim.
+
+export interface ApiKeyRecord {
+  id: string;
+  name: string;
+  prefix: string;
+  scopes: string[];
+  lastUsed: string | null;
+  revoked: boolean;
+}
+
+export const MOCK_API_KEYS: ApiKeyRecord[] = [
+  { id: "k_1", name: "Production CLI", prefix: "pk_live_3f9a", scopes: ["personas:read", "executions:read"], lastUsed: new Date(Date.now() - 2 * 3600_000).toISOString(), revoked: false },
+  { id: "k_2", name: "CI pipeline", prefix: "pk_live_b1d7", scopes: ["executions:write"], lastUsed: new Date(Date.now() - 26 * 3600_000).toISOString(), revoked: false },
+  { id: "k_3", name: "Old integration", prefix: "pk_live_99c2", scopes: ["personas:read"], lastUsed: null, revoked: true },
+];

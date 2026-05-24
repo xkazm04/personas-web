@@ -1,6 +1,5 @@
 import { ogCard, OG_SIZE } from "@/lib/og";
 
-export const runtime = "edge";
 export const alt = "Personas Templates";
 export const size = OG_SIZE;
 export const contentType = "image/png";

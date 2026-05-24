@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import { ClipboardCopy, Check } from "lucide-react";
+import { useTranslation } from "@/i18n/useTranslation";
 
 export function formatPayload(payload: string | null): string {
   if (!payload) return "{}";
@@ -62,6 +63,7 @@ export function highlightJson(json: string): React.ReactNode[] {
 }
 
 export default function JsonViewer({ payload }: { payload: string | null }) {
+  const { t } = useTranslation();
   const [copied, setCopied] = useState(false);
   const formatted = formatPayload(payload);
 
@@ -74,7 +76,7 @@ export default function JsonViewer({ payload }: { payload: string | null }) {
             setTimeout(() => setCopied(false), 1500);
           }).catch(() => {});
         }}
-        aria-label="Copy payload"
+        aria-label={t.dashboardUi.copyPayload}
         className="absolute right-2 top-2 rounded-md border border-glass-hover bg-white/[0.04] p-1.5 text-muted-dark transition-colors hover:border-glass-strong hover:text-foreground"
       >
         {copied ? <Check className="h-3.5 w-3.5 text-emerald-400" /> : <ClipboardCopy className="h-3.5 w-3.5" />}

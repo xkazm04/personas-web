@@ -60,7 +60,7 @@ export default function FleetOptimizationCard({
   const [expanded, setExpanded] = useState(false);
   const [dismissed, setDismissed] = useState(false);
 
-  if (!recommendation || executionCount < minExecutions || dismissed) {
+  if (!recommendation || executionCount < minExecutions) {
     return null;
   }
 
@@ -70,9 +70,17 @@ export default function FleetOptimizationCard({
     t.dashboard.fleet.severity[recommendation.severity];
 
   return (
-    <div
-      className={`relative overflow-hidden rounded-2xl border ${style.container} backdrop-blur-sm`}
-    >
+    <AnimatePresence initial={false}>
+      {!dismissed && (
+        <motion.div
+          key="fleet-card"
+          exit={{ opacity: 0, height: 0, marginBottom: 0 }}
+          transition={{ duration: 0.22, ease: "easeOut" }}
+          className="overflow-hidden"
+        >
+          <div
+            className={`relative overflow-hidden rounded-2xl border ${style.container} backdrop-blur-sm`}
+          >
       <div className="flex items-start gap-3 p-5">
         <div
           className={`flex h-9 w-9 flex-shrink-0 items-center justify-center rounded-xl bg-white/[0.04] ${style.iconTone}`}
@@ -143,21 +151,24 @@ export default function FleetOptimizationCard({
         </button>
       </div>
 
-      <AnimatePresence initial={false}>
-        {expanded && (
-          <motion.div
-            initial={{ height: 0, opacity: 0 }}
-            animate={{ height: "auto", opacity: 1 }}
-            exit={{ height: 0, opacity: 0 }}
-            transition={{ duration: 0.18 }}
-            className="overflow-hidden border-t border-glass-hover"
-          >
-            <div className="px-5 py-4 text-sm leading-relaxed text-muted">
-              {recommendation.detail}
-            </div>
-          </motion.div>
-        )}
-      </AnimatePresence>
-    </div>
+          <AnimatePresence initial={false}>
+            {expanded && (
+              <motion.div
+                initial={{ height: 0, opacity: 0 }}
+                animate={{ height: "auto", opacity: 1 }}
+                exit={{ height: 0, opacity: 0 }}
+                transition={{ duration: 0.18 }}
+                className="overflow-hidden border-t border-glass-hover"
+              >
+                <div className="px-5 py-4 text-sm leading-relaxed text-muted">
+                  {recommendation.detail}
+                </div>
+              </motion.div>
+            )}
+          </AnimatePresence>
+          </div>
+        </motion.div>
+      )}
+    </AnimatePresence>
   );
 }

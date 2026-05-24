@@ -4,25 +4,14 @@ import StageSection from "@/components/StageSection";
 export const dynamic = "force-static";
 export const revalidate = 3600;
 
-import DesignEngine from "@/components/todo/DesignEngine";
-import MemoryLayers from "@/components/todo/MemoryLayers";
-import HealingCircuit from "@/components/todo/HealingCircuit";
-import ObservabilityDeck from "@/components/todo/ObservabilityDeck";
-import Lab from "@/components/todo/Lab";
-import Plugins from "@/components/todo/Plugins";
-import SecurityVault from "@/components/todo/SecurityVault";
-import MultiProviderAI from "@/components/todo/MultiProviderAI";
-
-const scrollMapItems = [
-  { label: "DESIGN", href: "#design" },
-  { label: "MEMORY", href: "#memory-layers" },
-  { label: "HEALING", href: "#healing-circuit" },
-  { label: "SECURITY", href: "#security" },
-  { label: "AI MODELS", href: "#multi-provider" },
-  { label: "OBSERVE", href: "#observe" },
-  { label: "LAB", href: "#lab" },
-  { label: "PLUGINS", href: "#plugins" },
-];
+import DesignEngine from "@/components/feature-sections/DesignEngine";
+import MemoryLayers from "@/components/feature-sections/MemoryLayers";
+import HealingCircuit from "@/components/feature-sections/HealingCircuit";
+import ObservabilityDeck from "@/components/feature-sections/ObservabilityDeck";
+import Lab from "@/components/feature-sections/Lab";
+import Plugins from "@/components/feature-sections/Plugins";
+import SecurityVault from "@/components/feature-sections/SecurityVault";
+import MultiProviderAI from "@/components/feature-sections/MultiProviderAI";
 
 const breadcrumbItems = [
   { label: "DESIGN", href: "#design", color: "#a855f7" },
@@ -35,9 +24,11 @@ const breadcrumbItems = [
   { label: "PLUGINS", href: "#plugins", color: "#a855f7" },
 ];
 
+const scrollMapItems = breadcrumbItems.map(({ label, href }) => ({ label, href }));
+
 export default function FeaturesPage() {
   return (
-    <InfoPageLayout scrollMapItems={scrollMapItems} breadcrumbItems={breadcrumbItems}>
+    <InfoPageLayout scrollMapItems={scrollMapItems} breadcrumbItems={breadcrumbItems} tourId="features">
       <StageSection glow="purple" showTopLine={false} toColor="purple">
         <DesignEngine />
       </StageSection>

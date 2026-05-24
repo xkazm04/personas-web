@@ -8,16 +8,15 @@ import SectionIntro from "@/components/primitives/SectionIntro";
 import { fadeUp } from "@/lib/animations";
 import { colorClasses, commands, summaryLines } from "./data";
 import { useTerminalSequence } from "./use-terminal-sequence";
-import BlinkingCursor from "./components/BlinkingCursor";
+import { BlinkingCursor, TerminalHistory, TerminalLine } from "@/components/primitives";
 import CommandBadge from "./components/CommandBadge";
 import TerminalBackground from "./components/TerminalBackground";
 import TerminalControls from "./components/TerminalControls";
-import TerminalHistory from "./components/TerminalHistory";
-import TerminalLine from "./components/TerminalLine";
 
 export default function PlatformCommand() {
   const terminalRef = useRef<HTMLDivElement>(null);
   const scrollRef = useRef<HTMLDivElement>(null);
+  const stickToBottomRef = useRef(true);
 
   const {
     currentCommandIndex,
@@ -31,7 +30,18 @@ export default function PlatformCommand() {
   } = useTerminalSequence(terminalRef);
 
   useEffect(() => {
-    if (scrollRef.current) {
+    const el = scrollRef.current;
+    if (!el) return;
+    const handleScroll = () => {
+      const distanceFromBottom = el.scrollHeight - el.scrollTop - el.clientHeight;
+      stickToBottomRef.current = distanceFromBottom <= 16;
+    };
+    el.addEventListener("scroll", handleScroll, { passive: true });
+    return () => el.removeEventListener("scroll", handleScroll);
+  }, []);
+
+  useEffect(() => {
+    if (scrollRef.current && stickToBottomRef.current) {
       scrollRef.current.scrollTop = scrollRef.current.scrollHeight;
     }
   }, [typedText, outputLines, history, showSummary]);
@@ -95,7 +105,7 @@ export default function PlatformCommand() {
               scrollbarColor: "rgba(255,255,255,0.1) transparent",
             }}
           >
-            <TerminalHistory history={history} />
+            <TerminalHistory history={history} colorClasses={colorClasses} />
 
             {phase !== "idle" && phase !== "done" && phase !== "summary" && currentCmd && (
               <div className="mb-2">
@@ -107,7 +117,13 @@ export default function PlatformCommand() {
 
                 <AnimatePresence>
                   {outputLines.map((line, lIdx) => (
-                    <TerminalLine key={lIdx} line={line} index={lIdx} />
+                    <TerminalLine
+                      key={lIdx}
+                      text={line.text}
+                      colorClass={colorClasses[line.color]}
+                      indent={line.indent}
+                      index={lIdx}
+                    />
                   ))}
                 </AnimatePresence>
               </div>

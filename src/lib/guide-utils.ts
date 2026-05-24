@@ -22,6 +22,21 @@ export function isCategoryVisibleForMode(categoryId: string, modeFilter: GuideMo
   return GUIDE_TOPICS.some((t) => t.categoryId === categoryId && isTopicVisibleForMode(t, modeFilter));
 }
 
+/**
+ * Whether dev-only topics are surfaced. Controlled by the
+ * NEXT_PUBLIC_SHOW_DEV_GUIDE_TOPICS env var (inlined at build time).
+ * Production builds without this set leave devOnly topics hidden from
+ * the sidebar, category lists, search results, and direct URL access.
+ */
+export function isDevTopicsVisible(): boolean {
+  return process.env.NEXT_PUBLIC_SHOW_DEV_GUIDE_TOPICS === "true";
+}
+
+/** Whether a topic is visible — honors the devOnly flag. */
+export function isTopicVisible(topic: GuideTopic): boolean {
+  return !topic.devOnly || isDevTopicsVisible();
+}
+
 export interface RelatedTopic {
   topic: GuideTopic;
   category: GuideCategory;
@@ -42,12 +57,27 @@ export function getRelatedTopics(topicId: string, limit = 4): RelatedTopic[] {
 
   return GUIDE_TOPICS
     .filter((t) => t.id !== topicId && t.categoryId !== current.categoryId)
-    .map((t) => {
+    .map((t): RelatedTopic | null => {
+      const category = GUIDE_CATEGORIES.find((c) => c.id === t.categoryId);
+      if (!category) return null;
       const shared = t.tags.filter((tag) => currentTags.has(tag));
-      const category = GUIDE_CATEGORIES.find((c) => c.id === t.categoryId)!;
       return { topic: t, category, sharedTags: shared, score: shared.length };
     })
-    .filter((r) => r.score >= 2)
+    .filter((r): r is RelatedTopic => r !== null && r.score >= 2)
     .sort((a, b) => b.score - a.score)
     .slice(0, limit);
+}
+
+// Build-time invariant: every GUIDE_TOPICS entry must reference a known category.
+// Runs once at module load; throws fast in dev/build instead of silently shipping orphans.
+{
+  const categoryIds = new Set(GUIDE_CATEGORIES.map((c) => c.id));
+  const orphans = GUIDE_TOPICS.filter((t) => !categoryIds.has(t.categoryId));
+  if (orphans.length > 0) {
+    const list = orphans.map((t) => `${t.id} → ${t.categoryId}`).join(", ");
+    throw new Error(
+      `[guide-utils] GUIDE_TOPICS references unknown categoryId(s): ${list}. ` +
+        `Update src/data/guide/categories.ts or src/data/guide/topics.ts to keep them in sync.`,
+    );
+  }
 }

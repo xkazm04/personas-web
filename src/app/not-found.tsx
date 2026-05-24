@@ -1,7 +1,7 @@
 import Link from "next/link";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/sections/Footer";
-import { Search, Home, BookOpen, Download, ArrowRight, Puzzle, BarChart3, Shield } from "lucide-react";
+import { Home, BookOpen, Download, ArrowRight, Puzzle, BarChart3, Shield } from "lucide-react";
 
 const POPULAR_PAGES = [
   { label: "Home", href: "/", icon: Home, color: "#06b6d4" },
@@ -10,7 +10,6 @@ const POPULAR_PAGES = [
   { label: "Guide", href: "/guide", icon: BookOpen, color: "#fbbf24" },
   { label: "Templates", href: "/templates", icon: Puzzle, color: "#06b6d4" },
   { label: "Download", href: "/#download", icon: Download, color: "#34d399" },
-  { label: "Compare", href: "/compare", icon: Search, color: "#a855f7" },
   { label: "Security", href: "/security", icon: Shield, color: "#f43f5e" },
 ];
 
@@ -18,7 +17,7 @@ export default function NotFound() {
   return (
     <>
       <Navbar />
-      <main className="flex min-h-[70vh] flex-col items-center justify-center px-6 py-32">
+      <main id="main-content" className="flex min-h-[70vh] flex-col items-center justify-center px-6 py-32">
         <div className="mx-auto max-w-2xl text-center">
           {/* 404 badge */}
           <div className="mb-6 inline-flex items-center gap-2 rounded-full border border-brand-cyan/20 bg-brand-cyan/5 px-4 py-1.5 text-base font-mono font-medium text-brand-cyan/70">
@@ -46,7 +45,9 @@ export default function NotFound() {
                 >
                   <div
                     className="flex h-9 w-9 items-center justify-center rounded-lg"
-                    style={{ backgroundColor: `${page.color}12` }}
+                    style={{
+                      backgroundColor: `color-mix(in srgb, ${page.color} 7%, transparent)`,
+                    }}
                   >
                     <Icon
                       className="h-4 w-4 transition-transform group-hover:scale-110"

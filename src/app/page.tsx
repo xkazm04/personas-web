@@ -1,5 +1,6 @@
 import type { ComponentType } from "react";
 import type { StageColor } from "@/lib/colors";
+import { safeJsonLd } from "@/lib/seo";
 import Image from "next/image";
 import Navbar from "@/components/Navbar";
 import Hero from "@/components/sections/Hero";
@@ -7,7 +8,7 @@ import Footer from "@/components/sections/Footer";
 import {
   LazyDownloadCTA,
   LazyFAQ,
-  LazyPipelineShowcase,
+  LazyOrchestrationHub,
   LazyPricing,
   LazyUseCases,
   LazyVision,
@@ -19,6 +20,7 @@ import SectionDivider from "@/components/SectionDivider";
 import PageShell from "@/components/PageShell";
 import { SCROLL_MAP_SECTIONS } from "@/lib/constants";
 import { SectionObserverProvider } from "@/contexts/SectionObserverContext";
+import { faqJsonLd, organizationJsonLd, softwareJsonLd } from "./homeJsonLd";
 
 const scrollMapItems = SCROLL_MAP_SECTIONS.map((s) => ({
   label: s.label.toUpperCase(),
@@ -29,18 +31,7 @@ const sectionIds = scrollMapItems.map((item) => item.href.replace("#", ""));
 
 /* ── JSON-LD structured data for SEO ──────────────────────────────── */
 
-const organizationJsonLd = {
-  "@context": "https://schema.org",
-  "@type": "Organization",
-  name: "Personas",
-  url: "https://personas.ai",
-  logo: "https://personas.ai/imgs/logo.png",
-  description:
-    "Build intelligent AI agents in natural language. Orchestrate them locally or in the cloud.",
-  sameAs: [],
-};
-
-const softwareJsonLd = {
+const _unusedSoftwareJsonLd = {
   "@context": "https://schema.org",
   "@type": "SoftwareApplication",
   name: "Personas",
@@ -66,7 +57,7 @@ const softwareJsonLd = {
   ],
 };
 
-const faqJsonLd = {
+const _unusedFaqJsonLd = {
   "@context": "https://schema.org",
   "@type": "FAQPage",
   mainEntity: [
@@ -132,21 +123,21 @@ interface SectionConfig {
 }
 
 const sections: SectionConfig[] = [
-  { Component: LazyUseCases,           glow: "emerald", fromColor: "cyan",    toColor: "emerald", dividerFrom: "cyan",    dividerTo: "emerald" },
-  { Component: LazyPlaygroundSplit,    glow: "cyan",    fromColor: "emerald", toColor: "cyan",    dividerFrom: "emerald", dividerTo: "cyan" },
+  { Component: LazyUseCases,           glow: "emerald", fromColor: "cyan",    toColor: "emerald", dividerFrom: "cyan",    dividerTo: "emerald", wrapperId: "tools" },
+  { Component: LazyPlaygroundSplit,    glow: "cyan",    fromColor: "emerald", toColor: "cyan",    dividerFrom: "emerald", dividerTo: "cyan", wrapperId: "playground" },
   { Component: LazyGetStarted,         glow: "emerald", fromColor: "cyan",    toColor: "emerald", dividerFrom: "cyan",    dividerTo: "emerald", wrapperId: "get-started" },
-  { Component: LazyPipelineShowcase,   glow: "cyan",    fromColor: "emerald", toColor: "cyan",    dividerFrom: "emerald", dividerTo: "cyan",    wrapperId: "pipelines" },
+  { Component: LazyOrchestrationHub,   glow: "cyan",    fromColor: "emerald", toColor: "cyan",    dividerFrom: "emerald", dividerTo: "cyan",    wrapperId: "pipelines" },
   { Component: LazyVision,            glow: "purple",  fromColor: "cyan",    toColor: "purple",  dividerFrom: "cyan",    dividerTo: "purple", wrapperId: "vision" },
   { Component: LazyPricing,           glow: "purple",  fromColor: "purple",  toColor: "purple",  dividerFrom: "purple",  dividerTo: "purple", wrapperId: "pricing" },
   { Component: LazyFAQ,               glow: "cyan",    fromColor: "purple",  toColor: "cyan",    dividerFrom: "purple",  dividerTo: "cyan" },
-  { Component: LazyDownloadCTA,        glow: "cyan",    fromColor: "cyan",                        dividerFrom: "cyan",    dividerTo: "cyan" },
+  { Component: LazyDownloadCTA,        glow: "cyan",    fromColor: "cyan",                        dividerFrom: "cyan",    dividerTo: "cyan", wrapperId: "download-section" },
 ];
 
 export default function Home() {
   return (
     <SectionObserverProvider sectionIds={sectionIds}>
       {/* Decorative cinematic illustration — top-left ambient layer */}
-      <div className="pointer-events-none absolute top-0 left-0 z-0 w-[560px] h-[420px] md:w-[720px] md:h-[540px]">
+      <div className="pointer-events-none absolute left-0 top-0 z-0 h-[360px] w-full max-w-[560px] overflow-hidden md:h-[540px] md:max-w-[720px]">
         <Image
           src="/imgs/illustration_cyber_cinematic.png"
           alt=""
@@ -164,15 +155,15 @@ export default function Home() {
       <Navbar />
       <script
         type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(organizationJsonLd) }}
+        dangerouslySetInnerHTML={{ __html: safeJsonLd(organizationJsonLd) }}
       />
       <script
         type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(softwareJsonLd) }}
+        dangerouslySetInnerHTML={{ __html: safeJsonLd(softwareJsonLd) }}
       />
       <script
         type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(faqJsonLd) }}
+        dangerouslySetInnerHTML={{ __html: safeJsonLd(faqJsonLd) }}
       />
       <PageShell scrollMapItems={scrollMapItems}>
 

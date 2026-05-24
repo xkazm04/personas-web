@@ -189,20 +189,10 @@ export const TOPIC_MODULE_MAP: Record<string, TopicModuleRef> = {
     path: ["Connections", "Add New"],
     label: "Provider setup",
   },
-  "starter-vs-team-vs-builder-tiers": {
-    moduleId: "settings",
-    path: ["Settings", "Account"],
-    label: "Account tiers",
-  },
   "system-requirements": {
     moduleId: "home",
     path: ["Home", "System Check"],
     label: "System diagnostics",
-  },
-  "keyboard-shortcuts-and-tips": {
-    moduleId: "settings",
-    path: ["Settings", "Appearance"],
-    label: "Keyboard config",
   },
   "where-to-get-help": {
     moduleId: "home",
@@ -335,16 +325,6 @@ export const TOPIC_MODULE_MAP: Record<string, TopicModuleRef> = {
     path: ["Connections", "Add New"],
     label: "Add credential",
   },
-  "oauth-setup-walkthrough": {
-    moduleId: "connections",
-    path: ["Connections", "Add New"],
-    label: "OAuth setup",
-  },
-  "understanding-the-credential-vault": {
-    moduleId: "connections",
-    path: ["Connections", "Credentials"],
-    label: "Credential vault",
-  },
   "credential-health-checks": {
     moduleId: "connections",
     path: ["Connections", "Credentials"],
@@ -364,11 +344,6 @@ export const TOPIC_MODULE_MAP: Record<string, TopicModuleRef> = {
     moduleId: "connections",
     path: ["Connections", "Credentials"],
     label: "Token refresh",
-  },
-  "deleting-credentials-safely": {
-    moduleId: "connections",
-    path: ["Connections", "Credentials"],
-    label: "Credential cleanup",
   },
   "connector-catalog": {
     moduleId: "connections",

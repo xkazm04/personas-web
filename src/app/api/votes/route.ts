@@ -8,8 +8,9 @@
  */
 
 import { NextRequest, NextResponse } from "next/server";
-import { isValidEmail } from "@/lib/validation";
+import { isValidEmail, isValidVoterId } from "@/lib/validation";
 import { withWriteLock } from "@/lib/fileLock";
+import { getClientIp, parseJsonBody } from "@/lib/server/request";
 import { isRateLimited } from "./rate-limit";
 import {
   ALLOWED_FEATURES,
@@ -88,20 +89,19 @@ export async function GET(req: NextRequest) {
 /* ── POST — toggle a vote for a feature ──────────────────────────── */
 
 export async function POST(req: NextRequest) {
-  const ip =
-    req.headers.get("x-forwarded-for")?.split(",")[0]?.trim() ?? "unknown";
+  const ip = getClientIp(req);
   if (isRateLimited(ip)) {
     return NextResponse.json({ error: "Too many requests" }, { status: 429 });
   }
 
-  let body: { featureId?: string; voterId?: string; email?: string };
-  try {
-    body = await req.json();
-  } catch {
-    return NextResponse.json({ error: "Invalid JSON" }, { status: 400 });
-  }
+  const parsed = await parseJsonBody<{
+    featureId?: string;
+    voterId?: string;
+    email?: string;
+  }>(req, { maxBytes: 10 * 1024 });
+  if (!parsed.ok) return parsed.response;
 
-  const { featureId, voterId, email } = body;
+  const { featureId, voterId, email } = parsed.data;
   const normalizedEmail =
     email && typeof email === "string" && isValidEmail(email)
       ? email.trim().toLowerCase()
@@ -111,7 +111,7 @@ export async function POST(req: NextRequest) {
     return NextResponse.json({ error: "Invalid feature ID" }, { status: 400 });
   }
 
-  if (!voterId || typeof voterId !== "string" || voterId.length < 8) {
+  if (!isValidVoterId(voterId)) {
     return NextResponse.json(
       { error: "Valid voter ID is required" },
       { status: 400 },
@@ -122,13 +122,20 @@ export async function POST(req: NextRequest) {
   if (hasSupabase()) {
     const sb = await getSupabaseClient();
 
-    const { data: existing } = await sb
+    const { data: existing, error: lookupError } = await sb
       .from("feature_votes")
       .select("id")
       .eq("feature_id", featureId)
       .eq("voter_id", voterId)
       .limit(1)
-      .single();
+      .maybeSingle();
+
+    if (lookupError) {
+      return NextResponse.json(
+        { error: "Failed to record vote" },
+        { status: 500 },
+      );
+    }
 
     if (existing) {
       if (normalizedEmail) {

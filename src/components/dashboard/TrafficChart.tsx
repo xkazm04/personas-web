@@ -10,16 +10,18 @@ import {
   ResponsiveContainer,
 } from "recharts";
 import { ChartTooltipContent } from "@/components/dashboard/ObservabilityCharts";
+import { useTranslation } from "@/i18n/useTranslation";
 
 export interface TrafficChartProps {
   chartData: Array<{ date: string; Executions: number; Errors: number }>;
 }
 
 export default function TrafficChart({ chartData }: TrafficChartProps) {
+  const { t } = useTranslation();
   if (chartData.length === 0) {
     return (
       <div className="flex items-center justify-center h-64 text-sm text-muted-dark">
-        No data available yet
+        {t.dashboardUi.noDataAvailable}
       </div>
     );
   }
@@ -77,11 +79,11 @@ export default function TrafficChart({ chartData }: TrafficChartProps) {
       <div className="mt-3 flex items-center gap-4 text-sm text-muted-dark">
         <span className="flex items-center gap-1.5">
           <span className="h-2 w-2 rounded-full bg-cyan-400" />
-          Executions
+          {t.observabilityPage.executions}
         </span>
         <span className="flex items-center gap-1.5">
           <span className="h-2 w-2 rounded-full bg-rose-400" />
-          Errors
+          {t.dashboardUi.errors}
         </span>
       </div>
     </>

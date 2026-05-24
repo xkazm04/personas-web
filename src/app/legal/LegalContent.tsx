@@ -7,6 +7,15 @@ import { fadeUp, TRANSITION_NORMAL } from "@/lib/animations";
 import PrivacyPolicy from "./policies/PrivacyPolicy";
 import TermsOfService from "./policies/TermsOfService";
 import CookiePolicy from "./policies/CookiePolicy";
+import PolicyChangelog from "./PolicyChangelog";
+import {
+  hasUnseenUpdate,
+  readLastSeen,
+  writeLastSeen,
+  type PolicyId,
+} from "@/data/policy-changelog";
+
+type TabId = PolicyId;
 
 const TABS: { id: TabId; label: string; icon: LucideIcon }[] = [
   { id: "privacy", label: "Privacy Policy", icon: Shield },
@@ -14,13 +23,17 @@ const TABS: { id: TabId; label: string; icon: LucideIcon }[] = [
   { id: "cookies", label: "Cookie Policy", icon: Cookie },
 ];
 
-type TabId = "privacy" | "terms" | "cookies";
+type PolicyComponentProps = { changelog?: React.ReactNode };
 
-const TAB_CONTENT: Record<TabId, ComponentType> = {
+const TAB_CONTENT: Record<TabId, ComponentType<PolicyComponentProps>> = {
   privacy: PrivacyPolicy,
   terms: TermsOfService,
   cookies: CookiePolicy,
 };
+
+function todayIso(): string {
+  return new Date().toISOString().slice(0, 10);
+}
 
 function getInitialTab(): TabId {
   if (typeof window === "undefined") return "privacy";
@@ -30,10 +43,48 @@ function getInitialTab(): TabId {
 }
 
 export default function LegalContent() {
-  const [activeTab, setActiveTab] = useState<TabId>(getInitialTab);
+  // SSR renders "privacy" so the client's first paint matches; the real hash
+  // is synced into state in the mount effect below to avoid hydration mismatch
+  // on direct deep-links like /legal#cookies.
+  const [activeTab, setActiveTab] = useState<TabId>("privacy");
+  // Captured once on mount: which policies were unseen at first view. Drives the
+  // changelog "New" pill + auto-expand. Stays stable so the visual cue persists
+  // for the duration of the session even after we mark seen in localStorage.
+  const [initiallyUnseen, setInitiallyUnseen] = useState<Set<PolicyId>>(() => new Set());
+  // Live set of tabs that should still show the "Updated" tab badge. Shrinks
+  // to nothing as the user activates each tab.
+  const [pendingBadges, setPendingBadges] = useState<Set<PolicyId>>(() => new Set());
 
   useEffect(() => {
-    const onHash = () => setActiveTab(getInitialTab());
+    const initial = getInitialTab();
+    const t = setTimeout(() => {
+      if (initial !== "privacy") setActiveTab(initial);
+      const unseen = new Set<PolicyId>();
+      (TABS.map((tab) => tab.id) as PolicyId[]).forEach((pid) => {
+        if (hasUnseenUpdate(pid, readLastSeen(pid))) unseen.add(pid);
+      });
+      setInitiallyUnseen(unseen);
+      const pending = new Set(unseen);
+      pending.delete(initial);
+      setPendingBadges(pending);
+      writeLastSeen(initial, todayIso());
+    }, 0);
+    return () => clearTimeout(t);
+    // Mount-only hydration; reads hash post-mount so SSR/client agree.
+  }, []);
+
+  useEffect(() => {
+    const onHash = () => {
+      const newTab = getInitialTab();
+      setActiveTab(newTab);
+      writeLastSeen(newTab, todayIso());
+      setPendingBadges((prev) => {
+        if (!prev.has(newTab)) return prev;
+        const next = new Set(prev);
+        next.delete(newTab);
+        return next;
+      });
+    };
     window.addEventListener("hashchange", onHash);
     return () => window.removeEventListener("hashchange", onHash);
   }, []);
@@ -41,6 +92,13 @@ export default function LegalContent() {
   function switchTab(id: TabId) {
     setActiveTab(id);
     window.history.replaceState(null, "", `#${id}`);
+    writeLastSeen(id, todayIso());
+    setPendingBadges((prev) => {
+      if (!prev.has(id)) return prev;
+      const next = new Set(prev);
+      next.delete(id);
+      return next;
+    });
   }
 
   const Content = TAB_CONTENT[activeTab];
@@ -68,11 +126,12 @@ export default function LegalContent() {
         {TABS.map((tab) => {
           const Icon = tab.icon;
           const isActive = activeTab === tab.id;
+          const showBadge = pendingBadges.has(tab.id);
           return (
             <button
               key={tab.id}
               onClick={() => switchTab(tab.id)}
-              className={`inline-flex items-center gap-2 rounded-full border px-5 py-2 text-base font-medium transition-colors ${
+              className={`relative inline-flex items-center gap-2 rounded-full border px-5 py-2 text-base font-medium transition-colors ${
                 isActive
                   ? "border-brand-cyan/40 bg-brand-cyan/10 text-brand-cyan"
                   : "border-glass-hover bg-white/[0.02] text-muted-dark hover:border-glass-strong hover:text-foreground"
@@ -80,6 +139,14 @@ export default function LegalContent() {
             >
               <Icon className="h-4 w-4" />
               {tab.label}
+              {showBadge && (
+                <span
+                  className="ml-1 rounded-full bg-brand-cyan/15 px-2 py-0.5 text-xs font-medium text-brand-cyan"
+                  aria-label="Updated since your last visit"
+                >
+                  Updated
+                </span>
+              )}
             </button>
           );
         })}
@@ -95,7 +162,14 @@ export default function LegalContent() {
             exit={{ opacity: 0, y: -8 }}
             transition={TRANSITION_NORMAL}
           >
-            <Content />
+            <Content
+              changelog={
+                <PolicyChangelog
+                  policyId={activeTab}
+                  hasUnseenUpdate={initiallyUnseen.has(activeTab)}
+                />
+              }
+            />
           </motion.div>
         </AnimatePresence>
       </div>

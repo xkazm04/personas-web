@@ -1,22 +1,12 @@
 import InfoPageLayout from "@/components/InfoPageLayout";
 import StageSection from "@/components/StageSection";
-import DesignEngine from "@/components/todo/DesignEngine";
-import MemoryLayers from "@/components/todo/MemoryLayers";
-import HealingCircuit from "@/components/todo/HealingCircuit";
-import TriggerSystem from "@/components/todo/TriggerSystem";
-import ObservabilityDeck from "@/components/todo/ObservabilityDeck";
-import Lab from "@/components/todo/Lab";
-import Plugins from "@/components/todo/Plugins";
-
-const scrollMapItems = [
-  { label: "DESIGN", href: "#design" },
-  { label: "MEMORY", href: "#memory-layers" },
-  { label: "HEALING", href: "#healing-circuit" },
-  { label: "TRIGGERS", href: "#triggers" },
-  { label: "OBSERVE", href: "#observe" },
-  { label: "LAB", href: "#lab" },
-  { label: "PLUGINS", href: "#plugins" },
-];
+import DesignEngine from "@/components/feature-sections/DesignEngine";
+import MemoryLayers from "@/components/feature-sections/MemoryLayers";
+import HealingCircuit from "@/components/feature-sections/HealingCircuit";
+import TriggerSystem from "@/components/feature-sections/TriggerSystem";
+import ObservabilityDeck from "@/components/feature-sections/ObservabilityDeck";
+import Lab from "@/components/feature-sections/Lab";
+import Plugins from "@/components/feature-sections/Plugins";
 
 const breadcrumbItems = [
   { label: "DESIGN", href: "#design", color: "#a855f7" },
@@ -27,6 +17,8 @@ const breadcrumbItems = [
   { label: "LAB", href: "#lab", color: "#06b6d4" },
   { label: "PLUGINS", href: "#plugins", color: "#a855f7" },
 ];
+
+const scrollMapItems = breadcrumbItems.map(({ label, href }) => ({ label, href }));
 
 export default function TodoPage() {
   return (

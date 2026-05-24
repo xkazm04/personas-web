@@ -21,7 +21,7 @@ export default function StageCard({
   return (
     <motion.div
       layout
-      className={`relative flex-shrink-0 rounded-2xl border transition-all duration-500 ${
+      className={`relative flex-shrink-0 overflow-hidden rounded-2xl border transition-all duration-500 ${
         status === "active"
           ? "w-52 border-brand-cyan/40 bg-brand-cyan/[0.06] shadow-[0_0_30px_rgba(6,182,212,0.15)] scale-105"
           : status === "done"
@@ -33,15 +33,33 @@ export default function StageCard({
       style={{ zIndex: status === "active" ? 10 : 1 }}
     >
       {status === "active" && !reduced && (
-        <motion.div
-          className="absolute -inset-[1px] rounded-2xl"
-          style={{
-            background:
-              "radial-gradient(ellipse at center, rgba(6,182,212,0.12) 0%, transparent 70%)",
-          }}
-          animate={{ opacity: [0.5, 1, 0.5] }}
-          transition={{ duration: 2, repeat: Infinity, ease: "easeInOut" }}
-        />
+        <>
+          <motion.div
+            className="absolute -inset-[1px] rounded-2xl"
+            style={{
+              background:
+                "radial-gradient(ellipse at center, rgba(6,182,212,0.12) 0%, transparent 70%)",
+            }}
+            animate={{ opacity: [0.5, 1, 0.5] }}
+            transition={{ duration: 2, repeat: Infinity, ease: "easeInOut" }}
+          />
+          <motion.div
+            aria-hidden="true"
+            className="pointer-events-none absolute inset-y-0 w-full"
+            style={{
+              background:
+                "linear-gradient(90deg, transparent 0%, rgba(6,182,212,0.18) 50%, transparent 100%)",
+            }}
+            initial={{ x: "-100%" }}
+            animate={{ x: "100%" }}
+            transition={{
+              duration: 1.8,
+              repeat: Infinity,
+              ease: "easeInOut",
+              repeatDelay: 0.4,
+            }}
+          />
+        </>
       )}
 
       <AnimatePresence>

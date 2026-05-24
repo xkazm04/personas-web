@@ -4,6 +4,7 @@ import { useState, useEffect } from "react";
 import { motion } from "framer-motion";
 import { Activity, Radio, Wifi, Zap } from "lucide-react";
 import useAnimatedNumber from "@/hooks/useAnimatedNumber";
+import { useTranslation } from "@/i18n/useTranslation";
 
 // ── Simulated live counters ───────────────────────────────────────────
 
@@ -62,6 +63,7 @@ function StatItem({
 // ── Component ─────────────────────────────────────────────────────────
 
 export default function EventBusStats({ className = "" }: { className?: string }) {
+  const { t } = useTranslation();
   const { eventsPerSec, totalEvents, activeConnections } = useSimulatedMetrics();
   const [connected] = useState(true);
 
@@ -74,7 +76,7 @@ export default function EventBusStats({ className = "" }: { className?: string }
     >
       <StatItem
         icon={Zap}
-        label="Events/sec"
+        label={t.eventsPage.events}
         value={eventsPerSec}
         pulse
       />
@@ -83,7 +85,7 @@ export default function EventBusStats({ className = "" }: { className?: string }
 
       <StatItem
         icon={Activity}
-        label="Total"
+        label={t.dashboardUi.totalLabel}
         value={totalEvents}
       />
 
@@ -91,7 +93,7 @@ export default function EventBusStats({ className = "" }: { className?: string }
 
       <StatItem
         icon={Radio}
-        label="Connections"
+        label={t.dashboardUi.connections}
         value={activeConnections}
       />
 
@@ -114,7 +116,7 @@ export default function EventBusStats({ className = "" }: { className?: string }
             />
           </span>
           <span className="text-sm font-medium text-emerald-400">
-            {connected ? "Connected" : "Disconnected"}
+            {connected ? t.dashboardUi.connected : t.dashboardUi.disconnected}
           </span>
         </span>
       </div>

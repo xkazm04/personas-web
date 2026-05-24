@@ -27,6 +27,11 @@ interface Registration {
 }
 
 const registrations = new Map<symbol, Registration>();
+// Element-keyed indexes so observer callbacks are O(1) per entry instead of
+// scanning every registration. A canvas owns exactly one registration; a
+// parent element may host more than one canvas.
+const byCanvas = new Map<HTMLCanvasElement, Registration>();
+const byParent = new Map<Element, Set<Registration>>();
 let rafId = 0;
 let startTime = 0;
 let intersectionObserver: IntersectionObserver | null = null;
@@ -85,11 +90,8 @@ function getIntersectionObserver(): IntersectionObserver {
     intersectionObserver = new IntersectionObserver(
       (entries) => {
         for (const io of entries) {
-          for (const reg of registrations.values()) {
-            if (reg.canvas === io.target) {
-              reg.inView = io.isIntersecting;
-            }
-          }
+          const reg = byCanvas.get(io.target as HTMLCanvasElement);
+          if (reg) reg.inView = io.isIntersecting;
         }
         // Restart loop if a canvas came into view while loop was stopped
         if (rafId === 0 && anyInView()) {
@@ -108,14 +110,12 @@ function getResizeObserver(): ResizeObserver {
       // ResizeObserver already batches, but RAF ensures we stay in sync with display
       requestAnimationFrame(() => {
         for (const entry of entries) {
-          const parent = entry.target;
+          const regs = byParent.get(entry.target);
+          if (!regs) continue;
           const { width, height } = entry.contentRect;
-          
-          for (const reg of registrations.values()) {
-            if (reg.canvas.parentElement === parent) {
-              applyCanvasSize(reg.canvas, width, height);
-              reg.onResize?.(width, height);
-            }
+          for (const reg of regs) {
+            applyCanvasSize(reg.canvas, width, height);
+            reg.onResize?.(width, height);
           }
         }
       });
@@ -188,15 +188,58 @@ export function useCanvasCompositor(
     };
 
     registrations.set(key, registration);
-    getIntersectionObserver().observe(canvas);
-    if (parent) getResizeObserver().observe(parent);
+    byCanvas.set(canvas, registration);
+    if (parent) {
+      let set = byParent.get(parent);
+      if (!set) {
+        set = new Set();
+        byParent.set(parent, set);
+      }
+      set.add(registration);
+    }
+    // Capture the observer references at mount time. If we instead called
+    // the lazy getters from cleanup, an interleaved teardown could find
+    // `intersectionObserver === null` and the getter would synthesize a
+    // brand-new observer just to call `.unobserve()` on it — that fresh
+    // observer would then be leaked when the same cleanup's "size === 0"
+    // branch ran a `disconnect()` on it after also re-running its
+    // creation path. By holding a local ref, cleanup unobserves only the
+    // real observer this mount registered with, and skips entirely if
+    // that observer has already been disconnected by a sibling teardown.
+    const ioRef = getIntersectionObserver();
+    ioRef.observe(canvas);
+    let parentRoRef: ResizeObserver | null = null;
+    if (parent) {
+      parentRoRef = getResizeObserver();
+      parentRoRef.observe(parent);
+    }
 
     startLoop();
 
     return () => {
       registrations.delete(key);
-      getIntersectionObserver().unobserve(canvas);
-      if (parent) getResizeObserver().unobserve(parent);
+      byCanvas.delete(canvas);
+      // Use the captured ref. Skip if the singleton has already been
+      // torn down by a peer cleanup running ahead of us in the same
+      // teardown batch.
+      if (ioRef === intersectionObserver) {
+        ioRef.unobserve(canvas);
+      }
+      if (parent) {
+        const set = byParent.get(parent);
+        if (set) {
+          set.delete(registration);
+          if (set.size === 0) {
+            byParent.delete(parent);
+            // Only stop observing the parent when no other canvas under
+            // it is still registered, otherwise siblings would lose
+            // ResizeObserver updates.
+            if (parentRoRef && parentRoRef === resizeObserver) {
+              parentRoRef.unobserve(parent);
+            }
+          }
+        }
+      }
 
       if (registrations.size === 0) {
         stopLoop();

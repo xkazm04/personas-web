@@ -1,7 +1,7 @@
 "use client";
 
 import { memo } from "react";
-import { motion } from "framer-motion";
+import { motion, useReducedMotion } from "framer-motion";
 import { fadeUp } from "@/lib/animations";
 import { BRAND_VAR, tint, type BrandKey } from "@/lib/brand-theme";
 import { useTranslation } from "@/i18n/useTranslation";
@@ -25,6 +25,7 @@ const RoadmapCard = memo(function RoadmapCard({
   total: number;
 }) {
   const { t } = useTranslation();
+  const prefersReducedMotion = useReducedMotion();
   const status = statusConfig[item.status];
   const statusColor = brandColor(status.brand);
   const priority = priorityBrand[item.priority];
@@ -104,7 +105,11 @@ const RoadmapCard = memo(function RoadmapCard({
                   stroke={brandTint("cyan", 20)}
                   strokeWidth="1.5"
                   strokeDasharray="8 8"
-                  style={{ animation: "dash-flow 2s linear infinite" }}
+                  style={{
+                    animation: prefersReducedMotion
+                      ? undefined
+                      : "dash-flow 2s linear infinite",
+                  }}
                 />
               </svg>
             </div>

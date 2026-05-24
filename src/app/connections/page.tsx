@@ -1,34 +1,31 @@
 "use client";
 
-import { useState, useEffect, useCallback, Suspense } from "react";
-import { useSearchParams, usePathname } from "next/navigation";
+import { useEffect, useCallback, Suspense } from "react";
+import { usePathname } from "next/navigation";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/sections/Footer";
 import StageSection from "@/components/StageSection";
 import PageShell from "@/components/PageShell";
-import ConnectionsCatalog from "@/components/sections/ConnectionsCatalog";
-import ConnectorModal from "@/components/sections/ConnectorModal";
+import ConnectionsCatalog from "@/components/sections/connections-catalog";
+import ConnectorModal from "@/components/sections/connector-modal";
 import { connectors, type Connector } from "@/data/connectors";
+import {
+  useSearchParamState,
+  useParsedSearchParamState,
+} from "@/hooks/useSearchParamState";
 
 const scrollMapItems = [
   { label: "CATALOG", href: "#connections-catalog" },
 ];
 
 function ConnectionsContent() {
-  const searchParams = useSearchParams();
   const pathname = usePathname();
 
-  const [activeCategory, setActiveCategory] = useState(
-    () => searchParams.get("category") || "all",
-  );
-  const [search, setSearch] = useState(
-    () => searchParams.get("q") || "",
-  );
-  const [selectedConnector, setSelectedConnector] = useState<Connector | null>(
-    () => {
-      const name = searchParams.get("connector");
-      return name ? connectors.find((c) => c.name === name) ?? null : null;
-    },
+  const [activeCategory, setActiveCategory] = useSearchParamState("category", "all");
+  const [search, setSearch] = useSearchParamState("q", "");
+  const [selectedConnector, setSelectedConnector] = useParsedSearchParamState<Connector | null>(
+    "connector",
+    (name) => (name ? connectors.find((c) => c.name === name) ?? null : null),
   );
 
   useEffect(() => {
@@ -40,13 +37,16 @@ function ConnectionsContent() {
     window.history.replaceState(null, "", qs ? `${pathname}?${qs}` : pathname);
   }, [activeCategory, search, selectedConnector, pathname]);
 
-  const handleConnectorClick = useCallback((c: Connector) => {
-    setSelectedConnector(c);
-  }, []);
+  const handleConnectorClick = useCallback(
+    (c: Connector) => {
+      setSelectedConnector(c);
+    },
+    [setSelectedConnector],
+  );
 
   const handleCloseModal = useCallback(() => {
     setSelectedConnector(null);
-  }, []);
+  }, [setSelectedConnector]);
 
   return (
     <>

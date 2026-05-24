@@ -33,11 +33,21 @@ function clamp(value: number, min: number, max: number) {
   return Math.max(min, Math.min(max, value));
 }
 
+function sanitizeNonNegative(value: number): number {
+  return Number.isFinite(value) ? Math.max(0, value) : 0;
+}
+
 function withPressure(route: QueueRouteSeed): QueueRouteMetric {
-  const pressure = clamp(route.queueDepth / 60 + route.latencyMs / 900, 0, 1);
-  const inFlight = Math.max(1, Math.round(route.throughputEps / 10));
+  const queueDepth = sanitizeNonNegative(route.queueDepth);
+  const latencyMs = sanitizeNonNegative(route.latencyMs);
+  const throughputEps = sanitizeNonNegative(route.throughputEps);
+  const pressure = clamp(queueDepth / 60 + latencyMs / 900, 0, 1);
+  const inFlight = Math.max(1, Math.round(throughputEps / 10));
   return {
     ...route,
+    queueDepth,
+    latencyMs,
+    throughputEps,
     inFlight,
     pressure,
   };
@@ -61,6 +71,10 @@ export function createMockQueueTelemetryAdapter(
   return {
     source: "mock",
     subscribe(onSnapshot) {
+      if (typeof window === "undefined") {
+        return () => {};
+      }
+
       let current = seedRoutes.map((route) => ({ ...route }));
 
       const emit = () => {

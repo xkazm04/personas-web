@@ -1,101 +1,167 @@
 "use client";
 
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useRef, useState } from "react";
 import { motion } from "framer-motion";
+import * as Sentry from "@sentry/nextjs";
 import SectionWrapper from "@/components/SectionWrapper";
-import GradientText from "@/components/GradientText";
-import { fadeUp, staggerContainer } from "@/lib/animations";
+import { staggerContainer } from "@/lib/animations";
 import { trackFeatureComment } from "@/lib/analytics";
+import { useAbortableEffect } from "@/hooks/useAbortableEffect";
 import type { Comment } from "./local-types";
 import {
   KOFI_USERNAME,
   features,
+  fetchBoostTotals,
+  fetchComments,
+  fetchVotes,
   getOrCreateAuthor,
-  readBoosts,
-  readComments,
-  readVotedIds,
-  writeBoosts,
-  writeComments,
-  writeVotedIds,
+  getOrCreateVoterId,
+  postBoost,
+  postComment,
+  postVoteToggle,
 } from "./data";
 import FeatureVoteCard from "./components/FeatureVoteCard";
 import CustomFeatureRequest from "./components/CustomFeatureRequest";
+import { FeatureVotingHeader } from "./components/FeatureVotingHeader";
+import { FeatureVotingSummary } from "./components/FeatureVotingSummary";
 
 export default function FeatureVoting() {
   const [votedIds, setVotedIds] = useState<Set<string>>(new Set());
   const [comments, setComments] = useState<Comment[]>([]);
-  const [boosts, setBoosts] = useState<Record<string, number>>({});
+  const [boostTotals, setBoostTotals] = useState<Record<string, number>>({});
+  const [voteCounts, setVoteCounts] = useState<Record<string, number>>({});
+  const [loaded, setLoaded] = useState(false);
+  const voterIdRef = useRef<string>("");
 
-  useEffect(() => {
-    queueMicrotask(() => {
-      setVotedIds(readVotedIds());
-      setComments(readComments());
-      setBoosts(readBoosts());
+  useAbortableEffect((signal) => {
+    if (!voterIdRef.current) {
+      voterIdRef.current = getOrCreateVoterId();
+    }
+
+    Promise.allSettled([
+      fetchVotes(voterIdRef.current, signal),
+      fetchComments(signal),
+      fetchBoostTotals(signal),
+    ]).then(([votes, comm, boosts]) => {
+      if (signal.aborted) return;
+      if (votes.status === "fulfilled") {
+        setVoteCounts(votes.value.counts);
+        setVotedIds(votes.value.userVotes);
+      }
+      if (comm.status === "fulfilled") {
+        setComments(comm.value);
+      }
+      if (boosts.status === "fulfilled") {
+        setBoostTotals(boosts.value);
+      }
+      setLoaded(true);
     });
   }, []);
 
-  const handleToggleVote = useCallback((featureId: string, voted: boolean) => {
-    setVotedIds((prev) => {
-      const next = new Set(prev);
-      if (voted) next.add(featureId);
-      else next.delete(featureId);
-      writeVotedIds(next);
-      return next;
-    });
-  }, []);
+  const handleToggleVote = useCallback(
+    (featureId: string, voted: boolean) => {
+      setVotedIds((prev) => {
+        const next = new Set(prev);
+        if (voted) next.add(featureId);
+        else next.delete(featureId);
+        return next;
+      });
+      // Optimistic count update — corrected if the API rejects.
+      setVoteCounts((prev) => ({
+        ...prev,
+        [featureId]: Math.max(0, (prev[featureId] ?? 0) + (voted ? 1 : -1)),
+      }));
+
+      postVoteToggle(featureId, voterIdRef.current).catch((err) => {
+        Sentry.captureException(err, {
+          tags: { component: "FeatureVoting", action: "toggleVote" },
+        });
+        // Roll back the optimistic update.
+        setVotedIds((prev) => {
+          const next = new Set(prev);
+          if (voted) next.delete(featureId);
+          else next.add(featureId);
+          return next;
+        });
+        setVoteCounts((prev) => ({
+          ...prev,
+          [featureId]: Math.max(0, (prev[featureId] ?? 0) + (voted ? -1 : 1)),
+        }));
+      });
+    },
+    [],
+  );
 
   const handleAddComment = useCallback(
     (featureId: string, text: string, parentId: string | null) => {
       const author = getOrCreateAuthor();
-      const newComment: Comment = {
-        id: `${Date.now()}-${Math.random().toString(36).slice(2, 8)}`,
+      trackFeatureComment(featureId, parentId ? "reply" : "add");
+
+      // Optimistic — show immediately, replace with server row when it lands.
+      const optimisticId = `pending-${Date.now()}-${Math.random()
+        .toString(36)
+        .slice(2, 8)}`;
+      const optimistic: Comment = {
+        id: optimisticId,
         featureId,
         parentId,
         text,
         author,
         timestamp: Date.now(),
       };
-      trackFeatureComment(featureId, parentId ? "reply" : "add");
-      setComments((prev) => {
-        const next = [...prev, newComment];
-        writeComments(next);
-        return next;
-      });
+      setComments((prev) => [...prev, optimistic]);
+
+      postComment({ featureId, parentId, text, author })
+        .then((saved) => {
+          setComments((prev) => prev.map((c) => (c.id === optimisticId ? saved : c)));
+        })
+        .catch((err) => {
+          Sentry.captureException(err, {
+            tags: { component: "FeatureVoting", action: "addComment" },
+          });
+          // Roll back the optimistic insert.
+          setComments((prev) => prev.filter((c) => c.id !== optimisticId));
+        });
     },
-    []
+    [],
   );
 
   const handleBoost = useCallback((featureId: string, weight: number) => {
-    setBoosts((prev) => {
-      const next = { ...prev, [featureId]: (prev[featureId] ?? 0) + weight };
-      writeBoosts(next);
-      return next;
+    setBoostTotals((prev) => ({
+      ...prev,
+      [featureId]: (prev[featureId] ?? 0) + weight,
+    }));
+
+    postBoost({
+      featureId,
+      voterId: voterIdRef.current,
+      weight,
+      tierValue: weight,
+    }).catch((err) => {
+      Sentry.captureException(err, {
+        tags: { component: "FeatureVoting", action: "boost" },
+      });
+      setBoostTotals((prev) => ({
+        ...prev,
+        [featureId]: Math.max(0, (prev[featureId] ?? 0) - weight),
+      }));
     });
   }, []);
 
-  const totalBoosts = Object.values(boosts).reduce((s, v) => s + v, 0);
-  const sorted = [...features].sort((a, b) => b.votes - a.votes);
+  const totalBoosts = Object.values(boostTotals).reduce((s, v) => s + v, 0);
+  const sorted = [...features].sort((a, b) => {
+    const aTotal = a.votes + (voteCounts[a.id] ?? 0);
+    const bTotal = b.votes + (voteCounts[b.id] ?? 0);
+    return bTotal - aTotal;
+  });
+  const realVotesTotal = Object.values(voteCounts).reduce((s, v) => s + v, 0);
 
   return (
     <SectionWrapper id="vote">
-      <motion.div variants={fadeUp} className="text-center relative">
-        <span className="inline-block rounded-full border border-brand-purple/30 bg-brand-purple/10 px-4 py-1.5 text-base font-semibold tracking-widest uppercase text-brand-purple shadow-[0_0_15px_rgba(168,85,247,0.2)] font-mono mb-6">
-          Community
-        </span>
-        <span className="ml-2 inline-block rounded-full border border-glass-hover bg-white/[0.04] px-2.5 py-1 text-base font-mono tracking-wider uppercase text-muted-dark/60 mb-6">
-          Demo
-        </span>
-        <h2 className="text-3xl font-extrabold tracking-tight sm:text-4xl md:text-6xl drop-shadow-md">
-          Vote for{" "}
-          <GradientText className="drop-shadow-lg">what&apos;s next</GradientText>
-        </h2>
-        <p className="mx-auto mt-6 max-w-2xl text-lg text-muted-dark leading-relaxed font-light">
-          Help us prioritize. Pick the features that matter most to you and shape the
-          future of Personas.
-        </p>
-      </motion.div>
+      <FeatureVotingHeader />
 
       <motion.div
+        data-tour-diagram="vote"
         variants={staggerContainer}
         className="mt-16 grid gap-6 sm:grid-cols-2"
       >
@@ -103,11 +169,12 @@ export default function FeatureVoting() {
           <FeatureVoteCard
             key={feature.id}
             feature={feature}
+            apiCount={voteCounts[feature.id] ?? 0}
             initialVoted={votedIds.has(feature.id)}
             onToggleVote={handleToggleVote}
             comments={comments}
             onAddComment={handleAddComment}
-            boostCount={boosts[feature.id] ?? 0}
+            boostCount={boostTotals[feature.id] ?? 0}
             onBoost={handleBoost}
             showBoostUI={!!KOFI_USERNAME}
           />
@@ -116,23 +183,7 @@ export default function FeatureVoting() {
 
       <CustomFeatureRequest />
 
-      <motion.div variants={fadeUp} className="mt-8 text-center">
-        <p className="text-base font-mono text-muted-dark tracking-wide">
-          {(sorted.reduce((s, f) => s + f.votes, 0) + votedIds.size).toLocaleString()}{" "}
-          total votes&ensp;·&ensp;{comments.length} comment
-          {comments.length !== 1 ? "s" : ""}
-          {totalBoosts > 0 && (
-            <>
-              &ensp;·&ensp;{totalBoosts} boost{totalBoosts !== 1 ? "s" : ""}
-            </>
-          )}
-          &ensp;·&ensp;Stored in your browser
-        </p>
-        <p className="mt-1.5 text-base text-muted-dark/60 font-mono tracking-wide">
-          Demo mode &mdash; votes and comments are saved locally and are not shared with
-          other users
-        </p>
-      </motion.div>
+      <FeatureVotingSummary totalVotes={sorted.reduce((s, f) => s + f.votes, 0) + realVotesTotal} commentsCount={comments.length} totalBoosts={totalBoosts} loaded={loaded} />
     </SectionWrapper>
   );
 }

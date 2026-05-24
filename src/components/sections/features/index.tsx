@@ -6,6 +6,7 @@ import SectionIntro from "@/components/primitives/SectionIntro";
 import GlowCard from "@/components/GlowCard";
 import { fadeUp, TRANSITION_NORMAL } from "@/lib/animations";
 import { cardOrchestrator, heroSlideIn, gridCardVariants, connectorDraw, features } from "./data";
+import { FEATURE_VISUALS_BY_KEY } from "./components/visuals";
 import FeatureCardHeader from "./components/FeatureCardHeader";
 import GuideLinks from "./components/GuideLinks";
 import ProgressionThread from "./components/ProgressionThread";
@@ -13,6 +14,7 @@ import FeatureBridge from "./components/FeatureBridge";
 
 export default function Features() {
   const shouldReduceMotion = useReducedMotion();
+  const HeroVisual = FEATURE_VISUALS_BY_KEY[features[0].visualKey];
 
   return (
     <SectionWrapper id="features">
@@ -50,7 +52,7 @@ export default function Features() {
                   <p className="mt-4 text-base leading-relaxed text-muted">{features[0].description}</p>
                   <GuideLinks topics={features[0].guideTopics} layout="row" />
                 </div>
-                <div>{features[0].visual}</div>
+                <div><HeroVisual /></div>
               </div>
             </GlowCard>
           </div>
@@ -69,21 +71,24 @@ export default function Features() {
           </svg>
 
           <div className="grid gap-6 md:grid-cols-3">
-            {features.slice(1).map((f, i) => (
-              <motion.div
-                key={f.title}
-                variants={gridCardVariants[i]}
-                whileHover={shouldReduceMotion ? undefined : { scale: 1.02, boxShadow: `0 0 20px rgba(255,255,255,0.05)` }}
-                transition={TRANSITION_NORMAL}
-              >
-                <GlowCard accent={f.accent} className="p-6 md:p-8 h-full">
-                  <FeatureCardHeader f={f} />
-                  <p className="mt-4 text-base leading-relaxed text-muted">{f.description}</p>
-                  {f.visual}
-                  <GuideLinks topics={f.guideTopics} layout="stack" />
-                </GlowCard>
-              </motion.div>
-            ))}
+            {features.slice(1).map((f) => {
+              const Visual = FEATURE_VISUALS_BY_KEY[f.visualKey];
+              return (
+                <motion.div
+                  key={f.title}
+                  variants={gridCardVariants[f.entrance]}
+                  whileHover={shouldReduceMotion ? undefined : { scale: 1.02, boxShadow: `0 0 20px rgba(255,255,255,0.05)` }}
+                  transition={TRANSITION_NORMAL}
+                >
+                  <GlowCard accent={f.accent} className="p-6 md:p-8 h-full">
+                    <FeatureCardHeader f={f} />
+                    <p className="mt-4 text-base leading-relaxed text-muted">{f.description}</p>
+                    <Visual />
+                    <GuideLinks topics={f.guideTopics} layout="stack" />
+                  </GlowCard>
+                </motion.div>
+              );
+            })}
           </div>
         </div>
       </motion.div>

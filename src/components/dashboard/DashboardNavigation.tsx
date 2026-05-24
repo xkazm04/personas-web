@@ -53,7 +53,7 @@ export function useNavState() {
   const pendingReviewCount = useReviewStore((s) => s.pendingReviewCount);
   // Subscribe to the pre-aggregated count; the nav re-renders only when the
   // count itself changes, not on every unrelated execution-list mutation.
-  const runningCount = useExecutionStore((s) => s.runningCount);
+  const activeCount = useExecutionStore((s) => s.activeCount);
 
   const isConnected = health?.status === "ok";
 
@@ -69,7 +69,7 @@ export function useNavState() {
 
   const getBadge = (item: NavItem) => {
     if (item.key === "reviews" && pendingReviewCount > 0) return pendingReviewCount;
-    if (item.key === "executions" && runningCount > 0) return runningCount;
+    if (item.key === "executions" && activeCount > 0) return activeCount;
     if (item.key === "messages" && MOCK_UNREAD_MESSAGES > 0) return MOCK_UNREAD_MESSAGES;
     return null;
   };

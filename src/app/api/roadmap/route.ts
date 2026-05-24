@@ -1,15 +1,11 @@
 import { NextResponse } from "next/server";
-
-function hasSupabase(): boolean {
-  return !!(
-    process.env.NEXT_PUBLIC_SUPABASE_URL &&
-    process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY
-  );
-}
+import { hasSupabaseEnv } from "@/lib/server/env";
+import type { RoadmapResponse } from "./types";
 
 export async function GET() {
-  if (!hasSupabase()) {
-    return NextResponse.json({ items: [], source: "none" });
+  if (!hasSupabaseEnv()) {
+    const body: RoadmapResponse = { items: [], source: "none" };
+    return NextResponse.json(body);
   }
 
   const { getSupabase } = await import("@/lib/supabase");
@@ -21,9 +17,16 @@ export async function GET() {
     .order("sort_order", { ascending: true });
 
   if (error) {
-    console.error("[roadmap] Supabase error:", error.message);
-    return NextResponse.json({ items: [], source: "error" }, { status: 502 });
+    console.error("[roadmap] Supabase error:", {
+      code: error.code,
+      message: error.message,
+      hint: error.hint,
+      details: error.details,
+    });
+    const body: RoadmapResponse = { items: [], source: "error" };
+    return NextResponse.json(body, { status: 502 });
   }
 
-  return NextResponse.json({ items: data ?? [], source: "supabase" });
+  const body: RoadmapResponse = { items: data ?? [], source: "supabase" };
+  return NextResponse.json(body);
 }

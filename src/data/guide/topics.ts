@@ -7,13 +7,13 @@ export const GUIDE_TOPICS: GuideTopic[] = [
     categoryId: "getting-started",
     title: "Installing Personas",
     description:
-      "How to download and install on Windows, macOS, or Linux. The installer is a single file — download it, run it, and you're ready to go in under a minute.",
-    tags: ["getting-started", "install", "setup", "download", "windows", "mac", "linux"],
+      "How to download and install Personas on Windows. The installer is a single file — install Claude Code first, then run the Personas installer and you're ready to go in under a minute. macOS and Linux builds are on the roadmap.",
+    tags: ["getting-started", "install", "setup", "download", "windows", "claude-code", "roadmap"],
   },
   {
     id: "creating-your-first-agent",
     categoryId: "getting-started",
-    title: "Creating your first agent",
+    title: "Your first agent",
     description:
       "A step-by-step walkthrough of building your very first AI agent. You'll go from a blank slate to a working agent in about five minutes. By the end, you'll have a personal assistant that can carry out a real task for you.",
     tags: ["getting-started", "first-agent", "tutorial", "walkthrough", "beginner"],
@@ -24,10 +24,10 @@ export const GUIDE_TOPICS: GuideTopic[] = [
   {
     id: "understanding-the-interface",
     categoryId: "getting-started",
-    title: "Understanding the interface",
+    title: "App interface",
     description:
-      "A tour of the main screen, sidebar, and navigation. Learn where everything lives so you can move around the app with confidence. Think of it like a quick orientation before you start building.",
-    tags: ["getting-started", "interface", "navigation", "sidebar", "tour"],
+      "A tour of the main screen, sidebar, and navigation, plus the keyboard shortcuts that speed up everyday work. Learn where everything lives so you can move around the app with confidence — and once you know a few key combinations, most tasks become almost instant.",
+    tags: ["getting-started", "interface", "navigation", "sidebar", "tour", "keyboard", "shortcuts", "productivity"],
     coverage: {
       screenshotRecipe: "tools/guide-screenshots/recipes/understanding-the-interface.yaml",
     },
@@ -55,17 +55,10 @@ export const GUIDE_TOPICS: GuideTopic[] = [
     description:
       "How to connect Claude, OpenAI, or other AI services to power your agents. Each provider has different strengths, and you can switch anytime. We'll help you pick the best fit for your needs and budget.",
     tags: ["getting-started", "provider", "claude", "openai", "ai-model", "setup"],
+    devOnly: true,
     coverage: {
       screenshotRecipe: "tools/guide-screenshots/recipes/choosing-your-ai-provider.yaml",
     },
-  },
-  {
-    id: "starter-vs-team-vs-builder-tiers",
-    categoryId: "getting-started",
-    title: "Starter vs Team vs Builder tiers",
-    description:
-      "What each tier unlocks and how to switch between them. Starter is free and great for trying things out, Team adds collaboration, and Builder unlocks advanced automation features. You can upgrade or downgrade anytime.",
-    tags: ["getting-started", "tiers", "pricing", "plans", "upgrade"],
   },
   {
     id: "system-requirements",
@@ -74,14 +67,6 @@ export const GUIDE_TOPICS: GuideTopic[] = [
     description:
       "What your computer needs to run Personas smoothly. The app is lightweight and works on most modern computers. We'll tell you the minimum specs and what's recommended for the best experience.",
     tags: ["getting-started", "requirements", "hardware", "compatibility", "performance"],
-  },
-  {
-    id: "keyboard-shortcuts-and-tips",
-    categoryId: "getting-started",
-    title: "Keyboard shortcuts and tips",
-    description:
-      "Speed up your workflow with built-in shortcuts. Once you know a few key combinations, common tasks become almost instant. This guide covers the most useful shortcuts organized by what you do most.",
-    tags: ["getting-started", "keyboard", "shortcuts", "productivity", "tips"],
   },
   {
     id: "where-to-get-help",
@@ -276,7 +261,7 @@ export const GUIDE_TOPICS: GuideTopic[] = [
   {
     id: "how-personas-keeps-your-data-safe",
     categoryId: "credentials",
-    title: "How Personas keeps your data safe",
+    title: "Data safety",
     description:
       "An overview of the encryption and security model that protects your information. Your passwords and keys are locked in an encrypted vault on your own computer — they never leave your device. You're in full control of your data at all times.",
     tags: ["credentials", "security", "encryption", "privacy", "safety"],
@@ -288,22 +273,6 @@ export const GUIDE_TOPICS: GuideTopic[] = [
     description:
       "A step-by-step guide to storing API keys and passwords so your agents can use them. The process takes about 30 seconds — paste your key, give it a name, and you're done. Your credential is encrypted immediately and ready for your agents to use.",
     tags: ["credentials", "add", "api-key", "password", "store"],
-  },
-  {
-    id: "oauth-setup-walkthrough",
-    categoryId: "credentials",
-    title: "OAuth setup walkthrough",
-    description:
-      "Connecting services like Google, GitHub, and Slack with one click. OAuth lets you log in to a service and grant access without sharing your password. It's the same secure sign-in flow you use when you click \"Sign in with Google\" on a website.",
-    tags: ["credentials", "oauth", "google", "github", "slack", "connect"],
-  },
-  {
-    id: "understanding-the-credential-vault",
-    categoryId: "credentials",
-    title: "Understanding the credential vault",
-    description:
-      "How AES-256 encryption protects your secrets on your device. Think of the vault like a bank safe — even if someone got your computer, they couldn't read your stored keys without your master password. Your secrets are scrambled using the same standard that banks use.",
-    tags: ["credentials", "vault", "aes-256", "encryption", "storage"],
   },
   {
     id: "credential-health-checks",
@@ -336,14 +305,6 @@ export const GUIDE_TOPICS: GuideTopic[] = [
     description:
       "What happens when credentials expire and how to fix it. Some services require you to renew your access periodically, like renewing a library card. Personas warns you before expiration and makes refreshing as easy as clicking a button.",
     tags: ["credentials", "refresh", "expired", "token", "renew"],
-  },
-  {
-    id: "deleting-credentials-safely",
-    categoryId: "credentials",
-    title: "Deleting credentials safely",
-    description:
-      "Removing stored secrets without breaking your agents. Before deleting, Personas shows you which agents depend on that credential. You can reassign them first so nothing stops working when the old credential is removed.",
-    tags: ["credentials", "delete", "remove", "safe", "cleanup"],
   },
   {
     id: "connector-catalog",

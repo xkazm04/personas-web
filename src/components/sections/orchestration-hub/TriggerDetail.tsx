@@ -4,6 +4,7 @@ import Link from "next/link";
 import { AnimatePresence, motion } from "framer-motion";
 import { ArrowRight, Bot, BookOpen } from "lucide-react";
 import { BRAND_VAR, tint } from "@/lib/brand-theme";
+import { EYEBROW } from "@/lib/typography";
 import { TRIGGERS } from "./data";
 
 interface TriggerDetailProps {
@@ -17,7 +18,7 @@ interface TriggerDetailProps {
  */
 
 export default function TriggerDetail({ activeId }: TriggerDetailProps) {
-  const activeTrigger = TRIGGERS.find((t) => t.id === activeId)!;
+  const activeTrigger = TRIGGERS.find((t) => t.id === activeId) ?? TRIGGERS[0];
   const activeVar = BRAND_VAR[activeTrigger.brand];
   const Icon = activeTrigger.icon;
 
@@ -46,10 +47,7 @@ export default function TriggerDetail({ activeId }: TriggerDetailProps) {
                 <Icon className="h-5 w-5" style={{ color: activeVar }} />
               </div>
               <div>
-                <div
-                  className="text-base font-mono uppercase tracking-wider"
-                  style={{ color: activeVar }}
-                >
+                <div className={EYEBROW} style={{ color: activeVar }}>
                   Trigger
                 </div>
                 <div className="text-xl font-bold text-foreground">
@@ -63,7 +61,7 @@ export default function TriggerDetail({ activeId }: TriggerDetailProps) {
             </p>
 
             <div className="mb-4">
-              <div className="text-base font-mono uppercase tracking-wider text-muted-dark mb-1">
+              <div className={`${EYEBROW} mb-1`}>
                 Fires when
               </div>
               <div className="text-base font-mono text-foreground">
@@ -75,7 +73,7 @@ export default function TriggerDetail({ activeId }: TriggerDetailProps) {
               className="flex items-center gap-2 pt-4 border-t"
               style={{ borderColor: "var(--border-glass-hover)" }}
             >
-              <span className="text-base font-mono uppercase tracking-wider text-muted-dark">
+              <span className={EYEBROW}>
                 →
               </span>
               <div

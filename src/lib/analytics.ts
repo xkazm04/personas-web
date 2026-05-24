@@ -5,6 +5,7 @@ import { COOKIE_CONSENT_KEY } from "@/lib/constants";
 
 type QueuedEvent = { name: string; attributes?: Record<string, string> };
 
+const MAX_QUEUE_SIZE = 50;
 const queue: QueuedEvent[] = [];
 
 function hasAnalyticsConsent(): boolean {
@@ -16,6 +17,9 @@ function trackEvent(name: string, attributes?: Record<string, string>) {
   if (hasAnalyticsConsent()) {
     Sentry.metrics.count(name, 1, { attributes });
   } else {
+    if (queue.length >= MAX_QUEUE_SIZE) {
+      queue.shift();
+    }
     queue.push({ name, attributes });
   }
 }
@@ -24,7 +28,12 @@ export function flushAnalyticsQueue() {
   if (!hasAnalyticsConsent()) return;
   while (queue.length > 0) {
     const ev = queue.shift()!;
-    Sentry.metrics.count(ev.name, 1, { attributes: ev.attributes });
+    try {
+      Sentry.metrics.count(ev.name, 1, { attributes: ev.attributes });
+    } catch {
+      // Swallow per-event SDK errors so one failure does not drop the rest
+      // of the queue (and turn a transient hiccup into a permanent blackout).
+    }
   }
 }
 

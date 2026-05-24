@@ -41,35 +41,47 @@ function enrichWithPersona(
 /* ── Store (normalized — no persona metadata) ── */
 
 /**
- * Pre-aggregate the running count alongside the raw list so that the
+ * Pre-aggregate the active count alongside the raw list so that the
  * dashboard nav (and anything else that only cares about the count) can
  * subscribe to a primitive selector. Without this, every list mutation
  * — including unrelated field edits — would re-render the nav even when
  * the count didn't change.
+ *
+ * "Active" matches the page's notion (running OR queued) so the nav badge
+ * never disagrees with the table the user is staring at.
  */
-function countRunning(execs: PersonaExecution[]): number {
+function countActive(execs: PersonaExecution[]): number {
   let n = 0;
-  for (const e of execs) if (e.status === "running") n++;
+  for (const e of execs) if (e.status === "running" || e.status === "queued") n++;
   return n;
 }
 
 interface ExecutionState {
   /** Raw executions without persona enrichment */
   rawExecutions: PersonaExecution[];
-  /** Pre-aggregated count of running executions; consume via primitive selector. */
-  runningCount: number;
+  /** Pre-aggregated count of active (running or queued) executions; consume via primitive selector. */
+  activeCount: number;
   executionsLoading: boolean;
   executionsError: string | null;
+  /** Execution ids with an in-flight cancel request. Gates the per-row button. */
+  cancellingIds: Record<string, true>;
   fetchExecutions: (opts?: ExecFilterOpts) => Promise<void>;
   cancelExecution: (id: string) => Promise<void>;
   reset: () => void;
 }
 
-export const useExecutionStore = create<ExecutionState>((set) => ({
+const TERMINAL_STATUSES: ReadonlySet<PersonaExecution["status"]> = new Set([
+  "completed",
+  "failed",
+  "cancelled",
+]);
+
+export const useExecutionStore = create<ExecutionState>((set, get) => ({
   rawExecutions: [],
-  runningCount: 0,
+  activeCount: 0,
   executionsLoading: false,
   executionsError: null,
+  cancellingIds: {},
   fetchExecutions: async (opts) => {
     const seq = ++executionFetchSeq;
     set({ executionsLoading: true });
@@ -78,7 +90,7 @@ export const useExecutionStore = create<ExecutionState>((set) => ({
       if (seq === executionFetchSeq) {
         set({
           rawExecutions: raw,
-          runningCount: countRunning(raw),
+          activeCount: countActive(raw),
           executionsError: null,
         });
       }
@@ -96,22 +108,50 @@ export const useExecutionStore = create<ExecutionState>((set) => ({
     }
   },
   cancelExecution: async (id) => {
-    await api.cancelExecution(id);
-    set((s) => {
-      const rawExecutions = s.rawExecutions.map((e) =>
-        e.id === id ? { ...e, status: "cancelled" as const } : e,
-      );
-      return { rawExecutions, runningCount: countRunning(rawExecutions) };
-    });
+    const state = get();
+    // Idempotent on the client: skip if already in-flight or in a terminal state.
+    if (state.cancellingIds[id]) return;
+    const current = state.rawExecutions.find((e) => e.id === id);
+    if (current && TERMINAL_STATUSES.has(current.status)) return;
+
+    set((s) => ({ cancellingIds: { ...s.cancellingIds, [id]: true } }));
+    try {
+      await api.cancelExecution(id);
+      set((s) => {
+        const rawExecutions = s.rawExecutions.map((e) =>
+          e.id === id ? { ...e, status: "cancelled" as const } : e,
+        );
+        const { [id]: _omit, ...cancellingIds } = s.cancellingIds;
+        void _omit;
+        return {
+          rawExecutions,
+          activeCount: countActive(rawExecutions),
+          cancellingIds,
+          executionsError: null,
+        };
+      });
+    } catch (err) {
+      set((s) => {
+        const { [id]: _omit, ...cancellingIds } = s.cancellingIds;
+        void _omit;
+        return {
+          cancellingIds,
+          executionsError:
+            err instanceof Error ? err.message : "Failed to cancel execution",
+        };
+      });
+      throw err;
+    }
   },
   reset: () => {
     // Bump the seq so any in-flight fetch from the previous user can't write back.
     executionFetchSeq++;
     set({
       rawExecutions: [],
-      runningCount: 0,
+      activeCount: 0,
       executionsLoading: false,
       executionsError: null,
+      cancellingIds: {},
     });
   },
 }));

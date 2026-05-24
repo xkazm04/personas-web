@@ -50,7 +50,7 @@ export default function FlowNodeCard({
             stiffness: 300,
             damping: 20,
           }}
-          className={`flex items-center gap-2 rounded-xl border px-3 py-2.5 backdrop-blur-sm transition-all duration-500 ${getStatusColor(
+          className={`relative flex items-center gap-2 rounded-xl border px-3 py-2.5 backdrop-blur-sm overflow-hidden transition-all duration-500 ${getStatusColor(
             node.status
           )} ${
             node.status === "pending"
@@ -60,18 +60,38 @@ export default function FlowNodeCard({
                 : "bg-brand-emerald/[0.03]"
           }`}
         >
-          {getStatusIcon(node.status, node.icon)}
-          <span
-            className={`text-base font-medium whitespace-nowrap overflow-hidden text-ellipsis ${
-              node.status === "pending"
-                ? "text-muted-dark"
-                : node.status === "active"
-                  ? "text-brand-cyan"
-                  : "text-foreground/85"
-            }`}
-          >
-            {node.label}
-          </span>
+          {node.status === "active" && !reduced && (
+            <motion.div
+              aria-hidden="true"
+              className="pointer-events-none absolute inset-y-0 w-full"
+              style={{
+                background:
+                  "linear-gradient(90deg, transparent 0%, rgba(6,182,212,0.22) 50%, transparent 100%)",
+              }}
+              initial={{ x: "-100%" }}
+              animate={{ x: "100%" }}
+              transition={{
+                duration: 1.6,
+                repeat: Infinity,
+                ease: "easeInOut",
+                repeatDelay: 0.3,
+              }}
+            />
+          )}
+          <div className="relative z-10 flex items-center gap-2 min-w-0">
+            {getStatusIcon(node.status, node.icon)}
+            <span
+              className={`text-base font-medium whitespace-nowrap overflow-hidden text-ellipsis ${
+                node.status === "pending"
+                  ? "text-muted-dark"
+                  : node.status === "active"
+                    ? "text-brand-cyan"
+                    : "text-foreground/85"
+              }`}
+            >
+              {node.label}
+            </span>
+          </div>
         </motion.div>
       </foreignObject>
     </g>

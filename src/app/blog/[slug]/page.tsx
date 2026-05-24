@@ -1,7 +1,7 @@
 import { notFound } from "next/navigation";
 import type { Metadata } from "next";
 import { BLOG_POSTS, BLOG_CATEGORIES } from "@/data/blog";
-import { SITE_URL } from "@/lib/seo";
+import { SITE_URL, safeJsonLd } from "@/lib/seo";
 import BlogArticle from "./BlogArticle";
 
 interface Props {
@@ -54,7 +54,7 @@ export default async function BlogPostPage({ params }: Props) {
     <>
       <script
         type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(articleJsonLd) }}
+        dangerouslySetInnerHTML={{ __html: safeJsonLd(articleJsonLd) }}
       />
       <BlogArticle post={post} categoryLabel={category?.label ?? post.category} categoryColor={category?.color ?? "#06b6d4"} />
     </>

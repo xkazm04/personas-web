@@ -52,7 +52,7 @@ export default function FlowComposer({ onClose }: { onClose: () => void }) {
       />
 
       <AnimatePresence>
-        {shareToast && (
+        {shareToast?.kind === "success" && (
           <motion.div
             initial={{ opacity: 0, y: -10 }}
             animate={{ opacity: 1, y: 0 }}
@@ -60,6 +60,31 @@ export default function FlowComposer({ onClose }: { onClose: () => void }) {
             className="absolute top-0 left-1/2 -translate-x-1/2 -translate-y-full mb-2 z-30 rounded-full bg-brand-cyan/20 border border-brand-cyan/30 px-4 py-1.5 text-base font-mono text-brand-cyan"
           >
             URL copied to clipboard
+          </motion.div>
+        )}
+        {shareToast?.kind === "manual" && (
+          <motion.div
+            initial={{ opacity: 0, y: -10 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: -10 }}
+            role="alert"
+            className="absolute top-0 left-1/2 -translate-x-1/2 -translate-y-full mb-2 z-30 flex flex-col gap-1.5 rounded-2xl bg-brand-amber/15 border border-brand-amber/40 px-4 py-2 text-base font-mono text-brand-amber min-w-[18rem] max-w-[28rem]"
+          >
+            <span>
+              {shareToast.url
+                ? "Copy failed — press Ctrl+C"
+                : "Could not generate share URL"}
+            </span>
+            {shareToast.url && (
+              <input
+                readOnly
+                value={shareToast.url}
+                autoFocus
+                onFocus={(e) => e.currentTarget.select()}
+                onClick={(e) => e.currentTarget.select()}
+                className="w-full truncate rounded-md bg-background/60 border border-glass px-2 py-1 text-sm text-foreground outline-none focus:border-brand-amber"
+              />
+            )}
           </motion.div>
         )}
       </AnimatePresence>

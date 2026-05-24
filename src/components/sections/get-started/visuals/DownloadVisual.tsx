@@ -3,6 +3,7 @@
 import { motion } from "framer-motion";
 import { Download } from "lucide-react";
 import { BRAND_VAR, tint } from "@/lib/brand-theme";
+import { VisualFrame, VisualRow } from "./chrome";
 import type { VisualProps } from "./types";
 
 const PLATFORMS = [
@@ -14,7 +15,7 @@ const PLATFORMS = [
 export function DownloadVisual({ brand }: VisualProps) {
   const color = BRAND_VAR[brand];
   return (
-    <div className="flex h-full flex-col justify-center gap-4">
+    <VisualFrame>
       <div
         className="mx-auto flex h-20 w-20 items-center justify-center rounded-2xl"
         style={{ backgroundColor: tint(brand, 18) }}
@@ -33,27 +34,24 @@ export function DownloadVisual({ brand }: VisualProps) {
             initial={{ opacity: 0, x: -8 }}
             animate={{ opacity: 1, x: 0 }}
             transition={{ delay: 0.2 + i * 0.12 }}
-            className="flex items-center gap-3 rounded-xl border px-4 py-3"
-            style={{
-              borderColor: "var(--border-glass-hover)",
-              backgroundColor: "rgba(var(--surface-overlay), 0.02)",
-            }}
           >
-            <div
-              className="h-2 w-2 rounded-full"
-              style={{
-                backgroundColor: p.ready
-                  ? color
-                  : "rgba(var(--surface-overlay), 0.15)",
-              }}
-            />
-            <span className="text-base font-medium text-foreground">{p.name}</span>
-            <span className="ml-auto text-base font-mono text-muted-dark">
-              {p.ready ? "Available" : "Coming soon"}
-            </span>
+            <VisualRow>
+              <div
+                className="h-2 w-2 rounded-full"
+                style={{
+                  backgroundColor: p.ready
+                    ? color
+                    : "rgba(var(--surface-overlay), 0.15)",
+                }}
+              />
+              <span className="text-base font-medium text-foreground">{p.name}</span>
+              <span className="ml-auto text-base font-mono text-muted-dark">
+                {p.ready ? "Available" : "Coming soon"}
+              </span>
+            </VisualRow>
           </motion.div>
         ))}
       </div>
-    </div>
+    </VisualFrame>
   );
 }

@@ -12,8 +12,9 @@ import {
   type LucideIcon,
 } from "lucide-react";
 import type { BrandKey } from "@/lib/brand-theme";
+import { DISCORD_INVITE_URL } from "@/lib/constants";
 
-export const DISCORD_URL = "https://discord.gg/personas";
+export const DISCORD_URL = DISCORD_INVITE_URL;
 export const GITHUB_URL = "https://github.com";
 
 export interface CommunityChannel {
@@ -25,6 +26,7 @@ export interface CommunityChannel {
   external: boolean;
   cta: string;
   stat: string;
+  isLive?: boolean;
 }
 
 export const CHANNELS: CommunityChannel[] = [
@@ -38,6 +40,7 @@ export const CHANNELS: CommunityChannel[] = [
     external: true,
     cta: "Join Discord",
     stat: "Live chat",
+    isLive: true,
   },
   {
     title: "GitHub",

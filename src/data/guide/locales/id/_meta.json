@@ -1,0 +1,396 @@
+{
+  "locale": "id",
+  "localeName": "Indonesian",
+  "translatedAt": "2026-05-16T15:30:00.000Z",
+  "translator": "claude-opus-4-7",
+  "topics": {
+    "installing-personas": {
+      "translatedFromHash": "89b406357e3c",
+      "translatedAt": "2026-05-16T15:30:00.000Z"
+    },
+    "creating-your-first-agent": {
+      "translatedFromHash": "4f55346fca7c",
+      "translatedAt": "2026-05-16T15:30:00.000Z"
+    },
+    "understanding-the-interface": {
+      "translatedFromHash": "eccf00a702c9",
+      "translatedAt": "2026-05-16T15:30:00.000Z"
+    },
+    "what-is-an-ai-agent": {
+      "translatedFromHash": "6c7c10ae89ef",
+      "translatedAt": "2026-05-16T15:30:00.000Z"
+    },
+    "running-your-first-automation": {
+      "translatedFromHash": "ea86dda7d092",
+      "translatedAt": "2026-05-16T15:30:00.000Z"
+    },
+    "choosing-your-ai-provider": {
+      "translatedFromHash": "cb499a80430f",
+      "translatedAt": "2026-05-16T15:30:00.000Z"
+    },
+    "system-requirements": {
+      "translatedFromHash": "12cee576d502",
+      "translatedAt": "2026-05-16T15:30:00.000Z"
+    },
+    "where-to-get-help": {
+      "translatedFromHash": "4130e93405dd",
+      "translatedAt": "2026-05-16T15:30:00.000Z"
+    },
+    "creating-a-new-agent": {
+      "translatedFromHash": "b0cfcf3c866d",
+      "translatedAt": "2026-05-16T15:30:00.000Z"
+    },
+    "writing-effective-prompts": {
+      "translatedFromHash": "77b17e016555",
+      "translatedAt": "2026-05-16T15:30:00.000Z"
+    },
+    "simple-vs-structured-prompt-mode": {
+      "translatedFromHash": "11591b689fb1",
+      "translatedAt": "2026-05-16T15:30:00.000Z"
+    },
+    "structured-prompt-sections-explained": {
+      "translatedFromHash": "fd7b0a7d0628",
+      "translatedAt": "2026-05-16T15:30:00.000Z"
+    },
+    "agent-settings-and-limits": {
+      "translatedFromHash": "af8e24abfe51",
+      "translatedAt": "2026-05-16T15:30:00.000Z"
+    },
+    "assigning-tools-to-agents": {
+      "translatedFromHash": "93b0ec219cb6",
+      "translatedAt": "2026-05-16T15:30:00.000Z"
+    },
+    "prompt-version-history": {
+      "translatedFromHash": "2fb5b4432910",
+      "translatedAt": "2026-05-16T15:30:00.000Z"
+    },
+    "comparing-prompt-versions": {
+      "translatedFromHash": "fdad6a47aaef",
+      "translatedAt": "2026-05-16T15:30:00.000Z"
+    },
+    "cloning-and-duplicating-agents": {
+      "translatedFromHash": "683d415d81ae",
+      "translatedAt": "2026-05-16T15:30:00.000Z"
+    },
+    "agent-groups-and-organization": {
+      "translatedFromHash": "3a559c219bef",
+      "translatedAt": "2026-05-16T15:30:00.000Z"
+    },
+    "disabling-and-archiving-agents": {
+      "translatedFromHash": "68ab73c6d52d",
+      "translatedAt": "2026-05-16T15:30:00.000Z"
+    },
+    "agent-health-indicators": {
+      "translatedFromHash": "4db8d8743255",
+      "translatedAt": "2026-05-16T15:30:00.000Z"
+    },
+    "how-triggers-work": {
+      "translatedFromHash": "6417b627509d",
+      "translatedAt": "2026-05-16T15:30:00.000Z"
+    },
+    "manual-triggers": {
+      "translatedFromHash": "ad97ff1dca64",
+      "translatedAt": "2026-05-16T15:30:00.000Z"
+    },
+    "schedule-triggers": {
+      "translatedFromHash": "12c1c8dc848b",
+      "translatedAt": "2026-05-16T15:30:00.000Z"
+    },
+    "webhook-triggers": {
+      "translatedFromHash": "26a278700172",
+      "translatedAt": "2026-05-16T15:30:00.000Z"
+    },
+    "clipboard-monitor": {
+      "translatedFromHash": "96df3bb3f73f",
+      "translatedAt": "2026-05-16T15:30:00.000Z"
+    },
+    "file-watcher-triggers": {
+      "translatedFromHash": "dffec21a4267",
+      "translatedAt": "2026-05-16T15:30:00.000Z"
+    },
+    "chain-triggers": {
+      "translatedFromHash": "b63907a33e9c",
+      "translatedAt": "2026-05-16T15:30:00.000Z"
+    },
+    "event-based-triggers": {
+      "translatedFromHash": "df64808d3aeb",
+      "translatedAt": "2026-05-16T15:30:00.000Z"
+    },
+    "combining-multiple-triggers": {
+      "translatedFromHash": "0c76b58c90ff",
+      "translatedAt": "2026-05-16T15:30:00.000Z"
+    },
+    "testing-and-debugging-triggers": {
+      "translatedFromHash": "0a8fa0d52d27",
+      "translatedAt": "2026-05-16T15:30:00.000Z"
+    },
+    "how-personas-keeps-your-data-safe": {
+      "translatedFromHash": "3fdd39a74bdf",
+      "translatedAt": "2026-05-16T15:30:00.000Z"
+    },
+    "adding-a-new-credential": {
+      "translatedFromHash": "1cf06326b976",
+      "translatedAt": "2026-05-16T15:30:00.000Z"
+    },
+    "credential-health-checks": {
+      "translatedFromHash": "0b7390c979b4",
+      "translatedAt": "2026-05-16T15:30:00.000Z"
+    },
+    "auto-credential-browser": {
+      "translatedFromHash": "2198f45d0a2f",
+      "translatedAt": "2026-05-16T15:30:00.000Z"
+    },
+    "which-agents-use-which-credentials": {
+      "translatedFromHash": "8b272a4e1a02",
+      "translatedAt": "2026-05-16T15:30:00.000Z"
+    },
+    "refreshing-expired-tokens": {
+      "translatedFromHash": "d9b4e1af0252",
+      "translatedAt": "2026-05-16T15:30:00.000Z"
+    },
+    "connector-catalog": {
+      "translatedFromHash": "b5d2369194ec",
+      "translatedAt": "2026-05-16T15:30:00.000Z"
+    },
+    "what-are-pipelines": {
+      "translatedFromHash": "9be317e91cba",
+      "translatedAt": "2026-05-16T15:30:00.000Z"
+    },
+    "the-team-canvas": {
+      "translatedFromHash": "be9c385e9ca5",
+      "translatedAt": "2026-05-16T15:30:00.000Z"
+    },
+    "adding-agents-to-a-pipeline": {
+      "translatedFromHash": "9677c7577b70",
+      "translatedAt": "2026-05-16T15:30:00.000Z"
+    },
+    "connecting-agents-with-data-flow": {
+      "translatedFromHash": "8c4849e4c1bd",
+      "translatedAt": "2026-05-16T15:30:00.000Z"
+    },
+    "pipeline-execution": {
+      "translatedFromHash": "ee03b827d5f3",
+      "translatedAt": "2026-05-16T15:30:00.000Z"
+    },
+    "conditional-routing": {
+      "translatedFromHash": "f9fe9b37044b",
+      "translatedAt": "2026-05-16T15:30:00.000Z"
+    },
+    "team-members-and-roles": {
+      "translatedFromHash": "b3e9b33e30a4",
+      "translatedAt": "2026-05-16T15:30:00.000Z"
+    },
+    "pipeline-run-history": {
+      "translatedFromHash": "0406018bc053",
+      "translatedAt": "2026-05-16T15:30:00.000Z"
+    },
+    "pipeline-templates": {
+      "translatedFromHash": "d7edf5b0e3a2",
+      "translatedAt": "2026-05-16T15:30:00.000Z"
+    },
+    "debugging-pipeline-issues": {
+      "translatedFromHash": "98d2f3845de9",
+      "translatedAt": "2026-05-16T15:30:00.000Z"
+    },
+    "why-test-your-agents": {
+      "translatedFromHash": "c145e88d72e8",
+      "translatedAt": "2026-05-16T15:30:00.000Z"
+    },
+    "the-testing-lab-overview": {
+      "translatedFromHash": "8bfbfa32604a",
+      "translatedAt": "2026-05-16T15:30:00.000Z"
+    },
+    "arena-testing": {
+      "translatedFromHash": "f1f7fee6defb",
+      "translatedAt": "2026-05-16T15:30:00.000Z"
+    },
+    "ab-testing-prompts": {
+      "translatedFromHash": "f9ccc2d9e6f3",
+      "translatedAt": "2026-05-16T15:30:00.000Z"
+    },
+    "matrix-testing": {
+      "translatedFromHash": "1424dc413cc7",
+      "translatedAt": "2026-05-16T15:30:00.000Z"
+    },
+    "eval-testing": {
+      "translatedFromHash": "41e506b0de72",
+      "translatedAt": "2026-05-16T15:30:00.000Z"
+    },
+    "rating-and-scoring-results": {
+      "translatedFromHash": "f751c2a6c589",
+      "translatedAt": "2026-05-16T15:30:00.000Z"
+    },
+    "genome-evolution-basics": {
+      "translatedFromHash": "70bee3938be8",
+      "translatedAt": "2026-05-16T15:30:00.000Z"
+    },
+    "running-a-breeding-cycle": {
+      "translatedFromHash": "264685b3b569",
+      "translatedAt": "2026-05-16T15:30:00.000Z"
+    },
+    "adopting-evolved-prompts": {
+      "translatedFromHash": "9346df09f9bd",
+      "translatedAt": "2026-05-16T15:30:00.000Z"
+    },
+    "fitness-scoring-explained": {
+      "translatedFromHash": "8dae832cee2e",
+      "translatedAt": "2026-05-16T15:30:00.000Z"
+    },
+    "test-history-and-trends": {
+      "translatedFromHash": "5d2d668f9cb4",
+      "translatedAt": "2026-05-16T15:30:00.000Z"
+    },
+    "how-agent-memory-works": {
+      "translatedFromHash": "41b896034873",
+      "translatedAt": "2026-05-16T15:30:00.000Z"
+    },
+    "memory-categories": {
+      "translatedFromHash": "edb8fd520ddd",
+      "translatedAt": "2026-05-16T15:30:00.000Z"
+    },
+    "importance-levels": {
+      "translatedFromHash": "9bdcdee00bd4",
+      "translatedAt": "2026-05-16T15:30:00.000Z"
+    },
+    "searching-agent-memories": {
+      "translatedFromHash": "711b30f1da40",
+      "translatedAt": "2026-05-16T15:30:00.000Z"
+    },
+    "creating-memories-manually": {
+      "translatedFromHash": "01e2246c5b51",
+      "translatedAt": "2026-05-16T15:30:00.000Z"
+    },
+    "memory-tiers-explained": {
+      "translatedFromHash": "56b7e3531d1b",
+      "translatedAt": "2026-05-16T15:30:00.000Z"
+    },
+    "memory-and-execution": {
+      "translatedFromHash": "2d269cb0f552",
+      "translatedAt": "2026-05-16T15:30:00.000Z"
+    },
+    "reviewing-and-cleaning-memories": {
+      "translatedFromHash": "9f473d686948",
+      "translatedAt": "2026-05-16T15:30:00.000Z"
+    },
+    "exporting-and-importing-memories": {
+      "translatedFromHash": "b31efb7ca2a3",
+      "translatedAt": "2026-05-16T15:30:00.000Z"
+    },
+    "memory-best-practices": {
+      "translatedFromHash": "b2e23c0703fc",
+      "translatedAt": "2026-05-16T15:30:00.000Z"
+    },
+    "the-monitoring-dashboard": {
+      "translatedFromHash": "013686b6d15f",
+      "translatedAt": "2026-05-16T15:30:00.000Z"
+    },
+    "execution-logs": {
+      "translatedFromHash": "9a589bb08cbf",
+      "translatedAt": "2026-05-16T15:30:00.000Z"
+    },
+    "real-time-activity-feed": {
+      "translatedFromHash": "0f693113af00",
+      "translatedAt": "2026-05-16T15:30:00.000Z"
+    },
+    "cost-tracking-per-agent": {
+      "translatedFromHash": "d1701f89c957",
+      "translatedAt": "2026-05-16T15:30:00.000Z"
+    },
+    "cost-tracking-per-model": {
+      "translatedFromHash": "ad02d1592dae",
+      "translatedAt": "2026-05-16T15:30:00.000Z"
+    },
+    "success-rate-metrics": {
+      "translatedFromHash": "8665be752630",
+      "translatedAt": "2026-05-16T15:30:00.000Z"
+    },
+    "execution-tracing": {
+      "translatedFromHash": "cc919394c059",
+      "translatedAt": "2026-05-16T15:30:00.000Z"
+    },
+    "performance-trends": {
+      "translatedFromHash": "1ad7fe6a48a7",
+      "translatedAt": "2026-05-16T15:30:00.000Z"
+    },
+    "setting-budget-limits": {
+      "translatedFromHash": "aac508aad69d",
+      "translatedAt": "2026-05-16T15:30:00.000Z"
+    },
+    "anomaly-detection": {
+      "translatedFromHash": "89e65438099a",
+      "translatedAt": "2026-05-16T15:30:00.000Z"
+    },
+    "local-vs-cloud-execution": {
+      "translatedFromHash": "0c466e5bf97a",
+      "translatedAt": "2026-05-16T15:30:00.000Z"
+    },
+    "connecting-to-the-cloud-orchestrator": {
+      "translatedFromHash": "e358f022db74",
+      "translatedAt": "2026-05-16T15:30:00.000Z"
+    },
+    "deploying-an-agent-to-the-cloud": {
+      "translatedFromHash": "5e62849dd3f6",
+      "translatedAt": "2026-05-16T15:30:00.000Z"
+    },
+    "cloud-execution-monitoring": {
+      "translatedFromHash": "24b0dba665d4",
+      "translatedAt": "2026-05-16T15:30:00.000Z"
+    },
+    "github-actions-integration": {
+      "translatedFromHash": "8a6e1957c624",
+      "translatedAt": "2026-05-16T15:30:00.000Z"
+    },
+    "gitlab-ci-cd-integration": {
+      "translatedFromHash": "b762b3449497",
+      "translatedAt": "2026-05-16T15:30:00.000Z"
+    },
+    "n8n-workflow-integration": {
+      "translatedFromHash": "ee8f60bcfe8e",
+      "translatedAt": "2026-05-16T15:30:00.000Z"
+    },
+    "byoi-bring-your-own-infrastructure": {
+      "translatedFromHash": "d269dd9ba361",
+      "translatedAt": "2026-05-16T15:30:00.000Z"
+    },
+    "syncing-desktop-and-cloud": {
+      "translatedFromHash": "3d99c6137f3c",
+      "translatedAt": "2026-05-16T15:30:00.000Z"
+    },
+    "cloud-troubleshooting": {
+      "translatedFromHash": "86f3c761fcb1",
+      "translatedAt": "2026-05-16T15:30:00.000Z"
+    },
+    "common-error-messages": {
+      "translatedFromHash": "66ea72ae2978",
+      "translatedAt": "2026-05-16T15:30:00.000Z"
+    },
+    "agent-not-responding": {
+      "translatedFromHash": "e2dc56f2df2e",
+      "translatedAt": "2026-05-16T15:30:00.000Z"
+    },
+    "credential-errors": {
+      "translatedFromHash": "44686ca07317",
+      "translatedAt": "2026-05-16T15:30:00.000Z"
+    },
+    "trigger-not-firing": {
+      "translatedFromHash": "bf69bb0d269e",
+      "translatedAt": "2026-05-16T15:30:00.000Z"
+    },
+    "self-healing-explained": {
+      "translatedFromHash": "dfdcc9701dcb",
+      "translatedAt": "2026-05-16T15:30:00.000Z"
+    },
+    "checking-system-health": {
+      "translatedFromHash": "f0182579a585",
+      "translatedAt": "2026-05-16T15:30:00.000Z"
+    },
+    "log-files-and-debugging": {
+      "translatedFromHash": "7a075eada989",
+      "translatedAt": "2026-05-16T15:30:00.000Z"
+    },
+    "resetting-to-defaults": {
+      "translatedFromHash": "089dbb2d3989",
+      "translatedAt": "2026-05-16T15:30:00.000Z"
+    }
+  }
+}

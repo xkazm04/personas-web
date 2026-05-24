@@ -7,7 +7,7 @@ import { SectionIntro, BrandCard } from "@/components/primitives";
 import { fadeUp } from "@/lib/animations";
 import { useAutoCycle } from "@/hooks/useAutoCycle";
 import { TOUR_STEPS } from "@/data/tour";
-import { STEP_ICONS, STEP_BRAND, AUTO_ADVANCE_MS } from "./data";
+import { AUTO_ADVANCE_MS } from "./data";
 import { STEP_VISUALS } from "./visuals";
 import StepChip from "./StepChip";
 import StepContent from "./StepContent";
@@ -28,8 +28,6 @@ export default function GetStarted() {
 
   const step = TOUR_STEPS[active];
   const Visual = STEP_VISUALS[active];
-  const StepIcon = STEP_ICONS[active];
-  const brand = STEP_BRAND[active];
 
   return (
     <SectionWrapper id="get-started" aria-labelledby="get-started-heading">
@@ -51,8 +49,6 @@ export default function GetStarted() {
           <StepChip
             key={s.id}
             step={s}
-            brand={STEP_BRAND[i]}
-            icon={STEP_ICONS[i]}
             isActive={i === active}
             onClick={() => {
               setActive(i);
@@ -68,8 +64,8 @@ export default function GetStarted() {
           <AnimatePresence mode="wait">
             <StepContent
               step={step}
-              brand={brand}
-              icon={StepIcon}
+              brand={step.brand}
+              icon={step.icon}
               visual={Visual}
             />
           </AnimatePresence>

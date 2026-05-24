@@ -8,12 +8,14 @@ import { fadeUp } from "@/lib/animations";
 import { formatDateShort } from "@/lib/format-date";
 import type { BlogPost } from "@/data/blog";
 import { categoryOf } from "./category-meta";
+import { useTranslation } from "@/i18n/useTranslation";
 
 interface FeaturedPostProps {
   post: BlogPost;
 }
 
 export default function FeaturedPost({ post }: FeaturedPostProps) {
+  const { t } = useTranslation();
   const meta = categoryOf(post.category);
   const bv = BRAND_VAR[meta.brand];
 
@@ -39,7 +41,7 @@ export default function FeaturedPost({ post }: FeaturedPostProps) {
           style={{ backgroundColor: tint(meta.brand, 18), color: bv }}
         >
           <Sparkles className="h-3.5 w-3.5" />
-          Featured
+          {t.blogPage.featured}
         </div>
 
         <div className="relative flex flex-wrap items-center gap-3 mb-4">
@@ -59,7 +61,7 @@ export default function FeaturedPost({ post }: FeaturedPostProps) {
           </span>
           <span className="flex items-center gap-1.5 text-base text-muted-dark">
             <Clock className="h-3.5 w-3.5" />
-            {post.readingTime} min read
+            {post.readingTime} {t.blogPage.minRead}
           </span>
         </div>
 
@@ -79,7 +81,7 @@ export default function FeaturedPost({ post }: FeaturedPostProps) {
           className="relative mt-6 inline-flex items-center gap-2 text-base font-semibold transition-transform group-hover:translate-x-1"
           style={{ color: bv }}
         >
-          Read article
+          {t.blogPage.readArticle}
           <ArrowRight className="h-4 w-4" />
         </div>
       </Link>

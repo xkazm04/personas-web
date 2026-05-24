@@ -10,6 +10,7 @@ import { usePolling } from "@/hooks/usePolling";
 import AuthLayout from "./AuthLayout";
 import DashboardSkeleton from "./DashboardSkeleton";
 import SignInPrompt from "./SignInPrompt";
+import { useTranslation } from "@/i18n/useTranslation";
 
 export default function AuthGuard({ children }: { children: React.ReactNode }) {
   const { isAuthenticated, isLoading, error, retry } = useAuthStore(
@@ -47,6 +48,7 @@ function SessionErrorPrompt({
   error: string;
   onRetry: () => void;
 }) {
+  const { t } = useTranslation();
   return (
     <AuthLayout>
       <div
@@ -63,7 +65,7 @@ function SessionErrorPrompt({
             </div>
 
             <h1 className="mt-6 text-2xl font-bold tracking-tight">
-              Couldn&apos;t verify your session
+              {t.dashboardUi.sessionVerifyFailed}
             </h1>
 
             <p className="mt-3 text-sm text-muted-dark leading-relaxed">
@@ -75,11 +77,11 @@ function SessionErrorPrompt({
               className="mt-8 flex w-full items-center justify-center gap-2 rounded-full border border-brand-cyan/25 bg-brand-cyan/8 px-6 py-3.5 text-sm font-semibold text-brand-cyan transition-all duration-200 hover:border-brand-cyan/40 hover:bg-brand-cyan/15 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-cyan/60 focus-visible:ring-offset-2 focus-visible:ring-offset-[var(--background)]"
             >
               <RefreshCcw className="h-4 w-4" aria-hidden="true" />
-              Retry
+              {t.dashboard.errorBoundary.retry}
             </button>
 
             <p className="mt-4 text-[11px] text-muted-dark/60">
-              If this keeps happening, check your network or any ad-blockers.
+              {t.dashboardUi.sessionHelp}
             </p>
           </div>
         </div>

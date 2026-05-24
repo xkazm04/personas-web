@@ -2,7 +2,7 @@
 
 export default function AuthLayout({ children }: { children: React.ReactNode }) {
   return (
-    <div className="relative flex min-h-screen items-center justify-center overflow-hidden bg-[var(--background)]">
+    <main id="main-content" className="relative flex min-h-screen items-center justify-center overflow-hidden bg-[var(--background)]">
       {/* Background ambient orbs */}
       <div className="pointer-events-none absolute inset-0">
         <div
@@ -22,6 +22,6 @@ export default function AuthLayout({ children }: { children: React.ReactNode }) 
       </div>
 
       {children}
-    </div>
+    </main>
   );
 }

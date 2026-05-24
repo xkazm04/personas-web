@@ -1,35 +1,21 @@
 "use client";
 
-import { useEffect, useState } from "react";
 import { Radio, Clock, AlertCircle } from "lucide-react";
+import { mutate } from "swr";
 import StatusBadge from "@/components/dashboard/StatusBadge";
-import { api } from "@/lib/api";
 import type { Persona } from "@/lib/types";
 import { relativeTime, formatDuration } from "@/lib/format";
-import {
-  getCachedAgentDetail,
-  setCachedAgentDetail,
-  type AgentDetailData,
-} from "@/lib/agentDetailCache";
-
-async function loadAgentDetail(personaId: string): Promise<AgentDetailData> {
-  const cached = getCachedAgentDetail(personaId);
-  if (cached) return cached;
-
-  const [executions, subscriptions, triggers] = await Promise.all([
-    api.listExecutions({ personaId, limit: 5 }),
-    api.listSubscriptions(personaId),
-    api.listTriggers(personaId),
-  ]);
-
-  const data = { executions, subscriptions, triggers };
-  setCachedAgentDetail(personaId, data);
-  return data;
-}
+import { dashboardKeys, loadAgentDetail, useAgentDetail } from "@/lib/dashboard-queries";
+import { useTranslation } from "@/i18n/useTranslation";
 
 export async function prefetchAgentDetail(personaId: string): Promise<boolean> {
   try {
-    await loadAgentDetail(personaId);
+    const data = await loadAgentDetail(personaId);
+    // Seed SWR's cache so the next useAgentDetail(personaId) renders the
+    // fetched data instantly instead of firing another round-trip.
+    await mutate(dashboardKeys.agentDetail(personaId), data, {
+      revalidate: false,
+    });
     return true;
   } catch {
     // Best effort prefetch — caller decides whether to retry.
@@ -38,44 +24,15 @@ export async function prefetchAgentDetail(personaId: string): Promise<boolean> {
 }
 
 export default function AgentDetail({ persona }: { persona: Persona }) {
-  const [data, setData] = useState<AgentDetailData | null>(null);
-  const [error, setError] = useState(false);
-
-  useEffect(() => {
-    let cancelled = false;
-    const cached = getCachedAgentDetail(persona.id);
-    if (cached) {
-      queueMicrotask(() => {
-        setData(cached);
-        setError(false);
-      });
-      return () => {
-        cancelled = true;
-      };
-    }
-
-    queueMicrotask(() => {
-      setData(null);
-      setError(false);
-    });
-
-    loadAgentDetail(persona.id)
-      .then((next) => {
-        if (!cancelled) setData(next);
-      })
-      .catch(() => {
-        if (!cancelled) setError(true);
-      });
-
-    return () => { cancelled = true; };
-  }, [persona.id]);
+  const { t } = useTranslation();
+  const { data, error } = useAgentDetail(persona.id);
 
   if (error) {
     return (
       <div className="mt-4 border-t border-glass pt-4">
         <p className="flex items-center gap-1.5 text-sm text-red-400">
           <AlertCircle className="h-3 w-3" />
-          Failed to load agent details
+          {t.dashboardUi.failedAgentDetails}
         </p>
       </div>
     );
@@ -102,10 +59,10 @@ export default function AgentDetail({ persona }: { persona: Persona }) {
       {/* Recent executions */}
       <div>
         <h4 className="text-sm font-medium uppercase tracking-wider text-muted-dark">
-          Recent Executions
+          {t.dashboardUi.recentExecutions}
         </h4>
         {data.executions.length === 0 ? (
-          <p className="mt-1 text-sm text-muted-dark">No executions yet</p>
+          <p className="mt-1 text-sm text-muted-dark">{t.dashboardUi.noExecutionsYet}</p>
         ) : (
           <div className="mt-1.5 space-y-1">
             {data.executions.map((exec) => (
@@ -135,11 +92,11 @@ export default function AgentDetail({ persona }: { persona: Persona }) {
       <div className="flex gap-4 text-sm text-muted-dark">
         <span className="flex items-center gap-1">
           <Radio className="h-3 w-3" />
-          {data.subscriptions.length} subscription{data.subscriptions.length !== 1 ? "s" : ""}
+          {data.subscriptions.length} {data.subscriptions.length === 1 ? t.dashboardUi.subscription : t.dashboardUi.subscriptions}
         </span>
         <span className="flex items-center gap-1">
           <Clock className="h-3 w-3" />
-          {data.triggers.length} trigger{data.triggers.length !== 1 ? "s" : ""}
+          {data.triggers.length} {data.triggers.length === 1 ? t.dashboardUi.trigger : t.dashboardUi.triggers}
         </span>
       </div>
     </div>

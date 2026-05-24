@@ -4,6 +4,7 @@ import * as Sentry from "@sentry/nextjs";
 import { AlertTriangle, Check, Copy, RotateCcw } from "lucide-react";
 import { Component, useState, type ErrorInfo, type ReactNode } from "react";
 import { useTranslation } from "@/i18n/useTranslation";
+import { captureExceptionScrubbed } from "@/lib/sentry-pii";
 
 interface Props {
   children: ReactNode;
@@ -12,7 +13,18 @@ interface Props {
 interface State {
   hasError: boolean;
   errorId: string | null;
+  /** Number of times the user has clicked Retry on this boundary. */
+  retryCount: number;
 }
+
+// Cap on user-initiated retries before we go terminal. Each retry that
+// re-throws produces another Sentry event (componentDidCatch fires
+// every time the children re-render and crash again), so an
+// unrecoverable upstream — broken env var, missing API endpoint, dead
+// orchestrator — could otherwise burn through the project's daily
+// Sentry quota in seconds and pin 100% CPU on the user's tab as the
+// React reconciler ping-pongs through error frames.
+const MAX_RETRIES = 3;
 
 function shortCorrelationId(): string {
   if (typeof crypto !== "undefined" && typeof crypto.randomUUID === "function") {
@@ -23,28 +35,53 @@ function shortCorrelationId(): string {
 }
 
 export default class DashboardErrorBoundary extends Component<Props, State> {
-  public state: State = { hasError: false, errorId: null };
+  public state: State = { hasError: false, errorId: null, retryCount: 0 };
 
-  public static getDerivedStateFromError(): State {
+  public static getDerivedStateFromError(): Partial<State> {
     return { hasError: true, errorId: null };
   }
 
   public componentDidCatch(error: Error, info: ErrorInfo) {
     const errorId = shortCorrelationId();
     this.setState({ errorId });
-    Sentry.setContext("dashboardErrorBoundary", { errorId });
-    Sentry.captureException(error, {
-      tags: { errorId, scope: "DashboardErrorBoundary" },
+    // Stop sending to Sentry once the user has burned through MAX_RETRIES.
+    // The first N events are sufficient to diagnose; further repeats just
+    // confirm the boundary is in a retry-loop, which is itself diagnostic
+    // information the first event already conveyed via tags.
+    if (this.state.retryCount > MAX_RETRIES) {
+      console.error(`Dashboard render error (post-cap) [${errorId}]:`, error);
+      return;
+    }
+    Sentry.setContext("dashboardErrorBoundary", {
+      errorId,
+      retryCount: this.state.retryCount,
+    });
+    // Scrub message + stack at the call site (CLAUDE.md mandate). React's
+    // componentStack often quotes file paths and prop values that should
+    // never reach Sentry raw.
+    captureExceptionScrubbed(error, {
+      tags: {
+        errorId,
+        scope: "DashboardErrorBoundary",
+        retryCount: String(this.state.retryCount),
+      },
       contexts: {
         react: { componentStack: info.componentStack ?? undefined },
-        dashboardErrorBoundary: { errorId },
+        dashboardErrorBoundary: {
+          errorId,
+          retryCount: this.state.retryCount,
+        },
       },
     });
     console.error(`Dashboard render error [${errorId}]:`, error, info);
   }
 
   private handleRetry = () => {
-    this.setState({ hasError: false, errorId: null });
+    this.setState((prev) => ({
+      hasError: false,
+      errorId: null,
+      retryCount: prev.retryCount + 1,
+    }));
   };
 
   public render() {
@@ -56,6 +93,7 @@ export default class DashboardErrorBoundary extends Component<Props, State> {
       <ErrorBoundaryFallback
         errorId={this.state.errorId}
         onRetry={this.handleRetry}
+        retriesExhausted={this.state.retryCount >= MAX_RETRIES}
       />
     );
   }
@@ -64,9 +102,11 @@ export default class DashboardErrorBoundary extends Component<Props, State> {
 function ErrorBoundaryFallback({
   errorId,
   onRetry,
+  retriesExhausted,
 }: {
   errorId: string | null;
   onRetry: () => void;
+  retriesExhausted: boolean;
 }) {
   const { t } = useTranslation();
   const strings = t.dashboard.errorBoundary;
@@ -111,14 +151,20 @@ function ErrorBoundaryFallback({
         </button>
       )}
 
-      <button
-        type="button"
-        onClick={onRetry}
-        className="mt-4 inline-flex items-center gap-2 rounded-lg border border-white/[0.12] bg-white/[0.04] px-4 py-2 text-sm text-foreground outline-none transition-colors hover:bg-white/[0.08] focus-visible:ring-2 focus-visible:ring-brand-cyan/40"
-      >
-        <RotateCcw className="h-4 w-4" />
-        {strings.retry}
-      </button>
+      {retriesExhausted ? (
+        <p className="mt-4 max-w-sm text-sm text-muted-dark">
+          {t.dashboardUi.errorBoundaryFallback}
+        </p>
+      ) : (
+        <button
+          type="button"
+          onClick={onRetry}
+          className="mt-4 inline-flex items-center gap-2 rounded-lg border border-white/[0.12] bg-white/[0.04] px-4 py-2 text-sm text-foreground outline-none transition-colors hover:bg-white/[0.08] focus-visible:ring-2 focus-visible:ring-brand-cyan/40"
+        >
+          <RotateCcw className="h-4 w-4" />
+          {strings.retry}
+        </button>
+      )}
     </div>
   );
 }

@@ -1927,8 +1927,8 @@ export const beginnerPickReasons: Record<string, string> = {
 export const beginnerPicks = templateList.filter((t) => beginnerPickIds.includes(t.id as typeof beginnerPickIds[number]));
 
 export const difficultyColors: Record<Difficulty, string> = {
-  Beginner: "text-green-400 border-green-400/30 bg-green-400/10",
-  Intermediate: "text-yellow-400 border-yellow-400/30 bg-yellow-400/10",
+  Beginner: "text-emerald-400 border-emerald-400/30 bg-emerald-400/10",
+  Intermediate: "text-amber-400 border-amber-400/30 bg-amber-400/10",
   Advanced: "text-red-400 border-red-400/30 bg-red-400/10",
 };
 
@@ -1936,7 +1936,7 @@ export const categoryColors: Record<Category, string> = {
   DevOps: "text-brand-purple border-brand-purple/30 bg-brand-purple/10",
   Communication: "text-brand-cyan border-brand-cyan/30 bg-brand-cyan/10",
   Productivity: "text-brand-emerald border-brand-emerald/30 bg-brand-emerald/10",
-  Finance: "text-green-400 border-green-400/30 bg-green-400/10",
+  Finance: "text-emerald-400 border-emerald-400/30 bg-emerald-400/10",
   Sales: "text-orange-400 border-orange-400/30 bg-orange-400/10",
   Support: "text-cyan-400 border-cyan-400/30 bg-cyan-400/10",
   Research: "text-violet-400 border-violet-400/30 bg-violet-400/10",

@@ -1,7 +1,6 @@
 "use client";
 
-import dynamic from "next/dynamic";
-import { P, Ps, Pm, createLazySection } from "./LazySection";
+import { P, Ps, Pm, SectionSkeleton, createLazySection } from "./LazySection";
 
 /* ── Vision skeleton: tags + heading + terminal dashboard card ── */
 function VisionSkeleton() {
@@ -109,62 +108,55 @@ function FAQSkeleton() {
   );
 }
 
-/* ── Dynamic imports with section-specific skeletons ─────────── */
+/* ── Lazy section exports ──────────────────────────────────────── */
 
-const VisionSection = dynamic(() => import("@/components/sections/Vision"), {
-  ssr: true,
-  loading: () => <VisionSkeleton />,
-});
-const PricingSection = dynamic(() => import("@/components/sections/Pricing"), {
-  ssr: true,
-  loading: () => <PricingSkeleton />,
-});
-const FAQSection = dynamic(() => import("@/components/sections/FAQ"), {
-  ssr: true,
-  loading: () => <FAQSkeleton />,
-});
+export const LazyVision = createLazySection(
+  () => import("@/components/sections/vision-grid"),
+  VisionSkeleton,
+);
 
-export function LazyVision() {
-  return <VisionSection />;
-}
+export const LazyPricing = createLazySection(
+  () => import("@/components/sections/pricing"),
+  PricingSkeleton,
+);
 
-export function LazyPricing() {
-  return <PricingSection />;
-}
+export const LazyFAQ = createLazySection(
+  () => import("@/components/sections/FAQ"),
+  FAQSkeleton,
+);
 
-export function LazyFAQ() {
-  return <FAQSection />;
-}
+export const LazyUseCases = createLazySection(
+  () => import("@/components/sections/use-cases"),
+  SectionSkeleton,
+  { ssr: false },
+);
 
-/* ── Generic lazy sections (use shared SectionSkeleton) ──────── */
+export const LazyPlaygroundSplit = createLazySection(
+  () => import("@/components/sections/playground-split"),
+  SectionSkeleton,
+  { ssr: false },
+);
 
-const UseCasesSection = createLazySection(() => import("@/components/sections/UseCases"));
-const PlaygroundSplitSection = createLazySection(() => import("@/components/sections/PlaygroundSplit"));
-const DownloadCTASection = createLazySection(() => import("@/components/sections/DownloadCTA"));
-const PipelineShowcaseSection = createLazySection(() => import("@/components/sections/PipelineShowcase"));
-const ChangelogSection = createLazySection(() => import("@/components/sections/Changelog"));
-const GetStartedSection = createLazySection(() => import("@/components/sections/GetStarted"));
+export const LazyDownloadCTA = createLazySection(
+  () => import("@/components/sections/DownloadCTA"),
+  SectionSkeleton,
+  { ssr: false },
+);
 
-export function LazyUseCases() {
-  return <UseCasesSection />;
-}
+export const LazyOrchestrationHub = createLazySection(
+  () => import("@/components/sections/orchestration-hub"),
+  SectionSkeleton,
+  { ssr: false },
+);
 
-export function LazyPlaygroundSplit() {
-  return <PlaygroundSplitSection />;
-}
+export const LazyChangelog = createLazySection(
+  () => import("@/components/sections/Changelog"),
+  SectionSkeleton,
+  { ssr: false },
+);
 
-export function LazyDownloadCTA() {
-  return <DownloadCTASection />;
-}
-
-export function LazyPipelineShowcase() {
-  return <PipelineShowcaseSection />;
-}
-
-export function LazyChangelog() {
-  return <ChangelogSection />;
-}
-
-export function LazyGetStarted() {
-  return <GetStartedSection />;
-}
+export const LazyGetStarted = createLazySection(
+  () => import("@/components/sections/get-started"),
+  SectionSkeleton,
+  { ssr: false },
+);

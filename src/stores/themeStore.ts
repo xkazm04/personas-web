@@ -110,15 +110,29 @@ export const useThemeStore = create<ThemeState>()(
 );
 
 /**
- * Initialise the theme on first-ever visit.
- * If the user has already chosen (or shuffled) a theme it lives in
- * localStorage and persist's rehydration handles applying it; we no-op here.
+ * Sync the React store with the theme already applied to the DOM by the
+ * pre-paint inline script in `app/layout.tsx`. The DOM is the
+ * authoritative source on the first-paint frame; this hook just lifts
+ * that value back into Zustand so consumers like ThemeSwitcher render
+ * the right "selected" badge from mount. No DOM writes — the script
+ * already did them, and re-applying would re-run `theme-transitioning`
+ * for no reason.
  */
 export function initRandomTheme() {
   if (typeof window === "undefined") return;
-  if (window.localStorage.getItem(THEME_STORAGE_KEY) !== null) return;
-
-  const id = pickRandomTheme();
-  applyThemeToDOM(id);
-  useThemeStore.setState({ themeId: id });
+  // The script always sets the html `class` (with or without `dark`) and
+  // `data-theme` (omitted only for `dark-midnight`). Read both back and
+  // figure out which ThemeId we ended up with.
+  const el = document.documentElement;
+  const dataTheme = el.getAttribute("data-theme");
+  const isLight = !el.classList.contains("dark");
+  let resolved: ThemeId | null = null;
+  if (dataTheme && VALID_THEME_IDS.has(dataTheme as ThemeId)) {
+    resolved = dataTheme as ThemeId;
+  } else if (!dataTheme) {
+    resolved = isLight ? "light" : "dark-midnight";
+  }
+  if (resolved && useThemeStore.getState().themeId !== resolved) {
+    useThemeStore.setState({ themeId: resolved });
+  }
 }

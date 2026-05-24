@@ -9,11 +9,14 @@ import GradientText from "@/components/GradientText";
 import SectionHeading from "@/components/SectionHeading";
 import FloatingParticles from "@/components/FloatingParticles";
 import PrimaryCTA from "@/components/PrimaryCTA";
+import HoneycombMark from "@/components/HoneycombMark";
 import { useLiveStats } from "@/hooks/useLiveStats";
 import { useAnimationPauseRegister } from "@/hooks/useAnimationPause";
 import { connectors } from "@/data/connectors";
 import { useTranslation } from "@/i18n/useTranslation";
+import TourLauncher from "@/components/tour/TourLauncher";
 import CommandCenterIllustration from "./hero/CommandCenterIllustration";
+import HeroStatRow from "./hero/HeroStatRow";
 
 const CONNECTOR_COUNT = connectors.length;
 
@@ -63,6 +66,9 @@ export default function HeroClient() {
       className="noise relative flex min-h-screen items-center justify-center overflow-hidden px-4 sm:px-6"
       style={{ contain: "layout style paint" }}
       data-animate-when-visible
+      // useAnimationPause toggles .animations-paused via classList; suppress
+      // hydration warnings caused by observer-driven class mutations
+      suppressHydrationWarning
     >
       <FloatingParticles />
       <div className="hero-vignette pointer-events-none absolute inset-0" />
@@ -76,11 +82,15 @@ export default function HeroClient() {
         {/* Left — text */}
         <div className="text-center lg:text-left">
           <motion.div variants={fadeUp}>
-            <span className="ml-[500px] relative inline-flex items-center overflow-hidden rounded-full border border-brand-cyan/80 bg-brand-cyan/5 px-4 py-1.5 text-lg font-bold tracking-wider uppercase text-brand-cyan font-mono shadow-[0_0_15px_color-mix(in_srgb,var(--brand-cyan)_20%,transparent)]">
+            {/* The lg:ml-[500px] gates the desktop-only horizontal nudge that
+                positions the badge over the right command-center card. Below
+                lg, the badge sits inline within the centered text column. */}
+            <span className="lg:ml-[500px] relative inline-flex items-center gap-2 overflow-hidden rounded-full border border-brand-cyan/80 bg-brand-cyan/5 px-4 py-1.5 text-lg font-bold tracking-wider uppercase text-brand-cyan font-mono shadow-[0_0_15px_color-mix(in_srgb,var(--brand-cyan)_20%,transparent)]">
               <span
                 className="absolute inset-0 animate-shimmer bg-linear-to-r from-transparent via-brand-cyan/10 to-transparent"
                 style={{ animationDuration: "3s" }}
               />
+              <HoneycombMark className="relative shrink-0" />
               <span className="relative">{t.hero.badge}</span>
             </span>
           </motion.div>
@@ -138,20 +148,16 @@ export default function HeroClient() {
             </a>
           </motion.div>
 
+          <motion.div variants={fadeUp} className="mt-6 flex justify-center lg:justify-start">
+            <TourLauncher tourId="home" bridgeHref="/features?tour=1" intro />
+          </motion.div>
+
           <motion.div
             variants={fadeUp}
             className="mt-6 flex flex-col items-center gap-3 rounded-xl border border-glass bg-white/2 px-4 py-3 lg:hidden"
-            data-testid="mock-stats"
           >
             <div className="text-base font-mono uppercase tracking-wider text-muted-dark">{t.hero.adoptionSnapshot}</div>
-            <div className="flex justify-center gap-6 text-center">
-              {heroStats.map((stat) => (
-                <div key={stat.label}>
-                  <div className="text-base font-bold tracking-tight font-mono">{stat.value}</div>
-                  <div className="text-base text-muted-dark font-mono tracking-wider">{stat.label}</div>
-                </div>
-              ))}
-            </div>
+            <HeroStatRow stats={heroStats} variant="mobile" />
           </motion.div>
         </div>
 
@@ -172,18 +178,7 @@ export default function HeroClient() {
               <div className="rounded-full border border-glass bg-white/2 px-4 py-1.5 text-base font-mono tracking-wider text-muted-dark uppercase shadow-[0_0_10px_rgba(0,0,0,0.5)]">
                 {t.hero.commandCenter}
               </div>
-              <div className="flex gap-6 text-center" data-testid="mock-stats">
-                {heroStats.map((stat) => (
-                  <div key={stat.label} className="group">
-                    <div className="text-xl font-bold tracking-tight transition-colors group-hover:text-brand-cyan drop-shadow-[0_0_5px_rgba(255,255,255,0.2)]">
-                      {stat.value}
-                    </div>
-                    <div className="text-base text-muted-dark font-mono tracking-wider transition-colors group-hover:text-foreground/70">
-                      {stat.label}
-                    </div>
-                  </div>
-                ))}
-              </div>
+              <HeroStatRow stats={heroStats} variant="desktop" />
             </div>
           </div>
         </motion.div>

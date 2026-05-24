@@ -17,7 +17,7 @@ export type Phase = {
   id: number;
   name: string;
   goal: string;
-  priority: "Now" | "Next" | "Later";
+  priority: "now" | "next" | "later";
   accent: "cyan" | "purple" | "emerald" | "amber";
   status: "in-progress" | "upcoming" | "blocked";
   tasks: PhaseTask[];
@@ -28,7 +28,7 @@ export const phases: Phase[] = [
     id: 12,
     name: "Cloud Integration",
     goal: "Run your agents 24/7 in the cloud, even when your computer is off.",
-    priority: "Now",
+    priority: "now",
     accent: "cyan",
     status: "in-progress",
     tasks: [
@@ -74,7 +74,7 @@ export const phases: Phase[] = [
     id: 13,
     name: "Web App",
     goal: "The website you're on right now — sign up, manage your account, and explore Personas online.",
-    priority: "Now",
+    priority: "now",
     accent: "purple",
     status: "in-progress",
     tasks: [
@@ -113,7 +113,7 @@ export const phases: Phase[] = [
     id: 14,
     name: "Cloud Evolution",
     goal: "Make cloud execution faster, safer, and smarter with usage tracking and plan-based limits.",
-    priority: "Next",
+    priority: "next",
     accent: "emerald",
     status: "blocked",
     tasks: [
@@ -159,7 +159,7 @@ export const phases: Phase[] = [
     id: 15,
     name: "Distribution & Polish",
     goal: "One-click installers for every platform, automatic updates, and a polished first-time experience.",
-    priority: "Later",
+    priority: "later",
     accent: "amber",
     status: "blocked",
     tasks: [
@@ -212,7 +212,7 @@ export const phases: Phase[] = [
   },
 ];
 
-export const statusConfig = {
+export const phaseStatusConfig = {
   "in-progress": {
     label: "In Progress",
     dotClass: "bg-brand-cyan shadow-[0_0_8px_rgba(6,182,212,0.5)]",
@@ -233,10 +233,10 @@ export const statusConfig = {
   },
 };
 
-export const priorityClass: Record<Phase["priority"], string> = {
-  Now: "border-brand-cyan/20 bg-brand-cyan/5 text-brand-cyan/70",
-  Next: "border-brand-purple/20 bg-brand-purple/5 text-brand-purple/70",
-  Later: "border-glass-hover bg-white/[0.02] text-muted-dark",
+export const phasePriorityClass: Record<Phase["priority"], string> = {
+  now: "border-brand-cyan/20 bg-brand-cyan/5 text-brand-cyan/70",
+  next: "border-brand-purple/20 bg-brand-purple/5 text-brand-purple/70",
+  later: "border-glass-hover bg-white/[0.02] text-muted-dark",
 };
 
 export const phaseCardData: PhaseCardData[] = [

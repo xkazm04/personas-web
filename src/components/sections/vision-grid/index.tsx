@@ -30,6 +30,7 @@ export default function VisionGrid() {
       </div>
 
       <motion.div
+        data-tour-diagram="platform"
         variants={staggerContainer}
         initial="hidden"
         whileInView="visible"

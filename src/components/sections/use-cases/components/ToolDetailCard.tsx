@@ -33,7 +33,7 @@ const ToolDetailCard = forwardRef<HTMLDivElement, Props>(function ToolDetailCard
         />
         <div className="pointer-events-none absolute inset-x-0 bottom-0 h-px bg-linear-to-r from-transparent via-brand-cyan/10 to-transparent" />
 
-        <div className="relative mb-6 flex flex-wrap items-center gap-3">
+        <div className="relative mb-6 flex flex-wrap items-center gap-4">
           <div
             className="flex h-12 w-12 items-center justify-center rounded-xl shadow-lg"
             style={{ backgroundColor: `${activeTool.color}12`, boxShadow: `0 4px 20px ${activeTool.color}10` }}
@@ -41,12 +41,12 @@ const ToolDetailCard = forwardRef<HTMLDivElement, Props>(function ToolDetailCard
             <ConnectorIcon src={activeTool.icon.src} size={24} />
           </div>
           <div>
-            <h3 className="font-semibold text-lg">{activeTool.name}</h3>
-            <p className="text-base text-muted">{whatCanAutomateLabel}</p>
+            <h3 className="text-2xl font-semibold tracking-tight">{activeTool.name}</h3>
+            <p className="text-xs uppercase tracking-[0.18em] font-medium text-muted">{whatCanAutomateLabel}</p>
           </div>
         </div>
 
-        <div className="grid gap-4 md:grid-cols-3 items-start">
+        <div className="grid gap-4 md:grid-cols-3 items-stretch">
           {activeTool.useCases.map((uc, i) => (
             <motion.div
               key={uc.title}
@@ -54,9 +54,7 @@ const ToolDetailCard = forwardRef<HTMLDivElement, Props>(function ToolDetailCard
               whileInView={{ opacity: 1, y: 0, scale: 1 }}
               viewport={{ once: true, margin: "-50px" }}
               transition={{ delay: i * 0.15, duration: 0.4, ease: "easeOut" }}
-              className={`group rounded-xl border border-glass bg-white/1.5 p-4 transition-all duration-300 hover:bg-white/2.5 ${
-                i === 1 ? "md:-mt-2" : i === 2 ? "md:mt-4" : ""
-              }`}
+              className="group relative rounded-xl border border-glass bg-white/1.5 p-4 transition-transform duration-300 hover:bg-white/2.5 hover:-translate-y-1 before:pointer-events-none before:absolute before:inset-x-0 before:top-0 before:h-px before:bg-linear-to-r before:from-transparent before:via-brand-cyan/40 before:to-transparent before:opacity-0 before:transition-opacity before:duration-300 hover:before:opacity-100"
             >
               <div className="flex items-center gap-2 mb-3">
                 <div className="h-1.5 w-1.5 rounded-full bg-brand-cyan shadow-[0_0_8px_rgba(6,182,212,0.8)]" />
@@ -64,7 +62,7 @@ const ToolDetailCard = forwardRef<HTMLDivElement, Props>(function ToolDetailCard
                   {uc.title}
                 </h4>
               </div>
-              <p className="text-base leading-relaxed text-foreground/70 group-hover:text-foreground transition-colors">
+              <p className="text-sm leading-relaxed text-foreground/70 group-hover:text-foreground transition-colors">
                 {uc.desc}
               </p>
             </motion.div>

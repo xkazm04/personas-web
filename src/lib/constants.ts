@@ -29,6 +29,11 @@ export const SCROLL_MAP_SECTIONS = LANDING_SECTIONS.filter((s) => s.scrollMap !=
 
 export const COOKIE_CONSENT_KEY = "personas-cookie-consent";
 
+export const DASHBOARD_LAST_VISIT_KEY = "personas-dashboard-last-visit";
+
+export const DISCORD_INVITE_URL =
+  process.env.NEXT_PUBLIC_DISCORD_INVITE_URL || "https://discord.gg/personas";
+
 export const CHART_COLORS = [
   "#06b6d4",
   "#a855f7",

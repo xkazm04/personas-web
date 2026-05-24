@@ -1,307 +1,287 @@
 export const content: Record<string, string> = {
   "how-personas-keeps-your-data-safe": `
-## How Personas Keeps Your Data Safe
+## Data Safety
 
-Security is built into Personas from the ground up. Your passwords, API keys, and tokens are stored in an encrypted vault on your own computer — they never leave your device unless you explicitly send them to an AI provider during an agent run.
+Security is built into Personas from the ground up. API keys, tokens, and passwords live in a local encrypted vault on your own machine — they never leave the device unless an agent explicitly sends them to an AI provider or third-party service during a run. The vault file itself is encrypted with **AES-256-GCM**, and the key that unlocks it is wrapped by your OS-native keyring (Windows DPAPI, macOS Keychain, Linux Secret Service) so plaintext keys never sit on disk.
 
-The encryption uses AES-256, the same standard used by banks and governments. Even if someone gained physical access to your computer, they couldn't read your stored secrets without your master password. You're in full control of your data at all times.
+When you run an agent, the engine decrypts only the specific credentials that agent needs, holds them in memory for the duration of the call, then wipes the plaintext. Logs, traces, and exports never contain raw credential values — anywhere a credential would appear, you see a token reference (\`cred:gmail-work\`) instead.
+
+The vault is browsable from **Connections → Credentials**: each credential shows its label, category, health status, and dependencies. Raw values are never visible after the initial entry — there's ==no "show password" toggle, by design==. If you forget a value, rotate it at the provider and add the new one; the old record can be removed without revealing what it held.
 
 ### Key Points
 
-- **Local storage** — your credentials stay on your device, not in the cloud
-- **AES-256 encryption** — the gold standard in data protection
-- **No third-party access** — only your agents use your credentials, and only when running
-- **Open architecture** — you can review exactly what data is sent during each agent run
+- **AES-256-GCM** — authenticated encryption with field-level isolation; every credential's ciphertext has its own nonce, so a compromise of one record doesn't cascade to others
+- **OS keyring–wrapped master key** — DPAPI on Windows, Keychain on macOS, Secret Service on Linux; no master password to type each session, protection comes from your OS account login
+- **Tamper-evident** — GCM authentication tags catch any modification; a tampered vault file fails to decrypt with a clear error instead of silently returning garbage
+- **Local-only by default** — nothing is uploaded; cloud deploy is opt-in and encrypts in transit via TLS to your chosen orchestrator
+- **Token references in logs** — agent traces and exports use credential IDs, not raw secrets
+- **Bound to OS account** — copying the vault file to another machine or user account won't make it usable
 
 ### How It Works
 
-When you store a credential, it's immediately encrypted and saved to a local vault file. When an agent needs that credential (like an API key to call a service), it's decrypted just long enough to make the call, then locked again. The raw key is never displayed or logged.
+When the app starts, it asks the OS keyring for the wrapped vault key. The keyring decrypts the wrapping using OS-account-level protections (DPAPI / Keychain / Secret Service) and hands the vault key to the app process in memory. The vault key is never written to disk in plaintext, and the OS keyring is the only place that can produce it.
+
+From there, storing a credential encrypts it with the vault key and writes the ciphertext to local SQLite — each field stored separately, not as one bulk blob. Using a credential during an agent run decrypts it in memory, passes it to the relevant tool or HTTP client, and releases the buffer immediately. The raw value is never logged, never displayed after the initial entry, and never serialized anywhere outside the encrypted vault.
 
 ### See It In Action
 
 :::usecases
-**Team API Management**
-Your team uses 15 different services
+**Multiple services, isolated credentials**
+Your agents talk to Slack, GitHub, and Jira
 ---
-Each team member stores their own credentials locally. Agents use them without ever exposing secrets in logs, code, or chat.
+Each credential is encrypted independently with its own random nonce. A compromise of one record doesn't expose the others.
 ===
-**Credential Rotation**
-An API token expires
+**Credential rotation**
+A token expires or gets rotated
 ---
-Personas detects the expiry, alerts you, and can automatically refresh OAuth tokens — no manual work needed.
+OAuth credentials refresh automatically via the provider's refresh token. Manually-rotated keys you swap on the credential record without restarting anything.
 ===
-**Multi-Service Workflows**
-An agent needs access to Slack, GitHub, and Jira
+**Audit-friendly traces**
+You need to prove which credential was used where
 ---
-Each credential is stored separately, encrypted independently, and injected only when the agent needs it.
+Every run's trace records the credential ID it used. The actual value never appears; the ID is enough to demonstrate provenance.
 :::
 
-:::info
-If you lose your computer, your credentials remain protected by your OS login. Without your system password, the encrypted vault file is unreadable — it cannot be extracted and decrypted on another machine.
-:::
-
-:::warning
-Never share your master password or vault file with anyone. These are the keys to all your stored credentials. If you suspect either has been compromised, rotate all stored secrets immediately.
+:::callout-stack
+[info] The vault is bound to your OS user account via the OS keyring. Copying the vault file to a different machine, even with the same OS, won't make it decryptable — the wrapping key lives in the OS keyring and isn't portable.
+[warning] If you change your OS account password on macOS or Linux, the keyring may relock the wrapping key. Personas will prompt for the new credential on first run after the change. If the keyring is wiped (factory reset, account deletion), the vault becomes unrecoverable — back up the raw secrets externally if you need disaster recovery beyond the local machine.
+[tip] The local-only model is the right default for personal automation. For team / production work where multiple machines need the same credentials, the cloud deploy (Team / Builder tier) replicates vault state via the orchestrator with end-to-end encryption.
 :::
 
 :::tip
-Think of the credential vault like a safe deposit box at a bank. Your secrets are locked away and only taken out when needed for a specific job.
+Vault security is binary: it's either intact (OS account valid, keyring readable) or broken (cannot decrypt). There's no "weak" intermediate state. The most impactful thing you can do beyond Personas itself is run a modern OS version with full-disk encryption — BitLocker on Windows, FileVault on macOS, LUKS on Linux — so the device-level threat model is bounded.
 :::
   `,
 
   "adding-a-new-credential": `
 ## Adding a New Credential
 
-Storing a new credential takes about 30 seconds. Go to the \`Credentials\` section in the sidebar, click \`Add Credential\`, choose the type (API key, password, token, etc.), paste your secret, and give it a descriptive name like "OpenAI API Key" or "Gmail Password."
+Open **Connections → Credentials** and click \`Add Credential\`. The picker shows the connector catalog — 40+ pre-configured services across roles like source control, CI/CD, cloud storage, email delivery, payment processing, chat messaging, CRM, AI platforms, error monitoring, incident management, browser automation, and more. Each connector auto-configures its required auth type, fields, validation endpoint, and any service-specific quirks.
 
-Your credential is encrypted immediately and ready for your agents to use. You'll be able to assign it to agents from their settings panel.
+If your service isn't in the catalog, **AI Discovery** generates a schema for it on the fly — give it the service name (and optionally a docs URL) and it returns an inferred connector definition you can review, edit, and save. Discovered schemas are cached for reuse, so the second time someone adds the same service it's an instant match.
 
-### Step by Step
+### Authentication methods
 
-:::steps
-1. **Navigate to Credentials** — Open the \`Credentials\` section in the sidebar
-2. **Click Add Credential** — Hit the \`Add Credential\` button at the top
-3. **Select the credential type** — Choose from API key, OAuth token, password, or other types
-4. **Paste your secret** — Enter the value into the secure input field
-5. **Give it a descriptive name** — Use something recognizable like "Stripe Live Key" or "Gmail Work Account"
-6. **Click Save** — Your credential is encrypted with AES-256 and stored in the local vault
-:::
+Personas picks the auth flow automatically based on the connector you choose. Four distinct types are supported:
 
-### How It Works
+- **API credentials** — the everyday case: API key, personal access token, bot token, or basic auth. Paste the secret into the secure input and save. For connectors that declare one, Personas runs a no-op healthcheck call right after save to confirm the credential works.
+- **OAuth** — browser consent flow for services that support it (Google, GitHub, Slack, Linear, HubSpot, Twitter/X, Discord, and many more). Click Connect, sign in to the provider, approve specific scopes, and a scoped token + refresh token land encrypted in the vault. Your password never touches Personas.
+- **MCP (Model Context Protocol)** — first-class support for MCP servers as credentials, with \`stdio\` or \`sse\` transport, optional environment variables, and automatic tool discovery from the server's \`tools/list\`.
+- **CLI** — shell-based auth for tools that use their own login command (e.g. \`gcloud auth login\`, \`gh auth login\`). Personas drives the command in a subshell and stores the resulting session token.
 
-The moment you click Save, your credential is encrypted using AES-256 and stored in the local vault. The raw value is never shown again — you'll only see the credential's name and type. To use it, assign it to an agent in that agent's settings.
-
-:::warning
-Never paste credentials into chat messages, agent prompts, or unencrypted files. Always use the secure credential input field — it ensures the raw value is encrypted immediately and never logged.
-:::
-
-:::tip
-Use clear, descriptive names like "Stripe Live Key" or "Gmail Work Account." When you have many credentials, good names save you from guessing which is which.
-:::
-  `,
-
-  "oauth-setup-walkthrough": `
-## OAuth Setup Walkthrough
-
-OAuth lets you connect services like Google, GitHub, and Slack without sharing your password. Instead of typing a password, you click a "Connect" button, sign in through the service's own website, and grant permission. It's the same flow you use when you click "Sign in with Google" on any website.
-
-This is the most secure way to connect services because your password never touches Personas — only a limited access token is stored.
-
-### Step by Step
+### Step by step
 
 :::steps
-1. **Go to Credentials** — Open the \`Credentials\` section and click \`Add Credential\`
-2. **Choose the service** — Select the service you want to connect (Google, GitHub, Slack, etc.)
-3. **Click Connect** — A browser window opens to the service's login page
-4. **Sign in and approve** — Log in with your account and approve the requested permissions
-5. **Confirmation** — The window closes automatically and your credential appears as connected
+1. **Navigate to Connections → Credentials** — sidebar → Connections, then the Credentials tab
+2. **Click Add Credential** — top-right button on the credential list
+3. **Pick a connector** — search the catalog by name or filter by role; the picker filters to matches and shows the auth method as a badge
+4. **Run the auth flow** — paste the secret, click Connect for OAuth, wire up the MCP server, or run the CLI command depending on the connector's auth method
+5. **Name and save** — give the credential a label you'll recognize ("Stripe Live", "Gmail Personal"); the credential is encrypted with AES-256-GCM and persisted (one nonce per field, see [Data safety](/guide/credentials/how-personas-keeps-your-data-safe))
+6. **Healthcheck runs automatically** — for connectors that declare one, Personas pings the service with a lightweight no-op call to confirm the credential is live before exposing it to agents
+7. **Optional: bind to agents now** — the picker shows agents with matching open capability slots; one-click bind avoids hunting them down later
 :::
 
-### How It Works
+### OAuth flow in detail
 
-:::diagram
-[Click Connect] --> [Browser opens] --> [Sign in to service] --> [Approve permissions] --> [Token stored securely]
-:::
+OAuth-supporting services get a one-click **Connect** button instead of a paste-the-key form. The button opens your default browser to the provider's official consent screen — you sign in there using your existing account, review the specific scopes Personas is requesting, and approve to issue a token. The browser window closes automatically, the credential card lists the granted scopes, and you can immediately use it in agents.
 
-OAuth works like a valet key for your car — it gives limited access without handing over the master key. The service gives Personas a token that allows specific actions (like reading emails) without granting full account access. If you ever want to revoke access, you can do it from the service's security settings.
-
-:::info
-OAuth tokens grant limited, scoped access — not full account control. Each service defines exactly which permissions are requested. You can review and revoke these permissions at any time from the service's own security settings page.
-:::
+Personas requests **scoped tokens** (the minimum permission set for the integration's stated capability — e.g. Gmail read-only for a summarizer agent, Gmail read+send for an auto-reply agent) and refreshes them in the background using long-lived refresh tokens. You'll typically never see expiry messages from OAuth credentials unless the provider invalidates the refresh token (consent revoked, password changed, security event). When that happens, Personas prompts to re-authenticate; one click re-runs the consent flow.
 
 :::tip
-Some OAuth connections expire periodically. Personas will notify you when a reconnection is needed — it only takes a few seconds.
-:::
-  `,
-
-  "understanding-the-credential-vault": `
-## Understanding the Credential Vault
-
-The credential vault is where all your secrets live — encrypted, local, and under your control. Think of it like a bank safe: even if someone gained access to your computer, they couldn't read the contents without your master password. Every secret is individually wrapped in AES-256 encryption.
-
-The vault file lives on your computer's hard drive. It's never uploaded to the cloud, shared with third parties, or included in backups unless you explicitly choose to.
-
-:::feature
-**AES-256-GCM Encryption** color=#a855f7
-Every credential is individually encrypted with AES-256-GCM and stored locally. Your master key is derived through the OS-native keyring (Windows DPAPI, macOS Keychain, Linux Secret Service) — it never exists in plaintext on disk.
+For services that offer both OAuth and API-key options (e.g. GitHub, Linear), prefer ==OAuth== when available — scopes are tighter, revocation works from the provider side without rotating an API key, and the consent screen documents exactly what the integration can do.
 :::
 
-### Key Points
+### MCP servers
 
-- **AES-256 encryption** — each credential is individually encrypted
-- **Local file** — stored only on your computer, not in the cloud
-- **Master password protected** — an additional layer of security for vault access
-- **Tamper detection** — the vault detects if anyone has modified it externally
+Personas treats **Model Context Protocol** servers as first-class credentials. If you already have MCP servers configured in Claude Desktop, Personas auto-discovers them on first run — name, command, args, and env are imported as MCP credentials you can pick up in agent Connectors.
 
-### How It Works
+To add a new MCP server manually, pick **MCP** in the Add Credential picker and provide:
 
-When you add a credential, it's encrypted with a key derived from your master password and stored in the vault file. When an agent needs the credential, the vault decrypts it in memory just long enough to use it, then discards the decrypted version. The vault file itself is never in an unencrypted state.
+- **Package or command** — the npm package name (most servers) or an executable path
+- **Transport** — \`stdio\` for local subprocess (the common case) or \`sse\` for HTTP server-sent events
+- **Environment variables** — any secrets or config the server expects in its env, stored encrypted alongside the credential
+
+Once saved, the server's \`tools/list\` is queried automatically and the resulting tools appear both in the credential playground (so you can call them by hand to verify) and in the agent's Connectors tab as bindable capabilities.
 
 :::warning
-Choose a strong master password that you don't use anywhere else. This single password protects all your stored credentials. If your master password is weak or reused, every secret in the vault is at risk.
+Never paste credentials into agent prompts, code comments, or chat windows. Use the secure credential input field only — anything else risks the raw value being captured in a log, sync, or screenshot.
 :::
 
 :::tip
-Choose a strong master password that you don't use anywhere else. This single password protects all your stored credentials.
+Naming convention matters once you have 20+ credentials. \`<service>-<env>-<account>\` ("stripe-live-main", "gmail-prod-support") makes it instantly clear which credential to pick when you're configuring an agent's Connectors tab.
 :::
   `,
 
   "credential-health-checks": `
 ## Credential Health Checks
 
-Over time, API keys can expire, permissions can change, and passwords can be rotated. Credential health checks automatically test each stored credential to make sure it still works. This catches problems before they cause your agents to fail unexpectedly.
+Credentials drift over time — tokens expire, keys get rotated upstream, OAuth scopes change. Credential health checks ping each stored credential periodically with a lightweight test call (a no-op API request that costs nothing and tells you whether the credential is still valid). The results surface as a status indicator on the credential card and as alerts when a credential degrades.
 
-Think of it as a regular check-up for your connections — a quick test to confirm everything is still valid and working properly.
+The check schedule is configurable. By default, OAuth credentials check daily (because the refresh-token flow needs the credential to be exercised periodically anyway), API-key credentials check weekly. Manual checks can be run anytime from the credential card.
 
 ### Key Points
 
-- **Automatic testing** — health checks run periodically in the background
-- **Status indicators** — green (healthy), yellow (expiring soon), red (broken)
-- **Proactive alerts** — you're notified before a credential expires, not after
-- **One-click fix** — jump directly to the credential that needs attention
+- **Per-credential status** — green (healthy), yellow (expiring soon / scope changed), red (broken / revoked)
+- **Configurable cadence** — per-credential overrides if a service rate-limits aggressive checking
+- **Manual check** — one-click test from the credential card; useful before deploying a new agent
+- **Expiry projection** — for credentials with known expiry dates (signed JWTs, scoped tokens), the status flips to yellow N days before expiry (configurable, default 7)
+- **Alert routing** — failures route through the same notification channels you've configured for agents
 
 ### How It Works
 
-Personas periodically sends a small test request to each service to verify the credential works. If a test fails, the credential's status changes and you see an alert. Click the alert to go directly to the credential settings where you can refresh or replace it.
+Each connector defines its own health-check call (the lightest possible request that exercises the credential). The check runs in the background on the configured cadence; results are persisted and update the credential's status. If a check fails, the status flips, the credential card highlights, and dependent agents inherit the warning on their own health indicators — so a broken Gmail credential makes every Gmail-using agent show yellow until you fix it.
 
 :::tip
-Run a manual health check before deploying a new agent that depends on credentials. This ensures everything is working before your agent tries to use it.
+Run a manual health check before any production deploy or scheduled overnight run. Five seconds now versus a failed run at 3am because a token silently rotated.
 :::
   `,
 
   "auto-credential-browser": `
 ## Auto-Credential Browser
 
-Setting up credentials for new services can be confusing — each one has different settings, different URLs, and different steps. The auto-credential browser takes the guesswork out of this process. It walks you through each service's setup step by step, like having a tech-savvy friend looking over your shoulder.
+The auto-credential browser is the catalog-driven onboarding for new credentials. Open Connections → Catalog and you see every connector Personas ships pre-configured: 60+ services as of this writing, organized by category (email, storage, payments, communication, developer tools, CRM, AI providers, etc.). Each connector knows the right auth type, the required fields, the OAuth scopes, the API endpoints, and any service-specific quirks.
 
-Instead of hunting through documentation, you select a service and the browser shows you exactly what to do, where to find your keys, and how to configure the connection.
+When you pick a connector, the wizard walks you through the exact steps for that service — including links to the specific pages in the service's UI where you'd find an API key, or which OAuth scopes to approve, or what permissions matter. For services where Personas can detect a successful connection (most of them), the wizard verifies in real-time before saving.
 
 ### Key Points
 
-- **Guided setup** for 40+ popular services
-- **Step-by-step instructions** with screenshots for each service
-- **Auto-detection** of required fields and settings
-- Works with major providers like **Google, AWS, Stripe, Slack**, and many more
+- **60+ pre-configured connectors** — auth type, fields, scopes, endpoints baked in
+- **Service-specific guidance** — direct links to the exact API-key page or settings tab
+- **Live validation** — the wizard tests the credential before saving for most services
+- **Suggested-for-agent flow** — the catalog can also be entered from an agent's Connectors tab, where it's filtered to connectors matching the open capability slot
+- **Request new connectors** — services not yet in the catalog can be requested; for one-offs, use the Generic / Custom connector type
 
 ### How It Works
 
-When adding a credential, click \`Browse Services\` to open the auto-credential browser. Search or browse for the service you need. The browser shows you a step-by-step guide specific to that service, including where to find your API key and which permissions to grant.
+Connector definitions are shipped with the app and updated through the regular release cycle. Each definition declares its auth flow, required fields, validation endpoint, and scope list. When you pick a connector, the wizard reads the definition, renders the matching form, runs the OAuth or API-key flow, and validates before saving. The actual credential value is encrypted at save time using the same path as a manually-added credential.
 
 :::tip
-Even if you're familiar with a service, the auto-browser is worth checking. It often highlights permissions you might have missed that your agents will need.
+The catalog is also the fastest way to discover what's integrated. If you're considering whether Personas can do X with service Y, search the catalog first — if Y is there with a relevant capability, the integration is one-click.
 :::
   `,
 
   "which-agents-use-which-credentials": `
 ## Which Agents Use Which Credentials
 
-As your collection of agents and credentials grows, it's important to know which agents depend on which credentials. The credential usage map gives you a clear picture — select any credential and see every agent that relies on it. Select any agent and see every credential it uses.
+The Dependencies tab on Connections shows the credential → agent graph. Pick a credential on the left and you see every agent that references it on the right, with the specific capability slot named ("Gmail account for the email-summary agent"). Pick an agent and you see every credential it depends on. The graph is bidirectional — useful for both "what breaks if I rotate this key?" and "which credentials does this agent need before I can promote it?".
 
-This is especially helpful before you delete or rotate a key. You'll know exactly what might be affected and can plan accordingly.
+The same dependency map drives the build-engine pre-flight check: when you promote an agent, the engine cross-checks every required capability against the vault and flags missing or expired credentials before allowing promote. This is why you almost never get a "credential not found" error at runtime in newly-created agents — the dependency check ran at promote time and caught it.
 
 ### Key Points
 
-- **Visual dependency map** showing connections between agents and credentials
-- **Impact preview** — see which agents would break if a credential is removed
-- **Unused credential detection** — find credentials no agent is using anymore
-- **Quick navigation** — click any connection to jump to that agent or credential
+- **Bidirectional graph** — credential → agents and agent → credentials
+- **Capability-slot named** — the dependency tells you not just "this credential is used" but "used as the email-send capability"
+- **Pre-flight check** — promote-time validation that uses the same graph
+- **Impact preview** — selecting a credential highlights every agent that would be affected by its removal
+- **Unused-credential detection** — credentials with zero agent dependencies are surfaced in the Connections summary so you can clean them up
 
 ### How It Works
 
-Go to \`Credentials\` and look at the \`Usage\` column next to each credential. It shows a count of how many agents use it. Click the count to see the full list. You can also view this from an agent's side — open an agent's settings to see all credentials it depends on.
+Every agent's Connectors tab stores the credential reference per capability slot. The Dependencies view queries this storage in both directions to render the graph. Credential rotation, expiration, or removal events propagate through the graph: any agent depending on a degraded credential inherits the warning state on its health indicator, so the graph isn't just a static reference — it's a live propagation path.
 
 :::warning
-Before deleting or rotating a credential, always check its usage map. Removing a credential that active agents depend on will cause those agents to fail on their next run.
+Before rotating or deleting any credential used by an unattended (scheduled / webhook / chain) agent, check the dependency map and update the agents to point at the replacement credential first. The pre-flight check catches you at promote time; for already-promoted agents, the runtime failure is the only signal.
 :::
 
 :::tip
-Before deleting a credential, always check its usage map. Reassign dependent agents to a new credential first to avoid unexpected failures.
+A monthly "credential audit" routine: open Connections → Dependencies, sort by oldest, and ask "do I still use this credential?" for the bottom dozen. Unused credentials are surface area for nothing, so removing them is pure cleanup.
 :::
   `,
 
   "refreshing-expired-tokens": `
 ## Refreshing Expired Tokens
 
-Some services require you to renew your access periodically — like renewing a library card. When a token expires, your agent can no longer connect to that service until you refresh it. Personas makes this as painless as possible by warning you ahead of time and simplifying the refresh process.
+Some credentials are time-bounded by design — OAuth access tokens expire in minutes to hours; service-issued tokens (Slack bot tokens, GitHub PATs) often have N-day or N-year expiries. Personas tracks expiry where the provider publishes it and surfaces a "expiring soon" yellow status some days before the cutoff (configurable, default 7 days).
 
-Most of the time, refreshing is a one-click operation. For OAuth connections, it's often fully automatic.
-
-### Key Points
-
-- **Advance warnings** — you're notified days before a token expires
-- **One-click refresh** for most credential types
-- **Automatic refresh** for OAuth connections that support it
-- **Zero downtime** — the new token takes effect immediately
-
-### How It Works
-
-When a token is nearing expiration, you'll see a yellow warning on the credential and any agents that use it. Click the warning to open the credential settings, where a \`Refresh\` button handles the renewal. For OAuth credentials, Personas often refreshes the token automatically in the background.
-
-:::tip
-If you see a yellow warning on a credential, refresh it right away. A two-minute refresh now prevents a failed agent run later.
-:::
-  `,
-
-  "deleting-credentials-safely": `
-## Deleting Credentials Safely
-
-When you no longer need a credential — maybe you switched services or closed an account — you'll want to remove it cleanly. Personas helps you do this safely by showing which agents depend on the credential before you confirm the deletion.
-
-This prevents accidental breakage. You can reassign dependent agents to a different credential first, so nothing stops working when the old one is removed.
+For OAuth credentials with a refresh token, refresh is automatic and silent in the background. For API keys and tokens that don't refresh, you'll see the yellow warning and the credential card will offer a "Reconnect" or "Replace" button — clicking it opens the same wizard that created the credential.
 
 ### Key Points
 
-- **Dependency check** — see all agents using this credential before deleting
-- **Reassignment option** — point dependent agents to a replacement credential first
-- **Permanent removal** — once deleted, the encrypted data is wiped from the vault
-- **No undo** — deletion is permanent, so the confirmation step is important
+- **Automatic refresh for OAuth** — refresh token used silently; you don't see this happen
+- **Advance warning for non-refresh creds** — yellow status N days before expiry; configurable warning window
+- **One-click reconnect** — the credential card has a Reconnect button that re-runs the auth flow
+- **Zero-downtime swap** — for credentials with active dependent agents, the new token replaces the old in place; agents pick up the new value on their next run
+- **Failure surfaces in agent health** — credentials that fail to refresh make their dependent agents go yellow / red on the Health tab
 
 ### How It Works
 
-Select a credential and click \`Delete\`. Personas shows a list of all agents that depend on it. If any exist, you can reassign them to another credential right from the deletion dialog. Once all dependencies are cleared (or you confirm you want to proceed anyway), the credential is permanently removed from the vault.
-
-:::warning
-Credential deletion is permanent and cannot be undone. The encrypted data is wiped from the vault completely. Make sure you have a backup of the raw secret if you might need it again.
-:::
+Refresh runs as part of the same background task that does health checks. For OAuth, the task uses the refresh token to mint a new access token from the provider and updates the credential record. For non-refreshable tokens, the task only updates the expiry projection (so the yellow warning appears at the right time); the actual replacement is a manual action you take when the warning fires.
 
 :::tip
-If you're rotating a key (replacing old with new), add the new credential first, reassign your agents, and then delete the old one. This ensures zero downtime.
+When a yellow expiry warning fires, refresh immediately rather than waiting. Refreshing now is a one-minute task. Letting a scheduled agent fail at 3am because the token expired overnight is much more expensive in unwinding the missed runs.
 :::
   `,
 
   "connector-catalog": `
 ## Connector Catalog
 
-The connector catalog is your one-stop shop for service integrations. It lists 40+ pre-configured connectors for popular services — from email providers and cloud storage to payment processors and social media platforms. Each connector comes with built-in configuration so you don't have to figure out the technical details.
+The catalog at Connections → Catalog is the curated list of services Personas integrates with out of the box. As of this writing, 60+ connectors across 9 categories, with new connectors added each release based on user demand. Each connector declares its auth type (OAuth, API key, basic auth, bot token), required scopes / capabilities, and the agent-side tool surface it exposes.
 
-Just pick a service, sign in, and your agents can start using it. New connectors are added regularly based on user requests.
+When an agent's Connectors tab needs a capability ("email-send", "cloud-storage-write", "chat-message-send"), it queries the catalog for connectors that satisfy that capability, then matches against your vault. If you already have a credential for one of those connectors, it's an immediate match. If not, the catalog offers to add one — opening the same wizard described in the Auto-Credential Browser topic.
 
 ### Connector Categories
 
-| Category | Services | Auth Type |
-|---|---|---|
-| Email | Gmail, Outlook, IMAP/SMTP | OAuth / Password |
-| Cloud Storage | Google Drive, Dropbox, OneDrive, S3 | OAuth / API Key |
-| Payments | Stripe, PayPal, Square | API Key |
-| Social Media | Twitter/X, LinkedIn, Facebook | OAuth |
-| Developer Tools | GitHub, GitLab, Jira, Linear | OAuth / API Key |
-| Communication | Slack, Discord, Teams, Telegram | OAuth / Bot Token |
-| CRM | Salesforce, HubSpot, Pipedrive | OAuth / API Key |
-| AI Providers | OpenAI, Anthropic, Google AI | API Key |
+:::tabs
+### Email
+Receive, parse, send, and search messages. Triage inboxes, summarize threads, file invoices, route replies.
+
+Supported: **Gmail** (OAuth or app password), **Outlook / Microsoft 365** (OAuth), and any **IMAP / SMTP** provider (server URL + username + password).
+
+### Cloud Storage
+Read and write files for agents that ingest documents, save outputs, or sync results to a shared drive.
+
+Supported: **Google Drive**, **Dropbox**, **OneDrive** (OAuth), any **S3-compatible** store like AWS S3, R2, B2, or MinIO (access key + secret), and **Local Drive** for files already on this machine (filesystem path, no credential required).
+
+### Payments
+Read transactions, watch for new charges, refund or capture, generate reports.
+
+Supported: **Stripe** with live and test segregation, **PayPal**, **Square** — all via API key.
+
+### Social
+Post, schedule, read engagement, run analytics on social accounts.
+
+Supported: **Twitter / X**, **LinkedIn**, **Facebook**, **Mastodon** — all via OAuth.
+
+### Developer Tools
+Watch issues, open PRs, attach builds, mirror Sentry alerts into your agent flow.
+
+Supported: **GitHub** and **GitLab** (OAuth or fine-grained PAT), **Jira** and **Linear** (OAuth), and **Sentry** (auth token).
+
+### Communication
+Inbound webhooks for triggers, outbound channel-delivery for agent outputs, two-way bot interactions.
+
+Supported: **Slack** and **Microsoft Teams** (OAuth + bot token), **Discord** and **Telegram** (bot token), and the **Generic Webhook** type for any HTTP endpoint (URL only, no credential required).
+
+### CRM
+Read contacts, sync deals, automate stage transitions, watch for new leads.
+
+Supported: **Salesforce**, **HubSpot**, **Pipedrive** — OAuth (recommended) or API key.
+
+### AI Providers
+The model endpoints your agents call. See **Adding a New Credential** → **AI Provider Quick Start** for per-provider setup detail.
+
+Supported: **Anthropic**, **OpenAI**, **Google Gemini** (API key); **Ollama** for local models (server URL, no key); and **Custom OpenAI-compatible** for vLLM, LM Studio, OpenRouter, and similar (base URL + API key).
+
+### Data
+Query databases or arbitrary REST endpoints; results land in agent context as structured input.
+
+Supported: **Postgres**, **Snowflake**, **BigQuery** (connection string or service-account key), **Generic SQL** for any JDBC-style URL, and **Generic HTTP** for REST APIs (base URL + auth headers or bearer token).
+:::
 
 ### Key Points
 
-- **40+ pre-built connectors** for popular services
-- Categories include **email, storage, payments, social media**, and more
-- Each connector includes **guided setup** with clear instructions
-- **Request new connectors** if the service you need isn't listed yet
+- **Capability-based matching** — connectors expose capabilities; agents need capabilities; the catalog matches them
+- **Service-specific quirks baked in** — Slack workspace IDs, GitHub PAT scopes, OAuth callback URLs, etc., all pre-configured
+- **Auth-type indicators** — at a glance, see which connectors are OAuth vs. API-key vs. local
+- **Generic / Custom fallback** — for services not in the catalog, the Generic connector type accepts raw HTTP/REST configuration
+- **Channel-delivery connectors** — Slack, Discord, Teams, generic webhook show up here for outbound agent output too (configured per-agent on the Connectors tab)
 
 ### How It Works
 
-Open the connector catalog from the \`Credentials\` section and browse or search for the service you need. Click on a connector to see what it does and how to set it up. Follow the guided steps to connect your account. Once connected, the service becomes available as a tool for your agents.
+Connector definitions live in the app and are versioned alongside the binary. The Connectors tab on each agent queries the catalog dynamically — adding a connector to the catalog (in a release) makes it available to existing agents without any per-agent migration. Custom / Generic connectors you configure locally are vault-scoped and don't go through the catalog.
 
 :::tip
-Browse the catalog even if you don't need a specific service right now. You might discover integrations that inspire new automation ideas you hadn't considered.
+The catalog is also a discovery surface. Browse occasionally even when you don't have a specific need — you'll often find an integration that suggests a new automation. The Communication category in particular is rich for output-side use cases (delivering agent results to Slack / Discord / Teams).
 :::
   `,
 };

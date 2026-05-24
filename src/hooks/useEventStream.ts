@@ -101,6 +101,15 @@ export function useEventStream() {
     function connect() {
       if (disposed) return;
 
+      // Defensive: if a previous EventSource is still attached (caller
+      // raced an onerror reconnect with a fresh connect()), close it
+      // before creating a new one — otherwise we'd leak two parallel
+      // sockets to the proxy and double-deliver every event.
+      if (es) {
+        es.close();
+        es = null;
+      }
+
       // Stop fallback polling while SSE is active
       stopFallbackPolling();
 
@@ -129,7 +138,13 @@ export function useEventStream() {
         setStatusRef.current("reconnecting");
         scheduleFallbackPolling();
 
-        // Schedule SSE reconnect with exponential backoff
+        // Cancel any prior reconnect timer before scheduling the next.
+        // EventSource can fire onerror twice in rapid succession (e.g.
+        // server returns a non-2xx status, then the connection drops);
+        // without this clear, the first setTimeout was orphaned and
+        // fired after the second had already scheduled — connect() ran
+        // twice and produced two parallel EventSource instances.
+        if (reconnectTimer) clearTimeout(reconnectTimer);
         reconnectTimer = setTimeout(() => {
           reconnectTimer = null;
           connect();

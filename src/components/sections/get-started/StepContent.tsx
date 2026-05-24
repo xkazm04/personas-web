@@ -7,19 +7,59 @@ import { Check } from "lucide-react";
 import { BRAND_VAR, tint, type BrandKey } from "@/lib/brand-theme";
 import type { TourStep } from "@/data/tour";
 
-const STEP_BG_BY_NUMBER: Record<number, { dark: string; light: string }> = {
-  1: { dark: "/imgs/get-started/step1-dark.png", light: "/imgs/get-started/step1-light.png" },
-  2: { dark: "/imgs/get-started/step2-dark.png", light: "/imgs/get-started/step2-light.png" },
-  3: { dark: "/imgs/get-started/step3-dark.png", light: "/imgs/get-started/step3-light.png" },
-  4: { dark: "/imgs/get-started/step4-dark.png", light: "/imgs/get-started/step4-light.png" },
-  5: { dark: "/imgs/get-started/step5-dark.png", light: "/imgs/get-started/step5-light.png" },
-};
-
 interface StepContentProps {
   step: TourStep;
   brand: BrandKey;
   icon: LucideIcon;
   visual: ComponentType<{ brand: BrandKey }>;
+}
+
+/**
+ * Backdrop image + readability overlay for the left-side text panel.
+ * Each step has a paired dark/light artwork at /imgs/get-started/stepN-{dark,light}.png.
+ * The overlay is a horizontal gradient that fades from semi-transparent on the
+ * left (where text sits) to solid background on the right (where the artwork
+ * peeks through). Different opacity per theme so light-mode text stays legible
+ * over bright illustrations.
+ */
+function StepBackdrop({ stepNumber }: { stepNumber: number }) {
+  const dark = `/imgs/get-started/step${stepNumber}-dark.png`;
+  const light = `/imgs/get-started/step${stepNumber}-light.png`;
+  return (
+    <div className="pointer-events-none absolute inset-0">
+      {/* eslint-disable-next-line @next/next/no-img-element */}
+      <img
+        src={dark}
+        alt=""
+        aria-hidden="true"
+        className="hidden dark:block absolute inset-0 h-full w-full object-cover opacity-20"
+      />
+      {/* eslint-disable-next-line @next/next/no-img-element */}
+      <img
+        src={light}
+        alt=""
+        aria-hidden="true"
+        className="block dark:hidden absolute inset-0 h-full w-full object-cover opacity-35"
+      />
+      {/* Dark theme: left starts mostly transparent, fades to solid bg on the right */}
+      <div
+        className="hidden dark:block absolute inset-0"
+        style={{
+          background:
+            "linear-gradient(90deg, color-mix(in srgb, var(--background) 10%, transparent) 0%, color-mix(in srgb, var(--background) 40%, transparent) 40%, var(--background) 100%)",
+        }}
+      />
+      {/* Light theme: heavier wash across the whole panel so text stays
+          readable over bright illustrations; still fades to solid bg right. */}
+      <div
+        className="block dark:hidden absolute inset-0"
+        style={{
+          background:
+            "linear-gradient(90deg, color-mix(in srgb, var(--background) 45%, transparent) 0%, color-mix(in srgb, var(--background) 70%, transparent) 40%, var(--background) 100%)",
+        }}
+      />
+    </div>
+  );
 }
 
 export default function StepContent({
@@ -29,7 +69,6 @@ export default function StepContent({
   visual: Visual,
 }: StepContentProps) {
   const bv = BRAND_VAR[brand];
-  const bg = STEP_BG_BY_NUMBER[step.number];
 
   return (
     <motion.div
@@ -45,39 +84,7 @@ export default function StepContent({
         className="relative flex flex-col justify-center gap-5 border-b lg:border-b-0 lg:border-r p-8 sm:p-10 overflow-hidden"
         style={{ borderColor: "var(--border-glass)" }}
       >
-        {bg && (
-          <div className="pointer-events-none absolute inset-0">
-            <img
-              src={bg.dark}
-              alt=""
-              aria-hidden="true"
-              className="hidden dark:block absolute inset-0 h-full w-full object-cover opacity-20"
-            />
-            <img
-              src={bg.light}
-              alt=""
-              aria-hidden="true"
-              className="block dark:hidden absolute inset-0 h-full w-full object-cover opacity-35"
-            />
-            {/* Dark theme: left starts mostly transparent, fades to solid bg on the right */}
-            <div
-              className="hidden dark:block absolute inset-0"
-              style={{
-                background:
-                  "linear-gradient(90deg, color-mix(in srgb, var(--background) 10%, transparent) 0%, color-mix(in srgb, var(--background) 40%, transparent) 40%, var(--background) 100%)",
-              }}
-            />
-            {/* Light theme: heavier wash across the whole panel so text stays
-                readable over bright illustrations; still fades to solid bg right. */}
-            <div
-              className="block dark:hidden absolute inset-0"
-              style={{
-                background:
-                  "linear-gradient(90deg, color-mix(in srgb, var(--background) 45%, transparent) 0%, color-mix(in srgb, var(--background) 70%, transparent) 40%, var(--background) 100%)",
-              }}
-            />
-          </div>
-        )}
+        <StepBackdrop stepNumber={step.number} />
         <div className="relative flex items-center gap-3">
           <div
             className="flex h-12 w-12 items-center justify-center rounded-xl"

@@ -2,9 +2,21 @@
 
 import { motion } from "framer-motion";
 import { Brain, Check, Zap } from "lucide-react";
+import { staggerDelay, nextDelay } from "@/lib/animations";
 import type { Scenario } from "../types";
 
+const THOUGHT_STAGGER = 0.2;
+const ACTION_STAGGER = 0.12;
+const RESULT_GAP = 0.1;
+
 export default function AgentPanel({ scenario }: { scenario: Scenario }) {
+  const thoughtCount = scenario.agent.thoughts.length;
+  const actionCount = scenario.agent.actions.length;
+  const actionsStart = nextDelay(thoughtCount, THOUGHT_STAGGER);
+  const resultDelay =
+    nextDelay(thoughtCount, THOUGHT_STAGGER) +
+    nextDelay(actionCount, ACTION_STAGGER, RESULT_GAP);
+
   return (
     <div className="space-y-3">
       {scenario.agent.thoughts.map((thought, i) => (
@@ -13,7 +25,7 @@ export default function AgentPanel({ scenario }: { scenario: Scenario }) {
           initial={{ opacity: 0, scale: 0.95, y: 6 }}
           animate={{ opacity: 1, scale: 1, y: 0 }}
           exit={{ opacity: 0, scale: 0.95 }}
-          transition={{ delay: i * 0.2, duration: 0.35 }}
+          transition={{ delay: staggerDelay(i, THOUGHT_STAGGER), duration: 0.35 }}
           className="flex items-start gap-2.5"
         >
           <div className="mt-0.5 flex h-5 w-5 shrink-0 items-center justify-center rounded-md bg-brand-purple/10 ring-1 ring-brand-purple/10">
@@ -32,7 +44,7 @@ export default function AgentPanel({ scenario }: { scenario: Scenario }) {
           animate={{ opacity: 1, x: 0 }}
           exit={{ opacity: 0, x: 12 }}
           transition={{
-            delay: scenario.agent.thoughts.length * 0.2 + i * 0.12,
+            delay: actionsStart + staggerDelay(i, ACTION_STAGGER),
             duration: 0.3,
           }}
           className="flex items-start gap-2.5"
@@ -48,13 +60,7 @@ export default function AgentPanel({ scenario }: { scenario: Scenario }) {
         initial={{ opacity: 0, y: 8 }}
         animate={{ opacity: 1, y: 0 }}
         exit={{ opacity: 0 }}
-        transition={{
-          delay:
-            scenario.agent.thoughts.length * 0.2 +
-            scenario.agent.actions.length * 0.12 +
-            0.1,
-          duration: 0.3,
-        }}
+        transition={{ delay: resultDelay, duration: 0.3 }}
         className="mt-4 rounded-xl border border-brand-emerald/10 bg-brand-emerald/5 px-3 py-2.5"
       >
         <div className="flex items-center gap-2 mb-1">

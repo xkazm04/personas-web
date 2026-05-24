@@ -1,7 +1,7 @@
 "use client";
 
 import { useMemo } from "react";
-import { motion, AnimatePresence } from "framer-motion";
+import { motion, AnimatePresence, useScroll } from "framer-motion";
 import { useActiveSectionId } from "@/contexts/SectionObserverContext";
 
 interface BreadcrumbItem {
@@ -16,6 +16,7 @@ export default function SectionBreadcrumb({
   items: BreadcrumbItem[];
 }) {
   const activeSectionId = useActiveSectionId();
+  const { scrollYProgress } = useScroll();
 
   const activeIndex = useMemo(() => {
     if (!activeSectionId) return -1;
@@ -23,6 +24,7 @@ export default function SectionBreadcrumb({
   }, [items, activeSectionId]);
 
   const active = activeIndex >= 0 ? items[activeIndex] : null;
+  const accentColor = active?.color ?? "var(--brand-cyan, #06b6d4)";
 
   return (
     <div className="fixed top-[60px] left-0 right-0 z-40 hidden md:block">
@@ -33,8 +35,17 @@ export default function SectionBreadcrumb({
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: -8 }}
             transition={{ duration: 0.2 }}
-            className="h-8 bg-background/80 backdrop-blur-xl border-b border-glass"
+            className="relative h-8 bg-background/80 backdrop-blur-xl border-b border-glass"
           >
+            <motion.div
+              aria-hidden
+              style={{
+                scaleX: scrollYProgress,
+                transformOrigin: "left",
+                background: `linear-gradient(90deg, ${accentColor}, transparent)`,
+              }}
+              className="absolute top-0 left-0 right-0 h-[2px]"
+            />
             <div className="mx-auto flex h-full max-w-6xl items-center gap-4 px-6">
               {items.map((item, i) => {
                 const isActive = i === activeIndex;
