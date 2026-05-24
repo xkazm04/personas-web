@@ -243,14 +243,22 @@ export const FEATURES_TOUR_STEPS: TourStep[] = [
     dwellMs: 8500,
     audioSrc: "/tour/features4.mp3",
   },
-  // 5. Lab — the six ways to make a persona better.
+  // 5. Lab — cycle through the four variant tabs (chat → arena → evolution →
+  //    eval) in time with the narration so the audience sees each refinement
+  //    surface Athena names.
   {
     id: "lab",
     scrollTarget: "#lab",
     spotlightTarget: '[data-tour-diagram="lab"]',
     narration: "features5",
-    dwellMs: 9000,
+    dwellMs: 16000,
     audioSrc: "/tour/features5.mp3",
+    actions: [
+      { atMs: 4500, run: () => clickTarget('[data-lab-tab="chat"]') },
+      { atMs: 7500, run: () => clickTarget('[data-lab-tab="arena"]') },
+      { atMs: 10500, run: () => clickTarget('[data-lab-tab="evolution"]') },
+      { atMs: 13500, run: () => clickTarget('[data-lab-tab="eval"]') },
+    ],
   },
   // 6. Plugins — the bundled specialists; select Dev Tools so the card shows
   //    that plugin while it's narrated.

@@ -27,6 +27,7 @@ export default function TabSwitcher({
           return (
             <button
               key={tab.key}
+              data-lab-tab={tab.key}
               onClick={() => onSelect(tab.key)}
               aria-pressed={isActive}
               className={`flex-1 flex items-center justify-center gap-2 rounded-lg px-3 py-2.5 text-base font-medium transition-all duration-200 ${

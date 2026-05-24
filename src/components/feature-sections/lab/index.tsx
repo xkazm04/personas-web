@@ -31,21 +31,24 @@ export default function Lab() {
         />
       </motion.div>
 
-      <TabSwitcher active={active} onSelect={setActive} />
+      {/* Tour anchor wraps the switcher + the active variant so the spotlight
+          highlights both the buttons and the diagram together. */}
+      <div data-tour-diagram="lab">
+        <TabSwitcher active={active} onSelect={setActive} />
 
-      <motion.div
-        data-tour-diagram="lab"
-        key={active}
-        initial={{ opacity: 0, y: 12 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.35 }}
-        className="mt-6 mx-auto max-w-4xl"
-      >
-        {active === "chat" && <ChatTab />}
-        {active === "arena" && <ArenaTab />}
-        {active === "evolution" && <EvolutionTab />}
-        {active === "eval" && <EvalTab />}
-      </motion.div>
+        <motion.div
+          key={active}
+          initial={{ opacity: 0, y: 12 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.35 }}
+          className="mt-6 mx-auto max-w-4xl"
+        >
+          {active === "chat" && <ChatTab />}
+          {active === "arena" && <ArenaTab />}
+          {active === "evolution" && <EvolutionTab />}
+          {active === "eval" && <EvalTab />}
+        </motion.div>
+      </div>
     </SectionWrapper>
   );
 }
