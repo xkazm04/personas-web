@@ -13,24 +13,21 @@ import Plugins from "@/components/feature-sections/Plugins";
 import SecurityVault from "@/components/feature-sections/SecurityVault";
 import MultiProviderAI from "@/components/feature-sections/MultiProviderAI";
 
-const breadcrumbItems = [
-  { label: "DESIGN", href: "#design", color: "#a855f7" },
-  { label: "MEMORY", href: "#memory-layers", color: "#a855f7" },
-  { label: "HEALING", href: "#healing-circuit", color: "#f43f5e" },
-  { label: "SECURITY", href: "#security", color: "#f43f5e" },
-  { label: "AI MODELS", href: "#multi-provider", color: "#3b82f6" },
-  { label: "OBSERVE", href: "#observe", color: "#34d399" },
-  { label: "LAB", href: "#lab", color: "#06b6d4" },
-  { label: "PLUGINS", href: "#plugins", color: "#a855f7" },
+const scrollMapItems = [
+  { label: "DESIGN", href: "#design" },
+  { label: "MEMORY", href: "#memory-layers" },
+  { label: "HEALING", href: "#healing-circuit" },
+  { label: "SECURITY", href: "#security" },
+  { label: "AI MODELS", href: "#multi-provider" },
+  { label: "OBSERVE", href: "#observe" },
+  { label: "LAB", href: "#lab" },
+  { label: "PLUGINS", href: "#plugins" },
 ];
-
-const scrollMapItems = breadcrumbItems.map(({ label, href }) => ({ label, href }));
 
 export default function FeaturesPage() {
   return (
     <InfoPageLayout
       scrollMapItems={scrollMapItems}
-      breadcrumbItems={breadcrumbItems}
       tourId="features"
       tourBridgeHref="/demo?tour=1"
       tourBridgeKey="dashboard"
