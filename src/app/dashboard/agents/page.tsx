@@ -14,7 +14,6 @@ import { fadeUp, staggerContainer } from "@/lib/animations";
 import { usePersonaStore } from "@/stores/personaStore";
 import { useSystemStore } from "@/stores/systemStore";
 
-import { AgentCardIcon } from "./agents-page/AgentCardIcon";
 import { AgentCardImage } from "./agents-page/AgentCardImage";
 import { AgentsLoadingGrid } from "./agents-page/AgentsLoadingGrid";
 
@@ -25,7 +24,6 @@ export default function AgentsPage() {
   const fetchPersonas = usePersonaStore((state) => state.fetchPersonas);
   const fetchHealth = useSystemStore((state) => state.fetchHealth);
   const health = useSystemStore((state) => state.health);
-  const [expandedIconId, setExpandedIconId] = useState<string | null>(null);
   const [expandedImageId, setExpandedImageId] = useState<string | null>(null);
   const prefetchedDetailIdsRef = useRef<Set<string>>(new Set());
 
@@ -93,42 +91,20 @@ export default function AgentsPage() {
           description={t.agentsPage.noAgentsDesc}
         />
       ) : (
-        <div className="space-y-10">
-          {/* Variant A — icon dominant. Section labels intentionally omitted so
-              the comparison stays i18n-free; remove the loser variant once the
-              winner is picked. */}
-          <div className="grid gap-4 sm:grid-cols-2 xl:grid-cols-3">
-            {personas.map((persona) => (
-              <AgentCardIcon
-                key={`icon-${persona.id}`}
-                persona={persona}
-                expanded={expandedIconId === persona.id}
-                labels={{ execute: t.agentsPage.execute, details: t.agentsPage.details }}
-                onExecute={(personaId) => void handleExecute(personaId)}
-                onPrefetch={handlePrefetch}
-                onToggleExpanded={() =>
-                  setExpandedIconId(expandedIconId === persona.id ? null : persona.id)
-                }
-              />
-            ))}
-          </div>
-
-          {/* Variant B — portrait dominant */}
-          <div className="grid gap-4 sm:grid-cols-2 xl:grid-cols-3">
-            {personas.map((persona) => (
-              <AgentCardImage
-                key={`image-${persona.id}`}
-                persona={persona}
-                expanded={expandedImageId === persona.id}
-                labels={{ execute: t.agentsPage.execute, details: t.agentsPage.details }}
-                onExecute={(personaId) => void handleExecute(personaId)}
-                onPrefetch={handlePrefetch}
-                onToggleExpanded={() =>
-                  setExpandedImageId(expandedImageId === persona.id ? null : persona.id)
-                }
-              />
-            ))}
-          </div>
+        <div className="grid gap-4 sm:grid-cols-2 xl:grid-cols-3">
+          {personas.map((persona) => (
+            <AgentCardImage
+              key={persona.id}
+              persona={persona}
+              expanded={expandedImageId === persona.id}
+              labels={{ execute: t.agentsPage.execute, details: t.agentsPage.details }}
+              onExecute={(personaId) => void handleExecute(personaId)}
+              onPrefetch={handlePrefetch}
+              onToggleExpanded={() =>
+                setExpandedImageId(expandedImageId === persona.id ? null : persona.id)
+              }
+            />
+          ))}
         </div>
       )}
     </motion.div>
