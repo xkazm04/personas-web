@@ -5,6 +5,8 @@ import type { TourStep } from "@/lib/tour-script";
 
 /** Quiet beat between a step's clip ending and the next step starting. */
 const INTER_STEP_PAUSE_MS = 2000;
+/** Pause after the intro pop-up appears before Athena starts speaking. */
+const INTRO_START_DELAY_MS = 2000;
 
 interface UseTourAudioArgs {
   active: boolean;
@@ -47,6 +49,9 @@ export function useTourAudio({
   const audioRef = useRef<HTMLAudioElement | null>(null);
   const ctxRef = useRef<AudioContext | null>(null);
   const analyserRef = useRef<AnalyserNode | null>(null);
+  // Latest volume, read when creating each clip so a newly-created audio
+  // element starts at the current level (not the browser default of 1.0).
+  const volumeRef = useRef(volume);
   const [analyser, setAnalyser] = useState<AnalyserNode | null>(null);
 
   useEffect(() => {
@@ -56,10 +61,11 @@ export function useTourAudio({
     const src = atIntro ? introSrc : step?.audioSrc;
     if (!src) return;
     const audio = new Audio(src);
+    // Apply the current volume immediately so each new clip honours the slider.
+    // Read from the ref (not `volume`) to keep it out of the creation deps, so
+    // dragging the slider doesn't tear down and re-create the audio element.
+    audio.volume = volumeRef.current;
     audioRef.current = audio;
-    // Initial volume is applied by the dedicated [volume] effect below; doing
-    // it there (not here) keeps `volume` out of the creation deps, so dragging
-    // the slider doesn't tear down and re-create the audio element.
 
     // Lazy Web Audio graph (source → analyser → destination) so the companion
     // can read the voice envelope. Wrapped in try/catch: if Web Audio is
@@ -119,12 +125,22 @@ export function useTourAudio({
   useEffect(() => {
     const audio = audioRef.current;
     if (!audio) return;
-    if (active && playing && !atBridge) audio.play().catch(() => {});
-    else audio.pause();
+    if (!(active && playing && !atBridge)) {
+      audio.pause();
+      return;
+    }
+    // Let the intro pop-up settle before Athena speaks; steps play at once.
+    if (atIntro) {
+      const id = window.setTimeout(() => audio.play().catch(() => {}), INTRO_START_DELAY_MS);
+      return () => window.clearTimeout(id);
+    }
+    audio.play().catch(() => {});
   }, [active, playing, atBridge, atIntro, stepIndex, steps]);
 
-  // Apply slider changes to the live audio element in real time.
+  // Apply slider changes to the live audio element in real time, and keep the
+  // ref in sync so the next clip created starts at this level.
   useEffect(() => {
+    volumeRef.current = volume;
     if (audioRef.current) audioRef.current.volume = volume;
   }, [volume]);
 
