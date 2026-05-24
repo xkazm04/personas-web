@@ -773,6 +773,33 @@ export const vi: Translations = {
     queueLength: '\u0110\u1ed9 d\u00e0i h\u00e0ng \u0111\u1ee3i',
     activeExecutions: 'Th\u1ef1c thi \u0111ang ho\u1ea1t \u0111\u1ed9ng',
     loadingStatus: '\u0110ang t\u1ea3i tr\u1ea1ng th\u00e1i h\u1ec7 th\u1ed1ng...',
+    notifications: {
+      title: 'Thông báo',
+      subtitle: 'Cảnh báo tự phục hồi và bản tóm tắt',
+      weeklyDigest: 'Tóm tắt sức khỏe hàng tuần',
+      severity: {
+        critical: 'Nghiêm trọng',
+        high: 'Cao',
+        medium: 'Trung bình',
+        low: 'Thấp',
+      },
+    },
+    providers: {
+      title: 'Nhà cung cấp mô hình',
+      subtitle: 'Mô hình nào tác nhân của bạn được dùng',
+      allowed: 'Được phép',
+      requests: 'yêu cầu',
+    },
+    apiKeys: {
+      title: 'Khóa API',
+      subtitle: 'Khóa cho CLI và ứng dụng MCP',
+      create: 'Khóa mới',
+      revoke: 'Thu hồi',
+      revoked: 'Đã thu hồi',
+      active: 'Đang hoạt động',
+      lastUsed: 'Lần dùng cuối',
+      never: 'Chưa bao giờ',
+    },
   },
   legalPage: {
     title: 'Ph\u00e1p l\u00fd',

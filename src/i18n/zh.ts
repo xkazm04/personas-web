@@ -773,6 +773,33 @@ export const zh: Translations = {
     queueLength: '\u961F\u5217\u957F\u5EA6',
     activeExecutions: '\u6D3B\u8DC3\u6267\u884C',
     loadingStatus: '\u6B63\u5728\u52A0\u8F7D\u7CFB\u7EDF\u72B6\u6001...',
+    notifications: {
+      title: '通知',
+      subtitle: '自愈告警与摘要',
+      weeklyDigest: '每周健康摘要',
+      severity: {
+        critical: '严重',
+        high: '高',
+        medium: '中',
+        low: '低',
+      },
+    },
+    providers: {
+      title: '模型提供方',
+      subtitle: '允许智能体使用的模型',
+      allowed: '已允许',
+      requests: '次请求',
+    },
+    apiKeys: {
+      title: 'API 密钥',
+      subtitle: '用于 CLI 和 MCP 客户端的密钥',
+      create: '新建密钥',
+      revoke: '吊销',
+      revoked: '已吊销',
+      active: '活跃',
+      lastUsed: '最近使用',
+      never: '从未',
+    },
   },
   legalPage: {
     title: '\u6CD5\u5F8B',

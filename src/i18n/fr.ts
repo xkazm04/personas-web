@@ -773,6 +773,33 @@ export const fr: Translations = {
     queueLength: 'Longueur de la file',
     activeExecutions: 'Ex\u00e9cutions actives',
     loadingStatus: 'Chargement du statut du syst\u00e8me...',
+    notifications: {
+      title: 'Notifications',
+      subtitle: "Alertes d'auto-réparation et résumés",
+      weeklyDigest: 'Résumé de santé hebdomadaire',
+      severity: {
+        critical: 'Critique',
+        high: 'Élevé',
+        medium: 'Moyen',
+        low: 'Faible',
+      },
+    },
+    providers: {
+      title: 'Fournisseurs de modèles',
+      subtitle: 'Quels modèles vos agents peuvent utiliser',
+      allowed: 'Autorisé',
+      requests: 'requêtes',
+    },
+    apiKeys: {
+      title: 'Clés API',
+      subtitle: 'Clés pour la CLI et les clients MCP',
+      create: 'Nouvelle clé',
+      revoke: 'Révoquer',
+      revoked: 'Révoquée',
+      active: 'Active',
+      lastUsed: 'Dernière utilisation',
+      never: 'Jamais',
+    },
   },
   legalPage: {
     title: 'Mentions l\u00e9gales',

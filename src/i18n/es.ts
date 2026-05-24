@@ -773,6 +773,33 @@ export const es: Translations = {
     queueLength: 'Longitud de Cola',
     activeExecutions: 'Ejecuciones Activas',
     loadingStatus: 'Cargando estado del sistema...',
+    notifications: {
+      title: 'Notificaciones',
+      subtitle: 'Alertas de auto-reparación y resúmenes',
+      weeklyDigest: 'Resumen semanal de estado',
+      severity: {
+        critical: 'Crítico',
+        high: 'Alto',
+        medium: 'Medio',
+        low: 'Bajo',
+      },
+    },
+    providers: {
+      title: 'Proveedores de modelos',
+      subtitle: 'Qué modelos pueden usar tus agentes',
+      allowed: 'Permitido',
+      requests: 'solicitudes',
+    },
+    apiKeys: {
+      title: 'Claves API',
+      subtitle: 'Claves para la CLI y clientes MCP',
+      create: 'Nueva clave',
+      revoke: 'Revocar',
+      revoked: 'Revocada',
+      active: 'Activa',
+      lastUsed: 'Último uso',
+      never: 'Nunca',
+    },
   },
   legalPage: {
     title: 'Legal',

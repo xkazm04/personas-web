@@ -773,6 +773,33 @@ export const ru: Translations = {
     queueLength: '\u0414\u043B\u0438\u043D\u0430 \u043E\u0447\u0435\u0440\u0435\u0434\u0438',
     activeExecutions: '\u0410\u043A\u0442\u0438\u0432\u043D\u044B\u0435 \u0432\u044B\u043F\u043E\u043B\u043D\u0435\u043D\u0438\u044F',
     loadingStatus: '\u0417\u0430\u0433\u0440\u0443\u0437\u043A\u0430 \u0441\u043E\u0441\u0442\u043E\u044F\u043D\u0438\u044F \u0441\u0438\u0441\u0442\u0435\u043C\u044B...',
+    notifications: {
+      title: 'Уведомления',
+      subtitle: 'Оповещения о самовосстановлении и сводки',
+      weeklyDigest: 'Еженедельная сводка состояния',
+      severity: {
+        critical: 'Критический',
+        high: 'Высокий',
+        medium: 'Средний',
+        low: 'Низкий',
+      },
+    },
+    providers: {
+      title: 'Поставщики моделей',
+      subtitle: 'Какие модели могут использовать ваши агенты',
+      allowed: 'Разрешено',
+      requests: 'запросов',
+    },
+    apiKeys: {
+      title: 'API-ключи',
+      subtitle: 'Ключи для CLI и клиентов MCP',
+      create: 'Новый ключ',
+      revoke: 'Отозвать',
+      revoked: 'Отозван',
+      active: 'Активен',
+      lastUsed: 'Последнее использование',
+      never: 'Никогда',
+    },
   },
   legalPage: {
     title: '\u042E\u0440\u0438\u0434\u0438\u0447\u0435\u0441\u043A\u0430\u044F \u0438\u043D\u0444\u043E\u0440\u043C\u0430\u0446\u0438\u044F',

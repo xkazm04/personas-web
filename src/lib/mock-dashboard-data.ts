@@ -1135,3 +1135,42 @@ export const MOCK_VAULT_CHANGES: VaultChange[] = [
   { id: "vc_4", secret: "STRIPE_SECRET_KEY", action: "revoked", ago: "5h" },
   { id: "vc_5", secret: "GCAL_REFRESH_TOKEN", action: "rotated", ago: "1d" },
 ];
+
+// ── Settings: model providers (BYOM policy) ─────────────────────────
+// Which model providers the fleet may use, with rough usage. Provider/model
+// names are proper nouns shown verbatim (not translated).
+
+export interface ModelProvider {
+  id: string;
+  name: string;
+  model: string;
+  allowed: boolean;
+  requests: number;
+  costUsd: number;
+}
+
+export const MOCK_MODEL_PROVIDERS: ModelProvider[] = [
+  { id: "claude-sonnet", name: "Anthropic Claude", model: "sonnet-4-6", allowed: true, requests: 8421, costUsd: 142.18 },
+  { id: "claude-haiku", name: "Anthropic Haiku", model: "haiku-4-5", allowed: true, requests: 3120, costUsd: 11.4 },
+  { id: "openai", name: "OpenAI", model: "gpt-4o", allowed: true, requests: 1894, costUsd: 63.72 },
+  { id: "gemini", name: "Google Gemini", model: "gemini-2.0", allowed: false, requests: 0, costUsd: 0 },
+  { id: "llama", name: "Meta Llama", model: "llama-3.3-70b", allowed: false, requests: 0, costUsd: 0 },
+];
+
+// ── Settings: API keys (for CLI / MCP clients) ──────────────────────
+// `prefix` and `scopes` are technical identifiers shown verbatim.
+
+export interface ApiKeyRecord {
+  id: string;
+  name: string;
+  prefix: string;
+  scopes: string[];
+  lastUsed: string | null;
+  revoked: boolean;
+}
+
+export const MOCK_API_KEYS: ApiKeyRecord[] = [
+  { id: "k_1", name: "Production CLI", prefix: "pk_live_3f9a", scopes: ["personas:read", "executions:read"], lastUsed: new Date(Date.now() - 2 * 3600_000).toISOString(), revoked: false },
+  { id: "k_2", name: "CI pipeline", prefix: "pk_live_b1d7", scopes: ["executions:write"], lastUsed: new Date(Date.now() - 26 * 3600_000).toISOString(), revoked: false },
+  { id: "k_3", name: "Old integration", prefix: "pk_live_99c2", scopes: ["personas:read"], lastUsed: null, revoked: true },
+];

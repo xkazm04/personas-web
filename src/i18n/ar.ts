@@ -773,6 +773,33 @@ export const ar: Translations = {
     queueLength: '\u0637\u0648\u0644 \u0627\u0644\u0637\u0627\u0628\u0648\u0631',
     activeExecutions: '\u0627\u0644\u062A\u0646\u0641\u064A\u0630\u0627\u062A \u0627\u0644\u0646\u0634\u0637\u0629',
     loadingStatus: '\u062C\u0627\u0631\u064D \u062A\u062D\u0645\u064A\u0644 \u062D\u0627\u0644\u0629 \u0627\u0644\u0646\u0638\u0627\u0645...',
+    notifications: {
+      title: 'الإشعارات',
+      subtitle: 'تنبيهات الإصلاح الذاتي والملخصات',
+      weeklyDigest: 'ملخص الحالة الأسبوعي',
+      severity: {
+        critical: 'حرج',
+        high: 'عالٍ',
+        medium: 'متوسط',
+        low: 'منخفض',
+      },
+    },
+    providers: {
+      title: 'مزودو النماذج',
+      subtitle: 'النماذج التي يمكن لوكلائك استخدامها',
+      allowed: 'مسموح',
+      requests: 'طلبات',
+    },
+    apiKeys: {
+      title: 'مفاتيح API',
+      subtitle: 'مفاتيح لواجهة CLI وعملاء MCP',
+      create: 'مفتاح جديد',
+      revoke: 'إلغاء',
+      revoked: 'مُلغى',
+      active: 'نشط',
+      lastUsed: 'آخر استخدام',
+      never: 'أبدًا',
+    },
   },
   legalPage: {
     title: '\u0642\u0627\u0646\u0648\u0646\u064A',

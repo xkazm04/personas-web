@@ -773,6 +773,33 @@ export const ko: Translations = {
     queueLength: '\ub300\uae30\uc5f4 \uae38\uc774',
     activeExecutions: '\ud65c\uc131 \uc2e4\ud589',
     loadingStatus: '\uc2dc\uc2a4\ud15c \uc0c1\ud0dc \ub85c\ub529 \uc911...',
+    notifications: {
+      title: '알림',
+      subtitle: '자가 복구 알림 및 요약',
+      weeklyDigest: '주간 상태 요약',
+      severity: {
+        critical: '심각',
+        high: '높음',
+        medium: '보통',
+        low: '낮음',
+      },
+    },
+    providers: {
+      title: '모델 공급자',
+      subtitle: '에이전트가 사용할 수 있는 모델',
+      allowed: '허용됨',
+      requests: '요청',
+    },
+    apiKeys: {
+      title: 'API 키',
+      subtitle: 'CLI 및 MCP 클라이언트용 키',
+      create: '새 키',
+      revoke: '취소',
+      revoked: '취소됨',
+      active: '활성',
+      lastUsed: '마지막 사용',
+      never: '없음',
+    },
   },
   legalPage: {
     title: '\ubc95\uc801 \uc815\ubcf4',

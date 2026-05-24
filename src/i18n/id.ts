@@ -773,6 +773,33 @@ export const id: Translations = {
     queueLength: 'Panjang Antrian',
     activeExecutions: 'Eksekusi Aktif',
     loadingStatus: 'Memuat status sistem...',
+    notifications: {
+      title: 'Notifikasi',
+      subtitle: 'Peringatan penyembuhan otomatis dan ringkasan',
+      weeklyDigest: 'Ringkasan kesehatan mingguan',
+      severity: {
+        critical: 'Kritis',
+        high: 'Tinggi',
+        medium: 'Sedang',
+        low: 'Rendah',
+      },
+    },
+    providers: {
+      title: 'Penyedia model',
+      subtitle: 'Model mana yang boleh dipakai agen Anda',
+      allowed: 'Diizinkan',
+      requests: 'permintaan',
+    },
+    apiKeys: {
+      title: 'Kunci API',
+      subtitle: 'Kunci untuk CLI dan klien MCP',
+      create: 'Kunci baru',
+      revoke: 'Cabut',
+      revoked: 'Dicabut',
+      active: 'Aktif',
+      lastUsed: 'Terakhir dipakai',
+      never: 'Tidak pernah',
+    },
   },
   legalPage: {
     title: 'Hukum',

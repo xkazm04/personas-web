@@ -773,6 +773,33 @@ export const ja: Translations = {
     queueLength: '\u30ad\u30e5\u30fc\u9577',
     activeExecutions: '\u30a2\u30af\u30c6\u30a3\u30d6\u5b9f\u884c',
     loadingStatus: '\u30b7\u30b9\u30c6\u30e0\u30b9\u30c6\u30fc\u30bf\u30b9\u3092\u8aad\u307f\u8fbc\u307f\u4e2d...',
+    notifications: {
+      title: '通知',
+      subtitle: '自己修復アラートとダイジェスト',
+      weeklyDigest: '週次ヘルスダイジェスト',
+      severity: {
+        critical: '重大',
+        high: '高',
+        medium: '中',
+        low: '低',
+      },
+    },
+    providers: {
+      title: 'モデルプロバイダー',
+      subtitle: 'エージェントが使用できるモデル',
+      allowed: '許可',
+      requests: 'リクエスト',
+    },
+    apiKeys: {
+      title: 'APIキー',
+      subtitle: 'CLI と MCP クライアント用のキー',
+      create: '新しいキー',
+      revoke: '取り消し',
+      revoked: '取り消し済み',
+      active: '有効',
+      lastUsed: '最終使用',
+      never: 'なし',
+    },
   },
   legalPage: {
     title: '\u6cd5\u7684\u60c5\u5831',

@@ -773,6 +773,33 @@ export const hi: Translations = {
     queueLength: '\u0915\u094D\u092F\u0942 \u0932\u0902\u092C\u093E\u0908',
     activeExecutions: '\u0938\u0915\u094D\u0930\u093F\u092F \u090F\u0917\u094D\u091C\u093C\u0940\u0915\u094D\u092F\u0942\u0936\u0928',
     loadingStatus: '\u0938\u093F\u0938\u094D\u091F\u092E \u0938\u094D\u091F\u0947\u091F\u0938 \u0932\u094B\u0921 \u0939\u094B \u0930\u0939\u093E \u0939\u0948...',
+    notifications: {
+      title: 'सूचनाएं',
+      subtitle: 'स्व-उपचार अलर्ट और सारांश',
+      weeklyDigest: 'साप्ताहिक स्वास्थ्य सारांश',
+      severity: {
+        critical: 'गंभीर',
+        high: 'उच्च',
+        medium: 'मध्यम',
+        low: 'निम्न',
+      },
+    },
+    providers: {
+      title: 'मॉडल प्रदाता',
+      subtitle: 'आपके एजेंट कौन-से मॉडल उपयोग कर सकते हैं',
+      allowed: 'अनुमत',
+      requests: 'अनुरोध',
+    },
+    apiKeys: {
+      title: 'API कुंजियां',
+      subtitle: 'CLI और MCP क्लाइंट के लिए कुंजियां',
+      create: 'नई कुंजी',
+      revoke: 'रद्द करें',
+      revoked: 'रद्द',
+      active: 'सक्रिय',
+      lastUsed: 'अंतिम उपयोग',
+      never: 'कभी नहीं',
+    },
   },
   legalPage: {
     title: '\u0915\u093E\u0928\u0942\u0928\u0940',

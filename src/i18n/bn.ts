@@ -773,6 +773,33 @@ export const bn: Translations = {
     queueLength: '\u0995\u09bf\u0989\u09b0 \u09a6\u09c8\u09b0\u09cd\u0998\u09cd\u09af',
     activeExecutions: '\u09b8\u0995\u09cd\u09b0\u09bf\u09af\u09bc \u098f\u0995\u09cd\u09b8\u09bf\u0995\u09bf\u0989\u09b6\u09a8',
     loadingStatus: '\u09b8\u09bf\u09b8\u09cd\u099f\u09c7\u09ae \u09b8\u09cd\u099f\u09cd\u09af\u09be\u099f\u09be\u09b8 \u09b2\u09cb\u09a1 \u09b9\u099a\u09cd\u099b\u09c7...',
+    notifications: {
+      title: 'বিজ্ঞপ্তি',
+      subtitle: 'স্ব-নিরাময় সতর্কতা ও সারসংক্ষেপ',
+      weeklyDigest: 'সাপ্তাহিক স্বাস্থ্য সারসংক্ষেপ',
+      severity: {
+        critical: 'গুরুতর',
+        high: 'উচ্চ',
+        medium: 'মাঝারি',
+        low: 'নিম্ন',
+      },
+    },
+    providers: {
+      title: 'মডেল প্রদানকারী',
+      subtitle: 'আপনার এজেন্ট কোন মডেল ব্যবহার করতে পারে',
+      allowed: 'অনুমোদিত',
+      requests: 'অনুরোধ',
+    },
+    apiKeys: {
+      title: 'API কী',
+      subtitle: 'CLI এবং MCP ক্লায়েন্টের জন্য কী',
+      create: 'নতুন কী',
+      revoke: 'প্রত্যাহার',
+      revoked: 'প্রত্যাহৃত',
+      active: 'সক্রিয়',
+      lastUsed: 'সর্বশেষ ব্যবহার',
+      never: 'কখনও না',
+    },
   },
   legalPage: {
     title: '\u0986\u0987\u09a8\u0997\u09a4',

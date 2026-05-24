@@ -691,6 +691,33 @@
     queueLength: string;
     activeExecutions: string;
     loadingStatus: string;
+    notifications: {
+      title: string;
+      subtitle: string;
+      weeklyDigest: string;
+      severity: {
+        critical: string;
+        high: string;
+        medium: string;
+        low: string;
+      };
+    };
+    providers: {
+      title: string;
+      subtitle: string;
+      allowed: string;
+      requests: string;
+    };
+    apiKeys: {
+      title: string;
+      subtitle: string;
+      create: string;
+      revoke: string;
+      revoked: string;
+      active: string;
+      lastUsed: string;
+      never: string;
+    };
   };
   legalPage: {
     title: string;
@@ -1686,6 +1713,33 @@ export const en: Translations = {
     queueLength: 'Queue Length',
     activeExecutions: 'Active Executions',
     loadingStatus: 'Loading system status...',
+    notifications: {
+      title: 'Notifications',
+      subtitle: 'Healing alerts and digests',
+      weeklyDigest: 'Weekly health digest',
+      severity: {
+        critical: 'Critical',
+        high: 'High',
+        medium: 'Medium',
+        low: 'Low',
+      },
+    },
+    providers: {
+      title: 'Model providers',
+      subtitle: 'Which models your agents may use',
+      allowed: 'Allowed',
+      requests: 'requests',
+    },
+    apiKeys: {
+      title: 'API keys',
+      subtitle: 'Keys for the CLI and MCP clients',
+      create: 'New key',
+      revoke: 'Revoke',
+      revoked: 'Revoked',
+      active: 'Active',
+      lastUsed: 'Last used',
+      never: 'Never',
+    },
   },
   legalPage: {
     title: 'Legal',

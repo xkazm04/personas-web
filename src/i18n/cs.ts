@@ -773,6 +773,33 @@ export const cs: Translations = {
     queueLength: 'D\u00e9lka fronty',
     activeExecutions: 'Aktivn\u00ed spou\u0161t\u011bn\u00ed',
     loadingStatus: 'Na\u010d\u00edt\u00e1n\u00ed stavu syst\u00e9mu...',
+    notifications: {
+      title: 'Oznámení',
+      subtitle: 'Upozornění samoopravy a souhrny',
+      weeklyDigest: 'Týdenní souhrn stavu',
+      severity: {
+        critical: 'Kritická',
+        high: 'Vysoká',
+        medium: 'Střední',
+        low: 'Nízká',
+      },
+    },
+    providers: {
+      title: 'Poskytovatelé modelů',
+      subtitle: 'Které modely mohou vaši agenti používat',
+      allowed: 'Povoleno',
+      requests: 'požadavků',
+    },
+    apiKeys: {
+      title: 'API klíče',
+      subtitle: 'Klíče pro CLI a klienty MCP',
+      create: 'Nový klíč',
+      revoke: 'Odvolat',
+      revoked: 'Odvolán',
+      active: 'Aktivní',
+      lastUsed: 'Naposledy použito',
+      never: 'Nikdy',
+    },
   },
   legalPage: {
     title: 'Pr\u00e1vn\u00ed informace',
