@@ -54,6 +54,8 @@ interface AuthState {
   signInError: string | null;
   signInWithGoogle: () => Promise<void>;
   signInAsDemo: () => void;
+  /** Un-gated public demo entry used by the standalone `/demo` route. */
+  enterDemo: () => void;
   signOut: () => Promise<void>;
   initialize: () => (() => void) | undefined;
   retry: () => void;
@@ -181,6 +183,15 @@ export const useAuthStore = create<AuthState>((set, get) => ({
     if (!DEMO_ENABLED) return;
     mockSignIn(set);
     set({ isDemo: true });
+  },
+
+  enterDemo: () => {
+    // Public, un-gated entry for the standalone /demo route. Mints the mock
+    // session and marks the store initialized so the dashboard's AuthProvider
+    // won't re-run real auth and clobber the demo on the redirect into
+    // /dashboard. Distinct from signInAsDemo (gated for the sign-in button).
+    mockSignIn(set);
+    set({ isDemo: true, isLoading: false, initialized: true });
   },
 
   signInWithGoogle: async () => {
