@@ -753,7 +753,143 @@ export interface FeedbackMessage {
   timestamp: string; // ISO
   subject: string;
   status: MessageStatus;
-  payload: string; // JSON string (for JsonViewer)
+  payload: string; // JSON string (raw view)
+  body: string; // Markdown report (rendered as the message detail)
+}
+
+interface MessageFacts {
+  executionId: string;
+  persona: string;
+  durationMs: number;
+  model: string;
+  inputTokens: number;
+  outputTokens: number;
+  costUsd: number;
+  worker: string;
+  attempt: number;
+}
+
+function fmtMsgDuration(ms: number): string {
+  return ms < 1000 ? `${ms}ms` : `${(ms / 1000).toFixed(1)}s`;
+}
+
+// Markdown report bodies, one per subject (round-robined in the generator).
+// English-only mock content (like the report copy elsewhere), interpolating
+// each run's facts. Authored to stay within MarkdownReport's supported subset.
+function messageReportBody(idx: number, f: MessageFacts): string {
+  const dur = fmtMsgDuration(f.durationMs);
+  const cost = `$${f.costUsd.toFixed(4)}`;
+  const tokens = `${f.inputTokens.toLocaleString()} in / ${f.outputTokens.toLocaleString()} out`;
+  switch (idx) {
+    case 0:
+      return `## Run summary
+**${f.persona}** completed \`${f.executionId}\` on \`${f.worker}\` in **${dur}**.
+
+| Metric | Value |
+| --- | --- |
+| Model | ${f.model} |
+| Tokens | ${tokens} |
+| Cost | ${cost} |
+| Attempt | ${f.attempt} |
+
+### Notes
+- All items processed; no retries required.
+- Results written to the shared output bucket.
+
+> Next scheduled run in ~6 minutes.`;
+    case 1:
+      return `## Escalation required
+**${f.persona}** exhausted its retry budget on \`${f.executionId}\` and is handing off for human review.
+
+### What happened
+- 3 attempts, each failing at the *publish* step.
+- Last error: \`HTTP 503 from downstream\`.
+
+### Suggested action
+1. Confirm the downstream service is healthy.
+2. Approve a manual retry, or skip this item.
+
+> Paused after ${dur} on \`${f.worker}\`.`;
+    case 2:
+      return `## New pattern learned
+\`${f.persona}\` promoted a recurring tool sequence into memory:
+
+\`\`\`
+webhook.incoming → categorize → route
+\`\`\`
+
+- Observed **17 times** over the last 7 days with a 96% success rate.
+- Confidence is now high enough to apply it automatically.
+
+This should cut median latency on inbound webhooks.`;
+    case 3:
+      return `## Cost spike detected
+The last run of **${f.persona}** cost **${cost}** — well above its trailing average.
+
+| Driver | Impact |
+| --- | --- |
+| Model | ${f.model} |
+| Tokens | ${tokens} |
+| Duration | ${dur} |
+
+### Recommendation
+- Route simple inputs to \`haiku-4-5\`.
+- Cap context to the last 8 turns.`;
+    case 4:
+      return `## Tool deprecation warning
+**GitHub REST v3** is being retired, and \`${f.persona}\` still calls it on \`${f.executionId}\`.
+
+- Migrate to the GraphQL API before the cutoff.
+- Affected calls: \`issues.list\`, \`pulls.get\`.
+
+See the [migration guide](https://docs.github.com) for details.`;
+    case 5:
+      return `## Model downgrade recommended
+For simple CSV tasks, **${f.persona}** matches quality on a cheaper model.
+
+| Option | Quality | Cost |
+| --- | --- | --- |
+| sonnet-4-6 | 94% | ${cost} |
+| haiku-4-5 | 92% | ~1/8 |
+
+> Estimated savings are significant at the current volume.`;
+    case 6:
+      return `## Rate limit handled
+Slack API returned **429** during \`${f.executionId}\`. \`${f.persona}\` applied exponential backoff and recovered.
+
+- Backoff schedule: \`2s -> 8s -> 32s\`
+- Recovered on attempt **${f.attempt}** after ${dur}.
+
+No items were dropped.`;
+    case 7:
+      return `## Memory pruned
+\`${f.persona}\` dropped **3 stale conversation threads** to keep its working set sharp.
+
+- Freed context for higher-signal memories.
+- No active tasks referenced the pruned threads.
+
+Routine maintenance — no action needed.`;
+    case 8:
+      return `## A/B candidate ready
+A new prompt candidate for **${f.persona}** is ready for testing.
+
+1. Run baseline vs. candidate over the last 50 executions.
+2. Score on reliability, cost, and latency.
+3. Promote the winner.
+
+> Open the **Lab** to start the comparison.`;
+    default:
+      return `## Queue drained
+The rate-limit window reset and **${f.persona}** drained its backlog.
+
+| Metric | Value |
+| --- | --- |
+| Cleared on | \`${f.worker}\` |
+| Duration | ${dur} |
+| Cost | ${cost} |
+
+All pending items are now processed.`;
+  }
 }
 
 const MESSAGE_SUBJECTS = [
@@ -784,26 +920,30 @@ export const MOCK_MESSAGES: FeedbackMessage[] = (() => {
   for (let i = 0; i < total; i++) {
     const persona = MESSAGE_PERSONAS[i % MESSAGE_PERSONAS.length];
     const minutesAgo = Math.floor(i * 37 + rng() * 90);
-    const timestamp = new Date(
-      Date.now() - minutesAgo * 60_000,
-    ).toISOString();
-    const subject = MESSAGE_SUBJECTS[i % MESSAGE_SUBJECTS.length];
+    const timestamp = new Date(Date.now() - minutesAgo * 60_000).toISOString();
+    const subjectIdx = i % MESSAGE_SUBJECTS.length;
+    const subject = MESSAGE_SUBJECTS[subjectIdx];
+    const facts: MessageFacts = {
+      executionId: `exec_${String(40000 + i).padStart(6, "0")}`,
+      persona: persona.name,
+      durationMs: Math.floor(400 + rng() * 9500),
+      model: rng() < 0.4 ? "haiku-4-5" : "sonnet-4-6",
+      inputTokens: Math.floor(200 + rng() * 2200),
+      outputTokens: Math.floor(80 + rng() * 1200),
+      costUsd: +(0.001 + rng() * 0.18).toFixed(4),
+      worker: "worker-" + (Math.floor(rng() * 8) + 1),
+      attempt: Math.floor(rng() * 3) + 1,
+    };
     const payload = JSON.stringify(
       {
-        executionId: `exec_${String(40000 + i).padStart(6, "0")}`,
-        persona: persona.name,
-        durationMs: Math.floor(400 + rng() * 9500),
-        model: rng() < 0.4 ? "haiku-4-5" : "sonnet-4-6",
-        tokens: {
-          input: Math.floor(200 + rng() * 2200),
-          output: Math.floor(80 + rng() * 1200),
-        },
-        costUsd: +(0.001 + rng() * 0.18).toFixed(4),
+        executionId: facts.executionId,
+        persona: facts.persona,
+        durationMs: facts.durationMs,
+        model: facts.model,
+        tokens: { input: facts.inputTokens, output: facts.outputTokens },
+        costUsd: facts.costUsd,
         tags: rng() < 0.5 ? ["scheduled", "batch"] : ["ad-hoc"],
-        metadata: {
-          ranOn: "worker-" + (Math.floor(rng() * 8) + 1),
-          attempt: Math.floor(rng() * 3) + 1,
-        },
+        metadata: { ranOn: facts.worker, attempt: facts.attempt },
       },
       null,
       0,
@@ -816,6 +956,7 @@ export const MOCK_MESSAGES: FeedbackMessage[] = (() => {
       subject,
       status: i < 7 ? "unread" : "read",
       payload,
+      body: messageReportBody(subjectIdx, facts),
     });
   }
   return items;

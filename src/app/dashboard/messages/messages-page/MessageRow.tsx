@@ -1,7 +1,7 @@
 import { AnimatePresence, motion } from "framer-motion";
 import { ChevronDown } from "lucide-react";
 
-import JsonViewer from "@/components/dashboard/JsonViewer";
+import { MarkdownReport } from "@/components/dashboard/MarkdownReport";
 import PersonaAvatar from "@/components/dashboard/PersonaAvatar";
 import { useTranslation } from "@/i18n/useTranslation";
 import { relativeTime } from "@/lib/format";
@@ -74,8 +74,10 @@ export function MessageRow({
             transition={{ duration: 0.15 }}
             className="overflow-hidden border-t border-glass"
           >
-            <div className="p-3">
-              <JsonViewer payload={msg.payload} />
+            <div className="px-3 pb-3.5 pt-1">
+              <article className="rounded-xl border border-glass bg-white/[0.02] px-4 py-3.5">
+                <MarkdownReport content={msg.body} />
+              </article>
             </div>
           </motion.div>
         )}
