@@ -343,16 +343,8 @@ export const cs: Translations = {
     },
     home: {
       vitals: {
-        title: 'Stav flotily',
         runs: 'Spuštění',
         alerts: 'Upozornění',
-      },
-      triage: {
-        title: 'Fronta třídění',
-        empty: 'Vše v pořádku — nic nevyžaduje vaši pozornost.',
-        review: 'Kontrola',
-        alert: 'Upozornění',
-        message: 'Zpráva',
       },
       heatmap: {
         title: 'Aktivita spuštění',
@@ -553,7 +545,6 @@ export const cs: Translations = {
       empty: 'VĹˇe vyĹ™eĹˇeno â€” ĹľĂˇdnĂ© ÄŤekajĂ­cĂ­',
       approve: 'SchvĂˇlit',
       reject: 'ZamĂ­tnout',
-      shortcuts: 'A schvĂˇlit Â· R zamĂ­tnout Â· S pĹ™eskoÄŤit Â· Esc konec',
     },
     parseError: {
       label: 'Chyba parsovĂˇnĂ­',
@@ -768,11 +759,9 @@ export const cs: Translations = {
     cloudConnection: 'Cloudov\u00e9 p\u0159ipojen\u00ed',
     orchestrator: 'Orchestr\u00e1tor',
     notConfigured: 'Nenastaveno',
-    systemStatus: 'Stav syst\u00e9mu',
     totalWorkers: 'Celkem worker\u016f',
     queueLength: 'D\u00e9lka fronty',
     activeExecutions: 'Aktivn\u00ed spou\u0161t\u011bn\u00ed',
-    loadingStatus: 'Na\u010d\u00edt\u00e1n\u00ed stavu syst\u00e9mu...',
     notifications: {
       title: 'Oznámení',
       subtitle: 'Upozornění samoopravy a souhrny',

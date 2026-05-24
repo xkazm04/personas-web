@@ -343,16 +343,8 @@ export const zh: Translations = {
     },
     home: {
       vitals: {
-        title: '集群运行状况',
         runs: '运行次数',
         alerts: '告警',
-      },
-      triage: {
-        title: '处理队列',
-        empty: '一切就绪 — 暂无需要处理的事项。',
-        review: '审核',
-        alert: '告警',
-        message: '消息',
       },
       heatmap: {
         title: '执行活动',
@@ -553,7 +545,6 @@ export const zh: Translations = {
       empty: 'ĺ…¨é¨ĺ®Ść â€” ć— ĺľ…ĺ¤„ç†ĺ®ˇć ¸',
       approve: 'ć‰ąĺ‡†',
       reject: 'ć‹’ç»ť',
-      shortcuts: 'A ć‰ąĺ‡† Â· R ć‹’ç»ť Â· S č·łčż‡ Â· Esc é€€ĺ‡ş',
     },
     parseError: {
       label: 'č§Łćžé”™čŻŻ',
@@ -768,11 +759,9 @@ export const zh: Translations = {
     cloudConnection: '\u4E91\u8FDE\u63A5',
     orchestrator: '\u7F16\u6392\u5668',
     notConfigured: '\u672A\u914D\u7F6E',
-    systemStatus: '\u7CFB\u7EDF\u72B6\u6001',
     totalWorkers: '\u603B\u5DE5\u4F5C\u8282\u70B9',
     queueLength: '\u961F\u5217\u957F\u5EA6',
     activeExecutions: '\u6D3B\u8DC3\u6267\u884C',
-    loadingStatus: '\u6B63\u5728\u52A0\u8F7D\u7CFB\u7EDF\u72B6\u6001...',
     notifications: {
       title: '通知',
       subtitle: '自愈告警与摘要',

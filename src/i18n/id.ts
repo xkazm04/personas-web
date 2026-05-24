@@ -343,16 +343,8 @@ export const id: Translations = {
     },
     home: {
       vitals: {
-        title: 'Vital armada',
         runs: 'Eksekusi',
         alerts: 'Peringatan',
-      },
-      triage: {
-        title: 'Antrean triase',
-        empty: 'Semua beres — tidak ada yang perlu perhatian Anda.',
-        review: 'Tinjauan',
-        alert: 'Peringatan',
-        message: 'Pesan',
       },
       heatmap: {
         title: 'Aktivitas eksekusi',
@@ -553,7 +545,6 @@ export const id: Translations = {
       empty: 'Semua selesai â€” tidak ada ulasan tertunda',
       approve: 'Setujui',
       reject: 'Tolak',
-      shortcuts: 'A setujui Â· R tolak Â· S lewati Â· Esc keluar',
     },
     parseError: {
       label: 'Kesalahan parsing',
@@ -768,11 +759,9 @@ export const id: Translations = {
     cloudConnection: 'Koneksi Cloud',
     orchestrator: 'Orchestrator',
     notConfigured: 'Belum dikonfigurasi',
-    systemStatus: 'Status Sistem',
     totalWorkers: 'Total Worker',
     queueLength: 'Panjang Antrian',
     activeExecutions: 'Eksekusi Aktif',
-    loadingStatus: 'Memuat status sistem...',
     notifications: {
       title: 'Notifikasi',
       subtitle: 'Peringatan penyembuhan otomatis dan ringkasan',

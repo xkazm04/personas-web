@@ -343,16 +343,8 @@ export const vi: Translations = {
     },
     home: {
       vitals: {
-        title: 'Tình trạng đội tác nhân',
         runs: 'Lần chạy',
         alerts: 'Cảnh báo',
-      },
-      triage: {
-        title: 'Hàng đợi phân loại',
-        empty: 'Mọi thứ ổn — không có gì cần bạn chú ý.',
-        review: 'Đánh giá',
-        alert: 'Cảnh báo',
-        message: 'Tin nhắn',
       },
       heatmap: {
         title: 'Hoạt động thực thi',
@@ -553,7 +545,6 @@ export const vi: Translations = {
       empty: 'ÄĂŁ xong â€” khĂ´ng cĂł Ä‘Ăˇnh giĂˇ chá»ť xá»­ lĂ˝',
       approve: 'Duyá»‡t',
       reject: 'Tá»« chá»‘i',
-      shortcuts: 'A duyá»‡t Â· R tá»« chá»‘i Â· S bá»Ź qua Â· Esc thoĂˇt',
     },
     parseError: {
       label: 'Lá»—i phĂ˘n tĂ­ch',
@@ -768,11 +759,9 @@ export const vi: Translations = {
     cloudConnection: 'K\u1ebft n\u1ed1i \u0111\u00e1m m\u00e2y',
     orchestrator: 'B\u1ed9 \u0111i\u1ec1u ph\u1ed1i',
     notConfigured: 'Ch\u01b0a c\u1ea5u h\u00ecnh',
-    systemStatus: 'Tr\u1ea1ng th\u00e1i h\u1ec7 th\u1ed1ng',
     totalWorkers: 'T\u1ed5ng s\u1ed1 Worker',
     queueLength: '\u0110\u1ed9 d\u00e0i h\u00e0ng \u0111\u1ee3i',
     activeExecutions: 'Th\u1ef1c thi \u0111ang ho\u1ea1t \u0111\u1ed9ng',
-    loadingStatus: '\u0110ang t\u1ea3i tr\u1ea1ng th\u00e1i h\u1ec7 th\u1ed1ng...',
     notifications: {
       title: 'Thông báo',
       subtitle: 'Cảnh báo tự phục hồi và bản tóm tắt',

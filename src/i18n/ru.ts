@@ -343,16 +343,8 @@ export const ru: Translations = {
     },
     home: {
       vitals: {
-        title: 'Состояние флота',
         runs: 'Запуски',
         alerts: 'Оповещения',
-      },
-      triage: {
-        title: 'Очередь триажа',
-        empty: 'Всё в порядке — ничего не требует внимания.',
-        review: 'Проверка',
-        alert: 'Оповещение',
-        message: 'Сообщение',
       },
       heatmap: {
         title: 'Активность выполнения',
@@ -553,7 +545,6 @@ export const ru: Translations = {
       empty: 'Đ’ŃŃ‘ ŃĐ´ĐµĐ»Đ°Đ˝Đľ â€” Đ˝ĐµŃ‚ ĐľĐ¶Đ¸Đ´Đ°ŃŽŃ‰Đ¸Ń… ĐľĐ±Đ·ĐľŃ€ĐľĐ˛',
       approve: 'ĐžĐ´ĐľĐ±Ń€Đ¸Ń‚ŃŚ',
       reject: 'ĐžŃ‚ĐşĐ»ĐľĐ˝Đ¸Ń‚ŃŚ',
-      shortcuts: 'A ĐľĐ´ĐľĐ±Ń€Đ¸Ń‚ŃŚ Â· R ĐľŃ‚ĐşĐ»ĐľĐ˝Đ¸Ń‚ŃŚ Â· S ĐżŃ€ĐľĐżŃŃŃ‚Đ¸Ń‚ŃŚ Â· Esc Đ˛Ń‹Ń…ĐľĐ´',
     },
     parseError: {
       label: 'ĐžŃĐ¸Đ±ĐşĐ° Ń€Đ°Đ·Đ±ĐľŃ€Đ°',
@@ -768,11 +759,9 @@ export const ru: Translations = {
     cloudConnection: '\u041E\u0431\u043B\u0430\u0447\u043D\u043E\u0435 \u043F\u043E\u0434\u043A\u043B\u044E\u0447\u0435\u043D\u0438\u0435',
     orchestrator: '\u041E\u0440\u043A\u0435\u0441\u0442\u0440\u0430\u0442\u043E\u0440',
     notConfigured: '\u041D\u0435 \u043D\u0430\u0441\u0442\u0440\u043E\u0435\u043D\u043E',
-    systemStatus: '\u0421\u043E\u0441\u0442\u043E\u044F\u043D\u0438\u0435 \u0441\u0438\u0441\u0442\u0435\u043C\u044B',
     totalWorkers: '\u0412\u0441\u0435\u0433\u043E \u0432\u043E\u0440\u043A\u0435\u0440\u043E\u0432',
     queueLength: '\u0414\u043B\u0438\u043D\u0430 \u043E\u0447\u0435\u0440\u0435\u0434\u0438',
     activeExecutions: '\u0410\u043A\u0442\u0438\u0432\u043D\u044B\u0435 \u0432\u044B\u043F\u043E\u043B\u043D\u0435\u043D\u0438\u044F',
-    loadingStatus: '\u0417\u0430\u0433\u0440\u0443\u0437\u043A\u0430 \u0441\u043E\u0441\u0442\u043E\u044F\u043D\u0438\u044F \u0441\u0438\u0441\u0442\u0435\u043C\u044B...',
     notifications: {
       title: 'Уведомления',
       subtitle: 'Оповещения о самовосстановлении и сводки',

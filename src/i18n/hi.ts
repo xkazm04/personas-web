@@ -343,16 +343,8 @@ export const hi: Translations = {
     },
     home: {
       vitals: {
-        title: 'फ़्लीट विटल्स',
         runs: 'रन',
         alerts: 'अलर्ट',
-      },
-      triage: {
-        title: 'ट्रायेज क़तार',
-        empty: 'सब ठीक है — किसी चीज़ पर ध्यान देने की ज़रूरत नहीं।',
-        review: 'समीक्षा',
-        alert: 'अलर्ट',
-        message: 'संदेश',
       },
       heatmap: {
         title: 'निष्पादन गतिविधि',
@@ -553,7 +545,6 @@ export const hi: Translations = {
       empty: 'ŕ¤¸ŕ¤¬ ŕ¤ŞŕĄ‚ŕ¤°ŕ¤ľ â€” ŕ¤•ŕĄ‹ŕ¤ ŕ¤˛ŕ¤‚ŕ¤¬ŕ¤żŕ¤¤ ŕ¤¸ŕ¤®ŕĄ€ŕ¤•ŕĄŤŕ¤·ŕ¤ľ ŕ¤¨ŕ¤ąŕĄ€ŕ¤‚',
       approve: 'ŕ¤¸ŕĄŤŕ¤µŕĄ€ŕ¤•ŕĄŕ¤¤',
       reject: 'ŕ¤…ŕ¤¸ŕĄŤŕ¤µŕĄ€ŕ¤•ŕĄŕ¤¤',
-      shortcuts: 'A ŕ¤¸ŕĄŤŕ¤µŕĄ€ŕ¤•ŕĄŕ¤¤ Â· R ŕ¤…ŕ¤¸ŕĄŤŕ¤µŕĄ€ŕ¤•ŕĄŕ¤¤ Â· S ŕ¤›ŕĄ‹ŕ¤ˇŕ¤ĽŕĄ‡ŕ¤‚ Â· Esc ŕ¤¬ŕ¤ľŕ¤ąŕ¤°',
     },
     parseError: {
       label: 'ŕ¤Şŕ¤ľŕ¤°ŕĄŤŕ¤¸ ŕ¤¤ŕĄŤŕ¤°ŕĄŕ¤źŕ¤ż',
@@ -768,11 +759,9 @@ export const hi: Translations = {
     cloudConnection: '\u0915\u094D\u0932\u093E\u0909\u0921 \u0915\u0928\u0947\u0915\u094D\u0936\u0928',
     orchestrator: '\u0911\u0930\u094D\u0915\u0947\u0938\u094D\u091F\u094D\u0930\u0947\u091F\u0930',
     notConfigured: '\u0915\u0949\u0928\u094D\u092B\u093C\u093F\u0917\u0930 \u0928\u0939\u0940\u0902 \u0939\u0948',
-    systemStatus: '\u0938\u093F\u0938\u094D\u091F\u092E \u0938\u094D\u091F\u0947\u091F\u0938',
     totalWorkers: '\u0915\u0941\u0932 \u0935\u0930\u094D\u0915\u0930',
     queueLength: '\u0915\u094D\u092F\u0942 \u0932\u0902\u092C\u093E\u0908',
     activeExecutions: '\u0938\u0915\u094D\u0930\u093F\u092F \u090F\u0917\u094D\u091C\u093C\u0940\u0915\u094D\u092F\u0942\u0936\u0928',
-    loadingStatus: '\u0938\u093F\u0938\u094D\u091F\u092E \u0938\u094D\u091F\u0947\u091F\u0938 \u0932\u094B\u0921 \u0939\u094B \u0930\u0939\u093E \u0939\u0948...',
     notifications: {
       title: 'सूचनाएं',
       subtitle: 'स्व-उपचार अलर्ट और सारांश',

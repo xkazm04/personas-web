@@ -343,16 +343,8 @@ export const es: Translations = {
     },
     home: {
       vitals: {
-        title: 'Signos vitales de la flota',
         runs: 'Ejecuciones',
         alerts: 'Alertas',
-      },
-      triage: {
-        title: 'Cola de triaje',
-        empty: 'Todo en orden: nada requiere tu atención.',
-        review: 'Revisión',
-        alert: 'Alerta',
-        message: 'Mensaje',
       },
       heatmap: {
         title: 'Actividad de ejecución',
@@ -553,7 +545,6 @@ export const es: Translations = {
       empty: 'Todo al dĂ­a â€” sin revisiones pendientes',
       approve: 'Aprobar',
       reject: 'Rechazar',
-      shortcuts: 'A aprobar Â· R rechazar Â· S saltar Â· Esc salir',
     },
     parseError: {
       label: 'Error de anĂˇlisis',
@@ -768,11 +759,9 @@ export const es: Translations = {
     cloudConnection: 'Conexi\u00f3n a la Nube',
     orchestrator: 'Orquestador',
     notConfigured: 'No configurado',
-    systemStatus: 'Estado del Sistema',
     totalWorkers: 'Workers Totales',
     queueLength: 'Longitud de Cola',
     activeExecutions: 'Ejecuciones Activas',
-    loadingStatus: 'Cargando estado del sistema...',
     notifications: {
       title: 'Notificaciones',
       subtitle: 'Alertas de auto-reparación y resúmenes',

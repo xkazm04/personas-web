@@ -343,16 +343,8 @@ export const de: Translations = {
     },
     home: {
       vitals: {
-        title: 'Flotten-Vitalwerte',
         runs: 'Läufe',
         alerts: 'Warnungen',
-      },
-      triage: {
-        title: 'Triage-Warteschlange',
-        empty: 'Alles erledigt – nichts erfordert Ihre Aufmerksamkeit.',
-        review: 'Prüfung',
-        alert: 'Warnung',
-        message: 'Nachricht',
       },
       heatmap: {
         title: 'Ausführungsaktivität',
@@ -553,7 +545,6 @@ export const de: Translations = {
       empty: 'Alles erledigt â€” keine ausstehenden Reviews',
       approve: 'Genehmigen',
       reject: 'Ablehnen',
-      shortcuts: 'A genehmigen Â· R ablehnen Â· S ĂĽberspringen Â· Esc beenden',
     },
     parseError: {
       label: 'Parsing-Fehler',
@@ -768,11 +759,9 @@ export const de: Translations = {
     cloudConnection: 'Cloud-Verbindung',
     orchestrator: 'Orchestrator',
     notConfigured: 'Nicht konfiguriert',
-    systemStatus: 'Systemstatus',
     totalWorkers: 'Worker gesamt',
     queueLength: 'Warteschlangenl\u00e4nge',
     activeExecutions: 'Aktive Ausf\u00fchrungen',
-    loadingStatus: 'Systemstatus wird geladen...',
     notifications: {
       title: 'Benachrichtigungen',
       subtitle: 'Healing-Warnungen und Berichte',

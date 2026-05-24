@@ -343,16 +343,8 @@ export const ko: Translations = {
     },
     home: {
       vitals: {
-        title: '플릿 바이탈',
         runs: '실행 수',
         alerts: '알림',
-      },
-      triage: {
-        title: '분류 대기열',
-        empty: '모두 처리됨 — 주의가 필요한 항목이 없습니다.',
-        review: '검토',
-        alert: '경고',
-        message: '메시지',
       },
       heatmap: {
         title: '실행 활동',
@@ -553,7 +545,6 @@ export const ko: Translations = {
       empty: 'ëŞ¨ë‘ ě™„ëŁŚ â€” ëŚ€ę¸° ě¤‘ěť¸ ę˛€í†  ě—†ěťŚ',
       approve: 'ěŠąěť¸',
       reject: 'ę±°ë¶€',
-      shortcuts: 'A ěŠąěť¸ Â· R ę±°ë¶€ Â· S ę±´ë„ë›°ę¸° Â· Esc ě˘…ëŁŚ',
     },
     parseError: {
       label: 'íŚŚě‹± ě¤ëĄ',
@@ -768,11 +759,9 @@ export const ko: Translations = {
     cloudConnection: '\ud074\ub77c\uc6b0\ub4dc \uc5f0\uacb0',
     orchestrator: '\uc624\ucf00\uc2a4\ud2b8\ub808\uc774\ud130',
     notConfigured: '\uad6c\uc131\ub418\uc9c0 \uc54a\uc74c',
-    systemStatus: '\uc2dc\uc2a4\ud15c \uc0c1\ud0dc',
     totalWorkers: '\ucd1d \uc6cc\ucee4',
     queueLength: '\ub300\uae30\uc5f4 \uae38\uc774',
     activeExecutions: '\ud65c\uc131 \uc2e4\ud589',
-    loadingStatus: '\uc2dc\uc2a4\ud15c \uc0c1\ud0dc \ub85c\ub529 \uc911...',
     notifications: {
       title: '알림',
       subtitle: '자가 복구 알림 및 요약',

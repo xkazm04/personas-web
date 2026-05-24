@@ -343,16 +343,8 @@ export const bn: Translations = {
     },
     home: {
       vitals: {
-        title: 'ফ্লিট ভাইটালস',
         runs: 'রান',
         alerts: 'সতর্কতা',
-      },
-      triage: {
-        title: 'ট্রায়াজ সারি',
-        empty: 'সব ঠিক আছে — কোনো কিছুতে আপনার মনোযোগ প্রয়োজন নেই।',
-        review: 'পর্যালোচনা',
-        alert: 'সতর্কতা',
-        message: 'বার্তা',
       },
       heatmap: {
         title: 'নির্বাহ কার্যকলাপ',
@@ -553,7 +545,6 @@ export const bn: Translations = {
       empty: 'ŕ¦¸ŕ¦¬ ŕ¦ąŕ¦Żŕ¦Ľŕ§‡ ŕ¦—ŕ§‡ŕ¦›ŕ§‡ â€” ŕ¦•ŕ§‹ŕ¦¨ŕ§‹ ŕ¦¬ŕ¦ľŕ¦•ŕ¦ż ŕ¦Şŕ¦°ŕ§Ťŕ¦Żŕ¦ľŕ¦˛ŕ§‹ŕ¦šŕ¦¨ŕ¦ľ ŕ¦¨ŕ§‡ŕ¦‡',
       approve: 'ŕ¦…ŕ¦¨ŕ§ŕ¦®ŕ§‹ŕ¦¦ŕ¦¨',
       reject: 'ŕ¦Şŕ§Ťŕ¦°ŕ¦¤ŕ§Ťŕ¦Żŕ¦ľŕ¦–ŕ§Ťŕ¦Żŕ¦ľŕ¦¨',
-      shortcuts: 'A ŕ¦…ŕ¦¨ŕ§ŕ¦®ŕ§‹ŕ¦¦ŕ¦¨ Â· R ŕ¦Şŕ§Ťŕ¦°ŕ¦¤ŕ§Ťŕ¦Żŕ¦ľŕ¦–ŕ§Ťŕ¦Żŕ¦ľŕ¦¨ Â· S ŕ¦Źŕ¦ˇŕ¦Ľŕ¦ľŕ¦¨ŕ§‹ Â· Esc ŕ¦Şŕ§Ťŕ¦°ŕ¦¸ŕ§Ťŕ¦Ąŕ¦ľŕ¦¨',
     },
     parseError: {
       label: 'ŕ¦Şŕ¦ľŕ¦°ŕ§Ťŕ¦¸ ŕ¦¤ŕ§Ťŕ¦°ŕ§ŕ¦źŕ¦ż',
@@ -768,11 +759,9 @@ export const bn: Translations = {
     cloudConnection: '\u0995\u09cd\u09b2\u09be\u0989\u09a1 \u0995\u09a8\u09c7\u0995\u09b6\u09a8',
     orchestrator: '\u0985\u09b0\u09cd\u0995\u09c7\u09b8\u09cd\u099f\u09cd\u09b0\u09c7\u099f\u09b0',
     notConfigured: '\u0995\u09a8\u09ab\u09bf\u0997\u09be\u09b0 \u0995\u09b0\u09be \u09b9\u09af\u09bc\u09a8\u09bf',
-    systemStatus: '\u09b8\u09bf\u09b8\u09cd\u099f\u09c7\u09ae \u09b8\u09cd\u099f\u09cd\u09af\u09be\u099f\u09be\u09b8',
     totalWorkers: '\u09ae\u09cb\u099f \u0993\u09af\u09bc\u09be\u09b0\u09cd\u0995\u09be\u09b0',
     queueLength: '\u0995\u09bf\u0989\u09b0 \u09a6\u09c8\u09b0\u09cd\u0998\u09cd\u09af',
     activeExecutions: '\u09b8\u0995\u09cd\u09b0\u09bf\u09af\u09bc \u098f\u0995\u09cd\u09b8\u09bf\u0995\u09bf\u0989\u09b6\u09a8',
-    loadingStatus: '\u09b8\u09bf\u09b8\u09cd\u099f\u09c7\u09ae \u09b8\u09cd\u099f\u09cd\u09af\u09be\u099f\u09be\u09b8 \u09b2\u09cb\u09a1 \u09b9\u099a\u09cd\u099b\u09c7...',
     notifications: {
       title: 'বিজ্ঞপ্তি',
       subtitle: 'স্ব-নিরাময় সতর্কতা ও সারসংক্ষেপ',

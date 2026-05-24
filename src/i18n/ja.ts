@@ -343,16 +343,8 @@ export const ja: Translations = {
     },
     home: {
       vitals: {
-        title: 'フリートの稼働状況',
         runs: '実行数',
         alerts: 'アラート',
-      },
-      triage: {
-        title: 'トリアージキュー',
-        empty: 'すべて対応済み — 対応が必要な項目はありません。',
-        review: 'レビュー',
-        alert: 'アラート',
-        message: 'メッセージ',
       },
       heatmap: {
         title: '実行アクティビティ',
@@ -553,7 +545,6 @@ export const ja: Translations = {
       empty: 'ă™ăąă¦ĺ®Śäş† â€” äżťç•™ä¸­ă®ă¬ă“ăĄăĽăŻă‚ă‚Šăľă›ă‚“',
       approve: 'ć‰żčŞŤ',
       reject: 'ć‹’ĺ¦',
-      shortcuts: 'A ć‰żčŞŤ Â· R ć‹’ĺ¦ Â· S ă‚ąă‚­ăă— Â· Esc çµ‚äş†',
     },
     parseError: {
       label: 'č§Łćžă‚¨ă©ăĽ',
@@ -768,11 +759,9 @@ export const ja: Translations = {
     cloudConnection: '\u30af\u30e9\u30a6\u30c9\u63a5\u7d9a',
     orchestrator: '\u30aa\u30fc\u30b1\u30b9\u30c8\u30ec\u30fc\u30bf\u30fc',
     notConfigured: '\u672a\u8a2d\u5b9a',
-    systemStatus: '\u30b7\u30b9\u30c6\u30e0\u30b9\u30c6\u30fc\u30bf\u30b9',
     totalWorkers: '\u7dcf\u30ef\u30fc\u30ab\u30fc\u6570',
     queueLength: '\u30ad\u30e5\u30fc\u9577',
     activeExecutions: '\u30a2\u30af\u30c6\u30a3\u30d6\u5b9f\u884c',
-    loadingStatus: '\u30b7\u30b9\u30c6\u30e0\u30b9\u30c6\u30fc\u30bf\u30b9\u3092\u8aad\u307f\u8fbc\u307f\u4e2d...',
     notifications: {
       title: '通知',
       subtitle: '自己修復アラートとダイジェスト',

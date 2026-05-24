@@ -261,16 +261,8 @@
     };
     home: {
       vitals: {
-        title: string;
         runs: string;
         alerts: string;
-      };
-      triage: {
-        title: string;
-        empty: string;
-        review: string;
-        alert: string;
-        message: string;
       };
       heatmap: {
         title: string;
@@ -471,7 +463,6 @@
       empty: string;
       approve: string;
       reject: string;
-      shortcuts: string;
     };
     parseError: {
       label: string;
@@ -686,11 +677,9 @@
     cloudConnection: string;
     orchestrator: string;
     notConfigured: string;
-    systemStatus: string;
     totalWorkers: string;
     queueLength: string;
     activeExecutions: string;
-    loadingStatus: string;
     notifications: {
       title: string;
       subtitle: string;
@@ -1283,16 +1272,8 @@ export const en: Translations = {
     },
     home: {
       vitals: {
-        title: 'Fleet vitals',
         runs: 'Runs',
         alerts: 'Alerts',
-      },
-      triage: {
-        title: 'Triage queue',
-        empty: 'All clear — nothing needs your attention.',
-        review: 'Review',
-        alert: 'Alert',
-        message: 'Message',
       },
       heatmap: {
         title: 'Execution activity',
@@ -1493,7 +1474,6 @@ export const en: Translations = {
       empty: 'All caught up â€” no pending reviews',
       approve: 'Approve',
       reject: 'Reject',
-      shortcuts: 'A approve Â· R reject Â· S skip Â· Esc exit',
     },
     parseError: {
       label: 'Parse error',
@@ -1708,11 +1688,9 @@ export const en: Translations = {
     cloudConnection: 'Cloud Connection',
     orchestrator: 'Orchestrator',
     notConfigured: 'Not configured',
-    systemStatus: 'System Status',
     totalWorkers: 'Total Workers',
     queueLength: 'Queue Length',
     activeExecutions: 'Active Executions',
-    loadingStatus: 'Loading system status...',
     notifications: {
       title: 'Notifications',
       subtitle: 'Healing alerts and digests',

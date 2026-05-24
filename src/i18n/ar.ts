@@ -343,16 +343,8 @@ export const ar: Translations = {
     },
     home: {
       vitals: {
-        title: 'الحالة الحيوية للأسطول',
         runs: 'عمليات التشغيل',
         alerts: 'التنبيهات',
-      },
-      triage: {
-        title: 'قائمة الفرز',
-        empty: 'كل شيء على ما يرام — لا شيء يتطلب انتباهك.',
-        review: 'مراجعة',
-        alert: 'تنبيه',
-        message: 'رسالة',
       },
       heatmap: {
         title: 'نشاط التنفيذ',
@@ -553,7 +545,6 @@ export const ar: Translations = {
       empty: 'ŮŮ„ Ř´ŮŠŘˇ Ů…Ů†ŘŞŮ‡ŮŠ â€” Ů„Ř§ ŘŞŮŘ¬ŘŻ Ů…Ř±Ř§Ř¬ŘąŘ§ŘŞ Ů…ŘąŮ„Ů‚Ř©',
       approve: 'Ů…ŮŘ§ŮŮ‚Ř©',
       reject: 'Ř±ŮŘ¶',
-      shortcuts: 'A Ů…ŮŘ§ŮŮ‚Ř© Â· R Ř±ŮŘ¶ Â· S ŘŞŘ®Ř·ŮŠ Â· Esc Ř®Ř±ŮŘ¬',
     },
     parseError: {
       label: 'Ř®Ř·ŘŁ ŮŮŠ Ř§Ů„ŘŞŘ­Ů„ŮŠŮ„',
@@ -768,11 +759,9 @@ export const ar: Translations = {
     cloudConnection: '\u0627\u0644\u0627\u062A\u0635\u0627\u0644 \u0627\u0644\u0633\u062D\u0627\u0628\u064A',
     orchestrator: '\u0627\u0644\u0645\u0646\u0633\u0642',
     notConfigured: '\u063A\u064A\u0631 \u0645\u0643\u0648\u0651\u0646',
-    systemStatus: '\u062D\u0627\u0644\u0629 \u0627\u0644\u0646\u0638\u0627\u0645',
     totalWorkers: '\u0625\u062C\u0645\u0627\u0644\u064A \u0627\u0644\u0639\u0645\u0627\u0644',
     queueLength: '\u0637\u0648\u0644 \u0627\u0644\u0637\u0627\u0628\u0648\u0631',
     activeExecutions: '\u0627\u0644\u062A\u0646\u0641\u064A\u0630\u0627\u062A \u0627\u0644\u0646\u0634\u0637\u0629',
-    loadingStatus: '\u062C\u0627\u0631\u064D \u062A\u062D\u0645\u064A\u0644 \u062D\u0627\u0644\u0629 \u0627\u0644\u0646\u0638\u0627\u0645...',
     notifications: {
       title: 'الإشعارات',
       subtitle: 'تنبيهات الإصلاح الذاتي والملخصات',
