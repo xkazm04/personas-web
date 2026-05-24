@@ -449,6 +449,8 @@
     rate: string;
     rateLower: string;
     cost: string;
+    tokens: string;
+    retries: string;
     duration: string;
     confidence: string;
     lastSeen: string;
@@ -499,6 +501,8 @@
     metrics: {
       reliability: string;
       cost: string;
+    tokens: string;
+    retries: string;
       speed: string;
       quality: string;
       volume: string;
@@ -618,6 +622,8 @@
     agent: string;
     duration: string;
     cost: string;
+    tokens: string;
+    retries: string;
     started: string;
     noExecutions: string;
     noExecutionsDesc: string;
@@ -1535,6 +1541,8 @@ export const en: Translations = {
     rate: "Rate",
     rateLower: "rate",
     cost: "Cost",
+    tokens: 'Tokens',
+    retries: 'Retries',
     duration: "Duration",
     confidence: "Confidence",
     lastSeen: "Last seen",
@@ -1585,6 +1593,8 @@ export const en: Translations = {
     metrics: {
       reliability: 'Reliability',
       cost: 'Cost',
+    tokens: 'Tokens',
+    retries: 'Retries',
       speed: 'Speed',
       quality: 'Quality',
       volume: 'Volume',
@@ -1704,6 +1714,8 @@ export const en: Translations = {
     agent: 'Agent',
     duration: 'Duration',
     cost: 'Cost',
+    tokens: 'Tokens',
+    retries: 'Retries',
     started: 'Started',
     noExecutions: 'No executions yet',
     noExecutionsDesc: 'Execute an agent to see results here',

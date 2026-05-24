@@ -12,7 +12,9 @@ import { useTranslation } from "@/i18n/useTranslation";
 import { fadeUp, staggerContainer } from "@/lib/animations";
 import { useExecutionStore, useEnrichedExecutions } from "@/stores/executionStore";
 
-import { ExecutionOutput } from "./executions-page/ExecutionOutput";
+import type { GlobalExecution } from "@/lib/types";
+
+import { ExecutionDetailModal } from "./executions-page/ExecutionDetailModal";
 import { ExecutionsFilters } from "./executions-page/ExecutionsFilters";
 import {
   buildExecutionColumns,
@@ -32,6 +34,7 @@ export default function ExecutionsPage() {
   const cancellingIds = useExecutionStore((state) => state.cancellingIds);
   const [filter, setFilter] = useState("all");
   const [visibleCount, setVisibleCount] = useState(INITIAL_VISIBLE_EXECUTIONS);
+  const [selected, setSelected] = useState<GlobalExecution | null>(null);
 
   useEffect(() => {
     void fetchExecutions();
@@ -147,19 +150,7 @@ export default function ExecutionsPage() {
           columns={columns}
           data={visibleExecutions}
           keyExtractor={(row) => row.id}
-          expandable={(row) => (
-            <ExecutionOutput
-              executionId={row.id}
-              labels={{
-                status: t.common.status,
-                duration: t.executionsPage.duration,
-                cost: t.executionsPage.cost,
-                stdout: t.dashboardUi.stdout,
-                waitingForWorker: t.executionsPage.waitingForWorker,
-                noOutputYet: t.executionsPage.noOutputYet,
-              }}
-            />
-          )}
+          onRowClick={(row) => setSelected(row)}
           rowClassName={executionRowClassName}
           emptyState={
             <EmptyState
@@ -169,6 +160,8 @@ export default function ExecutionsPage() {
             />
           }
         />
+
+        <ExecutionDetailModal execution={selected} onClose={() => setSelected(null)} />
 
         {filtered.length > visibleExecutions.length && (
           <div className="mt-3 flex items-center justify-center">
