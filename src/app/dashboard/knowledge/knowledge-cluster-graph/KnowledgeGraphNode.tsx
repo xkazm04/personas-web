@@ -23,19 +23,31 @@ export function KnowledgeGraphNode({
 }) {
   const config = KNOWLEDGE_CLUSTER_TYPE_CONFIG[pattern.knowledgeType];
   const Icon = config.icon;
-  const size = 16 + pattern.confidence * 20;
+  // Larger, more legible nodes — diameter scales 28→58px with confidence.
+  const size = 28 + pattern.confidence * 30;
+  const iconPx = Math.round(size * 0.42);
+  const label =
+    pattern.patternKey.length > 16
+      ? `${pattern.patternKey.slice(0, 14)}…`
+      : pattern.patternKey;
 
   return (
     <motion.g initial={{ opacity: 0, scale: 0 }} animate={{ opacity: isDimmed ? 0.25 : 1, scale: 1 }} transition={{ duration: 0.4, ease: [0.22, 1, 0.36, 1] }} style={{ cursor: "pointer" }} onClick={() => onSelect(pattern)} onMouseEnter={() => onHover(pattern)} onMouseLeave={onLeave}>
-      {(isSelected || isHighlighted) && <circle cx={position.x} cy={position.y} r={size / 2 + 6} fill="none" stroke={config.color} strokeWidth={1.5} opacity={0.4} />}
-      <circle cx={position.x} cy={position.y} r={size / 2} fill={`${config.color}20`} stroke={isSelected ? config.color : `${config.color}40`} strokeWidth={isSelected ? 2 : 1} />
-      <foreignObject x={position.x - 6} y={position.y - 6} width={12} height={12} style={{ overflow: "visible" }}>
-        <div className="flex items-center justify-center w-3 h-3">
-          <Icon className={`w-3 h-3 ${config.textColor}`} />
+      {(isSelected || isHighlighted) && <circle cx={position.x} cy={position.y} r={size / 2 + 7} fill="none" stroke={config.color} strokeWidth={2} opacity={0.45} />}
+      <circle cx={position.x} cy={position.y} r={size / 2} fill={`${config.color}33`} stroke={isSelected ? config.color : `${config.color}66`} strokeWidth={isSelected ? 2.5 : 1.5} />
+      <foreignObject x={position.x - iconPx / 2} y={position.y - iconPx / 2} width={iconPx} height={iconPx} style={{ overflow: "visible" }}>
+        <div className="flex items-center justify-center" style={{ width: iconPx, height: iconPx }}>
+          <Icon size={Math.round(iconPx * 0.72)} className={config.textColor} />
         </div>
       </foreignObject>
-      <text x={position.x} y={position.y + size / 2 + 12} textAnchor="middle" className="text-sm fill-current text-foreground/60" style={{ fontSize: "8px" }}>
-        {pattern.patternKey.length > 18 ? `${pattern.patternKey.slice(0, 16)}...` : pattern.patternKey}
+      <text
+        x={position.x}
+        y={position.y + size / 2 + 18}
+        textAnchor="middle"
+        className="fill-current text-base font-medium text-foreground/80"
+        style={{ paintOrder: "stroke", stroke: "var(--background)", strokeWidth: "3px", strokeLinejoin: "round" }}
+      >
+        {label}
       </text>
     </motion.g>
   );

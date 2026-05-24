@@ -14,7 +14,7 @@ export function computeKnowledgeNodePositions(
   const positions = new Map<string, NodePosition>();
   const cx = width / 2;
   const cy = height / 2;
-  const radius = Math.min(width, height) * 0.32;
+  const radius = Math.min(width, height) * 0.34;
   const groups = new Map<KnowledgeType, KnowledgePattern[]>();
 
   for (const pattern of patterns) {
@@ -27,7 +27,8 @@ export function computeKnowledgeNodePositions(
     const angle = (config.clusterAngle * Math.PI) / 180;
     const clusterCx = cx + Math.cos(angle) * radius;
     const clusterCy = cy + Math.sin(angle) * radius;
-    const spreadRadius = 30 + members.length * 12;
+    // Wider spread so the larger nodes + text-base labels don't collide.
+    const spreadRadius = 60 + members.length * 16;
 
     members.forEach((pattern, index) => {
       const memberAngle = (index / members.length) * Math.PI * 2;
