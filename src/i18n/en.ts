@@ -481,6 +481,8 @@
       enter: string;
       exit: string;
     volume: string;
+    skipTo: string;
+    chapterHome: string;
       progress: string;
       skip: string;
       empty: string;
@@ -506,6 +508,8 @@
       speed: string;
       quality: string;
       volume: string;
+    skipTo: string;
+    chapterHome: string;
     };
     trend: {
       up: string;
@@ -915,6 +919,8 @@
     previous: string;
     exit: string;
     volume: string;
+    skipTo: string;
+    chapterHome: string;
     begin: string;
     skip: string;
     introTitle: string;
@@ -1579,6 +1585,8 @@ export const en: Translations = {
       enter: 'Focus flow',
       exit: 'Exit focus',
     volume: 'Volume',
+    skipTo: 'Jump to',
+    chapterHome: 'Homepage',
       progress: '{n} of {total}',
       skip: 'Skip',
       empty: 'All caught up â€” no pending reviews',
@@ -1604,6 +1612,8 @@ export const en: Translations = {
       speed: 'Speed',
       quality: 'Quality',
       volume: 'Volume',
+    skipTo: 'Jump to',
+    chapterHome: 'Homepage',
     },
     trend: {
       up: 'Up',
@@ -2029,6 +2039,8 @@ export const en: Translations = {
     previous: 'Previous step',
     exit: 'Exit tour',
     volume: 'Volume',
+    skipTo: 'Jump to',
+    chapterHome: 'Homepage',
     begin: 'Begin',
     skip: 'Skip',
     introTitle: 'Meet Athena, your guide',
