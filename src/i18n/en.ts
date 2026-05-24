@@ -18,6 +18,20 @@
     pricing: string;
     menu: string;
   };
+  compareSection: {
+    heading: string;
+    headingGradient: string;
+    description: string;
+    readGuide: string;
+    groups: {
+      "agents-prompts": { title: string; tagline: string; concepts: string[] };
+      triggers: { title: string; tagline: string; concepts: string[] };
+      pipelines: { title: string; tagline: string; concepts: string[] };
+      credentials: { title: string; tagline: string; concepts: string[] };
+      monitoring: { title: string; tagline: string; concepts: string[] };
+      testing: { title: string; tagline: string; concepts: string[] };
+    };
+  };
   footer: {
     tagline: string;
     motto: string;
@@ -302,6 +316,7 @@
     testFlow: string;
     eventTypes: string;
     stdout: string;
+    jumpToLatest: string;
     loadMoreExecutions: string;
     cancelling: string;
     cancelQueuedRun: string;
@@ -326,6 +341,7 @@
     searchShortcuts: string;
     noShortcutsMatch: string;
     failedAgentDetails: string;
+    retryAgentDetails: string;
     recentExecutions: string;
     noExecutionsYet: string;
     subscription: string;
@@ -333,9 +349,12 @@
     trigger: string;
     triggers: string;
     closeAgentDetails: string;
-    max: string;
-    timeoutSuffix: string;
-    budget: string;
+    metricConcurrency: string;
+    metricTimeout: string;
+    metricBudget: string;
+    metricConcurrencyTitle: string;
+    metricTimeoutTitle: string;
+    metricBudgetTitle: string;
     sessionVerifyFailed: string;
     sessionHelp: string;
     devModeMock: string;
@@ -413,6 +432,7 @@
     };
   };
   knowledgePage: {
+    viewSwitcherLabel: string;
     title: string;
     subtitle: string;
     denseTable: string;
@@ -458,6 +478,7 @@
     focus: {
       enter: string;
       exit: string;
+    volume: string;
       progress: string;
       skip: string;
       empty: string;
@@ -897,6 +918,7 @@
     next: string;
     previous: string;
     exit: string;
+    volume: string;
     begin: string;
     skip: string;
     introTitle: string;
@@ -904,6 +926,8 @@
     bridgePrompt: string;
     bridgeConfirm: string;
     bridgeDismiss: string;
+    bridgeToDashboardPrompt: string;
+    bridgeToDashboardConfirm: string;
     step1: string;
     step2: string;
     step3: string;
@@ -940,6 +964,81 @@ export const en: Translations = {
     changelog: 'Changelog',
     pricing: 'Pricing',
     menu: 'Menu',
+  },
+  compareSection: {
+    heading: 'Everything is',
+    headingGradient: 'free',
+    description: 'The desktop app and every capability below ship free forever. No tiers, no per-seat pricing — just a complete agent platform running on your machine.',
+    readGuide: 'Read the guide',
+    groups: {
+      'agents-prompts': {
+        title: 'Agents & Prompts',
+        tagline: 'Focused on users',
+        concepts: [
+          'Natural-language persona authoring',
+          '40+ adoptable templates',
+          'BYOM — Claude or local Ollama',
+          'Structured + simple prompt modes',
+          'Persistent agent memory',
+        ],
+      },
+      triggers: {
+        title: 'Orchestration',
+        tagline: 'Every way an agent can start',
+        concepts: [
+          'Schedule (cron)',
+          'Webhook endpoints',
+          'File watcher',
+          'Clipboard monitor',
+          'Chain / event trigger',
+          'Composite conditions',
+        ],
+      },
+      pipelines: {
+        title: 'Pipelines & Teams',
+        tagline: 'Visual agentic collaboration',
+        concepts: [
+          'Visual team canvas',
+          'Data-flow connections',
+          'Live event bus',
+          'Self-healing execution',
+          'Pipeline replay + time travel',
+        ],
+      },
+      credentials: {
+        title: 'Credentials & Security',
+        tagline: 'Your secrets stay on your machine',
+        concepts: [
+          'AES-256-GCM vault',
+          'OS-native keyring',
+          'AI-assisted OAuth',
+          'Automatic token refresh',
+          'Zero telemetry, local-first',
+        ],
+      },
+      monitoring: {
+        title: 'Monitoring',
+        tagline: 'See, cost, and control every run',
+        concepts: [
+          'Live observability dashboard',
+          'Span tracing per execution',
+          'Per-model cost attribution',
+          'Human review queues',
+          'Budget alerts + enforcement',
+        ],
+      },
+      testing: {
+        title: 'Testing Lab',
+        tagline: 'Automated evolution',
+        concepts: [
+          'Arena for A/B tests',
+          'Prompt versioning + diffs',
+          'Fitness scoring',
+          'Breeding cycles',
+          'Mock tool sandboxes',
+        ],
+      },
+    },
   },
   footer: {
     tagline: 'AI agents that work for you',
@@ -1313,6 +1412,7 @@ export const en: Translations = {
     testFlow: "Test Flow",
     eventTypes: "Event Types",
     stdout: "stdout",
+    jumpToLatest: "Jump to latest",
     loadMoreExecutions: "Load more executions ({visible}/{total})",
     cancelling: "Cancelling...",
     cancelQueuedRun: "Cancel queued run",
@@ -1337,6 +1437,7 @@ export const en: Translations = {
     searchShortcuts: "Search shortcuts...",
     noShortcutsMatch: "No shortcuts match \"{query}\"",
     failedAgentDetails: "Failed to load agent details",
+    retryAgentDetails: "Retry",
     recentExecutions: "Recent Executions",
     noExecutionsYet: "No executions yet",
     subscription: "subscription",
@@ -1344,9 +1445,12 @@ export const en: Translations = {
     trigger: "trigger",
     triggers: "triggers",
     closeAgentDetails: "Close agent details",
-    max: "max",
-    timeoutSuffix: "s timeout",
-    budget: "budget",
+    metricConcurrency: "Concurrency",
+    metricTimeout: "Timeout",
+    metricBudget: "Budget",
+    metricConcurrencyTitle: "Up to {n} concurrent executions",
+    metricTimeoutTitle: "Execution timeout: {n} seconds",
+    metricBudgetTitle: "Budget cap: {n} per execution",
     sessionVerifyFailed: "Couldn't verify your session",
     sessionHelp: "If this keeps happening, check your network or any ad-blockers.",
     devModeMock: "Development Mode - using mock data",
@@ -1424,6 +1528,7 @@ export const en: Translations = {
     },
   },
   knowledgePage: {
+    viewSwitcherLabel: "Knowledge views",
     title: "Knowledge Graph",
     subtitle: "Patterns learned from agent executions",
     denseTable: "Dense Table",
@@ -1469,6 +1574,7 @@ export const en: Translations = {
     focus: {
       enter: 'Focus flow',
       exit: 'Exit focus',
+    volume: 'Volume',
       progress: '{n} of {total}',
       skip: 'Skip',
       empty: 'All caught up â€” no pending reviews',
@@ -1924,6 +2030,7 @@ export const en: Translations = {
     next: 'Next step',
     previous: 'Previous step',
     exit: 'Exit tour',
+    volume: 'Volume',
     begin: 'Begin',
     skip: 'Skip',
     introTitle: 'Meet Athena, your guide',
@@ -1931,6 +2038,8 @@ export const en: Translations = {
     bridgePrompt: 'That is Personas at a glance. Want to go deeper and see how each piece actually works, feature by feature?',
     bridgeConfirm: 'Show me the features',
     bridgeDismiss: 'Maybe later',
+    bridgeToDashboardPrompt: 'Now see Personas in action — try the demo dashboard.',
+    bridgeToDashboardConfirm: 'Open the dashboard',
     step1: 'Meet a persona — a single AI agent with one stable identity and a composable set of skills. Give it the tools it needs, from Gmail and Slack to GitHub and your calendar, and it learns to act across all of them. One persona, many jobs, all working together.',
     step2: 'Now hand that persona a goal in plain language, like "triage my Gmail." Watch its mind work in real time: it reads the request, breaks it into steps, and plans its approach before touching a thing. Then it executes — and shows you every move as it goes.',
     step3: 'An agent is only as useful as the moments it wakes up for. Personas can be triggered eight ways — on a schedule, by an event, by polling a source, or from an incoming webhook. The orchestrator routes each signal to the right agent and keeps everything moving, healing itself if a step ever fails.',

@@ -13,6 +13,7 @@ import { useReducedMotion } from "framer-motion";
 import { INTRO_AUDIO_SRC, type TourStep } from "@/lib/tour-script";
 import { useTourAudio } from "@/hooks/useTourAudio";
 import { useTourScroll } from "@/hooks/useTourScroll";
+import { useTourVolume } from "@/hooks/useTourVolume";
 
 /** Options for a tour run. */
 interface TourStartOptions {
@@ -40,6 +41,9 @@ interface TourContextValue {
   atIntro: boolean;
   /** Live AnalyserNode for the current narration audio (companion reactivity). */
   audioAnalyser: AnalyserNode | null;
+  /** Narration output level (0..1). Persists via localStorage. */
+  volume: number;
+  setVolume: (value: number) => void;
   start: (steps: TourStep[], options?: TourStartOptions) => void;
   exit: () => void;
   next: () => void;
@@ -64,6 +68,7 @@ export function TourProvider({ children }: { children: ReactNode }) {
   const [bridgeHref, setBridgeHref] = useState<string | null>(null);
   const [atBridge, setAtBridge] = useState(false);
   const [atIntro, setAtIntro] = useState(false);
+  const [volume, setVolume] = useTourVolume();
   const prefersReducedMotion = useReducedMotion();
 
   const start = useCallback((nextSteps: TourStep[], options?: TourStartOptions) => {
@@ -85,9 +90,7 @@ export function TourProvider({ children }: { children: ReactNode }) {
 
   const beginTour = useCallback(() => setAtIntro(false), []);
 
-  // Advancing past the final step ends the tour — unless a bridge href is set,
-  // in which case we show the "continue?" prompt instead. The dwell timer and
-  // the manual "next" control share this terminal behaviour.
+  // Past the last step: show the bridge prompt if a href is set, else exit.
   const next = useCallback(() => {
     if (stepIndex >= steps.length - 1) {
       if (bridgeHref) {
@@ -128,9 +131,7 @@ export function TourProvider({ children }: { children: ReactNode }) {
 
   const togglePlay = useCallback(() => setPlaying((p) => !p), []);
 
-  // Dwell-timer auto-advance — only for steps with NO audio (audio steps are
-  // advanced on the clip's `ended` by useTourAudio). Timeout callback mutates
-  // state, not the effect body (React 19 "no setState in effect").
+  // Dwell-timer auto-advance for steps without audio (audio uses `ended`).
   useEffect(() => {
     if (!active || !playing || atBridge || atIntro || steps.length === 0) return;
     if (steps[stepIndex].audioSrc) return;
@@ -138,9 +139,7 @@ export function TourProvider({ children }: { children: ReactNode }) {
     return () => window.clearTimeout(id);
   }, [active, playing, atBridge, atIntro, stepIndex, next, steps]);
 
-  // Narration audio: plays the intro greeting during the intro, then each
-  // step's clip (advancing on `ended`). Returns the AnalyserNode that drives
-  // the Athena companion's glow / mouth.
+  // Narration audio + AnalyserNode for the Athena companion's reactivity.
   const audioAnalyser = useTourAudio({
     active,
     atIntro,
@@ -149,6 +148,7 @@ export function TourProvider({ children }: { children: ReactNode }) {
     playing,
     stepIndex,
     steps,
+    volume,
     next,
   });
 
@@ -180,9 +180,11 @@ export function TourProvider({ children }: { children: ReactNode }) {
   const value = useMemo<TourContextValue>(
     () => ({
       active, steps, stepIndex, playing, atBridge, atIntro, audioAnalyser,
+      volume, setVolume,
       start, exit, next, prev, goTo, togglePlay, beginTour, confirmBridge, dismissBridge,
     }),
     [active, steps, stepIndex, playing, atBridge, atIntro, audioAnalyser,
+     volume, setVolume,
      start, exit, next, prev, goTo, togglePlay, beginTour, confirmBridge, dismissBridge],
   );
 

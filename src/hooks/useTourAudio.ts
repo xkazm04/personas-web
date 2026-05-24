@@ -3,6 +3,9 @@
 import { useEffect, useRef, useState } from "react";
 import type { TourStep } from "@/lib/tour-script";
 
+/** Quiet beat between a step's clip ending and the next step starting. */
+const INTER_STEP_PAUSE_MS = 2000;
+
 interface UseTourAudioArgs {
   active: boolean;
   /** Intro phase — plays the greeting clip and does NOT auto-advance. */
@@ -13,6 +16,8 @@ interface UseTourAudioArgs {
   playing: boolean;
   stepIndex: number;
   steps: TourStep[];
+  /** Output level applied to the audio element in real time (0..1). */
+  volume: number;
   /** Advance to the next step — called on a step clip's `ended` event. */
   next: () => void;
 }
@@ -36,6 +41,7 @@ export function useTourAudio({
   playing,
   stepIndex,
   steps,
+  volume,
   next,
 }: UseTourAudioArgs): AnalyserNode | null {
   const audioRef = useRef<HTMLAudioElement | null>(null);
@@ -51,6 +57,9 @@ export function useTourAudio({
     if (!src) return;
     const audio = new Audio(src);
     audioRef.current = audio;
+    // Initial volume is applied by the dedicated [volume] effect below; doing
+    // it there (not here) keeps `volume` out of the creation deps, so dragging
+    // the slider doesn't tear down and re-create the audio element.
 
     // Lazy Web Audio graph (source → analyser → destination) so the companion
     // can read the voice envelope. Wrapped in try/catch: if Web Audio is
@@ -80,9 +89,12 @@ export function useTourAudio({
     }
 
     let fallbackId = 0;
+    let advanceId = 0;
     // The intro greeting just plays; only step clips auto-advance the tour.
+    // Insert a short pause after the clip ends so the spotlight breathes
+    // before jumping to the next step.
     const onEnded = () => {
-      if (!atIntro) next();
+      if (!atIntro) advanceId = window.setTimeout(next, INTER_STEP_PAUSE_MS);
     };
     const onError = () => {
       if (!atIntro && step) fallbackId = window.setTimeout(next, step.dwellMs);
@@ -99,6 +111,7 @@ export function useTourAudio({
         /* already disconnected */
       }
       if (fallbackId) window.clearTimeout(fallbackId);
+      if (advanceId) window.clearTimeout(advanceId);
       if (audioRef.current === audio) audioRef.current = null;
     };
   }, [active, atIntro, atBridge, introSrc, stepIndex, next, steps]);
@@ -109,6 +122,11 @@ export function useTourAudio({
     if (active && playing && !atBridge) audio.play().catch(() => {});
     else audio.pause();
   }, [active, playing, atBridge, atIntro, stepIndex, steps]);
+
+  // Apply slider changes to the live audio element in real time.
+  useEffect(() => {
+    if (audioRef.current) audioRef.current.volume = volume;
+  }, [volume]);
 
   return analyser;
 }

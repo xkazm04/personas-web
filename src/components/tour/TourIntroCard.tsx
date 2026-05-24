@@ -6,6 +6,7 @@ import { useTour } from "@/contexts/TourContext";
 import { useTranslation } from "@/i18n/useTranslation";
 import { TRANSITION_NORMAL } from "@/lib/animations";
 import AthenaCompanion from "./AthenaCompanion";
+import TourVolumeControl from "./TourVolumeControl";
 
 /**
  * Welcome pop-up shown when a tour with `intro` starts: dims the page and
@@ -68,6 +69,8 @@ export default function TourIntroCard() {
             {t.tour.skip}
           </button>
         </div>
+
+        <TourVolumeControl className="mt-1" />
       </motion.div>
     </motion.div>
   );

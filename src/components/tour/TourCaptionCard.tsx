@@ -6,6 +6,7 @@ import { useTour } from "@/contexts/TourContext";
 import { useTranslation } from "@/i18n/useTranslation";
 import { TRANSITION_NORMAL } from "@/lib/animations";
 import AthenaCompanion from "./AthenaCompanion";
+import TourVolumeControl from "./TourVolumeControl";
 
 const BTN_BASE =
   "flex h-9 w-9 items-center justify-center rounded-full border transition-colors duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-cyan/40 disabled:cursor-not-allowed disabled:opacity-40";
@@ -103,11 +104,13 @@ export default function TourCaptionCard() {
           <ChevronRight className="h-4 w-4" />
         </button>
 
+        <TourVolumeControl className="ml-auto" />
+
         <button
           type="button"
           onClick={exit}
           aria-label={t.tour.exit}
-          className={`${BTN_BASE} ml-auto border-glass text-muted-dark hover:border-glass-hover hover:text-foreground`}
+          className={`${BTN_BASE} border-glass text-muted-dark hover:border-glass-hover hover:text-foreground`}
         >
           <X className="h-4 w-4" />
         </button>
