@@ -55,12 +55,12 @@ export default function DataTable<T>({
     <div className="overflow-hidden rounded-2xl border border-glass bg-white/[0.02]">
       <div className="overflow-x-auto">
         {/* Header */}
-        <div className="flex min-w-[600px] items-center border-b border-glass bg-white/[0.02] px-4 py-2.5">
+        <div className="flex min-w-[600px] items-center border-b border-glass-strong bg-white/[0.05] px-4 py-2.5">
           {expandable && <div className="w-8" />}
           {columns.map((col) => (
             <div
               key={col.key}
-              className={`text-sm font-medium uppercase tracking-wider text-muted-dark ${col.className ?? "flex-1"}`}
+              className={`text-sm font-semibold uppercase tracking-wider text-muted ${col.className ?? "flex-1"}`}
             >
               {col.header}
             </div>
