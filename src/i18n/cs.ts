@@ -861,16 +861,6 @@ export const cs: Translations = {
       allowed: 'Povoleno',
       requests: 'požadavků',
     },
-    apiKeys: {
-      title: 'API klíče',
-      subtitle: 'Klíče pro CLI a klienty MCP',
-      create: 'Nový klíč',
-      revoke: 'Odvolat',
-      revoked: 'Odvolán',
-      active: 'Aktivní',
-      lastUsed: 'Naposledy použito',
-      never: 'Nikdy',
-    },
   },
   legalPage: {
     title: 'Pr\u00e1vn\u00ed informace',

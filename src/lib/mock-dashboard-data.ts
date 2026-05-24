@@ -1157,20 +1157,3 @@ export const MOCK_MODEL_PROVIDERS: ModelProvider[] = [
   { id: "llama", name: "Meta Llama", model: "llama-3.3-70b", allowed: false, requests: 0, costUsd: 0 },
 ];
 
-// ── Settings: API keys (for CLI / MCP clients) ──────────────────────
-// `prefix` and `scopes` are technical identifiers shown verbatim.
-
-export interface ApiKeyRecord {
-  id: string;
-  name: string;
-  prefix: string;
-  scopes: string[];
-  lastUsed: string | null;
-  revoked: boolean;
-}
-
-export const MOCK_API_KEYS: ApiKeyRecord[] = [
-  { id: "k_1", name: "Production CLI", prefix: "pk_live_3f9a", scopes: ["personas:read", "executions:read"], lastUsed: new Date(Date.now() - 2 * 3600_000).toISOString(), revoked: false },
-  { id: "k_2", name: "CI pipeline", prefix: "pk_live_b1d7", scopes: ["executions:write"], lastUsed: new Date(Date.now() - 26 * 3600_000).toISOString(), revoked: false },
-  { id: "k_3", name: "Old integration", prefix: "pk_live_99c2", scopes: ["personas:read"], lastUsed: null, revoked: true },
-];

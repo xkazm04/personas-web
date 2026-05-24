@@ -861,16 +861,6 @@ export const vi: Translations = {
       allowed: 'Được phép',
       requests: 'yêu cầu',
     },
-    apiKeys: {
-      title: 'Khóa API',
-      subtitle: 'Khóa cho CLI và ứng dụng MCP',
-      create: 'Khóa mới',
-      revoke: 'Thu hồi',
-      revoked: 'Đã thu hồi',
-      active: 'Đang hoạt động',
-      lastUsed: 'Lần dùng cuối',
-      never: 'Chưa bao giờ',
-    },
   },
   legalPage: {
     title: 'Ph\u00e1p l\u00fd',

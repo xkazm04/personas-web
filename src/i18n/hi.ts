@@ -861,16 +861,6 @@ export const hi: Translations = {
       allowed: 'अनुमत',
       requests: 'अनुरोध',
     },
-    apiKeys: {
-      title: 'API कुंजियां',
-      subtitle: 'CLI और MCP क्लाइंट के लिए कुंजियां',
-      create: 'नई कुंजी',
-      revoke: 'रद्द करें',
-      revoked: 'रद्द',
-      active: 'सक्रिय',
-      lastUsed: 'अंतिम उपयोग',
-      never: 'कभी नहीं',
-    },
   },
   legalPage: {
     title: '\u0915\u093E\u0928\u0942\u0928\u0940',

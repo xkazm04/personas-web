@@ -861,16 +861,6 @@ export const zh: Translations = {
       allowed: '已允许',
       requests: '次请求',
     },
-    apiKeys: {
-      title: 'API 密钥',
-      subtitle: '用于 CLI 和 MCP 客户端的密钥',
-      create: '新建密钥',
-      revoke: '吊销',
-      revoked: '已吊销',
-      active: '活跃',
-      lastUsed: '最近使用',
-      never: '从未',
-    },
   },
   legalPage: {
     title: '\u6CD5\u5F8B',

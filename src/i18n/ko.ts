@@ -861,16 +861,6 @@ export const ko: Translations = {
       allowed: '허용됨',
       requests: '요청',
     },
-    apiKeys: {
-      title: 'API 키',
-      subtitle: 'CLI 및 MCP 클라이언트용 키',
-      create: '새 키',
-      revoke: '취소',
-      revoked: '취소됨',
-      active: '활성',
-      lastUsed: '마지막 사용',
-      never: '없음',
-    },
   },
   legalPage: {
     title: '\ubc95\uc801 \uc815\ubcf4',

@@ -861,16 +861,6 @@ export const fr: Translations = {
       allowed: 'Autorisé',
       requests: 'requêtes',
     },
-    apiKeys: {
-      title: 'Clés API',
-      subtitle: 'Clés pour la CLI et les clients MCP',
-      create: 'Nouvelle clé',
-      revoke: 'Révoquer',
-      revoked: 'Révoquée',
-      active: 'Active',
-      lastUsed: 'Dernière utilisation',
-      never: 'Jamais',
-    },
   },
   legalPage: {
     title: 'Mentions l\u00e9gales',

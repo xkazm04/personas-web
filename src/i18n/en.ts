@@ -718,16 +718,6 @@
       allowed: string;
       requests: string;
     };
-    apiKeys: {
-      title: string;
-      subtitle: string;
-      create: string;
-      revoke: string;
-      revoked: string;
-      active: string;
-      lastUsed: string;
-      never: string;
-    };
   };
   legalPage: {
     title: string;
@@ -1813,16 +1803,6 @@ export const en: Translations = {
       subtitle: 'Which models your agents may use',
       allowed: 'Allowed',
       requests: 'requests',
-    },
-    apiKeys: {
-      title: 'API keys',
-      subtitle: 'Keys for the CLI and MCP clients',
-      create: 'New key',
-      revoke: 'Revoke',
-      revoked: 'Revoked',
-      active: 'Active',
-      lastUsed: 'Last used',
-      never: 'Never',
     },
   },
   legalPage: {

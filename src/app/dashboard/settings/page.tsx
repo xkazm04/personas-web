@@ -12,7 +12,6 @@ import { useAuthStore } from "@/stores/authStore";
 import { useSystemStore } from "@/stores/systemStore";
 import { useTranslation } from "@/i18n/useTranslation";
 import { SettingsHeader } from "./SettingsHeader";
-import { ApiKeysCard } from "./settings-sections/ApiKeysCard";
 import { ModelProvidersCard } from "./settings-sections/ModelProvidersCard";
 import { NotificationsCard } from "./settings-sections/NotificationsCard";
 
@@ -124,7 +123,6 @@ export default function SettingsPage() {
 
         <NotificationsCard />
         <ModelProvidersCard />
-        <ApiKeysCard />
       </div>
     </motion.div>
   );

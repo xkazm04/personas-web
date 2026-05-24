@@ -861,16 +861,6 @@ export const bn: Translations = {
       allowed: 'অনুমোদিত',
       requests: 'অনুরোধ',
     },
-    apiKeys: {
-      title: 'API কী',
-      subtitle: 'CLI এবং MCP ক্লায়েন্টের জন্য কী',
-      create: 'নতুন কী',
-      revoke: 'প্রত্যাহার',
-      revoked: 'প্রত্যাহৃত',
-      active: 'সক্রিয়',
-      lastUsed: 'সর্বশেষ ব্যবহার',
-      never: 'কখনও না',
-    },
   },
   legalPage: {
     title: '\u0986\u0987\u09a8\u0997\u09a4',

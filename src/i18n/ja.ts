@@ -861,16 +861,6 @@ export const ja: Translations = {
       allowed: '許可',
       requests: 'リクエスト',
     },
-    apiKeys: {
-      title: 'APIキー',
-      subtitle: 'CLI と MCP クライアント用のキー',
-      create: '新しいキー',
-      revoke: '取り消し',
-      revoked: '取り消し済み',
-      active: '有効',
-      lastUsed: '最終使用',
-      never: 'なし',
-    },
   },
   legalPage: {
     title: '\u6cd5\u7684\u60c5\u5831',

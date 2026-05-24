@@ -861,16 +861,6 @@ export const id: Translations = {
       allowed: 'Diizinkan',
       requests: 'permintaan',
     },
-    apiKeys: {
-      title: 'Kunci API',
-      subtitle: 'Kunci untuk CLI dan klien MCP',
-      create: 'Kunci baru',
-      revoke: 'Cabut',
-      revoked: 'Dicabut',
-      active: 'Aktif',
-      lastUsed: 'Terakhir dipakai',
-      never: 'Tidak pernah',
-    },
   },
   legalPage: {
     title: 'Hukum',

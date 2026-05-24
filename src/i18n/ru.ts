@@ -861,16 +861,6 @@ export const ru: Translations = {
       allowed: 'Разрешено',
       requests: 'запросов',
     },
-    apiKeys: {
-      title: 'API-ключи',
-      subtitle: 'Ключи для CLI и клиентов MCP',
-      create: 'Новый ключ',
-      revoke: 'Отозвать',
-      revoked: 'Отозван',
-      active: 'Активен',
-      lastUsed: 'Последнее использование',
-      never: 'Никогда',
-    },
   },
   legalPage: {
     title: '\u042E\u0440\u0438\u0434\u0438\u0447\u0435\u0441\u043A\u0430\u044F \u0438\u043D\u0444\u043E\u0440\u043C\u0430\u0446\u0438\u044F',

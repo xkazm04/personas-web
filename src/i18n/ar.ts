@@ -861,16 +861,6 @@ export const ar: Translations = {
       allowed: 'مسموح',
       requests: 'طلبات',
     },
-    apiKeys: {
-      title: 'مفاتيح API',
-      subtitle: 'مفاتيح لواجهة CLI وعملاء MCP',
-      create: 'مفتاح جديد',
-      revoke: 'إلغاء',
-      revoked: 'مُلغى',
-      active: 'نشط',
-      lastUsed: 'آخر استخدام',
-      never: 'أبدًا',
-    },
   },
   legalPage: {
     title: '\u0642\u0627\u0646\u0648\u0646\u064A',
