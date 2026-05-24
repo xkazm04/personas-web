@@ -5,8 +5,6 @@ import { motion } from "framer-motion";
 
 import FleetOptimizationCard from "@/components/dashboard/FleetOptimizationCard";
 import TourLauncher from "@/components/tour/TourLauncher";
-import TourOverlay from "@/components/tour/TourOverlay";
-import { TourProvider } from "@/contexts/TourContext";
 import { useTranslation } from "@/i18n/useTranslation";
 import { api } from "@/lib/api";
 import { fadeUp, staggerContainer } from "@/lib/animations";
@@ -117,8 +115,7 @@ export default function DashboardHomePage() {
   );
 
   return (
-    <TourProvider>
-      <motion.div initial="hidden" animate="visible" variants={staggerContainer}>
+    <motion.div initial="hidden" animate="visible" variants={staggerContainer}>
       <motion.div variants={fadeUp} className="mb-6 flex justify-end">
         <TourLauncher tourId="dashboard" />
       </motion.div>
@@ -181,8 +178,6 @@ export default function DashboardHomePage() {
           workersTotal={health?.workers.total ?? 0}
         />
       </motion.div>
-      </motion.div>
-      <TourOverlay />
-    </TourProvider>
+    </motion.div>
   );
 }

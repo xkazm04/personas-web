@@ -36,11 +36,13 @@ export default function ReviewsPage() {
         )}
       </motion.div>
 
-      {mode === "split" ? (
-        <ReviewsSplitPane />
-      ) : (
-        <ReviewsFocusFlow onExit={() => setMode("split")} />
-      )}
+      <div data-tour-diagram="dashboard-reviews">
+        {mode === "split" ? (
+          <ReviewsSplitPane />
+        ) : (
+          <ReviewsFocusFlow onExit={() => setMode("split")} />
+        )}
+      </div>
     </motion.div>
   );
 }

@@ -91,7 +91,7 @@ export default function AgentsPage() {
           description={t.agentsPage.noAgentsDesc}
         />
       ) : (
-        <div className="grid gap-4 sm:grid-cols-2 xl:grid-cols-3">
+        <div data-tour-diagram="dashboard-agents" className="grid gap-4 sm:grid-cols-2 xl:grid-cols-3">
           {personas.map((persona) => (
             <AgentCardImage
               key={persona.id}

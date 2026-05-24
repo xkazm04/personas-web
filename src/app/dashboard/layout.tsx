@@ -7,6 +7,8 @@ import DashboardScopeBar from "@/components/dashboard/DashboardScopeBar";
 import AuthGuard from "@/components/dashboard/AuthGuard";
 import DashboardErrorBoundary from "@/components/dashboard/DashboardErrorBoundary";
 import AuthProvider from "@/components/AuthProvider";
+import TourOverlay from "@/components/tour/TourOverlay";
+import { TourProvider } from "@/contexts/TourContext";
 
 const SCOPED_ROUTE_PREFIXES = [
   "/dashboard/home",
@@ -34,20 +36,25 @@ export default function DashboardLayout({
   return (
     <AuthProvider>
       <AuthGuard>
-        <div className="flex min-h-screen flex-col bg-[var(--background)] relative z-0">
-          <DashboardNavbar />
-          <div className="flex flex-1">
-            <DashboardNavigation />
-            <main id="main-content" className="min-w-0 flex-1 overflow-auto px-3 py-5 pb-20 sm:px-6 sm:py-8 md:pb-8">
-              <DashboardErrorBoundary>
-                <div className="mx-auto max-w-7xl">
-                  {showScope && <DashboardScopeBar />}
-                  {children}
-                </div>
-              </DashboardErrorBoundary>
-            </main>
+        {/* TourProvider lives here (not on a page) so the guided dashboard tour
+            keeps its state and narration across tab navigation. */}
+        <TourProvider>
+          <div className="flex min-h-screen flex-col bg-[var(--background)] relative z-0">
+            <DashboardNavbar />
+            <div className="flex flex-1">
+              <DashboardNavigation />
+              <main id="main-content" className="min-w-0 flex-1 overflow-auto px-3 py-5 pb-20 sm:px-6 sm:py-8 md:pb-8">
+                <DashboardErrorBoundary>
+                  <div className="mx-auto max-w-7xl">
+                    {showScope && <DashboardScopeBar />}
+                    {children}
+                  </div>
+                </DashboardErrorBoundary>
+              </main>
+            </div>
           </div>
-        </div>
+          <TourOverlay />
+        </TourProvider>
       </AuthGuard>
     </AuthProvider>
   );

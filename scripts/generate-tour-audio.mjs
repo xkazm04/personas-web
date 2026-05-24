@@ -64,19 +64,19 @@ const LINES = {
   features6:
     "Personas ships with six purpose-built plugins, each a self-contained workspace your agents can drive. Take Dev Tools: it turns a persona into a coding teammate that runs tasks, reads the output, and iterates. Switch a tab and you meet another specialist — all sharing the same credentials and memory.",
 
-  // /dashboard narration (matches tour.dashboard1-6 in src/i18n/en.ts).
-  dashboard1:
-    "Welcome to mission control. The badges across the top are your fleet's vitals at a glance — success rate, runs in flight, active agents, open alerts, and pending reviews. Five numbers that tell you in two seconds whether everything is on course or something needs your attention.",
-  dashboard2:
-    "Just below, the optimizer surfaces one high-leverage improvement at a time. Right now it's pointing at a routing change that would trim cost on a chunk of runs without touching quality. Apply it from here, or dismiss it and the next opportunity will take its place tomorrow.",
-  dashboard3:
-    "Two intelligence panels live underneath. On the left, every agent's heartbeat score with the issues it's seen this week. On the right, new memories your agents have learned and want to promote — a throttle that worked, a schedule that landed better. Accept what's useful, archive the rest.",
-  dashboard4:
-    "Now the live picture. The activity feed on the left shows every execution as it lands, with persona, timing, and cost. On the right, fourteen days of traffic against errors — spikes, dips, and shifts surface long before they become incidents.",
-  dashboard5:
-    "Zoom out one more level. The heatmap shows runs per agent, day by day — denser cells mean a busier agent. You can spot at a glance which agents are doing the heavy lifting, which are dormant, and where load is shifting across the week.",
-  dashboard6:
-    "And finally the bottom row. The leaderboard ranks your top three agents with the trend that's lifting or sinking them. Upcoming routines lists the next scheduled runs. And the credential vault tracks every secret rotation so you always know which keys are fresh. That's mission control — runs, health, and operations on one page.",
+  // /dashboard narration — one recording per page (matches tour.dashboard* in
+  // src/i18n/en.ts). The home clip is one continuous track; the spotlight
+  // sweeps across its sections in time with the narration.
+  dashboardHome:
+    "Welcome to mission control — your whole fleet on one screen. Up top, the vitals: success rate, runs in flight, active agents, open alerts, and reviews waiting on you. Below that, the optimizer surfaces one high-leverage fix at a time — right now, a routing change that trims cost without touching quality. The two panels beneath track each agent's health and the new memories they've learned and want to promote. Then the live picture: every execution as it lands on the left, fourteen days of traffic and errors on the right. The heatmap shows runs per agent, day by day, and the bottom row rounds it out — your top performers, the next scheduled routines, and every credential rotation. One page, the entire operation.",
+  dashboardAgents:
+    "This is your roster. Each card is a persona — a single agent with one identity and a set of skills it can compose. The portrait is generated to match its character; below it, the live stats: success rate, runs, and spend. Hit Execute to run one on demand, or open Details to inspect its configuration and recent history. Five agents here, each quietly doing one job well.",
+  dashboardExecutions:
+    "Every run the fleet has made lives here, newest first. The table shows the persona, status, duration, cost, and when it started — filter down to just the failures, or the ones still running. Click any row and the full execution opens: a metrics strip, any error explanation, and the live output streaming line by line, exactly as the agent produced it.",
+  dashboardEvents:
+    "Agents don't work in isolation — they react to events. This is the event bus: every signal flowing through the system, from schedules and webhooks to messages between agents. Each row shows the event type, its source, status, and how long ago it fired. Failed events can be retried in place, and related events chain together so you can follow a single cascade end to end.",
+  dashboardReviews:
+    "Some decisions need a human. When an agent hits something it shouldn't decide alone, it pauses and routes the call here. Each item carries the persona, the context, and the action it's proposing — approve it, reject it, or skip for later, by click or by keyboard. Nothing risky ships without your sign-off, and the queue keeps the rest of the fleet moving while you decide.",
 };
 
 const keys = process.argv.slice(2).length ? process.argv.slice(2) : Object.keys(LINES);

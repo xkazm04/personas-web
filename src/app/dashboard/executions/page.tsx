@@ -145,7 +145,7 @@ export default function ExecutionsPage() {
         onChange={handleFilterChange}
       />
 
-      <motion.div variants={fadeUp}>
+      <motion.div variants={fadeUp} data-tour-diagram="dashboard-executions">
         <DataTable
           columns={columns}
           data={visibleExecutions}

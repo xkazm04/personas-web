@@ -14,6 +14,9 @@ import { INTRO_AUDIO_SRC, type TourStep } from "@/lib/tour-script";
 import { useTourAudio } from "@/hooks/useTourAudio";
 import { useTourScroll } from "@/hooks/useTourScroll";
 import { useTourVolume } from "@/hooks/useTourVolume";
+import { useTourNavigation } from "@/hooks/useTourNavigation";
+import { useTourSpotlightSequence } from "@/hooks/useTourSpotlightSequence";
+import { useTourKeyboard } from "@/hooks/useTourKeyboard";
 
 /** Translated copy for the end-of-tour bridge prompt. */
 export interface TourBridgeStrings {
@@ -39,6 +42,8 @@ interface TourContextValue {
   steps: TourStep[];
   /** Index into `steps` of the current step. */
   stepIndex: number;
+  /** Selector the spotlight is currently tracking (follows in-step sweeps). */
+  activeSpotlight: string | null;
   /** Whether auto-advance is running. */
   playing: boolean;
   /** Whether the end-of-tour bridge prompt is showing. */
@@ -168,24 +173,17 @@ export function TourProvider({ children }: { children: ReactNode }) {
     return () => ids.forEach((id) => window.clearTimeout(id));
   }, [active, atIntro, stepIndex, steps]);
 
-  // Scroll the current step's spotlight target into view (paused during intro).
-  useTourScroll(active && !atIntro, stepIndex, steps, prefersReducedMotion);
+  // Navigate cross-page steps, resolve the live spotlight target (which follows
+  // in-step sweeps), and scroll it into view (all paused during the intro).
+  useTourNavigation(active, stepIndex, steps);
+  const activeSpotlight = useTourSpotlightSequence(active, atIntro, stepIndex, steps);
+  useTourScroll(active && !atIntro, activeSpotlight, steps[stepIndex]?.scrollTarget ?? null, prefersReducedMotion);
 
-  // Keyboard control: Escape exits, arrows step.
-  useEffect(() => {
-    if (!active) return;
-    const onKey = (e: KeyboardEvent) => {
-      if (e.key === "Escape") exit();
-      else if (e.key === "ArrowRight") next();
-      else if (e.key === "ArrowLeft") prev();
-    };
-    window.addEventListener("keydown", onKey);
-    return () => window.removeEventListener("keydown", onKey);
-  }, [active, exit, next, prev]);
+  useTourKeyboard(active, { exit, next, prev });
 
   const value = useMemo<TourContextValue>(
-    () => ({ active, steps, stepIndex, playing, atBridge, atIntro, audioAnalyser, volume, setVolume, bridge, start, exit, next, prev, goTo, togglePlay, beginTour, confirmBridge, dismissBridge }),
-    [active, steps, stepIndex, playing, atBridge, atIntro, audioAnalyser, volume, setVolume, bridge, start, exit, next, prev, goTo, togglePlay, beginTour, confirmBridge, dismissBridge],
+    () => ({ active, steps, stepIndex, activeSpotlight, playing, atBridge, atIntro, audioAnalyser, volume, setVolume, bridge, start, exit, next, prev, goTo, togglePlay, beginTour, confirmBridge, dismissBridge }),
+    [active, steps, stepIndex, activeSpotlight, playing, atBridge, atIntro, audioAnalyser, volume, setVolume, bridge, start, exit, next, prev, goTo, togglePlay, beginTour, confirmBridge, dismissBridge],
   );
 
   return <TourContext.Provider value={value}>{children}</TourContext.Provider>;
