@@ -26,6 +26,12 @@ export type TourNarrationKey =
   | "features4"
   | "features5"
   | "features6"
+  | "dashboard1"
+  | "dashboard2"
+  | "dashboard3"
+  | "dashboard4"
+  | "dashboard5"
+  | "dashboard6"
   | "roadmap1"
   | "roadmap2"
   | "roadmap3";
@@ -273,6 +279,62 @@ export const FEATURES_TOUR_STEPS: TourStep[] = [
   },
 ];
 
+// /dashboard/home — "Mission control": a guided sweep across the fleet
+// vitals header, the fleet optimizer, intelligence panels (health + memory),
+// live activity + traffic chart, the per-agent execution heatmap, and the
+// instruments row (top performers, upcoming routines, vault changes). Six
+// steps, one beat per region. No bridge — this is the end of the journey.
+export const DASHBOARD_TOUR_STEPS: TourStep[] = [
+  {
+    id: "vitals",
+    scrollTarget: '[data-tour-diagram="dashboard-vitals"]',
+    spotlightTarget: '[data-tour-diagram="dashboard-vitals"]',
+    narration: "dashboard1",
+    dwellMs: 16000,
+    audioSrc: "/tour/dashboard1.mp3",
+  },
+  {
+    id: "fleet",
+    scrollTarget: '[data-tour-diagram="dashboard-fleet"]',
+    spotlightTarget: '[data-tour-diagram="dashboard-fleet"]',
+    narration: "dashboard2",
+    dwellMs: 15000,
+    audioSrc: "/tour/dashboard2.mp3",
+  },
+  {
+    id: "intelligence",
+    scrollTarget: '[data-tour-diagram="dashboard-intelligence"]',
+    spotlightTarget: '[data-tour-diagram="dashboard-intelligence"]',
+    narration: "dashboard3",
+    dwellMs: 16000,
+    audioSrc: "/tour/dashboard3.mp3",
+  },
+  {
+    id: "activity",
+    scrollTarget: '[data-tour-diagram="dashboard-activity"]',
+    spotlightTarget: '[data-tour-diagram="dashboard-activity"]',
+    narration: "dashboard4",
+    dwellMs: 14000,
+    audioSrc: "/tour/dashboard4.mp3",
+  },
+  {
+    id: "heatmap",
+    scrollTarget: '[data-tour-diagram="dashboard-heatmap"]',
+    spotlightTarget: '[data-tour-diagram="dashboard-heatmap"]',
+    narration: "dashboard5",
+    dwellMs: 14000,
+    audioSrc: "/tour/dashboard5.mp3",
+  },
+  {
+    id: "instruments",
+    scrollTarget: '[data-tour-diagram="dashboard-instruments"]',
+    spotlightTarget: '[data-tour-diagram="dashboard-instruments"]',
+    narration: "dashboard6",
+    dwellMs: 18000,
+    audioSrc: "/tour/dashboard6.mp3",
+  },
+];
+
 // /roadmap — "Now → Next → Shipped".
 export const ROADMAP_TOUR_STEPS: TourStep[] = [
   {
@@ -307,6 +369,7 @@ export const ROADMAP_TOUR_STEPS: TourStep[] = [
 export const TOURS_BY_ID = {
   home: HOME_TOUR_STEPS,
   features: FEATURES_TOUR_STEPS,
+  dashboard: DASHBOARD_TOUR_STEPS,
   roadmap: ROADMAP_TOUR_STEPS,
 } as const;
 

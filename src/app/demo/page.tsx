@@ -25,7 +25,10 @@ export default function DemoEntryPage() {
 
   useEffect(() => {
     enterDemo();
-    router.replace("/dashboard/home");
+    // Forward any query (notably `?tour=1` from the /features bridge) so the
+    // dashboard's TourLauncher can autostart on arrival.
+    const search = typeof window !== "undefined" ? window.location.search : "";
+    router.replace(`/dashboard/home${search}`);
   }, [enterDemo, router]);
 
   return (

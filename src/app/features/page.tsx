@@ -32,7 +32,7 @@ export default function FeaturesPage() {
       scrollMapItems={scrollMapItems}
       breadcrumbItems={breadcrumbItems}
       tourId="features"
-      tourBridgeHref="/demo"
+      tourBridgeHref="/demo?tour=1"
       tourBridgeKey="dashboard"
     >
       <StageSection glow="purple" showTopLine={false} toColor="purple">

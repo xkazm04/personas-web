@@ -4,6 +4,9 @@ import { useEffect, useMemo, useRef, useState } from "react";
 import { motion } from "framer-motion";
 
 import FleetOptimizationCard from "@/components/dashboard/FleetOptimizationCard";
+import TourLauncher from "@/components/tour/TourLauncher";
+import TourOverlay from "@/components/tour/TourOverlay";
+import { TourProvider } from "@/contexts/TourContext";
 import { useTranslation } from "@/i18n/useTranslation";
 import { api } from "@/lib/api";
 import { fadeUp, staggerContainer } from "@/lib/animations";
@@ -114,7 +117,12 @@ export default function DashboardHomePage() {
   );
 
   return (
-    <motion.div initial="hidden" animate="visible" variants={staggerContainer}>
+    <TourProvider>
+      <motion.div initial="hidden" animate="visible" variants={staggerContainer}>
+      <motion.div variants={fadeUp} className="mb-6 flex justify-end">
+        <TourLauncher tourId="dashboard" />
+      </motion.div>
+
       <DashboardGreetingHeader
         greeting={greeting}
         displayName={displayName}
@@ -125,18 +133,18 @@ export default function DashboardHomePage() {
         reviews={pendingReviewCount}
       />
 
-      <motion.div variants={fadeUp} className="mb-6">
+      <motion.div variants={fadeUp} data-tour-diagram="dashboard-fleet" className="mb-6">
         <FleetOptimizationCard
           recommendation={MOCK_FLEET_RECOMMENDATION}
           executionCount={Math.max(stats.total, MOCK_GLOBAL_EXECUTIONS)}
         />
       </motion.div>
 
-      <motion.div variants={fadeUp} className="mb-6 grid gap-6 lg:grid-cols-2">
+      <motion.div variants={fadeUp} data-tour-diagram="dashboard-intelligence" className="mb-6 grid gap-6 lg:grid-cols-2">
         <DashboardIntelligencePanels ready={panelsReady} />
       </motion.div>
 
-      <div className="grid gap-6 lg:grid-cols-5">
+      <div data-tour-diagram="dashboard-activity" className="grid gap-6 lg:grid-cols-5">
         <motion.div variants={fadeUp} className="lg:col-span-2">
           <RecentActivityCard
             executions={recentExecs}
@@ -173,6 +181,8 @@ export default function DashboardHomePage() {
           workersTotal={health?.workers.total ?? 0}
         />
       </motion.div>
-    </motion.div>
+      </motion.div>
+      <TourOverlay />
+    </TourProvider>
   );
 }

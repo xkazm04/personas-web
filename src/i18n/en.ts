@@ -935,6 +935,12 @@
     features4: string;
     features5: string;
     features6: string;
+    dashboard1: string;
+    dashboard2: string;
+    dashboard3: string;
+    dashboard4: string;
+    dashboard5: string;
+    dashboard6: string;
     roadmap1: string;
     roadmap2: string;
     roadmap3: string;
@@ -2043,6 +2049,12 @@ export const en: Translations = {
     features4: 'And you never lose sight of any of it. Every execution, message, event, and memory streams live through one observability deck — sparklines, costs, and status, all in real time. Full transparency, zero setup.',
     features5: 'Great agents are rarely right the first time, so the Lab is where you refine them. Chat with a persona to coach it, pit two versions against each other in the arena, evolve it across generations, or score it on the dimensions that matter. Every improvement you keep is versioned and reversible.',
     features6: 'Personas ships with six purpose-built plugins, each a self-contained workspace your agents can drive. Take Dev Tools: it turns a persona into a coding teammate that runs tasks, reads the output, and iterates. Switch a tab and you meet another specialist — all sharing the same credentials and memory.',
+    dashboard1: 'Welcome to mission control. The badges across the top are your fleet\'s vitals at a glance — success rate, runs in flight, active agents, open alerts, and pending reviews. Five numbers that tell you in two seconds whether everything is on course or something needs your attention.',
+    dashboard2: 'Just below, the optimizer surfaces one high-leverage improvement at a time. Right now it\'s pointing at a routing change that would trim cost on a chunk of runs without touching quality. Apply it from here, or dismiss it and the next opportunity will take its place tomorrow.',
+    dashboard3: 'Two intelligence panels live underneath. On the left, every agent\'s heartbeat score with the issues it\'s seen this week. On the right, new memories your agents have learned and want to promote — a throttle that worked, a schedule that landed better. Accept what\'s useful, archive the rest.',
+    dashboard4: 'Now the live picture. The activity feed on the left shows every execution as it lands, with persona, timing, and cost. On the right, fourteen days of traffic against errors — spikes, dips, and shifts surface long before they become incidents.',
+    dashboard5: 'Zoom out one more level. The heatmap shows runs per agent, day by day — denser cells mean a busier agent. You can spot at a glance which agents are doing the heavy lifting, which are dormant, and where load is shifting across the week.',
+    dashboard6: 'And finally the bottom row. The leaderboard ranks your top three agents with the trend that\'s lifting or sinking them. Upcoming routines lists the next scheduled runs. And the credential vault tracks every secret rotation so you always know which keys are fresh. That\'s mission control — runs, health, and operations on one page.',
     roadmap1: 'Here is where we are now: each phase on the roadmap is graded by status as it ships.',
     roadmap2: 'What comes next is up to you — vote on the features you want most, and the top ideas shape what we build.',
     roadmap3: 'And here is everything already shipped — every release laid out in order, newest first.',

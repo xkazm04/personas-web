@@ -42,13 +42,13 @@ const LINES = {
   step3:
     "An agent is only as useful as the moments it wakes up for. Personas can be triggered eight ways — on a schedule, by an event, by polling a source, or from an incoming webhook. The orchestrator routes each signal to the right agent and keeps everything moving, healing itself if a step ever fails.",
   step4:
-    "All of this rests on one platform built for trust and scale. An encrypted vault guards your credentials, ready-made templates get you moving fast, and bring-your-own-model keeps you in control of the AI. Live monitoring, an experimentation lab, and team orchestration round it out — six pillars, one place.",
+    "All of this rests on one platform built for trust and scale. An encrypted vault guards your credentials, ready-made templates get you moving fast, and bring-your-own-model keeps you in control of the AI. Live monitoring, an experimentation lab, and team orchestration round it out.",
   step5:
     "Ready to put a persona to work? Personas runs on your own machine through Claude Code — Anthropic's command-line tool — so you stay private and in control. Download the installer for Windows 11, connect the CLI, and your first agent is live in minutes.",
 
   // Athena's spoken greeting for the intro pop-up.
   intro:
-    "Project loaded. Hello, Commander — my name is Athena, and I'll assist you in getting familiar with Personas. I'll walk you through it in about a minute; pause or skip anytime.",
+    "Project loaded. Hello, Commander, my name is Athena, and I'll assist you in getting familiar with Personas. I'll walk you through it in about a minute... Pause or skip anytime.",
 
   // /features narration (matches tour.features1-6 in src/i18n/en.ts).
   features1:
@@ -63,6 +63,20 @@ const LINES = {
     "Great agents are rarely right the first time, so the Lab is where you refine them. Chat with a persona to coach it, pit two versions against each other in the arena, evolve it across generations, or score it on the dimensions that matter. Every improvement you keep is versioned and reversible.",
   features6:
     "Personas ships with six purpose-built plugins, each a self-contained workspace your agents can drive. Take Dev Tools: it turns a persona into a coding teammate that runs tasks, reads the output, and iterates. Switch a tab and you meet another specialist — all sharing the same credentials and memory.",
+
+  // /dashboard narration (matches tour.dashboard1-6 in src/i18n/en.ts).
+  dashboard1:
+    "Welcome to mission control. The badges across the top are your fleet's vitals at a glance — success rate, runs in flight, active agents, open alerts, and pending reviews. Five numbers that tell you in two seconds whether everything is on course or something needs your attention.",
+  dashboard2:
+    "Just below, the optimizer surfaces one high-leverage improvement at a time. Right now it's pointing at a routing change that would trim cost on a chunk of runs without touching quality. Apply it from here, or dismiss it and the next opportunity will take its place tomorrow.",
+  dashboard3:
+    "Two intelligence panels live underneath. On the left, every agent's heartbeat score with the issues it's seen this week. On the right, new memories your agents have learned and want to promote — a throttle that worked, a schedule that landed better. Accept what's useful, archive the rest.",
+  dashboard4:
+    "Now the live picture. The activity feed on the left shows every execution as it lands, with persona, timing, and cost. On the right, fourteen days of traffic against errors — spikes, dips, and shifts surface long before they become incidents.",
+  dashboard5:
+    "Zoom out one more level. The heatmap shows runs per agent, day by day — denser cells mean a busier agent. You can spot at a glance which agents are doing the heavy lifting, which are dormant, and where load is shifting across the week.",
+  dashboard6:
+    "And finally the bottom row. The leaderboard ranks your top three agents with the trend that's lifting or sinking them. Upcoming routines lists the next scheduled runs. And the credential vault tracks every secret rotation so you always know which keys are fresh. That's mission control — runs, health, and operations on one page.",
 };
 
 const keys = process.argv.slice(2).length ? process.argv.slice(2) : Object.keys(LINES);
