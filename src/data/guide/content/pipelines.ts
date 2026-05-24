@@ -295,7 +295,7 @@ Open a team's canvas and click the **Assignments** badge (bottom-left). Hit **Ne
 :::tip
 Use an assignment when you know the outcome but not the exact steps. Use a pipeline when you want precise, repeatable control over every connection. Templates bridge the two — a saved assignment becomes a one-click starting point.
 :::
-  \`,
+  `,
 
   "debugging-pipeline-issues": `
 ## Debugging Pipeline Issues
