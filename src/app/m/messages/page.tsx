@@ -5,7 +5,7 @@ import { motion } from "framer-motion";
 import { MailOpen } from "lucide-react";
 
 import { ThreadRow } from "@/app/dashboard/messages/messages-page/ThreadRow";
-import { ThreadDetailModal } from "@/app/dashboard/messages/messages-page/ThreadDetailModal";
+import MobileThreadSheet from "@/components/mobile/MobileThreadSheet";
 import {
   MOCK_MESSAGE_THREADS,
   type MessageThread,
@@ -128,7 +128,7 @@ export default function MobileMessagesPage() {
         </motion.ul>
       )}
 
-      <ThreadDetailModal
+      <MobileThreadSheet
         thread={openThreadValue}
         onClose={() => setOpenThreadId(null)}
       />

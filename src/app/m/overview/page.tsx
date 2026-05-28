@@ -86,7 +86,7 @@ export default function MobileOverviewPage() {
         )}
       </motion.div>
 
-      <motion.div variants={fadeUp} className="grid grid-cols-2 gap-2.5">
+      <motion.div variants={fadeUp} className="grid grid-cols-4 gap-2">
         <MobileStatCard
           icon={TrendingUp}
           label={t.dashboard.successRate}
