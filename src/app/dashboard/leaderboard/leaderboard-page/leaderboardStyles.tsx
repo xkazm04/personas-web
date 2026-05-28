@@ -40,9 +40,9 @@ export const medalStyle: Record<1 | 2 | 3, { color: string; bg: string }> = {
 
 export function TrendIcon({ trend }: { trend: LeaderboardTrend }) {
   if (trend === "up")
-    return <TrendingUp className="h-3.5 w-3.5 text-emerald-400" />;
+    return <TrendingUp className="h-3.5 w-3.5 text-brand-emerald" />;
   if (trend === "down")
-    return <TrendingDown className="h-3.5 w-3.5 text-rose-400" />;
+    return <TrendingDown className="h-3.5 w-3.5 text-brand-rose" />;
   return <Minus className="h-3.5 w-3.5 text-muted-dark" />;
 }
 

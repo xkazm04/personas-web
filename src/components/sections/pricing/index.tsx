@@ -4,6 +4,7 @@ import { motion } from "framer-motion";
 import SectionWrapper from "@/components/SectionWrapper";
 import { SectionIntro } from "@/components/primitives";
 import { staggerContainer } from "@/lib/animations";
+import { useTranslation } from "@/i18n/useTranslation";
 import { FEATURE_GROUPS } from "./data";
 import FeatureGroupCard from "./FeatureGroupCard";
 
@@ -14,13 +15,14 @@ import FeatureGroupCard from "./FeatureGroupCard";
  */
 
 export default function Pricing() {
+  const { t } = useTranslation();
   return (
     <SectionWrapper id="pricing" aria-labelledby="compare-heading">
       <SectionIntro
         id="compare-heading"
-        heading="Everything is"
-        gradient="free"
-        description="The desktop app and every capability below ship free forever. No tiers, no per-seat pricing — just a complete agent platform running on your machine."
+        heading={t.compareSection.heading}
+        gradient={t.compareSection.headingGradient}
+        description={t.compareSection.description}
       />
 
       <motion.div

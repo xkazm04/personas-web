@@ -143,6 +143,7 @@
     active: string;
     idle: string;
     total: string;
+    checking: string;
     connected: string;
     disconnected: string;
     demo: string;
@@ -612,6 +613,9 @@
     timeoutSeconds: string;
     budget: string;
     execute: string;
+    executing: string;
+    executeQueued: string;
+    executeFailed: string;
     details: string;
   };
   executionsPage: {
@@ -631,6 +635,12 @@
     noExecutionsDesc: string;
     waitingForWorker: string;
     noOutputYet: string;
+    noFilteredActive: string;
+    noFilteredCompleted: string;
+    noFilteredFailed: string;
+    noFilteredCancelled: string;
+    filteredEmptyDesc: string;
+    showAllExecutions: string;
   };
   eventsPage: {
     title: string;
@@ -676,6 +686,9 @@
     match: string;
     matches: string;
     deleteSubscription: string;
+    unknownAgent: string;
+    disableSubscription: string;
+    enableSubscription: string;
     createSubscription: string;
     persona: string;
     selectPersona: string;
@@ -1156,6 +1169,7 @@ export const en: Translations = {
     active: 'active',
     idle: 'idle',
     total: 'total',
+    checking: 'Checking…',
     connected: 'Connected',
     disconnected: 'Disconnected',
     demo: 'Demo',
@@ -1713,6 +1727,9 @@ export const en: Translations = {
     timeoutSeconds: '{n}s timeout',
     budget: 'budget',
     execute: 'Execute',
+    executing: 'Executing…',
+    executeQueued: 'Execution queued for {name}',
+    executeFailed: 'Couldn’t start execution for {name}',
     details: 'Details',
   },
   executionsPage: {
@@ -1732,6 +1749,12 @@ export const en: Translations = {
     noExecutionsDesc: 'Execute an agent to see results here',
     waitingForWorker: 'Waiting for worker...',
     noOutputYet: 'No output yet',
+    noFilteredActive: 'No active runs in this view',
+    noFilteredCompleted: 'No completed runs in this view',
+    noFilteredFailed: 'No failed runs in this view',
+    noFilteredCancelled: 'No cancelled runs in this view',
+    filteredEmptyDesc: 'Other runs exist but none match this filter.',
+    showAllExecutions: 'Show all',
   },
   eventsPage: {
     title: 'Events',
@@ -1777,6 +1800,9 @@ export const en: Translations = {
     match: 'match',
     matches: 'matches',
     deleteSubscription: 'Delete subscription',
+    unknownAgent: 'Unknown agent',
+    disableSubscription: 'Disable subscription',
+    enableSubscription: 'Enable subscription',
     createSubscription: 'Create Subscription',
     persona: 'Persona',
     selectPersona: 'Select a persona...',

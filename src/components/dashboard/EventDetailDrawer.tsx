@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { AnimatePresence, motion } from "framer-motion";
+import { AnimatePresence, motion, useReducedMotion } from "framer-motion";
 
 import { EVENT_TYPES, type SwarmNode } from "@/lib/mock-dashboard-data";
 import { useTranslation } from "@/i18n/useTranslation";
@@ -10,6 +10,9 @@ import { EventDrawerHeader } from "./event-detail-drawer/EventDrawerHeader";
 import { EventDrawerMetadata } from "./event-detail-drawer/EventDrawerMetadata";
 import { EventDrawerPayload } from "./event-detail-drawer/EventDrawerPayload";
 import { EventDrawerSummary } from "./event-detail-drawer/EventDrawerSummary";
+import { useDialogFocusTrap } from "./event-detail-drawer/useDialogFocusTrap";
+
+const TITLE_ID = "event-detail-drawer-title";
 
 interface EventDetailDrawerProps {
   node: SwarmNode | null;
@@ -18,9 +21,18 @@ interface EventDetailDrawerProps {
 
 export default function EventDetailDrawer({ node, onClose }: EventDetailDrawerProps) {
   const { t } = useTranslation();
+  const reducedMotion = useReducedMotion();
   const [eventType] = useState(() => EVENT_TYPES[Math.floor(Math.random() * EVENT_TYPES.length)]);
   const [durationMs] = useState(() => Math.floor(200 + Math.random() * 4800));
   const [timestamp] = useState(() => new Date(Date.now() - Math.floor(Math.random() * 3600_000)).toISOString());
+
+  // role=dialog/aria-modal + Esc-to-close + Tab focus trap + focus restore.
+  const panelRef = useDialogFocusTrap(node !== null, onClose);
+
+  // The bus has no boolean liveness flag, so derive status from the node's
+  // real traffic volume instead of hardcoding "active" for every node:
+  // a node carrying meaningful traffic is active, a quiet one is idle.
+  const isActive = (node?.volume ?? 0) >= 0.5;
 
   return (
     <AnimatePresence>
@@ -36,6 +48,10 @@ export default function EventDetailDrawer({ node, onClose }: EventDetailDrawerPr
           />
 
           <motion.div
+            ref={panelRef}
+            role="dialog"
+            aria-modal="true"
+            aria-labelledby={TITLE_ID}
             initial={{ x: "100%" }}
             animate={{ x: 0 }}
             exit={{ x: "100%" }}
@@ -45,6 +61,8 @@ export default function EventDetailDrawer({ node, onClose }: EventDetailDrawerPr
             <EventDrawerHeader
               node={node}
               nodeLabel={t.dashboardUi.node}
+              closeLabel={t.common.close}
+              titleId={TITLE_ID}
               onClose={onClose}
             />
 
@@ -93,10 +111,22 @@ export default function EventDetailDrawer({ node, onClose }: EventDetailDrawerPr
                 </label>
                 <div className="flex items-center gap-2">
                   <span className="relative flex h-2 w-2">
-                    <span className="absolute inset-0 animate-ping rounded-full bg-emerald-400/60" />
-                    <span className="relative inline-flex h-2 w-2 rounded-full bg-emerald-400" />
+                    {isActive && !reducedMotion && (
+                      <span className="absolute inset-0 animate-ping rounded-full bg-emerald-400/60" />
+                    )}
+                    <span
+                      className={`relative inline-flex h-2 w-2 rounded-full ${
+                        isActive ? "bg-emerald-400" : "bg-amber-400"
+                      }`}
+                    />
                   </span>
-                  <span className="text-sm font-medium text-emerald-400">{t.common.active}</span>
+                  <span
+                    className={`text-sm font-medium capitalize ${
+                      isActive ? "text-emerald-400" : "text-amber-400"
+                    }`}
+                  >
+                    {isActive ? t.common.active : t.common.idle}
+                  </span>
                 </div>
               </div>
 

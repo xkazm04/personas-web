@@ -50,7 +50,7 @@ export function SubscriptionCard({
         <div className="flex-1 min-w-0">
           <div className="flex items-center gap-2">
             <span className="text-base font-medium text-foreground truncate">
-              {sub.personaName ?? "Unknown agent"}
+              {sub.personaName ?? t.eventsPage.unknownAgent}
             </span>
             <span className={`inline-flex items-center rounded-full px-2 py-0.5 text-sm font-medium ${
               sub.enabled
@@ -87,8 +87,8 @@ export function SubscriptionCard({
           <button
             onClick={() => void handleToggle()}
             disabled={toggling}
-            className="rounded-md p-1.5 text-muted-dark transition-colors hover:text-foreground hover:bg-white/[0.05] disabled:opacity-50"
-            title={sub.enabled ? "Disable subscription" : "Enable subscription"}
+            className="rounded-md p-1.5 text-muted-dark transition-colors hover:text-foreground hover:bg-white/[0.05] disabled:opacity-50 focus-ring focus-visible:ring-offset-0"
+            title={sub.enabled ? t.eventsPage.disableSubscription : t.eventsPage.enableSubscription}
           >
             {toggling ? (
               <Loader2 className="h-4 w-4 animate-spin" />
@@ -104,13 +104,13 @@ export function SubscriptionCard({
               <button
                 onClick={() => void handleDelete()}
                 disabled={deleting}
-                className="rounded-md border border-red-500/30 bg-red-500/10 px-2 py-1 text-sm font-medium text-red-400 transition-all hover:bg-red-500/20 disabled:opacity-50"
+                className="rounded-md border border-red-500/30 bg-red-500/10 px-2 py-1 text-sm font-medium text-red-400 transition-all hover:bg-red-500/20 disabled:opacity-50 focus-ring focus-visible:ring-offset-0"
               >
                 {deleting ? <Loader2 className="h-3 w-3 animate-spin" /> : t.common.delete}
               </button>
               <button
                 onClick={() => setConfirmDelete(false)}
-                className="rounded-md px-2 py-1 text-sm text-muted-dark hover:text-foreground transition-colors"
+                className="rounded-md px-2 py-1 text-sm text-muted-dark hover:text-foreground transition-colors focus-ring focus-visible:ring-offset-0"
               >
                 {t.common.cancel}
               </button>
@@ -118,7 +118,7 @@ export function SubscriptionCard({
           ) : (
             <button
               onClick={() => setConfirmDelete(true)}
-              className="rounded-md p-1.5 text-muted-dark transition-colors hover:text-red-400 hover:bg-red-500/10"
+              className="rounded-md p-1.5 text-muted-dark transition-colors hover:text-red-400 hover:bg-red-500/10 focus-ring focus-visible:ring-offset-0"
               title={t.eventsPage.deleteSubscription}
             >
               <Trash2 className="h-4 w-4" />

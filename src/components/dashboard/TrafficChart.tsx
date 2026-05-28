@@ -9,7 +9,7 @@ import {
   Tooltip,
   ResponsiveContainer,
 } from "recharts";
-import { ChartTooltipContent } from "@/components/dashboard/ObservabilityCharts";
+import { AXIS_TICK, GRID_STROKE, SERIES, ChartTooltip } from "@/lib/chart-theme";
 import { useTranslation } from "@/i18n/useTranslation";
 
 export interface TrafficChartProps {
@@ -32,43 +32,43 @@ export default function TrafficChart({ chartData }: TrafficChartProps) {
         <AreaChart data={chartData} margin={{ top: 8, right: 8, left: -20, bottom: 0 }}>
           <defs>
             <linearGradient id="gradExec" x1="0" y1="0" x2="0" y2="1">
-              <stop offset="0%" stopColor="#06b6d4" stopOpacity={0.3} />
-              <stop offset="100%" stopColor="#06b6d4" stopOpacity={0} />
+              <stop offset="0%" stopColor={SERIES.cyan} stopOpacity={0.3} />
+              <stop offset="100%" stopColor={SERIES.cyan} stopOpacity={0} />
             </linearGradient>
             <linearGradient id="gradErr" x1="0" y1="0" x2="0" y2="1">
-              <stop offset="0%" stopColor="#f43f5e" stopOpacity={0.3} />
-              <stop offset="100%" stopColor="#f43f5e" stopOpacity={0} />
+              <stop offset="0%" stopColor={SERIES.rose} stopOpacity={0.3} />
+              <stop offset="100%" stopColor={SERIES.rose} stopOpacity={0} />
             </linearGradient>
           </defs>
           <CartesianGrid
             strokeDasharray="3 3"
-            stroke="rgba(255,255,255,0.04)"
+            stroke={GRID_STROKE}
             vertical={false}
           />
           <XAxis
             dataKey="date"
-            tick={{ fontSize: 10, fill: "#64748b" }}
+            tick={AXIS_TICK}
             axisLine={false}
             tickLine={false}
           />
           <YAxis
-            tick={{ fontSize: 10, fill: "#64748b" }}
+            tick={AXIS_TICK}
             axisLine={false}
             tickLine={false}
             allowDecimals={false}
           />
-          <Tooltip content={<ChartTooltipContent />} />
+          <Tooltip content={<ChartTooltip />} />
           <Area
             type="monotone"
             dataKey="Executions"
-            stroke="#06b6d4"
+            stroke={SERIES.cyan}
             strokeWidth={2}
             fill="url(#gradExec)"
           />
           <Area
             type="monotone"
             dataKey="Errors"
-            stroke="#f43f5e"
+            stroke={SERIES.rose}
             strokeWidth={2}
             fill="url(#gradErr)"
           />

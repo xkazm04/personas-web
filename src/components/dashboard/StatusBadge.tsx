@@ -1,5 +1,6 @@
 "use client";
 
+import { useReducedMotion } from "framer-motion";
 import type { BadgeStatus } from "@/lib/types";
 
 const statusConfig: Record<
@@ -64,6 +65,7 @@ const statusConfig: Record<
 };
 
 export default function StatusBadge({ status }: { status: BadgeStatus }) {
+  const reducedMotion = useReducedMotion();
   const cfg = statusConfig[status];
   return (
     <span
@@ -71,7 +73,9 @@ export default function StatusBadge({ status }: { status: BadgeStatus }) {
     >
       {cfg.pulse && (
         <span className="relative flex h-1.5 w-1.5">
-          <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-cyan-400 opacity-75" />
+          {!reducedMotion && (
+            <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-cyan-400 opacity-75" />
+          )}
           <span className="relative inline-flex h-1.5 w-1.5 rounded-full bg-cyan-400" />
         </span>
       )}

@@ -2,7 +2,7 @@
 
 import { AnimatePresence, motion } from "framer-motion";
 import Image from "next/image";
-import { ChevronDown, Play, Power, PowerOff } from "lucide-react";
+import { ChevronDown, Loader2, Play, Power, PowerOff } from "lucide-react";
 
 import GlowCard from "@/components/GlowCard";
 import AgentDetail from "@/components/dashboard/AgentDetail";
@@ -21,6 +21,8 @@ import { PersonaGlyph, imageForPersona } from "./personaVisuals";
 export function AgentCardImage({
   persona,
   expanded,
+  executing,
+  result,
   labels,
   onExecute,
   onPrefetch,
@@ -28,7 +30,9 @@ export function AgentCardImage({
 }: {
   persona: Persona;
   expanded: boolean;
-  labels: { execute: string; details: string };
+  executing: boolean;
+  result: "success" | "error" | null;
+  labels: { execute: string; executing: string; details: string };
   onExecute: (id: string) => void;
   onPrefetch: (id: string) => void;
   onToggleExpanded: () => void;
@@ -36,6 +40,15 @@ export function AgentCardImage({
   const accent = accentFromColor(persona.color);
   const portrait = imageForPersona(persona.name);
   const tint = persona.color ?? "#06b6d4";
+
+  // Brief outcome ring flashed on the Execute button (~700ms) — emerald on a
+  // queued execution, rose on failure — pairing with the toast announcement.
+  const resultRing =
+    result === "success"
+      ? "ring-2 ring-emerald-400/40"
+      : result === "error"
+        ? "ring-2 ring-rose-400/40"
+        : "";
 
   return (
     <div onMouseEnter={() => onPrefetch(persona.id)}>
@@ -59,6 +72,16 @@ export function AgentCardImage({
             >
               <PersonaGlyph name={persona.name} className="h-20 w-20" style={{ color: tint }} />
             </div>
+          )}
+          {/* Success pulse — a brief emerald glow over the portrait the moment
+              a manual execution is accepted. Mounted only while active so each
+              success re-triggers the one-shot CSS animation. */}
+          {result === "success" && (
+            <div
+              className="execute-success-pulse pointer-events-none absolute inset-0 z-10"
+              style={{ boxShadow: "inset 0 0 36px 4px rgba(52, 211, 153, 0.55)" }}
+              aria-hidden="true"
+            />
           )}
           {/* Bottom gradient + name overlay */}
           <div className="pointer-events-none absolute inset-x-0 bottom-0 bg-gradient-to-t from-[rgba(8,11,20,0.92)] via-[rgba(8,11,20,0.6)] to-transparent px-5 pb-4 pt-12">
@@ -96,10 +119,16 @@ export function AgentCardImage({
                 e.stopPropagation();
                 onExecute(persona.id);
               }}
-              className="flex items-center gap-1.5 rounded-lg border border-brand-cyan/20 bg-brand-cyan/10 px-3 py-1.5 text-sm font-medium text-brand-cyan transition-all hover:bg-brand-cyan/20 focus-ring focus-visible:ring-offset-0"
+              disabled={executing}
+              aria-busy={executing}
+              className={`flex items-center gap-1.5 rounded-lg border border-brand-cyan/20 bg-brand-cyan/10 px-3 py-1.5 text-sm font-medium text-brand-cyan transition-all hover:bg-brand-cyan/20 focus-ring focus-visible:ring-offset-0 disabled:cursor-not-allowed disabled:opacity-70 disabled:hover:bg-brand-cyan/10 ${resultRing}`}
             >
-              <Play className="h-3 w-3" />
-              {labels.execute}
+              {executing ? (
+                <Loader2 className="h-3 w-3 animate-spin" />
+              ) : (
+                <Play className="h-3 w-3" />
+              )}
+              {executing ? labels.executing : labels.execute}
             </button>
             <button
               onClick={onToggleExpanded}

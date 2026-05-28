@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { motion } from "framer-motion";
+import { motion, useReducedMotion } from "framer-motion";
 import { Undo2 } from "lucide-react";
 
 export default function UndoToast({
@@ -15,6 +15,7 @@ export default function UndoToast({
   onUndo: () => void;
   onExpire: () => void;
 }) {
+  const reducedMotion = useReducedMotion();
   const totalSeconds = Math.ceil(durationMs / 1000);
   const [secondsLeft, setSecondsLeft] = useState(totalSeconds);
   const [prevTotal, setPrevTotal] = useState(totalSeconds);
@@ -60,10 +61,14 @@ export default function UndoToast({
         <div className="h-1 w-full overflow-hidden rounded-full bg-white/[0.06]">
           <div
             className="h-full rounded-full bg-brand-cyan/50"
-            style={{
-              width: "100%",
-              animation: `undo-shrink ${durationMs}ms linear forwards`,
-            }}
+            style={
+              reducedMotion
+                ? { width: `${(secondsLeft / totalSeconds) * 100}%` }
+                : {
+                    width: "100%",
+                    animation: `undo-shrink ${durationMs}ms linear forwards`,
+                  }
+            }
           />
         </div>
       </div>

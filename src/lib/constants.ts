@@ -31,16 +31,11 @@ export const COOKIE_CONSENT_KEY = "personas-cookie-consent";
 
 export const DASHBOARD_LAST_VISIT_KEY = "personas-dashboard-last-visit";
 
+export const KNOWLEDGE_VIEW_KEY = "personas-dashboard-knowledge-view";
+
 export const DISCORD_INVITE_URL =
   process.env.NEXT_PUBLIC_DISCORD_INVITE_URL || "https://discord.gg/personas";
 
-export const CHART_COLORS = [
-  "#06b6d4",
-  "#a855f7",
-  "#f43f5e",
-  "#34d399",
-  "#fbbf24",
-  "#3b82f6",
-  "#ec4899",
-  "#f97316",
-];
+// Categorical chart palette lives in the chart theme module (single source
+// of truth for chart tokens). Re-exported here for backward compatibility.
+export { CHART_PALETTE as CHART_COLORS } from "@/lib/chart-theme";

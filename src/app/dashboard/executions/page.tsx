@@ -2,11 +2,10 @@
 
 import { useCallback, useEffect, useMemo, useState } from "react";
 import { motion } from "framer-motion";
-import { AlertTriangle, Zap } from "lucide-react";
+import { AlertTriangle } from "lucide-react";
 
 import GradientText from "@/components/GradientText";
 import DataTable from "@/components/dashboard/DataTable";
-import EmptyState from "@/components/dashboard/EmptyState";
 import { usePolling } from "@/hooks/usePolling";
 import { useTranslation } from "@/i18n/useTranslation";
 import { fadeUp, staggerContainer } from "@/lib/animations";
@@ -15,6 +14,7 @@ import { useExecutionStore, useEnrichedExecutions } from "@/stores/executionStor
 import type { GlobalExecution } from "@/lib/types";
 
 import { ExecutionDetailModal } from "./executions-page/ExecutionDetailModal";
+import { ExecutionsEmptyState } from "./executions-page/ExecutionsEmptyState";
 import { ExecutionsFilters } from "./executions-page/ExecutionsFilters";
 import {
   buildExecutionColumns,
@@ -107,6 +107,11 @@ export default function ExecutionsPage() {
     [handleCancel, cancellingIds, t],
   );
 
+  // A status filter is active and the dataset is non-empty, yet nothing
+  // matches — distinguish "filtered out" from a genuinely idle system.
+  const isFilteredEmpty =
+    filter !== "all" && executions.length > 0 && filtered.length === 0;
+
   return (
     <motion.div initial="hidden" animate="visible" variants={staggerContainer}>
       <motion.div variants={fadeUp} className="mb-6">
@@ -153,10 +158,11 @@ export default function ExecutionsPage() {
           onRowClick={(row) => setSelected(row)}
           rowClassName={executionRowClassName}
           emptyState={
-            <EmptyState
-              icon={Zap}
-              title={t.executionsPage.noExecutions}
-              description={t.executionsPage.noExecutionsDesc}
+            <ExecutionsEmptyState
+              isFilteredEmpty={isFilteredEmpty}
+              filter={filter}
+              labels={t.executionsPage}
+              onShowAll={() => handleFilterChange("all")}
             />
           }
         />

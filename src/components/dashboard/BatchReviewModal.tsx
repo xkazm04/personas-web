@@ -1,8 +1,9 @@
 "use client";
 
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import { AnimatePresence, motion } from "framer-motion";
 
+import { useFocusTrap } from "@/hooks/useFocusTrap";
 import { useTranslation } from "@/i18n/useTranslation";
 import type { MemoryItem } from "@/lib/mock-dashboard-data";
 
@@ -29,6 +30,9 @@ export default function BatchReviewModal({
   const [decisions, setDecisions] = useState<Record<string, BatchDecision>>({});
   const [prevOpen, setPrevOpen] = useState(open);
   const [showDiscardConfirm, setShowDiscardConfirm] = useState(false);
+  const panelRef = useRef<HTMLDivElement>(null);
+
+  useFocusTrap({ active: open, containerRef: panelRef });
 
   if (open !== prevOpen) {
     setPrevOpen(open);
@@ -105,6 +109,7 @@ export default function BatchReviewModal({
         >
           <div className="absolute inset-0 bg-black/60 backdrop-blur-sm" />
           <motion.div
+            ref={panelRef}
             initial={{ scale: 0.95, opacity: 0, y: 8 }}
             animate={{ scale: 1, opacity: 1, y: 0 }}
             exit={{ scale: 0.97, opacity: 0 }}

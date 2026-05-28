@@ -1,8 +1,10 @@
 "use client";
 
-import { useEffect, type ReactNode } from "react";
+import { useEffect, useId, useRef, type ReactNode } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { AlertTriangle } from "lucide-react";
+
+import { useFocusTrap } from "@/hooks/useFocusTrap";
 
 export default function ConfirmDialog({
   open,
@@ -19,6 +21,12 @@ export default function ConfirmDialog({
   onConfirm: () => void;
   onCancel: () => void;
 }) {
+  const titleId = useId();
+  const panelRef = useRef<HTMLDivElement>(null);
+  const confirmRef = useRef<HTMLButtonElement>(null);
+
+  useFocusTrap({ active: open, containerRef: panelRef, initialFocusRef: confirmRef });
+
   useEffect(() => {
     if (!open) return;
     const handler = (e: KeyboardEvent) => {
@@ -42,9 +50,14 @@ export default function ConfirmDialog({
           <div
             className="absolute inset-0 bg-black/60 backdrop-blur-sm"
             onClick={onCancel}
+            aria-hidden="true"
           />
           {/* Panel */}
           <motion.div
+            ref={panelRef}
+            role="dialog"
+            aria-modal="true"
+            aria-labelledby={titleId}
             initial={{ scale: 0.95, opacity: 0 }}
             animate={{ scale: 1, opacity: 1 }}
             exit={{ scale: 0.95, opacity: 0 }}
@@ -56,7 +69,9 @@ export default function ConfirmDialog({
                 <AlertTriangle className="h-4.5 w-4.5 text-red-400" />
               </div>
               <div>
-                <h3 className="text-base font-semibold text-foreground">{title}</h3>
+                <h3 id={titleId} className="text-base font-semibold text-foreground">
+                  {title}
+                </h3>
                 <div className="mt-1.5 text-sm text-muted leading-relaxed">{children}</div>
               </div>
             </div>
@@ -68,6 +83,7 @@ export default function ConfirmDialog({
                 Cancel
               </button>
               <button
+                ref={confirmRef}
                 onClick={onConfirm}
                 className="rounded-lg border border-red-500/30 bg-red-500/10 px-4 py-2 text-sm font-medium text-red-400 transition-all hover:bg-red-500/20"
               >
