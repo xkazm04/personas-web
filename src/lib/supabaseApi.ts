@@ -35,6 +35,8 @@ import type {
   EventStatus,
 } from "./types";
 import type {
+  FeedbackMessage,
+  MessageThread,
   LeaderboardPersona,
   LeaderboardTrend,
   SLATarget,
@@ -853,4 +855,119 @@ export const getSyncedSla = async (): Promise<{
   }
 
   return { targets, breaches };
+};
+
+// ---------------------------------------------------------------------------
+// Messages — group synced_messages into MessageThread[]. The desktop writes one
+// row per message with a thread_id (NULL for standalone messages → grouped by
+// their own id). metadata carries the raw JSON payload the detail view shows.
+// ---------------------------------------------------------------------------
+
+interface PersonaMeta {
+  name: string;
+  color: string;
+}
+
+async function loadPersonaMeta(): Promise<Map<string, PersonaMeta>> {
+  const r = await rows<{ id: string; name: string | null; color: string | null }>(
+    getSupabase().from("synced_personas").select("id, name, color"),
+  );
+  return new Map(
+    r.map((p) => [p.id, { name: p.name ?? p.id, color: p.color ?? FALLBACK_PERSONA_COLOR }]),
+  );
+}
+
+function loadMeta(meta: Map<string, PersonaMeta>, personaId: string): PersonaMeta {
+  return meta.get(personaId) ?? { name: personaId, color: FALLBACK_PERSONA_COLOR };
+}
+
+interface MessageRowShape {
+  id: string;
+  persona_id: string;
+  execution_id: string | null;
+  title: string | null;
+  content: string;
+  content_type: string;
+  priority: string;
+  is_read: boolean;
+  metadata: string | null;
+  thread_id: string | null;
+  created_at: string;
+  read_at: string | null;
+}
+
+function mapFeedbackMessage(
+  row: MessageRowShape,
+  threadId: string,
+  isParent: boolean,
+  meta: PersonaMeta,
+): FeedbackMessage {
+  return {
+    id: row.id,
+    threadId,
+    isThreadParent: isParent,
+    persona: meta.name,
+    personaColor: meta.color,
+    timestamp: row.created_at,
+    subject: row.title ?? meta.name,
+    status: row.is_read ? "read" : "unread",
+    payload: row.metadata ?? "{}",
+    body: row.content,
+  };
+}
+
+export const getSyncedMessageThreads = async (): Promise<MessageThread[]> => {
+  const [r, meta] = await Promise.all([
+    rows<MessageRowShape>(
+      getSupabase()
+        .from("synced_messages")
+        .select(
+          "id, persona_id, execution_id, title, content, content_type, priority, is_read, metadata, thread_id, created_at, read_at",
+        )
+        .order("created_at", { ascending: true }),
+    ),
+    loadPersonaMeta(),
+  ]);
+
+  const groups = new Map<string, MessageRowShape[]>();
+  for (const row of r) {
+    const key = row.thread_id ?? row.id;
+    const bucket = groups.get(key);
+    if (bucket) bucket.push(row);
+    else groups.set(key, [row]);
+  }
+
+  const threads: MessageThread[] = [];
+  for (const [threadId, rowsInThread] of groups) {
+    const sorted = [...rowsInThread].sort(
+      (a, b) => new Date(a.created_at).getTime() - new Date(b.created_at).getTime(),
+    );
+    const parentRow = sorted[0];
+    const personaMeta = loadMeta(meta, parentRow.persona_id);
+    const parent = mapFeedbackMessage(parentRow, threadId, true, personaMeta);
+    const replies = sorted
+      .slice(1)
+      .map((row) => mapFeedbackMessage(row, threadId, false, loadMeta(meta, row.persona_id)));
+    const all = [parent, ...replies];
+    const latestTimestamp = all.reduce(
+      (latest, m) => (m.timestamp > latest ? m.timestamp : latest),
+      parent.timestamp,
+    );
+    const unreadCount = all.filter((m) => m.status === "unread").length;
+    threads.push({
+      id: threadId,
+      persona: personaMeta.name,
+      personaColor: personaMeta.color,
+      subject: parent.subject,
+      parent,
+      replies,
+      latestTimestamp,
+      unreadCount,
+    });
+  }
+
+  threads.sort(
+    (a, b) => new Date(b.latestTimestamp).getTime() - new Date(a.latestTimestamp).getTime(),
+  );
+  return threads;
 };

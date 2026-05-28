@@ -9,7 +9,6 @@ import StalenessIndicator from "@/components/dashboard/StalenessIndicator";
 import { useTranslation } from "@/i18n/useTranslation";
 import { fadeUp, staggerContainer } from "@/lib/animations";
 import {
-  MOCK_MESSAGE_THREADS,
   type MessageThread,
   type MessageStatus,
 } from "@/lib/mock-dashboard-data";
@@ -17,6 +16,7 @@ import {
 import { MessagesPagination } from "./messages-page/MessagesPagination";
 import { ThreadDetailModal } from "./messages-page/ThreadDetailModal";
 import { ThreadRow } from "./messages-page/ThreadRow";
+import { useMessagesData } from "./useMessagesData";
 
 const PAGE_SIZE = 10;
 
@@ -31,8 +31,10 @@ export default function MessagesPage() {
   const [openThreadId, setOpenThreadId] = useState<string | null>(null);
   const [fetchedAt] = useState(() => Date.now());
 
+  const { threads: baseThreads } = useMessagesData();
+
   const threads = useMemo<MessageThread[]>(() => {
-    return MOCK_MESSAGE_THREADS.map((thread) => {
+    return baseThreads.map((thread) => {
       const applyStatus = (status: MessageStatus, id: string): MessageStatus =>
         overrides.get(id) ?? status;
       const parent = {
@@ -52,7 +54,7 @@ export default function MessagesPage() {
         new Date(b.latestTimestamp).getTime() -
         new Date(a.latestTimestamp).getTime(),
     );
-  }, [overrides]);
+  }, [baseThreads, overrides]);
 
   const totalPages = Math.max(1, Math.ceil(threads.length / PAGE_SIZE));
   const clampedPage = Math.min(page, totalPages - 1);
