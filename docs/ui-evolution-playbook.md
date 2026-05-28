@@ -5,9 +5,41 @@
 This is **not a design system** and **not a style guide**. It deliberately contains no
 colors, fonts, or theming. It captures *how to think* and *what techniques to reach for*
 so a project can level up its UI **in its own visual language**. It was distilled from a
-codebase whose UI we were especially proud of (`personas-web`); file paths in
-`code-references` point at that source as a *reference implementation to learn from* — they
-will not exist in your target repo. Port the **idea**, not the file.
+codebase whose UI we were especially proud of (`personas-web`); the `code-reference` pointers
+name that source as a *reference implementation to learn from* — those files will not exist in
+your target repo. Port the **idea**, not the file.
+
+> **Path convention.** All `personas-web/...` references are written **relative to the `kiro/`
+> parent folder** (the directory that contains both the source project and your other sites),
+> never as absolute machine paths — so they resolve the same on any device. If `personas-web`
+> isn't checked out beside the target, treat the pointers as descriptions, not links.
+
+---
+
+## Task preamble (paste this above the playbook when you attach it)
+
+```text
+You are upgrading THIS project's UI to v2. The attached "UI Evolution Playbook" is your guide.
+
+Rules of engagement:
+- Read the entire playbook before touching code.
+- ADAPT, DON'T CLONE: never import the playbook source's colors, fonts, theming, or mood.
+  Keep THIS project's identity; transfer only approach and execution quality.
+- Work in atomic commits, surface by surface. Prefer additive, reversible changes.
+- Verify every change by driving the real UI (desktop + mobile), not just a type-check.
+
+Deliverables, in order — pause for my approval after step 2:
+  1. INVENTORY + DIAGNOSIS — scan the codebase and report how it currently handles tokens,
+     loading, motion, a11y, performance, reuse, and guardrails (use the playbook checklist).
+  2. PRIORITIZED v2 PLAN — foundation → chrome → hero surfaces → details → guardrails,
+     ordered high-impact/low-risk, each item adapted to this project's identity.
+  3. EXECUTION — atomic commits implementing the approved plan.
+  4. VERIFICATION — before/after notes (and screenshots where possible) proving each change.
+  5. LOCK-IN — encode the new patterns as lint rules / a component catalog so v2 doesn't rot.
+
+If the target is a different surface type than the source (e.g. data-dense app vs. marketing
+splash), recalibrate density and motion accordingly — don't impose the source's pacing.
+```
 
 ---
 
@@ -95,8 +127,9 @@ Each entry: **the idea → why it matters → how (mechanics) → adapt → code
   switch whole themes via a single `data-theme` attribute set pre-paint (no flash).
 - **Adapt:** keep the target's values; only adopt the *structure* (raw → semantic → utility
   bridge → `data-theme` switch). Never inline raw colors in components.
-- **Code-reference:** `src/styles/{tokens,themes,typography}.css`, the `@theme inline` bridge in
-  `src/app/globals.css`, the pre-paint theme script in `src/app/layout.tsx`.
+- **Code-reference:** `personas-web/src/styles/{tokens,themes,typography}.css`, the
+  `@theme inline` bridge in `personas-web/src/app/globals.css`, the pre-paint theme script in
+  `personas-web/src/app/layout.tsx`.
 
 ### 4.2 Progressive, scroll-gated loading (kill the big bang)
 - **Why:** shipping every section's JS + hydration at first paint is the #1 cause of a heavy,
@@ -107,15 +140,16 @@ Each entry: **the idea → why it matters → how (mechanics) → adapt → code
   ids on the always-rendered wrapper so in-page nav still works.
 - **Adapt:** tune the lead distance to the content weight; keep SEO-critical sections
   server-rendered, defer purely-decorative/interactive ones.
-- **Code-reference:** `createLazySection` (`src/components/sections/LazySection.tsx`),
-  `LazyMount` (`src/components/LazyMount.tsx`), usage in `src/app/page.tsx` & `features/page.tsx`.
+- **Code-reference:** `createLazySection` (`personas-web/src/components/sections/LazySection.tsx`),
+  `LazyMount` (`personas-web/src/components/LazyMount.tsx`), usage in
+  `personas-web/src/app/page.tsx` & `personas-web/src/app/features/page.tsx`.
 
 ### 4.3 Skeletons shaped like their content
 - **Why:** a skeleton that mirrors the real layout makes load feel instant and prevents CLS;
   a generic gray box does neither.
 - **How:** per-section skeletons that match heading/grid/card geometry; reserve real heights.
 - **Adapt:** build one skeleton per heavy surface; reuse a shared pulse primitive.
-- **Code-reference:** the section-specific skeletons in `src/components/sections/lazy.tsx`.
+- **Code-reference:** the section-specific skeletons in `personas-web/src/components/sections/lazy.tsx`.
 
 ### 4.4 A single motion vocabulary
 - **Why:** consistency reads as polish. Ten different easings read as chaos.
@@ -124,8 +158,8 @@ Each entry: **the idea → why it matters → how (mechanics) → adapt → code
   (GPU-composited); use shared-element transitions (`layoutId`) for "this became that";
   `AnimatePresence` for enter/exit; reusable variants (e.g. `fadeUp`, `staggerContainer`).
 - **Adapt:** pick the target's signature easing curve and reuse it everywhere.
-- **Code-reference:** `src/lib/animations.ts`; the tab-bar `layoutId` pill and `template.tsx`
-  page transitions under `src/app/m/`.
+- **Code-reference:** `personas-web/src/lib/animations.ts`; the tab-bar `layoutId` pill and
+  `template.tsx` page transitions under `personas-web/src/app/m/`.
 
 ### 4.5 Reduced-motion as a first-class path
 - **Why:** vestibular-sensitive users; also a respectful default.
@@ -133,8 +167,9 @@ Each entry: **the idea → why it matters → how (mechanics) → adapt → code
   a motion-library-level switch (e.g. `MotionConfig reducedMotion="user"`) so component
   transforms degrade to opacity automatically; per-component fallbacks for anything bespoke.
 - **Adapt:** every new animated component must have a reduced-motion branch *by default*.
-- **Code-reference:** the `@media (prefers-reduced-motion: reduce)` block in `globals.css`;
-  `MotionConfig` in `src/app/m/layout.tsx`; per-component `useReducedMotion()` branches.
+- **Code-reference:** the `@media (prefers-reduced-motion: reduce)` block in
+  `personas-web/src/app/globals.css`; `MotionConfig` in `personas-web/src/app/m/layout.tsx`;
+  per-component `useReducedMotion()` branches.
 
 ### 4.6 Spend the animation budget only where it's seen
 - **Why:** off-screen CSS animations and long lists silently burn GPU/CPU and hurt INP.
@@ -142,8 +177,9 @@ Each entry: **the idea → why it matters → how (mechanics) → adapt → code
   elements; `content-visibility: auto` (+ `contain-intrinsic-size`) on long lists so off-screen
   rows skip layout/paint; pause peripheral motion in background tabs.
 - **Adapt:** apply to anything that loops or any list that can grow into the hundreds.
-- **Code-reference:** `useAnimationPause` (`src/hooks/useAnimationPause.ts`) +
-  `.animations-paused` in `globals.css`; `content-visibility` on the `/m` lists.
+- **Code-reference:** `useAnimationPause` (`personas-web/src/hooks/useAnimationPause.ts`) +
+  `.animations-paused` in `personas-web/src/app/globals.css`; `content-visibility` on the
+  `/m` route's lists.
 
 ### 4.7 Adaptive fidelity (quality tiers)
 - **Why:** the same scene that delights on a laptop can melt a budget Android.
@@ -151,15 +187,17 @@ Each entry: **the idea → why it matters → how (mechanics) → adapt → code
   budget; gate the most expensive effects (big animated gradients, blur stacks, particle
   layers) behind the tier, with a cheap static fallback.
 - **Adapt:** tie your heaviest decorative layers to the tier; ship a static variant of each.
-- **Code-reference:** `QualityProvider`/`useQualityTier` (`src/contexts/QualityContext.tsx`);
-  `.cinematic-gradient` vs `.cinematic-gradient-static` in `globals.css`.
+- **Code-reference:** `QualityProvider`/`useQualityTier`
+  (`personas-web/src/contexts/QualityContext.tsx`); `.cinematic-gradient` vs
+  `.cinematic-gradient-static` in `personas-web/src/app/globals.css`.
 
 ### 4.8 Decorative richness without DOM bloat
 - **Why:** lush cards often get there via 5–6 extra divs each; that adds up.
 - **How:** express grid overlays, shine lines, corner accents, glows as `::before`/`::after`
   pseudo-elements and box-shadows on one element; drive per-instance accents with a CSS var.
 - **Adapt:** audit "decorative wrapper" divs and collapse them into pseudo-elements.
-- **Code-reference:** `.glow-card::before/::after` and the texture utilities in `globals.css`.
+- **Code-reference:** `.glow-card::before/::after` and the texture utilities in
+  `personas-web/src/app/globals.css`.
 
 ### 4.9 One signature, *reactive* moment
 - **Why:** memorability comes from a detail that feels alive and specific to the product.
@@ -169,7 +207,7 @@ Each entry: **the idea → why it matters → how (mechanics) → adapt → code
 - **Adapt:** choose a moment that fits *this* product's story; don't copy the companion — find
   the target's equivalent "alive" element.
 - **Code-reference:** `AthenaCompanion` (audio-reactive canvas) + `AvatarCountdown` (a forced
-  4s wait turned into a ring+number+tick countdown) under `src/components/tour/`.
+  4s wait turned into a ring+number+tick countdown) under `personas-web/src/components/tour/`.
 
 ### 4.10 Native-feeling interactions (esp. on touch)
 - **Why:** web UIs that ignore platform conventions feel cheap on phones.
@@ -178,7 +216,8 @@ Each entry: **the idea → why it matters → how (mechanics) → adapt → code
   `100vh`); `env(safe-area-inset-*)` for notch/home-indicator; ≥44px targets; suppressed
   tap-highlight; ≥16px inputs to avoid iOS zoom.
 - **Adapt:** apply on the target's mobile surfaces; desktop keeps its own conventions.
-- **Code-reference:** `MobileSheet`, `MobileTabBar`, `MobileShell` under `src/components/mobile/`.
+- **Code-reference:** `MobileSheet`, `MobileTabBar`, `MobileShell` under
+  `personas-web/src/components/mobile/`.
 
 ### 4.11 A discoverable shared-component layer
 - **Why:** drift starts the moment someone hand-rolls a spinner that already exists.
@@ -195,7 +234,8 @@ Each entry: **the idea → why it matters → how (mechanics) → adapt → code
   hook; minimum text-contrast/opacity; enforce the shared modal/sheet primitive; cap file size
   to force decomposition; forbid risky ref/`setState`-in-effect patterns.
 - **Adapt:** start with 3–4 rules that match the target's actual recurring smells; grow over time.
-- **Code-reference:** `eslint-rules/*.js` and the `custom-*` plugins in `eslint.config.mjs`.
+- **Code-reference:** `personas-web/eslint-rules/*.js` and the `custom-*` plugins in
+  `personas-web/eslint.config.mjs`.
 
 ---
 
