@@ -59,6 +59,12 @@ function mapStatus(s: string): PersonaExecutionStatus {
   return s === "incomplete" ? "failed" : (s as PersonaExecutionStatus);
 }
 
+/** Percentage change of `recent` vs `prior`; 0 when there's no prior baseline. */
+function pctChange(recent: number, prior: number): number {
+  if (prior === 0) return 0;
+  return ((recent - prior) / prior) * 100;
+}
+
 // ---------------------------------------------------------------------------
 // Row shapes (snake_case, as stored) → web types (camelCase)
 // ---------------------------------------------------------------------------
@@ -181,6 +187,53 @@ function mapEvent(r: EventRow): PersonaEvent {
   };
 }
 
+interface ManualReviewRow {
+  id: string;
+  execution_id: string;
+  persona_id: string;
+  title: string;
+  description: string | null;
+  severity: string;
+  status: string;
+  reviewer_notes: string | null;
+  resolved_at: string | null;
+  created_at: string;
+}
+
+/**
+ * Adapt a synced manual-review row into the `PersonaEvent` shape `reviewStore`
+ * already parses (it derives `ManualReviewItem` from a `manual_review` event).
+ * This keeps the Reviews module working in sync mode with no interface change:
+ * the review's fields ride in the event payload / status the store expects.
+ */
+function reviewToEvent(r: ManualReviewRow): PersonaEvent {
+  const status: EventStatus =
+    r.status === "approved" || r.status === "resolved"
+      ? "processed"
+      : r.status === "rejected"
+        ? "failed"
+        : "pending";
+  return {
+    id: r.id,
+    projectId: "default",
+    eventType: "manual_review",
+    sourceType: "manual_review",
+    sourceId: r.execution_id,
+    targetPersonaId: r.persona_id,
+    payload: JSON.stringify({
+      title: r.title,
+      description: r.description ?? "",
+      severity: r.severity,
+      reviewerNotes: r.reviewer_notes ?? null,
+    }),
+    status,
+    errorMessage: null,
+    processedAt: r.resolved_at,
+    useCaseId: null,
+    createdAt: r.created_at,
+  };
+}
+
 // ---------------------------------------------------------------------------
 // Implementation
 // ---------------------------------------------------------------------------
@@ -237,6 +290,21 @@ export const supabaseApi: ApiClient = {
   executePersona: async () => readOnly(),
 
   listEvents: async (opts?: { eventType?: string; status?: string; limit?: number }) => {
+    // Reviews live in their own synced table, not the event bus — adapt them
+    // into the manual_review event shape reviewStore consumes.
+    if (opts?.eventType === "manual_review") {
+      const r = await rows<ManualReviewRow>(
+        getSupabase()
+          .from("synced_manual_reviews")
+          .select(
+            "id, execution_id, persona_id, title, description, severity, status, reviewer_notes, resolved_at, created_at",
+          )
+          .order("created_at", { ascending: false })
+          .limit(opts?.limit ?? 100),
+      );
+      return r.map(reviewToEvent);
+    }
+
     let q = getSupabase()
       .from("synced_events")
       .select("*")
@@ -342,15 +410,26 @@ export const supabaseApi: ApiClient = {
         getSupabase().from("synced_personas").select("id").eq("enabled", true),
       )
     ).length;
+    // Period-over-period trend: compare the recent half of the daily series
+    // against the prior half (% change). Falls back to 0 with no baseline.
+    const mid = Math.floor(daily.length / 2);
+    const prior = daily.slice(0, mid);
+    const recent = daily.slice(mid);
+    const sum = (arr: DailyMetric[], f: (d: DailyMetric) => number) =>
+      arr.reduce((a, d) => a + f(d), 0);
+    const priorExec = sum(prior, (d) => d.executions);
+    const recentExec = sum(recent, (d) => d.executions);
+    const priorRate = priorExec > 0 ? sum(prior, (d) => d.successes) / priorExec : 0;
+    const recentRate = recentExec > 0 ? sum(recent, (d) => d.successes) / recentExec : 0;
+
     return {
       totalCost,
       totalExecutions,
       successRate: totalExecutions > 0 ? totalSuccesses / totalExecutions : 0,
       activePersonas,
-      // Period-over-period trends require a windowed comparison not modeled yet.
-      costTrend: 0,
-      execTrend: 0,
-      successTrend: 0,
+      costTrend: pctChange(sum(recent, (d) => d.cost), sum(prior, (d) => d.cost)),
+      execTrend: pctChange(recentExec, priorExec),
+      successTrend: pctChange(recentRate, priorRate),
     };
   },
 
