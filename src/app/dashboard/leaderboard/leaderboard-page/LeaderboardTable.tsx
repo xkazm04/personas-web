@@ -1,6 +1,7 @@
 import { motion } from "framer-motion";
 
 import PersonaAvatar from "@/components/dashboard/PersonaAvatar";
+import { trendColor } from "@/components/dashboard/trendColor";
 import { fadeUp } from "@/lib/animations";
 import type { LeaderboardPersona } from "@/lib/mock-dashboard-data";
 
@@ -65,13 +66,10 @@ export function LeaderboardTable({
                 {persona.composite}
               </span>
               <span
-                className={`flex items-center gap-1 text-sm tabular-nums ${
-                  persona.delta > 0
-                    ? "text-emerald-400"
-                    : persona.delta < 0
-                      ? "text-rose-400"
-                      : "text-muted-dark"
-                }`}
+                className={`flex items-center gap-1 text-sm tabular-nums ${trendColor(
+                  persona.delta,
+                  { neutralAtZero: true },
+                )}`}
               >
                 <TrendIcon trend={persona.trend} />
                 {persona.delta > 0 ? "+" : ""}

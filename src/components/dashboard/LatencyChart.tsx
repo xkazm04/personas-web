@@ -13,67 +13,43 @@ import {
   ReferenceLine,
 } from "recharts";
 import type { LatencyPoint } from "@/lib/mock-dashboard-data";
+import { AXIS_TICK, GRID_STROKE, SERIES, ChartTooltip } from "@/lib/chart-theme";
 
 const formatYAxis = (v: number): string => {
   if (v >= 1000) return `${(v / 1000).toFixed(1)}s`;
   return `${v}ms`;
 };
 
-function LatencyTooltipContent({
-  active,
-  payload,
-  label,
-}: {
-  active?: boolean;
-  payload?: Array<{ value: number; name: string; color: string }>;
-  label?: string;
-}) {
-  if (!active || !payload?.length) return null;
-  return (
-    <div className="rounded-xl border border-glass-hover bg-background/95 px-3 py-2 text-sm shadow-xl backdrop-blur-md">
-      <p className="mb-1 text-muted-dark">{label}</p>
-      {payload.map((entry) => (
-        <p key={entry.name} style={{ color: entry.color }} className="flex items-center gap-2">
-          <span className="h-1.5 w-1.5 rounded-full" style={{ backgroundColor: entry.color }} />
-          {entry.name}:{" "}
-          <span className="font-medium">
-            {entry.value >= 1000
-              ? `${(entry.value / 1000).toFixed(2)}s`
-              : `${entry.value}ms`}
-          </span>
-        </p>
-      ))}
-    </div>
-  );
-}
+const formatLatencyValue = (v: number): string =>
+  v >= 1000 ? `${(v / 1000).toFixed(2)}s` : `${v}ms`;
 
 export default memo(function LatencyChart({ data }: { data: LatencyPoint[] }) {
   return (
     <ResponsiveContainer width="100%" height={200}>
       <LineChart data={data} margin={{ top: 8, right: 8, left: -20, bottom: 0 }}>
-        <CartesianGrid strokeDasharray="3 3" stroke="rgba(255,255,255,0.04)" vertical={false} />
+        <CartesianGrid strokeDasharray="3 3" stroke={GRID_STROKE} vertical={false} />
         <XAxis
           dataKey="date"
-          tick={{ fontSize: 10, fill: "rgba(255,255,255,0.4)" }}
+          tick={AXIS_TICK}
           axisLine={false}
           tickLine={false}
         />
         <YAxis
-          tick={{ fontSize: 10, fill: "rgba(255,255,255,0.4)" }}
+          tick={AXIS_TICK}
           axisLine={false}
           tickLine={false}
           tickFormatter={formatYAxis}
         />
-        <Tooltip content={<LatencyTooltipContent />} />
+        <Tooltip content={<ChartTooltip valueFormatter={formatLatencyValue} />} />
         <ReferenceLine
           y={1000}
-          stroke="#f43f5e"
+          stroke={SERIES.rose}
           strokeDasharray="6 4"
           strokeOpacity={0.6}
           label={{
             value: "1s SLO",
             position: "right",
-            fill: "#f43f5e",
+            fill: SERIES.rose,
             fontSize: 10,
           }}
         />
@@ -81,7 +57,7 @@ export default memo(function LatencyChart({ data }: { data: LatencyPoint[] }) {
           type="monotone"
           dataKey="p50"
           name="P50"
-          stroke="#06b6d4"
+          stroke={SERIES.cyan}
           strokeWidth={2}
           dot={false}
         />
@@ -89,7 +65,7 @@ export default memo(function LatencyChart({ data }: { data: LatencyPoint[] }) {
           type="monotone"
           dataKey="p95"
           name="P95"
-          stroke="#fbbf24"
+          stroke={SERIES.amber}
           strokeWidth={2}
           dot={false}
         />
@@ -97,7 +73,7 @@ export default memo(function LatencyChart({ data }: { data: LatencyPoint[] }) {
           type="monotone"
           dataKey="p99"
           name="P99"
-          stroke="#f43f5e"
+          stroke={SERIES.rose}
           strokeWidth={2}
           dot={false}
         />

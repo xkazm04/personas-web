@@ -5,6 +5,7 @@ import noLowTextOpacity from "./eslint-rules/no-low-text-opacity.js";
 import requireAnimationGating from "./eslint-rules/require-animation-gating.js";
 import noMultiZustandSelector from "./eslint-rules/no-multi-zustand-selector.js";
 import maxTsxLines from "./eslint-rules/max-tsx-lines.js";
+import noConfusableMinus from "./eslint-rules/no-confusable-minus.js";
 
 const eslintConfig = defineConfig([
   ...nextVitals,
@@ -44,6 +45,7 @@ const eslintConfig = defineConfig([
       "custom-quality": {
         rules: {
           "max-tsx-lines": maxTsxLines,
+          "no-confusable-minus": noConfusableMinus,
         },
       },
     },
@@ -55,6 +57,7 @@ const eslintConfig = defineConfig([
         { hooks: ["useAuthStore"] },
       ],
       "custom-quality/max-tsx-lines": ["warn", { max: 200 }],
+      "custom-quality/no-confusable-minus": "error",
       "@typescript-eslint/no-unused-vars": [
         "warn",
         {

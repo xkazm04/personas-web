@@ -65,16 +65,20 @@ export default function ConnectorCard({
 
       <div className="relative z-10 p-5">
         <div className="flex items-center gap-3">
+          {/* Logo lockup — white pill with a brand-tinted ring so logos render
+              with their declared colours regardless of theme. Many tool SVGs
+              under /public/tools use fill="currentColor" or dark brand fills,
+              which would otherwise render near-invisible on the dark theme. */}
           <div
-            className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full"
-            style={{ backgroundColor: `${c.color}18` }}
+            className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-white"
+            style={{ boxShadow: `0 0 0 1px ${c.color}40, 0 0 10px ${c.color}26` }}
           >
             <Image
               src={`/tools/${iconName}.svg`}
               alt={`${c.label} logo`}
-              width={28}
-              height={28}
-              className="h-[28px] w-[28px] object-contain drop-shadow-[0_0_1px_rgba(255,255,255,0.15)]"
+              width={22}
+              height={22}
+              className="h-[22px] w-[22px] object-contain"
               onError={(e) => {
                 const img = e.target as HTMLImageElement;
                 img.style.display = "none";

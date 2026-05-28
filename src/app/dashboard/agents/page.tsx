@@ -1,7 +1,7 @@
 "use client";
 
 import { useCallback, useEffect, useRef, useState } from "react";
-import { motion } from "framer-motion";
+import { AnimatePresence, motion } from "framer-motion";
 import Image from "next/image";
 import { Bot } from "lucide-react";
 
@@ -14,8 +14,11 @@ import { fadeUp, staggerContainer } from "@/lib/animations";
 import { usePersonaStore } from "@/stores/personaStore";
 import { useSystemStore } from "@/stores/systemStore";
 
-import { AgentCard } from "./agents-page/AgentCard";
+import { AgentCardImage } from "./agents-page/AgentCardImage";
 import { AgentsLoadingGrid } from "./agents-page/AgentsLoadingGrid";
+import ExecuteToast from "./agents-page/ExecuteToast";
+
+type ExecuteToastState = { id: number; status: "success" | "error"; message: string };
 
 export default function AgentsPage() {
   const { t } = useTranslation();
@@ -24,21 +27,62 @@ export default function AgentsPage() {
   const fetchPersonas = usePersonaStore((state) => state.fetchPersonas);
   const fetchHealth = useSystemStore((state) => state.fetchHealth);
   const health = useSystemStore((state) => state.health);
-  const [expandedId, setExpandedId] = useState<string | null>(null);
+  const [expandedImageId, setExpandedImageId] = useState<string | null>(null);
+  const [executingIds, setExecutingIds] = useState<Set<string>>(() => new Set());
+  const [result, setResult] = useState<{ id: string; status: "success" | "error" } | null>(null);
+  const [toast, setToast] = useState<ExecuteToastState | null>(null);
   const prefetchedDetailIdsRef = useRef<Set<string>>(new Set());
+  const toastIdRef = useRef(0);
+  const resultTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 
   useEffect(() => {
     void fetchPersonas();
     void fetchHealth();
   }, [fetchPersonas, fetchHealth]);
 
+  // Clear the pending result-ring timer if we unmount mid-flight.
+  useEffect(() => () => {
+    if (resultTimerRef.current) clearTimeout(resultTimerRef.current);
+  }, []);
+
+  const showToast = useCallback((status: "success" | "error", message: string) => {
+    toastIdRef.current += 1;
+    setToast({ id: toastIdRef.current, status, message });
+  }, []);
+
+  const dismissToast = useCallback(() => setToast(null), []);
+
+  // Flash a brief success/error ring on the card's Execute button (~700ms),
+  // re-armed on each outcome so rapid re-fires restart the animation.
+  const flashResult = useCallback((id: string, status: "success" | "error") => {
+    setResult({ id, status });
+    if (resultTimerRef.current) clearTimeout(resultTimerRef.current);
+    resultTimerRef.current = setTimeout(() => setResult(null), 700);
+  }, []);
+
   const handleExecute = useCallback(async (personaId: string) => {
+    const name = usePersonaStore.getState().personasById[personaId]?.name ?? "";
+    setExecutingIds((prev) => {
+      const next = new Set(prev);
+      next.add(personaId);
+      return next;
+    });
     try {
       await api.executePersona(personaId, t.agentsPage.manualExecution);
+      showToast("success", t.agentsPage.executeQueued.replace("{name}", name));
+      flashResult(personaId, "success");
     } catch {
-      // TODO: toast
+      showToast("error", t.agentsPage.executeFailed.replace("{name}", name));
+      flashResult(personaId, "error");
+    } finally {
+      setExecutingIds((prev) => {
+        if (!prev.has(personaId)) return prev;
+        const next = new Set(prev);
+        next.delete(personaId);
+        return next;
+      });
     }
-  }, [t.agentsPage.manualExecution]);
+  }, [t.agentsPage.manualExecution, t.agentsPage.executeQueued, t.agentsPage.executeFailed, showToast, flashResult]);
 
   const handlePrefetch = useCallback((personaId: string) => {
     if (prefetchedDetailIdsRef.current.has(personaId)) return;
@@ -91,28 +135,39 @@ export default function AgentsPage() {
           description={t.agentsPage.noAgentsDesc}
         />
       ) : (
-        <div className="grid gap-4 sm:grid-cols-2 xl:grid-cols-3">
+        <div data-tour-diagram="dashboard-agents" className="grid gap-4 sm:grid-cols-2 xl:grid-cols-3">
           {personas.map((persona) => (
-            <AgentCard
+            <AgentCardImage
               key={persona.id}
               persona={persona}
-              expanded={expandedId === persona.id}
+              expanded={expandedImageId === persona.id}
+              executing={executingIds.has(persona.id)}
+              result={result?.id === persona.id ? result.status : null}
               labels={{
-                maxConcurrent: t.agentsPage.maxConcurrent,
-                timeoutSeconds: t.agentsPage.timeoutSeconds,
-                budget: t.agentsPage.budget,
                 execute: t.agentsPage.execute,
+                executing: t.agentsPage.executing,
                 details: t.agentsPage.details,
               }}
               onExecute={(personaId) => void handleExecute(personaId)}
               onPrefetch={handlePrefetch}
               onToggleExpanded={() =>
-                setExpandedId(expandedId === persona.id ? null : persona.id)
+                setExpandedImageId(expandedImageId === persona.id ? null : persona.id)
               }
             />
           ))}
         </div>
       )}
+
+      <AnimatePresence>
+        {toast && (
+          <ExecuteToast
+            key={toast.id}
+            status={toast.status}
+            message={toast.message}
+            onDismiss={dismissToast}
+          />
+        )}
+      </AnimatePresence>
     </motion.div>
   );
 }

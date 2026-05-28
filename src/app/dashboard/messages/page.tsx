@@ -9,72 +9,90 @@ import StalenessIndicator from "@/components/dashboard/StalenessIndicator";
 import { useTranslation } from "@/i18n/useTranslation";
 import { fadeUp, staggerContainer } from "@/lib/animations";
 import {
-  MOCK_MESSAGES,
+  MOCK_MESSAGE_THREADS,
+  type MessageThread,
   type MessageStatus,
 } from "@/lib/mock-dashboard-data";
 
-import { MessageRow } from "./messages-page/MessageRow";
 import { MessagesPagination } from "./messages-page/MessagesPagination";
+import { ThreadDetailModal } from "./messages-page/ThreadDetailModal";
+import { ThreadRow } from "./messages-page/ThreadRow";
 
 const PAGE_SIZE = 10;
 
 export default function MessagesPage() {
   const { t } = useTranslation();
   const [page, setPage] = useState(0);
-  const [statuses, setStatuses] = useState<Map<string, MessageStatus>>(
-    () => new Map(MOCK_MESSAGES.map((message) => [message.id, message.status])),
+  // Per-message read state (keyed by message id) layered over the mock fixture
+  // so "mark all read" / opening a thread can flip threads to read locally.
+  const [overrides, setOverrides] = useState<Map<string, MessageStatus>>(
+    () => new Map(),
   );
-  const [expandedIds, setExpandedIds] = useState<Set<string>>(
-    () => new Set<string>(),
-  );
+  const [openThreadId, setOpenThreadId] = useState<string | null>(null);
   const [fetchedAt] = useState(() => Date.now());
 
-  const ordered = useMemo(() => {
-    return [...MOCK_MESSAGES].sort(
+  const threads = useMemo<MessageThread[]>(() => {
+    return MOCK_MESSAGE_THREADS.map((thread) => {
+      const applyStatus = (status: MessageStatus, id: string): MessageStatus =>
+        overrides.get(id) ?? status;
+      const parent = {
+        ...thread.parent,
+        status: applyStatus(thread.parent.status, thread.parent.id),
+      };
+      const replies = thread.replies.map((r) => ({
+        ...r,
+        status: applyStatus(r.status, r.id),
+      }));
+      const unreadCount = [parent, ...replies].filter(
+        (m) => m.status === "unread",
+      ).length;
+      return { ...thread, parent, replies, unreadCount };
+    }).sort(
       (a, b) =>
-        new Date(b.timestamp).getTime() - new Date(a.timestamp).getTime(),
+        new Date(b.latestTimestamp).getTime() -
+        new Date(a.latestTimestamp).getTime(),
     );
-  }, []);
+  }, [overrides]);
 
-  const totalPages = Math.max(1, Math.ceil(ordered.length / PAGE_SIZE));
+  const totalPages = Math.max(1, Math.ceil(threads.length / PAGE_SIZE));
   const clampedPage = Math.min(page, totalPages - 1);
-  const pageItems = ordered
-    .slice(clampedPage * PAGE_SIZE, (clampedPage + 1) * PAGE_SIZE)
-    .map((message) => ({
-      ...message,
-      status: statuses.get(message.id) ?? message.status,
-    }));
-
-  const unreadCount = useMemo(
-    () => Array.from(statuses.values()).filter((status) => status === "unread").length,
-    [statuses],
+  const pageItems = threads.slice(
+    clampedPage * PAGE_SIZE,
+    (clampedPage + 1) * PAGE_SIZE,
   );
 
-  function markRead(id: string) {
-    setStatuses((prev) => {
-      if (prev.get(id) === "read") return prev;
+  const unreadCount = useMemo(
+    () => threads.reduce((sum, t) => sum + t.unreadCount, 0),
+    [threads],
+  );
+
+  function markThreadRead(thread: MessageThread) {
+    setOverrides((prev) => {
       const next = new Map(prev);
-      next.set(id, "read");
+      next.set(thread.parent.id, "read");
+      for (const r of thread.replies) next.set(r.id, "read");
       return next;
     });
   }
 
   function markAllRead() {
-    setStatuses((prev) => {
+    setOverrides((prev) => {
       const next = new Map(prev);
-      for (const id of next.keys()) next.set(id, "read");
+      for (const thread of threads) {
+        next.set(thread.parent.id, "read");
+        for (const r of thread.replies) next.set(r.id, "read");
+      }
       return next;
     });
   }
 
-  function toggleExpand(id: string) {
-    setExpandedIds((prev) => {
-      const next = new Set(prev);
-      if (next.has(id)) next.delete(id);
-      else next.add(id);
-      return next;
-    });
+  function openThread(thread: MessageThread) {
+    setOpenThreadId(thread.id);
+    markThreadRead(thread);
   }
+
+  const openThread_value =
+    threads.find((thread) => thread.id === openThreadId) ?? null;
 
   const pageLabel = t.messagesPage.pagination.page
     .replace("{n}", String(clampedPage + 1))
@@ -90,9 +108,7 @@ export default function MessagesPage() {
           <h1 className="text-2xl font-bold tracking-tight">
             <GradientText variant="silver">{t.messagesPage.title}</GradientText>
           </h1>
-          <p className="mt-1 text-base text-muted-dark">
-            {t.messagesPage.subtitle}
-          </p>
+          <p className="mt-1 text-base text-muted-dark">{t.messagesPage.subtitle}</p>
         </div>
         <StalenessIndicator fetchedAt={fetchedAt} className="mt-2" />
       </motion.div>
@@ -114,18 +130,14 @@ export default function MessagesPage() {
       </motion.div>
 
       {pageItems.length === 0 ? (
-        <p className="py-12 text-center text-sm text-muted-dark">
-          {t.messagesPage.empty}
-        </p>
+        <p className="py-12 text-center text-sm text-muted-dark">{t.messagesPage.empty}</p>
       ) : (
         <motion.div variants={fadeUp} className="space-y-2">
-          {pageItems.map((message) => (
-            <MessageRow
-              key={message.id}
-              msg={message}
-              expanded={expandedIds.has(message.id)}
-              onToggle={() => toggleExpand(message.id)}
-              onOpen={() => markRead(message.id)}
+          {pageItems.map((thread) => (
+            <ThreadRow
+              key={thread.id}
+              thread={thread}
+              onOpen={() => openThread(thread)}
             />
           ))}
         </motion.div>
@@ -138,6 +150,11 @@ export default function MessagesPage() {
         labels={t.messagesPage.pagination}
         onPrevious={() => setPage((value) => Math.max(0, value - 1))}
         onNext={() => setPage((value) => Math.min(totalPages - 1, value + 1))}
+      />
+
+      <ThreadDetailModal
+        thread={openThread_value}
+        onClose={() => setOpenThreadId(null)}
       />
     </motion.div>
   );

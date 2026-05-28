@@ -13,11 +13,12 @@ import {
 } from "recharts";
 import { MOCK_COST_COMPARE, MOCK_ANNOTATIONS } from "@/lib/mock-dashboard-data";
 import type { ChartAnnotation } from "@/lib/mock-dashboard-data";
+import { AXIS_TICK, GRID_STROKE, SERIES, CHART_TOOLTIP_CLASS } from "@/lib/chart-theme";
 
 const annotationStyles: Record<ChartAnnotation["type"], { stroke: string; emoji: string }> = {
-  deployment: { stroke: "#06b6d4", emoji: "\u{1F680}" },
-  incident: { stroke: "#f43f5e", emoji: "\u26A0\uFE0F" },
-  milestone: { stroke: "#34d399", emoji: "\u{1F3AF}" },
+  deployment: { stroke: SERIES.cyan, emoji: "\u{1F680}" },
+  incident: { stroke: SERIES.rose, emoji: "\u26A0\uFE0F" },
+  milestone: { stroke: SERIES.emerald, emoji: "\u{1F3AF}" },
 };
 
 // Hoisted to module scope so we don't rebuild this Map on every compare-toggle render.
@@ -49,7 +50,7 @@ function CompareTooltipContent({
 }) {
   if (!active || !payload?.length) return null;
   return (
-    <div className="rounded-xl border border-glass-hover bg-background/95 px-3 py-2 text-sm shadow-xl backdrop-blur-md">
+    <div className={CHART_TOOLTIP_CLASS}>
       <p className="mb-1 text-muted-dark">{label}</p>
       {payload.map((entry) => (
         <p key={entry.dataKey} style={{ color: entry.color }} className="flex items-center gap-2">
@@ -82,23 +83,23 @@ export default memo(function CostChartWithCompare({
       <AreaChart data={mergedData} margin={{ top: 8, right: 8, left: -20, bottom: 0 }}>
         <defs>
           <linearGradient id="gradCostCompare" x1="0" y1="0" x2="0" y2="1">
-            <stop offset="0%" stopColor="#06b6d4" stopOpacity={0.3} />
-            <stop offset="100%" stopColor="#06b6d4" stopOpacity={0} />
+            <stop offset="0%" stopColor={SERIES.cyan} stopOpacity={0.3} />
+            <stop offset="100%" stopColor={SERIES.cyan} stopOpacity={0} />
           </linearGradient>
           <linearGradient id="gradCostPrev" x1="0" y1="0" x2="0" y2="1">
-            <stop offset="0%" stopColor="#a855f7" stopOpacity={0.15} />
-            <stop offset="100%" stopColor="#a855f7" stopOpacity={0} />
+            <stop offset="0%" stopColor={SERIES.violet} stopOpacity={0.15} />
+            <stop offset="100%" stopColor={SERIES.violet} stopOpacity={0} />
           </linearGradient>
         </defs>
-        <CartesianGrid strokeDasharray="3 3" stroke="rgba(255,255,255,0.04)" vertical={false} />
+        <CartesianGrid strokeDasharray="3 3" stroke={GRID_STROKE} vertical={false} />
         <XAxis
           dataKey="date"
-          tick={{ fontSize: 10, fill: "rgba(255,255,255,0.4)" }}
+          tick={AXIS_TICK}
           axisLine={false}
           tickLine={false}
         />
         <YAxis
-          tick={{ fontSize: 10, fill: "rgba(255,255,255,0.4)" }}
+          tick={AXIS_TICK}
           axisLine={false}
           tickLine={false}
           tickFormatter={(v: number) => `$${v}`}
@@ -127,7 +128,7 @@ export default memo(function CostChartWithCompare({
           <Area
             type="monotone"
             dataKey="Previous"
-            stroke="#a855f7"
+            stroke={SERIES.violet}
             strokeWidth={1.5}
             strokeDasharray="6 3"
             fill="url(#gradCostPrev)"
@@ -136,7 +137,7 @@ export default memo(function CostChartWithCompare({
         <Area
           type="monotone"
           dataKey="Cost"
-          stroke="#06b6d4"
+          stroke={SERIES.cyan}
           strokeWidth={2}
           fill="url(#gradCostCompare)"
         />

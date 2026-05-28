@@ -16,6 +16,7 @@ import {
   YAxis,
 } from "recharts";
 import { CHART_COLORS } from "@/lib/constants";
+import { AXIS_TICK, AXIS_TICK_LABEL, GRID_STROKE } from "@/lib/chart-theme";
 import { useTranslation } from "@/i18n/useTranslation";
 import { UsageTooltip } from "./usage-charts/UsageTooltip";
 import type { AreaDatum, BarDatum, PersonaBarDatum, PieDatum } from "./usage-charts/usageChartTypes";
@@ -30,12 +31,12 @@ export function UsageInvocationsBarChart({
   return (
     <ResponsiveContainer width="100%" height={280}>
       <BarChart data={barData} layout="vertical" margin={{ top: 0, right: 16, left: 0, bottom: 0 }}>
-        <CartesianGrid strokeDasharray="3 3" stroke="rgba(255,255,255,0.04)" horizontal={false} />
-        <XAxis type="number" tick={{ fontSize: 10, fill: "#64748b" }} axisLine={false} tickLine={false} />
+        <CartesianGrid strokeDasharray="3 3" stroke={GRID_STROKE} horizontal={false} />
+        <XAxis type="number" tick={AXIS_TICK} axisLine={false} tickLine={false} />
         <YAxis
           dataKey="name"
           type="category"
-          tick={{ fontSize: 10, fill: "#94a3b8" }}
+          tick={AXIS_TICK_LABEL}
           axisLine={false}
           tickLine={false}
           width={120}
@@ -125,9 +126,9 @@ export function UsageOverTimeAreaChart({
             </linearGradient>
           ))}
         </defs>
-        <CartesianGrid strokeDasharray="3 3" stroke="rgba(255,255,255,0.04)" vertical={false} />
-        <XAxis dataKey="date" tick={{ fontSize: 10, fill: "#64748b" }} axisLine={false} tickLine={false} />
-        <YAxis tick={{ fontSize: 10, fill: "#64748b" }} axisLine={false} tickLine={false} allowDecimals={false} />
+        <CartesianGrid strokeDasharray="3 3" stroke={GRID_STROKE} vertical={false} />
+        <XAxis dataKey="date" tick={AXIS_TICK} axisLine={false} tickLine={false} />
+        <YAxis tick={AXIS_TICK} axisLine={false} tickLine={false} allowDecimals={false} />
         <Tooltip content={<UsageTooltip formatToolName={formatToolName} />} />
         <Legend
           iconType="circle"
@@ -164,9 +165,9 @@ export function UsageByPersonaBarChart({
   return (
     <ResponsiveContainer width="100%" height={240}>
       <BarChart data={personaBarData} margin={{ top: 8, right: 8, left: -20, bottom: 0 }}>
-        <CartesianGrid strokeDasharray="3 3" stroke="rgba(255,255,255,0.04)" vertical={false} />
-        <XAxis dataKey="name" tick={{ fontSize: 10, fill: "#94a3b8" }} axisLine={false} tickLine={false} />
-        <YAxis tick={{ fontSize: 10, fill: "#64748b" }} axisLine={false} tickLine={false} allowDecimals={false} />
+        <CartesianGrid strokeDasharray="3 3" stroke={GRID_STROKE} vertical={false} />
+        <XAxis dataKey="name" tick={AXIS_TICK_LABEL} axisLine={false} tickLine={false} />
+        <YAxis tick={AXIS_TICK} axisLine={false} tickLine={false} allowDecimals={false} />
         <Tooltip content={<UsageTooltip formatToolName={formatToolName} />} />
         <Legend
           iconType="circle"

@@ -748,6 +748,10 @@ export type MessageStatus = "unread" | "read";
 
 export interface FeedbackMessage {
   id: string;
+  /** Group key — parents store their own id; replies inherit the parent's id. */
+  threadId: string;
+  /** True for the first message in a thread (parent); replies set this to false. */
+  isThreadParent: boolean;
   persona: string;
   personaColor: string;
   timestamp: string; // ISO
@@ -755,6 +759,18 @@ export interface FeedbackMessage {
   status: MessageStatus;
   payload: string; // JSON string (raw view)
   body: string; // Markdown report (rendered as the message detail)
+}
+
+/** A conversation: a parent message + ordered replies, with derived counts. */
+export interface MessageThread {
+  id: string;
+  persona: string;
+  personaColor: string;
+  subject: string;
+  parent: FeedbackMessage;
+  replies: FeedbackMessage[];
+  latestTimestamp: string;
+  unreadCount: number;
 }
 
 interface MessageFacts {
@@ -913,18 +929,39 @@ const MESSAGE_PERSONAS = [
   { name: "NotifyBot", color: "#a855f7" },
 ];
 
-export const MOCK_MESSAGES: FeedbackMessage[] = (() => {
+// Reply bodies — short follow-ups from a human or another agent. Round-robined
+// per reply position so threads feel like real conversations without bloating
+// the mock fixture.
+const REPLY_BODIES = [
+  `Approved — going ahead with the suggested action.`,
+  `Confirmed the upstream is healthy now. Retried successfully on **attempt {n}**.`,
+  `Heads up: this might recur next batch if the rate-limit window doesn't reset on time.`,
+  `Filed a ticket for the deprecation; the GraphQL migration is on the next sprint.`,
+  `Promoted the candidate — \`prompt_v3\` is now the live config.`,
+];
+
+function messageReplyBody(replyIdx: number, n: number): string {
+  const tmpl = REPLY_BODIES[replyIdx % REPLY_BODIES.length];
+  return tmpl.replace("{n}", String(n));
+}
+
+// Thread shapes: a list of reply counts. 14 threads total → ~42 messages.
+// Mix singletons with multi-reply threads so the list shows real variety.
+const THREAD_REPLY_COUNTS = [0, 2, 1, 3, 0, 1, 0, 0, 2, 0, 0, 1, 0, 4, 0, 1, 0, 0, 2, 0];
+
+const messageThreadFixtures = (() => {
   const rng = seededRandom(711);
-  const items: FeedbackMessage[] = [];
-  const total = 42;
-  for (let i = 0; i < total; i++) {
-    const persona = MESSAGE_PERSONAS[i % MESSAGE_PERSONAS.length];
-    const minutesAgo = Math.floor(i * 37 + rng() * 90);
-    const timestamp = new Date(Date.now() - minutesAgo * 60_000).toISOString();
-    const subjectIdx = i % MESSAGE_SUBJECTS.length;
+  const threads: MessageThread[] = [];
+  const flat: FeedbackMessage[] = [];
+  let cursor = 0;
+  for (let t = 0; t < THREAD_REPLY_COUNTS.length; t++) {
+    const persona = MESSAGE_PERSONAS[t % MESSAGE_PERSONAS.length];
+    const subjectIdx = t % MESSAGE_SUBJECTS.length;
     const subject = MESSAGE_SUBJECTS[subjectIdx];
+    const parentMinutesAgo = Math.floor(t * 73 + rng() * 60);
+    const parentTimestamp = new Date(Date.now() - parentMinutesAgo * 60_000).toISOString();
     const facts: MessageFacts = {
-      executionId: `exec_${String(40000 + i).padStart(6, "0")}`,
+      executionId: `exec_${String(40000 + cursor).padStart(6, "0")}`,
       persona: persona.name,
       durationMs: Math.floor(400 + rng() * 9500),
       model: rng() < 0.4 ? "haiku-4-5" : "sonnet-4-6",
@@ -948,19 +985,66 @@ export const MOCK_MESSAGES: FeedbackMessage[] = (() => {
       null,
       0,
     );
-    items.push({
-      id: `msg_${i + 1}`,
+    const threadId = `thr_${t + 1}`;
+    const parentId = `msg_${cursor + 1}`;
+    cursor++;
+    const parent: FeedbackMessage = {
+      id: parentId,
+      threadId,
+      isThreadParent: true,
       persona: persona.name,
       personaColor: persona.color,
-      timestamp,
+      timestamp: parentTimestamp,
       subject,
-      status: i < 7 ? "unread" : "read",
+      status: t < 3 ? "unread" : "read",
       payload,
       body: messageReportBody(subjectIdx, facts),
+    };
+    const replies: FeedbackMessage[] = [];
+    const replyCount = THREAD_REPLY_COUNTS[t];
+    for (let r = 0; r < replyCount; r++) {
+      const replyMinutesAgo = parentMinutesAgo - (r + 1) * Math.floor(8 + rng() * 22);
+      const replyTimestamp = new Date(Date.now() - Math.max(1, replyMinutesAgo) * 60_000).toISOString();
+      replies.push({
+        id: `msg_${cursor + 1}`,
+        threadId,
+        isThreadParent: false,
+        persona: persona.name,
+        personaColor: persona.color,
+        timestamp: replyTimestamp,
+        subject: `Re: ${subject}`,
+        status: t === 1 && r === 1 ? "unread" : "read",
+        payload,
+        body: messageReplyBody(r, facts.attempt),
+      });
+      cursor++;
+    }
+    flat.push(parent, ...replies);
+    const latestTimestamp = replies.length > 0
+      ? replies[replies.length - 1].timestamp
+      : parentTimestamp;
+    const unreadCount = [parent, ...replies].filter((m) => m.status === "unread").length;
+    threads.push({
+      id: threadId,
+      persona: persona.name,
+      personaColor: persona.color,
+      subject,
+      parent,
+      replies,
+      latestTimestamp,
+      unreadCount,
     });
   }
-  return items;
+  return { threads, flat };
 })();
+
+export const MOCK_MESSAGE_THREADS: MessageThread[] = messageThreadFixtures.threads;
+
+/**
+ * Flat list of all messages (parents + replies in thread order). Kept for
+ * legacy consumers; new code should prefer MOCK_MESSAGE_THREADS.
+ */
+export const MOCK_MESSAGES: FeedbackMessage[] = messageThreadFixtures.flat;
 
 // ── Event swim-lane ─────────────────────────────────────────────────
 // Time-ordered per-persona trace rendered on the Events page.
@@ -1157,20 +1241,3 @@ export const MOCK_MODEL_PROVIDERS: ModelProvider[] = [
   { id: "llama", name: "Meta Llama", model: "llama-3.3-70b", allowed: false, requests: 0, costUsd: 0 },
 ];
 
-// ── Settings: API keys (for CLI / MCP clients) ──────────────────────
-// `prefix` and `scopes` are technical identifiers shown verbatim.
-
-export interface ApiKeyRecord {
-  id: string;
-  name: string;
-  prefix: string;
-  scopes: string[];
-  lastUsed: string | null;
-  revoked: boolean;
-}
-
-export const MOCK_API_KEYS: ApiKeyRecord[] = [
-  { id: "k_1", name: "Production CLI", prefix: "pk_live_3f9a", scopes: ["personas:read", "executions:read"], lastUsed: new Date(Date.now() - 2 * 3600_000).toISOString(), revoked: false },
-  { id: "k_2", name: "CI pipeline", prefix: "pk_live_b1d7", scopes: ["executions:write"], lastUsed: new Date(Date.now() - 26 * 3600_000).toISOString(), revoked: false },
-  { id: "k_3", name: "Old integration", prefix: "pk_live_99c2", scopes: ["personas:read"], lastUsed: null, revoked: true },
-];

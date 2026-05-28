@@ -33,6 +33,7 @@ export function DashboardGreetingHeader({
   return (
     <motion.div
       variants={fadeUp}
+      data-tour-diagram="dashboard-vitals"
       className="mb-8 flex flex-col gap-4 lg:flex-row lg:items-start lg:justify-between"
     >
       <div className="min-w-0">

@@ -83,7 +83,9 @@ export default function EventsPage() {
           />
         </motion.div>
       ) : (
-        <EventsListPanel />
+        <div data-tour-diagram="dashboard-events">
+          <EventsListPanel />
+        </div>
       )}
     </motion.div>
   );

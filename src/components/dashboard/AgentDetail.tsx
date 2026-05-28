@@ -1,12 +1,17 @@
 "use client";
 
-import { Radio, Clock, AlertCircle } from "lucide-react";
+import { Radio, Clock, AlertCircle, RotateCcw } from "lucide-react";
 import { mutate } from "swr";
+import { useReducedMotion } from "framer-motion";
 import StatusBadge from "@/components/dashboard/StatusBadge";
 import type { Persona } from "@/lib/types";
 import { relativeTime, formatDuration } from "@/lib/format";
 import { dashboardKeys, loadAgentDetail, useAgentDetail } from "@/lib/dashboard-queries";
 import { useTranslation } from "@/i18n/useTranslation";
+
+// Mirror the real executions list (api.listExecutions fetches up to 5 rows)
+// so the loading placeholder occupies the same vertical space the data will.
+const SKELETON_ROWS = [0, 1, 2, 3] as const;
 
 export async function prefetchAgentDetail(personaId: string): Promise<boolean> {
   try {
@@ -25,30 +30,76 @@ export async function prefetchAgentDetail(personaId: string): Promise<boolean> {
 
 export default function AgentDetail({ persona }: { persona: Persona }) {
   const { t } = useTranslation();
-  const { data, error } = useAgentDetail(persona.id);
+  const reducedMotion = useReducedMotion();
+  const { data, error, mutate: revalidate, isValidating } = useAgentDetail(persona.id);
 
   if (error) {
     return (
-      <div className="mt-4 border-t border-glass pt-4">
+      <div className="mt-4 flex items-center justify-between gap-3 border-t border-glass pt-4">
         <p className="flex items-center gap-1.5 text-sm text-red-400">
-          <AlertCircle className="h-3 w-3" />
+          <AlertCircle className="h-3 w-3 shrink-0" />
           {t.dashboardUi.failedAgentDetails}
         </p>
+        <button
+          type="button"
+          onClick={() => revalidate()}
+          disabled={isValidating}
+          className="inline-flex shrink-0 items-center gap-1.5 rounded-lg border border-white/[0.12] bg-white/[0.04] px-3 py-1 text-sm text-foreground outline-none transition-colors hover:bg-white/[0.08] focus-visible:ring-2 focus-visible:ring-brand-cyan/40 disabled:cursor-not-allowed disabled:opacity-50"
+        >
+          <RotateCcw
+            className={`h-3 w-3 ${isValidating && !reducedMotion ? "animate-spin" : ""}`}
+          />
+          {t.dashboardUi.retryAgentDetails}
+        </button>
       </div>
     );
   }
 
   if (!data) {
+    const pulse = reducedMotion ? "" : "animate-pulse";
     return (
-      <div className="mt-4 space-y-3 border-t border-glass pt-4">
-        <div className="flex animate-pulse space-x-4">
-          <div className="flex-1 space-y-3 py-1">
-            <div className="h-3 w-24 rounded bg-white/[0.05]" />
-            <div className="space-y-2">
-              <div className="h-2.5 rounded bg-white/[0.03]" />
-              <div className="h-2.5 w-5/6 rounded bg-white/[0.03]" />
+      <div
+        className="mt-4 space-y-3 border-t border-glass pt-4"
+        aria-busy="true"
+        aria-live="polite"
+        aria-label={t.dashboardUi.recentExecutions}
+      >
+        {/* "Recent Executions" heading */}
+        <div className={`h-3 w-28 rounded bg-white/[0.06] ${pulse}`} />
+
+        {/* Execution rows — mirror the status-badge list so data settles in place */}
+        <div className="mt-1.5 space-y-1">
+          {SKELETON_ROWS.map((i) => (
+            <div key={i} className="flex items-center gap-2">
+              {/* status badge pill */}
+              <div
+                className={`h-6 w-20 rounded-full bg-white/[0.05] ${pulse}`}
+                style={{ animationDelay: `${i * 120}ms` }}
+              />
+              {/* execution id */}
+              <div
+                className={`h-3 w-16 rounded bg-white/[0.03] ${pulse}`}
+                style={{ animationDelay: `${i * 120}ms` }}
+              />
+              <div className="flex-1" />
+              {/* duration */}
+              <div
+                className={`h-3 w-10 rounded bg-white/[0.03] ${pulse}`}
+                style={{ animationDelay: `${i * 120}ms` }}
+              />
+              {/* relative time */}
+              <div
+                className={`h-3 w-14 rounded bg-white/[0.03] ${pulse}`}
+                style={{ animationDelay: `${i * 120}ms` }}
+              />
             </div>
-          </div>
+          ))}
+        </div>
+
+        {/* Subscriptions & triggers counts row */}
+        <div className="flex gap-4">
+          <div className={`h-3 w-24 rounded bg-white/[0.03] ${pulse}`} />
+          <div className={`h-3 w-20 rounded bg-white/[0.03] ${pulse}`} />
         </div>
       </div>
     );

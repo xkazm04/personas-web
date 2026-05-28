@@ -30,20 +30,20 @@ export function highlightJson(json: string): React.ReactNode[] {
 
     if (match[1] !== undefined) {
       result.push(
-        <span key={idx} className="text-white font-semibold">{match[1]}</span>,
+        <span key={idx} className="text-foreground font-semibold">{match[1]}</span>,
       );
       result.push(match[0].slice(match[1].length));
     } else if (match[2] !== undefined) {
       result.push(
-        <span key={idx} className="text-cyan-400">{match[2]}</span>,
+        <span key={idx} className="text-brand-cyan">{match[2]}</span>,
       );
     } else if (match[3] !== undefined) {
       result.push(
-        <span key={idx} className="text-amber-400">{match[3]}</span>,
+        <span key={idx} className="text-brand-amber">{match[3]}</span>,
       );
     } else if (match[4] !== undefined) {
       result.push(
-        <span key={idx} className="text-purple-400">{match[4]}</span>,
+        <span key={idx} className="text-brand-purple">{match[4]}</span>,
       );
     } else if (match[5] !== undefined) {
       result.push(
@@ -81,7 +81,7 @@ export default function JsonViewer({ payload }: { payload: string | null }) {
       >
         {copied ? <Check className="h-3.5 w-3.5 text-emerald-400" /> : <ClipboardCopy className="h-3.5 w-3.5" />}
       </button>
-      <pre className="font-mono text-sm leading-relaxed text-white/60 whitespace-pre-wrap break-all">
+      <pre className="font-mono text-sm leading-relaxed text-foreground/80 whitespace-pre-wrap break-all">
         {highlightJson(formatted)}
       </pre>
     </div>

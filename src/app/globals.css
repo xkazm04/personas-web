@@ -291,6 +291,19 @@ html {
   animation: vote-card-pulse 600ms ease-out 1;
 }
 
+/* One-shot emerald glow over a persona portrait when its manual execution is
+   accepted — the visual half of the Execute-button feedback loop. The overlay
+   carries the inset box-shadow inline; this only drives the brief fade. */
+@keyframes execute-success-pulse {
+  0%   { opacity: 0; }
+  25%  { opacity: 1; }
+  100% { opacity: 0; }
+}
+
+.execute-success-pulse {
+  animation: execute-success-pulse 700ms ease-out 1;
+}
+
 .animate-heartbeat {
   animation: heartbeat 1.5s ease-in-out infinite;
 }
@@ -944,7 +957,11 @@ img {
 .connector-icon {
   filter: brightness(0) drop-shadow(0 0 2px rgba(0, 0, 0, 0.25));
 }
-[data-theme^="dark-"] .connector-icon {
+/* `.dark` covers the default `dark-midnight` theme, which ships *without* a
+   `data-theme` attribute (the store removes it), so the attribute-prefix
+   selector alone would leave midnight on the black light-theme filter. */
+[data-theme^="dark-"] .connector-icon,
+.dark .connector-icon {
   filter: brightness(0) invert(1) drop-shadow(0 0 2px rgba(255, 255, 255, 0.4));
 }
 

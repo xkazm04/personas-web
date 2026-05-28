@@ -1,6 +1,6 @@
 "use client";
 
-import { motion } from "framer-motion";
+import { motion, useReducedMotion } from "framer-motion";
 import { Loader2 } from "lucide-react";
 
 export default function BulkProgressBar({
@@ -14,6 +14,7 @@ export default function BulkProgressBar({
   failed?: number;
   label: string;
 }) {
+  const reducedMotion = useReducedMotion();
   const successPct = total > 0 ? Math.round(((done - failed) / total) * 100) : 0;
   const failPct = total > 0 ? Math.round((failed / total) * 100) : 0;
 
@@ -26,7 +27,9 @@ export default function BulkProgressBar({
     >
       <div className="flex w-[min(calc(100vw-2rem),24rem)] flex-col gap-2 rounded-xl border border-glass-hover bg-surface/95 backdrop-blur-xl px-4 py-3 shadow-2xl">
         <div className="flex items-center gap-2">
-          <Loader2 className="h-3.5 w-3.5 animate-spin text-brand-cyan" />
+          <Loader2
+            className={`h-3.5 w-3.5 text-brand-cyan ${reducedMotion ? "" : "animate-spin"}`}
+          />
           <span className="text-sm text-foreground">{label}</span>
           <span className="ml-auto flex items-center gap-1.5 text-xs tabular-nums text-muted-dark">
             {done}/{total}
@@ -39,17 +42,17 @@ export default function BulkProgressBar({
           <motion.div
             className="h-full bg-brand-cyan/60"
             style={{ borderRadius: failPct > 0 ? "9999px 0 0 9999px" : "9999px" }}
-            initial={{ width: 0 }}
+            initial={reducedMotion ? false : { width: 0 }}
             animate={{ width: `${successPct}%` }}
-            transition={{ duration: 0.2, ease: "easeOut" }}
+            transition={reducedMotion ? { duration: 0 } : { duration: 0.2, ease: "easeOut" }}
           />
           {failPct > 0 && (
             <motion.div
               className="h-full bg-red-500/60"
               style={{ borderRadius: "0 9999px 9999px 0" }}
-              initial={{ width: 0 }}
+              initial={reducedMotion ? false : { width: 0 }}
               animate={{ width: `${failPct}%` }}
-              transition={{ duration: 0.2, ease: "easeOut" }}
+              transition={reducedMotion ? { duration: 0 } : { duration: 0.2, ease: "easeOut" }}
             />
           )}
         </div>

@@ -26,6 +26,11 @@ export type TourNarrationKey =
   | "features4"
   | "features5"
   | "features6"
+  | "dashboardHome"
+  | "dashboardAgents"
+  | "dashboardExecutions"
+  | "dashboardEvents"
+  | "dashboardReviews"
   | "roadmap1"
   | "roadmap2"
   | "roadmap3";
@@ -45,9 +50,29 @@ export interface TourAction {
   run: () => void;
 }
 
+/**
+ * A timed change of the spotlight target *within* a single step — used when one
+ * continuous narration clip walks across several regions of one page (the
+ * dashboard home sweep). Scheduled relative to step entry; the spotlight tweens
+ * to each `target` as its `atMs` elapses.
+ */
+export interface TourSpotlightCue {
+  /** ms after the step becomes active to move the spotlight to `target`. */
+  atMs: number;
+  /** `[data-tour-diagram]` selector the spotlight glides to. */
+  target: string;
+}
+
 export interface TourStep {
   /** Stable id — used for React keys and progress tracking. */
   id: string;
+  /**
+   * Client route this step lives on. When set and different from the current
+   * path, the engine navigates here on step entry so one tour can span pages
+   * (each dashboard tab is its own step). Same-layout routes keep the tour
+   * provider mounted, so state and audio survive the navigation.
+   */
+  route?: string;
   /**
    * Selector scrolled into view. An always-present section wrapper id, so the
    * scroll fires even before lazy section content hydrates.
@@ -58,6 +83,12 @@ export interface TourStep {
    * May appear only after lazy hydration; the spotlight polls until it exists.
    */
   spotlightTarget: string;
+  /**
+   * Optional in-step spotlight itinerary. When set, the spotlight starts on
+   * `spotlightTarget` then glides to each cue's `target` on its timeline,
+   * keeping a single long narration in sync with the regions it describes.
+   */
+  spotlightSequence?: TourSpotlightCue[];
   /** Key into `t.tour` for the on-screen narration line. */
   narration: TourNarrationKey;
   /** ms to dwell before auto-advancing. Used until `audioSrc` is set. */
@@ -243,14 +274,22 @@ export const FEATURES_TOUR_STEPS: TourStep[] = [
     dwellMs: 8500,
     audioSrc: "/tour/features4.mp3",
   },
-  // 5. Lab — the six ways to make a persona better.
+  // 5. Lab — cycle through the four variant tabs (chat → arena → evolution →
+  //    eval) in time with the narration so the audience sees each refinement
+  //    surface Athena names.
   {
     id: "lab",
     scrollTarget: "#lab",
     spotlightTarget: '[data-tour-diagram="lab"]',
     narration: "features5",
-    dwellMs: 9000,
+    dwellMs: 16000,
     audioSrc: "/tour/features5.mp3",
+    actions: [
+      { atMs: 4500, run: () => clickTarget('[data-lab-tab="chat"]') },
+      { atMs: 7500, run: () => clickTarget('[data-lab-tab="arena"]') },
+      { atMs: 10500, run: () => clickTarget('[data-lab-tab="evolution"]') },
+      { atMs: 13500, run: () => clickTarget('[data-lab-tab="eval"]') },
+    ],
   },
   // 6. Plugins — the bundled specialists; select Dev Tools so the card shows
   //    that plugin while it's narrated.
@@ -262,6 +301,67 @@ export const FEATURES_TOUR_STEPS: TourStep[] = [
     dwellMs: 9500,
     audioSrc: "/tour/features6.mp3",
     actions: [{ atMs: 1800, run: () => clickTarget('[data-plugin-key="dev-tools"]') }],
+  },
+];
+
+// /dashboard — one recording per page. The home clip is a single ~46s track
+// whose spotlight sweeps the six home regions in time with the narration; each
+// dashboard tab (Agents, Executions, Events, Reviews) is then its own step on
+// its own route, navigated to in turn. `dwellMs` is only the audio-error
+// fallback here — auto-advance is driven by each clip's `ended` event. No
+// bridge: Reviews is the end of the journey.
+export const DASHBOARD_TOUR_STEPS: TourStep[] = [
+  {
+    id: "home",
+    route: "/dashboard/home",
+    scrollTarget: '[data-tour-diagram="dashboard-vitals"]',
+    spotlightTarget: '[data-tour-diagram="dashboard-vitals"]',
+    spotlightSequence: [
+      { atMs: 10800, target: '[data-tour-diagram="dashboard-fleet"]' },
+      { atMs: 19300, target: '[data-tour-diagram="dashboard-intelligence"]' },
+      { atMs: 26000, target: '[data-tour-diagram="dashboard-activity"]' },
+      { atMs: 33800, target: '[data-tour-diagram="dashboard-heatmap"]' },
+      { atMs: 37200, target: '[data-tour-diagram="dashboard-instruments"]' },
+    ],
+    narration: "dashboardHome",
+    dwellMs: 48000,
+    audioSrc: "/tour/dashboardHome.mp3",
+  },
+  {
+    id: "agents",
+    route: "/dashboard/agents",
+    scrollTarget: '[data-tour-diagram="dashboard-agents"]',
+    spotlightTarget: '[data-tour-diagram="dashboard-agents"]',
+    narration: "dashboardAgents",
+    dwellMs: 27000,
+    audioSrc: "/tour/dashboardAgents.mp3",
+  },
+  {
+    id: "executions",
+    route: "/dashboard/executions",
+    scrollTarget: '[data-tour-diagram="dashboard-executions"]',
+    spotlightTarget: '[data-tour-diagram="dashboard-executions"]',
+    narration: "dashboardExecutions",
+    dwellMs: 22000,
+    audioSrc: "/tour/dashboardExecutions.mp3",
+  },
+  {
+    id: "events",
+    route: "/dashboard/events",
+    scrollTarget: '[data-tour-diagram="dashboard-events"]',
+    spotlightTarget: '[data-tour-diagram="dashboard-events"]',
+    narration: "dashboardEvents",
+    dwellMs: 26000,
+    audioSrc: "/tour/dashboardEvents.mp3",
+  },
+  {
+    id: "reviews",
+    route: "/dashboard/reviews",
+    scrollTarget: '[data-tour-diagram="dashboard-reviews"]',
+    spotlightTarget: '[data-tour-diagram="dashboard-reviews"]',
+    narration: "dashboardReviews",
+    dwellMs: 24000,
+    audioSrc: "/tour/dashboardReviews.mp3",
   },
 ];
 
@@ -299,6 +399,7 @@ export const ROADMAP_TOUR_STEPS: TourStep[] = [
 export const TOURS_BY_ID = {
   home: HOME_TOUR_STEPS,
   features: FEATURES_TOUR_STEPS,
+  dashboard: DASHBOARD_TOUR_STEPS,
   roadmap: ROADMAP_TOUR_STEPS,
 } as const;
 

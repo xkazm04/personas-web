@@ -9,7 +9,6 @@
     dashboard: string;
     features: string;
     guide: string;
-    community: string;
     useCases: string;
     tour: string;
     security: string;
@@ -17,6 +16,20 @@
     changelog: string;
     pricing: string;
     menu: string;
+  };
+  compareSection: {
+    heading: string;
+    headingGradient: string;
+    description: string;
+    readGuide: string;
+    groups: {
+      "agents-prompts": { title: string; tagline: string; concepts: string[] };
+      triggers: { title: string; tagline: string; concepts: string[] };
+      pipelines: { title: string; tagline: string; concepts: string[] };
+      credentials: { title: string; tagline: string; concepts: string[] };
+      monitoring: { title: string; tagline: string; concepts: string[] };
+      testing: { title: string; tagline: string; concepts: string[] };
+    };
   };
   footer: {
     tagline: string;
@@ -103,7 +116,6 @@
     pricing: string;
     faq: string;
     features: string;
-    community: string;
     useCases: string;
     eventBus: string;
     download: string;
@@ -131,6 +143,7 @@
     active: string;
     idle: string;
     total: string;
+    checking: string;
     connected: string;
     disconnected: string;
     demo: string;
@@ -302,6 +315,7 @@
     testFlow: string;
     eventTypes: string;
     stdout: string;
+    jumpToLatest: string;
     loadMoreExecutions: string;
     cancelling: string;
     cancelQueuedRun: string;
@@ -326,6 +340,7 @@
     searchShortcuts: string;
     noShortcutsMatch: string;
     failedAgentDetails: string;
+    retryAgentDetails: string;
     recentExecutions: string;
     noExecutionsYet: string;
     subscription: string;
@@ -333,9 +348,12 @@
     trigger: string;
     triggers: string;
     closeAgentDetails: string;
-    max: string;
-    timeoutSuffix: string;
-    budget: string;
+    metricConcurrency: string;
+    metricTimeout: string;
+    metricBudget: string;
+    metricConcurrencyTitle: string;
+    metricTimeoutTitle: string;
+    metricBudgetTitle: string;
     sessionVerifyFailed: string;
     sessionHelp: string;
     devModeMock: string;
@@ -413,6 +431,7 @@
     };
   };
   knowledgePage: {
+    viewSwitcherLabel: string;
     title: string;
     subtitle: string;
     denseTable: string;
@@ -429,6 +448,8 @@
     rate: string;
     rateLower: string;
     cost: string;
+    tokens: string;
+    retries: string;
     duration: string;
     confidence: string;
     lastSeen: string;
@@ -458,6 +479,9 @@
     focus: {
       enter: string;
       exit: string;
+    volume: string;
+    skipTo: string;
+    chapterHome: string;
       progress: string;
       skip: string;
       empty: string;
@@ -478,9 +502,13 @@
     metrics: {
       reliability: string;
       cost: string;
+    tokens: string;
+    retries: string;
       speed: string;
       quality: string;
       volume: string;
+    skipTo: string;
+    chapterHome: string;
     };
     trend: {
       up: string;
@@ -585,6 +613,9 @@
     timeoutSeconds: string;
     budget: string;
     execute: string;
+    executing: string;
+    executeQueued: string;
+    executeFailed: string;
     details: string;
   };
   executionsPage: {
@@ -597,11 +628,19 @@
     agent: string;
     duration: string;
     cost: string;
+    tokens: string;
+    retries: string;
     started: string;
     noExecutions: string;
     noExecutionsDesc: string;
     waitingForWorker: string;
     noOutputYet: string;
+    noFilteredActive: string;
+    noFilteredCompleted: string;
+    noFilteredFailed: string;
+    noFilteredCancelled: string;
+    filteredEmptyDesc: string;
+    showAllExecutions: string;
   };
   eventsPage: {
     title: string;
@@ -647,6 +686,9 @@
     match: string;
     matches: string;
     deleteSubscription: string;
+    unknownAgent: string;
+    disableSubscription: string;
+    enableSubscription: string;
     createSubscription: string;
     persona: string;
     selectPersona: string;
@@ -696,16 +738,6 @@
       subtitle: string;
       allowed: string;
       requests: string;
-    };
-    apiKeys: {
-      title: string;
-      subtitle: string;
-      create: string;
-      revoke: string;
-      revoked: string;
-      active: string;
-      lastUsed: string;
-      never: string;
     };
   };
   legalPage: {
@@ -897,6 +929,9 @@
     next: string;
     previous: string;
     exit: string;
+    volume: string;
+    skipTo: string;
+    chapterHome: string;
     begin: string;
     skip: string;
     introTitle: string;
@@ -904,6 +939,8 @@
     bridgePrompt: string;
     bridgeConfirm: string;
     bridgeDismiss: string;
+    bridgeToDashboardPrompt: string;
+    bridgeToDashboardConfirm: string;
     step1: string;
     step2: string;
     step3: string;
@@ -915,6 +952,11 @@
     features4: string;
     features5: string;
     features6: string;
+    dashboardHome: string;
+    dashboardAgents: string;
+    dashboardExecutions: string;
+    dashboardEvents: string;
+    dashboardReviews: string;
     roadmap1: string;
     roadmap2: string;
     roadmap3: string;
@@ -932,7 +974,6 @@ export const en: Translations = {
     dashboard: 'Dashboard',
     features: 'Features',
     guide: 'Guide',
-    community: 'Community',
     useCases: 'Use Cases',
     tour: 'Tour',
     security: 'Security',
@@ -940,6 +981,81 @@ export const en: Translations = {
     changelog: 'Changelog',
     pricing: 'Pricing',
     menu: 'Menu',
+  },
+  compareSection: {
+    heading: 'Everything is',
+    headingGradient: 'free',
+    description: 'The desktop app and every capability below ship free forever. No tiers, no per-seat pricing — just a complete agent platform running on your machine.',
+    readGuide: 'Read the guide',
+    groups: {
+      'agents-prompts': {
+        title: 'Agents & Prompts',
+        tagline: 'Focused on users',
+        concepts: [
+          'Natural-language persona authoring',
+          '40+ adoptable templates',
+          'BYOM — Claude or local Ollama',
+          'Structured + simple prompt modes',
+          'Persistent agent memory',
+        ],
+      },
+      triggers: {
+        title: 'Orchestration',
+        tagline: 'Every way an agent can start',
+        concepts: [
+          'Schedule (cron)',
+          'Webhook endpoints',
+          'File watcher',
+          'Clipboard monitor',
+          'Chain / event trigger',
+          'Composite conditions',
+        ],
+      },
+      pipelines: {
+        title: 'Pipelines & Teams',
+        tagline: 'Visual agentic collaboration',
+        concepts: [
+          'Visual team canvas',
+          'Data-flow connections',
+          'Live event bus',
+          'Self-healing execution',
+          'Pipeline replay + time travel',
+        ],
+      },
+      credentials: {
+        title: 'Credentials & Security',
+        tagline: 'Your secrets stay on your machine',
+        concepts: [
+          'AES-256-GCM vault',
+          'OS-native keyring',
+          'AI-assisted OAuth',
+          'Automatic token refresh',
+          'Zero telemetry, local-first',
+        ],
+      },
+      monitoring: {
+        title: 'Monitoring',
+        tagline: 'See, cost, and control every run',
+        concepts: [
+          'Live observability dashboard',
+          'Span tracing per execution',
+          'Per-model cost attribution',
+          'Human review queues',
+          'Budget alerts + enforcement',
+        ],
+      },
+      testing: {
+        title: 'Testing Lab',
+        tagline: 'Automated evolution',
+        concepts: [
+          'Arena for A/B tests',
+          'Prompt versioning + diffs',
+          'Fitness scoring',
+          'Breeding cycles',
+          'Mock tool sandboxes',
+        ],
+      },
+    },
   },
   footer: {
     tagline: 'AI agents that work for you',
@@ -1026,7 +1142,6 @@ export const en: Translations = {
     pricing: 'Pricing',
     faq: 'FAQ',
     features: 'Features',
-    community: 'Community',
     useCases: 'Use Cases',
     eventBus: 'Event Bus',
     download: 'Download',
@@ -1054,6 +1169,7 @@ export const en: Translations = {
     active: 'active',
     idle: 'idle',
     total: 'total',
+    checking: 'Checking…',
     connected: 'Connected',
     disconnected: 'Disconnected',
     demo: 'Demo',
@@ -1313,6 +1429,7 @@ export const en: Translations = {
     testFlow: "Test Flow",
     eventTypes: "Event Types",
     stdout: "stdout",
+    jumpToLatest: "Jump to latest",
     loadMoreExecutions: "Load more executions ({visible}/{total})",
     cancelling: "Cancelling...",
     cancelQueuedRun: "Cancel queued run",
@@ -1337,6 +1454,7 @@ export const en: Translations = {
     searchShortcuts: "Search shortcuts...",
     noShortcutsMatch: "No shortcuts match \"{query}\"",
     failedAgentDetails: "Failed to load agent details",
+    retryAgentDetails: "Retry",
     recentExecutions: "Recent Executions",
     noExecutionsYet: "No executions yet",
     subscription: "subscription",
@@ -1344,9 +1462,12 @@ export const en: Translations = {
     trigger: "trigger",
     triggers: "triggers",
     closeAgentDetails: "Close agent details",
-    max: "max",
-    timeoutSuffix: "s timeout",
-    budget: "budget",
+    metricConcurrency: "Concurrency",
+    metricTimeout: "Timeout",
+    metricBudget: "Budget",
+    metricConcurrencyTitle: "Up to {n} concurrent executions",
+    metricTimeoutTitle: "Execution timeout: {n} seconds",
+    metricBudgetTitle: "Budget cap: {n} per execution",
     sessionVerifyFailed: "Couldn't verify your session",
     sessionHelp: "If this keeps happening, check your network or any ad-blockers.",
     devModeMock: "Development Mode - using mock data",
@@ -1424,6 +1545,7 @@ export const en: Translations = {
     },
   },
   knowledgePage: {
+    viewSwitcherLabel: "Knowledge views",
     title: "Knowledge Graph",
     subtitle: "Patterns learned from agent executions",
     denseTable: "Dense Table",
@@ -1440,6 +1562,8 @@ export const en: Translations = {
     rate: "Rate",
     rateLower: "rate",
     cost: "Cost",
+    tokens: 'Tokens',
+    retries: 'Retries',
     duration: "Duration",
     confidence: "Confidence",
     lastSeen: "Last seen",
@@ -1469,6 +1593,9 @@ export const en: Translations = {
     focus: {
       enter: 'Focus flow',
       exit: 'Exit focus',
+    volume: 'Volume',
+    skipTo: 'Jump to',
+    chapterHome: 'Homepage',
       progress: '{n} of {total}',
       skip: 'Skip',
       empty: 'All caught up â€” no pending reviews',
@@ -1489,9 +1616,13 @@ export const en: Translations = {
     metrics: {
       reliability: 'Reliability',
       cost: 'Cost',
+    tokens: 'Tokens',
+    retries: 'Retries',
       speed: 'Speed',
       quality: 'Quality',
       volume: 'Volume',
+    skipTo: 'Jump to',
+    chapterHome: 'Homepage',
     },
     trend: {
       up: 'Up',
@@ -1596,6 +1727,9 @@ export const en: Translations = {
     timeoutSeconds: '{n}s timeout',
     budget: 'budget',
     execute: 'Execute',
+    executing: 'Executing…',
+    executeQueued: 'Execution queued for {name}',
+    executeFailed: 'Couldn’t start execution for {name}',
     details: 'Details',
   },
   executionsPage: {
@@ -1608,11 +1742,19 @@ export const en: Translations = {
     agent: 'Agent',
     duration: 'Duration',
     cost: 'Cost',
+    tokens: 'Tokens',
+    retries: 'Retries',
     started: 'Started',
     noExecutions: 'No executions yet',
     noExecutionsDesc: 'Execute an agent to see results here',
     waitingForWorker: 'Waiting for worker...',
     noOutputYet: 'No output yet',
+    noFilteredActive: 'No active runs in this view',
+    noFilteredCompleted: 'No completed runs in this view',
+    noFilteredFailed: 'No failed runs in this view',
+    noFilteredCancelled: 'No cancelled runs in this view',
+    filteredEmptyDesc: 'Other runs exist but none match this filter.',
+    showAllExecutions: 'Show all',
   },
   eventsPage: {
     title: 'Events',
@@ -1658,6 +1800,9 @@ export const en: Translations = {
     match: 'match',
     matches: 'matches',
     deleteSubscription: 'Delete subscription',
+    unknownAgent: 'Unknown agent',
+    disableSubscription: 'Disable subscription',
+    enableSubscription: 'Enable subscription',
     createSubscription: 'Create Subscription',
     persona: 'Persona',
     selectPersona: 'Select a persona...',
@@ -1707,16 +1852,6 @@ export const en: Translations = {
       subtitle: 'Which models your agents may use',
       allowed: 'Allowed',
       requests: 'requests',
-    },
-    apiKeys: {
-      title: 'API keys',
-      subtitle: 'Keys for the CLI and MCP clients',
-      create: 'New key',
-      revoke: 'Revoke',
-      revoked: 'Revoked',
-      active: 'Active',
-      lastUsed: 'Last used',
-      never: 'Never',
     },
   },
   legalPage: {
@@ -1924,6 +2059,9 @@ export const en: Translations = {
     next: 'Next step',
     previous: 'Previous step',
     exit: 'Exit tour',
+    volume: 'Volume',
+    skipTo: 'Jump to',
+    chapterHome: 'Homepage',
     begin: 'Begin',
     skip: 'Skip',
     introTitle: 'Meet Athena, your guide',
@@ -1931,6 +2069,8 @@ export const en: Translations = {
     bridgePrompt: 'That is Personas at a glance. Want to go deeper and see how each piece actually works, feature by feature?',
     bridgeConfirm: 'Show me the features',
     bridgeDismiss: 'Maybe later',
+    bridgeToDashboardPrompt: 'Now see Personas in action — try the demo dashboard.',
+    bridgeToDashboardConfirm: 'Open the dashboard',
     step1: 'Meet a persona — a single AI agent with one stable identity and a composable set of skills. Give it the tools it needs, from Gmail and Slack to GitHub and your calendar, and it learns to act across all of them. One persona, many jobs, all working together.',
     step2: 'Now hand that persona a goal in plain language, like "triage my Gmail." Watch its mind work in real time: it reads the request, breaks it into steps, and plans its approach before touching a thing. Then it executes — and shows you every move as it goes.',
     step3: 'An agent is only as useful as the moments it wakes up for. Personas can be triggered eight ways — on a schedule, by an event, by polling a source, or from an incoming webhook. The orchestrator routes each signal to the right agent and keeps everything moving, healing itself if a step ever fails.',
@@ -1942,6 +2082,11 @@ export const en: Translations = {
     features4: 'And you never lose sight of any of it. Every execution, message, event, and memory streams live through one observability deck — sparklines, costs, and status, all in real time. Full transparency, zero setup.',
     features5: 'Great agents are rarely right the first time, so the Lab is where you refine them. Chat with a persona to coach it, pit two versions against each other in the arena, evolve it across generations, or score it on the dimensions that matter. Every improvement you keep is versioned and reversible.',
     features6: 'Personas ships with six purpose-built plugins, each a self-contained workspace your agents can drive. Take Dev Tools: it turns a persona into a coding teammate that runs tasks, reads the output, and iterates. Switch a tab and you meet another specialist — all sharing the same credentials and memory.',
+    dashboardHome: 'Welcome to mission control — your whole fleet on one screen. Up top, the vitals: success rate, runs in flight, active agents, open alerts, and reviews waiting on you. Below that, the optimizer surfaces one high-leverage fix at a time — right now, a routing change that trims cost without touching quality. The two panels beneath track each agent\'s health and the new memories they\'ve learned and want to promote. Then the live picture: every execution as it lands on the left, fourteen days of traffic and errors on the right. The heatmap shows runs per agent, day by day, and the bottom row rounds it out — your top performers, the next scheduled routines, and every credential rotation. One page, the entire operation.',
+    dashboardAgents: 'This is your roster. Each card is a persona — a single agent with one identity and a set of skills it can compose. The portrait is generated to match its character; below it, the live stats: success rate, runs, and spend. Hit Execute to run one on demand, or open Details to inspect its configuration and recent history. Five agents here, each quietly doing one job well.',
+    dashboardExecutions: 'Every run the fleet has made lives here, newest first. The table shows the persona, status, duration, cost, and when it started — filter down to just the failures, or the ones still running. Click any row and the full execution opens: a metrics strip, any error explanation, and the live output streaming line by line, exactly as the agent produced it.',
+    dashboardEvents: 'Agents don\'t work in isolation — they react to events. This is the event bus: every signal flowing through the system, from schedules and webhooks to messages between agents. Each row shows the event type, its source, status, and how long ago it fired. Failed events can be retried in place, and related events chain together so you can follow a single cascade end to end.',
+    dashboardReviews: 'Some decisions need a human. When an agent hits something it shouldn\'t decide alone, it pauses and routes the call here. Each item carries the persona, the context, and the action it\'s proposing — approve it, reject it, or skip for later, by click or by keyboard. Nothing risky ships without your sign-off, and the queue keeps the rest of the fleet moving while you decide.',
     roadmap1: 'Here is where we are now: each phase on the roadmap is graded by status as it ships.',
     roadmap2: 'What comes next is up to you — vote on the features you want most, and the top ideas shape what we build.',
     roadmap3: 'And here is everything already shipped — every release laid out in order, newest first.',

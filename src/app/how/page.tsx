@@ -21,12 +21,6 @@ const scrollMapItems = [
   { label: "EVENTS", href: "#event-bus" },
 ];
 
-const breadcrumbItems = [
-  { label: "AGENTS", href: "#agents-timeline", color: "#f43f5e" },
-  { label: "PLATFORM", href: "#platform-layers", color: "#06b6d4" },
-  { label: "EVENTS", href: "#event-bus", color: "#06b6d4" },
-];
-
 /* ── Glow colors per persona ── */
 
 const stageGlow: Record<ViewerRole, "cyan" | "purple" | "emerald"> = {
@@ -47,7 +41,7 @@ export default function HowItWorks() {
   const colors = stageColors[role];
 
   return (
-    <InfoPageLayout scrollMapItems={scrollMapItems} breadcrumbItems={breadcrumbItems}>
+    <InfoPageLayout scrollMapItems={scrollMapItems}>
       {/* Role selector */}
       <div className="relative z-10 flex flex-col items-center gap-3 pt-4 pb-2">
         <RoleSelector active={role} onChange={setRole} />

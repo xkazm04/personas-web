@@ -3,6 +3,8 @@
 import { useEffect, useRef } from "react";
 import { useReducedMotion } from "framer-motion";
 import { useTour } from "@/contexts/TourContext";
+import { INTRO_START_DELAY_MS } from "@/hooks/useTourAudio";
+import AvatarCountdown from "./AvatarCountdown";
 
 /**
  * Athena — the tour's companion avatar. Layer A is her looping idle video;
@@ -25,7 +27,7 @@ export default function AthenaCompanion({
   size?: number;
   className?: string;
 }) {
-  const { audioAnalyser } = useTour();
+  const { audioAnalyser, atIntro, playing, volume } = useTour();
   const prefersReducedMotion = useReducedMotion();
   const canvasRef = useRef<HTMLCanvasElement>(null);
 
@@ -117,6 +119,13 @@ export default function AthenaCompanion({
         className="pointer-events-none absolute inset-0 h-full w-full"
         style={{ width: size, height: size }}
       />
+      {atIntro && playing && (
+        <AvatarCountdown
+          size={size}
+          volume={volume}
+          durationMs={INTRO_START_DELAY_MS}
+        />
+      )}
     </span>
   );
 }

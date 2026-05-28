@@ -5,7 +5,7 @@ import Footer from "@/components/sections/Footer";
 import PageShell from "@/components/PageShell";
 import SectionBreadcrumb from "@/components/SectionBreadcrumb";
 import MobilePageTOC from "@/components/MobilePageTOC";
-import TourLauncher from "@/components/tour/TourLauncher";
+import TourLauncher, { type BridgeKey } from "@/components/tour/TourLauncher";
 import type { ScrollMapItem } from "@/lib/types";
 import type { TourId } from "@/lib/tour-script";
 
@@ -19,6 +19,8 @@ export default function InfoPageLayout({
   scrollMapItems,
   breadcrumbItems,
   tourId,
+  tourBridgeHref,
+  tourBridgeKey,
   children,
 }: {
   scrollMapItems: ScrollMapItem[];
@@ -26,6 +28,10 @@ export default function InfoPageLayout({
   /** Optional tour to offer — id only (serializable across the RSC boundary);
    *  renders a `TourLauncher` when set. */
   tourId?: TourId;
+  /** Where the tour bridges to after its last step (e.g. "/demo"). */
+  tourBridgeHref?: string;
+  /** Which bridge copy to use; default "features". */
+  tourBridgeKey?: BridgeKey;
   children: React.ReactNode;
 }) {
   return (
@@ -40,7 +46,7 @@ export default function InfoPageLayout({
         <div className="h-24" />
         {tourId && (
           <div className="mb-10 flex justify-center">
-            <TourLauncher tourId={tourId} />
+            <TourLauncher tourId={tourId} bridgeHref={tourBridgeHref} bridgeKey={tourBridgeKey} />
           </div>
         )}
         {children}

@@ -2,14 +2,15 @@
 
 import { ReferenceLine } from "recharts";
 import type { ChartAnnotation as ChartAnnotationType } from "@/lib/mock-dashboard-data";
+import { SERIES } from "@/lib/chart-theme";
 
 const annotationStyles: Record<
   ChartAnnotationType["type"],
   { stroke: string; emoji: string }
 > = {
-  deployment: { stroke: "#06b6d4", emoji: "\u{1F680}" },
-  incident: { stroke: "#f43f5e", emoji: "\u26A0\uFE0F" },
-  milestone: { stroke: "#34d399", emoji: "\u{1F3AF}" },
+  deployment: { stroke: SERIES.cyan, emoji: "\u{1F680}" },
+  incident: { stroke: SERIES.rose, emoji: "\u26A0\uFE0F" },
+  milestone: { stroke: SERIES.emerald, emoji: "\u{1F3AF}" },
 };
 
 export default function ChartAnnotations({

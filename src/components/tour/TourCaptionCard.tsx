@@ -1,11 +1,22 @@
 "use client";
 
 import { motion, AnimatePresence } from "framer-motion";
+import { usePathname } from "next/navigation";
 import { Play, Pause, ChevronLeft, ChevronRight, X } from "lucide-react";
 import { useTour } from "@/contexts/TourContext";
 import { useTranslation } from "@/i18n/useTranslation";
 import { TRANSITION_NORMAL } from "@/lib/animations";
 import AthenaCompanion from "./AthenaCompanion";
+import TourVolumeControl from "./TourVolumeControl";
+
+type Chapter = "home" | "features" | "dashboard";
+
+function chapterFromPath(pathname: string): Chapter | null {
+  if (pathname === "/") return "home";
+  if (pathname.startsWith("/features")) return "features";
+  if (pathname.startsWith("/dashboard")) return "dashboard";
+  return null;
+}
 
 const BTN_BASE =
   "flex h-9 w-9 items-center justify-center rounded-full border transition-colors duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-cyan/40 disabled:cursor-not-allowed disabled:opacity-40";
@@ -16,10 +27,12 @@ const BTN_BASE =
  */
 export default function TourCaptionCard() {
   const { t } = useTranslation();
+  const pathname = usePathname();
   const { steps, stepIndex, playing, next, prev, goTo, togglePlay, exit } = useTour();
   if (steps.length === 0) return null;
   const step = steps[stepIndex];
   const isFirst = stepIndex === 0;
+  const currentChapter = chapterFromPath(pathname);
 
   return (
     <motion.div
@@ -30,7 +43,7 @@ export default function TourCaptionCard() {
       animate={{ opacity: 1, y: 0 }}
       exit={{ opacity: 0, y: 24 }}
       transition={TRANSITION_NORMAL}
-      className="fixed inset-x-0 bottom-6 z-[90] mx-auto flex w-[min(92vw,30rem)] flex-col gap-4 rounded-2xl border border-glass-hover bg-surface/95 p-5 shadow-2xl backdrop-blur-md"
+      className="fixed inset-x-0 bottom-6 z-[90] mx-auto flex w-[min(94vw,36rem)] flex-col gap-4 rounded-2xl border border-glass-hover bg-surface/95 p-5 shadow-2xl backdrop-blur-md"
     >
       {/* Companion + narration — announced to assistive tech as it changes. */}
       <div className="flex items-start gap-3">
@@ -103,15 +116,52 @@ export default function TourCaptionCard() {
           <ChevronRight className="h-4 w-4" />
         </button>
 
+        <TourVolumeControl className="ml-auto" />
+
         <button
           type="button"
           onClick={exit}
           aria-label={t.tour.exit}
-          className={`${BTN_BASE} ml-auto border-glass text-muted-dark hover:border-glass-hover hover:text-foreground`}
+          className={`${BTN_BASE} border-glass text-muted-dark hover:border-glass-hover hover:text-foreground`}
         >
           <X className="h-4 w-4" />
         </button>
       </div>
+
+      {/* Chapter quick-nav — skip / switch between the three guided tours. */}
+      <div className="flex flex-wrap items-center justify-center gap-1.5 border-t border-glass pt-3 text-sm">
+        <span className="text-muted-dark">{t.tour.skipTo}</span>
+        <ChapterButton label={t.tour.chapterHome} href="/?tour=1" active={currentChapter === "home"} />
+        <ChapterButton label={t.nav.features} href="/features?tour=1" active={currentChapter === "features"} />
+        <ChapterButton label={t.nav.dashboard} href="/demo?tour=1" active={currentChapter === "dashboard"} />
+      </div>
     </motion.div>
+  );
+}
+
+function ChapterButton({
+  label,
+  href,
+  active,
+}: {
+  label: string;
+  href: string;
+  active: boolean;
+}) {
+  return (
+    <button
+      type="button"
+      aria-current={active ? "page" : undefined}
+      onClick={() => {
+        if (typeof window !== "undefined") window.location.href = href;
+      }}
+      className={`rounded-full px-2.5 py-1 font-medium transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-cyan/40 ${
+        active
+          ? "bg-brand-cyan/15 text-brand-cyan"
+          : "text-muted-dark hover:bg-white/[0.05] hover:text-foreground"
+      }`}
+    >
+      {label}
+    </button>
   );
 }

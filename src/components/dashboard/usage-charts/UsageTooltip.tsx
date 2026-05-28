@@ -1,15 +1,15 @@
-import { ChartTooltipContent } from "@/components/dashboard/ObservabilityCharts";
+import { ChartTooltip, type ChartTooltipEntry } from "@/lib/chart-theme";
 
 interface UsageTooltipProps {
   active?: boolean;
-  payload?: Array<{ value: number; name: string; color: string }>;
+  payload?: ChartTooltipEntry[];
   label?: string;
   formatToolName: (name: string) => string;
 }
 
 export function UsageTooltip({ active, payload, label, formatToolName }: UsageTooltipProps) {
   return (
-    <ChartTooltipContent
+    <ChartTooltip
       active={active}
       payload={payload}
       label={label}

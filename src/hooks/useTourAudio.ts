@@ -3,6 +3,14 @@
 import { useEffect, useRef, useState } from "react";
 import type { TourStep } from "@/lib/tour-script";
 
+/** Quiet beat between a step's clip ending and the next step starting. */
+const INTER_STEP_PAUSE_MS = 2000;
+/** Pause after the intro pop-up appears before Athena starts speaking. Kept
+ *  generous so the homepage greeting doesn't autoplay the instant the tour
+ *  starts — it should feel like a beat, not a jump-scare. The avatar countdown
+ *  (AvatarCountdown) is driven by this same value so the two stay in sync. */
+export const INTRO_START_DELAY_MS = 4000;
+
 interface UseTourAudioArgs {
   active: boolean;
   /** Intro phase — plays the greeting clip and does NOT auto-advance. */
@@ -13,6 +21,8 @@ interface UseTourAudioArgs {
   playing: boolean;
   stepIndex: number;
   steps: TourStep[];
+  /** Output level applied to the audio element in real time (0..1). */
+  volume: number;
   /** Advance to the next step — called on a step clip's `ended` event. */
   next: () => void;
 }
@@ -36,11 +46,15 @@ export function useTourAudio({
   playing,
   stepIndex,
   steps,
+  volume,
   next,
 }: UseTourAudioArgs): AnalyserNode | null {
   const audioRef = useRef<HTMLAudioElement | null>(null);
   const ctxRef = useRef<AudioContext | null>(null);
   const analyserRef = useRef<AnalyserNode | null>(null);
+  // Latest volume, read when creating each clip so a newly-created audio
+  // element starts at the current level (not the browser default of 1.0).
+  const volumeRef = useRef(volume);
   const [analyser, setAnalyser] = useState<AnalyserNode | null>(null);
 
   useEffect(() => {
@@ -50,6 +64,10 @@ export function useTourAudio({
     const src = atIntro ? introSrc : step?.audioSrc;
     if (!src) return;
     const audio = new Audio(src);
+    // Apply the current volume immediately so each new clip honours the slider.
+    // Read from the ref (not `volume`) to keep it out of the creation deps, so
+    // dragging the slider doesn't tear down and re-create the audio element.
+    audio.volume = volumeRef.current;
     audioRef.current = audio;
 
     // Lazy Web Audio graph (source → analyser → destination) so the companion
@@ -80,9 +98,12 @@ export function useTourAudio({
     }
 
     let fallbackId = 0;
+    let advanceId = 0;
     // The intro greeting just plays; only step clips auto-advance the tour.
+    // Insert a short pause after the clip ends so the spotlight breathes
+    // before jumping to the next step.
     const onEnded = () => {
-      if (!atIntro) next();
+      if (!atIntro) advanceId = window.setTimeout(next, INTER_STEP_PAUSE_MS);
     };
     const onError = () => {
       if (!atIntro && step) fallbackId = window.setTimeout(next, step.dwellMs);
@@ -99,6 +120,7 @@ export function useTourAudio({
         /* already disconnected */
       }
       if (fallbackId) window.clearTimeout(fallbackId);
+      if (advanceId) window.clearTimeout(advanceId);
       if (audioRef.current === audio) audioRef.current = null;
     };
   }, [active, atIntro, atBridge, introSrc, stepIndex, next, steps]);
@@ -106,9 +128,24 @@ export function useTourAudio({
   useEffect(() => {
     const audio = audioRef.current;
     if (!audio) return;
-    if (active && playing && !atBridge) audio.play().catch(() => {});
-    else audio.pause();
+    if (!(active && playing && !atBridge)) {
+      audio.pause();
+      return;
+    }
+    // Let the intro pop-up settle before Athena speaks; steps play at once.
+    if (atIntro) {
+      const id = window.setTimeout(() => audio.play().catch(() => {}), INTRO_START_DELAY_MS);
+      return () => window.clearTimeout(id);
+    }
+    audio.play().catch(() => {});
   }, [active, playing, atBridge, atIntro, stepIndex, steps]);
+
+  // Apply slider changes to the live audio element in real time, and keep the
+  // ref in sync so the next clip created starts at this level.
+  useEffect(() => {
+    volumeRef.current = volume;
+    if (audioRef.current) audioRef.current.volume = volume;
+  }, [volume]);
 
   return analyser;
 }

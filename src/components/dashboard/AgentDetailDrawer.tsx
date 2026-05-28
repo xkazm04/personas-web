@@ -6,6 +6,7 @@ import { motion, AnimatePresence } from "framer-motion";
 import { X } from "lucide-react";
 import PersonaAvatar from "@/components/dashboard/PersonaAvatar";
 import AgentDetail from "@/components/dashboard/AgentDetail";
+import AgentMetrics from "@/components/dashboard/AgentMetrics";
 import type { Persona } from "@/lib/types";
 import { useTranslation } from "@/i18n/useTranslation";
 
@@ -154,7 +155,7 @@ export default function AgentDetailDrawer({ persona, onClose }: AgentDetailDrawe
                 data-drawer-close
                 onClick={onClose}
                 aria-label={t.dashboardUi.closeAgentDetails}
-                className="shrink-0 rounded-lg p-1.5 text-muted-dark transition-colors hover:bg-white/[0.06] hover:text-foreground focus:outline-none focus:ring-1 focus:ring-white/20"
+                className="shrink-0 rounded-lg p-1.5 text-muted-dark transition-colors hover:bg-white/[0.06] hover:text-foreground focus-ring focus-visible:ring-offset-0"
               >
                 <X className="h-4 w-4" />
               </button>
@@ -163,16 +164,8 @@ export default function AgentDetailDrawer({ persona, onClose }: AgentDetailDrawe
             {/* Content */}
             <div className="flex-1 overflow-y-auto px-5 pb-6">
               {/* Stats row */}
-              <div className="mt-4 flex flex-wrap items-center gap-x-4 gap-y-1.5 text-xs text-muted-dark">
-                <span className="font-mono">{persona.maxConcurrent} {t.dashboardUi.max}</span>
-                <span className="font-mono">
-                  {(persona.timeoutMs / 1000).toFixed(0)}{t.dashboardUi.timeoutSuffix}
-                </span>
-                {persona.maxBudgetUsd && (
-                  <span className="font-mono">
-                    ${persona.maxBudgetUsd.toFixed(2)} {t.dashboardUi.budget}
-                  </span>
-                )}
+              <div className="mt-4">
+                <AgentMetrics persona={persona} />
               </div>
 
               <AgentDetail persona={persona} />

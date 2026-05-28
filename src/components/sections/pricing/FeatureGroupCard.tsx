@@ -6,6 +6,7 @@ import { Check } from "lucide-react";
 import { BRAND_VAR, tint, brandShadow } from "@/lib/brand-theme";
 import { fadeUp } from "@/lib/animations";
 import { BrandCard } from "@/components/primitives";
+import { useTranslation } from "@/i18n/useTranslation";
 import type { FeatureGroup } from "./data";
 
 interface FeatureGroupCardProps {
@@ -13,12 +14,14 @@ interface FeatureGroupCardProps {
 }
 
 export default function FeatureGroupCard({ group }: FeatureGroupCardProps) {
+  const { t } = useTranslation();
   const Icon = group.icon;
   const bv = BRAND_VAR[group.brand];
+  const copy = t.compareSection.groups[group.id];
 
   return (
-    <motion.div variants={fadeUp}>
-      <BrandCard brand={group.brand} className="group flex flex-col p-6">
+    <motion.div variants={fadeUp} className="h-full">
+      <BrandCard brand={group.brand} className="group flex h-full flex-col p-6">
         {/* Header */}
         <div className="flex items-start gap-3 mb-4">
           <div
@@ -38,10 +41,10 @@ export default function FeatureGroupCard({ group }: FeatureGroupCardProps) {
                 textShadow: `0 0 20px ${tint(group.brand, 35)}`,
               }}
             >
-              {group.title}
+              {copy.title}
             </h3>
             <p className="mt-1 text-base text-muted-dark leading-snug">
-              {group.tagline}
+              {copy.tagline}
             </p>
           </div>
         </div>
@@ -56,7 +59,7 @@ export default function FeatureGroupCard({ group }: FeatureGroupCardProps) {
 
         {/* Concepts */}
         <ul className="space-y-2.5 flex-1">
-          {group.concepts.map((concept) => (
+          {copy.concepts.map((concept) => (
             <li
               key={concept}
               className="flex items-start gap-2.5 text-base text-foreground/80"
@@ -73,7 +76,7 @@ export default function FeatureGroupCard({ group }: FeatureGroupCardProps) {
           className="mt-5 inline-flex items-center gap-1.5 text-base font-semibold transition-opacity hover:opacity-80"
           style={{ color: bv }}
         >
-          Read the guide
+          {t.compareSection.readGuide}
           <span aria-hidden="true">→</span>
         </Link>
       </BrandCard>

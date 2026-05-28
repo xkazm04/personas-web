@@ -47,20 +47,32 @@ export default function DataTable<T>({
     [onExpandedChange],
   );
 
+  const activateRow = useCallback(
+    (row: T, id: string) => {
+      if (expandable) toggleExpand(id);
+      onRowClick?.(row);
+    },
+    [expandable, toggleExpand, onRowClick],
+  );
+
   if (data.length === 0 && emptyState) {
     return <>{emptyState}</>;
   }
 
   return (
     <div className="overflow-hidden rounded-2xl border border-glass bg-white/[0.02]">
-      <div className="overflow-x-auto">
+      <div className="overflow-x-auto" role="table">
         {/* Header */}
-        <div className="flex min-w-[600px] items-center border-b border-glass-strong bg-white/[0.05] px-4 py-2.5">
-          {expandable && <div className="w-8" />}
+        <div
+          role="row"
+          className="flex min-w-[600px] items-center border-b border-glass-strong bg-white/[0.08] px-4 py-2.5"
+        >
+          {expandable && <div role="columnheader" className="w-8" />}
           {columns.map((col) => (
             <div
               key={col.key}
-              className={`text-sm font-semibold uppercase tracking-wider text-muted ${col.className ?? "flex-1"}`}
+              role="columnheader"
+              className={`text-sm font-semibold uppercase tracking-wider text-foreground ${col.className ?? "flex-1"}`}
             >
               {col.header}
             </div>
@@ -72,18 +84,33 @@ export default function DataTable<T>({
           const id = keyExtractor(row);
           const isExpanded = expandedId === id;
           const extraClass = rowClassName?.(row) ?? "";
+          const isInteractive = Boolean(expandable || onRowClick);
           return (
-            <div key={id} className={`border-b border-glass last:border-0 ${extraClass}`}>
+            <div
+              key={id}
+              role="row"
+              className={`border-b border-glass last:border-0 ${extraClass}`}
+            >
               <div
+                role={isInteractive ? "button" : undefined}
+                tabIndex={isInteractive ? 0 : undefined}
+                aria-expanded={expandable ? isExpanded : undefined}
+                onKeyDown={
+                  isInteractive
+                    ? (e) => {
+                        if (e.key === "Enter" || e.key === " ") {
+                          e.preventDefault();
+                          activateRow(row, id);
+                        }
+                      }
+                    : undefined
+                }
                 className={`flex min-w-[600px] items-center px-4 py-3 transition-colors duration-150 ${
-                  expandable || onRowClick
-                    ? "cursor-pointer hover:bg-white/[0.03]"
+                  isInteractive
+                    ? "cursor-pointer hover:bg-white/[0.03] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-brand-cyan/50"
                     : ""
                 } ${isExpanded ? "bg-white/[0.03]" : ""}`}
-                onClick={() => {
-                  if (expandable) toggleExpand(id);
-                  onRowClick?.(row);
-                }}
+                onClick={isInteractive ? () => activateRow(row, id) : undefined}
               >
                 {expandable && (
                   <div className="w-8 flex-shrink-0">
@@ -102,17 +129,20 @@ export default function DataTable<T>({
               </div>
 
               {/* Expanded content */}
-              {isExpanded && expandable && (
-                <AnimatePresence>
-                  <motion.div
-                    initial={{ height: 0, opacity: 0 }}
-                    animate={{ height: "auto", opacity: 1 }}
-                    exit={{ height: 0, opacity: 0 }}
-                    transition={{ duration: 0.2, ease: [0.22, 1, 0.36, 1] }}
-                    className="overflow-hidden border-t border-glass"
-                  >
-                    <div className="px-4 py-4">{expandable(row)}</div>
-                  </motion.div>
+              {expandable && (
+                <AnimatePresence initial={false}>
+                  {isExpanded && (
+                    <motion.div
+                      key="expanded"
+                      initial={{ height: 0, opacity: 0 }}
+                      animate={{ height: "auto", opacity: 1 }}
+                      exit={{ height: 0, opacity: 0 }}
+                      transition={{ duration: 0.2, ease: [0.22, 1, 0.36, 1] }}
+                      className="overflow-hidden border-t border-glass"
+                    >
+                      <div className="px-4 py-4">{expandable(row)}</div>
+                    </motion.div>
+                  )}
                 </AnimatePresence>
               )}
             </div>

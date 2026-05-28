@@ -15,10 +15,10 @@ import { VaultChangesCard } from "./VaultChangesCard";
 export function DashboardInstruments() {
   return (
     <>
-      <motion.div variants={fadeUp} className="mt-6">
+      <motion.div variants={fadeUp} data-tour-diagram="dashboard-heatmap" className="mt-6">
         <ExecutionHeatmapCard />
       </motion.div>
-      <div className="mt-6 grid gap-6 lg:grid-cols-3">
+      <div data-tour-diagram="dashboard-instruments" className="mt-6 grid gap-6 lg:grid-cols-3">
         <motion.div variants={fadeUp}>
           <TopPerformersCard />
         </motion.div>

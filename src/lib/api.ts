@@ -2,6 +2,7 @@ import * as Sentry from "@sentry/nextjs";
 import { useAuthStore } from "@/stores/authStore";
 import { DEVELOPMENT } from "./dev";
 import { mockApi } from "./mockApi";
+import { supabaseApi } from "./supabaseApi";
 import {
   OrchestratorConfigError,
   validateOrchestratorUrl,
@@ -344,14 +345,25 @@ const realApi: ApiClient = {
     };
 
 /**
+ * Which production data plane to use:
+ *   - `supabaseApi` — the desktop → Supabase sync mirror (read-only), when
+ *     `NEXT_PUBLIC_DATA_SOURCE=supabase`.
+ *   - `realApi` — the orchestrator REST API (default; left untouched).
+ * Demo/dev always use the mock.
+ */
+const USE_SUPABASE = process.env.NEXT_PUBLIC_DATA_SOURCE === "supabase";
+
+/**
  * Dynamic API dispatch: uses mockApi when DEVELOPMENT is true OR when the user
- * entered via the "Try Demo" button (isDemo flag in auth store).
+ * entered via the "Try Demo" button (isDemo flag in auth store); otherwise the
+ * Supabase mirror or the orchestrator depending on NEXT_PUBLIC_DATA_SOURCE.
  */
 export const api: ApiClient = new Proxy({} as ApiClient, {
   get(_target, prop: string | symbol) {
     if (DEVELOPMENT) return mockApi[prop as keyof ApiClient];
     const { isDemo } = useAuthStore.getState();
-    const impl = isDemo ? mockApi : realApi;
+    if (isDemo) return mockApi[prop as keyof ApiClient];
+    const impl = USE_SUPABASE ? supabaseApi : realApi;
     return impl[prop as keyof ApiClient];
   },
 });

@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import { motion } from "framer-motion";
 import { Play } from "lucide-react";
 import { useTour } from "@/contexts/TourContext";
@@ -17,9 +17,12 @@ const STORAGE_KEY = "personas-tour-seen";
  * flag remembers that a visitor has seen the tour so the first-time pulse
  * only shows once.
  */
+export type BridgeKey = "features" | "dashboard";
+
 export default function TourLauncher({
   tourId,
   bridgeHref,
+  bridgeKey,
   intro = false,
 }: {
   /** Which tour to run — resolved to its step array client-side, so the
@@ -27,12 +30,29 @@ export default function TourLauncher({
   tourId: TourId;
   /** When set, the tour offers to continue here after its last step. */
   bridgeHref?: string;
+  /** Which bridge prompt copy to use. Defaults to the "features" variant. */
+  bridgeKey?: BridgeKey;
   /** Show the welcome intro pop-up before the first step. */
   intro?: boolean;
 }) {
   const { t } = useTranslation();
   const { active, start } = useTour();
   const steps = TOURS_BY_ID[tourId];
+
+  // Build the per-tour bridge copy from i18n. Undefined when bridgeKey is
+  // unset → TourBridgeCard uses the default (features) strings. Memoized so
+  // the useEffect deps stay stable across renders.
+  const bridge = useMemo(
+    () =>
+      bridgeKey === "dashboard"
+        ? {
+            prompt: t.tour.bridgeToDashboardPrompt,
+            confirm: t.tour.bridgeToDashboardConfirm,
+            dismiss: t.tour.bridgeDismiss,
+          }
+        : undefined,
+    [bridgeKey, t.tour.bridgeToDashboardPrompt, t.tour.bridgeToDashboardConfirm, t.tour.bridgeDismiss],
+  );
   // Default to "seen" so returning visitors don't see a one-frame pulse
   // before the effect below flips state.
   const [seen, setSeen] = useState(true);
@@ -62,9 +82,9 @@ export default function TourLauncher({
       } catch {
         /* ignored */
       }
-      start(steps, { bridgeHref, intro });
+      start(steps, { bridgeHref, bridge, intro });
     }
-  }, [start, steps, bridgeHref, intro]);
+  }, [start, steps, bridgeHref, bridge, intro]);
 
   if (active) return null;
 
@@ -75,7 +95,7 @@ export default function TourLauncher({
       /* localStorage may be blocked; proceed regardless. */
     }
     setSeen(true);
-    start(steps, { bridgeHref, intro });
+    start(steps, { bridgeHref, bridge, intro });
   };
 
   return (

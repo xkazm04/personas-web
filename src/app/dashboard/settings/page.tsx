@@ -12,7 +12,6 @@ import { useAuthStore } from "@/stores/authStore";
 import { useSystemStore } from "@/stores/systemStore";
 import { useTranslation } from "@/i18n/useTranslation";
 import { SettingsHeader } from "./SettingsHeader";
-import { ApiKeysCard } from "./settings-sections/ApiKeysCard";
 import { ModelProvidersCard } from "./settings-sections/ModelProvidersCard";
 import { NotificationsCard } from "./settings-sections/NotificationsCard";
 
@@ -25,10 +24,11 @@ export default function SettingsPage() {
       isSigningOut: s.isSigningOut,
     })),
   );
-  const { health, status, fetchStatus, fetchHealth } = useSystemStore(
+  const { health, status, healthChecked, fetchStatus, fetchHealth } = useSystemStore(
     useShallow((s) => ({
       health: s.health,
       status: s.status,
+      healthChecked: s.healthChecked,
       fetchStatus: s.fetchStatus,
       fetchHealth: s.fetchHealth,
     })),
@@ -43,6 +43,10 @@ export default function SettingsPage() {
   const avatarUrl = user?.user_metadata?.avatar_url;
   const displayName = user?.user_metadata?.full_name ?? "User";
   const email = user?.email ?? "-";
+  // Until the first health check resolves we show a neutral "checking" state
+  // rather than defaulting to Disconnected — otherwise a healthy system flashes
+  // a red WifiOff error on every visit before fetchHealth resolves.
+  const isChecking = !healthChecked;
   const isConnected = health?.status === "ok";
 
   return (
@@ -85,15 +89,27 @@ export default function SettingsPage() {
         </GlowCard>
 
         {/* Cloud connection + system status */}
-        <GlowCard accent={isConnected ? "emerald" : "amber"} variants={fadeUp} className="p-6">
+        <GlowCard accent={isChecking ? "cyan" : isConnected ? "emerald" : "amber"} variants={fadeUp} className="p-6">
           <div className="mb-4 flex items-center gap-2">
             <Cloud className="h-4 w-4 text-brand-cyan" />
             <h2 className="text-base font-semibold text-foreground">{t.settingsPage.cloudConnection}</h2>
             <span className="ml-auto flex items-center gap-1.5 text-sm">
-              {isConnected ? <Wifi className="h-4 w-4 text-emerald-400" /> : <WifiOff className="h-4 w-4 text-red-400" />}
-              <span className={isConnected ? "text-emerald-400" : "text-red-400"}>
-                {isConnected ? t.common.connected : t.common.disconnected}
-              </span>
+              {isChecking ? (
+                <>
+                  <Wifi className="h-4 w-4 animate-pulse text-brand-cyan" />
+                  <span className="animate-pulse text-brand-cyan">{t.common.checking}</span>
+                </>
+              ) : isConnected ? (
+                <>
+                  <Wifi className="h-4 w-4 text-emerald-400" />
+                  <span className="text-emerald-400">{t.common.connected}</span>
+                </>
+              ) : (
+                <>
+                  <WifiOff className="h-4 w-4 text-red-400" />
+                  <span className="text-red-400">{t.common.disconnected}</span>
+                </>
+              )}
             </span>
           </div>
           <div className="divide-y divide-glass text-sm">
@@ -124,7 +140,6 @@ export default function SettingsPage() {
 
         <NotificationsCard />
         <ModelProvidersCard />
-        <ApiKeysCard />
       </div>
     </motion.div>
   );

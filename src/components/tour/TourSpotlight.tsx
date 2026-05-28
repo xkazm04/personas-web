@@ -39,9 +39,9 @@ const ease = (t: number) => 0.5 - 0.5 * Math.cos(Math.PI * t);
  * card and the rest of the active theme.
  */
 export default function TourSpotlight() {
-  const { active, stepIndex, steps } = useTour();
+  const { active, activeSpotlight } = useTour();
   const cutoutRef = useRef<HTMLDivElement>(null);
-  const prevIndexRef = useRef<number>(stepIndex);
+  const prevTargetRef = useRef<string | null>(activeSpotlight);
   const prevRectRef = useRef<DOMRect | null>(null);
   const tweenStartRef = useRef<number>(0);
   const prefersReducedMotion = useReducedMotion();
@@ -50,8 +50,8 @@ export default function TourSpotlight() {
   // element itself can react to being in focus (subtle scale + glow lift in
   // globals.css). Retries for lazy-hydrated targets.
   useEffect(() => {
-    if (!active || steps.length === 0) return;
-    const selector = steps[stepIndex].spotlightTarget;
+    if (!active || !activeSpotlight) return;
+    const selector = activeSpotlight;
     let marked: HTMLElement | null = null;
     const apply = () => {
       const el = document.querySelector<HTMLElement>(selector);
@@ -67,24 +67,24 @@ export default function TourSpotlight() {
       window.clearInterval(id);
       marked?.removeAttribute("data-tour-active");
     };
-  }, [active, stepIndex, steps]);
+  }, [active, activeSpotlight]);
 
   useEffect(() => {
-    if (!active || steps.length === 0) return;
+    if (!active || !activeSpotlight) return;
 
-    // Capture the previous target's rect at step-change time so the tween
-    // can start from where the spotlight currently is.
-    const oldIndex = prevIndexRef.current;
-    prevIndexRef.current = stepIndex;
-    if (oldIndex !== stepIndex && !prefersReducedMotion) {
-      const prevEl = document.querySelector<HTMLElement>(steps[oldIndex]?.spotlightTarget ?? "");
+    // Capture the previous target's rect when the target changes (step change
+    // or mid-step sweep) so the tween can start from where the spotlight is.
+    const oldTarget = prevTargetRef.current;
+    prevTargetRef.current = activeSpotlight;
+    if (oldTarget && oldTarget !== activeSpotlight && !prefersReducedMotion) {
+      const prevEl = document.querySelector<HTMLElement>(oldTarget);
       prevRectRef.current = prevEl ? prevEl.getBoundingClientRect() : null;
       tweenStartRef.current = performance.now();
     } else {
       prevRectRef.current = null;
     }
 
-    const newTarget = steps[stepIndex].spotlightTarget;
+    const newTarget = activeSpotlight;
     let frame = 0;
 
     const tick = () => {
@@ -130,7 +130,7 @@ export default function TourSpotlight() {
 
     frame = requestAnimationFrame(tick);
     return () => cancelAnimationFrame(frame);
-  }, [active, stepIndex, steps, prefersReducedMotion]);
+  }, [active, activeSpotlight, prefersReducedMotion]);
 
   return (
     <motion.div

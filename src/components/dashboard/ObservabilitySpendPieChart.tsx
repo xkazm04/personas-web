@@ -9,7 +9,7 @@ import {
   Tooltip,
 } from "recharts";
 import { CHART_COLORS } from "@/lib/constants";
-import { ChartTooltipContent } from "@/components/dashboard/ObservabilityCharts";
+import { ChartTooltip } from "@/lib/chart-theme";
 
 interface SpendPiePoint {
   name: string;
@@ -37,7 +37,7 @@ export default memo(function ObservabilitySpendPieChart({ data }: { data: SpendP
             <Cell key={entry.name} fill={entry.color || CHART_COLORS[i % CHART_COLORS.length]} />
           ))}
         </Pie>
-        <Tooltip content={<ChartTooltipContent valueFormatter={formatDollar} />} />
+        <Tooltip content={<ChartTooltip valueFormatter={formatDollar} />} />
       </PieChart>
     </ResponsiveContainer>
   );

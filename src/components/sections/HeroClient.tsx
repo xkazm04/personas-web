@@ -134,7 +134,7 @@ export default function HeroClient() {
             ))}
           </motion.div>
 
-          <motion.div variants={fadeUp} className="mt-12 flex w-full flex-col items-center justify-center gap-6 sm:w-auto sm:flex-row lg:items-start">
+          <motion.div variants={fadeUp} className="mt-12 flex w-full flex-col items-center justify-center gap-6 sm:w-auto sm:flex-row sm:flex-wrap lg:justify-start">
             <PrimaryCTA href={DOWNLOAD_URL ? "/api/download" : "#download"} icon={Download} label="Download" />
             <a
               href="https://github.com"
@@ -146,9 +146,6 @@ export default function HeroClient() {
               <GithubIcon className="h-5 w-5 transition-transform duration-300 group-hover:scale-110 group-hover:drop-shadow-[0_0_8px_rgba(255,255,255,0.8)]" />
               <span className="relative z-10">{t.hero.viewOnGithub}</span>
             </a>
-          </motion.div>
-
-          <motion.div variants={fadeUp} className="mt-6 flex justify-center lg:justify-start">
             <TourLauncher tourId="home" bridgeHref="/features?tour=1" intro />
           </motion.div>
 

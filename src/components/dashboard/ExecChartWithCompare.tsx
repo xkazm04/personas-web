@@ -15,11 +15,12 @@ import {
 } from "recharts";
 import { MOCK_EXEC_COMPARE, MOCK_ANNOTATIONS } from "@/lib/mock-dashboard-data";
 import type { ChartAnnotation } from "@/lib/mock-dashboard-data";
+import { AXIS_TICK, GRID_STROKE, SERIES, CHART_TOOLTIP_CLASS } from "@/lib/chart-theme";
 
 const annotationStyles: Record<ChartAnnotation["type"], { stroke: string; emoji: string }> = {
-  deployment: { stroke: "#06b6d4", emoji: "\u{1F680}" },
-  incident: { stroke: "#f43f5e", emoji: "\u26A0\uFE0F" },
-  milestone: { stroke: "#34d399", emoji: "\u{1F3AF}" },
+  deployment: { stroke: SERIES.cyan, emoji: "\u{1F680}" },
+  incident: { stroke: SERIES.rose, emoji: "\u26A0\uFE0F" },
+  milestone: { stroke: SERIES.emerald, emoji: "\u{1F3AF}" },
 };
 
 // Hoisted to module scope so we don't rebuild this Map on every compare-toggle render.
@@ -53,7 +54,7 @@ function ExecCompareTooltipContent({
 }) {
   if (!active || !payload?.length) return null;
   return (
-    <div className="rounded-xl border border-glass-hover bg-background/95 px-3 py-2 text-sm shadow-xl backdrop-blur-md">
+    <div className={CHART_TOOLTIP_CLASS}>
       <p className="mb-1 text-muted-dark">{label}</p>
       {payload.map((entry) => {
         let displayName = entry.dataKey;
@@ -90,15 +91,15 @@ export default memo(function ExecChartWithCompare({
     return (
       <ResponsiveContainer width="100%" height={240}>
         <BarChart data={data} margin={{ top: 8, right: 8, left: -20, bottom: 0 }}>
-          <CartesianGrid strokeDasharray="3 3" stroke="rgba(255,255,255,0.04)" vertical={false} />
+          <CartesianGrid strokeDasharray="3 3" stroke={GRID_STROKE} vertical={false} />
           <XAxis
             dataKey="date"
-            tick={{ fontSize: 10, fill: "rgba(255,255,255,0.4)" }}
+            tick={AXIS_TICK}
             axisLine={false}
             tickLine={false}
           />
           <YAxis
-            tick={{ fontSize: 10, fill: "rgba(255,255,255,0.4)" }}
+            tick={AXIS_TICK}
             axisLine={false}
             tickLine={false}
             allowDecimals={false}
@@ -122,8 +123,8 @@ export default memo(function ExecChartWithCompare({
               />
             );
           })}
-          <Bar dataKey="Successes" stackId="exec" fill="#34d399" radius={[0, 0, 0, 0]} />
-          <Bar dataKey="Failures" stackId="exec" fill="#f43f5e" radius={[4, 4, 0, 0]} />
+          <Bar dataKey="Successes" stackId="exec" fill={SERIES.emerald} radius={[0, 0, 0, 0]} />
+          <Bar dataKey="Failures" stackId="exec" fill={SERIES.rose} radius={[4, 4, 0, 0]} />
         </BarChart>
       </ResponsiveContainer>
     );
@@ -132,15 +133,15 @@ export default memo(function ExecChartWithCompare({
   return (
     <ResponsiveContainer width="100%" height={240}>
       <ComposedChart data={mergedData} margin={{ top: 8, right: 8, left: -20, bottom: 0 }}>
-        <CartesianGrid strokeDasharray="3 3" stroke="rgba(255,255,255,0.04)" vertical={false} />
+        <CartesianGrid strokeDasharray="3 3" stroke={GRID_STROKE} vertical={false} />
         <XAxis
           dataKey="date"
-          tick={{ fontSize: 10, fill: "rgba(255,255,255,0.4)" }}
+          tick={AXIS_TICK}
           axisLine={false}
           tickLine={false}
         />
         <YAxis
-          tick={{ fontSize: 10, fill: "rgba(255,255,255,0.4)" }}
+          tick={AXIS_TICK}
           axisLine={false}
           tickLine={false}
           allowDecimals={false}
@@ -164,13 +165,13 @@ export default memo(function ExecChartWithCompare({
             />
           );
         })}
-        <Bar dataKey="Successes" stackId="exec" fill="#34d399" radius={[0, 0, 0, 0]} />
-        <Bar dataKey="Failures" stackId="exec" fill="#f43f5e" radius={[4, 4, 0, 0]} />
+        <Bar dataKey="Successes" stackId="exec" fill={SERIES.emerald} radius={[0, 0, 0, 0]} />
+        <Bar dataKey="Failures" stackId="exec" fill={SERIES.rose} radius={[4, 4, 0, 0]} />
         <Line
           type="monotone"
           dataKey="PreviousTotal"
           name="Previous Total"
-          stroke="#a855f7"
+          stroke={SERIES.violet}
           strokeWidth={1.5}
           strokeDasharray="6 3"
           dot={false}
