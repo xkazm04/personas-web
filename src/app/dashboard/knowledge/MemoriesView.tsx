@@ -6,15 +6,17 @@ import BatchReviewModal, {
   type BatchDecision,
 } from "@/components/dashboard/BatchReviewModal";
 import { useTranslation } from "@/i18n/useTranslation";
-import {
-  MOCK_MEMORIES,
-} from "@/lib/mock-dashboard-data";
+import { type MemoryItem } from "@/lib/mock-dashboard-data";
 
 import { MemoriesToolbar } from "./memories-view/MemoriesToolbar";
 import { MemoryCard } from "./memories-view/MemoryCard";
 import { TYPES, type FilterKey } from "./memories-view/memoryViewConfig";
 
-export default function MemoriesView() {
+export default function MemoriesView({
+  memories,
+}: {
+  memories: MemoryItem[];
+}) {
   const { t } = useTranslation();
   const [filter, setFilter] = useState<FilterKey>("all");
   const [resolvedIds, setResolvedIds] = useState<Set<string>>(
@@ -24,10 +26,10 @@ export default function MemoriesView() {
 
   const visibleMemories = useMemo(
     () =>
-      MOCK_MEMORIES.map((memory) =>
+      memories.map((memory) =>
         resolvedIds.has(memory.id) ? { ...memory, hasConflict: false } : memory,
       ),
-    [resolvedIds],
+    [resolvedIds, memories],
   );
 
   const filtered = useMemo(
@@ -57,15 +59,15 @@ export default function MemoriesView() {
       {
         key: "all",
         label: t.memoriesPage.filters.all,
-        count: MOCK_MEMORIES.length,
+        count: memories.length,
       },
       ...TYPES.map((type) => ({
         key: type,
         label: t.memoriesPage.filters[type],
-        count: MOCK_MEMORIES.filter((memory) => memory.type === type).length,
+        count: memories.filter((memory) => memory.type === type).length,
       })),
     ],
-    [t],
+    [t, memories],
   );
 
   const conflictCountLabel = t.memoriesPage.conflicts.count.replace(

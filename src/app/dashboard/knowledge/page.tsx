@@ -9,6 +9,7 @@ import { useTranslation } from "@/i18n/useTranslation";
 import KnowledgeDenseTable from "./KnowledgeDenseTable";
 import KnowledgeClusterGraph from "./KnowledgeClusterGraph";
 import MemoriesView from "./MemoriesView";
+import { useKnowledgeData } from "./useKnowledgeData";
 
 type ViewVariant = "dense-table" | "cluster-graph" | "memories";
 
@@ -28,6 +29,7 @@ function isViewVariant(value: string | null): value is ViewVariant {
 
 export default function KnowledgeGraphPage() {
   const { t } = useTranslation();
+  const { patterns, memories } = useKnowledgeData();
   const [activeVariant, setActiveVariant] = useState<ViewVariant>("dense-table");
   const tabRefs = useRef<(HTMLButtonElement | null)[]>([]);
 
@@ -131,9 +133,9 @@ export default function KnowledgeGraphPage() {
         id={`knowledge-panel-${activeVariant}`}
         aria-labelledby={`knowledge-tab-${activeVariant}`}
       >
-        {activeVariant === "dense-table" && <KnowledgeDenseTable />}
-        {activeVariant === "cluster-graph" && <KnowledgeClusterGraph />}
-        {activeVariant === "memories" && <MemoriesView />}
+        {activeVariant === "dense-table" && <KnowledgeDenseTable patterns={patterns} />}
+        {activeVariant === "cluster-graph" && <KnowledgeClusterGraph patterns={patterns} />}
+        {activeVariant === "memories" && <MemoriesView memories={memories} />}
       </div>
     </div>
   );

@@ -4,7 +4,7 @@ import { useCallback, useMemo, useState } from "react";
 import { AnimatePresence, motion } from "framer-motion";
 import { fadeUp, staggerContainer } from "@/lib/animations";
 import { useTranslation } from "@/i18n/useTranslation";
-import { MOCK_KNOWLEDGE_PATTERNS, type KnowledgePattern } from "@/lib/mock-dashboard-data";
+import { type KnowledgePattern } from "@/lib/mock-dashboard-data";
 import { buildKnowledgeColumns } from "./knowledge-dense-table/buildKnowledgeColumns";
 import { KnowledgeDenseTopBar } from "./knowledge-dense-table/KnowledgeDenseTopBar";
 import { KnowledgePatternDetailPanel } from "./knowledge-dense-table/KnowledgePatternDetailPanel";
@@ -12,7 +12,11 @@ import { KnowledgePatternTable } from "./knowledge-dense-table/KnowledgePatternT
 import { knowledgeSuccessRate } from "./knowledge-dense-table/knowledgeDenseFormat";
 import type { KnowledgeType, SortDir, SortField } from "./knowledge-dense-table/knowledgeDenseTypes";
 
-export default function KnowledgeDenseTable() {
+export default function KnowledgeDenseTable({
+  patterns: allPatterns,
+}: {
+  patterns: KnowledgePattern[];
+}) {
   const { t } = useTranslation();
   const [sortField, setSortField] = useState<SortField>("confidence");
   const [sortDir, setSortDir] = useState<SortDir>("desc");
@@ -40,23 +44,24 @@ export default function KnowledgeDenseTable() {
   );
 
   const stats = useMemo(() => {
-    const total = MOCK_KNOWLEDGE_PATTERNS.length;
-    const avgConfidence = MOCK_KNOWLEDGE_PATTERNS.reduce((sum, pattern) => sum + pattern.confidence, 0) / total;
-    const totalSuccess = MOCK_KNOWLEDGE_PATTERNS.reduce((sum, pattern) => sum + pattern.successCount, 0);
-    const totalFailure = MOCK_KNOWLEDGE_PATTERNS.reduce((sum, pattern) => sum + pattern.failureCount, 0);
-    const avgCost = MOCK_KNOWLEDGE_PATTERNS.reduce((sum, pattern) => sum + pattern.avgCostUsd, 0) / total;
+    const total = allPatterns.length;
+    const safeTotal = Math.max(1, total);
+    const avgConfidence = allPatterns.reduce((sum, pattern) => sum + pattern.confidence, 0) / safeTotal;
+    const totalSuccess = allPatterns.reduce((sum, pattern) => sum + pattern.successCount, 0);
+    const totalFailure = allPatterns.reduce((sum, pattern) => sum + pattern.failureCount, 0);
+    const avgCost = allPatterns.reduce((sum, pattern) => sum + pattern.avgCostUsd, 0) / safeTotal;
     return { total, avgConfidence, totalSuccess, totalFailure, avgCost };
-  }, []);
+  }, [allPatterns]);
 
   const sortedPatterns = useMemo(() => {
     const patterns = typeFilters.size > 0
-      ? MOCK_KNOWLEDGE_PATTERNS.filter((pattern) => typeFilters.has(pattern.knowledgeType))
-      : [...MOCK_KNOWLEDGE_PATTERNS];
+      ? allPatterns.filter((pattern) => typeFilters.has(pattern.knowledgeType))
+      : [...allPatterns];
     const direction = sortDir === "asc" ? 1 : -1;
 
     patterns.sort((a, b) => direction * compareKnowledgePatterns(a, b, sortField));
     return patterns;
-  }, [sortField, sortDir, typeFilters]);
+  }, [allPatterns, sortField, sortDir, typeFilters]);
 
   const handleSelect = (pattern: KnowledgePattern) => {
     setSelectedPattern((prev) => (prev?.id === pattern.id ? null : pattern));

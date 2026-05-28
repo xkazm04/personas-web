@@ -3,7 +3,7 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { AnimatePresence, motion } from "framer-motion";
 import { fadeUp, staggerContainer } from "@/lib/animations";
-import { MOCK_KNOWLEDGE_PATTERNS, type KnowledgePattern } from "@/lib/mock-dashboard-data";
+import { type KnowledgePattern } from "@/lib/mock-dashboard-data";
 import { KnowledgeClusterDetailPanel } from "./knowledge-cluster-graph/KnowledgeClusterDetailPanel";
 import { KnowledgeClusterLabels } from "./knowledge-cluster-graph/KnowledgeClusterLabels";
 import { KnowledgeClusterLegends } from "./knowledge-cluster-graph/KnowledgeClusterLegends";
@@ -12,7 +12,11 @@ import { KnowledgeClusterTopBar } from "./knowledge-cluster-graph/KnowledgeClust
 import type { KnowledgeType } from "./knowledge-cluster-graph/knowledgeClusterConfig";
 import { computeKnowledgeEdges, computeKnowledgeNodePositions } from "./knowledge-cluster-graph/knowledgeClusterLayout";
 
-export default function KnowledgeClusterGraph() {
+export default function KnowledgeClusterGraph({
+  patterns,
+}: {
+  patterns: KnowledgePattern[];
+}) {
   const containerRef = useRef<HTMLDivElement>(null);
   const [dimensions, setDimensions] = useState({ width: 800, height: 500 });
   const [selectedPattern, setSelectedPattern] = useState<KnowledgePattern | null>(null);
@@ -31,9 +35,9 @@ export default function KnowledgeClusterGraph() {
   }, []);
 
   const filteredPatterns = useMemo(() => {
-    if (activeFilter === "all") return MOCK_KNOWLEDGE_PATTERNS;
-    return MOCK_KNOWLEDGE_PATTERNS.filter((pattern) => pattern.knowledgeType === activeFilter);
-  }, [activeFilter]);
+    if (activeFilter === "all") return patterns;
+    return patterns.filter((pattern) => pattern.knowledgeType === activeFilter);
+  }, [activeFilter, patterns]);
 
   const nodePositions = useMemo(
     () => computeKnowledgeNodePositions(filteredPatterns, dimensions.width, dimensions.height),
@@ -45,12 +49,12 @@ export default function KnowledgeClusterGraph() {
     return new Set(filteredPatterns.filter((pattern) => pattern.personaName === hoveredPattern.personaName).map((pattern) => pattern.id));
   }, [hoveredPattern, filteredPatterns]);
   const stats = useMemo(() => {
-    const total = MOCK_KNOWLEDGE_PATTERNS.length;
-    const avgConfidence = MOCK_KNOWLEDGE_PATTERNS.reduce((sum, pattern) => sum + pattern.confidence, 0) / total;
-    const personas = new Set(MOCK_KNOWLEDGE_PATTERNS.map((pattern) => pattern.personaName)).size;
-    const types = new Set(MOCK_KNOWLEDGE_PATTERNS.map((pattern) => pattern.knowledgeType)).size;
+    const total = patterns.length;
+    const avgConfidence = patterns.reduce((sum, pattern) => sum + pattern.confidence, 0) / Math.max(1, total);
+    const personas = new Set(patterns.map((pattern) => pattern.personaName)).size;
+    const types = new Set(patterns.map((pattern) => pattern.knowledgeType)).size;
     return { total, avgConfidence, personas, types };
-  }, []);
+  }, [patterns]);
 
   const handleSelect = useCallback((pattern: KnowledgePattern) => {
     setSelectedPattern((prev) => (prev?.id === pattern.id ? null : pattern));
