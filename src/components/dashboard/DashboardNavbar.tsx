@@ -1,7 +1,7 @@
 "use client";
 
 import { motion } from "framer-motion";
-import { LogOut, ChevronRight, FlaskConical, Loader2 } from "lucide-react";
+import { LogOut, ChevronRight, FlaskConical, Loader2, LogIn } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
 import GradientText from "@/components/GradientText";
@@ -12,8 +12,10 @@ export default function DashboardNavbar() {
   const { t } = useTranslation();
   const user = useAuthStore((s) => s.user);
   const signOut = useAuthStore((s) => s.signOut);
+  const signInWithGoogle = useAuthStore((s) => s.signInWithGoogle);
   const isDemo = useAuthStore((s) => s.isDemo);
   const isSigningOut = useAuthStore((s) => s.isSigningOut);
+  const isSigningIn = useAuthStore((s) => s.isSigningIn);
 
   const avatarUrl = user?.user_metadata?.avatar_url;
   const displayName =
@@ -53,27 +55,46 @@ export default function DashboardNavbar() {
           )}
         </div>
 
-        {/* Right: User + sign-out */}
+        {/* Right: identity + auth controls (available on every dashboard page) */}
         <div className="flex items-center gap-3">
-          <div className="flex items-center gap-2.5">
-            {avatarUrl ? (
-              <Image
-                src={avatarUrl}
-                alt=""
-                width={28}
-                height={28}
-                unoptimized
-                className="h-7 w-7 rounded-full border border-glass-hover object-cover"
-              />
-            ) : (
-              <div className="flex h-7 w-7 items-center justify-center rounded-full border border-glass-hover bg-brand-cyan/10 text-sm font-medium text-brand-cyan">
-                {displayName.charAt(0).toUpperCase()}
-              </div>
-            )}
-            <span className="hidden text-base text-muted sm:inline">
-              {displayName}
-            </span>
-          </div>
+          {/* Real account: show the signed-in identity. */}
+          {!isDemo && (
+            <div className="flex items-center gap-2.5">
+              {avatarUrl ? (
+                <Image
+                  src={avatarUrl}
+                  alt=""
+                  width={28}
+                  height={28}
+                  unoptimized
+                  className="h-7 w-7 rounded-full border border-glass-hover object-cover"
+                />
+              ) : (
+                <div className="flex h-7 w-7 items-center justify-center rounded-full border border-glass-hover bg-brand-cyan/10 text-sm font-medium text-brand-cyan">
+                  {displayName.charAt(0).toUpperCase()}
+                </div>
+              )}
+              <span className="hidden text-base text-muted sm:inline">
+                {displayName}
+              </span>
+            </div>
+          )}
+
+          {/* Demo: offer a one-click upgrade to a real account from any page. */}
+          {isDemo && (
+            <button
+              onClick={signInWithGoogle}
+              disabled={isSigningIn}
+              className="flex min-h-[44px] items-center justify-center gap-1.5 rounded-full border border-brand-cyan/25 bg-brand-cyan/8 px-3 py-1.5 text-sm font-medium text-brand-cyan transition-all duration-200 hover:border-brand-cyan/40 hover:bg-brand-cyan/15 disabled:opacity-60 disabled:pointer-events-none"
+            >
+              {isSigningIn ? (
+                <Loader2 className="h-4 w-4 animate-spin sm:h-3 sm:w-3" />
+              ) : (
+                <LogIn className="h-4 w-4 sm:h-3 sm:w-3" />
+              )}
+              <span>{isSigningIn ? t.dashboardUi.signingIn : t.common.signIn}</span>
+            </button>
+          )}
 
           <button
             onClick={signOut}

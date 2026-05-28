@@ -6,9 +6,13 @@ import { fadeUp, staggerContainer } from "@/lib/animations";
 import GradientText from "@/components/GradientText";
 import AuthLayout from "@/components/dashboard/AuthLayout";
 import { useAuthStore } from "@/stores/authStore";
-import { DEMO_ENABLED, DEVELOPMENT } from "@/lib/dev";
 import { useTranslation } from "@/i18n/useTranslation";
 
+/**
+ * Unauthenticated gate for `/dashboard/*`. Offers both paths in every
+ * environment: sign in to a real account (Supabase Google OAuth) or explore an
+ * in-memory demo. Demo is always available and never auto-entered.
+ */
 export default function SignInPrompt() {
   const { t } = useTranslation();
   const signInWithGoogle = useAuthStore((s) => s.signInWithGoogle);
@@ -24,17 +28,6 @@ export default function SignInPrompt() {
         variants={staggerContainer}
         className="relative z-10 mx-auto w-full max-w-md px-6"
       >
-        {/* Dev mode banner */}
-        {DEVELOPMENT && (
-          <motion.div
-            variants={fadeUp}
-            className="mb-4 flex items-center justify-center gap-2 rounded-xl border border-amber-500/20 bg-amber-500/5 px-4 py-2.5 text-sm text-amber-400"
-          >
-            <FlaskConical className="h-3.5 w-3.5" />
-            <span>{t.dashboardUi.devModeMock}</span>
-          </motion.div>
-        )}
-
         {/* Card */}
         <motion.div
           variants={fadeUp}
@@ -58,9 +51,7 @@ export default function SignInPrompt() {
             </h1>
 
             <p className="mt-3 text-base text-muted-dark leading-relaxed">
-              {DEVELOPMENT
-                ? t.dashboardUi.devSignInDesc
-                : t.dashboardUi.prodSignInDesc}
+              {t.dashboardUi.prodSignInDesc}
             </p>
 
             {/* Sign-In failure banner */}
@@ -80,25 +71,20 @@ export default function SignInPrompt() {
               </div>
             )}
 
-            {/* Sign-In Button */}
+            {/* Real auth — Google OAuth */}
             <button
               onClick={signInWithGoogle}
               disabled={isSigningIn}
               className="group relative mt-8 flex w-full items-center justify-center gap-3 overflow-hidden rounded-full border border-brand-cyan/25 bg-brand-cyan/8 px-6 py-3.5 text-base font-semibold text-brand-cyan transition-all duration-300 hover:border-brand-cyan/40 hover:bg-brand-cyan/15 hover:shadow-[0_0_30px_rgba(6,182,212,0.15)] disabled:opacity-60 disabled:pointer-events-none"
             >
-              <div className="absolute inset-0 bg-gradient-to-r from-transparent via-brand-cyan/10 to-transparent 
+              <div className="absolute inset-0 bg-gradient-to-r from-transparent via-brand-cyan/10 to-transparent
                 motion-safe:-translate-x-full motion-safe:transition-transform motion-safe:duration-700 motion-safe:group-hover:translate-x-full
-                motion-reduce:opacity-0 motion-reduce:group-hover:opacity-100 motion-reduce:transition-opacity motion-reduce:duration-300" 
+                motion-reduce:opacity-0 motion-reduce:group-hover:opacity-100 motion-reduce:transition-opacity motion-reduce:duration-300"
               />
               {isSigningIn ? (
                 <>
                   <Loader2 className="relative h-5 w-5 animate-spin" />
                   <span className="relative">{t.dashboardUi.signingIn}</span>
-                </>
-              ) : DEVELOPMENT ? (
-                <>
-                  <FlaskConical className="relative h-5 w-5" />
-                  <span className="relative">{t.dashboardUi.enterDemoDashboard}</span>
                 </>
               ) : (
                 <>
@@ -128,20 +114,18 @@ export default function SignInPrompt() {
               )}
             </button>
 
-            {!DEVELOPMENT && DEMO_ENABLED && (
-              <button
-                onClick={signInAsDemo}
-                className="group relative mt-3 flex w-full items-center justify-center gap-2 overflow-hidden rounded-full border border-glass-hover bg-white/[0.03] px-6 py-3 text-base font-medium text-muted-dark transition-all duration-300 hover:border-glass-strong hover:bg-white/[0.06] hover:text-foreground/80"
-              >
-                <FlaskConical className="relative h-4 w-4" />
-                <span className="relative">{t.dashboardUi.tryDemo}</span>
-              </button>
-            )}
+            {/* Demo — always available, explicit choice */}
+            <button
+              onClick={signInAsDemo}
+              disabled={isSigningIn}
+              className="group relative mt-3 flex w-full items-center justify-center gap-2 overflow-hidden rounded-full border border-glass-hover bg-white/[0.03] px-6 py-3 text-base font-medium text-muted-dark transition-all duration-300 hover:border-glass-strong hover:bg-white/[0.06] hover:text-foreground/80 disabled:opacity-60 disabled:pointer-events-none"
+            >
+              <FlaskConical className="relative h-4 w-4" />
+              <span className="relative">{t.dashboardUi.tryDemo}</span>
+            </button>
 
             <p className="mt-4 text-sm text-muted-dark/60">
-              {DEVELOPMENT
-                ? t.dashboardUi.devNoAuth
-                : t.dashboardUi.securedBySupabase}
+              {t.dashboardUi.securedBySupabase}
             </p>
           </div>
         </motion.div>

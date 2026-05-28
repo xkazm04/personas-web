@@ -3,7 +3,6 @@
 import { useEffect, useState } from "react";
 import * as Sentry from "@sentry/nextjs";
 
-import { DEVELOPMENT } from "@/lib/dev";
 import { useAuthStore } from "@/stores/authStore";
 import { api } from "@/lib/api";
 import {
@@ -111,7 +110,7 @@ export interface KnowledgeData {
  */
 export function useKnowledgeData(): KnowledgeData {
   const isDemo = useAuthStore((s) => s.isDemo);
-  const useMock = DEVELOPMENT || isDemo;
+  const useMock = isDemo;
 
   const [patterns, setPatterns] = useState<KnowledgePattern[]>(
     useMock ? MOCK_KNOWLEDGE_PATTERNS : [],

@@ -1,6 +1,5 @@
 import * as Sentry from "@sentry/nextjs";
 import { useAuthStore } from "@/stores/authStore";
-import { DEVELOPMENT } from "./dev";
 import { mockApi } from "./mockApi";
 import { supabaseApi } from "./supabaseApi";
 import {
@@ -354,13 +353,13 @@ const realApi: ApiClient = {
 const USE_SUPABASE = process.env.NEXT_PUBLIC_DATA_SOURCE === "supabase";
 
 /**
- * Dynamic API dispatch: uses mockApi when DEVELOPMENT is true OR when the user
- * entered via the "Try Demo" button (isDemo flag in auth store); otherwise the
- * Supabase mirror or the orchestrator depending on NEXT_PUBLIC_DATA_SOURCE.
+ * Dynamic API dispatch: uses mockApi when the user entered via the "Try Demo"
+ * button (isDemo flag in auth store); otherwise the Supabase mirror or the
+ * orchestrator depending on NEXT_PUBLIC_DATA_SOURCE. Behaviour is identical in
+ * every environment — demo is always an explicit user choice, never auto-on.
  */
 export const api: ApiClient = new Proxy({} as ApiClient, {
   get(_target, prop: string | symbol) {
-    if (DEVELOPMENT) return mockApi[prop as keyof ApiClient];
     const { isDemo } = useAuthStore.getState();
     if (isDemo) return mockApi[prop as keyof ApiClient];
     const impl = USE_SUPABASE ? supabaseApi : realApi;

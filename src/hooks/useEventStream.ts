@@ -1,7 +1,6 @@
 "use client";
 
 import { useEffect, useRef } from "react";
-import { DEVELOPMENT } from "@/lib/dev";
 import { useAuthStore } from "@/stores/authStore";
 import { useEventStore } from "@/stores/eventStore";
 import type { PersonaEvent } from "@/lib/types";
@@ -36,7 +35,7 @@ export function useEventStream() {
 
   useEffect(() => {
     // In dev/demo mode, SSE endpoint doesn't exist — fall back to polling
-    if (DEVELOPMENT || isDemo) {
+    if (isDemo) {
       setStatusRef.current("polling");
       let pollTimer: ReturnType<typeof setTimeout> | null = null;
       let disposed = false;

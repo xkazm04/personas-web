@@ -1,7 +1,6 @@
 import { create } from "zustand";
 import { getSupabase } from "@/lib/supabase";
-import { DEMO_ENABLED, DEVELOPMENT } from "@/lib/dev";
-import { mockInitialize, mockSignIn, mockSignOut } from "@/lib/mockAuth";
+import { mockSignIn, mockSignOut } from "@/lib/mockAuth";
 import { clearUserScopedCaches } from "@/lib/clearUserCaches";
 import type { User } from "@supabase/supabase-js";
 
@@ -79,20 +78,23 @@ export const useAuthStore = create<AuthState>((set, get) => ({
     if (get().initialized) return authSubscriptionCleanup ?? undefined;
     set({ initialized: true, error: null });
 
-    if (DEVELOPMENT) {
-      mockInitialize(set);
-      return;
+    // A demo session (isDemo) is a deliberate, in-memory choice — never
+    // re-run real auth over it (that would clobber the mock session on a
+    // remount). Real auth runs in every environment otherwise.
+    if (get().isDemo) {
+      set({ isLoading: false });
+      return authSubscriptionCleanup ?? undefined;
     }
 
     let supabase;
     try {
       supabase = getSupabase();
     } catch {
-      // Supabase not configured — stay in unauthenticated state
-      set({
-        error: "Authentication is not configured for this environment.",
-        isLoading: false,
-      });
+      // Supabase not configured for this environment. Don't hard-error into the
+      // session-error screen — fall through to the unauthenticated gate so the
+      // user can still explore the demo (and a Google click surfaces a friendly
+      // inline signInError). Keeps the "demo is always available" guarantee.
+      set({ isLoading: false });
       return;
     }
 
@@ -177,10 +179,8 @@ export const useAuthStore = create<AuthState>((set, get) => ({
   },
 
   signInAsDemo: () => {
-    // Defense-in-depth: even if the button leaks past its render gate
-    // (stale CDN HTML, page-script tampering), refuse to mint a fake session
-    // when demo is not explicitly enabled for this deploy.
-    if (!DEMO_ENABLED) return;
+    // Explicit, user-initiated demo entry — available in every environment.
+    // Mints an in-memory mock session; no real account is touched.
     mockSignIn(set);
     set({ isDemo: true });
   },
@@ -195,11 +195,6 @@ export const useAuthStore = create<AuthState>((set, get) => ({
   },
 
   signInWithGoogle: async () => {
-    if (DEVELOPMENT) {
-      mockSignIn(set);
-      return;
-    }
-
     set({ isSigningIn: true, signInError: null });
     try {
       const supabase = getSupabase();
@@ -236,7 +231,7 @@ export const useAuthStore = create<AuthState>((set, get) => ({
         authSubscriptionCleanup();
       }
 
-      if (DEVELOPMENT || get().isDemo) {
+      if (get().isDemo) {
         mockSignOut(set);
         set({ isDemo: false, isSigningOut: false });
         return;

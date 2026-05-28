@@ -3,7 +3,6 @@
 import { useEffect, useState } from "react";
 import * as Sentry from "@sentry/nextjs";
 
-import { DEVELOPMENT } from "@/lib/dev";
 import { useAuthStore } from "@/stores/authStore";
 import { getSyncedMessageThreads } from "@/lib/supabaseApi";
 import { MOCK_MESSAGE_THREADS, type MessageThread } from "@/lib/mock-dashboard-data";
@@ -22,7 +21,7 @@ export interface MessagesData {
  */
 export function useMessagesData(): MessagesData {
   const isDemo = useAuthStore((s) => s.isDemo);
-  const useMock = DEVELOPMENT || isDemo;
+  const useMock = isDemo;
 
   const [threads, setThreads] = useState<MessageThread[]>(
     useMock ? MOCK_MESSAGE_THREADS : [],

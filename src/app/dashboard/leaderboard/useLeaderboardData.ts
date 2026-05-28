@@ -3,7 +3,6 @@
 import { useEffect, useState } from "react";
 import * as Sentry from "@sentry/nextjs";
 
-import { DEVELOPMENT } from "@/lib/dev";
 import { useAuthStore } from "@/stores/authStore";
 import { getSyncedLeaderboard } from "@/lib/supabaseApi";
 import {
@@ -24,7 +23,7 @@ export interface LeaderboardData {
  */
 export function useLeaderboardData(): LeaderboardData {
   const isDemo = useAuthStore((s) => s.isDemo);
-  const useMock = DEVELOPMENT || isDemo;
+  const useMock = isDemo;
 
   const [personas, setPersonas] = useState<LeaderboardPersona[]>(
     useMock ? MOCK_LEADERBOARD : [],
