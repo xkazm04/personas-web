@@ -22,6 +22,32 @@ The title-bar notification bell is a one-click shortcut from anywhere in the app
 :::
   `,
 
+  "the-director": `
+## The Director — Automatic Agent Coaching
+
+The **Director** is a built-in meta-agent that watches your other agents and coaches them toward being genuinely useful. Instead of you reading every run, the Director reviews them for you and leaves a verdict.
+
+You choose what it watches by **starring** agents (the ⭐ on each row of All Agents). A starred agent is "in the Director's scope" — the Director reviews it; unstarred agents are left alone. The Director itself is a system agent and can't be deleted.
+
+### What a verdict looks like
+
+Every review produces an overall **0–5 score** plus optional coaching notes:
+
+- The **Verdict** column in the Activity list shows the score as stars, right next to the agent — a glance tells you which runs earned their cost.
+- The **Director** tab on any run opens the full assessment in readable markdown: the score, a one-line summary, and specific suggestions (a prompt tweak, a guardrail, a model-tier change, a missing tool).
+- Actionable notes also land in your review queue, where approving or rejecting them teaches the Director your taste over time.
+
+A healthy agent scores high with little or no coaching — the Director stays quiet when there's nothing to improve.
+
+### Long-term memory (optional)
+
+If you use the **Obsidian Brain**, you can switch on the Director's long-term memory. It then reads its own past notes about an agent before each review (so advice compounds instead of repeating) and writes each new verdict back into a \`Director/\` folder in your vault — a durable, human-readable coaching history.
+
+### Why It Matters
+
+Raw counts (runs, cost, success rate) tell you *what* happened, not *whether it was worth it*. The Director adds the missing judgment layer — an honest, evidence-based read on each agent's value and efficiency — so a fleet of agents stays useful without you auditing every run by hand.
+  `,
+
   "execution-logs": `
 ## Execution Logs
 
