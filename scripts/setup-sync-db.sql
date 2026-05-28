@@ -396,3 +396,29 @@ group by e.user_id, e.persona_id, p.name, p.color;
 grant select on public.synced_observability_daily to authenticated;
 grant select on public.synced_persona_spend to authenticated;
 grant select on public.synced_leaderboard to authenticated;
+
+-- =====================================================================
+-- Realtime — publish row changes on the busiest synced tables so the web
+-- dashboard can subscribe live (useSyncedRealtime) instead of polling.
+-- RLS still applies on the Realtime socket: each user only receives changes
+-- to their own rows. Idempotent — only adds a table not already published.
+-- =====================================================================
+do $$
+declare
+  t text;
+  tables text[] := array[
+    'synced_personas','synced_executions','synced_events',
+    'synced_manual_reviews','synced_devices'
+  ];
+begin
+  foreach t in array tables loop
+    if not exists (
+      select 1 from pg_publication_tables
+      where pubname = 'supabase_realtime'
+        and schemaname = 'public'
+        and tablename = t
+    ) then
+      execute format('alter publication supabase_realtime add table public.%I', t);
+    end if;
+  end loop;
+end $$;

@@ -7,6 +7,7 @@ import DashboardScopeBar from "@/components/dashboard/DashboardScopeBar";
 import AuthGuard from "@/components/dashboard/AuthGuard";
 import DashboardErrorBoundary from "@/components/dashboard/DashboardErrorBoundary";
 import AuthProvider from "@/components/AuthProvider";
+import SyncedRealtimeProvider from "@/components/dashboard/SyncedRealtimeProvider";
 import TourOverlay from "@/components/tour/TourOverlay";
 import { TourProvider } from "@/contexts/TourContext";
 
@@ -39,6 +40,8 @@ export default function DashboardLayout({
         {/* TourProvider lives here (not on a page) so the guided dashboard tour
             keeps its state and narration across tab navigation. */}
         <TourProvider>
+          {/* Live dashboard updates from the desktop sync writer (supabase mode). */}
+          <SyncedRealtimeProvider />
           <div className="flex min-h-screen flex-col bg-[var(--background)] relative z-0">
             <DashboardNavbar />
             <div className="flex flex-1">
