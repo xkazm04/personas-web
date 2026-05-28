@@ -25,6 +25,7 @@
     "check:i18n-coverage": "node scripts/check-i18n-coverage.mjs",
     "report:i18n-hardcoded": "node scripts/report-hardcoded-ui-strings.mjs",
     "db:migrate": "node scripts/run-voting-migration.mjs",
+    "db:migrate:sync": "node scripts/run-sync-migration.mjs",
     "prepare": "node scripts/install-git-hooks.mjs"
   },
   "dependencies": {
