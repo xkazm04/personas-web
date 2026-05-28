@@ -172,6 +172,9 @@ interface EventRow {
   source_type: string;
   source_id: string | null;
   target_persona_id: string | null;
+  // Sanitized event body synced by the desktop (v2): decrypted locally,
+  // secret-scrubbed, size-bounded. Null when omitted or not structured JSON.
+  payload: string | null;
   status: string;
   error_message: string | null;
   processed_at: string | null;
@@ -186,7 +189,7 @@ function mapEvent(r: EventRow): PersonaEvent {
     sourceType: r.source_type,
     sourceId: r.source_id,
     targetPersonaId: r.target_persona_id,
-    payload: null,
+    payload: r.payload ?? null,
     status: r.status as EventStatus,
     errorMessage: r.error_message,
     processedAt: r.processed_at,
@@ -674,7 +677,7 @@ const FALLBACK_PERSONA_COLOR = "#888888";
 //   - cost:        inverse of relative spend-per-execution (cheaper → higher).
 //   - speed:       inverse of relative avg duration (faster → higher).
 //   - quality:     PROXY — no explicit quality metric is synced, so we reuse a
-//                  blend of success rate and (1 − retry rate). Documented proxy.
+//                  blend of success rate and (1 - retry rate). Documented proxy.
 //   - volume:      relative execution count vs the busiest persona.
 // composite is the mean of the five axes; rank/trend/delta derived from it.
 // ---------------------------------------------------------------------------
