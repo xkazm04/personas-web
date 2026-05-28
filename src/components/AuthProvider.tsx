@@ -9,7 +9,8 @@ import AuthToast from "@/components/AuthToast";
 export default function AuthProvider({ children }: { children: React.ReactNode }) {
   const initialize = useAuthStore((s) => s.initialize);
   const pathname = usePathname();
-  const shouldInitializeAuth = pathname.startsWith("/dashboard");
+  const shouldInitializeAuth =
+    pathname.startsWith("/dashboard") || pathname.startsWith("/m");
 
   useEffect(() => {
     if (!shouldInitializeAuth) return;
