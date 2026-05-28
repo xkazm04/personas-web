@@ -7,8 +7,9 @@ import type { TourStep } from "@/lib/tour-script";
 const INTER_STEP_PAUSE_MS = 2000;
 /** Pause after the intro pop-up appears before Athena starts speaking. Kept
  *  generous so the homepage greeting doesn't autoplay the instant the tour
- *  starts — it should feel like a beat, not a jump-scare. */
-const INTRO_START_DELAY_MS = 4000;
+ *  starts — it should feel like a beat, not a jump-scare. The avatar countdown
+ *  (AvatarCountdown) is driven by this same value so the two stay in sync. */
+export const INTRO_START_DELAY_MS = 4000;
 
 interface UseTourAudioArgs {
   active: boolean;
