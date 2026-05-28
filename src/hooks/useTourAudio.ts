@@ -5,8 +5,10 @@ import type { TourStep } from "@/lib/tour-script";
 
 /** Quiet beat between a step's clip ending and the next step starting. */
 const INTER_STEP_PAUSE_MS = 2000;
-/** Pause after the intro pop-up appears before Athena starts speaking. */
-const INTRO_START_DELAY_MS = 2000;
+/** Pause after the intro pop-up appears before Athena starts speaking. Kept
+ *  generous so the homepage greeting doesn't autoplay the instant the tour
+ *  starts — it should feel like a beat, not a jump-scare. */
+const INTRO_START_DELAY_MS = 4000;
 
 interface UseTourAudioArgs {
   active: boolean;

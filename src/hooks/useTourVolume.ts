@@ -3,7 +3,9 @@
 import { useCallback, useState } from "react";
 
 const VOLUME_KEY = "personas-tour-volume";
-const DEFAULT_VOLUME = 0.5;
+// Narration plays quiet by default (half of the previous 0.5) — the autoplay
+// greeting was too loud out of the gate. Users can raise it via the slider.
+const DEFAULT_VOLUME = 0.25;
 
 function readInitialVolume(): number {
   if (typeof window === "undefined") return DEFAULT_VOLUME;
