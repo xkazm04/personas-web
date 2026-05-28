@@ -209,6 +209,48 @@ create table if not exists public.synced_tool_usage (
 create index if not exists idx_synced_tool_usage_user on public.synced_tool_usage (user_id, created_at desc);
 create index if not exists idx_synced_tool_usage_user_tool on public.synced_tool_usage (user_id, tool_name);
 
+-- ── persona memories (knowledge module) ──────────────────────────────
+create table if not exists public.synced_memories (
+  id                   text primary key,
+  user_id              uuid not null default auth.uid() references auth.users(id) on delete cascade,
+  device_id            text,
+  persona_id           text not null,
+  title                text not null,
+  content              text not null,
+  category             text,
+  source_execution_id  text,
+  importance           integer,
+  tags                 text,
+  created_at           timestamptz not null default now(),
+  updated_at           timestamptz not null default now(),
+  synced_at            timestamptz not null default now()
+);
+create index if not exists idx_synced_memories_user_persona on public.synced_memories (user_id, persona_id);
+create index if not exists idx_synced_memories_user_updated on public.synced_memories (user_id, updated_at desc);
+
+-- ── learned execution patterns (knowledge clusters) ──────────────────
+create table if not exists public.synced_knowledge_patterns (
+  id                 text primary key,
+  user_id            uuid not null default auth.uid() references auth.users(id) on delete cascade,
+  device_id          text,
+  persona_id         text not null,
+  use_case_id        text,
+  knowledge_type     text not null,
+  pattern_key        text not null,
+  pattern_data       text not null default '{}',
+  success_count      integer not null default 0,
+  failure_count      integer not null default 0,
+  avg_cost_usd       numeric not null default 0,
+  avg_duration_ms    numeric not null default 0,
+  confidence         numeric not null default 0,
+  last_execution_id  text,
+  created_at         timestamptz not null default now(),
+  updated_at         timestamptz not null default now(),
+  synced_at          timestamptz not null default now()
+);
+create index if not exists idx_synced_knowledge_user_persona on public.synced_knowledge_patterns (user_id, persona_id);
+create index if not exists idx_synced_knowledge_user_type on public.synced_knowledge_patterns (user_id, knowledge_type);
+
 -- =====================================================================
 -- PHASE 2 — approval-gated remote operations (scaffold; not wired yet)
 -- ---------------------------------------------------------------------
@@ -251,6 +293,8 @@ alter table public.synced_manual_reviews     enable row level security;
 alter table public.synced_messages           enable row level security;
 alter table public.synced_metrics_snapshots  enable row level security;
 alter table public.synced_tool_usage         enable row level security;
+alter table public.synced_memories           enable row level security;
+alter table public.synced_knowledge_patterns enable row level security;
 alter table public.pending_commands          enable row level security;
 
 -- One owner-only policy per table covering all verbs. Re-runnable.
@@ -260,7 +304,7 @@ declare
   tables text[] := array[
     'synced_devices','synced_personas','synced_executions','synced_events',
     'synced_manual_reviews','synced_messages','synced_metrics_snapshots',
-    'synced_tool_usage','pending_commands'
+    'synced_tool_usage','synced_memories','synced_knowledge_patterns','pending_commands'
   ];
 begin
   foreach t in array tables loop
@@ -280,7 +324,7 @@ declare
   tables text[] := array[
     'synced_devices','synced_personas','synced_executions','synced_events',
     'synced_manual_reviews','synced_messages','synced_metrics_snapshots',
-    'synced_tool_usage','pending_commands'
+    'synced_tool_usage','synced_memories','synced_knowledge_patterns','pending_commands'
   ];
 begin
   foreach t in array tables loop

@@ -543,3 +543,106 @@ export const supabaseApi: ApiClient = {
     return { toolUsage, toolUsageOverTime, toolUsageByPersona };
   },
 };
+
+// ---------------------------------------------------------------------------
+// Knowledge reads — standalone (not part of ApiClient). The desktop syncs
+// persona memories + learned execution patterns into these tables; the
+// knowledge dashboard module consumes these once its page is wired off mocks.
+// ---------------------------------------------------------------------------
+
+export interface SyncedMemory {
+  id: string;
+  personaId: string;
+  title: string;
+  content: string;
+  category: string | null;
+  sourceExecutionId: string | null;
+  importance: number | null;
+  tags: string | null;
+  createdAt: string;
+  updatedAt: string;
+}
+
+export interface SyncedKnowledgePattern {
+  id: string;
+  personaId: string;
+  useCaseId: string | null;
+  knowledgeType: string;
+  patternKey: string;
+  patternData: string;
+  successCount: number;
+  failureCount: number;
+  avgCostUsd: number;
+  avgDurationMs: number;
+  confidence: number;
+  lastExecutionId: string | null;
+  createdAt: string;
+  updatedAt: string;
+}
+
+export const getSyncedMemories = async (): Promise<SyncedMemory[]> => {
+  const r = await rows<{
+    id: string;
+    persona_id: string;
+    title: string;
+    content: string;
+    category: string | null;
+    source_execution_id: string | null;
+    importance: number | null;
+    tags: string | null;
+    created_at: string;
+    updated_at: string;
+  }>(getSupabase().from("synced_memories").select("*").order("updated_at", { ascending: false }));
+  return r.map((m) => ({
+    id: m.id,
+    personaId: m.persona_id,
+    title: m.title,
+    content: m.content,
+    category: m.category,
+    sourceExecutionId: m.source_execution_id,
+    importance: m.importance,
+    tags: m.tags,
+    createdAt: m.created_at,
+    updatedAt: m.updated_at,
+  }));
+};
+
+export const getSyncedKnowledgePatterns = async (): Promise<SyncedKnowledgePattern[]> => {
+  const r = await rows<{
+    id: string;
+    persona_id: string;
+    use_case_id: string | null;
+    knowledge_type: string;
+    pattern_key: string;
+    pattern_data: string;
+    success_count: number;
+    failure_count: number;
+    avg_cost_usd: number;
+    avg_duration_ms: number;
+    confidence: number;
+    last_execution_id: string | null;
+    created_at: string;
+    updated_at: string;
+  }>(
+    getSupabase()
+      .from("synced_knowledge_patterns")
+      .select("*")
+      .order("confidence", { ascending: false }),
+  );
+  return r.map((k) => ({
+    id: k.id,
+    personaId: k.persona_id,
+    useCaseId: k.use_case_id,
+    knowledgeType: k.knowledge_type,
+    patternKey: k.pattern_key,
+    patternData: k.pattern_data,
+    successCount: k.success_count,
+    failureCount: k.failure_count,
+    avgCostUsd: k.avg_cost_usd,
+    avgDurationMs: k.avg_duration_ms,
+    confidence: k.confidence,
+    lastExecutionId: k.last_execution_id,
+    createdAt: k.created_at,
+    updatedAt: k.updated_at,
+  }));
+};
