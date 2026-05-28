@@ -287,7 +287,43 @@ export const supabaseApi: ApiClient = {
   },
 
   cancelExecution: async () => readOnly(),
-  executePersona: async () => readOnly(),
+
+  // Phase 2: a run from the dashboard is a *request*, not a direct execution.
+  // Insert a pending_commands row targeting the most-recently-active device;
+  // the desktop surfaces an approval prompt and runs it locally on approval.
+  // Returns the command id as the handle (status "queued" = awaiting approval).
+  executePersona: async (personaId: string, prompt: string) => {
+    const sb = getSupabase();
+    const devices = await rows<{ device_id: string }>(
+      sb
+        .from("synced_devices")
+        .select("device_id")
+        .order("last_seen_at", { ascending: false, nullsFirst: false })
+        .limit(1),
+    );
+    if (devices.length === 0) {
+      throw new ApiError(
+        409,
+        "No synced device is available. Open the desktop app and turn on cloud sync to run from the dashboard.",
+      );
+    }
+    const inserted = await rows<{ id: string }>(
+      sb
+        .from("pending_commands")
+        .insert({
+          command_type: "run_persona",
+          persona_id: personaId,
+          prompt,
+          target_device_id: devices[0].device_id,
+          requested_from: "web",
+          status: "pending",
+        })
+        .select("id"),
+    );
+    const id = inserted[0]?.id;
+    if (!id) throw new ApiError(500, "Failed to queue the run request.");
+    return { executionId: id, status: "queued" as PersonaExecutionStatus };
+  },
 
   listEvents: async (opts?: { eventType?: string; status?: string; limit?: number }) => {
     // Reviews live in their own synced table, not the event bus — adapt them
