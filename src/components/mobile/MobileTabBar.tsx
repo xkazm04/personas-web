@@ -24,7 +24,7 @@ export default function MobileTabBar() {
   const pathname = usePathname();
   const reducedMotion = useReducedMotion();
   const pendingReviews = useReviewStore((s) => s.pendingReviewCount);
-  const tapProps = reducedMotion ? undefined : { whileTap: { scale: 0.94 } };
+  const tapProps = reducedMotion ? undefined : { whileTap: { scale: 0.92 } };
 
   const tabs: Tab[] = [
     {
@@ -51,8 +51,8 @@ export default function MobileTabBar() {
   ];
 
   return (
-    <nav className="fixed inset-x-0 bottom-0 z-50 border-t border-glass bg-background/95 backdrop-blur-xl safe-bottom">
-      <div className="mx-auto flex max-w-md items-stretch justify-around px-2 py-1">
+    <nav className="fixed inset-x-0 bottom-0 z-50 safe-bottom border-t border-white/[0.06] bg-background/80 backdrop-blur-xl">
+      <div className="mx-auto flex max-w-md items-stretch justify-around gap-1 px-2 pb-1 pt-1.5">
         {tabs.map((tab) => {
           // The Alerts subpage is a drill-in from Overview, so it keeps the
           // Overview tab highlighted.
@@ -69,23 +69,36 @@ export default function MobileTabBar() {
               href={tab.href}
               {...tapProps}
               aria-current={active ? "page" : undefined}
-              className={`relative flex min-h-[48px] min-w-[64px] flex-1 flex-col items-center justify-center gap-0.5 rounded-xl px-2 py-1.5 text-sm font-medium transition-colors ${
-                active ? "text-brand-cyan" : "text-muted-dark"
-              }`}
+              className="relative flex min-h-[52px] flex-1 flex-col items-center justify-center rounded-2xl px-1 py-1"
             >
-              {active && (
-                <span
+              {active && !reducedMotion && (
+                <motion.span
+                  layoutId="mobileTabActivePill"
                   aria-hidden
-                  className="absolute top-0 left-1/2 h-0.5 w-8 -translate-x-1/2 rounded-b-full bg-brand-cyan"
+                  className="absolute inset-0 rounded-2xl bg-brand-cyan/10 ring-1 ring-inset ring-brand-cyan/20"
+                  transition={{ type: "spring", stiffness: 420, damping: 34 }}
                 />
               )}
-              <Icon className="h-5 w-5" />
-              <span className="leading-none">{tab.label}</span>
-              {tab.badge !== null && (
-                <span className="absolute right-2 top-1 flex h-4 min-w-4 items-center justify-center rounded-full bg-brand-cyan/20 px-1 text-sm font-bold text-brand-cyan tabular-nums">
-                  {tab.badge}
+              <span
+                className={`relative flex flex-col items-center gap-0.5 transition-colors ${
+                  active ? "text-brand-cyan" : "text-muted-dark"
+                }`}
+              >
+                <span className="relative">
+                  <Icon
+                    className="h-[22px] w-[22px]"
+                    strokeWidth={active ? 2.4 : 2}
+                  />
+                  {tab.badge !== null && (
+                    <span className="absolute -right-2.5 -top-1.5 flex h-[17px] min-w-[17px] items-center justify-center rounded-full bg-brand-cyan px-1 text-[10px] font-bold leading-none text-background tabular-nums shadow-[0_0_0_2px_var(--background)]">
+                      {tab.badge > 9 ? "9+" : tab.badge}
+                    </span>
+                  )}
                 </span>
-              )}
+                <span className="text-[11px] font-medium leading-none">
+                  {tab.label}
+                </span>
+              </span>
             </MotionLink>
           );
         })}

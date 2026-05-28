@@ -113,15 +113,19 @@ export default function MobileMessagesPage() {
           {t.messagesPage.empty}
         </p>
       ) : (
-        <motion.div variants={fadeUp} className="space-y-2">
+        <motion.ul variants={fadeUp} className="space-y-2">
           {threads.map((thread) => (
-            <ThreadRow
+            // content-visibility lets the browser skip rendering/layout for
+            // rows scrolled off-screen; the intrinsic-size estimate keeps the
+            // scrollbar stable until a row is measured.
+            <li
               key={thread.id}
-              thread={thread}
-              onOpen={() => openThread(thread)}
-            />
+              className="[contain-intrinsic-size:auto_76px] [content-visibility:auto]"
+            >
+              <ThreadRow thread={thread} onOpen={() => openThread(thread)} />
+            </li>
           ))}
-        </motion.div>
+        </motion.ul>
       )}
 
       <ThreadDetailModal
