@@ -34,6 +34,12 @@ import type {
   PersonaExecutionStatus,
   EventStatus,
 } from "./types";
+import type {
+  LeaderboardPersona,
+  LeaderboardTrend,
+  SLATarget,
+  SLABreach,
+} from "./mock-dashboard-data";
 
 // ---------------------------------------------------------------------------
 // Helpers
@@ -645,4 +651,206 @@ export const getSyncedKnowledgePatterns = async (): Promise<SyncedKnowledgePatte
     createdAt: k.created_at,
     updatedAt: k.updated_at,
   }));
+};
+
+// ---------------------------------------------------------------------------
+// Persona name/color lookup — several of the dashboard display shapes below
+// surface a human persona name + its accent color, but the source tables only
+// carry persona_id. Resolve once per call against synced_personas.
+// ---------------------------------------------------------------------------
+
+const FALLBACK_PERSONA_COLOR = "#888888";
+
+
+// ---------------------------------------------------------------------------
+// Leaderboard — composite score + a 5-axis radar profile per persona. There is
+// no desktop-side "leaderboard" table; we read the `synced_leaderboard` view
+// (see scripts/setup-sync-db.sql) which aggregates per-persona execution stats.
+//
+// Radar axes (all 0-100, higher = better) are derived from real signals:
+//   - reliability: success rate (% of completed vs total).
+//   - cost:        inverse of relative spend-per-execution (cheaper → higher).
+//   - speed:       inverse of relative avg duration (faster → higher).
+//   - quality:     PROXY — no explicit quality metric is synced, so we reuse a
+//                  blend of success rate and (1 − retry rate). Documented proxy.
+//   - volume:      relative execution count vs the busiest persona.
+// composite is the mean of the five axes; rank/trend/delta derived from it.
+// ---------------------------------------------------------------------------
+
+interface LeaderboardViewRow {
+  persona_id: string;
+  persona_name: string | null;
+  persona_color: string | null;
+  total_executions: number;
+  successful_executions: number;
+  failed_executions: number;
+  total_retries: number;
+  total_cost_usd: number;
+  avg_duration_ms: number;
+}
+
+function clamp100(n: number): number {
+  if (!Number.isFinite(n)) return 0;
+  return Math.max(0, Math.min(100, Math.round(n)));
+}
+
+export const getSyncedLeaderboard = async (): Promise<LeaderboardPersona[]> => {
+  const r = await rows<LeaderboardViewRow>(
+    getSupabase().from("synced_leaderboard").select("*"),
+  );
+  if (r.length === 0) return [];
+
+  // Normalization baselines across the cohort: cost-per-exec and duration are
+  // scored relative to the cohort max (so the worst performer anchors 0-ish and
+  // everyone else scores higher), volume relative to the busiest persona.
+  const perExecCost = r.map((p) =>
+    p.total_executions > 0 ? p.total_cost_usd / p.total_executions : 0,
+  );
+  const maxPerExecCost = Math.max(...perExecCost, 0.0001);
+  const maxDuration = Math.max(...r.map((p) => p.avg_duration_ms || 0), 1);
+  const maxVolume = Math.max(...r.map((p) => p.total_executions || 0), 1);
+
+  const scored = r.map((p, i) => {
+    const total = p.total_executions || 0;
+    const successRate = total > 0 ? p.successful_executions / total : 0;
+    const retryRate = total > 0 ? Math.min(1, (p.total_retries || 0) / total) : 0;
+
+    const reliability = clamp100(successRate * 100);
+    // Cheaper-per-execution → closer to 100. Worst case anchors near 0.
+    const cost = clamp100((1 - perExecCost[i] / maxPerExecCost) * 100);
+    // Faster avg duration → closer to 100.
+    const speed = clamp100((1 - (p.avg_duration_ms || 0) / maxDuration) * 100);
+    // PROXY: blend success rate with the inverse retry rate (no quality metric
+    // is synced from the desktop; this approximates "got it right" quality).
+    const quality = clamp100((successRate * 0.7 + (1 - retryRate) * 0.3) * 100);
+    const volume = clamp100((total / maxVolume) * 100);
+
+    const metrics = { reliability, cost, speed, quality, volume };
+    const composite = clamp100(
+      (reliability + cost + speed + quality + volume) / 5,
+    );
+    return {
+      id: p.persona_id,
+      name: p.persona_name ?? p.persona_id,
+      color: p.persona_color ?? FALLBACK_PERSONA_COLOR,
+      metrics,
+      composite,
+    };
+  });
+
+  scored.sort((a, b) => b.composite - a.composite);
+
+  // No prior-period snapshot is available in the view, so trend/delta cannot be
+  // computed from real data yet — surface a neutral "flat / 0" rather than a
+  // fabricated movement. (PROXY: trend/delta are placeholders until a period
+  // comparison is synced.)
+  return scored.map<LeaderboardPersona>((p) => ({
+    ...p,
+    trend: "flat" as LeaderboardTrend,
+    delta: 0,
+  }));
+};
+
+// ---------------------------------------------------------------------------
+// SLA — there is no desktop-side SLA configuration, so the targets below are
+// APP-DEFINED DEFAULTS (success rate ≥ 95%, avg latency ≤ 30s). Per-persona
+// current values are computed from synced_executions; breaches are synthesized
+// for any persona currently outside its target. Documented as app defaults.
+// ---------------------------------------------------------------------------
+
+// App-defined default objectives (no desktop SLA config exists).
+const SLA_SUCCESS_RATE_TARGET = 95; // percent
+const SLA_LATENCY_TARGET_MS = 30_000; // avg duration ceiling
+
+interface SlaAggRow {
+  persona_id: string;
+  persona_name: string | null;
+  persona_color: string | null;
+  total_executions: number;
+  successful_executions: number;
+  avg_duration_ms: number;
+}
+
+export const getSyncedSla = async (): Promise<{
+  targets: SLATarget[];
+  breaches: SLABreach[];
+}> => {
+  // Reuse the leaderboard view's per-persona aggregates (success + duration).
+  const r = await rows<SlaAggRow>(
+    getSupabase()
+      .from("synced_leaderboard")
+      .select(
+        "persona_id, persona_name, persona_color, total_executions, successful_executions, avg_duration_ms",
+      ),
+  );
+
+  const targets: SLATarget[] = [];
+  const breaches: SLABreach[] = [];
+
+  for (const p of r) {
+    const total = p.total_executions || 0;
+    if (total === 0) continue;
+    const name = p.persona_name ?? p.persona_id;
+    const color = p.persona_color ?? FALLBACK_PERSONA_COLOR;
+
+    // Success-rate objective.
+    const successRate = (p.successful_executions / total) * 100;
+    const successBreach = successRate < SLA_SUCCESS_RATE_TARGET;
+    targets.push({
+      id: `sla_success_${p.persona_id}`,
+      persona: name,
+      personaColor: color,
+      metric: "successRate",
+      target: SLA_SUCCESS_RATE_TARGET,
+      current: +successRate.toFixed(1),
+      unit: "%",
+      // timeInSLA approximated by the success rate itself (fraction in range).
+      timeInSLA: Math.max(0, Math.min(1, successRate / 100)),
+      direction: "higher",
+      activeBreach: successBreach,
+    });
+    if (successBreach) {
+      breaches.push({
+        id: `br_success_${p.persona_id}`,
+        persona: name,
+        metric: "successRate",
+        startedAt: new Date().toISOString(),
+        resolvedAt: null,
+        durationMinutes: 0,
+        severity: successRate < 80 ? "critical" : "major",
+        summary: `Success rate ${successRate.toFixed(1)}% is below the ${SLA_SUCCESS_RATE_TARGET}% objective.`,
+      });
+    }
+
+    // Latency objective.
+    const avgMs = p.avg_duration_ms || 0;
+    const latencyBreach = avgMs > SLA_LATENCY_TARGET_MS;
+    targets.push({
+      id: `sla_latency_${p.persona_id}`,
+      persona: name,
+      personaColor: color,
+      metric: "latency",
+      target: SLA_LATENCY_TARGET_MS,
+      current: Math.round(avgMs),
+      unit: "ms",
+      // Fraction of the budget remaining (clamped) as a stand-in for time-in-SLA.
+      timeInSLA: Math.max(0, Math.min(1, 1 - avgMs / (SLA_LATENCY_TARGET_MS * 2))),
+      direction: "lower",
+      activeBreach: latencyBreach,
+    });
+    if (latencyBreach) {
+      breaches.push({
+        id: `br_latency_${p.persona_id}`,
+        persona: name,
+        metric: "latency",
+        startedAt: new Date().toISOString(),
+        resolvedAt: null,
+        durationMinutes: 0,
+        severity: avgMs > SLA_LATENCY_TARGET_MS * 2 ? "critical" : "major",
+        summary: `Average duration ${(avgMs / 1000).toFixed(1)}s exceeds the ${(SLA_LATENCY_TARGET_MS / 1000).toFixed(0)}s objective.`,
+      });
+    }
+  }
+
+  return { targets, breaches };
 };

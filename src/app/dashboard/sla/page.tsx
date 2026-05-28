@@ -8,26 +8,24 @@ import GradientText from "@/components/GradientText";
 import StalenessIndicator from "@/components/dashboard/StalenessIndicator";
 import { useTranslation } from "@/i18n/useTranslation";
 import { fadeUp, staggerContainer } from "@/lib/animations";
-import {
-  MOCK_SLA_BREACHES,
-  MOCK_SLA_TARGETS,
-} from "@/lib/mock-dashboard-data";
 
 import { SLABreachLog } from "./sla-page/SLABreachLog";
 import { SLASummaryGrid } from "./sla-page/SLASummaryGrid";
 import { SLATargetGrid } from "./sla-page/SLATargetGrid";
+import { useSlaData } from "./useSlaData";
 
 export default function SLAPage() {
   const { t } = useTranslation();
   const [fetchedAt] = useState(() => Date.now());
+  const { targets, breaches } = useSlaData();
 
   const { overallCompliance, activeBreachCount } = useMemo(() => {
     const avg =
-      MOCK_SLA_TARGETS.reduce((sum, target) => sum + target.timeInSLA, 0) /
-      Math.max(1, MOCK_SLA_TARGETS.length);
-    const active = MOCK_SLA_TARGETS.filter((target) => target.activeBreach).length;
+      targets.reduce((sum, target) => sum + target.timeInSLA, 0) /
+      Math.max(1, targets.length);
+    const active = targets.filter((target) => target.activeBreach).length;
     return { overallCompliance: avg, activeBreachCount: active };
-  }, []);
+  }, [targets]);
 
   return (
     <motion.div initial="hidden" animate="visible" variants={staggerContainer}>
@@ -47,7 +45,7 @@ export default function SLAPage() {
       <SLASummaryGrid
         overallCompliance={overallCompliance}
         activeBreachCount={activeBreachCount}
-        objectiveCount={MOCK_SLA_TARGETS.length}
+        objectiveCount={targets.length}
         labels={{
           compliance: t.slaPage.compliance,
           activeBreaches: t.slaPage.activeBreaches,
@@ -55,7 +53,7 @@ export default function SLAPage() {
         }}
       />
       <SLATargetGrid
-        targets={MOCK_SLA_TARGETS}
+        targets={targets}
         labels={{
           metricType: t.slaPage.metricType,
           target: t.slaPage.target,
@@ -64,7 +62,7 @@ export default function SLAPage() {
         }}
       />
       <SLABreachLog
-        breaches={MOCK_SLA_BREACHES}
+        breaches={breaches}
         labels={{
           title: t.slaPage.breachLog.title,
           empty: t.slaPage.breachLog.empty,

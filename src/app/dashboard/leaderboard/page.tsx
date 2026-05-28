@@ -8,25 +8,28 @@ import GradientText from "@/components/GradientText";
 import StalenessIndicator from "@/components/dashboard/StalenessIndicator";
 import { useTranslation } from "@/i18n/useTranslation";
 import { fadeUp, staggerContainer } from "@/lib/animations";
-import {
-  MOCK_LEADERBOARD,
-  type LeaderboardPersona,
-} from "@/lib/mock-dashboard-data";
+import { type LeaderboardPersona } from "@/lib/mock-dashboard-data";
 
 import { LeaderboardRadarCard } from "./leaderboard-page/LeaderboardRadarCard";
 import { LeaderboardTable } from "./leaderboard-page/LeaderboardTable";
+import { useLeaderboardData } from "./useLeaderboardData";
 
 export default function LeaderboardPage() {
   const { t } = useTranslation();
-  const [selectedId, setSelectedId] = useState<string>(
-    MOCK_LEADERBOARD[0]?.id ?? "",
-  );
+  const { personas } = useLeaderboardData();
+  // null = no explicit pick yet → fall back to the top-ranked persona. This
+  // keeps the selection valid as data loads / changes without a sync effect.
+  const [pickedId, setPickedId] = useState<string | null>(null);
   const [fetchedAt] = useState(() => Date.now());
 
-  const selected = useMemo<LeaderboardPersona | undefined>(
-    () => MOCK_LEADERBOARD.find((persona) => persona.id === selectedId),
-    [selectedId],
-  );
+  const selected = useMemo<LeaderboardPersona | undefined>(() => {
+    const picked =
+      pickedId !== null
+        ? personas.find((persona) => persona.id === pickedId)
+        : undefined;
+    return picked ?? personas[0];
+  }, [personas, pickedId]);
+  const selectedId = selected?.id ?? "";
 
   const radarData = useMemo(() => {
     if (!selected) return [];
@@ -61,14 +64,14 @@ export default function LeaderboardPage() {
 
       <div className="grid gap-6 lg:grid-cols-5">
         <LeaderboardTable
-          personas={MOCK_LEADERBOARD}
+          personas={personas}
           selectedId={selectedId}
           labels={{
             rank: t.leaderboardPage.rank,
             agent: t.dashboardUi.agent,
             composite: t.leaderboardPage.composite,
           }}
-          onSelect={setSelectedId}
+          onSelect={setPickedId}
         />
         <LeaderboardRadarCard
           selected={selected}

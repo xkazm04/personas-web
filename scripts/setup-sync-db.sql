@@ -369,5 +369,30 @@ left join public.synced_personas p
   on p.id = e.persona_id and p.user_id = e.user_id
 group by e.user_id, e.persona_id, p.name, p.color, p.max_budget_usd;
 
+-- leaderboard › per-persona aggregate stats  (→ LeaderboardPersona[] + SLA)
+-- Powers the Leaderboard radar (reliability / cost / speed / quality / volume)
+-- and the SLA module's per-persona success-rate + latency objectives. All
+-- derived from synced_executions; the web layer normalizes these raw counts
+-- into the 0-100 radar axes and applies app-defined SLA targets on top.
+drop view if exists public.synced_leaderboard;
+create view public.synced_leaderboard
+  with (security_invoker = true) as
+select
+  e.user_id,
+  e.persona_id,
+  p.name                                                  as persona_name,
+  p.color                                                 as persona_color,
+  count(*)                                                as total_executions,
+  count(*) filter (where e.status = 'completed')          as successful_executions,
+  count(*) filter (where e.status in ('failed','incomplete','cancelled')) as failed_executions,
+  coalesce(sum(e.retry_count), 0)                         as total_retries,
+  coalesce(sum(e.cost_usd), 0)                            as total_cost_usd,
+  coalesce(avg(e.duration_ms), 0)                         as avg_duration_ms
+from public.synced_executions e
+left join public.synced_personas p
+  on p.id = e.persona_id and p.user_id = e.user_id
+group by e.user_id, e.persona_id, p.name, p.color;
+
 grant select on public.synced_observability_daily to authenticated;
 grant select on public.synced_persona_spend to authenticated;
+grant select on public.synced_leaderboard to authenticated;
