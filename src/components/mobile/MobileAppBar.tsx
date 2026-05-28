@@ -21,7 +21,7 @@ export default function MobileAppBar({
       <Link
         href={backHref}
         aria-label={backLabel}
-        className="flex h-9 w-9 flex-shrink-0 items-center justify-center rounded-full border border-glass bg-white/[0.03] text-muted transition-colors hover:text-foreground active:scale-95"
+        className="flex h-11 w-11 flex-shrink-0 items-center justify-center rounded-full border border-glass bg-white/[0.03] text-muted transition-colors hover:text-foreground active:scale-95"
       >
         <ChevronLeft className="h-5 w-5" />
       </Link>
