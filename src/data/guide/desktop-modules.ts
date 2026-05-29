@@ -160,9 +160,9 @@ export const DESKTOP_MODULES: DesktopModule[] = [
 export const TOPIC_MODULE_MAP: Record<string, TopicModuleRef> = {
   // ─── Monitoring ─────────────────────────────────────────────────
   "the-director": {
-    moduleId: "agents",
-    path: ["Director", "Overview"],
-    label: "Director command center",
+    moduleId: "overview",
+    path: ["Overview", "Director"],
+    label: "Director coaching",
   },
   // ─── Getting Started ────────────────────────────────────────────
   "installing-personas": {

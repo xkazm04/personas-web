@@ -31,15 +31,13 @@ You choose what it watches by **starring** agents (the ⭐ on each row of All Ag
 
 ### The command center
 
-The Director has its own place in the app — a **Director** section in the sidebar with five tabs:
+The Director lives under **Overview › Director** — one focused screen:
 
-- **Overview** — a portfolio scorecard: how much of your fleet's work actually delivered value, the average verdict score, your cost per value-delivered run, and a 0–5 distribution showing how your starred agents stack up. One **Review all in scope** button kicks off a fresh sweep.
-- **Attention** — a triage list of exactly what to act on: agents awaiting their first review, low scorers, declining trends, and stale reviews — each with a one-click review. When everything's healthy, it tells you so.
-- **Roster** — every agent in scope with its latest score, a trend sparkline (is coaching moving the needle?), value rate, and last-review time; review or remove any agent inline, or add new ones to scope in a click.
-- **Reviews** — the full coaching history, filterable by severity, each verdict expandable to its reasoning and concrete suggestions.
-- **Memory** — switch on long-term memory (below).
+- A **portfolio scorecard**: how much of your fleet's work actually delivered value, the average verdict score, your cost per value-delivered run, and a 0–5 distribution showing how your starred agents stack up.
+- A **coaching table** of every agent in scope — score, a trend sparkline (is coaching moving the needle?), value rate, last review, and **attention tags** that flag exactly what to act on (awaiting first review, low score, declining, stale). Filter to just the agents that need attention. Click any agent to open its **detail** — full verdict history with the reasoning and concrete suggestions behind each score.
+- A thin header with **Review all in scope**, an **Add to scope** picker, and the long-term-**memory** toggle.
 
-The All Agents page keeps a slim Director strip that links straight into this command center.
+The All Agents page keeps a slim Director strip that links straight here.
 
 ### What a verdict looks like
 
