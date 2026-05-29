@@ -158,6 +158,12 @@ export const DESKTOP_MODULES: DesktopModule[] = [
 // Every guide topic maps to its primary location in the desktop app.
 
 export const TOPIC_MODULE_MAP: Record<string, TopicModuleRef> = {
+  // ─── Monitoring ─────────────────────────────────────────────────
+  "the-director": {
+    moduleId: "agents",
+    path: ["Director", "Overview"],
+    label: "Director command center",
+  },
   // ─── Getting Started ────────────────────────────────────────────
   "installing-personas": {
     moduleId: "home",

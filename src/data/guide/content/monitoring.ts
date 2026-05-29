@@ -29,6 +29,17 @@ The **Director** is a built-in meta-agent that watches your other agents and coa
 
 You choose what it watches by **starring** agents (the ⭐ on each row of All Agents). A starred agent is "in the Director's scope" — the Director reviews it; unstarred agents are left alone. The Director itself is a system agent and can't be deleted.
 
+### The command center
+
+The Director has its own place in the app — a **Director** section in the sidebar with four tabs:
+
+- **Overview** — a portfolio scorecard: how much of your fleet's work actually delivered value, the average verdict score, your cost per value-delivered run, and a 0–5 distribution showing how your starred agents stack up. One **Review all in scope** button kicks off a fresh sweep.
+- **Roster** — every agent in scope with its latest score, a trend sparkline (is coaching moving the needle?), value rate, and last-review time; review or remove any agent inline, or add new ones to scope in a click.
+- **Reviews** — the full coaching history, filterable by severity, each verdict expandable to its reasoning and concrete suggestions.
+- **Memory** — switch on long-term memory (below).
+
+The All Agents page keeps a slim Director strip that links straight into this command center.
+
 ### What a verdict looks like
 
 Every review produces an overall **0–5 score** plus optional coaching notes:
