@@ -866,6 +866,18 @@ export const cs: Translations = {
     queueLength: 'D\u00e9lka fronty',
     activeExecutions: 'Aktivn\u00ed spou\u0161t\u011bn\u00ed',
     notifications: {
+      voice: {
+        announcement: 'Nová {severity} kontrola od {persona}',
+        unknownPersona: 'agenta',
+        severity: {
+          critical: 'kritická',
+          warning: 'varovná',
+          info: 'informační',
+        },
+        label: 'Nahlas oznamovat nové kontroly',
+        preview: 'Náhled',
+        newReviewRequest: 'Nový požadavek na kontrolu',
+      },
       title: 'Oznámení',
       subtitle: 'Upozornění samoopravy a souhrny',
       weeklyDigest: 'Týdenní souhrn stavu',

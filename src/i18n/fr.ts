@@ -866,6 +866,18 @@ export const fr: Translations = {
     queueLength: 'Longueur de la file',
     activeExecutions: 'Ex\u00e9cutions actives',
     notifications: {
+      voice: {
+        announcement: 'Nouvelle révision {severity} de {persona}',
+        unknownPersona: 'un agent',
+        severity: {
+          critical: 'critique',
+          warning: "d'avertissement",
+          info: 'informative',
+        },
+        label: 'Annoncer les nouvelles révisions à voix haute',
+        preview: 'Aperçu',
+        newReviewRequest: 'Nouvelle demande de révision',
+      },
       title: 'Notifications',
       subtitle: "Alertes d'auto-réparation et résumés",
       weeklyDigest: 'Résumé de santé hebdomadaire',

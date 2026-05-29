@@ -866,6 +866,18 @@ export const bn: Translations = {
     queueLength: '\u0995\u09bf\u0989\u09b0 \u09a6\u09c8\u09b0\u09cd\u0998\u09cd\u09af',
     activeExecutions: '\u09b8\u0995\u09cd\u09b0\u09bf\u09af\u09bc \u098f\u0995\u09cd\u09b8\u09bf\u0995\u09bf\u0989\u09b6\u09a8',
     notifications: {
+      voice: {
+        announcement: '{persona} থেকে নতুন {severity} রিভিউ',
+        unknownPersona: 'একজন এজেন্ট',
+        severity: {
+          critical: 'গুরুতর',
+          warning: 'সতর্কতামূলক',
+          info: 'তথ্যমূলক',
+        },
+        label: 'নতুন রিভিউ সশব্দে ঘোষণা করুন',
+        preview: 'প্রিভিউ',
+        newReviewRequest: 'নতুন রিভিউ অনুরোধ',
+      },
       title: 'বিজ্ঞপ্তি',
       subtitle: 'স্ব-নিরাময় সতর্কতা ও সারসংক্ষেপ',
       weeklyDigest: 'সাপ্তাহিক স্বাস্থ্য সারসংক্ষেপ',

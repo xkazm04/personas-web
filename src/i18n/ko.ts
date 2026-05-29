@@ -866,6 +866,18 @@ export const ko: Translations = {
     queueLength: '\ub300\uae30\uc5f4 \uae38\uc774',
     activeExecutions: '\ud65c\uc131 \uc2e4\ud589',
     notifications: {
+      voice: {
+        announcement: '{persona}의 새 {severity} 검토',
+        unknownPersona: '에이전트',
+        severity: {
+          critical: '중요',
+          warning: '경고',
+          info: '정보',
+        },
+        label: '새 검토를 소리내어 알림',
+        preview: '미리 보기',
+        newReviewRequest: '새 검토 요청',
+      },
       title: '알림',
       subtitle: '자가 복구 알림 및 요약',
       weeklyDigest: '주간 상태 요약',

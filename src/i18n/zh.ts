@@ -866,6 +866,18 @@ export const zh: Translations = {
     queueLength: '\u961F\u5217\u957F\u5EA6',
     activeExecutions: '\u6D3B\u8DC3\u6267\u884C',
     notifications: {
+      voice: {
+        announcement: '来自 {persona} 的新{severity}审核',
+        unknownPersona: '某个代理',
+        severity: {
+          critical: '严重',
+          warning: '警告',
+          info: '信息',
+        },
+        label: '语音播报新的审核',
+        preview: '预览',
+        newReviewRequest: '新的审核请求',
+      },
       title: '通知',
       subtitle: '自愈告警与摘要',
       weeklyDigest: '每周健康摘要',

@@ -866,6 +866,18 @@ export const es: Translations = {
     queueLength: 'Longitud de Cola',
     activeExecutions: 'Ejecuciones Activas',
     notifications: {
+      voice: {
+        announcement: 'Nueva revisión {severity} de {persona}',
+        unknownPersona: 'un agente',
+        severity: {
+          critical: 'crítica',
+          warning: 'de advertencia',
+          info: 'informativa',
+        },
+        label: 'Anunciar nuevas revisiones en voz alta',
+        preview: 'Vista previa',
+        newReviewRequest: 'Nueva solicitud de revisión',
+      },
       title: 'Notificaciones',
       subtitle: 'Alertas de auto-reparación y resúmenes',
       weeklyDigest: 'Resumen semanal de estado',

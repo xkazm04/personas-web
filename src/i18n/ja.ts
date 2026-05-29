@@ -866,6 +866,18 @@ export const ja: Translations = {
     queueLength: '\u30ad\u30e5\u30fc\u9577',
     activeExecutions: '\u30a2\u30af\u30c6\u30a3\u30d6\u5b9f\u884c',
     notifications: {
+      voice: {
+        announcement: '{persona} からの新しい{severity}レビュー',
+        unknownPersona: 'エージェント',
+        severity: {
+          critical: '重大な',
+          warning: '警告',
+          info: '情報',
+        },
+        label: '新しいレビューを読み上げる',
+        preview: 'プレビュー',
+        newReviewRequest: '新しいレビュー リクエスト',
+      },
       title: '通知',
       subtitle: '自己修復アラートとダイジェスト',
       weeklyDigest: '週次ヘルスダイジェスト',

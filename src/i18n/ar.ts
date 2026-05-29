@@ -866,6 +866,18 @@ export const ar: Translations = {
     queueLength: '\u0637\u0648\u0644 \u0627\u0644\u0637\u0627\u0628\u0648\u0631',
     activeExecutions: '\u0627\u0644\u062A\u0646\u0641\u064A\u0630\u0627\u062A \u0627\u0644\u0646\u0634\u0637\u0629',
     notifications: {
+      voice: {
+        announcement: 'مراجعة {severity} جديدة من {persona}',
+        unknownPersona: 'أحد الوكلاء',
+        severity: {
+          critical: 'حرجة',
+          warning: 'تحذيرية',
+          info: 'معلوماتية',
+        },
+        label: 'الإعلان عن المراجعات الجديدة صوتيًا',
+        preview: 'معاينة',
+        newReviewRequest: 'طلب مراجعة جديد',
+      },
       title: 'الإشعارات',
       subtitle: 'تنبيهات الإصلاح الذاتي والملخصات',
       weeklyDigest: 'ملخص الحالة الأسبوعي',

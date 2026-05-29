@@ -866,6 +866,18 @@ export const vi: Translations = {
     queueLength: '\u0110\u1ed9 d\u00e0i h\u00e0ng \u0111\u1ee3i',
     activeExecutions: 'Th\u1ef1c thi \u0111ang ho\u1ea1t \u0111\u1ed9ng',
     notifications: {
+      voice: {
+        announcement: 'Đánh giá {severity} mới từ {persona}',
+        unknownPersona: 'một tác nhân',
+        severity: {
+          critical: 'nghiêm trọng',
+          warning: 'cảnh báo',
+          info: 'thông tin',
+        },
+        label: 'Đọc to các đánh giá mới',
+        preview: 'Xem trước',
+        newReviewRequest: 'Yêu cầu đánh giá mới',
+      },
       title: 'Thông báo',
       subtitle: 'Cảnh báo tự phục hồi và bản tóm tắt',
       weeklyDigest: 'Tóm tắt sức khỏe hàng tuần',

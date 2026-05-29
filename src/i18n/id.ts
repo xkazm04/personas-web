@@ -866,6 +866,18 @@ export const id: Translations = {
     queueLength: 'Panjang Antrian',
     activeExecutions: 'Eksekusi Aktif',
     notifications: {
+      voice: {
+        announcement: 'Ulasan {severity} baru dari {persona}',
+        unknownPersona: 'seorang agen',
+        severity: {
+          critical: 'kritis',
+          warning: 'peringatan',
+          info: 'info',
+        },
+        label: 'Umumkan ulasan baru dengan suara',
+        preview: 'Pratinjau',
+        newReviewRequest: 'Permintaan ulasan baru',
+      },
       title: 'Notifikasi',
       subtitle: 'Peringatan penyembuhan otomatis dan ringkasan',
       weeklyDigest: 'Ringkasan kesehatan mingguan',

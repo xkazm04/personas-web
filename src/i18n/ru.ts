@@ -866,6 +866,18 @@ export const ru: Translations = {
     queueLength: '\u0414\u043B\u0438\u043D\u0430 \u043E\u0447\u0435\u0440\u0435\u0434\u0438',
     activeExecutions: '\u0410\u043A\u0442\u0438\u0432\u043D\u044B\u0435 \u0432\u044B\u043F\u043E\u043B\u043D\u0435\u043D\u0438\u044F',
     notifications: {
+      voice: {
+        announcement: 'Новая {severity} проверка от {persona}',
+        unknownPersona: 'агента',
+        severity: {
+          critical: 'критическая',
+          warning: 'предупреждающая',
+          info: 'информационная',
+        },
+        label: 'Озвучивать новые проверки',
+        preview: 'Предпросмотр',
+        newReviewRequest: 'Новый запрос на проверку',
+      },
       title: 'Уведомления',
       subtitle: 'Оповещения о самовосстановлении и сводки',
       weeklyDigest: 'Еженедельная сводка состояния',

@@ -10,6 +10,8 @@ import { useExecutionStore } from "@/stores/executionStore";
 import { useEventStore } from "@/stores/eventStore";
 import { useReviewStore } from "@/stores/reviewStore";
 import { useSystemStore } from "@/stores/systemStore";
+import { emitNewReview } from "@/lib/review-voice";
+import type { ReviewSeverity } from "@/lib/types";
 
 /**
  * Live dashboard updates (v2). When the desktop sync writer pushes into the
@@ -35,6 +37,40 @@ const WATCHED_TABLES = [
   "synced_manual_reviews",
   "synced_devices",
 ] as const;
+
+const REVIEW_SEVERITIES = new Set<string>(["critical", "warning", "info"]);
+
+/** Coerce a synced row's severity to a known value (table default is "info"). */
+function toReviewSeverity(value: unknown): ReviewSeverity {
+  return typeof value === "string" && REVIEW_SEVERITIES.has(value)
+    ? (value as ReviewSeverity)
+    : "info";
+}
+
+/**
+ * Turn an INSERT on `synced_manual_reviews` into a new-review signal for the
+ * voice announcer. Only genuinely new, still-pending rows fire; `seen` guards
+ * against a socket reconnect replaying the same INSERT. Typed structurally so
+ * we don't depend on the exact Realtime payload generic.
+ */
+function maybeAnnounceNewReview(
+  payload: { eventType?: string; new?: Record<string, unknown> | null },
+  seen: Set<string>,
+): void {
+  if (payload.eventType !== "INSERT") return;
+  const row = payload.new;
+  if (!row) return;
+  const id = typeof row.id === "string" ? row.id : null;
+  if (!id || seen.has(id)) return;
+  if (row.status !== "pending") return;
+  seen.add(id);
+  emitNewReview({
+    id,
+    title: typeof row.title === "string" ? row.title : "",
+    severity: toReviewSeverity(row.severity),
+    personaId: typeof row.persona_id === "string" ? row.persona_id : "",
+  });
+}
 
 /** Map a changed table to the store refetch(es) it should trigger. */
 function refetchFor(table: string): (() => void) | null {
@@ -79,6 +115,10 @@ export function useSyncedRealtime(): void {
       );
     };
 
+    // Per-subscription set of review ids already announced, so a reconnect
+    // that replays recent INSERTs doesn't read the same review aloud twice.
+    const announcedReviews = new Set<string>();
+
     let channel: RealtimeChannel | undefined;
     try {
       const supabase = getSupabase();
@@ -87,7 +127,14 @@ export function useSyncedRealtime(): void {
         channel.on(
           "postgres_changes",
           { event: "*", schema: "public", table },
-          () => scheduleRefetch(table),
+          (payload) => {
+            scheduleRefetch(table);
+            // A new review is an event, not just a list change — surface it so
+            // the voice announcer can react. The debounced refetch still runs.
+            if (table === "synced_manual_reviews") {
+              maybeAnnounceNewReview(payload, announcedReviews);
+            }
+          },
         );
       }
       channel.subscribe();

@@ -726,6 +726,18 @@
       title: string;
       subtitle: string;
       weeklyDigest: string;
+      voice: {
+        label: string;
+        preview: string;
+        newReviewRequest: string;
+        announcement: string;
+        unknownPersona: string;
+        severity: {
+          critical: string;
+          warning: string;
+          info: string;
+        };
+      };
       severity: {
         critical: string;
         high: string;
@@ -1840,6 +1852,18 @@ export const en: Translations = {
       title: 'Notifications',
       subtitle: 'Healing alerts and digests',
       weeklyDigest: 'Weekly health digest',
+      voice: {
+        label: 'Announce new reviews aloud',
+        preview: 'Preview',
+        newReviewRequest: 'New review request',
+        announcement: 'New {severity} review from {persona}',
+        unknownPersona: 'an agent',
+        severity: {
+          critical: 'critical',
+          warning: 'warning',
+          info: 'info',
+        },
+      },
       severity: {
         critical: 'Critical',
         high: 'High',

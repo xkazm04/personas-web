@@ -866,6 +866,18 @@ export const hi: Translations = {
     queueLength: '\u0915\u094D\u092F\u0942 \u0932\u0902\u092C\u093E\u0908',
     activeExecutions: '\u0938\u0915\u094D\u0930\u093F\u092F \u090F\u0917\u094D\u091C\u093C\u0940\u0915\u094D\u092F\u0942\u0936\u0928',
     notifications: {
+      voice: {
+        announcement: '{persona} से नई {severity} समीक्षा',
+        unknownPersona: 'एक एजेंट',
+        severity: {
+          critical: 'गंभीर',
+          warning: 'चेतावनी',
+          info: 'जानकारी',
+        },
+        label: 'नई समीक्षाओं की ज़ोर से घोषणा करें',
+        preview: 'पूर्वावलोकन',
+        newReviewRequest: 'नया समीक्षा अनुरोध',
+      },
       title: 'सूचनाएं',
       subtitle: 'स्व-उपचार अलर्ट और सारांश',
       weeklyDigest: 'साप्ताहिक स्वास्थ्य सारांश',

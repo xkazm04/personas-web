@@ -866,6 +866,18 @@ export const de: Translations = {
     queueLength: 'Warteschlangenl\u00e4nge',
     activeExecutions: 'Aktive Ausf\u00fchrungen',
     notifications: {
+      voice: {
+        announcement: 'Neue {severity} Review von {persona}',
+        unknownPersona: 'einem Agenten',
+        severity: {
+          critical: 'kritische',
+          warning: 'wichtige',
+          info: 'informative',
+        },
+        label: 'Neue Reviews laut ansagen',
+        preview: 'Vorschau',
+        newReviewRequest: 'Neue Review-Anfrage',
+      },
       title: 'Benachrichtigungen',
       subtitle: 'Healing-Warnungen und Berichte',
       weeklyDigest: 'Wöchentlicher Zustandsbericht',
