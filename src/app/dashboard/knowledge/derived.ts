@@ -29,8 +29,15 @@ function formatCost(usd: number): string {
   return `$${usd.toFixed(3)}`;
 }
 
-export const DERIVED_KNOWLEDGE_PATTERNS: DerivedKnowledgePattern[] =
-  MOCK_KNOWLEDGE_PATTERNS.map((p) => {
+/**
+ * Build the per-row derived fields from an arbitrary patterns array. Extracted
+ * from the former module-scope constant so the same derivation can run at
+ * runtime against live (synced) data, not just the mock fixture.
+ */
+export function deriveKnowledgePatterns(
+  patterns: KnowledgePattern[],
+): DerivedKnowledgePattern[] {
+  return patterns.map((p) => {
     const total = p.successCount + p.failureCount;
     const lastSeenMs = new Date(p.lastSeen).getTime();
     return {
@@ -41,6 +48,11 @@ export const DERIVED_KNOWLEDGE_PATTERNS: DerivedKnowledgePattern[] =
       __durationFormatted: formatDuration(p.avgDurationMs),
     };
   });
+}
+
+/** Mock-derived rows, kept for any dev/demo consumer of the static fixture. */
+export const DERIVED_KNOWLEDGE_PATTERNS: DerivedKnowledgePattern[] =
+  deriveKnowledgePatterns(MOCK_KNOWLEDGE_PATTERNS);
 
 /**
  * Format a relative-time label using a frozen `nowMs` so every row in a single

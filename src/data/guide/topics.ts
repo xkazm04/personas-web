@@ -603,6 +603,14 @@ export const GUIDE_TOPICS: GuideTopic[] = [
     tags: ["monitoring", "dashboard", "overview", "activity", "command-center"],
   },
   {
+    id: "the-director",
+    categoryId: "monitoring",
+    title: "The Director — automatic agent coaching",
+    description:
+      "A built-in meta-agent that reviews your starred agents and scores each run 0–5 with concrete coaching notes. Star an agent to put it in the Director's scope; verdicts show as a stars column in Activity and a Director tab on each run. Can use your Obsidian Brain as long-term memory so its coaching improves over time.",
+    tags: ["monitoring", "director", "coaching", "verdict", "quality", "review"],
+  },
+  {
     id: "execution-logs",
     categoryId: "monitoring",
     title: "Execution logs",
