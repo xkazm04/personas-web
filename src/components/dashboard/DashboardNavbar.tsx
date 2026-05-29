@@ -96,20 +96,25 @@ export default function DashboardNavbar() {
             </button>
           )}
 
-          <button
-            onClick={signOut}
-            disabled={isSigningOut}
-            className="flex min-h-[44px] min-w-[44px] items-center justify-center gap-1.5 rounded-full border border-glass bg-white/[0.03] px-2 py-1.5 text-sm text-muted transition-all duration-200 hover:bg-white/[0.06] hover:text-foreground disabled:opacity-60 disabled:pointer-events-none sm:px-3"
-          >
-            {isSigningOut ? (
-              <Loader2 className="h-4 w-4 animate-spin sm:h-3 sm:w-3" />
-            ) : (
-              <LogOut className="h-4 w-4 sm:h-3 sm:w-3" />
-            )}
-            <span className="hidden sm:inline">
-              {isSigningOut ? t.common.signingOut : t.common.signOut}
-            </span>
-          </button>
+          {/* Sign out is only meaningful for a real account — a demo session
+              has nothing to sign out of. Demo users leave via "Sign in" (which
+              upgrades to a real account) or by navigating away. */}
+          {!isDemo && (
+            <button
+              onClick={signOut}
+              disabled={isSigningOut}
+              className="flex min-h-[44px] min-w-[44px] items-center justify-center gap-1.5 rounded-full border border-glass bg-white/[0.03] px-2 py-1.5 text-sm text-muted transition-all duration-200 hover:bg-white/[0.06] hover:text-foreground disabled:opacity-60 disabled:pointer-events-none sm:px-3"
+            >
+              {isSigningOut ? (
+                <Loader2 className="h-4 w-4 animate-spin sm:h-3 sm:w-3" />
+              ) : (
+                <LogOut className="h-4 w-4 sm:h-3 sm:w-3" />
+              )}
+              <span className="hidden sm:inline">
+                {isSigningOut ? t.common.signingOut : t.common.signOut}
+              </span>
+            </button>
+          )}
         </div>
       </nav>
     </motion.header>

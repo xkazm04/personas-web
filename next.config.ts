@@ -38,7 +38,18 @@ const securityHeaders = [
       "style-src 'self' 'unsafe-inline' https://fonts.googleapis.com",
       "img-src 'self' data: blob: https:",
       "font-src 'self' data: https://fonts.gstatic.com",
-      `connect-src 'self' ${process.env.NEXT_PUBLIC_SENTRY_DSN ? "*.sentry.io" : ""}`.trim(),
+      // Supabase auth (REST `/auth/v1`, `/rest/v1`) + Realtime (wss). Without
+      // these the browser blocks every Supabase call as a CSP violation, which
+      // breaks Google sign-in and the live-sync subscription. Wildcard so it
+      // works for any project ref (`<ref>.supabase.co`).
+      [
+        "connect-src 'self'",
+        "https://*.supabase.co",
+        "wss://*.supabase.co",
+        process.env.NEXT_PUBLIC_SENTRY_DSN ? "*.sentry.io" : "",
+      ]
+        .filter(Boolean)
+        .join(" "),
       "frame-ancestors 'none'",
       "base-uri 'self'",
       "form-action 'self'",
