@@ -31,9 +31,10 @@ You choose what it watches by **starring** agents (the ⭐ on each row of All Ag
 
 ### The command center
 
-The Director has its own place in the app — a **Director** section in the sidebar with four tabs:
+The Director has its own place in the app — a **Director** section in the sidebar with five tabs:
 
 - **Overview** — a portfolio scorecard: how much of your fleet's work actually delivered value, the average verdict score, your cost per value-delivered run, and a 0–5 distribution showing how your starred agents stack up. One **Review all in scope** button kicks off a fresh sweep.
+- **Attention** — a triage list of exactly what to act on: agents awaiting their first review, low scorers, declining trends, and stale reviews — each with a one-click review. When everything's healthy, it tells you so.
 - **Roster** — every agent in scope with its latest score, a trend sparkline (is coaching moving the needle?), value rate, and last-review time; review or remove any agent inline, or add new ones to scope in a click.
 - **Reviews** — the full coaching history, filterable by severity, each verdict expandable to its reasoning and concrete suggestions.
 - **Memory** — switch on long-term memory (below).
