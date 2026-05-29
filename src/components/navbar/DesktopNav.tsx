@@ -1,7 +1,7 @@
 "use client";
 
 import { motion } from "framer-motion";
-import { Download } from "lucide-react";
+import { Download, LayoutDashboard } from "lucide-react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useTranslation } from "@/i18n/useTranslation";
@@ -60,16 +60,29 @@ export default function DesktopNav({ onDownloadClick }: DesktopNavProps) {
         })}
       </div>
 
-      {/* Download CTA — desktop only */}
-      <button
-        type="button"
-        onClick={onDownloadClick}
-        className="group relative hidden items-center gap-2 overflow-hidden rounded-full border border-brand-cyan/25 bg-brand-cyan/8 px-6 py-2 text-base font-medium text-brand-cyan transition-all duration-300 hover:border-brand-cyan/40 hover:bg-brand-cyan/12 lg:flex focus-ring"
-      >
-        <div className="absolute inset-0 -translate-x-full bg-linear-to-r from-transparent via-brand-cyan/10 to-transparent transition-transform duration-700 group-hover:translate-x-full" />
-        <Download className="relative h-3.5 w-3.5" />
-        <span className="relative">{t.nav.download}</span>
-      </button>
+      {/* Right cluster — desktop only */}
+      <div className="hidden items-center gap-2 lg:flex">
+        {/* Open the dashboard */}
+        <Link
+          href="/dashboard"
+          aria-label={t.nav.dashboard}
+          title={t.nav.dashboard}
+          className="group flex items-center justify-center min-h-11 min-w-11 rounded-full border border-glass bg-white/2 text-muted backdrop-blur-sm transition-all duration-300 hover:border-brand-cyan/40 hover:bg-brand-cyan/8 hover:text-brand-cyan focus-ring"
+        >
+          <LayoutDashboard className="h-4 w-4" />
+        </Link>
+
+        {/* Download CTA */}
+        <button
+          type="button"
+          onClick={onDownloadClick}
+          className="group relative flex items-center gap-2 overflow-hidden rounded-full border border-brand-cyan/25 bg-brand-cyan/8 px-6 py-2 text-base font-medium text-brand-cyan transition-all duration-300 hover:border-brand-cyan/40 hover:bg-brand-cyan/12 focus-ring"
+        >
+          <div className="absolute inset-0 -translate-x-full bg-linear-to-r from-transparent via-brand-cyan/10 to-transparent transition-transform duration-700 group-hover:translate-x-full" />
+          <Download className="relative h-3.5 w-3.5" />
+          <span className="relative">{t.nav.download}</span>
+        </button>
+      </div>
     </>
   );
 }
