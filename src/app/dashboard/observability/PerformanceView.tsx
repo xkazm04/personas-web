@@ -10,6 +10,7 @@ import { fadeUp } from "@/lib/animations";
 import { api } from "@/lib/api";
 import { MOCK_COST_ANOMALIES, MOCK_HEALTH_ISSUES, type MockHealthIssue } from "@/lib/mock-dashboard-data";
 import { useTranslation } from "@/i18n/useTranslation";
+import { useAuthStore } from "@/stores/authStore";
 import { CostAnomalyBanner } from "./performance-view/CostAnomalyBanner";
 import { PerformanceChartGrid } from "./performance-view/PerformanceChartGrid";
 import { PerformanceHealthPanel } from "./performance-view/PerformanceHealthPanel";
@@ -20,6 +21,7 @@ import { BUDGET_THRESHOLD, type SeverityFilter } from "./performance-view/perfor
 
 export default function PerformanceView() {
   const { t } = useTranslation();
+  const isDemo = useAuthStore((s) => s.isDemo);
   const [compareEnabled, setCompareEnabled] = useState(false);
   const [severityFilter, setSeverityFilter] = useState<SeverityFilter>("all");
   const [healingActive, setHealingActive] = useState(false);
@@ -39,7 +41,9 @@ export default function PerformanceView() {
   const spendPieData = useMemo(() => personaSpend.map((persona) => ({ name: persona.personaName, value: persona.totalCost, color: persona.personaColor })), [personaSpend]);
 
   const displayHealthIssues: MockHealthIssue[] = useMemo(() => {
-    if (healthIssues.length === 0) return MOCK_HEALTH_ISSUES;
+    // Demo falls back to the illustrative fixture; real mode shows the genuine
+    // (possibly empty) synced health issues — never the mock.
+    if (healthIssues.length === 0) return isDemo ? MOCK_HEALTH_ISSUES : [];
     return healthIssues.map((issue) => ({
       id: issue.id,
       title: issue.title,
@@ -50,7 +54,7 @@ export default function PerformanceView() {
       detectedAt: issue.detectedAt,
       category: issue.category,
     }));
-  }, [healthIssues]);
+  }, [healthIssues, isDemo]);
 
   const filteredHealthIssues = useMemo(() => {
     if (severityFilter === "all") return displayHealthIssues;
@@ -85,7 +89,10 @@ export default function PerformanceView() {
       <div className="mb-6 flex justify-end">
         <CompareToggle enabled={compareEnabled} onToggle={() => setCompareEnabled((prev) => !prev)} />
       </div>
-      <CostAnomalyBanner anomalies={MOCK_COST_ANOMALIES} label={t.observabilityPage.costAnomalyDetected} />
+      {/* Cost-anomaly detection isn't synced — demo only. */}
+      {isDemo && (
+        <CostAnomalyBanner anomalies={MOCK_COST_ANOMALIES} label={t.observabilityPage.costAnomalyDetected} />
+      )}
       {overBudgetPersonas.length > 0 && (
         <motion.div variants={fadeUp} className="mb-6 flex items-center gap-3 rounded-xl border border-amber-500/20 bg-amber-500/5 px-4 py-3">
           <AlertTriangle className="h-4 w-4 text-amber-400 flex-shrink-0" />

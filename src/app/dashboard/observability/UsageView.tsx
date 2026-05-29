@@ -9,6 +9,7 @@ import { useTranslation } from "@/i18n/useTranslation";
 import { api } from "@/lib/api";
 import { fadeUp } from "@/lib/animations";
 import { CHART_COLORS } from "@/lib/constants";
+import { useAuthStore } from "@/stores/authStore";
 
 import {
   MOCK_TOOL_USAGE,
@@ -27,20 +28,28 @@ const MAX_BAR_TOOLS = 15;
 
 export default function UsageView() {
   const { t } = useTranslation();
+  const isDemo = useAuthStore((s) => s.isDemo);
   const { data, isLoading: loading } = useSWR("usage", api.getUsageAnalytics, {
     dedupingInterval: 8_000,
     revalidateOnFocus: false,
     keepPreviousData: true,
   });
+  // Demo mode renders the illustrative MOCK_* fixtures (and the example-data
+  // notice). Real mode uses the genuine — possibly empty — analytics, never the
+  // mock; an empty real dataset renders the empty charts honestly.
   const hasRealData = (data?.toolUsage ?? []).length > 0;
-  const toolUsage = hasRealData ? data!.toolUsage : MOCK_TOOL_USAGE;
+  const useMock = isDemo && !hasRealData;
+  const toolUsage = useMemo(
+    () => (useMock ? MOCK_TOOL_USAGE : (data?.toolUsage ?? [])),
+    [useMock, data],
+  );
   const toolUsageOverTime = useMemo(
-    () => (hasRealData ? (data!.toolUsageOverTime ?? []) : MOCK_TOOL_USAGE_OVER_TIME),
-    [hasRealData, data],
+    () => (useMock ? MOCK_TOOL_USAGE_OVER_TIME : (data?.toolUsageOverTime ?? [])),
+    [useMock, data],
   );
   const toolUsageByPersona = useMemo(
-    () => (hasRealData ? (data!.toolUsageByPersona ?? []) : MOCK_TOOL_USAGE_BY_PERSONA),
-    [hasRealData, data],
+    () => (useMock ? MOCK_TOOL_USAGE_BY_PERSONA : (data?.toolUsageByPersona ?? [])),
+    [useMock, data],
   );
 
   const barData = useMemo(() => {
@@ -135,7 +144,7 @@ export default function UsageView() {
 
   return (
     <div>
-      {!hasRealData && (
+      {useMock && (
         <motion.div variants={fadeUp} className="mb-6 flex items-center gap-2 rounded-xl border border-amber-500/20 bg-amber-500/5 px-4 py-2.5 text-sm text-amber-400">
           <Lightbulb className="h-3.5 w-3.5 flex-shrink-0" />
           {t.observabilityPage.exampleDataNotice}

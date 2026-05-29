@@ -251,6 +251,46 @@ create table if not exists public.synced_knowledge_patterns (
 create index if not exists idx_synced_knowledge_user_persona on public.synced_knowledge_patterns (user_id, persona_id);
 create index if not exists idx_synced_knowledge_user_type on public.synced_knowledge_patterns (user_id, knowledge_type);
 
+-- ── healing issues (overview health panel + home "open alerts") ───────
+create table if not exists public.synced_healing_issues (
+  id                 text primary key,
+  user_id            uuid not null default auth.uid() references auth.users(id) on delete cascade,
+  device_id          text,
+  persona_id         text not null,
+  execution_id       text,
+  title              text not null,
+  description        text,
+  severity           text not null default 'low',
+  category           text not null default 'config',
+  suggested_fix      text,
+  auto_fixed         boolean not null default false,
+  is_circuit_breaker boolean not null default false,
+  status             text not null default 'open',
+  created_at         timestamptz not null default now(),
+  resolved_at        timestamptz,
+  synced_at          timestamptz not null default now()
+);
+create index if not exists idx_synced_healing_user_status on public.synced_healing_issues (user_id, status);
+create index if not exists idx_synced_healing_user_created on public.synced_healing_issues (user_id, created_at desc);
+
+-- ── triggers (upcoming routines). config omitted by the writer — webhook
+--    configs can hold secret tokens; only schedule timing is projected. ──
+create table if not exists public.synced_triggers (
+  id                 text primary key,
+  user_id            uuid not null default auth.uid() references auth.users(id) on delete cascade,
+  device_id          text,
+  persona_id         text not null,
+  trigger_type       text not null,
+  enabled            boolean not null default true,
+  last_triggered_at  timestamptz,
+  next_trigger_at    timestamptz,
+  created_at         timestamptz not null default now(),
+  updated_at         timestamptz not null default now(),
+  synced_at          timestamptz not null default now()
+);
+create index if not exists idx_synced_triggers_user on public.synced_triggers (user_id);
+create index if not exists idx_synced_triggers_next on public.synced_triggers (user_id, next_trigger_at);
+
 -- =====================================================================
 -- PHASE 2 — approval-gated remote operations (scaffold; not wired yet)
 -- ---------------------------------------------------------------------
@@ -295,6 +335,8 @@ alter table public.synced_metrics_snapshots  enable row level security;
 alter table public.synced_tool_usage         enable row level security;
 alter table public.synced_memories           enable row level security;
 alter table public.synced_knowledge_patterns enable row level security;
+alter table public.synced_healing_issues     enable row level security;
+alter table public.synced_triggers           enable row level security;
 alter table public.pending_commands          enable row level security;
 
 -- One owner-only policy per table covering all verbs. Re-runnable.
@@ -304,7 +346,8 @@ declare
   tables text[] := array[
     'synced_devices','synced_personas','synced_executions','synced_events',
     'synced_manual_reviews','synced_messages','synced_metrics_snapshots',
-    'synced_tool_usage','synced_memories','synced_knowledge_patterns','pending_commands'
+    'synced_tool_usage','synced_memories','synced_knowledge_patterns',
+    'synced_healing_issues','synced_triggers','pending_commands'
   ];
 begin
   foreach t in array tables loop
@@ -324,7 +367,8 @@ declare
   tables text[] := array[
     'synced_devices','synced_personas','synced_executions','synced_events',
     'synced_manual_reviews','synced_messages','synced_metrics_snapshots',
-    'synced_tool_usage','synced_memories','synced_knowledge_patterns','pending_commands'
+    'synced_tool_usage','synced_memories','synced_knowledge_patterns',
+    'synced_healing_issues','synced_triggers','pending_commands'
   ];
 begin
   foreach t in array tables loop

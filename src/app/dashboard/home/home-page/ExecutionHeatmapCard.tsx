@@ -5,7 +5,8 @@ import { CalendarRange } from "lucide-react";
 
 import GlowCard from "@/components/GlowCard";
 import { useTranslation } from "@/i18n/useTranslation";
-import { HEATMAP_DAYS, MOCK_EXECUTION_HEATMAP } from "@/lib/mock-dashboard-data";
+import { HEATMAP_DAYS } from "@/lib/mock-dashboard-data";
+import { useExecutionHeatmap } from "./useExecutionHeatmap";
 
 // Violet intensity ramp (0 = no activity … 4 = peak), mirroring the desktop
 // ExecutionHeatmap colour scale.
@@ -31,6 +32,7 @@ function intensity(count: number, max: number): number {
 export function ExecutionHeatmapCard() {
   const { t } = useTranslation();
   const labels = t.dashboard.home.heatmap;
+  const { rows } = useExecutionHeatmap();
 
   // Cache the impure date math in a lazy initializer (React 19 purity rule).
   const [weekdays] = useState(() => {
@@ -43,8 +45,8 @@ export function ExecutionHeatmapCard() {
     });
   });
 
-  const max = Math.max(1, ...MOCK_EXECUTION_HEATMAP.flatMap((row) => row.days));
-  const isEmpty = MOCK_EXECUTION_HEATMAP.every((row) => row.days.every((c) => c === 0));
+  const max = Math.max(1, ...rows.flatMap((row) => row.days));
+  const isEmpty = rows.length === 0 || rows.every((row) => row.days.every((c) => c === 0));
 
   return (
     <GlowCard accent="purple" className="p-5">
@@ -71,7 +73,7 @@ export function ExecutionHeatmapCard() {
           </div>
 
           <div className="mt-1.5 space-y-1.5">
-            {MOCK_EXECUTION_HEATMAP.map((row) => (
+            {rows.map((row) => (
               <div key={row.persona} className="flex items-center gap-2">
                 <span className="flex w-24 flex-shrink-0 items-center gap-1.5">
                   <span

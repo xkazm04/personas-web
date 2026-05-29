@@ -7,15 +7,21 @@ import GlowCard from "@/components/GlowCard";
 import { useTranslation } from "@/i18n/useTranslation";
 import { fadeUp } from "@/lib/animations";
 import { MOCK_MODEL_PROVIDERS } from "@/lib/mock-dashboard-data";
+import { useAuthStore } from "@/stores/authStore";
 import { SettingToggle } from "./SettingToggle";
 
 /** BYOM policy: which model providers the fleet may use. Demo-only state. */
 export function ModelProvidersCard() {
   const { t } = useTranslation();
   const p = t.settingsPage.providers;
+  const isDemo = useAuthStore((s) => s.isDemo);
   const [allowed, setAllowed] = useState<Record<string, boolean>>(() =>
     Object.fromEntries(MOCK_MODEL_PROVIDERS.map((m) => [m.id, m.allowed])),
   );
+
+  // BYOM provider config is device-local and not part of the cloud sync set —
+  // there's no real source for this card in supabase mode.
+  if (!isDemo) return null;
 
   return (
     <GlowCard accent="purple" variants={fadeUp} className="p-6">

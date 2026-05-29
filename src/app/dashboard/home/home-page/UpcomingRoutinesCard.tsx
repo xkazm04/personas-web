@@ -5,7 +5,8 @@ import { CalendarClock } from "lucide-react";
 
 import GlowCard from "@/components/GlowCard";
 import { useTranslation } from "@/i18n/useTranslation";
-import { MOCK_UPCOMING_ROUTINES, type RoutineTrigger } from "@/lib/mock-dashboard-data";
+import { type RoutineTrigger } from "@/lib/mock-dashboard-data";
+import { useUpcomingRoutines } from "./useUpcomingRoutines";
 
 const TRIGGER_TINT: Record<RoutineTrigger, string> = {
   schedule: "border-cyan-500/20 bg-cyan-500/8 text-cyan-400",
@@ -22,6 +23,7 @@ const TRIGGER_TINT: Record<RoutineTrigger, string> = {
 export function UpcomingRoutinesCard() {
   const { t } = useTranslation();
   const labels = t.dashboard.home.upcomingRoutines;
+  const { routines } = useUpcomingRoutines();
 
   return (
     <GlowCard accent="cyan" className="h-full p-5">
@@ -31,11 +33,11 @@ export function UpcomingRoutinesCard() {
         <span className="ml-auto text-sm text-muted-dark">{labels.subtitle}</span>
       </div>
 
-      {MOCK_UPCOMING_ROUTINES.length === 0 ? (
+      {routines.length === 0 ? (
         <p className="py-8 text-center text-sm text-muted-dark">{labels.empty}</p>
       ) : (
         <div className="space-y-1.5">
-          {MOCK_UPCOMING_ROUTINES.map((routine) => (
+          {routines.map((routine) => (
             <Link
               key={routine.id}
               href="/dashboard/events"

@@ -13,6 +13,7 @@ import {
   MOCK_GLOBAL_EXECUTIONS,
 } from "@/lib/mock-dashboard-data";
 import { useAuthStore } from "@/stores/authStore";
+import { useShallow } from "zustand/react/shallow";
 import { useExecutionStore, useEnrichedExecutions } from "@/stores/executionStore";
 import { usePersonaStore } from "@/stores/personaStore";
 import { useReviewStore } from "@/stores/reviewStore";
@@ -30,7 +31,9 @@ import { useLastVisit } from "./home-page/useLastVisit";
 
 export default function DashboardHomePage() {
   const { t } = useTranslation();
-  const user = useAuthStore((state) => state.user);
+  const { user, isDemo } = useAuthStore(
+    useShallow((state) => ({ user: state.user, isDemo: state.isDemo })),
+  );
   const personas = usePersonaStore((state) => state.personas);
   const executions = useEnrichedExecutions();
   const pendingReviewCount = useReviewStore((state) => state.pendingReviewCount);
@@ -130,12 +133,16 @@ export default function DashboardHomePage() {
         reviews={pendingReviewCount}
       />
 
-      <motion.div variants={fadeUp} data-tour-diagram="dashboard-fleet" className="mb-6">
-        <FleetOptimizationCard
-          recommendation={MOCK_FLEET_RECOMMENDATION}
-          executionCount={Math.max(stats.total, MOCK_GLOBAL_EXECUTIONS)}
-        />
-      </motion.div>
+      {/* Fleet optimization is a heuristic recommendation with no synced
+          source — demo only; real mode omits it entirely. */}
+      {isDemo && (
+        <motion.div variants={fadeUp} data-tour-diagram="dashboard-fleet" className="mb-6">
+          <FleetOptimizationCard
+            recommendation={MOCK_FLEET_RECOMMENDATION}
+            executionCount={Math.max(stats.total, MOCK_GLOBAL_EXECUTIONS)}
+          />
+        </motion.div>
+      )}
 
       <motion.div variants={fadeUp} data-tour-diagram="dashboard-intelligence" className="mb-6 grid gap-6 lg:grid-cols-2">
         <DashboardIntelligencePanels ready={panelsReady} />

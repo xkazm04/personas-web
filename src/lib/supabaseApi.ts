@@ -245,6 +245,45 @@ function reviewToEvent(r: ManualReviewRow): PersonaEvent {
   };
 }
 
+interface HealingRow {
+  id: string;
+  persona_id: string;
+  title: string;
+  description: string | null;
+  severity: string;
+  category: string;
+  auto_fixed: boolean;
+  status: string;
+  created_at: string;
+}
+
+const HEALTH_SEVERITIES = new Set(["critical", "high", "medium", "low"]);
+
+/** Map a synced healing-issue row to the web HealthIssue shape, coercing the
+ *  desktop's free-text severity/status into the dashboard's enums. */
+function mapHealingIssue(h: HealingRow, meta: Map<string, PersonaMeta>): HealthIssue {
+  const persona = meta.get(h.persona_id);
+  const severity = HEALTH_SEVERITIES.has(h.severity)
+    ? (h.severity as HealthIssue["severity"])
+    : "low";
+  const status: HealthIssue["status"] = h.auto_fixed
+    ? "auto_fixed"
+    : h.status === "resolved"
+      ? "resolved"
+      : "open";
+  return {
+    id: h.id,
+    severity,
+    title: h.title,
+    description: h.description ?? "",
+    personaId: h.persona_id,
+    personaName: persona?.name ?? null,
+    detectedAt: h.created_at,
+    status,
+    category: h.category,
+  };
+}
+
 // ---------------------------------------------------------------------------
 // Implementation
 // ---------------------------------------------------------------------------
@@ -444,8 +483,21 @@ export const supabaseApi: ApiClient = {
     }));
   },
 
-  // Health issues aren't synced yet.
-  getObservabilityHealthIssues: async (): Promise<HealthIssue[]> => [],
+  getObservabilityHealthIssues: async (): Promise<HealthIssue[]> => {
+    const [r, meta] = await Promise.all([
+      rows<HealingRow>(
+        getSupabase()
+          .from("synced_healing_issues")
+          .select(
+            "id, persona_id, title, description, severity, category, auto_fixed, status, created_at",
+          )
+          .order("created_at", { ascending: false })
+          .limit(200),
+      ),
+      loadPersonaMeta(),
+    ]);
+    return r.map((h) => mapHealingIssue(h, meta));
+  },
 
   getObservabilityMetrics: async (): Promise<ObservabilityMetrics> => {
     const daily = await supabaseApi.getObservabilityDaily();
@@ -973,4 +1025,51 @@ export const getSyncedMessageThreads = async (): Promise<MessageThread[]> => {
     (a, b) => new Date(b.latestTimestamp).getTime() - new Date(a.latestTimestamp).getTime(),
   );
   return threads;
+};
+
+// ---------------------------------------------------------------------------
+// Triggers — "upcoming routines" (standalone read; not part of ApiClient).
+// The desktop projects schedule timing only (no `config` — secret-free).
+// ---------------------------------------------------------------------------
+
+export interface SyncedTrigger {
+  id: string;
+  personaId: string;
+  personaName: string;
+  personaColor: string;
+  triggerType: string;
+  enabled: boolean;
+  lastTriggeredAt: string | null;
+  nextTriggerAt: string | null;
+}
+
+export const getSyncedTriggers = async (): Promise<SyncedTrigger[]> => {
+  const [r, meta] = await Promise.all([
+    rows<{
+      id: string;
+      persona_id: string;
+      trigger_type: string;
+      enabled: boolean;
+      last_triggered_at: string | null;
+      next_trigger_at: string | null;
+    }>(
+      getSupabase()
+        .from("synced_triggers")
+        .select("id, persona_id, trigger_type, enabled, last_triggered_at, next_trigger_at"),
+    ),
+    loadPersonaMeta(),
+  ]);
+  return r.map((t) => {
+    const persona = loadMeta(meta, t.persona_id);
+    return {
+      id: t.id,
+      personaId: t.persona_id,
+      personaName: persona.name,
+      personaColor: persona.color,
+      triggerType: t.trigger_type,
+      enabled: t.enabled,
+      lastTriggeredAt: t.last_triggered_at,
+      nextTriggerAt: t.next_trigger_at,
+    };
+  });
 };

@@ -6,6 +6,7 @@ import { KeyRound } from "lucide-react";
 import GlowCard from "@/components/GlowCard";
 import { useTranslation } from "@/i18n/useTranslation";
 import { MOCK_VAULT_CHANGES, type VaultAction } from "@/lib/mock-dashboard-data";
+import { useAuthStore } from "@/stores/authStore";
 
 const ACTION_TINT: Record<VaultAction, string> = {
   rotated: "border-cyan-500/20 bg-cyan-500/8 text-cyan-400",
@@ -23,6 +24,11 @@ const ACTION_TINT: Record<VaultAction, string> = {
 export function VaultChangesCard() {
   const { t } = useTranslation();
   const labels = t.dashboard.home.vaultChanges;
+  const isDemo = useAuthStore((s) => s.isDemo);
+
+  // Credential vault is local-by-design on the desktop and never synced to the
+  // cloud mirror — there's no real source for this card in supabase mode.
+  if (!isDemo) return null;
 
   return (
     <GlowCard accent="emerald" className="h-full p-5">

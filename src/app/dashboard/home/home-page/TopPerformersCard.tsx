@@ -7,7 +7,8 @@ import GlowCard from "@/components/GlowCard";
 import PersonaAvatar from "@/components/dashboard/PersonaAvatar";
 import { healthScoreColor } from "@/components/dashboard/healthScoreColor";
 import { useTranslation } from "@/i18n/useTranslation";
-import { MOCK_LEADERBOARD, type LeaderboardTrend } from "@/lib/mock-dashboard-data";
+import { type LeaderboardTrend } from "@/lib/mock-dashboard-data";
+import { useTopPerformers } from "./useTopPerformers";
 
 const MEDALS = [
   { label: "1st", className: "border-amber-500/30 bg-amber-500/15 text-amber-400" },
@@ -28,7 +29,8 @@ const TREND: Record<LeaderboardTrend, { Icon: React.ElementType; color: string }
  */
 export function TopPerformersCard() {
   const { t } = useTranslation();
-  const top = MOCK_LEADERBOARD.slice(0, 3);
+  const { leaderboard } = useTopPerformers();
+  const top = leaderboard.slice(0, 3);
 
   return (
     <GlowCard accent="amber" className="h-full p-5">
@@ -44,6 +46,9 @@ export function TopPerformersCard() {
         </Link>
       </div>
 
+      {top.length === 0 ? (
+        <p className="py-8 text-center text-sm text-muted-dark">{t.dashboard.noExecutionsYet}</p>
+      ) : (
       <div className="space-y-2">
         {top.map((entry, index) => {
           const medal = MEDALS[index];
@@ -72,6 +77,7 @@ export function TopPerformersCard() {
           );
         })}
       </div>
+      )}
     </GlowCard>
   );
 }
