@@ -297,6 +297,36 @@ Use an assignment when you know the outcome but not the exact steps. Use a pipel
 :::
   `,
 
+  "team-memory-and-goals": `
+## Team Memory & Goals
+
+A team is more than a set of agents — it's agents that **remember together** and pull toward a shared outcome. Two things make that work: shared team memory, and goals.
+
+### Shared team memory
+
+As a team works, it records decisions and constraints — "we standardized on this format", "this account is out of scope", "the reviewer rejected approach X". Those notes become **team memory**, and a compact digest of the most important ones flows into every member's context on its next run.
+
+The effect: the team converges instead of repeating itself. An agent doesn't rediscover a decision a teammate already made — it inherits it. You can see and curate this memory in the Team Memory panel on the canvas.
+
+### Goals — steer without micromanaging
+
+Link a team to a **goal** and you stop babysitting individual runs. The goal tracks progress as the team works, and the app surfaces only the things that actually need a human — a stalled goal, an approaching deadline, a step awaiting your review. Everything else just runs.
+
+This is the "set the direction, stay high-level" loop: you define the outcome and the guardrails; the team handles the rest and raises its hand when it needs you.
+
+:::tip
+Think of team memory as the team's institutional knowledge and the goal as its north star. Memory keeps the team consistent run-to-run; the goal keeps it pointed at something worth doing.
+:::
+
+### Key Points
+
+- **Shared memory** — decisions/constraints recorded by the team are injected into each member's next run
+- **Convergence** — members build on each other's conclusions instead of re-deriving them
+- **Goal linking** — tie a team to a goal to track progress and due dates
+- **Surfaced, not buried** — the attention queue raises only what needs you (stalled, overdue, awaiting review)
+- **Curate it** — review, edit, or remove team memories from the canvas panel
+  `,
+
   "debugging-pipeline-issues": `
 ## Debugging Pipeline Issues
 
