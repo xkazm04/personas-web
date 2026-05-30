@@ -2,7 +2,7 @@ export const content: Record<string, string> = {
   "the-monitoring-dashboard": `
 ## The Monitoring Dashboard
 
-The Overview page is your command center for everything happening across your agents. The Dashboard tab opens by default and shows a grid of KpiTiles — one tile per metric (success rate, total runs, total cost, average duration, active agents, failures-today, etc.). Each tile has three density modes (compact / standard / detail) that you switch by clicking the tile; useful when you want a quick number vs. when you want the trend chart and breakdown.
+The Overview page is your command center for everything happening across your agents. The Mission control tab opens by default and shows a grid of KpiTiles — one tile per metric (success rate, total runs, total cost, average duration, active agents, failures-today, etc.). Each tile has three density modes (compact / standard / detail) that you switch by clicking the tile; useful when you want a quick number vs. when you want the trend chart and breakdown.
 
 Below the KpiTiles, the Overview surfaces live activity, recent failures, and notifications you've subscribed to. Everything on this page is filterable by agent, by group, and by time range — the same filter set applies across every panel so you can scope the whole dashboard to "this week, just my Marketing agents" in one click.
 
