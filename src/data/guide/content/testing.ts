@@ -4,7 +4,7 @@ export const content: Record<string, string> = {
 
 Testing is how you keep agents trustworthy as you iterate. Every prompt edit, every model swap, every new tool you add changes the agent's behavior in ways you can't fully predict from reading the diff. Testing turns that uncertainty into evidence: run the new version against representative inputs, compare to the previous version, see whether you improved the things you meant to and didn't regress the things you didn't.
 
-The Lab tab on each agent's editor is where this happens. It has four modes — Arena, A-B, Matrix, Eval — each answering a different question. Arena compares models on the same prompt. A-B compares two prompts on the same model. Matrix tests combinations of prompt components. Eval is the full grid: every prompt × every model.
+The Lab tab on each agent's editor is where this happens. It's a single **Versions & Ratings** table: every prompt version your agent has, crossed with every model you've measured it on — one row per pair, with the live config marked Active. From any row you measure it across models, activate it, diff it against the live version, or hand it to the Athena companion to improve.
 
 ### Key Points
 
@@ -15,42 +15,35 @@ The Lab tab on each agent's editor is where this happens. It has four modes — 
 
 ### How It Works
 
-Each Lab mode dispatches the same trigger payload to multiple agent variants (different prompts, different models, or both) in parallel. Outputs are presented side by side with quantitative metadata (duration, cost, token count) and your subjective rating buttons. The results land in the agent's test history and feed forward into fitness scoring.
+Measuring a version dispatches the agent's prompt to every selected model in parallel. Each result is scored (tool accuracy, output quality, protocol compliance) and rolled up into a single rating per (version, model) cell, alongside cost and latency. Pin any version as a regression baseline and every other row shows its delta on the same model.
 
 :::tip
-The cheapest moment to catch a prompt regression is right after you wrote it. Make Lab → A-B against the previous prompt version your habit on every prompt edit; the friction is much lower than discovering a regression in production runs three days later.
+The cheapest moment to catch a prompt regression is right after you wrote it. Pin your last known-good version as the baseline; after each edit, measure the new version and read its Δ-vs-baseline column — much lower friction than discovering a regression in production three days later.
 :::
   `,
 
   "the-testing-lab-overview": `
 ## The Testing Lab Overview
 
-The Lab tab on each agent's editor is one workspace with four modes. Pick the mode by what you're trying to learn:
+The Lab tab on each agent's editor is one table: prompt **versions** down the side, the **models** you've measured each on across the rows. One row is the live config. Read it top to bottom to answer the only question that matters — "which version + model should ship?"
 
-### The Four Modes
+### What each column tells you
 
-:::compare
-**Arena**
-Same prompt, multiple models. Sends one input through Claude / GPT / Gemini / local in parallel. Best for "which model is right for this agent?"
----
-**A-B**
-Two prompts, same model. Compare a prompt change against its predecessor under identical conditions. Best for "did this edit improve things?"
----
-**Matrix**
-Combinatorial. Define prompt components and the matrix tests every combination (3 × 4 = 12 variants). Best for "I have multiple competing ideas — which combo wins?"
----
-**Eval**
-Full grid: N prompts × M models. The complete picture when you want to optimize prompt *and* model together. Best when a major change is on the table.
-:::
+- **Rating** — the weighted composite score (tool accuracy, output quality, protocol compliance) averaged across every measurement of that version + model. The ★ marks the best model for each version.
+- **Δ baseline** — once you pin a version as the regression baseline, every row shows how it compares on the same model. A meaningful drop is flagged.
+- **Cost** — average spend per measured run, so the model-selection decision weighs quality against price in one place.
 
-### How It Works
+### What you do from a row
 
-Each mode shares the same input picker (manual entry, a paste of structured JSON, or replay of a real past execution from this agent's history) and the same rating UI. Output columns expand for the full trace (model call, tool calls, decision branches) just like a regular execution. Results are saved to test history with the test mode tagged, so you can browse past tests by mode.
+- **Activate** — make this (version, model) the agent's live config in one click; it sets both the prompt and the model.
+- **Measure** — run the version across models (an Arena sweep) to fill in its ratings.
+- **Improve** — hand the version to the Athena companion with its weakest metric pre-filled; you say what to focus on, she drafts the next version.
+- **Diff** — see exactly what changed between this version's prompt and the live one.
 
-For chained agents, the Lab tests just this agent — the upstream is mocked using the input you specified, so you can iterate on one stage of a pipeline without rerunning the whole chain.
+For chained agents, measurement tests just this agent — the upstream is mocked using the input you specified, so you can iterate on one stage of a pipeline without rerunning the whole chain.
 
 :::tip
-Most weeks, Arena and A-B are enough. Matrix is for "I have three plausible refactors and want to compare", Eval is for "I'm contemplating a major rewrite or a tier change". Don't reach for the heavy mode by default — the cheaper ones are usually sufficient.
+The everyday loop: edit the prompt → **Measure** → compare the rating to your baseline → **Activate** if it won. Reach for Athena's **Improve** when you're not sure what to change.
 :::
   `,
 
