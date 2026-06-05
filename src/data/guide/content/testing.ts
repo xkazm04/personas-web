@@ -48,54 +48,52 @@ The everyday loop: edit the prompt → **Measure** → compare the rating to you
   `,
 
   "arena-testing": `
-## Arena Testing
+## Measuring a Version (Arena)
 
-Arena sends the same prompt and same input to multiple models in parallel, then lays the results out side by side. Costs and durations are shown alongside the outputs so you're comparing on three axes — quality (your judgment), speed (engine-measured), and cost (token-by-token).
+**Measure** is the action behind every rating in the table. Click it on any row and the Arena opens — a roster where you pick the models to put that version's prompt against. It dispatches one run per model in parallel and lays the results out side by side, comparing on three axes: quality (the scored composite), speed (engine-measured), and cost (token-by-token).
 
-The most common use is the model-selection decision: "this agent has been running on Sonnet 4.6, would Haiku 4.5 hold up for 1/30th the cost?" Arena answers that in one test rather than weeks of production observation.
+The most common use is the model-selection decision: "this version has been running on Sonnet 4.6, would Haiku 4.5 hold up for a fraction of the cost?" Measure answers that in one sweep rather than weeks of production observation, and the scores flow straight back into the version's row.
 
 ### Key Points
 
-- **Parallel dispatch** — all models run at once; total wall-clock time = the slowest one, not the sum
-- **Side-by-side outputs** — full output of each model is visible without switching tabs
-- **Cost + duration shown** — under each output, in the same view as the text
-- **Rating UI per column** — thumbs-up / thumbs-down / star per model; ratings persist into the agent's fitness data
-- **Replay from history** — Arena tests can pull input from any past execution of this agent, so you're testing on real shape
+- **Version-scoped** — Measure runs *that row's* prompt version, not whatever happens to be live, so a row's rating always reflects the version it sits on
+- **Parallel dispatch** — every selected model runs at once; wall-clock = the slowest one, not the sum
+- **Side-by-side outputs** — full output of each model is visible without switching tabs, with cost + duration under each
+- **Scores roll up** — each run is scored (tool accuracy, output quality, protocol compliance) and averaged into the (version, model) cell back in the table
+- **Tagged, not counted** — measurement runs are tagged so they don't pollute the agent's production metrics
 
 ### How It Works
 
-Arena dispatches one execution per selected model using the agent's current prompt and tool configuration. Each execution is independent (separate trace, separate cost accounting) and tagged \`arena\` so it doesn't count against the agent's normal production metrics. Results appear as columns; you rate each column; ratings feed into the per-model fitness data for this agent.
+Measure dispatches one execution per selected model using the chosen version's prompt + the agent's tool configuration. Each execution is independent (separate trace, separate cost accounting). When the sweep finishes, the table's Rating and Cost columns for that version fill in.
 
 :::tip
-Pick 3 models at most per Arena run. More than that and side-by-side reading becomes unwieldy. If you're considering 5+ models, run multiple Arenas pairwise and keep a running mental note of which models won each round.
+Pick 3 models at most per sweep — more than that and side-by-side reading gets unwieldy. To compare two *versions*, measure each on the same models, then read their rows (and the Δ-baseline column) in the table.
 :::
   `,
 
   "ab-testing-prompts": `
-## A-B Testing Prompts
+## Comparing Prompt Versions
 
-A-B runs the same input through two prompt variants on the same model, so the only variable is the prompt. This is the right tool for evaluating a prompt edit: load the previous version as A, the new version as B, run on representative inputs, and see which one produces the result you want.
-
-The Lab's version picker integrates with the prompt's version history — you don't need to copy-paste the old version, just pick it from the dropdown. This makes "compare my current draft to last week's working version" a one-click setup.
+To evaluate a prompt edit, you don't need a separate A/B mode — the table *is* the comparison. Measure the old version and the new version on the same model, and their rows sit next to each other with their composite ratings, so the better prompt is the higher number. Because every version is an immutable snapshot in the prompt's history, the comparison is always apples-to-apples on the same model.
 
 ### Key Points
 
-- **Two prompts, one model, one input** — single-variable comparison
-- **Pick from version history** — A or B can be any past version of this agent's prompt
-- **Same trace fidelity** — both variants get full execution traces, so you can compare tool-call patterns, not just final output
-- **Multiple input rounds** — run the A-B against several different inputs in sequence to test generalization, not just one lucky case
-- **Score persists into fitness** — A-B ratings feed the same fitness data Arena and genome use
+- **Same model, two versions** — measure both on the same model and read the two rows; the only variable is the prompt
+- **Δ-baseline does the math** — pin the known-good version as the baseline and every other row shows its delta on the same model, so a regression is a red number, not a side-by-side squint
+- **Immutable snapshots** — versions never change after creation, so a measurement of v3 is always a measurement of *that* prompt
+- **Diff to see why** — the row's Diff action shows exactly what changed between that version's prompt and the live one
+- **Scores roll up** — every measurement feeds the same rating data, so comparisons accumulate as you iterate
 
 ### How It Works
 
-The A-B engine dispatches both prompts as independent executions and labels them A and B in the results panel. Beyond that, they're regular executions — same trace, same cost accounting, but tagged \`ab_test\` so they're filterable in test history and don't pollute production metrics.
+Each version's prompt is dispatched as independent measurement runs (via the Measure action), scored, and averaged into its (version, model) cell. The table aggregates those cells, marks the best model per version with a ★, and — once a baseline is pinned — computes each row's Δ against the baseline on the matching model.
 
 :::code-compare
-### Version A
+### v3 (baseline)
 Summarize the document.
 Keep it short.
 ---
-### Version B
+### v4 (candidate)
 Summarize the document in exactly
 3 bullet points. Each bullet should
 be one sentence. Start with the
@@ -103,59 +101,54 @@ most important finding.
 :::
 
 :::warning
-Change one thing per A-B round. If B differs from A in *both* format *and* tone *and* length, you can't tell which dimension caused the score change. Make one change, run A-B, accept or reject, then make the next change.
+Change one thing per version. If v4 differs from v3 in format *and* tone *and* length, the rating tells you it moved but not which dimension caused it. Make one change, measure, Activate if it won, then make the next change.
 :::
   `,
 
   "matrix-testing": `
-## Matrix Testing
+## Improving a Version with Athena
 
-Matrix is combinatorial A-B-C-D-… all at once. You define your prompt as components (intro × instructions × output-format, for instance) and the matrix generates every combination, dispatches them all, and ranks the results by fitness score.
+When a version's rating shows a weakness but you're not sure how to fix it, use the row's **Improve** action. It hands the version to the **Athena** companion with a brief already filled in — the persona, the version, and its weakest measured metric (tool accuracy, output quality, or protocol). You add one line about what to focus on, and Athena drafts the next version for you.
 
-With 3 components of 3 options each that's 27 combinations — way more than you'd test manually but easy for the engine to fan out in parallel. The matrix is most useful when you have multiple competing ideas for how to structure a prompt and want to find the combination that actually performs best rather than the one you guessed at.
+This replaced the old combinatorial "matrix" mode: instead of you hand-defining a grid of prompt components and reading a ranked table, you describe the goal and let the companion propose a concrete next version, which you then measure and Activate if it won.
 
 ### Key Points
 
-- **Define components, get combinations** — the matrix expands the components into all valid combinations
-- **Parallel dispatch** — every combo runs simultaneously (subject to provider rate limits)
-- **Ranked results** — fitness-scored grid, sorted from best to worst
-- **Component-level attribution** — see which components correlate with high scores; useful even when you don't adopt the top winner verbatim
-- **Save winning combo** — one-click to set the winning combination as the agent's active prompt
+- **Weakness pre-filled** — Improve reads the row's scores and tells Athena which metric is dragging, so you don't have to diagnose it first
+- **You stay in control** — Athena seeds the chat and waits; nothing is drafted until you say what to focus on
+- **Closes the loop** — the new version lands in the same table, ready to Measure against the one it came from
+- **One change at a time** — because each improvement is a discrete new version, the rating tells you whether it actually helped
 
 ### How It Works
 
-You define each component as a labeled set of variants in the matrix tab. The engine constructs every combination as a renderable prompt and dispatches each as an independent execution. Results are aggregated into a grid ranked by your chosen fitness signal (rating, cost-per-quality, speed, custom). Per-component attribution is computed by averaging fitness across combinations that share that component — so even if no single winner stands out, you learn which intro / instruction style / output format performs best on average.
-
-:::info
-With 3 components × 3 options = 27 variants. With 4 × 4 = 256. The matrix can handle large grids but you'll burn through tokens proportionally. Start with 3 × 3 and only expand if the result is genuinely ambiguous.
-:::
+Improve opens the Athena chat with a composed brief (persona name + version + weakest metric + the model it was measured on) and pauses on your input. When you send it, Athena proposes a revised prompt as a new version. Measure it, compare its rating to its parent (and to your pinned baseline), and Activate the winner.
 
 :::tip
-Matrix is most useful right after a major redesign of the prompt. When you're not sure whether the new structure is better than the old, matrix-test 3-4 candidate structures against a few representative inputs — the winner is usually clearer than you'd expect.
+Reach for Improve when you can see *that* a version is weak but not *why* — the companion is better at turning "protocol compliance is low on opus" into a concrete prompt change than a blank editor is.
 :::
   `,
 
   "eval-testing": `
-## Eval Testing
+## The Ratings Table Is the Grid
 
-Eval is the full grid: every prompt variant × every model. You pick the prompts (typically 2-3 candidates), pick the models (typically 2-4), and the eval grid runs all combinations and presents a heatmap of scores. The best prompt-model pair is highlighted.
+There's no separate "eval" mode anymore — the Versions & Ratings table *is* the version × model grid. Every version you've measured sits as a row per model, with its composite score; the ★ marks the best model for each version, and the live config is marked Active. The "full grid" you used to assemble by hand is just the accumulated state of the table.
 
-This is the heavyweight mode — most expensive in tokens, most thorough in coverage. Use it when you're making a major decision that affects both axes: "we're considering rewriting the prompt and moving to a cheaper model, can we do both at once and still hit our quality bar?"
+That makes the major both-axes decision — "should we rewrite the prompt *and* move to a cheaper model?" — a matter of reading the table: measure the candidate version on the candidate models, then compare its cells against the incumbent's, weighing the Rating against the Cost column.
 
 ### Key Points
 
-- **N prompts × M models** — heatmap of scores across both dimensions
-- **Best combination highlighted** — fitness-ranked, with the optimal cell visually called out
-- **Per-axis breakdowns** — see whether the prompt change or the model change drove the score change
-- **Test-history tagged** — eval runs land in history under the \`eval\` tag for later review
-- **One-click adopt** — apply the best combination (prompt version + model selection) to the live agent
+- **Versions × models, persistent** — the grid isn't a one-off run; it's the table, and it fills in as you measure
+- **Best cell highlighted** — the ★ calls out the top model per version; the Active row marks what's live
+- **Quality vs cost in one view** — Rating and Cost columns sit side by side, so the cheap-but-good cell is easy to spot
+- **Activate the winner** — one click sets a (version, model) cell as the agent's live config — prompt and model together
+- **Δ-baseline for safety** — pin an incumbent and the grid shows every candidate's delta, so a "cheaper model" that quietly regresses shows up red
 
 ### How It Works
 
-Eval dispatches \`prompts × models\` executions in parallel (subject to provider rate limits). Each cell is one independent execution with its own trace. The grid view aggregates by prompt-model pair; you rate cells using the same UI as Arena and A-B; fitness scores roll up into per-cell ranking. The top cell is the recommended combination — adopt it directly from the grid view.
+Each cell is the rolled-up score of the Measure runs for that (version, model) pair. The table aggregates them, ranks models within a version, and — with a baseline pinned — computes deltas on the matching model. Activating a cell rolls that version's prompt live and switches the agent's model to that cell's model in one transaction.
 
 :::warning
-Eval is the most expensive mode. 3 prompts × 4 models × 5 inputs = 60 executions, each with its own model call. Run sparingly, on representative input sets, and only when the decision really crosses both axes. For prompt-only decisions, A-B; for model-only decisions, Arena.
+Measuring every version on every model gets expensive fast — N versions × M models × your input set, each a real model call. Measure the candidates that matter on the models you'd actually ship, not the whole cartesian product.
 :::
   `,
 
@@ -239,16 +232,14 @@ Patience pays off. Generation 1 usually isn't dramatically better than your star
 
 A "breeding cycle" is one full evolution run: pick the agent, set the parameters, kick off, wait, review the population, adopt. Each cycle is N generations of M variants tested against your chosen input set. The total cost is roughly \`generations × population × input-count × per-run-cost\` — predictable from the parameters.
 
-The Genome tab on the Lab is the entry point. It opens with default parameters tuned for a representative starting point (5 generations × 10 variants × 5 inputs), which is enough to see meaningful change without burning excessive tokens. Adjust the parameters before kicking off if you want a heavier or lighter cycle.
+Breeding and evolution no longer have their own Lab tab — they run **headless, through the Athena companion**. You ask Athena to breed two strong agents or to run an evolution cycle on one, and (after you approve the run, since it's compute-heavy) the same engine does the work in the background. The engine, parameters, and fitness model below are unchanged; only the trigger moved from a panel to a conversation.
 
 :::steps
-1. **Open Lab → Genome** on the agent you want to evolve
-2. **Pick the input set** — manual entry, a saved set, or replay-from-history
-3. **Configure fitness weights** — rating weight (primary), cost weight (negative if you want shorter), duration weight (negative if you want faster)
-4. **Set generations and population** — 5 × 10 is the default; raise both for harder problems, lower both for quick experiments
-5. **Click Start Cycle** — the engine runs unattended; you can leave the app open or come back later
-6. **Review the final population** — ranked by fitness, with the trace of each variant available
-7. **Adopt the winner** — or any other variant you prefer; the agent's active prompt is updated and the cycle's full population is preserved in version history
+1. **Ask Athena** — e.g. "breed the Researcher and Summarizer agents" or "run an evolution cycle on the Researcher"
+2. **Confirm the parameters** — Athena proposes parents / fitness weights / generations × population; defaults (5 generations × 10 variants) suit most cases
+3. **Approve the run** — breeding and evolution are gated behind an approval card because they spawn a heavy background sweep
+4. **Let it run unattended** — the engine works in the background; you can keep using the app
+5. **Review the offspring** — ranked by fitness; adopt the winner (or any variant) and it lands in the agent's version history, ready to Measure in the table
 :::
 
 ### How It Works
@@ -296,7 +287,7 @@ Read the adopted variant before clicking Adopt. Evolution finds high-fitness pro
 
 Fitness is the single number that drives Matrix / Eval / Genome selection. It combines your manual ratings (primary signal) with objective metrics (cost, duration, success rate, output-length-target conformance, custom signals) into a weighted score. You configure the weights per agent or per test — by default, ratings dominate and objective metrics are tiebreakers.
 
-The score is computed per variant per input, then aggregated across all inputs in the test set to produce one fitness per variant. Variants are ranked by aggregate fitness; that ranking is what the genome selection algorithm consumes and what the Lab UI uses to highlight winners.
+The score is computed per variant per input, then aggregated across all inputs in the test set to produce one fitness per variant. Variants are ranked by aggregate fitness; that ranking is what the genome selection algorithm consumes and what Athena surfaces when she presents the offspring for review.
 
 ### Key Points
 

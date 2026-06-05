@@ -417,34 +417,34 @@ export const GUIDE_TOPICS: GuideTopic[] = [
   {
     id: "arena-testing",
     categoryId: "testing",
-    title: "Arena testing",
+    title: "Measuring a version",
     description:
-      "Comparing your agent across multiple AI models at once. Send the same task to Claude, GPT, Gemini, and others, then see which model produces the best result. It's like a talent show where AI models compete and you pick the winner.",
-    tags: ["testing", "arena", "model-comparison", "benchmark", "evaluate"],
+      "The Measure action behind every rating: open the Arena on a prompt version, pick the models, and run them in parallel to score that version. Like a talent show where the models compete on one version's prompt and the scores land back in the table.",
+    tags: ["testing", "arena", "measure", "model-comparison", "evaluate"],
   },
   {
     id: "ab-testing-prompts",
     categoryId: "testing",
-    title: "A/B testing prompts",
+    title: "Comparing versions",
     description:
-      "Running two prompt versions side-by-side to find the winner. Change one thing in your prompt and see if the new version performs better. This scientific approach takes the guesswork out of prompt improvement.",
-    tags: ["testing", "ab-test", "comparison", "prompts", "optimization"],
+      "Evaluating a prompt edit without a separate A/B mode — measure the old and new versions on the same model and read their rows in the table. Pin a baseline and the Δ column flags regressions for you.",
+    tags: ["testing", "comparison", "versions", "baseline", "optimization"],
   },
   {
     id: "matrix-testing",
     categoryId: "testing",
-    title: "Matrix testing",
+    title: "Improving with Athena",
     description:
-      "Generating multiple prompt variations automatically to explore what works best. The matrix creates dozens of combinations from your building blocks and tests them all. It's like trying every combination on a lock instead of guessing the code.",
-    tags: ["testing", "matrix", "variations", "automated", "exploration"],
+      "When a version scores low but you're not sure how to fix it, the Improve action hands it to the Athena companion with its weakest metric pre-filled. You say what to focus on; Athena drafts the next version to measure.",
+    tags: ["testing", "improve", "athena", "iteration", "prompts"],
   },
   {
     id: "eval-testing",
     categoryId: "testing",
-    title: "Eval testing",
+    title: "The ratings grid",
     description:
-      "Testing many prompts against many models in a grid. Eval mode gives you a complete picture — every prompt version tested against every model. The results appear in a clear table so you can spot the best combination instantly.",
-    tags: ["testing", "eval", "grid", "comprehensive", "prompts", "models"],
+      "The Versions & Ratings table is the version × model grid — every measured version as a row per model, the best cell starred, the live config marked Active. Activate the winning prompt + model in one click.",
+    tags: ["testing", "grid", "ratings", "versions", "models"],
   },
   {
     id: "rating-and-scoring-results",
