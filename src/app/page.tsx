@@ -14,6 +14,7 @@ import {
   LazyVision,
   LazyPlaygroundSplit,
   LazyGetStarted,
+  LazyWhyAgents,
 } from "@/components/sections/lazy";
 import StageSection from "@/components/StageSection";
 import SectionDivider from "@/components/SectionDivider";
@@ -45,6 +46,7 @@ interface SectionConfig {
 
 const sections: SectionConfig[] = [
   { Component: LazyUseCases,           glow: "emerald", fromColor: "cyan",    toColor: "emerald", dividerFrom: "cyan",    dividerTo: "emerald", wrapperId: "tools", gate: true },
+  { Component: LazyWhyAgents,          glow: "purple",  fromColor: "emerald", toColor: "purple",  dividerFrom: "emerald", dividerTo: "purple", gate: true },
   { Component: LazyPlaygroundSplit,    glow: "cyan",    fromColor: "emerald", toColor: "cyan",    dividerFrom: "emerald", dividerTo: "cyan", wrapperId: "playground", gate: true },
   { Component: LazyGetStarted,         glow: "emerald", fromColor: "cyan",    toColor: "emerald", dividerFrom: "cyan",    dividerTo: "emerald", wrapperId: "get-started", gate: true },
   { Component: LazyOrchestrationHub,   glow: "cyan",    fromColor: "emerald", toColor: "cyan",    dividerFrom: "emerald", dividerTo: "cyan",    wrapperId: "pipelines", gate: true },

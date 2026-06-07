@@ -131,6 +131,12 @@ export const LazyUseCases = createLazySection(
   { ssr: false },
 );
 
+export const LazyWhyAgents = createLazySection(
+  () => import("@/components/sections/why-agents"),
+  SectionSkeleton,
+  { ssr: false },
+);
+
 export const LazyPlaygroundSplit = createLazySection(
   () => import("@/components/sections/playground-split"),
   SectionSkeleton,
