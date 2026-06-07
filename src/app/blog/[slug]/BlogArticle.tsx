@@ -84,6 +84,7 @@ export default function BlogArticle({
                 seeItInAction: t.blogPage.seeItInAction,
                 browseTemplates: t.blogPage.browseTemplates,
               }}
+              links={post.relatedLinks}
             />
           </motion.article>
         </SectionWrapper>

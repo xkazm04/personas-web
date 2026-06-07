@@ -12,6 +12,10 @@ export interface BlogPost {
   readingTime: number;
   content: string;
   featured?: boolean;
+  /** Optional per-post cross-links rendered at the end of the article instead
+   *  of the generic defaults. Use safe in-app hrefs (guide categories,
+   *  /templates, /#download). */
+  relatedLinks?: { href: string; label: string }[];
 }
 
 export const BLOG_CATEGORIES: { id: BlogCategory; label: string; color: string }[] = [
@@ -53,6 +57,10 @@ Download Personas for Windows, macOS, or Linux. Create your first agent in natur
   },
   {
     slug: "self-healing-execution-engine",
+    relatedLinks: [
+      { href: "/guide/troubleshooting", label: "Troubleshooting guide" },
+      { href: "/#download", label: "Download free" },
+    ],
     title: "How Personas Self-Healing Engine Keeps Your Agents Running",
     description:
       "Deep dive into automatic failure detection, model failover, and circuit-breaker patterns that make agent pipelines resilient.",
@@ -90,6 +98,10 @@ In our testing, self-healing reduced manual intervention on agent pipelines by 9
   },
   {
     slug: "building-slack-triage-bot",
+    relatedLinks: [
+      { href: "/guide/triggers", label: "Set up triggers" },
+      { href: "/templates", label: "Browse templates" },
+    ],
     title: "Build a Slack Triage Bot in 5 Minutes with Personas",
     description:
       "Step-by-step tutorial: create an AI agent that monitors Slack channels, categorizes messages, and routes urgent items to the right team.",
@@ -141,6 +153,10 @@ Once you're satisfied, toggle the schedule to Active. Your triage bot is now run
   },
   {
     slug: "credential-vault-security",
+    relatedLinks: [
+      { href: "/guide/credentials", label: "Credentials guide" },
+      { href: "/#download", label: "Download free" },
+    ],
     title: "Credential Vault: How Personas Secures Your API Keys",
     description:
       "AES-256 encryption, OS-native keyring, AI-assisted OAuth — how Personas protects your integrations without touching the cloud.",
@@ -369,6 +385,10 @@ This hybrid model means you don't have to choose upfront. Start local, add cloud
   },
   {
     slug: "multi-agent-pipeline-tutorial",
+    relatedLinks: [
+      { href: "/guide/pipelines", label: "Pipelines guide" },
+      { href: "/templates", label: "Browse templates" },
+    ],
     title: "Building Your First Multi-Agent Pipeline: A Visual Guide",
     description:
       "Step-by-step tutorial for creating a multi-agent pipeline where agents collaborate on complex tasks. Visual canvas, data flow, and real-time execution.",
