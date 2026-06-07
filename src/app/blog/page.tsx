@@ -2,10 +2,11 @@
 
 import { useState, useMemo } from "react";
 import { motion } from "framer-motion";
-import { Search, X } from "lucide-react";
+import { Search, X, Download, Rss } from "lucide-react";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/sections/Footer";
 import PageShell from "@/components/PageShell";
+import PrimaryCTA from "@/components/PrimaryCTA";
 import SectionWrapper from "@/components/SectionWrapper";
 import { SectionIntro } from "@/components/primitives";
 import { staggerContainer, fadeUp } from "@/lib/animations";
@@ -118,6 +119,27 @@ export default function BlogPage() {
             countsByCategory={countsByCategory}
             allPostsLabel={t.blogPage.allPosts}
           />
+
+          {/* Conversion band: readers consumed content and bounced — give them a
+              download path and a feed to subscribe to. */}
+          <motion.div
+            variants={fadeUp}
+            className="mx-auto mb-10 mt-8 flex max-w-3xl flex-col items-center justify-between gap-4 rounded-2xl border border-glass bg-white/[0.02] px-6 py-5 backdrop-blur-sm sm:flex-row"
+          >
+            <p className="text-center text-sm font-light text-muted-dark sm:text-left">
+              Build agents locally, free forever. No signup, no credit card.
+            </p>
+            <div className="flex shrink-0 items-center gap-4">
+              <a
+                href="/blog/feed.xml"
+                className="inline-flex items-center gap-1.5 text-sm font-medium text-muted-dark transition-colors hover:text-foreground"
+              >
+                <Rss className="h-4 w-4" />
+                RSS
+              </a>
+              <PrimaryCTA href="/#download" icon={Download} label="Download free" />
+            </div>
+          </motion.div>
 
           {showFeatured && (
             <FeaturedPost post={featured} />
