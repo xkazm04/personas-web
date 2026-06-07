@@ -1,7 +1,7 @@
 "use client";
 
 import { useMemo, useRef } from "react";
-import { motion, useTransform, useMotionValue, useSpring } from "framer-motion";
+import { motion, useTransform, useMotionValue, useSpring, useReducedMotion } from "framer-motion";
 import { Download, ChevronDown, Wand2, Gift, Sparkles } from "lucide-react";
 import { GithubIcon } from "@/components/icons/brand-icons";
 import { fadeUp, staggerContainer } from "@/lib/animations";
@@ -28,7 +28,11 @@ export default function HeroClient() {
     { label: t.hero.mode5, Icon: Sparkles },
   ];
   const liveStats = useLiveStats();
+  const shouldReduceMotion = useReducedMotion();
   const DOWNLOAD_URL = process.env.NEXT_PUBLIC_DOWNLOAD_URL;
+  // Repo link is env-configurable; fall back to the canonical org used in the
+  // footer so the CTA never dead-ends on github.com's generic homepage.
+  const GITHUB_URL = process.env.NEXT_PUBLIC_GITHUB_URL ?? "https://github.com/personas-ai";
   const sectionRef = useRef<HTMLElement>(null);
   useAnimationPauseRegister(sectionRef);
 
@@ -87,8 +91,8 @@ export default function HeroClient() {
                 lg, the badge sits inline within the centered text column. */}
             <span className="lg:ml-[500px] relative inline-flex items-center gap-2 overflow-hidden rounded-full border border-brand-cyan/80 bg-brand-cyan/5 px-4 py-1.5 text-lg font-bold tracking-wider uppercase text-brand-cyan font-mono shadow-[0_0_15px_color-mix(in_srgb,var(--brand-cyan)_20%,transparent)]">
               <span
-                className="absolute inset-0 animate-shimmer bg-linear-to-r from-transparent via-brand-cyan/10 to-transparent"
-                style={{ animationDuration: "3s" }}
+                className={`absolute inset-0 bg-linear-to-r from-transparent via-brand-cyan/10 to-transparent${shouldReduceMotion ? "" : " animate-shimmer"}`}
+                style={shouldReduceMotion ? undefined : { animationDuration: "3s" }}
               />
               <HoneycombMark className="relative shrink-0" />
               <span className="relative">{t.hero.badge}</span>
@@ -137,7 +141,7 @@ export default function HeroClient() {
           <motion.div variants={fadeUp} className="mt-12 flex w-full flex-col items-center justify-center gap-6 sm:w-auto sm:flex-row sm:flex-wrap lg:justify-start">
             <PrimaryCTA href={DOWNLOAD_URL ? "/api/download" : "#download"} icon={Download} label="Download" />
             <a
-              href="https://github.com"
+              href={GITHUB_URL}
               target="_blank"
               rel="noopener noreferrer"
               className="group relative flex w-[min(100%,20rem)] items-center justify-center gap-3 rounded-full border border-glass-hover bg-white/2 px-8 py-4 text-base font-medium text-muted transition-all duration-300 hover:border-glass-strong hover:text-foreground hover:bg-white/5 hover:shadow-[0_0_20px_color-mix(in_srgb,var(--foreground)_10%,transparent)] sm:w-auto overflow-hidden focus-visible:ring-2 focus-visible:ring-brand-cyan/40 focus-visible:outline-none"
@@ -162,9 +166,9 @@ export default function HeroClient() {
         <motion.div
           variants={fadeUp}
           className="hidden lg:flex flex-col items-center gap-4 perspective-1000"
-          onMouseMove={handleMouseMove}
-          onMouseLeave={handleMouseLeave}
-          style={{ rotateX, rotateY, transformStyle: "preserve-3d" }}
+          onMouseMove={shouldReduceMotion ? undefined : handleMouseMove}
+          onMouseLeave={shouldReduceMotion ? undefined : handleMouseLeave}
+          style={shouldReduceMotion ? { transformStyle: "preserve-3d" } : { rotateX, rotateY, transformStyle: "preserve-3d" }}
         >
           <div
             className="relative p-8 rounded-3xl border border-glass bg-white/2 backdrop-blur-md shadow-2xl transition-all duration-300 hover:border-glass-hover hover:bg-white/5"
@@ -184,7 +188,7 @@ export default function HeroClient() {
       <div className="absolute bottom-8 left-1/2 z-10 -translate-x-1/2">
         <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 1.5, duration: 1 }} className="flex flex-col items-center gap-1">
           <span className="text-base tracking-widest uppercase text-muted-dark">{t.hero.scroll}</span>
-          <ChevronDown className="h-4 w-4 text-muted-dark animate-scroll-hint" />
+          <ChevronDown className={`h-4 w-4 text-muted-dark${shouldReduceMotion ? "" : " animate-scroll-hint"}`} />
         </motion.div>
       </div>
 
