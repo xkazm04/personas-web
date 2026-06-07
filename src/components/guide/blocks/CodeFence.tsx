@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useId, useMemo, useState } from "react";
+import { motion, useReducedMotion } from "framer-motion";
 import type { HighlighterGeneric } from "shiki/core";
 
 import { CopyButton } from "./CopyButton";
@@ -93,6 +94,7 @@ function buildHighlightCss(scope: string, lines: number[]): string {
 
 export function CodeFence({ text, lang, lineNumbers, highlightLines }: CodeFenceProps) {
   const [html, setHtml] = useState<string | null>(null);
+  const shouldReduceMotion = useReducedMotion();
   const normalized = normalizeLang(lang);
   const rawScope = useId();
   // useId returns ":r0:" style identifiers — strip non-class-safe chars.
@@ -143,7 +145,14 @@ export function CodeFence({ text, lang, lineNumbers, highlightLines }: CodeFence
         <CopyButton text={text} />
       </div>
       {html ? (
-        <div
+        // Crossfade the highlighted output over the plain fallback (same chrome,
+        // padding and line-height already reserve the space) so the shiki swap
+        // no longer hard-cuts the colors on first paint. The plain <pre> stays
+        // the SSR/no-JS render — a skeleton here would blank the code server-side.
+        <motion.div
+          initial={shouldReduceMotion ? false : { opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ duration: 0.2 }}
           className={`shiki-output ${wrapperClass} [&_pre]:!bg-transparent [&_pre]:!p-4 [&_pre]:!pt-2 [&_pre]:font-mono [&_pre]:text-base [&_pre]:leading-relaxed [&_pre]:overflow-x-auto`}
           dangerouslySetInnerHTML={{ __html: html }}
         />
