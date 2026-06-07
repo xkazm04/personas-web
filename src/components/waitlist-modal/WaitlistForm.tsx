@@ -44,11 +44,13 @@ export function WaitlistForm({
           placeholder={labels.emailPlaceholder}
           required
           autoFocus
+          aria-invalid={!!errorMsg}
+          aria-describedby={errorMsg ? "waitlist-email-error" : undefined}
           className="w-full rounded-xl border border-glass bg-white/[0.03] px-4 py-3 text-base text-foreground placeholder:text-muted-dark focus:border-brand-cyan/30 focus:outline-none focus:ring-1 focus:ring-brand-cyan/20 transition-colors"
         />
         <AnimatePresence>
           {errorMsg && (
-            <motion.p initial={{ opacity: 0, y: -4 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -4 }} transition={TRANSITION_FAST} role="alert" className="mt-2 flex items-center gap-1.5 text-sm font-medium text-brand-rose">
+            <motion.p id="waitlist-email-error" initial={{ opacity: 0, y: -4 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -4 }} transition={TRANSITION_FAST} role="alert" className="mt-2 flex items-center gap-1.5 text-sm font-medium text-brand-rose">
               <AlertCircle className="h-3.5 w-3.5 shrink-0" />
               {errorMsg}
             </motion.p>
