@@ -37,42 +37,46 @@ function VisionSkeleton() {
   );
 }
 
-/* ── Pricing skeleton: heading + 3 side-by-side pricing cards ── */
+/* ── Pricing skeleton: heading + offer banner + 3 feature-group cards ──
+   Mirrors the live section (SectionIntro + offer framing + FeatureGroupCard grid)
+   so the swap from skeleton to content doesn't jump. ── */
 function PricingSkeleton() {
   return (
     <section className="relative px-6 py-24 md:py-32">
       <div className="mx-auto max-w-6xl flex flex-col items-center">
-        {/* Heading */}
+        {/* Heading + description */}
         <div className={`h-10 w-2/3 max-w-md sm:h-12 ${Ps}`} />
         <div className={`mt-4 h-4 w-1/2 max-w-sm ${Pm}`} />
 
-        {/* Three pricing cards */}
-        <div className="mt-16 grid gap-6 sm:grid-cols-2 lg:grid-cols-3 w-full max-w-5xl">
-          {[5, 5, 6].map((featureCount, i) => (
-            <div key={i} className={`${P} flex flex-col gap-4 p-6 ${i === 1 ? "ring-1 ring-white/[0.06]" : ""}`}>
-              {/* Tier name */}
-              <div className={`${Pm} h-5 w-16`} />
-              {/* Price */}
-              <div className={`${Pm} h-10 w-24`} />
+        {/* Offer banner */}
+        <div className={`mt-10 h-32 w-full max-w-3xl ${P}`} />
+
+        {/* Three feature-group cards (icon + title/tagline + concept lines + link) */}
+        <div className="mt-14 grid gap-5 sm:grid-cols-2 lg:grid-cols-3 w-full max-w-6xl">
+          {[4, 4, 5].map((conceptCount, i) => (
+            <div key={i} className={`${P} flex flex-col gap-4 p-6`}>
+              {/* Header: icon square + title/tagline */}
+              <div className="flex items-start gap-3">
+                <div className={`${Pm} h-12 w-12 !rounded-xl shrink-0`} />
+                <div className="flex-1 space-y-2">
+                  <div className={`${Pm} h-6 w-3/4`} />
+                  <div className={`${Pm} h-3 w-1/2`} />
+                </div>
+              </div>
               {/* Divider */}
               <div className="h-px w-full bg-white/[0.04]" />
-              {/* Best for box */}
-              <div className={`${Pm} h-16 w-full`} />
-              {/* Feature lines */}
-              {Array.from({ length: featureCount }).map((_, j) => (
-                <div key={j} className="flex items-center gap-2">
-                  <div className={`${Pm} h-4 w-4 !rounded-full shrink-0`} />
-                  <div className={`${Pm} h-3 flex-1`} style={{ maxWidth: 140 + j * 20 }} />
+              {/* Concept lines */}
+              {Array.from({ length: conceptCount }).map((_, j) => (
+                <div key={j} className="flex items-center gap-2.5">
+                  <div className={`${Pm} h-4 w-4 !rounded shrink-0`} />
+                  <div className={`${Pm} h-3 flex-1`} style={{ maxWidth: 150 + j * 15 }} />
                 </div>
               ))}
-              {/* CTA button */}
-              <div className={`${Pm} h-10 w-full !rounded-full mt-4`} />
+              {/* Read guide link */}
+              <div className={`${Pm} h-4 w-28 mt-1`} />
             </div>
           ))}
         </div>
-
-        {/* Disclaimer bar */}
-        <div className={`mt-10 h-12 w-full max-w-5xl ${P}`} />
       </div>
     </section>
   );
