@@ -1,5 +1,7 @@
 "use client";
 
+import { ArrowDown } from "lucide-react";
+
 import { CopyButton } from "./CopyButton";
 
 interface CodeCompareProps {
@@ -31,6 +33,12 @@ export function CodeCompare({
         <pre className="p-4 font-mono text-base leading-relaxed text-muted-dark overflow-x-auto">
           <code>{before}</code>
         </pre>
+      </div>
+      {/* Mobile-only directional affordance: the panels stack below sm, so show a
+          down-arrow to preserve the before -> after relationship. Hidden at sm+
+          where the side-by-side grid makes it obvious. */}
+      <div className="flex items-center justify-center text-muted-dark sm:hidden" aria-hidden="true">
+        <ArrowDown className="h-4 w-4" />
       </div>
       <div className="group rounded-xl border border-emerald-400/10 bg-emerald-400/[0.02] overflow-hidden" role="region" aria-label={afterLabel ?? "After"}>
         <div className="flex items-center gap-2 border-b border-emerald-400/10 bg-emerald-400/[0.04] px-4 py-2">
