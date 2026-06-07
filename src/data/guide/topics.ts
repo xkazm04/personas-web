@@ -315,7 +315,23 @@ export const GUIDE_TOPICS: GuideTopic[] = [
     tags: ["credentials", "connectors", "integrations", "catalog", "services"],
   },
 
-  // ─── Pipelines & Teams (10) ─────────────────────────────────────────
+  // ─── Pipelines & Teams (12) ─────────────────────────────────────────
+  {
+    id: "team-assignments",
+    categoryId: "pipelines",
+    title: "Team assignments",
+    description:
+      "Give a team a goal in plain language and let it organize the work itself. Instead of wiring every step by hand, you describe what you want; the team breaks it into a checklist, picks the right agent for each part, and runs them in parallel — pausing for your review only when something needs a decision.",
+    tags: ["pipelines", "assignments", "goals", "orchestration", "delegation"],
+  },
+  {
+    id: "team-memory-and-goals",
+    categoryId: "pipelines",
+    title: "Team memory & goals",
+    description:
+      "How a team stays coherent over time and how you steer it without micromanaging. Teams build up shared memory — the decisions and constraints that flow into every member's next run, so the team converges instead of repeating itself. Link a team to a goal and you can stay high-level: progress is tracked and the app surfaces only what actually needs you.",
+    tags: ["pipelines", "teams", "memory", "goals", "orchestration", "oversight"],
+  },
   {
     id: "what-are-pipelines",
     categoryId: "pipelines",

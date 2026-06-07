@@ -358,6 +358,16 @@ export const TOPIC_MODULE_MAP: Record<string, TopicModuleRef> = {
   },
 
   // ─── Pipelines & Teams ─────────────────────────────────────────
+  "team-assignments": {
+    moduleId: "pipeline",
+    path: ["Pipeline", "Team Canvas", "Assignments"],
+    label: "Assignments panel",
+  },
+  "team-memory-and-goals": {
+    moduleId: "pipeline",
+    path: ["Pipeline", "Team Memory"],
+    label: "Team Memory panel",
+  },
   "what-are-pipelines": {
     moduleId: "pipeline",
     path: ["Pipeline", "Team Canvas"],

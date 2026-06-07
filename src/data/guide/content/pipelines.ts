@@ -271,6 +271,62 @@ Even when no template is an exact fit, picking the closest one and modifying it 
 :::
   `,
 
+  "team-assignments": `
+## Team Assignments
+
+Pipelines wire every step by hand. Assignments flip that around: you hand the team a **goal** in plain language, and the team figures out the steps itself. It breaks the goal into a checklist, picks the best agent for each step, and runs them in parallel — only stopping to ask you when a step fails or needs a decision.
+
+Think of it as the difference between drawing a flowchart and briefing a project manager. With a pipeline you design the flow; with an assignment you state the outcome and let the team organize around it.
+
+### Key Points
+
+- **Goal-first** — describe what you want; the team decomposes it into ordered steps
+- **Smart matching** — each step is routed to the agent best suited to it (you can pin agents manually, use fast local matching, or let the model decide)
+- **Auto-decompose** — one click turns a goal into an editable step list you can tweak before running
+- **Parallel execution** — independent steps run at the same time; dependent steps wait their turn
+- **Human review on failure** — a failed step pauses just that assignment and offers you Edit / Reassign / Skip, with a notification in the title bar
+- **Reusable templates** — save a goal + step layout as a template and stamp out new assignments from it
+- **Chat dispatch** — ask Athena to "have the research team handle this" and she'll set it up for your approval
+
+### How It Works
+
+Open a team's canvas and click the **Assignments** badge (bottom-left). Hit **New**, type a goal, and either fill in the steps yourself or click **Auto-decompose** to have the assistant propose them. Choose how agents get matched to steps, set how many run at once, and click **Create & start**. Watch the checklist update live; if a step fails, resolve it inline. Save anything you'll run again as a template.
+
+:::tip
+Use an assignment when you know the outcome but not the exact steps. Use a pipeline when you want precise, repeatable control over every connection. Templates bridge the two — a saved assignment becomes a one-click starting point.
+:::
+  `,
+
+  "team-memory-and-goals": `
+## Team Memory & Goals
+
+A team is more than a set of agents — it's agents that **remember together** and pull toward a shared outcome. Two things make that work: shared team memory, and goals.
+
+### Shared team memory
+
+As a team works, it records decisions and constraints — "we standardized on this format", "this account is out of scope", "the reviewer rejected approach X". Those notes become **team memory**, and a compact digest of the most important ones flows into every member's context on its next run.
+
+The effect: the team converges instead of repeating itself. An agent doesn't rediscover a decision a teammate already made — it inherits it. You can see and curate this memory in the Team Memory panel on the canvas.
+
+### Goals — steer without micromanaging
+
+Link a team to a **goal** and you stop babysitting individual runs. The goal tracks progress as the team works, and the app surfaces only the things that actually need a human — a stalled goal, an approaching deadline, a step awaiting your review. Everything else just runs.
+
+This is the "set the direction, stay high-level" loop: you define the outcome and the guardrails; the team handles the rest and raises its hand when it needs you.
+
+:::tip
+Think of team memory as the team's institutional knowledge and the goal as its north star. Memory keeps the team consistent run-to-run; the goal keeps it pointed at something worth doing.
+:::
+
+### Key Points
+
+- **Shared memory** — decisions/constraints recorded by the team are injected into each member's next run
+- **Convergence** — members build on each other's conclusions instead of re-deriving them
+- **Goal linking** — tie a team to a goal to track progress and due dates
+- **Surfaced, not buried** — the attention queue raises only what needs you (stalled, overdue, awaiting review)
+- **Curate it** — review, edit, or remove team memories from the canvas panel
+  `,
+
   "debugging-pipeline-issues": `
 ## Debugging Pipeline Issues
 
