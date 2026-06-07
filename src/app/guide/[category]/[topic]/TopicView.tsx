@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import Link from "next/link";
 import { ChevronLeft, ChevronRight } from "lucide-react";
 import GuideMarkdown from "@/components/guide/GuideMarkdown";
@@ -30,6 +30,8 @@ interface TopicViewProps {
 
 export default function TopicView({ category, topic, content, initialHeadings, prevTopic, nextTopic, related }: TopicViewProps) {
   const { t } = useTranslation();
+  const contentH1Ref = useRef<HTMLHeadingElement>(null);
+  const didMountRef = useRef(false);
   // Locale-aware swap. The server renders the English content (no locale
   // signal in the URL or cookie today), and once the i18nStore hydrates on
   // the client we re-resolve through getLocalizedTopic. Currently the
@@ -75,8 +77,26 @@ export default function TopicView({ category, topic, content, initialHeadings, p
     };
   }, [language, topic.id, content]);
 
+  // On client-side topic change (prev/next nav or search), move focus to the
+  // topic <h1> so screen-reader/keyboard users land on the new content and hear
+  // its title, instead of focus sitting on a now-stale link or the search input.
+  // Skip the initial mount so we never steal focus on first load.
+  useEffect(() => {
+    if (!didMountRef.current) {
+      didMountRef.current = true;
+      return;
+    }
+    contentH1Ref.current?.focus();
+  }, [topic.id]);
+
   return (
     <div className="px-6 pb-24 pt-9 lg:pt-0">
+      <a
+        href="#guide-topic-content"
+        className="sr-only focus:not-sr-only focus:absolute focus:left-4 focus:top-4 focus:z-50 focus:rounded-lg focus:border focus:border-glass-strong focus:bg-surface focus:px-4 focus:py-2 focus:text-sm focus:font-medium focus:text-foreground focus:ring-2 focus:ring-brand-cyan/50"
+      >
+        Skip to content
+      </a>
       <ReadingProgress />
       <MobileTopicTOC headings={headings} />
       <div className="mx-auto max-w-3xl lg:max-w-[80rem] lg:grid lg:grid-cols-[minmax(0,1fr)_14rem] lg:gap-12">
@@ -116,7 +136,12 @@ export default function TopicView({ category, topic, content, initialHeadings, p
 
         {/* Content */}
         <article className="mt-8">
-          <h1 className="text-3xl font-bold tracking-tight text-foreground sm:text-4xl">
+          <h1
+            ref={contentH1Ref}
+            id="guide-topic-content"
+            tabIndex={-1}
+            className="text-3xl font-bold tracking-tight text-foreground outline-none sm:text-4xl"
+          >
             {localized.title}
           </h1>
           {localized.description && (
