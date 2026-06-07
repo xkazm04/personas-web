@@ -23,9 +23,11 @@ export default function ScenarioSelector({
         <ThemedChip
           key={s.id}
           active={i === activeIndex}
+          aria-current={i === activeIndex ? "true" : undefined}
           onClick={() => onSelect(i)}
           size="sm"
           mono
+          className="inline-flex min-h-[40px] items-center"
         >
           {s.label}
         </ThemedChip>

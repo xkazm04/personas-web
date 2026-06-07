@@ -28,23 +28,28 @@ export default function ScenarioProgress({
           <button
             key={s.id}
             onClick={() => onSelect(i)}
-            className="relative h-1 flex-1 cursor-pointer rounded-full bg-white/[0.06] overflow-hidden"
+            aria-label={`Go to scenario ${i + 1}: ${s.label}`}
+            aria-current={i === activeIndex ? "true" : undefined}
+            className="group relative flex-1 cursor-pointer py-2.5 focus-visible:outline-none"
           >
-            {i === activeIndex && !paused && (
-              <motion.div
-                className="absolute inset-y-0 left-0 rounded-full bg-gradient-to-r from-brand-cyan to-brand-purple"
-                initial={{ width: "0%" }}
-                animate={{ width: "100%" }}
-                transition={{ duration: CYCLE_MS / 1000, ease: "linear" }}
-                key={`progress-${scenarioId}-${activeIndex}`}
-              />
-            )}
-            {i === activeIndex && paused && (
-              <div className="absolute inset-y-0 left-0 right-0 rounded-full bg-gradient-to-r from-brand-cyan to-brand-purple" />
-            )}
-            {i < activeIndex && (
-              <div className="absolute inset-0 rounded-full bg-white/[0.12]" />
-            )}
+            {/* Visual bar stays 1px tall; the padded button gives a ~24px tap target. */}
+            <span className="relative block h-1 w-full overflow-hidden rounded-full bg-white/[0.06] group-focus-visible:ring-2 group-focus-visible:ring-brand-cyan/40">
+              {i === activeIndex && !paused && (
+                <motion.div
+                  className="absolute inset-y-0 left-0 rounded-full bg-gradient-to-r from-brand-cyan to-brand-purple"
+                  initial={{ width: "0%" }}
+                  animate={{ width: "100%" }}
+                  transition={{ duration: CYCLE_MS / 1000, ease: "linear" }}
+                  key={`progress-${scenarioId}-${activeIndex}`}
+                />
+              )}
+              {i === activeIndex && paused && (
+                <div className="absolute inset-y-0 left-0 right-0 rounded-full bg-gradient-to-r from-brand-cyan to-brand-purple" />
+              )}
+              {i < activeIndex && (
+                <div className="absolute inset-0 rounded-full bg-white/[0.12]" />
+              )}
+            </span>
           </button>
         ))}
       </div>
@@ -54,7 +59,9 @@ export default function ScenarioProgress({
         </span>
         <button
           onClick={onTogglePause}
-          className="cursor-pointer flex items-center gap-1.5 transition-colors hover:text-muted-dark"
+          aria-label={paused ? "Resume scenario auto-play" : "Pause scenario auto-play"}
+          aria-pressed={paused}
+          className="cursor-pointer flex items-center gap-1.5 rounded py-2 transition-colors hover:text-muted focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-cyan/40"
         >
           {paused ? (
             <>
