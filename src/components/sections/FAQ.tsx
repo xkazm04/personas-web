@@ -4,6 +4,7 @@ import { useState, useRef, useCallback } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { ChevronDown } from "lucide-react";
 import SectionWrapper from "@/components/SectionWrapper";
+import { useIsMobile } from "@/hooks/useIsMobile";
 import { fadeUp, staggerContainer, TRANSITION_FAST, TRANSITION_NORMAL } from "@/lib/animations";
 
 import { useTranslation } from "@/i18n/useTranslation";
@@ -85,6 +86,7 @@ function FAQCard({
 
 export default function FAQ() {
   const { t } = useTranslation();
+  const isMobile = useIsMobile();
 
   warnOnFaqIllustrationDrift(t.faqSection.questions.length);
   const faqs: FAQItem[] = t.faqSection.questions.map((q, i) => ({
@@ -109,21 +111,29 @@ export default function FAQ() {
       const total = faqs.length;
       let nextIndex: number | null = null;
 
-      if (e.key === "ArrowDown") {
-        e.preventDefault();
-        nextIndex = (index + 1) % total;
-      } else if (e.key === "ArrowUp") {
-        e.preventDefault();
-        nextIndex = (index - 1 + total) % total;
-      } else if (e.key === "Home") {
-        e.preventDefault();
-        nextIndex = 0;
-      } else if (e.key === "End") {
-        e.preventDefault();
-        nextIndex = total - 1;
+      if (isMobile) {
+        // Single stacked column (below md): focus follows reading order.
+        if (e.key === "ArrowDown") nextIndex = (index + 1) % total;
+        else if (e.key === "ArrowUp") nextIndex = (index - 1 + total) % total;
+        else if (e.key === "Home") nextIndex = 0;
+        else if (e.key === "End") nextIndex = total - 1;
+      } else {
+        // Two columns (md+): Up/Down stay within a column and Left/Right cross
+        // columns, so keyboard order matches the on-screen spatial layout
+        // instead of jumping from the bottom-left card to the top-right one.
+        const inLeft = index < midpoint;
+        const colStart = inLeft ? 0 : midpoint;
+        const colEnd = inLeft ? midpoint - 1 : total - 1;
+        if (e.key === "ArrowDown") nextIndex = index < colEnd ? index + 1 : colStart;
+        else if (e.key === "ArrowUp") nextIndex = index > colStart ? index - 1 : colEnd;
+        else if (e.key === "ArrowRight") nextIndex = inLeft ? Math.min(index + midpoint, total - 1) : null;
+        else if (e.key === "ArrowLeft") nextIndex = inLeft ? null : index - midpoint;
+        else if (e.key === "Home") nextIndex = colStart;
+        else if (e.key === "End") nextIndex = colEnd;
       }
 
       if (nextIndex !== null) {
+        e.preventDefault();
         buttonRefs.current[nextIndex]?.focus();
       }
     };
