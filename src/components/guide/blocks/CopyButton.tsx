@@ -55,7 +55,7 @@ export function CopyButton({ text, className = "" }: CopyButtonProps) {
           ? "text-emerald-400 border-emerald-400/20 bg-emerald-400/[0.08]"
           : failed
           ? "text-rose-400 border-rose-400/20 bg-rose-400/[0.08]"
-          : "border-glass-hover text-muted-dark/70 hover:border-glass-strong sm:opacity-0 sm:group-hover:opacity-100"
+          : "border-glass-hover text-muted-dark/70 hover:border-glass-strong sm:opacity-40 sm:group-hover:opacity-100 sm:group-focus-within:opacity-100 focus-visible:opacity-100"
       } ${className}`}
     >
       {copied ? (
