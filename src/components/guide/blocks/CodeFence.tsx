@@ -141,7 +141,7 @@ export function CodeFence({ text, lang, lineNumbers, highlightLines }: CodeFence
       {lineNumbers ? <style>{LINE_NUMBER_CSS}</style> : null}
       {highlightCss ? <style>{highlightCss}</style> : null}
       <div className="flex items-center justify-between px-4 pt-2">
-        {lang ? <div className="select-none font-mono text-base text-muted-dark/60">{lang}</div> : <div />}
+        {lang ? <div className="select-none font-mono text-xs uppercase tracking-wider text-muted-dark/60">{lang}</div> : <div />}
         <CopyButton text={text} />
       </div>
       {html ? (

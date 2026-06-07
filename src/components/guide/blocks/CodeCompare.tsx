@@ -25,7 +25,7 @@ export function CodeCompare({
             className="h-2 w-2 rounded-full bg-rose-400/50"
             aria-hidden="true"
           />
-          <span className="text-base font-semibold uppercase tracking-wider text-rose-400/70">
+          <span className="text-xs font-semibold uppercase tracking-wider text-rose-400/70">
             {beforeLabel ?? "Before"}
           </span>
           <CopyButton text={before} className="ml-auto" />
@@ -46,7 +46,7 @@ export function CodeCompare({
             className="h-2 w-2 rounded-full bg-emerald-400/50"
             aria-hidden="true"
           />
-          <span className="text-base font-semibold uppercase tracking-wider text-emerald-400/70">
+          <span className="text-xs font-semibold uppercase tracking-wider text-emerald-400/70">
             {afterLabel ?? "After"}
           </span>
           <CopyButton text={after} className="ml-auto" />

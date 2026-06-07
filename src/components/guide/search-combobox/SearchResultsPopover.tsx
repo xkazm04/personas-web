@@ -92,7 +92,7 @@ export function SearchResultsPopover({
                       {highlightMatch(result.topic.title, query, result.matchType, group.category.color)}
                     </span>
                     {badge && (
-                      <span className="shrink-0 rounded bg-white/[0.06] px-1.5 py-0.5 text-base leading-none text-muted-dark">
+                      <span className="shrink-0 rounded bg-white/[0.06] px-1.5 py-0.5 text-xs leading-none text-muted-dark">
                         {badge}
                       </span>
                     )}
@@ -102,7 +102,7 @@ export function SearchResultsPopover({
               })}
             </div>
           ))}
-          <div className="border-t border-glass px-3 py-1.5 text-right text-base text-muted-dark">
+          <div className="border-t border-glass px-3 py-1.5 text-right text-xs text-muted-dark">
             {results.length} result{results.length !== 1 && "s"}
           </div>
         </>

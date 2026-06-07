@@ -133,7 +133,7 @@ export default function TopicView({ category, topic, content, initialHeadings, p
             {topic.tags.map((tag) => (
               <span
                 key={tag}
-                className="rounded-full px-2.5 py-0.5 text-base font-medium"
+                className="rounded-full px-2.5 py-0.5 text-xs font-medium"
                 style={{ backgroundColor: `${category.color}15`, color: category.color }}
               >
                 {tag}
@@ -196,7 +196,7 @@ export default function TopicView({ category, topic, content, initialHeadings, p
             >
               <ChevronLeft aria-hidden="true" className="h-4 w-4 shrink-0 text-muted-dark transition-transform group-hover:-translate-x-0.5" />
               <div className="min-w-0">
-                <div className="text-base text-muted-dark">Previous</div>
+                <div className="text-xs font-medium uppercase tracking-wider text-muted-dark">Previous</div>
                 <div className="truncate text-base font-medium text-foreground">{prevTopic.title}</div>
               </div>
             </Link>
@@ -207,7 +207,7 @@ export default function TopicView({ category, topic, content, initialHeadings, p
             >
               <ChevronLeft aria-hidden="true" className="h-4 w-4 shrink-0 text-muted-dark transition-transform group-hover:-translate-x-0.5" />
               <div className="min-w-0">
-                <div className="text-base text-muted-dark">Back to</div>
+                <div className="text-xs font-medium uppercase tracking-wider text-muted-dark">Back to</div>
                 <div className="truncate text-base font-medium text-foreground">{category.name}</div>
               </div>
             </Link>
@@ -219,7 +219,7 @@ export default function TopicView({ category, topic, content, initialHeadings, p
               className="group flex items-center justify-end gap-3 rounded-xl border border-glass bg-white/[0.02] px-5 py-4 text-right transition-colors hover:border-glass-strong hover:bg-white/[0.04]"
             >
               <div className="min-w-0">
-                <div className="text-base text-muted-dark">Next</div>
+                <div className="text-xs font-medium uppercase tracking-wider text-muted-dark">Next</div>
                 <div className="truncate text-base font-medium text-foreground">{nextTopic.title}</div>
               </div>
               <ChevronRight aria-hidden="true" className="h-4 w-4 shrink-0 text-muted-dark transition-transform group-hover:translate-x-0.5" />
