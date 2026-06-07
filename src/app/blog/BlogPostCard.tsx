@@ -54,7 +54,7 @@ export default function BlogPostCard({ post }: BlogPostCardProps) {
         >
           {post.title}
         </h3>
-        <p className="relative text-base text-muted-foreground leading-relaxed flex-1 mb-5">
+        <p className="relative text-base text-muted-dark leading-relaxed flex-1 mb-5">
           {post.description}
         </p>
         <div
