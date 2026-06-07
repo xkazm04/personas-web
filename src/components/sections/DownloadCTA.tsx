@@ -97,6 +97,10 @@ export default function DownloadCTA() {
           </div>
         </motion.div>
 
+        <motion.p variants={fadeUp} className="mt-4 text-sm font-light text-muted-dark">
+          No signup, no credit card. Runs on your machine. Zero telemetry.
+        </motion.p>
+
         <PlatformPills
           platforms={platforms}
           notifyLabel={t.common.notifyMe}

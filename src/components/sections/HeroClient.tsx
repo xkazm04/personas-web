@@ -153,6 +153,13 @@ export default function HeroClient() {
             <TourLauncher tourId="home" bridgeHref="/features?tour=1" intro />
           </motion.div>
 
+          <motion.p
+            variants={fadeUp}
+            className="mt-4 text-sm font-light text-muted-dark text-center lg:text-left"
+          >
+            No signup, no credit card. Runs on your machine. Zero telemetry.
+          </motion.p>
+
           <motion.div
             variants={fadeUp}
             className="mt-6 flex flex-col items-center gap-3 rounded-xl border border-glass bg-white/2 px-4 py-3 lg:hidden"
