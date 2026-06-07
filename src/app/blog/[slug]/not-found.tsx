@@ -5,6 +5,17 @@ import Navbar from "@/components/Navbar";
 import Footer from "@/components/sections/Footer";
 import { ArrowLeft, BookOpen } from "lucide-react";
 import { useTranslation } from "@/i18n/useTranslation";
+import { BLOG_POSTS } from "@/data/blog";
+
+// Suggest the featured post plus the two most recent so a mistyped/stale link
+// becomes a recovery point instead of a dead end. Computed at module load.
+const SUGGESTED_POSTS = [...BLOG_POSTS]
+  .sort(
+    (a, b) =>
+      (b.featured ? 1 : 0) - (a.featured ? 1 : 0) ||
+      new Date(b.date).getTime() - new Date(a.date).getTime(),
+  )
+  .slice(0, 3);
 
 export default function BlogPostNotFound() {
   const { t } = useTranslation();
@@ -38,6 +49,29 @@ export default function BlogPostNotFound() {
               <ArrowLeft className="h-4 w-4" />
               {t.blogPage.backToHome}
             </Link>
+          </div>
+
+          {/* Recovery: suggested posts so a stale/mistyped link isn't a dead end. */}
+          <div className="mt-14 w-full text-left">
+            <p className="mb-4 text-center text-xs font-mono uppercase tracking-wider text-muted-dark">
+              Popular posts
+            </p>
+            <div className="grid gap-3 sm:grid-cols-3">
+              {SUGGESTED_POSTS.map((post) => (
+                <Link
+                  key={post.slug}
+                  href={`/blog/${post.slug}`}
+                  className="group rounded-xl border border-glass bg-white/[0.02] p-4 transition-colors hover:border-glass-hover hover:bg-white/[0.04]"
+                >
+                  <span className="line-clamp-2 text-base font-medium text-foreground transition-colors group-hover:text-brand-cyan">
+                    {post.title}
+                  </span>
+                  <span className="mt-2 block text-xs text-muted-dark">
+                    {post.readingTime} {t.blogPage.minRead}
+                  </span>
+                </Link>
+              ))}
+            </div>
           </div>
         </div>
       </main>
