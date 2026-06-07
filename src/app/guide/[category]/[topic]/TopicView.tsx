@@ -2,7 +2,7 @@
 
 import { useEffect, useMemo, useRef, useState } from "react";
 import Link from "next/link";
-import { ChevronLeft, ChevronRight } from "lucide-react";
+import { ChevronLeft, ChevronRight, Clock } from "lucide-react";
 import GuideMarkdown from "@/components/guide/GuideMarkdown";
 import RelatedTopics from "@/components/guide/RelatedTopics";
 import ModuleBadge from "@/components/guide/ModuleBadge";
@@ -64,6 +64,13 @@ export default function TopicView({ category, topic, content, initialHeadings, p
   const headings = useMemo(
     () => (localized.body === content ? initialHeadings : extractHeadings(localized.body)),
     [localized.body, content, initialHeadings],
+  );
+
+  // Estimated reading time from the body word count (~200 wpm). Guide topics
+  // have no stored reading-time or last-updated field, so derive it here.
+  const readingMinutes = useMemo(
+    () => Math.max(1, Math.round(localized.body.trim().split(/\s+/).filter(Boolean).length / 200)),
+    [localized.body],
   );
 
   useEffect(() => {
@@ -149,6 +156,10 @@ export default function TopicView({ category, topic, content, initialHeadings, p
               {localized.description}
             </p>
           )}
+          <div className="mt-4 flex items-center gap-1.5 text-sm text-muted-dark">
+            <Clock className="h-3.5 w-3.5" aria-hidden="true" />
+            {readingMinutes} min read
+          </div>
           <div className="mt-8">
             <GuideMarkdown content={localized.body} />
           </div>
