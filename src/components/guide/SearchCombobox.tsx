@@ -20,6 +20,7 @@ export default function SearchCombobox({
   const [query, setQuery] = useState("");
   const [results, setResults] = useState<SearchResult[]>([]);
   const [isOpen, setIsOpen] = useState(false);
+  const [isPending, setIsPending] = useState(false);
   const [activeIndex, setActiveIndex] = useState(-1);
   const wrapperRef = useRef<HTMLDivElement>(null);
   const inputRef = useRef<HTMLInputElement>(null);
@@ -33,13 +34,17 @@ export default function SearchCombobox({
   // Debounced search
   useEffect(() => {
     if (query.length < 2) {
-      queueMicrotask(() => { setResults([]); setIsOpen(false); });
+      queueMicrotask(() => { setResults([]); setIsOpen(false); setIsPending(false); });
       resultsForQueryRef.current = query;
       return;
     }
+    // Acknowledge typing immediately: open the popover with a pending row while
+    // the debounce + search runs, so a query never sits in dead air.
+    queueMicrotask(() => { setIsPending(true); setIsOpen(true); });
     const timer = setTimeout(() => {
       const r = searchGuide(query);
       setResults(r);
+      setIsPending(false);
       setIsOpen(r.length > 0 || query.length >= 2);
       setActiveIndex(-1);
       resultsForQueryRef.current = query;
@@ -103,6 +108,7 @@ export default function SearchCombobox({
           }
           liveResults = searchGuide(query);
           setResults(liveResults);
+          setIsPending(false);
           setActiveIndex(-1);
           resultsForQueryRef.current = query;
         }
@@ -169,6 +175,7 @@ export default function SearchCombobox({
           <SearchResultsPopover
             query={query}
             results={results}
+            isPending={isPending}
             grouped={grouped}
             activeIndex={activeIndex}
             flatIndexMap={flatIndexMap}

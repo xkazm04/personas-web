@@ -1,5 +1,5 @@
 import { motion } from "framer-motion";
-import { ArrowRight } from "lucide-react";
+import { ArrowRight, Loader2 } from "lucide-react";
 
 import { highlightMatch } from "@/lib/highlight-match";
 import { TRANSITION_FAST } from "@/lib/animations";
@@ -16,6 +16,7 @@ const BADGE_LABEL: Record<SearchResult["matchType"], string | null> = {
 export function SearchResultsPopover({
   query,
   results,
+  isPending,
   grouped,
   activeIndex,
   flatIndexMap,
@@ -24,6 +25,7 @@ export function SearchResultsPopover({
 }: {
   query: string;
   results: SearchResult[];
+  isPending: boolean;
   grouped: ReturnType<typeof import("@/lib/guide-search").groupResultsByCategory>;
   activeIndex: number;
   flatIndexMap: Map<string, number>;
@@ -42,7 +44,12 @@ export function SearchResultsPopover({
       transition={TRANSITION_FAST}
       className="absolute left-0 right-0 top-full z-50 mt-2 max-h-80 overflow-y-auto rounded-xl border border-glass-hover bg-surface/95 shadow-2xl backdrop-blur-xl"
     >
-      {results.length === 0 ? (
+      {isPending && results.length === 0 ? (
+        <p className="flex items-center justify-center gap-2 px-4 py-6 text-center text-base text-muted-dark">
+          <Loader2 className="h-4 w-4 animate-spin motion-reduce:animate-none" aria-hidden="true" />
+          Searching&hellip;
+        </p>
+      ) : results.length === 0 ? (
         <p className="px-4 py-6 text-center text-base text-muted-dark">
           No topics found for &ldquo;{query}&rdquo;
         </p>
