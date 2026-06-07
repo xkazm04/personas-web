@@ -21,11 +21,11 @@ export default function HeroStatRow({
   const valueClass =
     variant === "desktop"
       ? "text-xl font-bold tracking-tight transition-colors group-hover:text-brand-cyan drop-shadow-[0_0_5px_rgba(255,255,255,0.2)]"
-      : "text-base font-bold tracking-tight font-mono";
+      : "text-lg font-bold tracking-tight font-mono";
   const labelClass =
     variant === "desktop"
-      ? "text-base text-muted-dark font-mono tracking-wider transition-colors group-hover:text-foreground/70"
-      : "text-base text-muted-dark font-mono tracking-wider";
+      ? "text-xs text-muted-dark font-mono uppercase tracking-wider transition-colors group-hover:text-foreground/70"
+      : "text-xs text-muted-dark font-mono uppercase tracking-wider";
   const itemClass = variant === "desktop" ? "group" : "";
 
   return (

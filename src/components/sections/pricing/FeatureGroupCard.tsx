@@ -43,7 +43,7 @@ export default function FeatureGroupCard({ group }: FeatureGroupCardProps) {
             >
               {copy.title}
             </h3>
-            <p className="mt-1 text-base text-muted-dark leading-snug">
+            <p className="mt-1 text-sm text-muted-dark leading-snug">
               {copy.tagline}
             </p>
           </div>

@@ -91,7 +91,7 @@ const ComparisonCard = memo(function ComparisonCard({
         )}
         <div>
           <h3 className="text-base font-semibold text-foreground">{title}</h3>
-          <p className={`text-base font-mono uppercase tracking-wider mt-0.5 ${color.subtitle}`}>
+          <p className={`text-xs font-mono uppercase tracking-wider mt-0.5 ${color.subtitle}`}>
             {subtitle}
           </p>
         </div>

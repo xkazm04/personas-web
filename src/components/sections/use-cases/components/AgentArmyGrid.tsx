@@ -100,7 +100,7 @@ export default function AgentArmyGrid() {
               <div className="text-base font-mono font-semibold text-foreground tabular-nums tracking-tight">
                 {agent.executions.toLocaleString()}
               </div>
-              <div className="text-base font-mono uppercase tracking-wider text-muted mb-2">executions</div>
+              <div className="text-xs font-mono uppercase tracking-wider text-muted mb-2">executions</div>
 
               <div className="w-full">
                 <div className="h-1 rounded-full bg-white/[0.04] overflow-hidden">
