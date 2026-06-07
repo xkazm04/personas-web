@@ -61,3 +61,22 @@
 - ~~`/compare` page has no structured data~~ DONE (Run #32) — Enhanced JSON-LD with SoftwareApplication types + applicationCategory per competitor
 - Competitor data in `comparison.ts` should be periodically verified against live competitor sites for accuracy
 - ~~The Pricing section's "See full comparison" link is an `<a>` tag, not `<Link>`~~ DONE (Run #32) — Pricing.tsx rewritten with `<Link>` throughout
+
+## Structural facts (scan-and-decide, 2026-06-07)
+- **Custom eslint rules** live in `eslint-rules/` (`eslint.config.mjs`). Only `custom-quality/no-confusable-minus` is **error**-level — use ASCII `-`, never en/em-dash in JSX text. `custom-quality/max-tsx-lines` (max **200**), `custom-animation/require-animation-gating`, `custom-a11y/no-low-text-opacity`, `custom-zustand/no-multi-zustand-selector` are all **warn** (non-blocking).
+- `SectionWrapper` is the framer-motion stagger root (`initial="hidden" whileInView="visible" variants={staggerContainer}`). Nested `motion.*` with `variants={fadeUp}` and no own initial/animate inherit and animate — no need to re-declare the orchestration on every grid (see FAQ, SocialProof).
+- Reduced-motion idiom is `useReducedMotion()` from `framer-motion`. `FloatingParticles` and `useAutoCycle` self-gate; `useAutoCycle({respectReducedMotion})` **defaults true** — passing `false` is the bug to look for.
+- The `WhyAgents` section + `roleCopy` (developer/product-manager/enterprise) in `src/components/sections/why-agents/` were built but **rendered nowhere** until this run. Wired into the homepage via a new `WhyAgentsSection` wrapper driven by `RoleSelector` (the ready-made "I am a ___" toggle, `src/components/RoleSelector.tsx`).
+- When a section renders its own `SectionWrapper id="..."` (e.g. `why-agents`, `social-proof`), do **NOT** also set `wrapperId` in the page.tsx `sections` array — page.tsx wraps in `<div id={wrapperId}>`, producing a duplicate id.
+- Canonical repo URL is `https://github.com/personas-ai` (`FooterBrand.tsx`); the Hero GitHub CTA now reads `NEXT_PUBLIC_GITHUB_URL` with that fallback.
+- Tests = **Playwright e2e only** (`npm run test:e2e`); no unit runner, and e2e needs a running server.
+
+## Anti-patterns to avoid (scan-and-decide, 2026-06-07)
+- The Vibeman "Marketing Pages" context `file_paths` are **partially stale** — they list `comparison-table/`, `/compare`, `NavbarSignIn` which exist only under `.claude/worktrees/`, not the live `src` tree. Verify paths before planning.
+- `.claude/worktrees/` holds many sibling worktrees each with their own `eslint.config.mjs` + `node_modules`. Scope all globs to top-level `src/`.
+
+## Open follow-ups (from scan-and-decide run, 2026-06-07)
+- `HeroClient.tsx` is now **206 lines** (>200 `max-tsx-lines` warn) after the GitHub-CTA + reduced-motion + trust-line edits. Extract the secondary-CTA / trust-line cluster into a subcomponent to clear it.
+- New marketing copy added this run (Hero trust line, `#pricing` offer banner, SocialProof headings/subtitle) is **hardcoded English**, not i18n'd across the 14 locales. Add `t.*` keys if these must localize.
+- `SocialProof` renders `USAGE_STATS` **statically**; the idea suggested animated counters (`useAnimatedNumber`/`useTweenedNumber`) — deferred (values like `"40+"`/`"0"` need parse logic + reduced-motion gating).
+- Playwright e2e **not run** this session (needs a running server). Verify the two new homepage sections (WhyAgents + RoleSelector, SocialProof) render before release.
