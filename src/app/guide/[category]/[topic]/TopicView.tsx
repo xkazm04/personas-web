@@ -2,8 +2,9 @@
 
 import { useEffect, useMemo, useRef, useState } from "react";
 import Link from "next/link";
-import { ChevronLeft, ChevronRight, Clock } from "lucide-react";
+import { ChevronLeft, ChevronRight, Clock, Download } from "lucide-react";
 import GuideMarkdown from "@/components/guide/GuideMarkdown";
+import PrimaryCTA from "@/components/PrimaryCTA";
 import RelatedTopics from "@/components/guide/RelatedTopics";
 import ModuleBadge from "@/components/guide/ModuleBadge";
 import TopicTOC from "@/components/guide/TopicTOC";
@@ -167,6 +168,24 @@ export default function TopicView({ category, topic, content, initialHeadings, p
 
         {/* Related topics */}
         <RelatedTopics related={related} />
+
+        {/* Try-it CTA: prev/next + related otherwise loop guide-to-guide, never
+            out to the product. Offer a path to download / templates. */}
+        <div className="mt-12 rounded-2xl border border-glass bg-white/[0.02] p-6 text-center backdrop-blur-sm">
+          <p className="text-lg font-semibold text-foreground">Ready to try this yourself?</p>
+          <p className="mx-auto mt-2 max-w-md text-sm font-light text-muted-dark">
+            Personas runs free on your machine. No signup, no credit card.
+          </p>
+          <div className="mt-5 flex flex-wrap items-center justify-center gap-3">
+            <PrimaryCTA href="/#download" icon={Download} label="Download free" />
+            <Link
+              href="/templates"
+              className="inline-flex items-center gap-1.5 rounded-full border border-glass-hover bg-white/[0.02] px-5 py-2.5 text-base font-medium text-muted transition-colors hover:border-glass-strong hover:text-foreground"
+            >
+              Browse templates
+            </Link>
+          </div>
+        </div>
 
         {/* Prev / Next navigation */}
         <nav aria-label="Topic navigation" className="mt-16 grid grid-cols-2 gap-4">
