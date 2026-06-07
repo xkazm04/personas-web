@@ -132,7 +132,7 @@ export const LazyUseCases = createLazySection(
 );
 
 export const LazyWhyAgents = createLazySection(
-  () => import("@/components/sections/why-agents"),
+  () => import("@/components/sections/why-agents/WhyAgentsSection"),
   SectionSkeleton,
   { ssr: false },
 );
