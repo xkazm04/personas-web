@@ -55,7 +55,10 @@ export function parseBlocks(lines: string[], opts: { copyAnchorLabel?: string } 
 
     const headingMatch = line.match(/^(#{1,4})\s+(.+)$/);
     if (headingMatch) {
-      const depth = headingMatch[1].length as 1 | 2 | 3 | 4;
+      // Shift in-content markdown headings down one level: the topic title is
+      // the page's single <h1> (rendered in TopicView), so a content "#"
+      // becomes <h2>, "##" becomes <h3>, etc. (capped at h4).
+      const depth = Math.min(headingMatch[1].length + 1, 4) as 1 | 2 | 3 | 4;
       const rawText = headingMatch[2];
       const baseSlug = slugifyHeading(rawText) || `section-${key}`;
       const count = usedSlugs.get(baseSlug) ?? 0;

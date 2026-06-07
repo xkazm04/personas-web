@@ -116,7 +116,17 @@ export default function TopicView({ category, topic, content, initialHeadings, p
 
         {/* Content */}
         <article className="mt-8">
-          <GuideMarkdown content={localized.body} />
+          <h1 className="text-3xl font-bold tracking-tight text-foreground sm:text-4xl">
+            {localized.title}
+          </h1>
+          {localized.description && (
+            <p className="mt-3 text-lg font-light leading-relaxed text-muted-dark">
+              {localized.description}
+            </p>
+          )}
+          <div className="mt-8">
+            <GuideMarkdown content={localized.body} />
+          </div>
         </article>
 
         {/* Related topics */}
