@@ -26,7 +26,6 @@ export default function WhyAgents({ role }: { role?: ViewerRole }) {
   } = useAutoCycle({
     count: scenarios.length,
     intervalMs: CYCLE_MS,
-    respectReducedMotion: false,
   });
   const measureRef = useRef<HTMLDivElement>(null);
   // Measure the tallest workflow/agent panel across all scenarios so the
