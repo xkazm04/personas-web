@@ -80,3 +80,24 @@
 - New marketing copy added this run (Hero trust line, `#pricing` offer banner, SocialProof headings/subtitle) is **hardcoded English**, not i18n'd across the 14 locales. Add `t.*` keys if these must localize.
 - `SocialProof` renders `USAGE_STATS` **statically**; the idea suggested animated counters (`useAnimatedNumber`/`useTweenedNumber`) — deferred (values like `"40+"`/`"0"` need parse logic + reduced-motion gating).
 - Playwright e2e **not run** this session (needs a running server). Verify the two new homepage sections (WhyAgents + RoleSelector, SocialProof) render before release.
+
+## Structural facts (scan-and-decide #2 — Documentation & Content, 2026-06-07)
+- Guide markdown: `parseBlocks.tsx` turns in-content `#`..`####` into headings via `HeadingAnchor.tsx`. As of this run, content headings are shifted +1 (`#` -> h2) because the topic title is rendered as the page's single `<h1>` in `TopicView.tsx`. `extractHeadings.ts` parses the TOC independently and is unaffected by the render-depth shift.
+- `BlogPost` (`src/data/blog.ts`) already has a `readingTime` field — blog cards AND the article page render reading time + date. Guide topics had neither; reading time is now derived from body word count in `TopicView`. Added an optional `relatedLinks` field for per-post cross-links.
+- Blog search is **inline** in `blog/page.tsx` (its own `useState`); the guide's `SearchCombobox` (debounced 150ms) is a separate component for guide topics. They don't share code.
+- 404s: `src/app/blog/[slug]/not-found.tsx` exists (client component); guide topics have **no** custom not-found and fall back to Next's default.
+- RSS feed lives at `/blog/feed.xml` (`src/app/blog/feed.xml/route.ts`, `revalidate = 3600`). `SITE_URL` = `NEXT_PUBLIC_SITE_URL ?? https://personas.ai`, `SITE_NAME` = `Personas` (`src/lib/seo.ts`).
+- Homepage `Changelog.tsx` ("Recent updates") reads `RELEASES` from `data/changelog.ts`; the full changelog page is `/changelog`.
+- Tailwind `motion-reduce:` variant works for reduced-motion gating without a JS hook (used for the search spinner).
+
+## Anti-patterns to avoid (scan-and-decide #2, 2026-06-07)
+- **Glob brace patterns `{a,b}` don't match in this environment** — they silently return nothing. Use separate Glob calls or Grep instead.
+- Two large TSX files crossed the 200-line `max-tsx-lines` warn this session after multiple ideas piled onto them: `HeroClient.tsx` (206) and `TopicView.tsx` (241). When several ideas target one file, budget an extraction.
+
+## Open follow-ups (from scan-and-decide #2, 2026-06-07)
+- `TopicView.tsx` is **241 lines** (>200 warn) after 5 ideas touched it. Extract the prev/next nav and the try-it CTA into subcomponents.
+- Idea #5 (meta type scale) covered `CodeFence`, `CodeCompare`, `SearchResultsPopover`, and `TopicView`. The block eyebrows in `Callout` / `StepWizard` / `KeyboardGrid` still use `text-base` — finish the pass there.
+- Guide topic 404 still uses Next's default; the #7 recovery suggestions were added to the blog 404 only. Add a guide `not-found.tsx` with suggested topics if wanted.
+- Changelog per-entry deep-links to matching guide topics were deferred — `RELEASES` has no `guideHref`/topic mapping data.
+- New docs/content copy (blog CTA band, guide try-it CTA, changelog CTA, 404 "Popular posts") is hardcoded English, not i18n'd across the 14 locales.
+- RSS feed is linked from the blog index + changelog, but not yet advertised via a `<link rel="alternate" type="application/rss+xml">` in `<head>` or from article pages.
