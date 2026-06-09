@@ -1140,5 +1140,17 @@ export const de: Translations = {
     roadmap2: 'Was als Nächstes kommt, liegt bei Ihnen — stimmen Sie für die Funktionen ab, die Sie am meisten wollen, und die Topideen prägen, was wir bauen.',
     roadmap3: 'Und hier ist alles, was bereits ausgeliefert wurde — jede Version der Reihe nach, die neueste zuerst.',
   },
+  playgroundPage: {
+    heroHeading: 'Agenten in',
+    heroHeadingGradient: 'Aktion',
+    heroDescription: 'Wählen Sie unten eine Aufgabe aus und beobachten Sie, wie ein Personas-Agent sie aufschlüsselt, die richtigen Werkzeuge auswählt und Ergebnisse liefert – alles in Sekunden.',
+    ctaTitle: 'Bereit, eigene Agenten zu erstellen?',
+    ctaDescription: 'Laden Sie Personas herunter und erstellen Sie autonome Agenten, die sich mit Ihren Werkzeugen verbinden, Ihre Regeln befolgen und nach Ihrem Zeitplan arbeiten.',
+    ctaDownload: 'Personas herunterladen',
+    ctaBrowseTemplates: 'Vorlagen durchsuchen',
+    selectTask: 'Wählen Sie oben eine Aufgabe, um die Simulation zu starten',
+    simulatedExecution: 'Simulierte Ausführung',
+    reset: 'Zurücksetzen',
+  },
 };
 

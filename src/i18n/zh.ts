@@ -1140,5 +1140,17 @@ export const zh: Translations = {
     roadmap2: '接下来做什么由你决定——为你最想要的功能投票，得票最高的想法将塑造我们的下一步。',
     roadmap3: '这里是所有已发布的内容——每个版本按顺序排列，最新的在前。',
   },
+  playgroundPage: {
+    heroHeading: '观看智能体',
+    heroHeadingGradient: '实际运行',
+    heroDescription: '选择下方的任务，看看 Personas 智能体如何分解它、选择合适的工具并在几秒内交付结果。',
+    ctaTitle: '准备好构建自己的智能体了吗？',
+    ctaDescription: '下载 Personas，创建连接到您工具、遵循您规则、按您计划运行的自主智能体。',
+    ctaDownload: '下载 Personas',
+    ctaBrowseTemplates: '浏览模板',
+    selectTask: '在上方选择一个任务以开始模拟',
+    simulatedExecution: '模拟执行',
+    reset: '重置',
+  },
 };
 

@@ -1140,5 +1140,17 @@ export const ja: Translations = {
     roadmap2: '次に何を作るかはあなた次第です。最も欲しい機能に投票してください。得票の多いアイデアが次の開発を形づくります。',
     roadmap3: 'そしてこれがすでにリリース済みのすべてです — 各リリースを新しい順に並べています。',
   },
+  playgroundPage: {
+    heroHeading: 'エージェントの',
+    heroHeadingGradient: '実演',
+    heroDescription: '以下からタスクを選択し、Personasエージェントがそれをどのように分解し、適切なツールを選択し、数秒で結果を出すかをご覧ください。',
+    ctaTitle: '自分のエージェントを構築する準備はできていますか？',
+    ctaDescription: 'Personasをダウンロードして、ツールに接続し、ルールに従い、スケジュール通りに動作する自律エージェントを作成してください。',
+    ctaDownload: 'Personasをダウンロード',
+    ctaBrowseTemplates: 'テンプレートを見る',
+    selectTask: 'シミュレーションを開始するには上のタスクを選択してください',
+    simulatedExecution: 'シミュレーション実行',
+    reset: 'リセット',
+  },
 };
 

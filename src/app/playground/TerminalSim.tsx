@@ -1,11 +1,11 @@
 "use client";
 
-import { AnimatePresence, motion } from "framer-motion";
+import { AnimatePresence, motion, useReducedMotion } from "framer-motion";
 import { RotateCcw } from "lucide-react";
 import { useEffect, useRef, useCallback, useState } from "react";
-import { useReducedMotion } from "framer-motion";
 import TerminalChrome from "@/components/TerminalChrome";
 import { BlinkingCursor, TerminalPanel } from "@/components/primitives";
+import { useTranslation } from "@/i18n/useTranslation";
 import { LINE_COLORS, LINE_ICONS, PROMPTS, type OutputLine } from "./data";
 
 interface TerminalSimProps {
@@ -15,9 +15,11 @@ interface TerminalSimProps {
 
 export default function TerminalSim({ active, onReset }: TerminalSimProps) {
   const prefersReducedMotion = useReducedMotion();
+  const { t } = useTranslation();
   const [lines, setLines] = useState<OutputLine[]>([]);
   const [isRunning, setIsRunning] = useState(false);
   const [isDone, setIsDone] = useState(false);
+  const [elapsed, setElapsed] = useState(0);
   const [prevActive, setPrevActive] = useState(active);
   const terminalRef = useRef<HTMLDivElement>(null);
   const timeoutsRef = useRef<ReturnType<typeof setTimeout>[]>([]);
@@ -27,6 +29,7 @@ export default function TerminalSim({ active, onReset }: TerminalSimProps) {
     setLines([]);
     setIsRunning(active !== null);
     setIsDone(false);
+    setElapsed(0);
   }
 
   const clearTimeouts = useCallback(() => {
@@ -51,6 +54,11 @@ export default function TerminalSim({ active, onReset }: TerminalSimProps) {
     clearTimeouts();
     if (active === null) return;
 
+    const runStart = Date.now();
+    const timerId = setInterval(() => {
+      setElapsed(Date.now() - runStart);
+    }, 100);
+
     const promptLines = PROMPTS[active].lines;
     let cumulative = 0;
     promptLines.forEach((line, i) => {
@@ -61,6 +69,7 @@ export default function TerminalSim({ active, onReset }: TerminalSimProps) {
         setLines((prev) => [...prev, line]);
         scrollTerminal();
         if (i === promptLines.length - 1) {
+          clearInterval(timerId);
           setIsRunning(false);
           setIsDone(true);
         }
@@ -68,7 +77,10 @@ export default function TerminalSim({ active, onReset }: TerminalSimProps) {
       timeoutsRef.current.push(t);
     });
 
-    return clearTimeouts;
+    return () => {
+      clearTimeouts();
+      clearInterval(timerId);
+    };
   }, [active, clearTimeouts, scrollTerminal]);
 
   const handleReset = () => {
@@ -76,7 +88,9 @@ export default function TerminalSim({ active, onReset }: TerminalSimProps) {
     onReset();
   };
 
-  const status = isRunning ? "executing..." : isDone ? "complete" : "ready";
+  const pg = t.playgroundPage;
+  const status = isRunning ? "executing…" : isDone ? "complete" : "ready";
+  const elapsedLabel = elapsed > 0 ? `${(elapsed / 1000).toFixed(1)}s` : undefined;
 
   return (
     <TerminalPanel
@@ -85,13 +99,14 @@ export default function TerminalSim({ active, onReset }: TerminalSimProps) {
         <TerminalChrome
           title="agent-playground — live"
           status={status}
+          info={elapsedLabel}
           className="px-4 py-3 sm:px-5"
         />
       }
       footer={
         <>
           <span className="text-base font-mono text-muted-dark uppercase tracking-wider">
-            Simulated execution
+            {pg.simulatedExecution}
           </span>
           {isDone && (
             <button
@@ -99,7 +114,7 @@ export default function TerminalSim({ active, onReset }: TerminalSimProps) {
               className="flex items-center gap-1.5 text-base font-mono text-muted-dark hover:text-foreground transition-colors cursor-pointer"
             >
               <RotateCcw className="h-3 w-3" />
-              Reset
+              {pg.reset}
             </button>
           )}
         </>
@@ -112,7 +127,7 @@ export default function TerminalSim({ active, onReset }: TerminalSimProps) {
         {active === null && (
           <div className="flex h-full items-center justify-center">
             <p className="text-base text-muted-dark font-mono text-center">
-              Select a task above to start the simulation
+              {pg.selectTask}
             </p>
           </div>
         )}
@@ -129,7 +144,7 @@ export default function TerminalSim({ active, onReset }: TerminalSimProps) {
                 paddingLeft: line.indent ? `${line.indent * 12}px` : undefined,
               }}
             >
-              {line.text ? `${LINE_ICONS[line.type]} ${line.text}` : "\u00A0"}
+              {line.text ? `${LINE_ICONS[line.type]} ${line.text}` : " "}
             </motion.div>
           ))}
         </AnimatePresence>

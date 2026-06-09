@@ -1140,5 +1140,17 @@ export const id: Translations = {
     roadmap2: 'Apa yang berikutnya terserah Anda — pilih fitur yang paling Anda inginkan, dan ide terpopuler membentuk apa yang kami bangun.',
     roadmap3: 'Dan inilah semua yang sudah dirilis — setiap rilis ditata berurutan, yang terbaru lebih dulu.',
   },
+  playgroundPage: {
+    heroHeading: 'Lihat agen dalam',
+    heroHeadingGradient: 'aksi',
+    heroDescription: 'Pilih tugas di bawah dan saksikan bagaimana agen Personas menguraikannya, memilih alat yang tepat, dan memberikan hasil — semua dalam hitungan detik.',
+    ctaTitle: 'Siap membangun agen Anda sendiri?',
+    ctaDescription: 'Unduh Personas dan buat agen otonom yang terhubung ke alat Anda, mengikuti aturan Anda, dan berjalan sesuai jadwal Anda.',
+    ctaDownload: 'Unduh Personas',
+    ctaBrowseTemplates: 'Jelajahi Templat',
+    selectTask: 'Pilih tugas di atas untuk memulai simulasi',
+    simulatedExecution: 'Eksekusi simulasi',
+    reset: 'Atur ulang',
+  },
 };
 

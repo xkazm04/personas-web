@@ -8,12 +8,15 @@ import Navbar from "@/components/Navbar";
 import Footer from "@/components/sections/Footer";
 import GradientText from "@/components/GradientText";
 import SectionHeading from "@/components/SectionHeading";
+import { useTranslation } from "@/i18n/useTranslation";
 import { fadeUp, staggerContainer } from "@/lib/animations";
 import PromptSelector from "./PromptSelector";
 import TerminalSim from "./TerminalSim";
 
 export default function PlaygroundPage() {
   const [activePrompt, setActivePrompt] = useState<number | null>(null);
+  const { t } = useTranslation();
+  const pg = t.playgroundPage;
 
   return (
     <>
@@ -28,13 +31,11 @@ export default function PlaygroundPage() {
             {/* Hero */}
             <motion.div variants={fadeUp} className="text-center mb-14">
               <SectionHeading as="h1">
-                See agents in{" "}
-                <GradientText>action</GradientText>
+                {pg.heroHeading}{" "}
+                <GradientText>{pg.heroHeadingGradient}</GradientText>
               </SectionHeading>
               <p className="mt-5 text-muted-dark text-base md:text-lg max-w-2xl mx-auto leading-relaxed">
-                Pick a task below and watch how a Personas agent breaks it
-                down, selects the right tools, and delivers results — all in
-                seconds.
+                {pg.heroDescription}
               </p>
             </motion.div>
 
@@ -53,11 +54,10 @@ export default function PlaygroundPage() {
                 <div className="absolute inset-0 rounded-2xl bg-gradient-to-br from-brand-cyan/[0.04] via-transparent to-purple-500/[0.04] pointer-events-none" />
 
                 <h3 className="relative text-xl font-bold text-foreground mb-3">
-                  Ready to build your own agents?
+                  {pg.ctaTitle}
                 </h3>
                 <p className="relative text-base text-muted-dark mb-6">
-                  Download Personas and create autonomous agents that connect
-                  to your tools, follow your rules, and run on your schedule.
+                  {pg.ctaDescription}
                 </p>
                 <div className="relative flex flex-col sm:flex-row items-center justify-center gap-3">
                   <Link
@@ -65,14 +65,14 @@ export default function PlaygroundPage() {
                     className="inline-flex items-center gap-2 rounded-lg bg-brand-cyan/15 border border-brand-cyan/30 px-5 py-2.5 text-base font-semibold text-brand-cyan transition-all hover:bg-brand-cyan/25"
                   >
                     <Download className="h-4 w-4" />
-                    Download Personas
+                    {pg.ctaDownload}
                   </Link>
                   <Link
                     href="/templates"
                     className="inline-flex items-center gap-2 rounded-lg border border-glass-hover bg-white/[0.04] px-5 py-2.5 text-base font-medium text-muted hover:text-foreground hover:border-white/20 transition-all"
                   >
                     <LayoutGrid className="h-4 w-4" />
-                    Browse Templates
+                    {pg.ctaBrowseTemplates}
                   </Link>
                 </div>
               </div>

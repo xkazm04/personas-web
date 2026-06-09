@@ -1140,5 +1140,17 @@ export const vi: Translations = {
     roadmap2: 'Điều tiếp theo là tùy bạn — hãy bình chọn cho các tính năng bạn muốn nhất, và những ý tưởng hàng đầu định hình điều chúng tôi xây dựng.',
     roadmap3: 'Và đây là tất cả những gì đã ra mắt — mỗi bản phát hành xếp theo thứ tự, mới nhất trước.',
   },
+  playgroundPage: {
+    heroHeading: 'Xem các agent trong',
+    heroHeadingGradient: 'hành động',
+    heroDescription: 'Chọn một nhiệm vụ bên dưới và xem cách agent Personas phân tích nó, chọn đúng công cụ và cung cấp kết quả — tất cả trong vài giây.',
+    ctaTitle: 'Sẵn sàng xây dựng agent của riêng bạn?',
+    ctaDescription: 'Tải Personas và tạo các agent tự động kết nối với công cụ của bạn, tuân theo quy tắc của bạn và chạy theo lịch trình của bạn.',
+    ctaDownload: 'Tải Personas',
+    ctaBrowseTemplates: 'Duyệt mẫu',
+    selectTask: 'Chọn một nhiệm vụ ở trên để bắt đầu mô phỏng',
+    simulatedExecution: 'Thực thi mô phỏng',
+    reset: 'Đặt lại',
+  },
 };
 

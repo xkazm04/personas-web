@@ -1140,5 +1140,17 @@ export const cs: Translations = {
     roadmap2: 'Co přijde dál, je na vás — hlasujte pro funkce, které chcete nejvíc, a nejlepší nápady určí, co postavíme.',
     roadmap3: 'A tady je všechno, co už vyšlo — každé vydání seřazené popořadě, nejnovější první.',
   },
+  playgroundPage: {
+    heroHeading: 'Sledujte agenty v',
+    heroHeadingGradient: 'akci',
+    heroDescription: 'Vyberte úkol níže a sledujte, jak agent Personas ho rozloží, vybere správné nástroje a doručí výsledky — vše během sekund.',
+    ctaTitle: 'Připraveni vytvořit vlastní agenty?',
+    ctaDescription: 'Stáhněte si Personas a vytvářejte autonomní agenty, kteří se připojují k vašim nástrojům, dodržují vaše pravidla a fungují podle vašeho harmonogramu.',
+    ctaDownload: 'Stáhnout Personas',
+    ctaBrowseTemplates: 'Procházet šablony',
+    selectTask: 'Vyberte úkol výše pro spuštění simulace',
+    simulatedExecution: 'Simulované provedení',
+    reset: 'Resetovat',
+  },
 };
 

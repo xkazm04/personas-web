@@ -1140,5 +1140,17 @@ export const ko: Translations = {
     roadmap2: '다음에 무엇을 만들지는 당신에게 달려 있습니다 — 가장 원하는 기능에 투표하세요. 가장 많은 표를 받은 아이디어가 다음 개발을 결정합니다.',
     roadmap3: '그리고 여기 이미 출시된 모든 것이 있습니다 — 각 릴리스를 최신순으로 정리했습니다.',
   },
+  playgroundPage: {
+    heroHeading: '에이전트의',
+    heroHeadingGradient: '실행 모습',
+    heroDescription: '아래에서 작업을 선택하고 Personas 에이전트가 이를 분해하고, 올바른 도구를 선택하며, 몇 초 만에 결과를 제공하는 모습을 확인하세요.',
+    ctaTitle: '나만의 에이전트를 만들 준비가 되셨나요?',
+    ctaDescription: 'Personas를 다운로드하고 도구에 연결되고, 규칙을 따르며, 일정에 따라 실행되는 자율 에이전트를 만드세요.',
+    ctaDownload: 'Personas 다운로드',
+    ctaBrowseTemplates: '템플릿 탐색',
+    selectTask: '시뮬레이션을 시작하려면 위에서 작업을 선택하세요',
+    simulatedExecution: '시뮬레이션 실행',
+    reset: '재설정',
+  },
 };
 

@@ -973,6 +973,18 @@
     roadmap2: string;
     roadmap3: string;
   };
+  playgroundPage: {
+    heroHeading: string;
+    heroHeadingGradient: string;
+    heroDescription: string;
+    ctaTitle: string;
+    ctaDescription: string;
+    ctaDownload: string;
+    ctaBrowseTemplates: string;
+    selectTask: string;
+    simulatedExecution: string;
+    reset: string;
+  };
 }
 
 export const en: Translations = {
@@ -2115,5 +2127,16 @@ export const en: Translations = {
     roadmap2: 'What comes next is up to you — vote on the features you want most, and the top ideas shape what we build.',
     roadmap3: 'And here is everything already shipped — every release laid out in order, newest first.',
   },
+  playgroundPage: {
+    heroHeading: 'See agents in',
+    heroHeadingGradient: 'action',
+    heroDescription: 'Pick a task below and watch how a Personas agent breaks it down, selects the right tools, and delivers results — all in seconds.',
+    ctaTitle: 'Ready to build your own agents?',
+    ctaDescription: 'Download Personas and create autonomous agents that connect to your tools, follow your rules, and run on your schedule.',
+    ctaDownload: 'Download Personas',
+    ctaBrowseTemplates: 'Browse Templates',
+    selectTask: 'Select a task above to start the simulation',
+    simulatedExecution: 'Simulated execution',
+    reset: 'Reset',
+  },
 };
-

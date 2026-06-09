@@ -1140,5 +1140,17 @@ export const es: Translations = {
     roadmap2: 'Lo que viene después depende de ti — vota por las funciones que más quieres, y las mejores ideas dan forma a lo que construimos.',
     roadmap3: 'Y aquí está todo lo ya publicado — cada versión ordenada en secuencia, la más reciente primero.',
   },
+  playgroundPage: {
+    heroHeading: 'Mira los agentes en',
+    heroHeadingGradient: 'acción',
+    heroDescription: 'Elige una tarea a continuación y observa cómo un agente de Personas la descompone, selecciona las herramientas adecuadas y entrega resultados — todo en segundos.',
+    ctaTitle: '¿Listo para crear tus propios agentes?',
+    ctaDescription: 'Descarga Personas y crea agentes autónomos que se conecten a tus herramientas, sigan tus reglas y funcionen según tu horario.',
+    ctaDownload: 'Descargar Personas',
+    ctaBrowseTemplates: 'Explorar plantillas',
+    selectTask: 'Selecciona una tarea arriba para iniciar la simulación',
+    simulatedExecution: 'Ejecución simulada',
+    reset: 'Restablecer',
+  },
 };
 
