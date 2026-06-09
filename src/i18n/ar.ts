@@ -1150,6 +1150,10 @@ export const ar: Translations = {
     ctaBrowseTemplates: 'تصفح القوالب',
     selectTask: 'حدد مهمة أعلاه لبدء المحاكاة',
     simulatedExecution: 'تنفيذ محاكى',
+    statusExecuting: 'جارٍ التنفيذ…',
+    statusComplete: 'اكتمل',
+    statusReady: 'جاهز',
+    chromeTitle: 'agent-playground — مباشر',
     reset: 'إعادة تعيين',
   },
 };

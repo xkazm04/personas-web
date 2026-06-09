@@ -1150,6 +1150,10 @@ export const bn: Translations = {
     ctaBrowseTemplates: 'টেমপ্লেট ব্রাউজ করুন',
     selectTask: 'সিমুলেশন শুরু করতে উপরে একটি কাজ বেছে নিন',
     simulatedExecution: 'সিমুলেটেড এক্সিকিউশন',
+    statusExecuting: 'চলছে…',
+    statusComplete: 'সম্পন্ন',
+    statusReady: 'প্রস্তুত',
+    chromeTitle: 'agent-playground — লাইভ',
     reset: 'রিসেট',
   },
 };

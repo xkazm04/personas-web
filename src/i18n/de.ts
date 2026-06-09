@@ -1150,6 +1150,10 @@ export const de: Translations = {
     ctaBrowseTemplates: 'Vorlagen durchsuchen',
     selectTask: 'Wählen Sie oben eine Aufgabe, um die Simulation zu starten',
     simulatedExecution: 'Simulierte Ausführung',
+    statusExecuting: 'wird ausgeführt…',
+    statusComplete: 'abgeschlossen',
+    statusReady: 'bereit',
+    chromeTitle: 'agent-playground — live',
     reset: 'Zurücksetzen',
   },
 };

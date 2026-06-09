@@ -1150,6 +1150,10 @@ export const cs: Translations = {
     ctaBrowseTemplates: 'Procházet šablony',
     selectTask: 'Vyberte úkol výše pro spuštění simulace',
     simulatedExecution: 'Simulované provedení',
+    statusExecuting: 'spouštění…',
+    statusComplete: 'dokončeno',
+    statusReady: 'připraven',
+    chromeTitle: 'agent-playground — spuštěno',
     reset: 'Resetovat',
   },
 };

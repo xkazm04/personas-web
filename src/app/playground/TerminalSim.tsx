@@ -13,6 +13,30 @@ interface TerminalSimProps {
   onReset: () => void;
 }
 
+function ElapsedDisplay({ ms, reduced }: { ms: number; reduced: boolean }) {
+  const display = (ms / 1000).toFixed(1);
+  const dot = display.indexOf(".");
+  const whole = display.slice(0, dot);
+  const frac = display.slice(dot);
+
+  return (
+    <span className="font-mono tabular-nums" aria-live="off">
+      <AnimatePresence mode="popLayout" initial={false}>
+        <motion.span
+          key={whole}
+          initial={reduced ? {} : { scale: 1.25, opacity: 0.55 }}
+          animate={{ scale: 1, opacity: 1 }}
+          transition={{ duration: 0.12, ease: "easeOut" }}
+          style={{ display: "inline-block" }}
+        >
+          {whole}
+        </motion.span>
+      </AnimatePresence>
+      <span>{frac}s</span>
+    </span>
+  );
+}
+
 export default function TerminalSim({ active, onReset }: TerminalSimProps) {
   const prefersReducedMotion = useReducedMotion();
   const { t } = useTranslation();
@@ -65,7 +89,7 @@ export default function TerminalSim({ active, onReset }: TerminalSimProps) {
       const delay =
         line.type === "info" && line.text === "" ? 100 : 250 + Math.random() * 150;
       cumulative += delay;
-      const t = setTimeout(() => {
+      const tid = setTimeout(() => {
         setLines((prev) => [...prev, line]);
         scrollTerminal();
         if (i === promptLines.length - 1) {
@@ -74,7 +98,7 @@ export default function TerminalSim({ active, onReset }: TerminalSimProps) {
           setIsDone(true);
         }
       }, cumulative);
-      timeoutsRef.current.push(t);
+      timeoutsRef.current.push(tid);
     });
 
     return () => {
@@ -89,17 +113,20 @@ export default function TerminalSim({ active, onReset }: TerminalSimProps) {
   };
 
   const pg = t.playgroundPage;
-  const status = isRunning ? "executing…" : isDone ? "complete" : "ready";
-  const elapsedLabel = elapsed > 0 ? `${(elapsed / 1000).toFixed(1)}s` : undefined;
+  const status = isRunning ? pg.statusExecuting : isDone ? pg.statusComplete : pg.statusReady;
+  const elapsedNode =
+    elapsed > 0 ? (
+      <ElapsedDisplay ms={elapsed} reduced={prefersReducedMotion ?? false} />
+    ) : undefined;
 
   return (
     <TerminalPanel
       shadow="hero"
       header={
         <TerminalChrome
-          title="agent-playground — live"
+          title={pg.chromeTitle}
           status={status}
-          info={elapsedLabel}
+          info={elapsedNode}
           className="px-4 py-3 sm:px-5"
         />
       }
@@ -144,7 +171,7 @@ export default function TerminalSim({ active, onReset }: TerminalSimProps) {
                 paddingLeft: line.indent ? `${line.indent * 12}px` : undefined,
               }}
             >
-              {line.text ? `${LINE_ICONS[line.type]} ${line.text}` : " "}
+              {line.text ? `${LINE_ICONS[line.type]} ${line.text}` : " "}
             </motion.div>
           ))}
         </AnimatePresence>

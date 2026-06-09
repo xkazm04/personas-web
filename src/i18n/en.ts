@@ -983,6 +983,10 @@
     ctaBrowseTemplates: string;
     selectTask: string;
     simulatedExecution: string;
+    statusExecuting: string;
+    statusComplete: string;
+    statusReady: string;
+    chromeTitle: string;
     reset: string;
   };
 }
@@ -2137,6 +2141,10 @@ export const en: Translations = {
     ctaBrowseTemplates: 'Browse Templates',
     selectTask: 'Select a task above to start the simulation',
     simulatedExecution: 'Simulated execution',
+    statusExecuting: 'executing…',
+    statusComplete: 'complete',
+    statusReady: 'ready',
+    chromeTitle: 'agent-playground — live',
     reset: 'Reset',
   },
 };

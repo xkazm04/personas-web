@@ -1150,6 +1150,10 @@ export const zh: Translations = {
     ctaBrowseTemplates: '浏览模板',
     selectTask: '在上方选择一个任务以开始模拟',
     simulatedExecution: '模拟执行',
+    statusExecuting: '执行中…',
+    statusComplete: '完成',
+    statusReady: '就绪',
+    chromeTitle: 'agent-playground — 实时',
     reset: '重置',
   },
 };

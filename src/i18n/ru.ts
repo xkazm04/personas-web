@@ -1150,6 +1150,10 @@ export const ru: Translations = {
     ctaBrowseTemplates: 'Просмотр шаблонов',
     selectTask: 'Выберите задачу выше для запуска симуляции',
     simulatedExecution: 'Симулированное выполнение',
+    statusExecuting: 'выполняется…',
+    statusComplete: 'завершено',
+    statusReady: 'готов',
+    chromeTitle: 'agent-playground — в эфире',
     reset: 'Сбросить',
   },
 };

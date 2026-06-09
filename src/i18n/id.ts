@@ -1150,6 +1150,10 @@ export const id: Translations = {
     ctaBrowseTemplates: 'Jelajahi Templat',
     selectTask: 'Pilih tugas di atas untuk memulai simulasi',
     simulatedExecution: 'Eksekusi simulasi',
+    statusExecuting: 'menjalankan…',
+    statusComplete: 'selesai',
+    statusReady: 'siap',
+    chromeTitle: 'agent-playground — langsung',
     reset: 'Atur ulang',
   },
 };

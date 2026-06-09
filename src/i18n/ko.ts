@@ -1150,6 +1150,10 @@ export const ko: Translations = {
     ctaBrowseTemplates: '템플릿 탐색',
     selectTask: '시뮬레이션을 시작하려면 위에서 작업을 선택하세요',
     simulatedExecution: '시뮬레이션 실행',
+    statusExecuting: '실행 중…',
+    statusComplete: '완료',
+    statusReady: '대기 중',
+    chromeTitle: 'agent-playground — 라이브',
     reset: '재설정',
   },
 };

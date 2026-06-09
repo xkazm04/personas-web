@@ -1150,6 +1150,10 @@ export const vi: Translations = {
     ctaBrowseTemplates: 'Duyệt mẫu',
     selectTask: 'Chọn một nhiệm vụ ở trên để bắt đầu mô phỏng',
     simulatedExecution: 'Thực thi mô phỏng',
+    statusExecuting: 'đang chạy…',
+    statusComplete: 'hoàn thành',
+    statusReady: 'sẵn sàng',
+    chromeTitle: 'agent-playground — trực tiếp',
     reset: 'Đặt lại',
   },
 };

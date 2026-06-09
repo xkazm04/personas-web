@@ -1150,6 +1150,10 @@ export const ja: Translations = {
     ctaBrowseTemplates: 'テンプレートを見る',
     selectTask: 'シミュレーションを開始するには上のタスクを選択してください',
     simulatedExecution: 'シミュレーション実行',
+    statusExecuting: '実行中…',
+    statusComplete: '完了',
+    statusReady: '待機中',
+    chromeTitle: 'agent-playground — ライブ',
     reset: 'リセット',
   },
 };
