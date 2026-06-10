@@ -637,6 +637,8 @@ export const es: Translations = {
     },
   },
   leaderboardPage: {
+    compare: 'Comparar',
+    versus: 'vs',
     delta: 'Cambio',
     sortBy: 'Ordenar por {field}',
     title: 'ClasificaciĂłn',

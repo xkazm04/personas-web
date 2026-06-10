@@ -637,6 +637,8 @@ export const de: Translations = {
     },
   },
   leaderboardPage: {
+    compare: 'Vergleichen',
+    versus: 'vs.',
     delta: 'Veränderung',
     sortBy: 'Sortieren nach {field}',
     title: 'Rangliste',

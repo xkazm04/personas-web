@@ -637,6 +637,8 @@ export const hi: Translations = {
     },
   },
   leaderboardPage: {
+    compare: 'तुलना करें',
+    versus: 'बनाम',
     delta: 'बदलाव',
     sortBy: '{field} के अनुसार क्रमबद्ध करें',
     title: 'ŕ¤˛ŕĄ€ŕ¤ˇŕ¤°ŕ¤¬ŕĄ‹ŕ¤°ŕĄŤŕ¤ˇ',

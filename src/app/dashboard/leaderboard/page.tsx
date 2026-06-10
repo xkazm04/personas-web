@@ -20,6 +20,8 @@ export default function LeaderboardPage() {
   // null = no explicit pick yet → fall back to the top-ranked persona. This
   // keeps the selection valid as data loads / changes without a sync effect.
   const [pickedId, setPickedId] = useState<string | null>(null);
+  const [comparing, setComparing] = useState(false);
+  const [compareId, setCompareId] = useState<string | null>(null);
   const [fetchedAt] = useState(() => Date.now());
 
   const selected = useMemo<LeaderboardPersona | undefined>(() => {
@@ -31,17 +33,43 @@ export default function LeaderboardPage() {
   }, [personas, pickedId]);
   const selectedId = selected?.id ?? "";
 
+  // In compare mode, fall back to the next-best persona so there is always a
+  // head-to-head opponent without forcing an extra click.
+  const compareSelected = useMemo<LeaderboardPersona | undefined>(() => {
+    if (!comparing) return undefined;
+    const explicit =
+      compareId !== null
+        ? personas.find((persona) => persona.id === compareId)
+        : undefined;
+    return explicit ?? personas.find((persona) => persona.id !== selectedId);
+  }, [comparing, compareId, personas, selectedId]);
+  const compareSelectedId = compareSelected?.id ?? "";
+
+  // While comparing, a row click pins the opponent; otherwise it picks primary.
+  const handleSelect = (id: string) => {
+    if (comparing) {
+      if (id !== selectedId) setCompareId(id);
+    } else {
+      setPickedId(id);
+    }
+  };
+
   const radarData = useMemo(() => {
-    if (!selected) return [];
-    const metrics = selected.metrics;
-    return [
-      { metric: t.leaderboardPage.metrics.reliability, value: metrics.reliability },
-      { metric: t.leaderboardPage.metrics.cost, value: metrics.cost },
-      { metric: t.leaderboardPage.metrics.speed, value: metrics.speed },
-      { metric: t.leaderboardPage.metrics.quality, value: metrics.quality },
-      { metric: t.leaderboardPage.metrics.volume, value: metrics.volume },
+    const a = selected?.metrics;
+    const b = compareSelected?.metrics;
+    const axes: { key: keyof LeaderboardPersona["metrics"]; label: string }[] = [
+      { key: "reliability", label: t.leaderboardPage.metrics.reliability },
+      { key: "cost", label: t.leaderboardPage.metrics.cost },
+      { key: "speed", label: t.leaderboardPage.metrics.speed },
+      { key: "quality", label: t.leaderboardPage.metrics.quality },
+      { key: "volume", label: t.leaderboardPage.metrics.volume },
     ];
-  }, [selected, t]);
+    return axes.map(({ key, label }) => ({
+      metric: label,
+      a: a ? a[key] : 0,
+      ...(b ? { b: b[key] } : {}),
+    }));
+  }, [selected, compareSelected, t]);
 
   return (
     <motion.div initial="hidden" animate="visible" variants={staggerContainer}>
@@ -66,6 +94,7 @@ export default function LeaderboardPage() {
         <LeaderboardTable
           personas={personas}
           selectedId={selectedId}
+          compareId={comparing ? compareSelectedId : ""}
           labels={{
             rank: t.leaderboardPage.rank,
             agent: t.dashboardUi.agent,
@@ -73,12 +102,17 @@ export default function LeaderboardPage() {
             delta: t.leaderboardPage.delta,
             sortBy: t.leaderboardPage.sortBy,
           }}
-          onSelect={setPickedId}
+          onSelect={handleSelect}
         />
         <LeaderboardRadarCard
-          selected={selected}
+          primary={selected}
+          compare={compareSelected}
           data={radarData}
           title={t.leaderboardPage.radarTitle}
+          comparing={comparing}
+          onToggleCompare={() => setComparing((on) => !on)}
+          compareLabel={t.leaderboardPage.compare}
+          versusLabel={t.leaderboardPage.versus}
         />
       </div>
     </motion.div>

@@ -9,29 +9,65 @@ import {
   Tooltip,
 } from "recharts";
 
+import CompareToggle from "@/components/dashboard/CompareToggle";
 import { fadeUp } from "@/lib/animations";
 import type { LeaderboardPersona } from "@/lib/mock-dashboard-data";
 
+function PersonaChip({ persona }: { persona: LeaderboardPersona }) {
+  return (
+    <span className="flex items-center gap-1.5 rounded-md border border-glass bg-white/[0.03] px-1.5 py-0.5 text-sm font-medium text-muted">
+      <span
+        className="h-2 w-2 rounded-full"
+        style={{ backgroundColor: persona.color }}
+      />
+      {persona.name}
+    </span>
+  );
+}
+
 export function LeaderboardRadarCard({
-  selected,
+  primary,
+  compare,
   data,
   title,
+  comparing,
+  onToggleCompare,
+  compareLabel,
+  versusLabel,
 }: {
-  selected?: LeaderboardPersona;
-  data: { metric: string; value: number }[];
+  primary?: LeaderboardPersona;
+  compare?: LeaderboardPersona;
+  data: { metric: string; a: number; b?: number }[];
   title: string;
+  comparing: boolean;
+  onToggleCompare: () => void;
+  compareLabel: string;
+  versusLabel: string;
 }) {
   return (
     <motion.div
       variants={fadeUp}
       className="rounded-2xl border border-glass bg-white/[0.02] p-5 lg:col-span-2"
     >
-      <div className="mb-2 flex items-center gap-2">
+      <div className="mb-3 flex flex-wrap items-center gap-2">
         <h2 className="text-base font-semibold text-foreground">{title}</h2>
-        {selected && (
-          <span className="rounded-md border border-glass bg-white/[0.03] px-1.5 py-0.5 text-sm font-medium text-muted">
-            {selected.name}
-          </span>
+        <div className="ml-auto">
+          <CompareToggle
+            enabled={comparing}
+            onToggle={onToggleCompare}
+            label={compareLabel}
+          />
+        </div>
+      </div>
+      <div className="mb-2 flex flex-wrap items-center gap-2">
+        {primary && <PersonaChip persona={primary} />}
+        {comparing && compare && (
+          <>
+            <span className="text-sm font-medium uppercase tracking-wider text-muted-dark">
+              {versusLabel}
+            </span>
+            <PersonaChip persona={compare} />
+          </>
         )}
       </div>
       <div className="h-[300px] w-full">
@@ -49,12 +85,23 @@ export function LeaderboardRadarCard({
               axisLine={false}
             />
             <Radar
-              dataKey="value"
-              stroke={selected?.color ?? "#06b6d4"}
-              fill={selected?.color ?? "#06b6d4"}
+              name={primary?.name}
+              dataKey="a"
+              stroke={primary?.color ?? "#06b6d4"}
+              fill={primary?.color ?? "#06b6d4"}
               fillOpacity={0.3}
               strokeWidth={2}
             />
+            {comparing && compare && (
+              <Radar
+                name={compare.name}
+                dataKey="b"
+                stroke={compare.color}
+                fill={compare.color}
+                fillOpacity={0.15}
+                strokeWidth={2}
+              />
+            )}
             <Tooltip
               contentStyle={{
                 background: "rgba(10,15,26,0.92)",

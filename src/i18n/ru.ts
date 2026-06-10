@@ -637,6 +637,8 @@ export const ru: Translations = {
     },
   },
   leaderboardPage: {
+    compare: 'Сравнить',
+    versus: 'против',
     delta: 'Изменение',
     sortBy: 'Сортировать по: {field}',
     title: 'Đ ĐµĐąŃ‚Đ¸Đ˝Đł',

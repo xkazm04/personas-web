@@ -500,6 +500,8 @@
     composite: string;
     delta: string;
     sortBy: string;
+    compare: string;
+    versus: string;
     radarTitle: string;
     metrics: {
       reliability: string;
@@ -1644,6 +1646,8 @@ export const en: Translations = {
     composite: 'Composite',
     delta: 'Delta',
     sortBy: 'Sort by {field}',
+    compare: 'Compare',
+    versus: 'vs',
     radarTitle: 'Metrics profile',
     metrics: {
       reliability: 'Reliability',

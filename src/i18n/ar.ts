@@ -637,6 +637,8 @@ export const ar: Translations = {
     },
   },
   leaderboardPage: {
+    compare: 'قارن',
+    versus: 'مقابل',
     delta: 'التغير',
     sortBy: 'ترتيب حسب {field}',
     title: 'Ů„ŮŘ­Ř© Ř§Ů„Ů…ŘŞŘµŘŻŘ±ŮŠŮ†',

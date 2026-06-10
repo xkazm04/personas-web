@@ -637,6 +637,8 @@ export const bn: Translations = {
     },
   },
   leaderboardPage: {
+    compare: 'তুলনা করুন',
+    versus: 'বনাম',
     delta: 'পরিবর্তন',
     sortBy: '{field} অনুসারে সাজান',
     title: 'ŕ¦˛ŕ¦żŕ¦ˇŕ¦ľŕ¦°ŕ¦¬ŕ§‹ŕ¦°ŕ§Ťŕ¦ˇ',

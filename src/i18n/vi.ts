@@ -637,6 +637,8 @@ export const vi: Translations = {
     },
   },
   leaderboardPage: {
+    compare: 'So sánh',
+    versus: 'vs',
     delta: 'Thay đổi',
     sortBy: 'Sắp xếp theo {field}',
     title: 'BáşŁng xáşżp háşˇng',

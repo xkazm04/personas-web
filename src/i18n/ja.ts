@@ -637,6 +637,8 @@ export const ja: Translations = {
     },
   },
   leaderboardPage: {
+    compare: '比較',
+    versus: '対',
     delta: '変化',
     sortBy: '{field}で並べ替え',
     title: 'ăŞăĽă€ăĽăśăĽă‰',

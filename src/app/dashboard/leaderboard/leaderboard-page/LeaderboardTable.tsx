@@ -19,11 +19,13 @@ import {
 export function LeaderboardTable({
   personas,
   selectedId,
+  compareId = "",
   labels,
   onSelect,
 }: {
   personas: LeaderboardPersona[];
   selectedId: string;
+  compareId?: string;
   labels: {
     rank: string;
     agent: string;
@@ -71,6 +73,7 @@ export function LeaderboardTable({
           const rank = ranks.get(persona.id) ?? 0;
           const band = compositeBand(persona.composite);
           const isSelected = persona.id === selectedId;
+          const isCompare = !isSelected && persona.id === compareId;
 
           return (
             <motion.button
@@ -81,7 +84,9 @@ export function LeaderboardTable({
               className={`grid w-full grid-cols-[auto_auto_1fr_auto_auto] items-center gap-2 rounded-xl border px-2 py-2 text-left transition-colors ${
                 isSelected
                   ? "border-brand-cyan/30 bg-brand-cyan/5"
-                  : "border-transparent hover:bg-white/[0.03]"
+                  : isCompare
+                    ? "border-amber-500/30 bg-amber-500/5"
+                    : "border-transparent hover:bg-white/[0.03]"
               }`}
             >
               <RankBadge rank={rank} />

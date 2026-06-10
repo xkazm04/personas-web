@@ -637,6 +637,8 @@ export const cs: Translations = {
     },
   },
   leaderboardPage: {
+    compare: 'Porovnat',
+    versus: 'vs.',
     delta: 'Změna',
     sortBy: 'Seřadit podle: {field}',
     title: 'Ĺ˝ebĹ™Ă­ÄŤek',

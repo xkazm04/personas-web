@@ -637,6 +637,8 @@ export const ko: Translations = {
     },
   },
   leaderboardPage: {
+    compare: '비교',
+    versus: '대',
     delta: '변화',
     sortBy: '{field} 기준 정렬',
     title: 'ë¦¬ëŤ”ëł´ë“ś',

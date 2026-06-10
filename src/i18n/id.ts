@@ -637,6 +637,8 @@ export const id: Translations = {
     },
   },
   leaderboardPage: {
+    compare: 'Bandingkan',
+    versus: 'vs',
     delta: 'Perubahan',
     sortBy: 'Urutkan berdasarkan {field}',
     title: 'Papan Peringkat',
