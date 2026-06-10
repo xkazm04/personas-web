@@ -84,6 +84,8 @@ Schedules respect a configurable timezone. By default the agent uses your system
 - **Timezone per trigger** — IANA timezone names (\`America/New_York\`, \`Europe/Prague\`, \`UTC\`); DST is handled automatically
 - **Next-run preview** — the trigger shows the next three scheduled times so you can sanity-check your cron expression
 - **Pause without losing** — disabling a schedule trigger doesn't delete it; re-enable to resume
+- **Past and future in one view** — the Schedules timeline opens with a "Last 24 hours" section (every run that already fired, with status, duration, and a one-click jump to its trace) above the upcoming buckets, so you can audit what happened overnight without leaving the page
+- **Usage-limit aware** — when a scheduled run fails because the Claude usage window is exhausted, it isn't silently lost: the engine schedules an automatic retry for when the limit resets (shown as an "auto-retry" badge on the failed run) and the retry survives app restarts. Weekly caps stay failed with a clear notice, since they're too far out to wait on
 
 ### Setting Up a Schedule
 
