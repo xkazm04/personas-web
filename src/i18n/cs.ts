@@ -637,6 +637,8 @@ export const cs: Translations = {
     },
   },
   leaderboardPage: {
+    delta: 'Změna',
+    sortBy: 'Seřadit podle: {field}',
     title: 'Ĺ˝ebĹ™Ă­ÄŤek',
     subtitle: 'Ĺ˝ebĹ™Ă­ÄŤek flotily podle souhrnnĂ©ho vĂ˝konu',
     rank: 'Rank',

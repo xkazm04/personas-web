@@ -637,6 +637,8 @@ export const vi: Translations = {
     },
   },
   leaderboardPage: {
+    delta: 'Thay đổi',
+    sortBy: 'Sắp xếp theo {field}',
     title: 'BáşŁng xáşżp háşˇng',
     subtitle: 'Xáşżp háşˇng Ä‘á»™i ngĹ© theo hiá»‡u suáşĄt tá»•ng há»Łp',
     rank: 'Rank',

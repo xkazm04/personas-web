@@ -637,6 +637,8 @@ export const de: Translations = {
     },
   },
   leaderboardPage: {
+    delta: 'Veränderung',
+    sortBy: 'Sortieren nach {field}',
     title: 'Rangliste',
     subtitle: 'Flotten-Ranking nach Gesamtleistung',
     rank: 'Rank',

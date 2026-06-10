@@ -637,6 +637,8 @@ export const es: Translations = {
     },
   },
   leaderboardPage: {
+    delta: 'Cambio',
+    sortBy: 'Ordenar por {field}',
     title: 'ClasificaciĂłn',
     subtitle: 'Ranking de flota por rendimiento compuesto',
     rank: 'Rank',

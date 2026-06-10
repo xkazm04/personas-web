@@ -498,6 +498,8 @@
     subtitle: string;
     rank: string;
     composite: string;
+    delta: string;
+    sortBy: string;
     radarTitle: string;
     metrics: {
       reliability: string;
@@ -1640,6 +1642,8 @@ export const en: Translations = {
     subtitle: 'Fleet ranking by composite performance',
     rank: 'Rank',
     composite: 'Composite',
+    delta: 'Delta',
+    sortBy: 'Sort by {field}',
     radarTitle: 'Metrics profile',
     metrics: {
       reliability: 'Reliability',

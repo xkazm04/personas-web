@@ -637,6 +637,8 @@ export const id: Translations = {
     },
   },
   leaderboardPage: {
+    delta: 'Perubahan',
+    sortBy: 'Urutkan berdasarkan {field}',
     title: 'Papan Peringkat',
     subtitle: 'Peringkat armada berdasarkan kinerja komposit',
     rank: 'Rank',

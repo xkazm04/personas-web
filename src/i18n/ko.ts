@@ -637,6 +637,8 @@ export const ko: Translations = {
     },
   },
   leaderboardPage: {
+    delta: '변화',
+    sortBy: '{field} 기준 정렬',
     title: 'ë¦¬ëŤ”ëł´ë“ś',
     subtitle: 'ě˘…í•© ě„±ëŠĄě— ë”°ëĄ¸ í”Śë¦ż ěśěś„',
     rank: 'Rank',

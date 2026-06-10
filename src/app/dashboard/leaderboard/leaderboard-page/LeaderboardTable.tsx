@@ -1,11 +1,20 @@
-import { motion } from "framer-motion";
+import { useMemo, useState } from "react";
+import { motion, useReducedMotion } from "framer-motion";
 
 import PersonaAvatar from "@/components/dashboard/PersonaAvatar";
 import { trendColor } from "@/components/dashboard/trendColor";
 import { fadeUp } from "@/lib/animations";
 import type { LeaderboardPersona } from "@/lib/mock-dashboard-data";
 
+import { LeaderboardSortHeader } from "./LeaderboardSortHeader";
 import { RankBadge, TrendIcon, compositeBand } from "./leaderboardStyles";
+import {
+  defaultDirFor,
+  rankByComposite,
+  sortPersonas,
+  type LeaderboardSortField,
+  type SortDir,
+} from "./leaderboardSort";
 
 export function LeaderboardTable({
   personas,
@@ -15,9 +24,36 @@ export function LeaderboardTable({
 }: {
   personas: LeaderboardPersona[];
   selectedId: string;
-  labels: { rank: string; agent: string; composite: string };
+  labels: {
+    rank: string;
+    agent: string;
+    composite: string;
+    delta: string;
+    sortBy: string;
+  };
   onSelect: (id: string) => void;
 }) {
+  const reduce = useReducedMotion();
+  const [sortField, setSortField] = useState<LeaderboardSortField>("composite");
+  const [sortDir, setSortDir] = useState<SortDir>("desc");
+
+  const ranks = useMemo(() => rankByComposite(personas), [personas]);
+  const ordered = useMemo(
+    () => sortPersonas(personas, sortField, sortDir),
+    [personas, sortField, sortDir],
+  );
+
+  function handleSort(field: LeaderboardSortField) {
+    if (field === sortField) {
+      setSortDir((dir) => (dir === "asc" ? "desc" : "asc"));
+    } else {
+      setSortField(field);
+      setSortDir(defaultDirFor(field));
+    }
+  }
+
+  const sortProps = { sortField, sortDir, sortByLabel: labels.sortBy, onSort: handleSort };
+
   return (
     <motion.div
       variants={fadeUp}
@@ -26,22 +62,23 @@ export function LeaderboardTable({
       <div className="grid grid-cols-[auto_auto_1fr_auto_auto] items-center gap-2 px-2 py-1.5 text-sm font-medium uppercase tracking-wider text-muted-dark">
         <span>{labels.rank}</span>
         <span />
-        <span>{labels.agent}</span>
-        <span className="text-right">{labels.composite}</span>
-        <span className="text-right">Delta</span>
+        <LeaderboardSortHeader field="name" label={labels.agent} {...sortProps} />
+        <LeaderboardSortHeader field="composite" label={labels.composite} align="right" {...sortProps} />
+        <LeaderboardSortHeader field="delta" label={labels.delta} align="right" {...sortProps} />
       </div>
       <div className="mt-1 space-y-1">
-        {personas.map((persona, index) => {
-          const rank = index + 1;
+        {ordered.map((persona) => {
+          const rank = ranks.get(persona.id) ?? 0;
           const band = compositeBand(persona.composite);
           const isSelected = persona.id === selectedId;
 
           return (
-            <button
+            <motion.button
               key={persona.id}
+              layout={reduce ? false : "position"}
               type="button"
               onClick={() => onSelect(persona.id)}
-              className={`grid w-full grid-cols-[auto_auto_1fr_auto_auto] items-center gap-2 rounded-xl border px-2 py-2 text-left transition-all ${
+              className={`grid w-full grid-cols-[auto_auto_1fr_auto_auto] items-center gap-2 rounded-xl border px-2 py-2 text-left transition-colors ${
                 isSelected
                   ? "border-brand-cyan/30 bg-brand-cyan/5"
                   : "border-transparent hover:bg-white/[0.03]"
@@ -75,7 +112,7 @@ export function LeaderboardTable({
                 {persona.delta > 0 ? "+" : ""}
                 {persona.delta}
               </span>
-            </button>
+            </motion.button>
           );
         })}
       </div>

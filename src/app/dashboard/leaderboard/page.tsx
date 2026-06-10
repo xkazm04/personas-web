@@ -70,6 +70,8 @@ export default function LeaderboardPage() {
             rank: t.leaderboardPage.rank,
             agent: t.dashboardUi.agent,
             composite: t.leaderboardPage.composite,
+            delta: t.leaderboardPage.delta,
+            sortBy: t.leaderboardPage.sortBy,
           }}
           onSelect={setPickedId}
         />

@@ -637,6 +637,8 @@ export const zh: Translations = {
     },
   },
   leaderboardPage: {
+    delta: '变化',
+    sortBy: '按{field}排序',
     title: 'ćŽ’čˇŚć¦ś',
     subtitle: 'ćŚ‰ç»Ľĺć€§č˝çš„č°éźćŽ’ĺŤ',
     rank: 'Rank',

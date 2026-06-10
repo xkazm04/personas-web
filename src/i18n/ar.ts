@@ -637,6 +637,8 @@ export const ar: Translations = {
     },
   },
   leaderboardPage: {
+    delta: 'التغير',
+    sortBy: 'ترتيب حسب {field}',
     title: 'Ů„ŮŘ­Ř© Ř§Ů„Ů…ŘŞŘµŘŻŘ±ŮŠŮ†',
     subtitle: 'ŘŞŘ±ŘŞŮŠŘ¨ Ř§Ů„ŘŁŘłŘ·ŮŮ„ Ř­ŘłŘ¨ Ř§Ů„ŘŁŘŻŘ§Řˇ Ř§Ů„Ů…Ř¬Ů…Řą',
     rank: 'Rank',

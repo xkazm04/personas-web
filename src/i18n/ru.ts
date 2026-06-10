@@ -637,6 +637,8 @@ export const ru: Translations = {
     },
   },
   leaderboardPage: {
+    delta: 'Изменение',
+    sortBy: 'Сортировать по: {field}',
     title: 'Đ ĐµĐąŃ‚Đ¸Đ˝Đł',
     subtitle: 'Đ ĐµĐąŃ‚Đ¸Đ˝Đł Ń„Đ»ĐľŃ‚Đ° ĐżĐľ ŃĐľĐ˛ĐľĐşŃĐżĐ˝ĐľĐą ĐżŃ€ĐľĐ¸Đ·Đ˛ĐľĐ´Đ¸Ń‚ĐµĐ»ŃŚĐ˝ĐľŃŃ‚Đ¸',
     rank: 'Rank',
