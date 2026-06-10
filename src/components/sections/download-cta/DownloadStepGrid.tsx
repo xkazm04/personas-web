@@ -26,13 +26,12 @@ export function DownloadStepGrid({
         const brand = STEP_BRANDS[index] ?? "cyan";
         const glowStrong = tint(brand, 50);
         const glowInset = tint(brand, 8);
-        const glowOff = tint(brand, 0);
         const borderOn = tint(brand, 40);
 
         return (
           <motion.div
             key={step}
-            className="rounded-xl border border-glass bg-white/[0.015] px-3 py-2"
+            className="relative rounded-xl border border-glass bg-white/[0.015] px-3 py-2"
             variants={{
               hidden: {
                 opacity: 0,
@@ -42,25 +41,28 @@ export function DownloadStepGrid({
               visible: {
                 opacity: 1,
                 y: 0,
-                boxShadow: [
-                  `0 0 0px ${glowOff}`,
-                  `0 0 20px ${glowStrong}, inset 0 0 12px ${glowInset}`,
-                  `0 0 0px ${glowOff}`,
-                ],
-                borderColor: [
-                  "rgba(255,255,255,0.05)",
-                  borderOn,
-                  "rgba(255,255,255,0.05)",
-                ],
-                transition: {
-                  opacity: { duration: 0.3 },
-                  y: { duration: 0.3 },
-                  boxShadow: { duration: 0.8, ease: "easeInOut" },
-                  borderColor: { duration: 0.8, ease: "easeInOut" },
-                },
+                transition: { duration: 0.3, ease: "easeOut" },
               },
             }}
           >
+            {/* framer-motion can't interpolate color-mix() values, so the
+                theme-adaptive tints stay as static styles and only the
+                overlay's opacity pulses. */}
+            <motion.div
+              aria-hidden
+              className="pointer-events-none absolute -inset-px rounded-xl"
+              style={{
+                border: `1px solid ${borderOn}`,
+                boxShadow: `0 0 20px ${glowStrong}, inset 0 0 12px ${glowInset}`,
+              }}
+              variants={{
+                hidden: { opacity: 0 },
+                visible: {
+                  opacity: [0, 1, 0],
+                  transition: { duration: 0.8, ease: "easeInOut" },
+                },
+              }}
+            />
             <p className="text-base font-mono uppercase tracking-wider text-muted-dark">
               {stepLabel} {index + 1}
             </p>

@@ -37,7 +37,7 @@ export default function PluginCard({
           <div className="flex items-center gap-3">
             <div
               className="flex h-11 w-11 items-center justify-center rounded-xl"
-              style={{ backgroundColor: `${activePlugin.color}18` }}
+              style={{ backgroundColor: `color-mix(in srgb, ${activePlugin.color} 10%, transparent)` }}
             >
               <PluginIcon className="h-5 w-5" style={{ color: activePlugin.color }} />
             </div>

@@ -30,7 +30,11 @@ export function KnowledgeClusterDetailPanel({
             <p className="text-sm text-muted-dark">{pattern.personaName}</p>
           </div>
         </div>
-        <button onClick={onClose} className="p-1 rounded-md hover:bg-white/[0.06] transition-colors">
+        <button
+          onClick={onClose}
+          aria-label={t.common.close}
+          className="p-1 rounded-md hover:bg-white/[0.06] transition-colors focus-ring focus-visible:ring-offset-0"
+        >
           <X className="h-3.5 w-3.5 text-muted-dark" />
         </button>
       </div>

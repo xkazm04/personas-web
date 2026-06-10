@@ -619,6 +619,8 @@ export const zh: Translations = {
     },
   },
   reviewsPage: {
+    selectReview: '选择审核项',
+    selectAllPending: '选择所有待处理审核项',
     focus: {
       enter: 'ä¸“ćł¨ć¨ˇĺĽŹ',
       exit: 'é€€ĺ‡ş',
@@ -637,6 +639,7 @@ export const zh: Translations = {
     },
   },
   leaderboardPage: {
+    delta: '变化',
     title: 'ćŽ’čˇŚć¦ś',
     subtitle: 'ćŚ‰ç»Ľĺć€§č˝çš„č°éźćŽ’ĺŤ',
     rank: 'Rank',
@@ -701,6 +704,7 @@ export const zh: Translations = {
     markAllRead: 'Mark all read',
   },
   observabilityPage: {
+    usageInsight: '{top} 的使用量是 {second} 的 {ratio} 倍，是您使用最多的工具集成。',
     title: 'ĺŹŻč§‚ćµ‹ć€§',
     subtitle: 'ć€§č˝ćŚ‡ć ‡ă€ććś¬č·źč¸Şĺ’Śĺ·Ąĺ…·ä˝żç”¨ć…ĺ†µ',
     tabPerformance: 'ć€§č˝',
@@ -746,6 +750,8 @@ export const zh: Translations = {
     },
   },
   agentsPage: {
+    statusLive: '运行中',
+    statusOff: '已关闭',
     title: '\u667A\u80FD\u4F53',
     noAgents: '\u672A\u90E8\u7F72\u667A\u80FD\u4F53',
     noAgentsDesc: '\u4ECE Personas \u684C\u9762\u5E94\u7528\u90E8\u7F72\u60A8\u7684\u7B2C\u4E00\u4E2A\u667A\u80FD\u4F53\uFF0C\u7136\u540E\u56DE\u5230\u8FD9\u91CC\u76D1\u63A7\u5B83\u3002',

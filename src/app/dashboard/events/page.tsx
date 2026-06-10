@@ -51,6 +51,7 @@ export default function EventsPage() {
           activeTab={pageTab}
           eventCount={events.length}
           subscriptionCount={subscriptions.length}
+          listLabel={t.eventsPage.title}
           labels={{
             events: t.eventsPage.tabEvents,
             subscriptions: t.eventsPage.tabSubscriptions,

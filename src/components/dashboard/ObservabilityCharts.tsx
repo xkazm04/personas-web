@@ -16,7 +16,16 @@ import {
   ResponsiveContainer,
 } from "recharts";
 import { CHART_COLORS } from "@/lib/constants";
-import { AXIS_TICK, GRID_STROKE, SERIES, ChartTooltip } from "@/lib/chart-theme";
+import {
+  AXIS_TICK,
+  GRID_STROKE,
+  SERIES,
+  ChartTooltip,
+  useChartAnimation,
+  ACTIVE_DOT,
+  CHART_CURSOR_LINE,
+  CHART_CURSOR_FILL,
+} from "@/lib/chart-theme";
 
 const formatDollar = (v: number) => `$${v.toFixed(2)}`;
 
@@ -38,6 +47,7 @@ interface SpendPiePoint {
 }
 
 export const CostChart = memo(function CostChart({ data }: { data: CostPoint[] }) {
+  const anim = useChartAnimation();
   return (
     <ResponsiveContainer width="100%" height={240}>
       <AreaChart data={data} margin={{ top: 8, right: 8, left: -20, bottom: 0 }}>
@@ -50,29 +60,31 @@ export const CostChart = memo(function CostChart({ data }: { data: CostPoint[] }
         <CartesianGrid strokeDasharray="3 3" stroke={GRID_STROKE} vertical={false} />
         <XAxis dataKey="date" tick={AXIS_TICK} axisLine={false} tickLine={false} />
         <YAxis tick={AXIS_TICK} axisLine={false} tickLine={false} tickFormatter={(v) => `$${v}`} />
-        <Tooltip content={<ChartTooltip valueFormatter={formatDollar} />} />
-        <Area type="monotone" dataKey="Cost" stroke={SERIES.cyan} strokeWidth={2} fill="url(#gradCost)" />
+        <Tooltip content={<ChartTooltip valueFormatter={formatDollar} />} cursor={CHART_CURSOR_LINE} />
+        <Area type="monotone" dataKey="Cost" stroke={SERIES.cyan} strokeWidth={2} fill="url(#gradCost)" activeDot={ACTIVE_DOT} {...anim} />
       </AreaChart>
     </ResponsiveContainer>
   );
 });
 
 export const ExecChart = memo(function ExecChart({ data }: { data: ExecPoint[] }) {
+  const anim = useChartAnimation();
   return (
     <ResponsiveContainer width="100%" height={240}>
       <BarChart data={data} margin={{ top: 8, right: 8, left: -20, bottom: 0 }}>
         <CartesianGrid strokeDasharray="3 3" stroke={GRID_STROKE} vertical={false} />
         <XAxis dataKey="date" tick={AXIS_TICK} axisLine={false} tickLine={false} />
         <YAxis tick={AXIS_TICK} axisLine={false} tickLine={false} allowDecimals={false} />
-        <Tooltip content={<ChartTooltip />} />
-        <Bar dataKey="Successes" stackId="exec" fill={SERIES.emerald} radius={[0, 0, 0, 0]} />
-        <Bar dataKey="Failures" stackId="exec" fill={SERIES.rose} radius={[4, 4, 0, 0]} />
+        <Tooltip content={<ChartTooltip />} cursor={CHART_CURSOR_FILL} />
+        <Bar dataKey="Successes" stackId="exec" fill={SERIES.emerald} radius={[0, 0, 0, 0]} {...anim} />
+        <Bar dataKey="Failures" stackId="exec" fill={SERIES.rose} radius={[4, 4, 0, 0]} {...anim} />
       </BarChart>
     </ResponsiveContainer>
   );
 });
 
 export const SpendPieChart = memo(function SpendPieChart({ data }: { data: SpendPiePoint[] }) {
+  const anim = useChartAnimation();
   return (
     <ResponsiveContainer width="100%" height={200}>
       <PieChart>
@@ -85,6 +97,7 @@ export const SpendPieChart = memo(function SpendPieChart({ data }: { data: Spend
           paddingAngle={3}
           dataKey="value"
           stroke="none"
+          {...anim}
         >
           {data.map((entry, i) => (
             <Cell key={entry.name} fill={entry.color || CHART_COLORS[i % CHART_COLORS.length]} />

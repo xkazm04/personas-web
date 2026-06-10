@@ -619,6 +619,8 @@ export const fr: Translations = {
     },
   },
   reviewsPage: {
+    selectReview: 'Sélectionner la revue',
+    selectAllPending: 'Sélectionner toutes les revues en attente',
     focus: {
       enter: 'Mode focus',
       exit: 'Quitter',
@@ -637,6 +639,7 @@ export const fr: Translations = {
     },
   },
   leaderboardPage: {
+    delta: 'Écart',
     title: 'Classement',
     subtitle: 'Classement de la flotte par performance composite',
     rank: 'Rank',
@@ -701,6 +704,7 @@ export const fr: Translations = {
     markAllRead: 'Mark all read',
   },
   observabilityPage: {
+    usageInsight: '{top} est utilisé {ratio} fois plus que {second}, ce qui en fait votre intégration d’outil la plus utilisée.',
     title: 'ObservabilitĂ©',
     subtitle: 'MĂ©triques de performance, suivi des coĂ»ts et utilisation des outils',
     tabPerformance: 'Performance',
@@ -746,6 +750,8 @@ export const fr: Translations = {
     },
   },
   agentsPage: {
+    statusLive: 'En ligne',
+    statusOff: 'Désactivé',
     title: 'Agents',
     noAgents: 'Aucun agent d\u00e9ploy\u00e9',
     noAgentsDesc: 'D\u00e9ployez votre premier agent depuis l\u2019application Personas, puis revenez ici pour le surveiller.',

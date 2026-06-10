@@ -619,6 +619,8 @@ export const hi: Translations = {
     },
   },
   reviewsPage: {
+    selectReview: 'समीक्षा चुनें',
+    selectAllPending: 'सभी लंबित समीक्षाएँ चुनें',
     focus: {
       enter: 'ŕ¤«ŕĄ‹ŕ¤•ŕ¤¸ ŕ¤®ŕĄ‹ŕ¤ˇ',
       exit: 'ŕ¤¬ŕ¤ľŕ¤ąŕ¤° ŕ¤¨ŕ¤żŕ¤•ŕ¤˛ŕĄ‡ŕ¤‚',
@@ -637,6 +639,7 @@ export const hi: Translations = {
     },
   },
   leaderboardPage: {
+    delta: 'बदलाव',
     title: 'ŕ¤˛ŕĄ€ŕ¤ˇŕ¤°ŕ¤¬ŕĄ‹ŕ¤°ŕĄŤŕ¤ˇ',
     subtitle: 'ŕ¤¸ŕ¤‚ŕ¤ŻŕĄŕ¤•ŕĄŤŕ¤¤ ŕ¤ŞŕĄŤŕ¤°ŕ¤¦ŕ¤°ŕĄŤŕ¤¶ŕ¤¨ ŕ¤¦ŕĄŤŕ¤µŕ¤ľŕ¤°ŕ¤ľ ŕ¤«ŕĄŤŕ¤˛ŕĄ€ŕ¤ź ŕ¤°ŕĄŕ¤‚ŕ¤•ŕ¤żŕ¤‚ŕ¤—',
     rank: 'Rank',
@@ -701,6 +704,7 @@ export const hi: Translations = {
     markAllRead: 'Mark all read',
   },
   observabilityPage: {
+    usageInsight: '{top} का उपयोग {second} से {ratio} गुना अधिक होता है, जिससे यह आपका सबसे अधिक उपयोग किया जाने वाला टूल इंटीग्रेशन है।',
     title: 'ŕ¤…ŕ¤µŕ¤˛ŕĄ‹ŕ¤•ŕ¤¨ŕĄ€ŕ¤Żŕ¤¤ŕ¤ľ',
     subtitle: 'ŕ¤ŞŕĄŤŕ¤°ŕ¤¦ŕ¤°ŕĄŤŕ¤¶ŕ¤¨ ŕ¤®ŕĄ€ŕ¤źŕĄŤŕ¤°ŕ¤żŕ¤•ŕĄŤŕ¤¸, ŕ¤˛ŕ¤ľŕ¤—ŕ¤¤ ŕ¤źŕĄŤŕ¤°ŕĄŕ¤•ŕ¤żŕ¤‚ŕ¤— ŕ¤”ŕ¤° ŕ¤źŕĄ‚ŕ¤˛ ŕ¤‰ŕ¤Şŕ¤ŻŕĄ‹ŕ¤—',
     tabPerformance: 'ŕ¤ŞŕĄŤŕ¤°ŕ¤¦ŕ¤°ŕĄŤŕ¤¶ŕ¤¨',
@@ -746,6 +750,8 @@ export const hi: Translations = {
     },
   },
   agentsPage: {
+    statusLive: 'लाइव',
+    statusOff: 'बंद',
     title: '\u090F\u091C\u0947\u0902\u091F',
     noAgents: '\u0915\u094B\u0908 \u090F\u091C\u0947\u0902\u091F \u0921\u093F\u092A\u094D\u0932\u0949\u092F \u0928\u0939\u0940\u0902',
     noAgentsDesc: 'Personas \u0921\u0947\u0938\u094D\u0915\u091F\u0949\u092A \u0910\u092A \u0938\u0947 \u0905\u092A\u0928\u093E \u092A\u0939\u0932\u093E \u090F\u091C\u0947\u0902\u091F \u0921\u093F\u092A\u094D\u0932\u0949\u092F \u0915\u0930\u0947\u0902, \u092B\u093F\u0930 \u0907\u0938\u0915\u0940 \u0928\u093F\u0917\u0930\u093E\u0928\u0940 \u0915\u0947 \u0932\u093F\u090F \u092F\u0939\u093E\u0902 \u0935\u093E\u092A\u0938 \u0906\u090F\u0902\u0964',

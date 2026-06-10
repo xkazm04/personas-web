@@ -109,7 +109,14 @@ export function buildExecutionColumns({
             }}
             disabled={pending}
             aria-busy={pending}
-            className="text-red-400 transition-colors hover:text-red-300 disabled:cursor-not-allowed disabled:opacity-50 disabled:hover:text-red-400"
+            aria-label={
+              pending
+                ? labels.cancelling
+                : row.status === "queued"
+                  ? labels.cancelQueuedRun
+                  : labels.cancel
+            }
+            className="rounded-md text-red-400 transition-colors hover:text-red-300 focus-ring focus-visible:ring-offset-0 disabled:cursor-not-allowed disabled:opacity-50 disabled:hover:text-red-400"
             title={
               pending
                 ? labels.cancelling

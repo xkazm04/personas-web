@@ -619,6 +619,8 @@ export const de: Translations = {
     },
   },
   reviewsPage: {
+    selectReview: 'Review auswählen',
+    selectAllPending: 'Alle ausstehenden Reviews auswählen',
     focus: {
       enter: 'Fokusmodus',
       exit: 'Fokus beenden',
@@ -637,6 +639,7 @@ export const de: Translations = {
     },
   },
   leaderboardPage: {
+    delta: 'Delta',
     title: 'Rangliste',
     subtitle: 'Flotten-Ranking nach Gesamtleistung',
     rank: 'Rank',
@@ -701,6 +704,7 @@ export const de: Translations = {
     markAllRead: 'Mark all read',
   },
   observabilityPage: {
+    usageInsight: '{top} wird {ratio}× häufiger genutzt als {second} und ist damit Ihre meistgenutzte Tool-Integration.',
     title: 'Observability',
     subtitle: 'Leistungsmetriken, Kostenverfolgung und Werkzeugnutzung',
     tabPerformance: 'Leistung',
@@ -746,6 +750,8 @@ export const de: Translations = {
     },
   },
   agentsPage: {
+    statusLive: 'Live',
+    statusOff: 'Aus',
     title: 'Agenten',
     noAgents: 'Keine Agenten bereitgestellt',
     noAgentsDesc: 'Stellen Sie Ihren ersten Agenten \u00fcber die Personas-Desktop-App bereit und kommen Sie dann hierher zur \u00dcberwachung.',

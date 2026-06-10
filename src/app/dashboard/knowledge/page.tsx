@@ -4,6 +4,8 @@ import { useCallback, useEffect, useRef, useState } from "react";
 import { motion } from "framer-motion";
 import { Table2, GitFork, Brain } from "lucide-react";
 import GradientText from "@/components/GradientText";
+import DashboardErrorBanner from "@/components/dashboard/DashboardErrorBanner";
+import SkeletonCard from "@/components/dashboard/SkeletonCard";
 import { KNOWLEDGE_VIEW_KEY } from "@/lib/constants";
 import { useTranslation } from "@/i18n/useTranslation";
 import KnowledgeDenseTable from "./KnowledgeDenseTable";
@@ -29,7 +31,7 @@ function isViewVariant(value: string | null): value is ViewVariant {
 
 export default function KnowledgeGraphPage() {
   const { t } = useTranslation();
-  const { patterns, memories } = useKnowledgeData();
+  const { patterns, memories, loading, error } = useKnowledgeData();
   const [activeVariant, setActiveVariant] = useState<ViewVariant>("dense-table");
   const tabRefs = useRef<(HTMLButtonElement | null)[]>([]);
 
@@ -128,14 +130,27 @@ export default function KnowledgeGraphPage() {
         </div>
       </motion.div>
 
+      {error && <DashboardErrorBanner message={error} />}
+
       <div
         role="tabpanel"
         id={`knowledge-panel-${activeVariant}`}
         aria-labelledby={`knowledge-tab-${activeVariant}`}
+        aria-busy={loading}
       >
-        {activeVariant === "dense-table" && <KnowledgeDenseTable patterns={patterns} />}
-        {activeVariant === "cluster-graph" && <KnowledgeClusterGraph patterns={patterns} />}
-        {activeVariant === "memories" && <MemoriesView memories={memories} />}
+        {loading ? (
+          <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+            {Array.from({ length: 3 }).map((_, i) => (
+              <SkeletonCard key={i} lines={4} />
+            ))}
+          </div>
+        ) : (
+          <>
+            {activeVariant === "dense-table" && <KnowledgeDenseTable patterns={patterns} />}
+            {activeVariant === "cluster-graph" && <KnowledgeClusterGraph patterns={patterns} />}
+            {activeVariant === "memories" && <MemoriesView memories={memories} />}
+          </>
+        )}
       </div>
     </div>
   );

@@ -619,6 +619,8 @@ export const ru: Translations = {
     },
   },
   reviewsPage: {
+    selectReview: 'Выбрать проверку',
+    selectAllPending: 'Выбрать все ожидающие проверки',
     focus: {
       enter: 'Đ ĐµĐ¶Đ¸ĐĽ Ń„ĐľĐşŃŃĐ°',
       exit: 'Đ’Ń‹Ń…ĐľĐ´',
@@ -637,6 +639,7 @@ export const ru: Translations = {
     },
   },
   leaderboardPage: {
+    delta: 'Изменение',
     title: 'Đ ĐµĐąŃ‚Đ¸Đ˝Đł',
     subtitle: 'Đ ĐµĐąŃ‚Đ¸Đ˝Đł Ń„Đ»ĐľŃ‚Đ° ĐżĐľ ŃĐľĐ˛ĐľĐşŃĐżĐ˝ĐľĐą ĐżŃ€ĐľĐ¸Đ·Đ˛ĐľĐ´Đ¸Ń‚ĐµĐ»ŃŚĐ˝ĐľŃŃ‚Đ¸',
     rank: 'Rank',
@@ -701,6 +704,7 @@ export const ru: Translations = {
     markAllRead: 'Mark all read',
   },
   observabilityPage: {
+    usageInsight: '{top} используется в {ratio} раза чаще, чем {second}, — это ваша самая используемая интеграция инструментов.',
     title: 'ĐťĐ°Đ±Đ»ŃŽĐ´Đ°ĐµĐĽĐľŃŃ‚ŃŚ',
     subtitle: 'ĐśĐµŃ‚Ń€Đ¸ĐşĐ¸ ĐżŃ€ĐľĐ¸Đ·Đ˛ĐľĐ´Đ¸Ń‚ĐµĐ»ŃŚĐ˝ĐľŃŃ‚Đ¸, ĐľŃ‚ŃĐ»ĐµĐ¶Đ¸Đ˛Đ°Đ˝Đ¸Đµ Ń€Đ°ŃŃ…ĐľĐ´ĐľĐ˛ Đ¸ Đ¸ŃĐżĐľĐ»ŃŚĐ·ĐľĐ˛Đ°Đ˝Đ¸Đµ Đ¸Đ˝ŃŃ‚Ń€ŃĐĽĐµĐ˝Ń‚ĐľĐ˛',
     tabPerformance: 'ĐźŃ€ĐľĐ¸Đ·Đ˛ĐľĐ´Đ¸Ń‚ĐµĐ»ŃŚĐ˝ĐľŃŃ‚ŃŚ',
@@ -746,6 +750,8 @@ export const ru: Translations = {
     },
   },
   agentsPage: {
+    statusLive: 'Активен',
+    statusOff: 'Выкл.',
     title: '\u0410\u0433\u0435\u043D\u0442\u044B',
     noAgents: '\u0410\u0433\u0435\u043D\u0442\u044B \u043D\u0435 \u0440\u0430\u0437\u0432\u0451\u0440\u043D\u0443\u0442\u044B',
     noAgentsDesc: '\u0420\u0430\u0437\u0432\u0435\u0440\u043D\u0438\u0442\u0435 \u043F\u0435\u0440\u0432\u043E\u0433\u043E \u0430\u0433\u0435\u043D\u0442\u0430 \u0438\u0437 \u043D\u0430\u0441\u0442\u043E\u043B\u044C\u043D\u043E\u0433\u043E \u043F\u0440\u0438\u043B\u043E\u0436\u0435\u043D\u0438\u044F Personas, \u0437\u0430\u0442\u0435\u043C \u0432\u0435\u0440\u043D\u0438\u0442\u0435\u0441\u044C \u0441\u044E\u0434\u0430 \u0434\u043B\u044F \u043C\u043E\u043D\u0438\u0442\u043E\u0440\u0438\u043D\u0433\u0430.',

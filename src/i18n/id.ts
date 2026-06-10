@@ -619,6 +619,8 @@ export const id: Translations = {
     },
   },
   reviewsPage: {
+    selectReview: 'Pilih tinjauan',
+    selectAllPending: 'Pilih semua tinjauan tertunda',
     focus: {
       enter: 'Mode fokus',
       exit: 'Keluar',
@@ -637,6 +639,7 @@ export const id: Translations = {
     },
   },
   leaderboardPage: {
+    delta: 'Perubahan',
     title: 'Papan Peringkat',
     subtitle: 'Peringkat armada berdasarkan kinerja komposit',
     rank: 'Rank',
@@ -701,6 +704,7 @@ export const id: Translations = {
     markAllRead: 'Mark all read',
   },
   observabilityPage: {
+    usageInsight: '{top} digunakan {ratio}x lebih sering daripada {second}, menjadikannya integrasi alat yang paling banyak Anda gunakan.',
     title: 'Observabilitas',
     subtitle: 'Metrik kinerja, pelacakan biaya, dan pemanfaatan alat',
     tabPerformance: 'Kinerja',
@@ -746,6 +750,8 @@ export const id: Translations = {
     },
   },
   agentsPage: {
+    statusLive: 'Aktif',
+    statusOff: 'Mati',
     title: 'Agen',
     noAgents: 'Tidak ada agen yang dideploy',
     noAgentsDesc: 'Deploy agen pertama Anda dari aplikasi desktop Personas, lalu kembali ke sini untuk memantaunya.',

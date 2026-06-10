@@ -5,6 +5,8 @@ import { motion } from "framer-motion";
 import { Activity } from "lucide-react";
 
 import GradientText from "@/components/GradientText";
+import DashboardErrorBanner from "@/components/dashboard/DashboardErrorBanner";
+import SkeletonCard from "@/components/dashboard/SkeletonCard";
 import StalenessIndicator from "@/components/dashboard/StalenessIndicator";
 import { useTranslation } from "@/i18n/useTranslation";
 import { fadeUp, staggerContainer } from "@/lib/animations";
@@ -17,7 +19,7 @@ import { useSlaData } from "./useSlaData";
 export default function SLAPage() {
   const { t } = useTranslation();
   const [fetchedAt] = useState(() => Date.now());
-  const { targets, breaches } = useSlaData();
+  const { targets, breaches, loading, error } = useSlaData();
 
   const { overallCompliance, activeBreachCount } = useMemo(() => {
     const avg =
@@ -42,36 +44,49 @@ export default function SLAPage() {
         <StalenessIndicator fetchedAt={fetchedAt} className="mt-2" />
       </motion.div>
 
-      <SLASummaryGrid
-        overallCompliance={overallCompliance}
-        activeBreachCount={activeBreachCount}
-        objectiveCount={targets.length}
-        labels={{
-          compliance: t.slaPage.compliance,
-          activeBreaches: t.slaPage.activeBreaches,
-          objectives: t.slaPage.objectives,
-        }}
-      />
-      <SLATargetGrid
-        targets={targets}
-        labels={{
-          metricType: t.slaPage.metricType,
-          target: t.slaPage.target,
-          current: t.slaPage.current,
-          timeInSla: t.slaPage.timeInSla,
-        }}
-      />
-      <SLABreachLog
-        breaches={breaches}
-        labels={{
-          title: t.slaPage.breachLog.title,
-          empty: t.slaPage.breachLog.empty,
-          duration: t.slaPage.breachLog.duration,
-          ongoing: t.slaPage.breachLog.ongoing,
-          metricType: t.slaPage.metricType,
-          severity: t.slaPage.severity,
-        }}
-      />
+      {error && <DashboardErrorBanner message={error} />}
+
+      {loading ? (
+        <div className="grid gap-4 sm:grid-cols-3" aria-busy="true">
+          {Array.from({ length: 3 }).map((_, i) => (
+            <SkeletonCard key={i} lines={2} />
+          ))}
+          <SkeletonCard className="sm:col-span-3" lines={5} />
+        </div>
+      ) : (
+        <>
+          <SLASummaryGrid
+            overallCompliance={overallCompliance}
+            activeBreachCount={activeBreachCount}
+            objectiveCount={targets.length}
+            labels={{
+              compliance: t.slaPage.compliance,
+              activeBreaches: t.slaPage.activeBreaches,
+              objectives: t.slaPage.objectives,
+            }}
+          />
+          <SLATargetGrid
+            targets={targets}
+            labels={{
+              metricType: t.slaPage.metricType,
+              target: t.slaPage.target,
+              current: t.slaPage.current,
+              timeInSla: t.slaPage.timeInSla,
+            }}
+          />
+          <SLABreachLog
+            breaches={breaches}
+            labels={{
+              title: t.slaPage.breachLog.title,
+              empty: t.slaPage.breachLog.empty,
+              duration: t.slaPage.breachLog.duration,
+              ongoing: t.slaPage.breachLog.ongoing,
+              metricType: t.slaPage.metricType,
+              severity: t.slaPage.severity,
+            }}
+          />
+        </>
+      )}
     </motion.div>
   );
 }

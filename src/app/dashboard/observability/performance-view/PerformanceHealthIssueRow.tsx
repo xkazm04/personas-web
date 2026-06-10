@@ -2,6 +2,7 @@ import { useState } from "react";
 import { AnimatePresence, motion } from "framer-motion";
 import { AlertTriangle, ChevronDown, ChevronUp, CircleDot, ShieldAlert, ShieldCheck, Zap } from "lucide-react";
 import type { ElementType } from "react";
+import { relativeTime } from "@/lib/format";
 import type { MockHealthIssue, ObservabilityLabels } from "./performanceViewTypes";
 
 const severityStyles: Record<string, { color: string; bgColor: string; icon: ElementType }> = {
@@ -11,12 +12,6 @@ const severityStyles: Record<string, { color: string; bgColor: string; icon: Ele
   low: { color: "text-blue-400", bgColor: "bg-blue-500/10 border-blue-500/20", icon: CircleDot },
 };
 
-function computeAge(detectedAt: string): string {
-  const diff = Date.now() - new Date(detectedAt).getTime();
-  const mins = Math.floor(diff / 60_000);
-  return mins < 60 ? `${mins}m ago` : `${Math.floor(mins / 60)}h ago`;
-}
-
 export function PerformanceHealthIssueRow({
   issue,
   labels,
@@ -25,7 +20,8 @@ export function PerformanceHealthIssueRow({
   labels: ObservabilityLabels;
 }) {
   const [expanded, setExpanded] = useState(false);
-  const [age] = useState(() => computeAge(issue.detectedAt));
+  // Lazy initializer: relativeTime reads Date.now(), which must stay out of render.
+  const [age] = useState(() => relativeTime(issue.detectedAt));
   const sev = severityStyles[issue.severity] ?? severityStyles.low;
   const SevIcon = sev.icon;
 
@@ -44,7 +40,9 @@ export function PerformanceHealthIssueRow({
           <div className="mt-2 flex items-center gap-3 text-sm text-muted-dark">
             <span>{issue.personaName}</span>
             <span>{age}</span>
-            <span className={`uppercase font-medium ${sev.color}`}>{issue.severity}</span>
+            <span className={`uppercase font-medium ${sev.color}`}>
+              {labels.severity[issue.severity as keyof ObservabilityLabels["severity"]] ?? issue.severity}
+            </span>
           </div>
           {issue.autoFixApplied && (
             <div className="mt-2">

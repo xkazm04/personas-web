@@ -2,8 +2,9 @@
 
 import { useId } from "react";
 import { motion, useReducedMotion } from "framer-motion";
-import { BRAND_VAR, tint } from "@/lib/brand-theme";
-import { TRIGGERS, CENTER, RADIUS, NODE_SIZE, nodePosition } from "./data";
+import { BRAND_VAR } from "@/lib/brand-theme";
+import { TRIGGERS, CENTER, RADIUS, nodePosition } from "./data";
+import HubNode from "./HubNode";
 
 interface HubRingProps {
   active: string;
@@ -12,10 +13,10 @@ interface HubRingProps {
 
 /**
  * HubRing — the SVG ring of 8 trigger nodes orbiting a central persona chip.
- * Each trigger has an opaque backing rect so the active spoke line never
- * shows through the node surface.
+ * A continuous "signal rain" of pulses runs every spoke inward to the hub,
+ * dramatizing "any signal can wake any agent"; the active spoke's pulse is
+ * brighter and faster. All continuous motion is gated on reduced-motion.
  */
-
 export default function HubRing({ active, onSelect }: HubRingProps) {
   const reduced = useReducedMotion() ?? false;
   const uid = useId();
@@ -31,16 +32,31 @@ export default function HubRing({ active, onSelect }: HubRingProps) {
         </radialGradient>
       </defs>
 
-      {/* Ambient ring — low-contrast guide circle */}
-      <circle
-        cx={CENTER}
-        cy={CENTER}
-        r={RADIUS}
-        fill="none"
-        stroke="rgba(var(--surface-overlay), 0.06)"
-        strokeWidth="1"
-        strokeDasharray="4 6"
-      />
+      {/* Ambient ring — low-contrast guide circle, slowly rotating for life */}
+      {reduced ? (
+        <circle
+          cx={CENTER}
+          cy={CENTER}
+          r={RADIUS}
+          fill="none"
+          stroke="rgba(var(--surface-overlay), 0.06)"
+          strokeWidth="1"
+          strokeDasharray="4 6"
+        />
+      ) : (
+        <motion.circle
+          cx={CENTER}
+          cy={CENTER}
+          r={RADIUS}
+          fill="none"
+          stroke="rgba(var(--surface-overlay), 0.06)"
+          strokeWidth="1"
+          strokeDasharray="4 6"
+          animate={{ rotate: 360 }}
+          transition={{ duration: 80, repeat: Infinity, ease: "linear" }}
+          style={{ transformBox: "view-box", transformOrigin: `${CENTER}px ${CENTER}px` }}
+        />
+      )}
       <circle cx={CENTER} cy={CENTER} r={90} fill={`url(#${uid}-hub)`} />
 
       {/* Spoke lines (rendered behind nodes via svg order) */}
@@ -48,31 +64,44 @@ export default function HubRing({ active, onSelect }: HubRingProps) {
         const p = nodePosition(i, TRIGGERS.length);
         const isActive = trigger.id === active;
         return (
-          <g key={`line-${trigger.id}`}>
-            <line
-              x1={CENTER}
-              y1={CENTER}
-              x2={p.x}
-              y2={p.y}
-              stroke={
-                isActive
-                  ? BRAND_VAR[trigger.brand]
-                  : "rgba(var(--surface-overlay), 0.08)"
-              }
-              strokeWidth={isActive ? 1.75 : 1}
-            />
-            {isActive && !reduced && (
-              <motion.circle
-                r="4.5"
-                fill={BRAND_VAR[trigger.brand]}
-                initial={{ cx: p.x, cy: p.y, opacity: 1 }}
-                animate={{ cx: CENTER, cy: CENTER, opacity: [1, 1, 0.2] }}
-                transition={{ duration: 1.4, repeat: Infinity, ease: "easeInOut" }}
-              />
-            )}
-          </g>
+          <line
+            key={`line-${trigger.id}`}
+            x1={CENTER}
+            y1={CENTER}
+            x2={p.x}
+            y2={p.y}
+            stroke={isActive ? BRAND_VAR[trigger.brand] : "rgba(var(--surface-overlay), 0.08)"}
+            strokeWidth={isActive ? 1.75 : 1}
+          />
         );
       })}
+
+      {/* Signal rain — a pulse travels each spoke inward to the hub, staggered
+          by node so signals appear to converge continuously. */}
+      {!reduced &&
+        TRIGGERS.map((trigger, i) => {
+          const p = nodePosition(i, TRIGGERS.length);
+          const isActive = trigger.id === active;
+          return (
+            <motion.circle
+              key={`pulse-${trigger.id}`}
+              r={isActive ? 4.5 : 2.2}
+              fill={BRAND_VAR[trigger.brand]}
+              initial={{ cx: p.x, cy: p.y, opacity: 0 }}
+              animate={{
+                cx: CENTER,
+                cy: CENTER,
+                opacity: isActive ? [0, 1, 1, 0.2] : [0, 0.45, 0.45, 0],
+              }}
+              transition={{
+                duration: isActive ? 1.5 : 2.8,
+                repeat: Infinity,
+                ease: "easeInOut",
+                delay: i * 0.3,
+              }}
+            />
+          );
+        })}
 
       {/* Central persona node — dual-theme image inside a circular mask */}
       <g>
@@ -103,71 +132,17 @@ export default function HubRing({ active, onSelect }: HubRingProps) {
       </g>
 
       {/* Trigger nodes — opaque so spoke lines never show through */}
-      {TRIGGERS.map((trigger, i) => {
-        const p = nodePosition(i, TRIGGERS.length);
-        const isActive = trigger.id === active;
-        const Icon = trigger.icon;
-        const v = BRAND_VAR[trigger.brand];
-        return (
-          <g
-            key={trigger.id}
-            data-trigger-id={trigger.id}
-            style={{ cursor: "pointer" }}
-            onClick={() => onSelect(trigger.id)}
-          >
-            {/* Opaque backing hides the line behind the node */}
-            <rect
-              x={p.x - NODE_SIZE / 2}
-              y={p.y - NODE_SIZE / 2}
-              width={NODE_SIZE}
-              height={NODE_SIZE}
-              rx="18"
-              fill="var(--background)"
-            />
-            <foreignObject
-              x={p.x - NODE_SIZE / 2}
-              y={p.y - NODE_SIZE / 2}
-              width={NODE_SIZE}
-              height={NODE_SIZE}
-            >
-              <motion.div
-                animate={{ scale: isActive ? 1.06 : 1 }}
-                className="flex h-full w-full flex-col items-center justify-center gap-1.5 rounded-2xl border transition-colors"
-                style={{
-                  backgroundColor: isActive
-                    ? tint(trigger.brand, 14)
-                    : "var(--background)",
-                  borderColor: isActive
-                    ? tint(trigger.brand, 50)
-                    : "rgba(var(--surface-overlay), 0.10)",
-                  boxShadow: isActive
-                    ? `0 0 24px ${tint(trigger.brand, 30)}`
-                    : "none",
-                }}
-              >
-                <Icon
-                  className="h-5 w-5"
-                  style={{
-                    color: isActive
-                      ? v
-                      : "rgba(var(--surface-overlay), 0.55)",
-                  }}
-                />
-                <span
-                  className="text-base font-semibold leading-tight text-center px-1"
-                  style={{
-                    color: isActive
-                      ? "var(--foreground)"
-                      : "var(--muted-dark)",
-                  }}
-                >
-                  {trigger.label}
-                </span>
-              </motion.div>
-            </foreignObject>
-          </g>
-        );
-      })}
+      {TRIGGERS.map((trigger, i) => (
+        <HubNode
+          key={trigger.id}
+          trigger={trigger}
+          index={i}
+          total={TRIGGERS.length}
+          isActive={trigger.id === active}
+          reduced={reduced}
+          onSelect={onSelect}
+        />
+      ))}
     </svg>
   );
 }

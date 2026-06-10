@@ -13,7 +13,15 @@ import {
   ReferenceLine,
 } from "recharts";
 import type { LatencyPoint } from "@/lib/mock-dashboard-data";
-import { AXIS_TICK, GRID_STROKE, SERIES, ChartTooltip } from "@/lib/chart-theme";
+import {
+  AXIS_TICK,
+  GRID_STROKE,
+  SERIES,
+  ChartTooltip,
+  useChartAnimation,
+  ACTIVE_DOT,
+  CHART_CURSOR_LINE,
+} from "@/lib/chart-theme";
 
 const formatYAxis = (v: number): string => {
   if (v >= 1000) return `${(v / 1000).toFixed(1)}s`;
@@ -24,6 +32,7 @@ const formatLatencyValue = (v: number): string =>
   v >= 1000 ? `${(v / 1000).toFixed(2)}s` : `${v}ms`;
 
 export default memo(function LatencyChart({ data }: { data: LatencyPoint[] }) {
+  const anim = useChartAnimation();
   return (
     <ResponsiveContainer width="100%" height={200}>
       <LineChart data={data} margin={{ top: 8, right: 8, left: -20, bottom: 0 }}>
@@ -40,7 +49,7 @@ export default memo(function LatencyChart({ data }: { data: LatencyPoint[] }) {
           tickLine={false}
           tickFormatter={formatYAxis}
         />
-        <Tooltip content={<ChartTooltip valueFormatter={formatLatencyValue} />} />
+        <Tooltip content={<ChartTooltip valueFormatter={formatLatencyValue} />} cursor={CHART_CURSOR_LINE} />
         <ReferenceLine
           y={1000}
           stroke={SERIES.rose}
@@ -60,6 +69,8 @@ export default memo(function LatencyChart({ data }: { data: LatencyPoint[] }) {
           stroke={SERIES.cyan}
           strokeWidth={2}
           dot={false}
+          activeDot={ACTIVE_DOT}
+          {...anim}
         />
         <Line
           type="monotone"
@@ -68,6 +79,8 @@ export default memo(function LatencyChart({ data }: { data: LatencyPoint[] }) {
           stroke={SERIES.amber}
           strokeWidth={2}
           dot={false}
+          activeDot={ACTIVE_DOT}
+          {...anim}
         />
         <Line
           type="monotone"
@@ -76,6 +89,8 @@ export default memo(function LatencyChart({ data }: { data: LatencyPoint[] }) {
           stroke={SERIES.rose}
           strokeWidth={2}
           dot={false}
+          activeDot={ACTIVE_DOT}
+          {...anim}
         />
         <Legend
           verticalAlign="bottom"

@@ -619,6 +619,8 @@ export const vi: Translations = {
     },
   },
   reviewsPage: {
+    selectReview: 'Chọn bản duyệt',
+    selectAllPending: 'Chọn tất cả bản duyệt đang chờ',
     focus: {
       enter: 'Cháşż Ä‘á»™ táş­p trung',
       exit: 'ThoĂˇt',
@@ -637,6 +639,7 @@ export const vi: Translations = {
     },
   },
   leaderboardPage: {
+    delta: 'Biến động',
     title: 'BáşŁng xáşżp háşˇng',
     subtitle: 'Xáşżp háşˇng Ä‘á»™i ngĹ© theo hiá»‡u suáşĄt tá»•ng há»Łp',
     rank: 'Rank',
@@ -701,6 +704,7 @@ export const vi: Translations = {
     markAllRead: 'Mark all read',
   },
   observabilityPage: {
+    usageInsight: '{top} được dùng nhiều gấp {ratio} lần {second}, là tích hợp công cụ được bạn sử dụng nhiều nhất.',
     title: 'KháşŁ nÄng quan sĂˇt',
     subtitle: 'Chá»‰ sá»‘ hiá»‡u suáşĄt, theo dĂµi chi phĂ­ vĂ  sá»­ dá»Ąng cĂ´ng cá»Ą',
     tabPerformance: 'Hiá»‡u suáşĄt',
@@ -746,6 +750,8 @@ export const vi: Translations = {
     },
   },
   agentsPage: {
+    statusLive: 'Hoạt động',
+    statusOff: 'Tắt',
     title: 'T\u00e1c nh\u00e2n',
     noAgents: 'Ch\u01b0a c\u00f3 t\u00e1c nh\u00e2n n\u00e0o \u0111\u01b0\u1ee3c tri\u1ec3n khai',
     noAgentsDesc: 'Tri\u1ec3n khai t\u00e1c nh\u00e2n \u0111\u1ea7u ti\u00ean t\u1eeb \u1ee9ng d\u1ee5ng Personas, sau \u0111\u00f3 quay l\u1ea1i \u0111\u00e2y \u0111\u1ec3 gi\u00e1m s\u00e1t.',

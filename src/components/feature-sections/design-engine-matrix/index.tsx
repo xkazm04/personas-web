@@ -10,6 +10,7 @@ import {
 } from "../designMatrixShared";
 import MatrixTile from "./components/MatrixTile";
 import IntentTile from "./components/IntentTile";
+import RadiateOverlay from "./components/RadiateOverlay";
 
 const CELL_BY_KEY: Record<CellKey, CellDef> = Object.fromEntries(
   CELLS.map((c) => [c.key, c]),
@@ -76,22 +77,27 @@ export default function DesignEngineMatrix() {
             </div>
           </div>
 
-          <div className="p-5 md:p-6 grid grid-cols-1 md:grid-cols-3 gap-3 sm:gap-4 md:gap-5">
-            <MatrixTile def={CELL_BY_KEY.tasks} status={statuses.tasks} />
-            <MatrixTile def={CELL_BY_KEY.apps} status={statuses.apps} />
-            <MatrixTile def={CELL_BY_KEY.triggers} status={statuses.triggers} />
+          <div className="relative">
+            {/* Connector spokes render the "radiate from center" metaphor; a
+                command packet travels out to each card as it's engaged. */}
+            <RadiateOverlay statuses={statuses} />
+            <div className="p-5 md:p-6 grid grid-cols-1 md:grid-cols-3 gap-3 sm:gap-4 md:gap-5">
+              <MatrixTile def={CELL_BY_KEY.tasks} status={statuses.tasks} />
+              <MatrixTile def={CELL_BY_KEY.apps} status={statuses.apps} />
+              <MatrixTile def={CELL_BY_KEY.triggers} status={statuses.triggers} />
 
-            <MatrixTile def={CELL_BY_KEY.messages} status={statuses.messages} />
-            <IntentTile
-              userTyped={userTyped}
-              phase={phase}
-              filledCount={filledCount}
-            />
-            <MatrixTile def={CELL_BY_KEY.review} status={statuses.review} />
+              <MatrixTile def={CELL_BY_KEY.messages} status={statuses.messages} />
+              <IntentTile
+                userTyped={userTyped}
+                phase={phase}
+                filledCount={filledCount}
+              />
+              <MatrixTile def={CELL_BY_KEY.review} status={statuses.review} />
 
-            <MatrixTile def={CELL_BY_KEY.memory} status={statuses.memory} />
-            <MatrixTile def={CELL_BY_KEY.errors} status={statuses.errors} />
-            <MatrixTile def={CELL_BY_KEY.events} status={statuses.events} />
+              <MatrixTile def={CELL_BY_KEY.memory} status={statuses.memory} />
+              <MatrixTile def={CELL_BY_KEY.errors} status={statuses.errors} />
+              <MatrixTile def={CELL_BY_KEY.events} status={statuses.events} />
+            </div>
           </div>
 
           <div className="flex items-center justify-between border-t border-foreground/[0.06] px-5 py-2.5 bg-foreground/[0.01]">

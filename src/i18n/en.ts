@@ -476,6 +476,8 @@
     };
   };
   reviewsPage: {
+    selectReview: string;
+    selectAllPending: string;
     focus: {
       enter: string;
       exit: string;
@@ -494,6 +496,7 @@
     };
   };
   leaderboardPage: {
+    delta: string;
     title: string;
     subtitle: string;
     rank: string;
@@ -558,6 +561,7 @@
     markAllRead: string;
   };
   observabilityPage: {
+    usageInsight: string;
     title: string;
     subtitle: string;
     tabPerformance: string;
@@ -603,6 +607,8 @@
     };
   };
   agentsPage: {
+    statusLive: string;
+    statusOff: string;
     title: string;
     noAgents: string;
     noAgentsDesc: string;
@@ -1618,6 +1624,8 @@ export const en: Translations = {
     },
   },
   reviewsPage: {
+    selectReview: 'Select review',
+    selectAllPending: 'Select all pending reviews',
     focus: {
       enter: 'Focus flow',
       exit: 'Exit focus',
@@ -1636,6 +1644,7 @@ export const en: Translations = {
     },
   },
   leaderboardPage: {
+    delta: 'Delta',
     title: 'Leaderboard',
     subtitle: 'Fleet ranking by composite performance',
     rank: 'Rank',
@@ -1700,6 +1709,7 @@ export const en: Translations = {
     markAllRead: 'Mark all read',
   },
   observabilityPage: {
+    usageInsight: '{top} is used {ratio}x more than {second}, making it your most utilized tool integration.',
     title: 'Observability',
     subtitle: 'Performance metrics, cost tracking, and tool utilization',
     tabPerformance: 'Performance',
@@ -1745,6 +1755,8 @@ export const en: Translations = {
     },
   },
   agentsPage: {
+    statusLive: 'Live',
+    statusOff: 'Off',
     title: 'Agents',
     noAgents: 'No agents deployed',
     noAgentsDesc: 'Deploy your first agent from the Personas desktop app, then come back here to monitor it.',

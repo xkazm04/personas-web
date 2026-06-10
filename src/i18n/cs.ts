@@ -619,6 +619,8 @@ export const cs: Translations = {
     },
   },
   reviewsPage: {
+    selectReview: 'Vybrat revizi',
+    selectAllPending: 'Vybrat všechny čekající revize',
     focus: {
       enter: 'ReĹľim soustĹ™edÄ›nĂ­',
       exit: 'UkonÄŤit',
@@ -637,6 +639,7 @@ export const cs: Translations = {
     },
   },
   leaderboardPage: {
+    delta: 'Změna',
     title: 'Ĺ˝ebĹ™Ă­ÄŤek',
     subtitle: 'Ĺ˝ebĹ™Ă­ÄŤek flotily podle souhrnnĂ©ho vĂ˝konu',
     rank: 'Rank',
@@ -701,6 +704,7 @@ export const cs: Translations = {
     markAllRead: 'Mark all read',
   },
   observabilityPage: {
+    usageInsight: '{top} se používá {ratio}× častěji než {second}, je to tedy vaše nejvyužívanější integrace nástrojů.',
     title: 'Pozorovatelnost',
     subtitle: 'Metriky vĂ˝konu, sledovĂˇnĂ­ nĂˇkladĹŻ a vyuĹľitĂ­ nĂˇstrojĹŻ',
     tabPerformance: 'VĂ˝kon',
@@ -746,6 +750,8 @@ export const cs: Translations = {
     },
   },
   agentsPage: {
+    statusLive: 'Aktivní',
+    statusOff: 'Vypnuto',
     title: 'Agenti',
     noAgents: '\u017d\u00e1dn\u00ed nasazen\u00ed agenti',
     noAgentsDesc: 'Nasa\u010fte sv\u00e9ho prvn\u00edho agenta z desktopov\u00e9 aplikace Personas, pak se vra\u0165te sem pro monitorov\u00e1n\u00ed.',

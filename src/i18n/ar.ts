@@ -619,6 +619,8 @@ export const ar: Translations = {
     },
   },
   reviewsPage: {
+    selectReview: 'تحديد المراجعة',
+    selectAllPending: 'تحديد كل المراجعات المعلّقة',
     focus: {
       enter: 'ŮŘ¶Řą Ř§Ů„ŘŞŘ±ŮŮŠŘ˛',
       exit: 'Ř§Ů„Ř®Ř±ŮŘ¬',
@@ -637,6 +639,7 @@ export const ar: Translations = {
     },
   },
   leaderboardPage: {
+    delta: 'التغيّر',
     title: 'Ů„ŮŘ­Ř© Ř§Ů„Ů…ŘŞŘµŘŻŘ±ŮŠŮ†',
     subtitle: 'ŘŞŘ±ŘŞŮŠŘ¨ Ř§Ů„ŘŁŘłŘ·ŮŮ„ Ř­ŘłŘ¨ Ř§Ů„ŘŁŘŻŘ§Řˇ Ř§Ů„Ů…Ř¬Ů…Řą',
     rank: 'Rank',
@@ -701,6 +704,7 @@ export const ar: Translations = {
     markAllRead: 'Mark all read',
   },
   observabilityPage: {
+    usageInsight: 'تُستخدم {top} أكثر بـ {ratio} مرة من {second}، ما يجعلها أكثر تكاملات الأدوات استخدامًا لديك.',
     title: 'Ů‚Ř§Ř¨Ů„ŮŠŘ© Ř§Ů„Ů…Ů„Ř§Ř­Ř¸Ř©',
     subtitle: 'Ů…Ů‚Ř§ŮŠŮŠŘł Ř§Ů„ŘŁŘŻŘ§Řˇ ŮŘŞŘŞŘ¨Řą Ř§Ů„ŘŞŮŮ„ŮŘ© ŮŘ§ŘłŘŞŘ®ŘŻŘ§Ů… Ř§Ů„ŘŁŘŻŮŘ§ŘŞ',
     tabPerformance: 'Ř§Ů„ŘŁŘŻŘ§Řˇ',
@@ -746,6 +750,8 @@ export const ar: Translations = {
     },
   },
   agentsPage: {
+    statusLive: 'مباشر',
+    statusOff: 'متوقف',
     title: '\u0627\u0644\u0648\u0643\u0644\u0627\u0621',
     noAgents: '\u0644\u0627 \u062A\u0648\u062C\u062F \u0648\u0643\u0644\u0627\u0621 \u0645\u0646\u0634\u0648\u0631\u0648\u0646',
     noAgentsDesc: '\u0627\u0646\u0634\u0631 \u0623\u0648\u0644 \u0648\u0643\u064A\u0644 \u0645\u0646 \u062A\u0637\u0628\u064A\u0642 Personas \u0644\u0633\u0637\u062D \u0627\u0644\u0645\u0643\u062A\u0628\u060C \u062B\u0645 \u0639\u062F \u0647\u0646\u0627 \u0644\u0645\u0631\u0627\u0642\u0628\u062A\u0647.',

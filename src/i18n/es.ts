@@ -619,6 +619,8 @@ export const es: Translations = {
     },
   },
   reviewsPage: {
+    selectReview: 'Seleccionar revisión',
+    selectAllPending: 'Seleccionar todas las revisiones pendientes',
     focus: {
       enter: 'Modo enfoque',
       exit: 'Salir',
@@ -637,6 +639,7 @@ export const es: Translations = {
     },
   },
   leaderboardPage: {
+    delta: 'Variación',
     title: 'ClasificaciĂłn',
     subtitle: 'Ranking de flota por rendimiento compuesto',
     rank: 'Rank',
@@ -701,6 +704,7 @@ export const es: Translations = {
     markAllRead: 'Mark all read',
   },
   observabilityPage: {
+    usageInsight: '{top} se usa {ratio} veces más que {second}, lo que la convierte en tu integración de herramientas más utilizada.',
     title: 'Observabilidad',
     subtitle: 'MĂ©tricas de rendimiento, seguimiento de costos y uso de herramientas',
     tabPerformance: 'Rendimiento',
@@ -746,6 +750,8 @@ export const es: Translations = {
     },
   },
   agentsPage: {
+    statusLive: 'Activo',
+    statusOff: 'Apagado',
     title: 'Agentes',
     noAgents: 'No hay agentes desplegados',
     noAgentsDesc: 'Despliega tu primer agente desde la aplicaci\u00f3n de escritorio Personas, luego vuelve aqu\u00ed para monitorearlo.',

@@ -9,7 +9,7 @@ import {
   Tooltip,
 } from "recharts";
 import { CHART_COLORS } from "@/lib/constants";
-import { ChartTooltip } from "@/lib/chart-theme";
+import { ChartTooltip, useChartAnimation } from "@/lib/chart-theme";
 
 interface SpendPiePoint {
   name: string;
@@ -20,6 +20,7 @@ interface SpendPiePoint {
 const formatDollar = (v: number) => `$${v.toFixed(2)}`;
 
 export default memo(function ObservabilitySpendPieChart({ data }: { data: SpendPiePoint[] }) {
+  const anim = useChartAnimation();
   return (
     <ResponsiveContainer width="100%" height={200}>
       <PieChart>
@@ -32,6 +33,7 @@ export default memo(function ObservabilitySpendPieChart({ data }: { data: SpendP
           paddingAngle={3}
           dataKey="value"
           stroke="none"
+          {...anim}
         >
           {data.map((entry, i) => (
             <Cell key={entry.name} fill={entry.color || CHART_COLORS[i % CHART_COLORS.length]} />

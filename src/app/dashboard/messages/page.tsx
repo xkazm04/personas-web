@@ -5,6 +5,8 @@ import { motion } from "framer-motion";
 import { Mail, MailOpen } from "lucide-react";
 
 import GradientText from "@/components/GradientText";
+import DashboardErrorBanner from "@/components/dashboard/DashboardErrorBanner";
+import SkeletonCard from "@/components/dashboard/SkeletonCard";
 import StalenessIndicator from "@/components/dashboard/StalenessIndicator";
 import { useTranslation } from "@/i18n/useTranslation";
 import { fadeUp, staggerContainer } from "@/lib/animations";
@@ -31,7 +33,7 @@ export default function MessagesPage() {
   const [openThreadId, setOpenThreadId] = useState<string | null>(null);
   const [fetchedAt] = useState(() => Date.now());
 
-  const { threads: baseThreads } = useMessagesData();
+  const { threads: baseThreads, loading, error } = useMessagesData();
 
   const threads = useMemo<MessageThread[]>(() => {
     return baseThreads.map((thread) => {
@@ -131,7 +133,15 @@ export default function MessagesPage() {
         )}
       </motion.div>
 
-      {pageItems.length === 0 ? (
+      {error && <DashboardErrorBanner message={error} />}
+
+      {loading ? (
+        <div className="space-y-2" aria-busy="true">
+          {Array.from({ length: 4 }).map((_, i) => (
+            <SkeletonCard key={i} lines={1} />
+          ))}
+        </div>
+      ) : pageItems.length === 0 ? (
         <p className="py-12 text-center text-sm text-muted-dark">{t.messagesPage.empty}</p>
       ) : (
         <motion.div variants={fadeUp} className="space-y-2">

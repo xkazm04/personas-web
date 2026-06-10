@@ -34,7 +34,9 @@ export function ReviewRow({
             e.stopPropagation();
             onToggleSelect(e);
           }}
-          className="flex-shrink-0 text-muted-dark hover:text-brand-cyan transition-colors"
+          aria-label={t.reviewsPage.selectReview}
+          aria-pressed={isSelected}
+          className="flex-shrink-0 rounded-sm text-muted-dark hover:text-brand-cyan transition-colors focus-ring focus-visible:ring-offset-0"
         >
           {isSelected ? <CheckSquare className="h-4 w-4 text-brand-cyan" /> : <Square className="h-4 w-4" />}
         </button>
@@ -48,7 +50,7 @@ export function ReviewRow({
         </span>
       )}
       <span className="text-sm font-medium text-foreground truncate w-20 flex-shrink-0">
-        {review.personaName ?? "Unknown"}
+        {review.personaName ?? t.eventsPage.unknownAgent}
       </span>
       <span className="flex-1 min-w-0 text-sm text-muted truncate">
         {review.content.split("\n")[0]}

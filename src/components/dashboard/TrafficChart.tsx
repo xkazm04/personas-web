@@ -9,7 +9,15 @@ import {
   Tooltip,
   ResponsiveContainer,
 } from "recharts";
-import { AXIS_TICK, GRID_STROKE, SERIES, ChartTooltip } from "@/lib/chart-theme";
+import {
+  AXIS_TICK,
+  GRID_STROKE,
+  SERIES,
+  ChartTooltip,
+  useChartAnimation,
+  ACTIVE_DOT,
+  CHART_CURSOR_LINE,
+} from "@/lib/chart-theme";
 import { useTranslation } from "@/i18n/useTranslation";
 
 export interface TrafficChartProps {
@@ -18,6 +26,7 @@ export interface TrafficChartProps {
 
 export default function TrafficChart({ chartData }: TrafficChartProps) {
   const { t } = useTranslation();
+  const anim = useChartAnimation();
   if (chartData.length === 0) {
     return (
       <div className="flex items-center justify-center h-64 text-sm text-muted-dark">
@@ -57,13 +66,15 @@ export default function TrafficChart({ chartData }: TrafficChartProps) {
             tickLine={false}
             allowDecimals={false}
           />
-          <Tooltip content={<ChartTooltip />} />
+          <Tooltip content={<ChartTooltip />} cursor={CHART_CURSOR_LINE} />
           <Area
             type="monotone"
             dataKey="Executions"
             stroke={SERIES.cyan}
             strokeWidth={2}
             fill="url(#gradExec)"
+            activeDot={ACTIVE_DOT}
+            {...anim}
           />
           <Area
             type="monotone"
@@ -71,6 +82,8 @@ export default function TrafficChart({ chartData }: TrafficChartProps) {
             stroke={SERIES.rose}
             strokeWidth={2}
             fill="url(#gradErr)"
+            activeDot={ACTIVE_DOT}
+            {...anim}
           />
         </AreaChart>
       </ResponsiveContainer>

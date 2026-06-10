@@ -37,6 +37,7 @@ export default function CircuitNodes({
               fill="rgba(15,15,25,0.92)"
               stroke={color}
               strokeWidth={1.75}
+              initial={{ strokeOpacity: isAffected ? 0.85 : 0.45 }}
               animate={{
                 strokeOpacity: isAffected && !reduced ? [0.7, 1, 0.7] : isAffected ? 0.85 : 0.45,
               }}
@@ -81,6 +82,7 @@ export default function CircuitNodes({
                 stroke={color}
                 strokeWidth={1.25}
                 filter="url(#nodeGlow)"
+                initial={{ opacity: reduced ? 0.7 : 0.5 }}
                 animate={reduced ? { opacity: 0.7 } : { opacity: [0.5, 0.9, 0.5] }}
                 transition={reduced ? { duration: 0 } : { duration: 1, repeat: Infinity }}
               />
@@ -91,6 +93,7 @@ export default function CircuitNodes({
               cy={node.y - 26}
               r={3}
               fill={color}
+              initial={{ opacity: 1 }}
               animate={isAffected && !reduced ? { opacity: [1, 0.3, 1] } : { opacity: 1 }}
               transition={
                 isAffected && !reduced

@@ -47,7 +47,11 @@ export function KnowledgePatternDetailPanel({
         </div>
         <div className="flex items-start gap-3 max-w-sm shrink-0">
           <p className="text-sm leading-relaxed text-foreground/60 line-clamp-2">{pattern.description}</p>
-          <button onClick={onClose} className="p-1 rounded-md hover:bg-white/[0.06] transition-colors shrink-0">
+          <button
+            onClick={onClose}
+            aria-label={t.common.close}
+            className="p-1 rounded-md hover:bg-white/[0.06] transition-colors shrink-0 focus-ring focus-visible:ring-offset-0"
+          >
             <X className="h-3.5 w-3.5 text-muted-dark" />
           </button>
         </div>

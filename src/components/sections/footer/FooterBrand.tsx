@@ -6,7 +6,9 @@ export function FooterBrand({ motto }: { motto: string }) {
   return (
     <div className="md:col-span-2">
       <div className="flex items-center gap-2.5">
-        <Image src="/imgs/logo.png" alt="Personas logo" width={24} height={24} className="h-6 w-auto object-contain drop-shadow-[0_0_8px_rgba(6,182,212,0.3)]" />
+        {/* width/height mirror the source's 1344×768 (1.75:1) aspect ratio so the
+    h-6 w-auto CSS sizing keeps it without a dev-mode aspect warning. */}
+        <Image src="/imgs/logo.png" alt="Personas logo" width={42} height={24} className="h-6 w-auto object-contain drop-shadow-[0_0_8px_rgba(6,182,212,0.3)]" />
         <span className="font-semibold tracking-tight">Personas</span>
       </div>
       <p className="mt-4 max-w-sm text-base leading-relaxed text-muted-dark">{motto}</p>

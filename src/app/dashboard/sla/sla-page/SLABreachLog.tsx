@@ -56,7 +56,10 @@ export function SLABreachLog({
                   {labels.severity[breach.severity]}
                 </span>
                 <div className="min-w-0">
-                  <p className="truncate text-sm font-medium text-foreground">
+                  <p
+                    className="truncate text-sm font-medium text-foreground"
+                    title={breach.summary}
+                  >
                     {breach.summary}
                   </p>
                   <p className="text-sm text-muted-dark">

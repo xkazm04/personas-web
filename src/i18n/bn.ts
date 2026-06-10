@@ -619,6 +619,8 @@ export const bn: Translations = {
     },
   },
   reviewsPage: {
+    selectReview: 'রিভিউ নির্বাচন করুন',
+    selectAllPending: 'সব অমীমাংসিত রিভিউ নির্বাচন করুন',
     focus: {
       enter: 'ŕ¦«ŕ§‹ŕ¦•ŕ¦ľŕ¦¸ ŕ¦®ŕ§‹ŕ¦ˇ',
       exit: 'ŕ¦Şŕ§Ťŕ¦°ŕ¦¸ŕ§Ťŕ¦Ąŕ¦ľŕ¦¨',
@@ -637,6 +639,7 @@ export const bn: Translations = {
     },
   },
   leaderboardPage: {
+    delta: 'পরিবর্তন',
     title: 'ŕ¦˛ŕ¦żŕ¦ˇŕ¦ľŕ¦°ŕ¦¬ŕ§‹ŕ¦°ŕ§Ťŕ¦ˇ',
     subtitle: 'ŕ¦¸ŕ¦‚ŕ¦®ŕ¦żŕ¦¶ŕ§Ťŕ¦° ŕ¦Şŕ¦ľŕ¦°ŕ¦«ŕ¦°ŕ¦®ŕ§Ťŕ¦Żŕ¦ľŕ¦¨ŕ§Ťŕ¦¸ ŕ¦¦ŕ§Ťŕ¦¬ŕ¦ľŕ¦°ŕ¦ľ ŕ¦«ŕ§Ťŕ¦˛ŕ¦żŕ¦ź ŕ¦°â€Śŕ§Ťŕ¦Żŕ¦ľŕ¦™ŕ§Ťŕ¦•ŕ¦żŕ¦‚',
     rank: 'Rank',
@@ -701,6 +704,7 @@ export const bn: Translations = {
     markAllRead: 'Mark all read',
   },
   observabilityPage: {
+    usageInsight: '{top} {second}-এর চেয়ে {ratio} গুণ বেশি ব্যবহৃত হয়, ফলে এটি আপনার সবচেয়ে বেশি ব্যবহৃত টুল ইন্টিগ্রেশন।',
     title: 'ŕ¦Şŕ¦°ŕ§Ťŕ¦Żŕ¦¬ŕ§‡ŕ¦•ŕ§Ťŕ¦·ŕ¦Łŕ¦Żŕ§‹ŕ¦—ŕ§Ťŕ¦Żŕ¦¤ŕ¦ľ',
     subtitle: 'ŕ¦Şŕ¦ľŕ¦°ŕ¦«ŕ¦°ŕ¦®ŕ§Ťŕ¦Żŕ¦ľŕ¦¨ŕ§Ťŕ¦¸ ŕ¦®ŕ§‡ŕ¦źŕ§Ťŕ¦°ŕ¦żŕ¦•ŕ§Ťŕ¦¸, ŕ¦–ŕ¦°ŕ¦š ŕ¦źŕ§Ťŕ¦°ŕ§Ťŕ¦Żŕ¦ľŕ¦•ŕ¦żŕ¦‚ ŕ¦Źŕ¦¬ŕ¦‚ ŕ¦źŕ§ŕ¦˛ ŕ¦¬ŕ§Ťŕ¦Żŕ¦¬ŕ¦ąŕ¦ľŕ¦°',
     tabPerformance: 'ŕ¦Şŕ¦ľŕ¦°ŕ¦«ŕ¦°ŕ¦®ŕ§Ťŕ¦Żŕ¦ľŕ¦¨ŕ§Ťŕ¦¸',
@@ -746,6 +750,8 @@ export const bn: Translations = {
     },
   },
   agentsPage: {
+    statusLive: 'লাইভ',
+    statusOff: 'বন্ধ',
     title: '\u098f\u099c\u09c7\u09a8\u09cd\u099f',
     noAgents: '\u0995\u09cb\u09a8\u09cb \u098f\u099c\u09c7\u09a8\u09cd\u099f \u09a1\u09bf\u09aa\u09cd\u09b2\u09af\u09bc \u09b9\u09af\u09bc\u09a8\u09bf',
     noAgentsDesc: 'Personas \u09a1\u09c7\u09b8\u09cd\u0995\u099f\u09aa \u0985\u09cd\u09af\u09be\u09aa \u09a5\u09c7\u0995\u09c7 \u0986\u09aa\u09a8\u09be\u09b0 \u09aa\u09cd\u09b0\u09a5\u09ae \u098f\u099c\u09c7\u09a8\u09cd\u099f \u09a1\u09bf\u09aa\u09cd\u09b2\u09af\u09bc \u0995\u09b0\u09c1\u09a8, \u09a4\u09be\u09b0\u09aa\u09b0 \u09ae\u09a8\u09bf\u099f\u09b0 \u0995\u09b0\u09a4\u09c7 \u098f\u0996\u09be\u09a8\u09c7 \u09ab\u09bf\u09b0\u09c7 \u0986\u09b8\u09c1\u09a8\u0964',

@@ -619,6 +619,8 @@ export const ja: Translations = {
     },
   },
   reviewsPage: {
+    selectReview: 'レビューを選択',
+    selectAllPending: '保留中のレビューをすべて選択',
     focus: {
       enter: 'ă•ă‚©ăĽă‚«ă‚ąă˘ăĽă‰',
       exit: 'çµ‚äş†',
@@ -637,6 +639,7 @@ export const ja: Translations = {
     },
   },
   leaderboardPage: {
+    delta: '変動',
     title: 'ăŞăĽă€ăĽăśăĽă‰',
     subtitle: 'č¤‡ĺă‘ă•ă‚©ăĽăžăłă‚ąă«ă‚ă‚‹ă•ăŞăĽăă©ăłă‚­ăłă‚°',
     rank: 'Rank',
@@ -701,6 +704,7 @@ export const ja: Translations = {
     markAllRead: 'Mark all read',
   },
   observabilityPage: {
+    usageInsight: '{top} は {second} の {ratio} 倍使用されており、最も活用されているツール統合です。',
     title: 'ă‚Şă–ă‚¶ăĽăă“ăŞă†ă‚Ł',
     subtitle: 'ă‘ă•ă‚©ăĽăžăłă‚ąćŚ‡ć¨™ă€ă‚łă‚ąăčż˝č·ˇă€ă„ăĽă«ä˝żç”¨çŠ¶ćł',
     tabPerformance: 'ă‘ă•ă‚©ăĽăžăłă‚ą',
@@ -746,6 +750,8 @@ export const ja: Translations = {
     },
   },
   agentsPage: {
+    statusLive: '稼働中',
+    statusOff: '停止',
     title: '\u30a8\u30fc\u30b8\u30a7\u30f3\u30c8',
     noAgents: '\u30c7\u30d7\u30ed\u30a4\u6e08\u307f\u306e\u30a8\u30fc\u30b8\u30a7\u30f3\u30c8\u306a\u3057',
     noAgentsDesc: 'Personas\u30c7\u30b9\u30af\u30c8\u30c3\u30d7\u30a2\u30d7\u30ea\u304b\u3089\u6700\u521d\u306e\u30a8\u30fc\u30b8\u30a7\u30f3\u30c8\u3092\u30c7\u30d7\u30ed\u30a4\u3057\u3001\u305d\u306e\u5f8c\u3053\u3053\u306b\u623b\u3063\u3066\u30e2\u30cb\u30bf\u30ea\u30f3\u30b0\u3057\u3066\u304f\u3060\u3055\u3044\u3002',

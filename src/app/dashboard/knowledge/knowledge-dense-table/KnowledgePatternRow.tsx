@@ -36,10 +36,10 @@ export function KnowledgePatternRow({
         </div>
       </div>
       <div className="flex-1 min-w-[140px] px-2 py-2.5">
-        <p className="text-sm font-medium text-foreground truncate">{pattern.patternKey}</p>
+        <p className="text-sm font-medium text-foreground truncate" title={pattern.patternKey}>{pattern.patternKey}</p>
       </div>
       <div className="w-28 px-2 py-2.5">
-        <p className="text-sm text-foreground/70 truncate">{pattern.personaName}</p>
+        <p className="text-sm text-foreground/70 truncate" title={pattern.personaName}>{pattern.personaName}</p>
       </div>
       <MetricCell width="w-18" tone="text-emerald-400" value={pattern.successCount} />
       <MetricCell width="w-16" tone="text-rose-400" value={pattern.failureCount} />

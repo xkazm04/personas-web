@@ -1,5 +1,6 @@
 import { memo } from "react";
 import type { ReactNode } from "react";
+import { useReducedMotion } from "framer-motion";
 
 /**
  * Single source of truth for recharts axis / grid / series styling.
@@ -9,6 +10,38 @@ import type { ReactNode } from "react";
  * tooltip from here so the observability area renders as one cohesive
  * system — and a single edit re-themes every chart at once.
  */
+
+/**
+ * Reduced-motion-aware animation props for any recharts series. Recharts
+ * defaults to a slow 1500ms ease that replays on every data refresh; we snap
+ * to no animation when the user prefers reduced motion (honouring the project
+ * animation contract) and use a snappier 700ms otherwise. Spread onto any
+ * `<Area / Bar / Line / Pie / Radar {...anim}>`.
+ */
+export function useChartAnimation(): {
+  isAnimationActive: boolean;
+  animationDuration: number;
+} {
+  const reduced = useReducedMotion() ?? false;
+  return { isAnimationActive: !reduced, animationDuration: reduced ? 0 : 700 };
+}
+
+/**
+ * Hover marker for line / area series: a filled point (inherits the series
+ * color) ringed in the page background so it reads cleanly over the fill.
+ * Spread onto `activeDot={ACTIVE_DOT}`.
+ */
+export const ACTIVE_DOT = { r: 4, strokeWidth: 2, stroke: "var(--background)" } as const;
+
+/** Tooltip cursor for line / area charts — a faint dashed vertical guide. */
+export const CHART_CURSOR_LINE = {
+  stroke: "rgba(255,255,255,0.14)",
+  strokeWidth: 1,
+  strokeDasharray: "3 3",
+} as const;
+
+/** Tooltip cursor for bar charts — a faint column highlight behind the hovered bar. */
+export const CHART_CURSOR_FILL = { fill: "rgba(255,255,255,0.04)" } as const;
 
 /** Tick style for value / date axes, spread into a recharts `tick={...}`. */
 export const AXIS_TICK = { fontSize: 10, fill: "#64748b" } as const;

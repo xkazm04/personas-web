@@ -147,6 +147,8 @@ export default function AgentsPage() {
                 execute: t.agentsPage.execute,
                 executing: t.agentsPage.executing,
                 details: t.agentsPage.details,
+                statusLive: t.agentsPage.statusLive,
+                statusOff: t.agentsPage.statusOff,
               }}
               onExecute={(personaId) => void handleExecute(personaId)}
               onPrefetch={handlePrefetch}

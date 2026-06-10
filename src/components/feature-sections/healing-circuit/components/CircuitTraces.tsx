@@ -52,6 +52,7 @@ export default function CircuitTraces({
               strokeWidth={2}
               strokeLinecap="round"
               strokeLinejoin="round"
+              initial={{ opacity: traceOpacity }}
               animate={{ opacity: traceOpacity }}
               transition={{ duration: 0.5 }}
             />
@@ -63,6 +64,7 @@ export default function CircuitTraces({
               strokeWidth={6}
               strokeLinecap="round"
               strokeLinejoin="round"
+              initial={{ opacity: traceOpacity * 0.3 }}
               animate={{ opacity: traceOpacity * 0.3 }}
               transition={{ duration: 0.5 }}
             />

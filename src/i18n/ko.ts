@@ -619,6 +619,8 @@ export const ko: Translations = {
     },
   },
   reviewsPage: {
+    selectReview: '리뷰 선택',
+    selectAllPending: '대기 중인 리뷰 모두 선택',
     focus: {
       enter: 'íŹ¬ě»¤ěŠ¤ ëŞ¨ë“ś',
       exit: 'ě˘…ëŁŚ',
@@ -637,6 +639,7 @@ export const ko: Translations = {
     },
   },
   leaderboardPage: {
+    delta: '변동',
     title: 'ë¦¬ëŤ”ëł´ë“ś',
     subtitle: 'ě˘…í•© ě„±ëŠĄě— ë”°ëĄ¸ í”Śë¦ż ěśěś„',
     rank: 'Rank',
@@ -701,6 +704,7 @@ export const ko: Translations = {
     markAllRead: 'Mark all read',
   },
   observabilityPage: {
+    usageInsight: '{top}은(는) {second}보다 {ratio}배 더 많이 사용되어 가장 많이 활용되는 도구 통합입니다.',
     title: 'ę°€ě‹śě„±',
     subtitle: 'ě„±ëŠĄ ě§€í‘ś, ëą„ěš© ě¶”ě , ëŹ„ęµ¬ ě‚¬ěš©ëź‰',
     tabPerformance: 'ě„±ëŠĄ',
@@ -746,6 +750,8 @@ export const ko: Translations = {
     },
   },
   agentsPage: {
+    statusLive: '활성',
+    statusOff: '꺼짐',
     title: '\uc5d0\uc774\uc804\ud2b8',
     noAgents: '\ubc30\ud3ec\ub41c \uc5d0\uc774\uc804\ud2b8 \uc5c6\uc74c',
     noAgentsDesc: 'Personas \ub370\uc2a4\ud06c\ud1b1 \uc571\uc5d0\uc11c \uccab \uc5d0\uc774\uc804\ud2b8\ub97c \ubc30\ud3ec\ud55c \ud6c4 \uc5ec\uae30\ub85c \ub3cc\uc544\uc640 \ubaa8\ub2c8\ud130\ub9c1\ud558\uc138\uc694.',

@@ -85,7 +85,9 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" className="dark" suppressHydrationWarning>
+    // data-scroll-behavior tells Next 16 the smooth scrolling (globals.css)
+    // is intentional, so it can disable it during route transitions.
+    <html lang="en" className="dark" data-scroll-behavior="smooth" suppressHydrationWarning>
       <head>
         {/* Pre-paint theme + locale init. Runs synchronously before any
             body content is parsed so the user never sees a flash of

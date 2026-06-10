@@ -70,6 +70,10 @@ canvas {
 
 html {
   scroll-behavior: smooth;
+  /* framer-motion's useScroll({ target }) measures targets relative to the
+     scroll container (document.scrollingElement = this element) and warns if
+     it is position: static. */
+  position: relative;
 }
 
 ::selection {

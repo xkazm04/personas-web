@@ -50,3 +50,6 @@ next-env.d.ts
 # claude code local artifacts
 /.claude/logs
 /.claude/worktrees
+
+# /icon-gen skill scratch output
+.icon-gen-work/

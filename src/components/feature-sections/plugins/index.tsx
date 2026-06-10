@@ -1,7 +1,7 @@
 "use client";
 
-import { useState, useEffect } from "react";
-import { motion, useReducedMotion } from "framer-motion";
+import { useState } from "react";
+import { motion } from "framer-motion";
 import SectionWrapper from "@/components/SectionWrapper";
 import SectionIntro from "@/components/primitives/SectionIntro";
 import { staggerContainer } from "@/lib/animations";
@@ -11,7 +11,6 @@ import PluginTabs from "./components/PluginTabs";
 import PluginCard from "./components/PluginCard";
 
 export default function Plugins() {
-  const reduced = useReducedMotion() ?? false;
   const [active, setActive] = useState<PluginKey>("dev-tools");
 
   const [variantByPlugin, setVariantByPlugin] = useState<
@@ -24,18 +23,6 @@ export default function Plugins() {
       >,
   );
 
-  const [userOverride, setUserOverride] = useState(false);
-  useEffect(() => {
-    if (reduced || userOverride) return;
-    const id = setInterval(() => {
-      setActive((prev) => {
-        const i = PLUGINS.findIndex((p) => p.key === prev);
-        return PLUGINS[(i + 1) % PLUGINS.length].key;
-      });
-    }, 12000);
-    return () => clearInterval(id);
-  }, [reduced, userOverride]);
-
   const activePlugin = PLUGINS.find((p) => p.key === active)!;
   const activeVariantKey = variantByPlugin[active];
   const activeVariant =
@@ -44,11 +31,6 @@ export default function Plugins() {
 
   const setVariantFor = (plugin: PluginKey, variantKey: string) => {
     setVariantByPlugin((prev) => ({ ...prev, [plugin]: variantKey }));
-  };
-
-  const handleSelect = (key: PluginKey) => {
-    setActive(key);
-    setUserOverride(true);
   };
 
   return (
@@ -68,7 +50,7 @@ export default function Plugins() {
       </motion.div>
 
       <div data-tour-diagram="plugins">
-        <PluginTabs plugins={PLUGINS} active={active} onSelect={handleSelect} />
+        <PluginTabs plugins={PLUGINS} active={active} onSelect={setActive} />
 
         <PluginCard
           plugins={PLUGINS}

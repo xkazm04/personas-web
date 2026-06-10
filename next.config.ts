@@ -71,6 +71,9 @@ const nextConfig: NextConfig = {
   // source PNG/JPG only when neither is acceptable.
   images: {
     formats: ["image/avif", "image/webp"],
+    // CinematicBg/ImageBackground request quality={80}; Next 16 only serves
+    // qualities explicitly allowed here (default is just 75).
+    qualities: [75, 80],
   },
   async headers() {
     return [

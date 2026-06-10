@@ -19,6 +19,7 @@ const eslintConfig = defineConfig([
     "build/**",
     "node_modules/**",
     ".claude/**",
+    ".icon-gen-work/**",
     "test-results/**",
     "playwright-report/**",
     "coverage/**",

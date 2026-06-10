@@ -128,8 +128,11 @@ export default function UsageView() {
     const second = toolUsage[1];
     if (!top || !second) return null;
     const ratio = (top.invocations / second.invocations).toFixed(1);
-    return `${formatToolName(top.toolName)} is used ${ratio}x more than ${formatToolName(second.toolName)}, making it your most utilized tool integration.`;
-  }, [toolUsage]);
+    return t.observabilityPage.usageInsight
+      .replace("{top}", formatToolName(top.toolName))
+      .replace("{ratio}", ratio)
+      .replace("{second}", formatToolName(second.toolName));
+  }, [toolUsage, t.observabilityPage.usageInsight]);
 
   const [overTimeRef, overTimeMounted] = useDeferredMount("260px");
   const [byPersonaRef, byPersonaMounted] = useDeferredMount("260px");

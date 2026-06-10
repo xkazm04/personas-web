@@ -33,7 +33,9 @@ export function ReviewsBulkToolbar({
             if (bulkCount === pendingInFiltered.length) clearSelection();
             else selectAll();
           }}
-          className="flex-shrink-0 text-muted-dark hover:text-brand-cyan transition-colors"
+          aria-label={t.reviewsPage.selectAllPending}
+          aria-pressed={bulkCount > 0 && bulkCount === pendingInFiltered.length}
+          className="flex-shrink-0 rounded-sm text-muted-dark hover:text-brand-cyan transition-colors focus-ring focus-visible:ring-offset-0"
         >
           {bulkCount === 0 ? (
             <Square className="h-4 w-4" />

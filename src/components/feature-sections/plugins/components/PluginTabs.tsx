@@ -37,8 +37,15 @@ export default function PluginTabs({
                   : "border-foreground/[0.08] bg-foreground/[0.02] text-foreground/65 hover:text-foreground hover:bg-foreground/[0.04]"
               }`}
               style={{
-                borderColor: isActive ? `${p.color}50` : undefined,
-                boxShadow: isActive ? `0 0 18px ${p.color}18` : undefined,
+                // p.color is a CSS var (BRAND_VAR), so alpha needs color-mix —
+                // hex-suffix alpha (`${color}50`) is invalid on vars and used
+                // to fall back to the default (foreground) border.
+                borderColor: isActive
+                  ? `color-mix(in srgb, ${p.color} 45%, transparent)`
+                  : undefined,
+                boxShadow: isActive
+                  ? `0 0 18px color-mix(in srgb, ${p.color} 12%, transparent)`
+                  : undefined,
               }}
             >
               <PIcon

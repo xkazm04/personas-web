@@ -15,7 +15,15 @@ import {
 } from "recharts";
 import { MOCK_EXEC_COMPARE, MOCK_ANNOTATIONS } from "@/lib/mock-dashboard-data";
 import type { ChartAnnotation } from "@/lib/mock-dashboard-data";
-import { AXIS_TICK, GRID_STROKE, SERIES, CHART_TOOLTIP_CLASS } from "@/lib/chart-theme";
+import {
+  AXIS_TICK,
+  GRID_STROKE,
+  SERIES,
+  CHART_TOOLTIP_CLASS,
+  useChartAnimation,
+  ACTIVE_DOT,
+  CHART_CURSOR_FILL,
+} from "@/lib/chart-theme";
 
 const annotationStyles: Record<ChartAnnotation["type"], { stroke: string; emoji: string }> = {
   deployment: { stroke: SERIES.cyan, emoji: "\u{1F680}" },
@@ -79,6 +87,7 @@ export default memo(function ExecChartWithCompare({
   data: ExecPoint[];
   compare: boolean;
 }) {
+  const anim = useChartAnimation();
   const mergedData: MergedExecPoint[] = useMemo(() => {
     if (!compare) return data;
     return data.map((d) => ({
@@ -104,7 +113,7 @@ export default memo(function ExecChartWithCompare({
             tickLine={false}
             allowDecimals={false}
           />
-          <Tooltip content={<ExecCompareTooltipContent compare={false} />} />
+          <Tooltip content={<ExecCompareTooltipContent compare={false} />} cursor={CHART_CURSOR_FILL} />
           {MOCK_ANNOTATIONS.map((a) => {
             const style = annotationStyles[a.type];
             return (
@@ -123,8 +132,8 @@ export default memo(function ExecChartWithCompare({
               />
             );
           })}
-          <Bar dataKey="Successes" stackId="exec" fill={SERIES.emerald} radius={[0, 0, 0, 0]} />
-          <Bar dataKey="Failures" stackId="exec" fill={SERIES.rose} radius={[4, 4, 0, 0]} />
+          <Bar dataKey="Successes" stackId="exec" fill={SERIES.emerald} radius={[0, 0, 0, 0]} {...anim} />
+          <Bar dataKey="Failures" stackId="exec" fill={SERIES.rose} radius={[4, 4, 0, 0]} {...anim} />
         </BarChart>
       </ResponsiveContainer>
     );
@@ -146,7 +155,7 @@ export default memo(function ExecChartWithCompare({
           tickLine={false}
           allowDecimals={false}
         />
-        <Tooltip content={<ExecCompareTooltipContent compare={true} />} />
+        <Tooltip content={<ExecCompareTooltipContent compare={true} />} cursor={CHART_CURSOR_FILL} />
         {MOCK_ANNOTATIONS.map((a) => {
           const style = annotationStyles[a.type];
           return (
@@ -165,8 +174,8 @@ export default memo(function ExecChartWithCompare({
             />
           );
         })}
-        <Bar dataKey="Successes" stackId="exec" fill={SERIES.emerald} radius={[0, 0, 0, 0]} />
-        <Bar dataKey="Failures" stackId="exec" fill={SERIES.rose} radius={[4, 4, 0, 0]} />
+        <Bar dataKey="Successes" stackId="exec" fill={SERIES.emerald} radius={[0, 0, 0, 0]} {...anim} />
+        <Bar dataKey="Failures" stackId="exec" fill={SERIES.rose} radius={[4, 4, 0, 0]} {...anim} />
         <Line
           type="monotone"
           dataKey="PreviousTotal"
@@ -175,6 +184,8 @@ export default memo(function ExecChartWithCompare({
           strokeWidth={1.5}
           strokeDasharray="6 3"
           dot={false}
+          activeDot={ACTIVE_DOT}
+          {...anim}
         />
       </ComposedChart>
     </ResponsiveContainer>

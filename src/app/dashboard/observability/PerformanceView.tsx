@@ -91,7 +91,11 @@ export default function PerformanceView() {
       </div>
       {/* Cost-anomaly detection isn't synced — demo only. */}
       {isDemo && (
-        <CostAnomalyBanner anomalies={MOCK_COST_ANOMALIES} label={t.observabilityPage.costAnomalyDetected} />
+        <CostAnomalyBanner
+          anomalies={MOCK_COST_ANOMALIES}
+          label={t.observabilityPage.costAnomalyDetected}
+          dismissLabel={t.common.close}
+        />
       )}
       {overBudgetPersonas.length > 0 && (
         <motion.div variants={fadeUp} className="mb-6 flex items-center gap-3 rounded-xl border border-amber-500/20 bg-amber-500/5 px-4 py-3">

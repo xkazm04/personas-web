@@ -2,9 +2,9 @@
 
 import { useCallback, useEffect, useMemo, useState } from "react";
 import { motion } from "framer-motion";
-import { AlertTriangle } from "lucide-react";
 
 import GradientText from "@/components/GradientText";
+import DashboardErrorBanner from "@/components/dashboard/DashboardErrorBanner";
 import DataTable from "@/components/dashboard/DataTable";
 import { usePolling } from "@/hooks/usePolling";
 import { useTranslation } from "@/i18n/useTranslation";
@@ -123,18 +123,7 @@ export default function ExecutionsPage() {
         </p>
       </motion.div>
 
-      {executionsError && (
-        <motion.div
-          variants={fadeUp}
-          className="mb-4 flex items-center gap-3 rounded-xl border border-amber-500/20 bg-amber-500/5 px-4 py-3"
-        >
-          <AlertTriangle className="h-4 w-4 text-amber-400 flex-shrink-0" />
-          <p className="text-base text-amber-300">
-            {t.waitlist.errorGeneric}{" "}
-            <span className="text-amber-300/80">{executionsError}</span>
-          </p>
-        </motion.div>
-      )}
+      {executionsError && <DashboardErrorBanner message={executionsError} />}
 
       <ExecutionsFilters
         filter={filter}

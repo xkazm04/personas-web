@@ -13,7 +13,15 @@ import {
 } from "recharts";
 import { MOCK_COST_COMPARE, MOCK_ANNOTATIONS } from "@/lib/mock-dashboard-data";
 import type { ChartAnnotation } from "@/lib/mock-dashboard-data";
-import { AXIS_TICK, GRID_STROKE, SERIES, CHART_TOOLTIP_CLASS } from "@/lib/chart-theme";
+import {
+  AXIS_TICK,
+  GRID_STROKE,
+  SERIES,
+  CHART_TOOLTIP_CLASS,
+  useChartAnimation,
+  ACTIVE_DOT,
+  CHART_CURSOR_LINE,
+} from "@/lib/chart-theme";
 
 const annotationStyles: Record<ChartAnnotation["type"], { stroke: string; emoji: string }> = {
   deployment: { stroke: SERIES.cyan, emoji: "\u{1F680}" },
@@ -70,6 +78,7 @@ export default memo(function CostChartWithCompare({
   data: CostPoint[];
   compare: boolean;
 }) {
+  const anim = useChartAnimation();
   const mergedData: MergedCostPoint[] = useMemo(() => {
     if (!compare) return data;
     return data.map((d) => ({
@@ -104,7 +113,7 @@ export default memo(function CostChartWithCompare({
           tickLine={false}
           tickFormatter={(v: number) => `$${v}`}
         />
-        <Tooltip content={<CompareTooltipContent compare={compare} />} />
+        <Tooltip content={<CompareTooltipContent compare={compare} />} cursor={CHART_CURSOR_LINE} />
         {/* Annotations */}
         {MOCK_ANNOTATIONS.map((a) => {
           const style = annotationStyles[a.type];
@@ -132,6 +141,8 @@ export default memo(function CostChartWithCompare({
             strokeWidth={1.5}
             strokeDasharray="6 3"
             fill="url(#gradCostPrev)"
+            activeDot={ACTIVE_DOT}
+            {...anim}
           />
         )}
         <Area
@@ -140,6 +151,8 @@ export default memo(function CostChartWithCompare({
           stroke={SERIES.cyan}
           strokeWidth={2}
           fill="url(#gradCostCompare)"
+          activeDot={ACTIVE_DOT}
+          {...anim}
         />
       </AreaChart>
     </ResponsiveContainer>

@@ -7,10 +7,8 @@ import {
 import { BRAND_VAR } from "@/lib/brand-theme";
 
 import ArtistGrid from "./ArtistGrid";
-import DevToolsRunner from "./DevToolsRunner";
-import DevToolsLifecycle from "./DevToolsLifecycle";
+import DevToolsGrid from "./DevToolsGrid";
 import SecondBrain from "./SecondBrain";
-import ObsidianCloudSync from "./ObsidianCloudSync";
 import ResearchLifecycle from "./ResearchLifecycle";
 import ResearchSources from "./ResearchSources";
 
@@ -35,27 +33,21 @@ export const PLUGINS: PluginDef[] = [
   {
     key: "dev-tools",
     label: "Dev Tools",
-    tagline: "Projects, triage, task runner",
+    tagline: "Parallel agent fleet, projects, triage",
     icon: Wrench,
     color: BRAND_VAR.cyan,
     variants: [
       {
-        key: "runner",
-        label: "Task Runner",
-        blurb: "Live queue, streaming output, self-healing actions",
-        component: DevToolsRunner,
-      },
-      {
-        key: "lifecycle",
-        label: "Goal Lifecycle",
-        blurb: "Kanban from idea → scoped → active → shipped",
-        component: DevToolsLifecycle,
+        key: "athena-fleet",
+        label: "Athena Fleet",
+        blurb: "A grid of CLIs under Athena's watch — her orb glides to whatever blocks them and answers on-policy",
+        component: DevToolsGrid,
       },
     ],
   },
   {
     key: "obsidian-brain",
-    label: "Obsidian Brain",
+    label: "Brain",
     tagline: "Your vault, agent-ready",
     icon: Brain,
     color: BRAND_VAR.purple,
@@ -65,12 +57,6 @@ export const PLUGINS: PluginDef[] = [
         label: "Second Brain",
         blurb: "Knowledge graph view — your notes, connected and alive",
         component: SecondBrain,
-      },
-      {
-        key: "cloud",
-        label: "Cloud Sync",
-        blurb: "Google Drive push/pull with live sync log",
-        component: ObsidianCloudSync,
       },
     ],
   },

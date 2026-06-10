@@ -32,7 +32,7 @@ export function AgentCardImage({
   expanded: boolean;
   executing: boolean;
   result: "success" | "error" | null;
-  labels: { execute: string; executing: string; details: string };
+  labels: { execute: string; executing: string; details: string; statusLive: string; statusOff: string };
   onExecute: (id: string) => void;
   onPrefetch: (id: string) => void;
   onToggleExpanded: () => void;
@@ -101,7 +101,7 @@ export function AgentCardImage({
                 ) : (
                   <PowerOff className="h-3 w-3" />
                 )}
-                {persona.enabled ? "Live" : "Off"}
+                {persona.enabled ? labels.statusLive : labels.statusOff}
               </span>
             </div>
           </div>
