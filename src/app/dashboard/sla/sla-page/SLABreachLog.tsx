@@ -1,4 +1,4 @@
-import { motion } from "framer-motion";
+import { motion, useReducedMotion } from "framer-motion";
 import { Clock } from "lucide-react";
 
 import { relativeTime } from "@/lib/format";
@@ -21,6 +21,9 @@ export function SLABreachLog({
     severity: Record<SLASeverity, string>;
   };
 }) {
+  const reduce = useReducedMotion();
+  const pulse = reduce ? "" : "animate-pulse";
+
   return (
     <motion.div
       variants={fadeUp}
@@ -70,11 +73,18 @@ export function SLABreachLog({
                 <span
                   className={`rounded-md px-1.5 py-0.5 text-sm font-medium ${
                     ongoing
-                      ? "border border-rose-500/25 bg-rose-500/10 text-rose-300"
+                      ? "flex items-center gap-1.5 border border-rose-500/25 bg-rose-500/10 text-rose-300"
                       : "text-muted-dark"
                   }`}
                 >
-                  {ongoing ? labels.ongoing : relativeTime(breach.resolvedAt ?? breach.startedAt)}
+                  {ongoing ? (
+                    <>
+                      <span className={`h-1.5 w-1.5 rounded-full bg-rose-400 ${pulse}`} />
+                      {labels.ongoing}
+                    </>
+                  ) : (
+                    relativeTime(breach.resolvedAt ?? breach.startedAt)
+                  )}
                 </span>
               </div>
             );
