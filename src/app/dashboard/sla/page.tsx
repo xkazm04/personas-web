@@ -72,6 +72,9 @@ export default function SLAPage() {
           ongoing: t.slaPage.breachLog.ongoing,
           started: t.slaPage.breachLog.started,
           resolved: t.slaPage.breachLog.resolved,
+          otherBreaches: t.slaPage.breachLog.otherBreaches,
+          timeToResolve: t.slaPage.breachLog.timeToResolve,
+          elapsed: t.slaPage.breachLog.elapsed,
           metricType: t.slaPage.metricType,
           severity: t.slaPage.severity,
         }}

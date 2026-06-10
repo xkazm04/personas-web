@@ -552,6 +552,9 @@
       duration: string;
       started: string;
       resolved: string;
+      otherBreaches: string;
+      timeToResolve: string;
+      elapsed: string;
     };
   };
   messagesPage: {
@@ -1703,6 +1706,9 @@ export const en: Translations = {
       all: 'All',
       started: 'Started',
       resolved: 'Resolved',
+      otherBreaches: 'Other breaches by {persona}: {n}',
+      timeToResolve: 'Time to resolve',
+      elapsed: 'Elapsed',
       empty: 'No breaches in the last 7 days.',
       ongoing: 'Ongoing',
       duration: '{n} min',
