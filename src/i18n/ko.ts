@@ -672,6 +672,11 @@ export const ko: Translations = {
     target: 'Target',
     current: 'Current',
     timeInSla: 'Time in SLA',
+    targetFilter: {
+      all: '전체',
+      atRisk: '위험',
+      healthy: '정상',
+    },
     metricType: {
       availability: 'Availability',
       latency: 'Latency p95',

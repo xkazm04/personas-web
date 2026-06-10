@@ -529,6 +529,11 @@
     target: string;
     current: string;
     timeInSla: string;
+    targetFilter: {
+      all: string;
+      atRisk: string;
+      healthy: string;
+    };
     metricType: {
       availability: string;
       latency: string;
@@ -1678,6 +1683,11 @@ export const en: Translations = {
     target: 'Target',
     current: 'Current',
     timeInSla: 'Time in SLA',
+    targetFilter: {
+      all: 'All',
+      atRisk: 'At risk',
+      healthy: 'Healthy',
+    },
     metricType: {
       availability: 'Availability',
       latency: 'Latency p95',

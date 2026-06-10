@@ -672,6 +672,11 @@ export const zh: Translations = {
     target: 'Target',
     current: 'Current',
     timeInSla: 'Time in SLA',
+    targetFilter: {
+      all: '全部',
+      atRisk: '有风险',
+      healthy: '正常',
+    },
     metricType: {
       availability: 'Availability',
       latency: 'Latency p95',

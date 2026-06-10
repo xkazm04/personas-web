@@ -672,6 +672,11 @@ export const vi: Translations = {
     target: 'Target',
     current: 'Current',
     timeInSla: 'Time in SLA',
+    targetFilter: {
+      all: 'Tất cả',
+      atRisk: 'Rủi ro',
+      healthy: 'Bình thường',
+    },
     metricType: {
       availability: 'Availability',
       latency: 'Latency p95',

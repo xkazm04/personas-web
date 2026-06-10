@@ -672,6 +672,11 @@ export const ru: Translations = {
     target: 'Target',
     current: 'Current',
     timeInSla: 'Time in SLA',
+    targetFilter: {
+      all: 'Все',
+      atRisk: 'Под угрозой',
+      healthy: 'В норме',
+    },
     metricType: {
       availability: 'Availability',
       latency: 'Latency p95',

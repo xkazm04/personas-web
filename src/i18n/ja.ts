@@ -672,6 +672,11 @@ export const ja: Translations = {
     target: 'Target',
     current: 'Current',
     timeInSla: 'Time in SLA',
+    targetFilter: {
+      all: 'すべて',
+      atRisk: 'リスクあり',
+      healthy: '正常',
+    },
     metricType: {
       availability: 'Availability',
       latency: 'Latency p95',

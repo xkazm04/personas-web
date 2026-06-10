@@ -672,6 +672,11 @@ export const cs: Translations = {
     target: 'Target',
     current: 'Current',
     timeInSla: 'Time in SLA',
+    targetFilter: {
+      all: 'Vše',
+      atRisk: 'Ohroženo',
+      healthy: 'V pořádku',
+    },
     metricType: {
       availability: 'Availability',
       latency: 'Latency p95',

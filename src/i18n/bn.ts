@@ -672,6 +672,11 @@ export const bn: Translations = {
     target: 'Target',
     current: 'Current',
     timeInSla: 'Time in SLA',
+    targetFilter: {
+      all: 'সব',
+      atRisk: 'ঝুঁকিতে',
+      healthy: 'সুস্থ',
+    },
     metricType: {
       availability: 'Availability',
       latency: 'Latency p95',

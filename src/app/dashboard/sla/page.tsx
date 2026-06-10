@@ -59,6 +59,7 @@ export default function SLAPage() {
           target: t.slaPage.target,
           current: t.slaPage.current,
           timeInSla: t.slaPage.timeInSla,
+          filter: t.slaPage.targetFilter,
         }}
       />
       <SLABreachLog
