@@ -207,6 +207,10 @@ A clean memory base leads to better agent performance. An agent that relies on o
 
 Open the \`Memories\` section and browse your agent's memory list. Sort by date, importance, or category to focus your review. Click any memory to edit its content, change its importance level, or delete it. The system also suggests potential duplicates that could be merged.
 
+### Automatic Cleanup with Revitalize
+
+If you mirror memories into an Obsidian vault with the **Obsidian Brain** plugin, its \`Revitalize\` tab can do this cleanup for you in the background — like sleep consolidating memory. Pick the goals (prune stale notes, aggregate duplicates, refresh structure), start a pass, and keep working while a status dot tracks progress in the sidebar. At the end you get a summary of notes removed, merged, and updated, plus the estimated tokens saved.
+
 :::tip
 Schedule a monthly review of your most active agents' memories. Even 15 minutes of cleanup can noticeably improve an agent's decision-making quality.
 :::
