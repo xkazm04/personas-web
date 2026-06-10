@@ -66,6 +66,7 @@ export default function SLAPage() {
         labels={{
           title: t.slaPage.breachLog.title,
           empty: t.slaPage.breachLog.empty,
+          all: t.slaPage.breachLog.all,
           duration: t.slaPage.breachLog.duration,
           ongoing: t.slaPage.breachLog.ongoing,
           metricType: t.slaPage.metricType,

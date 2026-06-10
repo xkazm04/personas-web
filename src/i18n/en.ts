@@ -541,6 +541,7 @@
     };
     breachLog: {
       title: string;
+      all: string;
       empty: string;
       ongoing: string;
       duration: string;
@@ -1687,6 +1688,7 @@ export const en: Translations = {
     },
     breachLog: {
       title: 'Breach log',
+      all: 'All',
       empty: 'No breaches in the last 7 days.',
       ongoing: 'Ongoing',
       duration: '{n} min',

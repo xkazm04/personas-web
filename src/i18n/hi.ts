@@ -684,6 +684,7 @@ export const hi: Translations = {
     },
     breachLog: {
       title: 'Breach log',
+      all: 'सभी',
       empty: 'No breaches in the last 7 days.',
       ongoing: 'Ongoing',
       duration: '{n} min',
