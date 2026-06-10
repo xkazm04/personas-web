@@ -639,7 +639,10 @@ export const bn: Translations = {
     },
   },
   leaderboardPage: {
+    compare: 'তুলনা করুন',
+    versus: 'বনাম',
     delta: 'পরিবর্তন',
+    sortBy: '{field} অনুসারে সাজান',
     title: 'ŕ¦˛ŕ¦żŕ¦ˇŕ¦ľŕ¦°ŕ¦¬ŕ§‹ŕ¦°ŕ§Ťŕ¦ˇ',
     subtitle: 'ŕ¦¸ŕ¦‚ŕ¦®ŕ¦żŕ¦¶ŕ§Ťŕ¦° ŕ¦Şŕ¦ľŕ¦°ŕ¦«ŕ¦°ŕ¦®ŕ§Ťŕ¦Żŕ¦ľŕ¦¨ŕ§Ťŕ¦¸ ŕ¦¦ŕ§Ťŕ¦¬ŕ¦ľŕ¦°ŕ¦ľ ŕ¦«ŕ§Ťŕ¦˛ŕ¦żŕ¦ź ŕ¦°â€Śŕ§Ťŕ¦Żŕ¦ľŕ¦™ŕ§Ťŕ¦•ŕ¦żŕ¦‚',
     rank: 'Rank',
@@ -671,6 +674,11 @@ export const bn: Translations = {
     target: 'Target',
     current: 'Current',
     timeInSla: 'Time in SLA',
+    targetFilter: {
+      all: 'সব',
+      atRisk: 'ঝুঁকিতে',
+      healthy: 'সুস্থ',
+    },
     metricType: {
       availability: 'Availability',
       latency: 'Latency p95',
@@ -683,6 +691,12 @@ export const bn: Translations = {
     },
     breachLog: {
       title: 'Breach log',
+      all: 'সব',
+      started: 'শুরু',
+      resolved: 'সমাধান',
+      otherBreaches: '{persona} এর অন্যান্য লঙ্ঘন: {n}',
+      timeToResolve: 'সমাধানের সময়',
+      elapsed: 'অতিবাহিত',
       empty: 'No breaches in the last 7 days.',
       ongoing: 'Ongoing',
       duration: '{n} min',

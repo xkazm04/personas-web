@@ -639,7 +639,10 @@ export const ko: Translations = {
     },
   },
   leaderboardPage: {
-    delta: '변동',
+    compare: '비교',
+    versus: '대',
+    delta: '변화',
+    sortBy: '{field} 기준 정렬',
     title: 'ë¦¬ëŤ”ëł´ë“ś',
     subtitle: 'ě˘…í•© ě„±ëŠĄě— ë”°ëĄ¸ í”Śë¦ż ěśěś„',
     rank: 'Rank',
@@ -671,6 +674,11 @@ export const ko: Translations = {
     target: 'Target',
     current: 'Current',
     timeInSla: 'Time in SLA',
+    targetFilter: {
+      all: '전체',
+      atRisk: '위험',
+      healthy: '정상',
+    },
     metricType: {
       availability: 'Availability',
       latency: 'Latency p95',
@@ -683,6 +691,12 @@ export const ko: Translations = {
     },
     breachLog: {
       title: 'Breach log',
+      all: '전체',
+      started: '시작',
+      resolved: '해결',
+      otherBreaches: '{persona}의 다른 위반: {n}',
+      timeToResolve: '해결 시간',
+      elapsed: '경과',
       empty: 'No breaches in the last 7 days.',
       ongoing: 'Ongoing',
       duration: '{n} min',

@@ -57,3 +57,16 @@ export function formatTarget(target: SLATarget): string {
 export function metricKey(metric: SLAMetricType) {
   return metric;
 }
+
+// Absolute timestamp for the expanded breach detail — deterministic given a
+// fixed ISO string (no current-time dependency), so it is render-safe.
+export function formatAbsolute(iso: string): string {
+  const date = new Date(iso);
+  if (!Number.isFinite(date.getTime())) return "-";
+  return date.toLocaleString("en-US", {
+    month: "short",
+    day: "numeric",
+    hour: "2-digit",
+    minute: "2-digit",
+  });
+}

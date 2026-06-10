@@ -92,6 +92,7 @@ export default function LeaderboardPage() {
               agent: t.dashboardUi.agent,
               composite: t.leaderboardPage.composite,
               delta: t.leaderboardPage.delta,
+              sortBy: t.leaderboardPage.sortBy,
             }}
             onSelect={setPickedId}
           />

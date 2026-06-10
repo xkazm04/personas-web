@@ -639,7 +639,10 @@ export const ar: Translations = {
     },
   },
   leaderboardPage: {
-    delta: 'التغيّر',
+    compare: 'قارن',
+    versus: 'مقابل',
+    delta: 'التغير',
+    sortBy: 'ترتيب حسب {field}',
     title: 'Ů„ŮŘ­Ř© Ř§Ů„Ů…ŘŞŘµŘŻŘ±ŮŠŮ†',
     subtitle: 'ŘŞŘ±ŘŞŮŠŘ¨ Ř§Ů„ŘŁŘłŘ·ŮŮ„ Ř­ŘłŘ¨ Ř§Ů„ŘŁŘŻŘ§Řˇ Ř§Ů„Ů…Ř¬Ů…Řą',
     rank: 'Rank',
@@ -671,6 +674,11 @@ export const ar: Translations = {
     target: 'Target',
     current: 'Current',
     timeInSla: 'Time in SLA',
+    targetFilter: {
+      all: 'الكل',
+      atRisk: 'في خطر',
+      healthy: 'سليم',
+    },
     metricType: {
       availability: 'Availability',
       latency: 'Latency p95',
@@ -683,6 +691,12 @@ export const ar: Translations = {
     },
     breachLog: {
       title: 'Breach log',
+      all: 'الكل',
+      started: 'البداية',
+      resolved: 'تم الحل',
+      otherBreaches: 'انتهاكات أخرى لـ {persona}: {n}',
+      timeToResolve: 'وقت الحل',
+      elapsed: 'المنقضي',
       empty: 'No breaches in the last 7 days.',
       ongoing: 'Ongoing',
       duration: '{n} min',

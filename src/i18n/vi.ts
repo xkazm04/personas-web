@@ -639,7 +639,10 @@ export const vi: Translations = {
     },
   },
   leaderboardPage: {
-    delta: 'Biến động',
+    compare: 'So sánh',
+    versus: 'vs',
+    delta: 'Thay đổi',
+    sortBy: 'Sắp xếp theo {field}',
     title: 'BáşŁng xáşżp háşˇng',
     subtitle: 'Xáşżp háşˇng Ä‘á»™i ngĹ© theo hiá»‡u suáşĄt tá»•ng há»Łp',
     rank: 'Rank',
@@ -671,6 +674,11 @@ export const vi: Translations = {
     target: 'Target',
     current: 'Current',
     timeInSla: 'Time in SLA',
+    targetFilter: {
+      all: 'Tất cả',
+      atRisk: 'Rủi ro',
+      healthy: 'Bình thường',
+    },
     metricType: {
       availability: 'Availability',
       latency: 'Latency p95',
@@ -683,6 +691,12 @@ export const vi: Translations = {
     },
     breachLog: {
       title: 'Breach log',
+      all: 'Tất cả',
+      started: 'Bắt đầu',
+      resolved: 'Đã giải quyết',
+      otherBreaches: 'Vi phạm khác của {persona}: {n}',
+      timeToResolve: 'Thời gian xử lý',
+      elapsed: 'Đã trôi qua',
       empty: 'No breaches in the last 7 days.',
       ongoing: 'Ongoing',
       duration: '{n} min',

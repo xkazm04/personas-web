@@ -639,7 +639,10 @@ export const ja: Translations = {
     },
   },
   leaderboardPage: {
-    delta: '変動',
+    compare: '比較',
+    versus: '対',
+    delta: '変化',
+    sortBy: '{field}で並べ替え',
     title: 'ăŞăĽă€ăĽăśăĽă‰',
     subtitle: 'č¤‡ĺă‘ă•ă‚©ăĽăžăłă‚ąă«ă‚ă‚‹ă•ăŞăĽăă©ăłă‚­ăłă‚°',
     rank: 'Rank',
@@ -671,6 +674,11 @@ export const ja: Translations = {
     target: 'Target',
     current: 'Current',
     timeInSla: 'Time in SLA',
+    targetFilter: {
+      all: 'すべて',
+      atRisk: 'リスクあり',
+      healthy: '正常',
+    },
     metricType: {
       availability: 'Availability',
       latency: 'Latency p95',
@@ -683,6 +691,12 @@ export const ja: Translations = {
     },
     breachLog: {
       title: 'Breach log',
+      all: 'すべて',
+      started: '開始',
+      resolved: '解決',
+      otherBreaches: '{persona} のその他の違反: {n}',
+      timeToResolve: '解決までの時間',
+      elapsed: '経過',
       empty: 'No breaches in the last 7 days.',
       ongoing: 'Ongoing',
       duration: '{n} min',

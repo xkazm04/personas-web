@@ -496,11 +496,14 @@
     };
   };
   leaderboardPage: {
-    delta: string;
     title: string;
     subtitle: string;
     rank: string;
     composite: string;
+    delta: string;
+    sortBy: string;
+    compare: string;
+    versus: string;
     radarTitle: string;
     metrics: {
       reliability: string;
@@ -528,6 +531,11 @@
     target: string;
     current: string;
     timeInSla: string;
+    targetFilter: {
+      all: string;
+      atRisk: string;
+      healthy: string;
+    };
     metricType: {
       availability: string;
       latency: string;
@@ -540,9 +548,15 @@
     };
     breachLog: {
       title: string;
+      all: string;
       empty: string;
       ongoing: string;
       duration: string;
+      started: string;
+      resolved: string;
+      otherBreaches: string;
+      timeToResolve: string;
+      elapsed: string;
     };
   };
   messagesPage: {
@@ -1644,11 +1658,14 @@ export const en: Translations = {
     },
   },
   leaderboardPage: {
-    delta: 'Delta',
     title: 'Leaderboard',
     subtitle: 'Fleet ranking by composite performance',
     rank: 'Rank',
     composite: 'Composite',
+    delta: 'Delta',
+    sortBy: 'Sort by {field}',
+    compare: 'Compare',
+    versus: 'vs',
     radarTitle: 'Metrics profile',
     metrics: {
       reliability: 'Reliability',
@@ -1676,6 +1693,11 @@ export const en: Translations = {
     target: 'Target',
     current: 'Current',
     timeInSla: 'Time in SLA',
+    targetFilter: {
+      all: 'All',
+      atRisk: 'At risk',
+      healthy: 'Healthy',
+    },
     metricType: {
       availability: 'Availability',
       latency: 'Latency p95',
@@ -1688,6 +1710,12 @@ export const en: Translations = {
     },
     breachLog: {
       title: 'Breach log',
+      all: 'All',
+      started: 'Started',
+      resolved: 'Resolved',
+      otherBreaches: 'Other breaches by {persona}: {n}',
+      timeToResolve: 'Time to resolve',
+      elapsed: 'Elapsed',
       empty: 'No breaches in the last 7 days.',
       ongoing: 'Ongoing',
       duration: '{n} min',

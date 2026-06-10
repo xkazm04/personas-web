@@ -639,7 +639,10 @@ export const id: Translations = {
     },
   },
   leaderboardPage: {
+    compare: 'Bandingkan',
+    versus: 'vs',
     delta: 'Perubahan',
+    sortBy: 'Urutkan berdasarkan {field}',
     title: 'Papan Peringkat',
     subtitle: 'Peringkat armada berdasarkan kinerja komposit',
     rank: 'Rank',
@@ -671,6 +674,11 @@ export const id: Translations = {
     target: 'Target',
     current: 'Current',
     timeInSla: 'Time in SLA',
+    targetFilter: {
+      all: 'Semua',
+      atRisk: 'Berisiko',
+      healthy: 'Sehat',
+    },
     metricType: {
       availability: 'Availability',
       latency: 'Latency p95',
@@ -683,6 +691,12 @@ export const id: Translations = {
     },
     breachLog: {
       title: 'Breach log',
+      all: 'Semua',
+      started: 'Mulai',
+      resolved: 'Selesai',
+      otherBreaches: 'Pelanggaran lain oleh {persona}: {n}',
+      timeToResolve: 'Waktu penyelesaian',
+      elapsed: 'Berlalu',
       empty: 'No breaches in the last 7 days.',
       ongoing: 'Ongoing',
       duration: '{n} min',

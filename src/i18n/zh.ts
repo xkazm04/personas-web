@@ -639,7 +639,10 @@ export const zh: Translations = {
     },
   },
   leaderboardPage: {
+    compare: '对比',
+    versus: '对',
     delta: '变化',
+    sortBy: '按{field}排序',
     title: 'ćŽ’čˇŚć¦ś',
     subtitle: 'ćŚ‰ç»Ľĺć€§č˝çš„č°éźćŽ’ĺŤ',
     rank: 'Rank',
@@ -671,6 +674,11 @@ export const zh: Translations = {
     target: 'Target',
     current: 'Current',
     timeInSla: 'Time in SLA',
+    targetFilter: {
+      all: '全部',
+      atRisk: '有风险',
+      healthy: '正常',
+    },
     metricType: {
       availability: 'Availability',
       latency: 'Latency p95',
@@ -683,6 +691,12 @@ export const zh: Translations = {
     },
     breachLog: {
       title: 'Breach log',
+      all: '全部',
+      started: '开始',
+      resolved: '已解决',
+      otherBreaches: '{persona} 的其他违规：{n}',
+      timeToResolve: '解决耗时',
+      elapsed: '已用时',
       empty: 'No breaches in the last 7 days.',
       ongoing: 'Ongoing',
       duration: '{n} min',

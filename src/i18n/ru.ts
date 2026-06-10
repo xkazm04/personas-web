@@ -639,7 +639,10 @@ export const ru: Translations = {
     },
   },
   leaderboardPage: {
+    compare: 'Сравнить',
+    versus: 'против',
     delta: 'Изменение',
+    sortBy: 'Сортировать по: {field}',
     title: 'Đ ĐµĐąŃ‚Đ¸Đ˝Đł',
     subtitle: 'Đ ĐµĐąŃ‚Đ¸Đ˝Đł Ń„Đ»ĐľŃ‚Đ° ĐżĐľ ŃĐľĐ˛ĐľĐşŃĐżĐ˝ĐľĐą ĐżŃ€ĐľĐ¸Đ·Đ˛ĐľĐ´Đ¸Ń‚ĐµĐ»ŃŚĐ˝ĐľŃŃ‚Đ¸',
     rank: 'Rank',
@@ -671,6 +674,11 @@ export const ru: Translations = {
     target: 'Target',
     current: 'Current',
     timeInSla: 'Time in SLA',
+    targetFilter: {
+      all: 'Все',
+      atRisk: 'Под угрозой',
+      healthy: 'В норме',
+    },
     metricType: {
       availability: 'Availability',
       latency: 'Latency p95',
@@ -683,6 +691,12 @@ export const ru: Translations = {
     },
     breachLog: {
       title: 'Breach log',
+      all: 'Все',
+      started: 'Начало',
+      resolved: 'Устранено',
+      otherBreaches: 'Другие нарушения {persona}: {n}',
+      timeToResolve: 'Время устранения',
+      elapsed: 'Прошло',
       empty: 'No breaches in the last 7 days.',
       ongoing: 'Ongoing',
       duration: '{n} min',

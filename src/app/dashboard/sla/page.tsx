@@ -72,6 +72,7 @@ export default function SLAPage() {
               target: t.slaPage.target,
               current: t.slaPage.current,
               timeInSla: t.slaPage.timeInSla,
+              filter: t.slaPage.targetFilter,
             }}
           />
           <SLABreachLog
@@ -79,8 +80,14 @@ export default function SLAPage() {
             labels={{
               title: t.slaPage.breachLog.title,
               empty: t.slaPage.breachLog.empty,
+              all: t.slaPage.breachLog.all,
               duration: t.slaPage.breachLog.duration,
               ongoing: t.slaPage.breachLog.ongoing,
+              started: t.slaPage.breachLog.started,
+              resolved: t.slaPage.breachLog.resolved,
+              otherBreaches: t.slaPage.breachLog.otherBreaches,
+              timeToResolve: t.slaPage.breachLog.timeToResolve,
+              elapsed: t.slaPage.breachLog.elapsed,
               metricType: t.slaPage.metricType,
               severity: t.slaPage.severity,
             }}

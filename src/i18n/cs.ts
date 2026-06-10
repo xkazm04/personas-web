@@ -639,7 +639,10 @@ export const cs: Translations = {
     },
   },
   leaderboardPage: {
+    compare: 'Porovnat',
+    versus: 'vs.',
     delta: 'Změna',
+    sortBy: 'Seřadit podle: {field}',
     title: 'Ĺ˝ebĹ™Ă­ÄŤek',
     subtitle: 'Ĺ˝ebĹ™Ă­ÄŤek flotily podle souhrnnĂ©ho vĂ˝konu',
     rank: 'Rank',
@@ -671,6 +674,11 @@ export const cs: Translations = {
     target: 'Target',
     current: 'Current',
     timeInSla: 'Time in SLA',
+    targetFilter: {
+      all: 'Vše',
+      atRisk: 'Ohroženo',
+      healthy: 'V pořádku',
+    },
     metricType: {
       availability: 'Availability',
       latency: 'Latency p95',
@@ -683,6 +691,12 @@ export const cs: Translations = {
     },
     breachLog: {
       title: 'Breach log',
+      all: 'Vše',
+      started: 'Začátek',
+      resolved: 'Vyřešeno',
+      otherBreaches: 'Další porušení od {persona}: {n}',
+      timeToResolve: 'Doba do vyřešení',
+      elapsed: 'Uplynulo',
       empty: 'No breaches in the last 7 days.',
       ongoing: 'Ongoing',
       duration: '{n} min',

@@ -639,7 +639,10 @@ export const de: Translations = {
     },
   },
   leaderboardPage: {
-    delta: 'Delta',
+    compare: 'Vergleichen',
+    versus: 'vs.',
+    delta: 'Veränderung',
+    sortBy: 'Sortieren nach {field}',
     title: 'Rangliste',
     subtitle: 'Flotten-Ranking nach Gesamtleistung',
     rank: 'Rank',
@@ -671,6 +674,11 @@ export const de: Translations = {
     target: 'Target',
     current: 'Current',
     timeInSla: 'Time in SLA',
+    targetFilter: {
+      all: 'Alle',
+      atRisk: 'Gefährdet',
+      healthy: 'Gesund',
+    },
     metricType: {
       availability: 'Availability',
       latency: 'Latency p95',
@@ -683,6 +691,12 @@ export const de: Translations = {
     },
     breachLog: {
       title: 'Breach log',
+      all: 'Alle',
+      started: 'Beginn',
+      resolved: 'Behoben',
+      otherBreaches: 'Weitere Verstöße von {persona}: {n}',
+      timeToResolve: 'Zeit bis zur Behebung',
+      elapsed: 'Vergangen',
       empty: 'No breaches in the last 7 days.',
       ongoing: 'Ongoing',
       duration: '{n} min',
