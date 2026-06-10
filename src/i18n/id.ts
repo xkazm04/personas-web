@@ -685,6 +685,8 @@ export const id: Translations = {
     breachLog: {
       title: 'Breach log',
       all: 'Semua',
+      started: 'Mulai',
+      resolved: 'Selesai',
       empty: 'No breaches in the last 7 days.',
       ongoing: 'Ongoing',
       duration: '{n} min',

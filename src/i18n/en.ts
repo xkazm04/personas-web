@@ -545,6 +545,8 @@
       empty: string;
       ongoing: string;
       duration: string;
+      started: string;
+      resolved: string;
     };
   };
   messagesPage: {
@@ -1689,6 +1691,8 @@ export const en: Translations = {
     breachLog: {
       title: 'Breach log',
       all: 'All',
+      started: 'Started',
+      resolved: 'Resolved',
       empty: 'No breaches in the last 7 days.',
       ongoing: 'Ongoing',
       duration: '{n} min',

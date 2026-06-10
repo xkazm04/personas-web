@@ -685,6 +685,8 @@ export const ko: Translations = {
     breachLog: {
       title: 'Breach log',
       all: '전체',
+      started: '시작',
+      resolved: '해결',
       empty: 'No breaches in the last 7 days.',
       ongoing: 'Ongoing',
       duration: '{n} min',

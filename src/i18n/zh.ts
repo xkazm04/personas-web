@@ -685,6 +685,8 @@ export const zh: Translations = {
     breachLog: {
       title: 'Breach log',
       all: '全部',
+      started: '开始',
+      resolved: '已解决',
       empty: 'No breaches in the last 7 days.',
       ongoing: 'Ongoing',
       duration: '{n} min',

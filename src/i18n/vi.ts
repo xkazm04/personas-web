@@ -685,6 +685,8 @@ export const vi: Translations = {
     breachLog: {
       title: 'Breach log',
       all: 'Tất cả',
+      started: 'Bắt đầu',
+      resolved: 'Đã giải quyết',
       empty: 'No breaches in the last 7 days.',
       ongoing: 'Ongoing',
       duration: '{n} min',

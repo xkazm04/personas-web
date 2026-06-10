@@ -685,6 +685,8 @@ export const ja: Translations = {
     breachLog: {
       title: 'Breach log',
       all: 'すべて',
+      started: '開始',
+      resolved: '解決',
       empty: 'No breaches in the last 7 days.',
       ongoing: 'Ongoing',
       duration: '{n} min',

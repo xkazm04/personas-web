@@ -685,6 +685,8 @@ export const es: Translations = {
     breachLog: {
       title: 'Breach log',
       all: 'Todas',
+      started: 'Inicio',
+      resolved: 'Resuelto',
       empty: 'No breaches in the last 7 days.',
       ongoing: 'Ongoing',
       duration: '{n} min',
