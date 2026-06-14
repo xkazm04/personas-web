@@ -15,7 +15,6 @@ import dynamic from "next/dynamic";
 export const PREVIEW_REGISTRY: Record<string, ComponentType> = {
   hero: dynamic(() => import("@/components/sections/Hero")),
   vision: dynamic(() => import("@/components/sections/vision-grid")),
-  "why-agents": dynamic(() => import("@/components/sections/why-agents")),
   features: dynamic(() => import("@/components/sections/features")),
   pricing: dynamic(() => import("@/components/sections/pricing")),
   faq: dynamic(() => import("@/components/sections/FAQ")),

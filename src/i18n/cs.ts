@@ -668,6 +668,8 @@ export const cs: Translations = {
     rank: 'Rank',
     composite: 'Composite',
     radarTitle: 'Metrics profile',
+    rankBy: 'Se\u0159adit podle',
+    overall: 'Celkov\u00e9',
     metrics: {
       reliability: 'Reliability',
       cost: 'Cost',
@@ -830,6 +832,7 @@ export const cs: Translations = {
     subtitle: 'Metriky vĂ˝konu, sledovĂˇnĂ­ nĂˇkladĹŻ a vyuĹľitĂ­ nĂˇstrojĹŻ',
     tabPerformance: 'VĂ˝kon',
     tabUsage: 'VyuĹľitĂ­ nĂˇstrojĹŻ',
+    tabActivity: 'Aktivita',
     circuitBreaker: 'Circuit breaker',
     autoFixed: 'Automaticky opraveno',
     resolved: 'Vy?e?eno',
@@ -862,6 +865,21 @@ export const cs: Translations = {
     last14Days: 'Posledn?ch 14 dn?',
     toolUsageByAgent: 'Vyu?it? n?stroj? podle agenta',
     other: 'Ostatn?',
+    athenaUsage: 'Vyu\u017eit\u00ed Atheny',
+    athenaSubtitle: 'N\u00e1klady Companionu podle akce',
+    athenaActions: {
+      invoke: 'Vyvol\u00e1n\u00ed',
+      recall: 'Na\u010dten\u00ed',
+      fallback: 'Z\u00e1loha',
+    },
+    valueRollup: 'P\u0159ehled hodnoty',
+    valueDelivered: 'Dodan\u00e1 hodnota',
+    costPerValue: 'N\u00e1klady na hodnotu',
+    outcomes: {
+      delivered: 'Dod\u00e1no',
+      partial: '\u010c\u00e1ste\u010dn\u011b',
+      blocked: 'Blokov\u00e1no',
+    },
     severity: {
       all: 'v?e',
       critical: 'kritick?',

@@ -7,9 +7,10 @@ import GradientText from "@/components/GradientText";
 import FilterBar from "@/components/dashboard/FilterBar";
 import PerformanceView from "./PerformanceView";
 import UsageView from "./UsageView";
+import ActivityMetricsView from "./ActivityMetricsView";
 import { useTranslation } from "@/i18n/useTranslation";
 
-type Tab = "performance" | "usage";
+type Tab = "performance" | "usage" | "activity";
 
 export default function ObservabilityPage() {
   const { t } = useTranslation();
@@ -33,13 +34,20 @@ export default function ObservabilityPage() {
           options={[
             { key: "performance", label: t.observabilityPage.tabPerformance },
             { key: "usage", label: t.observabilityPage.tabUsage },
+            { key: "activity", label: t.observabilityPage.tabActivity },
           ]}
           active={tab}
           onChange={(k) => setTab(k as Tab)}
         />
       </motion.div>
 
-      {tab === "performance" ? <PerformanceView /> : <UsageView />}
+      {tab === "performance" ? (
+        <PerformanceView />
+      ) : tab === "usage" ? (
+        <UsageView />
+      ) : (
+        <ActivityMetricsView />
+      )}
     </motion.div>
   );
 }

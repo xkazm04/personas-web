@@ -668,6 +668,8 @@ export const zh: Translations = {
     rank: 'Rank',
     composite: 'Composite',
     radarTitle: 'Metrics profile',
+    rankBy: '\u6392\u540d\u4f9d\u636e',
+    overall: '\u7efc\u5408',
     metrics: {
       reliability: 'Reliability',
       cost: 'Cost',
@@ -830,6 +832,7 @@ export const zh: Translations = {
     subtitle: 'ć€§č˝ćŚ‡ć ‡ă€ććś¬č·źč¸Şĺ’Śĺ·Ąĺ…·ä˝żç”¨ć…ĺ†µ',
     tabPerformance: 'ć€§č˝',
     tabUsage: 'ĺ·Ąĺ…·ä˝żç”¨',
+    tabActivity: '\u6d3b\u52a8',
     circuitBreaker: '???',
     autoFixed: '?????',
     resolved: '???',
@@ -862,6 +865,21 @@ export const zh: Translations = {
     last14Days: '?? 14 ?',
     toolUsageByAgent: '?????????',
     other: '??',
+    athenaUsage: 'Athena \u4f7f\u7528\u60c5\u51b5',
+    athenaSubtitle: '\u6309\u64cd\u4f5c\u5212\u5206\u7684\u52a9\u624b\u6210\u672c',
+    athenaActions: {
+      invoke: '\u8c03\u7528',
+      recall: '\u53ec\u56de',
+      fallback: '\u56de\u9000',
+    },
+    valueRollup: '\u4ef7\u503c\u6c47\u603b',
+    valueDelivered: '\u5df2\u4ea4\u4ed8\u4ef7\u503c',
+    costPerValue: '\u5355\u4f4d\u4ef7\u503c\u6210\u672c',
+    outcomes: {
+      delivered: '\u5df2\u4ea4\u4ed8',
+      partial: '\u90e8\u5206',
+      blocked: '\u5df2\u963b\u6b62',
+    },
     severity: {
       all: '??',
       critical: '??',

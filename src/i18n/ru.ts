@@ -668,6 +668,8 @@ export const ru: Translations = {
     rank: 'Rank',
     composite: 'Composite',
     radarTitle: 'Metrics profile',
+    rankBy: '\u0420\u0430\u043d\u0436\u0438\u0440\u043e\u0432\u0430\u0442\u044c \u043f\u043e',
+    overall: '\u041e\u0431\u0449\u0438\u0439',
     metrics: {
       reliability: 'Reliability',
       cost: 'Cost',
@@ -830,6 +832,7 @@ export const ru: Translations = {
     subtitle: 'ĐśĐµŃ‚Ń€Đ¸ĐşĐ¸ ĐżŃ€ĐľĐ¸Đ·Đ˛ĐľĐ´Đ¸Ń‚ĐµĐ»ŃŚĐ˝ĐľŃŃ‚Đ¸, ĐľŃ‚ŃĐ»ĐµĐ¶Đ¸Đ˛Đ°Đ˝Đ¸Đµ Ń€Đ°ŃŃ…ĐľĐ´ĐľĐ˛ Đ¸ Đ¸ŃĐżĐľĐ»ŃŚĐ·ĐľĐ˛Đ°Đ˝Đ¸Đµ Đ¸Đ˝ŃŃ‚Ń€ŃĐĽĐµĐ˝Ń‚ĐľĐ˛',
     tabPerformance: 'ĐźŃ€ĐľĐ¸Đ·Đ˛ĐľĐ´Đ¸Ń‚ĐµĐ»ŃŚĐ˝ĐľŃŃ‚ŃŚ',
     tabUsage: 'ĐŃĐżĐľĐ»ŃŚĐ·ĐľĐ˛Đ°Đ˝Đ¸Đµ Đ¸Đ˝ŃŃ‚Ń€ŃĐĽĐµĐ˝Ń‚ĐľĐ˛',
+    tabActivity: '\u0410\u043a\u0442\u0438\u0432\u043d\u043e\u0441\u0442\u044c',
     circuitBreaker: 'Circuit Breaker',
     autoFixed: '??????????????',
     resolved: '??????',
@@ -862,6 +865,21 @@ export const ru: Translations = {
     last14Days: '????????? 14 ????',
     toolUsageByAgent: '????????????? ???????????? ?? ???????',
     other: '??????',
+    athenaUsage: '\u0418\u0441\u043f\u043e\u043b\u044c\u0437\u043e\u0432\u0430\u043d\u0438\u0435 Athena',
+    athenaSubtitle: '\u0421\u0442\u043e\u0438\u043c\u043e\u0441\u0442\u044c Companion \u043f\u043e \u0434\u0435\u0439\u0441\u0442\u0432\u0438\u044f\u043c',
+    athenaActions: {
+      invoke: '\u0412\u044b\u0437\u043e\u0432',
+      recall: '\u0418\u0437\u0432\u043b\u0435\u0447\u0435\u043d\u0438\u0435',
+      fallback: '\u0420\u0435\u0437\u0435\u0440\u0432',
+    },
+    valueRollup: '\u0421\u0432\u043e\u0434\u043a\u0430 \u0446\u0435\u043d\u043d\u043e\u0441\u0442\u0438',
+    valueDelivered: '\u0426\u0435\u043d\u043d\u043e\u0441\u0442\u044c \u0434\u043e\u0441\u0442\u0430\u0432\u043b\u0435\u043d\u0430',
+    costPerValue: '\u0421\u0442\u043e\u0438\u043c\u043e\u0441\u0442\u044c \u0435\u0434\u0438\u043d\u0438\u0446\u044b \u0446\u0435\u043d\u043d\u043e\u0441\u0442\u0438',
+    outcomes: {
+      delivered: '\u0414\u043e\u0441\u0442\u0430\u0432\u043b\u0435\u043d\u043e',
+      partial: '\u0427\u0430\u0441\u0442\u0438\u0447\u043d\u043e',
+      blocked: '\u0417\u0430\u0431\u043b\u043e\u043a\u0438\u0440\u043e\u0432\u0430\u043d\u043e',
+    },
     severity: {
       all: '???',
       critical: '???????????',

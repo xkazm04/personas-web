@@ -1,11 +1,13 @@
 # Leaderboard & Rankings
-> Ranks the persona/agent fleet by a composite performance score in a sortable table, with a radar card that profiles the selected persona across five metrics against the #1 benchmark. · **Route:** `/dashboard/leaderboard` · **Nav label:** "Leaderboard" · **Status:** Demo-only (mocks)
+> A top-3 podium with rank-dimension tabs sits above a sortable table and a radar card, ranking the persona/agent fleet by composite score or any single metric. · **Route:** `/dashboard/leaderboard` · **Nav label:** "Leaderboard" · **Status:** Demo-only (mocks)
 
 ## What it does
 
 The Leaderboard answers one question for the agent fleet: *which persona is performing best overall, and where does each one win or lose?*
 
-It renders two side-by-side panels (a 5-column grid: table spans 3, radar spans 2):
+Above the detail panels sits a **podium**: rank-dimension tabs (overall / reliability / speed / cost / quality) re-rank the fleet, and the top 3 render as medal cards (🥇🥈🥉) with an animated **score ring** showing the selected dimension's value; the leader sits slightly raised. Clicking any podium card selects that persona, driving the radar below. The detail table and radar keep their own composite ordering and column sorts.
+
+It then renders two side-by-side panels (a 5-column grid: table spans 3, radar spans 2):
 
 1. **Ranked table** (left, `lg:col-span-3`) — one row per persona, ordered by a sortable column. Each row shows a **rank badge** (gold/silver/bronze medal icons for the top 3, plain number otherwise), a **persona avatar** (colored by the persona's brand color), the persona **name** with a thin **composite bar** beneath it (width = composite score, color banded by score tier), a **composite pill** (the 0–100 score, color-banded), and a **delta** column (trend arrow + signed change vs. last period). Clicking a row selects that persona to drive the radar.
 2. **Radar comparison card** (right, `lg:col-span-2`) — a 5-axis radar (Reliability, Cost, Speed, Quality, Volume; all 0–100) of the selected persona. When the selection is *not* the #1 persona, the #1 persona is overlaid faintly as a dashed "benchmark" series so the gap is legible, and a legend appears.
@@ -43,7 +45,10 @@ It renders two side-by-side panels (a 5-column grid: table spans 3, radar spans 
 
 | File | Role |
 | --- | --- |
-| `src/app/dashboard/leaderboard/page.tsx` | Page shell: selection/benchmark state, `radarData` memo, loading/error chrome, 5-col grid layout. |
+| `src/app/dashboard/leaderboard/page.tsx` | Page shell: selection/benchmark state, `rankDim` state, `radarData`/`top` memos, podium + tabs above the 5-col grid. |
+| `src/app/dashboard/leaderboard/leaderboard-page/LeaderboardPodium.tsx` | Top-3 podium cards with medals + animated score ring (reduced-motion gated); click selects → radar. |
+| `src/app/dashboard/leaderboard/leaderboard-page/RankDimensionTabs.tsx` | Rank-dimension segmented control (roving tabindex) driving the podium. |
+| `src/app/dashboard/leaderboard/leaderboard-page/leaderboardRank.ts` | Pure rank-dimension helpers: `RANK_DIMENSIONS`, `dimensionScore`, `rankByDimension`. |
 | `src/app/dashboard/leaderboard/useLeaderboardData.ts` | Data hook: demo mock vs. Supabase `getSyncedLeaderboard`, loading/error state, Sentry capture. |
 | `src/app/dashboard/leaderboard/leaderboard-page/LeaderboardTable.tsx` | Sortable ranked table: sort state, rank/order memos, row rendering, selection highlight. |
 | `src/app/dashboard/leaderboard/leaderboard-page/LeaderboardSortHeader.tsx` | Per-column sort button with chevron pair + active-cyan state + `aria-label`. |
@@ -60,7 +65,7 @@ It renders two side-by-side panels (a 5-column grid: table spans 3, radar spans 
 - **Types:** `LeaderboardPersona` (`{ id, name, color, metrics: { reliability, cost, speed, quality, volume }, composite, trend, delta }`) and `LeaderboardTrend = "up" | "down" | "flat"` in `src/lib/mock-dashboard-data.ts:536`. `RadarDatum` (`{ metric, value, benchmark? }`) in `LeaderboardRadarCard.tsx:19`. `LeaderboardSortField = "name" | "composite" | "delta"` and `SortDir = "asc" | "desc"` in `leaderboardSort.ts:3`.
 
 ## Integration points
-- **i18n:** strings under `t.leaderboardPage.*` (`src/i18n/en.ts:1660`): `title`, `subtitle`, `rank`, `composite`, `delta`, `sortBy` (`"Sort by {field}"`), `radarTitle`, and `metrics.{reliability,cost,speed,quality,volume}`. The agent column label reuses `t.dashboardUi.agent`. Nav label is `t.dashboard.leaderboard` (`en.ts:1368`).
+- **i18n:** strings under `t.leaderboardPage.*` (`src/i18n/en.ts:1660`): `title`, `subtitle`, `rank`, `composite`, `delta`, `sortBy` (`"Sort by {field}"`), `radarTitle`, `rankBy`, `overall` (podium rank-dimension labels), and `metrics.{reliability,cost,speed,quality,volume}`. The agent column label reuses `t.dashboardUi.agent`. Nav label is `t.dashboard.leaderboard` (`en.ts:1368`).
 - **Shared dashboard chrome:** `StalenessIndicator`, `DashboardErrorBanner`, `SkeletonCard` / `SkeletonChart`, `PersonaAvatar` (all under `src/components/dashboard/`), plus the shared `trendColor` helper.
 - **Animation/theme:** `fadeUp` / `staggerContainer` from `src/lib/animations`, `useChartAnimation` from `src/lib/chart-theme.tsx`, `BRAND_VAR` from `src/lib/brand-theme`, `GradientText` for the title.
 - **Charting:** Recharts (`RadarChart` + polar axes, `Legend`, `Tooltip`).

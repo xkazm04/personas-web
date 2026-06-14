@@ -668,6 +668,8 @@ export const fr: Translations = {
     rank: 'Rank',
     composite: 'Composite',
     radarTitle: 'Metrics profile',
+    rankBy: 'Classer par',
+    overall: 'Global',
     metrics: {
       reliability: 'Reliability',
       cost: 'Cost',
@@ -830,6 +832,7 @@ export const fr: Translations = {
     subtitle: 'MĂ©triques de performance, suivi des coĂ»ts et utilisation des outils',
     tabPerformance: 'Performance',
     tabUsage: 'Utilisation des outils',
+    tabActivity: 'Activit\u00e9',
     circuitBreaker: 'Disjoncteur',
     autoFixed: 'Corrig? automatiquement',
     resolved: 'R?solu',
@@ -862,6 +865,21 @@ export const fr: Translations = {
     last14Days: '14 derniers jours',
     toolUsageByAgent: 'Utilisation des outils par agent',
     other: 'Autre',
+    athenaUsage: 'Utilisation d\'Athena',
+    athenaSubtitle: 'Co\u00fbt du Companion par action',
+    athenaActions: {
+      invoke: 'Invocation',
+      recall: 'Rappel',
+      fallback: 'Repli',
+    },
+    valueRollup: 'Bilan de valeur',
+    valueDelivered: 'Valeur livr\u00e9e',
+    costPerValue: 'Co\u00fbt par valeur',
+    outcomes: {
+      delivered: 'Livr\u00e9',
+      partial: 'Partiel',
+      blocked: 'Bloqu\u00e9',
+    },
     severity: {
       all: 'tous',
       critical: 'critique',

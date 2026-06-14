@@ -668,6 +668,8 @@ export const hi: Translations = {
     rank: 'Rank',
     composite: 'Composite',
     radarTitle: 'Metrics profile',
+    rankBy: '\u0930\u0948\u0902\u0915 \u0906\u0927\u093e\u0930',
+    overall: '\u0938\u092e\u0917\u094d\u0930',
     metrics: {
       reliability: 'Reliability',
       cost: 'Cost',
@@ -830,6 +832,7 @@ export const hi: Translations = {
     subtitle: 'ŕ¤ŞŕĄŤŕ¤°ŕ¤¦ŕ¤°ŕĄŤŕ¤¶ŕ¤¨ ŕ¤®ŕĄ€ŕ¤źŕĄŤŕ¤°ŕ¤żŕ¤•ŕĄŤŕ¤¸, ŕ¤˛ŕ¤ľŕ¤—ŕ¤¤ ŕ¤źŕĄŤŕ¤°ŕĄŕ¤•ŕ¤żŕ¤‚ŕ¤— ŕ¤”ŕ¤° ŕ¤źŕĄ‚ŕ¤˛ ŕ¤‰ŕ¤Şŕ¤ŻŕĄ‹ŕ¤—',
     tabPerformance: 'ŕ¤ŞŕĄŤŕ¤°ŕ¤¦ŕ¤°ŕĄŤŕ¤¶ŕ¤¨',
     tabUsage: 'ŕ¤źŕĄ‚ŕ¤˛ ŕ¤‰ŕ¤Şŕ¤ŻŕĄ‹ŕ¤—',
+    tabActivity: '\u0917\u0924\u093f\u0935\u093f\u0927\u093f',
     circuitBreaker: '?????? ??????',
     autoFixed: '????-?? ??? ???',
     resolved: '?? ???',
@@ -862,6 +865,21 @@ export const hi: Translations = {
     last14Days: '????? 14 ???',
     toolUsageByAgent: '????? ?? ?????? ??? ?????',
     other: '????',
+    athenaUsage: 'Athena \u0909\u092a\u092f\u094b\u0917',
+    athenaSubtitle: '\u0915\u094d\u0930\u093f\u092f\u093e \u0905\u0928\u0941\u0938\u093e\u0930 \u0915\u0902\u092a\u0947\u0928\u093f\u092f\u0928 \u0932\u093e\u0917\u0924',
+    athenaActions: {
+      invoke: '\u0906\u0939\u094d\u0935\u093e\u0928',
+      recall: '\u0930\u093f\u0915\u0949\u0932',
+      fallback: '\u092b\u093c\u0949\u0932\u092c\u0948\u0915',
+    },
+    valueRollup: '\u092e\u0942\u0932\u094d\u092f \u0938\u093e\u0930\u093e\u0902\u0936',
+    valueDelivered: '\u0935\u093f\u0924\u0930\u093f\u0924 \u092e\u0942\u0932\u094d\u092f',
+    costPerValue: '\u092a\u094d\u0930\u0924\u093f \u092e\u0942\u0932\u094d\u092f \u0932\u093e\u0917\u0924',
+    outcomes: {
+      delivered: '\u0935\u093f\u0924\u0930\u093f\u0924',
+      partial: '\u0906\u0902\u0936\u093f\u0915',
+      blocked: '\u0905\u0935\u0930\u0941\u0926\u094d\u0927',
+    },
     severity: {
       all: '???',
       critical: '?????',

@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { promises as fs } from "fs";
 import path from "path";
-import { randomBytes, timingSafeEqual } from "crypto";
+import { createHash, randomBytes, timingSafeEqual } from "crypto";
 
 const DATA_DIR = path.join(process.cwd(), ".data");
 const WAITLIST_FILE = path.join(DATA_DIR, "waitlist.json");
@@ -382,9 +382,11 @@ function isAdminAuthorized(req: NextRequest): boolean {
   const match = header.match(/^Bearer\s+(.+)$/i);
   const provided = match?.[1] ?? "";
 
-  const a = Buffer.from(provided);
-  const b = Buffer.from(expected);
-  if (a.length !== b.length) return false;
+  // Compare SHA-256 digests (always 32 bytes) rather than the raw tokens, so
+  // the length check `timingSafeEqual` requires can't leak the token's length
+  // via an early return. Different inputs ⇒ different digests ⇒ false.
+  const a = createHash("sha256").update(provided).digest();
+  const b = createHash("sha256").update(expected).digest();
   return timingSafeEqual(a, b);
 }
 

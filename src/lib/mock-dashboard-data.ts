@@ -1631,3 +1631,56 @@ export const MOCK_HEALTH_ALERTS = MOCK_HEALTH_CHECKS.reduce(
   0,
 );
 
+// ── Activity Metrics: Athena usage + Value Rollup ───────────────────
+// Mirrors the desktop overview's Activity Metrics: the Companion (Athena)
+// cost-by-action stacked area (invoke / recall / fallback) and a value-
+// delivered rollup. Demo-only; deterministic (seeded at module load).
+
+export interface AthenaUsagePoint {
+  date: string; // MM-DD
+  invoke: number; // USD cost
+  recall: number;
+  fallback: number;
+  /** Previous-period total cost, for the compare overlay. */
+  prevTotal: number;
+}
+
+export const MOCK_ATHENA_USAGE: AthenaUsagePoint[] = (() => {
+  const rng = seededRandom(321);
+  const days = 14;
+  return Array.from({ length: days }, (_, i) => {
+    const d = new Date();
+    d.setDate(d.getDate() - (days - 1 - i));
+    const date = `${String(d.getMonth() + 1).padStart(2, "0")}-${String(d.getDate()).padStart(2, "0")}`;
+    const invoke = Number((0.9 + Math.sin(i * 0.5) * 0.25 + rng() * 0.3).toFixed(2));
+    const recall = Number((0.45 + Math.sin(i * 0.7) * 0.12 + rng() * 0.15).toFixed(2));
+    const fallback = Number((0.18 + rng() * 0.12).toFixed(2));
+    const total = invoke + recall + fallback;
+    // Previous period ran ~12–24% cheaper, so compare shows a rising trend.
+    const prevTotal = Number((total * (0.76 + rng() * 0.12)).toFixed(2));
+    return { date, invoke, recall, fallback, prevTotal };
+  });
+})();
+
+export interface ValueRollup {
+  /** Outcome counts over the period. */
+  delivered: number;
+  partial: number;
+  blocked: number;
+  /** Total Companion cost over the period (USD). */
+  costUsd: number;
+  /** Previous-period value-delivered rate (0–1), for compare. */
+  prevDeliveredRate: number;
+  /** Previous-period cost per delivered outcome (USD), for compare. */
+  prevCostPerValue: number;
+}
+
+export const MOCK_VALUE_ROLLUP: ValueRollup = {
+  delivered: 412,
+  partial: 78,
+  blocked: 31,
+  costUsd: 34.6,
+  prevDeliveredRate: 0.74,
+  prevCostPerValue: 0.092,
+};
+

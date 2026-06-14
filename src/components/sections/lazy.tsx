@@ -119,11 +119,6 @@ export const LazyVision = createLazySection(
   VisionSkeleton,
 );
 
-export const LazySocialProof = createLazySection(
-  () => import("@/components/sections/SocialProof"),
-  SectionSkeleton,
-);
-
 export const LazyPricing = createLazySection(
   () => import("@/components/sections/pricing"),
   PricingSkeleton,
@@ -136,12 +131,6 @@ export const LazyFAQ = createLazySection(
 
 export const LazyUseCases = createLazySection(
   () => import("@/components/sections/use-cases"),
-  SectionSkeleton,
-  { ssr: false },
-);
-
-export const LazyWhyAgents = createLazySection(
-  () => import("@/components/sections/why-agents/WhyAgentsSection"),
   SectionSkeleton,
   { ssr: false },
 );

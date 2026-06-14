@@ -17,11 +17,15 @@ import {
   resetMockOutputOffset,
 } from "./mockData";
 import {
+  MOCK_ATHENA_USAGE,
   MOCK_AUDIT_INCIDENTS,
   MOCK_DISK_USAGE,
   MOCK_HEALTH_CHECKS,
+  MOCK_VALUE_ROLLUP,
+  type AthenaUsagePoint,
   type AuditIncident,
   type HealthCheckSection,
+  type ValueRollup,
 } from "./mock-dashboard-data";
 import { ApiError, type ApiClient } from "./api";
 import type {
@@ -271,4 +275,17 @@ export async function getSystemHealth(): Promise<{
 }> {
   await delay(300);
   return { sections: MOCK_HEALTH_CHECKS.map((s) => ({ ...s })), diskUsage: { ...MOCK_DISK_USAGE } };
+}
+
+/**
+ * Activity-metrics snapshot for the observability Activity tab: Athena
+ * cost-by-action series + the value-delivered rollup. Demo-only standalone
+ * fetcher (not part of the real `ApiClient`).
+ */
+export async function getActivityMetrics(): Promise<{
+  athenaUsage: AthenaUsagePoint[];
+  valueRollup: ValueRollup;
+}> {
+  await delay(300);
+  return { athenaUsage: MOCK_ATHENA_USAGE.map((p) => ({ ...p })), valueRollup: { ...MOCK_VALUE_ROLLUP } };
 }

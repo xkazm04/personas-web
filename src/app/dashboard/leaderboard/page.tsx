@@ -12,8 +12,11 @@ import { useTranslation } from "@/i18n/useTranslation";
 import { fadeUp, staggerContainer } from "@/lib/animations";
 import { type LeaderboardPersona } from "@/lib/mock-dashboard-data";
 
+import { LeaderboardPodium } from "./leaderboard-page/LeaderboardPodium";
 import { LeaderboardRadarCard } from "./leaderboard-page/LeaderboardRadarCard";
 import { LeaderboardTable } from "./leaderboard-page/LeaderboardTable";
+import { RankDimensionTabs } from "./leaderboard-page/RankDimensionTabs";
+import { rankByDimension, type RankDimension } from "./leaderboard-page/leaderboardRank";
 import { useLeaderboardData } from "./useLeaderboardData";
 
 export default function LeaderboardPage() {
@@ -22,6 +25,7 @@ export default function LeaderboardPage() {
   // null = no explicit pick yet → fall back to the top-ranked persona. This
   // keeps the selection valid as data loads / changes without a sync effect.
   const [pickedId, setPickedId] = useState<string | null>(null);
+  const [rankDim, setRankDim] = useState<RankDimension>("overall");
   const [fetchedAt] = useState(() => Date.now());
 
   const selected = useMemo<LeaderboardPersona | undefined>(() => {
@@ -56,6 +60,13 @@ export default function LeaderboardPage() {
     }));
   }, [selected, benchmark, t]);
 
+  // Podium re-ranks by the selected dimension (composite or a single metric);
+  // the detailed table+radar below keep their own composite ordering + sorts.
+  const top = useMemo(
+    () => rankByDimension(personas, rankDim).slice(0, 3),
+    [personas, rankDim],
+  );
+
   return (
     <motion.div initial="hidden" animate="visible" variants={staggerContainer}>
       <motion.div variants={fadeUp} className="mb-6 flex items-start gap-3">
@@ -83,7 +94,14 @@ export default function LeaderboardPage() {
           <SkeletonChart className="lg:col-span-2" />
         </div>
       ) : (
-        <div className="grid gap-6 lg:grid-cols-5">
+        <>
+          <motion.div variants={fadeUp} className="mb-4 flex justify-end">
+            <RankDimensionTabs value={rankDim} onChange={setRankDim} />
+          </motion.div>
+          <motion.div variants={fadeUp} className="mb-6">
+            <LeaderboardPodium top={top} dim={rankDim} selectedId={selectedId} onSelect={setPickedId} />
+          </motion.div>
+          <div className="grid gap-6 lg:grid-cols-5">
           <LeaderboardTable
             personas={personas}
             selectedId={selectedId}
@@ -102,7 +120,8 @@ export default function LeaderboardPage() {
             data={radarData}
             title={t.leaderboardPage.radarTitle}
           />
-        </div>
+          </div>
+        </>
       )}
     </motion.div>
   );

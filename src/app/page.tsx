@@ -12,12 +12,10 @@ import {
   LazyCompanion,
   LazyTeamCanvas,
   LazyPricing,
-  LazySocialProof,
   LazyUseCases,
   LazyVision,
   LazyPlaygroundSplit,
   LazyGetStarted,
-  LazyWhyAgents,
 } from "@/components/sections/lazy";
 import StageSection from "@/components/StageSection";
 import SectionDivider from "@/components/SectionDivider";
@@ -49,14 +47,12 @@ interface SectionConfig {
 
 const sections: SectionConfig[] = [
   { Component: LazyUseCases,           glow: "emerald", fromColor: "cyan",    toColor: "emerald", dividerFrom: "cyan",    dividerTo: "emerald", wrapperId: "tools", gate: true },
-  { Component: LazyWhyAgents,          glow: "purple",  fromColor: "emerald", toColor: "purple",  dividerFrom: "emerald", dividerTo: "purple", gate: true },
   { Component: LazyPlaygroundSplit,    glow: "cyan",    fromColor: "emerald", toColor: "cyan",    dividerFrom: "emerald", dividerTo: "cyan", wrapperId: "playground", gate: true },
   { Component: LazyGetStarted,         glow: "emerald", fromColor: "cyan",    toColor: "emerald", dividerFrom: "cyan",    dividerTo: "emerald", wrapperId: "get-started", gate: true },
   { Component: LazyOrchestrationHub,   glow: "cyan",    fromColor: "emerald", toColor: "cyan",    dividerFrom: "emerald", dividerTo: "cyan",    wrapperId: "pipelines", gate: true },
   { Component: LazyTeamCanvas,         glow: "purple",  fromColor: "cyan",    toColor: "purple",  dividerFrom: "cyan",    dividerTo: "purple", gate: true },
   { Component: LazyCompanion,          glow: "purple",  fromColor: "purple",  toColor: "purple",  dividerFrom: "purple",  dividerTo: "purple", gate: true },
   { Component: LazyVision,            glow: "purple",  fromColor: "purple",  toColor: "purple",  dividerFrom: "purple",  dividerTo: "purple", wrapperId: "vision" },
-  { Component: LazySocialProof,        glow: "emerald", fromColor: "purple",  toColor: "purple",  dividerFrom: "purple",  dividerTo: "purple" },
   { Component: LazyPricing,           glow: "purple",  fromColor: "purple",  toColor: "purple",  dividerFrom: "purple",  dividerTo: "purple", wrapperId: "pricing" },
   { Component: LazyFAQ,               glow: "cyan",    fromColor: "purple",  toColor: "cyan",    dividerFrom: "purple",  dividerTo: "cyan" },
   { Component: LazyDownloadCTA,        glow: "cyan",    fromColor: "cyan",                        dividerFrom: "cyan",    dividerTo: "cyan", wrapperId: "download-section", gate: true },
