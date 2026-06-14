@@ -349,6 +349,7 @@ export const es: Translations = {
     leaderboard: 'ClasificaciĂłn',
     sla: 'SLA',
     incidents: 'Incidentes',
+    health: 'Estado',
     messages: 'Mensajes',
     more:'M\u00e1s',
     greeting: {
@@ -779,6 +780,33 @@ export const es: Translations = {
       description: 'La flota est\u00e1 sana: no se registraron incidentes de auditor\u00eda.',
       filteredTitle: 'Sin incidentes coincidentes',
       filteredDescription: 'Ning\u00fan incidente coincide con los filtros actuales.',
+    },
+  },
+  healthPage: {
+    title: 'Estado del sistema',
+    subtitle: 'Runtime, servicios, recursos e integraciones',
+    sections: {
+      runtime: 'Runtime',
+      services: 'Servicios',
+      resources: 'Recursos',
+      integrations: 'Integraciones',
+    },
+    status: {
+      ok: 'Correcto',
+      warn: 'Advertencia',
+      error: 'Error',
+      info: 'Informaci\u00f3n',
+    },
+    diskUsage: 'Uso de disco',
+    used: 'usado',
+    free: 'libre',
+    actions: {
+      install: 'Instalar',
+      configure: 'Configurar',
+    },
+    toast: {
+      configured: 'configurado (demo)',
+      installed: 'activado (demo)',
     },
   },
   messagesPage: {

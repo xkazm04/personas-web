@@ -11,6 +11,7 @@ import {
   Brain,
   Settings,
   Mail,
+  HeartPulse,
   Shield,
   Siren,
   Trophy,
@@ -18,7 +19,7 @@ import {
 import { useSystemStore } from "@/stores/systemStore";
 import { useReviewStore } from "@/stores/reviewStore";
 import { useExecutionStore } from "@/stores/executionStore";
-import { MOCK_OPEN_INCIDENTS, MOCK_UNREAD_MESSAGES } from "@/lib/mock-dashboard-data";
+import { MOCK_HEALTH_ALERTS, MOCK_OPEN_INCIDENTS, MOCK_UNREAD_MESSAGES } from "@/lib/mock-dashboard-data";
 import DesktopSidebar from "./DesktopSidebar";
 import MobileBottomNav from "./MobileBottomNav";
 import { useTranslation } from "@/i18n/useTranslation";
@@ -34,6 +35,7 @@ export const navItemDefs = [
   { key: "leaderboard", labelKey: "leaderboard" as const, icon: Trophy, href: "/dashboard/leaderboard" },
   { key: "sla", labelKey: "sla" as const, icon: Shield, href: "/dashboard/sla" },
   { key: "incidents", labelKey: "incidents" as const, icon: Siren, href: "/dashboard/incidents" },
+  { key: "health", labelKey: "health" as const, icon: HeartPulse, href: "/dashboard/health" },
   { key: "knowledge", labelKey: "knowledge" as const, icon: Brain, href: "/dashboard/knowledge" },
   { key: "settings", labelKey: "settings" as const, icon: Settings, href: "/dashboard/settings" },
 ] as const;
@@ -74,6 +76,7 @@ export function useNavState() {
     if (item.key === "executions" && activeCount > 0) return activeCount;
     if (item.key === "messages" && MOCK_UNREAD_MESSAGES > 0) return MOCK_UNREAD_MESSAGES;
     if (item.key === "incidents" && MOCK_OPEN_INCIDENTS > 0) return MOCK_OPEN_INCIDENTS;
+    if (item.key === "health" && MOCK_HEALTH_ALERTS > 0) return MOCK_HEALTH_ALERTS;
     return null;
   };
 

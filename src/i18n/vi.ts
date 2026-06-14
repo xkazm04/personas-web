@@ -349,6 +349,7 @@ export const vi: Translations = {
     leaderboard: 'BáşŁng xáşżp háşˇng',
     sla: 'SLA',
     incidents: 'Sự cố',
+    health: 'Tr\u1ea1ng th\u00e1i',
     messages: 'Tin nháşŻn',
     more:'Th\u00eam',
     greeting: {
@@ -779,6 +780,33 @@ export const vi: Translations = {
       description: '\u0110\u1ed9i ho\u1ea1t \u0111\u1ed9ng t\u1ed1t \u2014 kh\u00f4ng c\u00f3 s\u1ef1 c\u1ed1 ki\u1ec3m tra n\u00e0o.',
       filteredTitle: 'Kh\u00f4ng c\u00f3 s\u1ef1 c\u1ed1 ph\u00f9 h\u1ee3p',
       filteredDescription: 'Kh\u00f4ng c\u00f3 s\u1ef1 c\u1ed1 n\u00e0o kh\u1edbp v\u1edbi b\u1ed9 l\u1ecdc hi\u1ec7n t\u1ea1i.',
+    },
+  },
+  healthPage: {
+    title: 'Tr\u1ea1ng th\u00e1i h\u1ec7 th\u1ed1ng',
+    subtitle: 'Runtime, d\u1ecbch v\u1ee5, t\u00e0i nguy\u00ean v\u00e0 t\u00edch h\u1ee3p',
+    sections: {
+      runtime: 'Runtime',
+      services: 'D\u1ecbch v\u1ee5',
+      resources: 'T\u00e0i nguy\u00ean',
+      integrations: 'T\u00edch h\u1ee3p',
+    },
+    status: {
+      ok: 'Kh\u1ecfe m\u1ea1nh',
+      warn: 'C\u1ea3nh b\u00e1o',
+      error: 'L\u1ed7i',
+      info: 'Th\u00f4ng tin',
+    },
+    diskUsage: 'Dung l\u01b0\u1ee3ng \u0111\u0129a',
+    used: '\u0111\u00e3 d\u00f9ng',
+    free: 'tr\u1ed1ng',
+    actions: {
+      install: 'C\u00e0i \u0111\u1eb7t',
+      configure: 'C\u1ea5u h\u00ecnh',
+    },
+    toast: {
+      configured: '\u0111\u00e3 c\u1ea5u h\u00ecnh (demo)',
+      installed: '\u0111\u00e3 b\u1eadt (demo)',
     },
   },
   messagesPage: {

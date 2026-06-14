@@ -349,6 +349,7 @@ export const cs: Translations = {
     leaderboard: 'Ĺ˝ebĹ™Ă­ÄŤek',
     sla: 'SLA',
     incidents: 'Incidenty',
+    health: 'Stav',
     messages: 'ZprĂˇvy',
     more:'V\u00edce',
     greeting: {
@@ -779,6 +780,33 @@ export const cs: Translations = {
       description: 'Flotila je v po\u0159\u00e1dku \u2014 \u017e\u00e1dn\u00e9 auditn\u00ed incidenty.',
       filteredTitle: '\u017d\u00e1dn\u00e9 odpov\u00eddaj\u00edc\u00ed incidenty',
       filteredDescription: '\u017d\u00e1dn\u00e9 incidenty neodpov\u00eddaj\u00ed aktu\u00e1ln\u00edm filtr\u016fm.',
+    },
+  },
+  healthPage: {
+    title: 'Stav syst\u00e9mu',
+    subtitle: 'B\u011bhov\u00e9 prost\u0159ed\u00ed, slu\u017eby, zdroje a integrace',
+    sections: {
+      runtime: 'B\u011bhov\u00e9 prost\u0159ed\u00ed',
+      services: 'Slu\u017eby',
+      resources: 'Zdroje',
+      integrations: 'Integrace',
+    },
+    status: {
+      ok: 'V po\u0159\u00e1dku',
+      warn: 'Varov\u00e1n\u00ed',
+      error: 'Chyba',
+      info: 'Info',
+    },
+    diskUsage: 'Vyu\u017eit\u00ed disku',
+    used: 'vyu\u017eito',
+    free: 'voln\u00e9',
+    actions: {
+      install: 'Instalovat',
+      configure: 'Konfigurovat',
+    },
+    toast: {
+      configured: 'nakonfigurov\u00e1no (demo)',
+      installed: 'aktivov\u00e1no (demo)',
     },
   },
   messagesPage: {
