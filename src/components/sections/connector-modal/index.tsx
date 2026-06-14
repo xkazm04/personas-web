@@ -1,10 +1,11 @@
 "use client";
 
-import { useState, useEffect, useCallback } from "react";
+import { useState, useEffect, useCallback, useRef } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { X } from "lucide-react";
 import type { Connector } from "@/data/connectors";
 import { lockBodyScroll, unlockBodyScroll } from "@/lib/bodyScrollLock";
+import { useFocusTrap } from "@/hooks/useFocusTrap";
 import ConnectorModalHeader from "./components/ConnectorModalHeader";
 import UseCaseList from "./components/UseCaseList";
 import TryItToggle from "./components/TryItToggle";
@@ -19,6 +20,8 @@ export default function ConnectorModal({
   const [showSimulator, setShowSimulator] = useState(false);
   const [simKey, setSimKey] = useState(0);
   const [prevConnector, setPrevConnector] = useState(connector);
+  const contentRef = useRef<HTMLDivElement>(null);
+  useFocusTrap({ active: !!connector, containerRef: contentRef });
 
   if (connector !== prevConnector) {
     setPrevConnector(connector);
@@ -62,6 +65,10 @@ export default function ConnectorModal({
 
           <motion.div
             key="connector-modal-content"
+            ref={contentRef}
+            role="dialog"
+            aria-modal="true"
+            aria-label={`${connector.label} connector details`}
             initial={{ opacity: 0, scale: 0.92, y: 30 }}
             animate={{ opacity: 1, scale: 1, y: 0 }}
             exit={{ opacity: 0, scale: 0.92, y: 30 }}

@@ -43,8 +43,10 @@ export default function ConnectionsCatalog({
       const matchesSearch =
         s === "" ||
         c.label.toLowerCase().includes(s) ||
+        c.name.toLowerCase().includes(s) ||
         c.summary.toLowerCase().includes(s) ||
-        c.category.toLowerCase().includes(s);
+        c.category.toLowerCase().includes(s) ||
+        c.authType.toLowerCase().includes(s);
       return matchesCategory && matchesSearch;
     });
   }, [activeCategory, search]);

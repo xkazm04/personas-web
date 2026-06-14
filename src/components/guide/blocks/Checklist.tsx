@@ -63,7 +63,7 @@ export function Checklist({ items, id }: ChecklistProps) {
   return (
     <div className="my-6 space-y-2">
       <div className="flex items-center justify-between px-1 mb-1">
-        <span className="text-sm text-muted-dark/70">
+        <span aria-live="polite" className="text-sm text-muted-dark/70">
           {allDone ? (
             <span className="text-emerald-400">All done!</span>
           ) : (

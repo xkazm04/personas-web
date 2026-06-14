@@ -12,7 +12,7 @@ interface HubRingProps {
 }
 
 /**
- * HubRing — the SVG ring of 8 trigger nodes orbiting a central persona chip.
+ * HubRing — the SVG ring of 10 trigger nodes orbiting a central persona chip.
  * A continuous "signal rain" of pulses runs every spoke inward to the hub,
  * dramatizing "any signal can wake any agent"; the active spoke's pulse is
  * brighter and faster. All continuous motion is gated on reduced-motion.
@@ -24,7 +24,7 @@ export default function HubRing({ active, onSelect }: HubRingProps) {
   const activeVar = BRAND_VAR[activeTrigger.brand];
 
   return (
-    <svg viewBox="0 0 520 520" className="h-full w-full" aria-hidden="true">
+    <svg viewBox="0 0 520 520" className="h-full w-full" role="group" aria-label="Trigger types">
       <defs>
         <radialGradient id={`${uid}-hub`} cx="50%" cy="50%">
           <stop offset="0%" stopColor={activeVar} stopOpacity="0.5" />

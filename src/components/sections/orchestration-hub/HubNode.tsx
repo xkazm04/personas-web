@@ -2,6 +2,7 @@
 
 import { motion } from "framer-motion";
 import { BRAND_VAR, tint } from "@/lib/brand-theme";
+import { SVGFocusRingRect } from "@/components/SVGFocusRing";
 import { NODE_SIZE, nodePosition, type TriggerDef } from "./data";
 
 interface HubNodeProps {
@@ -31,7 +32,30 @@ export default function HubNode({
   const v = BRAND_VAR[trigger.brand];
 
   return (
-    <g data-trigger-id={trigger.id} style={{ cursor: "pointer" }} onClick={() => onSelect(trigger.id)}>
+    <g
+      data-trigger-id={trigger.id}
+      role="button"
+      tabIndex={0}
+      aria-label={trigger.label}
+      aria-pressed={isActive}
+      className="svg-focus-parent cursor-pointer focus-visible:outline-none"
+      onClick={() => onSelect(trigger.id)}
+      onKeyDown={(e) => {
+        if (e.key === "Enter" || e.key === " ") {
+          e.preventDefault();
+          onSelect(trigger.id);
+        }
+      }}
+    >
+      <SVGFocusRingRect
+        x={p.x - NODE_SIZE / 2}
+        y={p.y - NODE_SIZE / 2}
+        width={NODE_SIZE}
+        height={NODE_SIZE}
+        offset={4}
+        rx={20}
+        strokeWidth={2}
+      />
       {/* Pulsing halo behind the active node */}
       {isActive && !reduced && (
         <motion.circle
