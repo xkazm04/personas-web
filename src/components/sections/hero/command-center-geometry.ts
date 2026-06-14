@@ -58,3 +58,30 @@ export const spinOrigin = {
   transformBox: "view-box",
   transformOrigin: `${CX}px ${CY}px`,
 } as const;
+
+// ── Orbiting agents ─────────────────────────────────────────────────────────
+// The constellation the command center orchestrates: dots riding distinct radii
+// and speeds (parallax = life), each tethered to the core by a faint spoke.
+// Radii stay between the breathing core (≈46) and the progress ring (100) and
+// clear of the centered version readout.
+export interface AgentOrbit {
+  /** Orbit radius from center. */
+  r: number;
+  /** Start clock-angle (deg from 12 o'clock). */
+  startDeg: number;
+  /** Seconds per full revolution. */
+  duration: number;
+  /** Rotation direction. */
+  dir: 1 | -1;
+  /** Precomputed start position. */
+  x: number;
+  y: number;
+}
+
+const ORBITS: Omit<AgentOrbit, "x" | "y">[] = [
+  { r: INNER_R, startDeg: 8, duration: 13, dir: 1 },
+  { r: 66, startDeg: 140, duration: 17, dir: -1 },
+  { r: 76, startDeg: 252, duration: 21, dir: 1 },
+];
+
+export const AGENTS: AgentOrbit[] = ORBITS.map((a) => ({ ...a, ...polar(a.r, a.startDeg) }));

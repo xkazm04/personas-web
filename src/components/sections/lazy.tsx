@@ -164,6 +164,18 @@ export const LazyOrchestrationHub = createLazySection(
   { ssr: false },
 );
 
+export const LazyCompanion = createLazySection(
+  () => import("@/components/sections/companion"),
+  SectionSkeleton,
+  { ssr: false },
+);
+
+export const LazyTeamCanvas = createLazySection(
+  () => import("@/components/sections/team-canvas"),
+  SectionSkeleton,
+  { ssr: false },
+);
+
 export const LazyChangelog = createLazySection(
   () => import("@/components/sections/Changelog"),
   SectionSkeleton,

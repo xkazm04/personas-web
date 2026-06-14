@@ -206,6 +206,7 @@
     leaderboard: string;
     sla: string;
     incidents: string;
+    health: string;
     messages: string;
     more: string;
     greeting: {
@@ -636,6 +637,33 @@
       description: string;
       filteredTitle: string;
       filteredDescription: string;
+    };
+  };
+  healthPage: {
+    title: string;
+    subtitle: string;
+    sections: {
+      runtime: string;
+      services: string;
+      resources: string;
+      integrations: string;
+    };
+    status: {
+      ok: string;
+      warn: string;
+      error: string;
+      info: string;
+    };
+    diskUsage: string;
+    used: string;
+    free: string;
+    actions: {
+      install: string;
+      configure: string;
+    };
+    toast: {
+      configured: string;
+      installed: string;
     };
   };
   messagesPage: {
@@ -1447,6 +1475,7 @@ export const en: Translations = {
     leaderboard: 'Leaderboard',
     sla: 'SLA',
     incidents: 'Incidents',
+    health: 'Health',
     messages: 'Messages',
     more: 'More',
     greeting: {
@@ -1877,6 +1906,33 @@ export const en: Translations = {
       description: 'The fleet is healthy — no audit incidents recorded.',
       filteredTitle: 'No matching incidents',
       filteredDescription: 'No incidents match the current filters.',
+    },
+  },
+  healthPage: {
+    title: 'System health',
+    subtitle: 'Runtime, services, resources, and integrations',
+    sections: {
+      runtime: 'Runtime',
+      services: 'Services',
+      resources: 'Resources',
+      integrations: 'Integrations',
+    },
+    status: {
+      ok: 'Healthy',
+      warn: 'Warning',
+      error: 'Error',
+      info: 'Info',
+    },
+    diskUsage: 'Disk usage',
+    used: 'used',
+    free: 'free',
+    actions: {
+      install: 'Install',
+      configure: 'Configure',
+    },
+    toast: {
+      configured: 'configured (demo)',
+      installed: 'enabled (demo)',
     },
   },
   messagesPage: {
@@ -2311,7 +2367,7 @@ export const en: Translations = {
     bridgeToDashboardConfirm: 'Open the dashboard',
     step1: 'Meet a persona — a single AI agent with one stable identity and a composable set of skills. Give it the tools it needs, from Gmail and Slack to GitHub and your calendar, and it learns to act across all of them. One persona, many jobs, all working together.',
     step2: 'Now hand that persona a goal in plain language, like "triage my Gmail." Watch its mind work in real time: it reads the request, breaks it into steps, and plans its approach before touching a thing. Then it executes — and shows you every move as it goes.',
-    step3: 'An agent is only as useful as the moments it wakes up for. Personas can be triggered eight ways — on a schedule, by an event, by polling a source, or from an incoming webhook. The orchestrator routes each signal to the right agent and keeps everything moving, healing itself if a step ever fails.',
+    step3: 'An agent is only as useful as the moments it wakes up for. Personas can be triggered ten ways — on a schedule, by an event, by polling a source, or from an incoming webhook. The orchestrator routes each signal to the right agent and keeps everything moving, healing itself if a step ever fails.',
     step4: 'All of this rests on one platform built for trust and scale. An encrypted vault guards your credentials, ready-made templates get you moving fast, and bring-your-own-model keeps you in control of the AI. Live monitoring, an experimentation lab, and team orchestration round it out — six pillars, one place.',
     step5: 'Ready to put a persona to work? Personas runs on your own machine through Claude Code — Anthropic\'s command-line tool — so you stay private and in control. Download the installer for Windows 11, connect the CLI, and your first agent is live in minutes.',
     features1: 'Every agent is born from a single sentence of intent. Personas reads what you want and fills an eight-dimension persona matrix — tasks, memory, triggers, review, and more — asking you only when it truly needs a decision. In moments, a vague idea becomes a structured, executable agent.',

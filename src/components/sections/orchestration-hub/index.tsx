@@ -12,7 +12,7 @@ import TriggerDetail from "./TriggerDetail";
 
 /**
  * Landing section — redesigned from the old single-chain "Pipelines" concept
- * into a radial hub showing how 8 real trigger types all wake Personas.
+ * into a radial hub showing all 10 real trigger types that start Personas.
  * Auto-cycles the active trigger, pausing on hover and briefly on tap/click.
  */
 
@@ -48,7 +48,7 @@ export default function OrchestrationHub() {
         id="orchestration-hub-heading"
         heading="Orchestration"
         gradient="hub"
-        description="Eight trigger types, one persona hub. Any signal can wake any agent — pick a trigger to see it fire."
+        description="Ten trigger types, one persona hub. Any signal can wake any agent — or launch one yourself. Pick a trigger to see it fire."
       />
 
       <motion.div variants={fadeUp} className="mt-12 mx-auto max-w-5xl">

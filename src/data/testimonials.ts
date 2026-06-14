@@ -67,7 +67,7 @@ export interface UsageStat {
 
 export const USAGE_STATS: UsageStat[] = [
   { value: "40+", label: "Built-in connectors", color: "#06b6d4" },
-  { value: "6", label: "Trigger types", color: "#a855f7" },
+  { value: "10", label: "Trigger types", color: "#a855f7" },
   { value: "4", label: "AI providers supported", color: "#34d399" },
   { value: "0", label: "Telemetry collected", color: "#fbbf24" },
 ];
