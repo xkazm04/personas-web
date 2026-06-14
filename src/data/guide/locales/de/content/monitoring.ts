@@ -280,4 +280,120 @@ Die Baseline ist ein rollendes Fenster jüngster Läufe (konfigurierbar; Standar
 Anomalien, die du untersuchst und löst, solltest du als geklärt markieren (markiere sie als "investigated"). Die Baseline schließt untersuchte Anomalien aus ihrem rollenden Fenster aus, sodass das System nicht dazu driftet, den anomalen Lauf als "normal" zu betrachten.
 :::
   `,
+
+  "tracking-goals": `
+## Ziele verfolgen
+
+Ziele sind die Ergebnisebene über einzelnen Läufen. Statt Ausführungen einzeln zu beobachten, definierst du, was du erreichen willst — und lässt den Fortschritt automatisch aus der Arbeit deines Teams und deiner Agenten hochrollen.
+
+Ein Ziel hat einen Titel, ein optionales Zieldatum, einen Status und einen Fortschritts-Prozentsatz. Der Status folgt einem einfachen Vier-Werte-Modell: **offen** (noch nicht begonnen), **in Bearbeitung** (wird bearbeitet), **blockiert** (wartet auf etwas) und **erledigt**. Der Fortschritt ist hybrid: Das System berechnet einen Vorschlag aus den Checklisten-Elementen, Unterzielen und verknüpften Team-Zuweisungsschritten des Ziels — und zeigt ihn dir als **Annehmen / Bearbeiten**-Hinweis. Du entscheidest; eine manuelle Überschreibung gewinnt immer.
+
+### Drei Ansichten
+
+Ziele befinden sich im Teams-Bereich und bieten drei Oberflächen, die über die Seitenleiste umgeschaltet werden:
+
+- **Board** — ein Kanban, geordnet nach Status. Karten zeigen den vollständigen Zieltitel und eine eingebettete Checkliste (die ersten paar To-dos als umschaltbare Kontrollkästchen, der Rest hinter einem „+N weitere"-Link). Wenn ein Ziel To-dos hat, treibt das Abhaken dieser Punkte den Fortschritt voran — der Balken bewegt sich, wenn Einträge abgehakt werden.
+- **Karte** — eine Pan-und-Zoom-Canvas, die zeigt, wie Ziele miteinander zusammenhängen. Abhängigkeitskanten (blockiert, folgt) verbinden Ziele zu einem gerichteten Graphen. **Jetzt**-Hervorhebung (ein bernsteinfarbener pulsierender Ring) markiert aktuell in Bearbeitung befindliche Ziele; **Nächste**-Hervorhebung (ein blauer Ring) markiert Ziele, deren Blocker alle erledigt sind und die bereit zum Start sind. Herauszoomen zeigt die Konstellation; Hineinzoomen zeigt vollständige Metadaten auf jedem Knoten.
+- **Zeitlinie** — Ziele auf einer vertikalen Fälligkeitsdatum-Schiene, nach Dringlichkeit sortiert: Überfällig, Diese Woche, Diesen Monat, Später, Kein Datum.
+
+### Der entscheidende Schritt: An dein KI-Team übergeben
+
+Die Detailleiste für jedes Ziel hat ein Steuerelement **An dein KI-Team übergeben**. Wenn du es drückst, wird das Ziel in eine laufende Team-Zuweisung verwandelt, die zurück auf das Ziel verlinkt. Das Team zerlegt das Ziel in Schritte (oder übernimmt die vorhandenen To-dos wörtlich), bearbeitet sie nacheinander und hakt den Fortschritt automatisch ab, wenn jeder Schritt abgeschlossen ist. Das Ziel bewegt sich von selbst von offen über in Bearbeitung bis erledigt — und taucht nur dann in deiner Prüfungs-Queue auf, wenn ein Schritt wirklich eine menschliche Entscheidung braucht.
+
+:::tip
+Du musst ein Ziel nicht sofort an dein Team übergeben. Nutze das Board, um zuerst die Checkliste manuell aufzubauen — das Team übernimmt dann jeden To-do-Punkt der Reihe nach, was dir eine feinkörnige Kontrolle darüber gibt, was bearbeitet wird und in welcher Reihenfolge.
+:::
+  `,
+
+  "measuring-outcomes-with-kpis": `
+## Ergebnisse mit KPIs messen
+
+KPIs sind die Zahlenebene über den Zielen. Während ein Ziel ein Ergebnis beschreibt, das du erreichen möchtest, verfolgt ein KPI, ob du tatsächlich vorankommst — ein aktueller Wert, ein Zielwert und eine Takt-Einschätzung, die dir sagt, ob du auf Kurs bist.
+
+Jeder KPI zeigt seinen aktuellen Wert im Vergleich zum Ziel mit einem **Takt**-Status: **im Plan**, **nicht im Plan**, **erreicht** oder **nicht gemessen** (wenn noch keine Messung vorgenommen wurde). Ein Fortschrittsbalken und ein Messfrischikeitsindikator runden die Karte auf einen Blick ab.
+
+### Vier Messarten
+
+KPIs werden nicht alle auf dieselbe Weise gemessen. Personas unterstützt vier Messarten, jede für eine andere Datenquelle geeignet:
+
+:::info
+- **Codebase** — führt einen Befehl gegen dein Repository aus und analysiert das Ergebnis. Nützlich für Dinge wie Test-Abdeckungs-Prozentsatz oder Lint-Fehleranzahl, die vollständig im Code liegen.
+- **Abgeleitet** — liest aus den eigenen Daten des Orchestrators: Laufzählungen, Ergebnisraten, Kostentrends und ähnliche operative Metriken, die Personas bereits verfolgt.
+- **Connector** — zieht einen Wert aus einem verbundenen externen Dienst (Analytics, Traffic, Fehler-Tracking). Wenn der benötigte Connector noch nicht in deinem Vault ist, zeigt die KPI-Karte eine "Dienst verbinden"-Aufforderung, die direkt zum Zugangsdatenkatalog verlinkt.
+- **Manuell** — du gibst den Wert selbst ein. Nützlich für Geschäftszahlen, die in keinem verbundenen System liegen, oder für KPIs, die du informell verfolgen möchtest, bevor du die Messung automatisierst.
+:::
+
+### Wo KPIs zu finden sind
+
+**Teams › KPIs** hat zwei Ansichten hinter einem segmentierten Umschalter. Die **Dashboard**-Ansicht zeigt alle aktiven KPIs als Karten — klicke auf eine Karte, um die Detailleiste mit der vollständigen Messhistorie, einem Sparkline und einem manuellen Werteingabefeld zu öffnen. Die **Vorschläge**-Ansicht ist eine Prüfungs-Queue: Ein Klick auf "KPIs scannen" führt einen kopflosen Analyse-Durchlauf über die Kontext-Karte und bestehenden KPIs deines Projekts aus und zeigt vorgeschlagene KPIs mit einer einzeiligen Begründung und dem genauen Messverfahren, das verwendet würde. Du nimmst an (optional den Zielwert zuerst anpassend) oder lehnst ab. Abgelehnte Vorschläge werden archiviert und bei künftigen Scans als negative Beispiele zurückgespielt, damit derselbe Vorschlag nicht erneut kommt.
+
+:::tip
+Lass den Scan KPIs vorschlagen, bevor du sie manuell erstellst. Er liest die Kontext-Karte deines Projekts, deine bestehenden Ziele und den Connector-Bestand deines Vaults — und schlägt in der Regel Messungen vor, die mit dem, was du bereits verbunden hast, tatsächlich automatisierbar sind.
+:::
+  `,
+
+  "director-verdicts-and-categories": `
+## Director-Urteile und Kategorien
+
+Jede Director-Prüfung erzeugt ein strukturiertes Urteil — nicht nur ein Bestehen/Nichtbestehen, sondern eine mehrschichtige Einschätzung, die dir sagt, was ein Agent gut macht, was Coaching braucht und wie dieses Coaching abgelegt werden soll, damit es wirklich nützt.
+
+Das verpflichtende Element ist ein **Gesamtwert von 0–5** mit einer einzeiligen Zusammenfassung. Dieser Wert landet im Ausführungsdatensatz und erscheint als Sterne in der Aktivitätsliste — ein schneller Blick auf die jüngsten Läufe eines Agenten verrät dir, welche ihre Kosten wert waren. Der Wert treibt auch den Trend-Sparkline in der Agenten-Tabelle an: ein kurzer Verlaufsbalken, der in der Farbe der jüngsten Bewertung eingefärbt ist.
+
+### Was gut läuft
+
+Die Prüfung beginnt nicht mit Kritik. Bevor Coaching-Hinweise kommen, hebt der Director hervor, was der Agent wirklich gut macht — was die Dokumentation als **Erfolge** bezeichnet. Diese erscheinen oben in der vollständigen Bewertungs-Markdown als Abschnitt "Was gut läuft". Ein Agent, der gut abschneidet, bekommt vielleicht nur Erfolge; der Director bleibt ruhig, wenn es nichts zu verbessern gibt.
+
+### Coaching-Hinweise und Kategorien
+
+Nach den Erfolgen kommen die Coaching-Hinweise: spezifische, umsetzbare Vorschläge, eingeteilt unter eine von sechs **Kategorien**:
+
+- **Prompt** — die Anweisungen oder Rahmung des Agenten müssen angepasst werden
+- **Health** — Zuverlässigkeits- oder Fehlerbehandlungsprobleme
+- **Trigger** — wie und wann der Agent feuert (Zeitplan, Webhook, Chain-Setup)
+- **Zugangsdaten** — Vault- oder Berechtigungslücken, die den Agenten blockieren
+- **Memory** — was der Agent speichert und abruft (oder nicht abruft)
+- **Nützlichkeit** — ob die Ausgabe des Agenten tatsächlich wertvoll für seinen angegebenen Zweck ist
+
+Coaching-Hinweise landen als Elemente in deiner **Prüfungs-Queue**, die du genehmigst oder ablehnst. Das ist nicht nur Verwaltungsarbeit: das Annehmen oder Ablehnen von Hinweisen bringt dem Director mit der Zeit deinen Geschmack bei. Die nächste Prüfung liest zurück, welche Hinweise du angenommen und welche du verworfen hast, sodass die Feedbackschleife sich potenziert — der Director wird besser darin, zu wissen, was dir bei jedem Agenten wichtig ist, und hört auf, Dinge vorzuschlagen, die du bereits ausgeschlossen hast.
+
+Das Command Center des Directors enthält eine **Probleme nach Kategorie**-Zusammenfassung, die Coaching-Hinweise über deinen gesamten Fleet hinweg zählt, damit du auf Portfolio-Ebene sehen kannst, ob Zugangsdatenlücken dein häufigstes Problem sind oder ob die Prompt-Qualität der Bereich ist, in dem die meisten Agenten Aufmerksamkeit brauchen.
+
+:::tip
+Gesunde Agenten erzielen hohe Werte und erzeugen wenig oder keine Coaching-Hinweise. Wenn ein Agent konsequent 4–5 erzielt und keine ausstehenden Review-Elemente hat, ist das das Signal, ihn in Ruhe zu lassen und sich auf die Agenten mit rückläufigen Trends oder niedrigen Werten zu konzentrieren.
+:::
+  `,
+
+  "director-momentum-and-stale-sweep": `
+## Director-Momentum und Stale-Sweep
+
+Über einzelne Urteile hinaus erstellt der Director ein Portfolio-weites Bild davon, wie sich dein gesamter Fleet entwickelt. Das ist die Langzeitansicht — nicht "was hat dieser Agent im letzten Lauf gemacht", sondern "bewegt das Coaching die Nadel für deine Agenten über die Zeit?"
+
+### Die Scorecard
+
+Das Command Center des Directors öffnet sich mit einer **Scorecard**, die vier Fragen auf einen Blick beantwortet: Welcher Anteil der Arbeit deines Fleets hat Wert geliefert (die **Wertlieferungsrate**), wie hoch ist der durchschnittliche Urteilswert über alle in-scope Agenten, was sind die **Kosten pro nützlichem Lauf**, und wie viele Agenten sind derzeit im Scope. Unterhalb der Haupt-KPIs zerlegt ein **Wertaufschlüsselungs**-Balken die Wertlieferungsrate in die vollständige Ergebnis-Taxonomie — geliefert, teilweise, blockiert, kein Input, nicht bewertet — damit du sehen kannst, wo Wert verloren geht, nicht nur ob er verloren geht.
+
+Ein **0–5-Score-Verteilungs**-Diagramm zeigt, wie deine markierten Agenten über die gesamte Bewertungsskala verteilt sind, mit einer gestrichelten Linie, die den Portfolio-Durchschnitt markiert. Eine Prüfzeitraum-Auswahl (7 / 30 / 90 Tage) begrenzt die gesamte Scorecard.
+
+### Momentum
+
+Der **Momentum**-Streifen beantwortet die wichtigste Portfolio-Frage: Werden die Dinge besser? Er zählt, wie viele Agenten sich im Vergleich zur vorherigen Prüfung **verbessert**, **gehalten** oder **verschlechtert** haben. Ein sich verbessernder Fleet bedeutet, dass das Coaching wirkt; ein sich verschlechternder Fleet bedeutet, dass etwas Systemisches Aufmerksamkeit braucht — Modellwechsel, Zugangsdaten-Drift, Prompt-Verfall.
+
+### Aufmerksamkeits-Tags und Triage
+
+Die Coaching-Tabelle markiert jeden in-scope Agenten mit **Aufmerksamkeits-Tags** basierend auf clientseitig abgeleiteten Regeln: wartet auf erste Prüfung (noch nie bewertet), niedriger Wert (≤ 2), rückläufiger Trend oder veraltete Prüfung (seit mehr als 14 Tagen nicht gecoacht). Eine Aufmerksamkeits-Triage-Leiste oben in der Tabelle fasst diese Flags zusammen — N neu, N niedrig, N rückläufig, N veraltet — damit du den Umfang des Problems siehst, bevor du anfängst, es durchzuarbeiten.
+
+Ein Klick auf einen Triage-Chip filtert die Tabelle auf dieses Flag. Nach dem Filtern führt eine Aktion **Diese N prüfen** den Director sequenziell über genau diese Agenten aus — die Triage führt direkt zur Aktion.
+
+### Der Stale Sweep
+
+Die Schaltfläche **Stale Sweep** prüft alle markierten Agenten, die seit mehr als 14 Tagen nicht gecoacht wurden, mit einem einzigen Klick erneut. Sie erscheint nur, wenn veraltete Agenten vorhanden sind. Das ist der Routine-Wartungs-Durchlauf: Führe ihn einmal im Monat aus, und der Director fängt jeden Agenten ab, der seit seiner letzten Bewertung abgedriftet ist.
+
+### Langzeitgedächtnis
+
+Mit aktiviertem **Obsidian Brain** liest der Director seine eigenen früheren Notizen zu einem Agenten vor jeder Prüfung und schreibt das neue Urteil zurück in einen \`Director/\`-Ordner in deinem Vault. Das Coaching summiert sich, statt sich zu wiederholen — der Director schlägt nicht erneut Dinge vor, die er bereits angesprochen hat, und baut auf dem auf, was du über die Zeit angenommen und abgelehnt hast.
+
+:::tip
+Der Stale Sweep und die Aufmerksamkeits-Triage-Leiste sind die zwei schnellsten Wege, einen großen Fleet gesund zu halten, ohne Zeit mit Agenten zu verbringen, die bereits gut laufen. Nutze die Triage-Leiste, um die Agenten zu finden, die wirklich Aufmerksamkeit brauchen; nutze den Stale Sweep, um sicherzustellen, dass nichts still und leise ungeprüft abrutscht.
+:::
+  `,
 };

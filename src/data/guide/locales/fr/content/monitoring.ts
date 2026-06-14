@@ -280,4 +280,120 @@ Le référentiel est une fenêtre glissante d'exécutions récentes (configurabl
 Les anomalies que vous enquêtez et résolvez doivent être effacées (marquez-les "enquêtées"). Le référentiel exclut les anomalies enquêtées de sa fenêtre glissante, pour que le système ne dérive pas vers considérer l'exécution anormale comme "normale".
 :::
   `,
+
+  "tracking-goals": `
+## Suivre les objectifs
+
+Les objectifs sont la couche de résultats au-dessus des exécutions individuelles. Plutôt que d'observer les exécutions défiler une par une, vous définissez ce que vous essayez d'accomplir — et laissez la progression remonter automatiquement à partir du travail que font votre équipe et vos agents.
+
+Un objectif a un titre, une date cible facultative, un statut et un pourcentage de progression. Le statut suit un modèle simple à quatre valeurs : **ouvert** (pas commencé), **en cours** (en travail), **bloqué** (en attente de quelque chose) et **terminé**. La progression est hybride : le système calcule une suggestion à partir des éléments de liste de contrôle de l'objectif, des sous-objectifs et des étapes d'attribution d'équipe liées — et vous la présente sous la forme d'un nudge **Accepter / modifier**. Vous décidez ; un remplacement manuel l'emporte toujours.
+
+### Trois vues
+
+Les objectifs se trouvent dans la section Équipes et proposent trois surfaces, accessibles via la barre latérale :
+
+- **Tableau** — un kanban organisé par statut. Les cartes affichent le titre complet de l'objectif et une liste de contrôle intégrée (les premières tâches sous forme de cases à cocher activables, le reste derrière un lien « +N autres »). Quand un objectif a des tâches, les compléter fait avancer la progression — la barre avance à mesure que les éléments sont cochés.
+- **Carte** — un canevas panoramique et zoomable montrant comment les objectifs se rapportent les uns aux autres. Les arêtes de dépendance (bloque, suit) connectent les objectifs en un graphe orienté. La mise en évidence **Maintenant** (un anneau ambré pulsant) marque les objectifs actuellement en cours ; la mise en évidence **Suivant** (un anneau bleu) marque les objectifs dont tous les bloqueurs sont terminés et qui sont prêts à démarrer. Dézoomez pour voir la constellation ; zoomez pour les métadonnées complètes de chaque nœud.
+- **Chronologie** — les objectifs sur un rail de date d'échéance vertical, regroupés par urgence : En retard, Cette semaine, Ce mois, Plus tard, Pas de date.
+
+### Le geste clé : confier à votre équipe IA
+
+Le tiroir de détail pour tout objectif dispose d'un contrôle **Confier à votre équipe IA**. Le presser transforme l'objectif en une attribution d'équipe active liée à l'objectif. L'équipe décompose l'objectif en étapes (ou reprend les tâches existantes telles quelles), les travaille une par une, et coche la progression automatiquement à mesure que chaque étape se termine. L'objectif passe d'ouvert à en cours à terminé tout seul — et ne remonte dans votre file de révision que quand une étape nécessite réellement une décision humaine.
+
+:::tip
+Vous n'avez pas à confier un objectif à votre équipe immédiatement. Utilisez le Tableau pour élaborer la liste de contrôle manuellement d'abord — l'équipe reprend ensuite chaque tâche dans l'ordre, ce qui vous donne un contrôle fin sur ce qui est travaillé et dans quelle séquence.
+:::
+  `,
+
+  "measuring-outcomes-with-kpis": `
+## Mesurer les résultats avec des KPI
+
+Les KPI sont la couche numérique au-dessus des objectifs. Là où un objectif décrit un résultat que vous voulez atteindre, un KPI suit si vous y parvenez réellement — une valeur actuelle, une cible et une lecture de rythme qui vous indique si vous êtes sur la bonne voie.
+
+Chaque KPI affiche sa valeur actuelle par rapport à sa cible avec un statut de **rythme** : **sur la bonne voie**, **hors de la voie**, **atteint** ou **non mesuré** (quand une mesure n'a pas encore été prise). Une barre de progression et un indicateur de fraîcheur de mesure complètent la carte d'un coup d'œil.
+
+### Quatre types de mesure
+
+Les KPI ne sont pas tous mesurés de la même façon. Personas prend en charge quatre types de mesure, chacun adapté à une source de données différente :
+
+:::info
+- **Base de code** — exécute une commande sur votre dépôt et analyse le résultat. Utile pour des éléments comme le pourcentage de couverture de tests ou le nombre d'erreurs de lint qui vivent entièrement dans le code.
+- **Dérivé** — lit les données propres de l'orchestrateur : comptages d'exécutions, taux de résultats, tendances de coûts et métriques opérationnelles similaires que Personas suit déjà.
+- **Connecteur** — tire une valeur d'un service externe connecté (analytiques, trafic, suivi d'erreurs). Si le connecteur nécessaire n'est pas encore dans votre vault, la carte KPI affiche une invite « Connecter \<service\> » qui renvoie directement au catalogue d'identifiants.
+- **Manuel** — vous entrez la valeur vous-même. Utile pour les chiffres métier qui ne vivent dans aucun système que vous avez connecté, ou pour les KPI que vous souhaitez suivre de manière informelle avant d'automatiser la mesure.
+:::
+
+### Où vivent les KPI
+
+**Équipes › KPI** dispose de deux vues derrière un interrupteur segmenté. La vue **Tableau de bord** affiche tous les KPI actifs sous forme de cartes — cliquez sur n'importe quelle carte pour ouvrir le tiroir de détail avec l'historique complet des mesures, un sparkline et un champ de saisie manuelle de valeur. La vue **Propositions** est une file de révision : cliquer sur « Scanner les KPI » effectue une passe d'analyse sans interface sur la carte de contexte de votre projet et les KPI existants, et fait remonter des KPI proposés avec une justification en une ligne et la procédure de mesure exacte qu'il utiliserait. Vous acceptez (en ajustant éventuellement la cible d'abord) ou rejetez. Les propositions rejetées sont archivées et réinjectées dans les scans futurs comme exemples négatifs pour que la même suggestion ne revienne pas.
+
+:::tip
+Laissez le scan proposer des KPI avant de les rédiger manuellement. Il lit la carte de contexte de votre projet, vos objectifs existants et le roster de connecteurs de votre vault — et tend à suggérer des mesures réellement automatisables avec ce que vous avez déjà connecté.
+:::
+  `,
+
+  "director-verdicts-and-categories": `
+## Verdicts et catégories du Director
+
+Chaque révision du Director produit un verdict structuré — pas seulement un succès/échec, mais une évaluation en couches qui vous indique ce qu'un agent fait bien, ce qui nécessite du coaching, et comment classer ce coaching pour qu'il porte vraiment ses fruits.
+
+La pièce obligatoire est un **score global de 0 à 5** avec un résumé en une ligne. Ce score atterrit sur l'enregistrement d'exécution et apparaît sous forme d'étoiles dans la liste d'Activité — un scan rapide des exécutions récentes d'un agent vous indique lesquelles ont mérité leur coût. Le score alimente également le sparkline de tendance dans le tableau des agents : une courte barre d'historique colorée selon la dernière note.
+
+### Ce qui fonctionne bien
+
+La révision ne commence pas par la critique. Avant toute note de coaching, le Director souligne ce que l'agent fait vraiment bien — ce que les docs appellent les **réussites**. Elles apparaissent en haut du markdown complet de l'évaluation dans une section « Ce qui fonctionne ». Un agent qui performe bien n'obtient que des réussites ; le Director reste silencieux quand il n'y a rien à améliorer.
+
+### Notes de coaching et catégories
+
+Après les réussites viennent les notes de coaching : des suggestions spécifiques et actionnables classées sous l'une des six **catégories** :
+
+- **Prompt** — les instructions ou le cadrage de l'agent nécessitent un ajustement
+- **Santé** — problèmes de fiabilité ou de gestion des erreurs
+- **Déclencheurs** — comment et quand l'agent se déclenche (planning, webhook, configuration de chaîne)
+- **Identifiants** — lacunes de vault ou de permission bloquant l'agent
+- **Mémoire** — ce que l'agent stocke et rappelle (ou ne parvient pas à faire)
+- **Utilité** — si la sortie de l'agent est réellement précieuse pour son objectif déclaré
+
+Les notes de coaching atterrissent dans votre **file de révision** sous forme d'éléments que vous approuvez ou rejetez. Ce n'est pas juste de l'administration : approuver ou rejeter des notes enseigne au Director vos préférences. La prochaine révision relit quelles notes vous avez acceptées et lesquelles vous avez rejetées, de sorte que la boucle de retour se compose — le Director s'améliore pour savoir ce qui vous importe pour chaque agent, et cesse de suggérer des choses que vous avez déjà écartées.
+
+Le centre de commande du Director inclut un récapitulatif **Problèmes par catégorie** qui comptabilise les notes de coaching sur toute votre flotte, pour que vous puissiez voir au niveau du portefeuille si les lacunes d'identifiants sont votre problème le plus courant ou si la qualité du prompt est là où la plupart des agents ont besoin d'attention.
+
+:::tip
+Les agents sains obtiennent des scores élevés et génèrent peu ou pas de notes de coaching. Si un agent gagne systématiquement un 4–5 sans éléments de révision en attente, c'est le signal de le laisser tranquille et de concentrer l'attention sur ceux qui ont des tendances déclinantes ou des scores faibles.
+:::
+  `,
+
+  "director-momentum-and-stale-sweep": `
+## Élan du Director et balayage des obsolètes
+
+Au-delà des verdicts individuels, le Director construit une image de portefeuille de la tendance de toute votre flotte. C'est la vue longitudinale — pas « qu'a fait cet agent lors de sa dernière exécution » mais « le coaching fait-il vraiment avancer les choses à travers vos agents dans le temps ? »
+
+### Le tableau de bord
+
+Le centre de commande du Director s'ouvre avec un **tableau de bord** qui répond à quatre questions d'un coup d'œil : quelle fraction du travail de votre flotte a délivré de la valeur (le **taux de valeur délivrée**), quel est le score de verdict moyen à travers tous les agents dans le périmètre, quel est le **coût par exécution utile**, et combien d'agents sont actuellement dans le périmètre. Sous les KPI de titre, une barre de **décomposition de valeur** décompose le taux de valeur délivrée dans la taxonomie complète des résultats — délivré, partiel, bloqué, sans entrée, non évalué — pour que vous puissiez voir où la valeur fuit, pas seulement si elle fuit.
+
+Un graphique de **distribution des scores 0–5** montre comment vos agents étoilés se répartissent sur l'échelle de notation complète, avec une ligne en pointillé marquant la moyenne du portefeuille. Un sélecteur de période de révision (7 / 30 / 90 jours) limite l'ensemble du tableau de bord.
+
+### Élan
+
+La bande **d'élan** répond à la question la plus importante du portefeuille : les choses s'améliorent-elles ? Elle comptabilise combien d'agents se sont **améliorés**, ont **tenu le même niveau** ou ont **régressé** par rapport à leur révision précédente. Une flotte qui s'améliore signifie que le coaching fonctionne ; une flotte qui régresse signifie que quelque chose de systémique nécessite attention — changements de modèle, dérive des identifiants, dégradation des prompts.
+
+### Étiquettes d'attention et triage
+
+Le tableau de coaching signale chaque agent dans le périmètre avec des **étiquettes d'attention** basées sur des règles dérivées du client : en attente d'une première révision (jamais évalué), score faible (≤ 2), tendance déclinante ou révision obsolète (pas coaché depuis plus de 14 jours). Une barre de triage d'attention en haut du tableau récapitule ces indicateurs — N nouveaux, N faibles, N en déclin, N obsolètes — pour que vous voyiez l'ampleur du problème avant de commencer à le traiter.
+
+Cliquer sur un chip de triage filtre le tableau selon cet indicateur. Une fois filtré, une action **Réviser ces N** exécute le Director séquentiellement sur exactement ces agents — le triage débouche directement sur l'action.
+
+### Le balayage des obsolètes
+
+Le bouton **Balayage des obsolètes** re-révise tous les agents étoilés qui n'ont pas été coachés depuis plus de 14 jours, en un seul clic. Il n'apparaît que quand des agents obsolètes existent. C'est la passe de maintenance de routine : lancez-la une fois par mois et le Director attrape tout agent qui a dérivé depuis sa dernière évaluation.
+
+### Mémoire à long terme
+
+Avec l'**Obsidian Brain** activé, le Director lit ses propres notes passées sur un agent avant chaque révision et écrit le nouveau verdict dans un dossier \`Director/\` de votre vault. Le coaching se compose au lieu de se répéter — le Director ne re-suggère pas des choses qu'il a déjà couvertes, et il s'appuie sur ce que vous avez approuvé et rejeté au fil du temps.
+
+:::tip
+Le balayage des obsolètes et la barre de triage d'attention sont les deux moyens les plus rapides de maintenir une grande flotte en bonne santé sans passer du temps sur des agents qui fonctionnent déjà bien. Utilisez la barre de triage pour trouver les agents qui nécessitent réellement de l'attention ; utilisez le balayage des obsolètes pour vous assurer que rien ne glisse silencieusement sans révision.
+:::
+  `,
 };

@@ -499,4 +499,84 @@ export const topics: Record<string, { title: string; description: string }> = {
     description:
       "अपने एजेंटों को खोए बिना सुरक्षित रूप से सेटिंग्स को कैसे रीसेट करें। यदि आपने कुछ बदला है और यह पता नहीं लगा सकते कि क्या गलत है, तो डिफ़ॉल्ट पर रीसेट करना आपको एक साफ स्लेट देता है। आपके एजेंट, क्रेडेंशियल, और यादें संरक्षित हैं — केवल आपकी प्राथमिकताएँ अपने मूल मानों पर वापस जाती हैं।",
   },
+  "meet-athena": {
+    title: "Athena से मिलें",
+    description:
+      "Athena आपकी built-in कंपेनियन है — एक हमेशा-उपलब्ध सहायक जो app के कोने में रहती है। उसके avatar को tap करें chat खोलने के लिए, या उसे आपके काम के ऊपर एक movable orb के रूप में float करने दें। वह सवालों के जवाब दे सकती है, features समझा सकती है, और वास्तव में आपके लिए app को operate कर सकती है। यहीं से शुरू करें।",
+  },
+  "chatting-with-athena": {
+    title: "Athena से Chat करना",
+    description:
+      "Athena के साथ conversation से सबसे अधिक कैसे पाएं। किसी suggested prompt से शुरू करें, ready-made command pick करने के लिए \"/\" type करें, या बस अपने शब्दों में पूछें। वह quick follow-up replies और जवाब को छोटा करने या अधिक detail add करने के one-tap तरीके offer करती है, और composer को open रखती है ताकि आप बीच में उसे steer कर सकें।",
+  },
+  "voice-and-hold-to-talk": {
+    title: "Voice और Hold-to-Talk",
+    description:
+      "Type करने के बजाय Athena से बात करें, और उसे वापस बोलने दें। कोई सवाल dictate करने के लिए उसका avatar press और hold करें, या keyboard shortcut से कहीं से भी उसे voice से summon करें। Privacy के लिए आपका speech आपकी machine पर transcribe हो सकता है, और उसकी replies जोर से spoken हो सकती हैं — यहाँ तक कि जब chat बंद हो।",
+  },
+  "athenas-long-term-memory": {
+    title: "Athena की Long-Term Memory",
+    description:
+      "Athena conversations के पार याद रखती है ताकि आपको खुद को दोहराना न पड़े। वह आपके और आपके projects के बारे में facts, वह तरीके जो आपको चीज़ें पसंद हैं, और एक profile जो वह हर reply से पहले पढ़ती है रखती है — और आप control में रहते हैं: एक short intake interview उसे शुरू करती है, और आप जो कुछ भी उसने सीखा है उसे view, edit, या correct कर सकते हैं।",
+  },
+  "proactive-check-ins": {
+    title: "Proactive Check-Ins",
+    description:
+      "Athena पहले पहुंच सकती है जब कुछ आपके ध्यान के लायक हो — goal की deadline नज़दीक आ रही हो, एक agent fail हो गया हो या आपका इंतजार कर रहा हो, या एक reminder जो आपने उसे रखने के लिए कहा था। Check-ins quiet hours और daily limit respect करती हैं ताकि वह helpful रहे न कि noisy, और हर nudge पर आप act कर सकते हैं या dismiss कर सकते हैं।",
+  },
+  "guided-walkthroughs": {
+    title: "Guided Walkthroughs",
+    description:
+      "Athena से \"show me how\" कहें और वह real screen पर task के माध्यम से आपको walk करेगी। उसकी orb हर spot पर glide करती है, सही control जलती है, और वह step narrate करती है — फिर इसे खुद click करने का इंतजार करती है। यह actual app के अंदर hands-on learning है, watch करने के लिए video नहीं।",
+  },
+  "the-decision-hub": {
+    title: "Decision Hub",
+    description:
+      "कुछ actions आपकी say-so का इंतजार करते हैं। जब Athena या आपके agents में से कोई ऐसा कुछ करना चाहता है जिसे approval की ज़रूरत हो — agent run करना, profile बदलना, check-in schedule करना — यह एक card के रूप में दिखाई देता है जिसे आप approve या reject करते हैं। आपके running agents से requests भी यहाँ इकट्ठा होते हैं, जब वे pile up हों तो approve-all option के साथ।",
+  },
+  "operating-by-chat": {
+    title: "Chat द्वारा Personas को Operate करना",
+    description:
+      "Athena सिर्फ advisor नहीं है — वह app drive कर सकती है। उससे screen खोलने, agent's editor पर jump करने, custom home dashboard build करने, या connected service call करने के लिए कहें, और वह करती है, destination flash करती है ताकि आप follow कर सकें। दो one-tap buttons आपको fleet review और रात को जो हुआ उसका morning brief देते हैं।",
+  },
+  "browsing-templates": {
+    title: "Template Gallery ब्राउज़ करना",
+    description:
+      "खाली page के बजाय ready-made agent से शुरू करें। Template gallery real jobs के लिए pre-built agents की एक library है — हर एक यह list करता है कि क्या करता है, किन connectors की ज़रूरत है, और setup में कितना समय लगता है। Filter करें कि आपके setup के लिए template कितना ready है, कुछ को side by side compare करें, और commit करने से पहले इसके use cases preview करें।",
+  },
+  "adopting-a-template": {
+    title: "Template Adopt करना",
+    description:
+      "एक short guided setup के साथ template को अपने working agent में बदलें। एक one-question-at-a-time form जो agent को चाहिए वह collect करता है, और आपने vault में पहले से save किए credentials match और fill हो जाते हैं। Agent को promote होने से पहले आपके setup पर एक बार test किया जाता है, ताकि आप किसी ऐसी चीज़ से शुरू करें जो पहले से काम करती है।",
+  },
+  "recipes": {
+    title: "Recipes",
+    description:
+      "Templates से drawn सैकड़ों ready-to-run use cases browse करें, जो वे accomplish करते हैं उसके अनुसार grouped — monitoring, reporting, automation, communication, data sync, analysis, और अधिक। Recipes agents क्या कर सकते हैं इसके concrete examples देखने और आपके मन में जो job है उसके करीब एक ढूँढने का सबसे तेज़ तरीका हैं।",
+  },
+  "interface-modes": {
+    title: "Interface Modes: Simple और Power",
+    description:
+      "Personas आपको stripped-down workspace या full toolkit दिखा सकता है। Simple mode सिर्फ कुछ screens रखता है और advanced options hide करता है ताकि आप कुछ clicks में agent create, run, और review कर सकें; Power mode सब कुछ reveal करता है — team canvas, monitoring, हर trigger type, और full vault। Settings में कभी भी switch करें; कुछ भी remove नहीं होता, केवल show या tucked away होता है।",
+  },
+  "tracking-goals": {
+    title: "Goals Track करना",
+    description:
+      "Runs को एक-एक करके track करने के बजाय एक outcome set करें और उसकी ओर progress देखें। Goals to-dos, sub-goals, और आपकी teams के काम को एक single percentage में roll up करते हैं, board पर, goals कैसे depend करते हैं उसके map पर, या due-date timeline पर दिखाए जाते हैं। Goal को अपनी AI team को hand करें और यह अपने आप advance होता है, केवल तभी हाथ उठाता है जब इसे आपकी ज़रूरत हो।",
+  },
+  "measuring-outcomes-with-kpis": {
+    title: "KPIs के साथ Outcomes Measure करना",
+    description:
+      "वे numbers track करें जो बताते हैं कि आपके agents actually needle move कर रहे हैं या नहीं। KPIs चार तरीकों से outcomes measure करती हैं — आपके codebase से, orchestrator data से, connector के माध्यम से, या by hand — और on-track या off-track pace read के साथ target के विरुद्ध current value दिखाती हैं। एक scan आपके project के लिए relevant KPIs propose भी कर सकता है, हर एक के साथ वह exact तरीका जिससे इसे measure किया जाएगा।",
+  },
+  "director-verdicts-and-categories": {
+    title: "Director Verdicts और Categories",
+    description:
+      "Director जब agent review करता है तो क्या लिखता है इसका closer look। हर review एक overall 0–5 score और short summary देती है, call out करती है कि agent क्या अच्छा कर रहा है, और specific coaching notes category के अनुसार file करती है — prompt, health, triggers, credentials, memory, या usefulness। Note approve या reject करना Director को time के साथ आपकी taste सिखाता है।",
+  },
+  "director-momentum-and-stale-sweep": {
+    title: "Director Momentum और Stale Sweep",
+    description:
+      "Director time के साथ आपके पूरे fleet में coaching को कैसे honest रखता है। एक portfolio scorecard आपकी value-delivered rate, average score, और cost per useful run दिखाता है; एक momentum read बताता है कि कितने agents improved, held, या slipped उनकी last review से; और एक stale sweep किसी भी starred agent को re-review करता है जो दो सप्ताह से अधिक से नहीं देखा गया, ताकि कुछ चुपचाप unnoticed drift न हो।",
+  },
 };

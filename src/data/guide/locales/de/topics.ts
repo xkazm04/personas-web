@@ -499,4 +499,90 @@ export const topics: Record<string, { title: string; description: string }> = {
     description:
       "So setzt du Einstellungen sicher zurück, ohne deine Agenten zu verlieren. Wenn du etwas geändert hast und das Problem nicht findest, gibt dir das Zurücksetzen auf Standardwerte einen sauberen Anfang. Deine Agenten, Zugangsdaten und Memories bleiben erhalten — nur deine Einstellungen kehren auf die Originalwerte zurück.",
   },
+
+  // ─── Companion / Athena ──────────────────────────────────────────────
+  "meet-athena": {
+    title: "Athena kennenlernen",
+    description:
+      "Athena ist dein eingebauter Companion — ein immer verfügbarer Assistent, der in der Ecke der App lebt. Tippe auf ihren Avatar, um einen Chat zu öffnen, oder lass sie als beweglichen Orb über deiner Arbeit schweben. Sie kann Fragen beantworten, Funktionen erklären und die App tatsächlich für dich bedienen. Hier fängst du an.",
+  },
+  "chatting-with-athena": {
+    title: "Mit Athena chatten",
+    description:
+      "Wie du das Beste aus einem Gespräch mit Athena herausholst. Starte von einem vorgeschlagenen Prompt, tippe \"/\", um einen vorgefertigten Befehl auszuwählen, oder frage einfach mit eigenen Worten. Sie bietet schnelle Folge-Antworten und Ein-Klick-Möglichkeiten, eine Antwort kürzer zu machen oder mehr Detail hinzuzufügen, und lässt das Eingabefeld offen, damit du sie mitten im Gedanken steuern kannst.",
+  },
+  "voice-and-hold-to-talk": {
+    title: "Sprache & gedrückt halten",
+    description:
+      "Sprich mit Athena, statt zu tippen, und lass sie zurücksprechen. Halte ihren Avatar gedrückt, um eine Frage zu diktieren, oder nutze einen Tastaturkurzbefehl, um sie von überall per Sprache zu rufen. Deine Sprache kann auf deinem eigenen Rechner transkribiert werden, und ihre Antworten können laut vorgelesen werden — auch wenn der Chat geschlossen ist.",
+  },
+  "athenas-long-term-memory": {
+    title: "Athenas Langzeitgedächtnis",
+    description:
+      "Athena erinnert sich sitzungsübergreifend an dich, damit du dich nicht wiederholen musst. Sie merkt sich Fakten über dich und deine Projekte, wie du Dinge gerne hast, und ein Profil, das sie vor jeder Antwort liest — und du behältst die Kontrolle: Ein kurzes Einführungsinterview bringt sie auf Stand, und du kannst alles, was sie gelernt hat, einsehen, bearbeiten oder korrigieren.",
+  },
+  "proactive-check-ins": {
+    title: "Proaktive Check-ins",
+    description:
+      "Athena kann sich zuerst melden, wenn etwas deine Aufmerksamkeit verdient — das Fälligkeitsdatum eines Ziels naht, ein Agent ist fehlgeschlagen oder wartet auf dich, oder eine Erinnerung, die du ihr gesetzt hast. Check-ins respektieren Ruhestunden und ein Tageslimit, damit sie hilfreich bleibt statt lästig zu werden, und jeder Hinweis ist einer, auf den du reagieren oder den du verwerfen kannst.",
+  },
+  "guided-walkthroughs": {
+    title: "Geführte Walkthroughs",
+    description:
+      "Bitte Athena, dir zu „zeigen wie“, und sie führt dich durch eine Aufgabe auf dem echten Bildschirm. Ihr Orb gleitet zu jedem Punkt, das richtige Steuerelement leuchtet auf, und sie kommentiert den Schritt — dann wartet sie, bis du selbst klickst. Praxisnahes Lernen in der echten App, kein Video zum Anschauen.",
+  },
+  "the-decision-hub": {
+    title: "Der Decision Hub",
+    description:
+      "Einige Aktionen warten auf dein Einverständnis. Wenn Athena oder einer deiner Agenten etwas tun möchte, das Genehmigung braucht — einen Agenten starten, dein Profil ändern, einen Check-in einplanen — erscheint es als Karte, die du genehmigst oder ablehnst. Anfragen aus deinen laufenden Agenten sammeln sich hier ebenfalls, mit einer Alle-genehmigen-Option, wenn sie sich häufen.",
+  },
+  "operating-by-chat": {
+    title: "Personas per Chat bedienen",
+    description:
+      "Athena ist nicht nur eine Beraterin — sie kann die App steuern. Bitte sie, einen Bildschirm zu öffnen, zum Editor eines Agenten zu springen, ein eigenes Home-Dashboard zu bauen oder einen verbundenen Dienst aufzurufen, und sie tut es, mit kurzem Aufleuchten des Ziels, damit du mitverfolgen kannst. Zwei Ein-Klick-Schaltflächen geben dir eine Fleet-Übersicht und ein Morgenbriefing über das, was über Nacht passiert ist.",
+  },
+
+  // ─── Getting Started Ergänzungen ──────────────────────────────────────
+  "browsing-templates": {
+    title: "Die Vorlagensammlung durchsuchen",
+    description:
+      "Starte von einem fertigen Agenten statt einem leeren Blatt. Die Vorlagensammlung ist eine Bibliothek vorgefertigter Agenten für echte Aufgaben — jeder listet auf, was er macht, welche Connectors er braucht und wie lange die Einrichtung dauert. Filtere nach der Bereitschaft einer Vorlage für dein Setup, vergleiche ein paar nebeneinander und sieh dir die Anwendungsfälle an, bevor du dich festlegst.",
+  },
+  "adopting-a-template": {
+    title: "Eine Vorlage übernehmen",
+    description:
+      "Verwandle eine Vorlage mit einer kurzen geführten Einrichtung in deinen eigenen funktionierenden Agenten. Ein Formular mit einer Frage nach der anderen sammelt, was der Agent braucht, und Zugangsdaten, die du bereits im Vault gespeichert hast, werden automatisch abgeglichen und ausgefüllt. Der Agent wird einmal auf deinem Setup getestet, bevor er befördert wird, damit du von etwas startest, das bereits funktioniert.",
+  },
+  "recipes": {
+    title: "Rezepte",
+    description:
+      "Stöbere durch Hunderte von sofort einsetzbaren Anwendungsfällen aus den Vorlagen, gruppiert nach dem, was sie erreichen — Monitoring, Reporting, Automation, Kommunikation, Datensynchronisierung, Analyse und mehr. Rezepte sind der schnellste Weg, konkrete Beispiele zu sehen, was Agenten tun können, und eines zu finden, das der Aufgabe nahekommt, die du im Sinn hast.",
+  },
+  "interface-modes": {
+    title: "Oberflächen-Modi: Einfach & Power",
+    description:
+      "Personas kann dir einen reduzierten Arbeitsbereich oder das volle Toolkit zeigen. Der Einfach-Modus behält nur ein paar Bildschirme und blendet erweiterte Optionen aus, damit du einen Agenten mit wenigen Klicks erstellen, ausführen und überprüfen kannst; der Power-Modus enthüllt alles — die Team-Canvas, das Monitoring, jeden Trigger-Typ und den vollständigen Vault. Wechsle jederzeit in den Einstellungen; nichts wird entfernt, nur angezeigt oder weggesteckt.",
+  },
+
+  // ─── Monitoring Ergänzungen ───────────────────────────────────────────
+  "tracking-goals": {
+    title: "Ziele verfolgen",
+    description:
+      "Lege ein Ergebnis fest und beobachte den Fortschritt darauf, statt Läufe einzeln zu verfolgen. Ziele fassen To-dos, Unterziele und die Arbeit deiner Teams in einem einzigen Prozentsatz zusammen, angezeigt auf einem Board, einer Karte der Zielabhängigkeiten oder einer Fälligkeitsdatum-Zeitlinie. Übergib ein Ziel an dein KI-Team, und es schreitet von selbst voran — es meldet sich nur, wenn es dich braucht.",
+  },
+  "measuring-outcomes-with-kpis": {
+    title: "Ergebnisse mit KPIs messen",
+    description:
+      "Verfolge die Zahlen, die zeigen, ob deine Agenten wirklich etwas bewegen. KPIs messen Ergebnisse auf vier Arten — aus deiner Codebase, aus Orchestratordaten, über einen Connector oder manuell — und zeigen den aktuellen Wert im Vergleich zum Ziel mit einer Im-Plan- oder Nicht-im-Plan-Takteinschätzung. Ein Scan kann sogar relevante KPIs für dein Projekt vorschlagen, jeweils mit der genauen Messmethode.",
+  },
+  "director-verdicts-and-categories": {
+    title: "Director-Urteile & Kategorien",
+    description:
+      "Ein genauerer Blick auf das, was der Director schreibt, wenn er einen Agenten bewertet. Jede Prüfung gibt einen Gesamtwert von 0–5 mit einer kurzen Zusammenfassung, hebt hervor, was der Agent gut macht, und legt spezifische Coaching-Hinweise nach Kategorie ab — Prompt, Health, Trigger, Zugangsdaten, Memory oder Nützlichkeit. Das Annehmen oder Ablehnen eines Hinweises bringt dem Director mit der Zeit deinen Geschmack bei.",
+  },
+  "director-momentum-and-stale-sweep": {
+    title: "Director-Momentum & Stale Sweep",
+    description:
+      "Wie der Director das Coaching über deinen gesamten Fleet hinweg mit der Zeit ehrlich hält. Eine Portfolio-Scorecard zeigt deine Wertlieferungsrate, den Durchschnittswert und die Kosten pro nützlichem Lauf; ein Momentum-Indikator zeigt, wie viele Agenten sich verbessert, gehalten oder seit ihrer letzten Prüfung verschlechtert haben; und ein Stale Sweep prüft alle markierten Agenten erneut, die seit mehr als zwei Wochen nicht überprüft wurden, damit nichts unbemerkt abdriftet.",
+  },
 };

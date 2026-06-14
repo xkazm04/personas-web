@@ -234,4 +234,131 @@ El cockpit tiene acceso a una doctrina (un cuerpo curado de conocimiento sobre e
 Para preguntas del tipo "creo que algo está roto", abre Athena primero y pregunta "diagnóstica la última ejecución fallida del agente X". El flujo de depuración del cockpit está hecho para esto y suele ser mejor que leer logs manualmente.
 :::
   `,
+
+  "browsing-templates": `
+## Explorar la galería de plantillas
+
+No empieces desde una página en blanco. La galería de plantillas es una biblioteca de agentes prediseñados: cada uno pensado para un trabajo real, probado y listo para especializarse a tu configuración. Las plantillas cubren desde monitorización e informes hasta flujos de contenido y herramientas para desarrolladores. Encontrar la adecuada lleva menos tiempo que escribir un prompt desde cero.
+
+Cada tarjeta en la galería te dice qué hace el agente, qué tan compleja es su configuración y cuánto tiempo lleva adoptarlo aproximadamente. Debajo ves los **conectores** que necesita la plantilla — servicios como Slack, Notion, GitHub o un proveedor de almacenamiento en la nube — y si ya tienes credenciales que coincidan en tu bóveda. Un pequeño indicador de preparación en cada ficha de conector te dice de un vistazo: verde significa que estás listo, ámbar que tienes una coincidencia parcial y gris que necesitarías añadir esa credencial antes de que la plantilla pueda ejecutarse.
+
+### Filtro de cobertura
+
+La barra de filtros en la parte superior de la galería — **Todo / Listas / Parciales / Borradores** — te permite acotar lo que importa ahora mismo:
+
+- **Listas** — cada conector que necesita la plantilla ya está en tu bóveda. Son el camino más rápido hacia un agente en ejecución.
+- **Parciales** — algunos conectores están emparejados, otros no. Vale la pena explorarlas si planeas añadir credenciales pronto.
+- **Borradores** — plantillas no publicadas, visibles solo en compilaciones de desarrollo.
+
+Empieza por las Listas si quieres tener algo funcionando en minutos.
+
+### Comparar plantillas
+
+Cuando estás decidiendo entre varias opciones, no tienes que abrir cada una individualmente. Selecciona hasta tres tarjetas (al pasar el cursor aparece una casilla) y haz clic en **Comparar**: un modal en paralelo las alinea por categoría, objetivo, conectores, disparadores, casos de uso, complejidad y tiempo de configuración. Las filas donde las plantillas difieren se resaltan para que las diferencias sean fáciles de detectar. Puedes adoptar directamente desde la vista de comparación sin volver a la galería.
+
+### Adopción rápida de las más populares
+
+En la parte superior de la galería hay un estante de plantillas populares: las más adoptadas por todos los usuarios. Cada tarjeta tiene una acción **Adoptar** que aparece al pasar el cursor y abre el flujo de adopción directamente, saltando el modal de detalle si ya has tomado tu decisión.
+
+:::tip
+Empieza con el filtro **Listas**: esas plantillas coinciden con lo que ya tienes en tu bóveda y pueden estar en funcionamiento en minutos. Una vez que hayas lanzado una o dos, explora **Parciales** para ver qué nuevas credenciales desbloquearían más opciones.
+:::
+  `,
+
+  "adopting-a-template": `
+## Adoptar una plantilla
+
+Adoptar una plantilla es la forma más rápida de obtener un agente funcional y configurado. El flujo te lleva de la galería a un agente promovido en pocos minutos, y cada paso en el camino es reversible.
+
+:::steps
+1. **Haz clic en Adoptar** — desde la tarjeta de la galería, el modal de detalle, la vista de comparación o el estante de las más populares. Se abre el asistente de adopción. Nada se escribe en la base de datos todavía; puedes cerrar libremente en esta etapa.
+2. **Responde el cuestionario** — el formulario presenta una pregunta a la vez. A la derecha, un resumen en vivo muestra cómo se construyen tus respuestas en tiempo real. Las preguntas cubren cosas como qué espacio de trabajo o proyecto es el objetivo, qué formato de salida quieres y cómo debe el agente manejar los errores. Tus respuestas rellenarán los espacios \`{{marcador}}\` en el prompt del agente, especializándolo a tu configuración.
+3. **Prueba automática** — una vez que envías, el agente se ensambla a partir de la plantilla y tus respuestas, y se ejecuta una vez automáticamente. Esto confirma que la configuración es válida contra tus credenciales y conectores antes de que nada se promueva a producción.
+4. **Promover** — si la prueba pasa, el agente se promueve y se convierte en un agente real y editable en tu página de Agents. El asistente te navega allí automáticamente.
+:::
+
+### Emparejamiento automático de bóveda
+
+Las credenciales ya guardadas en tu bóveda se detectan y se rellenan automáticamente. Cuando el cuestionario tiene una pregunta de conector y tienes exactamente una credencial que coincide, se preselecciona y se marca con una insignia **auto**: no necesitas elegirla manualmente. Si tienes varias credenciales que coinciden, la pregunta limita las opciones disponibles a solo las que tienes.
+
+Si una plantilla necesita un conector que aún no has añadido, esa pregunta queda **bloqueada**: aparece un banner en la parte superior del formulario explicando qué categoría de credencial falta y mostrando un botón **Añadir credencial**. Al hacer clic te lleva al catálogo de credenciales, prefiltrado a la categoría correcta, y guarda tus respuestas en progreso como borrador. Cuando vuelves a la plantilla tras añadir la credencial, tus respuestas se restauran y la pregunta bloqueada se desbloquea.
+
+### Cómo tus respuestas moldean el agente
+
+Bajo el capó, tus respuestas se sustituyen en el prompt en dos niveles. Primero, cualquier marcador \`{{param.aq_*}}\` en el prompt de la plantilla se reemplaza con tus valores reales. Segundo, una sección \`## Configuración del usuario\` se añade al system prompt listando cada pregunta y respuesta, para que el modelo siempre tenga el contexto completo de tu configuración independientemente de si existe un marcador específico. Tanto la ejecución de prueba como el agente promovido usan tu configuración real, no los valores genéricos predeterminados de la plantilla.
+
+:::tip
+Si una pregunta no está clara, busca el ícono **ⓘ** a la derecha de la etiqueta de la pregunta. Al hacer clic se despliega un consejo con más contexto sobre qué afecta la pregunta y cómo es una buena respuesta.
+:::
+  `,
+
+  "recipes": `
+## Recetas
+
+Las recetas son cientos de casos de uso listos para ejecutar derivados de plantillas, organizados por lo que logran. Donde una plantilla es una configuración completa de agente, una receta es un ejemplo concreto de un trabajo que ese agente puede hacer: específico, accionable y cercano a algo que podrías tener realmente en tu lista de tareas.
+
+Las encontrarás en la pestaña **Templates → Recipes**. El catálogo completo es ordenable y buscable: explora por nombre, filtra por categoría o revisa los íconos de conectores para encontrar casos de uso que coincidan con lo que ya tienes conectado.
+
+### Categorías
+
+Las recetas se organizan en nueve grupos:
+
+- **Monitorización** — vigilar cambios, alertas, umbrales
+- **Informes** — generar resúmenes, digestos y paneles
+- **Automatización** — acciones repetitivas que se ejecutan por calendario o disparador
+- **Comunicación** — mensajes, notificaciones y enrutamiento
+- **Sincronización de datos** — mantener dos sistemas en acuerdo
+- **Análisis** — sintetizar información y producir perspectivas
+- **Desarrollo** — revisión de código, generación de pruebas, comprobaciones de despliegue
+- **Contenido** — redactar, editar, publicar
+- **Productividad** — ayudas para flujos de trabajo personales y de equipo
+
+### La tabla de recetas
+
+La vista principal es una tabla ordenable. Cada fila muestra el nombre de la receta (con resaltado de la búsqueda cuando has escrito una consulta), su insignia de categoría y una tira de íconos de conector mostrando qué servicios necesita: hasta tres íconos con un conteo adicional para plantillas que necesitan más. Haz clic en cualquier fila para abrir el panel de detalle de la receta.
+
+El panel de detalle te da el panorama completo: qué hace la receta, qué necesita (conectores y cualquier vínculo específico), cómo maneja los errores y si el agente actual ya la ha adoptado. Si ya has adoptado una receta para el agente activo, la fila muestra una ficha verde de **Adoptada**.
+
+### Preajustes de equipo
+
+Si estás configurando un flujo de trabajo completo en lugar de un único agente, busca **preajustes de equipo**: paquetes de plantillas que se adoptan juntas en un solo flujo. Un preajuste cubre un trabajo coherente (como un pipeline completo de contenido o un conjunto de productividad para desarrolladores) donde varios agentes se pasan trabajo entre sí.
+
+:::tip
+Las recetas son la forma más rápida de encontrar un ejemplo concreto cercano a un trabajo que tienes en mente. Si sabes qué resultado quieres pero no estás seguro de qué plantilla usar, busca primero en la pestaña Recipes: las descripciones específicas de casos de uso suelen ser más fáciles de relacionar con un trabajo que los nombres más amplios de las plantillas.
+:::
+  `,
+
+  "interface-modes": `
+## Modos de interfaz
+
+Personas tiene dos modos de interfaz: **Simple** y **Power**. Ejecutan la misma app — los mismos componentes, los mismos datos, los mismos agentes — con Simple ocultando las superficies que los usuarios no técnicos raramente necesitan. Nada se elimina; todo simplemente se muestra u oculta según el modo en que estés.
+
+:::compare
+**Simple**
+Opt-in. Cuatro pantallas: Home, Agents, Connections, Settings. Las superficies avanzadas — Overview, Workflows, Events, Templates, Plugins, disparadores avanzados y el conjunto completo de pestañas del editor — están ocultas. La ejecución se muestra como una barra de progreso limpia y resultado formateado en lugar de un flujo de tokens sin procesar. Ideal para usuarios que quieren ejecutar agentes, no construirlos.
+---
+**Power** [recommended]
+El predeterminado para la mayoría de la gente. La app completa. Todas las secciones de la barra lateral, todas las pestañas del editor (Prompt, Matrix, Lab, Activity, Health, Settings), todos los tipos de disparadores (calendario, webhook, observador de archivos, portapapeles, cadena y disparadores de eventos), la bóveda completa con playground y grafo de dependencias, monitorización a través de Overview, Director y todo lo demás. El modo al que la mayoría de los usuarios migran una vez que tienen unos pocos agentes en funcionamiento.
+:::
+
+### Qué oculta Simple
+
+En modo Simple la barra lateral se reduce a cuatro secciones: **Home**, **Agents**, **Connections** y **Settings**. Overview, Workflows, Events, Templates, Plugins y otras secciones avanzadas no aparecen en la navegación.
+
+Dentro de Agents, el editor muestra solo las pestañas **Prompt**, **Chat** y **Connectors**. El editor Matrix, la arena del Lab, el log de Activity, la pestaña Health, el historial de versiones, el constructor de condiciones, el panel de configuración de herramientas, los ajustes avanzados y los tipos de disparadores avanzados están todos ocultos. El único disparador visible es **Manual** (el botón Run).
+
+La salida de ejecución se simplifica: en lugar de un terminal en streaming con salida de tokens en bruto, ves una barra de progreso mientras el agente se ejecuta y un resultado formateado y legible cuando termina. El coste y los recuentos de tokens no se muestran.
+
+En Connections, la lista de credenciales muestra una vista simplificada: añadir, probar y eliminar una credencial. El playground de credenciales, la base de conocimiento vectorial, el gestor de conexiones de base de datos, las acciones masivas y la puntuación de salud están ocultos.
+
+### Cambiar de modo
+
+Ve a **Settings → Appearance → Interface Mode** y selecciona Simple o Power. El cambio tiene efecto inmediato: no se necesita reiniciar.
+
+La guía que estás leyendo ahora mismo tiene su propio interruptor Simple / Power en la barra lateral. Cambiar el modo de la guía filtra los temas para que coincidan: el modo Simple muestra los temas principales, el modo Power revela las secciones avanzadas. Los dos interruptores son independientes: puedes leer temas de la guía en modo Power mientras ejecutas la app en modo Simple.
+
+:::tip
+Empieza en modo Simple si eres nuevo en Personas. Una vez que tengas un par de agentes en funcionamiento y quieras ajustar calendarios, configurar disparadores de webhook o examinar trazas de ejecución, cambia a Power: todo lo que construiste en Simple se transfiere exactamente como está.
+:::
+  `,
 };

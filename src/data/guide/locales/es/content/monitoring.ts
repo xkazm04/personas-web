@@ -280,4 +280,120 @@ La línea base es una ventana móvil de ejecuciones recientes (configurable; pre
 Las anomalías que investigues y resuelvas deberían marcarse como "investigated". La línea base excluye las anomalías investigadas de su ventana móvil, así el sistema no deriva hacia considerar la ejecución anómala como "normal".
 :::
   `,
+
+  "tracking-goals": `
+## Seguimiento de objetivos
+
+Los objetivos son la capa de resultados por encima de las ejecuciones individuales. En lugar de ver pasar las ejecuciones una a una, defines lo que intentas lograr y dejas que el progreso se acumule automáticamente a partir del trabajo que están haciendo tu equipo y tus agentes.
+
+Un objetivo tiene un título, una fecha límite opcional, un estado y un porcentaje de progreso. El estado sigue un modelo sencillo de cuatro valores: **abierto** (no iniciado), **en curso** (siendo trabajado), **bloqueado** (esperando algo) y **completado**. El progreso es híbrido: el sistema calcula una sugerencia a partir de los ítems de la lista de verificación del objetivo, los sub-objetivos y los pasos de asignación de equipo vinculados, y te la muestra como un aviso **Aceptar / editar**. Decides tú; una anulación manual siempre gana.
+
+### Tres vistas
+
+Objetivos vive bajo la sección Equipos y ofrece tres superficies, accesibles desde la barra lateral:
+
+- **Tablero** — un kanban organizado por estado. Las tarjetas muestran el título completo del objetivo y una lista de verificación en línea (los primeros puntos como casillas que se pueden marcar, el resto tras un enlace "+N más"). Cuando un objetivo tiene puntos, completarlos impulsa el progreso: la barra avanza a medida que se marcan los ítems.
+- **Mapa** — un lienzo con desplazamiento y zoom que muestra cómo se relacionan los objetivos entre sí. Los bordes de dependencia (bloquea, sigue a) conectan los objetivos en un grafo dirigido. El resaltado **Ahora** (un anillo ámbar pulsante) marca los objetivos en curso; el resaltado **Siguiente** (un anillo azul) marca los objetivos cuyos bloqueos están todos resueltos y están listos para iniciarse. Aleja el zoom para ver la constelación; acerca para ver los metadatos completos de cada nodo.
+- **Línea de tiempo** — los objetivos en un carril vertical de fechas de vencimiento, agrupados por urgencia: Atrasados, Esta semana, Este mes, Más tarde, Sin fecha.
+
+### El movimiento clave: entregar a tu equipo de IA
+
+El cajón de detalle de cualquier objetivo tiene un control **Entregar a tu equipo de IA**. Pulsarlo convierte el objetivo en una asignación de equipo en ejecución vinculada de vuelta al objetivo. El equipo descompone el objetivo en pasos (o recoge los puntos existentes textualmente), los trabaja uno a uno y marca el progreso automáticamente a medida que se completa cada paso. El objetivo pasa de abierto a en curso a completado por sí solo, y solo aparece en tu cola de revisión cuando un paso genuinamente necesita una decisión humana.
+
+:::tip
+No tienes que entregar un objetivo a tu equipo de inmediato. Usa el Tablero para elaborar la lista de verificación manualmente primero: el equipo recoge entonces cada punto en orden, lo que te da un control preciso sobre qué se trabaja y en qué secuencia.
+:::
+  `,
+
+  "measuring-outcomes-with-kpis": `
+## Medir resultados con KPIs
+
+Los KPIs son la capa numérica por encima de los objetivos. Donde un objetivo describe un resultado que quieres alcanzar, un KPI rastrea si realmente lo estás logrando: un valor actual, un objetivo y una lectura de ritmo que te dice si vas por buen camino.
+
+Cada KPI muestra su valor actual frente a su objetivo con un estado de **ritmo**: **en camino**, **desviado**, **alcanzado** o **sin medir** (cuando aún no se ha tomado una medición). Una barra de progreso y un indicador de actualidad de la medición completan la tarjeta de un vistazo.
+
+### Cuatro tipos de medición
+
+Los KPIs no se miden todos de la misma manera. Personas admite cuatro tipos de medición, cada uno adecuado a una fuente de datos distinta:
+
+:::info
+- **Base de código** — ejecuta un comando contra tu repositorio y analiza el resultado. Útil para cosas como el porcentaje de cobertura de pruebas o el recuento de errores de linting que viven completamente en el código.
+- **Derivado** — lee desde los propios datos del orquestador: recuentos de ejecuciones, tasas de resultado, tendencias de costes y métricas operacionales similares que Personas ya rastrea.
+- **Conector** — extrae un valor de un servicio externo conectado (analíticas, tráfico, seguimiento de errores). Si el conector necesario no está en tu bóveda todavía, la tarjeta del KPI muestra un aviso "Conectar \<servicio\>" que enlaza directamente al catálogo de credenciales.
+- **Manual** — introduces el valor tú mismo. Útil para números de negocio que no viven en ningún sistema que hayas conectado, o para KPIs que quieras rastrear informalmente antes de automatizar la medición.
+:::
+
+### Dónde viven los KPIs
+
+**Equipos › KPIs** tiene dos vistas tras un selector segmentado. La vista **Panel** muestra todos los KPIs activos como tarjetas: haz clic en cualquier tarjeta para abrir el cajón de detalle con el historial completo de mediciones, un minigráfico y un campo de entrada manual de valor. La vista **Propuestas** es una cola de revisión: hacer clic en "Escanear KPIs" ejecuta un análisis sin interfaz sobre el mapa de contexto de tu proyecto y los KPIs existentes, y muestra KPIs propuestos con una justificación en una línea y el procedimiento exacto de medición que usaría. Aceptas (ajustando opcionalmente el objetivo primero) o rechazas. Las propuestas rechazadas se archivan y se retroalimentan a escaneos futuros como ejemplos negativos para que la misma sugerencia no vuelva a aparecer.
+
+:::tip
+Deja que el escaneo proponga KPIs antes de crearlos manualmente. Lee el mapa de contexto de tu proyecto, tus objetivos existentes y el roster de conectores de tu bóveda, y tiende a sugerir mediciones que son realmente automatizables con lo que ya tienes conectado.
+:::
+  `,
+
+  "director-verdicts-and-categories": `
+## Veredictos y categorías del Director
+
+Cada revisión del Director produce un veredicto estructurado: no solo aprobado/rechazado, sino una evaluación por capas que te dice qué está haciendo bien un agente, qué necesita entrenamiento y cómo archivar ese entrenamiento para que realmente cale.
+
+La pieza obligatoria es una **puntuación global de 0 a 5** con un resumen en una línea. Esta puntuación se añade al registro de ejecución y aparece como estrellas en la lista de Actividad: un escaneo rápido de las ejecuciones recientes de cualquier agente te dice cuáles justificaron su coste. La puntuación también impulsa el minigráfico de tendencia en la tabla de Agents: una barra de historial corta coloreada según la última calificación.
+
+### Lo que está funcionando
+
+La revisión no empieza con crítica. Antes de cualquier nota de entrenamiento, el Director señala las cosas que el agente está haciendo genuinamente bien: lo que la documentación llama **aciertos**. Estos aparecen en la parte superior del markdown completo de evaluación como una sección "Qué está funcionando". Un agente con buen rendimiento podría recibir solo aciertos; el Director guarda silencio cuando no hay nada que mejorar.
+
+### Notas de entrenamiento y categorías
+
+Tras los aciertos vienen las notas de entrenamiento: sugerencias específicas y accionables archivadas bajo una de seis **categorías**:
+
+- **Prompt** — las instrucciones o el enfoque del agente necesitan ajuste
+- **Salud** — problemas de fiabilidad o manejo de errores
+- **Disparadores** — cómo y cuándo se activa el agente (calendario, webhook, configuración de cadena)
+- **Credenciales** — brechas en la bóveda o permisos que bloquean al agente
+- **Memoria** — qué está guardando y recordando el agente (o dejando de recordar)
+- **Utilidad** — si la salida del agente es realmente valiosa para su propósito declarado
+
+Las notas de entrenamiento llegan a tu **cola de revisión** como ítems que apruebas o rechazas. Esto no es solo burocracia: aprobar o rechazar notas le enseña al Director tu criterio. La próxima revisión lee qué notas aceptaste y cuáles descartaste, así el ciclo de retroalimentación se acumula: el Director mejora cada vez más en saber qué te importa para cada agente y deja de sugerir cosas que ya has descartado.
+
+El centro de mando del Director incluye un resumen de **Incidencias por categoría** que contabiliza las notas de entrenamiento de toda tu flota, para que puedas ver a nivel de cartera si las brechas de credenciales son tu problema más común o si la calidad del prompt es donde la mayoría de los agentes necesitan atención.
+
+:::tip
+Los agentes saludables obtienen puntuaciones altas y generan pocas o ninguna nota de entrenamiento. Si un agente obtiene consistentemente un 4–5 sin ítems pendientes en la cola de revisión, esa es la señal de dejarlo en paz y centrar la atención en los que tienen tendencias a la baja o puntuaciones bajas.
+:::
+  `,
+
+  "director-momentum-and-stale-sweep": `
+## Impulso del Director y barrido de obsoletos
+
+Más allá de los veredictos individuales, el Director construye una imagen a nivel de cartera de cómo está evolucionando toda tu flota. Esta es la vista longitudinal: no "qué hizo este agente en la última ejecución" sino "¿está el entrenamiento moviendo la aguja a través de tus agentes con el tiempo?"
+
+### El panel de control
+
+El centro de mando del Director se abre con un **panel de control** que responde cuatro preguntas de un vistazo: qué fracción del trabajo de tu flota entregó valor (la **tasa de valor entregado**), cuál es la puntuación media de los veredictos en todos los agentes en el ámbito, cuál es el **coste por ejecución útil** y cuántos agentes están actualmente en el ámbito. Bajo los KPIs principales, una barra de **desglose de valor** descompone la tasa de valor entregado en la taxonomía completa de resultados — entregado, parcial, bloqueado, sin entrada, sin evaluar — para que puedas ver dónde se está perdiendo el valor, no solo si se está perdiendo.
+
+Un gráfico de **distribución de puntuación de 0 a 5** muestra cómo se distribuyen tus agentes destacados en toda la escala de calificación, con una línea discontinua marcando el promedio de la cartera. Un selector de período de revisión (7 / 30 / 90 días) acota todo el panel de control.
+
+### Impulso
+
+La franja de **impulso** responde la pregunta más importante de la cartera: ¿las cosas están mejorando? Contabiliza cuántos agentes **mejoraron**, **se mantuvieron estables** o **empeoraron** frente a su revisión anterior. Una flota que mejora significa que el entrenamiento está funcionando; una flota que empeora significa que algo sistémico necesita atención: cambios de modelo, desgaste de credenciales, decaimiento del prompt.
+
+### Etiquetas de atención y triaje
+
+La tabla de entrenamiento marca a cada agente en el ámbito con **etiquetas de atención** basadas en reglas derivadas del cliente: pendiente de primera revisión (nunca evaluado), puntuación baja (≤ 2), tendencia a la baja o revisión obsoleta (sin entrenamiento en más de 14 días). Una barra de triaje de atención en la parte superior de la tabla agrupa estas marcas: N nuevos, N bajos, N en declive, N obsoletos, para que veas el alcance del problema antes de empezar a trabajar en él.
+
+Hacer clic en un chip de triaje filtra la tabla a esa marca. Una vez filtrado, una acción **Revisar estos N** ejecuta el Director secuencialmente sobre exactamente esos agentes: el triaje lleva directamente a la acción.
+
+### El barrido de obsoletos
+
+El botón **Barrido de obsoletos** vuelve a revisar cada agente destacado que no ha sido entrenado en más de 14 días, con un solo clic. Solo aparece cuando existen agentes obsoletos. Este es el mantenimiento rutinario: ejecútalo una vez al mes y el Director detecta cualquier agente que haya derivado desde su última evaluación.
+
+### Memoria a largo plazo
+
+Con el **Obsidian Brain** activado, el Director lee sus propias notas anteriores sobre un agente antes de cada revisión y escribe el nuevo veredicto en una carpeta \`Director/\` de tu bóveda. El entrenamiento se acumula en lugar de repetirse: el Director no vuelve a sugerir cosas que ya cubrió, y se basa en lo que aprobaste y rechazaste con el tiempo.
+
+:::tip
+El barrido de obsoletos y la barra de triaje de atención son las dos formas más rápidas de mantener una flota grande saludable sin perder tiempo en agentes que ya están funcionando bien. Usa la barra de triaje para encontrar los agentes que realmente necesitan atención; usa el barrido de obsoletos para asegurarte de que nada está derivando silenciosamente sin revisión.
+:::
+  `,
 };

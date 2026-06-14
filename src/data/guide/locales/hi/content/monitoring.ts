@@ -280,4 +280,120 @@ Raw counts (runs, cost, success rate) बताते हैं कि *क्�
 जिन विसंगतियों की आप जांच करते हैं और हल करते हैं उन्हें साफ़ किया जाना चाहिए ("investigated" चिह्नित करें)। बेसलाइन अपनी रोलिंग विंडो से जांच की गई विसंगतियों को बाहर करती है, इसलिए सिस्टम विसंगत रन को "सामान्य" मानने की ओर नहीं बहता।
 :::
   `,
+
+  "tracking-goals": `
+## Goals Track करना
+
+Goals individual runs के ऊपर outcome layer हैं। Executions को एक-एक करके देखने के बजाय, आप define करते हैं कि आप क्या accomplish करने की कोशिश कर रहे हैं — और progress को automatically आपकी team और आपके agents द्वारा किए जा रहे काम से roll up होने दें।
+
+एक goal का एक title, एक optional target date, एक status, और एक progress percentage होती है। Status एक simple four-value model follow करता है: **open** (शुरू नहीं हुआ), **in-progress** (काम हो रहा है), **blocked** (किसी चीज़ का इंतजार), और **done**। Progress hybrid है: system goal की checklist items, sub-goals, और linked team-assignment steps से एक suggestion compute करता है — और इसे आपको **Accept / edit** nudge के रूप में दिखाता है। आप decide करते हैं; manual override हमेशा जीतता है।
+
+### तीन Views
+
+Goals Teams section के अंतर्गत रहता है और sidebar के माध्यम से switch की गई तीन surfaces offer करता है:
+
+- **Board** — status द्वारा organized kanban। Cards पूरा goal title और inline checklist दिखाते हैं (पहले कुछ to-dos toggleable checkboxes के रूप में, बाकी "+N more" link के पीछे)। जब goal में to-dos हों, तो उन्हें complete करना progress drive करता है — items check होने पर bar move होती है।
+- **Map** — एक pan-and-zoom canvas जो दिखाता है कि goals एक दूसरे से कैसे संबंधित हैं। Dependency edges (blocks, follows) goals को एक directed graph में connect करते हैं। **Now** highlighting (एक amber pulsing ring) currently in-progress goals mark करती है; **Next** highlighting (एक blue ring) उन goals mark करती है जिनके blockers सब done हैं और start करने के लिए ready हैं। Constellation देखने के लिए zoom out करें; प्रत्येक node पर full metadata के लिए zoom in करें।
+- **Timeline** — goals एक vertical due-date rail पर urgency द्वारा bucketed: Overdue, This week, This month, Later, No date।
+
+### Key Move: अपनी AI Team को Hand करें
+
+किसी भी goal के detail drawer में एक **Hand to your AI team** control है। इसे press करने से goal एक running team assignment बन जाती है जो goal से linked है। Team goal को steps में decompose करती है (या existing to-dos को verbatim उठाती है), उन्हें एक-एक करके काम करती है, और जैसे प्रत्येक step पूरा होता है progress automatically tick करती है। Goal अपने आप open से in-progress से done होती है — और केवल तभी आपकी review queue में surface होती है जब एक step को genuinely human decision की ज़रूरत हो।
+
+:::tip
+आपको goal immediately अपनी team को hand करना ज़रूरी नहीं है। Board का उपयोग करके पहले manually checklist build करें — team फिर हर to-do item को order में उठाती है, जो आपको fine-grained control देता है कि क्या काम होता है और किस sequence में।
+:::
+  `,
+
+  "measuring-outcomes-with-kpis": `
+## KPIs के साथ Outcomes Measure करना
+
+KPIs goals के ऊपर number layer हैं। जहाँ एक goal एक outcome describe करती है जिसे आप reach करना चाहते हैं, वहाँ एक KPI track करती है कि क्या आप actually वहाँ पहुँच रहे हैं — एक current value, एक target, और एक pace read जो बताती है कि आप course पर हैं या नहीं।
+
+प्रत्येक KPI अपनी current value को target के विरुद्ध **pace** status के साथ दिखाती है: **on-track**, **off-track**, **met**, या **unmeasured** (जब कोई measurement अभी तक नहीं ली गई हो)। एक progress bar और measurement freshness indicator card को एक नज़र में round out करते हैं।
+
+### चार Measurement Kinds
+
+KPIs सभी same तरीके से measured नहीं होतीं। Personas चार measurement kinds support करता है, प्रत्येक एक अलग data source के लिए suited:
+
+:::info
+- **Codebase** — आपके repository के विरुद्ध एक command run करती है और result parse करती है। Test coverage percentage या lint error count जैसी चीज़ों के लिए useful जो पूरी तरह code में रहती हैं।
+- **Derived** — orchestrator के अपने data से reads: run counts, outcome rates, cost trends, और similar operational metrics जो Personas पहले से track करता है।
+- **Connector** — एक connected external service (analytics, traffic, error tracking) से value pull करती है। यदि needed connector अभी तक आपके vault में नहीं है, तो KPI card एक "Connect \<service\>" prompt दिखाती है जो directly credential catalog से link करती है।
+- **Manual** — आप value खुद enter करते हैं। Business numbers के लिए useful जो किसी भी system में नहीं रहतीं जिसे आपने connected किया है, या KPIs के लिए जिन्हें आप measurement automate करने से पहले informally track करना चाहते हैं।
+:::
+
+### KPIs कहाँ रहती हैं
+
+**Teams › KPIs** के पास एक segmented switch के पीछे दो views हैं। **Dashboard** view सभी active KPIs को cards के रूप में दिखाता है — full measurement history, एक sparkline, और एक manual value entry field के साथ detail drawer खोलने के लिए किसी भी card पर click करें। **Proposals** view एक review queue है: "Scan for KPIs" click करने से आपके project के context map और existing KPIs पर एक headless analysis pass run होता है, और proposed KPIs को एक-line rationale और exact measurement procedure के साथ surface करता है जो यह use करेगी। आप accept (optionally target पहले adjust करके) या reject करते हैं। Rejected proposals archive होते हैं और future scans को negative examples के रूप में feed होते हैं ताकि same suggestion वापस न आए।
+
+:::tip
+Manually author करने से पहले scan को KPIs propose करने दें। यह आपके project के context map, आपके existing goals, और आपके vault के connector roster को पढ़ता है — और ऐसे measurements suggest करता है जो आपके पास already connected चीज़ों के साथ actually automatable हैं।
+:::
+  `,
+
+  "director-verdicts-and-categories": `
+## Director Verdicts और Categories
+
+प्रत्येक Director review एक structured verdict produce करती है — सिर्फ pass/fail नहीं, बल्कि एक layered assessment जो बताती है कि agent क्या अच्छा कर रहा है, क्या coaching की ज़रूरत है, और उस coaching को कैसे file करें ताकि यह actually stick करे।
+
+Mandatory piece एक **overall 0–5 score** है जिसके साथ एक-line summary है। यह score execution record पर land करता है और Activity list में stars के रूप में दिखाई देता है — किसी भी agent के recent runs का quick scan बताता है कि किन्होंने अपनी cost earn की। Score Agents table में trend sparkline भी drive करता है: most recent rating के रंग में colored एक short history bar।
+
+### क्या काम कर रहा है
+
+Review criticism से lead नहीं करती। किसी भी coaching notes से पहले, Director उन चीज़ों को call out करता है जो agent genuinely सही कर रहा है — docs जिसे **wins** कहते हैं। ये full assessment markdown के शीर्ष पर "What's working" section के रूप में दिखाई देते हैं। अच्छा perform करने वाले agent को सिर्फ wins मिल सकती हैं; जब सुधारने के लिए कुछ न हो तो Director चुप रहता है।
+
+### Coaching Notes और Categories
+
+Wins के बाद coaching notes आती हैं: specific, actionable suggestions जो छह **categories** में से एक के अंतर्गत filed होती हैं:
+
+- **Prompt** — agent के instructions या framing को tuning की ज़रूरत है
+- **Health** — reliability या error-handling issues
+- **Triggers** — agent कैसे और कब fire करता है (schedule, webhook, chain setup)
+- **Credentials** — vault या permission gaps agent को block कर रहे हैं
+- **Memory** — agent क्या store और recall कर रहा है (या fail कर रहा है)
+- **Usefulness** — क्या agent का output उसके stated purpose के लिए actually valuable है
+
+Coaching notes आपकी **review queue** में items के रूप में land होती हैं जिन्हें आप approve या reject करते हैं। यह सिर्फ housekeeping नहीं है: notes approve या reject करने से Director को आपकी taste का पता चलता है। अगली review back reads करती है कि आपने कौन सी notes accept की और कौन सी dismiss कीं, इसलिए feedback loop compound होता है — Director बेहतर होता जाता है यह जानने में कि आप प्रत्येक agent के लिए क्या care करते हैं, और उन चीज़ों का suggest करना बंद कर देता है जिन्हें आपने पहले से rule out किया है।
+
+Director का command center एक **Issues by category** rollup include करता है जो आपके पूरे fleet में coaching notes tally करता है, ताकि आप portfolio level पर देख सकें कि credential gaps आपका सबसे common issue हैं या prompt quality वह जगह है जहाँ अधिकांश agents को ध्यान की ज़रूरत है।
+
+:::tip
+Healthy agents ऊँचा score करते हैं और कम या कोई coaching notes generate नहीं करते। यदि कोई agent consistently 4–5 earn करता है बिना pending review items के, तो यह signal है कि उसे अकेला छोड़ें और declining trends या low scores वाले agents पर ध्यान केंद्रित करें।
+:::
+  `,
+
+  "director-momentum-and-stale-sweep": `
+## Director Momentum और Stale Sweep
+
+Individual verdicts से परे, Director आपके पूरे fleet के trend का portfolio-level picture build करता है। यह longitudinal view है — "इस agent ने last run में क्या किया" नहीं बल्कि "क्या coaching time के साथ आपके agents में actually needle move कर रही है?"
+
+### Scorecard
+
+Director का command center एक **scorecard** के साथ खुलता है जो एक नज़र में चार questions का जवाब देता है: आपकी fleet के कितने काम ने value deliver किया (**value-delivered rate**), सभी in-scope agents में average verdict score क्या है, **cost per useful run** क्या है, और कितने agents currently in scope हैं। Headline KPIs के नीचे, एक **value breakdown** bar value-delivered rate को full outcome taxonomy में decompose करता है — delivered, partial, blocked, no-input, unassessed — ताकि आप देख सकें कि value कहाँ leak हो रही है, सिर्फ यह नहीं कि है या नहीं।
+
+एक **0–5 score distribution** chart दिखाता है कि आपके starred agents पूरे rating scale में कैसे stack up करते हैं, एक dashed line portfolio average mark करती है। एक review-period selector (7 / 30 / 90 days) पूरे scorecard को scope करता है।
+
+### Momentum
+
+**Momentum** strip सबसे important portfolio question का जवाब देती है: क्या चीज़ें बेहतर हो रही हैं? यह tally करता है कि कितने agents ने **improved**, **held steady**, या **slipped** किया अपनी previous review की तुलना में। Improving fleet का मतलब है coaching काम कर रही है; slipping fleet का मतलब है कुछ systemic पर ध्यान देना होगा — model changes, credential drift, prompt decay।
+
+### Attention Tags और Triage
+
+Coaching table client-derived rules के आधार पर हर in-scope agent को **attention tags** के साथ flag करती है: awaiting first review (कभी assessed नहीं), low score (≤ 2), declining trend, या stale review (14 दिनों से अधिक समय से coached नहीं)। Table के शीर्ष पर एक attention triage bar इन flags को roll up करता है — N new, N low, N declining, N stale — ताकि आप problem के scope को उस पर काम शुरू करने से पहले देखें।
+
+Triage chip click करने से table उस flag पर filter होती है। Filter होने के बाद, एक **Review these N** action Director को exactly उन agents पर sequentially run करता है — triage directly action में flow करता है।
+
+### Stale Sweep
+
+**Stale sweep** button हर starred agent को जो 14 दिनों से अधिक समय से coached नहीं हुआ एक click में re-review करता है। यह केवल तब appear होता है जब stale agents exist करते हैं। यह routine maintenance pass है: इसे महीने में एक बार run करें और Director किसी भी agent को catch करता है जो last assessment के बाद drift हुआ है।
+
+### Long-Term Memory
+
+**Obsidian Brain** enabled होने पर, Director हर review से पहले किसी agent के बारे में अपने past notes पढ़ता है और नया verdict आपके vault में एक \`Director/\` folder में write करता है। Coaching दोहराने के बजाय compound होती है — Director उन चीज़ों को re-suggest नहीं करता जो उसने पहले cover कीं, और वह समय के साथ आपने जो approve और reject किया उस पर build करता है।
+
+:::tip
+Stale sweep और attention triage bar दो सबसे तेज़ तरीके हैं एक large fleet को उन agents पर समय बर्बाद किए बिना healthy रखने के जो पहले से अच्छा कर रहे हैं। Agents जिन पर actually ध्यान चाहिए उन्हें ढूँढने के लिए triage bar use करें; यह सुनिश्चित करने के लिए stale sweep use करें कि कोई चीज़ quietly unreviewed न slip करे।
+:::
+  `,
 };

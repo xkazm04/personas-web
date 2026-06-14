@@ -499,4 +499,84 @@ export const topics: Record<string, { title: string; description: string }> = {
     description:
       "Cara aman mereset pengaturan tanpa kehilangan agen Anda. Jika Anda telah mengubah sesuatu dan tidak dapat menemukan apa yang salah, mereset ke default memberi Anda papan tulis bersih. Agen, kredensial, dan memori Anda dipertahankan — hanya preferensi Anda yang kembali ke nilai aslinya.",
   },
+  "browsing-templates": {
+    title: "Menjelajahi galeri template",
+    description:
+      "Mulai dari agen yang sudah siap pakai, bukan dari halaman kosong. Galeri template adalah perpustakaan agen pra-built untuk pekerjaan nyata — masing-masing mencantumkan apa yang dilakukannya, connector apa yang dibutuhkan, dan berapa lama waktu setup. Filter berdasarkan kesiapan template untuk setup Anda, bandingkan beberapa secara berdampingan, dan pratinjau use case-nya sebelum berkomitmen.",
+  },
+  "adopting-a-template": {
+    title: "Mengadopsi template",
+    description:
+      "Ubah template menjadi agen Anda yang berfungsi sendiri dengan setup terpandu singkat. Formulir satu-pertanyaan-satu-waktu mengumpulkan apa yang dibutuhkan agen, dan kredensial yang sudah Anda simpan di vault dicocokkan dan diisi untuk Anda. Agen diuji sekali pada setup Anda sebelum dipromote, sehingga Anda mulai dari sesuatu yang sudah berfungsi.",
+  },
+  "recipes": {
+    title: "Resep",
+    description:
+      "Telusuri ratusan use case siap-jalankan yang diturunkan dari template, dikelompokkan berdasarkan apa yang dicapai — pemantauan, pelaporan, otomatisasi, komunikasi, sinkronisasi data, analisis, dan lainnya. Resep adalah cara tercepat untuk melihat contoh konkret dari apa yang dapat dilakukan agen dan menemukan yang mendekati pekerjaan yang ada di pikiran Anda.",
+  },
+  "interface-modes": {
+    title: "Mode antarmuka: Simple & Power",
+    description:
+      "Personas dapat menampilkan workspace yang disederhanakan atau toolkit penuh. Mode Simple hanya menyimpan beberapa layar dan menyembunyikan opsi lanjutan agar Anda dapat membuat, menjalankan, dan meninjau agen dalam beberapa klik; mode Power mengungkapkan segalanya — kanvas tim, pemantauan, setiap jenis trigger, dan vault penuh. Beralih kapan saja di Settings; tidak ada yang dihapus, hanya ditampilkan atau disembunyikan.",
+  },
+  "tracking-goals": {
+    title: "Melacak tujuan",
+    description:
+      "Tetapkan hasil dan pantau kemajuan menuju itu alih-alih melacak run satu per satu. Tujuan menggabungkan to-do, sub-tujuan, dan pekerjaan tim Anda ke dalam satu persentase, ditampilkan di papan, peta bagaimana tujuan saling bergantung, atau timeline tanggal jatuh tempo. Serahkan tujuan ke tim AI Anda dan ia maju sendiri, mengangkat tangan hanya ketika membutuhkan Anda.",
+  },
+  "measuring-outcomes-with-kpis": {
+    title: "Mengukur hasil dengan KPI",
+    description:
+      "Lacak angka-angka yang memberi tahu Anda apakah agen Anda benar-benar membuat kemajuan. KPI mengukur hasil dengan empat cara — dari codebase, dari data orchestrator, melalui connector, atau secara manual — dan menampilkan nilai saat ini terhadap target dengan pembacaan laju on-track atau off-track. Pemindaian bahkan dapat mengusulkan KPI yang relevan untuk proyek Anda, masing-masing dengan cara tepat pengukurannya.",
+  },
+  "director-verdicts-and-categories": {
+    title: "Verdict & kategori Director",
+    description:
+      "Pandangan lebih dekat pada apa yang ditulis Director saat meninjau agen. Setiap tinjauan memberikan skor 0–5 keseluruhan dengan ringkasan singkat, menyebutkan apa yang dilakukan agen dengan baik, dan mengarsipkan catatan pelatihan spesifik berdasarkan kategori — prompt, health, trigger, kredensial, memori, atau kegunaan. Menyetujui atau menolak catatan mengajarkan Director selera Anda dari waktu ke waktu.",
+  },
+  "director-momentum-and-stale-sweep": {
+    title: "Momentum Director & stale sweep",
+    description:
+      "Bagaimana Director menjaga kejujuran pelatihan di seluruh fleet Anda dari waktu ke waktu. Scorecard portofolio menampilkan value-delivered rate, rata-rata skor, dan biaya per run yang berguna; pembacaan momentum memberi tahu berapa banyak agen yang meningkat, tetap stabil, atau menurun sejak tinjauan terakhir mereka; dan stale sweep meninjau ulang agen berbintang mana pun yang belum diperiksa lebih dari dua minggu, agar tidak ada yang diam-diam menurun.",
+  },
+  "meet-athena": {
+    title: "Berkenalan dengan Athena",
+    description:
+      "Athena adalah companion bawaan Anda — asisten yang selalu tersedia yang berada di sudut aplikasi. Ketuk avatar-nya untuk membuka chat, atau biarkan ia mengambang di atas pekerjaan Anda sebagai orb yang dapat dipindahkan. Ia dapat menjawab pertanyaan, menjelaskan fitur, dan benar-benar mengoperasikan aplikasi untuk Anda. Ini adalah tempat untuk memulai.",
+  },
+  "chatting-with-athena": {
+    title: "Berchat dengan Athena",
+    description:
+      "Cara mendapatkan hasil maksimal dari percakapan dengan Athena. Mulai dari prompt yang disarankan, ketik \"/\" untuk memilih perintah siap pakai, atau tanyakan saja dengan kata-kata Anda sendiri. Ia menawarkan balasan lanjutan cepat dan cara satu ketuk untuk membuat jawaban lebih singkat atau menambahkan lebih detail, dan menjaga kotak ketik terbuka agar Anda dapat mengarahkannya di tengah pikiran.",
+  },
+  "voice-and-hold-to-talk": {
+    title: "Suara & hold-to-talk",
+    description:
+      "Bicara ke Athena alih-alih mengetik, dan biarkan ia membalas. Tekan dan tahan avatar-nya untuk mendiktekan pertanyaan, atau gunakan pintasan keyboard untuk memanggilnya dengan suara dari mana saja. Ucapan Anda dapat ditranskripsi di mesin Anda sendiri untuk privasi, dan balasannya dapat diucapkan dengan keras — bahkan ketika chat tertutup.",
+  },
+  "athenas-long-term-memory": {
+    title: "Memori jangka panjang Athena",
+    description:
+      "Athena mengingat lintas percakapan sehingga Anda tidak perlu mengulang diri sendiri. Ia menyimpan fakta tentang Anda dan proyek Anda, cara Anda menyukai sesuatu dikerjakan, dan profil yang dibacanya sebelum setiap balasan — dan Anda tetap memegang kendali: wawancara masuk singkat memberinya awal, dan Anda dapat melihat, mengedit, atau mengoreksi apa pun yang telah dipelajarinya.",
+  },
+  "proactive-check-ins": {
+    title: "Check-in proaktif",
+    description:
+      "Athena dapat menghubungi terlebih dahulu ketika sesuatu layak perhatian Anda — tenggat tujuan yang mendekat, agen yang gagal atau menunggu Anda, atau pengingat yang Anda minta dijaganya. Check-in menghormati jam tenang dan batas harian agar ia tetap membantu bukan mengganggu, dan setiap dorongan dapat Anda tindaklanjuti atau abaikan.",
+  },
+  "guided-walkthroughs": {
+    title: "Panduan walkthrough",
+    description:
+      "Minta Athena untuk \"tunjukkan caranya\" dan ia akan memandu Anda melalui tugas di layar nyata. Orb-nya meluncur ke setiap titik, kontrol yang tepat menyala, dan ia menceritakan langkah — lalu menunggu Anda mengkliknya sendiri. Pembelajaran langsung di dalam aplikasi nyata, bukan video yang ditonton.",
+  },
+  "the-decision-hub": {
+    title: "Decision hub",
+    description:
+      "Beberapa tindakan menunggu persetujuan Anda. Ketika Athena atau salah satu agen Anda ingin melakukan sesuatu yang membutuhkan persetujuan — menjalankan agen, mengubah profil Anda, menjadwalkan check-in — itu muncul sebagai kartu yang Anda setujui atau tolak. Permintaan dari agen yang berjalan juga berkumpul di sini, dengan opsi setujui-semua ketika menumpuk.",
+  },
+  "operating-by-chat": {
+    title: "Mengoperasikan Personas melalui chat",
+    description:
+      "Athena bukan hanya penasihat — ia dapat menjalankan aplikasi. Minta ia membuka layar, melompat ke editor agen, membangun dashboard home kustom, atau memanggil layanan yang terhubung, dan ia melakukannya, mengedipkan tujuan agar Anda dapat mengikutinya. Dua tombol satu ketuk memberi Anda tinjauan fleet dan briefing pagi tentang apa yang terjadi semalam.",
+  },
 };
