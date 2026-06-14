@@ -1328,6 +1328,21 @@
           ],
           "target": null,
           "apiRoutes": []
+        },
+        {
+          "name": "System Health Panel",
+          "description": "System Health Panel: runtime / services / resources / integrations status cards with status dots, a disk-usage gauge, and illustrative install/configure actions (demo no-ops to a toast). New route /dashboard/health; demo-only.",
+          "businessFeature": "System Health Panel",
+          "category": "ui",
+          "filePaths": [
+            "src/app/dashboard/health/page.tsx",
+            "src/app/dashboard/health/health-page/healthFormat.ts",
+            "src/app/dashboard/health/health-page/useSystemHealth.ts",
+            "src/app/dashboard/health/health-page/HealthSectionCard.tsx",
+            "src/app/dashboard/health/health-page/DiskUsageBar.tsx"
+          ],
+          "target": null,
+          "apiRoutes": []
         }
       ]
     },

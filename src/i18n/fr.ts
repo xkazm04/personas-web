@@ -349,6 +349,7 @@ export const fr: Translations = {
     leaderboard: 'Classement',
     sla: 'SLA',
     incidents: 'Incidents',
+    health: '\u00c9tat',
     messages: 'Messages',
     more:'Plus',
     greeting: {
@@ -779,6 +780,33 @@ export const fr: Translations = {
       description: 'La flotte est saine \u2014 aucun incident d\'audit enregistr\u00e9.',
       filteredTitle: 'Aucun incident correspondant',
       filteredDescription: 'Aucun incident ne correspond aux filtres actuels.',
+    },
+  },
+  healthPage: {
+    title: '\u00c9tat du syst\u00e8me',
+    subtitle: 'Runtime, services, ressources et int\u00e9grations',
+    sections: {
+      runtime: 'Runtime',
+      services: 'Services',
+      resources: 'Ressources',
+      integrations: 'Int\u00e9grations',
+    },
+    status: {
+      ok: 'Sain',
+      warn: 'Avertissement',
+      error: 'Erreur',
+      info: 'Info',
+    },
+    diskUsage: 'Utilisation du disque',
+    used: 'utilis\u00e9',
+    free: 'libre',
+    actions: {
+      install: 'Installer',
+      configure: 'Configurer',
+    },
+    toast: {
+      configured: 'configur\u00e9 (d\u00e9mo)',
+      installed: 'activ\u00e9 (d\u00e9mo)',
     },
   },
   messagesPage: {

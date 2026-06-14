@@ -349,6 +349,7 @@ export const zh: Translations = {
     leaderboard: 'ćŽ’čˇŚć¦ś',
     sla: 'SLA',
     incidents: '事件',
+    health: '\u72b6\u6001',
     messages: 'ć¶ćŻ',
     more:'\u66F4\u591A',
     greeting: {
@@ -779,6 +780,33 @@ export const zh: Translations = {
       description: '\u96c6\u7fa4\u8fd0\u884c\u6b63\u5e38 \u2014 \u672a\u8bb0\u5f55\u5ba1\u8ba1\u4e8b\u4ef6\u3002',
       filteredTitle: '\u65e0\u5339\u914d\u4e8b\u4ef6',
       filteredDescription: '\u6ca1\u6709\u4e8b\u4ef6\u7b26\u5408\u5f53\u524d\u7b5b\u9009\u6761\u4ef6\u3002',
+    },
+  },
+  healthPage: {
+    title: '\u7cfb\u7edf\u72b6\u6001',
+    subtitle: '\u8fd0\u884c\u65f6\u3001\u670d\u52a1\u3001\u8d44\u6e90\u4e0e\u96c6\u6210',
+    sections: {
+      runtime: '\u8fd0\u884c\u65f6',
+      services: '\u670d\u52a1',
+      resources: '\u8d44\u6e90',
+      integrations: '\u96c6\u6210',
+    },
+    status: {
+      ok: '\u6b63\u5e38',
+      warn: '\u8b66\u544a',
+      error: '\u9519\u8bef',
+      info: '\u4fe1\u606f',
+    },
+    diskUsage: '\u78c1\u76d8\u4f7f\u7528',
+    used: '\u5df2\u7528',
+    free: '\u53ef\u7528',
+    actions: {
+      install: '\u5b89\u88c5',
+      configure: '\u914d\u7f6e',
+    },
+    toast: {
+      configured: '\u5df2\u914d\u7f6e\uff08\u6f14\u793a\uff09',
+      installed: '\u5df2\u542f\u7528\uff08\u6f14\u793a\uff09',
     },
   },
   messagesPage: {

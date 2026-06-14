@@ -349,6 +349,7 @@ export const ja: Translations = {
     leaderboard: 'ăŞăĽă€ăĽăśăĽă‰',
     sla: 'SLA',
     incidents: 'インシデント',
+    health: '\u72b6\u614b',
     messages: 'ăˇăă‚»ăĽă‚¸',
     more:'\u305d\u306e\u4ed6',
     greeting: {
@@ -779,6 +780,33 @@ export const ja: Translations = {
       description: '\u30d5\u30ea\u30fc\u30c8\u306f\u6b63\u5e38\u3067\u3059 \u2014 \u76e3\u67fb\u30a4\u30f3\u30b7\u30c7\u30f3\u30c8\u306f\u8a18\u9332\u3055\u308c\u3066\u3044\u307e\u305b\u3093\u3002',
       filteredTitle: '\u4e00\u81f4\u3059\u308b\u30a4\u30f3\u30b7\u30c7\u30f3\u30c8\u306a\u3057',
       filteredDescription: '\u73fe\u5728\u306e\u30d5\u30a3\u30eb\u30bf\u30fc\u306b\u4e00\u81f4\u3059\u308b\u30a4\u30f3\u30b7\u30c7\u30f3\u30c8\u306f\u3042\u308a\u307e\u305b\u3093\u3002',
+    },
+  },
+  healthPage: {
+    title: '\u30b7\u30b9\u30c6\u30e0\u72b6\u614b',
+    subtitle: '\u30e9\u30f3\u30bf\u30a4\u30e0\u3001\u30b5\u30fc\u30d3\u30b9\u3001\u30ea\u30bd\u30fc\u30b9\u3001\u9023\u643a',
+    sections: {
+      runtime: '\u30e9\u30f3\u30bf\u30a4\u30e0',
+      services: '\u30b5\u30fc\u30d3\u30b9',
+      resources: '\u30ea\u30bd\u30fc\u30b9',
+      integrations: '\u9023\u643a',
+    },
+    status: {
+      ok: '\u6b63\u5e38',
+      warn: '\u8b66\u544a',
+      error: '\u30a8\u30e9\u30fc',
+      info: '\u60c5\u5831',
+    },
+    diskUsage: '\u30c7\u30a3\u30b9\u30af\u4f7f\u7528\u91cf',
+    used: '\u4f7f\u7528\u4e2d',
+    free: '\u7a7a\u304d',
+    actions: {
+      install: '\u30a4\u30f3\u30b9\u30c8\u30fc\u30eb',
+      configure: '\u8a2d\u5b9a',
+    },
+    toast: {
+      configured: '\u8a2d\u5b9a\u3057\u307e\u3057\u305f\uff08\u30c7\u30e2\uff09',
+      installed: '\u6709\u52b9\u5316\u3057\u307e\u3057\u305f\uff08\u30c7\u30e2\uff09',
     },
   },
   messagesPage: {

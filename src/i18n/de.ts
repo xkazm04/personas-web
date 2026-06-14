@@ -349,6 +349,7 @@ export const de: Translations = {
     leaderboard: 'Rangliste',
     sla: 'SLA',
     incidents: 'Vorfälle',
+    health: 'Zustand',
     messages: 'Nachrichten',
     more:'Mehr',
     greeting: {
@@ -779,6 +780,33 @@ export const de: Translations = {
       description: 'Die Flotte ist gesund \u2014 keine Audit-Vorf\u00e4lle erfasst.',
       filteredTitle: 'Keine passenden Vorf\u00e4lle',
       filteredDescription: 'Keine Vorf\u00e4lle entsprechen den aktuellen Filtern.',
+    },
+  },
+  healthPage: {
+    title: 'Systemzustand',
+    subtitle: 'Laufzeit, Dienste, Ressourcen und Integrationen',
+    sections: {
+      runtime: 'Laufzeit',
+      services: 'Dienste',
+      resources: 'Ressourcen',
+      integrations: 'Integrationen',
+    },
+    status: {
+      ok: 'Fehlerfrei',
+      warn: 'Warnung',
+      error: 'Fehler',
+      info: 'Info',
+    },
+    diskUsage: 'Speichernutzung',
+    used: 'belegt',
+    free: 'frei',
+    actions: {
+      install: 'Installieren',
+      configure: 'Konfigurieren',
+    },
+    toast: {
+      configured: 'konfiguriert (Demo)',
+      installed: 'aktiviert (Demo)',
     },
   },
   messagesPage: {

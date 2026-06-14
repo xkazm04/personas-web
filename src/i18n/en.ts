@@ -206,6 +206,7 @@
     leaderboard: string;
     sla: string;
     incidents: string;
+    health: string;
     messages: string;
     more: string;
     greeting: {
@@ -636,6 +637,33 @@
       description: string;
       filteredTitle: string;
       filteredDescription: string;
+    };
+  };
+  healthPage: {
+    title: string;
+    subtitle: string;
+    sections: {
+      runtime: string;
+      services: string;
+      resources: string;
+      integrations: string;
+    };
+    status: {
+      ok: string;
+      warn: string;
+      error: string;
+      info: string;
+    };
+    diskUsage: string;
+    used: string;
+    free: string;
+    actions: {
+      install: string;
+      configure: string;
+    };
+    toast: {
+      configured: string;
+      installed: string;
     };
   };
   messagesPage: {
@@ -1447,6 +1475,7 @@ export const en: Translations = {
     leaderboard: 'Leaderboard',
     sla: 'SLA',
     incidents: 'Incidents',
+    health: 'Health',
     messages: 'Messages',
     more: 'More',
     greeting: {
@@ -1877,6 +1906,33 @@ export const en: Translations = {
       description: 'The fleet is healthy — no audit incidents recorded.',
       filteredTitle: 'No matching incidents',
       filteredDescription: 'No incidents match the current filters.',
+    },
+  },
+  healthPage: {
+    title: 'System health',
+    subtitle: 'Runtime, services, resources, and integrations',
+    sections: {
+      runtime: 'Runtime',
+      services: 'Services',
+      resources: 'Resources',
+      integrations: 'Integrations',
+    },
+    status: {
+      ok: 'Healthy',
+      warn: 'Warning',
+      error: 'Error',
+      info: 'Info',
+    },
+    diskUsage: 'Disk usage',
+    used: 'used',
+    free: 'free',
+    actions: {
+      install: 'Install',
+      configure: 'Configure',
+    },
+    toast: {
+      configured: 'configured (demo)',
+      installed: 'enabled (demo)',
     },
   },
   messagesPage: {

@@ -349,6 +349,7 @@ export const id: Translations = {
     leaderboard: 'Papan Peringkat',
     sla: 'SLA',
     incidents: 'Insiden',
+    health: 'Status',
     messages: 'Pesan',
     more:'Lainnya',
     greeting: {
@@ -779,6 +780,33 @@ export const id: Translations = {
       description: 'Armada sehat \u2014 tidak ada insiden audit yang tercatat.',
       filteredTitle: 'Tidak ada insiden yang cocok',
       filteredDescription: 'Tidak ada insiden yang cocok dengan filter saat ini.',
+    },
+  },
+  healthPage: {
+    title: 'Status sistem',
+    subtitle: 'Runtime, layanan, sumber daya, dan integrasi',
+    sections: {
+      runtime: 'Runtime',
+      services: 'Layanan',
+      resources: 'Sumber daya',
+      integrations: 'Integrasi',
+    },
+    status: {
+      ok: 'Sehat',
+      warn: 'Peringatan',
+      error: 'Kesalahan',
+      info: 'Info',
+    },
+    diskUsage: 'Penggunaan disk',
+    used: 'terpakai',
+    free: 'bebas',
+    actions: {
+      install: 'Pasang',
+      configure: 'Konfigurasikan',
+    },
+    toast: {
+      configured: 'dikonfigurasi (demo)',
+      installed: 'diaktifkan (demo)',
     },
   },
   messagesPage: {

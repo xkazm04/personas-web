@@ -349,6 +349,7 @@ export const ko: Translations = {
     leaderboard: 'ë¦¬ëŤ”ëł´ë“ś',
     sla: 'SLA',
     incidents: '인시던트',
+    health: '\uc0c1\ud0dc',
     messages: 'ë©”ě‹śě§€',
     more:'\ub354 \ubcf4\uae30',
     greeting: {
@@ -779,6 +780,33 @@ export const ko: Translations = {
       description: '\ud50c\ub9bf\uc774 \uc815\uc0c1\uc785\ub2c8\ub2e4 \u2014 \uae30\ub85d\ub41c \uac10\uc0ac \uc778\uc2dc\ub358\ud2b8\uac00 \uc5c6\uc2b5\ub2c8\ub2e4.',
       filteredTitle: '\uc77c\uce58\ud558\ub294 \uc778\uc2dc\ub358\ud2b8 \uc5c6\uc74c',
       filteredDescription: '\ud604\uc7ac \ud544\ud130\uc640 \uc77c\uce58\ud558\ub294 \uc778\uc2dc\ub358\ud2b8\uac00 \uc5c6\uc2b5\ub2c8\ub2e4.',
+    },
+  },
+  healthPage: {
+    title: '\uc2dc\uc2a4\ud15c \uc0c1\ud0dc',
+    subtitle: '\ub7f0\ud0c0\uc784, \uc11c\ube44\uc2a4, \ub9ac\uc18c\uc2a4, \ud1b5\ud569',
+    sections: {
+      runtime: '\ub7f0\ud0c0\uc784',
+      services: '\uc11c\ube44\uc2a4',
+      resources: '\ub9ac\uc18c\uc2a4',
+      integrations: '\ud1b5\ud569',
+    },
+    status: {
+      ok: '\uc815\uc0c1',
+      warn: '\uacbd\uace0',
+      error: '\uc624\ub958',
+      info: '\uc815\ubcf4',
+    },
+    diskUsage: '\ub514\uc2a4\ud06c \uc0ac\uc6a9\ub7c9',
+    used: '\uc0ac\uc6a9 \uc911',
+    free: '\uc5ec\uc720',
+    actions: {
+      install: '\uc124\uce58',
+      configure: '\uad6c\uc131',
+    },
+    toast: {
+      configured: '\uad6c\uc131\ub428 (\ub370\ubaa8)',
+      installed: '\ud65c\uc131\ud654\ub428 (\ub370\ubaa8)',
     },
   },
   messagesPage: {

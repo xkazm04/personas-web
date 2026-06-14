@@ -1547,3 +1547,87 @@ export const MOCK_OPEN_INCIDENTS = MOCK_AUDIT_INCIDENTS.filter(
   (incident) => incident.status === "open" || incident.status === "escalated",
 ).length;
 
+// ── System Health Panel (runtime / services / resources / integrations) ──
+// Mirrors the desktop overview's System Health Panel (components/health): four
+// section cards of status-dotted checks, a disk-usage bar, and illustrative
+// install/configure actions (demo no-ops). Item names + details are technical
+// identifiers shown verbatim (not translated). Demo-only.
+
+export type HealthCheckStatus = "ok" | "warn" | "error" | "info";
+export type HealthSectionKey = "runtime" | "services" | "resources" | "integrations";
+export type HealthActionKind = "install" | "configure";
+
+export interface HealthCheckItem {
+  id: string;
+  /** Technical name shown verbatim. */
+  name: string;
+  status: HealthCheckStatus;
+  /** Short status line shown verbatim. */
+  detail: string;
+  /** When set, the row shows a demo action button (no-op → toast). */
+  action?: HealthActionKind;
+  /** Optional version/identifier suffix. */
+  meta?: string;
+}
+
+export interface HealthCheckSection {
+  key: HealthSectionKey;
+  items: HealthCheckItem[];
+}
+
+export const HEALTH_SECTION_ORDER: HealthSectionKey[] = [
+  "runtime",
+  "services",
+  "resources",
+  "integrations",
+];
+
+export const MOCK_HEALTH_CHECKS: HealthCheckSection[] = [
+  {
+    key: "runtime",
+    items: [
+      { id: "rt_node", name: "Node.js runtime", status: "ok", detail: "Healthy", meta: "v22.3.0" },
+      { id: "rt_cli", name: "Claude Code CLI", status: "ok", detail: "Connected", meta: "v1.4.2" },
+      { id: "rt_daemon", name: "Orchestrator daemon", status: "ok", detail: "Running · uptime 6d 4h" },
+      { id: "rt_gpu", name: "GPU acceleration", status: "warn", detail: "Not detected — falling back to CPU", action: "configure" },
+    ],
+  },
+  {
+    key: "services",
+    items: [
+      { id: "sv_api", name: "Local API", status: "ok", detail: "200 OK · 12ms" },
+      { id: "sv_ws", name: "WebSocket bridge", status: "ok", detail: "Connected · 5 subscribers" },
+      { id: "sv_sched", name: "Scheduler", status: "ok", detail: "Next tick in 6m" },
+      { id: "sv_vector", name: "Vector store", status: "warn", detail: "High memory — 82% of cache" },
+    ],
+  },
+  {
+    key: "resources",
+    items: [
+      { id: "rs_cpu", name: "CPU", status: "ok", detail: "28% avg · 8 cores" },
+      { id: "rs_mem", name: "Memory", status: "warn", detail: "12.4 / 16 GB · 78%" },
+      { id: "rs_net", name: "Network", status: "ok", detail: "↓ 1.2 MB/s · ↑ 0.3 MB/s" },
+    ],
+  },
+  {
+    key: "integrations",
+    items: [
+      { id: "in_github", name: "GitHub", status: "ok", detail: "Authorized · 3 repos" },
+      { id: "in_slack", name: "Slack", status: "error", detail: "Webhook circuit-broken", action: "configure" },
+      { id: "in_gcal", name: "Google Calendar", status: "ok", detail: "Authorized" },
+      { id: "in_openai", name: "OpenAI", status: "ok", detail: "Key valid" },
+      { id: "in_stripe", name: "Stripe", status: "info", detail: "Not configured", action: "configure" },
+      { id: "in_gemini", name: "Google Gemini", status: "info", detail: "Available — not enabled", action: "install" },
+    ],
+  },
+];
+
+/** Disk-usage gauge for the Resources card. */
+export const MOCK_DISK_USAGE = { usedGb: 142, totalGb: 256 };
+
+/** Non-ok health-check count, for the nav badge. */
+export const MOCK_HEALTH_ALERTS = MOCK_HEALTH_CHECKS.reduce(
+  (n, section) => n + section.items.filter((i) => i.status === "error").length,
+  0,
+);
+
