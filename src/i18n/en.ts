@@ -205,6 +205,7 @@
     settings: string;
     leaderboard: string;
     sla: string;
+    incidents: string;
     messages: string;
     more: string;
     greeting: {
@@ -575,6 +576,66 @@
       otherBreaches: string;
       timeToResolve: string;
       elapsed: string;
+    };
+  };
+  incidentsPage: {
+    title: string;
+    subtitle: string;
+    open: string;
+    total: string;
+    bySeverity: string;
+    bySource: string;
+    incidents: string;
+    groupByLabel: string;
+    clearFilters: string;
+    allPersonas: string;
+    statusLabel: string;
+    severity: {
+      critical: string;
+      high: string;
+      medium: string;
+      low: string;
+    };
+    status: {
+      all: string;
+      open: string;
+      resolved: string;
+      ignored: string;
+      escalated: string;
+    };
+    source: {
+      all: string;
+      executions: string;
+      events: string;
+      triggers: string;
+      vault: string;
+      messages: string;
+      reviews: string;
+    };
+    groupBy: {
+      none: string;
+      agent: string;
+      severity: string;
+      source: string;
+    };
+    badges: {
+      circuitBreaker: string;
+      autoFixed: string;
+    };
+    detail: {
+      recommendation: string;
+      source: string;
+      category: string;
+      persona: string;
+      detected: string;
+      resolved: string;
+      ongoing: string;
+    };
+    empty: {
+      title: string;
+      description: string;
+      filteredTitle: string;
+      filteredDescription: string;
     };
   };
   messagesPage: {
@@ -1385,6 +1446,7 @@ export const en: Translations = {
     settings: 'Settings',
     leaderboard: 'Leaderboard',
     sla: 'SLA',
+    incidents: 'Incidents',
     messages: 'Messages',
     more: 'More',
     greeting: {
@@ -1755,6 +1817,66 @@ export const en: Translations = {
       empty: 'No breaches in the last 7 days.',
       ongoing: 'Ongoing',
       duration: '{n} min',
+    },
+  },
+  incidentsPage: {
+    title: 'Incidents',
+    subtitle: 'Audit-log incidents across the fleet',
+    open: 'Open',
+    total: 'Total',
+    bySeverity: 'By severity',
+    bySource: 'By source',
+    incidents: 'incidents',
+    groupByLabel: 'Group by',
+    clearFilters: 'Clear filters',
+    allPersonas: 'All personas',
+    statusLabel: 'Status',
+    severity: {
+      critical: 'Critical',
+      high: 'High',
+      medium: 'Medium',
+      low: 'Low',
+    },
+    status: {
+      all: 'All',
+      open: 'Open',
+      resolved: 'Resolved',
+      ignored: 'Ignored',
+      escalated: 'Escalated',
+    },
+    source: {
+      all: 'All sources',
+      executions: 'Executions',
+      events: 'Events',
+      triggers: 'Triggers',
+      vault: 'Vault',
+      messages: 'Messages',
+      reviews: 'Reviews',
+    },
+    groupBy: {
+      none: 'None',
+      agent: 'Agent',
+      severity: 'Severity',
+      source: 'Source',
+    },
+    badges: {
+      circuitBreaker: 'Circuit breaker',
+      autoFixed: 'Auto-fixed',
+    },
+    detail: {
+      recommendation: 'Recommended action',
+      source: 'Source',
+      category: 'Category',
+      persona: 'Agent',
+      detected: 'Detected',
+      resolved: 'Resolved',
+      ongoing: 'Ongoing',
+    },
+    empty: {
+      title: 'No incidents',
+      description: 'The fleet is healthy — no audit incidents recorded.',
+      filteredTitle: 'No matching incidents',
+      filteredDescription: 'No incidents match the current filters.',
     },
   },
   messagesPage: {
