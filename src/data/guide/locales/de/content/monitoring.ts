@@ -221,6 +221,42 @@ Beginne mit Limits in etwa 3-fach dem, was du an einem typischen Tag erwartest. 
 :::
   `,
 
+  "the-director": `
+## Der Director — Automatisches Agenten-Coaching
+
+Der **Director** ist ein eingebauter Meta-Agent, der deine anderen Agenten beobachtet und ihnen hilft, wirklich nützlich zu werden. Statt jeden Lauf selbst zu lesen, prüft der Director sie für dich und hinterlässt ein Urteil.
+
+Du bestimmst, was er beobachtet, indem du Agenten **mit einem Stern markierst** (das ⭐ in jeder Zeile unter Alle Agenten). Ein markierter Agent ist "im Zuständigkeitsbereich des Directors" – der Director prüft ihn; nicht markierte Agenten bleiben unberührt. Der Director selbst ist ein System-Agent und kann nicht gelöscht werden.
+
+### Die Kommandozentrale
+
+Der Director befindet sich unter **Übersicht › Director** – ein fokussierter Bildschirm:
+
+- Ein **Portfolio-Scorecard**: wie viel von der Arbeit deiner Flotte tatsächlich Wert geliefert hat, der durchschnittliche Urteilswert, deine Kosten pro wertgeliefertem Lauf und eine 0–5-Verteilung, die zeigt, wie deine markierten Agenten abschneiden.
+- Eine **Coaching-Tabelle** aller Agenten im Zuständigkeitsbereich – Wert, ein Trend-Sparkline (bewegt das Coaching etwas?), Wertrate, letzte Prüfung und **Aufmerksamkeits-Tags**, die genau anzeigen, was zu tun ist (wartet auf erste Prüfung, niedriger Wert, rückläufig, veraltet). Filtere auf die Agenten, die Aufmerksamkeit brauchen. Klicke auf einen Agenten, um seine **Details** zu öffnen – vollständiger Urteilsverlauf mit Begründung und konkreten Vorschlägen hinter jedem Wert.
+- Eine schlanke Kopfzeile mit **Alle im Zuständigkeitsbereich prüfen**, einer **Zum Zuständigkeitsbereich hinzufügen**-Auswahl und dem Langzeit-**Memory**-Schalter.
+
+Die Seite Alle Agenten enthält einen schmalen Director-Streifen, der direkt hierher verlinkt.
+
+### Wie ein Urteil aussieht
+
+Jede Prüfung erzeugt einen **0–5-Gesamtwert** sowie optionale Coaching-Hinweise:
+
+- Die **Urteil**-Spalte in der Aktivitätsliste zeigt den Wert als Sterne direkt neben dem Agenten – ein Blick sagt dir, welche Läufe ihre Kosten wert waren.
+- Der **Director**-Tab bei jedem Lauf öffnet die vollständige Bewertung in lesbarem Markdown: der Wert, eine einzeilige Zusammenfassung und konkrete Vorschläge (eine Prompt-Anpassung, eine Leitplanke, ein Modellwechsel, ein fehlendes Tool).
+- Umsetzbare Hinweise landen auch in deiner Prüfungs-Queue, wo das Annehmen oder Ablehnen dem Director mit der Zeit deinen Geschmack beibringt.
+
+Ein gesunder Agent erzielt hohe Werte mit wenig oder keinem Coaching – der Director bleibt ruhig, wenn es nichts zu verbessern gibt.
+
+### Langzeitgedächtnis (optional)
+
+Wenn du das **Obsidian Brain** nutzt, kannst du das Langzeitgedächtnis des Directors einschalten. Er liest dann seine eigenen früheren Notizen zu einem Agenten vor jeder Prüfung (sodass sich Ratschläge summieren statt zu wiederholen) und schreibt jedes neue Urteil zurück in einen \`Director/\`-Ordner in deinem Vault – ein dauerhafter, menschenlesbarer Coaching-Verlauf.
+
+### Warum das wichtig ist
+
+Rohe Zahlen (Läufe, Kosten, Erfolgsrate) sagen dir *was* passiert ist, nicht *ob es die Mühe wert war*. Der Director fügt die fehlende Urteilsebene hinzu – eine ehrliche, evidenzbasierte Einschätzung des Werts und der Effizienz jedes Agenten – damit eine Flotte von Agenten nützlich bleibt, ohne dass du jeden Lauf von Hand auditieren musst.
+  `,
+
   "anomaly-detection": `
 ## Anomalie-Erkennung
 

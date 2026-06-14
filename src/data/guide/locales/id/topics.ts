@@ -229,6 +229,16 @@ export const topics: Record<string, { title: string; description: string }> = {
     description:
       "Mulai dari alur kerja multi-agen pra-dibangun alih-alih membangun dari awal. Template memberi Anda pipeline yang berfungsi yang dapat Anda sesuaikan agar sesuai dengan kebutuhan Anda. Ini seperti menggunakan resep sebagai titik awal dan menyesuaikan bahan sesuai selera Anda.",
   },
+  "team-assignments": {
+    title: "Team assignment",
+    description:
+      "Beri tim sebuah goal dalam bahasa sederhana dan biarkan tim itu sendiri yang mengorganisir pekerjaannya. Alih-alih mengkabelkan setiap langkah secara manual, Anda mendeskripsikan apa yang diinginkan; tim memecahnya menjadi checklist, memilih agen yang tepat untuk setiap bagian, dan menjalankannya secara paralel — berhenti untuk meminta persetujuan Anda hanya ketika ada keputusan yang perlu diambil.",
+  },
+  "team-memory-and-goals": {
+    title: "Team memory & goal",
+    description:
+      "Bagaimana tim tetap koheren dari waktu ke waktu dan cara Anda mengarahkannya tanpa micromanaging. Tim membangun shared memory — keputusan dan batasan yang mengalir ke setiap run anggota berikutnya, sehingga tim berkonvergensi alih-alih mengulang dirinya sendiri. Hubungkan tim ke sebuah goal dan Anda bisa tetap pada level tinggi: progres terpantau dan aplikasi hanya memunculkan apa yang benar-benar membutuhkan perhatian Anda.",
+  },
   "debugging-pipeline-issues": {
     title: "Men-debug masalah pipeline",
     description:
@@ -393,6 +403,11 @@ export const topics: Record<string, { title: string; description: string }> = {
     title: "Deteksi anomali",
     description:
       "Mendapatkan peringatan ketika sesuatu yang tidak biasa terjadi dengan agen Anda. Sistem mempelajari apa yang normal untuk setiap agen dan menandai apa pun yang tidak biasa — seperti lonjakan biaya yang tiba-tiba atau kegagalan tak terduga. Anda akan menjadi yang pertama tahu jika ada sesuatu yang membutuhkan perhatian.",
+  },
+  "the-director": {
+    title: "Director — pelatihan agen otomatis",
+    description:
+      "Meta-agen bawaan yang meninjau agen-agen berbintang Anda dan memberi skor setiap run dari 0–5 beserta catatan pelatihan yang konkret. Beri bintang pada agen untuk memasukkannya ke dalam cakupan Director; verdict ditampilkan sebagai kolom bintang di Activity dan tab Director pada setiap run. Dapat menggunakan Obsidian Brain Anda sebagai memori jangka panjang agar pelatihannya terus meningkat seiring waktu.",
   },
   "local-vs-cloud-execution": {
     title: "Eksekusi lokal vs cloud",

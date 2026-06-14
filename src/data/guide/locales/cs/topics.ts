@@ -234,6 +234,16 @@ export const topics: Record<string, { title: string; description: string }> = {
     description:
       "Hledání a oprava problémů ve víceagentových tocích. Když pipeline nefunguje, jak by měla, debugger přesně označí, kde se to pokazilo. Můžeš zkontrolovat data v každém kroku a problém přesně určit bez hádání.",
   },
+  "team-assignments": {
+    title: "Týmová zadání",
+    description:
+      "Zadej týmu cíl v přirozené řeči a nech ho, ať si práci zorganizuje sám. Místo ručního propojování každého kroku popíšeš, co chceš; tým cíl rozloží na seznam úkolů, vybere pro každou část vhodného agenta a spustí je paralelně — přičemž se zastaví a čeká na tvé rozhodnutí jen tehdy, kdy to opravdu potřebuje.",
+  },
+  "team-memory-and-goals": {
+    title: "Týmová paměť a cíle",
+    description:
+      "Jak tým zůstává soudržný v čase a jak ho řídit, aniž bys do všeho zasahoval/a. Týmy si budují sdílenou paměť — rozhodnutí a omezení, která se promítají do každého příštího běhu každého člena, takže tým konverguje místo toho, aby se opakoval. Propoj tým s cílem a zůstaň na vysoké úrovni: postup se sleduje automaticky a aplikace tě osloví jen tehdy, kdy tě opravdu potřebuje.",
+  },
   "why-test-your-agents": {
     title: "Proč testovat své agenty?",
     description:
@@ -393,6 +403,11 @@ export const topics: Record<string, { title: string; description: string }> = {
     title: "Detekce anomálií",
     description:
       "Dostaň upozornění, když se s tvými agenty stane něco neobvyklého. Systém se naučí, co je pro každého agenta normální, a označí cokoli mimo obvyklé — jako náhlý nárůst nákladů nebo neočekávané selhání. Budeš první, kdo se dozví, že něco vyžaduje pozornost.",
+  },
+  "the-director": {
+    title: "Director — automatický koučink agentů",
+    description:
+      "Vestavěný meta-agent, který sleduje tvé agenty označené hvězdičkou a každý jejich běh ohodnotí skóre 0–5 s konkrétními koučovacími poznámkami. Přidej agenta do scope Directora tím, že mu dáš hvězdičku; verdikty se zobrazí jako sloupec hvězdiček v Aktivitě a karta Director na každém běhu. Může využívat tvůj Obsidian Brain jako dlouhodobou paměť, takže jeho koučink se časem zlepšuje.",
   },
   "local-vs-cloud-execution": {
     title: "Lokální vs cloudové spouštění",

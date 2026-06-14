@@ -229,6 +229,16 @@ export const topics: Record<string, { title: string; description: string }> = {
     description:
       "처음부터 만드는 대신 사전 빌드된 다중 에이전트 워크플로에서 시작. 템플릿은 필요에 맞게 사용자 정의할 수 있는 작동하는 파이프라인을 제공합니다. 레시피를 시작점으로 사용하고 입맛에 맞게 재료를 조정하는 것과 같습니다.",
   },
+  "team-assignments": {
+    title: "팀 어사인먼트",
+    description:
+      "팀에 목표를 자연어로 제시하고 팀이 스스로 작업을 구성하도록 합니다. 모든 단계를 일일이 배선하는 대신 원하는 것을 설명하면, 팀이 그것을 체크리스트로 분해하고 각 단계에 가장 적합한 에이전트를 선택하여 병렬로 실행합니다 — 결정이 필요한 경우에만 검토를 위해 일시 중지합니다.",
+  },
+  "team-memory-and-goals": {
+    title: "팀 메모리 & 목표",
+    description:
+      "팀이 시간이 지나도 일관성을 유지하는 방법과 세세하게 관리하지 않고도 방향을 조종하는 방법. 팀은 공유 메모리를 축적합니다 — 모든 구성원의 다음 실행에 흘러들어가는 결정과 제약 조건으로, 팀이 같은 것을 반복하는 대신 수렴합니다. 팀을 목표에 연결하면 높은 수준에서 유지할 수 있습니다: 진행 상황이 추적되고 앱은 실제로 필요한 것만 표시합니다.",
+  },
   "debugging-pipeline-issues": {
     title: "파이프라인 문제 디버깅",
     description:
@@ -393,6 +403,11 @@ export const topics: Record<string, { title: string; description: string }> = {
     title: "이상 탐지",
     description:
       "에이전트에서 비정상적인 일이 발생할 때 경고 받기. 시스템은 각 에이전트의 정상이 무엇인지 학습하고 비정상적인 모든 것을 표시합니다 — 갑작스러운 비용 급증이나 예상치 못한 실패 같은. 무언가 주의가 필요하면 가장 먼저 알게 됩니다.",
+  },
+  "the-director": {
+    title: "Director — 자동 에이전트 코칭",
+    description:
+      "즐겨찾기한 에이전트를 검토하고 각 실행을 0–5점으로 평가하며 구체적인 코칭 메모를 남기는 내장 메타 에이전트. 에이전트에 별표를 달면 Director의 범위에 들어갑니다. 평가는 Activity의 별점 열과 각 실행의 Director 탭에 표시됩니다. Obsidian Brain을 장기 메모리로 사용할 수 있어 시간이 지날수록 코칭이 개선됩니다.",
   },
   "local-vs-cloud-execution": {
     title: "로컬 vs 클라우드 실행",

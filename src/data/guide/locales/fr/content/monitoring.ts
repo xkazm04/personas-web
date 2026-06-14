@@ -221,6 +221,42 @@ Commencez avec des plafonds environ 3x ce que vous attendez qu'une journée typi
 :::
   `,
 
+  "the-director": `
+## Le Director — Coaching automatique des agents
+
+Le **Director** est un méta-agent intégré qui surveille vos autres agents et les coache pour qu'ils soient véritablement utiles. Au lieu de lire vous-même chaque exécution, le Director les examine à votre place et laisse un verdict.
+
+Vous choisissez ce qu'il surveille en **étoilant** les agents (l'⭐ sur chaque ligne dans Tous les agents). Un agent étoilé est « dans le périmètre du Director » — le Director l'examine ; les agents non étoilés sont laissés de côté. Le Director lui-même est un agent système et ne peut pas être supprimé.
+
+### Le centre de commande
+
+Le Director se trouve sous **Vue d'ensemble › Director** — un écran dédié et focalisé :
+
+- Un **tableau de bord de portefeuille** : quelle part du travail de votre flotte a réellement produit de la valeur, le score de verdict moyen, votre coût par exécution à valeur délivrée, et une distribution 0–5 montrant comment vos agents étoilés se comparent.
+- Un **tableau de coaching** listant chaque agent dans le périmètre — score, sparkline de tendance (le coaching fait-il avancer les choses ?), taux de valeur, dernière révision, et **étiquettes d'attention** qui signalent exactement ce sur quoi agir (en attente d'une première révision, score faible, en déclin, obsolète). Filtrez pour n'afficher que les agents qui nécessitent attention. Cliquez sur n'importe quel agent pour ouvrir son **détail** — historique complet des verdicts avec le raisonnement et les suggestions concrètes derrière chaque score.
+- Un en-tête fin avec **Réviser tous dans le périmètre**, un sélecteur **Ajouter au périmètre**, et le bouton de basculement de la **mémoire** à long terme.
+
+La page Tous les agents conserve un bandeau Director discret qui renvoie directement ici.
+
+### À quoi ressemble un verdict
+
+Chaque révision produit un **score global de 0 à 5** plus des notes de coaching facultatives :
+
+- La colonne **Verdict** dans la liste d'Activité affiche le score sous forme d'étoiles, juste à côté de l'agent — un coup d'œil vous dit quelles exécutions ont mérité leur coût.
+- L'onglet **Director** sur n'importe quelle exécution ouvre l'évaluation complète en markdown lisible : le score, un résumé en une ligne, et des suggestions précises (un ajustement de prompt, un garde-fou, un changement de niveau de modèle, un outil manquant).
+- Les notes actionnables atterrissent également dans votre file de révision, où les approuver ou les rejeter enseigne au Director vos préférences au fil du temps.
+
+Un agent sain obtient un score élevé avec peu ou pas de coaching — le Director reste silencieux quand il n'y a rien à améliorer.
+
+### Mémoire à long terme (facultatif)
+
+Si vous utilisez l'**Obsidian Brain**, vous pouvez activer la mémoire à long terme du Director. Il lit alors ses propres notes passées sur un agent avant chaque révision (pour que les conseils s'accumulent au lieu de se répéter) et écrit chaque nouveau verdict dans un dossier \`Director/\` de votre vault — un historique de coaching durable et lisible par un humain.
+
+### Pourquoi c'est important
+
+Les compteurs bruts (exécutions, coût, taux de réussite) vous disent *ce qui* s'est passé, pas *si ça en valait la peine*. Le Director ajoute la couche de jugement manquante — une lecture honnête et fondée sur des preuves de la valeur et de l'efficacité de chaque agent — pour qu'une flotte d'agents reste utile sans que vous ayez à auditer chaque exécution à la main.
+  `,
+
   "anomaly-detection": `
 ## Détection d'anomalies
 

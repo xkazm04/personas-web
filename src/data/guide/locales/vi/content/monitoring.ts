@@ -244,4 +244,40 @@ Baseline là một cửa sổ cuộn của các lần chạy gần đây (có th
 Các bất thường mà bạn điều tra và giải quyết nên được xóa (đánh dấu chúng "đã điều tra"). Baseline loại trừ các bất thường đã được điều tra khỏi cửa sổ cuộn của nó, vì vậy hệ thống không trôi dạt theo hướng coi lần chạy bất thường là "bình thường".
 :::
   `,
+
+  "the-director": `
+## The Director — Huấn Luyện Agent Tự Động
+
+**The Director** là một meta-agent tích hợp sẵn theo dõi các agent khác của bạn và huấn luyện chúng để thực sự hữu ích hơn. Thay vì bạn phải đọc từng lần chạy, Director xem xét thay cho bạn và để lại nhận định.
+
+Bạn chọn những gì nó theo dõi bằng cách **gắn sao** các agent (biểu tượng ⭐ trên mỗi hàng trong All Agents). Agent được gắn sao là "trong phạm vi của Director" — Director sẽ xem xét nó; các agent chưa gắn sao thì không. Bản thân Director là một agent hệ thống và không thể bị xóa.
+
+### Trung tâm chỉ huy
+
+Director nằm trong **Overview › Director** — một màn hình tập trung duy nhất:
+
+- Một **thẻ điểm danh mục**: bao nhiêu công việc của đội agent thực sự tạo ra giá trị, điểm nhận định trung bình, chi phí trên mỗi lần chạy có giá trị, và phân bố 0–5 cho thấy các agent được gắn sao đứng ở đâu.
+- Một **bảng huấn luyện** gồm mọi agent trong phạm vi — điểm số, đường xu hướng (huấn luyện có tạo ra thay đổi không?), tỷ lệ giá trị, lần xem xét gần nhất, và **thẻ chú ý** đánh dấu chính xác những gì cần hành động (chờ xem xét đầu tiên, điểm thấp, đang giảm, lỗi thời). Lọc chỉ những agent cần chú ý. Nhấp vào bất kỳ agent nào để mở **chi tiết** — lịch sử nhận định đầy đủ với lý do và gợi ý cụ thể đằng sau mỗi điểm số.
+- Một tiêu đề nhỏ với **Xem xét tất cả trong phạm vi**, bộ chọn **Thêm vào phạm vi**, và nút chuyển đổi **bộ nhớ** dài hạn.
+
+Trang All Agents giữ một dải Director mỏng liên kết thẳng đến đây.
+
+### Một nhận định trông như thế nào
+
+Mỗi lần xem xét tạo ra một **điểm số tổng thể 0–5** cộng với ghi chú huấn luyện tùy chọn:
+
+- Cột **Verdict** trong danh sách Activity hiển thị điểm số dưới dạng sao, ngay bên cạnh agent — một cái nhìn cho bạn biết lần chạy nào xứng đáng với chi phí.
+- Tab **Director** trên bất kỳ lần chạy nào mở đánh giá đầy đủ dưới dạng markdown có thể đọc được: điểm số, tóm tắt một dòng, và gợi ý cụ thể (chỉnh sửa prompt, thêm rào chắn, thay đổi cấp mô hình, công cụ còn thiếu).
+- Ghi chú có thể hành động cũng được đưa vào hàng đợi xem xét của bạn, nơi phê duyệt hoặc từ chối chúng dạy Director biết gu của bạn theo thời gian.
+
+Một agent khỏe mạnh đạt điểm cao với ít hoặc không cần huấn luyện — Director im lặng khi không có gì cần cải thiện.
+
+### Bộ nhớ dài hạn (tùy chọn)
+
+Nếu bạn sử dụng **Obsidian Brain**, bạn có thể bật bộ nhớ dài hạn của Director. Khi đó nó đọc các ghi chú trong quá khứ về một agent trước mỗi lần xem xét (để lời khuyên cộng dồn thay vì lặp lại) và ghi lại từng nhận định mới vào thư mục \`Director/\` trong vault của bạn — một lịch sử huấn luyện bền vững, có thể đọc được bởi con người.
+
+### Tại Sao Điều Này Quan Trọng
+
+Các con số thô (lần chạy, chi phí, tỷ lệ thành công) cho bạn biết *điều gì* đã xảy ra, không phải *liệu nó có đáng không*. Director bổ sung lớp phán đoán còn thiếu — đánh giá trung thực, dựa trên bằng chứng về giá trị và hiệu quả của từng agent — để một đội agent vẫn hữu ích mà không cần bạn kiểm tra từng lần chạy bằng tay.
+  `,
 };

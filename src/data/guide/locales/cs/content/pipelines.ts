@@ -294,4 +294,60 @@ Engine pipeline emituje strukturované události selhání, když běh agenta zh
 Většina selhání pipeline jsou problémy spojení, ne problémy agentů. Když se něco rozbije, nejprve prozkoumej spojení krmící selhávajícího agenta — jaký tvar skutečně dostal? Mnohem častěji je to „data byla špatná" než „agent byl špatný"; inspektor spojení ti řekne, který případ to je za méně než minutu.
 :::
   `,
+
+  "team-assignments": `
+## Týmová zadání
+
+Pipeliny propojují každý krok ručně. Zadání to obrátí: předáš týmu **cíl** v přirozené řeči a tým si kroky vymyslí sám. Cíl rozloží na seznam úkolů, vybere pro každý krok nejvhodnějšího agenta a spustí je paralelně — zastaví se a zeptá se tě jen tehdy, když krok selže nebo vyžaduje rozhodnutí.
+
+Představ si to jako rozdíl mezi kreslením vývojového diagramu a předáním úkolu projektovému manažerovi. S pipelinou navrhuješ postup; se zadáním popíšeš výsledek a necháš tým, ať se kolem něj sám zorganizuje.
+
+### Klíčové body
+
+- **Cíl na prvním místě** — popíšeš, co chceš; tým cíl rozloží do seřazených kroků
+- **Chytré párování** — každý krok je předán agentovi, který mu nejlépe vyhovuje (agenty můžeš přiřadit ručně, použít rychlé lokální párování, nebo nechat rozhodnutí na modelu)
+- **Automatické rozložení** — jedním kliknutím se cíl změní na upravitelný seznam kroků, který můžeš ještě před spuštěním doladit
+- **Paralelní spouštění** — nezávislé kroky běží současně; závislé kroky čekají na svou řadu
+- **Lidská kontrola při selhání** — selhání kroku pozastaví jen dané zadání a nabídne ti možnosti Upravit / Přeřadit / Přeskočit s upozorněním v titulní liště
+- **Znovu použitelné šablony** — ulož cíl i rozložení kroků jako šablonu a spouštěj z ní nová zadání jedním kliknutím
+- **Odeslání přes chat** — požádej Athenu, aby „nechala výzkumný tým to vyřídit", a ona ti zadání připraví k schválení
+
+### Jak to funguje
+
+Otevři plátno týmu a klikni na odznak **Zadání** (vlevo dole). Stiskni **Nové**, napiš cíl a buď vyplň kroky sám/sama, nebo klikni na **Automaticky rozložit** a nech asistenta, ať je navrhne. Zvol způsob párování agentů s kroky, nastav, kolik jich může běžet současně, a klikni na **Vytvořit a spustit**. Sleduj, jak se seznam úkolů aktualizuje živě; pokud krok selže, vyřeš ho přímo v místě. Cokoli, co budeš chtít spustit znovu, ulož jako šablonu.
+
+:::tip
+Použij zadání, když znáš výsledek, ale ne přesné kroky. Použij pipelinu, když chceš přesnou, opakovatelnou kontrolu nad každým spojením. Šablony propojují obojí — uložené zadání se stane výchozím bodem na jedno kliknutí.
+:::
+  `,
+
+  "team-memory-and-goals": `
+## Týmová paměť a cíle
+
+Tým je víc než jen sada agentů — jsou to agenti, kteří **pamatují společně** a táhnou ke sdílenému výsledku. Funguje to díky dvěma věcem: sdílené týmové paměti a cílům.
+
+### Sdílená týmová paměť
+
+Jak tým pracuje, zaznamenává rozhodnutí a omezení — „sjednotili jsme se na tomto formátu", „tento účet je mimo rozsah", „recenzent odmítl přístup X". Tyto záznamy se stávají **týmovou pamětí** a stručný přehled těch nejdůležitějších se promítá do kontextu každého člena při jeho příštím běhu.
+
+Výsledek: tým konverguje místo toho, aby se opakoval. Agent znovu neobjevuje rozhodnutí, které už udělal jeho spoluhráč — přebírá ho. Tuto paměť si můžeš prohlížet a spravovat na panelu Týmová paměť na plátně.
+
+### Cíle — řízení bez mikromanagementu
+
+Propoj tým s **cílem** a přestaneš hlídat jednotlivé běhy. Cíl sleduje postup, jak tým pracuje, a aplikace upozorní jen na věci, které skutečně potřebují člověka — zasekaný cíl, blížící se termín, krok čekající na tvé schválení. Všechno ostatní prostě běží.
+
+To je smyčka „nastavíš směr, zůstaneš na vysoké úrovni": ty definuješ výsledek a mantinely; tým se postará o zbytek a zvedne ruku, až tě bude potřebovat.
+
+:::tip
+Představ si týmovou paměť jako institucionální znalost týmu a cíl jako jeho severní hvězdu. Paměť udržuje tým konzistentní běh od běhu; cíl ho drží namířeného na něco smysluplného.
+:::
+
+### Klíčové body
+
+- **Sdílená paměť** — rozhodnutí a omezení zaznamenaná týmem se vkládají do kontextu každého člena při příštím běhu
+- **Konvergence** — členové staví na závěrech ostatních místo toho, aby je znovu odvozovali
+- **Propojení s cílem** — navázání týmu na cíl umožňuje sledovat postup a termíny
+- **Vyneseno na povrch, ne zahlceno** — fronta pozornosti upozorní jen na to, co vyžaduje tebe (zaseknuté, po termínu, čeká na schválení)
+- **Spravuj ji** — týmové paměti si prohlíží, upravuj nebo odstraňuj z panelu na plátně
+  `,
 };

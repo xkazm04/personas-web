@@ -221,6 +221,42 @@ Trends उसी निष्पादन और ट्रेस स्टोर
 :::
   `,
 
+  "the-director": `
+## Director — स्वचालित Agent Coaching
+
+**Director** एक built-in meta-agent है जो आपके दूसरे agents को देखता है और उन्हें वास्तव में उपयोगी बनने की ओर coach करता है। हर run खुद पढ़ने के बजाय Director उन्हें आपके लिए review करता है और एक verdict छोड़ता है।
+
+आप तय करते हैं कि वह क्या देखे — agents को **starring** करके (All Agents की हर row पर ⭐)। Starred agent "Director के scope में" होता है — Director उसकी review करता है; unstarred agents को छोड़ दिया जाता है। Director खुद एक system agent है और इसे delete नहीं किया जा सकता।
+
+### Command center
+
+Director **Overview › Director** के अंतर्गत रहता है — एक केंद्रित screen:
+
+- एक **portfolio scorecard**: आपके fleet के कितने काम ने वास्तव में value deliver की, औसत verdict score, आपकी cost per value-delivered run, और 0–5 distribution जो दिखाती है कि आपके starred agents कहाँ खड़े हैं।
+- scope में हर agent की एक **coaching table** — score, एक trend sparkline (क्या coaching असर कर रही है?), value rate, आखिरी review, और **attention tags** जो ठीक बताते हैं कि क्या action लेना है (पहली review का इंतजार, कम score, गिरावट, stale)। केवल उन agents को filter करें जिन पर ध्यान चाहिए। किसी भी agent पर क्लिक करें ताकि उसकी **detail** खुले — हर score के पीछे की reasoning और ठोस सुझावों सहित पूरा verdict history।
+- एक पतला header जिसमें **Review all in scope**, एक **Add to scope** picker, और long-term-**memory** toggle है।
+
+All Agents page पर एक slim Director strip है जो सीधे यहाँ link करती है।
+
+### Verdict कैसा दिखता है
+
+हर review एक overall **0–5 score** और वैकल्पिक coaching notes देती है:
+
+- Activity list का **Verdict** column score को stars के रूप में दिखाता है, agent के ठीक बगल में — एक नज़र में पता चलता है कि किन runs ने अपनी cost justify की।
+- किसी भी run का **Director** tab readable markdown में पूरा assessment खोलता है: score, एक-पंक्ति summary, और specific सुझाव (prompt tweak, guardrail, model-tier change, missing tool)।
+- Actionable notes आपकी review queue में भी आती हैं, जहाँ उन्हें approve या reject करने से Director को आपकी पसंद का पता चलता है।
+
+एक healthy agent कम या बिना coaching के ऊँचा score करता है — जब सुधारने को कुछ न हो तो Director चुप रहता है।
+
+### Long-term memory (वैकल्पिक)
+
+यदि आप **Obsidian Brain** उपयोग करते हैं, तो आप Director की long-term memory चालू कर सकते हैं। तब वह हर review से पहले किसी agent के बारे में अपने पुराने notes पढ़ता है (ताकि सलाह दोहराने के बजाय बढ़ती जाए) और हर नया verdict आपके vault के \`Director/\` folder में लिखता है — एक टिकाऊ, human-readable coaching history।
+
+### यह क्यों मायने रखता है
+
+Raw counts (runs, cost, success rate) बताते हैं कि *क्या* हुआ, *क्या वह सार्थक था* नहीं। Director वह missing judgment layer जोड़ता है — हर agent की value और efficiency पर एक ईमानदार, साक्ष्य-आधारित राय — ताकि agents का पूरा fleet हर run को खुद audit किए बिना उपयोगी बना रहे।
+  `,
+
   "anomaly-detection": `
 ## विसंगति का पता लगाना
 

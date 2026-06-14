@@ -221,6 +221,42 @@ Empieza con topes alrededor de 3x lo que esperas que cueste un día típico. Lo 
 :::
   `,
 
+  "the-director": `
+## El Director — Entrenamiento automático de agentes
+
+El **Director** es un meta-agente integrado que vigila a tus otros agentes y los guía para que sean genuinamente útiles. En lugar de que tú leas cada ejecución, el Director las revisa por ti y deja un veredicto.
+
+Decides qué observa mediante el **destacado** de agentes (la ⭐ en cada fila de Todos los agentes). Un agente destacado está "en el ámbito del Director" — el Director lo revisa; los agentes no destacados se dejan como están. El Director en sí es un agente del sistema y no puede eliminarse.
+
+### El centro de mando
+
+El Director vive en **Vista general › Director** — una pantalla enfocada:
+
+- Un **panel de control de cartera**: cuánto del trabajo de tu flota entregó valor real, la puntuación media de los veredictos, tu coste por ejecución de valor entregado y una distribución de 0 a 5 que muestra cómo están tus agentes destacados.
+- Una **tabla de entrenamiento** con cada agente en el ámbito — puntuación, una minigráfica de tendencia (¿está avanzando el entrenamiento?), tasa de valor, última revisión y **etiquetas de atención** que señalan exactamente en qué actuar (pendiente de primera revisión, puntuación baja, en declive, sin revisiones recientes). Filtra para ver solo los agentes que necesitan atención. Haz clic en cualquier agente para abrir su **detalle** — historial completo de veredictos con el razonamiento y las sugerencias concretas detrás de cada puntuación.
+- Una cabecera con **Revisar todos los del ámbito**, un selector **Añadir al ámbito** y el interruptor de **memoria** a largo plazo.
+
+La página Todos los agentes mantiene una franja de Director discreta que enlaza directamente aquí.
+
+### Cómo es un veredicto
+
+Cada revisión produce una **puntuación global de 0 a 5** más notas de entrenamiento opcionales:
+
+- La columna **Veredicto** en la lista de Actividad muestra la puntuación como estrellas, justo junto al agente — un vistazo te dice qué ejecuciones justificaron su coste.
+- La pestaña **Director** en cualquier ejecución abre la evaluación completa en markdown legible: la puntuación, un resumen en una línea y sugerencias concretas (un ajuste de prompt, una salvaguarda, un cambio de nivel de modelo, una herramienta que falta).
+- Las notas accionables también llegan a tu cola de revisión, donde aprobarlas o rechazarlas le enseña al Director tu criterio con el tiempo.
+
+Un agente saludable obtiene puntuaciones altas con poco o ningún entrenamiento — el Director guarda silencio cuando no hay nada que mejorar.
+
+### Memoria a largo plazo (opcional)
+
+Si usas el **Obsidian Brain**, puedes activar la memoria a largo plazo del Director. Entonces leerá sus propias notas anteriores sobre un agente antes de cada revisión (para que los consejos se acumulen en lugar de repetirse) y escribirá cada nuevo veredicto en una carpeta \`Director/\` de tu bóveda — un historial de entrenamiento duradero y legible por personas.
+
+### Por qué importa
+
+Los recuentos brutos (ejecuciones, coste, tasa de éxito) te dicen *qué* ocurrió, no *si valió la pena*. El Director añade la capa de juicio que faltaba — una lectura honesta y basada en evidencia del valor y la eficiencia de cada agente — para que una flota de agentes se mantenga útil sin que tengas que auditar cada ejecución a mano.
+  `,
+
   "anomaly-detection": `
 ## Detección de anomalías
 

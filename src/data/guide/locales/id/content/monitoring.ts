@@ -221,6 +221,42 @@ Mulai dengan batas sekitar 3x dari yang Anda harapkan biaya hari tipikal. Cukup 
 :::
   `,
 
+  "the-director": `
+## Director — Pelatihan Agen Otomatis
+
+**Director** adalah meta-agen bawaan yang mengawasi agen-agen lain Anda dan melatih mereka agar benar-benar berguna. Alih-alih Anda membaca setiap run, Director meninjau run tersebut untuk Anda dan memberikan sebuah verdict.
+
+Anda memilih apa yang dipantaunya dengan cara **memberi bintang** pada agen (ikon ⭐ di setiap baris pada All Agents). Agen berbintang berarti "berada dalam cakupan Director" — Director meninjaunya; agen yang tidak berbintang dibiarkan saja. Director sendiri adalah agen sistem dan tidak dapat dihapus.
+
+### Pusat komando
+
+Director berada di **Overview › Director** — satu layar yang terfokus:
+
+- Sebuah **scorecard portofolio**: seberapa besar pekerjaan fleet Anda yang benar-benar menghasilkan nilai, rata-rata skor verdict, biaya per run yang memberikan nilai, dan distribusi 0–5 yang menunjukkan posisi agen berbintang Anda.
+- Sebuah **tabel pelatihan** setiap agen dalam cakupan — skor, sparkline tren (apakah pelatihan memberikan dampak?), value rate, tinjauan terakhir, dan **attention tag** yang menandai tepatnya apa yang perlu ditindaklanjuti (menunggu tinjauan pertama, skor rendah, menurun, tidak diperbarui). Filter hanya agen yang membutuhkan perhatian. Klik agen mana pun untuk membuka **detailnya** — riwayat verdict lengkap dengan alasan dan saran konkret di balik setiap skor.
+- Header tipis dengan **Review all in scope**, pemilih **Add to scope**, dan toggle **memory** jangka panjang.
+
+Halaman All Agents memiliki strip Director ramping yang menautkan langsung ke sini.
+
+### Tampilan sebuah verdict
+
+Setiap tinjauan menghasilkan **skor 0–5** secara keseluruhan ditambah catatan pelatihan opsional:
+
+- Kolom **Verdict** di daftar Activity menampilkan skor sebagai bintang, tepat di samping agen — satu pandangan memberi tahu Anda run mana yang layak biayanya.
+- Tab **Director** pada run mana pun membuka penilaian lengkap dalam markdown yang mudah dibaca: skor, ringkasan satu baris, dan saran spesifik (penyesuaian prompt, guardrail, perubahan tier model, alat yang hilang).
+- Catatan yang dapat ditindaklanjuti juga masuk ke antrean tinjauan Anda, di mana menyetujui atau menolaknya mengajarkan Director selera Anda dari waktu ke waktu.
+
+Agen yang sehat mendapat skor tinggi dengan sedikit atau tanpa pelatihan — Director tetap diam ketika tidak ada yang perlu ditingkatkan.
+
+### Memori jangka panjang (opsional)
+
+Jika Anda menggunakan **Obsidian Brain**, Anda dapat mengaktifkan memori jangka panjang Director. Director kemudian membaca catatan lamanya tentang sebuah agen sebelum setiap tinjauan (sehingga saran terakumulasi alih-alih berulang) dan menulis setiap verdict baru ke folder \`Director/\` di vault Anda — riwayat pelatihan yang tahan lama dan mudah dibaca manusia.
+
+### Mengapa Ini Penting
+
+Angka mentah (run, biaya, tingkat sukses) memberi tahu Anda *apa* yang terjadi, bukan *apakah itu sebanding*. Director menambahkan lapisan penilaian yang hilang — pembacaan jujur berbasis bukti tentang nilai dan efisiensi setiap agen — sehingga fleet agen tetap berguna tanpa Anda mengaudit setiap run secara manual.
+  `,
+
   "anomaly-detection": `
 ## Deteksi Anomali
 

@@ -244,4 +244,40 @@ Baseline je posuvné okno nedávných běhů (konfigurovatelné; výchozí 50). 
 Anomálie, které prozkoumáš a vyřešíš, by měly být vymazány (označ je „vyšetřeno"). Baseline vylučuje vyšetřené anomálie ze svého posuvného okna, takže systém nedrejtuje k tomu, aby považoval anomální běh za „normální".
 :::
   `,
+
+  "the-director": `
+## Director — automatický koučink agentů
+
+**Director** je vestavěný meta-agent, který sleduje tvé ostatní agenty a koučuje je, aby byli skutečně užiteční. Místo toho, abys musel/a číst každý běh sám/sama, Director je přezkoumá za tebe a zanechá verdikt.
+
+Ty rozhoduješ, co sleduje, pomocí **hvězdiček** u agentů (⭐ na každém řádku v sekci Všichni agenti). Agent s hvězdičkou je „ve scope Directora" — Director ho přezkoumává; agenti bez hvězdičky jsou ponecháni stranou. Director sám je systémový agent a nelze ho smazat.
+
+### Velitelské centrum
+
+Director sídlí pod **Přehled › Director** — jedna přehledná obrazovka:
+
+- **Přehled portfolia**: kolik práce tvé flotily skutečně přineslo hodnotu, průměrné skóre verdiktu, náklady na běh s přidanou hodnotou a distribuce 0–5 ukazující, jak si vedou tvoji agenti s hvězdičkou.
+- **Tabulka koučinku** každého agenta ve scope — skóre, trendová sparkline (posunuje koučink jehlu?), míra hodnoty, poslední přezkoumání a **štítky pozornosti**, které přesně označí, co je třeba řešit (čeká na první přezkoumání, nízké skóre, klesá, zastaralé). Filtruj na agenty, kteří potřebují pozornost. Klikni na libovolného agenta pro otevření jeho **detailu** — úplná historie verdiktů s odůvodněním a konkrétními návrhy za každým skóre.
+- Tenký záhlaví s tlačítkem **Přezkoumat vše ve scope**, výběrem **Přidat do scope** a přepínačem dlouhodobé **paměti**.
+
+Stránka Všichni agenti má tenký pruh Directora, který vede přímo sem.
+
+### Jak vypadá verdikt
+
+Každé přezkoumání přináší celkové **skóre 0–5** a volitelné koučovací poznámky:
+
+- Sloupec **Verdikt** v seznamu Aktivita zobrazuje skóre jako hvězdičky přímo vedle agenta — jedním pohledem vidíš, které běhy stály za své náklady.
+- Karta **Director** u libovolného běhu otevře celé hodnocení ve čitelném markdownu: skóre, jednořádkové shrnutí a konkrétní návrhy (úprava promptu, guardrail, změna třídy modelu, chybějící nástroj).
+- Použitelné poznámky se také dostanou do tvé fronty přezkoumání, kde jejich schvalování nebo odmítání učí Directora tvůj vkus postupem času.
+
+Zdravý agent dosahuje vysokého skóre s minimem nebo žádným koučinkem — Director mlčí, když není co zlepšovat.
+
+### Dlouhodobá paměť (volitelné)
+
+Pokud používáš **Obsidian Brain**, můžeš zapnout dlouhodobou paměť Directora. Pak si před každým přezkoumáním přečte své vlastní dřívější poznámky o daném agentovi (aby se rady kumulovaly místo opakování) a každý nový verdikt zapíše do složky \`Director/\` ve tvém vaultu — trvalá, lidsky čitelná koučovací história.
+
+### Proč na tom záleží
+
+Surová čísla (běhy, náklady, míra úspěchu) ti říkají *co* se stalo, ne *zda to stálo za to*. Director přidává chybějící vrstvu úsudku — poctivé, na důkazech založené čtení hodnoty a efektivity každého agenta — takže flotila agentů zůstává užitečná, aniž bys musel/a ručně auditovat každý běh.
+  `,
 };

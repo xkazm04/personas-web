@@ -271,6 +271,62 @@ Selbst wenn keine Vorlage exakt passt, ist die nächstgelegene zu wählen und zu
 :::
   `,
 
+  "team-assignments": `
+## Team-Aufgaben
+
+Pipelines verdrahten jeden Schritt von Hand. Aufgaben drehen das um: du gibst dem Team ein **Ziel** in natürlicher Sprache, und das Team erarbeitet die Schritte selbst. Es zerlegt das Ziel in eine Checkliste, wählt den besten Agenten für jeden Schritt und führt sie parallel aus – es hält nur dann inne, wenn ein Schritt fehlschlägt oder eine Entscheidung nötig ist.
+
+Stell es dir wie den Unterschied zwischen dem Zeichnen eines Flussdiagramms und dem Briefing eines Projektmanagers vor. Mit einer Pipeline entwirfst du den Ablauf; mit einer Aufgabe nennst du das Ergebnis und lässt das Team sich darum organisieren.
+
+### Wichtige Punkte
+
+- **Ziel zuerst** — beschreibe, was du willst; das Team zerlegt es in geordnete Schritte
+- **Intelligente Zuweisung** — jeder Schritt wird an den dafür am besten geeigneten Agenten weitergeleitet (du kannst Agenten manuell festlegen, schnelles lokales Matching nutzen oder das Modell entscheiden lassen)
+- **Auto-Zerlegung** — ein Klick verwandelt ein Ziel in eine bearbeitbare Schritt-Liste, die du vor dem Start anpassen kannst
+- **Parallele Ausführung** — unabhängige Schritte laufen gleichzeitig; abhängige Schritte warten auf ihre Reihe
+- **Menschliche Prüfung bei Fehlern** — ein fehlgeschlagener Schritt pausiert nur diese Aufgabe und bietet dir Bearbeiten / Neu zuweisen / Überspringen an, mit einer Benachrichtigung in der Titelleiste
+- **Wiederverwendbare Vorlagen** — speichere ein Ziel und ein Schritt-Layout als Vorlage und starte neue Aufgaben daraus
+- **Chat-Versand** — bitte Athena, "lass das Research-Team das übernehmen", und sie richtet es zur Genehmigung für dich ein
+
+### So funktioniert es
+
+Öffne die Canvas eines Teams und klicke auf das **Aufgaben**-Badge (unten links). Klicke auf **Neu**, gib ein Ziel ein und fülle entweder die Schritte selbst aus oder klicke auf **Auto-Zerlegung**, damit der Assistent sie vorschlägt. Wähle, wie Agenten den Schritten zugewiesen werden, lege fest, wie viele gleichzeitig laufen, und klicke auf **Erstellen & starten**. Beobachte, wie sich die Checkliste live aktualisiert; wenn ein Schritt fehlschlägt, löse ihn direkt inline. Speichere alles, das du öfter nutzen wirst, als Vorlage.
+
+:::tip
+Nutze eine Aufgabe, wenn du das Ergebnis kennst, aber nicht die genauen Schritte. Nutze eine Pipeline, wenn du präzise, wiederholbare Kontrolle über jede Verbindung willst. Vorlagen verbinden beides – eine gespeicherte Aufgabe wird zum Ausgangspunkt auf einen Klick.
+:::
+  `,
+
+  "team-memory-and-goals": `
+## Team-Memory & Ziele
+
+Ein Team ist mehr als eine Gruppe von Agenten – es sind Agenten, die **gemeinsam erinnern** und auf ein geteiltes Ergebnis hinarbeiten. Zwei Dinge machen das möglich: geteiltes Team-Memory und Ziele.
+
+### Geteiltes Team-Memory
+
+Während ein Team arbeitet, hält es Entscheidungen und Rahmenbedingungen fest – "wir haben uns auf dieses Format geeinigt", "dieses Konto ist außerhalb des Umfangs", "der Reviewer hat Ansatz X abgelehnt". Diese Notizen werden zum **Team-Memory**, und ein kompakter Auszug der wichtigsten davon fließt beim nächsten Lauf in den Kontext jedes Mitglieds ein.
+
+Der Effekt: das Team konvergiert, statt sich zu wiederholen. Ein Agent entdeckt eine Entscheidung, die ein Teammitglied bereits getroffen hat, nicht neu – er übernimmt sie. Du kannst dieses Memory im Team-Memory-Panel auf der Canvas einsehen und pflegen.
+
+### Ziele – steuern ohne zu mikromanagen
+
+Verknüpfe ein Team mit einem **Ziel** und hör auf, einzelne Läufe zu beaufsichtigen. Das Ziel verfolgt den Fortschritt, während das Team arbeitet, und die App zeigt nur das an, was wirklich einen Menschen braucht – ein ins Stocken geratenes Ziel, eine nahende Deadline, ein Schritt, der auf deine Prüfung wartet. Alles andere läuft einfach weiter.
+
+Das ist die "Richtung vorgeben, auf Überblicksebene bleiben"-Schleife: du definierst das Ergebnis und die Leitplanken; das Team kümmert sich um den Rest und meldet sich, wenn es dich braucht.
+
+:::tip
+Stell dir das Team-Memory als das institutionelle Wissen des Teams vor und das Ziel als seinen Nordstern. Memory hält das Team von Lauf zu Lauf konsistent; das Ziel hält es auf etwas Erstrebenswertes ausgerichtet.
+:::
+
+### Wichtige Punkte
+
+- **Geteiltes Memory** — vom Team erfasste Entscheidungen und Rahmenbedingungen werden beim nächsten Lauf in den Kontext jedes Mitglieds injiziert
+- **Konvergenz** — Mitglieder bauen auf den Schlussfolgerungen der anderen auf, statt sie neu herzuleiten
+- **Ziel-Verknüpfung** — verknüpfe ein Team mit einem Ziel, um Fortschritt und Deadlines zu verfolgen
+- **Aufmerksamkeit, nicht Lärm** — die Aufmerksamkeits-Queue zeigt nur, was dich braucht (ins Stocken geraten, überfällig, wartet auf Prüfung)
+- **Pflege es** — prüfe, bearbeite oder entferne Team-Memories im Canvas-Panel
+  `,
+
   "debugging-pipeline-issues": `
 ## Pipeline-Probleme debuggen
 

@@ -234,6 +234,16 @@ export const topics: Record<string, { title: string; description: string }> = {
     description:
       "Tìm và sửa các vấn đề trong luồng đa agent. Khi một pipeline không hoạt động như mong đợi, trình gỡ lỗi làm nổi bật chính xác nơi mọi thứ đi sai. Bạn có thể kiểm tra dữ liệu tại từng bước để xác định vấn đề mà không cần đoán.",
   },
+  "team-assignments": {
+    title: "Nhiệm vụ đội",
+    description:
+      "Giao cho đội một mục tiêu bằng ngôn ngữ thông thường và để đội tự tổ chức công việc. Thay vì phải kết nối từng bước một cách thủ công, bạn mô tả điều mình muốn; đội chia nhỏ thành danh sách kiểm tra, chọn agent phù hợp cho từng phần và chạy song song — chỉ dừng lại để bạn xem xét khi có điều gì đó cần quyết định.",
+  },
+  "team-memory-and-goals": {
+    title: "Bộ nhớ & mục tiêu đội",
+    description:
+      "Cách đội duy trì sự nhất quán theo thời gian và cách bạn định hướng mà không cần quản lý vi mô. Các đội tích lũy bộ nhớ chung — những quyết định và ràng buộc được truyền vào lần chạy tiếp theo của mỗi thành viên, giúp đội hội tụ thay vì lặp lại. Liên kết đội với một mục tiêu và bạn có thể ở tầm cao: tiến độ được theo dõi và ứng dụng chỉ hiển thị những gì thực sự cần đến bạn.",
+  },
   "why-test-your-agents": {
     title: "Tại sao kiểm thử agent của bạn?",
     description:
@@ -393,6 +403,11 @@ export const topics: Record<string, { title: string; description: string }> = {
     title: "Phát hiện bất thường",
     description:
       "Nhận cảnh báo khi có điều gì đó bất thường xảy ra với agent của bạn. Hệ thống học những gì là bình thường cho mỗi agent và đánh dấu mọi thứ ngoài thông thường — như sự tăng đột biến về chi phí hoặc lỗi bất ngờ. Bạn sẽ là người đầu tiên biết nếu có gì cần chú ý.",
+  },
+  "the-director": {
+    title: "The Director — huấn luyện agent tự động",
+    description:
+      "Một meta-agent tích hợp sẵn theo dõi các agent được gắn sao của bạn và chấm điểm mỗi lần chạy từ 0 đến 5 kèm ghi chú huấn luyện cụ thể. Gắn sao một agent để đưa nó vào phạm vi của Director; các nhận định xuất hiện dưới dạng cột sao trong Activity và tab Director trên mỗi lần chạy. Có thể sử dụng Obsidian Brain của bạn làm bộ nhớ dài hạn để chất lượng huấn luyện cải thiện theo thời gian.",
   },
   "local-vs-cloud-execution": {
     title: "Thực thi cục bộ so với đám mây",

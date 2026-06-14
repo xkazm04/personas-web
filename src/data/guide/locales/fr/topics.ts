@@ -234,6 +234,16 @@ export const topics: Record<string, { title: string; description: string }> = {
     description:
       "Trouver et résoudre les problèmes dans les flux multi-agents. Quand un pipeline ne fonctionne pas comme prévu, le débogueur met en évidence exactement où les choses ont mal tourné. Vous pouvez inspecter les données à chaque étape pour identifier le problème sans deviner.",
   },
+  "team-assignments": {
+    title: "Attributions d'équipe",
+    description:
+      "Donnez à une équipe un objectif en langage naturel et laissez-la organiser le travail elle-même. Au lieu de câbler chaque étape à la main, vous décrivez ce que vous voulez ; l'équipe le décompose en liste de tâches, choisit l'agent adapté à chaque partie et les exécute en parallèle — en s'arrêtant pour votre validation uniquement quand une décision est nécessaire.",
+  },
+  "team-memory-and-goals": {
+    title: "Mémoire et objectifs d'équipe",
+    description:
+      "Comment une équipe reste cohérente dans le temps et comment vous la pilotez sans microgestion. Les équipes accumulent une mémoire partagée — les décisions et contraintes qui s'injectent dans la prochaine exécution de chaque membre, pour que l'équipe converge au lieu de se répéter. Liez une équipe à un objectif et vous restez à haut niveau : la progression est suivie et l'application ne vous sollicite que pour ce qui requiert vraiment votre attention.",
+  },
   "why-test-your-agents": {
     title: "Pourquoi tester vos agents ?",
     description:
@@ -393,6 +403,11 @@ export const topics: Record<string, { title: string; description: string }> = {
     title: "Détection d'anomalies",
     description:
       "Recevoir des alertes lorsque quelque chose d'inhabituel se produit avec vos agents. Le système apprend ce qui est normal pour chaque agent et signale tout ce qui sort de l'ordinaire — comme une augmentation soudaine des coûts ou un échec inattendu. Vous serez le premier informé si quelque chose nécessite attention.",
+  },
+  "the-director": {
+    title: "Le Director — coaching automatique des agents",
+    description:
+      "Un méta-agent intégré qui examine vos agents étoilés et attribue un score de 0 à 5 à chaque exécution, accompagné de conseils concrets. Étoilez un agent pour le placer dans le périmètre du Director ; les verdicts apparaissent sous forme de colonne d'étoiles dans l'Activité et d'un onglet Director sur chaque exécution. Il peut utiliser votre Obsidian Brain comme mémoire à long terme pour que son coaching s'améliore au fil du temps.",
   },
   "local-vs-cloud-execution": {
     title: "Exécution locale vs cloud",

@@ -187,6 +187,16 @@ export const topics: Record<string, { title: string; description: string }> = {
     title: "调试 pipeline 问题",
     description: "查找和修复多 agent 流中的问题。当 pipeline 不按预期工作时,调试器会准确突出显示出错的地方。你可以检查每个步骤的数据以查明问题,而无需猜测。",
   },
+  "team-assignments": {
+    title: "团队任务分配",
+    description:
+      "用自然语言给团队一个目标,让团队自己组织工作。你不必逐步手动配置每个环节,只需描述你想要的结果;团队会将其拆解为任务清单,为每个步骤选择最合适的 agent 并并行执行 — 只有在需要你做决策时才会暂停请求审核。",
+  },
+  "team-memory-and-goals": {
+    title: "团队 memory 与目标",
+    description:
+      "团队如何随时间保持连贯,以及如何在不陷入微观管理的情况下指引团队方向。团队会积累共享 memory — 每次运行中流入每位成员上下文的决策与约束,使团队逐渐收敛而不是不断重复。将团队与目标关联后,你可以保持高层视角:进度自动跟踪,应用只会将真正需要你介入的事项浮现出来。",
+  },
   "why-test-your-agents": {
     title: "为什么要测试你的 agent?",
     description: "测试如何帮助你构建更可靠的自动化。测试就像彩排 — 它让你在错误重要之前发现它们。几分钟的测试可以为你节省数小时修复问题。",
@@ -314,6 +324,11 @@ export const topics: Record<string, { title: string; description: string }> = {
   "anomaly-detection": {
     title: "异常检测",
     description: "当 agent 发生异常事情时收到警报。系统了解每个 agent 的正常情况,并标记任何不寻常的事情 — 如成本突然飙升或意外故障。如果有什么需要注意,你会第一个知道。",
+  },
+  "the-director": {
+    title: "Director — 自动 agent 辅导",
+    description:
+      "一个内置的元 agent,负责审阅你收藏的 agent,并为每次运行打出 0–5 分,附上具体的辅导建议。将 agent 加星标即可纳入 Director 的审阅范围;审阅结果以星级列的形式显示在 Activity 中,每次运行也会出现专属的 Director 选项卡。可选择接入你的 Obsidian Brain 作为长期 memory,使辅导质量随时间持续提升。",
   },
   "local-vs-cloud-execution": {
     title: "本地与云执行对比",

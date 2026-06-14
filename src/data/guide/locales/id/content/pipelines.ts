@@ -271,6 +271,62 @@ Bahkan ketika tidak ada template yang cocok persis, memilih yang terdekat dan me
 :::
   `,
 
+  "team-assignments": `
+## Team Assignment
+
+Pipeline mengkabelkan setiap langkah secara manual. Assignment membalik itu: Anda menyerahkan **goal** kepada tim dalam bahasa sederhana, dan tim mencari tahu langkah-langkahnya sendiri. Tim memecah goal menjadi checklist, memilih agen terbaik untuk setiap langkah, dan menjalankannya secara paralel — hanya berhenti untuk bertanya kepada Anda ketika suatu langkah gagal atau membutuhkan keputusan.
+
+Bayangkan perbedaan antara menggambar flowchart dan memberi pengarahan kepada seorang project manager. Dengan pipeline Anda merancang alurnya; dengan assignment Anda menyatakan hasilnya dan membiarkan tim mengorganisir diri sendiri.
+
+### Poin Kunci
+
+- **Goal-first** — deskripsikan apa yang Anda inginkan; tim mengurainya menjadi langkah-langkah yang terurut
+- **Pencocokan cerdas** — setiap langkah diarahkan ke agen yang paling sesuai (Anda dapat menetapkan agen secara manual, menggunakan pencocokan lokal yang cepat, atau membiarkan model memutuskan)
+- **Auto-decompose** — satu klik mengubah goal menjadi daftar langkah yang dapat diedit sebelum dijalankan
+- **Eksekusi paralel** — langkah-langkah independen berjalan bersamaan; langkah-langkah yang bergantung menunggu giliran
+- **Tinjauan manusia saat kegagalan** — langkah yang gagal hanya menjeda assignment tersebut dan menawarkan Anda pilihan Edit / Reassign / Skip, dengan notifikasi di title bar
+- **Template yang dapat digunakan ulang** — simpan goal beserta susunan langkah sebagai template dan buat assignment baru darinya
+- **Chat dispatch** — minta Athena untuk "biarkan tim riset menangani ini" dan ia akan menyiapkannya untuk persetujuan Anda
+
+### Cara Kerjanya
+
+Buka canvas tim dan klik badge **Assignments** (kiri bawah). Tekan **New**, ketik sebuah goal, dan isi langkah-langkahnya sendiri atau klik **Auto-decompose** agar asisten mengusulkannya. Pilih bagaimana agen dicocokkan ke langkah-langkah, atur berapa banyak yang berjalan sekaligus, dan klik **Create & start**. Pantau checklist yang diperbarui secara langsung; jika suatu langkah gagal, selesaikan langsung di situ. Simpan apa pun yang akan Anda jalankan lagi sebagai template.
+
+:::tip
+Gunakan assignment ketika Anda tahu hasilnya tetapi tidak tahu langkah-langkah tepatnya. Gunakan pipeline ketika Anda menginginkan kontrol yang tepat dan berulang atas setiap koneksi. Template menjembatani keduanya — assignment yang disimpan menjadi titik awal satu klik.
+:::
+  `,
+
+  "team-memory-and-goals": `
+## Team Memory & Goal
+
+Tim bukan sekadar sekumpulan agen — melainkan agen-agen yang **mengingat bersama** dan bergerak menuju hasil yang sama. Dua hal yang membuat ini berhasil: shared team memory, dan goal.
+
+### Shared team memory
+
+Saat tim bekerja, ia mencatat keputusan dan batasan — "kami menstandardisasi format ini", "akun ini di luar cakupan", "reviewer menolak pendekatan X". Catatan-catatan itu menjadi **team memory**, dan ringkasan singkat dari yang paling penting mengalir ke konteks setiap anggota pada run berikutnya.
+
+Efeknya: tim berkonvergensi alih-alih mengulang dirinya sendiri. Seorang agen tidak perlu menemukan kembali keputusan yang sudah dibuat anggota tim lainnya — ia mewarisinya. Anda dapat melihat dan mengkurasi memory ini di panel Team Memory pada canvas.
+
+### Goal — arahkan tanpa micromanaging
+
+Hubungkan tim ke sebuah **goal** dan Anda berhenti mengawasi run individual. Goal melacak progres saat tim bekerja, dan aplikasi hanya memunculkan hal-hal yang benar-benar membutuhkan seorang manusia — goal yang terhenti, tenggat waktu yang mendekat, langkah yang menunggu tinjauan Anda. Selebihnya berjalan sendiri.
+
+Inilah siklus "tetapkan arah, tetap di level tinggi": Anda mendefinisikan hasilnya dan batasannya; tim menangani sisanya dan mengangkat tangan ketika membutuhkan Anda.
+
+:::tip
+Bayangkan team memory sebagai pengetahuan institusional tim dan goal sebagai bintang utaranya. Memory menjaga tim tetap konsisten dari run ke run; goal menjaganya tetap mengarah pada sesuatu yang berharga.
+:::
+
+### Poin Kunci
+
+- **Shared memory** — keputusan/batasan yang dicatat tim disuntikkan ke run berikutnya setiap anggota
+- **Konvergensi** — anggota membangun di atas kesimpulan satu sama lain alih-alih menurunkan ulang
+- **Pengaitan goal** — hubungkan tim ke sebuah goal untuk melacak progres dan tenggat waktu
+- **Dimunculkan, tidak tersembunyi** — antrean perhatian hanya menampilkan apa yang membutuhkan Anda (terhenti, terlambat, menunggu tinjauan)
+- **Kurasi** — tinjau, edit, atau hapus team memory dari panel canvas
+  `,
+
   "debugging-pipeline-issues": `
 ## Men-debug Masalah Pipeline
 

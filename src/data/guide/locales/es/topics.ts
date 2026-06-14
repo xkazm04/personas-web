@@ -234,6 +234,16 @@ export const topics: Record<string, { title: string; description: string }> = {
     description:
       "Encontrar y solucionar problemas en flujos multi-agente. Cuando un pipeline no funciona como esperabas, el depurador resalta exactamente dónde salió mal todo. Puedes inspeccionar los datos en cada paso para identificar el problema sin adivinanzas.",
   },
+  "team-assignments": {
+    title: "Tareas asignadas al equipo",
+    description:
+      "Dale a un equipo un objetivo en lenguaje natural y deja que organice el trabajo por sí solo. En lugar de cablear cada paso a mano, describes lo que quieres; el equipo lo descompone en una lista de verificación, elige al agente adecuado para cada parte y los ejecuta en paralelo, deteniéndose para que revises solo cuando algo requiere una decisión.",
+  },
+  "team-memory-and-goals": {
+    title: "Memoria y objetivos del equipo",
+    description:
+      "Cómo un equipo mantiene coherencia con el tiempo y cómo lo orientas sin microgestionar. Los equipos acumulan memoria compartida — las decisiones y restricciones que fluyen al siguiente turno de cada miembro, para que el equipo converja en lugar de repetirse. Vincula un equipo a un objetivo y puedes mantenerte en el nivel alto: el progreso se rastrea y la app solo te muestra lo que realmente necesita tu atención.",
+  },
   "why-test-your-agents": {
     title: "¿Por qué probar tus agentes?",
     description:
@@ -393,6 +403,11 @@ export const topics: Record<string, { title: string; description: string }> = {
     title: "Detección de anomalías",
     description:
       "Recibe alertas cuando ocurre algo inusual con tus agentes. El sistema aprende qué es normal para cada agente y marca cualquier cosa fuera de lo común, como un pico súbito de coste o un fallo inesperado. Serás el primero en enterarte si algo requiere atención.",
+  },
+  "the-director": {
+    title: "El Director — entrenamiento automático de agentes",
+    description:
+      "Un meta-agente integrado que revisa tus agentes destacados y puntúa cada ejecución de 0 a 5 con notas de entrenamiento concretas. Destaca un agente para incluirlo en el ámbito del Director; los veredictos aparecen como una columna de estrellas en Actividad y una pestaña Director en cada ejecución. Puede usar tu Obsidian Brain como memoria a largo plazo para que su entrenamiento mejore con el tiempo.",
   },
   "local-vs-cloud-execution": {
     title: "Ejecución local vs en la nube",

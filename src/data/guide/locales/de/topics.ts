@@ -234,6 +234,16 @@ export const topics: Record<string, { title: string; description: string }> = {
     description:
       "Finde und behebe Probleme in Multi-Agenten-Flows. Wenn eine Pipeline nicht wie erwartet funktioniert, hebt der Debugger genau hervor, wo etwas schiefgelaufen ist. Du kannst die Daten an jedem Schritt prüfen, um das Problem ohne Raten zu lokalisieren.",
   },
+  "team-assignments": {
+    title: "Team-Aufgaben",
+    description:
+      "Gib einem Team ein Ziel in natürlicher Sprache und lass es die Arbeit selbst organisieren. Statt jeden Schritt von Hand zu verdrahten, beschreibst du, was du willst – das Team zerlegt es in eine Checkliste, wählt den passenden Agenten für jeden Teil und führt sie parallel aus. Es hält nur dann inne, wenn eine Entscheidung von dir nötig ist.",
+  },
+  "team-memory-and-goals": {
+    title: "Team-Memory & Ziele",
+    description:
+      "Wie ein Team langfristig kohärent bleibt und wie du es steuerst, ohne zu mikromanagen. Teams bauen gemeinsames Memory auf – Entscheidungen und Rahmenbedingungen, die in jeden nächsten Lauf aller Mitglieder einfließen, sodass das Team konvergiert statt sich zu wiederholen. Verknüpfe ein Team mit einem Ziel und du bleibst auf der Überblicksebene: Fortschritt wird verfolgt, und die App zeigt dir nur, was wirklich deine Aufmerksamkeit braucht.",
+  },
   "why-test-your-agents": {
     title: "Warum solltest du deine Agenten testen?",
     description:
@@ -393,6 +403,11 @@ export const topics: Record<string, { title: string; description: string }> = {
     title: "Anomalie-Erkennung",
     description:
       "Werde benachrichtigt, wenn mit deinen Agenten etwas Ungewöhnliches passiert. Das System lernt, was für jeden Agenten normal ist, und markiert alles Außergewöhnliche — wie einen plötzlichen Kostenanstieg oder einen unerwarteten Ausfall. Du erfährst als Erster, wenn etwas Aufmerksamkeit braucht.",
+  },
+  "the-director": {
+    title: "Der Director — automatisches Agenten-Coaching",
+    description:
+      "Ein eingebauter Meta-Agent, der deine markierten Agenten bewertet und jeden Lauf von 0–5 mit konkreten Coaching-Hinweisen einstuft. Markiere einen Agenten mit einem Stern, um ihn in den Zuständigkeitsbereich des Directors aufzunehmen. Urteile erscheinen als Sternespalte in der Aktivitätsansicht und als Director-Tab bei jedem Lauf. Kann dein Obsidian Brain als Langzeitgedächtnis nutzen, sodass das Coaching mit der Zeit besser wird.",
   },
   "local-vs-cloud-execution": {
     title: "Lokale vs. Cloud-Ausführung",
