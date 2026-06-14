@@ -277,6 +277,24 @@
         runs: string;
         alerts: string;
       };
+      cockpit: {
+        vitalsTitle: string;
+        vitalsTrend: string;
+        triageTitle: string;
+        triageSubtitle: string;
+        triageEmpty: string;
+        triageKindBreach: string;
+        triageKindIncident: string;
+        triageKindReview: string;
+        tickerLabel: string;
+        tickerSuccess: string;
+        tickerAgents: string;
+        tickerProviders: string;
+        tickerNextRoutine: string;
+        tickerAlerts: string;
+        tickerAllClear: string;
+        instrumentsTitle: string;
+      };
       heatmap: {
         title: string;
         subtitle: string;
@@ -1438,6 +1456,24 @@ export const en: Translations = {
       vitals: {
         runs: 'Runs',
         alerts: 'Alerts',
+      },
+      cockpit: {
+        vitalsTitle: 'Fleet vitals',
+        vitalsTrend: 'Success · 14 days',
+        triageTitle: 'Triage queue',
+        triageSubtitle: 'Ranked by urgency',
+        triageEmpty: 'All clear — nothing needs your attention right now.',
+        triageKindBreach: 'SLA breach',
+        triageKindIncident: 'Incident',
+        triageKindReview: 'Review',
+        tickerLabel: 'Live',
+        tickerSuccess: 'Fleet success',
+        tickerAgents: 'Agents online',
+        tickerProviders: 'Providers',
+        tickerNextRoutine: 'Next routine',
+        tickerAlerts: 'Open alerts',
+        tickerAllClear: 'All clear',
+        instrumentsTitle: 'Instruments',
       },
       heatmap: {
         title: 'Execution activity',
