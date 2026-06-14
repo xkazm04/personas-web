@@ -1,6 +1,6 @@
 "use client";
 
-import { motion } from "framer-motion";
+import { motion, useReducedMotion } from "framer-motion";
 import { Download } from "lucide-react";
 import { BRAND_VAR, tint } from "@/lib/brand-theme";
 import { VisualFrame, VisualRow } from "./chrome";
@@ -14,6 +14,7 @@ const PLATFORMS = [
 
 export function DownloadVisual({ brand }: VisualProps) {
   const color = BRAND_VAR[brand];
+  const reduced = useReducedMotion() ?? false;
   return (
     <VisualFrame>
       <div
@@ -21,8 +22,8 @@ export function DownloadVisual({ brand }: VisualProps) {
         style={{ backgroundColor: tint(brand, 18) }}
       >
         <motion.div
-          animate={{ y: [0, 4, 0] }}
-          transition={{ duration: 1.8, repeat: Infinity, ease: "easeInOut" }}
+          animate={reduced ? undefined : { y: [0, 4, 0] }}
+          transition={reduced ? undefined : { duration: 1.8, repeat: Infinity, ease: "easeInOut" }}
         >
           <Download className="h-10 w-10" style={{ color }} />
         </motion.div>

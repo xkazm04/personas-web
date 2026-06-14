@@ -1,12 +1,13 @@
 "use client";
 
-import { motion } from "framer-motion";
+import { motion, useReducedMotion } from "framer-motion";
 import { Dna, Play } from "lucide-react";
 import { GENOME_NODES } from "../data";
 import type { GenomeNode } from "../types";
 import TabBackdrop from "./TabBackdrop";
 
 export default function EvolutionTab() {
+  const reduced = useReducedMotion() ?? false;
   const width = 600;
   const height = 320;
   const padY = 30;
@@ -118,8 +119,8 @@ export default function EvolutionTab() {
                     fill="none"
                     stroke="#f59e0b"
                     strokeWidth={1.5}
-                    animate={{ opacity: [0.3, 0.8, 0.3], r: [14, 18, 14] }}
-                    transition={{ duration: 2, repeat: Infinity }}
+                    animate={reduced ? { opacity: 0.8, r: 16 } : { opacity: [0.3, 0.8, 0.3], r: [14, 18, 14] }}
+                    transition={reduced ? undefined : { duration: 2, repeat: Infinity }}
                   />
                 )}
                 <circle cx={cx} cy={cy} r={8} fill={fill} />

@@ -1,4 +1,10 @@
+"use client";
+
+import { useReducedMotion } from "framer-motion";
+
 export default function HealthyShieldIllustration() {
+  const reduced = useReducedMotion() ?? false;
+
   return (
     <svg
       viewBox="0 0 100 100"
@@ -17,23 +23,23 @@ export default function HealthyShieldIllustration() {
 
       {/* Orbit ring 3 (outermost) */}
       <circle cx="50" cy="50" r="46" stroke="#06b6d4" strokeOpacity="0.08" strokeWidth="0.5" fill="none" />
-      {/* Orbit dot 3 */}
-      <circle r="2" fill="#06b6d4" opacity="0.4">
-        <animateMotion dur="8s" repeatCount="indefinite" path="M96,50 A46,46 0 1,1 95.99,50" />
+      {/* Orbit dot 3 — rests at the path's start (right edge) when motion is reduced */}
+      <circle cx={reduced ? 96 : undefined} cy={reduced ? 50 : undefined} r="2" fill="#06b6d4" opacity="0.4">
+        {!reduced && <animateMotion dur="8s" repeatCount="indefinite" path="M96,50 A46,46 0 1,1 95.99,50" />}
       </circle>
 
       {/* Orbit ring 2 */}
       <circle cx="50" cy="50" r="38" stroke="#06b6d4" strokeOpacity="0.10" strokeWidth="0.5" fill="none" />
       {/* Orbit dot 2 */}
-      <circle r="1.5" fill="#34d399" opacity="0.5">
-        <animateMotion dur="6s" repeatCount="indefinite" path="M88,50 A38,38 0 1,1 87.99,50" />
+      <circle cx={reduced ? 88 : undefined} cy={reduced ? 50 : undefined} r="1.5" fill="#34d399" opacity="0.5">
+        {!reduced && <animateMotion dur="6s" repeatCount="indefinite" path="M88,50 A38,38 0 1,1 87.99,50" />}
       </circle>
 
       {/* Orbit ring 1 (innermost) */}
       <circle cx="50" cy="50" r="30" stroke="#06b6d4" strokeOpacity="0.12" strokeWidth="0.5" fill="none" />
       {/* Orbit dot 1 */}
-      <circle r="1.5" fill="#34d399" opacity="0.6">
-        <animateMotion dur="4s" repeatCount="indefinite" path="M80,50 A30,30 0 1,1 79.99,50" />
+      <circle cx={reduced ? 80 : undefined} cy={reduced ? 50 : undefined} r="1.5" fill="#34d399" opacity="0.6">
+        {!reduced && <animateMotion dur="4s" repeatCount="indefinite" path="M80,50 A30,30 0 1,1 79.99,50" />}
       </circle>
 
       {/* Shield body */}

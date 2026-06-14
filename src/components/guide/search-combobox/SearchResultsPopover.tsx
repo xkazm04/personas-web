@@ -1,4 +1,4 @@
-import { motion } from "framer-motion";
+import { motion, useReducedMotion } from "framer-motion";
 import { ArrowRight, Loader2 } from "lucide-react";
 
 import { highlightMatch } from "@/lib/highlight-match";
@@ -32,16 +32,17 @@ export function SearchResultsPopover({
   listRef: React.RefObject<HTMLDivElement | null>;
   onNavigate: (result: SearchResult) => void;
 }) {
+  const reduced = useReducedMotion() ?? false;
   return (
     <motion.div
       id="search-listbox"
       role="listbox"
       aria-label="Search results"
       ref={listRef}
-      initial={{ opacity: 0, y: -6 }}
+      initial={reduced ? { opacity: 0 } : { opacity: 0, y: -6 }}
       animate={{ opacity: 1, y: 0 }}
-      exit={{ opacity: 0, y: -6 }}
-      transition={TRANSITION_FAST}
+      exit={reduced ? { opacity: 0 } : { opacity: 0, y: -6 }}
+      transition={reduced ? { duration: 0 } : TRANSITION_FAST}
       className="absolute left-0 right-0 top-full z-50 mt-2 max-h-80 overflow-y-auto rounded-xl border border-glass-hover bg-surface/95 shadow-2xl backdrop-blur-xl"
     >
       {isPending && results.length === 0 ? (

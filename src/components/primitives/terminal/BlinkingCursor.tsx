@@ -1,6 +1,6 @@
 "use client";
 
-import { motion } from "framer-motion";
+import { motion, useReducedMotion } from "framer-motion";
 
 /**
  * Blinking block cursor for terminal-style UIs. Use after a typed-text
@@ -8,11 +8,12 @@ import { motion } from "framer-motion";
  * "ready for input" prompt.
  */
 export default function BlinkingCursor() {
+  const reduced = useReducedMotion() ?? false;
   return (
     <motion.span
       className="inline-block w-2 h-4 bg-brand-cyan ml-0.5 align-middle"
-      animate={{ opacity: [1, 0] }}
-      transition={{ duration: 0.8, repeat: Infinity, repeatType: "reverse" }}
+      animate={reduced ? { opacity: 1 } : { opacity: [1, 0] }}
+      transition={reduced ? undefined : { duration: 0.8, repeat: Infinity, repeatType: "reverse" }}
     />
   );
 }

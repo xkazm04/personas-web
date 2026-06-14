@@ -163,7 +163,7 @@ export default function SecurityVaultPillars() {
         className="mt-12 flex justify-center"
       >
         <div className="relative flex h-14 w-14 items-center justify-center">
-          <div className="absolute inset-0 animate-ping rounded-full bg-rose-500/10" />
+          <div className="absolute inset-0 motion-safe:animate-ping rounded-full bg-rose-500/10" />
           <div className="absolute inset-0 rounded-full bg-rose-500/5" />
           <Shield className="relative h-7 w-7 text-rose-500/70" />
         </div>

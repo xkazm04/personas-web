@@ -1,6 +1,6 @@
 "use client";
 
-import { motion } from "framer-motion";
+import { motion, useReducedMotion } from "framer-motion";
 import { NODE_R, QUEUE_Y } from "../data";
 import type { Wire } from "../types";
 import { SVGFocusRingCircle } from "@/components/SVGFocusRing";
@@ -16,6 +16,7 @@ export default function FlowWires({
   evGlowId: string;
   onRemoveWire: (from: string, to: string) => void;
 }) {
+  const reduced = useReducedMotion() ?? false;
   return (
     <>
       {wires.map((wire) => {
@@ -36,12 +37,18 @@ export default function FlowWires({
               fill="rgba(6,182,212,0.95)"
               filter={`url(#${evGlowId})`}
               initial={{ cx: from.x, cy: from.y + NODE_R, opacity: 0 }}
-              animate={{
-                cx: [from.x, from.x, to.x, to.x],
-                cy: [from.y + NODE_R, QUEUE_Y, QUEUE_Y, to.y - NODE_R],
-                opacity: [0, 1, 1, 0],
-              }}
-              transition={{ duration: 2.5, repeat: Infinity, ease: "linear", repeatDelay: 1 }}
+              animate={
+                reduced
+                  ? { cx: midX, cy: QUEUE_Y, opacity: 1 }
+                  : {
+                      cx: [from.x, from.x, to.x, to.x],
+                      cy: [from.y + NODE_R, QUEUE_Y, QUEUE_Y, to.y - NODE_R],
+                      opacity: [0, 1, 1, 0],
+                    }
+              }
+              transition={
+                reduced ? undefined : { duration: 2.5, repeat: Infinity, ease: "linear", repeatDelay: 1 }
+              }
             />
             <text
               x={midX}
