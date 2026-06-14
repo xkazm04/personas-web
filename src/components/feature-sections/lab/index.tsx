@@ -26,7 +26,7 @@ export default function Lab() {
         <SectionIntro
           heading="The"
           gradient="Lab"
-          description="Six ways to make your personas better — chat with them, fight them against each other, evolve them across generations, or score them on the dimensions that matter. Every improvement you keep is versioned and reversible."
+          description="Four ways to make your personas better — chat with them, fight them against each other, evolve them across generations, or score them on the dimensions that matter. Every improvement you keep is versioned and reversible."
           className="mb-0"
         />
       </motion.div>

@@ -1,3 +1,5 @@
+import { POLICY_META } from "@/data/policy-changelog";
+
 type Props = { changelog?: React.ReactNode };
 
 export default function TermsOfService({ changelog }: Props) {
@@ -24,7 +26,7 @@ export default function TermsOfService({ changelog }: Props) {
         </ul>
       </div>
 
-      <p className="text-base text-muted-dark">Last updated: April 2026</p>
+      <p className="text-base text-muted-dark">Last updated: {POLICY_META.terms.formattedUpdate}</p>
 
       {changelog}
 

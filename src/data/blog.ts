@@ -25,6 +25,14 @@ export const BLOG_CATEGORIES: { id: BlogCategory; label: string; color: string }
   { id: "engineering", label: "Engineering", color: "#fbbf24" },
 ];
 
+/** A post is published once its `date` is on/before now. Authors stage
+ *  future-dated posts in BLOG_POSTS; isPublished keeps them out of the index,
+ *  static params, direct URLs (404), and 404 suggestions until their date. */
+export function isPublished(post: BlogPost): boolean {
+  const t = new Date(post.date).getTime();
+  return Number.isFinite(t) && t <= Date.now();
+}
+
 export const BLOG_POSTS: BlogPost[] = [
   {
     slug: "introducing-personas",

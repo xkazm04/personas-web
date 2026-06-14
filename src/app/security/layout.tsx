@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { SITE_URL, safeJsonLd } from "@/lib/seo";
+import { SECURITY_FAQS } from "@/data/security";
 
 export const metadata: Metadata = {
   title: "Security & Privacy",
@@ -14,36 +15,17 @@ export const metadata: Metadata = {
   alternates: { canonical: `${SITE_URL}/security` },
 };
 
+// FAQ structured data derived from the same SECURITY_FAQS the page renders
+// (security-page/SecurityFAQItem), so the JSON-LD can never drift from the
+// visible Q&A. Previously this was a hand-maintained duplicate.
 const jsonLd = {
   "@context": "https://schema.org",
   "@type": "FAQPage",
-  mainEntity: [
-    {
-      "@type": "Question",
-      name: "Does Personas send data to the cloud?",
-      acceptedAnswer: { "@type": "Answer", text: "No. Personas runs entirely on your desktop. Your data never leaves your machine." },
-    },
-    {
-      "@type": "Question",
-      name: "How are credentials stored?",
-      acceptedAnswer: { "@type": "Answer", text: "AES-256-GCM encryption with OS-native keyring integration (Windows DPAPI, macOS Keychain, Linux libsecret)." },
-    },
-    {
-      "@type": "Question",
-      name: "Does Personas collect telemetry?",
-      acceptedAnswer: { "@type": "Answer", text: "No. Zero analytics, crash reports, or phone-home behavior." },
-    },
-    {
-      "@type": "Question",
-      name: "Can my employer see my agent data?",
-      acceptedAnswer: { "@type": "Answer", text: "Only if they have access to your machine. Personas stores everything locally with no admin console or centralized server." },
-    },
-    {
-      "@type": "Question",
-      name: "What happens if I uninstall Personas?",
-      acceptedAnswer: { "@type": "Answer", text: "All data is removed with the application. No cloud accounts, no remote backups, no residual data on external servers." },
-    },
-  ],
+  mainEntity: SECURITY_FAQS.map((faq) => ({
+    "@type": "Question",
+    name: faq.question,
+    acceptedAnswer: { "@type": "Answer", text: faq.answer },
+  })),
 };
 
 export default function SecurityLayout({ children }: { children: React.ReactNode }) {
