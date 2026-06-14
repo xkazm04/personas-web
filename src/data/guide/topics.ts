@@ -1,7 +1,7 @@
 import type { GuideTopic } from "./types";
 
 export const GUIDE_TOPICS: GuideTopic[] = [
-  // ─── Getting Started (10) ───────────────────────────────────────────
+  // ─── Getting Started (12) ───────────────────────────────────────────
   {
     id: "installing-personas",
     categoryId: "getting-started",
@@ -75,6 +75,43 @@ export const GUIDE_TOPICS: GuideTopic[] = [
     description:
       "Discord community, documentation, and support resources all in one place. Whether you prefer chatting with other users, reading guides, or submitting a support request, we've got you covered. You're never stuck alone.",
     tags: ["getting-started", "help", "support", "discord", "community", "documentation"],
+  },
+
+  {
+    id: "browsing-templates",
+    categoryId: "getting-started",
+    title: "Browsing the template gallery",
+    description:
+      "Start from a ready-made agent instead of a blank page. The template gallery is a library of pre-built agents for real jobs — each one lists what it does, which connectors it needs, and how long setup takes. Filter by how ready a template is for your setup, compare a few side by side, and preview its use cases before you commit.",
+    tags: ["getting-started", "templates", "gallery", "browse", "prebuilt"],
+    mode: "both",
+  },
+  {
+    id: "adopting-a-template",
+    categoryId: "getting-started",
+    title: "Adopting a template",
+    description:
+      "Turn a template into your own working agent with a short guided setup. A one-question-at-a-time form collects what the agent needs, and credentials you already saved in the vault are matched and filled in for you. The agent is tested once on your setup before it's promoted, so you start from something that already works.",
+    tags: ["getting-started", "templates", "adopt", "questionnaire", "vault", "setup"],
+    mode: "both",
+  },
+  {
+    id: "recipes",
+    categoryId: "getting-started",
+    title: "Recipes",
+    description:
+      "Browse hundreds of ready-to-run use cases drawn from the templates, grouped by what they accomplish — monitoring, reporting, automation, communication, data sync, analysis, and more. Recipes are the fastest way to see concrete examples of what agents can do and to find one close to the job you have in mind.",
+    tags: ["getting-started", "templates", "recipes", "use-cases", "examples"],
+    mode: "power",
+  },
+  {
+    id: "interface-modes",
+    categoryId: "getting-started",
+    title: "Interface modes: Simple & Power",
+    description:
+      "Personas can show you a stripped-down workspace or the full toolkit. Simple mode keeps just a few screens and hides advanced options so you can create, run, and review an agent in a handful of clicks; Power mode reveals everything — the team canvas, monitoring, every trigger type, and the full vault. Switch anytime in Settings; nothing is removed, only shown or tucked away.",
+    tags: ["getting-started", "interface", "modes", "simple", "power", "settings"],
+    mode: "both",
   },
 
   // ─── Agents & Prompts (12) ──────────────────────────────────────────
@@ -593,7 +630,7 @@ export const GUIDE_TOPICS: GuideTopic[] = [
     tags: ["memories", "best-practices", "tips", "guidelines", "optimization"],
   },
 
-  // ─── Monitoring & Costs (10) ────────────────────────────────────────
+  // ─── Monitoring & Costs (15) ────────────────────────────────────────
   {
     id: "the-monitoring-dashboard",
     categoryId: "monitoring",
@@ -681,6 +718,43 @@ export const GUIDE_TOPICS: GuideTopic[] = [
     description:
       "Getting alerted when something unusual happens with your agents. The system learns what's normal for each agent and flags anything out of the ordinary — like a sudden spike in cost or an unexpected failure. You'll be the first to know if something needs attention.",
     tags: ["monitoring", "anomaly", "alerts", "unusual", "detection"],
+  },
+
+  {
+    id: "tracking-goals",
+    categoryId: "monitoring",
+    title: "Tracking goals",
+    description:
+      "Set an outcome and watch progress toward it instead of tracking runs one by one. Goals roll up to-dos, sub-goals, and the work your teams do into a single percentage, shown on a board, a map of how goals depend on each other, or a due-date timeline. Hand a goal to your AI team and it advances on its own, raising its hand only when it needs you.",
+    tags: ["monitoring", "goals", "outcomes", "tracking", "teams", "progress"],
+    mode: "power",
+  },
+  {
+    id: "measuring-outcomes-with-kpis",
+    categoryId: "monitoring",
+    title: "Measuring outcomes with KPIs",
+    description:
+      "Track the numbers that tell you whether your agents are actually moving the needle. KPIs measure outcomes four ways — from your codebase, from orchestrator data, through a connector, or by hand — and show current value against target with an on-track or off-track pace read. A scan can even propose relevant KPIs for your project, each with the exact way it will be measured.",
+    tags: ["monitoring", "kpis", "metrics", "outcomes", "measurement", "pace"],
+    mode: "power",
+  },
+  {
+    id: "director-verdicts-and-categories",
+    categoryId: "monitoring",
+    title: "Director verdicts & categories",
+    description:
+      "A closer look at what the Director writes when it reviews an agent. Every review gives an overall 0–5 score with a short summary, calls out what the agent is doing well, and files specific coaching notes by category — prompt, health, triggers, credentials, memory, or usefulness. Approving or rejecting a note teaches the Director your taste over time.",
+    tags: ["monitoring", "director", "verdicts", "coaching", "categories", "review"],
+    mode: "power",
+  },
+  {
+    id: "director-momentum-and-stale-sweep",
+    categoryId: "monitoring",
+    title: "Director momentum & stale sweep",
+    description:
+      "How the Director keeps coaching honest across your whole fleet over time. A portfolio scorecard shows your value-delivered rate, average score, and cost per useful run; a momentum read tells you how many agents improved, held, or slipped since their last review; and a stale sweep re-reviews any starred agent that hasn't been looked at in over two weeks, so nothing drifts unnoticed.",
+    tags: ["monitoring", "director", "momentum", "stale", "portfolio", "scorecard"],
+    mode: "power",
   },
 
   // ─── Deployment & Integrations (10) ─────────────────────────────────
@@ -829,5 +903,79 @@ export const GUIDE_TOPICS: GuideTopic[] = [
     description:
       "How to safely reset settings without losing your agents. If you've changed something and can't figure out what's wrong, resetting to defaults gives you a clean slate. Your agents, credentials, and memories are preserved — only your preferences go back to their original values.",
     tags: ["troubleshooting", "reset", "defaults", "settings", "safe"],
+  },
+
+  // ─── Companion / Athena (8) ─────────────────────────────────────────
+  {
+    id: "meet-athena",
+    categoryId: "companion",
+    title: "Meet Athena",
+    description:
+      "Athena is your built-in companion — an always-available assistant who lives in the corner of the app. Tap her avatar to open a chat, or let her float on top of your work as a movable orb. She can answer questions, explain features, and actually operate the app for you. This is the place to start.",
+    tags: ["companion", "athena", "assistant", "overview", "getting-started"],
+    mode: "simple",
+  },
+  {
+    id: "chatting-with-athena",
+    categoryId: "companion",
+    title: "Chatting with Athena",
+    description:
+      "How to get the most out of a conversation with Athena. Start from a suggested prompt, type \"/\" to pick a ready-made command, or just ask in your own words. She offers quick follow-up replies and one-tap ways to make an answer shorter or add more detail, and she keeps the typing box open so you can steer her mid-thought.",
+    tags: ["companion", "athena", "chat", "prompts", "slash-commands"],
+    mode: "simple",
+  },
+  {
+    id: "voice-and-hold-to-talk",
+    categoryId: "companion",
+    title: "Voice & hold-to-talk",
+    description:
+      "Talk to Athena instead of typing, and have her talk back. Press and hold her avatar to dictate a question, or use a keyboard shortcut to summon her by voice from anywhere. Your speech can be transcribed on your own machine for privacy, and her replies can be spoken aloud — even when the chat is closed.",
+    tags: ["companion", "athena", "voice", "speech", "dictation", "text-to-speech"],
+    mode: "both",
+  },
+  {
+    id: "athenas-long-term-memory",
+    categoryId: "companion",
+    title: "Athena's long-term memory",
+    description:
+      "Athena remembers across conversations so you don't have to repeat yourself. She keeps facts about you and your projects, the way you like things done, and a profile she reads before every reply — and you stay in control: a short intake interview gets her started, and you can view, edit, or correct anything she's learned.",
+    tags: ["companion", "athena", "memory", "brain", "identity", "privacy"],
+    mode: "both",
+  },
+  {
+    id: "proactive-check-ins",
+    categoryId: "companion",
+    title: "Proactive check-ins",
+    description:
+      "Athena can reach out first when something deserves your attention — a goal's deadline approaching, an agent that failed or is waiting on you, or a reminder you asked her to keep. Check-ins respect quiet hours and a daily limit so she stays helpful rather than noisy, and every nudge is one you can act on or dismiss.",
+    tags: ["companion", "athena", "proactive", "notifications", "nudges", "reminders"],
+    mode: "both",
+  },
+  {
+    id: "guided-walkthroughs",
+    categoryId: "companion",
+    title: "Guided walkthroughs",
+    description:
+      "Ask Athena to \"show me how\" and she'll walk you through a task on the real screen. Her orb glides to each spot, the right control lights up, and she narrates the step — then waits for you to click it yourself. It's hands-on learning inside the actual app, not a video to watch.",
+    tags: ["companion", "athena", "walkthrough", "tour", "help", "onboarding"],
+    mode: "simple",
+  },
+  {
+    id: "the-decision-hub",
+    categoryId: "companion",
+    title: "The decision hub",
+    description:
+      "Some actions wait for your say-so. When Athena or one of your agents wants to do something that needs approval — running an agent, changing your profile, scheduling a check-in — it shows up as a card you approve or reject. Requests from your running agents gather here too, with an approve-all option when they pile up.",
+    tags: ["companion", "athena", "approvals", "decisions", "inbox", "review"],
+    mode: "power",
+  },
+  {
+    id: "operating-by-chat",
+    categoryId: "companion",
+    title: "Operating Personas by chat",
+    description:
+      "Athena isn't just an advisor — she can drive the app. Ask her to open a screen, jump to an agent's editor, build a custom home dashboard, or call a connected service, and she does it, flashing the destination so you can follow along. Two one-tap buttons give you a fleet review and a morning brief of what happened overnight.",
+    tags: ["companion", "athena", "navigation", "automation", "ops", "dashboard"],
+    mode: "power",
   },
 ];

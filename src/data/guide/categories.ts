@@ -9,6 +9,14 @@ export const GUIDE_CATEGORIES: GuideCategory[] = [
     color: "#06b6d4",
   },
   {
+    id: "companion",
+    name: "Companion (Athena)",
+    description:
+      "Meet Athena, your always-on assistant. Chat or talk to her, let her run the app for you, and rely on her to remember what matters and check in when it counts.",
+    icon: "Sparkles",
+    color: "#ec4899",
+  },
+  {
     id: "credentials",
     name: "Credentials & Security",
     description: "Connect to services securely. Understand the encrypted vault and how your data stays safe.",
