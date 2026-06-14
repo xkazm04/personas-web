@@ -6,6 +6,16 @@
  * Brand colors are overridden per-theme for cohesive palettes.
  */
 
+/* ── Elevated solid surface (modals, sheets, toasts, popovers) ─────────────
+   bg-surface/95 in ~20 overlay components reads this. Derived from each
+   theme's own --background (resolved per-theme at use-time via color-mix), so
+   one declaration lifts every dark variant a consistent +5% toward white for
+   a subtle elevated panel; light themes override to solid white below.
+   Kept web-only (not in the shared tokens.css) to avoid desktop drift. */
+:root {
+  --surface: color-mix(in srgb, var(--background), #ffffff 5%);
+}
+
 /* ── Dark Themes ───────────────────────────────────────────────────────── */
 
 /* Dark: Cyan */
@@ -190,6 +200,13 @@
 }
 
 /* ── Light Themes ──────────────────────────────────────────────────────── */
+
+/* Light-theme surface: modals/sheets sit bright (toward white) above the
+   off-white page, matching the white-ish --card-bg light values. Source order
+   (after the :root default above) lets this win at equal specificity. */
+[data-theme^="light"] {
+  --surface: #ffffff;
+}
 
 /* Light */
 [data-theme="light"] {

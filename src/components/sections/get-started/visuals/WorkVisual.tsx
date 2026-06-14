@@ -22,7 +22,7 @@ export function WorkVisual({ brand }: VisualProps) {
         <div className="mb-3 flex items-center justify-between">
           <div className="flex items-center gap-2">
             <div
-              className="h-2 w-2 rounded-full animate-pulse"
+              className="h-2 w-2 rounded-full motion-safe:animate-pulse"
               style={{ backgroundColor: color }}
             />
             <span className="text-base font-mono uppercase tracking-wider text-foreground/80">

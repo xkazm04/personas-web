@@ -280,4 +280,120 @@ The baseline is a rolling window of recent runs (configurable; default 50). Each
 Anomalies that you investigate and resolve should be cleared (mark them "investigated"). The baseline excludes investigated anomalies from its rolling window, so the system doesn't drift toward considering the anomalous run "normal".
 :::
   `,
+
+  "tracking-goals": `
+## Tracking Goals
+
+Goals are the outcome layer above individual runs. Instead of watching executions tick by, you define what you're trying to accomplish — and let progress roll up automatically from the work your team and your agents are doing.
+
+A goal has a title, an optional target date, a status, and a progress percentage. Status follows a simple four-value model: **open** (not started), **in-progress** (being worked), **blocked** (waiting on something), and **done**. Progress is hybrid: the system computes a suggestion from the goal's checklist items, sub-goals, and linked team-assignment steps — and shows it to you as an **Accept / edit** nudge. You decide; a manual override always wins.
+
+### Three Views
+
+Goals lives under the Teams section and offers three surfaces, switched via the sidebar:
+
+- **Board** — a kanban organized by status. Cards show the full goal title and an inline checklist (the first few to-dos as toggleable checkboxes, the rest behind a "+N more" link). When a goal has to-dos, completing them drives progress — the bar moves as items are checked off.
+- **Map** — a pan-and-zoom canvas showing how goals relate to each other. Dependency edges (blocks, follows) connect goals into a directed graph. **Now** highlighting (an amber pulsing ring) marks goals currently in progress; **Next** highlighting (a blue ring) marks goals whose blockers are all done and are ready to start. Zoom out to see the constellation; zoom in for full metadata on each node.
+- **Timeline** — goals on a vertical due-date rail, bucketed by urgency: Overdue, This week, This month, Later, No date.
+
+### The Key Move: Hand to Your AI Team
+
+The detail drawer for any goal has a **Hand to your AI team** control. Pressing it turns the goal into a running team assignment linked back to the goal. The team decomposes the goal into steps (or picks up the existing to-dos verbatim), works them one by one, and ticks progress automatically as each step completes. The goal moves from open to in-progress to done on its own — and only surfaces in your review queue when a step genuinely needs a human decision.
+
+:::tip
+You don't have to hand a goal to your team immediately. Use the Board to build out the checklist manually first — the team then picks up each to-do item in order, which gives you fine-grained control over what gets worked and in what sequence.
+:::
+  `,
+
+  "measuring-outcomes-with-kpis": `
+## Measuring Outcomes with KPIs
+
+KPIs are the number layer above goals. Where a goal describes an outcome you want to reach, a KPI tracks whether you're actually getting there — a current value, a target, and a pace read that tells you whether you're on course.
+
+Each KPI shows its current value versus its target with a **pace** status: **on-track**, **off-track**, **met**, or **unmeasured** (when a measurement hasn't been taken yet). A progress bar and measurement freshness indicator round out the card at a glance.
+
+### Four Measurement Kinds
+
+KPIs aren't all measured the same way. Personas supports four measurement kinds, each suited to a different data source:
+
+:::info
+- **Codebase** — runs a command against your repository and parses the result. Useful for things like test coverage percentage or lint error count that live entirely in the code.
+- **Derived** — reads from the orchestrator's own data: run counts, outcome rates, cost trends, and similar operational metrics that Personas already tracks.
+- **Connector** — pulls a value from a connected external service (analytics, traffic, error tracking). If the needed connector isn't in your vault yet, the KPI card shows a "Connect \<service\>" prompt that links directly to the credential catalog.
+- **Manual** — you enter the value yourself. Useful for business numbers that don't live in any system you've connected, or for KPIs you want to track informally before automating measurement.
+:::
+
+### Where KPIs Live
+
+**Teams › KPIs** has two views behind a segmented switch. The **Dashboard** view shows all active KPIs as cards — click any card to open the detail drawer with the full measurement history, a sparkline, and a manual value entry field. The **Proposals** view is a review queue: clicking "Scan for KPIs" runs a headless analysis pass over your project's context map and existing KPIs, and surfaces proposed KPIs with a one-line rationale and the exact measurement procedure it would use. You accept (optionally adjusting the target first) or reject. Rejected proposals are archived and fed back to future scans as negative examples so the same suggestion doesn't come back.
+
+:::tip
+Let the scan propose KPIs before you author them manually. It reads your project's context map, your existing goals, and your vault's connector roster — and tends to suggest measurements that are actually automatable with what you already have connected.
+:::
+  `,
+
+  "director-verdicts-and-categories": `
+## Director Verdicts and Categories
+
+Every Director review produces a structured verdict — not just a pass/fail, but a layered assessment that tells you what an agent is doing well, what needs coaching, and how to file that coaching so it actually sticks.
+
+The mandatory piece is an **overall 0–5 score** with a one-line summary. This score lands on the execution record and shows up as stars in the Activity list — so a quick scan of any agent's recent runs tells you which ones earned their cost. The score also drives the trend sparkline in the Agents table: a short history bar colored by the most recent rating.
+
+### What's Working
+
+The review doesn't lead with criticism. Before any coaching notes, the Director calls out the things the agent is genuinely doing right — what the docs call **wins**. These appear at the top of the full assessment markdown as a "What's working" section. An agent that's performing well might get nothing but wins; the Director stays quiet when there's nothing to improve.
+
+### Coaching Notes and Categories
+
+After the wins come the coaching notes: specific, actionable suggestions filed under one of six **categories**:
+
+- **Prompt** — the agent's instructions or framing need tuning
+- **Health** — reliability or error-handling issues
+- **Triggers** — how and when the agent fires (schedule, webhook, chain setup)
+- **Credentials** — vault or permission gaps blocking the agent
+- **Memory** — what the agent is storing and recalling (or failing to)
+- **Usefulness** — whether the agent's output is actually valuable for its stated purpose
+
+Coaching notes land in your **review queue** as items you approve or reject. This isn't just housekeeping: approving or rejecting notes teaches the Director your taste. The next review reads back which notes you accepted and which you dismissed, so the feedback loop compounds — the Director gets better at knowing what you care about for each agent, and stops suggesting things you've already ruled out.
+
+The Director's command center includes an **Issues by category** rollup that tallies coaching notes across your whole fleet, so you can see at a portfolio level whether credential gaps are your most common issue or whether prompt quality is where most agents need attention.
+
+:::tip
+Healthy agents score high and generate few or no coaching notes. If an agent consistently earns a 4–5 with no pending review items, that's the signal to leave it alone and focus attention on the ones with declining trends or low scores.
+:::
+  `,
+
+  "director-momentum-and-stale-sweep": `
+## Director Momentum and Stale Sweep
+
+Beyond individual verdicts, the Director builds a portfolio-level picture of how your whole fleet is trending. This is the longitudinal view — not "what did this agent do last run" but "is coaching actually moving the needle across your agents over time?"
+
+### The Scorecard
+
+The Director's command center opens with a **scorecard** that answers four questions at a glance: what fraction of your fleet's work delivered value (the **value-delivered rate**), what's the average verdict score across all in-scope agents, what's the **cost per useful run**, and how many agents are currently in scope. Below the headline KPIs, a **value breakdown** bar decomposes the value-delivered rate into the full outcome taxonomy — delivered, partial, blocked, no-input, unassessed — so you can see where value is leaking, not just whether it is.
+
+A **0–5 score distribution** chart shows how your starred agents stack up across the full rating scale, with a dashed line marking the portfolio average. A review-period selector (7 / 30 / 90 days) scopes the entire scorecard.
+
+### Momentum
+
+The **momentum** strip answers the most important portfolio question: are things getting better? It tallies how many agents **improved**, **held steady**, or **slipped** versus their previous review. An improving fleet means coaching is working; a slipping fleet means something systemic needs attention — model changes, credential drift, prompt decay.
+
+### Attention Tags and Triage
+
+The coaching table flags every in-scope agent with **attention tags** based on client-derived rules: awaiting first review (never been assessed), low score (≤ 2), declining trend, or stale review (not coached in more than 14 days). An attention triage bar at the top of the table rolls these flags up — N new, N low, N declining, N stale — so you see the scope of the problem before you start working through it.
+
+Clicking a triage chip filters the table to that flag. Once filtered, a **Review these N** action runs the Director sequentially over exactly those agents — triage flows directly into action.
+
+### The Stale Sweep
+
+The **Stale sweep** button re-reviews every starred agent that hasn't been coached in more than 14 days, in one click. It only appears when stale agents exist. This is the routine maintenance pass: run it once a month and the Director catches any agent that's drifted since its last assessment.
+
+### Long-Term Memory
+
+With the **Obsidian Brain** enabled, the Director reads its own past notes about an agent before each review and writes the new verdict back to a \`Director/\` folder in your vault. Coaching compounds instead of repeating — the Director doesn't re-suggest things it already covered, and it builds on what you approved and rejected over time.
+
+:::tip
+The stale sweep and the attention triage bar are the two fastest ways to keep a large fleet healthy without spending time on agents that are already doing well. Use the triage bar to find the agents that actually need attention; use the stale sweep to make sure nothing is quietly slipping unreviewed.
+:::
+  `,
 };

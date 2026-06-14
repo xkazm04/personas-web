@@ -6,6 +6,8 @@ import {
   Clipboard,
   Focus,
   Layers,
+  Link,
+  MousePointerClick,
   RefreshCcw,
 } from "lucide-react";
 import type { LucideIcon } from "lucide-react";
@@ -111,6 +113,17 @@ export const TRIGGERS: TriggerDef[] = [
     doc: { label: "Event-based triggers", href: "/guide/triggers/event-based-triggers" },
   },
   {
+    id: "chain",
+    label: "Chain",
+    icon: Link,
+    brand: "purple",
+    description:
+      "Fires when an upstream persona finishes — one agent's output becomes the next agent's input.",
+    example: "After Researcher runs",
+    persona: "Report Writer",
+    doc: { label: "Chain triggers guide", href: "/guide/triggers/chain-triggers" },
+  },
+  {
     id: "composite",
     label: "Composite",
     icon: Layers,
@@ -120,6 +133,17 @@ export const TRIGGERS: TriggerDef[] = [
     example: "Schedule AND webhook",
     persona: "Gate Agent",
     doc: { label: "Combining multiple triggers", href: "/guide/triggers/combining-multiple-triggers" },
+  },
+  {
+    id: "manual",
+    label: "Manual",
+    icon: MousePointerClick,
+    brand: "cyan",
+    description:
+      "Run an agent on demand — straight from the dashboard, the CLI, or a hotkey. No automation required.",
+    example: "Click Run",
+    persona: "Ad-hoc Task",
+    doc: { label: "How triggers work", href: "/guide/triggers/how-triggers-work" },
   },
 ];
 

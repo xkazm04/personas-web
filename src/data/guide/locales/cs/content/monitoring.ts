@@ -244,4 +244,156 @@ Baseline je posuvné okno nedávných běhů (konfigurovatelné; výchozí 50). 
 Anomálie, které prozkoumáš a vyřešíš, by měly být vymazány (označ je „vyšetřeno"). Baseline vylučuje vyšetřené anomálie ze svého posuvného okna, takže systém nedrejtuje k tomu, aby považoval anomální běh za „normální".
 :::
   `,
+
+  "the-director": `
+## Director — automatický koučink agentů
+
+**Director** je vestavěný meta-agent, který sleduje tvé ostatní agenty a koučuje je, aby byli skutečně užiteční. Místo toho, abys musel/a číst každý běh sám/sama, Director je přezkoumá za tebe a zanechá verdikt.
+
+Ty rozhoduješ, co sleduje, pomocí **hvězdiček** u agentů (⭐ na každém řádku v sekci Všichni agenti). Agent s hvězdičkou je „ve scope Directora" — Director ho přezkoumává; agenti bez hvězdičky jsou ponecháni stranou. Director sám je systémový agent a nelze ho smazat.
+
+### Velitelské centrum
+
+Director sídlí pod **Přehled › Director** — jedna přehledná obrazovka:
+
+- **Přehled portfolia**: kolik práce tvé flotily skutečně přineslo hodnotu, průměrné skóre verdiktu, náklady na běh s přidanou hodnotou a distribuce 0–5 ukazující, jak si vedou tvoji agenti s hvězdičkou.
+- **Tabulka koučinku** každého agenta ve scope — skóre, trendová sparkline (posunuje koučink jehlu?), míra hodnoty, poslední přezkoumání a **štítky pozornosti**, které přesně označí, co je třeba řešit (čeká na první přezkoumání, nízké skóre, klesá, zastaralé). Filtruj na agenty, kteří potřebují pozornost. Klikni na libovolného agenta pro otevření jeho **detailu** — úplná historie verdiktů s odůvodněním a konkrétními návrhy za každým skóre.
+- Tenký záhlaví s tlačítkem **Přezkoumat vše ve scope**, výběrem **Přidat do scope** a přepínačem dlouhodobé **paměti**.
+
+Stránka Všichni agenti má tenký pruh Directora, který vede přímo sem.
+
+### Jak vypadá verdikt
+
+Každé přezkoumání přináší celkové **skóre 0–5** a volitelné koučovací poznámky:
+
+- Sloupec **Verdikt** v seznamu Aktivita zobrazuje skóre jako hvězdičky přímo vedle agenta — jedním pohledem vidíš, které běhy stály za své náklady.
+- Karta **Director** u libovolného běhu otevře celé hodnocení ve čitelném markdownu: skóre, jednořádkové shrnutí a konkrétní návrhy (úprava promptu, guardrail, změna třídy modelu, chybějící nástroj).
+- Použitelné poznámky se také dostanou do tvé fronty přezkoumání, kde jejich schvalování nebo odmítání učí Directora tvůj vkus postupem času.
+
+Zdravý agent dosahuje vysokého skóre s minimem nebo žádným koučinkem — Director mlčí, když není co zlepšovat.
+
+### Dlouhodobá paměť (volitelné)
+
+Pokud používáš **Obsidian Brain**, můžeš zapnout dlouhodobou paměť Directora. Pak si před každým přezkoumáním přečte své vlastní dřívější poznámky o daném agentovi (aby se rady kumulovaly místo opakování) a každý nový verdikt zapíše do složky \`Director/\` ve tvém vaultu — trvalá, lidsky čitelná koučovací história.
+
+### Proč na tom záleží
+
+Surová čísla (běhy, náklady, míra úspěchu) ti říkají *co* se stalo, ne *zda to stálo za to*. Director přidává chybějící vrstvu úsudku — poctivé, na důkazech založené čtení hodnoty a efektivity každého agenta — takže flotila agentů zůstává užitečná, aniž bys musel/a ručně auditovat každý běh.
+  `,
+
+  "tracking-goals": `
+## Sledování cílů
+
+Cíle jsou vrstvou výsledků nad jednotlivými běhy. Místo sledování každého spuštění si definuješ, čeho chceš dosáhnout — a postup se automaticky sloučí z práce, kterou dělá tvůj tým a tví agenti.
+
+Cíl má název, volitelné cílové datum, stav a procento postupu. Stav sleduje jednoduchý model čtyř hodnot: **otevřený** (nezahájený), **probíhající** (pracuje se), **blokovaný** (čeká na něco) a **hotový**. Postup je hybridní: systém vypočte návrh z položek kontrolního seznamu cíle, dílčích cílů a propojených kroků týmového zadání — a zobrazí ti ho jako výzvu **Přijmout / upravit**. Ty rozhoduješ; manuální přepsání vždy vyhraje.
+
+### Tři pohledy
+
+Cíle se nacházejí v sekci Teams a nabízejí tři plochy přepínatelné přes postranní panel:
+
+- **Nástěnka** — kanban uspořádaný podle stavu. Karty zobrazují plný název cíle a vložený kontrolní seznam (první několik úkolů jako přepínatelné zaškrtávací políčko, zbytek za odkazem „+N dalších"). Když má cíl úkoly, jejich dokončení posouvá postup — pruh se pohybuje, jak se položky odklikávají.
+- **Mapa** — plátno s posouváním a přibližováním ukazující, jak cíle navzájem souvisejí. Hrany závislostí (blokuje, navazuje) propojují cíle do řízeného grafu. Zvýraznění **Nyní** (jantarový pulzující kroužek) označuje právě probíhající cíle; zvýraznění **Dále** (modrý kroužek) označuje cíle, jejichž blokátory jsou všechny hotové a jsou připraveny začít. Oddal pro zobrazení souhvězdí; přiblíž pro plná metadata každého uzlu.
+- **Časová osa** — cíle na svislé kolejnici termínů seskupené podle naléhavosti: Po termínu, Tento týden, Tento měsíc, Později, Bez data.
+
+### Klíčový tah: Předej svému AI týmu
+
+Zásobník detailů libovolného cíle obsahuje ovládací prvek **Předej svému AI týmu**. Stisknutím se cíl promění v probíhající týmové zadání propojené zpět s cílem. Tým cíl rozloží na kroky (nebo přijme stávající úkoly doslova), pracuje je jeden po druhém a automaticky odklikává postup, jak se každý krok dokončí. Cíl se sám přesune z otevřeného na probíhající na hotový — a vynoří se v tvé frontě přezkoumání jen tehdy, když krok skutečně potřebuje lidské rozhodnutí.
+
+:::tip
+Nemusíš hned předávat cíl svému týmu. Nejdříve pomocí Nástěnky ručně sestav kontrolní seznam — tým pak přijme každý úkol v pořadí, což ti dává jemnou kontrolu nad tím, co se pracuje a v jakém sledu.
+:::
+  `,
+
+  "measuring-outcomes-with-kpis": `
+## Měření výsledků pomocí KPI
+
+KPI jsou číselnou vrstvou nad cíli. Zatímco cíl popisuje výsledek, kterého chceš dosáhnout, KPI sleduje, zda se k němu skutečně blížíš — aktuální hodnotu, cíl a čtení tempa, které ti říká, zda jsi na správné cestě.
+
+Každý KPI zobrazuje aktuální hodnotu vůči cíli se stavem **tempa**: **na správné cestě**, **mimo cestu**, **splněno** nebo **neměřeno** (když měření ještě neproběhlo). Pruh postupu a indikátor čerstvosti měření doplňují kartu na první pohled.
+
+### Čtyři způsoby měření
+
+KPI se všechny neměří stejně. Personas podporují čtyři způsoby měření, každý vhodný pro jiný datový zdroj:
+
+:::info
+- **Kódová základna** — spouští příkaz vůči tvému repozitáři a analyzuje výsledek. Vhodné pro věci jako procento pokrytí testy nebo počet chyb linteru, které žijí zcela v kódu.
+- **Odvozené** — čte z vlastních dat orchestrátoru: počty běhů, míry výsledků, trendy nákladů a podobné operační metriky, které Personas už sledují.
+- **Konektor** — stahuje hodnotu z připojené externí služby (analytika, provoz, sledování chyb). Pokud potřebný konektor ještě není ve tvém vaultu, karta KPI zobrazí výzvu „Připojit \<službu\>", která vede přímo do katalogu přihlašovacích údajů.
+- **Manuální** — hodnotu zadáváš sám/sama. Vhodné pro obchodní čísla, která nežijí v žádném systému, který jsi připojil/a, nebo pro KPI, které chceš sledovat neformálně, než automatizuješ měření.
+:::
+
+### Kde KPI žijí
+
+**Teams › KPI** má za segmentovaným přepínačem dva pohledy. Pohled **Dashboard** zobrazuje všechna aktivní KPI jako karty — kliknutím na libovolnou kartu se otevře zásobník detailů s úplnou historií měření, sparkline a polem pro ruční zadání hodnoty. Pohled **Návrhy** je fronta přezkoumání: kliknutím na „Prohledat KPI" se spustí bezobslužný analytický průchod přes kontextovou mapu tvého projektu a stávající KPI a navrhne KPI s jednořádkovým odůvodněním a přesným způsobem měření, který by použil. Přijmeš (volitelně nejprve upravíš cíl) nebo odmítneš. Odmítnuté návrhy jsou archivovány a předány zpět budoucím prohledáváním jako záporné příklady, aby se stejný návrh neopakoval.
+
+:::tip
+Nech prohledávání navrhnout KPI, než je začneš ručně vytvářet. Čte kontextovou mapu tvého projektu, stávající cíle a seznam konektorů tvého vaultu — a má tendenci navrhovat měření, která jsou skutečně automatizovatelná s tím, co již máš připojeno.
+:::
+  `,
+
+  "director-verdicts-and-categories": `
+## Verdikty a kategorie Directora
+
+Každé přezkoumání Directorem produkuje strukturovaný verdikt — ne jen prošel/neprošel, ale vrstvené hodnocení, které ti říká, co agent dělá dobře, co potřebuje koučink a jak tento koučink zařadit, aby skutečně zafungoval.
+
+Povinnou součástí je **celkové skóre 0–5** s jednořádkovým shrnutím. Toto skóre se připojí k záznamu spouštění a zobrazí se jako hvězdičky v seznamu Aktivita — takže rychlý pohled na nedávné běhy libovolného agenta ti řekne, které z nich stály za své náklady. Skóre také pohání trendovou sparkline v tabulce Agents: krátký pruh historie zbarvený podle posledního hodnocení.
+
+### Co funguje
+
+Přezkoumání nezačíná kritikou. Před jakýmikoli koučovacími poznámkami Director vyzdvihuje věci, které agent skutečně dělá správně — co dokumenty nazývají **výhrami**. Ty se zobrazují v horní části úplného hodnocení v markdownu jako sekce „Co funguje". Agent, který podává dobré výkony, může dostat jen výhry; Director mlčí, když není co zlepšovat.
+
+### Koučovací poznámky a kategorie
+
+Po výhrách přicházejí koučovací poznámky: konkrétní, realizovatelné návrhy zařazené do jedné ze šesti **kategorií**:
+
+- **Prompt** — instrukce nebo formulace agenta potřebují doladit
+- **Zdraví** — problémy se spolehlivostí nebo zpracováním chyb
+- **Spouštěče** — jak a kdy se agent spouští (plán, webhook, nastavení řetězu)
+- **Přihlašovací údaje** — mezery ve vaultu nebo oprávněních blokující agenta
+- **Paměť** — co agent ukládá a vybavuje (nebo selhává v tom)
+- **Užitečnost** — zda je výstup agenta skutečně hodnotný pro jeho deklarovaný účel
+
+Koučovací poznámky přistávají v tvé **frontě přezkoumání** jako položky, které schvalíš nebo odmítneš. To není jen administrativa: schvalování nebo odmítání poznámek učí Directora tvůj vkus. Příští přezkoumání si přečte, které poznámky jsi přijal/a a které jsi odmítl/a, takže zpětná vazba se kumuluje — Director se stále lépe ví, na čem ti u každého agenta záleží, a přestane navrhovat věci, které jsi již vyřadil/a.
+
+Velitelské centrum Directora obsahuje souhrnný přehled **Problémy podle kategorie**, který sčítá koučovací poznámky napříč celou tvou flotilou, takže na úrovni portfolia vidíš, zda jsou mezery v přihlašovacích údajích tvým nejčastějším problémem nebo zda je kvalita promptů místem, kde většina agentů potřebuje pozornost.
+
+:::tip
+Zdraví agenti dosahují vysokého skóre a generují málo nebo žádné koučovací poznámky. Pokud agent konzistentně dostává hodnocení 4–5 bez čekajících položek k přezkoumání, je to signál nechat ho být a soustředit pozornost na ty s klesajícími trendy nebo nízkými skóre.
+:::
+  `,
+
+  "director-momentum-and-stale-sweep": `
+## Momentum Directora a Přehled zastaralých
+
+Nad jednotlivými verdikty Director buduje pohled na úrovni portfolia toho, jak celá tvá flotila trenduje. Toto je longitudinální pohled — ne „co tento agent udělal v posledním běhu", ale „posunuje koučink jehlu napříč mými agenty v čase?"
+
+### Scorecard
+
+Velitelské centrum Directora se otevírá **scorecardou**, která na první pohled odpovídá na čtyři otázky: jaká část práce tvé flotily přinesla hodnotu (míra **přidané hodnoty**), jaké je průměrné skóre verdiktu napříč všemi agenty ve scope, jaké jsou **náklady na užitečný běh** a kolik agentů je momentálně ve scope. Pod hlavními KPI **pruh rozpisu hodnoty** rozloží míru přidané hodnoty do plné taxonomie výsledků — doručeno, částečné, blokováno, bez vstupu, nehodnoceno — takže vidíš, kde hodnota uniká, nejen zda uniká.
+
+Graf **distribuce skóre 0–5** ukazuje, jak si vedou tvoji agenti s hvězdičkou na plné hodnoticí škále, s přerušovanou čarou označující průměr portfolia. Selektor období přezkoumání (7 / 30 / 90 dní) vymezuje celou scorecardou.
+
+### Momentum
+
+Pruh **momentum** odpovídá na nejdůležitější otázku portfolia: zlepšují se věci? Sečte, kolik agentů se **zlepšilo**, **udrželo** nebo **zhoršilo** oproti předchozímu přezkoumání. Zlepšující se flotila znamená, že koučink funguje; zhoršující se flotila znamená, že něco systémového potřebuje pozornost — změny modelů, odchylka přihlašovacích údajů, opotřebení promptů.
+
+### Štítky pozornosti a třídění
+
+Tabulka koučinku označí každého agenta ve scope **štítky pozornosti** na základě pravidel odvozených od klienta: čeká na první přezkoumání (nikdy nehodnocen), nízké skóre (≤ 2), klesající trend nebo zastaralé přezkoumání (nekoučováno déle než 14 dní). Pruh třídění pozornosti v horní části tabulky tyto příznaky shrne — N nových, N nízkých, N klesajících, N zastaralých — takže vidíš rozsah problému před tím, než s ním začneš pracovat.
+
+Kliknutím na čip třídění se tabulka vyfiltruje na tento příznak. Po filtrování akce **Přezkoumat těchto N** spustí Director sekvenčně přesně přes tyto agenty — třídění vede přímo do akce.
+
+### Přehled zastaralých
+
+Tlačítko **Přehled zastaralých** přezkoumat každého agenta s hvězdičkou, který nebyl koučován více než 14 dní, jedním kliknutím. Zobrazí se pouze tehdy, když existují zastaralí agenti. Toto je rutinní průchod údržby: spusť ho jednou za měsíc a Director zachytí každého agenta, který se od posledního hodnocení odchýlil.
+
+### Dlouhodobá paměť
+
+S povoleným **Obsidian Brain** si Director před každým přezkoumáním přečte své vlastní dřívější poznámky o agentovi a nový verdikt zapíše do složky \`Director/\` ve tvém vaultu. Koučink se kumuluje místo opakování — Director nenavrhuje znovu věci, které již prozkoumal, a staví na tom, co jsi schválil/a a odmítl/a v čase.
+
+:::tip
+Přehled zastaralých a pruh třídění pozornosti jsou dva nejrychlejší způsoby, jak udržet velkou flotilu zdravou bez trávení času na agentech, kteří již fungují dobře. Použij pruh třídění pro nalezení agentů, kteří skutečně potřebují pozornost; použij přehled zastaralých, abys zajistil/a, že nic tiše neuniká bez přezkoumání.
+:::
+  `,
 };

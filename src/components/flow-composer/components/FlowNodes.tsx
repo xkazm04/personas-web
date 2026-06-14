@@ -1,5 +1,6 @@
 "use client";
 
+import { useReducedMotion } from "framer-motion";
 import { CONSUMER_Y, NODE_R, PRODUCER_Y, TOOL_MAP } from "../data";
 import type { CanvasNode } from "../types";
 import { SVGFocusRingCircle } from "@/components/SVGFocusRing";
@@ -19,6 +20,7 @@ export default function FlowNodes({
   onNodeKeyDown: (e: React.KeyboardEvent, nodeId: string) => void;
   onRemoveNode: (nodeId: string) => void;
 }) {
+  const reduced = useReducedMotion() ?? false;
   return (
     <>
       {nodes.map((node) => {
@@ -50,12 +52,14 @@ export default function FlowNodes({
                 strokeWidth="0.3"
                 strokeDasharray="1 1"
               >
-                <animate
-                  attributeName="r"
-                  values={`${NODE_R + 1.5};${NODE_R + 2.5};${NODE_R + 1.5}`}
-                  dur="1s"
-                  repeatCount="indefinite"
-                />
+                {!reduced && (
+                  <animate
+                    attributeName="r"
+                    values={`${NODE_R + 1.5};${NODE_R + 2.5};${NODE_R + 1.5}`}
+                    dur="1s"
+                    repeatCount="indefinite"
+                  />
+                )}
               </circle>
             )}
 

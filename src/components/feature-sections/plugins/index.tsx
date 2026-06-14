@@ -44,7 +44,7 @@ export default function Plugins() {
         <SectionIntro
           heading="Everything to"
           gradient="plug in"
-          description="Six purpose-built plugins shipped with Personas. Each one is a self-contained workspace your agents can drive, reuse shared credentials, and compose together. Switch a tab, meet a new specialist."
+          description="Four purpose-built plugins shipped with Personas. Each one is a self-contained workspace your agents can drive, reuse shared credentials, and compose together. Switch a tab, meet a new specialist."
           className="mb-0"
         />
       </motion.div>

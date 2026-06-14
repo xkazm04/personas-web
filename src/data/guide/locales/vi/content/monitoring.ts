@@ -244,4 +244,156 @@ Baseline là một cửa sổ cuộn của các lần chạy gần đây (có th
 Các bất thường mà bạn điều tra và giải quyết nên được xóa (đánh dấu chúng "đã điều tra"). Baseline loại trừ các bất thường đã được điều tra khỏi cửa sổ cuộn của nó, vì vậy hệ thống không trôi dạt theo hướng coi lần chạy bất thường là "bình thường".
 :::
   `,
+
+  "the-director": `
+## The Director — Huấn Luyện Agent Tự Động
+
+**The Director** là một meta-agent tích hợp sẵn theo dõi các agent khác của bạn và huấn luyện chúng để thực sự hữu ích hơn. Thay vì bạn phải đọc từng lần chạy, Director xem xét thay cho bạn và để lại nhận định.
+
+Bạn chọn những gì nó theo dõi bằng cách **gắn sao** các agent (biểu tượng ⭐ trên mỗi hàng trong All Agents). Agent được gắn sao là "trong phạm vi của Director" — Director sẽ xem xét nó; các agent chưa gắn sao thì không. Bản thân Director là một agent hệ thống và không thể bị xóa.
+
+### Trung tâm chỉ huy
+
+Director nằm trong **Overview › Director** — một màn hình tập trung duy nhất:
+
+- Một **thẻ điểm danh mục**: bao nhiêu công việc của đội agent thực sự tạo ra giá trị, điểm nhận định trung bình, chi phí trên mỗi lần chạy có giá trị, và phân bố 0–5 cho thấy các agent được gắn sao đứng ở đâu.
+- Một **bảng huấn luyện** gồm mọi agent trong phạm vi — điểm số, đường xu hướng (huấn luyện có tạo ra thay đổi không?), tỷ lệ giá trị, lần xem xét gần nhất, và **thẻ chú ý** đánh dấu chính xác những gì cần hành động (chờ xem xét đầu tiên, điểm thấp, đang giảm, lỗi thời). Lọc chỉ những agent cần chú ý. Nhấp vào bất kỳ agent nào để mở **chi tiết** — lịch sử nhận định đầy đủ với lý do và gợi ý cụ thể đằng sau mỗi điểm số.
+- Một tiêu đề nhỏ với **Xem xét tất cả trong phạm vi**, bộ chọn **Thêm vào phạm vi**, và nút chuyển đổi **bộ nhớ** dài hạn.
+
+Trang All Agents giữ một dải Director mỏng liên kết thẳng đến đây.
+
+### Một nhận định trông như thế nào
+
+Mỗi lần xem xét tạo ra một **điểm số tổng thể 0–5** cộng với ghi chú huấn luyện tùy chọn:
+
+- Cột **Verdict** trong danh sách Activity hiển thị điểm số dưới dạng sao, ngay bên cạnh agent — một cái nhìn cho bạn biết lần chạy nào xứng đáng với chi phí.
+- Tab **Director** trên bất kỳ lần chạy nào mở đánh giá đầy đủ dưới dạng markdown có thể đọc được: điểm số, tóm tắt một dòng, và gợi ý cụ thể (chỉnh sửa prompt, thêm rào chắn, thay đổi cấp mô hình, công cụ còn thiếu).
+- Ghi chú có thể hành động cũng được đưa vào hàng đợi xem xét của bạn, nơi phê duyệt hoặc từ chối chúng dạy Director biết gu của bạn theo thời gian.
+
+Một agent khỏe mạnh đạt điểm cao với ít hoặc không cần huấn luyện — Director im lặng khi không có gì cần cải thiện.
+
+### Bộ nhớ dài hạn (tùy chọn)
+
+Nếu bạn sử dụng **Obsidian Brain**, bạn có thể bật bộ nhớ dài hạn của Director. Khi đó nó đọc các ghi chú trong quá khứ về một agent trước mỗi lần xem xét (để lời khuyên cộng dồn thay vì lặp lại) và ghi lại từng nhận định mới vào thư mục \`Director/\` trong vault của bạn — một lịch sử huấn luyện bền vững, có thể đọc được bởi con người.
+
+### Tại Sao Điều Này Quan Trọng
+
+Các con số thô (lần chạy, chi phí, tỷ lệ thành công) cho bạn biết *điều gì* đã xảy ra, không phải *liệu nó có đáng không*. Director bổ sung lớp phán đoán còn thiếu — đánh giá trung thực, dựa trên bằng chứng về giá trị và hiệu quả của từng agent — để một đội agent vẫn hữu ích mà không cần bạn kiểm tra từng lần chạy bằng tay.
+  `,
+
+  "tracking-goals": `
+## Theo Dõi Mục Tiêu
+
+Mục tiêu là lớp kết quả phía trên các lần chạy riêng lẻ. Thay vì xem các lần thực thi đến và đi, bạn xác định những gì bạn đang cố gắng hoàn thành — và để tiến độ tự động tổng hợp từ công việc mà đội và agent của bạn đang làm.
+
+Mục tiêu có tiêu đề, ngày mục tiêu tùy chọn, trạng thái và phần trăm tiến độ. Trạng thái theo mô hình bốn giá trị đơn giản: **open** (chưa bắt đầu), **in-progress** (đang được làm), **blocked** (đang chờ điều gì đó) và **done**. Tiến độ là hỗn hợp: hệ thống tính toán gợi ý từ các mục checklist, mục tiêu con và các bước giao việc đội được liên kết của mục tiêu — và hiển thị nó cho bạn dưới dạng nhắc nhở **Accept / edit**. Bạn quyết định; ghi đè thủ công luôn thắng.
+
+### Ba Chế độ xem
+
+Mục tiêu nằm trong phần Teams và cung cấp ba bề mặt, được chuyển đổi qua sidebar:
+
+- **Board** — một kanban được tổ chức theo trạng thái. Các thẻ hiển thị tiêu đề mục tiêu đầy đủ và một checklist nội tuyến (một vài việc cần làm đầu tiên dưới dạng hộp kiểm có thể bật, phần còn lại sau liên kết "+N more"). Khi mục tiêu có việc cần làm, hoàn thành chúng thúc đẩy tiến độ — thanh di chuyển khi các mục được tích.
+- **Map** — một canvas có thể kéo và phóng to hiển thị mục tiêu liên quan với nhau như thế nào. Các cạnh phụ thuộc (chặn, theo sau) kết nối mục tiêu thành đồ thị có hướng. Tô sáng **Now** (vòng nhấp nháy hổ phách) đánh dấu các mục tiêu hiện đang trong tiến trình; tô sáng **Next** (vòng xanh) đánh dấu các mục tiêu mà các bộ chặn đã xong và sẵn sàng bắt đầu. Phóng ra để xem chòm sao; phóng vào để xem siêu dữ liệu đầy đủ trên mỗi nút.
+- **Timeline** — các mục tiêu trên một ray ngày đến thẳng đứng, được nhóm theo sự khẩn cấp: Overdue, This week, This month, Later, No date.
+
+### Động thái Chính: Giao cho Đội AI Của Bạn
+
+Ngăn kéo chi tiết cho bất kỳ mục tiêu nào có điều khiển **Hand to your AI team**. Nhấn nó biến mục tiêu thành một giao việc đội đang chạy được liên kết trở lại với mục tiêu. Đội phân rã mục tiêu thành các bước (hoặc lấy các việc cần làm hiện có nguyên văn), thực hiện từng cái một và tự động tích tiến độ khi mỗi bước hoàn thành. Mục tiêu di chuyển từ open đến in-progress đến done một mình — và chỉ xuất hiện trong hàng đợi xem xét của bạn khi một bước thực sự cần quyết định của người.
+
+:::tip
+Bạn không cần giao mục tiêu cho đội ngay lập tức. Sử dụng Board để xây dựng checklist trước một cách thủ công — đội sau đó lấy từng mục việc cần làm theo thứ tự, cho bạn quyền kiểm soát chi tiết về những gì được làm và theo trình tự nào.
+:::
+  `,
+
+  "measuring-outcomes-with-kpis": `
+## Đo Lường Kết Quả Với KPI
+
+KPI là lớp số phía trên mục tiêu. Trong khi mục tiêu mô tả kết quả bạn muốn đạt được, KPI theo dõi liệu bạn có thực sự đến đó hay không — một giá trị hiện tại, một mục tiêu và một đọc nhịp độ cho bạn biết liệu bạn có đang đi đúng hướng không.
+
+Mỗi KPI hiển thị giá trị hiện tại so với mục tiêu với trạng thái **nhịp độ**: **on-track**, **off-track**, **met** hoặc **unmeasured** (khi chưa có phép đo nào được thực hiện). Thanh tiến trình và chỉ báo độ tươi mới của phép đo hoàn thiện thẻ trong nháy mắt.
+
+### Bốn Loại Phép Đo
+
+Các KPI không phải tất cả được đo theo cùng một cách. Personas hỗ trợ bốn loại phép đo, mỗi loại phù hợp với nguồn dữ liệu khác nhau:
+
+:::info
+- **Codebase** — chạy lệnh với repository của bạn và phân tích kết quả. Hữu ích cho những thứ như phần trăm coverage kiểm thử hoặc số lỗi lint hoàn toàn nằm trong code.
+- **Derived** — đọc từ dữ liệu riêng của orchestrator: số lần chạy, tỷ lệ kết quả, xu hướng chi phí và các chỉ số hoạt động tương tự mà Personas đã theo dõi.
+- **Connector** — kéo một giá trị từ một dịch vụ bên ngoài được kết nối (phân tích, lưu lượng, theo dõi lỗi). Nếu connector cần chưa có trong vault của bạn, thẻ KPI hiển thị lời nhắc "Connect \<service\>" liên kết trực tiếp đến catalog thông tin đăng nhập.
+- **Manual** — bạn tự nhập giá trị. Hữu ích cho các con số kinh doanh không nằm trong bất kỳ hệ thống nào bạn đã kết nối, hoặc cho các KPI bạn muốn theo dõi không chính thức trước khi tự động hóa phép đo.
+:::
+
+### KPI Nằm Ở Đâu
+
+**Teams › KPIs** có hai chế độ xem sau một công tắc phân đoạn. Chế độ xem **Dashboard** hiển thị tất cả các KPI đang hoạt động dưới dạng thẻ — nhấp vào bất kỳ thẻ nào để mở ngăn kéo chi tiết với lịch sử phép đo đầy đủ, sparkline và trường nhập giá trị thủ công. Chế độ xem **Proposals** là hàng đợi xem xét: nhấp "Scan for KPIs" chạy một lần phân tích không đầu qua context map của dự án và các KPI hiện có của bạn, và hiển thị các KPI được đề xuất với lý do một dòng và thủ tục đo lường chính xác nó sẽ sử dụng. Bạn chấp nhận (tùy chọn điều chỉnh mục tiêu trước) hoặc từ chối. Các đề xuất bị từ chối được lưu trữ và phản hồi lại cho các lần quét trong tương lai như các ví dụ tiêu cực để cùng một gợi ý không quay lại.
+
+:::tip
+Để quét đề xuất KPI trước khi bạn tự soạn chúng. Nó đọc context map của dự án, các mục tiêu hiện có và danh mục connector trong vault của bạn — và có xu hướng đề xuất các phép đo thực sự có thể tự động hóa với những gì bạn đã kết nối.
+:::
+  `,
+
+  "director-verdicts-and-categories": `
+## Nhận Định và Danh Mục Của Director
+
+Mỗi lần xem xét của Director tạo ra một nhận định có cấu trúc — không chỉ là pass/fail, mà là đánh giá nhiều lớp cho bạn biết agent đang làm tốt điều gì, điều gì cần huấn luyện và cách ghi lại huấn luyện đó để nó thực sự bám vào.
+
+Phần bắt buộc là một **điểm số tổng thể 0–5** với tóm tắt một dòng. Điểm số này đáp vào bản ghi thực thi và xuất hiện dưới dạng sao trong danh sách Activity — vì vậy một lần quét nhanh các lần chạy gần đây của bất kỳ agent nào cho bạn biết cái nào xứng đáng với chi phí của nó. Điểm số cũng thúc đẩy sparkline xu hướng trong bảng Agents: một thanh lịch sử ngắn được tô màu bởi xếp hạng gần nhất.
+
+### Những Gì Đang Hoạt Động Tốt
+
+Đánh giá không bắt đầu bằng phê bình. Trước bất kỳ ghi chú huấn luyện nào, Director nêu ra những điều mà agent thực sự đang làm đúng — những gì tài liệu gọi là **thắng lợi**. Những điều này xuất hiện ở đầu markdown đánh giá đầy đủ dưới dạng phần "What's working". Một agent đang hoạt động tốt có thể chỉ nhận được thắng lợi; Director im lặng khi không có gì để cải thiện.
+
+### Ghi Chú Huấn Luyện và Danh Mục
+
+Sau thắng lợi là các ghi chú huấn luyện: gợi ý cụ thể, có thể hành động được ghi dưới một trong sáu **danh mục**:
+
+- **Prompt** — hướng dẫn hoặc khung của agent cần điều chỉnh
+- **Health** — các vấn đề về độ tin cậy hoặc xử lý lỗi
+- **Triggers** — cách thức và thời điểm agent kích hoạt (lịch trình, webhook, thiết lập chain)
+- **Credentials** — các khoảng trống vault hoặc quyền đang chặn agent
+- **Memory** — những gì agent đang lưu và thu hồi (hoặc không làm được)
+- **Usefulness** — liệu đầu ra của agent có thực sự có giá trị cho mục đích đã nêu hay không
+
+Các ghi chú huấn luyện xuất hiện trong **hàng đợi xem xét** của bạn dưới dạng các mục bạn phê duyệt hoặc từ chối. Đây không chỉ là việc nhà: phê duyệt hoặc từ chối các ghi chú dạy Director biết gu của bạn. Lần xem xét tiếp theo đọc lại các ghi chú bạn đã chấp nhận và những cái bạn đã bỏ qua, vì vậy vòng phản hồi cộng dồn — Director ngày càng giỏi hơn trong việc biết bạn quan tâm đến điều gì cho mỗi agent, và dừng đề xuất những thứ bạn đã loại trừ.
+
+Trung tâm chỉ huy của Director bao gồm một tổng hợp **Vấn đề theo danh mục** tổng hợp các ghi chú huấn luyện trên toàn đội của bạn, vì vậy bạn có thể thấy ở cấp độ danh mục đầu tư liệu khoảng trống thông tin đăng nhập có phải là vấn đề phổ biến nhất hay chất lượng prompt là nơi hầu hết các agent cần chú ý.
+
+:::tip
+Các agent khỏe mạnh đạt điểm cao và tạo ra ít hoặc không có ghi chú huấn luyện. Nếu một agent liên tục đạt 4–5 mà không có mục xem xét đang chờ, đó là tín hiệu để yên nó và tập trung sự chú ý vào những cái có xu hướng giảm hoặc điểm số thấp.
+:::
+  `,
+
+  "director-momentum-and-stale-sweep": `
+## Đà Động Lực và Quét Lỗi Thời Của Director
+
+Ngoài các nhận định cá nhân, Director xây dựng bức tranh cấp độ danh mục đầu tư về cách toàn bộ đội của bạn đang xu hướng. Đây là chế độ xem dọc — không phải "agent này đã làm gì trong lần chạy cuối cùng" mà "huấn luyện có thực sự tạo ra thay đổi trên các agent của bạn theo thời gian không?"
+
+### Thẻ Điểm
+
+Trung tâm chỉ huy của Director mở với **thẻ điểm** trả lời bốn câu hỏi trong nháy mắt: bao nhiêu phần công việc của đội đã tạo ra giá trị (**tỷ lệ giá trị được giao**), điểm nhận định trung bình trên tất cả các agent trong phạm vi là bao nhiêu, **chi phí trên mỗi lần chạy hữu ích** là bao nhiêu và có bao nhiêu agent hiện đang trong phạm vi. Bên dưới KPI tiêu đề, một thanh **phân tích giá trị** phân tách tỷ lệ giá trị được giao thành phân loại kết quả đầy đủ — đã giao, một phần, bị chặn, không có đầu vào, chưa được đánh giá — để bạn có thể thấy giá trị đang rò rỉ ở đâu, không chỉ là liệu có hay không.
+
+Biểu đồ **phân bố điểm 0–5** hiển thị cách các agent được gắn sao của bạn xếp hàng trên toàn thang đánh giá, với đường đứt nét đánh dấu trung bình danh mục đầu tư. Bộ chọn khoảng thời gian xem xét (7 / 30 / 90 ngày) phạm vi toàn bộ thẻ điểm.
+
+### Đà Động Lực
+
+Dải **đà động lực** trả lời câu hỏi danh mục đầu tư quan trọng nhất: mọi thứ có đang tốt hơn không? Nó đếm có bao nhiêu agent **cải thiện**, **giữ nguyên** hoặc **giảm sút** so với lần xem xét trước. Một đội đang cải thiện có nghĩa là huấn luyện đang có tác dụng; một đội đang giảm sút có nghĩa là điều gì đó có tính hệ thống cần chú ý — thay đổi mô hình, trôi dạt thông tin đăng nhập, phân rã prompt.
+
+### Thẻ Chú ý và Phân loại
+
+Bảng huấn luyện gắn cờ mọi agent trong phạm vi với **thẻ chú ý** dựa trên các quy tắc được suy ra từ client: đang chờ xem xét đầu tiên (chưa bao giờ được đánh giá), điểm thấp (≤ 2), xu hướng giảm hoặc xem xét lỗi thời (không được huấn luyện trong hơn 14 ngày). Một thanh phân loại chú ý ở đầu bảng tổng hợp các cờ này — N mới, N thấp, N giảm, N lỗi thời — để bạn thấy quy mô vấn đề trước khi bắt đầu giải quyết.
+
+Nhấp vào chip phân loại lọc bảng theo cờ đó. Sau khi lọc, hành động **Review these N** chạy Director tuần tự trên chính xác những agent đó — phân loại dẫn thẳng vào hành động.
+
+### Quét Lỗi Thời
+
+Nút **Stale sweep** xem xét lại mọi agent được gắn sao chưa được huấn luyện trong hơn 14 ngày, chỉ với một cú nhấp chuột. Nó chỉ xuất hiện khi tồn tại các agent lỗi thời. Đây là lần bảo trì định kỳ: chạy nó một lần mỗi tháng và Director bắt bất kỳ agent nào đã trôi dạt kể từ lần đánh giá cuối cùng.
+
+### Bộ Nhớ Dài Hạn
+
+Với **Obsidian Brain** được bật, Director đọc các ghi chú trong quá khứ về một agent trước mỗi lần xem xét và ghi lại nhận định mới vào thư mục \`Director/\` trong vault của bạn. Huấn luyện cộng dồn thay vì lặp lại — Director không tái đề xuất những thứ nó đã đề cập, và nó xây dựng trên những gì bạn đã phê duyệt và từ chối theo thời gian.
+
+:::tip
+Quét lỗi thời và thanh phân loại chú ý là hai cách nhanh nhất để giữ một đội lớn khỏe mạnh mà không mất thời gian với các agent đã đang làm tốt. Sử dụng thanh phân loại để tìm các agent thực sự cần chú ý; sử dụng quét lỗi thời để đảm bảo không có gì đang âm thầm trượt mà không được xem xét.
+:::
+  `,
 };

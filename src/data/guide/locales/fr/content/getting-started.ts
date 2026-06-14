@@ -234,4 +234,131 @@ Le cockpit a accès à une doctrine — un corpus de connaissances curé sur le 
 Pour les questions "je pense que quelque chose est cassé", ouvrez d'abord Athena et demandez "diagnostique la dernière exécution défaillante de l'agent X". Le flux de débogage du cockpit est conçu pour cela et surpasse généralement la lecture manuelle des journaux.
 :::
   `,
+
+  "browsing-templates": `
+## Parcourir la galerie de modèles
+
+Ne partez pas d'une page blanche. La galerie de modèles est une bibliothèque d'agents préconstruits — chacun conçu pour un vrai travail, testé et prêt à être spécialisé pour votre configuration. Les modèles couvrent tout, de la surveillance et des rapports aux flux de travail de contenu et aux outils de développeur. Trouver le bon prend moins de temps que d'écrire un prompt à partir de zéro.
+
+Chaque carte dans la galerie vous indique ce que fait l'agent, la complexité de sa configuration et combien de temps prend approximativement l'adoption. En dessous, vous voyez les **connecteurs** dont le modèle a besoin — des services comme Slack, Notion, GitHub ou un fournisseur de stockage cloud — et si vous avez déjà des identifiants correspondants dans votre vault. Un petit indicateur de disponibilité sur chaque chip de connecteur vous le dit d'un coup d'œil : vert signifie que vous êtes prêt, orange signifie une correspondance partielle, et gris signifie que vous devrez ajouter cet identifiant avant que le modèle puisse s'exécuter.
+
+### Filtre de couverture
+
+La bande de filtres en haut de la galerie — **Tous / Prêts / Partiels / Brouillons** — vous permet de vous concentrer sur ce qui compte maintenant :
+
+- **Prêts** — chaque connecteur dont le modèle a besoin est déjà dans votre vault. Ce sont le chemin le plus rapide vers un agent en cours d'exécution.
+- **Partiels** — certains connecteurs correspondent, d'autres non. Intéressant à parcourir si vous prévoyez d'ajouter des identifiants bientôt.
+- **Brouillons** — modèles non publiés, visibles uniquement dans les builds de développement.
+
+Commencez par Prêts si vous voulez être opérationnel en quelques minutes.
+
+### Comparer des modèles
+
+Quand vous hésitez entre quelques options, vous n'avez pas à les ouvrir individuellement. Sélectionnez jusqu'à trois cartes (survolez pour révéler une case à cocher) et cliquez sur **Comparer** — un modal côte à côte les aligne sur la catégorie, l'objectif, les connecteurs, les déclencheurs, les cas d'utilisation, la complexité et la durée de configuration. Les lignes où les modèles diffèrent sont mises en évidence pour que les différences soient faciles à repérer. Vous pouvez adopter directement depuis la vue de comparaison sans revenir à la galerie.
+
+### Adoption rapide des modèles populaires
+
+Le haut de la galerie comporte une étagère de modèles populaires — les plus fréquemment adoptés par l'ensemble des utilisateurs. Chaque carte dispose d'une action **Adopter** révélée au survol qui ouvre directement le flux d'adoption, en sautant le modal de détail si vous avez déjà pris votre décision.
+
+:::tip
+Commencez par le filtre **Prêts** — ces modèles correspondent à ce qui est déjà dans votre vault et peuvent être opérationnels en quelques minutes. Une fois que vous en avez lancé un ou deux, parcourez **Partiels** pour voir quels nouveaux identifiants débloqueraient des possibilités supplémentaires.
+:::
+  `,
+
+  "adopting-a-template": `
+## Adopter un modèle
+
+Adopter un modèle est le moyen le plus rapide d'obtenir un agent fonctionnel et configuré. Le flux vous emmène de la galerie à un agent promu en quelques minutes — et chaque étape est réversible.
+
+:::steps
+1. **Cliquez sur Adopter** — depuis la carte de galerie, le modal de détail, la vue de comparaison ou l'étagère des populaires. L'assistant d'adoption s'ouvre. Rien n'est encore écrit dans la base de données ; vous pouvez fermer librement à ce stade.
+2. **Répondez au questionnaire** — le formulaire présente une question à la fois. À droite, un brief en direct montre vos réponses qui s'accumulent en temps réel. Les questions portent sur des éléments tels que l'espace de travail ou le projet à cibler, le format de sortie souhaité et la façon dont l'agent doit gérer les erreurs. Vos réponses remplaceront les emplacements \`{{placeholder}}\` dans le prompt de l'agent, le spécialisant pour votre configuration.
+3. **Test automatique** — une fois soumis, l'agent est assemblé à partir du modèle et de vos réponses, puis exécuté une fois automatiquement. Cela confirme que la configuration est valide vis-à-vis de vos identifiants et connecteurs avant que quoi que ce soit ne soit promu en production.
+4. **Promouvoir** — si le test réussit, l'agent est promu et devient un vrai agent modifiable sur votre page Agents. L'assistant vous y navigue automatiquement.
+:::
+
+### Correspondance automatique avec le vault
+
+Les identifiants déjà dans votre vault sont détectés et renseignés automatiquement. Quand le questionnaire comporte une question de connecteur et que vous avez exactement un identifiant correspondant, il est pré-sélectionné et marqué d'un badge **auto** — vous n'avez pas besoin de le choisir manuellement. Si vous avez plusieurs identifiants correspondants, la question réduit les choix disponibles à ce que vous avez.
+
+Si un modèle a besoin d'un connecteur que vous n'avez pas encore ajouté, cette question est **bloquée** — une bannière apparaît en haut du formulaire expliquant quelle catégorie d'identifiant manque et affichant un bouton **Ajouter un identifiant**. Cliquer dessus vous redirige directement vers le catalogue d'identifiants, pré-filtré sur la bonne catégorie, et sauvegarde vos réponses en cours comme brouillon. Quand vous revenez au modèle après avoir ajouté l'identifiant, vos réponses sont restaurées et la question bloquée se débloque.
+
+### Comment vos réponses façonnent l'agent
+
+En coulisses, vos réponses sont substituées dans le prompt à deux niveaux. D'abord, tous les emplacements \`{{param.aq_*}}\` dans le prompt du modèle sont remplacés par vos valeurs réelles. Ensuite, une section \`## Configuration utilisateur\` est ajoutée au prompt système listant chaque question et réponse, de sorte que le modèle dispose toujours du contexte complet de votre configuration, qu'un emplacement spécifique existe ou non. L'exécution de test et l'agent promu utilisent tous deux votre vraie configuration — pas les valeurs par défaut génériques du modèle.
+
+:::tip
+Si une question n'est pas claire, cherchez l'icône **ⓘ** à droite du libellé de la question. Cliquer dessus développe un conseil avec plus de contexte sur ce qu'affecte la question et à quoi ressemble une bonne réponse.
+:::
+  `,
+
+  "recipes": `
+## Recettes
+
+Les recettes sont des centaines de cas d'utilisation prêts à exécuter tirés des modèles, organisés selon ce qu'ils accomplissent. Là où un modèle est une configuration d'agent complète, une recette est un exemple concret de travail que cet agent peut faire — spécifique, actionnable et proche de quelque chose que vous pourriez avoir sur votre liste de tâches.
+
+Vous les trouvez sous l'onglet **Modèles → Recettes**. Le catalogue complet est triable et consultable : parcourez par nom, filtrez par catégorie ou scannez les icônes de connecteurs pour trouver des cas d'utilisation correspondant à ce que vous avez déjà connecté.
+
+### Catégories
+
+Les recettes sont organisées en neuf catégories :
+
+- **Surveillance** — surveiller les changements, les alertes, les seuils
+- **Rapports** — générer des résumés, des digests et des tableaux de bord
+- **Automatisation** — actions répétitives qui s'exécutent selon un planning ou un déclencheur
+- **Communication** — messages, notifications et routage
+- **Synchronisation de données** — maintenir deux systèmes en accord
+- **Analyse** — synthétiser des informations et produire des insights
+- **Développement** — revue de code, génération de tests, vérifications de déploiement
+- **Contenu** — rédiger, éditer, publier
+- **Productivité** — assistants de flux de travail personnels et d'équipe
+
+### Le tableau des recettes
+
+La vue principale est un tableau triable. Chaque ligne affiche le nom de la recette (avec mise en évidence des correspondances de recherche quand vous avez tapé une requête), son badge de catégorie et une bande d'icônes de connecteurs indiquant les services requis — jusqu'à trois icônes, avec un compteur de débordement pour les modèles qui en nécessitent davantage. Cliquez sur n'importe quelle ligne pour ouvrir le panneau de détail de la recette.
+
+Le panneau de détail vous donne le tableau complet : ce que fait la recette, ce dont elle a besoin (connecteurs et liaisons spécifiques), comment elle gère les erreurs, et si l'agent actuel l'a déjà adoptée. Si vous avez déjà adopté une recette pour l'agent actif, la ligne affiche un chip vert **Adopté**.
+
+### Préréglages d'équipe
+
+Si vous configurez un flux de travail complet plutôt qu'un seul agent, recherchez les **préréglages d'équipe** — des ensembles de modèles adoptés ensemble en un seul flux. Un préréglage couvre un travail cohérent (comme un pipeline de contenu complet ou une suite de productivité développeur) où plusieurs agents se transmettent le travail.
+
+:::tip
+Les recettes sont le moyen le plus rapide de trouver un exemple concret proche d'un travail que vous avez en tête. Si vous savez quel résultat vous voulez mais n'êtes pas sûr de quel modèle commencer, cherchez d'abord dans l'onglet Recettes — les descriptions de cas d'utilisation spécifiques sont souvent plus faciles à faire correspondre à un travail que les noms de modèles plus généraux.
+:::
+  `,
+
+  "interface-modes": `
+## Modes d'interface
+
+Personas dispose de deux modes d'interface : **Simple** et **Avancé**. Ils exécutent la même application — mêmes composants, mêmes données, mêmes agents — avec le mode Simple masquant les surfaces dont les utilisateurs non techniques ont rarement besoin. Rien n'est supprimé ; tout est juste affiché ou masqué selon le mode dans lequel vous vous trouvez.
+
+:::compare
+**Simple**
+Optionnel. Quatre écrans : Accueil, Agents, Connexions, Paramètres. Les surfaces avancées — Vue d'ensemble, Flux de travail, Événements, Modèles, Plugins, les déclencheurs avancés et l'ensemble complet des onglets de l'éditeur — sont masquées. L'exécution s'affiche sous forme de barre de progression propre et de résultat formaté plutôt qu'un flux de tokens bruts. Idéal pour les utilisateurs qui veulent exécuter des agents, pas les construire.
+---
+**Avancé** [recommended]
+Le mode par défaut pour la plupart des gens. L'application complète. Toutes les sections de la barre latérale, tous les onglets de l'éditeur (Prompt, Matrix, Lab, Activité, Santé, Paramètres), tous les types de déclencheurs (planning, webhook, surveillance de fichiers, presse-papiers, chaîne et déclencheurs d'événements), le vault complet avec playground et graphe de dépendances, la surveillance via Vue d'ensemble, Director et tout le reste. Le mode dans lequel la plupart des utilisateurs évoluent une fois qu'ils ont quelques agents en cours d'exécution.
+:::
+
+### Ce que le mode Simple masque
+
+En mode Simple, la barre latérale se réduit à quatre sections : **Accueil**, **Agents**, **Connexions** et **Paramètres**. Vue d'ensemble, Flux de travail, Événements, Modèles, Plugins et autres sections avancées n'apparaissent pas dans la navigation.
+
+Dans Agents, l'éditeur n'affiche que les onglets **Prompt**, **Chat** et **Connecteurs**. L'éditeur Matrix, l'arène Lab, le journal d'activité, l'onglet Santé, l'historique des versions, le constructeur de conditions, le panneau de configuration des outils, les paramètres avancés et les types de déclencheurs avancés sont tous masqués. Le seul déclencheur visible est **Manuel** (le bouton Exécuter).
+
+La sortie d'exécution est simplifiée : au lieu d'un terminal en streaming avec sortie de tokens bruts, vous voyez une barre de progression pendant l'exécution de l'agent et un résultat formaté et lisible quand elle se termine. Le coût et les compteurs de tokens ne sont pas affichés.
+
+Dans Connexions, la liste d'identifiants affiche une vue simplifiée — ajouter, tester et supprimer un identifiant. Le playground d'identifiants, la base de connaissances vectorielle, le gestionnaire de connexions de base de données, les actions en masse et le scoring de santé sont masqués.
+
+### Changer de mode
+
+Allez dans **Paramètres → Apparence → Mode d'interface** et sélectionnez Simple ou Avancé. Le changement prend effet immédiatement — pas besoin de redémarrer.
+
+Le guide que vous lisez en ce moment dispose de son propre bouton Simple / Avancé dans la barre latérale. Changer le mode du guide filtre les rubriques pour correspondre : le mode Simple affiche les rubriques de base, le mode Avancé révèle les sections avancées. Les deux boutons sont indépendants — vous pouvez lire des rubriques du guide en mode Avancé tout en exécutant l'application en mode Simple.
+
+:::tip
+Commencez en mode Simple si vous êtes nouveau sur Personas. Une fois que vous avez quelques agents en cours d'exécution et que vous voulez régler les plannings, configurer des déclencheurs webhook ou explorer les traces d'exécution, passez en mode Avancé — tout ce que vous avez construit en mode Simple est préservé exactement tel quel.
+:::
+  `,
 };

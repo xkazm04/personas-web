@@ -1,6 +1,6 @@
 import { notFound } from "next/navigation";
 import type { Metadata } from "next";
-import { BLOG_POSTS, BLOG_CATEGORIES } from "@/data/blog";
+import { BLOG_POSTS, BLOG_CATEGORIES, isPublished } from "@/data/blog";
 import { SITE_URL, safeJsonLd } from "@/lib/seo";
 import BlogArticle from "./BlogArticle";
 
@@ -9,13 +9,15 @@ interface Props {
 }
 
 export async function generateStaticParams() {
-  return BLOG_POSTS.map((p) => ({ slug: p.slug }));
+  // Only published posts get pre-rendered/listed. Future-dated (staged) posts
+  // render on demand and 404 until their date passes (see isPublished).
+  return BLOG_POSTS.filter(isPublished).map((p) => ({ slug: p.slug }));
 }
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { slug } = await params;
   const post = BLOG_POSTS.find((p) => p.slug === slug);
-  if (!post) return {};
+  if (!post || !isPublished(post)) return {};
   return {
     title: post.title,
     description: post.description,
@@ -34,7 +36,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 export default async function BlogPostPage({ params }: Props) {
   const { slug } = await params;
   const post = BLOG_POSTS.find((p) => p.slug === slug);
-  if (!post) notFound();
+  if (!post || !isPublished(post)) notFound();
 
   const category = BLOG_CATEGORIES.find((c) => c.id === post.category);
 

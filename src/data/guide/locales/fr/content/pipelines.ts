@@ -271,6 +271,62 @@ Même quand aucun modèle ne correspond exactement, choisir le plus proche et le
 :::
   `,
 
+  "team-assignments": `
+## Attributions d'équipe
+
+Les pipelines câblent chaque étape à la main. Les attributions inversent ce schéma : vous confiez à l'équipe un **objectif** en langage naturel, et l'équipe détermine elle-même les étapes. Elle décompose l'objectif en liste de tâches, choisit l'agent le mieux adapté à chaque étape, et les exécute en parallèle — en s'arrêtant uniquement pour vous demander quand une étape échoue ou nécessite une décision.
+
+Pensez-y comme à la différence entre dessiner un organigramme et briefer un chef de projet. Avec un pipeline, vous concevez le flux ; avec une attribution, vous énoncez le résultat et laissez l'équipe s'organiser autour.
+
+### Points clés
+
+- **Objectif d'abord** — décrivez ce que vous voulez ; l'équipe le décompose en étapes ordonnées
+- **Correspondance intelligente** — chaque étape est acheminée vers l'agent le mieux adapté (vous pouvez épingler les agents manuellement, utiliser la correspondance locale rapide, ou laisser le modèle décider)
+- **Décomposition automatique** — un clic transforme un objectif en liste d'étapes modifiable que vous pouvez ajuster avant d'exécuter
+- **Exécution parallèle** — les étapes indépendantes s'exécutent simultanément ; les étapes dépendantes attendent leur tour
+- **Validation humaine en cas d'échec** — une étape qui échoue met en pause uniquement cette attribution et vous propose Modifier / Réassigner / Ignorer, avec une notification dans la barre de titre
+- **Modèles réutilisables** — enregistrez un objectif + disposition d'étapes comme modèle et créez de nouvelles attributions à partir de celui-ci
+- **Dispatch par chat** — demandez à Athena de « faire gérer ça par l'équipe de recherche » et elle le configurera pour votre approbation
+
+### Comment ça marche
+
+Ouvrez le canevas d'une équipe et cliquez sur le badge **Attributions** (en bas à gauche). Cliquez sur **Nouveau**, saisissez un objectif, et remplissez les étapes vous-même ou cliquez sur **Décomposer automatiquement** pour que l'assistant les propose. Choisissez comment les agents sont associés aux étapes, définissez combien s'exécutent simultanément, et cliquez sur **Créer et démarrer**. Regardez la liste de tâches se mettre à jour en direct ; si une étape échoue, résolvez-la directement. Enregistrez tout ce que vous réutiliserez comme modèle.
+
+:::tip
+Utilisez une attribution quand vous connaissez le résultat mais pas les étapes exactes. Utilisez un pipeline quand vous voulez un contrôle précis et reproductible sur chaque connexion. Les modèles font le lien entre les deux — une attribution enregistrée devient un point de départ en un clic.
+:::
+  `,
+
+  "team-memory-and-goals": `
+## Mémoire et objectifs d'équipe
+
+Une équipe est plus qu'un ensemble d'agents — ce sont des agents qui **se souviennent ensemble** et avancent vers un résultat partagé. Deux choses rendent cela possible : la mémoire d'équipe partagée et les objectifs.
+
+### Mémoire d'équipe partagée
+
+Au fil du travail, l'équipe enregistre des décisions et des contraintes — « nous avons standardisé ce format », « ce compte est hors périmètre », « le relecteur a rejeté l'approche X ». Ces notes deviennent la **mémoire d'équipe**, et un digest compact des plus importantes s'injecte dans le contexte de chaque membre lors de sa prochaine exécution.
+
+L'effet : l'équipe converge au lieu de se répéter. Un agent ne redécouvre pas une décision qu'un coéquipier a déjà prise — il en hérite. Vous pouvez consulter et gérer cette mémoire dans le panneau Mémoire d'équipe sur le canevas.
+
+### Objectifs — pilotez sans microgérer
+
+Liez une équipe à un **objectif** et vous cessez de surveiller chaque exécution individuellement. L'objectif suit la progression au fil du travail de l'équipe, et l'application ne met en avant que ce qui requiert réellement une intervention humaine — un objectif bloqué, une échéance qui approche, une étape en attente de votre validation. Tout le reste s'exécute.
+
+C'est la boucle « fixer le cap, rester à haut niveau » : vous définissez le résultat et les garde-fous ; l'équipe gère le reste et lève la main quand elle a besoin de vous.
+
+:::tip
+Pensez à la mémoire d'équipe comme au savoir institutionnel de l'équipe et à l'objectif comme à son étoile polaire. La mémoire maintient la cohérence de l'équipe d'une exécution à l'autre ; l'objectif la garde orientée vers quelque chose qui en vaut la peine.
+:::
+
+### Points clés
+
+- **Mémoire partagée** — les décisions et contraintes enregistrées par l'équipe sont injectées dans la prochaine exécution de chaque membre
+- **Convergence** — les membres s'appuient sur les conclusions des autres au lieu de les redériver
+- **Liaison à un objectif** — associez une équipe à un objectif pour suivre la progression et les échéances
+- **Mis en avant, pas enfoui** — la file d'attention ne remonte que ce qui vous concerne (bloqué, en retard, en attente de validation)
+- **Gérez-la** — consultez, modifiez ou supprimez les mémoires d'équipe depuis le panneau du canevas
+  `,
+
   "debugging-pipeline-issues": `
 ## Déboguer les problèmes de pipeline
 

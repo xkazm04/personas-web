@@ -1,7 +1,7 @@
 "use client";
 
 import { useCallback, useEffect, useId, useMemo, useState } from "react";
-import { AnimatePresence, motion } from "framer-motion";
+import { AnimatePresence, motion, useReducedMotion } from "framer-motion";
 import { ChevronDown } from "lucide-react";
 
 import { useTranslation } from "@/i18n/useTranslation";
@@ -17,6 +17,7 @@ interface MobileTopicTOCProps {
 export default function MobileTopicTOC({ headings }: MobileTopicTOCProps) {
   const { t } = useTranslation();
   const [open, setOpen] = useState(false);
+  const reduced = useReducedMotion() ?? false;
   const panelId = useId();
 
   const tocHeadings = useMemo(
@@ -72,7 +73,7 @@ export default function MobileTopicTOC({ headings }: MobileTopicTOCProps) {
           </span>
           <motion.span
             animate={{ rotate: open ? 180 : 0 }}
-            transition={{ duration: 0.2 }}
+            transition={reduced ? { duration: 0 } : { duration: 0.2 }}
             className="text-muted-dark"
             aria-hidden
           >
@@ -98,10 +99,10 @@ export default function MobileTopicTOC({ headings }: MobileTopicTOCProps) {
             <motion.nav
               key="panel"
               id={panelId}
-              initial={{ opacity: 0, y: -8 }}
+              initial={reduced ? { opacity: 0 } : { opacity: 0, y: -8 }}
               animate={{ opacity: 1, y: 0 }}
-              exit={{ opacity: 0, y: -8 }}
-              transition={{ duration: 0.18 }}
+              exit={reduced ? { opacity: 0 } : { opacity: 0, y: -8 }}
+              transition={reduced ? { duration: 0 } : { duration: 0.18 }}
               className="max-h-[70vh] overflow-y-auto border-b border-glass bg-surface/95 backdrop-blur-xl"
               aria-label={t.pageNav.onThisPage}
             >

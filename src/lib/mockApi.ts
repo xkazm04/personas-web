@@ -16,6 +16,13 @@ import {
   getMockExecutionDetail,
   resetMockOutputOffset,
 } from "./mockData";
+import {
+  MOCK_AUDIT_INCIDENTS,
+  MOCK_DISK_USAGE,
+  MOCK_HEALTH_CHECKS,
+  type AuditIncident,
+  type HealthCheckSection,
+} from "./mock-dashboard-data";
 import { ApiError, type ApiClient } from "./api";
 import type {
   Persona,
@@ -241,3 +248,27 @@ export const mockApi: ApiClient = {
     };
   },
 };
+
+/**
+ * Audit-log incidents for the Incidents Inbox. Demo-only — incidents have no
+ * faithful synced source, so this is a standalone mock fetcher (not part of the
+ * real `ApiClient`); callers import it directly rather than via the `api`
+ * proxy. Simulates fetch latency so the surface can show a loading state.
+ */
+export async function getAuditIncidents(): Promise<AuditIncident[]> {
+  await delay(300);
+  return [...MOCK_AUDIT_INCIDENTS];
+}
+
+/**
+ * System-health snapshot for the System Health Panel. Demo-only standalone
+ * fetcher (not part of the real `ApiClient`); simulates latency for a loading
+ * state. Returns the four check sections plus the disk-usage gauge.
+ */
+export async function getSystemHealth(): Promise<{
+  sections: HealthCheckSection[];
+  diskUsage: { usedGb: number; totalGb: number };
+}> {
+  await delay(300);
+  return { sections: MOCK_HEALTH_CHECKS.map((s) => ({ ...s })), diskUsage: { ...MOCK_DISK_USAGE } };
+}

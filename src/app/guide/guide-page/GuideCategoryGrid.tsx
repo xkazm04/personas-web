@@ -54,7 +54,7 @@ export function GuideCategoryGrid({
                 >
                   <Image
                     src={illustration.dark}
-                    alt={labels.categories[category.id]}
+                    alt={labels.categories[category.id] ?? category.name}
                     width={800}
                     height={400}
                     aria-hidden="true"
@@ -62,7 +62,7 @@ export function GuideCategoryGrid({
                   />
                   <Image
                     src={illustration.light}
-                    alt={labels.categories[category.id]}
+                    alt={labels.categories[category.id] ?? category.name}
                     width={800}
                     height={400}
                     className="block dark:hidden h-full w-full object-cover transition-transform duration-500 group-hover:scale-105"
@@ -86,7 +86,7 @@ export function GuideCategoryGrid({
                       textShadow: `0 0 24px ${tint(brand, 30)}`,
                     }}
                   >
-                    {labels.categories[category.id]}
+                    {labels.categories[category.id] ?? category.name}
                   </h3>
                   <span
                     className="shrink-0 rounded-full px-3 py-1 text-base font-semibold tabular-nums"
@@ -99,7 +99,7 @@ export function GuideCategoryGrid({
                   </span>
                 </div>
                 <p className="text-base text-foreground/75 leading-relaxed line-clamp-2 mb-4">
-                  {labels.categoryDescriptions[category.id]}
+                  {labels.categoryDescriptions[category.id] ?? category.description}
                 </p>
                 <div
                   className="inline-flex items-center gap-1.5 text-base font-semibold transition-transform group-hover:translate-x-0.5"

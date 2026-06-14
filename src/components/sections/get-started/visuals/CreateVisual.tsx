@@ -1,6 +1,6 @@
 "use client";
 
-import { motion } from "framer-motion";
+import { motion, useReducedMotion } from "framer-motion";
 import { Sparkles } from "lucide-react";
 import { BRAND_VAR, tint } from "@/lib/brand-theme";
 import { SURFACE_GLASS, VisualFrame } from "./chrome";
@@ -18,6 +18,7 @@ const PERSONA_FIELDS = [
 
 export function CreateVisual({ brand }: VisualProps) {
   const color = BRAND_VAR[brand];
+  const reduced = useReducedMotion() ?? false;
   return (
     <VisualFrame>
       <div className="rounded-xl border p-4" style={SURFACE_GLASS}>
@@ -28,8 +29,8 @@ export function CreateVisual({ brand }: VisualProps) {
         <div className="font-mono text-base leading-relaxed text-foreground">
           &gt; {PROMPT}
           <motion.span
-            animate={{ opacity: [1, 0, 1] }}
-            transition={{ duration: 1, repeat: Infinity }}
+            animate={reduced ? undefined : { opacity: [1, 0, 1] }}
+            transition={reduced ? undefined : { duration: 1, repeat: Infinity }}
             className="ml-0.5 inline-block"
           >
             _

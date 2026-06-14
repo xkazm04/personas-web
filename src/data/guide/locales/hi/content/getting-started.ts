@@ -234,4 +234,131 @@ Windows बिल्ड वेक्टर-नॉलेज-बेस फ़ी�
 "मुझे लगता है कि कुछ टूट गया है" जैसे प्रश्नों के लिए, पहले Athena खोलें और पूछें "एजेंट X के अंतिम विफल रन का निदान करें"। कॉकपिट का डिबग प्रवाह इसके लिए बनाया गया है और आमतौर पर मैन्युअल रूप से लॉग पढ़ने से बेहतर होता है।
 :::
   `,
+
+  "browsing-templates": `
+## Template Gallery ब्राउज़ करना
+
+खाली page से शुरू मत करें। Template gallery पूर्व-निर्मित agents की एक library है — प्रत्येक एक real job के लिए designed, tested, और आपके setup के अनुसार specialize करने के लिए तैयार। Templates monitoring और reporting से लेकर content workflows और developer tooling तक सब कुछ cover करते हैं। सही template ढूँढना scratch से prompt लिखने में कम समय लेता है।
+
+gallery में प्रत्येक card आपको बताता है कि agent क्या करता है, setup करना कितना complex है, और adoption में लगभग कितना समय लगता है। नीचे आप उन **connectors** देखते हैं जिनकी template को ज़रूरत है — Slack, Notion, GitHub, या cloud storage provider जैसी services — और आपके vault में पहले से matching credentials हैं या नहीं। प्रत्येक connector chip पर एक small readiness indicator एक नज़र में बताता है: green का मतलब आप तैयार हैं, amber का मतलब आपके पास partial match है, और grey का मतलब आपको वह credential add करनी होगी इससे पहले कि template run कर सके।
+
+### Coverage Filter
+
+gallery के शीर्ष पर filter strip — **All / Ready / Partial / Drafts** — आपको अभी जो मायने रखता है उस पर narrow करने देती है:
+
+- **Ready** — template को जिन सभी connectors की ज़रूरत है वे पहले से आपके vault में हैं। ये running agent तक सबसे तेज़ रास्ता हैं।
+- **Partial** — कुछ connectors matched हैं, कुछ नहीं। यदि आप जल्द ही credentials add करने की planning कर रहे हैं तो browse करने लायक।
+- **Drafts** — unpublished templates, केवल development builds में visible।
+
+यदि आप मिनटों में कुछ run करना चाहते हैं तो Ready से शुरू करें।
+
+### Templates की तुलना करना
+
+जब आप कुछ options के बीच decide कर रहे हों, तो आपको हर एक को individually खोलने की ज़रूरत नहीं। तीन cards तक select करें (hover एक checkbox reveal करता है) और **Compare** click करें — एक side-by-side modal उन्हें category, goal, connectors, triggers, use-cases, complexity, और setup time में line up करता है। जिन rows में templates differ करते हैं उन्हें highlight किया जाता है ताकि differences आसानी से spot हों। आप gallery में वापस गए बिना compare view से directly adopt कर सकते हैं।
+
+### Trending Quick-Adopt
+
+gallery के शीर्ष पर trending templates की एक shelf है — सभी users में सबसे अधिक adopted। प्रत्येक card पर एक hover-revealed **Adopt** action है जो detail modal को skip करके adoption flow directly खोलता है यदि आपने पहले से mind बना लिया हो।
+
+:::tip
+**Ready** filter से शुरू करें — वे templates आपके vault में पहले से मौजूद चीज़ों से match करते हैं और मिनटों में run हो सकते हैं। एक या दो ship करने के बाद, **Partial** browse करें यह देखने के लिए कि नई credentials क्या unlock करेंगी।
+:::
+  `,
+
+  "adopting-a-template": `
+## Template Adopt करना
+
+Template adopt करना एक working, configured agent पाने का सबसे तेज़ तरीका है। Flow आपको gallery से promoted agent तक कुछ मिनटों में ले जाता है — और रास्ते में हर step reversible है।
+
+:::steps
+1. **Adopt पर click करें** — gallery card, detail modal, compare view, या trending shelf से। Adoption wizard खुलता है। Database में अभी कुछ नहीं लिखा जाता; आप इस stage पर freely close कर सकते हैं।
+2. **Questionnaire का जवाब दें** — form एक समय में एक question present करता है। दाईं ओर, एक live brief दिखाती है कि आपके answers real time में build हो रहे हैं। Questions उन चीज़ों को cover करते हैं जैसे target करने के लिए कौन सा workspace या project, आप किस output format चाहते हैं, और agent को errors कैसे handle करने चाहिए। आपके answers agent के prompt में \`{{placeholder}}\` slots को fill करेंगे, इसे आपके setup के लिए specialize करते हुए।
+3. **Automatic test** — एक बार submit करने के बाद, agent template और आपके answers से assemble होता है, फिर automatically एक बार run होता है। यह confirm करता है कि production में कुछ भी promote होने से पहले configuration आपके credentials और connectors के विरुद्ध valid है।
+4. **Promote करें** — यदि test pass होता है, तो agent promoted और आपके Agents page पर एक real, editable agent बन जाता है। Wizard automatically आपको वहाँ navigate करता है।
+:::
+
+### Vault Auto-Matching
+
+आपके vault में पहले से existing credentials automatically detect और fill हो जाते हैं। जब questionnaire में connector question हो और आपके पास exactly एक matching credential हो, तो यह pre-selected और **auto** badge के साथ marked होता है — आपको इसे manually pick नहीं करना है। यदि आपके पास multiple matching credentials हैं, तो question उपलब्ध choices को केवल आपके पास जो है उस तक narrow करता है।
+
+यदि template को ऐसा connector चाहिए जो आपने अभी add नहीं किया, तो वह question **blocked** है — form के शीर्ष पर एक banner explain करता है कि कौन सी credential category missing है और एक **Add credential** button दिखाता है। उस पर click करना आपको credential catalog पर deep-link करता है, right category के लिए pre-filtered, और आपके in-progress answers को draft के रूप में save करता है। जब आप credential add करने के बाद template पर वापस आते हैं, तो आपके answers restored होते हैं और blocked question unlock हो जाता है।
+
+### आपके Answers Agent को कैसे Shape करते हैं
+
+Background में, आपके answers दो levels पर prompt में substituted होते हैं। पहले, template के prompt में कोई भी \`{{param.aq_*}}\` placeholders आपके actual values से replace होते हैं। दूसरा, system prompt में एक \`## User Configuration\` section append होता है जिसमें हर question और answer list होते हैं, ताकि model के पास हमेशा आपके setup का पूरा context हो चाहे specific placeholder exist करे या नहीं। Test run और promoted agent दोनों आपकी real configuration use करते हैं — generic template defaults नहीं।
+
+:::tip
+यदि कोई question स्पष्ट नहीं है, तो question label के दाईं ओर **ⓘ** icon देखें। इस पर click करना एक tip expand करता है जिसमें अधिक context होता है कि question किसे affect करता है और good answer कैसा दिखता है।
+:::
+  `,
+
+  "recipes": `
+## Recipes
+
+Recipes templates से derived सैकड़ों ready-to-run use cases हैं, organized उनके accomplish करने के आधार पर। जहाँ एक template एक पूरी agent configuration है, वहाँ एक recipe एक concrete example है कि वह agent क्या कर सकता है — specific, actionable, और आपकी to-do list पर जो हो सकता है उसके करीब।
+
+आप उन्हें **Templates → Recipes** tab के अंतर्गत पाते हैं। पूरा catalog sortable और searchable है: name से browse करें, category से filter करें, या उन use cases ढूँढने के लिए connector icons scan करें जो आपके पास already connected चीज़ों से match करते हों।
+
+### Categories
+
+Recipes नौ buckets में organized हैं:
+
+- **Monitoring** — changes, alerts, thresholds देखना
+- **Reporting** — summaries, digests, और dashboards generate करना
+- **Automation** — schedule या trigger पर चलने वाले repetitive actions
+- **Communication** — messages, notifications, और routing
+- **Data sync** — दो systems को agreement में रखना
+- **Analysis** — information synthesize करना और insights produce करना
+- **Development** — code review, test generation, deploy checks
+- **Content** — drafting, editing, publishing
+- **Productivity** — personal और team workflow helpers
+
+### Recipes Table
+
+Main view एक sortable table है। प्रत्येक row recipe name दिखाती है (जब आपने query type की हो तो search-match highlighting के साथ), उसका category badge, और connector icons की एक strip जो दिखाती है कि किन services की ज़रूरत है — तीन icons तक, उन templates के लिए overflow count के साथ जिन्हें अधिक की ज़रूरत है। Recipe detail panel खोलने के लिए किसी भी row पर click करें।
+
+Detail panel पूरी picture देता है: recipe क्या करती है, इसे क्या चाहिए (connectors और कोई specific bindings), यह errors कैसे handle करती है, और current agent ने इसे already adopt किया है या नहीं। यदि आपने active agent के लिए recipe पहले से adopt की है, तो row एक green **Adopted** chip दिखाती है।
+
+### Team Presets
+
+यदि आप एक single agent के बजाय एक full workflow setup कर रहे हैं, तो **team presets** देखें — templates के bundles जो एक flow में एक साथ adopt किए जाते हैं। एक preset एक coherent job cover करता है (जैसे एक full content pipeline या developer productivity suite) जहाँ multiple agents काम एक दूसरे को pass करते हैं।
+
+:::tip
+Recipes आपके मन में जो job है उसके करीब concrete example ढूँढने का सबसे तेज़ तरीका हैं। यदि आप जानते हैं कि आप क्या outcome चाहते हैं लेकिन यह नहीं जानते कि किस template से शुरू करें, तो पहले Recipes tab search करें — specific use-case descriptions अक्सर broader template names की तुलना में job से match करना आसान होती हैं।
+:::
+  `,
+
+  "interface-modes": `
+## Interface Modes
+
+Personas के दो interface modes हैं: **Simple** और **Power**। वे एक ही app run करते हैं — same components, same data, same agents — Simple उन surfaces को hide करके जिनकी non-technical users को शायद ही ज़रूरत हो। कुछ remove नहीं होता; सब कुछ बस show या hide होता है इस आधार पर कि आप किस mode में हैं।
+
+:::compare
+**Simple**
+Opt-in। चार screens: Home, Agents, Connections, Settings। Advanced surfaces — Overview, Workflows, Events, Templates, Plugins, advanced triggers, और full editor tab set — hidden हैं। Execution raw token stream के बजाय clean progress bar और formatted result के रूप में दिखाई देता है। उन users के लिए good जो agents run करना चाहते हैं, build नहीं करना।
+---
+**Power** [recommended]
+अधिकांश लोगों के लिए default। पूरा app। सभी sidebar sections, सभी editor tabs (Prompt, Matrix, Lab, Activity, Health, Settings), सभी trigger types (schedule, webhook, file watcher, clipboard, chain, और event triggers), playground और dependency graph के साथ full vault, Overview, Director के माध्यम से monitoring, और बाकी सब कुछ। वह mode जिसमें अधिकांश users graduate करते हैं एक बार जब उनके कुछ agents running हों।
+:::
+
+### Simple क्या Hide करता है
+
+Simple mode में sidebar चार sections तक narrow हो जाती है: **Home**, **Agents**, **Connections**, और **Settings**। Overview, Workflows, Events, Templates, Plugins, और अन्य advanced sections nav में दिखाई नहीं देते।
+
+Agents के अंदर, editor केवल **Prompt**, **Chat**, और **Connectors** tabs दिखाता है। Matrix editor, Lab arena, Activity log, Health tab, version history, condition builder, tool configuration panel, advanced settings, और advanced trigger types सभी hidden हैं। केवल visible trigger **Manual** है (Run button)।
+
+Execution output simplified है: streaming terminal के बजाय raw token output के साथ, आप agent run होने पर progress bar देखते हैं और समाप्त होने पर एक formatted, readable result। Cost और token counts नहीं दिखाए जाते।
+
+Connections में, credential list एक simplified view दिखाती है — credential add, test, और delete करें। Credential playground, vector knowledge base, database connection manager, bulk actions, और health scoring hidden हैं।
+
+### Modes Switch करना
+
+**Settings → Appearance → Interface Mode** पर जाएं और Simple या Power select करें। परिवर्तन तुरंत effective होता है — restart की ज़रूरत नहीं।
+
+आप जो guide अभी पढ़ रहे हैं उसका अपना Simple / Power toggle sidebar में है। Guide का mode switch करने से topics filter होती हैं: Simple mode core topics दिखाता है, Power mode advanced sections reveal करता है। दोनों toggles independent हैं — आप Simple mode app चलाते हुए Power-mode guide topics पढ़ सकते हैं।
+
+:::tip
+यदि आप Personas में नए हैं तो Simple mode से शुरू करें। एक बार जब आपके कुछ agents running हों और आप schedules tune करना चाहते हों, webhook triggers set करना चाहते हों, या execution traces में dig करना चाहते हों, तो Power पर switch करें — Simple mode में जो कुछ भी आपने build किया वह exactly as-is carry over करता है।
+:::
+  `,
 };

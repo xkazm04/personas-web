@@ -1,10 +1,11 @@
 "use client";
 
-import { useEffect, type ReactNode } from "react";
+import { useEffect, useId, useRef, type ReactNode } from "react";
 import { AnimatePresence, motion } from "framer-motion";
 import { X } from "lucide-react";
 
 import { useTranslation } from "@/i18n/useTranslation";
+import { useFocusTrap } from "@/hooks/useFocusTrap";
 
 /**
  * Bottom sheet for mobile detail views — the native pattern that replaces a
@@ -27,6 +28,9 @@ export default function MobileSheet({
   children: ReactNode;
 }) {
   const { t } = useTranslation();
+  const panelRef = useRef<HTMLDivElement>(null);
+  const titleId = useId();
+  useFocusTrap({ active: open, containerRef: panelRef });
 
   useEffect(() => {
     if (!open) return;
@@ -57,8 +61,10 @@ export default function MobileSheet({
             aria-hidden="true"
           />
           <motion.div
+            ref={panelRef}
             role="dialog"
             aria-modal="true"
+            aria-labelledby={title ? titleId : undefined}
             initial={{ y: "100%" }}
             animate={{ y: 0 }}
             exit={{ y: "100%" }}
@@ -78,7 +84,7 @@ export default function MobileSheet({
               <div className="flex shrink-0 items-start justify-between gap-3 px-5 pb-3 pt-2">
                 <div className="min-w-0 flex-1">
                   {title && (
-                    <div className="truncate text-base font-semibold text-foreground">
+                    <div id={titleId} className="truncate text-base font-semibold text-foreground">
                       {title}
                     </div>
                   )}

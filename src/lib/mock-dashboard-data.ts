@@ -1241,3 +1241,393 @@ export const MOCK_MODEL_PROVIDERS: ModelProvider[] = [
   { id: "llama", name: "Meta Llama", model: "llama-3.3-70b", allowed: false, requests: 0, costUsd: 0 },
 ];
 
+// ── Incidents Inbox (audit-log incidents across the fleet) ──────────
+// Mirrors the desktop overview's Incidents Inbox (sub_incidents): the
+// HealthIssue model promoted to a richer AuditIncident with an originating
+// audit-log table (source), a status lifecycle (open/resolved/ignored/
+// escalated), and a recommended action shown in the detail modal. Demo-only —
+// no synced source. Dates are stamped once at module load (deterministic).
+
+export type IncidentSeverity = "critical" | "high" | "medium" | "low";
+export type IncidentStatus = "open" | "resolved" | "ignored" | "escalated";
+export type IncidentSource =
+  | "executions"
+  | "events"
+  | "triggers"
+  | "vault"
+  | "messages"
+  | "reviews";
+
+export interface AuditIncident {
+  id: string;
+  title: string;
+  description: string;
+  severity: IncidentSeverity;
+  status: IncidentStatus;
+  /** Originating audit-log table (source_table on the desktop). */
+  source: IncidentSource;
+  persona: string;
+  personaColor: string;
+  detectedAt: string; // ISO
+  resolvedAt: string | null; // null unless status is resolved
+  category: string;
+  /** Suggested remediation, shown in the detail modal. */
+  recommendation: string;
+  isCircuitBreaker?: boolean;
+  autoFixApplied?: string;
+}
+
+export const INCIDENT_SEVERITIES: IncidentSeverity[] = ["critical", "high", "medium", "low"];
+export const INCIDENT_STATUSES: IncidentStatus[] = ["open", "resolved", "ignored", "escalated"];
+export const INCIDENT_SOURCES: IncidentSource[] = [
+  "executions",
+  "events",
+  "triggers",
+  "vault",
+  "messages",
+  "reviews",
+];
+
+const INCIDENT_MIN = 60_000;
+const INCIDENT_HOUR = 3_600_000;
+
+export const MOCK_AUDIT_INCIDENTS: AuditIncident[] = [
+  {
+    id: "inc_1",
+    title: "Slack webhook circuit-broken",
+    description:
+      "NotifyBot's Slack delivery tripped the circuit breaker after 3 consecutive 5xx responses; outbound notifications are paused.",
+    severity: "critical",
+    status: "escalated",
+    source: "events",
+    persona: "NotifyBot",
+    personaColor: "#a855f7",
+    detectedAt: new Date(Date.now() - 42 * INCIDENT_MIN).toISOString(),
+    resolvedAt: null,
+    category: "delivery",
+    recommendation: "Verify the Slack incoming-webhook URL in the vault and reset the breaker once upstream recovers.",
+    isCircuitBreaker: true,
+  },
+  {
+    id: "inc_2",
+    title: "P95 latency sustained above SLO",
+    description:
+      "ReportGen P95 held at 34.8s against a 30s objective for over an hour, driven by nested-schema CSV parsing.",
+    severity: "high",
+    status: "open",
+    source: "executions",
+    persona: "ReportGen",
+    personaColor: "#f43f5e",
+    detectedAt: new Date(Date.now() - 3 * INCIDENT_HOUR).toISOString(),
+    resolvedAt: null,
+    category: "performance",
+    recommendation: "Route nested-schema inputs to the streaming parser and cap concurrency at 4.",
+  },
+  {
+    id: "inc_3",
+    title: "Working-set memory trending up",
+    description:
+      "DataProcessor RSS grew 38% over 24h without a matching drop, suggesting a retained-buffer leak in the CSV path.",
+    severity: "medium",
+    status: "open",
+    source: "executions",
+    persona: "DataProcessor",
+    personaColor: "#fbbf24",
+    detectedAt: new Date(Date.now() - 5 * INCIDENT_HOUR).toISOString(),
+    resolvedAt: null,
+    category: "resource",
+    recommendation: "Profile the parser heap and release row buffers after each batch flush.",
+  },
+  {
+    id: "inc_4",
+    title: "Credential rotated past policy window",
+    description:
+      "ResearchAgent's search-API key exceeded its 90-day rotation window; auto-rotation re-issued and synced a fresh key.",
+    severity: "low",
+    status: "resolved",
+    source: "vault",
+    persona: "ResearchAgent",
+    personaColor: "#06b6d4",
+    detectedAt: new Date(Date.now() - 26 * INCIDENT_HOUR).toISOString(),
+    resolvedAt: new Date(Date.now() - 25 * INCIDENT_HOUR).toISOString(),
+    category: "security",
+    recommendation: "No action needed — rotation policy handled this automatically.",
+    autoFixApplied: "Rotated SEARCH_API_KEY and synced to all consumers.",
+  },
+  {
+    id: "inc_5",
+    title: "Referenced secret missing from vault",
+    description:
+      "DataProcessor referenced STRIPE_SECRET_KEY, which was revoked 5h ago; dependent runs fail fast at startup.",
+    severity: "critical",
+    status: "open",
+    source: "vault",
+    persona: "DataProcessor",
+    personaColor: "#fbbf24",
+    detectedAt: new Date(Date.now() - 70 * INCIDENT_MIN).toISOString(),
+    resolvedAt: null,
+    category: "security",
+    recommendation: "Re-add STRIPE_SECRET_KEY or update the persona config to drop the revoked dependency.",
+  },
+  {
+    id: "inc_6",
+    title: "Execution timed out at turn cap",
+    description:
+      "CodeReviewer hit its 20-turn cap on a large diff and was terminated before producing a verdict.",
+    severity: "high",
+    status: "resolved",
+    source: "executions",
+    persona: "CodeReviewer",
+    personaColor: "#34d399",
+    detectedAt: new Date(Date.now() - 9 * INCIDENT_HOUR).toISOString(),
+    resolvedAt: new Date(Date.now() - 8 * INCIDENT_HOUR).toISOString(),
+    category: "performance",
+    recommendation: "Raise maxTurns for review tasks over 400 changed lines, or chunk the diff.",
+  },
+  {
+    id: "inc_7",
+    title: "Duplicate notifications detected",
+    description:
+      "NotifyBot emitted the same digest twice within 90s after a retry raced the success ack.",
+    severity: "medium",
+    status: "ignored",
+    source: "messages",
+    persona: "NotifyBot",
+    personaColor: "#a855f7",
+    detectedAt: new Date(Date.now() - 14 * INCIDENT_HOUR).toISOString(),
+    resolvedAt: null,
+    category: "delivery",
+    recommendation: "Add an idempotency key on the digest send; low impact, deferred by the operator.",
+  },
+  {
+    id: "inc_8",
+    title: "Cron drift corrected",
+    description:
+      "ResearchAgent's hourly poll drifted 11 minutes after a DST transition; the scheduler re-anchored the next run.",
+    severity: "low",
+    status: "resolved",
+    source: "triggers",
+    persona: "ResearchAgent",
+    personaColor: "#06b6d4",
+    detectedAt: new Date(Date.now() - 30 * INCIDENT_HOUR).toISOString(),
+    resolvedAt: new Date(Date.now() - 30 * INCIDENT_HOUR + 20 * INCIDENT_MIN).toISOString(),
+    category: "scheduling",
+    recommendation: "No action needed — the scheduler self-corrected on the next tick.",
+    autoFixApplied: "Re-anchored the cron schedule to UTC.",
+  },
+  {
+    id: "inc_9",
+    title: "Review SLA breached",
+    description:
+      "A critical manual review for ReportGen sat unactioned past its 30-minute SLA and was auto-escalated.",
+    severity: "high",
+    status: "escalated",
+    source: "reviews",
+    persona: "ReportGen",
+    personaColor: "#f43f5e",
+    detectedAt: new Date(Date.now() - 55 * INCIDENT_MIN).toISOString(),
+    resolvedAt: null,
+    category: "oversight",
+    recommendation: "Assign a second reviewer or widen the critical-severity SLA in the escalation policy.",
+  },
+  {
+    id: "inc_10",
+    title: "Repeated tool failure",
+    description:
+      "DataProcessor's `http.fetch` tool failed 7 times in 10 minutes against the same host (connection reset).",
+    severity: "critical",
+    status: "open",
+    source: "executions",
+    persona: "DataProcessor",
+    personaColor: "#fbbf24",
+    detectedAt: new Date(Date.now() - 2 * INCIDENT_HOUR).toISOString(),
+    resolvedAt: null,
+    category: "reliability",
+    recommendation: "Add exponential backoff to http.fetch and a per-host circuit breaker.",
+  },
+  {
+    id: "inc_11",
+    title: "Event backlog building",
+    description:
+      "CodeReviewer's inbound `pull_request.opened` queue grew to 24 unprocessed events during a traffic spike.",
+    severity: "medium",
+    status: "open",
+    source: "events",
+    persona: "CodeReviewer",
+    personaColor: "#34d399",
+    detectedAt: new Date(Date.now() - 4 * INCIDENT_HOUR).toISOString(),
+    resolvedAt: null,
+    category: "throughput",
+    recommendation: "Raise maxConcurrent for CodeReviewer or shed low-priority draft PRs.",
+  },
+  {
+    id: "inc_12",
+    title: "Low-confidence pattern flagged",
+    description:
+      "ResearchAgent surfaced a cost-quality pattern at 0.41 confidence; below the 0.6 acceptance threshold.",
+    severity: "low",
+    status: "ignored",
+    source: "events",
+    persona: "ResearchAgent",
+    personaColor: "#06b6d4",
+    detectedAt: new Date(Date.now() - 40 * INCIDENT_HOUR).toISOString(),
+    resolvedAt: null,
+    category: "learning",
+    recommendation: "Informational only — gather more samples before promoting the pattern.",
+  },
+  {
+    id: "inc_13",
+    title: "Webhook signature mismatch",
+    description:
+      "NotifyBot rejected 3 inbound webhooks with an invalid HMAC signature, likely a rotated signing secret upstream.",
+    severity: "high",
+    status: "open",
+    source: "triggers",
+    persona: "NotifyBot",
+    personaColor: "#a855f7",
+    detectedAt: new Date(Date.now() - 80 * INCIDENT_MIN).toISOString(),
+    resolvedAt: null,
+    category: "security",
+    recommendation: "Sync the new signing secret into the vault and re-enable the trigger.",
+  },
+  {
+    id: "inc_14",
+    title: "Token rate limit throttled",
+    description:
+      "ResearchAgent hit the provider per-minute token limit during a burst; requests were throttled and retried.",
+    severity: "medium",
+    status: "resolved",
+    source: "executions",
+    persona: "ResearchAgent",
+    personaColor: "#06b6d4",
+    detectedAt: new Date(Date.now() - 12 * INCIDENT_HOUR).toISOString(),
+    resolvedAt: new Date(Date.now() - 12 * INCIDENT_HOUR + 8 * INCIDENT_MIN).toISOString(),
+    category: "rate-limit",
+    recommendation: "No action needed — adaptive backoff cleared the burst.",
+    autoFixApplied: "Throttled to 60% and retried with jitter.",
+  },
+  {
+    id: "inc_15",
+    title: "Pending review aging",
+    description:
+      "A warning-severity review for CodeReviewer has been pending for 3h, approaching its 4h SLA.",
+    severity: "low",
+    status: "open",
+    source: "reviews",
+    persona: "CodeReviewer",
+    personaColor: "#34d399",
+    detectedAt: new Date(Date.now() - 3 * INCIDENT_HOUR).toISOString(),
+    resolvedAt: null,
+    category: "oversight",
+    recommendation: "Action the review before the SLA expires to avoid auto-escalation.",
+  },
+  {
+    id: "inc_16",
+    title: "Credential rotation overdue",
+    description:
+      "ReportGen's GCAL_REFRESH_TOKEN is 4 days past its rotation window with auto-rotation disabled for this secret.",
+    severity: "medium",
+    status: "escalated",
+    source: "vault",
+    persona: "ReportGen",
+    personaColor: "#f43f5e",
+    detectedAt: new Date(Date.now() - 20 * INCIDENT_HOUR).toISOString(),
+    resolvedAt: null,
+    category: "security",
+    recommendation: "Enable auto-rotation for GCAL_REFRESH_TOKEN or rotate it manually now.",
+  },
+];
+
+/**
+ * Unresolved-incident count for the nav badge (mirrors MOCK_UNREAD_MESSAGES).
+ * "Unresolved" = open + escalated, matching the Incidents KPI header's headline
+ * so the badge and the page agree.
+ */
+export const MOCK_OPEN_INCIDENTS = MOCK_AUDIT_INCIDENTS.filter(
+  (incident) => incident.status === "open" || incident.status === "escalated",
+).length;
+
+// ── System Health Panel (runtime / services / resources / integrations) ──
+// Mirrors the desktop overview's System Health Panel (components/health): four
+// section cards of status-dotted checks, a disk-usage bar, and illustrative
+// install/configure actions (demo no-ops). Item names + details are technical
+// identifiers shown verbatim (not translated). Demo-only.
+
+export type HealthCheckStatus = "ok" | "warn" | "error" | "info";
+export type HealthSectionKey = "runtime" | "services" | "resources" | "integrations";
+export type HealthActionKind = "install" | "configure";
+
+export interface HealthCheckItem {
+  id: string;
+  /** Technical name shown verbatim. */
+  name: string;
+  status: HealthCheckStatus;
+  /** Short status line shown verbatim. */
+  detail: string;
+  /** When set, the row shows a demo action button (no-op → toast). */
+  action?: HealthActionKind;
+  /** Optional version/identifier suffix. */
+  meta?: string;
+}
+
+export interface HealthCheckSection {
+  key: HealthSectionKey;
+  items: HealthCheckItem[];
+}
+
+export const HEALTH_SECTION_ORDER: HealthSectionKey[] = [
+  "runtime",
+  "services",
+  "resources",
+  "integrations",
+];
+
+export const MOCK_HEALTH_CHECKS: HealthCheckSection[] = [
+  {
+    key: "runtime",
+    items: [
+      { id: "rt_node", name: "Node.js runtime", status: "ok", detail: "Healthy", meta: "v22.3.0" },
+      { id: "rt_cli", name: "Claude Code CLI", status: "ok", detail: "Connected", meta: "v1.4.2" },
+      { id: "rt_daemon", name: "Orchestrator daemon", status: "ok", detail: "Running · uptime 6d 4h" },
+      { id: "rt_gpu", name: "GPU acceleration", status: "warn", detail: "Not detected — falling back to CPU", action: "configure" },
+    ],
+  },
+  {
+    key: "services",
+    items: [
+      { id: "sv_api", name: "Local API", status: "ok", detail: "200 OK · 12ms" },
+      { id: "sv_ws", name: "WebSocket bridge", status: "ok", detail: "Connected · 5 subscribers" },
+      { id: "sv_sched", name: "Scheduler", status: "ok", detail: "Next tick in 6m" },
+      { id: "sv_vector", name: "Vector store", status: "warn", detail: "High memory — 82% of cache" },
+    ],
+  },
+  {
+    key: "resources",
+    items: [
+      { id: "rs_cpu", name: "CPU", status: "ok", detail: "28% avg · 8 cores" },
+      { id: "rs_mem", name: "Memory", status: "warn", detail: "12.4 / 16 GB · 78%" },
+      { id: "rs_net", name: "Network", status: "ok", detail: "↓ 1.2 MB/s · ↑ 0.3 MB/s" },
+    ],
+  },
+  {
+    key: "integrations",
+    items: [
+      { id: "in_github", name: "GitHub", status: "ok", detail: "Authorized · 3 repos" },
+      { id: "in_slack", name: "Slack", status: "error", detail: "Webhook circuit-broken", action: "configure" },
+      { id: "in_gcal", name: "Google Calendar", status: "ok", detail: "Authorized" },
+      { id: "in_openai", name: "OpenAI", status: "ok", detail: "Key valid" },
+      { id: "in_stripe", name: "Stripe", status: "info", detail: "Not configured", action: "configure" },
+      { id: "in_gemini", name: "Google Gemini", status: "info", detail: "Available — not enabled", action: "install" },
+    ],
+  },
+];
+
+/** Disk-usage gauge for the Resources card. */
+export const MOCK_DISK_USAGE = { usedGb: 142, totalGb: 256 };
+
+/** Non-ok health-check count, for the nav badge. */
+export const MOCK_HEALTH_ALERTS = MOCK_HEALTH_CHECKS.reduce(
+  (n, section) => n + section.items.filter((i) => i.status === "error").length,
+  0,
+);
+

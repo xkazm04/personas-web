@@ -1,5 +1,5 @@
 import { useMemo } from "react";
-import { AnimatePresence, motion } from "framer-motion";
+import { AnimatePresence, motion, useReducedMotion } from "framer-motion";
 import { Activity } from "lucide-react";
 
 import { EVENT_META } from "./pulseEventMeta";
@@ -17,6 +17,7 @@ export function AgentLane({
   stats: Stats[string] | undefined;
   filterPrefix: string | null;
 }) {
+  const reduced = useReducedMotion() ?? false;
   const pulses = useMemo(() => {
     const raw = stats?.pulses ?? [];
     return filterPrefix
@@ -38,11 +39,11 @@ export function AgentLane({
           className="h-2 w-2 rounded-full shrink-0"
           style={{ backgroundColor: color }}
           animate={
-            latest
+            latest && !reduced
               ? { opacity: [0.4, 1, 0.4], scale: [0.85, 1.15, 0.85] }
-              : { opacity: 0.35 }
+              : { opacity: latest ? 1 : 0.35, scale: 1 }
           }
-          transition={{ duration: 1.2, repeat: latest ? Infinity : 0 }}
+          transition={{ duration: 1.2, repeat: latest && !reduced ? Infinity : 0 }}
         />
         <span className="truncate text-base font-mono font-semibold text-foreground">
           {agent}

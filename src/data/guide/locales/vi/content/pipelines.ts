@@ -271,6 +271,62 @@ Ngay cả khi không có mẫu nào phù hợp chính xác, việc chọn cái g
 :::
   `,
 
+  "team-assignments": `
+## Nhiệm Vụ Đội
+
+Pipeline kết nối từng bước một cách thủ công. Nhiệm vụ làm ngược lại: bạn giao cho đội một **mục tiêu** bằng ngôn ngữ thông thường, và đội tự tìm ra các bước. Đội chia mục tiêu thành danh sách kiểm tra, chọn agent phù hợp nhất cho từng bước và chạy song song — chỉ dừng lại để hỏi bạn khi một bước thất bại hoặc cần quyết định.
+
+Hãy nghĩ về sự khác biệt giữa vẽ lưu đồ và giao việc cho một quản lý dự án. Với pipeline, bạn thiết kế luồng; với nhiệm vụ, bạn nêu kết quả và để đội tự tổ chức xung quanh đó.
+
+### Điểm Chính
+
+- **Mục tiêu trước tiên** — mô tả điều bạn muốn; đội phân tách thành các bước theo thứ tự
+- **Khớp thông minh** — mỗi bước được định tuyến đến agent phù hợp nhất (bạn có thể ghim agent thủ công, dùng khớp cục bộ nhanh, hoặc để mô hình quyết định)
+- **Tự động phân tách** — một cú nhấp chuột biến mục tiêu thành danh sách bước có thể chỉnh sửa trước khi chạy
+- **Thực thi song song** — các bước độc lập chạy cùng lúc; các bước phụ thuộc chờ đến lượt
+- **Xem xét của người dùng khi thất bại** — một bước thất bại chỉ tạm dừng nhiệm vụ đó và đề xuất Chỉnh sửa / Chỉ định lại / Bỏ qua, kèm thông báo trên thanh tiêu đề
+- **Mẫu tái sử dụng** — lưu mục tiêu cùng bố cục bước làm mẫu và tạo các nhiệm vụ mới từ đó
+- **Điều phối qua chat** — hỏi Athena "nhờ đội nghiên cứu xử lý việc này" và cô ấy sẽ thiết lập để bạn phê duyệt
+
+### Cách Hoạt Động
+
+Mở canvas của đội và nhấp vào huy hiệu **Assignments** (góc dưới bên trái). Nhấn **New**, nhập mục tiêu và tự điền các bước hoặc nhấn **Auto-decompose** để trợ lý đề xuất. Chọn cách agent được khớp với bước, đặt số lượng chạy song song và nhấn **Create & start**. Xem danh sách kiểm tra cập nhật trực tiếp; nếu một bước thất bại, hãy giải quyết trực tiếp. Lưu những gì bạn sẽ chạy lại làm mẫu.
+
+:::tip
+Dùng nhiệm vụ khi bạn biết kết quả nhưng chưa biết chính xác các bước. Dùng pipeline khi bạn muốn kiểm soát chính xác, lặp lại được từng kết nối. Mẫu nối liền cả hai — một nhiệm vụ đã lưu trở thành điểm khởi đầu chỉ một cú nhấp chuột.
+:::
+  `,
+
+  "team-memory-and-goals": `
+## Bộ Nhớ & Mục Tiêu Đội
+
+Đội không chỉ là tập hợp các agent — đó là những agent **nhớ cùng nhau** và hướng đến một kết quả chung. Hai thứ tạo nên điều đó: bộ nhớ chung của đội, và mục tiêu.
+
+### Bộ nhớ chung của đội
+
+Khi đội làm việc, đội ghi lại các quyết định và ràng buộc — "chúng ta đã chuẩn hóa định dạng này", "tài khoản này nằm ngoài phạm vi", "người đánh giá đã từ chối cách tiếp cận X". Những ghi chú đó trở thành **bộ nhớ đội**, và một bản tóm tắt gọn gàng những điểm quan trọng nhất được truyền vào ngữ cảnh của mỗi thành viên trong lần chạy tiếp theo.
+
+Kết quả: đội hội tụ thay vì lặp lại. Một agent không phải khám phá lại quyết định mà một thành viên khác đã đưa ra — nó kế thừa nó. Bạn có thể xem và quản lý bộ nhớ này trong bảng Team Memory trên canvas.
+
+### Mục tiêu — định hướng mà không cần quản lý vi mô
+
+Liên kết đội với một **mục tiêu** và bạn không còn phải giám sát từng lần chạy. Mục tiêu theo dõi tiến độ khi đội làm việc, và ứng dụng chỉ hiển thị những thứ thực sự cần người dùng — mục tiêu bị đình trệ, sắp đến hạn, một bước đang chờ bạn xem xét. Mọi thứ khác cứ chạy.
+
+Đây là vòng lặp "đặt hướng đi, ở tầm cao": bạn xác định kết quả và các giới hạn; đội xử lý phần còn lại và giơ tay khi cần bạn.
+
+:::tip
+Hãy nghĩ bộ nhớ đội như kiến thức tổ chức của đội và mục tiêu như ngôi sao hướng dẫn. Bộ nhớ giữ đội nhất quán từ lần chạy này sang lần khác; mục tiêu giữ đội hướng đến điều đáng làm.
+:::
+
+### Điểm Chính
+
+- **Bộ nhớ chung** — các quyết định/ràng buộc được đội ghi lại sẽ được đưa vào lần chạy tiếp theo của mỗi thành viên
+- **Hội tụ** — các thành viên xây dựng trên kết luận của nhau thay vì phải tự suy luận lại
+- **Liên kết mục tiêu** — gắn đội với mục tiêu để theo dõi tiến độ và thời hạn
+- **Được hiển thị, không bị chôn vùi** — hàng đợi chú ý chỉ đưa ra những gì cần bạn (bị đình trệ, quá hạn, đang chờ xem xét)
+- **Quản lý nó** — xem xét, chỉnh sửa hoặc xóa bộ nhớ đội từ bảng canvas
+  `,
+
   "debugging-pipeline-issues": `
 ## Gỡ Lỗi Vấn Đề Pipeline
 

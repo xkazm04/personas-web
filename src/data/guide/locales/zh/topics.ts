@@ -187,6 +187,16 @@ export const topics: Record<string, { title: string; description: string }> = {
     title: "调试 pipeline 问题",
     description: "查找和修复多 agent 流中的问题。当 pipeline 不按预期工作时,调试器会准确突出显示出错的地方。你可以检查每个步骤的数据以查明问题,而无需猜测。",
   },
+  "team-assignments": {
+    title: "团队任务分配",
+    description:
+      "用自然语言给团队一个目标,让团队自己组织工作。你不必逐步手动配置每个环节,只需描述你想要的结果;团队会将其拆解为任务清单,为每个步骤选择最合适的 agent 并并行执行 — 只有在需要你做决策时才会暂停请求审核。",
+  },
+  "team-memory-and-goals": {
+    title: "团队 memory 与目标",
+    description:
+      "团队如何随时间保持连贯,以及如何在不陷入微观管理的情况下指引团队方向。团队会积累共享 memory — 每次运行中流入每位成员上下文的决策与约束,使团队逐渐收敛而不是不断重复。将团队与目标关联后,你可以保持高层视角:进度自动跟踪,应用只会将真正需要你介入的事项浮现出来。",
+  },
   "why-test-your-agents": {
     title: "为什么要测试你的 agent?",
     description: "测试如何帮助你构建更可靠的自动化。测试就像彩排 — 它让你在错误重要之前发现它们。几分钟的测试可以为你节省数小时修复问题。",
@@ -315,6 +325,11 @@ export const topics: Record<string, { title: string; description: string }> = {
     title: "异常检测",
     description: "当 agent 发生异常事情时收到警报。系统了解每个 agent 的正常情况,并标记任何不寻常的事情 — 如成本突然飙升或意外故障。如果有什么需要注意,你会第一个知道。",
   },
+  "the-director": {
+    title: "Director — 自动 agent 辅导",
+    description:
+      "一个内置的元 agent,负责审阅你收藏的 agent,并为每次运行打出 0–5 分,附上具体的辅导建议。将 agent 加星标即可纳入 Director 的审阅范围;审阅结果以星级列的形式显示在 Activity 中,每次运行也会出现专属的 Director 选项卡。可选择接入你的 Obsidian Brain 作为长期 memory,使辅导质量随时间持续提升。",
+  },
   "local-vs-cloud-execution": {
     title: "本地与云执行对比",
     description: "了解何时在你的机器上 vs 在云中运行 agent。本地执行非常适合测试和私有数据 — 你的 agent 直接在你的计算机上运行。云执行让你的 agent 24/7 运行,即使你的计算机关闭。",
@@ -386,5 +401,69 @@ export const topics: Record<string, { title: string; description: string }> = {
   "resetting-to-defaults": {
     title: "重置为默认值",
     description: "如何安全重置设置而不丢失你的 agent。如果你已更改了某些内容且无法弄清楚出了什么问题,重置为默认值给你一个干净的起点。你的 agent、凭证和 memory 都被保留 — 只有你的偏好回到原始值。",
+  },
+  "browsing-templates": {
+    title: "浏览模板库",
+    description: "从现成的 agent 而非空白页开始。模板库是一个预构建 agent 的集合,针对真实工作而设计 — 每个都列出其功能、所需的连接器以及设置所需的时间。按模板对你设置的就绪程度过滤,并排对比几个选项,并在提交之前预览其用例。",
+  },
+  "adopting-a-template": {
+    title: "采用模板",
+    description: "通过简短的引导式设置将模板转化为你自己的可运行 agent。逐题表单收集 agent 所需的内容,你已保存在 vault 中的凭证会自动匹配填入。agent 在你的设置上经过一次测试后才会被提升,确保你从一个已经能运行的配置开始。",
+  },
+  "recipes": {
+    title: "配方",
+    description: "浏览从模板衍生的数百个即用型用例,按其完成的目标整理 — 监控、报告、自动化、通信、数据同步、分析等。配方是查看 agent 能做什么的具体示例、以及找到与你脑海中工作最接近的用例的最快方式。",
+  },
+  "interface-modes": {
+    title: "界面模式:简洁与全功能",
+    description: "Personas 可以展示精简的工作区或完整的工具集。简洁模式只保留几个界面,隐藏高级选项,让你只需几次点击即可创建、运行和审查 agent;全功能模式展示一切 — 团队画布、监控、每种触发器类型以及完整的 vault。随时在设置中切换;没有任何内容被删除,只是显示或收起。",
+  },
+  "meet-athena": {
+    title: "认识 Athena",
+    description: "Athena 是你内置的伴侣助手 — 一个始终在应用角落可用的助手。点击她的头像打开聊天,或让她以可移动的悬浮球形式漂浮在你的工作区上方。她可以回答问题、解释功能,并真正代你操作应用。从这里开始。",
+  },
+  "chatting-with-athena": {
+    title: "与 Athena 聊天",
+    description: "如何充分利用与 Athena 的对话。从建议的提示开始,输入“/”选择现成命令,或用你自己的语言提问。她提供快速后续回复和一键调整答复长短的方式,并在你说话时保持输入框开启,让你可以随时改变方向。",
+  },
+  "voice-and-hold-to-talk": {
+    title: "语音与按住说话",
+    description: "与其打字,不如直接与 Athena 说话,让她回话。按住她的头像录入问题,或使用键盘快捷键从应用的任何位置通过语音呼出她。你的语音可以在你自己的设备上转录以保护隐私,她的回复也可以大声播放 — 即使聊天已关闭。",
+  },
+  "athenas-long-term-memory": {
+    title: "Athena 的长期 Memory",
+    description: "Athena 会跨对话记住你,让你无需反复重复。她保存关于你和你的项目的事实、你偏好的做事方式,以及在每次回复前读取的档案 — 而你掌握控制权:一次简短的入门访谈让她起步,你可以随时查看、编辑或纠正她学到的任何内容。",
+  },
+  "proactive-check-ins": {
+    title: "主动提醒",
+    description: "Athena 可以在需要你注意的事情发生时主动联系你 — 目标截止日期临近、失败或等待你的 agent,或你要求她保存的提醒。提醒遵守免打扰时段和每日限额,让她保持有用而不烦人,每条提醒都是你可以处理或忽略的。",
+  },
+  "guided-walkthroughs": {
+    title: "引导式演练",
+    description: "告诉 Athena“教我如何操作”,她会在真实界面上带你完成任务。她的悬浮球滑向每个位置,相关控件发亮,并伴有步骤说明 — 然后等待你自己点击它。这是在实际应用中的动手学习,而非观看视频。",
+  },
+  "the-decision-hub": {
+    title: "决策中心",
+    description: "某些操作需要你的授权。当 Athena 或你的某个 agent 想做需要批准的事情时 — 运行 agent、修改你的档案、安排提醒 — 它会以一张你批准或拒绝的卡片呈现。来自运行中 agent 的请求也集中在这里,堆积时提供一次性全部批准的选项。",
+  },
+  "operating-by-chat": {
+    title: "通过聊天操作 Personas",
+    description: "Athena 不只是顾问 — 她可以驱动应用。让她打开某个界面、跳转到 agent 的编辑器、构建自定义主页仪表盘或调用某个已连接的服务,她就会去做,并闪烁目标位置让你跟上。两个一键按钮为你提供 fleet 评估和隔夜发生事情的晨间简报。",
+  },
+  "tracking-goals": {
+    title: "跟踪目标",
+    description: "设定一个成果并观察其进度,而无需逐条跟踪运行记录。目标将待办事项、子目标以及你的团队正在做的工作汇总为一个百分比,显示在看板、目标依赖关系地图或截止日期时间线上。将目标交给你的 AI 团队,它会自主推进,只在需要你时才举手。",
+  },
+  "measuring-outcomes-with-kpis": {
+    title: "用 KPI 衡量成果",
+    description: "跟踪能告诉你 agent 是否真正在推动进展的数字。KPI 通过四种方式测量成果 — 来自你的代码库、来自 orchestrator 数据、通过连接器或手动输入 — 并显示当前值相对于目标的在正轨或偏离正轨的节奏读数。扫描甚至可以为你的项目提议相关 KPI,每个都附带具体的测量方式。",
+  },
+  "director-verdicts-and-categories": {
+    title: "Director 评判与类别",
+    description: "深入了解 Director 审阅 agent 时写下的内容。每次审阅都给出 0–5 的综合评分和简短摘要,指出 agent 的亮点,并按类别归档具体的辅导建议 — prompt、健康、触发器、凭证、memory 或实用性。批准或拒绝建议会随时间教导 Director 了解你的偏好。",
+  },
+  "director-momentum-and-stale-sweep": {
+    title: "Director 动能与陈旧扫描",
+    description: "Director 如何随时间对你整个 fleet 的辅导保持诚实。组合计分卡显示你的价值交付率、平均评分和每次有用运行的成本;动能读数告诉你有多少 agent 自上次审阅以来改善、持平或下滑;而陈旧扫描会重新审阅超过两周未被查看的星标 agent,确保没有任何 agent 在悄悄下滑而未被发现。",
   },
 };

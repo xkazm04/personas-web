@@ -1,4 +1,5 @@
 import { content as gettingStarted } from "./getting-started";
+import { content as companion } from "./companion";
 import { content as credentials } from "./credentials";
 import { content as agentsPrompts } from "./agents-prompts";
 import { content as triggers } from "./triggers";
@@ -11,6 +12,7 @@ import { content as troubleshooting } from "./troubleshooting";
 
 export const GUIDE_CONTENT: Record<string, string> = {
   ...gettingStarted,
+  ...companion,
   ...credentials,
   ...agentsPrompts,
   ...triggers,

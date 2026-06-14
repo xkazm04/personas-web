@@ -1,6 +1,6 @@
 "use client";
 
-import { motion } from "framer-motion";
+import { motion, useReducedMotion } from "framer-motion";
 import { tint, type BrandKey } from "@/lib/brand-theme";
 
 export default function ConnectionPillar({
@@ -12,6 +12,7 @@ export default function ConnectionPillar({
   to: BrandKey;
   progress: number;
 }) {
+  const reduced = useReducedMotion() ?? false;
   const opacity = Math.min(progress * 1.5, 1);
   const fromAlpha = Math.round(30 * opacity);
   const toAlpha = Math.round(30 * opacity);
@@ -34,8 +35,8 @@ export default function ConnectionPillar({
           boxShadow: `0 0 8px ${tint(to, 40)}`,
           opacity,
         }}
-        animate={{ top: ["0%", "100%"] }}
-        transition={{ duration: 2, repeat: Infinity, ease: "linear", repeatDelay: 0.5 }}
+        animate={reduced ? { top: "50%" } : { top: ["0%", "100%"] }}
+        transition={reduced ? undefined : { duration: 2, repeat: Infinity, ease: "linear", repeatDelay: 0.5 }}
       />
     </div>
   );

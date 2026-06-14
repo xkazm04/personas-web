@@ -68,7 +68,7 @@ function FAQCard({
             className="overflow-hidden"
           >
             <div className="px-4 pb-1 pt-3">
-              <div className="mb-4 overflow-hidden rounded-xl border border-glass-hover">
+              <div aria-hidden="true" className="mb-4 overflow-hidden rounded-xl border border-glass-hover">
                 <div className="aspect-video w-full">
                   {item.illustration}
                 </div>

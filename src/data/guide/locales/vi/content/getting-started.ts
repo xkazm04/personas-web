@@ -234,4 +234,131 @@ Cockpit có quyền truy cập vào doctrine — một khối kiến thức đư
 Đối với các câu hỏi kiểu "Tôi nghĩ có gì đó bị hỏng", hãy mở Athena trước và hỏi "chẩn đoán lần chạy thất bại gần nhất của agent X". Luồng gỡ lỗi của cockpit được xây dựng cho việc này và thường tốt hơn việc đọc nhật ký thủ công.
 :::
   `,
+
+  "browsing-templates": `
+## Duyệt Templates
+
+Đừng bắt đầu từ trang trắng. Gallery template là một thư viện các agent được xây dựng sẵn — mỗi cái được thiết kế cho một công việc thực tế, đã được kiểm thử và sẵn sàng chuyên biệt hóa cho thiết lập của bạn. Các template bao gồm mọi thứ từ giám sát và báo cáo đến quy trình nội dung và công cụ phát triển. Tìm đúng cái mất ít thời gian hơn so với việc viết prompt từ đầu.
+
+Mỗi thẻ trong gallery cho bạn biết agent làm gì, độ phức tạp của việc thiết lập và thời gian áp dụng tương đương. Bên dưới đó bạn thấy các **connector** mà template cần — các dịch vụ như Slack, Notion, GitHub hoặc nhà cung cấp lưu trữ đám mây — và liệu bạn có thông tin đăng nhập khớp trong vault hay không. Một chỉ báo sẵn sàng nhỏ trên mỗi chip connector nói với bạn trong nháy mắt: xanh có nghĩa là bạn tốt để đi, hổ phách có nghĩa là bạn có khớp một phần, và xám có nghĩa là bạn cần thêm thông tin đăng nhập đó trước khi template có thể chạy.
+
+### Bộ lọc Mức độ bao phủ
+
+Dải lọc ở đầu gallery — **All / Ready / Partial / Drafts** — cho phép bạn thu hẹp đến những gì quan trọng ngay bây giờ:
+
+- **Ready** — mọi connector mà template cần đã có trong vault của bạn. Đây là con đường nhanh nhất đến một agent đang chạy.
+- **Partial** — một số connector được khớp, một số thì không. Đáng duyệt nếu bạn đang lên kế hoạch thêm thông tin đăng nhập sớm.
+- **Drafts** — các template chưa xuất bản, chỉ hiển thị trong các bản build phát triển.
+
+Bắt đầu với Ready nếu bạn muốn chạy điều gì đó trong vài phút.
+
+### So sánh Templates
+
+Khi bạn đang quyết định giữa một vài tùy chọn, bạn không phải mở từng cái một riêng lẻ. Chọn tối đa ba thẻ (di chuột qua hiển thị hộp kiểm) và nhấp **Compare** — một modal song song xếp chúng cạnh nhau theo danh mục, mục tiêu, connector, trigger, trường hợp sử dụng, độ phức tạp và thời gian thiết lập. Các hàng mà các template khác nhau được tô sáng để các điểm khác biệt dễ nhận thấy. Bạn có thể áp dụng trực tiếp từ chế độ xem so sánh mà không cần quay lại gallery.
+
+### Quick-Adopt Thịnh hành
+
+Đầu gallery có một kệ các template thịnh hành — những template được áp dụng thường xuyên nhất trên tất cả người dùng. Mỗi thẻ có hành động **Adopt** được hiển thị khi di chuột qua mở trực tiếp luồng áp dụng, bỏ qua modal chi tiết nếu bạn đã quyết định.
+
+:::tip
+Bắt đầu với bộ lọc **Ready** — những template đó khớp với những gì đã có trong vault của bạn và có thể đang chạy trong vài phút. Khi bạn đã ship một hoặc hai, hãy duyệt **Partial** để xem thông tin đăng nhập mới nào sẽ mở khóa được.
+:::
+  `,
+
+  "adopting-a-template": `
+## Áp Dụng Template
+
+Áp dụng template là cách nhanh nhất để có được một agent được cấu hình và hoạt động. Luồng đưa bạn từ gallery đến agent được promote chỉ trong vài phút — và mọi bước đều có thể đảo ngược.
+
+:::steps
+1. **Nhấp Adopt** — từ thẻ gallery, modal chi tiết, chế độ xem so sánh hoặc kệ thịnh hành. Trình hướng dẫn áp dụng mở ra. Chưa có gì được ghi vào cơ sở dữ liệu; bạn có thể đóng tự do ở giai đoạn này.
+2. **Trả lời bảng câu hỏi** — biểu mẫu trình bày một câu hỏi mỗi lần. Ở bên phải, một brief trực tiếp hiển thị câu trả lời của bạn tích lũy theo thời gian thực. Các câu hỏi bao gồm những thứ như không gian làm việc hoặc dự án nào cần nhắm mục tiêu, định dạng đầu ra bạn muốn và cách agent xử lý lỗi. Câu trả lời của bạn sẽ điền vào các khe \`{{placeholder}}\` trong prompt của agent, chuyên biệt hóa nó cho thiết lập của bạn.
+3. **Kiểm thử tự động** — khi bạn gửi, agent được lắp ráp từ template và câu trả lời của bạn, sau đó chạy một lần tự động. Điều này xác nhận cấu hình hợp lệ với thông tin đăng nhập và connector của bạn trước khi bất kỳ thứ gì được promote lên production.
+4. **Promote** — nếu bài kiểm thử vượt qua, agent được promote và trở thành một agent thực sự, có thể chỉnh sửa trên trang Agents của bạn. Trình hướng dẫn điều hướng bạn đến đó tự động.
+:::
+
+### Tự động Khớp Vault
+
+Các thông tin đăng nhập đã có trong vault được phát hiện và điền tự động. Khi bảng câu hỏi có câu hỏi connector và bạn có đúng một thông tin đăng nhập khớp, nó được chọn trước và được đánh dấu bằng huy hiệu **auto** — bạn không cần chọn thủ công. Nếu bạn có nhiều thông tin đăng nhập khớp, câu hỏi thu hẹp các lựa chọn có sẵn xuống chỉ những gì bạn có.
+
+Nếu template cần connector bạn chưa thêm, câu hỏi đó bị **chặn** — một banner xuất hiện ở đầu biểu mẫu giải thích danh mục thông tin đăng nhập nào đang thiếu và hiển thị nút **Add credential**. Nhấp vào nó dẫn bạn sâu đến catalog thông tin đăng nhập, được lọc sẵn theo danh mục đúng và lưu câu trả lời đang làm dưới dạng bản nháp. Khi bạn quay lại template sau khi thêm thông tin đăng nhập, câu trả lời của bạn được khôi phục và câu hỏi bị chặn mở khóa.
+
+### Câu trả lời của bạn định hình Agent như thế nào
+
+Phía sau hậu trường, câu trả lời của bạn được thay thế vào prompt ở hai cấp độ. Đầu tiên, bất kỳ placeholder \`{{param.aq_*}}\` nào trong prompt của template được thay thế bằng các giá trị thực tế của bạn. Thứ hai, một phần \`## User Configuration\` được thêm vào system prompt liệt kê mọi câu hỏi và câu trả lời, vì vậy mô hình luôn có đầy đủ ngữ cảnh thiết lập của bạn bất kể placeholder cụ thể có tồn tại hay không. Cả lần chạy kiểm thử và agent được promote đều sử dụng cấu hình thực tế của bạn — không phải các giá trị mặc định template chung.
+
+:::tip
+Nếu một câu hỏi chưa rõ, hãy tìm biểu tượng **ⓘ** ở bên phải nhãn câu hỏi. Nhấp vào nó mở rộng một gợi ý với nhiều ngữ cảnh hơn về những gì câu hỏi ảnh hưởng và câu trả lời tốt trông như thế nào.
+:::
+  `,
+
+  "recipes": `
+## Công Thức
+
+Công thức là hàng trăm trường hợp sử dụng sẵn sàng chạy được lấy từ các template, được tổ chức xung quanh những gì chúng hoàn thành. Trong khi template là một cấu hình agent đầy đủ, công thức là một ví dụ cụ thể về một công việc mà agent có thể làm — cụ thể, có thể hành động và gần với điều gì đó bạn có thể thực sự có trong danh sách việc cần làm.
+
+Bạn tìm thấy chúng trong tab **Templates → Recipes**. Catalog đầy đủ có thể sắp xếp và tìm kiếm: duyệt theo tên, lọc theo danh mục hoặc quét các biểu tượng connector để tìm các trường hợp sử dụng khớp với những gì bạn đã kết nối.
+
+### Danh mục
+
+Các công thức được tổ chức thành chín nhóm:
+
+- **Monitoring** — theo dõi thay đổi, cảnh báo, ngưỡng
+- **Reporting** — tạo tóm tắt, bản tóm lược và bảng điều khiển
+- **Automation** — các hành động lặp lại chạy theo lịch trình hoặc trigger
+- **Communication** — tin nhắn, thông báo và định tuyến
+- **Data sync** — giữ hai hệ thống đồng bộ
+- **Analysis** — tổng hợp thông tin và tạo ra hiểu biết
+- **Development** — đánh giá code, tạo kiểm thử, kiểm tra triển khai
+- **Content** — soạn thảo, chỉnh sửa, xuất bản
+- **Productivity** — công cụ hỗ trợ quy trình cá nhân và đội
+
+### Bảng Công thức
+
+Chế độ xem chính là một bảng có thể sắp xếp. Mỗi hàng hiển thị tên công thức (với tô sáng khớp tìm kiếm khi bạn đã gõ truy vấn), huy hiệu danh mục và một dải biểu tượng connector hiển thị dịch vụ nào cần — tối đa ba biểu tượng, với số tràn cho các template cần nhiều hơn. Nhấp vào bất kỳ hàng nào để mở bảng chi tiết công thức.
+
+Bảng chi tiết cung cấp cho bạn bức tranh đầy đủ: công thức làm gì, nó cần gì (connector và bất kỳ ràng buộc cụ thể nào), cách xử lý lỗi và liệu agent hiện tại có đã áp dụng nó hay không. Nếu bạn đã áp dụng công thức cho agent đang hoạt động, hàng hiển thị chip **Adopted** màu xanh lá.
+
+### Bộ đặt trước Đội
+
+Nếu bạn đang thiết lập một quy trình đầy đủ thay vì một agent đơn, hãy tìm kiếm **team presets** — các bộ template được áp dụng cùng nhau trong một luồng. Một bộ đặt trước bao gồm một công việc nhất quán (như một pipeline nội dung đầy đủ hoặc bộ năng suất nhà phát triển) nơi nhiều agent chuyển giao công việc cho nhau.
+
+:::tip
+Các công thức là cách nhanh nhất để tìm một ví dụ cụ thể gần với công việc bạn có trong đầu. Nếu bạn biết kết quả muốn đạt được nhưng không chắc template nào để bắt đầu, hãy tìm kiếm tab Recipes trước — các mô tả trường hợp sử dụng cụ thể thường dễ khớp với một công việc hơn là tên template rộng hơn.
+:::
+  `,
+
+  "interface-modes": `
+## Chế Độ Giao Diện
+
+Personas có hai chế độ giao diện: **Simple** và **Power**. Chúng chạy cùng ứng dụng — cùng các thành phần, cùng dữ liệu, cùng agent — với Simple ẩn các bề mặt mà người dùng không kỹ thuật ít khi cần. Không có gì bị xóa; tất cả chỉ được hiển thị hoặc ẩn tùy thuộc vào chế độ bạn đang ở.
+
+:::compare
+**Simple**
+Tùy chọn. Bốn màn hình: Home, Agents, Connections, Settings. Các bề mặt nâng cao — Overview, Workflows, Events, Templates, Plugins, trigger nâng cao và bộ tab editor đầy đủ — được ẩn. Thực thi hiển thị dưới dạng thanh tiến trình sạch và kết quả được định dạng thay vì luồng token thô. Tốt cho người dùng muốn chạy agent, không muốn xây dựng chúng.
+---
+**Power** [recommended]
+Mặc định cho hầu hết mọi người. Toàn bộ ứng dụng. Tất cả các phần sidebar, tất cả các tab editor (Prompt, Matrix, Lab, Activity, Health, Settings), tất cả các loại trigger (lịch trình, webhook, file watcher, clipboard, chain và event trigger), vault đầy đủ với playground và biểu đồ phụ thuộc, giám sát qua Overview, Director và mọi thứ khác. Chế độ mà hầu hết người dùng tốt nghiệp khi họ có một vài agent đang chạy.
+:::
+
+### Simple Ẩn Gì
+
+Trong chế độ Simple, sidebar thu hẹp thành bốn phần: **Home**, **Agents**, **Connections** và **Settings**. Overview, Workflows, Events, Templates, Plugins và các phần nâng cao khác không xuất hiện trong nav.
+
+Bên trong Agents, editor chỉ hiển thị các tab **Prompt**, **Chat** và **Connectors**. Editor Matrix, arena Lab, nhật ký Activity, tab Health, lịch sử phiên bản, condition builder, bảng cấu hình công cụ, cài đặt nâng cao và các loại trigger nâng cao đều bị ẩn. Trigger duy nhất hiển thị là **Manual** (nút Run).
+
+Đầu ra thực thi được đơn giản hóa: thay vì terminal streaming với đầu ra token thô, bạn thấy thanh tiến trình trong khi agent chạy và kết quả được định dạng, có thể đọc được khi nó kết thúc. Chi phí và số lượng token không được hiển thị.
+
+Trong Connections, danh sách thông tin đăng nhập hiển thị chế độ xem đơn giản hóa — thêm, kiểm thử và xóa thông tin đăng nhập. Playground thông tin đăng nhập, cơ sở kiến thức vector, trình quản lý kết nối cơ sở dữ liệu, hành động hàng loạt và chấm điểm sức khỏe đều bị ẩn.
+
+### Chuyển Đổi Chế Độ
+
+Đi đến **Settings → Appearance → Interface Mode** và chọn Simple hoặc Power. Thay đổi có hiệu lực ngay lập tức — không cần khởi động lại.
+
+Hướng dẫn bạn đang đọc ngay bây giờ có nút chuyển đổi Simple / Power riêng trong sidebar. Chuyển đổi chế độ của hướng dẫn lọc các chủ đề để khớp: chế độ Simple hiển thị các chủ đề cốt lõi, chế độ Power tiết lộ các phần nâng cao. Hai nút chuyển đổi độc lập — bạn có thể đọc các chủ đề hướng dẫn Power-mode trong khi chạy ứng dụng ở chế độ Simple.
+
+:::tip
+Bắt đầu ở chế độ Simple nếu bạn mới với Personas. Khi bạn có một vài agent đang chạy và muốn tinh chỉnh lịch trình, thiết lập webhook trigger hoặc đi sâu vào trace thực thi, hãy chuyển sang Power — mọi thứ bạn xây dựng ở chế độ Simple đều được mang sang nguyên vẹn.
+:::
+  `,
 };

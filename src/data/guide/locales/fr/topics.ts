@@ -234,6 +234,16 @@ export const topics: Record<string, { title: string; description: string }> = {
     description:
       "Trouver et résoudre les problèmes dans les flux multi-agents. Quand un pipeline ne fonctionne pas comme prévu, le débogueur met en évidence exactement où les choses ont mal tourné. Vous pouvez inspecter les données à chaque étape pour identifier le problème sans deviner.",
   },
+  "team-assignments": {
+    title: "Attributions d'équipe",
+    description:
+      "Donnez à une équipe un objectif en langage naturel et laissez-la organiser le travail elle-même. Au lieu de câbler chaque étape à la main, vous décrivez ce que vous voulez ; l'équipe le décompose en liste de tâches, choisit l'agent adapté à chaque partie et les exécute en parallèle — en s'arrêtant pour votre validation uniquement quand une décision est nécessaire.",
+  },
+  "team-memory-and-goals": {
+    title: "Mémoire et objectifs d'équipe",
+    description:
+      "Comment une équipe reste cohérente dans le temps et comment vous la pilotez sans microgestion. Les équipes accumulent une mémoire partagée — les décisions et contraintes qui s'injectent dans la prochaine exécution de chaque membre, pour que l'équipe converge au lieu de se répéter. Liez une équipe à un objectif et vous restez à haut niveau : la progression est suivie et l'application ne vous sollicite que pour ce qui requiert vraiment votre attention.",
+  },
   "why-test-your-agents": {
     title: "Pourquoi tester vos agents ?",
     description:
@@ -394,6 +404,11 @@ export const topics: Record<string, { title: string; description: string }> = {
     description:
       "Recevoir des alertes lorsque quelque chose d'inhabituel se produit avec vos agents. Le système apprend ce qui est normal pour chaque agent et signale tout ce qui sort de l'ordinaire — comme une augmentation soudaine des coûts ou un échec inattendu. Vous serez le premier informé si quelque chose nécessite attention.",
   },
+  "the-director": {
+    title: "Le Director — coaching automatique des agents",
+    description:
+      "Un méta-agent intégré qui examine vos agents étoilés et attribue un score de 0 à 5 à chaque exécution, accompagné de conseils concrets. Étoilez un agent pour le placer dans le périmètre du Director ; les verdicts apparaissent sous forme de colonne d'étoiles dans l'Activité et d'un onglet Director sur chaque exécution. Il peut utiliser votre Obsidian Brain comme mémoire à long terme pour que son coaching s'améliore au fil du temps.",
+  },
   "local-vs-cloud-execution": {
     title: "Exécution locale vs cloud",
     description:
@@ -483,5 +498,86 @@ export const topics: Record<string, { title: string; description: string }> = {
     title: "Réinitialiser aux valeurs par défaut",
     description:
       "Comment réinitialiser en toute sécurité les paramètres sans perdre vos agents. Si vous avez changé quelque chose et n'arrivez pas à déterminer ce qui ne va pas, la réinitialisation aux valeurs par défaut vous donne une base propre. Vos agents, identifiants et mémoires sont préservés — seules vos préférences reviennent à leurs valeurs d'origine.",
+  },
+
+  "browsing-templates": {
+    title: "Parcourir la galerie de modèles",
+    description:
+      "Partez d'un agent prêt à l'emploi plutôt que d'une page blanche. La galerie de modèles est une bibliothèque d'agents préconstruits pour de vrais travaux — chacun indique ce qu'il fait, quels connecteurs il nécessite et combien de temps prend la configuration. Filtrez selon la disponibilité du modèle pour votre configuration, comparez-en quelques-uns côte à côte et prévisualisez leurs cas d'utilisation avant de vous engager.",
+  },
+  "adopting-a-template": {
+    title: "Adopter un modèle",
+    description:
+      "Transformez un modèle en votre propre agent fonctionnel avec une configuration guidée courte. Un formulaire question par question collecte ce dont l'agent a besoin, et les identifiants que vous avez déjà enregistrés dans le vault sont correspondus et renseignés pour vous. L'agent est testé une fois sur votre configuration avant d'être promu, pour que vous partiez de quelque chose qui fonctionne déjà.",
+  },
+  "recipes": {
+    title: "Recettes",
+    description:
+      "Parcourez des centaines de cas d'utilisation prêts à exécuter tirés des modèles, regroupés selon ce qu'ils accomplissent — surveillance, rapports, automatisation, communication, synchronisation de données, analyse et plus encore. Les recettes sont le moyen le plus rapide de voir des exemples concrets de ce que les agents peuvent faire et d'en trouver un proche du travail que vous avez en tête.",
+  },
+  "interface-modes": {
+    title: "Modes d'interface : Simple et Avancé",
+    description:
+      "Personas peut vous montrer un espace de travail simplifié ou la boîte à outils complète. Le mode Simple garde seulement quelques écrans et masque les options avancées pour que vous puissiez créer, exécuter et réviser un agent en quelques clics ; le mode Avancé révèle tout — le canevas d'équipe, la surveillance, chaque type de déclencheur et le vault complet. Changez à tout moment dans Paramètres ; rien n'est supprimé, seulement affiché ou rangé.",
+  },
+  "tracking-goals": {
+    title: "Suivre les objectifs",
+    description:
+      "Définissez un résultat et observez la progression vers celui-ci plutôt que de suivre les exécutions une par une. Les objectifs agrègent les tâches, les sous-objectifs et le travail de vos équipes en un seul pourcentage, affiché sur un tableau, une carte des dépendances entre objectifs ou une chronologie par date d'échéance. Confiez un objectif à votre équipe IA et il avance tout seul, ne levant la main que quand il a besoin de vous.",
+  },
+  "measuring-outcomes-with-kpis": {
+    title: "Mesurer les résultats avec des KPI",
+    description:
+      "Suivez les chiffres qui vous indiquent si vos agents font réellement bouger les choses. Les KPI mesurent les résultats de quatre façons — depuis votre base de code, depuis les données de l'orchestrateur, via un connecteur ou manuellement — et affichent la valeur actuelle par rapport à la cible avec une lecture de rythme sur la bonne voie ou hors de la voie. Un scan peut même proposer des KPI pertinents pour votre projet, chacun avec la façon exacte dont il sera mesuré.",
+  },
+  "director-verdicts-and-categories": {
+    title: "Verdicts et catégories du Director",
+    description:
+      "Un regard plus approfondi sur ce que le Director écrit quand il révise un agent. Chaque révision donne un score global de 0 à 5 avec un court résumé, souligne ce que l'agent fait bien et dépose des notes de coaching spécifiques par catégorie — prompt, santé, déclencheurs, identifiants, mémoire ou utilité. Approuver ou rejeter une note enseigne au Director vos préférences au fil du temps.",
+  },
+  "director-momentum-and-stale-sweep": {
+    title: "Élan du Director et balayage des obsolètes",
+    description:
+      "Comment le Director maintient un coaching honnête sur toute votre flotte dans le temps. Un tableau de bord de portefeuille montre votre taux de valeur délivrée, le score moyen et le coût par exécution utile ; une lecture d'élan vous indique combien d'agents se sont améliorés, ont tenu le même niveau ou ont régressé depuis leur dernière révision ; et un balayage des obsolètes re-révise tout agent étoilé qui n'a pas été examiné depuis plus de deux semaines, pour que rien ne glisse inaperçu.",
+  },
+  "meet-athena": {
+    title: "Rencontrer Athena",
+    description:
+      "Athena est votre compagnon intégré — une assistante toujours disponible qui vit dans le coin de l'application. Tapez sur son avatar pour ouvrir un chat, ou laissez-la flotter au-dessus de votre travail sous forme d'orbe déplaçable. Elle peut répondre à des questions, expliquer des fonctionnalités et réellement opérer l'application pour vous. C'est l'endroit par où commencer.",
+  },
+  "chatting-with-athena": {
+    title: "Discuter avec Athena",
+    description:
+      "Comment tirer le meilleur parti d'une conversation avec Athena. Partez d'un prompt suggéré, tapez « / » pour choisir une commande prête à l'emploi, ou demandez simplement dans vos propres mots. Elle propose des réponses rapides de suivi et des moyens en un tap pour rendre une réponse plus courte ou plus détaillée, et garde la boîte de saisie ouverte pour que vous puissiez la réorienter en cours de pensée.",
+  },
+  "voice-and-hold-to-talk": {
+    title: "Voix et appui prolongé pour parler",
+    description:
+      "Parlez à Athena au lieu de taper, et laissez-la vous répondre. Appuyez longuement sur son avatar pour dicter une question, ou utilisez un raccourci clavier pour l'invoquer par la voix depuis n'importe où. Votre discours peut être transcrit sur votre propre machine pour la confidentialité, et ses réponses peuvent être lues à voix haute — même quand le chat est fermé.",
+  },
+  "athenas-long-term-memory": {
+    title: "La mémoire à long terme d'Athena",
+    description:
+      "Athena se souvient d'une conversation à l'autre pour que vous n'ayez pas à vous répéter. Elle conserve des faits sur vous et vos projets, la façon dont vous aimez que les choses soient faites et un profil qu'elle lit avant chaque réponse — et vous gardez le contrôle : un court entretien de prise en charge la lance, et vous pouvez voir, modifier ou corriger tout ce qu'elle a appris.",
+  },
+  "proactive-check-ins": {
+    title: "Rappels proactifs",
+    description:
+      "Athena peut prendre les devants quand quelque chose mérite votre attention — l'échéance d'un objectif qui approche, un agent qui a échoué ou qui vous attend, ou un rappel que vous lui avez demandé de garder. Les rappels respectent les heures calmes et une limite quotidienne pour qu'elle reste utile sans être envahissante, et chaque nudge est quelque chose sur lequel vous pouvez agir ou ignorer.",
+  },
+  "guided-walkthroughs": {
+    title: "Visites guidées",
+    description:
+      "Demandez à Athena de « me montrer comment » et elle vous guidera à travers une tâche sur le vrai écran. Son orbe glisse vers chaque endroit, le bon contrôle s'illumine, elle raconte l'étape — puis attend que vous cliquiez vous-même. C'est un apprentissage pratique dans l'application réelle, pas une vidéo à regarder.",
+  },
+  "the-decision-hub": {
+    title: "Le hub de décision",
+    description:
+      "Certaines actions attendent votre accord. Quand Athena ou l'un de vos agents veut faire quelque chose qui nécessite une approbation — exécuter un agent, modifier votre profil, planifier un rappel — cela apparaît sous forme de carte que vous approuvez ou rejetez. Les demandes de vos agents en cours d'exécution se rassemblent ici aussi, avec une option d'approbation globale quand elles s'accumulent.",
+  },
+  "operating-by-chat": {
+    title: "Opérer Personas par chat",
+    description:
+      "Athena n'est pas seulement une conseillère — elle peut piloter l'application. Demandez-lui d'ouvrir un écran, de sauter vers l'éditeur d'un agent, de construire un tableau de bord personnalisé ou d'appeler un service connecté, et elle le fait, en faisant clignoter la destination pour que vous puissiez suivre. Deux boutons en un tap vous donnent une revue de flotte et un briefing matinal de ce qui s'est passé pendant la nuit.",
   },
 };

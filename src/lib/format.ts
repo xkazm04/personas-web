@@ -37,7 +37,10 @@ export function relativeTime(iso: string): string {
     // Persistent future timestamps mean either upstream clock skew or wrong
     // user clock — silently clamping to "just now" hides the diagnostic.
     // Fall back to the absolute UTC date and breadcrumb once per session.
-    if (!skewBreadcrumbReported) {
+    // Browser-only: a module-level flag on the server is shared across every
+    // request/user (one report per server process, not per session), so only
+    // arm + report in the client where the flag is genuinely per-session.
+    if (!skewBreadcrumbReported && typeof window !== "undefined") {
       skewBreadcrumbReported = true;
       void import("@sentry/nextjs")
         .then((Sentry) => {

@@ -11,7 +11,7 @@ test.describe("Guided tour — stage 1 (homepage engine)", () => {
   const LAUNCH = "Take the tour";
   const STEP1 = "stable identity";
   const STEP2 = "real time";
-  const STEP3 = "triggered eight ways";
+  const STEP3 = "triggered ten ways";
   const STEP4 = "six pillars";
   const STEP5 = "Windows 11";
 

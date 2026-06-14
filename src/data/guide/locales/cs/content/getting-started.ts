@@ -234,4 +234,131 @@ Cockpit má přístup k doktríně — kurátorovanému souboru znalostí o prod
 Pro otázky typu „myslím, že je něco rozbité" otevři nejprve Athenu a zeptej se „diagnostikuj poslední selhávající běh agenta X". Ladicí tok cockpitu je pro tohle stavěn a obvykle poráží manuální čtení logů.
 :::
   `,
+
+  "browsing-templates": `
+## Procházení galerie šablon
+
+Nezačínej od prázdné stránky. Galerie šablon je knihovna předpřipravených agentů — každý je navržen pro skutečnou práci, otestován a připraven přizpůsobit se tvému nastavení. Šablony pokrývají vše od monitorování a reportování po obsahové pracovní postupy a vývojářské nástroje. Najít tu správnou trvá kratší dobu, než napsat prompt od nuly.
+
+Každá karta v galerii ti říká, co agent dělá, jak složité je nastavení a přibližně jak dlouho přijetí trvá. Níže vidíš **konektory**, které šablona potřebuje — služby jako Slack, Notion, GitHub nebo cloudový poskytovatel úložiště — a zda už máš ve vaultu odpovídající přihlašovací údaje. Malý indikátor připravenosti na každém čipu konektoru ti na první pohled řekne: zelená znamená, že jsi připraven/a, jantarová znamená částečnou shodu a šedá znamená, že bys tento přihlašovací údaj před spuštěním šablony musel/a přidat.
+
+### Filtr pokrytí
+
+Pruh filtrů v horní části galerie — **Vše / Připravené / Částečné / Koncepty** — ti umožňuje zúžit výběr na to, na čem ti teď záleží:
+
+- **Připravené** — každý konektor, který šablona potřebuje, je už ve tvém vaultu. Toto je nejrychlejší cesta k běžícímu agentovi.
+- **Částečné** — některé konektory jsou spárovány, jiné ne. Vyplatí se procházet, pokud brzy plánuješ přidat přihlašovací údaje.
+- **Koncepty** — nezveřejněné šablony, viditelné jen ve vývojových sestavách.
+
+Začni na Připravených, pokud chceš mít něco v chodu během minut.
+
+### Porovnávání šablon
+
+Když se rozhoduješ mezi několika možnostmi, nemusíš každou otevírat zvlášť. Vyber až tři karty (po najetí se zobrazí zaškrtávací políčko) a klikni na **Porovnat** — boční modal je seřadí podle kategorie, cíle, konektorů, spouštěčů, případů použití, složitosti a doby nastavení. Řádky, kde se šablony liší, se zvýrazní, aby byly rozdíly snadno patrné. Z pohledu porovnání můžeš šablonu přijmout přímo, aniž bys se vracel/a do galerie.
+
+### Rychlé přijetí z trendujících
+
+V horní části galerie je police s trendujícími šablonami — nejčastěji přijímaná napříč všemi uživateli. Každá karta po najetí odhalí akci **Přijmout**, která přímo otevře průběh přijetí a přeskočí detail modal, pokud ses již rozhodl/a.
+
+:::tip
+Začni filtrem **Připravené** — tyto šablony odpovídají tomu, co je již ve tvém vaultu, a mohou být v chodu během minut. Jakmile odešleš jednu nebo dvě, procházej **Částečné** a zjisti, jaké nové přihlašovací údaje by ti co odemkly.
+:::
+  `,
+
+  "adopting-a-template": `
+## Přijetí šablony
+
+Přijetí šablony je nejrychlejší způsob, jak získat funkčního, nakonfigurovaného agenta. Průběh tě provede od galerie k povýšenému agentovi za několik minut — a každý krok je vratný.
+
+:::steps
+1. **Klikni Přijmout** — z karty galerie, detailního modalu, pohledu porovnání nebo police trendujících. Otevře se průvodce přijetím. Do databáze se zatím nic nezapisuje; v tomto kroku můžeš volně zavřít.
+2. **Odpověz na dotazník** — formulář pokládá jednu otázku najednou. Vpravo živý přehled ukazuje, jak se tvé odpovědi průběžně skládají. Otázky se týkají věcí jako který pracovní prostor nebo projekt cílit, jaký formát výstupu chceš a jak má agent zpracovávat chyby. Tvé odpovědi vyplní zástupné symboly \`{{placeholder}}\` v promptu agenta a přizpůsobí ho tvému nastavení.
+3. **Automatický test** — po odeslání se agent sestaví ze šablony a tvých odpovědí a jednou se automaticky spustí. Tím se potvrdí, že konfigurace je platná vůči tvým přihlašovacím údajům a konektorům, než se cokoli povýší do produkce.
+4. **Povýšení** — pokud test proběhne úspěšně, agent se povýší a stane se skutečným, upravitelným agentem na tvé stránce Agents. Průvodce tě tam automaticky navede.
+:::
+
+### Automatické párování vaultu
+
+Přihlašovací údaje, které jsou již ve tvém vaultu, se automaticky detekují a vyplní. Když má dotazník otázku na konektor a ty máš přesně jeden odpovídající přihlašovací údaj, je předvybrán a označen odznáčkem **auto** — nemusíš ho vybírat ručně. Pokud máš více odpovídajících přihlašovacích údajů, otázka zúží dostupné volby jen na to, co máš.
+
+Pokud šablona potřebuje konektor, který jsi ještě nepřidal/a, tato otázka je **blokována** — v horní části formuláře se zobrazí banner s vysvětlením, jaká kategorie přihlašovacích údajů chybí, a tlačítkem **Přidat přihlašovací údaj**. Kliknutím se dostaneš přímo na katalog přihlašovacích údajů, předfiltrovaný na správnou kategorii, přičemž se tvé rozpracované odpovědi uloží jako koncept. Když se po přidání přihlašovacích údajů vrátíš na šablonu, tvé odpovědi se obnoví a blokovaná otázka se odemkne.
+
+### Jak tvé odpovědi formují agenta
+
+Za kulisami se tvé odpovědi vkládají do promptu na dvou úrovních. Zaprvé, všechny zástupné symboly \`{{param.aq_*}}\` v promptu šablony se nahradí tvými skutečnými hodnotami. Zadruhé, do systémového promptu se přidá sekce \`## Konfigurace uživatele\` se seznamem každé otázky a odpovědi, takže model vždy má plný kontext tvého nastavení bez ohledu na to, zda existuje konkrétní zástupný symbol. Testovací běh i povýšený agent používají tvou skutečnou konfiguraci — ne obecné výchozí hodnoty šablony.
+
+:::tip
+Pokud otázka není jasná, hledej ikonu **ⓘ** vpravo od popisku otázky. Kliknutím se rozbalí nápověda s dalším kontextem o tom, co otázka ovlivňuje a jak vypadá dobrá odpověď.
+:::
+  `,
+
+  "recipes": `
+## Recepty
+
+Recepty jsou stovky připravených případů použití odvozených ze šablon, organizovaných podle toho, co vykonávají. Zatímco šablona je plná konfigurace agenta, recept je konkrétní příklad práce, kterou tento agent může dělat — specifický, použitelný a blízký něčemu, co možná máš skutečně na seznamu úkolů.
+
+Najdeš je pod kartou **Templates → Recepty**. Celý katalog je seřaditelný a prohledávatelný: procházej podle názvu, filtruj podle kategorie nebo prohlížej ikony konektorů a hledej případy použití, které odpovídají tomu, co již máš připojeno.
+
+### Kategorie
+
+Recepty jsou organizovány do devíti skupin:
+
+- **Monitoring** — sledování změn, alertů, prahů
+- **Reporting** — generování souhrnů, výtahů a dashboardů
+- **Automatizace** — opakující se akce spouštěné plánem nebo událostí
+- **Komunikace** — zprávy, oznámení a směrování
+- **Synchronizace dat** — udržování dvou systémů v souladu
+- **Analýza** — syntéza informací a produkce přehledů
+- **Vývoj** — code review, generování testů, kontroly nasazení
+- **Obsah** — tvorba, editace, publikování
+- **Produktivita** — pomocníci pro osobní a týmové pracovní postupy
+
+### Tabulka receptů
+
+Hlavní pohled je seřaditelná tabulka. Každý řádek ukazuje název receptu (se zvýrazněním shody při hledání), odznak kategorie a pruh ikon konektorů ukazující, které služby potřebuje — až tři ikony s počtem přetečení u šablon, které potřebují více. Kliknutím na libovolný řádek se otevře panel detailu receptu.
+
+Panel detailu ti dá celkový obraz: co recept dělá, co potřebuje (konektory a případná specifická napojení), jak zpracovává chyby a zda ho aktuální agent již přijal. Pokud jsi recept pro aktivního agenta již přijal/a, řádek zobrazuje zelený čip **Přijato**.
+
+### Týmové předvolby
+
+Pokud nastavuješ celý pracovní postup, ne jednoho agenta, hledej **týmové předvolby** — balíčky šablon, které se přijmou společně v jednom průběhu. Předvolba pokrývá soudržnou práci (jako celou obsahovou pipeline nebo sadu nástrojů pro produktivitu vývojářů), kde si více agentů předává práci navzájem.
+
+:::tip
+Recepty jsou nejrychlejší způsob, jak najít konkrétní příklad blízký práci, kterou máš na mysli. Pokud víš, jaký výsledek chceš, ale nejsi si jist/a, od jaké šablony začít, hledej nejprve na kartě Recepty — konkrétní popisy případů použití se snáze shodují s prací než širší názvy šablon.
+:::
+  `,
+
+  "interface-modes": `
+## Režimy rozhraní: Jednoduchý a Mocný
+
+Personas mají dva režimy rozhraní: **Jednoduchý** a **Mocný**. Spouštějí stejnou aplikaci — stejné komponenty, stejná data, stejní agenti — přičemž Jednoduchý skrývá plochy, které netechničtí uživatelé jen zřídka potřebují. Nic se neodstraňuje; vše se jen zobrazuje nebo skrývá v závislosti na tom, ve kterém režimu jsi.
+
+:::compare
+**Jednoduchý**
+Dobrovolný. Čtyři obrazovky: Home, Agents, Connections, Settings. Pokročilé plochy — Overview, Workflows, Events, Templates, Plugins, pokročilé spouštěče a plná sada karet editoru — jsou skryty. Spouštění se zobrazuje jako čistý průběhový pruh a formátovaný výsledek, ne jako nezpracovaný stream tokenů. Vhodné pro uživatele, kteří chtějí agenty spouštět, ne stavět.
+---
+**Mocný** [recommended]
+Výchozí pro většinu lidí. Plná aplikace. Všechny sekce postranního panelu, všechny karty editoru (Prompt, Matrix, Lab, Activity, Health, Settings), všechny typy spouštěčů (plánování, webhook, sledování souborů, schránka, řetězec a spouštěče událostí), plný vault s hřištěm a grafem závislostí, monitoring přes Overview, Director a vše ostatní. Režim, do kterého většina uživatelů přejde, jakmile mají pár agentů v chodu.
+:::
+
+### Co Jednoduchý skrývá
+
+V Jednoduchém režimu se postranní panel zúží na čtyři sekce: **Home**, **Agents**, **Connections** a **Settings**. Overview, Workflows, Events, Templates, Plugins a jiné pokročilé sekce se v navigaci nezobrazují.
+
+Uvnitř Agents editor zobrazuje pouze karty **Prompt**, **Chat** a **Connectors**. Editor Matrix, aréna Lab, log Activity, karta Health, historie verzí, stavitel podmínek, panel konfigurace nástrojů, pokročilá nastavení a pokročilé typy spouštěčů jsou všechny skryty. Jediný viditelný spouštěč je **Manuální** (tlačítko Run).
+
+Výstup spouštění je zjednodušen: místo streamovacího terminálu s nezpracovanými tokeny vidíš průběhový pruh, zatímco agent běží, a formátovaný, čitelný výsledek po dokončení. Náklady a počty tokenů se nezobrazují.
+
+V Connections zobrazuje seznam přihlašovacích údajů zjednodušený pohled — přidat, otestovat a smazat přihlašovací údaj. Hřiště přihlašovacích údajů, vektorová znalostní báze, správce databázových připojení, hromadné akce a skórování zdraví jsou skryty.
+
+### Přepínání režimů
+
+Jdi do **Settings → Appearance → Interface Mode** a vyber Jednoduchý nebo Mocný. Změna se projeví okamžitě — restart není potřeba.
+
+Průvodce, který právě čteš, má vlastní přepínač Jednoduchý / Mocný v postranním panelu. Přepnutím se témata průvodce filtrují podle shody: Jednoduchý režim zobrazuje základní témata, Mocný odkryje pokročilé sekce. Oba přepínače jsou nezávislé — témata průvodce v Mocném režimu si lze číst při provozu aplikace v Jednoduchém režimu.
+
+:::tip
+Začni v Jednoduchém režimu, pokud jsi v Personas nový/nová. Jakmile máš pár agentů v chodu a chceš ladit plány, nastavit webhookové spouštěče nebo se ponořit do trasování spouštění, přepni na Mocný — vše, co jsi v Jednoduchém postavil/a, přejde přesně tak, jak je.
+:::
+  `,
 };

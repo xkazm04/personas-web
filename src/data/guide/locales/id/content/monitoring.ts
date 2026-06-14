@@ -221,6 +221,42 @@ Mulai dengan batas sekitar 3x dari yang Anda harapkan biaya hari tipikal. Cukup 
 :::
   `,
 
+  "the-director": `
+## Director — Pelatihan Agen Otomatis
+
+**Director** adalah meta-agen bawaan yang mengawasi agen-agen lain Anda dan melatih mereka agar benar-benar berguna. Alih-alih Anda membaca setiap run, Director meninjau run tersebut untuk Anda dan memberikan sebuah verdict.
+
+Anda memilih apa yang dipantaunya dengan cara **memberi bintang** pada agen (ikon ⭐ di setiap baris pada All Agents). Agen berbintang berarti "berada dalam cakupan Director" — Director meninjaunya; agen yang tidak berbintang dibiarkan saja. Director sendiri adalah agen sistem dan tidak dapat dihapus.
+
+### Pusat komando
+
+Director berada di **Overview › Director** — satu layar yang terfokus:
+
+- Sebuah **scorecard portofolio**: seberapa besar pekerjaan fleet Anda yang benar-benar menghasilkan nilai, rata-rata skor verdict, biaya per run yang memberikan nilai, dan distribusi 0–5 yang menunjukkan posisi agen berbintang Anda.
+- Sebuah **tabel pelatihan** setiap agen dalam cakupan — skor, sparkline tren (apakah pelatihan memberikan dampak?), value rate, tinjauan terakhir, dan **attention tag** yang menandai tepatnya apa yang perlu ditindaklanjuti (menunggu tinjauan pertama, skor rendah, menurun, tidak diperbarui). Filter hanya agen yang membutuhkan perhatian. Klik agen mana pun untuk membuka **detailnya** — riwayat verdict lengkap dengan alasan dan saran konkret di balik setiap skor.
+- Header tipis dengan **Review all in scope**, pemilih **Add to scope**, dan toggle **memory** jangka panjang.
+
+Halaman All Agents memiliki strip Director ramping yang menautkan langsung ke sini.
+
+### Tampilan sebuah verdict
+
+Setiap tinjauan menghasilkan **skor 0–5** secara keseluruhan ditambah catatan pelatihan opsional:
+
+- Kolom **Verdict** di daftar Activity menampilkan skor sebagai bintang, tepat di samping agen — satu pandangan memberi tahu Anda run mana yang layak biayanya.
+- Tab **Director** pada run mana pun membuka penilaian lengkap dalam markdown yang mudah dibaca: skor, ringkasan satu baris, dan saran spesifik (penyesuaian prompt, guardrail, perubahan tier model, alat yang hilang).
+- Catatan yang dapat ditindaklanjuti juga masuk ke antrean tinjauan Anda, di mana menyetujui atau menolaknya mengajarkan Director selera Anda dari waktu ke waktu.
+
+Agen yang sehat mendapat skor tinggi dengan sedikit atau tanpa pelatihan — Director tetap diam ketika tidak ada yang perlu ditingkatkan.
+
+### Memori jangka panjang (opsional)
+
+Jika Anda menggunakan **Obsidian Brain**, Anda dapat mengaktifkan memori jangka panjang Director. Director kemudian membaca catatan lamanya tentang sebuah agen sebelum setiap tinjauan (sehingga saran terakumulasi alih-alih berulang) dan menulis setiap verdict baru ke folder \`Director/\` di vault Anda — riwayat pelatihan yang tahan lama dan mudah dibaca manusia.
+
+### Mengapa Ini Penting
+
+Angka mentah (run, biaya, tingkat sukses) memberi tahu Anda *apa* yang terjadi, bukan *apakah itu sebanding*. Director menambahkan lapisan penilaian yang hilang — pembacaan jujur berbasis bukti tentang nilai dan efisiensi setiap agen — sehingga fleet agen tetap berguna tanpa Anda mengaudit setiap run secara manual.
+  `,
+
   "anomaly-detection": `
 ## Deteksi Anomali
 
@@ -242,6 +278,122 @@ Baseline adalah jendela bergulir run terbaru (dapat dikonfigurasi; default 50). 
 
 :::tip
 Anomali yang Anda selidiki dan selesaikan harus dibersihkan (tandai mereka "investigated"). Baseline mengecualikan anomali yang diselidiki dari jendela bergulirnya, sehingga sistem tidak melayang ke arah menganggap run anomali "normal".
+:::
+  `,
+
+  "tracking-goals": `
+## Melacak Tujuan
+
+Tujuan adalah lapisan hasil di atas run individual. Alih-alih mengamati eksekusi satu per satu, Anda mendefinisikan apa yang ingin dicapai — dan membiarkan kemajuan tergabung secara otomatis dari pekerjaan yang dilakukan tim dan agen Anda.
+
+Tujuan memiliki judul, tanggal target opsional, status, dan persentase kemajuan. Status mengikuti model empat nilai sederhana: **open** (belum dimulai), **in-progress** (sedang dikerjakan), **blocked** (menunggu sesuatu), dan **done**. Kemajuan bersifat hibrida: sistem menghitung saran dari item checklist tujuan, sub-tujuan, dan langkah penugasan tim yang tertaut — dan menampilkannya kepada Anda sebagai dorongan **Accept / edit**. Anda yang memutuskan; penggantian manual selalu menang.
+
+### Tiga Tampilan
+
+Tujuan berada di bawah bagian Teams dan menawarkan tiga permukaan, beralih melalui sidebar:
+
+- **Board** — kanban yang diorganisir berdasarkan status. Kartu menampilkan judul tujuan penuh dan checklist inline (beberapa to-do pertama sebagai kotak centang yang dapat diubah, sisanya di balik tautan "+N lagi"). Ketika tujuan memiliki to-do, menyelesaikannya mendorong kemajuan — bar bergerak saat item dicentang.
+- **Map** — kanvas pan-dan-zoom yang menampilkan bagaimana tujuan saling berhubungan. Edge dependensi (blocks, follows) menghubungkan tujuan menjadi grafik berarah. Penyorotan **Now** (cincin berdenyut kuning) menandai tujuan yang sedang in-progress; penyorotan **Next** (cincin biru) menandai tujuan yang semua pemblokir selesai dan siap dimulai. Zoom out untuk melihat konstelasi; zoom in untuk metadata lengkap di setiap node.
+- **Timeline** — tujuan pada rel tanggal-jatuh-tempo vertikal, dibagi berdasarkan urgensi: Overdue, This week, This month, Later, No date.
+
+### Langkah Kunci: Serahkan ke Tim AI Anda
+
+Drawer detail untuk tujuan mana pun memiliki kontrol **Hand to your AI team**. Menekannya mengubah tujuan menjadi penugasan tim yang berjalan yang terkait kembali ke tujuan. Tim menguraikan tujuan menjadi langkah-langkah (atau mengambil to-do yang ada secara verbatim), mengerjakannya satu per satu, dan mencentang kemajuan secara otomatis saat setiap langkah selesai. Tujuan bergerak dari open ke in-progress ke done sendiri — dan hanya muncul di antrean tinjauan Anda ketika sebuah langkah benar-benar membutuhkan keputusan manusia.
+
+:::tip
+Anda tidak harus segera menyerahkan tujuan ke tim Anda. Gunakan Board untuk membangun checklist secara manual terlebih dahulu — tim kemudian mengambil setiap item to-do secara berurutan, yang memberi Anda kontrol granular atas apa yang dikerjakan dan dalam urutan apa.
+:::
+  `,
+
+  "measuring-outcomes-with-kpis": `
+## Mengukur Hasil dengan KPI
+
+KPI adalah lapisan angka di atas tujuan. Di mana tujuan mendeskripsikan hasil yang ingin Anda capai, KPI melacak apakah Anda benar-benar menuju ke sana — nilai saat ini, target, dan pembacaan laju yang memberi tahu apakah Anda di jalur yang benar.
+
+Setiap KPI menampilkan nilai saat ini versus targetnya dengan status **laju**: **on-track**, **off-track**, **met**, atau **unmeasured** (ketika pengukuran belum dilakukan). Progress bar dan indikator kesegaran pengukuran melengkapi kartu secara sekilas.
+
+### Empat Jenis Pengukuran
+
+KPI tidak semuanya diukur dengan cara yang sama. Personas mendukung empat jenis pengukuran, masing-masing cocok untuk sumber data yang berbeda:
+
+:::info
+- **Codebase** — menjalankan perintah terhadap repositori Anda dan mengurai hasilnya. Berguna untuk hal-hal seperti persentase cakupan uji atau jumlah error lint yang sepenuhnya ada dalam kode.
+- **Derived** — membaca dari data orchestrator sendiri: jumlah run, tingkat hasil, tren biaya, dan metrik operasional serupa yang sudah dilacak Personas.
+- **Connector** — mengambil nilai dari layanan eksternal yang terhubung (analitik, lalu lintas, pelacakan error). Jika connector yang dibutuhkan belum ada di vault Anda, kartu KPI menampilkan prompt "Connect \<service\>" yang menautkan langsung ke katalog kredensial.
+- **Manual** — Anda memasukkan nilai sendiri. Berguna untuk angka bisnis yang tidak ada dalam sistem mana pun yang Anda hubungkan, atau untuk KPI yang ingin Anda lacak secara informal sebelum mengotomatiskan pengukuran.
+:::
+
+### Di Mana KPI Berada
+
+**Teams › KPIs** memiliki dua tampilan di balik switch tersegmen. Tampilan **Dashboard** menampilkan semua KPI aktif sebagai kartu — klik kartu mana pun untuk membuka drawer detail dengan riwayat pengukuran lengkap, sparkline, dan field entri nilai manual. Tampilan **Proposals** adalah antrean tinjauan: mengklik "Scan for KPIs" menjalankan analisis tanpa head atas context map proyek Anda dan KPI yang ada, dan memunculkan KPI yang diusulkan dengan alasan satu baris dan prosedur pengukuran yang tepat yang akan digunakan. Anda menerima (opsional menyesuaikan target terlebih dahulu) atau menolak. Proposal yang ditolak diarsipkan dan diumpankan kembali ke pemindaian masa depan sebagai contoh negatif agar saran yang sama tidak datang kembali.
+
+:::tip
+Biarkan pemindaian mengusulkan KPI sebelum Anda membuatnya secara manual. Ia membaca context map proyek Anda, tujuan Anda yang ada, dan daftar connector vault Anda — dan cenderung menyarankan pengukuran yang benar-benar dapat diotomatisasi dengan apa yang sudah Anda hubungkan.
+:::
+  `,
+
+  "director-verdicts-and-categories": `
+## Verdict dan Kategori Director
+
+Setiap tinjauan Director menghasilkan verdict terstruktur — bukan hanya lulus/gagal, tetapi penilaian berlapis yang memberi tahu Anda apa yang dilakukan agen dengan baik, apa yang membutuhkan pelatihan, dan bagaimana mengarsipkan pelatihan itu agar benar-benar melekat.
+
+Bagian wajibnya adalah **skor 0–5 keseluruhan** dengan ringkasan satu baris. Skor ini mendarat pada catatan eksekusi dan muncul sebagai bintang dalam daftar Activity — sehingga pemindaian cepat run terbaru agen mana pun memberi tahu Anda mana yang layak biayanya. Skor juga mendorong sparkline tren dalam tabel Agents: bar riwayat singkat yang diwarnai berdasarkan rating terbaru.
+
+### Yang Berjalan Baik
+
+Tinjauan tidak dimulai dengan kritik. Sebelum catatan pelatihan apa pun, Director menyebutkan hal-hal yang benar-benar dilakukan agen dengan baik — apa yang dokumen sebut **wins**. Ini muncul di bagian atas markdown penilaian lengkap sebagai bagian "What's working". Agen yang berkinerja baik mungkin hanya mendapatkan wins; Director tetap diam ketika tidak ada yang perlu ditingkatkan.
+
+### Catatan Pelatihan dan Kategori
+
+Setelah wins datang catatan pelatihan: saran spesifik yang dapat ditindaklanjuti yang diarsipkan di bawah salah satu dari enam **kategori**:
+
+- **Prompt** — instruksi atau framing agen perlu disetel
+- **Health** — masalah keandalan atau penanganan error
+- **Triggers** — bagaimana dan kapan agen menyala (jadwal, webhook, setup chain)
+- **Credentials** — celah vault atau izin yang memblokir agen
+- **Memory** — apa yang disimpan dan diingat agen (atau gagal dilakukan)
+- **Usefulness** — apakah output agen benar-benar berharga untuk tujuannya yang dinyatakan
+
+Catatan pelatihan mendarat di **antrean tinjauan** Anda sebagai item yang Anda setujui atau tolak. Ini bukan sekadar pemeliharaan: menyetujui atau menolak catatan mengajarkan Director selera Anda. Tinjauan berikutnya membaca kembali catatan mana yang Anda terima dan mana yang Anda abaikan, sehingga loop umpan balik terakumulasi — Director semakin baik mengetahui apa yang Anda pedulikan untuk setiap agen, dan berhenti menyarankan hal-hal yang sudah Anda singkirkan.
+
+Pusat komando Director menyertakan rollup **Issues by category** yang menghitung catatan pelatihan di seluruh fleet Anda, sehingga Anda dapat melihat pada level portofolio apakah celah kredensial adalah masalah paling umum Anda atau apakah kualitas prompt adalah tempat sebagian besar agen membutuhkan perhatian.
+
+:::tip
+Agen yang sehat mendapat skor tinggi dan menghasilkan sedikit atau tidak ada catatan pelatihan. Jika agen secara konsisten mendapat nilai 4–5 tanpa item tinjauan yang tertunda, itu adalah sinyal untuk membiarkannya dan memfokuskan perhatian pada yang memiliki tren menurun atau skor rendah.
+:::
+  `,
+
+  "director-momentum-and-stale-sweep": `
+## Momentum Director dan Stale Sweep
+
+Di luar verdict individual, Director membangun gambaran tingkat portofolio tentang bagaimana seluruh fleet Anda berkembang. Ini adalah tampilan longitudinal — bukan "apa yang dilakukan agen ini pada run terakhir" tetapi "apakah pelatihan benar-benar memberikan dampak di seluruh agen Anda dari waktu ke waktu?"
+
+### Scorecard
+
+Pusat komando Director terbuka dengan **scorecard** yang menjawab empat pertanyaan sekilas: berapa fraksi pekerjaan fleet Anda yang menghasilkan nilai (**value-delivered rate**), berapa rata-rata skor verdict di semua agen dalam cakupan, berapa **biaya per run yang berguna**, dan berapa banyak agen yang saat ini dalam cakupan. Di bawah KPI utama, bar **value breakdown** menguraikan value-delivered rate ke dalam taksonomi hasil lengkap — delivered, partial, blocked, no-input, unassessed — sehingga Anda dapat melihat di mana nilai bocor, bukan hanya apakah itu terjadi.
+
+Bagan **distribusi skor 0–5** menunjukkan bagaimana agen berbintang Anda berada di seluruh skala rating penuh, dengan garis putus-putus yang menandai rata-rata portofolio. Pemilih periode tinjauan (7 / 30 / 90 hari) mencakup seluruh scorecard.
+
+### Momentum
+
+Strip **momentum** menjawab pertanyaan portofolio yang paling penting: apakah segalanya membaik? Ia menghitung berapa banyak agen yang **meningkat**, **tetap stabil**, atau **menurun** dibandingkan tinjauan sebelumnya. Fleet yang meningkat berarti pelatihan berhasil; fleet yang menurun berarti ada sesuatu yang sistemik yang perlu diperhatikan — perubahan model, penurunan kredensial, peluruhan prompt.
+
+### Tag Perhatian dan Triage
+
+Tabel pelatihan menandai setiap agen dalam cakupan dengan **tag perhatian** berdasarkan aturan yang diturunkan klien: menunggu tinjauan pertama (belum pernah dinilai), skor rendah (≤ 2), tren menurun, atau tinjauan basi (tidak dilatih lebih dari 14 hari). Bar triage perhatian di bagian atas tabel menggabungkan flag ini — N baru, N rendah, N menurun, N basi — sehingga Anda melihat cakupan masalah sebelum mulai mengerjakannya.
+
+Mengklik chip triage memfilter tabel ke flag itu. Setelah difilter, tindakan **Review these N** menjalankan Director secara berurutan atas tepat agen tersebut — triage langsung mengarah ke tindakan.
+
+### Stale Sweep
+
+Tombol **Stale sweep** meninjau ulang setiap agen berbintang yang belum dilatih lebih dari 14 hari, dalam satu klik. Tombol ini hanya muncul ketika agen basi ada. Ini adalah pass pemeliharaan rutin: jalankan sekali sebulan dan Director menangkap agen mana pun yang telah bergeser sejak penilaian terakhirnya.
+
+### Memori Jangka Panjang
+
+Dengan **Obsidian Brain** diaktifkan, Director membaca catatan lamanya tentang agen sebelum setiap tinjauan dan menulis verdict baru ke folder \`Director/\` di vault Anda. Pelatihan terakumulasi alih-alih berulang — Director tidak menyarankan ulang hal-hal yang sudah dibahasnya, dan ia membangun atas apa yang Anda setujui dan tolak dari waktu ke waktu.
+
+:::tip
+Stale sweep dan bar triage perhatian adalah dua cara tercepat untuk menjaga fleet besar tetap sehat tanpa menghabiskan waktu pada agen yang sudah berjalan dengan baik. Gunakan bar triage untuk menemukan agen yang benar-benar membutuhkan perhatian; gunakan stale sweep untuk memastikan tidak ada yang diam-diam menurun tanpa ditinjau.
 :::
   `,
 };

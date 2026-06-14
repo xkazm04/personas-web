@@ -234,6 +234,16 @@ export const topics: Record<string, { title: string; description: string }> = {
     description:
       "Tìm và sửa các vấn đề trong luồng đa agent. Khi một pipeline không hoạt động như mong đợi, trình gỡ lỗi làm nổi bật chính xác nơi mọi thứ đi sai. Bạn có thể kiểm tra dữ liệu tại từng bước để xác định vấn đề mà không cần đoán.",
   },
+  "team-assignments": {
+    title: "Nhiệm vụ đội",
+    description:
+      "Giao cho đội một mục tiêu bằng ngôn ngữ thông thường và để đội tự tổ chức công việc. Thay vì phải kết nối từng bước một cách thủ công, bạn mô tả điều mình muốn; đội chia nhỏ thành danh sách kiểm tra, chọn agent phù hợp cho từng phần và chạy song song — chỉ dừng lại để bạn xem xét khi có điều gì đó cần quyết định.",
+  },
+  "team-memory-and-goals": {
+    title: "Bộ nhớ & mục tiêu đội",
+    description:
+      "Cách đội duy trì sự nhất quán theo thời gian và cách bạn định hướng mà không cần quản lý vi mô. Các đội tích lũy bộ nhớ chung — những quyết định và ràng buộc được truyền vào lần chạy tiếp theo của mỗi thành viên, giúp đội hội tụ thay vì lặp lại. Liên kết đội với một mục tiêu và bạn có thể ở tầm cao: tiến độ được theo dõi và ứng dụng chỉ hiển thị những gì thực sự cần đến bạn.",
+  },
   "why-test-your-agents": {
     title: "Tại sao kiểm thử agent của bạn?",
     description:
@@ -394,6 +404,11 @@ export const topics: Record<string, { title: string; description: string }> = {
     description:
       "Nhận cảnh báo khi có điều gì đó bất thường xảy ra với agent của bạn. Hệ thống học những gì là bình thường cho mỗi agent và đánh dấu mọi thứ ngoài thông thường — như sự tăng đột biến về chi phí hoặc lỗi bất ngờ. Bạn sẽ là người đầu tiên biết nếu có gì cần chú ý.",
   },
+  "the-director": {
+    title: "The Director — huấn luyện agent tự động",
+    description:
+      "Một meta-agent tích hợp sẵn theo dõi các agent được gắn sao của bạn và chấm điểm mỗi lần chạy từ 0 đến 5 kèm ghi chú huấn luyện cụ thể. Gắn sao một agent để đưa nó vào phạm vi của Director; các nhận định xuất hiện dưới dạng cột sao trong Activity và tab Director trên mỗi lần chạy. Có thể sử dụng Obsidian Brain của bạn làm bộ nhớ dài hạn để chất lượng huấn luyện cải thiện theo thời gian.",
+  },
   "local-vs-cloud-execution": {
     title: "Thực thi cục bộ so với đám mây",
     description:
@@ -483,5 +498,85 @@ export const topics: Record<string, { title: string; description: string }> = {
     title: "Đặt lại về mặc định",
     description:
       "Cách đặt lại cài đặt một cách an toàn mà không mất các agent của bạn. Nếu bạn đã thay đổi điều gì đó và không thể tìm ra cái gì sai, đặt lại về mặc định cho bạn một khởi đầu trong sạch. Các agent, credential và bộ nhớ của bạn được bảo toàn — chỉ tùy chọn của bạn trở về giá trị ban đầu.",
+  },
+  "browsing-templates": {
+    title: "Duyệt gallery template",
+    description:
+      "Bắt đầu từ một agent được xây dựng sẵn thay vì trang trắng. Gallery template là thư viện các agent được xây dựng sẵn cho các công việc thực tế — mỗi cái liệt kê agent làm gì, connector nào cần và thời gian thiết lập mất bao lâu. Lọc theo mức độ sẵn sàng của template cho thiết lập của bạn, so sánh một vài cái cạnh nhau và xem trước các trường hợp sử dụng trước khi cam kết.",
+  },
+  "adopting-a-template": {
+    title: "Áp dụng template",
+    description:
+      "Biến một template thành agent hoạt động của riêng bạn bằng thiết lập có hướng dẫn ngắn. Biểu mẫu một câu hỏi mỗi lần thu thập những gì agent cần, và thông tin đăng nhập bạn đã lưu trong vault được khớp và điền tự động. Agent được kiểm thử một lần trên thiết lập của bạn trước khi được promote, vì vậy bạn bắt đầu từ điều gì đó đã hoạt động.",
+  },
+  "recipes": {
+    title: "Công thức",
+    description:
+      "Duyệt hàng trăm trường hợp sử dụng sẵn sàng chạy được lấy từ các template, được nhóm theo những gì chúng hoàn thành — giám sát, báo cáo, tự động hóa, giao tiếp, đồng bộ dữ liệu, phân tích và nhiều hơn nữa. Công thức là cách nhanh nhất để xem các ví dụ cụ thể về những gì agent có thể làm và tìm một cái gần với công việc bạn có trong đầu.",
+  },
+  "interface-modes": {
+    title: "Chế độ giao diện: Simple & Power",
+    description:
+      "Personas có thể hiển thị cho bạn không gian làm việc được rút gọn hoặc bộ công cụ đầy đủ. Chế độ Simple chỉ giữ một vài màn hình và ẩn các tùy chọn nâng cao để bạn có thể tạo, chạy và xem xét agent chỉ với vài cú nhấp chuột; chế độ Power tiết lộ tất cả mọi thứ — canvas đội, giám sát, mọi loại trigger và vault đầy đủ. Chuyển đổi bất kỳ lúc nào trong Cài đặt; không có gì bị xóa, chỉ được hiển thị hoặc cất đi.",
+  },
+  "meet-athena": {
+    title: "Gặp gỡ Athena",
+    description:
+      "Athena là người bạn đồng hành tích hợp của bạn — một trợ lý luôn sẵn sàng sống ở góc ứng dụng. Chạm vào avatar của cô ấy để mở chat, hoặc để cô ấy nổi trên công việc của bạn như một orb có thể di chuyển. Cô ấy có thể trả lời câu hỏi, giải thích tính năng và thực sự vận hành ứng dụng cho bạn. Đây là nơi để bắt đầu.",
+  },
+  "chatting-with-athena": {
+    title: "Trò chuyện với Athena",
+    description:
+      "Cách tận dụng tối đa cuộc trò chuyện với Athena. Bắt đầu từ prompt gợi ý, gõ \"/\" để chọn lệnh có sẵn, hoặc chỉ hỏi theo cách của bạn. Cô ấy cung cấp các phản hồi theo dõi nhanh và cách một chạm để làm câu trả lời ngắn hơn hoặc thêm chi tiết, và giữ hộp gõ mở để bạn có thể hướng dẫn cô ấy giữa chừng.",
+  },
+  "voice-and-hold-to-talk": {
+    title: "Giọng nói và nhấn giữ để nói",
+    description:
+      "Nói chuyện với Athena thay vì gõ, và để cô ấy nói lại. Nhấn và giữ avatar của cô ấy để đọc một câu hỏi, hoặc sử dụng phím tắt bàn phím để triệu hồi cô ấy bằng giọng nói từ bất kỳ đâu. Giọng nói của bạn có thể được phiên âm trên máy của bạn để bảo mật, và các phản hồi của cô ấy có thể được đọc to — ngay cả khi chat đóng.",
+  },
+  "athenas-long-term-memory": {
+    title: "Bộ nhớ dài hạn của Athena",
+    description:
+      "Athena nhớ qua các cuộc trò chuyện để bạn không phải lặp lại. Cô ấy giữ sự kiện về bạn và dự án của bạn, cách bạn thích mọi thứ được làm và một hồ sơ cô ấy đọc trước mỗi phản hồi — và bạn vẫn kiểm soát: một cuộc phỏng vấn nhập liệu ngắn để bắt đầu, và bạn có thể xem, chỉnh sửa hoặc sửa bất kỳ điều gì cô ấy đã học.",
+  },
+  "proactive-check-ins": {
+    title: "Kiểm tra chủ động",
+    description:
+      "Athena có thể liên hệ trước khi điều gì đó xứng đáng được chú ý — thời hạn mục tiêu đang đến gần, một agent đã thất bại hoặc đang chờ bạn, hoặc nhắc nhở bạn đã yêu cầu cô ấy giữ. Các kiểm tra tôn trọng giờ im lặng và giới hạn hàng ngày để cô ấy vẫn hữu ích thay vì ồn ào, và mỗi nhắc nhở là điều bạn có thể hành động hoặc bỏ qua.",
+  },
+  "guided-walkthroughs": {
+    title: "Walkthrough có hướng dẫn",
+    description:
+      "Hỏi Athena \"show me how\" và cô ấy sẽ hướng dẫn bạn qua một tác vụ trên màn hình thực. Orb của cô ấy trượt đến từng điểm, điều khiển đúng sáng lên và cô ấy diễn giải bước — sau đó chờ bạn tự nhấp vào. Đây là học trực tiếp trong ứng dụng thực tế, không phải video để xem.",
+  },
+  "the-decision-hub": {
+    title: "Decision hub",
+    description:
+      "Một số hành động chờ sự đồng ý của bạn. Khi Athena hoặc một trong các agent của bạn muốn làm điều gì đó cần phê duyệt — chạy agent, thay đổi hồ sơ của bạn, lên lịch kiểm tra — nó xuất hiện dưới dạng thẻ bạn phê duyệt hoặc từ chối. Các yêu cầu từ agent đang chạy của bạn cũng tập hợp ở đây, với tùy chọn approve-all khi chúng chồng chất.",
+  },
+  "operating-by-chat": {
+    title: "Vận hành Personas bằng chat",
+    description:
+      "Athena không chỉ là cố vấn — cô ấy có thể điều khiển ứng dụng. Yêu cầu cô ấy mở một màn hình, nhảy đến editor của agent, xây dựng bảng điều khiển home tùy chỉnh hoặc gọi một dịch vụ được kết nối, và cô ấy làm điều đó, nhấp nháy đích đến để bạn có thể theo dõi. Hai nút một chạm cung cấp cho bạn xem xét đội và tóm tắt buổi sáng về những gì đã xảy ra qua đêm.",
+  },
+  "tracking-goals": {
+    title: "Theo dõi mục tiêu",
+    description:
+      "Đặt kết quả và xem tiến độ hướng đến nó thay vì theo dõi từng lần chạy. Mục tiêu tổng hợp việc cần làm, mục tiêu con và công việc đội của bạn thành một phần trăm duy nhất, được hiển thị trên bảng, bản đồ mục tiêu phụ thuộc lẫn nhau như thế nào hoặc timeline ngày đến. Giao mục tiêu cho đội AI và nó tự tiến, chỉ giơ tay khi cần bạn.",
+  },
+  "measuring-outcomes-with-kpis": {
+    title: "Đo lường kết quả với KPI",
+    description:
+      "Theo dõi các con số cho bạn biết liệu agent của bạn có thực sự tạo ra sự khác biệt. KPI đo lường kết quả bốn cách — từ codebase, từ dữ liệu orchestrator, qua connector hoặc bằng tay — và hiển thị giá trị hiện tại so với mục tiêu với đọc nhịp độ on-track hoặc off-track. Một lần quét thậm chí có thể đề xuất các KPI liên quan cho dự án của bạn, mỗi cái với cách chính xác nó sẽ được đo.",
+  },
+  "director-verdicts-and-categories": {
+    title: "Nhận định và danh mục của Director",
+    description:
+      "Một cái nhìn gần hơn về những gì Director viết khi xem xét agent. Mỗi lần xem xét đưa ra điểm số tổng thể 0–5 với tóm tắt ngắn, nêu bật những gì agent đang làm tốt và ghi các ghi chú huấn luyện cụ thể theo danh mục — prompt, health, trigger, credential, memory hoặc usefulness. Phê duyệt hoặc từ chối một ghi chú dạy Director biết gu của bạn theo thời gian.",
+  },
+  "director-momentum-and-stale-sweep": {
+    title: "Đà động lực và quét lỗi thời của Director",
+    description:
+      "Cách Director giữ huấn luyện trung thực trên toàn đội theo thời gian. Thẻ điểm danh mục đầu tư hiển thị tỷ lệ giá trị được giao, điểm trung bình và chi phí trên mỗi lần chạy hữu ích; đọc đà động lực cho bạn biết bao nhiêu agent đã cải thiện, giữ nguyên hoặc giảm kể từ lần xem xét cuối cùng; và quét lỗi thời xem xét lại bất kỳ agent được gắn sao nào chưa được xem xét trong hơn hai tuần, để không có gì trôi dạt mà không được chú ý.",
   },
 };

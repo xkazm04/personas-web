@@ -155,7 +155,7 @@ Measuring every version on every model gets expensive fast — N versions × M m
   "rating-and-scoring-results": `
 ## Rating and Scoring Results
 
-After any Lab test, each output row has rating controls: thumbs-up / thumbs-down for binary judgment, or a 1-5 star scale for nuanced cases. Your ratings feed two things: the agent's per-variant fitness score (used for ranking in matrix and eval, and as the genome-evolution selection pressure on Builder tier), and a personal preference signal across all your testing over time.
+After any Lab test, each output row has rating controls: thumbs-up / thumbs-down for binary judgment, or a 1-5 star scale for nuanced cases. Your ratings feed two things: the agent's per-variant fitness score (used for ranking in the Versions & Ratings table, and as the genome-evolution selection pressure on Builder tier), and a personal preference signal across all your testing over time.
 
 The ratings are personal — they encode your judgment of quality, not an objective metric. That's intentional; you're the one who knows whether the agent's output matches what you need, and that's the signal the system optimizes against.
 
@@ -163,7 +163,7 @@ The ratings are personal — they encode your judgment of quality, not an object
 
 - **Binary or 1-5 star** — pick whichever scale you're comfortable being consistent with
 - **Per-output rating** — every test output gets its own row of rating controls; nothing is aggregated automatically until you rate
-- **Drives fitness scores** — ratings feed the per-variant fitness signal that Matrix / Eval / genome use
+- **Drives fitness scores** — ratings feed the per-variant fitness signal that the Versions & Ratings table and genome evolution use
 - **Feedback history persists** — every rating you've ever given is stored; useful for "did I rate X higher than Y in past tests?"
 - **Consistency matters more than precision** — a 4-star you'd give consistently is more useful than a 5-star you give once and never again
 
@@ -285,7 +285,7 @@ Read the adopted variant before clicking Adopt. Evolution finds high-fitness pro
   "fitness-scoring-explained": `
 ## Fitness Scoring Explained
 
-Fitness is the single number that drives Matrix / Eval / Genome selection. It combines your manual ratings (primary signal) with objective metrics (cost, duration, success rate, output-length-target conformance, custom signals) into a weighted score. You configure the weights per agent or per test — by default, ratings dominate and objective metrics are tiebreakers.
+Fitness is the single number that drives ranking in the Versions & Ratings table and Genome selection. It combines your manual ratings (primary signal) with objective metrics (cost, duration, success rate, output-length-target conformance, custom signals) into a weighted score. You configure the weights per agent or per test — by default, ratings dominate and objective metrics are tiebreakers.
 
 The score is computed per variant per input, then aggregated across all inputs in the test set to produce one fitness per variant. Variants are ranked by aggregate fitness; that ranking is what the genome selection algorithm consumes and what Athena surfaces when she presents the offspring for review.
 
@@ -302,7 +302,7 @@ The score is computed per variant per input, then aggregated across all inputs i
 The fitness aggregator reads execution results (cost, duration, success), rating history (per execution), and any custom fitness signals registered for the agent. Each is normalized to a 0-1 range, multiplied by its configured weight, and summed. The result is the variant's fitness; aggregate across all inputs in the test set is the displayed score.
 
 :::tip
-The default weights (90% rating, 10% cost) are tuned for most agents. If you find yourself disagreeing with the system's "winners" in eval / matrix tests, the most useful adjustment is usually to up the rating weight further (95%) so the system trusts your judgment more. Adjust cost weight up for very high-volume agents where token cost is a real concern.
+The default weights (90% rating, 10% cost) are tuned for most agents. If you find yourself disagreeing with the system's "winners" in the ratings table, the most useful adjustment is usually to up the rating weight further (95%) so the system trusts your judgment more. Adjust cost weight up for very high-volume agents where token cost is a real concern.
 :::
   `,
 
@@ -316,7 +316,7 @@ The Trends sub-tab plots agent-level metrics over time — fitness of currently-
 ### Key Points
 
 - **Every test preserved** — full input, output, ratings, fitness; nothing is GC'd
-- **Mode-tagged** — filter by Arena / A-B / Matrix / Eval / Genome to find a specific past test
+- **Mode-tagged** — filter by Arena / A-B / Genome to find a specific past test
 - **Trend chart** with auto-annotation at every meaningful change point
 - **Compare a past test to current state** — useful for "is the current prompt still better than the one I rejected three weeks ago?"
 - **Exportable** — test history exports to CSV for external analysis

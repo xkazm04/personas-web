@@ -73,7 +73,7 @@ export default function Changelog() {
             Download free
           </Link>
           <Link
-            href="/changelog"
+            href="/roadmap#changelog"
             className="text-sm font-medium text-muted-dark transition-colors hover:text-foreground"
           >
             All updates &rarr;

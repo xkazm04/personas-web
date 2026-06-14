@@ -5,11 +5,12 @@ import Navbar from "@/components/Navbar";
 import Footer from "@/components/sections/Footer";
 import { ArrowLeft, BookOpen } from "lucide-react";
 import { useTranslation } from "@/i18n/useTranslation";
-import { BLOG_POSTS } from "@/data/blog";
+import { BLOG_POSTS, isPublished } from "@/data/blog";
 
 // Suggest the featured post plus the two most recent so a mistyped/stale link
 // becomes a recovery point instead of a dead end. Computed at module load.
 const SUGGESTED_POSTS = [...BLOG_POSTS]
+  .filter(isPublished)
   .sort(
     (a, b) =>
       (b.featured ? 1 : 0) - (a.featured ? 1 : 0) ||

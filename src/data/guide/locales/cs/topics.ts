@@ -234,6 +234,16 @@ export const topics: Record<string, { title: string; description: string }> = {
     description:
       "Hledání a oprava problémů ve víceagentových tocích. Když pipeline nefunguje, jak by měla, debugger přesně označí, kde se to pokazilo. Můžeš zkontrolovat data v každém kroku a problém přesně určit bez hádání.",
   },
+  "team-assignments": {
+    title: "Týmová zadání",
+    description:
+      "Zadej týmu cíl v přirozené řeči a nech ho, ať si práci zorganizuje sám. Místo ručního propojování každého kroku popíšeš, co chceš; tým cíl rozloží na seznam úkolů, vybere pro každou část vhodného agenta a spustí je paralelně — přičemž se zastaví a čeká na tvé rozhodnutí jen tehdy, kdy to opravdu potřebuje.",
+  },
+  "team-memory-and-goals": {
+    title: "Týmová paměť a cíle",
+    description:
+      "Jak tým zůstává soudržný v čase a jak ho řídit, aniž bys do všeho zasahoval/a. Týmy si budují sdílenou paměť — rozhodnutí a omezení, která se promítají do každého příštího běhu každého člena, takže tým konverguje místo toho, aby se opakoval. Propoj tým s cílem a zůstaň na vysoké úrovni: postup se sleduje automaticky a aplikace tě osloví jen tehdy, kdy tě opravdu potřebuje.",
+  },
   "why-test-your-agents": {
     title: "Proč testovat své agenty?",
     description:
@@ -394,6 +404,11 @@ export const topics: Record<string, { title: string; description: string }> = {
     description:
       "Dostaň upozornění, když se s tvými agenty stane něco neobvyklého. Systém se naučí, co je pro každého agenta normální, a označí cokoli mimo obvyklé — jako náhlý nárůst nákladů nebo neočekávané selhání. Budeš první, kdo se dozví, že něco vyžaduje pozornost.",
   },
+  "the-director": {
+    title: "Director — automatický koučink agentů",
+    description:
+      "Vestavěný meta-agent, který sleduje tvé agenty označené hvězdičkou a každý jejich běh ohodnotí skóre 0–5 s konkrétními koučovacími poznámkami. Přidej agenta do scope Directora tím, že mu dáš hvězdičku; verdikty se zobrazí jako sloupec hvězdiček v Aktivitě a karta Director na každém běhu. Může využívat tvůj Obsidian Brain jako dlouhodobou paměť, takže jeho koučink se časem zlepšuje.",
+  },
   "local-vs-cloud-execution": {
     title: "Lokální vs cloudové spouštění",
     description:
@@ -483,5 +498,85 @@ export const topics: Record<string, { title: string; description: string }> = {
     title: "Reset na výchozí nastavení",
     description:
       "Jak bezpečně resetovat nastavení, aniž bys přišel/přišla o své agenty. Pokud jsi něco změnil/a a nemůžeš zjistit, co je špatně, reset na výchozí ti dá čistý štít. Tvoji agenti, přihlašovací údaje a paměti jsou zachovány — jen tvé preference se vrátí na původní hodnoty.",
+  },
+  "meet-athena": {
+    title: "Seznamte se s Athenou",
+    description:
+      "Athena je tvoje vestavěná společnice — vždy dostupný asistent žijící v rohu aplikace. Klepni na její avatar pro otevření chatu nebo ji nech plout nad tvou prací jako pohyblivou kouli. Umí odpovídat na otázky, vysvětlovat funkce a skutečně za tebe ovládat aplikaci. Tady je to místo, kde začít.",
+  },
+  "chatting-with-athena": {
+    title: "Chat s Athenou",
+    description:
+      "Jak z konverzace s Athenou vytěžit maximum. Začni od navrženého promptu, zadej \"/\" pro výběr připraveného příkazu nebo se jednoduše zeptej svými slovy. Nabídne rychlé navazující odpovědi a jedním klepnutím způsoby, jak odpověď zkrátit nebo přidat více detailů, a drží pole pro psaní otevřené, abys ji mohl/a usměrnit uprostřed myšlenky.",
+  },
+  "voice-and-hold-to-talk": {
+    title: "Hlas a stisk-a-drž",
+    description:
+      "Mluv s Athenou místo psaní a nech ji mluvit zpět. Stiskni a drž její avatar pro nadiktování dotazu nebo použij klávesovou zkratku pro vyvolání hlasem odkudkoli. Tvou řeč lze přepsat přímo na tvém počítači pro soukromí a její odpovědi lze přehrávat nahlas — i když je chat zavřen.",
+  },
+  "athenas-long-term-memory": {
+    title: "Dlouhodobá paměť Atheny",
+    description:
+      "Athena si pamatuje napříč konverzacemi, takže se nemusíš opakovat. Uchovává si fakta o tobě a tvých projektech, způsob, jakým máš rád/ráda věci dělat, a profil, který čte před každou odpovědí — a ty zůstáváš v kontrole: krátký vstupní rozhovor ji nastartuje a cokoli, co se naučila, si můžeš prohlédnout, upravit nebo opravit.",
+  },
+  "proactive-check-ins": {
+    title: "Proaktivní upomínky",
+    description:
+      "Athena se může ozvat jako první, když něco zaslouží tvou pozornost — blížící se termín cíle, agent, který selhal nebo na tebe čeká, nebo připomínka, o jejíž uchování jsi ji požádal/a. Upomínky respektují tiché hodiny a denní limit, takže zůstává užitečná, ne rušivá, a každou výzvu můžeš přijmout nebo odmítnout.",
+  },
+  "guided-walkthroughs": {
+    title: "Průvodci",
+    description:
+      "Požádej Athenu, aby ti \"ukázala jak\", a ona tě provede úkolem na skutečné obrazovce. Její koule klouže na každé místo, příslušné ovládání se rozsvítí a ona tahu popisuje — poté čeká, než na něj sám/sama klikneš. Je to praktické učení přímo v aplikaci, ne video ke sledování.",
+  },
+  "the-decision-hub": {
+    title: "Decision Hub",
+    description:
+      "Některé akce čekají na tvůj souhlas. Když Athena nebo jeden z tvých agentů chce udělat něco, co vyžaduje schválení — spustit agenta, změnit tvůj profil, naplánovat upomínku — zobrazí se to jako karta, kterou schválíš nebo odmítneš. Zde se shromažďují i žádosti od tvých běžících agentů s možností schválit vše, když se nakupí.",
+  },
+  "operating-by-chat": {
+    title: "Ovládání Personas přes chat",
+    description:
+      "Athena není jen poradce — může řídit aplikaci. Požádej ji, aby otevřela obrazovku, přeskočila na editor agenta, sestavila vlastní domovský dashboard nebo zavolala připojenou službu, a ona to udělá s krátkým zablikáním cíle, abys mohl/a sledovat. Dvě tlačítka s jedním klepnutím ti dají přehled flotily a ranní souhrn toho, co se přes noc stalo.",
+  },
+  "browsing-templates": {
+    title: "Procházení galerie šablon",
+    description:
+      "Začni od hotového agenta místo prázdné stránky. Galerie šablon je knihovna předpřipravených agentů pro skutečné práce — každý uvádí, co dělá, které konektory potřebuje a jak dlouho nastavení trvá. Filtruj podle toho, jak připravená je šablona pro tvé nastavení, porovnej jich několik vedle sebe a prohlédni si její případy použití, než se rozhodneš.",
+  },
+  "adopting-a-template": {
+    title: "Přijetí šablony",
+    description:
+      "Přeměn šablonu ve svého vlastního funkčního agenta s krátkým řízeným nastavením. Formulář s jednou otázkou najednou shromáždí, co agent potřebuje, a přihlašovací údaje, které jsi již uložil/a ve vaultu, jsou automaticky přiřazeny a vyplněny. Agent se jednou otestuje na tvém nastavení, než se povýší, takže začínáš s něčím, co již funguje.",
+  },
+  "recipes": {
+    title: "Recepty",
+    description:
+      "Procházej stovky připravených případů použití odvozených ze šablon, seskupených podle toho, co vykonávají — monitoring, reporting, automatizace, komunikace, synchronizace dat, analýza a další. Recepty jsou nejrychlejší způsob, jak vidět konkrétní příklady toho, co agenti umí, a najít jeden blízký práci, která tě zajímá.",
+  },
+  "interface-modes": {
+    title: "Režimy rozhraní: Jednoduchý a Mocný",
+    description:
+      "Personas ti mohou ukázat zjednodušený pracovní prostor nebo plnou sadu nástrojů. Jednoduchý režim zachovává jen několik obrazovek a skrývá pokročilé možnosti, takže agenta vytvoříš, spustíš a zkontroluješ jen pár kliknutími; Mocný režim odhaluje vše — canvas týmu, monitoring, každý typ spouštěče a plný vault. Přepni kdykoli v Nastavení; nic se neodstraní, jen zobrazí nebo schová.",
+  },
+  "tracking-goals": {
+    title: "Sledování cílů",
+    description:
+      "Nastav výsledek a sleduj postup k němu místo trasování běhů jeden po druhém. Cíle slučují úkoly, dílčí cíle a práci, kterou dělají tvé týmy, do jednoho procenta, zobrazeného na nástěnce, mapě závislostí nebo časové ose termínů. Předej cíl svému AI týmu a on ho posune sám, zvedne ruku jen tehdy, když tě potřebuje.",
+  },
+  "measuring-outcomes-with-kpis": {
+    title: "Měření výsledků pomocí KPI",
+    description:
+      "Sleduj čísla, která ti říkají, zda tví agenti skutečně posouvají jehlu. KPI měří výsledky čtyřmi způsoby — z kódové základny, z dat orchestrátoru, přes konektor nebo ručně — a ukazují aktuální hodnotu vůči cíli s čtením tempa na správné nebo mimo cestu. Prohledávání může dokonce navrhnout relevantní KPI pro tvůj projekt, každý s přesným způsobem, jak bude měřen.",
+  },
+  "director-verdicts-and-categories": {
+    title: "Verdikty a kategorie Directora",
+    description:
+      "Bližší pohled na to, co Director píše při přezkoumání agenta. Každé přezkoumání dává celkové skóre 0–5 s krátkým shrnutím, vyzdvihuje, co agent dělá dobře, a podává konkrétní koučovací poznámky podle kategorie — prompt, zdraví, spouštěče, přihlašovací údaje, paměť nebo užitečnost. Schvalování nebo odmítání poznámky učí Directora tvůj vkus v čase.",
+  },
+  "director-momentum-and-stale-sweep": {
+    title: "Momentum Directora a Přehled zastaralých",
+    description:
+      "Jak Director udržuje koučink poctivý napříč celou tvou flotilou v čase. Scorecard portfolia zobrazuje tvou míru přidané hodnoty, průměrné skóre a náklady na užitečný běh; čtení momentu ti říká, kolik agentů se zlepšilo, udrželo nebo zhoršilo od posledního přezkoumání; a přehled zastaralých přezkoumat každého agenta s hvězdičkou, který nebyl hodnocen déle než dva týdny, aby nic tiše neunikalo bez povšimnutí.",
   },
 };

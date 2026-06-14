@@ -74,7 +74,7 @@ export const TOUR_STEPS: TourStep[] = [
     description:
       "Your persona listens for triggers — schedule, webhook, file watcher, event, or manual run — and executes locally. Watch the event bus light up and monitor every step in real time.",
     details: [
-      "Six trigger types cover every automation pattern",
+      "Ten trigger types cover every automation pattern",
       "Live event bus and span tracing per execution",
       "Self-healing engine recovers from transient failures",
     ],

@@ -126,3 +126,27 @@ Specialized, themed release passes are documented in
 - **A.3** — full `.env.example`
 - **A.4** — `package.json` metadata + helper scripts
 - **A.5** — this file
+
+<!-- vibeman:context-map:start -->
+## Context Map
+
+This project has a Vibeman-generated context map at `context-map.json` (repo root). It maps every file to a feature ("context"), grouped by business domain. **Before editing code, read `context-map.json` to find the relevant context and scope your changes to its `filePaths`.** The `index` field is a quick one-line-per-context overview. If you change which files a context owns, update `context-map.json` to match (or run Vibeman's refresh) so it stays accurate.
+<!-- vibeman:context-map:end -->
+
+## Feature docs
+
+`docs/features/` holds one markdown doc per logical submodule (following the app's
+navigation/route structure), grouped into folders that mirror the app: `dashboard/`,
+`marketing/`, `product-showcase/`, `demos/`, `guide/`, `content/`, `community/`,
+`connectors/`, `platform/`, `infrastructure/`. Start at `docs/features/INDEX.md` (the
+master map). Each doc is dual-purpose: a plain-language **What it does** (user overview)
+followed by **How it works / Key files / Data & state / Integration points / Conventions
+& gotchas** (the dev/LLM reference, with `file:line` anchors).
+
+- **Before working on a feature, read its doc** for the file map, state/data flow, and the
+  repo conventions + known gotchas that apply there. This complements `context-map.json`
+  (files → context) with the *what / how / why* per submodule.
+- The `Conventions & gotchas` sections record real findings from the doc scan (dead code,
+  dormant branches, hardcoded-English i18n gaps, ungated motion, route mismatches) — treat
+  them as known issues, not invitations to fix unasked.
+- **When a feature's files change, update its doc** in the same commit so it stays accurate.

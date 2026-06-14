@@ -19,18 +19,6 @@ type SetState = (partial: {
   isDemo?: boolean;
 }) => void;
 
-export function mockInitialize(set: SetState) {
-  // Auto-authenticate so /dashboard is reachable without a sign-in click when
-  // NEXT_PUBLIC_USE_MOCK_API=true. isDemo also surfaces the demo banner.
-  set({
-    user: MOCK_USER,
-    accessToken: MOCK_TOKEN,
-    isAuthenticated: true,
-    isDemo: true,
-    isLoading: false,
-  });
-}
-
 export function mockSignIn(set: SetState) {
   set({ user: MOCK_USER, accessToken: MOCK_TOKEN, isAuthenticated: true });
 }

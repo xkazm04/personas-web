@@ -234,4 +234,131 @@ Das Cockpit hat Zugriff auf eine Doctrine — eine kuratierte Wissensbasis über
 Bei "Ich glaube, etwas ist kaputt"-Fragen öffne zuerst Athena und frage "diagnose den letzten fehlschlagenden Lauf von Agent X". Der Debug-Flow des Cockpits ist dafür gebaut und schlägt das manuelle Lesen von Logs meist um Längen.
 :::
   `,
+
+  "browsing-templates": `
+## Die Vorlagensammlung durchsuchen
+
+Fang nicht bei einem leeren Blatt an. Die Vorlagensammlung ist eine Bibliothek vorgefertigter Agenten — jeder für eine echte Aufgabe entworfen, getestet und bereit, auf dein Setup spezialisiert zu werden. Vorlagen decken alles ab, von Monitoring und Reporting bis hin zu Content-Workflows und Entwickler-Tooling. Den richtigen zu finden dauert weniger Zeit, als einen Prompt von Grund auf zu schreiben.
+
+Jede Karte in der Sammlung verrät dir, was der Agent macht, wie komplex die Einrichtung ist und wie lange die Übernahme ungefähr dauert. Darunter siehst du die **Connectors**, die die Vorlage benötigt — Dienste wie Slack, Notion, GitHub oder ein Cloud-Speicheranbieter — und ob du bereits passende Zugangsdaten in deinem Vault hast. Ein kleiner Bereitschaftsindikator auf jedem Connector-Chip zeigt dir auf einen Blick: Grün bedeutet, du kannst sofort loslegen, Gelb bedeutet, du hast eine Teilübereinstimmung, und Grau bedeutet, du müsstest diese Zugangsdaten hinzufügen, bevor die Vorlage laufen kann.
+
+### Abdeckungsfilter
+
+Der Filterstreifen oben in der Sammlung — **Alle / Bereit / Teilweise / Entwürfe** — lässt dich eingrenzen, was gerade relevant ist:
+
+- **Bereit** — jeder Connector, den die Vorlage braucht, ist bereits in deinem Vault. Das sind die schnellsten Wege zu einem laufenden Agenten.
+- **Teilweise** — einige Connectors sind vorhanden, andere nicht. Lohnt sich zum Durchstöbern, wenn du planst, bald weitere Zugangsdaten hinzuzufügen.
+- **Entwürfe** — unveröffentlichte Vorlagen, nur in Entwicklungs-Builds sichtbar.
+
+Starte bei Bereit, wenn du in wenigen Minuten etwas am Laufen haben willst.
+
+### Vorlagen vergleichen
+
+Wenn du zwischen einigen Optionen entscheidest, musst du nicht jede einzeln öffnen. Wähle bis zu drei Karten aus (beim Überfahren erscheint ein Kontrollkästchen) und klicke auf **Vergleichen** — ein Nebeneinander-Modal stellt sie gegenüber in den Bereichen Kategorie, Ziel, Connectors, Trigger, Anwendungsfälle, Komplexität und Einrichtungszeit. Zeilen, in denen sich die Vorlagen unterscheiden, werden hervorgehoben, damit die Unterschiede leicht zu erkennen sind. Du kannst direkt aus der Vergleichsansicht übernehmen, ohne zur Sammlung zurückzukehren.
+
+### Trending-Schnellübernahme
+
+Oben in der Sammlung befindet sich ein Regal mit Trend-Vorlagen — die am häufigsten übernommenen bei allen Nutzern. Jede Karte hat eine beim Überfahren sichtbare **Übernehmen**-Aktion, die den Übernahme-Flow direkt öffnet und das Detail-Modal überspringt, wenn du dich schon entschieden hast.
+
+:::tip
+Starte beim Filter **Bereit** — diese Vorlagen passen zu dem, was bereits in deinem Vault ist, und können in wenigen Minuten laufen. Sobald du ein oder zwei verschickt hast, durchstöbere **Teilweise**, um zu sehen, welche neuen Zugangsdaten weitere Vorlagen freischalten würden.
+:::
+  `,
+
+  "adopting-a-template": `
+## Eine Vorlage übernehmen
+
+Eine Vorlage zu übernehmen ist der schnellste Weg zu einem fertigen, konfigurierten Agenten. Der Flow führt dich in wenigen Minuten von der Sammlung zu einem beförderten Agenten — und jeder Schritt ist dabei umkehrbar.
+
+:::steps
+1. **Klicke auf Übernehmen** — von der Sammlungskarte, dem Detail-Modal, der Vergleichsansicht oder dem Trend-Regal. Der Übernahme-Assistent öffnet sich. Es wird noch nichts in die Datenbank geschrieben; du kannst das Fenster in diesem Stadium frei schließen.
+2. **Beantworte den Fragebogen** — das Formular stellt eine Frage nach der anderen. Rechts zeigt eine Live-Vorschau, wie sich deine Antworten in Echtzeit aufbauen. Fragen betreffen Dinge wie den Arbeitsbereich oder das Projekt, das als Ziel dienen soll, das gewünschte Ausgabeformat und wie der Agent mit Fehlern umgehen soll. Deine Antworten füllen \`{{Platzhalter}}\`-Stellen im Prompt des Agenten aus und spezialisieren ihn auf dein Setup.
+3. **Automatischer Test** — sobald du absendest, wird der Agent aus der Vorlage und deinen Antworten zusammengestellt und einmal automatisch ausgeführt. Das bestätigt, dass die Konfiguration gegen deine Zugangsdaten und Connectors gültig ist, bevor sie in die Produktion befördert wird.
+4. **Befördern** — wenn der Test besteht, wird der Agent befördert und wird ein echter, bearbeitbarer Agent auf deiner Agents-Seite. Der Assistent navigiert dich automatisch dorthin.
+:::
+
+### Automatischer Vault-Abgleich
+
+Bereits in deinem Vault vorhandene Zugangsdaten werden automatisch erkannt und ausgefüllt. Wenn der Fragebogen eine Connector-Frage hat und du genau eine passende Zugangsdaten hast, wird sie vorausgewählt und mit einem **auto**-Badge markiert — du musst sie nicht manuell auswählen. Wenn du mehrere passende Zugangsdaten hast, schränkt die Frage die verfügbaren Auswahlmöglichkeiten auf das ein, was du hast.
+
+Wenn eine Vorlage einen Connector benötigt, den du noch nicht hinzugefügt hast, ist diese Frage **gesperrt** — ein Banner erscheint oben im Formular, das erklärt, welche Zugangsdatenkategorie fehlt, und zeigt eine **Zugangsdaten hinzufügen**-Schaltfläche. Ein Klick darauf führt dich tief in den Zugangsdatenkatalog, vorgefiltert auf die richtige Kategorie, und speichert deine laufenden Antworten als Entwurf. Wenn du nach dem Hinzufügen der Zugangsdaten zur Vorlage zurückkehrst, werden deine Antworten wiederhergestellt und die gesperrte Frage entsperrt.
+
+### Wie deine Antworten den Agenten formen
+
+Hinter den Kulissen werden deine Antworten auf zwei Ebenen in den Prompt eingesetzt. Erstens werden alle \`{{param.aq_*}}\`-Platzhalter im Prompt der Vorlage durch deine tatsächlichen Werte ersetzt. Zweitens wird ein Abschnitt \`## User Configuration\` an den System-Prompt angehängt, der jede Frage und Antwort auflistet, damit das Modell immer den vollständigen Kontext deines Setups hat, unabhängig davon, ob ein bestimmter Platzhalter vorhanden ist. Der Testlauf und der beförderte Agent nutzen beide deine echte Konfiguration — nicht die generischen Vorlagestandards.
+
+:::tip
+Wenn eine Frage nicht klar ist, suche nach dem **ⓘ**-Symbol rechts neben dem Fragenlabel. Ein Klick darauf blendet einen Hinweis mit mehr Kontext darüber ein, was die Frage beeinflusst und wie eine gute Antwort aussieht.
+:::
+  `,
+
+  "recipes": `
+## Rezepte
+
+Rezepte sind Hunderte von sofort einsetzbaren Anwendungsfällen, die aus Vorlagen abgeleitet werden, geordnet nach dem, was sie erreichen. Während eine Vorlage eine vollständige Agentenkonfiguration ist, ist ein Rezept ein konkretes Beispiel für eine Aufgabe, die dieser Agent erledigen kann — spezifisch, umsetzbar und nah an etwas, das du möglicherweise wirklich auf deiner To-do-Liste hast.
+
+Du findest sie unter dem Tab **Vorlagen → Rezepte**. Der vollständige Katalog ist sortierbar und durchsuchbar: stöbere nach Name, filtere nach Kategorie oder scanne die Connector-Symbole, um Anwendungsfälle zu finden, die zu dem passen, was du bereits verbunden hast.
+
+### Kategorien
+
+Rezepte sind in neun Bereiche eingeteilt:
+
+- **Monitoring** — Änderungen, Alerts und Schwellwerte beobachten
+- **Reporting** — Zusammenfassungen, Digests und Dashboards erstellen
+- **Automation** — wiederkehrende Aktionen nach Zeitplan oder Trigger ausführen
+- **Communication** — Nachrichten, Benachrichtigungen und Routing
+- **Data sync** — zwei Systeme in Einklang halten
+- **Analysis** — Informationen synthethisieren und Erkenntnisse gewinnen
+- **Development** — Code-Review, Test-Generierung, Deployment-Prüfungen
+- **Content** — Entwerfen, Bearbeiten, Veröffentlichen
+- **Productivity** — persönliche und Team-Workflow-Helfer
+
+### Die Rezept-Tabelle
+
+Die Hauptansicht ist eine sortierbare Tabelle. Jede Zeile zeigt den Rezeptnamen (mit Suchergebnis-Hervorhebung, wenn du eine Suchanfrage eingegeben hast), sein Kategorie-Badge und einen Streifen mit Connector-Symbolen, der anzeigt, welche Dienste benötigt werden — bis zu drei Symbole, mit einer Überlaufzahl für Vorlagen, die mehr brauchen. Klicke auf eine Zeile, um das Rezept-Detailpanel zu öffnen.
+
+Das Detailpanel gibt dir das vollständige Bild: Was das Rezept macht, was es braucht (Connectors und bestimmte Bindungen), wie es mit Fehlern umgeht, und ob der aktuelle Agent es bereits übernommen hat. Wenn du ein Rezept bereits für den aktiven Agenten übernommen hast, zeigt die Zeile einen grünen **Übernommen**-Chip.
+
+### Team-Presets
+
+Wenn du einen vollständigen Workflow statt eines einzelnen Agenten einrichtest, schau dir **Team-Presets** an — Bündel von Vorlagen, die gemeinsam in einem Flow übernommen werden. Ein Preset deckt eine zusammenhängende Aufgabe ab (wie eine vollständige Content-Pipeline oder eine Entwickler-Produktivitätssuite), bei der mehrere Agenten die Arbeit aneinander weitergeben.
+
+:::tip
+Rezepte sind der schnellste Weg, ein konkretes Beispiel zu finden, das einer Aufgabe nahekommt, die du im Sinn hast. Wenn du weißt, welches Ergebnis du willst, aber nicht sicher bist, mit welcher Vorlage du anfangen sollst, such zuerst im Rezepte-Tab — die spezifischen Anwendungsfallbeschreibungen lassen sich oft leichter einer Aufgabe zuordnen als die breiteren Vorlagennamen.
+:::
+  `,
+
+  "interface-modes": `
+## Oberflächen-Modi: Einfach und Power
+
+Personas hat zwei Oberflächen-Modi: **Einfach** und **Power**. Sie laufen in derselben App — dieselben Komponenten, dieselben Daten, dieselben Agenten — mit dem Unterschied, dass Einfach die Bereiche ausblendet, die technisch nicht versierte Nutzer selten brauchen. Nichts wird entfernt; alles wird nur je nach gewähltem Modus angezeigt oder ausgeblendet.
+
+:::compare
+**Einfach**
+Opt-in. Vier Bildschirme: Home, Agents, Connections, Settings. Erweiterte Bereiche — Overview, Workflows, Events, Templates, Plugins, erweiterte Trigger und der vollständige Editor-Tab-Satz — sind ausgeblendet. Die Ausführung wird als sauberer Fortschrittsbalken und formatiertes Ergebnis angezeigt, nicht als roher Token-Stream. Gut für Nutzer, die Agenten ausführen, nicht bauen wollen.
+---
+**Power** [recommended]
+Der Standard für die meisten Menschen. Die vollständige App. Alle Seitenleisten-Bereiche, alle Editor-Tabs (Prompt, Matrix, Lab, Activity, Health, Settings), alle Trigger-Typen (Zeitplan, Webhook, Datei-Watcher, Zwischenablage, Chain und Event-Trigger), der vollständige Vault mit Playground und Abhängigkeitsgraph, Monitoring über Overview, Director und alles andere. Der Modus, in den die meisten Nutzer wechseln, sobald sie ein paar Agenten am Laufen haben.
+:::
+
+### Was Einfach ausblendet
+
+Im Einfach-Modus schränkt sich die Seitenleiste auf vier Bereiche ein: **Home**, **Agents**, **Connections** und **Settings**. Overview, Workflows, Events, Templates, Plugins und andere erweiterte Bereiche erscheinen nicht in der Navigation.
+
+In Agents zeigt der Editor nur die Tabs **Prompt**, **Chat** und **Connectors**. Der Matrix-Editor, die Lab-Arena, das Activity-Log, der Health-Tab, der Versionsverlauf, der Bedingungsersteller, das Tool-Konfigurationspanel, die erweiterten Einstellungen und die erweiterten Trigger-Typen sind alle ausgeblendet. Der einzige sichtbare Trigger ist **Manuell** (die Ausführen-Schaltfläche).
+
+Die Ausgabe der Ausführung wird vereinfacht: Statt eines Streaming-Terminals mit rohem Token-Output siehst du während des Laufs einen Fortschrittsbalken und nach dem Abschluss ein formatiertes, lesbares Ergebnis. Kosten und Token-Zählungen werden nicht angezeigt.
+
+In Connections zeigt die Zugangsdatenliste eine vereinfachte Ansicht — Zugangsdaten hinzufügen, testen und löschen. Der Zugangsdaten-Playground, die Vektor-Wissensdatenbank, der Datenbankverbindungsmanager, Massenaktionen und Health-Scoring sind ausgeblendet.
+
+### Modi wechseln
+
+Gehe zu **Settings → Appearance → Interface Mode** und wähle Einfach oder Power. Die Änderung tritt sofort in Kraft — kein Neustart nötig.
+
+Der Guide, den du gerade liest, hat seinen eigenen Einfach-/Power-Umschalter in der Seitenleiste. Das Umschalten des Guide-Modus filtert Themen entsprechend: Im Einfach-Modus werden Kernthemen angezeigt, im Power-Modus werden erweiterte Abschnitte eingeblendet. Die beiden Umschalter sind unabhängig — du kannst Power-Modus-Guide-Themen lesen, während du die App im Einfach-Modus betreibst.
+
+:::tip
+Starte im Einfach-Modus, wenn du neu bei Personas bist. Sobald du ein paar Agenten am Laufen hast und Zeitpläne anpassen, Webhook-Trigger einrichten oder Ausführungs-Traces untersuchen willst, wechsle zu Power — alles, was du im Einfach-Modus gebaut hast, bleibt genau so erhalten.
+:::
+  `,
 };

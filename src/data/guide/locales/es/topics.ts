@@ -234,6 +234,16 @@ export const topics: Record<string, { title: string; description: string }> = {
     description:
       "Encontrar y solucionar problemas en flujos multi-agente. Cuando un pipeline no funciona como esperabas, el depurador resalta exactamente dónde salió mal todo. Puedes inspeccionar los datos en cada paso para identificar el problema sin adivinanzas.",
   },
+  "team-assignments": {
+    title: "Tareas asignadas al equipo",
+    description:
+      "Dale a un equipo un objetivo en lenguaje natural y deja que organice el trabajo por sí solo. En lugar de cablear cada paso a mano, describes lo que quieres; el equipo lo descompone en una lista de verificación, elige al agente adecuado para cada parte y los ejecuta en paralelo, deteniéndose para que revises solo cuando algo requiere una decisión.",
+  },
+  "team-memory-and-goals": {
+    title: "Memoria y objetivos del equipo",
+    description:
+      "Cómo un equipo mantiene coherencia con el tiempo y cómo lo orientas sin microgestionar. Los equipos acumulan memoria compartida — las decisiones y restricciones que fluyen al siguiente turno de cada miembro, para que el equipo converja en lugar de repetirse. Vincula un equipo a un objetivo y puedes mantenerte en el nivel alto: el progreso se rastrea y la app solo te muestra lo que realmente necesita tu atención.",
+  },
   "why-test-your-agents": {
     title: "¿Por qué probar tus agentes?",
     description:
@@ -394,6 +404,11 @@ export const topics: Record<string, { title: string; description: string }> = {
     description:
       "Recibe alertas cuando ocurre algo inusual con tus agentes. El sistema aprende qué es normal para cada agente y marca cualquier cosa fuera de lo común, como un pico súbito de coste o un fallo inesperado. Serás el primero en enterarte si algo requiere atención.",
   },
+  "the-director": {
+    title: "El Director — entrenamiento automático de agentes",
+    description:
+      "Un meta-agente integrado que revisa tus agentes destacados y puntúa cada ejecución de 0 a 5 con notas de entrenamiento concretas. Destaca un agente para incluirlo en el ámbito del Director; los veredictos aparecen como una columna de estrellas en Actividad y una pestaña Director en cada ejecución. Puede usar tu Obsidian Brain como memoria a largo plazo para que su entrenamiento mejore con el tiempo.",
+  },
   "local-vs-cloud-execution": {
     title: "Ejecución local vs en la nube",
     description:
@@ -483,5 +498,85 @@ export const topics: Record<string, { title: string; description: string }> = {
     title: "Restablecer a valores predeterminados",
     description:
       "Cómo restablecer ajustes de forma segura sin perder tus agentes. Si has cambiado algo y no consigues averiguar qué está mal, restablecer a los valores predeterminados te da un punto de partida limpio. Tus agentes, credenciales y memorias se conservan: solo tus preferencias vuelven a sus valores originales.",
+  },
+  "browsing-templates": {
+    title: "Explorar la galería de plantillas",
+    description:
+      "Empieza desde un agente prediseñado en lugar de una página en blanco. La galería de plantillas es una biblioteca de agentes listos para trabajos reales: cada una indica qué hace, qué conectores necesita y cuánto tarda la configuración. Filtra por cuán lista está una plantilla para tu configuración, compara varias en paralelo y previsualiza sus casos de uso antes de comprometerte.",
+  },
+  "adopting-a-template": {
+    title: "Adoptar una plantilla",
+    description:
+      "Convierte una plantilla en tu propio agente funcional con una configuración guiada breve. Un formulario de una pregunta a la vez recoge lo que el agente necesita, y las credenciales que ya guardaste en la bóveda se emparejan y rellenan automáticamente. El agente se prueba una vez en tu configuración antes de promoverse, así partes de algo que ya funciona.",
+  },
+  "recipes": {
+    title: "Recetas",
+    description:
+      "Explora cientos de casos de uso listos para ejecutar derivados de las plantillas, agrupados por lo que logran: monitorización, informes, automatización, comunicación, sincronización de datos, análisis y más. Las recetas son la forma más rápida de ver ejemplos concretos de lo que los agentes pueden hacer y encontrar uno cercano al trabajo que tienes en mente.",
+  },
+  "interface-modes": {
+    title: "Modos de interfaz: Simple y Power",
+    description:
+      "Personas puede mostrarte un espacio de trabajo reducido o el conjunto completo de herramientas. El modo Simple mantiene solo unas pocas pantallas y oculta las opciones avanzadas para que puedas crear, ejecutar y revisar un agente con unos pocos clics; el modo Power revela todo: el lienzo de equipos, la monitorización, cada tipo de disparador y la bóveda completa. Cambia cuando quieras en Ajustes; nada se elimina, solo se muestra u oculta.",
+  },
+  "tracking-goals": {
+    title: "Seguimiento de objetivos",
+    description:
+      "Define un resultado y observa el progreso hacia él en lugar de rastrear ejecuciones una a una. Los objetivos acumulan puntos, sub-objetivos y el trabajo de tus equipos en un único porcentaje, mostrado en un tablero, un mapa de cómo dependen los objetivos entre sí o una línea de tiempo por fecha límite. Entrega un objetivo a tu equipo de IA y avanza por sí solo, levantando la mano solo cuando te necesita.",
+  },
+  "measuring-outcomes-with-kpis": {
+    title: "Medir resultados con KPIs",
+    description:
+      "Rastrea los números que te dicen si tus agentes están moviendo realmente la aguja. Los KPIs miden resultados de cuatro formas: desde tu base de código, desde los datos del orquestador, a través de un conector o a mano, y muestran el valor actual frente al objetivo con una lectura de ritmo en camino o desviado. Un escaneo incluso puede proponer KPIs relevantes para tu proyecto, cada uno con la forma exacta en que se medirá.",
+  },
+  "director-verdicts-and-categories": {
+    title: "Veredictos y categorías del Director",
+    description:
+      "Una mirada más detallada a lo que el Director escribe cuando revisa un agente. Cada revisión da una puntuación global de 0 a 5 con un resumen breve, señala lo que el agente está haciendo bien y archiva notas de entrenamiento específicas por categoría: prompt, salud, disparadores, credenciales, memoria o utilidad. Aprobar o rechazar una nota le enseña al Director tu criterio con el tiempo.",
+  },
+  "director-momentum-and-stale-sweep": {
+    title: "Impulso del Director y barrido de obsoletos",
+    description:
+      "Cómo el Director mantiene el entrenamiento honesto en toda tu flota con el tiempo. Un panel de control muestra tu tasa de valor entregado, la puntuación media y el coste por ejecución útil; una lectura de impulso te dice cuántos agentes mejoraron, se mantuvieron o empeoraron desde su última revisión; y un barrido de obsoletos vuelve a revisar cualquier agente destacado que no se haya examinado en más de dos semanas, para que nada derive desapercibido.",
+  },
+  "meet-athena": {
+    title: "Conoce a Athena",
+    description:
+      "Athena es tu compañera integrada: una asistente siempre disponible que vive en la esquina de la app. Toca su avatar para abrir un chat, o déjala flotar sobre tu trabajo como un orbe movible. Puede responder preguntas, explicar funciones y operar la app por ti. Este es el lugar para empezar.",
+  },
+  "chatting-with-athena": {
+    title: "Chatear con Athena",
+    description:
+      "Cómo sacarle el máximo partido a una conversación con Athena. Empieza desde un prompt sugerido, escribe \"/\" para elegir un comando predefinido o simplemente pregunta con tus propias palabras. Ofrece respuestas rápidas de seguimiento y formas de un toque para hacer una respuesta más corta o añadir más detalle, y mantiene el cuadro de escritura abierto para que puedas redirigirla a mitad de pensamiento.",
+  },
+  "voice-and-hold-to-talk": {
+    title: "Voz y mantener pulsado para hablar",
+    description:
+      "Habla con Athena en lugar de escribir, y deja que ella te responda de voz. Mantén pulsado su avatar para dictar una pregunta, o usa un atajo de teclado para invocarla por voz desde cualquier parte. Tu voz puede transcribirse en tu propia máquina para mayor privacidad, y sus respuestas pueden pronunciarse en voz alta, incluso cuando el chat está cerrado.",
+  },
+  "athenas-long-term-memory": {
+    title: "La memoria a largo plazo de Athena",
+    description:
+      "Athena recuerda entre conversaciones para que no tengas que repetirte. Guarda hechos sobre ti y tus proyectos, la forma en que te gusta que se hagan las cosas y un perfil que lee antes de cada respuesta. Tú mantienes el control: una breve entrevista inicial la pone en marcha, y puedes ver, editar o corregir cualquier cosa que haya aprendido.",
+  },
+  "proactive-check-ins": {
+    title: "Consultas proactivas",
+    description:
+      "Athena puede ponerse en contacto primero cuando algo merece tu atención: la fecha límite de un objetivo que se acerca, un agente que falló o te está esperando, o un recordatorio que le pediste que guardara. Las consultas respetan las horas tranquilas y un límite diario para que sea útil en lugar de molesta, y cada aviso es algo en lo que puedes actuar o descartar.",
+  },
+  "guided-walkthroughs": {
+    title: "Recorridos guiados",
+    description:
+      "Pídele a Athena que te \"muestre cómo\" y te guiará por una tarea en la pantalla real. Su orbe se desliza a cada punto, el control correcto se ilumina y narra el paso, luego espera a que hagas clic tú mismo. Es aprendizaje práctico dentro de la app real, no un video que ver.",
+  },
+  "the-decision-hub": {
+    title: "El Centro de decisiones",
+    description:
+      "Algunas acciones esperan tu visto bueno. Cuando Athena o uno de tus agentes quiere hacer algo que necesita aprobación — ejecutar un agente, cambiar tu perfil, programar una consulta — aparece como una tarjeta que apruebas o rechazas. Las solicitudes de tus agentes en ejecución también se reúnen aquí, con una opción de aprobar-todo cuando se acumulan.",
+  },
+  "operating-by-chat": {
+    title: "Operar Personas por chat",
+    description:
+      "Athena no es solo una asesora: puede manejar la app. Pídele que abra una pantalla, salte al editor de un agente, construya un panel de control personalizado o llame a un servicio conectado, y lo hace, resaltando el destino para que puedas seguirla. Dos botones de un toque te dan una revisión de flota y un informe matutino de lo que pasó durante la noche.",
   },
 };

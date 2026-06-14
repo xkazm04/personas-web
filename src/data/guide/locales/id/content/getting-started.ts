@@ -234,4 +234,131 @@ Cockpit memiliki akses ke doctrine — kumpulan pengetahuan yang dikurasi tentan
 Untuk pertanyaan "Saya pikir ada yang rusak", buka Athena terlebih dahulu dan tanyakan "diagnose run gagal terakhir dari agen X". Alur debug cockpit dibangun untuk ini dan biasanya mengalahkan membaca log secara manual.
 :::
   `,
+
+  "browsing-templates": `
+## Menjelajahi Galeri Template
+
+Jangan mulai dari halaman kosong. Galeri template adalah perpustakaan agen yang sudah dibangun — masing-masing dirancang untuk pekerjaan nyata, telah diuji, dan siap disesuaikan dengan setup Anda. Template mencakup segalanya mulai dari pemantauan dan pelaporan hingga alur konten dan peralatan pengembang. Menemukan yang tepat membutuhkan waktu lebih sedikit daripada menulis prompt dari awal.
+
+Setiap kartu di galeri memberi tahu Anda apa yang dilakukan agen, seberapa kompleks setup-nya, dan kira-kira berapa lama adopsi membutuhkan waktu. Di bawahnya Anda melihat **connector** yang dibutuhkan template — layanan seperti Slack, Notion, GitHub, atau penyedia penyimpanan cloud — dan apakah Anda sudah memiliki kredensial yang cocok di vault Anda. Indikator kesiapan kecil pada setiap chip connector memberi tahu Anda sekilas: hijau berarti Anda siap, kuning berarti Anda memiliki kecocokan parsial, dan abu-abu berarti Anda perlu menambahkan kredensial itu sebelum template dapat berjalan.
+
+### Filter Cakupan
+
+Strip filter di bagian atas galeri — **All / Ready / Partial / Drafts** — memungkinkan Anda mempersempit ke apa yang penting saat ini:
+
+- **Ready** — setiap connector yang dibutuhkan template sudah ada di vault Anda. Ini adalah jalur tercepat ke agen yang berjalan.
+- **Partial** — beberapa connector cocok, beberapa tidak. Layak dijelajahi jika Anda berencana menambahkan kredensial segera.
+- **Drafts** — template yang belum dipublikasikan, hanya terlihat dalam build pengembangan.
+
+Mulai dari Ready jika Anda ingin menjalankan sesuatu dalam beberapa menit.
+
+### Membandingkan Template
+
+Ketika Anda memutuskan di antara beberapa opsi, Anda tidak perlu membuka masing-masing secara individual. Pilih hingga tiga kartu (hover mengungkapkan kotak centang) dan klik **Compare** — modal berdampingan menempatkan mereka bersebelahan di seluruh kategori, tujuan, connector, trigger, use case, kompleksitas, dan waktu setup. Baris di mana template berbeda disorot agar perbedaannya mudah terlihat. Anda dapat mengadopsi langsung dari tampilan perbandingan tanpa kembali ke galeri.
+
+### Trending Quick-Adopt
+
+Bagian atas galeri memiliki rak template trending — yang paling sering diadopsi di seluruh pengguna. Setiap kartu memiliki tindakan **Adopt** yang terungkap saat hover dan langsung membuka alur adopsi, melewatkan modal detail jika Anda sudah memutuskan.
+
+:::tip
+Mulai dari filter **Ready** — template tersebut cocok dengan apa yang sudah ada di vault Anda dan dapat berjalan dalam beberapa menit. Setelah Anda mengirimkan satu atau dua, jelajahi **Partial** untuk melihat kredensial baru apa yang dapat dibuka.
+:::
+  `,
+
+  "adopting-a-template": `
+## Mengadopsi Template
+
+Mengadopsi template adalah cara tercepat untuk mendapatkan agen yang berfungsi dan terkonfigurasi. Alur membawa Anda dari galeri ke agen yang dipromote dalam beberapa menit — dan setiap langkah sepanjang jalan dapat dibatalkan.
+
+:::steps
+1. **Klik Adopt** — dari kartu galeri, modal detail, tampilan perbandingan, atau rak trending. Wizard adopsi terbuka. Tidak ada yang ditulis ke database yet; Anda dapat menutup dengan bebas pada tahap ini.
+2. **Jawab kuesioner** — formulir menyajikan satu pertanyaan pada satu waktu. Di sebelah kanan, brief langsung menampilkan jawaban Anda terbentuk secara real-time. Pertanyaan mencakup hal-hal seperti workspace atau proyek mana yang ditargetkan, format output yang Anda inginkan, dan bagaimana agen harus menangani error. Jawaban Anda akan mengisi slot \`{{placeholder}}\` dalam prompt agen, mengkhususkannya untuk setup Anda.
+3. **Uji otomatis** — setelah Anda mengirimkan, agen dirakit dari template dan jawaban Anda, lalu dijalankan sekali secara otomatis. Ini mengonfirmasi konfigurasi valid terhadap kredensial dan connector Anda sebelum apa pun dipromote ke produksi.
+4. **Promote** — jika uji lulus, agen dipromote dan menjadi agen nyata yang dapat diedit di halaman Agents Anda. Wizard menavigasi Anda ke sana secara otomatis.
+:::
+
+### Pencocokan Vault Otomatis
+
+Kredensial yang sudah ada di vault Anda terdeteksi dan diisi secara otomatis. Ketika kuesioner memiliki pertanyaan connector dan Anda memiliki tepat satu kredensial yang cocok, itu dipilih otomatis dan ditandai dengan badge **auto** — Anda tidak perlu memilihnya secara manual. Jika Anda memiliki beberapa kredensial yang cocok, pertanyaan mempersempit pilihan yang tersedia hanya ke apa yang Anda miliki.
+
+Jika template membutuhkan connector yang belum Anda tambahkan, pertanyaan itu **diblokir** — banner muncul di bagian atas formulir menjelaskan kategori kredensial mana yang hilang dan menampilkan tombol **Add credential**. Mengkliknya membawa Anda langsung ke katalog kredensial, difilter ke kategori yang tepat, dan menyimpan jawaban yang sedang dikerjakan sebagai draf. Saat Anda kembali ke template setelah menambahkan kredensial, jawaban Anda dipulihkan dan pertanyaan yang diblokir terbuka.
+
+### Bagaimana Jawaban Anda Membentuk Agen
+
+Di balik layar, jawaban Anda disubstitusikan ke dalam prompt di dua level. Pertama, placeholder \`{{param.aq_*}}\` mana pun dalam prompt template diganti dengan nilai nyata Anda. Kedua, bagian \`## User Configuration\` ditambahkan ke prompt sistem yang mencantumkan setiap pertanyaan dan jawaban, sehingga model selalu memiliki konteks penuh setup Anda terlepas dari apakah placeholder tertentu ada. Run uji dan agen yang dipromote sama-sama menggunakan konfigurasi nyata Anda — bukan default template yang generik.
+
+:::tip
+Jika pertanyaan tidak jelas, cari ikon **ⓘ** di sebelah kanan label pertanyaan. Mengkliknya memperluas tip dengan lebih banyak konteks tentang apa yang dipengaruhi pertanyaan dan seperti apa jawaban yang baik.
+:::
+  `,
+
+  "recipes": `
+## Resep
+
+Resep adalah ratusan use case siap-jalankan yang diturunkan dari template, diorganisir berdasarkan apa yang mereka capai. Di mana template adalah konfigurasi agen penuh, resep adalah contoh konkret dari pekerjaan yang dapat dilakukan agen itu — spesifik, dapat ditindaklanjuti, dan dekat dengan sesuatu yang mungkin benar-benar ada di daftar tugas Anda.
+
+Anda menemukannya di tab **Templates → Recipes**. Katalog lengkap dapat diurutkan dan dicari: telusuri berdasarkan nama, filter berdasarkan kategori, atau pindai ikon connector untuk menemukan use case yang cocok dengan apa yang sudah Anda hubungkan.
+
+### Kategori
+
+Resep diorganisir ke dalam sembilan kelompok:
+
+- **Monitoring** — mengamati perubahan, peringatan, ambang batas
+- **Reporting** — menghasilkan ringkasan, digest, dan dashboard
+- **Automation** — tindakan berulang yang berjalan pada jadwal atau trigger
+- **Communication** — pesan, notifikasi, dan perutean
+- **Data sync** — menjaga dua sistem tetap sinkron
+- **Analysis** — mensintesis informasi dan menghasilkan wawasan
+- **Development** — tinjauan kode, pembuatan uji, pemeriksaan deploy
+- **Content** — menyusun, mengedit, menerbitkan
+- **Productivity** — pembantu alur kerja pribadi dan tim
+
+### Tabel Resep
+
+Tampilan utama adalah tabel yang dapat diurutkan. Setiap baris menampilkan nama resep (dengan penyorotan kecocokan pencarian saat Anda mengetik kueri), badge kategorinya, dan strip ikon connector yang menunjukkan layanan mana yang dibutuhkan — hingga tiga ikon, dengan jumlah overflow untuk template yang membutuhkan lebih. Klik baris mana pun untuk membuka panel detail resep.
+
+Panel detail memberi Anda gambaran lengkap: apa yang dilakukan resep, apa yang dibutuhkan (connector dan binding tertentu), bagaimana ia menangani error, dan apakah agen saat ini sudah mengadopsinya. Jika Anda sudah mengadopsi resep untuk agen aktif, baris menampilkan chip **Adopted** berwarna hijau.
+
+### Preset Tim
+
+Jika Anda menyiapkan alur kerja penuh alih-alih agen tunggal, cari **preset tim** — kumpulan template yang diadopsi bersama dalam satu alur. Preset mencakup pekerjaan yang koheren (seperti pipeline konten penuh atau suite produktivitas pengembang) di mana beberapa agen menyerahkan pekerjaan satu sama lain.
+
+:::tip
+Resep adalah cara tercepat untuk menemukan contoh konkret yang dekat dengan pekerjaan yang ada di pikiran Anda. Jika Anda tahu hasil yang Anda inginkan tetapi tidak yakin template mana yang harus dimulai, cari tab Recipes terlebih dahulu — deskripsi use case spesifik sering lebih mudah dicocokkan dengan pekerjaan daripada nama template yang lebih luas.
+:::
+  `,
+
+  "interface-modes": `
+## Mode Antarmuka
+
+Personas memiliki dua mode antarmuka: **Simple** dan **Power**. Keduanya menjalankan aplikasi yang sama — komponen yang sama, data yang sama, agen yang sama — dengan Simple menyembunyikan permukaan yang jarang dibutuhkan pengguna non-teknis. Tidak ada yang dihapus; semuanya hanya ditampilkan atau disembunyikan tergantung mode yang Anda gunakan.
+
+:::compare
+**Simple**
+Opt-in. Empat layar: Home, Agents, Connections, Settings. Permukaan lanjutan — Overview, Workflows, Events, Templates, Plugins, trigger lanjutan, dan set tab editor penuh — disembunyikan. Eksekusi ditampilkan sebagai progress bar bersih dan hasil yang diformat alih-alih aliran token mentah. Baik untuk pengguna yang ingin menjalankan agen, bukan membangunnya.
+---
+**Power** [recommended]
+Default untuk sebagian besar orang. Aplikasi penuh. Semua bagian sidebar, semua tab editor (Prompt, Matrix, Lab, Activity, Health, Settings), semua jenis trigger (jadwal, webhook, file watcher, clipboard, chain, dan event trigger), vault penuh dengan playground dan dependency graph, pemantauan melalui Overview, Director, dan semua lainnya. Mode yang sebagian besar pengguna beralih ke setelah memiliki beberapa agen yang berjalan.
+:::
+
+### Apa yang Disembunyikan Simple
+
+Dalam mode Simple sidebar menyempit ke empat bagian: **Home**, **Agents**, **Connections**, dan **Settings**. Overview, Workflows, Events, Templates, Plugins, dan bagian lanjutan lainnya tidak muncul di nav.
+
+Di dalam Agents, editor hanya menampilkan tab **Prompt**, **Chat**, dan **Connectors**. Editor Matrix, arena Lab, log Activity, tab Health, riwayat versi, pembangun kondisi, panel konfigurasi alat, pengaturan lanjutan, dan jenis trigger lanjutan semuanya disembunyikan. Satu-satunya trigger yang terlihat adalah **Manual** (tombol Run).
+
+Output eksekusi disederhanakan: alih-alih terminal streaming dengan output token mentah, Anda melihat progress bar saat agen berjalan dan hasil yang diformat dan mudah dibaca saat selesai. Biaya dan jumlah token tidak ditampilkan.
+
+Di Connections, daftar kredensial menampilkan tampilan yang disederhanakan — tambah, uji, dan hapus kredensial. Playground kredensial, vector knowledge base, manajer koneksi database, tindakan massal, dan penilaian kesehatan disembunyikan.
+
+### Beralih Mode
+
+Buka **Settings → Appearance → Interface Mode** dan pilih Simple atau Power. Perubahan langsung berlaku — tidak perlu restart.
+
+Panduan yang sedang Anda baca ini memiliki toggle Simple / Power sendiri di sidebar. Beralih mode panduan memfilter topik agar sesuai: mode Simple menampilkan topik inti, mode Power mengungkapkan bagian lanjutan. Kedua toggle independen — Anda dapat membaca topik panduan mode Power sambil menjalankan aplikasi dalam mode Simple.
+
+:::tip
+Mulai dalam mode Simple jika Anda baru mengenal Personas. Setelah Anda memiliki beberapa agen yang berjalan dan ingin menyetel jadwal, mengatur trigger webhook, atau menyelami jejak eksekusi, beralih ke Power — semua yang Anda bangun dalam mode Simple terbawa persis seperti adanya.
+:::
+  `,
 };

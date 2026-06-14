@@ -1,9 +1,11 @@
+import { SITE_URL } from "@/lib/seo";
+
 export const organizationJsonLd = {
   "@context": "https://schema.org",
   "@type": "Organization",
   name: "Personas",
-  url: "https://personas.ai",
-  logo: "https://personas.ai/imgs/logo.png",
+  url: SITE_URL,
+  logo: `${SITE_URL}/imgs/logo.png`,
   description: "Build intelligent AI agents in natural language. Orchestrate them locally or in the cloud.",
   sameAs: [],
 };

@@ -18,6 +18,7 @@ import {
   sweepTrail,
   spinOrigin,
 } from "./command-center-geometry";
+import AgentConstellation from "./AgentConstellation";
 
 const APP_VERSION = process.env.NEXT_PUBLIC_APP_VERSION ?? "0.1.0";
 
@@ -157,17 +158,8 @@ export default function CommandCenterIllustration({ publicBetaLabel }: Props) {
           />
         )}
 
-        {/* Orbiting satellite riding the inner ring */}
-        {!reduced && (
-          <motion.g
-            animate={{ rotate: 360 }}
-            transition={{ duration: 13, repeat: Infinity, ease: "linear" }}
-            style={spinOrigin}
-          >
-            <circle cx={CX} cy={CY - INNER_R} r={3} fill={cyan} opacity={0.85} />
-            <circle cx={CX} cy={CY - INNER_R} r={6} fill={cyan} opacity={0.18} />
-          </motion.g>
-        )}
+        {/* Orbiting agents — the constellation the command center orchestrates */}
+        <AgentConstellation cyan={cyan} reduced={reduced} />
       </svg>
 
       <div className="absolute inset-0 flex flex-col items-center justify-center">

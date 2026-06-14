@@ -271,6 +271,62 @@ Incluso cuando ninguna plantilla encaja exactamente, elegir la más cercana y mo
 :::
   `,
 
+  "team-assignments": `
+## Tareas asignadas al equipo
+
+Los pipelines cablean cada paso a mano. Las tareas asignadas dan la vuelta a eso: le entregas al equipo un **objetivo** en lenguaje natural y el equipo determina los pasos por sí solo. Descompone el objetivo en una lista de verificación, elige al mejor agente para cada paso y los ejecuta en paralelo — deteniéndose solo para preguntarte cuando un paso falla o requiere una decisión.
+
+Piénsalo como la diferencia entre dibujar un diagrama de flujo y hacer un briefing a un jefe de proyecto. Con un pipeline diseñas el flujo; con una tarea asignada declaras el resultado y dejas que el equipo se organice.
+
+### Puntos clave
+
+- **Primero el objetivo** — describe lo que quieres; el equipo lo descompone en pasos ordenados
+- **Asignación inteligente** — cada paso se dirige al agente más adecuado (puedes fijar agentes manualmente, usar emparejamiento local rápido o dejar que el modelo decida)
+- **Autodescomposición** — un clic convierte un objetivo en una lista de pasos editable que puedes ajustar antes de ejecutar
+- **Ejecución en paralelo** — los pasos independientes se ejecutan al mismo tiempo; los dependientes esperan su turno
+- **Revisión humana en caso de fallo** — un paso fallido pausa solo esa tarea asignada y te ofrece Editar / Reasignar / Omitir, con una notificación en la barra de título
+- **Plantillas reutilizables** — guarda un objetivo con su distribución de pasos como plantilla y crea nuevas tareas asignadas a partir de ella
+- **Despacho por chat** — pídele a Athena que "asigne esto al equipo de investigación" y ella lo configurará para tu aprobación
+
+### Cómo funciona
+
+Abre el lienzo de un equipo y haz clic en el distintivo **Asignaciones** (abajo a la izquierda). Pulsa **Nueva**, escribe un objetivo y rellena los pasos tú mismo o haz clic en **Autodescomponer** para que el asistente los proponga. Elige cómo se emparejan los agentes con los pasos, cuántos se ejecutan a la vez, y haz clic en **Crear e iniciar**. Observa cómo se actualiza la lista de verificación en vivo; si un paso falla, resuélvelo directamente. Guarda como plantilla todo lo que vayas a ejecutar de nuevo.
+
+:::tip
+Usa una tarea asignada cuando conozcas el resultado pero no los pasos exactos. Usa un pipeline cuando quieras un control preciso y repetible sobre cada conexión. Las plantillas tienden un puente entre ambas opciones — una tarea asignada guardada se convierte en un punto de partida de un solo clic.
+:::
+  `,
+
+  "team-memory-and-goals": `
+## Memoria y objetivos del equipo
+
+Un equipo es más que un conjunto de agentes: son agentes que **recuerdan juntos** y avanzan hacia un resultado compartido. Dos cosas lo hacen posible: la memoria compartida del equipo y los objetivos.
+
+### Memoria compartida del equipo
+
+Mientras el equipo trabaja, registra decisiones y restricciones — "estandarizamos este formato", "esta cuenta está fuera del alcance", "el revisor rechazó el enfoque X". Esas notas se convierten en **memoria del equipo**, y un resumen compacto de las más importantes fluye al contexto de cada miembro en su próxima ejecución.
+
+El resultado: el equipo converge en lugar de repetirse. Un agente no redescubre una decisión que ya tomó un compañero de equipo — la hereda. Puedes ver y curar esta memoria en el panel de Memoria del Equipo en el lienzo.
+
+### Objetivos — orienta sin microgestionar
+
+Vincula un equipo a un **objetivo** y deja de vigilar cada ejecución por separado. El objetivo rastrea el progreso mientras el equipo trabaja, y la app solo te muestra lo que realmente necesita una intervención humana — un objetivo atascado, un plazo que se acerca, un paso pendiente de tu revisión. Todo lo demás simplemente avanza.
+
+Este es el ciclo de "fija la dirección, mantente en el nivel alto": defines el resultado y los límites; el equipo se encarga del resto y levanta la mano cuando te necesita.
+
+:::tip
+Piensa en la memoria del equipo como el conocimiento institucional del equipo y en el objetivo como su estrella polar. La memoria mantiene al equipo coherente de una ejecución a la siguiente; el objetivo lo mantiene orientado hacia algo que vale la pena hacer.
+:::
+
+### Puntos clave
+
+- **Memoria compartida** — las decisiones y restricciones registradas por el equipo se inyectan en la próxima ejecución de cada miembro
+- **Convergencia** — los miembros construyen sobre las conclusiones de los demás en lugar de volver a derivarlas
+- **Vinculación de objetivos** — asocia un equipo a un objetivo para rastrear el progreso y las fechas límite
+- **Visible, no enterrado** — la cola de atención solo muestra lo que te necesita (atascado, vencido, pendiente de revisión)
+- **Curalo tú** — revisa, edita o elimina memorias del equipo desde el panel del lienzo
+  `,
+
   "debugging-pipeline-issues": `
 ## Depurar problemas del pipeline
 
