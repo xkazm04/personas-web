@@ -395,7 +395,7 @@ Personas has two interface modes: **Simple** and **Power**. They run the same ap
 Opt-in. Four screens: Home, Agents, Connections, Settings. Advanced surfaces — Overview, Workflows, Events, Templates, Plugins, advanced triggers, and the full editor tab set — are hidden. Execution shows as a clean progress bar and formatted result rather than a raw token stream. Good for users who want to run agents, not build them.
 ---
 **Power** [recommended]
-The default for most people. The full app. All sidebar sections, all editor tabs (Prompt, Matrix, Lab, Activity, Health, Settings), all trigger types (schedule, webhook, file watcher, clipboard, event chain), the full vault with playground and dependency graph, monitoring via Overview, Director, and everything else. The mode most users graduate into once they have a few agents running.
+The default for most people. The full app. All sidebar sections, all editor tabs (Prompt, Matrix, Lab, Activity, Health, Settings), all trigger types (schedule, webhook, file watcher, clipboard, chain, and event triggers), the full vault with playground and dependency graph, monitoring via Overview, Director, and everything else. The mode most users graduate into once they have a few agents running.
 :::
 
 ### What Simple Hides
