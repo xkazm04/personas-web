@@ -689,6 +689,7 @@
     subtitle: string;
     tabPerformance: string;
     tabUsage: string;
+    tabActivity: string;
     circuitBreaker: string;
     autoFixed: string;
     resolved: string;
@@ -721,6 +722,21 @@
     last14Days: string;
     toolUsageByAgent: string;
     other: string;
+    athenaUsage: string;
+    athenaSubtitle: string;
+    athenaActions: {
+      invoke: string;
+      recall: string;
+      fallback: string;
+    };
+    valueRollup: string;
+    valueDelivered: string;
+    costPerValue: string;
+    outcomes: {
+      delivered: string;
+      partial: string;
+      blocked: string;
+    };
     severity: {
       all: string;
       critical: string;
@@ -1960,6 +1976,7 @@ export const en: Translations = {
     subtitle: 'Performance metrics, cost tracking, and tool utilization',
     tabPerformance: 'Performance',
     tabUsage: 'Tool Usage',
+    tabActivity: 'Activity',
     circuitBreaker: 'Circuit Breaker',
     autoFixed: 'Auto-fixed',
     resolved: 'Resolved',
@@ -1992,6 +2009,21 @@ export const en: Translations = {
     last14Days: 'Last 14 days',
     toolUsageByAgent: 'Tool Usage by Agent',
     other: 'Other',
+    athenaUsage: 'Athena usage',
+    athenaSubtitle: 'Companion cost by action',
+    athenaActions: {
+      invoke: 'Invoke',
+      recall: 'Recall',
+      fallback: 'Fallback',
+    },
+    valueRollup: 'Value rollup',
+    valueDelivered: 'Value delivered',
+    costPerValue: 'Cost per value',
+    outcomes: {
+      delivered: 'Delivered',
+      partial: 'Partial',
+      blocked: 'Blocked',
+    },
     severity: {
       all: 'all',
       critical: 'critical',

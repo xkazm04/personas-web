@@ -1,9 +1,9 @@
 # Observability Charts
-> Performance & usage observability for the agent fleet — latency/cost/exec charts, spend breakdown, metric tiles with sparklines, and a self-healing health panel · **Route:** `/dashboard/observability` · **Nav label:** "Observability" · **Status:** Demo-only (mocks)
+> Performance, usage & activity observability for the agent fleet — latency/cost/exec charts, spend breakdown, metric tiles with sparklines, a self-healing health panel, and Athena usage + value rollup · **Route:** `/dashboard/observability` · **Nav label:** "Observability" · **Status:** Demo-only (mocks)
 
 ## What it does
 
-The Observability surface answers *How is the fleet performing, what is it costing, and which tools is it using?* It is a single page with two tabs (a `FilterBar` at the top):
+The Observability surface answers *How is the fleet performing, what is it costing, and which tools is it using?* It is a single page with three tabs (a `FilterBar` at the top):
 
 - **Performance** (default tab) — the operational health view:
   - **Metric tiles** — four headline KPIs (Total Cost, Executions, Success Rate, Active Personas) each with a trend pill and a mini sparkline.
@@ -13,12 +13,15 @@ The Observability surface answers *How is the fleet performing, what is it costi
   - **Health Issues panel** — a filterable (by severity) list of detected issues with auto-fix / circuit-breaker badges, a demo "Run Analysis" self-healing animation, and a healthy-state empty illustration.
   - Two banners surface above the grid: a dismissible **cost-anomaly** banner and a **budget-threshold** warning when any persona crosses 80% of its budget.
 - **Tool Usage** — the integration-utilization view: a top-N **Tool Invocations** horizontal bar (with an "is used Nx more than" insight badge), a **Distribution** donut with total, a 14-day stacked **Usage Over Time** area, and a **Tool Usage by Agent** stacked bar. The lower two charts mount lazily on scroll.
+- **Activity** — the Companion/value view (D-C3): an **Athena usage** stacked area of daily cost by action (invoke / recall / fallback) and a **Value rollup** card (value-delivered rate, cost per delivered outcome, and a delivered/partial/blocked outcome bar). Its own **Compare** toggle overlays the previous period — a dashed prev-total line on the area and period-over-period deltas (rate +pts, cost-per-value with inverted polarity) on the rollup.
 
 In this repo it is **demo-only**: everything renders from in-process fixtures. A real deployment swaps to the orchestrator REST API or a Supabase mirror behind the same hooks.
 
 ## How it works
 
-**Page shell — `page.tsx`.** `ObservabilityPage` holds one `tab` state (`"performance" | "usage"`) and renders the title/subtitle (`GradientText`), a `FilterBar` of two options, then `<PerformanceView />` or `<UsageView />`. The whole page is a `staggerContainer` with `fadeUp` children (framer-motion).
+**Page shell — `page.tsx`.** `ObservabilityPage` holds one `tab` state (`"performance" | "usage" | "activity"`) and renders the title/subtitle (`GradientText`), a `FilterBar` of three options, then `<PerformanceView />`, `<UsageView />`, or `<ActivityMetricsView />`. The whole page is a `staggerContainer` with `fadeUp` children (framer-motion).
+
+**Activity data — `ActivityMetricsView.tsx` + `activity-view/`.** `useActivityMetrics()` (SWR over the standalone `getActivityMetrics` mock fetcher) returns `{ athenaUsage, valueRollup }`. The view owns a local `compare` state driving a `CompareToggle`, then renders `AthenaUsageCard` (stacked `AreaChart` of invoke/recall/fallback with a dashed `prevTotal` overlay when comparing) and `ValueRollupCard` (rate + cost-per-value with `trendColor`-coloured deltas, and an outcome bar). Demo-only; no real source.
 
 **Performance data — `PerformanceView.tsx`.** Fetches via SWR: `useSWR("observability", api.getObservability, { refreshInterval: 30_000, dedupingInterval: 8_000, revalidateOnFocus: false, keepPreviousData: true })` (`PerformanceView.tsx:28`). From the one payload `{ metrics, dailyMetrics, personaSpend, healthIssues }` it memoizes the chart shapes: `costChartData` (`{date, Cost}`), `execChartData` (`{date, Successes, Failures}`), `spendPieData` (`{name, value, color}`), all keyed by `day.date.slice(5)` (MM-DD). Health issues get a demo-vs-real branch: when the synced list is empty it falls back to `MOCK_HEALTH_ISSUES` **only in demo** (`isDemo`), never in real mode (`PerformanceView.tsx:46`). It derives `filteredHealthIssues`, `severityCounts`, `openIssues`, and `overBudgetPersonas` (cost/budget > `BUDGET_THRESHOLD` = 0.8). `handleRunAnalysis` flips `healingActive` for 3s (a pure demo animation; runs no real analysis). While `loading && !metrics` it shows a spinner. A decorative `bg-observability.png` is layered at `opacity-[0.12]` behind the content.
 

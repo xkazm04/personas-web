@@ -1181,12 +1181,16 @@
         },
         {
           "name": "Observability Charts & SLA",
-          "description": "Performance and usage observability views (latency, cost, spend, exec charts, health panels) plus SLA target/breach tracking and system health state.",
+          "description": "Performance, usage, and activity observability views (latency, cost, spend, exec charts, health panels, Athena usage + value rollup) plus SLA target/breach tracking and system health state.",
           "businessFeature": "Observability Charts & SLA",
           "category": "ui",
           "filePaths": [
             "src/app/dashboard/observability/PerformanceView.tsx",
             "src/app/dashboard/observability/UsageView.tsx",
+            "src/app/dashboard/observability/ActivityMetricsView.tsx",
+            "src/app/dashboard/observability/activity-view/AthenaUsageCard.tsx",
+            "src/app/dashboard/observability/activity-view/ValueRollupCard.tsx",
+            "src/app/dashboard/observability/activity-view/useActivityMetrics.ts",
             "src/app/dashboard/observability/page.tsx",
             "src/app/dashboard/observability/performance-view/CostAnomalyBanner.tsx",
             "src/app/dashboard/observability/performance-view/PerformanceChartGrid.tsx",
