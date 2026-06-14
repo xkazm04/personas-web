@@ -16,8 +16,9 @@ interface HubNodeProps {
 
 /**
  * A single trigger node on the orbit ring: an opaque rounded chip (so the spoke
- * line never shows through) with an icon + label, plus a pulsing halo when
- * active. Entrance and halo motion are gated on reduced-motion preference.
+ * line never shows through) with an icon + label. The active node reads through a
+ * tinted fill + glow — no halo ring or scale bump, which jittered in the ring.
+ * Entrance motion is gated on reduced-motion preference.
  */
 export default function HubNode({
   trigger,
@@ -56,21 +57,6 @@ export default function HubNode({
         rx={20}
         strokeWidth={2}
       />
-      {/* Pulsing halo behind the active node */}
-      {isActive && !reduced && (
-        <motion.circle
-          cx={p.x}
-          cy={p.y}
-          r={NODE_SIZE / 2}
-          fill="none"
-          stroke={v}
-          strokeWidth="1.25"
-          initial={{ opacity: 0.5, scale: 0.92 }}
-          animate={{ opacity: [0.5, 0, 0.5], scale: [0.92, 1.35, 0.92] }}
-          transition={{ duration: 2.2, repeat: Infinity, ease: "easeOut" }}
-          style={{ transformBox: "view-box", transformOrigin: `${p.x}px ${p.y}px` }}
-        />
-      )}
       {/* Opaque backing hides the line behind the node */}
       <rect
         x={p.x - NODE_SIZE / 2}
@@ -83,14 +69,14 @@ export default function HubNode({
       <foreignObject x={p.x - NODE_SIZE / 2} y={p.y - NODE_SIZE / 2} width={NODE_SIZE} height={NODE_SIZE}>
         <motion.div
           initial={reduced ? false : { opacity: 0, scale: 0.5 }}
-          animate={{ opacity: 1, scale: isActive ? 1.06 : 1 }}
+          animate={{ opacity: 1, scale: 1 }}
           transition={
             reduced ? { duration: 0 } : { delay: index * 0.05, type: "spring", stiffness: 260, damping: 20 }
           }
           className="flex h-full w-full flex-col items-center justify-center gap-1.5 rounded-2xl border transition-colors"
           style={{
             backgroundColor: isActive ? tint(trigger.brand, 14) : "var(--background)",
-            borderColor: isActive ? tint(trigger.brand, 50) : "rgba(var(--surface-overlay), 0.10)",
+            borderColor: "rgba(var(--surface-overlay), 0.10)",
             boxShadow: isActive ? `0 0 24px ${tint(trigger.brand, 30)}` : "none",
           }}
         >

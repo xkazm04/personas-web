@@ -145,6 +145,15 @@ M-C2 hub event-lane particles).
   `wrapperId="companion"` outer div *and* `<SectionWrapper id="companion">` (duplicate DOM id) —
   dropped the wrapperId so the section element is the sole anchor (FAQ pattern). Verified: `tsc`
   0 errors, `lint` 0 errors / 0 new warnings, all files <200 LOC.
+  **↻ Redesigned (post-review, 2026-06-14):** the abstract DAG was replaced via the
+  `ui-variant-prototype` skill, borrowing the desktop **Factory/KPI mechanism**
+  (`personas/src/features/teams/sub_factory/`). Three contrasting variants were prototyped
+  behind a switcher (Assembly line / Scoreboard / Momentum) over shared scaffolding
+  (`variants/kpiData.ts` + `variants/kpiPrimitives.tsx`: baseline→target calibration,
+  traffic-light status, sparklines, composite health). **Winner: Assembly line** — a left→right
+  factory line (Goal → Plan·Build·Test·Review → Shipped) where each station's KPI calibrates
+  toward target as the run cascades. Switcher + the two losing variants + the old DAG files
+  (`data.ts`, `FlowNode.tsx`, `TeamCanvasFlow.tsx`) were deleted. Verified: `tsc`/`lint` clean.
 - **M-C2 Hub event-lane particles** *(P1 · M)* — reuse dashboard event-bus particles; gated.
 
 ### Phase 3 — Roadmap content + shared JSON *(together)*
@@ -160,6 +169,17 @@ M-C2 hub event-lane particles).
 - **M-B3 deploy/CI-CD** *(P2 · M)* · **M-B4 Director teaser** *(P2 · M)* · **M-B5 tiers**
   *(P2 · S, `compareSection`)* · **M-C3 features transitions** *(P2 · M)*.
 
+### Post-review homepage adjustments (2026-06-14)
+Repo-owner review of the live homepage produced four changes:
+1. **Removed "Why agents, not workflows"** — deleted `sections/why-agents/`; unwired from
+   `page.tsx`, `lazy.tsx`, `preview/registry.ts`.
+2. **Orchestration Hub active-node cleanup** — removed the pulsing halo circle, the active
+   scale bump, and the active border outline (jittery in the ring); active now reads via a
+   tinted fill + glow only (`HubNode.tsx`).
+3. **Team Canvas redesign** — see the M-B2 ↻ note above (KPI Factory "Assembly line").
+4. **Removed "Teams that ship… not glue code"** (SocialProof) + deleted the fabricated
+   `data/testimonials.ts` — no unverifiable testimonials/references ship.
+
 ---
 
 ## Acceptance gates (whole stream)
@@ -174,6 +194,7 @@ M-C2 hub event-lane particles).
 | Section / file | Strings | Added/edited in | Status |
 |---|---|---|---|
 | `orchestration-hub/` (`data.ts`, `index.tsx`) | Section heading/description + 10 trigger labels, descriptions, examples | Phase 0a (hardcoded EN) | Debt — extract to an `orchestrationHub` namespace ×14 later |
-| `data/testimonials.ts` (`USAGE_STATS`) | Stat labels ("Trigger types", etc.) | Pre-existing hardcoded; value edited Phase 0a | Debt (pre-existing) |
+| ~~`data/testimonials.ts`~~ | — | Removed post-review (SocialProof deleted) | Resolved — file deleted |
 | `data/tour.ts` (`details`/`subtitle`) | Tour step bullets + subtitles | Pre-existing hardcoded; bullet edited Phase 0a | Debt (pre-existing) — note: the tour *caption narration* (`step3`) IS i18n'd in `src/i18n/*` |
 | `sections/companion/` (`index.tsx`, `data.ts`) | Section eyebrow/heading/description + 4 capability labels, blurbs, orb "speech" lines | M-B1 (new, hardcoded EN) | Debt — extract to a `companionSection` namespace ×14 later |
+| `sections/team-canvas/variants/` (`kpiData.ts`, `AssemblyLine.tsx`) | Goal label, 6 KPI labels/units, status labels, station + section copy | M-B2 redesign (new, hardcoded EN) | Debt — extract to a `teamCanvasSection` namespace ×14 later |
