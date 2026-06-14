@@ -825,6 +825,9 @@ export const bn: Translations = {
       page: 'Page {n} of {total}',
     },
     markAllRead: 'Mark all read',
+    viewThreads: '\u09a5\u09cd\u09b0\u09c7\u09a1',
+    viewList: '\u09a4\u09be\u09b2\u09bf\u0995\u09be',
+    reply: '\u0989\u09a4\u09cd\u09a4\u09b0',
   },
   observabilityPage: {
     usageInsight: '{top} {second}-এর চেয়ে {ratio} গুণ বেশি ব্যবহৃত হয়, ফলে এটি আপনার সবচেয়ে বেশি ব্যবহৃত টুল ইন্টিগ্রেশন।',

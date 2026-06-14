@@ -825,6 +825,9 @@ export const es: Translations = {
       page: 'Page {n} of {total}',
     },
     markAllRead: 'Mark all read',
+    viewThreads: 'Hilos',
+    viewList: 'Lista',
+    reply: 'Respuesta',
   },
   observabilityPage: {
     usageInsight: '{top} se usa {ratio} veces más que {second}, lo que la convierte en tu integración de herramientas más utilizada.',

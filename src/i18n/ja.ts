@@ -825,6 +825,9 @@ export const ja: Translations = {
       page: 'Page {n} of {total}',
     },
     markAllRead: 'Mark all read',
+    viewThreads: '\u30b9\u30ec\u30c3\u30c9',
+    viewList: '\u30ea\u30b9\u30c8',
+    reply: '\u8fd4\u4fe1',
   },
   observabilityPage: {
     usageInsight: '{top} は {second} の {ratio} 倍使用されており、最も活用されているツール統合です。',

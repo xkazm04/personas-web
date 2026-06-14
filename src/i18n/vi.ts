@@ -825,6 +825,9 @@ export const vi: Translations = {
       page: 'Page {n} of {total}',
     },
     markAllRead: 'Mark all read',
+    viewThreads: 'Chu\u1ed7i',
+    viewList: 'Danh s\u00e1ch',
+    reply: 'Tr\u1ea3 l\u1eddi',
   },
   observabilityPage: {
     usageInsight: '{top} được dùng nhiều gấp {ratio} lần {second}, là tích hợp công cụ được bạn sử dụng nhiều nhất.',

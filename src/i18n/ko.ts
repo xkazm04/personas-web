@@ -825,6 +825,9 @@ export const ko: Translations = {
       page: 'Page {n} of {total}',
     },
     markAllRead: 'Mark all read',
+    viewThreads: '\uc2a4\ub808\ub4dc',
+    viewList: '\ubaa9\ub85d',
+    reply: '\ub2f5\uc7a5',
   },
   observabilityPage: {
     usageInsight: '{top}은(는) {second}보다 {ratio}배 더 많이 사용되어 가장 많이 활용되는 도구 통합입니다.',

@@ -825,6 +825,9 @@ export const ar: Translations = {
       page: 'Page {n} of {total}',
     },
     markAllRead: 'Mark all read',
+    viewThreads: '\u0627\u0644\u0633\u0644\u0627\u0633\u0644',
+    viewList: '\u0642\u0627\u0626\u0645\u0629',
+    reply: '\u0631\u062f',
   },
   observabilityPage: {
     usageInsight: 'تُستخدم {top} أكثر بـ {ratio} مرة من {second}، ما يجعلها أكثر تكاملات الأدوات استخدامًا لديك.',

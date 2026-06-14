@@ -7,7 +7,8 @@ Messages is an inbox-style surface listing **threads** — one per persona conve
 - A count chip at the top (`{n} unread`) sums unread messages across all visible threads, with a **Mark all read** button beside it when anything is unread.
 - Unread threads are visually highlighted (cyan-tinted row, bolder subject) and carry a `{n} Unread` pill.
 - Clicking a row opens the **Thread detail modal**, rendering the parent message and every reply as individual markdown articles (the run report body), and marks the whole thread read.
-- The list is paginated at 10 threads per page (the mock fixture has 14 threads / ~42 messages, so 2 pages).
+- A **Threads / List** toggle (top-right, with live counts) switches between the grouped thread view and a flat, newest-first list of every message (parents and replies); a list row opens its parent thread in the same modal.
+- The list is paginated at 10 items per page (threads in thread view, individual messages in list view).
 - In the nav, the Messages item shows a badge of `MOCK_UNREAD_MESSAGES` (currently `7`) — a fixed demo constant, independent of the per-session read overrides on this page.
 
 ## How it works
@@ -15,7 +16,7 @@ Messages is an inbox-style surface listing **threads** — one per persona conve
 
 **Read-state overrides** — the page (`page.tsx:30`) keeps a local `Map<messageId, MessageStatus>` of overrides layered over the immutable mock fixture. A `useMemo` (`page.tsx:38`) maps each base thread, applies overrides per message, recomputes `unreadCount`, and **re-sorts threads by `latestTimestamp` descending**. `markThreadRead`, `markAllRead`, and `openThread` all just add entries to this map — the fixture is never mutated.
 
-**List render** — `pageItems` is a 10-item slice of the sorted threads for the clamped page (`page.tsx:61-66`). Each renders a `ThreadRow` (`messages-page/ThreadRow.tsx`): `PersonaAvatar` + subject + reply-count chip (only when `replies.length > 0`) + unread pill, with `relativeTime(latestTimestamp)`. The whole row is a `<button>` whose `onClick` calls `openThread`.
+**View toggle + list render** — a `view` state (`"threads" | "list"`) drives a compact `FilterBar` with live counts; switching it resets `page` to 0. Thread view paginates the sorted `threads` and renders a `ThreadRow` each (`PersonaAvatar` + subject + reply-count chip + unread pill). List view paginates `flatMessages` — a `useMemo` flattening `[parent, ...replies]` across all threads, sorted by `timestamp` desc (statuses already resolved on `threads`, so overrides carry through) — and renders a `MessageRow` each (`messages-page/MessageRow.tsx`: avatar + subject + a reply chevron for non-parent messages + unread pill). Both row types are `<button>`s; a `MessageRow` click resolves its parent thread via `threads.find(t => t.id === message.threadId)` and calls `openThread`, so the same `ThreadDetailModal` and read-marking apply.
 
 **Detail modal** — `ThreadDetailModal` (`messages-page/ThreadDetailModal.tsx`) wraps the shared `Modal`. It is open whenever `thread !== null` (driven by `openThreadId`). The header shows persona · relative time · reply count; the body maps `[parent, ...replies]` to `ConversationMessage` articles, each rendering `message.body` through `MarkdownReport`, with replies indented and an unread cyan dot when applicable.
 
@@ -29,6 +30,7 @@ Messages is an inbox-style surface listing **threads** — one per persona conve
 | `src/app/dashboard/messages/page.tsx` | Page entry — paginates, holds read-state overrides, sorts threads, wires header/list/modal |
 | `src/app/dashboard/messages/useMessagesData.ts` | Data hook — mock threads in demo mode, `getSyncedMessageThreads()` otherwise |
 | `src/app/dashboard/messages/messages-page/ThreadRow.tsx` | One thread row (persona, subject, reply chip, unread pill) — opens the modal |
+| `src/app/dashboard/messages/messages-page/MessageRow.tsx` | One flat-list row (single message; reply chevron for non-parents) — opens the parent thread |
 | `src/app/dashboard/messages/messages-page/ThreadDetailModal.tsx` | Conversation modal — parent + replies as markdown articles |
 | `src/app/dashboard/messages/messages-page/MessagesPagination.tsx` | Presentational prev/next pagination bar |
 | `src/lib/mock-dashboard-data.ts` | `MessageThread`/`FeedbackMessage` types, `MOCK_MESSAGE_THREADS` fixture generator, `MOCK_UNREAD_MESSAGES` |
@@ -45,7 +47,7 @@ Messages is an inbox-style surface listing **threads** — one per persona conve
 - **Dashboard shell:** rendered inside the `/dashboard` layout; nav entry registered in `DashboardNavigation.tsx` (`{ key: "messages", icon: Mail, href: "/dashboard/messages" }`).
 - **Nav unread badge:** `useNavState().getBadge` in `DashboardNavigation.tsx` returns `MOCK_UNREAD_MESSAGES` (when `> 0`) for the messages item; consumed by `DesktopSidebar` and `MobileBottomNav`. Note this badge is the static constant `7`, not the live `unreadCount` derived on the page — marking messages read here does not change the nav badge.
 - **Shared primitives:** `Modal` (`components/dashboard/Modal.tsx`), `MarkdownReport`, `PersonaAvatar`, `SkeletonCard`, `StalenessIndicator`, `DashboardErrorBanner`, `GradientText`; `relativeTime` from `src/lib/format.ts`; `fadeUp`/`staggerContainer` from `src/lib/animations.ts`.
-- **i18n namespace:** `t.messagesPage` (title, subtitle, unread, read, empty, expand, collapse, markAllRead, pagination.{prev,next,page}); nav label is `t.dashboard.messages`.
+- **i18n namespace:** `t.messagesPage` (title, subtitle, unread, read, empty, expand, collapse, markAllRead, viewThreads, viewList, reply, pagination.{prev,next,page}); nav label is `t.dashboard.messages`.
 
 ## Conventions & gotchas
 - **i18n (14-locale lockstep):** every string comes from `t.messagesPage.*` / `t.dashboard.messages`. Adding a key means adding it to `en.ts` first then hand-translating into all 13 other locales. `expand`/`collapse` exist in the `messagesPage` namespace but are not referenced by the current components (likely vestigial from an inline-expand variant) — keep them in lockstep or remove from all locales together.

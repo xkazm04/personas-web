@@ -825,6 +825,9 @@ export const hi: Translations = {
       page: 'Page {n} of {total}',
     },
     markAllRead: 'Mark all read',
+    viewThreads: '\u0925\u094d\u0930\u0947\u0921',
+    viewList: '\u0938\u0942\u091a\u0940',
+    reply: '\u0909\u0924\u094d\u0924\u0930',
   },
   observabilityPage: {
     usageInsight: '{top} का उपयोग {second} से {ratio} गुना अधिक होता है, जिससे यह आपका सबसे अधिक उपयोग किया जाने वाला टूल इंटीग्रेशन है।',

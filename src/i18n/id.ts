@@ -825,6 +825,9 @@ export const id: Translations = {
       page: 'Page {n} of {total}',
     },
     markAllRead: 'Mark all read',
+    viewThreads: 'Utas',
+    viewList: 'Daftar',
+    reply: 'Balasan',
   },
   observabilityPage: {
     usageInsight: '{top} digunakan {ratio}x lebih sering daripada {second}, menjadikannya integrasi alat yang paling banyak Anda gunakan.',

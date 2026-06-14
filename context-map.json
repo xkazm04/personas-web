@@ -1001,6 +1001,7 @@
           "category": "ui",
           "filePaths": [
             "src/app/dashboard/messages/messages-page/MessagesPagination.tsx",
+            "src/app/dashboard/messages/messages-page/MessageRow.tsx",
             "src/app/dashboard/messages/messages-page/ThreadDetailModal.tsx",
             "src/app/dashboard/messages/messages-page/ThreadRow.tsx",
             "src/app/dashboard/messages/page.tsx",

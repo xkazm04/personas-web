@@ -8,17 +8,22 @@ import GradientText from "@/components/GradientText";
 import DashboardErrorBanner from "@/components/dashboard/DashboardErrorBanner";
 import SkeletonCard from "@/components/dashboard/SkeletonCard";
 import StalenessIndicator from "@/components/dashboard/StalenessIndicator";
+import FilterBar from "@/components/dashboard/FilterBar";
 import { useTranslation } from "@/i18n/useTranslation";
 import { fadeUp, staggerContainer } from "@/lib/animations";
 import {
+  type FeedbackMessage,
   type MessageThread,
   type MessageStatus,
 } from "@/lib/mock-dashboard-data";
 
 import { MessagesPagination } from "./messages-page/MessagesPagination";
+import { MessageRow } from "./messages-page/MessageRow";
 import { ThreadDetailModal } from "./messages-page/ThreadDetailModal";
 import { ThreadRow } from "./messages-page/ThreadRow";
 import { useMessagesData } from "./useMessagesData";
+
+type MessageView = "threads" | "list";
 
 const PAGE_SIZE = 10;
 
@@ -31,6 +36,7 @@ export default function MessagesPage() {
     () => new Map(),
   );
   const [openThreadId, setOpenThreadId] = useState<string | null>(null);
+  const [view, setView] = useState<MessageView>("threads");
   const [fetchedAt] = useState(() => Date.now());
 
   const { threads: baseThreads, loading, error } = useMessagesData();
@@ -58,12 +64,24 @@ export default function MessagesPage() {
     );
   }, [baseThreads, overrides]);
 
-  const totalPages = Math.max(1, Math.ceil(threads.length / PAGE_SIZE));
+  // Flat (list) view: every message, parent and reply, newest first. Statuses
+  // are already resolved on `threads`, so overrides carry through.
+  const flatMessages = useMemo<FeedbackMessage[]>(() => {
+    const all: FeedbackMessage[] = [];
+    for (const thread of threads) all.push(thread.parent, ...thread.replies);
+    return all.sort(
+      (a, b) => new Date(b.timestamp).getTime() - new Date(a.timestamp).getTime(),
+    );
+  }, [threads]);
+
+  const isList = view === "list";
+  const totalItems = isList ? flatMessages.length : threads.length;
+  const totalPages = Math.max(1, Math.ceil(totalItems / PAGE_SIZE));
   const clampedPage = Math.min(page, totalPages - 1);
-  const pageItems = threads.slice(
-    clampedPage * PAGE_SIZE,
-    (clampedPage + 1) * PAGE_SIZE,
-  );
+  const start = clampedPage * PAGE_SIZE;
+  const threadPageItems = threads.slice(start, start + PAGE_SIZE);
+  const messagePageItems = flatMessages.slice(start, start + PAGE_SIZE);
+  const isEmpty = (isList ? messagePageItems : threadPageItems).length === 0;
 
   const unreadCount = useMemo(
     () => threads.reduce((sum, t) => sum + t.unreadCount, 0),
@@ -93,6 +111,11 @@ export default function MessagesPage() {
   function openThread(thread: MessageThread) {
     setOpenThreadId(thread.id);
     markThreadRead(thread);
+  }
+
+  function openMessage(message: FeedbackMessage) {
+    const thread = threads.find((th) => th.id === message.threadId);
+    if (thread) openThread(thread);
   }
 
   const openThread_value =
@@ -131,6 +154,20 @@ export default function MessagesPage() {
             {t.messagesPage.markAllRead}
           </button>
         )}
+        <div className="ml-auto">
+          <FilterBar
+            compact
+            active={view}
+            onChange={(k) => {
+              setView(k as MessageView);
+              setPage(0);
+            }}
+            options={[
+              { key: "threads", label: t.messagesPage.viewThreads, count: threads.length },
+              { key: "list", label: t.messagesPage.viewList, count: flatMessages.length },
+            ]}
+          />
+        </div>
       </motion.div>
 
       {error && <DashboardErrorBanner message={error} />}
@@ -141,17 +178,25 @@ export default function MessagesPage() {
             <SkeletonCard key={i} lines={1} />
           ))}
         </div>
-      ) : pageItems.length === 0 ? (
+      ) : isEmpty ? (
         <p className="py-12 text-center text-sm text-muted-dark">{t.messagesPage.empty}</p>
       ) : (
         <motion.div variants={fadeUp} className="space-y-2">
-          {pageItems.map((thread) => (
-            <ThreadRow
-              key={thread.id}
-              thread={thread}
-              onOpen={() => openThread(thread)}
-            />
-          ))}
+          {isList
+            ? messagePageItems.map((message) => (
+                <MessageRow
+                  key={message.id}
+                  message={message}
+                  onOpen={() => openMessage(message)}
+                />
+              ))
+            : threadPageItems.map((thread) => (
+                <ThreadRow
+                  key={thread.id}
+                  thread={thread}
+                  onOpen={() => openThread(thread)}
+                />
+              ))}
         </motion.div>
       )}
 

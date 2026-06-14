@@ -825,6 +825,9 @@ export const cs: Translations = {
       page: 'Page {n} of {total}',
     },
     markAllRead: 'Mark all read',
+    viewThreads: 'Vl\u00e1kna',
+    viewList: 'Seznam',
+    reply: 'Odpov\u011b\u010f',
   },
   observabilityPage: {
     usageInsight: '{top} se používá {ratio}× častěji než {second}, je to tedy vaše nejvyužívanější integrace nástrojů.',

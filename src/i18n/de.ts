@@ -825,6 +825,9 @@ export const de: Translations = {
       page: 'Page {n} of {total}',
     },
     markAllRead: 'Mark all read',
+    viewThreads: 'Threads',
+    viewList: 'Liste',
+    reply: 'Antwort',
   },
   observabilityPage: {
     usageInsight: '{top} wird {ratio}× häufiger genutzt als {second} und ist damit Ihre meistgenutzte Tool-Integration.',

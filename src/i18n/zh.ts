@@ -825,6 +825,9 @@ export const zh: Translations = {
       page: 'Page {n} of {total}',
     },
     markAllRead: 'Mark all read',
+    viewThreads: '\u4f1a\u8bdd',
+    viewList: '\u5217\u8868',
+    reply: '\u56de\u590d',
   },
   observabilityPage: {
     usageInsight: '{top} 的使用量是 {second} 的 {ratio} 倍，是您使用最多的工具集成。',

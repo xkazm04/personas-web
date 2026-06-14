@@ -825,6 +825,9 @@ export const ru: Translations = {
       page: 'Page {n} of {total}',
     },
     markAllRead: 'Mark all read',
+    viewThreads: '\u0426\u0435\u043f\u043e\u0447\u043a\u0438',
+    viewList: '\u0421\u043f\u0438\u0441\u043e\u043a',
+    reply: '\u041e\u0442\u0432\u0435\u0442',
   },
   observabilityPage: {
     usageInsight: '{top} используется в {ratio} раза чаще, чем {second}, — это ваша самая используемая интеграция инструментов.',

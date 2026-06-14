@@ -682,6 +682,9 @@
       page: string;
     };
     markAllRead: string;
+    viewThreads: string;
+    viewList: string;
+    reply: string;
   };
   observabilityPage: {
     usageInsight: string;
@@ -1969,6 +1972,9 @@ export const en: Translations = {
       page: 'Page {n} of {total}',
     },
     markAllRead: 'Mark all read',
+    viewThreads: 'Threads',
+    viewList: 'List',
+    reply: 'Reply',
   },
   observabilityPage: {
     usageInsight: '{top} is used {ratio}x more than {second}, making it your most utilized tool integration.',
