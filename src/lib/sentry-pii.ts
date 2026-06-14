@@ -21,6 +21,12 @@ const QUOTED_RE = /'[^']{1,200}'|"[^"]{1,200}"/g;
 
 const URL_RE = /https?:\/\/[^\s,)}\]]+/g;
 
+// Bare email addresses — the scrubber's denylist drops known PII *keys*, but a
+// free-text value (an off-list `extra`/`tag`/message field, a stack-frame var)
+// can still carry an email that no UUID/URL/quoted pattern catches. Redacting
+// it everywhere is the safe direction for a PII scrubber.
+const EMAIL_RE = /[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,}/g;
+
 const SENSITIVE_FIELDS = new Set([
   "execution_id",
   "persona_id",
@@ -35,6 +41,12 @@ const SENSITIVE_FIELDS = new Set([
   "endpoint",
   "connector_name",
   "user_name",
+  // Common PII keys whose values may not match a UUID/URL/quoted pattern.
+  "email",
+  "user_email",
+  "workspace_id",
+  "workspace_name",
+  "full_name",
 ]);
 
 /** Reduce a URL to scheme + host only (strips path, query, fragment, userinfo). */
@@ -54,9 +66,12 @@ function redactUrl(url: string): string {
 export function scrubPii(input: string): string {
   // 1. Replace UUIDs with a short prefix for correlation
   let result = input.replace(UUID_RE, (match) => `[id:${match.slice(0, 6)}]`);
-  // 2. Reduce URLs to scheme + host only
+  // 2. Redact bare email addresses (before quoted/URL passes so they're caught
+  //    even when not quoted and not inside a URL)
+  result = result.replace(EMAIL_RE, "[redacted-email]");
+  // 3. Reduce URLs to scheme + host only
   result = result.replace(URL_RE, (match) => redactUrl(match));
-  // 3. Redact quoted strings (credential names, persona names, etc.)
+  // 4. Redact quoted strings (credential names, persona names, etc.)
   result = result.replace(QUOTED_RE, "[redacted]");
   return result;
 }
