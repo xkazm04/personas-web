@@ -668,6 +668,8 @@ export const de: Translations = {
     rank: 'Rank',
     composite: 'Composite',
     radarTitle: 'Metrics profile',
+    rankBy: 'Rangfolge nach',
+    overall: 'Gesamt',
     metrics: {
       reliability: 'Reliability',
       cost: 'Cost',

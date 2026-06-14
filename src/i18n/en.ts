@@ -525,6 +525,8 @@
     compare: string;
     versus: string;
     radarTitle: string;
+    rankBy: string;
+    overall: string;
     metrics: {
       reliability: string;
       cost: string;
@@ -1794,6 +1796,8 @@ export const en: Translations = {
     compare: 'Compare',
     versus: 'vs',
     radarTitle: 'Metrics profile',
+    rankBy: 'Rank by',
+    overall: 'Overall',
     metrics: {
       reliability: 'Reliability',
       cost: 'Cost',

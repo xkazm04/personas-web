@@ -668,6 +668,8 @@ export const ru: Translations = {
     rank: 'Rank',
     composite: 'Composite',
     radarTitle: 'Metrics profile',
+    rankBy: '\u0420\u0430\u043d\u0436\u0438\u0440\u043e\u0432\u0430\u0442\u044c \u043f\u043e',
+    overall: '\u041e\u0431\u0449\u0438\u0439',
     metrics: {
       reliability: 'Reliability',
       cost: 'Cost',

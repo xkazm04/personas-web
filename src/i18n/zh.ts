@@ -668,6 +668,8 @@ export const zh: Translations = {
     rank: 'Rank',
     composite: 'Composite',
     radarTitle: 'Metrics profile',
+    rankBy: '\u6392\u540d\u4f9d\u636e',
+    overall: '\u7efc\u5408',
     metrics: {
       reliability: 'Reliability',
       cost: 'Cost',

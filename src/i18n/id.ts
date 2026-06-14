@@ -668,6 +668,8 @@ export const id: Translations = {
     rank: 'Rank',
     composite: 'Composite',
     radarTitle: 'Metrics profile',
+    rankBy: 'Urutkan menurut',
+    overall: 'Keseluruhan',
     metrics: {
       reliability: 'Reliability',
       cost: 'Cost',

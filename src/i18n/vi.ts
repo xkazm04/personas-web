@@ -668,6 +668,8 @@ export const vi: Translations = {
     rank: 'Rank',
     composite: 'Composite',
     radarTitle: 'Metrics profile',
+    rankBy: 'X\u1ebfp h\u1ea1ng theo',
+    overall: 'T\u1ed5ng th\u1ec3',
     metrics: {
       reliability: 'Reliability',
       cost: 'Cost',

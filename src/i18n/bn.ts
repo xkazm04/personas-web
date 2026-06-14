@@ -668,6 +668,8 @@ export const bn: Translations = {
     rank: 'Rank',
     composite: 'Composite',
     radarTitle: 'Metrics profile',
+    rankBy: '\u09b0\u200d\u09cd\u09af\u09be\u0999\u09cd\u0995 \u0985\u09a8\u09c1\u09b8\u09be\u09b0\u09c7',
+    overall: '\u09b8\u09be\u09ae\u0997\u09cd\u09b0\u09bf\u0995',
     metrics: {
       reliability: 'Reliability',
       cost: 'Cost',

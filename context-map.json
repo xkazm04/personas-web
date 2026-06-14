@@ -1161,13 +1161,16 @@
         },
         {
           "name": "Leaderboard & Rankings",
-          "description": "Agent leaderboard with sortable table and a radar comparison card ranking persona performance.",
+          "description": "Agent leaderboard: a top-3 podium with rank-dimension tabs (overall/reliability/speed/cost/quality) above a sortable table and a radar comparison card ranking persona performance.",
           "businessFeature": "Leaderboard & Rankings",
           "category": "ui",
           "filePaths": [
+            "src/app/dashboard/leaderboard/leaderboard-page/LeaderboardPodium.tsx",
             "src/app/dashboard/leaderboard/leaderboard-page/LeaderboardRadarCard.tsx",
             "src/app/dashboard/leaderboard/leaderboard-page/LeaderboardSortHeader.tsx",
             "src/app/dashboard/leaderboard/leaderboard-page/LeaderboardTable.tsx",
+            "src/app/dashboard/leaderboard/leaderboard-page/RankDimensionTabs.tsx",
+            "src/app/dashboard/leaderboard/leaderboard-page/leaderboardRank.ts",
             "src/app/dashboard/leaderboard/leaderboard-page/leaderboardSort.ts",
             "src/app/dashboard/leaderboard/leaderboard-page/leaderboardStyles.tsx",
             "src/app/dashboard/leaderboard/page.tsx",

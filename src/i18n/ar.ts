@@ -668,6 +668,8 @@ export const ar: Translations = {
     rank: 'Rank',
     composite: 'Composite',
     radarTitle: 'Metrics profile',
+    rankBy: '\u0627\u0644\u062a\u0631\u062a\u064a\u0628 \u062d\u0633\u0628',
+    overall: '\u0625\u062c\u0645\u0627\u0644\u064a',
     metrics: {
       reliability: 'Reliability',
       cost: 'Cost',

@@ -668,6 +668,8 @@ export const ja: Translations = {
     rank: 'Rank',
     composite: 'Composite',
     radarTitle: 'Metrics profile',
+    rankBy: '\u30e9\u30f3\u30af\u57fa\u6e96',
+    overall: '\u7dcf\u5408',
     metrics: {
       reliability: 'Reliability',
       cost: 'Cost',

@@ -668,6 +668,8 @@ export const ko: Translations = {
     rank: 'Rank',
     composite: 'Composite',
     radarTitle: 'Metrics profile',
+    rankBy: '\uc21c\uc704 \uae30\uc900',
+    overall: '\uc885\ud569',
     metrics: {
       reliability: 'Reliability',
       cost: 'Cost',
