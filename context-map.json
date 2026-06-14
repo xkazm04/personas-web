@@ -1308,6 +1308,26 @@
           ],
           "target": null,
           "apiRoutes": []
+        },
+        {
+          "name": "Incidents Inbox",
+          "description": "Audit-log incidents across the fleet: KPI header (open/severity/source breakdown), persisted status/severity/source/persona filters, a group-by control (agent/severity/source/none) with collapsible sections, and a row-detail modal. New route /dashboard/incidents; demo-only.",
+          "businessFeature": "Incidents Inbox",
+          "category": "ui",
+          "filePaths": [
+            "src/app/dashboard/incidents/page.tsx",
+            "src/app/dashboard/incidents/incidents-page/incidentFormat.ts",
+            "src/app/dashboard/incidents/incidents-page/useIncidentsFilterStore.ts",
+            "src/app/dashboard/incidents/incidents-page/useAuditIncidents.ts",
+            "src/app/dashboard/incidents/incidents-page/IncidentsKpiHeader.tsx",
+            "src/app/dashboard/incidents/incidents-page/IncidentsFilters.tsx",
+            "src/app/dashboard/incidents/incidents-page/IncidentsGroupByTabs.tsx",
+            "src/app/dashboard/incidents/incidents-page/IncidentRow.tsx",
+            "src/app/dashboard/incidents/incidents-page/IncidentList.tsx",
+            "src/app/dashboard/incidents/incidents-page/IncidentDetailModal.tsx"
+          ],
+          "target": null,
+          "apiRoutes": []
         }
       ]
     },

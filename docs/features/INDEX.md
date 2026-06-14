@@ -54,6 +54,7 @@ Status legend: ✅ written · ⬜ planned
 | ✅ [observability](dashboard/observability.md) | `/dashboard/observability` | Observability |
 | ✅ [leaderboard](dashboard/leaderboard.md) | `/dashboard/leaderboard` | Leaderboard |
 | ✅ [sla](dashboard/sla.md) | `/dashboard/sla` | SLA (Incidents) |
+| ✅ [incidents](dashboard/incidents.md) | `/dashboard/incidents` | Incidents |
 | ✅ [knowledge](dashboard/knowledge.md) | `/dashboard/knowledge` | Knowledge |
 | ✅ [settings](dashboard/settings.md) | `/dashboard/settings` | Settings |
 | ✅ [shell-chrome](dashboard/shell-chrome.md) | `/dashboard/*` | (layout, sidebar, realtime) |

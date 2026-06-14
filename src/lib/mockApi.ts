@@ -16,6 +16,7 @@ import {
   getMockExecutionDetail,
   resetMockOutputOffset,
 } from "./mockData";
+import { MOCK_AUDIT_INCIDENTS, type AuditIncident } from "./mock-dashboard-data";
 import { ApiError, type ApiClient } from "./api";
 import type {
   Persona,
@@ -241,3 +242,14 @@ export const mockApi: ApiClient = {
     };
   },
 };
+
+/**
+ * Audit-log incidents for the Incidents Inbox. Demo-only — incidents have no
+ * faithful synced source, so this is a standalone mock fetcher (not part of the
+ * real `ApiClient`); callers import it directly rather than via the `api`
+ * proxy. Simulates fetch latency so the surface can show a loading state.
+ */
+export async function getAuditIncidents(): Promise<AuditIncident[]> {
+  await delay(300);
+  return [...MOCK_AUDIT_INCIDENTS];
+}
