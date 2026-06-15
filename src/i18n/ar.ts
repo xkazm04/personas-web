@@ -1042,6 +1042,17 @@ export const ar: Translations = {
       allowed: 'مسموح',
       requests: 'طلبات',
     },
+  rotation: {
+    title: '\u062a\u062f\u0648\u064a\u0631 \u0628\u064a\u0627\u0646\u0627\u062a \u0627\u0644\u0627\u0639\u062a\u0645\u0627\u062f',
+    subtitle: '\u062d\u0627\u0644\u0629 \u062a\u062f\u0648\u064a\u0631 \u0627\u0644\u062e\u0632\u0646\u0629',
+    hasPolicy: '\u0633\u064a\u0627\u0633\u0629',
+    noPolicy: '\u0628\u0644\u0627 \u0633\u064a\u0627\u0633\u0629',
+    auto: '\u062a\u0644\u0642\u0627\u0626\u064a',
+    manual: '\u064a\u062f\u0648\u064a',
+    anomaly: '\u0634\u0630\u0648\u0630',
+    next: '\u0627\u0644\u062a\u0627\u0644\u064a\u0629',
+    overdue: '\u0645\u062a\u0623\u062e\u0631\u0629',
+  },
   },
   legalPage: {
     title: '\u0642\u0627\u0646\u0648\u0646\u064A',

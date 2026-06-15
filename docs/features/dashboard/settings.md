@@ -1,15 +1,16 @@
 # Settings
-> The dashboard's account and configuration surface — account/sign-out, live cloud-connection status, healing-alert notification toggles (incl. spoken new-review announcements), and a BYOM model-provider allow-list. **Route:** `/dashboard/settings` · **Nav label:** "Settings" · **Status:** Demo-only (mocks)
+> The dashboard's account and configuration surface — account/sign-out, live cloud-connection status, healing-alert notification toggles (incl. spoken new-review announcements), a BYOM model-provider allow-list, and per-credential rotation status. **Route:** `/dashboard/settings` · **Nav label:** "Settings" · **Status:** Demo-only (mocks)
 
 ## What it does
-Settings is a two-column grid of glass cards covering four concerns:
+Settings is a two-column grid of glass cards covering five concerns:
 
 - **Account** — shows the signed-in user's avatar (or a monogram fallback), display name, and email, with a **Sign out** button (spinner while signing out).
 - **Cloud Connection** — a live status card: a Connecting / Connected / Disconnected pill driven by the orchestrator health check, plus rows for the orchestrator URL (or `mock://demo-data` in demo mode), total/active/idle worker counts, queue length, and active-execution count. The card accent color tracks health (cyan while checking, emerald when ok, amber otherwise).
 - **Notifications** — healing-alert severity switches (Critical / High / Medium / Low), a weekly-digest switch, and an "Announce new reviews aloud" voice switch with a **Preview** button that speaks a sample announcement through the Web Speech engine.
 - **Model providers** — a BYOM ("bring your own model") allow-list: per-provider switches deciding which model providers the agent fleet may use, with per-provider request counts. Demo-only — this card is hidden when not in demo mode.
+- **Credential rotation** (D-C4) — per-credential vault rotation status: a Policy / No-policy chip, an Auto / Manual chip (when a policy exists), an Anomaly chip when an access anomaly is flagged, and the next-rotation ETA (or **Overdue**). Demo-only — hidden when not in demo mode (the vault is local-by-design).
 
-The two right-hand cards (`NotificationsCard`, `ModelProvidersCard`) are self-contained client components; the left two (Account, Cloud Connection) are rendered inline in `page.tsx`.
+The right-hand cards (`NotificationsCard`, `ModelProvidersCard`, `RotationOverviewCard`) are self-contained client components; the left two (Account, Cloud Connection) are rendered inline in `page.tsx`.
 
 ## How it works
 **Page composition** — `page.tsx` is a `"use client"` component wrapped in a `motion.div` with `staggerContainer`; each card is a `GlowCard` carrying the `fadeUp` variant. A decorative `bg-settings.png` background sits behind the header at `opacity-[0.12]` with a gradient fade. The header is `SettingsHeader` (silver `GradientText` title + muted subtitle, both from `t.settingsPage`).
@@ -22,6 +23,8 @@ The two right-hand cards (`NotificationsCard`, `ModelProvidersCard`) are self-co
 
 **Model providers** (`ModelProvidersCard.tsx`) — early-returns `null` when `!isDemo` (BYOM config is device-local, with no Supabase source). In demo mode it seeds local `allowed` state from `MOCK_MODEL_PROVIDERS` (`useState(() => Object.fromEntries(...))`, a lazy initializer per React 19 purity rules), renders one row per provider (name, mono model id, request count when allowed & `requests > 0`), and a `SettingToggle` that flips local `allowed[id]`. State is in-memory only.
 
+**Credential rotation** (`RotationOverviewCard.tsx`) — early-returns `null` when `!isDemo` (like the providers card; the vault is local-by-design with no Supabase source). Renders one row per `MOCK_CREDENTIAL_ROTATIONS` entry (mono secret name + status chips): Policy/No-policy, Auto/Manual (only when a policy exists), an Anomaly chip when `anomaly`, and a right-aligned next-rotation ETA — `Overdue` (rose) when `overdue`, the `—` placeholder when there's no policy, else `Next {nextRotation}`. Read-only (no toggles).
+
 **SettingToggle** (`SettingToggle.tsx`) — the shared switch used by both cards: a controlled `<button role="switch" aria-checked={on} aria-label={label}>` with a sliding knob; cyan when on, glass when off. No internal state — fully driven by `on`/`onChange`.
 
 ## Key files
@@ -31,11 +34,12 @@ The two right-hand cards (`NotificationsCard`, `ModelProvidersCard`) are self-co
 | `src/app/dashboard/settings/SettingsHeader.tsx` | Header — silver `GradientText` title + subtitle from `t.settingsPage` |
 | `src/app/dashboard/settings/settings-sections/NotificationsCard.tsx` | Healing-alert severity + digest toggles (local) and the voice toggle + Preview trigger (persisted) |
 | `src/app/dashboard/settings/settings-sections/ModelProvidersCard.tsx` | BYOM provider allow-list (demo-only; hidden when not `isDemo`) |
+| `src/app/dashboard/settings/settings-sections/RotationOverviewCard.tsx` | Per-credential rotation status: policy / auto-vs-manual / anomaly / next-rotation (demo-only) |
 | `src/app/dashboard/settings/settings-sections/SettingToggle.tsx` | Shared controlled `role="switch"` toggle |
 | `src/lib/review-voice.ts` | Framework-free voice bus + Web Speech: `emitNewReview`, `onNewReview`, `armSpeech`, `speak`, `composeAnnouncement`, `localeToSpeechLang` |
 | `src/stores/reviewVoiceStore.ts` | Zustand store for the voice `enabled` flag, persisted to `localStorage` (`review-voice-enabled`) |
 | `src/hooks/useReviewVoice.ts` | Subscribes to the bus and speaks announcements (mounted via `SyncedRealtimeProvider`) |
-| `src/lib/mock-dashboard-data.ts` | `ModelProvider` type + `MOCK_MODEL_PROVIDERS` fixture (5 providers) |
+| `src/lib/mock-dashboard-data.ts` | `ModelProvider` + `MOCK_MODEL_PROVIDERS`; `CredentialRotation` + `MOCK_CREDENTIAL_ROTATIONS` (5 credentials) |
 
 ## Data & state
 - **Source:** `MOCK_MODEL_PROVIDERS` (`src/lib/mock-dashboard-data.ts:1236`) — 5 providers: Anthropic Claude (`sonnet-4-6`, allowed, 8,421 req), Anthropic Haiku (`haiku-4-5`, allowed, 3,120), OpenAI (`gpt-4o`, allowed, 1,894), Google Gemini (`gemini-2.0`, off), Meta Llama (`llama-3.3-70b`, off). Cloud-status numbers come from `useSystemStore` (`health`, `status`), which is mock-backed in demo mode (`mockApi`). Account data comes from `useAuthStore.user` (Supabase user / demo user).

@@ -1042,6 +1042,17 @@ export const fr: Translations = {
       allowed: 'Autorisé',
       requests: 'requêtes',
     },
+  rotation: {
+    title: 'Rotation des identifiants',
+    subtitle: '\u00c9tat de rotation du coffre',
+    hasPolicy: 'Politique',
+    noPolicy: 'Sans politique',
+    auto: 'Auto',
+    manual: 'Manuel',
+    anomaly: 'Anomalie',
+    next: 'Prochaine',
+    overdue: 'En retard',
+  },
   },
   legalPage: {
     title: 'Mentions l\u00e9gales',

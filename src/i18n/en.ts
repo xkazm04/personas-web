@@ -899,6 +899,17 @@
       allowed: string;
       requests: string;
     };
+    rotation: {
+      title: string;
+      subtitle: string;
+      hasPolicy: string;
+      noPolicy: string;
+      auto: string;
+      manual: string;
+      anomaly: string;
+      next: string;
+      overdue: string;
+    };
   };
   legalPage: {
     title: string;
@@ -2188,6 +2199,17 @@ export const en: Translations = {
       subtitle: 'Which models your agents may use',
       allowed: 'Allowed',
       requests: 'requests',
+    },
+    rotation: {
+      title: 'Credential rotation',
+      subtitle: 'Vault rotation status',
+      hasPolicy: 'Policy',
+      noPolicy: 'No policy',
+      auto: 'Auto',
+      manual: 'Manual',
+      anomaly: 'Anomaly',
+      next: 'Next',
+      overdue: 'Overdue',
     },
   },
   legalPage: {

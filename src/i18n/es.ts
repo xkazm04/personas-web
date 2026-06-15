@@ -1042,6 +1042,17 @@ export const es: Translations = {
       allowed: 'Permitido',
       requests: 'solicitudes',
     },
+  rotation: {
+    title: 'Rotaci\u00f3n de credenciales',
+    subtitle: 'Estado de rotaci\u00f3n de la b\u00f3veda',
+    hasPolicy: 'Pol\u00edtica',
+    noPolicy: 'Sin pol\u00edtica',
+    auto: 'Auto',
+    manual: 'Manual',
+    anomaly: 'Anomal\u00eda',
+    next: 'Pr\u00f3xima',
+    overdue: 'Vencida',
+  },
   },
   legalPage: {
     title: 'Legal',

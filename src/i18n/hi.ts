@@ -1042,6 +1042,17 @@ export const hi: Translations = {
       allowed: 'अनुमत',
       requests: 'अनुरोध',
     },
+  rotation: {
+    title: '\u0915\u094d\u0930\u0947\u0921\u0947\u0902\u0936\u093f\u092f\u0932 \u0930\u094b\u091f\u0947\u0936\u0928',
+    subtitle: '\u0935\u0949\u0932\u094d\u091f \u0930\u094b\u091f\u0947\u0936\u0928 \u0938\u094d\u0925\u093f\u0924\u093f',
+    hasPolicy: '\u0928\u0940\u0924\u093f',
+    noPolicy: '\u0915\u094b\u0908 \u0928\u0940\u0924\u093f \u0928\u0939\u0940\u0902',
+    auto: '\u0938\u094d\u0935\u0924\u0903',
+    manual: '\u092e\u0948\u0928\u0941\u0905\u0932',
+    anomaly: '\u0935\u093f\u0938\u0902\u0917\u0924\u093f',
+    next: '\u0905\u0917\u0932\u0940',
+    overdue: '\u0905\u0924\u093f\u0926\u0947\u092f',
+  },
   },
   legalPage: {
     title: '\u0915\u093E\u0928\u0942\u0928\u0940',

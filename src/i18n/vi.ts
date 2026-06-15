@@ -1042,6 +1042,17 @@ export const vi: Translations = {
       allowed: 'Được phép',
       requests: 'yêu cầu',
     },
+  rotation: {
+    title: 'Xoay v\u00f2ng th\u00f4ng tin \u0111\u0103ng nh\u1eadp',
+    subtitle: 'Tr\u1ea1ng th\u00e1i xoay v\u00f2ng kho kh\u00f3a',
+    hasPolicy: 'Ch\u00ednh s\u00e1ch',
+    noPolicy: 'Kh\u00f4ng c\u00f3 ch\u00ednh s\u00e1ch',
+    auto: 'T\u1ef1 \u0111\u1ed9ng',
+    manual: 'Th\u1ee7 c\u00f4ng',
+    anomaly: 'B\u1ea5t th\u01b0\u1eddng',
+    next: 'Ti\u1ebfp theo',
+    overdue: 'Qu\u00e1 h\u1ea1n',
+  },
   },
   legalPage: {
     title: 'Ph\u00e1p l\u00fd',

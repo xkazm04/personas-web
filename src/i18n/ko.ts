@@ -1042,6 +1042,17 @@ export const ko: Translations = {
       allowed: '허용됨',
       requests: '요청',
     },
+  rotation: {
+    title: '\uc790\uaca9 \uc99d\uba85 \uad50\uccb4',
+    subtitle: '\ubcfc\ud2b8 \uad50\uccb4 \uc0c1\ud0dc',
+    hasPolicy: '\uc815\ucc45',
+    noPolicy: '\uc815\ucc45 \uc5c6\uc74c',
+    auto: '\uc790\ub3d9',
+    manual: '\uc218\ub3d9',
+    anomaly: '\uc774\uc0c1',
+    next: '\ub2e4\uc74c',
+    overdue: '\uae30\ud55c \ucd08\uacfc',
+  },
   },
   legalPage: {
     title: '\ubc95\uc801 \uc815\ubcf4',

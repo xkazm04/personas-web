@@ -1042,6 +1042,17 @@ export const ja: Translations = {
       allowed: '許可',
       requests: 'リクエスト',
     },
+  rotation: {
+    title: '\u8a8d\u8a3c\u60c5\u5831\u306e\u30ed\u30fc\u30c6\u30fc\u30b7\u30e7\u30f3',
+    subtitle: '\u30dc\u30eb\u30c8\u306e\u30ed\u30fc\u30c6\u30fc\u30b7\u30e7\u30f3\u72b6\u6cc1',
+    hasPolicy: '\u30dd\u30ea\u30b7\u30fc',
+    noPolicy: '\u30dd\u30ea\u30b7\u30fc\u306a\u3057',
+    auto: '\u81ea\u52d5',
+    manual: '\u624b\u52d5',
+    anomaly: '\u7570\u5e38',
+    next: '\u6b21\u56de',
+    overdue: '\u671f\u9650\u5207\u308c',
+  },
   },
   legalPage: {
     title: '\u6cd5\u7684\u60c5\u5831',

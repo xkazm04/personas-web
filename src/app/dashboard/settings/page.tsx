@@ -14,6 +14,7 @@ import { useTranslation } from "@/i18n/useTranslation";
 import { SettingsHeader } from "./SettingsHeader";
 import { ModelProvidersCard } from "./settings-sections/ModelProvidersCard";
 import { NotificationsCard } from "./settings-sections/NotificationsCard";
+import { RotationOverviewCard } from "./settings-sections/RotationOverviewCard";
 
 export default function SettingsPage() {
   const { user, signOut, isDemo, isSigningOut } = useAuthStore(
@@ -140,6 +141,7 @@ export default function SettingsPage() {
 
         <NotificationsCard />
         <ModelProvidersCard />
+        <RotationOverviewCard />
       </div>
     </motion.div>
   );

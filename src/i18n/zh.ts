@@ -1042,6 +1042,17 @@ export const zh: Translations = {
       allowed: '已允许',
       requests: '次请求',
     },
+  rotation: {
+    title: '\u51ed\u636e\u8f6e\u6362',
+    subtitle: '\u4fdd\u9669\u5e93\u8f6e\u6362\u72b6\u6001',
+    hasPolicy: '\u7b56\u7565',
+    noPolicy: '\u65e0\u7b56\u7565',
+    auto: '\u81ea\u52a8',
+    manual: '\u624b\u52a8',
+    anomaly: '\u5f02\u5e38',
+    next: '\u4e0b\u6b21',
+    overdue: '\u5df2\u903e\u671f',
+  },
   },
   legalPage: {
     title: '\u6CD5\u5F8B',

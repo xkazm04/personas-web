@@ -1010,6 +1010,7 @@
             "src/app/dashboard/settings/page.tsx",
             "src/app/dashboard/settings/settings-sections/ModelProvidersCard.tsx",
             "src/app/dashboard/settings/settings-sections/NotificationsCard.tsx",
+            "src/app/dashboard/settings/settings-sections/RotationOverviewCard.tsx",
             "src/app/dashboard/settings/settings-sections/SettingToggle.tsx"
           ],
           "target": null,

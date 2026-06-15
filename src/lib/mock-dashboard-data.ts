@@ -1684,3 +1684,33 @@ export const MOCK_VALUE_ROLLUP: ValueRollup = {
   prevCostPerValue: 0.092,
 };
 
+// ── Rotation Overview (credential rotation status) ──────────────────
+// Mirrors the desktop overview's Rotation Overview: per-credential rotation
+// policy / auto-rotation / anomaly / next-rotation status. Secret names are
+// technical identifiers shown verbatim. Demo-only (vault is local-by-design).
+
+export interface CredentialRotation {
+  id: string;
+  /** Credential identifier — shown verbatim (not translated). */
+  secret: string;
+  /** A rotation policy is configured for this credential. */
+  hasPolicy: boolean;
+  /** Auto-rotation is enabled (vs. manual). */
+  enabled: boolean;
+  /** An access/usage anomaly was detected against this credential. */
+  anomaly: boolean;
+  /** Past its rotation window. */
+  overdue: boolean;
+  /** Time until the next rotation, e.g. "12d" (demo-static). */
+  nextRotation: string;
+  intervalDays: number;
+}
+
+export const MOCK_CREDENTIAL_ROTATIONS: CredentialRotation[] = [
+  { id: "cr_github", secret: "GITHUB_OAUTH_TOKEN", hasPolicy: true, enabled: true, anomaly: false, overdue: false, nextRotation: "12d", intervalDays: 90 },
+  { id: "cr_slack", secret: "SLACK_WEBHOOK_URL", hasPolicy: true, enabled: true, anomaly: true, overdue: false, nextRotation: "3d", intervalDays: 30 },
+  { id: "cr_openai", secret: "OPENAI_API_KEY", hasPolicy: true, enabled: false, anomaly: false, overdue: false, nextRotation: "21d", intervalDays: 90 },
+  { id: "cr_stripe", secret: "STRIPE_SECRET_KEY", hasPolicy: false, enabled: false, anomaly: false, overdue: false, nextRotation: "—", intervalDays: 0 },
+  { id: "cr_gcal", secret: "GCAL_REFRESH_TOKEN", hasPolicy: true, enabled: false, anomaly: false, overdue: true, nextRotation: "—", intervalDays: 60 },
+];
+

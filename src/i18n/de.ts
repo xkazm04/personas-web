@@ -1042,6 +1042,17 @@ export const de: Translations = {
       allowed: 'Erlaubt',
       requests: 'Anfragen',
     },
+  rotation: {
+    title: 'Anmeldedaten-Rotation',
+    subtitle: 'Tresor-Rotationsstatus',
+    hasPolicy: 'Richtlinie',
+    noPolicy: 'Keine Richtlinie',
+    auto: 'Auto',
+    manual: 'Manuell',
+    anomaly: 'Anomalie',
+    next: 'N\u00e4chste',
+    overdue: '\u00dcberf\u00e4llig',
+  },
   },
   legalPage: {
     title: 'Rechtliches',

@@ -1042,6 +1042,17 @@ export const cs: Translations = {
       allowed: 'Povoleno',
       requests: 'požadavků',
     },
+  rotation: {
+    title: 'Rotace p\u0159ihla\u0161ovac\u00edch \u00fadaj\u016f',
+    subtitle: 'Stav rotace trezoru',
+    hasPolicy: 'Z\u00e1sada',
+    noPolicy: 'Bez z\u00e1sady',
+    auto: 'Auto',
+    manual: 'Ru\u010dn\u011b',
+    anomaly: 'Anom\u00e1lie',
+    next: 'Dal\u0161\u00ed',
+    overdue: 'Po term\u00ednu',
+  },
   },
   legalPage: {
     title: 'Pr\u00e1vn\u00ed informace',

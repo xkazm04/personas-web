@@ -1042,6 +1042,17 @@ export const id: Translations = {
       allowed: 'Diizinkan',
       requests: 'permintaan',
     },
+  rotation: {
+    title: 'Rotasi kredensial',
+    subtitle: 'Status rotasi brankas',
+    hasPolicy: 'Kebijakan',
+    noPolicy: 'Tanpa kebijakan',
+    auto: 'Otomatis',
+    manual: 'Manual',
+    anomaly: 'Anomali',
+    next: 'Berikutnya',
+    overdue: 'Terlambat',
+  },
   },
   legalPage: {
     title: 'Hukum',
