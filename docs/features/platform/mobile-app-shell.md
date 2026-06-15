@@ -5,7 +5,7 @@
 Phone visitors to the demo dashboard get a dedicated native-feeling app instead of the cramped desktop layout. The middleware (`src/proxy.ts`) sniffs the user-agent on any `/dashboard*` request and redirects mobile browsers to `/m/overview`; everything under `/m` is then a self-contained app with a fixed bottom tab bar, slide-up page transitions, bottom sheets for detail, and compact stat tiles. Four views ship:
 
 - **Overview** (`/m/overview`) — greeting, a 4-up stat grid (success rate, runs, agents, pending reviews), an alerts banner that drills into `/m/alerts`, and the shared `RecentActivityCard`.
-- **Alerts** (`/m/alerts`) — a drill-in (back-chevron) page listing mock health issues and SLA breaches.
+- **Alerts** (`/m/alerts`) — a drill-in (back-chevron) page consolidating the fleet's attention items: open **incidents** (D-A2), a compact **system-health** section-status grid (D-A3), health issues, and SLA breaches. Reuses the desktop `incidentFormat` / `healthFormat` helpers and the `incidentsPage` / `healthPage` i18n (no mobile-specific strings).
 - **Messages** (`/m/messages`) — thread list with unread badges, mark-all-read, and a bottom-sheet thread reader.
 - **Reviews** (`/m/reviews`) — wraps the desktop `ReviewsFocusFlow` swipe/approve flow.
 
@@ -25,7 +25,7 @@ This is **Approach B** (per `src/app/m/layout.tsx:11`): reuse the dashboard's au
 | `src/app/m/layout.tsx` | Shell composition: auth guard, `MotionConfig`, `MobileShell` + `MobileTabBar` |
 | `src/app/m/template.tsx` | Per-navigation slide-up enter transition |
 | `src/app/m/overview/page.tsx` | Overview: greeting, stat grid, alerts banner, recent activity |
-| `src/app/m/alerts/page.tsx` | Drill-in: mock health issues + SLA breach log |
+| `src/app/m/alerts/page.tsx` | Drill-in: open incidents + system-health status grid + health issues + SLA breach log |
 | `src/app/m/messages/page.tsx` | Thread list, unread/mark-all-read, opens thread sheet |
 | `src/app/m/reviews/page.tsx` | Wraps desktop `ReviewsFocusFlow`, exits to `/m/overview` |
 | `src/components/mobile/MobileShell.tsx` | `max-w-md` scroll/padding container, safe-area insets, `#main-content` |
