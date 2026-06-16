@@ -47,7 +47,7 @@ i18n bundle entirely. **Gated — see scope note above.**
 
 | ID | Sev | Finding | Fix | Status |
 |---|---|---|---|---|
-| A-01 | High | `i18nStore.setLanguage` is a no-op; `language` hard-locked to `'en'`; no switcher; no `persist`. 13 non-en bundles never load at runtime. `src/stores/i18nStore.ts:15` | Decide product intent: ship a switcher + wire setLanguage, or document locale bundles as future-only. | 🔵 |
+| A-01 | High | `i18nStore.setLanguage` was a no-op; `language` hard-locked to `'en'`; no switcher; no `persist`. | **Infra built behind a dev flag (🟡).** `setLanguage` is now real + `persist`ed; added `LanguageSwitcher` (footer) + `<html lang>`/`dir` RTL handling. **Gated by `NEXT_PUBLIC_SHOW_LANGUAGE_SWITCHER`** (default off) — off ⇒ switcher renders null, `setLanguage` no-ops, persisted locale forced to `en`, so **production stays English-only, byte-identical**. `useTranslation` was already fully wired (lazy-load + en fallback). **Not shipped:** flag stays off until the corrupt non-en bundles are repaired (the switcher exists to QA them). A-02..A-13/A-16 (translation completeness + corruption) remain the gating data work — out-of-scope bulk migration per CLAUDE.md / your active i18n pipeline. | 🟡 |
 | A-02 | High | ~118 of ~582 `.tsx` use `useTranslation`; much UI copy is hardcoded English. | Inventory + scoped migration plan. | 🔵 |
 | A-03 | High | Entire `/features` product-showcase tree hardcoded English (all 9 sections). | Per-section i18n migration (14-locale). | 🔵 |
 | A-04 | High | Marketing hardcoded English: why-agents (`data.ts`+RoleSelector), features cluster, get-started+`TOUR_STEPS`, hero (`HeroClient.tsx:142,160`), `SocialProof.tsx`+`testimonials.ts`, pricing offer band. | Migrate per section. | 🔵 |
