@@ -1,1937 +1,2082 @@
 {
-  "$schema": "https://vibeman.dev/schemas/context-map.json",
-  "projectId": "39de516e-059b-4b1a-86ad-f28e8abddaf7",
-  "projectName": "personas-web",
-  "projectPath": "C:\\Users\\kazda\\kiro\\personas-web",
-  "version": "2.0.0",
+  "contexts": [
+    {
+      "api_surface": "",
+      "business_feature": "Agents Fleet Management",
+      "category": "ui",
+      "cross_refs": [
+        "mock-data-layer",
+        "dashboard-shell",
+        "observability-module"
+      ],
+      "db_tables": [],
+      "description": "The `/dashboard/agents` sub-page showing the fleet of active AI personas: their status, cost, execution counts, and per-agent detail views. AgentMetrics renders spark-lines and stat badges per persona. FleetOptimizationCard surfaces AI-generated recommendations for reducing cost or improving throughput.",
+      "entry_points": [
+        "src/app/dashboard/agents/",
+        "src/components/dashboard/AgentDetail.tsx"
+      ],
+      "file_paths": [
+        "src/app/dashboard/agents/",
+        "src/components/dashboard/AgentDetail.tsx",
+        "src/components/dashboard/AgentMetrics.tsx",
+        "src/components/dashboard/PersonaAvatar.tsx",
+        "src/components/dashboard/FleetOptimizationCard.tsx",
+        "src/components/dashboard/CompareToggle.tsx",
+        "src/components/dashboard/Sparkline.tsx",
+        "src/components/dashboard/MetricCard.tsx",
+        "src/components/dashboard/StatBadge.tsx",
+        "src/components/dashboard/StatusBadge.tsx",
+        "src/components/dashboard/StalenessIndicator.tsx",
+        "src/stores/personaStore.ts"
+      ],
+      "group": "Dashboard & Analytics",
+      "group_id": "2447d73f-894a-44a9-a6ec-c179e0799e1b",
+      "id": "a799f277-8e37-44c7-9f33-f34232995c23",
+      "keywords": [
+        "agents",
+        "personas",
+        "fleet",
+        "AI",
+        "cost",
+        "throughput",
+        "metrics",
+        "sparkline",
+        "status",
+        "avatar"
+      ],
+      "name": "agents-module",
+      "tech_stack": [
+        "React",
+        "TypeScript",
+        "Tailwind",
+        "Zustand",
+        "Recharts"
+      ]
+    },
+    {
+      "api_surface": "",
+      "business_feature": "Animation System",
+      "category": "lib",
+      "cross_refs": [
+        "brand-tokens",
+        "feature-showcase",
+        "home-page"
+      ],
+      "db_tables": [],
+      "description": "Reusable animation primitives, hooks, and gating infrastructure. `animations.ts` exports framer-motion variants and transition presets. Animation hooks manage numbers tweening, auto-cycling, canvas compositing, and section-based pause. `AnimationPauseObserver` pauses expensive animations when sections leave the viewport. All GPU-intensive animations gate on `useReducedMotion` per the project lint rule.",
+      "entry_points": [
+        "src/lib/animations.ts",
+        "src/components/AnimationPauseObserver.tsx"
+      ],
+      "file_paths": [
+        "src/lib/animations.ts",
+        "src/hooks/useAnimatedNumber.ts",
+        "src/hooks/useAnimationPause.ts",
+        "src/hooks/useAutoCycle.ts",
+        "src/hooks/useCanvasCompositor.ts",
+        "src/hooks/useSectionPause.ts",
+        "src/hooks/useTweenedNumber.ts",
+        "src/hooks/useActiveSection.ts",
+        "src/contexts/SectionObserverContext.tsx",
+        "src/contexts/QualityContext.tsx",
+        "src/components/AnimationPauseObserver.tsx",
+        "src/components/particle-host/particleHostRegistry.ts"
+      ],
+      "group": "Design System",
+      "group_id": "40c41653-ee2d-473d-8d67-b9328a0a86a0",
+      "id": "d1b82100-b9ae-4f42-a478-935c3445d404",
+      "keywords": [
+        "animation",
+        "framer-motion",
+        "reduced motion",
+        "tween",
+        "canvas",
+        "viewport",
+        "pause",
+        "cycle",
+        "gating",
+        "performance"
+      ],
+      "name": "animation-system",
+      "tech_stack": [
+        "React",
+        "TypeScript",
+        "framer-motion",
+        "canvas"
+      ]
+    },
+    {
+      "api_surface": "",
+      "business_feature": "Authentication",
+      "category": "lib",
+      "cross_refs": [
+        "supabase-layer",
+        "dashboard-shell"
+      ],
+      "db_tables": [
+        "auth.users"
+      ],
+      "description": "Client-side authentication state management for the demo dashboard. `authStore` (Zustand) holds the signed-in user, session token, and auth status. `AuthProvider` bootstraps the store on mount and subscribes to Supabase auth events. `mockAuth.ts` provides a deterministic fake auth flow for the demo environment when Supabase is not configured.",
+      "entry_points": [
+        "src/stores/authStore.ts",
+        "src/components/AuthProvider.tsx"
+      ],
+      "file_paths": [
+        "src/stores/authStore.ts",
+        "src/components/AuthProvider.tsx",
+        "src/components/AuthToast.tsx",
+        "src/lib/mockAuth.ts",
+        "src/components/dashboard/SignInPrompt.tsx",
+        "src/components/dashboard/AuthGuard.tsx",
+        "src/components/dashboard/AuthLayout.tsx"
+      ],
+      "group": "Platform Infrastructure",
+      "group_id": "23ebc3a7-d574-4e9f-92db-6894abdf3058",
+      "id": "481d4952-58ef-40d4-9350-9eecdf9aed4b",
+      "keywords": [
+        "auth",
+        "authentication",
+        "session",
+        "login",
+        "sign-in",
+        "mock auth",
+        "Supabase auth",
+        "Zustand",
+        "user",
+        "JWT"
+      ],
+      "name": "auth-system",
+      "tech_stack": [
+        "TypeScript",
+        "Zustand",
+        "Supabase Auth"
+      ]
+    },
+    {
+      "api_surface": "GET /blog/feed.xml",
+      "business_feature": "Blog",
+      "category": "ui",
+      "cross_refs": [
+        "site-shell",
+        "i18n-system"
+      ],
+      "db_tables": [],
+      "description": "The marketing blog at `/blog` featuring an RSS feed, category filtering, featured post highlight, and dynamic article pages with OG image generation. Blog post metadata lives in `src/data/blog.ts`. Articles are rendered by `BlogArticle.tsx` with shared markdown styling. The RSS feed route generates valid Atom XML.",
+      "entry_points": [
+        "src/app/blog/page.tsx",
+        "src/data/blog.ts"
+      ],
+      "file_paths": [
+        "src/app/blog/page.tsx",
+        "src/app/blog/layout.tsx",
+        "src/app/blog/BlogPostCard.tsx",
+        "src/app/blog/CategoryFilter.tsx",
+        "src/app/blog/FeaturedPost.tsx",
+        "src/app/blog/category-meta.ts",
+        "src/app/blog/feed.xml/route.ts",
+        "src/app/blog/[slug]/page.tsx",
+        "src/app/blog/[slug]/BlogArticle.tsx",
+        "src/app/blog/[slug]/opengraph-image.tsx",
+        "src/app/blog/[slug]/blog-article/",
+        "src/data/blog.ts"
+      ],
+      "group": "Content Hub",
+      "group_id": "188219bb-4d24-4436-a4a0-85f16d8f1ebd",
+      "id": "971bde11-d4a6-48b4-8581-71a3275ab8f8",
+      "keywords": [
+        "blog",
+        "articles",
+        "RSS",
+        "feed",
+        "categories",
+        "OG image",
+        "markdown",
+        "posts",
+        "content",
+        "SEO"
+      ],
+      "name": "blog",
+      "tech_stack": [
+        "Next.js",
+        "React",
+        "TypeScript",
+        "Shiki"
+      ]
+    },
+    {
+      "api_surface": "",
+      "business_feature": "Brand Design Tokens",
+      "category": "lib",
+      "cross_refs": [
+        "theme-system",
+        "animation-system"
+      ],
+      "db_tables": [],
+      "description": "The visual identity foundation: brand color palette, semantic Tailwind token definitions, CSS custom properties for themes, and typography scale. `brand-theme.ts` exports BRAND_VAR constants used by SVG illustrations and animation components. `themes.css` and `tokens.css` define light/dark CSS variables consumed by Tailwind's design tokens.",
+      "entry_points": [
+        "src/lib/brand-theme.ts",
+        "src/styles/tokens.css"
+      ],
+      "file_paths": [
+        "src/lib/brand-theme.ts",
+        "src/lib/colors.ts",
+        "src/lib/typography.ts",
+        "src/styles/themes.css",
+        "src/styles/tokens.css",
+        "src/styles/typography.css"
+      ],
+      "group": "Design System",
+      "group_id": "40c41653-ee2d-473d-8d67-b9328a0a86a0",
+      "id": "11a7848a-2dd6-4849-a9e5-2ad66bc8ac73",
+      "keywords": [
+        "brand",
+        "colors",
+        "tokens",
+        "CSS variables",
+        "theme",
+        "typography",
+        "Tailwind",
+        "palette",
+        "design system",
+        "SVG"
+      ],
+      "name": "brand-tokens",
+      "tech_stack": [
+        "CSS",
+        "TypeScript",
+        "Tailwind"
+      ]
+    },
+    {
+      "api_surface": "",
+      "business_feature": "Build & Tooling Configuration",
+      "category": "config",
+      "cross_refs": [
+        "observability-infra"
+      ],
+      "db_tables": [],
+      "description": "Build-time configuration and development tooling: Next.js config, TypeScript config, PostCSS, ESLint (including two custom rules for animation gating and low-opacity text), Playwright test runner config, and Sentry source-map upload integration. Custom ESLint rules under `eslint-rules/` enforce project-specific conventions.",
+      "entry_points": [
+        "next.config.ts",
+        "eslint.config.mjs"
+      ],
+      "file_paths": [
+        "next.config.ts",
+        "tsconfig.json",
+        "postcss.config.mjs",
+        "eslint.config.mjs",
+        "playwright.config.ts",
+        "eslint-rules/",
+        "scripts/install-git-hooks.mjs"
+      ],
+      "group": "Platform Infrastructure",
+      "group_id": "23ebc3a7-d574-4e9f-92db-6894abdf3058",
+      "id": "cce0ffe2-1401-4b46-8283-88a614588895",
+      "keywords": [
+        "build",
+        "config",
+        "ESLint",
+        "TypeScript",
+        "Playwright",
+        "PostCSS",
+        "Sentry",
+        "custom rules",
+        "git hooks"
+      ],
+      "name": "build-config",
+      "tech_stack": [
+        "Next.js",
+        "TypeScript",
+        "ESLint",
+        "Playwright"
+      ]
+    },
+    {
+      "api_surface": "",
+      "business_feature": "Changelog / Release Notes",
+      "category": "ui",
+      "cross_refs": [
+        "site-shell",
+        "i18n-system"
+      ],
+      "db_tables": [],
+      "description": "A scrollable timeline of product release notes embedded in the marketing site. Changelog entries are stored in `src/data/changelog.ts` and rendered by the `changelog-timeline` section components. The PreviewRegistry at `/preview` also references changelog for component development.",
+      "entry_points": [
+        "src/data/changelog.ts",
+        "src/components/sections/changelog-timeline/"
+      ],
+      "file_paths": [
+        "src/components/sections/changelog-timeline/",
+        "src/components/sections/Changelog.tsx",
+        "src/data/changelog.ts",
+        "src/app/preview/"
+      ],
+      "group": "Content Hub",
+      "group_id": "188219bb-4d24-4436-a4a0-85f16d8f1ebd",
+      "id": "8fbb3697-7736-4834-8fde-f2c561e50fbb",
+      "keywords": [
+        "changelog",
+        "release notes",
+        "timeline",
+        "version history",
+        "updates",
+        "product news"
+      ],
+      "name": "changelog",
+      "tech_stack": [
+        "React",
+        "TypeScript",
+        "Tailwind",
+        "framer-motion"
+      ]
+    },
+    {
+      "api_surface": "",
+      "business_feature": "Integrations / Connections Catalog",
+      "category": "ui",
+      "cross_refs": [
+        "ui-primitives",
+        "i18n-system"
+      ],
+      "db_tables": [],
+      "description": "The `/connections` page displaying the catalog of third-party integrations and connectors available to the Personas platform. Users can browse connector categories, open a modal for connector details, and see integration compatibility. Connector data is sourced from a static manifest (`src/data/connectors.ts`) and the display is generated from `src/lib/connectors.ts`.",
+      "entry_points": [
+        "src/app/connections/page.tsx",
+        "src/components/sections/connections-catalog/"
+      ],
+      "file_paths": [
+        "src/app/connections/page.tsx",
+        "src/app/connections/layout.tsx",
+        "src/app/connections/opengraph-image.tsx",
+        "src/components/sections/connections-catalog/",
+        "src/components/sections/connector-modal/",
+        "src/lib/connectors.ts",
+        "src/data/connectors.ts",
+        "src/components/icons/brand-icons.tsx"
+      ],
+      "group": "Marketing Site",
+      "group_id": "9fdd241e-a475-4625-90d8-01dddf3171ed",
+      "id": "3695de49-312a-4bee-8dcf-f10ce619fd9b",
+      "keywords": [
+        "connectors",
+        "integrations",
+        "third-party",
+        "catalog",
+        "API",
+        "connections",
+        "plugins",
+        "tools"
+      ],
+      "name": "connections-page",
+      "tech_stack": [
+        "Next.js",
+        "React",
+        "TypeScript",
+        "Tailwind"
+      ]
+    },
+    {
+      "api_surface": "",
+      "business_feature": "Dashboard Misc Pages",
+      "category": "ui",
+      "cross_refs": [
+        "mock-data-layer",
+        "dashboard-shell"
+      ],
+      "db_tables": [],
+      "description": "Remaining dashboard sub-pages that don't warrant their own contexts: Home overview (`/dashboard/home`), Messages thread view (`/dashboard/messages`), SLA tracking (`/dashboard/sla`), Leaderboard (`/dashboard/leaderboard`), and Settings (`/dashboard/settings`). Each is a focused single-page view built on the shared mock data layer and dashboard shell.",
+      "entry_points": [
+        "src/app/dashboard/home/",
+        "src/app/dashboard/settings/"
+      ],
+      "file_paths": [
+        "src/app/dashboard/home/",
+        "src/app/dashboard/messages/",
+        "src/app/dashboard/sla/",
+        "src/app/dashboard/leaderboard/",
+        "src/app/dashboard/settings/",
+        "src/components/dashboard/SubscriptionsPanel/",
+        "src/components/dashboard/Modal.tsx",
+        "src/components/dashboard/PersonaAvatar.tsx"
+      ],
+      "group": "Dashboard & Analytics",
+      "group_id": "2447d73f-894a-44a9-a6ec-c179e0799e1b",
+      "id": "65e106f6-0597-4fb6-90ab-92f5c9d73c26",
+      "keywords": [
+        "home",
+        "messages",
+        "SLA",
+        "leaderboard",
+        "settings",
+        "overview",
+        "threads",
+        "ranking"
+      ],
+      "name": "dashboard-misc-pages",
+      "tech_stack": [
+        "React",
+        "TypeScript",
+        "Tailwind",
+        "Zustand"
+      ]
+    },
+    {
+      "api_surface": "",
+      "business_feature": "Dashboard Shell",
+      "category": "ui",
+      "cross_refs": [
+        "auth-system",
+        "mock-data-layer",
+        "i18n-system",
+        "mobile-routes"
+      ],
+      "db_tables": [],
+      "description": "The demo dashboard's persistent shell: layout, sidebar navigation, scope bar, authentication guard, and skeleton loader. The dashboard runs entirely on mock data from `src/lib/mockApi.ts`; AuthGuard redirects unauthenticated visitors to the sign-in prompt. DashboardScopeBar provides a date-range and agent-scope selector used by all sub-pages.",
+      "entry_points": [
+        "src/app/dashboard/layout.tsx",
+        "src/components/dashboard/DashboardNavbar.tsx"
+      ],
+      "file_paths": [
+        "src/app/dashboard/layout.tsx",
+        "src/app/dashboard/page.tsx",
+        "src/components/dashboard/DashboardNavbar.tsx",
+        "src/components/dashboard/DashboardNavigation.tsx",
+        "src/components/dashboard/DashboardSidebar.tsx",
+        "src/components/dashboard/DashboardScopeBar.tsx",
+        "src/components/dashboard/DashboardSkeleton.tsx",
+        "src/components/dashboard/DesktopSidebar.tsx",
+        "src/components/dashboard/AuthGuard.tsx",
+        "src/components/dashboard/AuthLayout.tsx",
+        "src/components/dashboard/DashboardErrorBanner.tsx",
+        "src/components/dashboard/DashboardErrorBoundary.tsx",
+        "src/components/dashboard/SignInPrompt.tsx",
+        "src/components/dashboard/MobileBottomNav.tsx"
+      ],
+      "group": "Dashboard & Analytics",
+      "group_id": "2447d73f-894a-44a9-a6ec-c179e0799e1b",
+      "id": "4ce85dec-9404-432e-ac20-06f9dac48344",
+      "keywords": [
+        "dashboard",
+        "sidebar",
+        "navigation",
+        "auth guard",
+        "scope",
+        "layout",
+        "demo",
+        "shell"
+      ],
+      "name": "dashboard-shell",
+      "tech_stack": [
+        "Next.js",
+        "React",
+        "TypeScript",
+        "Tailwind",
+        "Zustand"
+      ]
+    },
+    {
+      "api_surface": "GET /api/download",
+      "business_feature": "Download & How It Works",
+      "category": "ui",
+      "cross_refs": [
+        "site-shell",
+        "i18n-system"
+      ],
+      "db_tables": [],
+      "description": "The `/how` and `/demo` marketing pages plus the download CTA section that drives app installs. The download API route at `/api/download` serves asset links for macOS, Windows, and Linux. The get-started and FAQ sections appear across multiple marketing pages to reduce friction.",
+      "entry_points": [
+        "src/app/how/",
+        "src/components/sections/download-cta/"
+      ],
+      "file_paths": [
+        "src/app/how/",
+        "src/app/demo/",
+        "src/components/sections/download-cta/",
+        "src/components/sections/get-started/",
+        "src/components/sections/faq/",
+        "src/app/api/download/route.ts"
+      ],
+      "group": "Marketing Site",
+      "group_id": "9fdd241e-a475-4625-90d8-01dddf3171ed",
+      "id": "4ddd4445-8794-443a-a490-f428a243713c",
+      "keywords": [
+        "download",
+        "install",
+        "how it works",
+        "get started",
+        "FAQ",
+        "demo",
+        "desktop app",
+        "CTA"
+      ],
+      "name": "download-how-pages",
+      "tech_stack": [
+        "Next.js",
+        "React",
+        "TypeScript",
+        "Tailwind"
+      ]
+    },
+    {
+      "api_surface": "",
+      "business_feature": "End-to-End Test Suite",
+      "category": "test",
+      "cross_refs": [
+        "guided-tour",
+        "guide-system",
+        "roadmap-voting",
+        "blog"
+      ],
+      "db_tables": [],
+      "description": "Playwright end-to-end test suite covering 13 user-facing flows: blog navigation, community, connection catalog, cookie consent, download, guide (10KB), legal, playground, roadmap voting, templates, guided tour (13KB), and use-cases. Tests run against the live dev server and verify real user interactions rather than mocked unit behavior.",
+      "entry_points": [
+        "e2e/tour.spec.ts",
+        "e2e/guide.spec.ts"
+      ],
+      "file_paths": [
+        "e2e/blog.spec.ts",
+        "e2e/community.spec.ts",
+        "e2e/compare.spec.ts",
+        "e2e/connections.spec.ts",
+        "e2e/cookie-consent.spec.ts",
+        "e2e/download.spec.ts",
+        "e2e/guide.spec.ts",
+        "e2e/legal.spec.ts",
+        "e2e/playground.spec.ts",
+        "e2e/roadmap.spec.ts",
+        "e2e/templates.spec.ts",
+        "e2e/tour.spec.ts",
+        "e2e/use-cases.spec.ts",
+        "playwright.config.ts"
+      ],
+      "group": "Platform Infrastructure",
+      "group_id": "23ebc3a7-d574-4e9f-92db-6894abdf3058",
+      "id": "68c11e4f-509f-48b2-8b35-28cc7842e0aa",
+      "keywords": [
+        "e2e",
+        "Playwright",
+        "tests",
+        "integration",
+        "spec",
+        "user flows",
+        "browser",
+        "automation"
+      ],
+      "name": "e2e-tests",
+      "tech_stack": [
+        "Playwright",
+        "TypeScript"
+      ]
+    },
+    {
+      "api_surface": "GET /api/events/stream (SSE)",
+      "business_feature": "Event Bus Visualizer",
+      "category": "ui",
+      "cross_refs": [
+        "mock-data-layer",
+        "dashboard-shell",
+        "executions-module"
+      ],
+      "db_tables": [],
+      "description": "The `/dashboard/events` sub-page providing a real-time event bus visualizer, swimlane view, and filterable event list. Events stream via SSE from `/api/events/stream`. The swimlane layout renders event topology as parallel lanes. EventDetailDrawer shows full payload and tracing context per event.",
+      "entry_points": [
+        "src/app/dashboard/events/",
+        "src/hooks/useEventStream.ts",
+        "src/stores/eventStore.ts"
+      ],
+      "file_paths": [
+        "src/app/dashboard/events/",
+        "src/app/api/events/stream/route.ts",
+        "src/components/dashboard/EventBusStats.tsx",
+        "src/components/dashboard/EventBusVisualization/",
+        "src/components/dashboard/EventDetailDrawer/",
+        "src/components/dashboard/EventsListPanel/",
+        "src/components/dashboard/EventSwimlane.tsx",
+        "src/components/dashboard/SwimlaneLane.tsx",
+        "src/components/dashboard/FilterBar.tsx",
+        "src/hooks/useEventStream.ts",
+        "src/hooks/useEventTopology.ts",
+        "src/stores/eventStore.ts",
+        "src/lib/event-bus-demo.ts"
+      ],
+      "group": "Dashboard & Analytics",
+      "group_id": "2447d73f-894a-44a9-a6ec-c179e0799e1b",
+      "id": "5eb4451a-6fe0-4049-9a7e-b381b6e998fa",
+      "keywords": [
+        "events",
+        "event bus",
+        "SSE",
+        "stream",
+        "swimlane",
+        "topology",
+        "real-time",
+        "filter",
+        "payload",
+        "tracing"
+      ],
+      "name": "events-module",
+      "tech_stack": [
+        "React",
+        "TypeScript",
+        "Zustand",
+        "SSE",
+        "framer-motion"
+      ]
+    },
+    {
+      "api_surface": "GET /api/executions/[id]/stream (SSE)",
+      "business_feature": "Execution Tracking",
+      "category": "ui",
+      "cross_refs": [
+        "mock-data-layer",
+        "dashboard-shell",
+        "events-module"
+      ],
+      "db_tables": [],
+      "description": "The `/dashboard/executions` sub-page tracking individual agent execution runs: duration, cost, status, and streaming logs. Executions can be polled in real-time via `/api/executions/[id]/stream`. ExecChartWithCompare renders period-over-period comparison charts. The execution store caches run state client-side.",
+      "entry_points": [
+        "src/app/dashboard/executions/",
+        "src/hooks/useExecutionPolling.ts"
+      ],
+      "file_paths": [
+        "src/app/dashboard/executions/",
+        "src/app/api/executions/[id]/stream/route.ts",
+        "src/components/dashboard/ExecChartWithCompare.tsx",
+        "src/components/dashboard/JsonViewer.tsx",
+        "src/components/dashboard/DataTable.tsx",
+        "src/components/dashboard/EmptyState.tsx",
+        "src/components/dashboard/SkeletonCard.tsx",
+        "src/hooks/useExecutionPolling.ts",
+        "src/stores/executionStore.ts"
+      ],
+      "group": "Dashboard & Analytics",
+      "group_id": "2447d73f-894a-44a9-a6ec-c179e0799e1b",
+      "id": "04118494-6da4-4ec7-b556-f0581a2ac98b",
+      "keywords": [
+        "executions",
+        "runs",
+        "logs",
+        "streaming",
+        "cost",
+        "duration",
+        "polling",
+        "status",
+        "compare",
+        "history"
+      ],
+      "name": "executions-module",
+      "tech_stack": [
+        "React",
+        "TypeScript",
+        "Zustand",
+        "SSE",
+        "Recharts"
+      ]
+    },
+    {
+      "api_surface": "",
+      "business_feature": "Feature Showcase Sections",
+      "category": "ui",
+      "cross_refs": [
+        "animation-system",
+        "home-page",
+        "features-page"
+      ],
+      "db_tables": [],
+      "description": "The cinematic animated feature sections used on the home page and `/features` page: event bus showcase, team canvas, companion section, and the section-level lazy loading wrapper. These are showcase-only (not feature-page specific), providing dramatic visual proof points for the platform capabilities. `SectionWrapper` drives scroll-triggered reveal for all sections.",
+      "entry_points": [
+        "src/components/SectionWrapper.tsx",
+        "src/components/sections/event-bus-showcase/"
+      ],
+      "file_paths": [
+        "src/components/sections/event-bus-showcase/",
+        "src/components/sections/team-canvas/",
+        "src/components/sections/companion/",
+        "src/components/sections/DownloadCTA.tsx",
+        "src/components/sections/LazySection.tsx",
+        "src/components/SectionWrapper.tsx",
+        "src/components/SectionBreadcrumb.tsx",
+        "src/components/SectionHeading.tsx",
+        "src/components/SectionDivider.tsx",
+        "src/components/StageSection.tsx",
+        "src/components/CinematicBreather.tsx",
+        "src/components/HoneycombMark.tsx",
+        "src/components/ScrollMap.tsx",
+        "src/components/ParticleHost.tsx",
+        "src/components/FloatingParticles.tsx",
+        "src/components/TopoBackground.tsx",
+        "src/components/ImageBackground.tsx",
+        "src/components/illustrations/"
+      ],
+      "group": "Demos & Tour",
+      "group_id": "9e7fd6ef-d447-4b6d-9840-c43ce7a376e9",
+      "id": "dd9607bf-6360-4dea-aeb8-9708b76eba70",
+      "keywords": [
+        "showcase",
+        "cinematic",
+        "event bus",
+        "team canvas",
+        "companion",
+        "scroll reveal",
+        "particles",
+        "illustrations",
+        "ambient"
+      ],
+      "name": "feature-showcase",
+      "tech_stack": [
+        "React",
+        "TypeScript",
+        "framer-motion",
+        "canvas"
+      ]
+    },
+    {
+      "api_surface": "",
+      "business_feature": "Features Showcase Page",
+      "category": "ui",
+      "cross_refs": [
+        "animation-system",
+        "ui-primitives",
+        "feature-showcase"
+      ],
+      "db_tables": [],
+      "description": "The `/features` marketing page that showcases individual product capabilities through animated feature sections (Memory, Healing Circuit, Design Engine, Security Vault, Trigger System, Observability Deck, Plugins, Multi-Provider AI). Each section is an isolated animated component lazy-loaded on scroll. This page drives top-of-funnel awareness of the platform's technical differentiators.",
+      "entry_points": [
+        "src/app/features/page.tsx",
+        "src/components/feature-sections/feature-lazy.tsx"
+      ],
+      "file_paths": [
+        "src/app/features/page.tsx",
+        "src/components/feature-sections/feature-lazy.tsx",
+        "src/components/feature-sections/MemoryLayers.tsx",
+        "src/components/feature-sections/MemoryLayersStack.tsx",
+        "src/components/feature-sections/memoryShared.tsx",
+        "src/components/feature-sections/HealingCircuit.tsx",
+        "src/components/feature-sections/DesignEngine.tsx",
+        "src/components/feature-sections/DesignEngineMatrix.tsx",
+        "src/components/feature-sections/designMatrixShared.tsx",
+        "src/components/feature-sections/SecurityVault.tsx",
+        "src/components/feature-sections/SecurityVaultPillars.tsx",
+        "src/components/feature-sections/TriggerSystem.tsx",
+        "src/components/feature-sections/ObservabilityDeck.tsx",
+        "src/components/feature-sections/Plugins.tsx",
+        "src/components/feature-sections/MultiProviderAI.tsx",
+        "src/components/feature-sections/Lab.tsx",
+        "src/components/feature-sections/ContextHint.tsx",
+        "src/components/sections/features/"
+      ],
+      "group": "Marketing Site",
+      "group_id": "9fdd241e-a475-4625-90d8-01dddf3171ed",
+      "id": "13cd2744-1da0-4f21-9e77-60a4f986400c",
+      "keywords": [
+        "features",
+        "memory",
+        "healing",
+        "design engine",
+        "security vault",
+        "triggers",
+        "observability",
+        "plugins",
+        "multi-provider",
+        "showcase"
+      ],
+      "name": "features-page",
+      "tech_stack": [
+        "Next.js",
+        "React",
+        "TypeScript",
+        "Tailwind",
+        "framer-motion",
+        "canvas"
+      ]
+    },
+    {
+      "api_surface": "",
+      "business_feature": "Visual Pipeline Composer",
+      "category": "ui",
+      "cross_refs": [
+        "playground",
+        "animation-system"
+      ],
+      "db_tables": [],
+      "description": "A node-graph drag-and-drop visual composer for building agent pipelines, used within the playground. Nodes represent agents/tools; edges represent data flow. State is managed by `use-flow-composer.ts`. The composer supports adding, connecting, and configuring nodes via a panel component. Renders inside `FlowComposer.tsx`.",
+      "entry_points": [
+        "src/components/FlowComposer.tsx",
+        "src/components/flow-composer/use-flow-composer.ts"
+      ],
+      "file_paths": [
+        "src/components/FlowComposer.tsx",
+        "src/components/flow-composer/components/",
+        "src/components/flow-composer/types.ts",
+        "src/components/flow-composer/data.ts",
+        "src/components/flow-composer/use-flow-composer.ts"
+      ],
+      "group": "Demos & Tour",
+      "group_id": "9e7fd6ef-d447-4b6d-9840-c43ce7a376e9",
+      "id": "b2a9e007-f26a-403d-9de3-40f7b35e5e9d",
+      "keywords": [
+        "flow composer",
+        "node graph",
+        "drag and drop",
+        "pipeline builder",
+        "visual editor",
+        "nodes",
+        "edges",
+        "agents",
+        "canvas"
+      ],
+      "name": "flow-composer",
+      "tech_stack": [
+        "React",
+        "TypeScript",
+        "framer-motion"
+      ]
+    },
+    {
+      "api_surface": "",
+      "business_feature": "Knowledge Base / Guide",
+      "category": "ui",
+      "cross_refs": [
+        "i18n-system",
+        "ui-primitives",
+        "blog"
+      ],
+      "db_tables": [],
+      "description": "A full-featured knowledge base at `/guide` organized into categories and topics, with markdown rendering, table of contents, reading progress, search, and mobile-responsive layout. Guide content is stored as structured TypeScript data in `src/data/guide/` with 13-locale translations. `GuideMarkdown` renders MDX-like blocks via `GuideBlocks`. Search is handled client-side by `guide-search.ts`.",
+      "entry_points": [
+        "src/app/guide/page.tsx",
+        "src/components/guide/",
+        "src/data/guide/topics.ts"
+      ],
+      "file_paths": [
+        "src/app/guide/page.tsx",
+        "src/app/guide/layout.tsx",
+        "src/app/guide/[category]/",
+        "src/app/guide/[category]/[topic]/",
+        "src/app/guide/guide-page/",
+        "src/components/guide/",
+        "src/data/guide/categories.ts",
+        "src/data/guide/topics.ts",
+        "src/data/guide/desktop-modules.ts",
+        "src/data/guide/illustrations.ts",
+        "src/data/guide/getLocalized.ts",
+        "src/data/guide/content/",
+        "src/data/guide/locales/",
+        "src/lib/guide-link.ts",
+        "src/lib/guide-search.ts",
+        "src/lib/guide-utils.ts"
+      ],
+      "group": "Content Hub",
+      "group_id": "188219bb-4d24-4436-a4a0-85f16d8f1ebd",
+      "id": "722951e6-8cfc-4d2f-90e6-cbc6f1e8d63e",
+      "keywords": [
+        "guide",
+        "knowledge base",
+        "docs",
+        "categories",
+        "topics",
+        "search",
+        "markdown",
+        "TOC",
+        "reading progress",
+        "localized"
+      ],
+      "name": "guide-system",
+      "tech_stack": [
+        "Next.js",
+        "React",
+        "TypeScript",
+        "Shiki"
+      ]
+    },
+    {
+      "api_surface": "",
+      "business_feature": "Guided Product Tour",
+      "category": "ui",
+      "cross_refs": [
+        "animation-system",
+        "home-page",
+        "i18n-system"
+      ],
+      "db_tables": [],
+      "description": "An interactive guided product tour overlaid on the marketing site, walking new visitors through Personas' core value propositions via spotlight animations, caption cards, avatar countdown, and optional audio narration. Tour state is managed in `TourContext`. Six hooks coordinate scroll, keyboard navigation, spotlight sequencing, audio playback, and volume. Tour script (~14KB) defines the step sequence.",
+      "entry_points": [
+        "src/components/tour/TourOverlay.tsx",
+        "src/contexts/TourContext.tsx",
+        "src/lib/tour-script.ts"
+      ],
+      "file_paths": [
+        "src/components/tour/TourOverlay.tsx",
+        "src/components/tour/TourLauncher.tsx",
+        "src/components/tour/TourSpotlight.tsx",
+        "src/components/tour/TourCaptionCard.tsx",
+        "src/components/tour/TourBridgeCard.tsx",
+        "src/components/tour/TourIntroCard.tsx",
+        "src/components/tour/AthenaCompanion.tsx",
+        "src/components/tour/AvatarCountdown.tsx",
+        "src/components/tour/TourVolumeControl.tsx",
+        "src/contexts/TourContext.tsx",
+        "src/hooks/useTourNavigation.ts",
+        "src/hooks/useTourKeyboard.ts",
+        "src/hooks/useTourScroll.ts",
+        "src/hooks/useTourSpotlightSequence.ts",
+        "src/hooks/useTourAudio.ts",
+        "src/hooks/useTourVolume.ts",
+        "src/lib/tour-script.ts",
+        "src/data/tour.ts",
+        "e2e/tour.spec.ts"
+      ],
+      "group": "Demos & Tour",
+      "group_id": "9e7fd6ef-d447-4b6d-9840-c43ce7a376e9",
+      "id": "b5c0b3ec-2761-426a-b002-6dc38d1e21e4",
+      "keywords": [
+        "tour",
+        "onboarding",
+        "spotlight",
+        "audio",
+        "walkthrough",
+        "guide",
+        "overlay",
+        "step",
+        "companion",
+        "narrator"
+      ],
+      "name": "guided-tour",
+      "tech_stack": [
+        "React",
+        "TypeScript",
+        "framer-motion",
+        "Web Audio API"
+      ]
+    },
+    {
+      "api_surface": "",
+      "business_feature": "Health & Incident Management",
+      "category": "ui",
+      "cross_refs": [
+        "mock-data-layer",
+        "dashboard-shell",
+        "observability-module"
+      ],
+      "db_tables": [],
+      "description": "The `/dashboard/health` and `/dashboard/incidents` sub-pages surfacing system health scores, active incidents, and degradation history. HealthDigestPanel renders an AI-generated summary of current issues. HealthIssueRow displays individual incident cards with severity, affected agents, and status. Health scores are computed from mock data.",
+      "entry_points": [
+        "src/app/dashboard/health/",
+        "src/components/dashboard/HealthDigestPanel.tsx"
+      ],
+      "file_paths": [
+        "src/app/dashboard/health/",
+        "src/app/dashboard/incidents/",
+        "src/components/dashboard/HealthDigestPanel.tsx",
+        "src/components/dashboard/HealthIssueRow.tsx",
+        "src/components/dashboard/healthScoreColor.ts",
+        "src/components/dashboard/MarkdownReport/"
+      ],
+      "group": "Dashboard & Analytics",
+      "group_id": "2447d73f-894a-44a9-a6ec-c179e0799e1b",
+      "id": "68d8afaf-5a28-42f2-9b07-0dda1686a50d",
+      "keywords": [
+        "health",
+        "incidents",
+        "degradation",
+        "score",
+        "severity",
+        "alerts",
+        "system status",
+        "monitoring"
+      ],
+      "name": "health-incidents-module",
+      "tech_stack": [
+        "React",
+        "TypeScript",
+        "Tailwind"
+      ]
+    },
+    {
+      "api_surface": "",
+      "business_feature": "Home / Landing Page",
+      "category": "ui",
+      "cross_refs": [
+        "feature-showcase",
+        "download-how-pages",
+        "animation-system"
+      ],
+      "db_tables": [],
+      "description": "The marketing home page at `/` including the hero section, primary CTA, use-case highlights, vision grid, orchestration hub, and structured JSON-LD data for search engines. Hero content is split into a server component and a client-animated HeroClient to allow static rendering with progressive enhancement. Cross-links to the download CTA and features sections.",
+      "entry_points": [
+        "src/app/page.tsx",
+        "src/components/sections/Hero.tsx"
+      ],
+      "file_paths": [
+        "src/app/page.tsx",
+        "src/app/homeJsonLd.ts",
+        "src/app/opengraph-image.tsx",
+        "src/components/sections/Hero.tsx",
+        "src/components/sections/HeroClient.tsx",
+        "src/components/sections/lazy.tsx",
+        "src/components/sections/how-lazy.tsx",
+        "src/components/sections/hero/",
+        "src/components/sections/use-cases/",
+        "src/components/sections/vision-grid/",
+        "src/components/sections/orchestration-hub/",
+        "src/components/sections/platform-command/",
+        "src/components/sections/platform-layers/",
+        "src/components/sections/agents-timeline/",
+        "src/components/PrimaryCTA.tsx",
+        "src/components/PhaseCard.tsx",
+        "src/components/ParallaxAccents.tsx",
+        "src/components/AmbientOrbs.tsx"
+      ],
+      "group": "Marketing Site",
+      "group_id": "9fdd241e-a475-4625-90d8-01dddf3171ed",
+      "id": "2380a729-4fd1-4a70-bc2f-01c927681a57",
+      "keywords": [
+        "hero",
+        "home",
+        "landing",
+        "CTA",
+        "vision",
+        "orchestration",
+        "agents",
+        "marketing",
+        "JSON-LD",
+        "structured data"
+      ],
+      "name": "home-page",
+      "tech_stack": [
+        "Next.js",
+        "React",
+        "TypeScript",
+        "Tailwind",
+        "framer-motion"
+      ]
+    },
+    {
+      "api_surface": "",
+      "business_feature": "Internationalization (14 Locales)",
+      "category": "lib",
+      "cross_refs": [
+        "site-shell",
+        "guide-system",
+        "blog"
+      ],
+      "db_tables": [],
+      "description": "A custom 14-locale internationalization system with a static bundle approach: all translations are TypeScript files compiled into the bundle. `useTranslation()` reads the active locale from `i18nStore` and returns a typed `Translations` object. `LanguageSwitcher` persists the chosen locale. Dev/QA locale switching is gated behind an env flag. `tsc` enforces key completeness across all 14 locales.",
+      "entry_points": [
+        "src/i18n/en.ts",
+        "src/i18n/useTranslation.ts",
+        "src/stores/i18nStore.ts"
+      ],
+      "file_paths": [
+        "src/i18n/en.ts",
+        "src/i18n/ar.ts",
+        "src/i18n/bn.ts",
+        "src/i18n/cs.ts",
+        "src/i18n/de.ts",
+        "src/i18n/es.ts",
+        "src/i18n/fr.ts",
+        "src/i18n/hi.ts",
+        "src/i18n/id.ts",
+        "src/i18n/ja.ts",
+        "src/i18n/ko.ts",
+        "src/i18n/ru.ts",
+        "src/i18n/vi.ts",
+        "src/i18n/zh.ts",
+        "src/i18n/useTranslation.ts",
+        "src/stores/i18nStore.ts",
+        "src/components/LanguageSwitcher.tsx",
+        "scripts/check-i18n-coverage.mjs",
+        "scripts/guide-i18n-audit.mjs",
+        "scripts/report-hardcoded-ui-strings.mjs"
+      ],
+      "group": "Platform Infrastructure",
+      "group_id": "23ebc3a7-d574-4e9f-92db-6894abdf3058",
+      "id": "43381da8-9499-45dc-b5f0-b99fd0626fe0",
+      "keywords": [
+        "i18n",
+        "internationalization",
+        "locale",
+        "translation",
+        "language",
+        "Arabic",
+        "Chinese",
+        "Japanese",
+        "multilingual",
+        "TypeScript"
+      ],
+      "name": "i18n-system",
+      "tech_stack": [
+        "TypeScript",
+        "Zustand"
+      ]
+    },
+    {
+      "api_surface": "",
+      "business_feature": "Knowledge & Memory Management",
+      "category": "ui",
+      "cross_refs": [
+        "mock-data-layer",
+        "dashboard-shell",
+        "agents-module"
+      ],
+      "db_tables": [],
+      "description": "The `/dashboard/knowledge` sub-page managing the agent memory system: semantic memories, pattern clusters, and recalled context. MemoryActionsPanel lets users pin, archive, or promote memory entries. The three sub-views (memories, patterns, clusters) reflect the knowledge graph structure of the orchestration platform.",
+      "entry_points": [
+        "src/app/dashboard/knowledge/"
+      ],
+      "file_paths": [
+        "src/app/dashboard/knowledge/",
+        "src/components/dashboard/MemoryActionsPanel.tsx"
+      ],
+      "group": "Dashboard & Analytics",
+      "group_id": "2447d73f-894a-44a9-a6ec-c179e0799e1b",
+      "id": "47e274ce-7ee2-45c3-8ade-75a90bd3e534",
+      "keywords": [
+        "knowledge",
+        "memory",
+        "patterns",
+        "clusters",
+        "semantic",
+        "recall",
+        "context",
+        "graph",
+        "pin",
+        "archive"
+      ],
+      "name": "knowledge-module",
+      "tech_stack": [
+        "React",
+        "TypeScript",
+        "Tailwind"
+      ]
+    },
+    {
+      "api_surface": "",
+      "business_feature": "Legal & Security Pages",
+      "category": "ui",
+      "cross_refs": [
+        "site-shell",
+        "i18n-system"
+      ],
+      "db_tables": [],
+      "description": "Static informational pages covering legal policies (privacy policy, terms of service, cookie policy) and the security documentation page. Policy content tracks changes via `policy-changelog.ts`. The security page displays compliance certifications, threat model, and disclosure process sourced from `security.ts`.",
+      "entry_points": [
+        "src/app/legal/",
+        "src/app/security/"
+      ],
+      "file_paths": [
+        "src/app/legal/",
+        "src/app/security/",
+        "src/data/security.ts",
+        "src/data/policy-changelog.ts",
+        "src/components/InfoPageLayout.tsx"
+      ],
+      "group": "Marketing Site",
+      "group_id": "9fdd241e-a475-4625-90d8-01dddf3171ed",
+      "id": "dfddd163-c6bd-4a80-951f-ffd015af1cdf",
+      "keywords": [
+        "legal",
+        "privacy",
+        "terms",
+        "security",
+        "policy",
+        "compliance",
+        "GDPR",
+        "cookie",
+        "disclosure"
+      ],
+      "name": "legal-security-pages",
+      "tech_stack": [
+        "Next.js",
+        "React",
+        "TypeScript",
+        "Tailwind"
+      ]
+    },
+    {
+      "api_surface": "",
+      "business_feature": "Mobile UI Components",
+      "category": "ui",
+      "cross_refs": [
+        "mobile-routes",
+        "ui-primitives",
+        "dashboard-shell"
+      ],
+      "db_tables": [],
+      "description": "Mobile-specific UI components: MobileAppBar (top header), MobileBottomNav (tab bar), MobileShell (page wrapper), MobileSheet (bottom drawer), MobileStatCard (compact KPI card), MobileTabBar, MobileThreadSheet, and ViewFullSiteLink. These components share the same mock data layer as the desktop dashboard but are tuned for touch interaction and small viewports.",
+      "entry_points": [
+        "src/components/mobile/MobileShell.tsx",
+        "src/components/mobile/MobileAppBar.tsx"
+      ],
+      "file_paths": [
+        "src/components/mobile/MobileAppBar.tsx",
+        "src/components/mobile/MobileSheet.tsx",
+        "src/components/mobile/MobileShell.tsx",
+        "src/components/mobile/MobileStatCard.tsx",
+        "src/components/mobile/MobileTabBar.tsx",
+        "src/components/mobile/MobileThreadSheet.tsx",
+        "src/components/mobile/ViewFullSiteLink.tsx",
+        "src/components/dashboard/MobileBottomNav.tsx",
+        "src/hooks/useIsMobile.ts"
+      ],
+      "group": "Mobile Experience",
+      "group_id": "b5f13a3a-0c83-4fbb-8b8a-71ebf816aa50",
+      "id": "f0884554-af27-4599-9fcb-63cc26d8ac0d",
+      "keywords": [
+        "mobile",
+        "app bar",
+        "bottom nav",
+        "sheet",
+        "drawer",
+        "tab bar",
+        "touch",
+        "viewport",
+        "stat card",
+        "thread"
+      ],
+      "name": "mobile-components",
+      "tech_stack": [
+        "React",
+        "TypeScript",
+        "Tailwind",
+        "framer-motion"
+      ]
+    },
+    {
+      "api_surface": "",
+      "business_feature": "Mobile Dashboard Routes",
+      "category": "ui",
+      "cross_refs": [
+        "mobile-components",
+        "mock-data-layer",
+        "health-incidents-module",
+        "reviews-module"
+      ],
+      "db_tables": [],
+      "description": "Mobile-optimized dashboard routes under `/m/*` providing lightweight views of alerts, messages, overview, and reviews. The mobile layout uses a bottom tab bar and app bar instead of the sidebar. A `ViewFullSiteLink` offers an escape hatch to the full desktop dashboard. Routes are separate from `/dashboard/*` to allow independent mobile optimization.",
+      "entry_points": [
+        "src/app/m/layout.tsx",
+        "src/app/m/page.tsx"
+      ],
+      "file_paths": [
+        "src/app/m/page.tsx",
+        "src/app/m/layout.tsx",
+        "src/app/m/template.tsx",
+        "src/app/m/alerts/",
+        "src/app/m/messages/",
+        "src/app/m/overview/",
+        "src/app/m/reviews/"
+      ],
+      "group": "Mobile Experience",
+      "group_id": "b5f13a3a-0c83-4fbb-8b8a-71ebf816aa50",
+      "id": "1e5ed329-99b8-4269-8323-f06efc184bcb",
+      "keywords": [
+        "mobile",
+        "responsive",
+        "alerts",
+        "messages",
+        "overview",
+        "reviews",
+        "bottom nav",
+        "app bar",
+        "mobile dashboard"
+      ],
+      "name": "mobile-routes",
+      "tech_stack": [
+        "Next.js",
+        "React",
+        "TypeScript",
+        "Tailwind"
+      ]
+    },
+    {
+      "api_surface": "Internal mock — mirrors orchestrator REST API",
+      "business_feature": "Mock API / Demo Data Layer",
+      "category": "lib",
+      "cross_refs": [
+        "dashboard-shell",
+        "agents-module",
+        "events-module",
+        "executions-module",
+        "observability-module"
+      ],
+      "db_tables": [],
+      "description": "The complete mock data and API layer that powers the demo dashboard without a real backend. `mockApi.ts` exposes typed async functions mimicking a REST/WebSocket orchestrator. `mock-dashboard-data.ts` contains seeded time-series generators for costs, executions, success rates, and agent metrics. `dashboard-queries.ts` wraps these in SWR-compatible fetchers.",
+      "entry_points": [
+        "src/lib/mockApi.ts",
+        "src/lib/dashboard-queries.ts"
+      ],
+      "file_paths": [
+        "src/lib/mockApi.ts",
+        "src/lib/mock-dashboard-data.ts",
+        "src/lib/mockData.ts",
+        "src/lib/mockAuth.ts",
+        "src/lib/dashboard-queries.ts",
+        "src/lib/orchestrator-config.ts",
+        "src/lib/api.ts",
+        "src/lib/api-fetch.ts",
+        "src/lib/timings.ts"
+      ],
+      "group": "Dashboard & Analytics",
+      "group_id": "2447d73f-894a-44a9-a6ec-c179e0799e1b",
+      "id": "2cba2d44-ec8f-4cc0-84fe-6ef57c4288f5",
+      "keywords": [
+        "mock",
+        "API",
+        "fake data",
+        "demo",
+        "orchestrator",
+        "seeded",
+        "time-series",
+        "SWR",
+        "fetcher"
+      ],
+      "name": "mock-data-layer",
+      "tech_stack": [
+        "TypeScript",
+        "SWR"
+      ]
+    },
+    {
+      "api_surface": "",
+      "business_feature": "Error Tracking & Analytics",
+      "category": "lib",
+      "cross_refs": [
+        "site-shell",
+        "supabase-layer"
+      ],
+      "db_tables": [],
+      "description": "Error tracking and analytics infrastructure. Sentry is configured with a custom PII scrubber (`sentry-pii.ts`) that strips UUIDs, URLs, quoted names, and sensitive breadcrumb fields before any event is sent. `analytics.ts` provides lightweight page-event tracking. `PageViewTracker` fires analytics on route changes. `instrumentation.ts` wires Sentry into the Next.js server runtime.",
+      "entry_points": [
+        "src/lib/sentry-pii.ts",
+        "src/instrumentation.ts",
+        "src/lib/analytics.ts"
+      ],
+      "file_paths": [
+        "src/lib/sentry.ts",
+        "src/lib/sentry-pii.ts",
+        "src/lib/analytics.ts",
+        "src/components/PageViewTracker.tsx",
+        "src/instrumentation.ts",
+        "sentry.client.config.ts",
+        "sentry.server.config.ts",
+        "sentry.edge.config.ts"
+      ],
+      "group": "Platform Infrastructure",
+      "group_id": "23ebc3a7-d574-4e9f-92db-6894abdf3058",
+      "id": "7d17c12c-6f9c-4b80-add4-ec1ca3c4e682",
+      "keywords": [
+        "Sentry",
+        "error tracking",
+        "PII scrubbing",
+        "analytics",
+        "page view",
+        "observability",
+        "breadcrumbs",
+        "instrumentation"
+      ],
+      "name": "observability-infra",
+      "tech_stack": [
+        "TypeScript",
+        "Sentry",
+        "Next.js"
+      ]
+    },
+    {
+      "api_surface": "",
+      "business_feature": "Observability & Spend Analytics",
+      "category": "ui",
+      "cross_refs": [
+        "mock-data-layer",
+        "dashboard-shell",
+        "agents-module"
+      ],
+      "db_tables": [],
+      "description": "The `/dashboard/observability` sub-page with three views — activity, performance, and usage — showing cost trends, latency, traffic patterns, and spend distribution. UsageCharts, CostChartWithCompare, LatencyChart, and TrafficChart are all Recharts-based with a shared chart theme. `useLiveStats` polls mock data and `useSyncedRealtime` keeps multiple clients in sync.",
+      "entry_points": [
+        "src/app/dashboard/observability/",
+        "src/hooks/useLiveStats.ts"
+      ],
+      "file_paths": [
+        "src/app/dashboard/observability/",
+        "src/components/dashboard/UsageCharts/",
+        "src/components/dashboard/ObservabilitySpendPieChart.tsx",
+        "src/components/dashboard/CostChartWithCompare.tsx",
+        "src/components/dashboard/LatencyChart.tsx",
+        "src/components/dashboard/TrafficChart.tsx",
+        "src/components/dashboard/trendColor.ts",
+        "src/hooks/useLiveStats.ts",
+        "src/hooks/useSyncedRealtime.ts",
+        "src/stores/systemStore.ts",
+        "src/components/dashboard/SyncedRealtimeProvider.tsx",
+        "src/lib/chart-theme.tsx"
+      ],
+      "group": "Dashboard & Analytics",
+      "group_id": "2447d73f-894a-44a9-a6ec-c179e0799e1b",
+      "id": "e86a1897-708c-48d7-9bbc-063d4ea06012",
+      "keywords": [
+        "observability",
+        "cost",
+        "latency",
+        "traffic",
+        "spend",
+        "chart",
+        "realtime",
+        "performance",
+        "usage",
+        "trends"
+      ],
+      "name": "observability-module",
+      "tech_stack": [
+        "React",
+        "TypeScript",
+        "Zustand",
+        "Recharts",
+        "SWR"
+      ]
+    },
+    {
+      "api_surface": "",
+      "business_feature": "Interactive Playground",
+      "category": "ui",
+      "cross_refs": [
+        "flow-composer",
+        "animation-system",
+        "mock-data-layer"
+      ],
+      "db_tables": [],
+      "description": "The interactive agent playground at `/playground` where visitors can send messages to a simulated multi-agent pipeline and see responses in real time. The split-pane layout shows a chat interface alongside an execution timeline. `agents-chat` and `playground-split` sections build the core interaction surface. The playground timeline visualizes the agent invocation chain.",
+      "entry_points": [
+        "src/app/playground/page.tsx",
+        "src/components/sections/agent-playground/"
+      ],
+      "file_paths": [
+        "src/app/playground/page.tsx",
+        "src/components/sections/agent-playground/",
+        "src/components/sections/agents-chat/",
+        "src/components/sections/playground-split/",
+        "src/components/sections/playground-timeline/",
+        "src/components/FlowComposer.tsx",
+        "src/components/flow-composer/"
+      ],
+      "group": "Demos & Tour",
+      "group_id": "9e7fd6ef-d447-4b6d-9840-c43ce7a376e9",
+      "id": "2af064b2-af6f-400a-897d-3e581ea4ae10",
+      "keywords": [
+        "playground",
+        "demo",
+        "chat",
+        "agents",
+        "pipeline",
+        "interactive",
+        "simulation",
+        "flow",
+        "real-time"
+      ],
+      "name": "playground",
+      "tech_stack": [
+        "React",
+        "TypeScript",
+        "Tailwind",
+        "framer-motion"
+      ]
+    },
+    {
+      "api_surface": "",
+      "business_feature": "Human Review Workflows",
+      "category": "ui",
+      "cross_refs": [
+        "mock-data-layer",
+        "dashboard-shell"
+      ],
+      "db_tables": [],
+      "description": "The `/dashboard/reviews` sub-page for human-in-the-loop review workflows: focus flow (single-item), split pane (compare), and keyboard shortcuts mode. Supports bulk accept/reject via `useReviewBulkActions` with undo toast. Optional voice narration of review items is managed by `reviewVoiceStore` and `useReviewVoice`, backed by a 36KB pre-generated voice data file.",
+      "entry_points": [
+        "src/app/dashboard/reviews/",
+        "src/stores/reviewStore.ts",
+        "src/hooks/useReviewBulkActions.ts"
+      ],
+      "file_paths": [
+        "src/app/dashboard/reviews/",
+        "src/components/dashboard/BatchReviewModal/",
+        "src/stores/reviewStore.ts",
+        "src/stores/reviewVoiceStore.ts",
+        "src/hooks/useReviewBulkActions.ts",
+        "src/hooks/useReviewVoice.ts",
+        "src/lib/reviewUtils.ts",
+        "src/lib/review-voice.ts",
+        "src/lib/review-voice-data.ts",
+        "src/components/BulkProgressBar.tsx",
+        "src/components/BulkResultToast.tsx",
+        "src/components/UndoToast.tsx",
+        "src/components/ConfirmDialog.tsx"
+      ],
+      "group": "Dashboard & Analytics",
+      "group_id": "2447d73f-894a-44a9-a6ec-c179e0799e1b",
+      "id": "b7cad451-40fc-408f-a22d-3cf22ebb3695",
+      "keywords": [
+        "reviews",
+        "human-in-the-loop",
+        "bulk actions",
+        "voice",
+        "approval",
+        "reject",
+        "focus flow",
+        "split pane",
+        "undo",
+        "keyboard"
+      ],
+      "name": "reviews-module",
+      "tech_stack": [
+        "React",
+        "TypeScript",
+        "Zustand",
+        "Web Audio API"
+      ]
+    },
+    {
+      "api_surface": "GET/POST /api/roadmap, POST /api/votes, POST /api/feature-requests, POST /api/feature-comments, POST /api/feature-boosts",
+      "business_feature": "Community Roadmap & Voting",
+      "category": "api",
+      "cross_refs": [
+        "supabase-layer",
+        "i18n-system"
+      ],
+      "db_tables": [
+        "feature_requests",
+        "feature_votes",
+        "feature_comments",
+        "feature_boosts"
+      ],
+      "description": "The public product roadmap at `/roadmap` where users can view planned features and vote on priorities. Feature requests are stored in Supabase; votes are rate-limited per IP. API routes handle CRUD for requests, comments, votes, and a live roadmap JSON endpoint consumed by the desktop app. Roadmap phases data in `src/data/roadmap-phases.ts` drives the timeline display.",
+      "entry_points": [
+        "src/app/roadmap/page.tsx",
+        "src/app/api/roadmap/route.ts",
+        "src/app/api/votes/route.ts"
+      ],
+      "file_paths": [
+        "src/app/roadmap/page.tsx",
+        "src/app/api/roadmap/route.ts",
+        "src/app/api/roadmap/types.ts",
+        "src/app/api/votes/route.ts",
+        "src/app/api/votes/rate-limit.ts",
+        "src/app/api/votes/storage.ts",
+        "src/app/api/feature-requests/route.ts",
+        "src/app/api/feature-comments/route.ts",
+        "src/app/api/feature-boosts/route.ts",
+        "src/components/sections/roadmap/",
+        "src/components/sections/feature-voting/",
+        "src/data/roadmap-phases.ts",
+        "src/lib/supabaseApi.ts"
+      ],
+      "group": "Community & Roadmap",
+      "group_id": "e011647e-fd58-4d27-9b2a-5cfda86ff27d",
+      "id": "43e92724-23ef-4286-a793-ec877cbefde0",
+      "keywords": [
+        "roadmap",
+        "voting",
+        "feature requests",
+        "community",
+        "upvote",
+        "rate limit",
+        "Supabase",
+        "phases",
+        "planning",
+        "prioritization"
+      ],
+      "name": "roadmap-voting",
+      "tech_stack": [
+        "Next.js",
+        "React",
+        "TypeScript",
+        "Supabase"
+      ]
+    },
+    {
+      "api_surface": "",
+      "business_feature": "Shared Utilities",
+      "category": "lib",
+      "cross_refs": [
+        "site-shell",
+        "i18n-system"
+      ],
+      "db_tables": [],
+      "description": "Shared server-side and isomorphic utilities: environment variable validation (`env.ts`), application constants, URL construction helpers, form/data validation, and the OG image generation utilities. `bodyScrollLock.ts` prevents background scroll when modals are open. `format.ts` and `format-date.ts` provide locale-aware display formatting.",
+      "entry_points": [
+        "src/lib/types.ts",
+        "src/lib/constants.ts"
+      ],
+      "file_paths": [
+        "src/lib/constants.ts",
+        "src/lib/url.ts",
+        "src/lib/validation.ts",
+        "src/lib/format.ts",
+        "src/lib/format-date.ts",
+        "src/lib/types.ts",
+        "src/lib/og.tsx",
+        "src/lib/og-frame.tsx",
+        "src/lib/bodyScrollLock.ts",
+        "src/lib/highlight-match.tsx",
+        "src/proxy.ts",
+        "src/hooks/useAbortableEffect.ts",
+        "src/hooks/usePolling.ts",
+        "src/hooks/useSearchParamState.ts",
+        "src/hooks/usePageVisibility.ts",
+        "src/hooks/useIsMobile.ts",
+        "src/hooks/useIsVisible.ts",
+        "src/hooks/useMaxScrollHeight.ts",
+        "src/hooks/useFocusTrap.ts"
+      ],
+      "group": "Platform Infrastructure",
+      "group_id": "23ebc3a7-d574-4e9f-92db-6894abdf3058",
+      "id": "a5a6632f-8636-4ab6-bf53-21eedeff72a0",
+      "keywords": [
+        "utilities",
+        "constants",
+        "URL",
+        "validation",
+        "format",
+        "OG image",
+        "scroll lock",
+        "hooks",
+        "polling",
+        "viewport"
+      ],
+      "name": "server-utilities",
+      "tech_stack": [
+        "TypeScript",
+        "React"
+      ]
+    },
+    {
+      "api_surface": "GET /sitemap.xml, GET /robots.txt, GET /manifest.webmanifest",
+      "business_feature": "Site Shell & Navigation",
+      "category": "ui",
+      "cross_refs": [
+        "i18n-system",
+        "theme-system",
+        "auth-system"
+      ],
+      "db_tables": [],
+      "description": "The root Next.js layout, global error boundaries, SEO infrastructure, and top navigation bar that wrap every page on the site. The Navbar component contains desktop nav, mobile panel, download modal, and route definitions. It reads the theme store and i18n translations to render locale-aware navigation links.",
+      "entry_points": [
+        "src/app/layout.tsx",
+        "src/components/Navbar.tsx"
+      ],
+      "file_paths": [
+        "src/app/layout.tsx",
+        "src/app/template.tsx",
+        "src/app/loading.tsx",
+        "src/app/error.tsx",
+        "src/app/global-error.tsx",
+        "src/app/not-found.tsx",
+        "src/app/sitemap.ts",
+        "src/app/robots.ts",
+        "src/app/manifest.ts",
+        "src/app/globals.css",
+        "src/components/Navbar.tsx",
+        "src/components/navbar/DesktopNav.tsx",
+        "src/components/navbar/MobilePanel.tsx",
+        "src/components/navbar/DownloadModal.tsx",
+        "src/components/navbar/useMobileMenu.ts",
+        "src/components/navbar/useRoutes.ts",
+        "src/components/PageShell.tsx",
+        "src/components/CookieConsent.tsx",
+        "src/lib/seo.ts"
+      ],
+      "group": "Marketing Site",
+      "group_id": "9fdd241e-a475-4625-90d8-01dddf3171ed",
+      "id": "6a52c103-a9fe-428a-8acd-7d9ca351cdbf",
+      "keywords": [
+        "layout",
+        "navbar",
+        "navigation",
+        "SEO",
+        "sitemap",
+        "robots",
+        "manifest",
+        "PWA",
+        "error boundary",
+        "cookie consent"
+      ],
+      "name": "site-shell",
+      "tech_stack": [
+        "Next.js",
+        "React",
+        "TypeScript",
+        "Tailwind"
+      ]
+    },
+    {
+      "api_surface": "GET /api/stats, GET/POST /api/personas/storage, POST /api/personas/publish",
+      "business_feature": "Usage Stats & Persona Publishing",
+      "category": "api",
+      "cross_refs": [
+        "supabase-layer",
+        "home-page"
+      ],
+      "db_tables": [
+        "personas",
+        "stats"
+      ],
+      "description": "The `/api/stats` endpoint and `/api/personas/storage` + `/api/personas/publish` routes that surface aggregate usage statistics (installs, active users) and allow persona configuration publishing. Used by marketing pages to show live adoption numbers and by the desktop app to publish/sync persona configs.",
+      "entry_points": [
+        "src/app/api/stats/route.ts"
+      ],
+      "file_paths": [
+        "src/app/api/stats/route.ts",
+        "src/app/api/personas/storage.ts",
+        "src/app/api/personas/publish/"
+      ],
+      "group": "Community & Roadmap",
+      "group_id": "e011647e-fd58-4d27-9b2a-5cfda86ff27d",
+      "id": "7f273efd-f122-4721-abe5-2cb41ac61dfe",
+      "keywords": [
+        "stats",
+        "metrics",
+        "installs",
+        "usage",
+        "personas",
+        "publish",
+        "sync",
+        "storage"
+      ],
+      "name": "stats-api",
+      "tech_stack": [
+        "Next.js",
+        "TypeScript",
+        "Supabase"
+      ]
+    },
+    {
+      "api_surface": "",
+      "business_feature": "Backend / Supabase Integration",
+      "category": "lib",
+      "cross_refs": [
+        "roadmap-voting",
+        "waitlist",
+        "auth-system"
+      ],
+      "db_tables": [
+        "feature_requests",
+        "feature_votes",
+        "waitlist",
+        "personas",
+        "sessions"
+      ],
+      "description": "The Supabase integration layer: client initialization with anon-key-only access, typed API wrappers for roadmap/voting/waitlist tables, and server-side JSON file store fallback for environments without Supabase. All calls are guarded by URL+key presence checks to degrade gracefully. Rate limiting and request utilities support API routes.",
+      "entry_points": [
+        "src/lib/supabase.ts",
+        "src/lib/supabaseApi.ts"
+      ],
+      "file_paths": [
+        "src/lib/supabase.ts",
+        "src/lib/supabaseApi.ts",
+        "src/lib/server/json-file-store.ts",
+        "src/lib/server/rate-limit.ts",
+        "src/lib/server/request.ts",
+        "src/lib/server/env.ts",
+        "src/lib/fileLock.ts",
+        "src/lib/clearUserCaches.ts",
+        "scripts/setup-voting-db.sql",
+        "scripts/setup-sync-db.sql",
+        "scripts/setup-growth-db.sql"
+      ],
+      "group": "Platform Infrastructure",
+      "group_id": "23ebc3a7-d574-4e9f-92db-6894abdf3058",
+      "id": "fdbe284d-ae3e-4c12-82a8-e30a14e57479",
+      "keywords": [
+        "Supabase",
+        "database",
+        "anon key",
+        "RLS",
+        "SQL",
+        "migration",
+        "rate limit",
+        "JSON store",
+        "fallback",
+        "server"
+      ],
+      "name": "supabase-layer",
+      "tech_stack": [
+        "TypeScript",
+        "Supabase",
+        "PostgreSQL"
+      ]
+    },
+    {
+      "api_surface": "",
+      "business_feature": "Template Library",
+      "category": "ui",
+      "cross_refs": [
+        "connections-page",
+        "i18n-system"
+      ],
+      "db_tables": [],
+      "description": "The `/templates` page providing a searchable catalog of pre-built agent pipeline templates users can inspect and clone. Template detail pages at `/templates/[id]` show full configuration, required connections, and setup steps. Template data (~63KB) is stored in `src/lib/templates.ts` and queried via `template-queries.ts`.",
+      "entry_points": [
+        "src/app/templates/page.tsx",
+        "src/lib/templates.ts"
+      ],
+      "file_paths": [
+        "src/app/templates/page.tsx",
+        "src/app/templates/templates-page/",
+        "src/app/templates/[id]/page.tsx",
+        "src/app/templates/[id]/",
+        "src/lib/templates.ts",
+        "src/lib/template-queries.ts",
+        "src/lib/tool-catalogue.ts"
+      ],
+      "group": "Content Hub",
+      "group_id": "188219bb-4d24-4436-a4a0-85f16d8f1ebd",
+      "id": "f081c863-05a4-4940-924a-03adab2c2442",
+      "keywords": [
+        "templates",
+        "catalog",
+        "pipeline",
+        "clone",
+        "configuration",
+        "prebuilt",
+        "agent templates",
+        "tools",
+        "browse"
+      ],
+      "name": "templates-library",
+      "tech_stack": [
+        "Next.js",
+        "React",
+        "TypeScript",
+        "Tailwind"
+      ]
+    },
+    {
+      "api_surface": "",
+      "business_feature": "Theme Switching",
+      "category": "lib",
+      "cross_refs": [
+        "brand-tokens",
+        "site-shell"
+      ],
+      "db_tables": [],
+      "description": "Runtime light/dark/system theme switching. `themeStore` persists the user's preference to localStorage and applies a `data-theme` attribute to `<html>`. `ThemeInit` is a script injected into `<head>` to prevent flash-of-unstyled-content by reading localStorage synchronously before React hydrates. `ThemeSwitcher` renders the toggle UI.",
+      "entry_points": [
+        "src/stores/themeStore.ts",
+        "src/components/ThemeInit.tsx"
+      ],
+      "file_paths": [
+        "src/stores/themeStore.ts",
+        "src/components/ThemeInit.tsx",
+        "src/components/ThemeSwitcher.tsx"
+      ],
+      "group": "Design System",
+      "group_id": "40c41653-ee2d-473d-8d67-b9328a0a86a0",
+      "id": "6a3e5b10-f0df-45ab-b0c2-df772f509ea3",
+      "keywords": [
+        "theme",
+        "dark mode",
+        "light mode",
+        "FOUC",
+        "localStorage",
+        "data-theme",
+        "toggle",
+        "Zustand",
+        "system preference"
+      ],
+      "name": "theme-system",
+      "tech_stack": [
+        "TypeScript",
+        "Zustand",
+        "CSS"
+      ]
+    },
+    {
+      "api_surface": "",
+      "business_feature": "UI Component Primitives",
+      "category": "ui",
+      "cross_refs": [
+        "brand-tokens",
+        "animation-system",
+        "theme-system"
+      ],
+      "db_tables": [],
+      "description": "The shared component library of reusable UI building blocks: BrandCard, SectionIntro, TerminalPanel (with blinking cursor and history), ThemedChip, GlowCard, GradientText, RoleSelector, SVGFocusRing, LazyMount, and ShortcutHint. These are consumed across marketing sections, dashboard, and guide pages and adhere to the semantic Tailwind token conventions.",
+      "entry_points": [
+        "src/components/primitives/BrandCard.tsx",
+        "src/components/primitives/TerminalPanel.tsx"
+      ],
+      "file_paths": [
+        "src/components/primitives/BrandCard.tsx",
+        "src/components/primitives/SectionIntro.tsx",
+        "src/components/primitives/TerminalPanel.tsx",
+        "src/components/primitives/ThemedChip.tsx",
+        "src/components/primitives/terminal/",
+        "src/components/GlowCard.tsx",
+        "src/components/GradientText.tsx",
+        "src/components/RoleSelector.tsx",
+        "src/components/SVGFocusRing.tsx",
+        "src/components/LazyMount.tsx",
+        "src/components/ShortcutHint.tsx",
+        "src/components/TerminalChrome.tsx",
+        "src/components/MobilePageTOC.tsx"
+      ],
+      "group": "Design System",
+      "group_id": "40c41653-ee2d-473d-8d67-b9328a0a86a0",
+      "id": "c8da50d4-6b3d-4c4b-8e69-c5924ec2483e",
+      "keywords": [
+        "primitives",
+        "components",
+        "card",
+        "terminal",
+        "chip",
+        "glow",
+        "gradient",
+        "focus",
+        "lazy",
+        "reusable"
+      ],
+      "name": "ui-primitives",
+      "tech_stack": [
+        "React",
+        "TypeScript",
+        "Tailwind",
+        "framer-motion"
+      ]
+    },
+    {
+      "api_surface": "POST /api/waitlist",
+      "business_feature": "Waitlist Signup",
+      "category": "ui",
+      "cross_refs": [
+        "supabase-layer",
+        "home-page",
+        "animation-system"
+      ],
+      "db_tables": [
+        "waitlist"
+      ],
+      "description": "The waitlist signup modal and API route that captures early-access email addresses. `WaitlistModal` renders a multi-step animated flow: form → loading → success panel with animated checkmark. Submissions are stored via the `/api/waitlist` route (Supabase). The modal is triggered globally from multiple CTAs.",
+      "entry_points": [
+        "src/components/WaitlistModal.tsx",
+        "src/app/api/waitlist/route.ts"
+      ],
+      "file_paths": [
+        "src/components/WaitlistModal.tsx",
+        "src/components/waitlist-modal/WaitlistForm.tsx",
+        "src/components/waitlist-modal/WaitlistHeader.tsx",
+        "src/components/waitlist-modal/WaitlistSuccessPanel.tsx",
+        "src/components/waitlist-modal/AnimatedCheckmark.tsx",
+        "src/components/waitlist-modal/waitlistUtils.ts",
+        "src/app/api/waitlist/route.ts"
+      ],
+      "group": "Community & Roadmap",
+      "group_id": "e011647e-fd58-4d27-9b2a-5cfda86ff27d",
+      "id": "3896251b-50d4-4596-94eb-b3425c04bdfa",
+      "keywords": [
+        "waitlist",
+        "signup",
+        "email",
+        "early access",
+        "modal",
+        "form",
+        "success",
+        "CTA"
+      ],
+      "name": "waitlist",
+      "tech_stack": [
+        "React",
+        "TypeScript",
+        "Tailwind",
+        "framer-motion",
+        "Supabase"
+      ]
+    }
+  ],
+  "generated_at": "2026-06-16T08:17:58.219017300+00:00",
+  "generator": "personas-context-scan",
   "groups": [
     {
-      "name": "Marketing & Landing",
+      "color": "emerald",
+      "context_count": 6,
       "domain": "feature",
-      "type": null,
-      "color": "#06B6D4",
-      "icon": null,
-      "contexts": [
-        {
-          "name": "Guided Product Tour",
-          "description": "Interactive guided tour overlay (Athena companion, spotlight, captions, audio/voice narration) that walks first-time visitors through the marketing site.",
-          "businessFeature": "Guided Product Tour",
-          "category": "ui",
-          "filePaths": [
-            "src/components/tour/AthenaCompanion.tsx",
-            "src/components/tour/AvatarCountdown.tsx",
-            "src/components/tour/TourBridgeCard.tsx",
-            "src/components/tour/TourCaptionCard.tsx",
-            "src/components/tour/TourIntroCard.tsx",
-            "src/components/tour/TourLauncher.tsx",
-            "src/components/tour/TourOverlay.tsx",
-            "src/components/tour/TourSpotlight.tsx",
-            "src/components/tour/TourVolumeControl.tsx",
-            "src/contexts/TourContext.tsx",
-            "src/data/tour.ts",
-            "src/hooks/useTourAudio.ts",
-            "src/hooks/useTourKeyboard.ts",
-            "src/hooks/useTourNavigation.ts",
-            "src/hooks/useTourScroll.ts",
-            "src/hooks/useTourSpotlightSequence.ts",
-            "src/hooks/useTourVolume.ts",
-            "src/lib/tour-script.ts"
-          ],
-          "target": null,
-          "apiRoutes": []
-        },
-        {
-          "name": "Conversion: Get Started, FAQ & Footer",
-          "description": "Bottom-of-funnel conversion surfaces: get-started step walkthrough with visuals, download CTA, FAQ accordion, primary CTA button, and the site footer.",
-          "businessFeature": "Conversion: Get Started, FAQ & Footer",
-          "category": "ui",
-          "filePaths": [
-            "src/components/PrimaryCTA.tsx",
-            "src/components/sections/DownloadCTA.tsx",
-            "src/components/sections/FAQ.tsx",
-            "src/components/sections/Footer.tsx",
-            "src/components/sections/download-cta/DownloadStepGrid.tsx",
-            "src/components/sections/download-cta/DownloadTrustSignals.tsx",
-            "src/components/sections/download-cta/PlatformPills.tsx",
-            "src/components/sections/download-cta/downloadCtaTypes.ts",
-            "src/components/sections/download-cta/useDownloadPlatforms.ts",
-            "src/components/sections/download-cta/useFreshRelease.ts",
-            "src/components/sections/faq/FAQDiscordCTA.tsx",
-            "src/components/sections/faq/FAQHeader.tsx",
-            "src/components/sections/faq/faqIllustrations.tsx",
-            "src/components/sections/footer/FooterBrand.tsx",
-            "src/components/sections/footer/FooterCopyright.tsx",
-            "src/components/sections/footer/FooterLinkColumn.tsx",
-            "src/components/sections/footer/footerColumns.ts",
-            "src/components/sections/get-started/StepChip.tsx",
-            "src/components/sections/get-started/StepContent.tsx",
-            "src/components/sections/get-started/data.ts",
-            "src/components/sections/get-started/index.tsx",
-            "src/components/sections/get-started/visuals/ConnectVisual.tsx",
-            "src/components/sections/get-started/visuals/CreateVisual.tsx",
-            "src/components/sections/get-started/visuals/DownloadVisual.tsx",
-            "src/components/sections/get-started/visuals/ImproveVisual.tsx",
-            "src/components/sections/get-started/visuals/WorkVisual.tsx",
-            "src/components/sections/get-started/visuals/chrome.tsx",
-            "src/components/sections/get-started/visuals/index.ts",
-            "src/components/sections/get-started/visuals/types.ts"
-          ],
-          "target": null,
-          "apiRoutes": []
-        },
-        {
-          "name": "Why Agents & Use Cases",
-          "description": "Persuasion sections: agent-vs-workflow scenario duels, the use-case agent-army grid with tool selection, and customer testimonials.",
-          "businessFeature": "Why Agents & Use Cases",
-          "category": "ui",
-          "filePaths": [
-            "src/components/sections/use-cases/components/AgentArmyGrid.tsx",
-            "src/components/sections/use-cases/components/ConnectorIcon.tsx",
-            "src/components/sections/use-cases/components/ToolButton.tsx",
-            "src/components/sections/use-cases/components/ToolDetailCard.tsx",
-            "src/components/sections/use-cases/components/ToolGrid.tsx",
-            "src/components/sections/use-cases/data.ts",
-            "src/components/sections/use-cases/index.tsx",
-            "src/components/sections/use-cases/types.ts",
-            "src/components/sections/use-cases/useConnectorPath.ts",
-            "src/components/sections/use-cases/useToolSelection.ts",
-            "src/components/sections/why-agents/WhyAgentsSection.tsx",
-            "src/components/sections/why-agents/components/AgentPanel.tsx",
-            "src/components/sections/why-agents/components/ComparisonCard.tsx",
-            "src/components/sections/why-agents/components/ScenarioDuel.tsx",
-            "src/components/sections/why-agents/components/ScenarioHeader.tsx",
-            "src/components/sections/why-agents/components/ScenarioProgress.tsx",
-            "src/components/sections/why-agents/components/ScenarioSelector.tsx",
-            "src/components/sections/why-agents/components/WorkflowPanel.tsx",
-            "src/components/sections/why-agents/data.ts",
-            "src/components/sections/why-agents/index.tsx",
-            "src/components/sections/why-agents/types.ts",
-            "src/data/testimonials.ts"
-          ],
-          "target": null,
-          "apiRoutes": []
-        },
-        {
-          "name": "Features Overview & Pricing",
-          "description": "Features overview page plus the value-proposition vision grid and pricing tier cards that explain what the platform offers and what it costs.",
-          "businessFeature": "Features Overview & Pricing",
-          "category": "ui",
-          "filePaths": [
-            "src/app/features/page.tsx",
-            "src/components/sections/features/components/FeatureBridge.tsx",
-            "src/components/sections/features/components/FeatureCardHeader.tsx",
-            "src/components/sections/features/components/GuideLinks.tsx",
-            "src/components/sections/features/components/ProgressionThread.tsx",
-            "src/components/sections/features/components/visuals.tsx",
-            "src/components/sections/features/data.ts",
-            "src/components/sections/features/index.tsx",
-            "src/components/sections/features/types.ts",
-            "src/components/sections/pricing/FeatureGroupCard.tsx",
-            "src/components/sections/pricing/data.ts",
-            "src/components/sections/pricing/index.tsx",
-            "src/components/sections/vision-grid/PlatformCardTile.tsx",
-            "src/components/sections/vision-grid/data.ts",
-            "src/components/sections/vision-grid/index.tsx",
-            "src/components/sections/vision-grid/platform-card-tile/PlatformCardBackdrop.tsx",
-            "src/components/sections/vision-grid/platform-card-tile/PlatformCardPanel.tsx",
-            "src/components/sections/vision-grid/platform-card-tile/usePlatformCardDisclosure.ts"
-          ],
-          "target": null,
-          "apiRoutes": []
-        },
-        {
-          "name": "Homepage & Hero",
-          "description": "Public homepage entry point: animated hero, command-center illustration, stat row, social proof, and lazy-loaded section orchestration.",
-          "businessFeature": "Homepage & Hero",
-          "category": "ui",
-          "filePaths": [
-            "src/app/homeJsonLd.ts",
-            "src/app/page.tsx",
-            "src/app/template.tsx",
-            "src/components/sections/Hero.tsx",
-            "src/components/sections/HeroClient.tsx",
-            "src/components/sections/HeroTransition.tsx",
-            "src/components/sections/LazySection.tsx",
-            "src/components/sections/SocialProof.tsx",
-            "src/components/sections/hero/CommandCenterIllustration.tsx",
-            "src/components/sections/hero/HeroStatRow.tsx",
-            "src/components/sections/hero/command-center-geometry.ts",
-            "src/components/sections/lazy.tsx"
-          ],
-          "target": null,
-          "apiRoutes": []
-        }
-      ]
+      "id": "9fdd241e-a475-4625-90d8-01dddf3171ed",
+      "name": "Marketing Site"
     },
     {
-      "name": "Product Feature Showcase",
+      "color": "blue",
+      "context_count": 10,
       "domain": "feature",
-      "type": null,
-      "color": "#EC4899",
-      "icon": null,
-      "contexts": [
-        {
-          "name": "Observability Deck & Security Vault",
-          "description": "Feature sections for the live observability pulse-grid deck and the security vault pillars, plus shared cinematic backdrop helpers.",
-          "businessFeature": "Observability Deck & Security Vault",
-          "category": "ui",
-          "filePaths": [
-            "src/components/feature-sections/CinematicBg.tsx",
-            "src/components/feature-sections/ContextHint.tsx",
-            "src/components/feature-sections/ObservabilityDeck.tsx",
-            "src/components/feature-sections/SecurityVault.tsx",
-            "src/components/feature-sections/SecurityVaultPillars.tsx",
-            "src/components/feature-sections/feature-lazy.tsx",
-            "src/components/feature-sections/observability-deck/components/ActivityFeed.tsx",
-            "src/components/feature-sections/observability-deck/components/AnimatedMetric.tsx",
-            "src/components/feature-sections/observability-deck/components/ModuleTag.tsx",
-            "src/components/feature-sections/observability-deck/data.ts",
-            "src/components/feature-sections/observability-deck/index.tsx",
-            "src/components/feature-sections/observability-deck/types.ts",
-            "src/components/feature-sections/observability-deck/useActivityFeed.ts",
-            "src/components/feature-sections/observability-deck/variants/PulseGridDeck.tsx",
-            "src/components/feature-sections/observability-deck/variants/pulse-grid-deck/AgentLane.tsx",
-            "src/components/feature-sections/observability-deck/variants/pulse-grid-deck/Sparkline.tsx",
-            "src/components/feature-sections/observability-deck/variants/pulse-grid-deck/pulseEventMeta.ts",
-            "src/components/feature-sections/observability-deck/variants/pulse-grid-deck/pulseGridTypes.ts"
-          ],
-          "target": null,
-          "apiRoutes": []
-        },
-        {
-          "name": "Agent Lab & Plugin Ecosystem",
-          "description": "The Agent Lab (arena/chat/eval/evolution tabs) and the plugin ecosystem grid (dev tools, artists, research lifecycle, second brain graph).",
-          "businessFeature": "Agent Lab & Plugin Ecosystem",
-          "category": "ui",
-          "filePaths": [
-            "src/components/feature-sections/Lab.tsx",
-            "src/components/feature-sections/Plugins.tsx",
-            "src/components/feature-sections/lab/components/ArenaTab.tsx",
-            "src/components/feature-sections/lab/components/ChatTab.tsx",
-            "src/components/feature-sections/lab/components/EvalTab.tsx",
-            "src/components/feature-sections/lab/components/EvolutionTab.tsx",
-            "src/components/feature-sections/lab/components/TabBackdrop.tsx",
-            "src/components/feature-sections/lab/components/TabSwitcher.tsx",
-            "src/components/feature-sections/lab/data.ts",
-            "src/components/feature-sections/lab/index.tsx",
-            "src/components/feature-sections/lab/types.ts",
-            "src/components/feature-sections/plugins/ArtistGrid.tsx",
-            "src/components/feature-sections/plugins/DevToolsGrid.tsx",
-            "src/components/feature-sections/plugins/ResearchLifecycle.tsx",
-            "src/components/feature-sections/plugins/ResearchSources.tsx",
-            "src/components/feature-sections/plugins/SecondBrain.tsx",
-            "src/components/feature-sections/plugins/components/PluginCard.tsx",
-            "src/components/feature-sections/plugins/components/PluginTabs.tsx",
-            "src/components/feature-sections/plugins/data.ts",
-            "src/components/feature-sections/plugins/dev-tools-grid/AthenaFleetParts.tsx",
-            "src/components/feature-sections/plugins/dev-tools-grid/athenaFleetData.ts",
-            "src/components/feature-sections/plugins/index.tsx",
-            "src/components/feature-sections/plugins/second-brain/SecondBrainGraph.tsx",
-            "src/components/feature-sections/plugins/second-brain/SecondBrainSidePanel.tsx",
-            "src/components/feature-sections/plugins/second-brain/secondBrainData.ts",
-            "src/components/feature-sections/plugins/types.ts"
-          ],
-          "target": null,
-          "apiRoutes": []
-        },
-        {
-          "name": "Memory Layers & Multi-Provider AI",
-          "description": "Showcase sections for the geological memory-layer stack, multi-provider AI routing, and the design-engine intent matrix.",
-          "businessFeature": "Memory Layers & Multi-Provider AI",
-          "category": "ui",
-          "filePaths": [
-            "src/components/feature-sections/DesignEngine.tsx",
-            "src/components/feature-sections/DesignEngineMatrix.tsx",
-            "src/components/feature-sections/MemoryLayers.tsx",
-            "src/components/feature-sections/MemoryLayersStack.tsx",
-            "src/components/feature-sections/MultiProviderAI.tsx",
-            "src/components/feature-sections/design-engine-matrix/components/IntentTile.tsx",
-            "src/components/feature-sections/design-engine-matrix/components/MatrixTile.tsx",
-            "src/components/feature-sections/design-engine-matrix/components/RadiateOverlay.tsx",
-            "src/components/feature-sections/design-engine-matrix/components/TileValue.tsx",
-            "src/components/feature-sections/design-engine-matrix/data.ts",
-            "src/components/feature-sections/design-engine-matrix/index.tsx",
-            "src/components/feature-sections/design-matrix/designMatrixCells.ts",
-            "src/components/feature-sections/designMatrixShared.tsx",
-            "src/components/feature-sections/memory-layers-stack/components/DepthScale.tsx",
-            "src/components/feature-sections/memory-layers-stack/components/GeologicalLayer.tsx",
-            "src/components/feature-sections/memory-layers-stack/components/MemoryPill.tsx",
-            "src/components/feature-sections/memory-layers-stack/components/StackLegend.tsx",
-            "src/components/feature-sections/memory-layers-stack/index.tsx",
-            "src/components/feature-sections/memoryShared.tsx"
-          ],
-          "target": null,
-          "apiRoutes": []
-        },
-        {
-          "name": "Self-Healing & Trigger Automation",
-          "description": "Animated explainer sections for the self-healing circuit (failure->recovery cycle) and the trigger-system wheel that fires automations.",
-          "businessFeature": "Self-Healing & Trigger Automation",
-          "category": "ui",
-          "filePaths": [
-            "src/components/feature-sections/HealingCircuit.tsx",
-            "src/components/feature-sections/TriggerSystem.tsx",
-            "src/components/feature-sections/healing-circuit/components/CircuitBoard.tsx",
-            "src/components/feature-sections/healing-circuit/components/CircuitHeader.tsx",
-            "src/components/feature-sections/healing-circuit/components/CircuitNodes.tsx",
-            "src/components/feature-sections/healing-circuit/components/CircuitTraces.tsx",
-            "src/components/feature-sections/healing-circuit/components/StageDescription.tsx",
-            "src/components/feature-sections/healing-circuit/components/StageTimeline.tsx",
-            "src/components/feature-sections/healing-circuit/components/StatusPanel.tsx",
-            "src/components/feature-sections/healing-circuit/components/SvgDefs.tsx",
-            "src/components/feature-sections/healing-circuit/components/effects.tsx",
-            "src/components/feature-sections/healing-circuit/data.ts",
-            "src/components/feature-sections/healing-circuit/index.tsx",
-            "src/components/feature-sections/healing-circuit/types.ts",
-            "src/components/feature-sections/healing-circuit/useHealingCycle.ts",
-            "src/components/feature-sections/trigger-system/components/TriggerDetail.tsx",
-            "src/components/feature-sections/trigger-system/components/TriggerWheel.tsx",
-            "src/components/feature-sections/trigger-system/data.ts",
-            "src/components/feature-sections/trigger-system/index.tsx",
-            "src/components/feature-sections/trigger-system/types.ts"
-          ],
-          "target": null,
-          "apiRoutes": []
-        }
-      ]
+      "id": "2447d73f-894a-44a9-a6ec-c179e0799e1b",
+      "name": "Dashboard & Analytics"
     },
     {
-      "name": "Interactive Demos & Playground",
+      "color": "amber",
+      "context_count": 4,
       "domain": "feature",
-      "type": null,
-      "color": "#8B5CF6",
-      "icon": null,
-      "contexts": [
-        {
-          "name": "Section Preview & Demo Harness",
-          "description": "Internal preview/demo harness routes that render individual sections in isolation via a section registry, plus the demo and todo scratch pages.",
-          "businessFeature": "Section Preview & Demo Harness",
-          "category": "ui",
-          "filePaths": [
-            "src/app/demo/page.tsx",
-            "src/app/preview/[section]/page.tsx",
-            "src/app/preview/page.tsx",
-            "src/app/preview/registry.ts",
-            "src/app/todo/page.tsx"
-          ],
-          "target": null,
-          "apiRoutes": []
-        },
-        {
-          "name": "Visual Flow Composer & Playground Page",
-          "description": "The interactive visual flow composer (node cards, wires, event-queue bar, tool sidebar) and the standalone /playground page with its terminal simulation.",
-          "businessFeature": "Visual Flow Composer & Playground Page",
-          "category": "ui",
-          "filePaths": [
-            "src/app/playground/PromptSelector.tsx",
-            "src/app/playground/TerminalSim.tsx",
-            "src/app/playground/data.ts",
-            "src/app/playground/layout.tsx",
-            "src/app/playground/page.tsx",
-            "src/components/FlowComposer.tsx",
-            "src/components/flow-composer/components/EventQueueBar.tsx",
-            "src/components/flow-composer/components/FlowCTA.tsx",
-            "src/components/flow-composer/components/FlowCanvasDefs.tsx",
-            "src/components/flow-composer/components/FlowHeader.tsx",
-            "src/components/flow-composer/components/FlowLegend.tsx",
-            "src/components/flow-composer/components/FlowNodes.tsx",
-            "src/components/flow-composer/components/FlowWires.tsx",
-            "src/components/flow-composer/components/NodeConnectors.tsx",
-            "src/components/flow-composer/components/ToolSidebar.tsx",
-            "src/components/flow-composer/data.ts",
-            "src/components/flow-composer/index.tsx",
-            "src/components/flow-composer/types.ts",
-            "src/components/flow-composer/use-flow-composer.ts"
-          ],
-          "target": null,
-          "apiRoutes": []
-        },
-        {
-          "name": "Orchestration & Platform Visualizers",
-          "description": "Architecture-explainer demos: orchestration hub graph, animated event-bus showcase, platform layer stack, and a terminal/CLI command sequence.",
-          "businessFeature": "Orchestration & Platform Visualizers",
-          "category": "ui",
-          "filePaths": [
-            "src/components/sections/event-bus-showcase/components/EventBusLegend.tsx",
-            "src/components/sections/event-bus-showcase/components/LanesView.tsx",
-            "src/components/sections/event-bus-showcase/components/SwarmView.tsx",
-            "src/components/sections/event-bus-showcase/components/VariantTabs.tsx",
-            "src/components/sections/event-bus-showcase/data.ts",
-            "src/components/sections/event-bus-showcase/index.tsx",
-            "src/components/sections/orchestration-hub/HubNode.tsx",
-            "src/components/sections/orchestration-hub/HubRing.tsx",
-            "src/components/sections/orchestration-hub/TriggerDetail.tsx",
-            "src/components/sections/orchestration-hub/data.ts",
-            "src/components/sections/orchestration-hub/index.tsx",
-            "src/components/sections/platform-command/components/CommandBadge.tsx",
-            "src/components/sections/platform-command/components/TerminalBackground.tsx",
-            "src/components/sections/platform-command/components/TerminalControls.tsx",
-            "src/components/sections/platform-command/data.ts",
-            "src/components/sections/platform-command/index.tsx",
-            "src/components/sections/platform-command/types.ts",
-            "src/components/sections/platform-command/use-terminal-sequence.ts",
-            "src/components/sections/platform-layers/components/ConnectionPillar.tsx",
-            "src/components/sections/platform-layers/components/Layer.tsx",
-            "src/components/sections/platform-layers/components/LayerConnection.tsx",
-            "src/components/sections/platform-layers/components/StackLabels.tsx",
-            "src/components/sections/platform-layers/data.ts",
-            "src/components/sections/platform-layers/index.tsx",
-            "src/components/sections/platform-layers/types.ts",
-            "src/components/sections/platform-layers/visuals.tsx",
-            "src/lib/event-bus-demo.ts"
-          ],
-          "target": null,
-          "apiRoutes": []
-        },
-        {
-          "name": "Split & Pipeline Playground",
-          "description": "Split-view playground (prompt editor + agent mind panel + flow nodes) and a pipeline-timeline simulation of staged orchestration.",
-          "businessFeature": "Split & Pipeline Playground",
-          "category": "ui",
-          "filePaths": [
-            "src/components/sections/playground-split/components/AgentMindPanel.tsx",
-            "src/components/sections/playground-split/components/ConnectionLine.tsx",
-            "src/components/sections/playground-split/components/FlowNodeCard.tsx",
-            "src/components/sections/playground-split/components/PromptEditorPanel.tsx",
-            "src/components/sections/playground-split/components/ResultCapabilitiesList.tsx",
-            "src/components/sections/playground-split/components/SyntaxPrompt.tsx",
-            "src/components/sections/playground-split/data.ts",
-            "src/components/sections/playground-split/index.tsx",
-            "src/components/sections/playground-split/types.ts",
-            "src/components/sections/playground-split/use-playground-simulation.ts",
-            "src/components/sections/playground-timeline/components/ExampleSelector.tsx",
-            "src/components/sections/playground-timeline/components/PipelinePanelFooter.tsx",
-            "src/components/sections/playground-timeline/components/PipelineProgressBar.tsx",
-            "src/components/sections/playground-timeline/components/StageCard.tsx",
-            "src/components/sections/playground-timeline/components/TimelineTrack.tsx",
-            "src/components/sections/playground-timeline/data.ts",
-            "src/components/sections/playground-timeline/index.tsx",
-            "src/components/sections/playground-timeline/types.ts",
-            "src/components/sections/playground-timeline/use-pipeline-simulation.ts"
-          ],
-          "target": null,
-          "apiRoutes": []
-        },
-        {
-          "name": "Agent Execution Timeline Race",
-          "description": "Animated multi-agent execution timeline that races agents through steps with a track view, race timer, and comparison results.",
-          "businessFeature": "Agent Execution Timeline Race",
-          "category": "ui",
-          "filePaths": [
-            "src/components/sections/agents-timeline/components/ComparisonSummary.tsx",
-            "src/components/sections/agents-timeline/components/RaceTimer.tsx",
-            "src/components/sections/agents-timeline/components/ResultCard.tsx",
-            "src/components/sections/agents-timeline/components/ScenarioTrigger.tsx",
-            "src/components/sections/agents-timeline/components/StepBlock.tsx",
-            "src/components/sections/agents-timeline/components/TimelineControls.tsx",
-            "src/components/sections/agents-timeline/components/TimelineRaceBody.tsx",
-            "src/components/sections/agents-timeline/components/Track.tsx",
-            "src/components/sections/agents-timeline/data.ts",
-            "src/components/sections/agents-timeline/index.tsx",
-            "src/components/sections/agents-timeline/types.ts"
-          ],
-          "target": null,
-          "apiRoutes": []
-        },
-        {
-          "name": "Agent Playground & Multi-Agent Chat",
-          "description": "Marketing demos that simulate live agent interaction: a playground terminal form and a multi-agent chat race with typing indicators and comparison summaries.",
-          "businessFeature": "Agent Playground & Multi-Agent Chat",
-          "category": "ui",
-          "filePaths": [
-            "src/components/sections/agent-playground/components/ExampleChips.tsx",
-            "src/components/sections/agent-playground/components/PlaygroundForm.tsx",
-            "src/components/sections/agent-playground/components/PlaygroundTerminal.tsx",
-            "src/components/sections/agent-playground/data.ts",
-            "src/components/sections/agent-playground/index.tsx",
-            "src/components/sections/agent-playground/types.ts",
-            "src/components/sections/agents-chat/components/ChatProgressBar.tsx",
-            "src/components/sections/agents-chat/components/ChatTimelineVariant.tsx",
-            "src/components/sections/agents-chat/components/StarRating.tsx",
-            "src/components/sections/agents-chat/components/TimelineRaceSummary.tsx",
-            "src/components/sections/agents-chat/components/TimelineRow.tsx",
-            "src/components/sections/agents-chat/components/TypingIndicator.tsx",
-            "src/components/sections/agents-chat/data.ts",
-            "src/components/sections/agents-chat/index.tsx",
-            "src/components/sections/agents-chat/timeline-utils.ts",
-            "src/components/sections/agents-chat/types.ts",
-            "src/components/sections/agents-chat/use-chat-sequence.ts"
-          ],
-          "target": null,
-          "apiRoutes": []
-        }
-      ]
+      "id": "188219bb-4d24-4436-a4a0-85f16d8f1ebd",
+      "name": "Content Hub"
     },
     {
-      "name": "Product Documentation (Guide)",
+      "color": "pink",
+      "context_count": 3,
       "domain": "feature",
-      "type": null,
-      "color": "#10B981",
-      "icon": null,
-      "contexts": [
-        {
-          "name": "Localized Guide Content (14 locales)",
-          "description": "Hand-translated guide content (topics + per-module articles) for all 13 non-English locales, mirroring the English guide-data shape.",
-          "businessFeature": "Localized Guide Content (14 locales)",
-          "category": "data",
-          "filePaths": [
-            "src/data/guide/locales/ar/content/agents-prompts.ts",
-            "src/data/guide/locales/ar/content/credentials.ts",
-            "src/data/guide/locales/ar/content/deployment.ts",
-            "src/data/guide/locales/ar/content/getting-started.ts",
-            "src/data/guide/locales/ar/content/memories.ts",
-            "src/data/guide/locales/ar/content/monitoring.ts",
-            "src/data/guide/locales/ar/content/pipelines.ts",
-            "src/data/guide/locales/ar/content/testing.ts",
-            "src/data/guide/locales/ar/content/triggers.ts",
-            "src/data/guide/locales/ar/content/troubleshooting.ts",
-            "src/data/guide/locales/ar/topics.ts",
-            "src/data/guide/locales/bn/content/agents-prompts.ts",
-            "src/data/guide/locales/bn/content/credentials.ts",
-            "src/data/guide/locales/bn/content/deployment.ts",
-            "src/data/guide/locales/bn/content/getting-started.ts",
-            "src/data/guide/locales/bn/content/memories.ts",
-            "src/data/guide/locales/bn/content/monitoring.ts",
-            "src/data/guide/locales/bn/content/pipelines.ts",
-            "src/data/guide/locales/bn/content/testing.ts",
-            "src/data/guide/locales/bn/content/triggers.ts",
-            "src/data/guide/locales/bn/content/troubleshooting.ts",
-            "src/data/guide/locales/bn/topics.ts",
-            "src/data/guide/locales/cs/content/agents-prompts.ts",
-            "src/data/guide/locales/cs/content/credentials.ts",
-            "src/data/guide/locales/cs/content/deployment.ts",
-            "src/data/guide/locales/cs/content/getting-started.ts",
-            "src/data/guide/locales/cs/content/memories.ts",
-            "src/data/guide/locales/cs/content/monitoring.ts",
-            "src/data/guide/locales/cs/content/pipelines.ts",
-            "src/data/guide/locales/cs/content/testing.ts",
-            "src/data/guide/locales/cs/content/triggers.ts",
-            "src/data/guide/locales/cs/content/troubleshooting.ts",
-            "src/data/guide/locales/cs/topics.ts",
-            "src/data/guide/locales/de/content/agents-prompts.ts",
-            "src/data/guide/locales/de/content/credentials.ts",
-            "src/data/guide/locales/de/content/deployment.ts",
-            "src/data/guide/locales/de/content/getting-started.ts",
-            "src/data/guide/locales/de/content/memories.ts",
-            "src/data/guide/locales/de/content/monitoring.ts",
-            "src/data/guide/locales/de/content/pipelines.ts",
-            "src/data/guide/locales/de/content/testing.ts",
-            "src/data/guide/locales/de/content/triggers.ts",
-            "src/data/guide/locales/de/content/troubleshooting.ts",
-            "src/data/guide/locales/de/topics.ts",
-            "src/data/guide/locales/es/content/agents-prompts.ts",
-            "src/data/guide/locales/es/content/credentials.ts",
-            "src/data/guide/locales/es/content/deployment.ts",
-            "src/data/guide/locales/es/content/getting-started.ts",
-            "src/data/guide/locales/es/content/memories.ts",
-            "src/data/guide/locales/es/content/monitoring.ts",
-            "src/data/guide/locales/es/content/pipelines.ts",
-            "src/data/guide/locales/es/content/testing.ts",
-            "src/data/guide/locales/es/content/triggers.ts",
-            "src/data/guide/locales/es/content/troubleshooting.ts",
-            "src/data/guide/locales/es/topics.ts",
-            "src/data/guide/locales/fr/content/agents-prompts.ts",
-            "src/data/guide/locales/fr/content/credentials.ts",
-            "src/data/guide/locales/fr/content/deployment.ts",
-            "src/data/guide/locales/fr/content/getting-started.ts",
-            "src/data/guide/locales/fr/content/memories.ts",
-            "src/data/guide/locales/fr/content/monitoring.ts",
-            "src/data/guide/locales/fr/content/pipelines.ts",
-            "src/data/guide/locales/fr/content/testing.ts",
-            "src/data/guide/locales/fr/content/triggers.ts",
-            "src/data/guide/locales/fr/content/troubleshooting.ts",
-            "src/data/guide/locales/fr/topics.ts",
-            "src/data/guide/locales/hi/content/agents-prompts.ts",
-            "src/data/guide/locales/hi/content/credentials.ts",
-            "src/data/guide/locales/hi/content/deployment.ts",
-            "src/data/guide/locales/hi/content/getting-started.ts",
-            "src/data/guide/locales/hi/content/memories.ts",
-            "src/data/guide/locales/hi/content/monitoring.ts",
-            "src/data/guide/locales/hi/content/pipelines.ts",
-            "src/data/guide/locales/hi/content/testing.ts",
-            "src/data/guide/locales/hi/content/triggers.ts",
-            "src/data/guide/locales/hi/content/troubleshooting.ts",
-            "src/data/guide/locales/hi/topics.ts",
-            "src/data/guide/locales/id/content/agents-prompts.ts",
-            "src/data/guide/locales/id/content/credentials.ts",
-            "src/data/guide/locales/id/content/deployment.ts",
-            "src/data/guide/locales/id/content/getting-started.ts",
-            "src/data/guide/locales/id/content/memories.ts",
-            "src/data/guide/locales/id/content/monitoring.ts",
-            "src/data/guide/locales/id/content/pipelines.ts",
-            "src/data/guide/locales/id/content/testing.ts",
-            "src/data/guide/locales/id/content/triggers.ts",
-            "src/data/guide/locales/id/content/troubleshooting.ts",
-            "src/data/guide/locales/id/topics.ts",
-            "src/data/guide/locales/ja/content/agents-prompts.ts",
-            "src/data/guide/locales/ja/content/credentials.ts",
-            "src/data/guide/locales/ja/content/deployment.ts",
-            "src/data/guide/locales/ja/content/getting-started.ts",
-            "src/data/guide/locales/ja/content/memories.ts",
-            "src/data/guide/locales/ja/content/monitoring.ts",
-            "src/data/guide/locales/ja/content/pipelines.ts",
-            "src/data/guide/locales/ja/content/testing.ts",
-            "src/data/guide/locales/ja/content/triggers.ts",
-            "src/data/guide/locales/ja/content/troubleshooting.ts",
-            "src/data/guide/locales/ja/topics.ts",
-            "src/data/guide/locales/ko/content/agents-prompts.ts",
-            "src/data/guide/locales/ko/content/credentials.ts",
-            "src/data/guide/locales/ko/content/deployment.ts",
-            "src/data/guide/locales/ko/content/getting-started.ts",
-            "src/data/guide/locales/ko/content/memories.ts",
-            "src/data/guide/locales/ko/content/monitoring.ts",
-            "src/data/guide/locales/ko/content/pipelines.ts",
-            "src/data/guide/locales/ko/content/testing.ts",
-            "src/data/guide/locales/ko/content/triggers.ts",
-            "src/data/guide/locales/ko/content/troubleshooting.ts",
-            "src/data/guide/locales/ko/topics.ts",
-            "src/data/guide/locales/ru/content/agents-prompts.ts",
-            "src/data/guide/locales/ru/content/credentials.ts",
-            "src/data/guide/locales/ru/content/deployment.ts",
-            "src/data/guide/locales/ru/content/getting-started.ts",
-            "src/data/guide/locales/ru/content/memories.ts",
-            "src/data/guide/locales/ru/content/monitoring.ts",
-            "src/data/guide/locales/ru/content/pipelines.ts",
-            "src/data/guide/locales/ru/content/testing.ts",
-            "src/data/guide/locales/ru/content/triggers.ts",
-            "src/data/guide/locales/ru/content/troubleshooting.ts",
-            "src/data/guide/locales/ru/topics.ts",
-            "src/data/guide/locales/vi/content/agents-prompts.ts",
-            "src/data/guide/locales/vi/content/credentials.ts",
-            "src/data/guide/locales/vi/content/deployment.ts",
-            "src/data/guide/locales/vi/content/getting-started.ts",
-            "src/data/guide/locales/vi/content/memories.ts",
-            "src/data/guide/locales/vi/content/monitoring.ts",
-            "src/data/guide/locales/vi/content/pipelines.ts",
-            "src/data/guide/locales/vi/content/testing.ts",
-            "src/data/guide/locales/vi/content/triggers.ts",
-            "src/data/guide/locales/vi/content/troubleshooting.ts",
-            "src/data/guide/locales/vi/topics.ts",
-            "src/data/guide/locales/zh/content/agents-prompts.ts",
-            "src/data/guide/locales/zh/content/credentials.ts",
-            "src/data/guide/locales/zh/content/deployment.ts",
-            "src/data/guide/locales/zh/content/getting-started.ts",
-            "src/data/guide/locales/zh/content/memories.ts",
-            "src/data/guide/locales/zh/content/monitoring.ts",
-            "src/data/guide/locales/zh/content/pipelines.ts",
-            "src/data/guide/locales/zh/content/testing.ts",
-            "src/data/guide/locales/zh/content/triggers.ts",
-            "src/data/guide/locales/zh/content/troubleshooting.ts",
-            "src/data/guide/locales/zh/topics.ts"
-          ],
-          "target": null,
-          "apiRoutes": []
-        },
-        {
-          "name": "Guide Data, Content & Search Index",
-          "description": "English source-of-truth guide content (categories, topics, per-module content) plus the search index, link, and localization-lookup utilities.",
-          "businessFeature": "Guide Data, Content & Search Index",
-          "category": "data",
-          "filePaths": [
-            "src/data/guide/categories.ts",
-            "src/data/guide/content/agents-prompts.ts",
-            "src/data/guide/content/credentials.ts",
-            "src/data/guide/content/deployment.ts",
-            "src/data/guide/content/getting-started.ts",
-            "src/data/guide/content/index.ts",
-            "src/data/guide/content/memories.ts",
-            "src/data/guide/content/monitoring.ts",
-            "src/data/guide/content/pipelines.ts",
-            "src/data/guide/content/testing.ts",
-            "src/data/guide/content/triggers.ts",
-            "src/data/guide/content/troubleshooting.ts",
-            "src/data/guide/desktop-modules.ts",
-            "src/data/guide/getLocalized.ts",
-            "src/data/guide/illustrations.ts",
-            "src/data/guide/topics.ts",
-            "src/data/guide/types.ts",
-            "src/lib/guide-link.ts",
-            "src/lib/guide-search.ts",
-            "src/lib/guide-utils.ts"
-          ],
-          "target": null,
-          "apiRoutes": []
-        },
-        {
-          "name": "Guide Content Blocks & Markdown",
-          "description": "The guide markdown renderer and its rich content blocks (callouts, code-compare, step wizards, architecture diagrams, keyboard grids, tabs).",
-          "businessFeature": "Guide Content Blocks & Markdown",
-          "category": "ui",
-          "filePaths": [
-            "src/components/guide/GuideBlocks.tsx",
-            "src/components/guide/GuideMarkdown.tsx",
-            "src/components/guide/blocks/ArchitectureDiagram.tsx",
-            "src/components/guide/blocks/Callout.tsx",
-            "src/components/guide/blocks/CalloutStack.tsx",
-            "src/components/guide/blocks/CardsBlock.tsx",
-            "src/components/guide/blocks/Checklist.tsx",
-            "src/components/guide/blocks/CliBlock.tsx",
-            "src/components/guide/blocks/CodeCompare.tsx",
-            "src/components/guide/blocks/CodeFence.tsx",
-            "src/components/guide/blocks/CompareBlock.tsx",
-            "src/components/guide/blocks/CopyButton.tsx",
-            "src/components/guide/blocks/FeatureHighlight.tsx",
-            "src/components/guide/blocks/KeyboardGrid.tsx",
-            "src/components/guide/blocks/MarkdownTable.tsx",
-            "src/components/guide/blocks/StepWizard.tsx",
-            "src/components/guide/blocks/TabBlock.tsx",
-            "src/components/guide/blocks/UseCaseGrid.tsx",
-            "src/components/guide/blocks/index.ts",
-            "src/components/guide/guide-markdown/HeadingAnchor.tsx",
-            "src/components/guide/guide-markdown/expandLineRanges.ts",
-            "src/components/guide/guide-markdown/extractHeadings.ts",
-            "src/components/guide/guide-markdown/parseBlocks.tsx",
-            "src/components/guide/guide-markdown/parseCalloutStack.tsx",
-            "src/components/guide/guide-markdown/parseCards.tsx",
-            "src/components/guide/guide-markdown/parseCustomBlock.tsx",
-            "src/components/guide/guide-markdown/parseInline.tsx",
-            "src/components/guide/guide-markdown/slugify.ts"
-          ],
-          "target": null,
-          "apiRoutes": []
-        },
-        {
-          "name": "Guide Pages & Navigation",
-          "description": "The documentation guide hub: category and topic routes, sidebar navigation, reading progress, table-of-contents, related topics, and the search combobox.",
-          "businessFeature": "Guide Pages & Navigation",
-          "category": "ui",
-          "filePaths": [
-            "src/app/guide/[category]/CategoryTopics.tsx",
-            "src/app/guide/[category]/[topic]/TopicView.tsx",
-            "src/app/guide/[category]/[topic]/not-found.tsx",
-            "src/app/guide/[category]/[topic]/page.tsx",
-            "src/app/guide/[category]/not-found.tsx",
-            "src/app/guide/[category]/page.tsx",
-            "src/app/guide/guide-page/GuideCategoryGrid.tsx",
-            "src/app/guide/guide-page/GuideDiscordCTA.tsx",
-            "src/app/guide/guide-page/GuideModeToggle.tsx",
-            "src/app/guide/guide-page/guidePageData.ts",
-            "src/app/guide/layout.tsx",
-            "src/app/guide/page.tsx",
-            "src/components/guide/GuideSidebar.tsx",
-            "src/components/guide/MobileTopicTOC.tsx",
-            "src/components/guide/ModuleBadge.tsx",
-            "src/components/guide/ReadingProgress.tsx",
-            "src/components/guide/RelatedTopics.tsx",
-            "src/components/guide/SearchCombobox.tsx",
-            "src/components/guide/TopicTOC.tsx",
-            "src/components/guide/guide-sidebar/GuideSidebarContent.tsx",
-            "src/components/guide/search-combobox/SearchResultsPopover.tsx",
-            "src/components/guide/useActiveHeading.ts"
-          ],
-          "target": null,
-          "apiRoutes": []
-        }
-      ]
+      "id": "e011647e-fd58-4d27-9b2a-5cfda86ff27d",
+      "name": "Community & Roadmap"
     },
     {
-      "name": "Content & Informational Pages",
+      "color": "violet",
+      "context_count": 4,
       "domain": "feature",
-      "type": null,
-      "color": "#14B8A6",
-      "icon": null,
-      "contexts": [
-        {
-          "name": "How It Works & Changelog",
-          "description": "The how-it-works explainer page plus the changelog/release-notes timeline section and its data.",
-          "businessFeature": "How It Works & Changelog",
-          "category": "ui",
-          "filePaths": [
-            "src/app/how/layout.tsx",
-            "src/app/how/page.tsx",
-            "src/components/sections/Changelog.tsx",
-            "src/components/sections/changelog-timeline/index.tsx",
-            "src/components/sections/how-lazy.tsx",
-            "src/data/changelog.ts"
-          ],
-          "target": null,
-          "apiRoutes": []
-        },
-        {
-          "name": "Legal & Policy",
-          "description": "Legal hub rendering privacy policy, terms of service, and cookie policy with a policy changelog.",
-          "businessFeature": "Legal & Policy",
-          "category": "ui",
-          "filePaths": [
-            "src/app/legal/LegalContent.tsx",
-            "src/app/legal/PolicyChangelog.tsx",
-            "src/app/legal/page.tsx",
-            "src/app/legal/policies/CookiePolicy.tsx",
-            "src/app/legal/policies/PrivacyPolicy.tsx",
-            "src/app/legal/policies/TermsOfService.tsx",
-            "src/data/policy-changelog.ts"
-          ],
-          "target": null,
-          "apiRoutes": []
-        },
-        {
-          "name": "Security & Compliance",
-          "description": "Security/compliance page: pillar grid, compliance rows, an architecture data-flow diagram, and a security FAQ.",
-          "businessFeature": "Security & Compliance",
-          "category": "ui",
-          "filePaths": [
-            "src/app/security/ArchitectureFlow.tsx",
-            "src/app/security/layout.tsx",
-            "src/app/security/page.tsx",
-            "src/app/security/security-page/ComplianceRow.tsx",
-            "src/app/security/security-page/SecurityFAQItem.tsx",
-            "src/app/security/security-page/SecurityPillarsGrid.tsx",
-            "src/data/security.ts"
-          ],
-          "target": null,
-          "apiRoutes": []
-        },
-        {
-          "name": "Blog",
-          "description": "Public blog: index with featured post and category filter, slug-based article pages with byline/cross-links, and an RSS feed route.",
-          "businessFeature": "Blog",
-          "category": "ui",
-          "filePaths": [
-            "src/app/blog/BlogPostCard.tsx",
-            "src/app/blog/CategoryFilter.tsx",
-            "src/app/blog/FeaturedPost.tsx",
-            "src/app/blog/[slug]/BlogArticle.tsx",
-            "src/app/blog/[slug]/blog-article/BlogArticleByline.tsx",
-            "src/app/blog/[slug]/blog-article/BlogArticleContent.tsx",
-            "src/app/blog/[slug]/blog-article/BlogArticleCrossLinks.tsx",
-            "src/app/blog/[slug]/not-found.tsx",
-            "src/app/blog/[slug]/page.tsx",
-            "src/app/blog/category-meta.ts",
-            "src/app/blog/feed.xml/route.ts",
-            "src/app/blog/layout.tsx",
-            "src/app/blog/page.tsx",
-            "src/data/blog.ts"
-          ],
-          "target": null,
-          "apiRoutes": [
-            "/blog/feed.xml"
-          ]
-        }
-      ]
+      "id": "9e7fd6ef-d447-4b6d-9840-c43ce7a376e9",
+      "name": "Demos & Tour"
     },
     {
-      "name": "Roadmap, Voting & Waitlist",
-      "domain": "integration",
-      "type": null,
-      "color": "#EF4444",
-      "icon": null,
-      "contexts": [
-        {
-          "name": "Server-Side Vote Persistence",
-          "description": "Server primitives backing the voting endpoints: IP rate limiting, a file-locked JSON store, and a cross-process file lock for vote idempotency.",
-          "businessFeature": "Server-Side Vote Persistence",
-          "category": "lib",
-          "filePaths": [
-            "src/lib/fileLock.ts",
-            "src/lib/server/json-file-store.ts",
-            "src/lib/server/rate-limit.ts"
-          ],
-          "target": null,
-          "apiRoutes": []
-        },
-        {
-          "name": "Waitlist & App Download",
-          "description": "Email waitlist signup modal and the desktop-app download artifact endpoint, plus the navbar download modal.",
-          "businessFeature": "Waitlist & App Download",
-          "category": "api",
-          "filePaths": [
-            "src/app/api/download/route.ts",
-            "src/app/api/waitlist/route.ts",
-            "src/components/WaitlistModal.tsx",
-            "src/components/navbar/DownloadModal.tsx",
-            "src/components/waitlist-modal/AnimatedCheckmark.tsx",
-            "src/components/waitlist-modal/WaitlistForm.tsx",
-            "src/components/waitlist-modal/WaitlistHeader.tsx",
-            "src/components/waitlist-modal/WaitlistSuccessPanel.tsx",
-            "src/components/waitlist-modal/waitlistUtils.ts"
-          ],
-          "target": null,
-          "apiRoutes": [
-            "/api/waitlist",
-            "/api/download"
-          ]
-        },
-        {
-          "name": "Feature Voting & Comments",
-          "description": "Anonymous feature voting, boosting, comment threads, and custom feature-request submission, backed by vote/request/comment/boost API routes.",
-          "businessFeature": "Feature Voting & Comments",
-          "category": "api",
-          "filePaths": [
-            "src/app/api/feature-boosts/route.ts",
-            "src/app/api/feature-comments/route.ts",
-            "src/app/api/feature-requests/route.ts",
-            "src/app/api/votes/rate-limit.ts",
-            "src/app/api/votes/route.ts",
-            "src/app/api/votes/storage.ts",
-            "src/components/sections/feature-voting/CustomRequest.tsx",
-            "src/components/sections/feature-voting/NotifyInput.tsx",
-            "src/components/sections/feature-voting/VoteParticles.tsx",
-            "src/components/sections/feature-voting/components/CommentBubble.tsx",
-            "src/components/sections/feature-voting/components/CommentInput.tsx",
-            "src/components/sections/feature-voting/components/CommentThread.tsx",
-            "src/components/sections/feature-voting/components/CustomFeatureRequest.tsx",
-            "src/components/sections/feature-voting/components/FeatureBoostButton.tsx",
-            "src/components/sections/feature-voting/components/FeatureVoteCard.tsx",
-            "src/components/sections/feature-voting/components/FeatureVoteIllustration.tsx",
-            "src/components/sections/feature-voting/components/FeatureVotingHeader.tsx",
-            "src/components/sections/feature-voting/components/FeatureVotingSummary.tsx",
-            "src/components/sections/feature-voting/data.ts",
-            "src/components/sections/feature-voting/index.tsx",
-            "src/components/sections/feature-voting/local-types.ts"
-          ],
-          "target": null,
-          "apiRoutes": [
-            "/api/votes",
-            "/api/feature-requests",
-            "/api/feature-comments",
-            "/api/feature-boosts"
-          ]
-        },
-        {
-          "name": "Public Roadmap",
-          "description": "Public roadmap page reading roadmap_items / shipped_features from Supabase plus static phase data, rendered as area cards with progress.",
-          "businessFeature": "Public Roadmap",
-          "category": "ui",
-          "filePaths": [
-            "src/app/api/roadmap/route.ts",
-            "src/app/api/roadmap/types.ts",
-            "src/app/roadmap/page.tsx",
-            "src/components/PhaseCard.tsx",
-            "src/components/sections/roadmap/areas.ts",
-            "src/components/sections/roadmap/components/AreaCardShell.tsx",
-            "src/components/sections/roadmap/components/FlagArt.tsx",
-            "src/components/sections/roadmap/components/RoadmapAreas.tsx",
-            "src/components/sections/roadmap/components/RoadmapProgress.tsx",
-            "src/components/sections/roadmap/index.tsx",
-            "src/components/sections/roadmap/types.ts",
-            "src/data/roadmap-phases.ts"
-          ],
-          "target": null,
-          "apiRoutes": [
-            "/api/roadmap"
-          ]
-        }
-      ]
-    },
-    {
-      "name": "Connectors & Templates",
-      "domain": "feature",
-      "type": null,
-      "color": "#7C3AED",
-      "icon": null,
-      "contexts": [
-        {
-          "name": "Templates Gallery & Detail",
-          "description": "Template gallery (category tiles + cards) and id-based template detail pages with YAML highlighting, configuration, and download CTA.",
-          "businessFeature": "Templates Gallery & Detail",
-          "category": "ui",
-          "filePaths": [
-            "src/app/templates/[id]/TemplateDetail.tsx",
-            "src/app/templates/[id]/YamlHighlighter.tsx",
-            "src/app/templates/[id]/not-found.tsx",
-            "src/app/templates/[id]/page.tsx",
-            "src/app/templates/[id]/template-detail/RelatedTemplates.tsx",
-            "src/app/templates/[id]/template-detail/TemplateConfiguration.tsx",
-            "src/app/templates/[id]/template-detail/TemplateDownloadCta.tsx",
-            "src/app/templates/[id]/template-detail/TemplateFallbackModal.tsx",
-            "src/app/templates/[id]/template-detail/TemplateHero.tsx",
-            "src/app/templates/[id]/template-detail/TemplateJsonLd.tsx",
-            "src/app/templates/[id]/template-detail/templateDetailMeta.ts",
-            "src/app/templates/layout.tsx",
-            "src/app/templates/page.tsx",
-            "src/app/templates/templates-page/CategoryTile.tsx",
-            "src/app/templates/templates-page/TemplateCard.tsx",
-            "src/app/templates/templates-page/templatePageConfig.ts",
-            "src/lib/template-queries.ts",
-            "src/lib/templates.ts"
-          ],
-          "target": null,
-          "apiRoutes": []
-        },
-        {
-          "name": "Connector Detail Modal",
-          "description": "Per-connector detail modal showing capabilities, a terminal simulator, copy buttons, a try-it toggle, and setup CTA.",
-          "businessFeature": "Connector Detail Modal",
-          "category": "ui",
-          "filePaths": [
-            "src/components/sections/connector-modal/components/ConnectorModalHeader.tsx",
-            "src/components/sections/connector-modal/components/CopyButton.tsx",
-            "src/components/sections/connector-modal/components/SetupCTA.tsx",
-            "src/components/sections/connector-modal/components/TerminalSimulator.tsx",
-            "src/components/sections/connector-modal/components/TryItToggle.tsx",
-            "src/components/sections/connector-modal/components/UseCaseList.tsx",
-            "src/components/sections/connector-modal/index.tsx"
-          ],
-          "target": null,
-          "apiRoutes": []
-        },
-        {
-          "name": "Connectors Catalog",
-          "description": "Integration/connector catalog page with category sidebar, filters, connector cards, and the extend-your-own card, backed by the tool catalogue.",
-          "businessFeature": "Connectors Catalog",
-          "category": "ui",
-          "filePaths": [
-            "src/app/connections/layout.tsx",
-            "src/app/connections/page.tsx",
-            "src/components/sections/connections-catalog/components/CatalogFilters.tsx",
-            "src/components/sections/connections-catalog/components/CategorySidebar.tsx",
-            "src/components/sections/connections-catalog/components/ConnectorCard.tsx",
-            "src/components/sections/connections-catalog/components/ExtendCard.tsx",
-            "src/components/sections/connections-catalog/data.ts",
-            "src/components/sections/connections-catalog/index.tsx",
-            "src/data/connectors.ts",
-            "src/lib/tool-catalogue.ts"
-          ],
-          "target": null,
-          "apiRoutes": []
-        }
-      ]
-    },
-    {
-      "name": "Agent Operations Dashboard",
-      "domain": "feature",
-      "type": null,
-      "color": "#F59E0B",
-      "icon": null,
-      "contexts": [
-        {
-          "name": "Messages & Settings",
-          "description": "Dashboard messages thread list/detail with pagination, plus user settings (model providers, notifications, toggles).",
-          "businessFeature": "Messages & Settings",
-          "category": "ui",
-          "filePaths": [
-            "src/app/dashboard/messages/messages-page/MessagesPagination.tsx",
-            "src/app/dashboard/messages/messages-page/MessageRow.tsx",
-            "src/app/dashboard/messages/messages-page/ThreadDetailModal.tsx",
-            "src/app/dashboard/messages/messages-page/ThreadRow.tsx",
-            "src/app/dashboard/messages/page.tsx",
-            "src/app/dashboard/messages/useMessagesData.ts",
-            "src/app/dashboard/settings/SettingsHeader.tsx",
-            "src/app/dashboard/settings/page.tsx",
-            "src/app/dashboard/settings/settings-sections/ModelProvidersCard.tsx",
-            "src/app/dashboard/settings/settings-sections/NotificationsCard.tsx",
-            "src/app/dashboard/settings/settings-sections/RotationOverviewCard.tsx",
-            "src/app/dashboard/settings/settings-sections/SettingToggle.tsx"
-          ],
-          "target": null,
-          "apiRoutes": []
-        },
-        {
-          "name": "Knowledge Base",
-          "description": "Knowledge-base surface: memory cards, a dense pattern table, and an interactive cluster graph with detail panels.",
-          "businessFeature": "Knowledge Base",
-          "category": "ui",
-          "filePaths": [
-            "src/app/dashboard/knowledge/KnowledgeClusterGraph.tsx",
-            "src/app/dashboard/knowledge/KnowledgeDenseTable.tsx",
-            "src/app/dashboard/knowledge/MemoriesView.tsx",
-            "src/app/dashboard/knowledge/derived.ts",
-            "src/app/dashboard/knowledge/knowledge-cluster-graph/KnowledgeClusterDetailPanel.tsx",
-            "src/app/dashboard/knowledge/knowledge-cluster-graph/KnowledgeClusterLabels.tsx",
-            "src/app/dashboard/knowledge/knowledge-cluster-graph/KnowledgeClusterLegends.tsx",
-            "src/app/dashboard/knowledge/knowledge-cluster-graph/KnowledgeClusterSvg.tsx",
-            "src/app/dashboard/knowledge/knowledge-cluster-graph/KnowledgeClusterTopBar.tsx",
-            "src/app/dashboard/knowledge/knowledge-cluster-graph/KnowledgeGraphNode.tsx",
-            "src/app/dashboard/knowledge/knowledge-cluster-graph/knowledgeClusterConfig.ts",
-            "src/app/dashboard/knowledge/knowledge-cluster-graph/knowledgeClusterLayout.ts",
-            "src/app/dashboard/knowledge/knowledge-dense-table/KnowledgeDenseTopBar.tsx",
-            "src/app/dashboard/knowledge/knowledge-dense-table/KnowledgePatternDetailPanel.tsx",
-            "src/app/dashboard/knowledge/knowledge-dense-table/KnowledgePatternRow.tsx",
-            "src/app/dashboard/knowledge/knowledge-dense-table/KnowledgePatternTable.tsx",
-            "src/app/dashboard/knowledge/knowledge-dense-table/KnowledgeSortHeader.tsx",
-            "src/app/dashboard/knowledge/knowledge-dense-table/buildKnowledgeColumns.ts",
-            "src/app/dashboard/knowledge/knowledge-dense-table/knowledgeDenseConfig.ts",
-            "src/app/dashboard/knowledge/knowledge-dense-table/knowledgeDenseFormat.ts",
-            "src/app/dashboard/knowledge/knowledge-dense-table/knowledgeDenseTypes.ts",
-            "src/app/dashboard/knowledge/memories-view/MemoriesToolbar.tsx",
-            "src/app/dashboard/knowledge/memories-view/MemoryCard.tsx",
-            "src/app/dashboard/knowledge/memories-view/ScoreDots.tsx",
-            "src/app/dashboard/knowledge/memories-view/memoryViewConfig.ts",
-            "src/app/dashboard/knowledge/page.tsx",
-            "src/app/dashboard/knowledge/useKnowledgeData.ts"
-          ],
-          "target": null,
-          "apiRoutes": []
-        },
-        {
-          "name": "Manual Review Queue",
-          "description": "Manual review queue with focus-flow and split-pane modes, batch approve/reject with progress + undo toasts, keyboard shortcuts, and voice annotation.",
-          "businessFeature": "Manual Review Queue",
-          "category": "ui",
-          "filePaths": [
-            "src/app/dashboard/reviews/ReviewsFocusFlow.tsx",
-            "src/app/dashboard/reviews/ReviewsSplitPane.tsx",
-            "src/app/dashboard/reviews/ShortcutsHud.tsx",
-            "src/app/dashboard/reviews/page.tsx",
-            "src/app/dashboard/reviews/reviews-focus-flow/FocusEmptyState.tsx",
-            "src/app/dashboard/reviews/reviews-focus-flow/FocusProgressHeader.tsx",
-            "src/app/dashboard/reviews/reviews-focus-flow/FocusReviewCard.tsx",
-            "src/app/dashboard/reviews/reviews-focus-flow/focusSeverityConfig.ts",
-            "src/app/dashboard/reviews/reviews-split-pane/ReviewDetailPanel.tsx",
-            "src/app/dashboard/reviews/reviews-split-pane/ReviewList.tsx",
-            "src/app/dashboard/reviews/reviews-split-pane/ReviewRow.tsx",
-            "src/app/dashboard/reviews/reviews-split-pane/ReviewStatusDot.tsx",
-            "src/app/dashboard/reviews/reviews-split-pane/ReviewsBulkToolbar.tsx",
-            "src/app/dashboard/reviews/reviews-split-pane/ReviewsSplitPaneToasts.tsx",
-            "src/app/dashboard/reviews/reviews-split-pane/reviewSeverityConfig.ts",
-            "src/app/dashboard/reviews/reviews-split-pane/useReviewKeyboardShortcuts.ts",
-            "src/app/dashboard/reviews/shortcuts-hud/ShortcutKeyChips.tsx",
-            "src/app/dashboard/reviews/shortcuts-hud/ShortcutsOverlayDialog.tsx",
-            "src/app/dashboard/reviews/shortcuts-hud/shortcutTypes.ts",
-            "src/app/dashboard/reviews/shortcuts-hud/usePlatformMod.ts",
-            "src/components/BulkProgressBar.tsx",
-            "src/components/BulkResultToast.tsx",
-            "src/components/ConfirmDialog.tsx",
-            "src/components/UndoToast.tsx",
-            "src/components/dashboard/BatchReviewModal.tsx",
-            "src/components/dashboard/batch-review-modal/BatchReviewDiscardDialog.tsx",
-            "src/components/dashboard/batch-review-modal/BatchReviewHeader.tsx",
-            "src/components/dashboard/batch-review-modal/ConflictDecisionCard.tsx",
-            "src/hooks/useReviewBulkActions.ts",
-            "src/hooks/useReviewVoice.ts",
-            "src/lib/review-voice-data.ts",
-            "src/lib/review-voice.ts",
-            "src/lib/reviewUtils.ts",
-            "src/stores/reviewStore.ts",
-            "src/stores/reviewVoiceStore.ts"
-          ],
-          "target": null,
-          "apiRoutes": []
-        },
-        {
-          "name": "Agents (Personas) Management",
-          "description": "Dashboard agent/persona list and detail drawer (detail, subscriptions, memory actions, metrics) with optimistic persona-store updates.",
-          "businessFeature": "Agents (Personas) Management",
-          "category": "ui",
-          "filePaths": [
-            "src/app/dashboard/agents/agents-page/AgentCardImage.tsx",
-            "src/app/dashboard/agents/agents-page/AgentsLoadingGrid.tsx",
-            "src/app/dashboard/agents/agents-page/ExecuteToast.tsx",
-            "src/app/dashboard/agents/agents-page/agentAccent.ts",
-            "src/app/dashboard/agents/agents-page/personaVisuals.tsx",
-            "src/app/dashboard/agents/page.tsx",
-            "src/app/dashboard/page.tsx",
-            "src/components/dashboard/AgentDetail.tsx",
-            "src/components/dashboard/AgentDetailDrawer.tsx",
-            "src/components/dashboard/AgentMetrics.tsx",
-            "src/components/dashboard/MemoryActionsPanel.tsx",
-            "src/components/dashboard/PersonaAvatar.tsx",
-            "src/components/dashboard/SubscriptionsPanel.tsx",
-            "src/components/dashboard/subscriptions-panel/CreateSubscriptionForm.tsx",
-            "src/components/dashboard/subscriptions-panel/SubscriptionCard.tsx",
-            "src/components/dashboard/subscriptions-panel/SubscriptionsToolbar.tsx",
-            "src/components/dashboard/subscriptions-panel/subscriptionTypes.ts",
-            "src/stores/personaStore.ts"
-          ],
-          "target": null,
-          "apiRoutes": []
-        }
-      ]
-    },
-    {
-      "name": "Observability & Event Monitoring",
-      "domain": "feature",
-      "type": null,
-      "color": "#F97316",
-      "icon": null,
-      "contexts": [
-        {
-          "name": "Execution History & Streaming",
-          "description": "Execution history table with filters and a detail modal that streams individual execution logs via an SSE proxy; filters persist via a filter store.",
-          "businessFeature": "Execution History & Streaming",
-          "category": "ui",
-          "filePaths": [
-            "src/app/api/executions/[id]/stream/route.ts",
-            "src/app/dashboard/executions/executions-page/ExecutionDetailModal.tsx",
-            "src/app/dashboard/executions/executions-page/ExecutionOutput.tsx",
-            "src/app/dashboard/executions/executions-page/ExecutionsEmptyState.tsx",
-            "src/app/dashboard/executions/executions-page/ExecutionsFilters.tsx",
-            "src/app/dashboard/executions/executions-page/buildExecutionColumns.tsx",
-            "src/app/dashboard/executions/page.tsx",
-            "src/components/dashboard/DataTable.tsx",
-            "src/components/dashboard/FilterBar.tsx",
-            "src/components/dashboard/MarkdownReport.tsx",
-            "src/components/dashboard/markdown-report/markdownInline.tsx",
-            "src/hooks/useExecutionPolling.ts",
-            "src/stores/dashboardFilterStore.ts",
-            "src/stores/executionStore.ts"
-          ],
-          "target": null,
-          "apiRoutes": [
-            "/api/executions/[id]/stream"
-          ]
-        },
-        {
-          "name": "Leaderboard & Rankings",
-          "description": "Agent leaderboard: a top-3 podium with rank-dimension tabs (overall/reliability/speed/cost/quality) above a sortable table and a radar comparison card ranking persona performance.",
-          "businessFeature": "Leaderboard & Rankings",
-          "category": "ui",
-          "filePaths": [
-            "src/app/dashboard/leaderboard/leaderboard-page/LeaderboardPodium.tsx",
-            "src/app/dashboard/leaderboard/leaderboard-page/LeaderboardRadarCard.tsx",
-            "src/app/dashboard/leaderboard/leaderboard-page/LeaderboardSortHeader.tsx",
-            "src/app/dashboard/leaderboard/leaderboard-page/LeaderboardTable.tsx",
-            "src/app/dashboard/leaderboard/leaderboard-page/RankDimensionTabs.tsx",
-            "src/app/dashboard/leaderboard/leaderboard-page/leaderboardRank.ts",
-            "src/app/dashboard/leaderboard/leaderboard-page/leaderboardSort.ts",
-            "src/app/dashboard/leaderboard/leaderboard-page/leaderboardStyles.tsx",
-            "src/app/dashboard/leaderboard/page.tsx",
-            "src/app/dashboard/leaderboard/useLeaderboardData.ts"
-          ],
-          "target": null,
-          "apiRoutes": []
-        },
-        {
-          "name": "Observability Charts & SLA",
-          "description": "Performance, usage, and activity observability views (latency, cost, spend, exec charts, health panels, Athena usage + value rollup) plus SLA target/breach tracking and system health state.",
-          "businessFeature": "Observability Charts & SLA",
-          "category": "ui",
-          "filePaths": [
-            "src/app/dashboard/observability/PerformanceView.tsx",
-            "src/app/dashboard/observability/UsageView.tsx",
-            "src/app/dashboard/observability/ActivityMetricsView.tsx",
-            "src/app/dashboard/observability/activity-view/AthenaUsageCard.tsx",
-            "src/app/dashboard/observability/activity-view/ValueRollupCard.tsx",
-            "src/app/dashboard/observability/activity-view/useActivityMetrics.ts",
-            "src/app/dashboard/observability/page.tsx",
-            "src/app/dashboard/observability/performance-view/CostAnomalyBanner.tsx",
-            "src/app/dashboard/observability/performance-view/PerformanceChartGrid.tsx",
-            "src/app/dashboard/observability/performance-view/PerformanceHealthIssueRow.tsx",
-            "src/app/dashboard/observability/performance-view/PerformanceHealthPanel.tsx",
-            "src/app/dashboard/observability/performance-view/PerformanceLatencyCard.tsx",
-            "src/app/dashboard/observability/performance-view/PerformanceMetricsGrid.tsx",
-            "src/app/dashboard/observability/performance-view/PerformanceSpendCard.tsx",
-            "src/app/dashboard/observability/performance-view/SeverityFilterChips.tsx",
-            "src/app/dashboard/observability/performance-view/performanceViewTypes.ts",
-            "src/app/dashboard/observability/performance-view/useLatencyData.ts",
-            "src/app/dashboard/observability/performance-view/useSparklines.ts",
-            "src/app/dashboard/observability/usage-view/UsageChartCards.tsx",
-            "src/app/dashboard/observability/usage-view/usageViewData.ts",
-            "src/app/dashboard/observability/usage-view/useDeferredMount.ts",
-            "src/app/dashboard/sla/page.tsx",
-            "src/app/dashboard/sla/sla-page/SLABreachDetail.tsx",
-            "src/app/dashboard/sla/sla-page/SLABreachLog.tsx",
-            "src/app/dashboard/sla/sla-page/SLABreachRow.tsx",
-            "src/app/dashboard/sla/sla-page/SLASummaryGrid.tsx",
-            "src/app/dashboard/sla/sla-page/SLATargetGrid.tsx",
-            "src/app/dashboard/sla/sla-page/slaFormat.ts",
-            "src/app/dashboard/sla/useSlaData.ts",
-            "src/components/dashboard/ChartAnnotation.tsx",
-            "src/components/dashboard/CompareToggle.tsx",
-            "src/components/dashboard/CostChartWithCompare.tsx",
-            "src/components/dashboard/ExecChartWithCompare.tsx",
-            "src/components/dashboard/HealthDigestPanel.tsx",
-            "src/components/dashboard/HealthIssueRow.tsx",
-            "src/components/dashboard/LatencyChart.tsx",
-            "src/components/dashboard/MetricCard.tsx",
-            "src/components/dashboard/ObservabilityCharts.tsx",
-            "src/components/dashboard/ObservabilityCostChart.tsx",
-            "src/components/dashboard/ObservabilityExecChart.tsx",
-            "src/components/dashboard/ObservabilitySpendPieChart.tsx",
-            "src/components/dashboard/Sparkline.tsx",
-            "src/components/dashboard/TrafficChart.tsx",
-            "src/components/dashboard/UsageCharts.tsx",
-            "src/components/dashboard/healthScoreColor.ts",
-            "src/components/dashboard/trendColor.ts",
-            "src/components/dashboard/usage-charts/UsageTooltip.tsx",
-            "src/components/dashboard/usage-charts/usageChartTypes.ts",
-            "src/hooks/useLiveStats.ts",
-            "src/lib/chart-theme.tsx",
-            "src/stores/systemStore.ts"
-          ],
-          "target": null,
-          "apiRoutes": []
-        },
-        {
-          "name": "Event Bus & Stream Monitoring",
-          "description": "Live event-bus topology visualization, swimlanes, event list panel with filters/bulk-retry, and an event detail drawer fed by an SSE stream.",
-          "businessFeature": "Event Bus & Stream Monitoring",
-          "category": "ui",
-          "filePaths": [
-            "src/app/api/events/stream/route.ts",
-            "src/app/dashboard/events/events-page/EventsPageTabs.tsx",
-            "src/app/dashboard/events/events-page/EventsVisualizationView.tsx",
-            "src/app/dashboard/events/page.tsx",
-            "src/components/dashboard/EventBusStats.tsx",
-            "src/components/dashboard/EventBusVisualization.tsx",
-            "src/components/dashboard/EventDetailDrawer.tsx",
-            "src/components/dashboard/EventSwimlane.tsx",
-            "src/components/dashboard/EventsListPanel.tsx",
-            "src/components/dashboard/JsonViewer.tsx",
-            "src/components/dashboard/SwimlaneLane.tsx",
-            "src/components/dashboard/event-bus-visualization/EventBusDefs.tsx",
-            "src/components/dashboard/event-bus-visualization/EventBusHub.tsx",
-            "src/components/dashboard/event-bus-visualization/EventBusNodes.tsx",
-            "src/components/dashboard/event-bus-visualization/EventBusParticles.tsx",
-            "src/components/dashboard/event-bus-visualization/EventBusStaticRings.tsx",
-            "src/components/dashboard/event-bus-visualization/eventBusGeometry.ts",
-            "src/components/dashboard/event-bus-visualization/useEventBusParticles.ts",
-            "src/components/dashboard/event-detail-drawer/EventDrawerHeader.tsx",
-            "src/components/dashboard/event-detail-drawer/EventDrawerMetadata.tsx",
-            "src/components/dashboard/event-detail-drawer/EventDrawerPayload.tsx",
-            "src/components/dashboard/event-detail-drawer/EventDrawerSummary.tsx",
-            "src/components/dashboard/event-detail-drawer/mockPayloadForNode.ts",
-            "src/components/dashboard/event-detail-drawer/useDialogFocusTrap.ts",
-            "src/components/dashboard/events-list-panel/EventExpandedContent.tsx",
-            "src/components/dashboard/events-list-panel/EventTypeBadge.tsx",
-            "src/components/dashboard/events-list-panel/EventsBulkRetryBar.tsx",
-            "src/components/dashboard/events-list-panel/EventsFiltersToolbar.tsx",
-            "src/components/dashboard/events-list-panel/EventsListColumns.tsx",
-            "src/components/dashboard/events-list-panel/eventPanelTypes.ts",
-            "src/hooks/useEventStream.ts",
-            "src/hooks/useEventTopology.ts",
-            "src/stores/eventStore.ts"
-          ],
-          "target": null,
-          "apiRoutes": [
-            "/api/events/stream"
-          ]
-        },
-        {
-          "name": "Dashboard Home Overview",
-          "description": "Mission-Control dashboard home: greeting, fleet recommendation, 3-column cockpit (triage / vitals console / activity stream), status ticker, and the below-fold instruments bay (heatmap, top performers, traffic, routines, vault).",
-          "businessFeature": "Dashboard Home Overview",
-          "category": "ui",
-          "filePaths": [
-            "src/app/dashboard/home/home-page/DashboardGreetingHeader.tsx",
-            "src/app/dashboard/home/home-page/DashboardIntelligencePanels.tsx",
-            "src/app/dashboard/home/home-page/DashboardQuickLinks.tsx",
-            "src/app/dashboard/home/home-page/ExecutionHeatmapCard.tsx",
-            "src/app/dashboard/home/home-page/InstrumentsBay.tsx",
-            "src/app/dashboard/home/home-page/RecentActivityCard.tsx",
-            "src/app/dashboard/home/home-page/StatusTicker.tsx",
-            "src/app/dashboard/home/home-page/TopPerformersCard.tsx",
-            "src/app/dashboard/home/home-page/TrafficErrorsCard.tsx",
-            "src/app/dashboard/home/home-page/TriagePane.tsx",
-            "src/app/dashboard/home/home-page/UpcomingRoutinesCard.tsx",
-            "src/app/dashboard/home/home-page/VaultChangesCard.tsx",
-            "src/app/dashboard/home/home-page/VitalsConsole.tsx",
-            "src/app/dashboard/home/home-page/useExecutionHeatmap.ts",
-            "src/app/dashboard/home/home-page/useGreeting.ts",
-            "src/app/dashboard/home/home-page/useLastVisit.ts",
-            "src/app/dashboard/home/home-page/useOpenAlertCount.ts",
-            "src/app/dashboard/home/home-page/useTopPerformers.ts",
-            "src/app/dashboard/home/home-page/useTriageQueue.ts",
-            "src/app/dashboard/home/home-page/useUpcomingRoutines.ts",
-            "src/app/dashboard/home/page.tsx"
-          ],
-          "target": null,
-          "apiRoutes": []
-        },
-        {
-          "name": "Incidents Inbox",
-          "description": "Audit-log incidents across the fleet: KPI header (open/severity/source breakdown), persisted status/severity/source/persona filters, a group-by control (agent/severity/source/none) with collapsible sections, and a row-detail modal. New route /dashboard/incidents; demo-only.",
-          "businessFeature": "Incidents Inbox",
-          "category": "ui",
-          "filePaths": [
-            "src/app/dashboard/incidents/page.tsx",
-            "src/app/dashboard/incidents/incidents-page/incidentFormat.ts",
-            "src/app/dashboard/incidents/incidents-page/useIncidentsFilterStore.ts",
-            "src/app/dashboard/incidents/incidents-page/useAuditIncidents.ts",
-            "src/app/dashboard/incidents/incidents-page/IncidentsKpiHeader.tsx",
-            "src/app/dashboard/incidents/incidents-page/IncidentsFilters.tsx",
-            "src/app/dashboard/incidents/incidents-page/IncidentsGroupByTabs.tsx",
-            "src/app/dashboard/incidents/incidents-page/IncidentRow.tsx",
-            "src/app/dashboard/incidents/incidents-page/IncidentList.tsx",
-            "src/app/dashboard/incidents/incidents-page/IncidentDetailModal.tsx"
-          ],
-          "target": null,
-          "apiRoutes": []
-        },
-        {
-          "name": "System Health Panel",
-          "description": "System Health Panel: runtime / services / resources / integrations status cards with status dots, a disk-usage gauge, and illustrative install/configure actions (demo no-ops to a toast). New route /dashboard/health; demo-only.",
-          "businessFeature": "System Health Panel",
-          "category": "ui",
-          "filePaths": [
-            "src/app/dashboard/health/page.tsx",
-            "src/app/dashboard/health/health-page/healthFormat.ts",
-            "src/app/dashboard/health/health-page/useSystemHealth.ts",
-            "src/app/dashboard/health/health-page/HealthSectionCard.tsx",
-            "src/app/dashboard/health/health-page/DiskUsageBar.tsx"
-          ],
-          "target": null,
-          "apiRoutes": []
-        }
-      ]
-    },
-    {
-      "name": "Platform Foundation: Shell, UI & Motion",
-      "domain": "shared",
-      "type": null,
-      "color": "#64748B",
-      "icon": null,
-      "contexts": [
-        {
-          "name": "Mobile App Shell & Views",
-          "description": "Dedicated mobile experience: the /m route shell (overview, alerts, messages, reviews) and mobile UI primitives (app bar, tab bar, sheets, stat cards).",
-          "businessFeature": "Mobile App Shell & Views",
-          "category": "ui",
-          "filePaths": [
-            "src/app/m/alerts/page.tsx",
-            "src/app/m/layout.tsx",
-            "src/app/m/messages/page.tsx",
-            "src/app/m/overview/page.tsx",
-            "src/app/m/page.tsx",
-            "src/app/m/reviews/page.tsx",
-            "src/app/m/template.tsx",
-            "src/components/mobile/MobileAppBar.tsx",
-            "src/components/mobile/MobileSheet.tsx",
-            "src/components/mobile/MobileShell.tsx",
-            "src/components/mobile/MobileStatCard.tsx",
-            "src/components/mobile/MobileTabBar.tsx",
-            "src/components/mobile/MobileThreadSheet.tsx"
-          ],
-          "target": null,
-          "apiRoutes": []
-        },
-        {
-          "name": "Animation & Motion System",
-          "description": "Ambient motion components (orbs, particles, parallax, topo background) and the animation hooks/contexts that gate GPU-intensive motion behind reduced-motion.",
-          "businessFeature": "Animation & Motion System",
-          "category": "lib",
-          "filePaths": [
-            "src/components/AmbientOrbs.tsx",
-            "src/components/AnimationPauseObserver.tsx",
-            "src/components/CinematicBreather.tsx",
-            "src/components/FloatingParticles.tsx",
-            "src/components/LazyMount.tsx",
-            "src/components/ParallaxAccents.tsx",
-            "src/components/ParticleHost.tsx",
-            "src/components/ScrollMap.tsx",
-            "src/components/TopoBackground.tsx",
-            "src/components/particle-host/particleHostRegistry.ts",
-            "src/contexts/QualityContext.tsx",
-            "src/contexts/SectionObserverContext.tsx",
-            "src/hooks/useActiveSection.ts",
-            "src/hooks/useAnimatedNumber.ts",
-            "src/hooks/useAnimationPause.ts",
-            "src/hooks/useAutoCycle.ts",
-            "src/hooks/useCanvasCompositor.ts",
-            "src/hooks/useIsMobile.ts",
-            "src/hooks/useIsVisible.ts",
-            "src/hooks/useMaxScrollHeight.ts",
-            "src/hooks/usePageVisibility.ts",
-            "src/hooks/useSectionPause.ts",
-            "src/hooks/useTweenedNumber.ts",
-            "src/lib/animations.ts"
-          ],
-          "target": null,
-          "apiRoutes": []
-        },
-        {
-          "name": "Shared UI Primitives & Illustrations",
-          "description": "Reusable design primitives (brand cards, terminal panel, chips), glow/gradient cards, brand icons, and the SVG illustration library.",
-          "businessFeature": "Shared UI Primitives & Illustrations",
-          "category": "ui",
-          "filePaths": [
-            "src/components/GlowCard.tsx",
-            "src/components/GradientText.tsx",
-            "src/components/HoneycombMark.tsx",
-            "src/components/ImageBackground.tsx",
-            "src/components/SVGFocusRing.tsx",
-            "src/components/ShortcutHint.tsx",
-            "src/components/TerminalChrome.tsx",
-            "src/components/icons/brand-icons.tsx",
-            "src/components/illustrations/AgentGridIllustration.tsx",
-            "src/components/illustrations/CloudInfraIllustration.tsx",
-            "src/components/illustrations/HealthyShieldIllustration.tsx",
-            "src/components/illustrations/LocalCloudIllustration.tsx",
-            "src/components/illustrations/PricingIllustration.tsx",
-            "src/components/illustrations/ShieldIllustration.tsx",
-            "src/components/illustrations/TerminalIllustration.tsx",
-            "src/components/primitives/BrandCard.tsx",
-            "src/components/primitives/SectionIntro.tsx",
-            "src/components/primitives/TerminalPanel.tsx",
-            "src/components/primitives/ThemedChip.tsx",
-            "src/components/primitives/index.ts",
-            "src/components/primitives/terminal/BlinkingCursor.tsx",
-            "src/components/primitives/terminal/TerminalHistory.tsx",
-            "src/components/primitives/terminal/TerminalLine.tsx",
-            "src/components/primitives/terminal/index.ts",
-            "src/components/primitives/terminal/types.ts"
-          ],
-          "target": null,
-          "apiRoutes": []
-        },
-        {
-          "name": "Dashboard Shell, Chrome & Realtime",
-          "description": "Dashboard chrome shared across all dashboard routes: layout, sidebars, scope bar, mobile bottom nav, skeletons, error boundary, status badges, and realtime sync provider.",
-          "businessFeature": "Dashboard Shell, Chrome & Realtime",
-          "category": "ui",
-          "filePaths": [
-            "src/app/dashboard/layout.tsx",
-            "src/components/dashboard/ConnectionStatusIndicator.tsx",
-            "src/components/dashboard/DashboardErrorBanner.tsx",
-            "src/components/dashboard/DashboardErrorBoundary.tsx",
-            "src/components/dashboard/DashboardNavbar.tsx",
-            "src/components/dashboard/DashboardNavigation.tsx",
-            "src/components/dashboard/DashboardScopeBar.tsx",
-            "src/components/dashboard/DashboardSidebar.tsx",
-            "src/components/dashboard/DashboardSkeleton.tsx",
-            "src/components/dashboard/DesktopSidebar.tsx",
-            "src/components/dashboard/EmptyState.tsx",
-            "src/components/dashboard/FleetOptimizationCard.tsx",
-            "src/components/dashboard/MobileBottomNav.tsx",
-            "src/components/dashboard/Modal.tsx",
-            "src/components/dashboard/SkeletonCard.tsx",
-            "src/components/dashboard/StalenessIndicator.tsx",
-            "src/components/dashboard/StatBadge.tsx",
-            "src/components/dashboard/StatusBadge.tsx",
-            "src/components/dashboard/SyncedRealtimeProvider.tsx",
-            "src/hooks/useSyncedRealtime.ts"
-          ],
-          "target": null,
-          "apiRoutes": []
-        },
-        {
-          "name": "Layout, Navigation & Page Shell",
-          "description": "Global app shell: root layout, error/loading/not-found boundaries, navbar (logo, mobile menu, routes), page shells, section wrappers, and cookie consent.",
-          "businessFeature": "Layout, Navigation & Page Shell",
-          "category": "ui",
-          "filePaths": [
-            "src/app/error.tsx",
-            "src/app/global-error.tsx",
-            "src/app/layout.tsx",
-            "src/app/loading.tsx",
-            "src/app/not-found.tsx",
-            "src/components/CookieConsent.tsx",
-            "src/components/InfoPageLayout.tsx",
-            "src/components/MobilePageTOC.tsx",
-            "src/components/Navbar.tsx",
-            "src/components/NavbarLogoGlyph.tsx",
-            "src/components/NavbarLogoWordmark.tsx",
-            "src/components/NavbarMobileMenu.tsx",
-            "src/components/PageShell.tsx",
-            "src/components/SectionBreadcrumb.tsx",
-            "src/components/SectionDivider.tsx",
-            "src/components/SectionHeading.tsx",
-            "src/components/SectionWrapper.tsx",
-            "src/components/StageSection.tsx",
-            "src/components/navbar/DesktopNav.tsx",
-            "src/components/navbar/MobilePanel.tsx",
-            "src/components/navbar/useMobileMenu.ts",
-            "src/components/navbar/useRoutes.ts"
-          ],
-          "target": null,
-          "apiRoutes": []
-        }
-      ]
-    },
-    {
-      "name": "Infrastructure & Telemetry",
+      "color": "indigo",
+      "context_count": 7,
       "domain": "infrastructure",
-      "type": null,
-      "color": "#6366F1",
-      "icon": null,
-      "contexts": [
-        {
-          "name": "Build Config & E2E Tests",
-          "description": "Build/runtime configuration (Next.js + Playwright config) and the Playwright end-to-end test specs.",
-          "businessFeature": "Build Config & E2E Tests",
-          "category": "test",
-          "filePaths": [
-            "e2e/blog.spec.ts",
-            "e2e/community.spec.ts",
-            "e2e/compare.spec.ts",
-            "e2e/connections.spec.ts",
-            "e2e/cookie-consent.spec.ts",
-            "e2e/download.spec.ts",
-            "e2e/guide.spec.ts",
-            "e2e/legal.spec.ts",
-            "e2e/playground.spec.ts",
-            "e2e/roadmap.spec.ts",
-            "e2e/templates.spec.ts",
-            "e2e/tour.spec.ts",
-            "e2e/use-cases.spec.ts",
-            "next.config.ts",
-            "playwright.config.ts"
-          ],
-          "target": null,
-          "apiRoutes": []
-        },
-        {
-          "name": "Supabase Client",
-          "description": "Optional anon-key-only Supabase client and the typed query helpers used by roadmap and voting (guarded so the app falls back to mocks when unconfigured).",
-          "businessFeature": "Supabase Client",
-          "category": "lib",
-          "filePaths": [
-            "src/lib/supabase.ts",
-            "src/lib/supabaseApi.ts"
-          ],
-          "target": null,
-          "apiRoutes": []
-        },
-        {
-          "name": "SEO & Social Metadata",
-          "description": "SEO and social plumbing: per-route OpenGraph image generators, the OG frame helper, sitemap, robots, manifest, and shared SEO metadata helpers.",
-          "businessFeature": "SEO & Social Metadata",
-          "category": "config",
-          "filePaths": [
-            "src/app/blog/[slug]/opengraph-image.tsx",
-            "src/app/connections/opengraph-image.tsx",
-            "src/app/features/opengraph-image.tsx",
-            "src/app/guide/[category]/[topic]/opengraph-image.tsx",
-            "src/app/guide/[category]/opengraph-image.tsx",
-            "src/app/how/opengraph-image.tsx",
-            "src/app/manifest.ts",
-            "src/app/opengraph-image.tsx",
-            "src/app/roadmap/opengraph-image.tsx",
-            "src/app/robots.ts",
-            "src/app/sitemap.ts",
-            "src/app/templates/opengraph-image.tsx",
-            "src/lib/og-frame.tsx",
-            "src/lib/og.tsx",
-            "src/lib/seo.ts"
-          ],
-          "target": null,
-          "apiRoutes": []
-        },
-        {
-          "name": "Error Monitoring & Analytics",
-          "description": "Sentry init across client/edge/server, instrumentation hook, PII-scrubbing pipeline, analytics + page-view tracking, and the admin-protected stats endpoint.",
-          "businessFeature": "Error Monitoring & Analytics",
-          "category": "config",
-          "filePaths": [
-            "sentry.client.config.ts",
-            "sentry.edge.config.ts",
-            "sentry.server.config.ts",
-            "src/app/api/stats/route.ts",
-            "src/components/PageViewTracker.tsx",
-            "src/instrumentation.ts",
-            "src/lib/analytics.ts",
-            "src/lib/sentry-pii.ts",
-            "src/lib/sentry.ts"
-          ],
-          "target": null,
-          "apiRoutes": [
-            "/api/stats"
-          ]
-        },
-        {
-          "name": "Orchestrator API Client & Mock Data",
-          "description": "The orchestrator API client and fetch wrapper, dashboard query layer, request proxy, and the demo-mode mock API + mock dashboard data sources.",
-          "businessFeature": "Orchestrator API Client & Mock Data",
-          "category": "lib",
-          "filePaths": [
-            "src/lib/api-fetch.ts",
-            "src/lib/api.ts",
-            "src/lib/dashboard-queries.ts",
-            "src/lib/mock-dashboard-data.ts",
-            "src/lib/mockApi.ts",
-            "src/lib/mockData.ts",
-            "src/lib/orchestrator-config.ts",
-            "src/proxy.ts"
-          ],
-          "target": null,
-          "apiRoutes": []
-        },
-        {
-          "name": "Authentication & User Session",
-          "description": "Demo OAuth-style auth: mock provider, role selector, route guards (AuthGuard/AuthLayout/SignInPrompt), auth store, and user-cache clearing on logout.",
-          "businessFeature": "Authentication & User Session",
-          "category": "lib",
-          "filePaths": [
-            "src/components/AuthProvider.tsx",
-            "src/components/AuthToast.tsx",
-            "src/components/RoleSelector.tsx",
-            "src/components/dashboard/AuthGuard.tsx",
-            "src/components/dashboard/AuthLayout.tsx",
-            "src/components/dashboard/SignInPrompt.tsx",
-            "src/lib/clearUserCaches.ts",
-            "src/lib/mockAuth.ts",
-            "src/stores/authStore.ts"
-          ],
-          "target": null,
-          "apiRoutes": []
-        }
-      ]
+      "id": "23ebc3a7-d574-4e9f-92db-6894abdf3058",
+      "name": "Platform Infrastructure"
     },
     {
-      "name": "Theming, i18n & Shared Utilities",
+      "color": "orange",
+      "context_count": 4,
       "domain": "shared",
-      "type": null,
-      "color": "#A855F7",
-      "icon": null,
-      "contexts": [
-        {
-          "name": "Shared Types, Utilities & Hooks",
-          "description": "Cross-cutting shared code: domain types, validation, formatting/date/url helpers, scroll-lock, generic hooks, and server request/env utilities.",
-          "businessFeature": "Shared Types, Utilities & Hooks",
-          "category": "lib",
-          "filePaths": [
-            "src/hooks/useAbortableEffect.ts",
-            "src/hooks/useFocusTrap.ts",
-            "src/hooks/usePolling.ts",
-            "src/hooks/useSearchParamState.ts",
-            "src/lib/bodyScrollLock.ts",
-            "src/lib/constants.ts",
-            "src/lib/format-date.ts",
-            "src/lib/format.ts",
-            "src/lib/highlight-match.tsx",
-            "src/lib/server/env.ts",
-            "src/lib/server/request.ts",
-            "src/lib/timings.ts",
-            "src/lib/types.ts",
-            "src/lib/url.ts",
-            "src/lib/validation.ts"
-          ],
-          "target": null,
-          "apiRoutes": []
-        },
-        {
-          "name": "Theme System",
-          "description": "Multi-variant theme system: persisted theme store, init + switcher, brand color tokens, and the semantic color/typography token mappings.",
-          "businessFeature": "Theme System",
-          "category": "lib",
-          "filePaths": [
-            "src/components/ThemeInit.tsx",
-            "src/components/ThemeSwitcher.tsx",
-            "src/lib/brand-theme.ts",
-            "src/lib/colors.ts",
-            "src/lib/typography.ts",
-            "src/stores/themeStore.ts"
-          ],
-          "target": null,
-          "apiRoutes": []
-        },
-        {
-          "name": "Internationalization (14 locales)",
-          "description": "14-locale UI translation bundle with en.ts as the typed source-of-truth, the useTranslation hook, and the persisted locale store.",
-          "businessFeature": "Internationalization (14 locales)",
-          "category": "lib",
-          "filePaths": [
-            "src/i18n/ar.ts",
-            "src/i18n/bn.ts",
-            "src/i18n/cs.ts",
-            "src/i18n/de.ts",
-            "src/i18n/en.ts",
-            "src/i18n/es.ts",
-            "src/i18n/fr.ts",
-            "src/i18n/hi.ts",
-            "src/i18n/id.ts",
-            "src/i18n/ja.ts",
-            "src/i18n/ko.ts",
-            "src/i18n/ru.ts",
-            "src/i18n/useTranslation.ts",
-            "src/i18n/vi.ts",
-            "src/i18n/zh.ts",
-            "src/stores/i18nStore.ts"
-          ],
-          "target": null,
-          "apiRoutes": []
-        }
-      ]
+      "id": "40c41653-ee2d-473d-8d67-b9328a0a86a0",
+      "name": "Design System"
+    },
+    {
+      "color": "red",
+      "context_count": 2,
+      "domain": "feature",
+      "id": "b5f13a3a-0c83-4fbb-8b8a-71ebf816aa50",
+      "name": "Mobile Experience"
     }
   ],
-  "ungrouped": [],
-  "relationships": [
-    {
-      "source": "Marketing & Landing",
-      "target": "Platform Foundation: Shell, UI & Motion",
-      "type": "uses"
-    },
-    {
-      "source": "Marketing & Landing",
-      "target": "Theming, i18n & Shared Utilities",
-      "type": "uses"
-    },
-    {
-      "source": "Marketing & Landing",
-      "target": "Product Feature Showcase",
-      "type": "uses"
-    },
-    {
-      "source": "Marketing & Landing",
-      "target": "Interactive Demos & Playground",
-      "type": "uses"
-    },
-    {
-      "source": "Product Feature Showcase",
-      "target": "Platform Foundation: Shell, UI & Motion",
-      "type": "uses"
-    },
-    {
-      "source": "Product Feature Showcase",
-      "target": "Theming, i18n & Shared Utilities",
-      "type": "uses"
-    },
-    {
-      "source": "Interactive Demos & Playground",
-      "target": "Platform Foundation: Shell, UI & Motion",
-      "type": "uses"
-    },
-    {
-      "source": "Interactive Demos & Playground",
-      "target": "Theming, i18n & Shared Utilities",
-      "type": "uses"
-    },
-    {
-      "source": "Product Documentation (Guide)",
-      "target": "Platform Foundation: Shell, UI & Motion",
-      "type": "uses"
-    },
-    {
-      "source": "Product Documentation (Guide)",
-      "target": "Theming, i18n & Shared Utilities",
-      "type": "uses"
-    },
-    {
-      "source": "Content & Informational Pages",
-      "target": "Platform Foundation: Shell, UI & Motion",
-      "type": "uses"
-    },
-    {
-      "source": "Content & Informational Pages",
-      "target": "Infrastructure & Telemetry",
-      "type": "uses"
-    },
-    {
-      "source": "Connectors & Templates",
-      "target": "Platform Foundation: Shell, UI & Motion",
-      "type": "uses"
-    },
-    {
-      "source": "Connectors & Templates",
-      "target": "Infrastructure & Telemetry",
-      "type": "calls"
-    },
-    {
-      "source": "Roadmap, Voting & Waitlist",
-      "target": "Infrastructure & Telemetry",
-      "type": "depends_on"
-    },
-    {
-      "source": "Roadmap, Voting & Waitlist",
-      "target": "Platform Foundation: Shell, UI & Motion",
-      "type": "uses"
-    },
-    {
-      "source": "Agent Operations Dashboard",
-      "target": "Infrastructure & Telemetry",
-      "type": "calls"
-    },
-    {
-      "source": "Agent Operations Dashboard",
-      "target": "Platform Foundation: Shell, UI & Motion",
-      "type": "uses"
-    },
-    {
-      "source": "Agent Operations Dashboard",
-      "target": "Theming, i18n & Shared Utilities",
-      "type": "uses"
-    },
-    {
-      "source": "Observability & Event Monitoring",
-      "target": "Infrastructure & Telemetry",
-      "type": "calls"
-    },
-    {
-      "source": "Observability & Event Monitoring",
-      "target": "Platform Foundation: Shell, UI & Motion",
-      "type": "uses"
-    },
-    {
-      "source": "Observability & Event Monitoring",
-      "target": "Theming, i18n & Shared Utilities",
-      "type": "uses"
-    },
-    {
-      "source": "Platform Foundation: Shell, UI & Motion",
-      "target": "Theming, i18n & Shared Utilities",
-      "type": "uses"
-    },
-    {
-      "source": "Platform Foundation: Shell, UI & Motion",
-      "target": "Infrastructure & Telemetry",
-      "type": "depends_on"
-    },
-    {
-      "source": "Infrastructure & Telemetry",
-      "target": "Theming, i18n & Shared Utilities",
-      "type": "uses"
-    }
-  ],
-  "index": [
-    "Marketing & Landing › Guided Product Tour [ui] — 18 files",
-    "Marketing & Landing › Conversion: Get Started, FAQ & Footer [ui] — 29 files",
-    "Marketing & Landing › Why Agents & Use Cases [ui] — 22 files",
-    "Marketing & Landing › Features Overview & Pricing [ui] — 18 files",
-    "Marketing & Landing › Homepage & Hero [ui] — 12 files",
-    "Product Feature Showcase › Observability Deck & Security Vault [ui] — 18 files",
-    "Product Feature Showcase › Agent Lab & Plugin Ecosystem [ui] — 26 files",
-    "Product Feature Showcase › Memory Layers & Multi-Provider AI [ui] — 19 files",
-    "Product Feature Showcase › Self-Healing & Trigger Automation [ui] — 20 files",
-    "Interactive Demos & Playground › Section Preview & Demo Harness [ui] — 5 files",
-    "Interactive Demos & Playground › Visual Flow Composer & Playground Page [ui] — 19 files",
-    "Interactive Demos & Playground › Orchestration & Platform Visualizers [ui] — 27 files",
-    "Interactive Demos & Playground › Split & Pipeline Playground [ui] — 19 files",
-    "Interactive Demos & Playground › Agent Execution Timeline Race [ui] — 11 files",
-    "Interactive Demos & Playground › Agent Playground & Multi-Agent Chat [ui] — 17 files",
-    "Product Documentation (Guide) › Localized Guide Content (14 locales) [data] — 143 files",
-    "Product Documentation (Guide) › Guide Data, Content & Search Index [data] — 20 files",
-    "Product Documentation (Guide) › Guide Content Blocks & Markdown [ui] — 28 files",
-    "Product Documentation (Guide) › Guide Pages & Navigation [ui] — 22 files",
-    "Content & Informational Pages › How It Works & Changelog [ui] — 6 files",
-    "Content & Informational Pages › Legal & Policy [ui] — 7 files",
-    "Content & Informational Pages › Security & Compliance [ui] — 7 files",
-    "Content & Informational Pages › Blog [ui] — 14 files",
-    "Roadmap, Voting & Waitlist › Server-Side Vote Persistence [lib] — 3 files",
-    "Roadmap, Voting & Waitlist › Waitlist & App Download [api] — 9 files",
-    "Roadmap, Voting & Waitlist › Feature Voting & Comments [api] — 21 files",
-    "Roadmap, Voting & Waitlist › Public Roadmap [ui] — 12 files",
-    "Connectors & Templates › Templates Gallery & Detail [ui] — 18 files",
-    "Connectors & Templates › Connector Detail Modal [ui] — 7 files",
-    "Connectors & Templates › Connectors Catalog [ui] — 10 files",
-    "Agent Operations Dashboard › Messages & Settings [ui] — 10 files",
-    "Agent Operations Dashboard › Knowledge Base [ui] — 27 files",
-    "Agent Operations Dashboard › Manual Review Queue [ui] — 35 files",
-    "Agent Operations Dashboard › Agents (Personas) Management [ui] — 18 files",
-    "Observability & Event Monitoring › Execution History & Streaming [ui] — 14 files",
-    "Observability & Event Monitoring › Leaderboard & Rankings [ui] — 7 files",
-    "Observability & Event Monitoring › Observability Charts & SLA [ui] — 47 files",
-    "Observability & Event Monitoring › Event Bus & Stream Monitoring [ui] — 33 files",
-    "Observability & Event Monitoring › Dashboard Home Overview [ui] — 17 files",
-    "Platform Foundation: Shell, UI & Motion › Mobile App Shell & Views [ui] — 13 files",
-    "Platform Foundation: Shell, UI & Motion › Animation & Motion System [lib] — 24 files",
-    "Platform Foundation: Shell, UI & Motion › Shared UI Primitives & Illustrations [ui] — 25 files",
-    "Platform Foundation: Shell, UI & Motion › Dashboard Shell, Chrome & Realtime [ui] — 20 files",
-    "Platform Foundation: Shell, UI & Motion › Layout, Navigation & Page Shell [ui] — 22 files",
-    "Infrastructure & Telemetry › Build Config & E2E Tests [test] — 15 files",
-    "Infrastructure & Telemetry › Supabase Client [lib] — 2 files",
-    "Infrastructure & Telemetry › SEO & Social Metadata [config] — 15 files",
-    "Infrastructure & Telemetry › Error Monitoring & Analytics [config] — 9 files",
-    "Infrastructure & Telemetry › Orchestrator API Client & Mock Data [lib] — 8 files",
-    "Infrastructure & Telemetry › Authentication & User Session [lib] — 9 files",
-    "Theming, i18n & Shared Utilities › Shared Types, Utilities & Hooks [lib] — 15 files",
-    "Theming, i18n & Shared Utilities › Theme System [lib] — 6 files",
-    "Theming, i18n & Shared Utilities › Internationalization (14 locales) [lib] — 16 files"
-  ],
-  "summary": {
-    "totalGroups": 12,
-    "totalContexts": 53,
-    "totalFiles": 1014,
-    "categories": {
-      "ui": 38,
-      "data": 2,
-      "lib": 8,
-      "api": 2,
-      "test": 1,
-      "config": 2
-    },
-    "domains": {
-      "feature": 8,
-      "integration": 1,
-      "shared": 2,
-      "infrastructure": 1
-    }
+  "project": {
+    "id": "0e73731f-67be-4411-acff-800753fb0e36",
+    "name": "personas-web",
+    "root": "C:\\Users\\kazda\\kiro\\personas-web"
   },
-  "audit": {
-    "ok": false,
-    "tier": "large",
-    "warnings": 15
+  "stats": {
+    "contexts": 40,
+    "files": 419,
+    "groups": 8
   },
-  "instructions": "Context map for personas-web. Each group is a business domain (domain field); each context is a feature with its files (filePaths) + a technical category. Read this to learn which files belong to which feature BEFORE editing. When you change a context's files, update them here (or run Vibeman's refresh) to keep this fresh.",
-  "generatedAt": "2026-06-13T20:55:12.591Z",
-  "revision": "4e6710d3b0ed"
+  "taxonomy": {
+    "context_categories": [
+      "ui",
+      "api",
+      "lib",
+      "data",
+      "test",
+      "config"
+    ],
+    "group_domains": [
+      "feature",
+      "infrastructure",
+      "shared",
+      "integration",
+      "data"
+    ]
+  },
+  "version": 2
 }
