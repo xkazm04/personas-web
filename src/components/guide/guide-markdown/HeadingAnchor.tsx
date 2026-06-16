@@ -35,7 +35,7 @@ export function HeadingAnchor({ depth, id, rawText, copyLabel, children }: Headi
             delete target.dataset.copied;
           }, 1500);
         }}
-        className="absolute -left-6 top-1/2 -translate-y-1/2 text-muted-dark/60 hover:text-brand-cyan no-underline opacity-0 group-hover:opacity-100 focus-visible:opacity-100 transition-opacity font-normal data-[copied=1]:text-emerald-400"
+        className="absolute -left-6 top-1/2 -translate-y-1/2 text-muted-dark/60 hover:text-brand-cyan no-underline opacity-0 group-hover:opacity-100 focus-visible:opacity-100 [@media(hover:none)]:opacity-100 transition-opacity font-normal data-[copied=1]:text-emerald-400"
       >
         #
       </a>

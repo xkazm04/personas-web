@@ -1,6 +1,21 @@
 ﻿import type { Translations } from './en';
 
 export const zh: Translations = {
+  notFound: {
+    title: '\u672a\u627e\u5230\u9875\u9762',
+    description: '\u60a8\u8981\u67e5\u627e\u7684\u9875\u9762\u4e0d\u5b58\u5728\u6216\u5df2\u88ab\u79fb\u52a8\u3002\u8bf7\u5c1d\u8bd5\u4ee5\u4e0b\u9875\u9762\uff1a',
+    home: '\u9996\u9875',
+    getStarted: '\u5f00\u59cb\u4f7f\u7528',
+    backToHome: '\u8fd4\u56de\u9996\u9875',
+  },
+  errorPage: {
+    title: '\u6b64\u9875\u9762\u51fa\u73b0\u4e86\u610f\u5916\u95ee\u9898',
+    description: '\u52a0\u8f7d\u6b64\u9875\u9762\u65f6\u51fa\u9519\u3002\u6211\u4eec\u7684\u56e2\u961f\u5df2\u6536\u5230\u901a\u77e5\u2014\u2014\u8bf7\u91cd\u8bd5\uff0c\u6216\u8fd4\u56de\u9996\u9875\u3002',
+    tryAgain: '\u91cd\u8bd5',
+    errorReference: '\u9519\u8bef\u53c2\u8003\u7f16\u53f7',
+    copyReference: '\u590d\u5236\u9519\u8bef\u53c2\u8003\u7f16\u53f7',
+    backToHome: '\u8fd4\u56de\u9996\u9875',
+  },
   nav: {
     home: 'Personas',
     how: '\u5DE5\u4F5C\u539F\u7406',
@@ -202,6 +217,7 @@ export const zh: Translations = {
     connected: '\u5DF2\u8FDE\u63A5',
     disconnected: '\u5DF2\u65AD\u5F00',
     demo: '\u6F14\u793A',
+    viewFullSite: '\u67E5\u770B\u5B8C\u6574\u7F51\u7AD9',
   },
   useCasesSection: {
     heading: 'ä¸€ä¸Şč§’č‰˛ďĽŚ',
@@ -498,6 +514,11 @@ export const zh: Translations = {
     refreshing: "Refreshing...",
     rejectSelectedTitle: "Reject selected reviews?",
     rejectSelectedBody: "This will reject {count} selected review{plural}. You will have 5 seconds to undo this action.",
+    undo: "撤销",
+    retry: "重试",
+    bulkFailedApprove: "{total} 项中有 {failed} 项批准失败",
+    bulkFailedReject: "{total} 项中有 {failed} 项拒绝失败",
+    bulkSucceededReselected: "{count} 项成功 · 已重新选择失败的项",
     allShortcuts: "All shortcuts",
     keyboardShortcuts: "Keyboard shortcuts",
     searchShortcuts: "Search shortcuts...",

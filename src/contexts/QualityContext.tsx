@@ -8,13 +8,11 @@ export type QualityTier = "high" | "medium" | "low";
 interface QualityState {
   tier: QualityTier;
   reducedMotion: boolean;
-  canHover: boolean;
 }
 
 const QualityContext = createContext<QualityState>({
   tier: "high",
   reducedMotion: false,
-  canHover: true,
 });
 
 /** Number of frame samples per evaluation window (~2 s at 60 fps). */
@@ -38,7 +36,6 @@ export function QualityProvider({ children }: { children: ReactNode }) {
   const framerReduced = useReducedMotion();
   const [tier, setTier] = useState<QualityTier>("high");
   const [reducedMotion, setReducedMotion] = useState(false);
-  const [canHover, setCanHover] = useState(true);
   const tierRef = useRef<QualityTier>("high");
   const rafRef = useRef(0);
   const lastFrameRef = useRef(0);
@@ -150,25 +147,20 @@ export function QualityProvider({ children }: { children: ReactNode }) {
     if (typeof window === "undefined" || !window.matchMedia) return;
 
     const reducedMotionQuery = window.matchMedia("(prefers-reduced-motion: reduce)");
-    const hoverQuery = window.matchMedia("(hover: hover)");
 
     const applyReducedMotion = () => setReducedMotion(reducedMotionQuery.matches);
-    const applyCanHover = () => setCanHover(hoverQuery.matches);
 
     applyReducedMotion();
-    applyCanHover();
 
     reducedMotionQuery.addEventListener("change", applyReducedMotion);
-    hoverQuery.addEventListener("change", applyCanHover);
 
     return () => {
       reducedMotionQuery.removeEventListener("change", applyReducedMotion);
-      hoverQuery.removeEventListener("change", applyCanHover);
     };
   }, []);
 
   return (
-    <QualityContext.Provider value={{ tier, reducedMotion, canHover }}>
+    <QualityContext.Provider value={{ tier, reducedMotion }}>
       {children}
     </QualityContext.Provider>
   );
@@ -180,8 +172,4 @@ export function useQualityTier(): QualityTier {
 
 export function useReducedMotionPreference(): boolean {
   return useContext(QualityContext).reducedMotion;
-}
-
-export function useCanHover(): boolean {
-  return useContext(QualityContext).canHover;
 }

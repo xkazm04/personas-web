@@ -5,6 +5,7 @@ import { motion } from "framer-motion";
 import { Lightbulb, Loader2 } from "lucide-react";
 import useSWR from "swr";
 
+import DashboardErrorBanner from "@/components/dashboard/DashboardErrorBanner";
 import { useTranslation } from "@/i18n/useTranslation";
 import { api } from "@/lib/api";
 import { fadeUp } from "@/lib/animations";
@@ -29,11 +30,12 @@ const MAX_BAR_TOOLS = 15;
 export default function UsageView() {
   const { t } = useTranslation();
   const isDemo = useAuthStore((s) => s.isDemo);
-  const { data, isLoading: loading } = useSWR("usage", api.getUsageAnalytics, {
+  const { data, isLoading: loading, error, mutate } = useSWR("usage", api.getUsageAnalytics, {
     dedupingInterval: 8_000,
     revalidateOnFocus: false,
     keepPreviousData: true,
   });
+  const errorMsg = error instanceof Error ? error.message : error ? String(error) : null;
   // Demo mode renders the illustrative MOCK_* fixtures (and the example-data
   // notice). Real mode uses the genuine — possibly empty — analytics, never the
   // mock; an empty real dataset renders the empty charts honestly.
@@ -147,6 +149,10 @@ export default function UsageView() {
 
   return (
     <div>
+      {errorMsg && (
+        <DashboardErrorBanner message={errorMsg} onRetry={() => void mutate()} />
+      )}
+
       {useMock && (
         <motion.div variants={fadeUp} className="mb-6 flex items-center gap-2 rounded-xl border border-amber-500/20 bg-amber-500/5 px-4 py-2.5 text-sm text-amber-400">
           <Lightbulb className="h-3.5 w-3.5 flex-shrink-0" />

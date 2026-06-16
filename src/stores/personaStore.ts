@@ -1,4 +1,5 @@
 import { create } from "zustand";
+import * as Sentry from "@sentry/nextjs";
 import { api } from "@/lib/api";
 import type { Persona } from "@/lib/types";
 
@@ -11,6 +12,12 @@ interface PersonaState {
   personaIds: string[];
   personasLoading: boolean;
   personasFetchedAt: number | null;
+  /**
+   * Last fetch failure, surfaced to the UI. Null while loading or after a
+   * success. Lets pages distinguish "fetch failed" from "genuinely no agents"
+   * instead of painting a reassuring empty state over a network error.
+   */
+  personasError: string | null;
   fetchPersonas: () => Promise<void>;
   /**
    * Apply a patch to the local persona record. Returns the pre-update
@@ -96,6 +103,7 @@ export const usePersonaStore = create<PersonaState>((set) => ({
   personaIds: [],
   personasLoading: false,
   personasFetchedAt: null,
+  personasError: null,
   fetchPersonas: () => {
     const { personas, personasFetchedAt } = usePersonaStore.getState();
     const now = Date.now();
@@ -106,6 +114,8 @@ export const usePersonaStore = create<PersonaState>((set) => ({
     if (isFresh) return Promise.resolve();
     if (inflight) return inflight;
 
+    // Clear any prior error at the start of a fetch (incl. an explicit retry).
+    set({ personasError: null });
     if (!hasStaleData) {
       set({ personasLoading: true });
     }
@@ -123,11 +133,17 @@ export const usePersonaStore = create<PersonaState>((set) => ({
             personasById: buildById(nextPersonas),
             personaIds,
             personasFetchedAt: Date.now(),
+            personasError: null,
           };
         });
       })
-      .catch(() => {
-        // leave stale
+      .catch((err) => {
+        // Keep any stale data on screen, but record the failure so the UI can
+        // surface it (and retry) instead of falling back to an empty state.
+        Sentry.captureException(err, { tags: { scope: "fetchPersonas" } });
+        set({
+          personasError: err instanceof Error ? err.message : "Failed to load agents",
+        });
       })
       .finally(() => {
         inflight = null;
@@ -216,6 +232,7 @@ export const usePersonaStore = create<PersonaState>((set) => ({
       personaIds: [],
       personasLoading: false,
       personasFetchedAt: null,
+      personasError: null,
     });
   },
 }));

@@ -5,6 +5,7 @@ import { motion, AnimatePresence } from "framer-motion";
 import { AlertTriangle } from "lucide-react";
 
 import { useFocusTrap } from "@/hooks/useFocusTrap";
+import { useTranslation } from "@/i18n/useTranslation";
 
 export default function ConfirmDialog({
   open,
@@ -21,6 +22,7 @@ export default function ConfirmDialog({
   onConfirm: () => void;
   onCancel: () => void;
 }) {
+  const { t } = useTranslation();
   const titleId = useId();
   const panelRef = useRef<HTMLDivElement>(null);
   const confirmRef = useRef<HTMLButtonElement>(null);
@@ -80,7 +82,7 @@ export default function ConfirmDialog({
                 onClick={onCancel}
                 className="rounded-lg border border-glass-hover px-4 py-2 text-sm font-medium text-muted hover:text-foreground transition-colors"
               >
-                Cancel
+                {t.common.cancel}
               </button>
               <button
                 ref={confirmRef}

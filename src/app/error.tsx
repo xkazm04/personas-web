@@ -6,6 +6,7 @@ import { useEffect, useState } from "react";
 import { Compass, RefreshCcw, Home, Copy, Check } from "lucide-react";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/sections/Footer";
+import { useTranslation } from "@/i18n/useTranslation";
 
 export default function RouteError({
   error,
@@ -14,6 +15,7 @@ export default function RouteError({
   error: Error & { digest?: string };
   reset: () => void;
 }) {
+  const { t } = useTranslation();
   const [copied, setCopied] = useState(false);
 
   useEffect(() => {
@@ -69,11 +71,10 @@ export default function RouteError({
             </div>
 
             <h1 className="mt-6 text-2xl font-bold tracking-tight sm:text-3xl">
-              This page hit an unexpected turn
+              {t.errorPage.title}
             </h1>
             <p className="mt-3 max-w-md text-sm leading-relaxed text-muted-dark">
-              Something went wrong while loading this page. Our team has been
-              notified — try again, or head back to home.
+              {t.errorPage.description}
             </p>
 
             {/* Verbose error message — dev only. Production hides error.message
@@ -89,12 +90,12 @@ export default function RouteError({
             {digest && (
               <div className="mt-5 flex items-center gap-2">
                 <span className="text-xs font-mono uppercase tracking-wider text-muted-dark/60">
-                  Error reference
+                  {t.errorPage.errorReference}
                 </span>
                 <button
                   type="button"
                   onClick={handleCopyDigest}
-                  aria-label="Copy error reference"
+                  aria-label={t.errorPage.copyReference}
                   className="group inline-flex items-center gap-1.5 rounded-md border border-white/[0.08] bg-white/[0.03] px-2 py-1 font-mono text-xs text-muted-dark transition-colors hover:border-white/[0.18] hover:text-foreground"
                 >
                   <code className="select-all">{digest}</code>
@@ -115,14 +116,14 @@ export default function RouteError({
                 className="group inline-flex items-center justify-center gap-2 rounded-full border border-brand-cyan/30 bg-brand-cyan/10 px-5 py-2.5 text-sm font-semibold text-brand-cyan shadow-[0_0_20px_rgba(6,182,212,0.12)] transition-all duration-200 hover:border-brand-cyan/50 hover:bg-brand-cyan/15 hover:shadow-[0_0_28px_rgba(6,182,212,0.2)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-cyan/50 focus-visible:ring-offset-2"
               >
                 <RefreshCcw className="h-4 w-4 transition-transform duration-300 group-hover:rotate-[-90deg]" />
-                Try again
+                {t.errorPage.tryAgain}
               </button>
               <Link
                 href="/"
                 className="inline-flex items-center justify-center gap-2 rounded-full border border-white/[0.08] bg-white/[0.03] px-5 py-2.5 text-sm font-medium text-muted transition-all duration-200 hover:border-white/[0.18] hover:bg-white/[0.06] hover:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-cyan/40 focus-visible:ring-offset-2"
               >
                 <Home className="h-4 w-4" />
-                Back to home
+                {t.errorPage.backToHome}
               </Link>
             </div>
           </div>

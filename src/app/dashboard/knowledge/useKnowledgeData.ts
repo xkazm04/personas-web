@@ -101,6 +101,7 @@ export interface KnowledgeData {
   memories: MemoryItem[];
   loading: boolean;
   error: string | null;
+  retry: () => void;
 }
 
 /**
@@ -120,6 +121,7 @@ export function useKnowledgeData(): KnowledgeData {
   );
   const [loading, setLoading] = useState(!useMock);
   const [error, setError] = useState<string | null>(null);
+  const [reloadKey, setReloadKey] = useState(0);
 
   useEffect(() => {
     // Mock/demo mode is decided once per session; the useState initializers
@@ -163,7 +165,7 @@ export function useKnowledgeData(): KnowledgeData {
     return () => {
       cancelled = true;
     };
-  }, [useMock]);
+  }, [useMock, reloadKey]);
 
-  return { patterns, memories, loading, error };
+  return { patterns, memories, loading, error, retry: () => setReloadKey((k) => k + 1) };
 }

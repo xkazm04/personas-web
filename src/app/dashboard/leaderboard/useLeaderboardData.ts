@@ -14,6 +14,7 @@ export interface LeaderboardData {
   personas: LeaderboardPersona[];
   loading: boolean;
   error: string | null;
+  retry: () => void;
 }
 
 /**
@@ -30,6 +31,7 @@ export function useLeaderboardData(): LeaderboardData {
   );
   const [loading, setLoading] = useState(!useMock);
   const [error, setError] = useState<string | null>(null);
+  const [reloadKey, setReloadKey] = useState(0);
 
   useEffect(() => {
     // Mock/demo mode is decided once per session; the useState initializers
@@ -59,7 +61,7 @@ export function useLeaderboardData(): LeaderboardData {
     return () => {
       cancelled = true;
     };
-  }, [useMock]);
+  }, [useMock, reloadKey]);
 
-  return { personas, loading, error };
+  return { personas, loading, error, retry: () => setReloadKey((k) => k + 1) };
 }

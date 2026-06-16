@@ -1,6 +1,21 @@
 ﻿import type { Translations } from './en';
 
 export const de: Translations = {
+  notFound: {
+    title: 'Seite nicht gefunden',
+    description: 'Die gesuchte Seite existiert nicht oder wurde verschoben. Versuchen Sie stattdessen eine davon:',
+    home: 'Startseite',
+    getStarted: 'Erste Schritte',
+    backToHome: 'Zur\u00fcck zur Startseite',
+  },
+  errorPage: {
+    title: 'Diese Seite ist auf einen Fehler gesto\u00dfen',
+    description: 'Beim Laden dieser Seite ist etwas schiefgelaufen. Unser Team wurde benachrichtigt \u2014 versuchen Sie es erneut oder kehren Sie zur Startseite zur\u00fcck.',
+    tryAgain: 'Erneut versuchen',
+    errorReference: 'Fehlerreferenz',
+    copyReference: 'Fehlerreferenz kopieren',
+    backToHome: 'Zur\u00fcck zur Startseite',
+  },
   nav: {
     home: 'Personas',
     how: 'So funktioniert es',
@@ -202,6 +217,7 @@ export const de: Translations = {
     connected: 'Verbunden',
     disconnected: 'Getrennt',
     demo: 'Demo',
+    viewFullSite: 'Vollständige Website anzeigen',
   },
   useCasesSection: {
     heading: 'Eine Persona,',
@@ -498,6 +514,11 @@ export const de: Translations = {
     refreshing: "Refreshing...",
     rejectSelectedTitle: "Reject selected reviews?",
     rejectSelectedBody: "This will reject {count} selected review{plural}. You will have 5 seconds to undo this action.",
+    undo: "Rückgängig",
+    retry: "Wiederholen",
+    bulkFailedApprove: "{failed} von {total} konnten nicht genehmigt werden",
+    bulkFailedReject: "{failed} von {total} konnten nicht abgelehnt werden",
+    bulkSucceededReselected: "{count} erfolgreich · fehlgeschlagene Elemente erneut ausgewählt",
     allShortcuts: "All shortcuts",
     keyboardShortcuts: "Keyboard shortcuts",
     searchShortcuts: "Search shortcuts...",

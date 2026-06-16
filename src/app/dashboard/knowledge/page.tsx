@@ -31,7 +31,7 @@ function isViewVariant(value: string | null): value is ViewVariant {
 
 export default function KnowledgeGraphPage() {
   const { t } = useTranslation();
-  const { patterns, memories, loading, error } = useKnowledgeData();
+  const { patterns, memories, loading, error, retry } = useKnowledgeData();
   const [activeVariant, setActiveVariant] = useState<ViewVariant>("dense-table");
   const tabRefs = useRef<(HTMLButtonElement | null)[]>([]);
 
@@ -130,7 +130,7 @@ export default function KnowledgeGraphPage() {
         </div>
       </motion.div>
 
-      {error && <DashboardErrorBanner message={error} />}
+      {error && <DashboardErrorBanner message={error} onRetry={retry} />}
 
       <div
         role="tabpanel"

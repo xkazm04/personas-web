@@ -17,6 +17,7 @@ export interface SlaData {
   breaches: SLABreach[];
   loading: boolean;
   error: string | null;
+  retry: () => void;
 }
 
 /**
@@ -36,6 +37,7 @@ export function useSlaData(): SlaData {
   );
   const [loading, setLoading] = useState(!useMock);
   const [error, setError] = useState<string | null>(null);
+  const [reloadKey, setReloadKey] = useState(0);
 
   useEffect(() => {
     // Mock/demo mode is decided once per session; the useState initializers
@@ -64,7 +66,7 @@ export function useSlaData(): SlaData {
     return () => {
       cancelled = true;
     };
-  }, [useMock]);
+  }, [useMock, reloadKey]);
 
-  return { targets, breaches, loading, error };
+  return { targets, breaches, loading, error, retry: () => setReloadKey((k) => k + 1) };
 }

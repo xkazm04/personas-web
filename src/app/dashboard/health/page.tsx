@@ -6,6 +6,7 @@ import { HeartPulse } from "lucide-react";
 
 import GradientText from "@/components/GradientText";
 import ExecuteToast from "@/app/dashboard/agents/agents-page/ExecuteToast";
+import DashboardErrorBanner from "@/components/dashboard/DashboardErrorBanner";
 import SkeletonCard from "@/components/dashboard/SkeletonCard";
 import { useTranslation } from "@/i18n/useTranslation";
 import { fadeUp, staggerContainer } from "@/lib/animations";
@@ -23,7 +24,7 @@ import { useSystemHealth } from "./health-page/useSystemHealth";
 export default function HealthPage() {
   const { t } = useTranslation();
   const labels = t.healthPage;
-  const { sections, diskUsage, isLoading } = useSystemHealth();
+  const { sections, diskUsage, isLoading, error, retry } = useSystemHealth();
   const [toast, setToast] = useState<{ id: number; message: string } | null>(null);
 
   const handleAction = (item: HealthCheckItem) => {
@@ -49,6 +50,12 @@ export default function HealthPage() {
         </div>
       </motion.div>
 
+      {error && (
+        <motion.div variants={fadeUp}>
+          <DashboardErrorBanner message={error} onRetry={retry} />
+        </motion.div>
+      )}
+
       {isLoading ? (
         <div className="grid gap-6 lg:grid-cols-2">
           <SkeletonCard lines={5} />
@@ -56,7 +63,7 @@ export default function HealthPage() {
           <SkeletonCard lines={5} />
           <SkeletonCard lines={5} />
         </div>
-      ) : (
+      ) : error && sections.length === 0 ? null : (
         <div className="grid gap-6 lg:grid-cols-2">
           {sections.map((section) => (
             <motion.div key={section.key} variants={fadeUp}>

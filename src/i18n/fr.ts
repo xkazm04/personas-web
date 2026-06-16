@@ -1,6 +1,21 @@
 ﻿import type { Translations } from './en';
 
 export const fr: Translations = {
+  notFound: {
+    title: 'Page introuvable',
+    description: 'La page que vous recherchez n\'existe pas ou a \u00e9t\u00e9 d\u00e9plac\u00e9e. Essayez plut\u00f4t l\'une de celles-ci :',
+    home: 'Accueil',
+    getStarted: 'Commencer',
+    backToHome: 'Retour \u00e0 l\'accueil',
+  },
+  errorPage: {
+    title: 'Cette page a rencontr\u00e9 un impr\u00e9vu',
+    description: 'Une erreur s\'est produite lors du chargement de cette page. Notre \u00e9quipe a \u00e9t\u00e9 inform\u00e9e \u2014 r\u00e9essayez ou revenez \u00e0 l\'accueil.',
+    tryAgain: 'R\u00e9essayer',
+    errorReference: 'R\u00e9f\u00e9rence de l\'erreur',
+    copyReference: 'Copier la r\u00e9f\u00e9rence de l\'erreur',
+    backToHome: 'Retour \u00e0 l\'accueil',
+  },
   nav: {
     home: 'Personas',
     how: 'Comment \u00e7a marche',
@@ -202,6 +217,7 @@ export const fr: Translations = {
     connected: 'Connect\u00e9',
     disconnected: 'D\u00e9connect\u00e9',
     demo: 'D\u00e9mo',
+    viewFullSite: 'Afficher le site complet',
   },
   useCasesSection: {
     heading: 'Un persona,',
@@ -498,6 +514,11 @@ export const fr: Translations = {
     refreshing: "Refreshing...",
     rejectSelectedTitle: "Reject selected reviews?",
     rejectSelectedBody: "This will reject {count} selected review{plural}. You will have 5 seconds to undo this action.",
+    undo: "Annuler",
+    retry: "Réessayer",
+    bulkFailedApprove: "Échec de l'approbation de {failed} sur {total}",
+    bulkFailedReject: "Échec du rejet de {failed} sur {total}",
+    bulkSucceededReselected: "{count} réussi(s) · éléments en échec resélectionnés",
     allShortcuts: "All shortcuts",
     keyboardShortcuts: "Keyboard shortcuts",
     searchShortcuts: "Search shortcuts...",

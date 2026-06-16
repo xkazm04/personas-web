@@ -4,6 +4,8 @@ import { useEffect, useState } from "react";
 import { motion, useReducedMotion } from "framer-motion";
 import { Undo2 } from "lucide-react";
 
+import { useTranslation } from "@/i18n/useTranslation";
+
 export default function UndoToast({
   message,
   durationMs,
@@ -15,6 +17,7 @@ export default function UndoToast({
   onUndo: () => void;
   onExpire: () => void;
 }) {
+  const { t } = useTranslation();
   const reducedMotion = useReducedMotion();
   const totalSeconds = Math.ceil(durationMs / 1000);
   const [secondsLeft, setSecondsLeft] = useState(totalSeconds);
@@ -39,6 +42,9 @@ export default function UndoToast({
 
   return (
     <motion.div
+      role="status"
+      aria-live="polite"
+      aria-atomic="true"
       initial={{ y: 80, opacity: 0 }}
       animate={{ y: 0, opacity: 1 }}
       exit={{ y: 80, opacity: 0 }}
@@ -47,7 +53,9 @@ export default function UndoToast({
       <div className="flex w-[min(calc(100vw-2rem),24rem)] flex-col gap-2 rounded-xl border border-glass-hover bg-surface/95 backdrop-blur-xl px-4 py-3 shadow-2xl">
         <div className="flex items-center gap-3">
           <span className="text-sm text-foreground">{message}</span>
-          <span className="ml-auto text-xs tabular-nums text-muted-dark">
+          {/* aria-hidden: the live region announces once on appearance; the
+              per-second tick would otherwise re-announce every second. */}
+          <span aria-hidden="true" className="ml-auto text-xs tabular-nums text-muted-dark">
             {secondsLeft}s
           </span>
           <button
@@ -55,10 +63,10 @@ export default function UndoToast({
             className="flex items-center gap-1 rounded-lg border border-brand-cyan/30 bg-brand-cyan/10 px-3 py-1.5 text-sm font-medium text-brand-cyan transition-all hover:bg-brand-cyan/20"
           >
             <Undo2 className="h-3 w-3" />
-            Undo
+            {t.dashboardUi.undo}
           </button>
         </div>
-        <div className="h-1 w-full overflow-hidden rounded-full bg-white/[0.06]">
+        <div aria-hidden="true" className="h-1 w-full overflow-hidden rounded-full bg-white/[0.06]">
           <div
             className="h-full rounded-full bg-brand-cyan/50"
             style={

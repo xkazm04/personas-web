@@ -6,6 +6,7 @@ import { motion } from "framer-motion";
 import { AlertTriangle, Loader2 } from "lucide-react";
 import useSWR from "swr";
 import CompareToggle from "@/components/dashboard/CompareToggle";
+import DashboardErrorBanner from "@/components/dashboard/DashboardErrorBanner";
 import { fadeUp } from "@/lib/animations";
 import { api } from "@/lib/api";
 import { MOCK_COST_ANOMALIES, MOCK_HEALTH_ISSUES, type MockHealthIssue } from "@/lib/mock-dashboard-data";
@@ -25,12 +26,13 @@ export default function PerformanceView() {
   const [compareEnabled, setCompareEnabled] = useState(false);
   const [severityFilter, setSeverityFilter] = useState<SeverityFilter>("all");
   const [healingActive, setHealingActive] = useState(false);
-  const { data, isLoading: loading } = useSWR("observability", api.getObservability, {
+  const { data, isLoading: loading, error, mutate } = useSWR("observability", api.getObservability, {
     refreshInterval: 30_000,
     dedupingInterval: 8_000,
     revalidateOnFocus: false,
     keepPreviousData: true,
   });
+  const errorMsg = error instanceof Error ? error.message : error ? String(error) : null;
 
   const metrics = data?.metrics ?? null;
   const dailyMetrics = useMemo(() => data?.dailyMetrics ?? [], [data]);
@@ -86,6 +88,9 @@ export default function PerformanceView() {
         <Image src="/gen/backgrounds/bg-observability.png" alt="" fill sizes="100vw" loading="lazy" className="object-cover opacity-[0.12]" />
         <div className="absolute inset-0 bg-gradient-to-b from-transparent via-transparent to-[var(--background)]" />
       </div>
+      {errorMsg && (
+        <DashboardErrorBanner message={errorMsg} onRetry={() => void mutate()} />
+      )}
       <div className="mb-6 flex justify-end">
         <CompareToggle enabled={compareEnabled} onToggle={() => setCompareEnabled((prev) => !prev)} />
       </div>

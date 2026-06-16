@@ -2,6 +2,7 @@ import dynamic from "next/dynamic";
 import { LineChart, TrendingUp } from "lucide-react";
 
 import GlowCard from "@/components/GlowCard";
+import DashboardErrorBanner from "@/components/dashboard/DashboardErrorBanner";
 import EmptyState from "@/components/dashboard/EmptyState";
 import StalenessIndicator from "@/components/dashboard/StalenessIndicator";
 
@@ -24,11 +25,17 @@ function TrafficChartSpinner() {
 export function TrafficErrorsCard({
   chartData,
   loadObservability,
+  loading,
+  error,
+  onRetry,
   fetchedAt,
   labels,
 }: {
   chartData: { date: string; Executions: number; Errors: number }[];
   loadObservability: boolean;
+  loading: boolean;
+  error: string | null;
+  onRetry: () => void;
   fetchedAt: number | null;
   labels: { title: string; last14Days: string; noTrafficYet: string };
 }) {
@@ -49,8 +56,13 @@ export function TrafficErrorsCard({
         </div>
       </div>
 
-      {!loadObservability ? (
+      {/* Spinner covers both the pre-trigger window and the in-flight fetch —
+          previously the empty state flashed (and, on failure, stuck) while data
+          was still loading. The empty state now means "resolved, truly empty". */}
+      {!loadObservability || loading ? (
         <TrafficChartSpinner />
+      ) : error ? (
+        <DashboardErrorBanner message={error} onRetry={onRetry} />
       ) : hasTraffic ? (
         <TrafficChart chartData={chartData} />
       ) : (

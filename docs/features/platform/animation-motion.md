@@ -20,7 +20,7 @@ CSS-only / cheap components (`AmbientOrbs`, `ParallaxAccents`, `TopoBackground`)
 ## Key files
 | File | Role |
 | --- | --- |
-| `src/contexts/QualityContext.tsx` | Adaptive `high/medium/low` tier from p90 frame time; `reducedMotion` + `canHover`; `useQualityTier` / `useReducedMotionPreference` / `useCanHover` |
+| `src/contexts/QualityContext.tsx` | Adaptive `high/medium/low` tier from p90 frame time; `reducedMotion`; `useQualityTier` / `useReducedMotionPreference` |
 | `src/contexts/SectionObserverContext.tsx` | Shared IntersectionObserver scroll-spy; `activeSectionId`, `observe/unobserve`, MutationObserver sweep for lazy sections |
 | `src/hooks/usePageVisibility.ts` | `useSyncExternalStore` tab-visibility; toggles `.page-hidden` on `<html>`; globalThis-keyed singleton listener |
 | `src/hooks/useAnimationPause.ts` | IntersectionObserver toggling `.animations-paused` on `[data-animate-when-visible]` + a register hook for lazy components |

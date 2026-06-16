@@ -1,4 +1,5 @@
 import { motion } from "framer-motion";
+import { SVGFocusRingCircle } from "@/components/SVGFocusRing";
 import type { KnowledgePattern } from "@/lib/mock-dashboard-data";
 import { KNOWLEDGE_CLUSTER_TYPE_CONFIG, type NodePosition } from "./knowledgeClusterConfig";
 
@@ -32,7 +33,27 @@ export function KnowledgeGraphNode({
       : pattern.patternKey;
 
   return (
-    <motion.g initial={{ opacity: 0, scale: 0 }} animate={{ opacity: isDimmed ? 0.25 : 1, scale: 1 }} transition={{ duration: 0.4, ease: [0.22, 1, 0.36, 1] }} style={{ cursor: "pointer" }} onClick={() => onSelect(pattern)} onMouseEnter={() => onHover(pattern)} onMouseLeave={onLeave}>
+    <motion.g
+      role="button"
+      tabIndex={0}
+      aria-label={pattern.patternKey}
+      aria-pressed={isSelected}
+      className="svg-focus-parent focus-visible:outline-none"
+      initial={{ opacity: 0, scale: 0 }}
+      animate={{ opacity: isDimmed ? 0.25 : 1, scale: 1 }}
+      transition={{ duration: 0.4, ease: [0.22, 1, 0.36, 1] }}
+      style={{ cursor: "pointer" }}
+      onClick={() => onSelect(pattern)}
+      onKeyDown={(e) => {
+        if (e.key === "Enter" || e.key === " ") {
+          e.preventDefault();
+          onSelect(pattern);
+        }
+      }}
+      onMouseEnter={() => onHover(pattern)}
+      onMouseLeave={onLeave}
+    >
+      <SVGFocusRingCircle cx={position.x} cy={position.y} r={size / 2 + 4} strokeWidth={2} />
       {(isSelected || isHighlighted) && <circle cx={position.x} cy={position.y} r={size / 2 + 7} fill="none" stroke={config.color} strokeWidth={2} opacity={0.45} />}
       <circle cx={position.x} cy={position.y} r={size / 2} fill={`${config.color}33`} stroke={isSelected ? config.color : `${config.color}66`} strokeWidth={isSelected ? 2.5 : 1.5} />
       <foreignObject x={position.x - iconPx / 2} y={position.y - iconPx / 2} width={iconPx} height={iconPx} style={{ overflow: "visible" }}>

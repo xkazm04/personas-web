@@ -1,13 +1,12 @@
 "use client";
 
-import { useEffect, useMemo, useRef, useState } from "react";
+import { useEffect, useMemo } from "react";
 import { motion } from "framer-motion";
 
 import FleetOptimizationCard from "@/components/dashboard/FleetOptimizationCard";
 import LazyMount from "@/components/LazyMount";
 import TourLauncher from "@/components/tour/TourLauncher";
 import { useTranslation } from "@/i18n/useTranslation";
-import { api } from "@/lib/api";
 import { fadeUp, staggerContainer } from "@/lib/animations";
 import {
   MOCK_FLEET_RECOMMENDATION,
@@ -19,7 +18,6 @@ import { useExecutionStore, useEnrichedExecutions } from "@/stores/executionStor
 import { usePersonaStore } from "@/stores/personaStore";
 import { useReviewStore } from "@/stores/reviewStore";
 import { useSystemStore } from "@/stores/systemStore";
-import useSWR from "swr";
 
 import { DashboardGreetingHeader } from "./home-page/DashboardGreetingHeader";
 import { InstrumentsBay } from "./home-page/InstrumentsBay";
@@ -27,6 +25,7 @@ import { RecentActivityCard } from "./home-page/RecentActivityCard";
 import { StatusTicker } from "./home-page/StatusTicker";
 import { TriagePane } from "./home-page/TriagePane";
 import { VitalsConsole } from "./home-page/VitalsConsole";
+import { useDeferredObservability } from "./home-page/useDeferredObservability";
 import { useGreeting } from "./home-page/useGreeting";
 import { useLastVisit } from "./home-page/useLastVisit";
 
@@ -48,44 +47,17 @@ export default function DashboardHomePage() {
   const fetchExecutions = useExecutionStore((state) => state.fetchExecutions);
   const fetchReviews = useReviewStore((state) => state.fetchReviews);
 
-  const instrumentsRef = useRef<HTMLDivElement | null>(null);
-  const [loadObservability, setLoadObservability] = useState(false);
-  const [observabilityFetchedAt, setObservabilityFetchedAt] = useState<number | null>(null);
-
-  const { data: observabilityData } = useSWR(
-    loadObservability ? "observability" : null,
-    api.getObservability,
-    {
-      revalidateOnFocus: false,
-      revalidateOnReconnect: false,
-      dedupingInterval: 60_000,
-      focusThrottleInterval: 60_000,
-      onSuccess: () => setObservabilityFetchedAt(Date.now()),
-    },
-  );
-  const dailyMetrics = useMemo(
-    () => observabilityData?.dailyMetrics ?? [],
-    [observabilityData],
-  );
-
-  // Defer the observability fetch until the Instruments Bay nears the viewport.
-  // The ref sits on the always-present LazyMount wrapper, so the observer fires
-  // regardless of whether the bay's children have hydrated yet.
-  useEffect(() => {
-    const target = instrumentsRef.current;
-    if (!target || loadObservability) return;
-    const observer = new IntersectionObserver(
-      ([entry]) => {
-        if (entry.isIntersecting) {
-          setLoadObservability(true);
-          observer.disconnect();
-        }
-      },
-      { rootMargin: "220px" },
-    );
-    observer.observe(target);
-    return () => observer.disconnect();
-  }, [loadObservability]);
+  // Deferred below-the-fold observability fetch (loading/error/retry surfaced
+  // to the Traffic & Errors chart).
+  const {
+    instrumentsRef,
+    loadObservability,
+    dailyMetrics,
+    observabilityLoading,
+    observabilityError: observabilityErrorMsg,
+    retryObservability,
+    fetchedAt: observabilityFetchedAt,
+  } = useDeferredObservability();
 
   useEffect(() => {
     void fetchExecutions();
@@ -180,6 +152,9 @@ export default function DashboardHomePage() {
           <InstrumentsBay
             chartData={chartData}
             loadObservability={loadObservability}
+            observabilityLoading={observabilityLoading}
+            observabilityError={observabilityErrorMsg}
+            onRetryObservability={() => void retryObservability()}
             fetchedAt={observabilityFetchedAt}
             personasCount={personas.length}
             workersTotal={health?.workers.total ?? 0}

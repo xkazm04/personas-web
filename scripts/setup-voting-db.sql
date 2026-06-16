@@ -33,18 +33,42 @@ create table if not exists public.feature_comments (
 create index if not exists idx_feature_comments_feature_id
   on public.feature_comments (feature_id, created_at);
 
--- ── feature_boosts (Ko-fi tier weight, append-only) ───────────────────
+-- ── feature_boosts (Ko-fi tier weight, one row per voter per feature) ──
+-- The UNIQUE constraint is what stops a single voter_id from stacking a
+-- feature's boost total without limit: the route upserts on it, so a
+-- re-boost replaces the prior tier instead of appending a new row.
 create table if not exists public.feature_boosts (
   id uuid primary key default gen_random_uuid(),
   feature_id text not null,
   voter_id text not null,
   weight integer not null check (weight > 0 and weight <= 1000),
   tier_value integer not null check (tier_value > 0 and tier_value <= 1000),
-  created_at timestamptz not null default now()
+  created_at timestamptz not null default now(),
+  constraint feature_boosts_feature_voter_key unique (feature_id, voter_id)
 );
 
 create index if not exists idx_feature_boosts_feature_id
   on public.feature_boosts (feature_id);
+
+-- Backfill for installs created before the uniqueness rule (the table used to
+-- be append-only): collapse any duplicate (feature_id, voter_id) boosts down
+-- to the highest-weight row, then add the constraint. Safe to re-run.
+do $$
+begin
+  if not exists (
+    select 1 from pg_constraint
+    where conname = 'feature_boosts_feature_voter_key'
+      and conrelid = 'public.feature_boosts'::regclass
+  ) then
+    delete from public.feature_boosts a
+      using public.feature_boosts b
+      where a.feature_id = b.feature_id
+        and a.voter_id = b.voter_id
+        and (a.weight < b.weight or (a.weight = b.weight and a.id < b.id));
+    alter table public.feature_boosts
+      add constraint feature_boosts_feature_voter_key unique (feature_id, voter_id);
+  end if;
+end $$;
 
 -- ── shipped_features (referenced by /api/votes GET) ───────────────────
 create table if not exists public.shipped_features (
@@ -84,13 +108,18 @@ create policy "anon read feature_comments" on public.feature_comments
 create policy "anon insert feature_comments" on public.feature_comments
   for insert with check (true);
 
--- feature_boosts — anon can read + insert.
+-- feature_boosts — anon can read + insert + update. The update policy is
+-- required for the route's upsert: on conflict it UPDATEs the voter's existing
+-- row (replacing the tier); without it the on-conflict path is denied by RLS.
 drop policy if exists "anon read feature_boosts" on public.feature_boosts;
 drop policy if exists "anon insert feature_boosts" on public.feature_boosts;
+drop policy if exists "anon update feature_boosts" on public.feature_boosts;
 create policy "anon read feature_boosts" on public.feature_boosts
   for select using (true);
 create policy "anon insert feature_boosts" on public.feature_boosts
   for insert with check (true);
+create policy "anon update feature_boosts" on public.feature_boosts
+  for update using (true) with check (true);
 
 -- shipped_features — read-only from the public site.
 drop policy if exists "anon read shipped_features" on public.shipped_features;

@@ -2,9 +2,9 @@
 > Purpose-built touch UI for phone users — a 3-tab shell over the dashboard's data layer with no desktop chrome. · **Route:** `/m`, `/m/overview`, `/m/alerts`, `/m/messages`, `/m/reviews` · **Status:** Demo-only (mocks)
 
 ## What it does
-Phone visitors to the demo dashboard get a dedicated native-feeling app instead of the cramped desktop layout. The middleware (`src/proxy.ts`) sniffs the user-agent on any `/dashboard*` request and redirects mobile browsers to `/m/overview`; everything under `/m` is then a self-contained app with a fixed bottom tab bar, slide-up page transitions, bottom sheets for detail, and compact stat tiles. Four views ship:
+Phone visitors to the demo dashboard get a dedicated native-feeling app instead of the cramped desktop layout. The middleware (`src/proxy.ts`) sniffs the user-agent on any `/dashboard*` request and redirects mobile browsers into `/m`, mapping the requested dashboard subpath to the closest mobile view (messages → `/m/messages`, reviews → `/m/reviews`, incidents/health/sla/observability → `/m/alerts`, everything else → `/m/overview`) and **preserving the query string** so deep links and UTM/attribution params survive. Everything under `/m` is then a self-contained app with a fixed bottom tab bar, slide-up page transitions, bottom sheets for detail, compact stat tiles, and a "View full site" escape hatch. Four views ship:
 
-- **Overview** (`/m/overview`) — greeting, a 4-up stat grid (success rate, runs, agents, pending reviews), an alerts banner that drills into `/m/alerts`, and the shared `RecentActivityCard`.
+- **Overview** (`/m/overview`) — greeting, a 2×2 stat grid (success rate, runs, agents, pending reviews), an alerts banner that drills into `/m/alerts`, and the shared `RecentActivityCard`.
 - **Alerts** (`/m/alerts`) — a drill-in (back-chevron) page consolidating the fleet's attention items: open **incidents** (D-A2), a compact **system-health** section-status grid (D-A3), health issues, and SLA breaches. Reuses the desktop `incidentFormat` / `healthFormat` helpers and the `incidentsPage` / `healthPage` i18n (no mobile-specific strings).
 - **Messages** (`/m/messages`) — thread list with unread badges, mark-all-read, and a bottom-sheet thread reader.
 - **Reviews** (`/m/reviews`) — wraps the desktop `ReviewsFocusFlow` swipe/approve flow.
@@ -12,7 +12,7 @@ Phone visitors to the demo dashboard get a dedicated native-feeling app instead 
 This is **Approach B** (per `src/app/m/layout.tsx:11`): reuse the dashboard's auth + Zustand stores + mock fixtures, but render a separate route tree and separate components rather than responsively reflowing the desktop pages.
 
 ## How it works
-- **Routing.** `/m/page.tsx` is a pure `redirect("/m/overview")`. The middleware `matcher` only covers `/dashboard*` (`src/proxy.ts:25`), so the redirect to `/m` happens at the dashboard boundary, not inside `/m`.
+- **Routing.** `/m/page.tsx` is a pure `redirect("/m/overview")`. The middleware `matcher` only covers `/dashboard*` (`src/proxy.ts`), so the redirect into `/m` happens at the dashboard boundary, not inside `/m`. `mobilePathFor()` (`proxy.ts`) maps the requested dashboard subpath to its closest `/m` view and the redirect keeps `url.search`, so a deep link lands on the matching page with its params intact rather than always on a param-less overview.
 - **Layout chrome.** `m/layout.tsx` wraps children in `AuthProvider` → `AuthGuard` → `MotionConfig reducedMotion="user"`, then renders `<MobileShell>{children}</MobileShell>` plus the fixed `<MobileTabBar/>`. The single `MotionConfig` makes every framer-motion animation under `/m` honor `prefers-reduced-motion` (transform/layout dropped, opacity kept) without per-component guards — though several components still self-guard via `useReducedMotion` (see gotchas).
 - **Per-navigation transition.** `m/template.tsx` is a Next `template` (remounted on every nav), giving each tab a ~220ms slide-up + fade enter.
 - **Tab vs. drill-in nav.** Three tabs (Overview / Reviews / Messages) live in `MobileTabBar`; `/m/alerts` is a drill-in from Overview and has no tab — it keeps the Overview tab highlighted via an explicit `pathname.startsWith("/m/alerts")` check (`MobileTabBar.tsx:63`) and shows a back chevron via `MobileAppBar` instead. The active tab uses a shared `layoutId="mobileTabActivePill"` so the highlight slides between tabs.
@@ -28,13 +28,14 @@ This is **Approach B** (per `src/app/m/layout.tsx:11`): reuse the dashboard's au
 | `src/app/m/alerts/page.tsx` | Drill-in: open incidents + system-health status grid + health issues + SLA breach log |
 | `src/app/m/messages/page.tsx` | Thread list, unread/mark-all-read, opens thread sheet |
 | `src/app/m/reviews/page.tsx` | Wraps desktop `ReviewsFocusFlow`, exits to `/m/overview` |
-| `src/components/mobile/MobileShell.tsx` | `max-w-md` scroll/padding container, safe-area insets, `#main-content` |
+| `src/components/mobile/MobileShell.tsx` | `max-w-md` scroll/padding container, safe-area insets, `#main-content`; renders `ViewFullSiteLink` after content |
+| `src/components/mobile/ViewFullSiteLink.tsx` | "View full site" escape hatch — sets the `prefer-full` cookie + hard-navigates to `/dashboard` |
 | `src/components/mobile/MobileTabBar.tsx` | Fixed bottom 3-tab nav with badges + active pill |
 | `src/components/mobile/MobileAppBar.tsx` | Back-chevron + title for drill-in subpages |
 | `src/components/mobile/MobileStatCard.tsx` | Compact accent-colored stat tile (optional drill-in) |
 | `src/components/mobile/MobileSheet.tsx` | Generic bottom sheet (drag-to-dismiss, backdrop, Escape, body-scroll lock) |
 | `src/components/mobile/MobileThreadSheet.tsx` | Message-thread reader composed on `MobileSheet` |
-| `src/proxy.ts` | Middleware UA redirect `/dashboard*` → `/m/overview` |
+| `src/proxy.ts` | Middleware UA redirect `/dashboard*` → matching `/m` view (path-mapped via `mobilePathFor`, query string preserved) |
 
 ## Data & state
 - **Source:** Demo-only mocks. `MOCK_HEALTH_ISSUES`, `MOCK_SLA_BREACHES`, `MOCK_MESSAGE_THREADS`, `MOCK_UNREAD_MESSAGES` from `src/lib/mock-dashboard-data.ts`; executions/personas/reviews come from the shared stores' mock-backed fetchers.
@@ -46,11 +47,11 @@ This is **Approach B** (per `src/app/m/layout.tsx:11`): reuse the dashboard's au
 ## Integration points
 - **Desktop dashboard.** Separate route tree (`/m/*` vs `/dashboard/*`) and separate mobile-specific components, but **shared stores + shared mock fixtures**, so demo data stays consistent across both. Reused desktop pieces: `RecentActivityCard`, `HealthIssueRow`, `ThreadRow`, `ReviewsFocusFlow`, `MarkdownReport`, `PersonaAvatar`, and SLA formatters (`severityPill`, `metricKey`) from `dashboard/sla/sla-page/slaFormat`.
 - **Auth.** `AuthProvider` treats `/m` as a protected surface alongside `/dashboard` (`src/components/AuthProvider.tsx:13`); `AuthGuard` is reused as-is.
-- **Entry point.** Reached only via the middleware redirect — there is no in-app link from desktop to `/m` (see gotchas). `prefer-full` cookie = `"1"` is the escape hatch that keeps a phone on the full dashboard.
+- **Entry point.** Reached via the middleware redirect. `ViewFullSiteLink` (rendered by `MobileShell`) sets `prefer-full=1` and hard-navigates to `/dashboard`, giving phone users a one-tap way to the full desktop UI. There is still no in-app link from desktop to `/m` (see gotchas).
 - **Animations.** `fadeUp` / `staggerContainer` variants from `src/lib/animations.ts`; `safe-bottom` and `focus-ring` utilities from `src/app/globals.css`.
 
 ## Conventions & gotchas
-- **`/m` is reachable only by UA sniffing — no clickable entry from desktop.** A desktop user (or a phone with `prefer-full=1`) can only land on `/m` by typing the URL. The redirect is one-directional and lives entirely in `src/proxy.ts`; there's no "switch to mobile" link and no "switch to full site" link rendered inside `/m` to set/clear `prefer-full`. Worth flagging: a phone user who wants the desktop view has no UI to opt out.
+- **`/m`→full-site opt-out now exists; desktop→`/m` still doesn't.** Phone users who want the desktop view tap "View full site" (`ViewFullSiteLink.tsx`, rendered by `MobileShell`), which sets `prefer-full=1` and navigates to `/dashboard`. There is still no "switch to mobile" link on desktop, and nothing clears `prefer-full` from the desktop side — a desktop user can only reach `/m` by typing the URL.
 - **iPad stays on desktop by design.** The UA regex deliberately omits iPad (iPadOS reports a Mac UA), so tablets get the full dashboard (`proxy.ts:3-6`). Not a bug, but non-obvious.
 - **Double reduced-motion handling.** The layout sets `MotionConfig reducedMotion="user"`, yet `MobileTabBar`, `MobileStatCard` still call `useReducedMotion()` and branch manually (e.g. suppressing `whileTap` and the `layoutId` pill). Belt-and-suspenders, but means the gating logic isn't centralized — when touching motion here, check both the `MotionConfig` and the local guard.
 - **Hardcoded raw color classes vs. semantic tokens.** These components lean heavily on raw Tailwind palette utilities (`text-cyan-300`, `bg-rose-500/[0.06]`, `text-emerald-400`, `bg-white/[0.02]`, `bg-[rgba(8,11,20,0.6)]`) rather than the project's semantic tokens (`text-brand-cyan`, `bg-surface`, `border-glass`). It's used inconsistently — some files mix `text-brand-cyan`/`border-glass` with raw palette colors in the same file (e.g. `overview/page.tsx`, `MobileTabBar.tsx`). New work should prefer the semantic tokens per CLAUDE.md convention 2.

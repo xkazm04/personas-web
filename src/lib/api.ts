@@ -304,8 +304,9 @@ const realApi: ApiClient = {
 
       getStatus: () => orchestratorFetch<StatusResponse>("/api/status"),
 
-      // Observability — full payload (legacy; prefer the field-selected calls
-      // below so the page can stream tiers independently)
+      // Observability — full payload. Use this when a consumer needs every tier
+      // at once (the Performance view); single-tier consumers use the
+      // field-selected variants below so they fetch only what they render.
       getObservability: () =>
         orchestratorFetch<{
           metrics: ObservabilityMetrics;

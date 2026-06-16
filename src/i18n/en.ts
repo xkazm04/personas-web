@@ -1,4 +1,19 @@
 ﻿export interface Translations {
+  notFound: {
+    title: string;
+    description: string;
+    home: string;
+    getStarted: string;
+    backToHome: string;
+  };
+  errorPage: {
+    title: string;
+    description: string;
+    tryAgain: string;
+    errorReference: string;
+    copyReference: string;
+    backToHome: string;
+  };
   nav: {
     home: string;
     how: string;
@@ -147,6 +162,7 @@
     connected: string;
     disconnected: string;
     demo: string;
+    viewFullSite: string;
   };
   useCasesSection: {
     heading: string;
@@ -355,6 +371,11 @@
     refreshing: string;
     rejectSelectedTitle: string;
     rejectSelectedBody: string;
+    undo: string;
+    retry: string;
+    bulkFailedApprove: string;
+    bulkFailedReject: string;
+    bulkSucceededReselected: string;
     allShortcuts: string;
     keyboardShortcuts: string;
     searchShortcuts: string;
@@ -1151,6 +1172,21 @@
 }
 
 export const en: Translations = {
+  notFound: {
+    title: 'Page not found',
+    description: 'The page you\'re looking for doesn\'t exist or has been moved. Try one of these instead:',
+    home: 'Home',
+    getStarted: 'Get Started',
+    backToHome: 'Back to home',
+  },
+  errorPage: {
+    title: 'This page hit an unexpected turn',
+    description: 'Something went wrong while loading this page. Our team has been notified \u2014 try again, or head back to home.',
+    tryAgain: 'Try again',
+    errorReference: 'Error reference',
+    copyReference: 'Copy error reference',
+    backToHome: 'Back to home',
+  },
   nav: {
     home: 'Personas',
     how: 'How it works',
@@ -1360,6 +1396,7 @@ export const en: Translations = {
     connected: 'Connected',
     disconnected: 'Disconnected',
     demo: 'Demo',
+    viewFullSite: 'View full site',
   },
   useCasesSection: {
     heading: 'One persona,',
@@ -1656,6 +1693,11 @@ export const en: Translations = {
     refreshing: "Refreshing...",
     rejectSelectedTitle: "Reject selected reviews?",
     rejectSelectedBody: "This will reject {count} selected review{plural}. You will have 5 seconds to undo this action.",
+    undo: "Undo",
+    retry: "Retry",
+    bulkFailedApprove: "{failed} of {total} failed to approve",
+    bulkFailedReject: "{failed} of {total} failed to reject",
+    bulkSucceededReselected: "{count} succeeded · failed items re-selected",
     allShortcuts: "All shortcuts",
     keyboardShortcuts: "Keyboard shortcuts",
     searchShortcuts: "Search shortcuts...",

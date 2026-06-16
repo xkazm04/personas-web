@@ -1,6 +1,21 @@
 ﻿import type { Translations } from './en';
 
 export const cs: Translations = {
+  notFound: {
+    title: 'Str\u00e1nka nenalezena',
+    description: 'Hledan\u00e1 str\u00e1nka neexistuje nebo byla p\u0159esunuta. Zkuste m\u00edsto toho n\u011bkterou z t\u011bchto:',
+    home: 'Dom\u016f',
+    getStarted: 'Za\u010d\u00edt',
+    backToHome: 'Zp\u011bt na domovskou str\u00e1nku',
+  },
+  errorPage: {
+    title: 'Na t\u00e9to str\u00e1nce do\u0161lo k neo\u010dek\u00e1van\u00e9 chyb\u011b',
+    description: 'P\u0159i na\u010d\u00edt\u00e1n\u00ed t\u00e9to str\u00e1nky se n\u011bco pokazilo. N\u00e1\u0161 t\u00fdm byl informov\u00e1n \u2014 zkuste to znovu nebo se vra\u0165te na domovskou str\u00e1nku.',
+    tryAgain: 'Zkusit znovu',
+    errorReference: 'Reference chyby',
+    copyReference: 'Kop\u00edrovat referenci chyby',
+    backToHome: 'Zp\u011bt na domovskou str\u00e1nku',
+  },
   nav: {
     home: 'Personas',
     how: 'Jak to funguje',
@@ -202,6 +217,7 @@ export const cs: Translations = {
     connected: 'P\u0159ipojeno',
     disconnected: 'Odpojeno',
     demo: 'Demo',
+    viewFullSite: 'Zobrazit plnou verzi',
   },
   useCasesSection: {
     heading: 'Jedna persona,',
@@ -498,6 +514,11 @@ export const cs: Translations = {
     refreshing: "Refreshing...",
     rejectSelectedTitle: "Reject selected reviews?",
     rejectSelectedBody: "This will reject {count} selected review{plural}. You will have 5 seconds to undo this action.",
+    undo: "Zpět",
+    retry: "Zkusit znovu",
+    bulkFailedApprove: "{failed} z {total} se nepodařilo schválit",
+    bulkFailedReject: "{failed} z {total} se nepodařilo zamítnout",
+    bulkSucceededReselected: "{count} úspěšně · neúspěšné položky znovu vybrány",
     allShortcuts: "All shortcuts",
     keyboardShortcuts: "Keyboard shortcuts",
     searchShortcuts: "Search shortcuts...",

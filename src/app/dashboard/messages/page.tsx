@@ -39,7 +39,7 @@ export default function MessagesPage() {
   const [view, setView] = useState<MessageView>("threads");
   const [fetchedAt] = useState(() => Date.now());
 
-  const { threads: baseThreads, loading, error } = useMessagesData();
+  const { threads: baseThreads, loading, error, retry } = useMessagesData();
 
   const threads = useMemo<MessageThread[]>(() => {
     return baseThreads.map((thread) => {
@@ -170,7 +170,7 @@ export default function MessagesPage() {
         </div>
       </motion.div>
 
-      {error && <DashboardErrorBanner message={error} />}
+      {error && <DashboardErrorBanner message={error} onRetry={retry} />}
 
       {loading ? (
         <div className="space-y-2" aria-busy="true">

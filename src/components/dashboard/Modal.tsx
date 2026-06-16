@@ -1,9 +1,10 @@
 "use client";
 
-import { useEffect, type ReactNode } from "react";
+import { useEffect, useRef, type ReactNode } from "react";
 import { AnimatePresence, motion } from "framer-motion";
 import { X } from "lucide-react";
 
+import { useFocusTrap } from "@/hooks/useFocusTrap";
 import { useTranslation } from "@/i18n/useTranslation";
 
 /**
@@ -32,6 +33,12 @@ export function Modal({
   ariaLabel?: string;
 }) {
   const { t } = useTranslation();
+  const panelRef = useRef<HTMLDivElement>(null);
+
+  // role=dialog/aria-modal alone don't contain focus — without a trap, keyboard
+  // and screen-reader users can Tab into the page behind the modal. This moves
+  // focus into the panel on open, cycles Tab within it, and restores on close.
+  useFocusTrap({ active: open, containerRef: panelRef });
 
   useEffect(() => {
     if (!open) return;
@@ -57,6 +64,7 @@ export function Modal({
             aria-hidden="true"
           />
           <motion.div
+            ref={panelRef}
             role="dialog"
             aria-modal="true"
             aria-label={ariaLabel}

@@ -21,7 +21,7 @@ import { useLeaderboardData } from "./useLeaderboardData";
 
 export default function LeaderboardPage() {
   const { t } = useTranslation();
-  const { personas, loading, error } = useLeaderboardData();
+  const { personas, loading, error, retry } = useLeaderboardData();
   // null = no explicit pick yet → fall back to the top-ranked persona. This
   // keeps the selection valid as data loads / changes without a sync effect.
   const [pickedId, setPickedId] = useState<string | null>(null);
@@ -86,7 +86,7 @@ export default function LeaderboardPage() {
         <StalenessIndicator fetchedAt={fetchedAt} className="mt-2" />
       </motion.div>
 
-      {error && <DashboardErrorBanner message={error} />}
+      {error && <DashboardErrorBanner message={error} onRetry={retry} />}
 
       {loading ? (
         <div className="grid gap-6 lg:grid-cols-5" aria-busy="true">

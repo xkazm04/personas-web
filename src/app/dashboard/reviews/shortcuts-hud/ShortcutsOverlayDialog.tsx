@@ -1,6 +1,10 @@
+"use client";
+
+import { useRef } from "react";
 import { AnimatePresence, motion } from "framer-motion";
 import { Keyboard, Search, X } from "lucide-react";
 
+import { useFocusTrap } from "@/hooks/useFocusTrap";
 import { ShortcutKeyChips } from "./ShortcutKeyChips";
 import type { Shortcut, ShortcutCategory } from "./shortcutTypes";
 import type { ShortcutMod } from "./usePlatformMod";
@@ -27,6 +31,13 @@ export function ShortcutsOverlayDialog({
   onClose: () => void;
   onQueryChange: (query: string) => void;
 }) {
+  const panelRef = useRef<HTMLDivElement>(null);
+  const inputRef = useRef<HTMLInputElement>(null);
+
+  // Contain Tab within the dialog and focus the search field on open (Escape
+  // is handled by the parent ShortcutsOverlay).
+  useFocusTrap({ active: open, containerRef: panelRef, initialFocusRef: inputRef });
+
   return (
     <AnimatePresence>
       {open && (
@@ -40,11 +51,13 @@ export function ShortcutsOverlayDialog({
             onClick={onClose}
           />
           <motion.div
+            ref={panelRef}
             initial={{ opacity: 0, scale: 0.96, y: 12 }}
             animate={{ opacity: 1, scale: 1, y: 0 }}
             exit={{ opacity: 0, scale: 0.96, y: 12 }}
             transition={{ duration: 0.18, ease: [0.22, 1, 0.36, 1] }}
             role="dialog"
+            aria-modal="true"
             aria-label={labels.keyboardShortcuts}
             className="fixed left-1/2 top-1/2 z-[81] w-[min(640px,calc(100vw-2rem))] -translate-x-1/2 -translate-y-1/2 rounded-2xl border border-white/[0.08] bg-surface/95 backdrop-blur-xl shadow-2xl"
           >
@@ -68,11 +81,12 @@ export function ShortcutsOverlayDialog({
               <div className="relative">
                 <Search className="pointer-events-none absolute left-2.5 top-1/2 h-3.5 w-3.5 -translate-y-1/2 text-muted-dark/60" />
                 <input
-                  autoFocus
+                  ref={inputRef}
                   type="text"
                   value={query}
                   onChange={(e) => onQueryChange(e.target.value)}
                   placeholder={labels.searchShortcuts}
+                  aria-label={labels.searchShortcuts}
                   className="w-full rounded-lg border border-white/[0.06] bg-white/[0.03] py-1.5 pl-8 pr-3 text-xs text-foreground placeholder:text-muted-dark/60 focus:border-brand-cyan/30 focus:outline-none"
                 />
               </div>

@@ -6,6 +6,7 @@ import Image from "next/image";
 import { Bot } from "lucide-react";
 
 import GradientText from "@/components/GradientText";
+import DashboardErrorBanner from "@/components/dashboard/DashboardErrorBanner";
 import EmptyState from "@/components/dashboard/EmptyState";
 import { prefetchAgentDetail } from "@/components/dashboard/AgentDetail";
 import { useTranslation } from "@/i18n/useTranslation";
@@ -24,6 +25,7 @@ export default function AgentsPage() {
   const { t } = useTranslation();
   const personas = usePersonaStore((state) => state.personas);
   const personasLoading = usePersonaStore((state) => state.personasLoading);
+  const personasError = usePersonaStore((state) => state.personasError);
   const fetchPersonas = usePersonaStore((state) => state.fetchPersonas);
   const fetchHealth = useSystemStore((state) => state.fetchHealth);
   const health = useSystemStore((state) => state.health);
@@ -128,12 +130,25 @@ export default function AgentsPage() {
         </div>
       </motion.div>
 
+      {personasError && (
+        <motion.div variants={fadeUp}>
+          <DashboardErrorBanner
+            message={personasError}
+            onRetry={() => void fetchPersonas()}
+          />
+        </motion.div>
+      )}
+
       {personas.length === 0 ? (
-        <EmptyState
-          icon={Bot}
-          title={t.agentsPage.noAgents}
-          description={t.agentsPage.noAgentsDesc}
-        />
+        // A failed fetch surfaces the banner above; don't also paint the
+        // reassuring "no agents" empty state over a network error.
+        personasError ? null : (
+          <EmptyState
+            icon={Bot}
+            title={t.agentsPage.noAgents}
+            description={t.agentsPage.noAgentsDesc}
+          />
+        )
       ) : (
         <div data-tour-diagram="dashboard-agents" className="grid gap-4 sm:grid-cols-2 xl:grid-cols-3">
           {personas.map((persona) => (

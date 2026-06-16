@@ -1,6 +1,21 @@
 ﻿import type { Translations } from './en';
 
 export const es: Translations = {
+  notFound: {
+    title: 'P\u00e1gina no encontrada',
+    description: 'La p\u00e1gina que buscas no existe o se ha movido. Prueba con una de estas:',
+    home: 'Inicio',
+    getStarted: 'Empezar',
+    backToHome: 'Volver al inicio',
+  },
+  errorPage: {
+    title: 'Esta p\u00e1gina encontr\u00f3 un problema inesperado',
+    description: 'Algo sali\u00f3 mal al cargar esta p\u00e1gina. Nuestro equipo ha sido notificado: int\u00e9ntalo de nuevo o vuelve al inicio.',
+    tryAgain: 'Intentar de nuevo',
+    errorReference: 'Referencia del error',
+    copyReference: 'Copiar referencia del error',
+    backToHome: 'Volver al inicio',
+  },
   nav: {
     home: 'Personas',
     how: 'C\u00f3mo funciona',
@@ -202,6 +217,7 @@ export const es: Translations = {
     connected: 'Conectado',
     disconnected: 'Desconectado',
     demo: 'Demo',
+    viewFullSite: 'Ver sitio completo',
   },
   useCasesSection: {
     heading: 'Una persona,',
@@ -498,6 +514,11 @@ export const es: Translations = {
     refreshing: "Refreshing...",
     rejectSelectedTitle: "Reject selected reviews?",
     rejectSelectedBody: "This will reject {count} selected review{plural}. You will have 5 seconds to undo this action.",
+    undo: "Deshacer",
+    retry: "Reintentar",
+    bulkFailedApprove: "No se pudieron aprobar {failed} de {total}",
+    bulkFailedReject: "No se pudieron rechazar {failed} de {total}",
+    bulkSucceededReselected: "{count} con éxito · elementos fallidos vueltos a seleccionar",
     allShortcuts: "All shortcuts",
     keyboardShortcuts: "Keyboard shortcuts",
     searchShortcuts: "Search shortcuts...",

@@ -21,12 +21,13 @@ export function isValidEmail(email: string): boolean {
  * a client-generated ID, so accidentally-pasted strings, prototypes, or
  * obviously-malformed values are turned away cheaply at the route boundary.
  *
- * What this validator does NOT do: prevent vote-stuffing. The current
- * design has no signed-cookie binding, captcha, or DB-level UNIQUE
- * constraint, so a determined attacker can still mint thousands of fresh
- * IDs. The follow-up work for real voting integrity is to bind voterId to
- * an HttpOnly signed cookie (HMAC of a server-issued nonce) and add a
- * UNIQUE(feature_id, voter_id) constraint in Supabase.
+ * What this validator does NOT do: prevent vote-stuffing. A
+ * UNIQUE(feature_id, voter_id) constraint already exists in Supabase
+ * (scripts/setup-voting-db.sql), so a single voter_id counts at most once
+ * per feature — but there is no signed-cookie binding or captcha, so a
+ * determined attacker can still mint thousands of fresh IDs. The follow-up
+ * work for real voting integrity is to bind voterId to an HttpOnly signed
+ * cookie (HMAC of a server-issued nonce).
  */
 const VOTER_ID_RE = /^[A-Za-z0-9_-]{16,64}$/;
 

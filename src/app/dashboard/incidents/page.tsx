@@ -5,6 +5,7 @@ import { motion } from "framer-motion";
 import { SearchX, ShieldCheck, Siren } from "lucide-react";
 
 import GradientText from "@/components/GradientText";
+import DashboardErrorBanner from "@/components/dashboard/DashboardErrorBanner";
 import EmptyState from "@/components/dashboard/EmptyState";
 import SkeletonCard from "@/components/dashboard/SkeletonCard";
 import { useTranslation } from "@/i18n/useTranslation";
@@ -28,7 +29,7 @@ import { useIncidentsFilterStore } from "./incidents-page/useIncidentsFilterStor
 export default function IncidentsPage() {
   const { t } = useTranslation();
   const labels = t.incidentsPage;
-  const { incidents, isLoading } = useAuditIncidents();
+  const { incidents, isLoading, error, retry } = useAuditIncidents();
 
   const status = useIncidentsFilterStore((s) => s.status);
   const severity = useIncidentsFilterStore((s) => s.severity);
@@ -61,12 +62,18 @@ export default function IncidentsPage() {
         </div>
       </motion.div>
 
+      {error && (
+        <motion.div variants={fadeUp}>
+          <DashboardErrorBanner message={error} onRetry={retry} />
+        </motion.div>
+      )}
+
       {isLoading ? (
         <div className="space-y-6">
           <SkeletonCard lines={2} />
           <SkeletonCard lines={6} />
         </div>
-      ) : (
+      ) : error && incidents.length === 0 ? null : (
         <>
           <motion.div variants={fadeUp} className="mb-6">
             <IncidentsKpiHeader incidents={incidents} />

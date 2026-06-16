@@ -32,12 +32,18 @@ const reveal = {
 export function InstrumentsBay({
   chartData,
   loadObservability,
+  observabilityLoading,
+  observabilityError,
+  onRetryObservability,
   fetchedAt,
   personasCount,
   workersTotal,
 }: {
   chartData: { date: string; Executions: number; Errors: number }[];
   loadObservability: boolean;
+  observabilityLoading: boolean;
+  observabilityError: string | null;
+  onRetryObservability: () => void;
   fetchedAt: number | null;
   personasCount: number;
   workersTotal: number;
@@ -63,6 +69,9 @@ export function InstrumentsBay({
           <TrafficErrorsCard
             chartData={chartData}
             loadObservability={loadObservability}
+            loading={observabilityLoading}
+            error={observabilityError}
+            onRetry={onRetryObservability}
             fetchedAt={fetchedAt}
             labels={{
               title: t.dashboard.trafficErrors,

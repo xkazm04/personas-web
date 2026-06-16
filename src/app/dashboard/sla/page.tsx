@@ -19,7 +19,7 @@ import { useSlaData } from "./useSlaData";
 export default function SLAPage() {
   const { t } = useTranslation();
   const [fetchedAt] = useState(() => Date.now());
-  const { targets, breaches, loading, error } = useSlaData();
+  const { targets, breaches, loading, error, retry } = useSlaData();
 
   const { overallCompliance, activeBreachCount } = useMemo(() => {
     const avg =
@@ -44,7 +44,7 @@ export default function SLAPage() {
         <StalenessIndicator fetchedAt={fetchedAt} className="mt-2" />
       </motion.div>
 
-      {error && <DashboardErrorBanner message={error} />}
+      {error && <DashboardErrorBanner message={error} onRetry={retry} />}
 
       {loading ? (
         <div className="grid gap-4 sm:grid-cols-3" aria-busy="true">

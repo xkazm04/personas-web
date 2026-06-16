@@ -3,6 +3,15 @@
  * This route stores an anonymous voter_id and a Ko-fi tier weight per
  * boost. IP addresses are used ONLY for transient in-memory rate
  * limiting and are NEVER persisted.
+ *
+ * ── Integrity note ──────────────────────────────────────────────────
+ * A boost is recorded when the user clicks a Ko-fi tier — there is no
+ * server-side proof a donation actually completed (that would require a
+ * signed Ko-fi webhook, which doesn't exist yet). To bound abuse until
+ * then we (1) pin weight/tier_value to the real tier set so a crafted
+ * request can't submit an arbitrary amount, and (2) store ONE boost row
+ * per (feature_id, voter_id) via upsert so a voter can't stack a feature's
+ * total without limit. Re-boosting replaces the prior tier.
  */
 
 import { NextRequest, NextResponse } from "next/server";
@@ -13,8 +22,12 @@ import { getClientIp, parseJsonBody } from "@/lib/server/request";
 import { isRateLimited as isSharedRateLimited } from "@/lib/server/rate-limit";
 
 const ALLOWED_FEATURES = new Set(["macos", "i18n", "dashboard", "enterprise"]);
-const MAX_WEIGHT = 1000;
-const MAX_TIER_VALUE = 1000;
+
+// Allowed Ko-fi boost tiers. MUST stay in sync with BOOST_TIERS in
+// src/components/sections/feature-voting/data.ts. The server pins to this
+// exact set so a crafted request can't submit an arbitrary weight (e.g.
+// 1000) and inflate a feature's boost total far beyond any real tier.
+const ALLOWED_TIERS = new Set([5, 15, 25]);
 
 interface BoostRow {
   feature_id: string;
@@ -104,29 +117,28 @@ export async function POST(req: NextRequest) {
       { status: 400 },
     );
   }
-  if (
-    !Number.isInteger(weight) ||
-    (weight as number) <= 0 ||
-    (weight as number) > MAX_WEIGHT
-  ) {
-    return NextResponse.json({ error: "Invalid weight" }, { status: 400 });
-  }
-  if (
-    !Number.isInteger(tierValue) ||
-    (tierValue as number) <= 0 ||
-    (tierValue as number) > MAX_TIER_VALUE
-  ) {
+  if (!Number.isInteger(tierValue) || !ALLOWED_TIERS.has(tierValue as number)) {
     return NextResponse.json({ error: "Invalid tier value" }, { status: 400 });
+  }
+  // The weight is derived from the chosen tier, not a free parameter. Pin it
+  // to tierValue so the two can't diverge (e.g. tier $5 but weight 1000).
+  if (weight !== tierValue) {
+    return NextResponse.json({ error: "Invalid weight" }, { status: 400 });
   }
 
   if (hasSupabase()) {
     const sb = await getSupabaseClient();
-    const { error } = await sb.from("feature_boosts").insert({
-      feature_id: featureId,
-      voter_id: voterId,
-      weight,
-      tier_value: tierValue,
-    });
+    // Upsert on (feature_id, voter_id): one boost per voter per feature.
+    // Re-boosting replaces the prior tier instead of stacking a new row.
+    const { error } = await sb.from("feature_boosts").upsert(
+      {
+        feature_id: featureId,
+        voter_id: voterId,
+        weight,
+        tier_value: tierValue,
+      },
+      { onConflict: "feature_id,voter_id" },
+    );
 
     if (error) {
       return NextResponse.json(
@@ -138,23 +150,29 @@ export async function POST(req: NextRequest) {
     return NextResponse.json({ ok: true });
   }
 
-  // FS fallback
+  // FS fallback — replace this voter's existing boost for the feature, if any.
   await updateJsonFile<FSBoosts>(
     "feature-boosts",
     "boosts.json",
     { entries: [] },
-    (current) => ({
-      entries: [
-        ...current.entries,
-        {
-          feature_id: featureId,
-          voter_id: voterId!,
-          weight: weight as number,
-          tier_value: tierValue as number,
-          created_at: new Date().toISOString(),
-        },
-      ],
-    }),
+    (current) => {
+      const row: BoostRow = {
+        feature_id: featureId,
+        voter_id: voterId!,
+        weight: weight as number,
+        tier_value: tierValue as number,
+        created_at: new Date().toISOString(),
+      };
+      const idx = current.entries.findIndex(
+        (e) => e.feature_id === featureId && e.voter_id === voterId,
+      );
+      if (idx !== -1) {
+        const entries = current.entries.slice();
+        entries[idx] = row;
+        return { entries };
+      }
+      return { entries: [...current.entries, row] };
+    },
   );
 
   return NextResponse.json({ ok: true });

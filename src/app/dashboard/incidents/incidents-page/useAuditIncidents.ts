@@ -10,11 +10,21 @@ import type { AuditIncident } from "@/lib/mock-dashboard-data";
  * the standalone mock fetcher (incidents have no synced source), with SWR
  * giving a brief loading state. Revalidation is off; the fixture is static.
  */
-export function useAuditIncidents(): { incidents: AuditIncident[]; isLoading: boolean } {
-  const { data, isLoading } = useSWR("audit-incidents", getAuditIncidents, {
+export function useAuditIncidents(): {
+  incidents: AuditIncident[];
+  isLoading: boolean;
+  error: string | null;
+  retry: () => void;
+} {
+  const { data, isLoading, error, mutate } = useSWR("audit-incidents", getAuditIncidents, {
     revalidateOnFocus: false,
     revalidateOnReconnect: false,
     dedupingInterval: 60_000,
   });
-  return { incidents: data ?? [], isLoading };
+  return {
+    incidents: data ?? [],
+    isLoading,
+    error: error instanceof Error ? error.message : error ? String(error) : null,
+    retry: () => void mutate(),
+  };
 }

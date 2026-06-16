@@ -4,6 +4,7 @@ import { useState } from "react";
 import { Loader2 } from "lucide-react";
 
 import CompareToggle from "@/components/dashboard/CompareToggle";
+import DashboardErrorBanner from "@/components/dashboard/DashboardErrorBanner";
 import { AthenaUsageCard } from "./activity-view/AthenaUsageCard";
 import { ValueRollupCard } from "./activity-view/ValueRollupCard";
 import { useActivityMetrics } from "./activity-view/useActivityMetrics";
@@ -15,7 +16,13 @@ import { useActivityMetrics } from "./activity-view/useActivityMetrics";
  */
 export default function ActivityMetricsView() {
   const [compare, setCompare] = useState(false);
-  const { athenaUsage, valueRollup, isLoading } = useActivityMetrics();
+  const { athenaUsage, valueRollup, isLoading, error, retry } = useActivityMetrics();
+
+  // A failed fetch would otherwise spin forever (valueRollup never arrives);
+  // surface the error with a retry instead.
+  if (error && !valueRollup) {
+    return <DashboardErrorBanner message={error} onRetry={retry} />;
+  }
 
   if (isLoading || !valueRollup) {
     return (

@@ -36,7 +36,7 @@ export function BlogArticleCrossLinks({
             className="group flex items-center gap-2 rounded-lg border border-glass bg-white/[0.02] px-4 py-3 text-base text-muted hover:border-glass-hover hover:text-foreground transition-colors"
           >
             {link.label}
-            <ArrowRight className="h-3.5 w-3.5 ml-auto opacity-0 group-hover:opacity-100 transition-opacity" />
+            <ArrowRight className="h-3.5 w-3.5 ml-auto opacity-0 group-hover:opacity-100 [@media(hover:none)]:opacity-100 transition-opacity" />
           </Link>
         ))}
       </div>

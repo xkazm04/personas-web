@@ -1,4 +1,5 @@
 import "server-only";
+import { createHash } from "crypto";
 import { NextRequest, NextResponse } from "next/server";
 
 /**
@@ -42,7 +43,49 @@ export function getClientIp(req: NextRequest): string {
     if (xff) return xff.split(",")[0]?.trim() || "unknown";
   }
 
-  return "unknown";
+  // No trusted IP source. Collapsing every anonymous client into a single
+  // `"unknown"` bucket means one client (or normal traffic) exhausts the
+  // *global* per-IP limit and locks everyone else out. Instead, derive a
+  // coarse per-client key from stable request headers so distinct clients
+  // land in distinct buckets. This is best-effort entropy and trivially
+  // spoofable, so it is NOT used for trust/identity — only to avoid a global
+  // self-DoS. Real cross-instance limiting needs a shared store (Redis/DB).
+  const fingerprintSource = [
+    req.headers.get("user-agent") ?? "",
+    req.headers.get("accept-language") ?? "",
+    req.headers.get("accept-encoding") ?? "",
+    // Untrusted XFF/real-ip: useless for identity here, fine as entropy.
+    req.headers.get("x-forwarded-for") ?? "",
+    req.headers.get("x-real-ip") ?? "",
+  ].join("|");
+  if (fingerprintSource.replace(/\|/g, "") === "") return "unknown";
+  const fp = createHash("sha256").update(fingerprintSource).digest("hex");
+  return `fp:${fp.slice(0, 16)}`;
+}
+
+function tooLarge(): { ok: false; response: NextResponse } {
+  return {
+    ok: false,
+    response: NextResponse.json({ error: "Payload too large" }, { status: 413 }),
+  };
+}
+
+function invalidJson(): { ok: false; response: NextResponse } {
+  return {
+    ok: false,
+    response: NextResponse.json({ error: "Invalid JSON" }, { status: 400 }),
+  };
+}
+
+function concatChunks(chunks: Uint8Array[], total: number): Uint8Array {
+  if (chunks.length === 1) return chunks[0];
+  const out = new Uint8Array(total);
+  let offset = 0;
+  for (const chunk of chunks) {
+    out.set(chunk, offset);
+    offset += chunk.byteLength;
+  }
+  return out;
 }
 
 export async function parseJsonBody<T>(
@@ -50,28 +93,56 @@ export async function parseJsonBody<T>(
   options?: { maxBytes?: number },
 ): Promise<{ ok: true; data: T } | { ok: false; response: NextResponse }> {
   const maxBytes = options?.maxBytes;
+
+  // Fast pre-check: a declared Content-Length over the cap lets us reject
+  // early. But a missing or understated header must NOT be a way to skip the
+  // cap (Transfer-Encoding: chunked sends no Content-Length), so the streaming
+  // read below enforces the real ceiling against the actual bytes received.
   if (maxBytes !== undefined) {
     const header = req.headers.get("content-length");
     if (header !== null) {
       const len = Number(header);
-      if (!Number.isFinite(len) || len > maxBytes) {
-        return {
-          ok: false,
-          response: NextResponse.json(
-            { error: "Payload too large" },
-            { status: 413 },
-          ),
-        };
-      }
+      if (!Number.isFinite(len) || len > maxBytes) return tooLarge();
     }
   }
+
+  // When no cap is requested (or there's no readable body), defer to the
+  // platform JSON parser.
+  if (maxBytes === undefined || !req.body) {
+    try {
+      return { ok: true, data: (await req.json()) as T };
+    } catch {
+      return invalidJson();
+    }
+  }
+
+  // Read the stream ourselves so we can abort the moment the running total
+  // exceeds maxBytes, regardless of what Content-Length claimed.
+  const reader = req.body.getReader();
+  const chunks: Uint8Array[] = [];
+  let total = 0;
   try {
-    return { ok: true, data: (await req.json()) as T };
+    for (;;) {
+      const { done, value } = await reader.read();
+      if (done) break;
+      if (!value) continue;
+      total += value.byteLength;
+      if (total > maxBytes) {
+        await reader.cancel();
+        return tooLarge();
+      }
+      chunks.push(value);
+    }
   } catch {
-    return {
-      ok: false,
-      response: NextResponse.json({ error: "Invalid JSON" }, { status: 400 }),
-    };
+    return invalidJson();
+  }
+
+  const raw = new TextDecoder().decode(concatChunks(chunks, total));
+  if (raw.trim() === "") return invalidJson();
+  try {
+    return { ok: true, data: JSON.parse(raw) as T };
+  } catch {
+    return invalidJson();
   }
 }
 

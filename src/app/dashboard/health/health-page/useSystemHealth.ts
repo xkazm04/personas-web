@@ -13,8 +13,10 @@ export function useSystemHealth(): {
   sections: HealthCheckSection[];
   diskUsage: { usedGb: number; totalGb: number };
   isLoading: boolean;
+  error: string | null;
+  retry: () => void;
 } {
-  const { data, isLoading } = useSWR("system-health", getSystemHealth, {
+  const { data, isLoading, error, mutate } = useSWR("system-health", getSystemHealth, {
     revalidateOnFocus: false,
     revalidateOnReconnect: false,
     dedupingInterval: 60_000,
@@ -23,5 +25,7 @@ export function useSystemHealth(): {
     sections: data?.sections ?? [],
     diskUsage: data?.diskUsage ?? { usedGb: 0, totalGb: 0 },
     isLoading,
+    error: error instanceof Error ? error.message : error ? String(error) : null,
+    retry: () => void mutate(),
   };
 }

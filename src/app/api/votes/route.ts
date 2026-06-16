@@ -31,7 +31,10 @@ export async function GET(req: NextRequest) {
     const sb = await getSupabaseClient();
 
     const [votesResult, shippedResult] = await Promise.all([
-      sb.from("feature_votes").select("feature_id, voter_id, email"),
+      // `email` is deliberately NOT selected: it must never leave the server
+      // keyed off a client-suppliable voterId (which also travels in the GET
+      // query string and lands in logs). Email is write-only here.
+      sb.from("feature_votes").select("feature_id, voter_id"),
       sb
         .from("shipped_features")
         .select("feature_id, changelog, link, shipped_at"),
@@ -49,39 +52,34 @@ export async function GET(req: NextRequest) {
     // API responds, added on top of the real counts from this endpoint.
     const counts: Record<string, number> = {};
     const userVotes: string[] = [];
-    let userEmail: string | null = null;
 
     for (const row of votesResult.data ?? []) {
       counts[row.feature_id] = (counts[row.feature_id] || 0) + 1;
       if (row.voter_id === voterId) {
         userVotes.push(row.feature_id);
-        if (row.email) userEmail = row.email;
       }
     }
 
     const shipped: ShippedEntry[] = shippedResult.data ?? [];
 
-    return NextResponse.json({ counts, userVotes, userEmail, shipped });
+    return NextResponse.json({ counts, userVotes, shipped });
   }
 
   // Filesystem fallback
   const [data, shippedData] = await Promise.all([readVotes(), readShipped()]);
   const counts: Record<string, number> = {};
   const userVotes: string[] = [];
-  let userEmail: string | null = null;
 
   for (const entry of data.entries) {
     counts[entry.feature_id] = (counts[entry.feature_id] || 0) + 1;
     if (entry.voter_id === voterId) {
       userVotes.push(entry.feature_id);
-      if (entry.email) userEmail = entry.email;
     }
   }
 
   return NextResponse.json({
     counts,
     userVotes,
-    userEmail,
     shipped: shippedData.entries,
   });
 }
@@ -155,11 +153,18 @@ export async function POST(req: NextRequest) {
       return NextResponse.json({ action: "removed" });
     }
 
-    const { error } = await sb.from("feature_votes").insert({
-      feature_id: featureId,
-      voter_id: voterId,
-      ...(normalizedEmail ? { email: normalizedEmail } : {}),
-    });
+    // Upsert with ignoreDuplicates (ON CONFLICT DO NOTHING). The
+    // UNIQUE(feature_id, voter_id) constraint already guarantees one row per
+    // voter; making the insert idempotent means two truly-concurrent requests
+    // can't 500 the loser of the race — the duplicate is simply skipped.
+    const { error } = await sb.from("feature_votes").upsert(
+      {
+        feature_id: featureId,
+        voter_id: voterId,
+        ...(normalizedEmail ? { email: normalizedEmail } : {}),
+      },
+      { onConflict: "feature_id,voter_id", ignoreDuplicates: true },
+    );
 
     if (error) {
       return NextResponse.json(

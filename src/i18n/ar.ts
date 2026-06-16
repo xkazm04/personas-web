@@ -1,6 +1,21 @@
 ﻿import type { Translations } from './en';
 
 export const ar: Translations = {
+  notFound: {
+    title: '\u0627\u0644\u0635\u0641\u062d\u0629 \u063a\u064a\u0631 \u0645\u0648\u062c\u0648\u062f\u0629',
+    description: '\u0627\u0644\u0635\u0641\u062d\u0629 \u0627\u0644\u062a\u064a \u062a\u0628\u062d\u062b \u0639\u0646\u0647\u0627 \u063a\u064a\u0631 \u0645\u0648\u062c\u0648\u062f\u0629 \u0623\u0648 \u062a\u0645 \u0646\u0642\u0644\u0647\u0627. \u062c\u0631\u0651\u0628 \u0625\u062d\u062f\u0649 \u0647\u0630\u0647 \u0627\u0644\u0635\u0641\u062d\u0627\u062a \u0628\u062f\u0644\u0627\u064b \u0645\u0646 \u0630\u0644\u0643:',
+    home: '\u0627\u0644\u0631\u0626\u064a\u0633\u064a\u0629',
+    getStarted: '\u0627\u0628\u062f\u0623 \u0627\u0644\u0622\u0646',
+    backToHome: '\u0627\u0644\u0639\u0648\u062f\u0629 \u0625\u0644\u0649 \u0627\u0644\u0631\u0626\u064a\u0633\u064a\u0629',
+  },
+  errorPage: {
+    title: '\u0648\u0627\u062c\u0647\u062a \u0647\u0630\u0647 \u0627\u0644\u0635\u0641\u062d\u0629 \u062e\u0637\u0623\u064b \u063a\u064a\u0631 \u0645\u062a\u0648\u0642\u0639',
+    description: '\u062d\u062f\u062b \u062e\u0637\u0623 \u0645\u0627 \u0623\u062b\u0646\u0627\u0621 \u062a\u062d\u0645\u064a\u0644 \u0647\u0630\u0647 \u0627\u0644\u0635\u0641\u062d\u0629. \u062a\u0645 \u0625\u062e\u0637\u0627\u0631 \u0641\u0631\u064a\u0642\u0646\u0627 \u2014 \u062d\u0627\u0648\u0644 \u0645\u0631\u0629 \u0623\u062e\u0631\u0649 \u0623\u0648 \u0639\u064f\u062f \u0625\u0644\u0649 \u0627\u0644\u0631\u0626\u064a\u0633\u064a\u0629.',
+    tryAgain: '\u062d\u0627\u0648\u0644 \u0645\u0631\u0629 \u0623\u062e\u0631\u0649',
+    errorReference: '\u0645\u0631\u062c\u0639 \u0627\u0644\u062e\u0637\u0623',
+    copyReference: '\u0646\u0633\u062e \u0645\u0631\u062c\u0639 \u0627\u0644\u062e\u0637\u0623',
+    backToHome: '\u0627\u0644\u0639\u0648\u062f\u0629 \u0625\u0644\u0649 \u0627\u0644\u0631\u0626\u064a\u0633\u064a\u0629',
+  },
   nav: {
     home: 'Personas',
     how: '\u0643\u064A\u0641 \u064A\u0639\u0645\u0644',
@@ -202,6 +217,7 @@ export const ar: Translations = {
     connected: '\u0645\u062A\u0635\u0644',
     disconnected: '\u063A\u064A\u0631 \u0645\u062A\u0635\u0644',
     demo: '\u0639\u0631\u0636 \u062A\u062C\u0631\u064A\u0628\u064A',
+    viewFullSite: '\u0639\u0631\u0636 \u0627\u0644\u0645\u0648\u0642\u0639 \u0627\u0644\u0643\u0627\u0645\u0644',
   },
   useCasesSection: {
     heading: 'Ř´Ř®ŘµŮŠŘ© ŮŘ§Ř­ŘŻŘ©ŘŚ',
@@ -498,6 +514,11 @@ export const ar: Translations = {
     refreshing: "Refreshing...",
     rejectSelectedTitle: "Reject selected reviews?",
     rejectSelectedBody: "This will reject {count} selected review{plural}. You will have 5 seconds to undo this action.",
+    undo: "تراجع",
+    retry: "إعادة المحاولة",
+    bulkFailedApprove: "فشلت الموافقة على {failed} من {total}",
+    bulkFailedReject: "فشل رفض {failed} من {total}",
+    bulkSucceededReselected: "نجح {count} · تمت إعادة تحديد العناصر الفاشلة",
     allShortcuts: "All shortcuts",
     keyboardShortcuts: "Keyboard shortcuts",
     searchShortcuts: "Search shortcuts...",

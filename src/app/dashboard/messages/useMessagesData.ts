@@ -11,6 +11,7 @@ export interface MessagesData {
   threads: MessageThread[];
   loading: boolean;
   error: string | null;
+  retry: () => void;
 }
 
 /**
@@ -28,6 +29,7 @@ export function useMessagesData(): MessagesData {
   );
   const [loading, setLoading] = useState(!useMock);
   const [error, setError] = useState<string | null>(null);
+  const [reloadKey, setReloadKey] = useState(0);
 
   useEffect(() => {
     if (useMock) return;
@@ -50,7 +52,7 @@ export function useMessagesData(): MessagesData {
     return () => {
       cancelled = true;
     };
-  }, [useMock]);
+  }, [useMock, reloadKey]);
 
-  return { threads, loading, error };
+  return { threads, loading, error, retry: () => setReloadKey((k) => k + 1) };
 }
