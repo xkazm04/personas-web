@@ -32,11 +32,14 @@ export default function DashboardNavbar() {
         {/* Left: Logo + breadcrumb */}
         <div className="flex items-center gap-3">
           <Link href="/" className="flex items-center gap-2">
+            {/* width/height mirror the source's 1344×768 (1.75:1) ratio; the
+                square h-7 w-7 slot object-contains it (both dims set, so no
+                browser aspect-ratio warning). */}
             <Image
               src="/imgs/logo.png"
               alt={t.dashboardUi.brandName}
-              width={28}
-              height={28}
+              width={42}
+              height={24}
               className="h-7 w-7 object-contain drop-shadow-[0_0_8px_rgba(6,182,212,0.3)]"
             />
             <span className="text-base font-semibold tracking-tight text-foreground">
