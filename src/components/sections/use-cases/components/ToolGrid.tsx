@@ -2,6 +2,7 @@
 
 import { motion } from "framer-motion";
 import { fadeUp } from "@/lib/animations";
+import { useStaggeredReveal } from "@/lib/useStaggeredReveal";
 import { tools } from "../data";
 import ToolButton from "./ToolButton";
 
@@ -24,6 +25,9 @@ export default function ToolGrid({
   desktopRefs,
   mobileRefs,
 }: Props) {
+  // Mount the tool buttons in small batches so they cascade in rather than all
+  // rendering at once (smoother feel + lighter single-shot load).
+  const revealed = useStaggeredReveal(tools.length, { initial: 4, batch: 2, intervalMs: 60 });
   return (
     <>
       {/* Desktop grid */}
@@ -34,7 +38,7 @@ export default function ToolGrid({
         aria-label="Integration tools"
         onKeyDown={onKeyDown}
       >
-        {tools.map((tool, i) => (
+        {tools.slice(0, revealed).map((tool, i) => (
           <ToolButton
             key={tool.id}
             ref={(node) => {
@@ -66,7 +70,7 @@ export default function ToolGrid({
           aria-label="Integration tools"
           onKeyDown={onKeyDown}
         >
-          {tools.map((tool, i) => (
+          {tools.slice(0, revealed).map((tool, i) => (
             <ToolButton
               key={tool.id}
               ref={(node) => {

@@ -3,6 +3,7 @@
 import { useEffect, useState } from "react";
 import { motion, useReducedMotion } from "framer-motion";
 import { fadeUp } from "@/lib/animations";
+import { useStaggeredReveal } from "@/lib/useStaggeredReveal";
 import type { AgentData } from "../types";
 import { initialAgents, statusStyles } from "../data";
 import ConnectorIcon from "./ConnectorIcon";
@@ -11,6 +12,8 @@ export default function AgentArmyGrid() {
   const prefersReducedMotion = useReducedMotion();
   const [agents, setAgents] = useState<AgentData[]>(initialAgents);
   const [flashIdx, setFlashIdx] = useState<number | null>(null);
+  // Mount the cards in small batches so a heavy grid doesn't render in one shot.
+  const revealed = useStaggeredReveal(agents.length, { initial: 2, batch: 2, intervalMs: 90 });
 
   useEffect(() => {
     if (prefersReducedMotion) return;
@@ -56,7 +59,7 @@ export default function AgentArmyGrid() {
       viewport={{ once: true, margin: "-60px" }}
       className="mt-16 mx-auto max-w-5xl grid grid-cols-2 sm:grid-cols-3 xl:grid-cols-6 gap-3"
     >
-      {agents.map((agent, i) => {
+      {agents.slice(0, revealed).map((agent, i) => {
         // Runtime fallback so a future status not yet wired into statusStyles
         // (or stale persisted state) renders as "idle" instead of crashing
         // the whole framer-motion grid into the section error boundary.
