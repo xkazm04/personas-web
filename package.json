@@ -26,6 +26,7 @@
     "report:i18n-hardcoded": "node scripts/report-hardcoded-ui-strings.mjs",
     "db:migrate": "node scripts/run-voting-migration.mjs",
     "db:migrate:sync": "node scripts/run-sync-migration.mjs",
+    "db:migrate:growth": "node scripts/run-growth-migration.mjs",
     "prepare": "node scripts/install-git-hooks.mjs"
   },
   "dependencies": {
