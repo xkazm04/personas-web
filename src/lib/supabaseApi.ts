@@ -524,7 +524,10 @@ export const supabaseApi: ApiClient = {
     return {
       totalCost,
       totalExecutions,
-      successRate: totalExecutions > 0 ? totalSuccesses / totalExecutions : 0,
+      // Percentage in [0,100] to match the mock contract + the `.toFixed(1)%`
+      // formatter in PerformanceMetricsGrid. (Returning the raw 0-1 fraction here
+      // rendered a healthy 95% fleet as "0.9%" in real cloud-sync mode.)
+      successRate: totalExecutions > 0 ? (totalSuccesses / totalExecutions) * 100 : 0,
       activePersonas,
       costTrend: pctChange(sum(recent, (d) => d.cost), sum(prior, (d) => d.cost)),
       execTrend: pctChange(recentExec, priorExec),
