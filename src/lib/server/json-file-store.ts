@@ -11,11 +11,29 @@ function resolveDataPath(fileName: string): string {
 }
 
 export async function readJsonFile<T>(fileName: string, fallback: T): Promise<T> {
+  let raw: string;
   try {
-    const raw = await fs.readFile(resolveDataPath(fileName), "utf-8");
+    raw = await fs.readFile(resolveDataPath(fileName), "utf-8");
+  } catch (err) {
+    // A missing file is the only legitimate "use the fallback" case — it means
+    // the store has not been created yet.
+    if ((err as NodeJS.ErrnoException)?.code === "ENOENT") return fallback;
+    // Any other read failure (EACCES, EIO, EBUSY, …) must NOT be swallowed into
+    // the empty fallback: the read-modify-write callers would then persist that
+    // empty value over the real data on the next write. Fail loud instead.
+    console.error(`[json-file-store] read failed for ${fileName}:`, err);
+    throw err;
+  }
+  try {
     return JSON.parse(raw) as T;
-  } catch {
-    return fallback;
+  } catch (err) {
+    // The file exists but is corrupt/unparseable. Returning the empty fallback
+    // here is the data-loss bug: updateJsonFile / the votes RMW would treat
+    // "empty" as authoritative and rename it over the real dataset. Refuse so a
+    // corrupt read can never be persisted over good data; the file is preserved
+    // in place for recovery.
+    console.error(`[json-file-store] corrupt JSON in ${fileName}; refusing to use empty fallback:`, err);
+    throw new Error(`Corrupt data file ${fileName}; refusing to overwrite. Inspect/restore .data/${fileName}.`);
   }
 }
 
