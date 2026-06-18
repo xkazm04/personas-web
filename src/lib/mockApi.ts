@@ -14,7 +14,6 @@ import {
   MOCK_TOOL_USAGE_OVER_TIME,
   MOCK_TOOL_USAGE_BY_PERSONA,
   getMockExecutionDetail,
-  resetMockOutputOffset,
 } from "./mockData";
 import {
   MOCK_ATHENA_USAGE,
@@ -84,9 +83,9 @@ export const mockApi: ApiClient = {
     return result;
   },
 
-  getExecution: async (id: string, _offset?: number): Promise<ExecutionDetail> => {
+  getExecution: async (id: string, offset?: number): Promise<ExecutionDetail> => {
     await delay(200);
-    return getMockExecutionDetail(id);
+    return getMockExecutionDetail(id, offset);
   },
 
   cancelExecution: async (id: string): Promise<{ executionId: string; status: PersonaExecutionStatus }> => {
@@ -96,7 +95,6 @@ export const mockApi: ApiClient = {
 
   executePersona: async (_personaId: string, _prompt: string): Promise<{ executionId: string; status: PersonaExecutionStatus }> => {
     await delay(500);
-    resetMockOutputOffset();
     return { executionId: `e-new-${Date.now()}`, status: "queued" };
   },
 

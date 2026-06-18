@@ -498,18 +498,19 @@ const MOCK_OUTPUT_LINES = [
   "- Code quality: Excellent",
 ];
 
-let mockOutputOffset = 0;
-
-export function getMockExecutionDetail(executionId: string): ExecutionDetail {
-  // Simulate progressive output for the "running" execution
+export function getMockExecutionDetail(executionId: string, offset = 0): ExecutionDetail {
+  // Simulate progressive output for the "running" execution. The caller (the
+  // polling hook) owns the cursor and advances it by output.length, matching the
+  // stateless real/supabase getExecution(id, offset) contract — so two concurrent
+  // pollers (or a StrictMode double-invoke) no longer fight over a shared global.
   const exec = MOCK_EXECUTIONS.find((e) => e.id === executionId);
   const isRunning = exec?.status === "running";
 
   if (isRunning) {
-    const end = Math.min(mockOutputOffset + 3, MOCK_OUTPUT_LINES.length);
-    const chunk = MOCK_OUTPUT_LINES.slice(mockOutputOffset, end);
+    const start = Math.max(0, offset);
+    const end = Math.min(start + 3, MOCK_OUTPUT_LINES.length);
+    const chunk = MOCK_OUTPUT_LINES.slice(start, end);
     const done = end >= MOCK_OUTPUT_LINES.length;
-    mockOutputOffset = end;
 
     return {
       executionId,
@@ -529,10 +530,6 @@ export function getMockExecutionDetail(executionId: string): ExecutionDetail {
     durationMs: exec?.durationMs ?? undefined,
     totalCostUsd: exec?.costUsd ?? undefined,
   };
-}
-
-export function resetMockOutputOffset(): void {
-  mockOutputOffset = 0;
 }
 
 // ---------------------------------------------------------------------------
