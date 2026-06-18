@@ -1,6 +1,5 @@
 "use client";
 
-import { useState } from "react";
 import { Network } from "lucide-react";
 
 import GlowCard from "@/components/GlowCard";
@@ -8,16 +7,17 @@ import { useTranslation } from "@/i18n/useTranslation";
 import { fadeUp } from "@/lib/animations";
 import { MOCK_MODEL_PROVIDERS } from "@/lib/mock-dashboard-data";
 import { useAuthStore } from "@/stores/authStore";
+import { useSettingsStore } from "@/stores/settingsStore";
 import { SettingToggle } from "./SettingToggle";
 
-/** BYOM policy: which model providers the fleet may use. Demo-only state. */
+/** BYOM policy: which model providers the fleet may use. Persisted in
+ *  settingsStore as an override map over each provider's default `allowed`. */
 export function ModelProvidersCard() {
   const { t } = useTranslation();
   const p = t.settingsPage.providers;
   const isDemo = useAuthStore((s) => s.isDemo);
-  const [allowed, setAllowed] = useState<Record<string, boolean>>(() =>
-    Object.fromEntries(MOCK_MODEL_PROVIDERS.map((m) => [m.id, m.allowed])),
-  );
+  const overrides = useSettingsStore((s) => s.providerOverrides);
+  const setProviderAllowed = useSettingsStore((s) => s.setProviderAllowed);
 
   // BYOM provider config is device-local and not part of the cloud sync set —
   // there's no real source for this card in supabase mode.
@@ -32,7 +32,7 @@ export function ModelProvidersCard() {
       </div>
       <div className="divide-y divide-glass">
         {MOCK_MODEL_PROVIDERS.map((m) => {
-          const on = allowed[m.id];
+          const on = overrides[m.id] ?? m.allowed;
           return (
             <div key={m.id} className="flex items-center gap-3 py-2.5">
               <div className="min-w-0 flex-1">
@@ -44,7 +44,7 @@ export function ModelProvidersCard() {
                   {m.requests.toLocaleString()} {p.requests}
                 </span>
               )}
-              <SettingToggle on={on} onChange={(v) => setAllowed((s) => ({ ...s, [m.id]: v }))} label={m.name} />
+              <SettingToggle on={on} onChange={(v) => setProviderAllowed(m.id, v)} label={m.name} />
             </div>
           );
         })}

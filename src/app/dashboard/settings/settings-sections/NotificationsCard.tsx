@@ -1,24 +1,27 @@
 "use client";
 
-import { useRef, useState } from "react";
+import { useRef } from "react";
 import { Bell, Volume2 } from "lucide-react";
 
 import GlowCard from "@/components/GlowCard";
 import { useTranslation } from "@/i18n/useTranslation";
 import { fadeUp } from "@/lib/animations";
 import { useReviewVoiceStore } from "@/stores/reviewVoiceStore";
+import { useSettingsStore, type AlertSeverity } from "@/stores/settingsStore";
 import { useReviewStore } from "@/stores/reviewStore";
 import { usePersonaStore } from "@/stores/personaStore";
 import { armSpeech, emitNewReview } from "@/lib/review-voice";
 import { SettingToggle } from "./SettingToggle";
 
-/** Healing-alert severity toggles + weekly digest (demo-only local state), plus
- *  the spoken new-review announcement toggle (persisted in reviewVoiceStore). */
+/** Healing-alert severity toggles + weekly digest (persisted in settingsStore),
+ *  plus the spoken new-review announcement toggle (persisted in reviewVoiceStore). */
 export function NotificationsCard() {
   const { t } = useTranslation();
   const n = t.settingsPage.notifications;
-  const [sev, setSev] = useState({ critical: true, high: true, medium: false, low: false });
-  const [digest, setDigest] = useState(true);
+  const sev = useSettingsStore((s) => s.alertSeverity);
+  const setAlertSeverity = useSettingsStore((s) => s.setAlertSeverity);
+  const digest = useSettingsStore((s) => s.weeklyDigest);
+  const setWeeklyDigest = useSettingsStore((s) => s.setWeeklyDigest);
 
   const voiceEnabled = useReviewVoiceStore((s) => s.enabled);
   const setVoiceEnabled = useReviewVoiceStore((s) => s.setEnabled);
@@ -47,7 +50,7 @@ export function NotificationsCard() {
     });
   };
 
-  const rows: Array<{ key: keyof typeof sev; label: string; dot: string }> = [
+  const rows: Array<{ key: keyof AlertSeverity; label: string; dot: string }> = [
     { key: "critical", label: n.severity.critical, dot: "bg-rose-400" },
     { key: "high", label: n.severity.high, dot: "bg-orange-400" },
     { key: "medium", label: n.severity.medium, dot: "bg-amber-400" },
@@ -66,12 +69,12 @@ export function NotificationsCard() {
           <div key={r.key} className="flex items-center gap-3 py-2.5">
             <span className={`h-2 w-2 flex-shrink-0 rounded-full ${r.dot}`} />
             <span className="flex-1 text-sm text-foreground">{r.label}</span>
-            <SettingToggle on={sev[r.key]} onChange={(v) => setSev((s) => ({ ...s, [r.key]: v }))} label={r.label} />
+            <SettingToggle on={sev[r.key]} onChange={(v) => setAlertSeverity(r.key, v)} label={r.label} />
           </div>
         ))}
         <div className="flex items-center gap-3 py-2.5">
           <span className="flex-1 text-sm text-foreground">{n.weeklyDigest}</span>
-          <SettingToggle on={digest} onChange={setDigest} label={n.weeklyDigest} />
+          <SettingToggle on={digest} onChange={setWeeklyDigest} label={n.weeklyDigest} />
         </div>
         <div className="flex items-center gap-3 py-2.5">
           <Volume2 className="h-3.5 w-3.5 flex-shrink-0 text-brand-cyan" />
