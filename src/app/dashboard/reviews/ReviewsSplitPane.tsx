@@ -73,6 +73,7 @@ export default function ReviewsSplitPane() {
     resolveReview,
     bulkCount,
     clearSelection: bulk.clearSelection,
+    resolveLocked: bulk.undoState !== null || bulk.bulkResolving,
   });
 
   const handleResolve = useCallback(
