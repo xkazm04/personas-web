@@ -875,8 +875,10 @@ export const getSyncedSla = async (): Promise<{
     const name = p.persona_name ?? p.persona_id;
     const color = p.persona_color ?? FALLBACK_PERSONA_COLOR;
 
-    // Success-rate objective.
-    const successRate = (p.successful_executions / total) * 100;
+    // Success-rate objective. Clamp to [0,100]: a sync skew where
+    // successful_executions > total_executions would otherwise yield a
+    // nonsensical >100% rate in the SLA card / timeInSLA math.
+    const successRate = Math.min(100, Math.max(0, (p.successful_executions / total) * 100));
     const successBreach = successRate < SLA_SUCCESS_RATE_TARGET;
     targets.push({
       id: `sla_success_${p.persona_id}`,
