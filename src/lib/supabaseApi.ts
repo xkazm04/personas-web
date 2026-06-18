@@ -62,9 +62,31 @@ async function rows<T>(
   return data ?? [];
 }
 
+const EXECUTION_STATUSES: ReadonlySet<string> = new Set([
+  "queued",
+  "running",
+  "completed",
+  "failed",
+  "cancelled",
+]);
+
 function mapStatus(s: string): PersonaExecutionStatus {
   // The desktop allows an `incomplete` status the web type doesn't model.
-  return s === "incomplete" ? "failed" : (s as PersonaExecutionStatus);
+  if (s === "incomplete") return "failed";
+  if (EXECUTION_STATUSES.has(s)) return s as PersonaExecutionStatus;
+  // Unknown desktop status (schema drift). A blind `as` cast lets the value flow
+  // into status badges, success-rate math, and eq("status", …) filters that
+  // silently never match it. Map to the neutral non-terminal "running" and warn.
+  console.warn(`[supabaseApi] unknown execution status "${s}"; treating as "running".`);
+  return "running";
+}
+
+const EVENT_STATUSES: ReadonlySet<string> = new Set(["pending", "processed", "failed"]);
+
+function mapEventStatus(s: string): EventStatus {
+  if (EVENT_STATUSES.has(s)) return s as EventStatus;
+  console.warn(`[supabaseApi] unknown event status "${s}"; treating as "pending".`);
+  return "pending";
 }
 
 /** Percentage change of `recent` vs `prior`; 0 when there's no prior baseline. */
@@ -190,7 +212,7 @@ function mapEvent(r: EventRow): PersonaEvent {
     sourceId: r.source_id,
     targetPersonaId: r.target_persona_id,
     payload: r.payload ?? null,
-    status: r.status as EventStatus,
+    status: mapEventStatus(r.status),
     errorMessage: r.error_message,
     processedAt: r.processed_at,
     useCaseId: null,
