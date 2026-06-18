@@ -145,16 +145,20 @@ export function useReviewBulkActions(filtered: ManualReviewItem[]) {
       const failedIds = ids.filter((_, i) => results[i].status === "rejected");
 
       if (failedIds.length > 0) {
-        useReviewStore.setState((s) => ({
-          reviews: s.reviews.map((r) =>
+        useReviewStore.setState((s) => {
+          const reviews = s.reviews.map((r) =>
             failedIds.includes(r.id)
               ? { ...r, status: "pending" as const, resolvedAt: null, resolvedBy: null }
               : r,
-          ),
-          pendingReviewCount: s.reviews.filter(
-            (r) => r.status === "pending" || failedIds.includes(r.id),
-          ).length,
-        }));
+          );
+          // Derive the count from the freshly-mapped array, not from the stale
+          // pre-map `s.reviews` + failedIds union (which drifted from the real
+          // count of status==="pending" rows until the next poll healed it).
+          return {
+            reviews,
+            pendingReviewCount: reviews.filter((r) => r.status === "pending").length,
+          };
+        });
         setSelectedIds(new Set(failedIds));
         setBulkResult({
           total: ids.length,
@@ -190,14 +194,15 @@ export function useReviewBulkActions(filtered: ManualReviewItem[]) {
 
       const count = ids.length;
 
-      useReviewStore.setState((s) => ({
-        reviews: s.reviews.map((r) =>
+      useReviewStore.setState((s) => {
+        const reviews = s.reviews.map((r) =>
           ids.includes(r.id) ? { ...r, status, resolvedAt: new Date().toISOString(), resolvedBy: "You" } : r,
-        ),
-        pendingReviewCount: s.reviews.filter(
-          (r) => !ids.includes(r.id) && r.status === "pending",
-        ).length,
-      }));
+        );
+        return {
+          reviews,
+          pendingReviewCount: reviews.filter((r) => r.status === "pending").length,
+        };
+      });
       setSelectedIds(new Set());
 
       const label = status === "approved" ? "Approved" : "Rejected";
@@ -252,14 +257,15 @@ export function useReviewBulkActions(filtered: ManualReviewItem[]) {
       undoTimerRef.current = null;
     }
     const ids = undoState.ids;
-    useReviewStore.setState((s) => ({
-      reviews: s.reviews.map((r) =>
+    useReviewStore.setState((s) => {
+      const reviews = s.reviews.map((r) =>
         ids.includes(r.id) ? { ...r, status: "pending" as const, resolvedAt: null, resolvedBy: null } : r,
-      ),
-      pendingReviewCount: s.reviews.filter(
-        (r) => r.status === "pending" || ids.includes(r.id),
-      ).length,
-    }));
+      );
+      return {
+        reviews,
+        pendingReviewCount: reviews.filter((r) => r.status === "pending").length,
+      };
+    });
     setUndoState(null);
     undoStateRef.current = null;
     useReviewStore.getState().setPollPaused(false);
