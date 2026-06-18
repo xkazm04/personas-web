@@ -101,3 +101,19 @@
 - Changelog per-entry deep-links to matching guide topics were deferred — `RELEASES` has no `guideHref`/topic mapping data.
 - New docs/content copy (blog CTA band, guide try-it CTA, changelog CTA, 404 "Popular posts") is hardcoded English, not i18n'd across the 14 locales.
 - RSS feed is linked from the blog index + changelog, but not yet advertised via a `<link rel="alternate" type="application/rss+xml">` in `<head>` or from article pages.
+
+## Structural facts (blended bug+test scan, 2026-06-19)
+- `src/lib/server/json-file-store.ts` `readJsonFile` now **fails loud** on non-ENOENT read errors and corrupt JSON (rethrows) — only a missing file uses the fallback. Do NOT re-add a blanket `catch{}` returning empty; it silently wipes the voting store on the next write.
+- `supabaseApi.getObservabilityMetrics().successRate` is now a **percentage 0–100** (matches the mock + the `.toFixed(1)%` tile). Any new ApiClient impl must return successRate in 0–100. `successTrend`/`pctChange` are scale-invariant.
+- Mock execution streaming is **stateless** now: `getMockExecutionDetail(id, offset)` honors the caller's offset; the old module-global `mockOutputOffset`/`resetMockOutputOffset` are gone — matches the real/supabase `getExecution(id, offset)` contract. The poller (`useExecutionPolling`) owns the cursor.
+- The execution detail modal streams via **offset-polling** (`useExecutionPolling`, 1s), NOT EventSource — `src/app/api/executions/[id]/stream/route.ts` (SSE) is effectively **dead code**.
+
+## Anti-patterns / context drift (2026-06-19)
+- **Context `filePaths` are drifting** (rebuilds since 2026-05-10). Files listed in contexts but ABSENT on disk: `src/app/todo/page.tsx`, `src/components/NavbarMobileMenu.tsx`; `src/components/dashboard/AgentDetailDrawer.tsx` exists only under `.claude/worktrees/`. `dashboard/home` is now a mission-control layout; roadmap + agents pages were rebuilt (several 2026-05-10 findings are now stale). Verify paths before planning.
+- **Dead code to prune**: `connector-modal/components/SetupCTA.tsx` + `CopyButton.tsx` (unimported — the modal has no setup CTA / copy affordance); the persona optimistic-update/rollback engine in `personaStore.ts` has **zero callers**; `NavbarLogoGlyph`/`NavbarLogoWordmark` unreferenced.
+
+## Open follow-ups (from blended bug+test scan, 2026-06-19)
+- **No unit runner exists** (Playwright e2e only). The dedicated test-infra wave should add **vitest** + a `test:unit` script + a new-code coverage gate, then seed batches for the highest-ROI pure modules: `validation`, `format-date`/`url`/`format`, `leaderboardSort`/SLA scoring math, `guide-search`, vote/boost/comment validators, `sentry-pii` scrubber, `event-bus-demo`. ~30 High findings collapse to this one infra move + batches.
+- **Broken/stale e2e specs** (success-theater): `e2e/roadmap.spec.ts` asserts removed text ("In Progress"/"current focus"); `e2e/templates.spec.ts:52` asserts "Design Highlights" (page renders "Key Benefits"); `e2e/guide.spec.ts` navigates to removed topic `keyboard-shortcuts-and-tips`; connector-modal e2e tests are `test.skip`. `playwright.config.ts` has `reuseExistingServer: true` unconditionally (false-pass risk).
+- **Deferred from Wave 1**: SLA breaches in `getSyncedSla` fabricate `startedAt = now` / `durationMinutes = 0` on every fetch (a long breach reads as brand-new each refresh). Needs a breach-history table or a UI "point-in-time" label.
+- **Security to revisit**: `getClientIp` (`src/lib/server/request.ts`) trusts `x-vercel-forwarded-for` before the `TRUST_PROXY` gate (spoofable off-Vercel); `sentry-pii` `scrubData` passes nested values through past depth 6.
