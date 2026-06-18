@@ -205,8 +205,8 @@ export default function MessagesPage() {
         isFirstPage={clampedPage === 0}
         isLastPage={clampedPage >= totalPages - 1}
         labels={t.messagesPage.pagination}
-        onPrevious={() => setPage((value) => Math.max(0, value - 1))}
-        onNext={() => setPage((value) => Math.min(totalPages - 1, value + 1))}
+        onPrevious={() => setPage(Math.max(0, clampedPage - 1))}
+        onNext={() => setPage(Math.min(totalPages - 1, clampedPage + 1))}
       />
 
       <ThreadDetailModal
