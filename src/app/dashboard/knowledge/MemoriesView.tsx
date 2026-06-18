@@ -48,7 +48,12 @@ export default function MemoriesView({
   function handleApply(decisions: Record<string, BatchDecision>) {
     setResolvedIds((prev) => {
       const next = new Set(prev);
-      for (const id of Object.keys(decisions)) next.add(id);
+      // Only an "accept" clears the conflict. A "reject" must leave the memory
+      // flagged as still-conflicting — clearing it for every decided id (the old
+      // behavior) silently discarded the operator's reject choice.
+      for (const [id, decision] of Object.entries(decisions)) {
+        if (decision === "accept") next.add(id);
+      }
       return next;
     });
     setModalOpen(false);
