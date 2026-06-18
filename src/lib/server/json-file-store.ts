@@ -43,8 +43,16 @@ export async function writeJsonFile<T>(fileName: string, data: T): Promise<void>
     DATA_DIR,
     `.${fileName.replace(/[^a-z0-9.-]/gi, "-")}-${randomBytes(6).toString("hex")}.tmp`,
   );
-  await fs.writeFile(tmpFile, JSON.stringify(data, null, 2));
-  await fs.rename(tmpFile, resolveDataPath(fileName));
+  try {
+    await fs.writeFile(tmpFile, JSON.stringify(data, null, 2));
+    await fs.rename(tmpFile, resolveDataPath(fileName));
+  } catch (err) {
+    // If the write or the atomic rename fails (EXDEV, EACCES, ENOSPC, EPERM on
+    // Windows when a reader holds the target open, …), unlink the temp file so a
+    // unique-named `.tmp` orphan doesn't accumulate on every failure.
+    await fs.rm(tmpFile, { force: true }).catch(() => {});
+    throw err;
+  }
 }
 
 export function updateJsonFile<T>(
