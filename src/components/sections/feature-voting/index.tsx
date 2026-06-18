@@ -32,6 +32,7 @@ export default function FeatureVoting() {
   const [voteCounts, setVoteCounts] = useState<Record<string, number>>({});
   const [loaded, setLoaded] = useState(false);
   const voterIdRef = useRef<string>("");
+  const boostInFlightRef = useRef<Set<string>>(new Set());
 
   useAbortableEffect((signal) => {
     if (!voterIdRef.current) {
@@ -127,6 +128,11 @@ export default function FeatureVoting() {
   );
 
   const handleBoost = useCallback((featureId: string, weight: number) => {
+    // The Ko-fi <a> has no native in-flight guard; ignore re-clicks on a feature
+    // whose boost is still in flight so a double-click can't double-apply.
+    if (boostInFlightRef.current.has(featureId)) return;
+    boostInFlightRef.current.add(featureId);
+
     setBoostTotals((prev) => ({
       ...prev,
       [featureId]: (prev[featureId] ?? 0) + weight,
@@ -137,15 +143,28 @@ export default function FeatureVoting() {
       voterId: voterIdRef.current,
       weight,
       tierValue: weight,
-    }).catch((err) => {
-      Sentry.captureException(err, {
-        tags: { component: "FeatureVoting", action: "boost" },
+    })
+      .then(() => {
+        // The server upserts one boost row per (feature, voter): a re-boost
+        // REPLACES the tier rather than adding, so the optimistic += drifts high.
+        // Reconcile from the authoritative totals (best-effort — the boost has
+        // already succeeded, so a refetch failure must NOT roll it back).
+        fetchBoostTotals()
+          .then((authoritative) => setBoostTotals(authoritative))
+          .catch(() => {});
+      })
+      .catch((err) => {
+        Sentry.captureException(err, {
+          tags: { component: "FeatureVoting", action: "boost" },
+        });
+        setBoostTotals((prev) => ({
+          ...prev,
+          [featureId]: Math.max(0, (prev[featureId] ?? 0) - weight),
+        }));
+      })
+      .finally(() => {
+        boostInFlightRef.current.delete(featureId);
       });
-      setBoostTotals((prev) => ({
-        ...prev,
-        [featureId]: Math.max(0, (prev[featureId] ?? 0) - weight),
-      }));
-    });
   }, []);
 
   const totalBoosts = Object.values(boostTotals).reduce((s, v) => s + v, 0);
