@@ -29,10 +29,12 @@ export function sortPersonas(
 ): LeaderboardPersona[] {
   const factor = dir === "asc" ? 1 : -1;
   return [...personas].sort((a, b) => {
-    const cmp =
-      field === "name"
-        ? a.name.localeCompare(b.name)
-        : a[field] - b[field] || a.name.localeCompare(b.name);
-    return cmp * factor;
+    if (field === "name") return a.name.localeCompare(b.name) * factor;
+    // Apply the direction ONLY to the primary key. The name tiebreaker stays
+    // ascending (A->Z) in both directions so equal-value rows keep a stable,
+    // deterministic order that matches rankByComposite (rather than flipping
+    // the tiebreak when the column is sorted descending).
+    const primary = (a[field] - b[field]) * factor;
+    return primary || a.name.localeCompare(b.name);
   });
 }
