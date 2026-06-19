@@ -102,6 +102,24 @@ export function decodeFlow(
       if (seen.has(node.id)) return null;
       seen.add(node.id);
     }
+
+    // Validate wires too — a hand-edited / garbage hash can carry wires whose
+    // from/to reference ids not in `nodes` (or non-string from/to/label). Those
+    // dangling wires all collapse onto the same fallback coordinate, can't be
+    // cleanly removed (removeWire keys on from,to), and an attacker-controlled
+    // `label` would render straight into the SVG. Reject the whole state.
+    for (const wire of parsed.wires) {
+      if (
+        !wire ||
+        typeof wire.from !== "string" ||
+        typeof wire.to !== "string" ||
+        typeof wire.label !== "string" ||
+        !seen.has(wire.from) ||
+        !seen.has(wire.to)
+      ) {
+        return null;
+      }
+    }
     return parsed as { nodes: CanvasNode[]; wires: Wire[] };
   } catch {
     /* invalid hash */
