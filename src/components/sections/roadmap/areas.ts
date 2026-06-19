@@ -177,7 +177,9 @@ export const AREAS: AreaDef[] = [
 
 /** Area-level fulfillment: the headline when present, else the bar mean. */
 export function areaOverall(area: AreaDef): number {
-  return area.headline
-    ? area.headline.value
-    : area.bars.reduce((sum, bar) => sum + bar.value, 0) / area.bars.length;
+  if (area.headline) return area.headline.value;
+  // Guard the empty-bars case: 0/0 = NaN would render "NaN%" and break the
+  // progressbar aria-valuenow / reveal clip-path downstream.
+  if (area.bars.length === 0) return 0;
+  return area.bars.reduce((sum, bar) => sum + bar.value, 0) / area.bars.length;
 }
