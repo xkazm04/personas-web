@@ -147,5 +147,18 @@ export function useTourAudio({
     if (audioRef.current) audioRef.current.volume = volume;
   }, [volume]);
 
+  // Close the Web Audio context on unmount. The per-clip cleanup only
+  // disconnects the source node — without this, the lazily-created AudioContext
+  // leaks, and repeated tour runs exhaust the browser's per-document context cap
+  // (~6 in Chromium), silently killing narration and the companion's voice glow.
+  useEffect(() => {
+    return () => {
+      const ctx = ctxRef.current;
+      if (ctx && ctx.state !== "closed") void ctx.close().catch(() => {});
+      ctxRef.current = null;
+      analyserRef.current = null;
+    };
+  }, []);
+
   return analyser;
 }
