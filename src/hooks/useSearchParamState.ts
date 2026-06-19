@@ -1,20 +1,33 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useSearchParams } from "next/navigation";
 
 /**
- * Read-once URL-derived useState. The hook seeds initial state from a
- * search param; syncing changes back to the URL stays the caller's job
- * (typically a single useEffect that owns all params at once, since
- * per-key writeback would race).
+ * URL-derived useState that also re-syncs when the param changes *underneath*
+ * it — back/forward navigation or a shared deep link clicked while the page is
+ * already mounted. Writing state back to the URL stays the caller's job (a
+ * single effect that owns all params at once). The `lastUrl` ref makes the
+ * re-sync ignore the caller's own writeback (current === last), so it only
+ * re-seeds on a genuine external change rather than fighting the writeback.
  */
 export function useSearchParamState(
   key: string,
   defaultValue: string,
 ): readonly [string, React.Dispatch<React.SetStateAction<string>>] {
   const searchParams = useSearchParams();
-  const [value, setValue] = useState<string>(() => searchParams.get(key) || defaultValue);
+  const fromUrl = searchParams.get(key) || defaultValue;
+  const [value, setValue] = useState<string>(fromUrl);
+  const lastUrlRef = useRef(fromUrl);
+
+  useEffect(() => {
+    const current = searchParams.get(key) || defaultValue;
+    if (current !== lastUrlRef.current) {
+      lastUrlRef.current = current;
+      setValue(current);
+    }
+  }, [searchParams, key, defaultValue]);
+
   return [value, setValue] as const;
 }
 
