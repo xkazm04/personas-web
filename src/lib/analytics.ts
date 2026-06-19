@@ -13,9 +13,21 @@ function hasAnalyticsConsent(): boolean {
   return localStorage.getItem(COOKIE_CONSENT_KEY) === "all";
 }
 
+// Telemetry must never throw into the caller — a click handler / route effect
+// must not break because the SDK is mid-init, metrics are disabled, or the
+// `metrics` API is unavailable in this build. Both call sites go through this.
+function safeCount(name: string, attributes?: Record<string, string>) {
+  try {
+    Sentry.metrics.count(name, 1, { attributes });
+  } catch {
+    // Swallow SDK errors so analytics can never turn a transient hiccup (or a
+    // missing metrics API) into a permanent blackout or a crashed UI handler.
+  }
+}
+
 function trackEvent(name: string, attributes?: Record<string, string>) {
   if (hasAnalyticsConsent()) {
-    Sentry.metrics.count(name, 1, { attributes });
+    safeCount(name, attributes);
   } else {
     if (queue.length >= MAX_QUEUE_SIZE) {
       queue.shift();
@@ -28,12 +40,7 @@ export function flushAnalyticsQueue() {
   if (!hasAnalyticsConsent()) return;
   while (queue.length > 0) {
     const ev = queue.shift()!;
-    try {
-      Sentry.metrics.count(ev.name, 1, { attributes: ev.attributes });
-    } catch {
-      // Swallow per-event SDK errors so one failure does not drop the rest
-      // of the queue (and turn a transient hiccup into a permanent blackout).
-    }
+    safeCount(ev.name, ev.attributes);
   }
 }
 
