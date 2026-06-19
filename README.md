@@ -61,6 +61,7 @@ Copy `.env.example` to `.env.local` and fill in what you need.
 
 ```bash
 npm run dev       # Next dev server with Turbopack
+npm run dev:inspect  # dev server + DevInspector source mapping (press ; then i)
 npm run build     # production build + Sentry source-map upload (if SENTRY_* set)
 npm run start     # serve the production build
 npm run lint      # eslint (next/core-web-vitals + next/typescript + 2 custom rules)
@@ -68,6 +69,26 @@ npx tsc --noEmit  # type-check without emitting
 npx playwright test              # e2e suite (12 specs in e2e/)
 npx playwright test --ui         # e2e with Playwright UI
 ```
+
+## DevInspector — click a component, copy its source path
+
+A dev-only overlay for grabbing a component's `src/.../File.tsx:line` and pasting it
+straight into an AI coding CLI (Claude Code, etc.). Off by default; never present in
+production builds.
+
+```bash
+npm run dev:inspect   # dev server with source-location stamping on
+```
+
+Then in the app, press **`;`** (enters keyboard mode) then **`i`** (Inspect) to arm it.
+Hover highlights the element under the cursor and pins a `File.tsx:line` chip; **right-click**
+copies the call-site path, **Alt+right-click** copies the innermost element, click a HUD row to
+copy any enclosing file, and **Esc** exits. A plain `npm run dev` works too, but the HUD will
+say source mapping is OFF until you relaunch with `npm run dev:inspect`.
+
+Under the hood, a gated Turbopack loader (`scripts/dev-inspector/`) stamps every host JSX
+element with a `data-loc` attribute when `DEV_INSPECT=1`; the overlay
+(`src/app/_dev-inspector/`) reads it at runtime. Both are absent from production.
 
 ## Conventions
 

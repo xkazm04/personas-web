@@ -12,6 +12,7 @@ import {
 } from "@/lib/seo";
 import ThemeInit from "@/components/ThemeInit";
 import CookieConsent from "@/components/CookieConsent";
+import { DevInspector } from "./_dev-inspector/DevInspector";
 import "./globals.css";
 
 export const viewport: Viewport = {
@@ -126,6 +127,7 @@ export default function RootLayout({
           {children}
         </QualityProvider>
         <CookieConsent />
+        {process.env.NODE_ENV === "development" && <DevInspector />}
       </body>
     </html>
   );
