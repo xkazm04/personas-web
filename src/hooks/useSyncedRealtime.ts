@@ -137,7 +137,15 @@ export function useSyncedRealtime(): void {
           },
         );
       }
-      channel.subscribe();
+      // Reflect the real socket state in the connection indicator. Previously
+      // subscribe() had no status callback, so eventStore.connectionStatus stayed
+      // at its "polling" default and the dot was pure decoration in supabase mode.
+      channel.subscribe((status) => {
+        const setStatus = useEventStore.getState().setConnectionStatus;
+        if (status === "SUBSCRIBED") setStatus("connected");
+        else if (status === "CHANNEL_ERROR" || status === "TIMED_OUT") setStatus("reconnecting");
+        else if (status === "CLOSED") setStatus("polling");
+      });
     } catch (err) {
       Sentry.captureException(err, { tags: { scope: "useSyncedRealtime" } });
       return;
@@ -153,6 +161,8 @@ export function useSyncedRealtime(): void {
           // Client already torn down (sign-out) — nothing to remove.
         }
       }
+      // Realtime is gone; polling is the backstop again.
+      useEventStore.getState().setConnectionStatus("polling");
     };
   }, [isAuthenticated, isDemo]);
 }
