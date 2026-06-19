@@ -6,6 +6,7 @@ import AuthProvider from "@/components/AuthProvider";
 import AuthGuard from "@/components/dashboard/AuthGuard";
 import MobileShell from "@/components/mobile/MobileShell";
 import MobileTabBar from "@/components/mobile/MobileTabBar";
+import MobilePageTransition from "@/components/mobile/MobilePageTransition";
 
 /**
  * Dedicated mobile shell (Approach B). Reuses the dashboard's auth + data layer
@@ -29,7 +30,9 @@ export default function MobileLayout({
             className="relative min-h-svh bg-[var(--background)] text-foreground"
             style={{ WebkitTapHighlightColor: "transparent" }}
           >
-            <MobileShell>{children}</MobileShell>
+            <MobileShell>
+              <MobilePageTransition>{children}</MobilePageTransition>
+            </MobileShell>
             <MobileTabBar />
           </div>
         </MotionConfig>

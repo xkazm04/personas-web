@@ -12,6 +12,7 @@ import {
 } from "@/lib/seo";
 import ThemeInit from "@/components/ThemeInit";
 import CookieConsent from "@/components/CookieConsent";
+import PageTransition from "@/components/PageTransition";
 import { DevInspector } from "./_dev-inspector/DevInspector";
 import "./globals.css";
 
@@ -124,7 +125,7 @@ export default function RootLayout({
         <ThemeInit />
         <QualityProvider>
           <PageViewTracker />
-          {children}
+          <PageTransition>{children}</PageTransition>
         </QualityProvider>
         <CookieConsent />
         {process.env.NODE_ENV === "development" && <DevInspector />}
