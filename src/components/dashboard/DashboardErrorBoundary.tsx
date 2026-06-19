@@ -8,6 +8,10 @@ import { captureExceptionScrubbed } from "@/lib/sentry-pii";
 
 interface Props {
   children: ReactNode;
+  /** Changes on route navigation (the layout passes the pathname). When it
+   *  changes while errored, the boundary resets so one page's crash doesn't
+   *  poison every sibling dashboard route. */
+  resetKey?: string;
 }
 
 interface State {
@@ -74,6 +78,14 @@ export default class DashboardErrorBoundary extends Component<Props, State> {
       },
     });
     console.error(`Dashboard render error [${errorId}]:`, error, info);
+  }
+
+  public componentDidUpdate(prevProps: Props) {
+    // A route change is a fresh context: clear the error and the retry budget so
+    // navigating away from a broken page recovers the rest of the dashboard.
+    if (this.state.hasError && prevProps.resetKey !== this.props.resetKey) {
+      this.setState({ hasError: false, errorId: null, retryCount: 0 });
+    }
   }
 
   private handleRetry = () => {
