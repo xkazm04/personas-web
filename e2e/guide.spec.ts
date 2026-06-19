@@ -176,7 +176,9 @@ test.describe("User Guide", () => {
   });
 
   test("guide topic renders keyboard grid", async ({ page }) => {
-    await page.goto("/guide/getting-started/keyboard-shortcuts-and-tips");
+    // Topic was renamed keyboard-shortcuts-and-tips -> understanding-the-interface
+    // (the old id 404s). The new topic carries the :::keys block.
+    await page.goto("/guide/getting-started/understanding-the-interface");
     const article = page.locator("article");
     // Keyboard grid renders kbd elements
     const kbdElements = article.locator("kbd");

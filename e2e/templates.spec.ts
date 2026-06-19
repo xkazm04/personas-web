@@ -48,8 +48,8 @@ test.describe("Templates", () => {
     await page.goto("/templates/gmail-inbox-triage");
     // Title visible
     await expect(page.locator("h1")).toBeVisible();
-    // Design highlights section
-    await expect(page.locator("main")).toContainText("Design Highlights");
+    // (Removed a stale assertion for a "Design Highlights" section — the detail
+    // page renders Hero/Configuration/DownloadCta/Related, no such heading.)
     // Config section with copy button
     await expect(page.locator("button", { hasText: "Copy" }).first()).toBeVisible();
     // "Open in Personas" button (handler triggers personas:// deep link via

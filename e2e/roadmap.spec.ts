@@ -16,9 +16,10 @@ test.describe("Roadmap Page", () => {
     await expect(page.locator("main")).toContainText("cloud");
   });
 
-  test("displays roadmap items with status badges", async ({ page }) => {
+  test("displays roadmap area cards", async ({ page }) => {
     await page.goto("/roadmap");
-    // Should show status labels
-    await expect(page.locator("main")).toContainText("In Progress");
+    // The rebuilt roadmap renders area cards (AreaCardShell h3 = area.title);
+    // the old "In Progress" status badge no longer exists.
+    await expect(page.locator("main")).toContainText("Core Platform");
   });
 });
