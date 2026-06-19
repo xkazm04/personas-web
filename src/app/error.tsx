@@ -1,6 +1,6 @@
 "use client";
 
-import * as Sentry from "@sentry/nextjs";
+import { captureExceptionScrubbed } from "@/lib/sentry-pii";
 import Link from "next/link";
 import { useEffect, useState } from "react";
 import { Compass, RefreshCcw, Home, Copy, Check } from "lucide-react";
@@ -19,7 +19,10 @@ export default function RouteError({
   const [copied, setCopied] = useState(false);
 
   useEffect(() => {
-    Sentry.captureException(error);
+    // Route through the scrubbed capture (like global-error.tsx). The global
+    // beforeSend hook does NOT scrub the original error.message/stack, so a raw
+    // captureException here could leak file paths / URLs with PII / emails.
+    captureExceptionScrubbed(error, { tags: { scope: "RouteError" } });
   }, [error]);
 
   const isDev = process.env.NODE_ENV !== "production";
