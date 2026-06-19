@@ -32,10 +32,19 @@ export function getClientIp(req: NextRequest): string {
   const platformIp = (req as { ip?: string | null }).ip;
   if (platformIp) return platformIp;
 
-  const vercelForwarded = req.headers.get("x-vercel-forwarded-for");
-  if (vercelForwarded) return vercelForwarded.split(",")[0]?.trim() || "unknown";
-
   const trustProxy = process.env.TRUST_PROXY === "true";
+
+  // `x-vercel-forwarded-for` is stamped by Vercel's edge — trust it ONLY when we
+  // are actually on Vercel (or proxies are explicitly trusted). Off-platform
+  // (preview/self-host/any non-Vercel runtime) it is as client-spoofable as any
+  // other forwarded header, so an attacker could forge a fresh IP per request to
+  // mint a new rate-limit bucket and poison abuse attribution. Gate it like the
+  // other forwarded headers below.
+  if (process.env.VERCEL === "1" || trustProxy) {
+    const vercelForwarded = req.headers.get("x-vercel-forwarded-for");
+    if (vercelForwarded) return vercelForwarded.split(",")[0]?.trim() || "unknown";
+  }
+
   if (trustProxy) {
     const realIp = req.headers.get("x-real-ip");
     if (realIp) return realIp;
