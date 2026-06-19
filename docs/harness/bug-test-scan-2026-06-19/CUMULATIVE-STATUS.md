@@ -14,7 +14,8 @@ Branch `vibeman/bug-test-fixes-2026-06-19` (off `master`).
 | 2 | Success-theater & state corruption | 6 (6H) |
 | 3 | Security & compliance | 6 (4H / 2M) |
 | 4 | Test infrastructure | runner + 36 tests + 2 source fixes + 3 e2e repairs |
-| **Total** | | **18 findings + the whole "no unit runner" theme** |
+| 5 | Lifecycle/leaks + time/numeric | 5 (5H) |
+| **Total** | | **23 findings (2C/18H/3M) + the whole "no unit runner" theme** |
 
 **Both genuine Criticals closed** (vote-store corrupt-wipe; successRate fraction-vs-percent).
 
@@ -30,9 +31,10 @@ Branch `vibeman/bug-test-fixes-2026-06-19` (off `master`).
 ~37 commits = 1 scan-docs + 18 fix commits + 2 source-fixes-with-tests + 1 test-batch + 3 e2e + DevInspector + vitest-setup + 4 wave docs + this status + learnings.
 
 ## What remains (open, per INDEX)
-- **Bug themes not yet worked**: F (lifecycle/leaks — incl. the deferred **timeline "Pause" rework** + **connection-status dot**, both needing runtime verification), G (time/timezone & numeric tail — heatmap DST, NaN guards, fixed-window rate-limit burst), J (dead-code cleanup — `SetupCTA`/`CopyButton`, the zero-caller persona optimistic engine, the dead SSE route), plus the Medium/Low tail.
-- **Deferred-with-reason**: SLA fabricated breach metadata (needs a breach-history table or UI label); the two flakiness-skipped connector-modal e2e tests; broadening the coverage gate; wiring `test:unit` into CI/git-hooks.
-- A future session resumes from this file + the INDEX.
+- **Animation/realtime items needing a browser to verify** (deferred from Waves 2 & 5): timeline "Pause" rework (timeline-race #1/#2), off-screen timer/particle suspension (orchestration #1, event-bus #3), SSE stale-"connected" on tab switch (dashboard-shell #3), `useSearchParamState` back/forward re-sync (shared-types #5).
+- **Theme J — dead-code cleanup**: `SetupCTA`/`CopyButton` (connector-modal), the zero-caller persona optimistic engine, the dead SSE route, `NavbarLogoGlyph`/`Wordmark`.
+- **Deferred-with-reason**: SLA fabricated breach metadata (needs a breach-history table or UI label); fixed-window rate-limit 2× burst (abuse, Medium); the two flakiness-skipped connector-modal e2e tests; broadening the coverage gate; wiring `test:unit` into CI/git-hooks.
+- Plus the Medium/Low tail across contexts. A future session resumes from this file + the INDEX.
 
 ## Notes
 - All work sits on the branch; `master` is untouched.
