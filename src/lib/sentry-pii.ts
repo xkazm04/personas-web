@@ -86,7 +86,10 @@ export function scrubPii(input: string): string {
 const MAX_SCRUB_DEPTH = 6;
 
 function scrubData(value: unknown, depth = 0): unknown {
-  if (depth > MAX_SCRUB_DEPTH) return value;
+  // At the depth cap, DROP rather than passthrough: returning the raw subtree
+  // would ship un-scrubbed emails/UUIDs/denylisted keys nested deeper than the
+  // cap straight to Sentry. For a PII boundary the safe direction is to redact.
+  if (depth > MAX_SCRUB_DEPTH) return "[redacted-depth]";
   if (typeof value === "string") return scrubPii(value);
   if (Array.isArray(value)) {
     return value.map((item) => scrubData(item, depth + 1));
