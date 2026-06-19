@@ -1,4 +1,5 @@
 import { POLICY_META } from "@/data/policy-changelog";
+import CookieSettingsButton from "@/components/CookieSettingsButton";
 
 type Props = { changelog?: React.ReactNode };
 
@@ -91,6 +92,7 @@ export default function CookiePolicy({ changelog }: Props) {
           </a>
           .
         </p>
+        <CookieSettingsButton />
       </section>
     </div>
   );

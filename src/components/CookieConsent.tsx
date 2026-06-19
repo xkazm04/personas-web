@@ -7,6 +7,25 @@ import Link from "next/link";
 import { COOKIE_CONSENT_KEY } from "@/lib/constants";
 import { flushAnalyticsQueue } from "@/lib/analytics";
 
+const CONSENT_REOPEN_EVENT = "cookie-consent:reopen";
+
+/**
+ * Withdraw cookie consent and re-show the banner. GDPR/ePrivacy require consent
+ * to be as easy to withdraw as to give. `storage` events don't fire in the tab
+ * that made the change, so we also dispatch an in-tab event the banner listens
+ * for. Call this from a "Cookie settings" control (e.g. the legal page).
+ */
+export function reopenCookieConsent(): void {
+  try {
+    localStorage.removeItem(COOKIE_CONSENT_KEY);
+  } catch {
+    // Storage unavailable — nothing to clear.
+  }
+  if (typeof window !== "undefined") {
+    window.dispatchEvent(new Event(CONSENT_REOPEN_EVENT));
+  }
+}
+
 // localStorage throws SecurityError in Safari Private mode, embedded
 // webviews with storage disabled, and some tracking-protection partition
 // modes. CookieConsent is mounted in the root layout, so an unguarded
@@ -34,6 +53,28 @@ export default function CookieConsent() {
 
   useEffect(() => {
     if (!readConsent()) queueMicrotask(() => setVisible(true));
+
+    // Keep consent consistent across tabs and support withdrawal:
+    // - another tab accepts/declines → sync this tab's banner + flush
+    // - another tab (or this one) clears the key → re-show the banner
+    const onStorage = (e: StorageEvent) => {
+      if (e.key !== COOKIE_CONSENT_KEY) return;
+      if (e.newValue === "all") {
+        flushAnalyticsQueue();
+        setVisible(false);
+      } else if (e.newValue === "essential") {
+        setVisible(false);
+      } else {
+        setVisible(true);
+      }
+    };
+    const onReopen = () => setVisible(true);
+    window.addEventListener("storage", onStorage);
+    window.addEventListener(CONSENT_REOPEN_EVENT, onReopen);
+    return () => {
+      window.removeEventListener("storage", onStorage);
+      window.removeEventListener(CONSENT_REOPEN_EVENT, onReopen);
+    };
   }, []);
 
   const accept = (value: "all" | "essential") => {
