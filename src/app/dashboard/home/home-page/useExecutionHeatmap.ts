@@ -25,16 +25,21 @@ function deriveHeatmap(
   personaMeta: Map<string, { name: string; color: string }>,
 ): HeatmapRow[] {
   // Day boundaries: index 0 = oldest day, index HEATMAP_DAYS-1 = today.
+  // Bucket by LOCAL CALENDAR day, not fixed 86.4M-ms slices — a calendar day is
+  // 23h/25h across a DST transition, so fixed-ms slicing drifts runs onto the
+  // wrong weekday relative to the calendar-day header. Diffing two local
+  // midnights and rounding absorbs the DST hour so each cell stays a real day.
   const startOfToday = new Date();
   startOfToday.setHours(0, 0, 0, 0);
   const dayStartMs = startOfToday.getTime();
-  const windowStartMs = dayStartMs - (HEATMAP_DAYS - 1) * 86_400_000;
 
   const counts = new Map<string, number[]>();
   for (const e of executions) {
-    const ts = new Date(e.createdAt).getTime();
-    if (!Number.isFinite(ts) || ts < windowStartMs) continue;
-    const dayIdx = Math.floor((ts - windowStartMs) / 86_400_000);
+    const eStart = new Date(e.createdAt);
+    if (!Number.isFinite(eStart.getTime())) continue;
+    eStart.setHours(0, 0, 0, 0);
+    const daysAgo = Math.round((dayStartMs - eStart.getTime()) / 86_400_000);
+    const dayIdx = HEATMAP_DAYS - 1 - daysAgo;
     if (dayIdx < 0 || dayIdx >= HEATMAP_DAYS) continue;
     let row = counts.get(e.personaId);
     if (!row) {
