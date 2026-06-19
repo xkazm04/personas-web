@@ -30,8 +30,13 @@ Branch `vibeman/bug-test-fixes-2026-06-19` (off `master`).
 ## Commit count
 ~37 commits = 1 scan-docs + 18 fix commits + 2 source-fixes-with-tests + 1 test-batch + 3 e2e + DevInspector + vitest-setup + 4 wave docs + this status + learnings.
 
+## Continuation (2026-06-19, on master after the push — dev server run)
+- **timeline-race #1/#2 — Pause now holds the result** (`9b7ed7c`): result timer banks remaining time on pause / re-arms on resume. Residual (follow-up): the rAF track/timer still animates visually while paused (needs `paused` threaded through TimelineRaceBody→Track/RaceTimer + visual verification).
+- **shared-types #5 — useSearchParamState re-syncs on external URL change** (`663263d`): guarded re-seed on back/forward, doesn't fight the caller's writeback.
+- Both verified: tsc 0, dev server compiles, the consumer pages render 200.
+
 ## What remains (open, per INDEX)
-- **Animation/realtime items needing a browser to verify** (deferred from Waves 2 & 5): timeline "Pause" rework (timeline-race #1/#2), off-screen timer/particle suspension (orchestration #1, event-bus #3), SSE stale-"connected" on tab switch (dashboard-shell #3), `useSearchParamState` back/forward re-sync (shared-types #5).
+- **Animation/realtime items still needing interactive browser verification**: off-screen timer/particle suspension (orchestration #1, event-bus #3), SSE stale-"connected" on tab switch (dashboard-shell #3), and the timeline visual-freeze residual above. Left for an interactive session — committing them blind risks the flaky-test/wrong-behavior trap.
 - **Theme J — dead-code: REVIEWED in Wave 6, left in place (not deleted).** Inspection showed these are built-but-unwired features / intentional infra, not junk: connector-modal `SetupCTA`/`CopyButton`/`TerminalSimulator` (wire-or-remove decision), the zero-external-caller persona optimistic engine (store-interface change), the orphaned-but-functional SSE route, and the unreferenced logo components (cf. `VisionHoneycomb` preservation precedent). Per-item decisions recorded in `harness-learnings.md`. The real fix for the modal/engine is to WIRE them (feature scope) or delete deliberately — an owner call.
 - **Deferred-with-reason**: SLA fabricated breach metadata (needs a breach-history table or UI label); fixed-window rate-limit 2× burst (abuse, Medium); the two flakiness-skipped connector-modal e2e tests; broadening the coverage gate; wiring `test:unit` into CI/git-hooks.
 - Plus the Medium/Low tail across contexts. A future session resumes from this file + the INDEX.
