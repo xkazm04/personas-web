@@ -110,7 +110,11 @@
 
 ## Anti-patterns / context drift (2026-06-19)
 - **Context `filePaths` are drifting** (rebuilds since 2026-05-10). Files listed in contexts but ABSENT on disk: `src/app/todo/page.tsx`, `src/components/NavbarMobileMenu.tsx`; `src/components/dashboard/AgentDetailDrawer.tsx` exists only under `.claude/worktrees/`. `dashboard/home` is now a mission-control layout; roadmap + agents pages were rebuilt (several 2026-05-10 findings are now stale). Verify paths before planning.
-- **Dead code to prune**: `connector-modal/components/SetupCTA.tsx` + `CopyButton.tsx` (unimported — the modal has no setup CTA / copy affordance); the persona optimistic-update/rollback engine in `personaStore.ts` has **zero callers**; `NavbarLogoGlyph`/`NavbarLogoWordmark` unreferenced.
+- **"Dead code" reviewed in Wave 6 (2026-06-19) — NOT junk, left in place.** On inspection these are built-but-unwired features / intentional infra, not prunable junk (deleting would destroy work / change interfaces). Decisions:
+  - `connector-modal/components/{SetupCTA,CopyButton,TerminalSimulator}.tsx` — **built-but-unwired**: `index.tsx` wires only `ConnectorModalHeader`/`UseCaseList`/`TryItToggle`. Real fix = wire them into the modal (feature scope), or deliberately remove. Left in place.
+  - `personaStore.ts` `optimisticUpdatePersona`/`commitOptimisticUpdate`/`patchStillApplied` — **zero external callers** (self-contained subsystem a prior scan added as a "fix"). Removing would change the store's public interface. Left in place; wire it to the real persona-mutation paths or remove as a deliberate decision.
+  - `src/app/api/executions/[id]/stream/route.ts` — a **functional SSE endpoint with zero client callers** (the detail modal offset-polls via `useExecutionPolling`). Capability, not dead code. Left in place.
+  - `NavbarLogoGlyph`/`NavbarLogoWordmark` — unreferenced, but cf. the `VisionHoneycomb` "intentionally preserved" precedent above. Left in place.
 
 ## Structural facts (test infra, 2026-06-19)
 - **A unit runner now exists**: `vitest` 4 (+ `@vitest/coverage-v8`), scripts `test:unit` / `test:unit:watch` / `test:unit:cov`, config in `vitest.config.ts` (node env, `@`→`src` alias, `server-only`→`src/test/server-only-stub.ts`). Tests are `src/**/*.test.ts` and ARE typechecked by `npm run typecheck`. Supersedes the older "Playwright e2e only" note.

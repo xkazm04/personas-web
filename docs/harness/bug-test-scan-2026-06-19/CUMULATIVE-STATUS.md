@@ -32,7 +32,7 @@ Branch `vibeman/bug-test-fixes-2026-06-19` (off `master`).
 
 ## What remains (open, per INDEX)
 - **Animation/realtime items needing a browser to verify** (deferred from Waves 2 & 5): timeline "Pause" rework (timeline-race #1/#2), off-screen timer/particle suspension (orchestration #1, event-bus #3), SSE stale-"connected" on tab switch (dashboard-shell #3), `useSearchParamState` back/forward re-sync (shared-types #5).
-- **Theme J — dead-code cleanup**: `SetupCTA`/`CopyButton` (connector-modal), the zero-caller persona optimistic engine, the dead SSE route, `NavbarLogoGlyph`/`Wordmark`.
+- **Theme J — dead-code: REVIEWED in Wave 6, left in place (not deleted).** Inspection showed these are built-but-unwired features / intentional infra, not junk: connector-modal `SetupCTA`/`CopyButton`/`TerminalSimulator` (wire-or-remove decision), the zero-external-caller persona optimistic engine (store-interface change), the orphaned-but-functional SSE route, and the unreferenced logo components (cf. `VisionHoneycomb` preservation precedent). Per-item decisions recorded in `harness-learnings.md`. The real fix for the modal/engine is to WIRE them (feature scope) or delete deliberately — an owner call.
 - **Deferred-with-reason**: SLA fabricated breach metadata (needs a breach-history table or UI label); fixed-window rate-limit 2× burst (abuse, Medium); the two flakiness-skipped connector-modal e2e tests; broadening the coverage gate; wiring `test:unit` into CI/git-hooks.
 - Plus the Medium/Low tail across contexts. A future session resumes from this file + the INDEX.
 
