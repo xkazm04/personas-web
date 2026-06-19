@@ -20,12 +20,19 @@ export default function AgentsTimeline() {
   const [paused, setPaused] = useState(false);
   const cycleTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
   const resultTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+  // For pause/resume of the in-flight race: when the current run started and how
+  // much of ANIMATION_DURATION_MS is still owed. Lets a pause freeze the result
+  // reveal (instead of it slamming in after 4s regardless) and resume finish it.
+  const raceStartRef = useRef(0);
+  const remainingRef = useRef(ANIMATION_DURATION_MS);
 
   const scenario = scenarios[activeIndex];
 
   const startAnimation = useCallback(() => {
     setIsPlaying(true);
     setShowResults(false);
+    remainingRef.current = ANIMATION_DURATION_MS;
+    raceStartRef.current = Date.now();
 
     if (resultTimerRef.current) clearTimeout(resultTimerRef.current);
     resultTimerRef.current = setTimeout(() => {
@@ -33,6 +40,32 @@ export default function AgentsTimeline() {
       setIsPlaying(false);
     }, ANIMATION_DURATION_MS);
   }, []);
+
+  // Make `paused` actually hold the race's result reveal. Pausing (hover or the
+  // Pause control) banks the remaining time and clears the result timer so
+  // results never appear while paused; resuming re-arms it for the banked
+  // remainder so the run completes — fixing both the "result slams in while
+  // paused" and the "Resume does nothing to the finished race" bugs.
+  useEffect(() => {
+    if (!isPlaying) return;
+    if (paused) {
+      if (resultTimerRef.current) {
+        clearTimeout(resultTimerRef.current);
+        resultTimerRef.current = null;
+        remainingRef.current = Math.max(
+          0,
+          remainingRef.current - (Date.now() - raceStartRef.current),
+        );
+      }
+    } else {
+      raceStartRef.current = Date.now();
+      if (resultTimerRef.current) clearTimeout(resultTimerRef.current);
+      resultTimerRef.current = setTimeout(() => {
+        setShowResults(true);
+        setIsPlaying(false);
+      }, remainingRef.current);
+    }
+  }, [paused, isPlaying]);
 
   const advanceScenario = useCallback(() => {
     setActiveIndex((prev) => (prev + 1) % scenarios.length);
