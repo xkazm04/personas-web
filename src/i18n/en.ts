@@ -1849,13 +1849,13 @@ export const en: Translations = {
     chapterHome: 'Homepage',
       progress: '{n} of {total}',
       skip: 'Skip',
-      empty: 'All caught up â€” no pending reviews',
+      empty: 'All caught up — no pending reviews',
       approve: 'Approve',
       reject: 'Reject',
     },
     parseError: {
       label: 'Parse error',
-      detail: 'Malformed payload â€” escalated to critical until reviewed',
+      detail: 'Malformed payload — escalated to critical until reviewed',
     },
   },
   leaderboardPage: {
@@ -2199,7 +2199,7 @@ export const en: Translations = {
     },
     connectionStatus: {
       connected: 'Real-time: connected',
-      reconnecting: 'Reconnecting to event streamâ€¦',
+      reconnecting: 'Reconnecting to event stream…',
       polling: 'Polling for updates (delayed)',
     },
   },
@@ -2280,7 +2280,7 @@ export const en: Translations = {
     title: 'Agent Templates',
     subtitle: 'Browse {count} ready-made agent templates grouped by the kind of work they do. Pick a category to see the templates inside.',
     gridHeading: 'Browse templates by category',
-    gridDescription: 'Templates are pre-configured Personas you can adopt with one click. Each template already has the prompt, tools, and triggers wired up for a specific job â€” no setup required.',
+    gridDescription: 'Templates are pre-configured Personas you can adopt with one click. Each template already has the prompt, tools, and triggers wired up for a specific job — no setup required.',
     changeCategory: 'Change category',
     complexityAll: 'All',
     complexityBasic: 'Basic',
@@ -2320,7 +2320,7 @@ export const en: Translations = {
     planned: 'Planned',
     completed: 'Completed',
     empty: 'Nothing planned right now.',
-    emptyHint: 'Check back soon â€” the next milestones land here as we plan them.',
+    emptyHint: 'Check back soon — the next milestones land here as we plan them.',
   },
   eventBusSection: {
     dynamicSwarm: 'Dynamic Swarm',
@@ -2330,7 +2330,7 @@ export const en: Translations = {
   },
   guide: {
     title: 'User',
-    subtitle: 'Everything you need to know about Personas â€” from your first agent to advanced multi-agent pipelines.',
+    subtitle: 'Everything you need to know about Personas — from your first agent to advanced multi-agent pipelines.',
     searchPlaceholder: 'Search 100+ topics...',
     searchInCategory: 'Search in this category...',
     topics: 'topics',
@@ -2356,7 +2356,7 @@ export const en: Translations = {
       "getting-started": "Install Personas, create your first agent, and learn the basics in under 10 minutes.",
       credentials: "Connect to services securely. Understand the encrypted vault and how your data stays safe.",
       "agents-prompts": "Create, configure, and fine-tune your AI agents. Master simple and structured prompt modes.",
-      triggers: "Set up when and how your agents run â€” schedules, webhooks, file watchers, and more.",
+      triggers: "Set up when and how your agents run — schedules, webhooks, file watchers, and more.",
       pipelines: "Wire agents together into visual pipelines. Build multi-agent workflows on the team canvas.",
       memories: "Your agents learn and remember. Manage what they know and how they use past experience.",
       monitoring: "Track every execution in real time. See what your agents do, how well they perform, and what they cost.",
@@ -2368,22 +2368,22 @@ export const en: Translations = {
   featurePages: {
     orchestration: {
       headline: "Agents that work together",
-      description: "Build visual pipelines where multiple agents collaborate on complex tasks. One agent's output feeds into the next â€” no glue code, no manual steps, no limits on what you can orchestrate.",
+      description: "Build visual pipelines where multiple agents collaborate on complex tasks. One agent's output feeds into the next — no glue code, no manual steps, no limits on what you can orchestrate.",
       cta: "Build your first pipeline",
     },
     security: {
       headline: "Your secrets stay yours",
-      description: "Every password, API key, and access token is encrypted on your device using bank-grade AES-256 encryption. Your credentials are stored in your operating system's own secure vault â€” nothing is ever sent to the cloud.",
+      description: "Every password, API key, and access token is encrypted on your device using bank-grade AES-256 encryption. Your credentials are stored in your operating system's own secure vault — nothing is ever sent to the cloud.",
       cta: "Secure your connections",
     },
     "multi-provider": {
       headline: "Not locked to one AI",
-      description: "Use Claude, OpenAI, Gemini, or run models locally with Ollama. Switch between providers freely, assign different models to different agents, and if one provider goes down â€” your agents automatically switch to another.",
+      description: "Use Claude, OpenAI, Gemini, or run models locally with Ollama. Switch between providers freely, assign different models to different agents, and if one provider goes down — your agents automatically switch to another.",
       cta: "Choose your AI",
     },
     genome: {
       headline: "Your agents get smarter automatically",
-      description: "Instead of manually tweaking prompts for hours, let the Genome system do it for you. It tests variations, keeps what works, and discards the rest â€” like natural selection for your AI agents.",
+      description: "Instead of manually tweaking prompts for hours, let the Genome system do it for you. It tests variations, keeps what works, and discards the rest — like natural selection for your AI agents.",
       cta: "Evolve your agents",
     },
   },
