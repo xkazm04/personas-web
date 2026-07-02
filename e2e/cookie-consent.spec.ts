@@ -37,8 +37,9 @@ test.describe("Cookie Consent", () => {
   test("banner does not show when preference already saved", async ({ page }) => {
     await page.evaluate(() => localStorage.setItem("personas-cookie-consent", "all"));
     await page.goto("/");
-    // Wait a moment for potential banner appearance
-    await page.waitForTimeout(1000);
+    // Wait for hydration to settle (the banner mounts client-side) instead
+    // of a raw timeout, then assert it never appeared.
+    await page.waitForLoadState("networkidle");
     await expect(page.locator("text=essential cookies")).not.toBeVisible();
   });
 
