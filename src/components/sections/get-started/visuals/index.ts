@@ -31,7 +31,6 @@ export const STEP_VISUALS = [
 ];
 
 if (process.env.NODE_ENV !== "production" && STEP_VISUALS.length !== TOUR_STEPS.length) {
-  // eslint-disable-next-line no-console
   console.error(
     `[get-started] STEP_VISUALS.length (${STEP_VISUALS.length}) does not match TOUR_STEPS.length (${TOUR_STEPS.length}). The visuals will be misaligned with their step content. Add or remove a Visual to match.`,
   );

@@ -17,7 +17,6 @@ export function sanitizeExternalUrl(value: string): string {
     // Not a parseable absolute URL — fall through to reject.
   }
   if (process.env.NODE_ENV !== "production") {
-    // eslint-disable-next-line no-console
     console.warn(`[sanitizeExternalUrl] Rejected non-http(s) URL: ${value}`);
   }
   return "#";

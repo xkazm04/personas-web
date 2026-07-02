@@ -19,7 +19,7 @@
  * are no `data-loc` attributes and the HUD says how to enable source mapping.
  */
 
-import { useCallback, useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useRef, useState, useSyncExternalStore } from "react";
 import { createPortal } from "react-dom";
 
 import { buildChain, dedupeChain, pickDefaultIndex, type LocEntry } from "./devLocate";
@@ -49,6 +49,17 @@ async function copyText(text: string): Promise<boolean> {
   }
 }
 
+// SSR-safe "am I on the client" detection without a setState-in-effect
+// mounted flag (React 19 purity rules): server snapshot is false, client
+// snapshot is true, and nothing ever notifies — so no re-render churn.
+const emptySubscribe = () => () => {};
+const useIsClient = () =>
+  useSyncExternalStore(
+    emptySubscribe,
+    () => true,
+    () => false,
+  );
+
 function isTypingTarget(target: EventTarget | null): boolean {
   const el = target as HTMLElement | null;
   if (!el) return false;
@@ -70,11 +81,9 @@ export function DevInspector() {
   const [hover, setHover] = useState<HoverState | null>(null);
   const [copied, setCopied] = useState<string | null>(null);
   const [copyOk, setCopyOk] = useState(true);
-  const [mounted, setMounted] = useState(false);
+  const mounted = useIsClient();
   const copiedTimer = useRef<ReturnType<typeof setTimeout> | undefined>(undefined);
   const navTimer = useRef<ReturnType<typeof setTimeout> | undefined>(undefined);
-
-  useEffect(() => setMounted(true), []);
 
   const doCopy = useCallback(async (loc: string) => {
     const ok = await copyText(loc);
