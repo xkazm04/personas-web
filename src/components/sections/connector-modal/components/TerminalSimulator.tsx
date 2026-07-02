@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useEffect, useRef } from "react";
-import { motion } from "framer-motion";
+import { motion, useReducedMotion } from "framer-motion";
 import { Terminal, ChevronRight } from "lucide-react";
 import type { Connector } from "@/data/connectors";
 
@@ -27,6 +27,7 @@ function generateSimOutput(connector: Connector): { text: string; delay: number 
 export default function TerminalSimulator({ connector }: { connector: Connector }) {
   const [lines, setLines] = useState<string[]>([]);
   const [done, setDone] = useState(false);
+  const reduced = useReducedMotion();
   const containerRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
@@ -83,8 +84,8 @@ export default function TerminalSimulator({ connector }: { connector: Connector 
         })}
         {!done && (
           <motion.span
-            animate={{ opacity: [1, 0] }}
-            transition={{ repeat: Infinity, duration: 0.8 }}
+            animate={reduced ? { opacity: 1 } : { opacity: [1, 0] }}
+            transition={reduced ? undefined : { repeat: Infinity, duration: 0.8 }}
             className="inline-block h-4 w-1.5 translate-y-0.5"
             style={{ backgroundColor: connector.color }}
           />

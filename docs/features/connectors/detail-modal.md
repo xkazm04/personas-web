@@ -20,7 +20,7 @@ Composition (top to bottom): `ConnectorModalHeader` → divider → `UseCaseList
 | `src/components/sections/connector-modal/components/ConnectorModalHeader.tsx` | Logo (SVG→monogram fallback), label, category badge, auth-type badge, summary |
 | `src/components/sections/connector-modal/components/UseCaseList.tsx` | "What you can do" numbered cards with title/description/`command` code line |
 | `src/components/sections/connector-modal/components/TryItToggle.tsx` | "Try it now" pill toggle + height-animated reveal that mounts the simulator |
-| `src/components/sections/connector-modal/components/TerminalSimulator.tsx` | Fake streaming terminal: timed `setTimeout` line append, auto-scroll, blinking cursor |
+| `src/components/sections/connector-modal/components/TerminalSimulator.tsx` | Fake streaming terminal: timed `setTimeout` line append, auto-scroll, blinking cursor (blink gated on `useReducedMotion` — static block when reduced) |
 | `src/components/sections/connector-modal/components/SetupCTA.tsx` | **Orphaned** — 3-step setup strip + "Set up … in Personas" link to `/#download` (not imported anywhere) |
 | `src/components/sections/connector-modal/components/CopyButton.tsx` | **Orphaned here** — clipboard button w/ legacy fallback; the modal does not use it (the catalog's copy is a different component) |
 | `src/lib/bodyScrollLock.ts` | Counted, HMR-safe `lockBodyScroll`/`unlockBodyScroll` used by the shell |

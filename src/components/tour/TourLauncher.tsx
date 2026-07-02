@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useMemo, useRef, useState } from "react";
-import { motion } from "framer-motion";
+import { motion, useReducedMotion } from "framer-motion";
 import { Play } from "lucide-react";
 import { useTour } from "@/contexts/TourContext";
 import { useTranslation } from "@/i18n/useTranslation";
@@ -37,6 +37,7 @@ export default function TourLauncher({
 }) {
   const { t } = useTranslation();
   const { active, start } = useTour();
+  const reduced = useReducedMotion();
   const steps = TOURS_BY_ID[tourId];
 
   // Build the per-tour bridge copy from i18n. Undefined when bridgeKey is
@@ -111,8 +112,8 @@ export default function TourLauncher({
         <motion.span
           aria-hidden
           className="pointer-events-none absolute -inset-0.5 rounded-full ring-2 ring-brand-cyan/50"
-          animate={{ opacity: [0.4, 1, 0.4] }}
-          transition={{ duration: 2.4, repeat: Infinity, ease: "easeInOut" }}
+          animate={reduced ? { opacity: 0.7 } : { opacity: [0.4, 1, 0.4] }}
+          transition={reduced ? { duration: 0 } : { duration: 2.4, repeat: Infinity, ease: "easeInOut" }}
         />
       )}
       <span className="flex h-6 w-6 items-center justify-center rounded-full border border-brand-cyan/50 bg-brand-cyan/10 text-brand-cyan transition-transform duration-300 group-hover:scale-110">

@@ -1,4 +1,4 @@
-import { AnimatePresence, motion } from "framer-motion";
+import { AnimatePresence, motion, useReducedMotion } from "framer-motion";
 import { Activity, Loader2, Search, ShieldAlert } from "lucide-react";
 import GlowCard from "@/components/GlowCard";
 import HealthyShieldIllustration from "@/components/illustrations/HealthyShieldIllustration";
@@ -58,11 +58,12 @@ function PerformanceHealthHeader({ openIssues, healingActive, onRunAnalysis, lab
 }
 
 function HealingAnalysisBanner({ active, label }: { active: boolean; label: string }) {
+  const reduced = useReducedMotion();
   return (
     <AnimatePresence>
       {active && (
         <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} className="mb-3 flex items-center gap-2 rounded-lg border border-cyan-500/20 bg-cyan-500/5 px-3 py-2">
-          <motion.div animate={{ rotate: 360 }} transition={{ duration: 1.5, repeat: Infinity, ease: "linear" }}>
+          <motion.div animate={reduced ? undefined : { rotate: 360 }} transition={reduced ? undefined : { duration: 1.5, repeat: Infinity, ease: "linear" }}>
             <Activity className="h-3.5 w-3.5 text-cyan-400" />
           </motion.div>
           <p className="text-sm text-cyan-300/80">{label}</p>

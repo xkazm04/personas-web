@@ -42,7 +42,7 @@ Per-frame mechanics:
 | `src/components/tour/TourIntroCard.tsx` | Welcome pop-up (Begin / Skip) |
 | `src/components/tour/TourBridgeCard.tsx` | End-of-chapter "continue?" prompt |
 | `src/components/tour/TourVolumeControl.tsx` | Volume slider bound to context |
-| `src/components/tour/TourLauncher.tsx` | Launch button; `?tour=1` autostart; "seen" pulse |
+| `src/components/tour/TourLauncher.tsx` | Launch button; `?tour=1` autostart; "seen" pulse (gated on `useReducedMotion` — static ring when reduced) |
 
 ## Data & state
 - **Source:** static, in-repo. Step scripts are hand-authored in `src/lib/tour-script.ts`; narration text comes from `t.tour.*` in `src/i18n/en.ts` (`tour:` block ~`en.ts:957`/`2135`); audio clips are static assets under `public/tour/*.mp3` plus `public/athena/athena_idle_loop.mp4` + `athena_baseline.jpg`. No network/orchestrator data.
