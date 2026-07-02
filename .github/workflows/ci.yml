@@ -1,0 +1,52 @@
+name: CI
+
+on:
+  push:
+    branches: [master]
+  pull_request:
+    branches: [master]
+  workflow_dispatch:
+  schedule:
+    # Nightly e2e at 03:17 UTC — the only place the full Playwright suite
+    # runs automatically (it rebuilds the app and takes ~10 minutes).
+    - cron: "17 3 * * *"
+
+jobs:
+  checks:
+    name: typecheck · lint · unit · i18n · build
+    runs-on: ubuntu-latest
+    if: github.event_name != 'schedule'
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+      - run: npm ci
+      - run: npm run typecheck
+      - run: npm run lint
+      - run: npm run test:unit
+      - run: npm run check:i18n-coverage
+      - run: npm run check:i18n-encoding
+      - run: npm run build
+
+  e2e:
+    name: playwright e2e
+    runs-on: ubuntu-latest
+    # Slow (full production build + serial suite) — nightly and on demand only.
+    if: github.event_name == 'schedule' || github.event_name == 'workflow_dispatch'
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+      - run: npm ci
+      - run: npx playwright install --with-deps chromium
+      - run: npx playwright test
+      - uses: actions/upload-artifact@v4
+        if: failure()
+        with:
+          name: playwright-traces
+          path: test-results/
+          retention-days: 7
