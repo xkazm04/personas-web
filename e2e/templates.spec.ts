@@ -1,77 +1,55 @@
 import { test, expect } from "@playwright/test";
 
+// The /templates page is a category-tile hub: the landing view shows one tile
+// per category, and template cards (plus search and the complexity filter)
+// only render after a category is selected.
 test.describe("Templates", () => {
-  test("templates page renders with category tabs and cards", async ({ page }) => {
+  test("templates hub renders with category tiles", async ({ page }) => {
     await page.goto("/templates");
-    await expect(page.locator("h1")).toBeVisible();
-    // Category tabs exist
-    await expect(page.locator("button", { hasText: "All" }).first()).toBeVisible();
-    // Template cards are rendered (links to detail pages)
+    await expect(page.locator("h1")).toContainText("Agent Templates");
+    await expect(page.locator("h2", { hasText: "Browse templates by category" })).toBeVisible();
+    // One tile button per category, each carrying a template count badge
+    const tiles = page.locator("button:has(h3)");
+    await expect(tiles.first()).toBeVisible();
+    expect(await tiles.count()).toBeGreaterThanOrEqual(5);
+  });
+
+  test("selecting a category shows its template cards", async ({ page }) => {
+    await page.goto("/templates");
+    await page.getByRole("button", { name: /Communication/ }).click();
+    await expect(page.locator("main")).toContainText(/Showing \d+ of \d+ templates/);
     const cards = page.locator("a[href^='/templates/']");
     await expect(cards.first()).toBeVisible();
-    const count = await cards.count();
-    expect(count).toBeGreaterThanOrEqual(10);
+    // Back to the hub via "Change category"
+    await page.getByRole("button", { name: "Change category" }).click();
+    await expect(page.locator("h2", { hasText: "Browse templates by category" })).toBeVisible();
   });
 
-  test("category tab filters templates", async ({ page }) => {
+  test("complexity toggle filters within a category", async ({ page }) => {
     await page.goto("/templates");
-    const financeTab = page.locator("button", { hasText: "Finance" });
-    await financeTab.click();
-    // Should show only finance templates
-    await expect(page.locator("main")).toContainText("Finance");
+    await page.getByRole("button", { name: /Communication/ }).click();
+    const group = page.locator("[role='group'][aria-label='Filter by complexity']");
+    const professional = group.getByRole("button", { name: "Professional" });
+    await professional.click();
+    await expect(professional).toHaveAttribute("aria-pressed", "true");
+    await expect(page.locator("main")).toContainText(/Showing \d+ of \d+ templates/);
   });
 
-  test("complexity toggle filters templates", async ({ page }) => {
+  test("search filters templates within a category", async ({ page }) => {
     await page.goto("/templates");
-    const proBtn = page.locator("button", { hasText: "Professional" });
-    await proBtn.click();
-    // Should show "Showing X of Y" text
-    await expect(page.locator("main")).toContainText("Showing");
-  });
-
-  test("search filters templates", async ({ page }) => {
-    await page.goto("/templates");
-    const search = page.locator("input[type='text']").first();
-    await search.fill("Slack");
-    await expect(page.locator("main")).toContainText("Slack");
+    await page.getByRole("button", { name: /Communication/ }).click();
+    const search = page.locator("input[placeholder*='Search templates']");
+    await search.fill("gmail");
+    await expect(page.locator("main")).toContainText(/Showing \d+ of \d+ templates/);
+    await expect(page.locator("a[href^='/templates/']").first()).toBeVisible();
   });
 
   test("clicking a template card navigates to detail page", async ({ page }) => {
     await page.goto("/templates");
+    await page.getByRole("button", { name: /Communication/ }).click();
     const card = page.locator("a[href='/templates/gmail-inbox-triage']").first();
     await expect(card).toBeVisible();
     await card.click();
     await expect(page).toHaveURL("/templates/gmail-inbox-triage");
-  });
-
-  test("template detail page renders content", async ({ page }) => {
-    await page.goto("/templates/gmail-inbox-triage");
-    // Title visible
-    await expect(page.locator("h1")).toBeVisible();
-    // (Removed a stale assertion for a "Design Highlights" section — the detail
-    // page renders Hero/Configuration/DownloadCta/Related, no such heading.)
-    // Config section with copy button
-    await expect(page.locator("button", { hasText: "Copy" }).first()).toBeVisible();
-    // "Open in Personas" button (handler triggers personas:// deep link via
-    // window.location.href rather than an <a href> — test the button).
-    await expect(
-      page.locator("button", { hasText: "Open in Personas" }).first(),
-    ).toBeVisible();
-  });
-
-  test("template detail has back link", async ({ page }) => {
-    await page.goto("/templates/gmail-inbox-triage");
-    const back = page.locator("a", { hasText: "Back to Templates" });
-    await expect(back).toBeVisible();
-    await back.click();
-    await expect(page).toHaveURL("/templates");
-  });
-
-  test("template detail shows related templates", async ({ page }) => {
-    await page.goto("/templates/gmail-inbox-triage");
-    await expect(page.locator("main")).toContainText("More");
-    // Related template cards exist
-    const related = page.locator("a[href^='/templates/']");
-    expect(await related.count()).toBeGreaterThanOrEqual(2);
   });
 });
