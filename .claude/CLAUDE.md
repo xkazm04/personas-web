@@ -10,7 +10,7 @@ subsequent decision.
 and supporting API routes for Personas, a multi-agent AI orchestration
 platform. Stack: React 19, TypeScript 6, Tailwind 4, Zustand 5, Supabase
 (roadmap/voting only), framer-motion, Sentry. i18n via a local 14-locale
-bundle. Playwright for e2e. No unit test runner yet.
+bundle. Playwright for e2e; vitest for unit tests (`npm run test:unit`).
 
 The `/dashboard/*` routes are **demo-only** in this repo, running on mocks
 in `src/lib/mockApi.ts` + `src/lib/mock-dashboard-data.ts`. Real live data
@@ -25,7 +25,8 @@ npm run dev         # Next dev server (Turbopack)
 npm run build       # production build + Sentry source-map upload (if configured)
 npm run lint        # eslint (see custom rules below)
 npm run typecheck   # tsc --noEmit
-npm run test:e2e    # Playwright (12 specs under e2e/)
+npm run test:unit   # vitest (src/**/*.test.ts)
+npm run test:e2e    # Playwright (9 specs under e2e/)
 ```
 
 ## Conventions (non-negotiable)

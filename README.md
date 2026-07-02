@@ -9,9 +9,9 @@ Built with Next.js 16 (App Router) + React 19 + TypeScript 6 + Tailwind 4.
 
 | Area | Routes | Purpose |
 |---|---|---|
-| Marketing | `/`, `/features`, `/use-cases`, `/templates`, `/compare`, `/download`, `/security` | Public landing surface |
-| Content | `/blog`, `/changelog`, `/guide`, `/community`, `/how` | Long-form content + structured guides |
-| Dashboard (demo) | `/dashboard/*` | Preview of the product UI — runs on mock data in this repo |
+| Marketing | `/`, `/features`, `/templates`, `/connections`, `/security`, `/demo` | Public landing surface |
+| Content | `/blog`, `/guide`, `/how`, `/roadmap` | Long-form content, structured guides, public roadmap |
+| Dashboard (demo) | `/dashboard/*`, `/m/*` | Preview of the product UI (desktop + mobile) — runs on mock data in this repo |
 | API | `/api/feature-requests`, `/api/votes`, `/api/roadmap`, `/api/events/stream`, `/api/download` | Roadmap voting (Supabase-backed) + orchestrator SSE proxy |
 | i18n | 14 locales | `en`, `de`, `es`, `fr`, `hi`, `id`, `ja`, `ko`, `ru`, `vi`, `zh`, `ar`, `bn`, `cs` |
 
@@ -66,7 +66,8 @@ npm run build     # production build + Sentry source-map upload (if SENTRY_* set
 npm run start     # serve the production build
 npm run lint      # eslint (next/core-web-vitals + next/typescript + 2 custom rules)
 npx tsc --noEmit  # type-check without emitting
-npx playwright test              # e2e suite (12 specs in e2e/)
+npm run test:unit # vitest unit tests (src/**/*.test.ts)
+npx playwright test              # e2e suite (9 specs in e2e/)
 npx playwright test --ui         # e2e with Playwright UI
 ```
 
