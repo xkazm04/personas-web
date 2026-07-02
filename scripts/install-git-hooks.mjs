@@ -18,6 +18,7 @@ const hookBody = `#!/bin/sh
 set -e
 
 npm run check:i18n-coverage
+npm run check:i18n-encoding
 `;
 
 const existing = fs.existsSync(prePushHook) ? fs.readFileSync(prePushHook, "utf8") : "";
@@ -26,11 +27,19 @@ if (existing === hookBody) {
   process.exit(0);
 }
 
-if (existing.trim().length > 0 && !existing.includes("npm run check:i18n-coverage")) {
-  const marker = "\n# personas-web i18n coverage check\nnpm run check:i18n-coverage\n";
-  fs.appendFileSync(prePushHook, marker);
-} else {
+if (existing.trim().length === 0) {
   fs.writeFileSync(prePushHook, hookBody);
+} else {
+  // A hook already exists (possibly with user content) — append only what's
+  // missing rather than overwriting.
+  let marker = "";
+  if (!existing.includes("npm run check:i18n-coverage")) {
+    marker += "\n# personas-web i18n coverage check\nnpm run check:i18n-coverage\n";
+  }
+  if (!existing.includes("npm run check:i18n-encoding")) {
+    marker += "\n# personas-web i18n encoding (mojibake) ratchet\nnpm run check:i18n-encoding\n";
+  }
+  if (marker) fs.appendFileSync(prePushHook, marker);
 }
 
 try {

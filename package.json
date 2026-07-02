@@ -27,6 +27,7 @@
     "test:e2e": "playwright test",
     "check:guide-content": "node scripts/check-guide-content.mjs",
     "check:i18n-coverage": "node scripts/check-i18n-coverage.mjs",
+    "check:i18n-encoding": "node scripts/check-i18n-encoding.mjs",
     "report:i18n-hardcoded": "node scripts/report-hardcoded-ui-strings.mjs",
     "db:migrate": "node scripts/run-voting-migration.mjs",
     "db:migrate:sync": "node scripts/run-sync-migration.mjs",
