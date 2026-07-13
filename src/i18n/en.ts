@@ -1060,6 +1060,58 @@
     };
     barAria: string;
   };
+  featureVoting: {
+    eyebrow: string;
+    heading: string;
+    headingGradient: string;
+    subheading: string;
+    features: {
+      macos: { title: string; description: string };
+      i18n: { title: string; description: string };
+      dashboard: { title: string; description: string };
+      enterprise: { title: string; description: string };
+    };
+    voteAria: string;
+    commentsToggleAria: string;
+    discussion: string;
+    noComments: string;
+    replying: string;
+    reply: string;
+    addCommentPlaceholder: string;
+    writeReplyPlaceholder: string;
+    sendCommentAria: string;
+    summary: {
+      totalVotes: string;
+      commentOne: string;
+      commentOther: string;
+      boostOne: string;
+      boostOther: string;
+      live: string;
+    };
+    boost: {
+      label: string;
+      toggleAria: string;
+      tierAria: string;
+    };
+    request: {
+      title: string;
+      subtitle: string;
+      placeholder: string;
+      submitAria: string;
+      success: string;
+      errorNetwork: string;
+      errorRateLimit: string;
+      errorInvalid: string;
+      errorGeneric: string;
+      sponsor: string;
+    };
+    timeAgo: {
+      justNow: string;
+      minutes: string;
+      hours: string;
+      days: string;
+    };
+  };
   eventBusSection: {
     dynamicSwarm: string;
     latencyLanes: string;
@@ -2441,6 +2493,70 @@ export const en: Translations = {
       templatesTotal: '{n} / {total} templates',
     },
     barAria: '{label}: {pct}%',
+  },
+  featureVoting: {
+    eyebrow: 'Community',
+    heading: 'Vote for',
+    headingGradient: "what's next",
+    subheading: 'Help us prioritize. Pick the features that matter most to you and shape the future of Personas.',
+    features: {
+      macos: {
+        title: 'macOS Support',
+        description: 'Full native macOS build with Apple Silicon optimization, Spotlight integration, and menu bar agent controls.',
+      },
+      i18n: {
+        title: 'Internationalization',
+        description: 'Multi-language agent instructions, localized UI, and region-aware scheduling for worldwide teams.',
+      },
+      dashboard: {
+        title: 'Web Dashboard',
+        description: 'Browser-based dashboard for real-time agent monitoring, execution history, and fleet management from any device.',
+      },
+      enterprise: {
+        title: 'Enterprise Projects',
+        description: 'Multi-tenant workspaces, RBAC, audit logs, SSO integration, and shared agent templates across your organization.',
+      },
+    },
+    voteAria: 'Vote for {feature}',
+    commentsToggleAria: 'Show comments for {feature}',
+    discussion: 'Discussion',
+    noComments: 'No comments yet. Be the first to share your thoughts.',
+    replying: 'Replying',
+    reply: 'Reply',
+    addCommentPlaceholder: 'Add a comment...',
+    writeReplyPlaceholder: 'Write a reply...',
+    sendCommentAria: 'Send comment',
+    summary: {
+      totalVotes: '{count} total votes',
+      commentOne: '{count} comment',
+      commentOther: '{count} comments',
+      boostOne: '{count} boost',
+      boostOther: '{count} boosts',
+      live: 'Live',
+    },
+    boost: {
+      label: 'Boost',
+      toggleAria: 'Boost {feature}',
+      tierAria: 'Boost with {amount}',
+    },
+    request: {
+      title: 'Something else in mind?',
+      subtitle: 'Suggest a feature',
+      placeholder: "Describe the feature you'd like to see...",
+      submitAria: 'Submit suggestion',
+      success: 'Thanks! Your suggestion has been recorded.',
+      errorNetwork: 'Network error — please check your connection and try again.',
+      errorRateLimit: "You're sending suggestions too quickly. Please wait a moment.",
+      errorInvalid: 'Please enter a valid suggestion (1–1000 characters).',
+      errorGeneric: 'Something went wrong saving your suggestion. Please try again.',
+      sponsor: 'Sponsor this request',
+    },
+    timeAgo: {
+      justNow: 'just now',
+      minutes: '{n}m ago',
+      hours: '{n}h ago',
+      days: '{n}d ago',
+    },
   },
   eventBusSection: {
     dynamicSwarm: 'Dynamic Swarm',

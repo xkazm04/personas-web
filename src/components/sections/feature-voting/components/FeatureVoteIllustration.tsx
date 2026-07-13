@@ -6,11 +6,14 @@ import type { Feature } from "../local-types";
 
 export default function FeatureVoteIllustration({
   feature,
+  title,
   rgba,
   imgLoaded,
   onImgLoad,
 }: {
   feature: Feature;
+  /** Localized feature title, used as the image alt text. */
+  title: string;
   rgba: (a: number) => string;
   imgLoaded: boolean;
   onImgLoad: () => void;
@@ -32,7 +35,7 @@ export default function FeatureVoteIllustration({
         >
           <Image
             src={featureIllustrations[feature.id]}
-            alt={feature.title}
+            alt={title}
             fill
             sizes="(max-width: 640px) 100vw, 50vw"
             loading="lazy"

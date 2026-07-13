@@ -13,12 +13,15 @@ import {
 } from "lucide-react";
 import { fadeUp } from "@/lib/animations";
 import { trackFeatureRequest } from "@/lib/analytics";
+import { useTranslation } from "@/i18n/useTranslation";
 import { KOFI_USERNAME } from "../data";
 
 const MAX_LENGTH = 1000;
 
 export default function CustomFeatureRequest() {
   const reduced = useReducedMotion() ?? false;
+  const { t } = useTranslation();
+  const r = t.featureVoting.request;
   const [value, setValue] = useState("");
   const [submitted, setSubmitted] = useState(false);
   const [saving, setSaving] = useState(false);
@@ -39,18 +42,18 @@ export default function CustomFeatureRequest() {
       });
     } catch {
       setSaving(false);
-      setError("Network error — please check your connection and try again.");
+      setError(r.errorNetwork);
       return;
     }
 
     if (!res.ok) {
       setSaving(false);
       if (res.status === 429) {
-        setError("You're sending suggestions too quickly. Please wait a moment.");
+        setError(r.errorRateLimit);
       } else if (res.status === 400) {
-        setError("Please enter a valid suggestion (1–1000 characters).");
+        setError(r.errorInvalid);
       } else {
-        setError("Something went wrong saving your suggestion. Please try again.");
+        setError(r.errorGeneric);
       }
       return;
     }
@@ -80,9 +83,9 @@ export default function CustomFeatureRequest() {
               <Lightbulb className="h-4 w-4 text-brand-cyan/70" />
             </div>
             <div>
-              <h4 className="text-base font-semibold">Something else in mind?</h4>
+              <h4 className="text-base font-semibold">{r.title}</h4>
               <p className="text-base text-muted-dark font-mono tracking-wide">
-                Suggest a feature
+                {r.subtitle}
               </p>
             </div>
           </div>
@@ -102,7 +105,7 @@ export default function CustomFeatureRequest() {
                 onKeyDown={(e) => {
                   if (e.key === "Enter") void handleSubmit();
                 }}
-                placeholder="Describe the feature you'd like to see..."
+                placeholder={r.placeholder}
                 className="w-full rounded-xl border border-glass bg-white/[0.02] px-4 py-2.5 text-base text-foreground placeholder:text-muted-dark outline-none transition-all duration-300 focus:border-brand-cyan/25 focus:bg-white/[0.03] focus:shadow-[0_0_20px_rgba(6,182,212,0.06)] disabled:opacity-60"
               />
               <div className="pointer-events-none absolute inset-x-4 -bottom-px h-px bg-gradient-to-r from-transparent via-brand-cyan/0 to-transparent transition-all duration-300 peer-focus:via-brand-cyan/20" />
@@ -110,6 +113,7 @@ export default function CustomFeatureRequest() {
             <button
               onClick={() => void handleSubmit()}
               disabled={saving || (!value.trim() && !submitted)}
+              aria-label={r.submitAria}
               className={`flex h-[42px] w-[42px] shrink-0 items-center justify-center rounded-xl border transition-all duration-300 cursor-pointer disabled:cursor-not-allowed ${
                 submitted
                   ? "border-brand-emerald/30 bg-brand-emerald/15 text-brand-emerald shadow-[0_0_15px_rgba(52,211,153,0.15)]"
@@ -134,7 +138,7 @@ export default function CustomFeatureRequest() {
               animate={{ opacity: 1, y: 0 }}
               className="mt-3 text-base text-brand-emerald/70 font-mono tracking-wide"
             >
-              Thanks! Your suggestion has been recorded.
+              {r.success}
             </motion.p>
           )}
 
@@ -159,7 +163,7 @@ export default function CustomFeatureRequest() {
                 className="flex items-center gap-1.5 text-base font-mono text-muted-dark/60 hover:text-brand-cyan/70 transition-colors"
               >
                 <Rocket className="h-3 w-3" />
-                Sponsor this request
+                {r.sponsor}
                 <ExternalLink className="h-2.5 w-2.5" />
               </a>
             </div>

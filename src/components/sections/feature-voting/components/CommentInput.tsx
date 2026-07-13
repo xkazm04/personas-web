@@ -6,11 +6,14 @@ import { Send } from "lucide-react";
 export default function CommentInput({
   onSubmit,
   placeholder,
+  submitLabel,
   accentRgba,
   autoFocus = false,
 }: {
   onSubmit: (text: string) => void;
   placeholder: string;
+  /** Accessible name for the icon-only send button. */
+  submitLabel: string;
   accentRgba: (a: number) => string;
   autoFocus?: boolean;
 }) {
@@ -40,6 +43,7 @@ export default function CommentInput({
       <button
         onClick={handleSubmit}
         disabled={!value.trim()}
+        aria-label={submitLabel}
         className="flex h-7 w-7 shrink-0 items-center justify-center rounded-lg border transition-all duration-300 cursor-pointer"
         style={
           value.trim()

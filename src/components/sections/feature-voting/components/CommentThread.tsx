@@ -3,6 +3,7 @@
 import { useState } from "react";
 import { AnimatePresence, motion, useReducedMotion } from "framer-motion";
 import { CornerDownRight } from "lucide-react";
+import { useTranslation } from "@/i18n/useTranslation";
 import type { Comment } from "../local-types";
 import CommentBubble from "./CommentBubble";
 import CommentInput from "./CommentInput";
@@ -19,6 +20,8 @@ export default function CommentThread({
   accentRgba: (a: number) => string;
 }) {
   const reduced = useReducedMotion() ?? false;
+  const { t } = useTranslation();
+  const vt = t.featureVoting;
   const [replyingTo, setReplyingTo] = useState<string | null>(null);
   const featureComments = comments.filter((c) => c.featureId === featureId);
   const topLevel = featureComments.filter((c) => c.parentId === null);
@@ -35,7 +38,7 @@ export default function CommentThread({
     <div className="space-y-1">
       {topLevel.length === 0 && (
         <p className="text-base text-muted-dark/60 font-mono py-1">
-          No comments yet. Be the first to share your thoughts.
+          {vt.noComments}
         </p>
       )}
       {topLevel
@@ -68,7 +71,7 @@ export default function CommentThread({
                   <div className="flex items-center gap-1 mb-1.5 mt-1">
                     <CornerDownRight className="h-2.5 w-2.5 text-muted-dark/60" />
                     <span className="text-base text-muted-dark/60 font-mono">
-                      Replying
+                      {vt.replying}
                     </span>
                   </div>
                   <CommentInput
@@ -76,7 +79,8 @@ export default function CommentThread({
                       onAddComment(featureId, text, comment.id);
                       setReplyingTo(null);
                     }}
-                    placeholder="Write a reply..."
+                    placeholder={vt.writeReplyPlaceholder}
+                    submitLabel={vt.sendCommentAria}
                     accentRgba={accentRgba}
                     autoFocus
                   />
@@ -89,7 +93,8 @@ export default function CommentThread({
       <div className="pt-2">
         <CommentInput
           onSubmit={(text) => onAddComment(featureId, text, null)}
-          placeholder="Add a comment..."
+          placeholder={vt.addCommentPlaceholder}
+          submitLabel={vt.sendCommentAria}
           accentRgba={accentRgba}
         />
       </div>

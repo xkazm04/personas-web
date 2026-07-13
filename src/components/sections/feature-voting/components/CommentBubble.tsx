@@ -1,6 +1,7 @@
 "use client";
 
 import { Reply } from "lucide-react";
+import { useTranslation } from "@/i18n/useTranslation";
 import type { Comment } from "../local-types";
 import { formatTimeAgo } from "../data";
 
@@ -15,6 +16,8 @@ export default function CommentBubble({
   onReply: (parentId: string) => void;
   depth?: number;
 }) {
+  const { t } = useTranslation();
+  const vt = t.featureVoting;
   return (
     <div
       className={
@@ -32,7 +35,7 @@ export default function CommentBubble({
             {comment.author}
           </span>
           <span className="text-base text-muted-dark/60 font-mono">
-            {formatTimeAgo(comment.timestamp)}
+            {formatTimeAgo(comment.timestamp, vt.timeAgo)}
           </span>
         </div>
         <p className="text-base leading-relaxed text-muted-dark">{comment.text}</p>
@@ -41,7 +44,7 @@ export default function CommentBubble({
           className="mt-1 flex items-center gap-1 text-base text-muted-dark/60 hover:text-muted-dark/70 transition-colors cursor-pointer"
         >
           <Reply className="h-2.5 w-2.5" />
-          Reply
+          {vt.reply}
         </button>
       </div>
     </div>

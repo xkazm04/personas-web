@@ -2,10 +2,12 @@
 
 import { AnimatePresence, motion, useReducedMotion } from "framer-motion";
 import { Rocket } from "lucide-react";
+import { useTranslation } from "@/i18n/useTranslation";
 import { BOOST_TIERS, KOFI_USERNAME } from "../data";
 
 export default function FeatureBoostButton({
   featureId,
+  featureTitle,
   boostCount,
   showTiers,
   setShowTiers,
@@ -13,6 +15,7 @@ export default function FeatureBoostButton({
   rgba,
 }: {
   featureId: string;
+  featureTitle: string;
   boostCount: number;
   showTiers: boolean;
   setShowTiers: (v: boolean) => void;
@@ -20,6 +23,8 @@ export default function FeatureBoostButton({
   rgba: (a: number) => string;
 }) {
   const reduced = useReducedMotion() ?? false;
+  const { t } = useTranslation();
+  const b = t.featureVoting.boost;
   return (
     <div className="relative shrink-0">
       <button
@@ -27,6 +32,8 @@ export default function FeatureBoostButton({
           e.stopPropagation();
           setShowTiers(!showTiers);
         }}
+        aria-label={b.toggleAria.replace("{feature}", featureTitle)}
+        aria-expanded={showTiers}
         className="flex items-center gap-1 rounded-full border px-2 py-1 text-base font-medium transition-all duration-300 cursor-pointer"
         style={
           boostCount > 0
@@ -56,13 +63,14 @@ export default function FeatureBoostButton({
             className="absolute bottom-full right-0 mb-2 flex items-center gap-1.5 rounded-xl border border-glass-hover bg-background/95 backdrop-blur-xl px-2.5 py-2 shadow-2xl z-20"
             onClick={(e) => e.stopPropagation()}
           >
-            <span className="text-base text-muted-dark/60 font-mono mr-1">Boost</span>
+            <span className="text-base text-muted-dark/60 font-mono mr-1">{b.label}</span>
             {BOOST_TIERS.map((tier) => (
               <a
                 key={tier.value}
                 href={`https://ko-fi.com/${KOFI_USERNAME}`}
                 target="_blank"
                 rel="noopener noreferrer"
+                aria-label={b.tierAria.replace("{amount}", tier.label)}
                 onClick={() => {
                   onBoost(featureId, tier.weight);
                   setShowTiers(false);

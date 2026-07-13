@@ -5,6 +5,7 @@ import { AnimatePresence, motion, useReducedMotion } from "framer-motion";
 import { ChevronUp, MessageCircle } from "lucide-react";
 import { fadeUp } from "@/lib/animations";
 import { trackFeatureVote } from "@/lib/analytics";
+import { useTranslation } from "@/i18n/useTranslation";
 import type { Comment, Feature } from "../local-types";
 import { localAccentTokens } from "../data";
 import CommentThread from "./CommentThread";
@@ -34,6 +35,9 @@ export default function FeatureVoteCard({
   showBoostUI: boolean;
 }) {
   const reduced = useReducedMotion() ?? false;
+  const { t } = useTranslation();
+  const vt = t.featureVoting;
+  const copy = vt.features[feature.id];
   const [voted, setVoted] = useState(initialVoted);
   const [showTiers, setShowTiers] = useState(false);
   const [imgLoaded, setImgLoaded] = useState(false);
@@ -52,8 +56,8 @@ export default function FeatureVoteCard({
   // the marketing seed + the live API count.
   const count = feature.votes + apiCount;
 
-  const t = localAccentTokens[feature.accent];
-  const rgba = (a: number) => `rgba(${t.r},${t.g},${t.b},${a})`;
+  const accentTok = localAccentTokens[feature.accent];
+  const rgba = (a: number) => `rgba(${accentTok.r},${accentTok.g},${accentTok.b},${a})`;
   const commentCount = comments.filter((c) => c.featureId === feature.id).length;
 
   const handleVote = (e: React.MouseEvent) => {
@@ -71,14 +75,13 @@ export default function FeatureVoteCard({
       className="group relative flex flex-col overflow-hidden rounded-2xl border border-glass bg-gradient-to-b from-white/[0.03] to-transparent backdrop-blur-sm transition-all duration-500 hover:border-glass-hover hover:shadow-[0_8px_60px_rgba(0,0,0,0.35)]"
     >
       <div className="px-4 pt-4 pb-2">
-        <h3 className="text-lg font-semibold leading-snug">{feature.title}</h3>
-        <p className="mt-1 text-sm leading-relaxed text-muted-dark line-clamp-2">
-          {feature.description}
-        </p>
+        <h3 className="text-lg font-semibold leading-snug">{copy.title}</h3>
+        <p className="mt-1 text-sm leading-relaxed text-muted-dark line-clamp-2">{copy.description}</p>
       </div>
 
       <FeatureVoteIllustration
         feature={feature}
+        title={copy.title}
         rgba={rgba}
         imgLoaded={imgLoaded}
         onImgLoad={() => setImgLoaded(true)}
@@ -95,6 +98,8 @@ export default function FeatureVoteCard({
         <div className="flex items-center gap-3 px-4 py-3">
           <button
             onClick={handleVote}
+            aria-label={vt.voteAria.replace("{feature}", copy.title)}
+            aria-pressed={voted}
             className="flex items-center gap-1.5 rounded-full border px-3 py-1.5 text-base font-medium transition-all duration-300 cursor-pointer shrink-0"
             style={
               voted
@@ -111,11 +116,7 @@ export default function FeatureVoteCard({
                   }
             }
           >
-            <ChevronUp
-              className={`h-3.5 w-3.5 transition-transform duration-300 ${
-                voted ? "scale-110" : ""
-              }`}
-            />
+            <ChevronUp className={`h-3.5 w-3.5 transition-transform duration-300 ${voted ? "scale-110" : ""}`} />
             <span className="tabular-nums">{count}</span>
           </button>
 
@@ -126,6 +127,8 @@ export default function FeatureVoteCard({
               e.stopPropagation();
               setShowComments((v) => !v);
             }}
+            aria-label={vt.commentsToggleAria.replace("{feature}", copy.title)}
+            aria-expanded={showComments}
             className="flex items-center gap-1 rounded-full border px-2 py-1 text-base font-medium transition-all duration-300 cursor-pointer shrink-0"
             style={
               showComments
@@ -142,14 +145,13 @@ export default function FeatureVoteCard({
             }
           >
             <MessageCircle className="h-3 w-3" />
-            {commentCount > 0 && (
-              <span className="tabular-nums">{commentCount}</span>
-            )}
+            {commentCount > 0 && <span className="tabular-nums">{commentCount}</span>}
           </button>
 
           {showBoostUI && (
             <FeatureBoostButton
               featureId={feature.id}
+              featureTitle={copy.title}
               boostCount={boostCount}
               showTiers={showTiers}
               setShowTiers={setShowTiers}
@@ -176,7 +178,7 @@ export default function FeatureVoteCard({
                 <div className="flex items-center gap-1.5 mb-2">
                   <MessageCircle className="h-3 w-3 text-muted-dark/60" />
                   <span className="text-base font-semibold text-muted-dark/60 font-mono tracking-wider uppercase">
-                    Discussion
+                    {vt.discussion}
                   </span>
                 </div>
                 <CommentThread

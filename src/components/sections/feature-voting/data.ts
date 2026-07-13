@@ -9,44 +9,14 @@ export const featureIllustrations: Record<string, string> = {
 };
 
 // The `votes` field is a marketing seed displayed before+added to real API vote
-// counts. Edit here to change initial display numbers.
+// counts. Edit here to change initial display numbers. Display copy (title +
+// description) lives in i18n under `featureVoting.features[id]` — keyed by `id`,
+// which also links to the server-side `ALLOWED_FEATURES` allowlist.
 export const features: Feature[] = [
-  {
-    id: "macos",
-    title: "macOS Support",
-    subtitle: "Native experience",
-    description:
-      "Full native macOS build with Apple Silicon optimization, Spotlight integration, and menu bar agent controls.",
-    accent: "cyan",
-    votes: 342,
-  },
-  {
-    id: "i18n",
-    title: "Internationalization",
-    subtitle: "Global reach",
-    description:
-      "Multi-language agent instructions, localized UI, and region-aware scheduling for worldwide teams.",
-    accent: "purple",
-    votes: 189,
-  },
-  {
-    id: "dashboard",
-    title: "Web Dashboard",
-    subtitle: "Monitor anywhere",
-    description:
-      "Browser-based dashboard for real-time agent monitoring, execution history, and fleet management from any device.",
-    accent: "emerald",
-    votes: 276,
-  },
-  {
-    id: "enterprise",
-    title: "Enterprise Projects",
-    subtitle: "Team-scale ops",
-    description:
-      "Multi-tenant workspaces, RBAC, audit logs, SSO integration, and shared agent templates across your organization.",
-    accent: "amber",
-    votes: 214,
-  },
+  { id: "macos", accent: "cyan", votes: 342 },
+  { id: "i18n", accent: "purple", votes: 189 },
+  { id: "dashboard", accent: "emerald", votes: 276 },
+  { id: "enterprise", accent: "amber", votes: 214 },
 ];
 
 export const localAccentTokens: Record<Feature["accent"], AccentToken> = {
@@ -173,13 +143,25 @@ export async function postBoost(
   });
 }
 
-export function formatTimeAgo(timestamp: number): string {
+/** Localized unit templates for {@link formatTimeAgo} (`{n}` = the amount). */
+export interface TimeAgoLabels {
+  justNow: string;
+  minutes: string;
+  hours: string;
+  days: string;
+}
+
+/**
+ * Pure relative-time formatter. Takes localized unit templates so the caller
+ * supplies `t.featureVoting.timeAgo`; `{n}` is replaced with the amount.
+ */
+export function formatTimeAgo(timestamp: number, labels: TimeAgoLabels): string {
   const diff = Date.now() - timestamp;
   const minutes = Math.floor(diff / 60_000);
-  if (minutes < 1) return "just now";
-  if (minutes < 60) return `${minutes}m ago`;
+  if (minutes < 1) return labels.justNow;
+  if (minutes < 60) return labels.minutes.replace("{n}", String(minutes));
   const hours = Math.floor(minutes / 60);
-  if (hours < 24) return `${hours}h ago`;
+  if (hours < 24) return labels.hours.replace("{n}", String(hours));
   const days = Math.floor(hours / 24);
-  return `${days}d ago`;
+  return labels.days.replace("{n}", String(days));
 }
