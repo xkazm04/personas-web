@@ -34,16 +34,17 @@ type LocaleContentModule = {
   content: Record<string, string>;
 };
 
-// Lazy registries — discovered via import.meta.glob so adding a new
-// locale directory is automatically picked up without editing this file.
-//
-// Turbopack/Vite both evaluate these patterns at build time.
+// Per-locale module memo caches. Each key resolves to a thunk that returns
+// the already-loaded module, so a given locale/category file is imported
+// (and its promise settled) at most once across the process.
 const localeTopicsModules: Record<string, () => Promise<LocaleTopicsModule>> = {};
 const localeContentModules: Record<string, () => Promise<LocaleContentModule>> = {};
 
-// Initialize registries with one entry per non-English locale. The actual
-// import-glob registration happens in the per-locale subagent-produced
-// _registry.ts which this module imports lazily at first call.
+// Load a locale's topics.ts via a plain template-literal dynamic import.
+// The path is statically analyzable enough for Turbopack to emit one chunk
+// per locale directory; a missing/failed import (locale not yet translated)
+// is swallowed and the caller falls back to English. The resolved module is
+// memoized into localeTopicsModules so repeat lookups skip the import.
 async function loadLocaleTopics(lang: Language): Promise<LocaleTopicsModule | null> {
   if (lang === "en") return null;
   if (!localeTopicsModules[lang]) {
