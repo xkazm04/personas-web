@@ -1,6 +1,6 @@
 "use client";
 
-import { motion } from "framer-motion";
+import { motion, useReducedMotion } from "framer-motion";
 import { Circle, CheckCircle2 } from "lucide-react";
 import { fadeUp } from "@/lib/animations";
 import { BRAND_VAR, tint } from "@/lib/brand-theme";
@@ -13,6 +13,10 @@ import {
 } from "@/data/roadmap-phases";
 
 export default function RoadmapProgress() {
+  // Gate the shimmer sweep, breathing dot, and fill animation — the bar
+  // resolves to its final static state under reduced-motion (repo convention;
+  // matches the sibling RevealTile treatment in RoadmapAreas).
+  const reduced = useReducedMotion() ?? false;
   // All counts/percentages flow from phaseCardData (single source of truth)
   // — flipping a `completed` flag now updates the public progress copy in
   // lockstep with the phase grid.
@@ -45,29 +49,37 @@ export default function RoadmapProgress() {
           style={{
             backgroundImage: `linear-gradient(90deg, ${BRAND_VAR.cyan}, ${BRAND_VAR.blue}, ${BRAND_VAR.purple})`,
             boxShadow: `0 0 15px ${tint("purple", 50)}`,
+            ...(reduced ? { width: progressWidth } : null),
           }}
-          initial={{ width: 0 }}
-          whileInView={{ width: progressWidth }}
+          initial={reduced ? false : { width: 0 }}
+          whileInView={reduced ? undefined : { width: progressWidth }}
           viewport={{ once: true }}
           transition={{ duration: 1.2, ease: "easeOut", delay: 0.4 }}
         >
-          <motion.div
-            className="absolute inset-0 animate-progress-shimmer"
-            style={{
-              background: "linear-gradient(90deg, transparent 70%, rgba(255,255,255,0.15) 90%, transparent 100%)",
-              backgroundSize: "200% 100%",
-            }}
-            initial={{ opacity: 0 }}
-            whileInView={{ opacity: [0, 1, 1, 0] }}
-            viewport={{ once: true }}
-            transition={{ duration: 2.4, delay: 0.4, times: [0, 0.15, 0.65, 1] }}
-          />
+          {/* Decorative shimmer sweep — omitted entirely under reduced motion */}
+          {!reduced && (
+            <motion.div
+              className="absolute inset-0 animate-progress-shimmer"
+              style={{
+                background: "linear-gradient(90deg, transparent 70%, rgba(255,255,255,0.15) 90%, transparent 100%)",
+                backgroundSize: "200% 100%",
+              }}
+              initial={{ opacity: 0 }}
+              whileInView={{ opacity: [0, 1, 1, 0] }}
+              viewport={{ once: true }}
+              transition={{ duration: 2.4, delay: 0.4, times: [0, 0.15, 0.65, 1] }}
+            />
+          )}
         </motion.div>
         <motion.div
-          className="absolute top-1/2 -translate-y-1/2 -translate-x-1/2 h-1 w-1 rounded-full animate-progress-dot-breathe"
-          style={{ backgroundColor: BRAND_VAR.cyan, boxShadow: `0 0 6px ${tint("cyan", 80)}, 0 0 12px ${tint("cyan", 40)}` }}
-          initial={{ left: "0%" }}
-          whileInView={{ left: "calc(var(--progress) * 100%)" }}
+          className={`absolute top-1/2 -translate-y-1/2 -translate-x-1/2 h-1 w-1 rounded-full ${reduced ? "" : "animate-progress-dot-breathe"}`}
+          style={{
+            backgroundColor: BRAND_VAR.cyan,
+            boxShadow: `0 0 6px ${tint("cyan", 80)}, 0 0 12px ${tint("cyan", 40)}`,
+            ...(reduced ? { left: "calc(var(--progress) * 100%)" } : null),
+          }}
+          initial={reduced ? false : { left: "0%" }}
+          whileInView={reduced ? undefined : { left: "calc(var(--progress) * 100%)" }}
           viewport={{ once: true }}
           transition={{ duration: 1.2, ease: "easeOut", delay: 0.4 }}
         />

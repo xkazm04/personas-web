@@ -127,7 +127,10 @@ function RevealTile({
 
       {/* Caption scrim — typography owns this zone */}
       <div className="absolute inset-x-0 bottom-0 z-10 flex items-end justify-between gap-3 bg-gradient-to-t from-black/85 via-black/35 to-transparent px-3 pb-2 pt-7">
-        <span className="min-w-0 truncate font-mono text-sm font-semibold text-white drop-shadow-[0_1px_4px_rgba(0,0,0,0.9)]">
+        <span
+          title={bar.label}
+          className="min-w-0 flex-1 truncate font-mono text-sm font-semibold text-white drop-shadow-[0_1px_4px_rgba(0,0,0,0.9)]"
+        >
           {bar.label}
         </span>
         <span className="flex shrink-0 items-baseline gap-1.5 font-mono text-xs text-white/80">
