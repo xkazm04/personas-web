@@ -1,15 +1,12 @@
 "use client";
 
 import { useCallback, useRef, useState } from "react";
-import { motion } from "framer-motion";
 import * as Sentry from "@sentry/nextjs";
 import SectionWrapper from "@/components/SectionWrapper";
-import { staggerContainer } from "@/lib/animations";
 import { trackFeatureComment } from "@/lib/analytics";
 import { useAbortableEffect } from "@/hooks/useAbortableEffect";
-import type { Comment } from "./local-types";
+import type { Comment, LoadState } from "./local-types";
 import {
-  KOFI_USERNAME,
   features,
   fetchBoostTotals,
   fetchComments,
@@ -20,8 +17,8 @@ import {
   postComment,
   postVoteToggle,
 } from "./data";
-import FeatureVoteCard from "./components/FeatureVoteCard";
 import CustomFeatureRequest from "./components/CustomFeatureRequest";
+import FeatureVotingGrid from "./components/FeatureVotingGrid";
 import { FeatureVotingHeader } from "./components/FeatureVotingHeader";
 import { FeatureVotingSummary } from "./components/FeatureVotingSummary";
 
@@ -30,7 +27,7 @@ export default function FeatureVoting() {
   const [comments, setComments] = useState<Comment[]>([]);
   const [boostTotals, setBoostTotals] = useState<Record<string, number>>({});
   const [voteCounts, setVoteCounts] = useState<Record<string, number>>({});
-  const [loaded, setLoaded] = useState(false);
+  const [loadState, setLoadState] = useState<LoadState>("loading");
   const voterIdRef = useRef<string>("");
   const boostInFlightRef = useRef<Set<string>>(new Set());
 
@@ -55,7 +52,14 @@ export default function FeatureVoting() {
       if (boosts.status === "fulfilled") {
         setBoostTotals(boosts.value);
       }
-      setLoaded(true);
+      // Only claim "Live" if at least one source actually resolved; if the
+      // whole batch rejected, drop into a quiet degraded state rather than
+      // presenting seed-only data as though it were live.
+      const anyOk =
+        votes.status === "fulfilled" ||
+        comm.status === "fulfilled" ||
+        boosts.status === "fulfilled";
+      setLoadState(anyOk ? "live" : "degraded");
     });
   }, []);
 
@@ -149,9 +153,14 @@ export default function FeatureVoting() {
         // REPLACES the tier rather than adding, so the optimistic += drifts high.
         // Reconcile from the authoritative totals (best-effort — the boost has
         // already succeeded, so a refetch failure must NOT roll it back).
+        // Retry once before accepting the drift, then give up silently.
         fetchBoostTotals()
           .then((authoritative) => setBoostTotals(authoritative))
-          .catch(() => {});
+          .catch(() =>
+            fetchBoostTotals()
+              .then((authoritative) => setBoostTotals(authoritative))
+              .catch(() => {}),
+          );
       })
       .catch((err) => {
         Sentry.captureException(err, {
@@ -179,30 +188,21 @@ export default function FeatureVoting() {
     <SectionWrapper id="vote">
       <FeatureVotingHeader />
 
-      <motion.div
-        data-tour-diagram="vote"
-        variants={staggerContainer}
-        className="mt-16 grid gap-6 sm:grid-cols-2"
-      >
-        {sorted.map((feature) => (
-          <FeatureVoteCard
-            key={feature.id}
-            feature={feature}
-            apiCount={voteCounts[feature.id] ?? 0}
-            initialVoted={votedIds.has(feature.id)}
-            onToggleVote={handleToggleVote}
-            comments={comments}
-            onAddComment={handleAddComment}
-            boostCount={boostTotals[feature.id] ?? 0}
-            onBoost={handleBoost}
-            showBoostUI={!!KOFI_USERNAME}
-          />
-        ))}
-      </motion.div>
+      <FeatureVotingGrid
+        loadState={loadState}
+        sorted={sorted}
+        voteCounts={voteCounts}
+        votedIds={votedIds}
+        comments={comments}
+        boostTotals={boostTotals}
+        onToggleVote={handleToggleVote}
+        onAddComment={handleAddComment}
+        onBoost={handleBoost}
+      />
 
       <CustomFeatureRequest />
 
-      <FeatureVotingSummary totalVotes={sorted.reduce((s, f) => s + f.votes, 0) + realVotesTotal} commentsCount={comments.length} totalBoosts={totalBoosts} loaded={loaded} />
+      <FeatureVotingSummary totalVotes={sorted.reduce((s, f) => s + f.votes, 0) + realVotesTotal} commentsCount={comments.length} totalBoosts={totalBoosts} loadState={loadState} />
     </SectionWrapper>
   );
 }

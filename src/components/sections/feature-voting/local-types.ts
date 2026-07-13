@@ -22,3 +22,12 @@ export interface AccentToken {
   b: number;
   tw: string;
 }
+
+/**
+ * Initial-load lifecycle for the section.
+ * - `loading`  — the first fetch batch is still in flight (show skeletons).
+ * - `live`     — at least one source resolved; the data is real.
+ * - `degraded` — every initial fetch rejected; present quietly and never
+ *   claim "Live" over what is effectively dead/seed-only data.
+ */
+export type LoadState = "loading" | "live" | "degraded";
