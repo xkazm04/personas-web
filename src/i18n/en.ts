@@ -999,6 +999,66 @@
     completed: string;
     empty: string;
     emptyHint: string;
+    heading: string;
+    gradient: string;
+    description: string;
+    progress: {
+      phasesComplete: string;
+      noneDone: string;
+      firstDone: string;
+      rangeDone: string;
+      toGoOne: string;
+      toGoOther: string;
+    };
+    areas: {
+      i18n: { title: string; caption: string };
+      devices: { title: string; caption: string };
+      collaboration: { title: string; caption: string };
+      platform: { title: string; caption: string };
+      templates: { title: string; caption: string };
+    };
+    bars: {
+      europe: string;
+      asiaPacific: string;
+      southAsia: string;
+      middleEast: string;
+      windows: string;
+      macos: string;
+      linux: string;
+      web: string;
+      mobileCompanion: string;
+      solo: string;
+      team: string;
+      enterprise: string;
+      devMode: string;
+      connectors: string;
+      cloudExecution: string;
+      installersUpdates: string;
+      allCategories: string;
+      devops: string;
+      productivity: string;
+      communication: string;
+      marketing: string;
+      research: string;
+      security: string;
+      financeCluster: string;
+    };
+    detail: {
+      localeOne: string;
+      localeOther: string;
+      shipped: string;
+      inDevelopment: string;
+      thisSite: string;
+      preview: string;
+      sharedAgents: string;
+      ssoAudit: string;
+      instantPreview: string;
+      services: string;
+      runs247: string;
+      autoUpdate: string;
+      templatesTotal: string;
+    };
+    barAria: string;
   };
   eventBusSection: {
     dynamicSwarm: string;
@@ -2321,6 +2381,66 @@ export const en: Translations = {
     completed: 'Completed',
     empty: 'Nothing planned right now.',
     emptyHint: 'Check back soon — the next milestones land here as we plan them.',
+    heading: 'Product',
+    gradient: 'Roadmap',
+    description: 'Where each area of Personas stands today — fulfillment left to right, not promises top to bottom.',
+    progress: {
+      phasesComplete: '{completed} of {total} phases complete',
+      noneDone: 'No phases done yet',
+      firstDone: 'Phase 1 done',
+      rangeDone: 'Phases 1-{count} done',
+      toGoOne: '{count} phase to go',
+      toGoOther: '{count} phases to go',
+    },
+    areas: {
+      i18n: { title: 'Internationalization', caption: '{count} locales, hand-translated — each flag develops with coverage' },
+      devices: { title: 'Device Support', caption: 'Personas on every machine you own' },
+      collaboration: { title: 'Collaboration', caption: 'From one operator to the whole org' },
+      platform: { title: 'Core Platform', caption: 'Dev mode, cloud execution, connectors, painless installs' },
+      templates: { title: 'Template Gallery', caption: 'Starter agents by category — live gallery counts' },
+    },
+    bars: {
+      europe: 'Europe',
+      asiaPacific: 'Asia-Pacific',
+      southAsia: 'South Asia',
+      middleEast: 'Middle East · RTL',
+      windows: 'Windows',
+      macos: 'macOS',
+      linux: 'Linux',
+      web: 'Web',
+      mobileCompanion: 'Mobile companion',
+      solo: 'Solo',
+      team: 'Team',
+      enterprise: 'Enterprise',
+      devMode: 'Dev Mode',
+      connectors: 'Connectors',
+      cloudExecution: 'Cloud execution',
+      installersUpdates: 'Installers & updates',
+      allCategories: 'All categories',
+      devops: 'DevOps',
+      productivity: 'Productivity',
+      communication: 'Communication',
+      marketing: 'Marketing',
+      research: 'Research',
+      security: 'Security',
+      financeCluster: 'Finance · Sales · Support · Legal',
+    },
+    detail: {
+      localeOne: '{n} locale',
+      localeOther: '{n} locales',
+      shipped: 'shipped',
+      inDevelopment: 'in development',
+      thisSite: 'this site',
+      preview: 'preview',
+      sharedAgents: 'shared agents',
+      ssoAudit: 'SSO · audit',
+      instantPreview: 'instant preview',
+      services: '{n} services',
+      runs247: '24/7 runs',
+      autoUpdate: 'auto-update',
+      templatesTotal: '{n} / {total} templates',
+    },
+    barAria: '{label}: {pct}%',
   },
   eventBusSection: {
     dynamicSwarm: 'Dynamic Swarm',

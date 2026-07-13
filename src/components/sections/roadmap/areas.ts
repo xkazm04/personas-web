@@ -15,7 +15,11 @@ import {
 
 import type { BrandKey } from "@/lib/brand-theme";
 import type { Category } from "@/lib/templates";
+import type { Translations } from "@/i18n/en";
 import type { FlagKey } from "./components/FlagArt";
+
+/** The localized copy for the roadmap section (see `roadmapSection` in en.ts). */
+export type RoadmapT = Translations["roadmapSection"];
 
 /**
  * The roadmap as fulfillment, not chronology: each logical area is a card,
@@ -65,8 +69,6 @@ const TEMPLATE_TARGETS = {
   total: 210,
 } as const;
 
-const localeDetail = (n: number) => `${n} locale${n === 1 ? "" : "s"}`;
-
 export type BarMotif =
   | { kind: "flag"; flag: FlagKey }
   | { kind: "image"; dark: string; light: string }
@@ -95,148 +97,155 @@ export interface AreaDef {
 
 /**
  * Build the roadmap area cards with live counts folded in. `counts` is derived
- * server-side from the real catalogs (see `roadmap-area-counts.ts`); everything
- * else (targets, coverage %, labels, motifs, icons) is authored here.
+ * server-side from the real catalogs (see `roadmap-area-counts.ts`); `t` is the
+ * localized `roadmapSection` copy (threaded from the client `RoadmapAreas`, the
+ * repo's client-only `useTranslation`). Everything else (targets, coverage %,
+ * motifs, icons) is authored here. Derived numbers stay derived — only the
+ * surrounding label text is localized.
  */
-export function buildAreas(counts: AreaCounts): AreaDef[] {
-  const t = counts.templatesByCategory;
+export function buildAreas(counts: AreaCounts, t: RoadmapT): AreaDef[] {
+  const cat = counts.templatesByCategory;
+  const localeDetail = (n: number) =>
+    (n === 1 ? t.detail.localeOne : t.detail.localeOther).replace("{n}", String(n));
   return [
     {
       key: "i18n",
-      title: "Internationalization",
+      title: t.areas.i18n.title,
       // `localeTotal` renders "14" today — derived from the LANGUAGES registry.
-      caption: `${counts.localeTotal} locales, hand-translated — each flag develops with coverage`,
+      caption: t.areas.i18n.caption.replace("{count}", String(counts.localeTotal)),
       icon: Languages,
       brand: "cyan",
       // Per-region `detail` counts are derived; the `value` (translation
       // completeness) is hand-authored — the non-en bundles are known-incomplete,
       // so there is no clean data source for coverage %.
       bars: [
-        { label: "Europe", value: 0.88, detail: localeDetail(counts.localesByRegion.europe), motif: { kind: "flag", flag: "eu" } },
-        { label: "Asia-Pacific", value: 0.76, detail: localeDetail(counts.localesByRegion.apac), motif: { kind: "flag", flag: "jp" } },
-        { label: "South Asia", value: 0.64, detail: localeDetail(counts.localesByRegion.southAsia), motif: { kind: "flag", flag: "in" } },
-        { label: "Middle East · RTL", value: 0.58, detail: localeDetail(counts.localesByRegion.middleEast), motif: { kind: "flag", flag: "ae" } },
+        { label: t.bars.europe, value: 0.88, detail: localeDetail(counts.localesByRegion.europe), motif: { kind: "flag", flag: "eu" } },
+        { label: t.bars.asiaPacific, value: 0.76, detail: localeDetail(counts.localesByRegion.apac), motif: { kind: "flag", flag: "jp" } },
+        { label: t.bars.southAsia, value: 0.64, detail: localeDetail(counts.localesByRegion.southAsia), motif: { kind: "flag", flag: "in" } },
+        { label: t.bars.middleEast, value: 0.58, detail: localeDetail(counts.localesByRegion.middleEast), motif: { kind: "flag", flag: "ae" } },
       ],
     },
     {
       key: "devices",
-      title: "Device Support",
-      caption: "Personas on every machine you own",
+      title: t.areas.devices.title,
+      caption: t.areas.devices.caption,
       icon: MonitorSmartphone,
       brand: "purple",
       bars: [
         {
-          label: "Windows",
+          label: t.bars.windows,
           value: 0.92,
-          detail: "shipped",
+          detail: t.detail.shipped,
           motif: { kind: "image", dark: "/imgs/get-started/platform/windows-dark.png", light: "/imgs/get-started/platform/windows-light.png" },
         },
         {
-          label: "macOS",
+          label: t.bars.macos,
           value: 0.55,
-          detail: "in development",
+          detail: t.detail.inDevelopment,
           motif: { kind: "image", dark: "/imgs/get-started/platform/mac-dark.png", light: "/imgs/get-started/platform/mac-light.png" },
         },
         {
-          label: "Linux",
+          label: t.bars.linux,
           value: 0.45,
-          detail: "in development",
+          detail: t.detail.inDevelopment,
           motif: { kind: "image", dark: "/imgs/get-started/platform/linux-dark.png", light: "/imgs/get-started/platform/linux-light.png" },
         },
         {
-          label: "Web",
+          label: t.bars.web,
           value: 0.8,
-          detail: "this site",
+          detail: t.detail.thisSite,
           motif: { kind: "image", dark: "/imgs/get-started/platform/web-dark.png", light: "/imgs/get-started/platform/web-light.png" },
         },
         {
-          label: "Mobile companion",
+          label: t.bars.mobileCompanion,
           value: 0.25,
-          detail: "preview",
+          detail: t.detail.preview,
           motif: { kind: "image", dark: "/imgs/get-started/platform/mobile-dark.png", light: "/imgs/get-started/platform/mobile-light.png" },
         },
       ],
     },
     {
       key: "collaboration",
-      title: "Collaboration",
-      caption: "From one operator to the whole org",
+      title: t.areas.collaboration.title,
+      caption: t.areas.collaboration.caption,
       icon: Users,
       brand: "emerald",
       bars: [
-        { label: "Solo", value: 0.95, detail: "shipped", motif: { kind: "icon", icon: User } },
-        { label: "Team", value: 0.4, detail: "shared agents", motif: { kind: "icon", icon: Users } },
-        { label: "Enterprise", value: 0.15, detail: "SSO · audit", motif: { kind: "icon", icon: Building2 } },
+        { label: t.bars.solo, value: 0.95, detail: t.detail.shipped, motif: { kind: "icon", icon: User } },
+        { label: t.bars.team, value: 0.4, detail: t.detail.sharedAgents, motif: { kind: "icon", icon: Users } },
+        { label: t.bars.enterprise, value: 0.15, detail: t.detail.ssoAudit, motif: { kind: "icon", icon: Building2 } },
       ],
     },
     {
       key: "platform",
-      title: "Core Platform",
-      caption: "Dev mode, cloud execution, connectors, painless installs",
+      title: t.areas.platform.title,
+      caption: t.areas.platform.caption,
       icon: Layers,
       brand: "amber",
       bars: [
-        { label: "Dev Mode", value: 0.85, detail: "instant preview", motif: { kind: "icon", icon: Wrench } },
+        { label: t.bars.devMode, value: 0.85, detail: t.detail.instantPreview, motif: { kind: "icon", icon: Wrench } },
         // Connector count derived from the live catalog; 0.85 is the fulfillment
         // target — the integrations phase is effectively shipped (no data source).
-        { label: "Connectors", value: 0.85, detail: `${counts.connectors} services`, motif: { kind: "icon", icon: Plug } },
-        { label: "Cloud execution", value: 0.5, detail: "24/7 runs", motif: { kind: "icon", icon: Cloud } },
-        { label: "Installers & updates", value: 0.35, detail: "auto-update", motif: { kind: "icon", icon: Package } },
+        { label: t.bars.connectors, value: 0.85, detail: t.detail.services.replace("{n}", String(counts.connectors)), motif: { kind: "icon", icon: Plug } },
+        { label: t.bars.cloudExecution, value: 0.5, detail: t.detail.runs247, motif: { kind: "icon", icon: Cloud } },
+        { label: t.bars.installersUpdates, value: 0.35, detail: t.detail.autoUpdate, motif: { kind: "icon", icon: Package } },
       ],
     },
     {
       key: "templates",
-      title: "Template Gallery",
-      caption: "Starter agents by category — live gallery counts",
+      title: t.areas.templates.title,
+      caption: t.areas.templates.caption,
       icon: LayoutGrid,
       brand: "blue",
       wide: true,
       // Numerators are DERIVED from the templates catalog (drift-proof); the
       // denominators are the aspirational TEMPLATE_TARGETS above (no data source).
       headline: {
-        label: "All categories",
+        label: t.bars.allCategories,
         value: counts.templateTotal / TEMPLATE_TARGETS.total,
-        detail: `${counts.templateTotal} / ${TEMPLATE_TARGETS.total} templates`,
+        detail: t.detail.templatesTotal
+          .replace("{n}", String(counts.templateTotal))
+          .replace("{total}", String(TEMPLATE_TARGETS.total)),
       },
       bars: [
         {
-          label: "DevOps",
-          value: t.DevOps / TEMPLATE_TARGETS.DevOps,
-          detail: `${t.DevOps}/${TEMPLATE_TARGETS.DevOps}`,
+          label: t.bars.devops,
+          value: cat.DevOps / TEMPLATE_TARGETS.DevOps,
+          detail: `${cat.DevOps}/${TEMPLATE_TARGETS.DevOps}`,
           motif: { kind: "image", dark: "/imgs/templates/devops-dark.png", light: "/imgs/templates/devops-light.png" },
         },
         {
-          label: "Productivity",
-          value: t.Productivity / TEMPLATE_TARGETS.Productivity,
-          detail: `${t.Productivity}/${TEMPLATE_TARGETS.Productivity}`,
+          label: t.bars.productivity,
+          value: cat.Productivity / TEMPLATE_TARGETS.Productivity,
+          detail: `${cat.Productivity}/${TEMPLATE_TARGETS.Productivity}`,
           motif: { kind: "image", dark: "/imgs/templates/productivity-dark.png", light: "/imgs/templates/productivity-light.png" },
         },
         {
-          label: "Communication",
-          value: t.Communication / TEMPLATE_TARGETS.Communication,
-          detail: `${t.Communication}/${TEMPLATE_TARGETS.Communication}`,
+          label: t.bars.communication,
+          value: cat.Communication / TEMPLATE_TARGETS.Communication,
+          detail: `${cat.Communication}/${TEMPLATE_TARGETS.Communication}`,
           motif: { kind: "image", dark: "/imgs/templates/communication-dark.png", light: "/imgs/templates/communication-light.png" },
         },
         {
-          label: "Marketing",
-          value: t.Marketing / TEMPLATE_TARGETS.Marketing,
-          detail: `${t.Marketing}/${TEMPLATE_TARGETS.Marketing}`,
+          label: t.bars.marketing,
+          value: cat.Marketing / TEMPLATE_TARGETS.Marketing,
+          detail: `${cat.Marketing}/${TEMPLATE_TARGETS.Marketing}`,
           motif: { kind: "image", dark: "/imgs/templates/marketing-dark.png", light: "/imgs/templates/marketing-light.png" },
         },
         {
-          label: "Research",
-          value: t.Research / TEMPLATE_TARGETS.Research,
-          detail: `${t.Research}/${TEMPLATE_TARGETS.Research}`,
+          label: t.bars.research,
+          value: cat.Research / TEMPLATE_TARGETS.Research,
+          detail: `${cat.Research}/${TEMPLATE_TARGETS.Research}`,
           motif: { kind: "image", dark: "/imgs/templates/research-dark.png", light: "/imgs/templates/research-light.png" },
         },
         {
-          label: "Security",
-          value: t.Security / TEMPLATE_TARGETS.Security,
-          detail: `${t.Security}/${TEMPLATE_TARGETS.Security}`,
+          label: t.bars.security,
+          value: cat.Security / TEMPLATE_TARGETS.Security,
+          detail: `${cat.Security}/${TEMPLATE_TARGETS.Security}`,
           motif: { kind: "image", dark: "/imgs/templates/security-dark.png", light: "/imgs/templates/security-light.png" },
         },
         {
-          label: "Finance · Sales · Support · Legal",
+          label: t.bars.financeCluster,
           value: counts.groupedTemplates / TEMPLATE_TARGETS.grouped,
           detail: `${counts.groupedTemplates}/${TEMPLATE_TARGETS.grouped}`,
         },

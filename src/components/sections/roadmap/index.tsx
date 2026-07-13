@@ -5,7 +5,7 @@
 // out of the client bundle — they are read at build time and passed down as
 // plain data.
 import SectionWrapper from "@/components/SectionWrapper";
-import SectionIntro from "@/components/primitives/SectionIntro";
+import RoadmapIntro from "./components/RoadmapIntro";
 import RoadmapProgress from "./components/RoadmapProgress";
 import RoadmapAreas from "./components/RoadmapAreas";
 import { AREA_COUNTS } from "./roadmap-area-counts";
@@ -13,11 +13,9 @@ import { AREA_COUNTS } from "./roadmap-area-counts";
 export default function Roadmap() {
   return (
     <SectionWrapper id="roadmap">
-      <SectionIntro
-        heading="Product"
-        gradient="Roadmap"
-        description="Where each area of Personas stands today — fulfillment left to right, not promises top to bottom."
-      />
+      {/* Localized intro — thin client wrapper (server component can't read the
+          client-only i18n store; see RoadmapIntro). */}
+      <RoadmapIntro />
 
       {/* Overall progress — most informative element first */}
       <RoadmapProgress />

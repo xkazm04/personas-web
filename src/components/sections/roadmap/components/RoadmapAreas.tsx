@@ -2,6 +2,7 @@
 
 import { motion, useReducedMotion } from "framer-motion";
 import { BRAND_VAR, tint, type BrandKey } from "@/lib/brand-theme";
+import { useTranslation } from "@/i18n/useTranslation";
 import { buildAreas, type AreaBarDef, type AreaCounts, type BarMotif } from "../areas";
 import AreaCardShell from "./AreaCardShell";
 import FlagArt from "./FlagArt";
@@ -18,7 +19,9 @@ import FlagArt from "./FlagArt";
  * client bundle while the card numbers still track the shipped product.
  */
 export default function RoadmapAreas({ counts }: { counts: AreaCounts }) {
-  const areas = buildAreas(counts);
+  const { t } = useTranslation();
+  const areas = buildAreas(counts, t.roadmapSection);
+  const ariaTemplate = t.roadmapSection.barAria;
   return (
     <div className="mt-12 mx-auto grid max-w-5xl gap-5 md:grid-cols-2">
       {areas.map((area) => (
@@ -31,6 +34,7 @@ export default function RoadmapAreas({ counts }: { counts: AreaCounts }) {
                 brand={area.brand}
                 index={i}
                 size={area.wide ? "sm" : "md"}
+                ariaTemplate={ariaTemplate}
               />
             ))}
           </div>
@@ -77,15 +81,18 @@ function RevealTile({
   brand,
   index,
   size,
+  ariaTemplate,
 }: {
   bar: AreaBarDef;
   brand: BrandKey;
   index: number;
   size: "md" | "sm";
+  ariaTemplate: string;
 }) {
   const reduced = useReducedMotion() ?? false;
   const pct = Math.round(bar.value * 100);
   const revealClip = `inset(0 ${100 - pct}% 0 0)`;
+  const ariaLabel = ariaTemplate.replace("{label}", bar.label).replace("{pct}", String(pct));
 
   return (
     <div
@@ -93,7 +100,7 @@ function RevealTile({
       aria-valuemin={0}
       aria-valuemax={100}
       aria-valuenow={pct}
-      aria-label={`${bar.label}: ${pct}%`}
+      aria-label={ariaLabel}
       className={`relative overflow-hidden rounded-xl border border-glass bg-white/[0.02] ${
         size === "md" ? "h-24" : "h-20"
       }`}

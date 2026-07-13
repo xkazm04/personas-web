@@ -4,6 +4,7 @@ import { motion, useReducedMotion } from "framer-motion";
 import { Circle, CheckCircle2 } from "lucide-react";
 import { fadeUp } from "@/lib/animations";
 import { BRAND_VAR, tint } from "@/lib/brand-theme";
+import { useTranslation } from "@/i18n/useTranslation";
 import {
   completedCount,
   totalPhases,
@@ -17,17 +18,25 @@ export default function RoadmapProgress() {
   // resolves to its final static state under reduced-motion (repo convention;
   // matches the sibling RevealTile treatment in RoadmapAreas).
   const reduced = useReducedMotion() ?? false;
+  const { t } = useTranslation();
+  const p = t.roadmapSection.progress;
   // All counts/percentages flow from phaseCardData (single source of truth)
   // — flipping a `completed` flag now updates the public progress copy in
-  // lockstep with the phase grid.
-  const phasesCompleteLabel = `${completedCount} of ${totalPhases} phases complete`;
+  // lockstep with the phase grid. Only the label text is localized; the
+  // pluralization/special-case branches are ported faithfully.
+  const phasesCompleteLabel = p.phasesComplete
+    .replace("{completed}", String(completedCount))
+    .replace("{total}", String(totalPhases));
   const phasesDoneLabel =
     completedCount === 0
-      ? "No phases done yet"
+      ? p.noneDone
       : completedCount === 1
-        ? "Phase 1 done"
-        : `Phases 1-${completedCount} done`;
-  const phasesRemainingLabel = `${remainingCount} phase${remainingCount === 1 ? "" : "s"} to go`;
+        ? p.firstDone
+        : p.rangeDone.replace("{count}", String(completedCount));
+  const phasesRemainingLabel = (remainingCount === 1 ? p.toGoOne : p.toGoOther).replace(
+    "{count}",
+    String(remainingCount),
+  );
 
   return (
     <motion.div data-tour-diagram="roadmap-progress" variants={fadeUp} className="mt-10 mx-auto max-w-2xl">
