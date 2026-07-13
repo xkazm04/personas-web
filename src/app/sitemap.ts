@@ -2,6 +2,7 @@ import type { MetadataRoute } from "next";
 import { SITE_URL } from "@/lib/seo";
 import { GUIDE_CATEGORIES } from "@/data/guide/categories";
 import { GUIDE_TOPICS } from "@/data/guide/topics";
+import { isTopicVisible } from "@/lib/guide-utils";
 import { templateList as templates } from "@/lib/templates";
 import { BLOG_POSTS } from "@/data/blog";
 
@@ -35,7 +36,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
   }));
 
   /* ── Guide topic pages ────────────────────────────────────────────── */
-  const guideTopics: MetadataRoute.Sitemap = GUIDE_TOPICS.map((t) => ({
+  const guideTopics: MetadataRoute.Sitemap = GUIDE_TOPICS.filter(isTopicVisible).map((t) => ({
     url: `${SITE_URL}/guide/${t.categoryId}/${t.id}`,
     lastModified: now,
     changeFrequency: "monthly" as const,

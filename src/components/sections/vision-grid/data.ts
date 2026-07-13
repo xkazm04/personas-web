@@ -53,8 +53,8 @@ export const PLATFORM_CARDS: PlatformCard[] = [
     guideTopics: [
       {
         label: "Browse template library",
-        category: "agents-prompts",
-        topic: "template-library",
+        category: "getting-started",
+        topic: "browsing-templates",
       },
     ],
   },
@@ -75,9 +75,9 @@ export const PLATFORM_CARDS: PlatformCard[] = [
     ],
     guideTopics: [
       {
-        label: "Choosing your AI provider",
-        category: "getting-started",
-        topic: "choosing-your-ai-provider",
+        label: "Creating a new agent",
+        category: "agents-prompts",
+        topic: "creating-a-new-agent",
       },
     ],
   },
