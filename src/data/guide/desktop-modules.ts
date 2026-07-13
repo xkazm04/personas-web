@@ -31,6 +31,18 @@ export const DESKTOP_MODULES: DesktopModule[] = [
     ],
   },
   {
+    id: "companion",
+    label: "Companion",
+    icon: "Sparkles",
+    children: [
+      { id: "chat", label: "Chat" },
+      { id: "voice", label: "Voice" },
+      { id: "memory", label: "Memory" },
+      { id: "check-ins", label: "Check-Ins" },
+      { id: "decision-hub", label: "Decision Hub" },
+    ],
+  },
+  {
     id: "overview",
     label: "Overview",
     icon: "LayoutDashboard",
@@ -44,6 +56,8 @@ export const DESKTOP_MODULES: DesktopModule[] = [
       { id: "sla", label: "SLA" },
       { id: "health", label: "Health" },
       { id: "memories", label: "Memories" },
+      { id: "director", label: "Director" },
+      { id: "goals", label: "Goals" },
       { id: "usage", label: "Usage" },
     ],
   },
@@ -677,5 +691,91 @@ export const TOPIC_MODULE_MAP: Record<string, TopicModuleRef> = {
     moduleId: "settings",
     path: ["Settings", "Appearance"],
     label: "Reset settings",
+  },
+
+  // ─── Companion / Athena ────────────────────────────────────────
+  "meet-athena": {
+    moduleId: "companion",
+    path: ["Companion", "Chat"],
+    label: "Athena panel",
+  },
+  "chatting-with-athena": {
+    moduleId: "companion",
+    path: ["Companion", "Chat"],
+    label: "Chat panel",
+  },
+  "voice-and-hold-to-talk": {
+    moduleId: "companion",
+    path: ["Companion", "Voice"],
+    label: "Voice settings",
+  },
+  "athenas-long-term-memory": {
+    moduleId: "companion",
+    path: ["Companion", "Memory"],
+    label: "Brain viewer",
+  },
+  "proactive-check-ins": {
+    moduleId: "companion",
+    path: ["Companion", "Check-Ins"],
+    label: "Proactive check-ins",
+  },
+  "guided-walkthroughs": {
+    moduleId: "companion",
+    path: ["Companion", "Chat"],
+    label: "Guided walkthroughs",
+  },
+  "the-decision-hub": {
+    moduleId: "companion",
+    path: ["Companion", "Decision Hub"],
+    label: "Approval cards",
+  },
+  "operating-by-chat": {
+    moduleId: "companion",
+    path: ["Companion", "Chat"],
+    label: "Operate by chat",
+  },
+
+  // ─── Getting Started · Templates & Modes ───────────────────────
+  "browsing-templates": {
+    moduleId: "templates",
+    path: ["Templates", "Generated"],
+    label: "Template gallery",
+  },
+  "adopting-a-template": {
+    moduleId: "templates",
+    path: ["Templates", "Generated"],
+    label: "Adopt template",
+  },
+  "recipes": {
+    moduleId: "templates",
+    path: ["Templates", "Generated"],
+    label: "Recipes",
+  },
+  "interface-modes": {
+    moduleId: "settings",
+    path: ["Settings", "Appearance"],
+    label: "Interface mode",
+  },
+
+  // ─── Monitoring · Goals, KPIs & Director ───────────────────────
+  "tracking-goals": {
+    moduleId: "overview",
+    path: ["Overview", "Goals"],
+    label: "Goals board",
+  },
+  "measuring-outcomes-with-kpis": {
+    moduleId: "overview",
+    path: ["Overview", "Goals", "KPIs"],
+    label: "KPI dashboard",
+  },
+  "director-verdicts-and-categories": {
+    moduleId: "overview",
+    path: ["Overview", "Director"],
+    label: "Director verdicts",
+  },
+  "director-momentum-and-stale-sweep": {
+    moduleId: "overview",
+    path: ["Overview", "Director"],
+    label: "Director momentum",
   },
 };
