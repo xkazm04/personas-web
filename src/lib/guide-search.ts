@@ -7,7 +7,22 @@ export interface SearchResult {
   topic: GuideTopic;
   category: GuideCategory;
   score: number;
-  matchType: "exact-title" | "exact-tag" | "fuzzy-title" | "fuzzy-tag" | "description";
+  matchType: "exact-title" | "exact-tag" | "fuzzy-title" | "fuzzy-tag" | "description" | "body";
+  /** For "body" matches: a short cleaned excerpt of the article text around the hit. */
+  excerpt?: string;
+}
+
+/**
+ * A distilled, searchable record of one topic's article body. Built from the
+ * Markdown content modules (see buildBodyIndex) with directive/markup syntax
+ * stripped, so the runtime index is far smaller than the raw ~136KB of bodies
+ * and safe to substring-scan. `text` keeps original casing for excerpts;
+ * `haystack` is its lowercased twin for matching.
+ */
+export interface BodyIndexEntry {
+  topicId: string;
+  text: string;
+  haystack: string;
 }
 
 export interface GroupedResults {
@@ -100,6 +115,127 @@ export function searchGuide(query: string, limit = 15): SearchResult[] {
     if (bestScore > 0) {
       results.push({ topic, category, score: bestScore, matchType: bestMatch });
     }
+  }
+
+  results.sort((a, b) => b.score - a.score || a.topic.title.localeCompare(b.topic.title));
+  return results.slice(0, limit);
+}
+
+// ── Body index (lowest-priority full-text tier) ────────────────────────
+//
+// The title/tag/description ladder above never sees article prose, so a query
+// for a phrase that lives only in a body returns nothing. These helpers build
+// a distilled full-text index from the Markdown content modules and scan it as
+// a strictly-below-description tier (score 1). They are pure (no content import
+// here) so the heavy GUIDE_CONTENT map is only pulled in by the lazily-imported
+// wrapper in guide-body-index.ts — keeping the initial search bundle unchanged.
+
+/**
+ * Strip Markdown + custom-directive syntax from a body so the indexed text and
+ * excerpts read as plain prose. Mirrors the syntax the guide renderer parses
+ * (see parseBlocks.tsx): fenced code, `:::directive` fences, headings, list and
+ * blockquote markers, tables, emphasis, inline code, and links.
+ */
+export function stripGuideMarkup(md: string): string {
+  return (
+    md
+      // Fenced code blocks — drop the code entirely (not prose).
+      .replace(/```[\s\S]*?```/g, " ")
+      // Directive open/close fences (:::steps, :::tip, the bare closing :::, and
+      // the :::compare "---" column separator).
+      .replace(/^\s*:::[\w-]*.*$/gm, " ")
+      .replace(/^\s*---+\s*$/gm, " ")
+      // Any stray inline directive token (defensive — real bodies keep these
+      // on their own line, but never let ":::" leak into an excerpt).
+      .replace(/:::[\w-]*/g, " ")
+      // Table pipes and heading/list/blockquote line markers.
+      .replace(/^\s{0,3}#{1,6}\s+/gm, "")
+      .replace(/^\s*>\s?/gm, "")
+      .replace(/^\s*[-*+]\s+/gm, "")
+      .replace(/^\s*\d+\.\s+/gm, "")
+      .replace(/\|/g, " ")
+      // Inline: links → text, images dropped, emphasis + inline code unwrapped.
+      .replace(/!\[[^\]]*\]\([^)]*\)/g, " ")
+      .replace(/\[([^\]]*)\]\([^)]*\)/g, "$1")
+      .replace(/\*\*\*([^*]+)\*\*\*/g, "$1")
+      .replace(/\*\*([^*]+)\*\*/g, "$1")
+      .replace(/\*([^*]+)\*/g, "$1")
+      .replace(/`([^`]+)`/g, "$1")
+      // Collapse whitespace runs (newlines included) into single spaces.
+      .replace(/\s+/g, " ")
+      .trim()
+  );
+}
+
+/** Build the distilled body index from a topicId → Markdown content map. */
+export function buildBodyIndex(content: Record<string, string>): BodyIndexEntry[] {
+  const index: BodyIndexEntry[] = [];
+  for (const topicId of Object.keys(content)) {
+    const text = stripGuideMarkup(content[topicId]);
+    if (!text) continue;
+    index.push({ topicId, text, haystack: text.toLowerCase() });
+  }
+  return index;
+}
+
+/**
+ * Extract a short, word-boundary-snapped excerpt of `text` around the first
+ * occurrence of `query`, with ellipses when the window is clipped.
+ */
+export function extractExcerpt(text: string, query: string, radius = 60): string {
+  const q = query.toLowerCase();
+  const lower = text.toLowerCase();
+  const at = lower.indexOf(q);
+  if (at === -1) return text.length > radius * 2 ? `${text.slice(0, radius * 2).trimEnd()}…` : text;
+
+  const hitEnd = at + q.length;
+  let start = Math.max(0, at - radius);
+  let end = Math.min(text.length, hitEnd + radius);
+  // Snap the window edges to word boundaries so we never cut mid-word.
+  if (start > 0) {
+    const sp = text.indexOf(" ", start);
+    if (sp !== -1 && sp < at) start = sp + 1;
+  }
+  if (end < text.length) {
+    const sp = text.lastIndexOf(" ", end);
+    if (sp > hitEnd) end = sp;
+  }
+  let excerpt = text.slice(start, end).trim();
+  if (start > 0) excerpt = `…${excerpt}`;
+  if (end < text.length) excerpt = `${excerpt}…`;
+  return excerpt;
+}
+
+/**
+ * Scan the body index for `query`, skipping topics already matched by a higher
+ * tier (`excludeIds`) and hidden topics. Returns SearchResult rows at score 1
+ * (strictly below the description tier) carrying a matching-text excerpt.
+ */
+export function searchBodyIndex(
+  index: BodyIndexEntry[],
+  query: string,
+  excludeIds: string[] = [],
+  limit = 15,
+): SearchResult[] {
+  const q = query.toLowerCase().trim();
+  if (q.length < 2 || limit <= 0) return [];
+  const excluded = new Set(excludeIds);
+  const results: SearchResult[] = [];
+
+  for (const entry of index) {
+    if (excluded.has(entry.topicId)) continue;
+    if (!entry.haystack.includes(q)) continue;
+    const topic = GUIDE_TOPICS.find((t) => t.id === entry.topicId);
+    if (!topic || !isTopicVisible(topic)) continue;
+    const category = GUIDE_CATEGORIES.find((c) => c.id === topic.categoryId);
+    if (!category) continue;
+    results.push({
+      topic,
+      category,
+      score: 1,
+      matchType: "body",
+      excerpt: extractExcerpt(entry.text, query),
+    });
   }
 
   results.sort((a, b) => b.score - a.score || a.topic.title.localeCompare(b.topic.title));

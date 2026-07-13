@@ -12,7 +12,7 @@ The User Guide is a 100+-topic documentation site nested under `/guide`. The hub
 - **TopicView** owns the article shell: it derives reading time (~200 wpm), renders `ReadingProgress`, `MobileTopicTOC`, `GuideMarkdown`, `RelatedTopics`, prev/next, and the sticky desktop `TopicTOC`. It also holds the **dormant locale-swap** machinery (see gotchas).
 - **Sidebar** (`GuideSidebar` → `GuideSidebarContent`) reads `usePathname()` to highlight the active category/topic, auto-expands the active category, and has its own client-side topic filter; expand/collapse animations are reduced-motion gated and announced via an `aria-live` region.
 - **Table of contents**: `TopicTOC` (desktop, sticky) and `MobileTopicTOC` (collapsible top bar) both filter to depth-2/3 headings and share `useActiveHeading`, an `IntersectionObserver` (rootMargin `-96px 0px -65% 0px`) that tracks the topmost visible heading.
-- **Search**: `SearchCombobox` debounces input 150 ms, calls `searchGuide()` (tiered exact/fuzzy Levenshtein matcher), groups by category in `SearchResultsPopover`, and supports full ARIA combobox keyboarding (Arrow/Enter/Escape/Tab), flushing the debounce on Enter so a keypress never sits in dead air.
+- **Search**: `SearchCombobox` (state/keyboarding in the `useGuideSearch` hook) debounces input 150 ms, calls `searchGuide()` (tiered exact/fuzzy Levenshtein matcher), then lazily imports `guide-body-index` to append a full-text body tier beneath the ladder (excerpt snippet per hit). It groups by category in `SearchResultsPopover`, and supports full ARIA combobox keyboarding (Arrow/Enter/Escape/Tab), flushing the debounce on Enter so a keypress never sits in dead air. The body index is dynamically imported so it stays out of the initial bundle.
 
 ## Key files
 | File | Role |
@@ -31,8 +31,9 @@ The User Guide is a 100+-topic documentation site nested under `/guide`. The hub
 | `src/app/guide/[category]/[topic]/not-found.tsx` | Unknown-topic 404 |
 | `src/components/guide/GuideSidebar.tsx` | Sidebar container: mobile drawer, expand state, sidebar search, a11y announcements |
 | `src/components/guide/guide-sidebar/GuideSidebarContent.tsx` | Presentational category tree + active-link styling |
-| `src/components/guide/SearchCombobox.tsx` | Global search input, debounce, keyboarding, routing |
-| `src/components/guide/search-combobox/SearchResultsPopover.tsx` | Grouped result listbox with match-type badges + highlight |
+| `src/components/guide/SearchCombobox.tsx` | Global search input, presentational shell (a11y, outside-click, grouping) |
+| `src/components/guide/search-combobox/useGuideSearch.ts` | Search state + debounce + keyboarding + lazy body-tier augmentation hook |
+| `src/components/guide/search-combobox/SearchResultsPopover.tsx` | Grouped result listbox with match-type badges + title/excerpt highlight |
 | `src/components/guide/TopicTOC.tsx` | Desktop sticky on-this-page nav |
 | `src/components/guide/MobileTopicTOC.tsx` | Mobile collapsible TOC bar + scrim |
 | `src/components/guide/useActiveHeading.ts` | `IntersectionObserver` active-heading tracker |
@@ -40,7 +41,8 @@ The User Guide is a 100+-topic documentation site nested under `/guide`. The hub
 | `src/components/guide/RelatedTopics.tsx` | Shared-tag related-topic cards |
 | `src/components/guide/ModuleBadge.tsx` | "In app" desktop-location popover badge |
 | `src/lib/guide-utils.ts` | Visibility/mode helpers, `getRelatedTopics`, orphan-topic build guard |
-| `src/lib/guide-search.ts` | `searchGuide` (Levenshtein tiers) + `groupResultsByCategory` |
+| `src/lib/guide-search.ts` | `searchGuide` (Levenshtein tiers) + `groupResultsByCategory` + pure body-tier primitives |
+| `src/lib/guide-body-index.ts` | Lazy full-text index over `GUIDE_CONTENT` (`searchGuideBodies`) |
 | `src/data/guide/getLocalized.ts` | `getLocalizedTopic` per-field locale fallback (dormant) |
 | `src/components/guide/guide-markdown/extractHeadings.ts` | Markdown → `GuideHeading[]` (used both server + client) |
 
@@ -62,7 +64,7 @@ The User Guide is a 100+-topic documentation site nested under `/guide`. The hub
 - **Dormant locale infrastructure:** `TopicView`'s `language`-driven `useState` + `useEffect` swap and `getLocalizedTopic` are fully wired but inert because `i18nStore.setLanguage` is a no-op (locked to `en`). The reset-on-locale-change uses the React 19 prev-state pattern (not setState-in-effect) and reading time/headings are `useMemo`'d off `localized.body` so they recompute correctly once the swap is live.
 - **Server/client heading parity:** `page.tsx` extracts headings server-side and passes `initialHeadings`; `TopicView` only re-parses (`extractHeadings`) when `localized.body` diverges from the original `content` (i.e. a locale swap), avoiding a redundant client parse on first load.
 - **Focus management:** on client topic change (prev/next or search nav) `TopicView` moves focus to the article `<h1>` (skipping the initial mount) so SR/keyboard users land on the new title.
-- **Search edge cases:** queries < 2 chars clear results via `queueMicrotask`; Enter flushes a still-pending or stale debounce by re-running `searchGuide` synchronously; `flatIndexMap` keeps option indices stable across grouped re-renders for `aria-activedescendant`.
+- **Search edge cases:** queries < 2 chars clear results via `queueMicrotask`; Enter flushes a still-pending or stale debounce by re-running `searchGuide` synchronously (the async body tier merges a beat later, so a body-*only* query may need a second Enter to navigate — the sync ladder never blocks on it); `flatIndexMap` keeps option indices stable across grouped re-renders for `aria-activedescendant`.
 
 ## Related docs
 - [Guide Data & Content](data-content.md)

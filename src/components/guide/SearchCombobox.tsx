@@ -1,12 +1,11 @@
 "use client";
 
-import { useState, useRef, useEffect, useCallback, useMemo } from "react";
-import { useRouter } from "next/navigation";
+import { useRef, useEffect, useMemo } from "react";
 import { AnimatePresence } from "framer-motion";
 import { Search } from "lucide-react";
-import { searchGuide, groupResultsByCategory } from "@/lib/guide-search";
-import type { SearchResult } from "@/lib/guide-search";
+import { groupResultsByCategory } from "@/lib/guide-search";
 import { SearchResultsPopover } from "./search-combobox/SearchResultsPopover";
+import { useGuideSearch } from "./search-combobox/useGuideSearch";
 
 interface SearchComboboxProps {
   placeholder?: string;
@@ -14,48 +13,13 @@ interface SearchComboboxProps {
 }
 
 export default function SearchCombobox({
-  placeholder = "Search topics\u2026",
+  placeholder = "Search topics…",
   className = "",
 }: SearchComboboxProps) {
-  const [query, setQuery] = useState("");
-  const [results, setResults] = useState<SearchResult[]>([]);
-  const [isOpen, setIsOpen] = useState(false);
-  const [isPending, setIsPending] = useState(false);
-  const [activeIndex, setActiveIndex] = useState(-1);
+  const { query, setQuery, results, isOpen, setIsOpen, isPending, activeIndex, listRef, navigate, onKeyDown } =
+    useGuideSearch();
   const wrapperRef = useRef<HTMLDivElement>(null);
   const inputRef = useRef<HTMLInputElement>(null);
-  const listRef = useRef<HTMLDivElement>(null);
-  // Tracks the active debounce timer so Enter can flush it synchronously
-  const debounceTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
-  // Tracks which query the current `results` correspond to (vs. lagging during debounce)
-  const resultsForQueryRef = useRef<string>("");
-  const router = useRouter();
-
-  // Debounced search
-  useEffect(() => {
-    if (query.length < 2) {
-      queueMicrotask(() => { setResults([]); setIsOpen(false); setIsPending(false); });
-      resultsForQueryRef.current = query;
-      return;
-    }
-    // Acknowledge typing immediately: open the popover with a pending row while
-    // the debounce + search runs, so a query never sits in dead air.
-    queueMicrotask(() => { setIsPending(true); setIsOpen(true); });
-    const timer = setTimeout(() => {
-      const r = searchGuide(query);
-      setResults(r);
-      setIsPending(false);
-      setIsOpen(r.length > 0 || query.length >= 2);
-      setActiveIndex(-1);
-      resultsForQueryRef.current = query;
-      if (debounceTimerRef.current === timer) debounceTimerRef.current = null;
-    }, 150);
-    debounceTimerRef.current = timer;
-    return () => {
-      clearTimeout(timer);
-      if (debounceTimerRef.current === timer) debounceTimerRef.current = null;
-    };
-  }, [query]);
 
   // Close on outside click
   useEffect(() => {
@@ -64,66 +28,7 @@ export default function SearchCombobox({
     }
     document.addEventListener("mousedown", handleClick);
     return () => document.removeEventListener("mousedown", handleClick);
-  }, []);
-
-  // Scroll active item into view
-  useEffect(() => {
-    if (activeIndex < 0 || !listRef.current) return;
-    listRef.current.querySelector(`[data-index="${activeIndex}"]`)?.scrollIntoView({ block: "nearest" });
-  }, [activeIndex]);
-
-  const navigate = useCallback(
-    (result: SearchResult) => {
-      setIsOpen(false);
-      setQuery("");
-      router.push(`/guide/${result.category.id}/${result.topic.id}`);
-    },
-    [router],
-  );
-
-  const onKeyDown = useCallback(
-    (e: React.KeyboardEvent) => {
-      if (e.key === "ArrowDown") {
-        e.preventDefault();
-        setActiveIndex((i) => Math.min(i + 1, results.length - 1));
-      } else if (e.key === "ArrowUp") {
-        e.preventDefault();
-        setActiveIndex((i) => Math.max(i - 1, -1));
-      } else if (e.key === "Enter") {
-        // Already-highlighted result wins
-        if (activeIndex >= 0 && results[activeIndex]) {
-          e.preventDefault();
-          navigate(results[activeIndex]);
-          return;
-        }
-        // Otherwise: flush any pending debounce so Enter never sits in dead air
-        if (query.trim().length < 2) return;
-        e.preventDefault();
-        let liveResults = results;
-        const isStale = resultsForQueryRef.current !== query;
-        if (isStale || debounceTimerRef.current) {
-          if (debounceTimerRef.current) {
-            clearTimeout(debounceTimerRef.current);
-            debounceTimerRef.current = null;
-          }
-          liveResults = searchGuide(query);
-          setResults(liveResults);
-          setIsPending(false);
-          setActiveIndex(-1);
-          resultsForQueryRef.current = query;
-        }
-        if (liveResults.length > 0) {
-          navigate(liveResults[0]);
-        } else {
-          // 0 results: ensure dropdown is visible so the "No matches" row gives feedback
-          setIsOpen(true);
-        }
-      } else if (e.key === "Escape" || e.key === "Tab") {
-        setIsOpen(false);
-      }
-    },
-    [activeIndex, results, navigate, query],
-  );
+  }, [setIsOpen]);
 
   const grouped = useMemo(() => groupResultsByCategory(results), [results]);
 

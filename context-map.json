@@ -645,6 +645,7 @@
             "src/data/guide/illustrations.ts",
             "src/data/guide/topics.ts",
             "src/data/guide/types.ts",
+            "src/lib/guide-body-index.ts",
             "src/lib/guide-link.ts",
             "src/lib/guide-search.ts",
             "src/lib/guide-utils.ts"
@@ -717,6 +718,7 @@
             "src/components/guide/TopicTOC.tsx",
             "src/components/guide/guide-sidebar/GuideSidebarContent.tsx",
             "src/components/guide/search-combobox/SearchResultsPopover.tsx",
+            "src/components/guide/search-combobox/useGuideSearch.ts",
             "src/components/guide/useActiveHeading.ts"
           ],
           "target": null,

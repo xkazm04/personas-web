@@ -62,7 +62,7 @@ function fuzzySegments(text: string, query: string): Segment[] {
   return merged;
 }
 
-export type MatchType = "exact-title" | "exact-tag" | "fuzzy-title" | "fuzzy-tag" | "description";
+export type MatchType = "exact-title" | "exact-tag" | "fuzzy-title" | "fuzzy-tag" | "description" | "body";
 
 export function highlightMatch(
   text: string,
@@ -70,7 +70,8 @@ export function highlightMatch(
   matchType: MatchType,
   color: string,
 ): ReactNode[] {
-  const isExact = matchType === "exact-title";
+  // "body" excerpts get exact-substring highlighting of the query, same as titles.
+  const isExact = matchType === "exact-title" || matchType === "body";
   const isFuzzy = matchType === "fuzzy-title";
   if (!isExact && !isFuzzy) return [text];
 

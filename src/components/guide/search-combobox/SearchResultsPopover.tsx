@@ -11,6 +11,9 @@ const BADGE_LABEL: Record<SearchResult["matchType"], string | null> = {
   "fuzzy-title": "~",
   "fuzzy-tag": "~tag",
   description: "desc",
+  // Body matches carry their own inline excerpt as the signal — no chrome badge
+  // (which would need a translated label) is added.
+  body: null,
 };
 
 export function SearchResultsPopover({
@@ -86,18 +89,25 @@ export function SearchResultsPopover({
                     }`}
                   >
                     <span
-                      className="h-1.5 w-1.5 shrink-0 rounded-full"
+                      className="h-1.5 w-1.5 shrink-0 self-start mt-1.5 rounded-full"
                       style={{ backgroundColor: group.category.color }}
                     />
-                    <span className="min-w-0 flex-1 truncate text-foreground">
-                      {highlightMatch(result.topic.title, query, result.matchType, group.category.color)}
+                    <span className="min-w-0 flex-1">
+                      <span className="block truncate text-foreground">
+                        {highlightMatch(result.topic.title, query, result.matchType, group.category.color)}
+                      </span>
+                      {result.excerpt && (
+                        <span className="mt-0.5 block truncate text-sm text-muted-dark">
+                          {highlightMatch(result.excerpt, query, result.matchType, group.category.color)}
+                        </span>
+                      )}
                     </span>
                     {badge && (
-                      <span className="shrink-0 rounded bg-white/[0.06] px-1.5 py-0.5 text-xs leading-none text-muted-dark">
+                      <span className="shrink-0 self-start mt-0.5 rounded bg-white/[0.06] px-1.5 py-0.5 text-xs leading-none text-muted-dark">
                         {badge}
                       </span>
                     )}
-                    {isActive && <ArrowRight className="h-3.5 w-3.5 shrink-0 text-muted-dark" />}
+                    {isActive && <ArrowRight className="h-3.5 w-3.5 shrink-0 self-start mt-1 text-muted-dark" />}
                   </button>
                 );
               })}
