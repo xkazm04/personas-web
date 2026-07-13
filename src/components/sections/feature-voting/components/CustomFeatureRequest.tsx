@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { motion } from "framer-motion";
+import { motion, useReducedMotion } from "framer-motion";
 import {
   AlertCircle,
   Check,
@@ -18,6 +18,7 @@ import { KOFI_USERNAME } from "../data";
 const MAX_LENGTH = 1000;
 
 export default function CustomFeatureRequest() {
+  const reduced = useReducedMotion() ?? false;
   const [value, setValue] = useState("");
   const [submitted, setSubmitted] = useState(false);
   const [saving, setSaving] = useState(false);
@@ -129,7 +130,7 @@ export default function CustomFeatureRequest() {
 
           {submitted && !error && (
             <motion.p
-              initial={{ opacity: 0, y: 4 }}
+              initial={reduced ? false : { opacity: 0, y: 4 }}
               animate={{ opacity: 1, y: 0 }}
               className="mt-3 text-base text-brand-emerald/70 font-mono tracking-wide"
             >
@@ -140,7 +141,7 @@ export default function CustomFeatureRequest() {
           {error && (
             <motion.p
               role="alert"
-              initial={{ opacity: 0, y: 4 }}
+              initial={reduced ? false : { opacity: 0, y: 4 }}
               animate={{ opacity: 1, y: 0 }}
               className="mt-3 flex items-center gap-1.5 text-base text-brand-amber/80 font-mono tracking-wide"
             >

@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { AnimatePresence, motion } from "framer-motion";
+import { AnimatePresence, motion, useReducedMotion } from "framer-motion";
 import { CornerDownRight } from "lucide-react";
 import type { Comment } from "../local-types";
 import CommentBubble from "./CommentBubble";
@@ -18,6 +18,7 @@ export default function CommentThread({
   onAddComment: (featureId: string, text: string, parentId: string | null) => void;
   accentRgba: (a: number) => string;
 }) {
+  const reduced = useReducedMotion() ?? false;
   const [replyingTo, setReplyingTo] = useState<string | null>(null);
   const featureComments = comments.filter((c) => c.featureId === featureId);
   const topLevel = featureComments.filter((c) => c.parentId === null);
@@ -58,10 +59,10 @@ export default function CommentThread({
             <AnimatePresence>
               {replyingTo === comment.id && (
                 <motion.div
-                  initial={{ height: 0, opacity: 0 }}
+                  initial={reduced ? false : { height: 0, opacity: 0 }}
                   animate={{ height: "auto", opacity: 1 }}
-                  exit={{ height: 0, opacity: 0 }}
-                  transition={{ duration: 0.2 }}
+                  exit={reduced ? { opacity: 0 } : { height: 0, opacity: 0 }}
+                  transition={reduced ? { duration: 0 } : { duration: 0.2 }}
                   className="overflow-hidden ms-[clamp(12px,2vw,16px)] ps-3 border-s border-glass"
                 >
                   <div className="flex items-center gap-1 mb-1.5 mt-1">

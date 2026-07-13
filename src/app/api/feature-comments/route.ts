@@ -12,7 +12,10 @@ import { getClientIp, parseJsonBody } from "@/lib/server/request";
 import { isRateLimited as isSharedRateLimited } from "@/lib/server/rate-limit";
 
 const ALLOWED_FEATURES = new Set(["macos", "i18n", "dashboard", "enterprise"]);
-const MAX_TEXT_LEN = 2000;
+// Aligned to the UI's 280-char comment cap (CommentInput's `maxLength={280}`),
+// plus a small tolerance margin so legitimate edge cases (IME composition,
+// paste normalization differences between client and server) aren't rejected.
+const MAX_TEXT_LEN = 300;
 const MAX_AUTHOR_LEN = 64;
 const UUID_RE =
   /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;

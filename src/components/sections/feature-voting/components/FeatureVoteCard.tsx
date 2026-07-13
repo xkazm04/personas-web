@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { AnimatePresence, motion } from "framer-motion";
+import { AnimatePresence, motion, useReducedMotion } from "framer-motion";
 import { ChevronUp, MessageCircle } from "lucide-react";
 import { fadeUp } from "@/lib/animations";
 import { trackFeatureVote } from "@/lib/analytics";
@@ -33,6 +33,7 @@ export default function FeatureVoteCard({
   onBoost: (featureId: string, tier: number) => void;
   showBoostUI: boolean;
 }) {
+  const reduced = useReducedMotion() ?? false;
   const [voted, setVoted] = useState(initialVoted);
   const [showTiers, setShowTiers] = useState(false);
   const [imgLoaded, setImgLoaded] = useState(false);
@@ -66,7 +67,7 @@ export default function FeatureVoteCard({
   return (
     <motion.div
       variants={fadeUp}
-      whileHover={{ y: -4, transition: { duration: 0.35, ease: "easeOut" } }}
+      whileHover={reduced ? undefined : { y: -4, transition: { duration: 0.35, ease: "easeOut" } }}
       className="group relative flex flex-col overflow-hidden rounded-2xl border border-glass bg-gradient-to-b from-white/[0.03] to-transparent backdrop-blur-sm transition-all duration-500 hover:border-glass-hover hover:shadow-[0_8px_60px_rgba(0,0,0,0.35)]"
     >
       <div className="px-4 pt-4 pb-2">
@@ -161,10 +162,10 @@ export default function FeatureVoteCard({
         <AnimatePresence>
           {showComments && (
             <motion.div
-              initial={{ height: 0, opacity: 0 }}
+              initial={reduced ? false : { height: 0, opacity: 0 }}
               animate={{ height: "auto", opacity: 1 }}
-              exit={{ height: 0, opacity: 0 }}
-              transition={{ duration: 0.3, ease: "easeOut" }}
+              exit={reduced ? { opacity: 0 } : { height: 0, opacity: 0 }}
+              transition={reduced ? { duration: 0 } : { duration: 0.3, ease: "easeOut" }}
               className="overflow-hidden"
             >
               <div className="px-4 pb-4">
