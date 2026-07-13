@@ -1,9 +1,8 @@
 "use client";
 
-import Image from "next/image";
 import { motion, useReducedMotion } from "framer-motion";
 import { BRAND_VAR, tint, type BrandKey } from "@/lib/brand-theme";
-import { AREAS, type AreaBarDef, type BarMotif } from "../areas";
+import { buildAreas, type AreaBarDef, type AreaCounts, type BarMotif } from "../areas";
 import AreaCardShell from "./AreaCardShell";
 import FlagArt from "./FlagArt";
 
@@ -13,11 +12,16 @@ import FlagArt from "./FlagArt";
  * grayscale; a full-color copy is clipped to the completion width behind a
  * glowing seam, so the picture literally develops as the work lands.
  * Typography lives on its own bottom scrim — it never fights the art.
+ *
+ * `counts` is derived server-side (see `roadmap-area-counts.ts`) and threaded
+ * in as plain data so the heavy template/connector catalogs stay off the
+ * client bundle while the card numbers still track the shipped product.
  */
-export default function RoadmapAreas() {
+export default function RoadmapAreas({ counts }: { counts: AreaCounts }) {
+  const areas = buildAreas(counts);
   return (
     <div className="mt-12 mx-auto grid max-w-5xl gap-5 md:grid-cols-2">
-      {AREAS.map((area) => (
+      {areas.map((area) => (
         <AreaCardShell key={area.key} area={area}>
           <div className={`mt-4 grid gap-3 ${area.wide ? "sm:grid-cols-2" : ""}`}>
             {area.bars.map((bar, i) => (
@@ -42,11 +46,13 @@ function TileArt({ motif, brand }: { motif?: BarMotif; brand: BrandKey }) {
     return <FlagArt flag={motif.flag} className="h-full w-full" />;
   }
   if (motif?.kind === "image") {
+    // One themed DOM node: the light/dark art are CSS variables and only the
+    // theme-active one is ever fetched (no dual dark/light <img> pair).
     return (
-      <>
-        <Image src={motif.dark} alt="" fill sizes="480px" className="hidden object-cover dark:block" />
-        <Image src={motif.light} alt="" fill sizes="480px" className="block object-cover dark:hidden" />
-      </>
+      <div
+        className="h-full w-full bg-cover bg-center bg-no-repeat bg-[image:var(--art-light)] dark:bg-[image:var(--art-dark)]"
+        style={{ "--art-light": `url(${motif.light})`, "--art-dark": `url(${motif.dark})` } as React.CSSProperties}
+      />
     );
   }
   return (
