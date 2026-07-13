@@ -34,6 +34,11 @@ export interface GuideTopic {
  * Tracks whether a topic is documented, up-to-date, and illustrated.
  * Presence of `screenshotRecipe` signals that the topic *should* have
  * per-locale screenshots; absence means it is intentionally text-only.
+ *
+ * These fields feed scripts/check-guide-coverage.mjs (screenshot coverage,
+ * content staleness, and desktop-drift reporting). Today only
+ * `screenshotRecipe` is populated in topics.ts; the review/drift fields
+ * are the schema that reporting reads and are not yet filled in.
  */
 export interface TopicCoverage {
   /**
@@ -41,8 +46,6 @@ export interface TopicCoverage {
    * runner. Presence = "this topic has a screenshot"; absence = text-only.
    */
   screenshotRecipe?: string;
-  /** ISO timestamp when the screenshot was last regenerated. */
-  screenshotCapturedAt?: string;
   /** ISO timestamp when the content was last reviewed for accuracy. */
   contentReviewedAt?: string;
   /** Semver of the desktop app the topic was last verified against. */
