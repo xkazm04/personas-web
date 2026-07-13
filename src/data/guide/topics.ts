@@ -1,7 +1,7 @@
 import type { GuideTopic } from "./types";
 
 export const GUIDE_TOPICS: GuideTopic[] = [
-  // ─── Getting Started (12) ───────────────────────────────────────────
+  // ─── Getting Started ────────────────────────────────────────────────
   {
     id: "installing-personas",
     categoryId: "getting-started",
@@ -114,7 +114,7 @@ export const GUIDE_TOPICS: GuideTopic[] = [
     mode: "both",
   },
 
-  // ─── Agents & Prompts (12) ──────────────────────────────────────────
+  // ─── Agents & Prompts ───────────────────────────────────────────────
   {
     id: "creating-a-new-agent",
     categoryId: "agents-prompts",
@@ -212,7 +212,7 @@ export const GUIDE_TOPICS: GuideTopic[] = [
     tags: ["agents-prompts", "health", "status", "indicators", "diagnostics"],
   },
 
-  // ─── Triggers & Scheduling (10) ─────────────────────────────────────
+  // ─── Triggers & Scheduling ──────────────────────────────────────────
   {
     id: "how-triggers-work",
     categoryId: "triggers",
@@ -294,7 +294,7 @@ export const GUIDE_TOPICS: GuideTopic[] = [
     tags: ["triggers", "testing", "debugging", "simulate", "verify"],
   },
 
-  // ─── Credentials & Security (10) ────────────────────────────────────
+  // ─── Credentials & Security ─────────────────────────────────────────
   {
     id: "how-personas-keeps-your-data-safe",
     categoryId: "credentials",
@@ -352,7 +352,7 @@ export const GUIDE_TOPICS: GuideTopic[] = [
     tags: ["credentials", "connectors", "integrations", "catalog", "services"],
   },
 
-  // ─── Pipelines & Teams (12) ─────────────────────────────────────────
+  // ─── Pipelines & Teams ──────────────────────────────────────────────
   {
     id: "team-assignments",
     categoryId: "pipelines",
@@ -450,7 +450,7 @@ export const GUIDE_TOPICS: GuideTopic[] = [
     tags: ["pipelines", "debugging", "troubleshooting", "errors", "fix"],
   },
 
-  // ─── Testing & Optimization (12) ────────────────────────────────────
+  // ─── Testing & Optimization ─────────────────────────────────────────
   {
     id: "why-test-your-agents",
     categoryId: "testing",
@@ -548,7 +548,7 @@ export const GUIDE_TOPICS: GuideTopic[] = [
     tags: ["testing", "history", "trends", "progress", "charts"],
   },
 
-  // ─── Memories & Knowledge (10) ──────────────────────────────────────
+  // ─── Memories & Knowledge ───────────────────────────────────────────
   {
     id: "how-agent-memory-works",
     categoryId: "memories",
@@ -630,7 +630,7 @@ export const GUIDE_TOPICS: GuideTopic[] = [
     tags: ["memories", "best-practices", "tips", "guidelines", "optimization"],
   },
 
-  // ─── Monitoring & Costs (15) ────────────────────────────────────────
+  // ─── Monitoring & Costs ─────────────────────────────────────────────
   {
     id: "the-monitoring-dashboard",
     categoryId: "monitoring",
@@ -757,7 +757,7 @@ export const GUIDE_TOPICS: GuideTopic[] = [
     mode: "power",
   },
 
-  // ─── Deployment & Integrations (10) ─────────────────────────────────
+  // ─── Deployment & Integrations ──────────────────────────────────────
   {
     id: "local-vs-cloud-execution",
     categoryId: "deployment",
@@ -839,7 +839,7 @@ export const GUIDE_TOPICS: GuideTopic[] = [
     tags: ["deployment", "troubleshooting", "cloud", "errors", "fix"],
   },
 
-  // ─── Troubleshooting (8) ────────────────────────────────────────────
+  // ─── Troubleshooting ────────────────────────────────────────────────
   {
     id: "common-error-messages",
     categoryId: "troubleshooting",
@@ -905,7 +905,7 @@ export const GUIDE_TOPICS: GuideTopic[] = [
     tags: ["troubleshooting", "reset", "defaults", "settings", "safe"],
   },
 
-  // ─── Companion / Athena (8) ─────────────────────────────────────────
+  // ─── Companion / Athena ─────────────────────────────────────────────
   {
     id: "meet-athena",
     categoryId: "companion",
