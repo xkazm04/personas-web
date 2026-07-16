@@ -37,6 +37,15 @@ function createPendingStatuses(): Record<CellKey, CellStatus> {
   ) as Record<CellKey, CellStatus>;
 }
 
+function createFilledStatuses(): Record<CellKey, CellStatus> {
+  return Object.fromEntries(
+    CELLS.map((cell) => [
+      cell.key,
+      { state: "filled" as CellState, answer: cell.question?.picked },
+    ]),
+  ) as Record<CellKey, CellStatus>;
+}
+
 export function usePersonaMatrixBuild(): PersonaMatrixState {
   const prefersReducedMotion = useReducedMotion();
   const [statuses, setStatuses] = useState<Record<CellKey, CellStatus>>(createPendingStatuses);
@@ -103,8 +112,23 @@ export function usePersonaMatrixBuild(): PersonaMatrixState {
     timeoutsRef.current.push(doneTimeout);
   }, [clearAll, setCell]);
 
+  const showFinal = useCallback(() => {
+    clearAll();
+    setUserTyped(USER_PROMPT);
+    setStatuses(createFilledStatuses());
+    setPhase("done");
+  }, [clearAll]);
+
   useEffect(() => {
-    if (prefersReducedMotion || hasRun.current) return;
+    if (hasRun.current) return;
+    // Reduced motion: skip the timed build and show the resolved end-state
+    // immediately, so the section carries its full content instead of a
+    // permanently pending skeleton.
+    if (prefersReducedMotion) {
+      hasRun.current = true;
+      showFinal();
+      return;
+    }
     const el = sectionRef.current;
     if (!el) return;
     const observer = new IntersectionObserver(
@@ -119,14 +143,20 @@ export function usePersonaMatrixBuild(): PersonaMatrixState {
     );
     observer.observe(el);
     return () => observer.disconnect();
-  }, [runBuild, prefersReducedMotion]);
+  }, [runBuild, showFinal, prefersReducedMotion]);
 
   useEffect(() => () => timeoutsRef.current.forEach(clearTimeout), []);
 
   const replay = useCallback(() => {
     hasRun.current = false;
-    runBuild();
-  }, [runBuild]);
+    // Under reduced motion replay must also use the instant path, otherwise
+    // it would start the very animation the user opted out of.
+    if (prefersReducedMotion) {
+      showFinal();
+    } else {
+      runBuild();
+    }
+  }, [runBuild, showFinal, prefersReducedMotion]);
 
   return { statuses, phase, userTyped, replay, sectionRef };
 }
