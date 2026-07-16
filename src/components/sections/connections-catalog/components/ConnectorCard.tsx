@@ -1,5 +1,6 @@
 "use client";
 
+import { useState } from "react";
 import { motion } from "framer-motion";
 import Image from "next/image";
 import type { Connector } from "@/data/connectors";
@@ -17,6 +18,7 @@ export default function ConnectorCard({
 }) {
   const categoryMeta = categories.find((cat) => cat.key === c.category);
   const iconName = c.icon ?? c.name;
+  const [pillIconFailed, setPillIconFailed] = useState(false);
 
   return (
     <motion.div
@@ -26,9 +28,19 @@ export default function ConnectorCard({
       exit={{ opacity: 0, scale: 0.95 }}
       transition={{ delay: Math.min(index * 0.03, 0.6), duration: 0.35 }}
       whileHover={{ y: -4, transition: { duration: 0.25 } }}
-      onClick={onClick}
-      className="group relative overflow-hidden rounded-2xl border border-glass bg-gradient-to-br from-white/[0.035] to-white/[0.008] transition-[border-color] duration-500 hover:border-glass-strong cursor-pointer will-change-transform"
+      className="group relative overflow-hidden rounded-2xl border border-glass bg-gradient-to-br from-white/[0.035] to-white/[0.008] transition-[border-color] duration-500 hover:border-glass-strong will-change-transform focus-within:border-glass-strong"
     >
+      {/* Real focusable control spanning the card, so opening a connector's
+          detail modal is keyboard-reachable and announced to AT. Sits above the
+          decorative layers (z-20) and below nothing interactive. */}
+      {onClick && (
+        <button
+          type="button"
+          onClick={onClick}
+          aria-label={`${c.label} connector details`}
+          className="absolute inset-0 z-20 cursor-pointer rounded-2xl outline-none focus-visible:ring-2 focus-visible:ring-brand-cyan/70 focus-visible:ring-offset-2 focus-visible:ring-offset-background"
+        />
+      )}
       <div className="pointer-events-none absolute inset-0 flex items-center justify-center overflow-hidden">
         <Image
           src={`/tools/${iconName}.svg`}
@@ -73,17 +85,20 @@ export default function ConnectorCard({
             className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-white"
             style={{ boxShadow: `0 0 0 1px ${c.color}40, 0 0 10px ${c.color}26` }}
           >
-            <Image
-              src={`/tools/${iconName}.svg`}
-              alt={`${c.label} logo`}
-              width={22}
-              height={22}
-              className="h-[22px] w-[22px] object-contain"
-              onError={(e) => {
-                const img = e.target as HTMLImageElement;
-                img.style.display = "none";
-              }}
-            />
+            {pillIconFailed ? (
+              <span className="font-mono text-xs font-bold leading-none" style={{ color: c.color }}>
+                {c.monogram}
+              </span>
+            ) : (
+              <Image
+                src={`/tools/${iconName}.svg`}
+                alt={`${c.label} logo`}
+                width={22}
+                height={22}
+                className="h-[22px] w-[22px] object-contain"
+                onError={() => setPillIconFailed(true)}
+              />
+            )}
           </div>
           <div className="min-w-0">
             <h3 className="text-base font-semibold leading-tight">{c.label}</h3>
