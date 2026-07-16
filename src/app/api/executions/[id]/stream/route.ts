@@ -21,7 +21,7 @@ export async function GET(
     orchestratorUrl,
   );
 
-  const apiKey = process.env.NEXT_PUBLIC_TEAM_API_KEY;
+  const apiKey = process.env.TEAM_API_KEY ?? process.env.NEXT_PUBLIC_TEAM_API_KEY;
   const userToken = req.headers.get("x-user-token");
   const headers: Record<string, string> = { Accept: "text/event-stream" };
   if (apiKey) headers["Authorization"] = `Bearer ${apiKey}`;

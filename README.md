@@ -43,7 +43,7 @@ Copy `.env.example` to `.env.local` and fill in what you need.
 | `NEXT_PUBLIC_SUPABASE_URL` | public | roadmap voting, feature requests, auth | `https://xxx.supabase.co` |
 | `NEXT_PUBLIC_SUPABASE_ANON_KEY` | public | same | `eyJhbGc...` |
 | `NEXT_PUBLIC_ORCHESTRATOR_URL` | public | `/dashboard`, event stream | `http://localhost:3001` |
-| `NEXT_PUBLIC_TEAM_API_KEY` | public | orchestrator auth | — |
+| `TEAM_API_KEY` | **server-only** | orchestrator auth (attached by the `/api/orchestrator` proxy; never sent to the browser) | — |
 | `NEXT_PUBLIC_SITE_URL` | public | canonical URLs, OG tags | `http://localhost:3000` |
 | `NEXT_PUBLIC_USE_MOCK_API` | public | force mock dashboard data | `true` |
 | `NEXT_PUBLIC_SENTRY_DSN` | public | client error reporting | — |

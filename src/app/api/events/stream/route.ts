@@ -15,8 +15,8 @@ export async function GET(req: NextRequest) {
 
   const streamUrl = new URL("/api/events/stream", orchestratorUrl);
 
-  // Forward auth headers
-  const apiKey = getOptionalEnv("NEXT_PUBLIC_TEAM_API_KEY");
+  // Forward auth headers (prefer the server-only key name)
+  const apiKey = getOptionalEnv("TEAM_API_KEY") ?? getOptionalEnv("NEXT_PUBLIC_TEAM_API_KEY");
   const userToken = req.headers.get("x-user-token");
   const headers: Record<string, string> = { Accept: "text/event-stream" };
   if (apiKey) headers["Authorization"] = `Bearer ${apiKey}`;

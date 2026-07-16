@@ -2,10 +2,7 @@ import * as Sentry from "@sentry/nextjs";
 import { useAuthStore } from "@/stores/authStore";
 import { mockApi } from "./mockApi";
 import { supabaseApi } from "./supabaseApi";
-import {
-  OrchestratorConfigError,
-  validateOrchestratorUrl,
-} from "./orchestrator-config";
+import { OrchestratorConfigError } from "./orchestrator-config";
 
 export { OrchestratorConfigError };
 import type {
@@ -44,15 +41,16 @@ export class ApiError extends Error {
   }
 }
 
-function getOrchestratorBase(): string {
-  return validateOrchestratorUrl(process.env.NEXT_PUBLIC_ORCHESTRATOR_URL);
-}
-
 // ---------------------------------------------------------------------------
 // Core fetch wrapper
 // ---------------------------------------------------------------------------
 
 const DEFAULT_TIMEOUT_MS = 15_000;
+
+// All orchestrator calls go through this same-origin proxy so the team API
+// key is attached server-side and never enters the browser bundle. The
+// browser only carries its own Supabase session token (X-User-Token).
+const ORCHESTRATOR_PROXY_PREFIX = "/api/orchestrator";
 
 async function orchestratorFetch<T>(
   path: string,
@@ -73,23 +71,18 @@ async function orchestratorFetch<T>(
     );
   }
 
-  const base = getOrchestratorBase();
-  const url = new URL(path, base);
-
+  const search = new URLSearchParams();
   if (options?.params) {
     for (const [k, v] of Object.entries(options.params)) {
-      if (v !== undefined) url.searchParams.set(k, v);
+      if (v !== undefined) search.set(k, v);
     }
   }
+  const qs = search.toString();
+  const proxyUrl = `${ORCHESTRATOR_PROXY_PREFIX}${path}${qs ? `?${qs}` : ""}`;
 
   const headers: Record<string, string> = {
     "Content-Type": "application/json",
   };
-
-  const apiKey = process.env.NEXT_PUBLIC_TEAM_API_KEY;
-  if (apiKey) {
-    headers["Authorization"] = `Bearer ${apiKey}`;
-  }
   if (accessToken) {
     headers["X-User-Token"] = accessToken;
   }
@@ -102,7 +95,7 @@ async function orchestratorFetch<T>(
 
   let res: Response;
   try {
-    res = await fetch(url.toString(), {
+    res = await fetch(proxyUrl, {
       method: options?.method ?? "GET",
       headers,
       body: options?.body ? JSON.stringify(options.body) : undefined,
