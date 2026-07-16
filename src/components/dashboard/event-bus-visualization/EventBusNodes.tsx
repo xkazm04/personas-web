@@ -1,5 +1,19 @@
+import type { KeyboardEvent as ReactKeyboardEvent } from "react";
 import { SWARM_PERSONAS, SWARM_SOURCES, type SwarmNode } from "@/lib/mock-dashboard-data";
 import type { Point } from "./eventBusGeometry";
+
+// SVG <g> is focusable with tabIndex; give it button semantics + keyboard
+// activation so the detail drawer isn't a mouse-only entry point.
+const nodeKeyActivate =
+  (fn: () => void) => (e: ReactKeyboardEvent<SVGGElement>) => {
+    if (e.key === "Enter" || e.key === " ") {
+      e.preventDefault();
+      fn();
+    }
+  };
+
+const NODE_INTERACTIVE_CLASS =
+  "cursor-pointer focus:outline-none focus-visible:outline focus-visible:outline-2 focus-visible:outline-brand-cyan";
 
 export function EventBusSourceNodes({ sourcePositions, onNodeClick }: { sourcePositions: Point[]; onNodeClick?: (node: SwarmNode) => void }) {
   return (
@@ -8,7 +22,15 @@ export function EventBusSourceNodes({ sourcePositions, onNodeClick }: { sourcePo
         const pos = sourcePositions[index];
         const r = 10 + source.volume * 6;
         return (
-          <g key={source.id} className="cursor-pointer" onClick={() => onNodeClick?.(source)}>
+          <g
+            key={source.id}
+            className={NODE_INTERACTIVE_CLASS}
+            role="button"
+            tabIndex={0}
+            aria-label={`${source.label} event source details`}
+            onClick={() => onNodeClick?.(source)}
+            onKeyDown={nodeKeyActivate(() => onNodeClick?.(source))}
+          >
             <circle cx={pos.x} cy={pos.y} r={r} fill="rgba(255,255,255,0.06)" stroke="rgba(255,255,255,0.12)" strokeWidth="0.8" />
             <text x={pos.x} y={pos.y + r + 14} textAnchor="middle" fill="rgba(255,255,255,0.4)" fontSize="9" fontFamily="system-ui, sans-serif">{source.label}</text>
             <circle cx={pos.x + r - 2} cy={pos.y - r + 2} r="2" fill={source.color} opacity="0.6" />
@@ -25,7 +47,15 @@ export function EventBusPersonaNodes({ personaPositions, prefersReduced, onNodeC
       {SWARM_PERSONAS.map((persona, index) => {
         const pos = personaPositions[index];
         return (
-          <g key={persona.id} className="cursor-pointer" onClick={() => onNodeClick?.(persona)}>
+          <g
+            key={persona.id}
+            className={NODE_INTERACTIVE_CLASS}
+            role="button"
+            tabIndex={0}
+            aria-label={`${persona.label} details`}
+            onClick={() => onNodeClick?.(persona)}
+            onKeyDown={nodeKeyActivate(() => onNodeClick?.(persona))}
+          >
             <circle cx={pos.x} cy={pos.y} r={22} fill="none" stroke={persona.color} strokeOpacity="0.1" strokeWidth="1">
               {!prefersReduced && <animate attributeName="r" values="22;24;22" dur={`${2.5 + index * 0.3}s`} repeatCount="indefinite" />}
             </circle>
