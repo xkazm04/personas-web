@@ -1,13 +1,14 @@
 /**
  * WAITLIST API - SERVERLESS LIMITATIONS & PRODUCTION WARNING
  *
- * 1. DEVELOPMENT ONLY: This implementation uses the local filesystem (.data/waitlist.json)
- *    for storage. On serverless platforms (Vercel, AWS Lambda), the filesystem is ephemeral.
- *    Data will be LOST on every cold start or redeploy.
+ * 1. STORAGE: When Supabase is configured (NEXT_PUBLIC_SUPABASE_URL + a key),
+ *    signups persist to the waitlist_entries table via the server-only client.
+ *    Otherwise this falls back to the local filesystem (.data/waitlist.json),
+ *    which is ephemeral on serverless (Vercel, AWS Lambda) — data is LOST on
+ *    every cold start or redeploy, so the FS path is for local dev only.
  *
- * 2. DATABASE REQUIRED: Production deployment requires a persistent database backend.
- *    Supabase (PostgreSQL) is already integrated into the project's Auth context and
- *    is the recommended path for production waitlist storage.
+ * 2. DATABASE: For production, configure Supabase and create the
+ *    waitlist_entries table (scripts/harden-voting-rls.sql).
  *
  * 3. RATE LIMITING: The rate limiter uses an in-memory Map. On serverless, this state
  *    is reset per invocation and shared only within the same warm instance, providing
@@ -26,10 +27,23 @@ import { NextRequest, NextResponse } from "next/server";
 import { isValidEmail } from "@/lib/validation";
 import { withWriteLock } from "@/lib/fileLock";
 import { readJsonFile, writeJsonFile } from "@/lib/server/json-file-store";
+import { hasSupabaseEnv } from "@/lib/server/env";
 import { getClientIp, jsonError, parseJsonBody } from "@/lib/server/request";
 import { isRateLimited as isSharedRateLimited } from "@/lib/server/rate-limit";
 
 const WAITLIST_FILE = "waitlist.json";
+const WAITLIST_TABLE = "waitlist_entries";
+
+// Persist to Supabase when configured; the .data/*.json path is a local-dev
+// fallback only (ephemeral on serverless — signups would be lost on cold start).
+function hasSupabase(): boolean {
+  return hasSupabaseEnv();
+}
+
+async function getSupabaseClient() {
+  const { getSupabaseAdmin } = await import("@/lib/supabase-admin");
+  return getSupabaseAdmin();
+}
 
 interface WaitlistEntry {
   email: string;
@@ -95,6 +109,19 @@ export async function GET(req: NextRequest) {
     return jsonError("Too many requests", 429, { "Retry-After": "60" });
   }
 
+  if (hasSupabase()) {
+    const sb = await getSupabaseClient();
+    const counts: Record<string, number> = {};
+    for (const platform of VALID_PLATFORMS) counts[platform] = 0;
+    const { data, error } = await sb.from(WAITLIST_TABLE).select("platform");
+    if (!error && data) {
+      for (const row of data as { platform: string }[]) {
+        if (row.platform in counts) counts[row.platform]++;
+      }
+    }
+    return NextResponse.json({ counts });
+  }
+
   // Use in-memory counts if available to avoid disk I/O and O(n) scan
   if (!platformCounts) {
     await readWaitlist();
@@ -135,6 +162,27 @@ export async function POST(req: NextRequest) {
   }
   if (!VALID_PLATFORMS.has(platform)) {
     return jsonError(`Platform must be one of: ${[...VALID_PLATFORMS].join(", ")}`, 400);
+  }
+
+  if (hasSupabase()) {
+    const sb = await getSupabaseClient();
+    const { error } = await sb.from(WAITLIST_TABLE).insert({
+      email: trimmedEmail,
+      platform,
+      early_beta: !!earlyBeta,
+    });
+    if (error) {
+      // 23505 = unique_violation on (email, platform) → already signed up.
+      if (error.code === "23505") {
+        return NextResponse.json({ message: "Already on the waitlist", duplicate: true });
+      }
+      return jsonError("Failed to join waitlist", 500);
+    }
+    const { count } = await sb
+      .from(WAITLIST_TABLE)
+      .select("*", { count: "exact", head: true })
+      .eq("platform", platform);
+    return NextResponse.json({ message: "Added to waitlist", count: count ?? 0 });
   }
 
   // Serialize read-modify-write to prevent TOCTOU race conditions.

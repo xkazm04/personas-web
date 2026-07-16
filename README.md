@@ -42,6 +42,7 @@ Copy `.env.example` to `.env.local` and fill in what you need.
 |---|---|---|---|
 | `NEXT_PUBLIC_SUPABASE_URL` | public | roadmap voting, feature requests, auth | `https://xxx.supabase.co` |
 | `NEXT_PUBLIC_SUPABASE_ANON_KEY` | public | same | `eyJhbGc...` |
+| `SUPABASE_SERVICE_ROLE_KEY` | **server-only** | votes/comments/boosts/waitlist writes; enables locked-down RLS (run `scripts/harden-voting-rls.sql`) | — |
 | `NEXT_PUBLIC_ORCHESTRATOR_URL` | public | `/dashboard`, event stream | `http://localhost:3001` |
 | `TEAM_API_KEY` | **server-only** | orchestrator auth (attached by the `/api/orchestrator` proxy; never sent to the browser) | — |
 | `NEXT_PUBLIC_SITE_URL` | public | canonical URLs, OG tags | `http://localhost:3000` |

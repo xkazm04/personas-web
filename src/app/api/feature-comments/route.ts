@@ -38,8 +38,8 @@ function hasSupabase(): boolean {
 }
 
 async function getSupabaseClient() {
-  const { getSupabase } = await import("@/lib/supabase");
-  return getSupabase();
+  const { getSupabaseAdmin } = await import("@/lib/supabase-admin");
+  return getSupabaseAdmin();
 }
 
 function isRateLimited(ip: string): boolean {

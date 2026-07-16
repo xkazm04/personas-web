@@ -46,8 +46,10 @@ export function hasSupabase(): boolean {
 }
 
 export async function getSupabaseClient() {
-  const { getSupabase } = await import("@/lib/supabase");
-  return getSupabase();
+  // Service-role client (server-only) so feature_votes RLS can be locked down
+  // and voter emails aren't readable by anyone with the public anon key.
+  const { getSupabaseAdmin } = await import("@/lib/supabase-admin");
+  return getSupabaseAdmin();
 }
 
 /* ── Filesystem fallback ───────────────────────────────────────────── */
