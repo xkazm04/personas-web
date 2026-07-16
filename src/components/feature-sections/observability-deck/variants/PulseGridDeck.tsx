@@ -17,6 +17,41 @@ import {
   type Stats,
 } from "./pulse-grid-deck/pulseGridTypes";
 
+function emptyStats(): Stats {
+  return Object.fromEntries(
+    agentPool.map((agent) => [
+      agent,
+      { pulses: [] as Pulse[], durations: [] as number[], totalCost: 0, pulseCount: 0 },
+    ]),
+  );
+}
+
+/**
+ * Deterministic populated snapshot for reduced-motion users. The live deck
+ * fills in via an interval that we intentionally never start under reduced
+ * motion; without this seed the lanes would sit permanently empty/"idle"
+ * while the chrome still claimed to be streaming.
+ */
+function staticSnapshot(): Stats {
+  return Object.fromEntries(
+    agentPool.map((agent, ai) => {
+      const pulses: Pulse[] = Array.from({ length: MAX_PULSES_PER_AGENT }, (_, pi) => {
+        const eventType = eventPool[(ai + pi) % eventPool.length] as EventType;
+        const duration = eventType.startsWith("execution")
+          ? Number((0.6 + ((ai + pi) % 5) * 0.7).toFixed(2))
+          : Number((0.05 + ((ai + pi) % 4) * 0.15).toFixed(2));
+        const cost = eventType.startsWith("execution")
+          ? Number((0.04 + ((ai + pi) % 6) * 0.03).toFixed(2))
+          : 0;
+        return { id: `static-${ai}-${pi}`, eventType, duration, cost, ts: pi };
+      });
+      const durations = pulses.map((p) => p.duration).slice(0, MAX_SPARKLINE);
+      const totalCost = Number(pulses.reduce((s, p) => s + p.cost, 0).toFixed(2));
+      return [agent, { pulses, durations, totalCost, pulseCount: 18 + ai * 4 }];
+    }),
+  );
+}
+
 export default function PulseGridDeck({
   filterPrefix,
   onClearFilter,
@@ -25,17 +60,15 @@ export default function PulseGridDeck({
   onClearFilter: () => void;
 }) {
   const reduced = useReducedMotion();
-  const [stats, setStats] = useState<Stats>(() =>
-    Object.fromEntries(
-      agentPool.map((agent) => [
-        agent,
-        { pulses: [] as Pulse[], durations: [] as number[], totalCost: 0, pulseCount: 0 },
-      ]),
-    ),
-  );
+  const [stats, setStats] = useState<Stats>(emptyStats);
 
   useEffect(() => {
-    if (reduced) return;
+    if (reduced) {
+      // Show a populated static end-state instead of empty "idle" lanes; a
+      // single state set is not motion, so it's safe under reduced motion.
+      setStats(staticSnapshot());
+      return;
+    }
     const id = setInterval(() => {
       const agent = agentPool[Math.floor(Math.random() * agentPool.length)];
       const eventType = eventPool[
@@ -81,7 +114,7 @@ export default function PulseGridDeck({
     <div className="rounded-2xl border border-foreground/10 bg-background/80 backdrop-blur-xl overflow-hidden shadow-[0_10px_40px_rgba(0,0,0,0.08)] dark:shadow-[0_0_60px_rgba(0,0,0,0.3)]">
       <TerminalChrome
         title="observability-deck"
-        status="streaming"
+        status={reduced ? "snapshot" : "streaming"}
         info="pulse grid"
         className="px-5 py-3"
       />
@@ -117,7 +150,7 @@ export default function PulseGridDeck({
         ) : (
           <span>Per-agent activity pulse</span>
         )}
-        <span className="text-brand-emerald">auto-refreshing</span>
+        <span className="text-brand-emerald">{reduced ? "snapshot" : "auto-refreshing"}</span>
       </div>
     </div>
   );
