@@ -25,8 +25,13 @@ export function useReviewKeyboardShortcuts({
 }) {
   useEffect(() => {
     const handler = (e: KeyboardEvent) => {
-      const tag = (e.target as HTMLElement)?.tagName;
-      if (tag === "INPUT" || tag === "TEXTAREA" || tag === "SELECT") return;
+      // Never hijack browser/OS chords (Ctrl+R reload, Cmd+A, Alt+…). e.key is
+      // still the bare letter when a modifier is held, so without this guard a
+      // reload keystroke would preventDefault and fire a destructive resolve.
+      if (e.ctrlKey || e.metaKey || e.altKey) return;
+      const target = e.target as HTMLElement | null;
+      const tag = target?.tagName;
+      if (tag === "INPUT" || tag === "TEXTAREA" || tag === "SELECT" || target?.isContentEditable) return;
 
       if (e.key === "j") {
         e.preventDefault();

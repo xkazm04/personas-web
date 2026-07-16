@@ -70,8 +70,12 @@ export default function ReviewsFocusFlow({ onExit }: Props) {
 
   useEffect(() => {
     function onKey(e: KeyboardEvent) {
-      const tag = (e.target as HTMLElement | null)?.tagName;
-      if (tag === "INPUT" || tag === "TEXTAREA" || tag === "SELECT") return;
+      // Don't hijack browser/OS chords (Ctrl+R, Cmd+A, …) into destructive
+      // approve/reject actions — e.key is still the bare letter with a modifier.
+      if (e.ctrlKey || e.metaKey || e.altKey) return;
+      const target = e.target as HTMLElement | null;
+      const tag = target?.tagName;
+      if (tag === "INPUT" || tag === "TEXTAREA" || tag === "SELECT" || target?.isContentEditable) return;
       if (e.key === "Escape") {
         e.preventDefault();
         onExit();
