@@ -29,6 +29,23 @@ import type { Variants } from "framer-motion";
 //      involves significant movement (> 10 px translate or continuous
 //      looping).
 //
+// 4. DECORATIVE vs CONTENT-BEARING — the "return null" in rules 1–2
+//    applies ONLY to purely decorative ambience (orbs, particles,
+//    background gradients) that carry no information.
+//    - Components whose animation REVEALS CONTENT (typewriter headlines,
+//      animated dashboards/metrics, build-up sequences that end on data
+//      the user needs) MUST render their final/static end-state under
+//      reduced motion — never `null`, never a permanently hidden or
+//      "pending" state. Skip the animation, keep the payload.
+//    - Litmus test: if a sighted user with motion enabled eventually
+//      reads text/numbers/status from the component, a reduced-motion
+//      user must see that same end-state immediately. Hiding it is an
+//      accessibility regression, not graceful degradation.
+//    - Past failures from getting this wrong: CinematicBreather (blank
+//      headline), PulseGridDeck (empty "idle" deck), Persona Matrix
+//      (permanent skeleton). All shipped by copying rule-1/2 `return null`
+//      into a content-bearing component.
+//
 // Rationale: inconsistent gating means some users with motion
 // sensitivity or low-end hardware see heavy canvas loops while
 // lighter components are already hidden. This contract makes the
