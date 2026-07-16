@@ -29,7 +29,9 @@ function TypewriterLine({
       {chars.map((char, index) => (
         <span
           key={`${text}-${index}-${char}`}
-          className={`inline-block ${inView && !prefersReducedMotion ? "tw-char-reveal" : "tw-char-hidden"}`}
+          className={`inline-block ${
+            prefersReducedMotion ? "" : inView ? "tw-char-reveal" : "tw-char-hidden"
+          }`}
           style={
             inView && !prefersReducedMotion
               ? { animationDelay: `${baseDelay + index * charStep}s` }
@@ -39,7 +41,7 @@ function TypewriterLine({
           {char === " " ? "\u00A0" : char}
         </span>
       ))}
-      {pulseAfter && (
+      {pulseAfter && !prefersReducedMotion && (
         <span
           className={`absolute inset-0 pointer-events-none bg-linear-to-r from-brand-cyan/0 via-brand-cyan/20 to-brand-purple/0 mix-blend-screen ${
             inView && !prefersReducedMotion ? "tw-pulse-reveal" : "tw-char-hidden"
