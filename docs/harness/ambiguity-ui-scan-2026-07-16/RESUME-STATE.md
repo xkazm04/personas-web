@@ -1,5 +1,13 @@
 # Scan resume state — ambiguity-guardian + ui-perfectionist, 2026-07-16
 
+## UPDATE 2026-07-16 (later): SCAN COMPLETE — 53/53 contexts, 265 findings (6C/113H/133M/13L), counts verified two ways. INDEX.md built + committed (f78d3fd) on branch `vibeman/ambiguity-ui-scan-2026-07-16-fixes`. Now in FIX phase.
+## FIX phase status: Wave 1 (reduced-motion T4, 4 findings) in progress. Security wave T1 (4 findings) DEFERRED for user sign-off (auth/secret/architecture). See INDEX.md "Suggested wave plan".
+## Baseline to hold every wave: tsc 0 · vitest 64/64.
+
+---
+# (original scan-interruption state below, now superseded)
+
+
 Pipeline B run on **personas-web** (project id `39de516e-059b-4b1a-86ad-f28e8abddaf7`).
 One combined-lens subagent per context, exactly 5 findings each, report per context in this directory.
 **Interrupted by Claude session usage limit (resets 3:20am Europe/Prague).**
