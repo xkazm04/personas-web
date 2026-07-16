@@ -30,8 +30,10 @@ export default function FlowNodes({
         const isWiringSource = wiringFrom === node.id;
 
         return (
+          // Non-interactive wrapper so the node and its remove control are
+          // SIBLING buttons, not nested (WCAG 4.1.2 nested-interactive).
+          <g key={node.id}>
           <g
-            key={node.id}
             role="button"
             tabIndex={0}
             aria-label={`${tool.name} ${node.side} node`}
@@ -97,11 +99,15 @@ export default function FlowNodes({
               {node.side === "producer" ? "PRODUCER" : "CONSUMER"}
             </text>
 
+          </g>
+            {/* Sibling of the node button (not nested). Always faintly visible
+                so touch users can discover + hit it deliberately, rather than
+                an invisible tap target that deletes on a stray edge tap. */}
             <g
               role="button"
               tabIndex={0}
               aria-label={`Remove ${tool.name} node`}
-              className="svg-focus-parent cursor-pointer opacity-0 hover:opacity-100 focus-visible:opacity-100 transition-opacity focus-visible:outline-none"
+              className="svg-focus-parent cursor-pointer opacity-40 hover:opacity-100 focus-visible:opacity-100 transition-opacity focus-visible:outline-none"
               onClick={(e) => {
                 e.stopPropagation();
                 onRemoveNode(node.id);
