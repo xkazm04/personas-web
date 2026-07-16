@@ -11,7 +11,6 @@ import {
   YAxis,
   ReferenceLine,
 } from "recharts";
-import { MOCK_COST_COMPARE, MOCK_ANNOTATIONS } from "@/lib/mock-dashboard-data";
 import type { ChartAnnotation } from "@/lib/mock-dashboard-data";
 import {
   AXIS_TICK,
@@ -29,14 +28,14 @@ const annotationStyles: Record<ChartAnnotation["type"], { stroke: string; emoji:
   milestone: { stroke: SERIES.emerald, emoji: "\u{1F3AF}" },
 };
 
-// Hoisted to module scope so we don't rebuild this Map on every compare-toggle render.
-const COST_COMPARE_MAP: ReadonlyMap<string, number> = new Map(
-  MOCK_COST_COMPARE.map((c) => [c.date, c.previous]),
-);
-
 interface CostPoint {
   date: string;
   Cost: number;
+}
+
+export interface ComparePoint {
+  date: string;
+  previous: number;
 }
 
 interface MergedCostPoint {
@@ -74,18 +73,30 @@ function CompareTooltipContent({
 export default memo(function CostChartWithCompare({
   data,
   compare,
+  previousSeries = [],
+  annotations = [],
 }: {
   data: CostPoint[];
   compare: boolean;
+  /** Previous-period overlay. Empty in real mode (no synced prior period) so
+   *  no fabricated "Previous" line is drawn over genuine data. */
+  previousSeries?: ComparePoint[];
+  /** Timeline annotations (deploys/incidents). Empty in real mode. */
+  annotations?: ChartAnnotation[];
 }) {
   const anim = useChartAnimation();
+  const compareMap = useMemo(
+    () => new Map(previousSeries.map((c) => [c.date, c.previous])),
+    [previousSeries],
+  );
+  const showPrevious = compare && previousSeries.length > 0;
   const mergedData: MergedCostPoint[] = useMemo(() => {
-    if (!compare) return data;
+    if (!showPrevious) return data;
     return data.map((d) => ({
       ...d,
-      Previous: COST_COMPARE_MAP.get(d.date),
+      Previous: compareMap.get(d.date),
     }));
-  }, [data, compare]);
+  }, [data, showPrevious, compareMap]);
 
   return (
     <ResponsiveContainer width="100%" height={240}>
@@ -113,9 +124,9 @@ export default memo(function CostChartWithCompare({
           tickLine={false}
           tickFormatter={(v: number) => `$${v}`}
         />
-        <Tooltip content={<CompareTooltipContent compare={compare} />} cursor={CHART_CURSOR_LINE} />
-        {/* Annotations */}
-        {MOCK_ANNOTATIONS.map((a) => {
+        <Tooltip content={<CompareTooltipContent compare={showPrevious} />} cursor={CHART_CURSOR_LINE} />
+        {/* Annotations (real mode passes none) */}
+        {annotations.map((a) => {
           const style = annotationStyles[a.type];
           return (
             <ReferenceLine
@@ -133,7 +144,7 @@ export default memo(function CostChartWithCompare({
             />
           );
         })}
-        {compare && (
+        {showPrevious && (
           <Area
             type="monotone"
             dataKey="Previous"

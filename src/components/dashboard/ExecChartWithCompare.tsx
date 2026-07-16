@@ -13,8 +13,8 @@ import {
   YAxis,
   ReferenceLine,
 } from "recharts";
-import { MOCK_EXEC_COMPARE, MOCK_ANNOTATIONS } from "@/lib/mock-dashboard-data";
 import type { ChartAnnotation } from "@/lib/mock-dashboard-data";
+import type { ComparePoint } from "./CostChartWithCompare";
 import {
   AXIS_TICK,
   GRID_STROKE,
@@ -30,11 +30,6 @@ const annotationStyles: Record<ChartAnnotation["type"], { stroke: string; emoji:
   incident: { stroke: SERIES.rose, emoji: "\u26A0\uFE0F" },
   milestone: { stroke: SERIES.emerald, emoji: "\u{1F3AF}" },
 };
-
-// Hoisted to module scope so we don't rebuild this Map on every compare-toggle render.
-const EXEC_COMPARE_MAP: ReadonlyMap<string, number> = new Map(
-  MOCK_EXEC_COMPARE.map((c) => [c.date, c.previous]),
-);
 
 interface ExecPoint {
   date: string;
@@ -83,20 +78,32 @@ function ExecCompareTooltipContent({
 export default memo(function ExecChartWithCompare({
   data,
   compare,
+  previousSeries = [],
+  annotations = [],
 }: {
   data: ExecPoint[];
   compare: boolean;
+  /** Previous-period overlay. Empty in real mode so no fabricated prior-period
+   *  total is drawn over genuine execution data. */
+  previousSeries?: ComparePoint[];
+  /** Timeline annotations (deploys/incidents). Empty in real mode. */
+  annotations?: ChartAnnotation[];
 }) {
   const anim = useChartAnimation();
+  const compareMap = useMemo(
+    () => new Map(previousSeries.map((c) => [c.date, c.previous])),
+    [previousSeries],
+  );
+  const showPrevious = compare && previousSeries.length > 0;
   const mergedData: MergedExecPoint[] = useMemo(() => {
-    if (!compare) return data;
+    if (!showPrevious) return data;
     return data.map((d) => ({
       ...d,
-      PreviousTotal: EXEC_COMPARE_MAP.get(d.date),
+      PreviousTotal: compareMap.get(d.date),
     }));
-  }, [data, compare]);
+  }, [data, showPrevious, compareMap]);
 
-  if (!compare) {
+  if (!showPrevious) {
     return (
       <ResponsiveContainer width="100%" height={240}>
         <BarChart data={data} margin={{ top: 8, right: 8, left: -20, bottom: 0 }}>
@@ -114,7 +121,7 @@ export default memo(function ExecChartWithCompare({
             allowDecimals={false}
           />
           <Tooltip content={<ExecCompareTooltipContent compare={false} />} cursor={CHART_CURSOR_FILL} />
-          {MOCK_ANNOTATIONS.map((a) => {
+          {annotations.map((a) => {
             const style = annotationStyles[a.type];
             return (
               <ReferenceLine
@@ -156,7 +163,7 @@ export default memo(function ExecChartWithCompare({
           allowDecimals={false}
         />
         <Tooltip content={<ExecCompareTooltipContent compare={true} />} cursor={CHART_CURSOR_FILL} />
-        {MOCK_ANNOTATIONS.map((a) => {
+        {annotations.map((a) => {
           const style = annotationStyles[a.type];
           return (
             <ReferenceLine

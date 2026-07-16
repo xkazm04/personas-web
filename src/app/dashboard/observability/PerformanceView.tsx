@@ -9,7 +9,7 @@ import CompareToggle from "@/components/dashboard/CompareToggle";
 import DashboardErrorBanner from "@/components/dashboard/DashboardErrorBanner";
 import { fadeUp } from "@/lib/animations";
 import { api } from "@/lib/api";
-import { MOCK_COST_ANOMALIES, MOCK_HEALTH_ISSUES, type MockHealthIssue } from "@/lib/mock-dashboard-data";
+import { MOCK_COST_ANOMALIES, MOCK_HEALTH_ISSUES, MOCK_COST_COMPARE, MOCK_EXEC_COMPARE, MOCK_ANNOTATIONS, type MockHealthIssue } from "@/lib/mock-dashboard-data";
 import { useTranslation } from "@/i18n/useTranslation";
 import { useAuthStore } from "@/stores/authStore";
 import { CostAnomalyBanner } from "./performance-view/CostAnomalyBanner";
@@ -91,9 +91,14 @@ export default function PerformanceView() {
       {errorMsg && (
         <DashboardErrorBanner message={errorMsg} onRetry={() => void mutate()} />
       )}
-      <div className="mb-6 flex justify-end">
-        <CompareToggle enabled={compareEnabled} onToggle={() => setCompareEnabled((prev) => !prev)} />
-      </div>
+      {/* Compare overlays a previous period, which only the demo fixtures
+          provide — real mode has no synced prior period, so hide the toggle
+          rather than show an empty/fabricated comparison. */}
+      {isDemo && (
+        <div className="mb-6 flex justify-end">
+          <CompareToggle enabled={compareEnabled} onToggle={() => setCompareEnabled((prev) => !prev)} />
+        </div>
+      )}
       {/* Cost-anomaly detection isn't synced — demo only. */}
       {isDemo && (
         <CostAnomalyBanner
@@ -111,7 +116,15 @@ export default function PerformanceView() {
         </motion.div>
       )}
       <PerformanceMetricsGrid metrics={metrics} labels={t.observabilityPage} />
-      <PerformanceChartGrid costChartData={costChartData} execChartData={execChartData} compareEnabled={compareEnabled} labels={t.observabilityPage} />
+      <PerformanceChartGrid
+        costChartData={costChartData}
+        execChartData={execChartData}
+        compareEnabled={compareEnabled}
+        costPrevious={isDemo ? MOCK_COST_COMPARE : []}
+        execPrevious={isDemo ? MOCK_EXEC_COMPARE : []}
+        annotations={isDemo ? MOCK_ANNOTATIONS : []}
+        labels={t.observabilityPage}
+      />
       <PerformanceLatencyCard labels={t.observabilityPage} />
       <div className="grid gap-6 lg:grid-cols-5">
         <PerformanceSpendCard personaSpend={personaSpend} spendPieData={spendPieData} labels={t.observabilityPage} />
