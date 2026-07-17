@@ -25,7 +25,10 @@ export default function TimelineControls({
         {scenarios.map((s, i) => (
           <button
             key={s.id}
+            type="button"
             onClick={() => onSelect(i)}
+            aria-label={`Play scenario ${i + 1}: ${s.name}`}
+            aria-current={i === activeIndex ? "true" : undefined}
             className="flex-1 cursor-pointer flex items-center min-h-[44px]"
           >
             <div className="relative h-1 w-full rounded-full bg-white/[0.06] overflow-hidden">

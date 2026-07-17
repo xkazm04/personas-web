@@ -160,6 +160,14 @@ export default function AgentsTimeline() {
         onReplay={() => startAnimation()}
         onTogglePause={() => setPaused((v) => !v)}
       />
+
+      {/* The race outcome is otherwise conveyed only by visual reveals; announce
+          it to assistive tech when results land. */}
+      <p className="sr-only" role="status" aria-live="polite">
+        {showResults
+          ? `${scenario.name}: workflow ${scenario.workflow.result}; agent ${scenario.agent.result}.`
+          : ""}
+      </p>
     </SectionWrapper>
   );
 }
