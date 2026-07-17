@@ -42,10 +42,13 @@ export default function EventBusShowcase({ telemetryAdapter }: { telemetryAdapte
     return adapter.subscribe(setSnapshot);
   }, [telemetryAdapter, inView]);
 
-  const [composerOpen, setComposerOpen] = useState(() => {
-    if (typeof window !== "undefined") return window.location.hash.startsWith("#flow=");
-    return false;
-  });
+  // Must start false so the client's first render matches the server HTML
+  // (server always renders the showcase branch). Reading the hash in a
+  // post-mount effect instead avoids a hydration mismatch on #flow= deep links.
+  const [composerOpen, setComposerOpen] = useState(false);
+  useEffect(() => {
+    if (window.location.hash.startsWith("#flow=")) setComposerOpen(true);
+  }, []);
 
   const laneMetrics = useMemo(
     () =>
@@ -105,7 +108,12 @@ export default function EventBusShowcase({ telemetryAdapter }: { telemetryAdapte
               <FlowComposer
                 onClose={() => {
                   setComposerOpen(false);
-                  window.history.replaceState(null, "", window.location.pathname);
+                  // Clear only the hash; preserve any query string (e.g. utm_*).
+                  window.history.replaceState(
+                    null,
+                    "",
+                    window.location.pathname + window.location.search,
+                  );
                 }}
               />
             </motion.div>

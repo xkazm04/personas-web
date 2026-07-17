@@ -8,6 +8,12 @@ interface Props {
   params: Promise<{ slug: string }>;
 }
 
+// A staged (future-dated) post renders on demand and 404s until its date
+// passes. Without a revalidate window that pre-date 404 is cached by the full
+// route cache and keeps serving even after the post goes live. Expire it
+// hourly, matching the feed route so the two stay in sync with isPublished().
+export const revalidate = 3600;
+
 export async function generateStaticParams() {
   // Only published posts get pre-rendered/listed. Future-dated (staged) posts
   // render on demand and 404 until their date passes (see isPublished).
