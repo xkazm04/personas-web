@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, type KeyboardEvent as ReactKeyboardEvent } from "react";
 import { motion, AnimatePresence, useReducedMotion } from "framer-motion";
 import { ARCHITECTURE_LAYERS, type ArchitectureLayer } from "@/data/security";
 
@@ -101,7 +101,11 @@ function LayerCard({
   reducedMotion: boolean | null;
 }) {
   const [hovered, setHovered] = useState(false);
+  const [focused, setFocused] = useState(false);
+  const [open, setOpen] = useState(false);
   const detail = LAYER_DETAILS[layer.name];
+  const expanded = detail ? open || hovered || focused : false;
+  const detailId = `arch-layer-detail-${index}`;
 
   return (
     <motion.div
@@ -115,8 +119,28 @@ function LayerCard({
       }}
       onMouseEnter={() => setHovered(true)}
       onMouseLeave={() => setHovered(false)}
-      className="group cursor-default rounded-xl border bg-white/[0.02] px-6 py-5 backdrop-blur-sm transition-colors duration-200"
-      style={{ borderColor: hovered ? `${layer.color}40` : `${layer.color}20` }}
+      // Focusable disclosure so the security detail (encryption/keyring/air-gap
+      // copy) is reachable by keyboard, touch, and screen readers — not just
+      // mouse hover. Hover/focus reveal; tap/Enter/Space toggle-latch.
+      {...(detail
+        ? {
+            role: "button" as const,
+            tabIndex: 0,
+            "aria-expanded": expanded,
+            "aria-controls": detailId,
+            onFocus: () => setFocused(true),
+            onBlur: () => setFocused(false),
+            onClick: () => setOpen((v) => !v),
+            onKeyDown: (e: ReactKeyboardEvent) => {
+              if (e.key === "Enter" || e.key === " ") {
+                e.preventDefault();
+                setOpen((v) => !v);
+              }
+            },
+          }
+        : {})}
+      className="group rounded-xl border bg-white/[0.02] px-6 py-5 backdrop-blur-sm transition-colors duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-cyan/60"
+      style={{ borderColor: expanded ? `${layer.color}40` : `${layer.color}20`, cursor: detail ? "pointer" : "default" }}
     >
       <div className="flex items-center gap-4">
         <div className="shrink-0">
@@ -124,7 +148,7 @@ function LayerCard({
             className="h-3 w-3 rounded-full transition-shadow duration-200"
             style={{
               backgroundColor: layer.color,
-              boxShadow: hovered ? `0 0 12px ${layer.color}60` : "none",
+              boxShadow: expanded ? `0 0 12px ${layer.color}60` : "none",
             }}
           />
         </div>
@@ -136,8 +160,9 @@ function LayerCard({
         </div>
       </div>
       <AnimatePresence>
-        {hovered && detail && (
+        {expanded && detail && (
           <motion.div
+            id={detailId}
             initial={{ height: 0, opacity: 0 }}
             animate={{ height: "auto", opacity: 1 }}
             exit={{ height: 0, opacity: 0 }}
