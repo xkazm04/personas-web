@@ -1,9 +1,10 @@
 # Scan resume state — ambiguity-guardian + ui-perfectionist, 2026-07-16
 
 ## UPDATE 2026-07-16 (later): SCAN COMPLETE — 53/53 contexts, 265 findings (6C/113H/133M/13L), counts verified two ways. INDEX.md built + committed (f78d3fd) on branch `vibeman/ambiguity-ui-scan-2026-07-16-fixes`. Now in FIX phase.
-## FIX phase status (updated): Waves 1-7 COMPLETE. ALL 6 CRITICALS CLOSED. 31 findings fixed, tsc 0 · vitest 64/64 · 0 regressions throughout.
-##   W1 (T4 reduced-motion, 4) · W2 (T1 security, 6 — DEPLOY STEPS in FIXES-WAVE-2.md) · W3-5 (T5 a11y, 10) · W6 (T2 fabricated-data, 5) · W7 (T3 mode-switch cache + T7 home error/loading, 6).
-## User directive: "keep going through the safe waves." NEXT: T6 pause/interrupt conflation, T8 dead/unwired surface, T10 conversion path, T11 hydration/SSR, T9 i18n, then T14/T15.
+## FIX phase status (updated): Waves 1-8 COMPLETE. ALL 6 CRITICALS CLOSED. 34 findings fixed, tsc 0 · vitest 64/64 · 0 regressions throughout.
+##   W1 (T4 reduced-motion, 4) · W2 (T1 security, 6 — DEPLOY STEPS in FIXES-WAVE-2.md) · W3-5 (T5 a11y, 10) · W6 (T2 fabricated-data, 5) · W7 (T3 cache + T7 home, 6) · W8 (T6 pause/interrupt, 3).
+## User directive: "keep going through the safe waves." NEXT: T8 dead/unwired surface, T10 conversion path, T11 hydration/SSR, T9 i18n, then T14/T15.
+## Deferred within T6: guided-product-tour #3 (tour pause desync), orchestration #3 (terminal no-stop). Plus earlier deferrals (knowledge type-bucket+legends, small T5 tail).
 ## Deferred sub-items: knowledge type-bucket coercion + cluster legends (knowledge #1 partial, #2); small T5 tail (leaderboard medal, trigger-wheel, legal tabs).
 ## Baseline to hold every wave: tsc 0 · vitest 64/64. Branch: vibeman/ambiguity-ui-scan-2026-07-16-fixes (unmerged).
 ## ⚠️ Wave 2 deploy steps pending user action: set SUPABASE_SERVICE_ROLE_KEY + run scripts/harden-voting-rls.sql; rename NEXT_PUBLIC_TEAM_API_KEY→TEAM_API_KEY.
