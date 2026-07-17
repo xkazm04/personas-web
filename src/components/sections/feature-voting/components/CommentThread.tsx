@@ -55,7 +55,6 @@ export default function CommentThread({
                 key={reply.id}
                 comment={reply}
                 accentRgba={accentRgba}
-                onReply={handleReply}
                 depth={1}
               />
             ))}

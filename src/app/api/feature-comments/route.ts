@@ -139,6 +139,22 @@ export async function POST(req: NextRequest) {
 
   if (hasSupabase()) {
     const sb = await getSupabaseClient();
+    // The thread model is one level deep. Reject a reply whose parent is itself
+    // a reply (or doesn't exist), so stored comments can never exceed the
+    // renderable depth and vanish. UUID shape alone isn't enough.
+    if (normalizedParent !== null) {
+      const { data: parent, error: parentErr } = await sb
+        .from("feature_comments")
+        .select("id, parent_id, feature_id")
+        .eq("id", normalizedParent)
+        .maybeSingle();
+      if (parentErr) {
+        return NextResponse.json({ error: "Failed to save comment" }, { status: 500 });
+      }
+      if (!parent || parent.parent_id !== null || parent.feature_id !== featureId) {
+        return NextResponse.json({ error: "Invalid parent ID" }, { status: 400 });
+      }
+    }
     const { data, error } = await sb
       .from("feature_comments")
       .insert({

@@ -13,7 +13,9 @@ export default function CommentBubble({
 }: {
   comment: Comment;
   accentRgba: (a: number) => string;
-  onReply: (parentId: string) => void;
+  // Omitted for nested replies: the thread model is one level deep, so a
+  // Reply-to-a-reply had nowhere to open and silently no-op'd.
+  onReply?: (parentId: string) => void;
   depth?: number;
 }) {
   const { t } = useTranslation();
@@ -39,13 +41,15 @@ export default function CommentBubble({
           </span>
         </div>
         <p className="text-base leading-relaxed text-muted-dark">{comment.text}</p>
-        <button
-          onClick={() => onReply(comment.id)}
-          className="mt-1 flex items-center gap-1 text-base text-muted-dark/60 hover:text-muted-dark/70 transition-colors cursor-pointer"
-        >
-          <Reply className="h-2.5 w-2.5" />
-          {vt.reply}
-        </button>
+        {onReply && (
+          <button
+            onClick={() => onReply(comment.id)}
+            className="mt-1 flex items-center gap-1 text-base text-muted-dark/60 hover:text-muted-dark/70 transition-colors cursor-pointer"
+          >
+            <Reply className="h-2.5 w-2.5" />
+            {vt.reply}
+          </button>
+        )}
       </div>
     </div>
   );
