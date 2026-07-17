@@ -88,6 +88,20 @@ export function useToolSelection(initiallyAutoplay: boolean) {
     progressRef.current = 0;
   }, []);
 
+  // Visible pause/play control (WCAG 2.2.2). Resuming restarts the progress
+  // cycle from zero and re-arms the "first manual click stops autoplay" latch.
+  const toggleAutoplay = useCallback(() => {
+    setAutoplay((v) => {
+      const next = !v;
+      if (next) {
+        userClickedRef.current = false;
+        setProgress(0);
+        progressRef.current = 0;
+      }
+      return next;
+    });
+  }, []);
+
   const handleToolbarKeyDown = useCallback(
     (e: React.KeyboardEvent) => {
       const currentIdx = tools.findIndex((tl) => tl.id === selected);
@@ -133,5 +147,6 @@ export function useToolSelection(initiallyAutoplay: boolean) {
     mobileButtonRefs,
     handleManualClick,
     handleToolbarKeyDown,
+    toggleAutoplay,
   };
 }

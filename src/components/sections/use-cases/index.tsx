@@ -21,7 +21,9 @@ export default function UseCases() {
   // selectors used by SVG url(#…) refs, so the gradient resolves to none in
   // strict browsers and the connector renders unstyled. Strip the colons
   // before composing the gradient id.
-  const gradientId = `usecases-connector-${useId().replace(/:/g, "")}`;
+  const rawId = useId().replace(/:/g, "");
+  const gradientId = `usecases-connector-${rawId}`;
+  const panelId = `usecases-panel-${rawId}`;
   const prefersReducedMotion = useReducedMotion();
   const containerRef = useRef<HTMLDivElement | null>(null);
   const detailCardRef = useRef<HTMLDivElement | null>(null);
@@ -35,6 +37,7 @@ export default function UseCases() {
     mobileButtonRefs,
     handleManualClick,
     handleToolbarKeyDown,
+    toggleAutoplay,
   } = useToolSelection(!prefersReducedMotion);
 
   const { connectorPath, connectorVisible } = useConnectorPath(
@@ -81,8 +84,10 @@ export default function UseCases() {
           selected={selected}
           autoplay={autoplay}
           progress={progress}
+          panelId={panelId}
           onManualClick={handleManualClick}
           onKeyDown={handleToolbarKeyDown}
+          onToggleAutoplay={toggleAutoplay}
           desktopRefs={desktopButtonRefs}
           mobileRefs={mobileButtonRefs}
         />
@@ -94,6 +99,7 @@ export default function UseCases() {
               ref={detailCardRef}
               activeTool={activeTool}
               whatCanAutomateLabel={t.useCasesSection.whatCanAutomate}
+              panelId={panelId}
             />
           )}
         </AnimatePresence>

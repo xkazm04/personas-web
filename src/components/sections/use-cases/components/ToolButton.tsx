@@ -13,10 +13,11 @@ interface Props {
   progress: number;
   onClick: () => void;
   variant: "desktop" | "mobile";
+  panelId: string;
 }
 
 const ToolButton = forwardRef<HTMLButtonElement, Props>(function ToolButton(
-  { tool, index, isActive, autoplay, progress, onClick, variant },
+  { tool, index, isActive, autoplay, progress, onClick, variant, panelId },
   ref,
 ) {
   const baseClass =
@@ -32,8 +33,10 @@ const ToolButton = forwardRef<HTMLButtonElement, Props>(function ToolButton(
   return (
     <motion.button
       ref={ref}
+      role="tab"
       tabIndex={isActive ? 0 : -1}
-      aria-pressed={isActive}
+      aria-selected={isActive}
+      aria-controls={panelId}
       onClick={onClick}
       className={`${baseClass} ${isActive ? activeClass : "border-glass bg-white/1.5 hover:border-glass-hover hover:bg-white/3"}`}
       style={{ boxShadow: isActive ? `0 0 40px ${tool.color}30` : undefined }}

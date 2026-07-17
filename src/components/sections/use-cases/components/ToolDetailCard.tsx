@@ -8,15 +8,20 @@ import ConnectorIcon from "./ConnectorIcon";
 interface Props {
   activeTool: Tool;
   whatCanAutomateLabel: string;
+  panelId: string;
 }
 
 const ToolDetailCard = forwardRef<HTMLDivElement, Props>(function ToolDetailCard(
-  { activeTool, whatCanAutomateLabel },
+  { activeTool, whatCanAutomateLabel, panelId },
   ref,
 ) {
   return (
     <motion.div
       key={activeTool.id}
+      id={panelId}
+      role="tabpanel"
+      aria-label={activeTool.name}
+      aria-live="polite"
       initial={{ opacity: 0, y: 16 }}
       animate={{ opacity: 1, y: 0 }}
       exit={{ opacity: 0, y: -8 }}
