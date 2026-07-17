@@ -47,23 +47,28 @@ export default function HowItWorks() {
         <RoleSelector active={role} onChange={setRole} />
       </div>
 
+      {/* Scroll-map / deep-link anchors live on the always-present StageSection
+          wrappers, not the inner ids owned by the ssr:false lazy chunks (which
+          are absent from the server HTML on first load). The browser scrolls to
+          the first matching element — the wrapper — so /how#event-bus works at
+          first paint and after the chunk mounts. */}
       {/* Agents */}
-      <StageSection glow="cyan" toColor="cyan">
+      <StageSection id="agents-timeline" glow="cyan" toColor="cyan">
         <LazyAgentsTimeline />
       </StageSection>
 
-      <StageSection glow="emerald" fromColor="cyan" toColor="emerald">
+      <StageSection id="agents-chat" glow="emerald" fromColor="cyan" toColor="emerald">
         <LazyAgentsChat />
       </StageSection>
 
       {/* Platform */}
-      <StageSection glow="purple" fromColor="emerald" toColor="purple">
+      <StageSection id="platform-layers" glow="purple" fromColor="emerald" toColor="purple">
         <LazyPlatformLayers />
       </StageSection>
 
       <CinematicBreather />
 
-      <StageSection glow={glow} fromColor={colors.evFrom} toColor={colors.evTo}>
+      <StageSection id="event-bus" glow={glow} fromColor={colors.evFrom} toColor={colors.evTo}>
         <LazyEventBusShowcase />
       </StageSection>
     </InfoPageLayout>
