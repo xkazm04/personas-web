@@ -25,8 +25,7 @@ export default function PerformanceView() {
   const isDemo = useAuthStore((s) => s.isDemo);
   const [compareEnabled, setCompareEnabled] = useState(false);
   const [severityFilter, setSeverityFilter] = useState<SeverityFilter>("all");
-  const [healingActive, setHealingActive] = useState(false);
-  const { data, isLoading: loading, error, mutate } = useSWR("observability", api.getObservability, {
+  const { data, isLoading: loading, isValidating, error, mutate } = useSWR("observability", api.getObservability, {
     refreshInterval: 30_000,
     dedupingInterval: 8_000,
     revalidateOnFocus: false,
@@ -69,10 +68,11 @@ export default function PerformanceView() {
   }, [displayHealthIssues]);
   const openIssues = useMemo(() => displayHealthIssues.filter((issue) => issue.status === "open"), [displayHealthIssues]);
   const overBudgetPersonas = useMemo(() => personaSpend.filter((persona) => persona.budgetUsd && persona.totalCost / persona.budgetUsd > BUDGET_THRESHOLD), [personaSpend]);
+  // Genuinely re-fetch observability data instead of a fake spinner; the
+  // "analyzing" state is SWR's real in-flight validation.
   const handleRunAnalysis = useCallback(() => {
-    setHealingActive(true);
-    setTimeout(() => setHealingActive(false), 3000);
-  }, []);
+    void mutate();
+  }, [mutate]);
 
   if (loading && !metrics) {
     return (
@@ -134,7 +134,7 @@ export default function PerformanceView() {
           severityFilter={severityFilter}
           setSeverityFilter={setSeverityFilter}
           severityCounts={severityCounts}
-          healingActive={healingActive}
+          healingActive={isValidating}
           onRunAnalysis={handleRunAnalysis}
           labels={t.observabilityPage}
         />
