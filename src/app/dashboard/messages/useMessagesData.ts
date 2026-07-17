@@ -32,7 +32,14 @@ export function useMessagesData(): MessagesData {
   const [reloadKey, setReloadKey] = useState(0);
 
   useEffect(() => {
-    if (useMock) return;
+    // isDemo can flip mid-session; re-seed the mock explicitly so a real→demo
+    // switch replaces the previous tenant's threads instead of leaving them.
+    if (useMock) {
+      setThreads(MOCK_MESSAGE_THREADS);
+      setError(null);
+      setLoading(false);
+      return;
+    }
     let cancelled = false;
     (async () => {
       setLoading(true);

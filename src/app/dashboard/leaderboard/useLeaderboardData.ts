@@ -34,10 +34,16 @@ export function useLeaderboardData(): LeaderboardData {
   const [reloadKey, setReloadKey] = useState(0);
 
   useEffect(() => {
-    // Mock/demo mode is decided once per session; the useState initializers
-    // above already seed the mock fixture, so the effect only drives the
-    // async real-data fetch.
-    if (useMock) return;
+    // isDemo is a live store subscription that can flip mid-session (sign out
+    // into demo, expiry). Re-seed the mock explicitly rather than early-return,
+    // so a real→demo switch replaces the previous account's leaderboard instead
+    // of leaving it on screen.
+    if (useMock) {
+      setPersonas(MOCK_LEADERBOARD);
+      setError(null);
+      setLoading(false);
+      return;
+    }
 
     let cancelled = false;
     (async () => {

@@ -125,10 +125,16 @@ export function useKnowledgeData(): KnowledgeData {
   const [reloadKey, setReloadKey] = useState(0);
 
   useEffect(() => {
-    // Mock/demo mode is decided once per session; the useState initializers
-    // above already seed the mock fixtures, so the effect only drives the
-    // async real-data fetch.
-    if (useMock) return;
+    // isDemo can flip mid-session; re-seed the mock fixtures explicitly so a
+    // real→demo switch replaces the previous account's patterns/memories
+    // instead of leaving them on screen.
+    if (useMock) {
+      setPatterns(MOCK_KNOWLEDGE_PATTERNS);
+      setMemories(MOCK_MEMORIES);
+      setError(null);
+      setLoading(false);
+      return;
+    }
 
     let cancelled = false;
     (async () => {
