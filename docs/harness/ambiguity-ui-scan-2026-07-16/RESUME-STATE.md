@@ -1,9 +1,10 @@
 # Scan resume state — ambiguity-guardian + ui-perfectionist, 2026-07-16
 
 ## UPDATE 2026-07-16 (later): SCAN COMPLETE — 53/53 contexts, 265 findings (6C/113H/133M/13L), counts verified two ways. INDEX.md built + committed (f78d3fd) on branch `vibeman/ambiguity-ui-scan-2026-07-16-fixes`. Now in FIX phase.
-## FIX phase status (updated): Waves 1-10 COMPLETE. ALL 6 CRITICALS CLOSED. 41 findings fixed, tsc 0 · vitest 64/64 · 0 regressions throughout.
-##   W1 (T4,4) · W2 (T1 security,6 — DEPLOY STEPS in FIXES-WAVE-2.md) · W3-5 (T5 a11y,10) · W6 (T2,5) · W7 (T3+T7,6) · W8 (T6,3) · W9 (T10,4) · W10 (T11 hydration/SSR,3; next build run).
-## User directive: "keep going through the safe waves." NEXT: T8 dead/unwired surface, T9 i18n, then T14/T15.
+## FIX phase status (updated): Waves 1-11 COMPLETE. ALL 6 CRITICALS CLOSED. 45 findings fixed, tsc 0 · vitest 64/64 · 0 regressions throughout.
+##   W1 (T4,4) · W2 (T1 security,6 — DEPLOY STEPS in FIXES-WAVE-2.md) · W3-5 (T5 a11y,10) · W6 (T2,5) · W7 (T3+T7,6) · W8 (T6,3) · W9 (T10,4) · W10 (T11,3; next build run) · W11 (T8 dead-surface,4).
+## User directive: "keep going through the safe waves." NEXT: T9 i18n, then T14/T15.
+## Deferred (product/decision): public-roadmap #1 (wire DB roadmap vs delete route+table — user call). Plus: guided-tour #3, orchestration #3, knowledge type-bucket+legends, small T5 tail, theme rehydrate DOM-write, stats writable-FS.
 ## Deferred: guided-tour #3, orchestration #3 (terminal no-stop), knowledge type-bucket+legends, small T5 tail, theme rehydrate DOM-write, stats writable-FS.
 ## Deferred: guided-tour #3 (tour pause), orchestration #3 (terminal no-stop), knowledge type-bucket+legends, small T5 tail (leaderboard medal, trigger-wheel buttons, legal tabs).
 ## Deferred within T6: guided-product-tour #3 (tour pause desync), orchestration #3 (terminal no-stop). Plus earlier deferrals (knowledge type-bucket+legends, small T5 tail).
