@@ -68,6 +68,8 @@ function deriveRoutines(triggers: SyncedTrigger[]): UpcomingRoutine[] {
 export interface UpcomingRoutinesData {
   routines: UpcomingRoutine[];
   loading: boolean;
+  error: string | null;
+  retry: () => void;
 }
 
 /**
@@ -83,9 +85,16 @@ export function useUpcomingRoutines(): UpcomingRoutinesData {
     useMock ? MOCK_UPCOMING_ROUTINES : [],
   );
   const [loading, setLoading] = useState(!useMock);
+  const [error, setError] = useState<string | null>(null);
+  const [reloadKey, setReloadKey] = useState(0);
 
   useEffect(() => {
-    if (useMock) return;
+    if (useMock) {
+      setRoutines(MOCK_UPCOMING_ROUTINES);
+      setError(null);
+      setLoading(false);
+      return;
+    }
     let cancelled = false;
     (async () => {
       setLoading(true);
@@ -93,9 +102,11 @@ export function useUpcomingRoutines(): UpcomingRoutinesData {
         const triggers = await getSyncedTriggers();
         if (cancelled) return;
         setRoutines(deriveRoutines(triggers));
+        setError(null);
       } catch (err) {
         if (cancelled) return;
         Sentry.captureException(err, { tags: { scope: "useUpcomingRoutines" } });
+        setError(err instanceof Error ? err.message : "Failed to load routines");
       } finally {
         if (!cancelled) setLoading(false);
       }
@@ -103,7 +114,7 @@ export function useUpcomingRoutines(): UpcomingRoutinesData {
     return () => {
       cancelled = true;
     };
-  }, [useMock]);
+  }, [useMock, reloadKey]);
 
-  return { routines, loading };
+  return { routines, loading, error, retry: () => setReloadKey((k) => k + 1) };
 }

@@ -62,6 +62,8 @@ function deriveHeatmap(
 export interface ExecutionHeatmapData {
   rows: HeatmapRow[];
   loading: boolean;
+  error: string | null;
+  retry: () => void;
 }
 
 /**
@@ -78,9 +80,16 @@ export function useExecutionHeatmap(): ExecutionHeatmapData {
     useMock ? MOCK_EXECUTION_HEATMAP : [],
   );
   const [loading, setLoading] = useState(!useMock);
+  const [error, setError] = useState<string | null>(null);
+  const [reloadKey, setReloadKey] = useState(0);
 
   useEffect(() => {
-    if (useMock) return;
+    if (useMock) {
+      setRows(MOCK_EXECUTION_HEATMAP);
+      setError(null);
+      setLoading(false);
+      return;
+    }
     let cancelled = false;
     (async () => {
       setLoading(true);
@@ -97,9 +106,13 @@ export function useExecutionHeatmap(): ExecutionHeatmapData {
           ]),
         );
         setRows(deriveHeatmap(executions, meta));
+        setError(null);
       } catch (err) {
         if (cancelled) return;
         Sentry.captureException(err, { tags: { scope: "useExecutionHeatmap" } });
+        // Surface the failure instead of leaving an authoritative-looking empty
+        // grid — a transient error must not read as "nothing has run".
+        setError(err instanceof Error ? err.message : "Failed to load executions");
       } finally {
         if (!cancelled) setLoading(false);
       }
@@ -107,7 +120,7 @@ export function useExecutionHeatmap(): ExecutionHeatmapData {
     return () => {
       cancelled = true;
     };
-  }, [useMock]);
+  }, [useMock, reloadKey]);
 
-  return { rows, loading };
+  return { rows, loading, error, retry: () => setReloadKey((k) => k + 1) };
 }

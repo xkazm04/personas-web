@@ -4,6 +4,7 @@ import Link from "next/link";
 import { CalendarClock } from "lucide-react";
 
 import GlowCard from "@/components/GlowCard";
+import DashboardErrorBanner from "@/components/dashboard/DashboardErrorBanner";
 import { useTranslation } from "@/i18n/useTranslation";
 import { type RoutineTrigger } from "@/lib/mock-dashboard-data";
 import { useUpcomingRoutines } from "./useUpcomingRoutines";
@@ -23,7 +24,7 @@ const TRIGGER_TINT: Record<RoutineTrigger, string> = {
 export function UpcomingRoutinesCard() {
   const { t } = useTranslation();
   const labels = t.dashboard.home.upcomingRoutines;
-  const { routines } = useUpcomingRoutines();
+  const { routines, loading, error, retry } = useUpcomingRoutines();
 
   return (
     <GlowCard accent="cyan" className="h-full p-5">
@@ -33,7 +34,13 @@ export function UpcomingRoutinesCard() {
         <span className="ml-auto text-sm text-muted-dark">{labels.subtitle}</span>
       </div>
 
-      {routines.length === 0 ? (
+      {loading ? (
+        <div className="flex items-center justify-center py-10">
+          <div className="h-4 w-4 animate-spin rounded-full border-2 border-glass-hover border-t-brand-cyan" />
+        </div>
+      ) : error ? (
+        <DashboardErrorBanner message={error} onRetry={retry} />
+      ) : routines.length === 0 ? (
         <p className="py-8 text-center text-sm text-muted-dark">{labels.empty}</p>
       ) : (
         <div className="space-y-1.5">

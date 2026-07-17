@@ -10,6 +10,8 @@ import { MOCK_LEADERBOARD, type LeaderboardPersona } from "@/lib/mock-dashboard-
 export interface TopPerformersData {
   leaderboard: LeaderboardPersona[];
   loading: boolean;
+  error: string | null;
+  retry: () => void;
 }
 
 /**
@@ -25,9 +27,16 @@ export function useTopPerformers(): TopPerformersData {
     useMock ? MOCK_LEADERBOARD : [],
   );
   const [loading, setLoading] = useState(!useMock);
+  const [error, setError] = useState<string | null>(null);
+  const [reloadKey, setReloadKey] = useState(0);
 
   useEffect(() => {
-    if (useMock) return;
+    if (useMock) {
+      setLeaderboard(MOCK_LEADERBOARD);
+      setError(null);
+      setLoading(false);
+      return;
+    }
     let cancelled = false;
     (async () => {
       setLoading(true);
@@ -35,9 +44,11 @@ export function useTopPerformers(): TopPerformersData {
         const rows = await getSyncedLeaderboard();
         if (cancelled) return;
         setLeaderboard(rows);
+        setError(null);
       } catch (err) {
         if (cancelled) return;
         Sentry.captureException(err, { tags: { scope: "useTopPerformers" } });
+        setError(err instanceof Error ? err.message : "Failed to load top performers");
       } finally {
         if (!cancelled) setLoading(false);
       }
@@ -45,7 +56,7 @@ export function useTopPerformers(): TopPerformersData {
     return () => {
       cancelled = true;
     };
-  }, [useMock]);
+  }, [useMock, reloadKey]);
 
-  return { leaderboard, loading };
+  return { leaderboard, loading, error, retry: () => setReloadKey((k) => k + 1) };
 }

@@ -4,9 +4,18 @@ import { useState } from "react";
 import { CalendarRange } from "lucide-react";
 
 import GlowCard from "@/components/GlowCard";
+import DashboardErrorBanner from "@/components/dashboard/DashboardErrorBanner";
 import { useTranslation } from "@/i18n/useTranslation";
 import { HEATMAP_DAYS } from "@/lib/mock-dashboard-data";
 import { useExecutionHeatmap } from "./useExecutionHeatmap";
+
+function CardSpinner() {
+  return (
+    <div className="flex items-center justify-center py-10">
+      <div className="h-4 w-4 animate-spin rounded-full border-2 border-glass-hover border-t-brand-cyan" />
+    </div>
+  );
+}
 
 // Violet intensity ramp (0 = no activity … 4 = peak), mirroring the desktop
 // ExecutionHeatmap colour scale.
@@ -32,7 +41,7 @@ function intensity(count: number, max: number): number {
 export function ExecutionHeatmapCard() {
   const { t } = useTranslation();
   const labels = t.dashboard.home.heatmap;
-  const { rows } = useExecutionHeatmap();
+  const { rows, loading, error, retry } = useExecutionHeatmap();
 
   // Cache the impure date math in a lazy initializer (React 19 purity rule).
   const [weekdays] = useState(() => {
@@ -56,7 +65,14 @@ export function ExecutionHeatmapCard() {
         <span className="ml-auto text-sm text-muted-dark">{labels.subtitle}</span>
       </div>
 
-      {isEmpty ? (
+      {/* Spinner while loading and error banner on failure precede the empty
+          state, so "no activity" only means resolved-and-truly-empty — not a
+          fetch in flight or a swallowed error. */}
+      {loading ? (
+        <CardSpinner />
+      ) : error ? (
+        <DashboardErrorBanner message={error} onRetry={retry} />
+      ) : isEmpty ? (
         <p className="py-8 text-center text-sm text-muted-dark">{labels.empty}</p>
       ) : (
         <>

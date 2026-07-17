@@ -5,6 +5,7 @@ import { ChevronRight, Minus, Trophy, TrendingDown, TrendingUp } from "lucide-re
 
 import GlowCard from "@/components/GlowCard";
 import PersonaAvatar from "@/components/dashboard/PersonaAvatar";
+import DashboardErrorBanner from "@/components/dashboard/DashboardErrorBanner";
 import { healthScoreColor } from "@/components/dashboard/healthScoreColor";
 import { useTranslation } from "@/i18n/useTranslation";
 import { type LeaderboardTrend } from "@/lib/mock-dashboard-data";
@@ -29,7 +30,7 @@ const TREND: Record<LeaderboardTrend, { Icon: React.ElementType; color: string }
  */
 export function TopPerformersCard() {
   const { t } = useTranslation();
-  const { leaderboard } = useTopPerformers();
+  const { leaderboard, loading, error, retry } = useTopPerformers();
   const top = leaderboard.slice(0, 3);
 
   return (
@@ -46,7 +47,13 @@ export function TopPerformersCard() {
         </Link>
       </div>
 
-      {top.length === 0 ? (
+      {loading ? (
+        <div className="flex items-center justify-center py-10">
+          <div className="h-4 w-4 animate-spin rounded-full border-2 border-glass-hover border-t-brand-cyan" />
+        </div>
+      ) : error ? (
+        <DashboardErrorBanner message={error} onRetry={retry} />
+      ) : top.length === 0 ? (
         <p className="py-8 text-center text-sm text-muted-dark">{t.dashboard.noExecutionsYet}</p>
       ) : (
       <div className="space-y-2">
