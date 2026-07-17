@@ -19,6 +19,7 @@ import {
 import { useSystemStore } from "@/stores/systemStore";
 import { useReviewStore } from "@/stores/reviewStore";
 import { useExecutionStore } from "@/stores/executionStore";
+import { useAuthStore } from "@/stores/authStore";
 import { MOCK_HEALTH_ALERTS, MOCK_OPEN_INCIDENTS, MOCK_UNREAD_MESSAGES } from "@/lib/mock-dashboard-data";
 import DesktopSidebar from "./DesktopSidebar";
 import MobileBottomNav from "./MobileBottomNav";
@@ -58,6 +59,7 @@ export function useNavState() {
   // Subscribe to the pre-aggregated count; the nav re-renders only when the
   // count itself changes, not on every unrelated execution-list mutation.
   const activeCount = useExecutionStore((s) => s.activeCount);
+  const isDemo = useAuthStore((s) => s.isDemo);
 
   const isConnected = health?.status === "ok";
 
@@ -72,8 +74,13 @@ export function useNavState() {
   };
 
   const getBadge = (item: NavItem) => {
+    // Reviews/executions badges come from real stores. Messages/incidents/health
+    // have no synced source yet, so their counts are illustrative fixtures —
+    // show them ONLY in demo mode; a real tenant must not see fabricated alert
+    // counts (they'd act on incidents/health that don't exist in their fleet).
     if (item.key === "reviews" && pendingReviewCount > 0) return pendingReviewCount;
     if (item.key === "executions" && activeCount > 0) return activeCount;
+    if (!isDemo) return null;
     if (item.key === "messages" && MOCK_UNREAD_MESSAGES > 0) return MOCK_UNREAD_MESSAGES;
     if (item.key === "incidents" && MOCK_OPEN_INCIDENTS > 0) return MOCK_OPEN_INCIDENTS;
     if (item.key === "health" && MOCK_HEALTH_ALERTS > 0) return MOCK_HEALTH_ALERTS;
