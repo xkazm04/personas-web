@@ -27,7 +27,10 @@ export default function ChatProgressBar({
         {scenarios.map((s, i) => (
           <button
             key={s.id}
+            type="button"
             onClick={() => onSelect(i)}
+            aria-label={`Play scenario ${i + 1}: ${s.name}`}
+            aria-current={i === activeIndex ? "true" : undefined}
             className="flex-1 cursor-pointer flex items-center min-h-[44px]"
           >
             <div className="relative h-1 w-full rounded-full bg-white/[0.06] overflow-hidden">
@@ -55,7 +58,9 @@ export default function ChatProgressBar({
           Chat {activeIndex + 1} of {scenarios.length}
         </span>
         <button
+          type="button"
           onClick={onTogglePause}
+          aria-pressed={paused}
           className="cursor-pointer flex items-center gap-1.5 min-h-[44px] transition-colors hover:text-muted-dark"
         >
           {paused ? (

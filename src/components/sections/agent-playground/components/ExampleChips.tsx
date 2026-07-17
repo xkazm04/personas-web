@@ -17,8 +17,10 @@ export default function ExampleChips({ activeExample, isRunning, onClick }: Prop
         return (
           <button
             key={ex.label}
+            type="button"
             onClick={() => onClick(i)}
             disabled={isRunning}
+            aria-pressed={active}
             className="group flex items-center gap-2 rounded-full border px-4 py-2 text-base font-medium transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed"
             style={
               active
