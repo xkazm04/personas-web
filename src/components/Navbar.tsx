@@ -5,6 +5,7 @@ import { motion, useMotionValueEvent, useScroll } from "framer-motion";
 import { Menu, Monitor, X } from "lucide-react";
 import DesktopNav from "./navbar/DesktopNav";
 import MobilePanel from "./navbar/MobilePanel";
+import NavbarLogoGlyph from "./NavbarLogoGlyph";
 import WaitlistModal from "./WaitlistModal";
 import { useTranslation } from "@/i18n/useTranslation";
 import { useMobileMenu } from "./navbar/useMobileMenu";
@@ -43,6 +44,10 @@ export default function Navbar() {
     >
       <nav className="mx-auto max-w-6xl px-6 py-4">
         <div className="flex items-center justify-between">
+          {/* Brand mark = home link, present at both breakpoints (mobile
+              header otherwise had only a hamburger and no home affordance). */}
+          <NavbarLogoGlyph scrolled={scrolled} />
+
           <DesktopNav onDownloadClick={openDownload} />
 
           {/* Hamburger — mobile only */}
