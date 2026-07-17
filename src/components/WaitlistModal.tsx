@@ -69,7 +69,13 @@ export default function WaitlistModal({ platformKey, platformLabel, platformIcon
     submitAbortRef.current?.abort();
     const controller = new AbortController();
     submitAbortRef.current = controller;
-    const timeout = setTimeout(() => controller.abort(), FETCH_TIMEOUT_MS);
+    // Distinguish a timeout-abort (user needs feedback + retry) from a
+    // close/re-submit abort (silence is correct).
+    let timedOut = false;
+    const timeout = setTimeout(() => {
+      timedOut = true;
+      controller.abort();
+    }, FETCH_TIMEOUT_MS);
 
     try {
       const res = await fetch("/api/waitlist", {
@@ -87,7 +93,15 @@ export default function WaitlistModal({ platformKey, platformLabel, platformIcon
         setWaitlistCount((prev) => (prev !== null ? prev + 1 : 1));
       }
     } catch (err) {
-      if (err instanceof DOMException && err.name === "AbortError") return;
+      if (err instanceof DOMException && err.name === "AbortError") {
+        // Timeout: the form would otherwise sit on "Joining…" forever with no
+        // recovery. Surface an error + retry. A close/re-submit abort stays silent.
+        if (timedOut) {
+          setStatus("error");
+          setErrorMsg("Request timed out — please try again");
+        }
+        return;
+      }
       Sentry.captureException(err, { tags: { component: "WaitlistModal" } });
       setStatus("error");
       setErrorMsg(err instanceof Error ? err.message : "Something went wrong");
