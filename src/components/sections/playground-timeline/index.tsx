@@ -113,6 +113,15 @@ export default function PlaygroundTimeline() {
           scrollRef={scrollRef}
         />
 
+        {/* Stage progression is otherwise visual-only; announce it to AT. */}
+        <p className="sr-only" role="status" aria-live="polite">
+          {phase === "running" && activeStageIdx >= 0 && activeExampleData
+            ? `Stage ${activeStageIdx + 1} of ${totalStages}: ${activeExampleData.stages[activeStageIdx]?.label ?? ""}`
+            : phase === "done"
+              ? "Pipeline complete"
+              : ""}
+        </p>
+
         </TerminalPanel>
       </motion.div>
     </SectionWrapper>

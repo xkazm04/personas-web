@@ -48,7 +48,10 @@ export default function ExampleSelector({
 
       <div className="flex items-center gap-2 ml-2">
         <button
+          type="button"
           onClick={onToggleSpeed}
+          aria-pressed={speed === 2}
+          aria-label={`Playback speed ${speed}x`}
           className="flex items-center gap-1.5 rounded-full border border-glass-hover px-3 py-2 text-base font-mono text-muted-dark hover:border-white/20 hover:text-foreground hover:bg-white/5 transition-all"
         >
           <Gauge className="h-3.5 w-3.5" />

@@ -134,6 +134,7 @@ export default function PlaygroundSplit() {
             <div
               className="relative h-1 bg-white/[0.03]"
               role="progressbar"
+              aria-label="Simulation progress"
               aria-valuenow={Math.round(progressPercent)}
               aria-valuemin={0}
               aria-valuemax={100}
@@ -171,6 +172,14 @@ export default function PlaygroundSplit() {
             />
             <AgentMindPanel nodes={nodes} phase={phase} reduced={reduced} />
           </div>
+          {/* Phase changes are otherwise visual-only; announce them to AT. */}
+          <p className="sr-only" role="status" aria-live="polite">
+            {phase === "running"
+              ? "Running simulation"
+              : phase === "done"
+                ? "Execution complete — results available"
+                : ""}
+          </p>
         </TerminalPanel>
       </motion.div>
     </SectionWrapper>
