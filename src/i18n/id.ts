@@ -35,6 +35,9 @@ export const id: Translations = {
     menu: 'Menu',
   },
   compareSection: {
+    offerBadges: ["Free forever", "Self-hosted", "No per-run markup", "Open source"],
+    offerBody: "Personas runs on your machine. No orchestration markup and no per-seat pricing. Paid cloud and priority support are optional, not required.",
+    ctaLabel: "Get started free",
     heading: 'Semuanya',
     headingGradient: 'gratis',
     description: 'Aplikasi desktop dan setiap kemampuan di bawah ini gratis selamanya. Tanpa tingkatan, tanpa biaya per kursi — hanya platform agen lengkap yang berjalan di mesin Anda.',

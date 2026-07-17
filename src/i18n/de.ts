@@ -35,6 +35,9 @@ export const de: Translations = {
     menu: 'Men\u00fc',
   },
   compareSection: {
+    offerBadges: ["Free forever", "Self-hosted", "No per-run markup", "Open source"],
+    offerBody: "Personas runs on your machine. No orchestration markup and no per-seat pricing. Paid cloud and priority support are optional, not required.",
+    ctaLabel: "Get started free",
     heading: 'Alles ist',
     headingGradient: 'kostenlos',
     description: 'Die Desktop-App und jede Funktion unten bleiben für immer kostenlos. Keine Stufen, keine Gebühren pro Platz – einfach eine vollständige Agentenplattform, die auf deinem Rechner läuft.',

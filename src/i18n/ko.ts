@@ -35,6 +35,9 @@ export const ko: Translations = {
     menu: '\uba54\ub274',
   },
   compareSection: {
+    offerBadges: ["Free forever", "Self-hosted", "No per-run markup", "Open source"],
+    offerBody: "Personas runs on your machine. No orchestration markup and no per-seat pricing. Paid cloud and priority support are optional, not required.",
+    ctaLabel: "Get started free",
     heading: '모든 것이',
     headingGradient: '무료',
     description: '데스크톱 앱과 아래의 모든 기능은 영원히 무료입니다. 등급도, 좌석당 요금도 없이 — 당신의 기기에서 실행되는 완전한 에이전트 플랫폼입니다.',

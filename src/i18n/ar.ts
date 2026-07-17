@@ -35,6 +35,9 @@ export const ar: Translations = {
     menu: '\u0627\u0644\u0642\u0627\u0626\u0645\u0629',
   },
   compareSection: {
+    offerBadges: ["Free forever", "Self-hosted", "No per-run markup", "Open source"],
+    offerBody: "Personas runs on your machine. No orchestration markup and no per-seat pricing. Paid cloud and priority support are optional, not required.",
+    ctaLabel: "Get started free",
     heading: 'كل شيء',
     headingGradient: 'مجاني',
     description: 'تطبيق سطح المكتب وكل قدرة موضّحة أدناه مجانية إلى الأبد. لا فئات ولا تسعير لكل مقعد — مجرد منصة وكلاء كاملة تعمل على جهازك.',

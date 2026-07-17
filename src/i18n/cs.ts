@@ -35,6 +35,9 @@ export const cs: Translations = {
     menu: 'Menu',
   },
   compareSection: {
+    offerBadges: ["Free forever", "Self-hosted", "No per-run markup", "Open source"],
+    offerBody: "Personas runs on your machine. No orchestration markup and no per-seat pricing. Paid cloud and priority support are optional, not required.",
+    ctaLabel: "Get started free",
     heading: 'Všechno je',
     headingGradient: 'zdarma',
     description: 'Desktopová aplikace a všechny funkce níže jsou navždy zdarma. Žádné úrovně, žádné ceny za uživatele — jen kompletní platforma agentů běžící na vašem počítači.',

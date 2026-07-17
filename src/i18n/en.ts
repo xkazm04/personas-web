@@ -36,6 +36,9 @@
     heading: string;
     headingGradient: string;
     description: string;
+    offerBadges: string[];
+    offerBody: string;
+    ctaLabel: string;
     readGuide: string;
     groups: {
       "agents-prompts": { title: string; tagline: string; concepts: string[] };
@@ -1334,6 +1337,9 @@ export const en: Translations = {
     heading: 'Everything is',
     headingGradient: 'free',
     description: 'The desktop app and every capability below ship free forever. No tiers, no per-seat pricing — just a complete agent platform running on your machine.',
+    offerBadges: ['Free forever', 'Self-hosted', 'No per-run markup', 'Open source'],
+    offerBody: 'Personas runs on your machine. No orchestration markup and no per-seat pricing. Paid cloud and priority support are optional, not required.',
+    ctaLabel: 'Get started free',
     readGuide: 'Read the guide',
     groups: {
       'agents-prompts': {

@@ -35,6 +35,9 @@ export const hi: Translations = {
     menu: '\u092E\u0947\u0928\u094D\u092F\u0942',
   },
   compareSection: {
+    offerBadges: ["Free forever", "Self-hosted", "No per-run markup", "Open source"],
+    offerBody: "Personas runs on your machine. No orchestration markup and no per-seat pricing. Paid cloud and priority support are optional, not required.",
+    ctaLabel: "Get started free",
     heading: 'सब कुछ',
     headingGradient: 'मुफ़्त',
     description: 'डेस्कटॉप ऐप और नीचे दी गई हर सुविधा हमेशा के लिए मुफ़्त है। कोई स्तर नहीं, प्रति-सीट कोई कीमत नहीं — बस एक संपूर्ण एजेंट प्लेटफ़ॉर्म जो आपकी मशीन पर चलता है।',

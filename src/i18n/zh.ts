@@ -35,6 +35,9 @@ export const zh: Translations = {
     menu: '\u83DC\u5355',
   },
   compareSection: {
+    offerBadges: ["Free forever", "Self-hosted", "No per-run markup", "Open source"],
+    offerBody: "Personas runs on your machine. No orchestration markup and no per-seat pricing. Paid cloud and priority support are optional, not required.",
+    ctaLabel: "Get started free",
     heading: '一切都',
     headingGradient: '免费',
     description: '桌面应用及下方的每项功能永久免费。没有套餐分级，没有按席位收费——只有一个在你的机器上运行的完整智能体平台。',

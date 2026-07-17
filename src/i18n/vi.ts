@@ -35,6 +35,9 @@ export const vi: Translations = {
     menu: 'Menu',
   },
   compareSection: {
+    offerBadges: ["Free forever", "Self-hosted", "No per-run markup", "Open source"],
+    offerBody: "Personas runs on your machine. No orchestration markup and no per-seat pricing. Paid cloud and priority support are optional, not required.",
+    ctaLabel: "Get started free",
     heading: 'Mọi thứ đều',
     headingGradient: 'miễn phí',
     description: 'Ứng dụng máy tính và mọi tính năng bên dưới đều miễn phí mãi mãi. Không phân hạng, không tính phí theo chỗ ngồi — chỉ là một nền tảng tác nhân hoàn chỉnh chạy trên máy của bạn.',

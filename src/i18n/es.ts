@@ -35,6 +35,9 @@ export const es: Translations = {
     menu: 'Men\u00fa',
   },
   compareSection: {
+    offerBadges: ["Free forever", "Self-hosted", "No per-run markup", "Open source"],
+    offerBody: "Personas runs on your machine. No orchestration markup and no per-seat pricing. Paid cloud and priority support are optional, not required.",
+    ctaLabel: "Get started free",
     heading: 'Todo es',
     headingGradient: 'gratis',
     description: 'La aplicación de escritorio y todas las funciones siguientes son gratuitas para siempre. Sin niveles, sin precio por puesto: solo una plataforma de agentes completa que se ejecuta en tu máquina.',

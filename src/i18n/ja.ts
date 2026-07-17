@@ -35,6 +35,9 @@ export const ja: Translations = {
     menu: '\u30e1\u30cb\u30e5\u30fc',
   },
   compareSection: {
+    offerBadges: ["Free forever", "Self-hosted", "No per-run markup", "Open source"],
+    offerBody: "Personas runs on your machine. No orchestration markup and no per-seat pricing. Paid cloud and priority support are optional, not required.",
+    ctaLabel: "Get started free",
     heading: 'すべてが',
     headingGradient: '無料',
     description: 'デスクトップアプリと以下のすべての機能は永久に無料です。階層もシートごとの料金もなく、あなたのマシンで動作する完全なエージェントプラットフォームです。',
