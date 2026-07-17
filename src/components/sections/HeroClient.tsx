@@ -139,7 +139,11 @@ export default function HeroClient() {
           </motion.div>
 
           <motion.div variants={fadeUp} className="mt-12 flex w-full flex-col items-center justify-center gap-6 sm:w-auto sm:flex-row sm:flex-wrap lg:justify-start">
-            <PrimaryCTA href={DOWNLOAD_URL ? "/api/download" : "#download"} icon={Download} label="Download" />
+            {/* Fallback targets the always-present wrapper (page.tsx wrapperId),
+                not the inner id="download" which lives inside a lazy, gated
+                section that isn't in the DOM on first paint. Scrolling to the
+                wrapper brings it into view and mounts the section. */}
+            <PrimaryCTA href={DOWNLOAD_URL ? "/api/download" : "#download-section"} icon={Download} label="Download" />
             <a
               href={GITHUB_URL}
               target="_blank"

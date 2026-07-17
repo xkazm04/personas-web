@@ -66,7 +66,10 @@ export default function PrimaryCTA({
   return (
     <div className={`relative inline-block ${v.wrapper} ${className}`}>
       {href ? (
-        <a href={href} {...commonProps}>
+        // Forward onClick to the anchor too — the download CTA passes both
+        // href="/api/download" and an analytics onClick; dropping it here lost
+        // the site's most important conversion metric in the live-download case.
+        <a href={href} onClick={onClick} {...commonProps}>
           {content}
         </a>
       ) : (
