@@ -17,7 +17,13 @@ export default function AgentsTimeline() {
   const [activeIndex, setActiveIndex] = useState(0);
   const [isPlaying, setIsPlaying] = useState(false);
   const [showResults, setShowResults] = useState(false);
-  const [paused, setPaused] = useState(false);
+  // Two distinct intents kept separate so incidental mouse movement can't undo
+  // an explicit Pause: hoverPaused is transient (pointer over the panel),
+  // userPaused is sticky (Pause button / chip selection). Effective pause is
+  // the union; mouse-leave clears only the hover half.
+  const [hoverPaused, setHoverPaused] = useState(false);
+  const [userPaused, setUserPaused] = useState(false);
+  const paused = hoverPaused || userPaused;
   const cycleTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
   const resultTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
   // For pause/resume of the in-flight race: when the current run started and how
@@ -116,7 +122,7 @@ export default function AgentsTimeline() {
             active={i === activeIndex}
             onClick={() => {
               setActiveIndex(i);
-              setPaused(true);
+              setUserPaused(true);
             }}
             size="sm"
             mono
@@ -133,8 +139,8 @@ export default function AgentsTimeline() {
       <motion.div
         variants={fadeUp}
         className="rounded-2xl border border-glass bg-white/[0.02] backdrop-blur-lg overflow-hidden"
-        onMouseEnter={() => setPaused(true)}
-        onMouseLeave={() => setPaused(false)}
+        onMouseEnter={() => setHoverPaused(true)}
+        onMouseLeave={() => setHoverPaused(false)}
       >
         <TerminalChrome
           title="agents-vs-workflows.race"
@@ -155,10 +161,10 @@ export default function AgentsTimeline() {
         paused={paused}
         onSelect={(i) => {
           setActiveIndex(i);
-          setPaused(true);
+          setUserPaused(true);
         }}
         onReplay={() => startAnimation()}
-        onTogglePause={() => setPaused((v) => !v)}
+        onTogglePause={() => setUserPaused((v) => !v)}
       />
 
       {/* The race outcome is otherwise conveyed only by visual reveals; announce
