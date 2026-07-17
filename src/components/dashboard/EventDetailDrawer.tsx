@@ -1,10 +1,21 @@
 "use client";
 
-import { useState } from "react";
+import { useMemo } from "react";
 import { AnimatePresence, motion, useReducedMotion } from "framer-motion";
 
 import { EVENT_TYPES, type SwarmNode } from "@/lib/mock-dashboard-data";
 import { useTranslation } from "@/i18n/useTranslation";
+
+// Stable hash of a node id so each node's sample event/duration/timestamp are
+// distinct but consistent across re-opens (not one shared random value for all).
+function hashId(id: string): number {
+  let h = 2166136261;
+  for (let i = 0; i < id.length; i++) {
+    h ^= id.charCodeAt(i);
+    h = Math.imul(h, 16777619);
+  }
+  return h >>> 0;
+}
 
 import { EventDrawerHeader } from "./event-detail-drawer/EventDrawerHeader";
 import { EventDrawerMetadata } from "./event-detail-drawer/EventDrawerMetadata";
@@ -22,9 +33,16 @@ interface EventDetailDrawerProps {
 export default function EventDetailDrawer({ node, onClose }: EventDetailDrawerProps) {
   const { t } = useTranslation();
   const reducedMotion = useReducedMotion();
-  const [eventType] = useState(() => EVENT_TYPES[Math.floor(Math.random() * EVENT_TYPES.length)]);
-  const [durationMs] = useState(() => Math.floor(200 + Math.random() * 4800));
-  const [timestamp] = useState(() => new Date(Date.now() - Math.floor(Math.random() * 3600_000)).toISOString());
+  const { eventType, durationMs, timestamp } = useMemo(() => {
+    const h = hashId(node?.id ?? "");
+    return {
+      eventType: EVENT_TYPES[h % EVENT_TYPES.length],
+      durationMs: 200 + (h % 4800),
+      // Derived from the node hash (not Date.now, which would break SSR/resume);
+      // an epoch-anchored offset so each node reads as a distinct recent time.
+      timestamp: new Date(1_700_000_000_000 - ((h >> 4) % 3600_000)).toISOString(),
+    };
+  }, [node?.id]);
 
   // role=dialog/aria-modal + Esc-to-close + Tab focus trap + focus restore.
   const panelRef = useDialogFocusTrap(node !== null, onClose);

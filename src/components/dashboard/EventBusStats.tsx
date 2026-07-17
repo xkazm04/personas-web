@@ -5,6 +5,7 @@ import { motion } from "framer-motion";
 import { Activity, Radio, Wifi, Zap } from "lucide-react";
 import useAnimatedNumber from "@/hooks/useAnimatedNumber";
 import { useTranslation } from "@/i18n/useTranslation";
+import { useEventStore } from "@/stores/eventStore";
 
 // ── Simulated live counters ───────────────────────────────────────────
 
@@ -65,7 +66,11 @@ function StatItem({
 export default function EventBusStats({ className = "" }: { className?: string }) {
   const { t } = useTranslation();
   const { eventsPerSec, totalEvents, activeConnections } = useSimulatedMetrics();
-  const [connected] = useState(true);
+  // The counters are simulated fixtures, but the connection dot must reflect the
+  // REAL stream status so it can't show green "Connected" while the header's
+  // ConnectionStatusIndicator says reconnecting/polling.
+  const connectionStatus = useEventStore((s) => s.connectionStatus);
+  const connected = connectionStatus === "connected";
 
   return (
     <motion.div
@@ -74,6 +79,11 @@ export default function EventBusStats({ className = "" }: { className?: string }
       transition={{ duration: 0.3 }}
       className={`flex flex-wrap items-center gap-1 rounded-xl border border-glass bg-white/[0.02] backdrop-blur-sm ${className}`}
     >
+      {/* The throughput counters are illustrative, not synced telemetry. */}
+      <span className="ml-2 rounded-full border border-glass px-2 py-0.5 text-xs font-medium uppercase tracking-wider text-muted-dark">
+        {t.common.demo}
+      </span>
+
       <StatItem
         icon={Zap}
         label={t.eventsPage.events}
@@ -111,12 +121,12 @@ export default function EventBusStats({ className = "" }: { className?: string }
               className={`relative inline-flex h-2 w-2 rounded-full ${
                 connected
                   ? "bg-emerald-400 shadow-[0_0_6px_rgba(52,211,153,0.5)]"
-                  : "bg-red-400"
+                  : "bg-amber-400"
               }`}
             />
           </span>
-          <span className="text-sm font-medium text-emerald-400">
-            {connected ? t.dashboardUi.connected : t.dashboardUi.disconnected}
+          <span className={`text-sm font-medium ${connected ? "text-emerald-400" : "text-amber-400"}`}>
+            {t.eventsPage.connectionStatus[connectionStatus]}
           </span>
         </span>
       </div>
