@@ -348,6 +348,17 @@
     };
   };
   dashboardUi: {
+    status: {
+      queued: string;
+      running: string;
+      completed: string;
+      processed: string;
+      failed: string;
+      cancelled: string;
+      pending: string;
+      approved: string;
+      rejected: string;
+    };
     testFlow: string;
     eventTypes: string;
     stdout: string;
@@ -1782,6 +1793,17 @@ export const en: Translations = {
     },
   },
   dashboardUi: {
+    status: {
+      queued: "Queued",
+      running: "Running",
+      completed: "Completed",
+      processed: "Processed",
+      failed: "Failed",
+      cancelled: "Cancelled",
+      pending: "Pending",
+      approved: "Approved",
+      rejected: "Rejected",
+    },
     testFlow: "Test Flow",
     eventTypes: "Event Types",
     stdout: "stdout",

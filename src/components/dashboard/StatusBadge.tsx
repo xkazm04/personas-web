@@ -2,62 +2,56 @@
 
 import { useReducedMotion } from "framer-motion";
 import type { BadgeStatus } from "@/lib/types";
+import { useTranslation } from "@/i18n/useTranslation";
 
+// Colour/pulse only — the label is resolved from i18n (t.dashboardUi.status)
+// so status chips localize like every other dashboard string.
 const statusConfig: Record<
   BadgeStatus,
-  { label: string; color: string; bgColor: string; borderColor: string; pulse?: boolean }
+  { color: string; bgColor: string; borderColor: string; pulse?: boolean }
 > = {
   queued: {
-    label: "Queued",
     color: "text-slate-400",
     bgColor: "bg-slate-500/10",
     borderColor: "border-slate-500/20",
   },
   running: {
-    label: "Running",
     color: "text-cyan-400",
     bgColor: "bg-cyan-500/10",
     borderColor: "border-cyan-500/30",
     pulse: true,
   },
   completed: {
-    label: "Completed",
     color: "text-emerald-400",
     bgColor: "bg-emerald-500/10",
     borderColor: "border-emerald-500/30",
   },
   processed: {
-    label: "Processed",
     color: "text-emerald-400",
     bgColor: "bg-emerald-500/10",
     borderColor: "border-emerald-500/30",
   },
   failed: {
-    label: "Failed",
     color: "text-red-400",
     bgColor: "bg-red-500/10",
     borderColor: "border-red-500/30",
   },
   cancelled: {
-    label: "Cancelled",
     color: "text-amber-400",
     bgColor: "bg-amber-500/10",
     borderColor: "border-amber-500/30",
   },
   pending: {
-    label: "Pending",
     color: "text-amber-400",
     bgColor: "bg-amber-500/10",
     borderColor: "border-amber-500/20",
   },
   approved: {
-    label: "Approved",
     color: "text-emerald-400",
     bgColor: "bg-emerald-500/10",
     borderColor: "border-emerald-500/30",
   },
   rejected: {
-    label: "Rejected",
     color: "text-red-400",
     bgColor: "bg-red-500/10",
     borderColor: "border-red-500/30",
@@ -66,6 +60,7 @@ const statusConfig: Record<
 
 export default function StatusBadge({ status }: { status: BadgeStatus }) {
   const reducedMotion = useReducedMotion();
+  const { t } = useTranslation();
   const cfg = statusConfig[status];
   return (
     <span
@@ -79,7 +74,7 @@ export default function StatusBadge({ status }: { status: BadgeStatus }) {
           <span className="relative inline-flex h-1.5 w-1.5 rounded-full bg-cyan-400" />
         </span>
       )}
-      {cfg.label}
+      {t.dashboardUi.status[status]}
     </span>
   );
 }
