@@ -87,10 +87,11 @@ function mapSyncedMemory(m: SyncedMemory, personaName: string): MemoryItem {
     score,
     // No accept/archive workflow is synced; treat every synced memory as active.
     status: "active" as MemoryStatus,
-    // usageCount / lastUsed aren't tracked in the sync projection.
-    usageCount: 0,
+    // usageCount / lastUsed aren't tracked in the sync projection — leave them
+    // undefined so the card omits them rather than reporting a fabricated 0.
+    usageCount: undefined,
     acceptedAt: m.createdAt,
-    lastUsed: m.updatedAt,
+    lastUsed: undefined,
     // Conflict detection is a desktop-only concept; never flag synced memories.
     hasConflict: false,
   };

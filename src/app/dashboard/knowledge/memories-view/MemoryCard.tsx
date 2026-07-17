@@ -11,7 +11,10 @@ export function MemoryCard({ item }: { item: MemoryItem }) {
   const { t } = useTranslation();
   const { Icon, tone } = typeConfig[item.type];
   const status = statusConfig[item.status];
-  const usesLabel = t.memoriesPage.uses.replace("{n}", String(item.usageCount));
+  const usesLabel =
+    item.usageCount !== undefined
+      ? t.memoriesPage.uses.replace("{n}", String(item.usageCount))
+      : null;
 
   return (
     <div
@@ -52,9 +55,13 @@ export function MemoryCard({ item }: { item: MemoryItem }) {
               {item.persona}
             </span>
             <ScoreDots score={item.score} type={item.type} />
-            <span className="tabular-nums">{usesLabel}</span>
-            <span aria-hidden>-</span>
-            <span>{relativeTime(item.lastUsed)}</span>
+            {usesLabel !== null && <span className="tabular-nums">{usesLabel}</span>}
+            {item.lastUsed !== undefined && (
+              <>
+                <span aria-hidden>-</span>
+                <span>{relativeTime(item.lastUsed)}</span>
+              </>
+            )}
           </div>
         </div>
       </div>

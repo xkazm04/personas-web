@@ -414,9 +414,12 @@ export interface MemoryItem {
   persona: string;
   score: number; // 1-10
   status: MemoryStatus;
-  usageCount: number;
+  // Optional: the synced (real-mode) projection doesn't track usage. Left
+  // undefined there so the UI omits the segment rather than printing "0 uses"
+  // as if it were a measured fact.
+  usageCount?: number;
   acceptedAt: string; // ISO
-  lastUsed: string; // ISO
+  lastUsed?: string; // ISO
   hasConflict: boolean;
   conflictReason?: string;
 }
