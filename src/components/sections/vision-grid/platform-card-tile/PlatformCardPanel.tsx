@@ -7,6 +7,7 @@ import type { PlatformCard } from "../data";
 export function PlatformCardPanel({
   card,
   open,
+  panelId,
   brandVar,
   panelRef,
   closeRef,
@@ -14,6 +15,7 @@ export function PlatformCardPanel({
 }: {
   card: PlatformCard;
   open: boolean;
+  panelId: string;
   brandVar: string;
   panelRef: React.RefObject<HTMLDivElement | null>;
   closeRef: React.RefObject<HTMLButtonElement | null>;
@@ -22,6 +24,7 @@ export function PlatformCardPanel({
   return (
     <div
       ref={panelRef}
+      id={panelId}
       role="region"
       aria-label={`${card.title} details`}
       className={`absolute inset-x-0 bottom-0 z-20 transition-all duration-500 ease-out ${
