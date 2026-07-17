@@ -7,11 +7,16 @@ import { useSystemStore } from "@/stores/systemStore";
 import { useDashboardFilterStore } from "@/stores/dashboardFilterStore";
 
 /**
- * Drop every in-memory cache that holds user-scoped data. Called on auth
- * transitions (logout, user switch) so a freshly signed-in account never sees
- * the previous account's personas, executions, subscriptions, triggers,
- * tool-usage, performance metrics, system health, or filter selections —
- * even before the first refetch completes.
+ * Drop every in-memory cache that holds user-scoped data so a freshly
+ * signed-in account never sees the previous account's personas, executions,
+ * subscriptions, triggers, tool-usage, performance metrics, system health, or
+ * filter selections — even before the first refetch completes.
+ *
+ * INVOCATION IS OWNED BY authStore, not callers. It runs on every identity or
+ * isDemo flip: signOut (its finally), demo entry (signInAsDemo/enterDemo), and
+ * the onAuthStateChange handler whenever the user id changes (expiry,
+ * revocation, cross-tab sign-out, account switch). Consumers therefore never
+ * need to clear caches themselves; they just refetch.
  *
  * Lives in lib/ rather than authStore so each store stays free of an
  * authStore import (would cycle: authStore → store → authStore).

@@ -155,6 +155,17 @@ export const useAuthStore = create<AuthState>((set, get) => ({
     } = supabase.auth.onAuthStateChange((_event, session) => {
       const wasAuthenticated = get().isAuthenticated;
       const nowAuthenticated = !!session?.user;
+      // Clear every user-scoped cache whenever the identity behind the data
+      // changes — expiry, revocation, sign-out in another tab, or a switch to a
+      // different account — so no consumer keeps the previous account's
+      // personas/executions/messages/leaderboard. A plain token refresh keeps
+      // the same user id and is left untouched. (signOut clears via its own
+      // finally; demo entry clears in signInAsDemo/enterDemo.)
+      const prevUserId = get().user?.id ?? null;
+      const nextUserId = session?.user?.id ?? null;
+      if (prevUserId !== nextUserId) {
+        clearUserScopedCaches();
+      }
       set({
         user: session?.user ?? null,
         accessToken: session?.access_token ?? null,
@@ -180,7 +191,9 @@ export const useAuthStore = create<AuthState>((set, get) => ({
 
   signInAsDemo: () => {
     // Explicit, user-initiated demo entry — available in every environment.
-    // Mints an in-memory mock session; no real account is touched.
+    // Mints an in-memory mock session; no real account is touched. Drop any
+    // prior real account's caches first so demo never renders their data.
+    clearUserScopedCaches();
     mockSignIn(set);
     set({ isDemo: true });
   },
@@ -190,6 +203,7 @@ export const useAuthStore = create<AuthState>((set, get) => ({
     // session and marks the store initialized so the dashboard's AuthProvider
     // won't re-run real auth and clobber the demo on the redirect into
     // /dashboard. Distinct from signInAsDemo (gated for the sign-in button).
+    clearUserScopedCaches();
     mockSignIn(set);
     set({ isDemo: true, isLoading: false, initialized: true });
   },
