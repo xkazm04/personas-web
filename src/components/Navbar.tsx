@@ -2,10 +2,11 @@
 
 import { useCallback, useRef, useState } from "react";
 import { motion, useMotionValueEvent, useScroll } from "framer-motion";
-import { Menu, X } from "lucide-react";
+import { Menu, Monitor, X } from "lucide-react";
 import DesktopNav from "./navbar/DesktopNav";
 import MobilePanel from "./navbar/MobilePanel";
-import DownloadModal from "./navbar/DownloadModal";
+import WaitlistModal from "./WaitlistModal";
+import { useTranslation } from "@/i18n/useTranslation";
 import { useMobileMenu } from "./navbar/useMobileMenu";
 
 /**
@@ -13,6 +14,7 @@ import { useMobileMenu } from "./navbar/useMobileMenu";
  * to DesktopNav + MobilePanel; shared mobile state lives in useMobileMenu.
  */
 export default function Navbar() {
+  const { t } = useTranslation();
   const [scrolled, setScrolled] = useState(false);
   const [downloadOpen, setDownloadOpen] = useState(false);
   const { scrollY } = useScroll();
@@ -66,7 +68,16 @@ export default function Navbar() {
         onDownloadClick={openDownload}
       />
 
-      <DownloadModal open={downloadOpen} onClose={closeDownload} />
+      {/* Desktop builds aren't shipping yet, so the CTA opens the canonical
+          waitlist flow (same intent as /api/download's fallback) instead of a
+          placeholder modal whose options downloaded nothing. */}
+      <WaitlistModal
+        platformKey="windows"
+        platformLabel={t.downloadSection.windows}
+        platformIcon={Monitor}
+        open={downloadOpen}
+        onClose={closeDownload}
+      />
     </motion.header>
   );
 }
