@@ -1,9 +1,9 @@
 # Scan resume state — ambiguity-guardian + ui-perfectionist, 2026-07-16
 
 ## UPDATE 2026-07-16 (later): SCAN COMPLETE — 53/53 contexts, 265 findings (6C/113H/133M/13L), counts verified two ways. INDEX.md built + committed (f78d3fd) on branch `vibeman/ambiguity-ui-scan-2026-07-16-fixes`. Now in FIX phase.
-## FIX phase status (updated): Waves 1-4 COMPLETE. ALL 6 CRITICALS CLOSED. 14 findings fixed, tsc 0 · vitest 64/64 · 0 regressions throughout.
-##   Wave 1 (T4 reduced-motion, 4) · Wave 2 (T1 security, 6 — user-approved; DEPLOY STEPS in FIXES-WAVE-2.md) · Wave 3 (T5 keyboard-cards, 2).
-## User directive: "keep going through the safe waves." NEXT: finish T5 (flow/event-bus nodes, unnamed progressbar/icon buttons), then T2/T3/T6-T15 per INDEX wave plan.
+## FIX phase status (updated): Waves 1-5 COMPLETE. ALL 6 CRITICALS CLOSED. 20 findings fixed, tsc 0 · vitest 64/64 · 0 regressions throughout.
+##   W1 (T4 reduced-motion, 4) · W2 (T1 security, 6 — user-approved; DEPLOY STEPS in FIXES-WAVE-2.md) · W3 (T5 cards, 2) · W4 (T5 svg-nodes, 2) · W5 (T5 unnamed/hover controls, 6).
+## User directive: "keep going through the safe waves." NEXT: T2 fabricated-data honesty, T3 mode-switch cache contract, T7 error states, then T6/T8-T15 per INDEX wave plan. Small T5 tail (leaderboard medal, trigger-wheel buttons, legal tabs) foldable later.
 ## Baseline to hold every wave: tsc 0 · vitest 64/64. Branch: vibeman/ambiguity-ui-scan-2026-07-16-fixes (unmerged).
 ## ⚠️ Wave 2 deploy steps pending user action: set SUPABASE_SERVICE_ROLE_KEY + run scripts/harden-voting-rls.sql; rename NEXT_PUBLIC_TEAM_API_KEY→TEAM_API_KEY.
 
