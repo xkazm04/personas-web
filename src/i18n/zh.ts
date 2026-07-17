@@ -155,6 +155,8 @@ export const zh: Translations = {
     },
   },
   hero: {
+    downloadCta: "Download",
+    trustLine: "No signup, no credit card. Runs on your machine. Zero telemetry.",
     title: '\u5728\u60A8\u7684\u8BBE\u5907\u4E0A\u8FD0\u884C\u7684 AI \u667A\u80FD\u4F53',
     subtitle: 'ä¸€ä¸Şč§’č‰˛ďĽŚĺ¤šç§Ťč˝ĺŠ›ă€‚ćž„ĺ»şć‹Ąćś‰ç¨łĺ®ščş«ä»˝çš„ĺŠ©ć‰‹ďĽŚč‡Şç”±ç»„ĺĺ®ć‰€ć‰żć‹…çš„ä»»ĺŠˇâ€”â€”éšŹć—¶ć·»ĺŠ ă€ĺŻĺść–é€€ĺ˝ąč˝ĺŠ›ďĽŚć— éś€ä»Žĺ¤´ĺĽ€ĺ§‹ă€‚',
     cta: '\u5F00\u59CB\u4F7F\u7528',

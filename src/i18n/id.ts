@@ -155,6 +155,8 @@ export const id: Translations = {
     },
   },
   hero: {
+    downloadCta: "Download",
+    trustLine: "No signup, no credit card. Runs on your machine. Zero telemetry.",
     title: 'Agen AI yang berjalan di perangkat Anda',
     subtitle: 'Satu persona, banyak kemampuan. Bangun asisten dengan identitas yang stabil dan susun pekerjaan yang dilakukannya â€” tambah, aktifkan, atau pensiunkan kemampuan tanpa harus mulai dari awal.',
     cta: 'Mulai Sekarang',

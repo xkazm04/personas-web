@@ -155,6 +155,8 @@ export const es: Translations = {
     },
   },
   hero: {
+    downloadCta: "Download",
+    trustLine: "No signup, no credit card. Runs on your machine. Zero telemetry.",
     title: 'Agentes de IA que se ejecutan en tu m\u00e1quina',
     subtitle: 'Una persona, muchas capacidades. Crea un asistente con una identidad estable y compone las tareas que realiza \u2014 a\u00f1ade, activa o retira capacidades sin empezar desde cero.',
     cta: 'Comenzar',

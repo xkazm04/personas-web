@@ -155,6 +155,8 @@ export const ja: Translations = {
     },
   },
   hero: {
+    downloadCta: "Download",
+    trustLine: "No signup, no credit card. Runs on your machine. Zero telemetry.",
     title: '\u3042\u306a\u305f\u306e\u30de\u30b7\u30f3\u3067\u52d5\u304f AI \u30a8\u30fc\u30b8\u30a7\u30f3\u30c8',
     subtitle: 'ă˛ă¨ă¤ă®ăšă«ă‚˝ăŠă€ĺ¤šĺ˝©ăŞć©źč˝ă€‚ĺ®‰ĺ®šă—ăźă‚˘ă‚¤ă‡ăłă†ă‚Łă†ă‚Łă‚’ćŚă¤ă‚˘ă‚·ă‚ąă‚żăłăă‚’ć§‹çŻ‰ă—ă€ă“ăŞă™ä»•äş‹ă‚’çµ„ăżĺă‚Źă›ă‚‹ â€” ćś€ĺťă‹ă‚‰ă‚„ă‚Šç›´ă™ă“ă¨ăŞăŹć©źč˝ă‚’čż˝ĺŠ ă€ĺ‡ă‚Šć›żăă€ĺ»ć­˘ă§ăŤă‚‹ă€‚',
     cta: '\u59cb\u3081\u308b',

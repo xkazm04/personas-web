@@ -94,6 +94,8 @@
   hero: {
     title: string;
     subtitle: string;
+    downloadCta: string;
+    trustLine: string;
     cta: string;
     badge: string;
     headingLine1: string;
@@ -1451,6 +1453,8 @@ export const en: Translations = {
   hero: {
     title: 'AI agents that run on your machine',
     subtitle: 'One persona, many capabilities. Build an assistant with a stable identity and compose the jobs it does \u2014 add, toggle, or retire capabilities without starting over.',
+    downloadCta: 'Download',
+    trustLine: 'No signup, no credit card. Runs on your machine. Zero telemetry.',
     cta: 'Get Started',
     badge: 'AI Agent Platform',
     headingLine1: 'Intelligent agents',

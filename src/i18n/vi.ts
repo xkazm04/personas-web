@@ -155,6 +155,8 @@ export const vi: Translations = {
     },
   },
   hero: {
+    downloadCta: "Download",
+    trustLine: "No signup, no credit card. Runs on your machine. Zero telemetry.",
     title: 'T\u00e1c nh\u00e2n AI ch\u1ea1y tr\u00ean m\u00e1y c\u1ee7a b\u1ea1n',
     subtitle: 'Má»™t persona, nhiá»u kháşŁ nÄng. XĂ˘y dá»±ng trá»Ł lĂ˝ vá»›i danh tĂ­nh á»•n Ä‘á»‹nh vĂ  káşżt há»Łp linh hoáşˇt cĂˇc cĂ´ng viá»‡c nĂł thá»±c hiá»‡n â€” thĂŞm, báş­t/táşŻt hoáş·c gá»ˇ bá»Ź kháşŁ nÄng mĂ  khĂ´ng cáş§n báşŻt Ä‘áş§u láşˇi.',
     cta: 'B\u1eaft \u0111\u1ea7u',

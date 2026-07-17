@@ -143,7 +143,7 @@ export default function HeroClient() {
                 not the inner id="download" which lives inside a lazy, gated
                 section that isn't in the DOM on first paint. Scrolling to the
                 wrapper brings it into view and mounts the section. */}
-            <PrimaryCTA href={DOWNLOAD_URL ? "/api/download" : "#download-section"} icon={Download} label="Download" />
+            <PrimaryCTA href={DOWNLOAD_URL ? "/api/download" : "#download-section"} icon={Download} label={t.hero.downloadCta} />
             <a
               href={GITHUB_URL}
               target="_blank"
@@ -161,7 +161,7 @@ export default function HeroClient() {
             variants={fadeUp}
             className="mt-4 text-sm font-light text-muted-dark text-center lg:text-left"
           >
-            No signup, no credit card. Runs on your machine. Zero telemetry.
+            {t.hero.trustLine}
           </motion.p>
 
           <motion.div

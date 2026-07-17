@@ -155,6 +155,8 @@ export const de: Translations = {
     },
   },
   hero: {
+    downloadCta: "Download",
+    trustLine: "No signup, no credit card. Runs on your machine. Zero telemetry.",
     title: 'KI-Agenten, die auf Ihrem Rechner laufen',
     subtitle: 'Eine Persona, viele F\u00e4higkeiten. Erstellen Sie einen Assistenten mit stabiler Identit\u00e4t und stellen Sie die Aufgaben zusammen, die er erledigt \u2014 F\u00e4higkeiten hinzuf\u00fcgen, aktivieren oder entfernen, ohne von vorne zu beginnen.',
     cta: 'Loslegen',

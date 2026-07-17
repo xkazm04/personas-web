@@ -155,6 +155,8 @@ export const cs: Translations = {
     },
   },
   hero: {
+    downloadCta: "Download",
+    trustLine: "No signup, no credit card. Runs on your machine. Zero telemetry.",
     title: 'AI agenti b\u011b\u017e\u00edc\u00ed na va\u0161em po\u010d\u00edta\u010di',
     subtitle: 'Jedna persona, mnoho schopnost\u00ed. Vytvo\u0159te asistenta se stabiln\u00ed identitou a skl\u00e1dejte \u00fakoly, kter\u00e9 prov\u00e1d\u00ed \u2014 p\u0159id\u00e1vejte, zapn\u011bte nebo vy\u0159a\u010fte schopnosti, ani\u017e byste za\u010d\u00ednali znova.',
     cta: 'Za\u010d\u00edt',
