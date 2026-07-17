@@ -9,6 +9,7 @@ import { useFocusTrap } from "@/hooks/useFocusTrap";
 import ConnectorModalHeader from "./components/ConnectorModalHeader";
 import UseCaseList from "./components/UseCaseList";
 import TryItToggle from "./components/TryItToggle";
+import SetupCTA from "./components/SetupCTA";
 
 export default function ConnectorModal({
   connector,
@@ -104,6 +105,8 @@ export default function ConnectorModal({
                 setShowSimulator(!showSimulator);
               }}
             />
+            <div className="mx-8 h-px bg-white/[0.06]" />
+            <SetupCTA connector={connector} />
           </motion.div>
         </motion.div>
       )}
