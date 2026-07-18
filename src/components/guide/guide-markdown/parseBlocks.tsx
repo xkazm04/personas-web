@@ -176,21 +176,40 @@ function buildUnorderedList(items: { depth: number; content: string }[], from: n
   let index = from;
   while (index < items.length && items[index].depth >= depth) {
     if (items[index].depth === depth) {
-      children.push(<li key={`li${index}`} className="text-base leading-relaxed">{parseInline(items[index].content, `ul${key}-${index}`)}</li>);
+      // A deeper list belongs INSIDE this <li>, not as a sibling of it — a
+      // <ul> directly inside a <ul> is invalid HTML and breaks list semantics
+      // for assistive tech. Look ahead for a nested block and render it within.
+      const liContent: ReactNode[] = [parseInline(items[index].content, `ul${key}-${index}`)];
+      const liIndex = index;
       index++;
+      if (index < items.length && items[index].depth > depth) {
+        const sub = buildUnorderedList(items, index, items[index].depth, key);
+        liContent.push(sub.node);
+        index = sub.next;
+      }
+      children.push(
+        <li key={`li${liIndex}`} className="text-base leading-relaxed">{liContent}</li>,
+      );
     } else {
+      // Deeper item with no preceding same-depth <li> (malformed indentation) —
+      // recurse defensively so nothing is dropped.
       const sub = buildUnorderedList(items, index, items[index].depth, key);
       children.push(sub.node);
       index = sub.next;
     }
   }
-  return { node: <ul className="list-disc list-inside space-y-1 mb-4 text-muted-dark">{children}</ul>, next: index };
+  return { node: <ul key={`ul${key}-${from}-${depth}`} className="list-disc list-inside space-y-1 mb-4 text-muted-dark">{children}</ul>, next: index };
 }
 
 function emitTable(tableLines: string[], emit: (node: ReactNode) => void) {
   const parseRow = (row: string) => row.split("|").slice(1, -1).map((cell) => cell.trim());
   if (tableLines.length < 2) return;
-  const headers = parseRow(tableLines[0]);
+  const rawHeaders = parseRow(tableLines[0]);
   const dataStart = /^[\s|:-]+$/.test(tableLines[1].replace(/\|/g, "").replace(/[-: ]/g, "")) ? 2 : 1;
-  emit(<MarkdownTable headers={headers} rows={tableLines.slice(dataStart).map(parseRow)} />);
+  const rawRows = tableLines.slice(dataStart).map(parseRow);
+  // Run cells through parseInline so `code`, **bold**, and links render like
+  // every other block type, instead of showing literal markdown syntax.
+  const headers = rawHeaders.map((cell, ci) => parseInline(cell, `th${ci}`));
+  const rows = rawRows.map((row, ri) => row.map((cell, ci) => parseInline(cell, `td${ri}-${ci}`)));
+  emit(<MarkdownTable headers={headers} rows={rows} />);
 }

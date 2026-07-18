@@ -1,12 +1,16 @@
 "use client";
 
+import type { ReactNode } from "react";
+
 /**
- * Table rendered from standard markdown pipe-table syntax.
+ * Table rendered from standard markdown pipe-table syntax. Cells are ReactNode
+ * so inline markdown (`code`, **bold**, links) rendered by the caller survives —
+ * plain strings still work unchanged.
  */
 
 interface MarkdownTableProps {
-  headers: string[];
-  rows: string[][];
+  headers: ReactNode[];
+  rows: ReactNode[][];
 }
 
 export function MarkdownTable({ headers, rows }: MarkdownTableProps) {
@@ -28,7 +32,7 @@ export function MarkdownTable({ headers, rows }: MarkdownTableProps) {
         </thead>
         <tbody className="divide-y divide-white/[0.04]">
           {rows.map((row, ri) => (
-            <tr key={ri} className="transition-colors hover:bg-white/[0.02] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-cyan/50" tabIndex={0}>
+            <tr key={ri} className="transition-colors hover:bg-white/[0.02]">
               {row.map((cell, ci) => (
                 <td
                   key={ci}
