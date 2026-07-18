@@ -149,6 +149,9 @@ export interface ArchitectureLayer {
   name: string;
   description: string;
   color: string;
+  /** Expanded detail shown on hover/focus of the layer card. Lives here (not
+   *  keyed by display-name in the component) so a rename can't silently drop it. */
+  detail: string;
 }
 
 export interface SecurityFAQ {
@@ -185,8 +188,8 @@ export const SECURITY_FAQS: SecurityFAQ[] = [
 ];
 
 export const ARCHITECTURE_LAYERS: ArchitectureLayer[] = [
-  { name: "Your AI Provider", description: "Direct API calls to Anthropic, OpenAI, Google — your keys, your account", color: "#06b6d4" },
-  { name: "Personas Engine", description: "Local orchestration, scheduling, healing, tracing — runs on your machine", color: "#a855f7" },
-  { name: "Encrypted Vault", description: "AES-256-GCM credentials stored in OS keyring — never in plaintext", color: "#34d399" },
-  { name: "Your Machine", description: "Windows, macOS, or Linux — your hardware, your security controls", color: "#fbbf24" },
+  { name: "Your AI Provider", description: "Direct API calls to Anthropic, OpenAI, Google — your keys, your account", color: "#06b6d4", detail: "Direct, encrypted API calls with no relay or proxy — your keys, your account, your rate limits." },
+  { name: "Personas Engine", description: "Local orchestration, scheduling, healing, tracing — runs on your machine", color: "#a855f7", detail: "Multi-agent orchestration, healing, scheduling, and tracing — everything runs as a local process." },
+  { name: "Encrypted Vault", description: "AES-256-GCM credentials stored in OS keyring — never in plaintext", color: "#34d399", detail: "AES-256-GCM with OS-native keyring integration — DPAPI on Windows, Keychain on macOS, libsecret on Linux." },
+  { name: "Your Machine", description: "Windows, macOS, or Linux — your hardware, your security controls", color: "#fbbf24", detail: "Full control over hardware, network policies, and OS security — air-gap capable with local LLMs." },
 ];

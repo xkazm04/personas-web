@@ -4,17 +4,6 @@ import { useState, type KeyboardEvent as ReactKeyboardEvent } from "react";
 import { motion, AnimatePresence, useReducedMotion } from "framer-motion";
 import { ARCHITECTURE_LAYERS, type ArchitectureLayer } from "@/data/security";
 
-const LAYER_DETAILS: Record<string, string> = {
-  "Your AI Provider":
-    "Direct, encrypted API calls with no relay or proxy — your keys, your account, your rate limits.",
-  "Personas Engine":
-    "Multi-agent orchestration, healing, scheduling, and tracing — everything runs as a local process.",
-  "Encrypted Vault":
-    "AES-256-GCM with OS-native keyring integration — DPAPI on Windows, Keychain on macOS, libsecret on Linux.",
-  "Your Machine":
-    "Full control over hardware, network policies, and OS security — air-gap capable with local LLMs.",
-};
-
 const TOTAL = ARCHITECTURE_LAYERS.length;
 
 function PulseConnector({
@@ -103,7 +92,7 @@ function LayerCard({
   const [hovered, setHovered] = useState(false);
   const [focused, setFocused] = useState(false);
   const [open, setOpen] = useState(false);
-  const detail = LAYER_DETAILS[layer.name];
+  const detail = layer.detail;
   const expanded = detail ? open || hovered || focused : false;
   const detailId = `arch-layer-detail-${index}`;
 
