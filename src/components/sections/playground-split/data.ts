@@ -196,4 +196,12 @@ export function getStatusColor(status: NodeStatus): string {
   }
 }
 
-export const SYNTAX_KEYWORDS = /\b(inbox|draft|replies|urgent|emails|PR|#142|bugs|style|issues|missing|tests|#engineering|#product|channels|24h|calendar|focus|time|next week)\b/gi;
+// Single source of truth for the prompt-highlighter keywords. The regex and the
+// membership test are derived from this in SyntaxPrompt (previously there were
+// three drifting copies). Note the `#`-prefixed tokens — a leading `\b` can
+// never match before `#`, so the pattern is built with boundary lookarounds.
+export const SYNTAX_KEYWORDS: string[] = [
+  "inbox", "draft", "replies", "urgent", "emails", "PR", "#142", "bugs",
+  "style", "issues", "missing", "tests", "#engineering", "#product",
+  "channels", "24h", "calendar", "focus", "time", "next week",
+];
