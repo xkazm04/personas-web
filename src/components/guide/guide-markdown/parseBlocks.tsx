@@ -3,7 +3,7 @@ import React, { type ReactNode } from "react";
 import { CodeFence, MarkdownTable } from "../GuideBlocks";
 import { expandLineRanges } from "./expandLineRanges";
 import { HeadingAnchor } from "./HeadingAnchor";
-import { slugifyHeading } from "./slugify";
+import { createHeadingIdAssigner } from "./headingId";
 import { parseCustomBlock } from "./parseCustomBlock";
 import { parseInline } from "./parseInline";
 
@@ -25,7 +25,7 @@ export function parseBlocks(lines: string[], opts: { copyAnchorLabel?: string } 
   const elements: ReactNode[] = [];
   let index = 0;
   let key = 0;
-  const usedSlugs = new Map<string, number>();
+  const assignHeadingId = createHeadingIdAssigner();
   const emit = (node: ReactNode) =>
     elements.push(React.cloneElement(node as React.ReactElement, { key: `b${key++}` }));
 
@@ -60,10 +60,8 @@ export function parseBlocks(lines: string[], opts: { copyAnchorLabel?: string } 
       // becomes <h2>, "##" becomes <h3>, etc. (capped at h4).
       const depth = Math.min(headingMatch[1].length + 1, 4) as 1 | 2 | 3 | 4;
       const rawText = headingMatch[2];
-      const baseSlug = slugifyHeading(rawText) || `section-${key}`;
-      const count = usedSlugs.get(baseSlug) ?? 0;
-      usedSlugs.set(baseSlug, count + 1);
-      const id = count === 0 ? baseSlug : `${baseSlug}-${count + 1}`;
+      // Shared assigner keeps these ids identical to the TOC's (extractHeadings).
+      const id = assignHeadingId(rawText);
       emit(
         <HeadingAnchor
           depth={depth}

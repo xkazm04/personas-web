@@ -1,4 +1,4 @@
-import { slugifyHeading } from "./slugify";
+import { createHeadingIdAssigner } from "./headingId";
 
 export interface GuideHeading {
   id: string;
@@ -10,10 +10,9 @@ export interface GuideHeading {
 export function extractHeadings(content: string): GuideHeading[] {
   const lines = content.split("\n");
   const headings: GuideHeading[] = [];
-  const usedSlugs = new Map<string, number>();
+  const assignHeadingId = createHeadingIdAssigner();
   let inCodeFence = false;
   let blockType: string | null = null;
-  let fallbackKey = 0;
 
   const attachTab = (label: string) => {
     if (headings.length === 0) return;
@@ -54,10 +53,7 @@ export function extractHeadings(content: string): GuideHeading[] {
     if (!match) continue;
     const depth = match[1].length as 1 | 2 | 3 | 4;
     const rawText = match[2];
-    const baseSlug = slugifyHeading(rawText) || `section-${fallbackKey++}`;
-    const count = usedSlugs.get(baseSlug) ?? 0;
-    usedSlugs.set(baseSlug, count + 1);
-    const id = count === 0 ? baseSlug : `${baseSlug}-${count + 1}`;
+    const id = assignHeadingId(rawText);
     const stripped = rawText
       .replace(/\*\*\*(.+?)\*\*\*/g, "$1")
       .replace(/\*\*(.+?)\*\*/g, "$1")
