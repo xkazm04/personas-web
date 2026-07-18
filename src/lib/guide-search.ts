@@ -51,12 +51,29 @@ function levenshtein(a: string, b: string, maxDist = 2): number {
   return dp[m][n];
 }
 
+/**
+ * Edit budget scaled to token length. A flat distance of 2 against a 2-char
+ * minimum query length made short queries ("ai", "run") fuzzy-match nearly
+ * every word, flooding tiers 3–4 with noise. Standard practice: 0 edits for
+ * very short tokens, 1 for medium, up to `maxDist` for longer ones.
+ */
+function editBudget(query: string, target: string, maxDist: number): number {
+  const shorter = Math.min(query.length, target.length);
+  if (shorter < 4) return 0;
+  if (shorter < 7) return Math.min(1, maxDist);
+  return maxDist;
+}
+
 function fuzzyWordMatch(query: string, target: string, maxDist = 2): boolean {
   if (target.includes(query)) return true;
-  if (levenshtein(query, target) <= maxDist) return true;
+  const budget = editBudget(query, target, maxDist);
+  if (budget > 0 && levenshtein(query, target, budget) <= budget) return true;
   const words = target.split(/\s+/);
   if (words.length > 1) {
-    return words.some((w) => levenshtein(query, w) <= maxDist);
+    return words.some((w) => {
+      const b = editBudget(query, w, maxDist);
+      return b > 0 && levenshtein(query, w, b) <= b;
+    });
   }
   return false;
 }
