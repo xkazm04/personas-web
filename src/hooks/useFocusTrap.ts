@@ -83,9 +83,14 @@ export function useFocusTrap({
       }
     }
 
-    container.addEventListener("keydown", onKeyDown);
+    // Listen at the document level: keydown events dispatch on the focused
+    // element, so a container-scoped listener never fires once focus has
+    // already escaped the panel — exactly the case the recovery branches in
+    // onKeyDown are written to handle. The `node.contains(activeEl)` checks
+    // keep this a no-op while focus is legitimately inside the trap.
+    document.addEventListener("keydown", onKeyDown);
     return () => {
-      container.removeEventListener("keydown", onKeyDown);
+      document.removeEventListener("keydown", onKeyDown);
       // Restore focus to the triggering element on close.
       restore?.focus?.();
     };

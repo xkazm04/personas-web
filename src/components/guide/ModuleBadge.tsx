@@ -14,9 +14,13 @@ export default function ModuleBadge({ moduleRef, categoryColor = "#06b6d4", comp
   const [open, setOpen] = useState(false);
   const popoverRef = useRef<HTMLDivElement>(null);
   const buttonRef = useRef<HTMLButtonElement>(null);
+  const closeRef = useRef<HTMLButtonElement>(null);
 
   useEffect(() => {
     if (!open) return;
+
+    // Move focus into the disclosure on open, restore to the trigger on close.
+    closeRef.current?.focus();
 
     function handleClickOutside(e: MouseEvent) {
       if (
@@ -38,17 +42,21 @@ export default function ModuleBadge({ moduleRef, categoryColor = "#06b6d4", comp
     return () => {
       document.removeEventListener("mousedown", handleClickOutside);
       document.removeEventListener("keydown", handleEscape);
+      // Restore focus to the trigger only if it still lives inside the popover.
+      if (popoverRef.current?.contains(document.activeElement)) {
+        buttonRef.current?.focus();
+      }
     };
   }, [open]);
 
   if (compact) {
     return (
-      <span
-        className="inline-flex items-center gap-1 text-sm text-muted-dark"
-        title={`Find in app: ${moduleRef.path.join(" → ")}`}
-      >
+      <span className="inline-flex items-center gap-1 text-sm text-muted-dark">
         <Monitor className="h-3 w-3 shrink-0" aria-hidden="true" />
-        <span className="truncate max-w-[120px]">{moduleRef.label}</span>
+        <span className="truncate max-w-[120px]" aria-hidden="true">
+          {moduleRef.label}
+        </span>
+        <span className="sr-only">Find in app: {moduleRef.path.join(" → ")}</span>
       </span>
     );
   }
@@ -71,7 +79,6 @@ export default function ModuleBadge({ moduleRef, categoryColor = "#06b6d4", comp
         <div
           ref={popoverRef}
           role="dialog"
-          aria-modal="true"
           aria-label="Desktop app location"
           className="absolute left-0 top-full z-50 mt-2 w-64 rounded-xl border border-glass-hover bg-[#0a0a0f]/95 backdrop-blur-md p-4 shadow-xl shadow-black/40"
         >
@@ -80,6 +87,7 @@ export default function ModuleBadge({ moduleRef, categoryColor = "#06b6d4", comp
               Find in app
             </p>
             <button
+              ref={closeRef}
               type="button"
               onClick={() => setOpen(false)}
               className="rounded p-0.5 text-muted-dark hover:text-foreground transition-colors outline-none focus-visible:ring-2 focus-visible:ring-brand-cyan/50 focus-visible:ring-offset-2 focus-visible:ring-offset-black"

@@ -43,12 +43,19 @@ export default function Sparkline({
   const areaPath = `M${points[0]} ${points.map((p) => `L${p}`).join(" ")} L${pad + w},${height} L${pad},${height} Z`;
   const colors = ACCENT_COLORS[accent] ?? ACCENT_COLORS.cyan;
 
+  const first = cleaned[0];
+  const last = cleaned[cleaned.length - 1];
+  const trend = last > first ? "up" : last < first ? "down" : "flat";
+  const label = `Sparkline trending ${trend}: ${cleaned.length} points, min ${min}, max ${max}, last ${last}.`;
+
   return (
     <svg
       width={width}
       height={height}
       viewBox={`0 0 ${width} ${height}`}
       className="flex-shrink-0"
+      role="img"
+      aria-label={label}
     >
       <defs>
         <linearGradient id={`spark-${accent}`} x1="0" y1="0" x2="0" y2="1">

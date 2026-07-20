@@ -1,10 +1,11 @@
 "use client";
 
-import { useCallback, useEffect, useId, useMemo, useState } from "react";
+import { useCallback, useEffect, useId, useMemo, useRef, useState } from "react";
 import { AnimatePresence, motion } from "framer-motion";
 import { ChevronDown } from "lucide-react";
 import { useActiveSectionId } from "@/contexts/SectionObserverContext";
 import { lockBodyScroll, unlockBodyScroll } from "@/lib/bodyScrollLock";
+import { useFocusTrap } from "@/hooks/useFocusTrap";
 import { useTranslation } from "@/i18n/useTranslation";
 import type { ScrollMapItem } from "@/lib/types";
 
@@ -13,6 +14,9 @@ export default function MobilePageTOC({ items }: { items: ScrollMapItem[] }) {
   const [open, setOpen] = useState(false);
   const activeSectionId = useActiveSectionId();
   const panelId = useId();
+  const panelRef = useRef<HTMLElement>(null);
+
+  useFocusTrap({ active: open, containerRef: panelRef });
 
   const activeIndex = useMemo(() => {
     const idx = items.findIndex((item) => item.href === `#${activeSectionId}`);
@@ -90,7 +94,10 @@ export default function MobilePageTOC({ items }: { items: ScrollMapItem[] }) {
             />
             <motion.nav
               key="panel"
+              ref={panelRef}
               id={panelId}
+              role="dialog"
+              aria-modal="true"
               initial={{ opacity: 0, y: -8 }}
               animate={{ opacity: 1, y: 0 }}
               exit={{ opacity: 0, y: -8 }}
