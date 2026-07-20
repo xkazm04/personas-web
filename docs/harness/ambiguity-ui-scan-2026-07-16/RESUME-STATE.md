@@ -3,7 +3,7 @@
 ## UPDATE 2026-07-16 (later): SCAN COMPLETE — 53/53 contexts, 265 findings (6C/113H/133M/13L), counts verified two ways. INDEX.md built + committed (f78d3fd) on branch `vibeman/ambiguity-ui-scan-2026-07-16-fixes`. Now in FIX phase.
 ## FIX phase status (updated): Waves 1-12 COMPLETE. ALL 6 CRITICALS CLOSED. 48 findings fixed, tsc 0 · vitest 64/64 · i18n 100% · 0 regressions throughout.
 ##   W1 (T4,4) · W2 (T1 security,6 — DEPLOY STEPS in FIXES-WAVE-2.md) · W3-5 (T5 a11y,10) · W6 (T2,5) · W7 (T3+T7,6) · W8 (T6,3) · W9 (T10,4) · W10 (T11,3; next build run) · W11 (T8,4) · W12 (T9 i18n hardcoded,3; all 15 locales).
-## Waves 1-14 COMPLETE (70 findings). W14 = Medium/Low a11y cluster (15 findings) on branch vibeman/medlow-a11y. ~131 Med/Low remain (see FIXES-WAVE-14.md triage + recommendation).
+## Waves 1-15 COMPLETE (84 findings). W15 = Med/Low loading+dead+dupe (14). Med/Low closed so far: 29 (W14 a11y 15 + W15 14); ~117 remain (context-drift rescan, magic-number, i18n-hardcoded, singletons).
 ## i18n codemod pattern: add key to en.ts interface+values, then Node inject English seed into 13 non-en after section-open line (idempotent); keep ASCII (encoding gate). check:i18n-coverage must stay 100%.
 ## Deferred (product/infra): roadmap #1 (wire-vs-delete), i18n coverage-gate hardening + mojibake (#1/#2), guided-tour #3, orchestration #3, knowledge type-bucket+legends, small T5 tail, theme rehydrate DOM-write, stats writable-FS.
 ## Deferred (product/decision): public-roadmap #1 (wire DB roadmap vs delete route+table — user call). Plus: guided-tour #3, orchestration #3, knowledge type-bucket+legends, small T5 tail, theme rehydrate DOM-write, stats writable-FS.
