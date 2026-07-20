@@ -200,14 +200,16 @@ export default function MessagesPage() {
         </motion.div>
       )}
 
-      <MessagesPagination
-        pageLabel={pageLabel}
-        isFirstPage={clampedPage === 0}
-        isLastPage={clampedPage >= totalPages - 1}
-        labels={t.messagesPage.pagination}
-        onPrevious={() => setPage(Math.max(0, clampedPage - 1))}
-        onNext={() => setPage(Math.min(totalPages - 1, clampedPage + 1))}
-      />
+      {!loading && !isEmpty && (
+        <MessagesPagination
+          pageLabel={pageLabel}
+          isFirstPage={clampedPage === 0}
+          isLastPage={clampedPage >= totalPages - 1}
+          labels={t.messagesPage.pagination}
+          onPrevious={() => setPage(Math.max(0, clampedPage - 1))}
+          onNext={() => setPage(Math.min(totalPages - 1, clampedPage + 1))}
+        />
+      )}
 
       <ThreadDetailModal
         thread={openThread_value}

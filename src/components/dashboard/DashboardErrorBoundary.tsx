@@ -51,8 +51,10 @@ export default class DashboardErrorBoundary extends Component<Props, State> {
     // Stop sending to Sentry once the user has burned through MAX_RETRIES.
     // The first N events are sufficient to diagnose; further repeats just
     // confirm the boundary is in a retry-loop, which is itself diagnostic
-    // information the first event already conveyed via tags.
-    if (this.state.retryCount > MAX_RETRIES) {
+    // information the first event already conveyed via tags. Cap on `>=` so
+    // the terminal (retries-exhausted) catch is suppressed — with `>` the
+    // guard was unreachable, since `retryCount` never exceeds MAX_RETRIES.
+    if (this.state.retryCount >= MAX_RETRIES) {
       console.error(`Dashboard render error (post-cap) [${errorId}]:`, error);
       return;
     }

@@ -6,6 +6,7 @@ import { Trophy } from "lucide-react";
 
 import GradientText from "@/components/GradientText";
 import DashboardErrorBanner from "@/components/dashboard/DashboardErrorBanner";
+import EmptyState from "@/components/dashboard/EmptyState";
 import SkeletonCard, { SkeletonChart } from "@/components/dashboard/SkeletonCard";
 import StalenessIndicator from "@/components/dashboard/StalenessIndicator";
 import { useTranslation } from "@/i18n/useTranslation";
@@ -93,6 +94,27 @@ export default function LeaderboardPage() {
           <SkeletonCard className="lg:col-span-3" lines={6} />
           <SkeletonChart className="lg:col-span-2" />
         </div>
+      ) : personas.length === 0 ? (
+        <EmptyState
+          icon={Trophy}
+          title="No agents ranked yet"
+          description={
+            error
+              ? "We couldn't load the leaderboard. Try again in a moment."
+              : "Once your agents start running, they'll appear here ranked by performance."
+          }
+          action={
+            error ? (
+              <button
+                type="button"
+                onClick={retry}
+                className="inline-flex items-center gap-2 rounded-lg border border-white/[0.12] bg-white/[0.04] px-4 py-2 text-sm text-foreground outline-none transition-colors hover:bg-white/[0.08] focus-visible:ring-2 focus-visible:ring-brand-cyan/40"
+              >
+                {t.dashboard.errorBoundary.retry}
+              </button>
+            ) : undefined
+          }
+        />
       ) : (
         <>
           <motion.div variants={fadeUp} className="mb-4 flex justify-end">
