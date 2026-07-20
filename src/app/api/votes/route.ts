@@ -2,13 +2,12 @@
  * ── PII Policy ──────────────────────────────────────────────────────
  * This route collects:
  * - voter_id: a client-generated anonymous identifier (not PII)
- * - email (optional): provided voluntarily for notifications
  * IP addresses are used ONLY for transient in-memory rate limiting and
  * are NEVER persisted to the database or filesystem.
  */
 
 import { NextRequest, NextResponse } from "next/server";
-import { isValidEmail, isValidVoterId } from "@/lib/validation";
+import { isValidVoterId } from "@/lib/validation";
 import { withWriteLock } from "@/lib/fileLock";
 import { getClientIp, parseJsonBody } from "@/lib/server/request";
 import { isRateLimited } from "./rate-limit";
@@ -95,15 +94,10 @@ export async function POST(req: NextRequest) {
   const parsed = await parseJsonBody<{
     featureId?: string;
     voterId?: string;
-    email?: string;
   }>(req, { maxBytes: 10 * 1024 });
   if (!parsed.ok) return parsed.response;
 
-  const { featureId, voterId, email } = parsed.data;
-  const normalizedEmail =
-    email && typeof email === "string" && isValidEmail(email)
-      ? email.trim().toLowerCase()
-      : undefined;
+  const { featureId, voterId } = parsed.data;
 
   if (!featureId || !ALLOWED_FEATURES.has(featureId)) {
     return NextResponse.json({ error: "Invalid feature ID" }, { status: 400 });
@@ -136,14 +130,6 @@ export async function POST(req: NextRequest) {
     }
 
     if (existing) {
-      if (normalizedEmail) {
-        await sb
-          .from("feature_votes")
-          .update({ email: normalizedEmail })
-          .eq("feature_id", featureId)
-          .eq("voter_id", voterId);
-        return NextResponse.json({ action: "email_saved" });
-      }
       await sb
         .from("feature_votes")
         .delete()
@@ -161,7 +147,6 @@ export async function POST(req: NextRequest) {
       {
         feature_id: featureId,
         voter_id: voterId,
-        ...(normalizedEmail ? { email: normalizedEmail } : {}),
       },
       { onConflict: "feature_id,voter_id", ignoreDuplicates: true },
     );
@@ -185,11 +170,6 @@ export async function POST(req: NextRequest) {
     );
 
     if (existingIdx !== -1) {
-      if (normalizedEmail) {
-        data.entries[existingIdx].email = normalizedEmail;
-        await writeVotes(data);
-        return NextResponse.json({ action: "email_saved" });
-      }
       data.entries.splice(existingIdx, 1);
       await writeVotes(data);
       return NextResponse.json({ action: "removed" });
@@ -198,7 +178,6 @@ export async function POST(req: NextRequest) {
     data.entries.push({
       feature_id: featureId,
       voter_id: voterId,
-      ...(normalizedEmail ? { email: normalizedEmail } : {}),
       created_at: new Date().toISOString(),
     });
 

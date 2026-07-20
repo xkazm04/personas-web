@@ -4,6 +4,7 @@ import { useCallback, useEffect, useRef, useState, type FormEvent } from "react"
 import { AnimatePresence, motion } from "framer-motion";
 import * as Sentry from "@sentry/nextjs";
 import { TRANSITION_FAST, TRANSITION_NORMAL } from "@/lib/animations";
+import { lockBodyScroll, unlockBodyScroll } from "@/lib/bodyScrollLock";
 import { useTranslation } from "@/i18n/useTranslation";
 import { WaitlistForm } from "./waitlist-modal/WaitlistForm";
 import { WaitlistHeader } from "./waitlist-modal/WaitlistHeader";
@@ -40,7 +41,10 @@ export default function WaitlistModal({ platformKey, platformLabel, platformIcon
         setWaitlistCount(data.counts?.[platformKey] ?? 0);
       }
     } catch (err) {
-      if (!(err instanceof DOMException && err.name === "AbortError")) return;
+      // Swallow aborts (close/re-open); report genuine failures. The header
+      // degrades gracefully by leaving `waitlistCount` null.
+      if (err instanceof DOMException && err.name === "AbortError") return;
+      Sentry.captureException(err, { tags: { component: "WaitlistModal" } });
     }
   }, [platformKey]);
 
@@ -55,7 +59,10 @@ export default function WaitlistModal({ platformKey, platformLabel, platformIcon
     if (!open) {
       submitAbortRef.current?.abort();
       submitAbortRef.current = null;
+      return;
     }
+    lockBodyScroll();
+    return () => unlockBodyScroll();
   }, [open]);
 
   const handleSubmit = async (event: FormEvent) => {

@@ -101,8 +101,8 @@ export async function postVoteToggle(
   featureId: string,
   voterId: string,
   signal?: AbortSignal,
-): Promise<"added" | "removed" | "email_saved"> {
-  const data = await apiFetch<{ action?: "added" | "removed" | "email_saved" }>(
+): Promise<"added" | "removed"> {
+  const data = await apiFetch<{ action?: "added" | "removed" }>(
     "/api/votes",
     { method: "POST", body: { featureId, voterId }, signal },
   );
