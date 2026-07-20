@@ -46,7 +46,7 @@ export function DataParticle({
   );
 }
 
-export function SparkEffect({ x, y }: { x: number; y: number }) {
+export function SparkEffect({ x, y, color }: { x: number; y: number; color: string }) {
   const reduced = useReducedMotion();
   const sparks = useMemo(
     () =>
@@ -61,7 +61,7 @@ export function SparkEffect({ x, y }: { x: number; y: number }) {
   if (reduced) {
     return (
       <g>
-        <circle cx={x} cy={y} r={6} fill="#f43f5e" opacity={0.7} />
+        <circle cx={x} cy={y} r={6} fill={color} opacity={0.7} />
       </g>
     );
   }
@@ -74,7 +74,7 @@ export function SparkEffect({ x, y }: { x: number; y: number }) {
           cx={x}
           cy={y}
           r={spark.size}
-          fill="#f43f5e"
+          fill={color}
           initial={{ cx: x, cy: y, opacity: 1 }}
           animate={{
             cx: x + Math.cos(spark.angle) * spark.dist,
@@ -94,7 +94,7 @@ export function SparkEffect({ x, y }: { x: number; y: number }) {
         cx={x}
         cy={y}
         r={4}
-        fill="#f43f5e"
+        fill={color}
         animate={{ r: [4, 8, 4], opacity: [0.8, 0.2, 0.8] }}
         transition={{ duration: 0.6, repeat: Infinity }}
       />
@@ -102,13 +102,13 @@ export function SparkEffect({ x, y }: { x: number; y: number }) {
   );
 }
 
-export function WeldFlash({ x, y }: { x: number; y: number }) {
+export function WeldFlash({ x, y, color }: { x: number; y: number; color: string }) {
   const reduced = useReducedMotion();
   if (reduced) {
     return (
       <g>
-        <circle cx={x} cy={y} r={8} fill="none" stroke="#06b6d4" strokeWidth={2} opacity={0.6} />
-        <circle cx={x} cy={y} r={3} fill="#06b6d4" filter="url(#weldGlow)" />
+        <circle cx={x} cy={y} r={8} fill="none" stroke={color} strokeWidth={2} opacity={0.6} />
+        <circle cx={x} cy={y} r={3} fill={color} filter="url(#weldGlow)" />
       </g>
     );
   }
@@ -127,7 +127,7 @@ export function WeldFlash({ x, y }: { x: number; y: number }) {
         cy={y}
         r={6}
         fill="none"
-        stroke="#06b6d4"
+        stroke={color}
         strokeWidth={2}
         animate={{ r: [6, 24, 6], opacity: [0.8, 0, 0.8] }}
         transition={{ duration: 0.6, repeat: Infinity }}
@@ -136,7 +136,7 @@ export function WeldFlash({ x, y }: { x: number; y: number }) {
         cx={x}
         cy={y}
         r={3}
-        fill="#06b6d4"
+        fill={color}
         filter="url(#weldGlow)"
         animate={{ opacity: [1, 0.5, 1] }}
         transition={{ duration: 0.3, repeat: Infinity }}
@@ -148,10 +148,12 @@ export function WeldFlash({ x, y }: { x: number; y: number }) {
 export function RepairBot({
   pathId,
   duration,
+  color,
   onComplete,
 }: {
   pathId: string;
   duration: number;
+  color: string;
   onComplete?: () => void;
 }) {
   const reduced = useReducedMotion();
@@ -162,7 +164,7 @@ export function RepairBot({
 
   return (
     <g>
-      <circle r={5} fill="#fbbf24" filter="url(#repairGlow)">
+      <circle r={5} fill={color} filter="url(#repairGlow)">
         <animateMotion dur={`${duration}s`} fill="freeze" repeatCount="1">
           <mpath href={`#${pathId}`} />
         </animateMotion>
@@ -176,7 +178,7 @@ export function RepairBot({
         <motion.circle
           r={8}
           fill="none"
-          stroke="#fbbf24"
+          stroke={color}
           strokeWidth={1}
           animate={{ r: [5, 12], opacity: [0.6, 0] }}
           transition={{ duration: 0.5, repeat: Infinity }}

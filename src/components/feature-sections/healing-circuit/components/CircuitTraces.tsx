@@ -1,19 +1,9 @@
 "use client";
 
 import { motion } from "framer-motion";
-import { connections } from "../data";
+import { connections, connectionStatusColor } from "../data";
 import type { ConnectionStatus } from "../types";
 import { DataParticle, SparkEffect, RepairBot, WeldFlash } from "./effects";
-
-function traceColorFor(status: ConnectionStatus) {
-  return status === "broken"
-    ? "#f43f5e"
-    : status === "diagnosing"
-      ? "#fbbf24"
-      : status === "repairing"
-        ? "#06b6d4"
-        : "#34d399";
-}
 
 export default function CircuitTraces({
   getConnectionStatus,
@@ -28,7 +18,7 @@ export default function CircuitTraces({
     <>
       {connections.map((conn) => {
         const status = getConnectionStatus(conn.id);
-        const traceColor = traceColorFor(status);
+        const traceColor = connectionStatusColor[status];
         const traceOpacity =
           status === "broken" ? 0.3 : status === "healthy" ? 0.4 : 0.5;
 
@@ -81,15 +71,15 @@ export default function CircuitTraces({
               ))}
 
             {status === "broken" && conn.id === brokenConnectionId && (
-              <SparkEffect x={breakPoint.x} y={breakPoint.y} />
+              <SparkEffect x={breakPoint.x} y={breakPoint.y} color={traceColor} />
             )}
 
             {status === "diagnosing" && conn.id === brokenConnectionId && (
-              <RepairBot pathId={conn.id} duration={2} />
+              <RepairBot pathId={conn.id} duration={2} color={traceColor} />
             )}
 
             {status === "repairing" && conn.id === brokenConnectionId && (
-              <WeldFlash x={breakPoint.x} y={breakPoint.y} />
+              <WeldFlash x={breakPoint.x} y={breakPoint.y} color={traceColor} />
             )}
           </g>
         );

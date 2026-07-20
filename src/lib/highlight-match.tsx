@@ -64,17 +64,36 @@ function fuzzySegments(text: string, query: string): Segment[] {
 
 export type MatchType = "exact-title" | "exact-tag" | "fuzzy-title" | "fuzzy-tag" | "description" | "body";
 
+type HighlightMode = "exact" | "fuzzy" | "none";
+
+// Exhaustive, per-value mapping so it's explicit which match kinds highlight the
+// rendered text and which intentionally don't. Tag matches highlight the tag
+// chip elsewhere (not this title/body text), so they resolve to "none".
+function highlightModeFor(matchType: MatchType): HighlightMode {
+  switch (matchType) {
+    case "exact-title":
+    case "body": // body excerpts get exact-substring highlighting, same as titles
+      return "exact";
+    case "fuzzy-title":
+      return "fuzzy";
+    case "exact-tag":
+    case "fuzzy-tag":
+    case "description":
+      // No highlighting applied to the passed text for these kinds.
+      return "none";
+  }
+}
+
 export function highlightMatch(
   text: string,
   query: string,
   matchType: MatchType,
   color: string,
 ): ReactNode[] {
-  // "body" excerpts get exact-substring highlighting of the query, same as titles.
-  const isExact = matchType === "exact-title" || matchType === "body";
-  const isFuzzy = matchType === "fuzzy-title";
-  if (!isExact && !isFuzzy) return [text];
+  const mode = highlightModeFor(matchType);
+  if (mode === "none") return [text];
 
+  const isExact = mode === "exact";
   const segments = isExact ? exactSegments(text, query) : fuzzySegments(text, query);
   const bg = `${color}33`;
 

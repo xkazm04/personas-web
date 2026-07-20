@@ -6,18 +6,17 @@ import { Tag, Sparkles, Wrench, Bug, AlertTriangle, type LucideIcon } from "luci
 import SectionWrapper from "@/components/SectionWrapper";
 import { SectionIntro } from "@/components/primitives";
 import { fadeUp, staggerContainer } from "@/lib/animations";
-import { RELEASES, type ChangeType } from "@/data/changelog";
-import { BRAND_VAR, tint, brandShadow, type BrandKey } from "@/lib/brand-theme";
+import { RELEASES, CHANGE_TYPE_META, type ChangeType } from "@/data/changelog";
+import { BRAND_VAR, tint, brandShadow } from "@/lib/brand-theme";
 import { formatDateLong as formatDate } from "@/lib/format-date";
 
-const CHANGE_META: Record<
-  ChangeType,
-  { label: string; brand: BrandKey; icon: LucideIcon }
-> = {
-  feature: { label: "New", brand: "emerald", icon: Sparkles },
-  improvement: { label: "Improved", brand: "cyan", icon: Wrench },
-  fix: { label: "Fixed", brand: "amber", icon: Bug },
-  breaking: { label: "Breaking", brand: "rose", icon: AlertTriangle },
+// Labels + brand tokens come from the canonical CHANGE_TYPE_META in the data
+// module; only the per-type icon lives here (it carries a React dependency).
+const CHANGE_ICON: Record<ChangeType, LucideIcon> = {
+  feature: Sparkles,
+  improvement: Wrench,
+  fix: Bug,
+  breaking: AlertTriangle,
 };
 
 const releaseSectionId = (version: string) =>
@@ -135,8 +134,8 @@ export default function ChangelogTimeline() {
                 {/* Change list */}
                 <ul className="space-y-2.5">
                   {release.changes.map((change, j) => {
-                    const meta = CHANGE_META[change.type];
-                    const Icon = meta.icon;
+                    const meta = CHANGE_TYPE_META[change.type];
+                    const Icon = CHANGE_ICON[change.type];
                     const bv = BRAND_VAR[meta.brand];
                     return (
                       <li

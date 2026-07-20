@@ -14,6 +14,7 @@ import type {
   CircuitNode,
   Connection,
   NodeStatus,
+  ConnectionStatus,
 } from "./types";
 
 export const healingStages: HealingStage[] = [
@@ -113,6 +114,16 @@ export const nodeStatusColor: Record<NodeStatus, string> = {
   error: "#f43f5e",
   warning: "#fbbf24",
   healing: "#06b6d4",
+};
+
+/* Single source of truth for connection-status colors — shared by the trace
+   strokes, data particles, and the spark/weld/repair effects so a palette
+   tweak stays in sync across all of them. */
+export const connectionStatusColor: Record<ConnectionStatus, string> = {
+  healthy: "#34d399",
+  broken: "#f43f5e",
+  diagnosing: "#fbbf24",
+  repairing: "#06b6d4",
 };
 
 /* Deterministic pseudo-random offsets for spark particles */

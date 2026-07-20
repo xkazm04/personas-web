@@ -25,20 +25,24 @@ import DesktopSidebar from "./DesktopSidebar";
 import MobileBottomNav from "./MobileBottomNav";
 import { useTranslation } from "@/i18n/useTranslation";
 
+// `scoped` marks pages whose data respects the persona/date-range filters in
+// `dashboardFilterStore` — those (and only those) render the DashboardScopeBar.
+// Kept here (the single nav registry) so route + scope membership can't drift
+// apart; the dashboard layout derives its scoped-prefix list from this flag.
 export const navItemDefs = [
-  { key: "home", labelKey: "overview" as const, icon: LayoutDashboard, href: "/dashboard/home" },
-  { key: "agents", labelKey: "agents" as const, icon: Bot, href: "/dashboard/agents" },
-  { key: "executions", labelKey: "executions" as const, icon: Zap, href: "/dashboard/executions" },
-  { key: "events", labelKey: "events" as const, icon: Radio, href: "/dashboard/events" },
-  { key: "reviews", labelKey: "reviews" as const, icon: ClipboardCheck, href: "/dashboard/reviews" },
-  { key: "messages", labelKey: "messages" as const, icon: Mail, href: "/dashboard/messages" },
-  { key: "observability", labelKey: "observability" as const, icon: Activity, href: "/dashboard/observability" },
-  { key: "leaderboard", labelKey: "leaderboard" as const, icon: Trophy, href: "/dashboard/leaderboard" },
-  { key: "sla", labelKey: "sla" as const, icon: Shield, href: "/dashboard/sla" },
-  { key: "incidents", labelKey: "incidents" as const, icon: Siren, href: "/dashboard/incidents" },
-  { key: "health", labelKey: "health" as const, icon: HeartPulse, href: "/dashboard/health" },
-  { key: "knowledge", labelKey: "knowledge" as const, icon: Brain, href: "/dashboard/knowledge" },
-  { key: "settings", labelKey: "settings" as const, icon: Settings, href: "/dashboard/settings" },
+  { key: "home", labelKey: "overview" as const, icon: LayoutDashboard, href: "/dashboard/home", scoped: true },
+  { key: "agents", labelKey: "agents" as const, icon: Bot, href: "/dashboard/agents", scoped: true },
+  { key: "executions", labelKey: "executions" as const, icon: Zap, href: "/dashboard/executions", scoped: true },
+  { key: "events", labelKey: "events" as const, icon: Radio, href: "/dashboard/events", scoped: true },
+  { key: "reviews", labelKey: "reviews" as const, icon: ClipboardCheck, href: "/dashboard/reviews", scoped: true },
+  { key: "messages", labelKey: "messages" as const, icon: Mail, href: "/dashboard/messages", scoped: true },
+  { key: "observability", labelKey: "observability" as const, icon: Activity, href: "/dashboard/observability", scoped: true },
+  { key: "leaderboard", labelKey: "leaderboard" as const, icon: Trophy, href: "/dashboard/leaderboard", scoped: true },
+  { key: "sla", labelKey: "sla" as const, icon: Shield, href: "/dashboard/sla", scoped: true },
+  { key: "incidents", labelKey: "incidents" as const, icon: Siren, href: "/dashboard/incidents", scoped: false },
+  { key: "health", labelKey: "health" as const, icon: HeartPulse, href: "/dashboard/health", scoped: false },
+  { key: "knowledge", labelKey: "knowledge" as const, icon: Brain, href: "/dashboard/knowledge", scoped: true },
+  { key: "settings", labelKey: "settings" as const, icon: Settings, href: "/dashboard/settings", scoped: false },
 ] as const;
 
 export type NavItemDef = (typeof navItemDefs)[number];

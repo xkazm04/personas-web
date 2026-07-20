@@ -2,7 +2,7 @@
 
 import { usePathname } from "next/navigation";
 import DashboardNavbar from "@/components/dashboard/DashboardNavbar";
-import DashboardNavigation from "@/components/dashboard/DashboardNavigation";
+import DashboardNavigation, { navItemDefs } from "@/components/dashboard/DashboardNavigation";
 import DashboardScopeBar from "@/components/dashboard/DashboardScopeBar";
 import AuthGuard from "@/components/dashboard/AuthGuard";
 import DashboardErrorBoundary from "@/components/dashboard/DashboardErrorBoundary";
@@ -11,18 +11,11 @@ import SyncedRealtimeProvider from "@/components/dashboard/SyncedRealtimeProvide
 import TourOverlay from "@/components/tour/TourOverlay";
 import { TourProvider } from "@/contexts/TourContext";
 
-const SCOPED_ROUTE_PREFIXES = [
-  "/dashboard/home",
-  "/dashboard/agents",
-  "/dashboard/executions",
-  "/dashboard/events",
-  "/dashboard/reviews",
-  "/dashboard/observability",
-  "/dashboard/knowledge",
-  "/dashboard/leaderboard",
-  "/dashboard/sla",
-  "/dashboard/messages",
-];
+// Derived from the single nav registry so the scope bar can never drift from
+// the routes: a nav entry is "scoped" iff its data respects dashboardFilterStore.
+const SCOPED_ROUTE_PREFIXES = navItemDefs
+  .filter((item) => item.scoped)
+  .map((item) => item.href);
 
 export default function DashboardLayout({
   children,

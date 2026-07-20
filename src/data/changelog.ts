@@ -1,5 +1,7 @@
 /* ── Desktop app changelog / release history ───────────────────────── */
 
+import type { BrandKey } from "@/lib/brand-theme";
+
 export type ChangeType = "feature" | "improvement" | "fix" | "breaking";
 
 export interface ChangeItem {
@@ -14,11 +16,14 @@ export interface Release {
   changes: ChangeItem[];
 }
 
-export const CHANGE_TYPE_META: Record<ChangeType, { label: string; color: string }> = {
-  feature: { label: "New", color: "#34d399" },
-  improvement: { label: "Improved", color: "#06b6d4" },
-  fix: { label: "Fixed", color: "#fbbf24" },
-  breaking: { label: "Breaking", color: "#f43f5e" },
+// Single source of truth for change-type styling. `brand` keys into the
+// brand-theme token system (the timeline resolves it to colors); per-type icons
+// stay component-side (keyed by ChangeType) since they carry a React dependency.
+export const CHANGE_TYPE_META: Record<ChangeType, { label: string; brand: BrandKey }> = {
+  feature: { label: "New", brand: "emerald" },
+  improvement: { label: "Improved", brand: "cyan" },
+  fix: { label: "Fixed", brand: "amber" },
+  breaking: { label: "Breaking", brand: "rose" },
 };
 
 export const RELEASES: Release[] = [
