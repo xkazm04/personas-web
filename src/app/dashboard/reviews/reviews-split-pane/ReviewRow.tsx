@@ -23,10 +23,20 @@ export function ReviewRow({
 
   return (
     <div
-      className={`w-full flex items-center gap-2 px-3 py-2 text-left transition-all duration-150 border-l-2 cursor-pointer ${
+      role="button"
+      tabIndex={0}
+      aria-current={isActive}
+      aria-label={`${review.personaName ?? t.eventsPage.unknownAgent}: ${review.content.split("\n")[0]}`}
+      className={`w-full flex items-center gap-2 px-3 py-2 text-left transition-all duration-150 border-l-2 cursor-pointer focus-ring focus-visible:ring-offset-0 ${
         isActive ? "bg-brand-cyan/[0.08] border-l-brand-cyan" : "border-l-transparent hover:bg-white/[0.03]"
       }`}
       onClick={onClick}
+      onKeyDown={(e) => {
+        if (e.key === "Enter" || e.key === " ") {
+          e.preventDefault();
+          onClick();
+        }
+      }}
     >
       {review.status === "pending" && (
         <button

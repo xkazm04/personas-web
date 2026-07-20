@@ -50,6 +50,11 @@ export default function RoadmapProgress() {
         </span>
       </div>
       <div
+        role="progressbar"
+        aria-valuenow={progressPercent}
+        aria-valuemin={0}
+        aria-valuemax={100}
+        aria-label={phasesCompleteLabel}
         className="relative h-2.5 rounded-full bg-white/[0.06] shadow-inner"
         style={{ "--progress": progressPercent / 100 } as React.CSSProperties}
       >

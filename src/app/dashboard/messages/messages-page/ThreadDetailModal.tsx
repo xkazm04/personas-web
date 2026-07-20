@@ -41,9 +41,9 @@ export function ThreadDetailModal({
                 <span aria-hidden>·</span>
                 <span
                   className="inline-flex items-center gap-1 tabular-nums"
-                  aria-label={`${replyCount}`}
+                  aria-label={`${replyCount} replies`}
                 >
-                  <MessageCircle className="h-3 w-3" />
+                  <MessageCircle className="h-3 w-3" aria-hidden />
                   {replyCount}
                 </span>
               </>

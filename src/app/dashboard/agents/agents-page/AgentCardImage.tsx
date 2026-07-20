@@ -132,6 +132,8 @@ export function AgentCardImage({
             </button>
             <button
               onClick={onToggleExpanded}
+              aria-expanded={expanded}
+              aria-controls={`agent-detail-${persona.id}`}
               className="ml-auto flex items-center gap-1 rounded-lg border border-glass bg-white/[0.03] px-3 py-1.5 text-sm font-medium text-muted transition-all hover:bg-white/[0.06] hover:text-foreground focus-ring focus-visible:ring-offset-0"
             >
               {labels.details}
@@ -142,6 +144,7 @@ export function AgentCardImage({
           <AnimatePresence>
             {expanded && (
               <motion.div
+                id={`agent-detail-${persona.id}`}
                 initial={{ height: 0, opacity: 0 }}
                 animate={{ height: "auto", opacity: 1 }}
                 exit={{ height: 0, opacity: 0 }}

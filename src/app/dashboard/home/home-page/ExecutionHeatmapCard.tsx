@@ -76,6 +76,15 @@ export function ExecutionHeatmapCard() {
         <p className="py-8 text-center text-sm text-muted-dark">{labels.empty}</p>
       ) : (
         <>
+          {/* Screen-reader summary — conveys the per-agent weekly totals in
+              text so the data isn't locked behind the colour-only cells. */}
+          <p className="sr-only">
+            {`${labels.title} · ${labels.subtitle}. `}
+            {rows
+              .map((row) => `${row.persona}: ${row.days.reduce((a, b) => a + b, 0)}`)
+              .join(", ")}
+          </p>
+
           {/* Weekday header aligned to the cell grid */}
           <div className="mt-4 flex items-center gap-2">
             <span className="w-24 flex-shrink-0" />
@@ -102,6 +111,8 @@ export function ExecutionHeatmapCard() {
                   {row.days.map((count, i) => (
                     <span
                       key={i}
+                      role="img"
+                      aria-label={`${row.persona}, ${weekdays[i]}: ${count}`}
                       title={`${row.persona} — ${count}`}
                       className="h-5 rounded-[3px]"
                       style={{ backgroundColor: FILL[intensity(count, max)] }}
