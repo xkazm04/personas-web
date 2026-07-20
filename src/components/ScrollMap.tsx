@@ -1,11 +1,13 @@
 "use client";
 
 import { useMemo } from "react";
+import { useReducedMotion } from "framer-motion";
 import { useActiveSectionId } from "@/contexts/SectionObserverContext";
 import type { ScrollMapItem } from "@/lib/types";
 
 export default function ScrollMap({ items }: { items: ScrollMapItem[] }) {
   const activeSectionId = useActiveSectionId();
+  const reduced = useReducedMotion() ?? false;
 
   const activeIndex = useMemo(() => {
     const idx = items.findIndex((item) => item.href === `#${activeSectionId}`);
@@ -16,7 +18,7 @@ export default function ScrollMap({ items }: { items: ScrollMapItem[] }) {
     const id = href.replace("#", "");
     const el = document.getElementById(id);
     if (el) {
-      el.scrollIntoView({ behavior: "smooth", block: "start" });
+      el.scrollIntoView({ behavior: reduced ? "auto" : "smooth", block: "start" });
     }
   };
 
@@ -30,9 +32,10 @@ export default function ScrollMap({ items }: { items: ScrollMapItem[] }) {
           <button
             key={item.href}
             onClick={() => scrollTo(item.href)}
+            aria-current={i === activeIndex ? "true" : undefined}
             className={`pointer-events-auto flex h-11 -my-3.5 items-center justify-end gap-2 transition-[color,transform] duration-300 cursor-pointer focus-ring focus-visible:ring-offset-4 ${
               i === activeIndex
-                ? "text-brand-cyan scale-105"
+                ? "text-brand-cyan scale-105 font-bold"
                 : "text-muted-dark hover:text-muted"
             }`}
           >

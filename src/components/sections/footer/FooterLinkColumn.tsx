@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useId, useState } from "react";
 import { AnimatePresence, motion, useReducedMotion } from "framer-motion";
 import { ChevronDown } from "lucide-react";
 import Link from "next/link";
@@ -12,19 +12,29 @@ function isExternal(href: string | null | undefined) {
 export function FooterLinkColumn({ title, links }: { title: string; links: { label: string; href: string }[] }) {
   const [open, setOpen] = useState(false);
   const reduced = useReducedMotion() ?? false;
+  const panelId = useId();
 
   return (
     <div className="min-w-0">
-      <button onClick={() => setOpen((value) => !value)} className="flex w-full items-center justify-between md:pointer-events-none md:cursor-default focus-visible:ring-2 focus-visible:ring-brand-cyan/40 focus-visible:outline-none focus-visible:rounded-lg">
+      {/* Mobile: interactive disclosure button */}
+      <button
+        type="button"
+        onClick={() => setOpen((value) => !value)}
+        aria-expanded={open}
+        aria-controls={panelId}
+        className="flex w-full items-center justify-between md:hidden focus-visible:ring-2 focus-visible:ring-brand-cyan/40 focus-visible:outline-none focus-visible:rounded-lg"
+      >
         <h4 className="text-base font-medium uppercase tracking-wider text-muted-dark">{title}</h4>
-        <ChevronDown className={`h-3.5 w-3.5 text-muted-dark transition-transform duration-200 md:hidden ${open ? "rotate-180" : ""}`} />
+        <ChevronDown className={`h-3.5 w-3.5 text-muted-dark transition-transform duration-200 ${open ? "rotate-180" : ""}`} />
       </button>
+      {/* Desktop: static heading (no dead tab stop) */}
+      <h4 className="hidden md:block text-base font-medium uppercase tracking-wider text-muted-dark">{title}</h4>
       <div className="mt-1.5 h-px w-8 bg-linear-to-r from-brand-cyan/10 to-transparent" />
       <FooterLinks links={links} className="mt-3 hidden md:block space-y-1" />
       <div className="md:hidden">
         <AnimatePresence initial={false}>
           {open && (
-            <motion.ul initial={{ height: 0, opacity: 0 }} animate={{ height: "auto", opacity: 1 }} exit={{ height: 0, opacity: 0 }} transition={reduced ? { duration: 0 } : { duration: 0.2, ease: "easeInOut" }} className="overflow-hidden mt-2 space-y-0.5">
+            <motion.ul id={panelId} initial={{ height: 0, opacity: 0 }} animate={{ height: "auto", opacity: 1 }} exit={{ height: 0, opacity: 0 }} transition={reduced ? { duration: 0 } : { duration: 0.2, ease: "easeInOut" }} className="overflow-hidden mt-2 space-y-0.5">
               {links.map((link) => <FooterLinkItem key={link.label} link={link} />)}
             </motion.ul>
           )}

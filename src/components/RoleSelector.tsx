@@ -1,7 +1,7 @@
 "use client";
 
 import { motion } from "framer-motion";
-import { Terminal, BarChart3, Shield } from "lucide-react";
+import { Terminal, BarChart3, Shield, Check } from "lucide-react";
 import type { LucideIcon } from "lucide-react";
 
 export type ViewerRole = "developer" | "product-manager" | "enterprise";
@@ -46,8 +46,8 @@ export default function RoleSelector({
   onChange: (role: ViewerRole) => void;
 }) {
   return (
-    <div className="flex flex-wrap items-center justify-center gap-2">
-      <span className="text-sm font-mono uppercase tracking-wider text-muted-dark/60 mr-1">
+    <div role="group" aria-label="I am a" className="flex flex-wrap items-center justify-center gap-2">
+      <span aria-hidden="true" className="text-sm font-mono uppercase tracking-wider text-muted-dark/60 mr-1">
         I am a
       </span>
       {roles.map((role) => {
@@ -57,18 +57,24 @@ export default function RoleSelector({
           <button
             key={role.id}
             onClick={() => onChange(role.id)}
+            aria-pressed={isActive}
             className={`relative cursor-pointer rounded-full border px-3.5 py-1.5 text-sm font-mono tracking-wider transition-all duration-300 flex items-center gap-1.5 ${
               isActive
                 ? role.activeClasses
                 : "border-glass bg-white/[0.02] text-muted-dark hover:border-glass-strong hover:text-muted"
             }`}
           >
-            <Icon className="h-3 w-3" />
+            {isActive ? (
+              <Check aria-hidden="true" className="h-3 w-3" />
+            ) : (
+              <Icon aria-hidden="true" className="h-3 w-3" />
+            )}
             {role.label}
             {isActive && (
               <motion.div
                 layoutId="role-indicator"
-                className="absolute inset-0 rounded-full border border-current opacity-20"
+                className="absolute inset-0 rounded-full border opacity-20"
+                style={{ borderColor: role.color }}
                 transition={{ type: "spring", stiffness: 400, damping: 30 }}
               />
             )}

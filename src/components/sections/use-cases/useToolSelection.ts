@@ -120,11 +120,12 @@ export function useToolSelection(initiallyAutoplay: boolean) {
         e.preventDefault();
         nextIdx = tools.length - 1;
       } else if (e.key === "Escape") {
+        // Escape follows convention: it stops motion, never silently restarts it.
+        // Resuming autoplay is done through the visible Pause/Play control
+        // (toggleAutoplay). Autoplay lifecycle: auto on mount -> stops on first
+        // manual interaction -> only re-armed via that control.
         e.preventDefault();
-        setAutoplay(true);
-        userClickedRef.current = false;
-        setProgress(0);
-        progressRef.current = 0;
+        setAutoplay(false);
         return;
       }
 
