@@ -1,13 +1,12 @@
 import { notFound } from "next/navigation";
-import Link from "next/link";
 import Image from "next/image";
-import { ArrowLeft } from "lucide-react";
 import { GUIDE_CATEGORIES } from "@/data/guide/categories";
 import { GUIDE_TOPICS } from "@/data/guide/topics";
 import { GUIDE_ILLUSTRATIONS } from "@/data/guide/illustrations";
 import CategoryGlyphArt from "@/components/guide/CategoryGlyphArt";
 import { isTopicVisible } from "@/lib/guide-utils";
 import { SITE_URL, safeJsonLd } from "@/lib/seo";
+import CategoryHeaderBar from "./CategoryHeaderBar";
 import CategoryTopics from "./CategoryTopics";
 
 /* ── Static generation ───────────────────────────────────────────────── */
@@ -77,14 +76,8 @@ export default async function CategoryPage({ params }: { params: Promise<{ categ
       />
     <div className="px-6 pb-24">
       <div className="mx-auto max-w-4xl">
-        {/* Back link */}
-        <Link
-          href="/guide"
-          className="mt-8 inline-flex items-center gap-1.5 text-base text-muted-dark transition-colors hover:text-foreground"
-        >
-          <ArrowLeft className="h-4 w-4" />
-          Back to Guide
-        </Link>
+        {/* Back link + full-guide search trigger */}
+        <CategoryHeaderBar />
 
         {/* Illustration banner — dark/light variants swap via CSS; categories
             without a painted illustration get the glyph fallback so every

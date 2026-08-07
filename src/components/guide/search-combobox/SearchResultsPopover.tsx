@@ -25,6 +25,7 @@ export function SearchResultsPopover({
   flatIndexMap,
   listRef,
   onNavigate,
+  noResultsLabel,
 }: {
   query: string;
   results: SearchResult[];
@@ -34,6 +35,9 @@ export function SearchResultsPopover({
   flatIndexMap: Map<string, number>;
   listRef: React.RefObject<HTMLDivElement | null>;
   onNavigate: (result: SearchResult) => void;
+  /** Translated empty-state copy (`t.guide.noResults`), resolved by the
+   *  client parent so this component stays presentational. */
+  noResultsLabel: string;
 }) {
   const reduced = useReducedMotion() ?? false;
   return (
@@ -55,7 +59,7 @@ export function SearchResultsPopover({
         </p>
       ) : results.length === 0 ? (
         <p className="px-4 py-6 text-center text-base text-muted-dark">
-          No topics found for &ldquo;{query}&rdquo;
+          {noResultsLabel}
         </p>
       ) : (
         <>

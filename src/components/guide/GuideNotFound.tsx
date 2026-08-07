@@ -5,6 +5,8 @@ import { ArrowLeft, BookOpen } from "lucide-react";
 
 import { useTranslation } from "@/i18n/useTranslation";
 
+import GuideSearchLauncher from "./GuideSearchLauncher";
+
 interface GuideNotFoundProps {
   title: string;
   description: string;
@@ -47,6 +49,10 @@ export default function GuideNotFound({ title, description }: GuideNotFoundProps
             <ArrowLeft className="h-4 w-4" aria-hidden="true" />
             {t.notFound.backToHome}
           </Link>
+        </div>
+        {/* A dead link is exactly where full-guide search earns its keep. */}
+        <div className="mt-6 flex justify-center">
+          <GuideSearchLauncher />
         </div>
       </div>
     </div>

@@ -7,6 +7,7 @@ import { Search } from "lucide-react";
 import type { GuideTopic } from "@/data/guide/types";
 import { TOPIC_MODULE_MAP } from "@/data/guide/desktop-modules";
 import ModuleBadge from "@/components/guide/ModuleBadge";
+import { useTranslation } from "@/i18n/useTranslation";
 import { fadeUp, staggerContainer } from "@/lib/animations";
 
 /* ── Props ────────────────────────────────────────────────────────────── */
@@ -20,6 +21,7 @@ interface CategoryTopicsProps {
 /* ── Component ────────────────────────────────────────────────────────── */
 
 export default function CategoryTopics({ topics, color, categoryId }: CategoryTopicsProps) {
+  const { t } = useTranslation();
   const [query, setQuery] = useState("");
 
   const filtered = useMemo(() => {
@@ -42,8 +44,8 @@ export default function CategoryTopics({ topics, color, categoryId }: CategoryTo
           type="text"
           value={query}
           onChange={(e) => setQuery(e.target.value)}
-          placeholder={`Filter ${topics.length} topics...`}
-          aria-label="Filter topics in this category"
+          placeholder={t.guide.searchInCategory}
+          aria-label={t.guide.searchInCategory}
           className="w-full rounded-xl border border-glass-hover bg-white/[0.03] py-2.5 pl-11 pr-4 text-base text-foreground placeholder:text-muted-dark backdrop-blur-sm outline-none transition-all duration-300 focus-visible:border-brand-cyan/30 focus-visible:ring-2 focus-visible:ring-brand-cyan/50 focus-visible:ring-offset-2 focus-visible:ring-offset-black"
         />
       </div>
@@ -104,11 +106,19 @@ export default function CategoryTopics({ topics, color, categoryId }: CategoryTo
         ))}
       </motion.div>
 
-      {/* Empty state */}
+      {/* Empty state — offers a way back out of the dead end rather than
+          leaving the reader with an empty grid and a stale filter. */}
       {filtered.length === 0 && query.trim() && (
-        <p className="mt-12 text-center text-muted-dark">
-          No topics match &ldquo;{query}&rdquo; in this category.
-        </p>
+        <div className="mt-12 text-center">
+          <p className="text-muted-dark">{t.guide.noResults}</p>
+          <button
+            type="button"
+            onClick={() => setQuery("")}
+            className="mt-4 inline-flex items-center rounded-lg border border-glass-hover bg-white/[0.03] px-4 py-2 text-base text-muted transition-colors hover:border-glass-strong hover:text-foreground outline-none focus-visible:ring-2 focus-visible:ring-brand-cyan/50 focus-visible:ring-offset-2 focus-visible:ring-offset-black"
+          >
+            {t.guide.showAllResults}
+          </button>
+        </div>
       )}
     </div>
   );

@@ -5,6 +5,7 @@ import { useSearchParams } from "next/navigation";
 import { motion } from "framer-motion";
 
 import GradientText from "@/components/GradientText";
+import GuideSearchLauncher from "@/components/guide/GuideSearchLauncher";
 import SearchCombobox from "@/components/guide/SearchCombobox";
 import { GUIDE_CATEGORIES } from "@/data/guide/categories";
 import { GUIDE_TOPICS } from "@/data/guide/topics";
@@ -105,9 +106,15 @@ function GuidePageInner() {
           <motion.div variants={fadeUp} className="mx-auto mt-10 max-w-xl">
             <SearchCombobox placeholder={t.guide.searchPlaceholder} />
           </motion.div>
-
           <GuideModeToggle modeFilter={modeFilter} onModeChange={setModeFilter} />
         </motion.div>
+
+        {/* The hub already shows search inline, so only the Cmd/Ctrl+K binding
+            is registered here — the shortcut works on every guide route, not
+            just the ones that paint a trigger. Mounted OUTSIDE the stagger
+            container so its dialog never inherits the one-shot reveal
+            variants when it opens later. */}
+        <GuideSearchLauncher hotkeyOnly />
 
         <GuideCategoryGrid
           categories={visibleCategories}

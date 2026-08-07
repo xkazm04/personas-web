@@ -3,6 +3,7 @@
 import { useRef, useEffect, useMemo } from "react";
 import { AnimatePresence } from "framer-motion";
 import { Search } from "lucide-react";
+import { useTranslation } from "@/i18n/useTranslation";
 import { groupResultsByCategory } from "@/lib/guide-search";
 import { SearchResultsPopover } from "./search-combobox/SearchResultsPopover";
 import { useGuideSearch } from "./search-combobox/useGuideSearch";
@@ -16,6 +17,7 @@ export default function SearchCombobox({
   placeholder = "Search topics…",
   className = "",
 }: SearchComboboxProps) {
+  const { t } = useTranslation();
   const { query, setQuery, results, isOpen, setIsOpen, isPending, activeIndex, listRef, navigate, onKeyDown } =
     useGuideSearch();
   const wrapperRef = useRef<HTMLDivElement>(null);
@@ -86,6 +88,7 @@ export default function SearchCombobox({
             flatIndexMap={flatIndexMap}
             listRef={listRef}
             onNavigate={navigate}
+            noResultsLabel={t.guide.noResults}
           />
         )}
       </AnimatePresence>

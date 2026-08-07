@@ -7,6 +7,7 @@ import GuideMarkdown from "@/components/guide/GuideMarkdown";
 import PrimaryCTA from "@/components/PrimaryCTA";
 import RelatedTopics from "@/components/guide/RelatedTopics";
 import ModuleBadge from "@/components/guide/ModuleBadge";
+import GuideSearchLauncher from "@/components/guide/GuideSearchLauncher";
 import TopicTOC from "@/components/guide/TopicTOC";
 import MobileTopicTOC from "@/components/guide/MobileTopicTOC";
 import ReadingProgress from "@/components/guide/ReadingProgress";
@@ -110,16 +111,19 @@ export default function TopicView({ category, topic, content, initialHeadings, p
       <MobileTopicTOC headings={headings} />
       <div className="mx-auto max-w-3xl lg:max-w-[80rem] lg:grid lg:grid-cols-[minmax(0,1fr)_14rem] lg:gap-12">
         <div className="min-w-0 lg:max-w-[52rem]">
-        {/* Breadcrumb */}
-        <nav aria-label="Breadcrumb" className="mt-8 flex items-center gap-1.5 text-base text-muted-dark">
-          <Link href="/guide" className="transition-colors hover:text-brand-cyan">Guide</Link>
-          <span>/</span>
-          <Link href={`/guide/${category.id}`} className="transition-colors hover:text-brand-cyan">
-            {category.name}
-          </Link>
-          <span>/</span>
-          <span className="text-foreground" aria-current="page">{localized.title}</span>
-        </nav>
+        {/* Breadcrumb + full-guide search trigger */}
+        <div className="mt-8 flex flex-wrap items-center justify-between gap-3">
+          <nav aria-label="Breadcrumb" className="flex min-w-0 items-center gap-1.5 text-base text-muted-dark">
+            <Link href="/guide" className="transition-colors hover:text-brand-cyan">Guide</Link>
+            <span>/</span>
+            <Link href={`/guide/${category.id}`} className="transition-colors hover:text-brand-cyan">
+              {category.name}
+            </Link>
+            <span>/</span>
+            <span className="truncate text-foreground" aria-current="page">{localized.title}</span>
+          </nav>
+          <GuideSearchLauncher />
+        </div>
 
         {/* Desktop app reference + Tags */}
         <div className="mt-5 flex flex-wrap items-center gap-1.5">

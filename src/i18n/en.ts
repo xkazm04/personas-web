@@ -1140,6 +1140,7 @@
     title: string;
     subtitle: string;
     searchPlaceholder: string;
+    searchAllTopics: string;
     searchInCategory: string;
     topics: string;
     backToGuide: string;
@@ -2617,6 +2618,7 @@ export const en: Translations = {
     title: 'User',
     subtitle: 'Everything you need to know about Personas — from your first agent to advanced multi-agent pipelines.',
     searchPlaceholder: 'Search 100+ topics...',
+    searchAllTopics: 'Search all topics',
     searchInCategory: 'Search in this category...',
     topics: 'topics',
     backToGuide: 'Back to Guide',

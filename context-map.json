@@ -696,6 +696,7 @@
           "businessFeature": "Guide Pages & Navigation",
           "category": "ui",
           "filePaths": [
+            "src/app/guide/[category]/CategoryHeaderBar.tsx",
             "src/app/guide/[category]/CategoryTopics.tsx",
             "src/app/guide/[category]/[topic]/TopicView.tsx",
             "src/app/guide/[category]/[topic]/not-found.tsx",
@@ -710,6 +711,7 @@
             "src/app/guide/page.tsx",
             "src/components/guide/CategoryGlyphArt.tsx",
             "src/components/guide/GuideNotFound.tsx",
+            "src/components/guide/GuideSearchLauncher.tsx",
             "src/components/guide/GuideSidebar.tsx",
             "src/components/guide/MobileTopicTOC.tsx",
             "src/components/guide/ModuleBadge.tsx",
