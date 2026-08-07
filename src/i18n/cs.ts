@@ -1404,6 +1404,15 @@ export const cs: Translations = {
       stillQuestions: "St\u00e1le m\u00e1te ot\u00e1zky?",
       joinDiscord: "P\u0159ipojte se k na\u0161emu Discordu",
       copyAnchor: "Zkop\u00edrovat odkaz na sekci",
+      guideHub: "Rozcestn\u00edk pr\u016fvodce",
+      categoryNotFound: {
+        title: "Kategorie pr\u016fvodce nenalezena",
+        description: "Tato kategorie neexistuje. V\u0161echny kategorie najdete v rozcestn\u00edku pr\u016fvodce."
+      },
+      topicNotFound: {
+        title: "T\u00e9ma pr\u016fvodce nenalezeno",
+        description: "Toto t\u00e9ma neexistuje. Pou\u017eijte vyhled\u00e1v\u00e1n\u00ed v pr\u016fvodci nebo proch\u00e1zejte rozcestn\u00edk a najd\u011bte, co pot\u0159ebujete."
+      },
       categories: {
         "getting-started": "Za\u010d\u00edn\u00e1me",
         "agents-prompts": "Agenti a prompty",

@@ -1404,6 +1404,15 @@ export const fr: Translations = {
       stillQuestions: "Encore des questions ?",
       joinDiscord: "Rejoignez notre Discord",
       copyAnchor: "Copier le lien de la section",
+      guideHub: "Accueil du guide",
+      categoryNotFound: {
+        title: "Cat\u00e9gorie du guide introuvable",
+        description: "Cette cat\u00e9gorie n'existe pas. Retrouvez toutes les cat\u00e9gories sur l'accueil du guide."
+      },
+      topicNotFound: {
+        title: "Sujet du guide introuvable",
+        description: "Ce sujet n'existe pas. Utilisez la recherche du guide ou parcourez l'accueil pour trouver ce qu'il vous faut."
+      },
       categories: {
         "getting-started": "Prise en main",
         "agents-prompts": "Agents et Prompts",

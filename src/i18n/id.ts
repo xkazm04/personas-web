@@ -1404,6 +1404,15 @@ export const id: Translations = {
       stillQuestions: "Masih punya pertanyaan?",
       joinDiscord: "Gabung Discord kami",
       copyAnchor: "Salin tautan ke bagian",
+      guideHub: "Pusat panduan",
+      categoryNotFound: {
+        title: "Kategori panduan tidak ditemukan",
+        description: "Kategori itu tidak ada. Lihat semua kategori di pusat panduan."
+      },
+      topicNotFound: {
+        title: "Topik panduan tidak ditemukan",
+        description: "Topik ini tidak ada. Gunakan pencarian panduan atau jelajahi pusat panduan untuk menemukan yang Anda butuhkan."
+      },
       categories: {
         "getting-started": "Memulai",
         "agents-prompts": "Agen & Prompt",

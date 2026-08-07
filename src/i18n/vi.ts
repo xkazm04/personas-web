@@ -1404,6 +1404,15 @@ export const vi: Translations = {
       stillQuestions: "V\u1eabn c\u00f2n c\u00e2u h\u1ecfi?",
       joinDiscord: "Tham gia Discord c\u1ee7a ch\u00fang t\u00f4i",
       copyAnchor: "Sao ch\u00e9p li\u00ean k\u1ebft ph\u1ea7n n\u00e0y",
+      guideHub: "Trang h\u01b0\u1edbng d\u1eabn",
+      categoryNotFound: {
+        title: "Kh\u00f4ng t\u00ecm th\u1ea5y danh m\u1ee5c h\u01b0\u1edbng d\u1eabn",
+        description: "Danh m\u1ee5c \u0111\u00f3 kh\u00f4ng t\u1ed3n t\u1ea1i. Xem t\u1ea5t c\u1ea3 danh m\u1ee5c t\u1ea1i trang h\u01b0\u1edbng d\u1eabn."
+      },
+      topicNotFound: {
+        title: "Kh\u00f4ng t\u00ecm th\u1ea5y ch\u1ee7 \u0111\u1ec1 h\u01b0\u1edbng d\u1eabn",
+        description: "Ch\u1ee7 \u0111\u1ec1 n\u00e0y kh\u00f4ng t\u1ed3n t\u1ea1i. H\u00e3y d\u00f9ng t\u00ecm ki\u1ebfm h\u01b0\u1edbng d\u1eabn ho\u1eb7c duy\u1ec7t trang h\u01b0\u1edbng d\u1eabn \u0111\u1ec3 t\u00ecm n\u1ed9i dung b\u1ea1n c\u1ea7n."
+      },
       categories: {
         "getting-started": "B\u1eaft \u0111\u1ea7u",
         "agents-prompts": "T\u00e1c nh\u00e2n & Prompt",

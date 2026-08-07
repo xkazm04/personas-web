@@ -1404,6 +1404,15 @@ export const zh: Translations = {
       stillQuestions: "\u8fd8\u6709\u7591\u95ee\uff1f",
       joinDiscord: "\u52a0\u5165\u6211\u4eec\u7684 Discord",
       copyAnchor: "\u590d\u5236\u7ae0\u8282\u94fe\u63a5",
+      guideHub: "\u6307\u5357\u4e3b\u9875",
+      categoryNotFound: {
+        title: "\u672a\u627e\u5230\u8be5\u6307\u5357\u5206\u7c7b",
+        description: "\u8be5\u5206\u7c7b\u4e0d\u5b58\u5728\u3002\u8bf7\u5728\u6307\u5357\u4e3b\u9875\u67e5\u770b\u5168\u90e8\u5206\u7c7b\u3002"
+      },
+      topicNotFound: {
+        title: "\u672a\u627e\u5230\u8be5\u6307\u5357\u4e3b\u9898",
+        description: "\u8be5\u4e3b\u9898\u4e0d\u5b58\u5728\u3002\u8bf7\u4f7f\u7528\u6307\u5357\u641c\u7d22\u6216\u6d4f\u89c8\u6307\u5357\u4e3b\u9875\uff0c\u627e\u5230\u4f60\u9700\u8981\u7684\u5185\u5bb9\u3002"
+      },
       categories: {
         "getting-started": "\u5feb\u901f\u5165\u95e8",
         "agents-prompts": "\u667a\u80fd\u4f53\u4e0e\u63d0\u793a\u8bcd",

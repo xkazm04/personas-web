@@ -1140,6 +1140,15 @@
     stillQuestions: string;
     joinDiscord: string;
     copyAnchor: string;
+    guideHub: string;
+    categoryNotFound: {
+      title: string;
+      description: string;
+    };
+    topicNotFound: {
+      title: string;
+      description: string;
+    };
     categories: {
       "getting-started": string;
       "agents-prompts": string;
@@ -2598,6 +2607,15 @@ export const en: Translations = {
     stillQuestions: 'Still have questions?',
     joinDiscord: 'Join our Discord',
     copyAnchor: 'Copy link to section',
+    guideHub: 'Guide hub',
+    categoryNotFound: {
+      title: 'Guide category not found',
+      description: "That category doesn't exist. See all categories on the guide hub.",
+    },
+    topicNotFound: {
+      title: 'Guide topic not found',
+      description: "This topic doesn't exist. Use the guide search or browse the hub to find what you need.",
+    },
     categories: {
       "getting-started": 'Getting Started',
       "agents-prompts": 'Agents & Prompts',

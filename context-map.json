@@ -707,6 +707,7 @@
             "src/app/guide/guide-page/guidePageData.ts",
             "src/app/guide/layout.tsx",
             "src/app/guide/page.tsx",
+            "src/components/guide/GuideNotFound.tsx",
             "src/components/guide/GuideSidebar.tsx",
             "src/components/guide/MobileTopicTOC.tsx",
             "src/components/guide/ModuleBadge.tsx",

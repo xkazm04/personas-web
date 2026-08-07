@@ -1404,6 +1404,15 @@ export const es: Translations = {
       stillQuestions: "\u00c2\u017cA\u0102\u015fn tienes preguntas?",
       joinDiscord: "\u00danete a nuestro Discord",
       copyAnchor: "Copiar enlace a la secci\u00f3n",
+      guideHub: "Centro de la gu\u00eda",
+      categoryNotFound: {
+        title: "Categor\u00eda de la gu\u00eda no encontrada",
+        description: "Esa categor\u00eda no existe. Consulta todas las categor\u00edas en el centro de la gu\u00eda."
+      },
+      topicNotFound: {
+        title: "Tema de la gu\u00eda no encontrado",
+        description: "Este tema no existe. Usa el buscador de la gu\u00eda o explora el centro para encontrar lo que necesitas."
+      },
       categories: {
         "getting-started": "Primeros Pasos",
         "agents-prompts": "Agentes y Prompts",

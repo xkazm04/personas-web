@@ -104,7 +104,11 @@ export default async function TopicPage({ params }: { params: Promise<{ category
   const content = categoryContent[topicId];
   if (!content) notFound();
 
-  const categoryTopics = GUIDE_TOPICS.filter((t) => t.categoryId === categoryId);
+  // Prev/next must walk only topics this build actually serves — an unfiltered
+  // neighbour would link straight into a notFound() for a devOnly topic.
+  const categoryTopics = GUIDE_TOPICS.filter(
+    (t) => t.categoryId === categoryId && isTopicVisible(t),
+  );
   const currentIndex = categoryTopics.findIndex((t) => t.id === topicId);
   const prevTopic = currentIndex > 0 ? categoryTopics[currentIndex - 1] : null;
   const nextTopic = currentIndex < categoryTopics.length - 1 ? categoryTopics[currentIndex + 1] : null;

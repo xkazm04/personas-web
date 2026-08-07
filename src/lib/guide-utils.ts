@@ -46,7 +46,8 @@ export interface RelatedTopic {
 
 /**
  * Find topics related to the given topic based on shared tags.
- * Excludes the topic itself and topics from the same category (those are navigated via prev/next).
+ * Excludes the topic itself, topics from the same category (those are navigated via prev/next),
+ * and topics hidden from this build (devOnly) — linking to one would render a 404.
  * Returns up to `limit` results sorted by relevance (shared tag count).
  */
 export function getRelatedTopics(topicId: string, limit = 4): RelatedTopic[] {
@@ -56,7 +57,7 @@ export function getRelatedTopics(topicId: string, limit = 4): RelatedTopic[] {
   const currentTags = new Set(current.tags);
 
   return GUIDE_TOPICS
-    .filter((t) => t.id !== topicId && t.categoryId !== current.categoryId)
+    .filter((t) => t.id !== topicId && t.categoryId !== current.categoryId && isTopicVisible(t))
     .map((t): RelatedTopic | null => {
       const category = GUIDE_CATEGORIES.find((c) => c.id === t.categoryId);
       if (!category) return null;
