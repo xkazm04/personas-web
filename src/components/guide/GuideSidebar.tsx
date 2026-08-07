@@ -6,21 +6,23 @@ import { AnimatePresence, motion, useReducedMotion } from "framer-motion";
 import { Menu, X } from "lucide-react";
 import type { Variants } from "framer-motion";
 
-import { GUIDE_CATEGORIES } from "@/data/guide/categories";
-import { GUIDE_TOPICS } from "@/data/guide/topics";
+import type { GuideNavCategory } from "@/data/guide/topics-nav";
 import { useFocusTrap } from "@/hooks/useFocusTrap";
 import { useTranslation } from "@/i18n/useTranslation";
 import { lockBodyScroll, unlockBodyScroll } from "@/lib/bodyScrollLock";
-import { isTopicVisible } from "@/lib/guide-utils";
 
 import { CHROME_SIDEBAR_STICKY, CHROME_TOP_MOBILE_BAR } from "./guide-chrome";
 import { FOCUS_RING, GuideSidebarContent } from "./guide-sidebar/GuideSidebarContent";
 
-function topicsFor(categoryId: string) {
-  return GUIDE_TOPICS.filter((topic) => topic.categoryId === categoryId && isTopicVisible(topic));
-}
-
-export default function GuideSidebar() {
+/**
+ * The category tree arrives as a prop from the server `guide/layout.tsx`
+ * (`GUIDE_NAV_CATEGORIES`), already filtered for visibility and projected down
+ * to {id, title, tags, devOnly}. This component used to import `GUIDE_TOPICS`
+ * and `guide-utils` itself, which put the whole ~57 KB topic table — full
+ * descriptions and coverage metadata included — into the client bundle of
+ * every single guide route, to draw a list of titles.
+ */
+export default function GuideSidebar({ categories }: { categories: GuideNavCategory[] }) {
   const { t } = useTranslation();
   const pathname = usePathname();
   const segments = pathname.split("/").filter(Boolean);
@@ -83,11 +85,11 @@ export default function GuideSidebar() {
   const toggle = (id: string) =>
     setExpanded((prev) => {
       const willExpand = !prev[id];
-      const topics = topicsFor(id);
-      const category = GUIDE_CATEGORIES.find((item) => item.id === id);
+      const category = categories.find((item) => item.id === id);
+      const count = category?.topics.length ?? 0;
       setAnnouncement(
         willExpand
-          ? `${category?.name}: ${topics.length} topic${topics.length !== 1 ? "s" : ""} shown`
+          ? `${category?.name}: ${count} topic${count !== 1 ? "s" : ""} shown`
           : `${category?.name}: collapsed`,
       );
       return { ...prev, [id]: willExpand };
@@ -95,25 +97,22 @@ export default function GuideSidebar() {
 
   const filteredCategories = useMemo(() => {
     const normalizedQuery = query.toLowerCase().trim();
-    if (!normalizedQuery) {
-      return GUIDE_CATEGORIES.map((category) => ({
+    if (!normalizedQuery) return categories;
+    return categories
+      .map((category) => ({
         ...category,
-        topics: topicsFor(category.id),
-      }));
-    }
-    return GUIDE_CATEGORIES.map((category) => {
-      const topics = topicsFor(category.id).filter(
-        (topic) =>
-          topic.title.toLowerCase().includes(normalizedQuery) ||
-          topic.tags.some((tag) => tag.toLowerCase().includes(normalizedQuery)),
+        topics: category.topics.filter(
+          (topic) =>
+            topic.title.toLowerCase().includes(normalizedQuery) ||
+            topic.tags.some((tag) => tag.toLowerCase().includes(normalizedQuery)),
+        ),
+      }))
+      .filter(
+        (category) =>
+          category.topics.length > 0 ||
+          category.name.toLowerCase().includes(normalizedQuery),
       );
-      return { ...category, topics };
-    }).filter(
-      (category) =>
-        category.topics.length > 0 ||
-        category.name.toLowerCase().includes(normalizedQuery),
-    );
-  }, [query]);
+  }, [query, categories]);
 
   const totalFilteredTopics = filteredCategories.reduce(
     (sum, category) => sum + category.topics.length,

@@ -1,6 +1,7 @@
 "use client";
 
 import { useCallback, useEffect, useRef, useState, useSyncExternalStore } from "react";
+import dynamic from "next/dynamic";
 import { usePathname } from "next/navigation";
 import { AnimatePresence, motion, useReducedMotion } from "framer-motion";
 import { Search, X } from "lucide-react";
@@ -9,9 +10,22 @@ import { useFocusTrap } from "@/hooks/useFocusTrap";
 import { useTranslation } from "@/i18n/useTranslation";
 import { lockBodyScroll, unlockBodyScroll } from "@/lib/bodyScrollLock";
 
-import SearchCombobox from "./SearchCombobox";
 import { CHROME_TOP_MOBILE_BELOW } from "./guide-chrome";
 import { FOCUS_RING } from "./guide-sidebar/GuideSidebarContent";
+
+/**
+ * Loaded on demand: `SearchCombobox` pulls in `guide-search`, which needs the
+ * whole `GUIDE_TOPICS` table (titles, tags AND descriptions) to run its
+ * matching ladder. Static-importing it here would put those 57 KB back into
+ * the initial bundle of every reading route — the exact payload the sidebar
+ * projection removes. The dialog is user-initiated, so the chunk is fetched
+ * on the first open and cached from then on.
+ */
+const SearchCombobox = dynamic(() => import("./SearchCombobox"), {
+  ssr: false,
+  // Same height as the real input, so the panel does not jump on load.
+  loading: () => <div className="h-[46px] rounded-xl border border-glass-hover bg-white/[0.03]" />,
+});
 
 /**
  * Full-guide search, reachable from every guide route.
@@ -155,7 +169,7 @@ export default function GuideSearchLauncher({
               transition={reduced ? { duration: 0 } : { duration: 0.18 }}
               className={`fixed inset-x-0 ${CHROME_TOP_MOBILE_BELOW} z-[70] mx-auto w-[min(36rem,calc(100vw-2rem))] rounded-2xl border border-glass-hover bg-surface/95 p-4 shadow-2xl backdrop-blur-xl`}
             >
-              <SearchCombobox placeholder={t.guide.searchPlaceholder} />
+              <SearchCombobox placeholder={t.guide.searchPlaceholder} autoFocus />
               <button
                 type="button"
                 onClick={close}

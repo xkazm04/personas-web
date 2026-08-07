@@ -11,11 +11,15 @@ import { useGuideSearch } from "./search-combobox/useGuideSearch";
 interface SearchComboboxProps {
   placeholder?: string;
   className?: string;
+  /** Focus the input on mount — used by the modal launcher, where the dialog
+   *  exists for no other purpose than typing into this field. */
+  autoFocus?: boolean;
 }
 
 export default function SearchCombobox({
   placeholder = "Search topics…",
   className = "",
+  autoFocus = false,
 }: SearchComboboxProps) {
   const { t } = useTranslation();
   const { query, setQuery, results, isOpen, setIsOpen, isPending, activeIndex, listRef, navigate, onKeyDown } =
@@ -31,6 +35,10 @@ export default function SearchCombobox({
     document.addEventListener("mousedown", handleClick);
     return () => document.removeEventListener("mousedown", handleClick);
   }, [setIsOpen]);
+
+  useEffect(() => {
+    if (autoFocus) inputRef.current?.focus();
+  }, [autoFocus]);
 
   const grouped = useMemo(() => groupResultsByCategory(results), [results]);
 

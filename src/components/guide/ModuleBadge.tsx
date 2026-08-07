@@ -80,7 +80,7 @@ export default function ModuleBadge({ moduleRef, categoryColor = "#06b6d4", comp
           ref={popoverRef}
           role="dialog"
           aria-label="Desktop app location"
-          className="absolute left-0 top-full z-50 mt-2 w-64 rounded-xl border border-glass-hover bg-[#0a0a0f]/95 backdrop-blur-md p-4 shadow-xl shadow-black/40"
+          className="absolute left-0 top-full z-50 mt-2 w-64 rounded-xl border border-glass-hover bg-surface/95 backdrop-blur-md p-4 shadow-xl shadow-black/40"
         >
           <div className="flex items-start justify-between gap-2">
             <p className="text-sm text-muted-dark font-medium uppercase tracking-wider">

@@ -1,16 +1,20 @@
 "use client";
 
 import Link from "next/link";
-import { motion } from "framer-motion";
+import { motion, useReducedMotion } from "framer-motion";
 import { ArrowRight } from "lucide-react";
 import { fadeUp, staggerContainer } from "@/lib/animations";
 import type { RelatedTopic } from "@/lib/guide-utils";
+
+import { STATIC_CONTAINER, STATIC_ITEM } from "./guide-motion";
 
 interface RelatedTopicsProps {
   related: RelatedTopic[];
 }
 
 export default function RelatedTopics({ related }: RelatedTopicsProps) {
+  const reduced = useReducedMotion() ?? false;
+
   if (related.length === 0) return null;
 
   return (
@@ -20,13 +24,13 @@ export default function RelatedTopics({ related }: RelatedTopicsProps) {
 
       <motion.div
         className="grid gap-4 sm:grid-cols-2"
-        variants={staggerContainer}
+        variants={reduced ? STATIC_CONTAINER : staggerContainer}
         initial="hidden"
         whileInView="visible"
         viewport={{ once: true, margin: "-40px" }}
       >
         {related.map(({ topic, category, sharedTags }) => (
-          <motion.div key={topic.id} variants={fadeUp}>
+          <motion.div key={topic.id} variants={reduced ? STATIC_ITEM : fadeUp}>
             <Link
               href={`/guide/${category.id}/${topic.id}`}
               className="group flex h-full flex-col gap-2 rounded-xl border border-glass bg-white/[0.02] p-4 backdrop-blur-sm transition-colors hover:border-glass-strong hover:bg-white/[0.04] outline-none focus-visible:ring-2 focus-visible:ring-brand-cyan/50 focus-visible:ring-offset-2 focus-visible:ring-offset-black"

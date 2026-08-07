@@ -3,14 +3,11 @@ import { AnimatePresence, motion } from "framer-motion";
 import { ChevronRight, Search } from "lucide-react";
 import type { Variants } from "framer-motion";
 
-import type { GUIDE_CATEGORIES } from "@/data/guide/categories";
-import type { GuideTopic } from "@/data/guide/types";
+import type { GuideNavCategory } from "@/data/guide/topics-nav";
 
 const FOCUS_RING = "outline-none focus-visible:ring-2 focus-visible:ring-brand-cyan/50 focus-visible:ring-offset-2 focus-visible:ring-offset-black";
 
-type SidebarCategory = (typeof GUIDE_CATEGORIES)[number] & {
-  topics: GuideTopic[];
-};
+type SidebarCategory = GuideNavCategory;
 
 export function GuideSidebarContent({
   announcement,

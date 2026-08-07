@@ -98,7 +98,7 @@ export default function MobileTopicTOC({ headings }: MobileTopicTOCProps) {
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               exit={{ opacity: 0 }}
-              transition={{ duration: 0.15 }}
+              transition={reduced ? { duration: 0 } : { duration: 0.15 }}
               onClick={close}
               aria-label={t.pageNav.closeMenu}
               className={`fixed inset-0 ${CHROME_TOP_MOBILE_BELOW} -z-10 bg-background/60 backdrop-blur-sm`}

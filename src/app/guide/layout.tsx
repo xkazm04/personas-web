@@ -4,6 +4,7 @@ import GuideSidebar from "@/components/guide/GuideSidebar";
 import { CHROME_PAD_NAVBAR } from "@/components/guide/guide-chrome";
 import { GUIDE_CATEGORIES } from "@/data/guide/categories";
 import { GUIDE_TOPICS } from "@/data/guide/topics";
+import { GUIDE_NAV_CATEGORIES } from "@/data/guide/topics-nav";
 
 // Counts are derived from the guide data, not typed by hand — the description
 // used to claim "10 categories" after an 11th (companion) had shipped.
@@ -19,7 +20,10 @@ export default function GuideLayout({ children }: { children: React.ReactNode })
     <>
       <Navbar />
       <div className={`flex min-h-screen ${CHROME_PAD_NAVBAR}`}>
-        <GuideSidebar />
+        {/* The tree is projected + visibility-filtered HERE, on the server, so
+            the client sidebar never imports GUIDE_TOPICS (57 KB of source,
+            almost all of it descriptions it does not render). */}
+        <GuideSidebar categories={GUIDE_NAV_CATEGORIES} />
         {/*
           No `overflow-y-auto` here: `<main>` has no constrained height, so an
           overflow value only made it the nearest scrollport without ever

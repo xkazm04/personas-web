@@ -81,7 +81,13 @@ export default async function CategoryPage({ params }: { params: Promise<{ categ
 
         {/* Illustration banner — dark/light variants swap via CSS; categories
             without a painted illustration get the glyph fallback so every
-            category page opens on artwork. */}
+            category page opens on artwork.
+
+            Only the DARK variant is `priority`. Both were, which preloaded two
+            full-width images while exactly one of them is ever painted. The
+            server renders `<html class="dark">` (see src/app/layout.tsx), so
+            the dark image is the LCP candidate on first paint; the light one
+            is swapped in later by the theme script and loads normally. */}
         <div className="relative mt-6 h-48 overflow-hidden rounded-2xl">
           {illus ? (
             <>
@@ -100,7 +106,6 @@ export default async function CategoryPage({ params }: { params: Promise<{ categ
                 width={800}
                 height={400}
                 className="block dark:hidden h-full w-full object-cover opacity-60"
-                priority
               />
             </>
           ) : (

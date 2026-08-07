@@ -1,6 +1,7 @@
-import { motion } from "framer-motion";
+import { motion, useReducedMotion } from "framer-motion";
 import { ArrowRight, MessageCircle } from "lucide-react";
 
+import { STATIC_ITEM } from "@/components/guide/guide-motion";
 import { fadeUp } from "@/lib/animations";
 import { BRAND_VAR, brandShadow, tint } from "@/lib/brand-theme";
 import { DISCORD_INVITE_URL } from "@/lib/constants";
@@ -14,12 +15,14 @@ export function GuideDiscordCTA({
   subtitle: string;
   ctaLabel: string;
 }) {
+  const reduced = useReducedMotion() ?? false;
+
   return (
     <motion.div
       initial="hidden"
       whileInView="visible"
       viewport={{ once: true }}
-      variants={fadeUp}
+      variants={reduced ? STATIC_ITEM : fadeUp}
       className="mt-16 mx-auto max-w-3xl"
     >
       <div

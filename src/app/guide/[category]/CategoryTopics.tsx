@@ -2,11 +2,12 @@
 
 import { useState, useMemo } from "react";
 import Link from "next/link";
-import { motion } from "framer-motion";
+import { motion, useReducedMotion } from "framer-motion";
 import { Search } from "lucide-react";
 import type { GuideTopic } from "@/data/guide/types";
 import { TOPIC_MODULE_MAP } from "@/data/guide/desktop-modules";
 import ModuleBadge from "@/components/guide/ModuleBadge";
+import { STATIC_CONTAINER, STATIC_ITEM } from "@/components/guide/guide-motion";
 import { useTranslation } from "@/i18n/useTranslation";
 import { fadeUp, staggerContainer } from "@/lib/animations";
 
@@ -22,6 +23,7 @@ interface CategoryTopicsProps {
 
 export default function CategoryTopics({ topics, color, categoryId }: CategoryTopicsProps) {
   const { t } = useTranslation();
+  const reduced = useReducedMotion() ?? false;
   const [query, setQuery] = useState("");
 
   const filtered = useMemo(() => {
@@ -61,11 +63,11 @@ export default function CategoryTopics({ topics, color, categoryId }: CategoryTo
       <motion.div
         initial="hidden"
         animate="visible"
-        variants={staggerContainer}
+        variants={reduced ? STATIC_CONTAINER : staggerContainer}
         className="mt-6 grid gap-4 sm:grid-cols-2"
       >
         {filtered.map((topic) => (
-          <motion.div key={topic.id} variants={fadeUp}>
+          <motion.div key={topic.id} variants={reduced ? STATIC_ITEM : fadeUp}>
             <Link
               href={`/guide/${categoryId}/${topic.id}`}
               className="group block rounded-2xl border border-glass bg-white/[0.02] p-5 backdrop-blur-sm transition-all duration-300 hover:border-glass-strong hover:bg-white/[0.05] outline-none focus-visible:ring-2 focus-visible:ring-brand-cyan/50 focus-visible:ring-offset-2 focus-visible:ring-offset-black"

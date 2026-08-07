@@ -1,9 +1,10 @@
-import { motion } from "framer-motion";
+import { motion, useReducedMotion } from "framer-motion";
 import { ArrowRight } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
 
 import CategoryGlyphArt from "@/components/guide/CategoryGlyphArt";
+import { STATIC_CONTAINER, STATIC_ITEM } from "@/components/guide/guide-motion";
 import type { GUIDE_CATEGORIES } from "@/data/guide/categories";
 import { GUIDE_ILLUSTRATIONS } from "@/data/guide/illustrations";
 import { fadeUp, staggerContainer } from "@/lib/animations";
@@ -24,12 +25,14 @@ export function GuideCategoryGrid({
     learnMore: string;
   };
 }) {
+  const reduced = useReducedMotion() ?? false;
+
   return (
     <motion.div
       initial="hidden"
       whileInView="visible"
       viewport={{ once: true, margin: "-40px" }}
-      variants={staggerContainer}
+      variants={reduced ? STATIC_CONTAINER : staggerContainer}
       className="mt-14 grid gap-5 sm:grid-cols-2 lg:grid-cols-3"
     >
       {categories.map((category) => {
@@ -38,7 +41,7 @@ export function GuideCategoryGrid({
         const brandVar = BRAND_VAR[brand];
 
         return (
-          <motion.div key={category.id} variants={fadeUp}>
+          <motion.div key={category.id} variants={reduced ? STATIC_ITEM : fadeUp}>
             <Link
               href={`/guide/${category.id}`}
               className="group relative block overflow-hidden rounded-2xl border transition-all duration-500 hover:scale-[1.01] outline-none focus-visible:ring-2 focus-visible:ring-brand-cyan/50 focus-visible:ring-offset-2 focus-visible:ring-offset-black"

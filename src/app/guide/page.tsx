@@ -2,11 +2,12 @@
 
 import { Suspense, useMemo, useState } from "react";
 import { useSearchParams } from "next/navigation";
-import { motion } from "framer-motion";
+import { motion, useReducedMotion } from "framer-motion";
 
 import GradientText from "@/components/GradientText";
 import GuideSearchLauncher from "@/components/guide/GuideSearchLauncher";
 import SearchCombobox from "@/components/guide/SearchCombobox";
+import { STATIC_CONTAINER, STATIC_ITEM } from "@/components/guide/guide-motion";
 import { GUIDE_CATEGORIES } from "@/data/guide/categories";
 import { GUIDE_TOPICS } from "@/data/guide/topics";
 import type { GuideMode } from "@/data/guide/types";
@@ -35,8 +36,15 @@ function GuidePageInner() {
   const initialMode = searchParams.get("mode") as GuideMode | null;
   const [modeFilter, setModeFilter] = useState<GuideMode | null>(initialMode);
 
-  const visibleCategories = GUIDE_CATEGORIES.filter((category) =>
-    isCategoryVisibleForMode(category.id, modeFilter),
+  const reduced = useReducedMotion() ?? false;
+
+  // Memoized, not a bare `.filter()`: this array is the dependency of the
+  // `topicCounts` memo below, and a fresh array identity on every render made
+  // that memo miss unconditionally — it recomputed 11 filtered passes over
+  // GUIDE_TOPICS on each keystroke of the search box.
+  const visibleCategories = useMemo(
+    () => GUIDE_CATEGORIES.filter((category) => isCategoryVisibleForMode(category.id, modeFilter)),
+    [modeFilter],
   );
 
   const topicCounts = useMemo(() => {
@@ -76,25 +84,25 @@ function GuidePageInner() {
         <motion.div
           initial="hidden"
           animate="visible"
-          variants={staggerContainer}
+          variants={reduced ? STATIC_CONTAINER : staggerContainer}
           className="pt-12 text-center"
         >
           <motion.p
-            variants={fadeUp}
+            variants={reduced ? STATIC_ITEM : fadeUp}
             className="mb-4 text-base font-semibold uppercase tracking-widest"
             style={{ color: BRAND_VAR.purple }}
           >
             {t.nav.guide}
           </motion.p>
           <motion.h1
-            variants={fadeUp}
+            variants={reduced ? STATIC_ITEM : fadeUp}
             className="text-4xl font-extrabold tracking-tight sm:text-5xl md:text-6xl drop-shadow-md"
           >
             {t.guide.title}{" "}
             <GradientText className="drop-shadow-lg">{t.nav.guide}</GradientText>
           </motion.h1>
           <motion.p
-            variants={fadeUp}
+            variants={reduced ? STATIC_ITEM : fadeUp}
             className="mx-auto mt-6 max-w-2xl text-base text-muted leading-relaxed font-light"
           >
             {t.guide.subtitle}{" "}
@@ -103,7 +111,7 @@ function GuidePageInner() {
             </span>
           </motion.p>
 
-          <motion.div variants={fadeUp} className="mx-auto mt-10 max-w-xl">
+          <motion.div variants={reduced ? STATIC_ITEM : fadeUp} className="mx-auto mt-10 max-w-xl">
             <SearchCombobox placeholder={t.guide.searchPlaceholder} />
           </motion.div>
           <GuideModeToggle modeFilter={modeFilter} onModeChange={setModeFilter} />
