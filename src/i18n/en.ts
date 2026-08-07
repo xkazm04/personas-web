@@ -868,6 +868,26 @@
       recall: string;
       fallback: string;
     };
+    athenaActionMix: string;
+    athenaOps: {
+      chat: string;
+      fleetSpawn: string;
+      canvasControl: string;
+      recall: string;
+      proactiveNudge: string;
+      execTriage: string;
+      msgTriage: string;
+      reviewResolution: string;
+    };
+    turnsCount: string;
+    athenaSpendLane: string;
+    spendTurns: string;
+    spendCost: string;
+    spendAvgPerTurn: string;
+    spendTokens: string;
+    spendTokensDetail: string;
+    athenaVsFleet: string;
+    athenaVsFleetCaption: string;
     valueRollup: string;
     valueDelivered: string;
     costPerValue: string;
@@ -2417,6 +2437,26 @@ export const en: Translations = {
       recall: 'Recall',
       fallback: 'Fallback',
     },
+    athenaActionMix: 'Cost by action type',
+    athenaOps: {
+      chat: 'Chat',
+      fleetSpawn: 'Fleet spawn',
+      canvasControl: 'Canvas control',
+      recall: 'Recall',
+      proactiveNudge: 'Proactive nudges',
+      execTriage: 'Execution triage',
+      msgTriage: 'Message triage',
+      reviewResolution: 'Review resolution',
+    },
+    turnsCount: '{count} turns',
+    athenaSpendLane: 'Athena spend lane',
+    spendTurns: 'Turns',
+    spendCost: 'Athena cost',
+    spendAvgPerTurn: 'Avg / turn',
+    spendTokens: 'Tokens',
+    spendTokensDetail: '{in} in · {out} out',
+    athenaVsFleet: 'Athena vs fleet',
+    athenaVsFleetCaption: '{athena} of {total} total spend this window',
     valueRollup: 'Value rollup',
     valueDelivered: 'Value delivered',
     costPerValue: 'Cost per value',

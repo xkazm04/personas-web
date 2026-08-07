@@ -1210,9 +1210,11 @@
           "businessFeature": "Observability Charts & SLA",
           "category": "ui",
           "filePaths": [
+            "src/app/dashboard/observability/ActivityMetricsView.tsx",
             "src/app/dashboard/observability/PerformanceView.tsx",
             "src/app/dashboard/observability/UsageView.tsx",
-            "src/app/dashboard/observability/ActivityMetricsView.tsx",
+            "src/app/dashboard/observability/activity-view/AthenaActionMixCard.tsx",
+            "src/app/dashboard/observability/activity-view/AthenaSpendLane.tsx",
             "src/app/dashboard/observability/activity-view/AthenaUsageCard.tsx",
             "src/app/dashboard/observability/activity-view/ValueRollupCard.tsx",
             "src/app/dashboard/observability/activity-view/useActivityMetrics.ts",
@@ -1915,7 +1917,7 @@
     "Observability & Event Monitoring › Execution History & Streaming [ui] — 14 files",
     "Observability & Event Monitoring › Leaderboard & Rankings [ui] — 7 files",
     "Observability & Event Monitoring › Director Coaching [ui] — 11 files",
-    "Observability & Event Monitoring › Observability Charts & SLA [ui] — 47 files",
+    "Observability & Event Monitoring › Observability Charts & SLA [ui] — 53 files",
     "Observability & Event Monitoring › Event Bus & Stream Monitoring [ui] — 33 files",
     "Observability & Event Monitoring › Dashboard Home Overview [ui] — 23 files",
     "Platform Foundation: Shell, UI & Motion › Mobile App Shell & Views [ui] — 13 files",
@@ -1936,7 +1938,7 @@
   "summary": {
     "totalGroups": 12,
     "totalContexts": 54,
-    "totalFiles": 1027,
+    "totalFiles": 1029,
     "categories": {
       "ui": 39,
       "data": 2,

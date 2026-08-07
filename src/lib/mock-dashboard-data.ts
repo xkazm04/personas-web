@@ -2023,6 +2023,58 @@ export const MOCK_DIRECTOR_VERDICTS: DirectorVerdict[] = [
   },
 ];
 
+// ── Athena op-grammar action mix + turn-ledger spend lane ───────────
+// Mirrors the desktop Activity tab's Athena lane: per-turn usage accounting
+// (the companion turn ledger) rolled up into an action-type cost breakdown
+// (op-grammar buckets) and headline totals with an Athena-vs-fleet ratio.
+// Demo-only; slugs are the desktop's real op grammar, labeled via i18n.
+
+/** Op-grammar bucket slugs (desktop parity: dispatcher action / headless leg). */
+export type AthenaOpAction =
+  | "chat"
+  | "fleet_spawn"
+  | "canvas_control"
+  | "recall"
+  | "proactive_nudge"
+  | "exec_triage"
+  | "msg_triage"
+  | "review_resolution";
+
+export interface AthenaActionCost {
+  action: AthenaOpAction;
+  costUsd: number;
+  turns: number;
+}
+
+/** Headline totals from the per-turn usage ledger, plus the fleet baseline. */
+export interface AthenaLedgerTotals {
+  turns: number;
+  costUsd: number;
+  inputTokens: number;
+  outputTokens: number;
+  /** Total fleet spend in the same window, for the Athena-vs-fleet ratio. */
+  fleetCostUsd: number;
+}
+
+export const MOCK_ATHENA_ACTION_MIX: AthenaActionCost[] = [
+  { action: "chat", costUsd: 7.4, turns: 96 },
+  { action: "fleet_spawn", costUsd: 4.6, turns: 38 },
+  { action: "canvas_control", costUsd: 3.1, turns: 52 },
+  { action: "proactive_nudge", costUsd: 2.9, turns: 84 },
+  { action: "recall", costUsd: 2.4, turns: 210 },
+  { action: "exec_triage", costUsd: 2.2, turns: 168 },
+  { action: "msg_triage", costUsd: 1.4, turns: 122 },
+  { action: "review_resolution", costUsd: 0.8, turns: 31 },
+];
+
+export const MOCK_ATHENA_LEDGER: AthenaLedgerTotals = {
+  turns: 801,
+  costUsd: 24.8,
+  inputTokens: 6_420_000,
+  outputTokens: 1_180_000,
+  fleetCostUsd: 186.4,
+};
+
 // ── Rotation Overview (credential rotation status) ──────────────────
 export const MOCK_CREDENTIAL_ROTATIONS: CredentialRotation[] = [
   { id: "cr_github", secret: "GITHUB_OAUTH_TOKEN", hasPolicy: true, enabled: true, anomaly: false, overdue: false, nextRotation: "12d", intervalDays: 90 },

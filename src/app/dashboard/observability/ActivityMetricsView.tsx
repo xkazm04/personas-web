@@ -5,18 +5,23 @@ import { Loader2 } from "lucide-react";
 
 import CompareToggle from "@/components/dashboard/CompareToggle";
 import DashboardErrorBanner from "@/components/dashboard/DashboardErrorBanner";
+import { AthenaActionMixCard } from "./activity-view/AthenaActionMixCard";
+import { AthenaSpendLane } from "./activity-view/AthenaSpendLane";
 import { AthenaUsageCard } from "./activity-view/AthenaUsageCard";
 import { ValueRollupCard } from "./activity-view/ValueRollupCard";
 import { useActivityMetrics } from "./activity-view/useActivityMetrics";
 
 /**
  * Activity Metrics tab: Athena (Companion) cost-by-action stacked area +
- * value-delivered rollup, with a compare toggle that overlays the previous
- * period on both. Demo-only. Mirrors the desktop overview's Activity Metrics.
+ * value-delivered rollup (compare toggle overlays the previous period on
+ * both), then the Athena lane — op-grammar action-type cost mix + the
+ * turn-ledger spend summary (no compare; point-in-time totals). Demo-only.
+ * Mirrors the desktop overview's Activity tab.
  */
 export default function ActivityMetricsView() {
   const [compare, setCompare] = useState(false);
-  const { athenaUsage, valueRollup, isLoading, error, retry } = useActivityMetrics();
+  const { athenaUsage, valueRollup, athenaActionMix, athenaLedger, isLoading, error, retry } =
+    useActivityMetrics();
 
   // A failed fetch would otherwise spin forever (valueRollup never arrives);
   // surface the error with a retry instead.
@@ -41,6 +46,12 @@ export default function ActivityMetricsView() {
         <AthenaUsageCard data={athenaUsage} compare={compare} />
         <ValueRollupCard rollup={valueRollup} compare={compare} />
       </div>
+      {athenaLedger && (
+        <div className="mt-6 grid gap-6 lg:grid-cols-5">
+          <AthenaActionMixCard actions={athenaActionMix} />
+          <AthenaSpendLane ledger={athenaLedger} />
+        </div>
+      )}
     </div>
   );
 }
