@@ -10,6 +10,7 @@ import ModuleBadge from "@/components/guide/ModuleBadge";
 import TopicTOC from "@/components/guide/TopicTOC";
 import MobileTopicTOC from "@/components/guide/MobileTopicTOC";
 import ReadingProgress from "@/components/guide/ReadingProgress";
+import { CHROME_PAD_TOPIC, CHROME_TOC_STICKY } from "@/components/guide/guide-chrome";
 import { extractHeadings } from "@/components/guide/guide-markdown/extractHeadings";
 import type { GuideHeading } from "@/components/guide/guide-markdown/extractHeadings";
 import { TOPIC_MODULE_MAP } from "@/data/guide/desktop-modules";
@@ -98,7 +99,7 @@ export default function TopicView({ category, topic, content, initialHeadings, p
   }, [topic.id]);
 
   return (
-    <div className="px-6 pb-24 pt-9 lg:pt-0">
+    <div className={`px-6 pb-24 ${CHROME_PAD_TOPIC}`}>
       <a
         href="#guide-topic-content"
         className="sr-only focus:not-sr-only focus:absolute focus:left-4 focus:top-4 focus:z-50 focus:rounded-lg focus:border focus:border-glass-strong focus:bg-surface focus:px-4 focus:py-2 focus:text-sm focus:font-medium focus:text-foreground focus:ring-2 focus:ring-brand-cyan/50"
@@ -230,7 +231,7 @@ export default function TopicView({ category, topic, content, initialHeadings, p
         </nav>
         </div>
         <aside className="hidden lg:block">
-          <div className="sticky top-24">
+          <div className={`sticky ${CHROME_TOC_STICKY}`}>
             <TopicTOC headings={headings} label={t.pageNav.onThisPage} />
           </div>
         </aside>

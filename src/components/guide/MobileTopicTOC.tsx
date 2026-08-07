@@ -7,6 +7,11 @@ import { ChevronDown } from "lucide-react";
 import { useTranslation } from "@/i18n/useTranslation";
 import { lockBodyScroll, unlockBodyScroll } from "@/lib/bodyScrollLock";
 
+import {
+  CHROME_TOP_MOBILE_BAR,
+  CHROME_TOP_MOBILE_BELOW,
+  CHROME_TRIGGER_LANE,
+} from "./guide-chrome";
 import { useActiveHeading } from "./useActiveHeading";
 import type { GuideHeading } from "./guide-markdown/extractHeadings";
 
@@ -57,14 +62,16 @@ export default function MobileTopicTOC({ headings }: MobileTopicTOCProps) {
   if (tocHeadings.length === 0) return null;
 
   return (
-    <div className="fixed top-[60px] left-0 right-0 z-40 lg:hidden">
+    // z-30 keeps the reading-progress bar (z-40) painting above this bar; the
+    // sidebar trigger shares this band and sits in the CHROME_TRIGGER_LANE.
+    <div className={`fixed ${CHROME_TOP_MOBILE_BAR} left-0 right-0 z-30 lg:hidden`}>
       <div className="border-b border-glass bg-background/80 backdrop-blur-xl">
         <button
           type="button"
           onClick={() => setOpen((v) => !v)}
           aria-expanded={open}
           aria-controls={panelId}
-          className="flex h-9 w-full items-center justify-between gap-3 px-4 text-sm font-mono uppercase tracking-wider text-muted-dark focus-ring"
+          className={`flex h-11 w-full items-center justify-between gap-3 ${CHROME_TRIGGER_LANE} pr-4 text-sm font-mono uppercase tracking-wider text-muted-dark focus-ring`}
         >
           <span className="flex min-w-0 items-center gap-2">
             <span className="text-muted">{t.pageNav.onThisPage}</span>
@@ -94,7 +101,7 @@ export default function MobileTopicTOC({ headings }: MobileTopicTOCProps) {
               transition={{ duration: 0.15 }}
               onClick={close}
               aria-label={t.pageNav.closeMenu}
-              className="fixed inset-0 top-[96px] -z-10 bg-background/60 backdrop-blur-sm"
+              className={`fixed inset-0 ${CHROME_TOP_MOBILE_BELOW} -z-10 bg-background/60 backdrop-blur-sm`}
             />
             <motion.nav
               key="panel"

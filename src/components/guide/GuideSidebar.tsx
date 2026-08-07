@@ -1,6 +1,6 @@
 "use client";
 
-import { useMemo, useState } from "react";
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { usePathname } from "next/navigation";
 import { AnimatePresence, motion, useReducedMotion } from "framer-motion";
 import { Menu, X } from "lucide-react";
@@ -8,8 +8,12 @@ import type { Variants } from "framer-motion";
 
 import { GUIDE_CATEGORIES } from "@/data/guide/categories";
 import { GUIDE_TOPICS } from "@/data/guide/topics";
+import { useFocusTrap } from "@/hooks/useFocusTrap";
+import { useTranslation } from "@/i18n/useTranslation";
+import { lockBodyScroll, unlockBodyScroll } from "@/lib/bodyScrollLock";
 import { isTopicVisible } from "@/lib/guide-utils";
 
+import { CHROME_SIDEBAR_STICKY, CHROME_TOP_MOBILE_BAR } from "./guide-chrome";
 import { FOCUS_RING, GuideSidebarContent } from "./guide-sidebar/GuideSidebarContent";
 
 function topicsFor(categoryId: string) {
@@ -17,6 +21,7 @@ function topicsFor(categoryId: string) {
 }
 
 export default function GuideSidebar() {
+  const { t } = useTranslation();
   const pathname = usePathname();
   const segments = pathname.split("/").filter(Boolean);
   const activeCategory = segments[1] ?? "";
@@ -31,6 +36,33 @@ export default function GuideSidebar() {
   const [query, setQuery] = useState("");
   const [mobileOpen, setMobileOpen] = useState(false);
   const [announcement, setAnnouncement] = useState("");
+
+  // The drawer claims role="dialog" aria-modal="true", so it has to behave like
+  // one: focus moves in on open and is restored to the trigger on close, Tab
+  // cycles inside the panel, Escape dismisses, and the page behind it cannot
+  // scroll. Same primitives every other modal in the repo uses.
+  const drawerRef = useRef<HTMLElement>(null);
+  const closeButtonRef = useRef<HTMLButtonElement>(null);
+  const closeMobile = useCallback(() => setMobileOpen(false), []);
+
+  useFocusTrap({
+    active: mobileOpen,
+    containerRef: drawerRef,
+    initialFocusRef: closeButtonRef,
+  });
+
+  useEffect(() => {
+    if (!mobileOpen) return;
+    lockBodyScroll();
+    const onKey = (event: KeyboardEvent) => {
+      if (event.key === "Escape") closeMobile();
+    };
+    window.addEventListener("keydown", onKey);
+    return () => {
+      window.removeEventListener("keydown", onKey);
+      unlockBodyScroll();
+    };
+  }, [mobileOpen, closeMobile]);
 
   const collapseVariants: Variants = shouldReduceMotion
     ? {
@@ -100,16 +132,19 @@ export default function GuideSidebar() {
       collapseVariants={collapseVariants}
       onQueryChange={setQuery}
       onToggleCategory={toggle}
-      onNavigateTopic={() => setMobileOpen(false)}
+      onNavigateTopic={closeMobile}
     />
   );
 
   return (
     <>
+      {/* Shares the mobile chrome band with MobileTopicTOC, which reserves the
+          matching CHROME_TRIGGER_LANE on its left so the two never overlap. */}
       <button
         onClick={() => setMobileOpen(true)}
-        className={`fixed left-3 top-20 z-40 flex h-10 w-10 items-center justify-center rounded-lg border border-glass-hover bg-surface/90 backdrop-blur-sm text-muted-dark transition-colors hover:text-foreground sm:left-4 lg:hidden ${FOCUS_RING}`}
+        className={`fixed left-3 ${CHROME_TOP_MOBILE_BAR} z-40 flex h-11 w-11 items-center justify-center rounded-lg border border-glass-hover bg-surface/90 backdrop-blur-sm text-muted-dark transition-colors hover:text-foreground lg:hidden ${FOCUS_RING}`}
         aria-label="Open guide navigation"
+        aria-expanded={mobileOpen}
       >
         <Menu className="h-4 w-4" />
       </button>
@@ -123,11 +158,13 @@ export default function GuideSidebar() {
               exit={{ opacity: 0 }}
               transition={shouldReduceMotion ? { duration: 0 } : undefined}
               className="fixed inset-0 z-40 bg-black/60 backdrop-blur-sm lg:hidden"
-              onClick={() => setMobileOpen(false)}
+              onClick={closeMobile}
             />
             <motion.aside
+              ref={drawerRef}
               role="dialog"
               aria-modal="true"
+              aria-label={t.nav.guide}
               initial={{ x: -288 }}
               animate={{ x: 0 }}
               exit={{ x: -288 }}
@@ -135,9 +172,10 @@ export default function GuideSidebar() {
               className="fixed left-0 top-0 z-50 h-dvh w-[min(20rem,calc(100vw-1rem))] border-r border-glass bg-surface pb-safe pt-16 lg:hidden"
             >
               <button
-                onClick={() => setMobileOpen(false)}
+                ref={closeButtonRef}
+                onClick={closeMobile}
                 className={`absolute right-3 top-[1.125rem] flex h-8 w-8 items-center justify-center rounded-lg text-muted-dark transition-colors hover:text-foreground ${FOCUS_RING}`}
-                aria-label="Close navigation"
+                aria-label={t.pageNav.closeMenu}
               >
                 <X className="h-4 w-4" />
               </button>
@@ -147,7 +185,9 @@ export default function GuideSidebar() {
         )}
       </AnimatePresence>
 
-      <aside className="hidden lg:block w-72 shrink-0 border-r border-glass bg-white/[0.02] sticky top-16 h-[calc(100dvh-4rem)]">
+      <aside
+        className={`hidden lg:block w-72 shrink-0 border-r border-glass bg-white/[0.02] sticky ${CHROME_SIDEBAR_STICKY}`}
+      >
         {sidebarContent}
       </aside>
     </>

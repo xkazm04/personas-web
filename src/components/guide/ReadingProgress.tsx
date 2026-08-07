@@ -2,6 +2,8 @@
 
 import { motion, useReducedMotion, useScroll, useSpring } from "framer-motion";
 
+import { CHROME_TOP_PROGRESS } from "./guide-chrome";
+
 export default function ReadingProgress() {
   const reduced = useReducedMotion();
   const { scrollYProgress } = useScroll();
@@ -13,7 +15,7 @@ export default function ReadingProgress() {
     <motion.div
       aria-hidden="true"
       style={{ scaleX }}
-      className="fixed top-[60px] left-0 right-0 z-40 h-0.5 origin-left bg-gradient-to-r from-brand-cyan via-brand-purple to-brand-cyan"
+      className={`fixed ${CHROME_TOP_PROGRESS} left-0 right-0 z-40 h-0.5 origin-left bg-gradient-to-r from-brand-cyan via-brand-purple to-brand-cyan`}
     />
   );
 }
