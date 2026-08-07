@@ -20,8 +20,8 @@ export default function HeroStatRow({
 }) {
   const valueClass =
     variant === "desktop"
-      ? "text-xl font-bold tracking-tight transition-colors group-hover:text-brand-cyan drop-shadow-[0_0_5px_rgba(255,255,255,0.2)]"
-      : "text-lg font-bold tracking-tight font-mono";
+      ? "text-xl font-bold tracking-tight tabular-nums transition-colors group-hover:text-brand-cyan drop-shadow-[0_0_5px_color-mix(in_srgb,var(--foreground)_20%,transparent)]"
+      : "text-lg font-bold tracking-tight tabular-nums font-mono";
   const labelClass =
     variant === "desktop"
       ? "text-xs text-muted-dark font-mono uppercase tracking-wider transition-colors group-hover:text-foreground/70"
@@ -30,8 +30,8 @@ export default function HeroStatRow({
 
   return (
     <div
-      className={`flex justify-center text-center ${variant === "desktop" ? "gap-6" : "gap-6"}`}
-      data-testid="mock-stats"
+      className="flex justify-center gap-6 text-center"
+      data-testid="hero-stats"
     >
       {stats.map((stat) => (
         <div key={stat.label} className={itemClass}>

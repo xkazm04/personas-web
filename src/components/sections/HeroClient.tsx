@@ -126,7 +126,7 @@ export default function HeroClient({ connectorCount }: { connectorCount: number 
             {differentiators.map(({ label, Icon }) => (
               <motion.span
                 key={label}
-                whileHover={{ scale: 1.05 }}
+                whileHover={shouldReduceMotion ? undefined : { scale: 1.05 }}
                 className="flex items-center gap-2 rounded-full border border-glass-hover bg-white/3 px-4 py-2 text-base font-mono tracking-wide text-muted-dark transition-colors duration-300 hover:bg-white/6 hover:text-foreground hover:border-glass-strong cursor-default"
               >
                 <Icon className="h-3.5 w-3.5 opacity-60" />
@@ -147,8 +147,10 @@ export default function HeroClient({ connectorCount }: { connectorCount: number 
               rel="noopener noreferrer"
               className="group relative flex w-[min(100%,20rem)] items-center justify-center gap-3 rounded-full border border-glass-hover bg-white/2 px-8 py-4 text-base font-medium text-muted transition-all duration-300 hover:border-glass-strong hover:text-foreground hover:bg-white/5 hover:shadow-[0_0_20px_color-mix(in_srgb,var(--foreground)_10%,transparent)] sm:w-auto overflow-hidden focus-visible:ring-2 focus-visible:ring-brand-cyan/40 focus-visible:outline-none"
             >
-              <span className="absolute inset-0 w-full h-full bg-linear-to-r from-transparent via-white/10 to-transparent -translate-x-full group-hover:animate-[shimmer_1.5s_infinite]" />
-              <GithubIcon className="h-5 w-5 transition-transform duration-300 group-hover:scale-110 group-hover:drop-shadow-[0_0_8px_rgba(255,255,255,0.8)]" />
+              <span
+                className={`absolute inset-0 w-full h-full bg-linear-to-r from-transparent via-white/10 to-transparent -translate-x-full${shouldReduceMotion ? "" : " group-hover:animate-[shimmer_1.5s_infinite]"}`}
+              />
+              <GithubIcon className="h-5 w-5 transition-transform duration-300 group-hover:scale-110 group-hover:drop-shadow-[0_0_8px_color-mix(in_srgb,var(--foreground)_80%,transparent)]" />
               <span className="relative z-10">{t.hero.viewOnGithub}</span>
             </a>
             <TourLauncher tourId="home" bridgeHref="/features?tour=1" intro />
@@ -184,7 +186,7 @@ export default function HeroClient({ connectorCount }: { connectorCount: number 
           >
             <CommandCenterIllustration publicBetaLabel={t.hero.publicBeta} />
             <div className="mt-6 flex flex-col items-center gap-4">
-              <div className="rounded-full border border-glass bg-white/2 px-4 py-1.5 text-base font-mono tracking-wider text-muted-dark uppercase shadow-[0_0_10px_rgba(0,0,0,0.5)]">
+              <div className="rounded-full border border-glass bg-white/2 px-4 py-1.5 text-base font-mono tracking-wider text-muted-dark uppercase shadow-[0_0_10px_color-mix(in_srgb,var(--background)_50%,transparent)]">
                 {t.hero.commandCenter}
               </div>
               <HeroStatRow stats={heroStats} variant="desktop" />

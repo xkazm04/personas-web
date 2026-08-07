@@ -97,7 +97,7 @@ export default function CommandCenterIllustration({ publicBetaLabel }: Props) {
         )}
 
         {/* Base track */}
-        <circle cx={CX} cy={CY} r={RADIUS} fill="none" stroke="rgba(255,255,255,0.03)" strokeWidth={STROKE} />
+        <circle cx={CX} cy={CY} r={RADIUS} fill="none" stroke="color-mix(in srgb, var(--foreground) 3%, transparent)" strokeWidth={STROKE} />
 
         {/* Progress arcs — one per roadmap phase, completed ones lit */}
         {phases.map((phase, i) => {
@@ -110,7 +110,7 @@ export default function CommandCenterIllustration({ publicBetaLabel }: Props) {
               key={phase.index}
               d={d}
               fill="none"
-              stroke={phase.completed ? `url(#${arcGradientId})` : "rgba(255,255,255,0.06)"}
+              stroke={phase.completed ? `url(#${arcGradientId})` : "color-mix(in srgb, var(--foreground) 6%, transparent)"}
               strokeWidth={phase.completed ? STROKE : STROKE - 1}
               strokeLinecap="round"
               filter={phase.completed ? `url(#${arcGlowId})` : undefined}
@@ -139,7 +139,7 @@ export default function CommandCenterIllustration({ publicBetaLabel }: Props) {
             cy={CY}
             r={INNER_R}
             fill="none"
-            stroke="rgba(255,255,255,0.02)"
+            stroke="color-mix(in srgb, var(--foreground) 2%, transparent)"
             strokeWidth="0.5"
             strokeDasharray="3 8"
           />
@@ -149,7 +149,7 @@ export default function CommandCenterIllustration({ publicBetaLabel }: Props) {
             cy={CY}
             r={INNER_R}
             fill="none"
-            stroke="rgba(255,255,255,0.035)"
+            stroke="color-mix(in srgb, var(--foreground) 3.5%, transparent)"
             strokeWidth="0.5"
             strokeDasharray="3 8"
             animate={{ rotate: -360 }}

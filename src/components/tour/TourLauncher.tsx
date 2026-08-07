@@ -113,8 +113,8 @@ export default function TourLauncher({
       onClick={handleStart}
       onPointerEnter={() => void loadSteps()}
       onFocus={() => void loadSteps()}
-      whileHover={{ scale: 1.04 }}
-      whileTap={{ scale: 0.97 }}
+      whileHover={reduced ? undefined : { scale: 1.04 }}
+      whileTap={reduced ? undefined : { scale: 0.97 }}
       className="group relative inline-flex items-center gap-2.5 rounded-full border border-glass-hover bg-white/3 px-5 py-2.5 text-base font-mono tracking-wide text-muted-dark transition-colors duration-300 hover:border-brand-cyan/50 hover:bg-brand-cyan/5 hover:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-cyan/40"
     >
       {/* Subtle pulsing ring for first-time visitors. */}
