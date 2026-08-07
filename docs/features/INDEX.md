@@ -53,6 +53,7 @@ Status legend: ✅ written · ⬜ planned
 | ✅ [messages](dashboard/messages.md) | `/dashboard/messages` | Messages |
 | ✅ [observability](dashboard/observability.md) | `/dashboard/observability` | Observability |
 | ✅ [leaderboard](dashboard/leaderboard.md) | `/dashboard/leaderboard` | Leaderboard |
+| ✅ [director](dashboard/director.md) | `/dashboard/director` | Director |
 | ✅ [sla](dashboard/sla.md) | `/dashboard/sla` | SLA (Incidents) |
 | ✅ [incidents](dashboard/incidents.md) | `/dashboard/incidents` | Incidents |
 | ✅ [health](dashboard/health.md) | `/dashboard/health` | Health |

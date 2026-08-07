@@ -1709,6 +1709,219 @@ export interface CredentialRotation {
   intervalDays: number;
 }
 
+// ── Director (coaching command center) ──────────────────────────────
+// Mirrors the desktop overview's Director tab: a system-owned meta-persona
+// that scores every starred agent's latest run on a 0–5 verdict scale and
+// tracks whether coaching moves the needle. Demo-only; the story is a small
+// fleet where two agents are improving, one is flat-and-stale, one is
+// declining into low scores, and one has never been reviewed.
+
+export type DirectorMomentum = "improving" | "flat" | "declining";
+export type DirectorSeverity = "info" | "warning" | "error";
+export type DirectorCategory =
+  | "prompt"
+  | "health"
+  | "triggers"
+  | "credentials"
+  | "memory"
+  | "usefulness";
+
+export interface DirectorRosterEntry {
+  id: string;
+  name: string;
+  color: string;
+  /** Latest 0–5 verdict; null = in scope but never scored. */
+  latestScore: number | null;
+  /** Recent 0–5 verdicts, oldest → newest (up to 12). */
+  scoreTrend: number[];
+  /** Share of this agent's assessed runs that delivered value (0–1). */
+  valueDeliveredRate: number;
+  totalExecutions: number;
+  /** ISO timestamp of the last Director review; null = never. */
+  lastReviewedAt: string | null;
+}
+
+export interface DirectorScoreBand {
+  score: number;
+  count: number;
+}
+
+/** Assessed-run outcome counts (the value breakdown bands). */
+export interface DirectorValueBreakdown {
+  delivered: number;
+  partial: number;
+  blocked: number;
+  noInput: number;
+  unassessed: number;
+}
+
+export interface DirectorPortfolio {
+  periodDays: number;
+  /** Total fleet cost over the period (USD, non-simulation). */
+  totalCostUsd: number;
+  /** Denominator for the value-delivered rate (sum of all bands). */
+  assessedExecutions: number;
+  breakdown: DirectorValueBreakdown;
+  /** Always six bands, scores 0..5. */
+  scoreDistribution: DirectorScoreBand[];
+  roster: DirectorRosterEntry[];
+  inScope: number;
+  reviewed: number;
+  unreviewed: number;
+  /** Mean latest score across reviewed agents; null when none reviewed. */
+  avgScore: number | null;
+}
+
+/** A prose coaching note the Director attached to a review. */
+export interface DirectorVerdict {
+  id: string;
+  personaId: string;
+  personaName: string;
+  personaColor: string;
+  severity: DirectorSeverity;
+  category: DirectorCategory;
+  /** Fixture text — demo verdict titles are data, shown verbatim. */
+  title: string;
+  createdAt: string;
+}
+
+const DIRECTOR_ROSTER: DirectorRosterEntry[] = [
+  {
+    id: "p-research",
+    name: "ResearchAgent",
+    color: "#06b6d4",
+    latestScore: 5,
+    scoreTrend: [3, 4, 4, 4, 5],
+    valueDeliveredRate: 0.86,
+    totalExecutions: 1240,
+    lastReviewedAt: new Date(Date.now() - 2 * 3600_000).toISOString(),
+  },
+  {
+    id: "p-codereview",
+    name: "CodeReviewer",
+    color: "#34d399",
+    latestScore: 4,
+    scoreTrend: [2, 3, 3, 4],
+    valueDeliveredRate: 0.78,
+    totalExecutions: 812,
+    lastReviewedAt: new Date(Date.now() - 26 * 3600_000).toISOString(),
+  },
+  {
+    id: "p-dataproc",
+    name: "DataProcessor",
+    color: "#fbbf24",
+    latestScore: 3,
+    scoreTrend: [3, 3, 3],
+    valueDeliveredRate: 0.64,
+    totalExecutions: 964,
+    lastReviewedAt: new Date(Date.now() - 16 * 24 * 3600_000).toISOString(),
+  },
+  {
+    id: "p-notify",
+    name: "NotifyBot",
+    color: "#a855f7",
+    latestScore: 2,
+    scoreTrend: [4, 4, 3, 2],
+    valueDeliveredRate: 0.41,
+    totalExecutions: 388,
+    lastReviewedAt: new Date(Date.now() - 5 * 3600_000).toISOString(),
+  },
+  {
+    id: "p-reportgen",
+    name: "ReportGen",
+    color: "#f43f5e",
+    latestScore: null,
+    scoreTrend: [],
+    valueDeliveredRate: 0.57,
+    totalExecutions: 143,
+    lastReviewedAt: null,
+  },
+];
+
+export const MOCK_DIRECTOR_PORTFOLIO: DirectorPortfolio = {
+  periodDays: 30,
+  totalCostUsd: 41.8,
+  assessedExecutions: 560,
+  breakdown: { delivered: 348, partial: 92, blocked: 41, noInput: 26, unassessed: 53 },
+  scoreDistribution: [
+    { score: 0, count: 0 },
+    { score: 1, count: 0 },
+    { score: 2, count: 1 },
+    { score: 3, count: 1 },
+    { score: 4, count: 1 },
+    { score: 5, count: 1 },
+  ],
+  roster: DIRECTOR_ROSTER,
+  inScope: 5,
+  reviewed: 4,
+  unreviewed: 1,
+  avgScore: 3.5,
+};
+
+export const MOCK_DIRECTOR_VERDICTS: DirectorVerdict[] = [
+  {
+    id: "dv-1",
+    personaId: "p-notify",
+    personaName: "NotifyBot",
+    personaColor: "#a855f7",
+    severity: "error",
+    category: "health",
+    title: "Slack webhook retry storm burns spend on dead endpoints",
+    createdAt: new Date(Date.now() - 3 * 3600_000).toISOString(),
+  },
+  {
+    id: "dv-2",
+    personaId: "p-notify",
+    personaName: "NotifyBot",
+    personaColor: "#a855f7",
+    severity: "warning",
+    category: "prompt",
+    title: "Digest prompt drifts from the notification template",
+    createdAt: new Date(Date.now() - 5 * 3600_000).toISOString(),
+  },
+  {
+    id: "dv-3",
+    personaId: "p-dataproc",
+    personaName: "DataProcessor",
+    personaColor: "#fbbf24",
+    severity: "warning",
+    category: "triggers",
+    title: "Polling trigger fires 4x more often than the data changes",
+    createdAt: new Date(Date.now() - 27 * 3600_000).toISOString(),
+  },
+  {
+    id: "dv-4",
+    personaId: "p-codereview",
+    personaName: "CodeReviewer",
+    personaColor: "#34d399",
+    severity: "info",
+    category: "usefulness",
+    title: "Review summaries restate the diff instead of judging it",
+    createdAt: new Date(Date.now() - 30 * 3600_000).toISOString(),
+  },
+  {
+    id: "dv-5",
+    personaId: "p-research",
+    personaName: "ResearchAgent",
+    personaColor: "#06b6d4",
+    severity: "info",
+    category: "memory",
+    title: "Recall surfaces near-duplicate memories from the same crawl",
+    createdAt: new Date(Date.now() - 2 * 24 * 3600_000).toISOString(),
+  },
+  {
+    id: "dv-6",
+    personaId: "p-dataproc",
+    personaName: "DataProcessor",
+    personaColor: "#fbbf24",
+    severity: "info",
+    category: "credentials",
+    title: "Vault token scoped wider than the jobs it runs",
+    createdAt: new Date(Date.now() - 3 * 24 * 3600_000).toISOString(),
+  },
+];
+
+// ── Rotation Overview (credential rotation status) ──────────────────
 export const MOCK_CREDENTIAL_ROTATIONS: CredentialRotation[] = [
   { id: "cr_github", secret: "GITHUB_OAUTH_TOKEN", hasPolicy: true, enabled: true, anomaly: false, overdue: false, nextRotation: "12d", intervalDays: 90 },
   { id: "cr_slack", secret: "SLACK_WEBHOOK_URL", hasPolicy: true, enabled: true, anomaly: true, overdue: false, nextRotation: "3d", intervalDays: 30 },

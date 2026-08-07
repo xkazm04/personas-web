@@ -1184,6 +1184,27 @@
           "apiRoutes": []
         },
         {
+          "name": "Director Coaching",
+          "description": "Director coaching command center: portfolio scorecard (value-delivered rate, avg 0-5 verdict, cost per value, scope), momentum buckets, value-breakdown bar, score-distribution histogram, per-agent verdict-history table with attention triage, and a recent coaching-verdict feed. Demo-only mocks; mirrors the desktop Director tab.",
+          "businessFeature": "Director Coaching",
+          "category": "ui",
+          "filePaths": [
+            "src/app/dashboard/director/director-page/AttentionTriageBar.tsx",
+            "src/app/dashboard/director/director-page/CoachingTable.tsx",
+            "src/app/dashboard/director/director-page/DirectorKpiGrid.tsx",
+            "src/app/dashboard/director/director-page/MomentumStrip.tsx",
+            "src/app/dashboard/director/director-page/ScoreDistributionCard.tsx",
+            "src/app/dashboard/director/director-page/ValueBreakdownCard.tsx",
+            "src/app/dashboard/director/director-page/VerdictFeedCard.tsx",
+            "src/app/dashboard/director/director-page/directorMeta.ts",
+            "src/app/dashboard/director/director-page/scoreVisuals.tsx",
+            "src/app/dashboard/director/page.tsx",
+            "src/app/dashboard/director/useDirectorData.ts"
+          ],
+          "target": null,
+          "apiRoutes": []
+        },
+        {
           "name": "Observability Charts & SLA",
           "description": "Performance, usage, and activity observability views (latency, cost, spend, exec charts, health panels, Athena usage + value rollup) plus SLA target/breach tracking and system health state.",
           "businessFeature": "Observability Charts & SLA",
@@ -1891,6 +1912,7 @@
     "Agent Operations Dashboard › Agents (Personas) Management [ui] — 18 files",
     "Observability & Event Monitoring › Execution History & Streaming [ui] — 14 files",
     "Observability & Event Monitoring › Leaderboard & Rankings [ui] — 7 files",
+    "Observability & Event Monitoring › Director Coaching [ui] — 11 files",
     "Observability & Event Monitoring › Observability Charts & SLA [ui] — 47 files",
     "Observability & Event Monitoring › Event Bus & Stream Monitoring [ui] — 33 files",
     "Observability & Event Monitoring › Dashboard Home Overview [ui] — 17 files",
@@ -1911,10 +1933,10 @@
   ],
   "summary": {
     "totalGroups": 12,
-    "totalContexts": 53,
-    "totalFiles": 1014,
+    "totalContexts": 54,
+    "totalFiles": 1025,
     "categories": {
-      "ui": 38,
+      "ui": 39,
       "data": 2,
       "lib": 8,
       "api": 2,

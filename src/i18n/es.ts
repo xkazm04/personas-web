@@ -462,6 +462,7 @@ export const es: Translations = {
       knowledge: "Conocimiento",
       settings: "Configuraci\u00f3n",
       leaderboard: "Clasificaci\u00f3n",
+      director: "Director",
       sla: "SLA",
       incidents: "Incidentes",
       health: "Estado",
@@ -816,6 +817,82 @@ export const es: Translations = {
         up: "En alza",
         down: "En baja",
         flat: "Estable"
+      }
+    },
+    directorPage: {
+      title: "Director",
+      subtitle: "Centro de mando de coaching para tus agentes destacados",
+      periodLabel: "\u00daltimos {n} d\u00edas",
+      kpi: {
+        valueRate: "Valor entregado",
+        valueRateHint: "Ejecuciones de la flota que entregaron valor",
+        avgVerdict: "Veredicto medio",
+        avgVerdictHint: "Media de las \u00faltimas puntuaciones de los agentes revisados",
+        costPerValue: "Coste / valor",
+        costPerValueHint: "Gasto por ejecuci\u00f3n con valor entregado",
+        inScope: "En alcance",
+        inScopeHint: "{reviewed} revisados \u00b7 {unreviewed} pendientes"
+      },
+      momentum: {
+        label: "Impulso",
+        improving: "mejorando",
+        flat: "estable",
+        declining: "empeorando",
+        steady: "Se mantiene estable"
+      },
+      breakdown: {
+        title: "Desglose de valor",
+        empty: "A\u00fan no hay ejecuciones evaluadas en este per\u00edodo",
+        bands: {
+          delivered: "Entregado",
+          partial: "Parcial",
+          blocked: "Bloqueado",
+          noInput: "Sin entrada",
+          unassessed: "Sin evaluar"
+        }
+      },
+      distribution: {
+        title: "Distribuci\u00f3n de puntuaciones",
+        avgLabel: "media",
+        empty: "A\u00fan no hay agentes puntuados",
+        agents: "{count} agentes"
+      },
+      coaching: {
+        title: "Alcance del coaching",
+        agent: "Agente",
+        latest: "\u00daltima",
+        trend: "Tendencia",
+        value: "Valor",
+        attention: "Atenci\u00f3n",
+        lastReview: "\u00daltima revisi\u00f3n",
+        never: "Nunca",
+        healthy: "Todos los agentes en alcance est\u00e1n sanos",
+        filterEmpty: "Ning\u00fan agente coincide con este filtro",
+        clearFilter: "Quitar filtro",
+        flags: {
+          needsReview: "Nuevo",
+          low: "Bajo",
+          declining: "En descenso",
+          stale: "Obsoleto"
+        },
+        flagHints: {
+          needsReview: "En alcance pero nunca puntuado \u2014 ejecuta el Director para obtener una l\u00ednea base.",
+          low: "El \u00faltimo veredicto es 2 o menos \u2014 estos agentes necesitan coaching.",
+          declining: "La \u00faltima puntuaci\u00f3n baj\u00f3 respecto a la revisi\u00f3n anterior.",
+          stale: "\u00daltima revisi\u00f3n hace m\u00e1s de dos semanas \u2014 comprueba que sigan mereciendo su lugar."
+        }
+      },
+      verdictFeed: {
+        title: "Veredictos de coaching recientes",
+        empty: "A\u00fan no hay veredictos \u2014 ejecuta una revisi\u00f3n para ver el coaching aqu\u00ed",
+        categories: {
+          prompt: "Prompt",
+          health: "Salud",
+          triggers: "Disparadores",
+          credentials: "Credenciales",
+          memory: "Memoria",
+          usefulness: "Utilidad"
+        }
       }
     },
     slaPage: {

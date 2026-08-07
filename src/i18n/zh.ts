@@ -462,6 +462,7 @@ export const zh: Translations = {
       knowledge: "\u77e5\u8bc6\u5e93",
       settings: "\u8bbe\u7f6e",
       leaderboard: "\u6392\u884c\u699c",
+      director: "\u5bfc\u6f14",
       sla: "SLA",
       incidents: "\u4e8b\u4ef6",
       health: "\u72b6\u6001",
@@ -816,6 +817,82 @@ export const zh: Translations = {
         up: "\u4e0a\u5347",
         down: "\u4e0b\u964d",
         flat: "\u6301\u5e73"
+      }
+    },
+    directorPage: {
+      title: "\u5bfc\u6f14",
+      subtitle: "\u661f\u6807\u667a\u80fd\u4f53\u7684\u6559\u7ec3\u6307\u6325\u4e2d\u5fc3",
+      periodLabel: "\u6700\u8fd1 {n} \u5929",
+      kpi: {
+        valueRate: "\u5df2\u4ea4\u4ed8\u4ef7\u503c",
+        valueRateHint: "\u4ea4\u4ed8\u4e86\u4ef7\u503c\u7684\u8230\u961f\u6267\u884c\u5360\u6bd4",
+        avgVerdict: "\u5e73\u5747\u8bc4\u5206",
+        avgVerdictHint: "\u5df2\u5ba1\u9605\u667a\u80fd\u4f53\u6700\u65b0\u8bc4\u5206\u7684\u5e73\u5747\u503c",
+        costPerValue: "\u6210\u672c / \u4ef7\u503c",
+        costPerValueHint: "\u6bcf\u6b21\u4ea4\u4ed8\u4ef7\u503c\u7684\u6267\u884c\u82b1\u8d39",
+        inScope: "\u8303\u56f4\u5185",
+        inScopeHint: "{reviewed} \u5df2\u5ba1\u9605 \u00b7 {unreviewed} \u5f85\u5ba1"
+      },
+      momentum: {
+        label: "\u52bf\u5934",
+        improving: "\u4e0a\u5347",
+        flat: "\u6301\u5e73",
+        declining: "\u4e0b\u6ed1",
+        steady: "\u4fdd\u6301\u7a33\u5b9a"
+      },
+      breakdown: {
+        title: "\u4ef7\u503c\u6784\u6210",
+        empty: "\u8be5\u65f6\u6bb5\u5185\u6682\u65e0\u5df2\u8bc4\u4f30\u7684\u6267\u884c",
+        bands: {
+          delivered: "\u5df2\u4ea4\u4ed8",
+          partial: "\u90e8\u5206",
+          blocked: "\u53d7\u963b",
+          noInput: "\u65e0\u8f93\u5165",
+          unassessed: "\u672a\u8bc4\u4f30"
+        }
+      },
+      distribution: {
+        title: "\u8bc4\u5206\u5206\u5e03",
+        avgLabel: "\u5e73\u5747",
+        empty: "\u6682\u65e0\u5df2\u8bc4\u5206\u7684\u667a\u80fd\u4f53",
+        agents: "{count} \u4e2a\u667a\u80fd\u4f53"
+      },
+      coaching: {
+        title: "\u6559\u7ec3\u8303\u56f4",
+        agent: "\u667a\u80fd\u4f53",
+        latest: "\u6700\u65b0",
+        trend: "\u8d8b\u52bf",
+        value: "\u4ef7\u503c",
+        attention: "\u6ce8\u610f",
+        lastReview: "\u4e0a\u6b21\u5ba1\u9605",
+        never: "\u4ece\u672a",
+        healthy: "\u8303\u56f4\u5185\u6240\u6709\u667a\u80fd\u4f53\u72b6\u6001\u826f\u597d",
+        filterEmpty: "\u6ca1\u6709\u7b26\u5408\u6b64\u7b5b\u9009\u6761\u4ef6\u7684\u667a\u80fd\u4f53",
+        clearFilter: "\u6e05\u9664\u7b5b\u9009",
+        flags: {
+          needsReview: "\u65b0",
+          low: "\u4f4e\u5206",
+          declining: "\u4e0b\u6ed1",
+          stale: "\u8fc7\u671f"
+        },
+        flagHints: {
+          needsReview: "\u5728\u8303\u56f4\u5185\u4f46\u4ece\u672a\u8bc4\u5206 \u2014 \u8fd0\u884c\u5bfc\u6f14\u4ee5\u83b7\u53d6\u57fa\u7ebf\u3002",
+          low: "\u6700\u65b0\u8bc4\u5206\u4e3a 2 \u5206\u6216\u66f4\u4f4e \u2014 \u8fd9\u4e9b\u667a\u80fd\u4f53\u9700\u8981\u6559\u7ec3\u6307\u5bfc\u3002",
+          declining: "\u6700\u65b0\u8bc4\u5206\u8f83\u4e0a\u6b21\u5ba1\u9605\u6709\u6240\u4e0b\u964d\u3002",
+          stale: "\u4e0a\u6b21\u5ba1\u9605\u5df2\u8d85\u8fc7\u4e24\u5468 \u2014 \u8bf7\u91cd\u65b0\u786e\u8ba4\u5b83\u4eec\u662f\u5426\u4ecd\u7136\u79f0\u804c\u3002"
+        }
+      },
+      verdictFeed: {
+        title: "\u8fd1\u671f\u6559\u7ec3\u8bc4\u5b9a",
+        empty: "\u6682\u65e0\u8bc4\u5b9a \u2014 \u8fd0\u884c\u4e00\u6b21\u5ba1\u9605\u5373\u53ef\u5728\u6b64\u770b\u5230\u6559\u7ec3\u610f\u89c1",
+        categories: {
+          prompt: "\u63d0\u793a\u8bcd",
+          health: "\u5065\u5eb7",
+          triggers: "\u89e6\u53d1\u5668",
+          credentials: "\u51ed\u636e",
+          memory: "\u8bb0\u5fc6",
+          usefulness: "\u6709\u7528\u6027"
+        }
       }
     },
     slaPage: {

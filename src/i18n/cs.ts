@@ -462,6 +462,7 @@ export const cs: Translations = {
       knowledge: "Znalosti",
       settings: "Nastaven\u00ed",
       leaderboard: "\u017deb\u0159\u00ed\u010dek",
+      director: "Re\u017eis\u00e9r",
       sla: "SLA",
       incidents: "Incidenty",
       health: "Stav",
@@ -816,6 +817,82 @@ export const cs: Translations = {
         up: "Nahoru",
         down: "Dol\u016f",
         flat: "Beze zm\u011bny"
+      }
+    },
+    directorPage: {
+      title: "Re\u017eis\u00e9r",
+      subtitle: "Kou\u010dovac\u00ed vel\u00edn pro va\u0161e agenty s hv\u011bzdi\u010dkou",
+      periodLabel: "Posledn\u00edch {n} dn\u00ed",
+      kpi: {
+        valueRate: "Dodan\u00e1 hodnota",
+        valueRateHint: "Pod\u00edl b\u011bh\u016f flotily, kter\u00e9 dodaly hodnotu",
+        avgVerdict: "Pr\u016fm\u011brn\u00fd verdikt",
+        avgVerdictHint: "Pr\u016fm\u011br posledn\u00edch sk\u00f3re hodnocen\u00fdch agent\u016f",
+        costPerValue: "N\u00e1klady / hodnota",
+        costPerValueHint: "\u00datrata na jeden b\u011bh s dodanou hodnotou",
+        inScope: "V z\u00e1b\u011bru",
+        inScopeHint: "{reviewed} hodnoceno \u00b7 {unreviewed} \u010dek\u00e1"
+      },
+      momentum: {
+        label: "Momentum",
+        improving: "zlep\u0161uje se",
+        flat: "beze zm\u011bny",
+        declining: "zhor\u0161uje se",
+        steady: "Dr\u017e\u00ed se stabiln\u011b"
+      },
+      breakdown: {
+        title: "Rozpad hodnoty",
+        empty: "V tomto obdob\u00ed zat\u00edm \u017e\u00e1dn\u00e9 vyhodnocen\u00e9 b\u011bhy",
+        bands: {
+          delivered: "Dod\u00e1no",
+          partial: "\u010c\u00e1ste\u010dn\u011b",
+          blocked: "Zablokov\u00e1no",
+          noInput: "Bez vstupu",
+          unassessed: "Nevyhodnoceno"
+        }
+      },
+      distribution: {
+        title: "Rozlo\u017een\u00ed sk\u00f3re",
+        avgLabel: "pr\u016fm.",
+        empty: "Zat\u00edm \u017e\u00e1dn\u00ed ohodnocen\u00ed agenti",
+        agents: "{count} agent\u016f"
+      },
+      coaching: {
+        title: "Z\u00e1b\u011br kou\u010dov\u00e1n\u00ed",
+        agent: "Agent",
+        latest: "Posledn\u00ed",
+        trend: "Trend",
+        value: "Hodnota",
+        attention: "Pozornost",
+        lastReview: "Posledn\u00ed revize",
+        never: "Nikdy",
+        healthy: "V\u0161ichni agenti v z\u00e1b\u011bru jsou v po\u0159\u00e1dku",
+        filterEmpty: "Tomuto filtru neodpov\u00edd\u00e1 \u017e\u00e1dn\u00fd agent",
+        clearFilter: "Zru\u0161it filtr",
+        flags: {
+          needsReview: "Nov\u00fd",
+          low: "N\u00edzk\u00e9",
+          declining: "Kles\u00e1",
+          stale: "Zastaral\u00e9"
+        },
+        flagHints: {
+          needsReview: "V z\u00e1b\u011bru, ale zat\u00edm bez sk\u00f3re \u2014 spus\u0165te Re\u017eis\u00e9ra pro v\u00fdchoz\u00ed hodnocen\u00ed.",
+          low: "Posledn\u00ed verdikt je 2 nebo m\u00e9n\u011b \u2014 tito agenti pot\u0159ebuj\u00ed kou\u010dink.",
+          declining: "Posledn\u00ed sk\u00f3re kleslo oproti p\u0159edchoz\u00ed revizi.",
+          stale: "Posledn\u00ed revize prob\u011bhla p\u0159ed v\u00edce ne\u017e dv\u011bma t\u00fddny \u2014 ov\u011b\u0159te, \u017ee si agenti sv\u00e9 m\u00edsto st\u00e1le zaslou\u017e\u00ed."
+        }
+      },
+      verdictFeed: {
+        title: "Ned\u00e1vn\u00e9 kou\u010dovac\u00ed verdikty",
+        empty: "Zat\u00edm \u017e\u00e1dn\u00e9 verdikty \u2014 spus\u0165te revizi a kou\u010dink se objev\u00ed zde",
+        categories: {
+          prompt: "Prompt",
+          health: "Zdrav\u00ed",
+          triggers: "Spou\u0161t\u011b\u010de",
+          credentials: "P\u0159ihla\u0161ovac\u00ed \u00fadaje",
+          memory: "Pam\u011b\u0165",
+          usefulness: "U\u017eite\u010dnost"
+        }
       }
     },
     slaPage: {

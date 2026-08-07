@@ -21,8 +21,12 @@ import {
   MOCK_DISK_USAGE,
   MOCK_HEALTH_CHECKS,
   MOCK_VALUE_ROLLUP,
+  MOCK_DIRECTOR_PORTFOLIO,
+  MOCK_DIRECTOR_VERDICTS,
   type AthenaUsagePoint,
   type AuditIncident,
+  type DirectorPortfolio,
+  type DirectorVerdict,
   type HealthCheckSection,
   type ValueRollup,
 } from "./mock-dashboard-data";
@@ -280,6 +284,29 @@ export async function getSystemHealth(): Promise<{
  * cost-by-action series + the value-delivered rollup. Demo-only standalone
  * fetcher (not part of the real `ApiClient`).
  */
+/**
+ * Director coaching snapshot for /dashboard/director: portfolio scorecard,
+ * roster with verdict history, and the recent coaching-verdict feed. Demo-only
+ * standalone fetcher (not part of the real `ApiClient`); callers import it
+ * directly rather than via the `api` proxy. Simulates fetch latency so the
+ * surface can show a loading state.
+ */
+export async function getDirectorSnapshot(): Promise<{
+  portfolio: DirectorPortfolio;
+  verdicts: DirectorVerdict[];
+}> {
+  await delay(300);
+  return {
+    portfolio: {
+      ...MOCK_DIRECTOR_PORTFOLIO,
+      breakdown: { ...MOCK_DIRECTOR_PORTFOLIO.breakdown },
+      scoreDistribution: MOCK_DIRECTOR_PORTFOLIO.scoreDistribution.map((b) => ({ ...b })),
+      roster: MOCK_DIRECTOR_PORTFOLIO.roster.map((r) => ({ ...r, scoreTrend: [...r.scoreTrend] })),
+    },
+    verdicts: MOCK_DIRECTOR_VERDICTS.map((v) => ({ ...v })),
+  };
+}
+
 export async function getActivityMetrics(): Promise<{
   athenaUsage: AthenaUsagePoint[];
   valueRollup: ValueRollup;

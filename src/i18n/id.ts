@@ -462,6 +462,7 @@ export const id: Translations = {
       knowledge: "Pengetahuan",
       settings: "Pengaturan",
       leaderboard: "Papan Peringkat",
+      director: "Sutradara",
       sla: "SLA",
       incidents: "Insiden",
       health: "Status",
@@ -816,6 +817,82 @@ export const id: Translations = {
         up: "Naik",
         down: "Turun",
         flat: "Stabil"
+      }
+    },
+    directorPage: {
+      title: "Sutradara",
+      subtitle: "Pusat komando pembinaan untuk agen berbintang Anda",
+      periodLabel: "{n} hari terakhir",
+      kpi: {
+        valueRate: "Nilai tersampaikan",
+        valueRateHint: "Eksekusi armada yang menyampaikan nilai",
+        avgVerdict: "Rata-rata vonis",
+        avgVerdictHint: "Rata-rata skor terbaru dari agen yang ditinjau",
+        costPerValue: "Biaya / nilai",
+        costPerValueHint: "Pengeluaran per eksekusi yang menyampaikan nilai",
+        inScope: "Dalam cakupan",
+        inScopeHint: "{reviewed} ditinjau \u00b7 {unreviewed} menunggu"
+      },
+      momentum: {
+        label: "Momentum",
+        improving: "membaik",
+        flat: "datar",
+        declining: "menurun",
+        steady: "Tetap stabil"
+      },
+      breakdown: {
+        title: "Rincian nilai",
+        empty: "Belum ada eksekusi yang dinilai pada periode ini",
+        bands: {
+          delivered: "Tersampaikan",
+          partial: "Sebagian",
+          blocked: "Terblokir",
+          noInput: "Tanpa input",
+          unassessed: "Belum dinilai"
+        }
+      },
+      distribution: {
+        title: "Distribusi skor",
+        avgLabel: "rata-rata",
+        empty: "Belum ada agen yang diberi skor",
+        agents: "{count} agen"
+      },
+      coaching: {
+        title: "Cakupan pembinaan",
+        agent: "Agen",
+        latest: "Terbaru",
+        trend: "Tren",
+        value: "Nilai",
+        attention: "Perhatian",
+        lastReview: "Tinjauan terakhir",
+        never: "Tidak pernah",
+        healthy: "Semua agen dalam cakupan sehat",
+        filterEmpty: "Tidak ada agen yang cocok dengan filter ini",
+        clearFilter: "Hapus filter",
+        flags: {
+          needsReview: "Baru",
+          low: "Rendah",
+          declining: "Menurun",
+          stale: "Usang"
+        },
+        flagHints: {
+          needsReview: "Dalam cakupan tetapi belum pernah diberi skor \u2014 jalankan Sutradara untuk mendapatkan garis dasar.",
+          low: "Vonis terakhir 2 atau kurang \u2014 agen ini butuh pembinaan.",
+          declining: "Skor terbaru turun dari tinjauan sebelumnya.",
+          stale: "Tinjauan terakhir lebih dari dua minggu lalu \u2014 periksa apakah mereka masih layak."
+        }
+      },
+      verdictFeed: {
+        title: "Vonis pembinaan terbaru",
+        empty: "Belum ada vonis \u2014 jalankan tinjauan untuk melihat pembinaan di sini",
+        categories: {
+          prompt: "Prompt",
+          health: "Kesehatan",
+          triggers: "Pemicu",
+          credentials: "Kredensial",
+          memory: "Memori",
+          usefulness: "Kegunaan"
+        }
       }
     },
     slaPage: {

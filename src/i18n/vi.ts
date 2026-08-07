@@ -462,6 +462,7 @@ export const vi: Translations = {
       knowledge: "Ki\u1ebfn th\u1ee9c",
       settings: "C\u00e0i \u0111\u1eb7t",
       leaderboard: "B\u1ea3ng x\u1ebfp h\u1ea1ng",
+      director: "\u0110\u1ea1o di\u1ec5n",
       sla: "SLA",
       incidents: "S\u1ef1 c\u1ed1",
       health: "Tr\u1ea1ng th\u00e1i",
@@ -816,6 +817,82 @@ export const vi: Translations = {
         up: "T\u0103ng",
         down: "Gi\u1ea3m",
         flat: "\u1ed4n \u0111\u1ecbnh"
+      }
+    },
+    directorPage: {
+      title: "\u0110\u1ea1o di\u1ec5n",
+      subtitle: "Trung t\u00e2m ch\u1ec9 huy hu\u1ea5n luy\u1ec7n cho c\u00e1c t\u00e1c nh\u00e2n \u0111\u01b0\u1ee3c g\u1eafn sao",
+      periodLabel: "{n} ng\u00e0y qua",
+      kpi: {
+        valueRate: "Gi\u00e1 tr\u1ecb \u0111\u00e3 mang l\u1ea1i",
+        valueRateHint: "C\u00e1c l\u01b0\u1ee3t ch\u1ea1y c\u1ee7a \u0111\u1ed9i \u0111\u00e3 mang l\u1ea1i gi\u00e1 tr\u1ecb",
+        avgVerdict: "Ph\u00e1n quy\u1ebft trung b\u00ecnh",
+        avgVerdictHint: "Trung b\u00ecnh \u0111i\u1ec3m m\u1edbi nh\u1ea5t c\u1ee7a c\u00e1c t\u00e1c nh\u00e2n \u0111\u00e3 \u0111\u01b0\u1ee3c \u0111\u00e1nh gi\u00e1",
+        costPerValue: "Chi ph\u00ed / gi\u00e1 tr\u1ecb",
+        costPerValueHint: "Chi ti\u00eau cho m\u1ed7i l\u01b0\u1ee3t ch\u1ea1y mang l\u1ea1i gi\u00e1 tr\u1ecb",
+        inScope: "Trong ph\u1ea1m vi",
+        inScopeHint: "{reviewed} \u0111\u00e3 \u0111\u00e1nh gi\u00e1 \u00b7 {unreviewed} \u0111ang ch\u1edd"
+      },
+      momentum: {
+        label: "\u0110\u00e0",
+        improving: "\u0111ang c\u1ea3i thi\u1ec7n",
+        flat: "\u0111i ngang",
+        declining: "\u0111ang gi\u1ea3m",
+        steady: "Gi\u1eef \u1ed5n \u0111\u1ecbnh"
+      },
+      breakdown: {
+        title: "Ph\u00e2n t\u00edch gi\u00e1 tr\u1ecb",
+        empty: "Ch\u01b0a c\u00f3 l\u01b0\u1ee3t ch\u1ea1y n\u00e0o \u0111\u01b0\u1ee3c th\u1ea9m \u0111\u1ecbnh trong giai \u0111o\u1ea1n n\u00e0y",
+        bands: {
+          delivered: "\u0110\u00e3 mang l\u1ea1i",
+          partial: "M\u1ed9t ph\u1ea7n",
+          blocked: "B\u1ecb ch\u1eb7n",
+          noInput: "Kh\u00f4ng c\u00f3 \u0111\u1ea7u v\u00e0o",
+          unassessed: "Ch\u01b0a th\u1ea9m \u0111\u1ecbnh"
+        }
+      },
+      distribution: {
+        title: "Ph\u00e2n b\u1ed1 \u0111i\u1ec3m",
+        avgLabel: "TB",
+        empty: "Ch\u01b0a c\u00f3 t\u00e1c nh\u00e2n n\u00e0o \u0111\u01b0\u1ee3c ch\u1ea5m \u0111i\u1ec3m",
+        agents: "{count} t\u00e1c nh\u00e2n"
+      },
+      coaching: {
+        title: "Ph\u1ea1m vi hu\u1ea5n luy\u1ec7n",
+        agent: "T\u00e1c nh\u00e2n",
+        latest: "M\u1edbi nh\u1ea5t",
+        trend: "Xu h\u01b0\u1edbng",
+        value: "Gi\u00e1 tr\u1ecb",
+        attention: "C\u1ea7n ch\u00fa \u00fd",
+        lastReview: "\u0110\u00e1nh gi\u00e1 g\u1ea7n nh\u1ea5t",
+        never: "Ch\u01b0a t\u1eebng",
+        healthy: "M\u1ecdi t\u00e1c nh\u00e2n trong ph\u1ea1m vi \u0111\u1ec1u \u1ed5n",
+        filterEmpty: "Kh\u00f4ng c\u00f3 t\u00e1c nh\u00e2n n\u00e0o kh\u1edbp b\u1ed9 l\u1ecdc n\u00e0y",
+        clearFilter: "X\u00f3a b\u1ed9 l\u1ecdc",
+        flags: {
+          needsReview: "M\u1edbi",
+          low: "Th\u1ea5p",
+          declining: "\u0110ang gi\u1ea3m",
+          stale: "C\u0169"
+        },
+        flagHints: {
+          needsReview: "Trong ph\u1ea1m vi nh\u01b0ng ch\u01b0a t\u1eebng \u0111\u01b0\u1ee3c ch\u1ea5m \u0111i\u1ec3m \u2014 h\u00e3y ch\u1ea1y \u0110\u1ea1o di\u1ec5n \u0111\u1ec3 c\u00f3 \u0111i\u1ec3m chu\u1ea9n.",
+          low: "Ph\u00e1n quy\u1ebft m\u1edbi nh\u1ea5t l\u00e0 2 tr\u1edf xu\u1ed1ng \u2014 c\u00e1c t\u00e1c nh\u00e2n n\u00e0y c\u1ea7n \u0111\u01b0\u1ee3c hu\u1ea5n luy\u1ec7n.",
+          declining: "\u0110i\u1ec3m m\u1edbi nh\u1ea5t \u0111\u00e3 gi\u1ea3m so v\u1edbi l\u1ea7n \u0111\u00e1nh gi\u00e1 tr\u01b0\u1edbc.",
+          stale: "L\u1ea7n \u0111\u00e1nh gi\u00e1 g\u1ea7n nh\u1ea5t \u0111\u00e3 h\u01a1n hai tu\u1ea7n \u2014 h\u00e3y ki\u1ec3m tra xem ch\u00fang c\u00f2n x\u1ee9ng \u0111\u00e1ng kh\u00f4ng."
+        }
+      },
+      verdictFeed: {
+        title: "Ph\u00e1n quy\u1ebft hu\u1ea5n luy\u1ec7n g\u1ea7n \u0111\u00e2y",
+        empty: "Ch\u01b0a c\u00f3 ph\u00e1n quy\u1ebft n\u00e0o \u2014 ch\u1ea1y m\u1ed9t l\u1ea7n \u0111\u00e1nh gi\u00e1 \u0111\u1ec3 xem hu\u1ea5n luy\u1ec7n t\u1ea1i \u0111\u00e2y",
+        categories: {
+          prompt: "Prompt",
+          health: "S\u1ee9c kh\u1ecfe",
+          triggers: "Tr\u00ecnh k\u00edch ho\u1ea1t",
+          credentials: "Th\u00f4ng tin x\u00e1c th\u1ef1c",
+          memory: "B\u1ed9 nh\u1edb",
+          usefulness: "T\u00ednh h\u1eefu \u00edch"
+        }
       }
     },
     slaPage: {
