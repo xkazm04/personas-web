@@ -31,6 +31,16 @@ export default function DownloadCTA() {
   // The entry point travels with the platform so the funnel can tell the hero
   // CTA apart from the platform pills below it.
   const [waitlist, setWaitlist] = useState<{ platform: Platform; entryPoint: WaitlistEntryPoint } | null>(null);
+  // Open/close is its OWN flag rather than `waitlist === null`. This mirrors the
+  // navbar mount: the selection latches on first open and is never cleared, so
+  // the modal stays mounted and AnimatePresence can play its exit. Clearing the
+  // selection on close used to unmount the dialog mid-animation, which is why
+  // the two entry points closed with different feels.
+  const [waitlistOpen, setWaitlistOpen] = useState(false);
+  const openWaitlist = (platform: Platform, entryPoint: WaitlistEntryPoint) => {
+    setWaitlist({ platform, entryPoint });
+    setWaitlistOpen(true);
+  };
   const isFresh = useFreshRelease(RELEASE_DATE);
   const downloadSteps = [
     DOWNLOAD_URL ? t.downloadSection.downloadInstaller : t.downloadSection.joinWaitlist,
@@ -86,7 +96,7 @@ export default function DownloadCTA() {
               /* No installer configured — this button opens the waitlist form,
                  so it must not claim to download anything. */
               <PrimaryCTA
-                onClick={() => setWaitlist({ platform: platforms[0], entryPoint: "download-cta" })}
+                onClick={() => openWaitlist(platforms[0], "download-cta")}
                 icon={Download}
                 label={t.downloadSection.joinWaitlist}
                 variant="solid"
@@ -108,7 +118,7 @@ export default function DownloadCTA() {
         <PlatformPills
           platforms={platforms}
           notifyLabel={t.common.notifyMe}
-          onWaitlist={(platform) => setWaitlist({ platform, entryPoint: "platform-pill" })}
+          onWaitlist={(platform) => openWaitlist(platform, "platform-pill")}
         />
 
         {DOWNLOAD_URL && (
@@ -124,8 +134,8 @@ export default function DownloadCTA() {
           platformKey={waitlist.platform.key}
           platformLabel={waitlist.platform.label}
           platformIcon={waitlist.platform.icon}
-          open={!!waitlist}
-          onClose={() => setWaitlist(null)}
+          open={waitlistOpen}
+          onClose={() => setWaitlistOpen(false)}
           entryPoint={waitlist.entryPoint}
         />
       )}

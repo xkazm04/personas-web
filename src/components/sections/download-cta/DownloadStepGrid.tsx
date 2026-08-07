@@ -1,4 +1,4 @@
-import { motion } from "framer-motion";
+import { motion, useReducedMotion } from "framer-motion";
 
 import { tint, type BrandKey } from "@/lib/brand-theme";
 
@@ -11,15 +11,18 @@ export function DownloadStepGrid({
   steps: string[];
   stepLabel: string;
 }) {
+  const reduced = useReducedMotion() ?? false;
   return (
     <motion.div
       className="mt-6 mx-auto grid max-w-xl grid-cols-1 gap-2 text-left sm:grid-cols-3"
       initial="hidden"
       whileInView="visible"
-      viewport={{ once: false, amount: 0.4 }}
+      /* `once: true`: the grid used to replay its stagger + glow pulse on every
+         scroll past, which reads as a glitch on a static marketing section. */
+      viewport={{ once: true, amount: 0.4 }}
       variants={{
-        hidden: { transition: { staggerChildren: 0.1 } },
-        visible: { transition: { staggerChildren: 0.6 } },
+        hidden: { transition: { staggerChildren: reduced ? 0 : 0.1 } },
+        visible: { transition: { staggerChildren: reduced ? 0 : 0.6 } },
       }}
     >
       {steps.map((step, index) => {
@@ -34,14 +37,14 @@ export function DownloadStepGrid({
             className="relative rounded-xl border border-glass bg-white/[0.015] px-3 py-2"
             variants={{
               hidden: {
-                opacity: 0,
-                y: 12,
-                transition: { duration: 0.3, ease: "easeOut" },
+                opacity: reduced ? 1 : 0,
+                y: reduced ? 0 : 12,
+                transition: { duration: reduced ? 0 : 0.3, ease: "easeOut" },
               },
               visible: {
                 opacity: 1,
                 y: 0,
-                transition: { duration: 0.3, ease: "easeOut" },
+                transition: { duration: reduced ? 0 : 0.3, ease: "easeOut" },
               },
             }}
           >
@@ -55,12 +58,16 @@ export function DownloadStepGrid({
                 border: `1px solid ${borderOn}`,
                 boxShadow: `0 0 20px ${glowStrong}, inset 0 0 12px ${glowInset}`,
               }}
+              /* Reduced motion: the glow pulse is pure decoration, so it stays
+                 fully off rather than flashing once. */
               variants={{
                 hidden: { opacity: 0 },
-                visible: {
-                  opacity: [0, 1, 0],
-                  transition: { duration: 0.8, ease: "easeInOut" },
-                },
+                visible: reduced
+                  ? { opacity: 0 }
+                  : {
+                      opacity: [0, 1, 0],
+                      transition: { duration: 0.8, ease: "easeInOut" },
+                    },
               }}
             />
             <p className="text-base font-mono uppercase tracking-wider text-muted-dark">

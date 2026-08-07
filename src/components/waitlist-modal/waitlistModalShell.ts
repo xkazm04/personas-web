@@ -55,8 +55,25 @@ export function resetModalState(setters: { setStatus: (status: WaitlistStatus) =
   setters.setShareFallbackUrl("");
 }
 
-export function markCopied(setShareState: (state: ShareState | ((state: ShareState) => ShareState)) => void, setShareFallbackUrl: (url: string) => void) {
+/**
+ * Show the "copied" bubble and retire it after 2s.
+ *
+ * The timer handle is parked in `timerRef` so the caller can cancel it when the
+ * modal closes or unmounts — an uncancelled timeout would call setState on a
+ * gone component (and, on a fast close/re-open, wipe a fresh "copied" state).
+ */
+export function markCopied(
+  setShareState: (state: ShareState | ((state: ShareState) => ShareState)) => void,
+  setShareFallbackUrl: (url: string) => void,
+  timerRef: { current: ReturnType<typeof setTimeout> | null },
+) {
   setShareState("copied");
   setShareFallbackUrl("");
-  setTimeout(() => setShareState((state) => (state === "copied" ? "idle" : state)), 2000);
+  if (timerRef.current) clearTimeout(timerRef.current);
+  timerRef.current = setTimeout(() => {
+    timerRef.current = null;
+    setShareState((state) => (state === "copied" ? "idle" : state));
+  }, COPIED_BUBBLE_MS);
 }
+
+const COPIED_BUBBLE_MS = 2000;

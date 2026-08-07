@@ -1,6 +1,7 @@
-import { AnimatePresence, motion } from "framer-motion";
+import { AnimatePresence, motion, useReducedMotion } from "framer-motion";
 import { AlertCircle, Info, Mail, Share2 } from "lucide-react";
 import Link from "next/link";
+import { useCallback } from "react";
 import { AnimatedCheckmark } from "./AnimatedCheckmark";
 import type { ShareState, WaitlistStatus } from "./waitlistUtils";
 
@@ -41,8 +42,9 @@ export function WaitlistSuccessPanel({
   onClose: () => void;
   labels: WaitlistPanelLabels;
 }) {
+  const reduced = useReducedMotion() ?? false;
   return (
-    <motion.div initial={{ opacity: 0, y: 8 }} animate={{ opacity: 1, y: 0 }} className="mt-6 text-center">
+    <motion.div initial={reduced ? false : { opacity: 0, y: 8 }} animate={{ opacity: 1, y: 0 }} className="mt-6 text-center">
       {status === "duplicate" ? (
         <div className="mx-auto mb-3 flex h-12 w-12 items-center justify-center rounded-full bg-brand-cyan/15 ring-1 ring-brand-cyan/20">
           <Info className="h-6 w-6 text-brand-cyan" />
@@ -116,8 +118,9 @@ function WaitlistNextSteps({ status, platformLabel, earlyBeta, labels }: { statu
 }
 
 function CopiedBubble({ label }: { label: string }) {
+  const reduced = useReducedMotion() ?? false;
   return (
-    <motion.div initial={{ opacity: 0, y: 10, scale: 0.9 }} animate={{ opacity: 1, y: 0, scale: 1 }} exit={{ opacity: 0, scale: 0.9 }} className="absolute -top-10 rounded-lg bg-brand-cyan px-2 py-1 text-sm font-bold uppercase tracking-wider text-black shadow-lg shadow-brand-cyan/20">
+    <motion.div initial={reduced ? false : { opacity: 0, y: 10, scale: 0.9 }} animate={{ opacity: 1, y: 0, scale: 1 }} exit={reduced ? { opacity: 0 } : { opacity: 0, scale: 0.9 }} className="absolute -top-10 rounded-lg bg-brand-cyan px-2 py-1 text-sm font-bold uppercase tracking-wider text-black shadow-lg shadow-brand-cyan/20">
       {label}
       <div className="absolute -bottom-1 left-1/2 h-2 w-2 -translate-x-1/2 rotate-45 bg-brand-cyan" />
     </motion.div>
@@ -125,15 +128,25 @@ function CopiedBubble({ label }: { label: string }) {
 }
 
 function ManualCopyAlert({ shareState, shareFallbackUrl, label }: { shareState: ShareState; shareFallbackUrl: string; label: string }) {
+  const reduced = useReducedMotion() ?? false;
+  // A callback ref instead of `autoFocus`: this input lives inside an
+  // AnimatePresence child, and autoFocus fires on every React mount pass while
+  // the node is still animating. The ref only runs on attach (and is called
+  // with null on detach), so focus lands once, after the element exists, and is
+  // never grabbed back mid-exit.
+  const focusAndSelect = useCallback((node: HTMLInputElement | null) => {
+    node?.focus();
+    node?.select();
+  }, []);
   return (
     <AnimatePresence>
       {shareState === "manual" && shareFallbackUrl && (
-        <motion.div initial={{ opacity: 0, y: -4 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -4 }} role="alert" className="mt-2 flex flex-col gap-1.5 rounded-xl border border-brand-amber/40 bg-brand-amber/10 px-3 py-2 text-left">
+        <motion.div initial={reduced ? false : { opacity: 0, y: -4 }} animate={{ opacity: 1, y: 0 }} exit={reduced ? { opacity: 0 } : { opacity: 0, y: -4 }} role="alert" className="mt-2 flex flex-col gap-1.5 rounded-xl border border-brand-amber/40 bg-brand-amber/10 px-3 py-2 text-left">
           <span className="flex items-center gap-1.5 text-sm font-medium text-brand-amber">
             <AlertCircle className="h-3.5 w-3.5 shrink-0" />
             {label}
           </span>
-          <input readOnly value={shareFallbackUrl} autoFocus onFocus={(event) => event.currentTarget.select()} onClick={(event) => event.currentTarget.select()} className="w-full truncate rounded-md border border-glass bg-background/60 px-2 py-1 text-sm font-mono text-foreground outline-none focus:border-brand-amber" />
+          <input readOnly value={shareFallbackUrl} ref={focusAndSelect} onFocus={(event) => event.currentTarget.select()} onClick={(event) => event.currentTarget.select()} className="w-full truncate rounded-md border border-glass bg-background/60 px-2 py-1 text-sm font-mono text-foreground outline-none focus:border-brand-amber" />
         </motion.div>
       )}
     </AnimatePresence>

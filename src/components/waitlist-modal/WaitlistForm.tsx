@@ -1,4 +1,4 @@
-import { AnimatePresence, motion } from "framer-motion";
+import { AnimatePresence, motion, useReducedMotion } from "framer-motion";
 import { AlertCircle, Bell, Sparkles } from "lucide-react";
 import { TRANSITION_FAST } from "@/lib/animations";
 import type { WaitlistStatus } from "./waitlistUtils";
@@ -30,6 +30,7 @@ export function WaitlistForm({
     notifyMe: string;
   };
 }) {
+  const reduced = useReducedMotion() ?? false;
   return (
     <form onSubmit={onSubmit} className="mt-4 space-y-4">
       <div>
@@ -51,7 +52,7 @@ export function WaitlistForm({
         />
         <AnimatePresence>
           {errorMsg && (
-            <motion.p id="waitlist-email-error" initial={{ opacity: 0, y: -4 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -4 }} transition={TRANSITION_FAST} role="alert" className="mt-2 flex items-center gap-1.5 text-sm font-medium text-brand-rose">
+            <motion.p id="waitlist-email-error" initial={reduced ? false : { opacity: 0, y: -4 }} animate={{ opacity: 1, y: 0 }} exit={reduced ? { opacity: 0 } : { opacity: 0, y: -4 }} transition={reduced ? { duration: 0 } : TRANSITION_FAST} role="alert" className="mt-2 flex items-center gap-1.5 text-sm font-medium text-brand-rose">
               <AlertCircle className="h-3.5 w-3.5 shrink-0" />
               {errorMsg}
             </motion.p>

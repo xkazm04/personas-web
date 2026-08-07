@@ -1,7 +1,7 @@
 "use client";
 
 import { useCallback, useEffect, useRef, useState, type FormEvent } from "react";
-import { AnimatePresence, motion } from "framer-motion";
+import { AnimatePresence, motion, useReducedMotion } from "framer-motion";
 import * as Sentry from "@sentry/nextjs";
 import { TRANSITION_FAST, TRANSITION_NORMAL } from "@/lib/animations";
 import { lockBodyScroll, unlockBodyScroll } from "@/lib/bodyScrollLock";
@@ -27,6 +27,7 @@ interface WaitlistModalProps {
 
 export default function WaitlistModal({ platformKey, platformLabel, platformIcon, open, onClose, entryPoint }: WaitlistModalProps) {
   const { t } = useTranslation();
+  const reduced = useReducedMotion() ?? false;
   const [email, setEmail] = useState("");
   const [submittedEmail, setSubmittedEmail] = useState("");
   const [earlyBeta, setEarlyBeta] = useState(false);
@@ -36,6 +37,7 @@ export default function WaitlistModal({ platformKey, platformLabel, platformIcon
   const [shareState, setShareState] = useState<ShareState>("idle");
   const [shareFallbackUrl, setShareFallbackUrl] = useState("");
   const submitAbortRef = useRef<AbortController | null>(null);
+  const copyTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
   const modalRef = useRef<HTMLDivElement>(null);
   const previousFocusRef = useRef<HTMLElement | null>(null);
 
@@ -68,14 +70,22 @@ export default function WaitlistModal({ platformKey, platformLabel, platformIcon
     if (!open) {
       submitAbortRef.current?.abort();
       submitAbortRef.current = null;
+      if (copyTimerRef.current) clearTimeout(copyTimerRef.current);
+      copyTimerRef.current = null;
       return;
     }
     lockBodyScroll();
     return () => unlockBodyScroll();
   }, [open]);
+  // The share bubble's timer can outlive the modal (dynamic import unmounts it).
+  useEffect(() => () => { if (copyTimerRef.current) clearTimeout(copyTimerRef.current); }, []);
 
   const handleSubmit = async (event: FormEvent) => {
     event.preventDefault();
+    // The submit BUTTON is disabled while loading, but Enter in the email input
+    // still fires form submit — without this guard a held Enter posts N times
+    // and the server sees N inserts.
+    if (status === "loading") return;
     if (!EMAIL_RE.test(email.trim())) {
       setErrorMsg(t.waitlist.invalidEmail);
       return;
@@ -147,11 +157,11 @@ export default function WaitlistModal({ platformKey, platformLabel, platformIcon
     const url = `${window.location.origin}?ref=waitlist&platform=${platformKey}`;
     try {
       await navigator.clipboard.writeText(url);
-      markCopied(setShareState, setShareFallbackUrl);
+      markCopied(setShareState, setShareFallbackUrl, copyTimerRef);
       return;
     } catch {}
     if (legacyCopyToClipboard(url)) {
-      markCopied(setShareState, setShareFallbackUrl);
+      markCopied(setShareState, setShareFallbackUrl, copyTimerRef);
       return;
     }
     setShareFallbackUrl(url);
@@ -161,10 +171,16 @@ export default function WaitlistModal({ platformKey, platformLabel, platformIcon
   return (
     <AnimatePresence>
       {open && (
-        <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} transition={TRANSITION_FAST} className="fixed inset-0 z-50 flex items-center justify-center px-4" onClick={onClose}>
+        <motion.div initial={reduced ? false : { opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} transition={reduced ? { duration: 0 } : TRANSITION_FAST} className="fixed inset-0 z-50 flex items-center justify-center px-4" onClick={onClose}>
           <div className="absolute inset-0 bg-black/60 backdrop-blur-sm" />
-          <motion.div ref={modalRef} role="dialog" aria-modal="true" aria-labelledby="waitlist-modal-title" initial={{ opacity: 0, scale: 0.95, y: 10 }} animate={{ opacity: 1, scale: 1, y: 0 }} exit={{ opacity: 0, scale: 0.95, y: 10 }} transition={TRANSITION_NORMAL} onClick={(event) => event.stopPropagation()} className="relative w-full max-w-[440px] rounded-2xl border border-glass bg-background p-6 shadow-2xl">
+          <motion.div ref={modalRef} role="dialog" aria-modal="true" aria-labelledby="waitlist-modal-title" initial={reduced ? false : { opacity: 0, scale: 0.95, y: 10 }} animate={{ opacity: 1, scale: 1, y: 0 }} exit={reduced ? { opacity: 0 } : { opacity: 0, scale: 0.95, y: 10 }} transition={reduced ? { duration: 0 } : TRANSITION_NORMAL} onClick={(event) => event.stopPropagation()} className="relative w-full max-w-[440px] rounded-2xl border border-glass bg-background p-6 shadow-2xl">
             <WaitlistHeader {...waitlistHeaderLabels(t, platformLabel)} PlatformIcon={platformIcon} count={waitlistCount} onClose={onClose} />
+            {/* Lives OUTSIDE the form/panel swap so the region already exists
+                when its content changes — a live region mounted together with
+                its text is unreliably announced. */}
+            <div aria-live="polite" className="sr-only">
+              {status === "success" ? t.waitlist.success : status === "duplicate" ? t.waitlist.duplicate : ""}
+            </div>
             {status === "success" || status === "duplicate" ? (
               <WaitlistSuccessPanel status={status} submittedEmail={submittedEmail} platformLabel={platformLabel} earlyBeta={earlyBeta} shareState={shareState} shareFallbackUrl={shareFallbackUrl} onShare={handleShare} onClose={onClose} labels={waitlistPanelLabels(t)} />
             ) : (
