@@ -1,6 +1,12 @@
 // ── Desktop App Module Registry ─────────────────────────────────────
 // Maps guide topics to their location in the Personas desktop app.
-// Used by ModuleBadge to show "Find in App: Agents → Editor → Prompt".
+// Used by ModuleBadge to show "Find in App: Agents → Editor → Design".
+//
+// Source of truth on the desktop side (verify against these on sync):
+//   src/lib/navigation/registry.ts            (Level-1 rail sections)
+//   src/features/shared/chrome/sidebar/sidebarData.ts (Level-2/3 items)
+// The desktop guide-sync skill reads and may update this file — keep the
+// module/child id shape and the TOPIC_MODULE_MAP export intact.
 // ────────────────────────────────────────────────────────────────────
 
 export interface DesktopModule {
@@ -25,12 +31,15 @@ export const DESKTOP_MODULES: DesktopModule[] = [
     icon: "House",
     children: [
       { id: "welcome", label: "Welcome" },
+      { id: "cockpit", label: "Cockpit" },
       { id: "learning", label: "Learning" },
       { id: "whats-new", label: "What's New" },
       { id: "system-check", label: "System Check" },
     ],
   },
   {
+    // Companion (Athena) ships as a plugin: Plugins → Companion. Chat is the
+    // Athena panel summoned from the title bar / orb rather than a sidebar tab.
     id: "companion",
     label: "Companion",
     icon: "Sparkles",
@@ -38,8 +47,8 @@ export const DESKTOP_MODULES: DesktopModule[] = [
       { id: "chat", label: "Chat" },
       { id: "voice", label: "Voice" },
       { id: "memory", label: "Memory" },
-      { id: "check-ins", label: "Check-Ins" },
-      { id: "decision-hub", label: "Decision Hub" },
+      { id: "setup", label: "Setup" },
+      { id: "decisions", label: "Decisions" },
     ],
   },
   {
@@ -48,17 +57,19 @@ export const DESKTOP_MODULES: DesktopModule[] = [
     icon: "LayoutDashboard",
     children: [
       { id: "dashboard", label: "Dashboard" },
+      { id: "incidents", label: "Incidents" },
       { id: "activity", label: "Activity" },
       { id: "approvals", label: "Approvals" },
       { id: "messages", label: "Messages" },
       { id: "events", label: "Events" },
-      { id: "knowledge", label: "Knowledge" },
-      { id: "sla", label: "SLA" },
-      { id: "health", label: "Health" },
       { id: "memories", label: "Memories" },
+      { id: "patterns", label: "Patterns" },
+      { id: "extracted", label: "Extracted" },
+      { id: "memory-graph", label: "Graph" },
+      { id: "sla", label: "Reliability" },
+      { id: "health", label: "Health" },
       { id: "director", label: "Director" },
-      { id: "goals", label: "Goals" },
-      { id: "usage", label: "Usage" },
+      { id: "leaderboard", label: "Leaderboard" },
     ],
   },
   {
@@ -68,14 +79,12 @@ export const DESKTOP_MODULES: DesktopModule[] = [
     children: [
       { id: "all-agents", label: "All Agents" },
       { id: "editor-activity", label: "Activity" },
+      { id: "editor-design", label: "Design" },
       { id: "editor-matrix", label: "Matrix" },
       { id: "editor-use-cases", label: "Use Cases" },
       { id: "editor-lab", label: "Lab" },
-      { id: "editor-connectors", label: "Connectors" },
       { id: "editor-chat", label: "Chat" },
       { id: "editor-settings", label: "Settings" },
-      { id: "editor-prompt", label: "Prompt" },
-      { id: "editor-health", label: "Health" },
     ],
   },
   {
@@ -84,11 +93,11 @@ export const DESKTOP_MODULES: DesktopModule[] = [
     icon: "Zap",
     children: [
       { id: "live-stream", label: "Live Stream" },
-      { id: "builder", label: "Builder" },
+      { id: "chain-studio", label: "Chain Studio" },
       { id: "speed-limits", label: "Speed Limits" },
       { id: "test", label: "Test" },
       { id: "local-relay", label: "Local Relay" },
-      { id: "chain-studio", label: "Chain Studio" },
+      { id: "marketplace", label: "Marketplace" },
     ],
   },
   {
@@ -100,15 +109,22 @@ export const DESKTOP_MODULES: DesktopModule[] = [
       { id: "databases", label: "Databases" },
       { id: "catalog", label: "Catalog" },
       { id: "dependencies", label: "Dependencies" },
+      { id: "broker", label: "Broker" },
       { id: "add-new", label: "Add New" },
     ],
   },
   {
+    // Templates is no longer a Level-1 rail entry on desktop — it's reached
+    // from the Connections Level-2 nav ("Templates" group) but remains a full
+    // content destination, so it stays a module here.
     id: "templates",
     label: "Templates",
     icon: "FileCode",
     children: [
       { id: "generated", label: "Generated" },
+      { id: "explore", label: "Explore" },
+      { id: "recipes", label: "Recipes" },
+      { id: "presets", label: "Presets" },
       { id: "n8n-import", label: "n8n Import" },
     ],
   },
@@ -120,8 +136,8 @@ export const DESKTOP_MODULES: DesktopModule[] = [
       { id: "browse", label: "Browse" },
       { id: "artist", label: "Artist" },
       { id: "dev-tools", label: "Dev Tools" },
-      { id: "doc-signing", label: "Doc Signing" },
-      { id: "ocr", label: "OCR" },
+      { id: "drive", label: "Drive" },
+      { id: "twin", label: "Twin" },
       { id: "obsidian-brain", label: "Obsidian Brain" },
     ],
   },
@@ -133,9 +149,13 @@ export const DESKTOP_MODULES: DesktopModule[] = [
       { id: "account", label: "Account" },
       { id: "appearance", label: "Appearance" },
       { id: "notifications", label: "Notifications" },
+      { id: "radio", label: "Radio" },
       { id: "engine", label: "Engine" },
       { id: "custom-models", label: "Custom Models" },
       { id: "data", label: "Data" },
+      { id: "limits", label: "Limits" },
+      { id: "api-keys", label: "API Keys" },
+      { id: "devices", label: "Devices" },
       { id: "admin", label: "Admin" },
     ],
   },
@@ -148,10 +168,18 @@ export const DESKTOP_MODULES: DesktopModule[] = [
     ],
   },
   {
+    // Desktop rail label is "Projects" (section id `teams`). Module id stays
+    // `pipeline` for TOPIC_MODULE_MAP stability.
     id: "pipeline",
-    label: "Pipeline",
-    icon: "GitBranch",
+    label: "Projects",
+    icon: "Users",
     children: [
+      { id: "projects", label: "Manage" },
+      { id: "goals", label: "Goals" },
+      { id: "lifecycle", label: "Lifecycle" },
+      { id: "factory", label: "Factory" },
+      { id: "competition", label: "Competition" },
+      { id: "mastermind", label: "Mastermind" },
       { id: "team-canvas", label: "Team Canvas" },
       { id: "team-memory", label: "Team Memory" },
     ],
@@ -161,9 +189,9 @@ export const DESKTOP_MODULES: DesktopModule[] = [
     label: "Deployment",
     icon: "Cloud",
     children: [
-      { id: "cloud-deploy", label: "Cloud Deploy" },
-      { id: "unified-dashboard", label: "Dashboard" },
-      { id: "gitlab-panel", label: "GitLab Panel" },
+      { id: "unified-dashboard", label: "All Deployments" },
+      { id: "cloud-deploy", label: "Cloud Runs" },
+      { id: "gitlab-panel", label: "GitLab" },
     ],
   },
 ];
@@ -228,17 +256,17 @@ export const TOPIC_MODULE_MAP: Record<string, TopicModuleRef> = {
   },
   "writing-effective-prompts": {
     moduleId: "agents",
-    path: ["Agents", "Editor", "Prompt"],
+    path: ["Agents", "Editor", "Design"],
     label: "Prompt editor",
   },
   "simple-vs-structured-prompt-mode": {
     moduleId: "agents",
-    path: ["Agents", "Editor", "Prompt"],
+    path: ["Agents", "Editor", "Design"],
     label: "Prompt modes",
   },
   "structured-prompt-sections-explained": {
     moduleId: "agents",
-    path: ["Agents", "Editor", "Prompt"],
+    path: ["Agents", "Editor", "Design"],
     label: "Prompt sections",
   },
   "agent-settings-and-limits": {
@@ -248,17 +276,17 @@ export const TOPIC_MODULE_MAP: Record<string, TopicModuleRef> = {
   },
   "assigning-tools-to-agents": {
     moduleId: "agents",
-    path: ["Agents", "Editor", "Connectors"],
+    path: ["Agents", "Editor", "Design"],
     label: "Tool assignment",
   },
   "prompt-version-history": {
     moduleId: "agents",
-    path: ["Agents", "Editor", "Prompt"],
+    path: ["Agents", "Editor", "Design"],
     label: "Version history",
   },
   "comparing-prompt-versions": {
     moduleId: "agents",
-    path: ["Agents", "Editor", "Prompt"],
+    path: ["Agents", "Editor", "Design"],
     label: "Version diff",
   },
   "cloning-and-duplicating-agents": {
@@ -278,19 +306,19 @@ export const TOPIC_MODULE_MAP: Record<string, TopicModuleRef> = {
   },
   "agent-health-indicators": {
     moduleId: "agents",
-    path: ["Agents", "Editor", "Health"],
-    label: "Health status",
+    path: ["Agents", "Editor"],
+    label: "Health badge",
   },
 
   // ─── Triggers & Scheduling ─────────────────────────────────────
   "how-triggers-work": {
-    moduleId: "events",
-    path: ["Events", "Builder"],
-    label: "Trigger builder",
+    moduleId: "agents",
+    path: ["Agents", "Editor", "Settings"],
+    label: "Trigger setup",
   },
   "manual-triggers": {
-    moduleId: "events",
-    path: ["Events", "Builder"],
+    moduleId: "agents",
+    path: ["Agents", "Editor", "Settings"],
     label: "Manual triggers",
   },
   "schedule-triggers": {
@@ -299,18 +327,18 @@ export const TOPIC_MODULE_MAP: Record<string, TopicModuleRef> = {
     label: "Schedule timeline",
   },
   "webhook-triggers": {
-    moduleId: "events",
-    path: ["Events", "Builder"],
+    moduleId: "agents",
+    path: ["Agents", "Editor", "Settings"],
     label: "Webhook config",
   },
   "clipboard-monitor": {
-    moduleId: "events",
-    path: ["Events", "Builder"],
+    moduleId: "agents",
+    path: ["Agents", "Editor", "Settings"],
     label: "Clipboard trigger",
   },
   "file-watcher-triggers": {
-    moduleId: "events",
-    path: ["Events", "Builder"],
+    moduleId: "agents",
+    path: ["Agents", "Editor", "Settings"],
     label: "File watcher",
   },
   "chain-triggers": {
@@ -324,8 +352,8 @@ export const TOPIC_MODULE_MAP: Record<string, TopicModuleRef> = {
     label: "Event stream",
   },
   "combining-multiple-triggers": {
-    moduleId: "events",
-    path: ["Events", "Builder"],
+    moduleId: "agents",
+    path: ["Agents", "Editor", "Settings"],
     label: "Multi-trigger",
   },
   "testing-and-debugging-triggers": {
@@ -374,47 +402,47 @@ export const TOPIC_MODULE_MAP: Record<string, TopicModuleRef> = {
   // ─── Pipelines & Teams ─────────────────────────────────────────
   "team-assignments": {
     moduleId: "pipeline",
-    path: ["Pipeline", "Team Canvas", "Assignments"],
+    path: ["Projects", "Team Canvas", "Assignments"],
     label: "Assignments panel",
   },
   "team-memory-and-goals": {
     moduleId: "pipeline",
-    path: ["Pipeline", "Team Memory"],
+    path: ["Projects", "Team Memory"],
     label: "Team Memory panel",
   },
   "what-are-pipelines": {
     moduleId: "pipeline",
-    path: ["Pipeline", "Team Canvas"],
+    path: ["Projects", "Team Canvas"],
     label: "Team canvas",
   },
   "the-team-canvas": {
     moduleId: "pipeline",
-    path: ["Pipeline", "Team Canvas"],
+    path: ["Projects", "Team Canvas"],
     label: "Canvas editor",
   },
   "adding-agents-to-a-pipeline": {
     moduleId: "pipeline",
-    path: ["Pipeline", "Team Canvas"],
+    path: ["Projects", "Team Canvas"],
     label: "Canvas agents",
   },
   "connecting-agents-with-data-flow": {
     moduleId: "pipeline",
-    path: ["Pipeline", "Team Canvas"],
+    path: ["Projects", "Team Canvas"],
     label: "Data flow wiring",
   },
   "pipeline-execution": {
     moduleId: "pipeline",
-    path: ["Pipeline", "Team Canvas"],
+    path: ["Projects", "Team Canvas"],
     label: "Pipeline runner",
   },
   "conditional-routing": {
     moduleId: "pipeline",
-    path: ["Pipeline", "Team Canvas"],
+    path: ["Projects", "Team Canvas"],
     label: "Routing logic",
   },
   "team-members-and-roles": {
     moduleId: "pipeline",
-    path: ["Pipeline", "Team Canvas"],
+    path: ["Projects", "Team Canvas"],
     label: "Team roles",
   },
   "pipeline-run-history": {
@@ -429,7 +457,7 @@ export const TOPIC_MODULE_MAP: Record<string, TopicModuleRef> = {
   },
   "debugging-pipeline-issues": {
     moduleId: "pipeline",
-    path: ["Pipeline", "Team Canvas"],
+    path: ["Projects", "Team Canvas"],
     label: "Pipeline debugger",
   },
 
@@ -565,12 +593,12 @@ export const TOPIC_MODULE_MAP: Record<string, TopicModuleRef> = {
   },
   "cost-tracking-per-agent": {
     moduleId: "overview",
-    path: ["Overview", "Usage"],
+    path: ["Overview", "Dashboard"],
     label: "Agent costs",
   },
   "cost-tracking-per-model": {
     moduleId: "overview",
-    path: ["Overview", "Usage"],
+    path: ["Overview", "Dashboard"],
     label: "Model costs",
   },
   "success-rate-metrics": {
@@ -602,32 +630,32 @@ export const TOPIC_MODULE_MAP: Record<string, TopicModuleRef> = {
   // ─── Deployment & Integrations ─────────────────────────────────
   "local-vs-cloud-execution": {
     moduleId: "deployment",
-    path: ["Deployment", "Cloud Deploy"],
+    path: ["Deployment", "Cloud Runs"],
     label: "Deploy options",
   },
   "connecting-to-the-cloud-orchestrator": {
     moduleId: "deployment",
-    path: ["Deployment", "Cloud Deploy"],
+    path: ["Deployment", "Cloud Runs"],
     label: "Cloud connect",
   },
   "deploying-an-agent-to-the-cloud": {
     moduleId: "deployment",
-    path: ["Deployment", "Cloud Deploy"],
+    path: ["Deployment", "Cloud Runs"],
     label: "Cloud deploy",
   },
   "cloud-execution-monitoring": {
     moduleId: "deployment",
-    path: ["Deployment", "Dashboard"],
+    path: ["Deployment", "All Deployments"],
     label: "Cloud monitoring",
   },
   "github-actions-integration": {
     moduleId: "deployment",
-    path: ["Deployment", "GitLab Panel"],
+    path: ["Deployment", "GitLab"],
     label: "GitHub Actions",
   },
   "gitlab-ci-cd-integration": {
     moduleId: "deployment",
-    path: ["Deployment", "GitLab Panel"],
+    path: ["Deployment", "GitLab"],
     label: "GitLab CI/CD",
   },
   "n8n-workflow-integration": {
@@ -637,17 +665,17 @@ export const TOPIC_MODULE_MAP: Record<string, TopicModuleRef> = {
   },
   "byoi-bring-your-own-infrastructure": {
     moduleId: "deployment",
-    path: ["Deployment", "Cloud Deploy"],
+    path: ["Deployment", "Cloud Runs"],
     label: "BYOI setup",
   },
   "syncing-desktop-and-cloud": {
     moduleId: "deployment",
-    path: ["Deployment", "Cloud Deploy"],
+    path: ["Deployment", "Cloud Runs"],
     label: "Desktop-cloud sync",
   },
   "cloud-troubleshooting": {
     moduleId: "deployment",
-    path: ["Deployment", "Cloud Deploy"],
+    path: ["Deployment", "Cloud Runs"],
     label: "Cloud debugging",
   },
 
@@ -659,7 +687,7 @@ export const TOPIC_MODULE_MAP: Record<string, TopicModuleRef> = {
   },
   "agent-not-responding": {
     moduleId: "agents",
-    path: ["Agents", "Editor", "Health"],
+    path: ["Agents", "Editor"],
     label: "Agent health",
   },
   "credential-errors": {
@@ -716,7 +744,7 @@ export const TOPIC_MODULE_MAP: Record<string, TopicModuleRef> = {
   },
   "proactive-check-ins": {
     moduleId: "companion",
-    path: ["Companion", "Check-Ins"],
+    path: ["Companion", "Setup"],
     label: "Proactive check-ins",
   },
   "guided-walkthroughs": {
@@ -725,9 +753,9 @@ export const TOPIC_MODULE_MAP: Record<string, TopicModuleRef> = {
     label: "Guided walkthroughs",
   },
   "the-decision-hub": {
-    moduleId: "companion",
-    path: ["Companion", "Decision Hub"],
-    label: "Approval cards",
+    moduleId: "overview",
+    path: ["Overview", "Approvals"],
+    label: "Approvals queue",
   },
   "operating-by-chat": {
     moduleId: "companion",
@@ -738,7 +766,7 @@ export const TOPIC_MODULE_MAP: Record<string, TopicModuleRef> = {
   // ─── Getting Started · Templates & Modes ───────────────────────
   "browsing-templates": {
     moduleId: "templates",
-    path: ["Templates", "Generated"],
+    path: ["Templates", "Explore"],
     label: "Template gallery",
   },
   "adopting-a-template": {
@@ -748,7 +776,7 @@ export const TOPIC_MODULE_MAP: Record<string, TopicModuleRef> = {
   },
   "recipes": {
     moduleId: "templates",
-    path: ["Templates", "Generated"],
+    path: ["Templates", "Recipes"],
     label: "Recipes",
   },
   "interface-modes": {
@@ -759,13 +787,13 @@ export const TOPIC_MODULE_MAP: Record<string, TopicModuleRef> = {
 
   // ─── Monitoring · Goals, KPIs & Director ───────────────────────
   "tracking-goals": {
-    moduleId: "overview",
-    path: ["Overview", "Goals"],
+    moduleId: "pipeline",
+    path: ["Projects", "Goals"],
     label: "Goals board",
   },
   "measuring-outcomes-with-kpis": {
-    moduleId: "overview",
-    path: ["Overview", "Goals", "KPIs"],
+    moduleId: "pipeline",
+    path: ["Projects", "Factory", "KPIs"],
     label: "KPI dashboard",
   },
   "director-verdicts-and-categories": {
