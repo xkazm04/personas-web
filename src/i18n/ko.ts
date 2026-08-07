@@ -446,6 +446,7 @@ export const ko: Translations = {
       knowledge: "\uc9c0\uc2dd",
       settings: "\uc124\uc815",
       leaderboard: "\ub9ac\ub354\ubcf4\ub4dc",
+      director: "\ub514\ub809\ud130",
       sla: "SLA",
       incidents: "\uc778\uc2dc\ub358\ud2b8",
       health: "\uc0c1\ud0dc",
@@ -538,6 +539,28 @@ export const ko: Translations = {
           instrumentsTitle: "\uacc4\uae30",
           tickerPause: "\uc0c1\ud0dc \ud2f0\ucee4 \uc77c\uc2dc\uc815\uc9c0",
           tickerResume: "\uc0c1\ud0dc \ud2f0\ucee4 \uc7ac\uc0dd"
+        },
+        fleetSessions: {
+          title: "\ud50c\ub9bf \uc138\uc158",
+          needsYou: "{count}\uac1c\uac00 \uc751\ub2f5 \ub300\uae30 \uc911",
+          athenaOnIt: "Athena\uac00 \ucc98\ub9ac \uc911",
+          states: {
+            working: "\uc791\uc5c5 \uc911",
+            needsYou: "\uc751\ub2f5 \ud544\uc694",
+            finished: "\uc644\ub8cc",
+            frozen: "\uc815\uc9c0\ub428"
+          }
+        },
+        approvedWork: {
+          title: "\uc2b9\uc778\ub41c \uc791\uc5c5",
+          summary: "\uc2b9\uc778\ub41c \uc544\uc774\ub514\uc5b4 {total}\uac1c \uc911 {undispatched}\uac1c\uac00 \uc791\uc5c5\uc73c\ub85c \uc774\uc5b4\uc9c0\uc9c0 \uc54a\uc558\uc2b5\ub2c8\ub2e4",
+          stale: "{count}\uac1c\uac00 {days}\uc77c \uc774\uc0c1 \ub300\uae30 \uc911",
+          neverDispatched: "\ubbf8\ubc1c\uc1a1",
+          dispatched: "\ubc1c\uc1a1\ub428",
+          dispatch: "\ubc1c\uc1a1",
+          sendAll: "\ud50c\ub9bf\uc73c\ub85c \ubcf4\ub0b4\uae30 ({count})",
+          toast: "{count}\uac1c \uc804\uc1a1\ub428 \u2014 \ud50c\ub9bf",
+          empty: "\ubc1c\uc1a1\uc744 \uae30\ub2e4\ub9ac\ub294 \ud56d\ubaa9\uc774 \uc5c6\uc2b5\ub2c8\ub2e4"
         },
         heatmap: {
           title: "\uc2e4\ud589 \ud65c\ub3d9",
@@ -812,6 +835,82 @@ export const ko: Translations = {
         flat: "\ubcf4\ud569"
       }
     },
+    directorPage: {
+      title: "\ub514\ub809\ud130",
+      subtitle: "\uc990\uaca8\ucc3e\uae30\ud55c \uc5d0\uc774\uc804\ud2b8\ub97c \uc704\ud55c \ucf54\uce6d \uc9c0\ud718 \uc13c\ud130",
+      periodLabel: "\ucd5c\uadfc {n}\uc77c",
+      kpi: {
+        valueRate: "\uac00\uce58 \uc81c\uacf5",
+        valueRateHint: "\uac00\uce58\ub97c \uc81c\uacf5\ud55c \ud50c\ub9bf \uc2e4\ud589 \ube44\uc728",
+        avgVerdict: "\ud3c9\uade0 \ud3c9\uacb0",
+        avgVerdictHint: "\uac80\ud1a0\ub41c \uc5d0\uc774\uc804\ud2b8\uc758 \ucd5c\uc2e0 \uc810\uc218 \ud3c9\uade0",
+        costPerValue: "\ube44\uc6a9 / \uac00\uce58",
+        costPerValueHint: "\uac00\uce58\ub97c \uc81c\uacf5\ud55c \uc2e4\ud589\ub2f9 \uc9c0\ucd9c",
+        inScope: "\ubc94\uc704 \ub0b4",
+        inScopeHint: "{reviewed}\uac1c \uac80\ud1a0\ub428 \u00b7 {unreviewed}\uac1c \ub300\uae30 \uc911"
+      },
+      momentum: {
+        label: "\ubaa8\uba58\ud140",
+        improving: "\uac1c\uc120 \uc911",
+        flat: "\ubcc0\ub3d9 \uc5c6\uc74c",
+        declining: "\ud558\ub77d \uc911",
+        steady: "\uc548\uc815\uc801\uc73c\ub85c \uc720\uc9c0 \uc911"
+      },
+      breakdown: {
+        title: "\uac00\uce58 \ubd84\uc11d",
+        empty: "\uc774 \uae30\uac04\uc5d0 \ud3c9\uac00\ub41c \uc2e4\ud589\uc774 \uc544\uc9c1 \uc5c6\uc2b5\ub2c8\ub2e4",
+        bands: {
+          delivered: "\uc81c\uacf5\ub428",
+          partial: "\ubd80\ubd84\uc801",
+          blocked: "\ucc28\ub2e8\ub428",
+          noInput: "\uc785\ub825 \uc5c6\uc74c",
+          unassessed: "\ubbf8\ud3c9\uac00"
+        }
+      },
+      distribution: {
+        title: "\uc810\uc218 \ubd84\ud3ec",
+        avgLabel: "\ud3c9\uade0",
+        empty: "\uc544\uc9c1 \uc810\uc218\uac00 \ub9e4\uaca8\uc9c4 \uc5d0\uc774\uc804\ud2b8\uac00 \uc5c6\uc2b5\ub2c8\ub2e4",
+        agents: "{count}\uac1c \uc5d0\uc774\uc804\ud2b8"
+      },
+      coaching: {
+        title: "\ucf54\uce6d \ubc94\uc704",
+        agent: "\uc5d0\uc774\uc804\ud2b8",
+        latest: "\ucd5c\uc2e0",
+        trend: "\ucd94\uc138",
+        value: "\uac00\uce58",
+        attention: "\uc8fc\uc758",
+        lastReview: "\ub9c8\uc9c0\ub9c9 \uac80\ud1a0",
+        never: "\uc5c6\uc74c",
+        healthy: "\ubc94\uc704 \ub0b4 \ubaa8\ub4e0 \uc5d0\uc774\uc804\ud2b8\uac00 \uc815\uc0c1\uc785\ub2c8\ub2e4",
+        filterEmpty: "\uc774 \ud544\ud130\uc640 \uc77c\uce58\ud558\ub294 \uc5d0\uc774\uc804\ud2b8\uac00 \uc5c6\uc2b5\ub2c8\ub2e4",
+        clearFilter: "\ud544\ud130 \uc9c0\uc6b0\uae30",
+        flags: {
+          needsReview: "\uc2e0\uaddc",
+          low: "\ub0ae\uc74c",
+          declining: "\ud558\ub77d",
+          stale: "\uc624\ub798\ub428"
+        },
+        flagHints: {
+          needsReview: "\ubc94\uc704\uc5d0 \uc788\uc9c0\ub9cc \uc544\uc9c1 \uc810\uc218\uac00 \uc5c6\uc2b5\ub2c8\ub2e4 \u2014 \ub514\ub809\ud130\ub97c \uc2e4\ud589\ud574 \uae30\uc900\uc120\uc744 \ub9cc\ub4dc\uc138\uc694.",
+          low: "\ucd5c\uc2e0 \ud3c9\uacb0\uc774 2 \uc774\ud558\uc785\ub2c8\ub2e4 \u2014 \uc774 \uc5d0\uc774\uc804\ud2b8\ub4e4\uc5d0\uac8c\ub294 \ucf54\uce6d\uc774 \ud544\uc694\ud569\ub2c8\ub2e4.",
+          declining: "\ucd5c\uc2e0 \uc810\uc218\uac00 \uc774\uc804 \uac80\ud1a0\ubcf4\ub2e4 \ud558\ub77d\ud588\uc2b5\ub2c8\ub2e4.",
+          stale: "\ub9c8\uc9c0\ub9c9 \uac80\ud1a0\uac00 2\uc8fc\ub97c \ub118\uc5c8\uc2b5\ub2c8\ub2e4 \u2014 \uc5ec\uc804\ud788 \uc81c \ubaab\uc744 \ud558\ub294\uc9c0 \ub2e4\uc2dc \ud655\uc778\ud558\uc138\uc694."
+        }
+      },
+      verdictFeed: {
+        title: "\ucd5c\uadfc \ucf54\uce6d \ud3c9\uacb0",
+        empty: "\uc544\uc9c1 \ud3c9\uacb0\uc774 \uc5c6\uc2b5\ub2c8\ub2e4 \u2014 \uac80\ud1a0\ub97c \uc2e4\ud589\ud558\uba74 \uc5ec\uae30\uc5d0 \ucf54\uce6d\uc774 \ud45c\uc2dc\ub429\ub2c8\ub2e4",
+        categories: {
+          prompt: "\ud504\ub86c\ud504\ud2b8",
+          health: "\uc0c1\ud0dc",
+          triggers: "\ud2b8\ub9ac\uac70",
+          credentials: "\uc790\uaca9 \uc99d\uba85",
+          memory: "\uba54\ubaa8\ub9ac",
+          usefulness: "\uc720\uc6a9\uc131"
+        }
+      }
+    },
     slaPage: {
       title: "SLA",
       subtitle: "\uc11c\ube44\uc2a4 \uc218\uc900 \ubaa9\ud45c, \uc900\uc218 \ud604\ud669, \uc704\ubc18 \uc774\ub825",
@@ -1000,6 +1099,26 @@ export const ko: Translations = {
         recall: "\ud68c\uc218",
         fallback: "\ud3f4\ubc31"
       },
+      athenaActionMix: "작업 유형별 비용",
+      athenaOps: {
+        chat: "채팅",
+        fleetSpawn: "플릿 스폰",
+        canvasControl: "캔버스 제어",
+        recall: "리콜",
+        proactiveNudge: "능동 알림",
+        execTriage: "실행 분류",
+        msgTriage: "메시지 분류",
+        reviewResolution: "검토 처리"
+      },
+      turnsCount: "{count}턴",
+      athenaSpendLane: "Athena 지출 레인",
+      spendTurns: "턴",
+      spendCost: "Athena 비용",
+      spendAvgPerTurn: "평균 / 턴",
+      spendTokens: "토큰",
+      spendTokensDetail: "입력 {in} · 출력 {out}",
+      athenaVsFleet: "Athena 대 플릿",
+      athenaVsFleetCaption: "이 기간 총 지출 {total} 중 {athena}",
       valueRollup: "\uac00\uce58 \uc694\uc57d",
       valueDelivered: "\uc81c\uacf5\ub41c \uac00\uce58",
       costPerValue: "\uac00\uce58\ub2f9 \ube44\uc6a9",

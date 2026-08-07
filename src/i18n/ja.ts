@@ -446,6 +446,7 @@ export const ja: Translations = {
       knowledge: "\u30ca\u30ec\u30c3\u30b8",
       settings: "\u8a2d\u5b9a",
       leaderboard: "\u0103\u0083\u015e\u0103\u0083\u013d\u0103\u0083\u20ac\u0103\u0083\u013d\u0103\u0083\u015b\u0103\u0083\u013d\u0103\u0083\u2030",
+      director: "\u30c7\u30a3\u30ec\u30af\u30bf\u30fc",
       sla: "SLA",
       incidents: "\u30a4\u30f3\u30b7\u30c7\u30f3\u30c8",
       health: "\u72b6\u614b",
@@ -538,6 +539,28 @@ export const ja: Translations = {
           instrumentsTitle: "\u30a4\u30f3\u30b9\u30c8\u30a5\u30eb\u30e1\u30f3\u30c8",
           tickerPause: "\u30b9\u30c6\u30fc\u30bf\u30b9\u30c6\u30a3\u30c3\u30ab\u30fc\u3092\u4e00\u6642\u505c\u6b62",
           tickerResume: "\u30b9\u30c6\u30fc\u30bf\u30b9\u30c6\u30a3\u30c3\u30ab\u30fc\u3092\u518d\u958b"
+        },
+        fleetSessions: {
+          title: "\u30d5\u30ea\u30fc\u30c8\u30bb\u30c3\u30b7\u30e7\u30f3",
+          needsYou: "{count}\u4ef6\u304c\u3042\u306a\u305f\u5f85\u3061",
+          athenaOnIt: "Athena\u304c\u5bfe\u5fdc\u4e2d",
+          states: {
+            working: "\u4f5c\u696d\u4e2d",
+            needsYou: "\u8981\u5bfe\u5fdc",
+            finished: "\u5b8c\u4e86",
+            frozen: "\u30d5\u30ea\u30fc\u30ba"
+          }
+        },
+        approvedWork: {
+          title: "\u627f\u8a8d\u6e08\u307f\u306e\u4f5c\u696d",
+          summary: "\u627f\u8a8d\u6e08\u307f\u30a2\u30a4\u30c7\u30a2{total}\u4ef6\u306e\u3046\u3061{undispatched}\u4ef6\u304c\u30bf\u30b9\u30af\u306b\u306a\u3063\u3066\u3044\u307e\u305b\u3093",
+          stale: "{count}\u4ef6\u304c{days}\u65e5\u4ee5\u4e0a\u5f85\u6a5f\u4e2d",
+          neverDispatched: "\u672a\u9001\u4fe1",
+          dispatched: "\u9001\u4fe1\u6e08\u307f",
+          dispatch: "\u9001\u4fe1",
+          sendAll: "\u30d5\u30ea\u30fc\u30c8\u3078\u9001\u4fe1 ({count})",
+          toast: "{count}\u4ef6\u9001\u4fe1 \u2014 \u30d5\u30ea\u30fc\u30c8",
+          empty: "\u9001\u4fe1\u5f85\u3061\u306f\u3042\u308a\u307e\u305b\u3093"
         },
         heatmap: {
           title: "\u5b9f\u884c\u30a2\u30af\u30c6\u30a3\u30d3\u30c6\u30a3",
@@ -812,6 +835,82 @@ export const ja: Translations = {
         flat: "\u6a2a\u3070\u3044"
       }
     },
+    directorPage: {
+      title: "\u30c7\u30a3\u30ec\u30af\u30bf\u30fc",
+      subtitle: "\u30b9\u30bf\u30fc\u4ed8\u304d\u30a8\u30fc\u30b8\u30a7\u30f3\u30c8\u306e\u30b3\u30fc\u30c1\u30f3\u30b0\u53f8\u4ee4\u5ba4",
+      periodLabel: "\u904e\u53bb{n}\u65e5\u9593",
+      kpi: {
+        valueRate: "\u63d0\u4f9b\u4fa1\u5024",
+        valueRateHint: "\u4fa1\u5024\u3092\u63d0\u4f9b\u3057\u305f\u30d5\u30ea\u30fc\u30c8\u5b9f\u884c\u306e\u5272\u5408",
+        avgVerdict: "\u5e73\u5747\u8a55\u5b9a",
+        avgVerdictHint: "\u30ec\u30d3\u30e5\u30fc\u6e08\u307f\u30a8\u30fc\u30b8\u30a7\u30f3\u30c8\u306e\u6700\u65b0\u30b9\u30b3\u30a2\u306e\u5e73\u5747",
+        costPerValue: "\u30b3\u30b9\u30c8 / \u4fa1\u5024",
+        costPerValueHint: "\u4fa1\u5024\u3092\u63d0\u4f9b\u3057\u305f\u5b9f\u884c\u3042\u305f\u308a\u306e\u652f\u51fa",
+        inScope: "\u5bfe\u8c61\u7bc4\u56f2",
+        inScopeHint: "{reviewed}\u4ef6\u30ec\u30d3\u30e5\u30fc\u6e08\u307f \u00b7 {unreviewed}\u4ef6\u4fdd\u7559"
+      },
+      momentum: {
+        label: "\u30e2\u30e1\u30f3\u30bf\u30e0",
+        improving: "\u6539\u5584\u4e2d",
+        flat: "\u6a2a\u3070\u3044",
+        declining: "\u60aa\u5316\u4e2d",
+        steady: "\u5b89\u5b9a\u3057\u3066\u3044\u307e\u3059"
+      },
+      breakdown: {
+        title: "\u4fa1\u5024\u306e\u5185\u8a33",
+        empty: "\u3053\u306e\u671f\u9593\u306b\u8a55\u4fa1\u6e08\u307f\u306e\u5b9f\u884c\u306f\u307e\u3060\u3042\u308a\u307e\u305b\u3093",
+        bands: {
+          delivered: "\u63d0\u4f9b\u6e08\u307f",
+          partial: "\u90e8\u5206\u7684",
+          blocked: "\u30d6\u30ed\u30c3\u30af",
+          noInput: "\u5165\u529b\u306a\u3057",
+          unassessed: "\u672a\u8a55\u4fa1"
+        }
+      },
+      distribution: {
+        title: "\u30b9\u30b3\u30a2\u5206\u5e03",
+        avgLabel: "\u5e73\u5747",
+        empty: "\u30b9\u30b3\u30a2\u4ed8\u304d\u306e\u30a8\u30fc\u30b8\u30a7\u30f3\u30c8\u306f\u307e\u3060\u3044\u307e\u305b\u3093",
+        agents: "{count}\u4ef6\u306e\u30a8\u30fc\u30b8\u30a7\u30f3\u30c8"
+      },
+      coaching: {
+        title: "\u30b3\u30fc\u30c1\u30f3\u30b0\u5bfe\u8c61",
+        agent: "\u30a8\u30fc\u30b8\u30a7\u30f3\u30c8",
+        latest: "\u6700\u65b0",
+        trend: "\u30c8\u30ec\u30f3\u30c9",
+        value: "\u4fa1\u5024",
+        attention: "\u8981\u6ce8\u610f",
+        lastReview: "\u6700\u7d42\u30ec\u30d3\u30e5\u30fc",
+        never: "\u672a\u5b9f\u65bd",
+        healthy: "\u5bfe\u8c61\u7bc4\u56f2\u306e\u30a8\u30fc\u30b8\u30a7\u30f3\u30c8\u306f\u3059\u3079\u3066\u5065\u5168\u3067\u3059",
+        filterEmpty: "\u3053\u306e\u30d5\u30a3\u30eb\u30bf\u30fc\u306b\u4e00\u81f4\u3059\u308b\u30a8\u30fc\u30b8\u30a7\u30f3\u30c8\u306f\u3044\u307e\u305b\u3093",
+        clearFilter: "\u30d5\u30a3\u30eb\u30bf\u30fc\u3092\u89e3\u9664",
+        flags: {
+          needsReview: "\u65b0\u898f",
+          low: "\u4f4e\u8a55\u4fa1",
+          declining: "\u4e0b\u964d",
+          stale: "\u505c\u6ede"
+        },
+        flagHints: {
+          needsReview: "\u5bfe\u8c61\u7bc4\u56f2\u5185\u3067\u3059\u304c\u672a\u63a1\u70b9\u3067\u3059 \u2014 \u30c7\u30a3\u30ec\u30af\u30bf\u30fc\u3092\u5b9f\u884c\u3057\u3066\u30d9\u30fc\u30b9\u30e9\u30a4\u30f3\u3092\u53d6\u5f97\u3057\u3066\u304f\u3060\u3055\u3044\u3002",
+          low: "\u6700\u65b0\u306e\u8a55\u5b9a\u304c2\u4ee5\u4e0b\u3067\u3059 \u2014 \u3053\u308c\u3089\u306e\u30a8\u30fc\u30b8\u30a7\u30f3\u30c8\u306b\u306f\u30b3\u30fc\u30c1\u30f3\u30b0\u304c\u5fc5\u8981\u3067\u3059\u3002",
+          declining: "\u6700\u65b0\u30b9\u30b3\u30a2\u304c\u524d\u56de\u306e\u30ec\u30d3\u30e5\u30fc\u304b\u3089\u4f4e\u4e0b\u3057\u307e\u3057\u305f\u3002",
+          stale: "\u6700\u7d42\u30ec\u30d3\u30e5\u30fc\u304b\u30892\u9031\u9593\u4ee5\u4e0a\u7d4c\u904e\u3057\u3066\u3044\u307e\u3059 \u2014 \u4eca\u3082\u4fa1\u5024\u3092\u51fa\u305b\u3066\u3044\u308b\u304b\u518d\u78ba\u8a8d\u3057\u3066\u304f\u3060\u3055\u3044\u3002"
+        }
+      },
+      verdictFeed: {
+        title: "\u6700\u8fd1\u306e\u30b3\u30fc\u30c1\u30f3\u30b0\u8a55\u5b9a",
+        empty: "\u8a55\u5b9a\u306f\u307e\u3060\u3042\u308a\u307e\u305b\u3093 \u2014 \u30ec\u30d3\u30e5\u30fc\u3092\u5b9f\u884c\u3059\u308b\u3068\u3053\u3053\u306b\u30b3\u30fc\u30c1\u30f3\u30b0\u304c\u8868\u793a\u3055\u308c\u307e\u3059",
+        categories: {
+          prompt: "\u30d7\u30ed\u30f3\u30d7\u30c8",
+          health: "\u30d8\u30eb\u30b9",
+          triggers: "\u30c8\u30ea\u30ac\u30fc",
+          credentials: "\u8a8d\u8a3c\u60c5\u5831",
+          memory: "\u30e1\u30e2\u30ea",
+          usefulness: "\u6709\u7528\u6027"
+        }
+      }
+    },
     slaPage: {
       title: "SLA",
       subtitle: "\u30b5\u30fc\u30d3\u30b9\u30ec\u30d9\u30eb\u76ee\u6a19\u3001\u9075\u5b88\u72b6\u6cc1\u3001\u9055\u53cd\u5c65\u6b74",
@@ -1000,6 +1099,26 @@ export const ja: Translations = {
         recall: "\u30ea\u30b3\u30fc\u30eb",
         fallback: "\u30d5\u30a9\u30fc\u30eb\u30d0\u30c3\u30af"
       },
+      athenaActionMix: "アクション種別ごとのコスト",
+      athenaOps: {
+        chat: "チャット",
+        fleetSpawn: "フリート起動",
+        canvasControl: "キャンバス操作",
+        recall: "リコール",
+        proactiveNudge: "プロアクティブ通知",
+        execTriage: "実行トリアージ",
+        msgTriage: "メッセージトリアージ",
+        reviewResolution: "レビュー解決"
+      },
+      turnsCount: "{count}ターン",
+      athenaSpendLane: "Athenaの支出レーン",
+      spendTurns: "ターン",
+      spendCost: "Athenaのコスト",
+      spendAvgPerTurn: "平均 / ターン",
+      spendTokens: "トークン",
+      spendTokensDetail: "入力{in} · 出力{out}",
+      athenaVsFleet: "Athena対フリート",
+      athenaVsFleetCaption: "この期間の総支出{total}のうち{athena}",
       valueRollup: "\u4fa1\u5024\u30b5\u30de\u30ea\u30fc",
       valueDelivered: "\u63d0\u4f9b\u3055\u308c\u305f\u4fa1\u5024",
       costPerValue: "\u4fa1\u5024\u3042\u305f\u308a\u306e\u30b3\u30b9\u30c8",

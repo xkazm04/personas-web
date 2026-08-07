@@ -4,6 +4,7 @@ import { usePathname } from "next/navigation";
 import {
   LayoutDashboard,
   Bot,
+  Clapperboard,
   Zap,
   Radio,
   ClipboardCheck,
@@ -38,6 +39,9 @@ export const navItemDefs = [
   { key: "messages", labelKey: "messages" as const, icon: Mail, href: "/dashboard/messages", scoped: true },
   { key: "observability", labelKey: "observability" as const, icon: Activity, href: "/dashboard/observability", scoped: true },
   { key: "leaderboard", labelKey: "leaderboard" as const, icon: Trophy, href: "/dashboard/leaderboard", scoped: true },
+  // Director doesn't honor the persona/date-range scope filters (its period
+  // pill is its own window), so it renders without the DashboardScopeBar.
+  { key: "director", labelKey: "director" as const, icon: Clapperboard, href: "/dashboard/director", scoped: false },
   { key: "sla", labelKey: "sla" as const, icon: Shield, href: "/dashboard/sla", scoped: true },
   { key: "incidents", labelKey: "incidents" as const, icon: Siren, href: "/dashboard/incidents", scoped: false },
   { key: "health", labelKey: "health" as const, icon: HeartPulse, href: "/dashboard/health", scoped: false },

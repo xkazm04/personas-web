@@ -446,6 +446,7 @@ export const de: Translations = {
       knowledge: "Wissen",
       settings: "Einstellungen",
       leaderboard: "Rangliste",
+      director: "Regisseur",
       sla: "SLA",
       incidents: "Vorf\u00e4lle",
       health: "Zustand",
@@ -538,6 +539,28 @@ export const de: Translations = {
           instrumentsTitle: "Instrumente",
           tickerPause: "Statusleiste pausieren",
           tickerResume: "Statusleiste fortsetzen"
+        },
+        fleetSessions: {
+          title: "Fleet-Sitzungen",
+          needsYou: "{count} brauchen Sie",
+          athenaOnIt: "Athena k\u00fcmmert sich",
+          states: {
+            working: "Arbeitet",
+            needsYou: "Braucht Sie",
+            finished: "Fertig",
+            frozen: "Eingefroren"
+          }
+        },
+        approvedWork: {
+          title: "Freigegebene Arbeit",
+          summary: "{undispatched} von {total} freigegebenen Ideen wurden nie zu einer Aufgabe",
+          stale: "{count} warten seit \u00fcber {days} Tagen",
+          neverDispatched: "Nie losgeschickt",
+          dispatched: "Losgeschickt",
+          dispatch: "Losschicken",
+          sendAll: "An die Flotte senden ({count})",
+          toast: "{count} gesendet \u2014 Flotte",
+          empty: "Nichts wartet auf den Versand"
         },
         heatmap: {
           title: "Ausf\u00fchrungsaktivit\u00e4t",
@@ -812,6 +835,82 @@ export const de: Translations = {
         flat: "Stabil"
       }
     },
+    directorPage: {
+      title: "Regisseur",
+      subtitle: "Coaching-Kommandozentrale f\u00fcr Ihre markierten Agenten",
+      periodLabel: "Letzte {n} Tage",
+      kpi: {
+        valueRate: "Gelieferter Wert",
+        valueRateHint: "Anteil der Flottenl\u00e4ufe, die Wert geliefert haben",
+        avgVerdict: "\u00d8-Urteil",
+        avgVerdictHint: "Mittel der letzten Bewertungen aller gepr\u00fcften Agenten",
+        costPerValue: "Kosten / Wert",
+        costPerValueHint: "Ausgaben pro wertliefernden Lauf",
+        inScope: "Im Fokus",
+        inScopeHint: "{reviewed} gepr\u00fcft \u00b7 {unreviewed} ausstehend"
+      },
+      momentum: {
+        label: "Momentum",
+        improving: "verbessert sich",
+        flat: "unver\u00e4ndert",
+        declining: "verschlechtert sich",
+        steady: "Bleibt stabil"
+      },
+      breakdown: {
+        title: "Wertaufschl\u00fcsselung",
+        empty: "Noch keine bewerteten L\u00e4ufe in diesem Zeitraum",
+        bands: {
+          delivered: "Geliefert",
+          partial: "Teilweise",
+          blocked: "Blockiert",
+          noInput: "Keine Eingabe",
+          unassessed: "Unbewertet"
+        }
+      },
+      distribution: {
+        title: "Bewertungsverteilung",
+        avgLabel: "\u00d8",
+        empty: "Noch keine bewerteten Agenten",
+        agents: "{count} Agenten"
+      },
+      coaching: {
+        title: "Coaching-Fokus",
+        agent: "Agent",
+        latest: "Zuletzt",
+        trend: "Trend",
+        value: "Wert",
+        attention: "Aufmerksamkeit",
+        lastReview: "Letzte Pr\u00fcfung",
+        never: "Nie",
+        healthy: "Alle Agenten im Fokus sind gesund",
+        filterEmpty: "Kein Agent entspricht diesem Filter",
+        clearFilter: "Filter l\u00f6schen",
+        flags: {
+          needsReview: "Neu",
+          low: "Niedrig",
+          declining: "Fallend",
+          stale: "Veraltet"
+        },
+        flagHints: {
+          needsReview: "Im Fokus, aber nie bewertet \u2014 starten Sie den Regisseur f\u00fcr eine Basisbewertung.",
+          low: "Letztes Urteil ist 2 oder darunter \u2014 diese Agenten brauchen Coaching.",
+          declining: "Letzte Bewertung ist gegen\u00fcber der vorherigen Pr\u00fcfung gefallen.",
+          stale: "Letzte Pr\u00fcfung liegt \u00fcber zwei Wochen zur\u00fcck \u2014 pr\u00fcfen Sie, ob sich diese Agenten noch lohnen."
+        }
+      },
+      verdictFeed: {
+        title: "Aktuelle Coaching-Urteile",
+        empty: "Noch keine Urteile \u2014 starten Sie eine Pr\u00fcfung, um hier Coaching zu sehen",
+        categories: {
+          prompt: "Prompt",
+          health: "Gesundheit",
+          triggers: "Ausl\u00f6ser",
+          credentials: "Zugangsdaten",
+          memory: "Ged\u00e4chtnis",
+          usefulness: "N\u00fctzlichkeit"
+        }
+      }
+    },
     slaPage: {
       title: "SLA",
       subtitle: "Service-Level-Ziele, Compliance und Verletzungshistorie",
@@ -1000,6 +1099,26 @@ export const de: Translations = {
         recall: "Abruf",
         fallback: "Fallback"
       },
+      athenaActionMix: "Kosten nach Aktionstyp",
+      athenaOps: {
+        chat: "Chat",
+        fleetSpawn: "Flotten\u002dSpawn",
+        canvasControl: "Canvas\u002dSteuerung",
+        recall: "Abruf",
+        proactiveNudge: "Proaktive Anstöße",
+        execTriage: "Ausführungs\u002dTriage",
+        msgTriage: "Nachrichten\u002dTriage",
+        reviewResolution: "Review\u002dKlärung"
+      },
+      turnsCount: "{count} Züge",
+      athenaSpendLane: "Athenas Ausgabenspur",
+      spendTurns: "Züge",
+      spendCost: "Athena\u002dKosten",
+      spendAvgPerTurn: "Ø / Zug",
+      spendTokens: "Tokens",
+      spendTokensDetail: "{in} ein · {out} aus",
+      athenaVsFleet: "Athena vs. Flotte",
+      athenaVsFleetCaption: "{athena} von {total} Gesamtausgaben in diesem Zeitraum",
       valueRollup: "Wert\u00fcbersicht",
       valueDelivered: "Wert geliefert",
       costPerValue: "Kosten pro Wert",

@@ -209,6 +209,7 @@
     knowledge: string;
     settings: string;
     leaderboard: string;
+    director: string;
     sla: string;
     incidents: string;
     health: string;
@@ -301,6 +302,28 @@
         instrumentsTitle: string;
         tickerPause: string;
         tickerResume: string;
+      };
+      fleetSessions: {
+        title: string;
+        needsYou: string;
+        athenaOnIt: string;
+        states: {
+          working: string;
+          needsYou: string;
+          finished: string;
+          frozen: string;
+        };
+      };
+      approvedWork: {
+        title: string;
+        summary: string;
+        stale: string;
+        neverDispatched: string;
+        dispatched: string;
+        dispatch: string;
+        sendAll: string;
+        toast: string;
+        empty: string;
       };
       heatmap: {
         title: string;
@@ -575,6 +598,82 @@
       flat: string;
     };
   };
+  directorPage: {
+    title: string;
+    subtitle: string;
+    periodLabel: string;
+    kpi: {
+      valueRate: string;
+      valueRateHint: string;
+      avgVerdict: string;
+      avgVerdictHint: string;
+      costPerValue: string;
+      costPerValueHint: string;
+      inScope: string;
+      inScopeHint: string;
+    };
+    momentum: {
+      label: string;
+      improving: string;
+      flat: string;
+      declining: string;
+      steady: string;
+    };
+    breakdown: {
+      title: string;
+      empty: string;
+      bands: {
+        delivered: string;
+        partial: string;
+        blocked: string;
+        noInput: string;
+        unassessed: string;
+      };
+    };
+    distribution: {
+      title: string;
+      avgLabel: string;
+      empty: string;
+      agents: string;
+    };
+    coaching: {
+      title: string;
+      agent: string;
+      latest: string;
+      trend: string;
+      value: string;
+      attention: string;
+      lastReview: string;
+      never: string;
+      healthy: string;
+      filterEmpty: string;
+      clearFilter: string;
+      flags: {
+        needsReview: string;
+        low: string;
+        declining: string;
+        stale: string;
+      };
+      flagHints: {
+        needsReview: string;
+        low: string;
+        declining: string;
+        stale: string;
+      };
+    };
+    verdictFeed: {
+      title: string;
+      empty: string;
+      categories: {
+        prompt: string;
+        health: string;
+        triggers: string;
+        credentials: string;
+        memory: string;
+        usefulness: string;
+      };
+    };
+  };
   slaPage: {
     title: string;
     subtitle: string;
@@ -763,6 +862,26 @@
       recall: string;
       fallback: string;
     };
+    athenaActionMix: string;
+    athenaOps: {
+      chat: string;
+      fleetSpawn: string;
+      canvasControl: string;
+      recall: string;
+      proactiveNudge: string;
+      execTriage: string;
+      msgTriage: string;
+      reviewResolution: string;
+    };
+    turnsCount: string;
+    athenaSpendLane: string;
+    spendTurns: string;
+    spendCost: string;
+    spendAvgPerTurn: string;
+    spendTokens: string;
+    spendTokensDetail: string;
+    athenaVsFleet: string;
+    athenaVsFleetCaption: string;
     valueRollup: string;
     valueDelivered: string;
     costPerValue: string;
@@ -1675,6 +1794,7 @@ export const en: Translations = {
     knowledge: 'Knowledge',
     settings: 'Settings',
     leaderboard: 'Leaderboard',
+    director: 'Director',
     sla: 'SLA',
     incidents: 'Incidents',
     health: 'Health',
@@ -1767,6 +1887,28 @@ export const en: Translations = {
         instrumentsTitle: 'Instruments',
         tickerPause: 'Pause status ticker',
         tickerResume: 'Resume status ticker',
+      },
+      fleetSessions: {
+        title: 'Fleet sessions',
+        needsYou: '{count} need you',
+        athenaOnIt: "Athena's on it",
+        states: {
+          working: 'Working',
+          needsYou: 'Needs you',
+          finished: 'Finished',
+          frozen: 'Frozen',
+        },
+      },
+      approvedWork: {
+        title: 'Approved work',
+        summary: '{undispatched} of {total} approved ideas never became a task',
+        stale: '{count} waiting over {days} days',
+        neverDispatched: 'Never dispatched',
+        dispatched: 'Dispatched',
+        dispatch: 'Dispatch',
+        sendAll: 'Send to Fleet ({count})',
+        toast: '{count} sent — Fleet',
+        empty: 'Nothing is waiting to be dispatched',
       },
       heatmap: {
         title: 'Execution activity',
@@ -2041,6 +2183,82 @@ export const en: Translations = {
       flat: 'Flat',
     },
   },
+  directorPage: {
+    title: 'Director',
+    subtitle: 'Coaching command center for your starred agents',
+    periodLabel: 'Last {n} days',
+    kpi: {
+      valueRate: 'Value delivered',
+      valueRateHint: 'Fleet executions that delivered value',
+      avgVerdict: 'Avg verdict',
+      avgVerdictHint: 'Mean latest score across reviewed agents',
+      costPerValue: 'Cost / value',
+      costPerValueHint: 'Spend per value-delivered run',
+      inScope: 'In scope',
+      inScopeHint: '{reviewed} reviewed · {unreviewed} pending',
+    },
+    momentum: {
+      label: 'Momentum',
+      improving: 'improving',
+      flat: 'flat',
+      declining: 'declining',
+      steady: 'Holding steady',
+    },
+    breakdown: {
+      title: 'Value breakdown',
+      empty: 'No assessed runs in this period yet',
+      bands: {
+        delivered: 'Delivered',
+        partial: 'Partial',
+        blocked: 'Blocked',
+        noInput: 'No input',
+        unassessed: 'Unassessed',
+      },
+    },
+    distribution: {
+      title: 'Score distribution',
+      avgLabel: 'avg',
+      empty: 'No scored agents yet',
+      agents: '{count} agents',
+    },
+    coaching: {
+      title: 'Coaching scope',
+      agent: 'Agent',
+      latest: 'Latest',
+      trend: 'Trend',
+      value: 'Value',
+      attention: 'Attention',
+      lastReview: 'Last review',
+      never: 'Never',
+      healthy: 'All agents in scope are healthy',
+      filterEmpty: 'No agents match this filter',
+      clearFilter: 'Clear filter',
+      flags: {
+        needsReview: 'New',
+        low: 'Low',
+        declining: 'Declining',
+        stale: 'Stale',
+      },
+      flagHints: {
+        needsReview: 'In scope but never scored — run the Director to get a baseline.',
+        low: 'Latest verdict is 2 or below — these agents need coaching.',
+        declining: 'Latest score dropped from the previous review.',
+        stale: 'Last reviewed over two weeks ago — re-check that they still earn their keep.',
+      },
+    },
+    verdictFeed: {
+      title: 'Recent coaching verdicts',
+      empty: 'No verdicts yet — run a review to see coaching here',
+      categories: {
+        prompt: 'Prompt',
+        health: 'Health',
+        triggers: 'Triggers',
+        credentials: 'Credentials',
+        memory: 'Memory',
+        usefulness: 'Usefulness',
+      },
+    },
+  },
   slaPage: {
     title: 'SLA',
     subtitle: 'Service-level objectives, compliance, and breach history',
@@ -2229,6 +2447,26 @@ export const en: Translations = {
       recall: 'Recall',
       fallback: 'Fallback',
     },
+    athenaActionMix: 'Cost by action type',
+    athenaOps: {
+      chat: 'Chat',
+      fleetSpawn: 'Fleet spawn',
+      canvasControl: 'Canvas control',
+      recall: 'Recall',
+      proactiveNudge: 'Proactive nudges',
+      execTriage: 'Execution triage',
+      msgTriage: 'Message triage',
+      reviewResolution: 'Review resolution',
+    },
+    turnsCount: '{count} turns',
+    athenaSpendLane: 'Athena spend lane',
+    spendTurns: 'Turns',
+    spendCost: 'Athena cost',
+    spendAvgPerTurn: 'Avg / turn',
+    spendTokens: 'Tokens',
+    spendTokensDetail: '{in} in · {out} out',
+    athenaVsFleet: 'Athena vs fleet',
+    athenaVsFleetCaption: '{athena} of {total} total spend this window',
     valueRollup: 'Value rollup',
     valueDelivered: 'Value delivered',
     costPerValue: 'Cost per value',

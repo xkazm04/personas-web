@@ -3,7 +3,12 @@
 import useSWR from "swr";
 
 import { getActivityMetrics } from "@/lib/mockApi";
-import type { AthenaUsagePoint, ValueRollup } from "@/lib/mock-dashboard-data";
+import type {
+  AthenaActionCost,
+  AthenaLedgerTotals,
+  AthenaUsagePoint,
+  ValueRollup,
+} from "@/lib/mock-dashboard-data";
 
 /**
  * Activity-metrics data for the observability Activity tab. Demo-only — sourced
@@ -12,6 +17,8 @@ import type { AthenaUsagePoint, ValueRollup } from "@/lib/mock-dashboard-data";
 export function useActivityMetrics(): {
   athenaUsage: AthenaUsagePoint[];
   valueRollup: ValueRollup | null;
+  athenaActionMix: AthenaActionCost[];
+  athenaLedger: AthenaLedgerTotals | null;
   isLoading: boolean;
   error: string | null;
   retry: () => void;
@@ -24,6 +31,8 @@ export function useActivityMetrics(): {
   return {
     athenaUsage: data?.athenaUsage ?? [],
     valueRollup: data?.valueRollup ?? null,
+    athenaActionMix: data?.athenaActionMix ?? [],
+    athenaLedger: data?.athenaLedger ?? null,
     isLoading,
     error: error instanceof Error ? error.message : error ? String(error) : null,
     retry: () => void mutate(),

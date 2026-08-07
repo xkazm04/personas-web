@@ -19,7 +19,9 @@ import { usePersonaStore } from "@/stores/personaStore";
 import { useReviewStore } from "@/stores/reviewStore";
 import { useSystemStore } from "@/stores/systemStore";
 
+import { ApprovedWorkCard } from "./home-page/ApprovedWorkCard";
 import { DashboardGreetingHeader } from "./home-page/DashboardGreetingHeader";
+import { FleetSessionsStrip } from "./home-page/FleetSessionsStrip";
 import { InstrumentsBay } from "./home-page/InstrumentsBay";
 import { RecentActivityCard } from "./home-page/RecentActivityCard";
 import { StatusTicker } from "./home-page/StatusTicker";
@@ -163,6 +165,20 @@ export default function DashboardHomePage() {
           />
         </motion.div>
       </div>
+
+      {/* Current-era Mission Control: fleet session ledger + approved-work
+          reconciliation. Pure fixtures with no synced source — demo only,
+          like the fleet recommendation above. */}
+      {isDemo && (
+        <div className="mt-6 grid gap-6 lg:grid-cols-3">
+          <motion.div variants={fadeUp} className="lg:col-span-2">
+            <FleetSessionsStrip />
+          </motion.div>
+          <motion.div variants={fadeUp}>
+            <ApprovedWorkCard />
+          </motion.div>
+        </div>
+      )}
 
       <motion.div variants={fadeUp} className="mt-6">
         <StatusTicker

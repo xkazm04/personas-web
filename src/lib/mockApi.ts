@@ -21,8 +21,16 @@ import {
   MOCK_DISK_USAGE,
   MOCK_HEALTH_CHECKS,
   MOCK_VALUE_ROLLUP,
+  MOCK_DIRECTOR_PORTFOLIO,
+  MOCK_DIRECTOR_VERDICTS,
+  MOCK_ATHENA_ACTION_MIX,
+  MOCK_ATHENA_LEDGER,
+  type AthenaActionCost,
+  type AthenaLedgerTotals,
   type AthenaUsagePoint,
   type AuditIncident,
+  type DirectorPortfolio,
+  type DirectorVerdict,
   type HealthCheckSection,
   type ValueRollup,
 } from "./mock-dashboard-data";
@@ -276,14 +284,45 @@ export async function getSystemHealth(): Promise<{
 }
 
 /**
+ * Director coaching snapshot for /dashboard/director: portfolio scorecard,
+ * roster with verdict history, and the recent coaching-verdict feed. Demo-only
+ * standalone fetcher (not part of the real `ApiClient`); callers import it
+ * directly rather than via the `api` proxy. Simulates fetch latency so the
+ * surface can show a loading state.
+ */
+export async function getDirectorSnapshot(): Promise<{
+  portfolio: DirectorPortfolio;
+  verdicts: DirectorVerdict[];
+}> {
+  await delay(300);
+  return {
+    portfolio: {
+      ...MOCK_DIRECTOR_PORTFOLIO,
+      breakdown: { ...MOCK_DIRECTOR_PORTFOLIO.breakdown },
+      scoreDistribution: MOCK_DIRECTOR_PORTFOLIO.scoreDistribution.map((b) => ({ ...b })),
+      roster: MOCK_DIRECTOR_PORTFOLIO.roster.map((r) => ({ ...r, scoreTrend: [...r.scoreTrend] })),
+    },
+    verdicts: MOCK_DIRECTOR_VERDICTS.map((v) => ({ ...v })),
+  };
+}
+
+/**
  * Activity-metrics snapshot for the observability Activity tab: Athena
- * cost-by-action series + the value-delivered rollup. Demo-only standalone
- * fetcher (not part of the real `ApiClient`).
+ * cost-by-action series, the value-delivered rollup, the op-grammar action
+ * mix, and the turn-ledger spend totals. Demo-only standalone fetcher (not
+ * part of the real `ApiClient`).
  */
 export async function getActivityMetrics(): Promise<{
   athenaUsage: AthenaUsagePoint[];
   valueRollup: ValueRollup;
+  athenaActionMix: AthenaActionCost[];
+  athenaLedger: AthenaLedgerTotals;
 }> {
   await delay(300);
-  return { athenaUsage: MOCK_ATHENA_USAGE.map((p) => ({ ...p })), valueRollup: { ...MOCK_VALUE_ROLLUP } };
+  return {
+    athenaUsage: MOCK_ATHENA_USAGE.map((p) => ({ ...p })),
+    valueRollup: { ...MOCK_VALUE_ROLLUP },
+    athenaActionMix: MOCK_ATHENA_ACTION_MIX.map((a) => ({ ...a })),
+    athenaLedger: { ...MOCK_ATHENA_LEDGER },
+  };
 }

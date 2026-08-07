@@ -446,6 +446,7 @@ export const fr: Translations = {
       knowledge: "Connaissances",
       settings: "Param\u00e8tres",
       leaderboard: "Classement",
+      director: "Directeur",
       sla: "SLA",
       incidents: "Incidents",
       health: "\u00c9tat",
@@ -538,6 +539,28 @@ export const fr: Translations = {
           instrumentsTitle: "Instruments",
           tickerPause: "Mettre en pause le bandeau d\u2019\u00e9tat",
           tickerResume: "Reprendre le bandeau d\u2019\u00e9tat"
+        },
+        fleetSessions: {
+          title: "Sessions de la flotte",
+          needsYou: "{count} vous attendent",
+          athenaOnIt: "Athena s'en occupe",
+          states: {
+            working: "En cours",
+            needsYou: "Vous attend",
+            finished: "Termin\u00e9e",
+            frozen: "Gel\u00e9e"
+          }
+        },
+        approvedWork: {
+          title: "Travail approuv\u00e9",
+          summary: "{undispatched} de {total} id\u00e9es approuv\u00e9es ne sont jamais devenues une t\u00e2che",
+          stale: "{count} en attente depuis plus de {days} jours",
+          neverDispatched: "Jamais envoy\u00e9e",
+          dispatched: "Envoy\u00e9e",
+          dispatch: "Envoyer",
+          sendAll: "Envoyer \u00e0 la flotte ({count})",
+          toast: "{count} envoy\u00e9es \u2014 Flotte",
+          empty: "Rien n'attend d'\u00eatre envoy\u00e9"
         },
         heatmap: {
           title: "Activit\u00e9 d'ex\u00e9cution",
@@ -812,6 +835,82 @@ export const fr: Translations = {
         flat: "Stable"
       }
     },
+    directorPage: {
+      title: "Directeur",
+      subtitle: "Centre de commandement du coaching pour vos agents favoris",
+      periodLabel: "{n} derniers jours",
+      kpi: {
+        valueRate: "Valeur livr\u00e9e",
+        valueRateHint: "Ex\u00e9cutions de la flotte ayant livr\u00e9 de la valeur",
+        avgVerdict: "Verdict moyen",
+        avgVerdictHint: "Moyenne des derniers scores des agents \u00e9valu\u00e9s",
+        costPerValue: "Co\u00fbt / valeur",
+        costPerValueHint: "D\u00e9pense par ex\u00e9cution \u00e0 valeur livr\u00e9e",
+        inScope: "Dans le p\u00e9rim\u00e8tre",
+        inScopeHint: "{reviewed} \u00e9valu\u00e9s \u00b7 {unreviewed} en attente"
+      },
+      momentum: {
+        label: "\u00c9lan",
+        improving: "en progression",
+        flat: "stable",
+        declining: "en d\u00e9clin",
+        steady: "Reste stable"
+      },
+      breakdown: {
+        title: "R\u00e9partition de la valeur",
+        empty: "Aucune ex\u00e9cution \u00e9valu\u00e9e sur cette p\u00e9riode pour l'instant",
+        bands: {
+          delivered: "Livr\u00e9",
+          partial: "Partiel",
+          blocked: "Bloqu\u00e9",
+          noInput: "Aucune entr\u00e9e",
+          unassessed: "Non \u00e9valu\u00e9"
+        }
+      },
+      distribution: {
+        title: "Distribution des scores",
+        avgLabel: "moy.",
+        empty: "Aucun agent not\u00e9 pour l'instant",
+        agents: "{count} agents"
+      },
+      coaching: {
+        title: "P\u00e9rim\u00e8tre de coaching",
+        agent: "Agent",
+        latest: "Dernier",
+        trend: "Tendance",
+        value: "Valeur",
+        attention: "Attention",
+        lastReview: "Derni\u00e8re revue",
+        never: "Jamais",
+        healthy: "Tous les agents du p\u00e9rim\u00e8tre sont sains",
+        filterEmpty: "Aucun agent ne correspond \u00e0 ce filtre",
+        clearFilter: "Effacer le filtre",
+        flags: {
+          needsReview: "Nouveau",
+          low: "Faible",
+          declining: "En baisse",
+          stale: "Obsol\u00e8te"
+        },
+        flagHints: {
+          needsReview: "Dans le p\u00e9rim\u00e8tre mais jamais not\u00e9 \u2014 lancez le Directeur pour \u00e9tablir une r\u00e9f\u00e9rence.",
+          low: "Le dernier verdict est de 2 ou moins \u2014 ces agents ont besoin de coaching.",
+          declining: "Le dernier score a baiss\u00e9 par rapport \u00e0 la revue pr\u00e9c\u00e9dente.",
+          stale: "Derni\u00e8re revue il y a plus de deux semaines \u2014 v\u00e9rifiez qu'ils m\u00e9ritent encore leur place."
+        }
+      },
+      verdictFeed: {
+        title: "Verdicts de coaching r\u00e9cents",
+        empty: "Aucun verdict pour l'instant \u2014 lancez une revue pour voir le coaching ici",
+        categories: {
+          prompt: "Prompt",
+          health: "Sant\u00e9",
+          triggers: "D\u00e9clencheurs",
+          credentials: "Identifiants",
+          memory: "M\u00e9moire",
+          usefulness: "Utilit\u00e9"
+        }
+      }
+    },
     slaPage: {
       title: "SLA",
       subtitle: "Objectifs de niveau de service, conformit\u00e9 et historique des violations",
@@ -1000,6 +1099,26 @@ export const fr: Translations = {
         recall: "Rappel",
         fallback: "Repli"
       },
+      athenaActionMix: "Coût par type d'action",
+      athenaOps: {
+        chat: "Chat",
+        fleetSpawn: "Lancement de flotte",
+        canvasControl: "Contrôle du canevas",
+        recall: "Rappel",
+        proactiveNudge: "Relances proactives",
+        execTriage: "Triage des exécutions",
+        msgTriage: "Triage des messages",
+        reviewResolution: "Résolution des revues"
+      },
+      turnsCount: "{count} tours",
+      athenaSpendLane: "Dépenses d'Athena",
+      spendTurns: "Tours",
+      spendCost: "Coût d'Athena",
+      spendAvgPerTurn: "Moy. / tour",
+      spendTokens: "Jetons",
+      spendTokensDetail: "{in} entrée · {out} sortie",
+      athenaVsFleet: "Athena vs flotte",
+      athenaVsFleetCaption: "{athena} sur {total} de dépense totale sur cette fenêtre",
       valueRollup: "Bilan de valeur",
       valueDelivered: "Valeur livr\u00e9e",
       costPerValue: "Co\u00fbt par valeur",

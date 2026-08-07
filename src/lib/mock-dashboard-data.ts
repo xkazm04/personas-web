@@ -1828,6 +1828,373 @@ export interface CredentialRotation {
   intervalDays: number;
 }
 
+// ── Mission Control: fleet sessions + approved work ─────────────────
+// Mirrors the desktop Mission Control's current-era elements: the fleet
+// session ledger with parked-state classification and the "Approved work"
+// reconciliation tray (approved ideas vs. actually dispatched tasks).
+// Demo-only fixtures; project/session titles are data shown verbatim.
+
+/**
+ * Parked-state classification for a fleet session. Web-demo simplification of
+ * the desktop's lifecycle-state + attention-lane pair: `working` (running),
+ * `needsYou` (awaiting input), `finished` (done, parked), `frozen` (total
+ * output silence past the stall cutoff).
+ */
+export type FleetSessionState = "working" | "needsYou" | "finished" | "frozen";
+
+export interface FleetSessionSummary {
+  id: string;
+  /** Project label — fixture, shown verbatim. */
+  project: string;
+  /** Live terminal title — fixture, shown verbatim. */
+  title: string;
+  state: FleetSessionState;
+  /** ISO timestamp of the last session activity. */
+  lastActivityAt: string;
+  /** Athena has taken this needs-you ticket ("Athena's on it"). */
+  athenaActive: boolean;
+}
+
+export const MOCK_FLEET_SESSIONS: FleetSessionSummary[] = [
+  {
+    id: "fs-1",
+    project: "personas-web",
+    title: "guide-pages: motion gating sweep",
+    state: "working",
+    lastActivityAt: new Date(Date.now() - 40_000).toISOString(),
+    athenaActive: false,
+  },
+  {
+    id: "fs-2",
+    project: "personas-web",
+    title: "waitlist: i18n completion pass",
+    state: "needsYou",
+    lastActivityAt: new Date(Date.now() - 12 * 60_000).toISOString(),
+    athenaActive: false,
+  },
+  {
+    id: "fs-3",
+    project: "personas",
+    title: "overview: director tab polish",
+    state: "needsYou",
+    lastActivityAt: new Date(Date.now() - 26 * 60_000).toISOString(),
+    athenaActive: true,
+  },
+  {
+    id: "fs-4",
+    project: "vibeman",
+    title: "context map refresh",
+    state: "finished",
+    lastActivityAt: new Date(Date.now() - 41 * 60_000).toISOString(),
+    athenaActive: false,
+  },
+  {
+    id: "fs-5",
+    project: "personas",
+    title: "e2e: fleet monitor spec",
+    state: "frozen",
+    lastActivityAt: new Date(Date.now() - 73 * 60_000).toISOString(),
+    athenaActive: false,
+  },
+  {
+    id: "fs-6",
+    project: "docs-site",
+    title: "changelog rollup",
+    state: "finished",
+    lastActivityAt: new Date(Date.now() - 118 * 60_000).toISOString(),
+    athenaActive: false,
+  },
+];
+
+/** An approved backlog idea, reconciled against whether work ever started. */
+export interface ApprovedWorkItem {
+  id: string;
+  /** Idea title — fixture, shown verbatim. */
+  title: string;
+  /** Project label — fixture, shown verbatim. */
+  project: string;
+  /** Accepted, with no task row — a decision that never became work. */
+  undispatched: boolean;
+  /** Whole hours since acceptance; null when a task already picked it up. */
+  ageHours: number | null;
+}
+
+/** An undispatched idea older than this reads as stale (days). */
+export const MOCK_APPROVED_WORK_STALE_DAYS = 7;
+
+export const MOCK_APPROVED_WORK: ApprovedWorkItem[] = [
+  { id: "aw-1", title: "Streaming exec log follow mode", project: "personas-web", undispatched: true, ageHours: 214 },
+  { id: "aw-2", title: "Retry budget per connector", project: "personas", undispatched: true, ageHours: 56 },
+  { id: "aw-3", title: "Fleet monitor keyboard nav", project: "personas", undispatched: true, ageHours: 9 },
+  { id: "aw-4", title: "Roadmap JSON publish job", project: "personas-web", undispatched: false, ageHours: null },
+  { id: "aw-5", title: "Vault rotation reminder digest", project: "personas", undispatched: false, ageHours: null },
+];
+
+// ── Director (coaching command center) ──────────────────────────────
+// Mirrors the desktop overview's Director tab: a system-owned meta-persona
+// that scores every starred agent's latest run on a 0–5 verdict scale and
+// tracks whether coaching moves the needle. Demo-only; the story is a small
+// fleet where two agents are improving, one is flat-and-stale, one is
+// declining into low scores, and one has never been reviewed.
+
+export type DirectorMomentum = "improving" | "flat" | "declining";
+export type DirectorSeverity = "info" | "warning" | "error";
+export type DirectorCategory =
+  | "prompt"
+  | "health"
+  | "triggers"
+  | "credentials"
+  | "memory"
+  | "usefulness";
+
+export interface DirectorRosterEntry {
+  id: string;
+  name: string;
+  color: string;
+  /** Latest 0–5 verdict; null = in scope but never scored. */
+  latestScore: number | null;
+  /** Recent 0–5 verdicts, oldest → newest (up to 12). */
+  scoreTrend: number[];
+  /** Share of this agent's assessed runs that delivered value (0–1). */
+  valueDeliveredRate: number;
+  totalExecutions: number;
+  /** ISO timestamp of the last Director review; null = never. */
+  lastReviewedAt: string | null;
+}
+
+export interface DirectorScoreBand {
+  score: number;
+  count: number;
+}
+
+/** Assessed-run outcome counts (the value breakdown bands). */
+export interface DirectorValueBreakdown {
+  delivered: number;
+  partial: number;
+  blocked: number;
+  noInput: number;
+  unassessed: number;
+}
+
+export interface DirectorPortfolio {
+  periodDays: number;
+  /** Total fleet cost over the period (USD, non-simulation). */
+  totalCostUsd: number;
+  /** Denominator for the value-delivered rate (sum of all bands). */
+  assessedExecutions: number;
+  breakdown: DirectorValueBreakdown;
+  /** Always six bands, scores 0..5. */
+  scoreDistribution: DirectorScoreBand[];
+  roster: DirectorRosterEntry[];
+  inScope: number;
+  reviewed: number;
+  unreviewed: number;
+  /** Mean latest score across reviewed agents; null when none reviewed. */
+  avgScore: number | null;
+}
+
+/** A prose coaching note the Director attached to a review. */
+export interface DirectorVerdict {
+  id: string;
+  personaId: string;
+  personaName: string;
+  personaColor: string;
+  severity: DirectorSeverity;
+  category: DirectorCategory;
+  /** Fixture text — demo verdict titles are data, shown verbatim. */
+  title: string;
+  createdAt: string;
+}
+
+const DIRECTOR_ROSTER: DirectorRosterEntry[] = [
+  {
+    id: "p-research",
+    name: "ResearchAgent",
+    color: "#06b6d4",
+    latestScore: 5,
+    scoreTrend: [3, 4, 4, 4, 5],
+    valueDeliveredRate: 0.86,
+    totalExecutions: 1240,
+    lastReviewedAt: new Date(Date.now() - 2 * 3600_000).toISOString(),
+  },
+  {
+    id: "p-codereview",
+    name: "CodeReviewer",
+    color: "#34d399",
+    latestScore: 4,
+    scoreTrend: [2, 3, 3, 4],
+    valueDeliveredRate: 0.78,
+    totalExecutions: 812,
+    lastReviewedAt: new Date(Date.now() - 26 * 3600_000).toISOString(),
+  },
+  {
+    id: "p-dataproc",
+    name: "DataProcessor",
+    color: "#fbbf24",
+    latestScore: 3,
+    scoreTrend: [3, 3, 3],
+    valueDeliveredRate: 0.64,
+    totalExecutions: 964,
+    lastReviewedAt: new Date(Date.now() - 16 * 24 * 3600_000).toISOString(),
+  },
+  {
+    id: "p-notify",
+    name: "NotifyBot",
+    color: "#a855f7",
+    latestScore: 2,
+    scoreTrend: [4, 4, 3, 2],
+    valueDeliveredRate: 0.41,
+    totalExecutions: 388,
+    lastReviewedAt: new Date(Date.now() - 5 * 3600_000).toISOString(),
+  },
+  {
+    id: "p-reportgen",
+    name: "ReportGen",
+    color: "#f43f5e",
+    latestScore: null,
+    scoreTrend: [],
+    valueDeliveredRate: 0.57,
+    totalExecutions: 143,
+    lastReviewedAt: null,
+  },
+];
+
+export const MOCK_DIRECTOR_PORTFOLIO: DirectorPortfolio = {
+  periodDays: 30,
+  totalCostUsd: 41.8,
+  assessedExecutions: 560,
+  breakdown: { delivered: 348, partial: 92, blocked: 41, noInput: 26, unassessed: 53 },
+  scoreDistribution: [
+    { score: 0, count: 0 },
+    { score: 1, count: 0 },
+    { score: 2, count: 1 },
+    { score: 3, count: 1 },
+    { score: 4, count: 1 },
+    { score: 5, count: 1 },
+  ],
+  roster: DIRECTOR_ROSTER,
+  inScope: 5,
+  reviewed: 4,
+  unreviewed: 1,
+  avgScore: 3.5,
+};
+
+export const MOCK_DIRECTOR_VERDICTS: DirectorVerdict[] = [
+  {
+    id: "dv-1",
+    personaId: "p-notify",
+    personaName: "NotifyBot",
+    personaColor: "#a855f7",
+    severity: "error",
+    category: "health",
+    title: "Slack webhook retry storm burns spend on dead endpoints",
+    createdAt: new Date(Date.now() - 3 * 3600_000).toISOString(),
+  },
+  {
+    id: "dv-2",
+    personaId: "p-notify",
+    personaName: "NotifyBot",
+    personaColor: "#a855f7",
+    severity: "warning",
+    category: "prompt",
+    title: "Digest prompt drifts from the notification template",
+    createdAt: new Date(Date.now() - 5 * 3600_000).toISOString(),
+  },
+  {
+    id: "dv-3",
+    personaId: "p-dataproc",
+    personaName: "DataProcessor",
+    personaColor: "#fbbf24",
+    severity: "warning",
+    category: "triggers",
+    title: "Polling trigger fires 4x more often than the data changes",
+    createdAt: new Date(Date.now() - 27 * 3600_000).toISOString(),
+  },
+  {
+    id: "dv-4",
+    personaId: "p-codereview",
+    personaName: "CodeReviewer",
+    personaColor: "#34d399",
+    severity: "info",
+    category: "usefulness",
+    title: "Review summaries restate the diff instead of judging it",
+    createdAt: new Date(Date.now() - 30 * 3600_000).toISOString(),
+  },
+  {
+    id: "dv-5",
+    personaId: "p-research",
+    personaName: "ResearchAgent",
+    personaColor: "#06b6d4",
+    severity: "info",
+    category: "memory",
+    title: "Recall surfaces near-duplicate memories from the same crawl",
+    createdAt: new Date(Date.now() - 2 * 24 * 3600_000).toISOString(),
+  },
+  {
+    id: "dv-6",
+    personaId: "p-dataproc",
+    personaName: "DataProcessor",
+    personaColor: "#fbbf24",
+    severity: "info",
+    category: "credentials",
+    title: "Vault token scoped wider than the jobs it runs",
+    createdAt: new Date(Date.now() - 3 * 24 * 3600_000).toISOString(),
+  },
+];
+
+// ── Athena op-grammar action mix + turn-ledger spend lane ───────────
+// Mirrors the desktop Activity tab's Athena lane: per-turn usage accounting
+// (the companion turn ledger) rolled up into an action-type cost breakdown
+// (op-grammar buckets) and headline totals with an Athena-vs-fleet ratio.
+// Demo-only; slugs are the desktop's real op grammar, labeled via i18n.
+
+/** Op-grammar bucket slugs (desktop parity: dispatcher action / headless leg). */
+export type AthenaOpAction =
+  | "chat"
+  | "fleet_spawn"
+  | "canvas_control"
+  | "recall"
+  | "proactive_nudge"
+  | "exec_triage"
+  | "msg_triage"
+  | "review_resolution";
+
+export interface AthenaActionCost {
+  action: AthenaOpAction;
+  costUsd: number;
+  turns: number;
+}
+
+/** Headline totals from the per-turn usage ledger, plus the fleet baseline. */
+export interface AthenaLedgerTotals {
+  turns: number;
+  costUsd: number;
+  inputTokens: number;
+  outputTokens: number;
+  /** Total fleet spend in the same window, for the Athena-vs-fleet ratio. */
+  fleetCostUsd: number;
+}
+
+export const MOCK_ATHENA_ACTION_MIX: AthenaActionCost[] = [
+  { action: "chat", costUsd: 7.4, turns: 96 },
+  { action: "fleet_spawn", costUsd: 4.6, turns: 38 },
+  { action: "canvas_control", costUsd: 3.1, turns: 52 },
+  { action: "proactive_nudge", costUsd: 2.9, turns: 84 },
+  { action: "recall", costUsd: 2.4, turns: 210 },
+  { action: "exec_triage", costUsd: 2.2, turns: 168 },
+  { action: "msg_triage", costUsd: 1.4, turns: 122 },
+  { action: "review_resolution", costUsd: 0.8, turns: 31 },
+];
+
+export const MOCK_ATHENA_LEDGER: AthenaLedgerTotals = {
+  turns: 801,
+  costUsd: 24.8,
+  inputTokens: 6_420_000,
+  outputTokens: 1_180_000,
+  fleetCostUsd: 186.4,
+};
+
+// ── Rotation Overview (credential rotation status) ──────────────────
 export const MOCK_CREDENTIAL_ROTATIONS: CredentialRotation[] = [
   { id: "cr_github", secret: "GITHUB_OAUTH_TOKEN", hasPolicy: true, enabled: true, anomaly: false, overdue: false, nextRotation: "12d", intervalDays: 90 },
   { id: "cr_slack", secret: "SLACK_WEBHOOK_URL", hasPolicy: true, enabled: true, anomaly: true, overdue: false, nextRotation: "3d", intervalDays: 30 },

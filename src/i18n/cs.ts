@@ -446,6 +446,7 @@ export const cs: Translations = {
       knowledge: "Znalosti",
       settings: "Nastaven\u00ed",
       leaderboard: "\u017deb\u0159\u00ed\u010dek",
+      director: "Re\u017eis\u00e9r",
       sla: "SLA",
       incidents: "Incidenty",
       health: "Stav",
@@ -538,6 +539,28 @@ export const cs: Translations = {
           instrumentsTitle: "N\u00e1stroje",
           tickerPause: "Pozastavit pruh stavu",
           tickerResume: "Spustit pruh stavu"
+        },
+        fleetSessions: {
+          title: "Relace flotily",
+          needsYou: "{count} \u010dekaj\u00ed na v\u00e1s",
+          athenaOnIt: "Athena na tom pracuje",
+          states: {
+            working: "Pracuje",
+            needsYou: "\u010cek\u00e1 na v\u00e1s",
+            finished: "Dokon\u010deno",
+            frozen: "Zamrzl\u00e9"
+          }
+        },
+        approvedWork: {
+          title: "Schv\u00e1len\u00e1 pr\u00e1ce",
+          summary: "{undispatched} z {total} schv\u00e1len\u00fdch n\u00e1pad\u016f se nikdy nestalo \u00fakolem",
+          stale: "{count} \u010dek\u00e1 d\u00e9le ne\u017e {days} dn\u00ed",
+          neverDispatched: "Nikdy neodesl\u00e1no",
+          dispatched: "Odesl\u00e1no",
+          dispatch: "Odeslat",
+          sendAll: "Odeslat do flotily ({count})",
+          toast: "{count} odesl\u00e1no \u2014 flotila",
+          empty: "Nic ne\u010dek\u00e1 na odesl\u00e1n\u00ed"
         },
         heatmap: {
           title: "Aktivita spu\u0161t\u011bn\u00ed",
@@ -812,6 +835,82 @@ export const cs: Translations = {
         flat: "Beze zm\u011bny"
       }
     },
+    directorPage: {
+      title: "Re\u017eis\u00e9r",
+      subtitle: "Kou\u010dovac\u00ed vel\u00edn pro va\u0161e agenty s hv\u011bzdi\u010dkou",
+      periodLabel: "Posledn\u00edch {n} dn\u00ed",
+      kpi: {
+        valueRate: "Dodan\u00e1 hodnota",
+        valueRateHint: "Pod\u00edl b\u011bh\u016f flotily, kter\u00e9 dodaly hodnotu",
+        avgVerdict: "Pr\u016fm\u011brn\u00fd verdikt",
+        avgVerdictHint: "Pr\u016fm\u011br posledn\u00edch sk\u00f3re hodnocen\u00fdch agent\u016f",
+        costPerValue: "N\u00e1klady / hodnota",
+        costPerValueHint: "\u00datrata na jeden b\u011bh s dodanou hodnotou",
+        inScope: "V z\u00e1b\u011bru",
+        inScopeHint: "{reviewed} hodnoceno \u00b7 {unreviewed} \u010dek\u00e1"
+      },
+      momentum: {
+        label: "Momentum",
+        improving: "zlep\u0161uje se",
+        flat: "beze zm\u011bny",
+        declining: "zhor\u0161uje se",
+        steady: "Dr\u017e\u00ed se stabiln\u011b"
+      },
+      breakdown: {
+        title: "Rozpad hodnoty",
+        empty: "V tomto obdob\u00ed zat\u00edm \u017e\u00e1dn\u00e9 vyhodnocen\u00e9 b\u011bhy",
+        bands: {
+          delivered: "Dod\u00e1no",
+          partial: "\u010c\u00e1ste\u010dn\u011b",
+          blocked: "Zablokov\u00e1no",
+          noInput: "Bez vstupu",
+          unassessed: "Nevyhodnoceno"
+        }
+      },
+      distribution: {
+        title: "Rozlo\u017een\u00ed sk\u00f3re",
+        avgLabel: "pr\u016fm.",
+        empty: "Zat\u00edm \u017e\u00e1dn\u00ed ohodnocen\u00ed agenti",
+        agents: "{count} agent\u016f"
+      },
+      coaching: {
+        title: "Z\u00e1b\u011br kou\u010dov\u00e1n\u00ed",
+        agent: "Agent",
+        latest: "Posledn\u00ed",
+        trend: "Trend",
+        value: "Hodnota",
+        attention: "Pozornost",
+        lastReview: "Posledn\u00ed revize",
+        never: "Nikdy",
+        healthy: "V\u0161ichni agenti v z\u00e1b\u011bru jsou v po\u0159\u00e1dku",
+        filterEmpty: "Tomuto filtru neodpov\u00edd\u00e1 \u017e\u00e1dn\u00fd agent",
+        clearFilter: "Zru\u0161it filtr",
+        flags: {
+          needsReview: "Nov\u00fd",
+          low: "N\u00edzk\u00e9",
+          declining: "Kles\u00e1",
+          stale: "Zastaral\u00e9"
+        },
+        flagHints: {
+          needsReview: "V z\u00e1b\u011bru, ale zat\u00edm bez sk\u00f3re \u2014 spus\u0165te Re\u017eis\u00e9ra pro v\u00fdchoz\u00ed hodnocen\u00ed.",
+          low: "Posledn\u00ed verdikt je 2 nebo m\u00e9n\u011b \u2014 tito agenti pot\u0159ebuj\u00ed kou\u010dink.",
+          declining: "Posledn\u00ed sk\u00f3re kleslo oproti p\u0159edchoz\u00ed revizi.",
+          stale: "Posledn\u00ed revize prob\u011bhla p\u0159ed v\u00edce ne\u017e dv\u011bma t\u00fddny \u2014 ov\u011b\u0159te, \u017ee si agenti sv\u00e9 m\u00edsto st\u00e1le zaslou\u017e\u00ed."
+        }
+      },
+      verdictFeed: {
+        title: "Ned\u00e1vn\u00e9 kou\u010dovac\u00ed verdikty",
+        empty: "Zat\u00edm \u017e\u00e1dn\u00e9 verdikty \u2014 spus\u0165te revizi a kou\u010dink se objev\u00ed zde",
+        categories: {
+          prompt: "Prompt",
+          health: "Zdrav\u00ed",
+          triggers: "Spou\u0161t\u011b\u010de",
+          credentials: "P\u0159ihla\u0161ovac\u00ed \u00fadaje",
+          memory: "Pam\u011b\u0165",
+          usefulness: "U\u017eite\u010dnost"
+        }
+      }
+    },
     slaPage: {
       title: "SLA",
       subtitle: "C\u00edle \u00farovn\u011b slu\u017eeb, dodr\u017eov\u00e1n\u00ed a historie poru\u0161en\u00ed",
@@ -1000,6 +1099,26 @@ export const cs: Translations = {
         recall: "Na\u010dten\u00ed",
         fallback: "Z\u00e1loha"
       },
+      athenaActionMix: "Náklady podle typu akce",
+      athenaOps: {
+        chat: "Chat",
+        fleetSpawn: "Spuštění flotily",
+        canvasControl: "Ovládání plátna",
+        recall: "Načtení",
+        proactiveNudge: "Proaktivní pobídky",
+        execTriage: "Třídění běhů",
+        msgTriage: "Třídění zpráv",
+        reviewResolution: "Vyřízení revizí"
+      },
+      turnsCount: "{count} tahů",
+      athenaSpendLane: "Útrata Athény",
+      spendTurns: "Tahy",
+      spendCost: "Náklady Athény",
+      spendAvgPerTurn: "Prům. / tah",
+      spendTokens: "Tokeny",
+      spendTokensDetail: "{in} vstup · {out} výstup",
+      athenaVsFleet: "Athena vs. flotila",
+      athenaVsFleetCaption: "{athena} z {total} celkové útraty v tomto okně",
       valueRollup: "P\u0159ehled hodnoty",
       valueDelivered: "Dodan\u00e1 hodnota",
       costPerValue: "N\u00e1klady na hodnotu",
