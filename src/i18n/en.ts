@@ -186,14 +186,14 @@
     headingGradient: string;
     subtitle: string;
     downloadInstaller: string;
+    downloadFor: string;
     joinWaitlist: string;
     connectCli: string;
     launchAgent: string;
     exploreFirst: string;
     requiresCli: string;
     installerSize: string;
-    noTelemetry: string;
-    localFirst: string;
+    noSignupLine: string;
     windows: string;
     macos: string;
     linux: string;
@@ -949,19 +949,27 @@
   };
   waitlist: {
     title: string;
-    subtitle: string;
     emailPlaceholder: string;
     earlyBeta: string;
-    submit: string;
+    earlyBetaHint: string;
     joining: string;
     success: string;
-    successDesc: string;
     duplicate: string;
-    duplicateDesc: string;
-    shareTitle: string;
+    joinCount: string;
+    spotSaved: string;
+    spotAlreadySaved: string;
+    betaFlagged: string;
+    emailUseOnly: string;
+    announceWhere: string;
+    roadmapLink: string;
+    share: string;
+    manualCopy: string;
+    invalidEmail: string;
+    errorTimeout: string;
+    errorRateLimited: string;
+    errorInvalidPlatform: string;
+    errorRetryable: string;
     copied: string;
-    copyLink: string;
-    peopleWaiting: string;
     errorGeneric: string;
   };
   templatesPage: {
@@ -1643,14 +1651,14 @@ export const en: Translations = {
     headingGradient: 'agent?',
     subtitle: 'Download Personas for free. Start building in minutes.',
     downloadInstaller: 'Download installer',
+    downloadFor: 'Download for {platform}',
     joinWaitlist: 'Join waitlist',
     connectCli: 'Connect Claude CLI',
     launchAgent: 'Launch first agent',
     exploreFirst: 'Explore capabilities first',
     requiresCli: 'Requires Claude CLI',
     installerSize: '12 MB installer',
-    noTelemetry: 'No telemetry',
-    localFirst: 'Local-first security',
+    noSignupLine: 'No signup, no credit card. Runs on your machine. Zero telemetry.',
     windows: 'Windows',
     macos: 'macOS',
     linux: 'Linux',
@@ -2405,20 +2413,28 @@ export const en: Translations = {
     description: 'Our privacy policy and terms of service are being finalized. In the meantime, if you have any questions please reach out to us.',
   },
   waitlist: {
-    title: 'Join the Waitlist',
-    subtitle: 'Be the first to know when we launch for',
+    title: 'Personas for {platform}',
     emailPlaceholder: 'Enter your email',
     earlyBeta: 'I want early beta access',
-    submit: 'Join Waitlist',
+    earlyBetaHint: 'Get access to unstable builds before the public release',
     joining: 'Joining...',
     success: "You're on the list!",
-    successDesc: "We'll notify you as soon as the build is ready.",
     duplicate: 'Already registered',
-    duplicateDesc: "You're already on the waitlist. We'll notify you when ready.",
-    shareTitle: 'Share with friends',
+    joinCount: 'Join {count} people waiting for {platform}',
+    spotSaved: 'Your spot for {platform} is saved.',
+    spotAlreadySaved: 'Your spot for {platform} was already saved.',
+    betaFlagged: 'You opted into early beta, so your entry is flagged for the first build wave.',
+    emailUseOnly: 'Your address is only used to size the waitlist - we send no marketing email.',
+    announceWhere: 'Beta availability is announced on the {link} and on GitHub - watch either for the release.',
+    roadmapLink: 'public roadmap',
+    share: 'Share with a friend',
+    manualCopy: 'Could not copy automatically - copy this link',
+    invalidEmail: 'Please enter a valid email address',
+    errorTimeout: 'Request timed out - please try again',
+    errorRateLimited: 'Too many attempts - please wait a minute and try again.',
+    errorInvalidPlatform: 'That platform is not supported yet.',
+    errorRetryable: 'Could not save your spot right now - please try again in a moment.',
     copied: 'Copied!',
-    copyLink: 'Copy link',
-    peopleWaiting: 'people waiting',
     errorGeneric: 'Something went wrong. Please try again.',
   },
   templatesPage: {

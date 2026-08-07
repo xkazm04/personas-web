@@ -79,7 +79,7 @@ export default function DownloadCTA() {
                 href="/api/download"
                 onClick={() => trackDownloadClick("windows")}
                 icon={Download}
-                label="Download for Windows"
+                label={t.downloadSection.downloadFor.replace("{platform}", t.downloadSection.windows)}
                 variant="solid"
               />
             ) : (
@@ -102,7 +102,7 @@ export default function DownloadCTA() {
         </motion.div>
 
         <motion.p variants={fadeUp} className="mt-4 text-sm font-light text-muted-dark">
-          No signup, no credit card. Runs on your machine. Zero telemetry.
+          {t.downloadSection.noSignupLine}
         </motion.p>
 
         <PlatformPills

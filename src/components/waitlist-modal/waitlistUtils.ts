@@ -23,6 +23,38 @@ export function detectPlatformKey(): PlatformKey {
   return "windows";
 }
 
+export interface WaitlistErrorLabels {
+  invalidEmail: string;
+  errorRateLimited: string;
+  errorInvalidPlatform: string;
+  errorRetryable: string;
+  errorGeneric: string;
+}
+
+/**
+ * Turn a failed `/api/waitlist` response into a *localized* message.
+ *
+ * The route's prose is English-only and describes server internals, so it must
+ * never reach the UI. It instead ships a stable `code` (plus the HTTP status as
+ * a fallback for responses that predate the codes, e.g. `parseJsonBody`), and
+ * the client picks the translated sentence.
+ */
+export function waitlistErrorMessage(status: number, code: unknown, labels: WaitlistErrorLabels): string {
+  switch (code) {
+    case "rate_limited":
+      return labels.errorRateLimited;
+    case "invalid_email":
+      return labels.invalidEmail;
+    case "invalid_platform":
+      return labels.errorInvalidPlatform;
+    case "store_unavailable":
+      return labels.errorRetryable;
+  }
+  if (status === 429) return labels.errorRateLimited;
+  if (status === 503) return labels.errorRetryable;
+  return labels.errorGeneric;
+}
+
 export function legacyCopyToClipboard(text: string): boolean {
   try {
     const ta = document.createElement("textarea");

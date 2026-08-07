@@ -4,6 +4,22 @@ import Link from "next/link";
 import { AnimatedCheckmark } from "./AnimatedCheckmark";
 import type { ShareState, WaitlistStatus } from "./waitlistUtils";
 
+export interface WaitlistPanelLabels {
+  duplicate: string;
+  success: string;
+  copied: string;
+  close: string;
+  next: string;
+  spotSaved: string;
+  spotAlreadySaved: string;
+  betaFlagged: string;
+  emailUseOnly: string;
+  announceWhere: string;
+  roadmapLink: string;
+  share: string;
+  manualCopy: string;
+}
+
 export function WaitlistSuccessPanel({
   status,
   submittedEmail,
@@ -23,7 +39,7 @@ export function WaitlistSuccessPanel({
   shareFallbackUrl: string;
   onShare: () => void;
   onClose: () => void;
-  labels: { duplicate: string; success: string; copied: string; close: string; next: string };
+  labels: WaitlistPanelLabels;
 }) {
   return (
     <motion.div initial={{ opacity: 0, y: 8 }} animate={{ opacity: 1, y: 0 }} className="mt-6 text-center">
@@ -40,53 +56,53 @@ export function WaitlistSuccessPanel({
         <span className="truncate text-sm font-medium text-foreground/80">{submittedEmail}</span>
         <span className="shrink-0 rounded-md bg-brand-purple/15 px-1.5 py-0.5 text-xs font-medium text-brand-purple">{platformLabel}</span>
       </div>
-      <WaitlistNextSteps status={status} platformLabel={platformLabel} earlyBeta={earlyBeta} nextLabel={labels.next} />
+      <WaitlistNextSteps status={status} platformLabel={platformLabel} earlyBeta={earlyBeta} labels={labels} />
       <button onClick={onClose} className="mt-5 w-full rounded-full border border-glass-hover bg-white/[0.02] px-4 py-2.5 text-base font-medium text-muted transition-colors hover:border-glass-strong hover:text-foreground">
         {labels.close}
       </button>
       <button onClick={onShare} className="mt-2 group relative flex w-full items-center justify-center gap-2 rounded-full bg-white/[0.04] px-4 py-2.5 text-base font-medium text-brand-cyan transition-colors hover:bg-white/[0.08]">
         <Share2 className="h-3.5 w-3.5" />
-        <span>Share with a friend</span>
+        <span>{labels.share}</span>
         <AnimatePresence>
           {shareState === "copied" && <CopiedBubble label={labels.copied} />}
         </AnimatePresence>
       </button>
-      <ManualCopyAlert shareState={shareState} shareFallbackUrl={shareFallbackUrl} />
+      <ManualCopyAlert shareState={shareState} shareFallbackUrl={shareFallbackUrl} label={labels.manualCopy} />
     </motion.div>
   );
 }
 
-function WaitlistNextSteps({ status, platformLabel, earlyBeta, nextLabel }: { status: "success" | "duplicate"; platformLabel: string; earlyBeta: boolean; nextLabel: string }) {
+function WaitlistNextSteps({ status, platformLabel, earlyBeta, labels }: { status: "success" | "duplicate"; platformLabel: string; earlyBeta: boolean; labels: WaitlistPanelLabels }) {
   // Honest next-steps only: this repo ships NO email pipeline, so nothing here
   // may promise a message. The beta is announced on the public roadmap and on
   // GitHub — both are real, live surfaces, so that is what we point people at.
+  //
+  // `announceWhere` carries a `{link}` placeholder so translators keep the link
+  // in the position their language needs; splitting on it beats concatenation.
+  const [beforeLink, afterLink = ""] = labels.announceWhere.split("{link}");
   const steps: { key: string; node: React.ReactNode }[] = [
     {
       key: "spot",
-      node: status === "duplicate"
-        ? `Your spot for ${platformLabel} was already saved.`
-        : `Your spot for ${platformLabel} is saved.`,
+      node: (status === "duplicate" ? labels.spotAlreadySaved : labels.spotSaved).replace("{platform}", platformLabel),
     },
     {
       key: "beta",
-      node: earlyBeta
-        ? "You opted into early beta, so your entry is flagged for the first build wave."
-        : "Your address is only used to size the waitlist - we send no marketing email.",
+      node: earlyBeta ? labels.betaFlagged : labels.emailUseOnly,
     },
     {
       key: "where",
       node: (
         <>
-          Beta availability is announced on the{" "}
-          <Link href="/roadmap" className="text-brand-cyan underline underline-offset-2 hover:text-brand-cyan/80">public roadmap</Link>
-          {" "}and on GitHub - watch either for the release.
+          {beforeLink}
+          <Link href="/roadmap" className="text-brand-cyan underline underline-offset-2 hover:text-brand-cyan/80">{labels.roadmapLink}</Link>
+          {afterLink}
         </>
       ),
     },
   ];
   return (
     <div className="mt-4 space-y-2.5 text-left">
-      <p className="text-sm font-medium text-foreground/70">{nextLabel}</p>
+      <p className="text-sm font-medium text-foreground/70">{labels.next}</p>
       <div className="space-y-2">
         {steps.map((step, index) => (
           <div key={step.key} className="flex items-start gap-2.5">
@@ -108,14 +124,14 @@ function CopiedBubble({ label }: { label: string }) {
   );
 }
 
-function ManualCopyAlert({ shareState, shareFallbackUrl }: { shareState: ShareState; shareFallbackUrl: string }) {
+function ManualCopyAlert({ shareState, shareFallbackUrl, label }: { shareState: ShareState; shareFallbackUrl: string; label: string }) {
   return (
     <AnimatePresence>
       {shareState === "manual" && shareFallbackUrl && (
         <motion.div initial={{ opacity: 0, y: -4 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -4 }} role="alert" className="mt-2 flex flex-col gap-1.5 rounded-xl border border-brand-amber/40 bg-brand-amber/10 px-3 py-2 text-left">
           <span className="flex items-center gap-1.5 text-sm font-medium text-brand-amber">
             <AlertCircle className="h-3.5 w-3.5 shrink-0" />
-            Could not copy automatically - copy this link
+            {label}
           </span>
           <input readOnly value={shareFallbackUrl} autoFocus onFocus={(event) => event.currentTarget.select()} onClick={(event) => event.currentTarget.select()} className="w-full truncate rounded-md border border-glass bg-background/60 px-2 py-1 text-sm font-mono text-foreground outline-none focus:border-brand-amber" />
         </motion.div>

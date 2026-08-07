@@ -46,12 +46,30 @@ import { isValidEmail } from "@/lib/validation";
 import { withWriteLock } from "@/lib/fileLock";
 import { readJsonFile, writeJsonFile } from "@/lib/server/json-file-store";
 import { hasSupabaseServiceRole } from "@/lib/server/env";
-import { getClientIp, jsonError, parseJsonBody } from "@/lib/server/request";
+import { getClientIp, parseJsonBody } from "@/lib/server/request";
 import { isRateLimited as isSharedRateLimited } from "@/lib/server/rate-limit";
 import { captureExceptionScrubbed } from "@/lib/sentry-pii";
 
 const WAITLIST_FILE = "waitlist.json";
 const WAITLIST_TABLE = "waitlist_entries";
+
+/**
+ * Stable machine-readable failure reasons. The `error` prose is English-only
+ * and is kept for existing/CLI consumers; the browser renders a *translated*
+ * string picked from this code (see `waitlistErrorMessage` in
+ * src/components/waitlist-modal/waitlistUtils.ts). Never reword a code.
+ */
+type WaitlistErrorCode = "rate_limited" | "invalid_email" | "invalid_platform" | "store_unavailable";
+
+/** `jsonError` shape (`{ error }`) plus the stable `code` — additive only. */
+function waitlistError(
+  error: string,
+  code: WaitlistErrorCode,
+  status: number,
+  headers?: HeadersInit,
+): NextResponse {
+  return NextResponse.json({ error, code }, { status, headers });
+}
 
 // Persist to Supabase only when a WRITABLE server client is available (see the
 // env matrix in the file header); the .data/*.json path is the local-dev
@@ -128,7 +146,7 @@ async function writeWaitlist(data: WaitlistData): Promise<void> {
 export async function GET(req: NextRequest) {
   const ip = getClientIp(req);
   if (!rateLimit(ip, RATE_LIMIT_GET)) {
-    return jsonError("Too many requests", 429, { "Retry-After": "60" });
+    return waitlistError("Too many requests", "rate_limited", 429, { "Retry-After": "60" });
   }
 
   if (hasSupabase()) {
@@ -177,7 +195,7 @@ export async function GET(req: NextRequest) {
 export async function POST(req: NextRequest) {
   const ip = getClientIp(req);
   if (!rateLimit(ip, RATE_LIMIT_POST)) {
-    return jsonError("Too many requests", 429, { "Retry-After": "60" });
+    return waitlistError("Too many requests", "rate_limited", 429, { "Retry-After": "60" });
   }
 
   const parsed = await parseJsonBody<{ email?: string; platform?: string; earlyBeta?: boolean }>(req);
@@ -187,19 +205,19 @@ export async function POST(req: NextRequest) {
 
   // Email validation
   if (!email || typeof email !== "string") {
-    return jsonError("Email is required", 400);
+    return waitlistError("Email is required", "invalid_email", 400);
   }
   const trimmedEmail = email.trim().toLowerCase();
   if (!isValidEmail(trimmedEmail)) {
-    return jsonError("Invalid email format", 400);
+    return waitlistError("Invalid email format", "invalid_email", 400);
   }
 
   // Platform validation — whitelist
   if (!platform || typeof platform !== "string") {
-    return jsonError("Platform is required", 400);
+    return waitlistError("Platform is required", "invalid_platform", 400);
   }
   if (!VALID_PLATFORMS.has(platform)) {
-    return jsonError(`Platform must be one of: ${[...VALID_PLATFORMS].join(", ")}`, 400);
+    return waitlistError(`Platform must be one of: ${[...VALID_PLATFORMS].join(", ")}`, "invalid_platform", 400);
   }
 
   if (hasSupabase()) {
@@ -228,8 +246,9 @@ export async function POST(req: NextRequest) {
           extra: { code: error.code ?? null, platform },
         },
       );
-      return jsonError(
+      return waitlistError(
         "Could not save your spot right now — please try again in a moment.",
+        "store_unavailable",
         503,
         { "Retry-After": "30" },
       );

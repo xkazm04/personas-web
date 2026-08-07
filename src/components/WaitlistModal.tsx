@@ -11,7 +11,9 @@ import { WaitlistForm } from "./waitlist-modal/WaitlistForm";
 import { WaitlistHeader } from "./waitlist-modal/WaitlistHeader";
 import { WaitlistSuccessPanel } from "./waitlist-modal/WaitlistSuccessPanel";
 import { loadWaitlistCounts, primeWaitlistCount } from "./waitlist-modal/waitlistCounts";
-import { EMAIL_RE, FETCH_TIMEOUT_MS, legacyCopyToClipboard, type PlatformKey, type ShareState, type WaitlistStatus } from "./waitlist-modal/waitlistUtils";
+import { markCopied, resetModalState, useWaitlistFocusAndKeys } from "./waitlist-modal/waitlistModalShell";
+import { waitlistErrorLabels, waitlistFormLabels, waitlistHeaderLabels, waitlistPanelLabels } from "./waitlist-modal/waitlistLabels";
+import { EMAIL_RE, FETCH_TIMEOUT_MS, legacyCopyToClipboard, waitlistErrorMessage, type PlatformKey, type ShareState, type WaitlistStatus } from "./waitlist-modal/waitlistUtils";
 
 interface WaitlistModalProps {
   platformKey: PlatformKey;
@@ -75,7 +77,7 @@ export default function WaitlistModal({ platformKey, platformLabel, platformIcon
   const handleSubmit = async (event: FormEvent) => {
     event.preventDefault();
     if (!EMAIL_RE.test(email.trim())) {
-      setErrorMsg("Please enter a valid email address");
+      setErrorMsg(t.waitlist.invalidEmail);
       return;
     }
     setStatus("loading");
@@ -100,7 +102,17 @@ export default function WaitlistModal({ platformKey, platformLabel, platformIcon
         signal: controller.signal,
       });
       const data = await res.json().catch(() => ({}));
-      if (!res.ok) throw new Error((typeof data.error === "string" && data.error) || "Failed to join waitlist");
+      if (!res.ok) {
+        // The route's `error` prose is English-only and describes server
+        // internals, so it is never rendered — the stable `code` (status as
+        // fallback) picks a translated sentence instead. The Sentry title stays
+        // machine-readable and carries no email.
+        const code = typeof data.code === "string" ? data.code : "none";
+        Sentry.captureException(new Error(`waitlist POST failed (status=${res.status}, code=${code})`), { tags: { component: "WaitlistModal" } });
+        setStatus("error");
+        setErrorMsg(waitlistErrorMessage(res.status, data.code, waitlistErrorLabels(t)));
+        return;
+      }
       setSubmittedEmail(email.trim());
       trackWaitlistResult(platformKey, entryPoint, data.duplicate ? "duplicate" : "success");
       if (data.duplicate) setStatus("duplicate");
@@ -118,13 +130,14 @@ export default function WaitlistModal({ platformKey, platformLabel, platformIcon
         // recovery. Surface an error + retry. A close/re-submit abort stays silent.
         if (timedOut) {
           setStatus("error");
-          setErrorMsg("Request timed out — please try again");
+          setErrorMsg(t.waitlist.errorTimeout);
         }
         return;
       }
       Sentry.captureException(err, { tags: { component: "WaitlistModal" } });
       setStatus("error");
-      setErrorMsg(err instanceof Error ? err.message : "Something went wrong");
+      // Transport/parse failures carry no server code — always the generic line.
+      setErrorMsg(t.waitlist.errorGeneric);
     } finally {
       clearTimeout(timeout);
     }
@@ -151,69 +164,15 @@ export default function WaitlistModal({ platformKey, platformLabel, platformIcon
         <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} transition={TRANSITION_FAST} className="fixed inset-0 z-50 flex items-center justify-center px-4" onClick={onClose}>
           <div className="absolute inset-0 bg-black/60 backdrop-blur-sm" />
           <motion.div ref={modalRef} role="dialog" aria-modal="true" aria-labelledby="waitlist-modal-title" initial={{ opacity: 0, scale: 0.95, y: 10 }} animate={{ opacity: 1, scale: 1, y: 0 }} exit={{ opacity: 0, scale: 0.95, y: 10 }} transition={TRANSITION_NORMAL} onClick={(event) => event.stopPropagation()} className="relative w-full max-w-[440px] rounded-2xl border border-glass bg-background p-6 shadow-2xl">
-            <WaitlistHeader platformLabel={platformLabel} PlatformIcon={platformIcon} count={waitlistCount} comingSoon={t.pricing.comingSoon} peopleWaiting={t.waitlist.peopleWaiting} closeLabel={t.common.close} onClose={onClose} />
+            <WaitlistHeader {...waitlistHeaderLabels(t, platformLabel)} PlatformIcon={platformIcon} count={waitlistCount} onClose={onClose} />
             {status === "success" || status === "duplicate" ? (
-              <WaitlistSuccessPanel status={status} submittedEmail={submittedEmail} platformLabel={platformLabel} earlyBeta={earlyBeta} shareState={shareState} shareFallbackUrl={shareFallbackUrl} onShare={handleShare} onClose={onClose} labels={{ duplicate: t.waitlist.duplicate, success: t.waitlist.success, copied: t.waitlist.copied, close: t.common.close, next: t.common.next }} />
+              <WaitlistSuccessPanel status={status} submittedEmail={submittedEmail} platformLabel={platformLabel} earlyBeta={earlyBeta} shareState={shareState} shareFallbackUrl={shareFallbackUrl} onShare={handleShare} onClose={onClose} labels={waitlistPanelLabels(t)} />
             ) : (
-              <WaitlistForm email={email} setEmail={setEmail} earlyBeta={earlyBeta} setEarlyBeta={setEarlyBeta} errorMsg={errorMsg} setErrorMsg={setErrorMsg} status={status} onSubmit={handleSubmit} labels={{ emailPlaceholder: t.waitlist.emailPlaceholder, earlyBeta: t.waitlist.earlyBeta, joining: t.waitlist.joining, notifyMe: t.common.notifyMe }} />
+              <WaitlistForm email={email} setEmail={setEmail} earlyBeta={earlyBeta} setEarlyBeta={setEarlyBeta} errorMsg={errorMsg} setErrorMsg={setErrorMsg} status={status} onSubmit={handleSubmit} labels={waitlistFormLabels(t)} />
             )}
           </motion.div>
         </motion.div>
       )}
     </AnimatePresence>
   );
-}
-
-function useWaitlistFocusAndKeys({ open, onClose, fetchCount, modalRef, previousFocusRef }: { open: boolean; onClose: () => void; fetchCount: (signal: AbortSignal) => Promise<void>; modalRef: React.RefObject<HTMLDivElement | null>; previousFocusRef: React.RefObject<HTMLElement | null> }) {
-  useEffect(() => {
-    if (!open) {
-      previousFocusRef.current?.focus();
-      previousFocusRef.current = null;
-      return;
-    }
-    previousFocusRef.current = document.activeElement as HTMLElement;
-    const controller = new AbortController();
-    queueMicrotask(() => fetchCount(controller.signal));
-    return () => controller.abort();
-  }, [open, fetchCount, previousFocusRef]);
-
-  useEffect(() => {
-    if (!open) return;
-    const handler = (event: KeyboardEvent) => {
-      if (event.key === "Escape") onClose();
-      if (event.key === "Tab" && modalRef.current) trapFocus(event, modalRef.current);
-    };
-    window.addEventListener("keydown", handler);
-    return () => window.removeEventListener("keydown", handler);
-  }, [open, onClose, modalRef]);
-}
-
-function trapFocus(event: KeyboardEvent, modal: HTMLDivElement) {
-  const focusable = modal.querySelectorAll<HTMLElement>('a, button:not([disabled]), input:not([disabled]), [tabindex]:not([tabindex="-1"])');
-  if (focusable.length === 0) return;
-  const first = focusable[0]!;
-  const last = focusable[focusable.length - 1]!;
-  if (event.shiftKey && document.activeElement === first) {
-    event.preventDefault();
-    last.focus();
-  } else if (!event.shiftKey && document.activeElement === last) {
-    event.preventDefault();
-    first.focus();
-  }
-}
-
-function resetModalState(setters: { setStatus: (status: WaitlistStatus) => void; setEmail: (email: string) => void; setSubmittedEmail: (email: string) => void; setEarlyBeta: (enabled: boolean) => void; setErrorMsg: (message: string) => void; setShareState: (state: ShareState) => void; setShareFallbackUrl: (url: string) => void }) {
-  setters.setStatus("idle");
-  setters.setEmail("");
-  setters.setSubmittedEmail("");
-  setters.setEarlyBeta(false);
-  setters.setErrorMsg("");
-  setters.setShareState("idle");
-  setters.setShareFallbackUrl("");
-}
-
-function markCopied(setShareState: (state: ShareState | ((state: ShareState) => ShareState)) => void, setShareFallbackUrl: (url: string) => void) {
-  setShareState("copied");
-  setShareFallbackUrl("");
-  setTimeout(() => setShareState((state) => (state === "copied" ? "idle" : state)), 2000);
 }

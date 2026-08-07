@@ -25,6 +25,7 @@ export function WaitlistForm({
   labels: {
     emailPlaceholder: string;
     earlyBeta: string;
+    earlyBetaHint: string;
     joining: string;
     notifyMe: string;
   };
@@ -64,7 +65,7 @@ export function WaitlistForm({
             <Sparkles className="h-3 w-3 text-brand-purple/70" />
             <span className="text-sm font-medium text-foreground/80">{labels.earlyBeta}</span>
           </div>
-          <p className="mt-0.5 text-sm text-muted-dark leading-relaxed">Get access to unstable builds before the public release</p>
+          <p className="mt-0.5 text-sm text-muted-dark leading-relaxed">{labels.earlyBetaHint}</p>
         </div>
       </label>
       <button type="submit" disabled={status === "loading"} className="flex w-full items-center justify-center gap-2 rounded-full bg-gradient-to-r from-brand-cyan to-brand-purple px-4 py-3.5 text-base font-medium text-white transition-opacity hover:opacity-90 disabled:opacity-60">
