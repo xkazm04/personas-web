@@ -4,7 +4,7 @@
 ## What it does
 This is the chrome that surrounds **every** page on the marketing site. It provides:
 
-- A **root HTML document** (`src/app/layout.tsx`) with site-wide `<head>` metadata (SEO, Open Graph, Twitter), the Geist fonts, a pre-paint theme/locale script, the Noto CJK/RTL/Indic web fonts, a "Skip to main content" link, and the always-mounted `CookieConsent` banner.
+- A **root HTML document** (`src/app/layout.tsx`) with site-wide `<head>` metadata (SEO, Open Graph, Twitter), the Geist fonts, a pre-paint theme/locale script, the Noto CJK/RTL/Indic web fonts, a localized skip-to-main-content link (`SkipLink.tsx`), and the always-mounted `CookieConsent` banner.
 - A **sticky navbar** (`Navbar`) — Personas logo, a desktop pill tab bar of the three public routes (Home / Features / Roadmap), a dashboard link + Download CTA, and a slide-in mobile panel with backdrop, focus trap, scroll lock, and Escape-to-close.
 - **Page shells** that content pages compose: `PageShell` (scroll-spy + particle/animation hosts + tour provider) and `InfoPageLayout` (navbar + `PageShell` + breadcrumb + mobile TOC + footer in one wrapper).
 - **Section primitives** reused across pages: `SectionWrapper` (one-shot scroll reveal), `SectionHeading`, `SectionDivider`, `StageSection`, plus the sticky `SectionBreadcrumb` (desktop) and `MobilePageTOC` (mobile) in-page navigators.

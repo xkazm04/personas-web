@@ -163,41 +163,25 @@ export const es: Translations = {
       }
     },
     hero: {
-      title: "Agentes de IA que se ejecutan en tu m\u00e1quina",
-      subtitle: "Una persona, muchas capacidades. Crea un asistente con una identidad estable y compone las tareas que realiza \u2014 a\u00f1ade, activa o retira capacidades sin empezar desde cero.",
       downloadCta: "Descargar",
       trustLine: "Sin registro, sin tarjeta de cr\u00e9dito. Se ejecuta en tu m\u00e1quina. Cero telemetr\u00eda.",
-      cta: "Comenzar",
       badge: "Plataforma de Agentes IA",
       headingLine1: "Agentes inteligentes",
       headingLine2: "que trabajan para ti",
       description: "Dise\u00f1a agentes en lenguaje natural. Orqu\u00e9stalos de forma local o en la nube.",
       descriptionBold: "Sin diagramas de flujo. Sin enjambres de agentes. Sin c\u00f3digo.",
-      mode1: "Capacidades componibles",
       mode2: "Configuraci\u00f3n sencilla",
       mode3: "Gratis",
-      mode4: "IA multiproveedor",
       mode5: "Se mejora solo",
       viewOnGithub: "Ver en GitHub",
       downloadForWindows: "Descargar para Windows",
-      joinWaitlist: "Unirse a la lista de espera de Windows",
       commandCenter: "Centro de Comando",
       adoptionSnapshot: "Panorama de adopci\u00f3n",
       scroll: "Desplazar",
-      phases: "FASES",
       publicBeta: "BETA P\u00daBLICA",
       agents: "Agentes",
-      executions: "Ejecuciones",
       connectors: "Conectores",
       templates: "Plantillas"
-    },
-    heroTransition: {
-      ariaLabel: "Pilares principales del producto",
-      speed: "R\u00e1pido",
-      privacy: "Privado",
-      scale: "Escalable",
-      value: "Una persona, muchas capacidades \u2014 una identidad estable con un conjunto componible de tareas, ejecut\u00e1ndose donde viven tus datos y bajo tu control.",
-      cta: "M\u00edralo en acci\u00f3n"
     },
     sections: {
       vision: "Visi\u00f3n",
@@ -1494,7 +1478,9 @@ export const es: Translations = {
     },
     pageNav: {
       onThisPage: "En esta p\u00e1gina",
-      closeMenu: "Cerrar men\u00fa"
+      closeMenu: "Cerrar men\u00fa",
+      landmarkLabel: "Navegaci\u00f3n de la p\u00e1gina",
+      scrollMap: "Mapa de la p\u00e1gina"
     },
     themes: {
       midnight: "Medianoche",

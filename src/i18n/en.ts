@@ -95,41 +95,25 @@
     };
   };
   hero: {
-    title: string;
-    subtitle: string;
     downloadCta: string;
     trustLine: string;
-    cta: string;
     badge: string;
     headingLine1: string;
     headingLine2: string;
     description: string;
     descriptionBold: string;
-    mode1: string;
     mode2: string;
     mode3: string;
-    mode4: string;
     mode5: string;
     viewOnGithub: string;
     downloadForWindows: string;
-    joinWaitlist: string;
     commandCenter: string;
     adoptionSnapshot: string;
     scroll: string;
-    phases: string;
     publicBeta: string;
     agents: string;
-    executions: string;
     connectors: string;
     templates: string;
-  };
-  heroTransition: {
-    ariaLabel: string;
-    speed: string;
-    privacy: string;
-    scale: string;
-    value: string;
-    cta: string;
   };
   sections: {
     vision: string;
@@ -1215,6 +1199,8 @@
   pageNav: {
     onThisPage: string;
     closeMenu: string;
+    landmarkLabel: string;
+    scrollMap: string;
   };
   themes: {
     midnight: string;
@@ -1457,41 +1443,25 @@ export const en: Translations = {
     },
   },
   hero: {
-    title: 'AI agents that run on your machine',
-    subtitle: 'One persona, many capabilities. Build an assistant with a stable identity and compose the jobs it does \u2014 add, toggle, or retire capabilities without starting over.',
     downloadCta: 'Download',
     trustLine: 'No signup, no credit card. Runs on your machine. Zero telemetry.',
-    cta: 'Get Started',
     badge: 'AI Agent Platform',
     headingLine1: 'Intelligent agents',
     headingLine2: 'that work for you',
     description: 'Design agents in natural language. Orchestrate them locally or in the cloud.',
     descriptionBold: 'No workflow diagrams. No agent swarms. No code.',
-    mode1: 'Composable Capabilities',
     mode2: 'Simple setup',
     mode3: 'Free',
-    mode4: 'Multi-Provider AI',
     mode5: 'Self-improving',
     viewOnGithub: 'View on GitHub',
     downloadForWindows: 'Download for Windows',
-    joinWaitlist: 'Join Windows Waitlist',
     commandCenter: 'Command Center',
     adoptionSnapshot: 'Adoption snapshot',
     scroll: 'Scroll',
-    phases: 'PHASES',
     publicBeta: 'PUBLIC BETA',
     agents: 'Agents',
-    executions: 'Executions',
     connectors: 'Connectors',
     templates: 'Templates',
-  },
-  heroTransition: {
-    ariaLabel: 'Core product pillars',
-    speed: 'Fast',
-    privacy: 'Private',
-    scale: 'Scalable',
-    value: 'One persona, many capabilities \u2014 a stable identity with a composable set of jobs, running where your data lives and staying under your control.',
-    cta: 'See it in action',
   },
   sections: {
     vision: 'Vision',
@@ -2693,6 +2663,8 @@ export const en: Translations = {
   pageNav: {
     onThisPage: 'On this page',
     closeMenu: 'Close menu',
+    landmarkLabel: 'Page navigation',
+    scrollMap: 'Scroll Map',
   },
   themes: {
     midnight: 'Midnight',

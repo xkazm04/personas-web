@@ -163,41 +163,25 @@ export const de: Translations = {
       }
     },
     hero: {
-      title: "KI-Agenten, die auf Ihrem Rechner laufen",
-      subtitle: "Eine Persona, viele F\u00e4higkeiten. Erstellen Sie einen Assistenten mit stabiler Identit\u00e4t und stellen Sie die Aufgaben zusammen, die er erledigt \u2014 F\u00e4higkeiten hinzuf\u00fcgen, aktivieren oder entfernen, ohne von vorne zu beginnen.",
       downloadCta: "Herunterladen",
       trustLine: "Keine Anmeldung, keine Kreditkarte. L\u00e4uft auf Ihrem Rechner. Keine Telemetrie.",
-      cta: "Loslegen",
       badge: "KI-Agenten-Plattform",
       headingLine1: "Intelligente Agenten",
       headingLine2: "die f\u00fcr Sie arbeiten",
       description: "Entwerfen Sie Agenten in nat\u00fcrlicher Sprache. Orchestrieren Sie sie lokal oder in der Cloud.",
       descriptionBold: "Keine Workflow-Diagramme. Keine Agenten-Schw\u00e4rme. Kein Code.",
-      mode1: "Komponierbare F\u00e4higkeiten",
       mode2: "Einfache Einrichtung",
       mode3: "Kostenlos",
-      mode4: "Multi-Provider-KI",
       mode5: "Selbstverbessernd",
       viewOnGithub: "Auf GitHub ansehen",
       downloadForWindows: "F\u00fcr Windows herunterladen",
-      joinWaitlist: "Windows-Warteliste beitreten",
       commandCenter: "Kommandozentrale",
       adoptionSnapshot: "Nutzungs\u00fcberblick",
       scroll: "Scrollen",
-      phases: "PHASEN",
       publicBeta: "\u00d6FFENTLICHE BETA",
       agents: "Agenten",
-      executions: "Ausf\u00fchrungen",
       connectors: "Konnektoren",
       templates: "Vorlagen"
-    },
-    heroTransition: {
-      ariaLabel: "Kerns\u00e4ulen des Produkts",
-      speed: "Schnell",
-      privacy: "Privat",
-      scale: "Skalierbar",
-      value: "Eine Persona, viele F\u00e4higkeiten \u2014 eine stabile Identit\u00e4t mit einem komponierbaren Satz von Aufgaben, die dort l\u00e4uft, wo Ihre Daten liegen, und unter Ihrer Kontrolle bleibt.",
-      cta: "In Aktion erleben"
     },
     sections: {
       vision: "Vision",
@@ -1494,7 +1478,9 @@ export const de: Translations = {
     },
     pageNav: {
       onThisPage: "Auf dieser Seite",
-      closeMenu: "Men\u00fc schlie\u00dfen"
+      closeMenu: "Men\u00fc schlie\u00dfen",
+      landmarkLabel: "Seitennavigation",
+      scrollMap: "Seiten\u00fcbersicht"
     },
     themes: {
       midnight: "Mitternacht",

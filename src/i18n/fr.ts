@@ -163,41 +163,25 @@ export const fr: Translations = {
       }
     },
     hero: {
-      title: "Des agents IA qui tournent sur votre machine",
-      subtitle: "Un persona, de multiples capacit\u00e9s. Cr\u00e9ez un assistant \u00e0 l'identit\u00e9 stable et composez les t\u00e2ches qu'il effectue \u2014 ajoutez, activez ou retirez des capacit\u00e9s sans repartir de z\u00e9ro.",
       downloadCta: "T\u00e9l\u00e9charger",
       trustLine: "Aucune inscription, aucune carte bancaire. Fonctionne sur votre machine. Z\u00e9ro t\u00e9l\u00e9m\u00e9trie.",
-      cta: "Commencer",
       badge: "Plateforme d\u2019agents IA",
       headingLine1: "Des agents intelligents",
       headingLine2: "qui travaillent pour vous",
       description: "Concevez des agents en langage naturel. Orchestrez-les en local ou dans le cloud.",
       descriptionBold: "Pas de diagrammes. Pas d\u2019essaims d\u2019agents. Pas de code.",
-      mode1: "Capacit\u00e9s composables",
       mode2: "Configuration simple",
       mode3: "Gratuit",
-      mode4: "IA multi-fournisseurs",
       mode5: "Auto-am\u00e9lioration",
       viewOnGithub: "Voir sur GitHub",
       downloadForWindows: "T\u00e9l\u00e9charger pour Windows",
-      joinWaitlist: "Rejoindre la liste d\u2019attente Windows",
       commandCenter: "Centre de commande",
       adoptionSnapshot: "Aper\u00e7u de l\u2019adoption",
       scroll: "D\u00e9filer",
-      phases: "PHASES",
       publicBeta: "B\u00caTA PUBLIQUE",
       agents: "Agents",
-      executions: "Ex\u00e9cutions",
       connectors: "Connecteurs",
       templates: "Mod\u00e8les"
-    },
-    heroTransition: {
-      ariaLabel: "Piliers fondamentaux du produit",
-      speed: "Rapide",
-      privacy: "Priv\u00e9",
-      scale: "\u00c9volutif",
-      value: "Un persona, de multiples capacit\u00e9s \u2014 une identit\u00e9 stable avec un ensemble de t\u00e2ches composables, s'ex\u00e9cutant l\u00e0 o\u00f9 vivent vos donn\u00e9es et restant sous votre contr\u00f4le.",
-      cta: "Voir en action"
     },
     sections: {
       vision: "Vision",
@@ -1494,7 +1478,9 @@ export const fr: Translations = {
     },
     pageNav: {
       onThisPage: "Sur cette page",
-      closeMenu: "Fermer le menu"
+      closeMenu: "Fermer le menu",
+      landmarkLabel: "Navigation de la page",
+      scrollMap: "Carte de la page"
     },
     themes: {
       midnight: "Minuit",

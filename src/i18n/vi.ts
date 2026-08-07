@@ -163,41 +163,25 @@ export const vi: Translations = {
       }
     },
     hero: {
-      title: "T\u00e1c nh\u00e2n AI ch\u1ea1y tr\u00ean m\u00e1y c\u1ee7a b\u1ea1n",
-      subtitle: "M\u1ed9t persona, nhi\u1ec1u kh\u1ea3 n\u0103ng. X\u00e2y d\u1ef1ng m\u1ed9t tr\u1ee3 l\u00fd v\u1edbi danh t\u00ednh \u1ed5n \u0111\u1ecbnh v\u00e0 k\u1ebft h\u1ee3p c\u00e1c c\u00f4ng vi\u1ec7c n\u00f3 th\u1ef1c hi\u1ec7n \u2014 th\u00eam, b\u1eadt/t\u1eaft, ho\u1eb7c lo\u1ea1i b\u1ecf kh\u1ea3 n\u0103ng m\u00e0 kh\u00f4ng c\u1ea7n l\u00e0m l\u1ea1i t\u1eeb \u0111\u1ea7u.",
       downloadCta: "T\u1ea3i xu\u1ed1ng",
       trustLine: "Kh\u00f4ng c\u1ea7n \u0111\u0103ng k\u00fd, kh\u00f4ng c\u1ea7n th\u1ebb t\u00edn d\u1ee5ng. Ch\u1ea1y tr\u00ean m\u00e1y c\u1ee7a b\u1ea1n. Kh\u00f4ng thu th\u1eadp d\u1eef li\u1ec7u telemetry.",
-      cta: "B\u1eaft \u0111\u1ea7u",
       badge: "N\u1ec1n t\u1ea3ng t\u00e1c nh\u00e2n AI",
       headingLine1: "T\u00e1c nh\u00e2n th\u00f4ng minh",
       headingLine2: "l\u00e0m vi\u1ec7c cho b\u1ea1n",
       description: "Thi\u1ebft k\u1ebf t\u00e1c nh\u00e2n b\u1eb1ng ng\u00f4n ng\u1eef t\u1ef1 nhi\u00ean. \u0110i\u1ec1u ph\u1ed1i ch\u00fang t\u1ea1i m\u00e1y ho\u1eb7c tr\u00ean \u0111\u00e1m m\u00e2y.",
       descriptionBold: "Kh\u00f4ng s\u01a1 \u0111\u1ed3 workflow. Kh\u00f4ng b\u1ea7y agent. Kh\u00f4ng c\u1ea7n vi\u1ebft code.",
-      mode1: "Kh\u1ea3 n\u0103ng k\u1ebft h\u1ee3p linh ho\u1ea1t",
       mode2: "C\u00e0i \u0111\u1eb7t \u0111\u01a1n gi\u1ea3n",
       mode3: "Mi\u1ec5n ph\u00ed",
-      mode4: "AI \u0111a nh\u00e0 cung c\u1ea5p",
       mode5: "T\u1ef1 c\u1ea3i thi\u1ec7n",
       viewOnGithub: "Xem tr\u00ean GitHub",
       downloadForWindows: "T\u1ea3i cho Windows",
-      joinWaitlist: "Tham gia danh s\u00e1ch ch\u1edd Windows",
       commandCenter: "Trung t\u00e2m \u0111i\u1ec1u khi\u1ec3n",
       adoptionSnapshot: "T\u1ed5ng quan s\u1eed d\u1ee5ng",
       scroll: "Cu\u1ed9n",
-      phases: "GIAI \u0110O\u1ea0N",
       publicBeta: "BETA C\u00d4NG KHAI",
       agents: "T\u00e1c nh\u00e2n",
-      executions: "Th\u1ef1c thi",
       connectors: "B\u1ed9 k\u1ebft n\u1ed1i",
       templates: "M\u1eabu"
-    },
-    heroTransition: {
-      ariaLabel: "C\u00e1c tr\u1ee5 c\u1ed9t s\u1ea3n ph\u1ea9m c\u1ed1t l\u00f5i",
-      speed: "Nhanh",
-      privacy: "Ri\u00eang t\u01b0",
-      scale: "C\u00f3 th\u1ec3 m\u1edf r\u1ed9ng",
-      value: "M\u1ed9t persona, nhi\u1ec1u kh\u1ea3 n\u0103ng \u2014 m\u1ed9t danh t\u00ednh \u1ed5n \u0111\u1ecbnh v\u1edbi t\u1eadp h\u1ee3p c\u00f4ng vi\u1ec7c c\u00f3 th\u1ec3 k\u1ebft h\u1ee3p, ch\u1ea1y ngay n\u01a1i d\u1eef li\u1ec7u c\u1ee7a b\u1ea1n t\u1ed3n t\u1ea1i v\u00e0 lu\u00f4n trong t\u1ea7m ki\u1ec3m so\u00e1t c\u1ee7a b\u1ea1n.",
-      cta: "Xem c\u00e1ch ho\u1ea1t \u0111\u1ed9ng"
     },
     sections: {
       vision: "T\u1ea7m nh\u00ecn",
@@ -1494,7 +1478,9 @@ export const vi: Translations = {
     },
     pageNav: {
       onThisPage: "Tr\u00ean trang n\u00e0y",
-      closeMenu: "\u0110\u00f3ng menu"
+      closeMenu: "\u0110\u00f3ng menu",
+      landmarkLabel: "\u0110i\u1ec1u h\u01b0\u1edbng trang",
+      scrollMap: "B\u1ea3n \u0111\u1ed3 trang"
     },
     themes: {
       midnight: "N\u1eeda \u0111\u00eam",

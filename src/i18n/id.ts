@@ -163,41 +163,25 @@ export const id: Translations = {
       }
     },
     hero: {
-      title: "Agen AI yang berjalan di perangkat Anda",
-      subtitle: "Satu persona, banyak kemampuan. Bangun asisten dengan identitas yang stabil dan susun tugas yang dilakukannya \u2014 tambah, aktifkan/nonaktifkan, atau hentikan kemampuan tanpa harus memulai dari awal.",
       downloadCta: "Unduh",
       trustLine: "Tanpa pendaftaran, tanpa kartu kredit. Berjalan di mesin Anda. Nol telemetri.",
-      cta: "Mulai Sekarang",
       badge: "Platform Agen AI",
       headingLine1: "Agen cerdas",
       headingLine2: "yang bekerja untuk Anda",
       description: "Desain agen dalam bahasa alami. Orkestrasi secara lokal atau di cloud.",
       descriptionBold: "Tanpa diagram alur kerja. Tanpa gerombolan agen. Tanpa kode.",
-      mode1: "Kemampuan yang Dapat Disusun",
       mode2: "Penyiapan sederhana",
       mode3: "Gratis",
-      mode4: "AI Multi-Provider",
       mode5: "Meningkatkan diri",
       viewOnGithub: "Lihat di GitHub",
       downloadForWindows: "Unduh untuk Windows",
-      joinWaitlist: "Gabung Daftar Tunggu Windows",
       commandCenter: "Pusat Komando",
       adoptionSnapshot: "Ringkasan adopsi",
       scroll: "Gulir",
-      phases: "FASE",
       publicBeta: "BETA PUBLIK",
       agents: "Agen",
-      executions: "Eksekusi",
       connectors: "Konektor",
       templates: "Templat"
-    },
-    heroTransition: {
-      ariaLabel: "Pilar inti produk",
-      speed: "Cepat",
-      privacy: "Privat",
-      scale: "Skalabel",
-      value: "Satu persona, banyak kemampuan \u2014 identitas yang stabil dengan sekumpulan tugas yang dapat disusun, berjalan di tempat data Anda berada dan tetap berada di bawah kendali Anda.",
-      cta: "Lihat cara kerjanya"
     },
     sections: {
       vision: "Visi",
@@ -1494,7 +1478,9 @@ export const id: Translations = {
     },
     pageNav: {
       onThisPage: "Di halaman ini",
-      closeMenu: "Tutup menu"
+      closeMenu: "Tutup menu",
+      landmarkLabel: "Navigasi halaman",
+      scrollMap: "Peta halaman"
     },
     themes: {
       midnight: "Tengah Malam",

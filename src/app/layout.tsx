@@ -10,6 +10,7 @@ import {
   SITE_LOCALE,
   TWITTER_HANDLE,
 } from "@/lib/seo";
+import SkipLink from "@/components/SkipLink";
 import ThemeInit from "@/components/ThemeInit";
 import CookieConsent from "@/components/CookieConsent";
 import PageTransition from "@/components/PageTransition";
@@ -116,12 +117,7 @@ export default function RootLayout({
       <body
         className={`${GeistSans.variable} ${GeistMono.variable} antialiased text-foreground`}
       >
-        <a
-          href="#main-content"
-          className="sr-only focus:not-sr-only focus:fixed focus:top-4 focus:left-4 focus:z-[100] focus:rounded-lg focus:bg-brand-cyan/90 focus:px-4 focus:py-2 focus:text-base focus:font-semibold focus:text-black focus:shadow-lg focus:outline-none"
-        >
-          Skip to main content
-        </a>
+        <SkipLink />
         <ThemeInit />
         <QualityProvider>
           <PageViewTracker />

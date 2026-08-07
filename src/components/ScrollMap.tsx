@@ -3,9 +3,11 @@
 import { useMemo } from "react";
 import { useReducedMotion } from "framer-motion";
 import { useActiveSectionId } from "@/contexts/SectionObserverContext";
+import { useTranslation } from "@/i18n/useTranslation";
 import type { ScrollMapItem } from "@/lib/types";
 
 export default function ScrollMap({ items }: { items: ScrollMapItem[] }) {
+  const { t } = useTranslation();
   const activeSectionId = useActiveSectionId();
   const reduced = useReducedMotion() ?? false;
 
@@ -33,9 +35,9 @@ export default function ScrollMap({ items }: { items: ScrollMapItem[] }) {
   };
 
   return (
-    <aside aria-label="Page navigation" className="pointer-events-none fixed right-5 top-1/2 z-40 hidden -translate-y-1/2 lg:flex flex-col items-end gap-2">
+    <aside aria-label={t.pageNav.landmarkLabel} className="pointer-events-none fixed right-5 top-1/2 z-40 hidden -translate-y-1/2 lg:flex flex-col items-end gap-2">
       <div className="rounded-full border border-glass bg-black/20 px-2.5 py-1 text-base uppercase tracking-[0.2em] text-muted-dark backdrop-blur-sm">
-        Scroll Map
+        {t.pageNav.scrollMap}
       </div>
       <div className="flex flex-col text-base font-mono tracking-wider">
         {items.map((item, i) => (

@@ -163,41 +163,25 @@ export const cs: Translations = {
       }
     },
     hero: {
-      title: "AI agenti b\u011b\u017e\u00edc\u00ed na va\u0161em po\u010d\u00edta\u010di",
-      subtitle: "Jedna persona, mnoho schopnost\u00ed. Vytvo\u0159te asistenta se stabiln\u00ed identitou a skl\u00e1dejte \u00fakoly, kter\u00e9 vykon\u00e1v\u00e1 \u2014 p\u0159id\u00e1vejte, p\u0159ep\u00ednejte nebo ru\u0161te schopnosti bez nutnosti za\u010d\u00ednat znovu.",
       downloadCta: "St\u00e1hnout",
       trustLine: "Bez registrace, bez platebn\u00ed karty. B\u011b\u017e\u00ed na va\u0161em po\u010d\u00edta\u010di. Nulov\u00e1 telemetrie.",
-      cta: "Za\u010d\u00edt",
       badge: "Platforma AI agent\u016f",
       headingLine1: "Inteligentn\u00ed agenti",
       headingLine2: "kte\u0159\u00ed pracuj\u00ed pro v\u00e1s",
       description: "Navrhujte agenty v p\u0159irozen\u00e9m jazyce. Orchestrujte je lok\u00e1ln\u011b nebo v cloudu.",
       descriptionBold: "\u017d\u00e1dn\u00e9 diagramy pracovn\u00edch postup\u016f. \u017d\u00e1dn\u00e9 roje agent\u016f. \u017d\u00e1dn\u00fd k\u00f3d.",
-      mode1: "Skl\u00e1dateln\u00e9 schopnosti",
       mode2: "Jednoduch\u00e9 nastaven\u00ed",
       mode3: "Zdarma",
-      mode4: "Podpora v\u00edce poskytovatel\u016f AI",
       mode5: "Samovylep\u0161uj\u00edc\u00ed se",
       viewOnGithub: "Zobrazit na GitHub",
       downloadForWindows: "St\u00e1hnout pro Windows",
-      joinWaitlist: "P\u0159idat se na \u010dekac\u00ed listinu pro Windows",
       commandCenter: "Velitelsk\u00e9 centrum",
       adoptionSnapshot: "P\u0159ehled adopce",
       scroll: "Posuv",
-      phases: "F\u00c1ZE",
       publicBeta: "VE\u0139\u0098EJN\u0102\u0081 BETA",
       agents: "Agenti",
-      executions: "Spou\u0161t\u011bn\u00ed",
       connectors: "Konektory",
       templates: "\u0160ablony"
-    },
-    heroTransition: {
-      ariaLabel: "Kl\u00ed\u010dov\u00e9 pil\u00ed\u0159e produktu",
-      speed: "Rychl\u00e9",
-      privacy: "Soukrom\u00e9",
-      scale: "\u0160k\u00e1lovateln\u00e9",
-      value: "Jedna persona, mnoho schopnost\u00ed \u2014 stabiln\u00ed identita se skl\u00e1datelnou sadou \u00fakol\u016f, b\u011b\u017e\u00edc\u00ed tam, kde \u017eij\u00ed va\u0161e data, a pln\u011b pod va\u0161\u00ed kontrolou.",
-      cta: "Pod\u00edvejte se na to v akci"
     },
     sections: {
       vision: "Vize",
@@ -1494,7 +1478,9 @@ export const cs: Translations = {
     },
     pageNav: {
       onThisPage: "Na t\u00e9to str\u00e1nce",
-      closeMenu: "Zav\u0159\u00edt nab\u00eddku"
+      closeMenu: "Zav\u0159\u00edt nab\u00eddku",
+      landmarkLabel: "Navigace na str\u00e1nce",
+      scrollMap: "Mapa str\u00e1nky"
     },
     themes: {
       midnight: "P\u0139\u017blnoc",
