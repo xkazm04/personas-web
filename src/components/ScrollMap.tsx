@@ -16,7 +16,17 @@ export default function ScrollMap({ items }: { items: ScrollMapItem[] }) {
 
   const scrollTo = (href: string) => {
     const id = href.replace("#", "");
-    const el = document.getElementById(id);
+    // Several scroll-map targets are ids that only exist once their section
+    // has mounted: those sections are `ssr: false` and behind a viewport gate,
+    // so on first paint `getElementById` returned null and the click was a
+    // silent no-op. Each stage therefore carries a `data-scroll-anchor` on its
+    // always-present wrapper (see `src/app/page.tsx`) — the same technique the
+    // hero CTA uses to reach `#download-section`. Prefer the real section when
+    // it is mounted (most precise), fall back to the wrapper otherwise;
+    // scrolling there brings the section into view, which mounts it.
+    const el =
+      document.getElementById(id) ??
+      document.querySelector(`[data-scroll-anchor="${CSS.escape(id)}"]`);
     if (el) {
       el.scrollIntoView({ behavior: reduced ? "auto" : "smooth", block: "start" });
     }
