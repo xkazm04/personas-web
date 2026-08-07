@@ -36,9 +36,12 @@ export interface GuideTopic {
  * per-locale screenshots; absence means it is intentionally text-only.
  *
  * These fields feed scripts/check-guide-coverage.mjs (screenshot coverage,
- * content staleness, and desktop-drift reporting). Today only
- * `screenshotRecipe` is populated in topics.ts; the review/drift fields
- * are the schema that reporting reads and are not yet filled in.
+ * content staleness, and desktop-drift reporting). All topics carry
+ * `contentReviewedAt` / `appVersion` / `watchedFiles` since pass T.4:
+ * reviewed-at dates come from the web git history of the category's
+ * content file, `appVersion` is the desktop version current at backfill
+ * time, and `watchedFiles` are deliberately coarse desktop feature
+ * directories so the drift signal doesn't churn per-file.
  */
 export interface TopicCoverage {
   /**
