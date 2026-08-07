@@ -472,9 +472,7 @@ export const zh: Translations = {
       noTrafficYet: "\u6682\u65e0\u6d41\u91cf",
       deployed: "\u5df2\u90e8\u7f72",
       metricsHealth: "\u6307\u6807\u4e0e\u5065\u5eb7",
-      toolUtilization: "\u5de5\u5177\u5229\u7528\u7387",
       workers: "\u5de5\u4f5c\u8282\u70b9",
-      usageAnalytics: "\u7528\u91cf\u5206\u6790",
       errorBoundary: {
         title: "\u4eea\u8868\u677f\u9762\u677f\u6e32\u67d3\u5931\u8d25",
         description: "\u6b64\u90e8\u5206\u9047\u5230\u610f\u5916\u9519\u8bef\u3002\u4f60\u53ef\u4ee5\u5728\u4e0d\u79bb\u5f00\u9875\u9762\u7684\u60c5\u51b5\u4e0b\u91cd\u8bd5\u3002",

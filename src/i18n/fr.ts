@@ -472,9 +472,7 @@ export const fr: Translations = {
       noTrafficYet: "Aucun trafic pour l'instant",
       deployed: "d\u00e9ploy\u00e9",
       metricsHealth: "M\u00e9triques et sant\u00e9",
-      toolUtilization: "Utilisation des outils",
       workers: "workers",
-      usageAnalytics: "Analyses d\u2019utilisation",
       errorBoundary: {
         title: "\u00c9chec du rendu du panneau du tableau de bord",
         description: "Cette section a rencontr\u00e9 une erreur inattendue. Vous pouvez r\u00e9essayer sans quitter la page.",

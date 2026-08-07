@@ -472,9 +472,7 @@ export const es: Translations = {
       noTrafficYet: "A\u00fan sin tr\u00e1fico",
       deployed: "desplegado",
       metricsHealth: "M\u00e9tricas y salud",
-      toolUtilization: "Utilizaci\u00f3n de herramientas",
       workers: "workers",
-      usageAnalytics: "Anal\u00edticas de Uso",
       errorBoundary: {
         title: "El panel del panel de control no se pudo renderizar",
         description: "Esta secci\u00f3n tuvo un error inesperado. Puedes reintentar sin salir de la p\u00e1gina.",

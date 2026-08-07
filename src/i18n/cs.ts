@@ -472,9 +472,7 @@ export const cs: Translations = {
       noTrafficYet: "Zat\u00edm \u017e\u00e1dn\u00fd provoz",
       deployed: "nasazeno",
       metricsHealth: "Metriky & zdrav\u00ed",
-      toolUtilization: "Vyu\u017eit\u00ed n\u00e1stroj\u016f",
       workers: "workery",
-      usageAnalytics: "Analytika vyu\u017eit\u00ed",
       errorBoundary: {
         title: "Panel dashboardu se nepoda\u0159ilo vykreslit",
         description: "V t\u00e9to sekci do\u0161lo k neo\u010dek\u00e1van\u00e9 chyb\u011b. M\u016f\u017eete to zkusit znovu bez opu\u0161t\u011bn\u00ed str\u00e1nky.",

@@ -174,7 +174,11 @@ export default function DashboardHomePage() {
 
       {/* Below the fold: deferred instruments bay (charts, heatmap, panels). */}
       <div ref={instrumentsRef} className="mt-6">
-        <LazyMount minHeight={720} label={t.dashboard.home.cockpit.instrumentsTitle}>
+        {/* Reserve the bay's measured height (headless Chromium, demo mode):
+            1689px at >=1280px wide — see home-overview.md for the per-section
+            breakdown. Below `lg` the grids stack to ~2.7k, which no single
+            reserve covers. The old 720 under-reserved by ~1000px. */}
+        <LazyMount minHeight={1690} label={t.dashboard.home.cockpit.instrumentsTitle}>
           <InstrumentsBay
             chartData={chartData}
             loadObservability={loadObservability}
@@ -183,6 +187,7 @@ export default function DashboardHomePage() {
             onRetryObservability={() => void retryObservability()}
             fetchedAt={observabilityFetchedAt}
             personasCount={personas.length}
+            executionsCount={stats.total}
             workersTotal={health?.workers.total ?? 0}
           />
         </LazyMount>

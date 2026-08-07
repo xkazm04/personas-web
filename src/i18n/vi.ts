@@ -472,9 +472,7 @@ export const vi: Translations = {
       noTrafficYet: "Ch\u01b0a c\u00f3 l\u01b0u l\u01b0\u1ee3ng n\u00e0o",
       deployed: "\u0111\u00e3 tri\u1ec3n khai",
       metricsHealth: "S\u1ed1 li\u1ec7u & s\u1ee9c kh\u1ecfe",
-      toolUtilization: "S\u1eed d\u1ee5ng c\u00f4ng c\u1ee5",
       workers: "worker",
-      usageAnalytics: "Ph\u00e2n t\u00edch s\u1eed d\u1ee5ng",
       errorBoundary: {
         title: "B\u1ea3ng \u0111i\u1ec1u khi\u1ec3n g\u1eb7p l\u1ed7i khi hi\u1ec3n th\u1ecb",
         description: "Ph\u1ea7n n\u00e0y g\u1eb7p l\u1ed7i b\u1ea5t ng\u1edd. B\u1ea1n c\u00f3 th\u1ec3 th\u1eed l\u1ea1i m\u00e0 kh\u00f4ng c\u1ea7n r\u1eddi kh\u1ecfi trang.",

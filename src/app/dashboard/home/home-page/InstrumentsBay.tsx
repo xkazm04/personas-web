@@ -37,6 +37,7 @@ export function InstrumentsBay({
   onRetryObservability,
   fetchedAt,
   personasCount,
+  executionsCount,
   workersTotal,
 }: {
   chartData: { date: string; Executions: number; Errors: number }[];
@@ -46,6 +47,7 @@ export function InstrumentsBay({
   onRetryObservability: () => void;
   fetchedAt: number | null;
   personasCount: number;
+  executionsCount: number;
   workersTotal: number;
 }) {
   const { t } = useTranslation();
@@ -53,9 +55,13 @@ export function InstrumentsBay({
 
   return (
     <div className="space-y-6">
-      <motion.div {...reveal} data-tour-diagram="dashboard-intelligence" className="grid gap-6 lg:grid-cols-2">
-        <DashboardIntelligencePanels ready />
-      </motion.div>
+      {/* Demo-only, and gated here too so real mode doesn't reserve an empty
+          two-column row (same shape as the routines/vault row below). */}
+      {isDemo && (
+        <motion.div {...reveal} data-tour-diagram="dashboard-intelligence" className="grid gap-6 lg:grid-cols-2">
+          <DashboardIntelligencePanels />
+        </motion.div>
+      )}
 
       <motion.div {...reveal} data-tour-diagram="dashboard-heatmap">
         <ExecutionHeatmapCard />
@@ -91,6 +97,7 @@ export function InstrumentsBay({
         <DashboardQuickLinks
           labels={t.dashboard}
           personasCount={personasCount}
+          executionsCount={executionsCount}
           workersTotal={workersTotal}
         />
       </motion.div>

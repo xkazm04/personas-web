@@ -25,6 +25,7 @@ const iconTintClass: Record<Accent, string> = {
 export function DashboardQuickLinks({
   labels,
   personasCount,
+  executionsCount,
   workersTotal,
 }: {
   labels: {
@@ -32,12 +33,13 @@ export function DashboardQuickLinks({
     deployed: string;
     observability: string;
     metricsHealth: string;
-    usageAnalytics: string;
-    toolUtilization: string;
+    executions: string;
+    totalExecutions: string;
     settings: string;
     workers: string;
   };
   personasCount: number;
+  executionsCount: number;
   workersTotal: number;
 }) {
   const links: Array<{
@@ -49,7 +51,11 @@ export function DashboardQuickLinks({
   }> = [
     { label: labels.agents, desc: `${personasCount} ${labels.deployed}`, icon: Bot, href: "/dashboard/agents", accent: "cyan" },
     { label: labels.observability, desc: labels.metricsHealth, icon: Activity, href: "/dashboard/observability", accent: "emerald" },
-    { label: labels.usageAnalytics, desc: labels.toolUtilization, icon: TrendingUp, href: "/dashboard/observability", accent: "purple" },
+    // Was a second "/dashboard/observability" tile ("Usage Analytics") — two of
+    // four tiles pointing at the same route wasted a quarter of the rail. The
+    // usage numbers already live one tab away inside Observability; Executions
+    // is the run log, the one top-level section the rail didn't reach.
+    { label: labels.executions, desc: `${executionsCount} ${labels.totalExecutions}`, icon: TrendingUp, href: "/dashboard/executions", accent: "purple" },
     { label: labels.settings, desc: `${workersTotal} ${labels.workers}`, icon: Activity, href: "/dashboard/settings", accent: "amber" },
   ];
 

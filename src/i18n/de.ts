@@ -472,9 +472,7 @@ export const de: Translations = {
       noTrafficYet: "Noch keine Aktivit\u00e4t",
       deployed: "bereitgestellt",
       metricsHealth: "Metriken & Zustand",
-      toolUtilization: "Tool-Auslastung",
       workers: "Worker",
-      usageAnalytics: "Nutzungsanalysen",
       errorBoundary: {
         title: "Dashboard-Panel konnte nicht gerendert werden",
         description: "In diesem Bereich ist ein unerwarteter Fehler aufgetreten. Sie k\u00f6nnen es erneut versuchen, ohne die Seite zu verlassen.",

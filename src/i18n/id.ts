@@ -472,9 +472,7 @@ export const id: Translations = {
       noTrafficYet: "Belum ada lalu lintas",
       deployed: "dideploy",
       metricsHealth: "Metrik & kesehatan",
-      toolUtilization: "Utilisasi alat",
       workers: "worker",
-      usageAnalytics: "Analitik Penggunaan",
       errorBoundary: {
         title: "Panel dashboard gagal dirender",
         description: "Bagian ini mengalami kesalahan tak terduga. Anda dapat mencoba lagi tanpa meninggalkan halaman ini.",

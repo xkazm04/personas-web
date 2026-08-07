@@ -7,7 +7,6 @@ import type {
   HealthResponse,
   StatusResponse,
   GlobalExecution,
-  ManualReviewItem,
   ObservabilityMetrics,
   DailyMetric,
   PersonaSpend,
@@ -26,6 +25,23 @@ function ago(minutes: number): string {
 
 function id(prefix: string, n: number): string {
   return `${prefix}-${String(n).padStart(4, "0")}-mock`;
+}
+
+/**
+ * Deterministic Lehmer RNG — the demo's only source of "jitter".
+ *
+ * Fixtures must be stable across reloads: `Math.random()` at module scope means
+ * every refresh redraws the chart with different bars, so a visitor comparing
+ * two tabs (or a screenshot to the live page) sees numbers that disagree for no
+ * reason. Shared with `mock-dashboard-data.ts` so both files jitter the same way
+ * from the same primitive.
+ */
+export function seededRandom(seed: number): () => number {
+  let s = seed;
+  return () => {
+    s = (s * 16807 + 0) % 2147483647;
+    return (s - 1) / 2147483646;
+  };
 }
 
 // ---------------------------------------------------------------------------
@@ -755,16 +771,21 @@ export const MOCK_TOOL_USAGE: ToolUsageSummary[] = [
   { toolName: "email_send", invocations: 22, avgDurationMs: 350, successRate: 100.0 },
 ];
 
+// Seeded, not random: the 14-day tool series has to look the same on every
+// reload (see `seededRandom`). One generator drives the whole series so the
+// day-to-day jitter stays uncorrelated between tools.
+const TOOL_USAGE_RNG = seededRandom(2024);
+
 export const MOCK_TOOL_USAGE_OVER_TIME: ToolUsageOverTime[] = Array.from({ length: 14 }, (_, i) => {
   const day = 13 - i;
   return {
     date: daysAgo(day),
     tools: {
-      github_pr_review: Math.floor(8 + Math.random() * 6),
-      slack_send_message: Math.floor(5 + Math.random() * 8),
-      pagerduty_get_incident: Math.floor(2 + Math.random() * 6),
-      github_get_diff: Math.floor(3 + Math.random() * 4),
-      linear_create_issue: Math.floor(1 + Math.random() * 5),
+      github_pr_review: Math.floor(8 + TOOL_USAGE_RNG() * 6),
+      slack_send_message: Math.floor(5 + TOOL_USAGE_RNG() * 8),
+      pagerduty_get_incident: Math.floor(2 + TOOL_USAGE_RNG() * 6),
+      github_get_diff: Math.floor(3 + TOOL_USAGE_RNG() * 4),
+      linear_create_issue: Math.floor(1 + TOOL_USAGE_RNG() * 5),
     },
   };
 });
@@ -774,62 +795,4 @@ export const MOCK_TOOL_USAGE_BY_PERSONA: ToolUsageByPersona[] = [
   { personaId: id("p", 2), personaName: "Incident Responder", personaColor: "#f43f5e", tools: { pagerduty_get_incident: 67, datadog_query_metrics: 29, slack_send_message: 38 } },
   { personaId: id("p", 3), personaName: "Daily Standup Digest", personaColor: "#a855f7", tools: { slack_send_message: 22, email_send: 22, linear_create_issue: 10 } },
   { personaId: id("p", 5), personaName: "Customer Feedback Analyzer", personaColor: "#fbbf24", tools: { zendesk_search_tickets: 34, slack_send_message: 14, linear_create_issue: 35 } },
-];
-
-// ---------------------------------------------------------------------------
-// Manual reviews (parsed from events)
-// ---------------------------------------------------------------------------
-
-export const MOCK_REVIEWS: ManualReviewItem[] = [
-  {
-    id: id("ev", 4),
-    personaId: id("p", 2),
-    executionId: id("e", 2),
-    eventType: "manual_review",
-    content: "Proposed Incident Mitigation\nThe agent wants to restart the Redis cluster pods in production. This will cause ~30s of downtime for cached sessions.\n\nAffected services:\n- api-prod (checkout flow)\n- session-service\n- rate-limiter\n\nEstimated recovery: 2 minutes",
-    severity: "critical",
-    status: "pending",
-    reviewerNotes: null,
-    createdAt: ago(14),
-    resolvedAt: null,
-    resolvedBy: null,
-    escalatedAt: null,
-    personaName: "Incident Responder",
-    personaIcon: undefined,
-    personaColor: "#f43f5e",
-  },
-  {
-    id: id("ev", 5),
-    personaId: id("p", 5),
-    executionId: id("e", 5),
-    eventType: "manual_review",
-    content: "Publish Weekly Insights to Slack\nReady to post the weekly customer feedback digest to #product-insights channel.\n\nSummary includes:\n- 342 tickets analyzed\n- Sentiment score: 8.2/10 (+0.4)\n- Top 3 feature requests\n- 2 emerging issues flagged",
-    severity: "info",
-    status: "pending",
-    reviewerNotes: null,
-    createdAt: ago(1440),
-    resolvedAt: null,
-    resolvedBy: null,
-    escalatedAt: null,
-    personaName: "Customer Feedback Analyzer",
-    personaIcon: undefined,
-    personaColor: "#fbbf24",
-  },
-  {
-    id: id("ev", 6),
-    personaId: id("p", 3),
-    executionId: id("e", 3),
-    eventType: "manual_review",
-    content: "Send Standup Digest Email\nDigest ready to send to team@acme.com. Contains activity from 8 team members across 3 repositories.",
-    severity: "warning",
-    status: "approved",
-    reviewerNotes: "Approved - looks good, send it out.",
-    createdAt: ago(119),
-    resolvedAt: ago(118),
-    resolvedBy: "admin",
-    escalatedAt: null,
-    personaName: "Daily Standup Digest",
-    personaIcon: undefined,
-    personaColor: "#a855f7",
-  },
 ];

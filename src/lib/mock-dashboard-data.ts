@@ -6,16 +6,9 @@ import {
   MOCK_OBSERVABILITY_METRICS,
   MOCK_PERSONA_SPEND,
   MOCK_PERSONAS,
+  seededRandom,
 } from "./mockData";
 import type { HealthIssue } from "./types";
-
-function seededRandom(seed: number): () => number {
-  let s = seed;
-  return () => {
-    s = (s * 16807 + 0) % 2147483647;
-    return (s - 1) / 2147483646;
-  };
-}
 
 function generateTimeSeries(
   days: number,

@@ -235,9 +235,7 @@
     noTrafficYet: string;
     deployed: string;
     metricsHealth: string;
-    toolUtilization: string;
     workers: string;
-    usageAnalytics: string;
     errorBoundary: {
       title: string;
       description: string;
@@ -1683,9 +1681,7 @@ export const en: Translations = {
     noTrafficYet: 'No traffic yet',
     deployed: 'deployed',
     metricsHealth: 'Metrics & health',
-    toolUtilization: 'Tool utilization',
     workers: 'workers',
-    usageAnalytics: 'Usage Analytics',
     errorBoundary: {
       title: 'Dashboard panel failed to render',
       description: 'This section hit an unexpected error. You can retry without leaving the page.',
