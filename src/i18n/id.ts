@@ -556,6 +556,28 @@ export const id: Translations = {
           tickerAllClear: "Semua aman",
           instrumentsTitle: "Instrumen"
         },
+        fleetSessions: {
+          title: "Sesi armada",
+          needsYou: "{count} menunggu Anda",
+          athenaOnIt: "Athena menanganinya",
+          states: {
+            working: "Bekerja",
+            needsYou: "Butuh Anda",
+            finished: "Selesai",
+            frozen: "Beku"
+          }
+        },
+        approvedWork: {
+          title: "Pekerjaan disetujui",
+          summary: "{undispatched} dari {total} ide yang disetujui tidak pernah menjadi tugas",
+          stale: "{count} menunggu lebih dari {days} hari",
+          neverDispatched: "Tidak pernah dikirim",
+          dispatched: "Terkirim",
+          dispatch: "Kirim",
+          sendAll: "Kirim ke armada ({count})",
+          toast: "{count} terkirim \u2014 Armada",
+          empty: "Tidak ada yang menunggu dikirim"
+        },
         heatmap: {
           title: "Aktivitas eksekusi",
           subtitle: "Eksekusi per agen \u00b7 7 hari terakhir",

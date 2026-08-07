@@ -1316,10 +1316,12 @@
           "businessFeature": "Dashboard Home Overview",
           "category": "ui",
           "filePaths": [
+            "src/app/dashboard/home/home-page/ApprovedWorkCard.tsx",
             "src/app/dashboard/home/home-page/DashboardGreetingHeader.tsx",
             "src/app/dashboard/home/home-page/DashboardIntelligencePanels.tsx",
             "src/app/dashboard/home/home-page/DashboardQuickLinks.tsx",
             "src/app/dashboard/home/home-page/ExecutionHeatmapCard.tsx",
+            "src/app/dashboard/home/home-page/FleetSessionsStrip.tsx",
             "src/app/dashboard/home/home-page/InstrumentsBay.tsx",
             "src/app/dashboard/home/home-page/RecentActivityCard.tsx",
             "src/app/dashboard/home/home-page/StatusTicker.tsx",
@@ -1915,7 +1917,7 @@
     "Observability & Event Monitoring › Director Coaching [ui] — 11 files",
     "Observability & Event Monitoring › Observability Charts & SLA [ui] — 47 files",
     "Observability & Event Monitoring › Event Bus & Stream Monitoring [ui] — 33 files",
-    "Observability & Event Monitoring › Dashboard Home Overview [ui] — 17 files",
+    "Observability & Event Monitoring › Dashboard Home Overview [ui] — 23 files",
     "Platform Foundation: Shell, UI & Motion › Mobile App Shell & Views [ui] — 13 files",
     "Platform Foundation: Shell, UI & Motion › Animation & Motion System [lib] — 24 files",
     "Platform Foundation: Shell, UI & Motion › Shared UI Primitives & Illustrations [ui] — 25 files",
@@ -1934,7 +1936,7 @@
   "summary": {
     "totalGroups": 12,
     "totalContexts": 54,
-    "totalFiles": 1025,
+    "totalFiles": 1027,
     "categories": {
       "ui": 39,
       "data": 2,

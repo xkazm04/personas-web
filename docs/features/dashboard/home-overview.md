@@ -11,6 +11,9 @@ It greets the user by first name with a time-of-day greeting and an optional "la
   - **Triage Pane** — one ranked queue of the most urgent items (active SLA breaches, open health incidents, pending reviews) sorted by severity then recency; "all clear" empty state.
   - **Vitals Console** — a success-rate ring + 14-day success sparkline over a 2×2 grid of counters (runs, agents, open alerts, pending reviews).
   - **Activity Stream** — the latest 12 executions with persona avatar, relative time, duration, cost, and status; new runs pulse cyan as they arrive.
+- **Fleet sessions + Approved work** (demo only) — a 2:1 row mirroring the desktop's current Mission Control era:
+  - **Fleet sessions strip** — the session ledger with parked-state classification: **Needs you** (violet, blocking on the operator, counted in a header pill), **Working** (blue), **Frozen** (orange — output silence past the stall cutoff), **Finished** (teal). Needs-you rows sort first; a session Athena has taken carries an "Athena's on it" chip.
+  - **Approved work card** — reconciliation of approved ideas vs. actually dispatched work: a "{n} of {m} approved ideas never became a task" summary (+ stale count over 7 days), per-row Never dispatched / Dispatched tags with waiting age, a one-click **Dispatch** button per waiting row and a **Send to Fleet (n)** footer button. Demo-only: dispatching marks rows locally and confirms with a toast (`ExecuteToast`), nothing is actually sent.
 - **Status Ticker** — a slim live strip that cross-fades through fleet vitals (success, agents online, providers, next routine, open alerts); static when reduced-motion.
 - **Instruments Bay** (below the fold, lazy-mounted) — intelligence panels (Health Digest + Memory Actions), an execution-activity heatmap, Top performers alongside the 14-day traffic/errors chart, Upcoming routines + (demo) Vault changes, and four quick-link tiles.
 
@@ -23,7 +26,7 @@ Key behaviors:
 - **Deferred instruments bay** — the below-fold region is wrapped in `LazyMount` (`src/components/LazyMount.tsx`, mounts ~800px before viewport). The `instrumentsRef` div around it always exists, so an `IntersectionObserver` (rootMargin `220px`) flips `loadObservability` true on first approach (`page.tsx`); only then does `useSWR("observability", api.getObservability)` fire (revalidation off, 60s dedupe). `observabilityFetchedAt` feeds a `StalenessIndicator`.
 - **Self-driven reveals** — `InstrumentsBay` mounts after the page's one-shot stagger has fired, so its sections animate themselves with `whileInView` (`viewport once`) rather than inherited variants (the SectionWrapper late-mount gotcha).
 - **Store hydration** — one effect calls `fetchExecutions()` + `fetchReviews()` on mount.
-- **Demo-conditional regions** — Fleet optimization and Vault changes render only when `isDemo`; the Triage Pane sources SLA breaches + health incidents only in demo (pending reviews come from the live store in both modes); the Intelligence panels are illustrative-only (see gotchas).
+- **Demo-conditional regions** — Fleet optimization, the Fleet sessions + Approved work row (`MOCK_FLEET_SESSIONS` / `MOCK_APPROVED_WORK` fixtures; the Approved-work "dispatch" only flips local state + shows a success toast), and Vault changes render only when `isDemo`; the Triage Pane sources SLA breaches + health incidents only in demo (pending reviews come from the live store in both modes); the Intelligence panels are illustrative-only (see gotchas).
 
 Subcomponents each own a slice:
 - `DashboardGreetingHeader` → slim greeting + last-seen line (vitals now live in the Vitals Console).
@@ -41,6 +44,8 @@ Subcomponents each own a slice:
 | `src/app/dashboard/home/home-page/useTriageQueue.ts` | Merges + ranks triage items (severity → weight → recency) |
 | `src/app/dashboard/home/home-page/VitalsConsole.tsx` | Success-rate ring + sparkline + 2×2 counters |
 | `src/app/dashboard/home/home-page/useOpenAlertCount.ts` | Open-alert count (mock in demo, fetch in real); shared by cockpit |
+| `src/app/dashboard/home/home-page/FleetSessionsStrip.tsx` | Session ledger with parked-state classification (needs-you / working / frozen / finished), demo only |
+| `src/app/dashboard/home/home-page/ApprovedWorkCard.tsx` | Approved-vs-dispatched reconciliation with demo-only dispatch + toast |
 | `src/app/dashboard/home/home-page/StatusTicker.tsx` | Live status strip; cross-fades, static under reduced-motion |
 | `src/app/dashboard/home/home-page/RecentActivityCard.tsx` | Last-12 executions feed with new-run pulse + 30s relative-time tick |
 | `src/app/dashboard/home/home-page/InstrumentsBay.tsx` | Below-fold composition (panels / heatmap / traffic / routines / vault / links) |

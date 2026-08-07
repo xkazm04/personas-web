@@ -319,6 +319,28 @@
         tickerAllClear: string;
         instrumentsTitle: string;
       };
+      fleetSessions: {
+        title: string;
+        needsYou: string;
+        athenaOnIt: string;
+        states: {
+          working: string;
+          needsYou: string;
+          finished: string;
+          frozen: string;
+        };
+      };
+      approvedWork: {
+        title: string;
+        summary: string;
+        stale: string;
+        neverDispatched: string;
+        dispatched: string;
+        dispatch: string;
+        sendAll: string;
+        toast: string;
+        empty: string;
+      };
       heatmap: {
         title: string;
         subtitle: string;
@@ -1845,6 +1867,28 @@ export const en: Translations = {
         tickerAlerts: 'Open alerts',
         tickerAllClear: 'All clear',
         instrumentsTitle: 'Instruments',
+      },
+      fleetSessions: {
+        title: 'Fleet sessions',
+        needsYou: '{count} need you',
+        athenaOnIt: "Athena's on it",
+        states: {
+          working: 'Working',
+          needsYou: 'Needs you',
+          finished: 'Finished',
+          frozen: 'Frozen',
+        },
+      },
+      approvedWork: {
+        title: 'Approved work',
+        summary: '{undispatched} of {total} approved ideas never became a task',
+        stale: '{count} waiting over {days} days',
+        neverDispatched: 'Never dispatched',
+        dispatched: 'Dispatched',
+        dispatch: 'Dispatch',
+        sendAll: 'Send to Fleet ({count})',
+        toast: '{count} sent — Fleet',
+        empty: 'Nothing is waiting to be dispatched',
       },
       heatmap: {
         title: 'Execution activity',

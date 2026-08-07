@@ -556,6 +556,28 @@ export const zh: Translations = {
           tickerAllClear: "\u4e00\u5207\u6b63\u5e38",
           instrumentsTitle: "\u4eea\u8868"
         },
+        fleetSessions: {
+          title: "\u8230\u961f\u4f1a\u8bdd",
+          needsYou: "{count} \u4e2a\u7b49\u4f60\u5904\u7406",
+          athenaOnIt: "Athena \u6b63\u5728\u5904\u7406",
+          states: {
+            working: "\u5de5\u4f5c\u4e2d",
+            needsYou: "\u9700\u8981\u4f60",
+            finished: "\u5df2\u5b8c\u6210",
+            frozen: "\u5df2\u51bb\u7ed3"
+          }
+        },
+        approvedWork: {
+          title: "\u5df2\u6279\u51c6\u7684\u5de5\u4f5c",
+          summary: "{total} \u4e2a\u5df2\u6279\u51c6\u7684\u60f3\u6cd5\u4e2d\u6709 {undispatched} \u4e2a\u4ece\u672a\u6210\u4e3a\u4efb\u52a1",
+          stale: "{count} \u4e2a\u7b49\u5f85\u8d85\u8fc7 {days} \u5929",
+          neverDispatched: "\u4ece\u672a\u6d3e\u53d1",
+          dispatched: "\u5df2\u6d3e\u53d1",
+          dispatch: "\u6d3e\u53d1",
+          sendAll: "\u53d1\u9001\u5230\u8230\u961f ({count})",
+          toast: "\u5df2\u53d1\u9001 {count} \u2014 \u8230\u961f",
+          empty: "\u6ca1\u6709\u7b49\u5f85\u6d3e\u53d1\u7684\u5185\u5bb9"
+        },
         heatmap: {
           title: "\u6267\u884c\u6d3b\u52a8",
           subtitle: "\u5404\u667a\u80fd\u4f53\u8fd0\u884c\u6b21\u6570 \u00b7 \u6700\u8fd1 7 \u5929",

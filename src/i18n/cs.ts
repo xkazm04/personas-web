@@ -556,6 +556,28 @@ export const cs: Translations = {
           tickerAllClear: "V\u0161e v po\u0159\u00e1dku",
           instrumentsTitle: "N\u00e1stroje"
         },
+        fleetSessions: {
+          title: "Relace flotily",
+          needsYou: "{count} \u010dekaj\u00ed na v\u00e1s",
+          athenaOnIt: "Athena na tom pracuje",
+          states: {
+            working: "Pracuje",
+            needsYou: "\u010cek\u00e1 na v\u00e1s",
+            finished: "Dokon\u010deno",
+            frozen: "Zamrzl\u00e9"
+          }
+        },
+        approvedWork: {
+          title: "Schv\u00e1len\u00e1 pr\u00e1ce",
+          summary: "{undispatched} z {total} schv\u00e1len\u00fdch n\u00e1pad\u016f se nikdy nestalo \u00fakolem",
+          stale: "{count} \u010dek\u00e1 d\u00e9le ne\u017e {days} dn\u00ed",
+          neverDispatched: "Nikdy neodesl\u00e1no",
+          dispatched: "Odesl\u00e1no",
+          dispatch: "Odeslat",
+          sendAll: "Odeslat do flotily ({count})",
+          toast: "{count} odesl\u00e1no \u2014 flotila",
+          empty: "Nic ne\u010dek\u00e1 na odesl\u00e1n\u00ed"
+        },
         heatmap: {
           title: "Aktivita spu\u0161t\u011bn\u00ed",
           subtitle: "Spu\u0161t\u011bn\u00ed na agenta \u00b7 posledn\u00edch 7 dn\u00ed",

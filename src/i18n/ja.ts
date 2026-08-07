@@ -556,6 +556,28 @@ export const ja: Translations = {
           tickerAllClear: "\u554f\u984c\u306a\u3057",
           instrumentsTitle: "\u30a4\u30f3\u30b9\u30c8\u30a5\u30eb\u30e1\u30f3\u30c8"
         },
+        fleetSessions: {
+          title: "\u30d5\u30ea\u30fc\u30c8\u30bb\u30c3\u30b7\u30e7\u30f3",
+          needsYou: "{count}\u4ef6\u304c\u3042\u306a\u305f\u5f85\u3061",
+          athenaOnIt: "Athena\u304c\u5bfe\u5fdc\u4e2d",
+          states: {
+            working: "\u4f5c\u696d\u4e2d",
+            needsYou: "\u8981\u5bfe\u5fdc",
+            finished: "\u5b8c\u4e86",
+            frozen: "\u30d5\u30ea\u30fc\u30ba"
+          }
+        },
+        approvedWork: {
+          title: "\u627f\u8a8d\u6e08\u307f\u306e\u4f5c\u696d",
+          summary: "\u627f\u8a8d\u6e08\u307f\u30a2\u30a4\u30c7\u30a2{total}\u4ef6\u306e\u3046\u3061{undispatched}\u4ef6\u304c\u30bf\u30b9\u30af\u306b\u306a\u3063\u3066\u3044\u307e\u305b\u3093",
+          stale: "{count}\u4ef6\u304c{days}\u65e5\u4ee5\u4e0a\u5f85\u6a5f\u4e2d",
+          neverDispatched: "\u672a\u9001\u4fe1",
+          dispatched: "\u9001\u4fe1\u6e08\u307f",
+          dispatch: "\u9001\u4fe1",
+          sendAll: "\u30d5\u30ea\u30fc\u30c8\u3078\u9001\u4fe1 ({count})",
+          toast: "{count}\u4ef6\u9001\u4fe1 \u2014 \u30d5\u30ea\u30fc\u30c8",
+          empty: "\u9001\u4fe1\u5f85\u3061\u306f\u3042\u308a\u307e\u305b\u3093"
+        },
         heatmap: {
           title: "\u5b9f\u884c\u30a2\u30af\u30c6\u30a3\u30d3\u30c6\u30a3",
           subtitle: "\u30a8\u30fc\u30b8\u30a7\u30f3\u30c8\u5225\u306e\u5b9f\u884c\u6570 \u00b7 \u904e\u53bb7\u65e5\u9593",

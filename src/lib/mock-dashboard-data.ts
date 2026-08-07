@@ -1709,6 +1709,108 @@ export interface CredentialRotation {
   intervalDays: number;
 }
 
+// ── Mission Control: fleet sessions + approved work ─────────────────
+// Mirrors the desktop Mission Control's current-era elements: the fleet
+// session ledger with parked-state classification and the "Approved work"
+// reconciliation tray (approved ideas vs. actually dispatched tasks).
+// Demo-only fixtures; project/session titles are data shown verbatim.
+
+/**
+ * Parked-state classification for a fleet session. Web-demo simplification of
+ * the desktop's lifecycle-state + attention-lane pair: `working` (running),
+ * `needsYou` (awaiting input), `finished` (done, parked), `frozen` (total
+ * output silence past the stall cutoff).
+ */
+export type FleetSessionState = "working" | "needsYou" | "finished" | "frozen";
+
+export interface FleetSessionSummary {
+  id: string;
+  /** Project label — fixture, shown verbatim. */
+  project: string;
+  /** Live terminal title — fixture, shown verbatim. */
+  title: string;
+  state: FleetSessionState;
+  /** ISO timestamp of the last session activity. */
+  lastActivityAt: string;
+  /** Athena has taken this needs-you ticket ("Athena's on it"). */
+  athenaActive: boolean;
+}
+
+export const MOCK_FLEET_SESSIONS: FleetSessionSummary[] = [
+  {
+    id: "fs-1",
+    project: "personas-web",
+    title: "guide-pages: motion gating sweep",
+    state: "working",
+    lastActivityAt: new Date(Date.now() - 40_000).toISOString(),
+    athenaActive: false,
+  },
+  {
+    id: "fs-2",
+    project: "personas-web",
+    title: "waitlist: i18n completion pass",
+    state: "needsYou",
+    lastActivityAt: new Date(Date.now() - 12 * 60_000).toISOString(),
+    athenaActive: false,
+  },
+  {
+    id: "fs-3",
+    project: "personas",
+    title: "overview: director tab polish",
+    state: "needsYou",
+    lastActivityAt: new Date(Date.now() - 26 * 60_000).toISOString(),
+    athenaActive: true,
+  },
+  {
+    id: "fs-4",
+    project: "vibeman",
+    title: "context map refresh",
+    state: "finished",
+    lastActivityAt: new Date(Date.now() - 41 * 60_000).toISOString(),
+    athenaActive: false,
+  },
+  {
+    id: "fs-5",
+    project: "personas",
+    title: "e2e: fleet monitor spec",
+    state: "frozen",
+    lastActivityAt: new Date(Date.now() - 73 * 60_000).toISOString(),
+    athenaActive: false,
+  },
+  {
+    id: "fs-6",
+    project: "docs-site",
+    title: "changelog rollup",
+    state: "finished",
+    lastActivityAt: new Date(Date.now() - 118 * 60_000).toISOString(),
+    athenaActive: false,
+  },
+];
+
+/** An approved backlog idea, reconciled against whether work ever started. */
+export interface ApprovedWorkItem {
+  id: string;
+  /** Idea title — fixture, shown verbatim. */
+  title: string;
+  /** Project label — fixture, shown verbatim. */
+  project: string;
+  /** Accepted, with no task row — a decision that never became work. */
+  undispatched: boolean;
+  /** Whole hours since acceptance; null when a task already picked it up. */
+  ageHours: number | null;
+}
+
+/** An undispatched idea older than this reads as stale (days). */
+export const MOCK_APPROVED_WORK_STALE_DAYS = 7;
+
+export const MOCK_APPROVED_WORK: ApprovedWorkItem[] = [
+  { id: "aw-1", title: "Streaming exec log follow mode", project: "personas-web", undispatched: true, ageHours: 214 },
+  { id: "aw-2", title: "Retry budget per connector", project: "personas", undispatched: true, ageHours: 56 },
+  { id: "aw-3", title: "Fleet monitor keyboard nav", project: "personas", undispatched: true, ageHours: 9 },
+  { id: "aw-4", title: "Roadmap JSON publish job", project: "personas-web", undispatched: false, ageHours: null },
+  { id: "aw-5", title: "Vault rotation reminder digest", project: "personas", undispatched: false, ageHours: null },
+];
+
 // ── Director (coaching command center) ──────────────────────────────
 // Mirrors the desktop overview's Director tab: a system-owned meta-persona
 // that scores every starred agent's latest run on a 0–5 verdict scale and

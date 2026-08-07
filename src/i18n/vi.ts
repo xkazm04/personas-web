@@ -556,6 +556,28 @@ export const vi: Translations = {
           tickerAllClear: "M\u1ecdi th\u1ee9 \u1ed5n",
           instrumentsTitle: "C\u00f4ng c\u1ee5"
         },
+        fleetSessions: {
+          title: "Phi\u00ean \u0111\u1ed9i",
+          needsYou: "{count} phi\u00ean \u0111ang ch\u1edd b\u1ea1n",
+          athenaOnIt: "Athena \u0111ang x\u1eed l\u00fd",
+          states: {
+            working: "\u0110ang ch\u1ea1y",
+            needsYou: "C\u1ea7n b\u1ea1n",
+            finished: "\u0110\u00e3 xong",
+            frozen: "B\u1ecb \u0111\u00f3ng b\u0103ng"
+          }
+        },
+        approvedWork: {
+          title: "C\u00f4ng vi\u1ec7c \u0111\u00e3 duy\u1ec7t",
+          summary: "{undispatched} trong {total} \u00fd t\u01b0\u1edfng \u0111\u00e3 duy\u1ec7t ch\u01b0a bao gi\u1edd th\u00e0nh nhi\u1ec7m v\u1ee5",
+          stale: "{count} ch\u1edd h\u01a1n {days} ng\u00e0y",
+          neverDispatched: "Ch\u01b0a t\u1eebng g\u1eedi",
+          dispatched: "\u0110\u00e3 g\u1eedi",
+          dispatch: "G\u1eedi",
+          sendAll: "G\u1eedi cho \u0111\u1ed9i ({count})",
+          toast: "\u0110\u00e3 g\u1eedi {count} \u2014 \u0110\u1ed9i",
+          empty: "Kh\u00f4ng c\u00f3 g\u00ec \u0111ang ch\u1edd g\u1eedi"
+        },
         heatmap: {
           title: "Ho\u1ea1t \u0111\u1ed9ng th\u1ef1c thi",
           subtitle: "L\u1ea7n ch\u1ea1y m\u1ed7i t\u00e1c nh\u00e2n \u00b7 7 ng\u00e0y qua",

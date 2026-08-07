@@ -556,6 +556,28 @@ export const es: Translations = {
           tickerAllClear: "Todo en orden",
           instrumentsTitle: "Instrumentos"
         },
+        fleetSessions: {
+          title: "Sesiones de la flota",
+          needsYou: "{count} te necesitan",
+          athenaOnIt: "Athena se encarga",
+          states: {
+            working: "Trabajando",
+            needsYou: "Te necesita",
+            finished: "Terminada",
+            frozen: "Congelada"
+          }
+        },
+        approvedWork: {
+          title: "Trabajo aprobado",
+          summary: "{undispatched} de {total} ideas aprobadas nunca se convirtieron en tarea",
+          stale: "{count} esperando m\u00e1s de {days} d\u00edas",
+          neverDispatched: "Nunca enviada",
+          dispatched: "Enviada",
+          dispatch: "Enviar",
+          sendAll: "Enviar a la flota ({count})",
+          toast: "{count} enviadas \u2014 Flota",
+          empty: "Nada espera ser enviado"
+        },
         heatmap: {
           title: "Actividad de ejecuci\u00f3n",
           subtitle: "Ejecuciones por agente \u00b7 \u00faltimos 7 d\u00edas",

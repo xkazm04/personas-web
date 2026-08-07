@@ -556,6 +556,28 @@ export const ko: Translations = {
           tickerAllClear: "\ubaa8\ub450 \uc815\uc0c1",
           instrumentsTitle: "\uacc4\uae30"
         },
+        fleetSessions: {
+          title: "\ud50c\ub9bf \uc138\uc158",
+          needsYou: "{count}\uac1c\uac00 \uc751\ub2f5 \ub300\uae30 \uc911",
+          athenaOnIt: "Athena\uac00 \ucc98\ub9ac \uc911",
+          states: {
+            working: "\uc791\uc5c5 \uc911",
+            needsYou: "\uc751\ub2f5 \ud544\uc694",
+            finished: "\uc644\ub8cc",
+            frozen: "\uc815\uc9c0\ub428"
+          }
+        },
+        approvedWork: {
+          title: "\uc2b9\uc778\ub41c \uc791\uc5c5",
+          summary: "\uc2b9\uc778\ub41c \uc544\uc774\ub514\uc5b4 {total}\uac1c \uc911 {undispatched}\uac1c\uac00 \uc791\uc5c5\uc73c\ub85c \uc774\uc5b4\uc9c0\uc9c0 \uc54a\uc558\uc2b5\ub2c8\ub2e4",
+          stale: "{count}\uac1c\uac00 {days}\uc77c \uc774\uc0c1 \ub300\uae30 \uc911",
+          neverDispatched: "\ubbf8\ubc1c\uc1a1",
+          dispatched: "\ubc1c\uc1a1\ub428",
+          dispatch: "\ubc1c\uc1a1",
+          sendAll: "\ud50c\ub9bf\uc73c\ub85c \ubcf4\ub0b4\uae30 ({count})",
+          toast: "{count}\uac1c \uc804\uc1a1\ub428 \u2014 \ud50c\ub9bf",
+          empty: "\ubc1c\uc1a1\uc744 \uae30\ub2e4\ub9ac\ub294 \ud56d\ubaa9\uc774 \uc5c6\uc2b5\ub2c8\ub2e4"
+        },
         heatmap: {
           title: "\uc2e4\ud589 \ud65c\ub3d9",
           subtitle: "\uc5d0\uc774\uc804\ud2b8\ubcc4 \uc2e4\ud589 \u00b7 \ucd5c\uadfc 7\uc77c",
