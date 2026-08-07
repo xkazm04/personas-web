@@ -10,6 +10,7 @@ import { trackWaitlistOpen, trackWaitlistResult, trackWaitlistSubmit, type Waitl
 import { WaitlistForm } from "./waitlist-modal/WaitlistForm";
 import { WaitlistHeader } from "./waitlist-modal/WaitlistHeader";
 import { WaitlistSuccessPanel } from "./waitlist-modal/WaitlistSuccessPanel";
+import { loadWaitlistCounts, primeWaitlistCount } from "./waitlist-modal/waitlistCounts";
 import { EMAIL_RE, FETCH_TIMEOUT_MS, legacyCopyToClipboard, type PlatformKey, type ShareState, type WaitlistStatus } from "./waitlist-modal/waitlistUtils";
 
 interface WaitlistModalProps {
@@ -38,11 +39,11 @@ export default function WaitlistModal({ platformKey, platformLabel, platformIcon
 
   const fetchCount = useCallback(async (signal: AbortSignal) => {
     try {
-      const res = await fetch("/api/waitlist", { signal });
-      if (res.ok) {
-        const data = await res.json();
-        setWaitlistCount(data.counts?.[platformKey] ?? 0);
-      }
+      const counts = await loadWaitlistCounts();
+      // The shared request is not aborted (another mount may still want it);
+      // the signal only decides whether THIS instance applies the result.
+      if (signal.aborted || !counts) return;
+      setWaitlistCount(counts[platformKey] ?? 0);
     } catch (err) {
       // Swallow aborts (close/re-open); report genuine failures. The header
       // degrades gracefully by leaving `waitlistCount` null.
@@ -108,6 +109,7 @@ export default function WaitlistModal({ platformKey, platformLabel, platformIcon
         // Prefer the authoritative post-insert count the route returns; the
         // optimistic +1 is only a fallback for responses that omit it.
         const serverCount = typeof data.count === "number" ? data.count : null;
+        if (serverCount !== null) primeWaitlistCount(platformKey, serverCount);
         setWaitlistCount((prev) => (serverCount ?? (prev !== null ? prev + 1 : 1)));
       }
     } catch (err) {
@@ -148,7 +150,7 @@ export default function WaitlistModal({ platformKey, platformLabel, platformIcon
       {open && (
         <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} transition={TRANSITION_FAST} className="fixed inset-0 z-50 flex items-center justify-center px-4" onClick={onClose}>
           <div className="absolute inset-0 bg-black/60 backdrop-blur-sm" />
-          <motion.div ref={modalRef} role="dialog" aria-modal="true" aria-labelledby="waitlist-modal-title" initial={{ opacity: 0, scale: 0.95, y: 10 }} animate={{ opacity: 1, scale: 1, y: 0 }} exit={{ opacity: 0, scale: 0.95, y: 10 }} transition={TRANSITION_NORMAL} onClick={(event) => event.stopPropagation()} className="relative w-full max-w-[440px] rounded-2xl border border-glass bg-background p-6 shadow-[0_0_80px_rgba(0,0,0,0.5)]">
+          <motion.div ref={modalRef} role="dialog" aria-modal="true" aria-labelledby="waitlist-modal-title" initial={{ opacity: 0, scale: 0.95, y: 10 }} animate={{ opacity: 1, scale: 1, y: 0 }} exit={{ opacity: 0, scale: 0.95, y: 10 }} transition={TRANSITION_NORMAL} onClick={(event) => event.stopPropagation()} className="relative w-full max-w-[440px] rounded-2xl border border-glass bg-background p-6 shadow-2xl">
             <WaitlistHeader platformLabel={platformLabel} PlatformIcon={platformIcon} count={waitlistCount} comingSoon={t.pricing.comingSoon} peopleWaiting={t.waitlist.peopleWaiting} closeLabel={t.common.close} onClose={onClose} />
             {status === "success" || status === "duplicate" ? (
               <WaitlistSuccessPanel status={status} submittedEmail={submittedEmail} platformLabel={platformLabel} earlyBeta={earlyBeta} shareState={shareState} shareFallbackUrl={shareFallbackUrl} onShare={handleShare} onClose={onClose} labels={{ duplicate: t.waitlist.duplicate, success: t.waitlist.success, copied: t.waitlist.copied, close: t.common.close, next: t.common.next }} />

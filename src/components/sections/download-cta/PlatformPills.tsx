@@ -19,11 +19,11 @@ export function PlatformPills({
         platform.available ? (
           <div
             key={platform.key}
-            className="flex items-center gap-2 rounded-full border border-brand-cyan/20 bg-brand-cyan/5 px-4 py-2 text-base font-medium text-brand-cyan shadow-[0_0_15px_rgba(6,182,212,0.06)] transition-all duration-300"
+            className="flex items-center gap-2 rounded-full border border-brand-cyan/20 bg-brand-cyan/5 px-4 py-2 text-base font-medium text-brand-cyan shadow-[0_0_15px_color-mix(in_srgb,var(--brand-cyan)_6%,transparent)] transition-all duration-300"
           >
             <platform.icon className="h-3.5 w-3.5" />
             {platform.label}
-            <div className="h-1.5 w-1.5 rounded-full bg-brand-cyan shadow-[0_0_4px_rgba(6,182,212,0.5)]" />
+            <div className="h-1.5 w-1.5 rounded-full bg-brand-cyan shadow-[0_0_4px_color-mix(in_srgb,var(--brand-cyan)_50%,transparent)]" />
           </div>
         ) : (
           <button

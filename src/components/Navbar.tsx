@@ -2,11 +2,17 @@
 
 import { useCallback, useRef, useState } from "react";
 import { motion, useMotionValueEvent, useScroll } from "framer-motion";
+import dynamic from "next/dynamic";
 import { Apple, Menu, Monitor, Terminal, X } from "lucide-react";
 import DesktopNav from "./navbar/DesktopNav";
 import MobilePanel from "./navbar/MobilePanel";
 import NavbarLogoGlyph from "./NavbarLogoGlyph";
-import WaitlistModal from "./WaitlistModal";
+// The navbar renders on every page, but the waitlist modal is only ever needed
+// after a click — a static import dragged the whole modal tree (framer-motion
+// variants, lucide icons, form + success panels) into the global navbar chunk.
+// Loaded on demand instead; `ssr: false` because it is never server-rendered
+// (it is closed until a click).
+const WaitlistModal = dynamic(() => import("./WaitlistModal"), { ssr: false });
 import { useTranslation } from "@/i18n/useTranslation";
 import { useMobileMenu } from "./navbar/useMobileMenu";
 import { detectPlatformKey, type PlatformKey } from "./waitlist-modal/waitlistUtils";
@@ -35,9 +41,14 @@ export default function Navbar() {
 
   useMotionValueEvent(scrollY, "change", (v) => setScrolled(v > 40));
 
+  // Latches on first open and never unlatches, so the modal stays mounted for
+  // its exit animation / focus restore instead of being ripped out on close.
+  const [modalRequested, setModalRequested] = useState(false);
+
   const openDownload = useCallback(() => {
     closeMobile();
     setPlatformKey(detectPlatformKey());
+    setModalRequested(true);
     setDownloadOpen(true);
   }, [closeMobile]);
   const closeDownload = useCallback(() => setDownloadOpen(false), []);
@@ -87,6 +98,7 @@ export default function Navbar() {
       {/* Desktop builds aren't shipping yet, so the CTA opens the canonical
           waitlist flow (same intent as /api/download's fallback) instead of a
           placeholder modal whose options downloaded nothing. */}
+      {modalRequested && (
       <WaitlistModal
         platformKey={platformKey}
         platformLabel={t.downloadSection[platformKey]}
@@ -95,6 +107,7 @@ export default function Navbar() {
         onClose={closeDownload}
         entryPoint="navbar"
       />
+      )}
     </motion.header>
   );
 }

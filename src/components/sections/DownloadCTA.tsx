@@ -43,8 +43,8 @@ export default function DownloadCTA() {
       <div className="pointer-events-none absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2">
         <div className="animate-spin-slow h-[min(500px,86vw)] w-[min(500px,86vw)]" style={{ animationDuration: "40s" }}>
           <svg viewBox="0 0 500 500" className="h-full w-full">
-            <circle cx="250" cy="250" r="240" fill="none" stroke="rgba(6,182,212,0.025)" strokeWidth="0.5" strokeDasharray="4 16" />
-            <circle cx="250" cy="10" r="2" fill="rgba(6,182,212,0.12)" />
+            <circle cx="250" cy="250" r="240" fill="none" stroke="color-mix(in srgb, var(--brand-cyan) 2.5%, transparent)" strokeWidth="0.5" strokeDasharray="4 16" />
+            <circle cx="250" cy="10" r="2" fill="color-mix(in srgb, var(--brand-cyan) 12%, transparent)" />
           </svg>
         </div>
       </div>

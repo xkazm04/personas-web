@@ -133,13 +133,29 @@ export async function GET(req: NextRequest) {
 
   if (hasSupabase()) {
     const sb = await getSupabaseClient();
+    // One `head: true` count query per platform (3 total) instead of selecting
+    // every row and counting in JS: the old shape transferred and parsed the
+    // whole table on every poll, so cost grew linearly with signups. Response
+    // shape is unchanged.
     const counts: Record<string, number> = {};
-    for (const platform of VALID_PLATFORMS) counts[platform] = 0;
-    const { data, error } = await sb.from(WAITLIST_TABLE).select("platform");
-    if (!error && data) {
-      for (const row of data as { platform: string }[]) {
-        if (row.platform in counts) counts[row.platform]++;
-      }
+    let failed: unknown = null;
+    await Promise.all(
+      [...VALID_PLATFORMS].map(async (platform) => {
+        const { count, error } = await sb
+          .from(WAITLIST_TABLE)
+          .select("*", { count: "exact", head: true })
+          .eq("platform", platform);
+        if (error) failed ??= error;
+        counts[platform] = error ? 0 : (count ?? 0);
+      }),
+    );
+    if (failed) {
+      // Counts are non-PII, but a zeroed response used to be indistinguishable
+      // from an empty waitlist. Report the fault instead of hiding it.
+      captureExceptionScrubbed(
+        new Error(`waitlist count query failed (code=${(failed as { code?: string }).code ?? "unknown"})`),
+        { tags: { scope: "api/waitlist", reason: "supabase-count-failed" } },
+      );
     }
     return NextResponse.json({ counts });
   }

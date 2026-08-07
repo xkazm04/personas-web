@@ -831,18 +831,18 @@
         },
         {
           "name": "Waitlist & App Download",
-          "description": "Email waitlist signup modal and the desktop-app download artifact endpoint, plus the navbar download modal.",
+          "description": "Email waitlist signup modal (lazy-loaded from the navbar, static on the download CTA) and the desktop-app download artifact endpoint.",
           "businessFeature": "Waitlist & App Download",
           "category": "api",
           "filePaths": [
             "src/app/api/download/route.ts",
             "src/app/api/waitlist/route.ts",
             "src/components/WaitlistModal.tsx",
-            "src/components/navbar/DownloadModal.tsx",
             "src/components/waitlist-modal/AnimatedCheckmark.tsx",
             "src/components/waitlist-modal/WaitlistForm.tsx",
             "src/components/waitlist-modal/WaitlistHeader.tsx",
             "src/components/waitlist-modal/WaitlistSuccessPanel.tsx",
+            "src/components/waitlist-modal/waitlistCounts.ts",
             "src/components/waitlist-modal/waitlistUtils.ts"
           ],
           "target": null,
