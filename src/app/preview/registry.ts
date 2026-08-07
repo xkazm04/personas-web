@@ -34,6 +34,10 @@ export const PREVIEW_REGISTRY: Record<string, ComponentType> = {
   roadmap: dynamic(() => import("@/components/sections/roadmap")),
   "feature-voting": dynamic(() => import("@/components/sections/feature-voting")),
   footer: dynamic(() => import("@/components/sections/Footer")),
+  // /athena page prototypes — three competing hero art directions (pick/fuse).
+  "athena-hero-a": dynamic(() => import("@/components/athena/hero/variant-a")),
+  "athena-hero-b": dynamic(() => import("@/components/athena/hero/variant-b")),
+  "athena-hero-c": dynamic(() => import("@/components/athena/hero/variant-c")),
 };
 // Sections that require runtime props (e.g. connections-catalog needs
 // activeCategory + search state) are intentionally excluded — register
