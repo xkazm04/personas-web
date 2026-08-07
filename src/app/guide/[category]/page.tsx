@@ -5,6 +5,7 @@ import { ArrowLeft } from "lucide-react";
 import { GUIDE_CATEGORIES } from "@/data/guide/categories";
 import { GUIDE_TOPICS } from "@/data/guide/topics";
 import { GUIDE_ILLUSTRATIONS } from "@/data/guide/illustrations";
+import CategoryGlyphArt from "@/components/guide/CategoryGlyphArt";
 import { isTopicVisible } from "@/lib/guide-utils";
 import { SITE_URL, safeJsonLd } from "@/lib/seo";
 import CategoryTopics from "./CategoryTopics";
@@ -85,29 +86,35 @@ export default async function CategoryPage({ params }: { params: Promise<{ categ
           Back to Guide
         </Link>
 
-        {/* Illustration banner — dark/light variants swap via CSS */}
-        {illus && (
-          <div className="relative mt-6 overflow-hidden rounded-2xl">
-            <Image
-              src={illus.dark}
-              alt={cat.name}
-              width={800}
-              height={400}
-              aria-hidden="true"
-              className="hidden dark:block h-auto max-h-48 w-full object-cover opacity-60"
-              priority
-            />
-            <Image
-              src={illus.light}
-              alt={cat.name}
-              width={800}
-              height={400}
-              className="block dark:hidden h-auto max-h-48 w-full object-cover opacity-60"
-              priority
-            />
-            <div className="absolute inset-0 bg-gradient-to-t from-background via-background/40 to-transparent" />
-          </div>
-        )}
+        {/* Illustration banner — dark/light variants swap via CSS; categories
+            without a painted illustration get the glyph fallback so every
+            category page opens on artwork. */}
+        <div className="relative mt-6 h-48 overflow-hidden rounded-2xl">
+          {illus ? (
+            <>
+              <Image
+                src={illus.dark}
+                alt={cat.name}
+                width={800}
+                height={400}
+                aria-hidden="true"
+                className="hidden dark:block h-full w-full object-cover opacity-60"
+                priority
+              />
+              <Image
+                src={illus.light}
+                alt={cat.name}
+                width={800}
+                height={400}
+                className="block dark:hidden h-full w-full object-cover opacity-60"
+                priority
+              />
+            </>
+          ) : (
+            <CategoryGlyphArt icon={cat.icon} color={cat.color} />
+          )}
+          <div className="absolute inset-0 bg-gradient-to-t from-background via-background/40 to-transparent" />
+        </div>
 
         {/* Category header */}
         <div className="mt-6 min-w-0">

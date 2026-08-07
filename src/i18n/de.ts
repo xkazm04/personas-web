@@ -1415,6 +1415,7 @@ export const de: Translations = {
       },
       categories: {
         "getting-started": "Erste Schritte",
+        companion: "Begleiterin (Athena)",
         "agents-prompts": "Agenten & Prompts",
         triggers: "Trigger & Planung",
         credentials: "Zugangsdaten & Sicherheit",
@@ -1427,6 +1428,7 @@ export const de: Translations = {
       },
       categoryDescriptions: {
         "getting-started": "Installieren Sie Personas, erstellen Sie Ihren ersten Agenten und lernen Sie die Grundlagen in unter 10 Minuten.",
+        companion: "Lernen Sie Athena kennen, Ihre immer verf\u00fcgbare Assistentin. Schreiben oder sprechen Sie mit ihr, lassen Sie sie die App f\u00fcr Sie bedienen und verlassen Sie sich darauf, dass sie sich merkt, was z\u00e4hlt.",
         credentials: "Verbinden Sie sich sicher mit Diensten. Verstehen Sie den verschl\u0102\u013dsselten Tresor und wie Ihre Daten gesch\u0102\u013dtzt bleiben.",
         "agents-prompts": "Erstellen, konfigurieren und optimieren Sie Ihre KI-Agenten. Meistern Sie einfache und strukturierte Prompt-Modi.",
         triggers: "Legen Sie fest, wann und wie Ihre Agenten laufen \u2014 Zeitpl\u00e4ne, Webhooks, Datei-Watcher und mehr.",

@@ -1415,6 +1415,7 @@ export const fr: Translations = {
       },
       categories: {
         "getting-started": "Prise en main",
+        companion: "Compagne (Athena)",
         "agents-prompts": "Agents et Prompts",
         triggers: "D\u00e9clencheurs et planification",
         credentials: "Identifiants et s\u00e9curit\u00e9",
@@ -1427,6 +1428,7 @@ export const fr: Translations = {
       },
       categoryDescriptions: {
         "getting-started": "Installez Personas, cr\u00e9ez votre premier agent et apprenez les bases en moins de 10 minutes.",
+        companion: "D\u00e9couvrez Athena, votre assistante toujours disponible. \u00c9crivez-lui ou parlez-lui, laissez-la piloter l'application pour vous et comptez sur elle pour retenir l'essentiel.",
         credentials: "Connectez-vous aux services en toute s\u00e9curit\u00e9. Comprenez le coffre-fort chiffr\u00e9 et comment vos donn\u00e9es restent en s\u00e9curit\u00e9.",
         "agents-prompts": "Cr\u00e9ez, configurez et affinez vos agents IA. Ma\u00eetrisez les modes de prompt simples et structur\u00e9s.",
         triggers: "Configurez quand et comment vos agents s'ex\u00e9cutent \u2014 planifications, webhooks, surveillance de fichiers, et plus encore.",

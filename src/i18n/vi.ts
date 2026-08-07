@@ -1415,6 +1415,7 @@ export const vi: Translations = {
       },
       categories: {
         "getting-started": "B\u1eaft \u0111\u1ea7u",
+        companion: "Ng\u01b0\u1eddi \u0111\u1ed3ng h\u00e0nh (Athena)",
         "agents-prompts": "T\u00e1c nh\u00e2n & Prompt",
         triggers: "Tr\u00ecnh k\u00edch ho\u1ea1t & L\u1eadp l\u1ecbch",
         credentials: "Th\u00f4ng tin x\u00e1c th\u1ef1c & B\u1ea3o m\u1eadt",
@@ -1427,6 +1428,7 @@ export const vi: Translations = {
       },
       categoryDescriptions: {
         "getting-started": "C\u00e0i \u0111\u1eb7t Personas, t\u1ea1o agent \u0111\u1ea7u ti\u00ean c\u1ee7a b\u1ea1n, v\u00e0 h\u1ecdc c\u00e1c ki\u1ebfn th\u1ee9c c\u01a1 b\u1ea3n trong v\u00f2ng ch\u01b0a \u0111\u1ea7y 10 ph\u00fat.",
+        companion: "G\u1eb7p Athena, tr\u1ee3 l\u00fd lu\u00f4n s\u1eb5n s\u00e0ng c\u1ee7a b\u1ea1n. Nh\u1eafn ho\u1eb7c n\u00f3i chuy\u1ec7n v\u1edbi c\u00f4 \u1ea5y, \u0111\u1ec3 c\u00f4 \u1ea5y \u0111i\u1ec1u khi\u1ec3n \u1ee9ng d\u1ee5ng thay b\u1ea1n, v\u00e0 tin t\u01b0\u1edfng c\u00f4 \u1ea5y ghi nh\u1edb nh\u1eefng \u0111i\u1ec1u quan tr\u1ecdng.",
         credentials: "K\u1ebft n\u1ed1i v\u1edbi c\u00e1c d\u1ecbch v\u1ee5 m\u1ed9t c\u00e1ch an to\u00e0n. Hi\u1ec3u v\u1ec1 kho l\u01b0u tr\u1eef m\u00e3 h\u00f3a v\u00e0 c\u00e1ch d\u1eef li\u1ec7u c\u1ee7a b\u1ea1n lu\u00f4n \u0111\u01b0\u1ee3c b\u1ea3o v\u1ec7.",
         "agents-prompts": "T\u1ea1o, c\u1ea5u h\u00ecnh v\u00e0 tinh ch\u1ec9nh c\u00e1c AI agent c\u1ee7a b\u1ea1n. N\u1eafm v\u1eefng ch\u1ebf \u0111\u1ed9 prompt \u0111\u01a1n gi\u1ea3n v\u00e0 c\u00f3 c\u1ea5u tr\u00fac.",
         triggers: "Thi\u1ebft l\u1eadp th\u1eddi \u0111i\u1ec3m v\u00e0 c\u00e1ch th\u1ee9c agent c\u1ee7a b\u1ea1n ch\u1ea1y \u2014 l\u1ecbch tr\u00ecnh, webhook, theo d\u00f5i t\u1ec7p v\u00e0 h\u01a1n th\u1ebf n\u1eefa.",

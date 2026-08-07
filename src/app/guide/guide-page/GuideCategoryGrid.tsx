@@ -3,6 +3,7 @@ import { ArrowRight } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
 
+import CategoryGlyphArt from "@/components/guide/CategoryGlyphArt";
 import type { GUIDE_CATEGORIES } from "@/data/guide/categories";
 import { GUIDE_ILLUSTRATIONS } from "@/data/guide/illustrations";
 import { fadeUp, staggerContainer } from "@/lib/animations";
@@ -47,35 +48,42 @@ export function GuideCategoryGrid({
                 backgroundImage: `linear-gradient(180deg, transparent 0%, ${tint(brand, 8)} 100%)`,
               }}
             >
-              {illustration && (
+              {/* Every card keeps the artwork slot — categories without a
+                  painted illustration fall back to CategoryGlyphArt so the
+                  grid rhythm never breaks. */}
+              <div
+                className="relative aspect-video w-full overflow-hidden"
+                style={{ backgroundColor: tint(brand, 6) }}
+              >
+                {illustration ? (
+                  <>
+                    <Image
+                      src={illustration.dark}
+                      alt={labels.categories[category.id] ?? category.name}
+                      width={800}
+                      height={400}
+                      aria-hidden="true"
+                      className="hidden dark:block h-full w-full object-cover transition-transform duration-500 group-hover:scale-105"
+                    />
+                    <Image
+                      src={illustration.light}
+                      alt={labels.categories[category.id] ?? category.name}
+                      width={800}
+                      height={400}
+                      className="block dark:hidden h-full w-full object-cover transition-transform duration-500 group-hover:scale-105"
+                    />
+                  </>
+                ) : (
+                  <CategoryGlyphArt icon={category.icon} color={category.color} />
+                )}
                 <div
-                  className="relative aspect-video w-full overflow-hidden"
-                  style={{ backgroundColor: tint(brand, 6) }}
-                >
-                  <Image
-                    src={illustration.dark}
-                    alt={labels.categories[category.id] ?? category.name}
-                    width={800}
-                    height={400}
-                    aria-hidden="true"
-                    className="hidden dark:block h-full w-full object-cover transition-transform duration-500 group-hover:scale-105"
-                  />
-                  <Image
-                    src={illustration.light}
-                    alt={labels.categories[category.id] ?? category.name}
-                    width={800}
-                    height={400}
-                    className="block dark:hidden h-full w-full object-cover transition-transform duration-500 group-hover:scale-105"
-                  />
-                  <div
-                    className="absolute inset-x-0 bottom-0 h-1/2"
-                    style={{
-                      backgroundImage:
-                        "linear-gradient(180deg, transparent 0%, rgba(var(--background-rgb, 10,10,18), 0.85) 100%)",
-                    }}
-                  />
-                </div>
-              )}
+                  className="absolute inset-x-0 bottom-0 h-1/2"
+                  style={{
+                    backgroundImage:
+                      "linear-gradient(180deg, transparent 0%, rgba(var(--background-rgb, 10,10,18), 0.85) 100%)",
+                  }}
+                />
+              </div>
 
               <div className="relative p-6">
                 <div className="flex items-start justify-between gap-3 mb-3">

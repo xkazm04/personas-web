@@ -1415,6 +1415,7 @@ export const id: Translations = {
       },
       categories: {
         "getting-started": "Memulai",
+        companion: "Pendamping (Athena)",
         "agents-prompts": "Agen & Prompt",
         triggers: "Pemicu & Penjadwalan",
         credentials: "Kredensial & Keamanan",
@@ -1427,6 +1428,7 @@ export const id: Translations = {
       },
       categoryDescriptions: {
         "getting-started": "Instal Personas, buat agen pertama Anda, dan pelajari dasar-dasarnya dalam waktu kurang dari 10 menit.",
+        companion: "Kenali Athena, asisten yang selalu siap. Ketik atau bicara dengannya, biarkan dia menjalankan aplikasi untuk Anda, dan andalkan dia mengingat hal yang penting.",
         credentials: "Hubungkan ke layanan dengan aman. Pahami vault terenkripsi dan bagaimana data Anda tetap terlindungi.",
         "agents-prompts": "Buat, konfigurasikan, dan sempurnakan agen AI Anda. Kuasai mode prompt sederhana dan terstruktur.",
         triggers: "Atur kapan dan bagaimana agent Anda berjalan \u2014 jadwal, webhook, pemantau file, dan lainnya.",

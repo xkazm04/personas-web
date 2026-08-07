@@ -1415,6 +1415,7 @@ export const cs: Translations = {
       },
       categories: {
         "getting-started": "Za\u010d\u00edn\u00e1me",
+        companion: "Spole\u010dnice (Athena)",
         "agents-prompts": "Agenti a prompty",
         triggers: "Spou\u0161t\u011b\u010de a pl\u00e1nov\u00e1n\u00ed",
         credentials: "P\u0159ihla\u0161ovac\u00ed \u00fadaje a zabezpe\u010den\u00ed",
@@ -1427,6 +1428,7 @@ export const cs: Translations = {
       },
       categoryDescriptions: {
         "getting-started": "Nainstalujte Personas, vytvo\u0159te sv\u00e9ho prvn\u00edho agenta a nau\u010dte se z\u00e1klady za m\u00e9n\u011b ne\u017e 10 minut.",
+        companion: "Seznamte se s Athenou, va\u0161\u00ed st\u00e1le dostupnou asistentkou. Pi\u0161te j\u00ed nebo s n\u00ed mluvte, nechte ji ovl\u00e1dat aplikaci za v\u00e1s a spolehn\u011bte se, \u017ee si zapamatuje, na \u010dem z\u00e1le\u017e\u00ed.",
         credentials: "Bezpe\u010dn\u011b se p\u0159ipojte ke slu\u017eb\u00e1m. Pochopte \u0161ifrovan\u00fd trezor a jak va\u0161e data z\u016fst\u00e1vaj\u00ed v bezpe\u010d\u00ed.",
         "agents-prompts": "Vytv\u00e1\u0159ejte, konfigurujte a doluje sv\u00e9 AI agenty. Ovl\u00e1dn\u011bte jednoduch\u00fd i strukturovan\u00fd re\u017eim prompt\u016f.",
         triggers: "Nastavte, kdy a jak va\u0161i agenti b\u011b\u017e\u00ed \u2014 pl\u00e1ny, webhooky, sledov\u00e1n\u00ed soubor\u016f a dal\u0161\u00ed.",

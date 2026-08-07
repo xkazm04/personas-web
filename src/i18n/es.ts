@@ -1415,6 +1415,7 @@ export const es: Translations = {
       },
       categories: {
         "getting-started": "Primeros Pasos",
+        companion: "Compa\u00f1era (Athena)",
         "agents-prompts": "Agentes y Prompts",
         triggers: "Disparadores y programaci\u00f3n",
         credentials: "Credenciales y Seguridad",
@@ -1427,6 +1428,7 @@ export const es: Translations = {
       },
       categoryDescriptions: {
         "getting-started": "Instala Personas, crea tu primer agente y aprende lo b\u00e1sico en menos de 10 minutos.",
+        companion: "Conoce a Athena, tu asistente siempre disponible. Escr\u00edbele o h\u00e1blale, deja que maneje la app por ti y conf\u00eda en que recordar\u00e1 lo que importa.",
         credentials: "Con\u00e9ctate a servicios de forma segura. Entiende la b\u00f3veda cifrada y c\u00f3mo tus datos se mantienen seguros.",
         "agents-prompts": "Crea, configura y ajusta tus agentes de IA. Domina los modos de prompt simple y estructurado.",
         triggers: "Configura cu\u00e1ndo y c\u00f3mo se ejecutan tus agentes \u2014 programaciones, webhooks, vigilancia de archivos y m\u00e1s.",

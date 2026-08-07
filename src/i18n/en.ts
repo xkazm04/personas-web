@@ -1151,6 +1151,7 @@
     };
     categories: {
       "getting-started": string;
+      companion: string;
       "agents-prompts": string;
       triggers: string;
       credentials: string;
@@ -1163,6 +1164,7 @@
     };
     categoryDescriptions: {
       "getting-started": string;
+      companion: string;
       credentials: string;
       "agents-prompts": string;
       triggers: string;
@@ -2618,6 +2620,7 @@ export const en: Translations = {
     },
     categories: {
       "getting-started": 'Getting Started',
+      companion: 'Companion (Athena)',
       "agents-prompts": 'Agents & Prompts',
       triggers: 'Triggers & Scheduling',
       credentials: 'Credentials & Security',
@@ -2630,6 +2633,7 @@ export const en: Translations = {
     },
     categoryDescriptions: {
       "getting-started": "Install Personas, create your first agent, and learn the basics in under 10 minutes.",
+      companion: "Meet Athena, your always-on assistant. Chat or talk to her, let her run the app for you, and rely on her to remember what matters.",
       credentials: "Connect to services securely. Understand the encrypted vault and how your data stays safe.",
       "agents-prompts": "Create, configure, and fine-tune your AI agents. Master simple and structured prompt modes.",
       triggers: "Set up when and how your agents run — schedules, webhooks, file watchers, and more.",

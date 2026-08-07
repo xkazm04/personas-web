@@ -628,6 +628,7 @@
           "filePaths": [
             "src/data/guide/categories.ts",
             "src/data/guide/content/agents-prompts.ts",
+            "src/data/guide/content/companion.ts",
             "src/data/guide/content/credentials.ts",
             "src/data/guide/content/deployment.ts",
             "src/data/guide/content/getting-started.ts",
@@ -707,6 +708,7 @@
             "src/app/guide/guide-page/guidePageData.ts",
             "src/app/guide/layout.tsx",
             "src/app/guide/page.tsx",
+            "src/components/guide/CategoryGlyphArt.tsx",
             "src/components/guide/GuideNotFound.tsx",
             "src/components/guide/GuideSidebar.tsx",
             "src/components/guide/MobileTopicTOC.tsx",
