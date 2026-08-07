@@ -1,5 +1,6 @@
 import { AnimatePresence, motion } from "framer-motion";
 import { AlertCircle, Info, Mail, Share2 } from "lucide-react";
+import Link from "next/link";
 import { AnimatedCheckmark } from "./AnimatedCheckmark";
 import type { ShareState, WaitlistStatus } from "./waitlistUtils";
 
@@ -56,18 +57,41 @@ export function WaitlistSuccessPanel({
 }
 
 function WaitlistNextSteps({ status, platformLabel, earlyBeta, nextLabel }: { status: "success" | "duplicate"; platformLabel: string; earlyBeta: boolean; nextLabel: string }) {
-  const steps = [
-    status === "duplicate" ? `We already have your spot saved for ${platformLabel}.` : `We'll email you at this address when the ${platformLabel} beta is ready.`,
-    earlyBeta ? "You opted into early beta - you'll be among the first to get access." : "No spam, just one email when it's time.",
+  // Honest next-steps only: this repo ships NO email pipeline, so nothing here
+  // may promise a message. The beta is announced on the public roadmap and on
+  // GitHub — both are real, live surfaces, so that is what we point people at.
+  const steps: { key: string; node: React.ReactNode }[] = [
+    {
+      key: "spot",
+      node: status === "duplicate"
+        ? `Your spot for ${platformLabel} was already saved.`
+        : `Your spot for ${platformLabel} is saved.`,
+    },
+    {
+      key: "beta",
+      node: earlyBeta
+        ? "You opted into early beta, so your entry is flagged for the first build wave."
+        : "Your address is only used to size the waitlist - we send no marketing email.",
+    },
+    {
+      key: "where",
+      node: (
+        <>
+          Beta availability is announced on the{" "}
+          <Link href="/roadmap" className="text-brand-cyan underline underline-offset-2 hover:text-brand-cyan/80">public roadmap</Link>
+          {" "}and on GitHub - watch either for the release.
+        </>
+      ),
+    },
   ];
   return (
     <div className="mt-4 space-y-2.5 text-left">
       <p className="text-sm font-medium text-foreground/70">{nextLabel}</p>
       <div className="space-y-2">
         {steps.map((step, index) => (
-          <div key={step} className="flex items-start gap-2.5">
+          <div key={step.key} className="flex items-start gap-2.5">
             <span className="mt-0.5 flex h-5 w-5 shrink-0 items-center justify-center rounded-full bg-white/[0.06] text-xs font-medium text-muted-dark">{index + 1}</span>
-            <p className="text-sm leading-relaxed text-muted-dark">{step}</p>
+            <p className="text-sm leading-relaxed text-muted-dark">{step.node}</p>
           </div>
         ))}
       </div>

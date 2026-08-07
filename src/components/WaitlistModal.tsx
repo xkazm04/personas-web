@@ -97,7 +97,10 @@ export default function WaitlistModal({ platformKey, platformLabel, platformIcon
       if (data.duplicate) setStatus("duplicate");
       else {
         setStatus("success");
-        setWaitlistCount((prev) => (prev !== null ? prev + 1 : 1));
+        // Prefer the authoritative post-insert count the route returns; the
+        // optimistic +1 is only a fallback for responses that omit it.
+        const serverCount = typeof data.count === "number" ? data.count : null;
+        setWaitlistCount((prev) => (serverCount ?? (prev !== null ? prev + 1 : 1)));
       }
     } catch (err) {
       if (err instanceof DOMException && err.name === "AbortError") {

@@ -1,11 +1,29 @@
 /**
  * WAITLIST API - SERVERLESS LIMITATIONS & PRODUCTION WARNING
  *
- * 1. STORAGE: When Supabase is configured (NEXT_PUBLIC_SUPABASE_URL + a key),
- *    signups persist to the waitlist_entries table via the server-only client.
- *    Otherwise this falls back to the local filesystem (.data/waitlist.json),
- *    which is ephemeral on serverless (Vercel, AWS Lambda) — data is LOST on
- *    every cold start or redeploy, so the FS path is for local dev only.
+ * 1. STORAGE: signups persist to the Supabase waitlist_entries table ONLY when
+ *    a *writable* server client exists. Otherwise this falls back to the local
+ *    filesystem (.data/waitlist.json), which is ephemeral on serverless
+ *    (Vercel, AWS Lambda) — data is LOST on every cold start or redeploy, so
+ *    the FS path is for local dev only.
+ *
+ *    ── Env matrix (which store this route picks) ─────────────────────────
+ *    NEXT_PUBLIC_SUPABASE_URL | ANON_KEY | SUPABASE_SERVICE_ROLE_KEY | store
+ *    ------------------------ | -------- | ------------------------- | -----
+ *    unset                    | any      | any                       | file
+ *    set                      | any      | unset                     | file
+ *    set                      | any      | set                       | Supabase
+ *    unset                    | any      | set                       | file
+ *
+ *    Why the service-role key (and not the anon key) is the switch:
+ *    `getSupabaseAdmin()` prefers the service-role client but silently falls
+ *    back to the anon client when the key is missing, and
+ *    scripts/harden-voting-rls.sql does
+ *    `revoke all on public.waitlist_entries from anon`. So a URL+anon-only
+ *    deployment used to route every insert into a client that has no grants —
+ *    every signup died as a generic 500. The file store is lossy, but it is
+ *    never silent about it and never eats a signup at request time.
+ *    See `hasSupabaseServiceRole()` in src/lib/server/env.ts.
  *
  * 2. DATABASE: For production, configure Supabase and create the
  *    waitlist_entries table (scripts/harden-voting-rls.sql).
@@ -27,17 +45,21 @@ import { NextRequest, NextResponse } from "next/server";
 import { isValidEmail } from "@/lib/validation";
 import { withWriteLock } from "@/lib/fileLock";
 import { readJsonFile, writeJsonFile } from "@/lib/server/json-file-store";
-import { hasSupabaseEnv } from "@/lib/server/env";
+import { hasSupabaseServiceRole } from "@/lib/server/env";
 import { getClientIp, jsonError, parseJsonBody } from "@/lib/server/request";
 import { isRateLimited as isSharedRateLimited } from "@/lib/server/rate-limit";
+import { captureExceptionScrubbed } from "@/lib/sentry-pii";
 
 const WAITLIST_FILE = "waitlist.json";
 const WAITLIST_TABLE = "waitlist_entries";
 
-// Persist to Supabase when configured; the .data/*.json path is a local-dev
-// fallback only (ephemeral on serverless — signups would be lost on cold start).
+// Persist to Supabase only when a WRITABLE server client is available (see the
+// env matrix in the file header); the .data/*.json path is the local-dev
+// fallback (ephemeral on serverless — signups would be lost on cold start).
+// GET and POST must agree on the store, or the counts would come from one
+// backend while the entries land in the other.
 function hasSupabase(): boolean {
-  return hasSupabaseEnv();
+  return hasSupabaseServiceRole();
 }
 
 async function getSupabaseClient() {
@@ -176,7 +198,25 @@ export async function POST(req: NextRequest) {
       if (error.code === "23505") {
         return NextResponse.json({ message: "Already on the waitlist", duplicate: true });
       }
-      return jsonError("Failed to join waitlist", 500);
+      // Anything else (missing grants, table absent, network) is an
+      // infrastructure fault, not a user error — say so, make it retryable, and
+      // surface it instead of swallowing the signup behind a generic 500.
+      //
+      // PII: the Postgres error message can echo the offending row (i.e. the
+      // email), so only the error *code* and the platform are reported, and the
+      // whole payload still goes through the scrubber (src/lib/sentry-pii.ts).
+      captureExceptionScrubbed(
+        new Error(`waitlist insert failed (code=${error.code ?? "unknown"})`),
+        {
+          tags: { scope: "api/waitlist", reason: "supabase-insert-failed" },
+          extra: { code: error.code ?? null, platform },
+        },
+      );
+      return jsonError(
+        "Could not save your spot right now — please try again in a moment.",
+        503,
+        { "Retry-After": "30" },
+      );
     }
     const { count } = await sb
       .from(WAITLIST_TABLE)
