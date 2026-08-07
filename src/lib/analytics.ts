@@ -54,6 +54,31 @@ export function trackDownloadClick(platform: string) {
   trackEvent("download_click", { platform });
 }
 
+/**
+ * Where a waitlist modal was opened from. The waitlist is the only live
+ * conversion path while no download URL is configured, so every entry point
+ * reports itself and funnel drop-off is attributable.
+ */
+export type WaitlistEntryPoint = "download-cta" | "platform-pill" | "navbar";
+
+// PII: waitlist events carry the platform + entry point ONLY. The email the
+// user typed must never reach analytics (see src/lib/sentry-pii.ts).
+export function trackWaitlistOpen(platform: string, entryPoint: WaitlistEntryPoint) {
+  trackEvent("waitlist_open", { platform, entry_point: entryPoint });
+}
+
+export function trackWaitlistSubmit(platform: string, entryPoint: WaitlistEntryPoint) {
+  trackEvent("waitlist_submit", { platform, entry_point: entryPoint });
+}
+
+export function trackWaitlistResult(
+  platform: string,
+  entryPoint: WaitlistEntryPoint,
+  result: "success" | "duplicate",
+) {
+  trackEvent("waitlist_result", { platform, entry_point: entryPoint, result });
+}
+
 export function trackFeatureVote(featureId: string, action: "upvote" | "undo") {
   trackEvent("feature_vote", { feature: featureId, action });
 }

@@ -11,7 +11,7 @@ import SectionWrapper from "@/components/SectionWrapper";
 import WaitlistModal from "@/components/WaitlistModal";
 import { useTranslation } from "@/i18n/useTranslation";
 import { fadeUp } from "@/lib/animations";
-import { trackDownloadClick } from "@/lib/analytics";
+import { trackDownloadClick, type WaitlistEntryPoint } from "@/lib/analytics";
 
 import { DownloadStepGrid } from "./download-cta/DownloadStepGrid";
 import { DownloadTrustSignals } from "./download-cta/DownloadTrustSignals";
@@ -28,7 +28,9 @@ const DOWNLOAD_URL = process.env.NEXT_PUBLIC_DOWNLOAD_URL;
 export default function DownloadCTA() {
   const { t } = useTranslation();
   const platforms = useDownloadPlatforms(DOWNLOAD_URL);
-  const [waitlistPlatform, setWaitlistPlatform] = useState<Platform | null>(null);
+  // The entry point travels with the platform so the funnel can tell the hero
+  // CTA apart from the platform pills below it.
+  const [waitlist, setWaitlist] = useState<{ platform: Platform; entryPoint: WaitlistEntryPoint } | null>(null);
   const isFresh = useFreshRelease(RELEASE_DATE);
   const downloadSteps = [
     DOWNLOAD_URL ? t.downloadSection.downloadInstaller : t.downloadSection.joinWaitlist,
@@ -81,10 +83,12 @@ export default function DownloadCTA() {
                 variant="solid"
               />
             ) : (
+              /* No installer configured — this button opens the waitlist form,
+                 so it must not claim to download anything. */
               <PrimaryCTA
-                onClick={() => setWaitlistPlatform(platforms[0])}
+                onClick={() => setWaitlist({ platform: platforms[0], entryPoint: "download-cta" })}
                 icon={Download}
-                label="Download for Windows"
+                label={t.downloadSection.joinWaitlist}
                 variant="solid"
               />
             )}
@@ -104,7 +108,7 @@ export default function DownloadCTA() {
         <PlatformPills
           platforms={platforms}
           notifyLabel={t.common.notifyMe}
-          onWaitlist={setWaitlistPlatform}
+          onWaitlist={(platform) => setWaitlist({ platform, entryPoint: "platform-pill" })}
         />
 
         {DOWNLOAD_URL && (
@@ -115,13 +119,14 @@ export default function DownloadCTA() {
         )}
       </div>
 
-      {waitlistPlatform && (
+      {waitlist && (
         <WaitlistModal
-          platformKey={waitlistPlatform.key}
-          platformLabel={waitlistPlatform.label}
-          platformIcon={waitlistPlatform.icon}
-          open={!!waitlistPlatform}
-          onClose={() => setWaitlistPlatform(null)}
+          platformKey={waitlist.platform.key}
+          platformLabel={waitlist.platform.label}
+          platformIcon={waitlist.platform.icon}
+          open={!!waitlist}
+          onClose={() => setWaitlist(null)}
+          entryPoint={waitlist.entryPoint}
         />
       )}
     </SectionWrapper>

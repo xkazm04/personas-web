@@ -6,6 +6,7 @@ import * as Sentry from "@sentry/nextjs";
 import { TRANSITION_FAST, TRANSITION_NORMAL } from "@/lib/animations";
 import { lockBodyScroll, unlockBodyScroll } from "@/lib/bodyScrollLock";
 import { useTranslation } from "@/i18n/useTranslation";
+import { trackWaitlistOpen, trackWaitlistResult, trackWaitlistSubmit, type WaitlistEntryPoint } from "@/lib/analytics";
 import { WaitlistForm } from "./waitlist-modal/WaitlistForm";
 import { WaitlistHeader } from "./waitlist-modal/WaitlistHeader";
 import { WaitlistSuccessPanel } from "./waitlist-modal/WaitlistSuccessPanel";
@@ -17,9 +18,11 @@ interface WaitlistModalProps {
   platformIcon: React.ComponentType<{ className?: string }>;
   open: boolean;
   onClose: () => void;
+  /** Which surface opened this modal — reported with every waitlist event. */
+  entryPoint: WaitlistEntryPoint;
 }
 
-export default function WaitlistModal({ platformKey, platformLabel, platformIcon, open, onClose }: WaitlistModalProps) {
+export default function WaitlistModal({ platformKey, platformLabel, platformIcon, open, onClose, entryPoint }: WaitlistModalProps) {
   const { t } = useTranslation();
   const [email, setEmail] = useState("");
   const [submittedEmail, setSubmittedEmail] = useState("");
@@ -56,6 +59,9 @@ export default function WaitlistModal({ platformKey, platformLabel, platformIcon
 
   useWaitlistFocusAndKeys({ open, onClose, fetchCount, modalRef, previousFocusRef });
   useEffect(() => {
+    if (open) trackWaitlistOpen(platformKey, entryPoint);
+  }, [open, platformKey, entryPoint]);
+  useEffect(() => {
     if (!open) {
       submitAbortRef.current?.abort();
       submitAbortRef.current = null;
@@ -73,6 +79,7 @@ export default function WaitlistModal({ platformKey, platformLabel, platformIcon
     }
     setStatus("loading");
     setErrorMsg("");
+    trackWaitlistSubmit(platformKey, entryPoint);
     submitAbortRef.current?.abort();
     const controller = new AbortController();
     submitAbortRef.current = controller;
@@ -94,6 +101,7 @@ export default function WaitlistModal({ platformKey, platformLabel, platformIcon
       const data = await res.json().catch(() => ({}));
       if (!res.ok) throw new Error((typeof data.error === "string" && data.error) || "Failed to join waitlist");
       setSubmittedEmail(email.trim());
+      trackWaitlistResult(platformKey, entryPoint, data.duplicate ? "duplicate" : "success");
       if (data.duplicate) setStatus("duplicate");
       else {
         setStatus("success");

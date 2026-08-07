@@ -2,13 +2,20 @@
 
 import { useCallback, useRef, useState } from "react";
 import { motion, useMotionValueEvent, useScroll } from "framer-motion";
-import { Menu, Monitor, X } from "lucide-react";
+import { Apple, Menu, Monitor, Terminal, X } from "lucide-react";
 import DesktopNav from "./navbar/DesktopNav";
 import MobilePanel from "./navbar/MobilePanel";
 import NavbarLogoGlyph from "./NavbarLogoGlyph";
 import WaitlistModal from "./WaitlistModal";
 import { useTranslation } from "@/i18n/useTranslation";
 import { useMobileMenu } from "./navbar/useMobileMenu";
+import { detectPlatformKey, type PlatformKey } from "./waitlist-modal/waitlistUtils";
+
+const PLATFORM_ICONS: Record<PlatformKey, React.ComponentType<{ className?: string }>> = {
+  windows: Monitor,
+  macos: Apple,
+  linux: Terminal,
+};
 
 /**
  * Sticky header with a blurred glass surface on scroll. Delegates rendering
@@ -18,6 +25,9 @@ export default function Navbar() {
   const { t } = useTranslation();
   const [scrolled, setScrolled] = useState(false);
   const [downloadOpen, setDownloadOpen] = useState(false);
+  // Resolved on click, not in render: `navigator` is server-undefined, so a
+  // render-time read would hydrate differently than it renders.
+  const [platformKey, setPlatformKey] = useState<PlatformKey>("windows");
   const { scrollY } = useScroll();
   const panelRef = useRef<HTMLDivElement>(null);
   const { open: mobileOpen, setOpen: setMobileOpen, close: closeMobile } =
@@ -27,6 +37,7 @@ export default function Navbar() {
 
   const openDownload = useCallback(() => {
     closeMobile();
+    setPlatformKey(detectPlatformKey());
     setDownloadOpen(true);
   }, [closeMobile]);
   const closeDownload = useCallback(() => setDownloadOpen(false), []);
@@ -77,11 +88,12 @@ export default function Navbar() {
           waitlist flow (same intent as /api/download's fallback) instead of a
           placeholder modal whose options downloaded nothing. */}
       <WaitlistModal
-        platformKey="windows"
-        platformLabel={t.downloadSection.windows}
-        platformIcon={Monitor}
+        platformKey={platformKey}
+        platformLabel={t.downloadSection[platformKey]}
+        platformIcon={PLATFORM_ICONS[platformKey]}
         open={downloadOpen}
         onClose={closeDownload}
+        entryPoint="navbar"
       />
     </motion.header>
   );
