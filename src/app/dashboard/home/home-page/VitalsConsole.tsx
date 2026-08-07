@@ -108,11 +108,14 @@ export function VitalsConsole({
   runs,
   agents,
   reviews,
+  loading = false,
 }: {
   successRate: number;
   runs: number;
   agents: number;
   reviews: number;
+  /** True until the first execution fetch settles — see the ladder below. */
+  loading?: boolean;
 }) {
   const { t } = useTranslation();
   const labels = t.dashboard.home.cockpit;
@@ -125,6 +128,15 @@ export function VitalsConsole({
         <h2 className="text-base font-semibold text-foreground">{labels.vitalsTitle}</h2>
       </div>
 
+      {/* Same loading ladder as the below-fold instruments: nothing is asserted
+          until the executions land. Without it the ring painted a rose 0% and
+          then re-swept to the real figure on the first response. */}
+      {loading ? (
+        <div className="flex flex-1 items-center justify-center py-10" aria-hidden>
+          <div className="h-4 w-4 animate-spin rounded-full border-2 border-glass-hover border-t-brand-cyan" />
+        </div>
+      ) : (
+        <>
       <div className="flex flex-col items-center">
         <SuccessRing value={successRate} label={t.dashboard.successRate} />
         <div className="mt-3 flex w-full items-center justify-center gap-2 text-xs text-muted-dark">
@@ -145,6 +157,8 @@ export function VitalsConsole({
         />
         <VitalCounter icon={ClipboardCheck} label={t.dashboard.reviews} value={reviews} href="/dashboard/reviews" accent="amber" />
       </div>
+        </>
+      )}
     </GlowCard>
   );
 }

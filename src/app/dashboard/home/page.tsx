@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useMemo } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { motion } from "framer-motion";
 
 import FleetOptimizationCard from "@/components/dashboard/FleetOptimizationCard";
@@ -45,7 +45,16 @@ export default function DashboardHomePage() {
   const pendingReviewCount = useReviewStore((state) => state.pendingReviewCount);
   const health = useSystemStore((state) => state.health);
   const fetchExecutions = useExecutionStore((state) => state.fetchExecutions);
+  const executionsLoading = useExecutionStore((state) => state.executionsLoading);
   const fetchReviews = useReviewStore((state) => state.fetchReviews);
+
+  // `executionsLoading` only flips true once the effect below has run, so on
+  // the very first paint it is false while the list is still empty. This latch
+  // covers that window: without it the cockpit paints a rose 0% ring, an empty
+  // activity stream and a "0%" ticker tick before the first mock response
+  // (~300ms) lands, then jumps. Cleared once the initial fetches settle.
+  const [awaitingFirstLoad, setAwaitingFirstLoad] = useState(true);
+  const cockpitLoading = awaitingFirstLoad || executionsLoading;
 
   // Deferred below-the-fold observability fetch (loading/error/retry surfaced
   // to the Traffic & Errors chart).
@@ -60,8 +69,13 @@ export default function DashboardHomePage() {
   } = useDeferredObservability();
 
   useEffect(() => {
-    void fetchExecutions();
-    void fetchReviews();
+    let cancelled = false;
+    void Promise.allSettled([fetchExecutions(), fetchReviews()]).then(() => {
+      if (!cancelled) setAwaitingFirstLoad(false);
+    });
+    return () => {
+      cancelled = true;
+    };
   }, [fetchExecutions, fetchReviews]);
 
   const greeting = useGreeting(t.dashboard.greeting);
@@ -72,12 +86,18 @@ export default function DashboardHomePage() {
   const stats = useMemo(() => {
     const total = executions.length;
     const completed = executions.filter((execution) => execution.status === "completed").length;
+    const failed = executions.filter((execution) => execution.status === "failed").length;
     const running = executions.filter(
       (execution) => execution.status === "running" || execution.status === "queued",
     ).length;
+    // Success rate is completed ÷ FINISHED runs. Dividing by every loaded run
+    // counted still-running, queued and cancelled executions as failures, which
+    // scored a healthy fleet at 43% (amber) while the sparkline underneath and
+    // the observability page both reported ~89%.
+    const terminal = completed + failed;
     return {
       total,
-      successRate: total > 0 ? Math.round((completed / total) * 100) : 0,
+      successRate: terminal > 0 ? Math.round((completed / terminal) * 100) : 0,
       running,
       activeAgents: personas.filter((persona) => persona.enabled).length,
     };
@@ -126,12 +146,14 @@ export default function DashboardHomePage() {
             runs={stats.total}
             agents={stats.activeAgents}
             reviews={pendingReviewCount}
+            loading={cockpitLoading}
           />
         </motion.div>
         <motion.div variants={fadeUp} data-tour-diagram="dashboard-activity">
           <RecentActivityCard
             executions={recentExecs}
             runningCount={stats.running}
+            loading={cockpitLoading}
             labels={{
               title: t.dashboard.recentActivity,
               running: t.dashboard.running,
@@ -143,7 +165,11 @@ export default function DashboardHomePage() {
       </div>
 
       <motion.div variants={fadeUp} className="mt-6">
-        <StatusTicker successRate={stats.successRate} agents={stats.activeAgents} />
+        <StatusTicker
+          successRate={stats.successRate}
+          agents={stats.activeAgents}
+          loading={cockpitLoading}
+        />
       </motion.div>
 
       {/* Below the fold: deferred instruments bay (charts, heatmap, panels). */}

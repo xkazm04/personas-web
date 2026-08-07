@@ -26,10 +26,17 @@ type RecentExecution = GlobalExecution & {
 export function RecentActivityCard({
   executions,
   runningCount,
+  loading = false,
   labels,
 }: {
   executions: RecentExecution[];
   runningCount: number;
+  /**
+   * True while the first execution fetch is in flight. Distinguishes "nothing
+   * has run yet" from "we don't know yet" — without it the card asserted the
+   * empty state for ~300ms and then flipped to a full list.
+   */
+  loading?: boolean;
   labels: {
     title: string;
     running: string;
@@ -72,7 +79,11 @@ export function RecentActivityCard({
         )}
       </div>
 
-      {executions.length === 0 ? (
+      {loading ? (
+        <div className="flex items-center justify-center py-10" aria-hidden>
+          <div className="h-4 w-4 animate-spin rounded-full border-2 border-glass-hover border-t-brand-cyan" />
+        </div>
+      ) : executions.length === 0 ? (
         <p className="text-sm text-muted-dark py-8 text-center">
           {labels.noExecutionsYet} {labels.executeToSee}
         </p>

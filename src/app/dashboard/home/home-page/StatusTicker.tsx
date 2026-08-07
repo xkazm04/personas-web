@@ -48,9 +48,12 @@ interface TickerItem {
 export function StatusTicker({
   successRate,
   agents,
+  loading = false,
 }: {
   successRate: number;
   agents: number;
+  /** True until the first execution fetch settles — see the ladder below. */
+  loading?: boolean;
 }) {
   const { t } = useTranslation();
   const labels = t.dashboard.home.cockpit;
@@ -76,10 +79,10 @@ export function StatusTicker({
   const count = items.length;
 
   useEffect(() => {
-    if (reduced || hidden || paused || count <= 1) return;
+    if (reduced || hidden || paused || loading || count <= 1) return;
     const timer = setInterval(() => setIndex((i) => (i + 1) % count), ROTATE_MS);
     return () => clearInterval(timer);
-  }, [reduced, hidden, paused, count]);
+  }, [reduced, hidden, paused, loading, count]);
 
   // Keep the index in range if the item count shrinks (e.g. alerts clear).
   const safeIndex = index % count;
@@ -107,7 +110,14 @@ export function StatusTicker({
 
       <span aria-hidden className="h-4 w-px flex-shrink-0 bg-glass" />
 
-      {reduced ? (
+      {/* Until the executions land, the strip shows the same spinner the rest
+          of the dashboard uses rather than ticking a fabricated "Fleet success
+          0%" as its opening frame. */}
+      {loading ? (
+        <div className="flex min-w-0 flex-1 items-center py-1" aria-hidden>
+          <div className="h-4 w-4 animate-spin rounded-full border-2 border-glass-hover border-t-brand-cyan" />
+        </div>
+      ) : reduced ? (
         <div className="flex min-w-0 flex-1 flex-wrap items-center gap-x-5 gap-y-1">
           {items.map((item) => {
             const Icon = item.icon;
