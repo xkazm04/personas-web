@@ -537,7 +537,9 @@ export const ja: Translations = {
           tickerNextRoutine: "\u6b21\u306e\u30eb\u30fc\u30c6\u30a3\u30f3",
           tickerAlerts: "\u672a\u5bfe\u5fdc\u306e\u30a2\u30e9\u30fc\u30c8",
           tickerAllClear: "\u554f\u984c\u306a\u3057",
-          instrumentsTitle: "\u30a4\u30f3\u30b9\u30c8\u30a5\u30eb\u30e1\u30f3\u30c8"
+          instrumentsTitle: "\u30a4\u30f3\u30b9\u30c8\u30a5\u30eb\u30e1\u30f3\u30c8",
+          tickerPause: "\u30b9\u30c6\u30fc\u30bf\u30b9\u30c6\u30a3\u30c3\u30ab\u30fc\u3092\u4e00\u6642\u505c\u6b62",
+          tickerResume: "\u30b9\u30c6\u30fc\u30bf\u30b9\u30c6\u30a3\u30c3\u30ab\u30fc\u3092\u518d\u958b"
         },
         heatmap: {
           title: "\u5b9f\u884c\u30a2\u30af\u30c6\u30a3\u30d3\u30c6\u30a3",
@@ -545,6 +547,16 @@ export const ja: Translations = {
           less: "\u5c11",
           more: "\u591a",
           empty: "\u307e\u3060\u5b9f\u884c\u304c\u3042\u308a\u307e\u305b\u3093\u3002"
+        },
+        medals: {
+          first: "1\u4f4d",
+          second: "2\u4f4d",
+          third: "3\u4f4d"
+        },
+        errors: {
+          topPerformers: "\u30c8\u30c3\u30d7\u30d1\u30d5\u30a9\u30fc\u30de\u30fc\u3092\u8aad\u307f\u8fbc\u3081\u307e\u305b\u3093\u3067\u3057\u305f",
+          routines: "\u30eb\u30fc\u30c6\u30a3\u30f3\u3092\u8aad\u307f\u8fbc\u3081\u307e\u305b\u3093\u3067\u3057\u305f",
+          executions: "\u5b9f\u884c\u5c65\u6b74\u3092\u8aad\u307f\u8fbc\u3081\u307e\u305b\u3093\u3067\u3057\u305f"
         },
         topPerformers: {
           title: "\u30c8\u30c3\u30d7\u30d1\u30d5\u30a9\u30fc\u30de\u30fc"

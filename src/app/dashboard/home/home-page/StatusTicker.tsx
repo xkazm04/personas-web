@@ -8,6 +8,8 @@ import {
   Bot,
   CalendarClock,
   CheckCircle2,
+  Pause,
+  Play,
   Server,
 } from "lucide-react";
 
@@ -17,6 +19,7 @@ import {
   MOCK_MODEL_PROVIDERS,
   MOCK_UPCOMING_ROUTINES,
 } from "@/lib/mock-dashboard-data";
+import { useAuthStore } from "@/stores/authStore";
 import { useOpenAlertCount } from "./useOpenAlertCount";
 
 const ROTATE_MS = 3600;
@@ -60,14 +63,19 @@ export function StatusTicker({
   const reduced = useReducedMotion() ?? false;
   const hidden = usePageVisibility();
   const openAlerts = useOpenAlertCount();
+  const isDemo = useAuthStore((s) => s.isDemo);
 
-  const providers = MOCK_MODEL_PROVIDERS.filter((p) => p.allowed).length;
-  const next = MOCK_UPCOMING_ROUTINES[0];
+  // Provider allow-list and the routine schedule are demo fixtures with no
+  // synced source — the same gate `VaultChangesCard` and `InstrumentsBay` use.
+  // Without it the strip asserted demo numbers as fact in supabase/orchestrator
+  // mode. Success, agents and open alerts come from live stores, so they stay.
+  const providers = isDemo ? MOCK_MODEL_PROVIDERS.filter((p) => p.allowed).length : null;
+  const next = isDemo ? MOCK_UPCOMING_ROUTINES[0] : undefined;
 
   const items: TickerItem[] = [
     { id: "success", icon: Activity, label: labels.tickerSuccess, value: `${successRate}%`, tone: "emerald" },
     { id: "agents", icon: Bot, label: labels.tickerAgents, value: `${agents}`, tone: "cyan" },
-    { id: "providers", icon: Server, label: labels.tickerProviders, value: `${providers}`, tone: "purple" },
+    ...(providers != null ? [{ id: "providers", icon: Server, label: labels.tickerProviders, value: `${providers}`, tone: "purple" as Tone }] : []),
     ...(next ? [{ id: "routine", icon: CalendarClock, label: labels.tickerNextRoutine, value: `${next.persona} · ${next.eta}`, tone: "cyan" as Tone }] : []),
     openAlerts > 0
       ? { id: "alerts", icon: AlertTriangle, label: labels.tickerAlerts, value: `${openAlerts}`, tone: "rose" }
@@ -75,7 +83,14 @@ export function StatusTicker({
   ];
 
   const [index, setIndex] = useState(0);
-  const [paused, setPaused] = useState(false);
+  // Three independent pause sources. Hover and focus are transient (WCAG 2.2.2
+  // needs the rotation to stop while a keyboard user is reading it, not just a
+  // mouse user); `manualPaused` is the explicit, visible control and survives
+  // blur so a stopped ticker stays stopped.
+  const [hoverPaused, setHoverPaused] = useState(false);
+  const [focusPaused, setFocusPaused] = useState(false);
+  const [manualPaused, setManualPaused] = useState(false);
+  const paused = hoverPaused || focusPaused || manualPaused;
   const count = items.length;
 
   useEffect(() => {
@@ -93,8 +108,10 @@ export function StatusTicker({
     <div
       data-tour-diagram="dashboard-ticker"
       className="flex items-center gap-3 overflow-hidden rounded-xl border border-glass bg-white/[0.02] px-4 py-2.5"
-      onMouseEnter={() => setPaused(true)}
-      onMouseLeave={() => setPaused(false)}
+      onMouseEnter={() => setHoverPaused(true)}
+      onMouseLeave={() => setHoverPaused(false)}
+      onFocusCapture={() => setFocusPaused(true)}
+      onBlurCapture={() => setFocusPaused(false)}
     >
       <span className="flex flex-shrink-0 items-center gap-1.5">
         <span className="relative flex h-2 w-2">
@@ -132,7 +149,11 @@ export function StatusTicker({
         </div>
       ) : (
         <>
-          <div className="relative min-w-0 flex-1">
+          {/* Polite live region: the rotating item is the only place these
+              values appear, so a screen reader has to hear each frame.
+              `mode="wait"` keeps exactly one item mounted at a time, so the
+              region never announces two frames at once. */}
+          <div className="relative min-w-0 flex-1" aria-live="polite" aria-atomic="true">
             <AnimatePresence mode="wait" initial={false}>
               <motion.span
                 key={active.id}
@@ -148,7 +169,7 @@ export function StatusTicker({
               </motion.span>
             </AnimatePresence>
           </div>
-          <div className="flex flex-shrink-0 items-center gap-1">
+          <div aria-hidden className="flex flex-shrink-0 items-center gap-1">
             {items.map((item, i) => (
               <span
                 key={item.id}
@@ -158,6 +179,18 @@ export function StatusTicker({
               />
             ))}
           </div>
+          {/* WCAG 2.2.2: auto-updating content needs a user-reachable stop.
+              Focusing anywhere in the strip already pauses it; this is the
+              visible, persistent control. */}
+          <button
+            type="button"
+            onClick={() => setManualPaused((p) => !p)}
+            aria-pressed={manualPaused}
+            aria-label={manualPaused ? labels.tickerResume : labels.tickerPause}
+            className="flex h-6 w-6 flex-shrink-0 items-center justify-center rounded-md border border-glass text-muted-dark transition-colors hover:border-glass-hover hover:text-foreground focus-ring focus-visible:ring-offset-0"
+          >
+            {manualPaused ? <Play className="h-3 w-3" /> : <Pause className="h-3 w-3" />}
+          </button>
         </>
       )}
     </div>

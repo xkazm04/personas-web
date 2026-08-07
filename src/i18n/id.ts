@@ -537,7 +537,9 @@ export const id: Translations = {
           tickerNextRoutine: "Rutinitas berikutnya",
           tickerAlerts: "Peringatan terbuka",
           tickerAllClear: "Semua aman",
-          instrumentsTitle: "Instrumen"
+          instrumentsTitle: "Instrumen",
+          tickerPause: "Jeda tiker status",
+          tickerResume: "Lanjutkan tiker status"
         },
         heatmap: {
           title: "Aktivitas eksekusi",
@@ -545,6 +547,16 @@ export const id: Translations = {
           less: "Sedikit",
           more: "Banyak",
           empty: "Belum ada eksekusi."
+        },
+        medals: {
+          first: "ke-1",
+          second: "ke-2",
+          third: "ke-3"
+        },
+        errors: {
+          topPerformers: "Gagal memuat performa terbaik",
+          routines: "Gagal memuat rutinitas",
+          executions: "Gagal memuat eksekusi"
         },
         topPerformers: {
           title: "Performa terbaik"

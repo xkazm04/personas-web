@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import * as Sentry from "@sentry/nextjs";
 
 import { useAuthStore } from "@/stores/authStore";
+import { useTranslation } from "@/i18n/useTranslation";
 import { api } from "@/lib/api";
 import {
   HEATMAP_DAYS,
@@ -75,6 +76,10 @@ export interface ExecutionHeatmapData {
 export function useExecutionHeatmap(): ExecutionHeatmapData {
   const isDemo = useAuthStore((s) => s.isDemo);
   const useMock = isDemo;
+  // Localized fallback for errors that carry no message of their own. Held as a
+  // plain string so the fetch effect only re-runs when the locale changes.
+  const { t } = useTranslation();
+  const loadFailed = t.dashboard.home.errors.executions;
 
   const [rows, setRows] = useState<HeatmapRow[]>(
     useMock ? MOCK_EXECUTION_HEATMAP : [],
@@ -112,7 +117,7 @@ export function useExecutionHeatmap(): ExecutionHeatmapData {
         Sentry.captureException(err, { tags: { scope: "useExecutionHeatmap" } });
         // Surface the failure instead of leaving an authoritative-looking empty
         // grid — a transient error must not read as "nothing has run".
-        setError(err instanceof Error ? err.message : "Failed to load executions");
+        setError(err instanceof Error ? err.message : loadFailed);
       } finally {
         if (!cancelled) setLoading(false);
       }
@@ -120,7 +125,7 @@ export function useExecutionHeatmap(): ExecutionHeatmapData {
     return () => {
       cancelled = true;
     };
-  }, [useMock, reloadKey]);
+  }, [useMock, reloadKey, loadFailed]);
 
   return { rows, loading, error, retry: () => setReloadKey((k) => k + 1) };
 }

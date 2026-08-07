@@ -301,6 +301,8 @@
         tickerAlerts: string;
         tickerAllClear: string;
         instrumentsTitle: string;
+        tickerPause: string;
+        tickerResume: string;
       };
       heatmap: {
         title: string;
@@ -308,6 +310,16 @@
         less: string;
         more: string;
         empty: string;
+      };
+      medals: {
+        first: string;
+        second: string;
+        third: string;
+      };
+      errors: {
+        topPerformers: string;
+        routines: string;
+        executions: string;
       };
       topPerformers: {
         title: string;
@@ -1737,6 +1749,8 @@ export const en: Translations = {
         tickerAlerts: 'Open alerts',
         tickerAllClear: 'All clear',
         instrumentsTitle: 'Instruments',
+        tickerPause: 'Pause status ticker',
+        tickerResume: 'Resume status ticker',
       },
       heatmap: {
         title: 'Execution activity',
@@ -1744,6 +1758,16 @@ export const en: Translations = {
         less: 'Less',
         more: 'More',
         empty: 'No executions yet.',
+      },
+      medals: {
+        first: '1st',
+        second: '2nd',
+        third: '3rd',
+      },
+      errors: {
+        topPerformers: 'Failed to load top performers',
+        routines: 'Failed to load routines',
+        executions: 'Failed to load executions',
       },
       topPerformers: {
         title: 'Top performers',

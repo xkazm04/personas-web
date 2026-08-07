@@ -537,7 +537,9 @@ export const zh: Translations = {
           tickerNextRoutine: "\u4e0b\u4e00\u4e2a\u4f8b\u7a0b",
           tickerAlerts: "\u672a\u5904\u7406\u544a\u8b66",
           tickerAllClear: "\u4e00\u5207\u6b63\u5e38",
-          instrumentsTitle: "\u4eea\u8868"
+          instrumentsTitle: "\u4eea\u8868",
+          tickerPause: "\u6682\u505c\u72b6\u6001\u680f",
+          tickerResume: "\u7ee7\u7eed\u72b6\u6001\u680f"
         },
         heatmap: {
           title: "\u6267\u884c\u6d3b\u52a8",
@@ -545,6 +547,16 @@ export const zh: Translations = {
           less: "\u5c11",
           more: "\u591a",
           empty: "\u6682\u65e0\u6267\u884c\u8bb0\u5f55\u3002"
+        },
+        medals: {
+          first: "\u7b2c1",
+          second: "\u7b2c2",
+          third: "\u7b2c3"
+        },
+        errors: {
+          topPerformers: "\u65e0\u6cd5\u52a0\u8f7d\u6700\u4f73\u8868\u73b0",
+          routines: "\u65e0\u6cd5\u52a0\u8f7d\u4f8b\u7a0b",
+          executions: "\u65e0\u6cd5\u52a0\u8f7d\u6267\u884c\u8bb0\u5f55"
         },
         topPerformers: {
           title: "\u6700\u4f73\u8868\u73b0"

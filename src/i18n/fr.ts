@@ -537,7 +537,9 @@ export const fr: Translations = {
           tickerNextRoutine: "Prochaine routine",
           tickerAlerts: "Alertes ouvertes",
           tickerAllClear: "Tout va bien",
-          instrumentsTitle: "Instruments"
+          instrumentsTitle: "Instruments",
+          tickerPause: "Mettre en pause le bandeau d\u2019\u00e9tat",
+          tickerResume: "Reprendre le bandeau d\u2019\u00e9tat"
         },
         heatmap: {
           title: "Activit\u00e9 d'ex\u00e9cution",
@@ -545,6 +547,16 @@ export const fr: Translations = {
           less: "Moins",
           more: "Plus",
           empty: "Aucune ex\u00e9cution pour le moment."
+        },
+        medals: {
+          first: "1er",
+          second: "2e",
+          third: "3e"
+        },
+        errors: {
+          topPerformers: "\u00c9chec du chargement des meilleurs agents",
+          routines: "\u00c9chec du chargement des routines",
+          executions: "\u00c9chec du chargement des ex\u00e9cutions"
         },
         topPerformers: {
           title: "Meilleurs agents"

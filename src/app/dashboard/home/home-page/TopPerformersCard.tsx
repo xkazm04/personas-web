@@ -11,10 +11,13 @@ import { useTranslation } from "@/i18n/useTranslation";
 import { type LeaderboardTrend } from "@/lib/mock-dashboard-data";
 import { useTopPerformers } from "./useTopPerformers";
 
-const MEDALS = [
-  { label: "1st", className: "border-amber-500/30 bg-amber-500/15 text-amber-400" },
-  { label: "2nd", className: "border-slate-400/30 bg-slate-300/15 text-slate-300" },
-  { label: "3rd", className: "border-orange-600/30 bg-orange-600/15 text-orange-400" },
+// Podium tints only — the ordinal label itself is translated (ordinal forms
+// differ per locale: "1st" / "1." / "1位" / "Nhất" …), so it comes from
+// `t.dashboard.home.medals` rather than a hardcoded English literal.
+const MEDAL_CLASS = [
+  "border-amber-500/30 bg-amber-500/15 text-amber-400",
+  "border-slate-400/30 bg-slate-300/15 text-slate-300",
+  "border-orange-600/30 bg-orange-600/15 text-orange-400",
 ];
 
 const TREND: Record<LeaderboardTrend, { Icon: React.ElementType; color: string }> = {
@@ -32,6 +35,11 @@ export function TopPerformersCard() {
   const { t } = useTranslation();
   const { leaderboard, loading, error, retry } = useTopPerformers();
   const top = leaderboard.slice(0, 3);
+  const medalLabels = [
+    t.dashboard.home.medals.first,
+    t.dashboard.home.medals.second,
+    t.dashboard.home.medals.third,
+  ];
 
   return (
     <GlowCard accent="amber" className="h-full p-5">
@@ -58,7 +66,6 @@ export function TopPerformersCard() {
       ) : (
       <div className="space-y-2">
         {top.map((entry, index) => {
-          const medal = MEDALS[index];
           const trend = TREND[entry.trend];
           const TrendIcon = trend.Icon;
           const scoreColor = healthScoreColor(entry.composite).text;
@@ -68,9 +75,9 @@ export function TopPerformersCard() {
               className="flex items-center gap-2.5 rounded-lg px-2 py-1.5 transition-colors hover:bg-white/[0.03]"
             >
               <span
-                className={`inline-flex h-6 w-6 flex-shrink-0 items-center justify-center rounded-md border text-sm font-bold ${medal.className}`}
+                className={`inline-flex h-6 min-w-6 flex-shrink-0 items-center justify-center rounded-md border px-1 text-sm font-bold ${MEDAL_CLASS[index]}`}
               >
-                {medal.label}
+                {medalLabels[index]}
               </span>
               <PersonaAvatar color={entry.color} name={entry.name} />
               <span className="min-w-0 flex-1 truncate text-sm font-medium text-foreground">

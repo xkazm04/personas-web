@@ -537,7 +537,9 @@ export const de: Translations = {
           tickerNextRoutine: "N\u00e4chste Routine",
           tickerAlerts: "Offene Warnungen",
           tickerAllClear: "Alles in Ordnung",
-          instrumentsTitle: "Instrumente"
+          instrumentsTitle: "Instrumente",
+          tickerPause: "Statusleiste pausieren",
+          tickerResume: "Statusleiste fortsetzen"
         },
         heatmap: {
           title: "Ausf\u00fchrungsaktivit\u00e4t",
@@ -545,6 +547,16 @@ export const de: Translations = {
           less: "Weniger",
           more: "Mehr",
           empty: "Noch keine Ausf\u00fchrungen."
+        },
+        medals: {
+          first: "1.",
+          second: "2.",
+          third: "3."
+        },
+        errors: {
+          topPerformers: "Top-Performer konnten nicht geladen werden",
+          routines: "Routinen konnten nicht geladen werden",
+          executions: "Ausf\u00fchrungen konnten nicht geladen werden"
         },
         topPerformers: {
           title: "Top-Performer"

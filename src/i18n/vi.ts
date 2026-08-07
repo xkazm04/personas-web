@@ -537,7 +537,9 @@ export const vi: Translations = {
           tickerNextRoutine: "Quy tr\u00ecnh ti\u1ebfp theo",
           tickerAlerts: "C\u1ea3nh b\u00e1o \u0111ang m\u1edf",
           tickerAllClear: "M\u1ecdi th\u1ee9 \u1ed5n",
-          instrumentsTitle: "C\u00f4ng c\u1ee5"
+          instrumentsTitle: "C\u00f4ng c\u1ee5",
+          tickerPause: "T\u1ea1m d\u1eebng thanh tr\u1ea1ng th\u00e1i",
+          tickerResume: "Ti\u1ebfp t\u1ee5c thanh tr\u1ea1ng th\u00e1i"
         },
         heatmap: {
           title: "Ho\u1ea1t \u0111\u1ed9ng th\u1ef1c thi",
@@ -545,6 +547,16 @@ export const vi: Translations = {
           less: "\u00cdt",
           more: "Nhi\u1ec1u",
           empty: "Ch\u01b0a c\u00f3 l\u01b0\u1ee3t th\u1ef1c thi n\u00e0o."
+        },
+        medals: {
+          first: "Nh\u1ea5t",
+          second: "Nh\u00ec",
+          third: "Ba"
+        },
+        errors: {
+          topPerformers: "Kh\u00f4ng t\u1ea3i \u0111\u01b0\u1ee3c hi\u1ec7u su\u1ea5t h\u00e0ng \u0111\u1ea7u",
+          routines: "Kh\u00f4ng t\u1ea3i \u0111\u01b0\u1ee3c quy tr\u00ecnh",
+          executions: "Kh\u00f4ng t\u1ea3i \u0111\u01b0\u1ee3c l\u1ea7n th\u1ef1c thi"
         },
         topPerformers: {
           title: "Hi\u1ec7u su\u1ea5t h\u00e0ng \u0111\u1ea7u"

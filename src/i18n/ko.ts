@@ -537,7 +537,9 @@ export const ko: Translations = {
           tickerNextRoutine: "\ub2e4\uc74c \ub8e8\ud2f4",
           tickerAlerts: "\ubbf8\ud574\uacb0 \uc54c\ub9bc",
           tickerAllClear: "\ubaa8\ub450 \uc815\uc0c1",
-          instrumentsTitle: "\uacc4\uae30"
+          instrumentsTitle: "\uacc4\uae30",
+          tickerPause: "\uc0c1\ud0dc \ud2f0\ucee4 \uc77c\uc2dc\uc815\uc9c0",
+          tickerResume: "\uc0c1\ud0dc \ud2f0\ucee4 \uc7ac\uc0dd"
         },
         heatmap: {
           title: "\uc2e4\ud589 \ud65c\ub3d9",
@@ -545,6 +547,16 @@ export const ko: Translations = {
           less: "\uc801\uc74c",
           more: "\ub9ce\uc74c",
           empty: "\uc544\uc9c1 \uc2e4\ud589\uc774 \uc5c6\uc2b5\ub2c8\ub2e4."
+        },
+        medals: {
+          first: "1\uc704",
+          second: "2\uc704",
+          third: "3\uc704"
+        },
+        errors: {
+          topPerformers: "\uc0c1\uc704 \uc131\uacfc\uc790\ub97c \ubd88\ub7ec\uc624\uc9c0 \ubabb\ud588\uc2b5\ub2c8\ub2e4",
+          routines: "\ub8e8\ud2f4\uc744 \ubd88\ub7ec\uc624\uc9c0 \ubabb\ud588\uc2b5\ub2c8\ub2e4",
+          executions: "\uc2e4\ud589 \uae30\ub85d\uc744 \ubd88\ub7ec\uc624\uc9c0 \ubabb\ud588\uc2b5\ub2c8\ub2e4"
         },
         topPerformers: {
           title: "\uc0c1\uc704 \uc131\uacfc\uc790"

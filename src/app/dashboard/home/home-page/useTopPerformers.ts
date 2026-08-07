@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import * as Sentry from "@sentry/nextjs";
 
 import { useAuthStore } from "@/stores/authStore";
+import { useTranslation } from "@/i18n/useTranslation";
 import { getSyncedLeaderboard } from "@/lib/supabaseApi";
 import { MOCK_LEADERBOARD, type LeaderboardPersona } from "@/lib/mock-dashboard-data";
 
@@ -22,6 +23,10 @@ export interface TopPerformersData {
 export function useTopPerformers(): TopPerformersData {
   const isDemo = useAuthStore((s) => s.isDemo);
   const useMock = isDemo;
+  // Localized fallback for errors that carry no message of their own. Held as a
+  // plain string so the fetch effect only re-runs when the locale changes.
+  const { t } = useTranslation();
+  const loadFailed = t.dashboard.home.errors.topPerformers;
 
   const [leaderboard, setLeaderboard] = useState<LeaderboardPersona[]>(
     useMock ? MOCK_LEADERBOARD : [],
@@ -48,7 +53,7 @@ export function useTopPerformers(): TopPerformersData {
       } catch (err) {
         if (cancelled) return;
         Sentry.captureException(err, { tags: { scope: "useTopPerformers" } });
-        setError(err instanceof Error ? err.message : "Failed to load top performers");
+        setError(err instanceof Error ? err.message : loadFailed);
       } finally {
         if (!cancelled) setLoading(false);
       }
@@ -56,7 +61,7 @@ export function useTopPerformers(): TopPerformersData {
     return () => {
       cancelled = true;
     };
-  }, [useMock, reloadKey]);
+  }, [useMock, reloadKey, loadFailed]);
 
   return { leaderboard, loading, error, retry: () => setReloadKey((k) => k + 1) };
 }

@@ -11,7 +11,7 @@ It greets the user by first name with a time-of-day greeting and an optional "la
   - **Triage Pane** — one ranked queue of the most urgent items (active SLA breaches, open health incidents, pending reviews) sorted by severity then recency; "all clear" empty state.
   - **Vitals Console** — a success-rate ring + 14-day success sparkline over a 2×2 grid of counters (runs, agents, open alerts, pending reviews).
   - **Activity Stream** — the latest 12 executions with persona avatar, relative time, duration, cost, and status; new runs pulse cyan as they arrive.
-- **Status Ticker** — a slim live strip that cross-fades through fleet vitals (success, agents online, providers, next routine, open alerts); static when reduced-motion.
+- **Status Ticker** — a slim live strip that cross-fades through fleet vitals (success, agents online, and — demo only — providers + next routine, plus open alerts); static when reduced-motion. Rotation pauses on hover, on keyboard focus, and via a visible pause/play button (WCAG 2.2.2); the current item is announced through a polite live region.
 - **Instruments Bay** (below the fold, lazy-mounted) — intelligence panels (Health Digest + Memory Actions), an execution-activity heatmap, Top performers alongside the 14-day traffic/errors chart, Upcoming routines + (demo) Vault changes, and four quick-link tiles.
 
 Every stat and card is a deep link into the matching dashboard section. Like the rest of `/dashboard/*`, all numbers here are **mock data** — live data would flow through the external orchestrator (or the Supabase mirror), but this repo ships demo fixtures.
@@ -23,7 +23,7 @@ Key behaviors:
 - **Deferred instruments bay** — the below-fold region is wrapped in `LazyMount` (`src/components/LazyMount.tsx`, mounts ~800px before viewport). The `instrumentsRef` div around it always exists, so an `IntersectionObserver` (rootMargin `220px`) flips `loadObservability` true on first approach (`page.tsx`); only then does `useSWR("observability", api.getObservability)` fire (revalidation off, 60s dedupe). `observabilityFetchedAt` feeds a `StalenessIndicator`.
 - **Self-driven reveals** — `InstrumentsBay` mounts after the page's one-shot stagger has fired, so its sections animate themselves with `whileInView` (`viewport once`) rather than inherited variants (the SectionWrapper late-mount gotcha).
 - **Store hydration** — one effect calls `fetchExecutions()` + `fetchReviews()` on mount.
-- **Demo-conditional regions** — Fleet optimization and Vault changes render only when `isDemo`; the Triage Pane sources SLA breaches + health incidents only in demo (pending reviews come from the live store in both modes); the Intelligence panels are illustrative-only (see gotchas).
+- **Demo-conditional regions** — Fleet optimization and Vault changes render only when `isDemo`; the Status Ticker drops its provider-count and next-routine items outside demo (both read `MOCK_*` fixtures with no synced source); the Triage Pane sources SLA breaches + health incidents only in demo (pending reviews come from the live store in both modes); the Intelligence panels are illustrative-only (see gotchas).
 
 Subcomponents each own a slice:
 - `DashboardGreetingHeader` → slim greeting + last-seen line (vitals now live in the Vitals Console).
@@ -68,7 +68,7 @@ Subcomponents each own a slice:
 - **Dashboard shell** — rendered inside the `/dashboard` layout (`src/app/dashboard/layout.tsx`) with `DashboardNavbar` + `DashboardNavigation`; nav label is `t.dashboard.overview`.
 - **Shared primitives** — `GlowCard`, `GradientText`, `LazyMount`, `components/dashboard/*` (`StatBadge`, `Sparkline`, `PersonaAvatar`, `StatusBadge`, `EmptyState`, `SkeletonCard`, `StalenessIndicator`, `HealthDigestPanel`, `MemoryActionsPanel`, `FleetOptimizationCard`, `healthScoreColor`, `TrafficChart`), and `TourLauncher`. The `data-tour-diagram="dashboard-*"` anchors drive the guided dashboard tour (`DASHBOARD_TOUR_STEPS` in `src/lib/tour-script.ts`): `dashboard-fleet` (fleet card), `dashboard-vitals` (vitals console), `dashboard-activity` (activity stream), `dashboard-intelligence`/`dashboard-heatmap`/`dashboard-instruments` (instruments bay). Keep these anchors when restructuring — the audio sweep targets them.
 - **Motion** — `fadeUp` / `staggerContainer` from `src/lib/animations.ts`; `RecentActivityCard`, `VitalsConsole` (success ring), and `StatusTicker` use `useReducedMotion`.
-- **i18n** — namespaces `t.dashboard.*` and the nested `t.dashboard.home.{vitals,cockpit,heatmap,topPerformers,upcomingRoutines,vaultChanges}` (`src/i18n/en.ts:275`, EN values at `:1437`). The cockpit's triage/vitals/ticker strings live under `t.dashboard.home.cockpit`.
+- **i18n** — namespaces `t.dashboard.*` and the nested `t.dashboard.home.{vitals,cockpit,heatmap,medals,errors,topPerformers,upcomingRoutines,vaultChanges}`. The cockpit's triage/vitals/ticker strings (including the pause/resume button's accessible name) live under `t.dashboard.home.cockpit`; podium ordinals under `…home.medals` (locale-specific ordinal forms: `1st` / `1.` / `1位` / `Nhất` …); the data hooks' no-message error fallbacks under `…home.errors`.
 - **Format/util** — `relativeTime` from `src/lib/format.ts`; `usePageVisibility` hook; `DASHBOARD_LAST_VISIT_KEY` from `src/lib/constants.ts`.
 
 ## Conventions & gotchas

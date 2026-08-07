@@ -537,7 +537,9 @@ export const cs: Translations = {
           tickerNextRoutine: "Dal\u0161\u00ed rutina",
           tickerAlerts: "Otev\u0159en\u00e1 upozorn\u011bn\u00ed",
           tickerAllClear: "V\u0161e v po\u0159\u00e1dku",
-          instrumentsTitle: "N\u00e1stroje"
+          instrumentsTitle: "N\u00e1stroje",
+          tickerPause: "Pozastavit pruh stavu",
+          tickerResume: "Spustit pruh stavu"
         },
         heatmap: {
           title: "Aktivita spu\u0161t\u011bn\u00ed",
@@ -545,6 +547,16 @@ export const cs: Translations = {
           less: "M\u00e9n\u011b",
           more: "V\u00edce",
           empty: "Zat\u00edm \u017e\u00e1dn\u00e1 spu\u0161t\u011bn\u00ed."
+        },
+        medals: {
+          first: "1.",
+          second: "2.",
+          third: "3."
+        },
+        errors: {
+          topPerformers: "Nepoda\u0159ilo se na\u010d\u00edst nejlep\u0161\u00ed v\u00fdkony",
+          routines: "Nepoda\u0159ilo se na\u010d\u00edst rutiny",
+          executions: "Nepoda\u0159ilo se na\u010d\u00edst spu\u0161t\u011bn\u00ed"
         },
         topPerformers: {
           title: "Nejlep\u0161\u00ed v\u00fdkony"

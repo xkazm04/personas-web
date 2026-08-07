@@ -537,7 +537,9 @@ export const es: Translations = {
           tickerNextRoutine: "Pr\u00f3xima rutina",
           tickerAlerts: "Alertas abiertas",
           tickerAllClear: "Todo en orden",
-          instrumentsTitle: "Instrumentos"
+          instrumentsTitle: "Instrumentos",
+          tickerPause: "Pausar la cinta de estado",
+          tickerResume: "Reanudar la cinta de estado"
         },
         heatmap: {
           title: "Actividad de ejecuci\u00f3n",
@@ -545,6 +547,16 @@ export const es: Translations = {
           less: "Menos",
           more: "M\u00e1s",
           empty: "A\u00fan no hay ejecuciones."
+        },
+        medals: {
+          first: "1.\u00ba",
+          second: "2.\u00ba",
+          third: "3.\u00ba"
+        },
+        errors: {
+          topPerformers: "No se pudieron cargar los mejores agentes",
+          routines: "No se pudieron cargar las rutinas",
+          executions: "No se pudieron cargar las ejecuciones"
         },
         topPerformers: {
           title: "Mejores agentes"
