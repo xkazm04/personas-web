@@ -2,51 +2,21 @@
 
 import { useEffect, useState } from "react";
 import { AnimatePresence, motion, useReducedMotion } from "framer-motion";
-import {
-  Activity,
-  AlertTriangle,
-  Bot,
-  CalendarClock,
-  CheckCircle2,
-  Pause,
-  Play,
-  Server,
-} from "lucide-react";
+import { Pause, Play } from "lucide-react";
 
 import { useTranslation } from "@/i18n/useTranslation";
 import { usePageVisibility } from "@/hooks/usePageVisibility";
-import {
-  MOCK_MODEL_PROVIDERS,
-  MOCK_UPCOMING_ROUTINES,
-} from "@/lib/mock-dashboard-data";
-import { useAuthStore } from "@/stores/authStore";
-import { useOpenAlertCount } from "./useOpenAlertCount";
+import { TONE_CLASS, useTickerItems } from "./useTickerItems";
 
 const ROTATE_MS = 3600;
 
-type Tone = "emerald" | "cyan" | "purple" | "rose";
-
-const TONE_CLASS: Record<Tone, string> = {
-  emerald: "text-emerald-400",
-  cyan: "text-cyan-400",
-  purple: "text-purple-400",
-  rose: "text-rose-400",
-};
-
-interface TickerItem {
-  id: string;
-  icon: React.ElementType;
-  label: string;
-  value: string;
-  tone: Tone;
-}
-
 /**
  * Status Ticker — the slim live-status strip under the cockpit. Rotates through
- * fleet vitals (success, agents online, providers, next routine, open alerts).
- * Auto-advances only when motion is allowed and the tab is visible; otherwise
- * it lays every item out statically. The web counterpart to the desktop
- * overview's Status Ticker.
+ * fleet vitals (success, agents online, providers, next routine, open alerts —
+ * see `useTickerItems` for which of those are demo-only). Auto-advances only
+ * when motion is allowed, the tab is visible and nothing has paused it;
+ * otherwise it lays every item out statically. The web counterpart to the
+ * desktop overview's Status Ticker.
  */
 export function StatusTicker({
   successRate,
@@ -62,25 +32,7 @@ export function StatusTicker({
   const labels = t.dashboard.home.cockpit;
   const reduced = useReducedMotion() ?? false;
   const hidden = usePageVisibility();
-  const openAlerts = useOpenAlertCount();
-  const isDemo = useAuthStore((s) => s.isDemo);
-
-  // Provider allow-list and the routine schedule are demo fixtures with no
-  // synced source — the same gate `VaultChangesCard` and `InstrumentsBay` use.
-  // Without it the strip asserted demo numbers as fact in supabase/orchestrator
-  // mode. Success, agents and open alerts come from live stores, so they stay.
-  const providers = isDemo ? MOCK_MODEL_PROVIDERS.filter((p) => p.allowed).length : null;
-  const next = isDemo ? MOCK_UPCOMING_ROUTINES[0] : undefined;
-
-  const items: TickerItem[] = [
-    { id: "success", icon: Activity, label: labels.tickerSuccess, value: `${successRate}%`, tone: "emerald" },
-    { id: "agents", icon: Bot, label: labels.tickerAgents, value: `${agents}`, tone: "cyan" },
-    ...(providers != null ? [{ id: "providers", icon: Server, label: labels.tickerProviders, value: `${providers}`, tone: "purple" as Tone }] : []),
-    ...(next ? [{ id: "routine", icon: CalendarClock, label: labels.tickerNextRoutine, value: `${next.persona} · ${next.eta}`, tone: "cyan" as Tone }] : []),
-    openAlerts > 0
-      ? { id: "alerts", icon: AlertTriangle, label: labels.tickerAlerts, value: `${openAlerts}`, tone: "rose" }
-      : { id: "alerts", icon: CheckCircle2, label: labels.tickerAlerts, value: labels.tickerAllClear, tone: "emerald" },
-  ];
+  const items = useTickerItems({ successRate, agents });
 
   const [index, setIndex] = useState(0);
   // Three independent pause sources. Hover and focus are transient (WCAG 2.2.2

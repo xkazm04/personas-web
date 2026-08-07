@@ -7,6 +7,8 @@ import GlowCard from "@/components/GlowCard";
 import DashboardErrorBanner from "@/components/dashboard/DashboardErrorBanner";
 import { useTranslation } from "@/i18n/useTranslation";
 import { type RoutineTrigger } from "@/lib/mock-dashboard-data";
+import { effectiveNextRunMs, untilLabel } from "./relativeLabels";
+import { useLiveClock } from "./useLiveClock";
 import { useUpcomingRoutines } from "./useUpcomingRoutines";
 
 const TRIGGER_TINT: Record<RoutineTrigger, string> = {
@@ -25,6 +27,9 @@ export function UpcomingRoutinesCard() {
   const { t } = useTranslation();
   const labels = t.dashboard.home.upcomingRoutines;
   const { routines, loading, error, retry } = useUpcomingRoutines();
+  // Live ETAs: the countdown ticks down beside the activity stream instead of
+  // freezing on the value it had when the page loaded.
+  const now = useLiveClock();
 
   return (
     <GlowCard accent="cyan" className="h-full p-5">
@@ -62,8 +67,11 @@ export function UpcomingRoutinesCard() {
               >
                 {labels.triggers[routine.trigger]}
               </span>
-              <span className="w-8 flex-shrink-0 text-right text-sm tabular-nums text-muted-dark">
-                {routine.eta}
+              <span className="w-10 flex-shrink-0 text-right text-sm tabular-nums text-muted-dark">
+                {untilLabel(
+                  effectiveNextRunMs(routine.nextRunAt, routine.everyMinutes, now),
+                  now,
+                )}
               </span>
             </Link>
           ))}

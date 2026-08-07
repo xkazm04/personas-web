@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useMemo } from "react";
 import { CalendarRange } from "lucide-react";
 
 import GlowCard from "@/components/GlowCard";
@@ -8,6 +8,10 @@ import DashboardErrorBanner from "@/components/dashboard/DashboardErrorBanner";
 import { useTranslation } from "@/i18n/useTranslation";
 import { HEATMAP_DAYS } from "@/lib/mock-dashboard-data";
 import { useExecutionHeatmap } from "./useExecutionHeatmap";
+import { useLiveClock } from "./useLiveClock";
+
+/** Weekday headers only need minute resolution to survive a midnight rollover. */
+const WEEKDAY_TICK_MS = 60_000;
 
 function CardSpinner() {
   return (
@@ -43,16 +47,24 @@ export function ExecutionHeatmapCard() {
   const labels = t.dashboard.home.heatmap;
   const { rows, loading, error, retry } = useExecutionHeatmap();
 
-  // Cache the impure date math in a lazy initializer (React 19 purity rule).
-  const [weekdays] = useState(() => {
+  // Weekday headers are derived from a live clock rather than cached once at
+  // mount: a dashboard left open across midnight used to mislabel every column
+  // (the grid still ends at "today", but the header claimed yesterday's days).
+  // `useLiveClock` supplies the current time from state — so the `useMemo`
+  // below stays pure — and suspends while the tab is hidden. Narrowing to the
+  // local day start means the labels only recompute when the date actually
+  // rolls over, not once a minute.
+  const now = useLiveClock(WEEKDAY_TICK_MS);
+  const dayStartMs = useMemo(() => new Date(now).setHours(0, 0, 0, 0), [now]);
+  const weekdays = useMemo(() => {
     const fmt = new Intl.DateTimeFormat(undefined, { weekday: "narrow" });
-    const today = new Date();
+    const today = new Date(dayStartMs);
     return Array.from({ length: HEATMAP_DAYS }, (_, i) => {
-      const d = new Date(today);
+      const d = new Date(dayStartMs);
       d.setDate(today.getDate() - (HEATMAP_DAYS - 1 - i));
       return fmt.format(d);
     });
-  });
+  }, [dayStartMs]);
 
   const max = Math.max(1, ...rows.flatMap((row) => row.days));
   const isEmpty = rows.length === 0 || rows.every((row) => row.days.every((c) => c === 0));

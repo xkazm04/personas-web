@@ -7,6 +7,8 @@ import GlowCard from "@/components/GlowCard";
 import { useTranslation } from "@/i18n/useTranslation";
 import { MOCK_VAULT_CHANGES, type VaultAction } from "@/lib/mock-dashboard-data";
 import { useAuthStore } from "@/stores/authStore";
+import { sinceLabel } from "./relativeLabels";
+import { useLiveClock } from "./useLiveClock";
 
 const ACTION_TINT: Record<VaultAction, string> = {
   rotated: "border-cyan-500/20 bg-cyan-500/8 text-cyan-400",
@@ -25,6 +27,9 @@ export function VaultChangesCard() {
   const { t } = useTranslation();
   const labels = t.dashboard.home.vaultChanges;
   const isDemo = useAuthStore((s) => s.isDemo);
+  // Live "time since" labels — the fixture carries real timestamps seeded at
+  // module load, so a demo left open ages instead of showing a frozen "4m".
+  const now = useLiveClock();
 
   // Credential vault is local-by-design on the desktop and never synced to the
   // cloud mirror — there's no real source for this card in supabase mode.
@@ -57,8 +62,8 @@ export function VaultChangesCard() {
               >
                 {labels.actions[change.action]}
               </span>
-              <span className="w-8 flex-shrink-0 text-right text-sm tabular-nums text-muted-dark">
-                {change.ago}
+              <span className="w-10 flex-shrink-0 text-right text-sm tabular-nums text-muted-dark">
+                {sinceLabel(change.changedAt, now)}
               </span>
             </Link>
           ))}

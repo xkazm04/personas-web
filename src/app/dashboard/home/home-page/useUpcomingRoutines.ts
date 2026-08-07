@@ -26,23 +26,16 @@ function normalizeTrigger(raw: string): RoutineTrigger {
   return "schedule";
 }
 
-/** Compact ETA label (e.g. "6m", "1h", "1d") from now → the next run time. */
-function etaLabel(nextTriggerAt: string): string {
-  const deltaMs = new Date(nextTriggerAt).getTime() - Date.now();
-  const mins = Math.max(0, Math.round(deltaMs / 60_000));
-  if (mins < 60) return `${mins}m`;
-  const hours = Math.round(mins / 60);
-  if (hours < 24) return `${hours}h`;
-  return `${Math.round(hours / 24)}d`;
-}
-
+// The ETA label is no longer baked in here: the raw next-run timestamp travels
+// to the card, which formats it against a live clock (`useLiveClock`). Baking a
+// string at fetch time froze the ETA for the lifetime of the page.
 function mapTrigger(t: SyncedTrigger): UpcomingRoutine {
   return {
     id: t.id,
     persona: t.personaName,
     color: t.personaColor,
     trigger: normalizeTrigger(t.triggerType),
-    eta: t.nextTriggerAt ? etaLabel(t.nextTriggerAt) : "",
+    nextRunAt: t.nextTriggerAt as string,
   };
 }
 

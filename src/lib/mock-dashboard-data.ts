@@ -1280,9 +1280,24 @@ export const MOCK_EXECUTION_HEATMAP: HeatmapRow[] = (() => {
   return rows;
 })();
 
+// ── Demo clock ──────────────────────────────────────────────────────
+// Home fixtures that describe *when* something happened or will happen carry
+// real ISO timestamps anchored at module-eval ("seed") time — the same shape
+// `mockData.ts` uses for execution/review timestamps — instead of frozen "6m" /
+// "4m" labels. The cards format them against a live clock, so a demo left open
+// visibly ages next to the activity stream rather than contradicting it.
+
+function seedMinutesFromNow(minutes: number): string {
+  return new Date(Date.now() + minutes * 60_000).toISOString();
+}
+
+function seedMinutesAgo(minutes: number): string {
+  return seedMinutesFromNow(-minutes);
+}
+
 // ── Upcoming scheduled routines (home) ──────────────────────────────
 // Mirrors the desktop UpcomingRoutinesCard: the next scheduled runs across
-// the fleet. `eta` is a pre-computed, demo-static label (no live clock).
+// the fleet.
 
 export type RoutineTrigger = "schedule" | "polling" | "webhook" | "event";
 
@@ -1291,22 +1306,29 @@ export interface UpcomingRoutine {
   persona: string;
   color: string;
   trigger: RoutineTrigger;
-  /** Time until the next run, e.g. "6m", "1h", "1d" (demo-static). */
-  eta: string;
+  /** ISO timestamp of the next run; rendered as a live countdown. */
+  nextRunAt: string;
+  /**
+   * Demo-only cadence in minutes. Once the demo has been open past `nextRunAt`,
+   * the card rolls the run forward by whole cadences so the ETA keeps counting
+   * down instead of pinning at "0m". Real triggers omit it — their
+   * `nextTriggerAt` is authoritative and refetched.
+   */
+  everyMinutes?: number;
 }
 
 export const MOCK_UPCOMING_ROUTINES: UpcomingRoutine[] = [
-  { id: "ur_1", persona: INCIDENT.name, color: INCIDENT.color, trigger: "schedule", eta: "6m" },
-  { id: "ur_2", persona: STANDUP.name, color: STANDUP.color, trigger: "polling", eta: "23m" },
-  { id: "ur_3", persona: FEEDBACK.name, color: FEEDBACK.color, trigger: "schedule", eta: "1h" },
-  { id: "ur_4", persona: PR_REVIEW.name, color: PR_REVIEW.color, trigger: "webhook", eta: "3h" },
+  { id: "ur_1", persona: INCIDENT.name, color: INCIDENT.color, trigger: "schedule", nextRunAt: seedMinutesFromNow(6), everyMinutes: 30 },
+  { id: "ur_2", persona: STANDUP.name, color: STANDUP.color, trigger: "polling", nextRunAt: seedMinutesFromNow(23), everyMinutes: 60 },
+  { id: "ur_3", persona: FEEDBACK.name, color: FEEDBACK.color, trigger: "schedule", nextRunAt: seedMinutesFromNow(60), everyMinutes: 180 },
+  { id: "ur_4", persona: PR_REVIEW.name, color: PR_REVIEW.color, trigger: "webhook", nextRunAt: seedMinutesFromNow(180) },
   // No row for the disabled agent (SECURITY): a paused agent has no next run,
   // which is also why it contributes nothing to the heatmap or the spend table.
 ];
 
 // ── Credential vault recent changes (home) ──────────────────────────
 // Mirrors the desktop VaultRecentChangesCard. `secret` names are technical
-// identifiers shown verbatim; `ago` is a pre-computed, demo-static label.
+// identifiers shown verbatim.
 
 export type VaultAction = "rotated" | "added" | "revoked" | "synced";
 
@@ -1315,16 +1337,16 @@ export interface VaultChange {
   /** Credential identifier — shown verbatim (not translated). */
   secret: string;
   action: VaultAction;
-  /** How long ago the change happened, e.g. "4m", "2h" (demo-static). */
-  ago: string;
+  /** ISO timestamp of the change; rendered as a live "time since" label. */
+  changedAt: string;
 }
 
 export const MOCK_VAULT_CHANGES: VaultChange[] = [
-  { id: "vc_1", secret: "GITHUB_OAUTH_TOKEN", action: "rotated", ago: "4m" },
-  { id: "vc_2", secret: "SLACK_WEBHOOK_URL", action: "synced", ago: "31m" },
-  { id: "vc_3", secret: "OPENAI_API_KEY", action: "added", ago: "2h" },
-  { id: "vc_4", secret: "STRIPE_SECRET_KEY", action: "revoked", ago: "5h" },
-  { id: "vc_5", secret: "GCAL_REFRESH_TOKEN", action: "rotated", ago: "1d" },
+  { id: "vc_1", secret: "GITHUB_OAUTH_TOKEN", action: "rotated", changedAt: seedMinutesAgo(4) },
+  { id: "vc_2", secret: "SLACK_WEBHOOK_URL", action: "synced", changedAt: seedMinutesAgo(31) },
+  { id: "vc_3", secret: "OPENAI_API_KEY", action: "added", changedAt: seedMinutesAgo(120) },
+  { id: "vc_4", secret: "STRIPE_SECRET_KEY", action: "revoked", changedAt: seedMinutesAgo(300) },
+  { id: "vc_5", secret: "GCAL_REFRESH_TOKEN", action: "rotated", changedAt: seedMinutesAgo(1440) },
 ];
 
 // ── Settings: model providers (BYOM policy) ─────────────────────────
