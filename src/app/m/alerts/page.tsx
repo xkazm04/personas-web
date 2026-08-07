@@ -129,7 +129,7 @@ export default function MobileAlertsPage() {
                 key={issue.id}
                 className="[contain-intrinsic-size:auto_96px] [content-visibility:auto]"
               >
-                <HealthIssueRow issue={{ ...issue, personaId: null }} />
+                <HealthIssueRow issue={issue} />
               </li>
             ))}
           </ul>

@@ -38,7 +38,7 @@ export function PerformanceHealthIssueRow({
           </div>
           <p className="mt-1 text-sm text-muted-dark line-clamp-2">{issue.description}</p>
           <div className="mt-2 flex items-center gap-3 text-sm text-muted-dark">
-            <span>{issue.personaName}</span>
+            {issue.personaName && <span>{issue.personaName}</span>}
             <span>{age}</span>
             <span className={`uppercase font-medium ${sev.color}`}>
               {labels.severity[issue.severity as keyof ObservabilityLabels["severity"]] ?? issue.severity}

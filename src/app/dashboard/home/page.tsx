@@ -9,8 +9,8 @@ import TourLauncher from "@/components/tour/TourLauncher";
 import { useTranslation } from "@/i18n/useTranslation";
 import { fadeUp, staggerContainer } from "@/lib/animations";
 import {
+  MOCK_FLEET_EXECUTIONS,
   MOCK_FLEET_RECOMMENDATION,
-  MOCK_GLOBAL_EXECUTIONS,
 } from "@/lib/mock-dashboard-data";
 import { useAuthStore } from "@/stores/authStore";
 import { useShallow } from "zustand/react/shallow";
@@ -110,7 +110,7 @@ export default function DashboardHomePage() {
         <motion.div variants={fadeUp} data-tour-diagram="dashboard-fleet" className="mb-6">
           <FleetOptimizationCard
             recommendation={MOCK_FLEET_RECOMMENDATION}
-            executionCount={Math.max(stats.total, MOCK_GLOBAL_EXECUTIONS)}
+            executionCount={Math.max(stats.total, MOCK_FLEET_EXECUTIONS)}
           />
         </motion.div>
       )}

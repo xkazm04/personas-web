@@ -1,6 +1,6 @@
 import { AlertCircle, ArrowRightLeft, Cpu, DollarSign, Workflow } from "lucide-react";
 import type { ElementType } from "react";
-import type { KnowledgePattern } from "@/lib/mock-dashboard-data";
+import { FLEET, type KnowledgePattern } from "@/lib/mock-dashboard-data";
 
 export type KnowledgeType = KnowledgePattern["knowledgeType"];
 
@@ -62,10 +62,8 @@ export const KNOWLEDGE_CLUSTER_TYPE_CONFIG: Record<
   },
 };
 
-export const PERSONA_COLORS: Record<string, string> = {
-  ResearchAgent: "#06b6d4",
-  CodeReviewer: "#34d399",
-  DataProcessor: "#fbbf24",
-  NotifyBot: "#a855f7",
-  ReportGen: "#f43f5e",
-};
+// Persona name → brand colour, projected from the one canonical demo fleet so
+// the cluster graph tints each agent exactly like the rest of the dashboard.
+export const PERSONA_COLORS: Record<string, string> = Object.fromEntries(
+  FLEET.map((member) => [member.name, member.color]),
+);

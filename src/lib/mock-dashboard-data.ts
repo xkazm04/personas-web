@@ -1,6 +1,14 @@
 // ── Mock data for dashboard visualizations ──────────────────────────
 // Generates realistic-looking data for maximum visitor impression.
 
+import {
+  MOCK_DAILY_METRICS,
+  MOCK_OBSERVABILITY_METRICS,
+  MOCK_PERSONA_SPEND,
+  MOCK_PERSONAS,
+} from "./mockData";
+import type { HealthIssue } from "./types";
+
 function seededRandom(seed: number): () => number {
   let s = seed;
   return () => {
@@ -20,6 +28,40 @@ function generateTimeSeries(
     Math.max(0, baseFn(i, days) + (rng() - 0.5) * noise),
   );
 }
+
+// ── Canonical demo fleet roster ─────────────────────────────────────
+// The demo dashboard runs ONE fleet. The roster is not re-declared here: it is
+// projected from MOCK_PERSONAS — the exact list `api.listPersonas()` serves in
+// demo mode — so every fixture below (heatmap, leaderboard, SLA, health issues,
+// routines, triage, messages, memories) names the same five agents, in the same
+// colours, as the agents page and the execution list.
+
+export interface FleetMember {
+  /** Matches the persona id returned by `api.listPersonas()` in demo mode. */
+  id: string;
+  name: string;
+  color: string;
+  /** Disabled agents keep their history but have no upcoming scheduled runs. */
+  enabled: boolean;
+}
+
+const FALLBACK_COLOR = "#64748b";
+
+export const FLEET: FleetMember[] = MOCK_PERSONAS.map((persona) => ({
+  id: persona.id,
+  name: persona.name,
+  color: persona.color ?? FALLBACK_COLOR,
+  enabled: persona.enabled,
+}));
+
+const [PR_REVIEW, INCIDENT, STANDUP, SECURITY, FEEDBACK] = FLEET;
+
+/**
+ * Executions the fleet completed in the 14-day observability window. Derived
+ * from the same daily series the traffic chart plots, so "how busy is this
+ * fleet?" has exactly one answer across the dashboard.
+ */
+export const MOCK_FLEET_EXECUTIONS = MOCK_OBSERVABILITY_METRICS.totalExecutions;
 
 // ── Sparkline data for metric cards ─────────────────────────────────
 
@@ -105,15 +147,13 @@ export const MOCK_COST_ANOMALIES: CostAnomaly[] = [
 
 // ── Health issues with auto-healing ─────────────────────────────────
 
-export interface MockHealthIssue {
-  id: string;
-  title: string;
-  description: string;
-  severity: "critical" | "high" | "medium" | "low";
-  status: "open" | "auto_fixed" | "resolved";
-  personaName: string;
-  detectedAt: string;
-  category: string;
+/**
+ * The API's `HealthIssue` plus the two auto-healing fields the desktop health
+ * panel renders. Because it *extends* the API shape, one array can serve both
+ * `mockApi.getObservability()` and the richer demo panels — there is no second
+ * health-issue fixture anywhere in the repo.
+ */
+export interface MockHealthIssue extends HealthIssue {
   isCircuitBreaker?: boolean;
   autoFixApplied?: string;
 }
@@ -122,10 +162,11 @@ export const MOCK_HEALTH_ISSUES: MockHealthIssue[] = [
   {
     id: "hi_1",
     title: "Token rate limit exceeded",
-    description: "Claude API rate limit hit 3 times in 5 minutes for ResearchAgent. Automatic backoff applied with exponential retry.",
+    description: `Claude API rate limit hit 3 times in 5 minutes for ${INCIDENT.name}. Automatic backoff applied with exponential retry.`,
     severity: "high",
     status: "auto_fixed",
-    personaName: "ResearchAgent",
+    personaId: INCIDENT.id,
+    personaName: INCIDENT.name,
     detectedAt: new Date(Date.now() - 12 * 60_000).toISOString(),
     category: "rate_limit",
     autoFixApplied: "Exponential backoff (2s → 8s → 32s)",
@@ -136,7 +177,8 @@ export const MOCK_HEALTH_ISSUES: MockHealthIssue[] = [
     description: "5 consecutive failures to Slack webhook. Circuit breaker activated, requests paused for 60s cooldown.",
     severity: "critical",
     status: "open",
-    personaName: "NotifyBot",
+    personaId: STANDUP.id,
+    personaName: STANDUP.name,
     detectedAt: new Date(Date.now() - 3 * 60_000).toISOString(),
     category: "circuit_breaker",
     isCircuitBreaker: true,
@@ -144,10 +186,11 @@ export const MOCK_HEALTH_ISSUES: MockHealthIssue[] = [
   {
     id: "hi_3",
     title: "Memory usage above threshold",
-    description: "DataProcessor agent using 847MB of 1GB allocation. Consider pruning conversation history or increasing limit.",
+    description: `${FEEDBACK.name} is using 847MB of its 1GB allocation. Consider pruning conversation history or increasing the limit.`,
     severity: "medium",
     status: "open",
-    personaName: "DataProcessor",
+    personaId: FEEDBACK.id,
+    personaName: FEEDBACK.name,
     detectedAt: new Date(Date.now() - 45 * 60_000).toISOString(),
     category: "resource",
   },
@@ -157,7 +200,8 @@ export const MOCK_HEALTH_ISSUES: MockHealthIssue[] = [
     description: "GitHub OAuth token expires in 2 hours. Auto-refreshed using stored refresh token.",
     severity: "low",
     status: "auto_fixed",
-    personaName: "CodeReviewer",
+    personaId: PR_REVIEW.id,
+    personaName: PR_REVIEW.name,
     detectedAt: new Date(Date.now() - 90 * 60_000).toISOString(),
     category: "credentials",
     autoFixApplied: "Token auto-refreshed via OAuth flow",
@@ -165,12 +209,26 @@ export const MOCK_HEALTH_ISSUES: MockHealthIssue[] = [
   {
     id: "hi_5",
     title: "Execution timeout exceeded",
-    description: "ReportGen took 145s (limit: 120s). Task was gracefully terminated and partial results saved.",
+    description: `${SECURITY.name} took 145s (limit: 120s). Task was gracefully terminated and partial results saved.`,
     severity: "high",
     status: "resolved",
-    personaName: "ReportGen",
+    personaId: SECURITY.id,
+    personaName: SECURITY.name,
     detectedAt: new Date(Date.now() - 2 * 3600_000).toISOString(),
     category: "timeout",
+  },
+  // Fleet-level issue — no owning agent (personaId/personaName null exercises
+  // the "infrastructure, not agent" branch every renderer has to handle).
+  {
+    id: "hi_6",
+    title: "Worker connection lost",
+    description: "Worker w-005 disconnected unexpectedly. Last heartbeat was 5 minutes ago; its queue was drained to w-002.",
+    severity: "critical",
+    status: "resolved",
+    personaId: null,
+    personaName: null,
+    detectedAt: new Date(Date.now() - 5 * 60_000).toISOString(),
+    category: "infrastructure",
   },
 ];
 
@@ -193,7 +251,7 @@ export interface KnowledgePattern {
 export const MOCK_KNOWLEDGE_PATTERNS: KnowledgePattern[] = [
   {
     id: "kp_1",
-    personaName: "ResearchAgent",
+    personaName: INCIDENT.name,
     knowledgeType: "tool_sequence",
     patternKey: "web_search → summarize → email",
     successCount: 142,
@@ -206,7 +264,7 @@ export const MOCK_KNOWLEDGE_PATTERNS: KnowledgePattern[] = [
   },
   {
     id: "kp_2",
-    personaName: "CodeReviewer",
+    personaName: PR_REVIEW.name,
     knowledgeType: "failure_pattern",
     patternKey: "large_diff_timeout",
     successCount: 0,
@@ -219,7 +277,7 @@ export const MOCK_KNOWLEDGE_PATTERNS: KnowledgePattern[] = [
   },
   {
     id: "kp_3",
-    personaName: "DataProcessor",
+    personaName: FEEDBACK.name,
     knowledgeType: "cost_quality",
     patternKey: "haiku_vs_sonnet_csv",
     successCount: 89,
@@ -232,7 +290,7 @@ export const MOCK_KNOWLEDGE_PATTERNS: KnowledgePattern[] = [
   },
   {
     id: "kp_4",
-    personaName: "NotifyBot",
+    personaName: STANDUP.name,
     knowledgeType: "data_flow",
     patternKey: "event → filter → route → deliver",
     successCount: 1247,
@@ -245,7 +303,7 @@ export const MOCK_KNOWLEDGE_PATTERNS: KnowledgePattern[] = [
   },
   {
     id: "kp_5",
-    personaName: "ReportGen",
+    personaName: SECURITY.name,
     knowledgeType: "model_performance",
     patternKey: "opus_complex_analysis",
     successCount: 34,
@@ -258,7 +316,7 @@ export const MOCK_KNOWLEDGE_PATTERNS: KnowledgePattern[] = [
   },
   {
     id: "kp_6",
-    personaName: "ResearchAgent",
+    personaName: INCIDENT.name,
     knowledgeType: "tool_sequence",
     patternKey: "api_call → validate → transform",
     successCount: 234,
@@ -271,7 +329,7 @@ export const MOCK_KNOWLEDGE_PATTERNS: KnowledgePattern[] = [
   },
   {
     id: "kp_7",
-    personaName: "CodeReviewer",
+    personaName: PR_REVIEW.name,
     knowledgeType: "cost_quality",
     patternKey: "sonnet_code_review_optimal",
     successCount: 167,
@@ -284,7 +342,7 @@ export const MOCK_KNOWLEDGE_PATTERNS: KnowledgePattern[] = [
   },
   {
     id: "kp_8",
-    personaName: "DataProcessor",
+    personaName: FEEDBACK.name,
     knowledgeType: "failure_pattern",
     patternKey: "json_nested_depth_limit",
     successCount: 0,
@@ -319,11 +377,11 @@ export interface EventFlow {
 }
 
 export const SWARM_PERSONAS: SwarmNode[] = [
-  { id: "p_research", label: "ResearchAgent", type: "persona", color: "#06b6d4", icon: "🔍", volume: 0.85 },
-  { id: "p_notify", label: "NotifyBot", type: "persona", color: "#a855f7", icon: "🔔", volume: 0.7 },
-  { id: "p_code", label: "CodeReviewer", type: "persona", color: "#34d399", icon: "🔧", volume: 0.6 },
-  { id: "p_data", label: "DataProcessor", type: "persona", color: "#fbbf24", icon: "📊", volume: 0.9 },
-  { id: "p_report", label: "ReportGen", type: "persona", color: "#f43f5e", icon: "📝", volume: 0.45 },
+  { id: "p_research", label: INCIDENT.name, type: "persona", color: INCIDENT.color, icon: "🔍", volume: 0.85 },
+  { id: "p_notify", label: STANDUP.name, type: "persona", color: STANDUP.color, icon: "🔔", volume: 0.7 },
+  { id: "p_code", label: PR_REVIEW.name, type: "persona", color: PR_REVIEW.color, icon: "🔧", volume: 0.6 },
+  { id: "p_data", label: FEEDBACK.name, type: "persona", color: FEEDBACK.color, icon: "📊", volume: 0.9 },
+  { id: "p_report", label: SECURITY.name, type: "persona", color: SECURITY.color, icon: "📝", volume: 0.45 },
 ];
 
 export const SWARM_SOURCES: SwarmNode[] = [
@@ -377,25 +435,25 @@ export const MOCK_MEMORY_ACTIONS: MemoryAction[] = [
   {
     id: "ma_1",
     type: "throttle",
-    title: "Reduce ResearchAgent frequency",
-    description: "ResearchAgent runs 3x more than needed during weekends. Consider throttling to hourly schedule on Sat/Sun.",
-    persona: "ResearchAgent",
+    title: "Reduce Incident Responder frequency",
+    description: "Incident Responder runs 3x more than needed during weekends. Consider throttling to hourly schedule on Sat/Sun.",
+    persona: INCIDENT.name,
     score: 9,
   },
   {
     id: "ma_2",
     type: "alert",
-    title: "Set up cost alert for DataProcessor",
-    description: "DataProcessor cost increased 40% this week. Recommend setting a $5/day budget alert threshold.",
-    persona: "DataProcessor",
+    title: "Set up cost alert for Customer Feedback Analyzer",
+    description: "Customer Feedback Analyzer cost increased 40% this week. Recommend setting a $5/day budget alert threshold.",
+    persona: FEEDBACK.name,
     score: 8,
   },
   {
     id: "ma_3",
     type: "routing",
     title: "Route low-priority reviews to Haiku",
-    description: "72% of CodeReviewer tasks are simple lint checks. Route these to Haiku to save ~$12/week.",
-    persona: "CodeReviewer",
+    description: "72% of PR Review Agent tasks are simple lint checks. Route these to Haiku to save ~$12/week.",
+    persona: PR_REVIEW.name,
     score: 8,
   },
 ];
@@ -432,11 +490,11 @@ const CONFLICT_REASONS = [
 ];
 
 const MEMORY_PERSONAS = [
-  "ResearchAgent",
-  "NotifyBot",
-  "CodeReviewer",
-  "DataProcessor",
-  "ReportGen",
+  "Incident Responder",
+  "Daily Standup Digest",
+  "PR Review Agent",
+  "Customer Feedback Analyzer",
+  "Security Scanner",
 ];
 
 const MEMORY_TYPES: MemoryAction["type"][] = [
@@ -563,41 +621,41 @@ function computeComposite(m: LeaderboardPersona["metrics"]): number {
 export const MOCK_LEADERBOARD: LeaderboardPersona[] = (() => {
   const base: Omit<LeaderboardPersona, "composite">[] = [
     {
-      id: "research",
-      name: "ResearchAgent",
-      color: "#06b6d4",
+      id: INCIDENT.id,
+      name: INCIDENT.name,
+      color: INCIDENT.color,
       metrics: { reliability: 95, cost: 82, speed: 78, quality: 92, volume: 88 },
       trend: "up",
       delta: 4,
     },
     {
-      id: "code",
-      name: "CodeReviewer",
-      color: "#34d399",
+      id: PR_REVIEW.id,
+      name: PR_REVIEW.name,
+      color: PR_REVIEW.color,
       metrics: { reliability: 91, cost: 88, speed: 72, quality: 94, volume: 66 },
       trend: "up",
       delta: 2,
     },
     {
-      id: "report",
-      name: "ReportGen",
-      color: "#f43f5e",
+      id: SECURITY.id,
+      name: SECURITY.name,
+      color: SECURITY.color,
       metrics: { reliability: 88, cost: 74, speed: 54, quality: 90, volume: 48 },
       trend: "flat",
       delta: 0,
     },
     {
-      id: "data",
-      name: "DataProcessor",
-      color: "#fbbf24",
+      id: FEEDBACK.id,
+      name: FEEDBACK.name,
+      color: FEEDBACK.color,
       metrics: { reliability: 68, cost: 78, speed: 84, quality: 72, volume: 94 },
       trend: "down",
       delta: -6,
     },
     {
-      id: "notify",
-      name: "NotifyBot",
-      color: "#a855f7",
+      id: STANDUP.id,
+      name: STANDUP.name,
+      color: STANDUP.color,
       metrics: { reliability: 42, cost: 90, speed: 96, quality: 64, volume: 82 },
       trend: "down",
       delta: -12,
@@ -629,8 +687,8 @@ export interface SLATarget {
 export const MOCK_SLA_TARGETS: SLATarget[] = [
   {
     id: "sla_1",
-    persona: "ResearchAgent",
-    personaColor: "#06b6d4",
+    persona: INCIDENT.name,
+    personaColor: INCIDENT.color,
     metric: "availability",
     target: 99.9,
     current: 99.97,
@@ -641,8 +699,8 @@ export const MOCK_SLA_TARGETS: SLATarget[] = [
   },
   {
     id: "sla_2",
-    persona: "CodeReviewer",
-    personaColor: "#34d399",
+    persona: PR_REVIEW.name,
+    personaColor: PR_REVIEW.color,
     metric: "latency",
     target: 500,
     current: 312,
@@ -653,8 +711,8 @@ export const MOCK_SLA_TARGETS: SLATarget[] = [
   },
   {
     id: "sla_3",
-    persona: "DataProcessor",
-    personaColor: "#fbbf24",
+    persona: FEEDBACK.name,
+    personaColor: FEEDBACK.color,
     metric: "successRate",
     target: 98,
     current: 96.4,
@@ -665,8 +723,8 @@ export const MOCK_SLA_TARGETS: SLATarget[] = [
   },
   {
     id: "sla_4",
-    persona: "ReportGen",
-    personaColor: "#f43f5e",
+    persona: SECURITY.name,
+    personaColor: SECURITY.color,
     metric: "latency",
     target: 30_000,
     current: 34_800,
@@ -677,8 +735,8 @@ export const MOCK_SLA_TARGETS: SLATarget[] = [
   },
   {
     id: "sla_5",
-    persona: "NotifyBot",
-    personaColor: "#a855f7",
+    persona: STANDUP.name,
+    personaColor: STANDUP.color,
     metric: "availability",
     target: 99.5,
     current: 97.1,
@@ -703,7 +761,7 @@ export interface SLABreach {
 export const MOCK_SLA_BREACHES: SLABreach[] = [
   {
     id: "br_1",
-    persona: "NotifyBot",
+    persona: STANDUP.name,
     metric: "availability",
     startedAt: new Date(Date.now() - 45 * 60_000).toISOString(),
     resolvedAt: null,
@@ -713,7 +771,7 @@ export const MOCK_SLA_BREACHES: SLABreach[] = [
   },
   {
     id: "br_2",
-    persona: "ReportGen",
+    persona: SECURITY.name,
     metric: "latency",
     startedAt: new Date(Date.now() - 3 * 3600_000).toISOString(),
     resolvedAt: null,
@@ -723,7 +781,7 @@ export const MOCK_SLA_BREACHES: SLABreach[] = [
   },
   {
     id: "br_3",
-    persona: "DataProcessor",
+    persona: FEEDBACK.name,
     metric: "successRate",
     startedAt: new Date(Date.now() - 6 * 3600_000).toISOString(),
     resolvedAt: new Date(Date.now() - 4 * 3600_000).toISOString(),
@@ -733,7 +791,7 @@ export const MOCK_SLA_BREACHES: SLABreach[] = [
   },
   {
     id: "br_4",
-    persona: "ResearchAgent",
+    persona: INCIDENT.name,
     metric: "latency",
     startedAt: new Date(Date.now() - 24 * 3600_000).toISOString(),
     resolvedAt: new Date(Date.now() - 23 * 3600_000).toISOString(),
@@ -925,11 +983,11 @@ const MESSAGE_SUBJECTS = [
 ];
 
 const MESSAGE_PERSONAS = [
-  { name: "ResearchAgent", color: "#06b6d4" },
-  { name: "CodeReviewer", color: "#34d399" },
-  { name: "DataProcessor", color: "#fbbf24" },
-  { name: "ReportGen", color: "#f43f5e" },
-  { name: "NotifyBot", color: "#a855f7" },
+  { name: INCIDENT.name, color: INCIDENT.color },
+  { name: PR_REVIEW.name, color: PR_REVIEW.color },
+  { name: FEEDBACK.name, color: FEEDBACK.color },
+  { name: SECURITY.name, color: SECURITY.color },
+  { name: STANDUP.name, color: STANDUP.color },
 ];
 
 // Reply bodies — short follow-ups from a human or another agent. Round-robined
@@ -1100,8 +1158,10 @@ export interface HealthDigest {
 
 export const MOCK_UNREAD_MESSAGES = 7;
 
-// Cumulative global execution count (larger than the loaded list).
-export const MOCK_GLOBAL_EXECUTIONS = 12_847;
+// (The fleet's own execution volume lives in MOCK_FLEET_EXECUTIONS, derived
+// from the observability window at the top of this file. There is deliberately
+// no second, larger "global" counter: a demo fleet that has run 47 times must
+// not also claim 12,847 runs three cards away.)
 
 // ── Fleet optimization recommendation ───────────────────────────────
 // Mirrors desktop's single-top-recommendation panel. Surfaced on /dashboard/home.
@@ -1130,13 +1190,13 @@ export const MOCK_FLEET_RECOMMENDATION: FleetRecommendation = {
   id: "fr_1",
   severity: "suggested",
   category: "cost",
-  title: "Downgrade DataProcessor to Haiku for CSV tasks",
+  title: "Downgrade Customer Feedback Analyzer to Haiku for CSV tasks",
   summary:
-    "72% of DataProcessor runs are simple CSV parses — Haiku matches Sonnet quality at 1/8th the cost.",
+    "72% of Customer Feedback Analyzer runs are simple CSV parses — Haiku matches Sonnet quality at 1/8th the cost.",
   detail:
     "Observed 89 CSV-parsing executions over the last 30 days. Haiku achieved 92% task success vs Sonnet's 94% on the same prompts, while using 12% of the token spend. Recommended to route `knowledge_type=cost_quality` patterns tagged `haiku_vs_sonnet_csv` through Haiku by default, with Sonnet reserved for nested-schema fallbacks.",
   impact: "≈ $48/month saved",
-  personaName: "DataProcessor",
+  personaName: FEEDBACK.name,
   actionLabel: "Review routing policy",
   actionHref: "/dashboard/agents",
 };
@@ -1144,18 +1204,21 @@ export const MOCK_FLEET_RECOMMENDATION: FleetRecommendation = {
 export const MOCK_HEALTH_DIGEST: HealthDigest = {
   overallScore: 87,
   agents: [
-    { name: "ResearchAgent", score: 95, issues: 0, lastRun: new Date(Date.now() - 300_000).toISOString(), color: "#06b6d4" },
-    { name: "NotifyBot", score: 72, issues: 2, lastRun: new Date(Date.now() - 180_000).toISOString(), color: "#a855f7" },
-    { name: "CodeReviewer", score: 91, issues: 0, lastRun: new Date(Date.now() - 600_000).toISOString(), color: "#34d399" },
-    { name: "DataProcessor", score: 84, issues: 1, lastRun: new Date(Date.now() - 120_000).toISOString(), color: "#fbbf24" },
-    { name: "ReportGen", score: 88, issues: 0, lastRun: new Date(Date.now() - 3600_000).toISOString(), color: "#f43f5e" },
+    { name: INCIDENT.name, score: 95, issues: 0, lastRun: new Date(Date.now() - 300_000).toISOString(), color: INCIDENT.color },
+    { name: STANDUP.name, score: 72, issues: 2, lastRun: new Date(Date.now() - 180_000).toISOString(), color: STANDUP.color },
+    { name: PR_REVIEW.name, score: 91, issues: 0, lastRun: new Date(Date.now() - 600_000).toISOString(), color: PR_REVIEW.color },
+    { name: FEEDBACK.name, score: 84, issues: 1, lastRun: new Date(Date.now() - 120_000).toISOString(), color: FEEDBACK.color },
+    { name: SECURITY.name, score: 88, issues: 0, lastRun: new Date(Date.now() - 3600_000).toISOString(), color: SECURITY.color },
   ],
 };
 
 // ── Execution heatmap (home: per-agent activity, last 7 days) ────────
-// Mirrors the desktop ExecutionHeatmap as a compact agent × day grid:
-// one row per persona, one cell per day (oldest → newest). Counts are
-// seeded so the grid is deterministic across renders.
+// Mirrors the desktop ExecutionHeatmap as a compact agent × day grid: one row
+// per persona, one cell per day (oldest → newest). Each COLUMN sums to exactly
+// that day's execution count in MOCK_DAILY_METRICS — the same series the home
+// traffic chart plots — so the heatmap and the chart describe one fleet rather
+// than two. Per-agent share follows MOCK_PERSONA_SPEND (the same 14-day
+// window); the paused agent has no share and stays empty.
 
 export const HEATMAP_DAYS = 7;
 
@@ -1166,15 +1229,52 @@ export interface HeatmapRow {
   days: number[];
 }
 
+/**
+ * Split `total` runs across agents by `weights`, largest-remainder style, so
+ * the parts always add back up to `total` (no drift between the grid and the
+ * chart it is supposed to decompose).
+ */
+function splitByWeight(total: number, weights: number[]): number[] {
+  const sum = weights.reduce((a, b) => a + b, 0);
+  if (sum <= 0 || total <= 0) return weights.map(() => 0);
+  const exact = weights.map((w) => (total * w) / sum);
+  const out = exact.map((v) => Math.floor(v));
+  let remainder = total - out.reduce((a, b) => a + b, 0);
+  const byFraction = exact
+    .map((v, i) => ({ i, frac: v - Math.floor(v) }))
+    .sort((a, b) => b.frac - a.frac || a.i - b.i);
+  for (const { i } of byFraction) {
+    if (remainder <= 0) break;
+    out[i] += 1;
+    remainder -= 1;
+  }
+  return out;
+}
+
 export const MOCK_EXECUTION_HEATMAP: HeatmapRow[] = (() => {
   const rng = seededRandom(7);
-  return MOCK_HEALTH_DIGEST.agents.map((agent, idx) => ({
-    persona: agent.name,
-    color: agent.color,
-    days: Array.from({ length: HEATMAP_DAYS }, (_, d) =>
-      Math.round(Math.max(0, agent.score / 9 + Math.sin((d + idx) * 0.8) * 4 + rng() * 7)),
-    ),
+  const spendByPersona = new Map(
+    MOCK_PERSONA_SPEND.map((row) => [row.personaId, row.executionCount]),
+  );
+  // Base share of fleet volume per agent over the window.
+  const baseWeights = FLEET.map((member) => spendByPersona.get(member.id) ?? 0);
+  const rows: HeatmapRow[] = FLEET.map((member) => ({
+    persona: member.name,
+    color: member.color,
+    days: Array.from({ length: HEATMAP_DAYS }, () => 0),
   }));
+
+  const window = MOCK_DAILY_METRICS.slice(-HEATMAP_DAYS);
+  window.forEach((day, d) => {
+    // Jitter the shares per day (deterministically) so the grid reads as real
+    // activity rather than the same column repeated seven times.
+    const weights = baseWeights.map((w) => w * (0.45 + rng()));
+    splitByWeight(day.executions, weights).forEach((count, agentIdx) => {
+      rows[agentIdx].days[d] = count;
+    });
+  });
+
+  return rows;
 })();
 
 // ── Upcoming scheduled routines (home) ──────────────────────────────
@@ -1193,11 +1293,12 @@ export interface UpcomingRoutine {
 }
 
 export const MOCK_UPCOMING_ROUTINES: UpcomingRoutine[] = [
-  { id: "ur_1", persona: "ResearchAgent", color: "#06b6d4", trigger: "schedule", eta: "6m" },
-  { id: "ur_2", persona: "NotifyBot", color: "#a855f7", trigger: "polling", eta: "23m" },
-  { id: "ur_3", persona: "DataProcessor", color: "#fbbf24", trigger: "schedule", eta: "1h" },
-  { id: "ur_4", persona: "CodeReviewer", color: "#34d399", trigger: "webhook", eta: "3h" },
-  { id: "ur_5", persona: "ReportGen", color: "#f43f5e", trigger: "schedule", eta: "1d" },
+  { id: "ur_1", persona: INCIDENT.name, color: INCIDENT.color, trigger: "schedule", eta: "6m" },
+  { id: "ur_2", persona: STANDUP.name, color: STANDUP.color, trigger: "polling", eta: "23m" },
+  { id: "ur_3", persona: FEEDBACK.name, color: FEEDBACK.color, trigger: "schedule", eta: "1h" },
+  { id: "ur_4", persona: PR_REVIEW.name, color: PR_REVIEW.color, trigger: "webhook", eta: "3h" },
+  // No row for the disabled agent (SECURITY): a paused agent has no next run,
+  // which is also why it contributes nothing to the heatmap or the spend table.
 ];
 
 // ── Credential vault recent changes (home) ──────────────────────────
@@ -1299,12 +1400,12 @@ export const MOCK_AUDIT_INCIDENTS: AuditIncident[] = [
     id: "inc_1",
     title: "Slack webhook circuit-broken",
     description:
-      "NotifyBot's Slack delivery tripped the circuit breaker after 3 consecutive 5xx responses; outbound notifications are paused.",
+      "Daily Standup Digest's Slack delivery tripped the circuit breaker after 3 consecutive 5xx responses; outbound notifications are paused.",
     severity: "critical",
     status: "escalated",
     source: "events",
-    persona: "NotifyBot",
-    personaColor: "#a855f7",
+    persona: STANDUP.name,
+    personaColor: STANDUP.color,
     detectedAt: new Date(Date.now() - 42 * INCIDENT_MIN).toISOString(),
     resolvedAt: null,
     category: "delivery",
@@ -1315,12 +1416,12 @@ export const MOCK_AUDIT_INCIDENTS: AuditIncident[] = [
     id: "inc_2",
     title: "P95 latency sustained above SLO",
     description:
-      "ReportGen P95 held at 34.8s against a 30s objective for over an hour, driven by nested-schema CSV parsing.",
+      "Security Scanner P95 held at 34.8s against a 30s objective for over an hour, driven by nested-schema CSV parsing.",
     severity: "high",
     status: "open",
     source: "executions",
-    persona: "ReportGen",
-    personaColor: "#f43f5e",
+    persona: SECURITY.name,
+    personaColor: SECURITY.color,
     detectedAt: new Date(Date.now() - 3 * INCIDENT_HOUR).toISOString(),
     resolvedAt: null,
     category: "performance",
@@ -1330,12 +1431,12 @@ export const MOCK_AUDIT_INCIDENTS: AuditIncident[] = [
     id: "inc_3",
     title: "Working-set memory trending up",
     description:
-      "DataProcessor RSS grew 38% over 24h without a matching drop, suggesting a retained-buffer leak in the CSV path.",
+      "Customer Feedback Analyzer RSS grew 38% over 24h without a matching drop, suggesting a retained-buffer leak in the CSV path.",
     severity: "medium",
     status: "open",
     source: "executions",
-    persona: "DataProcessor",
-    personaColor: "#fbbf24",
+    persona: FEEDBACK.name,
+    personaColor: FEEDBACK.color,
     detectedAt: new Date(Date.now() - 5 * INCIDENT_HOUR).toISOString(),
     resolvedAt: null,
     category: "resource",
@@ -1345,12 +1446,12 @@ export const MOCK_AUDIT_INCIDENTS: AuditIncident[] = [
     id: "inc_4",
     title: "Credential rotated past policy window",
     description:
-      "ResearchAgent's search-API key exceeded its 90-day rotation window; auto-rotation re-issued and synced a fresh key.",
+      "Incident Responder's search-API key exceeded its 90-day rotation window; auto-rotation re-issued and synced a fresh key.",
     severity: "low",
     status: "resolved",
     source: "vault",
-    persona: "ResearchAgent",
-    personaColor: "#06b6d4",
+    persona: INCIDENT.name,
+    personaColor: INCIDENT.color,
     detectedAt: new Date(Date.now() - 26 * INCIDENT_HOUR).toISOString(),
     resolvedAt: new Date(Date.now() - 25 * INCIDENT_HOUR).toISOString(),
     category: "security",
@@ -1361,12 +1462,12 @@ export const MOCK_AUDIT_INCIDENTS: AuditIncident[] = [
     id: "inc_5",
     title: "Referenced secret missing from vault",
     description:
-      "DataProcessor referenced STRIPE_SECRET_KEY, which was revoked 5h ago; dependent runs fail fast at startup.",
+      "Customer Feedback Analyzer referenced STRIPE_SECRET_KEY, which was revoked 5h ago; dependent runs fail fast at startup.",
     severity: "critical",
     status: "open",
     source: "vault",
-    persona: "DataProcessor",
-    personaColor: "#fbbf24",
+    persona: FEEDBACK.name,
+    personaColor: FEEDBACK.color,
     detectedAt: new Date(Date.now() - 70 * INCIDENT_MIN).toISOString(),
     resolvedAt: null,
     category: "security",
@@ -1376,12 +1477,12 @@ export const MOCK_AUDIT_INCIDENTS: AuditIncident[] = [
     id: "inc_6",
     title: "Execution timed out at turn cap",
     description:
-      "CodeReviewer hit its 20-turn cap on a large diff and was terminated before producing a verdict.",
+      "PR Review Agent hit its 20-turn cap on a large diff and was terminated before producing a verdict.",
     severity: "high",
     status: "resolved",
     source: "executions",
-    persona: "CodeReviewer",
-    personaColor: "#34d399",
+    persona: PR_REVIEW.name,
+    personaColor: PR_REVIEW.color,
     detectedAt: new Date(Date.now() - 9 * INCIDENT_HOUR).toISOString(),
     resolvedAt: new Date(Date.now() - 8 * INCIDENT_HOUR).toISOString(),
     category: "performance",
@@ -1391,12 +1492,12 @@ export const MOCK_AUDIT_INCIDENTS: AuditIncident[] = [
     id: "inc_7",
     title: "Duplicate notifications detected",
     description:
-      "NotifyBot emitted the same digest twice within 90s after a retry raced the success ack.",
+      "Daily Standup Digest emitted the same digest twice within 90s after a retry raced the success ack.",
     severity: "medium",
     status: "ignored",
     source: "messages",
-    persona: "NotifyBot",
-    personaColor: "#a855f7",
+    persona: STANDUP.name,
+    personaColor: STANDUP.color,
     detectedAt: new Date(Date.now() - 14 * INCIDENT_HOUR).toISOString(),
     resolvedAt: null,
     category: "delivery",
@@ -1406,12 +1507,12 @@ export const MOCK_AUDIT_INCIDENTS: AuditIncident[] = [
     id: "inc_8",
     title: "Cron drift corrected",
     description:
-      "ResearchAgent's hourly poll drifted 11 minutes after a DST transition; the scheduler re-anchored the next run.",
+      "Incident Responder's hourly poll drifted 11 minutes after a DST transition; the scheduler re-anchored the next run.",
     severity: "low",
     status: "resolved",
     source: "triggers",
-    persona: "ResearchAgent",
-    personaColor: "#06b6d4",
+    persona: INCIDENT.name,
+    personaColor: INCIDENT.color,
     detectedAt: new Date(Date.now() - 30 * INCIDENT_HOUR).toISOString(),
     resolvedAt: new Date(Date.now() - 30 * INCIDENT_HOUR + 20 * INCIDENT_MIN).toISOString(),
     category: "scheduling",
@@ -1422,12 +1523,12 @@ export const MOCK_AUDIT_INCIDENTS: AuditIncident[] = [
     id: "inc_9",
     title: "Review SLA breached",
     description:
-      "A critical manual review for ReportGen sat unactioned past its 30-minute SLA and was auto-escalated.",
+      "A critical manual review for Security Scanner sat unactioned past its 30-minute SLA and was auto-escalated.",
     severity: "high",
     status: "escalated",
     source: "reviews",
-    persona: "ReportGen",
-    personaColor: "#f43f5e",
+    persona: SECURITY.name,
+    personaColor: SECURITY.color,
     detectedAt: new Date(Date.now() - 55 * INCIDENT_MIN).toISOString(),
     resolvedAt: null,
     category: "oversight",
@@ -1437,12 +1538,12 @@ export const MOCK_AUDIT_INCIDENTS: AuditIncident[] = [
     id: "inc_10",
     title: "Repeated tool failure",
     description:
-      "DataProcessor's `http.fetch` tool failed 7 times in 10 minutes against the same host (connection reset).",
+      "Customer Feedback Analyzer's `http.fetch` tool failed 7 times in 10 minutes against the same host (connection reset).",
     severity: "critical",
     status: "open",
     source: "executions",
-    persona: "DataProcessor",
-    personaColor: "#fbbf24",
+    persona: FEEDBACK.name,
+    personaColor: FEEDBACK.color,
     detectedAt: new Date(Date.now() - 2 * INCIDENT_HOUR).toISOString(),
     resolvedAt: null,
     category: "reliability",
@@ -1452,27 +1553,27 @@ export const MOCK_AUDIT_INCIDENTS: AuditIncident[] = [
     id: "inc_11",
     title: "Event backlog building",
     description:
-      "CodeReviewer's inbound `pull_request.opened` queue grew to 24 unprocessed events during a traffic spike.",
+      "PR Review Agent's inbound `pull_request.opened` queue grew to 24 unprocessed events during a traffic spike.",
     severity: "medium",
     status: "open",
     source: "events",
-    persona: "CodeReviewer",
-    personaColor: "#34d399",
+    persona: PR_REVIEW.name,
+    personaColor: PR_REVIEW.color,
     detectedAt: new Date(Date.now() - 4 * INCIDENT_HOUR).toISOString(),
     resolvedAt: null,
     category: "throughput",
-    recommendation: "Raise maxConcurrent for CodeReviewer or shed low-priority draft PRs.",
+    recommendation: "Raise maxConcurrent for PR Review Agent or shed low-priority draft PRs.",
   },
   {
     id: "inc_12",
     title: "Low-confidence pattern flagged",
     description:
-      "ResearchAgent surfaced a cost-quality pattern at 0.41 confidence; below the 0.6 acceptance threshold.",
+      "Incident Responder surfaced a cost-quality pattern at 0.41 confidence; below the 0.6 acceptance threshold.",
     severity: "low",
     status: "ignored",
     source: "events",
-    persona: "ResearchAgent",
-    personaColor: "#06b6d4",
+    persona: INCIDENT.name,
+    personaColor: INCIDENT.color,
     detectedAt: new Date(Date.now() - 40 * INCIDENT_HOUR).toISOString(),
     resolvedAt: null,
     category: "learning",
@@ -1482,12 +1583,12 @@ export const MOCK_AUDIT_INCIDENTS: AuditIncident[] = [
     id: "inc_13",
     title: "Webhook signature mismatch",
     description:
-      "NotifyBot rejected 3 inbound webhooks with an invalid HMAC signature, likely a rotated signing secret upstream.",
+      "Daily Standup Digest rejected 3 inbound webhooks with an invalid HMAC signature, likely a rotated signing secret upstream.",
     severity: "high",
     status: "open",
     source: "triggers",
-    persona: "NotifyBot",
-    personaColor: "#a855f7",
+    persona: STANDUP.name,
+    personaColor: STANDUP.color,
     detectedAt: new Date(Date.now() - 80 * INCIDENT_MIN).toISOString(),
     resolvedAt: null,
     category: "security",
@@ -1497,12 +1598,12 @@ export const MOCK_AUDIT_INCIDENTS: AuditIncident[] = [
     id: "inc_14",
     title: "Token rate limit throttled",
     description:
-      "ResearchAgent hit the provider per-minute token limit during a burst; requests were throttled and retried.",
+      "Incident Responder hit the provider per-minute token limit during a burst; requests were throttled and retried.",
     severity: "medium",
     status: "resolved",
     source: "executions",
-    persona: "ResearchAgent",
-    personaColor: "#06b6d4",
+    persona: INCIDENT.name,
+    personaColor: INCIDENT.color,
     detectedAt: new Date(Date.now() - 12 * INCIDENT_HOUR).toISOString(),
     resolvedAt: new Date(Date.now() - 12 * INCIDENT_HOUR + 8 * INCIDENT_MIN).toISOString(),
     category: "rate-limit",
@@ -1513,12 +1614,12 @@ export const MOCK_AUDIT_INCIDENTS: AuditIncident[] = [
     id: "inc_15",
     title: "Pending review aging",
     description:
-      "A warning-severity review for CodeReviewer has been pending for 3h, approaching its 4h SLA.",
+      "A warning-severity review for PR Review Agent has been pending for 3h, approaching its 4h SLA.",
     severity: "low",
     status: "open",
     source: "reviews",
-    persona: "CodeReviewer",
-    personaColor: "#34d399",
+    persona: PR_REVIEW.name,
+    personaColor: PR_REVIEW.color,
     detectedAt: new Date(Date.now() - 3 * INCIDENT_HOUR).toISOString(),
     resolvedAt: null,
     category: "oversight",
@@ -1528,12 +1629,12 @@ export const MOCK_AUDIT_INCIDENTS: AuditIncident[] = [
     id: "inc_16",
     title: "Credential rotation overdue",
     description:
-      "ReportGen's GCAL_REFRESH_TOKEN is 4 days past its rotation window with auto-rotation disabled for this secret.",
+      "Security Scanner's GCAL_REFRESH_TOKEN is 4 days past its rotation window with auto-rotation disabled for this secret.",
     severity: "medium",
     status: "escalated",
     source: "vault",
-    persona: "ReportGen",
-    personaColor: "#f43f5e",
+    persona: SECURITY.name,
+    personaColor: SECURITY.color,
     detectedAt: new Date(Date.now() - 20 * INCIDENT_HOUR).toISOString(),
     resolvedAt: null,
     category: "security",

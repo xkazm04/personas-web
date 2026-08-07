@@ -45,16 +45,9 @@ export default function PerformanceView() {
     // Demo falls back to the illustrative fixture; real mode shows the genuine
     // (possibly empty) synced health issues — never the mock.
     if (healthIssues.length === 0) return isDemo ? MOCK_HEALTH_ISSUES : [];
-    return healthIssues.map((issue) => ({
-      id: issue.id,
-      title: issue.title,
-      description: issue.description,
-      severity: issue.severity,
-      status: issue.status,
-      personaName: issue.personaName ?? "Unknown",
-      detectedAt: issue.detectedAt,
-      category: issue.category,
-    }));
+    // MockHealthIssue extends the API's HealthIssue, so synced issues need no
+    // reshaping — they simply arrive without the auto-healing extras.
+    return healthIssues;
   }, [healthIssues, isDemo]);
 
   const filteredHealthIssues = useMemo(() => {

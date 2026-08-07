@@ -11,7 +11,6 @@ import type {
   ObservabilityMetrics,
   DailyMetric,
   PersonaSpend,
-  HealthIssue,
   ToolUsageSummary,
   ToolUsageOverTime,
   ToolUsageByPersona,
@@ -309,6 +308,130 @@ export const MOCK_EXECUTIONS: GlobalExecution[] = [
     personaIcon: undefined,
     personaColor: "#06b6d4",
   },
+  // The eight completed runs against the single failure above are what makes
+  // the fleet's terminal success rate (8/9 ≈ 89%) agree with the observability
+  // window's 89.4% — the home success ring and the 14-day chart read the same
+  // fleet, so they must not be able to disagree by 45 points.
+  {
+    id: id("e", 8),
+    personaId: id("p", 3),
+    triggerId: id("t", 1),
+    useCaseId: null,
+    status: "completed",
+    inputData: null,
+    outputData: "## Standup Digest - Feb 24\n\n**Platform Team**\n- 5 PRs merged, 1 rollback...",
+    claudeSessionId: "sess-mno345",
+    modelUsed: "claude-sonnet-4-5-20250929",
+    inputTokens: 11400,
+    outputTokens: 2200,
+    costUsd: 0.0298,
+    errorMessage: null,
+    durationMs: 17400,
+    retryOfExecutionId: null,
+    retryCount: 0,
+    startedAt: ago(1560),
+    completedAt: ago(1559),
+    createdAt: ago(1560),
+    personaName: "Daily Standup Digest",
+    personaIcon: undefined,
+    personaColor: "#a855f7",
+  },
+  {
+    id: id("e", 9),
+    personaId: id("p", 1),
+    triggerId: null,
+    useCaseId: null,
+    status: "completed",
+    inputData: '{"pr_number": 337, "repo": "acme/frontend"}',
+    outputData: "Reviewed 14 files. 2 blocking comments on error handling, 3 nits...",
+    claudeSessionId: "sess-pqr678",
+    modelUsed: "claude-sonnet-4-5-20250929",
+    inputTokens: 6100,
+    outputTokens: 2400,
+    costUsd: 0.0311,
+    errorMessage: null,
+    durationMs: 28900,
+    retryOfExecutionId: null,
+    retryCount: 0,
+    startedAt: ago(2400),
+    completedAt: ago(2399),
+    createdAt: ago(2400),
+    personaName: "PR Review Agent",
+    personaIcon: undefined,
+    personaColor: "#06b6d4",
+  },
+  {
+    id: id("e", 10),
+    personaId: id("p", 2),
+    triggerId: null,
+    useCaseId: null,
+    status: "completed",
+    inputData: '{"alert_id": "INC-884", "severity": "P3"}',
+    outputData: "Incident triaged. Disk pressure on ingest-2; log rotation restored headroom...",
+    claudeSessionId: "sess-stu901",
+    modelUsed: "claude-sonnet-4-5-20250929",
+    inputTokens: 7300,
+    outputTokens: 2600,
+    costUsd: 0.0442,
+    errorMessage: null,
+    durationMs: 39100,
+    retryOfExecutionId: null,
+    retryCount: 0,
+    startedAt: ago(4320),
+    completedAt: ago(4319),
+    createdAt: ago(4320),
+    personaName: "Incident Responder",
+    personaIcon: undefined,
+    personaColor: "#f43f5e",
+  },
+  {
+    id: id("e", 11),
+    personaId: id("p", 5),
+    triggerId: id("t", 2),
+    useCaseId: null,
+    status: "completed",
+    inputData: '{"source": "zendesk", "period": "last_7_days"}',
+    outputData: "## Weekly Customer Insights\n\nOverall sentiment: Positive (+4% WoW)...",
+    claudeSessionId: "sess-vwx234",
+    modelUsed: "claude-sonnet-4-5-20250929",
+    inputTokens: 16900,
+    outputTokens: 3700,
+    costUsd: 0.0714,
+    errorMessage: null,
+    durationMs: 58400,
+    retryOfExecutionId: null,
+    retryCount: 0,
+    startedAt: ago(5760),
+    completedAt: ago(5759),
+    createdAt: ago(5760),
+    personaName: "Customer Feedback Analyzer",
+    personaIcon: undefined,
+    personaColor: "#fbbf24",
+  },
+  {
+    id: id("e", 12),
+    personaId: id("p", 3),
+    triggerId: id("t", 1),
+    useCaseId: null,
+    status: "completed",
+    inputData: null,
+    outputData: "## Standup Digest - Feb 22\n\n**Frontend Team**\n- 2 PRs merged, 1 blocked...",
+    claudeSessionId: "sess-yza567",
+    modelUsed: "claude-sonnet-4-5-20250929",
+    inputTokens: 10800,
+    outputTokens: 2100,
+    costUsd: 0.0276,
+    errorMessage: null,
+    durationMs: 16200,
+    retryOfExecutionId: null,
+    retryCount: 0,
+    startedAt: ago(7200),
+    completedAt: ago(7199),
+    createdAt: ago(7200),
+    personaName: "Daily Standup Digest",
+    personaIcon: undefined,
+    personaColor: "#a855f7",
+  },
 ];
 
 // ---------------------------------------------------------------------------
@@ -572,29 +695,37 @@ function daysAgo(d: number): string {
   return date.toISOString().split("T")[0];
 }
 
+// The 14-day observability window, oldest → newest. These three series are the
+// SINGLE source of truth for every fleet magnitude in the demo: the totals
+// below, the per-agent spend table, the home traffic chart and the execution
+// heatmap are all derived from (or reconciled against) them. They are hand-
+// tuned rather than randomised so the numbers stay identical between the
+// server render and the client, and between one card and the next.
+const DAILY_EXECUTIONS = [2, 3, 4, 3, 5, 4, 2, 3, 4, 3, 5, 3, 4, 2]; // Σ 47
+const DAILY_FAILURES = [0, 1, 0, 0, 1, 0, 0, 1, 0, 0, 1, 0, 1, 0]; //   Σ 5
+const DAILY_COST = [0.21, 0.31, 0.39, 0.31, 0.51, 0.41, 0.21, 0.31, 0.41, 0.31, 0.51, 0.31, 0.41, 0.21]; // Σ 4.82
+
+export const MOCK_DAILY_METRICS: DailyMetric[] = DAILY_EXECUTIONS.map((execs, i) => ({
+  date: daysAgo(13 - i),
+  cost: DAILY_COST[i],
+  executions: execs,
+  successes: execs - DAILY_FAILURES[i],
+  failures: DAILY_FAILURES[i],
+}));
+
+const WINDOW_EXECUTIONS = DAILY_EXECUTIONS.reduce((a, b) => a + b, 0);
+const WINDOW_FAILURES = DAILY_FAILURES.reduce((a, b) => a + b, 0);
+const WINDOW_COST = DAILY_COST.reduce((a, b) => a + b, 0);
+
 export const MOCK_OBSERVABILITY_METRICS: ObservabilityMetrics = {
-  totalCost: 4.82,
-  totalExecutions: 47,
-  successRate: 89.4,
-  activePersonas: 4,
+  totalCost: +WINDOW_COST.toFixed(2),
+  totalExecutions: WINDOW_EXECUTIONS,
+  successRate: +(((WINDOW_EXECUTIONS - WINDOW_FAILURES) / WINDOW_EXECUTIONS) * 100).toFixed(1),
+  activePersonas: MOCK_PERSONAS.filter((persona) => persona.enabled).length,
   costTrend: 12.3,
   execTrend: 8.5,
   successTrend: -2.1,
 };
-
-export const MOCK_DAILY_METRICS: DailyMetric[] = Array.from({ length: 14 }, (_, i) => {
-  const day = 13 - i;
-  const base = 2 + Math.sin(i * 0.7) * 1.5;
-  const execs = Math.floor(3 + Math.random() * 5);
-  const fails = Math.floor(Math.random() * 2);
-  return {
-    date: daysAgo(day),
-    cost: +(base * (0.8 + Math.random() * 0.4)).toFixed(2),
-    executions: execs,
-    successes: execs - fails,
-    failures: fails,
-  };
-});
 
 export const MOCK_PERSONA_SPEND: PersonaSpend[] = [
   { personaId: id("p", 1), personaName: "PR Review Agent", personaColor: "#06b6d4", totalCost: 1.45, executionCount: 18, budgetUsd: 5.0 },
@@ -603,12 +734,11 @@ export const MOCK_PERSONA_SPEND: PersonaSpend[] = [
   { personaId: id("p", 5), personaName: "Customer Feedback Analyzer", personaColor: "#fbbf24", totalCost: 0.86, executionCount: 11, budgetUsd: 4.0 },
 ];
 
-export const MOCK_HEALTH_ISSUES: HealthIssue[] = [
-  { id: "hi-1", severity: "high", title: "High error rate on PR Review Agent", description: "Error rate exceeded 25% in the last hour. 3 of 12 executions failed due to context window overflow.", personaId: id("p", 1), personaName: "PR Review Agent", detectedAt: ago(30), status: "open", category: "error_rate" },
-  { id: "hi-2", severity: "medium", title: "Budget threshold warning", description: "Daily Standup Digest has used 62% of its $2.00 monthly budget with 3 weeks remaining.", personaId: id("p", 3), personaName: "Daily Standup Digest", detectedAt: ago(180), status: "open", category: "budget" },
-  { id: "hi-3", severity: "low", title: "Slow execution detected", description: "Customer Feedback Analyzer took 62.3s, which is 2.1x the average duration.", personaId: id("p", 5), personaName: "Customer Feedback Analyzer", detectedAt: ago(1440), status: "auto_fixed", category: "latency" },
-  { id: "hi-4", severity: "critical", title: "Worker connection lost", description: "Worker w-005 disconnected unexpectedly. Last heartbeat was 5 minutes ago.", personaId: null, personaName: null, detectedAt: ago(5), status: "resolved", category: "infrastructure" },
-];
+// Health issues live in ONE place: `MOCK_HEALTH_ISSUES` in
+// `./mock-dashboard-data` (richer shape — circuit-breaker + auto-fix fields —
+// and the same `HealthIssue` contract the API returns). `mockApi.getObservability`
+// serves that array, so the observability page, the mobile alert list and the
+// home cockpit can never disagree about how many alerts are open.
 
 // ---------------------------------------------------------------------------
 // Usage analytics
