@@ -1,9 +1,9 @@
 import type { ComponentType } from "react";
 import type { StageColor } from "@/lib/colors";
 import { safeJsonLd } from "@/lib/seo";
-import Image from "next/image";
 import Navbar from "@/components/Navbar";
 import Hero from "@/components/sections/Hero";
+import HeroAmbientIllustration from "@/components/sections/hero/HeroAmbientIllustration";
 import Footer from "@/components/sections/Footer";
 import {
   LazyDownloadCTA,
@@ -62,24 +62,7 @@ export default function Home() {
   return (
     <SectionObserverProvider sectionIds={sectionIds}>
       {/* Decorative cinematic illustration — top-left ambient layer */}
-      <div className="pointer-events-none absolute left-0 top-0 z-0 h-[360px] w-full max-w-[560px] overflow-hidden md:h-[540px] md:max-w-[720px]">
-        {/* `fill` (not width/height) — the parent's aspect ratio varies with the
-            viewport, so fixed width/height + `h-full w-full` tripped the browser's
-            "one dimension modified, not the other" aspect-ratio warning. */}
-        <Image
-          src="/imgs/illustration_cyber_cinematic.png"
-          alt=""
-          fill
-          sizes="(max-width: 768px) 560px, 720px"
-          className="object-cover opacity-[0.98] mix-blend-lighten"
-          style={{
-            maskImage: "radial-gradient(ellipse 90% 85% at 15% 25%, black 0%, rgba(0,0,0,0.5) 35%, transparent 65%)",
-            WebkitMaskImage: "radial-gradient(ellipse 90% 85% at 15% 25%, black 0%, rgba(0,0,0,0.5) 35%, transparent 65%)",
-          }}
-          priority
-          aria-hidden="true"
-        />
-      </div>
+      <HeroAmbientIllustration />
       <Navbar />
       <script
         type="application/ld+json"

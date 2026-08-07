@@ -135,8 +135,8 @@ export function clickByText(text: string): void {
   }
 }
 
-/** Athena's spoken greeting, played while the intro pop-up is shown. */
-export const INTRO_AUDIO_SRC = "/tour/intro.mp3";
+// `INTRO_AUDIO_SRC` lives in `@/lib/tour-audio` — TourProvider mounts on every
+// page and must not pull these step scripts into the above-fold chunk.
 
 // Homepage — "Meet a persona, then watch it work": what a persona is (Tools)
 // → its mind, live (Agent Mind) → how it's triggered (Orchestration) → the

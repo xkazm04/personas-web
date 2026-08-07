@@ -10,7 +10,8 @@ import {
   type ReactNode,
 } from "react";
 import { useReducedMotion } from "framer-motion";
-import { INTRO_AUDIO_SRC, type TourStep } from "@/lib/tour-script";
+import type { TourStep } from "@/lib/tour-script";
+import { INTRO_AUDIO_SRC } from "@/lib/tour-audio";
 import { useTourAudio } from "@/hooks/useTourAudio";
 import { useTourScroll } from "@/hooks/useTourScroll";
 import { useTourVolume } from "@/hooks/useTourVolume";

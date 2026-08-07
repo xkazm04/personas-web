@@ -12,15 +12,12 @@ import PrimaryCTA from "@/components/PrimaryCTA";
 import HoneycombMark from "@/components/HoneycombMark";
 import { useLiveStats } from "@/hooks/useLiveStats";
 import { useAnimationPauseRegister } from "@/hooks/useAnimationPause";
-import { connectors } from "@/data/connectors";
 import { useTranslation } from "@/i18n/useTranslation";
 import TourLauncher from "@/components/tour/TourLauncher";
 import CommandCenterIllustration from "./hero/CommandCenterIllustration";
 import HeroStatRow from "./hero/HeroStatRow";
 
-const CONNECTOR_COUNT = connectors.length;
-
-export default function HeroClient() {
+export default function HeroClient({ connectorCount }: { connectorCount: number }) {
   const { t } = useTranslation();
   const differentiators = [
     { label: t.hero.mode2, Icon: Wand2 },
@@ -39,10 +36,10 @@ export default function HeroClient() {
   const heroStats = useMemo(
     () => [
       { value: String(liveStats.totalAgents), label: t.hero.agents },
-      { value: String(CONNECTOR_COUNT), label: t.hero.connectors },
+      { value: String(connectorCount), label: t.hero.connectors },
       { value: `${liveStats.totalTemplates}+`, label: t.hero.templates },
     ],
-    [liveStats.totalAgents, liveStats.totalTemplates, t],
+    [liveStats.totalAgents, liveStats.totalTemplates, connectorCount, t],
   );
 
   // 3D tilt for the right card

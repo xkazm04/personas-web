@@ -1,11 +1,11 @@
 "use client";
 
-import { useEffect, useMemo, useRef, useState } from "react";
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { motion, useReducedMotion } from "framer-motion";
 import { Play } from "lucide-react";
 import { useTour } from "@/contexts/TourContext";
 import { useTranslation } from "@/i18n/useTranslation";
-import { TOURS_BY_ID, type TourId } from "@/lib/tour-script";
+import type { TourId } from "@/lib/tour-script";
 
 const STORAGE_KEY = "personas-tour-seen";
 
@@ -38,7 +38,15 @@ export default function TourLauncher({
   const { t } = useTranslation();
   const { active, start } = useTour();
   const reduced = useReducedMotion();
-  const steps = TOURS_BY_ID[tourId];
+
+  // The tour scripts (every tour for every page) are loaded on demand, not in
+  // the above-fold chunk: this launcher sits in the hero, and the vast
+  // majority of visitors never start a tour. Resolved on hover/focus (so the
+  // chunk is usually warm by the time the click lands) and awaited on click.
+  const loadSteps = useCallback(
+    () => import("@/lib/tour-script").then((m) => m.TOURS_BY_ID[tourId]),
+    [tourId],
+  );
 
   // Build the per-tour bridge copy from i18n. Undefined when bridgeKey is
   // unset → TourBridgeCard uses the default (features) strings. Memoized so
@@ -83,9 +91,9 @@ export default function TourLauncher({
       } catch {
         /* ignored */
       }
-      start(steps, { bridgeHref, bridge, intro });
+      void loadSteps().then((steps) => start(steps, { bridgeHref, bridge, intro }));
     }
-  }, [start, steps, bridgeHref, bridge, intro]);
+  }, [start, loadSteps, bridgeHref, bridge, intro]);
 
   if (active) return null;
 
@@ -96,13 +104,15 @@ export default function TourLauncher({
       /* localStorage may be blocked; proceed regardless. */
     }
     setSeen(true);
-    start(steps, { bridgeHref, bridge, intro });
+    void loadSteps().then((steps) => start(steps, { bridgeHref, bridge, intro }));
   };
 
   return (
     <motion.button
       type="button"
       onClick={handleStart}
+      onPointerEnter={() => void loadSteps()}
+      onFocus={() => void loadSteps()}
       whileHover={{ scale: 1.04 }}
       whileTap={{ scale: 0.97 }}
       className="group relative inline-flex items-center gap-2.5 rounded-full border border-glass-hover bg-white/3 px-5 py-2.5 text-base font-mono tracking-wide text-muted-dark transition-colors duration-300 hover:border-brand-cyan/50 hover:bg-brand-cyan/5 hover:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-cyan/40"
