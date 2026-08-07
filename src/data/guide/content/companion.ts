@@ -123,6 +123,21 @@ Open **Companion → Memory** to see everything Athena knows. The Brain Viewer l
 
 **Corrections are one click.** Each bullet in the identity view has a "That's wrong" affordance. Click it and Athena records the correction as a high-value learning signal and proposes removing the incorrect bullet in a single approval card. You approve and the wrong claim is gone.
 
+**Rebuild search index.** Memory is indexed for meaning-based search at the moment it is written, so anything that arrived another way (an import, a restored backup, a change of embedding model) has the text but is not findable by meaning. The Memory tab's **Rebuild search index** action fixes that. It is safe to run whenever you like: a second run finds nothing left to do.
+
+### Moving Athena to another computer
+
+Athena's memory is portable. **Settings → Data → Export Workspace** offers an **Athena memory** scope in two parts, and you can take either or both:
+
+- **Core self.** Her identity profile, a few of her preferences, and the list of your conversation threads with their titles and pins.
+- **Learned memory.** The facts, procedural preferences, goals, backlog items, rituals, and design decisions she has accumulated.
+
+**Conversation history deliberately stays behind.** Athena carries what she learned, not what was said. Her product knowledge stays behind too, because it rebuilds itself on the new machine the first time she starts.
+
+Because this is your personal profile, the scope only exports under a passphrase, and it is never ticked for you. Enter a passphrase of at least 8 characters to include it; run a plain full export without one and it is simply left out, with a note saying so.
+
+On the receiving machine the import **merges** rather than overwrites. Anything Athena already learned there is kept, and items she already knew are reported as skipped rather than duplicated. The identity profile is the one thing genuinely replaced, and the previous version is backed up first. Imported memories become searchable a moment later, once the index catches up in the background.
+
 ### Privacy
 
 The brain data — all five memory tiers — lives on your machine at \`~/.personas/companion-brain/\`. Nothing is stored in a cloud database. If you use the local Whisper STT and Piper TTS engines, no audio leaves your machine either.
