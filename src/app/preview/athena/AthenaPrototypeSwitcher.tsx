@@ -25,6 +25,24 @@ const PROTOTYPES: Prototype[] = [
     note: "winner — locks the page tone",
     Component: dynamic(() => import("@/components/athena/hero/variant-a")),
   },
+  {
+    id: "s2-a",
+    label: "S2·A — Migration Ledger",
+    note: "noise surfaces fly to their doctrine destinations",
+    Component: dynamic(() => import("@/components/athena/sections/two-surfaces/variant-a")),
+  },
+  {
+    id: "s2-b",
+    label: "S2·B — Never Neither",
+    note: "playable chat-open toggle, decision hops surfaces",
+    Component: dynamic(() => import("@/components/athena/sections/two-surfaces/variant-b")),
+  },
+  {
+    id: "s2-c",
+    label: "S2·C — The Collapse",
+    note: "six panels fold into the attention bar",
+    Component: dynamic(() => import("@/components/athena/sections/two-surfaces/variant-c")),
+  },
 ];
 
 export default function AthenaPrototypeSwitcher() {
