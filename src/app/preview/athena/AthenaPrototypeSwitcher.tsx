@@ -31,6 +31,12 @@ const PROTOTYPES: Prototype[] = [
     note: "voice-to-fleet sequence",
     Component: dynamic(() => import("@/components/athena/hero/variant-b")),
   },
+  {
+    id: "hero-c",
+    label: "Hero C — Summons",
+    note: "playable hold-to-talk gesture",
+    Component: dynamic(() => import("@/components/athena/hero/variant-c")),
+  },
 ];
 
 export default function AthenaPrototypeSwitcher() {
