@@ -4,6 +4,7 @@ import Image from "next/image";
 import { AnimatePresence, motion } from "framer-motion";
 import { BRAND_VAR, brandShadow, tint } from "@/lib/brand-theme";
 import { SPRING_POP } from "@/components/athena/stage/athena-tokens";
+import TravelLayer from "./TravelLayer";
 import type { Rect } from "./data";
 
 /**
@@ -23,6 +24,7 @@ const TRAILS = [
   { stiffness: 34, damping: 14, size: "h-4 w-4", opacity: 0.35 },
   { stiffness: 22, damping: 15, size: "h-2.5 w-2.5", opacity: 0.2 },
 ] as const;
+
 
 /** Athena's avatar-orb gliding across the app. Reduced motion mounts the
  *  static poster instead of the idle-loop video (resource discipline). */
@@ -47,29 +49,32 @@ export function GuideOrb({
       {/* Faint motion trail — lags the orb on softer springs */}
       {!reduced &&
         TRAILS.map((t) => (
-          <motion.span
+          <TravelLayer
             key={t.stiffness}
-            className={`pointer-events-none absolute z-10 rounded-full blur-[3px] ${t.size}`}
-            style={{
-              backgroundColor: tint("cyan", 55),
-              opacity: t.opacity,
-              translateX: "-50%",
-              translateY: "-50%",
-            }}
-            initial={false}
-            animate={{ left: `${x}%`, top: `${y}%` }}
-            transition={{ type: "spring", stiffness: t.stiffness, damping: t.damping }}
-            aria-hidden="true"
-          />
+            x={x}
+            y={y}
+            spring={{ type: "spring", stiffness: t.stiffness, damping: t.damping }}
+            className="z-10"
+          >
+            <span
+              className={`absolute left-0 top-0 -translate-x-1/2 -translate-y-1/2 rounded-full blur-[3px] ${t.size}`}
+              style={{ backgroundColor: tint("cyan", 55), opacity: t.opacity }}
+            />
+          </TravelLayer>
         ))}
-      <motion.div
-        className="pointer-events-none absolute z-20"
-        initial={false}
-        animate={{ left: `${x}%`, top: `${y}%`, scale: traveling && !reduced ? 1.12 : 1 }}
-        transition={reduced ? { duration: 0 } : GLIDE_SPRING}
-        style={{ left: `${x}%`, top: `${y}%` }}
+      <TravelLayer
+        x={x}
+        y={y}
+        spring={reduced ? { duration: 0 } : GLIDE_SPRING}
+        className="z-20"
       >
-        <div className="relative -translate-x-1/2 -translate-y-1/2">
+        <motion.div
+          className="absolute left-0 top-0 -translate-x-1/2 -translate-y-1/2"
+          initial={false}
+          animate={{ scale: traveling && !reduced ? 1.12 : 1 }}
+          transition={reduced ? { duration: 0 } : GLIDE_SPRING}
+        >
+          <div className="relative">
           {/* Halo — swells while she narrates a stop */}
           <motion.div
             className="absolute -inset-3 rounded-full blur-xl"
@@ -131,8 +136,9 @@ export function GuideOrb({
               </motion.div>
             )}
           </AnimatePresence>
-        </div>
-      </motion.div>
+          </div>
+        </motion.div>
+      </TravelLayer>
     </>
   );
 }
