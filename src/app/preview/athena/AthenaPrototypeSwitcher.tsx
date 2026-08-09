@@ -40,7 +40,30 @@ const PAGE: SectionSlot[] = [
       },
     ],
   },
-  // Next section's variants register here when built.
+  {
+    id: "shows-you",
+    title: "S3 — She shows you how",
+    variants: [
+      {
+        id: "glide",
+        label: "A — The Glide",
+        note: "orb walks a 4-stop tour of the app in place",
+        Component: dynamic(() => import("@/components/athena/sections/shows-you/variant-a")),
+      },
+      {
+        id: "first-person",
+        label: "B — First person",
+        note: "the camera travels with her, push-in per stop",
+        Component: dynamic(() => import("@/components/athena/sections/shows-you/variant-b")),
+      },
+      {
+        id: "thread",
+        label: "C — The Thread",
+        note: "one luminous route through five mini screens",
+        Component: dynamic(() => import("@/components/athena/sections/shows-you/variant-c")),
+      },
+    ],
+  },
 ];
 
 /*
