@@ -11,13 +11,14 @@
 
 /** The page's second typographic voice — blueprint/console annotations
  *  (kp's hand-font equivalent). Use for op names, eyebrows, stat whispers.
- *  text-sm floor: prototype rounds that ran text-xs were flagged unreadable. */
+ *  text-base floor — user directive: NOTHING on this page renders below
+ *  text-base (two prototype rounds were flagged unreadable). */
 export const ANNOTATION =
-  "font-mono text-sm uppercase tracking-[0.18em] text-brand-cyan/80";
+  "font-mono text-base uppercase tracking-[0.18em] text-brand-cyan/80";
 
 /** Muted variant of the annotation voice for secondary labels. */
 export const ANNOTATION_DIM =
-  "font-mono text-sm uppercase tracking-[0.18em] text-muted-dark";
+  "font-mono text-base uppercase tracking-[0.18em] text-muted-dark";
 
 /** Section display type. Sections must read at arm's length — headlines are
  *  large by default and never shrink to make room for art (user feedback). */

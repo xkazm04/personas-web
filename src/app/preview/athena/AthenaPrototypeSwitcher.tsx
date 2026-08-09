@@ -46,21 +46,9 @@ const PAGE: SectionSlot[] = [
     variants: [
       {
         id: "glide",
-        label: "A — The Glide",
-        note: "orb walks a 4-stop tour of the app in place",
+        label: "A — The Glide (developing)",
+        note: "winner in refinement — richer modules, landing title style",
         Component: dynamic(() => import("@/components/athena/sections/shows-you/variant-a")),
-      },
-      {
-        id: "first-person",
-        label: "B — First person",
-        note: "the camera travels with her, push-in per stop",
-        Component: dynamic(() => import("@/components/athena/sections/shows-you/variant-b")),
-      },
-      {
-        id: "thread",
-        label: "C — The Thread",
-        note: "one luminous route through five mini screens",
-        Component: dynamic(() => import("@/components/athena/sections/shows-you/variant-c")),
       },
     ],
   },
