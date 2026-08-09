@@ -40,36 +40,18 @@ const PAGE: SectionSlot[] = [
       },
     ],
   },
-  {
-    id: "attention",
-    title: "S2 — Your attention, protected",
-    variants: [
-      {
-        id: "focus-kept",
-        label: "A — Focus, kept",
-        note: "your screen heals as interruptions are held",
-        Component: dynamic(() => import("@/components/athena/sections/attention/variant-a")),
-      },
-      {
-        id: "nothing-slips",
-        label: "B — Nothing slips",
-        note: "buried-in-47 vs one calm card",
-        Component: dynamic(() => import("@/components/athena/sections/attention/variant-b")),
-      },
-      {
-        id: "day-drawn",
-        label: "C — A day, drawn",
-        note: "interruption storm vs three intentional moments",
-        Component: dynamic(() => import("@/components/athena/sections/attention/variant-c")),
-      },
-    ],
-  },
+  // Next section's variants register here when built.
 ];
 
+/*
+ * All variants of a slot stay MOUNTED; tabs toggle visibility only. This
+ * makes switching instant and keeps the rest of the page untouched — no
+ * unmount/remount, no height collapse, no scroll jump, no replayed
+ * reveals in neighboring sections.
+ */
 function SectionRow({ slot }: { slot: SectionSlot }) {
   const [activeId, setActiveId] = useState(slot.variants[0].id);
   const active = slot.variants.find((v) => v.id === activeId) ?? slot.variants[0];
-  const Active = active.Component;
 
   return (
     <section className="relative">
@@ -100,7 +82,11 @@ function SectionRow({ slot }: { slot: SectionSlot }) {
           <span className="ml-auto hidden sm:inline">{active.note}</span>
         </div>
       </div>
-      <Active key={active.id} />
+      {slot.variants.map((v) => (
+        <div key={v.id} className={v.id === active.id ? undefined : "hidden"}>
+          <v.Component />
+        </div>
+      ))}
     </section>
   );
 }
