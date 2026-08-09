@@ -10,13 +10,22 @@
  */
 
 /** The page's second typographic voice — blueprint/console annotations
- *  (kp's hand-font equivalent). Use for op names, eyebrows, stat whispers. */
+ *  (kp's hand-font equivalent). Use for op names, eyebrows, stat whispers.
+ *  text-sm floor: prototype rounds that ran text-xs were flagged unreadable. */
 export const ANNOTATION =
-  "font-mono text-xs uppercase tracking-[0.18em] text-brand-cyan/80";
+  "font-mono text-sm uppercase tracking-[0.18em] text-brand-cyan/80";
 
 /** Muted variant of the annotation voice for secondary labels. */
 export const ANNOTATION_DIM =
-  "font-mono text-xs uppercase tracking-[0.18em] text-muted-dark";
+  "font-mono text-sm uppercase tracking-[0.18em] text-muted-dark";
+
+/** Section display type. Sections must read at arm's length — headlines are
+ *  large by default and never shrink to make room for art (user feedback). */
+export const HEADLINE =
+  "text-4xl font-semibold tracking-tight text-foreground sm:text-5xl lg:text-6xl";
+
+/** Section sub/body line paired with HEADLINE. */
+export const SUBLINE = "text-lg leading-relaxed text-muted-dark sm:text-xl";
 
 /** Glass panel — the page's card surface (miniature product UI sits on these). */
 export const PANEL =
