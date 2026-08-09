@@ -1,10 +1,12 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { useReducedMotion } from "framer-motion";
+import { motion, useReducedMotion } from "framer-motion";
 import AthenaStage from "@/components/athena/stage/AthenaStage";
-import { ANNOTATION_DIM, HEADLINE } from "@/components/athena/stage/athena-tokens";
-import { AppWindow, CanvasScene } from "./AppChrome";
+import { SectionIntro } from "@/components/primitives";
+import { staggerContainer } from "@/lib/animations";
+import { AppWindow } from "./AppChrome";
+import { CanvasScene } from "./CanvasScene";
 import { GuideOrb, LockBrackets, ProgressRail } from "./GlideParts";
 import {
   COPY,
@@ -16,6 +18,8 @@ import {
   orbAt,
   railAt,
   statusAt,
+  statusShortAt,
+  travelingAt,
 } from "./data";
 
 /**
@@ -29,11 +33,12 @@ import {
  * the UI is never dimmed or blocked), a ≤5-word caption narrates, and the
  * segmented rail at the bottom advances. Loop.
  *
- * The only copy outside the illustration is the section title band; every
+ * The only copy outside the illustration is the SectionIntro trio; every
  * other word is an in-scene UI label, caption, or the mono status line.
  *
  * Reduced motion: no interval — the scene pins INITIAL_TICK, a
- * mid-walkthrough frame (brackets locked on stop 2, rail 2/4, caption up).
+ * mid-walkthrough frame (brackets locked on stop 2, rail 2/4, caption up,
+ * all enriched modules rendered in their finished state).
  *
  * NOTE: the AthenaStage wrapper unwraps at assembly — the /athena page
  * owns one shared stage and sections inherit it.
@@ -53,23 +58,37 @@ export default function ShowsYouGlide() {
   const orb = orbAt(phase);
   const rail = railAt(phase);
   const pulse = actionPulseAt(phase);
+  const traveling = travelingAt(phase);
 
   return (
     <AthenaStage>
-      <section className="relative flex min-h-dvh flex-col px-3 pb-4 pt-8 sm:px-6 sm:pb-6 sm:pt-10">
-        {/* Title band — the only words outside the illustration */}
-        <div className="mb-5 flex flex-wrap items-end justify-between gap-x-6 gap-y-2 sm:mb-7">
-          <h2 className={HEADLINE}>{COPY.title}</h2>
-          <p className={`hidden pb-1.5 sm:block ${ANNOTATION_DIM}`}>{COPY.eyebrow}</p>
-        </div>
+      <section className="relative flex min-h-dvh flex-col px-3 pb-4 pt-10 sm:px-6 sm:pb-6 sm:pt-14">
+        {/* Landing-style title trio — SectionIntro needs a motion parent
+            driving hidden→visible for its fadeUp variants */}
+        <motion.div
+          initial="hidden"
+          whileInView="visible"
+          viewport={{ once: true, amount: 0.4 }}
+          variants={staggerContainer}
+        >
+          <SectionIntro
+            eyebrow={COPY.intro.eyebrow}
+            heading={COPY.intro.heading}
+            gradient={COPY.intro.gradient}
+            className="mb-6 sm:mb-8"
+          />
+        </motion.div>
 
         {/* The illustration — a full-height app the walkthrough plays inside */}
         <AppWindow
           footer={
             <>
               <ProgressRail rail={rail} reduced={reduced} />
-              <span className="shrink-0 whitespace-nowrap font-mono text-xs uppercase tracking-widest text-muted-dark sm:text-sm">
+              <span className="hidden shrink-0 whitespace-nowrap font-mono text-base uppercase tracking-widest text-muted-dark sm:block">
                 {statusAt(phase)}
+              </span>
+              <span className="shrink-0 whitespace-nowrap font-mono text-base uppercase tracking-widest text-muted-dark sm:hidden">
+                {statusShortAt(phase)}
               </span>
             </>
           }
@@ -81,6 +100,7 @@ export default function ShowsYouGlide() {
             y={orb.y}
             caption={locked?.caption ?? null}
             locked={locked !== null}
+            traveling={traveling}
             reduced={reduced}
           />
         </AppWindow>
