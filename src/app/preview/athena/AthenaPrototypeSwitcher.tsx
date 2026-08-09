@@ -20,22 +20,10 @@ type Prototype = {
 
 const PROTOTYPES: Prototype[] = [
   {
-    id: "hero-a",
-    label: "Hero A — Presence",
-    note: "orb-first cinematic",
+    id: "hero",
+    label: "Hero ✓ Presence",
+    note: "winner — locks the page tone",
     Component: dynamic(() => import("@/components/athena/hero/variant-a")),
-  },
-  {
-    id: "hero-b",
-    label: "Hero B — Conductor",
-    note: "voice-to-fleet sequence",
-    Component: dynamic(() => import("@/components/athena/hero/variant-b")),
-  },
-  {
-    id: "hero-c",
-    label: "Hero C — Summons",
-    note: "playable hold-to-talk gesture",
-    Component: dynamic(() => import("@/components/athena/hero/variant-c")),
   },
 ];
 
