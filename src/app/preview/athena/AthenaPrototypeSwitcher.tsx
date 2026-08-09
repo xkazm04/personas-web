@@ -40,7 +40,30 @@ const PAGE: SectionSlot[] = [
       },
     ],
   },
-  // Section 2 "Two surfaces" round 2 (benefit-first) registers here when built.
+  {
+    id: "attention",
+    title: "S2 — Your attention, protected",
+    variants: [
+      {
+        id: "focus-kept",
+        label: "A — Focus, kept",
+        note: "your screen heals as interruptions are held",
+        Component: dynamic(() => import("@/components/athena/sections/attention/variant-a")),
+      },
+      {
+        id: "nothing-slips",
+        label: "B — Nothing slips",
+        note: "buried-in-47 vs one calm card",
+        Component: dynamic(() => import("@/components/athena/sections/attention/variant-b")),
+      },
+      {
+        id: "day-drawn",
+        label: "C — A day, drawn",
+        note: "interruption storm vs three intentional moments",
+        Component: dynamic(() => import("@/components/athena/sections/attention/variant-c")),
+      },
+    ],
+  },
 ];
 
 function SectionRow({ slot }: { slot: SectionSlot }) {
