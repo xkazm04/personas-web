@@ -4,6 +4,7 @@ import Image from "next/image";
 import { AnimatePresence, motion } from "framer-motion";
 import { BRAND_VAR, brandShadow, tint } from "@/lib/brand-theme";
 import { SPRING_POP } from "@/components/athena/stage/athena-tokens";
+import { useAvatarPlayback } from "@/components/athena/stage/useAvatarPlayback";
 import TravelLayer from "./TravelLayer";
 import type { Rect } from "./data";
 
@@ -27,7 +28,10 @@ const TRAILS = [
 
 
 /** Athena's avatar-orb gliding across the app. Reduced motion mounts the
- *  static poster instead of the idle-loop video (resource discipline). */
+ *  static poster instead of the idle-loop video (resource discipline), and
+ *  when the video does mount `useAvatarPlayback` keeps it paused until this
+ *  section is on screen — the hero orb runs the same clip, and only one of
+ *  the two ever decodes. */
 export function GuideOrb({
   x,
   y,
@@ -44,6 +48,7 @@ export function GuideOrb({
   reduced: boolean;
 }) {
   const captionOnLeft = x > 55;
+  const avatarRef = useAvatarPlayback(!reduced);
   return (
     <>
       {/* Faint motion trail — lags the orb on softer springs */}
@@ -108,13 +113,10 @@ export function GuideOrb({
               />
             ) : (
               <video
+                ref={avatarRef}
                 src="/athena/athena_idle_loop.mp4"
                 poster="/athena/athena_baseline.jpg"
-                muted
-                loop
-                autoPlay
-                playsInline
-                preload="auto"
+                muted loop playsInline preload="metadata"
                 className="absolute inset-0 h-full w-full object-cover"
               />
             )}

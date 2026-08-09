@@ -4,6 +4,7 @@ import { useId, useRef, useState } from "react";
 import { motion, useReducedMotion, AnimatePresence } from "framer-motion";
 import { BRAND_VAR, brandShadow, tint } from "@/lib/brand-theme";
 import { ANNOTATION } from "@/components/athena/stage/athena-tokens";
+import { useAvatarPlayback } from "@/components/athena/stage/useAvatarPlayback";
 import { COPY } from "./data";
 import {
   SIZE, C, GLOW_R, GUIDE_R, DOT_R, ACK_R, ORB_PCT, DOTS, dotTrackPath, spinOrigin,
@@ -18,12 +19,16 @@ import {
  * Continuous motion (glow breathing, guide-ring spin, dot pulses) gates on
  * `prefers-reduced-motion` at the `animate` prop, keeping markup identical.
  * Exception: the looping <video> never mounts under reduced motion — the
- * static poster renders instead.
+ * static poster renders instead. When it does mount, `useAvatarPlayback`
+ * owns its decode: it plays only while on screen and while the tab is
+ * foregrounded, so the hero orb and the walkthrough guide orb never decode
+ * at the same time.
  */
 export default function OrbScene() {
   const reduced = useReducedMotion() ?? false;
   const uid = useId();
   const cyan = BRAND_VAR.cyan;
+  const avatarRef = useAvatarPlayback(!reduced);
 
   // One-shot acknowledge: each trigger bumps the tick (keys a fresh pulse);
   // `busy` throttles retriggers while a pulse is mid-flight.
@@ -105,9 +110,10 @@ export default function OrbScene() {
           <img src="/athena/athena_baseline.jpg" alt={COPY.avatarAlt} className="h-full w-full object-cover" />
         ) : (
           <video
+            ref={avatarRef}
             src="/athena/athena_idle_loop.mp4"
             poster="/athena/athena_baseline.jpg"
-            muted loop autoPlay playsInline preload="auto"
+            muted loop playsInline preload="auto"
             aria-label={COPY.avatarAlt}
             className="h-full w-full object-cover"
           />
