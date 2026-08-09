@@ -1,4 +1,3 @@
-// PROTOTYPE COPY — extract to src/i18n at assembly
 /**
  * Data + clock for "The Glide" — section 3 ("She shows you how"), variant A.
  * Modeled on dev-tools-grid/athenaFleetData.ts: one deterministic CYCLE,
@@ -10,68 +9,98 @@
  * onto the exact control, the control glows (the rest of the UI is never
  * dimmed or blocked), a ≤5-word caption narrates, and a segmented progress
  * rail advances. The final stop is a real action button. Loop.
+ *
+ * Geometry lives in `./layout` (WIDE + COMPACT rect sets); all wording lives
+ * in `./copy` under the PROTOTYPE COPY header. Both are re-exported here so
+ * the scene has a single import surface.
  */
 
-import {
-  Activity,
-  Bell,
-  Bot,
-  Clock3,
-  FileText,
-  GitBranch,
-  Home,
-  Inbox,
-  KeyRound,
-  LayoutTemplate,
-  MessagesSquare,
-  Newspaper,
-  Pencil,
-  Plug,
-  Search,
-  Settings,
-  Sparkles,
-  type LucideIcon,
-} from "lucide-react";
+import type { Point, Rect } from "./layout";
+
+export { COPY } from "./copy";
+export { WIDE, COMPACT, WIDE_ONLY, layoutFor } from "./layout";
+export type { Point, Rect, SceneLayout } from "./layout";
 
 export const CYCLE = 24;
 export const TICK_MS = 1100;
 /** Reduced-motion pinned frame: mid-walkthrough — brackets locked on stop 2
- *  (Slack connector), rail at 2/4, caption visible. The story in one image. */
+ *  (Slack connector, mid-handshake), rail at 2/4, caption visible. Every
+ *  enriched module renders in its finished state. The story in one image. */
 export const INITIAL_TICK = 9;
 
 export type StopId = "template" | "connect" | "trigger" | "action";
-
-/** Percent coordinates within the app's main canvas. */
-export interface Rect {
-  x: number;
-  y: number;
-  w: number;
-  h: number;
-}
 
 export interface GlideStop {
   id: StopId;
   /** ≤5-word caption narrated beside the orb while locked. */
   caption: string;
-  /** The control the brackets lock onto. */
+  /** The control the brackets lock onto (md+ / <md). */
   rect: Rect;
-  /** Where the orb hovers while narrating this stop. */
-  orb: { x: number; y: number };
+  rectCompact: Rect;
+  /** Where the orb hovers while narrating this stop (md+ / <md). */
+  orb: Point;
+  orbCompact: Point;
   arrive: number;
   depart: number;
 }
 
 /** The walkthrough route — pick a template → connect a tool → set the
- *  trigger → end on a real action button. */
+ *  trigger → end on a real action button. Rects mirror `./layout`. */
 export const STOPS: GlideStop[] = [
-  { id: "template", caption: "pick a starting point", rect: { x: 5, y: 10, w: 36, h: 24 }, orb: { x: 48, y: 22 }, arrive: 2, depart: 7 },
-  { id: "connect", caption: "connect your Slack", rect: { x: 5, y: 47, w: 33, h: 12 }, orb: { x: 45, y: 53 }, arrive: 7, depart: 12 },
-  { id: "trigger", caption: "set the trigger", rect: { x: 5, y: 70, w: 49, h: 12 }, orb: { x: 61, y: 76 }, arrive: 12, depart: 17 },
-  { id: "action", caption: "one click — it's live", rect: { x: 63, y: 84, w: 31, h: 11 }, orb: { x: 57, y: 89 }, arrive: 17, depart: 22 },
+  {
+    id: "template",
+    caption: "pick a starting point",
+    rect: { x: 3.5, y: 16.5, w: 27, h: 26 },
+    rectCompact: { x: 4, y: 15.5, w: 92, h: 22 },
+    orb: { x: 61, y: 29 },
+    orbCompact: { x: 64, y: 31 },
+    arrive: 2,
+    depart: 7,
+  },
+  {
+    id: "connect",
+    caption: "connect your Slack",
+    rect: { x: 5.5, y: 51.5, w: 51.5, h: 6 },
+    rectCompact: { x: 6, y: 47.5, w: 88, h: 6 },
+    orb: { x: 61, y: 48 },
+    orbCompact: { x: 64, y: 56 },
+    arrive: 7,
+    depart: 12,
+  },
+  {
+    id: "trigger",
+    caption: "set the trigger",
+    rect: { x: 3.5, y: 80, w: 55.5, h: 16 },
+    rectCompact: { x: 4, y: 70, w: 92, h: 15 },
+    orb: { x: 61, y: 76 },
+    orbCompact: { x: 64, y: 82.5 },
+    arrive: 12,
+    depart: 17,
+  },
+  {
+    id: "action",
+    caption: "one click — it's live",
+    rect: { x: 63.5, y: 80, w: 33, h: 13 },
+    rectCompact: { x: 4, y: 88.5, w: 92, h: 8 },
+    orb: { x: 61, y: 86.5 },
+    orbCompact: { x: 50, y: 78.4 },
+    arrive: 17,
+    depart: 22,
+  },
 ];
 
 /** Where the orb rests before/after a walkthrough — upper right, off the UI. */
-export const DOCK = { x: 88, y: 6 };
+export const DOCK: Point = { x: 88, y: 5.5 };
+
+/** Target rect for a stop at the current breakpoint. */
+export function rectFor(stop: GlideStop, compact: boolean): Rect {
+  return compact ? stop.rectCompact : stop.rect;
+}
+
+/** Same, by stop id — how the scene places its four target controls. */
+export function rectOf(id: StopId, compact: boolean): Rect {
+  return rectFor(STOPS.find((s) => s.id === id) ?? STOPS[0], compact);
+}
 
 /** The stop the orb is working (arrived, not yet departed) at a phase tick. */
 export function activeStopAt(phase: number): GlideStop | null {
@@ -86,8 +115,10 @@ export function lockedStopAt(phase: number): GlideStop | null {
 }
 
 /** Orb position at a phase tick — at the active stop, else docked. */
-export function orbAt(phase: number): { x: number; y: number } {
-  return activeStopAt(phase)?.orb ?? DOCK;
+export function orbAt(phase: number, compact: boolean): Point {
+  const stop = activeStopAt(phase);
+  if (!stop) return DOCK;
+  return compact ? stop.orbCompact : stop.orb;
 }
 
 /** True on the arrival tick — she is mid-glide / just landing, not locked.
@@ -108,6 +139,17 @@ export function actionPulseAt(phase: number): boolean {
   return phase >= last.arrive + 1 && phase < last.depart;
 }
 
+export type ConnectState = "connect" | "connecting" | "connected";
+
+/** The Slack row lives its own little life: an unconnected tool before she
+ *  gets there, a handshake while she narrates it, connected ever after. */
+export function slackStateAt(phase: number): ConnectState {
+  const stop = STOPS[1];
+  if (phase < stop.arrive + 1) return "connect";
+  if (phase < stop.depart) return "connecting";
+  return "connected";
+}
+
 /** Mono status line — corner console readout (≤5 words). */
 export function statusAt(phase: number): string {
   if (phase < STOPS[0].arrive) return "guided · walkthrough starting";
@@ -123,55 +165,10 @@ export function statusShortAt(phase: number): string {
   return `step ${Math.max(railAt(phase).filter(Boolean).length, 1)}/${STOPS.length}`;
 }
 
-/** Decorative activity chart — one deterministic week of run counts. */
+/** Monitoring sparkline — one deterministic week of run counts (SVG y-axis,
+ *  so a falling number is a rising line). */
 export const CHART_POINTS = [20, 16, 18, 10, 13, 6, 9, 3] as const;
-
-/** All words in the scene — section intro + in-scene UI labels only. */
-export const COPY = {
-  intro: {
-    eyebrow: "Guided walkthroughs",
-    heading: "She shows you",
-    gradient: "how",
-  },
-  chrome: {
-    appName: "Personas",
-    search: "Search…",
-    searchIcon: Search as LucideIcon,
-    bellIcon: Bell as LucideIcon,
-    nav: [
-      { label: "Home", icon: Home as LucideIcon },
-      { label: "Agents", icon: Bot as LucideIcon },
-      { label: "Templates", icon: LayoutTemplate as LucideIcon },
-      { label: "Connectors", icon: Plug as LucideIcon },
-      { label: "Vault", icon: KeyRound as LucideIcon },
-      { label: "Settings", icon: Settings as LucideIcon },
-    ],
-    navActive: 2,
-    usageLabel: "runs today",
-    usageValue: "18 / 25",
-    usagePct: 72,
-    newAgent: "New agent",
-  },
-  canvas: {
-    templatesLabel: "Templates",
-    template: { icon: Newspaper as LucideIcon, title: "Daily digest", meta: "summarize · post · 9:00", pill: "popular" },
-    templateAlt: { icon: Inbox as LucideIcon, title: "Inbox triage", meta: "label · draft · archive", pill: "new" },
-    connectLabel: "Connect a tool",
-    slack: { icon: MessagesSquare as LucideIcon, name: "Slack", state: "connect" },
-    chips: [
-      { icon: GitBranch as LucideIcon, name: "GitHub", state: "linked" },
-      { icon: FileText as LucideIcon, name: "Notion", state: "linked" },
-    ],
-    triggerLabel: "Trigger",
-    triggerIcon: Clock3 as LucideIcon,
-    triggerValue: "Every morning · 9:00",
-    triggerHint: "edit",
-    triggerHintIcon: Pencil as LucideIcon,
-    activityLabel: "Monitoring",
-    activityIcon: Activity as LucideIcon,
-    activityStat: "24 runs",
-    activityPill: "live",
-    actionIcon: Sparkles as LucideIcon,
-    action: "Create agent",
-  },
-} as const;
+/** Monitoring bar series — the same week as discrete volume. */
+export const BAR_POINTS = [45, 70, 55, 85, 60, 95, 72] as const;
+/** Template-card health strip — per-day success, as bar heights. */
+export const HEALTH_BARS = [55, 80, 62, 90, 70, 96, 84] as const;

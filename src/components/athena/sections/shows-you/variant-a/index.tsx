@@ -3,7 +3,9 @@
 import { useEffect, useState } from "react";
 import { motion, useReducedMotion } from "framer-motion";
 import AthenaStage from "@/components/athena/stage/AthenaStage";
+import { ANNOTATION_DIM } from "@/components/athena/stage/athena-tokens";
 import { SectionIntro } from "@/components/primitives";
+import { useIsMobile } from "@/hooks/useIsMobile";
 import { staggerContainer } from "@/lib/animations";
 import { AppWindow } from "./AppChrome";
 import { CanvasScene } from "./CanvasScene";
@@ -17,6 +19,8 @@ import {
   lockedStopAt,
   orbAt,
   railAt,
+  rectFor,
+  slackStateAt,
   statusAt,
   statusShortAt,
   travelingAt,
@@ -33,6 +37,11 @@ import {
  * the UI is never dimmed or blocked), a ≤5-word caption narrates, and the
  * segmented rail at the bottom advances. Loop.
  *
+ * The app around her is real product UI: brand connector glyphs, template
+ * cards with health strips, a connector list mid-handshake, a weekday
+ * scheduler, a runs table and a monitoring deck — so a visitor recognises
+ * the screen at a glance instead of reading labels in boxes.
+ *
  * The only copy outside the illustration is the SectionIntro trio; every
  * other word is an in-scene UI label, caption, or the mono status line.
  *
@@ -45,6 +54,7 @@ import {
  */
 export default function ShowsYouGlide() {
   const reduced = useReducedMotion() ?? false;
+  const compact = useIsMobile();
   const [tick, setTick] = useState(INITIAL_TICK);
 
   useEffect(() => {
@@ -55,7 +65,7 @@ export default function ShowsYouGlide() {
 
   const phase = tick % CYCLE;
   const locked = lockedStopAt(phase);
-  const orb = orbAt(phase);
+  const orb = orbAt(phase, compact);
   const rail = railAt(phase);
   const pulse = actionPulseAt(phase);
   const traveling = travelingAt(phase);
@@ -84,17 +94,25 @@ export default function ShowsYouGlide() {
           footer={
             <>
               <ProgressRail rail={rail} reduced={reduced} />
-              <span className="hidden shrink-0 whitespace-nowrap font-mono text-base uppercase tracking-widest text-muted-dark sm:block">
+              <span className={`hidden shrink-0 whitespace-nowrap sm:block ${ANNOTATION_DIM}`}>
                 {statusAt(phase)}
               </span>
-              <span className="shrink-0 whitespace-nowrap font-mono text-base uppercase tracking-widest text-muted-dark sm:hidden">
+              <span className={`shrink-0 whitespace-nowrap sm:hidden ${ANNOTATION_DIM}`}>
                 {statusShortAt(phase)}
               </span>
             </>
           }
         >
-          <CanvasScene lockedId={locked?.id ?? null} pulse={pulse} reduced={reduced} />
-          {locked && <LockBrackets key={locked.id} rect={locked.rect} reduced={reduced} />}
+          <CanvasScene
+            lockedId={locked?.id ?? null}
+            pulse={pulse}
+            slackState={slackStateAt(phase)}
+            compact={compact}
+            reduced={reduced}
+          />
+          {locked && (
+            <LockBrackets key={locked.id} rect={rectFor(locked, compact)} reduced={reduced} />
+          )}
           <GuideOrb
             x={orb.x}
             y={orb.y}
