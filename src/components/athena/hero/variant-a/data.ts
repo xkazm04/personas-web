@@ -23,8 +23,13 @@ export const COPY = {
     "A strategist, not a cheerful assistant — direct, opinionated, warm without performing. “Speed is not your job. Quality is.”",
   ctaPrimary: "See her work",
   ctaSecondary: "Download Personas",
-  statWhisper:
-    "Constitution revision 51 · 49 gated operations · runs entirely local",
+  // Deliberately NOT "constitution revision 51 · 49 gated operations": those
+  // are internal maturity metrics, not visitor value. Both halves here are
+  // literally true — she runs on-device, and the approval gate plus the
+  // autonomy dial are the user's to set. Avoid absolutes like "nothing
+  // happens without your say-so": on the default setting a single spoken
+  // request can dispatch work with no click in between.
+  statWhisper: "Runs entirely on your machine · you decide how far she goes",
   avatarAlt: "Athena, the Personas companion",
   /** The one signature interaction — hover/tap/Enter on the orb. */
   orbAria: "Athena — press Enter and she acknowledges you",
