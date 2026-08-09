@@ -1,7 +1,8 @@
 "use client";
 
 import { useId, useRef, useState } from "react";
-import { motion, useReducedMotion, AnimatePresence } from "framer-motion";
+import { motion, AnimatePresence } from "framer-motion";
+import { useStillMotion } from "@/components/athena/stage/useStillMotion";
 import { BRAND_VAR, brandShadow, tint } from "@/lib/brand-theme";
 import { ANNOTATION } from "@/components/athena/stage/athena-tokens";
 import { useAvatarPlayback } from "@/components/athena/stage/useAvatarPlayback";
@@ -25,7 +26,7 @@ import {
  * at the same time.
  */
 export default function OrbScene() {
-  const reduced = useReducedMotion() ?? false;
+  const reduced = useStillMotion();
   const uid = useId();
   const cyan = BRAND_VAR.cyan;
   const avatarRef = useAvatarPlayback(!reduced);

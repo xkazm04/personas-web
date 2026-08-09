@@ -1,6 +1,7 @@
 "use client";
 
-import { motion, useReducedMotion } from "framer-motion";
+import { motion } from "framer-motion";
+import { useStillMotion } from "@/components/athena/stage/useStillMotion";
 import { BRAND_VAR, brandShadow } from "@/lib/brand-theme";
 import SectionHeading from "@/components/SectionHeading";
 import GradientText from "@/components/GradientText";
@@ -25,7 +26,7 @@ import { CalloutOverlay, CalloutList } from "./Callouts";
  * props (markup identical); the looping <video> swaps for its poster.
  */
 export default function AthenaPresenceHero() {
-  const reduced = useReducedMotion() ?? false;
+  const reduced = useStillMotion();
 
   /** Spring pop-in with a slight settle-rotation; replays on re-entry. */
   const pop = (delay: number, rotate = -2) =>

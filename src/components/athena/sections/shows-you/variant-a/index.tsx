@@ -1,7 +1,8 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
-import { motion, useInView, useReducedMotion } from "framer-motion";
+import { motion, useInView } from "framer-motion";
+import { useStillMotion } from "@/components/athena/stage/useStillMotion";
 import AthenaStage from "@/components/athena/stage/AthenaStage";
 import { ANNOTATION_DIM } from "@/components/athena/stage/athena-tokens";
 import { SectionIntro } from "@/components/primitives";
@@ -64,7 +65,7 @@ import {
 const START_TICK = 0;
 
 export default function ShowsYouGlide() {
-  const reduced = useReducedMotion() ?? false;
+  const reduced = useStillMotion();
   const compact = useIsMobile();
   const sectionRef = useRef<HTMLElement | null>(null);
   const inView = useInView(sectionRef, { amount: 0.4 });

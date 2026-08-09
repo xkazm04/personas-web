@@ -1,6 +1,7 @@
 "use client";
 
-import { motion, useReducedMotion } from "framer-motion";
+import { motion } from "framer-motion";
+import { useStillMotion } from "@/components/athena/stage/useStillMotion";
 import { BRAND_VAR, tint } from "@/lib/brand-theme";
 import { ANNOTATION, ANNOTATION_DIM, REPLAY, SPRING_POP } from "@/components/athena/stage/athena-tokens";
 import { CALLOUTS } from "./data";
@@ -21,7 +22,7 @@ import { STAGE_W, STAGE_H, CALLOUT_GEOMETRY } from "./presence-geometry";
  */
 
 export function CalloutOverlay() {
-  const reduced = useReducedMotion() ?? false;
+  const reduced = useStillMotion();
   const cyan = BRAND_VAR.cyan;
 
   return (
@@ -79,7 +80,7 @@ export function CalloutOverlay() {
  *  Label and fact stack rather than sharing a line: at the text-base floor
  *  a single row cannot hold both at 375px without wrapping mid-phrase. */
 export function CalloutList({ ariaLabel }: { ariaLabel: string }) {
-  const reduced = useReducedMotion() ?? false;
+  const reduced = useStillMotion();
 
   return (
     <ul aria-label={ariaLabel} className="mx-auto mt-6 grid w-full max-w-md grid-cols-1 gap-4 px-6 lg:hidden">

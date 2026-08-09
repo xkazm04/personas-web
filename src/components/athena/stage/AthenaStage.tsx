@@ -1,7 +1,8 @@
 "use client";
 
 import { useId, type ReactNode } from "react";
-import { motion, useReducedMotion } from "framer-motion";
+import { motion } from "framer-motion";
+import { useStillMotion } from "./useStillMotion";
 import { BRAND_VAR, tint } from "@/lib/brand-theme";
 
 /*
@@ -33,7 +34,7 @@ export default function AthenaStage({
   children: ReactNode;
   className?: string;
 }) {
-  const reduced = useReducedMotion() ?? false;
+  const reduced = useStillMotion();
   const uid = useId();
 
   return (
