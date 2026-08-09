@@ -7,6 +7,11 @@
 // TYPE FLOOR: nothing on the /athena page renders below `text-base`. Copy
 // here is written to be readable at 16px in a ~180px blueprint column —
 // keep labels short and facts to ~6 words. Never shrink type to fit.
+//
+// VISITOR VOICE: every string a visitor or a screen reader can reach names
+// what she DOES FOR THEM, never how she is built. No internal vocabulary
+// ("orb", op names, pixel/ms thresholds) survives into user-facing or aria
+// text — code identifiers and comments below may still use it.
 
 export const COPY = {
   eyebrow: "Your chief of staff",
@@ -22,21 +27,24 @@ export const COPY = {
     "Constitution revision 51 · 49 gated operations · runs entirely local",
   avatarAlt: "Athena, the Personas companion",
   /** The one signature interaction — hover/tap/Enter on the orb. */
-  orbAria: "Athena's orb — press Enter and she acknowledges you",
+  orbAria: "Athena — press Enter and she acknowledges you",
   acknowledgeLine: "I'm listening.",
-  calloutsAria: "Orb specification callouts",
+  calloutsAria: "What Athena does for you",
 } as const;
 
 /**
- * Blueprint annotation callouts — real spec-sheet facts, each tied by a
- * leader line to the exact part of the orb it describes. `id` keys into
+ * Blueprint annotation callouts — each names what the visitor GETS, tied by
+ * a leader line to the part of the orb that delivers it. Keep the benefit
+ * framing: earlier prototypes were rejected for reading as a spec sheet, so
+ * gestures a visitor performs ("hold to speak", the summon shortcut) stay,
+ * while internal thresholds and counts do not. `id` keys into
  * CALLOUT_GEOMETRY (same order, same ids) in presence-geometry.ts.
  */
 export const CALLOUTS = [
-  { id: "talk", label: "Push-to-talk", fact: "hold 220ms → speak" },
-  { id: "tasks", label: "Task ring", fact: "5 dots · one per background task" },
-  { id: "drag", label: "Reposition", fact: "drag ≥6px → relocate" },
-  { id: "summon", label: "Summon", fact: "Cmd/Ctrl+Shift+A" },
+  { id: "talk", label: "Talk to her", fact: "Hold to speak — no typing" },
+  { id: "tasks", label: "At a glance", fact: "See what she's working on" },
+  { id: "drag", label: "Your desktop", fact: "Drag her where you work" },
+  { id: "summon", label: "Always ready", fact: "Cmd/Ctrl+Shift+A, from any app" },
 ] as const;
 
 export type CalloutId = (typeof CALLOUTS)[number]["id"];

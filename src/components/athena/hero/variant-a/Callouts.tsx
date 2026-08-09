@@ -7,9 +7,9 @@ import { CALLOUTS } from "./data";
 import { STAGE_W, STAGE_H, CALLOUT_GEOMETRY } from "./presence-geometry";
 
 /**
- * Blueprint annotation layer — 3-4 spec-sheet callouts around the orb,
- * each tied by a thin SVG leader line to the exact part of the being it
- * describes. Leader lines draw in (pathLength) and labels pop with the
+ * Blueprint annotation layer — four benefit callouts around the orb, each
+ * tied by a thin SVG leader line to the part of the being that delivers
+ * it. Leader lines draw in (pathLength) and labels pop with the
  * shared spring + a slight settle-rotation, staggered; everything replays
  * on scroll re-entry (shared REPLAY config).
  *

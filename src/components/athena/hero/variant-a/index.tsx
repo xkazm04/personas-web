@@ -15,7 +15,7 @@ import { CalloutOverlay, CalloutList } from "./Callouts";
  *
  * Cinematic and orb-first on the shared AthenaStage canvas: the real
  * avatar is the undisputed centerpiece, now surrounded by blueprint
- * annotation callouts — real spec-sheet facts wired to the orb by thin
+ * annotation callouts — one visitor benefit each, wired to the orb by thin
  * leader lines that draw in with staggered springs and replay on every
  * scroll re-entry. One signature interaction: hover/tap/Enter and she
  * acknowledges you (ring pulse + "I'm listening."). Typography owns a
