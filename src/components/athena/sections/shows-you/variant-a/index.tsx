@@ -1,7 +1,7 @@
 "use client";
 
-import { useEffect, useState } from "react";
-import { motion, useReducedMotion } from "framer-motion";
+import { useEffect, useRef, useState } from "react";
+import { motion, useInView, useReducedMotion } from "framer-motion";
 import AthenaStage from "@/components/athena/stage/AthenaStage";
 import { ANNOTATION_DIM } from "@/components/athena/stage/athena-tokens";
 import { SectionIntro } from "@/components/primitives";
@@ -45,23 +45,44 @@ import {
  * The only copy outside the illustration is the SectionIntro trio; every
  * other word is an in-scene UI label, caption, or the mono status line.
  *
+ * The clock only runs while the section is on screen (useInView, 40% of
+ * the section visible) and the route rewinds to START_TICK on every entry,
+ * so nobody joins the story mid-sentence and nothing ticks off-screen.
+ *
  * Reduced motion: no interval — the scene pins INITIAL_TICK, a
  * mid-walkthrough frame (brackets locked on stop 2, rail 2/4, caption up,
- * all enriched modules rendered in their finished state).
+ * all enriched modules rendered in their finished state). It deliberately
+ * does NOT rewind: the still frame tells the whole story at once.
  *
  * NOTE: the AthenaStage wrapper unwraps at assembly — the /athena page
  * owns one shared stage and sections inherit it.
  */
+
+/** Phase 0 — the true top of the route: orb docked off the UI, rail empty,
+ *  nothing locked, status "walkthrough starting". Stop 1 arrives two ticks
+ *  later, so the establishing glide from the dock is part of the story. */
+const START_TICK = 0;
+
 export default function ShowsYouGlide() {
   const reduced = useReducedMotion() ?? false;
   const compact = useIsMobile();
+  const sectionRef = useRef<HTMLElement | null>(null);
+  const inView = useInView(sectionRef, { amount: 0.4 });
   const [tick, setTick] = useState(INITIAL_TICK);
 
+  // Rewind to step 1 whenever the section (re-)enters view. Render-time
+  // prev-state pattern — React 19 forbids sync setState in a useEffect body.
+  const [prevInView, setPrevInView] = useState(inView);
+  if (inView !== prevInView) {
+    setPrevInView(inView);
+    if (inView && !reduced) setTick(START_TICK);
+  }
+
   useEffect(() => {
-    if (reduced) return;
+    if (reduced || !inView) return;
     const id = setInterval(() => setTick((t) => t + 1), TICK_MS);
     return () => clearInterval(id);
-  }, [reduced]);
+  }, [reduced, inView]);
 
   const phase = tick % CYCLE;
   const locked = lockedStopAt(phase);
@@ -72,7 +93,10 @@ export default function ShowsYouGlide() {
 
   return (
     <AthenaStage>
-      <section className="relative flex min-h-dvh flex-col px-3 pb-4 pt-10 sm:px-6 sm:pb-6 sm:pt-14">
+      <section
+        ref={sectionRef}
+        className="relative flex min-h-dvh flex-col px-3 pb-4 pt-10 sm:px-6 sm:pb-6 sm:pt-14"
+      >
         {/* Landing-style title trio — SectionIntro needs a motion parent
             driving hidden→visible for its fadeUp variants */}
         <motion.div
