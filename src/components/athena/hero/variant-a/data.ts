@@ -3,10 +3,16 @@
 // All user-facing strings for the "Presence" hero (variant A, round 2:
 // schematic-of-a-being). Facts are verified against the desktop repo;
 // keep them verbatim when extracting.
+//
+// TYPE FLOOR: nothing on the /athena page renders below `text-base`. Copy
+// here is written to be readable at 16px in a ~180px blueprint column —
+// keep labels short and facts to ~6 words. Never shrink type to fit.
 
 export const COPY = {
   eyebrow: "Your chief of staff",
-  headline: "Meet Athena",
+  /** Landing title idiom — plain lead-in + gradient word (see SectionIntro). */
+  headline: "Meet",
+  headlineGradient: "Athena",
   tagline: "She says nothing when nothing needs saying.",
   persona:
     "A strategist, not a cheerful assistant — direct, opinionated, warm without performing. “Speed is not your job. Quality is.”",

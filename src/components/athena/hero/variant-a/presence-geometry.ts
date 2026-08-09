@@ -4,10 +4,14 @@
  * Two coordinate spaces:
  *  1. Orb-local — a 640×640 SVG viewBox holding the avatar disc, breathing
  *     glow, guide ring, task-dot arc, and the acknowledge pulse ring.
- *  2. Stage — an 880×640 viewBox that overlays the whole hero art block on
- *     md+ screens. The orb square sits centered, so orb center = (440, 320)
+ *  2. Stage — a 1024×640 viewBox that overlays the whole hero art block on
+ *     lg+ screens. The orb square sits centered, so orb center = (512, 320)
  *     and radii are shared between both spaces (same unit scale). Blueprint
  *     callout leader lines live here.
+ *
+ * The stage is wider than the orb square (1024 vs 640) purely to buy the
+ * blueprint labels a readable column: nothing on this page renders below
+ * text-base, and 16px mono at 0.18em tracking needs ~180px per side.
  */
 
 export const SIZE = 640;
@@ -54,18 +58,21 @@ export const spinOrigin = {
 } as const;
 
 /* ------------------------------------------------------------------ */
-/* Stage space — blueprint callout leader lines (md+ overlay)          */
+/* Stage space — blueprint callout leader lines (lg+ overlay)          */
 /* ------------------------------------------------------------------ */
 
-export const STAGE_W = 880;
+export const STAGE_W = 1024;
 export const STAGE_H = 640;
 export const STAGE_CX = STAGE_W / 2;
 export const STAGE_CY = STAGE_H / 2;
 
 const ANCHOR_R = ORB_R + 10; // leader start, just off the disc edge
 const ELBOW_R = ORB_R + 56; // radial run before the horizontal elbow
-const RUN_X = 285; // |x - CX| where the horizontal segment ends
-const LABEL_X = 293; // |x - CX| where the HTML label column starts
+const RUN_X = 322; // |x - CX| where the horizontal segment ends
+/** |x - CX| where the HTML label column starts. The column then runs to the
+ *  stage edge (STAGE_W/2 - LABEL_X = 182 units), which is the readable width
+ *  budget for a text-base blueprint label. Keep it clear of GLOW_R (270). */
+const LABEL_X = 330;
 
 export type CalloutGeometry = {
   id: "talk" | "tasks" | "drag" | "summon";
@@ -74,8 +81,10 @@ export type CalloutGeometry = {
   path: string;
   /** Anchor tick on the disc edge (leader start). */
   anchor: { x: number; y: number };
-  /** Absolute CSS placement for the HTML label (percent of stage box). */
-  labelStyle: { top: string } & ({ left: string } | { right: string });
+  /** Absolute CSS placement for the HTML label (percent of stage box). Both
+   *  horizontal edges are pinned so the label box exactly fills its column
+   *  and can never overflow the stage, whatever the copy length. */
+  labelStyle: { top: string; left: string; right: string };
 };
 
 function callout(
@@ -91,7 +100,7 @@ function callout(
   const p2 = { x: STAGE_CX + cos * ELBOW_R, y: STAGE_CY + sin * ELBOW_R };
   const p3 = { x: STAGE_CX + dir * RUN_X, y: p2.y };
   const topPct = `${((p2.y / STAGE_H) * 100).toFixed(2)}%`;
-  const edgePct = `${(((STAGE_W / 2 - LABEL_X) / STAGE_W) * 100).toFixed(2)}%`;
+  const insetPct = `${(((STAGE_CX + LABEL_X) / STAGE_W) * 100).toFixed(2)}%`;
   return {
     id,
     side,
@@ -102,8 +111,8 @@ function callout(
     anchor: p1,
     labelStyle:
       side === "left"
-        ? { top: topPct, right: `${(100 - parseFloat(edgePct)).toFixed(2)}%` }
-        : { top: topPct, left: `${(100 - parseFloat(edgePct)).toFixed(2)}%` },
+        ? { top: topPct, right: insetPct, left: "0%" }
+        : { top: topPct, left: insetPct, right: "0%" },
   };
 }
 
