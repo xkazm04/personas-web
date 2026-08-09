@@ -53,3 +53,8 @@ next-env.d.ts
 
 # /icon-gen skill scratch output
 .icon-gen-work/
+
+# Next 16.3 writes these on every `next dev` (versioned docs for AI agents).
+# Anchored to the repo root so the project's own .claude/CLAUDE.md is untouched.
+/AGENTS.md
+/CLAUDE.md
