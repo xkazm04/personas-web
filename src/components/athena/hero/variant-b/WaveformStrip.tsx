@@ -1,6 +1,7 @@
 "use client";
 
 import { motion, useReducedMotion } from "framer-motion";
+import { ANNOTATION, PANEL } from "@/components/athena/stage/athena-tokens";
 import { BRAND_VAR, tint } from "@/lib/brand-theme";
 import { HERO_COPY } from "./data";
 
@@ -31,7 +32,7 @@ export default function WaveformStrip({ listening, typed, done }: Props) {
   const live = listening && !reduced;
 
   return (
-    <div className="flex items-center gap-3 rounded-2xl border border-glass bg-background/60 px-4 py-3">
+    <div className={`${PANEL} flex items-center gap-3 px-4 py-3`}>
       {/* Mic dot */}
       <span className="relative flex h-2.5 w-2.5 shrink-0" aria-hidden="true">
         {live && (
@@ -93,7 +94,7 @@ export default function WaveformStrip({ listening, typed, done }: Props) {
       </p>
 
       {listening && (
-        <span className="hidden shrink-0 font-mono text-xs uppercase tracking-widest text-brand-cyan sm:inline">
+        <span className={`${ANNOTATION} hidden shrink-0 sm:inline`}>
           {HERO_COPY.listeningLabel}
         </span>
       )}

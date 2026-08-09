@@ -5,7 +5,7 @@ export const HERO_COPY = {
   eyebrow: "Athena — fleet conductor",
   headlineTop: "Speak a sentence.",
   headlineAccent: "Watch eight terminals open.",
-  sub: "Spoken or typed, it is the same code path: Athena drafts a fleet plan you can edit row by row — project, model, effort — and nothing spawns until you confirm.",
+  sub: "Spoken or typed, it is the same code path: Athena drafts a fleet plan you can edit row by row — label, model, effort — and nothing spawns until you confirm.",
   ctaPrimary: "Get early access",
   ctaSecondary: "See how dispatch works",
   quote: "an assistant that cannot start work is not a conductor.",
@@ -15,15 +15,26 @@ export const HERO_COPY = {
   orbSub: "the conductor",
   planTitle: "Fleet plan",
   planMeta: "3 rows · 8 sessions · cap 8",
-  planFooter: "fleet_dispatch · claim-before-spawn · idempotent",
+  planFooter: "fleet_dispatch · claim-before-spawn",
   confirmLabel: "Confirm & dispatch",
+  confirmHint: "your click, not hers",
   dispatchedLabel: "Dispatched — 8/8 claimed",
   editedTag: "edited",
   agentsSuffix: "agents",
   claimedPrefix: "claimed",
   standbyLabel: "standby",
-  phaseRail: ["voice", "plan", "confirm", "dispatch"],
 } as const;
+
+/** Caption rail — op grammar tokens + human captions, one per phase beat. */
+export const CAPTIONS = [
+  { token: "listening", caption: "spoken or typed — one code path" },
+  { token: "show_fleet_plan", caption: "rows are yours: label · model · effort" },
+  {
+    token: "fleet_dispatch · 3 rows",
+    caption: "your click, not hers — nothing spawns before Confirm",
+  },
+  { token: "claimed 8/8 — idempotent", caption: "claim-before-spawn, capped at eight" },
+] as const;
 
 /** The sentence Athena hears — typed out char by char during the listen phase. */
 export const SPOKEN_SENTENCE = "get three agents on the flaky tests";
@@ -31,7 +42,7 @@ export const SPOKEN_SENTENCE = "get three agents on the flaky tests";
 export type Effort = "low" | "medium" | "high";
 
 export interface FleetRow {
-  project: string;
+  label: string;
   objective: string;
   model: string;
   effort: Effort;
@@ -41,13 +52,13 @@ export interface FleetRow {
   accent: BrandAccent;
 }
 
-/** Row the user visibly edits during the edit phase. */
+/** Row that is visibly edited during the edit phase. */
 export const EDITED_ROW_INDEX = 1;
 
-/** 3 rows → fleet_dispatch (2+ rows), 3 + 3 + 2 = 8 sessions (the cap). */
+/** 3 rows → fleet_dispatch (1 row would be fleet_spawn); 3 + 3 + 2 = 8, the cap. */
 export const FLEET_ROWS: FleetRow[] = [
   {
-    project: "personas-web",
+    label: "personas-web",
     objective: "Hunt the flaky Playwright specs",
     model: "opus",
     effort: "high",
@@ -55,7 +66,7 @@ export const FLEET_ROWS: FleetRow[] = [
     accent: "cyan",
   },
   {
-    project: "personas-desktop",
+    label: "personas-desktop",
     objective: "Reproduce the CI-only races",
     model: "sonnet",
     effort: "medium",
@@ -64,7 +75,7 @@ export const FLEET_ROWS: FleetRow[] = [
     accent: "purple",
   },
   {
-    project: "harness",
+    label: "harness",
     objective: "Quarantine and re-run the reds",
     model: "sonnet",
     effort: "low",

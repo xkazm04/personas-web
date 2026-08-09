@@ -1,14 +1,16 @@
 "use client";
 
 import { motion, useReducedMotion } from "framer-motion";
+import { SPRING_POP } from "@/components/athena/stage/athena-tokens";
 import { BRAND_VAR, brandShadow, tint } from "@/lib/brand-theme";
 import { HERO_COPY, TERMINALS } from "./data";
 
 /**
  * TerminalGrid — phase 4 of the Conductor sequence. Eight terminal tiles
- * (the dispatched sessions, capped at 8) ignite one by one after Confirm,
- * each with its own operator label and a "claimed n/8" footer — the visual
- * form of claim-before-spawn idempotent dispatch.
+ * (the dispatched sessions, capped at 8) ignite one by one after the
+ * visitor's Confirm, each landing like a dealt card (spring + ±2° settle,
+ * kp micro-physics) with its own operator label and a "claimed n/8" footer —
+ * the visual form of claim-before-spawn idempotent dispatch.
  */
 
 interface Props {
@@ -27,10 +29,14 @@ export default function TerminalGrid({ litCount }: Props) {
         return (
           <motion.div
             key={tile.operator}
-            className="rounded-xl border border-glass bg-background/60 p-2.5 sm:p-3"
+            className="rounded-xl border border-glass bg-surface/60 p-2.5 backdrop-blur-md sm:p-3"
             initial={false}
-            animate={{ opacity: lit ? 1 : 0.35, scale: lit ? 1 : 0.97 }}
-            transition={reduced ? { duration: 0 } : { duration: 0.35, ease: "easeOut" }}
+            animate={
+              lit
+                ? { opacity: 1, scale: 1, rotate: 0, y: 0 }
+                : { opacity: 0.3, scale: 0.92, rotate: i % 2 ? 2 : -2, y: 8 }
+            }
+            transition={reduced ? { duration: 0 } : SPRING_POP}
             style={
               lit
                 ? {
