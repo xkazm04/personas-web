@@ -20,6 +20,10 @@ export default function ViewFullSiteLink() {
     document.cookie = "prefer-full=1; path=/; max-age=31536000; samesite=lax";
     // Hard navigation (not a soft <Link>) so the middleware re-evaluates the
     // request with the cookie now present and serves the desktop dashboard.
+    /* eslint-disable-next-line @next/next/no-location-assign-relative-destination --
+       a router.push() here would be a client-side transition that never reaches the
+       proxy, so the `prefer-full` cookie would go unread and the user would stay
+       stuck in /m. */
     window.location.href = "/dashboard";
   };
 
