@@ -4,6 +4,8 @@ import { motion } from "framer-motion";
 import Image from "next/image";
 import Link from "next/link";
 
+import { tint } from "@/lib/brand-theme";
+
 /**
  * Variant A: "Glyph Mark" — Icon-forward logo with animated neon pulse.
  * Large icon dominates; gradient text collapses to monogram on scroll.
@@ -17,10 +19,14 @@ export default function NavbarLogoGlyph({ scrolled }: { scrolled?: boolean }) {
         <motion.div
           className="absolute inset-0 rounded-xl border border-brand-cyan/30"
           animate={{
+            // Brand tokens rather than the cyan/purple hexes they used to be
+            // hardcoded as: `tint()` emits color-mix(), which framer-motion
+            // could not interpolate before 12.37, so the pulse had to be
+            // literal rgba and stayed cyan/purple under every theme variant.
             boxShadow: [
-              "0 0 8px rgba(6,182,212,0.15), inset 0 0 6px rgba(168,85,247,0.1)",
-              "0 0 16px rgba(6,182,212,0.3), inset 0 0 10px rgba(168,85,247,0.2)",
-              "0 0 8px rgba(6,182,212,0.15), inset 0 0 6px rgba(168,85,247,0.1)",
+              `0 0 8px ${tint("cyan", 15)}, inset 0 0 6px ${tint("purple", 10)}`,
+              `0 0 16px ${tint("cyan", 30)}, inset 0 0 10px ${tint("purple", 20)}`,
+              `0 0 8px ${tint("cyan", 15)}, inset 0 0 6px ${tint("purple", 10)}`,
             ],
           }}
           transition={{ duration: 3, repeat: Infinity, ease: "easeInOut" }}

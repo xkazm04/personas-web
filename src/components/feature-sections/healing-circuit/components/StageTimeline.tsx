@@ -30,10 +30,10 @@ export default function StageTimeline({
                       ? `${stage.color}60`
                       : isDone
                         ? `${stage.color}30`
-                        : "rgba(255,255,255,0.06)",
+                        : "var(--border-glass)",
                     backgroundColor: isActive
                       ? `${stage.color}12`
-                      : "rgba(255,255,255,0)",
+                      : "transparent",
                   }}
                   className="flex items-center gap-1.5 rounded-full border px-3 py-1 shrink-0"
                 >
@@ -72,7 +72,7 @@ export default function StageTimeline({
                     animate={{
                       backgroundColor: isDone
                         ? `${stage.color}40`
-                        : "rgba(255,255,255,0.06)",
+                        : "var(--border-glass)",
                     }}
                   />
                 )}
