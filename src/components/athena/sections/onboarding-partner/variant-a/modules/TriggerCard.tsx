@@ -1,33 +1,42 @@
 "use client";
 
+import { motion } from "framer-motion";
 import { brandShadow, tint } from "@/lib/brand-theme";
 import { ANNOTATION, ANNOTATION_DIM } from "@/components/athena/stage/athena-tokens";
 import { COPY } from "../copy";
 import type { Rect } from "../layout";
+import { atStage, type ModuleStage } from "../stages";
+import { Part } from "./parts";
 import { TargetPanel } from "./shell";
 
 /**
- * The schedule module — a real scheduler, not a caption. Top row: clock
- * glyph, the human schedule, and an enable toggle. Bottom row: the weekday
- * selector strip, the timezone the run is pinned to, and an edit affordance.
+ * The schedule module — a real scheduler, not a caption. It frames up while
+ * she crosses, the schedule line lands as she arrives (body), and the weekday
+ * strip, timezone and edit affordance fill on the bracket lock (detail).
  *
  * It arrives EMPTY: no schedule, every day dark, the switch off. The third
- * choice is what fills it — M–F light up and the toggle flips on, on that one
- * beat — so the visitor watches the schedule get set instead of finding it
- * pre-set. Nothing here moves layout: only colors and the knob's transform.
- *
- * The long schedule string swaps for its short form below md so the weekday
- * strip and the toggle keep their room without dropping under text-base.
+ * choice is what fills it, and that beat is played out rather than flipped —
+ * the weekdays light M→F in sequence, the schedule line resolves behind them,
+ * and only then does the toggle throw. Nothing here moves layout: both rows
+ * hold their height from the moment they exist, so only colors change.
  */
+
+/** Both rows reserve their line box the moment they mount, so the panel's
+ *  centered column can never shift as parts fill in. */
+const ROW = "flex min-h-6 min-w-0 items-center";
+/** Seconds between weekday cells lighting up, and the toggle's own wait. */
+const DAY_STEP = 0.1;
+const TOGGLE_WAIT = 0.58;
+
 export function TriggerCard({
   rect,
-  shown,
+  stage,
   locked,
   armed,
   reduced,
 }: {
   rect: Rect;
-  shown: boolean;
+  stage: ModuleStage;
   locked: boolean;
   armed: boolean;
   reduced: boolean;
@@ -36,77 +45,116 @@ export function TriggerCard({
   const Clock = c.triggerIcon;
   const Pencil = c.triggerHintIcon;
   const voice = armed ? ANNOTATION : ANNOTATION_DIM;
+  const body = atStage(stage, "body");
+  const detail = atStage(stage, "detail");
   return (
     <TargetPanel
       rect={rect}
-      shown={shown}
+      stage={stage}
       locked={locked}
       reduced={reduced}
       className="flex-col justify-center gap-2 px-3 py-2"
     >
-      <span className="flex min-w-0 items-center gap-2">
-        <Clock
-          className={`h-4.5 w-4.5 shrink-0 ${armed ? "text-brand-cyan" : "text-muted-dark"}`}
-          aria-hidden="true"
-        />
-        <span className={`hidden truncate normal-case md:inline ${voice}`}>
-          {armed ? c.triggerValue : c.triggerIdle}
+      {body && (
+        <span className={`${ROW} gap-2`}>
+          <Part show i={0} reduced={reduced} className="flex shrink-0">
+            <Clock
+              className={`h-4.5 w-4.5 duration-500 transition-colors ${armed ? "text-brand-cyan" : "text-muted-dark"}`}
+              aria-hidden="true"
+            />
+          </Part>
+          <Part
+            show
+            i={1}
+            reduced={reduced}
+            className={`hidden min-w-0 truncate normal-case md:inline ${voice}`}
+          >
+            <Schedule armed={armed} reduced={reduced} long />
+          </Part>
+          <Part show i={1} reduced={reduced} className={`min-w-0 truncate normal-case md:hidden ${voice}`}>
+            <Schedule armed={armed} reduced={reduced} />
+          </Part>
+          <Part show i={2} reduced={reduced} className="ml-auto flex shrink-0 items-center gap-2">
+            <span className="hidden text-base text-muted-dark sm:block">
+              {armed ? c.triggerOn : c.triggerOff}
+            </span>
+            <Toggle on={armed} reduced={reduced} />
+          </Part>
         </span>
-        <span className={`truncate normal-case md:hidden ${voice}`}>
-          {armed ? c.triggerValueShort : c.triggerIdleShort}
-        </span>
-        <span className="ml-auto flex shrink-0 items-center gap-2">
-          <span className="hidden text-base text-muted-dark sm:block">
-            {armed ? c.triggerOn : c.triggerOff}
-          </span>
-          <Toggle on={armed} />
-        </span>
-      </span>
+      )}
 
-      <span className="flex min-w-0 items-center gap-1.5">
-        {c.triggerDays.map((day, i) => (
-          <DayCell key={i} label={day} active={armed && c.triggerActiveDays.includes(i)} />
-        ))}
-        <span className="ml-auto hidden shrink-0 text-base text-muted-dark sm:block">
-          {c.triggerZone}
+      {body && (
+        <span className={`${ROW} gap-1.5`}>
+          {c.triggerDays.map((day, i) => (
+            <Part key={i} show={detail} i={i} reduced={reduced} className="flex shrink-0">
+              <DayCell label={day} lit={armed && c.triggerActiveDays.includes(i)} order={c.triggerActiveDays.indexOf(i)} />
+            </Part>
+          ))}
+          <Part show={detail} i={7} reduced={reduced} className="ml-auto hidden shrink-0 text-base text-muted-dark sm:block">
+            {c.triggerZone}
+          </Part>
+          <Part show={detail} i={8} reduced={reduced} className="hidden shrink-0 items-center gap-1.5 text-base text-muted-dark lg:flex">
+            <Pencil className="h-4 w-4" aria-hidden="true" />
+            {c.triggerHint}
+          </Part>
         </span>
-        <span className="hidden shrink-0 items-center gap-1.5 text-base text-muted-dark lg:flex">
-          <Pencil className="h-4 w-4" aria-hidden="true" />
-          {c.triggerHint}
-        </span>
-      </span>
+      )}
     </TargetPanel>
   );
 }
 
-/** One weekday in the selector strip — lit only once the schedule is set. */
-function DayCell({ label, active }: { label: string; active: boolean }) {
+/** The schedule line — it resolves as the weekdays finish lighting, so the
+ *  strip reads as the cause and the sentence as the consequence. */
+function Schedule({ armed, reduced, long }: { armed: boolean; reduced: boolean; long?: boolean }) {
+  const c = COPY.canvas;
+  const set = long ? c.triggerValue : c.triggerValueShort;
+  const idle = long ? c.triggerIdle : c.triggerIdleShort;
+  return (
+    <motion.span
+      key={armed ? "set" : "idle"}
+      initial={reduced ? false : { opacity: 0 }}
+      animate={{ opacity: 1 }}
+      transition={reduced ? { duration: 0 } : { duration: 0.35, delay: armed ? 0.42 : 0 }}
+    >
+      {armed ? set : idle}
+    </motion.span>
+  );
+}
+
+/** One weekday in the selector strip. The lit ones come up in sequence — a
+ *  schedule being written across the week, not a row switching on. */
+function DayCell({ label, lit, order }: { label: string; lit: boolean; order: number }) {
   return (
     <span
       className={`flex h-6 w-6 shrink-0 items-center justify-center rounded-md border text-base duration-500 transition-[background-color,border-color,color] ${
-        active ? "border-brand-cyan/40 text-brand-cyan" : "border-glass text-muted-dark"
+        lit ? "border-brand-cyan/40 text-brand-cyan" : "border-glass text-muted-dark"
       }`}
-      style={active ? { backgroundColor: tint("cyan", 14) } : undefined}
+      style={{
+        backgroundColor: lit ? tint("cyan", 14) : undefined,
+        transitionDelay: lit ? `${Math.round(Math.max(order, 0) * DAY_STEP * 1000)}ms` : "0ms",
+      }}
     >
       {label}
     </span>
   );
 }
 
-/** The enable switch — it flips on the beat the choice commits. */
-function Toggle({ on }: { on: boolean }) {
+/** The enable switch — it throws only after the week has finished lighting. */
+function Toggle({ on, reduced }: { on: boolean; reduced: boolean }) {
+  const wait = on && !reduced ? `${Math.round(TOGGLE_WAIT * 1000)}ms` : "0ms";
   return (
     <span
-      className={`relative block h-5 w-9 shrink-0 rounded-full duration-500 transition-[background-color,box-shadow] ${
-        on ? "" : "bg-foreground/15"
-      }`}
-      style={on ? { backgroundColor: tint("cyan", 55), boxShadow: brandShadow("cyan", 12, 40) } : undefined}
+      className={`relative block h-5 w-9 shrink-0 rounded-full duration-500 transition-[background-color,box-shadow] ${on ? "" : "bg-foreground/15"}`}
+      style={{
+        backgroundColor: on ? tint("cyan", 55) : undefined,
+        boxShadow: on ? brandShadow("cyan", 12, 40) : undefined,
+        transitionDelay: wait,
+      }}
       aria-hidden="true"
     >
       <span
-        className={`absolute left-0.5 top-0.5 h-4 w-4 rounded-full bg-background transition-transform duration-500 ${
-          on ? "translate-x-4" : ""
-        }`}
+        className={`absolute left-0.5 top-0.5 h-4 w-4 rounded-full bg-background transition-transform duration-500 ${on ? "translate-x-4" : ""}`}
+        style={{ transitionDelay: wait }}
       />
     </span>
   );

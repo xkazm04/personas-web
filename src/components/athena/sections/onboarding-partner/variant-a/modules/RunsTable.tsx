@@ -4,51 +4,74 @@ import ConnectorIcon from "@/components/sections/use-cases/components/ConnectorI
 import { ANNOTATION_DIM } from "@/components/athena/stage/athena-tokens";
 import { COPY } from "../copy";
 import type { Rect } from "../layout";
+import { atStage, type ModuleStage } from "../stages";
 import { Dot, SkeletonRow } from "./primitives";
+import { Part } from "./parts";
 import { ModuleReveal } from "./shell";
 
 /**
- * Recent-runs table — the right rail's product texture: a titled panel, a
- * real column header, rows keyed by the tool that ran (genuine brand glyph),
- * a status dot, a duration, and a skeleton row so the list obviously
- * continues past the fold. md+ only; the compact layout drops the rail.
+ * Recent-runs table — the right rail's product texture, and the first half of
+ * the payoff. It does not exist until the agent does, and when it does it
+ * BUILDS: the panel and its title frame up on the commit beat, the column
+ * header and the three runs walk in one after another behind it, and the
+ * "last 24h" hint plus the continues-past-the-fold skeleton settle a beat
+ * later. md+ only; the compact layout drops the rail.
  *
- * It does not exist until the agent does. Runs are the consequence of the
- * final choice, so this arrives on that beat and not one tick earlier.
+ * Every row arrives whole — glyph, name, status, duration — because a run is
+ * one fact. It is the LIST that assembles, not the row.
  */
 export function RunsTable({
   rect,
-  shown,
+  stage,
   reduced,
 }: {
   rect: Rect;
-  shown: boolean;
+  stage: ModuleStage;
   reduced: boolean;
 }) {
   const c = COPY.canvas;
+  const body = atStage(stage, "body");
+  const detail = atStage(stage, "detail");
   return (
     <ModuleReveal
       rect={rect}
-      shown={shown}
+      stage={stage}
       reduced={reduced}
-      ghostClassName="hidden md:block"
       className="hidden flex-col gap-1.5 overflow-hidden rounded-xl border border-glass px-3 py-2.5 md:flex"
     >
       <span className="flex items-baseline gap-2">
-        <span className="truncate text-base font-semibold text-foreground">{c.runsTitle}</span>
-        <span className="ml-auto hidden shrink-0 text-base text-muted-dark lg:block">
+        <Part show i={0} reduced={reduced} className="truncate text-base font-semibold text-foreground">
+          {c.runsTitle}
+        </Part>
+        <Part
+          show={detail}
+          reduced={reduced}
+          className="ml-auto hidden shrink-0 text-base text-muted-dark lg:block"
+        >
           {c.runsHint}
-        </span>
+        </Part>
       </span>
 
-      <span className={`flex items-center gap-2 border-b border-glass pb-1 ${ANNOTATION_DIM}`}>
+      <Part
+        show={body}
+        i={1}
+        reduced={reduced}
+        className={`flex items-center gap-2 border-b border-glass pb-1 ${ANNOTATION_DIM}`}
+      >
         <span className="min-w-0 flex-1 truncate">{c.runsCols[0]}</span>
         <span className="hidden w-24 shrink-0 truncate lg:block">{c.runsCols[1]}</span>
         <span className="w-12 shrink-0 truncate text-right">{c.runsCols[2]}</span>
-      </span>
+      </Part>
 
-      {c.runsRows.map((row) => (
-        <span key={row.name} className="flex items-center gap-2">
+      {c.runsRows.map((row, i) => (
+        <Part
+          key={row.name}
+          show={body}
+          i={i}
+          lead={0.3}
+          reduced={reduced}
+          className="flex items-center gap-2"
+        >
           <span className="shrink-0">
             <ConnectorIcon src={row.glyph} size={16} />
           </span>
@@ -60,10 +83,12 @@ export function RunsTable({
           <span className="w-12 shrink-0 text-right font-mono text-base text-muted-dark">
             {row.took}
           </span>
-        </span>
+        </Part>
       ))}
 
-      <SkeletonRow widths={[38, 22, 14]} />
+      <Part show={detail} lead={0.12} reduced={reduced} className="flex">
+        <SkeletonRow widths={[38, 22, 14]} />
+      </Part>
     </ModuleReveal>
   );
 }

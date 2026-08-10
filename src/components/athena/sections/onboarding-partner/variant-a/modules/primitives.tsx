@@ -1,7 +1,9 @@
 "use client";
 
+import { type ReactNode } from "react";
 import { motion } from "framer-motion";
 import { BRAND_VAR, type BrandKey, tint } from "@/lib/brand-theme";
+import { STEP } from "../stages";
 
 /**
  * The small state/health atoms every module draws from — pills, dots, avatar
@@ -38,16 +40,22 @@ export type PillTone = "brand" | "ok" | "muted";
 
 const PILL = "flex shrink-0 items-center gap-1.5 rounded-full border px-2.5 py-0.5 text-base";
 
-/** Status / health pill — the state vocabulary shared by every module. */
+/**
+ * Status / health pill — the state vocabulary shared by every module. `glyph`
+ * replaces the leading dot when a state has something better to say than
+ * "something is here": a spinner mid-handshake, a drawn check once it lands.
+ */
 export function StatePill({
   tone,
   label,
   pulse,
+  glyph,
   reduced,
 }: {
   tone: PillTone;
   label: string;
   pulse?: boolean;
+  glyph?: ReactNode;
   reduced?: boolean;
 }) {
   if (tone === "muted") {
@@ -63,7 +71,7 @@ export function StatePill({
         color: BRAND_VAR[accent],
       }}
     >
-      <Dot accent={accent} pulse={pulse} reduced={reduced} className="h-1.5 w-1.5" />
+      {glyph ?? <Dot accent={accent} pulse={pulse} reduced={reduced} className="h-1.5 w-1.5" />}
       {label}
     </span>
   );
@@ -89,26 +97,38 @@ export function AvatarStack({ tints = [32, 20, 12] }: { tints?: readonly number[
  * The caller owns the box (`h-5 flex-1` inside a row, `h-8 w-full shrink-0`
  * inside a column): a baked-in `flex-1` lets a column parent collapse the
  * strip to a few pixels, which is exactly how it read before.
+ *
+ * The bars GROW left to right when they arrive — a strip is a series, so it
+ * should be read as one. `scaleY` keeps that off the layout entirely.
  */
 export function MiniBars({
   points,
   className = "h-4",
   accentLast,
+  reduced,
+  lead = 0,
 }: {
   points: readonly number[];
   className?: string;
   accentLast?: boolean;
+  reduced?: boolean;
+  lead?: number;
 }) {
   return (
     <span className={`flex min-w-0 items-end gap-1 ${className}`} aria-hidden="true">
       {points.map((p, i) => (
-        <span
+        <motion.span
           key={i}
-          className="min-w-0 flex-1 rounded-sm"
+          className="min-w-0 flex-1 origin-bottom rounded-sm"
           style={{
             height: `${p}%`,
             backgroundColor: tint("cyan", accentLast && i === points.length - 1 ? 65 : 24),
           }}
+          initial={reduced ? false : { scaleY: 0, opacity: 0 }}
+          animate={{ scaleY: 1, opacity: 1 }}
+          transition={
+            reduced ? { duration: 0 } : { duration: 0.4, delay: lead + i * (STEP * 0.6) }
+          }
         />
       ))}
     </span>

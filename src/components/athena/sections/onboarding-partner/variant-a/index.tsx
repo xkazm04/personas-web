@@ -21,24 +21,26 @@ import {
   railAt,
   rectFor,
   sceneStateAt,
-  statusAt,
-  statusShortAt,
   travelingAt,
 } from "./data";
+import { statusAt, statusShortAt } from "./status";
 
 /**
  * Section 3, variant A — "The Glide" (onboarding partner).
  *
  * A full-viewport stylized desktop app is BUILT WITH you on the deterministic
- * tick clock (DevToolsGrid pattern). The canvas opens as a set of quiet
- * skeletons holding their rects, and each module materializes only when the
- * route reaches it: Athena's orb glides stop to stop along a scripted 4-stop
- * route — pick a template, connect Slack, choose when it runs, click the real
- * "Create agent" button — and every stop ends in a choice that visibly
- * commits (card selected, tool connected, schedule armed, agent created).
- * Corner brackets lock onto each control, the control glows (the rest of the
- * UI is never dimmed or blocked), a ≤5-word caption narrates, and the
- * segmented rail counts decisions made. Loop.
+ * tick clock (DevToolsGrid pattern). The canvas opens as a set of quiet ghosts
+ * holding their rects, and each module then COMPOSES itself in layers that
+ * interleave with her journey: the ghost solidifies into a panel while she is
+ * still in flight toward it, the structure cascades in as she lands, the fine
+ * texture fills on the bracket lock, and the choice commits as a small
+ * choreographed moment. Athena's orb glides stop to stop along a scripted
+ * 4-stop route — pick a template, connect Slack, choose when it runs, click
+ * the real "Create agent" button — and every stop ends in a choice that
+ * visibly commits (card selected, tool connected, schedule armed, agent
+ * created). Corner brackets lock onto each control, the control glows (the
+ * rest of the UI is never dimmed or blocked), a ≤5-word caption narrates, and
+ * the segmented rail counts decisions made. Loop.
  *
  * The app around her is real product UI: brand connector glyphs, template
  * cards with health strips, a connector list mid-handshake, a weekday
@@ -63,10 +65,11 @@ import {
  * owns one shared stage and sections inherit it.
  */
 
-/** Phase 0 — the true top of the route: an empty workspace of skeletons, orb
- *  docked off the UI, rail empty, nothing locked. The first module reveals
- *  two ticks later, so every visitor watches the app get built from nothing —
- *  which only works because the clock rewinds on every entry. */
+/** Phase 0 — the true top of the route: the app chrome composing itself around
+ *  a canvas of ghosts, orb docked off the UI, rail empty, nothing locked. The
+ *  first module starts framing two ticks later, so every visitor watches the
+ *  app get built from nothing — which only works because the clock rewinds on
+ *  every entry. */
 const START_TICK = 0;
 
 export default function OnboardingPartnerGlide() {
@@ -75,13 +78,19 @@ export default function OnboardingPartnerGlide() {
   const sectionRef = useRef<HTMLElement | null>(null);
   const inView = useInView(sectionRef, { amount: 0.4 });
   const [tick, setTick] = useState(INITIAL_TICK);
+  // Bumped on every (re-)entry so the chrome's compose replays on screen
+  // rather than off it — see `boot` below.
+  const [entries, setEntries] = useState(0);
 
   // Rewind to step 1 whenever the section (re-)enters view. Render-time
   // prev-state pattern — React 19 forbids sync setState in a useEffect body.
   const [prevInView, setPrevInView] = useState(inView);
   if (inView !== prevInView) {
     setPrevInView(inView);
-    if (inView && !reduced) setTick(START_TICK);
+    if (inView && !reduced) {
+      setTick(START_TICK);
+      setEntries((n) => n + 1);
+    }
   }
 
   useEffect(() => {
@@ -99,6 +108,10 @@ export default function OnboardingPartnerGlide() {
   const orb = orbAt(phase, compact);
   const rail = railAt(phase);
   const traveling = travelingAt(phase);
+  // One number that changes exactly when the window should reassemble itself:
+  // at every loop top and at every re-entry. Reduced motion pins it so the
+  // chrome renders finished and never replays.
+  const boot = reduced ? 0 : entries * CYCLE + Math.floor(tick / CYCLE);
 
   return (
     <AthenaStage>
@@ -124,6 +137,8 @@ export default function OnboardingPartnerGlide() {
 
         {/* The illustration — a full-height app that assembles as she guides */}
         <AppWindow
+          boot={boot}
+          reduced={reduced}
           footer={
             <>
               <ProgressRail rail={rail} reduced={reduced} />

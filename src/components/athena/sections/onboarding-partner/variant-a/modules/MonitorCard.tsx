@@ -6,21 +6,25 @@ import { BRAND_VAR, tint } from "@/lib/brand-theme";
 import { ANNOTATION_DIM } from "@/components/athena/stage/athena-tokens";
 import { BAR_POINTS, CHART_POINTS, COPY } from "../data";
 import type { Rect } from "../layout";
+import { atStage, type ModuleStage } from "../stages";
 import { MiniBars, StatePill } from "./primitives";
+import { Part } from "./parts";
 import { ModuleReveal } from "./shell";
 
 /**
- * Monitoring module — dashboard texture, not a captioned sparkline: header
- * with a live pill, a three-up stat row (runs / success / avg duration), the
- * gradient area chart that draws itself in on mount, and a run-volume bar
- * series underneath. md+ only.
+ * Monitoring module — the second half of the payoff, and the last thing on the
+ * canvas to exist: there is nothing to monitor until the agent has been
+ * created. It builds one beat behind the runs table and in three passes of its
+ * own — header and live pill (shell), the three headline numbers counting in
+ * one after another (body), then the chart drawing itself and the run-volume
+ * bars rising left to right (detail).
  *
- * The last thing on the canvas to exist, one beat after the runs table:
- * there is nothing to monitor until the agent has been created. Because it
- * mounts on that beat, the chart's draw-in lands exactly as it arrives.
+ * Every box holds its own height from the moment it mounts, so the chart never
+ * resizes while the deck fills — the flex column is frozen, only its contents
+ * arrive. md+ only.
  *
- * Motion is gated: reduced motion renders the finished chart with no draw-in
- * and a steady live dot.
+ * Motion is gated: reduced motion renders the finished deck outright — no
+ * draw-in, no cascade, a steady live dot.
  */
 
 const W = 100;
@@ -33,43 +37,57 @@ const linePath = (): string => {
 
 export function MonitorCard({
   rect,
-  shown,
+  stage,
   reduced,
 }: {
   rect: Rect;
-  shown: boolean;
+  stage: ModuleStage;
   reduced: boolean;
 }) {
   const uid = useId();
   const c = COPY.canvas;
   const Icon = c.activityIcon;
   const line = linePath();
+  const body = atStage(stage, "body");
+  const detail = atStage(stage, "detail");
   return (
     <ModuleReveal
       rect={rect}
-      shown={shown}
+      stage={stage}
       reduced={reduced}
-      ghostClassName="hidden md:block"
       className="hidden flex-col gap-2 rounded-xl border border-glass px-3 py-2.5 md:flex"
     >
-      <div className="flex items-center gap-2">
-        <Icon className="h-4.5 w-4.5 shrink-0 text-brand-cyan" aria-hidden="true" />
-        <span className="truncate text-base font-semibold text-foreground">{c.activityLabel}</span>
-        <span className="ml-auto">
+      <span className="flex items-center gap-2">
+        <Part show i={0} reduced={reduced} className="flex shrink-0 text-brand-cyan">
+          <Icon className="h-4.5 w-4.5" aria-hidden="true" />
+        </Part>
+        <Part show i={1} reduced={reduced} className="truncate text-base font-semibold text-foreground">
+          {c.activityLabel}
+        </Part>
+        <Part show i={2} reduced={reduced} className="ml-auto flex">
           <StatePill tone="brand" label={c.activityPill} pulse reduced={reduced} />
-        </span>
-      </div>
+        </Part>
+      </span>
 
-      <div className="flex items-end gap-3">
-        {c.stats.map((s) => (
-          <span key={s.label} className="flex min-w-0 flex-1 flex-col">
+      {/* min-h holds the stat row's line box, so the chart below never resizes
+          as the numbers walk in */}
+      <span className="flex min-h-13 items-end gap-3">
+        {c.stats.map((s, i) => (
+          <Part
+            key={s.label}
+            show={body}
+            i={i}
+            lead={0.15}
+            reduced={reduced}
+            className="flex min-w-0 flex-1 flex-col"
+          >
             <span className="truncate text-xl font-semibold tabular-nums text-foreground">
               {s.value}
             </span>
             <span className={`truncate normal-case ${ANNOTATION_DIM}`}>{s.label}</span>
-          </span>
+          </Part>
         ))}
-      </div>
+      </span>
 
       <svg
         viewBox={`0 0 ${W} ${H}`}
@@ -83,28 +101,42 @@ export function MonitorCard({
             <stop offset="100%" stopColor={tint("cyan", 0)} />
           </linearGradient>
         </defs>
-        {/* Gradient area fades up under the line */}
-        <motion.path
-          d={`${line} L${W} ${H} L0 ${H} Z`}
-          fill={`url(#${uid}-spark)`}
-          initial={reduced ? false : { opacity: 0 }}
-          animate={{ opacity: 1 }}
-          transition={reduced ? { duration: 0 } : { duration: 0.9, delay: 0.7 }}
-        />
-        {/* The line draws itself in */}
-        <motion.path
-          d={line}
-          fill="none"
-          stroke={BRAND_VAR.cyan}
-          strokeWidth="1.4"
-          strokeLinecap="round"
-          initial={reduced ? false : { pathLength: 0 }}
-          animate={{ pathLength: 1 }}
-          transition={reduced ? { duration: 0 } : { duration: 1.4, ease: "easeInOut" }}
-        />
+        {detail && (
+          <>
+            {/* Gradient area fades up under the line */}
+            <motion.path
+              d={`${line} L${W} ${H} L0 ${H} Z`}
+              fill={`url(#${uid}-spark)`}
+              initial={reduced ? false : { opacity: 0 }}
+              animate={{ opacity: 1 }}
+              transition={reduced ? { duration: 0 } : { duration: 0.9, delay: 0.55 }}
+            />
+            {/* The line draws itself in */}
+            <motion.path
+              d={line}
+              fill="none"
+              stroke={BRAND_VAR.cyan}
+              strokeWidth="1.4"
+              strokeLinecap="round"
+              initial={reduced ? false : { pathLength: 0 }}
+              animate={{ pathLength: 1 }}
+              transition={reduced ? { duration: 0 } : { duration: 1.2, ease: "easeInOut" }}
+            />
+          </>
+        )}
       </svg>
 
-      <MiniBars points={BAR_POINTS} className="h-8 w-full shrink-0" accentLast />
+      <span className="flex h-8 w-full shrink-0">
+        {detail && (
+          <MiniBars
+            points={BAR_POINTS}
+            className="h-full w-full"
+            accentLast
+            reduced={reduced}
+            lead={0.35}
+          />
+        )}
+      </span>
     </ModuleReveal>
   );
 }
