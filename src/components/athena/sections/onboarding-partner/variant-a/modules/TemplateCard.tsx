@@ -1,8 +1,9 @@
 "use client";
 
+import { motion } from "framer-motion";
 import ConnectorIcon from "@/components/sections/use-cases/components/ConnectorIcon";
-import { tint } from "@/lib/brand-theme";
-import { ANNOTATION_DIM } from "@/components/athena/stage/athena-tokens";
+import { BRAND_VAR, tint } from "@/lib/brand-theme";
+import { ANNOTATION_DIM, SPRING_POP } from "@/components/athena/stage/athena-tokens";
 import { COPY, HEALTH_BARS } from "../data";
 import { AvatarStack, MiniBars, StatePill } from "./primitives";
 
@@ -11,14 +12,29 @@ import { AvatarStack, MiniBars, StatePill } from "./primitives";
  * name + state pill, what it does, then a signal row (schedule chip, the
  * agents that run it, lifetime run count) over a per-day health strip.
  *
+ * Two of these sit side by side as equals until the first choice commits —
+ * then the chosen one takes a check and the other dims to "not this one".
+ * That contrast IS the choice; without it the pair is just decoration.
+ *
  * The glyph is the genuine product SVG from `public/icons/connectors`, drawn
  * through ConnectorIcon so it flattens to one theme-aware tone.
  */
 
 type Card = typeof COPY.canvas.template | typeof COPY.canvas.templateAlt;
 
-export function TemplateCard({ card, dim }: { card: Card; dim?: boolean }) {
+export function TemplateCard({
+  card,
+  dim,
+  selected,
+  reduced,
+}: {
+  card: Card;
+  dim?: boolean;
+  selected?: boolean;
+  reduced?: boolean;
+}) {
   const Clock = COPY.canvas.triggerIcon;
+  const CheckMark = COPY.canvas.chosenIcon;
   return (
     <>
       <span className="flex min-w-0 shrink-0 items-center gap-2.5">
@@ -33,6 +49,18 @@ export function TemplateCard({ card, dim }: { card: Card; dim?: boolean }) {
         >
           {card.title}
         </span>
+        {selected && (
+          <motion.span
+            className="flex h-5 w-5 shrink-0 items-center justify-center rounded-full"
+            style={{ backgroundColor: BRAND_VAR.cyan }}
+            initial={reduced ? false : { scale: 0 }}
+            animate={{ scale: 1 }}
+            transition={reduced ? { duration: 0 } : SPRING_POP}
+            aria-hidden="true"
+          >
+            <CheckMark className="h-3.5 w-3.5 text-background" />
+          </motion.span>
+        )}
         <span className="ml-auto hidden lg:block">
           <StatePill tone="muted" label={card.pill} />
         </span>

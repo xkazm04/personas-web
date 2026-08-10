@@ -6,13 +6,18 @@ import { BRAND_VAR, tint } from "@/lib/brand-theme";
 import { ANNOTATION_DIM } from "@/components/athena/stage/athena-tokens";
 import { BAR_POINTS, CHART_POINTS, COPY } from "../data";
 import type { Rect } from "../layout";
-import { MiniBars, StatePill, rectStyle } from "./primitives";
+import { MiniBars, StatePill } from "./primitives";
+import { ModuleReveal } from "./shell";
 
 /**
  * Monitoring module — dashboard texture, not a captioned sparkline: header
  * with a live pill, a three-up stat row (runs / success / avg duration), the
  * gradient area chart that draws itself in on mount, and a run-volume bar
  * series underneath. md+ only.
+ *
+ * The last thing on the canvas to exist, one beat after the runs table:
+ * there is nothing to monitor until the agent has been created. Because it
+ * mounts on that beat, the chart's draw-in lands exactly as it arrives.
  *
  * Motion is gated: reduced motion renders the finished chart with no draw-in
  * and a steady live dot.
@@ -26,15 +31,26 @@ const linePath = (): string => {
   return CHART_POINTS.map((y, i) => `${i === 0 ? "M" : "L"}${(i * step).toFixed(1)} ${y}`).join(" ");
 };
 
-export function MonitorCard({ rect, reduced }: { rect: Rect; reduced: boolean }) {
+export function MonitorCard({
+  rect,
+  shown,
+  reduced,
+}: {
+  rect: Rect;
+  shown: boolean;
+  reduced: boolean;
+}) {
   const uid = useId();
   const c = COPY.canvas;
   const Icon = c.activityIcon;
   const line = linePath();
   return (
-    <div
-      className="absolute hidden flex-col gap-2 rounded-xl border border-glass px-3 py-2.5 md:flex"
-      style={rectStyle(rect)}
+    <ModuleReveal
+      rect={rect}
+      shown={shown}
+      reduced={reduced}
+      ghostClassName="hidden md:block"
+      className="hidden flex-col gap-2 rounded-xl border border-glass px-3 py-2.5 md:flex"
     >
       <div className="flex items-center gap-2">
         <Icon className="h-4.5 w-4.5 shrink-0 text-brand-cyan" aria-hidden="true" />
@@ -89,6 +105,6 @@ export function MonitorCard({ rect, reduced }: { rect: Rect; reduced: boolean })
       </svg>
 
       <MiniBars points={BAR_POINTS} className="h-8 w-full shrink-0" accentLast />
-    </div>
+    </ModuleReveal>
   );
 }

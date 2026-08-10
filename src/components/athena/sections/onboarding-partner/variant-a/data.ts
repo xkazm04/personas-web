@@ -1,96 +1,93 @@
 /**
- * Data + clock for "The Glide" — section 3 ("Onboarding partner"), variant A.
- * Modeled on dev-tools-grid/athenaFleetData.ts: one deterministic CYCLE,
- * choreography as data (stops with arrive/depart ticks + target rects), and
- * pure phase functions the scene derives everything from.
+ * WHEN everything happens in "The Glide" — section 3 ("Onboarding partner"),
+ * variant A. Modeled on dev-tools-grid/athenaFleetData.ts: one deterministic
+ * CYCLE and pure phase functions the scene reads every frame. Where the route
+ * goes is `./route`; `./copy`, `./layout` and `./series` are re-exported here
+ * so the scene has one import surface. Nothing here touches the DOM.
  *
- * The scene: a stylized desktop app gets set up with you, step by step.
- * Athena's orb glides stop to stop; at each stop four corner brackets lock
- * onto the exact control, the control glows (the rest of the UI is never
- * dimmed or blocked), a ≤5-word caption narrates, and a segmented progress
- * rail advances. The final stop is a real action button. Loop.
+ * The app BUILDS itself. The canvas opens as quiet skeletons holding their
+ * rects, and each module materializes only at its own moment — onboarding is
+ * a thing you make, not a finished screen someone points at. Every stop runs
+ * the same five-beat figure:
  *
- * Geometry lives in `./layout` (WIDE + COMPACT rect sets); all wording lives
- * in `./copy` under the PROTOTYPE COPY header. Both are re-exported here so
- * the scene has a single import surface.
+ *   revealAt   the module springs into its reserved rect; she sets off for it
+ *   arrive     the orb lands
+ *   arrive+1   the corner brackets lock
+ *   chooseAt   the choice COMMITS — a state change you can see
+ *   depart     she moves on; the module keeps that state for the rest of the
+ *              loop, so the screen only ever accumulates
+ *
+ * The closing stop creates the agent, and only then do the runs table and the
+ * monitoring deck exist — because only then is there anything to monitor.
  */
 
+import { DOCK, ROUTE, type RouteStop, type StopId } from "./route";
 import type { Point, Rect } from "./layout";
 
 export { COPY } from "./copy";
 export { WIDE, COMPACT, WIDE_ONLY, layoutFor } from "./layout";
+export { BAR_POINTS, CHART_POINTS, HEALTH_BARS } from "./series";
 export type { Point, Rect, SceneLayout } from "./layout";
+export type { RouteStop, StopId } from "./route";
 
-export const CYCLE = 24;
-export const TICK_MS = 1100;
-/** Reduced-motion pinned frame: mid-walkthrough — brackets locked on stop 2
- *  (Slack connector, mid-handshake), rail at 2/4, caption visible. Every
- *  enriched module renders in its finished state. The story in one image. */
-export const INITIAL_TICK = 9;
+/** Ticks per stop: reveal · arrive · lock · choose · settle. */
+const STOP_TICKS = 5;
+/** Two opening beats before the first module — bare skeletons, then the
+ *  toolbar. The workspace wakes up instead of popping in from a dead canvas. */
+const FIRST_REVEAL = 2;
+/** The closing stop lingers: the button beckons an extra beat before it
+ *  commits, and she stays while the results deck arrives behind her. */
+const FINALE_TAIL = 2;
 
-export type StopId = "template" | "connect" | "trigger" | "action";
+export const CYCLE = 27;
+export const TICK_MS = 900; // 27 ticks × 900ms ≈ 24.3s per loop
+/** Reduced-motion pinned frame: the last beat that still has her in it. Every
+ *  module revealed and in its chosen state — template picked, Slack connected,
+ *  schedule armed, agent created, runs + monitoring live — brackets on the
+ *  action button, rail 4/4. The finished story in one still image. */
+export const INITIAL_TICK = 23;
 
-export interface GlideStop {
-  id: StopId;
-  /** ≤5-word caption narrated beside the orb while locked. */
-  caption: string;
-  /** The control the brackets lock onto (md+ / <md). */
-  rect: Rect;
-  rectCompact: Rect;
-  /** Where the orb hovers while narrating this stop (md+ / <md). */
-  orb: Point;
-  orbCompact: Point;
+export interface GlideStop extends RouteStop {
+  /** The module materializes here — and she sets off for it. */
+  revealAt: number;
+  /** She has landed; the brackets lock one tick later. */
   arrive: number;
+  /** The beat the whole stop exists for: the choice commits. */
+  chooseAt: number;
   depart: number;
 }
 
-/** The walkthrough route — pick a template → connect a tool → set the
- *  trigger → end on a real action button. Rects mirror `./layout`. */
-export const STOPS: GlideStop[] = [
-  {
-    id: "template",
-    caption: "pick a starting point",
-    rect: { x: 3.5, y: 16.5, w: 27, h: 26 },
-    rectCompact: { x: 4, y: 15.5, w: 92, h: 22 },
-    orb: { x: 61, y: 29 },
-    orbCompact: { x: 64, y: 31 },
-    arrive: 2,
-    depart: 7,
-  },
-  {
-    id: "connect",
-    caption: "connect your Slack",
-    rect: { x: 5.5, y: 51.5, w: 51.5, h: 6 },
-    rectCompact: { x: 6, y: 47.5, w: 88, h: 6 },
-    orb: { x: 61, y: 48 },
-    orbCompact: { x: 64, y: 56 },
-    arrive: 7,
-    depart: 12,
-  },
-  {
-    id: "trigger",
-    caption: "set the trigger",
-    rect: { x: 3.5, y: 80, w: 55.5, h: 16 },
-    rectCompact: { x: 4, y: 70, w: 92, h: 15 },
-    orb: { x: 61, y: 76 },
-    orbCompact: { x: 64, y: 82.5 },
-    arrive: 12,
-    depart: 17,
-  },
-  {
-    id: "action",
-    caption: "one click — it's live",
-    rect: { x: 63.5, y: 80, w: 33, h: 13 },
-    rectCompact: { x: 4, y: 88.5, w: 92, h: 8 },
-    orb: { x: 61, y: 86.5 },
-    orbCompact: { x: 50, y: 78.4 },
-    arrive: 17,
-    depart: 22,
-  },
-];
+/** Beats derived from one grid, so no two tick numbers can drift apart. Each
+ *  stop's revealAt is the previous stop's depart — she never returns to the
+ *  dock mid-route, and the next module lands as she leaves the last. */
+export const STOPS: GlideStop[] = ROUTE.map((stop, i) => {
+  const last = i === ROUTE.length - 1;
+  const revealAt = FIRST_REVEAL + i * STOP_TICKS;
+  return {
+    ...stop,
+    revealAt,
+    arrive: revealAt + 1,
+    chooseAt: revealAt + (last ? 4 : 3),
+    depart: revealAt + STOP_TICKS + (last ? FINALE_TAIL : 0),
+  };
+});
 
-/** Where the orb rests before/after a walkthrough — upper right, off the UI. */
-export const DOCK: Point = { x: 88, y: 5.5 };
+const CLOSER = STOPS[STOPS.length - 1];
+
+/** The tick each module materializes on — the whole reveal order in one
+ *  table. Stop-owned modules inherit their stop's reveal beat; the results
+ *  deck waits for the agent to exist. */
+export const REVEAL = {
+  toolbar: 1,
+  templates: STOPS[0].revealAt,
+  connectors: STOPS[1].revealAt,
+  trigger: STOPS[2].revealAt,
+  action: CLOSER.revealAt,
+  runs: CLOSER.chooseAt,
+  monitor: CLOSER.chooseAt + 1,
+};
+
+export type ModuleKey = keyof typeof REVEAL;
 
 /** Target rect for a stop at the current breakpoint. */
 export function rectFor(stop: GlideStop, compact: boolean): Rect {
@@ -102,9 +99,9 @@ export function rectOf(id: StopId, compact: boolean): Rect {
   return rectFor(STOPS.find((s) => s.id === id) ?? STOPS[0], compact);
 }
 
-/** The stop the orb is working (arrived, not yet departed) at a phase tick. */
+/** The stop she is working: its module is up and she has not departed. */
 export function activeStopAt(phase: number): GlideStop | null {
-  return STOPS.find((s) => phase >= s.arrive && phase < s.depart) ?? null;
+  return STOPS.find((s) => phase >= s.revealAt && phase < s.depart) ?? null;
 }
 
 /** The stop whose brackets have snapped on (one tick after arrival — the
@@ -121,54 +118,82 @@ export function orbAt(phase: number, compact: boolean): Point {
   return compact ? stop.orbCompact : stop.orb;
 }
 
-/** True on the arrival tick — she is mid-glide / just landing, not locked.
- *  The orb swells while traveling and settles when the brackets snap. */
+/** True while she is crossing to a stop — the reveal beat. The orb swells in
+ *  flight and settles on arrival, one beat before the brackets snap. */
 export function travelingAt(phase: number): boolean {
   const stop = activeStopAt(phase);
-  return stop !== null && phase < stop.arrive + 1;
+  return stop !== null && phase < stop.arrive;
 }
 
-/** Segmented progress rail — a segment fills the moment its stop locks. */
+/** Segmented progress rail — a segment fills when its choice commits, not
+ *  when she arrives: the rail counts decisions made, not places visited. */
 export function railAt(phase: number): boolean[] {
-  return STOPS.map((s) => phase >= s.arrive + 1);
-}
-
-/** Final-stop action button pulses while she presents it. */
-export function actionPulseAt(phase: number): boolean {
-  const last = STOPS[STOPS.length - 1];
-  return phase >= last.arrive + 1 && phase < last.depart;
+  return STOPS.map((s) => phase >= s.chooseAt);
 }
 
 export type ConnectState = "connect" | "connecting" | "connected";
+export type ActionState = "idle" | "pulse" | "done";
 
-/** The Slack row lives its own little life: an unconnected tool before she
- *  gets there, a handshake while she narrates it, connected ever after. */
-export function slackStateAt(phase: number): ConnectState {
-  const stop = STOPS[1];
-  if (phase < stop.arrive + 1) return "connect";
-  if (phase < stop.depart) return "connecting";
-  return "connected";
+export interface SceneState {
+  lockedId: StopId | null;
+  /** Which modules exist yet; the rest hold their rects as quiet skeletons. */
+  shown: Record<ModuleKey, boolean>;
+  templateChosen: boolean;
+  slack: ConnectState;
+  scheduleArmed: boolean;
+  action: ActionState;
 }
 
-/** Mono status line — corner console readout (≤5 words). */
+/** The Slack row lives its own little life: an unconnected tool until she
+ *  commits the choice, a handshake on that beat, connected ever after. */
+function slackStateAt(phase: number): ConnectState {
+  const stop = STOPS[1];
+  if (phase < stop.chooseAt) return "connect";
+  return phase < stop.chooseAt + 1 ? "connecting" : "connected";
+}
+
+/** The closing button beckons once the brackets lock, then commits for good. */
+function actionStateAt(phase: number): ActionState {
+  if (phase >= CLOSER.chooseAt) return "done";
+  return phase >= CLOSER.arrive + 1 ? "pulse" : "idle";
+}
+
+/** Everything the canvas needs at a phase tick, derived in one pure read. */
+export function sceneStateAt(phase: number): SceneState {
+  return {
+    lockedId: lockedStopAt(phase)?.id ?? null,
+    shown: {
+      toolbar: phase >= REVEAL.toolbar,
+      templates: phase >= REVEAL.templates,
+      connectors: phase >= REVEAL.connectors,
+      trigger: phase >= REVEAL.trigger,
+      action: phase >= REVEAL.action,
+      runs: phase >= REVEAL.runs,
+      monitor: phase >= REVEAL.monitor,
+    },
+    templateChosen: phase >= STOPS[0].chooseAt,
+    slack: slackStateAt(phase),
+    scheduleArmed: phase >= STOPS[2].chooseAt,
+    action: actionStateAt(phase),
+  };
+}
+
+/** Which step of the route is on screen (1-based), for the status readouts. */
+function stepAt(phase: number): number {
+  const stop = activeStopAt(phase);
+  return stop ? STOPS.indexOf(stop) + 1 : STOPS.length;
+}
+
+/** Mono status line — corner console readout. */
 export function statusAt(phase: number): string {
-  if (phase < STOPS[0].arrive) return "guided · walkthrough starting";
-  if (phase >= STOPS[STOPS.length - 1].depart) return "ended on a real action";
-  const done = Math.max(railAt(phase).filter(Boolean).length, 1);
-  return `step ${done}/${STOPS.length} · screen stays yours`;
+  if (phase < STOPS[0].revealAt) return "workspace · setting up together";
+  if (phase >= CLOSER.chooseAt) return "agent live · monitoring on";
+  return `step ${stepAt(phase)}/${STOPS.length} · built with you`;
 }
 
 /** Compact status for narrow viewports — the step counter alone. */
 export function statusShortAt(phase: number): string {
-  if (phase < STOPS[0].arrive) return "starting";
-  if (phase >= STOPS[STOPS.length - 1].depart) return "live";
-  return `step ${Math.max(railAt(phase).filter(Boolean).length, 1)}/${STOPS.length}`;
+  if (phase < STOPS[0].revealAt) return "setting up";
+  if (phase >= CLOSER.chooseAt) return "live";
+  return `step ${stepAt(phase)}/${STOPS.length}`;
 }
-
-/** Monitoring sparkline — one deterministic week of run counts (SVG y-axis,
- *  so a falling number is a rising line). */
-export const CHART_POINTS = [20, 16, 18, 10, 13, 6, 9, 3] as const;
-/** Monitoring bar series — the same week as discrete volume. */
-export const BAR_POINTS = [45, 70, 55, 85, 60, 95, 72] as const;
-/** Template-card health strip — per-day success, as bar heights. */
-export const HEALTH_BARS = [55, 80, 62, 90, 70, 96, 84] as const;

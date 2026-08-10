@@ -15,6 +15,7 @@ import {
   Activity,
   Bell,
   Bot,
+  Check,
   ChevronRight,
   Clock3,
   Home,
@@ -104,6 +105,7 @@ export const COPY = {
     // Connector list
     connectLabel: "Connect a tool",
     connectCount: "2 of 9 connected",
+    connectCountDone: "3 of 9 connected",
     slack: {
       glyph: GLYPH.slack,
       name: "Slack",
@@ -116,9 +118,12 @@ export const COPY = {
       { glyph: GLYPH.github, name: "GitHub", detail: "synced 2m ago", state: "connected" },
       { glyph: GLYPH.notion, name: "Notion", detail: "12 pages", state: "connected" },
     ],
-    // Schedule / trigger
+    // Schedule / trigger — idle strings show until the choice commits, so the
+    // module never claims a schedule nobody has set yet
     triggerLabel: "Trigger",
     triggerIcon: Clock3 as LucideIcon,
+    triggerIdle: "No schedule yet",
+    triggerIdleShort: "Not set",
     triggerValue: "Every morning · 9:00",
     triggerValueShort: "Daily · 9:00",
     triggerHint: "edit",
@@ -126,6 +131,7 @@ export const COPY = {
     triggerDays: ["S", "M", "T", "W", "T", "F", "S"] as const,
     triggerActiveDays: [1, 2, 3, 4, 5] as readonly number[],
     triggerZone: "UTC+1",
+    triggerOff: "off",
     triggerOn: "on",
     // Monitoring
     activityLabel: "Monitoring",
@@ -137,8 +143,12 @@ export const COPY = {
       { value: "98%", label: "success" },
       { value: "1.4s", label: "avg" },
     ],
-    // Final action
+    // The mark a committed choice leaves on the thing that was chosen
+    chosenIcon: Check as LucideIcon,
+    // Final action — the button commits into its own done state
     actionIcon: Sparkles as LucideIcon,
     action: "Create agent",
+    actionDoneIcon: Check as LucideIcon,
+    actionDone: "Agent created",
   },
 } as const;

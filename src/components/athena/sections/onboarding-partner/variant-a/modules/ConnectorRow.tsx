@@ -4,44 +4,60 @@ import ConnectorIcon from "@/components/sections/use-cases/components/ConnectorI
 import { ANNOTATION_DIM } from "@/components/athena/stage/athena-tokens";
 import { COPY, type ConnectState } from "../data";
 import type { Rect } from "../layout";
-import { StatePill, TargetPanel, rectStyle } from "./primitives";
+import { StatePill } from "./primitives";
+import { ModuleReveal, TargetPanel } from "./shell";
 
 /**
  * The connector list: a backing panel with a real header (label + connected
  * count) and rows carrying the genuine brand glyph, the account detail the
  * product would show, and a live connection state.
  *
- * The Slack row is the walkthrough's second target and changes state as she
- * narrates it — connect → connecting… → connected — so the scene shows a
- * handshake happening rather than a static label.
+ * The Slack row is the second setup target, and the choice made there is a
+ * handshake you watch happen — connect → connecting… → connected — with the
+ * panel's own count ticking up behind it. All three rows arrive together, so
+ * the rows need no skeleton of their own: the panel's already holds the rect.
  */
 
 /** Backing panel — rows are positioned over it so brackets stay pixel-true. */
-export function ConnectorPanel({ rect }: { rect: Rect }) {
+export function ConnectorPanel({
+  rect,
+  shown,
+  connected,
+  reduced,
+}: {
+  rect: Rect;
+  shown: boolean;
+  connected: boolean;
+  reduced: boolean;
+}) {
   const c = COPY.canvas;
   return (
-    <div
-      className="absolute flex flex-col rounded-xl border border-glass px-3 py-2.5"
-      style={rectStyle(rect)}
+    <ModuleReveal
+      rect={rect}
+      shown={shown}
+      reduced={reduced}
+      className="flex flex-col rounded-xl border border-glass px-3 py-2.5"
     >
       <span className="flex items-baseline gap-2">
         <span className={`${ANNOTATION_DIM} normal-case`}>{c.connectLabel}</span>
         <span className="ml-auto hidden truncate text-base text-muted-dark sm:block">
-          {c.connectCount}
+          {connected ? c.connectCountDone : c.connectCount}
         </span>
       </span>
-    </div>
+    </ModuleReveal>
   );
 }
 
-/** The Slack row — a walkthrough target, so it lives in a TargetPanel. */
+/** The Slack row — a setup target, so it lives in a TargetPanel. */
 export function SlackRow({
   rect,
+  shown,
   state,
   locked,
   reduced,
 }: {
   rect: Rect;
+  shown: boolean;
   state: ConnectState;
   locked: boolean;
   reduced: boolean;
@@ -49,7 +65,14 @@ export function SlackRow({
   const s = COPY.canvas.slack;
   const connected = state === "connected";
   return (
-    <TargetPanel rect={rect} locked={locked} className="items-center gap-2 px-2.5">
+    <TargetPanel
+      rect={rect}
+      shown={shown}
+      locked={locked}
+      reduced={reduced}
+      ghost={false}
+      className="items-center gap-2 px-2.5"
+    >
       <RowBody glyph={s.glyph} name={s.name} detail={s.detail} />
       <StatePill
         tone={connected ? "ok" : "brand"}
@@ -65,18 +88,25 @@ export function SlackRow({
 export function ConnectorRow({
   rect,
   chip,
+  shown,
+  reduced,
 }: {
   rect: Rect;
   chip: (typeof COPY.canvas.chips)[number];
+  shown: boolean;
+  reduced: boolean;
 }) {
   return (
-    <div
-      className="absolute flex items-center gap-2 rounded-xl border border-glass px-2.5"
-      style={rectStyle(rect)}
+    <ModuleReveal
+      rect={rect}
+      shown={shown}
+      reduced={reduced}
+      ghost={false}
+      className="flex items-center gap-2 rounded-xl border border-glass px-2.5"
     >
       <RowBody glyph={chip.glyph} name={chip.name} detail={chip.detail} dim />
       <StatePill tone="ok" label={chip.state} />
-    </div>
+    </ModuleReveal>
   );
 }
 

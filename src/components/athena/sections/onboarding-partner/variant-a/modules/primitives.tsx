@@ -1,78 +1,14 @@
 "use client";
 
-import { type ReactNode } from "react";
 import { motion } from "framer-motion";
-import { BRAND_VAR, type BrandKey, brandShadow, tint } from "@/lib/brand-theme";
-import { ANNOTATION_DIM } from "@/components/athena/stage/athena-tokens";
-import type { Point, Rect } from "../layout";
+import { BRAND_VAR, type BrandKey, tint } from "@/lib/brand-theme";
 
 /**
- * The shared vocabulary every module in the stylized app draws from: percent
- * placement, the target panel that glows when the brackets lock, and the
- * small state/health atoms (pills, dots, avatar stacks, bar strips) that make
- * a module read as product UI instead of a captioned box.
+ * The small state/health atoms every module draws from — pills, dots, avatar
+ * stacks, bar strips — the things that make a module read as product UI
+ * instead of a captioned box. Placement and reveal live in `./shell`.
  * Type floor: nothing renders below text-base.
  */
-
-export const rectStyle = (r: Rect) => ({
-  left: `${r.x}%`,
-  top: `${r.y}%`,
-  width: `${r.w}%`,
-  height: `${r.h}%`,
-});
-
-/** Content header: section name on the left, a live hint on the right. */
-export function SectionLabel({
-  at,
-  w,
-  text,
-  hint,
-}: {
-  at: Point;
-  w: number;
-  text: string;
-  hint?: string;
-}) {
-  return (
-    <div
-      className="absolute flex items-baseline gap-2"
-      style={{ left: `${at.x}%`, top: `${at.y}%`, width: `${w}%` }}
-    >
-      <span className={`${ANNOTATION_DIM} normal-case`}>{text}</span>
-      {hint && (
-        <span className="ml-auto hidden truncate text-base text-muted-dark sm:block">{hint}</span>
-      )}
-    </div>
-  );
-}
-
-/** A walkthrough target: glows while locked — the rest is never dimmed. */
-export function TargetPanel({
-  rect,
-  locked,
-  className = "",
-  children,
-}: {
-  rect: Rect;
-  locked: boolean;
-  className?: string;
-  children: ReactNode;
-}) {
-  return (
-    <div
-      className={`absolute flex overflow-hidden rounded-xl border transition-all duration-500 ${
-        locked ? "border-glass-hover" : "border-glass"
-      } ${className}`}
-      style={{
-        ...rectStyle(rect),
-        backgroundColor: locked ? tint("cyan", 8) : undefined,
-        boxShadow: locked ? brandShadow("cyan", 22, 24) : undefined,
-      }}
-    >
-      {children}
-    </div>
-  );
-}
 
 /** A status dot — optionally breathing while something is in flight. */
 export function Dot({

@@ -4,20 +4,35 @@ import ConnectorIcon from "@/components/sections/use-cases/components/ConnectorI
 import { ANNOTATION_DIM } from "@/components/athena/stage/athena-tokens";
 import { COPY } from "../copy";
 import type { Rect } from "../layout";
-import { Dot, SkeletonRow, rectStyle } from "./primitives";
+import { Dot, SkeletonRow } from "./primitives";
+import { ModuleReveal } from "./shell";
 
 /**
  * Recent-runs table — the right rail's product texture: a titled panel, a
  * real column header, rows keyed by the tool that ran (genuine brand glyph),
  * a status dot, a duration, and a skeleton row so the list obviously
  * continues past the fold. md+ only; the compact layout drops the rail.
+ *
+ * It does not exist until the agent does. Runs are the consequence of the
+ * final choice, so this arrives on that beat and not one tick earlier.
  */
-export function RunsTable({ rect }: { rect: Rect }) {
+export function RunsTable({
+  rect,
+  shown,
+  reduced,
+}: {
+  rect: Rect;
+  shown: boolean;
+  reduced: boolean;
+}) {
   const c = COPY.canvas;
   return (
-    <div
-      className="absolute hidden flex-col gap-1.5 overflow-hidden rounded-xl border border-glass px-3 py-2.5 md:flex"
-      style={rectStyle(rect)}
+    <ModuleReveal
+      rect={rect}
+      shown={shown}
+      reduced={reduced}
+      ghostClassName="hidden md:block"
+      className="hidden flex-col gap-1.5 overflow-hidden rounded-xl border border-glass px-3 py-2.5 md:flex"
     >
       <span className="flex items-baseline gap-2">
         <span className="truncate text-base font-semibold text-foreground">{c.runsTitle}</span>
@@ -49,6 +64,6 @@ export function RunsTable({ rect }: { rect: Rect }) {
       ))}
 
       <SkeletonRow widths={[38, 22, 14]} />
-    </div>
+    </ModuleReveal>
   );
 }

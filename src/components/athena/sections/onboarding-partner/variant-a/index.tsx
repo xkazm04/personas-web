@@ -16,12 +16,11 @@ import {
   CYCLE,
   INITIAL_TICK,
   TICK_MS,
-  actionPulseAt,
   lockedStopAt,
   orbAt,
   railAt,
   rectFor,
-  slackStateAt,
+  sceneStateAt,
   statusAt,
   statusShortAt,
   travelingAt,
@@ -30,18 +29,23 @@ import {
 /**
  * Section 3, variant A — "The Glide" (onboarding partner).
  *
- * A full-viewport stylized desktop app is set up WITH you on the
- * deterministic tick clock (DevToolsGrid pattern): Athena's orb glides stop
- * to stop along a scripted 4-stop route — pick a template, connect Slack,
- * set the trigger, land on the real "Create agent" button — corner brackets
- * lock onto each control, the control glows (the rest of the UI is never
- * dimmed or blocked), a ≤5-word caption narrates, and the segmented rail at
- * the bottom advances. Loop.
+ * A full-viewport stylized desktop app is BUILT WITH you on the deterministic
+ * tick clock (DevToolsGrid pattern). The canvas opens as a set of quiet
+ * skeletons holding their rects, and each module materializes only when the
+ * route reaches it: Athena's orb glides stop to stop along a scripted 4-stop
+ * route — pick a template, connect Slack, choose when it runs, click the real
+ * "Create agent" button — and every stop ends in a choice that visibly
+ * commits (card selected, tool connected, schedule armed, agent created).
+ * Corner brackets lock onto each control, the control glows (the rest of the
+ * UI is never dimmed or blocked), a ≤5-word caption narrates, and the
+ * segmented rail counts decisions made. Loop.
  *
  * The app around her is real product UI: brand connector glyphs, template
  * cards with health strips, a connector list mid-handshake, a weekday
  * scheduler, a runs table and a monitoring deck — so a visitor recognises
- * the screen at a glance instead of reading labels in boxes.
+ * the screen at a glance instead of reading labels in boxes. The runs table
+ * and the monitoring deck only exist after the agent is created, because
+ * until then there is nothing to monitor.
  *
  * The only copy outside the illustration is the SectionIntro trio; every
  * other word is an in-scene UI label, caption, or the mono status line.
@@ -59,9 +63,10 @@ import {
  * owns one shared stage and sections inherit it.
  */
 
-/** Phase 0 — the true top of the route: orb docked off the UI, rail empty,
- *  nothing locked, status "walkthrough starting". Stop 1 arrives two ticks
- *  later, so the establishing glide from the dock is part of the story. */
+/** Phase 0 — the true top of the route: an empty workspace of skeletons, orb
+ *  docked off the UI, rail empty, nothing locked. The first module reveals
+ *  two ticks later, so every visitor watches the app get built from nothing —
+ *  which only works because the clock rewinds on every entry. */
 const START_TICK = 0;
 
 export default function OnboardingPartnerGlide() {
@@ -85,11 +90,14 @@ export default function OnboardingPartnerGlide() {
     return () => clearInterval(id);
   }, [reduced, inView]);
 
-  const phase = tick % CYCLE;
+  // Reduced motion pins the assembled still outright rather than freezing the
+  // clock, so a visitor who flips the preference mid-loop lands on the
+  // finished story instead of a half-built app.
+  const phase = (reduced ? INITIAL_TICK : tick) % CYCLE;
+  const scene = sceneStateAt(phase);
   const locked = lockedStopAt(phase);
   const orb = orbAt(phase, compact);
   const rail = railAt(phase);
-  const pulse = actionPulseAt(phase);
   const traveling = travelingAt(phase);
 
   return (
@@ -114,7 +122,7 @@ export default function OnboardingPartnerGlide() {
           />
         </motion.div>
 
-        {/* The illustration — a full-height app the walkthrough plays inside */}
+        {/* The illustration — a full-height app that assembles as she guides */}
         <AppWindow
           footer={
             <>
@@ -128,13 +136,7 @@ export default function OnboardingPartnerGlide() {
             </>
           }
         >
-          <CanvasScene
-            lockedId={locked?.id ?? null}
-            pulse={pulse}
-            slackState={slackStateAt(phase)}
-            compact={compact}
-            reduced={reduced}
-          />
+          <CanvasScene scene={scene} compact={compact} reduced={reduced} />
           {locked && (
             <LockBrackets key={locked.id} rect={rectFor(locked, compact)} reduced={reduced} />
           )}
