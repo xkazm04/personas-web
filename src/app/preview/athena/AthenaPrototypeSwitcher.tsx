@@ -84,6 +84,36 @@ const PAGE: SectionSlot[] = [
       },
     ],
   },
+  {
+    id: "one-mind",
+    title: "S6 — Always the same person",
+    variants: [
+      {
+        id: "one-mind",
+        label: "A — One Mind",
+        note: "a fact learned in one conversation, used in another",
+        Component: dynamic(
+          () => import("@/components/athena/sections/one-mind/variant-a"),
+        ),
+      },
+      {
+        id: "pick-it-up",
+        label: "B — Pick It Up Where You Left It",
+        note: "the draft you were about to type, clearing itself",
+        Component: dynamic(
+          () => import("@/components/athena/sections/one-mind/variant-b"),
+        ),
+      },
+      {
+        id: "the-return",
+        label: "C — The Return",
+        note: "wildcard closer: the page arrives instead of fanning out",
+        Component: dynamic(
+          () => import("@/components/athena/sections/one-mind/variant-c"),
+        ),
+      },
+    ],
+  },
 ];
 
 /*
