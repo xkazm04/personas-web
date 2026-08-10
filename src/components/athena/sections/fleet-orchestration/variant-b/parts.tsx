@@ -79,7 +79,16 @@ export function Slot({
       />
       <div
         className={`absolute inset-0 border ${round} ${SKIN} ${className}`}
-        style={solid ? style : BARE}
+        style={
+          solid
+            ? // A bare `border` with no colour resolves to `currentColor`, and
+              // this page's text is near-white — which is how every panel grew
+              // a white outline the theme never asked for. Callers set
+              // `borderColor` only in their emphatic states, so the calm state
+              // needs a themed floor here rather than at each call site.
+              { ...style, borderColor: style?.borderColor ?? tint("cyan", 20) }
+            : BARE
+        }
       >
         {solid && children}
       </div>

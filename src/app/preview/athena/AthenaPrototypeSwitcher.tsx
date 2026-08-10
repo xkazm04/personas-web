@@ -55,31 +55,16 @@ const PAGE: SectionSlot[] = [
     ],
   },
   {
-    id: "sentence-to-work",
-    title: "S4 — A sentence becomes work",
+    id: "fleet-orchestration",
+    title: "S4 — Fleet orchestration",
+    locked: true,
     variants: [
       {
-        id: "desk",
-        label: "A — The Desk",
-        note: "in-app: plan builds, she edits a row, work ignites",
-        Component: dynamic(
-          () => import("@/components/athena/sections/sentence-to-work/variant-a"),
-        ),
-      },
-      {
         id: "decomposition",
-        label: "B — The Decomposition",
-        note: "the sentence comes apart into the work it implies",
+        label: "Decomposition ✓",
+        note: "winner — the sentence comes apart into the work it implies",
         Component: dynamic(
-          () => import("@/components/athena/sections/sentence-to-work/variant-b"),
-        ),
-      },
-      {
-        id: "you-left",
-        label: "C — You Left. It Kept Going.",
-        note: "wildcard: hand it over, walk away, come back to it done",
-        Component: dynamic(
-          () => import("@/components/athena/sections/sentence-to-work/variant-c"),
+          () => import("@/components/athena/sections/fleet-orchestration/variant-b"),
         ),
       },
     ],

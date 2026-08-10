@@ -60,8 +60,8 @@ export const EDITED_TASK = 0;
 export const COPY = {
   intro: {
     eyebrow: "Say it in your own words",
-    heading: "One sentence,",
-    gradient: "a whole team",
+    heading: "Fleet",
+    gradient: "orchestration",
   },
   request: {
     /** Sits in the box until the first words land. */
