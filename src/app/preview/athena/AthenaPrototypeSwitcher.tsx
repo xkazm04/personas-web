@@ -69,6 +69,36 @@ const PAGE: SectionSlot[] = [
       },
     ],
   },
+  {
+    id: "whole-portfolio",
+    title: "S5 — Your whole portfolio",
+    variants: [
+      {
+        id: "flight",
+        label: "A — The Flight",
+        note: "camera travels the field, descends onto the worst one",
+        Component: dynamic(
+          () => import("@/components/athena/sections/whole-portfolio/variant-a"),
+        ),
+      },
+      {
+        id: "worst-first",
+        label: "B — Worst First",
+        note: "many → few → ordered → one; the sort is the argument",
+        Component: dynamic(
+          () => import("@/components/athena/sections/whole-portfolio/variant-b"),
+        ),
+      },
+      {
+        id: "stopped-looking",
+        label: "C — The Thing You Stopped Looking At",
+        note: "wildcard: elapsed attention, quiet decay, noticed in time",
+        Component: dynamic(
+          () => import("@/components/athena/sections/whole-portfolio/variant-c"),
+        ),
+      },
+    ],
+  },
 ];
 
 /*
