@@ -41,14 +41,16 @@ const PAGE: SectionSlot[] = [
     ],
   },
   {
-    id: "shows-you",
-    title: "S3 — She shows you how",
+    id: "onboarding-partner",
+    title: "S3 — Onboarding partner",
     variants: [
       {
         id: "glide",
         label: "A — The Glide (developing)",
-        note: "winner in refinement — richer modules, landing title style",
-        Component: dynamic(() => import("@/components/athena/sections/shows-you/variant-a")),
+        note: "winner in refinement — she sets the workspace up with you",
+        Component: dynamic(
+          () => import("@/components/athena/sections/onboarding-partner/variant-a"),
+        ),
       },
     ],
   },

@@ -1,10 +1,10 @@
 /**
- * Data + clock for "The Glide" — section 3 ("She shows you how"), variant A.
+ * Data + clock for "The Glide" — section 3 ("Onboarding partner"), variant A.
  * Modeled on dev-tools-grid/athenaFleetData.ts: one deterministic CYCLE,
  * choreography as data (stops with arrive/depart ticks + target rects), and
  * pure phase functions the scene derives everything from.
  *
- * The scene: a stylized desktop app plays a complete guided walkthrough.
+ * The scene: a stylized desktop app gets set up with you, step by step.
  * Athena's orb glides stop to stop; at each stop four corner brackets lock
  * onto the exact control, the control glows (the rest of the UI is never
  * dimmed or blocked), a ≤5-word caption narrates, and a segmented progress

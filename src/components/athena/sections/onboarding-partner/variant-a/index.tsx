@@ -28,15 +28,15 @@ import {
 } from "./data";
 
 /**
- * Section 3, variant A — "The Glide" (she shows you how).
+ * Section 3, variant A — "The Glide" (onboarding partner).
  *
- * A full-viewport stylized desktop app plays a complete guided walkthrough
- * on the deterministic tick clock (DevToolsGrid pattern): Athena's orb
- * glides stop to stop along a scripted 4-stop route — pick a template,
- * connect Slack, set the trigger, land on the real "Create agent" button —
- * corner brackets lock onto each control, the control glows (the rest of
- * the UI is never dimmed or blocked), a ≤5-word caption narrates, and the
- * segmented rail at the bottom advances. Loop.
+ * A full-viewport stylized desktop app is set up WITH you on the
+ * deterministic tick clock (DevToolsGrid pattern): Athena's orb glides stop
+ * to stop along a scripted 4-stop route — pick a template, connect Slack,
+ * set the trigger, land on the real "Create agent" button — corner brackets
+ * lock onto each control, the control glows (the rest of the UI is never
+ * dimmed or blocked), a ≤5-word caption narrates, and the segmented rail at
+ * the bottom advances. Loop.
  *
  * The app around her is real product UI: brand connector glyphs, template
  * cards with health strips, a connector list mid-handshake, a weekday
@@ -50,10 +50,10 @@ import {
  * the section visible) and the route rewinds to START_TICK on every entry,
  * so nobody joins the story mid-sentence and nothing ticks off-screen.
  *
- * Reduced motion: no interval — the scene pins INITIAL_TICK, a
- * mid-walkthrough frame (brackets locked on stop 2, rail 2/4, caption up,
- * all enriched modules rendered in their finished state). It deliberately
- * does NOT rewind: the still frame tells the whole story at once.
+ * Reduced motion: no interval — the scene pins INITIAL_TICK, a late frame
+ * where the whole workspace is assembled and every choice has committed.
+ * It deliberately does NOT rewind: the still frame tells the whole story
+ * at once.
  *
  * NOTE: the AthenaStage wrapper unwraps at assembly — the /athena page
  * owns one shared stage and sections inherit it.
@@ -64,7 +64,7 @@ import {
  *  later, so the establishing glide from the dock is part of the story. */
 const START_TICK = 0;
 
-export default function ShowsYouGlide() {
+export default function OnboardingPartnerGlide() {
   const reduced = useStillMotion();
   const compact = useIsMobile();
   const sectionRef = useRef<HTMLElement | null>(null);

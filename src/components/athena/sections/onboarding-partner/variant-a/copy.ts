@@ -1,8 +1,9 @@
 // PROTOTYPE COPY — extract to src/i18n at assembly
 /**
- * Every word in section 3 variant A: the SectionIntro trio plus the in-scene
- * UI labels of the stylized app. Nothing here is decorative filler — each
- * string is something a real Personas screen would say.
+ * Every word in section 3 ("Onboarding partner"), variant A: the SectionIntro
+ * trio plus the in-scene UI labels of the stylized app. Nothing here is
+ * decorative filler — each string is something a real Personas screen would
+ * say while you and Athena set the workspace up together.
  *
  * Icons split two ways on purpose:
  *   • real products  → the brand SVGs in `public/icons/connectors`, rendered
@@ -37,9 +38,9 @@ const GLYPH = {
 
 export const COPY = {
   intro: {
-    eyebrow: "Guided walkthroughs",
-    heading: "She shows you",
-    gradient: "how",
+    eyebrow: "Set up together",
+    heading: "Onboarding",
+    gradient: "partner",
   },
   chrome: {
     appName: "Personas",
