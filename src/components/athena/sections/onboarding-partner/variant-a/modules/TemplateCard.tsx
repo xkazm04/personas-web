@@ -5,7 +5,7 @@ import ConnectorIcon from "@/components/sections/use-cases/components/ConnectorI
 import { BRAND_VAR, tint } from "@/lib/brand-theme";
 import { ANNOTATION_DIM, SPRING_POP } from "@/components/athena/stage/athena-tokens";
 import { COPY, HEALTH_BARS } from "../data";
-import { atStage, type ModuleStage } from "../stages";
+import { atStage, type ModuleStage } from "@/components/athena/stage/stages";
 import { AvatarStack, MiniBars, StatePill } from "./primitives";
 import { DrawCheck, Part, Sheen } from "./parts";
 

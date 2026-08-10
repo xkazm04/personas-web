@@ -5,7 +5,7 @@ import { brandShadow, tint } from "@/lib/brand-theme";
 import { ANNOTATION, ANNOTATION_DIM } from "@/components/athena/stage/athena-tokens";
 import { COPY } from "../copy";
 import type { Rect } from "../layout";
-import { atStage, type ModuleStage } from "../stages";
+import { atStage, type ModuleStage } from "@/components/athena/stage/stages";
 import { Part } from "./parts";
 import { TargetPanel } from "./shell";
 

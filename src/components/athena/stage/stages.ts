@@ -1,5 +1,11 @@
 /**
- * The layered-reveal vocabulary every module in "The Glide" composes through.
+ * The layered-reveal vocabulary every /athena scene composes through.
+ *
+ * Lives in `stage/` beside the page's other shared vocabulary (AthenaStage,
+ * athena-tokens, useStillMotion) because it is section-agnostic: it says only
+ * that content arrives in ordered layers, never what any layer contains. Born
+ * in the onboarding-partner section; promoted here so later sections inherit
+ * the model instead of forking it.
  *
  * A module is never "shown" or "hidden" — it is at a STAGE, and the stages are
  * cumulative, so a module reading `atStage(stage, "body")` still has everything

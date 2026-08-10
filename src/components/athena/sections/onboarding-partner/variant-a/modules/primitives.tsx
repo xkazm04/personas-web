@@ -3,7 +3,7 @@
 import { type ReactNode } from "react";
 import { motion } from "framer-motion";
 import { BRAND_VAR, type BrandKey, tint } from "@/lib/brand-theme";
-import { STEP } from "../stages";
+import { STEP } from "@/components/athena/stage/stages";
 
 /**
  * The small state/health atoms every module draws from — pills, dots, avatar

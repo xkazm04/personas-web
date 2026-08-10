@@ -4,7 +4,7 @@ import ConnectorIcon from "@/components/sections/use-cases/components/ConnectorI
 import { ANNOTATION_DIM } from "@/components/athena/stage/athena-tokens";
 import { COPY, type ConnectState } from "../data";
 import type { Rect } from "../layout";
-import { atStage, type ModuleStage } from "../stages";
+import { atStage, type ModuleStage } from "@/components/athena/stage/stages";
 import { StatePill } from "./primitives";
 import { DrawCheck, Flash, Part, Spinner } from "./parts";
 import { ModuleReveal, TargetPanel } from "./shell";

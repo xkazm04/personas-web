@@ -4,7 +4,7 @@ import { type CSSProperties, type ReactNode } from "react";
 import { motion } from "framer-motion";
 import { brandShadow, tint } from "@/lib/brand-theme";
 import { ANNOTATION_DIM, SPRING_POP } from "@/components/athena/stage/athena-tokens";
-import { atStage, type ModuleStage } from "../stages";
+import { atStage, type ModuleStage } from "@/components/athena/stage/stages";
 import type { Point, Rect } from "../layout";
 
 /**

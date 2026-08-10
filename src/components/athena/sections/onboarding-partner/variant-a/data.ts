@@ -24,14 +24,14 @@
  */
 
 import { DOCK, ROUTE, type RouteStop, type StopId } from "./route";
-import { atStage, stageOf, type ModuleStage, type StagePlan } from "./stages";
+import { atStage, stageOf, type ModuleStage, type StagePlan } from "@/components/athena/stage/stages";
 import type { Point, Rect } from "./layout";
 
 export { COPY } from "./copy";
 export { WIDE, COMPACT, WIDE_ONLY, layoutFor } from "./layout";
 export { BAR_POINTS, CHART_POINTS, HEALTH_BARS } from "./series";
-export { atStage, stepDelay, STEP } from "./stages";
-export type { ModuleStage } from "./stages";
+export { atStage, stepDelay, STEP } from "@/components/athena/stage/stages";
+export type { ModuleStage } from "@/components/athena/stage/stages";
 export type { Point, Rect, SceneLayout } from "./layout";
 export type { RouteStop, StopId } from "./route";
 

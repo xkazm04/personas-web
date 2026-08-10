@@ -5,7 +5,7 @@ import { BRAND_VAR, brandShadow, tint } from "@/lib/brand-theme";
 import { SPRING_POP } from "@/components/athena/stage/athena-tokens";
 import { COPY, type ActionState } from "../data";
 import type { Rect } from "../layout";
-import { atStage, type ModuleStage } from "../stages";
+import { atStage, type ModuleStage } from "@/components/athena/stage/stages";
 import { DrawCheck, Part, Sheen } from "./parts";
 import { ModuleReveal } from "./shell";
 

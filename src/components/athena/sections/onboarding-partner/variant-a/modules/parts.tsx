@@ -4,7 +4,7 @@ import { type CSSProperties, type ReactNode } from "react";
 import { motion } from "framer-motion";
 import { tint } from "@/lib/brand-theme";
 import { SPRING_POP } from "@/components/athena/stage/athena-tokens";
-import { stepDelay } from "../stages";
+import { stepDelay } from "@/components/athena/stage/stages";
 
 /**
  * The atoms of an INTRA-stage cascade, and of the commit beats.

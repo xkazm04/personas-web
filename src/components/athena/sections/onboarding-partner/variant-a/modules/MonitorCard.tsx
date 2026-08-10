@@ -6,7 +6,7 @@ import { BRAND_VAR, tint } from "@/lib/brand-theme";
 import { ANNOTATION_DIM } from "@/components/athena/stage/athena-tokens";
 import { BAR_POINTS, CHART_POINTS, COPY } from "../data";
 import type { Rect } from "../layout";
-import { atStage, type ModuleStage } from "../stages";
+import { atStage, type ModuleStage } from "@/components/athena/stage/stages";
 import { MiniBars, StatePill } from "./primitives";
 import { Part } from "./parts";
 import { ModuleReveal } from "./shell";
