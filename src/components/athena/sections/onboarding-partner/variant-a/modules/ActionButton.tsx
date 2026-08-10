@@ -12,11 +12,11 @@ import { ModuleReveal } from "./shell";
 /**
  * The closing stop — a real action button, built like everything else rather
  * than dropped in finished. While she is still crossing to it the ghost
- * solidifies into an empty outline (shell); the surface floods brand cyan and
- * the label walks in as she arrives (body); it starts beckoning on the lock
- * (detail); and the click commits into a done face whose check DRAWS while an
- * accent sweeps the button — the same commit vocabulary the template card and
- * the Slack row use.
+ * solidifies into an OUTLINE BUTTON that already says what it does (shell);
+ * the surface floods brand cyan and the label inverts as she arrives (body);
+ * it starts beckoning on the lock (detail); and the click commits into a done
+ * face whose check DRAWS while an accent sweeps the button — the same commit
+ * vocabulary the template card and the Slack row use.
  */
 export function ActionButton({
   rect,
@@ -32,6 +32,11 @@ export function ActionButton({
   const c = COPY.canvas;
   const Spark = c.actionIcon;
   const done = state === "done";
+  // The label rides the OUTLINE, not the fill. A button whose surface exists
+  // before its words reads as a skeleton, not as composition — the label is
+  // what makes the shape a button. So shell draws an outline button already
+  // saying what it does, and `body` floods the surface and inverts the text.
+  const outlined = atStage(stage, "shell");
   const filled = atStage(stage, "body");
   const live = state === "pulse" && !reduced;
   return (
@@ -57,7 +62,7 @@ export function ActionButton({
             <Spark className="h-4.5 w-4.5" aria-hidden="true" />
           )}
         </Part>
-        {filled && (
+        {outlined && (
           <motion.span
             key={done ? "done" : "idle"}
             initial={reduced ? false : { opacity: 0, scale: 0.9 }}
