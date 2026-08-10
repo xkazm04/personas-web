@@ -85,8 +85,38 @@ const PAGE: SectionSlot[] = [
     ],
   },
   {
+    id: "lasting-memory",
+    title: "S6 — Memory that keeps itself",
+    variants: [
+      {
+        id: "tide",
+        label: "A — The Tide",
+        note: "talk accumulates, crosses the line, settles into a few kept things",
+        Component: dynamic(
+          () => import("@/components/athena/sections/lasting-memory/variant-a"),
+        ),
+      },
+      {
+        id: "nothing-lost",
+        label: "B — Nothing Is Lost",
+        note: "superseded ≠ gone: it dims out of use, still readable, still linked",
+        Component: dynamic(
+          () => import("@/components/athena/sections/lasting-memory/variant-b"),
+        ),
+      },
+      {
+        id: "deferred",
+        label: "C — Deferred, Not Lost",
+        note: "wildcard: it says what it didn't reach, and resumes exactly there",
+        Component: dynamic(
+          () => import("@/components/athena/sections/lasting-memory/variant-c"),
+        ),
+      },
+    ],
+  },
+  {
     id: "one-mind",
-    title: "S6 — Always the same person",
+    title: "S7 — Always the same person",
     locked: true,
     variants: [
       {
