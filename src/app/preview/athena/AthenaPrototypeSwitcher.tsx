@@ -87,29 +87,14 @@ const PAGE: SectionSlot[] = [
   {
     id: "lasting-memory",
     title: "S6 — She grows with you",
+    locked: true,
     variants: [
       {
-        id: "anatomy",
-        label: "D — The Anatomy",
-        note: "wide→narrow→wide: nine streams in, three kept, twice over",
-        Component: dynamic(
-          () => import("@/components/athena/sections/lasting-memory/variant-d"),
-        ),
-      },
-      {
         id: "every-night",
-        label: "E — Every Night, A Little More",
-        note: "five ordinary days; talk churns, the shelf only grows",
+        label: "Every Night, A Little More ✓",
+        note: "winner — five ordinary days; talk churns, the shelf only grows",
         Component: dynamic(
           () => import("@/components/athena/sections/lasting-memory/variant-e"),
-        ),
-      },
-      {
-        id: "deferred",
-        label: "C — baseline (previous pick)",
-        note: "the bar to beat: it says what it didn't reach, and resumes there",
-        Component: dynamic(
-          () => import("@/components/athena/sections/lasting-memory/variant-c"),
         ),
       },
     ],
