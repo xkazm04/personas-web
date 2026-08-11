@@ -70,8 +70,38 @@ const PAGE: SectionSlot[] = [
     ],
   },
   {
+    id: "her-workshop",
+    title: "S5 — Everything she can put to work",
+    variants: [
+      {
+        id: "wall",
+        label: "A — The Wall",
+        note: "many running at once; one pass, every screen answers",
+        Component: dynamic(
+          () => import("@/components/athena/sections/her-workshop/variant-a"),
+        ),
+      },
+      {
+        id: "workshop",
+        label: "B — The Workshop",
+        note: "five different instruments, four clocks, one desk",
+        Component: dynamic(
+          () => import("@/components/athena/sections/her-workshop/variant-b"),
+        ),
+      },
+      {
+        id: "fence",
+        label: "C — The Fence",
+        note: "wildcard: the dial moves, the boundary never does",
+        Component: dynamic(
+          () => import("@/components/athena/sections/her-workshop/variant-c"),
+        ),
+      },
+    ],
+  },
+  {
     id: "whole-portfolio",
-    title: "S5 — Your whole portfolio",
+    title: "S6 — Your whole portfolio",
     locked: true,
     variants: [
       {
@@ -86,7 +116,7 @@ const PAGE: SectionSlot[] = [
   },
   {
     id: "lasting-memory",
-    title: "S6 — She grows with you",
+    title: "S7 — She grows with you",
     locked: true,
     variants: [
       {
@@ -101,7 +131,7 @@ const PAGE: SectionSlot[] = [
   },
   {
     id: "one-mind",
-    title: "S7 — Always the same person",
+    title: "S8 — Always the same person",
     locked: true,
     variants: [
       {
