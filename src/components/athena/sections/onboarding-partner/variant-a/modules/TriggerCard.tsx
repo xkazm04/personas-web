@@ -3,7 +3,8 @@
 import { motion } from "framer-motion";
 import { brandShadow, tint } from "@/lib/brand-theme";
 import { ANNOTATION, ANNOTATION_DIM } from "@/components/athena/stage/athena-tokens";
-import { COPY } from "../copy";
+import { useTranslation } from "@/i18n/useTranslation";
+import { SCENE } from "../copy";
 import type { Rect } from "../layout";
 import { atStage, type ModuleStage } from "@/components/athena/stage/stages";
 import { Part } from "./parts";
@@ -41,9 +42,10 @@ export function TriggerCard({
   armed: boolean;
   reduced: boolean;
 }) {
-  const c = COPY.canvas;
-  const Clock = c.triggerIcon;
-  const Pencil = c.triggerHintIcon;
+  const { t } = useTranslation();
+  const c = t.athenaPage.onboarding.canvas;
+  const Clock = SCENE.canvas.triggerIcon;
+  const Pencil = SCENE.canvas.triggerHintIcon;
   const voice = armed ? ANNOTATION : ANNOTATION_DIM;
   const body = atStage(stage, "body");
   const detail = atStage(stage, "detail");
@@ -87,7 +89,11 @@ export function TriggerCard({
         <span className={`${ROW} gap-1.5`}>
           {c.triggerDays.map((day, i) => (
             <Part key={i} show={detail} i={i} reduced={reduced} className="flex shrink-0">
-              <DayCell label={day} lit={armed && c.triggerActiveDays.includes(i)} order={c.triggerActiveDays.indexOf(i)} />
+              <DayCell
+                label={day}
+                lit={armed && SCENE.canvas.triggerActiveDays.includes(i)}
+                order={SCENE.canvas.triggerActiveDays.indexOf(i)}
+              />
             </Part>
           ))}
           <Part show={detail} i={7} reduced={reduced} className="ml-auto hidden shrink-0 text-base text-muted-dark sm:block">
@@ -106,7 +112,8 @@ export function TriggerCard({
 /** The schedule line — it resolves as the weekdays finish lighting, so the
  *  strip reads as the cause and the sentence as the consequence. */
 function Schedule({ armed, reduced, long }: { armed: boolean; reduced: boolean; long?: boolean }) {
-  const c = COPY.canvas;
+  const { t } = useTranslation();
+  const c = t.athenaPage.onboarding.canvas;
   const set = long ? c.triggerValue : c.triggerValueShort;
   const idle = long ? c.triggerIdle : c.triggerIdleShort;
   return (

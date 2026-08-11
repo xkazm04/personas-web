@@ -1432,6 +1432,153 @@
     chromeTitle: string;
     reset: string;
   };
+  athenaPage: {
+    hero: {
+      eyebrow: string;
+      headline: string;
+      headlineGradient: string;
+      tagline: string;
+      persona: string;
+      ctaPrimary: string;
+      ctaSecondary: string;
+      statWhisper: string;
+      avatarAlt: string;
+      orbAria: string;
+      acknowledgeLine: string;
+      calloutsAria: string;
+      callouts: { label: string; fact: string }[];
+    };
+    onboarding: {
+      intro: { eyebrow: string; heading: string; gradient: string };
+      chrome: {
+        appName: string;
+        search: string;
+        nav: string[];
+        usageLabel: string;
+        usageValue: string;
+        newAgent: string;
+      };
+      canvas: {
+        crumbs: string[];
+        filters: string[];
+        templatesLabel: string;
+        templatesHint: string;
+        template: {
+          title: string;
+          meta: string;
+          pill: string;
+          schedule: string;
+          runs: string;
+          health: string;
+        };
+        templateAlt: {
+          title: string;
+          meta: string;
+          pill: string;
+          schedule: string;
+          runs: string;
+          health: string;
+        };
+        runsTitle: string;
+        runsHint: string;
+        runsCols: string[];
+        runsRows: { name: string; state: string; took: string }[];
+        connectLabel: string;
+        connectCount: string;
+        connectCountDone: string;
+        slack: {
+          name: string;
+          detail: string;
+          connect: string;
+          connecting: string;
+          connected: string;
+        };
+        chips: { name: string; detail: string; state: string }[];
+        triggerLabel: string;
+        triggerIdle: string;
+        triggerIdleShort: string;
+        triggerValue: string;
+        triggerValueShort: string;
+        triggerHint: string;
+        triggerDays: string[];
+        triggerZone: string;
+        triggerOff: string;
+        triggerOn: string;
+        activityLabel: string;
+        activityStat: string;
+        activityPill: string;
+        stats: { value: string; label: string }[];
+        action: string;
+        actionDone: string;
+      };
+    };
+    fleet: {
+      intro: { eyebrow: string; heading: string; gradient: string };
+      request: { placeholder: string; voice: string; sent: string; clauses: string[][] };
+      plan: {
+        hint: string;
+        hintShort: string;
+        edited: string;
+        start: string;
+        working: string;
+        done: string;
+      };
+      task: { working: string; finished: string };
+      tasks: { title: string; scope: string; scopeEdited?: string; found: string }[];
+      result: { title: string; rows: { label: string; meta: string }[]; footer: string };
+    };
+    workshop: {
+      intro: { eyebrow: string; heading: string; gradient: string };
+      beds: { name: string; short: string }[];
+      jobTitles: string[];
+      fence: { plate: string; plateShort: string };
+      dial: { label: string; labelShort: string; stops: string[]; stopsShort: string[] };
+      job: { working: string; done: string };
+      outside: { name: string; waits: string };
+    };
+    portfolio: {
+      intro: { eyebrow: string; heading: string; gradient: string };
+      projects: string[];
+      field: { needs: string; handled: string };
+      panel: {
+        badge: string;
+        rows: { name: string; since: string }[];
+        rest: string;
+        finding: string;
+        findingShort: string;
+        action: string;
+        actionShort: string;
+        done: string;
+      };
+      caption: {
+        survey: string;
+        surfaced: string;
+        worst: string;
+        found: string;
+        opened: string;
+      };
+    };
+    memory: {
+      intro: { eyebrow: string; heading: string; gradient: string };
+      talk: string;
+      rail: string;
+      night: string;
+      shelf: string;
+      kept: string[];
+    };
+    oneMind: {
+      intro: { eyebrow: string; heading: string; gradient: string };
+      conversations: { name: string; short: string }[];
+      open: {
+        label: string;
+        question: string;
+        from: string;
+        footer: string;
+        footerShort: string;
+      };
+      rows: { claim: string; short: string }[];
+    };
+  };
 }
 
 export const en: Translations = {
@@ -3044,5 +3191,248 @@ export const en: Translations = {
     statusReady: 'ready',
     chromeTitle: 'agent-playground — live',
     reset: 'Reset',
+  },
+  athenaPage: {
+    hero: {
+      eyebrow: 'Your chief of staff',
+      headline: 'Meet',
+      headlineGradient: 'Athena',
+      tagline: 'She says nothing when nothing needs saying.',
+      persona: 'A strategist, not a cheerful assistant \u2014 direct, opinionated, warm without performing. \u201CSpeed is not your job. Quality is.\u201D',
+      ctaPrimary: 'See her work',
+      ctaSecondary: 'Download Personas',
+      statWhisper: 'Runs entirely on your machine \u00B7 you decide how far she goes',
+      avatarAlt: 'Athena, the Personas companion',
+      orbAria: 'Athena \u2014 press Enter and she acknowledges you',
+      acknowledgeLine: 'I\'m listening.',
+      calloutsAria: 'What Athena does for you',
+      callouts: [
+        { label: 'Talk to her', fact: 'Hold to speak \u2014 no typing' },
+        { label: 'At a glance', fact: 'See what she\'s working on' },
+        { label: 'Your desktop', fact: 'Drag her where you work' },
+        { label: 'Always ready', fact: 'Cmd/Ctrl+Shift+A, from any app' },
+      ],
+    },
+    onboarding: {
+      intro: { eyebrow: 'Set up together', heading: 'Onboarding', gradient: 'partner' },
+      chrome: {
+        appName: 'Personas',
+        search: 'Search\u2026',
+        nav: ['Home', 'Agents', 'Templates', 'Connectors', 'Vault', 'Settings'],
+        usageLabel: 'runs today',
+        usageValue: '18 / 25',
+        newAgent: 'New agent',
+      },
+      canvas: {
+        crumbs: ['Workspace', 'Automation'],
+        filters: ['All', 'Popular', 'Scheduled', 'New'],
+        templatesLabel: 'Templates',
+        templatesHint: '12 templates',
+        template: {
+          title: 'Daily digest',
+          meta: 'summarize \u00B7 post \u00B7 9:00',
+          pill: 'popular',
+          schedule: 'Daily 9:00',
+          runs: '142 runs',
+          health: '98% ok',
+        },
+        templateAlt: {
+          title: 'Inbox triage',
+          meta: 'label \u00B7 draft \u00B7 archive',
+          pill: 'new',
+          schedule: 'On new mail',
+          runs: '86 runs',
+          health: '94% ok',
+        },
+        runsTitle: 'Recent runs',
+        runsHint: 'last 24h',
+        runsCols: ['agent', 'status', 'took'],
+        runsRows: [
+          { name: 'Daily digest', state: 'ok', took: '1.2s' },
+          { name: 'PR review', state: 'ok', took: '0.8s' },
+          { name: 'Notes sync', state: 'running', took: '\u2014' },
+        ],
+        connectLabel: 'Connect a tool',
+        connectCount: '2 of 9 connected',
+        connectCountDone: '3 of 9 connected',
+        slack: {
+          name: 'Slack',
+          detail: '#general \u00B7 updates',
+          connect: 'connect',
+          connecting: 'connecting\u2026',
+          connected: 'connected',
+        },
+        chips: [
+          { name: 'GitHub', detail: 'synced 2m ago', state: 'connected' },
+          { name: 'Notion', detail: '12 pages', state: 'connected' },
+        ],
+        triggerLabel: 'Trigger',
+        triggerIdle: 'No schedule yet',
+        triggerIdleShort: 'Not set',
+        triggerValue: 'Every morning \u00B7 9:00',
+        triggerValueShort: 'Daily \u00B7 9:00',
+        triggerHint: 'edit',
+        triggerDays: ['S', 'M', 'T', 'W', 'T', 'F', 'S'],
+        triggerZone: 'UTC+1',
+        triggerOff: 'off',
+        triggerOn: 'on',
+        activityLabel: 'Monitoring',
+        activityStat: '24 runs',
+        activityPill: 'live',
+        stats: [
+          { value: '24', label: 'runs' },
+          { value: '98%', label: 'success' },
+          { value: '1.4s', label: 'avg' },
+        ],
+        action: 'Create agent',
+        actionDone: 'Agent created',
+      },
+    },
+    fleet: {
+      intro: { eyebrow: 'Say it in your own words', heading: 'Fleet', gradient: 'orchestration' },
+      request: {
+        placeholder: 'Ask Athena for anything\u2026',
+        voice: 'or just say it',
+        sent: 'sent',
+        clauses: [
+          ['Pull ', 'last week\'s tickets', ','],
+          [' find ', 'the complaints that repeat', ','],
+          [' check ', 'what we already fixed', ','],
+          [' count ', 'how many it hit', ','],
+          [' and ', 'tell the team what matters', '.'],
+        ],
+      },
+      plan: {
+        hint: 'Change anything before it starts',
+        hintShort: 'Change anything first',
+        edited: 'Changed',
+        start: 'Start',
+        working: 'Working',
+        done: 'Done',
+      },
+      task: { working: 'working', finished: 'done' },
+      tasks: [
+        {
+          title: 'Collect the tickets',
+          scope: 'last 7 days',
+          scopeEdited: 'last 14 days',
+          found: '1,284 tickets',
+        },
+        { title: 'Group the repeat complaints', scope: 'all channels', found: '9 clusters' },
+        { title: 'Check what we already shipped', scope: 'since May', found: '4 already fixed' },
+        { title: 'Count the people affected', scope: 'by account', found: '612 accounts' },
+      ],
+      result: {
+        title: 'What matters this week',
+        rows: [
+          { label: 'Checkout errors', meta: '214 people' },
+          { label: 'Slow search', meta: '96 people' },
+          { label: 'Login loop', meta: 'fixed Tuesday' },
+        ],
+        footer: 'sent to the team',
+      },
+    },
+    workshop: {
+      intro: { eyebrow: 'However much you hand her', heading: 'The lines you drew', gradient: 'hold' },
+      beds: [
+        { name: 'Checkout app', short: 'Checkout' },
+        { name: 'Marketing site', short: 'Website' },
+        { name: 'Billing service', short: 'Billing' },
+      ],
+      jobTitles: [
+        'run the tests',
+        'check the links',
+        'clean up the warnings',
+        'fix the flaky test',
+        'refresh the changelog',
+        'tidy the old branches',
+      ],
+      fence: { plate: 'the places you opened', plateShort: 'places you opened' },
+      dial: {
+        label: 'how much she does on her own',
+        labelShort: 'how much on her own',
+        stops: ['check with me first', 'the small stuff', 'go ahead'],
+        stopsShort: ['ask me first', 'small stuff', 'go ahead'],
+      },
+      job: { working: 'working', done: 'done' },
+      outside: { name: 'Old client work', waits: 'waits for you' },
+    },
+    portfolio: {
+      intro: { eyebrow: 'While you are busy elsewhere', heading: 'Nothing quietly', gradient: 'rots' },
+      projects: [
+        'Marketing site',
+        'Docs',
+        'Mobile app',
+        'Design system',
+        'Support inbox',
+        'Data pipeline',
+        'Admin tools',
+        'Payments API',
+        'Search service',
+        'Onboarding flow',
+        'Notifications',
+        'Internal wiki',
+      ],
+      field: { needs: 'needs you', handled: 'handled' },
+      panel: {
+        badge: 'worst first',
+        rows: [
+          { name: 'Dependencies', since: 'quiet 11 days' },
+          { name: 'Nightly build', since: 'red since Friday' },
+        ],
+        rest: '5 other checks fine',
+        finding: 'Payment library is 3 versions behind, one with a known hole.',
+        findingShort: '3 versions behind, one with a hole.',
+        action: 'Open what fixes it',
+        actionShort: 'Open the fix',
+        done: 'Opened',
+      },
+      caption: {
+        survey: 'Checking every project',
+        surfaced: 'Three need you',
+        worst: 'This one first',
+        found: 'Quiet for 11 days',
+        opened: 'Opened for you',
+      },
+    },
+    memory: {
+      intro: { eyebrow: 'The longer you work together', heading: 'The more she', gradient: 'carries' },
+      talk: 'each day\'s talk',
+      rail: 'enough to sleep on',
+      night: 'she sleeps on it',
+      shelf: 'what she keeps',
+      kept: [
+        'You ship on Thursdays.',
+        'Staging is where you try things.',
+        'Billing is the one you worry about.',
+        'You like the short version first.',
+      ],
+    },
+    oneMind: {
+      intro: { eyebrow: 'However many conversations', heading: 'Always the', gradient: 'same person' },
+      conversations: [
+        { name: 'The rewrite', short: 'The rewrite' },
+        { name: 'Monday review', short: 'Monday' },
+        { name: 'Getting set up', short: 'Setup' },
+        { name: 'The outage', short: 'Outage' },
+        { name: 'The pricing page', short: 'Pricing' },
+        { name: 'Invoices', short: 'Invoices' },
+      ],
+      open: {
+        label: 'this conversation',
+        question: 'What else are we working on?',
+        from: 'from',
+        footer: 'Nothing else needs you today.',
+        footerShort: 'Nothing else needs you.',
+      },
+      rows: [
+        { claim: 'The last check passed about an hour ago', short: 'Last check passed' },
+        {
+          claim: 'Two projects are waiting on you, neither urgent',
+          short: '2 waiting, none urgent',
+        },
+        { claim: 'Your calendar still isn\'t connected', short: 'Calendar not connected' },
+      ],
+    },
   },
 };

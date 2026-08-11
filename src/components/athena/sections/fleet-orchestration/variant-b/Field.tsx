@@ -1,7 +1,8 @@
 "use client";
 
 import { atStage } from "@/components/athena/stage/stages";
-import { EDITED_TASK, TASKS } from "./copy";
+import { useTranslation } from "@/i18n/useTranslation";
+import { EDITED_TASK } from "./copy";
 import type { SceneState } from "./data";
 import type { FieldLayout } from "./layout";
 import BranchNode from "./BranchNode";
@@ -32,6 +33,7 @@ export default function Field({
   layout: FieldLayout;
   reduced: boolean;
 }) {
+  const { t } = useTranslation();
   return (
     <div className="absolute inset-0">
       <ThreadField
@@ -52,7 +54,7 @@ export default function Field({
         />
         <PlanBar rect={layout.plan} plan={scene.plan} reduced={reduced} />
 
-        {TASKS.map((task, i) => (
+        {t.athenaPage.fleet.tasks.map((task, i) => (
           <TaskCard
             key={task.title}
             rect={layout.cards[i]}

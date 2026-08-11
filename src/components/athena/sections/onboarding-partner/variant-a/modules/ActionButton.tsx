@@ -3,7 +3,8 @@
 import { motion } from "framer-motion";
 import { BRAND_VAR, brandShadow, tint } from "@/lib/brand-theme";
 import { SPRING_POP } from "@/components/athena/stage/athena-tokens";
-import { COPY, type ActionState } from "../data";
+import { useTranslation } from "@/i18n/useTranslation";
+import { SCENE, type ActionState } from "../data";
 import type { Rect } from "../layout";
 import { atStage, type ModuleStage } from "@/components/athena/stage/stages";
 import { DrawCheck, Part, Sheen } from "./parts";
@@ -29,8 +30,9 @@ export function ActionButton({
   state: ActionState;
   reduced: boolean;
 }) {
-  const c = COPY.canvas;
-  const Spark = c.actionIcon;
+  const { t } = useTranslation();
+  const c = t.athenaPage.onboarding.canvas;
+  const Spark = SCENE.canvas.actionIcon;
   const done = state === "done";
   // The label rides the OUTLINE, not the fill. A button whose surface exists
   // before its words reads as a skeleton, not as composition — the label is

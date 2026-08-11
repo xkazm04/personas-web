@@ -4,7 +4,8 @@ import { motion } from "framer-motion";
 import ConnectorIcon from "@/components/sections/use-cases/components/ConnectorIcon";
 import { BRAND_VAR, tint } from "@/lib/brand-theme";
 import { ANNOTATION_DIM, SPRING_POP } from "@/components/athena/stage/athena-tokens";
-import { COPY, HEALTH_BARS } from "../data";
+import type { Translations } from "@/i18n/en";
+import { SCENE, HEALTH_BARS } from "../data";
 import { atStage, type ModuleStage } from "@/components/athena/stage/stages";
 import { AvatarStack, MiniBars, StatePill } from "./primitives";
 import { DrawCheck, Part, Sheen } from "./parts";
@@ -21,22 +22,25 @@ import { DrawCheck, Part, Sheen } from "./parts";
  * later does the runner-up dim to "not this one".
  */
 
-type Card = typeof COPY.canvas.template | typeof COPY.canvas.templateAlt;
+type Card = Translations["athenaPage"]["onboarding"]["canvas"]["template"];
 
 export function TemplateCard({
   card,
+  glyph,
   stage,
   dim,
   selected,
   reduced,
 }: {
   card: Card;
+  /** The brand glyph this card's starting point wears (see `../copy`). */
+  glyph: string;
   stage: ModuleStage;
   dim?: boolean;
   selected?: boolean;
   reduced: boolean;
 }) {
-  const Clock = COPY.canvas.triggerIcon;
+  const Clock = SCENE.canvas.triggerIcon;
   const body = atStage(stage, "body");
   const detail = atStage(stage, "detail");
   const fade = "duration-500 transition-[opacity,color,background-color]";
@@ -49,7 +53,7 @@ export function TemplateCard({
           className={`flex h-8 w-8 shrink-0 items-center justify-center rounded-lg ${fade} ${dim ? "opacity-70" : ""}`}
           style={{ backgroundColor: tint("cyan", dim ? 9 : 15) }}
         >
-          <ConnectorIcon src={card.glyph} size={18} />
+          <ConnectorIcon src={glyph} size={18} />
         </span>
         <span
           className={`truncate text-base font-semibold ${fade} ${dim ? "text-foreground/70" : "text-foreground"}`}

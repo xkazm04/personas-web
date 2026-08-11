@@ -2,7 +2,7 @@
 
 import { motion } from "framer-motion";
 import Bed from "./Bed";
-import { BEDS, JOB_TITLES } from "./copy";
+import { useTranslation } from "@/i18n/useTranslation";
 import { JOBS_IN, type SceneState } from "./data";
 import Dial from "./Dial";
 import Fence from "./Fence";
@@ -35,6 +35,8 @@ export default function Field({
   layout: FieldLayout;
   reduced: boolean;
 }) {
+  const { t } = useTranslation();
+  const { beds, jobTitles } = t.athenaPage.workshop;
   return (
     <div className="absolute inset-0">
       <Fence
@@ -63,12 +65,12 @@ export default function Field({
             the room it has either way. */}
         {layout.beds.map((rect, b) => (
           <Bed
-            key={BEDS[b].name}
+            key={beds[b].name}
             rect={rect}
-            bed={BEDS[b]}
+            bed={beds[b]}
             stage={scene.beds[b]}
             jobs={JOBS_IN[b].map((i) => ({
-              title: JOB_TITLES[i],
+              title: jobTitles[i],
               stage: scene.jobs[i],
               progress: scene.progress[i],
             }))}

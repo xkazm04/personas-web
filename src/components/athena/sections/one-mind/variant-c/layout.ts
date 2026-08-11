@@ -42,7 +42,7 @@ export const ROW_FRAC = [0.43, 0.6, 0.77] as const;
 
 /** One line of her answer, and the conversation it came from. */
 export interface Source {
-  /** Index into CONVERSATIONS. */
+  /** Index into `athenaPage.oneMind.conversations`. */
   card: number;
   /** Which edge of the open conversation the hairline leaves by — always the
    *  one facing its card, so a source never has to cross the answer. */

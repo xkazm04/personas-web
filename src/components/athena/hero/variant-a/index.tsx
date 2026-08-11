@@ -2,12 +2,12 @@
 
 import { motion } from "framer-motion";
 import { useStillMotion } from "@/components/athena/stage/useStillMotion";
+import { useTranslation } from "@/i18n/useTranslation";
 import { BRAND_VAR, brandShadow } from "@/lib/brand-theme";
 import SectionHeading from "@/components/SectionHeading";
 import GradientText from "@/components/GradientText";
 import AthenaStage from "@/components/athena/stage/AthenaStage";
 import { ANNOTATION_DIM, REPLAY, SPRING_POP } from "@/components/athena/stage/athena-tokens";
-import { COPY } from "./data";
 import OrbScene from "./OrbScene";
 import { CalloutOverlay, CalloutList } from "./Callouts";
 
@@ -27,6 +27,8 @@ import { CalloutOverlay, CalloutList } from "./Callouts";
  */
 export default function AthenaPresenceHero() {
   const reduced = useStillMotion();
+  const { t } = useTranslation();
+  const c = t.athenaPage.hero;
 
   /** Spring pop-in with a slight settle-rotation; replays on re-entry. */
   const pop = (delay: number, rotate = -2) =>
@@ -61,7 +63,7 @@ export default function AthenaPresenceHero() {
             </div>
             <CalloutOverlay />
           </motion.div>
-          <CalloutList ariaLabel={COPY.calloutsAria} />
+          <CalloutList ariaLabel={c.calloutsAria} />
         </div>
 
         {/* Scrim zone — typography owns this band; the art fades into it */}
@@ -72,7 +74,7 @@ export default function AthenaPresenceHero() {
           />
           <div className="relative mx-auto max-w-2xl text-center">
             <motion.p {...pop(0.05, 2)} className={ANNOTATION_DIM}>
-              {COPY.eyebrow}
+              {c.eyebrow}
             </motion.p>
             {/* The site's landing title idiom: SectionHeading + GradientText.
                 Composed directly rather than through SectionIntro — the hero
@@ -82,15 +84,15 @@ export default function AthenaPresenceHero() {
                 (driven by a parent, ungated) would replace. */}
             <motion.div {...pop(0.14)} className="mt-4">
               <SectionHeading as="h1" className="text-foreground">
-                {COPY.headline}{" "}
-                <GradientText className="drop-shadow-lg">{COPY.headlineGradient}</GradientText>
+                {c.headline}{" "}
+                <GradientText className="drop-shadow-lg">{c.headlineGradient}</GradientText>
               </SectionHeading>
             </motion.div>
             <motion.p {...pop(0.24, 1)} className="mt-4 text-xl text-foreground/80 sm:text-2xl">
-              {COPY.tagline}
+              {c.tagline}
             </motion.p>
             <motion.p {...pop(0.32, -1)} className="mx-auto mt-3 max-w-lg text-base leading-relaxed text-muted-dark">
-              {COPY.persona}
+              {c.persona}
             </motion.p>
 
             <motion.div {...pop(0.42, 1)} className="mt-8 flex flex-wrap items-center justify-center gap-3">
@@ -99,18 +101,18 @@ export default function AthenaPresenceHero() {
                 className="rounded-full px-7 py-3 text-base font-semibold text-background transition-transform hover:scale-[1.03]"
                 style={{ backgroundColor: BRAND_VAR.cyan, boxShadow: brandShadow("cyan", 36, 30) }}
               >
-                {COPY.ctaPrimary}
+                {c.ctaPrimary}
               </a>
               <a
                 href="#"
                 className="rounded-full border border-glass px-7 py-3 text-base font-semibold text-foreground transition-colors hover:border-glass-hover"
               >
-                {COPY.ctaSecondary}
+                {c.ctaSecondary}
               </a>
             </motion.div>
 
             <motion.p {...pop(0.52, -1)} className={`mx-auto mt-6 max-w-xl ${ANNOTATION_DIM} normal-case tracking-wide`}>
-              {COPY.statWhisper}
+              {c.statWhisper}
             </motion.p>
           </div>
         </div>

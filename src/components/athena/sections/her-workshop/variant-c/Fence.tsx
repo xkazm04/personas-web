@@ -4,7 +4,7 @@ import { motion } from "framer-motion";
 import { BRAND_VAR, tint } from "@/lib/brand-theme";
 import { ANNOTATION } from "@/components/athena/stage/athena-tokens";
 import { atStage, type ModuleStage } from "@/components/athena/stage/stages";
-import { COPY } from "./copy";
+import { useTranslation } from "@/i18n/useTranslation";
 import type { FieldLayout } from "./layout";
 import { BREATH, rectStyle } from "./parts";
 
@@ -87,6 +87,8 @@ export default function Fence({
   calm: boolean;
   reduced: boolean;
 }) {
+  const { t } = useTranslation();
+  const c = t.athenaPage.workshop.fence;
   const drawn = atStage(stage, "shell");
   const glowing = atStage(stage, "body");
   const named = atStage(stage, "detail");
@@ -166,8 +168,8 @@ export default function Fence({
         transition={reduced ? { duration: 0 } : { duration: 0.45, ease: "easeOut" }}
         aria-hidden="true"
       >
-        <span className="hidden sm:inline">{COPY.fence.plate}</span>
-        <span className="sm:hidden">{COPY.fence.plateShort}</span>
+        <span className="hidden sm:inline">{c.plate}</span>
+        <span className="sm:hidden">{c.plateShort}</span>
       </motion.span>
     </>
   );

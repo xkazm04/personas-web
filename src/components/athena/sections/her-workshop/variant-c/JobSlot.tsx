@@ -3,7 +3,7 @@
 import { motion } from "framer-motion";
 import { BRAND_VAR, brandShadow, tint } from "@/lib/brand-theme";
 import { atStage, type ModuleStage } from "@/components/athena/stage/stages";
-import { COPY } from "./copy";
+import { useTranslation } from "@/i18n/useTranslation";
 import { Cell, DrawCheck, Part } from "./parts";
 
 /**
@@ -66,6 +66,7 @@ export default function JobSlot({
   waiting: boolean;
   reduced: boolean;
 }) {
+  const { t } = useTranslation();
   const shell = atStage(stage, "shell");
   const running = atStage(stage, "body");
   const lit = atStage(stage, "detail");
@@ -107,7 +108,7 @@ export default function JobSlot({
           className="hidden shrink-0 text-base lg:inline"
           style={{ color: BRAND_VAR.cyan }}
         >
-          {done ? COPY.job.done : COPY.job.working}
+          {done ? t.athenaPage.workshop.job.done : t.athenaPage.workshop.job.working}
         </Part>
       </span>
 

@@ -2,7 +2,8 @@
 
 import ConnectorIcon from "@/components/sections/use-cases/components/ConnectorIcon";
 import { ANNOTATION_DIM } from "@/components/athena/stage/athena-tokens";
-import { COPY } from "../copy";
+import { useTranslation } from "@/i18n/useTranslation";
+import { SCENE } from "../copy";
 import type { Rect } from "../layout";
 import { atStage, type ModuleStage } from "@/components/athena/stage/stages";
 import { Dot, SkeletonRow } from "./primitives";
@@ -29,7 +30,8 @@ export function RunsTable({
   stage: ModuleStage;
   reduced: boolean;
 }) {
-  const c = COPY.canvas;
+  const { t } = useTranslation();
+  const c = t.athenaPage.onboarding.canvas;
   const body = atStage(stage, "body");
   const detail = atStage(stage, "detail");
   return (
@@ -73,11 +75,11 @@ export function RunsTable({
           className="flex items-center gap-2"
         >
           <span className="shrink-0">
-            <ConnectorIcon src={row.glyph} size={16} />
+            <ConnectorIcon src={SCENE.canvas.runsRows[i].glyph} size={16} />
           </span>
           <span className="min-w-0 flex-1 truncate text-base text-foreground/80">{row.name}</span>
           <span className="hidden w-24 shrink-0 items-center gap-1.5 text-base text-muted-dark lg:flex">
-            <Dot accent={row.state === "ok" ? "emerald" : "cyan"} className="h-1.5 w-1.5" />
+            <Dot accent={SCENE.canvas.runsRows[i].ok ? "emerald" : "cyan"} className="h-1.5 w-1.5" />
             <span className="truncate">{row.state}</span>
           </span>
           <span className="w-12 shrink-0 text-right font-mono text-base text-muted-dark">

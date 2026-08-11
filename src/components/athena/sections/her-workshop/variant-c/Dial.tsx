@@ -3,7 +3,7 @@
 import { motion } from "framer-motion";
 import { brandShadow, tint } from "@/lib/brand-theme";
 import { atStage, type ModuleStage } from "@/components/athena/stage/stages";
-import { COPY } from "./copy";
+import { useTranslation } from "@/i18n/useTranslation";
 import type { Rect } from "./layout";
 import { Part, Slot } from "./parts";
 
@@ -100,6 +100,8 @@ export default function Dial({
   level: number;
   reduced: boolean;
 }) {
+  const { t } = useTranslation();
+  const c = t.athenaPage.workshop.dial;
   const solid = atStage(stage, "shell");
   const topped = atStage(stage, "chosen");
   const at = Math.min(Math.max(level, 0), STOPS - 1);
@@ -123,15 +125,15 @@ export default function Dial({
     >
       {vertical ? (
         <Part show i={0} reduced={reduced} className={`shrink-0 text-center ${label}`}>
-          {COPY.dial.label}
+          {c.label}
         </Part>
       ) : (
         <span className="flex shrink-0 items-center gap-2">
           <Part show i={0} reduced={reduced} className={`min-w-0 flex-1 truncate ${label}`}>
-            {COPY.dial.labelShort}
+            {c.labelShort}
           </Part>
           <Part show i={1} reduced={reduced} className="shrink-0 text-base text-brand-cyan">
-            {COPY.dial.stopsShort[at]}
+            {c.stopsShort[at]}
           </Part>
         </span>
       )}
@@ -146,7 +148,7 @@ export default function Dial({
           animate={{ opacity: 1, y: 0 }}
           transition={reduced ? { duration: 0 } : { duration: 0.35, ease: "easeOut" }}
         >
-          {COPY.dial.stops[at]}
+          {c.stops[at]}
         </motion.span>
       )}
     </Slot>

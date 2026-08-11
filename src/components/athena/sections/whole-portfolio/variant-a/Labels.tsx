@@ -1,7 +1,7 @@
 "use client";
 
 import { BRAND_VAR, type BrandKey, tint } from "@/lib/brand-theme";
-import { COPY, PROJECTS } from "./copy";
+import { useTranslation } from "@/i18n/useTranslation";
 import type { Tone } from "./data";
 import { labelPoint, type Camera, type FieldLayout, type Rect } from "./layout";
 import { DrawCheck } from "./parts";
@@ -52,6 +52,8 @@ export default function Labels({
   avoid: Rect | null;
   reduced: boolean;
 }) {
+  const { t } = useTranslation();
+  const { projects, field } = t.athenaPage.portfolio;
   return (
     <div className="pointer-events-none absolute inset-0" aria-hidden="true">
       {layout.islands.map((rect, i) => {
@@ -73,7 +75,7 @@ export default function Labels({
         const quiet = tone === "waiting" || tone === "calm";
         return (
           <span
-            key={PROJECTS[i].name}
+            key={projects[i]}
             className={`absolute flex -translate-x-1/2 items-center gap-1.5 whitespace-nowrap text-base ${
               quiet ? "text-muted-dark" : "font-medium"
             } ${reduced ? "" : "transition-opacity duration-500"}`}
@@ -95,9 +97,9 @@ export default function Labels({
                 }}
               />
             ) : null}
-            {PROJECTS[i].name}
+            {projects[i]}
             {tone === "handled" && (
-              <span className="text-muted-dark">{COPY.field.handled}</span>
+              <span className="text-muted-dark">{field.handled}</span>
             )}
           </span>
         );

@@ -1,8 +1,9 @@
 "use client";
 
 import { tint } from "@/lib/brand-theme";
+import { useTranslation } from "@/i18n/useTranslation";
 import { ANNOTATION_DIM } from "@/components/athena/stage/athena-tokens";
-import { COPY } from "../copy";
+import { SCENE } from "../copy";
 import type { Rect } from "../layout";
 import { atStage, type ModuleStage } from "@/components/athena/stage/stages";
 import { Part } from "./parts";
@@ -26,8 +27,9 @@ export function Toolbar({
   stage: ModuleStage;
   reduced: boolean;
 }) {
-  const c = COPY.canvas;
-  const Chevron = c.crumbIcon;
+  const { t } = useTranslation();
+  const c = t.athenaPage.onboarding.canvas;
+  const Chevron = SCENE.canvas.crumbIcon;
   const body = atStage(stage, "body");
   const detail = atStage(stage, "detail");
   return (
@@ -47,23 +49,26 @@ export function Toolbar({
         {c.crumbs[1]}
       </Part>
       <span className="ml-auto hidden items-center gap-1.5 sm:flex">
-        {c.filters.map((f, i) => (
-          <Part
-            key={f.label}
-            show={detail}
-            i={i}
-            lead={0.3}
-            reduced={reduced}
-            className={
-              f.active
-                ? `${CHIP} border-brand-cyan/40 text-brand-cyan`
-                : `${CHIP} hidden border-glass text-muted-dark lg:block`
-            }
-            style={f.active ? { backgroundColor: tint("cyan", 12) } : undefined}
-          >
-            {f.label}
-          </Part>
-        ))}
+        {c.filters.map((label, i) => {
+          const active = i === SCENE.canvas.filterActive;
+          return (
+            <Part
+              key={label}
+              show={detail}
+              i={i}
+              lead={0.3}
+              reduced={reduced}
+              className={
+                active
+                  ? `${CHIP} border-brand-cyan/40 text-brand-cyan`
+                  : `${CHIP} hidden border-glass text-muted-dark lg:block`
+              }
+              style={active ? { backgroundColor: tint("cyan", 12) } : undefined}
+            >
+              {label}
+            </Part>
+          );
+        })}
       </span>
     </ModuleReveal>
   );

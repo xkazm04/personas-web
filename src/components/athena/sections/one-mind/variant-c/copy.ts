@@ -1,44 +1,45 @@
-// PROTOTYPE COPY — extract to src/i18n at assembly
 /**
- * Every word in section 6 ("One mind"), variant C — "The Return".
+ * The structural half of section 6 ("One mind"), variant C — "The Return":
+ * which miniature each conversation carries, which of them she answers from,
+ * and how lived-in each thread looks. Every word lives in `src/i18n` under
+ * `athenaPage.oneMind`.
  *
- * This is the last section of the page, so the rule this file keeps is
- * stricter than usual: nothing here may teach a visitor a word they did not
- * already have. Conversations are named the way a person names their own
- * ("Monday review", "Getting set up"), a claim is a sentence a colleague
- * would say out loud, and the source beside it is simply where she heard it.
- * Athena is only ever "Athena", or "she".
+ * This is the last section of the page, so the rule the words there keep is
+ * stricter than usual: nothing may teach a visitor a word they did not already
+ * have. Conversations are named the way a person names their own ("Monday
+ * review", "Getting set up"), a claim is a sentence a colleague would say out
+ * loud, and the source beside it is simply where she heard it. Athena is only
+ * ever "Athena", or "she".
  *
- * Three of the conversations are the page's own earlier sections, seen from
- * far enough away to be texture rather than detail — the workspace she set up
- * with you, the team she built out of one sentence, the projects she keeps in
- * view. They are the three she answers FROM, which is the closing argument:
- * everything this page showed you, she was holding the whole time.
+ * Three of the conversations are the page's own earlier sections, seen from far
+ * enough away to be texture rather than detail — the workspace she set up with
+ * you, the team she built out of one sentence, the projects she keeps in view.
+ * They are the three she answers FROM, which is the closing argument:
+ * everything this page showed you, she was holding the whole time. The compact
+ * layout renders the first four, so those three are the first three and the
+ * section makes the same argument at every breakpoint.
+ *
+ * `athenaPage.oneMind.conversations` must stay in lockstep with GLYPHS below —
+ * same length, same order.
  */
+
+import type { Translations } from "@/i18n/en";
 
 /** Which miniature a conversation carries. Three are callbacks; the rest are
  *  the ordinary texture of a thread you have been typing in. */
 export type Glyph = "team" | "portfolio" | "workspace" | "talk";
 
-export interface Conversation {
-  name: string;
-  /** For the source chip on narrow viewports. */
-  short: string;
-  glyph: Glyph;
-}
+/** One conversation you have going — its name, and the short form the source
+ *  chip wears on narrow viewports. */
+export type Conversation = Translations["athenaPage"]["oneMind"]["conversations"][number];
 
-/**
- * The compact layout renders the first four, so the three she answers from
- * are the first three — the section makes the same argument at every
- * breakpoint.
- */
-export const CONVERSATIONS: readonly Conversation[] = [
-  { name: "The rewrite", short: "The rewrite", glyph: "team" },
-  { name: "Monday review", short: "Monday", glyph: "portfolio" },
-  { name: "Getting set up", short: "Setup", glyph: "workspace" },
-  { name: "The outage", short: "Outage", glyph: "talk" },
-  { name: "The pricing page", short: "Pricing", glyph: "talk" },
-  { name: "Invoices", short: "Invoices", glyph: "talk" },
+export const GLYPHS: readonly Glyph[] = [
+  "team",
+  "portfolio",
+  "workspace",
+  "talk",
+  "talk",
+  "talk",
 ];
 
 /** Which conversation each line of her answer came from. */
@@ -54,47 +55,3 @@ export const CHATTER: readonly (readonly number[])[] = [
   [78, 52],
   [62, 44],
 ];
-
-export const COPY = {
-  /** The page's last word, so it is also its shortest. The locked sections
-   *  all carry a one-line headline and the art gets the height — a closing
-   *  title that wrapped to three lines would be taking room from the frame
-   *  the page is meant to end on. */
-  intro: {
-    eyebrow: "However many conversations",
-    heading: "Always the",
-    gradient: "same person",
-  },
-  /** The conversation the visitor is standing in. */
-  open: {
-    label: "this conversation",
-    question: "What else are we working on?",
-    from: "from",
-    footer: "Nothing else needs you today.",
-    footerShort: "Nothing else needs you.",
-  },
-  /**
-   * Her answer. One fact per line, and every line has somewhere it came from
-   * — which is why the sources are geometry (see ./layout) and not a
-   * footnote.
-   *
-   * No claim may name its own source. "The rewrite passed its last check —
-   * from The rewrite" reads as a label repeating itself; the fact belongs to
-   * the line and the place she heard it belongs to the chip, and it is the
-   * pair that makes the point.
-   */
-  rows: [
-    {
-      claim: "The last check passed about an hour ago",
-      short: "Last check passed",
-    },
-    {
-      claim: "Two projects are waiting on you, neither urgent",
-      short: "2 waiting, none urgent",
-    },
-    {
-      claim: "Your calendar still isn't connected",
-      short: "Calendar not connected",
-    },
-  ],
-} as const;

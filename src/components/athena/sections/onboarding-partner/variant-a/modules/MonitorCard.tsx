@@ -4,7 +4,8 @@ import { useId } from "react";
 import { motion } from "framer-motion";
 import { BRAND_VAR, tint } from "@/lib/brand-theme";
 import { ANNOTATION_DIM } from "@/components/athena/stage/athena-tokens";
-import { BAR_POINTS, CHART_POINTS, COPY } from "../data";
+import { useTranslation } from "@/i18n/useTranslation";
+import { BAR_POINTS, CHART_POINTS, SCENE } from "../data";
 import type { Rect } from "../layout";
 import { atStage, type ModuleStage } from "@/components/athena/stage/stages";
 import { MiniBars, StatePill } from "./primitives";
@@ -45,8 +46,9 @@ export function MonitorCard({
   reduced: boolean;
 }) {
   const uid = useId();
-  const c = COPY.canvas;
-  const Icon = c.activityIcon;
+  const { t } = useTranslation();
+  const c = t.athenaPage.onboarding.canvas;
+  const Icon = SCENE.canvas.activityIcon;
   const line = linePath();
   const body = atStage(stage, "body");
   const detail = atStage(stage, "detail");

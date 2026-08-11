@@ -4,7 +4,8 @@ import { motion } from "framer-motion";
 import { Pencil } from "lucide-react";
 import { BRAND_VAR, brandShadow, tint } from "@/lib/brand-theme";
 import { atStage, type ModuleStage } from "@/components/athena/stage/stages";
-import { COPY, type Task } from "./copy";
+import { useTranslation } from "@/i18n/useTranslation";
+import type { Task } from "./copy";
 import type { Rect } from "./layout";
 import { DrawCheck, Part, Sheen, Slot } from "./parts";
 
@@ -76,6 +77,7 @@ export default function TaskCard({
   edited: boolean;
   reduced: boolean;
 }) {
+  const { t } = useTranslation();
   const shell = atStage(stage, "shell");
   const running = atStage(stage, "body");
   const detail = atStage(stage, "detail");
@@ -174,7 +176,7 @@ export default function TaskCard({
                   color: BRAND_VAR.cyan,
                 }}
               >
-                {done ? COPY.task.finished : COPY.task.working}
+                {done ? t.athenaPage.fleet.task.finished : t.athenaPage.fleet.task.working}
               </span>
             </Part>
           )}

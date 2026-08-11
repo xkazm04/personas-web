@@ -26,7 +26,7 @@
  */
 
 import { stageOf, type ModuleStage, type StagePlan } from "@/components/athena/stage/stages";
-import { BEDS, JOB_TITLES } from "./copy";
+import { BED_COUNT } from "./copy";
 
 export const TICK_MS = 900;
 /** 27 × 900ms ≈ 24.3s per loop, the last 2.7s of it still. */
@@ -101,7 +101,7 @@ export const DIAL_PLAN: StagePlan = {
  *  cause, and a cause has to be seen before its effect to read as one. */
 const startOf = (i: number): number => LEVEL_AT[JOBS[i].level] + 1;
 
-export const JOB_PLANS: StagePlan[] = JOB_TITLES.map((_, i) => ({
+export const JOB_PLANS: StagePlan[] = JOBS.map((_, i) => ({
   shell: startOf(i),
   body: startOf(i) + 1,
   detail: startOf(i) + 2,
@@ -110,7 +110,7 @@ export const JOB_PLANS: StagePlan[] = JOB_TITLES.map((_, i) => ({
 
 /** Which jobs live in which place, in slot order — so the field can hand each
  *  place its own work without every panel knowing the whole table. */
-export const JOBS_IN: number[][] = BEDS.map((_, b) =>
+export const JOBS_IN: number[][] = Array.from({ length: BED_COUNT }, (_, b) =>
   JOBS.map((j, i) => ({ j, i }))
     .filter((e) => e.j.bed === b)
     .sort((a, z) => a.j.slot - z.j.slot)

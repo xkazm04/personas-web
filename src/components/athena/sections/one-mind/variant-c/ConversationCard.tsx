@@ -3,7 +3,8 @@
 import { motion } from "framer-motion";
 import { BRAND_VAR, brandShadow, tint } from "@/lib/brand-theme";
 import { atStage, type ModuleStage } from "@/components/athena/stage/stages";
-import { CONVERSATIONS } from "./copy";
+import { useTranslation } from "@/i18n/useTranslation";
+import { GLYPHS } from "./copy";
 import type { Rect } from "./layout";
 import Memory from "./Memory";
 import { BREATH, Chorus, Part, Slot } from "./parts";
@@ -48,7 +49,8 @@ export default function ConversationCard({
   together: boolean;
   reduced: boolean;
 }) {
-  const convo = CONVERSATIONS[index];
+  const { t } = useTranslation();
+  const convo = t.athenaPage.oneMind.conversations[index];
   const solid = atStage(stage, "shell");
   const named = atStage(stage, "body");
   const live = atStage(stage, "detail");
@@ -122,7 +124,7 @@ export default function ConversationCard({
 
         {/* What this one is holding, at watermark strength */}
         <Part show={live} lead={0.08} reduced={reduced} className="min-h-0 flex-1">
-          <Memory glyph={convo.glyph} className="h-full w-full" />
+          <Memory glyph={GLYPHS[index]} className="h-full w-full" />
         </Part>
       </Slot>
     </>

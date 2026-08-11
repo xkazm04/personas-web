@@ -3,7 +3,7 @@
 import { motion } from "framer-motion";
 import { BRAND_VAR, brandShadow, tint } from "@/lib/brand-theme";
 import { SPRING_POP } from "@/components/athena/stage/athena-tokens";
-import { KEPT } from "./copy";
+import { useTranslation } from "@/i18n/useTranslation";
 import { PASS_DAYS } from "./data";
 import { noteRect, type FieldLayout } from "./layout";
 import { BREATH, rectStyle } from "./parts";
@@ -40,6 +40,8 @@ export default function Notes({
   holding: boolean;
   reduced: boolean;
 }) {
+  const { t } = useTranslation();
+  const kept = t.athenaPage.memory.kept;
   return (
     <>
       {PASS_DAYS.map((day, p) => {
@@ -74,7 +76,7 @@ export default function Notes({
               } ${warm ? "" : "text-foreground"}`}
               style={warm ? { color: BRAND_VAR.cyan } : undefined}
             >
-              {KEPT[p]}
+              {kept[p]}
             </span>
           </motion.div>
         );

@@ -23,7 +23,9 @@
  */
 
 import { stageOf, type ModuleStage, type StagePlan } from "@/components/athena/stage/stages";
-import { REQUEST, TASKS } from "./copy";
+import { CLAUSE_COUNT, TASK_COUNT } from "./copy";
+
+export { CLAUSE_COUNT, TASK_COUNT };
 
 export const TICK_MS = 900;
 /** 26 × 900ms ≈ 23.4s per loop. */
@@ -34,9 +36,6 @@ export const CYCLE = 26;
  * settled. The whole argument in one still image.
  */
 export const INITIAL_TICK = 24;
-
-export const TASK_COUNT = TASKS.length;
-export const CLAUSE_COUNT = REQUEST.length;
 
 /** A clause of the sentence lands per tick from here. */
 const CLAUSE_START = 2;

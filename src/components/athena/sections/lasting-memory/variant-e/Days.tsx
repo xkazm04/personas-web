@@ -3,7 +3,7 @@
 import { motion } from "framer-motion";
 import { tint } from "@/lib/brand-theme";
 import { atStage, type ModuleStage } from "@/components/athena/stage/stages";
-import { COPY } from "./copy";
+import { useTranslation } from "@/i18n/useTranslation";
 import { DAYS, nightX, type FieldLayout } from "./layout";
 import { BandLabel, Slot } from "./parts";
 import Pile from "./Pile";
@@ -48,6 +48,8 @@ export default function Days({
   holding: boolean;
   reduced: boolean;
 }) {
+  const { t } = useTranslation();
+  const c = t.athenaPage.memory;
   const open = atStage(band, "shell");
   const named = atStage(band, "body");
 
@@ -118,11 +120,11 @@ export default function Days({
 
       {layout.labelRailY !== null && (
         <BandLabel layout={layout} show={named} y={layout.labelRailY} reduced={reduced}>
-          {COPY.rail}
+          {c.rail}
         </BandLabel>
       )}
       <BandLabel layout={layout} show={named} y={layout.labelTalkY} i={1} reduced={reduced}>
-        {COPY.talk}
+        {c.talk}
       </BandLabel>
     </>
   );

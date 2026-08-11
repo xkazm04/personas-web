@@ -1,16 +1,20 @@
-// PROTOTYPE COPY — extract to src/i18n at assembly
 /**
- * Every word in section 4 ("Sentence to work"), variant B.
+ * The structural half of section 4 ("Sentence to work"), variant B — the shape
+ * the request has, not the words in it. Every word lives in `src/i18n` under
+ * `athenaPage.fleet`.
  *
  * The rule this file exists to keep: the tasks must be TRACEABLE. A visitor
  * should be able to point at a phrase in the sentence and then at the card it
  * became. So the sentence is authored as five clauses, each carrying exactly
- * one highlightable phrase, and the four task titles are plainly derived
- * restatements of the first four — the fifth is the answer itself.
- *
- * Ordinary words only. Nobody in this scene says anything a person wouldn't
- * say to a colleague, and Athena is only ever "Athena".
+ * one highlightable phrase (`athenaPage.fleet.request.clauses` — three parts
+ * per clause, the middle one being the phrase), and the four task titles are
+ * plainly derived restatements of the first four; the fifth is the answer
+ * itself. Clause i owns task i, which is what makes the rebuild below a
+ * one-liner and what a translation must preserve: re-word a clause freely,
+ * but never add, drop or re-order one.
  */
+
+import type { Translations } from "@/i18n/en";
 
 /** A run of the sentence. `task` marks the phrase that becomes something. */
 export interface Segment {
@@ -24,72 +28,25 @@ export type Clause = readonly Segment[];
 /** The phrase that becomes the answer rather than a task. */
 export const ANSWER_PHRASE = 4;
 
-export const REQUEST: readonly Clause[] = [
-  [{ t: "Pull " }, { t: "last week's tickets", task: 0 }, { t: "," }],
-  [{ t: " find " }, { t: "the complaints that repeat", task: 1 }, { t: "," }],
-  [{ t: " check " }, { t: "what we already fixed", task: 2 }, { t: "," }],
-  [{ t: " count " }, { t: "how many it hit", task: 3 }, { t: "," }],
-  [{ t: " and " }, { t: "tell the team what matters", task: ANSWER_PHRASE }, { t: "." }],
-];
-
-export interface Task {
-  /** The phrase, restated as a piece of work. */
-  title: string;
-  /** The narrowing Athena proposed — and the one thing you change. */
-  scope: string;
-  scopeEdited?: string;
-  /** What this task came back with. */
-  found: string;
-}
-
-export const TASKS: readonly Task[] = [
-  {
-    title: "Collect the tickets",
-    scope: "last 7 days",
-    scopeEdited: "last 14 days",
-    found: "1,284 tickets",
-  },
-  { title: "Group the repeat complaints", scope: "all channels", found: "9 clusters" },
-  { title: "Check what we already shipped", scope: "since May", found: "4 already fixed" },
-  { title: "Count the people affected", scope: "by account", found: "612 accounts" },
-];
+/** How long the request is, in clauses and in the work it implies. The tick
+ *  clock in `./data` is budgeted against both. */
+export const CLAUSE_COUNT = 5;
+export const TASK_COUNT = 4;
 
 /** The one task whose scope you change before anything runs. */
 export const EDITED_TASK = 0;
 
-export const COPY = {
-  intro: {
-    eyebrow: "Say it in your own words",
-    heading: "Fleet",
-    gradient: "orchestration",
-  },
-  request: {
-    /** Sits in the box until the first words land. */
-    placeholder: "Ask Athena for anything…",
-    /** Both affordances are on the box the whole time — same path either way. */
-    voice: "or just say it",
-    sent: "sent",
-  },
-  plan: {
-    /** Athena has proposed; nothing has started. */
-    hint: "Change anything before it starts",
-    hintShort: "Change anything first",
-    edited: "Changed",
-    start: "Start",
-    working: "Working",
-    done: "Done",
-  },
-  task: {
-    working: "working",
-    finished: "done",
-  },
-  result: {
-    title: "What matters this week",
-    rows: [
-      { label: "Checkout errors", meta: "214 people" },
-      { label: "Slow search", meta: "96 people" },
-      { label: "Login loop", meta: "fixed Tuesday" },
-    ],
-    footer: "sent to the team",
-  },
-} as const;
+/** Which part of a clause is its one highlightable phrase. */
+const PHRASE = 1;
+
+/** Rebuild the request out of the localized clauses — clause i carries task i,
+ *  and the last one carries ANSWER_PHRASE, which is the same number. */
+export function requestFrom(clauses: readonly (readonly string[])[]): readonly Clause[] {
+  return clauses
+    .slice(0, CLAUSE_COUNT)
+    .map((parts, i) => parts.map((t, k) => (k === PHRASE ? { t, task: i } : { t })));
+}
+
+/** One piece of work: the phrase restated, the narrowing Athena proposed (and
+ *  the one you change), and what it came back with. */
+export type Task = Translations["athenaPage"]["fleet"]["tasks"][number];

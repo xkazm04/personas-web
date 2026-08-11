@@ -8,7 +8,8 @@ import { ModuleReveal, SectionLabel, TargetPanel } from "./modules/shell";
 import { TemplateCard } from "./modules/TemplateCard";
 import { Toolbar } from "./modules/Toolbar";
 import { TriggerCard } from "./modules/TriggerCard";
-import { COPY, WIDE_ONLY, atStage, layoutFor, rectOf, type SceneState } from "./data";
+import { useTranslation } from "@/i18n/useTranslation";
+import { SCENE, WIDE_ONLY, atStage, layoutFor, rectOf, type SceneState } from "./data";
 
 /**
  * All canvas content of the stylized app — a real product screen, not a
@@ -37,7 +38,9 @@ export function CanvasScene({
   compact: boolean;
   reduced: boolean;
 }) {
-  const c = COPY.canvas;
+  const { t } = useTranslation();
+  const c = t.athenaPage.onboarding.canvas;
+  const g = SCENE.canvas;
   const L = layoutFor(compact);
   const { stage, lockedId } = scene;
   return (
@@ -62,6 +65,7 @@ export function CanvasScene({
       >
         <TemplateCard
           card={c.template}
+          glyph={g.templateGlyph}
           stage={stage.templates}
           selected={scene.templateChosen}
           reduced={reduced}
@@ -79,6 +83,7 @@ export function CanvasScene({
       >
         <TemplateCard
           card={c.templateAlt}
+          glyph={g.templateAltGlyph}
           stage={stage.templates}
           dim={scene.templateDimmed}
           reduced={reduced}
@@ -104,6 +109,7 @@ export function CanvasScene({
           key={c.chips[i].name}
           rect={rect}
           chip={c.chips[i]}
+          glyph={g.chipGlyphs[i]}
           stage={stage.connectors}
           lead={(i + 1) * 0.14}
           reduced={reduced}

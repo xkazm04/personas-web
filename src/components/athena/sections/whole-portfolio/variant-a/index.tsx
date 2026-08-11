@@ -7,9 +7,9 @@ import { ANNOTATION_DIM } from "@/components/athena/stage/athena-tokens";
 import { useStillMotion } from "@/components/athena/stage/useStillMotion";
 import { SectionIntro } from "@/components/primitives";
 import { useIsMobile } from "@/hooks/useIsMobile";
+import { useTranslation } from "@/i18n/useTranslation";
 import { staggerContainer } from "@/lib/animations";
 import { BRAND_VAR } from "@/lib/brand-theme";
-import { COPY } from "./copy";
 import { CYCLE, INITIAL_TICK, PARK_TICK, TICK_MS, sceneAt } from "./data";
 import Field from "./Field";
 import { layoutFor } from "./layout";
@@ -61,6 +61,8 @@ const START_TICK = 0;
 export default function WholePortfolioFlight() {
   const reduced = useStillMotion();
   const compact = useIsMobile();
+  const { t } = useTranslation();
+  const { intro, caption } = t.athenaPage.portfolio;
   const sectionRef = useRef<HTMLElement | null>(null);
   const inView = useInView(sectionRef, { amount: 0.4 });
   const [tick, setTick] = useState(PARK_TICK);
@@ -101,9 +103,9 @@ export default function WholePortfolioFlight() {
           variants={staggerContainer}
         >
           <SectionIntro
-            eyebrow={COPY.intro.eyebrow}
-            heading={COPY.intro.heading}
-            gradient={COPY.intro.gradient}
+            eyebrow={intro.eyebrow}
+            heading={intro.heading}
+            gradient={intro.gradient}
             className="mb-6 sm:mb-8"
           />
         </motion.div>
@@ -112,7 +114,7 @@ export default function WholePortfolioFlight() {
             reach any one of them. The floor the percent geometry is budgeted
             against (see ./layout); below it the field crowds its own type. */}
         <div className="relative min-h-[34rem] flex-1">
-          <Field scene={scene} caption={captionAt(phase)} layout={layout} reduced={reduced} />
+          <Field scene={scene} caption={captionAt(phase, caption)} layout={layout} reduced={reduced} />
         </div>
 
         <div className="mt-3 flex shrink-0 items-center gap-2.5">

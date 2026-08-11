@@ -4,7 +4,7 @@ import { motion } from "framer-motion";
 import { tint } from "@/lib/brand-theme";
 import { atStage, type ModuleStage } from "@/components/athena/stage/stages";
 import Chip from "./Chip";
-import { COPY } from "./copy";
+import { useTranslation } from "@/i18n/useTranslation";
 import { PASS_DAYS } from "./data";
 import { chipRect, type FieldLayout } from "./layout";
 import { Rule, Wash } from "./ink";
@@ -46,6 +46,7 @@ export default function Shelf({
   holding: boolean;
   reduced: boolean;
 }) {
+  const { t } = useTranslation();
   const open = atStage(band, "shell");
   const last = kept > 0 ? chipRect(layout, PASS_DAYS[kept - 1], layout.chipsPerPass - 1) : null;
   const grown = last ? (last.x + last.w - layout.band.x) / layout.band.w : 0;
@@ -139,7 +140,7 @@ export default function Shelf({
         y={layout.labelShelfY}
         reduced={reduced}
       >
-        {COPY.shelf}
+        {t.athenaPage.memory.shelf}
       </BandLabel>
     </>
   );

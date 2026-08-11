@@ -3,7 +3,7 @@
 import { motion } from "framer-motion";
 import { UserRound } from "lucide-react";
 import { tint } from "@/lib/brand-theme";
-import { COPY } from "./copy";
+import { useTranslation } from "@/i18n/useTranslation";
 import type { Rect } from "./layout";
 import { Part, rectStyle } from "./parts";
 
@@ -34,7 +34,8 @@ export default function Outside({
   waits: boolean;
   reduced: boolean;
 }) {
-  const c = COPY.outside;
+  const { t } = useTranslation();
+  const c = t.athenaPage.workshop.outside;
   return (
     <div className="absolute" style={rectStyle(rect)}>
       <motion.div

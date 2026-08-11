@@ -12,8 +12,8 @@
  * section is making ("all of them, still in view") is true of both.
  */
 
+import type { Translations } from "@/i18n/en";
 import { BEATS } from "./data";
-import { COPY } from "./copy";
 
 /** Full line — one plain claim per act of the story. */
 export function statusAt(phase: number): string {
@@ -41,8 +41,10 @@ export function statusShortAt(phase: number): string {
 
 /** What she says, where she is standing. Null wherever the art speaks for
  *  itself — a caption on every beat is a subtitle track, not narration. */
-export function captionAt(phase: number): string | null {
-  const c = COPY.caption;
+export function captionAt(
+  phase: number,
+  c: Translations["athenaPage"]["portfolio"]["caption"],
+): string | null {
   if (phase >= BEATS.LIFT_AT) return null;
   if (phase >= BEATS.OPEN_AT) return c.opened;
   if (phase >= BEATS.NEAR_AT) return c.found;

@@ -2,9 +2,9 @@
 
 import { motion } from "framer-motion";
 import { useStillMotion } from "@/components/athena/stage/useStillMotion";
+import { useTranslation } from "@/i18n/useTranslation";
 import { BRAND_VAR, tint } from "@/lib/brand-theme";
 import { ANNOTATION, ANNOTATION_DIM, REPLAY, SPRING_POP } from "@/components/athena/stage/athena-tokens";
-import { CALLOUTS } from "./data";
 import { STAGE_W, STAGE_H, CALLOUT_GEOMETRY } from "./presence-geometry";
 
 /**
@@ -23,6 +23,8 @@ import { STAGE_W, STAGE_H, CALLOUT_GEOMETRY } from "./presence-geometry";
 
 export function CalloutOverlay() {
   const reduced = useStillMotion();
+  const { t } = useTranslation();
+  const callouts = t.athenaPage.hero.callouts;
   const cyan = BRAND_VAR.cyan;
 
   return (
@@ -55,11 +57,11 @@ export function CalloutOverlay() {
         ))}
       </svg>
 
-      {CALLOUTS.map((c, i) => {
-        const g = CALLOUT_GEOMETRY[i];
+      {CALLOUT_GEOMETRY.map((g, i) => {
+        const c = callouts[i];
         return (
           <motion.div
-            key={c.id}
+            key={g.id}
             className={`absolute -translate-y-1/2 break-words ${g.side === "left" ? "text-right" : "text-left"}`}
             style={g.labelStyle}
             initial={reduced ? false : { opacity: 0, scale: 0.85, rotate: g.side === "left" ? -3 : 3 }}
@@ -81,12 +83,13 @@ export function CalloutOverlay() {
  *  a single row cannot hold both at 375px without wrapping mid-phrase. */
 export function CalloutList({ ariaLabel }: { ariaLabel: string }) {
   const reduced = useStillMotion();
+  const { t } = useTranslation();
 
   return (
     <ul aria-label={ariaLabel} className="mx-auto mt-6 grid w-full max-w-md grid-cols-1 gap-4 px-6 lg:hidden">
-      {CALLOUTS.map((c, i) => (
+      {t.athenaPage.hero.callouts.map((c, i) => (
         <motion.li
-          key={c.id}
+          key={CALLOUT_GEOMETRY[i].id}
           className="flex items-start gap-3"
           initial={reduced ? false : { opacity: 0, x: -10, rotate: -2 }}
           whileInView={{ opacity: 1, x: 0, rotate: 0 }}

@@ -116,7 +116,7 @@ function callout(
   };
 }
 
-/** One entry per CALLOUTS item in data.ts, keyed by the same ids. */
+/** One entry per `athenaPage.hero.callouts` item in src/i18n, same order. */
 export const CALLOUT_GEOMETRY: readonly CalloutGeometry[] = [
   callout("talk", 148), // lower-left — her voice
   callout("tasks", -50), // upper-right — the task-dot arc

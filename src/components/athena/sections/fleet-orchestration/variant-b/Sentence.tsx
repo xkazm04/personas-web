@@ -5,7 +5,8 @@ import { Mic } from "lucide-react";
 import { BRAND_VAR, brandShadow, tint } from "@/lib/brand-theme";
 import { ANNOTATION_DIM } from "@/components/athena/stage/athena-tokens";
 import { STEP, atStage, stepDelay, type ModuleStage } from "@/components/athena/stage/stages";
-import { COPY, REQUEST } from "./copy";
+import { useTranslation } from "@/i18n/useTranslation";
+import { requestFrom, type Clause } from "./copy";
 import type { Rect } from "./layout";
 import { DrawCheck, Part, Slot } from "./parts";
 
@@ -49,9 +50,9 @@ function Waveform({ live, reduced }: { live: boolean; reduced: boolean }) {
 
 /** Split a clause into words carrying their place in the clause's cascade.
  *  Pure: same clause in, same order out, every render. */
-function wordsOf(index: number) {
+function wordsOf(clause: Clause) {
   let n = 0;
-  return REQUEST[index].map((seg) => ({
+  return clause.map((seg) => ({
     seg,
     chunks: seg.t.split(/(\s+)/).map((chunk) => ({
       chunk,
@@ -63,17 +64,17 @@ function wordsOf(index: number) {
 /** One clause. Words rise in sequence inside their own tick, so the sentence
  *  reads as being written rather than pasted. */
 function ClauseLine({
-  index,
+  clause,
   lit,
   reduced,
 }: {
-  index: number;
+  clause: Clause;
   lit: boolean[];
   reduced: boolean;
 }) {
   return (
     <>
-      {wordsOf(index).map(({ seg, chunks }, si) => {
+      {wordsOf(clause).map(({ seg, chunks }, si) => {
         const on = seg.task !== undefined && lit[seg.task];
         return (
           <span
@@ -128,6 +129,9 @@ export default function Sentence({
   lit: boolean[];
   reduced: boolean;
 }) {
+  const { t } = useTranslation();
+  const c = t.athenaPage.fleet.request;
+  const request = requestFrom(c.clauses);
   const shell = atStage(stage, "shell");
   const typing = atStage(stage, "body") && !atStage(stage, "chosen");
   const sent = atStage(stage, "chosen");
@@ -150,10 +154,10 @@ export default function Sentence({
           request would cost the section its whole premise. */}
       <p className="min-h-0 flex-1 overflow-hidden text-base leading-snug text-foreground sm:text-lg">
         {clauses === 0 ? (
-          <span className="text-muted-dark">{COPY.request.placeholder}</span>
+          <span className="text-muted-dark">{c.placeholder}</span>
         ) : (
-          Array.from({ length: clauses }, (_, i) => (
-            <ClauseLine key={i} index={i} lit={lit} reduced={reduced} />
+          Array.from({ length: Math.min(clauses, request.length) }, (_, i) => (
+            <ClauseLine key={i} clause={request[i]} lit={lit} reduced={reduced} />
           ))
         )}
         {!sent && (
@@ -172,7 +176,7 @@ export default function Sentence({
           <Mic className="h-4.5 w-4.5 text-brand-cyan" aria-hidden="true" />
           <Waveform live={typing} reduced={reduced} />
           <span className={`hidden normal-case sm:inline ${ANNOTATION_DIM}`}>
-            {COPY.request.voice}
+            {c.voice}
           </span>
         </Part>
         {sent && (
@@ -182,7 +186,7 @@ export default function Sentence({
             className="ml-auto flex items-center gap-1.5 text-base text-brand-cyan"
           >
             <DrawCheck reduced={reduced} className="h-4 w-4" />
-            {COPY.request.sent}
+            {c.sent}
           </Part>
         )}
       </span>

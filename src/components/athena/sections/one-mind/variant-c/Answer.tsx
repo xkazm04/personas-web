@@ -4,7 +4,8 @@ import { motion } from "framer-motion";
 import { BRAND_VAR, brandShadow, tint } from "@/lib/brand-theme";
 import { ANNOTATION_DIM } from "@/components/athena/stage/athena-tokens";
 import { atStage, type ModuleStage } from "@/components/athena/stage/stages";
-import { CONVERSATIONS, COPY, SOURCE_OF } from "./copy";
+import { useTranslation } from "@/i18n/useTranslation";
+import { SOURCE_OF } from "./copy";
 import { ROW_FRAC, type FieldLayout } from "./layout";
 import { BREATH, Chorus, DrawCheck, Part, Slot } from "./parts";
 
@@ -43,7 +44,8 @@ export default function Answer({
   together: boolean;
   reduced: boolean;
 }) {
-  const c = COPY.open;
+  const { t } = useTranslation();
+  const { conversations, open: c, rows } = t.athenaPage.oneMind;
   const shell = atStage(stage, "shell");
   const asked = atStage(stage, "body");
   const settled = atStage(stage, "chosen");
@@ -91,7 +93,7 @@ export default function Answer({
         {c.question}
       </Part>
 
-      {COPY.rows.map((row, i) => (
+      {rows.map((row, i) => (
         <span key={row.claim} className={ROW} style={{ top: `${ROW_FRAC[i] * 100}%` }}>
           <Part show={rowsIn > i} reduced={reduced} className="flex items-center gap-2.5">
             <span
@@ -110,8 +112,8 @@ export default function Answer({
               style={{ borderColor: tint("cyan", 30), color: BRAND_VAR.cyan }}
             >
               <span className="text-muted-dark">{c.from} </span>
-              <span className="hidden sm:inline">{CONVERSATIONS[SOURCE_OF[i]].name}</span>
-              <span className="sm:hidden">{CONVERSATIONS[SOURCE_OF[i]].short}</span>
+              <span className="hidden sm:inline">{conversations[SOURCE_OF[i]].name}</span>
+              <span className="sm:hidden">{conversations[SOURCE_OF[i]].short}</span>
             </span>
           </Part>
         </span>

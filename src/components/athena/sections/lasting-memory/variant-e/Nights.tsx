@@ -2,7 +2,7 @@
 
 import { brandShadow, tint } from "@/lib/brand-theme";
 import { atStage, type ModuleStage } from "@/components/athena/stage/stages";
-import { COPY } from "./copy";
+import { useTranslation } from "@/i18n/useTranslation";
 import { DAYS, nightX, type FieldLayout } from "./layout";
 import { Bloom } from "./ink";
 import { BandLabel, SKIN, Slot } from "./parts";
@@ -44,6 +44,7 @@ export default function Nights({
   quietNight: boolean;
   reduced: boolean;
 }) {
+  const { t } = useTranslation();
   const open = atStage(band, "shell");
 
   return (
@@ -93,7 +94,7 @@ export default function Nights({
           y={layout.labelNightY}
           reduced={reduced}
         >
-          {COPY.night}
+          {t.athenaPage.memory.night}
         </BandLabel>
       )}
     </>

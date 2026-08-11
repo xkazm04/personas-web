@@ -109,7 +109,7 @@ export default function Field({
 
           {layout.islands.map((rect, i) => (
             <Island
-              key={PROJECTS[i].name}
+              key={i}
               index={i}
               rect={rect}
               tilt={layout.tilt[i]}

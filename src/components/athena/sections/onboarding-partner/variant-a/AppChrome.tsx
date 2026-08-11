@@ -2,10 +2,11 @@
 
 import { type ReactNode } from "react";
 import { motion } from "framer-motion";
+import { useTranslation } from "@/i18n/useTranslation";
 import { BRAND_VAR, tint } from "@/lib/brand-theme";
 import { PANEL } from "@/components/athena/stage/athena-tokens";
 import { Part } from "./modules/parts";
-import { COPY } from "./data";
+import { SCENE } from "./data";
 
 /**
  * The stylized desktop app window "The Glide" plays inside — header with
@@ -33,9 +34,11 @@ export function AppWindow({
   children: ReactNode;
   footer: ReactNode;
 }) {
-  const ch = COPY.chrome;
-  const SearchIcon = ch.searchIcon;
-  const BellIcon = ch.bellIcon;
+  const { t } = useTranslation();
+  const ch = t.athenaPage.onboarding.chrome;
+  const s = SCENE.chrome;
+  const SearchIcon = s.searchIcon;
+  const BellIcon = s.bellIcon;
   return (
     <div className={`relative flex min-h-0 flex-1 flex-col overflow-hidden ${PANEL}`}>
       {/* Header bar */}
@@ -83,12 +86,12 @@ export function AppWindow({
         {/* Sidebar — icon nav + usage meter, words as short labels */}
         <nav className="relative hidden w-48 shrink-0 flex-col gap-1 p-3 md:flex">
           <Seam boot={boot} reduced={reduced} axis="y" className="inset-y-0 right-0 w-px" />
-          {ch.nav.map((item, i) => {
-            const active = i === ch.navActive;
-            const Icon = item.icon;
+          {ch.nav.map((label, i) => {
+            const active = i === s.navActive;
+            const Icon = s.navIcons[i];
             return (
               <Part
-                key={`${boot}-${item.label}`}
+                key={`${boot}-${label}`}
                 show
                 i={i}
                 lead={0.16}
@@ -103,7 +106,7 @@ export function AppWindow({
                   style={active ? { color: BRAND_VAR.cyan } : undefined}
                   aria-hidden="true"
                 />
-                {item.label}
+                {label}
               </Part>
             );
           })}
@@ -127,7 +130,7 @@ export function AppWindow({
             >
               <motion.span
                 className="block h-full origin-left rounded-full"
-                style={{ width: `${ch.usagePct}%`, backgroundColor: BRAND_VAR.cyan }}
+                style={{ width: `${s.usagePct}%`, backgroundColor: BRAND_VAR.cyan }}
                 initial={reduced ? false : { scaleX: 0 }}
                 animate={{ scaleX: 1 }}
                 transition={reduced ? { duration: 0 } : { duration: 0.7, delay: 0.9 }}

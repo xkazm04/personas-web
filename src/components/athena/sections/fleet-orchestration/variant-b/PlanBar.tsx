@@ -4,7 +4,7 @@ import { motion } from "framer-motion";
 import { Pencil } from "lucide-react";
 import { BRAND_VAR, brandShadow, tint } from "@/lib/brand-theme";
 import { ANNOTATION_DIM } from "@/components/athena/stage/athena-tokens";
-import { COPY } from "./copy";
+import { useTranslation } from "@/i18n/useTranslation";
 import type { PlanState } from "./data";
 import type { Rect } from "./layout";
 import { DrawCheck, Part, Sheen, Slot } from "./parts";
@@ -24,7 +24,8 @@ const PILL =
   "flex shrink-0 items-center gap-1.5 rounded-full border px-3 py-0.5 text-base";
 
 function StartPill({ plan, reduced }: { plan: PlanState; reduced: boolean }) {
-  const c = COPY.plan;
+  const { t } = useTranslation();
+  const c = t.athenaPage.fleet.plan;
   const waiting = plan === "proposed" || plan === "editing";
   const done = plan === "done";
   const label = waiting ? c.start : done ? c.done : c.working;
@@ -68,7 +69,8 @@ export default function PlanBar({
   plan: PlanState;
   reduced: boolean;
 }) {
-  const c = COPY.plan;
+  const { t } = useTranslation();
+  const c = t.athenaPage.fleet.plan;
   const shown = plan !== "hidden";
   const changed = plan !== "proposed" && shown;
   return (

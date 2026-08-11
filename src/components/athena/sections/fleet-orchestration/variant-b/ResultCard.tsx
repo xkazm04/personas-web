@@ -4,7 +4,7 @@ import { motion } from "framer-motion";
 import { BRAND_VAR, brandShadow, tint } from "@/lib/brand-theme";
 import { ANNOTATION_DIM } from "@/components/athena/stage/athena-tokens";
 import { atStage, type ModuleStage } from "@/components/athena/stage/stages";
-import { COPY } from "./copy";
+import { useTranslation } from "@/i18n/useTranslation";
 import type { Rect } from "./layout";
 import { DrawCheck, Part, Sheen, Slot } from "./parts";
 
@@ -30,7 +30,8 @@ export default function ResultCard({
   waiting: boolean;
   reduced: boolean;
 }) {
-  const c = COPY.result;
+  const { t } = useTranslation();
+  const c = t.athenaPage.fleet.result;
   const shell = atStage(stage, "shell");
   const body = atStage(stage, "body");
   const detail = atStage(stage, "detail");

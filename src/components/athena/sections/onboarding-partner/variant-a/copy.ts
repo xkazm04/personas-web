@@ -1,9 +1,12 @@
-// PROTOTYPE COPY — extract to src/i18n at assembly
 /**
- * Every word in section 3 ("Onboarding partner"), variant A: the SectionIntro
- * trio plus the in-scene UI labels of the stylized app. Nothing here is
- * decorative filler — each string is something a real Personas screen would
- * say while you and Athena set the workspace up together.
+ * The non-word half of section 3 ("Onboarding partner"), variant A: which icon
+ * each in-scene control wears, which brand glyph each row carries, and the few
+ * indices the scene reads off its own content.
+ *
+ * Every WORD this section renders lives in `src/i18n` under
+ * `athenaPage.onboarding` — nav items, connector rows, template cards and the
+ * recent-runs table are ordered lists there, and the arrays below are their
+ * structural twins. Same order, same length: change one, change both.
  *
  * Icons split two ways on purpose:
  *   • real products  → the brand SVGs in `public/icons/connectors`, rendered
@@ -37,118 +40,38 @@ const GLYPH = {
   gmail: "/icons/connectors/gmail.svg",
 } as const;
 
-export const COPY = {
-  intro: {
-    eyebrow: "Set up together",
-    heading: "Onboarding",
-    gradient: "partner",
-  },
+export const SCENE = {
   chrome: {
-    appName: "Personas",
-    search: "Search…",
     searchIcon: Search as LucideIcon,
     bellIcon: Bell as LucideIcon,
-    nav: [
-      { label: "Home", icon: Home as LucideIcon },
-      { label: "Agents", icon: Bot as LucideIcon },
-      { label: "Templates", icon: LayoutTemplate as LucideIcon },
-      { label: "Connectors", icon: Plug as LucideIcon },
-      { label: "Vault", icon: KeyRound as LucideIcon },
-      { label: "Settings", icon: Settings as LucideIcon },
-    ],
+    /** One per `athenaPage.onboarding.chrome.nav` entry, same order. */
+    navIcons: [Home, Bot, LayoutTemplate, Plug, KeyRound, Settings] as LucideIcon[],
     navActive: 2,
-    usageLabel: "runs today",
-    usageValue: "18 / 25",
     usagePct: 72,
-    newAgent: "New agent",
   },
   canvas: {
-    // Toolbar — breadcrumb + filter chips
-    crumbs: ["Workspace", "Automation"] as const,
     crumbIcon: ChevronRight as LucideIcon,
-    filters: [
-      { label: "All", active: true },
-      { label: "Popular", active: false },
-      { label: "Scheduled", active: false },
-      { label: "New", active: false },
-    ],
-    // Template cards
-    templatesLabel: "Templates",
-    templatesHint: "12 templates",
-    template: {
-      glyph: GLYPH.slack,
-      title: "Daily digest",
-      meta: "summarize · post · 9:00",
-      pill: "popular",
-      schedule: "Daily 9:00",
-      runs: "142 runs",
-      health: "98% ok",
-    },
-    templateAlt: {
-      glyph: GLYPH.gmail,
-      title: "Inbox triage",
-      meta: "label · draft · archive",
-      pill: "new",
-      schedule: "On new mail",
-      runs: "86 runs",
-      health: "94% ok",
-    },
-    // Recent-runs table
-    runsTitle: "Recent runs",
-    runsHint: "last 24h",
-    runsCols: ["agent", "status", "took"] as const,
+    /** Which filter chip carries the brand tint. */
+    filterActive: 0,
+    templateGlyph: GLYPH.slack,
+    templateAltGlyph: GLYPH.gmail,
+    /** One per recent-runs row: its brand glyph, and whether it has landed. */
     runsRows: [
-      { glyph: GLYPH.slack, name: "Daily digest", state: "ok", took: "1.2s" },
-      { glyph: GLYPH.github, name: "PR review", state: "ok", took: "0.8s" },
-      { glyph: GLYPH.notion, name: "Notes sync", state: "running", took: "—" },
+      { glyph: GLYPH.slack, ok: true },
+      { glyph: GLYPH.github, ok: true },
+      { glyph: GLYPH.notion, ok: false },
     ],
-    // Connector list
-    connectLabel: "Connect a tool",
-    connectCount: "2 of 9 connected",
-    connectCountDone: "3 of 9 connected",
-    slack: {
-      glyph: GLYPH.slack,
-      name: "Slack",
-      detail: "#general · updates",
-      connect: "connect",
-      connecting: "connecting…",
-      connected: "connected",
-    },
-    chips: [
-      { glyph: GLYPH.github, name: "GitHub", detail: "synced 2m ago", state: "connected" },
-      { glyph: GLYPH.notion, name: "Notion", detail: "12 pages", state: "connected" },
-    ],
-    // Schedule / trigger — idle strings show until the choice commits, so the
-    // module never claims a schedule nobody has set yet
-    triggerLabel: "Trigger",
+    slackGlyph: GLYPH.slack,
+    /** One per already-connected chip, same order as the i18n chips. */
+    chipGlyphs: [GLYPH.github, GLYPH.notion],
     triggerIcon: Clock3 as LucideIcon,
-    triggerIdle: "No schedule yet",
-    triggerIdleShort: "Not set",
-    triggerValue: "Every morning · 9:00",
-    triggerValueShort: "Daily · 9:00",
-    triggerHint: "edit",
     triggerHintIcon: Pencil as LucideIcon,
-    triggerDays: ["S", "M", "T", "W", "T", "F", "S"] as const,
     triggerActiveDays: [1, 2, 3, 4, 5] as readonly number[],
-    triggerZone: "UTC+1",
-    triggerOff: "off",
-    triggerOn: "on",
-    // Monitoring
-    activityLabel: "Monitoring",
     activityIcon: Activity as LucideIcon,
-    activityStat: "24 runs",
-    activityPill: "live",
-    stats: [
-      { value: "24", label: "runs" },
-      { value: "98%", label: "success" },
-      { value: "1.4s", label: "avg" },
-    ],
     // The mark a committed choice leaves on the thing that was chosen
     chosenIcon: Check as LucideIcon,
     // Final action — the button commits into its own done state
     actionIcon: Sparkles as LucideIcon,
-    action: "Create agent",
     actionDoneIcon: Check as LucideIcon,
-    actionDone: "Agent created",
   },
 } as const;

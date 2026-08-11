@@ -1,12 +1,14 @@
 "use client";
 
-import ConnectorIcon from "@/components/sections/use-cases/components/ConnectorIcon";
 import { ANNOTATION_DIM } from "@/components/athena/stage/athena-tokens";
-import { COPY, type ConnectState } from "../data";
+import type { Translations } from "@/i18n/en";
+import { useTranslation } from "@/i18n/useTranslation";
+import { SCENE, type ConnectState } from "../data";
 import type { Rect } from "../layout";
 import { atStage, type ModuleStage } from "@/components/athena/stage/stages";
 import { StatePill } from "./primitives";
 import { DrawCheck, Flash, Part, Spinner } from "./parts";
+import { RowBody } from "./RowBody";
 import { ModuleReveal, TargetPanel } from "./shell";
 
 /**
@@ -33,7 +35,8 @@ export function ConnectorPanel({
   connected: boolean;
   reduced: boolean;
 }) {
-  const c = COPY.canvas;
+  const { t } = useTranslation();
+  const c = t.athenaPage.onboarding.canvas;
   return (
     <ModuleReveal
       rect={rect}
@@ -72,7 +75,8 @@ export function SlackRow({
   locked: boolean;
   reduced: boolean;
 }) {
-  const s = COPY.canvas.slack;
+  const { t } = useTranslation();
+  const s = t.athenaPage.onboarding.canvas.slack;
   const connected = state === "connected";
   return (
     <TargetPanel
@@ -85,7 +89,13 @@ export function SlackRow({
       className="items-center gap-2 px-2.5"
     >
       <Flash on={connected} reduced={reduced} />
-      <RowBody glyph={s.glyph} name={s.name} detail={s.detail} stage={stage} reduced={reduced} />
+      <RowBody
+        glyph={SCENE.canvas.slackGlyph}
+        name={s.name}
+        detail={s.detail}
+        stage={stage}
+        reduced={reduced}
+      />
       <Part show={atStage(stage, "detail")} i={2} reduced={reduced} className="flex shrink-0">
         <StatePill
           tone={connected ? "ok" : "brand"}
@@ -109,12 +119,15 @@ export function SlackRow({
 export function ConnectorRow({
   rect,
   chip,
+  glyph,
   stage,
   lead,
   reduced,
 }: {
   rect: Rect;
-  chip: (typeof COPY.canvas.chips)[number];
+  chip: Translations["athenaPage"]["onboarding"]["canvas"]["chips"][number];
+  /** The brand glyph this row wears (see `../copy`). */
+  glyph: string;
   stage: ModuleStage;
   lead: number;
   reduced: boolean;
@@ -130,7 +143,7 @@ export function ConnectorRow({
       className="flex items-center gap-2 rounded-xl border border-glass px-2.5"
     >
       <RowBody
-        glyph={chip.glyph}
+        glyph={glyph}
         name={chip.name}
         detail={chip.detail}
         stage={stage}
@@ -142,56 +155,5 @@ export function ConnectorRow({
         <StatePill tone="ok" label={chip.state} />
       </Part>
     </ModuleReveal>
-  );
-}
-
-/** Glyph + name + account detail — the left side of every connector row. */
-function RowBody({
-  glyph,
-  name,
-  detail,
-  stage,
-  lead = 0,
-  reduced,
-  dim,
-}: {
-  glyph: string;
-  name: string;
-  detail: string;
-  stage: ModuleStage;
-  lead?: number;
-  reduced: boolean;
-  dim?: boolean;
-}) {
-  return (
-    <>
-      <Part
-        show={atStage(stage, "body")}
-        i={0}
-        lead={lead}
-        reduced={reduced}
-        className={dim ? "flex shrink-0 opacity-70" : "flex shrink-0"}
-      >
-        <ConnectorIcon src={glyph} size={18} />
-      </Part>
-      <Part
-        show={atStage(stage, "body")}
-        i={1}
-        lead={lead}
-        reduced={reduced}
-        className={`min-w-0 flex-1 truncate text-base font-medium ${dim ? "text-foreground/70" : "text-foreground"}`}
-      >
-        {name}
-      </Part>
-      <Part
-        show={atStage(stage, "detail")}
-        i={1}
-        lead={lead}
-        reduced={reduced}
-        className="hidden shrink-0 truncate text-base text-muted-dark md:block"
-      >
-        {detail}
-      </Part>
-    </>
   );
 }

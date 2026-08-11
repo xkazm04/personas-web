@@ -6,7 +6,7 @@ import { useStillMotion } from "@/components/athena/stage/useStillMotion";
 import { BRAND_VAR, brandShadow, tint } from "@/lib/brand-theme";
 import { ANNOTATION } from "@/components/athena/stage/athena-tokens";
 import { useAvatarPlayback } from "@/components/athena/stage/useAvatarPlayback";
-import { COPY } from "./data";
+import { useTranslation } from "@/i18n/useTranslation";
 import {
   SIZE, C, GLOW_R, GUIDE_R, DOT_R, ACK_R, ORB_PCT, DOTS, dotTrackPath, spinOrigin,
 } from "./presence-geometry";
@@ -27,6 +27,8 @@ import {
  */
 export default function OrbScene() {
   const reduced = useStillMotion();
+  const { t } = useTranslation();
+  const c = t.athenaPage.hero;
   const uid = useId();
   const cyan = BRAND_VAR.cyan;
   const avatarRef = useAvatarPlayback(!reduced);
@@ -100,7 +102,7 @@ export default function OrbScene() {
       {/* The real Athena avatar, focusable — Enter/click/hover acknowledges */}
       <button
         type="button"
-        aria-label={COPY.orbAria}
+        aria-label={c.orbAria}
         onClick={acknowledge}
         onMouseEnter={acknowledge}
         className="absolute left-1/2 top-1/2 aspect-square -translate-x-1/2 -translate-y-1/2 cursor-pointer overflow-hidden rounded-full focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-brand-cyan"
@@ -108,14 +110,14 @@ export default function OrbScene() {
       >
         {reduced ? (
           // eslint-disable-next-line @next/next/no-img-element -- static poster fallback; next/image adds no value for a fixed local asset
-          <img src="/athena/athena_baseline.jpg" alt={COPY.avatarAlt} className="h-full w-full object-cover" />
+          <img src="/athena/athena_baseline.jpg" alt={c.avatarAlt} className="h-full w-full object-cover" />
         ) : (
           <video
             ref={avatarRef}
             src="/athena/athena_idle_loop.mp4"
             poster="/athena/athena_baseline.jpg"
             muted loop playsInline preload="auto"
-            aria-label={COPY.avatarAlt}
+            aria-label={c.avatarAlt}
             className="h-full w-full object-cover"
           />
         )}
@@ -135,7 +137,7 @@ export default function OrbScene() {
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.5, ease: "easeOut", delay: 0.15 }}
             >
-              {COPY.acknowledgeLine}
+              {c.acknowledgeLine}
             </motion.span>
           )}
         </AnimatePresence>
