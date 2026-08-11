@@ -1712,551 +1712,373 @@ export const de: Translations = {
       chromeTitle: "agent-playground \u2014 live",
       reset: "Zur\u00fccksetzen"
     },
-    // athenaPage: seeded from en, pending translation
     athenaPage: {
+      nav: {
+        meet: "ATHENA TREFFEN",
+        onboarding: "EINRICHTUNG",
+        fleet: "AUS EINEM SATZ",
+        workshop: "WAS SIE BETREUT",
+        portfolio: "PROJEKTE",
+        memory: "GED\u00c4CHTNIS",
+        oneMind: "IMMER DIESELBE"
+      },
       hero: {
-        eyebrow: "Your chief of staff",
-        headline: "Meet",
+        eyebrow: "Deine rechte Hand",
+        headline: "Das ist",
         headlineGradient: "Athena",
-        tagline: "She says nothing when nothing needs saying.",
-        persona: "A strategist, not a cheerful assistant \u2014 direct, opinionated, warm without performing. \u201CSpeed is not your job. Quality is.\u201D",
-        ctaPrimary: "See her work",
-        ctaSecondary: "Download Personas",
-        statWhisper: "Runs entirely on your machine \u00B7 you decide how far she goes",
-        avatarAlt: "Athena, the Personas companion",
-        orbAria: "Athena \u2014 press Enter and she acknowledges you",
-        acknowledgeLine: "I'm listening.",
-        calloutsAria: "What Athena does for you",
+        tagline: "Sie sagt nichts, wenn nichts zu sagen ist.",
+        persona: "Eine Strategin, keine gut gelaunte Assistentin \u2014 direkt, mit eigener Meinung, warm ohne Show. \u201eTempo ist nicht deine Aufgabe. Qualit\u00e4t schon.\u201c",
+        ctaPrimary: "Sieh sie arbeiten",
+        ctaSecondary: "Personas herunterladen",
+        statWhisper: "L\u00e4uft komplett auf deinem Rechner \u00b7 wie weit sie geht, entscheidest du",
+        avatarAlt: "Athena, die Begleiterin in Personas",
+        orbAria: "Athena \u2014 dr\u00fcck Enter, und sie meldet sich",
+        acknowledgeLine: "Ich h\u00f6re zu.",
+        calloutsAria: "Was Athena f\u00fcr dich tut",
         callouts: [
-          {
-            label: "Talk to her",
-            fact: "Hold to speak \u2014 no typing"
-          },
-          {
-            label: "At a glance",
-            fact: "See what she's working on"
-          },
-          {
-            label: "Your desktop",
-            fact: "Drag her where you work"
-          },
-          {
-            label: "Always ready",
-            fact: "Cmd/Ctrl+Shift+A, from any app"
-          }
+          { label: "Sprich mit ihr", fact: "Gedr\u00fcckt halten und sprechen" },
+          { label: "Auf einen Blick", fact: "Sieh, woran sie arbeitet" },
+          { label: "Dein Desktop", fact: "Zieh sie dorthin, wo du arbeitest" },
+          { label: "Immer bereit", fact: "Cmd/Ctrl+Shift+A, aus jeder App" }
         ]
       },
       onboarding: {
-        intro: {
-          eyebrow: "Set up together",
-          heading: "Onboarding",
-          gradient: "partner"
-        },
+        intro: { eyebrow: "Wir richten es zusammen ein", heading: "Einrichtung", gradient: "zu zweit" },
         chrome: {
           appName: "Personas",
-          search: "Search\u2026",
-          nav: [
-            "Home",
-            "Agents",
-            "Templates",
-            "Connectors",
-            "Vault",
-            "Settings"
-          ],
-          usageLabel: "runs today",
+          search: "Suchen\u2026",
+          nav: ["Start", "Agenten", "Vorlagen", "Konnektoren", "Tresor", "Einstellungen"],
+          usageLabel: "L\u00e4ufe heute",
           usageValue: "18 / 25",
-          newAgent: "New agent"
+          newAgent: "Neuer Agent"
         },
         canvas: {
-          crumbs: [
-            "Workspace",
-            "Automation"
-          ],
-          filters: [
-            "All",
-            "Popular",
-            "Scheduled",
-            "New"
-          ],
-          templatesLabel: "Templates",
-          templatesHint: "12 templates",
+          crumbs: ["Workspace", "Automatisierung"],
+          filters: ["Alle", "Beliebt", "Geplant", "Neu"],
+          templatesLabel: "Vorlagen",
+          templatesHint: "12 Vorlagen",
           template: {
-            title: "Daily digest",
-            meta: "summarize \u00B7 post \u00B7 9:00",
-            pill: "popular",
-            schedule: "Daily 9:00",
-            runs: "142 runs",
-            health: "98% ok"
+            title: "Tages\u00fcberblick",
+            meta: "zusammenfassen \u00b7 posten \u00b7 9:00",
+            pill: "beliebt",
+            schedule: "T\u00e4glich 9:00",
+            runs: "142 L\u00e4ufe",
+            health: "98 % ok"
           },
           templateAlt: {
-            title: "Inbox triage",
-            meta: "label \u00B7 draft \u00B7 archive",
-            pill: "new",
-            schedule: "On new mail",
-            runs: "86 runs",
-            health: "94% ok"
+            title: "Posteingang sortieren",
+            meta: "labeln \u00b7 entwerfen \u00b7 archivieren",
+            pill: "neu",
+            schedule: "Bei neuer Mail",
+            runs: "86 L\u00e4ufe",
+            health: "94 % ok"
           },
-          runsTitle: "Recent runs",
-          runsHint: "last 24h",
-          runsCols: [
-            "agent",
-            "status",
-            "took"
-          ],
+          runsTitle: "Letzte L\u00e4ufe",
+          runsHint: "letzte 24 h",
+          runsCols: ["Agent", "Status", "Dauer"],
           runsRows: [
-            {
-              name: "Daily digest",
-              state: "ok",
-              took: "1.2s"
-            },
-            {
-              name: "PR review",
-              state: "ok",
-              took: "0.8s"
-            },
-            {
-              name: "Notes sync",
-              state: "running",
-              took: "\u2014"
-            }
+            { name: "Tages\u00fcberblick", state: "ok", took: "1,2 s" },
+            { name: "PR-Review", state: "ok", took: "0,8 s" },
+            { name: "Notizen-Sync", state: "l\u00e4uft", took: "\u2014" }
           ],
-          connectLabel: "Connect a tool",
-          connectCount: "2 of 9 connected",
-          connectCountDone: "3 of 9 connected",
+          connectLabel: "Tool verbinden",
+          connectCount: "2 von 9 verbunden",
+          connectCountDone: "3 von 9 verbunden",
           slack: {
             name: "Slack",
-            detail: "#general \u00B7 updates",
-            connect: "connect",
-            connecting: "connecting\u2026",
-            connected: "connected"
+            detail: "#general \u00b7 Updates",
+            connect: "verbinden",
+            connecting: "verbinde\u2026",
+            connected: "verbunden"
           },
           chips: [
-            {
-              name: "GitHub",
-              detail: "synced 2m ago",
-              state: "connected"
-            },
-            {
-              name: "Notion",
-              detail: "12 pages",
-              state: "connected"
-            }
+            { name: "GitHub", detail: "Sync vor 2 Min", state: "verbunden" },
+            { name: "Notion", detail: "12 Seiten", state: "verbunden" }
           ],
-          triggerLabel: "Trigger",
-          triggerIdle: "No schedule yet",
-          triggerIdleShort: "Not set",
-          triggerValue: "Every morning \u00B7 9:00",
-          triggerValueShort: "Daily \u00B7 9:00",
-          triggerHint: "edit",
-          triggerDays: [
-            "S",
-            "M",
-            "T",
-            "W",
-            "T",
-            "F",
-            "S"
-          ],
+          triggerLabel: "Ausl\u00f6ser",
+          triggerIdle: "Noch kein Zeitplan",
+          triggerIdleShort: "Nicht gesetzt",
+          triggerValue: "Jeden Morgen \u00b7 9:00",
+          triggerValueShort: "T\u00e4glich \u00b7 9:00",
+          triggerHint: "\u00e4ndern",
+          triggerDays: ["S", "M", "D", "M", "D", "F", "S"],
           triggerZone: "UTC+1",
-          triggerOff: "off",
-          triggerOn: "on",
-          activityLabel: "Monitoring",
+          triggerOff: "aus",
+          triggerOn: "an",
+          activityLabel: "\u00dcberwachung",
           activityPill: "live",
           stats: [
-            {
-              value: "24",
-              label: "runs"
-            },
-            {
-              value: "98%",
-              label: "success"
-            },
-            {
-              value: "1.4s",
-              label: "avg"
-            }
+            { value: "24", label: "L\u00e4ufe" },
+            { value: "98 %", label: "Erfolg" },
+            { value: "1,4 s", label: "\u00d8" }
           ],
-          action: "Create agent",
-          actionDone: "Agent created"
+          action: "Agent erstellen",
+          actionDone: "Agent erstellt"
         },
         captions: {
-          template: "pick a starting point",
-          connect: "connect your Slack",
-          trigger: "choose when it runs",
-          action: "one click \u2014 it's live"
+          template: "w\u00e4hl einen Startpunkt",
+          connect: "verbinde dein Slack",
+          trigger: "leg fest, wann er l\u00e4uft",
+          action: "ein Klick \u2014 er l\u00e4uft"
         },
         status: {
-          setup: "workspace \u00B7 setting up together",
-          setupShort: "setting up",
-          step: "step {n}/{total} \u00B7 built with you",
-          stepShort: "step {n}/{total}",
-          live: "agent live \u00B7 monitoring on",
-          liveShort: "live"
+          setup: "Workspace \u00b7 gemeinsam eingerichtet",
+          setupShort: "wird eingerichtet",
+          step: "Schritt {n}/{total} \u00b7 mit dir gebaut",
+          stepShort: "Schritt {n}/{total}",
+          live: "Agent l\u00e4uft \u00b7 \u00dcberwachung an",
+          liveShort: "l\u00e4uft"
         }
       },
       fleet: {
-        intro: {
-          eyebrow: "Say it in your own words",
-          heading: "Fleet",
-          gradient: "orchestration"
-        },
+        intro: { eyebrow: "Sag es in deinen Worten", heading: "Die Flotte", gradient: "im Zusammenspiel" },
         request: {
-          placeholder: "Ask Athena for anything\u2026",
-          voice: "or just say it",
-          sent: "sent",
+          placeholder: "Frag Athena, was du willst\u2026",
+          voice: "oder sag es einfach",
+          sent: "gesendet",
           clauses: [
-            [
-              "Pull ",
-              "last week's tickets",
-              ","
-            ],
-            [
-              " find ",
-              "the complaints that repeat",
-              ","
-            ],
-            [
-              " check ",
-              "what we already fixed",
-              ","
-            ],
-            [
-              " count ",
-              "how many it hit",
-              ","
-            ],
-            [
-              " and ",
-              "tell the team what matters",
-              "."
-            ]
+            ["Hol ", "die Tickets der letzten Woche", ","],
+            [" finde ", "die Beschwerden, die sich wiederholen", ","],
+            [" pr\u00fcf, ", "was wir schon behoben haben", ","],
+            [" z\u00e4hl, ", "wie viele es getroffen hat", ","],
+            [" und ", "sag dem Team, worauf es ankommt", "."]
           ]
         },
         plan: {
-          hint: "Change anything before it starts",
-          hintShort: "Change anything first",
-          edited: "Changed",
+          hint: "\u00c4nder alles, bevor es losgeht",
+          hintShort: "Vorher alles \u00e4nderbar",
+          edited: "Ge\u00e4ndert",
           start: "Start",
-          working: "Working",
-          done: "Done"
+          working: "Arbeitet",
+          done: "Fertig"
         },
-        task: {
-          working: "working",
-          finished: "done"
-        },
+        task: { working: "arbeitet", finished: "fertig" },
         tasks: [
           {
-            title: "Collect the tickets",
-            scope: "last 7 days",
-            scopeEdited: "last 14 days",
-            found: "1,284 tickets"
+            title: "Die Tickets holen",
+            scope: "letzte 7 Tage",
+            scopeEdited: "letzte 14 Tage",
+            found: "1.284 Tickets"
           },
-          {
-            title: "Group the repeat complaints",
-            scope: "all channels",
-            found: "9 clusters"
-          },
-          {
-            title: "Check what we already shipped",
-            scope: "since May",
-            found: "4 already fixed"
-          },
-          {
-            title: "Count the people affected",
-            scope: "by account",
-            found: "612 accounts"
-          }
+          { title: "Wiederkehrende Beschwerden gruppieren", scope: "alle Kan\u00e4le", found: "9 Cluster" },
+          { title: "Pr\u00fcfen, was schon drau\u00dfen ist", scope: "seit Mai", found: "4 schon behoben" },
+          { title: "Betroffene z\u00e4hlen", scope: "nach Konto", found: "612 Konten" }
         ],
         result: {
-          title: "What matters this week",
+          title: "Worauf es diese Woche ankommt",
           rows: [
-            {
-              label: "Checkout errors",
-              meta: "214 people"
-            },
-            {
-              label: "Slow search",
-              meta: "96 people"
-            },
-            {
-              label: "Login loop",
-              meta: "fixed Tuesday"
-            }
+            { label: "Fehler im Checkout", meta: "214 Personen" },
+            { label: "Langsame Suche", meta: "96 Personen" },
+            { label: "Login-Schleife", meta: "Dienstag behoben" }
           ],
-          footer: "sent to the team"
+          footer: "ans Team geschickt"
         },
         status: {
-          speak: "speak it or type it \u2014 same either way",
-          speakShort: "type it or say it",
-          planning: "Athena works out what it takes",
-          pieces: "one sentence, four pieces of work",
-          piecesShort: "four pieces of work",
-          yourCall: "nothing runs until you say so",
-          yourCallShort: "your call to start",
-          parallel: "all four at the same time",
-          parallelShort: "all four at once",
-          returning: "coming back as one answer",
-          returningShort: "coming back as one",
-          closing: "one sentence in \u00B7 one answer back",
-          closingShort: "one answer back"
+          speak: "sprich es oder tipp es \u2014 egal",
+          speakShort: "tippen oder sprechen",
+          planning: "Athena \u00fcberlegt, was dazugeh\u00f6rt",
+          pieces: "ein Satz, vier Arbeitspakete",
+          piecesShort: "vier Arbeitspakete",
+          yourCall: "nichts l\u00e4uft, bis du es sagst",
+          yourCallShort: "du gibst das Startsignal",
+          parallel: "alle vier zur gleichen Zeit",
+          parallelShort: "alle vier gleichzeitig",
+          returning: "kommt als eine Antwort zur\u00fcck",
+          returningShort: "als eine Antwort zur\u00fcck",
+          closing: "ein Satz rein \u00b7 eine Antwort zur\u00fcck",
+          closingShort: "eine Antwort zur\u00fcck"
         }
       },
       workshop: {
-        intro: {
-          eyebrow: "However much you hand her",
-          heading: "The lines you drew",
-          gradient: "hold"
-        },
+        intro: { eyebrow: "Wie viel du ihr auch gibst", heading: "Deine Grenzen", gradient: "halten" },
         beds: [
-          {
-            name: "Checkout app",
-            short: "Checkout"
-          },
-          {
-            name: "Marketing site",
-            short: "Website"
-          },
-          {
-            name: "Billing service",
-            short: "Billing"
-          }
+          { name: "Checkout-App", short: "Checkout" },
+          { name: "Marketing-Website", short: "Website" },
+          { name: "Abrechnungsdienst", short: "Abrechnung" }
         ],
         jobTitles: [
-          "run the tests",
-          "check the links",
-          "clean up the warnings",
-          "fix the flaky test",
-          "refresh the changelog",
-          "tidy the old branches"
+          "die Tests laufen lassen",
+          "die Links pr\u00fcfen",
+          "die Warnungen aufr\u00e4umen",
+          "den wackligen Test fixen",
+          "das Changelog auffrischen",
+          "die alten Branches aufr\u00e4umen"
         ],
-        fence: {
-          plate: "the places you opened",
-          plateShort: "places you opened"
-        },
+        fence: { plate: "die Orte, die du ge\u00f6ffnet hast", plateShort: "Orte, die du ge\u00f6ffnet hast" },
         dial: {
-          label: "how much she does on her own",
-          labelShort: "how much on her own",
-          stops: [
-            "check with me first",
-            "the small stuff",
-            "go ahead"
-          ],
-          stopsShort: [
-            "ask me first",
-            "small stuff",
-            "go ahead"
-          ]
+          label: "wie viel sie allein macht",
+          labelShort: "wie viel allein",
+          stops: ["frag mich vorher", "die kleinen Dinge", "leg los"],
+          stopsShort: ["frag mich", "Kleinigkeiten", "leg los"]
         },
-        job: {
-          working: "working",
-          done: "done"
-        },
-        outside: {
-          name: "Old client work",
-          waits: "waits for you"
-        },
+        job: { working: "arbeitet", done: "fertig" },
+        outside: { name: "Alter Kundenjob", waits: "wartet auf dich" },
         status: {
-          line: "the line comes first",
-          lineShort: "the line comes first",
-          draw: "you draw it once",
-          drawShort: "you draw it once",
-          places: "these are the places you opened",
-          placesShort: "the places you opened",
-          inside: "she works inside it \u2014 all of it",
-          insideShort: "she works inside",
-          turnUp: "turn it up \u2014 more at once, fewer questions",
-          turnUpShort: "turn it up \u2014 more at once",
-          unmoved: "the line doesn't move with it",
-          unmovedShort: "the line doesn't move",
-          stops: "she stops where you stopped her",
-          stopsShort: "she stops at the line",
-          waits: "and waits \u2014 that one is yours",
-          waitsShort: "that one is yours",
-          free: "as free as you like, inside your lines",
-          freeShort: "free, inside your lines"
+          line: "zuerst kommt die Grenze",
+          lineShort: "zuerst kommt die Grenze",
+          draw: "du ziehst sie einmal",
+          drawShort: "du ziehst sie einmal",
+          places: "das sind deine ge\u00f6ffneten Orte",
+          placesShort: "deine ge\u00f6ffneten Orte",
+          inside: "darin arbeitet sie \u2014 \u00fcberall",
+          insideShort: "sie arbeitet darin",
+          turnUp: "dreh auf \u2014 mehr auf einmal, weniger Fragen",
+          turnUpShort: "dreh auf \u2014 mehr auf einmal",
+          unmoved: "die Grenze wandert nicht mit",
+          unmovedShort: "die Grenze bleibt",
+          stops: "sie h\u00e4lt genau an deiner Grenze",
+          stopsShort: "sie h\u00e4lt an der Grenze",
+          waits: "und wartet \u2014 das geh\u00f6rt dir",
+          waitsShort: "das geh\u00f6rt dir",
+          free: "so frei du willst, in deinen Grenzen",
+          freeShort: "frei, in deinen Grenzen"
         }
       },
       portfolio: {
         intro: {
-          eyebrow: "While you are busy elsewhere",
-          heading: "Nothing quietly",
-          gradient: "rots"
+          eyebrow: "W\u00e4hrend du woanders steckst",
+          heading: "Nichts verf\u00e4llt",
+          gradient: "im Stillen"
         },
         projects: [
-          "Marketing site",
-          "Docs",
-          "Mobile app",
-          "Design system",
-          "Support inbox",
-          "Data pipeline",
-          "Admin tools",
-          "Payments API",
-          "Search service",
-          "Onboarding flow",
-          "Notifications",
-          "Internal wiki"
+          "Marketing-Website",
+          "Doku",
+          "Mobile App",
+          "Design-System",
+          "Support-Postfach",
+          "Datenpipeline",
+          "Admin-Tools",
+          "Payments-API",
+          "Suchdienst",
+          "Onboarding",
+          "Benachrichtigungen",
+          "Internes Wiki"
         ],
-        field: {
-          handled: "handled"
-        },
+        field: { handled: "erledigt" },
         panel: {
-          badge: "worst first",
+          badge: "Schlimmstes zuerst",
           rows: [
-            {
-              name: "Dependencies",
-              since: "quiet 11 days"
-            },
-            {
-              name: "Nightly build",
-              since: "red since Friday"
-            }
+            { name: "Abh\u00e4ngigkeiten", since: "still seit 11 Tagen" },
+            { name: "Nightly Build", since: "rot seit Freitag" }
           ],
-          rest: "5 other checks fine",
-          finding: "Payment library is 3 versions behind, one with a known hole.",
-          findingShort: "3 versions behind, one with a hole.",
-          action: "Open what fixes it",
-          actionShort: "Open the fix",
-          done: "Opened"
+          rest: "5 weitere Checks in Ordnung",
+          finding: "Die Payment-Bibliothek ist 3 Versionen zur\u00fcck, eine mit bekannter L\u00fccke.",
+          findingShort: "3 Versionen zur\u00fcck, eine mit L\u00fccke.",
+          action: "\u00d6ffnen, was es behebt",
+          actionShort: "Fix \u00f6ffnen",
+          done: "Ge\u00f6ffnet"
         },
         caption: {
-          survey: "Checking every project",
-          surfaced: "Three need you",
-          worst: "This one first",
-          found: "Quiet for 11 days",
-          opened: "Opened for you"
+          survey: "Pr\u00fcft jedes Projekt",
+          surfaced: "Drei brauchen dich",
+          worst: "Dieses zuerst",
+          found: "Seit 11 Tagen still",
+          opened: "F\u00fcr dich ge\u00f6ffnet"
         },
         status: {
-          view: "every project you own, in view",
-          viewShort: "all of them, in view",
-          checking: "checking all of them at once",
-          checkingShort: "checking all of them",
-          needing: "3 need you \u00B7 worst first",
-          needingShort: "3 need you",
-          travel: "going straight to the worst one",
-          travelShort: "worst one first",
-          quiet: "payments api \u00B7 quiet for 11 days",
-          quietShort: "quiet for 11 days",
-          opened: "opened the thing that fixes it",
-          openedShort: "opened for you",
-          back: "back out to the whole picture",
-          backShort: "back out",
-          settled: "1 handled \u00B7 2 still waiting",
-          settledShort: "1 handled \u00B7 2 waiting"
+          view: "jedes Projekt von dir im Blick",
+          viewShort: "alle im Blick",
+          checking: "pr\u00fcft alle auf einmal",
+          checkingShort: "pr\u00fcft alle",
+          needing: "3 brauchen dich \u00b7 Schlimmstes zuerst",
+          needingShort: "3 brauchen dich",
+          travel: "direkt zum schlimmsten Fall",
+          travelShort: "schlimmstes zuerst",
+          quiet: "payments api \u00b7 11 Tage still",
+          quietShort: "11 Tage still",
+          opened: "hat ge\u00f6ffnet, was es behebt",
+          openedShort: "f\u00fcr dich ge\u00f6ffnet",
+          back: "zur\u00fcck aufs ganze Bild",
+          backShort: "zur\u00fcck",
+          settled: "1 erledigt \u00b7 2 warten noch",
+          settledShort: "1 erledigt \u00b7 2 warten"
         }
       },
       memory: {
         intro: {
-          eyebrow: "The longer you work together",
-          heading: "The more she",
-          gradient: "carries"
+          eyebrow: "Je l\u00e4nger ihr zusammenarbeitet",
+          heading: "desto mehr",
+          gradient: "tr\u00e4gt sie mit"
         },
-        talk: "each day's talk",
-        rail: "enough to sleep on",
-        night: "she sleeps on it",
-        shelf: "what she keeps",
+        talk: "das Gespr\u00e4ch des Tages",
+        rail: "genug zum Dr\u00fcberschlafen",
+        night: "sie schl\u00e4ft dar\u00fcber",
+        shelf: "was sie beh\u00e4lt",
         kept: [
-          "You ship on Thursdays.",
-          "Staging is where you try things.",
-          "Billing is the one you worry about.",
-          "You like the short version first."
+          "Du lieferst donnerstags aus.",
+          "Auf Staging probierst du Sachen aus.",
+          "Die Abrechnung macht dir Sorgen.",
+          "Du willst zuerst die Kurzfassung."
         ],
         status: {
-          day: "one ordinary day of working together",
-          dayShort: "one ordinary day",
-          building: "everything you two get through, building up",
-          buildingShort: "the day's talk, building up",
-          sleeps: "enough has built up \u2014 she sleeps on it",
-          sleepsShort: "she sleeps on it",
-          wakes: "she wakes with a little more than she had",
-          wakesShort: "a little more than before",
-          keeping: "another night, another thing worth keeping",
-          keepingShort: "another thing worth keeping",
-          quiet: "a quiet day \u2014 barely anything said",
-          quietShort: "a quiet day",
-          notEnough: "not enough to sleep on, so she doesn't",
-          notEnoughShort: "not enough to sleep on",
-          nothingLost: "nothing is lost \u2014 that day is still there",
-          nothingLostShort: "still there, nothing lost",
-          inUse: "and the first thing she kept is in use today",
-          inUseShort: "day one's, in use today",
-          sleepsAgain: "she sleeps on this one too",
-          sleepsAgainShort: "she sleeps on this one too",
-          cost: "it costs her less than one ordinary reply",
-          costShort: "less than one reply",
-          oneMore: "one more night, one more thing she carries",
-          oneMoreShort: "one more thing she carries",
-          carries: "the longer you work together, the more she carries",
-          carriesShort: "the more she carries"
+          day: "ein ganz normaler Arbeitstag zusammen",
+          dayShort: "ein ganz normaler Tag",
+          building: "alles, was ihr durchgeht, sammelt sich",
+          buildingShort: "das Tagesgespr\u00e4ch sammelt sich",
+          sleeps: "genug ist zusammen \u2014 sie schl\u00e4ft dar\u00fcber",
+          sleepsShort: "sie schl\u00e4ft dar\u00fcber",
+          wakes: "sie wacht mit etwas mehr auf",
+          wakesShort: "etwas mehr als vorher",
+          keeping: "noch eine Nacht, noch etwas Behaltenes",
+          keepingShort: "noch etwas zum Behalten",
+          quiet: "ein stiller Tag \u2014 kaum etwas gesagt",
+          quietShort: "ein stiller Tag",
+          notEnough: "zu wenig zum Dr\u00fcberschlafen, also l\u00e4sst sie es",
+          notEnoughShort: "zu wenig zum Dr\u00fcberschlafen",
+          nothingLost: "nichts geht verloren \u2014 der Tag bleibt",
+          nothingLostShort: "bleibt da, nichts verloren",
+          inUse: "und das Erste, was sie behielt, hilft heute",
+          inUseShort: "vom ersten Tag, heute genutzt",
+          sleepsAgain: "auch dar\u00fcber schl\u00e4ft sie",
+          sleepsAgainShort: "auch dar\u00fcber schl\u00e4ft sie",
+          cost: "das kostet sie weniger als eine Antwort",
+          costShort: "weniger als eine Antwort",
+          oneMore: "eine Nacht mehr, eine Sache mehr",
+          oneMoreShort: "eine Sache mehr im Gep\u00e4ck",
+          carries: "je l\u00e4nger ihr zusammenarbeitet, desto mehr tr\u00e4gt sie mit",
+          carriesShort: "desto mehr tr\u00e4gt sie mit"
         }
       },
       oneMind: {
-        intro: {
-          eyebrow: "However many conversations",
-          heading: "Always the",
-          gradient: "same person"
-        },
+        intro: { eyebrow: "Wie viele Gespr\u00e4che auch laufen", heading: "immer", gradient: "dieselbe Person" },
         conversations: [
-          {
-            name: "The rewrite",
-            short: "The rewrite"
-          },
-          {
-            name: "Monday review",
-            short: "Monday"
-          },
-          {
-            name: "Getting set up",
-            short: "Setup"
-          },
-          {
-            name: "The outage",
-            short: "Outage"
-          },
-          {
-            name: "The pricing page",
-            short: "Pricing"
-          },
-          {
-            name: "Invoices",
-            short: "Invoices"
-          }
+          { name: "Der Umbau", short: "Umbau" },
+          { name: "Montagsrunde", short: "Montag" },
+          { name: "Die Einrichtung", short: "Setup" },
+          { name: "Der Ausfall", short: "Ausfall" },
+          { name: "Die Preisseite", short: "Preise" },
+          { name: "Rechnungen", short: "Rechnungen" }
         ],
         open: {
-          label: "this conversation",
-          question: "What else are we working on?",
-          from: "from",
-          footer: "Nothing else needs you today.",
-          footerShort: "Nothing else needs you."
+          label: "dieses Gespr\u00e4ch",
+          question: "Woran arbeiten wir sonst noch?",
+          from: "Quelle:",
+          footer: "Sonst braucht dich heute nichts.",
+          footerShort: "Sonst braucht dich nichts."
         },
         rows: [
+          { claim: "Der letzte Check lief vor etwa einer Stunde durch", short: "Letzter Check bestanden" },
           {
-            claim: "The last check passed about an hour ago",
-            short: "Last check passed"
+            claim: "Zwei Projekte warten auf dich, beide nicht dringend",
+            short: "2 warten, nichts dringend"
           },
-          {
-            claim: "Two projects are waiting on you, neither urgent",
-            short: "2 waiting, none urgent"
-          },
-          {
-            claim: "Your calendar still isn't connected",
-            short: "Calendar not connected"
-          }
+          { claim: "Dein Kalender ist noch nicht verbunden", short: "Kalender nicht verbunden" }
         ],
         status: {
-          live: "every conversation you have going",
-          liveShort: "all your conversations",
-          open: "all of them open at the same time",
-          openShort: "all open at once",
-          asked: "you asked in one of them",
-          askedShort: "you asked here",
-          answers: "she answers from everything she knows",
-          answersShort: "she answers from all of it",
-          sources: "every line, and where it came from",
-          sourcesShort: "every line, and its source",
-          oneVoice: "one voice \u2014 you never hear two at once",
-          oneVoiceShort: "one voice, never two",
-          samePerson: "the same person, in all of them",
-          samePersonShort: "the same person, in all of them"
+          live: "jedes Gespr\u00e4ch, das du f\u00fchrst",
+          liveShort: "all deine Gespr\u00e4che",
+          open: "alle gleichzeitig offen",
+          openShort: "alle offen",
+          asked: "du hast in einem gefragt",
+          askedShort: "du fragst hier",
+          answers: "sie antwortet aus allem, was sie wei\u00df",
+          answersShort: "sie antwortet aus allem",
+          sources: "jede Zeile, und woher sie kommt",
+          sourcesShort: "jede Zeile mit Quelle",
+          oneVoice: "eine Stimme \u2014 nie zwei zugleich",
+          oneVoiceShort: "eine Stimme, nie zwei",
+          samePerson: "dieselbe Person, in allen",
+          samePersonShort: "dieselbe Person, in allen"
         }
       }
     }

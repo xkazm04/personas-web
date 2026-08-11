@@ -1712,551 +1712,403 @@ export const cs: Translations = {
       chromeTitle: "agent-playground \u2014 spu\u0161t\u011bno",
       reset: "Resetovat"
     },
-    // athenaPage: seeded from en, pending translation
     athenaPage: {
+      nav: {
+        meet: "POZNEJ ATHENU",
+        onboarding: "ZA\u010c\u00cdN\u00c1ME",
+        fleet: "Z JEDN\u00c9 V\u011aTY",
+        workshop: "CO \u0158\u00cdD\u00cd",
+        portfolio: "PROJEKTY",
+        memory: "PAM\u011a\u0164",
+        oneMind: "JEDNA MYSL"
+      },
       hero: {
-        eyebrow: "Your chief of staff",
-        headline: "Meet",
+        eyebrow: "Tvoje prav\u00e1 ruka",
+        headline: "Tohle je",
         headlineGradient: "Athena",
-        tagline: "She says nothing when nothing needs saying.",
-        persona: "A strategist, not a cheerful assistant \u2014 direct, opinionated, warm without performing. \u201CSpeed is not your job. Quality is.\u201D",
-        ctaPrimary: "See her work",
-        ctaSecondary: "Download Personas",
-        statWhisper: "Runs entirely on your machine \u00B7 you decide how far she goes",
-        avatarAlt: "Athena, the Personas companion",
-        orbAria: "Athena \u2014 press Enter and she acknowledges you",
-        acknowledgeLine: "I'm listening.",
-        calloutsAria: "What Athena does for you",
+        tagline: "Kdy\u017e nen\u00ed co \u0159\u00edct, nic ne\u0159\u00edk\u00e1.",
+        persona: "Strat\u00e9\u017eka, ne rozj\u00e1san\u00e1 asistentka \u2014 p\u0159\u00edm\u00e1, s vlastn\u00edm n\u00e1zorem, v\u0159el\u00e1 bez p\u0159ehr\u00e1v\u00e1n\u00ed. \u201eRychlost nen\u00ed tvoje pr\u00e1ce. Kvalita ano.\u201c",
+        ctaPrimary: "Pod\u00edvej se, jak pracuje",
+        ctaSecondary: "St\u00e1hnout Personas",
+        statWhisper: "B\u011b\u017e\u00ed cel\u00e1 u tebe v po\u010d\u00edta\u010di \u00b7 jak daleko zajde, ur\u010duje\u0161 ty",
+        avatarAlt: "Athena, spole\u010dnice z Personas",
+        orbAria: "Athena \u2014 stiskni Enter a ozve se ti",
+        acknowledgeLine: "Poslouch\u00e1m.",
+        calloutsAria: "Co pro tebe Athena d\u011bl\u00e1",
         callouts: [
-          {
-            label: "Talk to her",
-            fact: "Hold to speak \u2014 no typing"
-          },
-          {
-            label: "At a glance",
-            fact: "See what she's working on"
-          },
-          {
-            label: "Your desktop",
-            fact: "Drag her where you work"
-          },
-          {
-            label: "Always ready",
-            fact: "Cmd/Ctrl+Shift+A, from any app"
-          }
+          { label: "Mluv s n\u00ed", fact: "Podr\u017e a mluv \u2014 bez psan\u00ed" },
+          { label: "Jedn\u00edm pohledem", fact: "Vid\u00ed\u0161, na \u010dem pracuje" },
+          { label: "Tvoje plocha", fact: "P\u0159et\u00e1hni ji, kam pracuje\u0161" },
+          { label: "V\u017edy po ruce", fact: "Cmd/Ctrl+Shift+A, odkudkoli" }
         ]
       },
       onboarding: {
         intro: {
-          eyebrow: "Set up together",
-          heading: "Onboarding",
-          gradient: "partner"
+          eyebrow: "Nastav\u00edme to spolu",
+          heading: "Par\u0165\u00e1k",
+          gradient: "na za\u010d\u00e1tek"
         },
         chrome: {
           appName: "Personas",
-          search: "Search\u2026",
-          nav: [
-            "Home",
-            "Agents",
-            "Templates",
-            "Connectors",
-            "Vault",
-            "Settings"
-          ],
-          usageLabel: "runs today",
+          search: "Hledat\u2026",
+          nav: ["Dom\u016f", "Agenti", "\u0160ablony", "Konektory", "Trezor", "Nastaven\u00ed"],
+          usageLabel: "spu\u0161t\u011bn\u00ed dnes",
           usageValue: "18 / 25",
-          newAgent: "New agent"
+          newAgent: "Nov\u00fd agent"
         },
         canvas: {
-          crumbs: [
-            "Workspace",
-            "Automation"
-          ],
-          filters: [
-            "All",
-            "Popular",
-            "Scheduled",
-            "New"
-          ],
-          templatesLabel: "Templates",
-          templatesHint: "12 templates",
+          crumbs: ["Pracovn\u00ed prostor", "Automatizace"],
+          filters: ["V\u0161e", "Obl\u00edben\u00e9", "Napl\u00e1novan\u00e9", "Nov\u00e9"],
+          templatesLabel: "\u0160ablony",
+          templatesHint: "12 \u0161ablon",
           template: {
-            title: "Daily digest",
-            meta: "summarize \u00B7 post \u00B7 9:00",
-            pill: "popular",
-            schedule: "Daily 9:00",
-            runs: "142 runs",
-            health: "98% ok"
+            title: "Denn\u00ed p\u0159ehled",
+            meta: "shrnout \u00b7 odeslat \u00b7 9:00",
+            pill: "obl\u00edben\u00e9",
+            schedule: "Denn\u011b v 9:00",
+            runs: "142 spu\u0161t\u011bn\u00ed",
+            health: "98 % ok"
           },
           templateAlt: {
-            title: "Inbox triage",
-            meta: "label \u00B7 draft \u00B7 archive",
-            pill: "new",
-            schedule: "On new mail",
-            runs: "86 runs",
-            health: "94% ok"
+            title: "T\u0159\u00edd\u011bn\u00ed po\u0161ty",
+            meta: "\u0161t\u00edtek \u00b7 n\u00e1vrh \u00b7 archiv",
+            pill: "nov\u00e9",
+            schedule: "P\u0159i nov\u00e9 po\u0161t\u011b",
+            runs: "86 spu\u0161t\u011bn\u00ed",
+            health: "94 % ok"
           },
-          runsTitle: "Recent runs",
-          runsHint: "last 24h",
-          runsCols: [
-            "agent",
-            "status",
-            "took"
-          ],
+          runsTitle: "Posledn\u00ed spu\u0161t\u011bn\u00ed",
+          runsHint: "posledn\u00edch 24 h",
+          runsCols: ["agent", "stav", "trvalo"],
           runsRows: [
-            {
-              name: "Daily digest",
-              state: "ok",
-              took: "1.2s"
-            },
-            {
-              name: "PR review",
-              state: "ok",
-              took: "0.8s"
-            },
-            {
-              name: "Notes sync",
-              state: "running",
-              took: "\u2014"
-            }
+            { name: "Denn\u00ed p\u0159ehled", state: "ok", took: "1,2 s" },
+            { name: "Kontrola PR", state: "ok", took: "0,8 s" },
+            { name: "Sync pozn\u00e1mek", state: "b\u011b\u017e\u00ed", took: "\u2014" }
           ],
-          connectLabel: "Connect a tool",
-          connectCount: "2 of 9 connected",
-          connectCountDone: "3 of 9 connected",
+          connectLabel: "P\u0159ipoj n\u00e1stroj",
+          connectCount: "2 z 9 p\u0159ipojeno",
+          connectCountDone: "3 z 9 p\u0159ipojeno",
           slack: {
             name: "Slack",
-            detail: "#general \u00B7 updates",
-            connect: "connect",
-            connecting: "connecting\u2026",
-            connected: "connected"
+            detail: "#general \u00b7 novinky",
+            connect: "p\u0159ipojit",
+            connecting: "p\u0159ipojuji\u2026",
+            connected: "p\u0159ipojeno"
           },
           chips: [
-            {
-              name: "GitHub",
-              detail: "synced 2m ago",
-              state: "connected"
-            },
-            {
-              name: "Notion",
-              detail: "12 pages",
-              state: "connected"
-            }
+            { name: "GitHub", detail: "sync p\u0159ed 2 min", state: "p\u0159ipojeno" },
+            { name: "Notion", detail: "12 str\u00e1nek", state: "p\u0159ipojeno" }
           ],
-          triggerLabel: "Trigger",
-          triggerIdle: "No schedule yet",
-          triggerIdleShort: "Not set",
-          triggerValue: "Every morning \u00B7 9:00",
-          triggerValueShort: "Daily \u00B7 9:00",
-          triggerHint: "edit",
-          triggerDays: [
-            "S",
-            "M",
-            "T",
-            "W",
-            "T",
-            "F",
-            "S"
-          ],
+          triggerLabel: "Spou\u0161t\u011b\u010d",
+          triggerIdle: "Zat\u00edm bez pl\u00e1nu",
+          triggerIdleShort: "Bez pl\u00e1nu",
+          triggerValue: "Ka\u017ed\u00e9 r\u00e1no \u00b7 9:00",
+          triggerValueShort: "Denn\u011b \u00b7 9:00",
+          triggerHint: "upravit",
+          triggerDays: ["N", "P", "\u00da", "S", "\u010c", "P", "S"],
           triggerZone: "UTC+1",
-          triggerOff: "off",
-          triggerOn: "on",
-          activityLabel: "Monitoring",
-          activityPill: "live",
+          triggerOff: "vyp",
+          triggerOn: "zap",
+          activityLabel: "Sledov\u00e1n\u00ed",
+          activityPill: "\u017eiv\u011b",
           stats: [
-            {
-              value: "24",
-              label: "runs"
-            },
-            {
-              value: "98%",
-              label: "success"
-            },
-            {
-              value: "1.4s",
-              label: "avg"
-            }
+            { value: "24", label: "spu\u0161t\u011bn\u00ed" },
+            { value: "98 %", label: "\u00fasp\u011bch" },
+            { value: "1,4 s", label: "pr\u016fm\u011br" }
           ],
-          action: "Create agent",
-          actionDone: "Agent created"
+          action: "Vytvo\u0159it agenta",
+          actionDone: "Agent vytvo\u0159en"
         },
         captions: {
-          template: "pick a starting point",
-          connect: "connect your Slack",
-          trigger: "choose when it runs",
-          action: "one click \u2014 it's live"
+          template: "vyber si v\u00fdchoz\u00ed bod",
+          connect: "p\u0159ipoj sv\u016fj Slack",
+          trigger: "ur\u010di, kdy pob\u011b\u017e\u00ed",
+          action: "jedno kliknut\u00ed \u2014 a jede"
         },
         status: {
-          setup: "workspace \u00B7 setting up together",
-          setupShort: "setting up",
-          step: "step {n}/{total} \u00B7 built with you",
-          stepShort: "step {n}/{total}",
-          live: "agent live \u00B7 monitoring on",
-          liveShort: "live"
+          setup: "prostor \u00b7 nastavujeme spolu",
+          setupShort: "nastavujeme",
+          step: "krok {n}/{total} \u00b7 tvo\u0159\u00edte spolu",
+          stepShort: "krok {n}/{total}",
+          live: "agent b\u011b\u017e\u00ed \u00b7 sledov\u00e1n\u00ed zap",
+          liveShort: "b\u011b\u017e\u00ed"
         }
       },
       fleet: {
-        intro: {
-          eyebrow: "Say it in your own words",
-          heading: "Fleet",
-          gradient: "orchestration"
-        },
+        intro: { eyebrow: "\u0158ekni to sv\u00fdmi slovy", heading: "Orchestrace", gradient: "flotily" },
         request: {
-          placeholder: "Ask Athena for anything\u2026",
-          voice: "or just say it",
-          sent: "sent",
+          placeholder: "Zeptej se Atheny na cokoli\u2026",
+          voice: "nebo to prost\u011b \u0159ekni",
+          sent: "odesl\u00e1no",
           clauses: [
-            [
-              "Pull ",
-              "last week's tickets",
-              ","
-            ],
-            [
-              " find ",
-              "the complaints that repeat",
-              ","
-            ],
-            [
-              " check ",
-              "what we already fixed",
-              ","
-            ],
-            [
-              " count ",
-              "how many it hit",
-              ","
-            ],
-            [
-              " and ",
-              "tell the team what matters",
-              "."
-            ]
+            ["Vyt\u00e1hni ", "tikety z minul\u00e9ho t\u00fddne", ","],
+            [" najdi ", "st\u00ed\u017enosti, kter\u00e9 se opakuj\u00ed", ","],
+            [" zjisti, ", "co u\u017e jsme opravili", ","],
+            [" spo\u010d\u00edtej, ", "kolika lid\u00ed se to t\u00fdkalo", ","],
+            [" a ", "\u0159ekni t\u00fdmu, na \u010dem z\u00e1le\u017e\u00ed", "."]
           ]
         },
         plan: {
-          hint: "Change anything before it starts",
-          hintShort: "Change anything first",
-          edited: "Changed",
-          start: "Start",
-          working: "Working",
-          done: "Done"
+          hint: "Ne\u017e to spust\u00ed\u0161, m\u016f\u017ee\u0161 cokoli zm\u011bnit",
+          hintShort: "Nejd\u0159\u00edv cokoli zm\u011b\u0148",
+          edited: "Zm\u011bn\u011bno",
+          start: "Spustit",
+          working: "Pracuje",
+          done: "Hotovo"
         },
-        task: {
-          working: "working",
-          finished: "done"
-        },
+        task: { working: "pracuje", finished: "hotovo" },
         tasks: [
           {
-            title: "Collect the tickets",
-            scope: "last 7 days",
-            scopeEdited: "last 14 days",
-            found: "1,284 tickets"
+            title: "Posb\u00edrat tikety",
+            scope: "posledn\u00edch 7 dn\u00ed",
+            scopeEdited: "posledn\u00edch 14 dn\u00ed",
+            found: "1 284 tiket\u016f"
           },
           {
-            title: "Group the repeat complaints",
-            scope: "all channels",
-            found: "9 clusters"
+            title: "Seskupit opakovan\u00e9 st\u00ed\u017enosti",
+            scope: "v\u0161echny kan\u00e1ly",
+            found: "9 skupin"
           },
           {
-            title: "Check what we already shipped",
-            scope: "since May",
-            found: "4 already fixed"
+            title: "Ov\u011b\u0159it, co u\u017e jsme vydali",
+            scope: "od kv\u011btna",
+            found: "4 u\u017e opraveno"
           },
           {
-            title: "Count the people affected",
-            scope: "by account",
-            found: "612 accounts"
+            title: "Spo\u010d\u00edtat zasa\u017een\u00e9 lidi",
+            scope: "podle \u00fa\u010dtu",
+            found: "612 \u00fa\u010dt\u016f"
           }
         ],
         result: {
-          title: "What matters this week",
+          title: "Na \u010dem tento t\u00fdden z\u00e1le\u017e\u00ed",
           rows: [
-            {
-              label: "Checkout errors",
-              meta: "214 people"
-            },
-            {
-              label: "Slow search",
-              meta: "96 people"
-            },
-            {
-              label: "Login loop",
-              meta: "fixed Tuesday"
-            }
+            { label: "Chyby v pokladn\u011b", meta: "214 lid\u00ed" },
+            { label: "Pomal\u00e9 hled\u00e1n\u00ed", meta: "96 lid\u00ed" },
+            { label: "Smy\u010dka p\u0159ihl\u00e1\u0161en\u00ed", meta: "opraveno v \u00fater\u00fd" }
           ],
-          footer: "sent to the team"
+          footer: "odesl\u00e1no t\u00fdmu"
         },
         status: {
-          speak: "speak it or type it \u2014 same either way",
-          speakShort: "type it or say it",
-          planning: "Athena works out what it takes",
-          pieces: "one sentence, four pieces of work",
-          piecesShort: "four pieces of work",
-          yourCall: "nothing runs until you say so",
-          yourCallShort: "your call to start",
-          parallel: "all four at the same time",
-          parallelShort: "all four at once",
-          returning: "coming back as one answer",
-          returningShort: "coming back as one",
-          closing: "one sentence in \u00B7 one answer back",
-          closingShort: "one answer back"
+          speak: "\u0159ekni to nebo napi\u0161 \u2014 nez\u00e1le\u017e\u00ed",
+          speakShort: "napi\u0161 to nebo \u0159ekni",
+          planning: "Athena promysl\u00ed, co to obn\u00e1\u0161\u00ed",
+          pieces: "jedna v\u011bta, \u010dty\u0159i kusy pr\u00e1ce",
+          piecesShort: "\u010dty\u0159i kusy pr\u00e1ce",
+          yourCall: "nic neb\u011b\u017e\u00ed, dokud ne\u0159ekne\u0161",
+          yourCallShort: "start je na tob\u011b",
+          parallel: "v\u0161echny \u010dty\u0159i ve stejnou chv\u00edli",
+          parallelShort: "v\u0161echny \u010dty\u0159i nar\u00e1z",
+          returning: "vrac\u00ed se jako jedna odpov\u011b\u010f",
+          returningShort: "vrac\u00ed se jako jedna",
+          closing: "jedna v\u011bta tam \u00b7 jedna odpov\u011b\u010f zp\u011bt",
+          closingShort: "jedna odpov\u011b\u010f zp\u011bt"
         }
       },
       workshop: {
         intro: {
-          eyebrow: "However much you hand her",
-          heading: "The lines you drew",
-          gradient: "hold"
+          eyebrow: "A\u0165 j\u00ed sv\u011b\u0159\u00ed\u0161 cokoli",
+          heading: "Tvoje hranice",
+          gradient: "dr\u017e\u00ed"
         },
         beds: [
-          {
-            name: "Checkout app",
-            short: "Checkout"
-          },
-          {
-            name: "Marketing site",
-            short: "Website"
-          },
-          {
-            name: "Billing service",
-            short: "Billing"
-          }
+          { name: "Aplikace pokladny", short: "Pokladna" },
+          { name: "Marketingov\u00fd web", short: "Web" },
+          { name: "Faktura\u010dn\u00ed slu\u017eba", short: "Fakturace" }
         ],
         jobTitles: [
-          "run the tests",
-          "check the links",
-          "clean up the warnings",
-          "fix the flaky test",
-          "refresh the changelog",
-          "tidy the old branches"
+          "spustit testy",
+          "zkontrolovat odkazy",
+          "uklidit varov\u00e1n\u00ed",
+          "opravit nestabiln\u00ed test",
+          "aktualizovat changelog",
+          "uklidit star\u00e9 v\u011btve"
         ],
-        fence: {
-          plate: "the places you opened",
-          plateShort: "places you opened"
-        },
+        fence: { plate: "m\u00edsta, kter\u00e1 jsi otev\u0159el", plateShort: "co jsi otev\u0159el" },
         dial: {
-          label: "how much she does on her own",
-          labelShort: "how much on her own",
-          stops: [
-            "check with me first",
-            "the small stuff",
-            "go ahead"
-          ],
-          stopsShort: [
-            "ask me first",
-            "small stuff",
-            "go ahead"
-          ]
+          label: "kolik toho zvl\u00e1dne sama",
+          labelShort: "kolik zvl\u00e1dne sama",
+          stops: ["nejd\u0159\u00edv se m\u011b zeptej", "ty drobnosti", "jen do toho"],
+          stopsShort: ["zeptej se m\u011b", "drobnosti", "do toho"]
         },
-        job: {
-          working: "working",
-          done: "done"
-        },
-        outside: {
-          name: "Old client work",
-          waits: "waits for you"
-        },
+        job: { working: "pracuje", done: "hotovo" },
+        outside: { name: "Star\u00e1 zak\u00e1zka", waits: "\u010dek\u00e1 na tebe" },
         status: {
-          line: "the line comes first",
-          lineShort: "the line comes first",
-          draw: "you draw it once",
-          drawShort: "you draw it once",
-          places: "these are the places you opened",
-          placesShort: "the places you opened",
-          inside: "she works inside it \u2014 all of it",
-          insideShort: "she works inside",
-          turnUp: "turn it up \u2014 more at once, fewer questions",
-          turnUpShort: "turn it up \u2014 more at once",
-          unmoved: "the line doesn't move with it",
-          unmovedShort: "the line doesn't move",
-          stops: "she stops where you stopped her",
-          stopsShort: "she stops at the line",
-          waits: "and waits \u2014 that one is yours",
-          waitsShort: "that one is yours",
-          free: "as free as you like, inside your lines",
-          freeShort: "free, inside your lines"
+          line: "nejd\u0159\u00edv je hranice",
+          lineShort: "nejd\u0159\u00edv je hranice",
+          draw: "nakresl\u00ed\u0161 ji jednou",
+          drawShort: "nakresl\u00ed\u0161 ji jednou",
+          places: "tohle jsou m\u00edsta, cos otev\u0159el",
+          placesShort: "m\u00edsta, cos otev\u0159el",
+          inside: "uvnit\u0159 pracuje naplno \u2014 v\u0161ude",
+          insideShort: "pracuje uvnit\u0159",
+          turnUp: "p\u0159idej \u2014 v\u00edc nar\u00e1z, m\u00ed\u0148 ot\u00e1zek",
+          turnUpShort: "p\u0159idej \u2014 v\u00edc nar\u00e1z",
+          unmoved: "hranice se s t\u00edm nehne",
+          unmovedShort: "hranice se nehne",
+          stops: "zastav\u00ed tam, kde jsi \u0159ekl",
+          stopsShort: "zastav\u00ed na hranici",
+          waits: "a \u010dek\u00e1 \u2014 tohle je tvoje",
+          waitsShort: "tohle je tvoje",
+          free: "voln\u011b, jak chce\u0161 \u2014 uvnit\u0159 hranic",
+          freeShort: "voln\u011b, uvnit\u0159 tv\u00fdch hranic"
         }
       },
       portfolio: {
         intro: {
-          eyebrow: "While you are busy elsewhere",
-          heading: "Nothing quietly",
-          gradient: "rots"
+          eyebrow: "Zat\u00edmco m\u00e1\u0161 pr\u00e1ci jinde",
+          heading: "Nic ti\u0161e",
+          gradient: "nech\u00e1tr\u00e1"
         },
         projects: [
-          "Marketing site",
-          "Docs",
-          "Mobile app",
-          "Design system",
-          "Support inbox",
-          "Data pipeline",
-          "Admin tools",
-          "Payments API",
-          "Search service",
-          "Onboarding flow",
-          "Notifications",
-          "Internal wiki"
+          "Marketingov\u00fd web",
+          "Dokumentace",
+          "Mobiln\u00ed aplikace",
+          "Design syst\u00e9m",
+          "Schr\u00e1nka podpory",
+          "Datov\u00e1 pipeline",
+          "Admin n\u00e1stroje",
+          "Platebn\u00ed API",
+          "Vyhled\u00e1v\u00e1n\u00ed",
+          "Onboarding",
+          "Notifikace",
+          "Intern\u00ed wiki"
         ],
-        field: {
-          handled: "handled"
-        },
+        field: { handled: "vy\u0159e\u0161eno" },
         panel: {
-          badge: "worst first",
+          badge: "nejhor\u0161\u00ed prvn\u00ed",
           rows: [
-            {
-              name: "Dependencies",
-              since: "quiet 11 days"
-            },
-            {
-              name: "Nightly build",
-              since: "red since Friday"
-            }
+            { name: "Z\u00e1vislosti", since: "ticho 11 dn\u00ed" },
+            { name: "No\u010dn\u00ed build", since: "\u010derven\u00fd od p\u00e1tku" }
           ],
-          rest: "5 other checks fine",
-          finding: "Payment library is 3 versions behind, one with a known hole.",
-          findingShort: "3 versions behind, one with a hole.",
-          action: "Open what fixes it",
-          actionShort: "Open the fix",
-          done: "Opened"
+          rest: "5 dal\u0161\u00edch kontrol v po\u0159\u00e1dku",
+          finding: "Platebn\u00ed knihovna je o 3 verze pozadu, jedna z nich m\u00e1 zn\u00e1mou d\u00edru.",
+          findingShort: "3 verze pozadu, jedna s d\u00edrou.",
+          action: "Otev\u0159\u00edt, co to sprav\u00ed",
+          actionShort: "Otev\u0159\u00edt opravu",
+          done: "Otev\u0159eno"
         },
         caption: {
-          survey: "Checking every project",
-          surfaced: "Three need you",
-          worst: "This one first",
-          found: "Quiet for 11 days",
-          opened: "Opened for you"
+          survey: "Proch\u00e1z\u00ed ka\u017ed\u00fd projekt",
+          surfaced: "T\u0159i t\u011b pot\u0159ebuj\u00ed",
+          worst: "Tenhle prvn\u00ed",
+          found: "Ticho u\u017e 11 dn\u00ed",
+          opened: "Otev\u0159eno pro tebe"
         },
         status: {
-          view: "every project you own, in view",
-          viewShort: "all of them, in view",
-          checking: "checking all of them at once",
-          checkingShort: "checking all of them",
-          needing: "3 need you \u00B7 worst first",
-          needingShort: "3 need you",
-          travel: "going straight to the worst one",
-          travelShort: "worst one first",
-          quiet: "payments api \u00B7 quiet for 11 days",
-          quietShort: "quiet for 11 days",
-          opened: "opened the thing that fixes it",
-          openedShort: "opened for you",
-          back: "back out to the whole picture",
-          backShort: "back out",
-          settled: "1 handled \u00B7 2 still waiting",
-          settledShort: "1 handled \u00B7 2 waiting"
+          view: "v\u0161echny tvoje projekty na o\u010d\u00edch",
+          viewShort: "v\u0161echny na o\u010d\u00edch",
+          checking: "kontroluje v\u0161echny nar\u00e1z",
+          checkingShort: "kontroluje v\u0161echny",
+          needing: "3 t\u011b pot\u0159ebuj\u00ed \u00b7 nejhor\u0161\u00ed prvn\u00ed",
+          needingShort: "3 t\u011b pot\u0159ebuj\u00ed",
+          travel: "m\u00ed\u0159\u00ed rovnou k tomu nejhor\u0161\u00edmu",
+          travelShort: "nejhor\u0161\u00ed prvn\u00ed",
+          quiet: "payments api \u00b7 ticho 11 dn\u00ed",
+          quietShort: "ticho 11 dn\u00ed",
+          opened: "otev\u0159ela to, co to sprav\u00ed",
+          openedShort: "otev\u0159eno pro tebe",
+          back: "zp\u00e1tky na cel\u00fd obraz",
+          backShort: "zp\u00e1tky ven",
+          settled: "1 vy\u0159e\u0161eno \u00b7 2 st\u00e1le \u010dekaj\u00ed",
+          settledShort: "1 vy\u0159e\u0161eno \u00b7 2 \u010dekaj\u00ed"
         }
       },
       memory: {
         intro: {
-          eyebrow: "The longer you work together",
-          heading: "The more she",
-          gradient: "carries"
+          eyebrow: "\u010c\u00edm d\u00e9le spolu pracujete",
+          heading: "T\u00edm v\u00edc si",
+          gradient: "toho nese"
         },
-        talk: "each day's talk",
-        rail: "enough to sleep on",
-        night: "she sleeps on it",
-        shelf: "what she keeps",
+        talk: "pov\u00edd\u00e1n\u00ed za den",
+        rail: "dost, aby se vyspala",
+        night: "vysp\u00ed se na to",
+        shelf: "co si nech\u00e1v\u00e1",
         kept: [
-          "You ship on Thursdays.",
-          "Staging is where you try things.",
-          "Billing is the one you worry about.",
-          "You like the short version first."
+          "Vyd\u00e1v\u00e1\u0161 ve \u010dtvrtek.",
+          "Na stagingu zkou\u0161\u00ed\u0161 v\u011bci.",
+          "Fakturace je to, co t\u011b tr\u00e1p\u00ed.",
+          "Nejd\u0159\u00edv chce\u0161 kr\u00e1tkou verzi."
         ],
         status: {
-          day: "one ordinary day of working together",
-          dayShort: "one ordinary day",
-          building: "everything you two get through, building up",
-          buildingShort: "the day's talk, building up",
-          sleeps: "enough has built up \u2014 she sleeps on it",
-          sleepsShort: "she sleeps on it",
-          wakes: "she wakes with a little more than she had",
-          wakesShort: "a little more than before",
-          keeping: "another night, another thing worth keeping",
-          keepingShort: "another thing worth keeping",
-          quiet: "a quiet day \u2014 barely anything said",
-          quietShort: "a quiet day",
-          notEnough: "not enough to sleep on, so she doesn't",
-          notEnoughShort: "not enough to sleep on",
-          nothingLost: "nothing is lost \u2014 that day is still there",
-          nothingLostShort: "still there, nothing lost",
-          inUse: "and the first thing she kept is in use today",
-          inUseShort: "day one's, in use today",
-          sleepsAgain: "she sleeps on this one too",
-          sleepsAgainShort: "she sleeps on this one too",
-          cost: "it costs her less than one ordinary reply",
-          costShort: "less than one reply",
-          oneMore: "one more night, one more thing she carries",
-          oneMoreShort: "one more thing she carries",
-          carries: "the longer you work together, the more she carries",
-          carriesShort: "the more she carries"
+          day: "jeden oby\u010dejn\u00fd den spolupr\u00e1ce",
+          dayShort: "jeden oby\u010dejn\u00fd den",
+          building: "v\u0161echno, \u010d\u00edm spolu projdete, se vrstv\u00ed",
+          buildingShort: "denn\u00ed pov\u00edd\u00e1n\u00ed se vrstv\u00ed",
+          sleeps: "nasb\u00edralo se dost \u2014 vysp\u00ed se",
+          sleepsShort: "vysp\u00ed se na to",
+          wakes: "probud\u00ed se o kousek d\u00e1l",
+          wakesShort: "o kousek d\u00e1l",
+          keeping: "dal\u0161\u00ed noc, dal\u0161\u00ed v\u011bc k zapamatov\u00e1n\u00ed",
+          keepingShort: "dal\u0161\u00ed v\u011bc k zapamatov\u00e1n\u00ed",
+          quiet: "klidn\u00fd den \u2014 skoro nic \u0159e\u010deno",
+          quietShort: "klidn\u00fd den",
+          notEnough: "nenasb\u00edralo se dost, tak nesp\u00ed",
+          notEnoughShort: "nenasb\u00edralo se dost",
+          nothingLost: "nic nen\u00ed pry\u010d \u2014 ten den z\u016fst\u00e1v\u00e1",
+          nothingLostShort: "z\u016fst\u00e1v\u00e1, nic nen\u00ed pry\u010d",
+          inUse: "a prvn\u00ed poznatek pou\u017e\u00edv\u00e1 i dnes",
+          inUseShort: "prvn\u00ed poznatek, dnes",
+          sleepsAgain: "i na tuhle se vysp\u00ed",
+          sleepsAgainShort: "i na tuhle se vysp\u00ed",
+          cost: "stoj\u00ed ji m\u00ed\u0148 ne\u017e jedna odpov\u011b\u010f",
+          costShort: "m\u00ed\u0148 ne\u017e jedna odpov\u011b\u010f",
+          oneMore: "dal\u0161\u00ed noc, dal\u0161\u00ed v\u011bc nav\u00edc",
+          oneMoreShort: "dal\u0161\u00ed v\u011bc, co si nese",
+          carries: "\u010d\u00edm d\u00e9le spolu pracujete, t\u00edm v\u00edc si toho nese",
+          carriesShort: "t\u00edm v\u00edc si toho nese"
         }
       },
       oneMind: {
         intro: {
-          eyebrow: "However many conversations",
-          heading: "Always the",
-          gradient: "same person"
+          eyebrow: "A\u0165 m\u00e1\u0161 rozhovor\u016f kolik chce\u0161",
+          heading: "Po\u0159\u00e1d ta",
+          gradient: "stejn\u00e1 osoba"
         },
         conversations: [
-          {
-            name: "The rewrite",
-            short: "The rewrite"
-          },
-          {
-            name: "Monday review",
-            short: "Monday"
-          },
-          {
-            name: "Getting set up",
-            short: "Setup"
-          },
-          {
-            name: "The outage",
-            short: "Outage"
-          },
-          {
-            name: "The pricing page",
-            short: "Pricing"
-          },
-          {
-            name: "Invoices",
-            short: "Invoices"
-          }
+          { name: "Ten p\u0159epis", short: "P\u0159epis" },
+          { name: "Pond\u011bln\u00ed review", short: "Pond\u011bl\u00ed" },
+          { name: "Rozj\u00ed\u017ed\u00edme to", short: "Rozjezd" },
+          { name: "V\u00fdpadek", short: "V\u00fdpadek" },
+          { name: "Str\u00e1nka s cenami", short: "Ceny" },
+          { name: "Faktury", short: "Faktury" }
         ],
         open: {
-          label: "this conversation",
-          question: "What else are we working on?",
-          from: "from",
-          footer: "Nothing else needs you today.",
-          footerShort: "Nothing else needs you."
+          label: "tenhle rozhovor",
+          question: "Na \u010dem dal\u0161\u00edm pracujeme?",
+          from: "zdroj:",
+          footer: "Dnes t\u011b nic dal\u0161\u00edho nepot\u0159ebuje.",
+          footerShort: "Nic dal\u0161\u00edho t\u011b nepot\u0159ebuje."
         },
         rows: [
           {
-            claim: "The last check passed about an hour ago",
-            short: "Last check passed"
+            claim: "Posledn\u00ed kontrola pro\u0161la asi p\u0159ed hodinou",
+            short: "Posledn\u00ed kontrola pro\u0161la"
           },
           {
-            claim: "Two projects are waiting on you, neither urgent",
-            short: "2 waiting, none urgent"
+            claim: "Dva projekty \u010dekaj\u00ed na tebe, ani jeden neho\u0159\u00ed",
+            short: "2 \u010dekaj\u00ed, nic neho\u0159\u00ed"
           },
           {
-            claim: "Your calendar still isn't connected",
-            short: "Calendar not connected"
+            claim: "Kalend\u00e1\u0159 po\u0159\u00e1d nem\u00e1\u0161 p\u0159ipojen\u00fd",
+            short: "Kalend\u00e1\u0159 nen\u00ed p\u0159ipojen\u00fd"
           }
         ],
         status: {
-          live: "every conversation you have going",
-          liveShort: "all your conversations",
-          open: "all of them open at the same time",
-          openShort: "all open at once",
-          asked: "you asked in one of them",
-          askedShort: "you asked here",
-          answers: "she answers from everything she knows",
-          answersShort: "she answers from all of it",
-          sources: "every line, and where it came from",
-          sourcesShort: "every line, and its source",
-          oneVoice: "one voice \u2014 you never hear two at once",
-          oneVoiceShort: "one voice, never two",
-          samePerson: "the same person, in all of them",
-          samePersonShort: "the same person, in all of them"
+          live: "v\u0161echny rozhovory, co m\u00e1\u0161 rozjet\u00e9",
+          liveShort: "v\u0161echny tvoje rozhovory",
+          open: "v\u0161echny otev\u0159en\u00e9 nar\u00e1z",
+          openShort: "v\u0161echny nar\u00e1z",
+          asked: "zeptal ses v jednom z nich",
+          askedShort: "zeptal ses tady",
+          answers: "odpov\u00edd\u00e1 ze v\u0161eho, co v\u00ed",
+          answersShort: "odpov\u00edd\u00e1 ze v\u0161eho",
+          sources: "ka\u017ed\u00fd \u0159\u00e1dek i s t\u00edm, odkud je",
+          sourcesShort: "ka\u017ed\u00fd \u0159\u00e1dek a odkud je",
+          oneVoice: "jeden hlas \u2014 nikdy dva nar\u00e1z",
+          oneVoiceShort: "jeden hlas, nikdy dva",
+          samePerson: "ve v\u0161ech ta stejn\u00e1 osoba",
+          samePersonShort: "ve v\u0161ech ta stejn\u00e1 osoba"
         }
       }
     }
