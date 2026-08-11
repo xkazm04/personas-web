@@ -1712,551 +1712,559 @@ export const id: Translations = {
       chromeTitle: "agent-playground \u2014 langsung",
       reset: "Atur ulang"
     },
-    // athenaPage: seeded from en, pending translation
     athenaPage: {
+      nav: {
+        meet: "Kenali Athena",
+        onboarding: "Persiapan",
+        fleet: "Dari satu kalimat",
+        workshop: "Yang dia jalankan",
+        portfolio: "Semua proyek",
+        memory: "Ingatan",
+        oneMind: "Satu pikiran"
+      },
       hero: {
-        eyebrow: "Your chief of staff",
-        headline: "Meet",
+        eyebrow: "Tangan kanan kamu",
+        headline: "Kenalkan,",
         headlineGradient: "Athena",
-        tagline: "She says nothing when nothing needs saying.",
-        persona: "A strategist, not a cheerful assistant \u2014 direct, opinionated, warm without performing. \u201CSpeed is not your job. Quality is.\u201D",
-        ctaPrimary: "See her work",
-        ctaSecondary: "Download Personas",
-        statWhisper: "Runs entirely on your machine \u00B7 you decide how far she goes",
-        avatarAlt: "Athena, the Personas companion",
-        orbAria: "Athena \u2014 press Enter and she acknowledges you",
-        acknowledgeLine: "I'm listening.",
-        calloutsAria: "What Athena does for you",
+        tagline: "Dia diam kalau memang tidak ada yang perlu dikatakan.",
+        persona: "Seorang perancang strategi, bukan asisten yang selalu ceria \u2014 lugas, punya pendapat, hangat tanpa berpura-pura. \u201cKecepatan bukan tugasmu. Kualitas yang jadi tugasmu.\u201d",
+        ctaPrimary: "Lihat cara kerjanya",
+        ctaSecondary: "Unduh Personas",
+        statWhisper: "Berjalan sepenuhnya di mesin kamu \u00b7 kamu yang menentukan sejauh mana dia melangkah",
+        avatarAlt: "Athena, pendamping Personas",
+        orbAria: "Athena \u2014 tekan Enter dan dia akan menyahut",
+        acknowledgeLine: "Aku mendengarkan.",
+        calloutsAria: "Apa yang Athena lakukan untukmu",
         callouts: [
           {
-            label: "Talk to her",
-            fact: "Hold to speak \u2014 no typing"
+            label: "Ajak dia bicara",
+            fact: "Tahan lalu bicara \u2014 tanpa mengetik"
           },
           {
-            label: "At a glance",
-            fact: "See what she's working on"
+            label: "Sekilas pandang",
+            fact: "Lihat apa yang sedang dia kerjakan"
           },
           {
-            label: "Your desktop",
-            fact: "Drag her where you work"
+            label: "Desktop kamu",
+            fact: "Seret dia ke tempat kamu bekerja"
           },
           {
-            label: "Always ready",
-            fact: "Cmd/Ctrl+Shift+A, from any app"
+            label: "Selalu siap",
+            fact: "Cmd/Ctrl+Shift+A, dari aplikasi mana pun"
           }
         ]
       },
       onboarding: {
         intro: {
-          eyebrow: "Set up together",
-          heading: "Onboarding",
-          gradient: "partner"
+          eyebrow: "Disiapkan bersama",
+          heading: "Pendamping",
+          gradient: "persiapan"
         },
         chrome: {
           appName: "Personas",
-          search: "Search\u2026",
+          search: "Cari\u2026",
           nav: [
-            "Home",
-            "Agents",
-            "Templates",
-            "Connectors",
-            "Vault",
-            "Settings"
+            "Beranda",
+            "Agen",
+            "Templat",
+            "Konektor",
+            "Brankas",
+            "Pengaturan"
           ],
-          usageLabel: "runs today",
+          usageLabel: "eksekusi hari ini",
           usageValue: "18 / 25",
-          newAgent: "New agent"
+          newAgent: "Agen baru"
         },
         canvas: {
           crumbs: [
-            "Workspace",
-            "Automation"
+            "Ruang kerja",
+            "Otomatisasi"
           ],
           filters: [
-            "All",
-            "Popular",
-            "Scheduled",
-            "New"
+            "Semua",
+            "Populer",
+            "Terjadwal",
+            "Baru"
           ],
-          templatesLabel: "Templates",
-          templatesHint: "12 templates",
+          templatesLabel: "Templat",
+          templatesHint: "12 templat",
           template: {
-            title: "Daily digest",
-            meta: "summarize \u00B7 post \u00B7 9:00",
-            pill: "popular",
-            schedule: "Daily 9:00",
-            runs: "142 runs",
-            health: "98% ok"
+            title: "Ringkasan harian",
+            meta: "rangkum \u00b7 posting \u00b7 9:00",
+            pill: "populer",
+            schedule: "Harian 9:00",
+            runs: "142 eksekusi",
+            health: "98% oke"
           },
           templateAlt: {
-            title: "Inbox triage",
-            meta: "label \u00B7 draft \u00B7 archive",
-            pill: "new",
-            schedule: "On new mail",
-            runs: "86 runs",
-            health: "94% ok"
+            title: "Pilah kotak masuk",
+            meta: "label \u00b7 draf \u00b7 arsip",
+            pill: "baru",
+            schedule: "Saat ada surel baru",
+            runs: "86 eksekusi",
+            health: "94% oke"
           },
-          runsTitle: "Recent runs",
-          runsHint: "last 24h",
+          runsTitle: "Eksekusi terbaru",
+          runsHint: "24 jam terakhir",
           runsCols: [
-            "agent",
+            "agen",
             "status",
-            "took"
+            "durasi"
           ],
           runsRows: [
             {
-              name: "Daily digest",
-              state: "ok",
+              name: "Ringkasan harian",
+              state: "oke",
               took: "1.2s"
             },
             {
-              name: "PR review",
-              state: "ok",
+              name: "Tinjauan PR",
+              state: "oke",
               took: "0.8s"
             },
             {
-              name: "Notes sync",
-              state: "running",
+              name: "Sinkron catatan",
+              state: "berjalan",
               took: "\u2014"
             }
           ],
-          connectLabel: "Connect a tool",
-          connectCount: "2 of 9 connected",
-          connectCountDone: "3 of 9 connected",
+          connectLabel: "Hubungkan satu alat",
+          connectCount: "2 dari 9 terhubung",
+          connectCountDone: "3 dari 9 terhubung",
           slack: {
             name: "Slack",
-            detail: "#general \u00B7 updates",
-            connect: "connect",
-            connecting: "connecting\u2026",
-            connected: "connected"
+            detail: "#general \u00b7 pembaruan",
+            connect: "hubungkan",
+            connecting: "menghubungkan\u2026",
+            connected: "terhubung"
           },
           chips: [
             {
               name: "GitHub",
-              detail: "synced 2m ago",
-              state: "connected"
+              detail: "disinkron 2 mnt lalu",
+              state: "terhubung"
             },
             {
               name: "Notion",
-              detail: "12 pages",
-              state: "connected"
+              detail: "12 halaman",
+              state: "terhubung"
             }
           ],
-          triggerLabel: "Trigger",
-          triggerIdle: "No schedule yet",
-          triggerIdleShort: "Not set",
-          triggerValue: "Every morning \u00B7 9:00",
-          triggerValueShort: "Daily \u00B7 9:00",
-          triggerHint: "edit",
+          triggerLabel: "Pemicu",
+          triggerIdle: "Belum ada jadwal",
+          triggerIdleShort: "Belum diatur",
+          triggerValue: "Setiap pagi \u00b7 9:00",
+          triggerValueShort: "Harian \u00b7 9:00",
+          triggerHint: "ubah",
           triggerDays: [
-            "S",
             "M",
-            "T",
-            "W",
-            "T",
-            "F",
+            "S",
+            "S",
+            "R",
+            "K",
+            "J",
             "S"
           ],
           triggerZone: "UTC+1",
-          triggerOff: "off",
-          triggerOn: "on",
-          activityLabel: "Monitoring",
-          activityPill: "live",
+          triggerOff: "mati",
+          triggerOn: "nyala",
+          activityLabel: "Pemantauan",
+          activityPill: "aktif",
           stats: [
             {
               value: "24",
-              label: "runs"
+              label: "eksekusi"
             },
             {
               value: "98%",
-              label: "success"
+              label: "sukses"
             },
             {
               value: "1.4s",
-              label: "avg"
+              label: "rata-rata"
             }
           ],
-          action: "Create agent",
-          actionDone: "Agent created"
+          action: "Buat agen",
+          actionDone: "Agen dibuat"
         },
         captions: {
-          template: "pick a starting point",
-          connect: "connect your Slack",
-          trigger: "choose when it runs",
-          action: "one click \u2014 it's live"
+          template: "pilih titik awal",
+          connect: "hubungkan Slack kamu",
+          trigger: "pilih kapan dia jalan",
+          action: "satu klik \u2014 langsung aktif"
         },
         status: {
-          setup: "workspace \u00B7 setting up together",
-          setupShort: "setting up",
-          step: "step {n}/{total} \u00B7 built with you",
-          stepShort: "step {n}/{total}",
-          live: "agent live \u00B7 monitoring on",
-          liveShort: "live"
+          setup: "ruang kerja \u00b7 disiapkan bersama",
+          setupShort: "sedang disiapkan",
+          step: "langkah {n}/{total} \u00b7 dibangun bersamamu",
+          stepShort: "langkah {n}/{total}",
+          live: "agen aktif \u00b7 pemantauan menyala",
+          liveShort: "aktif"
         }
       },
       fleet: {
         intro: {
-          eyebrow: "Say it in your own words",
-          heading: "Fleet",
-          gradient: "orchestration"
+          eyebrow: "Katakan dengan kata-katamu sendiri",
+          heading: "Orkestrasi",
+          gradient: "armada"
         },
         request: {
-          placeholder: "Ask Athena for anything\u2026",
-          voice: "or just say it",
-          sent: "sent",
+          placeholder: "Minta apa saja ke Athena\u2026",
+          voice: "atau cukup ucapkan",
+          sent: "terkirim",
           clauses: [
             [
-              "Pull ",
-              "last week's tickets",
+              "Ambil ",
+              "tiket minggu lalu",
               ","
             ],
             [
-              " find ",
-              "the complaints that repeat",
+              " cari ",
+              "keluhan yang terus berulang",
               ","
             ],
             [
-              " check ",
-              "what we already fixed",
+              " periksa ",
+              "apa yang sudah kita perbaiki",
               ","
             ],
             [
-              " count ",
-              "how many it hit",
+              " hitung ",
+              "berapa banyak yang terkena",
               ","
             ],
             [
-              " and ",
-              "tell the team what matters",
+              " lalu ",
+              "beri tahu tim apa yang penting",
               "."
             ]
           ]
         },
         plan: {
-          hint: "Change anything before it starts",
-          hintShort: "Change anything first",
-          edited: "Changed",
-          start: "Start",
-          working: "Working",
-          done: "Done"
+          hint: "Ubah apa pun sebelum dia mulai",
+          hintShort: "Ubah dulu apa pun",
+          edited: "Diubah",
+          start: "Mulai",
+          working: "Sedang jalan",
+          done: "Selesai"
         },
         task: {
-          working: "working",
-          finished: "done"
+          working: "berjalan",
+          finished: "selesai"
         },
         tasks: [
           {
-            title: "Collect the tickets",
-            scope: "last 7 days",
-            scopeEdited: "last 14 days",
-            found: "1,284 tickets"
+            title: "Kumpulkan tiketnya",
+            scope: "7 hari terakhir",
+            scopeEdited: "14 hari terakhir",
+            found: "1.284 tiket"
           },
           {
-            title: "Group the repeat complaints",
-            scope: "all channels",
-            found: "9 clusters"
+            title: "Kelompokkan keluhan berulang",
+            scope: "semua kanal",
+            found: "9 klaster"
           },
           {
-            title: "Check what we already shipped",
-            scope: "since May",
-            found: "4 already fixed"
+            title: "Periksa yang sudah dirilis",
+            scope: "sejak Mei",
+            found: "4 sudah diperbaiki"
           },
           {
-            title: "Count the people affected",
-            scope: "by account",
-            found: "612 accounts"
+            title: "Hitung orang yang terdampak",
+            scope: "per akun",
+            found: "612 akun"
           }
         ],
         result: {
-          title: "What matters this week",
+          title: "Yang penting minggu ini",
           rows: [
             {
-              label: "Checkout errors",
-              meta: "214 people"
+              label: "Error checkout",
+              meta: "214 orang"
             },
             {
-              label: "Slow search",
-              meta: "96 people"
+              label: "Pencarian lambat",
+              meta: "96 orang"
             },
             {
-              label: "Login loop",
-              meta: "fixed Tuesday"
+              label: "Loop login",
+              meta: "beres Selasa"
             }
           ],
-          footer: "sent to the team"
+          footer: "dikirim ke tim"
         },
         status: {
-          speak: "speak it or type it \u2014 same either way",
-          speakShort: "type it or say it",
-          planning: "Athena works out what it takes",
-          pieces: "one sentence, four pieces of work",
-          piecesShort: "four pieces of work",
-          yourCall: "nothing runs until you say so",
-          yourCallShort: "your call to start",
-          parallel: "all four at the same time",
-          parallelShort: "all four at once",
-          returning: "coming back as one answer",
-          returningShort: "coming back as one",
-          closing: "one sentence in \u00B7 one answer back",
-          closingShort: "one answer back"
+          speak: "diucapkan atau diketik \u2014 sama saja",
+          speakShort: "ketik atau ucapkan",
+          planning: "Athena menyusun apa yang dibutuhkan",
+          pieces: "satu kalimat, empat pekerjaan",
+          piecesShort: "empat pekerjaan",
+          yourCall: "tidak ada yang jalan sebelum kamu bilang",
+          yourCallShort: "kamu yang memulai",
+          parallel: "keempatnya berjalan bersamaan",
+          parallelShort: "empat sekaligus",
+          returning: "kembali sebagai satu jawaban",
+          returningShort: "jadi satu jawaban",
+          closing: "satu kalimat masuk \u00b7 satu jawaban kembali",
+          closingShort: "satu jawaban kembali"
         }
       },
       workshop: {
         intro: {
-          eyebrow: "However much you hand her",
-          heading: "The lines you drew",
-          gradient: "hold"
+          eyebrow: "Sebanyak apa pun yang kamu serahkan",
+          heading: "Garis yang kamu tarik",
+          gradient: "tetap berlaku"
         },
         beds: [
           {
-            name: "Checkout app",
+            name: "Aplikasi checkout",
             short: "Checkout"
           },
           {
-            name: "Marketing site",
-            short: "Website"
+            name: "Situs marketing",
+            short: "Situs"
           },
           {
-            name: "Billing service",
-            short: "Billing"
+            name: "Layanan penagihan",
+            short: "Penagihan"
           }
         ],
         jobTitles: [
-          "run the tests",
-          "check the links",
-          "clean up the warnings",
-          "fix the flaky test",
-          "refresh the changelog",
-          "tidy the old branches"
+          "jalankan tesnya",
+          "cek tautannya",
+          "bersihkan peringatannya",
+          "perbaiki tes yang labil",
+          "segarkan changelog",
+          "rapikan branch lama"
         ],
         fence: {
-          plate: "the places you opened",
-          plateShort: "places you opened"
+          plate: "tempat yang kamu buka",
+          plateShort: "yang kamu buka"
         },
         dial: {
-          label: "how much she does on her own",
-          labelShort: "how much on her own",
+          label: "seberapa banyak dia lakukan sendiri",
+          labelShort: "seberapa mandiri",
           stops: [
-            "check with me first",
-            "the small stuff",
-            "go ahead"
+            "tanya aku dulu",
+            "urus hal-hal kecil",
+            "lanjutkan saja"
           ],
           stopsShort: [
-            "ask me first",
-            "small stuff",
-            "go ahead"
+            "tanya dulu",
+            "hal kecil",
+            "lanjutkan"
           ]
         },
         job: {
-          working: "working",
-          done: "done"
+          working: "berjalan",
+          done: "selesai"
         },
         outside: {
-          name: "Old client work",
-          waits: "waits for you"
+          name: "Pekerjaan klien lama",
+          waits: "menunggu kamu"
         },
         status: {
-          line: "the line comes first",
-          lineShort: "the line comes first",
-          draw: "you draw it once",
-          drawShort: "you draw it once",
-          places: "these are the places you opened",
-          placesShort: "the places you opened",
-          inside: "she works inside it \u2014 all of it",
-          insideShort: "she works inside",
-          turnUp: "turn it up \u2014 more at once, fewer questions",
-          turnUpShort: "turn it up \u2014 more at once",
-          unmoved: "the line doesn't move with it",
-          unmovedShort: "the line doesn't move",
-          stops: "she stops where you stopped her",
-          stopsShort: "she stops at the line",
-          waits: "and waits \u2014 that one is yours",
-          waitsShort: "that one is yours",
-          free: "as free as you like, inside your lines",
-          freeShort: "free, inside your lines"
+          line: "garisnya lebih dulu",
+          lineShort: "garisnya lebih dulu",
+          draw: "kamu menariknya sekali",
+          drawShort: "kamu menariknya sekali",
+          places: "inilah tempat yang kamu buka",
+          placesShort: "tempat yang kamu buka",
+          inside: "dia bekerja di dalamnya \u2014 seluruhnya",
+          insideShort: "dia bekerja di dalam",
+          turnUp: "naikkan \u2014 lebih banyak sekaligus, lebih sedikit bertanya",
+          turnUpShort: "naikkan \u2014 lebih banyak sekaligus",
+          unmoved: "garisnya tidak ikut bergeser",
+          unmovedShort: "garisnya tidak bergeser",
+          stops: "dia berhenti di tempat kamu menghentikannya",
+          stopsShort: "dia berhenti di garis",
+          waits: "lalu menunggu \u2014 yang itu milikmu",
+          waitsShort: "yang itu milikmu",
+          free: "sebebas yang kamu mau, di dalam garismu",
+          freeShort: "bebas, di dalam garismu"
         }
       },
       portfolio: {
         intro: {
-          eyebrow: "While you are busy elsewhere",
-          heading: "Nothing quietly",
-          gradient: "rots"
+          eyebrow: "Saat kamu sibuk di tempat lain",
+          heading: "Tidak ada yang diam-diam",
+          gradient: "membusuk"
         },
         projects: [
-          "Marketing site",
-          "Docs",
-          "Mobile app",
-          "Design system",
-          "Support inbox",
-          "Data pipeline",
-          "Admin tools",
-          "Payments API",
-          "Search service",
-          "Onboarding flow",
-          "Notifications",
-          "Internal wiki"
+          "Situs marketing",
+          "Dokumentasi",
+          "Aplikasi mobile",
+          "Sistem desain",
+          "Kotak masuk dukungan",
+          "Pipeline data",
+          "Alat admin",
+          "API pembayaran",
+          "Layanan pencarian",
+          "Alur onboarding",
+          "Notifikasi",
+          "Wiki internal"
         ],
         field: {
-          handled: "handled"
+          handled: "beres"
         },
         panel: {
-          badge: "worst first",
+          badge: "terparah dulu",
           rows: [
             {
-              name: "Dependencies",
-              since: "quiet 11 days"
+              name: "Dependensi",
+              since: "sunyi 11 hari"
             },
             {
-              name: "Nightly build",
-              since: "red since Friday"
+              name: "Build malam",
+              since: "merah sejak Jumat"
             }
           ],
-          rest: "5 other checks fine",
-          finding: "Payment library is 3 versions behind, one with a known hole.",
-          findingShort: "3 versions behind, one with a hole.",
-          action: "Open what fixes it",
-          actionShort: "Open the fix",
-          done: "Opened"
+          rest: "5 pemeriksaan lain aman",
+          finding: "Pustaka pembayaran tertinggal 3 versi, salah satunya punya celah yang sudah dikenal.",
+          findingShort: "Tertinggal 3 versi, satu berlubang.",
+          action: "Buka yang memperbaikinya",
+          actionShort: "Buka perbaikannya",
+          done: "Dibuka"
         },
         caption: {
-          survey: "Checking every project",
-          surfaced: "Three need you",
-          worst: "This one first",
-          found: "Quiet for 11 days",
-          opened: "Opened for you"
+          survey: "Memeriksa setiap proyek",
+          surfaced: "Tiga butuh kamu",
+          worst: "Yang ini dulu",
+          found: "Sunyi selama 11 hari",
+          opened: "Dibuka untuk kamu"
         },
         status: {
-          view: "every project you own, in view",
-          viewShort: "all of them, in view",
-          checking: "checking all of them at once",
-          checkingShort: "checking all of them",
-          needing: "3 need you \u00B7 worst first",
-          needingShort: "3 need you",
-          travel: "going straight to the worst one",
-          travelShort: "worst one first",
-          quiet: "payments api \u00B7 quiet for 11 days",
-          quietShort: "quiet for 11 days",
-          opened: "opened the thing that fixes it",
-          openedShort: "opened for you",
-          back: "back out to the whole picture",
-          backShort: "back out",
-          settled: "1 handled \u00B7 2 still waiting",
-          settledShort: "1 handled \u00B7 2 waiting"
+          view: "semua proyekmu, dalam satu pandangan",
+          viewShort: "semuanya, dalam pandangan",
+          checking: "memeriksa semuanya sekaligus",
+          checkingShort: "memeriksa semuanya",
+          needing: "3 butuh kamu \u00b7 terparah dulu",
+          needingShort: "3 butuh kamu",
+          travel: "langsung menuju yang terparah",
+          travelShort: "yang terparah dulu",
+          quiet: "api pembayaran \u00b7 sunyi selama 11 hari",
+          quietShort: "sunyi 11 hari",
+          opened: "membuka hal yang memperbaikinya",
+          openedShort: "dibuka untuk kamu",
+          back: "kembali ke gambaran utuh",
+          backShort: "kembali keluar",
+          settled: "1 beres \u00b7 2 masih menunggu",
+          settledShort: "1 beres \u00b7 2 menunggu"
         }
       },
       memory: {
         intro: {
-          eyebrow: "The longer you work together",
-          heading: "The more she",
-          gradient: "carries"
+          eyebrow: "Makin lama kalian bekerja bersama",
+          heading: "Makin banyak yang",
+          gradient: "dia bawa"
         },
-        talk: "each day's talk",
-        rail: "enough to sleep on",
-        night: "she sleeps on it",
-        shelf: "what she keeps",
+        talk: "obrolan tiap hari",
+        rail: "cukup untuk dipikirkan semalam",
+        night: "dia memikirkannya semalam",
+        shelf: "yang dia simpan",
         kept: [
-          "You ship on Thursdays.",
-          "Staging is where you try things.",
-          "Billing is the one you worry about.",
-          "You like the short version first."
+          "Kamu rilis tiap Kamis.",
+          "Staging tempat kamu mencoba-coba.",
+          "Penagihan yang bikin kamu waswas.",
+          "Kamu suka versi singkatnya dulu."
         ],
         status: {
-          day: "one ordinary day of working together",
-          dayShort: "one ordinary day",
-          building: "everything you two get through, building up",
-          buildingShort: "the day's talk, building up",
-          sleeps: "enough has built up \u2014 she sleeps on it",
-          sleepsShort: "she sleeps on it",
-          wakes: "she wakes with a little more than she had",
-          wakesShort: "a little more than before",
-          keeping: "another night, another thing worth keeping",
-          keepingShort: "another thing worth keeping",
-          quiet: "a quiet day \u2014 barely anything said",
-          quietShort: "a quiet day",
-          notEnough: "not enough to sleep on, so she doesn't",
-          notEnoughShort: "not enough to sleep on",
-          nothingLost: "nothing is lost \u2014 that day is still there",
-          nothingLostShort: "still there, nothing lost",
-          inUse: "and the first thing she kept is in use today",
-          inUseShort: "day one's, in use today",
-          sleepsAgain: "she sleeps on this one too",
-          sleepsAgainShort: "she sleeps on this one too",
-          cost: "it costs her less than one ordinary reply",
-          costShort: "less than one reply",
-          oneMore: "one more night, one more thing she carries",
-          oneMoreShort: "one more thing she carries",
-          carries: "the longer you work together, the more she carries",
-          carriesShort: "the more she carries"
+          day: "satu hari biasa bekerja bersama",
+          dayShort: "satu hari biasa",
+          building: "semua yang kalian lalui, menumpuk pelan-pelan",
+          buildingShort: "obrolan hari itu, menumpuk",
+          sleeps: "sudah cukup menumpuk \u2014 dia memikirkannya semalam",
+          sleepsShort: "dia memikirkannya semalam",
+          wakes: "dia bangun dengan sedikit lebih banyak dari sebelumnya",
+          wakesShort: "sedikit lebih dari sebelumnya",
+          keeping: "satu malam lagi, satu hal lagi yang layak disimpan",
+          keepingShort: "satu hal lagi yang layak disimpan",
+          quiet: "hari yang sepi \u2014 nyaris tak ada yang dibilang",
+          quietShort: "hari yang sepi",
+          notEnough: "tidak cukup untuk dipikirkan semalam, jadi tidak dia lakukan",
+          notEnoughShort: "tidak cukup untuk dipikirkan",
+          nothingLost: "tidak ada yang hilang \u2014 hari itu masih ada",
+          nothingLostShort: "masih ada, tak ada yang hilang",
+          inUse: "dan hal pertama yang dia simpan masih terpakai hari ini",
+          inUseShort: "dari hari pertama, terpakai hari ini",
+          sleepsAgain: "yang ini pun dia pikirkan semalam",
+          sleepsAgainShort: "yang ini pun dia pikirkan semalam",
+          cost: "biayanya kurang dari satu balasan biasa",
+          costShort: "kurang dari satu balasan",
+          oneMore: "satu malam lagi, satu hal lagi yang dia bawa",
+          oneMoreShort: "satu hal lagi yang dia bawa",
+          carries: "makin lama kalian bekerja bersama, makin banyak yang dia bawa",
+          carriesShort: "makin banyak yang dia bawa"
         }
       },
       oneMind: {
         intro: {
-          eyebrow: "However many conversations",
-          heading: "Always the",
-          gradient: "same person"
+          eyebrow: "Sebanyak apa pun percakapannya",
+          heading: "Selalu",
+          gradient: "orang yang sama"
         },
         conversations: [
           {
-            name: "The rewrite",
-            short: "The rewrite"
+            name: "Penulisan ulang",
+            short: "Tulis ulang"
           },
           {
-            name: "Monday review",
-            short: "Monday"
+            name: "Tinjauan Senin",
+            short: "Senin"
           },
           {
-            name: "Getting set up",
-            short: "Setup"
+            name: "Persiapan awal",
+            short: "Persiapan"
           },
           {
-            name: "The outage",
-            short: "Outage"
+            name: "Gangguan layanan",
+            short: "Gangguan"
           },
           {
-            name: "The pricing page",
-            short: "Pricing"
+            name: "Halaman harga",
+            short: "Harga"
           },
           {
-            name: "Invoices",
-            short: "Invoices"
+            name: "Faktur",
+            short: "Faktur"
           }
         ],
         open: {
-          label: "this conversation",
-          question: "What else are we working on?",
-          from: "from",
-          footer: "Nothing else needs you today.",
-          footerShort: "Nothing else needs you."
+          label: "percakapan ini",
+          question: "Apa lagi yang sedang kita kerjakan?",
+          from: "dari",
+          footer: "Hari ini tidak ada lagi yang butuh kamu.",
+          footerShort: "Tidak ada lagi yang butuh kamu."
         },
         rows: [
           {
-            claim: "The last check passed about an hour ago",
-            short: "Last check passed"
+            claim: "Pemeriksaan terakhir lolos sekitar sejam lalu",
+            short: "Pemeriksaan terakhir lolos"
           },
           {
-            claim: "Two projects are waiting on you, neither urgent",
-            short: "2 waiting, none urgent"
+            claim: "Dua proyek menunggu kamu, tidak ada yang mendesak",
+            short: "2 menunggu, tak ada yang mendesak"
           },
           {
-            claim: "Your calendar still isn't connected",
-            short: "Calendar not connected"
+            claim: "Kalendermu masih belum terhubung",
+            short: "Kalender belum terhubung"
           }
         ],
         status: {
-          live: "every conversation you have going",
-          liveShort: "all your conversations",
-          open: "all of them open at the same time",
-          openShort: "all open at once",
-          asked: "you asked in one of them",
-          askedShort: "you asked here",
-          answers: "she answers from everything she knows",
-          answersShort: "she answers from all of it",
-          sources: "every line, and where it came from",
-          sourcesShort: "every line, and its source",
-          oneVoice: "one voice \u2014 you never hear two at once",
-          oneVoiceShort: "one voice, never two",
-          samePerson: "the same person, in all of them",
-          samePersonShort: "the same person, in all of them"
+          live: "setiap percakapan yang sedang kamu jalani",
+          liveShort: "semua percakapanmu",
+          open: "semuanya terbuka pada saat yang sama",
+          openShort: "semua terbuka sekaligus",
+          asked: "kamu bertanya di salah satunya",
+          askedShort: "kamu bertanya di sini",
+          answers: "dia menjawab dari semua yang dia tahu",
+          answersShort: "dia menjawab dari semuanya",
+          sources: "setiap baris, dan dari mana asalnya",
+          sourcesShort: "setiap baris dan sumbernya",
+          oneVoice: "satu suara \u2014 kamu tidak pernah dengar dua sekaligus",
+          oneVoiceShort: "satu suara, bukan dua",
+          samePerson: "orang yang sama, di semuanya",
+          samePersonShort: "orang yang sama, di semuanya"
         }
       }
     }
