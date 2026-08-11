@@ -1433,6 +1433,16 @@
     reset: string;
   };
   athenaPage: {
+    /** Scroll-map / mobile-TOC labels for the page's seven sections. */
+    nav: {
+      meet: string;
+      onboarding: string;
+      fleet: string;
+      workshop: string;
+      portfolio: string;
+      memory: string;
+      oneMind: string;
+    };
     hero: {
       eyebrow: string;
       headline: string;
@@ -3300,6 +3310,15 @@ export const en: Translations = {
     reset: 'Reset',
   },
   athenaPage: {
+    nav: {
+      meet: "MEET ATHENA",
+      onboarding: "ONBOARDING",
+      fleet: "FROM A SENTENCE",
+      workshop: "WHAT SHE RUNS",
+      portfolio: "PORTFOLIO",
+      memory: "MEMORY",
+      oneMind: "ONE MIND"
+    },
     hero: {
       eyebrow: 'Your chief of staff',
       headline: 'Meet',

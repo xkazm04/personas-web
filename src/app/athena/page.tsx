@@ -1,6 +1,7 @@
 "use client";
 
 import InfoPageLayout from "@/components/InfoPageLayout";
+import { useTranslation } from "@/i18n/useTranslation";
 import {
   LazyAthenaHero,
   LazyOnboardingPartner,
@@ -33,17 +34,22 @@ import {
  *   closes by arriving back at one presence.
  */
 
-const scrollMapItems = [
-  { label: "MEET ATHENA", href: "#meet" },
-  { label: "ONBOARDING", href: "#onboarding" },
-  { label: "FROM A SENTENCE", href: "#fleet" },
-  { label: "WHAT SHE RUNS", href: "#workshop" },
-  { label: "PORTFOLIO", href: "#portfolio" },
-  { label: "MEMORY", href: "#memory" },
-  { label: "ONE MIND", href: "#one-mind" },
-];
-
 export default function AthenaPage() {
+  const { t } = useTranslation();
+  const nav = t.athenaPage.nav;
+
+  // Built inside the component because the labels are localized; the desktop
+  // scroll-map rail and the mobile TOC both render them as visible text.
+  const scrollMapItems = [
+    { label: nav.meet, href: "#meet" },
+    { label: nav.onboarding, href: "#onboarding" },
+    { label: nav.fleet, href: "#fleet" },
+    { label: nav.workshop, href: "#workshop" },
+    { label: nav.portfolio, href: "#portfolio" },
+    { label: nav.memory, href: "#memory" },
+    { label: nav.oneMind, href: "#one-mind" },
+  ];
+
   return (
     <InfoPageLayout scrollMapItems={scrollMapItems}>
       <div id="meet" className="scroll-mt-24">
