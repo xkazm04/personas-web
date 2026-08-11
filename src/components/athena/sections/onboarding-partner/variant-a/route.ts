@@ -1,7 +1,9 @@
 /**
  * WHERE the setup route goes: the four stops in order, each with the control
  * it targets and the spot the orb hovers while narrating it. WHEN each beat
- * fires lives in `./data`, which stamps the tick grid onto these.
+ * fires lives in `./data`, which stamps the tick grid onto these. WHAT she
+ * says at each one is `athenaPage.onboarding.captions` in `src/i18n`, keyed by
+ * the same `StopId` — this file is pure geometry and carries no words.
  *
  * Rects are percent boxes over the app canvas and mirror `./layout`, so the
  * corner brackets — reading the same numbers — always frame the real control.
@@ -15,8 +17,6 @@ export type StopId = "template" | "connect" | "trigger" | "action";
 
 export interface RouteStop {
   id: StopId;
-  /** ≤5-word caption narrated beside the orb while locked. */
-  caption: string;
   /** The control the brackets lock onto (md+ / <md). */
   rect: Rect;
   rectCompact: Rect;
@@ -30,7 +30,6 @@ export interface RouteStop {
 export const ROUTE: RouteStop[] = [
   {
     id: "template",
-    caption: "pick a starting point",
     rect: { x: 3.5, y: 16.5, w: 27, h: 26 },
     rectCompact: { x: 4, y: 15.5, w: 92, h: 22 },
     orb: { x: 61, y: 29 },
@@ -38,7 +37,6 @@ export const ROUTE: RouteStop[] = [
   },
   {
     id: "connect",
-    caption: "connect your Slack",
     rect: { x: 5.5, y: 51.5, w: 51.5, h: 6 },
     rectCompact: { x: 6, y: 47.5, w: 88, h: 6 },
     orb: { x: 61, y: 48 },
@@ -46,7 +44,6 @@ export const ROUTE: RouteStop[] = [
   },
   {
     id: "trigger",
-    caption: "choose when it runs",
     rect: { x: 3.5, y: 80, w: 55.5, h: 16 },
     rectCompact: { x: 4, y: 70, w: 92, h: 15 },
     orb: { x: 61, y: 76 },
@@ -54,7 +51,6 @@ export const ROUTE: RouteStop[] = [
   },
   {
     id: "action",
-    caption: "one click — it's live",
     rect: { x: 63.5, y: 80, w: 33, h: 13 },
     rectCompact: { x: 4, y: 88.5, w: 92, h: 8 },
     orb: { x: 61, y: 86.5 },

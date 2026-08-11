@@ -1861,7 +1861,6 @@ export const bn: Translations = {
           triggerOff: "off",
           triggerOn: "on",
           activityLabel: "Monitoring",
-          activityStat: "24 runs",
           activityPill: "live",
           stats: [
             {
@@ -1879,6 +1878,20 @@ export const bn: Translations = {
           ],
           action: "Create agent",
           actionDone: "Agent created"
+        },
+        captions: {
+          template: "pick a starting point",
+          connect: "connect your Slack",
+          trigger: "choose when it runs",
+          action: "one click \u2014 it's live"
+        },
+        status: {
+          setup: "workspace \u00B7 setting up together",
+          setupShort: "setting up",
+          step: "step {n}/{total} \u00B7 built with you",
+          stepShort: "step {n}/{total}",
+          live: "agent live \u00B7 monitoring on",
+          liveShort: "live"
         }
       },
       fleet: {
@@ -1971,6 +1984,21 @@ export const bn: Translations = {
             }
           ],
           footer: "sent to the team"
+        },
+        status: {
+          speak: "speak it or type it \u2014 same either way",
+          speakShort: "type it or say it",
+          planning: "Athena works out what it takes",
+          pieces: "one sentence, four pieces of work",
+          piecesShort: "four pieces of work",
+          yourCall: "nothing runs until you say so",
+          yourCallShort: "your call to start",
+          parallel: "all four at the same time",
+          parallelShort: "all four at once",
+          returning: "coming back as one answer",
+          returningShort: "coming back as one",
+          closing: "one sentence in \u00B7 one answer back",
+          closingShort: "one answer back"
         }
       },
       workshop: {
@@ -2026,6 +2054,26 @@ export const bn: Translations = {
         outside: {
           name: "Old client work",
           waits: "waits for you"
+        },
+        status: {
+          line: "the line comes first",
+          lineShort: "the line comes first",
+          draw: "you draw it once",
+          drawShort: "you draw it once",
+          places: "these are the places you opened",
+          placesShort: "the places you opened",
+          inside: "she works inside it \u2014 all of it",
+          insideShort: "she works inside",
+          turnUp: "turn it up \u2014 more at once, fewer questions",
+          turnUpShort: "turn it up \u2014 more at once",
+          unmoved: "the line doesn't move with it",
+          unmovedShort: "the line doesn't move",
+          stops: "she stops where you stopped her",
+          stopsShort: "she stops at the line",
+          waits: "and waits \u2014 that one is yours",
+          waitsShort: "that one is yours",
+          free: "as free as you like, inside your lines",
+          freeShort: "free, inside your lines"
         }
       },
       portfolio: {
@@ -2049,7 +2097,6 @@ export const bn: Translations = {
           "Internal wiki"
         ],
         field: {
-          needs: "needs you",
           handled: "handled"
         },
         panel: {
@@ -2077,6 +2124,24 @@ export const bn: Translations = {
           worst: "This one first",
           found: "Quiet for 11 days",
           opened: "Opened for you"
+        },
+        status: {
+          view: "every project you own, in view",
+          viewShort: "all of them, in view",
+          checking: "checking all of them at once",
+          checkingShort: "checking all of them",
+          needing: "3 need you \u00B7 worst first",
+          needingShort: "3 need you",
+          travel: "going straight to the worst one",
+          travelShort: "worst one first",
+          quiet: "payments api \u00B7 quiet for 11 days",
+          quietShort: "quiet for 11 days",
+          opened: "opened the thing that fixes it",
+          openedShort: "opened for you",
+          back: "back out to the whole picture",
+          backShort: "back out",
+          settled: "1 handled \u00B7 2 still waiting",
+          settledShort: "1 handled \u00B7 2 waiting"
         }
       },
       memory: {
@@ -2094,7 +2159,35 @@ export const bn: Translations = {
           "Staging is where you try things.",
           "Billing is the one you worry about.",
           "You like the short version first."
-        ]
+        ],
+        status: {
+          day: "one ordinary day of working together",
+          dayShort: "one ordinary day",
+          building: "everything you two get through, building up",
+          buildingShort: "the day's talk, building up",
+          sleeps: "enough has built up \u2014 she sleeps on it",
+          sleepsShort: "she sleeps on it",
+          wakes: "she wakes with a little more than she had",
+          wakesShort: "a little more than before",
+          keeping: "another night, another thing worth keeping",
+          keepingShort: "another thing worth keeping",
+          quiet: "a quiet day \u2014 barely anything said",
+          quietShort: "a quiet day",
+          notEnough: "not enough to sleep on, so she doesn't",
+          notEnoughShort: "not enough to sleep on",
+          nothingLost: "nothing is lost \u2014 that day is still there",
+          nothingLostShort: "still there, nothing lost",
+          inUse: "and the first thing she kept is in use today",
+          inUseShort: "day one's, in use today",
+          sleepsAgain: "she sleeps on this one too",
+          sleepsAgainShort: "she sleeps on this one too",
+          cost: "it costs her less than one ordinary reply",
+          costShort: "less than one reply",
+          oneMore: "one more night, one more thing she carries",
+          oneMoreShort: "one more thing she carries",
+          carries: "the longer you work together, the more she carries",
+          carriesShort: "the more she carries"
+        }
       },
       oneMind: {
         intro: {
@@ -2148,7 +2241,23 @@ export const bn: Translations = {
             claim: "Your calendar still isn't connected",
             short: "Calendar not connected"
           }
-        ]
+        ],
+        status: {
+          live: "every conversation you have going",
+          liveShort: "all your conversations",
+          open: "all of them open at the same time",
+          openShort: "all open at once",
+          asked: "you asked in one of them",
+          askedShort: "you asked here",
+          answers: "she answers from everything she knows",
+          answersShort: "she answers from all of it",
+          sources: "every line, and where it came from",
+          sourcesShort: "every line, and its source",
+          oneVoice: "one voice \u2014 you never hear two at once",
+          oneVoiceShort: "one voice, never two",
+          samePerson: "the same person, in all of them",
+          samePersonShort: "the same person, in all of them"
+        }
       }
     }
   };

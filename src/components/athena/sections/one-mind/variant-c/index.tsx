@@ -63,7 +63,7 @@ export default function OneMindReturn() {
   const reduced = useStillMotion();
   const compact = useIsMobile();
   const { t } = useTranslation();
-  const intro = t.athenaPage.oneMind.intro;
+  const { intro, status } = t.athenaPage.oneMind;
   const sectionRef = useRef<HTMLElement | null>(null);
   const inView = useInView(sectionRef, { amount: 0.4 });
   const [tick, setTick] = useState(PARK_TICK);
@@ -133,10 +133,10 @@ export default function OneMindReturn() {
             aria-hidden="true"
           />
           <span className={`hidden truncate whitespace-nowrap sm:block ${ANNOTATION_DIM}`}>
-            {statusAt(phase)}
+            {statusAt(phase, status)}
           </span>
           <span className={`truncate whitespace-nowrap sm:hidden ${ANNOTATION_DIM}`}>
-            {statusShortAt(phase)}
+            {statusShortAt(phase, status)}
           </span>
         </div>
       </section>

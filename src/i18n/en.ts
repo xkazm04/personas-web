@@ -1505,11 +1505,21 @@
         triggerOff: string;
         triggerOn: string;
         activityLabel: string;
-        activityStat: string;
         activityPill: string;
         stats: { value: string; label: string }[];
         action: string;
         actionDone: string;
+      };
+      /** The <=5-word lines she narrates beside the orb, one per route stop. */
+      captions: { template: string; connect: string; trigger: string; action: string };
+      /** `{n}` / `{total}` are filled with the step counter by ./status. */
+      status: {
+        setup: string;
+        setupShort: string;
+        step: string;
+        stepShort: string;
+        live: string;
+        liveShort: string;
       };
     };
     fleet: {
@@ -1526,6 +1536,21 @@
       task: { working: string; finished: string };
       tasks: { title: string; scope: string; scopeEdited?: string; found: string }[];
       result: { title: string; rows: { label: string; meta: string }[]; footer: string };
+      status: {
+        speak: string;
+        speakShort: string;
+        planning: string;
+        pieces: string;
+        piecesShort: string;
+        yourCall: string;
+        yourCallShort: string;
+        parallel: string;
+        parallelShort: string;
+        returning: string;
+        returningShort: string;
+        closing: string;
+        closingShort: string;
+      };
     };
     workshop: {
       intro: { eyebrow: string; heading: string; gradient: string };
@@ -1535,11 +1560,31 @@
       dial: { label: string; labelShort: string; stops: string[]; stopsShort: string[] };
       job: { working: string; done: string };
       outside: { name: string; waits: string };
+      status: {
+        line: string;
+        lineShort: string;
+        draw: string;
+        drawShort: string;
+        places: string;
+        placesShort: string;
+        inside: string;
+        insideShort: string;
+        turnUp: string;
+        turnUpShort: string;
+        unmoved: string;
+        unmovedShort: string;
+        stops: string;
+        stopsShort: string;
+        waits: string;
+        waitsShort: string;
+        free: string;
+        freeShort: string;
+      };
     };
     portfolio: {
       intro: { eyebrow: string; heading: string; gradient: string };
       projects: string[];
-      field: { needs: string; handled: string };
+      field: { handled: string };
       panel: {
         badge: string;
         rows: { name: string; since: string }[];
@@ -1557,6 +1602,24 @@
         found: string;
         opened: string;
       };
+      status: {
+        view: string;
+        viewShort: string;
+        checking: string;
+        checkingShort: string;
+        needing: string;
+        needingShort: string;
+        travel: string;
+        travelShort: string;
+        quiet: string;
+        quietShort: string;
+        opened: string;
+        openedShort: string;
+        back: string;
+        backShort: string;
+        settled: string;
+        settledShort: string;
+      };
     };
     memory: {
       intro: { eyebrow: string; heading: string; gradient: string };
@@ -1565,6 +1628,34 @@
       night: string;
       shelf: string;
       kept: string[];
+      status: {
+        day: string;
+        dayShort: string;
+        building: string;
+        buildingShort: string;
+        sleeps: string;
+        sleepsShort: string;
+        wakes: string;
+        wakesShort: string;
+        keeping: string;
+        keepingShort: string;
+        quiet: string;
+        quietShort: string;
+        notEnough: string;
+        notEnoughShort: string;
+        nothingLost: string;
+        nothingLostShort: string;
+        inUse: string;
+        inUseShort: string;
+        sleepsAgain: string;
+        sleepsAgainShort: string;
+        cost: string;
+        costShort: string;
+        oneMore: string;
+        oneMoreShort: string;
+        carries: string;
+        carriesShort: string;
+      };
     };
     oneMind: {
       intro: { eyebrow: string; heading: string; gradient: string };
@@ -1577,6 +1668,22 @@
         footerShort: string;
       };
       rows: { claim: string; short: string }[];
+      status: {
+        live: string;
+        liveShort: string;
+        open: string;
+        openShort: string;
+        asked: string;
+        askedShort: string;
+        answers: string;
+        answersShort: string;
+        sources: string;
+        sourcesShort: string;
+        oneVoice: string;
+        oneVoiceShort: string;
+        samePerson: string;
+        samePersonShort: string;
+      };
     };
   };
 }
@@ -3277,7 +3384,6 @@ export const en: Translations = {
         triggerOff: 'off',
         triggerOn: 'on',
         activityLabel: 'Monitoring',
-        activityStat: '24 runs',
         activityPill: 'live',
         stats: [
           { value: '24', label: 'runs' },
@@ -3286,6 +3392,20 @@ export const en: Translations = {
         ],
         action: 'Create agent',
         actionDone: 'Agent created',
+      },
+      captions: {
+        template: 'pick a starting point',
+        connect: 'connect your Slack',
+        trigger: 'choose when it runs',
+        action: 'one click \u2014 it\'s live',
+      },
+      status: {
+        setup: 'workspace \u00B7 setting up together',
+        setupShort: 'setting up',
+        step: 'step {n}/{total} \u00B7 built with you',
+        stepShort: 'step {n}/{total}',
+        live: 'agent live \u00B7 monitoring on',
+        liveShort: 'live',
       },
     },
     fleet: {
@@ -3331,6 +3451,21 @@ export const en: Translations = {
         ],
         footer: 'sent to the team',
       },
+      status: {
+        speak: 'speak it or type it \u2014 same either way',
+        speakShort: 'type it or say it',
+        planning: 'Athena works out what it takes',
+        pieces: 'one sentence, four pieces of work',
+        piecesShort: 'four pieces of work',
+        yourCall: 'nothing runs until you say so',
+        yourCallShort: 'your call to start',
+        parallel: 'all four at the same time',
+        parallelShort: 'all four at once',
+        returning: 'coming back as one answer',
+        returningShort: 'coming back as one',
+        closing: 'one sentence in \u00B7 one answer back',
+        closingShort: 'one answer back',
+      },
     },
     workshop: {
       intro: { eyebrow: 'However much you hand her', heading: 'The lines you drew', gradient: 'hold' },
@@ -3356,6 +3491,26 @@ export const en: Translations = {
       },
       job: { working: 'working', done: 'done' },
       outside: { name: 'Old client work', waits: 'waits for you' },
+      status: {
+        line: 'the line comes first',
+        lineShort: 'the line comes first',
+        draw: 'you draw it once',
+        drawShort: 'you draw it once',
+        places: 'these are the places you opened',
+        placesShort: 'the places you opened',
+        inside: 'she works inside it \u2014 all of it',
+        insideShort: 'she works inside',
+        turnUp: 'turn it up \u2014 more at once, fewer questions',
+        turnUpShort: 'turn it up \u2014 more at once',
+        unmoved: 'the line doesn\'t move with it',
+        unmovedShort: 'the line doesn\'t move',
+        stops: 'she stops where you stopped her',
+        stopsShort: 'she stops at the line',
+        waits: 'and waits \u2014 that one is yours',
+        waitsShort: 'that one is yours',
+        free: 'as free as you like, inside your lines',
+        freeShort: 'free, inside your lines',
+      },
     },
     portfolio: {
       intro: { eyebrow: 'While you are busy elsewhere', heading: 'Nothing quietly', gradient: 'rots' },
@@ -3373,7 +3528,7 @@ export const en: Translations = {
         'Notifications',
         'Internal wiki',
       ],
-      field: { needs: 'needs you', handled: 'handled' },
+      field: { handled: 'handled' },
       panel: {
         badge: 'worst first',
         rows: [
@@ -3394,6 +3549,24 @@ export const en: Translations = {
         found: 'Quiet for 11 days',
         opened: 'Opened for you',
       },
+      status: {
+        view: 'every project you own, in view',
+        viewShort: 'all of them, in view',
+        checking: 'checking all of them at once',
+        checkingShort: 'checking all of them',
+        needing: '3 need you \u00B7 worst first',
+        needingShort: '3 need you',
+        travel: 'going straight to the worst one',
+        travelShort: 'worst one first',
+        quiet: 'payments api \u00B7 quiet for 11 days',
+        quietShort: 'quiet for 11 days',
+        opened: 'opened the thing that fixes it',
+        openedShort: 'opened for you',
+        back: 'back out to the whole picture',
+        backShort: 'back out',
+        settled: '1 handled \u00B7 2 still waiting',
+        settledShort: '1 handled \u00B7 2 waiting',
+      },
     },
     memory: {
       intro: { eyebrow: 'The longer you work together', heading: 'The more she', gradient: 'carries' },
@@ -3407,6 +3580,34 @@ export const en: Translations = {
         'Billing is the one you worry about.',
         'You like the short version first.',
       ],
+      status: {
+        day: 'one ordinary day of working together',
+        dayShort: 'one ordinary day',
+        building: 'everything you two get through, building up',
+        buildingShort: 'the day\'s talk, building up',
+        sleeps: 'enough has built up \u2014 she sleeps on it',
+        sleepsShort: 'she sleeps on it',
+        wakes: 'she wakes with a little more than she had',
+        wakesShort: 'a little more than before',
+        keeping: 'another night, another thing worth keeping',
+        keepingShort: 'another thing worth keeping',
+        quiet: 'a quiet day \u2014 barely anything said',
+        quietShort: 'a quiet day',
+        notEnough: 'not enough to sleep on, so she doesn\'t',
+        notEnoughShort: 'not enough to sleep on',
+        nothingLost: 'nothing is lost \u2014 that day is still there',
+        nothingLostShort: 'still there, nothing lost',
+        inUse: 'and the first thing she kept is in use today',
+        inUseShort: 'day one\'s, in use today',
+        sleepsAgain: 'she sleeps on this one too',
+        sleepsAgainShort: 'she sleeps on this one too',
+        cost: 'it costs her less than one ordinary reply',
+        costShort: 'less than one reply',
+        oneMore: 'one more night, one more thing she carries',
+        oneMoreShort: 'one more thing she carries',
+        carries: 'the longer you work together, the more she carries',
+        carriesShort: 'the more she carries',
+      },
     },
     oneMind: {
       intro: { eyebrow: 'However many conversations', heading: 'Always the', gradient: 'same person' },
@@ -3433,6 +3634,22 @@ export const en: Translations = {
         },
         { claim: 'Your calendar still isn\'t connected', short: 'Calendar not connected' },
       ],
+      status: {
+        live: 'every conversation you have going',
+        liveShort: 'all your conversations',
+        open: 'all of them open at the same time',
+        openShort: 'all open at once',
+        asked: 'you asked in one of them',
+        askedShort: 'you asked here',
+        answers: 'she answers from everything she knows',
+        answersShort: 'she answers from all of it',
+        sources: 'every line, and where it came from',
+        sourcesShort: 'every line, and its source',
+        oneVoice: 'one voice \u2014 you never hear two at once',
+        oneVoiceShort: 'one voice, never two',
+        samePerson: 'the same person, in all of them',
+        samePersonShort: 'the same person, in all of them',
+      },
     },
   },
 };

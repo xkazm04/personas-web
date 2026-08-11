@@ -68,7 +68,7 @@ export default function HerWorkshopFence() {
   const reduced = useStillMotion();
   const compact = useIsMobile();
   const { t } = useTranslation();
-  const intro = t.athenaPage.workshop.intro;
+  const { intro, status } = t.athenaPage.workshop;
   const sectionRef = useRef<HTMLElement | null>(null);
   const inView = useInView(sectionRef, { amount: 0.4 });
   const [tick, setTick] = useState(INITIAL_TICK);
@@ -138,10 +138,10 @@ export default function HerWorkshopFence() {
             aria-hidden="true"
           />
           <span className={`hidden truncate whitespace-nowrap sm:block ${ANNOTATION_DIM}`}>
-            {statusAt(phase)}
+            {statusAt(phase, status)}
           </span>
           <span className={`truncate whitespace-nowrap sm:hidden ${ANNOTATION_DIM}`}>
-            {statusShortAt(phase)}
+            {statusShortAt(phase, status)}
           </span>
         </div>
       </section>

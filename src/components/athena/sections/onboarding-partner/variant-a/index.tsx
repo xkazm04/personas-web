@@ -76,7 +76,7 @@ export default function OnboardingPartnerGlide() {
   const reduced = useStillMotion();
   const compact = useIsMobile();
   const { t } = useTranslation();
-  const intro = t.athenaPage.onboarding.intro;
+  const { intro, captions, status } = t.athenaPage.onboarding;
   const sectionRef = useRef<HTMLElement | null>(null);
   const inView = useInView(sectionRef, { amount: 0.4 });
   const [tick, setTick] = useState(INITIAL_TICK);
@@ -145,10 +145,10 @@ export default function OnboardingPartnerGlide() {
             <>
               <ProgressRail rail={rail} reduced={reduced} />
               <span className={`hidden shrink-0 whitespace-nowrap sm:block ${ANNOTATION_DIM}`}>
-                {statusAt(phase)}
+                {statusAt(phase, status)}
               </span>
               <span className={`shrink-0 whitespace-nowrap sm:hidden ${ANNOTATION_DIM}`}>
-                {statusShortAt(phase)}
+                {statusShortAt(phase, status)}
               </span>
             </>
           }
@@ -160,7 +160,7 @@ export default function OnboardingPartnerGlide() {
           <GuideOrb
             x={orb.x}
             y={orb.y}
-            caption={locked?.caption ?? null}
+            caption={locked ? captions[locked.id] : null}
             locked={locked !== null}
             traveling={traveling}
             reduced={reduced}
