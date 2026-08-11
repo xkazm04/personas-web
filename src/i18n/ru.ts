@@ -1712,551 +1712,559 @@ export const ru: Translations = {
       chromeTitle: "agent-playground \u2014 \u0432 \u044d\u0444\u0438\u0440\u0435",
       reset: "\u0421\u0431\u0440\u043e\u0441\u0438\u0442\u044c"
     },
-    // athenaPage: seeded from en, pending translation
     athenaPage: {
+      nav: {
+        meet: "\u0410\u0424\u0418\u041d\u0410",
+        onboarding: "\u041d\u0410\u0421\u0422\u0420\u041e\u0419\u041a\u0410",
+        fleet: "\u041e\u0414\u041d\u0410 \u0424\u0420\u0410\u0417\u0410",
+        workshop: "\u0413\u0420\u0410\u041d\u0418\u0426\u042b",
+        portfolio: "\u041f\u0420\u041e\u0415\u041a\u0422\u042b",
+        memory: "\u041f\u0410\u041c\u042f\u0422\u042c",
+        oneMind: "\u041e\u0414\u0418\u041d \u0420\u0410\u0417\u0423\u041c"
+      },
       hero: {
-        eyebrow: "Your chief of staff",
-        headline: "Meet",
-        headlineGradient: "Athena",
-        tagline: "She says nothing when nothing needs saying.",
-        persona: "A strategist, not a cheerful assistant \u2014 direct, opinionated, warm without performing. \u201CSpeed is not your job. Quality is.\u201D",
-        ctaPrimary: "See her work",
-        ctaSecondary: "Download Personas",
-        statWhisper: "Runs entirely on your machine \u00B7 you decide how far she goes",
-        avatarAlt: "Athena, the Personas companion",
-        orbAria: "Athena \u2014 press Enter and she acknowledges you",
-        acknowledgeLine: "I'm listening.",
-        calloutsAria: "What Athena does for you",
+        eyebrow: "\u0422\u0432\u043e\u044f \u043f\u0440\u0430\u0432\u0430\u044f \u0440\u0443\u043a\u0430",
+        headline: "\u0417\u043d\u0430\u043a\u043e\u043c\u044c\u0441\u044f,",
+        headlineGradient: "\u0410\u0444\u0438\u043d\u0430",
+        tagline: "\u041c\u043e\u043b\u0447\u0438\u0442, \u043a\u043e\u0433\u0434\u0430 \u0433\u043e\u0432\u043e\u0440\u0438\u0442\u044c \u043d\u0435\u0447\u0435\u0433\u043e.",
+        persona: "\u0421\u0442\u0440\u0430\u0442\u0435\u0433, \u0430 \u043d\u0435 \u0431\u043e\u0434\u0440\u0430\u044f \u043f\u043e\u043c\u043e\u0449\u043d\u0438\u0446\u0430 \u2014 \u043f\u0440\u044f\u043c\u0430\u044f, \u0441\u043e \u0441\u0432\u043e\u0438\u043c \u043c\u043d\u0435\u043d\u0438\u0435\u043c, \u0442\u0451\u043f\u043b\u0430\u044f \u0431\u0435\u0437 \u0438\u0433\u0440\u044b. \u00ab\u0421\u043a\u043e\u0440\u043e\u0441\u0442\u044c \u2014 \u043d\u0435 \u0442\u0432\u043e\u044f \u0440\u0430\u0431\u043e\u0442\u0430. \u0422\u0432\u043e\u044f \u0440\u0430\u0431\u043e\u0442\u0430 \u2014 \u043a\u0430\u0447\u0435\u0441\u0442\u0432\u043e.\u00bb",
+        ctaPrimary: "\u041f\u043e\u0441\u043c\u043e\u0442\u0440\u0435\u0442\u044c \u0435\u0451 \u0440\u0430\u0431\u043e\u0442\u0443",
+        ctaSecondary: "\u0421\u043a\u0430\u0447\u0430\u0442\u044c Personas",
+        statWhisper: "\u0420\u0430\u0431\u043e\u0442\u0430\u0435\u0442 \u0446\u0435\u043b\u0438\u043a\u043e\u043c \u043d\u0430 \u0442\u0432\u043e\u0435\u0439 \u043c\u0430\u0448\u0438\u043d\u0435 \u00b7 \u0442\u044b \u0440\u0435\u0448\u0430\u0435\u0448\u044c, \u043a\u0430\u043a \u0434\u0430\u043b\u0435\u043a\u043e \u043e\u043d\u0430 \u0437\u0430\u0439\u0434\u0451\u0442",
+        avatarAlt: "\u0410\u0444\u0438\u043d\u0430, \u0441\u043f\u0443\u0442\u043d\u0438\u0446\u0430 Personas",
+        orbAria: "\u0410\u0444\u0438\u043d\u0430 \u2014 \u043d\u0430\u0436\u043c\u0438 Enter, \u0438 \u043e\u043d\u0430 \u043e\u0442\u0437\u043e\u0432\u0451\u0442\u0441\u044f",
+        acknowledgeLine: "\u0421\u043b\u0443\u0448\u0430\u044e.",
+        calloutsAria: "\u0427\u0442\u043e \u0410\u0444\u0438\u043d\u0430 \u0434\u0435\u043b\u0430\u0435\u0442 \u0434\u043b\u044f \u0442\u0435\u0431\u044f",
         callouts: [
           {
-            label: "Talk to her",
-            fact: "Hold to speak \u2014 no typing"
+            label: "\u041f\u043e\u0433\u043e\u0432\u043e\u0440\u0438 \u0441 \u043d\u0435\u0439",
+            fact: "\u0417\u0430\u0436\u043c\u0438 \u0438 \u0433\u043e\u0432\u043e\u0440\u0438 \u2014 \u043f\u0435\u0447\u0430\u0442\u0430\u0442\u044c \u043d\u0435 \u043d\u0430\u0434\u043e"
           },
           {
-            label: "At a glance",
-            fact: "See what she's working on"
+            label: "\u0421 \u043e\u0434\u043d\u043e\u0433\u043e \u0432\u0437\u0433\u043b\u044f\u0434\u0430",
+            fact: "\u0412\u0438\u0434\u043d\u043e, \u0447\u0435\u043c \u043e\u043d\u0430 \u0437\u0430\u043d\u044f\u0442\u0430"
           },
           {
-            label: "Your desktop",
-            fact: "Drag her where you work"
+            label: "\u0422\u0432\u043e\u0439 \u0440\u0430\u0431\u043e\u0447\u0438\u0439 \u0441\u0442\u043e\u043b",
+            fact: "\u041f\u0435\u0440\u0435\u0442\u0430\u0449\u0438 \u0442\u0443\u0434\u0430, \u0433\u0434\u0435 \u0440\u0430\u0431\u043e\u0442\u0430\u0435\u0448\u044c"
           },
           {
-            label: "Always ready",
-            fact: "Cmd/Ctrl+Shift+A, from any app"
+            label: "\u0412\u0441\u0435\u0433\u0434\u0430 \u0440\u044f\u0434\u043e\u043c",
+            fact: "Cmd/Ctrl+Shift+A, \u0438\u0437 \u043b\u044e\u0431\u043e\u0433\u043e \u043f\u0440\u0438\u043b\u043e\u0436\u0435\u043d\u0438\u044f"
           }
         ]
       },
       onboarding: {
         intro: {
-          eyebrow: "Set up together",
-          heading: "Onboarding",
-          gradient: "partner"
+          eyebrow: "\u041d\u0430\u0441\u0442\u0440\u0430\u0438\u0432\u0430\u0435\u043c \u0432\u043c\u0435\u0441\u0442\u0435",
+          heading: "\u0421 \u043f\u0435\u0440\u0432\u043e\u0433\u043e \u0448\u0430\u0433\u0430",
+          gradient: "\u0440\u044f\u0434\u043e\u043c"
         },
         chrome: {
           appName: "Personas",
-          search: "Search\u2026",
+          search: "\u041f\u043e\u0438\u0441\u043a\u2026",
           nav: [
-            "Home",
-            "Agents",
-            "Templates",
-            "Connectors",
-            "Vault",
-            "Settings"
+            "\u0413\u043b\u0430\u0432\u043d\u0430\u044f",
+            "\u0410\u0433\u0435\u043d\u0442\u044b",
+            "\u0428\u0430\u0431\u043b\u043e\u043d\u044b",
+            "\u041a\u043e\u043d\u043d\u0435\u043a\u0442\u043e\u0440\u044b",
+            "\u0425\u0440\u0430\u043d\u0438\u043b\u0438\u0449\u0435",
+            "\u041d\u0430\u0441\u0442\u0440\u043e\u0439\u043a\u0438"
           ],
-          usageLabel: "runs today",
+          usageLabel: "\u0437\u0430\u043f\u0443\u0441\u043a\u043e\u0432 \u0441\u0435\u0433\u043e\u0434\u043d\u044f",
           usageValue: "18 / 25",
-          newAgent: "New agent"
+          newAgent: "\u041d\u043e\u0432\u044b\u0439 \u0430\u0433\u0435\u043d\u0442"
         },
         canvas: {
           crumbs: [
-            "Workspace",
-            "Automation"
+            "\u0420\u0430\u0431\u043e\u0447\u0430\u044f \u043e\u0431\u043b\u0430\u0441\u0442\u044c",
+            "\u0410\u0432\u0442\u043e\u043c\u0430\u0442\u0438\u0437\u0430\u0446\u0438\u044f"
           ],
           filters: [
-            "All",
-            "Popular",
-            "Scheduled",
-            "New"
+            "\u0412\u0441\u0435",
+            "\u041f\u043e\u043f\u0443\u043b\u044f\u0440\u043d\u044b\u0435",
+            "\u041f\u043e \u0440\u0430\u0441\u043f\u0438\u0441\u0430\u043d\u0438\u044e",
+            "\u041d\u043e\u0432\u044b\u0435"
           ],
-          templatesLabel: "Templates",
-          templatesHint: "12 templates",
+          templatesLabel: "\u0428\u0430\u0431\u043b\u043e\u043d\u044b",
+          templatesHint: "12 \u0448\u0430\u0431\u043b\u043e\u043d\u043e\u0432",
           template: {
-            title: "Daily digest",
-            meta: "summarize \u00B7 post \u00B7 9:00",
-            pill: "popular",
-            schedule: "Daily 9:00",
-            runs: "142 runs",
-            health: "98% ok"
+            title: "\u0414\u0430\u0439\u0434\u0436\u0435\u0441\u0442 \u0434\u043d\u044f",
+            meta: "\u0441\u0432\u043e\u0434\u043a\u0430 \u00b7 \u043f\u043e\u0441\u0442 \u00b7 9:00",
+            pill: "\u043f\u043e\u043f\u0443\u043b\u044f\u0440\u043d\u044b\u0439",
+            schedule: "\u041a\u0430\u0436\u0434\u044b\u0439 \u0434\u0435\u043d\u044c 9:00",
+            runs: "142 \u0437\u0430\u043f\u0443\u0441\u043a\u0430",
+            health: "98% \u043e\u043a"
           },
           templateAlt: {
-            title: "Inbox triage",
-            meta: "label \u00B7 draft \u00B7 archive",
-            pill: "new",
-            schedule: "On new mail",
-            runs: "86 runs",
-            health: "94% ok"
+            title: "\u0420\u0430\u0437\u0431\u043e\u0440 \u0432\u0445\u043e\u0434\u044f\u0449\u0438\u0445",
+            meta: "\u043c\u0435\u0442\u043a\u0430 \u00b7 \u0447\u0435\u0440\u043d\u043e\u0432\u0438\u043a \u00b7 \u0430\u0440\u0445\u0438\u0432",
+            pill: "\u043d\u043e\u0432\u044b\u0439",
+            schedule: "\u041f\u0440\u0438 \u043d\u043e\u0432\u043e\u043c \u043f\u0438\u0441\u044c\u043c\u0435",
+            runs: "86 \u0437\u0430\u043f\u0443\u0441\u043a\u043e\u0432",
+            health: "94% \u043e\u043a"
           },
-          runsTitle: "Recent runs",
-          runsHint: "last 24h",
+          runsTitle: "\u041d\u0435\u0434\u0430\u0432\u043d\u0438\u0435 \u0437\u0430\u043f\u0443\u0441\u043a\u0438",
+          runsHint: "\u0437\u0430 24 \u0447\u0430\u0441\u0430",
           runsCols: [
-            "agent",
-            "status",
-            "took"
+            "\u0430\u0433\u0435\u043d\u0442",
+            "\u0441\u0442\u0430\u0442\u0443\u0441",
+            "\u0432\u0440\u0435\u043c\u044f"
           ],
           runsRows: [
             {
-              name: "Daily digest",
-              state: "ok",
+              name: "\u0414\u0430\u0439\u0434\u0436\u0435\u0441\u0442 \u0434\u043d\u044f",
+              state: "\u043e\u043a",
               took: "1.2s"
             },
             {
-              name: "PR review",
-              state: "ok",
+              name: "\u0420\u0435\u0432\u044c\u044e PR",
+              state: "\u043e\u043a",
               took: "0.8s"
             },
             {
-              name: "Notes sync",
-              state: "running",
+              name: "\u0421\u0438\u043d\u0445\u0440\u043e\u043d\u0438\u0437\u0430\u0446\u0438\u044f \u0437\u0430\u043c\u0435\u0442\u043e\u043a",
+              state: "\u0438\u0434\u0451\u0442",
               took: "\u2014"
             }
           ],
-          connectLabel: "Connect a tool",
-          connectCount: "2 of 9 connected",
-          connectCountDone: "3 of 9 connected",
+          connectLabel: "\u041f\u043e\u0434\u043a\u043b\u044e\u0447\u0438\u0442\u044c \u0438\u043d\u0441\u0442\u0440\u0443\u043c\u0435\u043d\u0442",
+          connectCount: "2 \u0438\u0437 9 \u043f\u043e\u0434\u043a\u043b\u044e\u0447\u0435\u043d\u044b",
+          connectCountDone: "3 \u0438\u0437 9 \u043f\u043e\u0434\u043a\u043b\u044e\u0447\u0435\u043d\u044b",
           slack: {
             name: "Slack",
-            detail: "#general \u00B7 updates",
-            connect: "connect",
-            connecting: "connecting\u2026",
-            connected: "connected"
+            detail: "#general \u00b7 \u043e\u0431\u043d\u043e\u0432\u043b\u0435\u043d\u0438\u044f",
+            connect: "\u043f\u043e\u0434\u043a\u043b\u044e\u0447\u0438\u0442\u044c",
+            connecting: "\u043f\u043e\u0434\u043a\u043b\u044e\u0447\u0430\u0435\u043c\u2026",
+            connected: "\u043f\u043e\u0434\u043a\u043b\u044e\u0447\u0435\u043d\u043e"
           },
           chips: [
             {
               name: "GitHub",
-              detail: "synced 2m ago",
-              state: "connected"
+              detail: "\u0441\u0438\u043d\u0445\u0440. 2 \u043c\u0438\u043d \u043d\u0430\u0437\u0430\u0434",
+              state: "\u043f\u043e\u0434\u043a\u043b\u044e\u0447\u0435\u043d\u043e"
             },
             {
               name: "Notion",
-              detail: "12 pages",
-              state: "connected"
+              detail: "12 \u0441\u0442\u0440\u0430\u043d\u0438\u0446",
+              state: "\u043f\u043e\u0434\u043a\u043b\u044e\u0447\u0435\u043d\u043e"
             }
           ],
-          triggerLabel: "Trigger",
-          triggerIdle: "No schedule yet",
-          triggerIdleShort: "Not set",
-          triggerValue: "Every morning \u00B7 9:00",
-          triggerValueShort: "Daily \u00B7 9:00",
-          triggerHint: "edit",
+          triggerLabel: "\u0422\u0440\u0438\u0433\u0433\u0435\u0440",
+          triggerIdle: "\u0420\u0430\u0441\u043f\u0438\u0441\u0430\u043d\u0438\u044f \u043f\u043e\u043a\u0430 \u043d\u0435\u0442",
+          triggerIdleShort: "\u041d\u0435 \u0437\u0430\u0434\u0430\u043d\u043e",
+          triggerValue: "\u041a\u0430\u0436\u0434\u043e\u0435 \u0443\u0442\u0440\u043e \u00b7 9:00",
+          triggerValueShort: "\u0415\u0436\u0435\u0434\u043d\u0435\u0432\u043d\u043e \u00b7 9:00",
+          triggerHint: "\u0438\u0437\u043c\u0435\u043d\u0438\u0442\u044c",
           triggerDays: [
-            "S",
-            "M",
-            "T",
-            "W",
-            "T",
-            "F",
-            "S"
+            "\u0412",
+            "\u041f",
+            "\u0412",
+            "\u0421",
+            "\u0427",
+            "\u041f",
+            "\u0421"
           ],
           triggerZone: "UTC+1",
-          triggerOff: "off",
-          triggerOn: "on",
-          activityLabel: "Monitoring",
-          activityPill: "live",
+          triggerOff: "\u0432\u044b\u043a\u043b",
+          triggerOn: "\u0432\u043a\u043b",
+          activityLabel: "\u041d\u0430\u0431\u043b\u044e\u0434\u0435\u043d\u0438\u0435",
+          activityPill: "\u0440\u0430\u0431\u043e\u0442\u0430\u0435\u0442",
           stats: [
             {
               value: "24",
-              label: "runs"
+              label: "\u0437\u0430\u043f\u0443\u0441\u043a\u0438"
             },
             {
               value: "98%",
-              label: "success"
+              label: "\u0443\u0441\u043f\u0435\u0445"
             },
             {
               value: "1.4s",
-              label: "avg"
+              label: "\u0441\u0440\u0435\u0434\u043d."
             }
           ],
-          action: "Create agent",
-          actionDone: "Agent created"
+          action: "\u0421\u043e\u0437\u0434\u0430\u0442\u044c \u0430\u0433\u0435\u043d\u0442\u0430",
+          actionDone: "\u0410\u0433\u0435\u043d\u0442 \u0441\u043e\u0437\u0434\u0430\u043d"
         },
         captions: {
-          template: "pick a starting point",
-          connect: "connect your Slack",
-          trigger: "choose when it runs",
-          action: "one click \u2014 it's live"
+          template: "\u0432\u044b\u0431\u0435\u0440\u0438, \u0441 \u0447\u0435\u0433\u043e \u043d\u0430\u0447\u0430\u0442\u044c",
+          connect: "\u043f\u043e\u0434\u043a\u043b\u044e\u0447\u0438 \u0441\u0432\u043e\u0439 Slack",
+          trigger: "\u0432\u044b\u0431\u0435\u0440\u0438, \u043a\u043e\u0433\u0434\u0430 \u0437\u0430\u043f\u0443\u0441\u043a\u0430\u0442\u044c",
+          action: "\u043e\u0434\u0438\u043d \u043a\u043b\u0438\u043a \u2014 \u0438 \u0440\u0430\u0431\u043e\u0442\u0430\u0435\u0442"
         },
         status: {
-          setup: "workspace \u00B7 setting up together",
-          setupShort: "setting up",
-          step: "step {n}/{total} \u00B7 built with you",
-          stepShort: "step {n}/{total}",
-          live: "agent live \u00B7 monitoring on",
-          liveShort: "live"
+          setup: "\u0440\u0430\u0431\u043e\u0447\u0430\u044f \u043e\u0431\u043b\u0430\u0441\u0442\u044c \u00b7 \u043d\u0430\u0441\u0442\u0440\u0430\u0438\u0432\u0430\u0435\u043c \u0432\u043c\u0435\u0441\u0442\u0435",
+          setupShort: "\u043d\u0430\u0441\u0442\u0440\u0430\u0438\u0432\u0430\u0435\u043c",
+          step: "\u0448\u0430\u0433 {n}/{total} \u00b7 \u0434\u0435\u043b\u0430\u0435\u043c \u0432\u043c\u0435\u0441\u0442\u0435",
+          stepShort: "\u0448\u0430\u0433 {n}/{total}",
+          live: "\u0430\u0433\u0435\u043d\u0442 \u0440\u0430\u0431\u043e\u0442\u0430\u0435\u0442 \u00b7 \u043d\u0430\u0431\u043b\u044e\u0434\u0435\u043d\u0438\u0435 \u0432\u043a\u043b",
+          liveShort: "\u0440\u0430\u0431\u043e\u0442\u0430\u0435\u0442"
         }
       },
       fleet: {
         intro: {
-          eyebrow: "Say it in your own words",
-          heading: "Fleet",
-          gradient: "orchestration"
+          eyebrow: "\u0421\u043a\u0430\u0436\u0438 \u0441\u0432\u043e\u0438\u043c\u0438 \u0441\u043b\u043e\u0432\u0430\u043c\u0438",
+          heading: "\u0420\u0430\u0431\u043e\u0442\u0430\u044e\u0442",
+          gradient: "\u0432\u043c\u0435\u0441\u0442\u0435"
         },
         request: {
-          placeholder: "Ask Athena for anything\u2026",
-          voice: "or just say it",
-          sent: "sent",
+          placeholder: "\u041f\u043e\u043f\u0440\u043e\u0441\u0438 \u0410\u0444\u0438\u043d\u0443 \u043e \u0447\u0451\u043c \u0443\u0433\u043e\u0434\u043d\u043e\u2026",
+          voice: "\u0438\u043b\u0438 \u043f\u0440\u043e\u0441\u0442\u043e \u0441\u043a\u0430\u0436\u0438",
+          sent: "\u043e\u0442\u043f\u0440\u0430\u0432\u043b\u0435\u043d\u043e",
           clauses: [
             [
-              "Pull ",
-              "last week's tickets",
+              "\u0421\u043e\u0431\u0435\u0440\u0438 ",
+              "\u0442\u0438\u043a\u0435\u0442\u044b \u0437\u0430 \u043f\u0440\u043e\u0448\u043b\u0443\u044e \u043d\u0435\u0434\u0435\u043b\u044e",
               ","
             ],
             [
-              " find ",
-              "the complaints that repeat",
+              " \u043d\u0430\u0439\u0434\u0438 ",
+              "\u0436\u0430\u043b\u043e\u0431\u044b, \u043a\u043e\u0442\u043e\u0440\u044b\u0435 \u043f\u043e\u0432\u0442\u043e\u0440\u044f\u044e\u0442\u0441\u044f",
               ","
             ],
             [
-              " check ",
-              "what we already fixed",
+              " \u043f\u0440\u043e\u0432\u0435\u0440\u044c, ",
+              "\u0447\u0442\u043e \u043c\u044b \u0443\u0436\u0435 \u043f\u043e\u0447\u0438\u043d\u0438\u043b\u0438",
               ","
             ],
             [
-              " count ",
-              "how many it hit",
+              " \u043f\u043e\u0441\u0447\u0438\u0442\u0430\u0439, ",
+              "\u0441\u043a\u043e\u043b\u044c\u043a\u0438\u0445 \u044d\u0442\u043e \u0437\u0430\u0434\u0435\u043b\u043e",
               ","
             ],
             [
-              " and ",
-              "tell the team what matters",
+              " \u0438 ",
+              "\u0440\u0430\u0441\u0441\u043a\u0430\u0436\u0438 \u043a\u043e\u043c\u0430\u043d\u0434\u0435 \u043e \u0433\u043b\u0430\u0432\u043d\u043e\u043c",
               "."
             ]
           ]
         },
         plan: {
-          hint: "Change anything before it starts",
-          hintShort: "Change anything first",
-          edited: "Changed",
-          start: "Start",
-          working: "Working",
-          done: "Done"
+          hint: "\u041c\u0435\u043d\u044f\u0439 \u0447\u0442\u043e \u0443\u0433\u043e\u0434\u043d\u043e \u0434\u043e \u0441\u0442\u0430\u0440\u0442\u0430",
+          hintShort: "\u0421\u043d\u0430\u0447\u0430\u043b\u0430 \u043c\u043e\u0436\u043d\u043e \u043f\u043e\u043c\u0435\u043d\u044f\u0442\u044c",
+          edited: "\u0418\u0437\u043c\u0435\u043d\u0435\u043d\u043e",
+          start: "\u0417\u0430\u043f\u0443\u0441\u0442\u0438\u0442\u044c",
+          working: "\u0420\u0430\u0431\u043e\u0442\u0430\u0435\u0442",
+          done: "\u0413\u043e\u0442\u043e\u0432\u043e"
         },
         task: {
-          working: "working",
-          finished: "done"
+          working: "\u0440\u0430\u0431\u043e\u0442\u0430\u0435\u0442",
+          finished: "\u0433\u043e\u0442\u043e\u0432\u043e"
         },
         tasks: [
           {
-            title: "Collect the tickets",
-            scope: "last 7 days",
-            scopeEdited: "last 14 days",
-            found: "1,284 tickets"
+            title: "\u0421\u043e\u0431\u0440\u0430\u0442\u044c \u0442\u0438\u043a\u0435\u0442\u044b",
+            scope: "\u0437\u0430 7 \u0434\u043d\u0435\u0439",
+            scopeEdited: "\u0437\u0430 14 \u0434\u043d\u0435\u0439",
+            found: "1 284 \u0442\u0438\u043a\u0435\u0442\u0430"
           },
           {
-            title: "Group the repeat complaints",
-            scope: "all channels",
-            found: "9 clusters"
+            title: "\u0421\u0433\u0440\u0443\u043f\u043f\u0438\u0440\u043e\u0432\u0430\u0442\u044c \u043f\u043e\u0432\u0442\u043e\u0440\u044b \u0436\u0430\u043b\u043e\u0431",
+            scope: "\u0432\u0441\u0435 \u043a\u0430\u043d\u0430\u043b\u044b",
+            found: "9 \u0433\u0440\u0443\u043f\u043f"
           },
           {
-            title: "Check what we already shipped",
-            scope: "since May",
-            found: "4 already fixed"
+            title: "\u041f\u0440\u043e\u0432\u0435\u0440\u0438\u0442\u044c, \u0447\u0442\u043e \u0443\u0436\u0435 \u0432\u044b\u043f\u0443\u0449\u0435\u043d\u043e",
+            scope: "\u0441 \u043c\u0430\u044f",
+            found: "4 \u0443\u0436\u0435 \u043f\u043e\u0447\u0438\u043d\u0435\u043d\u044b"
           },
           {
-            title: "Count the people affected",
-            scope: "by account",
-            found: "612 accounts"
+            title: "\u041f\u043e\u0441\u0447\u0438\u0442\u0430\u0442\u044c, \u043a\u043e\u0433\u043e \u0437\u0430\u0434\u0435\u043b\u043e",
+            scope: "\u043f\u043e \u0430\u043a\u043a\u0430\u0443\u043d\u0442\u0430\u043c",
+            found: "612 \u0430\u043a\u043a\u0430\u0443\u043d\u0442\u043e\u0432"
           }
         ],
         result: {
-          title: "What matters this week",
+          title: "\u0427\u0442\u043e \u0432\u0430\u0436\u043d\u043e \u043d\u0430 \u044d\u0442\u043e\u0439 \u043d\u0435\u0434\u0435\u043b\u0435",
           rows: [
             {
-              label: "Checkout errors",
-              meta: "214 people"
+              label: "\u041e\u0448\u0438\u0431\u043a\u0438 \u043e\u043f\u043b\u0430\u0442\u044b",
+              meta: "214 \u0447\u0435\u043b\u043e\u0432\u0435\u043a"
             },
             {
-              label: "Slow search",
-              meta: "96 people"
+              label: "\u041c\u0435\u0434\u043b\u0435\u043d\u043d\u044b\u0439 \u043f\u043e\u0438\u0441\u043a",
+              meta: "96 \u0447\u0435\u043b\u043e\u0432\u0435\u043a"
             },
             {
-              label: "Login loop",
-              meta: "fixed Tuesday"
+              label: "\u041f\u0435\u0442\u043b\u044f \u0432\u0445\u043e\u0434\u0430",
+              meta: "\u043f\u043e\u0447\u0438\u043d\u0438\u043b\u0438 \u0432\u043e \u0432\u0442\u043e\u0440\u043d\u0438\u043a"
             }
           ],
-          footer: "sent to the team"
+          footer: "\u043e\u0442\u043f\u0440\u0430\u0432\u043b\u0435\u043d\u043e \u043a\u043e\u043c\u0430\u043d\u0434\u0435"
         },
         status: {
-          speak: "speak it or type it \u2014 same either way",
-          speakShort: "type it or say it",
-          planning: "Athena works out what it takes",
-          pieces: "one sentence, four pieces of work",
-          piecesShort: "four pieces of work",
-          yourCall: "nothing runs until you say so",
-          yourCallShort: "your call to start",
-          parallel: "all four at the same time",
-          parallelShort: "all four at once",
-          returning: "coming back as one answer",
-          returningShort: "coming back as one",
-          closing: "one sentence in \u00B7 one answer back",
-          closingShort: "one answer back"
+          speak: "\u0441\u043a\u0430\u0436\u0438 \u0438\u043b\u0438 \u043d\u0430\u043f\u0435\u0447\u0430\u0442\u0430\u0439 \u2014 \u0440\u0430\u0437\u043d\u0438\u0446\u044b \u043d\u0435\u0442",
+          speakShort: "\u0441\u043a\u0430\u0436\u0438 \u0438\u043b\u0438 \u043d\u0430\u043f\u0435\u0447\u0430\u0442\u0430\u0439",
+          planning: "\u0410\u0444\u0438\u043d\u0430 \u043f\u0440\u0438\u043a\u0438\u0434\u044b\u0432\u0430\u0435\u0442, \u0447\u0442\u043e \u043d\u0443\u0436\u043d\u043e",
+          pieces: "\u043e\u0434\u043d\u0430 \u0444\u0440\u0430\u0437\u0430 \u2014 \u0447\u0435\u0442\u044b\u0440\u0435 \u0434\u0435\u043b\u0430",
+          piecesShort: "\u0447\u0435\u0442\u044b\u0440\u0435 \u0434\u0435\u043b\u0430",
+          yourCall: "\u043d\u0438\u0447\u0435\u0433\u043e \u043d\u0435 \u043d\u0430\u0447\u043d\u0451\u0442\u0441\u044f \u0431\u0435\u0437 \u0442\u0432\u043e\u0435\u0433\u043e \u0441\u043b\u043e\u0432\u0430",
+          yourCallShort: "\u0441\u0442\u0430\u0440\u0442\u0443\u0435\u0448\u044c \u0442\u044b",
+          parallel: "\u0432\u0441\u0435 \u0447\u0435\u0442\u044b\u0440\u0435 \u0440\u0430\u0437\u043e\u043c",
+          parallelShort: "\u0447\u0435\u0442\u044b\u0440\u0435 \u0441\u0440\u0430\u0437\u0443",
+          returning: "\u0432\u043e\u0437\u0432\u0440\u0430\u0449\u0430\u0435\u0442\u0441\u044f \u043e\u0434\u043d\u0438\u043c \u043e\u0442\u0432\u0435\u0442\u043e\u043c",
+          returningShort: "\u0432\u043e\u0437\u0432\u0440\u0430\u0449\u0430\u0435\u0442\u0441\u044f \u043e\u0434\u043d\u0438\u043c",
+          closing: "\u043e\u0434\u043d\u0430 \u0444\u0440\u0430\u0437\u0430 \u00b7 \u043e\u0434\u0438\u043d \u043e\u0442\u0432\u0435\u0442",
+          closingShort: "\u043e\u0434\u0438\u043d \u043e\u0442\u0432\u0435\u0442"
         }
       },
       workshop: {
         intro: {
-          eyebrow: "However much you hand her",
-          heading: "The lines you drew",
-          gradient: "hold"
+          eyebrow: "\u0421\u043a\u043e\u043b\u044c\u043a\u043e \u0431\u044b \u0442\u044b \u043d\u0438 \u0434\u043e\u0432\u0435\u0440\u0438\u043b",
+          heading: "\u0427\u0435\u0440\u0442\u0430, \u043a\u043e\u0442\u043e\u0440\u0443\u044e \u0442\u044b \u043f\u0440\u043e\u0432\u0451\u043b,",
+          gradient: "\u0434\u0435\u0440\u0436\u0438\u0442"
         },
         beds: [
           {
-            name: "Checkout app",
-            short: "Checkout"
+            name: "\u041f\u0440\u0438\u043b\u043e\u0436\u0435\u043d\u0438\u0435 \u043e\u043f\u043b\u0430\u0442\u044b",
+            short: "\u041e\u043f\u043b\u0430\u0442\u0430"
           },
           {
-            name: "Marketing site",
-            short: "Website"
+            name: "\u0421\u0430\u0439\u0442 \u0434\u043b\u044f \u043c\u0430\u0440\u043a\u0435\u0442\u0438\u043d\u0433\u0430",
+            short: "\u0421\u0430\u0439\u0442"
           },
           {
-            name: "Billing service",
-            short: "Billing"
+            name: "\u0421\u0435\u0440\u0432\u0438\u0441 \u0431\u0438\u043b\u043b\u0438\u043d\u0433\u0430",
+            short: "\u0411\u0438\u043b\u043b\u0438\u043d\u0433"
           }
         ],
         jobTitles: [
-          "run the tests",
-          "check the links",
-          "clean up the warnings",
-          "fix the flaky test",
-          "refresh the changelog",
-          "tidy the old branches"
+          "\u043f\u0440\u043e\u0433\u043d\u0430\u0442\u044c \u0442\u0435\u0441\u0442\u044b",
+          "\u043f\u0440\u043e\u0432\u0435\u0440\u0438\u0442\u044c \u0441\u0441\u044b\u043b\u043a\u0438",
+          "\u0440\u0430\u0437\u043e\u0431\u0440\u0430\u0442\u044c \u043f\u0440\u0435\u0434\u0443\u043f\u0440\u0435\u0436\u0434\u0435\u043d\u0438\u044f",
+          "\u043f\u043e\u0447\u0438\u043d\u0438\u0442\u044c \u043d\u0435\u0441\u0442\u0430\u0431\u0438\u043b\u044c\u043d\u044b\u0439 \u0442\u0435\u0441\u0442",
+          "\u043e\u0431\u043d\u043e\u0432\u0438\u0442\u044c changelog",
+          "\u043f\u0440\u0438\u0431\u0440\u0430\u0442\u044c \u0441\u0442\u0430\u0440\u044b\u0435 \u0432\u0435\u0442\u043a\u0438"
         ],
         fence: {
-          plate: "the places you opened",
-          plateShort: "places you opened"
+          plate: "\u043c\u0435\u0441\u0442\u0430, \u043a\u043e\u0442\u043e\u0440\u044b\u0435 \u0442\u044b \u043e\u0442\u043a\u0440\u044b\u043b",
+          plateShort: "\u0447\u0442\u043e \u0442\u044b \u043e\u0442\u043a\u0440\u044b\u043b"
         },
         dial: {
-          label: "how much she does on her own",
-          labelShort: "how much on her own",
+          label: "\u0441\u043a\u043e\u043b\u044c\u043a\u043e \u043e\u043d\u0430 \u0434\u0435\u043b\u0430\u0435\u0442 \u0441\u0430\u043c\u0430",
+          labelShort: "\u0441\u043a\u043e\u043b\u044c\u043a\u043e \u0441\u0430\u043c\u0430",
           stops: [
-            "check with me first",
-            "the small stuff",
-            "go ahead"
+            "\u0441\u043d\u0430\u0447\u0430\u043b\u0430 \u0441\u043f\u0440\u043e\u0441\u0438",
+            "\u043c\u0435\u043b\u043e\u0447\u0438 \u0441\u0430\u043c\u0430",
+            "\u0434\u0435\u0439\u0441\u0442\u0432\u0443\u0439 \u0441\u043c\u0435\u043b\u043e"
           ],
           stopsShort: [
-            "ask me first",
-            "small stuff",
-            "go ahead"
+            "\u0441\u043f\u0440\u043e\u0441\u0438",
+            "\u043c\u0435\u043b\u043e\u0447\u0438",
+            "\u0434\u0435\u0439\u0441\u0442\u0432\u0443\u0439"
           ]
         },
         job: {
-          working: "working",
-          done: "done"
+          working: "\u0440\u0430\u0431\u043e\u0442\u0430\u0435\u0442",
+          done: "\u0433\u043e\u0442\u043e\u0432\u043e"
         },
         outside: {
-          name: "Old client work",
-          waits: "waits for you"
+          name: "\u0421\u0442\u0430\u0440\u044b\u0439 \u043f\u0440\u043e\u0435\u043a\u0442 \u043a\u043b\u0438\u0435\u043d\u0442\u0430",
+          waits: "\u0436\u0434\u0451\u0442 \u0442\u0435\u0431\u044f"
         },
         status: {
-          line: "the line comes first",
-          lineShort: "the line comes first",
-          draw: "you draw it once",
-          drawShort: "you draw it once",
-          places: "these are the places you opened",
-          placesShort: "the places you opened",
-          inside: "she works inside it \u2014 all of it",
-          insideShort: "she works inside",
-          turnUp: "turn it up \u2014 more at once, fewer questions",
-          turnUpShort: "turn it up \u2014 more at once",
-          unmoved: "the line doesn't move with it",
-          unmovedShort: "the line doesn't move",
-          stops: "she stops where you stopped her",
-          stopsShort: "she stops at the line",
-          waits: "and waits \u2014 that one is yours",
-          waitsShort: "that one is yours",
-          free: "as free as you like, inside your lines",
-          freeShort: "free, inside your lines"
+          line: "\u0441\u043d\u0430\u0447\u0430\u043b\u0430 \u0447\u0435\u0440\u0442\u0430",
+          lineShort: "\u0441\u043d\u0430\u0447\u0430\u043b\u0430 \u0447\u0435\u0440\u0442\u0430",
+          draw: "\u043f\u0440\u043e\u0432\u043e\u0434\u0438\u0448\u044c \u043e\u0434\u0438\u043d \u0440\u0430\u0437",
+          drawShort: "\u043f\u0440\u043e\u0432\u043e\u0434\u0438\u0448\u044c \u043e\u0434\u0438\u043d \u0440\u0430\u0437",
+          places: "\u0432\u043e\u0442 \u043c\u0435\u0441\u0442\u0430, \u043a\u043e\u0442\u043e\u0440\u044b\u0435 \u0442\u044b \u043e\u0442\u043a\u0440\u044b\u043b",
+          placesShort: "\u043c\u0435\u0441\u0442\u0430, \u0447\u0442\u043e \u0442\u044b \u043e\u0442\u043a\u0440\u044b\u043b",
+          inside: "\u0432\u043d\u0443\u0442\u0440\u0438 \u043e\u043d\u0430 \u0440\u0430\u0431\u043e\u0442\u0430\u0435\u0442 \u2014 \u0432\u043e \u0432\u0441\u0451\u043c",
+          insideShort: "\u0440\u0430\u0431\u043e\u0442\u0430\u0435\u0442 \u0432\u043d\u0443\u0442\u0440\u0438",
+          turnUp: "\u043f\u0440\u0438\u0431\u0430\u0432\u044c \u2014 \u0431\u043e\u043b\u044c\u0448\u0435 \u0441\u0440\u0430\u0437\u0443, \u043c\u0435\u043d\u044c\u0448\u0435 \u0432\u043e\u043f\u0440\u043e\u0441\u043e\u0432",
+          turnUpShort: "\u043f\u0440\u0438\u0431\u0430\u0432\u044c \u2014 \u0431\u043e\u043b\u044c\u0448\u0435 \u0441\u0440\u0430\u0437\u0443",
+          unmoved: "\u0430 \u0447\u0435\u0440\u0442\u0430 \u043e\u0441\u0442\u0430\u0451\u0442\u0441\u044f \u043d\u0430 \u043c\u0435\u0441\u0442\u0435",
+          unmovedShort: "\u0447\u0435\u0440\u0442\u0430 \u043d\u0435 \u0434\u0432\u0438\u0433\u0430\u0435\u0442\u0441\u044f",
+          stops: "\u043e\u043d\u0430 \u043e\u0441\u0442\u0430\u043d\u0430\u0432\u043b\u0438\u0432\u0430\u0435\u0442\u0441\u044f \u0442\u0430\u043c, \u0433\u0434\u0435 \u0442\u044b \u0441\u043a\u0430\u0437\u0430\u043b",
+          stopsShort: "\u043e\u0441\u0442\u0430\u043d\u0430\u0432\u043b\u0438\u0432\u0430\u0435\u0442\u0441\u044f \u0443 \u0447\u0435\u0440\u0442\u044b",
+          waits: "\u0438 \u0436\u0434\u0451\u0442 \u2014 \u044d\u0442\u043e \u0443\u0436\u0435 \u0442\u0432\u043e\u0451",
+          waitsShort: "\u044d\u0442\u043e \u0443\u0436\u0435 \u0442\u0432\u043e\u0451",
+          free: "\u0441\u043a\u043e\u043b\u044c\u043a\u043e \u0443\u0433\u043e\u0434\u043d\u043e \u0441\u0432\u043e\u0431\u043e\u0434\u044b \u2014 \u0432\u043d\u0443\u0442\u0440\u0438 \u0442\u0432\u043e\u0438\u0445 \u0433\u0440\u0430\u043d\u0438\u0446",
+          freeShort: "\u0441\u0432\u043e\u0431\u043e\u0434\u043d\u0430 \u0432\u043d\u0443\u0442\u0440\u0438 \u0442\u0432\u043e\u0438\u0445 \u0433\u0440\u0430\u043d\u0438\u0446"
         }
       },
       portfolio: {
         intro: {
-          eyebrow: "While you are busy elsewhere",
-          heading: "Nothing quietly",
-          gradient: "rots"
+          eyebrow: "\u041f\u043e\u043a\u0430 \u0442\u044b \u0437\u0430\u043d\u044f\u0442 \u0434\u0440\u0443\u0433\u0438\u043c",
+          heading: "\u041d\u0438\u0447\u0442\u043e \u043d\u0435 \u0433\u043d\u0438\u0451\u0442",
+          gradient: "\u0432\u0442\u0438\u0445\u0443\u044e"
         },
         projects: [
-          "Marketing site",
-          "Docs",
-          "Mobile app",
-          "Design system",
-          "Support inbox",
-          "Data pipeline",
-          "Admin tools",
-          "Payments API",
-          "Search service",
-          "Onboarding flow",
-          "Notifications",
-          "Internal wiki"
+          "\u0421\u0430\u0439\u0442",
+          "\u0414\u043e\u043a\u0443\u043c\u0435\u043d\u0442\u0430\u0446\u0438\u044f",
+          "\u041c\u043e\u0431\u0438\u043b\u044c\u043d\u043e\u0435 \u043f\u0440\u0438\u043b\u043e\u0436\u0435\u043d\u0438\u0435",
+          "\u0414\u0438\u0437\u0430\u0439\u043d-\u0441\u0438\u0441\u0442\u0435\u043c\u0430",
+          "\u041f\u043e\u0434\u0434\u0435\u0440\u0436\u043a\u0430",
+          "\u041f\u0430\u0439\u043f\u043b\u0430\u0439\u043d \u0434\u0430\u043d\u043d\u044b\u0445",
+          "\u0410\u0434\u043c\u0438\u043d\u043a\u0430",
+          "API \u043e\u043f\u043b\u0430\u0442\u044b",
+          "\u041f\u043e\u0438\u0441\u043a",
+          "\u041e\u043d\u0431\u043e\u0440\u0434\u0438\u043d\u0433",
+          "\u0423\u0432\u0435\u0434\u043e\u043c\u043b\u0435\u043d\u0438\u044f",
+          "\u0412\u043d\u0443\u0442\u0440\u0435\u043d\u043d\u044f\u044f \u0432\u0438\u043a\u0438"
         ],
         field: {
-          handled: "handled"
+          handled: "\u0441\u0434\u0435\u043b\u0430\u043d\u043e"
         },
         panel: {
-          badge: "worst first",
+          badge: "\u0445\u0443\u0434\u0448\u0435\u0435 \u043f\u0435\u0440\u0432\u044b\u043c",
           rows: [
             {
-              name: "Dependencies",
-              since: "quiet 11 days"
+              name: "\u0417\u0430\u0432\u0438\u0441\u0438\u043c\u043e\u0441\u0442\u0438",
+              since: "\u0442\u0438\u0445\u043e 11 \u0434\u043d\u0435\u0439"
             },
             {
-              name: "Nightly build",
-              since: "red since Friday"
+              name: "\u041d\u043e\u0447\u043d\u0430\u044f \u0441\u0431\u043e\u0440\u043a\u0430",
+              since: "\u043a\u0440\u0430\u0441\u043d\u0430\u044f \u0441 \u043f\u044f\u0442\u043d\u0438\u0446\u044b"
             }
           ],
-          rest: "5 other checks fine",
-          finding: "Payment library is 3 versions behind, one with a known hole.",
-          findingShort: "3 versions behind, one with a hole.",
-          action: "Open what fixes it",
-          actionShort: "Open the fix",
-          done: "Opened"
+          rest: "\u043e\u0441\u0442\u0430\u043b\u044c\u043d\u044b\u0435 5 \u043f\u0440\u043e\u0432\u0435\u0440\u043e\u043a \u0432 \u043f\u043e\u0440\u044f\u0434\u043a\u0435",
+          finding: "\u0411\u0438\u0431\u043b\u0438\u043e\u0442\u0435\u043a\u0430 \u043f\u043b\u0430\u0442\u0435\u0436\u0435\u0439 \u043e\u0442\u0441\u0442\u0430\u0451\u0442 \u043d\u0430 3 \u0432\u0435\u0440\u0441\u0438\u0438, \u0432 \u043e\u0434\u043d\u043e\u0439 \u2014 \u0438\u0437\u0432\u0435\u0441\u0442\u043d\u0430\u044f \u0434\u044b\u0440\u0430.",
+          findingShort: "\u041e\u0442\u0441\u0442\u0430\u0451\u0442 \u043d\u0430 3 \u0432\u0435\u0440\u0441\u0438\u0438, \u0432 \u043e\u0434\u043d\u043e\u0439 \u0434\u044b\u0440\u0430.",
+          action: "\u041e\u0442\u043a\u0440\u044b\u0442\u044c \u0442\u043e, \u0447\u0442\u043e \u0447\u0438\u043d\u0438\u0442",
+          actionShort: "\u041e\u0442\u043a\u0440\u044b\u0442\u044c \u0444\u0438\u043a\u0441",
+          done: "\u041e\u0442\u043a\u0440\u044b\u0442\u043e"
         },
         caption: {
-          survey: "Checking every project",
-          surfaced: "Three need you",
-          worst: "This one first",
-          found: "Quiet for 11 days",
-          opened: "Opened for you"
+          survey: "\u041f\u0440\u043e\u0432\u0435\u0440\u044f\u044e \u0432\u0441\u0435 \u043f\u0440\u043e\u0435\u043a\u0442\u044b",
+          surfaced: "\u0422\u0440\u0438 \u0436\u0434\u0443\u0442 \u0442\u0435\u0431\u044f",
+          worst: "\u0421\u043d\u0430\u0447\u0430\u043b\u0430 \u044d\u0442\u043e\u0442",
+          found: "\u0422\u0438\u0445\u043e 11 \u0434\u043d\u0435\u0439",
+          opened: "\u041e\u0442\u043a\u0440\u044b\u043b\u0430 \u0434\u043b\u044f \u0442\u0435\u0431\u044f"
         },
         status: {
-          view: "every project you own, in view",
-          viewShort: "all of them, in view",
-          checking: "checking all of them at once",
-          checkingShort: "checking all of them",
-          needing: "3 need you \u00B7 worst first",
-          needingShort: "3 need you",
-          travel: "going straight to the worst one",
-          travelShort: "worst one first",
-          quiet: "payments api \u00B7 quiet for 11 days",
-          quietShort: "quiet for 11 days",
-          opened: "opened the thing that fixes it",
-          openedShort: "opened for you",
-          back: "back out to the whole picture",
-          backShort: "back out",
-          settled: "1 handled \u00B7 2 still waiting",
-          settledShort: "1 handled \u00B7 2 waiting"
+          view: "\u0432\u0441\u0435 \u0442\u0432\u043e\u0438 \u043f\u0440\u043e\u0435\u043a\u0442\u044b \u043d\u0430 \u0432\u0438\u0434\u0443",
+          viewShort: "\u0432\u0441\u0435 \u043d\u0430 \u0432\u0438\u0434\u0443",
+          checking: "\u043f\u0440\u043e\u0432\u0435\u0440\u044f\u0435\u0442 \u0432\u0441\u0435 \u0440\u0430\u0437\u043e\u043c",
+          checkingShort: "\u043f\u0440\u043e\u0432\u0435\u0440\u044f\u0435\u0442 \u0432\u0441\u0435",
+          needing: "3 \u0436\u0434\u0443\u0442 \u0442\u0435\u0431\u044f \u00b7 \u0445\u0443\u0434\u0448\u0435\u0435 \u043f\u0435\u0440\u0432\u044b\u043c",
+          needingShort: "3 \u0436\u0434\u0443\u0442 \u0442\u0435\u0431\u044f",
+          travel: "\u0441\u0440\u0430\u0437\u0443 \u043a \u0441\u0430\u043c\u043e\u043c\u0443 \u043f\u043b\u043e\u0445\u043e\u043c\u0443",
+          travelShort: "\u0441\u043d\u0430\u0447\u0430\u043b\u0430 \u0445\u0443\u0434\u0448\u0435\u0435",
+          quiet: "api \u043e\u043f\u043b\u0430\u0442\u044b \u00b7 \u0442\u0438\u0445\u043e 11 \u0434\u043d\u0435\u0439",
+          quietShort: "\u0442\u0438\u0445\u043e 11 \u0434\u043d\u0435\u0439",
+          opened: "\u043e\u0442\u043a\u0440\u044b\u043b\u0430 \u0442\u043e, \u0447\u0442\u043e \u044d\u0442\u043e \u0447\u0438\u043d\u0438\u0442",
+          openedShort: "\u043e\u0442\u043a\u0440\u044b\u043b\u0430 \u0434\u043b\u044f \u0442\u0435\u0431\u044f",
+          back: "\u043e\u0431\u0440\u0430\u0442\u043d\u043e \u043a \u043e\u0431\u0449\u0435\u0439 \u043a\u0430\u0440\u0442\u0438\u043d\u0435",
+          backShort: "\u043e\u0431\u0440\u0430\u0442\u043d\u043e",
+          settled: "1 \u0441\u0434\u0435\u043b\u0430\u043d\u043e \u00b7 2 \u0435\u0449\u0451 \u0436\u0434\u0443\u0442",
+          settledShort: "1 \u0441\u0434\u0435\u043b\u0430\u043d\u043e \u00b7 2 \u0436\u0434\u0443\u0442"
         }
       },
       memory: {
         intro: {
-          eyebrow: "The longer you work together",
-          heading: "The more she",
-          gradient: "carries"
+          eyebrow: "\u0427\u0435\u043c \u0434\u043e\u043b\u044c\u0448\u0435 \u0432\u044b \u0432\u043c\u0435\u0441\u0442\u0435",
+          heading: "\u0422\u0435\u043c \u0431\u043e\u043b\u044c\u0448\u0435 \u043e\u043d\u0430",
+          gradient: "\u043f\u043e\u043c\u043d\u0438\u0442"
         },
-        talk: "each day's talk",
-        rail: "enough to sleep on",
-        night: "she sleeps on it",
-        shelf: "what she keeps",
+        talk: "\u0440\u0430\u0437\u0433\u043e\u0432\u043e\u0440\u044b \u0437\u0430 \u0434\u0435\u043d\u044c",
+        rail: "\u0445\u0432\u0430\u0442\u0438\u0442 \u043d\u0430 \u043d\u043e\u0447\u044c",
+        night: "\u043d\u043e\u0447\u044c \u043d\u0430 \u0440\u0430\u0437\u043c\u044b\u0448\u043b\u0435\u043d\u0438\u0435",
+        shelf: "\u0447\u0442\u043e \u043e\u043d\u0430 \u043e\u0441\u0442\u0430\u0432\u043b\u044f\u0435\u0442",
         kept: [
-          "You ship on Thursdays.",
-          "Staging is where you try things.",
-          "Billing is the one you worry about.",
-          "You like the short version first."
+          "\u0422\u044b \u0432\u044b\u043a\u0430\u0442\u044b\u0432\u0430\u0435\u0448\u044c \u043f\u043e \u0447\u0435\u0442\u0432\u0435\u0440\u0433\u0430\u043c.",
+          "\u0421\u0442\u0435\u0439\u0434\u0436\u0438\u043d\u0433 \u2014 \u0442\u0430\u043c, \u0433\u0434\u0435 \u0442\u044b \u043f\u0440\u043e\u0431\u0443\u0435\u0448\u044c.",
+          "\u0411\u043e\u043b\u044c\u0448\u0435 \u0432\u0441\u0435\u0433\u043e \u0442\u044b \u043f\u0435\u0440\u0435\u0436\u0438\u0432\u0430\u0435\u0448\u044c \u0437\u0430 \u0431\u0438\u043b\u043b\u0438\u043d\u0433.",
+          "\u0421\u043d\u0430\u0447\u0430\u043b\u0430 \u0442\u044b \u0445\u043e\u0447\u0435\u0448\u044c \u043a\u043e\u0440\u043e\u0442\u043a\u0443\u044e \u0432\u0435\u0440\u0441\u0438\u044e."
         ],
         status: {
-          day: "one ordinary day of working together",
-          dayShort: "one ordinary day",
-          building: "everything you two get through, building up",
-          buildingShort: "the day's talk, building up",
-          sleeps: "enough has built up \u2014 she sleeps on it",
-          sleepsShort: "she sleeps on it",
-          wakes: "she wakes with a little more than she had",
-          wakesShort: "a little more than before",
-          keeping: "another night, another thing worth keeping",
-          keepingShort: "another thing worth keeping",
-          quiet: "a quiet day \u2014 barely anything said",
-          quietShort: "a quiet day",
-          notEnough: "not enough to sleep on, so she doesn't",
-          notEnoughShort: "not enough to sleep on",
-          nothingLost: "nothing is lost \u2014 that day is still there",
-          nothingLostShort: "still there, nothing lost",
-          inUse: "and the first thing she kept is in use today",
-          inUseShort: "day one's, in use today",
-          sleepsAgain: "she sleeps on this one too",
-          sleepsAgainShort: "she sleeps on this one too",
-          cost: "it costs her less than one ordinary reply",
-          costShort: "less than one reply",
-          oneMore: "one more night, one more thing she carries",
-          oneMoreShort: "one more thing she carries",
-          carries: "the longer you work together, the more she carries",
-          carriesShort: "the more she carries"
+          day: "\u043e\u0431\u044b\u0447\u043d\u044b\u0439 \u0434\u0435\u043d\u044c \u0432\u043c\u0435\u0441\u0442\u0435",
+          dayShort: "\u043e\u0431\u044b\u0447\u043d\u044b\u0439 \u0434\u0435\u043d\u044c",
+          building: "\u0432\u0441\u0451, \u0447\u0442\u043e \u0432\u044b \u043f\u0440\u043e\u0448\u043b\u0438, \u043a\u043e\u043f\u0438\u0442\u0441\u044f",
+          buildingShort: "\u0440\u0430\u0437\u0433\u043e\u0432\u043e\u0440\u044b \u0437\u0430 \u0434\u0435\u043d\u044c \u043a\u043e\u043f\u044f\u0442\u0441\u044f",
+          sleeps: "\u043d\u0430\u043a\u043e\u043f\u0438\u043b\u043e\u0441\u044c \u0434\u043e\u0441\u0442\u0430\u0442\u043e\u0447\u043d\u043e \u2014 \u0434\u0443\u043c\u0430\u0435\u0442 \u043d\u0430\u0434 \u044d\u0442\u0438\u043c \u043d\u043e\u0447\u044c",
+          sleepsShort: "\u0434\u0443\u043c\u0430\u0435\u0442 \u043d\u0430\u0434 \u044d\u0442\u0438\u043c \u043d\u043e\u0447\u044c",
+          wakes: "\u043f\u0440\u043e\u0441\u044b\u043f\u0430\u0435\u0442\u0441\u044f, \u0437\u043d\u0430\u044f \u0447\u0443\u0442\u044c \u0431\u043e\u043b\u044c\u0448\u0435",
+          wakesShort: "\u0447\u0443\u0442\u044c \u0431\u043e\u043b\u044c\u0448\u0435, \u0447\u0435\u043c \u0431\u044b\u043b\u043e",
+          keeping: "\u0435\u0449\u0451 \u043e\u0434\u043d\u0430 \u043d\u043e\u0447\u044c \u2014 \u0435\u0449\u0451 \u043e\u0434\u043d\u043e, \u0447\u0442\u043e \u0441\u0442\u043e\u0438\u0442 \u043e\u0441\u0442\u0430\u0432\u0438\u0442\u044c",
+          keepingShort: "\u0435\u0449\u0451 \u043e\u0434\u043d\u0430 \u0432\u0435\u0449\u044c \u043d\u0430 \u043f\u0430\u043c\u044f\u0442\u044c",
+          quiet: "\u0442\u0438\u0445\u0438\u0439 \u0434\u0435\u043d\u044c \u2014 \u043f\u043e\u0447\u0442\u0438 \u043d\u0438\u0447\u0435\u0433\u043e \u043d\u0435 \u0441\u043a\u0430\u0437\u0430\u043d\u043e",
+          quietShort: "\u0442\u0438\u0445\u0438\u0439 \u0434\u0435\u043d\u044c",
+          notEnough: "\u043e\u0431\u0434\u0443\u043c\u044b\u0432\u0430\u0442\u044c \u043d\u0435\u0447\u0435\u0433\u043e \u2014 \u043e\u043d\u0430 \u0438 \u043d\u0435 \u0431\u0435\u0440\u0451\u0442\u0441\u044f",
+          notEnoughShort: "\u043c\u0430\u043b\u043e, \u0447\u0442\u043e\u0431\u044b \u043e\u0431\u0434\u0443\u043c\u044b\u0432\u0430\u0442\u044c",
+          nothingLost: "\u043d\u0438\u0447\u0435\u0433\u043e \u043d\u0435 \u043f\u0440\u043e\u043f\u0430\u043b\u043e \u2014 \u0442\u043e\u0442 \u0434\u0435\u043d\u044c \u0432\u0441\u0451 \u0435\u0449\u0451 \u0437\u0434\u0435\u0441\u044c",
+          nothingLostShort: "\u0432\u0441\u0451 \u043d\u0430 \u043c\u0435\u0441\u0442\u0435, \u043d\u0438\u0447\u0435\u0433\u043e \u043d\u0435 \u043f\u0440\u043e\u043f\u0430\u043b\u043e",
+          inUse: "\u0438 \u0442\u043e, \u0447\u0442\u043e \u043e\u043d\u0430 \u043e\u0441\u0442\u0430\u0432\u0438\u043b\u0430 \u043f\u0435\u0440\u0432\u044b\u043c, \u0432 \u0434\u0435\u043b\u0435 \u0441\u0435\u0433\u043e\u0434\u043d\u044f",
+          inUseShort: "\u0441\u0430\u043c\u043e\u0435 \u043f\u0435\u0440\u0432\u043e\u0435 \u2014 \u0432 \u0434\u0435\u043b\u0435",
+          sleepsAgain: "\u0438 \u043d\u0430\u0434 \u044d\u0442\u0438\u043c \u043e\u043d\u0430 \u0434\u0443\u043c\u0430\u0435\u0442 \u043d\u043e\u0447\u044c",
+          sleepsAgainShort: "\u0438 \u043d\u0430\u0434 \u044d\u0442\u0438\u043c \u043e\u043d\u0430 \u0434\u0443\u043c\u0430\u0435\u0442 \u043d\u043e\u0447\u044c",
+          cost: "\u044d\u0442\u043e \u0434\u0435\u0448\u0435\u0432\u043b\u0435 \u043e\u0434\u043d\u043e\u0433\u043e \u043e\u0431\u044b\u0447\u043d\u043e\u0433\u043e \u043e\u0442\u0432\u0435\u0442\u0430",
+          costShort: "\u043c\u0435\u043d\u044c\u0448\u0435 \u043e\u0434\u043d\u043e\u0433\u043e \u043e\u0442\u0432\u0435\u0442\u0430",
+          oneMore: "\u0435\u0449\u0451 \u043d\u043e\u0447\u044c \u2014 \u0435\u0449\u0451 \u043e\u0434\u043d\u0430 \u0432\u0435\u0449\u044c, \u043a\u043e\u0442\u043e\u0440\u0443\u044e \u043e\u043d\u0430 \u043d\u0435\u0441\u0451\u0442",
+          oneMoreShort: "\u0435\u0449\u0451 \u043e\u0434\u043d\u0430 \u0432\u0435\u0449\u044c \u043f\u0440\u0438 \u043d\u0435\u0439",
+          carries: "\u0447\u0435\u043c \u0434\u043e\u043b\u044c\u0448\u0435 \u0432\u044b \u0432\u043c\u0435\u0441\u0442\u0435, \u0442\u0435\u043c \u0431\u043e\u043b\u044c\u0448\u0435 \u043e\u043d\u0430 \u043d\u0435\u0441\u0451\u0442",
+          carriesShort: "\u0442\u0435\u043c \u0431\u043e\u043b\u044c\u0448\u0435 \u043e\u043d\u0430 \u043d\u0435\u0441\u0451\u0442"
         }
       },
       oneMind: {
         intro: {
-          eyebrow: "However many conversations",
-          heading: "Always the",
-          gradient: "same person"
+          eyebrow: "\u0421\u043a\u043e\u043b\u044c\u043a\u043e \u0431\u044b \u043d\u0438 \u0431\u044b\u043b\u043e \u0440\u0430\u0437\u0433\u043e\u0432\u043e\u0440\u043e\u0432",
+          heading: "\u0412\u0441\u0435\u0433\u0434\u0430",
+          gradient: "\u0442\u043e\u0442 \u0436\u0435 \u0447\u0435\u043b\u043e\u0432\u0435\u043a"
         },
         conversations: [
           {
-            name: "The rewrite",
-            short: "The rewrite"
+            name: "\u0411\u043e\u043b\u044c\u0448\u043e\u0435 \u043f\u0435\u0440\u0435\u043f\u0438\u0441\u044b\u0432\u0430\u043d\u0438\u0435",
+            short: "\u041f\u0435\u0440\u0435\u043f\u0438\u0441\u0430\u0442\u044c"
           },
           {
-            name: "Monday review",
-            short: "Monday"
+            name: "\u041e\u0431\u0437\u043e\u0440 \u0432 \u043f\u043e\u043d\u0435\u0434\u0435\u043b\u044c\u043d\u0438\u043a",
+            short: "\u041f\u043e\u043d\u0435\u0434\u0435\u043b\u044c\u043d\u0438\u043a"
           },
           {
-            name: "Getting set up",
-            short: "Setup"
+            name: "\u041d\u0430\u0441\u0442\u0440\u043e\u0439\u043a\u0430 \u0441 \u043d\u0443\u043b\u044f",
+            short: "\u041d\u0430\u0441\u0442\u0440\u043e\u0439\u043a\u0430"
           },
           {
-            name: "The outage",
-            short: "Outage"
+            name: "\u0422\u043e \u043f\u0430\u0434\u0435\u043d\u0438\u0435",
+            short: "\u041f\u0430\u0434\u0435\u043d\u0438\u0435"
           },
           {
-            name: "The pricing page",
-            short: "Pricing"
+            name: "\u0421\u0442\u0440\u0430\u043d\u0438\u0446\u0430 \u0446\u0435\u043d",
+            short: "\u0426\u0435\u043d\u044b"
           },
           {
-            name: "Invoices",
-            short: "Invoices"
+            name: "\u0421\u0447\u0435\u0442\u0430",
+            short: "\u0421\u0447\u0435\u0442\u0430"
           }
         ],
         open: {
-          label: "this conversation",
-          question: "What else are we working on?",
-          from: "from",
-          footer: "Nothing else needs you today.",
-          footerShort: "Nothing else needs you."
+          label: "\u044d\u0442\u043e\u0442 \u0440\u0430\u0437\u0433\u043e\u0432\u043e\u0440",
+          question: "\u041d\u0430\u0434 \u0447\u0435\u043c \u043c\u044b \u0435\u0449\u0451 \u0440\u0430\u0431\u043e\u0442\u0430\u0435\u043c?",
+          from: "\u0438\u0437",
+          footer: "\u0421\u0435\u0433\u043e\u0434\u043d\u044f \u0431\u043e\u043b\u044c\u0448\u0435 \u043d\u0438\u0447\u0435\u0433\u043e \u043e\u0442 \u0442\u0435\u0431\u044f \u043d\u0435 \u043d\u0443\u0436\u043d\u043e.",
+          footerShort: "\u0411\u043e\u043b\u044c\u0448\u0435 \u043d\u0438\u0447\u0435\u0433\u043e \u043d\u0435 \u043d\u0443\u0436\u043d\u043e."
         },
         rows: [
           {
-            claim: "The last check passed about an hour ago",
-            short: "Last check passed"
+            claim: "\u041f\u043e\u0441\u043b\u0435\u0434\u043d\u044f\u044f \u043f\u0440\u043e\u0432\u0435\u0440\u043a\u0430 \u043f\u0440\u043e\u0448\u043b\u0430 \u043e\u043a\u043e\u043b\u043e \u0447\u0430\u0441\u0430 \u043d\u0430\u0437\u0430\u0434",
+            short: "\u041f\u043e\u0441\u043b\u0435\u0434\u043d\u044f\u044f \u043f\u0440\u043e\u0432\u0435\u0440\u043a\u0430 \u043f\u0440\u043e\u0448\u043b\u0430"
           },
           {
-            claim: "Two projects are waiting on you, neither urgent",
-            short: "2 waiting, none urgent"
+            claim: "\u0414\u0432\u0430 \u043f\u0440\u043e\u0435\u043a\u0442\u0430 \u0436\u0434\u0443\u0442 \u0442\u0435\u0431\u044f, \u043e\u0431\u0430 \u043d\u0435 \u0441\u0440\u043e\u0447\u043d\u044b\u0435",
+            short: "2 \u0436\u0434\u0443\u0442, \u043d\u0435\u0441\u0440\u043e\u0447\u043d\u043e"
           },
           {
-            claim: "Your calendar still isn't connected",
-            short: "Calendar not connected"
+            claim: "\u0422\u0432\u043e\u0439 \u043a\u0430\u043b\u0435\u043d\u0434\u0430\u0440\u044c \u0432\u0441\u0451 \u0435\u0449\u0451 \u043d\u0435 \u043f\u043e\u0434\u043a\u043b\u044e\u0447\u0451\u043d",
+            short: "\u041a\u0430\u043b\u0435\u043d\u0434\u0430\u0440\u044c \u043d\u0435 \u043f\u043e\u0434\u043a\u043b\u044e\u0447\u0451\u043d"
           }
         ],
         status: {
-          live: "every conversation you have going",
-          liveShort: "all your conversations",
-          open: "all of them open at the same time",
-          openShort: "all open at once",
-          asked: "you asked in one of them",
-          askedShort: "you asked here",
-          answers: "she answers from everything she knows",
-          answersShort: "she answers from all of it",
-          sources: "every line, and where it came from",
-          sourcesShort: "every line, and its source",
-          oneVoice: "one voice \u2014 you never hear two at once",
-          oneVoiceShort: "one voice, never two",
-          samePerson: "the same person, in all of them",
-          samePersonShort: "the same person, in all of them"
+          live: "\u0432\u0441\u0435 \u0440\u0430\u0437\u0433\u043e\u0432\u043e\u0440\u044b, \u0447\u0442\u043e \u0443 \u0442\u0435\u0431\u044f \u0438\u0434\u0443\u0442",
+          liveShort: "\u0432\u0441\u0435 \u0442\u0432\u043e\u0438 \u0440\u0430\u0437\u0433\u043e\u0432\u043e\u0440\u044b",
+          open: "\u0432\u0441\u0435 \u043e\u0442\u043a\u0440\u044b\u0442\u044b \u043e\u0434\u043d\u043e\u0432\u0440\u0435\u043c\u0435\u043d\u043d\u043e",
+          openShort: "\u0432\u0441\u0435 \u0441\u0440\u0430\u0437\u0443 \u043e\u0442\u043a\u0440\u044b\u0442\u044b",
+          asked: "\u0442\u044b \u0441\u043f\u0440\u043e\u0441\u0438\u043b \u0432 \u043e\u0434\u043d\u043e\u043c \u0438\u0437 \u043d\u0438\u0445",
+          askedShort: "\u0442\u044b \u0441\u043f\u0440\u043e\u0441\u0438\u043b \u0437\u0434\u0435\u0441\u044c",
+          answers: "\u043e\u043d\u0430 \u043e\u0442\u0432\u0435\u0447\u0430\u0435\u0442 \u0438\u0437 \u0432\u0441\u0435\u0433\u043e, \u0447\u0442\u043e \u0437\u043d\u0430\u0435\u0442",
+          answersShort: "\u043e\u0442\u0432\u0435\u0447\u0430\u0435\u0442 \u0438\u0437 \u0432\u0441\u0435\u0433\u043e \u0441\u0440\u0430\u0437\u0443",
+          sources: "\u043a\u0430\u0436\u0434\u0430\u044f \u0441\u0442\u0440\u043e\u043a\u0430 \u2014 \u0438 \u043e\u0442\u043a\u0443\u0434\u0430 \u043e\u043d\u0430",
+          sourcesShort: "\u043a\u0430\u0436\u0434\u0430\u044f \u0441\u0442\u0440\u043e\u043a\u0430 \u0438 \u0435\u0451 \u0438\u0441\u0442\u043e\u0447\u043d\u0438\u043a",
+          oneVoice: "\u043e\u0434\u0438\u043d \u0433\u043e\u043b\u043e\u0441 \u2014 \u0434\u0432\u0443\u0445 \u0441\u0440\u0430\u0437\u0443 \u0442\u044b \u043d\u0435 \u0443\u0441\u043b\u044b\u0448\u0438\u0448\u044c",
+          oneVoiceShort: "\u043e\u0434\u0438\u043d \u0433\u043e\u043b\u043e\u0441, \u043d\u0435 \u0434\u0432\u0430",
+          samePerson: "\u043e\u0434\u0438\u043d \u0438 \u0442\u043e\u0442 \u0436\u0435 \u0447\u0435\u043b\u043e\u0432\u0435\u043a \u2014 \u0432\u043e \u0432\u0441\u0435\u0445",
+          samePersonShort: "\u043e\u0434\u0438\u043d \u0438 \u0442\u043e\u0442 \u0436\u0435 \u0447\u0435\u043b\u043e\u0432\u0435\u043a \u2014 \u0432\u043e \u0432\u0441\u0435\u0445"
         }
       }
     }
