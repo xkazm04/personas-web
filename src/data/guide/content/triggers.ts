@@ -2,7 +2,7 @@ export const content: Record<string, string> = {
   "how-triggers-work": `
 ## How Triggers Work
 
-Triggers are the "when" of your agent. The prompt and tools define *what* the agent does; the trigger defines *when* and *with what input*. Personas ships seven trigger types: **manual** (click a button), **schedule** (cron-style), **webhook** (inbound HTTP), **clipboard** (copy event match), **file watcher** (filesystem events), **chain** (output of another agent), and **event-based** (internal events emitted by other agents, plugins, or the engine itself).
+Triggers are the "when" of your agent. The prompt and tools define *what* the agent does; the trigger defines *when* and *with what input*. Personas ships ten trigger types: **manual** (click a button), **schedule** (cron-style), **polling** (fetch a URL on an interval), **webhook** (inbound HTTP), **clipboard** (copy event match), **file watcher** (filesystem events), **app focus** (you switch to a named window), **chain** (output of another agent), **composite** (several conditions inside one time window), and **event-based** (internal events emitted by other agents, plugins, or the engine itself).
 
 Each agent can have any number of triggers, mixed across types. A single agent might run on a daily schedule, react to a webhook from Stripe, fire when you copy an email address, and be chainable from upstream agents — all at once.
 
@@ -13,7 +13,10 @@ Each agent can have any number of triggers, mixed across types. A single agent m
 Button click in the editor or from the title-bar quick-run. Every agent gets this by default. Best for testing and ad-hoc invocations.
 ---
 **Schedule**
-Cron-based. Hourly, daily, weekly, or full cron expression with timezone. Best for routine work that runs without input — daily summaries, weekly reports.
+Cron-based. Hourly, daily, weekly, or full cron expression with timezone. Best for routine work that runs without input — daily summaries, weekly reports. A schedule with no cron expression and no interval, or with a timezone that isn't a real IANA zone name, is *refused at save time* rather than saved as an automation that silently never runs.
+---
+**Polling**
+Fetches a URL on a fixed interval and starts the agent when the response changes. Best for sources that offer no webhook — a status page, an RSS feed, a plain JSON endpoint.
 ---
 **Webhook**
 A unique inbound URL the agent listens on. External services POST to it to start the agent. Best for "react to event from third-party service".
@@ -24,8 +27,14 @@ Fires when copied text matches a configured pattern (regex, content type, or key
 **File Watcher**
 Filesystem events on a watched folder (create / modify / delete). Best for drop-zone workflows where files arrive at unpredictable times.
 ---
+**App Focus**
+Fires when you switch to a window matching a name or title pattern. Best for context-aware assistants that should wake when you open a particular tool.
+---
 **Chain**
 The output of agent A becomes the input of agent B. Best for multi-step pipelines composed of focused agents.
+---
+**Composite**
+Fires only when several conditions all occur inside one time window (AND / OR over event types). Best for "only act when these things happen together".
 ---
 **Event-Based**
 Subscribes to internal Personas events (a credential expired, a plugin emitted an event, an execution finished with manual_review). Best for reactive automations within your own setup.
@@ -38,6 +47,7 @@ Subscribes to internal Personas events (a credential expired, a plugin emitted a
 - **Per-trigger filtering** — each trigger can have its own filter conditions (e.g. webhook trigger only fires on \`event_type=charge.succeeded\`)
 - **Trigger lineage** — the Lineage canvas (Events → Live Stream → Lineage) shows which triggers, which agents, and which events are connected, end-to-end across your whole setup
 - **Pause individually** — disable a single trigger without touching the rest of the agent
+- **A trigger that can't fire says so** — a trigger is armed when it's created, or the save is refused with the reason. A clock-driven trigger that somehow has no next run time is badged **Not scheduled** in the list instead of reading as armed
 
 ### How It Works
 
