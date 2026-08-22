@@ -7,6 +7,7 @@ import { trackFeatureComment } from "@/lib/analytics";
 import { useAbortableEffect } from "@/hooks/useAbortableEffect";
 import type { Comment, LoadState } from "./local-types";
 import {
+  SEED_VOTES_TOTAL,
   features,
   fetchBoostTotals,
   fetchComments,
@@ -202,7 +203,8 @@ export default function FeatureVoting() {
 
       <CustomFeatureRequest />
 
-      <FeatureVotingSummary totalVotes={sorted.reduce((s, f) => s + f.votes, 0) + realVotesTotal} commentsCount={comments.length} totalBoosts={totalBoosts} loadState={loadState} />
+      {/* Seed and live halves stay separate so the summary can disclose which part was measured (see `data.ts`). */}
+      <FeatureVotingSummary seedVotes={SEED_VOTES_TOTAL} liveVotes={realVotesTotal} commentsCount={comments.length} totalBoosts={totalBoosts} loadState={loadState} />
     </SectionWrapper>
   );
 }
