@@ -51,11 +51,18 @@ export interface TopicCoverage {
   screenshotRecipe?: string;
   /** ISO timestamp when the content was last reviewed for accuracy. */
   contentReviewedAt?: string;
-  /** Semver of the desktop app the topic was last verified against. */
+  /**
+   * Semver of the desktop app the topic was last verified against.
+   * Recorded for humans reading the metadata; the drift detector never
+   * queries it — see `watchedFiles`.
+   */
   appVersion?: string;
   /**
    * Files in the desktop repo whose changes should trigger a re-review.
-   * Checked by the drift detector against the git log since `appVersion`.
+   * Checked by the drift detector against the git log since
+   * `contentReviewedAt` — the review date, not `appVersion`. A topic missing
+   * either `watchedFiles` or `contentReviewedAt` is skipped by the detector
+   * and reported as a named skip class, never counted as drift-free.
    */
   watchedFiles?: string[];
 }
