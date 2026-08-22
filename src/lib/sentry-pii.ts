@@ -5,7 +5,9 @@
  * - UUIDs (execution_id, persona_id, etc.) → keyed correlation marker
  * - Bare email addresses → [redacted-email]
  * - Quoted names (persona names, credential names) → [redacted]
- * - Full URLs → domain-only
+ * - Full URLs in prose → domain-only
+ * - Code locations (stack frames) → structurally redacted, path and
+ *   `:line:col` kept — see the note above `redactLocation` for the split
  * - Sensitive breadcrumb / context / extra / tag fields
  *
  * ## The correlation marker
@@ -264,6 +266,188 @@ export function scrubPii(input: string): string {
   return result;
 }
 
+// ── Structural scrubbing: locations, not prose ──────────────────────────────
+
+/**
+ * There are two redaction paths in this module and the split is deliberate.
+ *
+ * - A URL in PROSE — a message, an `extra`, a `tag`, a context or breadcrumb
+ *   value — is redacted AGGRESSIVELY by `scrubPii`/`redactUrl`, down to
+ *   `scheme://host/…`. Prose is unstructured: nothing downstream can rely on
+ *   the path a human happened to interpolate into a log line, and the path and
+ *   query are exactly where tokens and identifiers ride.
+ *
+ * - A URL or native path that IS A CODE LOCATION — `frame.filename`,
+ *   `frame.abs_path`, `frame.module`, and the `at …` lines of `error.stack` —
+ *   is redacted STRUCTURALLY by `redactLocation`. Here the path is the entire
+ *   signal: it is this bundle's own coordinates, and it is what lets the error
+ *   tracker group by file and line instead of collapsing every frame to
+ *   `origin/…` and grouping by function name. So the shape is preserved and
+ *   only the parts that carry personal data are removed.
+ *
+ * `redactLocation` is therefore NOT a weaker `scrubPii`; it is a different
+ * decision about a different kind of string. Neither may be swapped for the
+ * other: prose on the structural path leaks (a token in a sentence survives),
+ * and a location on the aggressive path destroys the frame.
+ */
+
+/**
+ * A frame's trailing `:line:col` (or `:line`). Split off before anything else
+ * so no rule below can mistake a position for a port or a path segment, and
+ * re-appended verbatim: a line number is a coordinate, never personal data.
+ */
+const POSITION_SUFFIX_RE = /:\d{1,9}(?::\d{1,9})?$/;
+
+/** Scheme + authority of a location: `https://user:pass@host`, `webpack://`. */
+const LOCATION_AUTHORITY_RE = /^([A-Za-z][A-Za-z0-9+.-]*):\/\/([^/\\?#]*)/;
+
+/**
+ * A home-directory root followed by the segment that names its owner:
+ * `/Users/<name>`, `/home/<name>`, `C:\Users\<name>`, `/C:/Users/<name>`
+ * (what a `file://` URL looks like on Windows). Anchored at the START of the
+ * path so it matches a filesystem root and not a website route that happens to
+ * be called `/home/...`.
+ */
+const HOME_DIR_RE =
+  /^([\\/]?(?:[A-Za-z]:)?[\\/])(Users|home|Documents and Settings)([\\/])([^\\/]+)/i;
+
+const REDACTED_USER = "[redacted-user]";
+
+/**
+ * Redact a code location while keeping it usable as one.
+ *
+ * Preserved: scheme, host, path, and any trailing `:line:col`. Those are the
+ * bundle's own coordinates and they are the entire point of a stack frame.
+ *
+ * Removed or rewritten:
+ * - the query string and the fragment, entirely — a frame URL's `?token=…`,
+ *   `?id=<uuid>` or `#access_token=…` carries secrets and contributes nothing
+ *   to grouping
+ * - userinfo (`https://user:pass@host/…`)
+ * - the username in a home directory (`/Users/<name>/`, `/home/<name>/`,
+ *   `C:\Users\<name>\`). This is the real personal data in a stack: it rides in
+ *   `file://` frames and in source-mapped `abs_path`, and nothing else in this
+ *   pipeline catches it. The name segment is replaced; the rest of the path
+ *   stays, so two machines' frames now agree instead of splintering.
+ * - anything the identifier/address passes still find in what remains, so a
+ *   UUID or an email inside a path segment becomes a marker.
+ */
+export function redactLocation(value: string): string {
+  if (!value) return value;
+
+  const position = POSITION_SUFFIX_RE.exec(value)?.[0] ?? "";
+  let body = position ? value.slice(0, value.length - position.length) : value;
+
+  // Same bound as `scrubPii`, and for the same reason: `EMAIL_RE` scans
+  // quadratically over a long run of matching characters with no `@`, and a
+  // frame location is as caller-influenced as any other string here.
+  if (body.length > MAX_STRING_LEN) {
+    body =
+      body.slice(0, MAX_STRING_LEN).replace(TRAILING_TOKEN_RE, "") +
+      "…[truncated]";
+  }
+
+  const fragment = body.indexOf("#");
+  if (fragment !== -1) body = body.slice(0, fragment);
+  const query = body.indexOf("?");
+  if (query !== -1) body = body.slice(0, query);
+
+  let prefix = "";
+  let path = body;
+  let scheme = "";
+  const authority = LOCATION_AUTHORITY_RE.exec(body);
+  if (authority) {
+    scheme = authority[1].toLowerCase();
+    const host = authority[2];
+    // Last `@`, not first: an encoded `%40` inside userinfo would make the
+    // first one the wrong boundary.
+    const at = host.lastIndexOf("@");
+    prefix = `${authority[1]}://${at === -1 ? host : host.slice(at + 1)}`;
+    path = body.slice(authority[0].length);
+  }
+
+  // Home-directory redaction is skipped for http(s), where `/home/<x>` is a
+  // route on a public site, not somebody's home directory. Every other scheme
+  // (`file:`, `webpack:`, `app:`) and every bare native path is a filesystem
+  // coordinate, where that segment is a username.
+  if (scheme !== "http" && scheme !== "https") {
+    path = path.replace(
+      HOME_DIR_RE,
+      (_match, root: string, home: string, separator: string) =>
+        `${root}${home}${separator}${REDACTED_USER}`,
+    );
+  }
+
+  let out = `${prefix}${path}`.replace(EMAIL_RE, "[redacted-email]");
+  out = out.replace(UUID_RE, (match) => correlationMarker(match));
+  return `${out}${position}`;
+}
+
+/**
+ * A frame line: V8's `    at fn (loc)` / `    at loc`, or the `fn@loc` shape
+ * Firefox and Safari emit. The Firefox shape allows no whitespace before the
+ * `@`, which is what keeps a prose line containing an email address from being
+ * mistaken for a frame.
+ */
+const V8_FRAME_RE = /^\s*at\s/;
+const AT_FRAME_RE = /^[^\s@]*@\S/;
+
+/**
+ * A location token inside a frame line: any `scheme://` URL, a Windows path,
+ * or an absolute/relative POSIX path. It runs to the next whitespace or `)` so
+ * the surrounding `at fn (` … `)` scaffolding — the grouping input — is left
+ * exactly as the runtime wrote it.
+ */
+const STACK_LOCATION_RE =
+  /(?:[A-Za-z][A-Za-z0-9+.-]*:\/\/|[A-Za-z]:[\\/]|\.{0,2}\/)[^\s)]*/g;
+
+/**
+ * Bounds on a stack string. The old `scrubPii(error.stack)` got these for free
+ * from `MAX_STRING_LEN` (it capped the whole stack at one string); redacting
+ * per line has to restate them, because `error.stack` is writable and a frame
+ * line is therefore as caller-shaped as any other input here. A line longer
+ * than the string cap is not a frame this code can trust, so it falls back to
+ * the aggressive path — which truncates — rather than running the regex passes
+ * over it. Sentry's own parser keeps 50 frames by default; 200 lines is well
+ * clear of any real stack.
+ */
+const MAX_STACK_LINES = 200;
+
+/**
+ * Redact an `error.stack` STRING, line by line, splitting it the way the two
+ * paths above split: the header (`Name: message`, and any continuation of a
+ * multi-line message) is prose and takes the aggressive path; the frames are
+ * locations and take the structural one.
+ *
+ * Lines are classified independently rather than latching at the first frame,
+ * so a trailing `Caused by: …` line goes back to the aggressive path. Anything
+ * this code cannot recognise as a frame is treated as prose, which is the safe
+ * direction. Line 0 may only be claimed by the `fn@loc` shape: a V8 stack's
+ * first line is always the header, and a message that happens to begin with
+ * "at " must not be mistaken for a frame.
+ */
+export function redactStack(stack: string): string {
+  const lines = stack.split("\n");
+  const out = lines.slice(0, MAX_STACK_LINES).map((line, index) => {
+    const isFrame =
+      line.length <= MAX_STRING_LEN &&
+      (AT_FRAME_RE.test(line) || (index > 0 && V8_FRAME_RE.test(line)));
+    if (!isFrame) return scrubPii(line);
+    return (
+      line
+        .replace(STACK_LOCATION_RE, (match) => redactLocation(match))
+        // Belt and braces for the one thing that is never a coordinate: an
+        // address outside a location token (a misclassified line, an odd
+        // runtime's frame format) still goes.
+        .replace(EMAIL_RE, "[redacted-email]")
+    );
+  });
+  if (lines.length > MAX_STACK_LINES) {
+    out.push(`    … [redacted-depth: ${lines.length - MAX_STACK_LINES} more lines]`);
+  }
+  return out.join("\n");
+}
+
 // ── Structured payload scrubbing ────────────────────────────────────────────
 
 /**
@@ -366,7 +550,17 @@ export function scrubEvent(event: ErrorEvent): ErrorEvent {
   if (event.message) {
     event.message = scrubPii(event.message);
   }
-  // Scrub PII from exception values + their stack-frame variables.
+  // Scrub PII from exception values + their stack frames.
+  //
+  // A frame is scrubbed along the two paths described above `redactLocation`:
+  // its LOCATIONS (`filename`, `abs_path`, `module`) go structurally, keeping
+  // path and position while losing query string, userinfo and home-directory
+  // username; its `vars` are free-text local values and stay on the aggressive
+  // path. `function`, `lineno`, `colno` and `in_app` are untouched — they are
+  // the grouping inputs and carry nothing personal.
+  //
+  // This runs after the SDK's own event processors (`beforeSend` is last), so
+  // it also covers whatever `RewriteFrames`-style integrations produced.
   if (event.exception?.values) {
     for (const exc of event.exception.values) {
       if (exc.value) {
@@ -375,6 +569,9 @@ export function scrubEvent(event: ErrorEvent): ErrorEvent {
       const frames = exc.stacktrace?.frames;
       if (frames) {
         for (const frame of frames) {
+          if (frame.filename) frame.filename = redactLocation(frame.filename);
+          if (frame.abs_path) frame.abs_path = redactLocation(frame.abs_path);
+          if (frame.module) frame.module = redactLocation(frame.module);
           if (frame.vars) {
             frame.vars = scrubData(frame.vars) as Record<string, unknown>;
           }
@@ -506,13 +703,13 @@ export function safeScrubBreadcrumb(breadcrumb: Breadcrumb): Breadcrumb | null {
  * the SDK. Use this instead of `Sentry.captureException` everywhere; a
  * `src/lib/no-raw-sentry-capture.test.ts` spec enforces it.
  *
+ * The message takes the aggressive path (`scrubPii`); the stack takes the
+ * structural one (`redactStack` → `redactLocation` per frame location). See the
+ * note above `redactLocation` for why those are different decisions.
+ *
  * The global `beforeSend` hook (`safeScrubEvent`) already scrubs the serialized
- * event — `message`, `exception.values[].value`, `contexts`, `extra`, `tags`,
- * breadcrumbs and stack-frame `vars`. What it cannot reach:
- * - `error.stack` as a STRING. The SDK parses the stack into frames before
- *   `beforeSend` runs, and `scrubEvent` deliberately does not rewrite
- *   `frame.filename` / `frame.abs_path` — so a URL carrying a token or an
- *   identifier in its query string reaches the wire from a raw capture.
+ * event — `message`, `exception.values[].value`, frame locations and `vars`,
+ * `contexts`, `extra`, `tags` and breadcrumbs. What it cannot reach:
  * - The pre-send window. A raw `Error` sits in the SDK's in-memory event queue
  *   (and its offline/replay buffers) un-scrubbed until the hook fires;
  *   scrubbing at the call site means the identifier is destroyed before the
@@ -521,10 +718,19 @@ export function safeScrubBreadcrumb(breadcrumb: Breadcrumb): Breadcrumb | null {
  *   a second `Sentry.init`, or an integration that captures on its own path
  *   silently removes it. This wrapper is per-call and cannot be un-wired.
  *
- * Cost, stated plainly: scrubbing `error.stack` reduces frame URLs to
- * `origin/…`, so converted call sites lose file/line detail in Sentry and group
- * mainly by function name. That is the deliberate trade — see the report note
- * on frame-preserving redaction if the balance needs revisiting.
+ * Cost, stated plainly — what a converted call site still loses:
+ * - The query string of every frame URL. Grouping and artifact matching are on
+ *   the path, so releases are unaffected, but a dev-server URL whose only
+ *   cache-buster lives in `?v=…` no longer resolves to a unique asset.
+ * - A UUID embedded in a frame path becomes a session-keyed marker, so such a
+ *   frame's string differs between sessions and can splinter its group. Paths
+ *   with ids in them are rare; a token in one is not.
+ * - The error identity: this constructs a plain `Error`, so an `Error`
+ *   subclass, its `cause`, and any own properties do not survive. That is
+ *   pre-existing and independent of which redaction path the stack takes.
+ * What it no longer loses (this was the old trade, now reversed): the frame
+ * path and its `:line:col`, so converted call sites group by file and line
+ * again instead of by function name.
  */
 export function captureExceptionScrubbed(
   error: unknown,
@@ -533,7 +739,7 @@ export function captureExceptionScrubbed(
   let scrubbed: unknown = error;
   if (error instanceof Error) {
     scrubbed = new Error(scrubPii(error.message));
-    if (error.stack) (scrubbed as Error).stack = scrubPii(error.stack);
+    if (error.stack) (scrubbed as Error).stack = redactStack(error.stack);
     (scrubbed as Error).name = error.name;
   } else if (typeof error === "string") {
     scrubbed = scrubPii(error);
