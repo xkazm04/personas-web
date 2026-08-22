@@ -151,3 +151,10 @@ followed by **How it works / Key files / Data & state / Integration points / Con
   dormant branches, hardcoded-English i18n gaps, ungated motion, route mismatches) — treat
   them as known issues, not invitations to fix unasked.
 - **When a feature's files change, update its doc** in the same commit so it stays accurate.
+
+## AI registry (knowledge + skills)
+
+This repo is wired to the organization's AI registry (github:xkazm04/ai-registry; local sibling checkout `../ai-registry`).
+
+- **Knowledge**: this repo consumes the `software-engineering` bundle(s). Before a product, architecture or domain decision in those areas, run `/consult <topic>` - it reads the relevant subjects (golden path + techniques) and logs the consult to `.ai/consults.jsonl` (gitignored).
+- **Skills**: shared skills come from the `ai-registry` plugin marketplace, declared in `.claude/settings.json` (`enabledPlugins`). Do not copy a registry skill into `.claude/skills/` - only project-specific skills live there. Update with `claude plugin update <skill>@ai-registry`. Project-specific configuration for a registry skill lives in its committed overlay (e.g. `.claude/perfect/config.md`).

@@ -61,3 +61,6 @@ next-env.d.ts
 # Anchored to the repo root so the project's own .claude/CLAUDE.md is untouched.
 /AGENTS.md
 /CLAUDE.md
+
+# /consult skill log (counts reach the ai-registry signals lane; the log itself stays local)
+.ai/consults.jsonl
