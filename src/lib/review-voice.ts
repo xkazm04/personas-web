@@ -1,4 +1,4 @@
-import * as Sentry from "@sentry/nextjs";
+import { captureExceptionScrubbed } from "./sentry-pii";
 import type { ReviewSeverity } from "@/lib/types";
 import { RECOMMENDED_VOICES } from "./review-voice-data";
 
@@ -81,7 +81,7 @@ export function emitNewReview(signal: NewReviewSignal): void {
     try {
       listener(signal);
     } catch (err) {
-      Sentry.captureException(err, { tags: { scope: "review-voice", op: "emit" } });
+      captureExceptionScrubbed(err, { tags: { scope: "review-voice", op: "emit" } });
     }
   }
 }
@@ -189,7 +189,7 @@ export function speak(text: string, lang: string | undefined, dedupeId: string):
       }
       window.speechSynthesis.speak(u);
     } catch (err) {
-      Sentry.captureException(err, { tags: { scope: "review-voice", op: "speak" } });
+      captureExceptionScrubbed(err, { tags: { scope: "review-voice", op: "speak" } });
     }
   };
 
@@ -203,7 +203,7 @@ export function speak(text: string, lang: string | undefined, dedupeId: string):
       })
       .catch((err) => {
         // Lock API hiccup shouldn't swallow the announcement entirely.
-        Sentry.captureException(err, { tags: { scope: "review-voice", op: "lock" } });
+        captureExceptionScrubbed(err, { tags: { scope: "review-voice", op: "lock" } });
         utter();
       });
   } else {

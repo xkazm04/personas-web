@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import * as Sentry from "@sentry/nextjs";
+import { captureExceptionScrubbed } from "@/lib/sentry-pii";
 
 import { useAuthStore } from "@/stores/authStore";
 import { getSyncedLeaderboard } from "@/lib/supabaseApi";
@@ -51,7 +51,7 @@ export function useLeaderboardData(): LeaderboardData {
         setFetchError(null);
       } catch (err) {
         if (cancelled) return;
-        Sentry.captureException(err, { tags: { scope: "useLeaderboardData" } });
+        captureExceptionScrubbed(err, { tags: { scope: "useLeaderboardData" } });
         setFetchError(
           err instanceof Error ? err.message : "Failed to load leaderboard",
         );

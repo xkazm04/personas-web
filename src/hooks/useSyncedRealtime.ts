@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useRef } from "react";
-import * as Sentry from "@sentry/nextjs";
+import { captureExceptionScrubbed } from "@/lib/sentry-pii";
 import type { RealtimeChannel } from "@supabase/supabase-js";
 import { getSupabase } from "@/lib/supabase";
 import { useAuthStore } from "@/stores/authStore";
@@ -147,7 +147,7 @@ export function useSyncedRealtime(): void {
         else if (status === "CLOSED") setStatus("polling");
       });
     } catch (err) {
-      Sentry.captureException(err, { tags: { scope: "useSyncedRealtime" } });
+      captureExceptionScrubbed(err, { tags: { scope: "useSyncedRealtime" } });
       return;
     }
 

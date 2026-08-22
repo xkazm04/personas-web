@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import * as Sentry from "@sentry/nextjs";
+import { captureExceptionScrubbed } from "@/lib/sentry-pii";
 
 import { useAuthStore } from "@/stores/authStore";
 import { getSyncedSla } from "@/lib/supabaseApi";
@@ -56,7 +56,7 @@ export function useSlaData(): SlaData {
         setError(null);
       } catch (err) {
         if (cancelled) return;
-        Sentry.captureException(err, { tags: { scope: "useSlaData" } });
+        captureExceptionScrubbed(err, { tags: { scope: "useSlaData" } });
         setError(err instanceof Error ? err.message : "Failed to load SLA data");
       } finally {
         if (!cancelled) setLoading(false);

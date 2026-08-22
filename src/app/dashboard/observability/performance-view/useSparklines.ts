@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import * as Sentry from "@sentry/nextjs";
+import { captureExceptionScrubbed } from "@/lib/sentry-pii";
 
 import { useAuthStore } from "@/stores/authStore";
 import { api } from "@/lib/api";
@@ -78,7 +78,7 @@ export function useSparklines(): SparklinesResult {
         setError(null);
       } catch (err) {
         if (cancelled) return;
-        Sentry.captureException(err, { tags: { scope: "useSparklines" } });
+        captureExceptionScrubbed(err, { tags: { scope: "useSparklines" } });
         setError(
           err instanceof Error ? err.message : "Failed to load sparkline data",
         );

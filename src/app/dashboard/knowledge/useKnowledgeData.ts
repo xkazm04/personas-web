@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import * as Sentry from "@sentry/nextjs";
+import { captureExceptionScrubbed } from "@/lib/sentry-pii";
 
 import { useAuthStore } from "@/stores/authStore";
 import { api } from "@/lib/api";
@@ -153,7 +153,7 @@ export function useKnowledgeData(): KnowledgeData {
         setFetchError(null);
       } catch (err) {
         if (cancelled) return;
-        Sentry.captureException(err, { tags: { scope: "useKnowledgeData" } });
+        captureExceptionScrubbed(err, { tags: { scope: "useKnowledgeData" } });
         setFetchError(
           err instanceof Error ? err.message : "Failed to load knowledge data",
         );

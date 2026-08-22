@@ -1,5 +1,5 @@
 import { create } from "zustand";
-import * as Sentry from "@sentry/nextjs";
+import { captureExceptionScrubbed } from "@/lib/sentry-pii";
 import { api } from "@/lib/api";
 import type { HealthResponse, StatusResponse } from "@/lib/types";
 
@@ -26,7 +26,7 @@ export const useSystemStore = create<SystemState>((set) => ({
     } catch (err) {
       // Health is secondary chrome (worker counts) — leave it null rather than
       // blocking the page, but record the failure so it isn't silently lost.
-      Sentry.captureException(err, { tags: { scope: "fetchHealth" } });
+      captureExceptionScrubbed(err, { tags: { scope: "fetchHealth" } });
     } finally {
       set({ healthChecked: true });
     }
@@ -36,7 +36,7 @@ export const useSystemStore = create<SystemState>((set) => ({
       const status = await api.getStatus();
       set({ status });
     } catch (err) {
-      Sentry.captureException(err, { tags: { scope: "fetchStatus" } });
+      captureExceptionScrubbed(err, { tags: { scope: "fetchStatus" } });
     }
   },
   reset: () => set({ health: null, status: null, healthChecked: false }),

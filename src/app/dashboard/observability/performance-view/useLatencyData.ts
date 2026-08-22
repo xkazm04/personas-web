@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import * as Sentry from "@sentry/nextjs";
+import { captureExceptionScrubbed } from "@/lib/sentry-pii";
 
 import { useAuthStore } from "@/stores/authStore";
 import { api } from "@/lib/api";
@@ -86,7 +86,7 @@ export function useLatencyData(): LatencyData {
         setPoints(deriveLatency(executions));
       } catch (err) {
         if (cancelled) return;
-        Sentry.captureException(err, { tags: { scope: "useLatencyData" } });
+        captureExceptionScrubbed(err, { tags: { scope: "useLatencyData" } });
       } finally {
         if (!cancelled) setLoading(false);
       }

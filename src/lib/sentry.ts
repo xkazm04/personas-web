@@ -1,13 +1,16 @@
 import * as Sentry from "@sentry/nextjs";
-import { scrubEvent, scrubBreadcrumb } from "./sentry-pii";
+import { safeScrubEvent, safeScrubBreadcrumb } from "./sentry-pii";
 
 export const baseSentryConfig = {
   dsn: process.env.NEXT_PUBLIC_SENTRY_DSN,
   environment: process.env.NODE_ENV,
   tracesSampleRate: 0,
   sendDefaultPii: false,
-  beforeSend: scrubEvent,
-  beforeBreadcrumb: scrubBreadcrumb,
+  // Fail-closed wrappers, never the bare scrubbers: a thrown callback is
+  // treated as "send the original" by several transports, which would ship the
+  // exact payload these hooks exist to remove. See src/lib/sentry-pii.ts.
+  beforeSend: safeScrubEvent,
+  beforeBreadcrumb: safeScrubBreadcrumb,
 } as const;
 
 /**

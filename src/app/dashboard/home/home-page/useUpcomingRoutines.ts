@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import * as Sentry from "@sentry/nextjs";
+import { captureExceptionScrubbed } from "@/lib/sentry-pii";
 
 import { useAuthStore } from "@/stores/authStore";
 import { useTranslation } from "@/i18n/useTranslation";
@@ -102,7 +102,7 @@ export function useUpcomingRoutines(): UpcomingRoutinesData {
         setFetchError(null);
       } catch (err) {
         if (cancelled) return;
-        Sentry.captureException(err, { tags: { scope: "useUpcomingRoutines" } });
+        captureExceptionScrubbed(err, { tags: { scope: "useUpcomingRoutines" } });
         setFetchError(err instanceof Error ? err.message : loadFailed);
       } finally {
         if (!cancelled) setFetchLoading(false);

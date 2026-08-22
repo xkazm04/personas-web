@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import * as Sentry from "@sentry/nextjs";
+import { captureExceptionScrubbed } from "@/lib/sentry-pii";
 
 import { useAuthStore } from "@/stores/authStore";
 import { getSyncedMessageThreads } from "@/lib/supabaseApi";
@@ -47,7 +47,7 @@ export function useMessagesData(): MessagesData {
         setFetchError(null);
       } catch (err) {
         if (cancelled) return;
-        Sentry.captureException(err, { tags: { scope: "useMessagesData" } });
+        captureExceptionScrubbed(err, { tags: { scope: "useMessagesData" } });
         setFetchError(
           err instanceof Error ? err.message : "Failed to load messages",
         );

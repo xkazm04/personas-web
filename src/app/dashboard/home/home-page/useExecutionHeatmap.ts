@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import * as Sentry from "@sentry/nextjs";
+import { captureExceptionScrubbed } from "@/lib/sentry-pii";
 
 import { useAuthStore } from "@/stores/authStore";
 import { useTranslation } from "@/i18n/useTranslation";
@@ -113,7 +113,7 @@ export function useExecutionHeatmap(): ExecutionHeatmapData {
         setFetchError(null);
       } catch (err) {
         if (cancelled) return;
-        Sentry.captureException(err, { tags: { scope: "useExecutionHeatmap" } });
+        captureExceptionScrubbed(err, { tags: { scope: "useExecutionHeatmap" } });
         // Surface the failure instead of leaving an authoritative-looking empty
         // grid — a transient error must not read as "nothing has run".
         setFetchError(err instanceof Error ? err.message : loadFailed);
