@@ -19,7 +19,7 @@ import { isValidVoterId } from "@/lib/validation";
 import { hasSupabaseEnv } from "@/lib/server/env";
 import { readJsonFile, updateJsonFile } from "@/lib/server/json-file-store";
 import { getClientIp, parseJsonBody } from "@/lib/server/request";
-import { isRateLimited as isSharedRateLimited } from "@/lib/server/rate-limit";
+import { rateLimitGuard } from "@/lib/server/rate-limit";
 
 const ALLOWED_FEATURES = new Set(["macos", "i18n", "dashboard", "enterprise"]);
 
@@ -50,8 +50,9 @@ async function getSupabaseClient() {
   return getSupabaseAdmin();
 }
 
-function isRateLimited(ip: string): boolean {
-  return isSharedRateLimited({
+/** Returns the 429 to send, or `null` to serve the request. */
+function rateLimit(ip: string): NextResponse | null {
+  return rateLimitGuard({
     namespace: "feature-boosts",
     key: ip,
     limit: 30,
@@ -94,9 +95,8 @@ export async function GET() {
 
 export async function POST(req: NextRequest) {
   const ip = getClientIp(req);
-  if (isRateLimited(ip)) {
-    return NextResponse.json({ error: "Too many requests" }, { status: 429 });
-  }
+  const refusal = rateLimit(ip);
+  if (refusal) return refusal;
 
   const parsed = await parseJsonBody<{
     featureId?: string;

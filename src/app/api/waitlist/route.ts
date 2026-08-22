@@ -46,29 +46,33 @@ import { isValidEmail } from "@/lib/validation";
 import { withWriteLock } from "@/lib/fileLock";
 import { readJsonFile, writeJsonFile } from "@/lib/server/json-file-store";
 import { hasSupabaseServiceRole } from "@/lib/server/env";
-import { getClientIp, parseJsonBody } from "@/lib/server/request";
-import { isRateLimited as isSharedRateLimited } from "@/lib/server/rate-limit";
+import { getClientIp, parseJsonBody, apiError, type ApiErrorCode } from "@/lib/server/request";
+import { rateLimitGuard } from "@/lib/server/rate-limit";
 import { captureExceptionScrubbed } from "@/lib/sentry-pii";
 
 const WAITLIST_FILE = "waitlist.json";
 const WAITLIST_TABLE = "waitlist_entries";
 
 /**
- * Stable machine-readable failure reasons. The `error` prose is English-only
- * and is kept for existing/CLI consumers; the browser renders a *translated*
- * string picked from this code (see `waitlistErrorMessage` in
- * src/components/waitlist-modal/waitlistUtils.ts). Never reword a code.
+ * The subset of the shared `ApiErrorCode` union this route can emit. Narrowing
+ * the shared union (rather than re-declaring a parallel one) keeps the codes
+ * the browser already translates byte-identical while making it impossible for
+ * this route to invent a code no other route knows about. Never reword a code
+ * — see the union's docs in src/lib/server/request.ts.
  */
-type WaitlistErrorCode = "rate_limited" | "invalid_email" | "invalid_platform" | "store_unavailable";
+type WaitlistErrorCode = Extract<
+  ApiErrorCode,
+  "rate_limited" | "invalid_email" | "invalid_platform" | "store_unavailable"
+>;
 
-/** `jsonError` shape (`{ error }`) plus the stable `code` — additive only. */
+/** Shared `{ error, code }` refusal, narrowed to this route's codes. */
 function waitlistError(
   error: string,
   code: WaitlistErrorCode,
   status: number,
   headers?: HeadersInit,
 ): NextResponse {
-  return NextResponse.json({ error, code }, { status, headers });
+  return apiError(error, code, status, headers);
 }
 
 // Persist to Supabase only when a WRITABLE server client is available (see the
@@ -106,8 +110,16 @@ const RATE_WINDOW_MS = 60_000; // 1 minute
 const RATE_LIMIT_POST = 5;     // max 5 signups per minute per IP
 const RATE_LIMIT_GET = 30;     // max 30 reads per minute per IP
 
-function rateLimit(ip: string, limit: number): boolean {
-  return isSharedRateLimited({
+/**
+ * Returns the 429 to send, or `null` to serve the request.
+ *
+ * This replaces a `boolean`-returning `rateLimit(ip, limit)` helper whose two
+ * call sites both branched on its negation, so the first N requests per minute
+ * were refused and everything past the limit was let through. The guard has no
+ * polarity to get wrong: the only value it can return is the refusal itself.
+ */
+function rateLimit(ip: string, limit: number): NextResponse | null {
+  return rateLimitGuard({
     namespace: "waitlist",
     key: ip,
     limit,
@@ -145,9 +157,8 @@ async function writeWaitlist(data: WaitlistData): Promise<void> {
 // GET — return counts per platform
 export async function GET(req: NextRequest) {
   const ip = getClientIp(req);
-  if (!rateLimit(ip, RATE_LIMIT_GET)) {
-    return waitlistError("Too many requests", "rate_limited", 429, { "Retry-After": "60" });
-  }
+  const refusal = rateLimit(ip, RATE_LIMIT_GET);
+  if (refusal) return refusal;
 
   if (hasSupabase()) {
     const sb = await getSupabaseClient();
@@ -194,9 +205,8 @@ export async function GET(req: NextRequest) {
 // POST — add an email to the waitlist
 export async function POST(req: NextRequest) {
   const ip = getClientIp(req);
-  if (!rateLimit(ip, RATE_LIMIT_POST)) {
-    return waitlistError("Too many requests", "rate_limited", 429, { "Retry-After": "60" });
-  }
+  const refusal = rateLimit(ip, RATE_LIMIT_POST);
+  if (refusal) return refusal;
 
   const parsed = await parseJsonBody<{ email?: string; platform?: string; earlyBeta?: boolean }>(req);
   if (!parsed.ok) return parsed.response;

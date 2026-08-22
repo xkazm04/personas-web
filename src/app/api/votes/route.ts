@@ -10,7 +10,7 @@ import { NextRequest, NextResponse } from "next/server";
 import { isValidVoterId } from "@/lib/validation";
 import { withWriteLock } from "@/lib/fileLock";
 import { getClientIp, parseJsonBody } from "@/lib/server/request";
-import { isRateLimited } from "./rate-limit";
+import { rateLimit } from "./rate-limit";
 import {
   ALLOWED_FEATURES,
   hasSupabase,
@@ -87,9 +87,8 @@ export async function GET(req: NextRequest) {
 
 export async function POST(req: NextRequest) {
   const ip = getClientIp(req);
-  if (isRateLimited(ip)) {
-    return NextResponse.json({ error: "Too many requests" }, { status: 429 });
-  }
+  const refusal = rateLimit(ip);
+  if (refusal) return refusal;
 
   const parsed = await parseJsonBody<{
     featureId?: string;
