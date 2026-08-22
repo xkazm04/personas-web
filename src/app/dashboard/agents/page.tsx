@@ -100,7 +100,7 @@ export default function AgentsPage() {
     <motion.div initial="hidden" animate="visible" variants={staggerContainer} className="relative">
       <div className="pointer-events-none absolute inset-x-0 top-0 h-80 overflow-hidden">
         <Image
-          src="/gen/backgrounds/bg-agents.png"
+          src="/gen/backgrounds/bg-agents.avif"
           alt=""
           fill
           sizes="100vw"

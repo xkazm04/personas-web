@@ -7,7 +7,10 @@ import { categories } from "@/data/connectors";
 
 export default function ConnectorModalHeader({ connector }: { connector: Connector }) {
   const categoryMeta = categories.find((c) => c.key === connector.category);
-  const iconName = connector.icon ?? connector.name;
+  // No `?? connector.name` fallback — see ConnectorCard for the measurement.
+  // The generator only sets `icon` when the asset exists, so guessing from the
+  // name re-requests exactly the file it decided was absent.
+  const iconName = connector.icon;
   const [imgError, setImgError] = useState(false);
   // Reset imgError when the connector switches: without this, opening any
   // connector with a missing /tools/<icon>.svg permanently latches imgError
@@ -31,7 +34,7 @@ export default function ConnectorModalHeader({ connector }: { connector: Connect
             color: connector.color,
           }}
         >
-          {imgError ? (
+          {!iconName || imgError ? (
             connector.monogram
           ) : (
             <Image

@@ -53,7 +53,7 @@ export default function SettingsPage() {
   return (
     <motion.div initial="hidden" animate="visible" variants={staggerContainer} className="relative">
       <div className="pointer-events-none absolute inset-x-0 top-0 h-80 overflow-hidden">
-        <Image src="/gen/backgrounds/bg-settings.png" alt="" fill sizes="100vw" loading="lazy" className="object-cover opacity-[0.12]" />
+        <Image src="/gen/backgrounds/bg-settings.avif" alt="" fill sizes="100vw" loading="lazy" className="object-cover opacity-[0.12]" />
         <div className="absolute inset-0 bg-gradient-to-b from-transparent via-transparent to-[var(--background)]" />
       </div>
 

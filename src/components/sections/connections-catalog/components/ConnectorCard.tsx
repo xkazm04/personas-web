@@ -17,7 +17,15 @@ export default function ConnectorCard({
   onClick?: () => void;
 }) {
   const categoryMeta = categories.find((cat) => cat.key === c.category);
-  const iconName = c.icon ?? c.name;
+  // No `?? c.name` fallback. The generator sets `icon` only when the asset
+  // exists on disk and deliberately drops it otherwise, so guessing a path from
+  // the entry's name undoes that check and requests a file that by construction
+  // cannot be there. Measured on the shipped catalog: 120 entries carry an
+  // explicit `icon` and every one resolves; the 5 without it are built-in and
+  // local connectors that have no brand asset by nature, and the fallback 404'd
+  // for all 5. It was wrong every time it was used and right none. Absent icon
+  // means monogram, which is what those entries carry a monogram for.
+  const iconName = c.icon;
   const [pillIconFailed, setPillIconFailed] = useState(false);
 
   return (
@@ -42,16 +50,18 @@ export default function ConnectorCard({
         />
       )}
       <div className="pointer-events-none absolute inset-0 flex items-center justify-center overflow-hidden">
-        <Image
-          src={`/tools/${iconName}.svg`}
-          alt=""
-          width={120}
-          height={120}
-          className="opacity-[0.04] transition-[opacity,transform] duration-500 group-hover:opacity-100 group-hover:scale-110"
-          onError={(e) => {
-            (e.target as HTMLImageElement).style.display = "none";
-          }}
-        />
+        {iconName && (
+          <Image
+            src={`/tools/${iconName}.svg`}
+            alt=""
+            width={120}
+            height={120}
+            className="opacity-[0.04] transition-[opacity,transform] duration-500 group-hover:opacity-100 group-hover:scale-110"
+            onError={(e) => {
+              (e.target as HTMLImageElement).style.display = "none";
+            }}
+          />
+        )}
       </div>
 
       <div className="pointer-events-none absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-white/[0.06] to-transparent" />
@@ -85,7 +95,7 @@ export default function ConnectorCard({
             className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-white"
             style={{ boxShadow: `0 0 0 1px ${c.color}40, 0 0 10px ${c.color}26` }}
           >
-            {pillIconFailed ? (
+            {!iconName || pillIconFailed ? (
               <span className="font-mono text-xs font-bold leading-none" style={{ color: c.color }}>
                 {c.monogram}
               </span>
