@@ -20,6 +20,23 @@
  *   - counts below baseline print a reminder to tighten the ratchet.
  *   - node scripts/check-i18n-encoding.mjs --update-baseline  → rewrite the
  *     baseline to current counts (use only after an intentional repair).
+ *
+ * Instrument assertions (checked BEFORE any result is reported):
+ *   - the locale directory must exist;
+ *   - the selected file set must be NON-EMPTY. A checker that walks zero
+ *     inputs and exits 0 reports "clean" when it means "blind" — the most
+ *     expensive kind of green, because the number it prints is reassuring and
+ *     meaningless. Zero files is a broken checker, not a clean repo.
+ *   - every file named in the baseline must still be found by the selector.
+ *     The baseline doubles as a manifest of what SHOULD be scanned, so if the
+ *     selector silently stops matching a file (renamed locale, changed suffix,
+ *     a locale moved to a region-coded name), the gate fails loudly instead of
+ *     quietly measuring a smaller corpus.
+ *
+ * Selection: any *.ts in src/i18n that is not a known non-locale module. This
+ * is deliberately broader than a bare two-letter match so that region-coded
+ * locales (pt-BR.ts, zh-Hant.ts) are covered the day they are added rather
+ * than being silently skipped by a gate that still prints OK.
  */
 import fs from "node:fs";
 import path from "node:path";
@@ -42,10 +59,33 @@ const MOJIBAKE = new RegExp(`[${escapeCls(LEAD)}][${escapeCls(CONT)}]|�`, "g")
 
 const updateBaseline = process.argv.includes("--update-baseline");
 
-const files = fs
-  .readdirSync(I18N_DIR)
-  .filter((f) => /^[a-z]{2}\.ts$/.test(f))
-  .sort();
+// Modules that live in src/i18n but are not locale message files.
+const NON_LOCALE_FILES = new Set(["useTranslation.ts", "index.ts", "types.ts"]);
+// A locale file is <lang>[-<Region|Script>].ts — e.g. en.ts, pt-BR.ts, zh-Hant.ts.
+const LOCALE_FILE = /^[a-z]{2,3}(?:-[A-Za-z0-9]{2,8})*\.ts$/;
+
+if (!fs.existsSync(I18N_DIR) || !fs.statSync(I18N_DIR).isDirectory()) {
+  console.error(
+    `[i18n-encoding] BROKEN CHECKER: locale directory not found: ${I18N_DIR}\n` +
+      `  This gate cannot report "clean" when it cannot find anything to read.`,
+  );
+  process.exit(1);
+}
+
+const allTs = fs.readdirSync(I18N_DIR).filter((f) => f.endsWith(".ts"));
+const files = allTs.filter((f) => !NON_LOCALE_FILES.has(f) && LOCALE_FILE.test(f)).sort();
+
+// ── Instrument assertions ───────────────────────────────────────────────────
+// Assert the instrument before trusting the result.
+if (files.length === 0) {
+  console.error(
+    `[i18n-encoding] BROKEN CHECKER: selected 0 locale files in ${I18N_DIR}.\n` +
+      `  ${allTs.length} .ts file(s) are present but none matched ${LOCALE_FILE}.\n` +
+      `  A mojibake gate that scans nothing and exits 0 reports "clean" when it means\n` +
+      `  "blind". Fix the selector (or the filenames) — this is a FAILURE, not a pass.`,
+  );
+  process.exit(1);
+}
 
 const counts = {};
 const samples = {};
@@ -74,6 +114,20 @@ if (updateBaseline) {
 const baseline = fs.existsSync(BASELINE_PATH)
   ? JSON.parse(fs.readFileSync(BASELINE_PATH, "utf8"))
   : {};
+
+// The baseline doubles as a manifest of what this gate is supposed to scan.
+// If it names a file the selector no longer finds, the gate has gone partly
+// blind — measuring a smaller corpus while still printing OK.
+const unscanned = Object.keys(baseline).filter((f) => !files.includes(f));
+if (unscanned.length > 0) {
+  console.error(
+    `[i18n-encoding] BROKEN CHECKER: ${unscanned.length} file(s) named in the baseline were not\n` +
+      `  scanned: ${unscanned.join(", ")}\n` +
+      `  Either the file was renamed/removed (drop it from ${path.relative(process.cwd(), BASELINE_PATH)})\n` +
+      `  or the selector stopped matching it. Refusing to report on a partial corpus.`,
+  );
+  process.exit(1);
+}
 
 let failed = false;
 let improved = false;
@@ -104,5 +158,7 @@ const dirty = files.filter((f) => counts[f] > 0);
 console.log(
   dirty.length === 0
     ? `[i18n-encoding] OK — all ${files.length} locale files clean`
-    : `[i18n-encoding] OK — no new corruption (${dirty.length} file(s) still carry known baseline debt: ${dirty.map((f) => `${f}=${counts[f]}`).join(", ")})`,
+    : `[i18n-encoding] OK — scanned ${files.length} locale files, no new corruption ` +
+        `(${dirty.length} file(s) still carry known baseline debt: ` +
+        `${dirty.map((f) => `${f}=${counts[f]}`).join(", ")})`,
 );

@@ -17,11 +17,16 @@
 // Companion: scripts/i18n/translate-guide-subagent-prompt.md
 // (the prompt template subagents use when bootstrapping or refreshing
 // a locale).
+//
+// Source extraction and hashing live in ./guide-source.mjs, shared verbatim
+// with emit-source-hashes.mjs. Do not re-implement either here: the two sides
+// must agree on the EXTRACTION as well as the digest, and a hand-copied
+// duplicate is exactly how they previously stayed identically wrong.
 
 import fs from "node:fs";
 import path from "node:path";
-import crypto from "node:crypto";
 import { fileURLToPath } from "node:url";
+import { readEnglishGuide } from "./guide-source.mjs";
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -40,51 +45,6 @@ function parseArgs(argv) {
   return flags;
 }
 
-/** sha1 of a string — used purely as a content identity, not for security. */
-function hashContent(s) {
-  return crypto.createHash("sha1").update(s, "utf8").digest("hex").slice(0, 12);
-}
-
-/**
- * Parse the English content for a category file. The file is a tagged-template
- * literal map of topicId -> markdown string; we use a regex extraction rather
- * than dynamic import because this script runs as a plain node script outside
- * the Next.js build.
- */
-function parseContentFile(filePath) {
-  const src = fs.readFileSync(filePath, "utf8");
-  const out = {};
-  // Match:   "topic-id": `\n  ...body...\n  `,
-  // The body is delimited by unescaped backticks; topic IDs are kebab-case.
-  const re = /"([a-z][a-z0-9-]+)":\s*`([\s\S]*?)`\s*,/g;
-  let m;
-  while ((m = re.exec(src)) !== null) {
-    out[m[1]] = m[2];
-  }
-  return out;
-}
-
-/**
- * Parse topics.ts (English titles + descriptions). Same regex-extraction
- * approach as parseContentFile — we only need the topic id, title, and
- * description fields here.
- */
-function parseTopicsFile(filePath) {
-  const src = fs.readFileSync(filePath, "utf8");
-  const out = {};
-  // Match a topic object literal: { id: "...", categoryId: "...", title: "...", description: "...", ... }
-  // We tolerate the fields appearing in any order and allow other fields between them.
-  const blockRe = /\{\s*id:\s*"([^"]+)"[\s\S]*?title:\s*"([^"]*(?:\\.[^"]*)*)"[\s\S]*?description:\s*\n?\s*"([^"]*(?:\\.[^"]*)*)"/g;
-  let m;
-  while ((m = blockRe.exec(src)) !== null) {
-    out[m[1]] = {
-      title: m[2].replace(/\\"/g, '"'),
-      description: m[3].replace(/\\"/g, '"'),
-    };
-  }
-  return out;
-}
-
 function readMeta(localeDir) {
   const metaPath = path.join(localeDir, "_meta.json");
   if (!fs.existsSync(metaPath)) return { topics: {} };
@@ -98,32 +58,27 @@ function readMeta(localeDir) {
 function main() {
   const flags = parseArgs(process.argv.slice(2));
 
-  const guideContentDir = path.join(REPO_ROOT, "src", "data", "guide", "content");
-  const topicsFile = path.join(REPO_ROOT, "src", "data", "guide", "topics.ts");
   const localesDir = path.join(REPO_ROOT, "src", "data", "guide", "locales");
 
-  // Build English source-of-truth hashes per topic.
-  const englishTopics = parseTopicsFile(topicsFile);
-  const englishContent = {};
-
-  for (const file of fs.readdirSync(guideContentDir)) {
-    if (!file.endsWith(".ts") || file === "index.ts") continue;
-    const parsed = parseContentFile(path.join(guideContentDir, file));
-    Object.assign(englishContent, parsed);
-  }
-
-  const englishHashes = {};
-  for (const topicId of Object.keys(englishTopics)) {
-    const body = englishContent[topicId] ?? "";
-    const meta = englishTopics[topicId];
-    // Combined hash so a title/description change also triggers re-translation.
-    const combined = JSON.stringify({ title: meta.title, description: meta.description, body });
-    englishHashes[topicId] = hashContent(combined);
-  }
+  // Build English source-of-truth hashes per topic. readEnglishGuide throws if
+  // the corpus is empty or a declared topic has no extractable body, so a
+  // "clean" report below always means it measured something real.
+  const { hashes: englishHashes, stats } = readEnglishGuide(REPO_ROOT);
 
   // Compute drift per locale.
+  if (flags.locale && !LOCALES.includes(flags.locale)) {
+    console.error(
+      `[guide-translations] Unknown locale "${flags.locale}". Known: ${LOCALES.join(", ")}`,
+    );
+    process.exit(1);
+  }
+  if (flags.topic && !englishHashes[flags.topic]) {
+    console.error(`[guide-translations] Unknown topic "${flags.topic}" — not present in topics.ts.`);
+    process.exit(1);
+  }
+
   const localesToCheck = flags.locale ? [flags.locale] : LOCALES;
-  const report = { generated: new Date().toISOString(), locales: {} };
+  const report = { generated: new Date().toISOString(), source: stats, locales: {} };
   let totalDrift = 0;
 
   for (const lang of localesToCheck) {
@@ -164,6 +119,10 @@ function main() {
   if (flags.json) {
     console.log(JSON.stringify(report, null, 2));
   } else {
+    console.log(
+      `English source: ${stats.topicCount} topics, ${stats.bodyCount} bodies, ` +
+        `${stats.contentFiles} content file(s)\n`,
+    );
     let any = false;
     for (const [lang, r] of Object.entries(report.locales)) {
       const issues = r.stale.length + r.missing.length + r.orphaned.length;
