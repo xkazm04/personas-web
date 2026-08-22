@@ -41,16 +41,24 @@
  * Verified against ground truth by evaluating the real modules: all 116 bodies
  * now match the values the app itself loads.
  *
- * ── Hash stability caveat (KNOWN, deliberately not changed here) ────────────
+ * ── Line endings: CRLF is canonical, by decision ───────────────────────────
  * Bodies are hashed as RAW SOURCE TEXT: escape sequences stay escaped and line
- * endings are whatever is on disk. The repo has no .gitattributes, so a
- * Windows checkout (CRLF) and a Linux checkout (LF) produce DIFFERENT hashes
- * for 98 of 116 topics. The drift detector is therefore not portable across
- * platforms today, and must not be wired into a Linux CI job until that is
- * resolved. Normalising line endings here would fix portability but would
- * invalidate all 1261 stored pins at once (measured), so it needs a
- * coordinated re-pin and is left as an explicit follow-up rather than folded
- * into the truncation fix.
+ * endings are whatever is on disk. With no .gitattributes, a Windows checkout
+ * (CRLF) and a Linux checkout (LF) produce DIFFERENT hashes for 98 of 116
+ * topics (measured).
+ *
+ * This project targets Windows, and the 1261 stored pins were computed there.
+ * CRLF is therefore the canonical form for these hashes and the divergence is
+ * a SETTLED DECISION, not an open follow-up: we are not normalising, and this
+ * detector is a local Windows tool by design.
+ *
+ * Two consequences worth knowing before anyone changes this:
+ *   - Do NOT run this on a Linux checkout. It will report almost everything
+ *     stale, and that number is about line endings, not translations.
+ *   - If portability is ever wanted, the cheap route is a .gitattributes
+ *     forcing `eol=crlf` on the guide content, which makes every checkout
+ *     match the pins that already exist. Normalising to LF instead would
+ *     invalidate all 1261 pins at once and needs a coordinated re-pin.
  */
 import fs from "node:fs";
 import path from "node:path";

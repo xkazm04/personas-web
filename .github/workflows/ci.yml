@@ -55,18 +55,23 @@ jobs:
       # enforce thresholds only from a machine that has the desktop repo.
       - run: npm run check:guide-coverage
       #
-      # NOT WIRED HERE: `npm run check:guide-translations`.
+      # NOT WIRED HERE, PERMANENTLY: `npm run check:guide-translations`.
       # The stored per-topic source hashes in src/data/guide/locales/*/_meta.json
-      # were computed on Windows and include raw CRLF line endings. With no
-      # .gitattributes, 98 of 116 hashes differ between a Windows and a Linux
-      # checkout, so on ubuntu-latest the detector reports ~100% stale — a
-      # number about line endings, not about translations. Running it here
-      # report-only would print a page of noise; running it --strict would
-      # block every PR for a reason that isn't real. A `runner.os == 'Windows'`
-      # guard was rejected too: this job only ever runs on ubuntu, so the step
-      # would be permanently skipped — config that looks like a gate and is
-      # not. It stays a local-only script until the line endings are normalised
-      # and all 1,261 pins are re-pinned in one coordinated pass.
+      # include raw CRLF line endings, and CRLF is the canonical form by
+      # decision — this project targets Windows and is not normalising. With no
+      # .gitattributes, 98 of 116 hashes differ on a Linux checkout, so on
+      # ubuntu-latest the detector would report ~100% stale: a number about line
+      # endings, not about translations. Report-only here would print a page of
+      # noise; --strict would block every PR for a reason that isn't real. A
+      # `runner.os == 'Windows'` guard was rejected too — this job only ever
+      # runs on ubuntu, so the step would be permanently skipped, which is
+      # config that looks like a gate and is not.
+      #
+      # This is a settled decision, not a pending item. Translation drift is
+      # checked from a Windows machine, deliberately. If someone ever wants it
+      # in CI, the cheap route is a .gitattributes forcing `eol=crlf` on the
+      # guide content so every checkout matches the pins that already exist —
+      # normalising to LF instead invalidates all 1,261 pins at once.
       #
       - run: npm run build
 
