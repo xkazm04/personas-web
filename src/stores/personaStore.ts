@@ -1,6 +1,6 @@
 import { create } from "zustand";
-import * as Sentry from "@sentry/nextjs";
 import { api } from "@/lib/api";
+import { captureExceptionScrubbed } from "@/lib/sentry-pii";
 import type { Persona } from "@/lib/types";
 
 interface PersonaState {
@@ -19,6 +19,35 @@ interface PersonaState {
    */
   personasError: string | null;
   fetchPersonas: () => Promise<void>;
+
+  // ───────────────────────────────────────────────────────────────────────
+  // DORMANT: the optimistic-write path below has NO CALLERS.
+  //
+  // `optimisticUpdatePersona`, `rollbackPersona` and `commitOptimisticUpdate`
+  // — together with the per-id mutex (`personaMutationInflight`) and the CAS
+  // guard (`patchStillApplied`) — are fully implemented and believed correct,
+  // but nothing in `src/` invokes them. A repo-wide search finds only these
+  // definitions and their own internal references.
+  //
+  // This is a KEPT capability, not an oversight, and not a claim that it
+  // works in production. It has never run outside tests: the agents page's
+  // execute path calls `api.executePersona` without touching the store, and
+  // the dashboard's only live optimistic writes live in `reviewStore`. There
+  // is no per-persona inline edit/toggle UI yet — when one is built, this is
+  // the intended pattern for it, which is why it survives rather than being
+  // deleted.
+  //
+  // Two consequences the next reader should not have to rediscover:
+  //   - Do not cite this code as evidence that persona mutations are
+  //     concurrency-safe. Nothing exercises it end to end.
+  //   - `patchStillApplied` compares with `!==`, so it is only sound for
+  //     patches of primitive fields. Wiring it to a patch carrying an object
+  //     or array (`config`, tags) needs a value-equality check first.
+  //
+  // If a persona-mutation UI lands and does NOT use this, delete the whole
+  // path instead of leaving a second dormant copy.
+  // ───────────────────────────────────────────────────────────────────────
+
   /**
    * Apply a patch to the local persona record. Returns the pre-update
    * snapshot so callers can pass it to `rollbackPersona` if the wrapped
@@ -55,7 +84,11 @@ const PERSONA_STALE_MS = 300_000;
 
 let inflight: Promise<void> | null = null;
 
-// Per-id mutex for optimistic updates. Two rapid clicks on the same toggle
+// Per-id mutex for optimistic updates. See the DORMANT banner in
+// `PersonaState` above: this and everything it guards currently has no
+// caller, so the bug described below is prevented in theory only.
+//
+// Two rapid clicks on the same toggle
 // (or two panels writing to the same persona concurrently) used to capture
 // overlapping snapshots — snapshot B was taken *after* A's optimistic patch
 // landed, so a rollback of B reverted to A's patched value rather than the
@@ -140,7 +173,7 @@ export const usePersonaStore = create<PersonaState>((set) => ({
       .catch((err) => {
         // Keep any stale data on screen, but record the failure so the UI can
         // surface it (and retry) instead of falling back to an empty state.
-        Sentry.captureException(err, { tags: { scope: "fetchPersonas" } });
+        captureExceptionScrubbed(err, { tags: { scope: "fetchPersonas" } });
         set({
           personasError: err instanceof Error ? err.message : "Failed to load agents",
         });

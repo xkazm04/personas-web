@@ -6,17 +6,28 @@ import {
   MOCK_HEALTH_DIGEST,
   MOCK_HEALTH_ISSUES,
   MOCK_SLA_BREACHES,
+  type IncidentSeverity,
+  type SLASeverity,
 } from "@/lib/mock-dashboard-data";
+import type { ReviewSeverity } from "@/lib/types";
 import { useAuthStore } from "@/stores/authStore";
 import { useReviewStore } from "@/stores/reviewStore";
 
 export type TriageKind = "breach" | "incident" | "review";
 
+/**
+ * Every severity word this pane can be handed, as the union of the three
+ * source vocabularies it merges. These stay three separate scales on purpose
+ * — an SLA breach, a health incident, and a manual review grade different
+ * things — so this union is the *only* place they meet.
+ */
+export type TriageSeverity = SLASeverity | IncidentSeverity | ReviewSeverity;
+
 export interface TriageItem {
   id: string;
   kind: TriageKind;
   /** Raw severity from the source (SLA / health / review vocabularies). */
-  severity: string;
+  severity: TriageSeverity;
   /** Normalized urgency used for ranking + tone selection. */
   weight: number;
   persona?: string;
@@ -29,7 +40,16 @@ export interface TriageItem {
 
 // Cross-vocabulary severity → urgency weight. Higher sorts first and drives
 // the row tone (rose ≥ 90, amber ≥ 50, cyan otherwise).
-const SEVERITY_WEIGHT: Record<string, number> = {
+//
+// Typed as `Record<TriageSeverity, number>`, NOT `Record<string, number>` —
+// that is the whole safety story here. Because the key type is derived from
+// the three source unions, this table cannot drift from them in either
+// direction: add a member to `SLASeverity` / `IncidentSeverity` /
+// `ReviewSeverity` and `tsc` fails with a missing property until it is
+// weighted here; delete a member and the leftover key fails as an excess
+// property. Do not widen the key type to `string` to "fix" a build error —
+// that error IS the check doing its job.
+const SEVERITY_WEIGHT: Record<TriageSeverity, number> = {
   critical: 100,
   major: 75,
   high: 70,
@@ -69,7 +89,7 @@ export function useTriageQueue(): TriageItem[] {
           id: `tri-${breach.id}`,
           kind: "breach",
           severity: breach.severity,
-          weight: SEVERITY_WEIGHT[breach.severity] ?? 0,
+          weight: SEVERITY_WEIGHT[breach.severity],
           persona: breach.persona,
           personaColor: PERSONA_COLOR[breach.persona],
           summary: breach.summary,
@@ -83,7 +103,7 @@ export function useTriageQueue(): TriageItem[] {
           id: `tri-${issue.id}`,
           kind: "incident",
           severity: issue.severity,
-          weight: SEVERITY_WEIGHT[issue.severity] ?? 0,
+          weight: SEVERITY_WEIGHT[issue.severity],
           persona: issue.personaName ?? undefined,
           personaColor: issue.personaName ? PERSONA_COLOR[issue.personaName] : undefined,
           summary: issue.title,
@@ -100,7 +120,7 @@ export function useTriageQueue(): TriageItem[] {
         id: `tri-${review.id}`,
         kind: "review",
         severity: review.severity,
-        weight: SEVERITY_WEIGHT[review.severity] ?? 0,
+        weight: SEVERITY_WEIGHT[review.severity],
         persona: review.personaName ?? undefined,
         personaColor: review.personaColor ?? undefined,
         summary: firstLine || review.eventType,

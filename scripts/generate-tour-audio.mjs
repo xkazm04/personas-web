@@ -3,16 +3,30 @@
  *
  *   node --env-file=.env scripts/generate-tour-audio.mjs            # all below
  *   node --env-file=.env scripts/generate-tour-audio.mjs step1 step3  # subset
+ *   node scripts/generate-tour-audio.mjs --check   # print resolved lines, no API call
  *
  * Falls back to parsing .env itself if --env-file isn't supported. Writes
  * <key>.mp3 into the configured outputDir (public/tour/). Voice / model /
  * settings come from scripts/tour-audio.config.mjs.
  *
- * LINES below are the ENGLISH narration — keep in sync with the matching
- * `tour.*` keys in src/i18n/en.ts (the source of truth for on-screen text).
+ * NARRATION SOURCE: the spoken lines are READ FROM `src/i18n/en.ts` at run
+ * time — they are not copied here. `tour.*` in the locale is the single
+ * source of truth for both the on-screen caption and the voiceover, so the
+ * two cannot drift. (They had: the previous hand-maintained copy of these
+ * lines, kept in step by a "keep in sync" comment, had already fallen behind
+ * en.ts on `step3` and `step4`.)
+ *
+ * The locale is loaded the same zero-dependency way `check-i18n-coverage.mjs`
+ * does it: transpile the .ts with the TypeScript compiler API and evaluate it
+ * in a `vm` sandbox whose `require` throws. No Next build, no app runtime,
+ * no bundler — en.ts is a pure data module with no imports, and the sandbox
+ * enforces that.
  */
 import { writeFileSync, mkdirSync, readFileSync, existsSync } from "node:fs";
-import { join } from "node:path";
+import { dirname, join } from "node:path";
+import { fileURLToPath } from "node:url";
+import vm from "node:vm";
+import ts from "typescript";
 import { tourAudioConfig as cfg } from "./tour-audio.config.mjs";
 
 // Minimal .env loader so the script works without --env-file too.
@@ -24,6 +38,113 @@ function loadEnv() {
     if (m && !process.env[m[1]]) process.env[m[1]] = m[2];
   }
 }
+const LOCALE_PATH = join(dirname(fileURLToPath(import.meta.url)), "..", "src", "i18n", "en.ts");
+
+/** Evaluate `src/i18n/en.ts` and return its `tour` block. Throws if it moved. */
+function loadTourCopy() {
+  const source = readFileSync(LOCALE_PATH, "utf8");
+  const compiled = ts.transpileModule(source, {
+    compilerOptions: {
+      module: ts.ModuleKind.CommonJS,
+      target: ts.ScriptTarget.ES2020,
+      esModuleInterop: true,
+    },
+    fileName: LOCALE_PATH,
+  }).outputText;
+
+  const sandbox = {
+    exports: {},
+    module: { exports: {} },
+    // en.ts must stay a pure data module — a runtime import would mean the
+    // narration can no longer be read without the app's build.
+    require: (specifier) => {
+      throw new Error(`Unexpected runtime import "${specifier}" in ${LOCALE_PATH}`);
+    },
+  };
+  sandbox.exports = sandbox.module.exports;
+  vm.runInNewContext(compiled, sandbox, { filename: LOCALE_PATH });
+
+  const en = sandbox.module.exports.en ?? sandbox.exports.en;
+  if (!en || typeof en.tour !== "object") {
+    throw new Error(`Could not read \`en.tour\` from ${LOCALE_PATH}`);
+  }
+  return en.tour;
+}
+
+// Lines with no on-screen counterpart, so they cannot come from the locale.
+// Athena's spoken greeting is voiceover-only — the intro pop-up shows
+// `tour.introBody`, which is different copy written for reading, not speech.
+const SPOKEN_ONLY = {
+  intro:
+    "Project loaded. Hello, Commander, my name is Athena, and I'll assist you in getting familiar with Personas. I'll walk you through it in about a minute... Pause or skip anytime.",
+};
+
+// The generated set, in recording order. Every entry not in SPOKEN_ONLY is a
+// `tour.<key>` lookup in en.ts. `tour.roadmap1-3` exist in the locale but are
+// not generated yet — add them here to start recording them.
+const NARRATION_ORDER = [
+  // Homepage.
+  "step1",
+  "step2",
+  "step3",
+  "step4",
+  "step5",
+  "intro",
+  // /features.
+  "features1",
+  "features2",
+  "features3",
+  "features4",
+  "features5",
+  "features6",
+  // /dashboard — one recording per page. The home clip is one continuous
+  // track; the spotlight sweeps across its sections in time with it.
+  "dashboardHome",
+  "dashboardAgents",
+  "dashboardExecutions",
+  "dashboardEvents",
+  "dashboardReviews",
+];
+
+const tour = loadTourCopy();
+const LINES = {};
+const missingFromLocale = [];
+for (const key of NARRATION_ORDER) {
+  if (key in SPOKEN_ONLY) {
+    LINES[key] = SPOKEN_ONLY[key];
+    continue;
+  }
+  const text = tour[key];
+  if (typeof text !== "string" || text.trim() === "") {
+    missingFromLocale.push(key);
+    continue;
+  }
+  LINES[key] = text;
+}
+// Fail loudly rather than silently recording a shorter tour: a renamed or
+// deleted locale key must stop the run, not quietly drop a chapter.
+if (missingFromLocale.length > 0) {
+  console.error(
+    `Missing/empty tour.* keys in ${LOCALE_PATH}: ${missingFromLocale.join(", ")}\n` +
+      "Either restore them in the locale or remove them from NARRATION_ORDER.",
+  );
+  process.exit(1);
+}
+
+const args = process.argv.slice(2);
+
+// `--check` resolves the narration and prints it without calling ElevenLabs,
+// so the exact text about to be recorded can be reviewed (and diffed) before
+// spending API credits. Runs before the API-key gate on purpose.
+if (args.includes("--check")) {
+  for (const [key, text] of Object.entries(LINES)) {
+    const origin = key in SPOKEN_ONLY ? "script" : "en.tour";
+    console.log(`${key}\t[${origin}]\t${text}`);
+  }
+  console.log(`\n${Object.keys(LINES).length} lines resolved from ${LOCALE_PATH}.`);
+  process.exit(0);
+}
+
 loadEnv();
 
 const API_KEY = process.env[cfg.apiKeyEnv];
@@ -32,54 +153,7 @@ if (!API_KEY) {
   process.exit(1);
 }
 
-// Homepage narration (the set being evaluated). Add features*/roadmap* here
-// when expanding generation beyond the homepage.
-const LINES = {
-  step1:
-    "Meet a persona — a single AI agent with one stable identity and a composable set of skills. Give it the tools it needs, from Gmail and Slack to GitHub and your calendar, and it learns to act across all of them. One persona, many jobs, all working together.",
-  step2:
-    'Now hand that persona a goal in plain language, like "triage my Gmail." Watch its mind work in real time: it reads the request, breaks it into steps, and plans its approach before touching a thing. Then it executes — and shows you every move as it goes.',
-  step3:
-    "An agent is only as useful as the moments it wakes up for. Personas can be triggered eight ways — on a schedule, by an event, by polling a source, or from an incoming webhook. The orchestrator routes each signal to the right agent and keeps everything moving, healing itself if a step ever fails.",
-  step4:
-    "All of this rests on one platform built for trust and scale. An encrypted vault guards your credentials, ready-made templates get you moving fast, and bring-your-own-model keeps you in control of the AI. Live monitoring, an experimentation lab, and team orchestration round it out.",
-  step5:
-    "Ready to put a persona to work? Personas runs on your own machine through Claude Code — Anthropic's command-line tool — so you stay private and in control. Download the installer for Windows 11, connect the CLI, and your first agent is live in minutes.",
-
-  // Athena's spoken greeting for the intro pop-up.
-  intro:
-    "Project loaded. Hello, Commander, my name is Athena, and I'll assist you in getting familiar with Personas. I'll walk you through it in about a minute... Pause or skip anytime.",
-
-  // /features narration (matches tour.features1-6 in src/i18n/en.ts).
-  features1:
-    "Every agent is born from a single sentence of intent. Personas reads what you want and fills an eight-dimension persona matrix — tasks, memory, triggers, review, and more — asking you only when it truly needs a decision. In moments, a vague idea becomes a structured, executable agent.",
-  features2:
-    "Then it starts to learn. Every task it runs leaves a trace, and the lessons that matter rise into its memory layers while noise settles to the bottom. The more your agent works, the sharper and more context-aware it becomes.",
-  features3:
-    "Real work breaks, so Personas is built to recover. When a step fails, the circuit does not stall — it diagnoses what went wrong, repairs the path, and retries on its own. No 3 a.m. alerts, no manual restarts; the workflow simply keeps moving.",
-  features4:
-    "And you never lose sight of any of it. Every execution, message, event, and memory streams live through one observability deck — sparklines, costs, and status, all in real time. Full transparency, zero setup.",
-  features5:
-    "Great agents are rarely right the first time, so the Lab is where you refine them. Chat with a persona to coach it, pit two versions against each other in the arena, evolve it across generations, or score it on the dimensions that matter. Every improvement you keep is versioned and reversible.",
-  features6:
-    "Personas ships with six purpose-built plugins, each a self-contained workspace your agents can drive. Take Dev Tools: it turns a persona into a coding teammate that runs tasks, reads the output, and iterates. Switch a tab and you meet another specialist — all sharing the same credentials and memory.",
-
-  // /dashboard narration — one recording per page (matches tour.dashboard* in
-  // src/i18n/en.ts). The home clip is one continuous track; the spotlight
-  // sweeps across its sections in time with the narration.
-  dashboardHome:
-    "Welcome to mission control — your whole fleet on one screen. Up top, the vitals: success rate, runs in flight, active agents, open alerts, and reviews waiting on you. Below that, the optimizer surfaces one high-leverage fix at a time — right now, a routing change that trims cost without touching quality. The two panels beneath track each agent's health and the new memories they've learned and want to promote. Then the live picture: every execution as it lands on the left, fourteen days of traffic and errors on the right. The heatmap shows runs per agent, day by day, and the bottom row rounds it out — your top performers, the next scheduled routines, and every credential rotation. One page, the entire operation.",
-  dashboardAgents:
-    "This is your roster. Each card is a persona — a single agent with one identity and a set of skills it can compose. The portrait is generated to match its character; below it, the live stats: success rate, runs, and spend. Hit Execute to run one on demand, or open Details to inspect its configuration and recent history. Five agents here, each quietly doing one job well.",
-  dashboardExecutions:
-    "Every run the fleet has made lives here, newest first. The table shows the persona, status, duration, cost, and when it started — filter down to just the failures, or the ones still running. Click any row and the full execution opens: a metrics strip, any error explanation, and the live output streaming line by line, exactly as the agent produced it.",
-  dashboardEvents:
-    "Agents don't work in isolation — they react to events. This is the event bus: every signal flowing through the system, from schedules and webhooks to messages between agents. Each row shows the event type, its source, status, and how long ago it fired. Failed events can be retried in place, and related events chain together so you can follow a single cascade end to end.",
-  dashboardReviews:
-    "Some decisions need a human. When an agent hits something it shouldn't decide alone, it pauses and routes the call here. Each item carries the persona, the context, and the action it's proposing — approve it, reject it, or skip for later, by click or by keyboard. Nothing risky ships without your sign-off, and the queue keeps the rest of the fleet moving while you decide.",
-};
-
-const keys = process.argv.slice(2).length ? process.argv.slice(2) : Object.keys(LINES);
+const keys = args.length ? args : Object.keys(LINES);
 mkdirSync(cfg.outputDir, { recursive: true });
 
 for (const key of keys) {
