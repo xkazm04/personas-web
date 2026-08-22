@@ -7,7 +7,18 @@ export default defineConfig({
   fullyParallel: false,
   workers: 1,
   // One retry so trace-on-first-retry can actually produce a trace on failure.
+  // Dropping to 0 would delete the traces along with the retry, so the retry
+  // stays and the silence it caused is fixed below instead.
   retries: 1,
+  // A spec that fails then passes on the retry used to exit 0 with no record
+  // anywhere: green run, no annotation, trace discarded because the artifact
+  // upload is gated on failure(). The repo has no flake register, so the only
+  // honest place to record a flake is the run itself — under CI a flaky result
+  // is a failed result, which turns the run red AND ships the on-first-retry
+  // trace as an artifact. Locally it stays off: the list reporter already
+  // prints "flaky" to a developer who is watching, and failing their run
+  // produces friction without producing a record.
+  failOnFlakyTests: !!process.env.CI,
   use: {
     baseURL: "http://localhost:3002",
     trace: "on-first-retry",

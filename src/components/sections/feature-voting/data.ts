@@ -8,16 +8,30 @@ export const featureIllustrations: Record<string, string> = {
   enterprise: "/gen/vote/vote-enterprise.png",
 };
 
-// The `votes` field is a marketing seed displayed before+added to real API vote
-// counts. Edit here to change initial display numbers. Display copy (title +
-// description) lives in i18n under `featureVoting.features[id]` — keyed by `id`,
-// which also links to the server-side `ALLOWED_FEATURES` allowlist.
+/**
+ * The `votes` field is a marketing SEED — a number a person typed, added on top
+ * of the real API vote count before display. Edit here to change initial
+ * display numbers. Display copy (title + description) lives in i18n under
+ * `featureVoting.features[id]` — keyed by `id`, which also links to the
+ * server-side `ALLOWED_FEATURES` allowlist.
+ *
+ * PROVENANCE: nothing measured produced these four numbers, and every surface
+ * that renders `seed + apiCount` is therefore showing a commitment, not a
+ * count. The seed itself is a deliberate product decision and stays; what it
+ * must not do is wear a liveness badge unchallenged, so
+ * `FeatureVotingSummary` marks any seeded total with an "approximately" sign
+ * and withholds the "Live" label until real data is actually on screen.
+ * Comment counts and boost totals, by contrast, are pure API measurements.
+ */
 export const features: Feature[] = [
   { id: "macos", accent: "cyan", votes: 342 },
   { id: "i18n", accent: "purple", votes: 189 },
   { id: "dashboard", accent: "emerald", votes: 276 },
   { id: "enterprise", accent: "amber", votes: 214 },
 ];
+
+/** Derived: the hand-authored portion of every displayed vote total. */
+export const SEED_VOTES_TOTAL = features.reduce((sum, f) => sum + f.votes, 0);
 
 export const localAccentTokens: Record<Feature["accent"], AccentToken> = {
   cyan: { r: 6, g: 182, b: 212, tw: "brand-cyan" },

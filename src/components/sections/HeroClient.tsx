@@ -10,14 +10,15 @@ import SectionHeading from "@/components/SectionHeading";
 import FloatingParticles from "@/components/FloatingParticles";
 import PrimaryCTA from "@/components/PrimaryCTA";
 import HoneycombMark from "@/components/HoneycombMark";
-import { useLiveStats } from "@/hooks/useLiveStats";
+import { isMeasuredStat, useLiveStats } from "@/hooks/useLiveStats";
 import { useAnimationPauseRegister } from "@/hooks/useAnimationPause";
 import { useTranslation } from "@/i18n/useTranslation";
 import TourLauncher from "@/components/tour/TourLauncher";
 import CommandCenterIllustration from "./hero/CommandCenterIllustration";
 import HeroStatRow from "./hero/HeroStatRow";
 
-export default function HeroClient({ connectorCount }: { connectorCount: number }) {
+// `connectorCount`/`templateCount` are derived server-side — see `Hero.tsx`.
+export default function HeroClient({ connectorCount, templateCount }: { connectorCount: number; templateCount: number }) {
   const { t } = useTranslation();
   const differentiators = [
     { label: t.hero.mode2, Icon: Wand2 },
@@ -33,13 +34,19 @@ export default function HeroClient({ connectorCount }: { connectorCount: number 
   const sectionRef = useRef<HTMLElement>(null);
   useAnimationPauseRegister(sectionRef);
 
+  // Connectors/templates are exact counts of the shipped catalogs. `totalAgents`
+  // has no data source — /api/stats returns a floor or a seed — so it wears a
+  // locale-neutral "approximately" sign unless the API tags it as measured.
+  const agentsValue = isMeasuredStat(liveStats, "totalAgents")
+    ? String(liveStats.totalAgents)
+    : `≈${liveStats.totalAgents}`;
   const heroStats = useMemo(
     () => [
-      { value: String(liveStats.totalAgents), label: t.hero.agents },
+      { value: agentsValue, label: t.hero.agents },
       { value: String(connectorCount), label: t.hero.connectors },
-      { value: `${liveStats.totalTemplates}+`, label: t.hero.templates },
+      { value: String(templateCount), label: t.hero.templates },
     ],
-    [liveStats.totalAgents, liveStats.totalTemplates, connectorCount, t],
+    [agentsValue, connectorCount, templateCount, t],
   );
 
   // 3D tilt for the right card

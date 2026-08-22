@@ -2,7 +2,7 @@
 
 import { useCallback, useEffect, useRef, useState, type FormEvent } from "react";
 import { AnimatePresence, motion, useReducedMotion } from "framer-motion";
-import * as Sentry from "@sentry/nextjs";
+import { captureExceptionScrubbed } from "@/lib/sentry-pii";
 import { TRANSITION_FAST, TRANSITION_NORMAL } from "@/lib/animations";
 import { lockBodyScroll, unlockBodyScroll } from "@/lib/bodyScrollLock";
 import { useTranslation } from "@/i18n/useTranslation";
@@ -52,7 +52,7 @@ export default function WaitlistModal({ platformKey, platformLabel, platformIcon
       // Swallow aborts (close/re-open); report genuine failures. The header
       // degrades gracefully by leaving `waitlistCount` null.
       if (err instanceof DOMException && err.name === "AbortError") return;
-      Sentry.captureException(err, { tags: { component: "WaitlistModal" } });
+      captureExceptionScrubbed(err, { tags: { component: "WaitlistModal" } });
     }
   }, [platformKey]);
 
@@ -118,7 +118,7 @@ export default function WaitlistModal({ platformKey, platformLabel, platformIcon
         // fallback) picks a translated sentence instead. The Sentry title stays
         // machine-readable and carries no email.
         const code = typeof data.code === "string" ? data.code : "none";
-        Sentry.captureException(new Error(`waitlist POST failed (status=${res.status}, code=${code})`), { tags: { component: "WaitlistModal" } });
+        captureExceptionScrubbed(new Error(`waitlist POST failed (status=${res.status}, code=${code})`), { tags: { component: "WaitlistModal" } });
         setStatus("error");
         setErrorMsg(waitlistErrorMessage(res.status, data.code, waitlistErrorLabels(t)));
         return;
@@ -144,7 +144,7 @@ export default function WaitlistModal({ platformKey, platformLabel, platformIcon
         }
         return;
       }
-      Sentry.captureException(err, { tags: { component: "WaitlistModal" } });
+      captureExceptionScrubbed(err, { tags: { component: "WaitlistModal" } });
       setStatus("error");
       // Transport/parse failures carry no server code — always the generic line.
       setErrorMsg(t.waitlist.errorGeneric);

@@ -11,23 +11,63 @@ on:
     # runs automatically (it rebuilds the app and takes ~10 minutes).
     - cron: "17 3 * * *"
 
+# Action pins are by commit SHA with the tag in a trailing comment (a tag is a
+# movable ref; a SHA is not). Each SHA below was resolved from the GitHub API
+# tag ref on 2026-08-22 and is the current latest release. To move a pin:
+# resolve the new tag to its SHA, replace both, and update the comment.
+
 jobs:
   checks:
-    name: typecheck · lint · unit · i18n · build
+    name: typecheck · lint · unit · i18n · guide · build
     runs-on: ubuntu-latest
-    if: github.event_name != 'schedule'
+    # NOTE: this job deliberately has NO `if:` guard.
+    #
+    # It used to carry `if: github.event_name != 'schedule'`, which meant the
+    # nightly runs — the ones that dominate the Actions default view — skipped
+    # every check and showed only the e2e job. When `npm run lint` started
+    # failing, every push run on master went red for five weeks and nobody saw
+    # it, because the runs people looked at were the nightly ones that never
+    # ran lint at all. The checks are ~3 minutes; running them nightly as well
+    # costs almost nothing and makes a broken master visible in the view that
+    # actually gets read.
     steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-node@v4
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+      - uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v7.0.0
         with:
           node-version: 22
           cache: npm
       - run: npm ci
       - run: npm run typecheck
+      # Warning ceiling — see the enforcement policy comment in eslint.config.mjs.
       - run: npm run lint
       - run: npm run test:unit
       - run: npm run check:i18n-coverage
       - run: npm run check:i18n-encoding
+      # Gate: a topic listed in GUIDE_TOPICS but absent from its category's
+      # content module 404s while still shipping SEO tags. Bidirectional, so a
+      # partial parse fails loudly in both directions rather than passing thin.
+      - run: npm run check:guide-content
+      # Report-only, on purpose: no --fail-under / --fail-stale-over /
+      # --fail-drift-over. The drift signal needs a sibling `personas` desktop
+      # checkout, which no runner has, so the script reports every topic as
+      # `desktop-repo-unavailable` and exits 0. A threshold here would be
+      # reading a measurement that was never taken. Read the numbers in the log;
+      # enforce thresholds only from a machine that has the desktop repo.
+      - run: npm run check:guide-coverage
+      #
+      # NOT WIRED HERE: `npm run check:guide-translations`.
+      # The stored per-topic source hashes in src/data/guide/locales/*/_meta.json
+      # were computed on Windows and include raw CRLF line endings. With no
+      # .gitattributes, 98 of 116 hashes differ between a Windows and a Linux
+      # checkout, so on ubuntu-latest the detector reports ~100% stale — a
+      # number about line endings, not about translations. Running it here
+      # report-only would print a page of noise; running it --strict would
+      # block every PR for a reason that isn't real. A `runner.os == 'Windows'`
+      # guard was rejected too: this job only ever runs on ubuntu, so the step
+      # would be permanently skipped — config that looks like a gate and is
+      # not. It stays a local-only script until the line endings are normalised
+      # and all 1,261 pins are re-pinned in one coordinated pass.
+      #
       - run: npm run build
 
   e2e:
@@ -36,15 +76,18 @@ jobs:
     # Slow (full production build + serial suite) — nightly and on demand only.
     if: github.event_name == 'schedule' || github.event_name == 'workflow_dispatch'
     steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-node@v4
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+      - uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v7.0.0
         with:
           node-version: 22
           cache: npm
       - run: npm ci
       - run: npx playwright install --with-deps chromium
       - run: npx playwright test
-      - uses: actions/upload-artifact@v4
+      # `failure()` now also covers a passed-on-retry run: playwright.config.ts
+      # sets failOnFlakyTests under CI, so the trace that `on-first-retry`
+      # produced for a flake is uploaded instead of being discarded on a green run.
+      - uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
         if: failure()
         with:
           name: playwright-traces

@@ -1,4 +1,4 @@
-import * as Sentry from "@sentry/nextjs";
+import { captureExceptionScrubbed } from "./sentry-pii";
 import { useAuthStore } from "@/stores/authStore";
 import { mockApi } from "./mockApi";
 import { supabaseApi } from "./supabaseApi";
@@ -251,7 +251,7 @@ const realApi: ApiClient = {
             fulfilled.push(...result.value);
           } else {
             const personaId = personas[i]?.id;
-            Sentry.captureException(result.reason, {
+            captureExceptionScrubbed(result.reason, {
               tags: { scope: "listAllSubscriptions" },
               contexts: { persona: { id: personaId } },
             });

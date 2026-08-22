@@ -31,12 +31,22 @@ const ease = (t: number) => 0.5 - 0.5 * Math.cos(Math.PI * t);
  * Imports `useReducedMotion` per `custom-animation/require-animation-gating`;
  * when set, the tween is skipped and the cutout snaps to each step.
  *
- * The scrim uses a literal dark colour, not a theme token: a cinematic dim
- * must stay dark in every theme, and `--background` collapses to a light
- * system colour under `prefers-color-scheme: light` / forced-colors (literal
- * hex for overlay scrims is sanctioned in `.claude/design.md`). The ring,
- * however, uses the themed `--brand-cyan` accent so it matches the caption
- * card and the rest of the active theme.
+ * The scrim is a literal `rgba(8, 11, 20, 0.8)`, not a theme token, and the
+ * reason is the scrim's job rather than a style waiver: it exists to darken
+ * whatever is behind it, so it must stay dark in every theme. A themed token
+ * cannot do that — `--background` resolves to a light colour under
+ * `prefers-color-scheme: light` and under forced-colors, which would make the
+ * "dim" brighter than the page and destroy the cutout entirely. The literal
+ * is load-bearing: it is the one value here that must NOT follow the theme.
+ *
+ * Note this is a deliberate exception to the "semantic tokens only, never raw
+ * colour values" rule in `.claude/design.md` §1, which sanctions exactly one
+ * other literal (`#0a0f1a` for modal/popover surfaces) and does not cover
+ * scrims. Justified above rather than by citation — do not read it as blanket
+ * permission for literal colours elsewhere in the tour components.
+ *
+ * The ring, by contrast, uses the themed `--brand-cyan` accent so it matches
+ * the caption card and the rest of the active theme.
  */
 export default function TourSpotlight() {
   const { active, activeSpotlight } = useTour();

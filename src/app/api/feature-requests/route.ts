@@ -9,14 +9,15 @@ import { NextRequest, NextResponse } from "next/server";
 import { hasSupabaseEnv } from "@/lib/server/env";
 import { updateJsonFile } from "@/lib/server/json-file-store";
 import { getClientIp, jsonError, parseJsonBody } from "@/lib/server/request";
-import { isRateLimited as isSharedRateLimited } from "@/lib/server/rate-limit";
+import { rateLimitGuard } from "@/lib/server/rate-limit";
 
 // ---------------------------------------------------------------------------
 // Rate limiting (in-memory, per-IP, resets on deploy)
 // ---------------------------------------------------------------------------
 
-function isRateLimited(ip: string): boolean {
-  return isSharedRateLimited({
+/** Returns the 429 to send, or `null` to serve the request. */
+function rateLimit(ip: string): NextResponse | null {
+  return rateLimitGuard({
     namespace: "feature-requests",
     key: ip,
     limit: 10,
@@ -58,9 +59,8 @@ interface RequestsData {
 
 export async function POST(req: NextRequest) {
   const ip = getClientIp(req);
-  if (isRateLimited(ip)) {
-    return jsonError("Too many requests", 429, { "Retry-After": "60" });
-  }
+  const refusal = rateLimit(ip);
+  if (refusal) return refusal;
 
   const parsed = await parseJsonBody<{ text?: string }>(req, {
     maxBytes: 4 * 1024,

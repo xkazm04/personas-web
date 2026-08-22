@@ -3,10 +3,12 @@
  * IP is used only transiently here — never persisted to disk or database.
  */
 
-import { isRateLimited as isSharedRateLimited } from "@/lib/server/rate-limit";
+import type { NextResponse } from "next/server";
+import { rateLimitGuard } from "@/lib/server/rate-limit";
 
-export function isRateLimited(ip: string): boolean {
-  return isSharedRateLimited({
+/** Returns the 429 to send, or `null` to serve the request. */
+export function rateLimit(ip: string): NextResponse | null {
+  return rateLimitGuard({
     namespace: "votes",
     key: ip,
     limit: 20,

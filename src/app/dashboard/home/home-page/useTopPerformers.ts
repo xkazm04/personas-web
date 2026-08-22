@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import * as Sentry from "@sentry/nextjs";
+import { captureExceptionScrubbed } from "@/lib/sentry-pii";
 
 import { useAuthStore } from "@/stores/authStore";
 import { useTranslation } from "@/i18n/useTranslation";
@@ -28,40 +28,43 @@ export function useTopPerformers(): TopPerformersData {
   const { t } = useTranslation();
   const loadFailed = t.dashboard.home.errors.topPerformers;
 
-  const [leaderboard, setLeaderboard] = useState<LeaderboardPersona[]>(
-    useMock ? MOCK_LEADERBOARD : [],
-  );
-  const [loading, setLoading] = useState(!useMock);
-  const [error, setError] = useState<string | null>(null);
+  // Only the *fetched* half lives in state. The demo values are a pure function
+  // of `useMock`, so they're derived during render below rather than copied
+  // into state by the effect: mirroring store state into React state costs an
+  // extra render pass before paint, and left one frame of the previous
+  // account's leaderboard on screen whenever `isDemo` flipped mid-session.
+  const [fetchedLeaderboard, setFetchedLeaderboard] = useState<LeaderboardPersona[]>([]);
+  const [fetchLoading, setFetchLoading] = useState(true);
+  const [fetchError, setFetchError] = useState<string | null>(null);
   const [reloadKey, setReloadKey] = useState(0);
 
   useEffect(() => {
-    if (useMock) {
-      setLeaderboard(MOCK_LEADERBOARD);
-      setError(null);
-      setLoading(false);
-      return;
-    }
+    // Demo mode has nothing to fetch; the mock leaderboard is derived below.
+    if (useMock) return;
     let cancelled = false;
     (async () => {
-      setLoading(true);
+      setFetchLoading(true);
       try {
         const rows = await getSyncedLeaderboard();
         if (cancelled) return;
-        setLeaderboard(rows);
-        setError(null);
+        setFetchedLeaderboard(rows);
+        setFetchError(null);
       } catch (err) {
         if (cancelled) return;
-        Sentry.captureException(err, { tags: { scope: "useTopPerformers" } });
-        setError(err instanceof Error ? err.message : loadFailed);
+        captureExceptionScrubbed(err, { tags: { scope: "useTopPerformers" } });
+        setFetchError(err instanceof Error ? err.message : loadFailed);
       } finally {
-        if (!cancelled) setLoading(false);
+        if (!cancelled) setFetchLoading(false);
       }
     })();
     return () => {
       cancelled = true;
     };
   }, [useMock, reloadKey, loadFailed]);
+
+  const leaderboard = useMock ? MOCK_LEADERBOARD : fetchedLeaderboard;
+  const loading = useMock ? false : fetchLoading;
+  const error = useMock ? null : fetchError;
 
   return { leaderboard, loading, error, retry: () => setReloadKey((k) => k + 1) };
 }

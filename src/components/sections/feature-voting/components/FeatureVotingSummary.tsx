@@ -6,12 +6,16 @@ import { useTranslation } from "@/i18n/useTranslation";
 import type { LoadState } from "../local-types";
 
 export function FeatureVotingSummary({
-  totalVotes,
+  seedVotes,
+  liveVotes,
   commentsCount,
   totalBoosts,
   loadState,
 }: {
-  totalVotes: number;
+  /** Hand-authored marketing seed folded into the displayed total (see `data.ts`). */
+  seedVotes: number;
+  /** Real votes counted by /api/votes. */
+  liveVotes: number;
   commentsCount: number;
   totalBoosts: number;
   loadState: LoadState;
@@ -36,7 +40,20 @@ export function FeatureVotingSummary({
   // "Live" claim and dim the line so it never dresses dead data as live.
   const degraded = loadState === "degraded";
 
-  const votesLabel = s.totalVotes.replace("{count}", totalVotes.toLocaleString());
+  // A resolved fetch is necessary but not sufficient for the "Live" badge:
+  // if the API returned nothing at all, every number on this line is a typed
+  // seed and the badge would be decorating hand-authored copy. Claim liveness
+  // only when something real is actually on screen.
+  const hasLiveData = liveVotes > 0 || commentsCount > 0 || totalBoosts > 0;
+
+  // The vote figure is a hand-authored seed PLUS the live API count, so it is
+  // not a measurement. Mark it with the locale-neutral "approximately" sign
+  // whenever a seed is folded in, so the number can't be read as a count.
+  const totalVotes = seedVotes + liveVotes;
+  const votesLabel = s.totalVotes.replace(
+    "{count}",
+    `${seedVotes > 0 ? "≈" : ""}${totalVotes.toLocaleString()}`,
+  );
   const commentsLabel = (commentsCount === 1 ? s.commentOne : s.commentOther).replace(
     "{count}",
     String(commentsCount),
@@ -51,7 +68,7 @@ export function FeatureVotingSummary({
       <p className="text-base font-mono text-muted-dark tracking-wide">
         {votesLabel}&nbsp;&middot;&nbsp;{commentsLabel}
         {totalBoosts > 0 && <>&nbsp;&middot;&nbsp;{boostsLabel}</>}
-        {!degraded && <>&nbsp;&middot;&nbsp;{s.live}</>}
+        {!degraded && hasLiveData && <>&nbsp;&middot;&nbsp;{s.live}</>}
       </p>
     </motion.div>
   );

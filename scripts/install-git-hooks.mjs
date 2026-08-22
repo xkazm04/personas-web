@@ -19,6 +19,7 @@ set -e
 
 npm run check:i18n-coverage
 npm run check:i18n-encoding
+npm run check:guide-content
 `;
 
 const existing = fs.existsSync(prePushHook) ? fs.readFileSync(prePushHook, "utf8") : "";
@@ -38,6 +39,9 @@ if (existing.trim().length === 0) {
   }
   if (!existing.includes("npm run check:i18n-encoding")) {
     marker += "\n# personas-web i18n encoding (mojibake) ratchet\nnpm run check:i18n-encoding\n";
+  }
+  if (!existing.includes("npm run check:guide-content")) {
+    marker += "\n# personas-web guide catalog invariant\nnpm run check:guide-content\n";
   }
   if (marker) fs.appendFileSync(prePushHook, marker);
 }

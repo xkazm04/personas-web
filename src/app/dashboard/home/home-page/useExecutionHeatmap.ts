@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import * as Sentry from "@sentry/nextjs";
+import { captureExceptionScrubbed } from "@/lib/sentry-pii";
 
 import { useAuthStore } from "@/stores/authStore";
 import { useTranslation } from "@/i18n/useTranslation";
@@ -81,23 +81,22 @@ export function useExecutionHeatmap(): ExecutionHeatmapData {
   const { t } = useTranslation();
   const loadFailed = t.dashboard.home.errors.executions;
 
-  const [rows, setRows] = useState<HeatmapRow[]>(
-    useMock ? MOCK_EXECUTION_HEATMAP : [],
-  );
-  const [loading, setLoading] = useState(!useMock);
-  const [error, setError] = useState<string | null>(null);
+  // Only the *fetched* half lives in state. The demo values are a pure function
+  // of `useMock`, so they're derived during render below instead of being
+  // copied into state by the effect: mirroring store state into React state
+  // costs an extra render pass before paint, and left one frame of the previous
+  // account's grid on screen whenever `isDemo` flipped mid-session.
+  const [fetchedRows, setFetchedRows] = useState<HeatmapRow[]>([]);
+  const [fetchLoading, setFetchLoading] = useState(true);
+  const [fetchError, setFetchError] = useState<string | null>(null);
   const [reloadKey, setReloadKey] = useState(0);
 
   useEffect(() => {
-    if (useMock) {
-      setRows(MOCK_EXECUTION_HEATMAP);
-      setError(null);
-      setLoading(false);
-      return;
-    }
+    // Demo mode has nothing to fetch; the mock grid is derived below.
+    if (useMock) return;
     let cancelled = false;
     (async () => {
-      setLoading(true);
+      setFetchLoading(true);
       try {
         const [executions, personas] = await Promise.all([
           api.listExecutions({ limit: 2000 }),
@@ -110,22 +109,26 @@ export function useExecutionHeatmap(): ExecutionHeatmapData {
             { name: p.name, color: p.color ?? FALLBACK_PERSONA_COLOR },
           ]),
         );
-        setRows(deriveHeatmap(executions, meta));
-        setError(null);
+        setFetchedRows(deriveHeatmap(executions, meta));
+        setFetchError(null);
       } catch (err) {
         if (cancelled) return;
-        Sentry.captureException(err, { tags: { scope: "useExecutionHeatmap" } });
+        captureExceptionScrubbed(err, { tags: { scope: "useExecutionHeatmap" } });
         // Surface the failure instead of leaving an authoritative-looking empty
         // grid — a transient error must not read as "nothing has run".
-        setError(err instanceof Error ? err.message : loadFailed);
+        setFetchError(err instanceof Error ? err.message : loadFailed);
       } finally {
-        if (!cancelled) setLoading(false);
+        if (!cancelled) setFetchLoading(false);
       }
     })();
     return () => {
       cancelled = true;
     };
   }, [useMock, reloadKey, loadFailed]);
+
+  const rows = useMock ? MOCK_EXECUTION_HEATMAP : fetchedRows;
+  const loading = useMock ? false : fetchLoading;
+  const error = useMock ? null : fetchError;
 
   return { rows, loading, error, retry: () => setReloadKey((k) => k + 1) };
 }

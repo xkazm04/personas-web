@@ -1,12 +1,13 @@
 "use client";
 
 import { useCallback, useRef, useState } from "react";
-import * as Sentry from "@sentry/nextjs";
+import { captureExceptionScrubbed } from "@/lib/sentry-pii";
 import SectionWrapper from "@/components/SectionWrapper";
 import { trackFeatureComment } from "@/lib/analytics";
 import { useAbortableEffect } from "@/hooks/useAbortableEffect";
 import type { Comment, LoadState } from "./local-types";
 import {
+  SEED_VOTES_TOTAL,
   features,
   fetchBoostTotals,
   fetchComments,
@@ -78,7 +79,7 @@ export default function FeatureVoting() {
       }));
 
       postVoteToggle(featureId, voterIdRef.current).catch((err) => {
-        Sentry.captureException(err, {
+        captureExceptionScrubbed(err, {
           tags: { component: "FeatureVoting", action: "toggleVote" },
         });
         // Roll back the optimistic update.
@@ -121,7 +122,7 @@ export default function FeatureVoting() {
           setComments((prev) => prev.map((c) => (c.id === optimisticId ? saved : c)));
         })
         .catch((err) => {
-          Sentry.captureException(err, {
+          captureExceptionScrubbed(err, {
             tags: { component: "FeatureVoting", action: "addComment" },
           });
           // Roll back the optimistic insert.
@@ -163,7 +164,7 @@ export default function FeatureVoting() {
           );
       })
       .catch((err) => {
-        Sentry.captureException(err, {
+        captureExceptionScrubbed(err, {
           tags: { component: "FeatureVoting", action: "boost" },
         });
         setBoostTotals((prev) => ({
@@ -202,7 +203,8 @@ export default function FeatureVoting() {
 
       <CustomFeatureRequest />
 
-      <FeatureVotingSummary totalVotes={sorted.reduce((s, f) => s + f.votes, 0) + realVotesTotal} commentsCount={comments.length} totalBoosts={totalBoosts} loadState={loadState} />
+      {/* Seed and live halves stay separate so the summary can disclose which part was measured (see `data.ts`). */}
+      <FeatureVotingSummary seedVotes={SEED_VOTES_TOTAL} liveVotes={realVotesTotal} commentsCount={comments.length} totalBoosts={totalBoosts} loadState={loadState} />
     </SectionWrapper>
   );
 }

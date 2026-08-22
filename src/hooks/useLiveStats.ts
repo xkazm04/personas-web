@@ -4,8 +4,10 @@ import * as Sentry from "@sentry/nextjs";
 import { useEffect, useState } from "react";
 import type {
   PlatformStats,
+  PlatformStatsProvenance,
   PlatformStatsResponse,
   PlatformStatsSeries,
+  StatProvenance,
 } from "@/app/api/stats/route";
 import { captureExceptionScrubbed } from "@/lib/sentry-pii";
 
@@ -20,6 +22,8 @@ const FALLBACK_STATS: PlatformStats = {
   roadmapCompleted: 11,
   roadmapTotal: 15,
 };
+
+const STAT_KEYS = Object.keys(FALLBACK_STATS) as (keyof PlatformStats)[];
 
 function buildFlatSeries(stats: PlatformStats): PlatformStatsSeries {
   const length = 7;
@@ -36,11 +40,76 @@ function buildFlatSeries(stats: PlatformStats): PlatformStatsSeries {
   };
 }
 
+/** Nothing here was measured — every fallback field is a typed constant. */
+const FALLBACK_PROVENANCE: PlatformStatsProvenance = STAT_KEYS.reduce((acc, key) => {
+  acc[key] = "seed";
+  return acc;
+}, {} as PlatformStatsProvenance);
+
 const FALLBACK_RESPONSE: PlatformStatsResponse = {
   ...FALLBACK_STATS,
   trend7d: { ...FALLBACK_STATS },
   series: buildFlatSeries(FALLBACK_STATS),
+  provenance: FALLBACK_PROVENANCE,
 };
+
+/**
+ * Whether the numbers in hand came from the API or from the seed table.
+ * - `pending`  — the first fetch is still in flight; you are looking at seeds.
+ * - `live`     — the payload came from `/api/stats`.
+ * - `fallback` — the fetch failed or came back malformed; you are looking at
+ *   seeds and `fallbackReason` says why.
+ */
+export type LiveStatsStatus = "pending" | "live" | "fallback";
+
+export type LiveStatsFallbackReason = "fetch-failed" | "malformed-shape";
+
+export interface LiveStatsResult extends PlatformStatsResponse {
+  /** Discriminant: never present a non-`live` result as a measurement. */
+  status: LiveStatsStatus;
+  /** Populated only when `status === "fallback"`. */
+  fallbackReason: LiveStatsFallbackReason | null;
+}
+
+const PENDING_RESULT: LiveStatsResult = {
+  ...FALLBACK_RESPONSE,
+  status: "pending",
+  fallbackReason: null,
+};
+
+function fallbackResult(reason: LiveStatsFallbackReason): LiveStatsResult {
+  return { ...FALLBACK_RESPONSE, status: "fallback", fallbackReason: reason };
+}
+
+function liveResult(data: PlatformStatsResponse): LiveStatsResult {
+  return {
+    ...data,
+    // A server that predates the `provenance` field would otherwise leave the
+    // map undefined and every `isMeasuredStat` check would read as false —
+    // which is the safe direction, but be explicit about it.
+    provenance: data.provenance ?? FALLBACK_PROVENANCE,
+    status: "live",
+    fallbackReason: null,
+  };
+}
+
+/**
+ * The only sanctioned way to ask "may I show this number as a real one?".
+ * Both halves must hold: the payload has to be live, AND the API has to have
+ * tagged that particular metric as `measured` rather than `floored`/`seed`.
+ */
+export function isMeasuredStat(stats: LiveStatsResult, key: keyof PlatformStats): boolean {
+  return stats.status === "live" && statProvenance(stats, key) === "measured";
+}
+
+/** Per-metric provenance, collapsed to `seed` whenever the result isn't live. */
+export function statProvenance(
+  stats: LiveStatsResult,
+  key: keyof PlatformStats,
+): StatProvenance {
+  if (stats.status !== "live") return "seed";
+  return stats.provenance?.[key] ?? "seed";
+}
 
 let cachedResult: PlatformStatsResponse | null = null;
 // Warn-once gate: prevents Sentry flooding under React 19 strict-mode double
@@ -61,10 +130,26 @@ let warnedOnce = false;
  * - Cadence: Fetched once per session (client-side cache). API response is cached
  *   on the server for 1 hour (SWR-ish).
  *
- * @returns {PlatformStatsResponse} Latest stats + trend metadata, or fallback defaults.
+ * Failure Contract (why this hook returns more than the API does):
+ * - The returned object is ALWAYS structurally complete, so a failed fetch used
+ *   to be indistinguishable from a successful one — the caller got seed numbers
+ *   with nothing marking them as seeds. `status` is the discriminant that closes
+ *   that: `pending` before the first response, `live` once the API answers, and
+ *   `fallback` (+ `fallbackReason`) when the fetch rejected or returned a
+ *   malformed shape. In both non-`live` states every number is a typed constant
+ *   from `FALLBACK_STATS`.
+ * - Per-metric truth is a second axis: even a `live` payload mixes measurements
+ *   with marketing floors, which the API discloses in `provenance`. Use
+ *   {@link isMeasuredStat} (both axes at once) rather than reading a number and
+ *   assuming it was counted.
+ *
+ * @returns {LiveStatsResult} Latest stats + trend metadata + provenance, or
+ *   annotated fallback defaults.
  */
-export function useLiveStats(): PlatformStatsResponse {
-  const [stats, setStats] = useState<PlatformStatsResponse>(cachedResult ?? FALLBACK_RESPONSE);
+export function useLiveStats(): LiveStatsResult {
+  const [stats, setStats] = useState<LiveStatsResult>(() =>
+    cachedResult ? liveResult(cachedResult) : PENDING_RESULT,
+  );
 
   useEffect(() => {
     if (cachedResult) return;
@@ -99,12 +184,17 @@ export function useLiveStats(): PlatformStatsResponse {
               );
             }
           }
+          // Keep the seeds, but stop pretending they are a result. The state
+          // update is deliberately OUTSIDE the warn-once gate: warn-once is
+          // about Sentry volume, and every consumer still needs the flag.
+          setStats(fallbackResult("malformed-shape"));
           return;
         }
         cachedResult = data;
-        setStats(data);
+        setStats(liveResult(data));
       })
       .catch((err: unknown) => {
+        if (!cancelled) setStats(fallbackResult("fetch-failed"));
         if (warnedOnce) return;
         warnedOnce = true;
         captureExceptionScrubbed(err, {

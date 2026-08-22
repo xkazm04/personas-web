@@ -45,6 +45,18 @@ export async function writeJsonFile<T>(fileName: string, data: T): Promise<void>
   );
   try {
     await fs.writeFile(tmpFile, JSON.stringify(data, null, 2));
+    // write-to-temp + rename. `rename` is atomic with respect to *readers*: no
+    // reader ever observes a half-written file, it sees either the old contents
+    // or the new ones.
+    //
+    // It is NOT a durability guarantee. Neither the temp file's data nor the
+    // directory entry is fsynced before/after the rename, so a crash or power
+    // loss can leave the rename unreflected — or, on some filesystems, the
+    // renamed file present but empty. And atomicity is per-process only: two
+    // processes writing the same file both rename over each other, last one
+    // wins (see src/lib/fileLock.ts — the lock here is in-process only).
+    // Acceptable because `.data/` is the local-dev fallback store; a durable
+    // store belongs in Postgres, not behind an fsync added here.
     await fs.rename(tmpFile, resolveDataPath(fileName));
   } catch (err) {
     // If the write or the atomic rename fails (EXDEV, EACCES, ENOSPC, EPERM on

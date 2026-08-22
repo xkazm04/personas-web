@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import * as Sentry from "@sentry/nextjs";
+import { captureExceptionScrubbed } from "@/lib/sentry-pii";
 
 import { useAuthStore } from "@/stores/authStore";
 import { useTranslation } from "@/i18n/useTranslation";
@@ -79,40 +79,43 @@ export function useUpcomingRoutines(): UpcomingRoutinesData {
   const { t } = useTranslation();
   const loadFailed = t.dashboard.home.errors.routines;
 
-  const [routines, setRoutines] = useState<UpcomingRoutine[]>(
-    useMock ? MOCK_UPCOMING_ROUTINES : [],
-  );
-  const [loading, setLoading] = useState(!useMock);
-  const [error, setError] = useState<string | null>(null);
+  // Only the *fetched* half lives in state. The demo values are a pure function
+  // of `useMock`, so they're derived during render below rather than copied
+  // into state by the effect: mirroring store state into React state costs an
+  // extra render pass before paint, and left one frame of the previous
+  // account's routines on screen whenever `isDemo` flipped mid-session.
+  const [fetchedRoutines, setFetchedRoutines] = useState<UpcomingRoutine[]>([]);
+  const [fetchLoading, setFetchLoading] = useState(true);
+  const [fetchError, setFetchError] = useState<string | null>(null);
   const [reloadKey, setReloadKey] = useState(0);
 
   useEffect(() => {
-    if (useMock) {
-      setRoutines(MOCK_UPCOMING_ROUTINES);
-      setError(null);
-      setLoading(false);
-      return;
-    }
+    // Demo mode has nothing to fetch; the mock routines are derived below.
+    if (useMock) return;
     let cancelled = false;
     (async () => {
-      setLoading(true);
+      setFetchLoading(true);
       try {
         const triggers = await getSyncedTriggers();
         if (cancelled) return;
-        setRoutines(deriveRoutines(triggers));
-        setError(null);
+        setFetchedRoutines(deriveRoutines(triggers));
+        setFetchError(null);
       } catch (err) {
         if (cancelled) return;
-        Sentry.captureException(err, { tags: { scope: "useUpcomingRoutines" } });
-        setError(err instanceof Error ? err.message : loadFailed);
+        captureExceptionScrubbed(err, { tags: { scope: "useUpcomingRoutines" } });
+        setFetchError(err instanceof Error ? err.message : loadFailed);
       } finally {
-        if (!cancelled) setLoading(false);
+        if (!cancelled) setFetchLoading(false);
       }
     })();
     return () => {
       cancelled = true;
     };
   }, [useMock, reloadKey, loadFailed]);
+
+  const routines = useMock ? MOCK_UPCOMING_ROUTINES : fetchedRoutines;
+  const loading = useMock ? false : fetchLoading;
+  const error = useMock ? null : fetchError;
 
   return { routines, loading, error, retry: () => setReloadKey((k) => k + 1) };
 }

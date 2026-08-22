@@ -87,6 +87,17 @@ const CACHE_CONTROL_BYPASS = "no-store";
  *
  * To update: change values here. These are NOT bugs — they are a
  * deliberate marketing decision.
+ *
+ * DISCLOSURE: because a floored value used to be indistinguishable from a
+ * measured one, every response now carries a `provenance` map tagging each
+ * metric `measured` / `floored` / `seed` (see {@link StatProvenance}). The
+ * floor still applies; it is simply no longer silent.
+ *
+ * NOTE on `totalTemplates`: this 120 is a marketing target, not the shipped
+ * catalog — `src/lib/templates.ts` holds 57 templates. The hero no longer
+ * reads this field; it derives its template figure from the catalog itself
+ * (`src/components/sections/Hero.tsx`), which is checkable against the
+ * gallery. Keep that in mind before wiring this field to a public surface.
  */
 const MINIMUM_DISPLAY_VALUES: PlatformStats = {
   totalUsers: 228,
@@ -148,11 +159,41 @@ const STAT_KEYS: ReadonlyArray<keyof PlatformStats> = [
 
 export type PlatformStatsSeries = Record<keyof PlatformStats, number[]>;
 
+/**
+ * How a single displayed number came to be — the disclosure half of the
+ * marketing floor.
+ *
+ * The floor above is a deliberate product decision and stays. The defect it
+ * used to carry was that a floored value and a real one left this route byte
+ * -identical, so no consumer (and therefore no reader) could tell a
+ * measurement from a commitment. Every response now says which is which:
+ *
+ * - `measured` — the value came from a real source (the waitlist file for
+ *   `totalUsers`, `platform-counters.json` for the rest) and the floor did
+ *   not raise it. This is the only value a UI may present as live.
+ * - `floored`  — a real source existed but sat below `MINIMUM_DISPLAY_VALUES`,
+ *   so `applyFloor` substituted the minimum. The number on screen is the
+ *   marketing floor, not the measurement.
+ * - `seed`     — no source at all; the number IS `MINIMUM_DISPLAY_VALUES`,
+ *   typed by a person. Correct on the day it was written.
+ *
+ * `trend7d`/`series` are built from RAW history and are never floored, so
+ * they need no provenance tag.
+ */
+export type StatProvenance = "measured" | "floored" | "seed";
+
+export type PlatformStatsProvenance = Record<keyof PlatformStats, StatProvenance>;
+
+/** Where a raw (pre-floor) value was read from. */
+type RawSource = "counters-file" | "waitlist" | "default";
+
 export interface PlatformStatsResponse extends PlatformStats {
   /** Value of each metric 7 days ago (real, not floored). */
   trend7d: PlatformStats;
   /** Last 7 daily snapshots per metric, oldest → newest. */
   series: PlatformStatsSeries;
+  /** Per-metric disclosure: measurement, marketing floor, or typed seed. */
+  provenance: PlatformStatsProvenance;
 }
 
 interface HistoryRow extends PlatformStats {
@@ -173,14 +214,19 @@ function todayKey(): string {
   return new Date().toISOString().slice(0, 10);
 }
 
-async function getWaitlistCount(): Promise<number> {
+/**
+ * Live waitlist size, or `null` when there is no readable waitlist file.
+ * `null` and `0` both display as 0, but only `null` means "never measured" —
+ * the distinction feeds the `provenance` tag on the response.
+ */
+async function getWaitlistCount(): Promise<number | null> {
   try {
     const raw = await readBoundedFile(WAITLIST_FILE, WAITLIST_MAX_BYTES);
-    if (raw === null) return 0;
+    if (raw === null) return null;
     const data = JSON.parse(raw) as { entries: unknown[] };
     return data.entries.length;
   } catch {
-    return 0;
+    return null;
   }
 }
 
@@ -193,6 +239,10 @@ async function readCache(): Promise<CachedStats | null> {
       cached.response &&
       cached.response.series &&
       cached.response.trend7d &&
+      // Entries written before `provenance` existed are treated as stale:
+      // serving one would publish floored numbers with no disclosure, which
+      // is the exact failure this field exists to close.
+      cached.response.provenance &&
       typeof cached.cachedAt === "number" &&
       Date.now() - cached.cachedAt < CACHE_TTL_MS
     ) {
@@ -250,13 +300,21 @@ async function writeCache(response: PlatformStatsResponse): Promise<void> {
  * exist. Until that process is built, raw values come from the waitlist
  * file (totalUsers) and MINIMUM_DISPLAY_VALUES defaults (everything else).
  */
-async function readRawCounters(): Promise<PlatformStats> {
+async function readRawCounters(): Promise<{
+  raw: PlatformStats;
+  sources: Record<keyof PlatformStats, RawSource>;
+}> {
   const waitlistUsers = await getWaitlistCount();
-  const raw: PlatformStats = { ...MINIMUM_DISPLAY_VALUES, totalUsers: waitlistUsers };
+  const raw: PlatformStats = { ...MINIMUM_DISPLAY_VALUES, totalUsers: waitlistUsers ?? 0 };
+  const sources = STAT_KEYS.reduce((acc, key) => {
+    acc[key] = "default";
+    return acc;
+  }, {} as Record<keyof PlatformStats, RawSource>);
+  if (waitlistUsers !== null) sources.totalUsers = "waitlist";
 
   try {
     const file = await readBoundedFile(COUNTERS_FILE, COUNTERS_MAX_BYTES);
-    if (file === null) return raw;
+    if (file === null) return { raw, sources };
     const counters = JSON.parse(file) as Partial<PlatformStats>;
     for (const key of STAT_KEYS) {
       const v = counters[key];
@@ -265,12 +323,13 @@ async function readRawCounters(): Promise<PlatformStats> {
       // original "waitlist count is a lower bound" behavior). Other metrics
       // are direct overrides — counters can lower them below the default.
       raw[key] = key === "totalUsers" ? Math.max(raw[key], v) : v;
+      sources[key] = "counters-file";
     }
   } catch {
     // No external counters file — keep waitlist count + defaults.
   }
 
-  return raw;
+  return { raw, sources };
 }
 
 function applyFloor(raw: PlatformStats): PlatformStats {
@@ -279,6 +338,28 @@ function applyFloor(raw: PlatformStats): PlatformStats {
     result[key] = Math.max(raw[key], MINIMUM_DISPLAY_VALUES[key]);
   }
   return result;
+}
+
+/**
+ * Label every displayed value with how it was produced. Derived purely from
+ * data already in hand — `display` vs `raw` reveals whether the floor bit,
+ * `sources` reveals whether anything was ever measured. See
+ * {@link StatProvenance}.
+ */
+function describeProvenance(
+  raw: PlatformStats,
+  display: PlatformStats,
+  sources: Record<keyof PlatformStats, RawSource>,
+): PlatformStatsProvenance {
+  return STAT_KEYS.reduce((acc, key) => {
+    acc[key] =
+      display[key] !== raw[key]
+        ? "floored"
+        : sources[key] === "default"
+          ? "seed"
+          : "measured";
+    return acc;
+  }, {} as PlatformStatsProvenance);
 }
 
 async function readHistory(): Promise<HistoryRow[]> {
@@ -351,11 +432,11 @@ function buildSeriesAndTrend(
 }
 
 async function aggregateStats(): Promise<PlatformStatsResponse> {
-  const raw = await readRawCounters();
+  const { raw, sources } = await readRawCounters();
   const history = await appendTodaySnapshotIfMissing(raw);
   const display = applyFloor(raw);
   const { trend7d, series } = buildSeriesAndTrend(history, raw);
-  return { ...display, trend7d, series };
+  return { ...display, trend7d, series, provenance: describeProvenance(raw, display, sources) };
 }
 
 /**

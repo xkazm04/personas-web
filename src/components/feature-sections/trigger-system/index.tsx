@@ -23,13 +23,19 @@ export default function TriggerSystem() {
 
   const scheduleNext = useCallback(() => {
     if (prefersReducedMotion) return;
-    timerRef.current = setTimeout(() => {
-      const idx = Math.floor(Math.random() * triggers.length);
-      setFiring(idx);
-      setActiveTrigger(idx);
-      firingTimeoutRef.current = setTimeout(() => setFiring(null), 1000);
-      scheduleNext();
-    }, 3000 + Math.random() * 2000);
+    // The autoplay loop re-arms itself. It must recurse through the named
+    // function expression `arm` — which binds inside its own body — and not
+    // through the outer `scheduleNext` const, which is still in its temporal
+    // dead zone while this callback is being created.
+    (function arm() {
+      timerRef.current = setTimeout(() => {
+        const idx = Math.floor(Math.random() * triggers.length);
+        setFiring(idx);
+        setActiveTrigger(idx);
+        firingTimeoutRef.current = setTimeout(() => setFiring(null), 1000);
+        arm();
+      }, 3000 + Math.random() * 2000);
+    })();
   }, [prefersReducedMotion]);
 
   useEffect(() => {

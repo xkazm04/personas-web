@@ -162,3 +162,36 @@ export function jsonError(
 ): NextResponse {
   return NextResponse.json({ error }, { status, headers });
 }
+
+/**
+ * Stable, machine-readable failure reasons, shared by every API route.
+ *
+ * The `error` prose is English-only and is kept for existing/CLI consumers;
+ * the browser renders a *translated* string picked from this code (see
+ * `waitlistErrorMessage` in src/components/waitlist-modal/waitlistUtils.ts).
+ * **Never reword a code** — clients and translation tables key off these exact
+ * strings. Adding a new member is fine; renaming one is a breaking change.
+ *
+ * This union generalises the one the waitlist route defined locally; that
+ * route now narrows this union instead of declaring a parallel copy, so the
+ * codes it already ships stay byte-identical.
+ */
+export type ApiErrorCode =
+  | "rate_limited"
+  | "invalid_email"
+  | "invalid_platform"
+  | "store_unavailable";
+
+/**
+ * The canonical refusal: `jsonError`'s `{ error }` body plus the stable
+ * `code` — additive, so a client reading only `error`/`status` is unaffected.
+ * Prefer this over `jsonError` for any refusal a client might branch on.
+ */
+export function apiError(
+  error: string,
+  code: ApiErrorCode,
+  status: number,
+  headers?: HeadersInit,
+): NextResponse {
+  return NextResponse.json({ error, code }, { status, headers });
+}

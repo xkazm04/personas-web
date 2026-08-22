@@ -121,21 +121,26 @@ export function usePersonaMatrixBuild(): PersonaMatrixState {
 
   useEffect(() => {
     if (hasRun.current) return;
-    // Reduced motion: skip the timed build and show the resolved end-state
-    // immediately, so the section carries its full content instead of a
-    // permanently pending skeleton.
-    if (prefersReducedMotion) {
-      hasRun.current = true;
-      showFinal();
-      return;
-    }
     const el = sectionRef.current;
     if (!el) return;
+    // Both branches are driven from the observer callback — an external-system
+    // callback — rather than from the effect body, so no state is written
+    // synchronously during the effect.
+    //
+    // This component is server-rendered (DesignEngine is a static, above-the-fold
+    // import), so the reduced-motion end-state cannot be derived during render or
+    // seeded in a lazy initialiser: `useReducedMotion()` reads the media query on
+    // the client only, and the server always emits the pending skeleton. Deciding
+    // post-mount is what keeps hydration in sync.
     const observer = new IntersectionObserver(
       ([entry]) => {
         if (entry.isIntersecting && !hasRun.current) {
           hasRun.current = true;
-          runBuild();
+          // Reduced motion: skip the timed build and jump straight to the
+          // resolved end-state, so the section carries its full content the
+          // moment it is on screen instead of a permanently pending skeleton.
+          if (prefersReducedMotion) showFinal();
+          else runBuild();
           observer.disconnect();
         }
       },

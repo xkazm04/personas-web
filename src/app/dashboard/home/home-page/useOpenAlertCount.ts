@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import * as Sentry from "@sentry/nextjs";
+import { captureExceptionScrubbed } from "@/lib/sentry-pii";
 
 import { api } from "@/lib/api";
 import { MOCK_HEALTH_ISSUES } from "@/lib/mock-dashboard-data";
@@ -31,7 +31,7 @@ export function useOpenAlertCount(): number {
         setCount(issues.filter((issue) => issue.status === "open").length);
       } catch (err) {
         if (cancelled) return;
-        Sentry.captureException(err, { tags: { scope: "useOpenAlertCount" } });
+        captureExceptionScrubbed(err, { tags: { scope: "useOpenAlertCount" } });
       }
     })();
     return () => {
