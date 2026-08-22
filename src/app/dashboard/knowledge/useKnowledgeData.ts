@@ -114,31 +114,24 @@ export function useKnowledgeData(): KnowledgeData {
   const isDemo = useAuthStore((s) => s.isDemo);
   const useMock = isDemo;
 
-  const [patterns, setPatterns] = useState<KnowledgePattern[]>(
-    useMock ? MOCK_KNOWLEDGE_PATTERNS : [],
-  );
-  const [memories, setMemories] = useState<MemoryItem[]>(
-    useMock ? MOCK_MEMORIES : [],
-  );
-  const [loading, setLoading] = useState(!useMock);
-  const [error, setError] = useState<string | null>(null);
+  // isDemo can flip mid-session, and a real→demo switch must replace the
+  // previous account's patterns/memories instead of leaving them on screen.
+  // That's done by DERIVING the demo fixtures during render — only the fetched
+  // half is state. Re-seeding from the effect instead cost an extra render pass
+  // before paint and still showed one frame of the previous account's rows.
+  const [fetchedPatterns, setFetchedPatterns] = useState<KnowledgePattern[]>([]);
+  const [fetchedMemories, setFetchedMemories] = useState<MemoryItem[]>([]);
+  const [fetchLoading, setFetchLoading] = useState(true);
+  const [fetchError, setFetchError] = useState<string | null>(null);
   const [reloadKey, setReloadKey] = useState(0);
 
   useEffect(() => {
-    // isDemo can flip mid-session; re-seed the mock fixtures explicitly so a
-    // real→demo switch replaces the previous account's patterns/memories
-    // instead of leaving them on screen.
-    if (useMock) {
-      setPatterns(MOCK_KNOWLEDGE_PATTERNS);
-      setMemories(MOCK_MEMORIES);
-      setError(null);
-      setLoading(false);
-      return;
-    }
+    // Demo mode has nothing to fetch; the mock fixtures are derived below.
+    if (useMock) return;
 
     let cancelled = false;
     (async () => {
-      setLoading(true);
+      setFetchLoading(true);
       try {
         const [syncedPatterns, syncedMemories, personas] = await Promise.all([
           getSyncedKnowledgePatterns(),
@@ -147,25 +140,25 @@ export function useKnowledgeData(): KnowledgeData {
         ]);
         if (cancelled) return;
         const nameById = new Map(personas.map((p) => [p.id, p.name]));
-        setPatterns(
+        setFetchedPatterns(
           syncedPatterns.map((k) =>
             mapSyncedPattern(k, nameById.get(k.personaId) ?? k.personaId),
           ),
         );
-        setMemories(
+        setFetchedMemories(
           syncedMemories.map((m) =>
             mapSyncedMemory(m, nameById.get(m.personaId) ?? m.personaId),
           ),
         );
-        setError(null);
+        setFetchError(null);
       } catch (err) {
         if (cancelled) return;
         Sentry.captureException(err, { tags: { scope: "useKnowledgeData" } });
-        setError(
+        setFetchError(
           err instanceof Error ? err.message : "Failed to load knowledge data",
         );
       } finally {
-        if (!cancelled) setLoading(false);
+        if (!cancelled) setFetchLoading(false);
       }
     })();
 
@@ -173,6 +166,11 @@ export function useKnowledgeData(): KnowledgeData {
       cancelled = true;
     };
   }, [useMock, reloadKey]);
+
+  const patterns = useMock ? MOCK_KNOWLEDGE_PATTERNS : fetchedPatterns;
+  const memories = useMock ? MOCK_MEMORIES : fetchedMemories;
+  const loading = useMock ? false : fetchLoading;
+  const error = useMock ? null : fetchError;
 
   return { patterns, memories, loading, error, retry: () => setReloadKey((k) => k + 1) };
 }

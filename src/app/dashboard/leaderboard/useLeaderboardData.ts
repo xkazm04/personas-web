@@ -26,41 +26,37 @@ export function useLeaderboardData(): LeaderboardData {
   const isDemo = useAuthStore((s) => s.isDemo);
   const useMock = isDemo;
 
-  const [personas, setPersonas] = useState<LeaderboardPersona[]>(
-    useMock ? MOCK_LEADERBOARD : [],
-  );
-  const [loading, setLoading] = useState(!useMock);
-  const [error, setError] = useState<string | null>(null);
+  // isDemo is a live store subscription that can flip mid-session (sign out
+  // into demo, expiry), so a real→demo switch must replace the previous
+  // account's leaderboard rather than leave it on screen. That's done by
+  // DERIVING the demo values during render — only the fetched half is state.
+  // Re-seeding from the effect instead cost an extra render pass before paint
+  // and still showed one frame of the previous account's rows.
+  const [fetchedPersonas, setFetchedPersonas] = useState<LeaderboardPersona[]>([]);
+  const [fetchLoading, setFetchLoading] = useState(true);
+  const [fetchError, setFetchError] = useState<string | null>(null);
   const [reloadKey, setReloadKey] = useState(0);
 
   useEffect(() => {
-    // isDemo is a live store subscription that can flip mid-session (sign out
-    // into demo, expiry). Re-seed the mock explicitly rather than early-return,
-    // so a real→demo switch replaces the previous account's leaderboard instead
-    // of leaving it on screen.
-    if (useMock) {
-      setPersonas(MOCK_LEADERBOARD);
-      setError(null);
-      setLoading(false);
-      return;
-    }
+    // Demo mode has nothing to fetch; the mock leaderboard is derived below.
+    if (useMock) return;
 
     let cancelled = false;
     (async () => {
-      setLoading(true);
+      setFetchLoading(true);
       try {
         const data = await getSyncedLeaderboard();
         if (cancelled) return;
-        setPersonas(data);
-        setError(null);
+        setFetchedPersonas(data);
+        setFetchError(null);
       } catch (err) {
         if (cancelled) return;
         Sentry.captureException(err, { tags: { scope: "useLeaderboardData" } });
-        setError(
+        setFetchError(
           err instanceof Error ? err.message : "Failed to load leaderboard",
         );
       } finally {
-        if (!cancelled) setLoading(false);
+        if (!cancelled) setFetchLoading(false);
       }
     })();
 
@@ -68,6 +64,10 @@ export function useLeaderboardData(): LeaderboardData {
       cancelled = true;
     };
   }, [useMock, reloadKey]);
+
+  const personas = useMock ? MOCK_LEADERBOARD : fetchedPersonas;
+  const loading = useMock ? false : fetchLoading;
+  const error = useMock ? null : fetchError;
 
   return { personas, loading, error, retry: () => setReloadKey((k) => k + 1) };
 }

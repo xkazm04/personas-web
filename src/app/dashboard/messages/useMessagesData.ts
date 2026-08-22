@@ -24,42 +24,45 @@ export function useMessagesData(): MessagesData {
   const isDemo = useAuthStore((s) => s.isDemo);
   const useMock = isDemo;
 
-  const [threads, setThreads] = useState<MessageThread[]>(
-    useMock ? MOCK_MESSAGE_THREADS : [],
-  );
-  const [loading, setLoading] = useState(!useMock);
-  const [error, setError] = useState<string | null>(null);
+  // isDemo can flip mid-session, and a real→demo switch must replace the
+  // previous tenant's threads instead of leaving them on screen. That's done by
+  // DERIVING the demo values during render — only the fetched half is state.
+  // Re-seeding from the effect instead cost an extra render pass before paint
+  // and still showed one frame of the previous tenant's threads.
+  const [fetchedThreads, setFetchedThreads] = useState<MessageThread[]>([]);
+  const [fetchLoading, setFetchLoading] = useState(true);
+  const [fetchError, setFetchError] = useState<string | null>(null);
   const [reloadKey, setReloadKey] = useState(0);
 
   useEffect(() => {
-    // isDemo can flip mid-session; re-seed the mock explicitly so a real→demo
-    // switch replaces the previous tenant's threads instead of leaving them.
-    if (useMock) {
-      setThreads(MOCK_MESSAGE_THREADS);
-      setError(null);
-      setLoading(false);
-      return;
-    }
+    // Demo mode has nothing to fetch; the mock threads are derived below.
+    if (useMock) return;
     let cancelled = false;
     (async () => {
-      setLoading(true);
+      setFetchLoading(true);
       try {
         const t = await getSyncedMessageThreads();
         if (cancelled) return;
-        setThreads(t);
-        setError(null);
+        setFetchedThreads(t);
+        setFetchError(null);
       } catch (err) {
         if (cancelled) return;
         Sentry.captureException(err, { tags: { scope: "useMessagesData" } });
-        setError(err instanceof Error ? err.message : "Failed to load messages");
+        setFetchError(
+          err instanceof Error ? err.message : "Failed to load messages",
+        );
       } finally {
-        if (!cancelled) setLoading(false);
+        if (!cancelled) setFetchLoading(false);
       }
     })();
     return () => {
       cancelled = true;
     };
   }, [useMock, reloadKey]);
+
+  const threads = useMock ? MOCK_MESSAGE_THREADS : fetchedThreads;
+  const loading = useMock ? false : fetchLoading;
+  const error = useMock ? null : fetchError;
 
   return { threads, loading, error, retry: () => setReloadKey((k) => k + 1) };
 }

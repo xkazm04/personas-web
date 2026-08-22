@@ -34,7 +34,12 @@ export default function DemoEntryPage() {
       enterDemo();
       router.replace(target);
     } catch {
-      setFailed(true);
+      // The handoff itself failed (store threw, router unavailable). Whether it
+      // throws is only knowable at commit time — it can't be derived during
+      // render, and neither enterDemo() nor replace() may run in a lazy state
+      // initialiser — so the escape hatch is published after paint via
+      // queueMicrotask, the same deferral used elsewhere for this React 19 rule.
+      queueMicrotask(() => setFailed(true));
       return;
     }
     // Escape hatch: if the redirect never lands (chunk-load error, dashboard
