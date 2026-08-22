@@ -1,6 +1,13 @@
 "use client";
 
-import { useId, useRef, useState, useEffect, useMemo } from "react";
+import {
+  useId,
+  useRef,
+  useState,
+  useEffect,
+  useMemo,
+  useSyncExternalStore,
+} from "react";
 import { motion, useInView, AnimatePresence } from "framer-motion";
 import { Wand2 } from "lucide-react";
 import dynamic from "next/dynamic";
@@ -29,6 +36,20 @@ const FlowComposer = dynamic(() => import("@/components/FlowComposer"), {
   ),
 });
 
+// ── #flow= deep link ────────────────────────────────────────────────
+// The composer can be deep-linked with `#flow=…`, but the hash is a client-only
+// value: the server always renders the showcase branch, so reading it during
+// render (or in a lazy `useState` initialiser) would desync hydration. Modelling
+// the location hash as the external store it actually is gives React `false` for
+// the hydration render and reconciles to the real hash straight after mount —
+// the same post-mount read the old effect did, without a setState inside one.
+function subscribeToHash(onStoreChange: () => void) {
+  window.addEventListener("hashchange", onStoreChange);
+  return () => window.removeEventListener("hashchange", onStoreChange);
+}
+const readFlowHash = () => window.location.hash.startsWith("#flow=");
+const noFlowHashOnServer = () => false;
+
 export default function EventBusShowcase({ telemetryAdapter }: { telemetryAdapter?: QueueTelemetryAdapter }) {
   const uid = useId();
   const containerRef = useRef<HTMLDivElement>(null);
@@ -42,13 +63,17 @@ export default function EventBusShowcase({ telemetryAdapter }: { telemetryAdapte
     return adapter.subscribe(setSnapshot);
   }, [telemetryAdapter, inView]);
 
-  // Must start false so the client's first render matches the server HTML
-  // (server always renders the showcase branch). Reading the hash in a
-  // post-mount effect instead avoids a hydration mismatch on #flow= deep links.
-  const [composerOpen, setComposerOpen] = useState(false);
-  useEffect(() => {
-    if (window.location.hash.startsWith("#flow=")) setComposerOpen(true);
-  }, []);
+  // `false` on the server and for the hydration render, so the client's first
+  // render still matches the server HTML; the real hash is picked up right after.
+  const deepLinked = useSyncExternalStore(
+    subscribeToHash,
+    readFlowHash,
+    noFlowHashOnServer,
+  );
+  // An explicit open/close by the visitor wins over the deep link; `null` means
+  // "not touched yet", so the hash still decides.
+  const [composerToggle, setComposerToggle] = useState<boolean | null>(null);
+  const composerOpen = composerToggle ?? deepLinked;
 
   const laneMetrics = useMemo(
     () =>
@@ -81,7 +106,7 @@ export default function EventBusShowcase({ telemetryAdapter }: { telemetryAdapte
       {!composerOpen && (
         <motion.div variants={fadeUp} className="-mt-4 flex justify-center">
           <button
-            onClick={() => setComposerOpen(true)}
+            onClick={() => setComposerToggle(true)}
             className="group flex items-center gap-2 rounded-full border px-6 py-2.5 text-base font-medium transition-all"
             style={{
               borderColor: tint("cyan", 25),
@@ -107,7 +132,7 @@ export default function EventBusShowcase({ telemetryAdapter }: { telemetryAdapte
             >
               <FlowComposer
                 onClose={() => {
-                  setComposerOpen(false);
+                  setComposerToggle(false);
                   // Clear only the hash; preserve any query string (e.g. utm_*).
                   window.history.replaceState(
                     null,

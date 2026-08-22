@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { useReducedMotion } from "framer-motion";
 
 import TerminalChrome from "@/components/TerminalChrome";
@@ -60,15 +60,21 @@ export default function PulseGridDeck({
   onClearFilter: () => void;
 }) {
   const reduced = useReducedMotion();
-  const [stats, setStats] = useState<Stats>(emptyStats);
+  const [liveStats, setLiveStats] = useState<Stats>(emptyStats);
+
+  // Reduced motion: derive the populated end-state during render rather than
+  // writing it from the effect. Identical payload — the lanes still never sit
+  // in the empty "idle" state the animation contract calls out — but it is now
+  // correct on the very first paint instead of one commit later. This deck is
+  // mounted with `ssr: false` (see feature-lazy.tsx), so branching on `reduced`
+  // during render cannot desync hydration.
+  const reducedStats = useMemo(() => (reduced ? staticSnapshot() : null), [reduced]);
+  const stats = reducedStats ?? liveStats;
 
   useEffect(() => {
-    if (reduced) {
-      // Show a populated static end-state instead of empty "idle" lanes; a
-      // single state set is not motion, so it's safe under reduced motion.
-      setStats(staticSnapshot());
-      return;
-    }
+    // The live deck fills in via this interval, which we intentionally never
+    // start under reduced motion — `reducedStats` above carries that case.
+    if (reduced) return;
     const id = setInterval(() => {
       const agent = agentPool[Math.floor(Math.random() * agentPool.length)];
       const eventType = eventPool[
@@ -89,7 +95,7 @@ export default function PulseGridDeck({
         ts: Date.now(),
       };
 
-      setStats((prev) => {
+      setLiveStats((prev) => {
         const current = prev[agent] ?? {
           pulses: [],
           durations: [],
