@@ -18,7 +18,9 @@
     "weaklyGoverned": 1,
     "medianTopScore": 394.9,
     "carriedVerdicts": 0,
-    "restoredPairs": 0
+    "restoredPairs": 0,
+    "judged": 2,
+    "deviations": 2
   },
   "subjectIndex": {
     "guided-tours": [
@@ -2323,7 +2325,10 @@
             "severity"
           ],
           "confidence": "strong",
-          "state": "unknown"
+          "state": "deviation",
+          "evidence": "Real, not mock: api.ts:355-361 uses mockApi only when isDemo. The escalate rung writes client state only; setEscalationEnabled and reviewUtils have zero call sites.",
+          "evaluatedAt": "2026-08-23",
+          "evaluatedAgainst": "sha256:1117665ec59c1168"
         },
         {
           "subject": "wizard-flows",
@@ -2796,7 +2801,10 @@
             "retry"
           ],
           "confidence": "strong",
-          "state": "unknown"
+          "state": "deviation",
+          "evidence": "Retry publishes a NEW event (eventStore.ts:170-177); the original stays failed, so each click adds a duplicate and the dead-letter lane never drains.",
+          "evaluatedAt": "2026-08-23",
+          "evaluatedAgainst": "sha256:1117665ec59c1168"
         },
         {
           "subject": "streaming-output",
