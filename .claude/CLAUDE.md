@@ -26,7 +26,7 @@ npm run build       # production build + Sentry source-map upload (if configured
 npm run lint        # eslint (see custom rules below)
 npm run typecheck   # tsc --noEmit
 npm run test:unit   # vitest (src/**/*.test.ts)
-npm run test:e2e    # Playwright (9 specs under e2e/)
+npm run test:e2e    # Playwright (specs under e2e/)
 ```
 
 ## Conventions (non-negotiable)
@@ -48,13 +48,11 @@ npm run test:e2e    # Playwright (9 specs under e2e/)
 2. **Semantic Tailwind tokens**: use `text-foreground`, `bg-background`,
    `bg-surface`, `text-muted-dark`, `border-glass`, `border-glass-hover`,
    `text-brand-cyan`, `rounded-*`, etc. Avoid `text-white`, `bg-black`, raw
-   hex colors. Text opacities below `/60` are lint-warned (WCAG AA).
+   hex colors. Text-opacity floor: see `custom-a11y/no-low-text-opacity`
+   under **Custom lint rules**.
 
-3. **Animation gating**: any component that calls `requestAnimationFrame`,
-   `cancelAnimationFrame`, or runs canvas/GPU-intensive motion MUST import
-   and call `useReducedMotion` from framer-motion, and short-circuit the
-   animation when it returns `true`. Enforced by
-   `custom-animation/require-animation-gating`.
+3. **Animation gating**: gate all motion behind `useReducedMotion` — see
+   `custom-animation/require-animation-gating` under **Custom lint rules**.
 
 4. **React 19 rules**: the repo runs React 19's hooks/purity compiler rules.
    - **Never** call synchronous `setState` inside a `useEffect` body. For
@@ -92,8 +90,6 @@ npm run test:e2e    # Playwright (9 specs under e2e/)
 
 Unless the user explicitly asks:
 
-- Do **not** edit `.claude/commands/goal-analysis-*.md` files (they are the
-  user's in-progress deletions; committing that is their call).
 - Do **not** bulk-migrate translations across all 14 locales beyond adding
   the minimum English placeholder needed to compile.
 - Do **not** add a new test runner, bundler, or linter. The current stack
@@ -106,13 +102,20 @@ Unless the user explicitly asks:
 
 ## Custom lint rules
 
-Implemented under `eslint-rules/`:
+Implemented under `eslint-rules/`, wired in `eslint.config.mjs` at `warn`
+level under the `--max-warnings` ratchet in `package.json` (`npm run lint`
+fails above the ceiling; when you fix a warning, lower the number in the
+same commit):
 
-- **`custom-a11y/no-low-text-opacity`** — warns when Tailwind text utilities
-  use opacity modifiers below `/60` (contrast below WCAG AA).
-- **`custom-animation/require-animation-gating`** — warns when a file uses
-  `requestAnimationFrame` / `cancelAnimationFrame` without importing
-  `useReducedMotion` from framer-motion.
+- **`custom-a11y/no-low-text-opacity`** — Tailwind text utilities must not
+  use opacity modifiers below `/60` (contrast below WCAG AA). Enforced by
+  `eslint-rules/no-low-text-opacity.js`; do not work around it.
+- **`custom-animation/require-animation-gating`** — any file that uses
+  `requestAnimationFrame` / `cancelAnimationFrame` must import and call
+  `useReducedMotion` from framer-motion and short-circuit the animation when
+  it returns `true`. Enforced by `eslint-rules/require-animation-gating.js`;
+  do not work around it. The rule only sees raw animation-frame calls, so
+  CSS- and framer-motion-driven motion must still be gated by hand.
 
 ## OSS release passes
 
