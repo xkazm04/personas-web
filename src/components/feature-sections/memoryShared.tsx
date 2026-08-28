@@ -50,7 +50,13 @@ export const CATEGORY_META: Record<
   },
 };
 
-const NOW = Date.now();
+// A fixed epoch, deliberately not `Date.now()`. These seeds only ever feed a
+// relative sort (`b.addedAt - a.addedAt`), so the absolute value is unused —
+// but sampling the clock at module scope evaluates once on the server and
+// again on the client, which is the same impurity the React 19 rules forbid in
+// render and the trap that springs the day someone formats `addedAt` for
+// display. A constant makes the seed order deterministic on both sides.
+const NOW = 1_760_000_000_000;
 
 const initialMemories: Memory[] = [
   { id: 1, title: "Slack #eng-alerts uses PagerDuty format", category: "learning", importance: 8, source: "Exec #847", tags: ["slack", "alerts"], addedAt: NOW - 60_000 },
