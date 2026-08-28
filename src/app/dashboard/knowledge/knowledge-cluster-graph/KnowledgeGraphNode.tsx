@@ -2,6 +2,7 @@ import { motion } from "framer-motion";
 import { SVGFocusRingCircle } from "@/components/SVGFocusRing";
 import type { KnowledgePattern } from "@/lib/mock-dashboard-data";
 import { KNOWLEDGE_CLUSTER_TYPE_CONFIG, type NodePosition } from "./knowledgeClusterConfig";
+import { EASE_CURVE } from "@/lib/animations";
 
 export function KnowledgeGraphNode({
   pattern,
@@ -41,7 +42,7 @@ export function KnowledgeGraphNode({
       className="svg-focus-parent focus-visible:outline-none"
       initial={{ opacity: 0, scale: 0 }}
       animate={{ opacity: isDimmed ? 0.25 : 1, scale: 1 }}
-      transition={{ duration: 0.4, ease: [0.22, 1, 0.36, 1] }}
+      transition={{ duration: 0.4, ease: EASE_CURVE }}
       style={{ cursor: "pointer" }}
       onClick={() => onSelect(pattern)}
       onKeyDown={(e) => {

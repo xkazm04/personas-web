@@ -8,6 +8,7 @@ import { useFocusTrap } from "@/hooks/useFocusTrap";
 import { ShortcutKeyChips } from "./ShortcutKeyChips";
 import type { Shortcut, ShortcutCategory } from "./shortcutTypes";
 import type { ShortcutMod } from "./usePlatformMod";
+import { EASE_CURVE } from "@/lib/animations";
 
 export function ShortcutsOverlayDialog({
   open,
@@ -55,7 +56,7 @@ export function ShortcutsOverlayDialog({
             initial={{ opacity: 0, scale: 0.96, y: 12 }}
             animate={{ opacity: 1, scale: 1, y: 0 }}
             exit={{ opacity: 0, scale: 0.96, y: 12 }}
-            transition={{ duration: 0.18, ease: [0.22, 1, 0.36, 1] }}
+            transition={{ duration: 0.18, ease: EASE_CURVE }}
             role="dialog"
             aria-modal="true"
             aria-label={labels.keyboardShortcuts}

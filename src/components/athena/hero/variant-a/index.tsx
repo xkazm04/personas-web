@@ -10,6 +10,7 @@ import AthenaStage from "@/components/athena/stage/AthenaStage";
 import { ANNOTATION_DIM, REPLAY, SPRING_POP } from "@/components/athena/stage/athena-tokens";
 import OrbScene from "./OrbScene";
 import { CalloutOverlay, CalloutList } from "./Callouts";
+import { EASE_CURVE } from "@/lib/animations";
 
 /**
  * Athena hero — variant A, "Presence" (round 2: schematic of a being).
@@ -54,7 +55,7 @@ export default function AthenaPresenceHero() {
               : {
                   initial: { opacity: 0, scale: 0.94 },
                   animate: { opacity: 1, scale: 1 },
-                  transition: { duration: 1.2, ease: [0.22, 1, 0.36, 1] as const },
+                  transition: { duration: 1.2, ease: EASE_CURVE },
                 })}
             className="relative aspect-square w-full max-w-[min(88vmin,560px)] lg:aspect-[1024/640] lg:max-w-[1024px]"
           >

@@ -5,6 +5,7 @@ import type { KnowledgePattern } from "@/lib/mock-dashboard-data";
 import { formatCost, formatDuration, relativeTime } from "@/lib/format";
 import { KNOWLEDGE_CLUSTER_TYPE_CONFIG } from "./knowledgeClusterConfig";
 import { knowledgeClusterSuccessRate } from "./knowledgeClusterLayout";
+import { EASE_CURVE } from "@/lib/animations";
 
 export function KnowledgeClusterDetailPanel({
   pattern,
@@ -19,7 +20,7 @@ export function KnowledgeClusterDetailPanel({
   const rate = knowledgeClusterSuccessRate(pattern);
 
   return (
-    <motion.div initial={{ opacity: 0, x: 20 }} animate={{ opacity: 1, x: 0 }} exit={{ opacity: 0, x: 20 }} transition={{ duration: 0.2, ease: [0.22, 1, 0.36, 1] }} className="absolute right-3 top-3 z-50 w-72 rounded-xl border border-glass-hover bg-background/95 backdrop-blur-xl p-4 shadow-2xl">
+    <motion.div initial={{ opacity: 0, x: 20 }} animate={{ opacity: 1, x: 0 }} exit={{ opacity: 0, x: 20 }} transition={{ duration: 0.2, ease: EASE_CURVE }} className="absolute right-3 top-3 z-50 w-72 rounded-xl border border-glass-hover bg-background/95 backdrop-blur-xl p-4 shadow-2xl">
       <div className="flex items-start justify-between mb-3">
         <div className="flex items-center gap-2">
           <div className={`flex h-7 w-7 items-center justify-center rounded-lg ${config.bgClass}`}>
@@ -49,7 +50,7 @@ export function KnowledgeClusterDetailPanel({
         <DetailStat label={t.knowledgePage.confidence} value={`${Math.round(pattern.confidence * 100)}%`} tone={config.textColor} small />
       </div>
       <div className="h-1.5 w-full rounded-full bg-white/[0.06] overflow-hidden mb-3">
-        <motion.div className="h-full rounded-full" style={{ backgroundColor: config.color }} initial={{ width: 0 }} animate={{ width: `${pattern.confidence * 100}%` }} transition={{ duration: 0.5, ease: [0.22, 1, 0.36, 1] }} />
+        <motion.div className="h-full rounded-full" style={{ backgroundColor: config.color }} initial={{ width: 0 }} animate={{ width: `${pattern.confidence * 100}%` }} transition={{ duration: 0.5, ease: EASE_CURVE }} />
       </div>
       <p className="text-sm leading-relaxed text-foreground/60">{pattern.description}</p>
       <div className="mt-2 flex items-center gap-1 text-sm text-muted-dark">

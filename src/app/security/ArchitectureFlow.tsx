@@ -3,6 +3,7 @@
 import { useState, type KeyboardEvent as ReactKeyboardEvent } from "react";
 import { motion, AnimatePresence, useReducedMotion } from "framer-motion";
 import { ARCHITECTURE_LAYERS, type ArchitectureLayer } from "@/data/security";
+import { EASE_CURVE } from "@/lib/animations";
 
 const TOTAL = ARCHITECTURE_LAYERS.length;
 
@@ -104,7 +105,7 @@ function LayerCard({
       transition={{
         duration: 0.5,
         delay: index * 0.15,
-        ease: [0.22, 1, 0.36, 1],
+        ease: EASE_CURVE,
       }}
       onMouseEnter={() => setHovered(true)}
       onMouseLeave={() => setHovered(false)}
@@ -155,7 +156,7 @@ function LayerCard({
             initial={{ height: 0, opacity: 0 }}
             animate={{ height: "auto", opacity: 1 }}
             exit={{ height: 0, opacity: 0 }}
-            transition={{ duration: 0.2, ease: [0.22, 1, 0.36, 1] }}
+            transition={{ duration: 0.2, ease: EASE_CURVE }}
             className="overflow-hidden"
           >
             <p className="mt-3 pl-7 text-xs text-muted/70">{detail}</p>

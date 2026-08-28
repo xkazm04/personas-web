@@ -2,6 +2,7 @@
 
 import { motion } from "framer-motion";
 import { usePathname } from "next/navigation";
+import { EASE_CURVE } from "@/lib/animations";
 
 /**
  * Per-tab enter transition for `/m`. Replaces `app/m/template.tsx`.
@@ -20,7 +21,7 @@ export default function MobilePageTransition({ children }: { children: React.Rea
       key={pathname}
       initial={{ opacity: 0, y: 8 }}
       animate={{ opacity: 1, y: 0 }}
-      transition={{ duration: 0.22, ease: [0.22, 1, 0.36, 1] }}
+      transition={{ duration: 0.22, ease: EASE_CURVE }}
     >
       {children}
     </motion.div>

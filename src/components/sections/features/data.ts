@@ -1,6 +1,7 @@
 import type { Variants } from "framer-motion";
 import { Wand2, Zap, Cloud, Activity } from "lucide-react";
 import type { Feature, FeatureEntrance } from "./types";
+import { EASE_CURVE } from "@/lib/animations";
 
 export const cardOrchestrator: Variants = {
   hidden: {},
@@ -13,7 +14,7 @@ export const heroSlideIn: Variants = {
     opacity: 1,
     x: 0,
     scale: 1,
-    transition: { duration: 0.7, ease: [0.22, 1, 0.36, 1] },
+    transition: { duration: 0.7, ease: EASE_CURVE },
   },
 };
 
@@ -29,7 +30,7 @@ export const gridCardVariants: Record<FeatureEntrance, Variants> = {
       opacity: 1,
       x: 0,
       rotate: 0,
-      transition: { duration: 0.6, ease: [0.22, 1, 0.36, 1] },
+      transition: { duration: 0.6, ease: EASE_CURVE },
     },
   },
   fadeUp: {
@@ -38,7 +39,7 @@ export const gridCardVariants: Record<FeatureEntrance, Variants> = {
       opacity: 1,
       y: 0,
       rotate: 0,
-      transition: { duration: 0.6, ease: [0.22, 1, 0.36, 1] },
+      transition: { duration: 0.6, ease: EASE_CURVE },
     },
   },
   slideRight: {
@@ -47,7 +48,7 @@ export const gridCardVariants: Record<FeatureEntrance, Variants> = {
       opacity: 1,
       x: 0,
       rotate: 0,
-      transition: { duration: 0.6, ease: [0.22, 1, 0.36, 1] },
+      transition: { duration: 0.6, ease: EASE_CURVE },
     },
   },
 };

@@ -6,6 +6,7 @@ import { X } from "lucide-react";
 
 import { useFocusTrap } from "@/hooks/useFocusTrap";
 import { useTranslation } from "@/i18n/useTranslation";
+import { EASE_CURVE } from "@/lib/animations";
 
 /**
  * Generic dashboard modal: backdrop + centered panel with header/body/footer
@@ -71,7 +72,7 @@ export function Modal({
             initial={{ opacity: 0, y: 20, scale: 0.98 }}
             animate={{ opacity: 1, y: 0, scale: 1 }}
             exit={{ opacity: 0, y: 20, scale: 0.98 }}
-            transition={{ duration: 0.2, ease: [0.22, 1, 0.36, 1] }}
+            transition={{ duration: 0.2, ease: EASE_CURVE }}
             className={`relative flex w-full ${maxWidth} flex-col rounded-2xl border border-glass-hover bg-surface/95 shadow-2xl backdrop-blur-md`}
           >
             {(title || subtitle) && (
