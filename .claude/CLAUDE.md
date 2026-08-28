@@ -67,19 +67,17 @@ npm run test:e2e    # Playwright (specs under e2e/)
      behind `next/dynamic({ ssr: false })` or `<LazyMount>` never server-render
      and are exempt.)
    - Infinite loops reduce to **stillness**, not to a faster loop.
-   - For anything inside a section, prefer `useSectionPaused()`
-     (`src/hooks/useSectionPause.ts`) — it merges the preference with in-view,
-     tab-visibility and the manual pause toggle into one signal.
-
-8. **Client/server boundary**: a `"use client"` page cannot export `metadata`.
-   Routes whose `page.tsx` is a client component therefore carry a sibling
-   **server `layout.tsx` that exists to hold the metadata** (`blog`,
-   `templates`, `guide`, `how`, `playground`, `athena`, `connections` all do
-   this). If the page is a server component, put `metadata` directly on it.
-   Any route added to `src/app/sitemap.ts` must have one or the other —
-   `src/lib/sitemapRoutesHaveMetadata.test.ts` fails the build otherwise.
-   Prefer pushing `"use client"` down to the interactive leaf rather than
-   hoisting it to the page root for a single `useState`.
+   - An **ambient** loop (one that runs for as long as it is mounted) must also
+     stop when the tab is backgrounded: add `usePageVisibility()`
+     (`src/hooks/usePageVisibility.ts`) to its guard, or `useIsVisible()` when
+     it should also stop off-screen. A loop the user *starts* should instead
+     refuse to start while `document.hidden` — see
+     `use-playground-simulation.ts` and `use-pipeline-simulation.ts`.
+   - Note: `useSectionPause.ts` implements a fuller merged signal (preference +
+     in-view + tab-hidden + manual toggle) but is **currently dormant** — no
+     `SectionPauseProvider` is mounted anywhere, so `useSectionPaused()` has no
+     consumers and `TerminalChrome`'s pause button never renders. Do not reach
+     for it until it is actually wired.
 
 4. **React 19 rules**: the repo runs React 19's hooks/purity compiler rules.
    - **Never** call synchronous `setState` inside a `useEffect` body. For
@@ -113,6 +111,16 @@ npm run test:e2e    # Playwright (specs under e2e/)
    Verified: <tsc|lint|build|playwright>
    ```
 
+8. **Client/server boundary**: a `"use client"` page cannot export `metadata`.
+   Routes whose `page.tsx` is a client component therefore carry a sibling
+   **server `layout.tsx` that exists to hold the metadata** (`blog`,
+   `templates`, `guide`, `how`, `playground`, `athena`, `connections` all do
+   this). If the page is a server component, put `metadata` directly on it.
+   Any route added to `src/app/sitemap.ts` must have one or the other —
+   `src/lib/sitemapRoutesHaveMetadata.test.ts` fails the build otherwise.
+   Prefer pushing `"use client"` down to the interactive leaf rather than
+   hoisting it to the page root for a single `useState`.
+
 ## Out of scope
 
 Unless the user explicitly asks:
@@ -138,11 +146,13 @@ same commit):
   use opacity modifiers below `/60` (contrast below WCAG AA). Enforced by
   `eslint-rules/no-low-text-opacity.js`; do not work around it.
 - **`custom-animation/require-animation-gating`** — any file that uses
-  `requestAnimationFrame` / `cancelAnimationFrame` must import and call
-  `useReducedMotion` from framer-motion and short-circuit the animation when
-  it returns `true`. Enforced by `eslint-rules/require-animation-gating.js`;
-  do not work around it. The rule only sees raw animation-frame calls, so
-  CSS- and framer-motion-driven motion must still be gated by hand.
+  `requestAnimationFrame` / `cancelAnimationFrame` / `<canvas>` must import and
+  call a reduced-motion gate and short-circuit the animation. Accepted gates are
+  the named `ACCEPTED_GATES` set in `eslint-rules/require-animation-gating.js`:
+  `useStillMotion` (preferred), `useSectionPaused`, `useReducedMotion`,
+  `useReducedMotionPreference`. Do not work around it. The rule only sees raw
+  animation-frame and canvas usage, so CSS- and framer-motion-driven motion must
+  still be gated by hand.
 
 ## OSS release passes
 

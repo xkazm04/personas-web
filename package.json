@@ -18,6 +18,7 @@
     "dev": "next dev",
     "dev:inspect": "cross-env DEV_INSPECT=1 next dev",
     "build": "next build",
+    "analyze": "next experimental-analyze",
     "start": "next start",
     "lint": "eslint --max-warnings 24",
     "typecheck": "tsc --noEmit",
