@@ -37,7 +37,7 @@ The demo story: ResearchAgent and CodeReviewer are improving, DataProcessor is f
 - `DirectorKpiGrid.tsx` — four `GlowCard` KPI tiles; derives value rate and cost-per-value from the breakdown (cost/value is `null`→em-dash when nothing delivered value).
 - `MomentumStrip.tsx` — counted filter chips in `MOMENTUM_ORDER`, zero-count buckets hidden, "holding steady" collapse.
 - `ValueBreakdownCard.tsx` — hand-rolled stacked bar (`aria-hidden`; the counted legend is the semantic content), bands emerald/amber/rose/cyan/muted.
-- `ScoreDistributionCard.tsx` — Recharts `BarChart` themed via `chart-theme` (`AXIS_TICK`, `GRID_STROKE`, `CHART_CURSOR_FILL`, `useChartAnimation`), per-band `Cell` fills from `scoreTone(...).series`, click-to-filter via the Bar `onClick` payload, non-selected bands dimmed while a score facet is active.
+- `ScoreDistributionCard.tsx` — card chrome only; the chart is `@/components/dashboard/ScoreDistributionChart`, `dynamic(..., { ssr: false })` (−405 KB off this route's first load). The card resolves each band's `fill` via `scoreTone(...).series` and passes plain `ScoreBand`s down, so the chart module carries no director-page import. Recharts `BarChart` themed via `chart-theme` (`AXIS_TICK`, `GRID_STROKE`, `CHART_CURSOR_FILL`, `useChartAnimation`), per-band `Cell` fills from `scoreTone(...).series`, click-to-filter via the Bar `onClick` payload, non-selected bands dimmed while a score facet is active.
 - `CoachingTable.tsx` — sort = flagged first (by `ATTENTION_ORDER` of the primary flag), then ascending latest score (unscored = 99), then name; a `min-w-[640px]` grid inside `overflow-x-auto`. Renders `AttentionTriageBar` and the `scoreVisuals` pieces.
 - `AttentionTriageBar.tsx` — the flag chips + facet clear-chip + all-healthy line.
 - `scoreVisuals.tsx` — `ScoreSparkline` (inline SVG polyline + trailing dot) and `ScoreDelta` (signed arrow, hidden at zero).
@@ -53,7 +53,8 @@ The demo story: ResearchAgent and CodeReviewer are improving, DataProcessor is f
 | `src/app/dashboard/director/director-page/DirectorKpiGrid.tsx` | Portfolio scorecard (4 KPI tiles) |
 | `src/app/dashboard/director/director-page/MomentumStrip.tsx` | Improving/flat/declining filter chips |
 | `src/app/dashboard/director/director-page/ValueBreakdownCard.tsx` | Stacked value-outcome bar + legend |
-| `src/app/dashboard/director/director-page/ScoreDistributionCard.tsx` | 0–5 verdict histogram (Recharts, click-to-filter) |
+| `src/app/dashboard/director/director-page/ScoreDistributionCard.tsx` | 0–5 verdict histogram card; defers `ScoreDistributionChart` |
+| `src/components/dashboard/ScoreDistributionChart.tsx` | The Recharts histogram itself (click-to-filter), lazy-loaded |
 | `src/app/dashboard/director/director-page/CoachingTable.tsx` | Per-agent verdict-history table |
 | `src/app/dashboard/director/director-page/AttentionTriageBar.tsx` | Attention flag chips + clear-chip |
 | `src/app/dashboard/director/director-page/scoreVisuals.tsx` | Score sparkline + delta arrow |

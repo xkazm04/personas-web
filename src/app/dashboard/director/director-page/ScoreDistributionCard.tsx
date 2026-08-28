@@ -1,53 +1,26 @@
 "use client";
 
+import { useMemo } from "react";
+import dynamic from "next/dynamic";
 import { BarChart3 } from "lucide-react";
-import {
-  Bar,
-  BarChart,
-  CartesianGrid,
-  Cell,
-  ResponsiveContainer,
-  Tooltip,
-  XAxis,
-  YAxis,
-} from "recharts";
 
 import GlowCard from "@/components/GlowCard";
 import { useTranslation } from "@/i18n/useTranslation";
-import {
-  AXIS_TICK,
-  AXIS_TICK_LABEL,
-  CHART_CURSOR_FILL,
-  CHART_TOOLTIP_CLASS,
-  GRID_STROKE,
-  useChartAnimation,
-} from "@/lib/chart-theme";
+import type { ScoreBand } from "@/components/dashboard/ScoreDistributionChart";
 import type { DirectorScoreBand } from "@/lib/mock-dashboard-data";
 
 import { scoreTone, type RosterFacet } from "./directorMeta";
 
-function DistributionTooltip({
-  active,
-  payload,
-  label,
-  agentsLabel,
-}: {
-  active?: boolean;
-  payload?: Array<{ value: number }>;
-  label?: number;
-  agentsLabel: string;
-}) {
-  if (!active || !payload?.length) return null;
-  return (
-    <div className={CHART_TOOLTIP_CLASS}>
-      <p className="text-muted-dark">
-        {label}/5 · <span className="font-medium text-foreground">
-          {agentsLabel.replace("{count}", String(payload[0].value))}
-        </span>
-      </p>
-    </div>
-  );
-}
+// recharts (+ d3) is a 344 KB chunk; importing it here put it in this route's
+// first load. Deferred, it is fetched when the card mounts. Matches
+// PerformanceLatencyCard / PerformanceSpendCard on the observability route.
+const ScoreDistributionChart = dynamic(
+  () => import("@/components/dashboard/ScoreDistributionChart"),
+  {
+    ssr: false,
+    loading: () => <div className="h-[200px] animate-pulse rounded-lg bg-white/[0.03]" />,
+  },
+);
 
 /**
  * Score distribution — how the latest 0–5 verdicts spread across the coaching
@@ -68,9 +41,20 @@ export function ScoreDistributionCard({
 }) {
   const { t } = useTranslation();
   const lp = t.directorPage.distribution;
-  const anim = useChartAnimation();
   const hasScores = distribution.some((band) => band.count > 0);
   const selectedScore = facet?.type === "score" ? facet.score : null;
+
+  // Resolve the per-band colour here so the chart module stays free of
+  // director-page imports (and so importing it cannot drag recharts back in).
+  const bands = useMemo<ScoreBand[]>(
+    () =>
+      distribution.map((band) => ({
+        score: band.score,
+        count: band.count,
+        fill: scoreTone(band.score).series,
+      })),
+    [distribution],
+  );
 
   return (
     <GlowCard accent="purple" className="flex h-full flex-col p-5">
@@ -89,40 +73,14 @@ export function ScoreDistributionCard({
           {lp.empty}
         </p>
       ) : (
-        <ResponsiveContainer width="100%" height={200}>
-          <BarChart data={distribution} margin={{ top: 8, right: 8, left: -28, bottom: 0 }}>
-            <CartesianGrid strokeDasharray="3 3" stroke={GRID_STROKE} vertical={false} />
-            <XAxis dataKey="score" tick={AXIS_TICK_LABEL} axisLine={false} tickLine={false} />
-            <YAxis tick={AXIS_TICK} axisLine={false} tickLine={false} allowDecimals={false} />
-            <Tooltip
-              content={<DistributionTooltip agentsLabel={lp.agents} />}
-              cursor={CHART_CURSOR_FILL}
-            />
-            <Bar
-              dataKey="count"
-              radius={[4, 4, 0, 0]}
-              className="cursor-pointer"
-              onClick={(item) => {
-                const band = (item as { payload?: DirectorScoreBand }).payload;
-                if (!band || band.count === 0) return;
-                onFacetChange(
-                  selectedScore === band.score ? null : { type: "score", score: band.score },
-                );
-              }}
-              {...anim}
-            >
-              {distribution.map((band) => (
-                <Cell
-                  key={band.score}
-                  fill={scoreTone(band.score).series}
-                  fillOpacity={
-                    selectedScore === null ? 0.75 : selectedScore === band.score ? 0.95 : 0.25
-                  }
-                />
-              ))}
-            </Bar>
-          </BarChart>
-        </ResponsiveContainer>
+        <ScoreDistributionChart
+          bands={bands}
+          selectedScore={selectedScore}
+          onSelectScore={(score) =>
+            onFacetChange(selectedScore === score ? null : { type: "score", score })
+          }
+          agentsLabel={lp.agents}
+        />
       )}
     </GlowCard>
   );

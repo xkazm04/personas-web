@@ -1,26 +1,22 @@
 import { motion } from "framer-motion";
-import {
-  Legend,
-  PolarAngleAxis,
-  PolarGrid,
-  PolarRadiusAxis,
-  Radar,
-  RadarChart,
-  ResponsiveContainer,
-  Tooltip,
-} from "recharts";
+import dynamic from "next/dynamic";
 
 import { fadeUp } from "@/lib/animations";
 import { BRAND_VAR } from "@/lib/brand-theme";
-import { useChartAnimation } from "@/lib/chart-theme";
+import type { RadarDatum } from "@/components/dashboard/LeaderboardRadarChart";
 import type { LeaderboardPersona } from "@/lib/mock-dashboard-data";
 
-/** One radar axis: the selected persona's value plus the benchmark overlay. */
-export interface RadarDatum {
-  metric: string;
-  value: number;
-  benchmark?: number;
-}
+// recharts (+ d3) is a 344 KB chunk; importing it here put it in this route's
+// first load. Deferred, it is fetched when the card mounts.
+const LeaderboardRadarChart = dynamic(
+  () => import("@/components/dashboard/LeaderboardRadarChart"),
+  {
+    ssr: false,
+    loading: () => <div className="h-full w-full animate-pulse rounded-lg bg-white/[0.03]" />,
+  },
+);
+
+export type { RadarDatum };
 
 export function LeaderboardRadarCard({
   selected,
@@ -34,7 +30,6 @@ export function LeaderboardRadarCard({
   data: RadarDatum[];
   title: string;
 }) {
-  const anim = useChartAnimation();
   const selectedColor = selected?.color ?? BRAND_VAR.cyan;
 
   return (
@@ -52,59 +47,13 @@ export function LeaderboardRadarCard({
         )}
       </div>
       <div className="h-[300px] w-full">
-        <ResponsiveContainer>
-          <RadarChart data={data} outerRadius="72%">
-            <PolarGrid stroke="rgba(255,255,255,0.08)" />
-            <PolarAngleAxis
-              dataKey="metric"
-              tick={{ fill: "rgba(255,255,255,0.55)", fontSize: 11 }}
-            />
-            <PolarRadiusAxis
-              angle={90}
-              domain={[0, 100]}
-              tick={{ fill: "rgba(255,255,255,0.35)", fontSize: 10 }}
-              axisLine={false}
-            />
-            {/* Benchmark (#1) drawn first so it sits behind the selection. */}
-            {benchmark && (
-              <Radar
-                name={benchmark.name}
-                dataKey="benchmark"
-                stroke={benchmark.color}
-                fill={benchmark.color}
-                fillOpacity={0.05}
-                strokeWidth={1.5}
-                strokeDasharray="4 3"
-                {...anim}
-              />
-            )}
-            <Radar
-              name={selected?.name ?? ""}
-              dataKey="value"
-              stroke={selectedColor}
-              fill={selectedColor}
-              fillOpacity={0.32}
-              strokeWidth={2}
-              {...anim}
-            />
-            {benchmark && (
-              <Legend
-                iconType="line"
-                iconSize={12}
-                wrapperStyle={{ fontSize: 12, paddingTop: 4 }}
-              />
-            )}
-            <Tooltip
-              contentStyle={{
-                background: "rgba(10,15,26,0.92)",
-                border: "1px solid rgba(255,255,255,0.08)",
-                borderRadius: "10px",
-                fontSize: 12,
-                backdropFilter: "blur(6px)",
-              }}
-            />
-          </RadarChart>
-        </ResponsiveContainer>
+        <LeaderboardRadarChart
+          data={data}
+          selectedName={selected?.name ?? ""}
+          selectedColor={selectedColor}
+          benchmarkName={benchmark?.name}
+          benchmarkColor={benchmark?.color}
+        />
       </div>
     </motion.div>
   );
