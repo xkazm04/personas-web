@@ -13,6 +13,7 @@ import { lockBodyScroll, unlockBodyScroll } from "@/lib/bodyScrollLock";
 
 import { CHROME_SIDEBAR_STICKY, CHROME_TOP_MOBILE_BAR } from "./guide-chrome";
 import { FOCUS_RING, GuideSidebarContent } from "./guide-sidebar/GuideSidebarContent";
+import { EASE_CURVE } from "@/lib/animations";
 
 /**
  * The category tree arrives as a prop from the server `guide/layout.tsx`
@@ -74,13 +75,13 @@ export default function GuideSidebar({ categories }: { categories: GuideNavCateg
       }
     : {
         hidden: { height: 0, opacity: 0 },
-        visible: { height: "auto", opacity: 1, transition: { duration: 0.2, ease: [0.22, 1, 0.36, 1] } },
-        exit: { height: 0, opacity: 0, transition: { duration: 0.15, ease: [0.22, 1, 0.36, 1] } },
+        visible: { height: "auto", opacity: 1, transition: { duration: 0.2, ease: EASE_CURVE } },
+        exit: { height: 0, opacity: 0, transition: { duration: 0.15, ease: EASE_CURVE } },
       };
 
   const mobileTransition = shouldReduceMotion
     ? { duration: 0 }
-    : { duration: 0.25, ease: [0.22, 1, 0.36, 1] as const };
+    : { duration: 0.25, ease: EASE_CURVE };
 
   const toggle = (id: string) =>
     setExpanded((prev) => {

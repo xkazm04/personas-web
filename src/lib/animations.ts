@@ -55,7 +55,9 @@ import type { Variants } from "framer-motion";
 
 // ── Standardized ease curve ──────────────────────────────────────────
 // Used across all transition presets for a consistent spring-like feel.
-const EASE_CURVE = [0.22, 1, 0.36, 1] as [number, number, number, number];
+// Exported so call sites that need a bespoke duration can still share the one
+// curve rather than re-typing it. Retuning the house feel stays a single edit.
+export const EASE_CURVE = [0.22, 1, 0.36, 1] as [number, number, number, number];
 
 // ── Framer Motion transition presets ─────────────────────────────────
 // instant (100ms) → tooltips, micro-interactions

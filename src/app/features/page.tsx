@@ -1,9 +1,31 @@
+import type { Metadata } from "next";
 import InfoPageLayout from "@/components/InfoPageLayout";
 import StageSection from "@/components/StageSection";
 import LazyMount from "@/components/LazyMount";
+import { SITE_URL } from "@/lib/seo";
 
 export const dynamic = "force-static";
 export const revalidate = 3600;
+
+// This page is listed in sitemap.ts at priority 0.9 — second only to the
+// homepage — and until now exported no metadata at all, so it inherited the
+// root layout's title and description verbatim and presented search engines
+// with a duplicate of the homepage. `sitemapRoutesHaveMetadata.test.ts` now
+// fails if any sitemap-listed route regresses to that state.
+export const metadata: Metadata = {
+  title: "Features",
+  description:
+    "Every capability behind Personas: a visual design engine, layered agent memory, self-healing runs, a credential vault, multi-provider AI routing, an observability deck, the agent lab, and a plugin ecosystem.",
+  openGraph: {
+    title: "Features — Personas",
+    description:
+      "Design, memory, self-healing, security, multi-provider AI, observability, the agent lab and plugins — the full capability map of the Personas platform.",
+    url: `${SITE_URL}/features`,
+  },
+  alternates: {
+    canonical: `${SITE_URL}/features`,
+  },
+};
 
 import DesignEngine from "@/components/feature-sections/DesignEngine";
 import {

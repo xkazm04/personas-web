@@ -6,6 +6,7 @@ import { Cookie, X } from "lucide-react";
 import Link from "next/link";
 import { COOKIE_CONSENT_KEY } from "@/lib/constants";
 import { flushAnalyticsQueue } from "@/lib/analytics";
+import { EASE_CURVE } from "@/lib/animations";
 
 const CONSENT_REOPEN_EVENT = "cookie-consent:reopen";
 
@@ -90,7 +91,7 @@ export default function CookieConsent() {
           initial={{ y: 80, opacity: 0 }}
           animate={{ y: 0, opacity: 1 }}
           exit={{ y: 80, opacity: 0 }}
-          transition={{ duration: 0.35, ease: [0.22, 1, 0.36, 1] }}
+          transition={{ duration: 0.35, ease: EASE_CURVE }}
           className="fixed bottom-0 inset-x-0 z-50 flex justify-center p-4"
         >
           <div className="relative w-full max-w-4xl rounded-2xl bg-card-bg/95 backdrop-blur-xl border border-glass-hover px-6 py-4 shadow-2xl">

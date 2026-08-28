@@ -28,10 +28,19 @@ export default function BlogPage() {
   // with a future `date` immediately publishes it (the freshness
   // clock is the user's, not the build's). Use UTC midnight cutoff so
   // a post dated "today" reliably appears regardless of TZ.
-  const visiblePosts = useMemo(() => {
+  // `new Date()` is impure, so it may not run in render or in a `useMemo`
+  // factory (React 19 purity rule). A lazy `useState` initializer samples the
+  // clock exactly once, on the client, at mount — which also closes a real
+  // hydration hole: read during render, an SSR pass and a hydration pass that
+  // straddle UTC midnight computed different cutoffs and rendered a different
+  // number of cards.
+  const [cutoff] = useState(() => {
     const todayUtc = new Date();
     todayUtc.setUTCHours(0, 0, 0, 0);
-    const cutoff = todayUtc.getTime();
+    return todayUtc.getTime();
+  });
+
+  const visiblePosts = useMemo(() => {
     const dated = BLOG_POSTS.filter((p) => {
       const t = new Date(p.date).getTime();
       return Number.isFinite(t) && t <= cutoff;
@@ -41,7 +50,7 @@ export default function BlogPage() {
     return dated.slice().sort(
       (a, b) => new Date(b.date).getTime() - new Date(a.date).getTime(),
     );
-  }, []);
+  }, [cutoff]);
 
   const filtered = useMemo(() => {
     const q = search.toLowerCase().trim();

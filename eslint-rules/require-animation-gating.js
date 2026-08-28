@@ -4,11 +4,27 @@
  * Enforces the animation gating contract defined in lib/animations.ts.
  *
  * Flags files that use `requestAnimationFrame`, `<canvas>`, or
- * `cancelAnimationFrame` without also importing `useReducedMotion`
- * (from framer-motion or a local hook).
+ * `cancelAnimationFrame` without also importing a reduced-motion gate.
+ *
+ * Accepted gates: `useStillMotion` (preferred — SSR-safe and subscribing),
+ * `useReducedMotion` (framer's; samples once on the client and answers null on
+ * the server, so it must not reach markup decisions), `useReducedMotionPreference`,
+ * and `useSectionPaused` (the merged pause signal, which folds the preference in
+ * along with in-view and tab-visibility).
  *
  * This converts the documented contract into a lint-time guarantee.
  */
+
+const ACCEPTED_GATES = new Set([
+  // Preferred: SSR-safe (useSyncExternalStore + getServerSnapshot) and live.
+  "useStillMotion",
+  // The merged pause signal — preference + in-view + tab-hidden + manual.
+  "useSectionPaused",
+  // framer's hook. Still an accepted gate for frame loops, but it answers
+  // `null` on the server, so it must never decide markup.
+  "useReducedMotion",
+  "useReducedMotionPreference",
+]);
 
 module.exports = {
   meta: {
@@ -36,8 +52,7 @@ module.exports = {
         for (const specifier of node.specifiers) {
           if (
             specifier.local &&
-            (specifier.local.name === "useReducedMotion" ||
-              specifier.local.name === "useReducedMotionPreference")
+            ACCEPTED_GATES.has(specifier.local.name)
           ) {
             hasReducedMotion = true;
           }
@@ -61,8 +76,7 @@ module.exports = {
         // without import, e.g. from a destructured hook)
         if (
           node.callee.type === "Identifier" &&
-          (node.callee.name === "useReducedMotion" ||
-            node.callee.name === "useReducedMotionPreference")
+          ACCEPTED_GATES.has(node.callee.name)
         ) {
           hasReducedMotion = true;
         }

@@ -4,7 +4,7 @@ import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { AnimatePresence, motion } from "framer-motion";
 import { Loader2 } from "lucide-react";
 import FilterBar from "@/components/dashboard/FilterBar";
-import { fadeUp, staggerContainer } from "@/lib/animations";
+import { EASE_CURVE, fadeUp, staggerContainer } from "@/lib/animations";
 import { useReviewBulkActions } from "@/hooks/useReviewBulkActions";
 import { usePolling } from "@/hooks/usePolling";
 import { useTranslation } from "@/i18n/useTranslation";
@@ -122,7 +122,7 @@ export default function ReviewsSplitPane() {
         </div>
         <div className="w-[60%] flex flex-col">
           <AnimatePresence mode="wait">
-            <motion.div key={selectedReview?.id ?? "empty"} initial={{ opacity: 0, x: 10 }} animate={{ opacity: 1, x: 0 }} exit={{ opacity: 0, x: -10 }} transition={{ duration: 0.15, ease: [0.22, 1, 0.36, 1] }} className="h-full">
+            <motion.div key={selectedReview?.id ?? "empty"} initial={{ opacity: 0, x: 10 }} animate={{ opacity: 1, x: 0 }} exit={{ opacity: 0, x: -10 }} transition={{ duration: 0.15, ease: EASE_CURVE }} className="h-full">
               <ReviewDetailPanel review={selectedReview} onResolve={handleResolve} />
             </motion.div>
           </AnimatePresence>

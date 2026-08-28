@@ -12,6 +12,7 @@ import KnowledgeDenseTable from "./KnowledgeDenseTable";
 import KnowledgeClusterGraph from "./KnowledgeClusterGraph";
 import MemoriesView from "./MemoriesView";
 import { useKnowledgeData } from "./useKnowledgeData";
+import { EASE_CURVE } from "@/lib/animations";
 
 type ViewVariant = "dense-table" | "cluster-graph" | "memories";
 
@@ -81,7 +82,7 @@ export default function KnowledgeGraphPage() {
       <motion.div
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.25, ease: [0.22, 1, 0.36, 1] }}
+        transition={{ duration: 0.25, ease: EASE_CURVE }}
         className="flex items-center justify-between mb-6"
       >
         <div>

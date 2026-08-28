@@ -2,12 +2,15 @@
 
 import { useState, useEffect } from "react";
 import { motion, useReducedMotion } from "framer-motion";
+import { usePageVisibility } from "@/hooks/usePageVisibility";
 import { Swords, Check, X } from "lucide-react";
 import { ARENA_ROUNDS } from "../data";
 import TabBackdrop from "./TabBackdrop";
 
 export default function ArenaTab() {
   const reduced = useReducedMotion() ?? false;
+  // Ambient round cycle: stop advancing rounds into a backgrounded tab.
+  const tabHidden = usePageVisibility();
   const [currentRound, setCurrentRound] = useState(() =>
     reduced ? ARENA_ROUNDS.length - 1 : 0,
   );
@@ -25,7 +28,7 @@ export default function ArenaTab() {
   }
 
   useEffect(() => {
-    if (reduced) return;
+    if (reduced || tabHidden) return;
     const id = setInterval(() => {
       setCurrentRound((r) => (r + 1) % ARENA_ROUNDS.length);
       setPhase("fighting");
@@ -33,7 +36,7 @@ export default function ArenaTab() {
       return () => clearTimeout(t);
     }, 3400);
     return () => clearInterval(id);
-  }, [reduced]);
+  }, [reduced, tabHidden]);
 
   useEffect(() => {
     if (phase === "fighting" && !reduced) {

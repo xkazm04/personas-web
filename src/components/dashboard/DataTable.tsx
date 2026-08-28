@@ -3,6 +3,7 @@
 import { motion, AnimatePresence } from "framer-motion";
 import { ChevronDown } from "lucide-react";
 import { useState, useCallback } from "react";
+import { EASE_CURVE } from "@/lib/animations";
 
 interface Column<T> {
   key: string;
@@ -137,7 +138,7 @@ export default function DataTable<T>({
                       initial={{ height: 0, opacity: 0 }}
                       animate={{ height: "auto", opacity: 1 }}
                       exit={{ height: 0, opacity: 0 }}
-                      transition={{ duration: 0.2, ease: [0.22, 1, 0.36, 1] }}
+                      transition={{ duration: 0.2, ease: EASE_CURVE }}
                       className="overflow-hidden border-t border-glass"
                     >
                       <div className="px-4 py-4">{expandable(row)}</div>

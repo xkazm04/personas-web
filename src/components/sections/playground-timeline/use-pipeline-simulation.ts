@@ -32,6 +32,13 @@ export function usePipelineSimulation() {
 
   const runSimulation = useCallback(
     (exampleIdx: number, playbackSpeed: 1 | 2 = 1) => {
+      // Refuse to start against a hidden tab. This simulation schedules every
+      // stage's timeout up front, so a run begun in a backgrounded tab races
+      // ahead invisibly and the user returns to a finished pipeline they never
+      // saw — the "done already?" surprise its sibling
+      // (use-playground-simulation.ts) guards against in the same way.
+      if (typeof document !== "undefined" && document.hidden) return;
+
       const example =
         Number.isInteger(exampleIdx) &&
         exampleIdx >= 0 &&

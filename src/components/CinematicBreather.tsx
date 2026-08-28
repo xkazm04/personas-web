@@ -1,7 +1,8 @@
 "use client";
 
 import { useRef, useCallback } from "react";
-import { useInView, useReducedMotion } from "framer-motion";
+import { useInView } from "framer-motion";
+import { useStillMotion } from "@/hooks/useStillMotion";
 import { useQualityTier, type QualityTier } from "@/contexts/QualityContext";
 import { useCanvasCompositor } from "@/hooks/useCanvasCompositor";
 
@@ -18,7 +19,7 @@ function TypewriterLine({
   charStep?: number;
   pulseAfter?: boolean;
 }) {
-  const prefersReducedMotion = useReducedMotion();
+  const prefersReducedMotion = useStillMotion();
   const lineRef = useRef<HTMLSpanElement>(null);
   const inView = useInView(lineRef, { once: true, margin: "-80px" });
   const chars = Array.from(text);
@@ -91,7 +92,7 @@ function tickAndDrawParticles(
 }
 
 function AmbientParticles() {
-  const prefersReducedMotion = useReducedMotion();
+  const prefersReducedMotion = useStillMotion();
   const tier = useQualityTier();
   const particleCount = PARTICLE_COUNTS[tier];
   const canvasRef = useRef<HTMLCanvasElement>(null);

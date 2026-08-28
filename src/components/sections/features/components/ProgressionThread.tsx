@@ -2,6 +2,7 @@
 
 import { motion } from "framer-motion";
 import type { Feature } from "../types";
+import { EASE_CURVE } from "@/lib/animations";
 
 /* ── Position constants ───────────────────────────────────────────────
  * The thread renders a vertical dashed line with numbered dots beside
@@ -53,7 +54,7 @@ export default function ProgressionThread({ features }: { features: Feature[] })
             visible: {
               scale: 1,
               opacity: 1,
-              transition: { delay: 0.4 + i * 0.15, duration: 0.4, ease: [0.22, 1, 0.36, 1] },
+              transition: { delay: 0.4 + i * 0.15, duration: 0.4, ease: EASE_CURVE },
             },
           }}
         >

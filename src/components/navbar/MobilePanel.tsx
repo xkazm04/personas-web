@@ -7,6 +7,7 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useTranslation } from "@/i18n/useTranslation";
 import { useRoutes } from "./useRoutes";
+import { EASE_CURVE } from "@/lib/animations";
 
 interface MobilePanelProps {
   open: boolean;
@@ -45,7 +46,7 @@ const MobilePanel = forwardRef<HTMLDivElement, MobilePanelProps>(
               initial={{ x: "100%" }}
               animate={{ x: 0 }}
               exit={{ x: "100%" }}
-              transition={{ duration: 0.25, ease: [0.22, 1, 0.36, 1] }}
+              transition={{ duration: 0.25, ease: EASE_CURVE }}
               role="dialog"
               aria-modal="true"
               aria-label="Navigation menu"

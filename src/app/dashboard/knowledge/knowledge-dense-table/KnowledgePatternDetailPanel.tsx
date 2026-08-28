@@ -4,6 +4,7 @@ import { useTranslation } from "@/i18n/useTranslation";
 import type { KnowledgePattern } from "@/lib/mock-dashboard-data";
 import { KNOWLEDGE_TYPE_CONFIG } from "./knowledgeDenseConfig";
 import { formatKnowledgeCost, formatKnowledgeDuration, knowledgeSuccessRate, relativeKnowledgeTime } from "./knowledgeDenseFormat";
+import { EASE_CURVE } from "@/lib/animations";
 
 export function KnowledgePatternDetailPanel({
   pattern,
@@ -22,7 +23,7 @@ export function KnowledgePatternDetailPanel({
       initial={{ height: 0, opacity: 0 }}
       animate={{ height: "auto", opacity: 1 }}
       exit={{ height: 0, opacity: 0 }}
-      transition={{ duration: 0.25, ease: [0.22, 1, 0.36, 1] }}
+      transition={{ duration: 0.25, ease: EASE_CURVE }}
       className="overflow-hidden border-t border-glass bg-white/[0.02] shrink-0"
     >
       <div className="p-3 flex items-start gap-4">

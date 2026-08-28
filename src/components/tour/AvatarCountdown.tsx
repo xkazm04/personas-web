@@ -4,6 +4,7 @@ import { useCallback, useEffect, useRef, useState } from "react";
 import { AnimatePresence, motion, useReducedMotion } from "framer-motion";
 
 import { INTRO_START_DELAY_MS } from "@/hooks/useTourAudio";
+import { EASE_CURVE } from "@/lib/animations";
 
 /**
  * Countdown that fills the Athena avatar during the pre-speech beat of the
@@ -185,7 +186,7 @@ export default function AvatarCountdown({
                   ? { opacity: 0 }
                   : { opacity: 0, scale: 1.7, filter: "blur(10px)" }
               }
-              transition={{ duration: 0.45, ease: [0.22, 1, 0.36, 1] }}
+              transition={{ duration: 0.45, ease: EASE_CURVE }}
             >
               {count}
             </motion.span>

@@ -4,6 +4,7 @@ import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { ChevronDown, Sparkles } from "lucide-react";
 import { POLICY_META, type PolicyId } from "@/data/policy-changelog";
+import { EASE_CURVE } from "@/lib/animations";
 
 type Props = {
   policyId: PolicyId;
@@ -45,7 +46,7 @@ export default function PolicyChangelog({ policyId, hasUnseenUpdate }: Props) {
             initial={{ height: 0, opacity: 0 }}
             animate={{ height: "auto", opacity: 1 }}
             exit={{ height: 0, opacity: 0 }}
-            transition={{ duration: 0.2, ease: [0.22, 1, 0.36, 1] }}
+            transition={{ duration: 0.2, ease: EASE_CURVE }}
             className="overflow-hidden"
           >
             <ul className="space-y-2 border-t border-glass px-4 py-3 text-sm leading-relaxed text-muted-dark">
