@@ -2,6 +2,7 @@
 
 import { useState, useEffect, useCallback, useRef } from "react";
 import { useReducedMotion } from "framer-motion";
+import { usePageVisibility } from "@/hooks/usePageVisibility";
 
 /* ── Types ──────────────────────────────────────────────────────── */
 
@@ -107,11 +108,16 @@ export function useMemoryFeed() {
     setTimeout(() => setFreshId((v) => (v === id ? null : v)), 1800);
   }, []);
 
+  // Ambient demo loop: it runs for as long as the section is mounted, so
+  // without the tab-visibility decider it keeps minting memories into a
+  // backgrounded tab that nobody is looking at.
+  const tabHidden = usePageVisibility();
+
   useEffect(() => {
-    if (prefersReducedMotion) return;
+    if (prefersReducedMotion || tabHidden) return;
     const id = setInterval(addMemory, 5500 + Math.random() * 2500);
     return () => clearInterval(id);
-  }, [addMemory, prefersReducedMotion]);
+  }, [addMemory, prefersReducedMotion, tabHidden]);
 
   return { memories, freshId };
 }

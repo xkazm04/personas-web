@@ -3,6 +3,7 @@
 import { useEffect, useState } from "react";
 import Image from "next/image";
 import { useReducedMotion } from "framer-motion";
+import { usePageVisibility } from "@/hooks/usePageVisibility";
 
 import { AthenaOrb, FleetCell } from "./dev-tools-grid/AthenaFleetParts";
 import {
@@ -23,13 +24,16 @@ const NEEDS_STATES: CellState[] = ["awaiting", "stale"];
 
 export default function DevToolsGrid() {
   const reduced = useReducedMotion() ?? false;
+  // Ambient tick: pause it while the tab is backgrounded, matching the
+  // visibility discipline the canvas systems and use-playground-simulation use.
+  const tabHidden = usePageVisibility();
   const [tick, setTick] = useState(INITIAL_TICK);
 
   useEffect(() => {
-    if (reduced) return;
+    if (reduced || tabHidden) return;
     const id = setInterval(() => setTick((t) => t + 1), TICK_MS);
     return () => clearInterval(id);
-  }, [reduced]);
+  }, [reduced, tabHidden]);
 
   const phase = tick % CYCLE;
   const states = CELLS.map((_, i) => stateAt(i, phase));
