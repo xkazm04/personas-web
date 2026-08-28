@@ -1,11 +1,12 @@
 "use client";
 
-import { motion, useReducedMotion, useScroll, useSpring } from "framer-motion";
+import { motion, useScroll, useSpring } from "framer-motion";
+import { useStillMotion } from "@/hooks/useStillMotion";
 
 import { CHROME_TOP_PROGRESS } from "./guide-chrome";
 
 export default function ReadingProgress() {
-  const reduced = useReducedMotion();
+  const reduced = useStillMotion();
   const { scrollYProgress } = useScroll();
   const scaleX = useSpring(scrollYProgress, { stiffness: 220, damping: 30, mass: 0.4 });
 

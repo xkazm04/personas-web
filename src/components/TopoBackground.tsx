@@ -1,6 +1,6 @@
 "use client";
 
-import { useReducedMotion } from "framer-motion";
+import { useStillMotion } from "@/hooks/useStillMotion";
 import { useQualityTier } from "@/contexts/QualityContext";
 
 /**
@@ -16,7 +16,7 @@ import { useQualityTier } from "@/contexts/QualityContext";
  * identical to the previous implementation but without SVG path rasterisation.
  */
 export default function TopoBackground() {
-  const prefersReducedMotion = useReducedMotion();
+  const prefersReducedMotion = useStillMotion();
   const tier = useQualityTier();
 
   if (prefersReducedMotion) return null;

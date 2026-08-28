@@ -12,12 +12,17 @@ import {
   type ReactNode,
   type RefObject,
 } from "react";
-import { useReducedMotion } from "framer-motion";
 import { usePageVisibility } from "./usePageVisibility";
+import { useStillMotion } from "./useStillMotion";
 
 /**
  * Section-level animation pause state. Combines four signals:
- *   1. `prefers-reduced-motion` (accessibility)
+ *   1. `prefers-reduced-motion` (accessibility) — read through
+ *      `useStillMotion`, NOT framer's `useReducedMotion`: this merged value
+ *      reaches render decisions, and framer's hook answers `null` on the
+ *      server and the real preference on the client's first render, which
+ *      desyncs hydration. `useStillMotion` also subscribes, so a visitor who
+ *      changes the OS setting is accommodated without a reload.
  *   2. IntersectionObserver — only animate when on/near screen
  *   3. `document.hidden` — halt loops when the tab is blurred
  *   4. Manual user toggle (rendered by TerminalChrome's pause button)
@@ -51,7 +56,7 @@ export function useSectionPauseController({
   ref,
   rootMargin = "200px 0px",
 }: UseSectionPauseControllerOptions): SectionPauseValue {
-  const reducedMotion = !!useReducedMotion();
+  const reducedMotion = useStillMotion();
   const tabHidden = usePageVisibility();
   const [manualPaused, setManualPaused] = useState(false);
   const [inView, setInView] = useState(true);
@@ -107,7 +112,7 @@ export function SectionPauseProvider({
  */
 export function useSectionPaused(): boolean {
   const ctx = useContext(SectionPauseContext);
-  const reduced = !!useReducedMotion();
+  const reduced = useStillMotion();
   const tabHidden = usePageVisibility();
   if (ctx) return ctx.paused;
   return reduced || tabHidden;
