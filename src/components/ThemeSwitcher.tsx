@@ -2,7 +2,13 @@
 
 import { useState } from "react";
 import { AnimatePresence, motion } from "framer-motion";
-import { useThemeStore, THEMES, type ThemeId } from "@/stores/themeStore";
+import {
+  useThemeStore,
+  THEMES,
+  DEFAULT_THEME_ID,
+  type ThemeId,
+} from "@/stores/themeStore";
+import { useHydrated } from "@/hooks/useHydrated";
 import { useTranslation } from "@/i18n/useTranslation";
 import type { Translations } from "@/i18n/en";
 
@@ -67,9 +73,19 @@ const SWATCH_PATTERNS: Record<ThemeId, React.ReactNode> = {
 };
 
 export default function ThemeSwitcher() {
-  const themeId = useThemeStore((s) => s.themeId);
+  const persistedThemeId = useThemeStore((s) => s.themeId);
   const setTheme = useThemeStore((s) => s.setTheme);
   const { t } = useTranslation();
+
+  // `themeStore` uses zustand `persist`, which rehydrates from localStorage
+  // while the module evaluates — before React renders anything. Read directly,
+  // this component marked one swatch active on the server (the default) and a
+  // different one on the client's first render, because the pre-paint script in
+  // app/layout.tsx picks a theme at RANDOM from eleven ids on a first visit.
+  // That is a hydration mismatch on every page (this renders in the footer).
+  // Fall back to the store's pre-rehydration value until React has hydrated.
+  const hydrated = useHydrated();
+  const themeId = hydrated ? persistedThemeId : DEFAULT_THEME_ID;
 
   const dark = THEMES.filter((t) => !t.isLight);
   const light = THEMES.filter((t) => t.isLight);

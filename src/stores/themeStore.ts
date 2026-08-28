@@ -81,10 +81,18 @@ interface ThemeState {
   shuffleTheme: () => void;
 }
 
+/**
+ * The value the store holds before `persist` rehydrates — i.e. exactly what a
+ * server render sees. Components that read `themeId` during render must fall
+ * back to this until `useHydrated()` is true, or they will disagree with the
+ * HTML the server sent.
+ */
+export const DEFAULT_THEME_ID: ThemeId = "dark-midnight";
+
 export const useThemeStore = create<ThemeState>()(
   persist(
     (set) => ({
-      themeId: "dark-midnight",
+      themeId: DEFAULT_THEME_ID,
       setTheme: (themeId) => {
         applyThemeToDOM(themeId);
         set({ themeId });
