@@ -51,8 +51,35 @@ npm run test:e2e    # Playwright (specs under e2e/)
    hex colors. Text-opacity floor: see `custom-a11y/no-low-text-opacity`
    under **Custom lint rules**.
 
-3. **Animation gating**: gate all motion behind `useReducedMotion` — see
+3. **Animation gating**: gate all motion behind a reduced-motion signal — see
    `custom-animation/require-animation-gating` under **Custom lint rules**.
+   - Prefer **`useStillMotion`** (`src/hooks/useStillMotion.ts`) over framer's
+     `useReducedMotion`. framer's hook samples the media query once, on the
+     *client*, and answers `null` on the server — so it is neither SSR-safe nor
+     live. `useStillMotion` wraps it in `useSyncExternalStore` with a
+     `getServerSnapshot`, which React also uses for the hydrating render.
+   - **Never let a reduced-motion value decide markup** in a component that
+     server-renders. `if (reduced) return null` / returning a different element
+     makes the server and the client's first render disagree, and React
+     discards and re-renders the whole subtree — the most work possible for the
+     visitors who asked for less. Gate the `animate`/`variants`/`transition`
+     props instead, so DOM shape stays constant. (Components rendered only
+     behind `next/dynamic({ ssr: false })` or `<LazyMount>` never server-render
+     and are exempt.)
+   - Infinite loops reduce to **stillness**, not to a faster loop.
+   - For anything inside a section, prefer `useSectionPaused()`
+     (`src/hooks/useSectionPause.ts`) — it merges the preference with in-view,
+     tab-visibility and the manual pause toggle into one signal.
+
+8. **Client/server boundary**: a `"use client"` page cannot export `metadata`.
+   Routes whose `page.tsx` is a client component therefore carry a sibling
+   **server `layout.tsx` that exists to hold the metadata** (`blog`,
+   `templates`, `guide`, `how`, `playground`, `athena`, `connections` all do
+   this). If the page is a server component, put `metadata` directly on it.
+   Any route added to `src/app/sitemap.ts` must have one or the other —
+   `src/lib/sitemapRoutesHaveMetadata.test.ts` fails the build otherwise.
+   Prefer pushing `"use client"` down to the interactive leaf rather than
+   hoisting it to the page root for a single `useState`.
 
 4. **React 19 rules**: the repo runs React 19's hooks/purity compiler rules.
    - **Never** call synchronous `setState` inside a `useEffect` body. For
