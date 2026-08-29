@@ -3598,7 +3598,10 @@
             "guards"
           ],
           "confidence": "probable",
-          "state": "unknown"
+          "state": "conformant",
+          "evidence": "identity-scoped-eviction gap closed: useIncidentsFilterStore added to clearUserScopedCaches (commit 3f03ba9); no user-scoped persisted store remains outside the eviction list",
+          "evaluatedAt": "2026-08-29",
+          "evaluatedAgainst": "sha256:1117665ec59c1168"
         },
         {
           "subject": "design-tokens",
