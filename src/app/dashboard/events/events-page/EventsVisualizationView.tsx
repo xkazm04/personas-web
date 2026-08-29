@@ -1,9 +1,24 @@
+import dynamic from "next/dynamic";
 import { Play } from "lucide-react";
 
 import EventBusStats from "@/components/dashboard/EventBusStats";
-import EventBusVisualization from "@/components/dashboard/EventBusVisualization";
 import EventDetailDrawer from "@/components/dashboard/EventDetailDrawer";
 import { EVENT_TYPES, SWARM_PERSONAS, type SwarmNode } from "@/lib/mock-dashboard-data";
+
+// The event-bus swarm is an animated SVG with a requestAnimationFrame particle
+// system, and it lives behind the non-default "visualization" tab - but a
+// static import put it in this route's first load for everyone. Deferred, it
+// is fetched when the tab is opened. Its marketing twin (event-bus-showcase)
+// was already gated this way; this carries the same discipline into the
+// dashboard. ssr:false also suits it: it branches its markup on
+// prefers-reduced-motion, which is only safe off the server-rendered path.
+const EventBusVisualization = dynamic(
+  () => import("@/components/dashboard/EventBusVisualization"),
+  {
+    ssr: false,
+    loading: () => <div className="relative z-10 h-[420px] animate-pulse rounded-xl bg-white/[0.03]" />,
+  },
+);
 
 const EVENT_TYPE_COLORS: Record<string, string> = {
   "pull_request.opened": "#06b6d4",

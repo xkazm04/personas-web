@@ -48,7 +48,7 @@ upstream-unreachable → a structured `{ error: "upstream_unreachable" }` 502, a
 clamps out-of-range upstream statuses to 502 to avoid `Response` `RangeError`. It
 never leaks the orchestrator hostname.
 
-**Visualization.** `EventBusVisualization` lays out nodes with `nodePosition` (polar
+**Visualization.** `EventBusVisualization` is loaded with `dynamic(..., { ssr: false })` from `EventsVisualizationView` — it sits behind the non-default `visualization` tab, and `ssr: false` also keeps it off the server-rendered path, which matters because it branches its markup on `prefersReduced`. It lays out nodes with `nodePosition` (polar
 geometry, `eventBusGeometry.ts`) and drives particles via `useEventBusParticles` —
 a 60fps `requestAnimationFrame` loop that mutates particle/burst arrays in refs and
 calls `forceRender` once per frame (deliberately not React state, to avoid

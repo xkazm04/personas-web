@@ -1,6 +1,7 @@
 "use client";
 
 import { useCallback, useEffect, useRef, useState } from "react";
+import dynamic from "next/dynamic";
 import { motion } from "framer-motion";
 import { Table2, GitFork, Brain } from "lucide-react";
 import GradientText from "@/components/GradientText";
@@ -9,10 +10,19 @@ import SkeletonCard from "@/components/dashboard/SkeletonCard";
 import { KNOWLEDGE_VIEW_KEY } from "@/lib/constants";
 import { useTranslation } from "@/i18n/useTranslation";
 import KnowledgeDenseTable from "./KnowledgeDenseTable";
-import KnowledgeClusterGraph from "./KnowledgeClusterGraph";
 import MemoriesView from "./MemoriesView";
 import { useKnowledgeData } from "./useKnowledgeData";
 import { EASE_CURVE } from "@/lib/animations";
+
+// The cluster graph is one of three view variants and NOT the default
+// ("dense-table" is), yet a static import shipped its whole subtree - SVG
+// layout math, five sub-components, framer-motion - to every visitor of this
+// route regardless of which tab they opened. Deferred, it is fetched only when
+// the tab is actually selected.
+const KnowledgeClusterGraph = dynamic(() => import("./KnowledgeClusterGraph"), {
+  ssr: false,
+  loading: () => <div className="h-[500px] animate-pulse rounded-2xl bg-white/[0.03]" />,
+});
 
 type ViewVariant = "dense-table" | "cluster-graph" | "memories";
 
