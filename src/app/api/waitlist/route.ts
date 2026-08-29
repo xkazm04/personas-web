@@ -179,11 +179,17 @@ export async function GET(req: NextRequest) {
       }),
     );
     if (failed) {
-      // Counts are non-PII, but a zeroed response used to be indistinguishable
-      // from an empty waitlist. Report the fault instead of hiding it.
+      // Counts are non-PII, but a zeroed 200 is indistinguishable from an
+      // empty waitlist. Report the fault to Sentry AND refuse the request —
+      // a read that could not reach its store must not fabricate zeros.
       captureExceptionScrubbed(
         new Error(`waitlist count query failed (code=${(failed as { code?: string }).code ?? "unknown"})`),
         { tags: { scope: "api/waitlist", reason: "supabase-count-failed" } },
+      );
+      return waitlistError(
+        "Waitlist counts are temporarily unavailable",
+        "store_unavailable",
+        503,
       );
     }
     return NextResponse.json({ counts });
