@@ -5,6 +5,7 @@ import { useExecutionStore } from "@/stores/executionStore";
 import { useReviewStore } from "@/stores/reviewStore";
 import { useSystemStore } from "@/stores/systemStore";
 import { useDashboardFilterStore } from "@/stores/dashboardFilterStore";
+import { useIncidentsFilterStore } from "@/app/dashboard/incidents/incidents-page/useIncidentsFilterStore";
 
 /**
  * Drop every in-memory cache that holds user-scoped data so a freshly
@@ -42,4 +43,8 @@ export function clearUserScopedCaches(): void {
   // the next user briefly sees results filtered by the previous user's
   // selected persona.
   useDashboardFilterStore.getState().reset();
+  // Incidents filter store persists a persona *name* (plus filters) under
+  // "incidents-filter-state"; its reset() writes the defaults back through
+  // persist(), overwriting the stored payload rather than merely shadowing it.
+  useIncidentsFilterStore.getState().reset();
 }
