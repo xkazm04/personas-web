@@ -1445,7 +1445,6 @@
             "src/hooks/useIsVisible.ts",
             "src/hooks/useMaxScrollHeight.ts",
             "src/hooks/usePageVisibility.ts",
-            "src/hooks/useSectionPause.ts",
             "src/hooks/useTweenedNumber.ts",
             "src/lib/animations.ts"
           ],

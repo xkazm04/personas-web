@@ -73,11 +73,6 @@ npm run test:e2e    # Playwright (specs under e2e/)
      it should also stop off-screen. A loop the user *starts* should instead
      refuse to start while `document.hidden` — see
      `use-playground-simulation.ts` and `use-pipeline-simulation.ts`.
-   - Note: `useSectionPause.ts` implements a fuller merged signal (preference +
-     in-view + tab-hidden + manual toggle) but is **currently dormant** — no
-     `SectionPauseProvider` is mounted anywhere, so `useSectionPaused()` has no
-     consumers and `TerminalChrome`'s pause button never renders. Do not reach
-     for it until it is actually wired.
 
 4. **React 19 rules**: the repo runs React 19's hooks/purity compiler rules.
    - **Never** call synchronous `setState` inside a `useEffect` body. For
@@ -149,8 +144,8 @@ same commit):
   `requestAnimationFrame` / `cancelAnimationFrame` / `<canvas>` must import and
   call a reduced-motion gate and short-circuit the animation. Accepted gates are
   the named `ACCEPTED_GATES` set in `eslint-rules/require-animation-gating.js`:
-  `useStillMotion` (preferred), `useSectionPaused`, `useReducedMotion`,
-  `useReducedMotionPreference`. Do not work around it. The rule only sees raw
+  `useStillMotion` (preferred), `useIsVisible`, `usePageVisibility`,
+  `useReducedMotion`, `useReducedMotionPreference`. Do not work around it. The rule only sees raw
   animation-frame and canvas usage, so CSS- and framer-motion-driven motion must
   still be gated by hand.
 

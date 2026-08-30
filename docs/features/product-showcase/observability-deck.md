@@ -39,7 +39,7 @@ Renders the `OBSERVE` deep-dive on `/features` (`StageSection id="observe"`, eme
 - `src/app/features/page.tsx` — `StageSection id="observe"` renders `<LazyObservabilityDeck />`; nav anchor `{ label: "OBSERVE", href: "#observe" }`.
 - `src/components/feature-sections/feature-lazy.tsx` — `LazyObservabilityDeck` (code-split, `ssr:false`).
 - `@/components/SectionWrapper`, `@/components/primitives/SectionIntro`, `@/lib/animations` (`staggerContainer`).
-- `@/components/TerminalChrome` — chrome bar; auto-shows a pause toggle if a `SectionPauseProvider` is in scope (none here, so hidden).
+- `@/components/TerminalChrome` — chrome bar (title, traffic-light dots, status).
 - `@/hooks/useTweenedNumber` — count-up tween for metrics.
 - `@/lib/brand-theme` (`BRAND_VAR`) — all accent colors (emerald/cyan/purple/amber/rose/blue).
 - `lucide-react` icons throughout.

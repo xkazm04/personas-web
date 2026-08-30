@@ -9,8 +9,8 @@
  * Accepted gates: `useStillMotion` (preferred — SSR-safe and subscribing),
  * `useReducedMotion` (framer's; samples once on the client and answers null on
  * the server, so it must not reach markup decisions), `useReducedMotionPreference`,
- * and `useSectionPaused` (the merged pause signal, which folds the preference in
- * along with in-view and tab-visibility).
+ * and `useIsVisible` / `usePageVisibility` (which fold in in-view and
+ * tab-visibility around a reduced-motion gate).
  *
  * This converts the documented contract into a lint-time guarantee.
  */
@@ -18,8 +18,9 @@
 const ACCEPTED_GATES = new Set([
   // Preferred: SSR-safe (useSyncExternalStore + getServerSnapshot) and live.
   "useStillMotion",
-  // The merged pause signal — preference + in-view + tab-hidden + manual.
-  "useSectionPaused",
+  // Visibility gates, used alongside a preference gate for ambient loops.
+  "useIsVisible",
+  "usePageVisibility",
   // framer's hook. Still an accepted gate for frame loops, but it answers
   // `null` on the server, so it must never decide markup.
   "useReducedMotion",

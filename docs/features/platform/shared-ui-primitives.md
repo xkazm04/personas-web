@@ -11,7 +11,7 @@ Primitives split into two folders. `src/components/primitives/` holds the consol
 
 Theming is driven by `src/lib/brand-theme.ts`: components take a `BrandKey`/`BrandAccent` prop and resolve color via `BRAND_VAR[key]` (a CSS var like `var(--brand-cyan)`) plus `tint()` / `brandShadow()` (CSS `color-mix`). This keeps every primitive correct across all theme variants (dark-midnight, light, light-ice, light-news) instead of baking in hex. `GlowCard` is the exception — it still drives per-accent Tailwind utility strings from `src/lib/colors.ts` hex triplets, falling back to the `.glow-card-dynamic` CSS class (via a `--gc-accent` custom property) when a caller passes a custom `color`.
 
-The **terminal panel sub-system** layers three pieces: `TerminalPanel` (the dark glass shell with optional header/footer slots), `TerminalChrome` (the mac-traffic-light title bar, status dot, and an optional pause toggle wired to `useSectionPauseState`), and the `terminal/` render primitives — `TerminalLine` (one fade-in output row), `TerminalHistory` (a `command` + `output[]` block), and `BlinkingCursor`. `TerminalLine`/`TerminalHistory` are palette-agnostic: the shared `TerminalOutputLine` type leaves `color` an open `string`, and each consumer passes a `colorClasses` Record mapping its own narrow color union to Tailwind classes. `TerminalHistory` dev-warns once per unknown color key and falls back to `text-muted`.
+The **terminal panel sub-system** layers three pieces: `TerminalPanel` (the dark glass shell with optional header/footer slots), `TerminalChrome` (the mac-traffic-light title bar and status dot), and the `terminal/` render primitives — `TerminalLine` (one fade-in output row), `TerminalHistory` (a `command` + `output[]` block), and `BlinkingCursor`. `TerminalLine`/`TerminalHistory` are palette-agnostic: the shared `TerminalOutputLine` type leaves `color` an open `string`, and each consumer passes a `colorClasses` Record mapping its own narrow color union to Tailwind classes. `TerminalHistory` dev-warns once per unknown color key and falls back to `text-muted`.
 
 The **illustration library** is plain inline `<svg>` — no props, fixed `viewBox`, gradient `<defs>` and brand hex baked in. They are static except `HealthyShieldIllustration`, which animates orbiting dots via SMIL `<animateMotion>` and a breathing glow via the `.animate-breathe-glow` CSS class.
 
@@ -31,7 +31,7 @@ The **illustration library** is plain inline `<svg>` — no props, fixed `viewBo
 | `src/components/primitives/terminal/types.ts:12` | `TerminalOutputLine` shape (`text`, open-`string` `color`, `indent`, `delay`) |
 | `src/components/GlowCard.tsx:41` | Marketing glow card; `accent`/custom `color`, `texture`, `highlighted`; uses hex from `lib/colors.ts` + `.glow-card-dynamic` |
 | `src/components/GradientText.tsx:14` | Gradient-clipped text span; `marketing`/`silver` variants |
-| `src/components/TerminalChrome.tsx:18` | Title bar: traffic-light dots, status, pause toggle via `useSectionPauseState` |
+| `src/components/TerminalChrome.tsx` | Title bar: traffic-light dots, status |
 | `src/components/ImageBackground.tsx:18` | `next/image` cover background with overlay + optional scroll parallax |
 | `src/components/HoneycombMark.tsx:6` | Small hexagon brand glyph (`aria-hidden`) |
 | `src/components/SVGFocusRing.tsx:5` | `SVGFocusRingCircle` / `SVGFocusRingRect` keyboard-focus rings for SVG nodes |
@@ -42,7 +42,7 @@ The **illustration library** is plain inline `<svg>` — no props, fixed `viewBo
 | `src/lib/colors.ts:2` | `BRAND_COLORS` hex triplets, `rgba`, `hexToRgbTriplet` — used by `GlowCard` |
 
 ## Data & state
-- **Source:** none — these are presentational components with no data fetching. **Stores:** no Zustand; `ShortcutHint` keeps local `useState(visible)`. **API routes:** none. **Types:** `BrandKey`/`BrandAccent` (`src/lib/brand-theme.ts`), `TerminalOutputLine` (`primitives/terminal/types.ts`), `ShortcutEntry` (`ShortcutHint.tsx:7`), `IconProps` (`icons/brand-icons.tsx:5`). The only shared *state* dependency is the `SectionPause` context (`src/hooks/useSectionPause.ts`): `TerminalChrome` reads `useSectionPauseState()` to render its pause toggle and call `toggleManual`.
+- **Source:** none — these are presentational components with no data fetching. **Stores:** no Zustand; `ShortcutHint` keeps local `useState(visible)`. **API routes:** none. **Types:** `BrandKey`/`BrandAccent` (`src/lib/brand-theme.ts`), `TerminalOutputLine` (`primitives/terminal/types.ts`), `ShortcutEntry` (`ShortcutHint.tsx:7`), `IconProps` (`icons/brand-icons.tsx:5`). These primitives have no shared *state* dependency. (`TerminalChrome` previously read a `SectionPause` context to render a pause toggle; that context was never mounted anywhere, so the toggle never rendered, and both were removed 2026-08-30.)
 
 ## Integration points
 - **Theme system:** themed primitives resolve color through `BRAND_VAR`/`tint`/`brandShadow` and CSS vars in `src/styles/tokens.css` + `themes.css`, so they re-skin per `data-theme`.
