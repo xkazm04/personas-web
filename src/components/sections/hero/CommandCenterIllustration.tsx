@@ -1,7 +1,8 @@
 "use client";
 
 import { useId } from "react";
-import { motion, useReducedMotion } from "framer-motion";
+import { motion } from "framer-motion";
+import { useStillMotion } from "@/hooks/useStillMotion";
 import { BRAND_VAR } from "@/lib/brand-theme";
 import {
   phases,
@@ -35,7 +36,7 @@ export default function CommandCenterIllustration({ publicBetaLabel }: Props) {
   const uid = useId();
   // Continuous loops (radar sweep, orbit, breathing core) are gated on reduced
   // motion per the animation contract; the static structure renders either way.
-  const reduced = useReducedMotion() ?? false;
+  const reduced = useStillMotion();
   const arcGradientId = `${uid}-arcGrad`;
   const arcGlowId = `${uid}-arcGlow`;
   const sweepGradId = `${uid}-sweep`;

@@ -1,7 +1,8 @@
 "use client";
 
 import { useState } from "react";
-import { motion, useReducedMotion } from "framer-motion";
+import { motion } from "framer-motion";
+import { useStillMotion } from "@/hooks/useStillMotion";
 
 export default function SkeletonCard({
   lines = 3,
@@ -10,7 +11,7 @@ export default function SkeletonCard({
   lines?: number;
   className?: string;
 }) {
-  const reducedMotion = useReducedMotion();
+  const reducedMotion = useStillMotion();
   const [lineWidths] = useState(() =>
     Array.from({ length: lines }, () => 70 + Math.random() * 30),
   );
@@ -55,7 +56,7 @@ export default function SkeletonCard({
 }
 
 export function SkeletonChart({ className = "" }: { className?: string }) {
-  const reducedMotion = useReducedMotion();
+  const reducedMotion = useStillMotion();
   const [barHeights] = useState(() =>
     Array.from({ length: 14 }, (_, i) => 30 + Math.sin(i * 0.8) * 25 + Math.random() * 20),
   );

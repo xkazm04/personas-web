@@ -1,8 +1,8 @@
 "use client";
 
-import { useReducedMotion } from "framer-motion";
 import type { BadgeStatus } from "@/lib/types";
 import { useTranslation } from "@/i18n/useTranslation";
+import { useStillMotion } from "@/hooks/useStillMotion";
 
 // Colour/pulse only — the label is resolved from i18n (t.dashboardUi.status)
 // so status chips localize like every other dashboard string.
@@ -59,7 +59,7 @@ const statusConfig: Record<
 };
 
 export default function StatusBadge({ status }: { status: BadgeStatus }) {
-  const reducedMotion = useReducedMotion();
+  const reducedMotion = useStillMotion();
   const { t } = useTranslation();
   const cfg = statusConfig[status];
   return (

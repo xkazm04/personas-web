@@ -1,7 +1,8 @@
 "use client";
 
 import { useId } from "react";
-import { motion, useReducedMotion } from "framer-motion";
+import { motion } from "framer-motion";
+import { useStillMotion } from "@/hooks/useStillMotion";
 
 interface FilterOption {
   key: string;
@@ -21,7 +22,7 @@ export default function FilterBar({
   onChange: (key: string) => void;
   compact?: boolean;
 }) {
-  const reducedMotion = useReducedMotion();
+  const reducedMotion = useStillMotion();
   // Namespace the shared layoutId per instance so the sliding pill never
   // jumps between two FilterBars that happen to mount on the same page.
   const pillId = `filter-pill-${useId()}`;

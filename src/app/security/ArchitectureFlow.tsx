@@ -1,7 +1,8 @@
 "use client";
 
 import { useState, type KeyboardEvent as ReactKeyboardEvent } from "react";
-import { motion, AnimatePresence, useReducedMotion } from "framer-motion";
+import { motion, AnimatePresence } from "framer-motion";
+import { useStillMotion } from "@/hooks/useStillMotion";
 import { ARCHITECTURE_LAYERS, type ArchitectureLayer } from "@/data/security";
 import { EASE_CURVE } from "@/lib/animations";
 
@@ -168,7 +169,7 @@ function LayerCard({
 }
 
 export default function ArchitectureFlow() {
-  const reducedMotion = useReducedMotion();
+  const reducedMotion = useStillMotion();
 
   return (
     <div className="mx-auto max-w-2xl">

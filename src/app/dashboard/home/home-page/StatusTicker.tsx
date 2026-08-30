@@ -1,12 +1,13 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { AnimatePresence, motion, useReducedMotion } from "framer-motion";
+import { AnimatePresence, motion } from "framer-motion";
 import { Pause, Play } from "lucide-react";
 
 import { useTranslation } from "@/i18n/useTranslation";
 import { usePageVisibility } from "@/hooks/usePageVisibility";
 import { TONE_CLASS, useTickerItems } from "./useTickerItems";
+import { useStillMotion } from "@/hooks/useStillMotion";
 
 const ROTATE_MS = 3600;
 
@@ -30,7 +31,7 @@ export function StatusTicker({
 }) {
   const { t } = useTranslation();
   const labels = t.dashboard.home.cockpit;
-  const reduced = useReducedMotion() ?? false;
+  const reduced = useStillMotion();
   const hidden = usePageVisibility();
   const items = useTickerItems({ successRate, agents });
 

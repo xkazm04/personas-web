@@ -1,9 +1,9 @@
 "use client";
 
-import { useReducedMotion } from "framer-motion";
+import { useStillMotion } from "@/hooks/useStillMotion";
 
 export default function HealthyShieldIllustration() {
-  const reduced = useReducedMotion() ?? false;
+  const reduced = useStillMotion();
 
   return (
     <svg

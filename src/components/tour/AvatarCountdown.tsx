@@ -1,8 +1,8 @@
 "use client";
 
 import { useCallback, useEffect, useRef, useState } from "react";
-import { AnimatePresence, motion, useReducedMotion } from "framer-motion";
-
+import { AnimatePresence, motion } from "framer-motion";
+import { useStillMotion } from "@/hooks/useStillMotion";
 import { INTRO_START_DELAY_MS } from "@/hooks/useTourAudio";
 import { EASE_CURVE } from "@/lib/animations";
 
@@ -22,7 +22,7 @@ export default function AvatarCountdown({
   volume: number;
   durationMs?: number;
 }) {
-  const reduced = useReducedMotion();
+  const reduced = useStillMotion();
   const total = Math.max(1, Math.ceil(durationMs / 1000));
   const [count, setCount] = useState(total);
 

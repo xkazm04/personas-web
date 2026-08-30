@@ -1,6 +1,7 @@
 "use client";
 
-import { motion, useReducedMotion } from "framer-motion";
+import { motion } from "framer-motion";
+import { useStillMotion } from "@/hooks/useStillMotion";
 import { Circle, CheckCircle2 } from "lucide-react";
 import { fadeUp } from "@/lib/animations";
 import { BRAND_VAR, tint } from "@/lib/brand-theme";
@@ -17,7 +18,7 @@ export default function RoadmapProgress() {
   // Gate the shimmer sweep, breathing dot, and fill animation — the bar
   // resolves to its final static state under reduced-motion (repo convention;
   // matches the sibling RevealTile treatment in RoadmapAreas).
-  const reduced = useReducedMotion() ?? false;
+  const reduced = useStillMotion();
   const { t } = useTranslation();
   const p = t.roadmapSection.progress;
   // All counts/percentages flow from phaseCardData (single source of truth)
