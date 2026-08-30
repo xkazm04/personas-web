@@ -26,6 +26,8 @@ npm run build       # production build + Sentry source-map upload (if configured
 npm run lint        # eslint (see custom rules below)
 npm run typecheck   # tsc --noEmit
 npm run test:unit   # vitest (src/**/*.test.ts)
+npm run analyze     # Turbopack bundle analyzer (UI on :4000)
+npm run check:bundle  # per-route first-load JS vs bundle-budget.json (needs a build first)
 npm run test:e2e    # Playwright (specs under e2e/)
 ```
 
@@ -115,6 +117,19 @@ npm run test:e2e    # Playwright (specs under e2e/)
    `src/lib/sitemapRoutesHaveMetadata.test.ts` fails the build otherwise.
    Prefer pushing `"use client"` down to the interactive leaf rather than
    hoisting it to the page root for a single `useState`.
+
+9. **Bundle budget**: `bundle-budget.json` holds a per-route ceiling for
+   first-load JS, enforced by `npm run check:bundle` in CI (after `npm run
+   build`, which writes the stats it reads). Next 16 no longer prints size
+   columns, so this file is the only thing that can see bundle weight. When a
+   route legitimately grows, re-baseline with `npm run check:bundle -- --update`
+   and say why in the commit message — don't raise a single ceiling by hand.
+   The usual cause of an unexpected jump is a heavy module imported statically
+   into a route: defer it with `dynamic(() => import(...), { ssr: false })`,
+   passing resolved values rather than importing back into the deferred module
+   (an import from the caller pulls the dependency into the static graph and
+   silently undoes the split). See the chart cards under
+   `src/components/dashboard/` for the established shape.
 
 ## Out of scope
 

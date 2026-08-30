@@ -75,6 +75,12 @@ jobs:
       #
       - run: npm run build
 
+      # Bundle ratchet. Must follow `npm run build` — it reads the per-route
+      # first-load JS from .next/diagnostics/route-bundle-stats.json, which is
+      # a build artifact. Ceilings live in bundle-budget.json; re-baseline with
+      # `npm run check:bundle -- --update` and say why in the commit message.
+      - run: npm run check:bundle
+
   e2e:
     name: playwright e2e
     runs-on: ubuntu-latest
