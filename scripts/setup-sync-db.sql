@@ -66,12 +66,19 @@ create table if not exists public.synced_personas (
   design_context     text,
   home_team_id       text,
   template_category  text,
+  core_profile       text,
   created_at         timestamptz not null default now(),
   updated_at         timestamptz not null default now(),
   synced_at          timestamptz not null default now()
 );
 create index if not exists idx_synced_personas_user on public.synced_personas (user_id);
 create index if not exists idx_synced_personas_user_updated on public.synced_personas (user_id, updated_at desc);
+-- Living-agent Core (PersonaCore JSON: dials + identity/voice/principles).
+-- Operator-owned, secret-free by design — safe in the read projection.
+-- CREATE TABLE IF NOT EXISTS does not alter an already-deployed table, so
+-- existing tenants pick the column up via this idempotent ALTER on re-run
+-- of `npm run db:migrate:sync`.
+alter table public.synced_personas add column if not exists core_profile text;
 
 -- ── executions (append-heavy; the dashboard's busiest table) ──────────
 -- status allows the desktop's 6-value set incl. 'incomplete'; the web
