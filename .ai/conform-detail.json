@@ -1,0 +1,245 @@
+{
+  "schema": "conform-detail/1",
+  "pairs": {
+    "Observability & Event Monitoring/Observability Charts & SLA/hitl-approval": {
+      "context": "Observability Charts & SLA",
+      "subject": "hitl-approval",
+      "bundle": "software-engineering",
+      "state": "not-applicable",
+      "evaluatedAt": "2026-08-31",
+      "worker": "w8-personas-web",
+      "techniques": [
+        {
+          "technique": "gate-state-machines",
+          "verdict": "not-applicable",
+          "evidence": "no pending/approve/reject state exists in src/app/dashboard/observability/** — only display of already-terminal issue status"
+        },
+        {
+          "technique": "review-queues",
+          "verdict": "not-applicable",
+          "evidence": "PerformanceHealthPanel.tsx's \"Run Analysis\" button (line 52) only re-triggers a fetch (PerformanceView.tsx:66-68); it is not a decision surface"
+        }
+      ]
+    },
+    "Observability & Event Monitoring/Observability Charts & SLA/cost-metering": {
+      "context": "Observability Charts & SLA",
+      "subject": "cost-metering",
+      "bundle": "software-engineering",
+      "state": "not-applicable",
+      "evaluatedAt": "2026-08-31",
+      "worker": "w8-personas-web",
+      "techniques": [
+        {
+          "technique": "budget-enforcement",
+          "verdict": "not-applicable",
+          "evidence": "PerformanceView.tsx:63 overBudgetPersonas only drives a warning banner (lines 103-110); no call is ever refused"
+        },
+        {
+          "technique": "spend-observability",
+          "verdict": "not-applicable",
+          "evidence": "AthenaSpendLane.tsx:47-105 displays totals it does not compute or meter; the metering system, if any, is outside this repo"
+        }
+      ]
+    },
+    "Observability & Event Monitoring/Event Bus & Stream Monitoring/client-state": {
+      "context": "Event Bus & Stream Monitoring",
+      "subject": "client-state",
+      "bundle": "software-engineering",
+      "state": "deviation",
+      "evaluatedAt": "2026-08-31",
+      "worker": "w8-personas-web",
+      "techniques": [
+        {
+          "technique": "identity-scoped-eviction",
+          "verdict": "conformant",
+          "evidence": "src/lib/clearUserCaches.ts:38 (useEventStore.getState().reset()), which also clears the persisted retryCounts via saveRetryCounts({}) in eventStore.ts:270-281"
+        },
+        {
+          "technique": "async-race-guards",
+          "verdict": "conformant",
+          "evidence": "src/stores/eventStore.ts:104-117 (eventIds dedup + merge-not-replace fetch) and useEventStream.ts:107-110 (defensive close-before-reconnect)"
+        },
+        {
+          "technique": "persistence-and-migration",
+          "verdict": "deviation",
+          "evidence": "src/stores/eventStore.ts:26-52 loadRetryCounts/saveRetryCounts write raw localStorage JSON with no version stamp; a future shape change has no migration path (mitigated somewhat by per-field validation on read)"
+        }
+      ]
+    },
+    "Observability & Event Monitoring/Dashboard Home Overview/fleet-orchestration": {
+      "context": "Dashboard Home Overview",
+      "subject": "fleet-orchestration",
+      "bundle": "software-engineering",
+      "state": "not-applicable",
+      "evaluatedAt": "2026-08-31",
+      "worker": "w8-personas-web",
+      "techniques": [
+        {
+          "technique": "session-registry",
+          "verdict": "not-applicable",
+          "evidence": "src/app/dashboard/home/home-page/FleetSessionsStrip.tsx:31 sorts a static MOCK_FLEET_SESSIONS array — no registry exists"
+        }
+      ]
+    },
+    "Roadmap, Voting & Waitlist/Server-Side Vote Persistence/client-state": {
+      "context": "Server-Side Vote Persistence",
+      "subject": "client-state",
+      "bundle": "software-engineering",
+      "state": "not-applicable",
+      "evaluatedAt": "2026-08-31",
+      "worker": "w8-personas-web",
+      "techniques": [
+        {
+          "technique": "singleton-lifecycle",
+          "verdict": "not-applicable",
+          "evidence": "src/lib/fileLock.ts:37 and rate-limit.ts:40 are server-process module singletons (Node, no HMR/browser replacement hazard the technique addresses)"
+        }
+      ]
+    },
+    "Content & Informational Pages/Legal & Policy/hitl-approval": {
+      "context": "Legal & Policy",
+      "subject": "hitl-approval",
+      "bundle": "software-engineering",
+      "state": "not-applicable",
+      "evaluatedAt": "2026-08-31",
+      "worker": "w8-personas-web",
+      "techniques": [
+        {
+          "technique": "consent-gates",
+          "verdict": "not-applicable",
+          "evidence": "no consent/authorization UI exists anywhere under src/app/legal/**"
+        }
+      ]
+    },
+    "Marketing & Landing/Guided Product Tour/guided-tours": {
+      "context": "Guided Product Tour",
+      "subject": "guided-tours",
+      "bundle": "software-engineering",
+      "state": "deviation",
+      "evaluatedAt": "2026-08-31",
+      "worker": "w8-personas-web",
+      "techniques": [
+        {
+          "technique": "anchor-contracts",
+          "verdict": "deviation",
+          "evidence": "declared [data-tour-diagram] ids + live geometry derivation (TourSpotlight.tsx:100-143) are solid, but no generated/verified manifest gate catches a vanished anchor at build/test time"
+        },
+        {
+          "technique": "missing-anchor-degradation",
+          "verdict": "conformant",
+          "evidence": "TourSpotlight.tsx:62-80 retries every 200ms for lazy targets; tick() at 103-137 simply skips rendering when width/height are 0, never stranding the overlay"
+        },
+        {
+          "technique": "action-driven-advancement",
+          "verdict": "deviation",
+          "evidence": "src/contexts/TourContext.tsx:147-152 (dwell timer) and useTourAudio (audio ended) are the only advance triggers; the tour never waits for a real product signal"
+        },
+        {
+          "technique": "tour-lifecycle",
+          "verdict": "conformant",
+          "evidence": "e2e/tour.spec.ts:190-198 confirms the seen flag persists to localStorage; TourContext.tsx bridge/resume (lines 120-131) and exit (96-101) cover completion/lifecycle"
+        }
+      ]
+    },
+    "Platform Foundation: Shell, UI & Motion/Animation & Motion System/motion": {
+      "context": "Animation & Motion System",
+      "subject": "motion",
+      "bundle": "software-engineering",
+      "state": "conformant",
+      "evaluatedAt": "2026-08-31",
+      "worker": "w8-personas-web",
+      "techniques": [
+        {
+          "technique": "preset-vocabulary",
+          "verdict": "conformant",
+          "evidence": "src/lib/animations.ts:60-159 (fadeUp/fadeIn/slideIn*/scaleIn/stagger* + duration ladder), one shared EASE_CURVE"
+        },
+        {
+          "technique": "performance-discipline",
+          "verdict": "conformant",
+          "evidence": "src/components/particle-host/particleHostRegistry.ts:56-218 — single shared requestAnimationFrame loop, IntersectionObserver in-view gating, canvas rendering"
+        },
+        {
+          "technique": "reduced-motion-mechanics",
+          "verdict": "conformant",
+          "evidence": "src/lib/animations.ts:1-54 documents the gating contract; src/hooks/useStillMotion.ts:40-57 is an SSR-safe live subscription (fixes a real hydration-mismatch bug documented in its own comment)"
+        },
+        {
+          "technique": "content-bearing-degradation",
+          "verdict": "conformant",
+          "evidence": "src/components/CinematicBreather.tsx:22-58 always renders the headline text under reduced motion, only the char-reveal animation classes are skipped"
+        },
+        {
+          "technique": "loop-pause-governance",
+          "verdict": "unknown",
+          "evidence": "src/app/dashboard/home/home-page/StatusTicker.tsx:43-53 merges its own closed decider set (hover/focus/manual/reduced/hidden) locally rather than through one shared coordinator every loop reads; not audited across every looping animation in the app, so left unjudged rather than guessed"
+        }
+      ]
+    },
+    "Connectors & Templates/Templates Gallery & Detail/templates-scaffolding": {
+      "context": "Templates Gallery & Detail",
+      "subject": "templates-scaffolding",
+      "bundle": "software-engineering",
+      "state": "not-applicable",
+      "evaluatedAt": "2026-08-31",
+      "worker": "w8-personas-web",
+      "techniques": [
+        {
+          "technique": "adoption-lifecycle",
+          "verdict": "not-applicable",
+          "evidence": "TemplateDetail.tsx:88-102 hands off to `personas://template/<id>` — no interview or instantiation happens in this repo"
+        },
+        {
+          "technique": "catalog-curation",
+          "verdict": "conformant",
+          "evidence": "src/lib/template-queries.ts:9-19 asserts (throws at module load) on duplicate template ids — a real, if minimal, admission-bar check"
+        }
+      ]
+    },
+    "Agent Operations Dashboard/Knowledge Base/knowledge-registry": {
+      "context": "Knowledge Base",
+      "subject": "knowledge-registry",
+      "bundle": "software-engineering",
+      "state": "not-applicable",
+      "evaluatedAt": "2026-08-31",
+      "worker": "w8-personas-web",
+      "techniques": [
+        {
+          "technique": "lane-contracts",
+          "verdict": "not-applicable",
+          "evidence": "no multi-lane, multi-consumer repository structure exists; this is a single dashboard's data views"
+        }
+      ]
+    },
+    "Product Documentation (Guide)/Guide Content Blocks & Markdown/authoring-block-vocabulary": {
+      "context": "Guide Content Blocks & Markdown",
+      "subject": "authoring-block-vocabulary",
+      "bundle": "software-engineering",
+      "state": "deviation",
+      "evaluatedAt": "2026-08-31",
+      "worker": "w8-personas-web",
+      "techniques": [
+        {
+          "technique": "closed-directive-set",
+          "verdict": "conformant",
+          "evidence": "src/components/guide/guide-markdown/parseCustomBlock.tsx:20-38 (single dispatch, `return null` for unknown blockType), parseBlocks.tsx:125-136 (silent drop when parsed is null)"
+        },
+        {
+          "technique": "per-block-line-grammar",
+          "verdict": "conformant",
+          "evidence": "src/components/guide/guide-markdown/parseCustomBlock.tsx:40-196 — parseSteps/parseKeys/parseCompare/parseDiagram/etc., each a small line-oriented grammar"
+        },
+        {
+          "technique": "enum-guarded-block-payloads",
+          "verdict": "conformant",
+          "evidence": "src/components/guide/blocks/Callout.tsx:16-56 CALLOUT_STYLES lookup with `?? CALLOUT_STYLES.info` fallback; parser guard at parseCustomBlock.tsx:33"
+        },
+        {
+          "technique": "vocabulary-as-translation-invariant",
+          "verdict": "deviation",
+          "evidence": "src/data/guide/locales/ holds 13 locale directories (getLocalized.ts:1-120) with no test or gate comparing parsed block structure between English and translated bodies"
+        }
+      ]
+    }
+  }
+}

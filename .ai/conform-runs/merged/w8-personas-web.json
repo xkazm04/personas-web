@@ -1,0 +1,157 @@
+{
+  "worker": "w8-personas-web",
+  "evaluatedAt": "2026-08-31",
+  "pairs": [
+    {
+      "context": "Observability & Event Monitoring/Observability Charts & SLA",
+      "subject": "hitl-approval",
+      "bundle": "software-engineering",
+      "state": "not-applicable",
+      "evidence": "src/app/dashboard/observability/performance-view/PerformanceHealthPanel.tsx:15-104 and PerformanceHealthIssueRow.tsx render health-issue status (open/auto_fixed/resolved) read-only, with no approve/reject/consent affordance anywhere in this context's files — hitl-approval's precondition (an action boundary where a person must pause a machine before it acts) does not hold; this is a post-hoc display surface, not an action surface. Contrast the sibling Agent Operations Dashboard/Manual Review Queue, which does own a real (if incomplete) approve/reject flow.",
+      "techniques": [
+        { "technique": "gate-state-machines", "verdict": "not-applicable",
+          "evidence": "no pending/approve/reject state exists in src/app/dashboard/observability/** — only display of already-terminal issue status" },
+        { "technique": "review-queues", "verdict": "not-applicable",
+          "evidence": "PerformanceHealthPanel.tsx's \"Run Analysis\" button (line 52) only re-triggers a fetch (PerformanceView.tsx:66-68); it is not a decision surface" }
+      ]
+    },
+    {
+      "context": "Observability & Event Monitoring/Observability Charts & SLA",
+      "subject": "cost-metering",
+      "bundle": "software-engineering",
+      "state": "not-applicable",
+      "evidence": "src/app/dashboard/observability/activity-view/AthenaSpendLane.tsx:47-105 and PerformanceView.tsx:63/103-110 (BUDGET_THRESHOLD banner) only render spend figures sourced from mock fixtures (useActivityMetrics.ts:26 via mockApi) or api.getObservability — no price table, usage ledger, preflight estimation, or budget-enforcement gate exists anywhere in these files; the 0.8 threshold banner is a presentational comparison, not an enforcement point that blocks a call.",
+      "techniques": [
+        { "technique": "budget-enforcement", "verdict": "not-applicable",
+          "evidence": "PerformanceView.tsx:63 overBudgetPersonas only drives a warning banner (lines 103-110); no call is ever refused" },
+        { "technique": "spend-observability", "verdict": "not-applicable",
+          "evidence": "AthenaSpendLane.tsx:47-105 displays totals it does not compute or meter; the metering system, if any, is outside this repo" }
+      ]
+    },
+    {
+      "context": "Observability & Event Monitoring/Event Bus & Stream Monitoring",
+      "subject": "client-state",
+      "bundle": "software-engineering",
+      "state": "deviation",
+      "evidence": "src/lib/clearUserCaches.ts:38 correctly wires eventStore.reset() into identity-scoped-eviction (clears both the in-memory buffer and the persisted retryCounts on every identity flip), and src/stores/eventStore.ts:104-141 plus src/hooks/useEventStream.ts:100-153 realize solid async-race-guards (dedup-by-id, merge-not-replace refetch, single-EventSource guard) and status-fsms (connectionStatus enum) — but eventStore.ts:26-52 persists replay retryCounts to localStorage with no version stamp, violating persistence-and-migration's versioned-contract rule.",
+      "techniques": [
+        { "technique": "identity-scoped-eviction", "verdict": "conformant",
+          "evidence": "src/lib/clearUserCaches.ts:38 (useEventStore.getState().reset()), which also clears the persisted retryCounts via saveRetryCounts({}) in eventStore.ts:270-281" },
+        { "technique": "async-race-guards", "verdict": "conformant",
+          "evidence": "src/stores/eventStore.ts:104-117 (eventIds dedup + merge-not-replace fetch) and useEventStream.ts:107-110 (defensive close-before-reconnect)" },
+        { "technique": "persistence-and-migration", "verdict": "deviation",
+          "evidence": "src/stores/eventStore.ts:26-52 loadRetryCounts/saveRetryCounts write raw localStorage JSON with no version stamp; a future shape change has no migration path (mitigated somewhat by per-field validation on read)" }
+      ]
+    },
+    {
+      "context": "Observability & Event Monitoring/Dashboard Home Overview",
+      "subject": "fleet-orchestration",
+      "bundle": "software-engineering",
+      "state": "not-applicable",
+      "evidence": "src/app/dashboard/home/home-page/FleetSessionsStrip.tsx:8-31 renders MOCK_FLEET_SESSIONS, a static fixture array with no registry/lifecycle/dispatch machinery behind it, and is gated behind isDemo at the call site (src/app/dashboard/home/page.tsx:172-181, comment: \"Pure fixtures with no synced source\") — never shown to real users. fleet-orchestration's precondition (a real orchestrated multi-session fleet) does not hold in this repo; presentation is honestly disclosed as demo-only.",
+      "techniques": [
+        { "technique": "session-registry", "verdict": "not-applicable",
+          "evidence": "src/app/dashboard/home/home-page/FleetSessionsStrip.tsx:31 sorts a static MOCK_FLEET_SESSIONS array — no registry exists" }
+      ]
+    },
+    {
+      "context": "Roadmap, Voting & Waitlist/Server-Side Vote Persistence",
+      "subject": "client-state",
+      "bundle": "software-engineering",
+      "state": "not-applicable",
+      "evidence": "src/lib/server/json-file-store.ts:1, src/lib/fileLock.ts, and src/lib/server/rate-limit.ts:31 all declare `import \"server-only\"` — this is Node-side file-backed persistence, an in-process write lock, and an in-memory rate limiter running in Next.js route handlers, never a browser. client-state's precondition (a long-lived client application's state) does not hold here at all; this looks like a lexical mismatch (the matcher likely keyed on \"state\"/\"persistence\" vocabulary) rather than a real governance relationship — flagged as a coverage question in the report, not judged as a deviation.",
+      "techniques": [
+        { "technique": "singleton-lifecycle", "verdict": "not-applicable",
+          "evidence": "src/lib/fileLock.ts:37 and rate-limit.ts:40 are server-process module singletons (Node, no HMR/browser replacement hazard the technique addresses)" }
+      ]
+    },
+    {
+      "context": "Content & Informational Pages/Legal & Policy",
+      "subject": "hitl-approval",
+      "bundle": "software-engineering",
+      "state": "not-applicable",
+      "evidence": "src/app/legal/LegalContent.tsx and src/app/legal/policies/*.tsx render static legal prose with a localStorage-backed \"last seen\" changelog badge (src/data/policy-changelog.ts:45-61) — no autonomous action, consent flow, or review gate exists on this page (grepped for consent/accept/reject/approve/escalate: only \"Acceptance of Terms\" prose text). hitl-approval's precondition (an action boundary needing human judgment) fails entirely; this is documentation, not an agent action surface.",
+      "techniques": [
+        { "technique": "consent-gates", "verdict": "not-applicable",
+          "evidence": "no consent/authorization UI exists anywhere under src/app/legal/**" }
+      ]
+    },
+    {
+      "context": "Marketing & Landing/Guided Product Tour",
+      "subject": "guided-tours",
+      "bundle": "software-engineering",
+      "state": "deviation",
+      "evidence": "src/lib/tour-script.ts:66-105 declares stable [data-tour-diagram] anchors and src/components/tour/TourSpotlight.tsx:82-143 derives spotlight geometry live via rAF with retry for lazy-hydrated targets — solid anchor-contracts realization — but no generated/verified anchor manifest gate exists (only manual e2e coverage in e2e/tour.spec.ts), and src/contexts/TourContext.tsx:147-152 advances purely on a dwell timer or audio `ended` event: action-driven-advancement (completion on a real user action) is unrealized — the tour instead auto-drives clicks on the product itself (tour-script.ts:165-227) rather than waiting for the visitor to act.",
+      "techniques": [
+        { "technique": "anchor-contracts", "verdict": "deviation",
+          "evidence": "declared [data-tour-diagram] ids + live geometry derivation (TourSpotlight.tsx:100-143) are solid, but no generated/verified manifest gate catches a vanished anchor at build/test time" },
+        { "technique": "missing-anchor-degradation", "verdict": "conformant",
+          "evidence": "TourSpotlight.tsx:62-80 retries every 200ms for lazy targets; tick() at 103-137 simply skips rendering when width/height are 0, never stranding the overlay" },
+        { "technique": "action-driven-advancement", "verdict": "deviation",
+          "evidence": "src/contexts/TourContext.tsx:147-152 (dwell timer) and useTourAudio (audio ended) are the only advance triggers; the tour never waits for a real product signal" },
+        { "technique": "tour-lifecycle", "verdict": "conformant",
+          "evidence": "e2e/tour.spec.ts:190-198 confirms the seen flag persists to localStorage; TourContext.tsx bridge/resume (lines 120-131) and exit (96-101) cover completion/lifecycle" }
+      ]
+    },
+    {
+      "context": "Platform Foundation: Shell, UI & Motion/Animation & Motion System",
+      "subject": "motion",
+      "bundle": "software-engineering",
+      "state": "conformant",
+      "evidence": "src/lib/animations.ts:1-159 is a centrally-owned, documented preset/easing vocabulary with an enforced ESLint gating rule (custom-animation/require-animation-gating) and a written content-bearing-degradation litmus test; src/components/particle-host/particleHostRegistry.ts:56-218 is one shared rAF engine (IntersectionObserver-gated, canvas-based, compositor-friendly) satisfying performance-discipline; src/components/CinematicBreather.tsx:22-58 (TypewriterLine) renders resolved text under reduced motion rather than a blank state — the exact past failure the file's own comment (animations.ts:44-47) names as fixed.",
+      "techniques": [
+        { "technique": "preset-vocabulary", "verdict": "conformant",
+          "evidence": "src/lib/animations.ts:60-159 (fadeUp/fadeIn/slideIn*/scaleIn/stagger* + duration ladder), one shared EASE_CURVE" },
+        { "technique": "performance-discipline", "verdict": "conformant",
+          "evidence": "src/components/particle-host/particleHostRegistry.ts:56-218 — single shared requestAnimationFrame loop, IntersectionObserver in-view gating, canvas rendering" },
+        { "technique": "reduced-motion-mechanics", "verdict": "conformant",
+          "evidence": "src/lib/animations.ts:1-54 documents the gating contract; src/hooks/useStillMotion.ts:40-57 is an SSR-safe live subscription (fixes a real hydration-mismatch bug documented in its own comment)" },
+        { "technique": "content-bearing-degradation", "verdict": "conformant",
+          "evidence": "src/components/CinematicBreather.tsx:22-58 always renders the headline text under reduced motion, only the char-reveal animation classes are skipped" },
+        { "technique": "loop-pause-governance", "verdict": "unknown",
+          "evidence": "src/app/dashboard/home/home-page/StatusTicker.tsx:43-53 merges its own closed decider set (hover/focus/manual/reduced/hidden) locally rather than through one shared coordinator every loop reads; not audited across every looping animation in the app, so left unjudged rather than guessed" }
+      ]
+    },
+    {
+      "context": "Connectors & Templates/Templates Gallery & Detail",
+      "subject": "templates-scaffolding",
+      "bundle": "software-engineering",
+      "state": "not-applicable",
+      "evidence": "src/lib/templates.ts:18-32 defines AgentTemplate as static hardcoded metadata + a fixed YAML `config` string with no parameter/dimension model; src/app/templates/[id]/TemplateDetail.tsx:63-102 offers only copy-to-clipboard and a `personas://` deep link that hands off adoption to a separate desktop app. This repo owns browse+preview only — the interview, adoption transaction, readiness-prerequisites check, integrity manifest, and portability rewriting that templates-scaffolding governs have no home here; they belong (if they exist) to the desktop app this page links out to.",
+      "techniques": [
+        { "technique": "adoption-lifecycle", "verdict": "not-applicable",
+          "evidence": "TemplateDetail.tsx:88-102 hands off to `personas://template/<id>` — no interview or instantiation happens in this repo" },
+        { "technique": "catalog-curation", "verdict": "conformant",
+          "evidence": "src/lib/template-queries.ts:9-19 asserts (throws at module load) on duplicate template ids — a real, if minimal, admission-bar check" }
+      ]
+    },
+    {
+      "context": "Agent Operations Dashboard/Knowledge Base",
+      "subject": "knowledge-registry",
+      "bundle": "software-engineering",
+      "state": "not-applicable",
+      "evidence": "src/app/dashboard/knowledge/MemoriesView.tsx and KnowledgeDenseTable.tsx display per-persona runtime learned patterns (KnowledgePattern: successCount/failureCount/confidence/avgCostUsd) and memory-conflict resolution for one agent fleet — this is agent runtime memory, not a shared, multi-consumer repository with lanes, a write path, or a catalog-as-sync-key. knowledge-registry's precondition (an organizational registry consumed by many codebases and tools) does not hold; likely a lexical match on \"knowledge\" rather than a real governance relationship — flagged as a coverage question.",
+      "techniques": [
+        { "technique": "lane-contracts", "verdict": "not-applicable",
+          "evidence": "no multi-lane, multi-consumer repository structure exists; this is a single dashboard's data views" }
+      ]
+    },
+    {
+      "context": "Product Documentation (Guide)/Guide Content Blocks & Markdown",
+      "subject": "authoring-block-vocabulary",
+      "bundle": "software-engineering",
+      "state": "deviation",
+      "evidence": "src/components/guide/guide-markdown/parseCustomBlock.tsx:20-38 is a textbook closed-directive-set: one dispatch over an enumerated block-type list, `return null` for anything else, and parseBlocks.tsx:133-135 only emits when non-null; each block type gets its own tiny line grammar (parseCustomBlock.tsx:40-196) and Callout.tsx:16-56 enum-guards its label styling with a named fallback (`?? CALLOUT_STYLES.info`) — but the 13-locale corpus under src/data/guide/locales/ (getLocalized.ts:1-120) has no structural-equivalence check comparing translated block structure against the English source; a translator could break a directive/separator and nothing would catch it before publish (currently low-risk since the locale switcher is dormant per getLocalized.ts:6-8).",
+      "techniques": [
+        { "technique": "closed-directive-set", "verdict": "conformant",
+          "evidence": "src/components/guide/guide-markdown/parseCustomBlock.tsx:20-38 (single dispatch, `return null` for unknown blockType), parseBlocks.tsx:125-136 (silent drop when parsed is null)" },
+        { "technique": "per-block-line-grammar", "verdict": "conformant",
+          "evidence": "src/components/guide/guide-markdown/parseCustomBlock.tsx:40-196 — parseSteps/parseKeys/parseCompare/parseDiagram/etc., each a small line-oriented grammar" },
+        { "technique": "enum-guarded-block-payloads", "verdict": "conformant",
+          "evidence": "src/components/guide/blocks/Callout.tsx:16-56 CALLOUT_STYLES lookup with `?? CALLOUT_STYLES.info` fallback; parser guard at parseCustomBlock.tsx:33" },
+        { "technique": "vocabulary-as-translation-invariant", "verdict": "deviation",
+          "evidence": "src/data/guide/locales/ holds 13 locale directories (getLocalized.ts:1-120) with no test or gate comparing parsed block structure between English and translated bodies" }
+      ]
+    }
+  ]
+}
