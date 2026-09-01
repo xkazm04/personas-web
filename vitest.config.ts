@@ -26,14 +26,25 @@ export default defineConfig({
       // browser-bound (scrubEvent, parseJsonBody, the window-gated encodeFlow), so
       // gating their full surface would be coverage-for-coverage's-sake. Promote
       // them into the gate as their batches grow.
-      include: [
-        "src/lib/validation.ts",
-        "src/lib/url.ts",
-        "src/lib/format-date.ts",
-        "src/app/dashboard/leaderboard/leaderboard-page/leaderboardSort.ts",
-        "src/app/dashboard/sla/sla-page/slaFormat.ts",
-      ],
-      thresholds: { statements: 80, branches: 72, functions: 72, lines: 80 },
+      // Two include sets, two consumers. `all` + the whole-tree include define what
+      // the REPORT is measured over, so a module no test imports reads as 0% instead
+      // of being absent from the denominator. Measured 2026-09-01: the scoped list
+      // below shows 5 files at 95.74% lines; the whole tree shows 1171 files at
+      // 4.32%, i.e. 1070 source files were invisible to this report, not visibly
+      // untested. The GATE stays scoped — a threshold over the untested surface
+      // would be red from day one and get deleted — so `thresholds` names its own
+      // per-glob population and the top-level floors are off.
+      all: true,
+      include: ["src/**/*.{ts,tsx}"],
+      exclude: ["**/*.test.{ts,tsx}", "**/*.d.ts", "src/test/**"],
+      reporter: ["text-summary", "text", "json-summary"],
+      thresholds: {
+        "src/lib/validation.ts": { statements: 80, branches: 72, functions: 72, lines: 80 },
+        "src/lib/url.ts": { statements: 80, branches: 72, functions: 72, lines: 80 },
+        "src/lib/format-date.ts": { statements: 80, branches: 72, functions: 72, lines: 80 },
+        "src/app/dashboard/leaderboard/leaderboard-page/leaderboardSort.ts": { statements: 80, branches: 72, functions: 72, lines: 80 },
+        "src/app/dashboard/sla/sla-page/slaFormat.ts": { statements: 80, branches: 72, functions: 72, lines: 80 },
+      },
     },
   },
 });
