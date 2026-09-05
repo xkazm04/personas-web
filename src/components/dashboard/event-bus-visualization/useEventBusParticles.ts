@@ -1,9 +1,10 @@
 /* 60fps SVG particle simulation: particles/bursts are intentionally kept in
    refs and mutated from requestAnimationFrame. Promoting them to state would
    allocate arrays every frame and thrash React reconciliation. */
-/* eslint-disable react-hooks/refs, react-hooks/immutability, custom-animation/require-animation-gating */
+/* eslint-disable react-hooks/refs, react-hooks/immutability */
 
 import { useCallback, useEffect, useRef, useState } from "react";
+import { usePageVisibility } from "@/hooks/usePageVisibility";
 import { SWARM_PERSONAS, SWARM_SOURCES } from "@/lib/mock-dashboard-data";
 import { bezierControlPoint, CX, CY, type BurstRing, type Particle, type Point } from "./eventBusGeometry";
 
@@ -26,7 +27,14 @@ export function useEventBusParticles({
   const lastTimeRef = useRef<number>(0);
   const spawnTimerRef = useRef<number>(0);
   const inViewRef = useRef(false);
+  const startedRef = useRef(false);
   const [, forceRender] = useState(0);
+  // Ambient loop: it must stop when the tab is backgrounded AND resume when the
+  // tab comes back. `tick`'s own `document.hidden` check only ever stops the
+  // loop; nothing re-arms it, and the IntersectionObserver upstream does not
+  // fire on a visibility change — so without this subscription the bus stays
+  // frozen until the element's intersection state happens to change.
+  const pageHidden = usePageVisibility();
 
   const spawnParticle = useCallback(() => {
     const srcIdx = Math.floor(Math.random() * SWARM_SOURCES.length);
@@ -81,12 +89,29 @@ export function useEventBusParticles({
 
   useEffect(() => {
     if (prefersReduced) return;
-    inViewRef.current = true;
-    rafRef.current = requestAnimationFrame(tick);
-    return () => {
+    // First activation only: assume on-screen until the IntersectionObserver
+    // says otherwise. Re-running for a visibility change must NOT reset this,
+    // or returning to the tab would restart a loop that is scrolled away.
+    if (!startedRef.current) {
+      startedRef.current = true;
+      inViewRef.current = true;
+    }
+    if (!pageHidden && inViewRef.current) {
+      // Cancel first so a rapid hide/show (or a handle the observer armed)
+      // can never leave two loops running against the same refs.
       if (rafRef.current) cancelAnimationFrame(rafRef.current);
+      lastTimeRef.current = 0; // don't integrate the backgrounded gap as one dt
+      rafRef.current = requestAnimationFrame(tick);
+    }
+    // Registered unconditionally: the observer can arm a frame while this
+    // effect took the early path, and that handle still has to be released.
+    return () => {
+      if (rafRef.current) {
+        cancelAnimationFrame(rafRef.current);
+        rafRef.current = 0;
+      }
     };
-  }, [prefersReduced, tick]);
+  }, [prefersReduced, pageHidden, tick]);
 
   return { particles: particlesRef.current, bursts: burstsRef.current, tick, inViewRef, rafRef, lastTimeRef };
 }
