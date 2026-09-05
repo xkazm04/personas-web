@@ -1,7 +1,8 @@
 "use client";
 
 import { useEffect, useRef } from "react";
-import { motion, useReducedMotion } from "framer-motion";
+import { motion } from "framer-motion";
+import { useStillMotion } from "@/hooks/useStillMotion";
 import { useTour } from "@/contexts/TourContext";
 
 /** Breathing room (px) drawn around the spotlit element. */
@@ -46,16 +47,15 @@ const ease = (t: number) => 0.5 - 0.5 * Math.cos(Math.PI * t);
  * between headings instead of jump-cutting. After the blend the rAF keeps
  * tracking the live rect — scroll-follow for free, no scroll listener.
  *
- * Imports `useReducedMotion` per `custom-animation/require-animation-gating`;
+ * Gated on `useStillMotion` per `custom-animation/require-animation-gating`;
  * when set, the tween is skipped and the cutout snaps to each step.
  *
  * **Missed-anchor policy — keep the caption, drop the scrim.** If a step's
  * selector has not resolved within `ANCHOR_TIMEOUT_MS` the cutout fades out, so
  * the page reads normally while narration and caption carry on. Skipping the
  * step was rejected: it would discard narration already playing and desync the
- * voice from the caption. It also fixes the worse half of the same bug — a
- * cutout left holding the *previous* step's rect, confidently highlighting the
- * wrong thing. Self-healing: a late anchor restores the cutout next frame.
+ * voice from the caption. It also fixes the worse half of the same bug — a cutout
+ * left on the *previous* step's rect. Self-healing: a late anchor restores it.
  *
  * The scrim is a literal `rgba(8, 11, 20, 0.8)`, not a theme token, because its
  * job is to darken whatever is behind it — it must stay dark in every theme, and
@@ -73,7 +73,7 @@ export default function TourSpotlight() {
   const prevTargetRef = useRef<string | null>(activeSpotlight);
   const prevRectRef = useRef<DOMRect | null>(null);
   const tweenStartRef = useRef<number>(0);
-  const prefersReducedMotion = useReducedMotion();
+  const prefersReducedMotion = useStillMotion();
 
   // Mark the live spotlight target with `data-tour-active="true"` so the
   // element itself can react to being in focus (subtle scale + glow lift in
