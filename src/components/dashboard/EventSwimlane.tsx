@@ -75,7 +75,12 @@ export default function EventSwimlane() {
                       transform: `translateX(-${tick * 100}%)`,
                     }}
                   >
-                    {mins === 0 ? "now" : `-${mins}m`}
+                    {mins === 0
+                      ? t.dashboard.staleness.justNow
+                      : t.dashboard.staleness.minutesAgo.replace(
+                          "{n}",
+                          String(mins),
+                        )}
                   </span>
                 );
               })}
@@ -124,7 +129,7 @@ export default function EventSwimlane() {
                     className="h-2 w-2 rounded-full"
                     style={{ backgroundColor: statusColor[s] }}
                   />
-                  {s}
+                  {t.eventsPage.swimlane.status[s]}
                 </span>
               ),
             )}
