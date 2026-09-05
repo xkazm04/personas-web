@@ -13,6 +13,7 @@
  */
 import { getSupabase } from "./supabase";
 import { ApiError, type ApiClient } from "./api";
+import { EVENT_STATUS_TRANSITIONS } from "./eventStatusFsm";
 import type {
   Persona,
   PersonaExecution,
@@ -81,7 +82,11 @@ function mapStatus(s: string): PersonaExecutionStatus {
   return "running";
 }
 
-const EVENT_STATUSES: ReadonlySet<string> = new Set(["pending", "processed", "failed"]);
+// Derived from the state machine rather than hand-listed: when the union grew
+// (pending/processing/processed/failed/dead_letter/discarded), a literal set
+// silently downgraded every new status to "pending" on the way in from the
+// sync mirror. Keying off the transition table means it cannot drift again.
+const EVENT_STATUSES: ReadonlySet<string> = new Set(Object.keys(EVENT_STATUS_TRANSITIONS));
 
 function mapEventStatus(s: string): EventStatus {
   if (EVENT_STATUSES.has(s)) return s as EventStatus;
