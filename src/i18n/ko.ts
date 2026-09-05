@@ -1253,6 +1253,8 @@ export const ko: Translations = {
       durationSlow: "\ub290\ub9bc",
       swimlane: {
         eventAt: "{time}\uc758 {type}",
+        axisNow: "\uc9c0\uae08",
+        axisMinutes: "{n}\ubd84",
         status: {
           success: "\uc131\uacf5",
           failure: "\uc2e4\ud328",

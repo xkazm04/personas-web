@@ -1253,6 +1253,8 @@ export const ja: Translations = {
       durationSlow: "\u4f4e\u901f",
       swimlane: {
         eventAt: "{time} \u306e {type}",
+        axisNow: "\u73fe\u5728",
+        axisMinutes: "{n}\u5206",
         status: {
           success: "\u6210\u529f",
           failure: "\u5931\u6557",

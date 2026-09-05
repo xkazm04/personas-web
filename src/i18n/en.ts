@@ -1019,6 +1019,8 @@
       subtitle: string;
       empty: string;
       eventAt: string;
+      axisNow: string;
+      axisMinutes: string;
       status: {
         success: string;
         failure: string;
@@ -2889,6 +2891,10 @@ export const en: Translations = {
       subtitle: 'Time-ordered per-persona event trace',
       empty: 'No events in the selected window',
       eventAt: '{type} at {time}',
+      // Chart-axis register: keep these terse in every locale, they are tick
+      // labels sharing one column. Not the staleness-pill sentence form.
+      axisNow: 'now',
+      axisMinutes: '{n}m',
       status: {
         success: 'Success',
         failure: 'Failure',

@@ -1253,6 +1253,8 @@ export const bn: Translations = {
       durationSlow: "\u09a7\u09c0\u09b0",
       swimlane: {
         eventAt: "{time}-\u098f {type}",
+        axisNow: "\u098f\u0996\u09a8",
+        axisMinutes: "{n} \u09ae\u09bf",
         status: {
           success: "\u09b8\u09ab\u09b2",
           failure: "\u09ac\u09cd\u09af\u09b0\u09cd\u09a5",

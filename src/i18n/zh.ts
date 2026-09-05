@@ -1253,6 +1253,8 @@ export const zh: Translations = {
       durationSlow: "\u6162",
       swimlane: {
         eventAt: "{time} \u7684 {type}",
+        axisNow: "\u73b0\u5728",
+        axisMinutes: "{n}\u5206",
         status: {
           success: "\u6210\u529f",
           failure: "\u5931\u8d25",

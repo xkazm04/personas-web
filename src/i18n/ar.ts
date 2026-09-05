@@ -1253,6 +1253,8 @@ export const ar: Translations = {
       durationSlow: "\u0628\u0637\u064a\u0621",
       swimlane: {
         eventAt: "{type} \u0641\u064a {time}",
+        axisNow: "\u0627\u0644\u0622\u0646",
+        axisMinutes: "{n} \u062f",
         status: {
           success: "\u0646\u062c\u0627\u062d",
           failure: "\u0641\u0634\u0644",

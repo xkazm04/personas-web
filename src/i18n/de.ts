@@ -1253,6 +1253,8 @@ export const de: Translations = {
       durationSlow: "Langsam",
       swimlane: {
         eventAt: "{type} um {time}",
+        axisNow: "jetzt",
+        axisMinutes: "{n} Min",
         status: {
           success: "Erfolg",
           failure: "Fehler",

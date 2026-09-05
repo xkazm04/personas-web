@@ -1253,6 +1253,8 @@ export const vi: Translations = {
       durationSlow: "Ch\u1eadm",
       swimlane: {
         eventAt: "{type} l\u00fac {time}",
+        axisNow: "b\u00e2y gi\u1edd",
+        axisMinutes: "{n} ph\u00fat",
         status: {
           success: "Th\u00e0nh c\u00f4ng",
           failure: "Th\u1ea5t b\u1ea1i",

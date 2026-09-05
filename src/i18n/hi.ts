@@ -1253,6 +1253,8 @@ export const hi: Translations = {
       durationSlow: "\u0927\u0940\u092e\u093e",
       swimlane: {
         eventAt: "{time} \u092a\u0930 {type}",
+        axisNow: "\u0905\u092d\u0940",
+        axisMinutes: "{n} \u092e\u093f",
         status: {
           success: "\u0938\u092b\u0932",
           failure: "\u0935\u093f\u092b\u0932",

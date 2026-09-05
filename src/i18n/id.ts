@@ -1253,6 +1253,8 @@ export const id: Translations = {
       durationSlow: "Lambat",
       swimlane: {
         eventAt: "{type} pada {time}",
+        axisNow: "kini",
+        axisMinutes: "{n} mnt",
         status: {
           success: "Berhasil",
           failure: "Gagal",

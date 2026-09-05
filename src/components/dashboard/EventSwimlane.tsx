@@ -76,8 +76,8 @@ export default function EventSwimlane() {
                     }}
                   >
                     {mins === 0
-                      ? t.dashboard.staleness.justNow
-                      : t.dashboard.staleness.minutesAgo.replace(
+                      ? t.eventsPage.swimlane.axisNow
+                      : t.eventsPage.swimlane.axisMinutes.replace(
                           "{n}",
                           String(mins),
                         )}

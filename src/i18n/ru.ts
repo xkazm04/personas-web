@@ -1253,6 +1253,8 @@ export const ru: Translations = {
       durationSlow: "\u041c\u0435\u0434\u043b\u0435\u043d\u043d\u043e",
       swimlane: {
         eventAt: "{type} \u0432 {time}",
+        axisNow: "\u0441\u0435\u0439\u0447\u0430\u0441",
+        axisMinutes: "{n} \u043c\u0438\u043d",
         status: {
           success: "\u0423\u0441\u043f\u0435\u0445",
           failure: "\u041e\u0448\u0438\u0431\u043a\u0430",
