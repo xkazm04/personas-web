@@ -81,7 +81,7 @@ per-node-id lookup of realistic mock JSON), syntax-highlighted by `highlightJson
 | `src/stores/eventStore.ts` | Zustand store: events buffer, replay/DLQ/discard, subscriptions |
 | `src/stores/eventStore.test.ts` | Store specs: retry drains the lane, discard verdict, lockout parking |
 | `src/components/dashboard/EventsListPanel.tsx` | Events tab: fetch, stream, filter, chains, bulk retry |
-| `src/components/dashboard/events-list-panel/EventsListColumns.tsx` | `DataTable` column builder (select, status, persona, chain, retry) |
+| `src/components/dashboard/events-list-panel/EventsListColumns.tsx` | `DataTable` column builder (select, status, persona, chain, retry, discard) |
 | `src/components/dashboard/events-list-panel/EventsFiltersToolbar.tsx` | Search input + status/eventType/sourceType filters + chain pill |
 | `src/components/dashboard/events-list-panel/EventsBulkRetryBar.tsx` | Sticky bottom bulk-retry bar |
 | `src/components/dashboard/events-list-panel/EventExpandedContent.tsx` | Expanded row: ids, payload viewer, error + retry |
@@ -228,6 +228,14 @@ per-node-id lookup of realistic mock JSON), syntax-highlighted by `highlightJson
   components use literal `rgba(...)` fills/strokes inside SVG (acceptable for SVG
   paint, but the `text-white/60` is a semantic-token violation — prefer
   `text-foreground/…` style tokens).
+- **Headerless columns still need names.** `DataTable` renders an ARIA table
+  (`role="table"`/`row"`/`columnheader"` divs, not a native `<table>`), so a
+  column's accessible name comes from its header content and there is no
+  `<th>`-style fallback. Five of the events columns are headerless by design
+  (select, status glyph, persona avatar, retry pill, actions); each ships its
+  name through the `ColumnName` `sr-only` wrapper in `EventsListColumns.tsx`
+  rather than an empty string. `Column.header` is typed `React.ReactNode` for
+  exactly this. If you add a headerless column here, wrap a name the same way.
 - **Star-topology chains.** `useEventTopology` connects all children of a `sourceId`
   to the *first* child (O(k), same connected component as all-pairs) — the chain
   count is correct but the implied graph edges are a star, not a clique. It runs only

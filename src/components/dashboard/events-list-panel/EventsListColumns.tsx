@@ -43,19 +43,19 @@ export function buildEventColumns(
   return [
     {
       key: "select",
-      header: "",
+      header: <ColumnName>{labels.eventsPage.columnSelect}</ColumnName>,
       className: "w-6 flex-shrink-0",
       render: (event) => isEventRetryable(event.status) ? <FailedSelect event={event} labels={labels} selectedIds={selectedIds} onSelect={onSelect} /> : null,
     },
     {
       key: "status-icon",
-      header: "",
+      header: <ColumnName>{labels.eventsPage.columnState}</ColumnName>,
       className: "w-8 flex-shrink-0",
       render: (event) => <EventStatusIcon status={event.status} />,
     },
     {
       key: "persona",
-      header: "",
+      header: <ColumnName>{labels.eventsPage.columnPersona}</ColumnName>,
       className: "w-8 flex-shrink-0",
       render: (event) => <EventPersona event={event} personaMap={personaMap} />,
     },
@@ -69,14 +69,14 @@ export function buildEventColumns(
     { key: "status", header: labels.common.status, className: "w-28 flex-shrink-0 hidden sm:block", render: (event) => <StatusBadge status={event.status} /> },
     {
       key: "retries",
-      header: "",
+      header: <ColumnName>{labels.eventsPage.columnRetries}</ColumnName>,
       className: "w-10 flex-shrink-0",
       render: (event) => <RetryCount count={retryCounts[event.id]} label={labels.eventsPage.retriedCount} />,
     },
     { key: "time", header: labels.eventsPage.time, className: "w-16 flex-shrink-0 text-right", render: (event) => <span className="text-sm text-muted-dark">{relativeTime(event.createdAt)}</span> },
     {
       key: "actions",
-      header: "",
+      header: <ColumnName>{labels.eventsPage.columnActions}</ColumnName>,
       className: "w-16 flex-shrink-0",
       render: (event) => <EventRowActions event={event} labels={labels} replayingIds={replayingIds} onReplay={onReplay} discardingIds={discardingIds} onDiscard={onDiscard} />,
     },
@@ -84,6 +84,17 @@ export function buildEventColumns(
 }
 
 export { DataTable };
+
+/**
+ * A column header that is announced but not drawn. Five of these columns are
+ * intentionally headerless in the design (a checkbox, a status glyph, an
+ * avatar, a retry pill, the row actions) — but `DataTable` renders headers
+ * into `role="columnheader"` divs, so an empty string left a screen-reader
+ * user with five blank columns. `sr-only` keeps the layout pixel-identical.
+ */
+function ColumnName({ children }: { children: React.ReactNode }) {
+  return <span className="sr-only">{children}</span>;
+}
 
 function FailedSelect({ event, labels, selectedIds, onSelect }: { event: PersonaEvent; labels: EventPanelLabels; selectedIds: Set<string>; onSelect: (id: string) => void }) {
   const selected = selectedIds.has(event.id);

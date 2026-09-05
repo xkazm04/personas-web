@@ -962,6 +962,11 @@
     retriedCount: string;
     retryEvent: string;
     discardEvent: string;
+    columnSelect: string;
+    columnState: string;
+    columnPersona: string;
+    columnRetries: string;
+    columnActions: string;
     discardAll: string;
     searchPlaceholder: string;
     clearSearch: string;
@@ -2827,6 +2832,11 @@ export const en: Translations = {
     retriedCount: 'Retried {count} time',
     retryEvent: 'Retry event',
     discardEvent: 'Discard event',
+    columnSelect: 'Select',
+    columnState: 'State',
+    columnPersona: 'Target persona',
+    columnRetries: 'Retries',
+    columnActions: 'Actions',
     discardAll: 'Discard',
     searchPlaceholder: 'Search payloads, event types, sources, errors...',
     clearSearch: 'Clear search',
