@@ -4,6 +4,7 @@ import { motion, AnimatePresence } from "framer-motion";
 import { usePathname } from "next/navigation";
 import { Play, Pause, ChevronLeft, ChevronRight, X } from "lucide-react";
 import { useTour } from "@/contexts/TourContext";
+import { useDialogFocusTrap, type DialogFocusTrapOptions } from "@/hooks/useDialogFocusTrap";
 import { useTranslation } from "@/i18n/useTranslation";
 import { TRANSITION_NORMAL } from "@/lib/animations";
 import AthenaCompanion from "./AthenaCompanion";
@@ -18,6 +19,14 @@ function chapterFromPath(pathname: string): Chapter | null {
   return null;
 }
 
+/** See the identical block in `TourIntroCard` for why each option is set. */
+const TRAP: DialogFocusTrapOptions = {
+  initialFocusSelector: "[data-tour-focus]",
+  escape: false,
+  restoreFocusSelector: "[data-tour-launcher]",
+  deferToMovedFocus: true,
+};
+
 const BTN_BASE =
   "flex h-9 w-9 items-center justify-center rounded-full border transition-colors duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-cyan/40 disabled:cursor-not-allowed disabled:opacity-40";
 
@@ -29,6 +38,9 @@ export default function TourCaptionCard() {
   const { t } = useTranslation();
   const pathname = usePathname();
   const { steps, stepIndex, playing, next, prev, goTo, togglePlay, exit } = useTour();
+  // Declared aria-modal, so Tab is contained here too. Escape stays with
+  // `useTourKeyboard`; the trap only owns Tab and focus restore.
+  const panelRef = useDialogFocusTrap(true, exit, TRAP);
   if (steps.length === 0) return null;
   const step = steps[stepIndex];
   const isFirst = stepIndex === 0;
@@ -36,6 +48,7 @@ export default function TourCaptionCard() {
 
   return (
     <motion.div
+      ref={panelRef}
       role="dialog"
       aria-modal="true"
       aria-label={t.tour.launch}
@@ -96,6 +109,7 @@ export default function TourCaptionCard() {
 
         <button
           type="button"
+          data-tour-focus
           onClick={togglePlay}
           aria-label={playing ? t.tour.pause : t.tour.play}
           className={`${BTN_BASE} border-brand-cyan/50 bg-brand-cyan/10 text-brand-cyan hover:bg-brand-cyan/20`}

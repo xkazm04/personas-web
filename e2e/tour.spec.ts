@@ -367,3 +367,65 @@ test.describe("Guided tour — no-strand backstops", () => {
     await expect(caption).toBeVisible();
   });
 });
+
+test.describe("Guided tour — dialog focus trap", () => {
+  const LAUNCH = "Take the tour";
+  const STEP1 = "stable identity";
+
+  /**
+   * The caption card declares `role="dialog"` + `aria-modal="true"`. Before the
+   * shared `useDialogFocusTrap` was applied to it, Tab walked straight out of
+   * the card into the page behind the scrim — controls a keyboard user cannot
+   * see and, under the dim overlay, cannot use.
+   */
+  test("Tab stays inside the caption card", async ({ page }) => {
+    await page.goto("/");
+    await page.getByRole("button", { name: LAUNCH }).click();
+    await page.getByRole("button", { name: "Begin" }).click();
+
+    const caption = page.getByRole("dialog", { name: LAUNCH });
+    await expect(caption).toContainText(STEP1);
+    // Initial focus lands on the card's designated control, not <body>.
+    await expect(caption.locator("[data-tour-focus]")).toBeFocused();
+
+    const focusIsInsideDialog = () =>
+      page.evaluate(() => !!document.activeElement?.closest('[role="dialog"]'));
+
+    // More presses than the card has focusable controls, so the cycle wraps.
+    for (let i = 0; i < 16; i++) {
+      await page.keyboard.press("Tab");
+      expect(await focusIsInsideDialog()).toBe(true);
+    }
+    // ...and backwards over the first element, too.
+    for (let i = 0; i < 4; i++) {
+      await page.keyboard.press("Shift+Tab");
+      expect(await focusIsInsideDialog()).toBe(true);
+    }
+  });
+
+  test("Escape still exits (the trap does not swallow or double-fire it)", async ({ page }) => {
+    await page.goto("/");
+    await page.getByRole("button", { name: LAUNCH }).click();
+    await page.getByRole("button", { name: "Begin" }).click();
+    const caption = page.getByRole("dialog", { name: LAUNCH });
+    await expect(caption).toBeVisible();
+    await page.keyboard.press("Escape");
+    await expect(caption).toBeHidden();
+    await expect(page.getByRole("button", { name: LAUNCH })).toBeVisible();
+  });
+
+  /**
+   * The launcher unmounts while the tour runs, so the node captured when the
+   * trap opened is detached by the time it closes; the trap falls back to the
+   * `[data-tour-launcher]` selector rather than dropping focus on `<body>`.
+   */
+  test("closing the tour returns focus to the launcher", async ({ page }) => {
+    await page.goto("/");
+    await page.getByRole("button", { name: LAUNCH }).click();
+    await page.getByRole("button", { name: "Begin" }).click();
+    const caption = page.getByRole("dialog", { name: LAUNCH });
+    await caption.getByRole("button", { name: "Exit tour" }).click();
+
+    await expect(page.getByRole("button", { name: LAUNCH })).toBeFocused();
+  });
+});

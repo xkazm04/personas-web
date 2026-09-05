@@ -110,6 +110,10 @@ export default function TourLauncher({
   return (
     <motion.button
       type="button"
+      // The tour's dialog cards restore focus here when they close. The button
+      // that opened the tour has unmounted by then (`if (active) return null`),
+      // so the trap cannot restore the original node — it looks this up instead.
+      data-tour-launcher
       onClick={handleStart}
       onPointerEnter={() => void loadSteps()}
       onFocus={() => void loadSteps()}
