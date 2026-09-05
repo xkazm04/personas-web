@@ -12,6 +12,25 @@ const MARGIN = 44;
 const BOTTOM_GAP = 150;
 /** Step-to-step tween duration. */
 const TWEEN_MS = 600;
+/** Anchor wait before the missed-anchor policy fires (covers lazy hydration). */
+const ANCHOR_TIMEOUT_MS = 3000;
+
+/** Data-free breadcrumb: no SENSITIVE_FIELDS key, no user-derived value. */
+function breadcrumbMissedAnchor(waitedMs: number): void {
+  if (typeof window === "undefined") return;
+  void import("@sentry/nextjs")
+    .then((Sentry) => {
+      Sentry.addBreadcrumb({
+        category: "tour",
+        level: "warning",
+        message: "tour spotlight anchor never resolved; dropping the scrim",
+        data: { waitedMs },
+      });
+    })
+    .catch(() => {
+      /* Sentry is optional — the scrim is dropped either way. */
+    });
+}
 
 const clamp = (v: number, lo: number, hi: number) => Math.min(Math.max(v, lo), hi);
 /** Smooth ease-in-out for the tween. */
@@ -21,32 +40,32 @@ const ease = (t: number) => 0.5 - 0.5 * Math.cos(Math.PI * t);
  * Dims the page except a rounded cutout that *glides* between step targets.
  *
  * Uses one `requestAnimationFrame` loop while the tour is active. Each frame
- * reads the current step's target rect and applies it to the cutout — and
- * during the first `TWEEN_MS` after a step change, the position is blended
- * from the previous step's captured rect toward the live new rect, so the
- * spotlight visibly travels between headings instead of jump-cutting. After
- * the blend, the rAF keeps tracking the live rect, which gives natural
- * scroll-follow without a separate scroll listener.
+ * reads the current step's target rect and applies it to the cutout; for the
+ * first `TWEEN_MS` after a step change the position is blended from the previous
+ * step's captured rect toward the live one, so the spotlight visibly travels
+ * between headings instead of jump-cutting. After the blend the rAF keeps
+ * tracking the live rect — scroll-follow for free, no scroll listener.
  *
  * Imports `useReducedMotion` per `custom-animation/require-animation-gating`;
  * when set, the tween is skipped and the cutout snaps to each step.
  *
- * The scrim is a literal `rgba(8, 11, 20, 0.8)`, not a theme token, and the
- * reason is the scrim's job rather than a style waiver: it exists to darken
- * whatever is behind it, so it must stay dark in every theme. A themed token
- * cannot do that — `--background` resolves to a light colour under
- * `prefers-color-scheme: light` and under forced-colors, which would make the
- * "dim" brighter than the page and destroy the cutout entirely. The literal
- * is load-bearing: it is the one value here that must NOT follow the theme.
+ * **Missed-anchor policy — keep the caption, drop the scrim.** If a step's
+ * selector has not resolved within `ANCHOR_TIMEOUT_MS` the cutout fades out, so
+ * the page reads normally while narration and caption carry on. Skipping the
+ * step was rejected: it would discard narration already playing and desync the
+ * voice from the caption. It also fixes the worse half of the same bug — a
+ * cutout left holding the *previous* step's rect, confidently highlighting the
+ * wrong thing. Self-healing: a late anchor restores the cutout next frame.
  *
- * Note this is a deliberate exception to the "semantic tokens only, never raw
- * colour values" rule in `.claude/design.md` §1, which sanctions exactly one
- * other literal (`#0a0f1a` for modal/popover surfaces) and does not cover
- * scrims. Justified above rather than by citation — do not read it as blanket
- * permission for literal colours elsewhere in the tour components.
- *
- * The ring, by contrast, uses the themed `--brand-cyan` accent so it matches
- * the caption card and the rest of the active theme.
+ * The scrim is a literal `rgba(8, 11, 20, 0.8)`, not a theme token, because its
+ * job is to darken whatever is behind it — it must stay dark in every theme, and
+ * `--background` resolves to a light colour under `prefers-color-scheme: light`
+ * and forced-colors, which would make the "dim" brighter than the page and
+ * destroy the cutout. It is the one value here that must NOT follow the theme, a
+ * deliberate exception to `.claude/design.md` §1 (which sanctions only `#0a0f1a`
+ * for modal surfaces, not scrims) — not blanket permission for literal colours
+ * elsewhere in the tour. The ring, by contrast, uses the themed `--brand-cyan`
+ * accent so it matches the caption card and the rest of the active theme.
  */
 export default function TourSpotlight() {
   const { active, activeSpotlight } = useTour();
@@ -96,6 +115,9 @@ export default function TourSpotlight() {
 
     const newTarget = activeSpotlight;
     let frame = 0;
+    const startedAt = performance.now();
+    let resolved = false;
+    let dropped = false;
 
     const tick = () => {
       const cutout = cutoutRef.current;
@@ -103,6 +125,7 @@ export default function TourSpotlight() {
       if (cutout && el) {
         const r = el.getBoundingClientRect();
         if (r.width > 0 || r.height > 0) {
+          resolved = true;
           let left = r.left;
           let top = r.top;
           let right = r.right;
@@ -133,6 +156,16 @@ export default function TourSpotlight() {
           cutout.style.width = `${Math.max(0, cr - cl)}px`;
           cutout.style.height = `${Math.max(0, cb - ct)}px`;
           cutout.style.opacity = "1";
+        }
+      }
+      // Missed-anchor policy (see docblock). Two boolean reads per frame once
+      // the anchor resolves, so the happy path is untouched.
+      if (!resolved && !dropped && cutout) {
+        const waitedMs = performance.now() - startedAt;
+        if (waitedMs > ANCHOR_TIMEOUT_MS) {
+          dropped = true;
+          cutout.style.opacity = "0";
+          breadcrumbMissedAnchor(Math.round(waitedMs));
         }
       }
       frame = requestAnimationFrame(tick);

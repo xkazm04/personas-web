@@ -303,3 +303,67 @@ test.describe("Guided tour — intro pop-up (Athena)", () => {
     await expect(page.getByRole("button", { name: LAUNCH })).toBeVisible();
   });
 });
+
+test.describe("Guided tour — no-strand backstops", () => {
+  const LAUNCH = "Take the tour";
+  const STEP1 = "stable identity";
+  const STEP2 = "real time";
+
+  /**
+   * A clip that loads and then stalls fires neither `ended` nor `error`, and
+   * `ended` is the only thing that advances an audio-bearing step — so before
+   * the watchdog in `useTourAudio` this left the visitor under the scrim with no
+   * way forward. Held requests reproduce exactly that: the media element never
+   * completes and never errors.
+   *
+   * Step 1's ceiling is `max(clip duration, dwellMs = 12s) + STALL_SLACK_MS =
+   * 20s`; the duration is never known here, so the dwell floor applies.
+   */
+  test("a stalled narration clip still advances the tour", async ({ page }) => {
+    test.setTimeout(90_000);
+    // Hold every narration request open forever — never fulfil, never abort.
+    await page.route("**/tour/*.mp3", () => {
+      /* deliberately unresolved: the clip loads forever */
+    });
+
+    await page.goto("/");
+    await page.getByRole("button", { name: LAUNCH }).click();
+    await page.getByRole("button", { name: "Begin" }).click();
+
+    const caption = page.getByRole("dialog", { name: LAUNCH });
+    await expect(caption).toContainText(STEP1);
+    // No `ended`, no `error` — only the stall ceiling can move this on.
+    await expect(caption).toContainText(STEP2, { timeout: 40_000 });
+  });
+
+  /**
+   * A step whose spotlight anchor never resolves must not leave a dimmed page
+   * highlighting nothing (or still highlighting the previous step). The declared
+   * policy is "keep the caption, drop the scrim": the cutout — which carries the
+   * `0 0 0 100vmax` scrim in its own box-shadow — fades to opacity 0 while the
+   * caption keeps running.
+   */
+  test("a missing spotlight anchor drops the scrim and keeps the caption", async ({ page }) => {
+    await page.goto("/");
+    await page.getByRole("button", { name: LAUNCH }).click();
+    await page.getByRole("button", { name: "Begin" }).click();
+
+    const caption = page.getByRole("dialog", { name: LAUNCH });
+    await expect(caption).toContainText(STEP1);
+
+    const cutout = page.locator(".tour-cutout-pulse");
+    // Sanity: with a real anchor the scrim is up.
+    await expect(cutout).toHaveCSS("opacity", "1");
+
+    // Remove every spotlight anchor, then step on — nothing can resolve.
+    await page.evaluate(() => {
+      document
+        .querySelectorAll("[data-tour-diagram]")
+        .forEach((el) => el.removeAttribute("data-tour-diagram"));
+    });
+    await caption.getByRole("button", { name: "Next step" }).click();
+
+    await expect(cutout).toHaveCSS("opacity", "0", { timeout: 15_000 });
+    await expect(caption).toBeVisible();
+  });
+});
