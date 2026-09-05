@@ -215,20 +215,48 @@ per-node-id lookup of realistic mock JSON), syntax-highlighted by `highlightJson
   `mockPayloadForNode` computes `s_cron.next_run` with `Date.now()` at call time
   (drawer render) — harmless for mock display but don't copy the pattern into a hook
   or `useMemo`.
+- **The particle loop is an AMBIENT loop, gated on BOTH signals.** An
+  `IntersectionObserver` in `EventBusVisualization.tsx` covers off-screen, and
+  `usePageVisibility()` inside `useEventBusParticles.ts` covers a backgrounded tab.
+  Before `c6de33f` only the observer could re-arm `requestAnimationFrame`, so returning
+  to a backgrounded tab left the bus frozen until the element's intersection state
+  happened to change. `inViewRef` is optimistically set true on FIRST activation only
+  (`startedRef`) — resetting it on a visibility change would restart a scrolled-away
+  loop. `useEventBusParticles.ts` no longer disables
+  `custom-animation/require-animation-gating`; `usePageVisibility` is an accepted gate.
+  The reduced-motion gate still lives one level up (`if (prefersReduced) return`, plus
+  `EventBusParticles` returning `null`), which is safe only because the parent loads the
+  component via `dynamic(..., { ssr: false })`. Do not server-render it.
 - **`_personaPos` monkeypatch.** Particles stash their outbound persona target via a
   cast-and-assign (`(particle as Particle & { _personaPos: Point })._personaPos`) in
   `useEventBusParticles` rather than on the typed `Particle` interface — fragile but
   intentional to keep the public geometry type clean.
 - **i18n.** All strings come from `t.eventsPage.*`, `t.dashboardUi.*`, `t.common.*`,
-  `t.executionsPage.*`, `t.memoriesPage.*`. Watch for stragglers: the `"Dead Letter"`
-  filter label (`EventsFiltersToolbar.tsx:60`) and the `"Fast"/"Normal"/"Slow"` +
-  `"ms"` duration qualifiers (`EventDrawerMetadata.tsx`) are **hardcoded English** —
-  fix these by adding keys to `en.ts` and all 13 locales if you go near them.
+  `t.executionsPage.*`, `t.memoriesPage.*`. The events surfaces are fully keyed as of
+  `aa75f5d` — the former stragglers (the `Dead Letter` filter chip, the `ms` suffix,
+  `Fast`/`Normal`/`Slow`, the swim-lane `now` / `-Nm` axis ticks, the raw
+  `success`/`failure`/`processing` legend keys and the `"... at ..."` dot `aria-label`)
+  now live under `eventsPage.deadLetter`, `eventsPage.durationMs` / `durationFast` /
+  `durationNormal` / `durationSlow`, and `eventsPage.swimlane.*`.
+- **The swim-lane axis has its own COMPACT keys** — `eventsPage.swimlane.axisNow` and
+  `axisMinutes` (`'{n}m'`) — deliberately NOT `dashboard.staleness.justNow` /
+  `minutesAgo`. Five absolutely positioned `text-sm` labels share one `1fr` column in
+  the `grid-cols-[8rem_1fr]` axis row, so these are chart-axis labels: translators get
+  the terse form (`сейчас`, `jetzt`), never the staleness-pill sentence. The number
+  still travels with its unit inside one interpolated message, so unit placement and
+  RTL stay the translator's call. Leave `dashboard.staleness.*` alone —
+  `StalenessIndicator` uses it and it is correct there. French `maintenant` is the
+  widest label in the set; it lands on the right-aligned rightmost tick, so it grows
+  away from its neighbour, but eyeball it first if the axis ever looks tight.
+- **`EventDrawerMetadata` reads duration strings from `useTranslation()` directly**,
+  not through the `labels` prop `EventDetailDrawer` passes for `timestamp`/`duration`.
+  Two sources in one component is deliberate, not drift: the prop shape is owned by
+  the drawer.
 - **Token drift.** `EventDrawerPayload` uses raw `text-white/60` and the visualization
   components use literal `rgba(...)` fills/strokes inside SVG (acceptable for SVG
   paint, but the `text-white/60` is a semantic-token violation — prefer
   `text-foreground/…` style tokens).
-- **Headerless columns still need names.** `DataTable` renders an ARIA table
+- **Headerless columns carry `sr-only` names.** `DataTable` renders an ARIA table
   (`role="table"`/`row"`/`columnheader"` divs, not a native `<table>`), so a
   column's accessible name comes from its header content and there is no
   `<th>`-style fallback. Five of the events columns are headerless by design
