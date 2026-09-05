@@ -616,7 +616,10 @@ export const es: Translations = {
         cancelled: "Cancelado",
         pending: "Pendiente",
         approved: "Aprobado",
-        rejected: "Rechazado"
+        rejected: "Rechazado",
+        processing: "Procesando",
+        dead_letter: "No entregado",
+        discarded: "Descartado"
       },
       testFlow: "Probar flujo",
       eventTypes: "Tipos de eventos",
@@ -1195,6 +1198,8 @@ export const es: Translations = {
       showRelatedEvents: "Mostrar {count} eventos relacionados",
       retriedCount: "Reintentado {count} vez",
       retryEvent: "Reintentar evento",
+      discardEvent: "Descartar evento",
+      discardAll: "Descartar",
       searchPlaceholder: "Buscar payloads, tipos de evento, or?genes, errores...",
       clearSearch: "Limpiar b?squeda",
       eventType: "Tipo de evento",
@@ -1236,7 +1241,18 @@ export const es: Translations = {
       noMatchingSubscriptions: "No hay suscripciones coincidentes",
       noSubscriptions: "No hay suscripciones",
       noSubscriptionsDescription: "Crea suscripciones para dirigir eventos a tus agentes",
+      deadLetter: "No entregados",
+      durationMs: "{n} ms",
+      durationFast: "R\u00e1pido",
+      durationNormal: "Normal",
+      durationSlow: "Lento",
       swimlane: {
+        eventAt: "{type} a las {time}",
+        status: {
+          success: "\u00c9xito",
+          failure: "Fallo",
+          processing: "Procesando"
+        },
         title: "Carriles de eventos",
         subtitle: "Traza de eventos por persona ordenada en el tiempo",
         empty: "No hay eventos en la ventana seleccionada"

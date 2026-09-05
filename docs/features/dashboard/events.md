@@ -11,8 +11,11 @@ email) into the persona agents that react to them. It has four tabs:
   source, target persona, event type, retry count, and time. You can full-text
   search, filter by status / event type / source type, drill into a row to see its
   JSON payload and error, follow "related event" chains (events linked by
-  `sourceId`), retry a single failed event, or multi-select failed events and
-  **bulk-retry** them from a sticky bottom bar.
+  `sourceId`), retry a single failed event, **discard** one you have judged
+  unrecoverable, or multi-select failed / dead-lettered events and **bulk-retry
+  or bulk-discard** them from a sticky bottom bar. The **Dead Letter** filter is
+  a working queue, not a read-out: every row in it carries both verbs, and the
+  lane drains to empty as you resolve them.
 - **Subscriptions** — which personas subscribe to which event types (handled by
   `SubscriptionsPanel`, documented elsewhere).
 - **Visualization** — an animated SVG topology: source nodes on an outer ring,
@@ -73,7 +76,10 @@ per-node-id lookup of realistic mock JSON), syntax-highlighted by `highlightJson
 | `src/app/api/events/stream/route.ts` | **Real** SSE proxy to the orchestrator with heartbeat injection |
 | `src/hooks/useEventStream.ts` | EventSource lifecycle, reconnect backoff, polling fallback |
 | `src/hooks/useEventTopology.ts` | BFS over `sourceId` links → event-chain components |
-| `src/stores/eventStore.ts` | Zustand store: events buffer, replay/DLQ, subscriptions |
+| `src/lib/eventStatusFsm.ts` | The event delivery FSM: transition table, `assertEventTransition`, retry-budget landing |
+| `src/lib/eventStatusFsm.test.ts` | FSM transition + retry-budget specs |
+| `src/stores/eventStore.ts` | Zustand store: events buffer, replay/DLQ/discard, subscriptions |
+| `src/stores/eventStore.test.ts` | Store specs: retry drains the lane, discard verdict, lockout parking |
 | `src/components/dashboard/EventsListPanel.tsx` | Events tab: fetch, stream, filter, chains, bulk retry |
 | `src/components/dashboard/events-list-panel/EventsListColumns.tsx` | `DataTable` column builder (select, status, persona, chain, retry) |
 | `src/components/dashboard/events-list-panel/EventsFiltersToolbar.tsx` | Search input + status/eventType/sourceType filters + chain pill |
@@ -99,9 +105,16 @@ per-node-id lookup of realistic mock JSON), syntax-highlighted by `highlightJson
 
 ## Data & state
 
-- **Source:** Demo-only. List/replay/subscriptions read mocks via `api.*` →
+- **Source:** Demo-only. List/replay/discard/subscriptions read mocks via `api.*` →
   `src/lib/mockApi.ts` (`listEvents`, `publishEvent`, `updateEvent`,
-  `listAllSubscriptions`, …) backed by `MOCK_EVENTS` / `MOCK_SUBSCRIPTIONS`. The
+  `listAllSubscriptions`, …) backed by `MOCK_EVENTS` (`src/lib/mockData.ts`) /
+  `MOCK_SUBSCRIPTIONS`. `publishEvent` mints a real event from its input and
+  `updateEvent` writes the transition back into the `MOCK_EVENTS` array — both
+  used to be inert (`publishEvent` literally returned `MOCK_EVENTS[0]`, which the
+  store's id dedupe then swallowed, so every demo retry was a silent no-op, and
+  `updateEvent` returned a detached copy that the next 10s poll overwrote).
+  `MOCK_EVENTS` carries eight dead-letter/failed fixtures so the Dead Letter
+  filter can be watched draining to empty. The
   visualization, swimlane, and drawer use static fixtures from
   `src/lib/mock-dashboard-data.ts` (`SWARM_PERSONAS`, `SWARM_SOURCES`, `EVENT_TYPES`,
   `MOCK_SWIMLANE_EVENTS`, `SWIMLANE_WINDOW_MS`, `SwarmNode`). `EventBusStats` counters
@@ -116,7 +129,10 @@ per-node-id lookup of realistic mock JSON), syntax-highlighted by `highlightJson
   surface owns). Everything else routes through the `api` client, which is the mock
   layer in this repo.
 - **Types:** `PersonaEvent`, `PersonaEventSubscription`, `CreateEventInput`,
-  `EventStatus` (`src/lib/types.ts`); `SwarmNode`, `SwimlaneEvent`, `EventFlow`
+  `EventStatus` — `pending | processing | processed | failed | dead_letter |
+  discarded` (`src/lib/types.ts`); the transition table, `assertEventTransition`
+  and the `isEventRetryable` / `isEventDiscardable` predicates
+  (`src/lib/eventStatusFsm.ts`); `SwarmNode`, `SwimlaneEvent`, `EventFlow`
   (`src/lib/mock-dashboard-data.ts`); `Particle`, `BurstRing`, `Point`
   (`eventBusGeometry.ts`); `ConnectionStatus`, `ReplayLockedError`,
   `MAX_REPLAY_RETRIES` (`eventStore.ts`).
@@ -149,21 +165,37 @@ per-node-id lookup of realistic mock JSON), syntax-highlighted by `highlightJson
   (`EventsListPanel.tsx:43-46`), so switching to the Visualization/Swimlane/
   Subscriptions tabs unmounts the list and **stops the live stream/poll**; the
   title-bar connection dot then reflects the last status until you return.
-- **`EventBusStats` is decoupled from real connection state.** It hardcodes
-  `connected = true` (`EventBusStats.tsx:68`) and its three counters are random
-  walks on a `setInterval` — it always shows "Connected" and fake throughput
-  regardless of `connectionStatus`. Don't read it as live health; that's the
-  title-bar `ConnectionStatusIndicator`'s job.
+- **`EventBusStats` counters are simulated, but its connection state is real.**
+  It reads `connectionStatus` from `eventStore` (an earlier version of this doc
+  claimed it hardcoded `connected = true` — that is no longer true). The three
+  counters are still random walks on a `setInterval`, so don't read the
+  throughput numbers as live; the title-bar `ConnectionStatusIndicator` remains
+  the authority on stream health.
+- **The status FSM is the only writer of `event.status`.** `eventStore.transitionEvent`
+  calls `assertEventTransition` *before* its `set()`, so an illegal move throws
+  `IllegalEventTransitionError` and leaves the buffer untouched — a discarded event
+  cannot be resurrected and a processed one cannot be re-failed. The table lives in
+  `src/lib/eventStatusFsm.ts`:
+  `pending -> processing`; `processing -> processed | pending | failed | dead_letter`;
+  `failed -> processing | dead_letter | discarded`; `dead_letter -> processing | discarded`;
+  `processed` and `discarded` are terminal.
 - **Replay lockout & retry budget.** `replayEvent` counts the *attempt* up front
   (not success) and persists `retryCounts` to `localStorage`
   (`event-replay-retry-counts`); once an event hits `MAX_REPLAY_RETRIES = 3` it's
-  **replay-locked** and throws `ReplayLockedError`. This is intentional — the prior
-  shape only counted successes, so an always-failing handler could be retried
-  forever. `replayEvents` (bulk) pre-filters locked events as `skipped`, batches in
-  groups of 10 via `Promise.allSettled`, and trips a **circuit breaker** after 5
-  *consecutive* failures (resets on any success), returning
-  `{ succeeded, failed, aborted, skipped }`. `store.reset()` clears the persisted
-  counts.
+  **replay-locked**, is moved into `dead_letter`, and throws `ReplayLockedError`.
+  A retry transitions the ORIGINAL event `-> processing`, then `-> processed` on
+  success (via `api.updateEvent`, which had zero call sites before this) or
+  `-> failed` / `-> dead_letter` on failure depending on whether the budget is
+  spent (`statusAfterFailedAttempt`). `replayEvents` (bulk) is the same code path
+  per item — it pre-filters locked and non-retryable events as `skipped` (parking
+  locked ones in the dead letter as it goes), batches in groups of 10 via
+  `Promise.allSettled`, and trips a **circuit breaker** after 5 *consecutive*
+  failures (resets on any success), returning `{ succeeded, failed, aborted, skipped }`.
+- **Discard is the second verb the dead letter needs.** `discardEvent` /
+  `discardEvents` write `discarded` through `api.updateEvent` and track in-flight
+  rows in `discardingIds` (the mirror of `replayingIds`). Both are exposed per-row
+  in the actions column and in bulk from `EventsBulkRetryBar`. `store.reset()`
+  clears the persisted counts and both id sets.
 - **Counts attempts globally, not per-handler** — the retry budget is keyed by event
   id, and `localStorage` is shared across all browser tabs, so retries in one tab
   count against another. Lockout survives reloads but not `reset()`.

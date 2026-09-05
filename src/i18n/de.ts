@@ -616,7 +616,10 @@ export const de: Translations = {
         cancelled: "Abgebrochen",
         pending: "Ausstehend",
         approved: "Genehmigt",
-        rejected: "Abgelehnt"
+        rejected: "Abgelehnt",
+        processing: "In Bearbeitung",
+        dead_letter: "Unzustellbar",
+        discarded: "Verworfen"
       },
       testFlow: "Testablauf",
       eventTypes: "Event-Typen",
@@ -1195,6 +1198,8 @@ export const de: Translations = {
       showRelatedEvents: "{count} verwandte Ereignisse anzeigen",
       retriedCount: "{count} Mal wiederholt",
       retryEvent: "Ereignis wiederholen",
+      discardEvent: "Ereignis verwerfen",
+      discardAll: "Verwerfen",
       searchPlaceholder: "Payloads, Ereignistypen, Quellen, Fehler suchen...",
       clearSearch: "Suche l?schen",
       eventType: "Ereignistyp",
@@ -1236,7 +1241,18 @@ export const de: Translations = {
       noMatchingSubscriptions: "Keine passenden Abonnements",
       noSubscriptions: "Keine Abonnements",
       noSubscriptionsDescription: "Erstellen Sie Abonnements, um Events an Ihre Agenten weiterzuleiten",
+      deadLetter: "Unzustellbar",
+      durationMs: "{n} ms",
+      durationFast: "Schnell",
+      durationNormal: "Normal",
+      durationSlow: "Langsam",
       swimlane: {
+        eventAt: "{type} um {time}",
+        status: {
+          success: "Erfolg",
+          failure: "Fehler",
+          processing: "In Bearbeitung"
+        },
         title: "Event-Schwimmbahnen",
         subtitle: "Zeitlich geordnete Event-Spur pro Persona",
         empty: "Keine Events im ausgew\u00e4hlten Zeitraum"

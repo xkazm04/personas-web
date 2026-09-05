@@ -61,6 +61,13 @@ function delay(ms = 300): Promise<void> {
   return new Promise((r) => setTimeout(r, ms));
 }
 
+/**
+ * Monotonic id source for events minted by `publishEvent`. A counter rather
+ * than `Math.random()` keeps demo ids stable and readable, and it never runs
+ * in a render path.
+ */
+let publishedEventSeq = 0;
+
 export const mockApi: ApiClient = {
   listPersonas: async (): Promise<Persona[]> => {
     await delay();
@@ -123,16 +130,48 @@ export const mockApi: ApiClient = {
     return result;
   },
 
-  publishEvent: async (_input: CreateEventInput): Promise<PersonaEvent> => {
+  publishEvent: async (input: CreateEventInput): Promise<PersonaEvent> => {
     await delay();
-    return MOCK_EVENTS[0];
+    // This used to `return MOCK_EVENTS[0]` — a literal, unrelated fixture. The
+    // store dedupes appended events by id, so every replay in the demo was a
+    // silent no-op: the operator clicked Retry and nothing whatsoever entered
+    // the bus. Mint a real event from the input instead, and push it onto the
+    // fixture array so the next poll of `listEvents` still sees it.
+    publishedEventSeq += 1;
+    const now = new Date().toISOString();
+    const event: PersonaEvent = {
+      id: `ev-published-${publishedEventSeq}-mock`,
+      projectId: "mock-project",
+      eventType: input.eventType,
+      sourceType: input.sourceType,
+      sourceId: input.sourceId ?? null,
+      targetPersonaId: input.targetPersonaId ?? null,
+      payload: input.payload ?? null,
+      status: "pending",
+      errorMessage: null,
+      processedAt: null,
+      useCaseId: null,
+      createdAt: now,
+    };
+    MOCK_EVENTS.unshift(event);
+    return event;
   },
 
   updateEvent: async (id: string, body: { status: EventStatus; metadata?: string }): Promise<PersonaEvent> => {
     await delay();
-    const ev = MOCK_EVENTS.find((e) => e.id === id);
-    if (!ev) throw new ApiError(404, "Event not found");
-    return { ...ev, status: body.status, processedAt: new Date().toISOString() };
+    const index = MOCK_EVENTS.findIndex((e) => e.id === id);
+    if (index === -1) throw new ApiError(404, "Event not found");
+    // Write the transition back into the fixture array. Returning a detached
+    // copy meant the next `listEvents` poll merged the stale status straight
+    // back over the store, so a drained dead letter row reappeared within 10s.
+    const updated: PersonaEvent = {
+      ...MOCK_EVENTS[index],
+      status: body.status,
+      processedAt: new Date().toISOString(),
+      errorMessage: body.status === "processed" ? null : MOCK_EVENTS[index].errorMessage,
+    };
+    MOCK_EVENTS[index] = updated;
+    return updated;
   },
 
   listSubscriptions: async (personaId: string): Promise<PersonaEventSubscription[]> => {

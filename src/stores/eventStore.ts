@@ -1,6 +1,13 @@
 import { create } from "zustand";
 import { api } from "@/lib/api";
-import type { PersonaEvent, PersonaEventSubscription } from "@/lib/types";
+import type { EventStatus, PersonaEvent, PersonaEventSubscription } from "@/lib/types";
+import {
+  assertEventTransition,
+  IllegalEventTransitionError,
+  isEventDiscardable,
+  isEventRetryable,
+  statusAfterFailedAttempt,
+} from "@/lib/eventStatusFsm";
 import { mutate } from "swr";
 import { dashboardKeys } from "@/lib/dashboard-queries";
 
@@ -57,6 +64,16 @@ export function isReplayLocked(retryCounts: Record<string, number>, eventId: str
 
 export type ConnectionStatus = "connected" | "reconnecting" | "polling";
 
+type EventSetter = (partial: (state: EventState) => Partial<EventState>) => void;
+
+function clearReplaying(set: EventSetter, eventId: string): void {
+  set((s) => {
+    const nextReplayingIds = new Set(s.replayingIds);
+    nextReplayingIds.delete(eventId);
+    return { replayingIds: nextReplayingIds };
+  });
+}
+
 interface EventState {
   events: PersonaEvent[];
   eventIds: Set<string>;
@@ -68,9 +85,18 @@ interface EventState {
 
   // Replay / DLQ
   replayingIds: Set<string>;
+  discardingIds: Set<string>;
   retryCounts: Record<string, number>;
+  /**
+   * The only writer of `event.status`. Rejects any move the FSM in
+   * `eventStatusFsm.ts` does not allow, so an illegal transition throws at the
+   * call site instead of quietly corrupting the dead letter lane.
+   */
+  transitionEvent: (eventId: string, next: EventStatus) => PersonaEvent | null;
   replayEvent: (event: PersonaEvent) => Promise<void>;
   replayEvents: (events: PersonaEvent[]) => Promise<{ succeeded: number; failed: number; aborted: boolean; skipped: number }>;
+  discardEvent: (event: PersonaEvent) => Promise<void>;
+  discardEvents: (events: PersonaEvent[]) => Promise<{ succeeded: number; failed: number; skipped: number }>;
 
   subscriptions: PersonaEventSubscription[];
   subscriptionsLoading: boolean;
@@ -143,9 +169,42 @@ export const useEventStore = create<EventState>((set, get) => ({
 
   // Replay / DLQ
   replayingIds: new Set(),
+  discardingIds: new Set(),
   retryCounts: loadRetryCounts(),
+  transitionEvent: (eventId, next) => {
+    const index = get().events.findIndex((e) => e.id === eventId);
+    if (index === -1) return null;
+    const current = get().events[index];
+    if (current.status === next) return current;
+    // Throws IllegalEventTransitionError on an illegal move. Deliberately
+    // *before* the set() so a rejected transition leaves the store untouched.
+    assertEventTransition(current.status, next);
+    const updated: PersonaEvent = {
+      ...current,
+      status: next,
+      processedAt: next === "pending" || next === "processing" ? current.processedAt : new Date().toISOString(),
+      errorMessage: next === "processed" ? null : current.errorMessage,
+    };
+    set((s) => {
+      const events = [...s.events];
+      const i = events.findIndex((e) => e.id === eventId);
+      if (i === -1) return s;
+      events[i] = updated;
+      return { events };
+    });
+    return updated;
+  },
   replayEvent: async (event) => {
+    const currentEvent = get().events.find((e) => e.id === event.id) ?? event;
+    // A retry is a transition, not a counter bump: only a row that is actually
+    // sitting in the failed / dead-letter lane can be retried.
+    if (!isEventRetryable(currentEvent.status)) {
+      throw new IllegalEventTransitionError(currentEvent.status, "processing");
+    }
     if (isReplayLocked(get().retryCounts, event.id)) {
+      // Budget spent. Park it in the dead letter so the row has a destination
+      // rather than a permanently climbing retry badge.
+      if (currentEvent.status === "failed") get().transitionEvent(event.id, "dead_letter");
       throw new ReplayLockedError(event.id);
     }
     // Count the attempt up front, not the success. The previous shape only
@@ -155,17 +214,16 @@ export const useEventStore = create<EventState>((set, get) => ({
     // the bus indefinitely. Counting attempts means after MAX_REPLAY_RETRIES
     // calls the event becomes replay-locked regardless of outcome, which is
     // the actual semantics of "retry budget".
+    const attempts = (get().retryCounts[event.id] ?? 0) + 1;
     set((s) => {
-      const nextRetryCounts = {
-        ...s.retryCounts,
-        [event.id]: (s.retryCounts[event.id] ?? 0) + 1,
-      };
+      const nextRetryCounts = { ...s.retryCounts, [event.id]: attempts };
       saveRetryCounts(nextRetryCounts);
       return {
         replayingIds: new Set(s.replayingIds).add(event.id),
         retryCounts: nextRetryCounts,
       };
     });
+    get().transitionEvent(event.id, "processing");
     try {
       const newEvent = await api.publishEvent({
         eventType: event.eventType,
@@ -175,18 +233,22 @@ export const useEventStore = create<EventState>((set, get) => ({
         payload: event.payload ?? undefined,
       });
       get().appendEvent(newEvent);
-      set((s) => {
-        const nextReplayingIds = new Set(s.replayingIds);
-        nextReplayingIds.delete(event.id);
-        return { replayingIds: nextReplayingIds };
-      });
+      // The verb that resolves the row. `api.updateEvent` existed with zero
+      // call sites before this — the original event was never written back.
+      await api.updateEvent(event.id, { status: "processed" });
+      get().transitionEvent(event.id, "processed");
+      clearReplaying(set, event.id);
     } catch (err) {
-      set((s) => {
-        const nextReplayingIds = new Set(s.replayingIds);
-        nextReplayingIds.delete(event.id);
-        return { replayingIds: nextReplayingIds };
-      });
+      const landing = statusAfterFailedAttempt(attempts, MAX_REPLAY_RETRIES);
+      try {
+        await api.updateEvent(event.id, { status: landing });
+      } catch {
+        // The local transition is still the truth the operator sees.
+      }
+      get().transitionEvent(event.id, landing);
+      clearReplaying(set, event.id);
       if (err instanceof ReplayLockedError) throw err;
+      if (err instanceof IllegalEventTransitionError) throw err;
       throw new Error("Replay failed");
     }
   },
@@ -198,10 +260,16 @@ export const useEventStore = create<EventState>((set, get) => ({
     let consecutiveFailures = 0;
 
     // Pre-filter out already-locked events so we don't churn batches calling
-    // them just to throw ReplayLockedError. Lockout is reported as `skipped`.
+    // them just to throw ReplayLockedError. Lockout is reported as `skipped`,
+    // and a locked row is moved into the dead letter here too, so bulk retry
+    // resolves exactly the same states as the per-row verb.
     const eligible: PersonaEvent[] = [];
     for (const e of events) {
       if (isReplayLocked(get().retryCounts, e.id)) {
+        const current = get().events.find((x) => x.id === e.id) ?? e;
+        if (current.status === "failed") get().transitionEvent(e.id, "dead_letter");
+        skipped++;
+      } else if (!isEventRetryable((get().events.find((x) => x.id === e.id) ?? e).status)) {
         skipped++;
       } else {
         eligible.push(e);
@@ -230,6 +298,43 @@ export const useEventStore = create<EventState>((set, get) => ({
     }
 
     return { succeeded, failed, aborted, skipped };
+  },
+  discardEvent: async (event) => {
+    const currentEvent = get().events.find((e) => e.id === event.id) ?? event;
+    if (!isEventDiscardable(currentEvent.status)) {
+      throw new IllegalEventTransitionError(currentEvent.status, "discarded");
+    }
+    set((s) => ({ discardingIds: new Set(s.discardingIds).add(event.id) }));
+    try {
+      await api.updateEvent(event.id, { status: "discarded" });
+      get().transitionEvent(event.id, "discarded");
+    } finally {
+      set((s) => {
+        const next = new Set(s.discardingIds);
+        next.delete(event.id);
+        return { discardingIds: next };
+      });
+    }
+  },
+  discardEvents: async (events) => {
+    let succeeded = 0;
+    let failed = 0;
+    let skipped = 0;
+    const eligible = events.filter((e) => {
+      const current = get().events.find((x) => x.id === e.id) ?? e;
+      if (isEventDiscardable(current.status)) return true;
+      skipped++;
+      return false;
+    });
+    for (let i = 0; i < eligible.length; i += REPLAY_BATCH_SIZE) {
+      const batch = eligible.slice(i, i + REPLAY_BATCH_SIZE);
+      const results = await Promise.allSettled(batch.map((e) => get().discardEvent(e)));
+      for (const r of results) {
+        if (r.status === "fulfilled") succeeded++;
+        else failed++;
+      }
+    }
+    return { succeeded, failed, skipped };
   },
 
   subscriptions: [],
@@ -274,6 +379,7 @@ export const useEventStore = create<EventState>((set, get) => ({
       eventIds: new Set(),
       eventsLoading: false,
       replayingIds: new Set(),
+      discardingIds: new Set(),
       retryCounts: {},
       subscriptions: [],
       subscriptionsLoading: false,

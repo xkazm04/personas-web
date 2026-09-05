@@ -380,6 +380,9 @@
       pending: string;
       approved: string;
       rejected: string;
+      processing: string;
+      dead_letter: string;
+      discarded: string;
     };
     testFlow: string;
     eventTypes: string;
@@ -958,6 +961,8 @@
     showRelatedEvents: string;
     retriedCount: string;
     retryEvent: string;
+    discardEvent: string;
+    discardAll: string;
     searchPlaceholder: string;
     clearSearch: string;
     eventType: string;
@@ -999,10 +1004,21 @@
     noMatchingSubscriptions: string;
     noSubscriptions: string;
     noSubscriptionsDescription: string;
+    deadLetter: string;
+    durationMs: string;
+    durationFast: string;
+    durationNormal: string;
+    durationSlow: string;
     swimlane: {
       title: string;
       subtitle: string;
       empty: string;
+      eventAt: string;
+      status: {
+        success: string;
+        failure: string;
+        processing: string;
+      };
     };
     connectionStatus: {
       connected: string;
@@ -2229,6 +2245,9 @@ export const en: Translations = {
       pending: "Pending",
       approved: "Approved",
       rejected: "Rejected",
+      processing: "Processing",
+      dead_letter: "Dead letter",
+      discarded: "Discarded",
     },
     testFlow: "Test Flow",
     eventTypes: "Event Types",
@@ -2807,6 +2826,8 @@ export const en: Translations = {
     showRelatedEvents: 'Show {count} related events',
     retriedCount: 'Retried {count} time',
     retryEvent: 'Retry event',
+    discardEvent: 'Discard event',
+    discardAll: 'Discard',
     searchPlaceholder: 'Search payloads, event types, sources, errors...',
     clearSearch: 'Clear search',
     eventType: 'Event type',
@@ -2848,10 +2869,21 @@ export const en: Translations = {
     noMatchingSubscriptions: 'No matching subscriptions',
     noSubscriptions: 'No subscriptions',
     noSubscriptionsDescription: 'Create subscriptions to route events to your agents',
+    deadLetter: 'Dead Letter',
+    durationMs: '{n} ms',
+    durationFast: 'Fast',
+    durationNormal: 'Normal',
+    durationSlow: 'Slow',
     swimlane: {
       title: 'Event swim-lanes',
       subtitle: 'Time-ordered per-persona event trace',
       empty: 'No events in the selected window',
+      eventAt: '{type} at {time}',
+      status: {
+        success: 'Success',
+        failure: 'Failure',
+        processing: 'Processing',
+      },
     },
     connectionStatus: {
       connected: 'Real-time: connected',

@@ -31,6 +31,22 @@ const statusConfig: Record<
     bgColor: "bg-emerald-500/10",
     borderColor: "border-emerald-500/30",
   },
+  processing: {
+    color: "text-cyan-400",
+    bgColor: "bg-cyan-500/10",
+    borderColor: "border-cyan-500/30",
+    pulse: true,
+  },
+  dead_letter: {
+    color: "text-rose-400",
+    bgColor: "bg-rose-500/10",
+    borderColor: "border-rose-500/40",
+  },
+  discarded: {
+    color: "text-slate-400",
+    bgColor: "bg-slate-500/10",
+    borderColor: "border-slate-500/20",
+  },
   failed: {
     color: "text-red-400",
     bgColor: "bg-red-500/10",

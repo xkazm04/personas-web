@@ -616,7 +616,10 @@ export const vi: Translations = {
         cancelled: "\u0110\u00e3 h\u1ee7y",
         pending: "\u0110ang ch\u1edd x\u1eed l\u00fd",
         approved: "\u0110\u00e3 duy\u1ec7t",
-        rejected: "\u0110\u00e3 t\u1eeb ch\u1ed1i"
+        rejected: "\u0110\u00e3 t\u1eeb ch\u1ed1i",
+        processing: "\u0110ang x\u1eed l\u00fd",
+        dead_letter: "Kh\u00f4ng g\u1eedi \u0111\u01b0\u1ee3c",
+        discarded: "\u0110\u00e3 lo\u1ea1i b\u1ecf"
       },
       testFlow: "Ki\u1ec3m th\u1eed lu\u1ed3ng",
       eventTypes: "Lo\u1ea1i s\u1ef1 ki\u1ec7n",
@@ -1195,6 +1198,8 @@ export const vi: Translations = {
       showRelatedEvents: "Hi\u1ec3n th\u1ecb {count} s\u1ef1 ki\u1ec7n li\u00ean quan",
       retriedCount: "\u0110\u00e3 th\u1eed l\u1ea1i {count} l\u1ea7n",
       retryEvent: "Th\u1eed l\u1ea1i s\u1ef1 ki\u1ec7n",
+      discardEvent: "Lo\u1ea1i b\u1ecf s\u1ef1 ki\u1ec7n",
+      discardAll: "Lo\u1ea1i b\u1ecf",
       searchPlaceholder: "T\u00ecm ki\u1ebfm payload, lo\u1ea1i s\u1ef1 ki\u1ec7n, ngu\u1ed3n, l\u1ed7i...",
       clearSearch: "X\u00f3a t\u00ecm ki\u1ebfm",
       eventType: "Lo\u1ea1i s\u1ef1 ki\u1ec7n",
@@ -1236,7 +1241,18 @@ export const vi: Translations = {
       noMatchingSubscriptions: "Kh\u00f4ng c\u00f3 \u0111\u0103ng k\u00fd ph\u00f9 h\u1ee3p",
       noSubscriptions: "Kh\u00f4ng c\u00f3 \u0111\u0103ng k\u00fd n\u00e0o",
       noSubscriptionsDescription: "T\u1ea1o \u0111\u0103ng k\u00fd \u0111\u1ec3 \u0111\u1ecbnh tuy\u1ebfn s\u1ef1 ki\u1ec7n \u0111\u1ebfn agent c\u1ee7a b\u1ea1n",
+      deadLetter: "Kh\u00f4ng g\u1eedi \u0111\u01b0\u1ee3c",
+      durationMs: "{n} ms",
+      durationFast: "Nhanh",
+      durationNormal: "B\u00ecnh th\u01b0\u1eddng",
+      durationSlow: "Ch\u1eadm",
       swimlane: {
+        eventAt: "{type} l\u00fac {time}",
+        status: {
+          success: "Th\u00e0nh c\u00f4ng",
+          failure: "Th\u1ea5t b\u1ea1i",
+          processing: "\u0110ang x\u1eed l\u00fd"
+        },
         title: "L\u00e0n s\u1ef1 ki\u1ec7n",
         subtitle: "D\u1ea5u v\u1ebft s\u1ef1 ki\u1ec7n theo t\u1eebng persona, s\u1eafp x\u1ebfp theo th\u1eddi gian",
         empty: "Kh\u00f4ng c\u00f3 s\u1ef1 ki\u1ec7n n\u00e0o trong kho\u1ea3ng th\u1eddi gian \u0111\u00e3 ch\u1ecdn"

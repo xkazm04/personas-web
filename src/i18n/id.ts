@@ -616,7 +616,10 @@ export const id: Translations = {
         cancelled: "Dibatalkan",
         pending: "Menunggu",
         approved: "Disetujui",
-        rejected: "Ditolak"
+        rejected: "Ditolak",
+        processing: "Diproses",
+        dead_letter: "Tidak terkirim",
+        discarded: "Dibuang"
       },
       testFlow: "Uji Alur",
       eventTypes: "Jenis Event",
@@ -1195,6 +1198,8 @@ export const id: Translations = {
       showRelatedEvents: "Tampilkan {count} event terkait",
       retriedCount: "Dicoba ulang {count} kali",
       retryEvent: "Coba lagi event",
+      discardEvent: "Buang event",
+      discardAll: "Buang",
       searchPlaceholder: "Cari payload, tipe event, sumber, kesalahan...",
       clearSearch: "Hapus pencarian",
       eventType: "Tipe event",
@@ -1236,7 +1241,18 @@ export const id: Translations = {
       noMatchingSubscriptions: "Tidak ada langganan yang cocok",
       noSubscriptions: "Tidak ada langganan",
       noSubscriptionsDescription: "Buat langganan untuk merutekan event ke agen Anda",
+      deadLetter: "Tak terkirim",
+      durationMs: "{n} ms",
+      durationFast: "Cepat",
+      durationNormal: "Normal",
+      durationSlow: "Lambat",
       swimlane: {
+        eventAt: "{type} pada {time}",
+        status: {
+          success: "Berhasil",
+          failure: "Gagal",
+          processing: "Diproses"
+        },
         title: "Jalur event",
         subtitle: "Jejak event per persona berurutan waktu",
         empty: "Tidak ada event dalam jendela yang dipilih"
