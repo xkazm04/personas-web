@@ -11,8 +11,8 @@ import {
   INCIDENT_STATUSES,
   type AuditIncident,
 } from "@/lib/mock-dashboard-data";
-import type { SeverityFilter, SourceFilter, StatusFilter } from "./incidentFormat";
-import { useIncidentsFilterStore } from "./useIncidentsFilterStore";
+import type { SeverityFilter, SourceFilter, StatusFilter } from "@/lib/incidentFormat";
+import { useIncidentsFilterStore } from "@/stores/incidentsFilterStore";
 
 function FilterGroup({ label, children }: { label: string; children: React.ReactNode }) {
   return (

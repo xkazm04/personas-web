@@ -9,7 +9,7 @@ import {
   INCIDENT_SOURCES,
   type AuditIncident,
 } from "@/lib/mock-dashboard-data";
-import { severityStyle, sourceIcon } from "./incidentFormat";
+import { severityStyle, sourceIcon } from "@/lib/incidentFormat";
 
 /**
  * Incidents KPI header: the open/total headline plus severity and source

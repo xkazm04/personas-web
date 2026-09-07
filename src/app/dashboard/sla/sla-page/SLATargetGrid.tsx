@@ -6,7 +6,7 @@ import FilterBar from "@/components/dashboard/FilterBar";
 import { fadeUp } from "@/lib/animations";
 import type { SLAMetricType, SLATarget } from "@/lib/mock-dashboard-data";
 
-import { complianceBand, formatTarget, formatValue, metricKey } from "./slaFormat";
+import { complianceBand, formatTarget, formatValue, metricKey } from "@/lib/slaFormat";
 
 type StatusFilter = "all" | "atRisk" | "healthy";
 

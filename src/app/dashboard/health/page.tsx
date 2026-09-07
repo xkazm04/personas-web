@@ -5,7 +5,7 @@ import { motion } from "framer-motion";
 import { HeartPulse } from "lucide-react";
 
 import GradientText from "@/components/GradientText";
-import ExecuteToast from "@/app/dashboard/agents/agents-page/ExecuteToast";
+import ExecuteToast from "@/components/dashboard/ExecuteToast";
 import DashboardErrorBanner from "@/components/dashboard/DashboardErrorBanner";
 import SkeletonCard from "@/components/dashboard/SkeletonCard";
 import { useTranslation } from "@/i18n/useTranslation";

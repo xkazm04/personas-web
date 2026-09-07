@@ -5,7 +5,7 @@ import { AnimatePresence } from "framer-motion";
 import { Rocket, Send } from "lucide-react";
 
 import GlowCard from "@/components/GlowCard";
-import ExecuteToast from "@/app/dashboard/agents/agents-page/ExecuteToast";
+import ExecuteToast from "@/components/dashboard/ExecuteToast";
 import { useTranslation } from "@/i18n/useTranslation";
 import {
   MOCK_APPROVED_WORK,

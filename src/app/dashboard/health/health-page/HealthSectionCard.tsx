@@ -3,7 +3,7 @@
 import GlowCard from "@/components/GlowCard";
 import { useTranslation } from "@/i18n/useTranslation";
 import type { HealthCheckItem, HealthCheckSection } from "@/lib/mock-dashboard-data";
-import { sectionAccent, sectionIcon, statusStyle, worstStatus } from "./healthFormat";
+import { sectionAccent, sectionIcon, statusStyle, worstStatus } from "@/lib/healthFormat";
 
 /**
  * One System-Health section card (runtime / services / resources /

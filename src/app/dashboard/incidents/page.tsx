@@ -11,14 +11,14 @@ import SkeletonCard from "@/components/dashboard/SkeletonCard";
 import { useTranslation } from "@/i18n/useTranslation";
 import { fadeUp, staggerContainer } from "@/lib/animations";
 import type { AuditIncident } from "@/lib/mock-dashboard-data";
-import { applyIncidentFilters } from "./incidents-page/incidentFormat";
+import { applyIncidentFilters } from "@/lib/incidentFormat";
 import { IncidentDetailModal } from "./incidents-page/IncidentDetailModal";
 import { IncidentList } from "./incidents-page/IncidentList";
 import { IncidentsFilters } from "./incidents-page/IncidentsFilters";
 import { IncidentsGroupByTabs } from "./incidents-page/IncidentsGroupByTabs";
 import { IncidentsKpiHeader } from "./incidents-page/IncidentsKpiHeader";
 import { useAuditIncidents } from "./incidents-page/useAuditIncidents";
-import { useIncidentsFilterStore } from "./incidents-page/useIncidentsFilterStore";
+import { useIncidentsFilterStore } from "@/stores/incidentsFilterStore";
 
 /**
  * Incidents Inbox — audit-log incidents across the fleet. KPI header, status /

@@ -20,7 +20,7 @@ import {
 import { MessagesPagination } from "./messages-page/MessagesPagination";
 import { MessageRow } from "./messages-page/MessageRow";
 import { ThreadDetailModal } from "./messages-page/ThreadDetailModal";
-import { ThreadRow } from "./messages-page/ThreadRow";
+import { ThreadRow } from "@/components/dashboard/ThreadRow";
 import { useMessagesData } from "./useMessagesData";
 
 type MessageView = "threads" | "list";

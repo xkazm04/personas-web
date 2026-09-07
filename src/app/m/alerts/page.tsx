@@ -7,17 +7,17 @@ import HealthIssueRow from "@/components/dashboard/HealthIssueRow";
 import {
   severityPill,
   metricKey,
-} from "@/app/dashboard/sla/sla-page/slaFormat";
+} from "@/lib/slaFormat";
 import {
   severityStyle as incidentSeverity,
   statusStyle as incidentStatus,
   sourceIcon,
-} from "@/app/dashboard/incidents/incidents-page/incidentFormat";
+} from "@/lib/incidentFormat";
 import {
   sectionIcon,
   statusStyle as healthStatus,
   worstStatus,
-} from "@/app/dashboard/health/health-page/healthFormat";
+} from "@/lib/healthFormat";
 import {
   MOCK_AUDIT_INCIDENTS,
   MOCK_HEALTH_CHECKS,

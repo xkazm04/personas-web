@@ -17,7 +17,7 @@ import { useSystemStore } from "@/stores/systemStore";
 
 import { AgentCardImage } from "./agents-page/AgentCardImage";
 import { AgentsLoadingGrid } from "./agents-page/AgentsLoadingGrid";
-import ExecuteToast from "./agents-page/ExecuteToast";
+import ExecuteToast from "@/components/dashboard/ExecuteToast";
 
 type ExecuteToastState = { id: number; status: "success" | "error"; message: string };
 

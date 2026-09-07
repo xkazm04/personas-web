@@ -3,8 +3,8 @@
 import { useCallback, useRef } from "react";
 
 import { useTranslation } from "@/i18n/useTranslation";
-import type { GroupByKey } from "./incidentFormat";
-import { useIncidentsFilterStore } from "./useIncidentsFilterStore";
+import type { GroupByKey } from "@/lib/incidentFormat";
+import { useIncidentsFilterStore } from "@/stores/incidentsFilterStore";
 
 const ORDER: GroupByKey[] = ["none", "agent", "severity", "source"];
 
