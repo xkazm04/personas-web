@@ -165,12 +165,6 @@ export const LazyTeamCanvas = createLazySection(
   { ssr: false },
 );
 
-export const LazyChangelog = createLazySection(
-  () => import("@/components/sections/Changelog"),
-  SectionSkeleton,
-  { ssr: false },
-);
-
 export const LazyGetStarted = createLazySection(
   () => import("@/components/sections/get-started"),
   SectionSkeleton,
