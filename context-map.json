@@ -1302,7 +1302,7 @@
             "src/components/dashboard/event-detail-drawer/EventDrawerPayload.tsx",
             "src/components/dashboard/event-detail-drawer/EventDrawerSummary.tsx",
             "src/components/dashboard/event-detail-drawer/mockPayloadForNode.ts",
-            "src/components/dashboard/event-detail-drawer/useDialogFocusTrap.ts",
+            "src/hooks/useDialogFocusTrap.ts",
             "src/components/dashboard/events-list-panel/EventExpandedContent.tsx",
             "src/components/dashboard/events-list-panel/EventTypeBadge.tsx",
             "src/components/dashboard/events-list-panel/EventsBulkRetryBar.tsx",

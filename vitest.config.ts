@@ -34,7 +34,10 @@ export default defineConfig({
       // untested. The GATE stays scoped — a threshold over the untested surface
       // would be red from day one and get deleted — so `thresholds` names its own
       // per-glob population and the top-level floors are off.
-      all: true,
+      // (vitest 4 removed the `all` option: covering every file matched by
+      // `include`, rather than only the ones a test imported, is now the
+      // built-in behaviour. Dropping the flag keeps the denominator described
+      // above — it does not narrow it.)
       include: ["src/**/*.{ts,tsx}"],
       exclude: ["**/*.test.{ts,tsx}", "**/*.d.ts", "src/test/**"],
       reporter: ["text-summary", "text", "json-summary"],

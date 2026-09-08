@@ -3,19 +3,37 @@
 import { motion } from "framer-motion";
 import { ArrowRight, X } from "lucide-react";
 import { useTour } from "@/contexts/TourContext";
+import { useDialogFocusTrap, type DialogFocusTrapOptions } from "@/hooks/useDialogFocusTrap";
 import { useTranslation } from "@/i18n/useTranslation";
 import { TRANSITION_NORMAL } from "@/lib/animations";
 import AthenaCompanion from "./AthenaCompanion";
 import TourVolumeControl from "./TourVolumeControl";
 
+/** Shared trap configuration for the tour's dialog cards: focus the card's own
+ *  primary control (not a `[data-drawer-close]`, which the tour has no
+ *  equivalent of), leave Escape to `useTourKeyboard` so exit doesn't fire
+ *  twice, hand focus back to the re-mounted launcher, and stand aside when a
+ *  sibling card has already taken focus mid-handover. */
+const TRAP: DialogFocusTrapOptions = {
+  initialFocusSelector: "[data-tour-focus]",
+  escape: false,
+  restoreFocusSelector: "[data-tour-launcher]",
+  deferToMovedFocus: true,
+};
+
 /**
  * Welcome pop-up shown when a tour with `intro` starts: dims the page and
  * introduces Athena (the companion) plus what to expect, before the guided
  * steps begin. "Begin" starts the walkthrough; "Skip" exits.
+ *
+ * Declares `aria-modal`, so it also behaves like one: the shared
+ * `useDialogFocusTrap` keeps Tab inside the card instead of letting it walk the
+ * dimmed page behind the scrim. Escape stays with `useTourKeyboard`.
  */
 export default function TourIntroCard() {
   const { t } = useTranslation();
   const { beginTour, exit } = useTour();
+  const panelRef = useDialogFocusTrap(true, exit, TRAP);
 
   return (
     <motion.div
@@ -31,6 +49,7 @@ export default function TourIntroCard() {
         aria-hidden="true"
       />
       <motion.div
+        ref={panelRef}
         role="dialog"
         aria-modal="true"
         aria-label={t.tour.introTitle}
@@ -54,6 +73,7 @@ export default function TourIntroCard() {
         <div className="mt-1 flex w-full items-center justify-center gap-3">
           <button
             type="button"
+            data-tour-focus
             onClick={beginTour}
             className="group inline-flex items-center justify-center gap-2 rounded-full border border-brand-cyan/50 bg-brand-cyan/10 px-6 py-3 text-base font-medium text-brand-cyan transition-colors duration-200 hover:bg-brand-cyan/20 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-cyan/40"
           >

@@ -1,4 +1,7 @@
+"use client";
+
 import { Clock, Timer } from "lucide-react";
+import { useTranslation } from "@/i18n/useTranslation";
 
 export function EventDrawerMetadata({
   timestamp,
@@ -9,6 +12,14 @@ export function EventDrawerMetadata({
   durationMs: number;
   labels: { timestamp: string; duration: string };
 }) {
+  const { t } = useTranslation();
+  const speed =
+    durationMs < 500
+      ? t.eventsPage.durationFast
+      : durationMs < 2000
+        ? t.eventsPage.durationNormal
+        : t.eventsPage.durationSlow;
+
   return (
     <div className="grid grid-cols-2 gap-3">
       <div className="rounded-xl border border-glass bg-white/[0.02] p-3">
@@ -30,11 +41,9 @@ export function EventDrawerMetadata({
           {labels.duration}
         </div>
         <p className="mt-1 text-sm font-mono text-foreground">
-          {durationMs.toLocaleString()}{"ms"}
+          {t.eventsPage.durationMs.replace("{n}", durationMs.toLocaleString())}
         </p>
-        <p className="text-sm text-muted-dark">
-          {durationMs < 500 ? "Fast" : durationMs < 2000 ? "Normal" : "Slow"}
-        </p>
+        <p className="text-sm text-muted-dark">{speed}</p>
       </div>
     </div>
   );

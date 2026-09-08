@@ -616,7 +616,10 @@ export const zh: Translations = {
         cancelled: "\u5df2\u53d6\u6d88",
         pending: "\u5f85\u5904\u7406",
         approved: "\u5df2\u6279\u51c6",
-        rejected: "\u5df2\u62d2\u7edd"
+        rejected: "\u5df2\u62d2\u7edd",
+        processing: "\u5904\u7406\u4e2d",
+        dead_letter: "\u65e0\u6cd5\u6295\u9012",
+        discarded: "\u5df2\u4e22\u5f03"
       },
       testFlow: "\u6d4b\u8bd5\u6d41\u7a0b",
       eventTypes: "\u4e8b\u4ef6\u7c7b\u578b",
@@ -1195,6 +1198,13 @@ export const zh: Translations = {
       showRelatedEvents: "?? {count} ?????",
       retriedCount: "??? {count} ?",
       retryEvent: "????",
+      discardEvent: "\u4e22\u5f03\u4e8b\u4ef6",
+      columnSelect: "\u9009\u62e9",
+      columnState: "\u72b6\u6001",
+      columnPersona: "\u76ee\u6807\u89d2\u8272",
+      columnRetries: "\u91cd\u8bd5\u6b21\u6570",
+      columnActions: "\u64cd\u4f5c",
+      discardAll: "\u4e22\u5f03",
       searchPlaceholder: "???????????????...",
       clearSearch: "????",
       eventType: "????",
@@ -1236,7 +1246,20 @@ export const zh: Translations = {
       noMatchingSubscriptions: "\u6ca1\u6709\u5339\u914d\u7684\u8ba2\u9605",
       noSubscriptions: "\u6682\u65e0\u8ba2\u9605",
       noSubscriptionsDescription: "\u521b\u5efa\u8ba2\u9605\u4ee5\u5c06\u4e8b\u4ef6\u8def\u7531\u5230\u4f60\u7684\u667a\u80fd\u4f53",
+      deadLetter: "\u6b7b\u4fe1",
+      durationMs: "{n} \u6beb\u79d2",
+      durationFast: "\u5feb",
+      durationNormal: "\u6b63\u5e38",
+      durationSlow: "\u6162",
       swimlane: {
+        eventAt: "{time} \u7684 {type}",
+        axisNow: "\u73b0\u5728",
+        axisMinutes: "{n}\u5206",
+        status: {
+          success: "\u6210\u529f",
+          failure: "\u5931\u8d25",
+          processing: "\u5904\u7406\u4e2d"
+        },
         title: "\u4e8b\u4ef6\u6cf3\u9053",
         subtitle: "\u6309\u65f6\u95f4\u987a\u5e8f\u6392\u5217\u7684\u5404 persona \u4e8b\u4ef6\u8f68\u8ff9",
         empty: "\u6240\u9009\u65f6\u95f4\u8303\u56f4\u5185\u6ca1\u6709\u4e8b\u4ef6"

@@ -65,6 +65,12 @@ next-env.d.ts
 # /consult skill log (counts reach the ai-registry signals lane; the log itself stays local)
 .ai/consults.jsonl
 
+# /perfect leads outbox (collected by ai-registry/scripts/leads-collect.mjs; stays local)
+.ai/registry-leads.jsonl
+
+# /perfect coverage outbox (append-only; ingested by the Personas app, never a build input)
+/.personas/
+
 # BEGIN ai-registry linked skills (managed by ai-registry/scripts/link-skills.mjs)
 # The links are machine state; the declaration lives in .ai/manifest.yaml `skills:`.
 /.claude/skills/architect

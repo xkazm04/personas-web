@@ -616,7 +616,10 @@ export const ja: Translations = {
         cancelled: "\u30ad\u30e3\u30f3\u30bb\u30eb\u6e08\u307f",
         pending: "\u4fdd\u7559\u4e2d",
         approved: "\u627f\u8a8d\u6e08\u307f",
-        rejected: "\u5374\u4e0b"
+        rejected: "\u5374\u4e0b",
+        processing: "\u51e6\u7406\u4e2d",
+        dead_letter: "\u914d\u4fe1\u4e0d\u80fd",
+        discarded: "\u7834\u68c4\u6e08\u307f"
       },
       testFlow: "\u30c6\u30b9\u30c8\u30d5\u30ed\u30fc",
       eventTypes: "\u30a4\u30d9\u30f3\u30c8\u30bf\u30a4\u30d7",
@@ -1195,6 +1198,13 @@ export const ja: Translations = {
       showRelatedEvents: "\u95a2\u9023\u30a4\u30d9\u30f3\u30c8 {count} \u4ef6\u3092\u8868\u793a",
       retriedCount: "{count} \u56de\u518d\u8a66\u884c\u3057\u307e\u3057\u305f",
       retryEvent: "\u30a4\u30d9\u30f3\u30c8\u3092\u518d\u8a66\u884c",
+      discardEvent: "\u30a4\u30d9\u30f3\u30c8\u3092\u7834\u68c4",
+      columnSelect: "\u9078\u629e",
+      columnState: "\u72b6\u614b",
+      columnPersona: "\u5bfe\u8c61\u30da\u30eb\u30bd\u30ca",
+      columnRetries: "\u518d\u8a66\u884c",
+      columnActions: "\u64cd\u4f5c",
+      discardAll: "\u7834\u68c4",
       searchPlaceholder: "\u30da\u30a4\u30ed\u30fc\u30c9\u3001\u30a4\u30d9\u30f3\u30c8\u30bf\u30a4\u30d7\u3001\u30bd\u30fc\u30b9\u3001\u30a8\u30e9\u30fc\u3092\u691c\u7d22...",
       clearSearch: "\u691c\u7d22\u3092\u30af\u30ea\u30a2",
       eventType: "\u30a4\u30d9\u30f3\u30c8\u30bf\u30a4\u30d7",
@@ -1236,7 +1246,20 @@ export const ja: Translations = {
       noMatchingSubscriptions: "\u4e00\u81f4\u3059\u308b\u30b5\u30d6\u30b9\u30af\u30ea\u30d7\u30b7\u30e7\u30f3\u304c\u3042\u308a\u307e\u305b\u3093",
       noSubscriptions: "\u30b5\u30d6\u30b9\u30af\u30ea\u30d7\u30b7\u30e7\u30f3\u304c\u3042\u308a\u307e\u305b\u3093",
       noSubscriptionsDescription: "\u30b5\u30d6\u30b9\u30af\u30ea\u30d7\u30b7\u30e7\u30f3\u3092\u4f5c\u6210\u3057\u3066\u3001\u30a4\u30d9\u30f3\u30c8\u3092\u30a8\u30fc\u30b8\u30a7\u30f3\u30c8\u306b\u30eb\u30fc\u30c6\u30a3\u30f3\u30b0\u3057\u307e\u3059",
+      deadLetter: "\u30c7\u30c3\u30c9\u30ec\u30bf\u30fc",
+      durationMs: "{n} ms",
+      durationFast: "\u9ad8\u901f",
+      durationNormal: "\u6a19\u6e96",
+      durationSlow: "\u4f4e\u901f",
       swimlane: {
+        eventAt: "{time} \u306e {type}",
+        axisNow: "\u73fe\u5728",
+        axisMinutes: "{n}\u5206",
+        status: {
+          success: "\u6210\u529f",
+          failure: "\u5931\u6557",
+          processing: "\u51e6\u7406\u4e2d"
+        },
         title: "\u30a4\u30d9\u30f3\u30c8\u30b9\u30a4\u30e0\u30ec\u30fc\u30f3",
         subtitle: "\u30da\u30eb\u30bd\u30ca\u3054\u3068\u306e\u6642\u7cfb\u5217\u30a4\u30d9\u30f3\u30c8\u30c8\u30ec\u30fc\u30b9",
         empty: "\u9078\u629e\u3057\u305f\u671f\u9593\u306b\u30a4\u30d9\u30f3\u30c8\u306f\u3042\u308a\u307e\u305b\u3093"

@@ -616,7 +616,10 @@ export const ko: Translations = {
         cancelled: "\ucde8\uc18c\ub428",
         pending: "\ubcf4\ub958 \uc911",
         approved: "\uc2b9\uc778\ub428",
-        rejected: "\uac70\ubd80\ub428"
+        rejected: "\uac70\ubd80\ub428",
+        processing: "\ucc98\ub9ac \uc911",
+        dead_letter: "\uc804\ub2ec \ubd88\uac00",
+        discarded: "\ud3d0\uae30\ub428"
       },
       testFlow: "\ud14c\uc2a4\ud2b8 \ud750\ub984",
       eventTypes: "\uc774\ubca4\ud2b8 \uc720\ud615",
@@ -1195,6 +1198,13 @@ export const ko: Translations = {
       showRelatedEvents: "\uad00\ub828 \uc774\ubca4\ud2b8 {count}\uac1c \ud45c\uc2dc",
       retriedCount: "{count}\ud68c \uc7ac\uc2dc\ub3c4\ub428",
       retryEvent: "\uc774\ubca4\ud2b8 \uc7ac\uc2dc\ub3c4",
+      discardEvent: "\uc774\ubca4\ud2b8 \ud3d0\uae30",
+      columnSelect: "\uc120\ud0dd",
+      columnState: "\uc0c1\ud0dc",
+      columnPersona: "\ub300\uc0c1 \ud398\ub974\uc18c\ub098",
+      columnRetries: "\uc7ac\uc2dc\ub3c4",
+      columnActions: "\uc791\uc5c5",
+      discardAll: "\ud3d0\uae30",
       searchPlaceholder: "\ud398\uc774\ub85c\ub4dc, \uc774\ubca4\ud2b8 \uc720\ud615, \uc18c\uc2a4, \uc624\ub958 \uac80\uc0c9...",
       clearSearch: "\uac80\uc0c9 \uc9c0\uc6b0\uae30",
       eventType: "\uc774\ubca4\ud2b8 \uc720\ud615",
@@ -1236,7 +1246,20 @@ export const ko: Translations = {
       noMatchingSubscriptions: "\uc77c\uce58\ud558\ub294 \uad6c\ub3c5 \uc5c6\uc74c",
       noSubscriptions: "\uad6c\ub3c5 \uc5c6\uc74c",
       noSubscriptionsDescription: "\uc5d0\uc774\uc804\ud2b8\ub85c \uc774\ubca4\ud2b8\ub97c \ub77c\uc6b0\ud305\ud560 \uad6c\ub3c5\uc744 \uc0dd\uc131\ud558\uc138\uc694",
+      deadLetter: "\ub370\ub4dc \ub808\ud130",
+      durationMs: "{n} ms",
+      durationFast: "\ube60\ub984",
+      durationNormal: "\ubcf4\ud1b5",
+      durationSlow: "\ub290\ub9bc",
       swimlane: {
+        eventAt: "{time}\uc758 {type}",
+        axisNow: "\uc9c0\uae08",
+        axisMinutes: "{n}\ubd84",
+        status: {
+          success: "\uc131\uacf5",
+          failure: "\uc2e4\ud328",
+          processing: "\ucc98\ub9ac \uc911"
+        },
         title: "\uc774\ubca4\ud2b8 \uc2a4\uc714\ub808\uc778",
         subtitle: "\ud398\ub974\uc18c\ub098\ubcc4 \uc2dc\uac04\uc21c \uc774\ubca4\ud2b8 \ucd94\uc801",
         empty: "\uc120\ud0dd\ud55c \uae30\uac04\uc5d0 \uc774\ubca4\ud2b8\uac00 \uc5c6\uc2b5\ub2c8\ub2e4"

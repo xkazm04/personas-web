@@ -616,7 +616,10 @@ export const fr: Translations = {
         cancelled: "Annul\u00e9",
         pending: "En attente",
         approved: "Approuv\u00e9",
-        rejected: "Rejet\u00e9"
+        rejected: "Rejet\u00e9",
+        processing: "En cours de traitement",
+        dead_letter: "Non distribu\u00e9",
+        discarded: "\u00c9cart\u00e9"
       },
       testFlow: "Tester le flux",
       eventTypes: "Types d'\u00e9v\u00e9nements",
@@ -1195,6 +1198,13 @@ export const fr: Translations = {
       showRelatedEvents: "Afficher {count} ?v?nements li?s",
       retriedCount: "R?essay? {count} fois",
       retryEvent: "R?essayer l??v?nement",
+      discardEvent: "\u00c9carter l\u2019\u00e9v\u00e9nement",
+      columnSelect: "S\u00e9lection",
+      columnState: "\u00c9tat",
+      columnPersona: "Persona cible",
+      columnRetries: "Tentatives",
+      columnActions: "Actions",
+      discardAll: "\u00c9carter",
       searchPlaceholder: "Rechercher payloads, types d??v?nements, sources, erreurs...",
       clearSearch: "Effacer la recherche",
       eventType: "Type d??v?nement",
@@ -1236,7 +1246,20 @@ export const fr: Translations = {
       noMatchingSubscriptions: "Aucun abonnement correspondant",
       noSubscriptions: "Aucun abonnement",
       noSubscriptionsDescription: "Cr\u00e9ez des abonnements pour router les \u00e9v\u00e9nements vers vos agents",
+      deadLetter: "Lettres mortes",
+      durationMs: "{n} ms",
+      durationFast: "Rapide",
+      durationNormal: "Normal",
+      durationSlow: "Lent",
       swimlane: {
+        eventAt: "{type} \u00e0 {time}",
+        axisNow: "maintenant",
+        axisMinutes: "{n} min",
+        status: {
+          success: "Succ\u00e8s",
+          failure: "\u00c9chec",
+          processing: "En cours"
+        },
         title: "Couloirs d'\u00e9v\u00e9nements",
         subtitle: "Trace d'\u00e9v\u00e9nements par persona, ordonn\u00e9e dans le temps",
         empty: "Aucun \u00e9v\u00e9nement dans la fen\u00eatre s\u00e9lectionn\u00e9e"

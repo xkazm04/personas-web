@@ -6,6 +6,7 @@ import { Inbox, Radio } from "lucide-react";
 import EmptyState from "@/components/dashboard/EmptyState";
 import { fadeUp } from "@/lib/animations";
 import type { PersonaEvent } from "@/lib/types";
+import { isEventDiscardable, isEventRetryable } from "@/lib/eventStatusFsm";
 import { useEventStream } from "@/hooks/useEventStream";
 import { useEventTopology } from "@/hooks/useEventTopology";
 import { useTranslation } from "@/i18n/useTranslation";
@@ -28,11 +29,15 @@ export default function EventsListPanel() {
   const replayEvent = useEventStore((s) => s.replayEvent);
   const replayEvents = useEventStore((s) => s.replayEvents);
   const replayingIds = useEventStore((s) => s.replayingIds);
+  const discardEvent = useEventStore((s) => s.discardEvent);
+  const discardEvents = useEventStore((s) => s.discardEvents);
+  const discardingIds = useEventStore((s) => s.discardingIds);
   const retryCounts = useEventStore((s) => s.retryCounts);
   const personas = usePersonaStore((s) => s.personas);
   const [filter, setFilter] = useState("all");
   const [selectedIds, setSelectedIds] = useState<Set<string>>(new Set());
   const [bulkRetrying, setBulkRetrying] = useState(false);
+  const [bulkDiscarding, setBulkDiscarding] = useState(false);
   const [query, setQuery] = useState("");
   const deferredQuery = useDeferredValue(query);
   const [eventTypeFilter, setEventTypeFilter] = useState("");
@@ -54,7 +59,10 @@ export default function EventsListPanel() {
     const q = deferredQuery.toLowerCase().trim();
     return events.filter((event) => {
       if (filter === "dead_letter") {
-        if (event.status !== "failed" || !event.errorMessage) return false;
+        // The lane is a *destination* now, not "anything failed that carried a
+        // message": only events the FSM actually parked in `dead_letter` sit
+        // here, so retry / discard drain it to empty.
+        if (event.status !== "dead_letter") return false;
       } else if (filter !== "all" && event.status !== filter) return false;
       if (eventTypeFilter && event.eventType !== eventTypeFilter) return false;
       if (sourceTypeFilter && event.sourceType !== sourceTypeFilter) return false;
@@ -65,7 +73,8 @@ export default function EventsListPanel() {
   const chainMap = useEventTopology(visibleEvents);
   const counts = useEventCounts(events);
 
-  const handleReplay = useCallback((event: PersonaEvent) => void replayEvent(event), [replayEvent]);
+  const handleReplay = useCallback((event: PersonaEvent) => void replayEvent(event).catch(() => undefined), [replayEvent]);
+  const handleDiscard = useCallback((event: PersonaEvent) => void discardEvent(event).catch(() => undefined), [discardEvent]);
   const toggleSelectEvent = useCallback((id: string) => {
     setSelectedIds((prev) => {
       const next = new Set(prev);
@@ -75,13 +84,21 @@ export default function EventsListPanel() {
     });
   }, []);
   const handleBulkRetry = useCallback(async () => {
-    const selected = events.filter((event) => selectedIds.has(event.id) && event.status === "failed");
+    const selected = events.filter((event) => selectedIds.has(event.id) && isEventRetryable(event.status));
     if (selected.length === 0) return;
     setBulkRetrying(true);
     await replayEvents(selected);
     setSelectedIds(new Set());
     setBulkRetrying(false);
   }, [events, selectedIds, replayEvents]);
+  const handleBulkDiscard = useCallback(async () => {
+    const selected = events.filter((event) => selectedIds.has(event.id) && isEventDiscardable(event.status));
+    if (selected.length === 0) return;
+    setBulkDiscarding(true);
+    await discardEvents(selected);
+    setSelectedIds(new Set());
+    setBulkDiscarding(false);
+  }, [events, selectedIds, discardEvents]);
 
   useEffect(() => {
     queueMicrotask(() => setSelectedIds(new Set()));
@@ -91,8 +108,8 @@ export default function EventsListPanel() {
   }, [filter, query, eventTypeFilter, sourceTypeFilter]);
 
   const columns = useMemo(
-    () => buildEventColumns(t, personaMap, chainMap, activeChain, setActiveChain, replayingIds, retryCounts, handleReplay, selectedIds, toggleSelectEvent),
-    [t, personaMap, chainMap, activeChain, replayingIds, retryCounts, handleReplay, selectedIds, toggleSelectEvent],
+    () => buildEventColumns(t, personaMap, chainMap, activeChain, setActiveChain, replayingIds, retryCounts, handleReplay, selectedIds, toggleSelectEvent, discardingIds, handleDiscard),
+    [t, personaMap, chainMap, activeChain, replayingIds, retryCounts, handleReplay, selectedIds, toggleSelectEvent, discardingIds, handleDiscard],
   );
   const rowClassName = useCallback(
     (event: PersonaEvent) => [activeChain?.has(event.id) ? "bg-brand-cyan/[0.04]" : "", activeChain !== null && !activeChain.has(event.id) ? "opacity-30" : ""].filter(Boolean).join(" "),
@@ -130,7 +147,7 @@ export default function EventsListPanel() {
           </button>
         </motion.div>
       )}
-      <EventsBulkRetryBar selectedIds={selectedIds} visibleEvents={visibleEvents} setSelectedIds={setSelectedIds} bulkRetrying={bulkRetrying} onBulkRetry={() => void handleBulkRetry()} labels={t} />
+      <EventsBulkRetryBar selectedIds={selectedIds} visibleEvents={visibleEvents} setSelectedIds={setSelectedIds} bulkRetrying={bulkRetrying} onBulkRetry={() => void handleBulkRetry()} bulkDiscarding={bulkDiscarding} onBulkDiscard={() => void handleBulkDiscard()} labels={t} />
     </>
   );
 }
@@ -142,7 +159,7 @@ function useEventCounts(events: PersonaEvent[]) {
       if (event.status === "pending") counts.pending++;
       else if (event.status === "processed") counts.processed++;
       else if (event.status === "failed") counts.failed++;
-      if (event.status === "failed" && event.errorMessage) counts.dead_letter++;
+      if (event.status === "dead_letter") counts.dead_letter++;
     }
     return counts;
   }, [events]);

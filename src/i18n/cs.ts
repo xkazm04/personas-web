@@ -616,7 +616,10 @@ export const cs: Translations = {
         cancelled: "Zru\u0161eno",
         pending: "\u010cek\u00e1",
         approved: "Schv\u00e1leno",
-        rejected: "Zam\u00edtnuto"
+        rejected: "Zam\u00edtnuto",
+        processing: "Zpracov\u00e1v\u00e1 se",
+        dead_letter: "Nedoru\u010diteln\u00e9",
+        discarded: "Zahozeno"
       },
       testFlow: "Testovac\u00ed tok",
       eventTypes: "Typy ud\u00e1lost\u00ed",
@@ -1195,6 +1198,13 @@ export const cs: Translations = {
       showRelatedEvents: "Zobrazit {count} souvisej?c?ch ud?lost?",
       retriedCount: "Opakov?no {count}?",
       retryEvent: "Opakovat ud?lost",
+      discardEvent: "Zahodit ud\u00e1lost",
+      columnSelect: "V\u00fdb\u011br",
+      columnState: "Stav",
+      columnPersona: "C\u00edlov\u00e1 persona",
+      columnRetries: "Pokusy",
+      columnActions: "Akce",
+      discardAll: "Zahodit",
       searchPlaceholder: "Hledat payloady, typy ud?lost?, zdroje, chyby...",
       clearSearch: "Vymazat hled?n?",
       eventType: "Typ ud?losti",
@@ -1236,7 +1246,20 @@ export const cs: Translations = {
       noMatchingSubscriptions: "\u017d\u00e1dn\u00e9 odpov\u00eddaj\u00edc\u00ed odb\u011bry",
       noSubscriptions: "\u017d\u00e1dn\u00e9 odb\u011bry",
       noSubscriptionsDescription: "Vytvo\u0159te odb\u011bry pro sm\u011brov\u00e1n\u00ed ud\u00e1lost\u00ed k va\u0161im agent\u016fm",
+      deadLetter: "Nedoru\u010diteln\u00e9",
+      durationMs: "{n} ms",
+      durationFast: "Rychl\u00e9",
+      durationNormal: "Norm\u00e1ln\u00ed",
+      durationSlow: "Pomal\u00e9",
       swimlane: {
+        eventAt: "{type} v {time}",
+        axisNow: "te\u010f",
+        axisMinutes: "{n} min",
+        status: {
+          success: "\u00dasp\u011bch",
+          failure: "Selh\u00e1n\u00ed",
+          processing: "Zpracov\u00e1v\u00e1 se"
+        },
         title: "\u010casov\u00e9 pruhy ud\u00e1lost\u00ed",
         subtitle: "\u010casov\u011b se\u0159azen\u00e1 stopa ud\u00e1lost\u00ed podle persony",
         empty: "Ve vybran\u00e9m obdob\u00ed nejsou \u017e\u00e1dn\u00e9 ud\u00e1losti"
