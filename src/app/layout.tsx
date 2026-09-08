@@ -99,7 +99,6 @@ export default function RootLayout({
             announcement. The script is intentionally tiny and self-
             contained (no module imports) so it can land in <head>. */}
         <script
-          // eslint-disable-next-line react/no-danger
           dangerouslySetInnerHTML={{
             __html: `(function(){try{var T=['dark-midnight','dark-cyan','dark-bronze','dark-frost','dark-purple','dark-pink','dark-red','dark-matrix','light','light-ice','light-news'];var L=['light','light-ice','light-news'];var el=document.documentElement;var raw=null;try{raw=localStorage.getItem('personas-theme');}catch(e){}var id;if(raw){try{var p=JSON.parse(raw);if(p&&p.state&&T.indexOf(p.state.themeId)!==-1)id=p.state.themeId;}catch(e){}}if(!id){id=T[Math.floor(Math.random()*T.length)];try{localStorage.setItem('personas-theme',JSON.stringify({state:{themeId:id},version:0}));}catch(e){}}if(id!=='dark-midnight')el.setAttribute('data-theme',id);if(L.indexOf(id)===-1)el.classList.add('dark');else el.classList.remove('dark');el.setAttribute('lang','en');el.setAttribute('data-lang','en');el.removeAttribute('dir');}catch(e){}})();`,
           }}

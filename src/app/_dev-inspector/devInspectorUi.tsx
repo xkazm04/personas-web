@@ -1,7 +1,5 @@
 "use client";
 
-/* eslint-disable */
-
 /**
  * Presentational chrome for {@link DevInspector} — highlight boxes, the
  * cursor-anchored source label, the breadcrumb HUD, and the nav-mode hint.

@@ -1,6 +1,7 @@
 "use client";
 
 import { motion } from "framer-motion";
+import { useShallow } from "zustand/react/shallow";
 import { LogIn, FlaskConical, Loader2, AlertTriangle } from "lucide-react";
 import { fadeUp, staggerContainer } from "@/lib/animations";
 import GradientText from "@/components/GradientText";
@@ -15,10 +16,14 @@ import { useTranslation } from "@/i18n/useTranslation";
  */
 export default function SignInPrompt() {
   const { t } = useTranslation();
-  const signInWithGoogle = useAuthStore((s) => s.signInWithGoogle);
-  const signInAsDemo = useAuthStore((s) => s.signInAsDemo);
-  const isSigningIn = useAuthStore((s) => s.isSigningIn);
-  const signInError = useAuthStore((s) => s.signInError);
+  const { signInWithGoogle, signInAsDemo, isSigningIn, signInError } = useAuthStore(
+    useShallow((s) => ({
+      signInWithGoogle: s.signInWithGoogle,
+      signInAsDemo: s.signInAsDemo,
+      isSigningIn: s.isSigningIn,
+      signInError: s.signInError,
+    })),
+  );
 
   return (
     <AuthLayout>

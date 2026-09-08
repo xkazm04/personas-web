@@ -145,7 +145,6 @@ function makeMonogram(label) {
 // also try to copy the file from the app's public/icons/connectors/ and
 // only emit a slug if the SVG actually exists there.
 const PERSONAS_ICONS_DIR = "C:/Users/kazda/kiro/personas/public/icons/connectors";
-const WEB_TOOLS_DIR = join(REPO, "public/tools");
 // Connectors whose app icon_url is an external simpleicons CDN URL —
 // the SVGs were fetched and committed to public/tools/<slug>.svg.
 const CDN_SLUGS = {
@@ -177,10 +176,9 @@ function iconSlugFromUrl(name, iconUrl) {
 }
 
 // ── 7. useCases templates by consolidated category ───────────────────
-// Each template takes the connector's label and the connector's name
-// (used in the personas-run example command). Templates produce 1-2
+// Each template takes the connector's label. Templates produce 1-2
 // case objects per connector; existing hand-written cases take priority.
-function placeholderUseCases(webCategory, label, name) {
+function placeholderUseCases(webCategory, label) {
   const cmd = (txt) => `personas run "${txt}"`;
   const cases = {
     messaging: [
@@ -279,13 +277,6 @@ const built = raw
     const summary = data.metadata?.summary || `Integrate ${data.label}.`;
     const monogram = makeMonogram(data.label);
     const icon = iconSlugFromUrl(data.name, data.icon_url);
-    const useCases = existingUseCases[data.name] ||
-      JSON.stringify(placeholderUseCases(webCategory, data.label, data.name))
-        // pretty-print the inline array as multi-line useCases lines
-        .replace(/\[\{/, "{\n      ")
-        .replace(/\}\]/, "\n      }")
-        .replace(/\},\{/g, "\n    },\n    {\n      ")
-        .replace(/","/g, '", "');
     return {
       name: data.name,
       label: data.label,
@@ -296,7 +287,7 @@ const built = raw
       authType: auth,
       icon,
       useCasesRaw: existingUseCases[data.name],
-      useCasesPlaceholder: existingUseCases[data.name] ? null : placeholderUseCases(webCategory, data.label, data.name),
+      useCasesPlaceholder: existingUseCases[data.name] ? null : placeholderUseCases(webCategory, data.label),
     };
   })
   .filter(Boolean)

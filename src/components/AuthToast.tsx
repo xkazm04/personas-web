@@ -1,14 +1,19 @@
 "use client";
 
 import { useEffect, useRef } from "react";
+import { useShallow } from "zustand/react/shallow";
 import { motion } from "framer-motion";
 import { LogIn, X } from "lucide-react";
 import { useAuthStore } from "@/stores/authStore";
 
 export default function AuthToast() {
-  const sessionExpired = useAuthStore((s) => s.sessionExpired);
-  const clearSessionExpired = useAuthStore((s) => s.clearSessionExpired);
-  const signInWithGoogle = useAuthStore((s) => s.signInWithGoogle);
+  const { sessionExpired, clearSessionExpired, signInWithGoogle } = useAuthStore(
+    useShallow((s) => ({
+      sessionExpired: s.sessionExpired,
+      clearSessionExpired: s.clearSessionExpired,
+      signInWithGoogle: s.signInWithGoogle,
+    })),
+  );
   const signInButtonRef = useRef<HTMLButtonElement>(null);
   const previousActiveElementRef = useRef<HTMLElement | null>(null);
 

@@ -4,9 +4,7 @@ test.describe("Connections Page", () => {
   test("connections page renders with heading and connectors", async ({ page }) => {
     await page.goto("/connections");
     await expect(page.locator("main")).toContainText("everything");
-    // Connector cards exist
-    const cards = page.locator("[data-testid='connector-card']");
-    // Fallback: check for connector names if no testid
+    // Connector cards render — assert on the connector names they show.
     await expect(page.locator("main")).toContainText("Slack");
     await expect(page.locator("main")).toContainText("GitHub");
   });

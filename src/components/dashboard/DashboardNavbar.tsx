@@ -1,6 +1,7 @@
 "use client";
 
 import { motion } from "framer-motion";
+import { useShallow } from "zustand/react/shallow";
 import { LogOut, ChevronRight, FlaskConical, Loader2, LogIn } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
@@ -10,12 +11,17 @@ import { useTranslation } from "@/i18n/useTranslation";
 
 export default function DashboardNavbar() {
   const { t } = useTranslation();
-  const user = useAuthStore((s) => s.user);
-  const signOut = useAuthStore((s) => s.signOut);
-  const signInWithGoogle = useAuthStore((s) => s.signInWithGoogle);
-  const isDemo = useAuthStore((s) => s.isDemo);
-  const isSigningOut = useAuthStore((s) => s.isSigningOut);
-  const isSigningIn = useAuthStore((s) => s.isSigningIn);
+  const { user, signOut, signInWithGoogle, isDemo, isSigningOut, isSigningIn } =
+    useAuthStore(
+      useShallow((s) => ({
+        user: s.user,
+        signOut: s.signOut,
+        signInWithGoogle: s.signInWithGoogle,
+        isDemo: s.isDemo,
+        isSigningOut: s.isSigningOut,
+        isSigningIn: s.isSigningIn,
+      })),
+    );
 
   const avatarUrl = user?.user_metadata?.avatar_url;
   const displayName =
