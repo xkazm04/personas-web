@@ -7,7 +7,7 @@ import { ChevronDown } from "lucide-react";
 import GlowCard from "@/components/GlowCard";
 import { useTranslation } from "@/i18n/useTranslation";
 import type { AuditIncident, IncidentSeverity, IncidentSource } from "@/lib/mock-dashboard-data";
-import { type GroupByKey, groupIncidents, severityStyle, sourceIcon } from "./incidentFormat";
+import { type GroupByKey, groupIncidents, severityStyle, sourceIcon } from "@/lib/incidentFormat";
 import { IncidentRow } from "./IncidentRow";
 
 function GroupLeading({ groupBy, sample }: { groupBy: GroupByKey; sample: AuditIncident }) {

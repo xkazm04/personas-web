@@ -5,7 +5,7 @@ import { ChevronRight, ShieldCheck, Zap } from "lucide-react";
 import { useTranslation } from "@/i18n/useTranslation";
 import { relativeTime } from "@/lib/format";
 import type { AuditIncident } from "@/lib/mock-dashboard-data";
-import { severityStyle, sourceIcon, statusStyle } from "./incidentFormat";
+import { severityStyle, sourceIcon, statusStyle } from "@/lib/incidentFormat";
 
 /**
  * One incident row: severity rail + icon, title (with circuit-breaker /

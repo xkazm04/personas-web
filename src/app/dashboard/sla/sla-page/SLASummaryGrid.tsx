@@ -2,7 +2,7 @@ import { motion } from "framer-motion";
 
 import { fadeUp } from "@/lib/animations";
 
-import { complianceBand } from "./slaFormat";
+import { complianceBand } from "@/lib/slaFormat";
 
 export function SLASummaryGrid({
   overallCompliance,

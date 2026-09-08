@@ -1,6 +1,6 @@
 import type { SLABreach } from "@/lib/mock-dashboard-data";
 
-import { formatAbsolute } from "./slaFormat";
+import { formatAbsolute } from "@/lib/slaFormat";
 
 // Expanded view of a single breach. Adds what the collapsed row can't show:
 // the full (untruncated) summary, absolute start/resolve timestamps, a

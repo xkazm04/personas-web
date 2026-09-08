@@ -23,12 +23,12 @@ import { ApprovedWorkCard } from "./home-page/ApprovedWorkCard";
 import { DashboardGreetingHeader } from "./home-page/DashboardGreetingHeader";
 import { FleetSessionsStrip } from "./home-page/FleetSessionsStrip";
 import { InstrumentsBay } from "./home-page/InstrumentsBay";
-import { RecentActivityCard } from "./home-page/RecentActivityCard";
+import { RecentActivityCard } from "@/components/dashboard/RecentActivityCard";
 import { StatusTicker } from "./home-page/StatusTicker";
 import { TriagePane } from "./home-page/TriagePane";
 import { VitalsConsole } from "./home-page/VitalsConsole";
 import { useDeferredObservability } from "./home-page/useDeferredObservability";
-import { useGreeting } from "./home-page/useGreeting";
+import { useGreeting } from "@/hooks/useGreeting";
 import { useLastVisit } from "./home-page/useLastVisit";
 
 /**

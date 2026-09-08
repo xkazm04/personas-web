@@ -6,7 +6,7 @@ import { Modal } from "@/components/dashboard/Modal";
 import PersonaAvatar from "@/components/dashboard/PersonaAvatar";
 import { useTranslation } from "@/i18n/useTranslation";
 import type { AuditIncident } from "@/lib/mock-dashboard-data";
-import { severityStyle, sourceIcon, statusStyle } from "./incidentFormat";
+import { severityStyle, sourceIcon, statusStyle } from "@/lib/incidentFormat";
 
 function MetaItem({ label, value }: { label: string; value: React.ReactNode }) {
   return (

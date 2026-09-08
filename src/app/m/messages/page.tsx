@@ -4,7 +4,7 @@ import { useMemo, useState } from "react";
 import { motion } from "framer-motion";
 import { MailOpen } from "lucide-react";
 
-import { ThreadRow } from "@/app/dashboard/messages/messages-page/ThreadRow";
+import { ThreadRow } from "@/components/dashboard/ThreadRow";
 import MobileThreadSheet from "@/components/mobile/MobileThreadSheet";
 import {
   MOCK_MESSAGE_THREADS,

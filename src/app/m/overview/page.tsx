@@ -14,8 +14,8 @@ import {
 } from "lucide-react";
 
 import MobileStatCard from "@/components/mobile/MobileStatCard";
-import { RecentActivityCard } from "@/app/dashboard/home/home-page/RecentActivityCard";
-import { useGreeting } from "@/app/dashboard/home/home-page/useGreeting";
+import { RecentActivityCard } from "@/components/dashboard/RecentActivityCard";
+import { useGreeting } from "@/hooks/useGreeting";
 import { useExecutionStore, useEnrichedExecutions } from "@/stores/executionStore";
 import { usePersonaStore } from "@/stores/personaStore";
 import { useReviewStore } from "@/stores/reviewStore";

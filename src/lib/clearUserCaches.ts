@@ -5,7 +5,7 @@ import { useExecutionStore } from "@/stores/executionStore";
 import { useReviewStore } from "@/stores/reviewStore";
 import { useSystemStore } from "@/stores/systemStore";
 import { useDashboardFilterStore } from "@/stores/dashboardFilterStore";
-import { useIncidentsFilterStore } from "@/app/dashboard/incidents/incidents-page/useIncidentsFilterStore";
+import { useIncidentsFilterStore } from "@/stores/incidentsFilterStore";
 
 /**
  * Drop every in-memory cache that holds user-scoped data so a freshly

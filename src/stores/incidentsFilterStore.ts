@@ -10,7 +10,7 @@ import type {
   SeverityFilter,
   SourceFilter,
   StatusFilter,
-} from "./incidentFormat";
+} from "@/lib/incidentFormat";
 
 interface IncidentsFilterState {
   status: StatusFilter;

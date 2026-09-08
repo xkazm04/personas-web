@@ -5,7 +5,7 @@ import { relativeTime } from "@/lib/format";
 import type { SLABreach, SLAMetricType, SLASeverity } from "@/lib/mock-dashboard-data";
 
 import { SLABreachDetail } from "./SLABreachDetail";
-import { metricKey, severityPill } from "./slaFormat";
+import { metricKey, severityPill } from "@/lib/slaFormat";
 
 export function SLABreachRow({
   breach,

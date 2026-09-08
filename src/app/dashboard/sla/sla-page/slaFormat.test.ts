@@ -1,6 +1,6 @@
 import { describe, it, expect } from "vitest";
 import type { SLATarget } from "@/lib/mock-dashboard-data";
-import { complianceBand, formatValue, formatTarget, formatAbsolute } from "./slaFormat";
+import { complianceBand, formatValue, formatTarget, formatAbsolute } from "@/lib/slaFormat";
 
 const target = (over: Partial<SLATarget>) =>
   ({ unit: "%", current: 99, target: 95, ...over }) as unknown as SLATarget;
