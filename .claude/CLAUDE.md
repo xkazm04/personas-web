@@ -93,10 +93,18 @@ npm run test:e2e    # Playwright (specs under e2e/)
    `Sentry.captureException(err, { extra })`, check whether the shape
    contains any of the SENSITIVE_FIELDS or patterns that should scrub.
 
-6. **Supabase**: only the anon key is used client-side. `service_role` must
-   never appear in `src/`. All Supabase access is optional — guard every
-   call with a check that both URL and anon key are set; fall back to mocks
-   or no-ops otherwise.
+6. **Supabase**: only the anon key (`NEXT_PUBLIC_SUPABASE_ANON_KEY`) may be
+   read from client code. The `service_role` key
+   (`SUPABASE_SERVICE_ROLE_KEY`) is **server-only**: it may appear in `src/`
+   *only* inside a module whose first line is `import "server-only"` — today
+   `src/lib/server/env.ts` and `src/lib/supabase-admin.ts` — and must never
+   carry a `NEXT_PUBLIC_` prefix. Those two properties are what keep it out of
+   the client bundle: an un-prefixed env var is never inlined into client JS,
+   and Next fails the build if a `server-only` module is imported from a
+   client component. Never read `SUPABASE_SERVICE_ROLE_KEY` outside a
+   `server-only` module, and never send it to the browser. All Supabase access
+   is optional — guard every call with a check that the required env is set;
+   fall back to mocks or no-ops otherwise.
 
 7. **Commits**: one atomic change per commit. Message format used by the
    OSS release passes:
