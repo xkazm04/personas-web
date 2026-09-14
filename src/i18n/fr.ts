@@ -37,14 +37,13 @@ export const fr: Translations = {
     compareSection: {
       heading: "Tout est",
       headingGradient: "gratuit",
-      description: "L'application de bureau et toutes les fonctionnalit\u00e9s ci-dessous sont gratuites pour toujours. Pas de paliers, pas de tarif par utilisateur \u2014 juste une plateforme d'agents compl\u00e8te qui tourne sur votre machine.",
+      description: "L'application de bureau et toutes les fonctionnalit\u00e9s ci-dessous sont gratuites pour toujours\u00a0: une plateforme d'agents compl\u00e8te qui tourne sur votre machine.",
       offerBadges: [
         "Gratuit \u00e0 vie",
         "Auto-h\u00e9berg\u00e9",
-        "Aucune majoration par ex\u00e9cution",
         "Open source"
       ],
-      offerBody: "Personas fonctionne sur votre machine. Aucune majoration d'orchestration et aucune tarification par si\u00e8ge.",
+      offerBody: "Personas fonctionne sur votre machine.",
       ctaLabel: "Commencer gratuitement",
       readGuide: "Lire le guide",
       groups: {

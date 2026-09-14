@@ -37,14 +37,13 @@ export const id: Translations = {
     compareSection: {
       heading: "Semuanya",
       headingGradient: "gratis",
-      description: "Aplikasi desktop dan setiap kemampuan di bawah ini gratis selamanya. Tanpa tingkatan, tanpa biaya per kursi \u2014 hanya platform agen lengkap yang berjalan di mesin Anda.",
+      description: "Aplikasi desktop dan setiap kemampuan di bawah ini gratis selamanya: platform agen lengkap yang berjalan di mesin Anda.",
       offerBadges: [
         "Gratis selamanya",
         "Self-hosted",
-        "Tanpa markup per-run",
         "Open source"
       ],
-      offerBody: "Personas berjalan di mesin Anda. Tidak ada markup orkestrasi dan tidak ada harga per-kursi.",
+      offerBody: "Personas berjalan di mesin Anda.",
       ctaLabel: "Mulai gratis",
       readGuide: "Baca panduan",
       groups: {

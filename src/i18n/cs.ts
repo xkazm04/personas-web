@@ -37,14 +37,13 @@ export const cs: Translations = {
     compareSection: {
       heading: "V\u0161echno je",
       headingGradient: "zdarma",
-      description: "Desktopov\u00e1 aplikace a v\u0161echny funkce n\u00ed\u017ee jsou nav\u017edy zdarma. \u017d\u00e1dn\u00e9 \u00farovn\u011b, \u017e\u00e1dn\u00e9 ceny za u\u017eivatele \u2014 jen kompletn\u00ed platforma pro agenty b\u011b\u017e\u00edc\u00ed na va\u0161em po\u010d\u00edta\u010di.",
+      description: "Desktopov\u00e1 aplikace a v\u0161echny funkce n\u00ed\u017ee jsou nav\u017edy zdarma: kompletn\u00ed platforma pro agenty b\u011b\u017e\u00edc\u00ed na va\u0161em po\u010d\u00edta\u010di.",
       offerBadges: [
         "Nav\u017edy zdarma",
         "Self-hosted",
-        "Bez p\u0159ir\u00e1\u017eky za b\u011bh",
         "Open source"
       ],
-      offerBody: "Personas b\u011b\u017e\u00ed na va\u0161em po\u010d\u00edta\u010di. \u017d\u00e1dn\u00e1 p\u0159ir\u00e1\u017eka za orchestraci ani ceny za u\u017eivatele.",
+      offerBody: "Personas b\u011b\u017e\u00ed na va\u0161em po\u010d\u00edta\u010di.",
       ctaLabel: "Za\u010d\u00edt zdarma",
       readGuide: "P\u0159e\u010d\u00edst pr\u016fvodce",
       groups: {

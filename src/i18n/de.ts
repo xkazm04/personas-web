@@ -37,14 +37,13 @@ export const de: Translations = {
     compareSection: {
       heading: "Alles ist",
       headingGradient: "kostenlos",
-      description: "Die Desktop-App und jede Funktion unten bleiben f\u00fcr immer kostenlos. Keine Stufen, keine Geb\u00fchren pro Platz \u2013 einfach eine vollst\u00e4ndige Agentenplattform, die auf deinem Rechner l\u00e4uft.",
+      description: "Die Desktop-App und jede Funktion unten bleiben f\u00fcr immer kostenlos: eine vollst\u00e4ndige Agentenplattform, die auf deinem Rechner l\u00e4uft.",
       offerBadges: [
         "F\u00fcr immer kostenlos",
         "Selbst gehostet",
-        "Kein Aufschlag pro Ausf\u00fchrung",
         "Open Source"
       ],
-      offerBody: "Personas l\u00e4uft auf Ihrem eigenen Rechner. Kein Aufschlag f\u00fcr Orchestrierung und keine Preise pro Sitzplatz.",
+      offerBody: "Personas l\u00e4uft auf Ihrem eigenen Rechner.",
       ctaLabel: "Kostenlos loslegen",
       readGuide: "Anleitung lesen",
       groups: {

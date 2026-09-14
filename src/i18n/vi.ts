@@ -37,14 +37,13 @@ export const vi: Translations = {
     compareSection: {
       heading: "M\u1ecdi th\u1ee9 \u0111\u1ec1u",
       headingGradient: "mi\u1ec5n ph\u00ed",
-      description: "\u1ee8ng d\u1ee5ng desktop v\u00e0 m\u1ecdi t\u00ednh n\u0103ng b\u00ean d\u01b0\u1edbi \u0111\u1ec1u mi\u1ec5n ph\u00ed v\u0129nh vi\u1ec5n. Kh\u00f4ng ph\u00e2n h\u1ea1ng, kh\u00f4ng t\u00ednh ph\u00ed theo s\u1ed1 ng\u01b0\u1eddi d\u00f9ng \u2014 ch\u1ec9 l\u00e0 m\u1ed9t n\u1ec1n t\u1ea3ng agent ho\u00e0n ch\u1ec9nh ch\u1ea1y tr\u00ean m\u00e1y c\u1ee7a b\u1ea1n.",
+      description: "\u1ee8ng d\u1ee5ng desktop v\u00e0 m\u1ecdi t\u00ednh n\u0103ng b\u00ean d\u01b0\u1edbi \u0111\u1ec1u mi\u1ec5n ph\u00ed v\u0129nh vi\u1ec5n: m\u1ed9t n\u1ec1n t\u1ea3ng agent ho\u00e0n ch\u1ec9nh ch\u1ea1y tr\u00ean m\u00e1y c\u1ee7a b\u1ea1n.",
       offerBadges: [
         "Mi\u1ec5n ph\u00ed v\u0129nh vi\u1ec5n",
         "T\u1ef1 l\u01b0u tr\u1eef",
-        "Kh\u00f4ng ph\u1ee5 ph\u00ed m\u1ed7i l\u01b0\u1ee3t ch\u1ea1y",
         "M\u00e3 ngu\u1ed3n m\u1edf"
       ],
-      offerBody: "Personas ch\u1ea1y tr\u00ean m\u00e1y c\u1ee7a b\u1ea1n. Kh\u00f4ng ph\u1ee5 ph\u00ed \u0111i\u1ec1u ph\u1ed1i, kh\u00f4ng t\u00ednh ph\u00ed theo s\u1ed1 ng\u01b0\u1eddi d\u00f9ng.",
+      offerBody: "Personas ch\u1ea1y tr\u00ean m\u00e1y c\u1ee7a b\u1ea1n.",
       ctaLabel: "B\u1eaft \u0111\u1ea7u mi\u1ec5n ph\u00ed",
       readGuide: "\u0110\u1ecdc h\u01b0\u1edbng d\u1eabn",
       groups: {

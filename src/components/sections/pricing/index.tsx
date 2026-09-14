@@ -30,7 +30,7 @@ export default function Pricing() {
       />
 
       {/* Offer framing — the section dropped its old price tiers, so restate the
-          actual offer (free, self-hosted, no markup) with a primary CTA. */}
+          actual offer (free, self-hosted, open source) with a primary CTA. */}
       <motion.div
         variants={fadeUp}
         className="mx-auto mt-10 max-w-3xl rounded-2xl border border-glass bg-white/[0.02] px-6 py-6 text-center backdrop-blur-sm"

@@ -1725,9 +1725,9 @@ export const en: Translations = {
   compareSection: {
     heading: 'Everything is',
     headingGradient: 'free',
-    description: 'The desktop app and every capability below ship free forever. No tiers, no per-seat pricing — just a complete agent platform running on your machine.',
-    offerBadges: ['Free forever', 'Self-hosted', 'No per-run markup', 'Open source'],
-    offerBody: 'Personas runs on your machine. No orchestration markup and no per-seat pricing.',
+    description: 'The desktop app and every capability below ship free forever: a complete agent platform running on your machine.',
+    offerBadges: ['Free forever', 'Self-hosted', 'Open source'],
+    offerBody: 'Personas runs on your machine.',
     ctaLabel: 'Get started free',
     readGuide: 'Read the guide',
     groups: {

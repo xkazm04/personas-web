@@ -37,14 +37,13 @@ export const es: Translations = {
     compareSection: {
       heading: "Todo es",
       headingGradient: "gratis",
-      description: "La aplicaci\u00f3n de escritorio y todas las funciones siguientes son gratuitas para siempre. Sin niveles, sin precio por puesto: solo una plataforma de agentes completa que se ejecuta en tu m\u00e1quina.",
+      description: "La aplicaci\u00f3n de escritorio y todas las funciones siguientes son gratuitas para siempre: una plataforma de agentes completa que se ejecuta en tu m\u00e1quina.",
       offerBadges: [
         "Gratis para siempre",
         "Autoalojado",
-        "Sin recargo por ejecuci\u00f3n",
         "C\u00f3digo abierto"
       ],
-      offerBody: "Personas se ejecuta en tu m\u00e1quina. Sin recargos de orquestaci\u00f3n ni precios por asiento.",
+      offerBody: "Personas se ejecuta en tu m\u00e1quina.",
       ctaLabel: "Empieza gratis",
       readGuide: "Leer la gu\u00eda",
       groups: {

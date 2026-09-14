@@ -1,8 +1,8 @@
 {
   "version": 1,
   "checker": "native-copy/copy-check 1.2.0",
-  "generatedAt": "2026-09-14T15:39:09.309Z",
-  "count": 579,
+  "generatedAt": "2026-09-14T15:41:50.141Z",
+  "count": 578,
   "fingerprints": [
     "EN-AMPERSAND|src/data/connectors.ts|connectors[42].useCases[1].title|1be0f3a7ab40878b53b04b0061e260121a1c0e97",
     "EN-AMPERSAND|src/data/connectors.ts|connectors[43].useCases[1].title|1be0f3a7ab40878b53b04b0061e260121a1c0e97",
@@ -467,7 +467,6 @@
     "EN-DASH|src/i18n/en.ts|en.athenaPage.hero.orbAria|53089820dfe02a7f288d41cfdc4ab99effb88997",
     "EN-DASH|src/i18n/en.ts|en.athenaPage.hero.persona|af486fbe41542320322132bb9839ed77898c354b",
     "EN-DASH|src/i18n/en.ts|en.athenaPage.onboarding.captions.action|2d7ffc4594964af96fcbc3b72580cd0113dfd553",
-    "EN-DASH|src/i18n/en.ts|en.compareSection.description|056deca68844db5f328ccdf7e6f3b85a96a8631c",
     "EN-DASH|src/i18n/en.ts|en.compareSection.groups.agents-prompts.concepts[2]|edd5232549609f2482b57877f5a07788e0eeadcc",
     "EN-DASH|src/i18n/en.ts|en.dashboard.home.approvedWork.toast|b57c74786148f9ee6a90685a21a76b7e68a30cad",
     "EN-DASH|src/i18n/en.ts|en.dashboard.home.cockpit.triageEmpty|f098f1b62c20960d8257c7d223b349fe900fa934",
