@@ -147,7 +147,6 @@ Stell es dir wie einen Arztbesuch für dein Personas-Setup vor. Eine schnelle Un
 - **Datenbank-Integrität** — deine lokalen Datendateien sind intakt und gesund
 - **Zugangsdaten-Status** — alle gespeicherten Zugangsdaten sind gültig und funktionieren
 - **Anbieter-Konnektivität** — deine KI-Anbieter sind erreichbar und antworten
-- **Cloud-Verbindung** — deine Orchestrator-Verbindung ist aktiv (falls konfiguriert)
 
 ### So funktioniert es
 

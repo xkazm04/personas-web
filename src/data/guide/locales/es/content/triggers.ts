@@ -96,7 +96,7 @@ Los calendarios respetan una zona horaria configurable. Por defecto el agente us
 :::
 
 :::tip
-Los disparadores programados no rellenan ejecuciones perdidas. Si la app está cerrada o la máquina dormida cuando pasa una hora programada, esa ejecución se omite. Para trabajo programado crítico, ejecuta el despliegue en la nube (nivel Builder) para que el orquestador maneje el calendario del lado del servidor.
+Los disparadores programados no rellenan ejecuciones perdidas. Si la app está cerrada o la máquina dormida cuando pasa una hora programada, esa ejecución se omite.
 :::
   `,
 

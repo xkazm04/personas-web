@@ -1161,7 +1161,6 @@
       enterprise: string;
       devMode: string;
       connectors: string;
-      cloudExecution: string;
       installersUpdates: string;
       allCategories: string;
       devops: string;
@@ -1183,7 +1182,6 @@
       ssoAudit: string;
       instantPreview: string;
       services: string;
-      runs247: string;
       autoUpdate: string;
       templatesTotal: string;
     };
@@ -1822,7 +1820,7 @@ export const en: Translations = {
     badge: 'AI Agent Platform',
     headingLine1: 'Intelligent agents',
     headingLine2: 'that work for you',
-    description: 'Design agents in natural language. Orchestrate them locally or in the cloud.',
+    description: 'Design agents in natural language. Orchestrate them on your own machine.',
     descriptionBold: 'No workflow diagrams. No agent swarms. No code.',
     mode2: 'Simple setup',
     mode3: 'Free',
@@ -1971,19 +1969,11 @@ export const en: Translations = {
       },
       {
         q: 'Does Personas collect any telemetry or usage data?',
-        a: 'No. Personas runs entirely on your machine with zero telemetry. We don\'t collect analytics, usage metrics, or any personal data. Your prompts, agent configurations, and execution logs never leave your device unless you explicitly enable cloud execution.',
+        a: 'No. Personas runs entirely on your machine with zero telemetry. We don\'t collect analytics, usage metrics, or any personal data. Your prompts, agent configurations, and execution logs never leave your device.',
       },
       {
-        q: 'How does the pricing model work?',
-        a: 'The desktop app is free and open source, with unlimited local agents. There are no paid plans or tiers. You always need your own Claude subscription. We never touch your Anthropic bill. Think of Personas as the orchestration layer, and Claude as the engine.',
-      },
-      {
-        q: 'What is Bring Your Own Infrastructure (BYOI)?',
-        a: 'BYOI lets you connect your own cloud provider credentials (e.g., Fly.io API tokens) instead of using our managed infrastructure. Personas provisions and manages the workers on your account, giving you unlimited execution without per-month caps \u2014 you only pay your cloud provider directly.',
-      },
-      {
-        q: 'What\'s the difference between local and cloud execution?',
-        a: 'Local execution runs agents on your machine using Claude Code. It\'s instant, free, and private, but stops when your computer sleeps. Cloud execution runs agents on remote workers 24/7, supports event-bus bridging across environments, and enables team collaboration. You can switch between modes per agent.',
+        q: 'Is Personas free?',
+        a: 'Yes. The desktop app is free and open source, with unlimited local agents. You need your own Claude subscription, and we never touch your Anthropic bill. Think of Personas as the orchestration layer, and Claude as the engine.',
       },
       {
         q: 'Are there any limits on the number of agents?',
@@ -2986,7 +2976,7 @@ export const en: Translations = {
       i18n: { title: 'Internationalization', caption: '{count} locales, hand-translated — each flag develops with coverage' },
       devices: { title: 'Device Support', caption: 'Personas on every machine you own' },
       collaboration: { title: 'Collaboration', caption: 'From one operator to the whole org' },
-      platform: { title: 'Core Platform', caption: 'Dev mode, cloud execution, connectors, painless installs' },
+      platform: { title: 'Core Platform', caption: 'Dev mode, connectors, painless installs' },
       templates: { title: 'Template Gallery', caption: 'Starter agents by category — live gallery counts' },
     },
     bars: {
@@ -3004,7 +2994,6 @@ export const en: Translations = {
       enterprise: 'Enterprise',
       devMode: 'Dev Mode',
       connectors: 'Connectors',
-      cloudExecution: 'Cloud execution',
       installersUpdates: 'Installers & updates',
       allCategories: 'All categories',
       devops: 'DevOps',
@@ -3026,7 +3015,6 @@ export const en: Translations = {
       ssoAudit: 'SSO · audit',
       instantPreview: 'instant preview',
       services: '{n} services',
-      runs247: '24/7 runs',
       autoUpdate: 'auto-update',
       templatesTotal: '{n} / {total} templates',
     },
@@ -3147,7 +3135,7 @@ export const en: Translations = {
       memories: "Your agents learn and remember. Manage what they know and how they use past experience.",
       monitoring: "Track every execution in real time. See what your agents do, how well they perform, and what they cost.",
       testing: "Run arena tests, A/B comparisons, and let the genome system evolve your best prompts.",
-      deployment: "Deploy agents to the cloud, connect to GitHub Actions, GitLab CI, and n8n workflows.",
+      deployment: "Connect agents to GitHub Actions, GitLab CI, and n8n workflows.",
       troubleshooting: "Fix common issues, understand error messages, and get your agents back on track.",
     },
   },

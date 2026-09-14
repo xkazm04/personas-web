@@ -200,7 +200,7 @@ Binary yang disertakan sekitar 90 MB setelah pemasangan. Plugin (Artist untuk pe
 
 ### Cara Kerjanya
 
-Aplikasi menyimpan database-nya (\`personas.db\`), credential vault, riwayat eksekusi, dan konfigurasi secara lokal di direktori app-data khusus OS Anda. Tidak ada yang diunggah kecuali Anda secara eksplisit mengaktifkan deployment cloud atau menggunakan penyedia AI cloud. Plugin yang menyertakan model lokal (misalnya image-gen plugin Artist + Gemini vision) mengunduh file model pada penggunaan pertama.
+Aplikasi menyimpan database-nya (\`personas.db\`), credential vault, riwayat eksekusi, dan konfigurasi secara lokal di direktori app-data khusus OS Anda. Tidak ada yang diunggah kecuali Anda menggunakan penyedia AI cloud. Plugin yang menyertakan model lokal (misalnya image-gen plugin Artist + Gemini vision) mengunduh file model pada penggunaan pertama.
 
 Build Windows menggunakan ONNX Runtime untuk embedding ketika fitur vector-knowledge-base diaktifkan; ini adalah dependensi tunggal terbesar dalam kasus tersebut.
 

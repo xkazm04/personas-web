@@ -29,7 +29,7 @@
       "translatedAt": "2026-05-16T15:00:52.691Z"
     },
     "system-requirements": {
-      "translatedFromHash": "12cee576d502",
+      "translatedFromHash": "7742d280c97c",
       "translatedAt": "2026-05-16T15:00:52.691Z"
     },
     "where-to-get-help": {
@@ -77,7 +77,7 @@
       "translatedAt": "2026-05-16T15:00:52.691Z"
     },
     "disabling-and-archiving-agents": {
-      "translatedFromHash": "68ab73c6d52d",
+      "translatedFromHash": "22c598acbf2c",
       "translatedAt": "2026-05-16T15:00:52.691Z"
     },
     "agent-health-indicators": {
@@ -221,7 +221,7 @@
       "translatedAt": "2026-05-16T15:00:52.691Z"
     },
     "genome-evolution-basics": {
-      "translatedFromHash": "70bee3938be8",
+      "translatedFromHash": "e076da353f49",
       "translatedAt": "2026-05-16T15:00:52.691Z"
     },
     "running-a-breeding-cycle": {
@@ -297,7 +297,7 @@
       "translatedAt": "2026-05-16T15:00:52.691Z"
     },
     "cost-tracking-per-model": {
-      "translatedFromHash": "ad02d1592dae",
+      "translatedFromHash": "cdc4ce066463",
       "translatedAt": "2026-05-16T15:00:52.691Z"
     },
     "success-rate-metrics": {
@@ -320,22 +320,6 @@
       "translatedFromHash": "89e65438099a",
       "translatedAt": "2026-05-16T15:00:52.691Z"
     },
-    "local-vs-cloud-execution": {
-      "translatedFromHash": "0c466e5bf97a",
-      "translatedAt": "2026-05-16T15:00:52.691Z"
-    },
-    "connecting-to-the-cloud-orchestrator": {
-      "translatedFromHash": "e358f022db74",
-      "translatedAt": "2026-05-16T15:00:52.691Z"
-    },
-    "deploying-an-agent-to-the-cloud": {
-      "translatedFromHash": "5e62849dd3f6",
-      "translatedAt": "2026-05-16T15:00:52.691Z"
-    },
-    "cloud-execution-monitoring": {
-      "translatedFromHash": "24b0dba665d4",
-      "translatedAt": "2026-05-16T15:00:52.691Z"
-    },
     "github-actions-integration": {
       "translatedFromHash": "8a6e1957c624",
       "translatedAt": "2026-05-16T15:00:52.691Z"
@@ -346,18 +330,6 @@
     },
     "n8n-workflow-integration": {
       "translatedFromHash": "ee8f60bcfe8e",
-      "translatedAt": "2026-05-16T15:00:52.691Z"
-    },
-    "byoi-bring-your-own-infrastructure": {
-      "translatedFromHash": "d269dd9ba361",
-      "translatedAt": "2026-05-16T15:00:52.691Z"
-    },
-    "syncing-desktop-and-cloud": {
-      "translatedFromHash": "3d99c6137f3c",
-      "translatedAt": "2026-05-16T15:00:52.691Z"
-    },
-    "cloud-troubleshooting": {
-      "translatedFromHash": "86f3c761fcb1",
       "translatedAt": "2026-05-16T15:00:52.691Z"
     },
     "common-error-messages": {
@@ -381,7 +353,7 @@
       "translatedAt": "2026-05-16T15:00:52.691Z"
     },
     "checking-system-health": {
-      "translatedFromHash": "f0182579a585",
+      "translatedFromHash": "4c3b69d9f1b5",
       "translatedAt": "2026-05-16T15:00:52.691Z"
     },
     "log-files-and-debugging": {

@@ -137,7 +137,7 @@ export const id: Translations = {
       badge: "Platform Agen AI",
       headingLine1: "Agen cerdas",
       headingLine2: "yang bekerja untuk Anda",
-      description: "Desain agen dalam bahasa alami. Orkestrasi secara lokal atau di cloud.",
+      description: "Desain agen dalam bahasa alami. Orkestrasi di mesin Anda sendiri.",
       descriptionBold: "Tanpa diagram alur kerja. Tanpa gerombolan agen. Tanpa kode.",
       mode2: "Penyiapan sederhana",
       mode3: "Gratis",
@@ -367,19 +367,11 @@ export const id: Translations = {
         },
         {
           q: "Does Personas collect any telemetry or usage data?",
-          a: "No. Personas runs entirely on your machine with zero telemetry. We don't collect analytics, usage metrics, or any personal data. Your prompts, agent configurations, and execution logs never leave your device unless you explicitly enable cloud execution."
+          a: "No. Personas runs entirely on your machine with zero telemetry. We don't collect analytics, usage metrics, or any personal data. Your prompts, agent configurations, and execution logs never leave your device."
         },
         {
-          q: "How does the pricing model work?",
-          a: "The desktop app is free and open source, with unlimited local agents. There are no paid plans or tiers. You always need your own Claude subscription. We never touch your Anthropic bill. Think of Personas as the orchestration layer, and Claude as the engine."
-        },
-        {
-          q: "What is Bring Your Own Infrastructure (BYOI)?",
-          a: "BYOI lets you connect your own cloud provider credentials (e.g., Fly.io API tokens) instead of using our managed infrastructure. Personas provisions and manages the workers on your account, giving you unlimited execution without per-month caps \u2014 you only pay your cloud provider directly."
-        },
-        {
-          q: "What's the difference between local and cloud execution?",
-          a: "Local execution runs agents on your machine using Claude Code. It's instant, free, and private, but stops when your computer sleeps. Cloud execution runs agents on remote workers 24/7, supports event-bus bridging across environments, and enables team collaboration. You can switch between modes per agent."
+          q: "Is Personas free?",
+          a: "Yes. The desktop app is free and open source, with unlimited local agents. You need your own Claude subscription, and we never touch your Anthropic bill. Think of Personas as the orchestration layer, and Claude as the engine."
         },
         {
           q: "Are there any limits on the number of agents?",
@@ -1391,7 +1383,7 @@ export const id: Translations = {
         },
         platform: {
           title: "Platform Inti",
-          caption: "Mode dev, eksekusi cloud, konektor, instalasi tanpa repot"
+          caption: "Mode dev, konektor, instalasi tanpa repot"
         },
         templates: {
           title: "Galeri Templat",
@@ -1413,7 +1405,6 @@ export const id: Translations = {
         enterprise: "Perusahaan",
         devMode: "Mode dev",
         connectors: "Konektor",
-        cloudExecution: "Eksekusi cloud",
         installersUpdates: "Penginstal & pembaruan",
         allCategories: "Semua kategori",
         devops: "DevOps",
@@ -1435,7 +1426,6 @@ export const id: Translations = {
         ssoAudit: "SSO \u00b7 audit",
         instantPreview: "pratinjau instan",
         services: "{n} layanan",
-        runs247: "operasi 24/7",
         autoUpdate: "pembaruan otomatis",
         templatesTotal: "{n} / {total} templat"
       },
@@ -1556,7 +1546,7 @@ export const id: Translations = {
         memories: "Agen Anda belajar dan mengingat. Kelola apa yang mereka ketahui dan bagaimana mereka menggunakan pengalaman sebelumnya.",
         monitoring: "Pantau setiap eksekusi secara real time. Lihat apa yang dilakukan agen Anda, seberapa baik kinerjanya, dan berapa biayanya.",
         testing: "Jalankan tes arena, perbandingan A/B, dan biarkan sistem genome mengembangkan prompt terbaik Anda.",
-        deployment: "Deploy agen ke cloud, hubungkan ke GitHub Actions, GitLab CI, dan alur kerja n8n.",
+        deployment: "Hubungkan agen ke GitHub Actions, GitLab CI, dan alur kerja n8n.",
         troubleshooting: "Perbaiki masalah umum, pahami pesan error, dan kembalikan agen Anda ke jalur yang benar."
       }
     },

@@ -10,7 +10,7 @@ Karta Lab v editoru každého agenta je místem, kde se to děje. Má čtyři re
 
 - **Zachyť regrese včas** — testování po každé změně je způsob, jak se vyhneš „agent fungoval, co jsem rozbil?"
 - **Porovnávej alternativy systematicky** — Arena a A-B ti umožňují volit mezi možnostmi s evidencí místo instinktu
-- **Generuj fitness data** — Lab běhy akumulují per-prompt skóre, které krmí evoluci genomu (Builder tarif)
+- **Generuj fitness data** — Lab běhy akumulují per-prompt skóre, které krmí evoluci genomu
 - **Opakovaně použitelné sady vstupů** — testovací vstupy jsou uloženy per-agent; stejné prompty, stejná data, opakovatelná porovnání
 
 ### Jak to funguje
@@ -169,7 +169,7 @@ Eval je nejdražší režim. 3 prompty × 4 modely × 5 vstupů = 60 běhů, ka�
   "rating-and-scoring-results": `
 ## Hodnocení a skórování výsledků
 
-Po libovolném Lab testu má každý výstupní řádek hodnotící ovládací prvky: palec nahoru / palec dolů pro binární úsudek, nebo 1-5 hvězdičkovou škálu pro odstínované případy. Tvá hodnocení krmí dvě věci: fitness skóre per-variant agenta (použité pro řazení v matrix a eval a jako tlak výběru evoluce genomu na Builder tarifu) a osobní signál preference napříč celým tvým testováním v čase.
+Po libovolném Lab testu má každý výstupní řádek hodnotící ovládací prvky: palec nahoru / palec dolů pro binární úsudek, nebo 1-5 hvězdičkovou škálu pro odstínované případy. Tvá hodnocení krmí dvě věci: fitness skóre per-variant agenta (použité pro řazení v matrix a eval a jako tlak výběru evoluce genomu) a osobní signál preference napříč celým tvým testováním v čase.
 
 Hodnocení jsou osobní — zakódovávají tvůj úsudek o kvalitě, ne objektivní metriku. To je záměrné; ty jsi ten, kdo ví, zda výstup agenta odpovídá tomu, co potřebuješ, a to je signál, proti kterému systém optimalizuje.
 
@@ -183,7 +183,7 @@ Hodnocení jsou osobní — zakódovávají tvůj úsudek o kvalitě, ne objekti
 
 ### Jak to funguje
 
-Hodnocení jsou uložena proti konkrétnímu běhu (trace, verze promptu, model, vstup). Fitness agregátor čte hodnocení + objektivní metriky (náklady, doba trvání, úspěch) a počítá fitness skóre per-variant, které se používá v řazení. Evoluce genomu (Builder tarif) používá hodnocení jako primární tlak výběru pro volbu rodičovských promptů ke šlechtění.
+Hodnocení jsou uložena proti konkrétnímu běhu (trace, verze promptu, model, vstup). Fitness agregátor čte hodnocení + objektivní metriky (náklady, doba trvání, úspěch) a počítá fitness skóre per-variant, které se používá v řazení. Evoluce genomu používá hodnocení jako primární tlak výběru pro volbu rodičovských promptů ke šlechtění.
 
 :::tip
 Hodnoť na základě toho, co skutečně chceš, ne toho, co je technicky působivé. Krátká správná odpověď často poráží dlouhou propracovanou. Systém optimalizuje proti tvým preferencím, takže poctivá, konzistentní hodnocení produkují agenty naladěné na *tvůj* úsudek.
@@ -193,7 +193,7 @@ Hodnoť na základě toho, co skutečně chceš, ne toho, co je technicky působ
   "genome-evolution-basics": `
 ## Základy evoluce genomu
 
-Evoluce genomu (Builder tarif) automaticky šlechtí nové varianty promptů z tvých nejlépe hodnocených minulých testů. Každá „generace" mutuje a rekombinuje nejvýkonnější prompty z předchozí generace; přes několik generací prompty konvergují na konfigurace, které skórují konzistentně lépe než tvůj výchozí bod. Je to evoluční hledání s tvými hodnoceními jako fitness funkcí.
+Evoluce genomu automaticky šlechtí nové varianty promptů z tvých nejlépe hodnocených minulých testů. Každá „generace" mutuje a rekombinuje nejvýkonnější prompty z předchozí generace; přes několik generací prompty konvergují na konfigurace, které skórují konzistentně lépe než tvůj výchozí bod. Je to evoluční hledání s tvými hodnoceními jako fitness funkcí.
 
 Proces je nezatížený, jakmile ho spustíš. Poskytneš startovní prompt a fitness signál (typicky historie tvých hodnocení plus volitelné objektivní metriky jako náklady nebo doba trvání), nastavíš velikost populace a počet generací a necháš to běžet. Normální spouštěče agenta zůstávají pozastaveny během evoluce, aby porovnání zůstalo čisté.
 

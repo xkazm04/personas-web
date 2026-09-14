@@ -96,7 +96,7 @@ Lịch trình tôn trọng múi giờ có thể cấu hình. Theo mặc định,
 :::
 
 :::tip
-Schedule trigger không lấp đầy lại các lần chạy bị bỏ lỡ. Nếu ứng dụng đóng hoặc máy đang ngủ khi một thời gian lịch trình đi qua, lần chạy đó bị bỏ qua. Đối với công việc theo lịch trình quan trọng, hãy chạy triển khai đám mây (gói Builder) để orchestrator xử lý lịch trình phía server.
+Schedule trigger không lấp đầy lại các lần chạy bị bỏ lỡ. Nếu ứng dụng đóng hoặc máy đang ngủ khi một thời gian lịch trình đi qua, lần chạy đó bị bỏ qua.
 :::
   `,
 

@@ -108,9 +108,8 @@ export const RELEASES: Release[] = [
   {
     version: "0.12.0",
     date: "2026-02-28",
-    summary: "Cloud execution engine with live event streaming",
+    summary: "Live event streaming and execution tracing",
     changes: [
-      { text: "Cloud orchestrator deployment target — run agents on remote servers", type: "feature" },
       { text: "Live event streaming dashboard with real-time execution visualization", type: "feature" },
       { text: "GitHub Actions deployment integration with repository dispatch", type: "feature" },
       { text: "Improved execution trace UI with parent-child span visualization", type: "improvement" },

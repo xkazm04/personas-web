@@ -147,7 +147,6 @@ Hãy nghĩ về nó như một chuyến thăm bác sĩ cho thiết lập Persona
 - **Tính toàn vẹn cơ sở dữ liệu** — các tệp dữ liệu cục bộ của bạn nguyên vẹn và khỏe mạnh
 - **Trạng thái credential** — tất cả các credential được lưu trữ đều hợp lệ và đang hoạt động
 - **Kết nối nhà cung cấp** — các nhà cung cấp AI của bạn có thể tiếp cận và đang phản hồi
-- **Kết nối đám mây** — kết nối orchestrator của bạn đang hoạt động (nếu được cấu hình)
 
 ### Cách Hoạt Động
 

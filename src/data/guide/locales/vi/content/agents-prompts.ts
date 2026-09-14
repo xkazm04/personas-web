@@ -271,14 +271,14 @@ Một nhóm "Drafts" hoặc "Experimental" ở đầu thanh bên của bạn là
   "disabling-and-archiving-agents": `
 ## Vô Hiệu Hóa Và Lưu Trữ Agent
 
-Hai cách để tạm dừng một agent mà không xóa nó. **Vô hiệu hóa** ngăn tất cả các trigger kích hoạt và chặn các lần chạy thủ công; agent vẫn hiển thị trong thanh bên với biểu tượng mờ để bạn nhớ rằng nó tồn tại. **Lưu trữ** chuyển agent vào phần lưu trữ ẩn ra khỏi tầm sử dụng hàng ngày; nó ngừng kích hoạt, không tính vào giới hạn gói và có thể được khôi phục bất cứ lúc nào.
+Hai cách để tạm dừng một agent mà không xóa nó. **Vô hiệu hóa** ngăn tất cả các trigger kích hoạt và chặn các lần chạy thủ công; agent vẫn hiển thị trong thanh bên với biểu tượng mờ để bạn nhớ rằng nó tồn tại. **Lưu trữ** chuyển agent vào phần lưu trữ ẩn ra khỏi tầm sử dụng hàng ngày; nó ngừng kích hoạt và có thể được khôi phục bất cứ lúc nào.
 
 Cả hai thao tác đều không chạm vào các lần thực thi, cài đặt hoặc lịch sử phiên bản. Lưu trữ nặng hơn — dùng nó cho các agent bạn đã hoàn thành bây giờ nhưng có thể muốn quay lại. Vô hiệu hóa nhẹ hơn — dùng nó khi bạn cần tạm dừng một agent tạm thời mà không mất nó khỏi tầm nhìn.
 
 ### Điểm Chính
 
 - **Disable** — tạm dừng thực thi; agent vẫn hiển thị trong thanh bên; kích hoạt lại một cú nhấp chuột
-- **Archive** — ẩn agent và giải phóng slot của nó so với giới hạn gói; có thể khôi phục vĩnh viễn
+- **Archive** — ẩn agent; có thể khôi phục vĩnh viễn
 - **Cả hai đều không xóa** — cài đặt, lịch sử prompt và các lần thực thi trước đó được bảo toàn
 - **Trigger tôn trọng disable** — một agent bị vô hiệu hóa bỏ qua các sự kiện schedule/webhook/file-watcher; chúng không xếp hàng để phát lại khi kích hoạt lại
 

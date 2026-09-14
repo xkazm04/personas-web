@@ -137,7 +137,7 @@ export const zh: Translations = {
       badge: "AI \u667a\u80fd\u4f53\u5e73\u53f0",
       headingLine1: "\u667a\u80fd\u4f53",
       headingLine2: "\u4e3a\u60a8\u5de5\u4f5c",
-      description: "\u7528\u81ea\u7136\u8bed\u8a00\u8bbe\u8ba1\u667a\u80fd\u4f53\u3002\u5728\u672c\u5730\u6216\u4e91\u7aef\u7f16\u6392\u5b83\u4eec\u3002",
+      description: "\u7528\u81ea\u7136\u8bed\u8a00\u8bbe\u8ba1\u667a\u80fd\u4f53\u3002\u5728\u4f60\u81ea\u5df1\u7684\u8bbe\u5907\u4e0a\u7f16\u6392\u5b83\u4eec\u3002",
       descriptionBold: "\u6ca1\u6709\u5de5\u4f5c\u6d41\u56fe\u8868\u3002\u6ca1\u6709\u667a\u80fd\u4f53\u96c6\u7fa4\u3002\u6ca1\u6709\u4ee3\u7801\u3002",
       mode2: "\u7b80\u5355\u8bbe\u7f6e",
       mode3: "\u514d\u8d39",
@@ -367,19 +367,11 @@ export const zh: Translations = {
         },
         {
           q: "Does Personas collect any telemetry or usage data?",
-          a: "No. Personas runs entirely on your machine with zero telemetry. We don't collect analytics, usage metrics, or any personal data. Your prompts, agent configurations, and execution logs never leave your device unless you explicitly enable cloud execution."
+          a: "No. Personas runs entirely on your machine with zero telemetry. We don't collect analytics, usage metrics, or any personal data. Your prompts, agent configurations, and execution logs never leave your device."
         },
         {
-          q: "How does the pricing model work?",
-          a: "The desktop app is free and open source, with unlimited local agents. There are no paid plans or tiers. You always need your own Claude subscription. We never touch your Anthropic bill. Think of Personas as the orchestration layer, and Claude as the engine."
-        },
-        {
-          q: "What is Bring Your Own Infrastructure (BYOI)?",
-          a: "BYOI lets you connect your own cloud provider credentials (e.g., Fly.io API tokens) instead of using our managed infrastructure. Personas provisions and manages the workers on your account, giving you unlimited execution without per-month caps \u2014 you only pay your cloud provider directly."
-        },
-        {
-          q: "What's the difference between local and cloud execution?",
-          a: "Local execution runs agents on your machine using Claude Code. It's instant, free, and private, but stops when your computer sleeps. Cloud execution runs agents on remote workers 24/7, supports event-bus bridging across environments, and enables team collaboration. You can switch between modes per agent."
+          q: "Is Personas free?",
+          a: "Yes. The desktop app is free and open source, with unlimited local agents. You need your own Claude subscription, and we never touch your Anthropic bill. Think of Personas as the orchestration layer, and Claude as the engine."
         },
         {
           q: "Are there any limits on the number of agents?",
@@ -1391,7 +1383,7 @@ export const zh: Translations = {
         },
         platform: {
           title: "\u6838\u5fc3\u5e73\u53f0",
-          caption: "\u5f00\u53d1\u6a21\u5f0f\u3001\u4e91\u7aef\u6267\u884c\u3001\u8fde\u63a5\u5668\u3001\u8f7b\u677e\u5b89\u88c5"
+          caption: "\u5f00\u53d1\u6a21\u5f0f\u3001\u8fde\u63a5\u5668\u3001\u8f7b\u677e\u5b89\u88c5"
         },
         templates: {
           title: "\u6a21\u677f\u5e93",
@@ -1413,7 +1405,6 @@ export const zh: Translations = {
         enterprise: "\u4f01\u4e1a",
         devMode: "\u5f00\u53d1\u6a21\u5f0f",
         connectors: "\u8fde\u63a5\u5668",
-        cloudExecution: "\u4e91\u7aef\u6267\u884c",
         installersUpdates: "\u5b89\u88c5\u7a0b\u5e8f\u4e0e\u66f4\u65b0",
         allCategories: "\u6240\u6709\u7c7b\u522b",
         devops: "DevOps",
@@ -1435,7 +1426,6 @@ export const zh: Translations = {
         ssoAudit: "SSO \u00b7 \u5ba1\u8ba1",
         instantPreview: "\u5373\u65f6\u9884\u89c8",
         services: "{n} \u9879\u670d\u52a1",
-        runs247: "\u5168\u5929\u5019\u8fd0\u884c",
         autoUpdate: "\u81ea\u52a8\u66f4\u65b0",
         templatesTotal: "{n} / {total} \u4e2a\u6a21\u677f"
       },
@@ -1556,7 +1546,7 @@ export const zh: Translations = {
         memories: "\u4f60\u7684\u667a\u80fd\u4f53\u4f1a\u5b66\u4e60\u5e76\u8bb0\u4f4f\u7ecf\u9a8c\u3002\u7ba1\u7406\u5b83\u4eec\u77e5\u9053\u4ec0\u4e48,\u4ee5\u53ca\u5982\u4f55\u5229\u7528\u8fc7\u5f80\u7ecf\u9a8c\u3002",
         monitoring: "\u5b9e\u65f6\u8ffd\u8e2a\u6bcf\u4e00\u6b21\u6267\u884c\u3002\u67e5\u770b\u667a\u80fd\u4f53\u505a\u4e86\u4ec0\u4e48\u3001\u8868\u73b0\u5982\u4f55\u4ee5\u53ca\u82b1\u8d39\u591a\u5c11\u3002",
         testing: "\u8fd0\u884c\u7ade\u6280\u573a\u6d4b\u8bd5\u3001A/B \u5bf9\u6bd4,\u8ba9\u57fa\u56e0\u7ec4\u7cfb\u7edf\u8fdb\u5316\u51fa\u4f60\u6700\u597d\u7684\u63d0\u793a\u8bcd\u3002",
-        deployment: "\u5c06\u667a\u80fd\u4f53\u90e8\u7f72\u5230\u4e91\u7aef,\u8fde\u63a5 GitHub Actions\u3001GitLab CI \u548c n8n \u5de5\u4f5c\u6d41\u3002",
+        deployment: "\u5c06\u667a\u80fd\u4f53\u8fde\u63a5\u5230 GitHub Actions\u3001GitLab CI \u548c n8n \u5de5\u4f5c\u6d41\u3002",
         troubleshooting: "\u4fee\u590d\u5e38\u89c1\u95ee\u9898,\u7406\u89e3\u9519\u8bef\u4fe1\u606f,\u8ba9\u4f60\u7684\u667a\u80fd\u4f53\u91cd\u56de\u6b63\u8f68\u3002"
       }
     },

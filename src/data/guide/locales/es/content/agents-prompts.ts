@@ -271,14 +271,14 @@ Un grupo "Borradores" o "Experimental" al principio de tu barra lateral es un pa
   "disabling-and-archiving-agents": `
 ## Desactivar y archivar agentes
 
-Dos formas de pausar un agente sin eliminarlo. **Desactivar** detiene todos los disparadores y bloquea las ejecuciones manuales; el agente permanece visible en la barra lateral con un ícono atenuado para que recuerdes que existe. **Archivar** mueve al agente a una sección de archivo oculta fuera del uso diario; deja de dispararse, no cuenta contra los límites del nivel y se puede restaurar en cualquier momento.
+Dos formas de pausar un agente sin eliminarlo. **Desactivar** detiene todos los disparadores y bloquea las ejecuciones manuales; el agente permanece visible en la barra lateral con un ícono atenuado para que recuerdes que existe. **Archivar** mueve al agente a una sección de archivo oculta fuera del uso diario; deja de dispararse y se puede restaurar en cualquier momento.
 
 Ninguna operación toca las ejecuciones, los ajustes ni el historial de versiones. Archivar es más pesado: úsalo para agentes con los que has terminado por ahora pero podrías querer recuperar. Desactivar es más ligero: úsalo cuando necesites detener un agente temporalmente sin perderlo de vista.
 
 ### Puntos clave
 
 - **Desactivar** — pausa la ejecución; el agente sigue visible en la barra lateral; reactivación con un clic
-- **Archivar** — oculta el agente y libera su cupo frente al límite de tu nivel; restaurable para siempre
+- **Archivar** — oculta el agente; restaurable para siempre
 - **Ninguno elimina** — los ajustes, el historial del prompt y las ejecuciones pasadas se conservan
 - **Los disparadores respetan la desactivación** — un agente desactivado ignora los eventos de calendario/webhook/observación de archivos; no se acumulan para reproducir al reactivar
 

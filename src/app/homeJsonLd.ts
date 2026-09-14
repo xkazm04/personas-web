@@ -33,7 +33,7 @@ export const softwareJsonLd = {
     "40+ built-in integrations (Slack, GitHub, Jira, Notion, etc.)",
     "6 trigger types: schedule, webhook, clipboard, file watcher, chain, event",
     "Real-time event bus and observability dashboard",
-    "Local-first architecture with optional cloud deployment",
+    "Local-first architecture: agents run on your machine",
   ],
 };
 

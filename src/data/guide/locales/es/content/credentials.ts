@@ -10,7 +10,7 @@ Cuando ejecutas un agente, el motor descifra solo las credenciales específicas 
 
 - **AES-256-GCM** — cifrado autenticado (el texto cifrado de cada credencial se verifica en integridad, así que un archivo de bóveda alterado se detecta, no se descifra silenciosamente)
 - **Clave maestra envuelta por el keyring del SO** — DPAPI en Windows, Keychain en macOS, Secret Service en Linux; sin contraseña maestra que teclear en cada sesión
-- **Solo local por defecto** — nada se sube; el despliegue en la nube es opcional y cifra en tránsito vía TLS hacia el orquestador que elijas
+- **Solo local por defecto** — nada se sube
 - **Referencias de token en los logs** — las trazas de los agentes y las exportaciones usan IDs de credencial, no secretos en bruto
 - **Evidencia de manipulación** — las etiquetas de autenticación GCM detectan cualquier modificación del archivo de la bóveda
 
@@ -43,10 +43,6 @@ La bóveda está atada a tu cuenta de usuario del SO vía el keyring del SO. Cop
 
 :::warning
 Si cambias tu contraseña de cuenta del SO en macOS o Linux, el keyring puede volver a bloquear la clave envolvente. Personas pedirá la nueva credencial en la primera ejecución tras el cambio. Si el keyring se borra (restablecimiento de fábrica, eliminación de cuenta), la bóveda se vuelve irrecuperable: respalda externamente los secretos en bruto si necesitas recuperación de desastres más allá de la máquina local.
-:::
-
-:::tip
-El modelo solo local es el predeterminado correcto para automatización personal. Para trabajo de equipo / producción donde varias máquinas necesitan las mismas credenciales, el despliegue en la nube (nivel Team / Builder) replica el estado de la bóveda vía el orquestador con cifrado de extremo a extremo.
 :::
   `,
 

@@ -137,7 +137,7 @@ export const ko: Translations = {
       badge: "AI \uc5d0\uc774\uc804\ud2b8 \ud50c\ub7ab\ud3fc",
       headingLine1: "\uc9c0\ub2a5\ud615 \uc5d0\uc774\uc804\ud2b8",
       headingLine2: "\ub2f9\uc2e0\uc744 \uc704\ud574 \uc77c\ud569\ub2c8\ub2e4",
-      description: "\uc790\uc5f0\uc5b4\ub85c \uc5d0\uc774\uc804\ud2b8\ub97c \ub514\uc790\uc778\ud558\uc138\uc694. \ub85c\uceec \ub610\ub294 \ud074\ub77c\uc6b0\ub4dc\uc5d0\uc11c \uc624\ucf00\uc2a4\ud2b8\ub808\uc774\uc158\ud558\uc138\uc694.",
+      description: "\uc790\uc5f0\uc5b4\ub85c \uc5d0\uc774\uc804\ud2b8\ub97c \ub514\uc790\uc778\ud558\uc138\uc694. \uc0ac\uc6a9\uc790\uc758 \uae30\uae30\uc5d0\uc11c \uc624\ucf00\uc2a4\ud2b8\ub808\uc774\uc158\ud558\uc138\uc694.",
       descriptionBold: "\uc6cc\ud06c\ud50c\ub85c \ub2e4\uc774\uc5b4\uadf8\ub7a8 \uc5c6\uc774. \uc5d0\uc774\uc804\ud2b8 \uad70\uc9d1 \uc5c6\uc774. \ucf54\ub4dc \uc5c6\uc774.",
       mode2: "\uac04\ub2e8\ud55c \uc124\uc815",
       mode3: "\ubb34\ub8cc",
@@ -367,19 +367,11 @@ export const ko: Translations = {
         },
         {
           q: "Does Personas collect any telemetry or usage data?",
-          a: "No. Personas runs entirely on your machine with zero telemetry. We don't collect analytics, usage metrics, or any personal data. Your prompts, agent configurations, and execution logs never leave your device unless you explicitly enable cloud execution."
+          a: "No. Personas runs entirely on your machine with zero telemetry. We don't collect analytics, usage metrics, or any personal data. Your prompts, agent configurations, and execution logs never leave your device."
         },
         {
-          q: "How does the pricing model work?",
-          a: "The desktop app is free and open source, with unlimited local agents. There are no paid plans or tiers. You always need your own Claude subscription. We never touch your Anthropic bill. Think of Personas as the orchestration layer, and Claude as the engine."
-        },
-        {
-          q: "What is Bring Your Own Infrastructure (BYOI)?",
-          a: "BYOI lets you connect your own cloud provider credentials (e.g., Fly.io API tokens) instead of using our managed infrastructure. Personas provisions and manages the workers on your account, giving you unlimited execution without per-month caps \u2014 you only pay your cloud provider directly."
-        },
-        {
-          q: "What's the difference between local and cloud execution?",
-          a: "Local execution runs agents on your machine using Claude Code. It's instant, free, and private, but stops when your computer sleeps. Cloud execution runs agents on remote workers 24/7, supports event-bus bridging across environments, and enables team collaboration. You can switch between modes per agent."
+          q: "Is Personas free?",
+          a: "Yes. The desktop app is free and open source, with unlimited local agents. You need your own Claude subscription, and we never touch your Anthropic bill. Think of Personas as the orchestration layer, and Claude as the engine."
         },
         {
           q: "Are there any limits on the number of agents?",
@@ -1391,7 +1383,7 @@ export const ko: Translations = {
         },
         platform: {
           title: "\ud575\uc2ec \ud50c\ub7ab\ud3fc",
-          caption: "\uac1c\ubc1c \ubaa8\ub4dc, \ud074\ub77c\uc6b0\ub4dc \uc2e4\ud589, \ucee4\ub125\ud130, \uc190\uc26c\uc6b4 \uc124\uce58"
+          caption: "\uac1c\ubc1c \ubaa8\ub4dc, \ucee4\ub125\ud130, \uc190\uc26c\uc6b4 \uc124\uce58"
         },
         templates: {
           title: "\ud15c\ud50c\ub9bf \uac24\ub7ec\ub9ac",
@@ -1413,7 +1405,6 @@ export const ko: Translations = {
         enterprise: "\uc5d4\ud130\ud504\ub77c\uc774\uc988",
         devMode: "\uac1c\ubc1c \ubaa8\ub4dc",
         connectors: "\ucee4\ub125\ud130",
-        cloudExecution: "\ud074\ub77c\uc6b0\ub4dc \uc2e4\ud589",
         installersUpdates: "\uc124\uce58 \ud504\ub85c\uadf8\ub7a8 \ubc0f \uc5c5\ub370\uc774\ud2b8",
         allCategories: "\ubaa8\ub4e0 \uce74\ud14c\uace0\ub9ac",
         devops: "DevOps",
@@ -1435,7 +1426,6 @@ export const ko: Translations = {
         ssoAudit: "SSO \u00b7 \uac10\uc0ac",
         instantPreview: "\uc989\uc2dc \ubbf8\ub9ac \ubcf4\uae30",
         services: "{n}\uac1c \uc11c\ube44\uc2a4",
-        runs247: "\uc5f0\uc911\ubb34\ud734 \uc2e4\ud589",
         autoUpdate: "\uc790\ub3d9 \uc5c5\ub370\uc774\ud2b8",
         templatesTotal: "{n} / {total} \ud15c\ud50c\ub9bf"
       },
@@ -1556,7 +1546,7 @@ export const ko: Translations = {
         memories: "\uc5d0\uc774\uc804\ud2b8\uac00 \ud559\uc2b5\ud558\uace0 \uae30\uc5b5\ud569\ub2c8\ub2e4. \ubb34\uc5c7\uc744 \uc54c\uace0 \uc788\ub294\uc9c0, \uacfc\uac70 \uacbd\ud5d8\uc744 \uc5b4\ub5bb\uac8c \ud65c\uc6a9\ud558\ub294\uc9c0 \uad00\ub9ac\ud558\uc138\uc694.",
         monitoring: "\ubaa8\ub4e0 \uc2e4\ud589\uc744 \uc2e4\uc2dc\uac04\uc73c\ub85c \ucd94\uc801\ud558\uc138\uc694. \uc5d0\uc774\uc804\ud2b8\uac00 \ubb34\uc5c7\uc744 \ud558\ub294\uc9c0, \uc131\ub2a5\uacfc \ube44\uc6a9\uc740 \uc5b4\ub5a4\uc9c0 \ud655\uc778\ud558\uc138\uc694.",
         testing: "\uc544\ub808\ub098 \ud14c\uc2a4\ud2b8, A/B \ube44\uad50\ub97c \uc2e4\ud589\ud558\uace0 \uac8c\ub188 \uc2dc\uc2a4\ud15c\uc73c\ub85c \ucd5c\uace0\uc758 \ud504\ub86c\ud504\ud2b8\ub97c \uc9c4\ud654\uc2dc\ud0a4\uc138\uc694.",
-        deployment: "\uc5d0\uc774\uc804\ud2b8\ub97c \ud074\ub77c\uc6b0\ub4dc\uc5d0 \ubc30\ud3ec\ud558\uace0, GitHub Actions, GitLab CI, n8n \uc6cc\ud06c\ud50c\ub85c\uc5d0 \uc5f0\uacb0\ud558\uc138\uc694.",
+        deployment: "\uc5d0\uc774\uc804\ud2b8\ub97c GitHub Actions, GitLab CI, n8n \uc6cc\ud06c\ud50c\ub85c\uc5d0 \uc5f0\uacb0\ud558\uc138\uc694.",
         troubleshooting: "\uc77c\ubc18\uc801\uc778 \ubb38\uc81c\ub97c \ud574\uacb0\ud558\uace0, \uc624\ub958 \uba54\uc2dc\uc9c0\ub97c \uc774\ud574\ud558\uace0, \uc5d0\uc774\uc804\ud2b8\ub97c \ub2e4\uc2dc \uc815\uc0c1 \uada4\ub3c4\uc5d0 \uc62c\ub9ac\uc138\uc694."
       }
     },

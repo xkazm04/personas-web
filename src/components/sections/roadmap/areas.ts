@@ -1,6 +1,5 @@
 import {
   Building2,
-  Cloud,
   Languages,
   LayoutGrid,
   Layers,
@@ -187,7 +186,6 @@ export function buildAreas(counts: AreaCounts, t: RoadmapT): AreaDef[] {
         // Connector count derived from the live catalog; 0.85 is the fulfillment
         // target — the integrations phase is effectively shipped (no data source).
         { label: t.bars.connectors, value: 0.85, detail: t.detail.services.replace("{n}", String(counts.connectors)), motif: { kind: "icon", icon: Plug } },
-        { label: t.bars.cloudExecution, value: 0.5, detail: t.detail.runs247, motif: { kind: "icon", icon: Cloud } },
         { label: t.bars.installersUpdates, value: 0.35, detail: t.detail.autoUpdate, motif: { kind: "icon", icon: Package } },
       ],
     },

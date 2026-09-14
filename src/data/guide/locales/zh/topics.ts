@@ -330,22 +330,6 @@ export const topics: Record<string, { title: string; description: string }> = {
     description:
       "一个内置的元 agent,负责审阅你收藏的 agent,并为每次运行打出 0–5 分,附上具体的辅导建议。将 agent 加星标即可纳入 Director 的审阅范围;审阅结果以星级列的形式显示在 Activity 中,每次运行也会出现专属的 Director 选项卡。可选择接入你的 Obsidian Brain 作为长期 memory,使辅导质量随时间持续提升。",
   },
-  "local-vs-cloud-execution": {
-    title: "本地与云执行对比",
-    description: "了解何时在你的机器上 vs 在云中运行 agent。本地执行非常适合测试和私有数据 — 你的 agent 直接在你的计算机上运行。云执行让你的 agent 24/7 运行,即使你的计算机关闭。",
-  },
-  "connecting-to-the-cloud-orchestrator": {
-    title: "连接到云 orchestrator",
-    description: "设置 24/7 远程 agent 执行,这样你的 agent 永不睡觉。云 orchestrator 是一项全天候运行你的 agent 的服务,无需你的计算机开机。连接一次,你的 agent 始终可用。",
-  },
-  "deploying-an-agent-to-the-cloud": {
-    title: "将 agent 部署到云",
-    description: "通过几次点击发布 agent 以始终在线执行。选择 agent,选择你的云设置,然后点击部署 — 它在几秒钟内上线。即使你关闭应用,你的 agent 也会按其计划继续工作。",
-  },
-  "cloud-execution-monitoring": {
-    title: "云执行监控",
-    description: "从桌面跟踪远程 agent 性能和成本。即使你的 agent 在云中运行,你也可以从 Personas 应用的舒适环境中监控它们。查看实时状态、成本和结果,就像你为本地 agent 所做的那样。",
-  },
   "github-actions-integration": {
     title: "GitHub Actions 集成",
     description: "从你的 agent 触发 GitHub 工作流。如果你的团队使用 GitHub,你的 agent 可以自动启动构建和部署 pipeline。它就像给你的 agent 一个启动团队标准流程的按钮。",
@@ -357,18 +341,6 @@ export const topics: Record<string, { title: string; description: string }> = {
   "n8n-workflow-integration": {
     title: "n8n 工作流集成",
     description: "将 Personas agent 与 n8n 自动化工作流连接。如果你已经使用 n8n 进行自动化,你的 Personas agent 可以直接插入。这让你将 AI 驱动的决策与 n8n 的庞大集成库结合起来。",
-  },
-  "byoi-bring-your-own-infrastructure": {
-    title: "BYOI — 自带基础设施",
-    description: "使用你自己的云服务器而不是托管。如果你出于合规或成本原因更喜欢在自己的基础设施上运行所有内容,BYOI 给你完全控制。你获得云执行的所有好处,而没有供应商锁定。",
-  },
-  "syncing-desktop-and-cloud": {
-    title: "同步桌面和云",
-    description: "保持你的本地和远程 agent 同步。当你在桌面上进行更改时,它们可以自动推送到云。这确保远程运行的版本始终与你的最新改进保持同步。",
-  },
-  "cloud-troubleshooting": {
-    title: "云故障排除",
-    description: "修复常见的云部署问题。如果你的云 agent 没有按预期行为运行,本指南将引导你了解最常见的原因和修复。从连接问题到权限错误,你将找到清晰的步骤恢复正常。",
   },
   "common-error-messages": {
     title: "常见错误消息",

@@ -49,8 +49,7 @@ export default function TermsOfService({ changelog }: Props) {
         <p className="text-base leading-relaxed text-muted-dark">
           Personas is a desktop application for building and orchestrating AI
           agent pipelines. The core app is free and runs entirely on your
-          machine. Optional paid cloud tiers provide remote execution,
-          scheduling, and team collaboration features.
+          machine.
         </p>
       </section>
 

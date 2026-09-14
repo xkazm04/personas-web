@@ -190,7 +190,6 @@ export const DESKTOP_MODULES: DesktopModule[] = [
     icon: "Cloud",
     children: [
       { id: "unified-dashboard", label: "All Deployments" },
-      { id: "cloud-deploy", label: "Cloud Runs" },
       { id: "gitlab-panel", label: "GitLab" },
     ],
   },
@@ -628,26 +627,6 @@ export const TOPIC_MODULE_MAP: Record<string, TopicModuleRef> = {
   },
 
   // ─── Deployment & Integrations ─────────────────────────────────
-  "local-vs-cloud-execution": {
-    moduleId: "deployment",
-    path: ["Deployment", "Cloud Runs"],
-    label: "Deploy options",
-  },
-  "connecting-to-the-cloud-orchestrator": {
-    moduleId: "deployment",
-    path: ["Deployment", "Cloud Runs"],
-    label: "Cloud connect",
-  },
-  "deploying-an-agent-to-the-cloud": {
-    moduleId: "deployment",
-    path: ["Deployment", "Cloud Runs"],
-    label: "Cloud deploy",
-  },
-  "cloud-execution-monitoring": {
-    moduleId: "deployment",
-    path: ["Deployment", "All Deployments"],
-    label: "Cloud monitoring",
-  },
   "github-actions-integration": {
     moduleId: "deployment",
     path: ["Deployment", "GitLab"],
@@ -662,21 +641,6 @@ export const TOPIC_MODULE_MAP: Record<string, TopicModuleRef> = {
     moduleId: "templates",
     path: ["Templates", "n8n Import"],
     label: "n8n import",
-  },
-  "byoi-bring-your-own-infrastructure": {
-    moduleId: "deployment",
-    path: ["Deployment", "Cloud Runs"],
-    label: "BYOI setup",
-  },
-  "syncing-desktop-and-cloud": {
-    moduleId: "deployment",
-    path: ["Deployment", "Cloud Runs"],
-    label: "Desktop-cloud sync",
-  },
-  "cloud-troubleshooting": {
-    moduleId: "deployment",
-    path: ["Deployment", "Cloud Runs"],
-    label: "Cloud debugging",
   },
 
   // ─── Troubleshooting ───────────────────────────────────────────

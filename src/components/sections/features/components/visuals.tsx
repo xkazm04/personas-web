@@ -74,35 +74,6 @@ export function CoordinateVisual() {
   );
 }
 
-export function DeployVisual() {
-  return (
-    <div
-      role="img"
-      aria-label="Deployment flow diagram: local Desktop app deploys to cloud for 24/7 availability"
-      className="mt-6 flex items-center justify-center gap-3 py-3 relative"
-    >
-      <div className="pointer-events-none absolute top-1/2 left-[10%] right-[10%] h-8 -translate-y-1/2 rounded-full bg-linear-to-r from-transparent via-emerald-500/2 to-transparent" />
-      <div className="relative rounded-xl border border-emerald-500/12 bg-emerald-500/5 px-4 py-2.5 text-base font-mono text-emerald-400">
-        <div className="text-base text-emerald-400/60 mb-0.5">local</div>
-        Desktop
-        <div className="absolute -top-1 -right-1 h-2 w-2 rounded-full bg-emerald-400/70 shadow-[0_0_6px_rgba(52,211,153,0.5)]" />
-      </div>
-      <div className="flex flex-col items-center gap-1">
-        <svg width="48" height="8" className="text-emerald-500/60">
-          <line x1="0" y1="4" x2="48" y2="4" stroke="currentColor" strokeWidth="1" strokeDasharray="3 3" />
-          <polygon points="44,1 48,4 44,7" fill="currentColor" />
-        </svg>
-        <span className="text-base text-muted-dark font-mono">deploy</span>
-      </div>
-      <div className="relative rounded-xl border border-emerald-400/20 bg-emerald-500/10 px-4 py-2.5 text-base font-mono text-emerald-300 shadow-[0_0_25px_rgba(52,211,153,0.10)]">
-        <div className="text-base text-emerald-400/60 mb-0.5">cloud</div>
-        24/7
-        <div className="absolute inset-0 rounded-xl border border-emerald-400/10 animate-glow-border" />
-      </div>
-    </div>
-  );
-}
-
 export function TelemetryVisual() {
   return (
     <div
@@ -138,7 +109,6 @@ export function TelemetryVisual() {
 export const FEATURE_VISUALS_BY_KEY = {
   design: DesignVisual,
   coordinate: CoordinateVisual,
-  deploy: DeployVisual,
   telemetry: TelemetryVisual,
 } as const;
 

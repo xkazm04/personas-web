@@ -47,17 +47,22 @@ times" is fully translated).
 
 Manual, Schedule, Webhook, Clipboard, File Watcher, Chain, Event-Based.
 
-## 5. Tier names: none (owner decision 2026-09-14)
+## 5. Tiers, pricing and cloud deployment: none (owner decision 2026-09-14)
 
-**Decision:** there are no paid plans or tiers. The desktop app is free and open
-source. A translator must not introduce a tier or plan name, and must report any
-English unit that still carries one.
+**Decision:** there are no paid plans, tiers or prices, and no cloud deployment (no
+cloud orchestrator, no BYOI, no remote execution, no 24/7 hosted runs). The desktop app
+is free and open source and runs agents on the user's own machine. A translator must
+not introduce any of these, and must report any English unit that still carries one.
 
 | Set | Names as written | State |
 | --- | --- | --- |
 | A | Local / Cloud / Enterprise, with feature rows "Everything in Free" and "Everything in Pro" | **Removed** from `src/i18n/*.ts` (`pricing.*` except `comingSoon`, which the waitlist modal renders) |
-| B | Starter, Pro, Team ("Cloud plans (Starter, Pro, Team)"; "Pro and Team plans") | **Removed** from the FAQ answers in all 14 locales; the FAQ JSON-LD follows `en.faqSection` |
-| C | Starter, Team, Builder ("Builder tier", "Team / Builder tier") | **Open:** guide bodies `src/data/guide/content/triggers.ts`, `testing.ts`, `deployment.ts`, `credentials.ts`, `agents-prompts.ts` ("tier limit"). Some may name the desktop app's interface modes rather than paid tiers; the owner states which before the English sweep and the guide sync |
+| B | Starter, Pro, Team ("Cloud plans (Starter, Pro, Team)"; "Pro and Team plans") | **Removed** from the FAQ in all 14 locales; the FAQ JSON-LD follows `en.faqSection` |
+| C | Starter, Team, Builder ("Builder tier", "Team / Builder tier") | **Removed** from the guide bodies in English and all 13 locales |
+| D | Cloud execution, cloud orchestrator, BYOI, cloud deploy | **Removed:** seven guide topics, the FAQ BYOI and local-vs-cloud answers, the features card, the terminal demo step, the roadmap bar, blog and changelog passages |
+
+"Cloud" still correctly names third-party services: a cloud AI provider, cloud storage
+connectors, a synced cloud folder, an OS vendor's cloud speech service.
 
 Not a tier set: `roadmap.bars.solo` / `team` / `enterprise` (Solo, Team, Enterprise)
 are collaboration-phase labels on the roadmap.

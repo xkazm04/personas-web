@@ -409,26 +409,6 @@ export const topics: Record<string, { title: string; description: string }> = {
     description:
       "즐겨찾기한 에이전트를 검토하고 각 실행을 0–5점으로 평가하며 구체적인 코칭 메모를 남기는 내장 메타 에이전트. 에이전트에 별표를 달면 Director의 범위에 들어갑니다. 평가는 Activity의 별점 열과 각 실행의 Director 탭에 표시됩니다. Obsidian Brain을 장기 메모리로 사용할 수 있어 시간이 지날수록 코칭이 개선됩니다.",
   },
-  "local-vs-cloud-execution": {
-    title: "로컬 vs 클라우드 실행",
-    description:
-      "컴퓨터에서 에이전트를 실행할 때와 클라우드에서 실행할 때를 이해합니다. 로컬 실행은 테스트와 비공개 데이터에 좋습니다 — 에이전트가 컴퓨터에서 바로 실행됩니다. 클라우드 실행은 컴퓨터가 꺼져 있어도 에이전트를 24/7 실행 상태로 유지합니다.",
-  },
-  "connecting-to-the-cloud-orchestrator": {
-    title: "클라우드 오케스트레이터에 연결하기",
-    description:
-      "에이전트가 절대 잠들지 않도록 24/7 원격 에이전트 실행 설정. 클라우드 오케스트레이터는 컴퓨터가 켜져 있지 않아도 에이전트를 24시간 실행하는 서비스입니다. 한 번 연결하면 에이전트가 항상 사용 가능합니다.",
-  },
-  "deploying-an-agent-to-the-cloud": {
-    title: "에이전트를 클라우드에 배포하기",
-    description:
-      "몇 번의 클릭으로 항상 실행되는 에이전트 게시. 에이전트를 선택하고, 클라우드 설정을 선택하고, Deploy를 누르세요 — 몇 초 안에 라이브가 됩니다. 앱을 닫아도 에이전트가 스케줄에 따라 계속 작동합니다.",
-  },
-  "cloud-execution-monitoring": {
-    title: "클라우드 실행 모니터링",
-    description:
-      "데스크톱에서 원격 에이전트 성능 및 비용 추적. 에이전트가 클라우드에서 실행되더라도 Personas 앱의 편안함에서 모니터링할 수 있습니다. 로컬 에이전트처럼 실시간 상태, 비용, 결과를 보세요.",
-  },
   "github-actions-integration": {
     title: "GitHub Actions 통합",
     description:
@@ -443,21 +423,6 @@ export const topics: Record<string, { title: string; description: string }> = {
     title: "n8n 워크플로 통합",
     description:
       "Personas 에이전트를 n8n 자동화 워크플로와 연결. 자동화를 위해 이미 n8n을 사용한다면 Personas 에이전트가 바로 연결될 수 있습니다. 이는 AI 기반 의사결정을 n8n의 광범위한 통합 라이브러리와 결합할 수 있게 합니다.",
-  },
-  "byoi-bring-your-own-infrastructure": {
-    title: "BYOI — 자체 인프라 가져오기",
-    description:
-      "관리형 호스팅 대신 자체 클라우드 서버 사용. 규정 준수나 비용 이유로 자체 인프라에서 모든 것을 실행하기를 선호한다면 BYOI는 완전한 통제를 제공합니다. 공급업체 종속 없이 클라우드 실행의 모든 혜택을 받습니다.",
-  },
-  "syncing-desktop-and-cloud": {
-    title: "데스크톱과 클라우드 동기화",
-    description:
-      "로컬 및 원격 에이전트를 동기화 상태로 유지. 데스크톱에서 변경하면 자동으로 클라우드에 푸시될 수 있습니다. 이는 원격으로 실행되는 버전이 항상 최신 개선 사항으로 최신 상태임을 보장합니다.",
-  },
-  "cloud-troubleshooting": {
-    title: "클라우드 문제 해결",
-    description:
-      "일반적인 클라우드 배포 문제 수정. 클라우드 에이전트가 예상대로 동작하지 않으면 이 가이드가 가장 일반적인 원인과 수정을 안내합니다. 연결 문제에서 권한 오류까지 정상으로 돌아갈 명확한 단계를 찾을 수 있습니다.",
   },
   "common-error-messages": {
     title: "일반적인 오류 메시지",

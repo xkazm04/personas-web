@@ -271,14 +271,14 @@ Format as a numbered list.
   "disabling-and-archiving-agents": `
 ## 禁用和归档 agent
 
-在不删除的情况下暂停 agent 的两种方式。**Disable** 阻止所有触发器触发并阻止手动运行;agent 在侧边栏中保持可见,图标被静音,这样你记得它存在。**Archive** 将 agent 移到隐藏的归档部分,远离日常使用;它停止触发,不计入层级限制,可以随时恢复。
+在不删除的情况下暂停 agent 的两种方式。**Disable** 阻止所有触发器触发并阻止手动运行;agent 在侧边栏中保持可见,图标被静音,这样你记得它存在。**Archive** 将 agent 移到隐藏的归档部分,远离日常使用;它停止触发,可以随时恢复。
 
 这两种操作都不会触及执行、设置或版本历史。Archive 更重 — 用于你暂时完成但可能想要回来的 agent。Disable 更轻 — 用于你需要临时停止 agent 而不从视图中失去它。
 
 ### 关键点
 
 - **Disable** — 暂停执行;agent 在侧边栏中仍可见;一键重新启用
-- **Archive** — 隐藏 agent 并释放其相对于层级限制的位置;永远可恢复
+- **Archive** — 隐藏 agent;永远可恢复
 - **都不删除** — 设置、prompt 历史和过去的执行都被保留
 - **触发器遵守 disable** — 禁用的 agent 忽略 schedule/webhook/file-watcher 事件;它们不会排队等待重新启用时重放
 

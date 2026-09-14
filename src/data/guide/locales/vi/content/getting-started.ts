@@ -200,7 +200,7 @@ Mã nhị phân đi kèm có dung lượng khoảng 90 MB sau khi cài đặt. P
 
 ### Cách Hoạt Động
 
-Ứng dụng lưu trữ cơ sở dữ liệu của nó (\`personas.db\`), vault credential, lịch sử thực thi và cấu hình cục bộ trong thư mục dữ liệu ứng dụng dành riêng cho hệ điều hành của bạn. Không có gì được tải lên trừ khi bạn cố ý bật triển khai đám mây hoặc sử dụng nhà cung cấp AI đám mây. Plugin ship các mô hình cục bộ (ví dụ: tạo hình ảnh + Gemini vision của plugin Artist) tải xuống các tệp mô hình trong lần sử dụng đầu tiên.
+Ứng dụng lưu trữ cơ sở dữ liệu của nó (\`personas.db\`), vault credential, lịch sử thực thi và cấu hình cục bộ trong thư mục dữ liệu ứng dụng dành riêng cho hệ điều hành của bạn. Không có gì được tải lên trừ khi bạn sử dụng nhà cung cấp AI đám mây. Plugin ship các mô hình cục bộ (ví dụ: tạo hình ảnh + Gemini vision của plugin Artist) tải xuống các tệp mô hình trong lần sử dụng đầu tiên.
 
 Bản build Windows sử dụng ONNX Runtime cho embedding khi tính năng vector-knowledge-base được bật; đây là phụ thuộc đơn lẻ lớn nhất trong trường hợp đó.
 

@@ -13,7 +13,7 @@ The vault is browsable from **Connections → Credentials**: each credential sho
 - **AES-256-GCM** — authenticated encryption with field-level isolation; every credential's ciphertext has its own nonce, so a compromise of one record doesn't cascade to others
 - **OS keyring–wrapped master key** — DPAPI on Windows, Keychain on macOS, Secret Service on Linux; no master password to type each session, protection comes from your OS account login
 - **Tamper-evident** — GCM authentication tags catch any modification; a tampered vault file fails to decrypt with a clear error instead of silently returning garbage
-- **Local-only by default** — nothing is uploaded; cloud deploy is opt-in and encrypts in transit via TLS to your chosen orchestrator
+- **Local-only by default** — nothing is uploaded
 - **Token references in logs** — agent traces and exports use credential IDs, not raw secrets
 - **Bound to OS account** — copying the vault file to another machine or user account won't make it usable
 
@@ -45,7 +45,6 @@ Every run's trace records the credential ID it used. The actual value never appe
 :::callout-stack
 [info] The vault is bound to your OS user account via the OS keyring. Copying the vault file to a different machine, even with the same OS, won't make it decryptable — the wrapping key lives in the OS keyring and isn't portable.
 [warning] If you change your OS account password on macOS or Linux, the keyring may relock the wrapping key. Personas will prompt for the new credential on first run after the change. If the keyring is wiped (factory reset, account deletion), the vault becomes unrecoverable — back up the raw secrets externally if you need disaster recovery beyond the local machine.
-[tip] The local-only model is the right default for personal automation. For team / production work where multiple machines need the same credentials, the cloud deploy (Team / Builder tier) replicates vault state via the orchestrator with end-to-end encryption.
 :::
 
 :::tip

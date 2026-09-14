@@ -137,7 +137,7 @@ export const vi: Translations = {
       badge: "N\u1ec1n t\u1ea3ng t\u00e1c nh\u00e2n AI",
       headingLine1: "T\u00e1c nh\u00e2n th\u00f4ng minh",
       headingLine2: "l\u00e0m vi\u1ec7c cho b\u1ea1n",
-      description: "Thi\u1ebft k\u1ebf t\u00e1c nh\u00e2n b\u1eb1ng ng\u00f4n ng\u1eef t\u1ef1 nhi\u00ean. \u0110i\u1ec1u ph\u1ed1i ch\u00fang t\u1ea1i m\u00e1y ho\u1eb7c tr\u00ean \u0111\u00e1m m\u00e2y.",
+      description: "Thi\u1ebft k\u1ebf t\u00e1c nh\u00e2n b\u1eb1ng ng\u00f4n ng\u1eef t\u1ef1 nhi\u00ean. \u0110i\u1ec1u ph\u1ed1i ch\u00fang ngay tr\u00ean m\u00e1y c\u1ee7a b\u1ea1n.",
       descriptionBold: "Kh\u00f4ng s\u01a1 \u0111\u1ed3 workflow. Kh\u00f4ng b\u1ea7y agent. Kh\u00f4ng c\u1ea7n vi\u1ebft code.",
       mode2: "C\u00e0i \u0111\u1eb7t \u0111\u01a1n gi\u1ea3n",
       mode3: "Mi\u1ec5n ph\u00ed",
@@ -367,19 +367,11 @@ export const vi: Translations = {
         },
         {
           q: "Does Personas collect any telemetry or usage data?",
-          a: "No. Personas runs entirely on your machine with zero telemetry. We don't collect analytics, usage metrics, or any personal data. Your prompts, agent configurations, and execution logs never leave your device unless you explicitly enable cloud execution."
+          a: "No. Personas runs entirely on your machine with zero telemetry. We don't collect analytics, usage metrics, or any personal data. Your prompts, agent configurations, and execution logs never leave your device."
         },
         {
-          q: "How does the pricing model work?",
-          a: "The desktop app is free and open source, with unlimited local agents. There are no paid plans or tiers. You always need your own Claude subscription. We never touch your Anthropic bill. Think of Personas as the orchestration layer, and Claude as the engine."
-        },
-        {
-          q: "What is Bring Your Own Infrastructure (BYOI)?",
-          a: "BYOI lets you connect your own cloud provider credentials (e.g., Fly.io API tokens) instead of using our managed infrastructure. Personas provisions and manages the workers on your account, giving you unlimited execution without per-month caps \u2014 you only pay your cloud provider directly."
-        },
-        {
-          q: "What's the difference between local and cloud execution?",
-          a: "Local execution runs agents on your machine using Claude Code. It's instant, free, and private, but stops when your computer sleeps. Cloud execution runs agents on remote workers 24/7, supports event-bus bridging across environments, and enables team collaboration. You can switch between modes per agent."
+          q: "Is Personas free?",
+          a: "Yes. The desktop app is free and open source, with unlimited local agents. You need your own Claude subscription, and we never touch your Anthropic bill. Think of Personas as the orchestration layer, and Claude as the engine."
         },
         {
           q: "Are there any limits on the number of agents?",
@@ -1391,7 +1383,7 @@ export const vi: Translations = {
         },
         platform: {
           title: "N\u1ec1n t\u1ea3ng c\u1ed1t l\u00f5i",
-          caption: "Ch\u1ebf \u0111\u1ed9 dev, th\u1ef1c thi \u0111\u00e1m m\u00e2y, tr\u00ecnh k\u1ebft n\u1ed1i, c\u00e0i \u0111\u1eb7t d\u1ec5 d\u00e0ng"
+          caption: "Ch\u1ebf \u0111\u1ed9 dev, tr\u00ecnh k\u1ebft n\u1ed1i, c\u00e0i \u0111\u1eb7t d\u1ec5 d\u00e0ng"
         },
         templates: {
           title: "Th\u01b0 vi\u1ec7n m\u1eabu",
@@ -1413,7 +1405,6 @@ export const vi: Translations = {
         enterprise: "Doanh nghi\u1ec7p",
         devMode: "Ch\u1ebf \u0111\u1ed9 dev",
         connectors: "Tr\u00ecnh k\u1ebft n\u1ed1i",
-        cloudExecution: "Th\u1ef1c thi \u0111\u00e1m m\u00e2y",
         installersUpdates: "Tr\u00ecnh c\u00e0i \u0111\u1eb7t & c\u1eadp nh\u1eadt",
         allCategories: "T\u1ea5t c\u1ea3 danh m\u1ee5c",
         devops: "DevOps",
@@ -1435,7 +1426,6 @@ export const vi: Translations = {
         ssoAudit: "SSO \u00b7 ki\u1ec3m to\u00e1n",
         instantPreview: "xem tr\u01b0\u1edbc t\u1ee9c th\u00ec",
         services: "{n} d\u1ecbch v\u1ee5",
-        runs247: "ch\u1ea1y 24/7",
         autoUpdate: "t\u1ef1 \u0111\u1ed9ng c\u1eadp nh\u1eadt",
         templatesTotal: "{n} / {total} m\u1eabu"
       },
@@ -1556,7 +1546,7 @@ export const vi: Translations = {
         memories: "Agent c\u1ee7a b\u1ea1n h\u1ecdc h\u1ecfi v\u00e0 ghi nh\u1edb. Qu\u1ea3n l\u00fd nh\u1eefng g\u00ec ch\u00fang bi\u1ebft v\u00e0 c\u00e1ch ch\u00fang s\u1eed d\u1ee5ng kinh nghi\u1ec7m tr\u01b0\u1edbc \u0111\u00f3.",
         monitoring: "Theo d\u00f5i m\u1ecdi l\u01b0\u1ee3t th\u1ef1c thi theo th\u1eddi gian th\u1ef1c. Xem agent c\u1ee7a b\u1ea1n l\u00e0m g\u00ec, hi\u1ec7u su\u1ea5t ra sao, v\u00e0 t\u1ed1n bao nhi\u00eau chi ph\u00ed.",
         testing: "Ch\u1ea1y c\u00e1c b\u00e0i ki\u1ec3m th\u1eed arena, so s\u00e1nh A/B, v\u00e0 \u0111\u1ec3 h\u1ec7 th\u1ed1ng genome ti\u1ebfn h\u00f3a c\u00e1c prompt t\u1ed1t nh\u1ea5t c\u1ee7a b\u1ea1n.",
-        deployment: "Tri\u1ec3n khai agent l\u00ean cloud, k\u1ebft n\u1ed1i v\u1edbi GitHub Actions, GitLab CI, v\u00e0 quy tr\u00ecnh n8n.",
+        deployment: "K\u1ebft n\u1ed1i agent v\u1edbi GitHub Actions, GitLab CI, v\u00e0 quy tr\u00ecnh n8n.",
         troubleshooting: "Kh\u1eafc ph\u1ee5c c\u00e1c s\u1ef1 c\u1ed1 th\u01b0\u1eddng g\u1eb7p, hi\u1ec3u c\u00e1c th\u00f4ng b\u00e1o l\u1ed7i, v\u00e0 \u0111\u01b0a agent c\u1ee7a b\u1ea1n ho\u1ea1t \u0111\u1ed9ng tr\u1edf l\u1ea1i."
       }
     },

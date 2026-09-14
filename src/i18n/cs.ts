@@ -137,7 +137,7 @@ export const cs: Translations = {
       badge: "Platforma AI agent\u016f",
       headingLine1: "Inteligentn\u00ed agenti",
       headingLine2: "kte\u0159\u00ed pracuj\u00ed pro v\u00e1s",
-      description: "Navrhujte agenty v p\u0159irozen\u00e9m jazyce. Orchestrujte je lok\u00e1ln\u011b nebo v cloudu.",
+      description: "Navrhujte agenty v p\u0159irozen\u00e9m jazyce. Orchestrujte je na sv\u00e9m po\u010d\u00edta\u010di.",
       descriptionBold: "\u017d\u00e1dn\u00e9 diagramy pracovn\u00edch postup\u016f. \u017d\u00e1dn\u00e9 roje agent\u016f. \u017d\u00e1dn\u00fd k\u00f3d.",
       mode2: "Jednoduch\u00e9 nastaven\u00ed",
       mode3: "Zdarma",
@@ -367,19 +367,11 @@ export const cs: Translations = {
         },
         {
           q: "Does Personas collect any telemetry or usage data?",
-          a: "No. Personas runs entirely on your machine with zero telemetry. We don't collect analytics, usage metrics, or any personal data. Your prompts, agent configurations, and execution logs never leave your device unless you explicitly enable cloud execution."
+          a: "No. Personas runs entirely on your machine with zero telemetry. We don't collect analytics, usage metrics, or any personal data. Your prompts, agent configurations, and execution logs never leave your device."
         },
         {
-          q: "How does the pricing model work?",
-          a: "The desktop app is free and open source, with unlimited local agents. There are no paid plans or tiers. You always need your own Claude subscription. We never touch your Anthropic bill. Think of Personas as the orchestration layer, and Claude as the engine."
-        },
-        {
-          q: "What is Bring Your Own Infrastructure (BYOI)?",
-          a: "BYOI lets you connect your own cloud provider credentials (e.g., Fly.io API tokens) instead of using our managed infrastructure. Personas provisions and manages the workers on your account, giving you unlimited execution without per-month caps \u2014 you only pay your cloud provider directly."
-        },
-        {
-          q: "What's the difference between local and cloud execution?",
-          a: "Local execution runs agents on your machine using Claude Code. It's instant, free, and private, but stops when your computer sleeps. Cloud execution runs agents on remote workers 24/7, supports event-bus bridging across environments, and enables team collaboration. You can switch between modes per agent."
+          q: "Is Personas free?",
+          a: "Yes. The desktop app is free and open source, with unlimited local agents. You need your own Claude subscription, and we never touch your Anthropic bill. Think of Personas as the orchestration layer, and Claude as the engine."
         },
         {
           q: "Are there any limits on the number of agents?",
@@ -1391,7 +1383,7 @@ export const cs: Translations = {
         },
         platform: {
           title: "Z\u00e1kladn\u00ed platforma",
-          caption: "V\u00fdvojov\u00fd re\u017eim, cloudov\u00e9 spou\u0161t\u011bn\u00ed, konektory, bezprobl\u00e9mov\u00e9 instalace"
+          caption: "V\u00fdvojov\u00fd re\u017eim, konektory, bezprobl\u00e9mov\u00e9 instalace"
         },
         templates: {
           title: "Galerie \u0161ablon",
@@ -1413,7 +1405,6 @@ export const cs: Translations = {
         enterprise: "Enterprise",
         devMode: "Dev re\u017eim",
         connectors: "Konektory",
-        cloudExecution: "B\u011bh v cloudu",
         installersUpdates: "Instal\u00e1tory a aktualizace",
         allCategories: "V\u0161echny kategorie",
         devops: "DevOps",
@@ -1435,7 +1426,6 @@ export const cs: Translations = {
         ssoAudit: "SSO \u00b7 audit",
         instantPreview: "okam\u017eit\u00fd n\u00e1hled",
         services: "{n} slu\u017eeb",
-        runs247: "provoz 24/7",
         autoUpdate: "automatick\u00e1 aktualizace",
         templatesTotal: "{n} / {total} \u0161ablon"
       },
@@ -1556,7 +1546,7 @@ export const cs: Translations = {
         memories: "Va\u0161i agenti se u\u010d\u00ed a pamatuj\u00ed si. Spravujte, co v\u011bd\u00ed a jak vyu\u017e\u00edvaj\u00ed minul\u00e9 zku\u0161enosti.",
         monitoring: "Sledujte ka\u017ed\u00e9 spu\u0161t\u011bn\u00ed v re\u00e1ln\u00e9m \u010dase. Zjist\u011bte, co va\u0161i agenti d\u011blaj\u00ed, jak dob\u0159e funguj\u00ed a kolik stoj\u00ed.",
         testing: "Spou\u0161t\u011bjte ar\u00e9nov\u00e9 testy, A/B porovn\u00e1n\u00ed a nechte syst\u00e9m genomu vyv\u00edjet va\u0161e nejlep\u0161\u00ed prompty.",
-        deployment: "Nasa\u010fte agenty do cloudu, propojte se s GitHub Actions, GitLab CI a n8n pracovn\u00edmi postupy.",
+        deployment: "Propojte agenty s GitHub Actions, GitLab CI a n8n pracovn\u00edmi postupy.",
         troubleshooting: "Opravte b\u011b\u017en\u00e9 probl\u00e9my, pochopte chybov\u00e9 zpr\u00e1vy a vra\u0165te sv\u00e9 agenty zp\u011bt na spr\u00e1vnou cestu."
       }
     },

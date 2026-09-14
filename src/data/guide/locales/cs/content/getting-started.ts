@@ -200,7 +200,7 @@ Binárka po instalaci má kolem 90 MB. Pluginy (Artist pro generování obrázk�
 
 ### Jak to funguje
 
-Aplikace ukládá svou databázi (\`personas.db\`), trezor přihlašovacích údajů, historii běhů a konfiguraci lokálně v adresáři aplikačních dat specifickém pro tvůj OS. Nic se nenahrává, pokud explicitně nepovolíš cloudové nasazení nebo nepoužiješ cloudového AI poskytovatele. Pluginy, které dodávají lokální modely (např. obrazový generátor pluginu Artist + Gemini vize), stahují soubory modelů při prvním použití.
+Aplikace ukládá svou databázi (\`personas.db\`), trezor přihlašovacích údajů, historii běhů a konfiguraci lokálně v adresáři aplikačních dat specifickém pro tvůj OS. Nic se nenahrává, pokud nepoužiješ cloudového AI poskytovatele. Pluginy, které dodávají lokální modely (např. obrazový generátor pluginu Artist + Gemini vize), stahují soubory modelů při prvním použití.
 
 Windows build používá ONNX Runtime pro embedding, když je povolena funkce vector-knowledge-base; v takovém případě je to největší jednotlivá závislost.
 

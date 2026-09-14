@@ -1203,58 +1203,6 @@ export const GUIDE_TOPICS: GuideTopic[] = [
 
   // ─── Deployment & Integrations ──────────────────────────────────────
   {
-    id: "local-vs-cloud-execution",
-    categoryId: "deployment",
-    title: "Local vs cloud execution",
-    description:
-      "Understanding when to run agents on your machine vs in the cloud. Local execution is great for testing and private data — your agents run right on your computer. Cloud execution keeps your agents running 24/7, even when your computer is off.",
-    tags: ["deployment", "local", "cloud", "execution", "comparison"],
-    coverage: {
-      contentReviewedAt: "2026-06-10",
-      appVersion: "1.1.0",
-      watchedFiles: ["src/features/cloud/"],
-    },
-  },
-  {
-    id: "connecting-to-the-cloud-orchestrator",
-    categoryId: "deployment",
-    title: "Connecting to the cloud orchestrator",
-    description:
-      "Setting up 24/7 remote agent execution so your agents never sleep. The cloud orchestrator is a service that runs your agents around the clock without needing your computer turned on. Connect once and your agents are always available.",
-    tags: ["deployment", "cloud", "orchestrator", "always-on", "setup"],
-    coverage: {
-      contentReviewedAt: "2026-06-10",
-      appVersion: "1.1.0",
-      watchedFiles: ["src/features/cloud/"],
-    },
-  },
-  {
-    id: "deploying-an-agent-to-the-cloud",
-    categoryId: "deployment",
-    title: "Deploying an agent to the cloud",
-    description:
-      "Publishing agents for always-on execution with a few clicks. Select an agent, choose your cloud settings, and hit deploy — it's live in seconds. Your agent will keep working on its schedule even when you close the app.",
-    tags: ["deployment", "deploy", "publish", "cloud", "always-on"],
-    coverage: {
-      contentReviewedAt: "2026-06-10",
-      appVersion: "1.1.0",
-      watchedFiles: ["src/features/cloud/"],
-    },
-  },
-  {
-    id: "cloud-execution-monitoring",
-    categoryId: "deployment",
-    title: "Cloud execution monitoring",
-    description:
-      "Tracking remote agent performance and costs from your desktop. Even though your agents run in the cloud, you can monitor them from the comfort of the Personas app. See live status, costs, and results just like you would for local agents.",
-    tags: ["deployment", "cloud", "monitoring", "remote", "performance"],
-    coverage: {
-      contentReviewedAt: "2026-06-10",
-      appVersion: "1.1.0",
-      watchedFiles: ["src/features/cloud/"],
-    },
-  },
-  {
     id: "github-actions-integration",
     categoryId: "deployment",
     title: "GitHub Actions integration",
@@ -1291,45 +1239,6 @@ export const GUIDE_TOPICS: GuideTopic[] = [
       contentReviewedAt: "2026-06-10",
       appVersion: "1.1.0",
       watchedFiles: ["src/features/templates/"],
-    },
-  },
-  {
-    id: "byoi-bring-your-own-infrastructure",
-    categoryId: "deployment",
-    title: "BYOI — Bring Your Own Infrastructure",
-    description:
-      "Using your own cloud servers instead of managed hosting. If you prefer to run everything on your own infrastructure for compliance or cost reasons, BYOI gives you full control. You get all the benefits of cloud execution with none of the vendor lock-in.",
-    tags: ["deployment", "byoi", "self-hosted", "infrastructure", "custom"],
-    coverage: {
-      contentReviewedAt: "2026-06-10",
-      appVersion: "1.1.0",
-      watchedFiles: ["src/features/cloud/"],
-    },
-  },
-  {
-    id: "syncing-desktop-and-cloud",
-    categoryId: "deployment",
-    title: "Syncing desktop and cloud",
-    description:
-      "Keeping your local and remote agents in sync. When you make changes on your desktop, they can be pushed to the cloud automatically. This ensures the version running remotely is always up to date with your latest improvements.",
-    tags: ["deployment", "sync", "desktop", "cloud", "consistency"],
-    coverage: {
-      contentReviewedAt: "2026-06-10",
-      appVersion: "1.1.0",
-      watchedFiles: ["src/features/cloud/"],
-    },
-  },
-  {
-    id: "cloud-troubleshooting",
-    categoryId: "deployment",
-    title: "Cloud troubleshooting",
-    description:
-      "Fixing common cloud deployment issues. If your cloud agent isn't behaving as expected, this guide walks you through the most common causes and fixes. From connection problems to permission errors, you'll find clear steps to get back on track.",
-    tags: ["deployment", "troubleshooting", "cloud", "errors", "fix"],
-    coverage: {
-      contentReviewedAt: "2026-06-10",
-      appVersion: "1.1.0",
-      watchedFiles: ["src/features/cloud/"],
     },
   },
 

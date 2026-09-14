@@ -108,7 +108,7 @@ Schedules respect a configurable timezone. By default the agent uses your system
 :::
 
 :::tip
-Schedule triggers do not back-fill missed runs. If the app is closed or the machine is asleep when a scheduled time passes, that run is skipped. For mission-critical scheduled work, run the cloud deploy (Builder tier) so the orchestrator handles scheduling server-side.
+Schedule triggers do not back-fill missed runs. If the app is closed or the machine is asleep when a scheduled time passes, that run is skipped.
 :::
   `,
 

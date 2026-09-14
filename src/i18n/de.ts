@@ -137,7 +137,7 @@ export const de: Translations = {
       badge: "KI-Agenten-Plattform",
       headingLine1: "Intelligente Agenten",
       headingLine2: "die f\u00fcr Sie arbeiten",
-      description: "Entwerfen Sie Agenten in nat\u00fcrlicher Sprache. Orchestrieren Sie sie lokal oder in der Cloud.",
+      description: "Entwerfen Sie Agenten in nat\u00fcrlicher Sprache. Orchestrieren Sie sie auf Ihrem eigenen Rechner.",
       descriptionBold: "Keine Workflow-Diagramme. Keine Agenten-Schw\u00e4rme. Kein Code.",
       mode2: "Einfache Einrichtung",
       mode3: "Kostenlos",
@@ -367,19 +367,11 @@ export const de: Translations = {
         },
         {
           q: "Does Personas collect any telemetry or usage data?",
-          a: "No. Personas runs entirely on your machine with zero telemetry. We don't collect analytics, usage metrics, or any personal data. Your prompts, agent configurations, and execution logs never leave your device unless you explicitly enable cloud execution."
+          a: "No. Personas runs entirely on your machine with zero telemetry. We don't collect analytics, usage metrics, or any personal data. Your prompts, agent configurations, and execution logs never leave your device."
         },
         {
-          q: "How does the pricing model work?",
-          a: "The desktop app is free and open source, with unlimited local agents. There are no paid plans or tiers. You always need your own Claude subscription. We never touch your Anthropic bill. Think of Personas as the orchestration layer, and Claude as the engine."
-        },
-        {
-          q: "What is Bring Your Own Infrastructure (BYOI)?",
-          a: "BYOI lets you connect your own cloud provider credentials (e.g., Fly.io API tokens) instead of using our managed infrastructure. Personas provisions and manages the workers on your account, giving you unlimited execution without per-month caps \u2014 you only pay your cloud provider directly."
-        },
-        {
-          q: "What's the difference between local and cloud execution?",
-          a: "Local execution runs agents on your machine using Claude Code. It's instant, free, and private, but stops when your computer sleeps. Cloud execution runs agents on remote workers 24/7, supports event-bus bridging across environments, and enables team collaboration. You can switch between modes per agent."
+          q: "Is Personas free?",
+          a: "Yes. The desktop app is free and open source, with unlimited local agents. You need your own Claude subscription, and we never touch your Anthropic bill. Think of Personas as the orchestration layer, and Claude as the engine."
         },
         {
           q: "Are there any limits on the number of agents?",
@@ -1391,7 +1383,7 @@ export const de: Translations = {
         },
         platform: {
           title: "Kernplattform",
-          caption: "Dev-Modus, Cloud-Ausf\u00fchrung, Konnektoren, m\u00fchelose Installation"
+          caption: "Dev-Modus, Konnektoren, m\u00fchelose Installation"
         },
         templates: {
           title: "Vorlagengalerie",
@@ -1413,7 +1405,6 @@ export const de: Translations = {
         enterprise: "Unternehmen",
         devMode: "Dev-Modus",
         connectors: "Konnektoren",
-        cloudExecution: "Cloud-Ausf\u00fchrung",
         installersUpdates: "Installer & Updates",
         allCategories: "Alle Kategorien",
         devops: "DevOps",
@@ -1435,7 +1426,6 @@ export const de: Translations = {
         ssoAudit: "SSO \u00b7 Audit",
         instantPreview: "sofortige Vorschau",
         services: "{n} Dienste",
-        runs247: "24/7-Ausf\u00fchrung",
         autoUpdate: "Auto-Update",
         templatesTotal: "{n} / {total} Vorlagen"
       },
@@ -1556,7 +1546,7 @@ export const de: Translations = {
         memories: "Ihre Agenten lernen und merken sich Dinge. Verwalten Sie, was sie wissen und wie sie vergangene Erfahrungen nutzen.",
         monitoring: "Verfolgen Sie jede Ausf\u0102\u013dhrung in Echtzeit. Sehen Sie, was Ihre Agenten tun, wie gut sie arbeiten und was sie kosten.",
         testing: "F\u0102\u013dhren Sie Arena-Tests, A/B-Vergleiche durch und lassen Sie das Genome-System Ihre besten Prompts weiterentwickeln.",
-        deployment: "Stellen Sie Agenten in der Cloud bereit, verbinden Sie sie mit GitHub Actions, GitLab CI und n8n-Workflows.",
+        deployment: "Verbinden Sie Agenten mit GitHub Actions, GitLab CI und n8n-Workflows.",
         troubleshooting: "Beheben Sie h\u00e4ufige Probleme, verstehen Sie Fehlermeldungen und bringen Sie Ihre Agenten wieder auf Kurs."
       }
     },

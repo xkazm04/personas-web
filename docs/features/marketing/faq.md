@@ -3,7 +3,7 @@
 
 ## What it does
 
-Answers common pre-install questions (Claude Code requirement, telemetry, pricing, BYOI, local vs. cloud, agent limits) in an expandable accordion, then funnels anyone still stuck to the Discord community.
+Answers common pre-install questions (Claude Code requirement, telemetry, whether Personas is free, agent limits) in an expandable accordion, then funnels anyone still stuck to the Discord community.
 
 - Renders a centered header ("Frequently *asked*", gradient on the second word) and subtitle.
 - Lays the questions out in a **two-column grid** (`md+`); each question is a collapsed card. Clicking a card toggles a panel that reveals a per-question **illustration** (an `aspect-video` SVG) above the answer text. The chevron rotates 180° when open.
@@ -32,7 +32,7 @@ Section motion comes from `SectionWrapper` (`whileInView` `staggerContainer`, `o
 | `src/components/sections/faq/FAQHeader.tsx` | Centered heading (`GradientText` on the gradient word) + subtitle; owns `id="faq-heading"`. |
 | `src/components/sections/faq/FAQDiscordCTA.tsx` | "Still have questions?" card with `DiscordIcon` and an external link to `DISCORD_INVITE_URL`. |
 | `src/components/sections/faq/faqIllustrations.tsx` | `FAQItem` type, `FAQ_ILLUSTRATIONS_BY_POSITION` array, `FALLBACK_ILLUSTRATION`, and `warnOnFaqIllustrationDrift()`. |
-| `src/components/illustrations/*Illustration.tsx` | The six static SVG illustrations (Terminal, Shield, Pricing, CloudInfra, LocalCloud, AgentGrid). |
+| `src/components/illustrations/*Illustration.tsx` | The four static SVG illustrations (Terminal, Shield, Pricing, AgentGrid). CloudInfra and LocalCloud were deleted with the BYOI and local-vs-cloud questions (owner ruling 2026-09-14: no cloud deployment). |
 | `src/i18n/en.ts` (`faqSection`, line ~1307) | Source of truth for all copy: `heading`, `headingGradient`, `subtitle`, `questions[]`, and CTA strings. |
 
 ## Data & state

@@ -1,4 +1,4 @@
-// Decorative art for the FAQ "How does the pricing model work?" answer. The
+// Decorative art for the FAQ "Is Personas free?" answer. The
 // product has no paid plans or tiers (owner ruling 2026-09-14): the desktop app
 // is free and open source, so the art paints one free card and no price ladder.
 const OFFER = { name: "Free", price: "$0", note: "Open source" } as const;

@@ -200,7 +200,7 @@ Le binaire fourni fait environ 90 Mo après installation. Les plugins (Artist po
 
 ### Comment ça marche
 
-L'application stocke sa base de données (\`personas.db\`), son coffre d'identifiants, son historique d'exécution et sa configuration localement dans le répertoire de données d'application spécifique à votre OS. Rien n'est téléchargé sauf si vous activez explicitement le déploiement cloud ou utilisez un fournisseur d'IA cloud. Les plugins qui livrent des modèles locaux (par ex., génération d'images + vision Gemini du plugin Artist) téléchargent les fichiers de modèle à la première utilisation.
+L'application stocke sa base de données (\`personas.db\`), son coffre d'identifiants, son historique d'exécution et sa configuration localement dans le répertoire de données d'application spécifique à votre OS. Rien n'est téléchargé sauf si vous utilisez un fournisseur d'IA cloud. Les plugins qui livrent des modèles locaux (par ex., génération d'images + vision Gemini du plugin Artist) téléchargent les fichiers de modèle à la première utilisation.
 
 La version Windows utilise ONNX Runtime pour l'embedding lorsque la fonctionnalité base de connaissances vectorielle est activée ; c'est la plus grande dépendance unique dans ce cas.
 

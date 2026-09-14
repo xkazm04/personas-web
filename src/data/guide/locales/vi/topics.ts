@@ -409,26 +409,6 @@ export const topics: Record<string, { title: string; description: string }> = {
     description:
       "Một meta-agent tích hợp sẵn theo dõi các agent được gắn sao của bạn và chấm điểm mỗi lần chạy từ 0 đến 5 kèm ghi chú huấn luyện cụ thể. Gắn sao một agent để đưa nó vào phạm vi của Director; các nhận định xuất hiện dưới dạng cột sao trong Activity và tab Director trên mỗi lần chạy. Có thể sử dụng Obsidian Brain của bạn làm bộ nhớ dài hạn để chất lượng huấn luyện cải thiện theo thời gian.",
   },
-  "local-vs-cloud-execution": {
-    title: "Thực thi cục bộ so với đám mây",
-    description:
-      "Hiểu khi nào nên chạy agent trên máy của bạn so với trên đám mây. Thực thi cục bộ tuyệt vời cho việc kiểm thử và dữ liệu riêng tư — agent của bạn chạy ngay trên máy tính. Thực thi đám mây giữ agent của bạn chạy 24/7, ngay cả khi máy tính của bạn tắt.",
-  },
-  "connecting-to-the-cloud-orchestrator": {
-    title: "Kết nối với cloud orchestrator",
-    description:
-      "Thiết lập thực thi agent từ xa 24/7 để agent của bạn không bao giờ ngủ. Cloud orchestrator là một dịch vụ chạy agent của bạn quanh đồng hồ mà không cần máy tính bật. Kết nối một lần và agent của bạn luôn sẵn sàng.",
-  },
-  "deploying-an-agent-to-the-cloud": {
-    title: "Triển khai agent lên đám mây",
-    description:
-      "Xuất bản agent cho thực thi luôn bật chỉ với vài cú nhấp chuột. Chọn một agent, chọn cài đặt đám mây của bạn và nhấn triển khai — nó hoạt động trong vài giây. Agent của bạn sẽ tiếp tục làm việc theo lịch trình ngay cả khi bạn đóng ứng dụng.",
-  },
-  "cloud-execution-monitoring": {
-    title: "Giám sát thực thi đám mây",
-    description:
-      "Theo dõi hiệu suất và chi phí agent từ xa từ máy tính để bàn của bạn. Mặc dù agent của bạn chạy trên đám mây, bạn có thể giám sát chúng từ sự thoải mái của ứng dụng Personas. Xem trạng thái trực tiếp, chi phí và kết quả giống như bạn làm với agent cục bộ.",
-  },
   "github-actions-integration": {
     title: "Tích hợp GitHub Actions",
     description:
@@ -443,21 +423,6 @@ export const topics: Record<string, { title: string; description: string }> = {
     title: "Tích hợp quy trình n8n",
     description:
       "Kết nối agent Personas với các quy trình tự động hóa n8n. Nếu bạn đã sử dụng n8n cho tự động hóa, agent Personas có thể cắm thẳng vào. Điều này cho phép bạn kết hợp ra quyết định bằng AI với thư viện tích hợp khổng lồ của n8n.",
-  },
-  "byoi-bring-your-own-infrastructure": {
-    title: "BYOI — Bring Your Own Infrastructure",
-    description:
-      "Sử dụng máy chủ đám mây của riêng bạn thay vì hosting được quản lý. Nếu bạn thích chạy mọi thứ trên hạ tầng riêng vì lý do tuân thủ hoặc chi phí, BYOI cho bạn toàn quyền kiểm soát. Bạn nhận được tất cả lợi ích của thực thi đám mây mà không bị khóa vào nhà cung cấp.",
-  },
-  "syncing-desktop-and-cloud": {
-    title: "Đồng bộ máy tính để bàn và đám mây",
-    description:
-      "Giữ agent cục bộ và từ xa của bạn đồng bộ. Khi bạn thực hiện thay đổi trên máy tính để bàn, chúng có thể được đẩy lên đám mây tự động. Điều này đảm bảo phiên bản chạy từ xa luôn được cập nhật với những cải tiến mới nhất của bạn.",
-  },
-  "cloud-troubleshooting": {
-    title: "Khắc phục sự cố đám mây",
-    description:
-      "Khắc phục các vấn đề triển khai đám mây phổ biến. Nếu agent đám mây của bạn không hoạt động như mong đợi, hướng dẫn này dẫn bạn qua các nguyên nhân và cách khắc phục phổ biến nhất. Từ các vấn đề kết nối đến lỗi quyền, bạn sẽ tìm thấy các bước rõ ràng để quay trở lại đúng hướng.",
   },
   "common-error-messages": {
     title: "Thông báo lỗi phổ biến",

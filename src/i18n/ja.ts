@@ -137,7 +137,7 @@ export const ja: Translations = {
       badge: "AI \u30a8\u30fc\u30b8\u30a7\u30f3\u30c8\u30d7\u30e9\u30c3\u30c8\u30d5\u30a9\u30fc\u30e0",
       headingLine1: "\u30a4\u30f3\u30c6\u30ea\u30b8\u30a7\u30f3\u30c8\u30a8\u30fc\u30b8\u30a7\u30f3\u30c8",
       headingLine2: "\u304c\u3042\u306a\u305f\u306e\u305f\u3081\u306b\u50cd\u304f",
-      description: "\u81ea\u7136\u8a00\u8a9e\u3067\u30a8\u30fc\u30b8\u30a7\u30f3\u30c8\u3092\u8a2d\u8a08\u3002\u30ed\u30fc\u30ab\u30eb\u307e\u305f\u306f\u30af\u30e9\u30a6\u30c9\u3067\u30aa\u30fc\u30b1\u30b9\u30c8\u30ec\u30fc\u30b7\u30e7\u30f3\u3002",
+      description: "\u81ea\u7136\u8a00\u8a9e\u3067\u30a8\u30fc\u30b8\u30a7\u30f3\u30c8\u3092\u8a2d\u8a08\u3002\u3042\u306a\u305f\u81ea\u8eab\u306e\u30de\u30b7\u30f3\u4e0a\u3067\u30aa\u30fc\u30b1\u30b9\u30c8\u30ec\u30fc\u30b7\u30e7\u30f3\u3002",
       descriptionBold: "\u30ef\u30fc\u30af\u30d5\u30ed\u30fc\u56f3\u3082\u30a8\u30fc\u30b8\u30a7\u30f3\u30c8\u7fa4\u3082\u30b3\u30fc\u30c9\u3082\u4e0d\u8981\u3067\u3059\u3002",
       mode2: "\u7c21\u5358\u306a\u30bb\u30c3\u30c8\u30a2\u30c3\u30d7",
       mode3: "\u7121\u6599",
@@ -367,19 +367,11 @@ export const ja: Translations = {
         },
         {
           q: "Does Personas collect any telemetry or usage data?",
-          a: "No. Personas runs entirely on your machine with zero telemetry. We don't collect analytics, usage metrics, or any personal data. Your prompts, agent configurations, and execution logs never leave your device unless you explicitly enable cloud execution."
+          a: "No. Personas runs entirely on your machine with zero telemetry. We don't collect analytics, usage metrics, or any personal data. Your prompts, agent configurations, and execution logs never leave your device."
         },
         {
-          q: "How does the pricing model work?",
-          a: "The desktop app is free and open source, with unlimited local agents. There are no paid plans or tiers. You always need your own Claude subscription. We never touch your Anthropic bill. Think of Personas as the orchestration layer, and Claude as the engine."
-        },
-        {
-          q: "What is Bring Your Own Infrastructure (BYOI)?",
-          a: "BYOI lets you connect your own cloud provider credentials (e.g., Fly.io API tokens) instead of using our managed infrastructure. Personas provisions and manages the workers on your account, giving you unlimited execution without per-month caps \u2014 you only pay your cloud provider directly."
-        },
-        {
-          q: "What's the difference between local and cloud execution?",
-          a: "Local execution runs agents on your machine using Claude Code. It's instant, free, and private, but stops when your computer sleeps. Cloud execution runs agents on remote workers 24/7, supports event-bus bridging across environments, and enables team collaboration. You can switch between modes per agent."
+          q: "Is Personas free?",
+          a: "Yes. The desktop app is free and open source, with unlimited local agents. You need your own Claude subscription, and we never touch your Anthropic bill. Think of Personas as the orchestration layer, and Claude as the engine."
         },
         {
           q: "Are there any limits on the number of agents?",
@@ -1391,7 +1383,7 @@ export const ja: Translations = {
         },
         platform: {
           title: "\u30b3\u30a2\u30d7\u30e9\u30c3\u30c8\u30d5\u30a9\u30fc\u30e0",
-          caption: "\u958b\u767a\u30e2\u30fc\u30c9\u3001\u30af\u30e9\u30a6\u30c9\u5b9f\u884c\u3001\u30b3\u30cd\u30af\u30bf\u3001\u624b\u9593\u306e\u306a\u3044\u30a4\u30f3\u30b9\u30c8\u30fc\u30eb"
+          caption: "\u958b\u767a\u30e2\u30fc\u30c9\u3001\u30b3\u30cd\u30af\u30bf\u3001\u624b\u9593\u306e\u306a\u3044\u30a4\u30f3\u30b9\u30c8\u30fc\u30eb"
         },
         templates: {
           title: "\u30c6\u30f3\u30d7\u30ec\u30fc\u30c8\u30ae\u30e3\u30e9\u30ea\u30fc",
@@ -1413,7 +1405,6 @@ export const ja: Translations = {
         enterprise: "\u30a8\u30f3\u30bf\u30fc\u30d7\u30e9\u30a4\u30ba",
         devMode: "\u958b\u767a\u30e2\u30fc\u30c9",
         connectors: "\u30b3\u30cd\u30af\u30bf",
-        cloudExecution: "\u30af\u30e9\u30a6\u30c9\u5b9f\u884c",
         installersUpdates: "\u30a4\u30f3\u30b9\u30c8\u30fc\u30e9\u30fc\u3068\u66f4\u65b0",
         allCategories: "\u3059\u3079\u3066\u306e\u30ab\u30c6\u30b4\u30ea",
         devops: "DevOps",
@@ -1435,7 +1426,6 @@ export const ja: Translations = {
         ssoAudit: "SSO \u00b7 \u76e3\u67fb",
         instantPreview: "\u5373\u6642\u30d7\u30ec\u30d3\u30e5\u30fc",
         services: "{n} \u30b5\u30fc\u30d3\u30b9",
-        runs247: "24\u6642\u9593365\u65e5\u306e\u5b9f\u884c",
         autoUpdate: "\u81ea\u52d5\u66f4\u65b0",
         templatesTotal: "{n} / {total} \u30c6\u30f3\u30d7\u30ec\u30fc\u30c8"
       },
@@ -1556,7 +1546,7 @@ export const ja: Translations = {
         memories: "\u30a8\u30fc\u30b8\u30a7\u30f3\u30c8\u306f\u5b66\u7fd2\u3057\u3001\u8a18\u61b6\u3057\u307e\u3059\u3002\u30a8\u30fc\u30b8\u30a7\u30f3\u30c8\u304c\u77e5\u3063\u3066\u3044\u308b\u3053\u3068\u3068\u3001\u904e\u53bb\u306e\u7d4c\u9a13\u306e\u6d3b\u7528\u65b9\u6cd5\u3092\u7ba1\u7406\u3057\u307e\u3057\u3087\u3046\u3002",
         monitoring: "\u3059\u3079\u3066\u306e\u5b9f\u884c\u3092\u30ea\u30a2\u30eb\u30bf\u30a4\u30e0\u3067\u8ffd\u8de1\u3057\u307e\u3059\u3002\u30a8\u30fc\u30b8\u30a7\u30f3\u30c8\u306e\u52d5\u4f5c\u3001\u30d1\u30d5\u30a9\u30fc\u30de\u30f3\u30b9\u3001\u30b3\u30b9\u30c8\u3092\u78ba\u8a8d\u3067\u304d\u307e\u3059\u3002",
         testing: "\u30a2\u30ea\u30fc\u30ca\u30c6\u30b9\u30c8\u3084A/B\u6bd4\u8f03\u3092\u5b9f\u884c\u3057\u3001\u30b2\u30ce\u30e0\u30b7\u30b9\u30c6\u30e0\u306b\u6700\u9069\u306a\u30d7\u30ed\u30f3\u30d7\u30c8\u3092\u9032\u5316\u3055\u305b\u307e\u3057\u3087\u3046\u3002",
-        deployment: "\u30a8\u30fc\u30b8\u30a7\u30f3\u30c8\u3092\u30af\u30e9\u30a6\u30c9\u306b\u30c7\u30d7\u30ed\u30a4\u3057\u3001GitHub Actions\u3001GitLab CI\u3001n8n\u306e\u30ef\u30fc\u30af\u30d5\u30ed\u30fc\u306b\u63a5\u7d9a\u3057\u307e\u3059\u3002",
+        deployment: "\u30a8\u30fc\u30b8\u30a7\u30f3\u30c8\u3092GitHub Actions\u3001GitLab CI\u3001n8n\u306e\u30ef\u30fc\u30af\u30d5\u30ed\u30fc\u306b\u63a5\u7d9a\u3057\u307e\u3059\u3002",
         troubleshooting: "\u3088\u304f\u3042\u308b\u554f\u984c\u3092\u89e3\u6c7a\u3057\u3001\u30a8\u30e9\u30fc\u30e1\u30c3\u30bb\u30fc\u30b8\u3092\u7406\u89e3\u3057\u3066\u3001\u30a8\u30fc\u30b8\u30a7\u30f3\u30c8\u3092\u6b63\u5e38\u306a\u72b6\u614b\u306b\u623b\u3057\u307e\u3057\u3087\u3046\u3002"
       }
     },

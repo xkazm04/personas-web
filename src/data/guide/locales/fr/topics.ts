@@ -409,26 +409,6 @@ export const topics: Record<string, { title: string; description: string }> = {
     description:
       "Un méta-agent intégré qui examine vos agents étoilés et attribue un score de 0 à 5 à chaque exécution, accompagné de conseils concrets. Étoilez un agent pour le placer dans le périmètre du Director ; les verdicts apparaissent sous forme de colonne d'étoiles dans l'Activité et d'un onglet Director sur chaque exécution. Il peut utiliser votre Obsidian Brain comme mémoire à long terme pour que son coaching s'améliore au fil du temps.",
   },
-  "local-vs-cloud-execution": {
-    title: "Exécution locale vs cloud",
-    description:
-      "Comprendre quand exécuter les agents sur votre machine vs dans le cloud. L'exécution locale est idéale pour les tests et les données privées — vos agents s'exécutent directement sur votre ordinateur. L'exécution cloud maintient vos agents en marche 24/7, même quand votre ordinateur est éteint.",
-  },
-  "connecting-to-the-cloud-orchestrator": {
-    title: "Se connecter à l'orchestrateur cloud",
-    description:
-      "Configurer l'exécution distante d'agents 24/7 pour que vos agents ne dorment jamais. L'orchestrateur cloud est un service qui exécute vos agents en permanence sans avoir besoin que votre ordinateur soit allumé. Connectez-vous une fois et vos agents sont toujours disponibles.",
-  },
-  "deploying-an-agent-to-the-cloud": {
-    title: "Déployer un agent vers le cloud",
-    description:
-      "Publier des agents pour une exécution toujours active en quelques clics. Sélectionnez un agent, choisissez vos paramètres cloud, et appuyez sur déployer — c'est en ligne en quelques secondes. Votre agent continuera à travailler selon son calendrier même quand vous fermez l'application.",
-  },
-  "cloud-execution-monitoring": {
-    title: "Surveillance de l'exécution cloud",
-    description:
-      "Suivre les performances et les coûts des agents distants depuis votre bureau. Même si vos agents s'exécutent dans le cloud, vous pouvez les surveiller depuis le confort de l'application Personas. Voyez le statut en direct, les coûts et les résultats comme vous le feriez pour les agents locaux.",
-  },
   "github-actions-integration": {
     title: "Intégration GitHub Actions",
     description:
@@ -443,21 +423,6 @@ export const topics: Record<string, { title: string; description: string }> = {
     title: "Intégration des workflows n8n",
     description:
       "Connecter les agents Personas avec les workflows d'automatisation n8n. Si vous utilisez déjà n8n pour l'automatisation, vos agents Personas peuvent s'y intégrer directement. Cela vous permet de combiner la prise de décision alimentée par l'IA avec la vaste bibliothèque d'intégrations de n8n.",
-  },
-  "byoi-bring-your-own-infrastructure": {
-    title: "BYOI — Apportez votre propre infrastructure",
-    description:
-      "Utiliser vos propres serveurs cloud au lieu de l'hébergement géré. Si vous préférez tout exécuter sur votre propre infrastructure pour des raisons de conformité ou de coût, BYOI vous donne un contrôle total. Vous obtenez tous les avantages de l'exécution cloud sans aucun verrouillage fournisseur.",
-  },
-  "syncing-desktop-and-cloud": {
-    title: "Synchroniser bureau et cloud",
-    description:
-      "Garder vos agents locaux et distants synchronisés. Lorsque vous effectuez des modifications sur votre bureau, elles peuvent être envoyées automatiquement vers le cloud. Cela garantit que la version exécutée à distance est toujours à jour avec vos dernières améliorations.",
-  },
-  "cloud-troubleshooting": {
-    title: "Dépannage cloud",
-    description:
-      "Résoudre les problèmes courants de déploiement cloud. Si votre agent cloud ne se comporte pas comme prévu, ce guide vous présente les causes et solutions les plus courantes. Des problèmes de connexion aux erreurs de permission, vous trouverez des étapes claires pour revenir sur la bonne voie.",
   },
   "common-error-messages": {
     title: "Messages d'erreur courants",
