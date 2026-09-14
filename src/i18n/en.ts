@@ -1760,7 +1760,7 @@ export const en: Translations = {
     headingGradient: 'free',
     description: 'The desktop app and every capability below ship free forever. No tiers, no per-seat pricing — just a complete agent platform running on your machine.',
     offerBadges: ['Free forever', 'Self-hosted', 'No per-run markup', 'Open source'],
-    offerBody: 'Personas runs on your machine. No orchestration markup and no per-seat pricing. Paid cloud and priority support are optional, not required.',
+    offerBody: 'Personas runs on your machine. No orchestration markup and no per-seat pricing. Paid cloud and priority support are optional.',
     ctaLabel: 'Get started free',
     readGuide: 'Read the guide',
     groups: {
@@ -1835,7 +1835,7 @@ export const en: Translations = {
   },
   footer: {
     tagline: 'AI agents that work for you',
-    motto: 'AI agents that automate your work, so you can focus on what matters most.',
+    motto: 'AI agents that automate your work.',
     product: 'Product',
     resources: 'Resources',
     legal: 'Legal',
@@ -1879,7 +1879,7 @@ export const en: Translations = {
     },
   },
   hero: {
-    downloadCta: 'Download',
+    downloadCta: 'Download Personas',
     trustLine: 'No signup, no credit card. Runs on your machine. Zero telemetry.',
     badge: 'AI Agent Platform',
     headingLine1: 'Intelligent agents',
@@ -2037,7 +2037,7 @@ export const en: Translations = {
       },
       {
         q: 'How does the pricing model work?',
-        a: 'The desktop app is free forever with unlimited local agents. Cloud plans (Starter, Pro, Team) add 24/7 execution, remote workers, and team features on top. You always need your own Claude subscription \u2014 we never touch your Anthropic bill. Think of Personas as the orchestration layer, and Claude as the engine.',
+        a: 'The desktop app is free forever with unlimited local agents. Cloud plans (Starter, Pro, Team) add 24/7 execution, remote workers, and team features. You always need your own Claude subscription. We never touch your Anthropic bill. Think of Personas as the orchestration layer, and Claude as the engine.',
       },
       {
         q: 'What is Bring Your Own Infrastructure (BYOI)?',
@@ -2045,11 +2045,11 @@ export const en: Translations = {
       },
       {
         q: 'What\'s the difference between local and cloud execution?',
-        a: 'Local execution runs agents on your machine using Claude CLI \u2014 it\'s instant, free, and private, but stops when your computer sleeps. Cloud execution runs agents on remote workers 24/7, supports event-bus bridging across environments, and enables team collaboration. You can switch between modes per-agent.',
+        a: 'Local execution runs agents on your machine using Claude CLI. It\'s instant, free, and private, but stops when your computer sleeps. Cloud execution runs agents on remote workers 24/7, supports event-bus bridging across environments, and enables team collaboration. You can switch between modes per agent.',
       },
       {
         q: 'Are there any limits on the number of agents?',
-        a: 'Locally, there are no limits \u2014 create as many agents as you want. Cloud plans have worker limits (1\u20135 depending on tier) and monthly execution caps. Pro and Team plans include burst auto-scaling for traffic spikes. BYOI removes all caps entirely.',
+        a: 'Locally, there are no limits: create as many agents as you want. Cloud plans have worker limits (1 to 5 depending on tier) and monthly execution caps. Pro and Team plans include burst auto-scaling for traffic spikes. BYOI removes all caps.',
       },
     ],
   },
@@ -3226,7 +3226,7 @@ export const en: Translations = {
     },
     "multi-provider": {
       headline: "Not locked to one AI",
-      description: "Use Claude, OpenAI, Gemini, or run models locally with Ollama. Switch between providers freely, assign different models to different agents, and if one provider goes down — your agents automatically switch to another.",
+      description: "Use Claude, OpenAI, Gemini, or run models locally with Ollama. Switch between providers freely and assign different models to different agents. If one provider goes down, your agents automatically switch to another.",
       cta: "Choose your AI",
     },
     genome: {

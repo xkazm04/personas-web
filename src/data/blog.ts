@@ -36,7 +36,7 @@ export function isPublished(post: BlogPost): boolean {
 export const BLOG_POSTS: BlogPost[] = [
   {
     slug: "introducing-personas",
-    title: "Introducing Personas — Free Desktop AI Agent Orchestration",
+    title: "Free Desktop AI Agent Orchestration: Introducing Personas",
     description:
       "Build, orchestrate, and monitor multi-agent AI pipelines from your desktop. Free forever, fully private, zero telemetry.",
     category: "announcement",
@@ -69,14 +69,14 @@ Download Personas for Windows, macOS, or Linux. Create your first agent in natur
       { href: "/guide/troubleshooting", label: "Troubleshooting guide" },
       { href: "/#download", label: "Download free" },
     ],
-    title: "How Personas Self-Healing Engine Keeps Your Agents Running",
+    title: "How Personas' Self-Healing Engine Keeps Your Agents Running",
     description:
       "Deep dive into automatic failure detection, model failover, and circuit-breaker patterns that make agent pipelines resilient.",
     category: "engineering",
     author: "Personas Team",
     date: "2026-03-22",
     readingTime: 8,
-    content: `Production AI agent pipelines fail. Models go down, rate limits hit, APIs return errors, and context windows overflow. The question isn't whether your agents will fail — it's how fast they recover.
+    content: `Production AI agent pipelines fail. Models go down, rate limits hit, APIs return errors, and context windows overflow. The question is how fast your agents recover.
 
 ## The Problem with Brittle Pipelines
 
@@ -90,11 +90,11 @@ Personas implements a three-layer resilience system:
 
 ### Layer 1: Automatic Retry with Backoff
 
-Transient failures (network timeouts, 429 rate limits, 503 service unavailable) trigger automatic retries with exponential backoff. Each provider has independent retry budgets — a failing Claude endpoint doesn't exhaust your GPT retry budget.
+Transient failures (network timeouts, 429 rate limits, 503 service unavailable) trigger automatic retries with exponential backoff. Each provider has independent retry budgets: a failing Claude endpoint doesn't exhaust your GPT retry budget.
 
 ### Layer 2: Model Failover
 
-When a provider is consistently failing, Personas automatically routes to the next available model in your provider chain. If Claude is down, your agents seamlessly switch to GPT or Gemini — without changing prompts or losing context.
+When a provider is consistently failing, Personas automatically routes to the next available model in your provider chain. If Claude is down, your agents seamlessly switch to GPT or Gemini without changing prompts or losing context.
 
 ### Layer 3: Circuit Breaker
 
