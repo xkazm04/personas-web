@@ -44,7 +44,7 @@ export const ar: Translations = {
         "\u0628\u062f\u0648\u0646 \u0647\u0627\u0645\u0634 \u0631\u0628\u062d \u0644\u0643\u0644 \u062a\u0634\u063a\u064a\u0644",
         "\u0645\u0641\u062a\u0648\u062d \u0627\u0644\u0645\u0635\u062f\u0631"
       ],
-      offerBody: "\u064a\u0639\u0645\u0644 Personas \u0639\u0644\u0649 \u062c\u0647\u0627\u0632\u0643. \u0628\u062f\u0648\u0646 \u0647\u0627\u0645\u0634 \u0631\u0628\u062d \u0639\u0644\u0649 \u0627\u0644\u062a\u0646\u0633\u064a\u0642 \u0648\u0628\u062f\u0648\u0646 \u062a\u0633\u0639\u064a\u0631 \u0644\u0643\u0644 \u0645\u0642\u0639\u062f. \u0627\u0644\u0633\u062d\u0627\u0628\u0629 \u0627\u0644\u0645\u062f\u0641\u0648\u0639\u0629 \u0648\u0627\u0644\u062f\u0639\u0645 \u0630\u0648 \u0627\u0644\u0623\u0648\u0644\u0648\u064a\u0629 \u0627\u062e\u062a\u064a\u0627\u0631\u064a\u0627\u0646 \u0648\u0644\u064a\u0633\u0627 \u0625\u0644\u0632\u0627\u0645\u064a\u064a\u0646.",
+      offerBody: "\u064a\u0639\u0645\u0644 Personas \u0639\u0644\u0649 \u062c\u0647\u0627\u0632\u0643. \u0628\u062f\u0648\u0646 \u0647\u0627\u0645\u0634 \u0631\u0628\u062d \u0639\u0644\u0649 \u0627\u0644\u062a\u0646\u0633\u064a\u0642 \u0648\u0628\u062f\u0648\u0646 \u062a\u0633\u0639\u064a\u0631 \u0644\u0643\u0644 \u0645\u0642\u0639\u062f.",
       ctaLabel: "\u0627\u0628\u062f\u0623 \u0645\u062c\u0627\u0646\u064b\u0627",
       readGuide: "\u0627\u0642\u0631\u0623 \u0627\u0644\u062f\u0644\u064a\u0644",
       groups: {
@@ -129,38 +129,7 @@ export const ar: Translations = {
       slogan: "\u0623\u062a\u0645\u062a \u0639\u0645\u0644\u0643. \u0627\u0633\u062a\u0639\u062f \u0648\u0642\u062a\u0643."
     },
     pricing: {
-      local: "\u0645\u062d\u0644\u064a",
-      cloud: "\u0633\u062d\u0627\u0628\u064a",
-      enterprise: "\u0645\u0624\u0633\u0633\u0627\u062a",
-      downloadLocal: "\u062a\u062d\u0645\u064a\u0644 \u0627\u0644\u0646\u0633\u062e\u0629 \u0627\u0644\u0645\u062d\u0644\u064a\u0629",
-      goCloud: "\u0627\u0646\u062a\u0642\u0644 \u0644\u0644\u0633\u062d\u0627\u0628\u0629",
-      contactSales: "\u062a\u0648\u0627\u0635\u0644 \u0645\u0639 \u0627\u0644\u0645\u0628\u064a\u0639\u0627\u062a",
-      comingSoon: "\u0642\u0631\u064a\u0628\u064b\u0627",
-      bestFor: "\u0627\u0644\u0623\u0641\u0636\u0644 \u0644\u0640",
-      forever: "\u0645\u062c\u0627\u0646\u064b\u0627 \u0644\u0644\u0623\u0628\u062f",
-      mo: "/\u0634\u0647\u0631",
-      custom: "\u0645\u062e\u0635\u0635",
-      bestForLocal: "\u0627\u0644\u0645\u0637\u0648\u0631\u064a\u0646 \u0627\u0644\u0645\u0628\u062a\u062f\u0626\u064a\u0646",
-      bestForCloud: "\u0627\u0644\u0641\u0631\u0642 \u0627\u0644\u0633\u0631\u064a\u0639\u0629 \u0627\u0644\u062d\u0631\u0643\u0629",
-      bestForEnterprise: "\u0627\u0644\u0645\u0624\u0633\u0633\u0627\u062a \u0630\u0627\u062a \u0645\u062a\u0637\u0644\u0628\u0627\u062a \u0627\u0644\u0627\u0645\u062a\u062b\u0627\u0644 \u0648\u0627\u0644\u062a\u0648\u0633\u0639",
-      features: {
-        unlimitedLocalAgents: "\u0648\u0643\u0644\u0627\u0621 \u0645\u062d\u0644\u064a\u0648\u0646 \u063a\u064a\u0631 \u0645\u062d\u062f\u0648\u062f\u064a\u0646",
-        localEventBus: "\u0646\u0627\u0642\u0644 \u0623\u062d\u062f\u0627\u062b \u0645\u062d\u0644\u064a \u0648\u0645\u062c\u062f\u0648\u0644",
-        fullObservability: "\u0644\u0648\u062d\u0629 \u0645\u0631\u0627\u0642\u0628\u0629 \u0643\u0627\u0645\u0644\u0629",
-        designEngine: "\u0645\u062d\u0631\u0643 \u0627\u0644\u062a\u0635\u0645\u064a\u0645",
-        teamCanvasLocal: "\u0644\u0648\u062d\u0629 \u0627\u0644\u0641\u0631\u064a\u0642 (\u0645\u062d\u0644\u064a)",
-        everythingInFree: "\u0643\u0644 \u0645\u0627 \u0641\u064a \u0627\u0644\u0645\u062c\u0627\u0646\u064a",
-        cloudWorkers3: "3 \u0639\u0645\u0627\u0644 \u0633\u062d\u0627\u0628\u064a\u064a\u0646",
-        executions1000: "1,000 \u062a\u0646\u0641\u064a\u0630/\u0634\u0647\u0631",
-        events10000: "10,000 \u062d\u062f\u062b/\u0634\u0647\u0631",
-        burstAutoScaling: "\u062a\u0648\u0633\u0639 \u062a\u0644\u0642\u0627\u0626\u064a \u0644\u0644\u0630\u0631\u0648\u0627\u062a",
-        everythingInPro: "\u0643\u0644 \u0645\u0627 \u0641\u064a \u0627\u0644\u0627\u062d\u062a\u0631\u0627\u0641\u064a",
-        ssoSaml: "SSO \u0639\u0628\u0631 SAML \u0648 OIDC",
-        multiTenantRbac: "\u0645\u0633\u0627\u062d\u0627\u062a \u0639\u0645\u0644 \u0645\u062a\u0639\u062f\u062f\u0629 \u0627\u0644\u0645\u0633\u062a\u0623\u062c\u0631\u064a\u0646 \u0645\u0639 RBAC",
-        auditTrailExport: "\u062a\u0635\u062f\u064a\u0631 \u0633\u062c\u0644 \u0627\u0644\u062a\u062f\u0642\u064a\u0642",
-        dedicatedWorkers: "\u0639\u0645\u0627\u0644 \u0633\u062d\u0627\u0628\u064a\u0648\u0646 \u0645\u062e\u0635\u0635\u0648\u0646 \u0648 SLA",
-        prioritySupport: "\u062f\u0639\u0645 \u0630\u0648 \u0623\u0648\u0644\u0648\u064a\u0629"
-      }
+      comingSoon: "\u0642\u0631\u064a\u0628\u064b\u0627"
     },
     hero: {
       downloadCta: "\u062a\u0646\u0632\u064a\u0644",
@@ -393,8 +362,8 @@ export const ar: Translations = {
       discordSubtitle: "\u0627\u0646\u0636\u0645 \u0625\u0644\u0649 \u0645\u062c\u062a\u0645\u0639 Discord \u0644\u0644\u062d\u0635\u0648\u0644 \u0639\u0644\u0649 \u0627\u0644\u0645\u0633\u0627\u0639\u062f\u0629 \u0648\u0627\u0644\u0646\u0642\u0627\u0634.",
       questions: [
         {
-          q: "What is Claude CLI and why do I need it?",
-          a: "Claude CLI is Anthropic's official command-line interface for interacting with Claude. Personas uses it under the hood to run your agents locally \u2014 it handles authentication, model access, and streaming responses. You'll need an active Claude Pro or Max subscription and the CLI installed before launching Personas."
+          q: "What is Claude Code and why do I need it?",
+          a: "Claude Code is Anthropic's official command-line tool for working with Claude. Personas uses it under the hood to run your agents locally. It handles authentication, model access, and streaming responses. You'll need an active Claude Pro or Max subscription and Claude Code installed before launching Personas."
         },
         {
           q: "Does Personas collect any telemetry or usage data?",
@@ -402,7 +371,7 @@ export const ar: Translations = {
         },
         {
           q: "How does the pricing model work?",
-          a: "The desktop app is free forever with unlimited local agents. Cloud plans (Starter, Pro, Team) add 24/7 execution, remote workers, and team features on top. You always need your own Claude subscription \u2014 we never touch your Anthropic bill. Think of Personas as the orchestration layer, and Claude as the engine."
+          a: "The desktop app is free and open source, with unlimited local agents. There are no paid plans or tiers. You always need your own Claude subscription. We never touch your Anthropic bill. Think of Personas as the orchestration layer, and Claude as the engine."
         },
         {
           q: "What is Bring Your Own Infrastructure (BYOI)?",
@@ -410,11 +379,11 @@ export const ar: Translations = {
         },
         {
           q: "What's the difference between local and cloud execution?",
-          a: "Local execution runs agents on your machine using Claude CLI \u2014 it's instant, free, and private, but stops when your computer sleeps. Cloud execution runs agents on remote workers 24/7, supports event-bus bridging across environments, and enables team collaboration. You can switch between modes per-agent."
+          a: "Local execution runs agents on your machine using Claude Code. It's instant, free, and private, but stops when your computer sleeps. Cloud execution runs agents on remote workers 24/7, supports event-bus bridging across environments, and enables team collaboration. You can switch between modes per agent."
         },
         {
           q: "Are there any limits on the number of agents?",
-          a: "Locally, there are no limits \u2014 create as many agents as you want. Cloud plans have worker limits (1\u20135 depending on tier) and monthly execution caps. Pro and Team plans include burst auto-scaling for traffic spikes. BYOI removes all caps entirely."
+          a: "No. Create as many agents as you want."
         }
       ]
     },
@@ -425,10 +394,10 @@ export const ar: Translations = {
       downloadInstaller: "\u062a\u062d\u0645\u064a\u0644 \u0627\u0644\u0645\u062b\u0628\u062a",
       downloadFor: "\u062a\u0646\u0632\u064a\u0644 \u0644\u0640 {platform}",
       joinWaitlist: "\u0627\u0646\u0636\u0645 \u0644\u0642\u0627\u0626\u0645\u0629 \u0627\u0644\u0627\u0646\u062a\u0638\u0627\u0631",
-      connectCli: "\u0631\u0628\u0637 Claude CLI",
+      connectCli: "\u0631\u0628\u0637 Claude Code",
       launchAgent: "\u062a\u0634\u063a\u064a\u0644 \u0623\u0648\u0644 \u0648\u0643\u064a\u0644",
       exploreFirst: "\u0627\u0633\u062a\u0643\u0634\u0641 \u0627\u0644\u0625\u0645\u0643\u0627\u0646\u064a\u0627\u062a \u0623\u0648\u0644\u0627\u064b",
-      requiresCli: "\u064a\u062a\u0637\u0644\u0628 Claude CLI",
+      requiresCli: "\u064a\u062a\u0637\u0644\u0628 Claude Code",
       installerSize: "\u0645\u062b\u0628\u062a 12 \u0645\u064a\u063a\u0627\u0628\u0627\u064a\u062a",
       noSignupLine: "\u0644\u0627 \u062a\u0633\u062c\u064a\u0644 \u0648\u0644\u0627 \u0628\u0637\u0627\u0642\u0629 \u0627\u0626\u062a\u0645\u0627\u0646. \u064a\u0639\u0645\u0644 \u0639\u0644\u0649 \u062c\u0647\u0627\u0632\u0643. \u0628\u062f\u0648\u0646 \u0623\u064a \u0642\u064a\u0627\u0633 \u0639\u0646 \u0628\u0639\u062f.",
       windows: "Windows",
@@ -1599,7 +1568,7 @@ export const ar: Translations = {
       },
       security: {
         headline: "\u0623\u0633\u0631\u0627\u0631\u0643 \u062a\u0628\u0642\u0649 \u0644\u0643",
-        description: "\u0643\u0644 \u0643\u0644\u0645\u0629 \u0645\u0631\u0648\u0631 \u0648\u0645\u0641\u062a\u0627\u062d API \u0648\u0631\u0645\u0632 \u0648\u0635\u0648\u0644 \u0645\u0634\u0641\u0651\u0631 \u0639\u0644\u0649 \u062c\u0647\u0627\u0632\u0643 \u0628\u0627\u0633\u062a\u062e\u062f\u0627\u0645 \u062a\u0634\u0641\u064a\u0631 AES-256 \u0628\u0645\u0633\u062a\u0648\u0649 \u0627\u0644\u0628\u0646\u0648\u0643. \u062a\u064f\u062e\u0632\u064e\u0651\u0646 \u0628\u064a\u0627\u0646\u0627\u062a \u0627\u0639\u062a\u0645\u0627\u062f\u0643 \u0641\u064a \u0627\u0644\u062e\u0632\u0646\u0629 \u0627\u0644\u0622\u0645\u0646\u0629 \u0627\u0644\u062e\u0627\u0635\u0629 \u0628\u0646\u0638\u0627\u0645 \u0627\u0644\u062a\u0634\u063a\u064a\u0644 \u0644\u062f\u064a\u0643 \u2014 \u0644\u0627 \u064a\u064f\u0631\u0633\u0644 \u0634\u064a\u0621 \u0625\u0644\u0649 \u0627\u0644\u0633\u062d\u0627\u0628\u0629 \u0623\u0628\u062f\u064b\u0627.",
+        description: "\u0643\u0644 \u0643\u0644\u0645\u0629 \u0645\u0631\u0648\u0631 \u0648\u0645\u0641\u062a\u0627\u062d API \u0648\u0631\u0645\u0632 \u0648\u0635\u0648\u0644 \u0645\u0634\u0641\u0651\u0631 \u0639\u0644\u0649 \u062c\u0647\u0627\u0632\u0643 \u0628\u0627\u0633\u062a\u062e\u062f\u0627\u0645 \u062a\u0634\u0641\u064a\u0631 AES-256 \u0628\u0645\u0633\u062a\u0648\u0649 \u0627\u0644\u0628\u0646\u0648\u0643. \u062a\u064f\u062e\u0632\u064e\u0651\u0646 \u0628\u064a\u0627\u0646\u0627\u062a \u0627\u0639\u062a\u0645\u0627\u062f\u0643 \u0641\u064a \u0627\u0644\u062e\u0632\u0646\u0629 \u0627\u0644\u0622\u0645\u0646\u0629 \u0627\u0644\u062e\u0627\u0635\u0629 \u0628\u0646\u0638\u0627\u0645 \u0627\u0644\u062a\u0634\u063a\u064a\u0644 \u0644\u062f\u064a\u0643.",
         cta: "\u0623\u0645\u0651\u0646 \u0627\u062a\u0635\u0627\u0644\u0627\u062a\u0643"
       },
       "multi-provider": {

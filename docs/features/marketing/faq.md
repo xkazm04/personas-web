@@ -3,7 +3,7 @@
 
 ## What it does
 
-Answers common pre-install questions (Claude CLI requirement, telemetry, pricing, BYOI, local vs. cloud, agent limits) in an expandable accordion, then funnels anyone still stuck to the Discord community.
+Answers common pre-install questions (Claude Code requirement, telemetry, pricing, BYOI, local vs. cloud, agent limits) in an expandable accordion, then funnels anyone still stuck to the Discord community.
 
 - Renders a centered header ("Frequently *asked*", gradient on the second word) and subtitle.
 - Lays the questions out in a **two-column grid** (`md+`); each question is a collapsed card. Clicking a card toggles a panel that reveals a per-question **illustration** (an `aspect-video` SVG) above the answer text. The chevron rotates 180° when open.

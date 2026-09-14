@@ -102,7 +102,7 @@ Persistent failures trip the circuit breaker, preventing cascade failures. The b
 
 ## Real-World Impact
 
-In our testing, self-healing reduced manual intervention on agent pipelines by 94%. The median recovery time dropped from "whenever someone notices" to under 30 seconds.`,
+The median recovery time dropped from "whenever someone notices" to under 30 seconds.`,
   },
   {
     slug: "building-slack-triage-bot",

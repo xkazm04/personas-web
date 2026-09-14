@@ -44,7 +44,7 @@ export const ko: Translations = {
         "\uc2e4\ud589\ub2f9 \ucd94\uac00 \uc694\uae08 \uc5c6\uc74c",
         "\uc624\ud508\uc18c\uc2a4"
       ],
-      offerBody: "Personas\ub294 \uc0ac\uc6a9\uc790\uc758 \uae30\uae30\uc5d0\uc11c \uc2e4\ud589\ub429\ub2c8\ub2e4. \uc624\ucf00\uc2a4\ud2b8\ub808\uc774\uc158 \ucd94\uac00 \uc694\uae08\uc774\ub098 \uc88c\uc11d\ub2f9 \uc694\uae08\uc774 \uc5c6\uc2b5\ub2c8\ub2e4. \uc720\ub8cc \ud074\ub77c\uc6b0\ub4dc\uc640 \uc6b0\uc120 \uc9c0\uc6d0\uc740 \uc120\ud0dd \uc0ac\ud56d\uc774\uba70 \ud544\uc218\uac00 \uc544\ub2d9\ub2c8\ub2e4.",
+      offerBody: "Personas\ub294 \uc0ac\uc6a9\uc790\uc758 \uae30\uae30\uc5d0\uc11c \uc2e4\ud589\ub429\ub2c8\ub2e4. \uc624\ucf00\uc2a4\ud2b8\ub808\uc774\uc158 \ucd94\uac00 \uc694\uae08\uc774\ub098 \uc88c\uc11d\ub2f9 \uc694\uae08\uc774 \uc5c6\uc2b5\ub2c8\ub2e4.",
       ctaLabel: "\ubb34\ub8cc\ub85c \uc2dc\uc791\ud558\uae30",
       readGuide: "\uac00\uc774\ub4dc \uc77d\uae30",
       groups: {
@@ -129,38 +129,7 @@ export const ko: Translations = {
       slogan: "\uc5c5\ubb34\ub97c \uc790\ub3d9\ud654\ud558\uc138\uc694. \uc2dc\uac04\uc744 \ub418\ucc3e\uc73c\uc138\uc694."
     },
     pricing: {
-      local: "\ub85c\uceec",
-      cloud: "\ud074\ub77c\uc6b0\ub4dc",
-      enterprise: "\uc5d4\ud130\ud504\ub77c\uc774\uc988",
-      downloadLocal: "\ub85c\uceec \ub2e4\uc6b4\ub85c\ub4dc",
-      goCloud: "\ud074\ub77c\uc6b0\ub4dc\ub85c",
-      contactSales: "\uc601\uc5c5 \ubb38\uc758",
-      comingSoon: "\ucd9c\uc2dc \uc608\uc815",
-      bestFor: "\ucd94\ucc9c",
-      forever: "\uc601\uad6c \ubb34\ub8cc",
-      mo: "/\uc6d4",
-      custom: "\ub9de\ucda4\ud615",
-      bestForLocal: "\uc2dc\uc791\ud558\ub294 \uac1c\uc778 \uac1c\ubc1c\uc790",
-      bestForCloud: "\ube60\ub974\uac8c \uc6c0\uc9c1\uc774\ub294 \uac1c\uc778 \ud300",
-      bestForEnterprise: "\uaddc\uc815 \uc900\uc218 \ubc0f \ud655\uc7a5\uc774 \ud544\uc694\ud55c \uc870\uc9c1",
-      features: {
-        unlimitedLocalAgents: "\ubb34\uc81c\ud55c \ub85c\uceec \uc5d0\uc774\uc804\ud2b8",
-        localEventBus: "\ub85c\uceec \uc774\ubca4\ud2b8 \ubc84\uc2a4 & \uc2a4\ucf00\uc904\ub7ec",
-        fullObservability: "\uc644\uc804\ud55c \uad00\uce21 \ub300\uc2dc\ubcf4\ub4dc",
-        designEngine: "\ub514\uc790\uc778 \uc5d4\uc9c4",
-        teamCanvasLocal: "\ud300 \uce94\ubc84\uc2a4 (\ub85c\uceec)",
-        everythingInFree: "Free \ud50c\ub79c\uc758 \ubaa8\ub4e0 \uac83",
-        cloudWorkers3: "\ud074\ub77c\uc6b0\ub4dc \uc6cc\ucee4 3\uac1c",
-        executions1000: "\uc6d4 1,000\ud68c \uc2e4\ud589",
-        events10000: "\uc6d4 10,000\uac74 \uc774\ubca4\ud2b8",
-        burstAutoScaling: "\ubc84\uc2a4\ud2b8 \uc790\ub3d9 \uc2a4\ucf00\uc77c\ub9c1",
-        everythingInPro: "Pro \ud50c\ub79c\uc758 \ubaa8\ub4e0 \uac83",
-        ssoSaml: "SAML & OIDC SSO",
-        multiTenantRbac: "RBAC \uba40\ud2f0 \ud14c\ub10c\ud2b8 \uc6cc\ud06c\uc2a4\ud398\uc774\uc2a4",
-        auditTrailExport: "\uc2e4\ud589 \uac10\uc0ac \ucd94\uc801 \ub0b4\ubcf4\ub0b4\uae30",
-        dedicatedWorkers: "\uc804\uc6a9 \ud074\ub77c\uc6b0\ub4dc \uc6cc\ucee4 & SLA",
-        prioritySupport: "\uc6b0\uc120 \uc9c0\uc6d0"
-      }
+      comingSoon: "\ucd9c\uc2dc \uc608\uc815"
     },
     hero: {
       downloadCta: "\ub2e4\uc6b4\ub85c\ub4dc",
@@ -393,8 +362,8 @@ export const ko: Translations = {
       discordSubtitle: "\ub3c4\uc6c0\uacfc \ud1a0\ub860\uc744 \uc704\ud574 Discord \ucee4\ubba4\ub2c8\ud2f0\uc5d0 \ucc38\uc5ec\ud558\uc138\uc694.",
       questions: [
         {
-          q: "What is Claude CLI and why do I need it?",
-          a: "Claude CLI is Anthropic's official command-line interface for interacting with Claude. Personas uses it under the hood to run your agents locally \u2014 it handles authentication, model access, and streaming responses. You'll need an active Claude Pro or Max subscription and the CLI installed before launching Personas."
+          q: "What is Claude Code and why do I need it?",
+          a: "Claude Code is Anthropic's official command-line tool for working with Claude. Personas uses it under the hood to run your agents locally. It handles authentication, model access, and streaming responses. You'll need an active Claude Pro or Max subscription and Claude Code installed before launching Personas."
         },
         {
           q: "Does Personas collect any telemetry or usage data?",
@@ -402,7 +371,7 @@ export const ko: Translations = {
         },
         {
           q: "How does the pricing model work?",
-          a: "The desktop app is free forever with unlimited local agents. Cloud plans (Starter, Pro, Team) add 24/7 execution, remote workers, and team features on top. You always need your own Claude subscription \u2014 we never touch your Anthropic bill. Think of Personas as the orchestration layer, and Claude as the engine."
+          a: "The desktop app is free and open source, with unlimited local agents. There are no paid plans or tiers. You always need your own Claude subscription. We never touch your Anthropic bill. Think of Personas as the orchestration layer, and Claude as the engine."
         },
         {
           q: "What is Bring Your Own Infrastructure (BYOI)?",
@@ -410,11 +379,11 @@ export const ko: Translations = {
         },
         {
           q: "What's the difference between local and cloud execution?",
-          a: "Local execution runs agents on your machine using Claude CLI \u2014 it's instant, free, and private, but stops when your computer sleeps. Cloud execution runs agents on remote workers 24/7, supports event-bus bridging across environments, and enables team collaboration. You can switch between modes per-agent."
+          a: "Local execution runs agents on your machine using Claude Code. It's instant, free, and private, but stops when your computer sleeps. Cloud execution runs agents on remote workers 24/7, supports event-bus bridging across environments, and enables team collaboration. You can switch between modes per agent."
         },
         {
           q: "Are there any limits on the number of agents?",
-          a: "Locally, there are no limits \u2014 create as many agents as you want. Cloud plans have worker limits (1\u20135 depending on tier) and monthly execution caps. Pro and Team plans include burst auto-scaling for traffic spikes. BYOI removes all caps entirely."
+          a: "No. Create as many agents as you want."
         }
       ]
     },
@@ -425,10 +394,10 @@ export const ko: Translations = {
       downloadInstaller: "\uc124\uce58 \ud30c\uc77c \ub2e4\uc6b4\ub85c\ub4dc",
       downloadFor: "{platform}\uc6a9 \ub2e4\uc6b4\ub85c\ub4dc",
       joinWaitlist: "\ub300\uae30\uc790 \ub4f1\ub85d",
-      connectCli: "Claude CLI \uc5f0\uacb0",
+      connectCli: "Claude Code \uc5f0\uacb0",
       launchAgent: "\uccab \uc5d0\uc774\uc804\ud2b8 \uc2e4\ud589",
       exploreFirst: "\uba3c\uc800 \uae30\ub2a5 \uc0b4\ud3b4\ubcf4\uae30",
-      requiresCli: "Claude CLI \ud544\uc694",
+      requiresCli: "Claude Code \ud544\uc694",
       installerSize: "12 MB \uc124\uce58 \ud30c\uc77c",
       noSignupLine: "\uac00\uc785 \ubd88\ud544\uc694, \uc2e0\uc6a9\uce74\ub4dc \ubd88\ud544\uc694. \ub0b4 \ucef4\ud4e8\ud130\uc5d0\uc11c \uc2e4\ud589\ub418\uba70 \ud154\ub808\uba54\ud2b8\ub9ac\ub294 \uc804\ud600 \uc5c6\uc2b5\ub2c8\ub2e4.",
       windows: "Windows",
@@ -1599,7 +1568,7 @@ export const ko: Translations = {
       },
       security: {
         headline: "\ub2f9\uc2e0\uc758 \ube44\ubc00\uc740 \ub2f9\uc2e0\ub9cc\uc758 \uac83",
-        description: "\ubaa8\ub4e0 \ube44\ubc00\ubc88\ud638, API \ud0a4, \uc561\uc138\uc2a4 \ud1a0\ud070\uc740 \uc740\ud589\uae09 AES-256 \uc554\ud638\ud654\ub97c \uc0ac\uc6a9\ud574 \uc0ac\uc6a9\uc790\uc758 \uae30\uae30\uc5d0\uc11c \uc554\ud638\ud654\ub429\ub2c8\ub2e4. \uc790\uaca9 \uc99d\uba85\uc740 \uc6b4\uc601\uccb4\uc81c \uc790\uccb4\uc758 \ubcf4\uc548 \ubcfc\ud2b8\uc5d0 \uc800\uc7a5\ub418\uba70 \ud074\ub77c\uc6b0\ub4dc\ub85c \uc804\uc1a1\ub418\uc9c0 \uc54a\uc2b5\ub2c8\ub2e4.",
+        description: "\ubaa8\ub4e0 \ube44\ubc00\ubc88\ud638, API \ud0a4, \uc561\uc138\uc2a4 \ud1a0\ud070\uc740 \uc740\ud589\uae09 AES-256 \uc554\ud638\ud654\ub97c \uc0ac\uc6a9\ud574 \uc0ac\uc6a9\uc790\uc758 \uae30\uae30\uc5d0\uc11c \uc554\ud638\ud654\ub429\ub2c8\ub2e4. \uc790\uaca9 \uc99d\uba85\uc740 \uc6b4\uc601\uccb4\uc81c \uc790\uccb4\uc758 \ubcf4\uc548 \ubcfc\ud2b8\uc5d0 \uc800\uc7a5\ub429\ub2c8\ub2e4.",
         cta: "\uc5f0\uacb0 \ubcf4\uc548 \uac15\ud654\ud558\uae30"
       },
       "multi-provider": {

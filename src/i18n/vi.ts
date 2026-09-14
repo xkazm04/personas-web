@@ -44,7 +44,7 @@ export const vi: Translations = {
         "Kh\u00f4ng ph\u1ee5 ph\u00ed m\u1ed7i l\u01b0\u1ee3t ch\u1ea1y",
         "M\u00e3 ngu\u1ed3n m\u1edf"
       ],
-      offerBody: "Personas ch\u1ea1y tr\u00ean m\u00e1y c\u1ee7a b\u1ea1n. Kh\u00f4ng ph\u1ee5 ph\u00ed \u0111i\u1ec1u ph\u1ed1i, kh\u00f4ng t\u00ednh ph\u00ed theo s\u1ed1 ng\u01b0\u1eddi d\u00f9ng. Cloud tr\u1ea3 ph\u00ed v\u00e0 h\u1ed7 tr\u1ee3 \u01b0u ti\u00ean l\u00e0 t\u00f9y ch\u1ecdn, kh\u00f4ng b\u1eaft bu\u1ed9c.",
+      offerBody: "Personas ch\u1ea1y tr\u00ean m\u00e1y c\u1ee7a b\u1ea1n. Kh\u00f4ng ph\u1ee5 ph\u00ed \u0111i\u1ec1u ph\u1ed1i, kh\u00f4ng t\u00ednh ph\u00ed theo s\u1ed1 ng\u01b0\u1eddi d\u00f9ng.",
       ctaLabel: "B\u1eaft \u0111\u1ea7u mi\u1ec5n ph\u00ed",
       readGuide: "\u0110\u1ecdc h\u01b0\u1edbng d\u1eabn",
       groups: {
@@ -129,38 +129,7 @@ export const vi: Translations = {
       slogan: "T\u1ef1 \u0111\u1ed9ng h\u00f3a c\u00f4ng vi\u1ec7c. L\u1ea5y l\u1ea1i th\u1eddi gian c\u1ee7a b\u1ea1n."
     },
     pricing: {
-      local: "C\u1ee5c b\u1ed9",
-      cloud: "\u0110\u00e1m m\u00e2y",
-      enterprise: "Doanh nghi\u1ec7p",
-      downloadLocal: "T\u1ea3i b\u1ea3n c\u1ee5c b\u1ed9",
-      goCloud: "D\u00f9ng \u0111\u00e1m m\u00e2y",
-      contactSales: "Li\u00ean h\u1ec7 b\u00e1n h\u00e0ng",
-      comingSoon: "S\u1eafp ra m\u1eaft",
-      bestFor: "Ph\u00f9 h\u1ee3p nh\u1ea5t cho",
-      forever: "m\u00e3i m\u00e3i",
-      mo: "/th\u00e1ng",
-      custom: "T\u00f9y ch\u1ec9nh",
-      bestForLocal: "Ng\u01b0\u1eddi x\u00e2y d\u1ef1ng c\u00e1 nh\u00e2n m\u1edbi b\u1eaft \u0111\u1ea7u",
-      bestForCloud: "\u0110\u1ed9i nh\u00f3m c\u00e1 nh\u00e2n l\u00e0m vi\u1ec7c nhanh",
-      bestForEnterprise: "T\u1ed5 ch\u1ee9c c\u00f3 nhu c\u1ea7u tu\u00e2n th\u1ee7 & m\u1edf r\u1ed9ng quy m\u00f4",
-      features: {
-        unlimitedLocalAgents: "T\u00e1c nh\u00e2n c\u1ee5c b\u1ed9 kh\u00f4ng gi\u1edbi h\u1ea1n",
-        localEventBus: "Bus s\u1ef1 ki\u1ec7n c\u1ee5c b\u1ed9 & b\u1ed9 l\u1eadp l\u1ecbch",
-        fullObservability: "B\u1ea3ng \u0111i\u1ec1u khi\u1ec3n gi\u00e1m s\u00e1t \u0111\u1ea7y \u0111\u1ee7",
-        designEngine: "C\u00f4ng c\u1ee5 thi\u1ebft k\u1ebf",
-        teamCanvasLocal: "Canvas nh\u00f3m (c\u1ee5c b\u1ed9)",
-        everythingInFree: "T\u1ea5t c\u1ea3 trong g\u00f3i Mi\u1ec5n ph\u00ed",
-        cloudWorkers3: "3 worker \u0111\u00e1m m\u00e2y",
-        executions1000: "1.000 l\u1ea7n th\u1ef1c thi/th\u00e1ng",
-        events10000: "10.000 s\u1ef1 ki\u1ec7n/th\u00e1ng",
-        burstAutoScaling: "T\u1ef1 \u0111\u1ed9ng m\u1edf r\u1ed9ng khi c\u1ea7n",
-        everythingInPro: "T\u1ea5t c\u1ea3 trong g\u00f3i Pro",
-        ssoSaml: "SSO qua SAML & OIDC",
-        multiTenantRbac: "Kh\u00f4ng gian l\u00e0m vi\u1ec7c \u0111a ng\u01b0\u1eddi d\u00f9ng v\u1edbi RBAC",
-        auditTrailExport: "Xu\u1ea5t nh\u1eadt k\u00fd ki\u1ec3m to\u00e1n th\u1ef1c thi",
-        dedicatedWorkers: "Worker \u0111\u00e1m m\u00e2y chuy\u00ean d\u1ee5ng & SLA",
-        prioritySupport: "H\u1ed7 tr\u1ee3 \u01b0u ti\u00ean"
-      }
+      comingSoon: "S\u1eafp ra m\u1eaft"
     },
     hero: {
       downloadCta: "T\u1ea3i xu\u1ed1ng",
@@ -393,8 +362,8 @@ export const vi: Translations = {
       discordSubtitle: "Tham gia c\u1ed9ng \u0111\u1ed3ng Discord c\u1ee7a ch\u00fang t\u00f4i \u0111\u1ec3 \u0111\u01b0\u1ee3c tr\u1ee3 gi\u00fap v\u00e0 th\u1ea3o lu\u1eadn.",
       questions: [
         {
-          q: "What is Claude CLI and why do I need it?",
-          a: "Claude CLI is Anthropic's official command-line interface for interacting with Claude. Personas uses it under the hood to run your agents locally \u2014 it handles authentication, model access, and streaming responses. You'll need an active Claude Pro or Max subscription and the CLI installed before launching Personas."
+          q: "What is Claude Code and why do I need it?",
+          a: "Claude Code is Anthropic's official command-line tool for working with Claude. Personas uses it under the hood to run your agents locally. It handles authentication, model access, and streaming responses. You'll need an active Claude Pro or Max subscription and Claude Code installed before launching Personas."
         },
         {
           q: "Does Personas collect any telemetry or usage data?",
@@ -402,7 +371,7 @@ export const vi: Translations = {
         },
         {
           q: "How does the pricing model work?",
-          a: "The desktop app is free forever with unlimited local agents. Cloud plans (Starter, Pro, Team) add 24/7 execution, remote workers, and team features on top. You always need your own Claude subscription \u2014 we never touch your Anthropic bill. Think of Personas as the orchestration layer, and Claude as the engine."
+          a: "The desktop app is free and open source, with unlimited local agents. There are no paid plans or tiers. You always need your own Claude subscription. We never touch your Anthropic bill. Think of Personas as the orchestration layer, and Claude as the engine."
         },
         {
           q: "What is Bring Your Own Infrastructure (BYOI)?",
@@ -410,11 +379,11 @@ export const vi: Translations = {
         },
         {
           q: "What's the difference between local and cloud execution?",
-          a: "Local execution runs agents on your machine using Claude CLI \u2014 it's instant, free, and private, but stops when your computer sleeps. Cloud execution runs agents on remote workers 24/7, supports event-bus bridging across environments, and enables team collaboration. You can switch between modes per-agent."
+          a: "Local execution runs agents on your machine using Claude Code. It's instant, free, and private, but stops when your computer sleeps. Cloud execution runs agents on remote workers 24/7, supports event-bus bridging across environments, and enables team collaboration. You can switch between modes per agent."
         },
         {
           q: "Are there any limits on the number of agents?",
-          a: "Locally, there are no limits \u2014 create as many agents as you want. Cloud plans have worker limits (1\u20135 depending on tier) and monthly execution caps. Pro and Team plans include burst auto-scaling for traffic spikes. BYOI removes all caps entirely."
+          a: "No. Create as many agents as you want."
         }
       ]
     },
@@ -425,10 +394,10 @@ export const vi: Translations = {
       downloadInstaller: "T\u1ea3i tr\u00ecnh c\u00e0i \u0111\u1eb7t",
       downloadFor: "T\u1ea3i xu\u1ed1ng cho {platform}",
       joinWaitlist: "Tham gia danh s\u00e1ch ch\u1edd",
-      connectCli: "K\u1ebft n\u1ed1i Claude CLI",
+      connectCli: "K\u1ebft n\u1ed1i Claude Code",
       launchAgent: "Kh\u1edfi ch\u1ea1y t\u00e1c nh\u00e2n \u0111\u1ea7u ti\u00ean",
       exploreFirst: "Kh\u00e1m ph\u00e1 kh\u1ea3 n\u0103ng tr\u01b0\u1edbc",
-      requiresCli: "Y\u00eau c\u1ea7u Claude CLI",
+      requiresCli: "Y\u00eau c\u1ea7u Claude Code",
       installerSize: "Tr\u00ecnh c\u00e0i \u0111\u1eb7t 12 MB",
       noSignupLine: "Kh\u00f4ng c\u1ea7n \u0111\u0103ng k\u00fd, kh\u00f4ng c\u1ea7n th\u1ebb t\u00edn d\u1ee5ng. Ch\u1ea1y tr\u00ean m\u00e1y c\u1ee7a b\u1ea1n. Kh\u00f4ng \u0111o l\u01b0\u1eddng t\u1eeb xa.",
       windows: "Windows",
@@ -1599,7 +1568,7 @@ export const vi: Translations = {
       },
       security: {
         headline: "B\u00ed m\u1eadt c\u1ee7a b\u1ea1n lu\u00f4n l\u00e0 c\u1ee7a b\u1ea1n",
-        description: "M\u1ecdi m\u1eadt kh\u1ea9u, API key v\u00e0 m\u00e3 truy c\u1eadp \u0111\u1ec1u \u0111\u01b0\u1ee3c m\u00e3 h\u00f3a tr\u00ean thi\u1ebft b\u1ecb c\u1ee7a b\u1ea1n b\u1eb1ng m\u00e3 h\u00f3a AES-256 c\u1ea5p ng\u00e2n h\u00e0ng. Th\u00f4ng tin \u0111\u0103ng nh\u1eadp c\u1ee7a b\u1ea1n \u0111\u01b0\u1ee3c l\u01b0u tr\u1eef trong kho b\u1ea3o m\u1eadt ri\u00eang c\u1ee7a h\u1ec7 \u0111i\u1ec1u h\u00e0nh \u2014 kh\u00f4ng bao gi\u1edd \u0111\u01b0\u1ee3c g\u1eedi l\u00ean cloud.",
+        description: "M\u1ecdi m\u1eadt kh\u1ea9u, API key v\u00e0 m\u00e3 truy c\u1eadp \u0111\u1ec1u \u0111\u01b0\u1ee3c m\u00e3 h\u00f3a tr\u00ean thi\u1ebft b\u1ecb c\u1ee7a b\u1ea1n b\u1eb1ng m\u00e3 h\u00f3a AES-256 c\u1ea5p ng\u00e2n h\u00e0ng. Th\u00f4ng tin \u0111\u0103ng nh\u1eadp c\u1ee7a b\u1ea1n \u0111\u01b0\u1ee3c l\u01b0u tr\u1eef trong kho b\u1ea3o m\u1eadt ri\u00eang c\u1ee7a h\u1ec7 \u0111i\u1ec1u h\u00e0nh.",
         cta: "B\u1ea3o m\u1eadt k\u1ebft n\u1ed1i c\u1ee7a b\u1ea1n"
       },
       "multi-provider": {

@@ -29,10 +29,7 @@ export default function SecurityVault() {
         >
           Every password, API key, and access token is encrypted on your device
           using the same security standard banks rely on. Credentials are stored
-          in your operating system&apos;s own secure vault —{" "}
-          <span className="text-foreground font-medium">
-            nothing is sent to the cloud, ever.
-          </span>
+          in your operating system&apos;s own secure vault.
         </motion.p>
       </motion.div>
 

@@ -44,7 +44,7 @@ export const cs: Translations = {
         "Bez p\u0159ir\u00e1\u017eky za b\u011bh",
         "Open source"
       ],
-      offerBody: "Personas b\u011b\u017e\u00ed na va\u0161em po\u010d\u00edta\u010di. \u017d\u00e1dn\u00e1 p\u0159ir\u00e1\u017eka za orchestraci ani ceny za u\u017eivatele. Placen\u00fd cloud a prioritn\u00ed podpora jsou voliteln\u00e9, ne povinn\u00e9.",
+      offerBody: "Personas b\u011b\u017e\u00ed na va\u0161em po\u010d\u00edta\u010di. \u017d\u00e1dn\u00e1 p\u0159ir\u00e1\u017eka za orchestraci ani ceny za u\u017eivatele.",
       ctaLabel: "Za\u010d\u00edt zdarma",
       readGuide: "P\u0159e\u010d\u00edst pr\u016fvodce",
       groups: {
@@ -129,38 +129,7 @@ export const cs: Translations = {
       slogan: "Automatizujte svou pr\u00e1ci. Z\u00edskejte sv\u016fj \u010das zp\u011bt."
     },
     pricing: {
-      local: "Lok\u00e1ln\u00ed",
-      cloud: "Cloud",
-      enterprise: "Enterprise",
-      downloadLocal: "St\u00e1hnout lok\u00e1ln\u011b",
-      goCloud: "P\u0159ej\u00edt na cloud",
-      contactSales: "Kontaktovat obchod",
-      comingSoon: "Ji\u017e brzy",
-      bestFor: "Nejlep\u0161\u00ed pro",
-      forever: "nav\u017edy",
-      mo: "/m\u011bs\u00edc",
-      custom: "Na m\u00edru",
-      bestForLocal: "Samostatn\u00e9 tv\u016frce za\u010d\u00ednaj\u00edc\u00ed s v\u00fdvojem",
-      bestForCloud: "Rychle se rozv\u00edjej\u00edc\u00ed jednotliv\u00e9 t\u00fdmy",
-      bestForEnterprise: "Organizace s pot\u0159ebou compliance a \u0161k\u00e1lov\u00e1n\u00ed",
-      features: {
-        unlimitedLocalAgents: "Neomezen\u00e9 lok\u00e1ln\u00ed agenty",
-        localEventBus: "Lok\u00e1ln\u00ed sb\u011brnice ud\u00e1lost\u00ed a pl\u00e1nova\u010d",
-        fullObservability: "Pln\u00fd dashboard observability",
-        designEngine: "Design engine",
-        teamCanvasLocal: "T\u00fdmov\u00e9 pl\u00e1tno (lok\u00e1ln\u00ed)",
-        everythingInFree: "V\u0161e z Free pl\u00e1nu",
-        cloudWorkers3: "3 cloudov\u00ed pracovn\u00edci",
-        executions1000: "1 000 spou\u0161t\u011bn\u00ed/m\u011bs\u00edc",
-        events10000: "10 000 ud\u00e1lost\u00ed/m\u011bs\u00edc",
-        burstAutoScaling: "N\u00e1razov\u00e9 automatick\u00e9 \u0161k\u00e1lov\u00e1n\u00ed",
-        everythingInPro: "V\u0161e z Pro pl\u00e1nu",
-        ssoSaml: "SSO p\u0159es SAML & OIDC",
-        multiTenantRbac: "Multi-tenant workspaces s RBAC",
-        auditTrailExport: "Export auditn\u00edho z\u00e1znamu spou\u0161t\u011bn\u00ed",
-        dedicatedWorkers: "Vyhrazen\u00ed cloudov\u00ed pracovn\u00edci a SLA",
-        prioritySupport: "Prioritn\u00ed podpora"
-      }
+      comingSoon: "Ji\u017e brzy"
     },
     hero: {
       downloadCta: "St\u00e1hnout",
@@ -393,8 +362,8 @@ export const cs: Translations = {
       discordSubtitle: "P\u0159ipojte se k na\u0161\u00ed komunit\u011b na Discordu pro pomoc a diskuzi.",
       questions: [
         {
-          q: "What is Claude CLI and why do I need it?",
-          a: "Claude CLI is Anthropic's official command-line interface for interacting with Claude. Personas uses it under the hood to run your agents locally \u2014 it handles authentication, model access, and streaming responses. You'll need an active Claude Pro or Max subscription and the CLI installed before launching Personas."
+          q: "What is Claude Code and why do I need it?",
+          a: "Claude Code is Anthropic's official command-line tool for working with Claude. Personas uses it under the hood to run your agents locally. It handles authentication, model access, and streaming responses. You'll need an active Claude Pro or Max subscription and Claude Code installed before launching Personas."
         },
         {
           q: "Does Personas collect any telemetry or usage data?",
@@ -402,7 +371,7 @@ export const cs: Translations = {
         },
         {
           q: "How does the pricing model work?",
-          a: "The desktop app is free forever with unlimited local agents. Cloud plans (Starter, Pro, Team) add 24/7 execution, remote workers, and team features on top. You always need your own Claude subscription \u2014 we never touch your Anthropic bill. Think of Personas as the orchestration layer, and Claude as the engine."
+          a: "The desktop app is free and open source, with unlimited local agents. There are no paid plans or tiers. You always need your own Claude subscription. We never touch your Anthropic bill. Think of Personas as the orchestration layer, and Claude as the engine."
         },
         {
           q: "What is Bring Your Own Infrastructure (BYOI)?",
@@ -410,11 +379,11 @@ export const cs: Translations = {
         },
         {
           q: "What's the difference between local and cloud execution?",
-          a: "Local execution runs agents on your machine using Claude CLI \u2014 it's instant, free, and private, but stops when your computer sleeps. Cloud execution runs agents on remote workers 24/7, supports event-bus bridging across environments, and enables team collaboration. You can switch between modes per-agent."
+          a: "Local execution runs agents on your machine using Claude Code. It's instant, free, and private, but stops when your computer sleeps. Cloud execution runs agents on remote workers 24/7, supports event-bus bridging across environments, and enables team collaboration. You can switch between modes per agent."
         },
         {
           q: "Are there any limits on the number of agents?",
-          a: "Locally, there are no limits \u2014 create as many agents as you want. Cloud plans have worker limits (1\u20135 depending on tier) and monthly execution caps. Pro and Team plans include burst auto-scaling for traffic spikes. BYOI removes all caps entirely."
+          a: "No. Create as many agents as you want."
         }
       ]
     },
@@ -425,10 +394,10 @@ export const cs: Translations = {
       downloadInstaller: "St\u00e1hnout instal\u00e1tor",
       downloadFor: "St\u00e1hnout pro {platform}",
       joinWaitlist: "P\u0159idat se na \u010dekac\u00ed listinu",
-      connectCli: "P\u0159ipojit Claude CLI",
+      connectCli: "P\u0159ipojit Claude Code",
       launchAgent: "Spustit prvn\u00edho agenta",
       exploreFirst: "Nejd\u0159\u00edve prozkoumat mo\u017enosti",
-      requiresCli: "Vy\u017eaduje Claude CLI",
+      requiresCli: "Vy\u017eaduje Claude Code",
       installerSize: "12 MB instal\u00e1tor",
       noSignupLine: "\u017d\u00e1dn\u00e1 registrace, \u017e\u00e1dn\u00e1 platebn\u00ed karta. B\u011b\u017e\u00ed na va\u0161em po\u010d\u00edta\u010di. Nulov\u00e1 telemetrie.",
       windows: "Windows",
@@ -1599,7 +1568,7 @@ export const cs: Translations = {
       },
       security: {
         headline: "Va\u0161e tajemstv\u00ed z\u016fst\u00e1vaj\u00ed va\u0161e",
-        description: "Ka\u017ed\u00e9 heslo, kl\u00ed\u010d API a p\u0159\u00edstupov\u00fd token je na va\u0161em za\u0159\u00edzen\u00ed \u0161ifrov\u00e1n pomoc\u00ed bankovn\u00edho \u0161ifrov\u00e1n\u00ed AES-256. Va\u0161e p\u0159ihla\u0161ovac\u00ed \u00fadaje jsou ulo\u017eeny ve vlastn\u00edm zabezpe\u010den\u00e9m trezoru va\u0161eho opera\u010dn\u00edho syst\u00e9mu \u2014 nic nen\u00ed nikdy odesl\u00e1no do cloudu.",
+        description: "Ka\u017ed\u00e9 heslo, kl\u00ed\u010d API a p\u0159\u00edstupov\u00fd token je na va\u0161em za\u0159\u00edzen\u00ed \u0161ifrov\u00e1n pomoc\u00ed bankovn\u00edho \u0161ifrov\u00e1n\u00ed AES-256. Va\u0161e p\u0159ihla\u0161ovac\u00ed \u00fadaje jsou ulo\u017eeny ve vlastn\u00edm zabezpe\u010den\u00e9m trezoru va\u0161eho opera\u010dn\u00edho syst\u00e9mu.",
         cta: "Zabezpe\u010dte sv\u00e1 p\u0159ipojen\u00ed"
       },
       "multi-provider": {

@@ -44,7 +44,7 @@ export const de: Translations = {
         "Kein Aufschlag pro Ausf\u00fchrung",
         "Open Source"
       ],
-      offerBody: "Personas l\u00e4uft auf Ihrem eigenen Rechner. Kein Aufschlag f\u00fcr Orchestrierung und keine Preise pro Sitzplatz. Bezahlte Cloud- und Priority-Support-Optionen sind optional, nicht erforderlich.",
+      offerBody: "Personas l\u00e4uft auf Ihrem eigenen Rechner. Kein Aufschlag f\u00fcr Orchestrierung und keine Preise pro Sitzplatz.",
       ctaLabel: "Kostenlos loslegen",
       readGuide: "Anleitung lesen",
       groups: {
@@ -129,38 +129,7 @@ export const de: Translations = {
       slogan: "Automatisieren Sie Ihre Arbeit. Gewinnen Sie Ihre Zeit zur\u00fcck."
     },
     pricing: {
-      local: "Lokal",
-      cloud: "Cloud",
-      enterprise: "Unternehmen",
-      downloadLocal: "Lokal herunterladen",
-      goCloud: "Zur Cloud",
-      contactSales: "Vertrieb kontaktieren",
-      comingSoon: "Demn\u00e4chst",
-      bestFor: "Ideal f\u00fcr",
-      forever: "f\u00fcr immer",
-      mo: "/Monat",
-      custom: "Individuell",
-      bestForLocal: "Einzelentwickler zum Einstieg",
-      bestForCloud: "Schnell arbeitende Einzelteams",
-      bestForEnterprise: "Organisationen mit Compliance- und Skalierungsanforderungen",
-      features: {
-        unlimitedLocalAgents: "Unbegrenzte lokale Agenten",
-        localEventBus: "Lokaler Event-Bus & Scheduler",
-        fullObservability: "Vollst\u00e4ndiges Observability-Dashboard",
-        designEngine: "Design-Engine",
-        teamCanvasLocal: "Team-Canvas (lokal)",
-        everythingInFree: "Alles im Free-Plan",
-        cloudWorkers3: "3 Cloud-Worker",
-        executions1000: "1.000 Ausf\u00fchrungen/Monat",
-        events10000: "10.000 Events/Monat",
-        burstAutoScaling: "Burst-Auto-Scaling",
-        everythingInPro: "Alles im Pro-Plan",
-        ssoSaml: "SSO \u00fcber SAML & OIDC",
-        multiTenantRbac: "Multi-Tenant-Workspaces mit RBAC",
-        auditTrailExport: "Ausf\u00fchrungs-Audit-Trail-Export",
-        dedicatedWorkers: "Dedizierte Cloud-Worker & SLA",
-        prioritySupport: "Priorit\u00e4ts-Support"
-      }
+      comingSoon: "Demn\u00e4chst"
     },
     hero: {
       downloadCta: "Herunterladen",
@@ -393,8 +362,8 @@ export const de: Translations = {
       discordSubtitle: "Treten Sie unserer Discord-Community f\u00fcr Hilfe und Diskussion bei.",
       questions: [
         {
-          q: "What is Claude CLI and why do I need it?",
-          a: "Claude CLI is Anthropic's official command-line interface for interacting with Claude. Personas uses it under the hood to run your agents locally \u2014 it handles authentication, model access, and streaming responses. You'll need an active Claude Pro or Max subscription and the CLI installed before launching Personas."
+          q: "What is Claude Code and why do I need it?",
+          a: "Claude Code is Anthropic's official command-line tool for working with Claude. Personas uses it under the hood to run your agents locally. It handles authentication, model access, and streaming responses. You'll need an active Claude Pro or Max subscription and Claude Code installed before launching Personas."
         },
         {
           q: "Does Personas collect any telemetry or usage data?",
@@ -402,7 +371,7 @@ export const de: Translations = {
         },
         {
           q: "How does the pricing model work?",
-          a: "The desktop app is free forever with unlimited local agents. Cloud plans (Starter, Pro, Team) add 24/7 execution, remote workers, and team features on top. You always need your own Claude subscription \u2014 we never touch your Anthropic bill. Think of Personas as the orchestration layer, and Claude as the engine."
+          a: "The desktop app is free and open source, with unlimited local agents. There are no paid plans or tiers. You always need your own Claude subscription. We never touch your Anthropic bill. Think of Personas as the orchestration layer, and Claude as the engine."
         },
         {
           q: "What is Bring Your Own Infrastructure (BYOI)?",
@@ -410,11 +379,11 @@ export const de: Translations = {
         },
         {
           q: "What's the difference between local and cloud execution?",
-          a: "Local execution runs agents on your machine using Claude CLI \u2014 it's instant, free, and private, but stops when your computer sleeps. Cloud execution runs agents on remote workers 24/7, supports event-bus bridging across environments, and enables team collaboration. You can switch between modes per-agent."
+          a: "Local execution runs agents on your machine using Claude Code. It's instant, free, and private, but stops when your computer sleeps. Cloud execution runs agents on remote workers 24/7, supports event-bus bridging across environments, and enables team collaboration. You can switch between modes per agent."
         },
         {
           q: "Are there any limits on the number of agents?",
-          a: "Locally, there are no limits \u2014 create as many agents as you want. Cloud plans have worker limits (1\u20135 depending on tier) and monthly execution caps. Pro and Team plans include burst auto-scaling for traffic spikes. BYOI removes all caps entirely."
+          a: "No. Create as many agents as you want."
         }
       ]
     },
@@ -425,10 +394,10 @@ export const de: Translations = {
       downloadInstaller: "Installer herunterladen",
       downloadFor: "F\u00fcr {platform} herunterladen",
       joinWaitlist: "Warteliste beitreten",
-      connectCli: "Claude CLI verbinden",
+      connectCli: "Claude Code verbinden",
       launchAgent: "Ersten Agenten starten",
       exploreFirst: "Zuerst M\u00f6glichkeiten erkunden",
-      requiresCli: "Erfordert Claude CLI",
+      requiresCli: "Erfordert Claude Code",
       installerSize: "12 MB Installer",
       noSignupLine: "Keine Registrierung, keine Kreditkarte. L\u00e4uft auf Ihrem Rechner. Null Telemetrie.",
       windows: "Windows",
@@ -1599,7 +1568,7 @@ export const de: Translations = {
       },
       security: {
         headline: "Ihre Geheimnisse bleiben Ihre",
-        description: "Jedes Passwort, jeder API-Schl\u00fcssel und jedes Zugriffstoken wird auf Ihrem Ger\u00e4t mit bankentauglicher AES-256-Verschl\u00fcsselung verschl\u00fcsselt. Ihre Zugangsdaten werden im eigenen sicheren Tresor Ihres Betriebssystems gespeichert \u2014 nichts wird jemals in die Cloud gesendet.",
+        description: "Jedes Passwort, jeder API-Schl\u00fcssel und jedes Zugriffstoken wird auf Ihrem Ger\u00e4t mit bankentauglicher AES-256-Verschl\u00fcsselung verschl\u00fcsselt. Ihre Zugangsdaten werden im eigenen sicheren Tresor Ihres Betriebssystems gespeichert.",
         cta: "Sichern Sie Ihre Verbindungen"
       },
       "multi-provider": {

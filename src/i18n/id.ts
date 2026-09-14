@@ -44,7 +44,7 @@ export const id: Translations = {
         "Tanpa markup per-run",
         "Open source"
       ],
-      offerBody: "Personas berjalan di mesin Anda. Tidak ada markup orkestrasi dan tidak ada harga per-kursi. Cloud berbayar dan dukungan prioritas bersifat opsional, bukan wajib.",
+      offerBody: "Personas berjalan di mesin Anda. Tidak ada markup orkestrasi dan tidak ada harga per-kursi.",
       ctaLabel: "Mulai gratis",
       readGuide: "Baca panduan",
       groups: {
@@ -129,38 +129,7 @@ export const id: Translations = {
       slogan: "Otomatiskan pekerjaan Anda. Ambil kembali waktu Anda."
     },
     pricing: {
-      local: "Lokal",
-      cloud: "Cloud",
-      enterprise: "Enterprise",
-      downloadLocal: "Unduh Lokal",
-      goCloud: "Gunakan Cloud",
-      contactSales: "Hubungi Penjualan",
-      comingSoon: "Segera Hadir",
-      bestFor: "Terbaik untuk",
-      forever: "selamanya",
-      mo: "/bln",
-      custom: "Kustom",
-      bestForLocal: "Pengembang solo untuk memulai",
-      bestForCloud: "Tim individu yang bergerak cepat",
-      bestForEnterprise: "Organisasi dengan kebutuhan kepatuhan & skala",
-      features: {
-        unlimitedLocalAgents: "Agen lokal tak terbatas",
-        localEventBus: "Event bus & penjadwal lokal",
-        fullObservability: "Dasbor observabilitas penuh",
-        designEngine: "Mesin desain",
-        teamCanvasLocal: "Kanvas tim (lokal)",
-        everythingInFree: "Semua di paket Gratis",
-        cloudWorkers3: "3 worker cloud",
-        executions1000: "1.000 eksekusi/bln",
-        events10000: "10.000 event/bln",
-        burstAutoScaling: "Auto-scaling lonjakan",
-        everythingInPro: "Semua di Pro",
-        ssoSaml: "SSO via SAML & OIDC",
-        multiTenantRbac: "Workspace multi-tenant dengan RBAC",
-        auditTrailExport: "Ekspor jejak audit eksekusi",
-        dedicatedWorkers: "Worker cloud khusus & SLA",
-        prioritySupport: "Dukungan prioritas"
-      }
+      comingSoon: "Segera Hadir"
     },
     hero: {
       downloadCta: "Unduh",
@@ -393,8 +362,8 @@ export const id: Translations = {
       discordSubtitle: "Bergabunglah dengan komunitas Discord kami untuk bantuan dan diskusi.",
       questions: [
         {
-          q: "What is Claude CLI and why do I need it?",
-          a: "Claude CLI is Anthropic's official command-line interface for interacting with Claude. Personas uses it under the hood to run your agents locally \u2014 it handles authentication, model access, and streaming responses. You'll need an active Claude Pro or Max subscription and the CLI installed before launching Personas."
+          q: "What is Claude Code and why do I need it?",
+          a: "Claude Code is Anthropic's official command-line tool for working with Claude. Personas uses it under the hood to run your agents locally. It handles authentication, model access, and streaming responses. You'll need an active Claude Pro or Max subscription and Claude Code installed before launching Personas."
         },
         {
           q: "Does Personas collect any telemetry or usage data?",
@@ -402,7 +371,7 @@ export const id: Translations = {
         },
         {
           q: "How does the pricing model work?",
-          a: "The desktop app is free forever with unlimited local agents. Cloud plans (Starter, Pro, Team) add 24/7 execution, remote workers, and team features on top. You always need your own Claude subscription \u2014 we never touch your Anthropic bill. Think of Personas as the orchestration layer, and Claude as the engine."
+          a: "The desktop app is free and open source, with unlimited local agents. There are no paid plans or tiers. You always need your own Claude subscription. We never touch your Anthropic bill. Think of Personas as the orchestration layer, and Claude as the engine."
         },
         {
           q: "What is Bring Your Own Infrastructure (BYOI)?",
@@ -410,11 +379,11 @@ export const id: Translations = {
         },
         {
           q: "What's the difference between local and cloud execution?",
-          a: "Local execution runs agents on your machine using Claude CLI \u2014 it's instant, free, and private, but stops when your computer sleeps. Cloud execution runs agents on remote workers 24/7, supports event-bus bridging across environments, and enables team collaboration. You can switch between modes per-agent."
+          a: "Local execution runs agents on your machine using Claude Code. It's instant, free, and private, but stops when your computer sleeps. Cloud execution runs agents on remote workers 24/7, supports event-bus bridging across environments, and enables team collaboration. You can switch between modes per agent."
         },
         {
           q: "Are there any limits on the number of agents?",
-          a: "Locally, there are no limits \u2014 create as many agents as you want. Cloud plans have worker limits (1\u20135 depending on tier) and monthly execution caps. Pro and Team plans include burst auto-scaling for traffic spikes. BYOI removes all caps entirely."
+          a: "No. Create as many agents as you want."
         }
       ]
     },
@@ -425,10 +394,10 @@ export const id: Translations = {
       downloadInstaller: "Unduh installer",
       downloadFor: "Unduh untuk {platform}",
       joinWaitlist: "Gabung daftar tunggu",
-      connectCli: "Hubungkan Claude CLI",
+      connectCli: "Hubungkan Claude Code",
       launchAgent: "Luncurkan agen pertama",
       exploreFirst: "Jelajahi kemampuan dulu",
-      requiresCli: "Memerlukan Claude CLI",
+      requiresCli: "Memerlukan Claude Code",
       installerSize: "Installer 12 MB",
       noSignupLine: "Tanpa pendaftaran, tanpa kartu kredit. Berjalan di mesin Anda. Nol telemetri.",
       windows: "Windows",
@@ -1599,7 +1568,7 @@ export const id: Translations = {
       },
       security: {
         headline: "Rahasia Anda tetap milik Anda",
-        description: "Setiap kata sandi, API key, dan access token dienkripsi di perangkat Anda menggunakan enkripsi AES-256 setara bank. Kredensial Anda disimpan dalam vault aman milik sistem operasi Anda sendiri \u2014 tidak ada yang pernah dikirim ke cloud.",
+        description: "Setiap kata sandi, API key, dan access token dienkripsi di perangkat Anda menggunakan enkripsi AES-256 setara bank. Kredensial Anda disimpan dalam vault aman milik sistem operasi Anda sendiri.",
         cta: "Amankan koneksi Anda"
       },
       "multi-provider": {
