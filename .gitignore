@@ -86,6 +86,8 @@ next-env.d.ts
 /.claude/skills/leonardo
 /.claude/skills/npm-updates
 /.claude/skills/perfect
+/.claude/skills/native-copy
 /.claude/rules/ai-registry-access.md
 /.claude/rules/ai-registry-software-engineering.md
+/.claude/rules/ai-registry-localization.md
 # END ai-registry linked skills

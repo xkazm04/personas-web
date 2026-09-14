@@ -14,13 +14,27 @@ if (!fs.existsSync(gitDir) || !fs.statSync(gitDir).isDirectory()) {
 
 fs.mkdirSync(hooksDir, { recursive: true });
 
+// English copy gate (docs/i18n/style-en.md § Copy gate). The checker is a
+// gitignored link to ai-registry, so a fresh clone or CI has none: the step
+// skips LOUDLY rather than reading as a pass. Keep this marker string stable -
+// the append branch below detects an installed step by it.
+const COPY_GATE_MARKER = "native-copy/scripts/copy-check.mjs";
+const copyGateStep = `
+# personas-web English copy gate (native-copy, baseline ratchet)
+if [ -f .claude/skills/${COPY_GATE_MARKER} ]; then
+  npm run copy:check
+else
+  echo "pre-push: native-copy checker not installed - copy gate SKIPPED (run ai-registry/scripts/link-registry.mjs)" >&2
+fi
+`;
+
 const hookBody = `#!/bin/sh
 set -e
 
 npm run check:i18n-coverage
 npm run check:i18n-encoding
 npm run check:guide-content
-`;
+${copyGateStep}`;
 
 const existing = fs.existsSync(prePushHook) ? fs.readFileSync(prePushHook, "utf8") : "";
 
@@ -42,6 +56,9 @@ if (existing.trim().length === 0) {
   }
   if (!existing.includes("npm run check:guide-content")) {
     marker += "\n# personas-web guide catalog invariant\nnpm run check:guide-content\n";
+  }
+  if (!existing.includes(COPY_GATE_MARKER)) {
+    marker += copyGateStep;
   }
   if (marker) fs.appendFileSync(prePushHook, marker);
 }
