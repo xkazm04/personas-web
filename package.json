@@ -21,7 +21,7 @@
     "analyze": "next experimental-analyze",
     "check:bundle": "node scripts/check-bundle-budget.mjs",
     "start": "next start",
-    "lint": "eslint --max-warnings 24",
+    "lint": "eslint --max-warnings 13",
     "typecheck": "tsc --noEmit",
     "test:unit": "vitest run",
     "test:unit:watch": "vitest",
