@@ -134,7 +134,6 @@ export const DESKTOP_MODULES: DesktopModule[] = [
     icon: "Puzzle",
     children: [
       { id: "browse", label: "Browse" },
-      { id: "artist", label: "Artist" },
       { id: "dev-tools", label: "Dev Tools" },
       { id: "drive", label: "Drive" },
       { id: "twin", label: "Twin" },

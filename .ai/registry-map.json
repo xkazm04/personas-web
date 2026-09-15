@@ -979,8 +979,7 @@
         "src/components/feature-sections/lab/components/TabSwitcher.tsx",
         "src/components/feature-sections/lab/data.ts",
         "src/components/feature-sections/lab/index.tsx",
-        "src/components/feature-sections/lab/types.ts",
-        "src/components/feature-sections/plugins/ArtistGrid.tsx"
+        "src/components/feature-sections/lab/types.ts"
       ],
       "subjects": [
         {

@@ -99,7 +99,7 @@ The custom lint rule only fires on `requestAnimationFrame`, so framer-motion / S
 infinite loops slip past `useReducedMotion`. Confirmed ungated motion:
 
 `AgentLane` pulse (observability-deck) · `SecurityVault` `animate-ping` · `EvolutionTab`
-pulse (agent-lab) · `ArtistGrid`/`ResearchLifecycle`/`ResearchSources`/`PluginCard`/`PluginTabs`
+pulse (agent-lab) · `PluginCard`/`PluginTabs`
 (plugins) · `FlowWires`+`FlowNodes` (flow-composer) · `ConnectionPillar` (platform-layers) ·
 `FooterLinkColumn` accordion · `MobileTopicTOC`+`SearchResultsPopover` (guide) ·
 `HealthyShieldIllustration` SMIL `animateMotion` (also not paused by the global

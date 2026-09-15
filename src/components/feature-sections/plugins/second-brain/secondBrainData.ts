@@ -26,7 +26,7 @@ export const SATELLITES: GraphNode[] = [
   { id: "shipping", label: "#shipping", type: "tag", x: 12, y: 58 },
   { id: "agents", label: "agents", type: "note", x: 88, y: 58 },
   { id: "ideas", label: "ideas", type: "idea", x: 32, y: 86 },
-  { id: "research", label: "research-lab", type: "note", x: 68, y: 86 },
+  { id: "roadmap", label: "roadmap", type: "note", x: 68, y: 86 },
 ];
 
 export const EDGES: Array<[string, string]> = [
@@ -34,10 +34,10 @@ export const EDGES: Array<[string, string]> = [
   ["central", "matrix"],
   ["central", "agents"],
   ["central", "ideas"],
-  ["central", "research"],
+  ["central", "roadmap"],
   ["leonardo", "matrix"],
   ["shipping", "central"],
-  ["agents", "research"],
+  ["agents", "roadmap"],
 ];
 
 export const NODE_ICON: Record<NodeType, typeof FileText> = {
@@ -50,7 +50,7 @@ export const BACKLINKS = [
   { label: "leonardo.md", note: "tile illustrations" },
   { label: "matrix-redesign.md", note: "3x3 layout - shipped" },
   { label: "agents.md", note: "orchestrator notes" },
-  { label: "research-lab.md", note: "lit search - queued" },
+  { label: "roadmap.md", note: "next milestone - queued" },
 ];
 
 export const CAPTURES = [

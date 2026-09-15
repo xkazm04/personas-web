@@ -1,10 +1,8 @@
 import type { LucideIcon } from "lucide-react";
 
 export type PluginKey =
-  | "artist"
   | "dev-tools"
-  | "obsidian-brain"
-  | "research-lab";
+  | "obsidian-brain";
 
 export interface VariantDef {
   key: string;
