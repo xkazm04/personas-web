@@ -32,6 +32,7 @@
     "check:guide-translations": "node scripts/i18n/check-guide-translations.mjs",
     "check:i18n-coverage": "node scripts/check-i18n-coverage.mjs",
     "check:i18n-encoding": "node scripts/check-i18n-encoding.mjs",
+    "check:route-coverage": "node scripts/check-route-coverage.mjs",
     "report:i18n-hardcoded": "node scripts/report-hardcoded-ui-strings.mjs",
     "db:migrate": "node scripts/run-voting-migration.mjs",
     "db:migrate:sync": "node scripts/run-sync-migration.mjs",
