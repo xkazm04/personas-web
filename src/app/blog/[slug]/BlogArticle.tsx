@@ -4,6 +4,7 @@ import { motion } from "framer-motion";
 import { ArrowLeft, Clock } from "lucide-react";
 import Link from "next/link";
 
+import ReadingProgress from "@/components/guide/ReadingProgress";
 import Footer from "@/components/sections/Footer";
 import Navbar from "@/components/Navbar";
 import PageShell from "@/components/PageShell";
@@ -32,6 +33,7 @@ export default function BlogArticle({
   return (
     <>
       <Navbar />
+      <ReadingProgress />
       <PageShell scrollMapItems={[{ label: t.blogPage.article.toUpperCase(), href: "#article" }]}>
         <div className="h-24" />
 
