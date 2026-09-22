@@ -246,19 +246,19 @@ Overview → Usage shows which agents and models dominate the spend. Swap the to
 
 Personas is a Tauri desktop app — Rust backend, React frontend, local SQLite database — and it's intentionally lightweight. Most of the heavy compute happens on the AI provider's servers, not your machine. The app idles at near-zero CPU and uses a few hundred megabytes of RAM; it scales up only when agents are actively running locally.
 
-The bundled binary is about 90 MB after install. Plugins (Artist for image generation, Obsidian Brain for vector search) can add to that footprint if you enable them.
+The bundled binary is about 90 MB after install. Plugins such as Obsidian Brain (vector search) can add to that footprint if you enable them.
 
 :::checklist
 - Windows 10+, macOS 12+, or Ubuntu 20.04+ (latest version recommended)
 - 4 GB RAM minimum (8 GB+ recommended if you use the embeddings / vector-search plugins)
-- 1 GB free disk space (more if you enable the Artist plugin's local models)
+- 1 GB free disk space
 - Stable broadband — agent execution is bound by the AI provider's API latency
 - Any modern dual-core CPU; quad-core or better recommended for parallel multi-agent runs
 :::
 
 ### How It Works
 
-The app stores its database (\`personas.db\`), credential vault, execution history, and configuration locally in your OS-specific app-data directory. Nothing is uploaded unless you use a cloud AI provider. Plugins that ship local models (e.g. the Artist plugin's image-gen + Gemini vision) download the model files on first use.
+The app stores its database (\`personas.db\`), credential vault, execution history, and configuration locally in your OS-specific app-data directory. Nothing is uploaded unless you use a cloud AI provider. Plugins that ship local models download the model files on first use.
 
 The Windows build uses ONNX Runtime for embedding when the vector-knowledge-base feature is enabled; this is the largest single dependency in that case.
 

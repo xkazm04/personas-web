@@ -13,9 +13,14 @@
  *           thing it is aiming at, or the existing violations are tracked debt
  *           that nobody has scheduled the repair for. Does not fail on its own.
  *
- * The ceiling: `npm run lint` is `eslint --max-warnings 24` (package.json).
- * 24 is the count measured on 2026-08-22. New warnings fail the build; the 24
- * that exist are debt with a number attached. This is the same ratchet shape
+ * The ceiling: `npm run lint` is `eslint --max-warnings 13` (package.json).
+ * 13 is the count measured on 2026-09-08, after clearing 11 of the 24 warnings
+ * present on 2026-08-22 (four useAuthStore selectors collapsed into useShallow,
+ * three unused eslint-disable directives removed, four unused vars / dead code
+ * dropped from scripts + e2e). The 13 that remain are debt with a number
+ * attached: 9 max-tsx-lines files, 2 exhaustive-deps ref-in-cleanup warnings,
+ * and 2 no-img-element warnings — each needs a larger or visually-verified
+ * change. New warnings fail the build. This is the same ratchet shape
  * the repo already uses for encoding corruption
  * (scripts/check-i18n-encoding.mjs + scripts/i18n-encoding-baseline.json):
  * hold the line at today's number, never above it.

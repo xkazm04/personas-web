@@ -1,0 +1,14 @@
+{
+  "$schema": "https://unpkg.com/knip@6/schema.json",
+  "ignore": [
+    "src/data/guide/locales/**",
+    "scripts/**",
+    ".claude/**",
+    "public/sw.js",
+    "src/instrumentation.ts",
+    "sentry.client.config.ts",
+    "sentry.edge.config.ts",
+    "sentry.server.config.ts"
+  ],
+  "ignoreExportsUsedInFile": true
+}
