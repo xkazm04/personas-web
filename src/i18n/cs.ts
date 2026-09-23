@@ -805,6 +805,11 @@ export const cs: Translations = {
       parseError: {
         label: "Chyba anal\u00fdzy",
         detail: "Po\u0161kozen\u00fd payload \u2014 eskalov\u00e1no na kritick\u00e9, dokud nebude p\u0159ezkoum\u00e1no"
+      },
+      undo: {
+        approved: "Schv\u00e1len\u00e9 revize: {count}",
+        rejected: "Zam\u00edtnut\u00e9 revize: {count}",
+        refused: "U n\u011bkter\u00fdch z t\u011bchto reviz\u00ed u\u017e \u010dek\u00e1 rozhodnut\u00ed \u2014 vra\u0165te ho zp\u011bt, nebo po\u010dkejte, a\u017e se ulo\u017e\u00ed."
       }
     },
     leaderboardPage: {

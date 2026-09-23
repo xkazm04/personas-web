@@ -805,6 +805,11 @@ export const es: Translations = {
       parseError: {
         label: "Error de an\u00e1lisis",
         detail: "Payload mal formado \u2014 escalado a cr\u00edtico hasta ser revisado"
+      },
+      undo: {
+        approved: "Revisiones aprobadas: {count}",
+        rejected: "Revisiones rechazadas: {count}",
+        refused: "Algunas de estas revisiones ya tienen una decisi\u00f3n pendiente: deshazla o espera a que se guarde."
       }
     },
     leaderboardPage: {

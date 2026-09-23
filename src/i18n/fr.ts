@@ -805,6 +805,11 @@ export const fr: Translations = {
       parseError: {
         label: "Erreur d'analyse",
         detail: "Charge utile malform\u00e9e \u2014 escalad\u00e9e en critique jusqu'\u00e0 r\u00e9vision"
+      },
+      undo: {
+        approved: "Revues approuv\u00e9es : {count}",
+        rejected: "Revues rejet\u00e9es : {count}",
+        refused: "Certaines de ces revues ont d\u00e9j\u00e0 une d\u00e9cision en attente : annulez-la ou attendez qu'elle soit enregistr\u00e9e."
       }
     },
     leaderboardPage: {

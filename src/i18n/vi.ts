@@ -805,6 +805,11 @@ export const vi: Translations = {
       parseError: {
         label: "L\u1ed7i ph\u00e2n t\u00edch",
         detail: "Payload kh\u00f4ng \u0111\u00fang \u0111\u1ecbnh d\u1ea1ng \u2014 \u0111\u00e3 n\u00e2ng m\u1ee9c nghi\u00eam tr\u1ecdng l\u00ean nghi\u00eam tr\u1ecdng cho \u0111\u1ebfn khi \u0111\u01b0\u1ee3c xem x\u00e9t"
+      },
+      undo: {
+        approved: "B\u1ea3n duy\u1ec7t \u0111\u00e3 ch\u1ea5p thu\u1eadn: {count}",
+        rejected: "B\u1ea3n duy\u1ec7t \u0111\u00e3 t\u1eeb ch\u1ed1i: {count}",
+        refused: "M\u1ed9t s\u1ed1 b\u1ea3n duy\u1ec7t n\u00e0y \u0111\u00e3 c\u00f3 quy\u1ebft \u0111\u1ecbnh \u0111ang ch\u1edd \u2014 h\u00e3y ho\u00e0n t\u00e1c ho\u1eb7c \u0111\u1ee3i \u0111\u1ebfn khi \u0111\u01b0\u1ee3c l\u01b0u."
       }
     },
     leaderboardPage: {

@@ -805,6 +805,11 @@ export const id: Translations = {
       parseError: {
         label: "Kesalahan parsing",
         detail: "Payload tidak valid \u2014 dieskalasi menjadi kritis hingga ditinjau"
+      },
+      undo: {
+        approved: "Tinjauan disetujui: {count}",
+        rejected: "Tinjauan ditolak: {count}",
+        refused: "Beberapa tinjauan ini sudah memiliki keputusan yang tertunda \u2014 urungkan atau tunggu hingga tersimpan."
       }
     },
     leaderboardPage: {

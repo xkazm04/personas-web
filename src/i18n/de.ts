@@ -805,6 +805,11 @@ export const de: Translations = {
       parseError: {
         label: "Parsing-Fehler",
         detail: "Fehlerhafte Payload \u2014 bis zur Pr\u00fcfung als kritisch eskaliert"
+      },
+      undo: {
+        approved: "Genehmigte Reviews: {count}",
+        rejected: "Abgelehnte Reviews: {count}",
+        refused: "F\u00fcr einige dieser Reviews steht bereits eine Entscheidung aus \u2014 mach sie r\u00fcckg\u00e4ngig oder warte, bis sie gespeichert ist."
       }
     },
     leaderboardPage: {

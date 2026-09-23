@@ -569,6 +569,12 @@
       label: string;
       detail: string;
     };
+    /** Undo toast of the review decision ledger ({count} = rows in the window). */
+    undo: {
+      approved: string;
+      rejected: string;
+      refused: string;
+    };
   };
   leaderboardPage: {
     title: string;
@@ -2423,6 +2429,11 @@ export const en: Translations = {
     parseError: {
       label: 'Parse error',
       detail: 'Malformed payload — escalated to critical until reviewed',
+    },
+    undo: {
+      approved: 'Reviews approved: {count}',
+      rejected: 'Reviews rejected: {count}',
+      refused: 'Some of these reviews already have a verdict pending. Undo it or wait for it to save.',
     },
   },
   leaderboardPage: {
