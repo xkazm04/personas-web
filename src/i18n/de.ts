@@ -1059,7 +1059,6 @@ export const de: Translations = {
       allSystemsHealthy: "Alle Systeme fehlerfrei",
       noIssuesDetected: "Keine Probleme in ?berwachten Diensten erkannt",
       noSeverityIssues: "Keine Probleme mit Schweregrad {severity}",
-      exampleDataNotice: "Es werden Beispieldaten angezeigt. Echte Analysen erscheinen, sobald Agenten Ausf?hrungen starten.",
       toolInvocations: "Tool-Aufrufe",
       distribution: "Verteilung",
       usageOverTime: "Nutzung im Zeitverlauf",

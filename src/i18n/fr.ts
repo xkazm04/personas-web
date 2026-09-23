@@ -1059,7 +1059,6 @@ export const fr: Translations = {
       allSystemsHealthy: "Tous les syst?mes sont sains",
       noIssuesDetected: "Aucun probl?me d?tect? sur les services surveill?s",
       noSeverityIssues: "Aucun probl?me de s?v?rit? {severity}",
-      exampleDataNotice: "Des donn?es d?exemple sont affich?es. Les vraies analyses appara?tront quand les agents lanceront des ex?cutions.",
       toolInvocations: "Appels d?outils",
       distribution: "Distribution",
       usageOverTime: "Utilisation dans le temps",

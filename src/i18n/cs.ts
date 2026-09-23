@@ -1059,7 +1059,6 @@ export const cs: Translations = {
       allSystemsHealthy: "V?echny syst?my jsou v po??dku",
       noIssuesDetected: "Ve sledovan?ch slu?b?ch nebyly zji?t?ny probl?my",
       noSeverityIssues: "??dn? probl?my z?va?nosti {severity}",
-      exampleDataNotice: "Zobrazuj? se uk?zkov? data. Skute?n? analytika se objev?, jakmile agenti za?nou spou?t?t ?lohy.",
       toolInvocations: "Vol?n? n?stroj?",
       distribution: "Rozlo?en?",
       usageOverTime: "Vyu?it? v ?ase",

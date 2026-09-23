@@ -833,7 +833,6 @@
     allSystemsHealthy: string;
     noIssuesDetected: string;
     noSeverityIssues: string;
-    exampleDataNotice: string;
     toolInvocations: string;
     distribution: string;
     usageOverTime: string;
@@ -2699,7 +2698,6 @@ export const en: Translations = {
     allSystemsHealthy: 'All systems healthy',
     noIssuesDetected: 'No issues detected across monitored services',
     noSeverityIssues: 'No {severity} severity issues',
-    exampleDataNotice: 'Showing example data. Real analytics will appear once agents start running executions.',
     toolInvocations: 'Tool Invocations',
     distribution: 'Distribution',
     usageOverTime: 'Usage Over Time',

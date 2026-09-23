@@ -1059,7 +1059,6 @@ export const id: Translations = {
       allSystemsHealthy: "Semua sistem sehat",
       noIssuesDetected: "Tidak ada masalah terdeteksi di layanan yang dipantau",
       noSeverityIssues: "Tidak ada masalah tingkat {severity}",
-      exampleDataNotice: "Menampilkan data contoh. Analitik nyata akan muncul setelah agen mulai menjalankan eksekusi.",
       toolInvocations: "Pemanggilan alat",
       distribution: "Distribusi",
       usageOverTime: "Penggunaan dari waktu ke waktu",
