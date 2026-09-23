@@ -1484,7 +1484,8 @@
             "src/hooks/useTweenedNumber.ts",
             "src/lib/animations.ts",
             "src/lib/motion/loop-gate.ts",
-            "src/hooks/useLoopGate.ts"
+            "src/hooks/useLoopGate.ts",
+            "src/contexts/reducedMotionHydration.test.ts"
           ],
           "target": null,
           "apiRoutes": []
@@ -1620,7 +1621,8 @@
             "e2e/landing-hash-arrival.spec.ts",
             "e2e/orchestration-hub.spec.ts",
             "e2e/review-undo.spec.ts",
-            "e2e/reduced-motion.spec.ts"
+            "e2e/reduced-motion.spec.ts",
+            "e2e/reduced-motion-hydration.spec.ts"
           ],
           "target": null,
           "apiRoutes": []
