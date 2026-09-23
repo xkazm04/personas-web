@@ -2,6 +2,7 @@
 
 import { motion } from "framer-motion";
 import { loopTransition } from "@/lib/motion/loop-gate";
+import { laneFigures } from "../figures";
 
 interface LaneMetric {
   id: string;
@@ -11,14 +12,6 @@ interface LaneMetric {
   latencyMs: number;
   eps: number;
   color: string;
-}
-
-function clamp(value: number, min: number, max: number) {
-  return Math.max(min, Math.min(max, value));
-}
-
-function sanitize(value: number): number {
-  return Number.isFinite(value) ? Math.max(0, value) : 0;
 }
 
 /**
@@ -38,11 +31,7 @@ export default function LanesView({ laneMetrics, run }: { laneMetrics: LaneMetri
   return (
     <div className="space-y-3">
       {laneMetrics.map((lane, i) => {
-        const queueDepth = sanitize(lane.queueDepth);
-        const latencyMs = sanitize(lane.latencyMs);
-        const eps = sanitize(lane.eps);
-        const depthRatio = clamp(queueDepth / 50, 0, 1);
-        const latencyRatio = clamp(latencyMs / 600, 0, 1);
+        const { queueDepth, deliveryMs, eps, queueFillPct } = laneFigures(lane);
         return (
           <motion.div
             key={lane.id}
@@ -60,7 +49,6 @@ export default function LanesView({ laneMetrics, run }: { laneMetrics: LaneMetri
               </div>
               <div className="flex items-center gap-2 text-base font-mono text-muted">
                 <span className="rounded-full border border-glass-hover px-2 py-0.5">{eps} msgs/s</span>
-                <span className="rounded-full border border-glass-hover px-2 py-0.5">{latencyMs} ms</span>
               </div>
             </div>
 
@@ -68,11 +56,11 @@ export default function LanesView({ laneMetrics, run }: { laneMetrics: LaneMetri
               <motion.div
                 className="absolute inset-y-0 left-0 rounded-full"
                 style={{
-                  width: `${Math.max(depthRatio * 100, 8)}%`,
+                  width: `${queueFillPct}%`,
                   background: `linear-gradient(90deg, ${lane.color}66, color-mix(in srgb, var(--brand-cyan) 60%, transparent))`,
                 }}
                 initial={{ width: 0 }}
-                animate={{ width: `${Math.max(depthRatio * 100, 8)}%` }}
+                animate={{ width: `${queueFillPct}%` }}
                 transition={{ duration: 0.6, ease: "easeOut" }}
               />
               <motion.div
@@ -88,7 +76,7 @@ export default function LanesView({ laneMetrics, run }: { laneMetrics: LaneMetri
                 Waiting: <span className="text-foreground/80">{queueDepth}</span>
               </div>
               <div className="rounded-lg border border-glass-hover bg-white/2 px-2 py-1">
-                Delivery time: <span className="text-foreground/80">{Math.round(latencyRatio * 100)}%</span>
+                Delivery time: <span className="text-foreground/80">{deliveryMs} ms</span>
               </div>
             </div>
           </motion.div>
