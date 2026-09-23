@@ -202,7 +202,7 @@
         },
         {
           "name": "Agent Lab & Plugin Ecosystem",
-          "description": "The Agent Lab (arena/chat/eval/evolution tabs) and the plugin ecosystem grid (dev tools, artists, research lifecycle, second brain graph).",
+          "description": "The Agent Lab (arena/chat/eval/evolution tabs) and the plugin ecosystem grid (dev tools, second brain graph), projected from the desktop-plugin manifest.",
           "businessFeature": "Agent Lab & Plugin Ecosystem",
           "category": "ui",
           "filePaths": [
@@ -217,10 +217,7 @@
             "src/components/feature-sections/lab/data.ts",
             "src/components/feature-sections/lab/index.tsx",
             "src/components/feature-sections/lab/types.ts",
-            "src/components/feature-sections/plugins/ArtistGrid.tsx",
             "src/components/feature-sections/plugins/DevToolsGrid.tsx",
-            "src/components/feature-sections/plugins/ResearchLifecycle.tsx",
-            "src/components/feature-sections/plugins/ResearchSources.tsx",
             "src/components/feature-sections/plugins/SecondBrain.tsx",
             "src/components/feature-sections/plugins/components/PluginCard.tsx",
             "src/components/feature-sections/plugins/components/PluginTabs.tsx",
@@ -231,7 +228,10 @@
             "src/components/feature-sections/plugins/second-brain/SecondBrainGraph.tsx",
             "src/components/feature-sections/plugins/second-brain/SecondBrainSidePanel.tsx",
             "src/components/feature-sections/plugins/second-brain/secondBrainData.ts",
-            "src/components/feature-sections/plugins/types.ts"
+            "src/components/feature-sections/plugins/types.ts",
+            "src/data/desktop-plugins.ts",
+            "src/data/desktop-plugins.test.ts",
+            "src/components/feature-sections/plugins/roster.ts"
           ],
           "target": null,
           "apiRoutes": []
