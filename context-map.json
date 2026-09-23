@@ -619,7 +619,9 @@
             "src/data/guide/locales/zh/content/testing.ts",
             "src/data/guide/locales/zh/content/triggers.ts",
             "src/data/guide/locales/zh/content/troubleshooting.ts",
-            "src/data/guide/locales/zh/topics.ts"
+            "src/data/guide/locales/zh/topics.ts",
+            "scripts/i18n/guide-drift.mjs",
+            "src/lib/guide-drift.test.ts"
           ],
           "target": null,
           "apiRoutes": []
