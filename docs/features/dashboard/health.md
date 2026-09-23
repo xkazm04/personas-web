@@ -9,6 +9,8 @@ Health is the fleet's system-status board: four cards of health checks, each ite
 - **Resources** — CPU, memory, network, plus a **disk-usage bar** (used / free).
 - **Integrations** — GitHub, Slack, Google Calendar, OpenAI, Stripe, Gemini — with **Install / Configure** actions on items that aren't set up (demo no-ops that fire a toast).
 
+A check that is one fragment of a wider incident (today: Slack's "Webhook circuit-broken") shows **Related** chips that deep-link to the same incident on SLA and Observability, and `/dashboard/health?focus=<check id>` rings that row and scrolls it into view, next to its Configure button.
+
 Each card's header dot reflects the worst item status. Like the rest of `/dashboard/*`, all data is **mock** — there's no real host to probe in this repo.
 
 ## How it works
@@ -18,6 +20,7 @@ Key behaviors:
 - **Demo-only fetch** — `getSystemHealth` is a *standalone* export in `mockApi.ts` (not part of the `ApiClient` interface — no real/supabase client changes); the hook calls it via SWR for a brief loading state. Returns the four sections + the disk-usage gauge.
 - **Worst-status header dot** — `worstStatus(items)` ranks error > warn > info > ok; the section header dot + icon take that status's tint.
 - **Demo actions** — items with an `action` (`install` | `configure`) render a button; clicking calls `onAction`, which composes a localized toast message (`{name} {verb}`) and shows `ExecuteToast`. Toast `key` increments per action so the dismiss timer restarts.
+- **Focus + related links** — `HealthSectionCard` reads `useFocusParam()` once and passes `focused` to each `HealthCheckRow`, which adds a `ring-brand-cyan/50` class (class only — markup shape never depends on the URL, and the server/hydrating render see `null`) and calls `useScrollIntoViewWhen`. Rows whose id is in an incident thread (`causeKey` on the fixture, `src/lib/incidentThreads.ts`) render `RelatedIncidentLinks` under the detail line; the rest render nothing extra.
 - **Nav badge** — `MOCK_HEALTH_ALERTS` (count of `error` items) drives the sidebar badge.
 
 ## Key files
@@ -26,7 +29,7 @@ Key behaviors:
 | `src/app/dashboard/health/page.tsx` | Page shell: load, 2-col section grid, disk-bar footer on Resources, action toast |
 | `src/app/dashboard/health/health-page/healthFormat.ts` | Status → dot/text/icon maps, section icon/accent maps, `worstStatus` |
 | `src/app/dashboard/health/health-page/useSystemHealth.ts` | SWR over the standalone `getSystemHealth` mock fetcher |
-| `src/app/dashboard/health/health-page/HealthSectionCard.tsx` | One section card: header status dot + item rows + optional footer + action buttons |
+| `src/app/dashboard/health/health-page/HealthSectionCard.tsx` | One section card: header status dot + `HealthCheckRow` items (focus ring, Related chips) + optional footer + action buttons |
 | `src/app/dashboard/health/health-page/DiskUsageBar.tsx` | Disk-usage gauge (fill-tinted bar + used/free readouts) |
 
 ## Data & state

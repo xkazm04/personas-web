@@ -1,8 +1,11 @@
-import { useState } from "react";
+import { useRef, useState } from "react";
 import { AnimatePresence, motion } from "framer-motion";
 import { AlertTriangle, ChevronDown, ChevronUp, CircleDot, ShieldAlert, ShieldCheck, Zap } from "lucide-react";
 import type { ElementType } from "react";
+import RelatedIncidentLinks from "@/components/dashboard/RelatedIncidentLinks";
+import { useFocusParam, useScrollIntoViewWhen } from "@/hooks/useFocusParam";
 import { relativeTime } from "@/lib/format";
+import { DEMO_THREADS, relatedTo } from "@/lib/incidentThreads";
 import type { MockHealthIssue, ObservabilityLabels } from "./performanceViewTypes";
 
 const severityStyles: Record<string, { color: string; bgColor: string; icon: ElementType }> = {
@@ -24,9 +27,13 @@ export function PerformanceHealthIssueRow({
   const [age] = useState(() => relativeTime(issue.detectedAt));
   const sev = severityStyles[issue.severity] ?? severityStyles.low;
   const SevIcon = sev.icon;
+  // A ?focus=<issue id> deep link rings the row (class only) and scrolls to it.
+  const ref = useRef<HTMLDivElement>(null);
+  const focused = useFocusParam() === issue.id;
+  useScrollIntoViewWhen(ref, focused);
 
   return (
-    <div className={`rounded-xl border p-3.5 transition-colors ${sev.bgColor}`}>
+    <div ref={ref} className={`rounded-xl border p-3.5 transition-colors ${sev.bgColor} ${focused ? "ring-2 ring-brand-cyan/50" : ""}`}>
       <div className="flex items-start gap-3">
         <SevIcon className={`mt-0.5 h-4 w-4 flex-shrink-0 ${sev.color}`} />
         <div className="flex-1 min-w-0">
@@ -61,6 +68,7 @@ export function PerformanceHealthIssueRow({
               </AnimatePresence>
             </div>
           )}
+          <RelatedIncidentLinks links={relatedTo(DEMO_THREADS, issue.id)} />
         </div>
       </div>
     </div>

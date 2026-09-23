@@ -129,6 +129,8 @@ export const MOCK_COST_ANOMALIES: CostAnomaly[] = detectCostAnomalies(MOCK_DAILY
 export interface MockHealthIssue extends HealthIssue {
   isCircuitBreaker?: boolean;
   autoFixApplied?: string;
+  /** Demo incident thread this issue belongs to (see lib/incidentThreads.ts). */
+  causeKey?: string;
 }
 
 export const MOCK_HEALTH_ISSUES: MockHealthIssue[] = [
@@ -155,6 +157,7 @@ export const MOCK_HEALTH_ISSUES: MockHealthIssue[] = [
     detectedAt: new Date(Date.now() - 3 * 60_000).toISOString(),
     category: "circuit_breaker",
     isCircuitBreaker: true,
+    causeKey: "slack-circuit-break",
   },
   {
     id: "hi_3",
@@ -189,6 +192,7 @@ export const MOCK_HEALTH_ISSUES: MockHealthIssue[] = [
     personaName: SECURITY.name,
     detectedAt: new Date(Date.now() - 2 * 3600_000).toISOString(),
     category: "timeout",
+    causeKey: "security-latency",
   },
   // Fleet-level issue — no owning agent (personaId/personaName null exercises
   // the "infrastructure, not agent" branch every renderer has to handle).
@@ -727,6 +731,11 @@ export interface SLABreach {
   durationMinutes: number;
   severity: SLASeverity;
   summary: string;
+  /**
+   * Demo incident thread this breach belongs to (see lib/incidentThreads.ts).
+   * Its SLA target joins the thread by persona + metric, so targets carry none.
+   */
+  causeKey?: string;
 }
 
 export const MOCK_SLA_BREACHES: SLABreach[] = [
@@ -739,6 +748,7 @@ export const MOCK_SLA_BREACHES: SLABreach[] = [
     durationMinutes: 45,
     severity: "critical",
     summary: "Slack webhook circuit-broken; 3 retries exhausted.",
+    causeKey: "slack-circuit-break",
   },
   {
     id: "br_2",
@@ -749,6 +759,7 @@ export const MOCK_SLA_BREACHES: SLABreach[] = [
     durationMinutes: 180,
     severity: "major",
     summary: "P95 latency sustained above 30s target.",
+    causeKey: "security-latency",
   },
   {
     id: "br_3",
@@ -1665,6 +1676,8 @@ export interface HealthCheckItem {
   action?: HealthActionKind;
   /** Optional version/identifier suffix. */
   meta?: string;
+  /** Demo incident thread this check belongs to (see lib/incidentThreads.ts). */
+  causeKey?: string;
 }
 
 export interface HealthCheckSection {
@@ -1710,7 +1723,7 @@ export const MOCK_HEALTH_CHECKS: HealthCheckSection[] = [
     key: "integrations",
     items: [
       { id: "in_github", name: "GitHub", status: "ok", detail: "Authorized · 3 repos" },
-      { id: "in_slack", name: "Slack", status: "error", detail: "Webhook circuit-broken", action: "configure" },
+      { id: "in_slack", name: "Slack", status: "error", detail: "Webhook circuit-broken", action: "configure", causeKey: "slack-circuit-break" },
       { id: "in_gcal", name: "Google Calendar", status: "ok", detail: "Authorized" },
       { id: "in_openai", name: "OpenAI", status: "ok", detail: "Key valid" },
       { id: "in_stripe", name: "Stripe", status: "info", detail: "Not configured", action: "configure" },

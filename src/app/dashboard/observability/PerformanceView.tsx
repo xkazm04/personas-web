@@ -7,6 +7,7 @@ import { AlertTriangle, Loader2 } from "lucide-react";
 import useSWR from "swr";
 import CompareToggle from "@/components/dashboard/CompareToggle";
 import DashboardErrorBanner from "@/components/dashboard/DashboardErrorBanner";
+import { useFocusParam } from "@/hooks/useFocusParam";
 import { fadeUp } from "@/lib/animations";
 import { api } from "@/lib/api";
 import { MOCK_COST_ANOMALIES, MOCK_HEALTH_ISSUES, MOCK_COST_COMPARE, MOCK_EXEC_COMPARE, MOCK_ANNOTATIONS, type MockHealthIssue } from "@/lib/mock-dashboard-data";
@@ -25,6 +26,14 @@ export default function PerformanceView() {
   const isDemo = useAuthStore((s) => s.isDemo);
   const [compareEnabled, setCompareEnabled] = useState(false);
   const [severityFilter, setSeverityFilter] = useState<SeverityFilter>("all");
+  // A ?focus= deep link (e.g. back/forward onto a filtered list) must never
+  // land on a row the severity filter hides: clear the filter when it changes.
+  const focusId = useFocusParam();
+  const [seenFocus, setSeenFocus] = useState(focusId);
+  if (focusId !== seenFocus) {
+    setSeenFocus(focusId);
+    if (focusId) setSeverityFilter("all");
+  }
   const { data, isLoading: loading, isValidating, error, mutate } = useSWR("observability", api.getObservability, {
     refreshInterval: 30_000,
     dedupingInterval: 8_000,

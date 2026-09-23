@@ -1,11 +1,18 @@
+import { useRef } from "react";
+
+import RelatedIncidentLinks from "@/components/dashboard/RelatedIncidentLinks";
+import { useFocusParam, useScrollIntoViewWhen } from "@/hooks/useFocusParam";
+import { DEMO_THREADS, relatedTo } from "@/lib/incidentThreads";
 import type { SLABreach } from "@/lib/mock-dashboard-data";
 
 import { formatAbsolute } from "@/lib/slaFormat";
 
 // Expanded view of a single breach. Adds what the collapsed row can't show:
 // the full (untruncated) summary, absolute start/resolve timestamps, a
-// duration bar scaled against the longest breach currently in view, and
-// whether this persona is a repeat offender in the current set.
+// duration bar scaled against the longest breach currently in view, whether
+// this persona is a repeat offender in the current set, and "Related" links to
+// the same incident on Observability and Health. A ?focus= deep link rings it
+// (a class only, so markup shape never depends on the URL) and scrolls it in.
 export function SLABreachDetail({
   breach,
   durationLabel,
@@ -26,6 +33,9 @@ export function SLABreachDetail({
     elapsed: string;
   };
 }) {
+  const ref = useRef<HTMLDivElement>(null);
+  const focused = useFocusParam() === breach.id;
+  useScrollIntoViewWhen(ref, focused);
   const ongoing = breach.resolvedAt === null;
   const barPct =
     maxDuration > 0
@@ -33,7 +43,10 @@ export function SLABreachDetail({
       : 0;
 
   return (
-    <div className="border-t border-glass px-2 pb-3 pt-2.5">
+    <div
+      ref={ref}
+      className={`border-t border-glass px-2 pb-3 pt-2.5 ${focused ? "rounded-b-lg ring-2 ring-inset ring-brand-cyan/50" : ""}`}
+    >
       <p className="text-sm text-foreground">{breach.summary}</p>
       <div className="mt-2.5 grid grid-cols-2 gap-3">
         <div>
@@ -68,6 +81,7 @@ export function SLABreachDetail({
             .replace("{n}", String(samePersonaCount))}
         </p>
       )}
+      <RelatedIncidentLinks links={relatedTo(DEMO_THREADS, breach.id)} />
     </div>
   );
 }

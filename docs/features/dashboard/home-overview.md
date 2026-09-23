@@ -8,7 +8,7 @@ It greets the user by first name with a time-of-day greeting and an optional "la
 
 - **Fleet optimization** — a heuristic "scale up / down" recommendation card (demo only), the single top recommendation.
 - **Cockpit** — a 3-column row:
-  - **Triage Pane** — one ranked queue of the most urgent items (active SLA breaches, open health incidents, pending reviews) sorted by severity then recency; "all clear" empty state.
+  - **Triage Pane** — one ranked queue of the most urgent items (active SLA breaches, open health incidents, pending reviews) sorted by severity then recency; "all clear" empty state. Breach and incident rows deep-link to their exact row — `focusHref("slaBreach", id)` → `/dashboard/sla?focus=<id>` (the breach opens) and `focusHref("healthIssue", id)` → `/dashboard/observability?focus=<id>` (the issue is ringed) — from `src/lib/incidentThreads.ts`, the same helper the SLA / Observability / Health "Related" chips use. The Slack circuit-break still appears twice (breach `br_1` + issue `hi_2`); they are one incident thread and each now links to the other through its landing row.
   - **Vitals Console** — a success-rate ring + 14-day success sparkline over a 2×2 grid of counters (runs, agents, open alerts, pending reviews).
   - **Activity Stream** — the latest 12 executions with persona avatar, relative time, duration, cost, and status; new runs pulse cyan as they arrive.
 - **Fleet sessions + Approved work** (demo only) — a 2:1 row mirroring the desktop's current Mission Control era:
@@ -43,7 +43,7 @@ Subcomponents each own a slice:
 | `src/app/dashboard/page.tsx` | `redirect("/dashboard/home")` |
 | `src/app/dashboard/home/home-page/DashboardGreetingHeader.tsx` | Slim greeting + last-seen line |
 | `src/app/dashboard/home/home-page/TriagePane.tsx` | Ranked urgent queue (breaches / incidents / reviews) |
-| `src/app/dashboard/home/home-page/useTriageQueue.ts` | Merges + ranks triage items (severity → weight → recency) |
+| `src/app/dashboard/home/home-page/useTriageQueue.ts` | Merges + ranks triage items (severity → weight → recency); breach/incident hrefs via `focusHref` |
 | `src/app/dashboard/home/home-page/VitalsConsole.tsx` | Success-rate ring + sparkline + 2×2 counters |
 | `src/app/dashboard/home/home-page/useOpenAlertCount.ts` | Open-alert count (mock in demo, fetch in real); shared by cockpit |
 | `src/app/dashboard/home/home-page/FleetSessionsStrip.tsx` | Session ledger with parked-state classification (needs-you / working / frozen / finished), demo only |
