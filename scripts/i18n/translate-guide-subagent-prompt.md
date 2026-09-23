@@ -8,9 +8,12 @@ placeholders below.
 Companion scripts:
 - `scripts/i18n/emit-source-hashes.mjs` — produces the per-topic source-hash
   manifest the subagent bakes into `_meta.json`.
-- `scripts/i18n/check-guide-translations.mjs` — drift detector that
-  compares current English hashes vs. each locale's stored hashes; used
-  on later sessions to identify topics that need re-translation.
+- `scripts/i18n/check-guide-translations.mjs` — drift detector. It anchors
+  each locale's stored hash to the English revision it was taken from and
+  reports only real English changes as stale (line-ending and extractor
+  churn is named and folded into fresh). `--work-order` prints, per topic,
+  the locales to refresh and the English line diff since the translation:
+  that output is `<WORK_ORDER_PATH>` for the refresh mode below.
 
 Companion data:
 - `docs/i18n/glossary.md` — do-not-translate terms and the UNRESOLVED tier
@@ -28,8 +31,10 @@ REPO ROOT: <WORKTREE_ABSOLUTE_PATH>
 
 ## Unit context
 
-- Action: full translation of every guide topic into this locale. This
-  template has no review or re-translation mode.
+- Action: <ACTION>. `full` = translate every guide topic into this locale
+  (the sections below as written). `refresh` = bring existing translations
+  up to date with the English edits listed in the work order; follow
+  "Refresh mode" below, which overrides "What to write" and "How to work".
 - Surface: each topic body is Markdown rendered as a page of the public
   user guide on the website; titles and descriptions appear in the guide's
   navigation and search. Readers are users of the Personas desktop app.
@@ -227,6 +232,38 @@ export const content: Record<string, string> = {
    with translated titles + descriptions for every topic in the manifest.
 7. Finally, produce `_meta.json` with the source hashes from step 1.
 
+## Refresh mode (only when Action is `refresh`)
+
+Work order (English deltas since each translation):
+  <WORK_ORDER_PATH>
+
+1. Read the work order. Act only on entries whose `locales` list includes
+   <LOCALE_CODE>. Every entry names a topic id, the English revision the
+   current translation was made from, and the English change since then:
+   title and description as `"old" -> "new"`, body as a line diff (`-`
+   removed, `+` added, ` ` unchanged context, `@@` elided unchanged text).
+2. For each topic, open the EXISTING translation in
+   `locales/<LOCALE_CODE>/content/<category>.ts` (and `topics.ts` when the
+   title or description changed). Apply the delta: rewrite the passages
+   the diff changes, add translations of added lines, delete the
+   translation of removed lines. Leave unchanged passages as they are - do
+   not re-translate or re-style them.
+3. Read the full current English body once as well, so the refreshed
+   passages fit it; the diff is the work order, not the whole context.
+4. In `_meta.json`, set `translatedFromHash` (and `translatedAt`) to the
+   CURRENT hash from the source-hash manifest - only for the topics you
+   refreshed. Never re-pin a topic you did not change: a pin says "this
+   translation reflects that English", and re-pinning without the edit
+   hides staleness from the detector.
+5. Entries marked `present-unpinned` have no `_meta.json` entry yet; after
+   refreshing, add one with the current hash.
+6. Topics not in the work order are out of scope: do not touch them, even
+   if you notice something you would phrase differently.
+
+The translation rules, style guidance and verification below apply to
+every passage you write. In your summary, list each refreshed topic id
+and the fields you changed.
+
 ## Verification before returning
 
 Before you finish, verify your output:
@@ -275,6 +312,8 @@ When spawning a subagent, replace these placeholders in the prompt above:
 | `<WORKTREE>`             | absolute path to the personas-web worktree                 |
 | `<WORKTREE_ABSOLUTE_PATH>` | same as `<WORKTREE>`                                     |
 | `<SOURCE_HASHES_PATH>`   | path to the JSON manifest emitted by `emit-source-hashes.mjs` |
+| `<ACTION>`               | `full` (bootstrap a locale) or `refresh` (apply a work order) |
+| `<WORK_ORDER_PATH>`      | refresh only: file holding `node scripts/i18n/check-guide-translations.mjs --work-order` output |
 | `<PLURAL_CATEGORIES>`    | derived, never hand-typed: `new Intl.PluralRules("<LOCALE_CODE>").resolvedOptions().pluralCategories.join(", ")` |
 
 `<PLURAL_CATEGORIES>` as Node 24 resolves it (2026-09-14): ar zero, one, two,
