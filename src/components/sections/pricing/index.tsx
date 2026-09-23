@@ -15,14 +15,16 @@ import FeatureGroupCard from "./FeatureGroupCard";
 
 /**
  * Landing section — re-labelled from the old Pricing tiers to a feature-group
- * showcase sourced from /guide categories. Anchor remains `#pricing` so the
- * scroll-map and existing hash links keep working.
+ * showcase sourced from /guide categories. Anchor remains `#pricing` (held by
+ * the page.tsx stage wrapper) so the scroll-map and existing hash links keep working.
  */
 
 export default function Pricing() {
   const { t } = useTranslation();
   return (
-    <SectionWrapper id="pricing" aria-labelledby="compare-heading">
+    // No id: page.tsx's always-present wrapper owns `pricing` (ids are unique
+    // per document); `lib/landing-address.ts` finds this section by its label.
+    <SectionWrapper aria-labelledby="compare-heading">
       <SectionIntro
         id="compare-heading"
         heading={t.compareSection.heading}

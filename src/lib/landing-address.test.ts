@@ -113,6 +113,28 @@ describe("resolveLandingAddress", () => {
     );
   });
 
+  it("pricing's id is emitted once: the always-present wrapper holds it, the mounted section does not", () => {
+    // Same bug class as get-started: page.tsx's wrapper and the Pricing
+    // SectionWrapper both rendered id="pricing".
+    const page = read("src/app/page.tsx");
+    const wrapperEmits = [...page.matchAll(/wrapperId:\s*"pricing"/g)].length;
+    const sectionEmits = walk(path.join(SRC_ROOT, "components", "sections")).reduce(
+      (n, file) => n + [...readFileSync(file, "utf8").matchAll(/\bid="pricing"/g)].length,
+      0,
+    );
+    expect({ wrapperEmits, sectionEmits }).toEqual({ wrapperEmits: 1, sectionEmits: 0 });
+  });
+
+  it("finds the mounted pricing section by its heading label, not by an id the wrapper owns", () => {
+    const address = resolveLandingAddress("#pricing")!;
+    expect(address.wrapperSelector).toBe('[data-scroll-anchor="pricing"]');
+    expect(address.innerSelector).toBe('[data-scroll-anchor="pricing"] [aria-labelledby="compare-heading"]');
+    // ...and that label is really what the section carries, on the heading it names.
+    const section = read("src/components/sections/pricing/index.tsx");
+    expect(section).toMatch(/<SectionWrapper aria-labelledby="compare-heading">/);
+    expect(section).toMatch(/<SectionIntro\s+id="compare-heading"/);
+  });
+
   it("guard: every inner section id is rendered by some home section", () => {
     const ids = new Set<string>();
     for (const file of walk(path.join(SRC_ROOT, "components", "sections"))) {

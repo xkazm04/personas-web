@@ -25,9 +25,8 @@ export interface LandingAddress {
    *  the section's own id or, where the wrapper owns the address id, the id of
    *  the heading the section is labelled by (see `LABELLED_INNER`). */
   innerId: string;
-  /** Finds the mounted section INSIDE its wrapper. A descendant match, so a
-   *  wrapper that repeats the section's id (`pricing`) is never mistaken for
-   *  the mounted section. */
+  /** Finds the mounted section INSIDE its wrapper - a descendant match, so the
+   *  always-present wrapper itself is never mistaken for the mounted section. */
   innerSelector: string;
 }
 
@@ -52,6 +51,7 @@ const INNER_IDS: Readonly<Record<string, string>> = {
  *  carries none and is found by the heading that labels it instead. */
 const LABELLED_INNER: Readonly<Record<string, string>> = {
   "get-started": "get-started-heading",
+  pricing: "compare-heading",
 };
 
 const DECLARED = new Set(LANDING_SECTIONS.map((s) => s.id));
