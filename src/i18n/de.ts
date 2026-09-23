@@ -2095,5 +2095,18 @@ export const de: Translations = {
       pinBaseline: "Als Baseline festlegen",
       regression: "Regression",
       nowLive: "{version} ist live"
+    },
+    pluginShowcase: {
+      heading: "Alles zum",
+      headingGradient: "Andocken",
+      introAll: "Personas bringt {shipped} Plugins mit, und alle sind unten im Einsatz.",
+      introSome: "Personas bringt {shipped} Plugins mit, {showcased} davon sind unten im Einsatz.",
+      introTail: "Jedes ist ein eigenst\u00e4ndiger Arbeitsbereich, den Ihre Agenten steuern k\u00f6nnen \u2013 mit denselben Anmeldedaten und im Zusammenspiel mit den anderen. Wechseln Sie den Tab, um einen weiteren Spezialisten kennenzulernen.",
+      tabsLabel: "Vorgestellte Plugins",
+      counter: "Plugin {current} von {total}",
+      taglines: {
+        devTools: "Parallele Agentenflotte, Projekte, Triage",
+        brain: "Ihr Vault, bereit f\u00fcr Agenten"
+      }
     }
   };

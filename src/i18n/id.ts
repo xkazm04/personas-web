@@ -2281,5 +2281,18 @@ export const id: Translations = {
       pinBaseline: "Jadikan acuan",
       regression: "Regresi",
       nowLive: "{version} sudah tayang"
+    },
+    pluginShowcase: {
+      heading: "Semua siap",
+      headingGradient: "dipasang",
+      introAll: "Personas hadir dengan {shipped} plugin, dan semuanya sedang bekerja di bawah.",
+      introSome: "Personas hadir dengan {shipped} plugin, dan {showcased} di antaranya sedang bekerja di bawah.",
+      introTail: "Masing-masing adalah ruang kerja mandiri yang dapat dijalankan agen Anda, berbagi kredensial yang sama dan saling melengkapi. Ganti tab untuk bertemu spesialis lain.",
+      tabsLabel: "Plugin yang ditampilkan",
+      counter: "plugin {current} dari {total}",
+      taglines: {
+        devTools: "Armada agen paralel, proyek, triase",
+        brain: "Vault Anda, siap untuk agen"
+      }
     }
   };

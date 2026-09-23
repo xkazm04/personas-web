@@ -2125,5 +2125,18 @@ export const cs: Translations = {
       pinBaseline: "Nastavit jako referenci",
       regression: "Regrese",
       nowLive: "{version} b\u011b\u017e\u00ed naostro"
+    },
+    pluginShowcase: {
+      heading: "V\u0161echno, co",
+      headingGradient: "sta\u010d\u00ed zapojit",
+      introAll: "Personas p\u0159ich\u00e1z\u00ed s {shipped} pluginy a v\u0161echny uvid\u00edte n\u00ed\u017ee v akci.",
+      introSome: "Personas p\u0159ich\u00e1z\u00ed s {shipped} pluginy a {showcased} z nich uvid\u00edte n\u00ed\u017ee v akci.",
+      introTail: "Ka\u017ed\u00fd je samostatn\u00fd pracovn\u00ed prostor, kter\u00fd mohou va\u0161i agenti \u0159\u00eddit \u2013 sd\u00edl\u00ed stejn\u00e9 p\u0159ihla\u0161ovac\u00ed \u00fadaje a spolupracuje s ostatn\u00edmi. P\u0159epn\u011bte kartu a potk\u00e1te dal\u0161\u00edho specialistu.",
+      tabsLabel: "P\u0159edstaven\u00e9 pluginy",
+      counter: "plugin {current} z {total}",
+      taglines: {
+        devTools: "Paraleln\u00ed flotila agent\u016f, projekty, t\u0159\u00edd\u011bn\u00ed",
+        brain: "V\u00e1\u0161 trezor, p\u0159ipraven\u00fd pro agenty"
+      }
     }
   };

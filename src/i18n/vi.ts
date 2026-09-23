@@ -2281,5 +2281,18 @@ export const vi: Translations = {
       pinBaseline: "\u0110\u1eb7t l\u00e0m m\u1ed1c chu\u1ea9n",
       regression: "Suy gi\u1ea3m",
       nowLive: "{version} \u0111ang ch\u1ea1y"
+    },
+    pluginShowcase: {
+      heading: "M\u1ecdi th\u1ee9 \u0111\u1ec1u",
+      headingGradient: "c\u1eafm l\u00e0 ch\u1ea1y",
+      introAll: "Personas \u0111i k\u00e8m {shipped} plugin, v\u00e0 t\u1ea5t c\u1ea3 \u0111\u1ec1u \u0111ang ho\u1ea1t \u0111\u1ed9ng b\u00ean d\u01b0\u1edbi.",
+      introSome: "Personas \u0111i k\u00e8m {shipped} plugin, v\u00e0 {showcased} trong s\u1ed1 \u0111\u00f3 \u0111ang ho\u1ea1t \u0111\u1ed9ng b\u00ean d\u01b0\u1edbi.",
+      introTail: "M\u1ed7i plugin l\u00e0 m\u1ed9t kh\u00f4ng gian l\u00e0m vi\u1ec7c \u0111\u1ed9c l\u1eadp m\u00e0 agent c\u1ee7a b\u1ea1n c\u00f3 th\u1ec3 \u0111i\u1ec1u khi\u1ec3n, d\u00f9ng chung th\u00f4ng tin \u0111\u0103ng nh\u1eadp v\u00e0 k\u1ebft h\u1ee3p \u0111\u01b0\u1ee3c v\u1edbi c\u00e1c plugin kh\u00e1c. Chuy\u1ec3n tab \u0111\u1ec3 g\u1eb7p m\u1ed9t chuy\u00ean gia kh\u00e1c.",
+      tabsLabel: "C\u00e1c plugin \u0111\u01b0\u1ee3c gi\u1edbi thi\u1ec7u",
+      counter: "plugin {current} / {total}",
+      taglines: {
+        devTools: "\u0110\u1ed9i agent song song, d\u1ef1 \u00e1n, ph\u00e2n lo\u1ea1i",
+        brain: "Vault c\u1ee7a b\u1ea1n, s\u1eb5n s\u00e0ng cho agent"
+      }
     }
   };

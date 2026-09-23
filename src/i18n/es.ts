@@ -2091,5 +2091,18 @@ export const es: Translations = {
       pinBaseline: "Fijar como referencia",
       regression: "Regresi\u00f3n",
       nowLive: "{version} est\u00e1 en producci\u00f3n"
+    },
+    pluginShowcase: {
+      heading: "Todo listo para",
+      headingGradient: "conectar",
+      introAll: "Personas incluye {shipped} plugins, y todos est\u00e1n en acci\u00f3n aqu\u00ed abajo.",
+      introSome: "Personas incluye {shipped} plugins, y {showcased} de ellos est\u00e1n en acci\u00f3n aqu\u00ed abajo.",
+      introTail: "Cada uno es un espacio de trabajo aut\u00f3nomo que tus agentes pueden manejar, con las mismas credenciales y en combinaci\u00f3n con los dem\u00e1s. Cambia de pesta\u00f1a para conocer a otro especialista.",
+      tabsLabel: "Plugins destacados",
+      counter: "plugin {current} de {total}",
+      taglines: {
+        devTools: "Flota de agentes en paralelo, proyectos, triaje",
+        brain: "Tu b\u00f3veda, lista para agentes"
+      }
     }
   };

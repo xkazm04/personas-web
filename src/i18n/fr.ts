@@ -2098,5 +2098,18 @@ export const fr: Translations = {
       pinBaseline: "D\u00e9finir comme r\u00e9f\u00e9rence",
       regression: "R\u00e9gression",
       nowLive: "{version} est en production"
+    },
+    pluginShowcase: {
+      heading: "Tout se",
+      headingGradient: "branche",
+      introAll: "Personas est livr\u00e9 avec {shipped} plugins, et tous sont \u00e0 l'\u0153uvre ci-dessous.",
+      introSome: "Personas est livr\u00e9 avec {shipped} plugins, dont {showcased} sont \u00e0 l'\u0153uvre ci-dessous.",
+      introTail: "Chacun est un espace de travail autonome que vos agents peuvent piloter, avec les m\u00eames identifiants et en synergie avec les autres. Changez d'onglet pour rencontrer un autre sp\u00e9cialiste.",
+      tabsLabel: "Plugins pr\u00e9sent\u00e9s",
+      counter: "plugin {current} sur {total}",
+      taglines: {
+        devTools: "Flotte d'agents en parall\u00e8le, projets, tri",
+        brain: "Votre coffre, pr\u00eat pour les agents"
+      }
     }
   };

@@ -1722,6 +1722,23 @@
     regression: string;
     nowLive: string;
   };
+  /**
+   * /features plugin showcase. {shipped}/{showcased} are derived counts (desktop manifest /
+   * roster); {current}/{total} are the open tab's position. Product names stay untranslated.
+   */
+  pluginShowcase: {
+    heading: string;
+    headingGradient: string;
+    introAll: string;
+    introSome: string;
+    introTail: string;
+    tabsLabel: string;
+    counter: string;
+    taglines: {
+      devTools: string;
+      brain: string;
+    };
+  };
 }
 
 export const en: Translations = {
@@ -3713,5 +3730,18 @@ export const en: Translations = {
     pinBaseline: 'Pin as baseline',
     regression: 'Regression',
     nowLive: '{version} is live',
+  },
+  pluginShowcase: {
+    heading: 'Everything to',
+    headingGradient: 'plug in',
+    introAll: 'Personas ships with {shipped} plugins, and every one is at work below.',
+    introSome: 'Personas ships with {shipped} plugins, and {showcased} of them are at work below.',
+    introTail: 'Each is a self-contained workspace your agents can drive, sharing the same credentials and composing with the others. Switch a tab to meet another specialist.',
+    tabsLabel: 'Showcased plugins',
+    counter: 'plugin {current} of {total}',
+    taglines: {
+      devTools: 'Parallel agent fleet, projects, triage',
+      brain: 'Your vault, agent-ready',
+    },
   },
 };
