@@ -1268,7 +1268,8 @@
             "src/components/dashboard/usage-charts/usageChartTypes.ts",
             "src/hooks/useLiveStats.ts",
             "src/lib/chart-theme.tsx",
-            "src/stores/systemStore.ts"
+            "src/stores/systemStore.ts",
+            "src/lib/observabilitySeries.ts"
           ],
           "target": null,
           "apiRoutes": []
