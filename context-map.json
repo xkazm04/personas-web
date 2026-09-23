@@ -1615,7 +1615,11 @@
             "e2e/tour.spec.ts",
             "e2e/use-cases.spec.ts",
             "next.config.ts",
-            "playwright.config.ts"
+            "playwright.config.ts",
+            "e2e/landing-hash-arrival.spec.ts",
+            "e2e/orchestration-hub.spec.ts",
+            "e2e/review-undo.spec.ts",
+            "e2e/reduced-motion.spec.ts"
           ],
           "target": null,
           "apiRoutes": []
