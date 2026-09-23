@@ -1096,7 +1096,6 @@
           "filePaths": [
             "src/app/dashboard/reviews/ReviewsFocusFlow.tsx",
             "src/app/dashboard/reviews/ReviewsSplitPane.tsx",
-            "src/app/dashboard/reviews/ShortcutsHud.tsx",
             "src/app/dashboard/reviews/page.tsx",
             "src/app/dashboard/reviews/reviews-focus-flow/FocusEmptyState.tsx",
             "src/app/dashboard/reviews/reviews-focus-flow/FocusProgressHeader.tsx",
@@ -1110,10 +1109,6 @@
             "src/app/dashboard/reviews/reviews-split-pane/ReviewsSplitPaneToasts.tsx",
             "src/app/dashboard/reviews/reviews-split-pane/reviewSeverityConfig.ts",
             "src/app/dashboard/reviews/reviews-split-pane/useReviewKeyboardShortcuts.ts",
-            "src/app/dashboard/reviews/shortcuts-hud/ShortcutKeyChips.tsx",
-            "src/app/dashboard/reviews/shortcuts-hud/ShortcutsOverlayDialog.tsx",
-            "src/app/dashboard/reviews/shortcuts-hud/shortcutTypes.ts",
-            "src/app/dashboard/reviews/shortcuts-hud/usePlatformMod.ts",
             "src/components/BulkProgressBar.tsx",
             "src/components/BulkResultToast.tsx",
             "src/components/ConfirmDialog.tsx",
@@ -1126,7 +1121,6 @@
             "src/hooks/useReviewVoice.ts",
             "src/lib/review-voice-data.ts",
             "src/lib/review-voice.ts",
-            "src/lib/reviewUtils.ts",
             "src/stores/reviewStore.ts",
             "src/stores/reviewVoiceStore.ts",
             "src/lib/review-ledger.ts",
@@ -1136,7 +1130,9 @@
             "src/lib/review-sla.test.ts",
             "src/lib/reviewFixtures.test.ts",
             "src/stores/reviewStore.sla.test.ts",
-            "src/app/dashboard/reviews/review-due.tsx"
+            "src/app/dashboard/reviews/review-due.tsx",
+            "src/lib/review-display.ts",
+            "src/lib/review-queue-i18n.test.ts"
           ],
           "target": null,
           "apiRoutes": []
