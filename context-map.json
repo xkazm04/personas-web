@@ -1274,9 +1274,8 @@
             "src/app/dashboard/sla/sla-page/SLABreachRow.tsx",
             "src/app/dashboard/sla/sla-page/SLASummaryGrid.tsx",
             "src/app/dashboard/sla/sla-page/SLATargetGrid.tsx",
-            "src/app/dashboard/sla/sla-page/slaFormat.ts",
+            "src/lib/slaFormat.ts",
             "src/app/dashboard/sla/useSlaData.ts",
-            "src/components/dashboard/ChartAnnotation.tsx",
             "src/components/dashboard/CompareToggle.tsx",
             "src/components/dashboard/CostChartWithCompare.tsx",
             "src/components/dashboard/ExecChartWithCompare.tsx",
@@ -1284,9 +1283,6 @@
             "src/components/dashboard/HealthIssueRow.tsx",
             "src/components/dashboard/LatencyChart.tsx",
             "src/components/dashboard/MetricCard.tsx",
-            "src/components/dashboard/ObservabilityCharts.tsx",
-            "src/components/dashboard/ObservabilityCostChart.tsx",
-            "src/components/dashboard/ObservabilityExecChart.tsx",
             "src/components/dashboard/ObservabilitySpendPieChart.tsx",
             "src/components/dashboard/Sparkline.tsx",
             "src/components/dashboard/TrafficChart.tsx",
@@ -1301,7 +1297,9 @@
             "src/lib/observabilitySeries.ts",
             "src/lib/incidentThreads.ts",
             "src/hooks/useFocusParam.ts",
-            "src/components/dashboard/RelatedIncidentLinks.tsx"
+            "src/components/dashboard/RelatedIncidentLinks.tsx",
+            "src/app/dashboard/observability/observabilityStillMotion.test.ts",
+            "src/app/dashboard/observability/usageViewDemoPath.test.ts"
           ],
           "target": null,
           "apiRoutes": []
@@ -1406,15 +1404,17 @@
         },
         {
           "name": "System Health Panel",
-          "description": "System Health Panel: runtime / services / resources / integrations status cards with status dots, a disk-usage gauge, and illustrative install/configure actions (demo no-ops to a toast). New route /dashboard/health; demo-only.",
+          "description": "System Health Panel: runtime / services / resources / integrations status cards with status dots, a disk-usage gauge, and illustrative install/configure actions (demo-only: the row settles to ok in-session, plus a toast). New route /dashboard/health; demo-only.",
           "businessFeature": "System Health Panel",
           "category": "ui",
           "filePaths": [
             "src/app/dashboard/health/page.tsx",
-            "src/app/dashboard/health/health-page/healthFormat.ts",
+            "src/lib/healthFormat.ts",
             "src/app/dashboard/health/health-page/useSystemHealth.ts",
             "src/app/dashboard/health/health-page/HealthSectionCard.tsx",
-            "src/app/dashboard/health/health-page/DiskUsageBar.tsx"
+            "src/app/dashboard/health/health-page/DiskUsageBar.tsx",
+            "src/app/dashboard/health/health-page/healthActions.ts",
+            "src/app/dashboard/health/health-page/healthActions.test.ts"
           ],
           "target": null,
           "apiRoutes": []
@@ -1958,7 +1958,7 @@
     "Observability & Event Monitoring › Execution History & Streaming [ui] — 14 files",
     "Observability & Event Monitoring › Leaderboard & Rankings [ui] — 7 files",
     "Observability & Event Monitoring › Director Coaching [ui] — 11 files",
-    "Observability & Event Monitoring › Observability Charts & SLA [ui] — 53 files",
+    "Observability & Event Monitoring › Observability Charts & SLA [ui] — 55 files",
     "Observability & Event Monitoring › Event Bus & Stream Monitoring [ui] — 33 files",
     "Observability & Event Monitoring › Dashboard Home Overview [ui] — 23 files",
     "Platform Foundation: Shell, UI & Motion › Mobile App Shell & Views [ui] — 13 files",
