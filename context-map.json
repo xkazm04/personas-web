@@ -1111,7 +1111,10 @@
             "src/lib/review-voice.ts",
             "src/lib/reviewUtils.ts",
             "src/stores/reviewStore.ts",
-            "src/stores/reviewVoiceStore.ts"
+            "src/stores/reviewVoiceStore.ts",
+            "src/lib/review-ledger.ts",
+            "src/lib/review-ledger.test.ts",
+            "src/stores/reviewStore.test.ts"
           ],
           "target": null,
           "apiRoutes": []
