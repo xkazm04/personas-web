@@ -12,6 +12,8 @@ import WaitlistModal from "@/components/WaitlistModal";
 import { useTranslation } from "@/i18n/useTranslation";
 import { fadeUp } from "@/lib/animations";
 import { trackDownloadClick, type WaitlistEntryPoint } from "@/lib/analytics";
+import { pickWaitlistPlatform } from "@/lib/landing-address";
+import { detectPlatformKey } from "@/components/waitlist-modal/waitlistUtils";
 
 import { DownloadStepGrid } from "./download-cta/DownloadStepGrid";
 import { DownloadTrustSignals } from "./download-cta/DownloadTrustSignals";
@@ -96,14 +98,14 @@ export default function DownloadCTA() {
               /* No installer configured — this button opens the waitlist form,
                  so it must not claim to download anything. */
               <PrimaryCTA
-                onClick={() => openWaitlist(platforms[0], "download-cta")}
+                onClick={() => openWaitlist(pickWaitlistPlatform(detectPlatformKey(), platforms), "download-cta")}
                 icon={Download}
                 label={t.downloadSection.joinWaitlist}
                 variant="solid"
               />
             )}
             <a
-              href="#features"
+              href="#use-cases"
               className="inline-flex w-[min(100%,20rem)] items-center justify-center rounded-full border border-glass-hover bg-white/[0.015] px-6 py-3 text-base font-medium text-muted transition-colors duration-300 hover:border-glass-strong hover:text-foreground sm:w-auto focus-visible:ring-2 focus-visible:ring-brand-cyan/40 focus-visible:outline-none"
             >
               {t.downloadSection.exploreFirst}

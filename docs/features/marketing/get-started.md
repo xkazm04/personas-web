@@ -35,6 +35,8 @@ Two stacked homepage conversion sections that turn an interested visitor into a 
 
 **`/api/download`** (`src/app/api/download/route.ts`). `PrimaryCTA` links here, not directly to the artifact. The route validates `NEXT_PUBLIC_DOWNLOAD_URL` at module load: must be parseable, `https:`, and its host must be in `ALLOWED_DOWNLOAD_HOSTS` (github / personas.app CDNs) — preventing an env-var compromise from turning the route into an open redirect. On success it 302s to the URL; otherwise it redirects to `/#download` (the waitlist fallback) and logs a Sentry warning once per process.
 
+**Arriving at `/#download`.** Thirteen off-home links (blog, guide topics, templates, security, playground, connections, the 404 page, and this route's own fallback) send visitors to `/#download`, but `id="download"` exists only after the `ssr: false`, viewport-gated section mounts, so the browser's fragment scroll and Next's layout-router both used to drop them at the top of the hero. `<LandingHashArrival />` (mounted in `src/app/page.tsx`) resolves the hash through `resolveLandingAddress` (`src/lib/landing-address.ts`) and runs the arrival protocol in `src/hooks/useHashArrival.ts`: it scrolls the always-present `[data-scroll-anchor="download"]` wrapper so the section mounts, lands on the section once it exists, moves focus to `#download-heading`, and holds the position for `REASSERT_MS` while skeletons above resolve. `#download-section` is an alias of the same address. The primary waitlist button (no installer configured) pre-selects the visitor's own OS via `pickWaitlistPlatform(detectPlatformKey(), platforms)`, as the navbar does, instead of always opening the Windows list.
+
 ## Key files
 
 | File | Role |
@@ -56,6 +58,9 @@ Two stacked homepage conversion sections that turn an interested visitor into a 
 | `src/components/sections/download-cta/DownloadStepGrid.tsx` | 3-tile download step sequence with glow pulse |
 | `src/components/sections/download-cta/DownloadTrustSignals.tsx` | CLI/installer-size trust line |
 | `src/app/api/download/route.ts` | Allowlisted redirect to the release artifact |
+| `src/lib/landing-address.ts` | Home address resolver (aliases, inner ids), pure arrival `step()` table, `pickWaitlistPlatform` |
+| `src/hooks/useHashArrival.ts` | Arrival runner: seek the wrapper, land + focus, re-assert, cancel on reader scroll |
+| `src/components/LandingHashArrival.tsx` | Client leaf mounted in `page.tsx` that resolves the hash on load and on `hashchange` |
 
 ## Data & state
 - **Source:** Static. Get Started content is `TOUR_STEPS` (`src/data/tour.ts`); visuals' inner data (connectors, prompt, events, fitness bars, platforms) is hardcoded inside each visual component. Download CTA config comes from `NEXT_PUBLIC_*` build-time env vars.
@@ -78,6 +83,7 @@ Two stacked homepage conversion sections that turn an interested visitor into a 
 - **Two unrelated brand sets:** `TOUR_STEPS[*].brand` (`cyan/purple/emerald/amber/rose`) themes the Get Started steps; `DownloadStepGrid`'s `STEP_BRANDS` (`cyan/blue/purple`) is a separate local palette — don't conflate them.
 - **React 19 purity:** `useFreshRelease` correctly seeds from `Date.now()` in a lazy `useState` initializer (not in render/`useMemo`); `useAutoCycle` uses the prev-state pattern to clamp the index instead of `setState`-in-effect. Preserve both patterns.
 - **Download is env-gated end to end:** with no `NEXT_PUBLIC_DOWNLOAD_URL`, the whole CTA degrades to waitlist mode (button → modal, no trust signals, macOS/Linux/Windows all "notify me"). `/api/download` independently re-validates the URL host, so the button can render while the route still falls back to `/#download`.
+- **Home links must resolve:** `src/lib/landing-address.test.ts` scans every `"/#x"` literal in `src/` and every in-page `href="#x"` in the home sections and fails when one does not resolve to a declared address. It caught "Explore first" pointing at a `#features` id nothing renders; that link now goes to `#use-cases`.
 - **Backdrop artwork is decorative:** `StepBackdrop` images use `alt=""` + `aria-hidden` (correct); they require paired `step{N}-dark.png` / `step{N}-light.png` assets under `public/imgs/get-started/`.
 
 ## Related docs
