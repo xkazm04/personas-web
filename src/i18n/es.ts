@@ -2092,5 +2092,19 @@ export const es: Translations = {
     orchestrationHub: {
       previousTrigger: "Disparador anterior",
       nextTrigger: "Disparador siguiente"
+    },
+    labVersions: {
+      title: "Versiones y puntuaciones",
+      hint: "Activa una versi\u00f3n para ponerla en producci\u00f3n. Para revertir, activa la anterior.",
+      live: "En producci\u00f3n",
+      experimental: "Experimental",
+      rating: "Puntuaci\u00f3n",
+      deltaVsBaseline: "\u0394 frente a la referencia",
+      baseline: "Referencia",
+      activate: "Activar",
+      activateVersion: "Activar {version}",
+      pinBaseline: "Fijar como referencia",
+      regression: "Regresi\u00f3n",
+      nowLive: "{version} est\u00e1 en producci\u00f3n"
     }
   };

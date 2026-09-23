@@ -2099,5 +2099,19 @@ export const fr: Translations = {
     orchestrationHub: {
       previousTrigger: "D\u00e9clencheur pr\u00e9c\u00e9dent",
       nextTrigger: "D\u00e9clencheur suivant"
+    },
+    labVersions: {
+      title: "Versions et notes",
+      hint: "Activez une version pour la mettre en production. Pour revenir en arri\u00e8re, r\u00e9activez la pr\u00e9c\u00e9dente.",
+      live: "En production",
+      experimental: "Exp\u00e9rimentale",
+      rating: "Note",
+      deltaVsBaseline: "\u0394 par rapport \u00e0 la r\u00e9f\u00e9rence",
+      baseline: "R\u00e9f\u00e9rence",
+      activate: "Activer",
+      activateVersion: "Activer {version}",
+      pinBaseline: "D\u00e9finir comme r\u00e9f\u00e9rence",
+      regression: "R\u00e9gression",
+      nowLive: "{version} est en production"
     }
   };

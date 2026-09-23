@@ -2282,5 +2282,19 @@ export const zh: Translations = {
     orchestrationHub: {
       previousTrigger: "\u4e0a\u4e00\u4e2a\u89e6\u53d1\u5668",
       nextTrigger: "\u4e0b\u4e00\u4e2a\u89e6\u53d1\u5668"
+    },
+    labVersions: {
+      title: "\u7248\u672c\u4e0e\u8bc4\u5206",
+      hint: "\u6fc0\u6d3b\u67d0\u4e2a\u7248\u672c\u5373\u53ef\u4e0a\u7ebf\u3002\u8981\u56de\u6eda\uff0c\u91cd\u65b0\u6fc0\u6d3b\u4e0a\u4e00\u4e2a\u7248\u672c\u5373\u53ef\u3002",
+      live: "\u5df2\u4e0a\u7ebf",
+      experimental: "\u5b9e\u9a8c\u7248",
+      rating: "\u8bc4\u5206",
+      deltaVsBaseline: "\u76f8\u5bf9\u57fa\u7ebf \u0394",
+      baseline: "\u57fa\u7ebf",
+      activate: "\u6fc0\u6d3b",
+      activateVersion: "\u6fc0\u6d3b {version}",
+      pinBaseline: "\u8bbe\u4e3a\u57fa\u7ebf",
+      regression: "\u6027\u80fd\u56de\u9000",
+      nowLive: "{version} \u5df2\u4e0a\u7ebf"
     }
   };

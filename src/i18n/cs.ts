@@ -2126,5 +2126,19 @@ export const cs: Translations = {
     orchestrationHub: {
       previousTrigger: "P\u0159edchoz\u00ed trigger",
       nextTrigger: "Dal\u0161\u00ed trigger"
+    },
+    labVersions: {
+      title: "Verze a hodnocen\u00ed",
+      hint: "Aktivac\u00ed nasad\u00edte verzi naostro. Pro n\u00e1vrat aktivujte tu p\u0159edchoz\u00ed.",
+      live: "Naostro",
+      experimental: "Experiment\u00e1ln\u00ed",
+      rating: "Hodnocen\u00ed",
+      deltaVsBaseline: "\u0394 oproti referenci",
+      baseline: "Reference",
+      activate: "Aktivovat",
+      activateVersion: "Aktivovat {version}",
+      pinBaseline: "Nastavit jako referenci",
+      regression: "Regrese",
+      nowLive: "{version} b\u011b\u017e\u00ed naostro"
     }
   };

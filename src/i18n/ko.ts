@@ -2282,5 +2282,19 @@ export const ko: Translations = {
     orchestrationHub: {
       previousTrigger: "\uc774\uc804 \ud2b8\ub9ac\uac70",
       nextTrigger: "\ub2e4\uc74c \ud2b8\ub9ac\uac70"
+    },
+    labVersions: {
+      title: "\ubc84\uc804 \ubc0f \ud3c9\uac00",
+      hint: "\ubc84\uc804\uc744 \ud65c\uc131\ud654\ud558\uba74 \ub77c\uc774\ube0c\ub85c \uc804\ud658\ub429\ub2c8\ub2e4. \ub418\ub3cc\ub9ac\ub824\uba74 \uc774\uc804 \ubc84\uc804\uc744 \ud65c\uc131\ud654\ud558\uc138\uc694.",
+      live: "\ub77c\uc774\ube0c",
+      experimental: "\uc2e4\ud5d8 \ubc84\uc804",
+      rating: "\ud3c9\uac00",
+      deltaVsBaseline: "\uae30\uc900 \ub300\ube44 \u0394",
+      baseline: "\uae30\uc900",
+      activate: "\ud65c\uc131\ud654",
+      activateVersion: "{version} \ud65c\uc131\ud654",
+      pinBaseline: "\uae30\uc900\uc73c\ub85c \uace0\uc815",
+      regression: "\uc131\ub2a5 \uc800\ud558",
+      nowLive: "{version} \ub77c\uc774\ube0c \uc911"
     }
   };

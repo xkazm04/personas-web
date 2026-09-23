@@ -2096,5 +2096,19 @@ export const de: Translations = {
     orchestrationHub: {
       previousTrigger: "Vorheriger Trigger",
       nextTrigger: "N\u00e4chster Trigger"
+    },
+    labVersions: {
+      title: "Versionen & Bewertungen",
+      hint: "Aktiviere eine Version, um sie live zu schalten. Zum Zur\u00fcckrollen aktivierst du die vorherige.",
+      live: "Live",
+      experimental: "Experimentell",
+      rating: "Bewertung",
+      deltaVsBaseline: "\u0394 zur Baseline",
+      baseline: "Baseline",
+      activate: "Aktivieren",
+      activateVersion: "{version} aktivieren",
+      pinBaseline: "Als Baseline festlegen",
+      regression: "Regression",
+      nowLive: "{version} ist live"
     }
   };

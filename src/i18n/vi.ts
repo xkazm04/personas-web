@@ -2282,5 +2282,19 @@ export const vi: Translations = {
     orchestrationHub: {
       previousTrigger: "Tr\u00ecnh k\u00edch ho\u1ea1t tr\u01b0\u1edbc",
       nextTrigger: "Tr\u00ecnh k\u00edch ho\u1ea1t ti\u1ebfp theo"
+    },
+    labVersions: {
+      title: "Phi\u00ean b\u1ea3n & \u0111\u00e1nh gi\u00e1",
+      hint: "K\u00edch ho\u1ea1t m\u1ed9t phi\u00ean b\u1ea3n \u0111\u1ec3 \u0111\u01b0a n\u00f3 v\u00e0o ho\u1ea1t \u0111\u1ed9ng. Mu\u1ed1n quay l\u1ea1i, h\u00e3y k\u00edch ho\u1ea1t phi\u00ean b\u1ea3n tr\u01b0\u1edbc \u0111\u00f3.",
+      live: "\u0110ang ch\u1ea1y",
+      experimental: "Th\u1eed nghi\u1ec7m",
+      rating: "\u0110i\u1ec3m",
+      deltaVsBaseline: "\u0394 so v\u1edbi m\u1ed1c chu\u1ea9n",
+      baseline: "M\u1ed1c chu\u1ea9n",
+      activate: "K\u00edch ho\u1ea1t",
+      activateVersion: "K\u00edch ho\u1ea1t {version}",
+      pinBaseline: "\u0110\u1eb7t l\u00e0m m\u1ed1c chu\u1ea9n",
+      regression: "Suy gi\u1ea3m",
+      nowLive: "{version} \u0111ang ch\u1ea1y"
     }
   };

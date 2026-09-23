@@ -2282,5 +2282,19 @@ export const id: Translations = {
     orchestrationHub: {
       previousTrigger: "Trigger sebelumnya",
       nextTrigger: "Trigger berikutnya"
+    },
+    labVersions: {
+      title: "Versi & penilaian",
+      hint: "Aktifkan sebuah versi untuk menayangkannya. Untuk kembali, aktifkan versi sebelumnya.",
+      live: "Tayang",
+      experimental: "Eksperimental",
+      rating: "Nilai",
+      deltaVsBaseline: "\u0394 terhadap acuan",
+      baseline: "Acuan",
+      activate: "Aktifkan",
+      activateVersion: "Aktifkan {version}",
+      pinBaseline: "Jadikan acuan",
+      regression: "Regresi",
+      nowLive: "{version} sudah tayang"
     }
   };

@@ -1712,6 +1712,21 @@
     previousTrigger: string;
     nextTrigger: string;
   };
+  /** Lab version rail: the desktop Lab's Versions & Ratings table ({version} = a version id). */
+  labVersions: {
+    title: string;
+    hint: string;
+    live: string;
+    experimental: string;
+    rating: string;
+    deltaVsBaseline: string;
+    baseline: string;
+    activate: string;
+    activateVersion: string;
+    pinBaseline: string;
+    regression: string;
+    nowLive: string;
+  };
 }
 
 export const en: Translations = {
@@ -3701,5 +3716,19 @@ export const en: Translations = {
   orchestrationHub: {
     previousTrigger: 'Previous trigger',
     nextTrigger: 'Next trigger',
+  },
+  labVersions: {
+    title: 'Versions & ratings',
+    hint: 'Activate a version to put it live. To roll back, activate the previous one.',
+    live: 'Live',
+    experimental: 'Experimental',
+    rating: 'Rating',
+    deltaVsBaseline: 'Δ vs baseline',
+    baseline: 'Baseline',
+    activate: 'Activate',
+    activateVersion: 'Activate {version}',
+    pinBaseline: 'Pin as baseline',
+    regression: 'Regression',
+    nowLive: '{version} is live',
   },
 };
