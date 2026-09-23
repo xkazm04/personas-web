@@ -1,9 +1,10 @@
 import { useMemo, useState } from "react";
-import { AnimatePresence, motion, useReducedMotion } from "framer-motion";
+import { AnimatePresence, motion } from "framer-motion";
 import { Clock } from "lucide-react";
 
 import FilterBar from "@/components/dashboard/FilterBar";
 import { useFocusParam } from "@/hooks/useFocusParam";
+import { useStillMotion } from "@/hooks/useStillMotion";
 import { fadeUp } from "@/lib/animations";
 import { initialBreachLogState } from "@/lib/incidentThreads";
 import type { SLABreach, SLAMetricType, SLASeverity } from "@/lib/mock-dashboard-data";
@@ -33,8 +34,7 @@ export function SLABreachLog({
     severity: Record<SLASeverity, string>;
   };
 }) {
-  const reduce = useReducedMotion();
-  const pulse = reduce ? "" : "animate-pulse";
+  const reduce = useStillMotion();
   // A ?focus=<breach id> deep link opens that breach with no filter hiding it.
   // The focus arrives one commit after hydration, so re-seed on change
   // (prev-state pattern) as well as at mount.
@@ -115,7 +115,6 @@ export function SLABreachLog({
                 breach={breach}
                 labels={labels}
                 reduce={reduce}
-                pulse={pulse}
                 maxDuration={maxDuration}
                 samePersonaCount={
                   filtered.filter(
