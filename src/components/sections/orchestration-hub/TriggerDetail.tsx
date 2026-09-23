@@ -9,15 +9,18 @@ import { TRIGGERS } from "./data";
 
 interface TriggerDetailProps {
   activeId: string;
+  /** Announce changes (the visitor chose this trigger); autoplay stays silent. */
+  announce?: boolean;
 }
 
 /**
  * Side panel that describes the currently active trigger — label, description,
  * concrete firing condition, the persona it wakes, and a deep-link into the
- * guide for that trigger type.
+ * guide for that trigger type. A polite live region only while the visitor is
+ * driving, so the autoplay never talks over a screen reader.
  */
 
-export default function TriggerDetail({ activeId }: TriggerDetailProps) {
+export default function TriggerDetail({ activeId, announce = false }: TriggerDetailProps) {
   const activeTrigger = TRIGGERS.find((t) => t.id === activeId) ?? TRIGGERS[0];
   const activeVar = BRAND_VAR[activeTrigger.brand];
   const Icon = activeTrigger.icon;
@@ -25,6 +28,7 @@ export default function TriggerDetail({ activeId }: TriggerDetailProps) {
   return (
     <div className="flex flex-col gap-5">
       <div
+        aria-live={announce ? "polite" : "off"}
         className="rounded-2xl border p-6"
         style={{
           borderColor: "var(--border-glass-hover)",
