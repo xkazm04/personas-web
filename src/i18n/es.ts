@@ -2088,5 +2088,9 @@ export const es: Translations = {
           samePersonShort: "la misma persona, en todas"
         }
       }
+    },
+    orchestrationHub: {
+      previousTrigger: "Disparador anterior",
+      nextTrigger: "Disparador siguiente"
     }
   };

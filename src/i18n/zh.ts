@@ -2278,5 +2278,9 @@ export const zh: Translations = {
           samePersonShort: "\u5728\u6bcf\u4e2a\u5bf9\u8bdd\u91cc\uff0c\u90fd\u662f\u540c\u4e00\u4e2a\u4eba"
         }
       }
+    },
+    orchestrationHub: {
+      previousTrigger: "\u4e0a\u4e00\u4e2a\u89e6\u53d1\u5668",
+      nextTrigger: "\u4e0b\u4e00\u4e2a\u89e6\u53d1\u5668"
     }
   };

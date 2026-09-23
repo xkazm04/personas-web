@@ -2278,5 +2278,9 @@ export const id: Translations = {
           samePersonShort: "orang yang sama, di semuanya"
         }
       }
+    },
+    orchestrationHub: {
+      previousTrigger: "Trigger sebelumnya",
+      nextTrigger: "Trigger berikutnya"
     }
   };

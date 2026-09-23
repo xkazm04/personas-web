@@ -2278,5 +2278,9 @@ export const ar: Translations = {
           samePersonShort: "\u0627\u0644\u0634\u062e\u0635 \u0646\u0641\u0633\u0647\u060c \u0641\u064a \u0643\u0644\u0647\u0627"
         }
       }
+    },
+    orchestrationHub: {
+      previousTrigger: "\u0627\u0644\u0645\u0634\u063a\u0651\u0644 \u0627\u0644\u0633\u0627\u0628\u0642",
+      nextTrigger: "\u0627\u0644\u0645\u0634\u063a\u0651\u0644 \u0627\u0644\u062a\u0627\u0644\u064a"
     }
   };

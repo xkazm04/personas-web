@@ -1708,6 +1708,10 @@
       };
     };
   };
+  orchestrationHub: {
+    previousTrigger: string;
+    nextTrigger: string;
+  };
 }
 
 export const en: Translations = {
@@ -3693,5 +3697,9 @@ export const en: Translations = {
         samePersonShort: 'the same person, in all of them',
       },
     },
+  },
+  orchestrationHub: {
+    previousTrigger: 'Previous trigger',
+    nextTrigger: 'Next trigger',
   },
 };

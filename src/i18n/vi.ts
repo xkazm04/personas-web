@@ -2278,5 +2278,9 @@ export const vi: Translations = {
           samePersonShort: "v\u1eabn l\u00e0 m\u1ed9t ng\u01b0\u1eddi, trong t\u1ea5t c\u1ea3"
         }
       }
+    },
+    orchestrationHub: {
+      previousTrigger: "Tr\u00ecnh k\u00edch ho\u1ea1t tr\u01b0\u1edbc",
+      nextTrigger: "Tr\u00ecnh k\u00edch ho\u1ea1t ti\u1ebfp theo"
     }
   };

@@ -2122,5 +2122,9 @@ export const cs: Translations = {
           samePersonShort: "ve v\u0161ech ta stejn\u00e1 osoba"
         }
       }
+    },
+    orchestrationHub: {
+      previousTrigger: "P\u0159edchoz\u00ed trigger",
+      nextTrigger: "Dal\u0161\u00ed trigger"
     }
   };

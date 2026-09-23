@@ -2095,5 +2095,9 @@ export const fr: Translations = {
           samePersonShort: "la m\u00eame personne, partout"
         }
       }
+    },
+    orchestrationHub: {
+      previousTrigger: "D\u00e9clencheur pr\u00e9c\u00e9dent",
+      nextTrigger: "D\u00e9clencheur suivant"
     }
   };

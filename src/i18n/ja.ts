@@ -2278,5 +2278,9 @@ export const ja: Translations = {
           samePersonShort: "\u3069\u306e\u4f1a\u8a71\u3067\u3082\u3001\u540c\u3058\u4eba"
         }
       }
+    },
+    orchestrationHub: {
+      previousTrigger: "\u524d\u306e\u30c8\u30ea\u30ac\u30fc",
+      nextTrigger: "\u6b21\u306e\u30c8\u30ea\u30ac\u30fc"
     }
   };

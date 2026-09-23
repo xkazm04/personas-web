@@ -2092,5 +2092,9 @@ export const de: Translations = {
           samePersonShort: "dieselbe Person, in allen"
         }
       }
+    },
+    orchestrationHub: {
+      previousTrigger: "Vorheriger Trigger",
+      nextTrigger: "N\u00e4chster Trigger"
     }
   };

@@ -2278,5 +2278,9 @@ export const bn: Translations = {
           samePersonShort: "\u09b8\u09ac\u0997\u09c1\u09b2\u09cb\u09a4\u09c7\u0987 \u098f\u0995\u0987 \u09ae\u09be\u09a8\u09c1\u09b7"
         }
       }
+    },
+    orchestrationHub: {
+      previousTrigger: "\u0986\u0997\u09c7\u09b0 \u099f\u09cd\u09b0\u09bf\u0997\u09be\u09b0",
+      nextTrigger: "\u09aa\u09b0\u09c7\u09b0 \u099f\u09cd\u09b0\u09bf\u0997\u09be\u09b0"
     }
   };

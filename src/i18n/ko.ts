@@ -2278,5 +2278,9 @@ export const ko: Translations = {
           samePersonShort: "\uc5b4\ub290 \ub300\ud654\uc5d0\uc11c\ub4e0 \uac19\uc740 \uc0ac\ub78c"
         }
       }
+    },
+    orchestrationHub: {
+      previousTrigger: "\uc774\uc804 \ud2b8\ub9ac\uac70",
+      nextTrigger: "\ub2e4\uc74c \ud2b8\ub9ac\uac70"
     }
   };
