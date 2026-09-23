@@ -1,10 +1,11 @@
 "use client";
 
 import { useRef, useState } from "react";
-import { motion, useScroll, useTransform, useSpring, useReducedMotion } from "framer-motion";
+import { motion, useScroll, useTransform, useSpring } from "framer-motion";
 import SectionWrapper from "@/components/SectionWrapper";
 import SectionIntro from "@/components/primitives/SectionIntro";
 import { fadeUp } from "@/lib/animations";
+import { useLoopGate } from "@/hooks/useLoopGate";
 import { layers } from "./data";
 import StackLabels from "./components/StackLabels";
 import LayerConnection from "./components/LayerConnection";
@@ -12,7 +13,9 @@ import Layer from "./components/Layer";
 
 export default function PlatformLayers() {
   const containerRef = useRef<HTMLDivElement>(null);
-  const prefersReducedMotion = useReducedMotion() ?? false;
+  // One gate for the stack: `run` drives the pillar dots' loop, `still` the
+  // layers' rotateX tilt (flattened under reduced motion).
+  const { run, still } = useLoopGate(containerRef);
   const [hoveredIndex, setHoveredIndex] = useState<number | null>(null);
 
   const { scrollYProgress } = useScroll({
@@ -64,6 +67,7 @@ export default function PlatformLayers() {
                 from={layer.brand}
                 to={nextLayer.brand}
                 spread={spread}
+                run={run}
               />
             );
           })}
@@ -79,7 +83,7 @@ export default function PlatformLayers() {
               spread={spread}
               baseOffset={spreadValues[i]}
               stackHeight={layers.length * 120 + 140}
-              prefersReducedMotion={prefersReducedMotion}
+              prefersReducedMotion={still}
             />
           ))}
         </div>

@@ -1,6 +1,8 @@
 "use client";
 
+import { useRef } from "react";
 import { SVG_EYEBROW } from "@/lib/typography";
+import { useLoopGate, useSvgTimelineGate } from "@/hooks/useLoopGate";
 import { swarmTools } from "../data";
 
 const RADIUS = 35;
@@ -70,7 +72,17 @@ function computeSwarmTiming(index: number, total: number): SwarmTiming {
   };
 }
 
+/** Under reduced motion the loops flatten to this pose: visible, not blank. */
+const REST_OPACITY = "0.8";
+const STILL_OPACITY_VALUES = Array(5).fill(REST_OPACITY).join(";");
+const STILL_TRAVEL_VALUES = "0 0;0 0;0 0;0 0";
+
+/** SMIL follows the loop gate; under reduced motion values flatten, elements stay. */
 export default function SwarmView({ uid }: { uid: string }) {
+  const svgRef = useRef<SVGSVGElement>(null);
+  const { run, still } = useLoopGate(svgRef);
+  useSvgTimelineGate(svgRef, run);
+
   if (swarmTools.length === 0) {
     return (
       <div className="flex min-h-90 items-center justify-center text-base font-mono text-muted">
@@ -80,7 +92,7 @@ export default function SwarmView({ uid }: { uid: string }) {
   }
 
   return (
-    <svg viewBox="0 0 100 100" className="w-full min-h-90">
+    <svg ref={svgRef} viewBox="0 0 100 100" className="w-full min-h-90">
       <defs>
         <filter id={`${uid}-swarmGlow`}>
           <feGaussianBlur stdDeviation="1.5" result="blur" />
@@ -127,10 +139,10 @@ export default function SwarmView({ uid }: { uid: string }) {
         const iconSize = 5;
 
         return (
-          <g key={tool.id} opacity="0">
+          <g key={tool.id} opacity={still ? REST_OPACITY : "0"}>
             <animate
               attributeName="opacity"
-              values="0;0.8;0.8;0;0"
+              values={still ? STILL_OPACITY_VALUES : "0;0.8;0.8;0;0"}
               keyTimes={t.opacityKeyTimes}
               dur={`${t.totalCycle}s`}
               begin={`${t.delay}s`}
@@ -151,7 +163,7 @@ export default function SwarmView({ uid }: { uid: string }) {
               <animateTransform
                 attributeName="transform"
                 type="translate"
-                values={`0 0;${t.dx} ${t.dy};0 0;0 0`}
+                values={still ? STILL_TRAVEL_VALUES : `0 0;${t.dx} ${t.dy};0 0;0 0`}
                 keyTimes={t.travelKeyTimes}
                 dur={`${t.totalCycle}s`}
                 begin={`${t.travelBegin}s`}

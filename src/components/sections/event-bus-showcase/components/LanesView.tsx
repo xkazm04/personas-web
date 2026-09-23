@@ -1,6 +1,7 @@
 "use client";
 
 import { motion } from "framer-motion";
+import { loopTransition } from "@/lib/motion/loop-gate";
 
 interface LaneMetric {
   id: string;
@@ -20,7 +21,12 @@ function sanitize(value: number): number {
   return Number.isFinite(value) ? Math.max(0, value) : 0;
 }
 
-export default function LanesView({ laneMetrics, inView }: { laneMetrics: LaneMetric[]; inView: boolean }) {
+/**
+ * `run` is the parent panel's loop-gate verdict (useLoopGate): the delivery
+ * dots travel only while no decider objects, and rest at the lane start
+ * otherwise.
+ */
+export default function LanesView({ laneMetrics, run }: { laneMetrics: LaneMetric[]; run: boolean }) {
   if (!laneMetrics || laneMetrics.length === 0) {
     return (
       <div className="flex min-h-40 items-center justify-center text-base font-mono text-muted">
@@ -72,8 +78,8 @@ export default function LanesView({ laneMetrics, inView }: { laneMetrics: LaneMe
               <motion.div
                 className="absolute top-1/2 h-2 w-2 -translate-y-1/2 rounded-full"
                 style={{ backgroundColor: lane.color, boxShadow: `0 0 10px ${lane.color}` }}
-                animate={inView ? { x: ["0%", "2600%"] } : { x: "0%" }}
-                transition={{ duration: 2.8 + i * 0.35, repeat: inView ? Infinity : 0, ease: "linear" }}
+                animate={run ? { x: ["0%", "2600%"] } : { x: "0%" }}
+                transition={loopTransition(run, { duration: 2.8 + i * 0.35, ease: "linear" })}
               />
             </div>
 

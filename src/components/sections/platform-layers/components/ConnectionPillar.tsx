@@ -1,18 +1,21 @@
 "use client";
 
-import { motion, useReducedMotion } from "framer-motion";
+import { motion } from "framer-motion";
 import { tint, type BrandKey } from "@/lib/brand-theme";
+import { loopTransition } from "@/lib/motion/loop-gate";
 
 export default function ConnectionPillar({
   from,
   to,
   progress,
+  run,
 }: {
   from: BrandKey;
   to: BrandKey;
   progress: number;
+  /** Loop-gate verdict: the dot travels while true and rests mid-pillar otherwise. */
+  run: boolean;
 }) {
-  const reduced = useReducedMotion() ?? false;
   const opacity = Math.min(progress * 1.5, 1);
   const fromAlpha = Math.round(30 * opacity);
   const toAlpha = Math.round(30 * opacity);
@@ -35,8 +38,8 @@ export default function ConnectionPillar({
           boxShadow: `0 0 8px ${tint(to, 40)}`,
           opacity,
         }}
-        animate={reduced ? { top: "50%" } : { top: ["0%", "100%"] }}
-        transition={reduced ? undefined : { duration: 2, repeat: Infinity, ease: "linear", repeatDelay: 0.5 }}
+        animate={run ? { top: ["0%", "100%"] } : { top: "50%" }}
+        transition={loopTransition(run, { duration: 2, ease: "linear", repeatDelay: 0.5 })}
       />
     </div>
   );
