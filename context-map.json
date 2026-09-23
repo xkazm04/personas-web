@@ -322,7 +322,10 @@
             "src/app/preview/[section]/page.tsx",
             "src/app/preview/page.tsx",
             "src/app/preview/registry.ts",
-            "src/app/todo/page.tsx"
+            "src/app/todo/page.tsx",
+            "src/app/preview/derive.ts",
+            "src/app/preview/registry.test.ts",
+            "src/app/preview/PreviewMount.tsx"
           ],
           "target": null,
           "apiRoutes": []
@@ -391,7 +394,9 @@
             "src/lib/event-bus-demo.ts",
             "src/components/sections/orchestration-hub/playback.ts",
             "src/components/sections/orchestration-hub/playback.test.ts",
-            "src/components/sections/orchestration-hub/PlaybackControls.tsx"
+            "src/components/sections/orchestration-hub/PlaybackControls.tsx",
+            "src/components/sections/event-bus-showcase/figures.ts",
+            "src/components/sections/event-bus-showcase/figures.test.ts"
           ],
           "target": null,
           "apiRoutes": []
