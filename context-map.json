@@ -74,7 +74,11 @@
             "src/components/sections/get-started/visuals/WorkVisual.tsx",
             "src/components/sections/get-started/visuals/chrome.tsx",
             "src/components/sections/get-started/visuals/index.ts",
-            "src/components/sections/get-started/visuals/types.ts"
+            "src/components/sections/get-started/visuals/types.ts",
+            "src/lib/landing-address.ts",
+            "src/lib/landing-address.test.ts",
+            "src/hooks/useHashArrival.ts",
+            "src/components/LandingHashArrival.tsx"
           ],
           "target": null,
           "apiRoutes": []
