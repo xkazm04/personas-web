@@ -21,6 +21,7 @@
  *   repaint a pending verdict. `countPending(overlay(...))` is the only
  *   pending-count formula.
  */
+import { RESOLVED_BY_REVIEWER } from "./review-display";
 import type { ManualReviewItem } from "./types";
 
 export type Verdict = "approved" | "rejected";
@@ -140,7 +141,7 @@ function applyBatch(row: ManualReviewItem, batch: LedgerBatch): ManualReviewItem
     ...row,
     status: batch.verdict,
     resolvedAt: new Date(batch.armedAt).toISOString(),
-    resolvedBy: "You",
+    resolvedBy: RESOLVED_BY_REVIEWER,
     reviewerNotes: batch.notes[row.id] ?? row.reviewerNotes,
   };
 }

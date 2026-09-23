@@ -3,6 +3,8 @@
 import { motion, useReducedMotion } from "framer-motion";
 import { Loader2 } from "lucide-react";
 
+import { useTranslation } from "@/i18n/useTranslation";
+
 export default function BulkProgressBar({
   done,
   total,
@@ -14,6 +16,7 @@ export default function BulkProgressBar({
   failed?: number;
   label: string;
 }) {
+  const { t } = useTranslation();
   const reducedMotion = useReducedMotion();
   const successPct = total > 0 ? Math.round(((done - failed) / total) * 100) : 0;
   const failPct = total > 0 ? Math.round((failed / total) * 100) : 0;
@@ -34,7 +37,7 @@ export default function BulkProgressBar({
           <span className="ml-auto flex items-center gap-1.5 text-xs tabular-nums text-muted-dark">
             {done}/{total}
             {failed > 0 && (
-              <span className="text-red-400">({failed} failed)</span>
+              <span className="text-red-400">({t.dashboardUi.status.failed}: {failed})</span>
             )}
           </span>
         </div>

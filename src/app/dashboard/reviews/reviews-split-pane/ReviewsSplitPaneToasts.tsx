@@ -53,6 +53,7 @@ export function ReviewsSplitPaneToasts({
   rejectTitle: string;
   rejectBody: string;
 }) {
+  const { t } = useTranslation();
   const windowOpen = useReviewStore((s) => s.ledger.window !== null);
   return (
     <>
@@ -63,7 +64,7 @@ export function ReviewsSplitPaneToasts({
             done={bulkProgress.done}
             total={bulkProgress.total}
             failed={bulkProgress.failed}
-            label={`Processing ${bulkProgress.total} review${bulkProgress.total !== 1 ? "s" : ""}`}
+            label={t.reviewsPage.bulkProcessing.replace("{count}", String(bulkProgress.total))}
           />
         )}
       </AnimatePresence>
@@ -82,11 +83,11 @@ export function ReviewsSplitPaneToasts({
       <ConfirmDialog
         open={showRejectConfirm}
         title={rejectTitle}
-        confirmLabel={`Reject ${bulkCount} review${bulkCount !== 1 ? "s" : ""}`}
+        confirmLabel={`${t.reviewsPage.focus.reject} (${bulkCount})`}
         onConfirm={handleBulkRejectConfirm}
         onCancel={() => setShowRejectConfirm(false)}
       >
-        {rejectBody.replace("{count}", String(bulkCount)).replace("{plural}", bulkCount !== 1 ? "s" : "")}
+        {rejectBody.replace("{count}", String(bulkCount))}
       </ConfirmDialog>
     </>
   );

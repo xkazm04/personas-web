@@ -23,6 +23,7 @@ import {
   type RefusalReason,
   type Verdict,
 } from "@/lib/review-ledger";
+import { AUTO_APPROVE_NOTE, RESOLVED_BY_REVIEWER, RESOLVED_BY_SYSTEM } from "@/lib/review-display";
 import { DEFAULT_ESCALATION_POLICY, escalationDue, validateEscalationPolicy } from "@/lib/review-sla";
 
 export { DEFAULT_ESCALATION_POLICY };
@@ -82,7 +83,7 @@ function parseManualReview(
     reviewerNotes,
     createdAt: event.createdAt,
     resolvedAt: event.processedAt,
-    resolvedBy: status !== "pending" ? "System" : null,
+    resolvedBy: status !== "pending" ? RESOLVED_BY_SYSTEM : null,
     escalatedAt: null,
     personaName: p?.name,
     personaIcon: p?.icon ?? undefined,
@@ -389,7 +390,7 @@ export const useReviewStore = create<ReviewState>((set, get) => {
       set((s) =>
         derive(
           s.baseReviews.map((r) =>
-            r.id === id ? { ...r, status, resolvedAt, resolvedBy: "You", reviewerNotes: notes ?? r.reviewerNotes } : r,
+            r.id === id ? { ...r, status, resolvedAt, resolvedBy: RESOLVED_BY_REVIEWER, reviewerNotes: notes ?? r.reviewerNotes } : r,
           ),
           s.ledger,
         ),
@@ -440,7 +441,7 @@ export const useReviewStore = create<ReviewState>((set, get) => {
             if (rule.action === "auto_approve") {
               // Awaited so the next iteration can't re-pick a still-pending row,
               // and so escalationsInFlight covers the whole API round-trip.
-              await resolveReview(review.id, "approved", "Auto-approved: SLA expired");
+              await resolveReview(review.id, "approved", AUTO_APPROVE_NOTE);
             } else if (rule.action === "escalate") {
               const escalatedAt = new Date().toISOString();
               set((s) =>

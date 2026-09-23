@@ -3,7 +3,7 @@ import { AlertOctagon, Bookmark, Check, ClipboardCheck, Clock, Terminal, X } fro
 import PersonaAvatar from "@/components/dashboard/PersonaAvatar";
 import StatusBadge from "@/components/dashboard/StatusBadge";
 import { useTranslation } from "@/i18n/useTranslation";
-import { relativeTime } from "@/lib/format";
+import { formatAge, resolverLabel, reviewerNotesText } from "@/lib/review-display";
 import type { ManualReviewItem } from "@/lib/types";
 import { useReviewStore } from "@/stores/reviewStore";
 import { DueChip } from "../review-due";
@@ -19,7 +19,7 @@ export function ReviewDetailPanel({
   /** Notes are not passed: the store's `decide` reads the draft for the id. */
   onResolve: (id: string, status: "approved" | "rejected") => void;
 }) {
-  const { t } = useTranslation();
+  const { t, language } = useTranslation();
   // Drafts live in the review store keyed by id, so the keyboard a/r path and
   // these buttons carry the same notes, and a draft survives switching rows.
   const draft = useReviewStore((s) => (review ? s.drafts[review.id] : undefined));
@@ -62,18 +62,19 @@ export function ReviewDetailPanel({
           <PersonaAvatar icon={review.personaIcon} color={review.personaColor} name={review.personaName} size="md" />
           <div className="flex-1 min-w-0">
             <div className="flex items-center gap-2">
-              <span className="text-base font-medium text-foreground">{review.personaName ?? "Unknown Agent"}</span>
+              <span className="text-base font-medium text-foreground">{review.personaName ?? t.eventsPage.unknownAgent}</span>
               <StatusBadge status={review.status} />
             </div>
             <div className="flex items-center gap-2 mt-0.5">
               <SevIcon className={`h-3 w-3 ${sev.color}`} />
-              <span className={`text-sm font-medium capitalize ${sev.color}`}>{review.severity}</span>
-              <span className="text-sm text-muted-dark">{relativeTime(review.createdAt)}</span>
+              <span className={`text-sm font-medium ${sev.color}`}>{t.reviewsPage.severity[review.severity]}</span>
+              <span className="text-sm text-muted-dark">{formatAge(review.createdAt, now, language) ?? "-"}</span>
               <DueChip review={review} now={now} />
               {review.resolvedAt && (
                 <span className="text-sm text-muted-dark">
-                  {t.observabilityPage.resolved} {relativeTime(review.resolvedAt)}
-                  {review.resolvedBy && ` by ${review.resolvedBy}`}
+                  {(review.resolvedBy ? t.reviewsPage.resolvedBy : t.reviewsPage.resolved)
+                    .replace("{when}", formatAge(review.resolvedAt, now, language) ?? "-")
+                    .replace("{name}", review.resolvedBy ? resolverLabel(review.resolvedBy, t.reviewsPage) : "")}
                 </span>
               )}
             </div>
@@ -159,7 +160,7 @@ function ReviewResolvedNotes({ notes }: { notes: string }) {
         <Bookmark className="h-3 w-3 text-muted-dark" />
         <span className="text-sm font-medium uppercase tracking-wider text-muted-dark">{t.dashboardUi.reviewerNotes}</span>
       </div>
-      <div className="rounded-lg border border-glass bg-white/[0.02] px-3 py-2 text-sm text-muted">{notes}</div>
+      <div className="rounded-lg border border-glass bg-white/[0.02] px-3 py-2 text-sm text-muted">{reviewerNotesText(notes, t.reviewsPage)}</div>
     </div>
   );
 }

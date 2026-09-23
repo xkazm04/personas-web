@@ -88,10 +88,10 @@ export default function ReviewsSplitPane({ now }: { now: number }) {
           <div className="flex-shrink-0 px-2 pt-2 pb-1 border-b border-glass">
             <FilterBar
               options={[
-                { key: "all", label: "All", count: counts.all },
-                { key: "pending", label: "Pending", count: counts.pending },
-                { key: "approved", label: "Approved", count: counts.approved },
-                { key: "rejected", label: "Rejected", count: counts.rejected },
+                { key: "all", label: t.executionsPage.all, count: counts.all },
+                { key: "pending", label: t.dashboardUi.status.pending, count: counts.pending },
+                { key: "approved", label: t.dashboardUi.status.approved, count: counts.approved },
+                { key: "rejected", label: t.dashboardUi.status.rejected, count: counts.rejected },
               ]}
               active={filter}
               onChange={setFilter}

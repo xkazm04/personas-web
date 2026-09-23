@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { motion } from "framer-motion";
 import { Undo2 } from "lucide-react";
 
@@ -25,7 +25,12 @@ export default function UndoToast({
   /** Optional second line, e.g. why a newer action was refused. */
   notice?: string;
 }) {
-  const { t } = useTranslation();
+  const { t, language } = useTranslation();
+  // "4s" / "4 s" / "4秒": the unit comes from Intl, not a locale string.
+  const seconds = useMemo(
+    () => new Intl.NumberFormat(language, { style: "unit", unit: "second", unitDisplay: "narrow" }),
+    [language],
+  );
   const still = useStillMotion();
   // Captured once at mount (lazy initializers may be impure).
   const [durationMs] = useState(() => Math.max(0, deadline - Date.now()));
@@ -55,7 +60,7 @@ export default function UndoToast({
           {/* aria-hidden: the live region announces once on appearance; the
               per-second tick would otherwise re-announce every second. */}
           <span aria-hidden="true" className="ml-auto text-xs tabular-nums text-muted-dark">
-            {secondsLeft}s
+            {seconds.format(secondsLeft)}
           </span>
           <button
             onClick={onUndo}

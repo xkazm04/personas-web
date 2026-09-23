@@ -57,7 +57,7 @@ Rules the table enforces: a disjoint arm while a window is open **commits the op
 
 **Voice** (`useReviewVoice.ts`, `review-voice.ts`). A tiny framework-free pub/sub bus: `emitNewReview` (from realtime sync or the settings Preview button) fans out to `onNewReview` subscribers; `useReviewVoice` composes "New {severity} review from {persona}: {title}" and speaks it via Web Speech — only when `useReviewVoiceStore.enabled` is true. `speak` de-dups across tabs with a per-id Web Lock; `pickVoice` selects the best available voice from a curated, quality-ordered list per locale.
 
-**Shortcuts HUD** (`ShortcutsHud.tsx`). Exports `ShortcutsFooter` and `ShortcutsOverlay` (searchable, grouped, `Esc`-to-close) plus the `REVIEW_SHORTCUTS` catalog. Note: these are presently self-contained and **not mounted** by the reviews page — the live in-pane shortcuts are wired in `useReviewKeyboardShortcuts` / `ReviewsFocusFlow`. `usePlatformMod` resolves Cmd vs Ctrl per platform.
+**Display copy** (`src/lib/review-display.ts`, pure). The store writes stable sentinels (`resolvedBy` = `RESOLVED_BY_REVIEWER` / `RESOLVED_BY_SYSTEM`, the escalation note `AUTO_APPROVE_NOTE`, which is persisted as reviewer notes); `resolverLabel` / `reviewerNotesText` map them to `t.reviewsPage.resolver.*` / `autoApprovedNote` at render, and a human name or note passes through verbatim. Row, card and detail ages use `formatAge(iso, now, language)` (`Intl.RelativeTimeFormat` over `formatDue`, the page clock's `now`), not the English-only `relativeTime` from `src/lib/format.ts`; the undo countdown's seconds come from `Intl.NumberFormat` (`unit: "second"`).
 
 ## Key files
 | File | Role |
@@ -74,7 +74,7 @@ Rules the table enforces: a disjoint arm while a window is open **commits the op
 | `src/app/dashboard/reviews/reviews-split-pane/useReviewKeyboardShortcuts.ts` | `j`/`k`/`a`/`r`/`Esc` for the split-pane |
 | `src/app/dashboard/reviews/reviews-split-pane/{ReviewStatusDot,reviewSeverityConfig}.ts(x)` | Status indicator + severity icon/color map |
 | `src/app/dashboard/reviews/reviews-focus-flow/{FocusReviewCard,FocusProgressHeader,FocusEmptyState,focusSeverityConfig}.ts(x)` | Focus-mode card, header, empty state, severity pills |
-| `src/app/dashboard/reviews/ShortcutsHud.tsx` + `shortcuts-hud/*` | Shortcuts footer/overlay, `REVIEW_SHORTCUTS`, platform mod (not currently mounted) |
+| `src/lib/review-display.ts` | Resolver / auto-approve-note sentinels + their display mapping, `formatAge` (test: `review-queue-i18n.test.ts`, which also source-scans the queue for hardcoded English) |
 | `src/hooks/useReviewBulkActions.ts` | Bulk selection, reject confirm, retry and unmount flush, all through `decide` |
 | `src/lib/review-ledger.ts` | Pure decision ledger: `transition`, `overlay`, `applyConfirmed`, `countPending` (tests: `review-ledger.test.ts`, `src/stores/reviewStore.test.ts`) |
 | `src/hooks/useReviewVoice.ts` | Bridges new-review signals to Web Speech |
@@ -97,11 +97,11 @@ Rules the table enforces: a disjoint arm while a window is open **commits the op
 - **Persona store** — joins persona name/icon/color into each item; `PersonaAvatar`/`StatusBadge` for rendering.
 - **Shared primitives** — `UndoToast`, `BulkProgressBar`, `BulkResultToast`, `ConfirmDialog` (all consumed by the bulk flow); `FilterBar` for the status pills; `usePolling`, `useFocusTrap`.
 - **Realtime / voice** — `emitNewReview` is driven by realtime sync and the Settings "Preview" button; the voice toggle lives in `t.settingsPage.notifications.voice`.
-- **i18n** — namespaces `t.reviewsPage.*` (focus, parseError, undo, sla), `t.dashboardUi.*` (most labels), `t.dashboard.reviews` (nav label), `t.guide…dashboardReviews` (product description), `t.memoriesPage.conflicts.*` (BatchReviewModal).
+- **i18n** — namespaces `t.reviewsPage.*` (focus, parseError, undo, sla, resolved/resolvedBy, resolver, autoApprovedNote, bulkProcessing, severity), `t.dashboardUi.*` (most labels, `status.*` for the filter pills and the progress bar's failed count), `t.executionsPage.all` (the "All" pill), `t.eventsPage.unknownAgent`, `t.dashboard.reviews` (nav label), `t.guide…dashboardReviews` (product description), `t.memoriesPage.conflicts.*` (BatchReviewModal).
 - **Telemetry** — Sentry warnings on escalation-policy validation failures and voice errors.
 
 ## Conventions & gotchas
-- **i18n (14-locale lockstep):** all user-facing copy comes from `t.*`; any new key must be added to `en.ts` and hand-translated into all 13 other locales in the same commit. A few literals are still hardcoded in shared primitives (`"Undo"`, `"Retry"`, `"Cancel"`, `BulkProgressBar`/`BulkResultToast` label strings, the `Processing N reviews` / `Reject N reviews` templates) — match the existing pattern if you touch them.
+- **i18n (14-locale lockstep):** all user-facing copy comes from `t.*` or `Intl`; any new key must be added to `en.ts` and hand-translated into all 13 other locales in the same commit. `src/lib/review-queue-i18n.test.ts` scans the queue's rendering files (this folder, `BulkProgressBar`, `BulkResultToast`, `ConfirmDialog`, `UndoToast`, `BatchReviewModal` + `batch-review-modal/*`) and fails on prose literals, JSX text, a raw `.severity`/`.status`/`.resolvedBy` rendered as text, or a `relativeTime(` call; its allowlist is only key names (`Escape`, `Enter`) and the `<kbd>` glyphs `A R S J K`. Count-bearing copy is count-neutral ("Processing reviews: {count}"), never an English plural suffix.
 - **Semantic Tailwind tokens** throughout (`text-foreground`, `border-glass`, `text-brand-cyan`, severity `*-500/10` tints). No raw hex except persona color fallbacks.
 - **Animation gating:** `UndoToast` (`useStillMotion`) and `BulkProgressBar` (`useReducedMotion`) gate the shrink/spin animations — required by `custom-animation/require-animation-gating`. Card transitions use framer `AnimatePresence` without rAF.
 - **React 19 purity/effects:** reset-on-prop-change uses the prev-state pattern, not `setState`-in-effect — see the `prevPendingKey` queue reconcile in `ReviewsFocusFlow.tsx`, `prevResult` reselect in `useReviewBulkActions.ts`, and `prevOpen` in `BatchReviewModal.tsx:37`. Don't reintroduce effect-based resets. `new Date()`/`Date.now()` only appear in event handlers and store actions, never in render/`useMemo`.
@@ -111,7 +111,6 @@ Rules the table enforces: a disjoint arm while a window is open **commits the op
 - **Urgency < SLA invariant:** `validateEscalationPolicy` (`review-sla.ts`) refuses any SLA shorter than its urgency threshold on every policy it sees, and the module throws at load if the default breaks it. Respect it when tuning timings.
 - **One SLA rule, one clock:** never compute SLA age inline (a source scan fails on `slaMinutes *` outside `review-sla.ts`), and never call `Date.now()` in render: take `now` from `useReviewClock` or the page's prop. Adding a manual_review seed moves every pending badge; update the pinned count in `reviewFixtures.test.ts` on purpose.
 - **BatchReviewModal naming trap:** despite the "Review" name and its `batch-review-modal/` folder, `BatchReviewModal` operates on `MemoryItem` conflicts via `t.memoriesPage.conflicts.*` and belongs to the **Memories** page, not this queue. The review queue's batching lives in `useReviewBulkActions` + `ReviewsBulkToolbar`.
-- **ShortcutsHud not mounted:** `ShortcutsFooter`/`ShortcutsOverlay` aren't rendered by the reviews page today; the actual key handling is in `useReviewKeyboardShortcuts` and `ReviewsFocusFlow`. If you wire the HUD in, keep `REVIEW_SHORTCUTS` in sync with the real handlers.
 - **Demo-only:** the whole surface runs on mocks. To extend safely, add fields to `ManualReviewItem` + `parseManualReview`, seed `mockData.ts`, and keep `resolveReview`'s event-status mapping (`approved↔processed`, `rejected↔failed`) intact.
 
 ## Related docs

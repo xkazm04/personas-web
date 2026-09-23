@@ -1,6 +1,6 @@
 import { AlertOctagon, CheckSquare, ChevronRight, Square } from "lucide-react";
 import { useTranslation } from "@/i18n/useTranslation";
-import { relativeTime } from "@/lib/format";
+import { formatAge } from "@/lib/review-display";
 import type { ManualReviewItem } from "@/lib/types";
 import { DueChip } from "../review-due";
 import { reviewSeverityConfig } from "./reviewSeverityConfig";
@@ -21,7 +21,7 @@ export function ReviewRow({
   onToggleSelect: (e: React.MouseEvent) => void;
   onClick: () => void;
 }) {
-  const { t } = useTranslation();
+  const { t, language } = useTranslation();
   const sev = reviewSeverityConfig[review.severity];
 
   return (
@@ -72,7 +72,7 @@ export function ReviewRow({
         <DueChip review={review} now={now} compact />
       ) : (
         <span className="text-sm text-muted-dark flex-shrink-0 tabular-nums">
-          {relativeTime(review.createdAt)}
+          {formatAge(review.createdAt, now, language, "short") ?? "-"}
         </span>
       )}
       {isActive && <ChevronRight className="h-3 w-3 text-brand-cyan flex-shrink-0" />}
