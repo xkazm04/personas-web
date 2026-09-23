@@ -1,5 +1,6 @@
-import { motion, useReducedMotion } from "framer-motion";
+import { motion } from "framer-motion";
 
+import { useStillMotion } from "@/hooks/useStillMotion";
 import { tint, type BrandKey } from "@/lib/brand-theme";
 
 const STEP_BRANDS: BrandKey[] = ["cyan", "blue", "purple"];
@@ -11,7 +12,7 @@ export function DownloadStepGrid({
   steps: string[];
   stepLabel: string;
 }) {
-  const reduced = useReducedMotion() ?? false;
+  const reduced = useStillMotion();
   return (
     <motion.div
       className="mt-6 mx-auto grid max-w-xl grid-cols-1 gap-2 text-left sm:grid-cols-3"
