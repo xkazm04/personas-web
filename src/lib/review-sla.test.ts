@@ -15,7 +15,6 @@ import {
   slaState,
   validateEscalationPolicy,
 } from "./review-sla";
-import { getUrgencyLevel, severityThresholdMinutes } from "./reviewUtils";
 import type { EscalationPolicy, ManualReviewItem, ReviewSeverity, ReviewStatus } from "./types";
 
 // One fixed clock for every case: the SLA rule is pure and takes `now`.
@@ -198,9 +197,10 @@ describe("validateEscalationPolicy: SLA >= urgency threshold on every policy", (
 });
 
 describe("guard: urgency thresholds unchanged", () => {
-  it("getUrgencyLevel is 0 below 5/30/120 min and ramps to 1 at 3x", () => {
-    expect(severityThresholdMinutes).toEqual({ critical: 5, warning: 30, info: 120 });
-    const at = (sev: ReviewSeverity, minutes: number) => getUrgencyLevel(new Date(NOW - minutes * MIN).toISOString(), sev, NOW);
+  it("urgency is 0 below 5/30/120 min and ramps to 1 at 3x", () => {
+    expect(URGENCY_THRESHOLD_MINUTES).toEqual({ critical: 5, warning: 30, info: 120 });
+    const at = (sev: ReviewSeverity, minutes: number) =>
+      slaState({ createdAt: new Date(NOW - minutes * MIN).toISOString(), severity: sev }, DEFAULT_ESCALATION_POLICY, NOW).urgency;
     expect(at("critical", 4)).toBe(0);
     expect(at("critical", 10)).toBeCloseTo(0.5);
     expect(at("warning", 90)).toBe(1);

@@ -149,7 +149,7 @@ The system tags runs that look like they could have run on a cheaper model with 
 
 ### How It Works
 
-The Usage view groups the same execution records as the per-agent view but on the model dimension instead. Pricing is configured per-model in Settings → Engine, with defaults matching each provider's public pricing; you can override if you have a negotiated rate or are using BYOI on a cheaper endpoint.
+The Usage view groups the same execution records as the per-agent view but on the model dimension instead. Pricing is configured per-model in Settings → Engine, with defaults matching each provider's public pricing; you can override if you have a negotiated rate or a cheaper endpoint.
 
 :::tip
 Once a month, scan the per-model view sorted by total cost. The top entry is your biggest opportunity for savings — drop it into the Lab arena against the next cheaper model and see if quality holds. Most agents tolerate a model downgrade fine; the ones that don't are the ones genuinely worth the spend.
@@ -159,7 +159,7 @@ Once a month, scan the per-model view sorted by total cost. The top entry is you
   "success-rate-metrics": `
 ## Success Rate Metrics
 
-Every run finishes with a status: success, failure, or manual-review. Success rate is the percentage of runs that completed successfully against a backdrop of expected behavior. The Overview → Health tab and the per-agent Activity tab both surface success rate with a trend indicator — week-over-week change — so you can see at a glance whether reliability is holding.
+Every run finishes with a status: success, failure, or manual-review. Success rate is the percentage of runs that completed successfully against a backdrop of expected behavior. The Overview → Mission control dashboard and the per-agent Activity tab both surface success rate with a trend indicator — week-over-week change — so you can see at a glance whether reliability is holding.
 
 The metric goes beyond pure success/failure now. With **business_outcome** tracking, the agent itself can declare whether a successful run produced the outcome you actually wanted (a sale, an approved doc, a useful summary) — a separate signal from "did the run complete without errors". Success rate splits into "completed cleanly" and "produced the desired business outcome" — the second one is the more useful number for most agents.
 
@@ -173,10 +173,10 @@ The metric goes beyond pure success/failure now. With **business_outcome** track
 
 ### How It Works
 
-The Health tab aggregates run statuses over a rolling window per agent. Business-outcome tracking requires the agent to emit a \`business_outcome\` directive in its output (most templates that need it do so by default; custom agents can add it explicitly). Threshold alerts are configured per agent and fire through the same notification channels the agent is set up with.
+The Mission control dashboard aggregates run statuses over a rolling window per agent (its status monitor and daily success-rate trend). Business-outcome tracking requires the agent to emit a \`business_outcome\` directive in its output (most templates that need it do so by default; custom agents can add it explicitly). Threshold alerts are configured per agent and fire through the same notification channels the agent is set up with.
 
 :::tip
-Set a 90% threshold on every production agent. The alert won't tell you why an agent is failing, but it'll tell you something is. The failure-reason classification on the Health tab is where you go next to diagnose.
+Set a 90% threshold on every production agent. The alert won't tell you why an agent is failing, but it'll tell you something is. The failure-reason classification on the Mission control status monitor is where you go next to diagnose.
 :::
   `,
 
@@ -274,7 +274,7 @@ This catches a class of problems pure success/failure metrics miss: the run comp
 
 ### How It Works
 
-The baseline is a rolling window of recent runs (configurable; default 50). Each new run is scored on each signal; if any signal crosses the configured threshold (default 3 standard deviations from the rolling mean), the run is flagged and an anomaly event is emitted. Anomaly events show up on Overview → Notifications and in the Health tab for that agent.
+The baseline is a rolling window of recent runs (configurable; default 50). Each new run is scored on each signal; if any signal crosses the configured threshold (default 3 standard deviations from the rolling mean), the run is flagged and an anomaly event is emitted. Anomaly events show up on Overview → Notifications and on the Mission control status monitor for that agent.
 
 :::tip
 Anomalies that you investigate and resolve should be cleared (mark them "investigated"). The baseline excludes investigated anomalies from its rolling window, so the system doesn't drift toward considering the anomalous run "normal".

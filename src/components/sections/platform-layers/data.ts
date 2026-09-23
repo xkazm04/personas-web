@@ -1,15 +1,15 @@
-import { Wand2, Zap, Cloud, Activity } from "lucide-react";
+import { Wand2, Zap, Monitor, Activity } from "lucide-react";
 import type { Layer } from "./types";
 
 export const layers: Layer[] = [
   {
     id: "deploy",
-    label: "Infrastructure",
-    pillar: "Deploy",
-    icon: Cloud,
+    label: "Runtime",
+    pillar: "Run",
+    icon: Monitor,
     brand: "emerald",
     description:
-      "Run agents on your computer or in the cloud — or both at once. Deploy with a single click, and use your own servers if you prefer.",
+      "Agents run on your own computer, and your credentials stay in your operating system's keyring. There are no servers to rent or maintain.",
   },
   {
     id: "coordinate",

@@ -9,7 +9,7 @@ import {
   useState,
   type ReactNode,
 } from "react";
-import { useReducedMotion } from "framer-motion";
+import { useStillMotion } from "@/hooks/useStillMotion";
 import type { TourStep } from "@/lib/tour-script";
 import { INTRO_AUDIO_SRC } from "@/lib/tour-audio";
 import { useTourAudio } from "@/hooks/useTourAudio";
@@ -80,7 +80,7 @@ export function TourProvider({ children }: { children: ReactNode }) {
   const [atBridge, setAtBridge] = useState(false);
   const [atIntro, setAtIntro] = useState(false);
   const [volume, setVolume] = useTourVolume();
-  const prefersReducedMotion = useReducedMotion();
+  const prefersReducedMotion = useStillMotion();
 
   const start = useCallback((nextSteps: TourStep[], options?: TourStartOptions) => {
     setSteps(nextSteps);

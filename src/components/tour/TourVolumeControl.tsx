@@ -8,7 +8,8 @@ import { useTranslation } from "@/i18n/useTranslation";
 /**
  * Compact narration-volume slider for the tour overlay. Reads / writes the
  * volume state on the TourContext, which `useTourAudio` applies to the live
- * audio element in real time. Default 50%, persists via localStorage.
+ * audio element in real time. Default 25% (`DEFAULT_VOLUME` in `useTourVolume`),
+ * persists via localStorage.
  */
 export default function TourVolumeControl({ className = "" }: { className?: string }) {
   const { t } = useTranslation();

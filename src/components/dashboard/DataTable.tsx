@@ -7,7 +7,13 @@ import { EASE_CURVE } from "@/lib/animations";
 
 interface Column<T> {
   key: string;
-  header: string;
+  /**
+   * Rendered into a `role="columnheader"` div, which is where the column gets
+   * its accessible name. A column with no visible header must still pass a
+   * name here (wrap it in `sr-only`) — an ARIA table has no `<th>`-style
+   * fallback, so an empty header is announced as a blank column.
+   */
+  header: React.ReactNode;
   className?: string;
   render: (row: T) => React.ReactNode;
 }

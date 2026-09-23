@@ -188,19 +188,19 @@ Většina poskytovatelů nabízí kredity pro bezplatnou zkušební verzi. Přip
 
 Personas jsou Tauri desktopová aplikace — Rust backend, React frontend, lokální SQLite databáze — a jsou záměrně nenáročné. Většina výpočetně náročné práce se odehrává na serverech AI poskytovatele, ne na tvém stroji. Aplikace v klidu spotřebovává téměř nulu CPU a používá několik set megabajtů RAM; škáluje se nahoru, jen když agenti aktivně běží lokálně.
 
-Binárka po instalaci má kolem 90 MB. Pluginy (Artist pro generování obrázků, Obsidian Brain pro vektorové vyhledávání) mohou k tomu přidat, pokud je povolíš.
+Binárka po instalaci má kolem 90 MB. Pluginy jako Obsidian Brain (vektorové vyhledávání) mohou k tomu přidat, pokud je povolíš.
 
 :::checklist
 - Windows 10+, macOS 12+ nebo Ubuntu 20.04+ (doporučená nejnovější verze)
 - Minimálně 4 GB RAM (8 GB+ doporučeno, pokud používáš pluginy pro embedding / vektorové vyhledávání)
-- 1 GB volného místa na disku (více, pokud povolíš lokální modely pluginu Artist)
+- 1 GB volného místa na disku
 - Stabilní širokopásmové připojení — běh agenta je omezen latencí API AI poskytovatele
 - Jakékoli moderní dvoujádrové CPU; čtyřjádrové nebo lepší doporučeno pro paralelní víceagentové běhy
 :::
 
 ### Jak to funguje
 
-Aplikace ukládá svou databázi (\`personas.db\`), trezor přihlašovacích údajů, historii běhů a konfiguraci lokálně v adresáři aplikačních dat specifickém pro tvůj OS. Nic se nenahrává, pokud explicitně nepovolíš cloudové nasazení nebo nepoužiješ cloudového AI poskytovatele. Pluginy, které dodávají lokální modely (např. obrazový generátor pluginu Artist + Gemini vize), stahují soubory modelů při prvním použití.
+Aplikace ukládá svou databázi (\`personas.db\`), trezor přihlašovacích údajů, historii běhů a konfiguraci lokálně v adresáři aplikačních dat specifickém pro tvůj OS. Nic se nenahrává, pokud nepoužiješ cloudového AI poskytovatele. Pluginy, které dodávají lokální modely, stahují soubory modelů při prvním použití.
 
 Windows build používá ONNX Runtime pro embedding, když je povolena funkce vector-knowledge-base; v takovém případě je to největší jednotlivá závislost.
 

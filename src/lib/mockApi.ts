@@ -76,6 +76,13 @@ function mergeReviewerNotes(payload: string | null, metadata?: string): string |
   }
 }
 
+/**
+ * Monotonic id source for events minted by `publishEvent`. A counter rather
+ * than `Math.random()` keeps demo ids stable and readable, and it never runs
+ * in a render path.
+ */
+let publishedEventSeq = 0;
+
 export const mockApi: ApiClient = {
   listPersonas: async (): Promise<Persona[]> => {
     await delay();
@@ -138,9 +145,31 @@ export const mockApi: ApiClient = {
     return result;
   },
 
-  publishEvent: async (_input: CreateEventInput): Promise<PersonaEvent> => {
+  publishEvent: async (input: CreateEventInput): Promise<PersonaEvent> => {
     await delay();
-    return MOCK_EVENTS[0];
+    // This used to `return MOCK_EVENTS[0]` — a literal, unrelated fixture. The
+    // store dedupes appended events by id, so every replay in the demo was a
+    // silent no-op: the operator clicked Retry and nothing whatsoever entered
+    // the bus. Mint a real event from the input instead, and push it onto the
+    // fixture array so the next poll of `listEvents` still sees it.
+    publishedEventSeq += 1;
+    const now = new Date().toISOString();
+    const event: PersonaEvent = {
+      id: `ev-published-${publishedEventSeq}-mock`,
+      projectId: "mock-project",
+      eventType: input.eventType,
+      sourceType: input.sourceType,
+      sourceId: input.sourceId ?? null,
+      targetPersonaId: input.targetPersonaId ?? null,
+      payload: input.payload ?? null,
+      status: "pending",
+      errorMessage: null,
+      processedAt: null,
+      useCaseId: null,
+      createdAt: now,
+    };
+    MOCK_EVENTS.unshift(event);
+    return event;
   },
 
   updateEvent: async (id: string, body: { status: EventStatus; metadata?: string }): Promise<PersonaEvent> => {
@@ -156,6 +185,8 @@ export const mockApi: ApiClient = {
       status: body.status,
       processedAt: new Date().toISOString(),
       payload: mergeReviewerNotes(ev.payload, body.metadata),
+      // A drained dead letter stops showing its old failure once processed.
+      errorMessage: body.status === "processed" ? null : ev.errorMessage,
     };
     MOCK_EVENTS[idx] = updated;
     return { ...updated };

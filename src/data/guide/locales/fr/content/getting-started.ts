@@ -188,19 +188,19 @@ La plupart des fournisseurs offrent des crédits d'essai gratuits. Connectez-en 
 
 Personas est une application de bureau Tauri — backend Rust, frontend React, base de données SQLite locale — et elle est intentionnellement légère. La majeure partie du calcul lourd se produit sur les serveurs du fournisseur d'IA, pas sur votre machine. L'application est inactive à un CPU proche de zéro et utilise quelques centaines de mégaoctets de RAM ; elle monte en puissance uniquement lorsque les agents s'exécutent activement en local.
 
-Le binaire fourni fait environ 90 Mo après installation. Les plugins (Artist pour la génération d'images, Obsidian Brain pour la recherche vectorielle) peuvent ajouter à cette empreinte si vous les activez.
+Le binaire fourni fait environ 90 Mo après installation. Les plugins comme Obsidian Brain (recherche vectorielle) peuvent ajouter à cette empreinte si vous les activez.
 
 :::checklist
 - Windows 10+, macOS 12+, ou Ubuntu 20.04+ (dernière version recommandée)
 - 4 Go de RAM minimum (8 Go+ recommandés si vous utilisez les plugins d'embeddings / recherche vectorielle)
-- 1 Go d'espace disque libre (plus si vous activez les modèles locaux du plugin Artist)
+- 1 Go d'espace disque libre
 - Haut débit stable — l'exécution d'agents est limitée par la latence de l'API du fournisseur d'IA
 - Tout CPU dual-core moderne ; quad-core ou mieux recommandé pour les exécutions multi-agents parallèles
 :::
 
 ### Comment ça marche
 
-L'application stocke sa base de données (\`personas.db\`), son coffre d'identifiants, son historique d'exécution et sa configuration localement dans le répertoire de données d'application spécifique à votre OS. Rien n'est téléchargé sauf si vous activez explicitement le déploiement cloud ou utilisez un fournisseur d'IA cloud. Les plugins qui livrent des modèles locaux (par ex., génération d'images + vision Gemini du plugin Artist) téléchargent les fichiers de modèle à la première utilisation.
+L'application stocke sa base de données (\`personas.db\`), son coffre d'identifiants, son historique d'exécution et sa configuration localement dans le répertoire de données d'application spécifique à votre OS. Rien n'est téléchargé sauf si vous utilisez un fournisseur d'IA cloud. Les plugins qui livrent des modèles locaux téléchargent les fichiers de modèle à la première utilisation.
 
 La version Windows utilise ONNX Runtime pour l'embedding lorsque la fonctionnalité base de connaissances vectorielle est activée ; c'est la plus grande dépendance unique dans ce cas.
 

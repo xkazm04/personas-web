@@ -3,8 +3,17 @@
 import { motion } from "framer-motion";
 import { ArrowRight, X } from "lucide-react";
 import { useTour } from "@/contexts/TourContext";
+import { useDialogFocusTrap, type DialogFocusTrapOptions } from "@/hooks/useDialogFocusTrap";
 import { useTranslation } from "@/i18n/useTranslation";
 import { TRANSITION_NORMAL } from "@/lib/animations";
+
+/** See the identical block in `TourIntroCard` for why each option is set. */
+const TRAP: DialogFocusTrapOptions = {
+  initialFocusSelector: "[data-tour-focus]",
+  escape: false,
+  restoreFocusSelector: "[data-tour-launcher]",
+  deferToMovedFocus: true,
+};
 
 /**
  * End-of-tour bridge prompt. Shown when a tour run finishes its last step and
@@ -14,6 +23,8 @@ import { TRANSITION_NORMAL } from "@/lib/animations";
 export default function TourBridgeCard() {
   const { t } = useTranslation();
   const { confirmBridge, dismissBridge, bridge } = useTour();
+  // Declared aria-modal, so Tab is contained here too (Escape stays global).
+  const panelRef = useDialogFocusTrap(true, dismissBridge, TRAP);
   // Per-tour overrides win; otherwise fall back to the default (features) copy.
   const prompt = bridge?.prompt ?? t.tour.bridgePrompt;
   const confirm = bridge?.confirm ?? t.tour.bridgeConfirm;
@@ -21,6 +32,7 @@ export default function TourBridgeCard() {
 
   return (
     <motion.div
+      ref={panelRef}
       role="dialog"
       aria-modal="true"
       aria-label={prompt}
@@ -34,6 +46,7 @@ export default function TourBridgeCard() {
       <div className="flex items-center gap-3">
         <button
           type="button"
+          data-tour-focus
           onClick={confirmBridge}
           className="group inline-flex flex-1 items-center justify-center gap-2 rounded-full border border-brand-cyan/50 bg-brand-cyan/10 px-5 py-2.5 text-base font-medium text-brand-cyan transition-colors duration-200 hover:bg-brand-cyan/20 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-cyan/40"
         >

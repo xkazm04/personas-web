@@ -188,19 +188,19 @@ La mayoría de los proveedores ofrecen créditos de prueba gratis. Conecta dos o
 
 Personas es una app de escritorio Tauri (backend en Rust, frontend en React, base de datos SQLite local) y está pensada intencionalmente para ser ligera. La mayor parte del cómputo pesado ocurre en los servidores del proveedor de IA, no en tu máquina. La app se mantiene casi a cero de CPU en reposo y usa unos cientos de megabytes de RAM; solo escala cuando se están ejecutando agentes localmente.
 
-El binario incluido pesa unos 90 MB tras la instalación. Los plugins (Artist para generación de imágenes, Obsidian Brain para búsqueda vectorial) pueden añadir a esa huella si los activas.
+El binario incluido pesa unos 90 MB tras la instalación. Los plugins como Obsidian Brain (búsqueda vectorial) pueden añadir a esa huella si los activas.
 
 :::checklist
 - Windows 10+, macOS 12+ o Ubuntu 20.04+ (se recomienda la última versión)
 - 4 GB de RAM mínimo (8 GB+ recomendado si usas los plugins de embeddings / búsqueda vectorial)
-- 1 GB de espacio libre en disco (más si activas los modelos locales del plugin Artist)
+- 1 GB de espacio libre en disco
 - Banda ancha estable: la ejecución de los agentes está limitada por la latencia de la API del proveedor de IA
 - Cualquier CPU moderna de doble núcleo; cuádruple núcleo o superior recomendado para ejecuciones paralelas multi-agente
 :::
 
 ### Cómo funciona
 
-La app almacena su base de datos (\`personas.db\`), la bóveda de credenciales, el historial de ejecuciones y la configuración localmente en el directorio de datos de la app específico de tu SO. Nada se sube salvo que actives explícitamente el despliegue en la nube o uses un proveedor de IA en la nube. Los plugins que incluyen modelos locales (p. ej. el plugin Artist con generación de imágenes + visión de Gemini) descargan los archivos del modelo en el primer uso.
+La app almacena su base de datos (\`personas.db\`), la bóveda de credenciales, el historial de ejecuciones y la configuración localmente en el directorio de datos de la app específico de tu SO. Nada se sube salvo que uses un proveedor de IA en la nube. Los plugins que incluyen modelos locales descargan los archivos del modelo en el primer uso.
 
 La compilación de Windows usa ONNX Runtime para embeddings cuando la función de base de conocimiento vectorial está activada; en ese caso es la dependencia más grande.
 

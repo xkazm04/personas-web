@@ -5,6 +5,38 @@ import type { TourStep } from "@/lib/tour-script";
 
 /** Quiet beat between a step's clip ending and the next step starting. */
 const INTER_STEP_PAUSE_MS = 2000;
+/**
+ * Grace added on top of a clip's own length before the stall watchdog gives up
+ * on it. A clip that loads and starts playing but then stalls fires neither
+ * `ended` nor `error`, so nothing else in the tour would ever advance that step
+ * — the visitor is left under the scrim with no way forward. The ceiling is
+ * derived from the media (its `duration` once known, with the step's `dwellMs`
+ * as the floor) plus this slack, deliberately generous so a slow connection
+ * re-buffering mid-sentence is never cut short.
+ */
+const STALL_SLACK_MS = 8000;
+
+/**
+ * Record the stall degradation without any user-derived data: numbers and an
+ * in-repo constant string only. Checked against `src/lib/sentry-pii.ts` —
+ * neither key is in SENSITIVE_FIELDS and neither value can carry a UUID, URL,
+ * email or quoted name, so nothing here depends on the scrubber to be safe.
+ */
+function breadcrumbStall(stepIndex: number, ceilingMs: number): void {
+  if (typeof window === "undefined") return;
+  void import("@sentry/nextjs")
+    .then((Sentry) => {
+      Sentry.addBreadcrumb({
+        category: "tour",
+        level: "warning",
+        message: "tour narration stalled; advancing on the watchdog ceiling",
+        data: { stepIndex, ceilingMs },
+      });
+    })
+    .catch(() => {
+      /* Sentry is optional — the watchdog still advances the tour. */
+    });
+}
 /** Pause after the intro pop-up appears before Athena starts speaking. Kept
  *  generous so the homepage greeting doesn't autoplay the instant the tour
  *  starts — it should feel like a beat, not a jump-scare. The avatar countdown
@@ -99,20 +131,59 @@ export function useTourAudio({
 
     let fallbackId = 0;
     let advanceId = 0;
+    let ceilingId = 0;
+    const clearCeiling = () => {
+      if (ceilingId) window.clearTimeout(ceilingId);
+      ceilingId = 0;
+    };
+    // Stall backstop. `ended` is the only thing that advances an audio-bearing
+    // step, and a clip that stalls mid-playback fires neither `ended` nor
+    // `error` — so arm a ceiling derived from the clip's own length (falling
+    // back to the step's dwell while `duration` is still unknown) and advance
+    // if it expires. Re-armed on `loadedmetadata`/`durationchange` (the real
+    // duration replaces the floor) and on `play` (a resumed clip gets a fresh
+    // budget); cleared on `pause`, `ended` and `error`, so a paused tour never
+    // advances behind the visitor's back and the happy path never sees it fire.
+    const armCeiling = () => {
+      if (atIntro || !step) return;
+      clearCeiling();
+      const clipMs = Number.isFinite(audio.duration) ? audio.duration * 1000 : 0;
+      const ceilingMs = Math.max(clipMs, step.dwellMs) + STALL_SLACK_MS;
+      ceilingId = window.setTimeout(() => {
+        ceilingId = 0;
+        breadcrumbStall(stepIndex, ceilingMs);
+        next();
+      }, ceilingMs);
+    };
     // The intro greeting just plays; only step clips auto-advance the tour.
     // Insert a short pause after the clip ends so the spotlight breathes
     // before jumping to the next step.
     const onEnded = () => {
+      clearCeiling();
       if (!atIntro) advanceId = window.setTimeout(next, INTER_STEP_PAUSE_MS);
     };
     const onError = () => {
+      clearCeiling();
       if (!atIntro && step) fallbackId = window.setTimeout(next, step.dwellMs);
     };
     audio.addEventListener("ended", onEnded);
     audio.addEventListener("error", onError);
+    audio.addEventListener("loadedmetadata", armCeiling);
+    audio.addEventListener("durationchange", armCeiling);
+    audio.addEventListener("play", armCeiling);
+    audio.addEventListener("pause", clearCeiling);
+    // Armed from creation rather than from `play`, so a clip whose autoplay the
+    // browser refuses (no user gesture yet) is covered too — that path fires no
+    // media event at all and would otherwise strand the tour just as hard.
+    armCeiling();
     return () => {
       audio.removeEventListener("ended", onEnded);
       audio.removeEventListener("error", onError);
+      audio.removeEventListener("loadedmetadata", armCeiling);
+      audio.removeEventListener("durationchange", armCeiling);
+      audio.removeEventListener("play", armCeiling);
+      audio.removeEventListener("pause", clearCeiling);
+      clearCeiling();
       audio.pause();
       try {
         source?.disconnect();

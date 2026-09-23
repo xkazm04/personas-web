@@ -11,8 +11,11 @@ email) into the persona agents that react to them. It has four tabs:
   source, target persona, event type, retry count, and time. You can full-text
   search, filter by status / event type / source type, drill into a row to see its
   JSON payload and error, follow "related event" chains (events linked by
-  `sourceId`), retry a single failed event, or multi-select failed events and
-  **bulk-retry** them from a sticky bottom bar.
+  `sourceId`), retry a single failed event, **discard** one you have judged
+  unrecoverable, or multi-select failed / dead-lettered events and **bulk-retry
+  or bulk-discard** them from a sticky bottom bar. The **Dead Letter** filter is
+  a working queue, not a read-out: every row in it carries both verbs, and the
+  lane drains to empty as you resolve them.
 - **Subscriptions** — which personas subscribe to which event types (handled by
   `SubscriptionsPanel`, documented elsewhere).
 - **Visualization** — an animated SVG topology: source nodes on an outer ring,
@@ -73,9 +76,12 @@ per-node-id lookup of realistic mock JSON), syntax-highlighted by `highlightJson
 | `src/app/api/events/stream/route.ts` | **Real** SSE proxy to the orchestrator with heartbeat injection |
 | `src/hooks/useEventStream.ts` | EventSource lifecycle, reconnect backoff, polling fallback |
 | `src/hooks/useEventTopology.ts` | BFS over `sourceId` links → event-chain components |
-| `src/stores/eventStore.ts` | Zustand store: events buffer, replay/DLQ, subscriptions |
+| `src/lib/eventStatusFsm.ts` | The event delivery FSM: transition table, `assertEventTransition`, retry-budget landing |
+| `src/lib/eventStatusFsm.test.ts` | FSM transition + retry-budget specs |
+| `src/stores/eventStore.ts` | Zustand store: events buffer, replay/DLQ/discard, subscriptions |
+| `src/stores/eventStore.test.ts` | Store specs: retry drains the lane, discard verdict, lockout parking |
 | `src/components/dashboard/EventsListPanel.tsx` | Events tab: fetch, stream, filter, chains, bulk retry |
-| `src/components/dashboard/events-list-panel/EventsListColumns.tsx` | `DataTable` column builder (select, status, persona, chain, retry) |
+| `src/components/dashboard/events-list-panel/EventsListColumns.tsx` | `DataTable` column builder (select, status, persona, chain, retry, discard) |
 | `src/components/dashboard/events-list-panel/EventsFiltersToolbar.tsx` | Search input + status/eventType/sourceType filters + chain pill |
 | `src/components/dashboard/events-list-panel/EventsBulkRetryBar.tsx` | Sticky bottom bulk-retry bar |
 | `src/components/dashboard/events-list-panel/EventExpandedContent.tsx` | Expanded row: ids, payload viewer, error + retry |
@@ -99,9 +105,16 @@ per-node-id lookup of realistic mock JSON), syntax-highlighted by `highlightJson
 
 ## Data & state
 
-- **Source:** Demo-only. List/replay/subscriptions read mocks via `api.*` →
+- **Source:** Demo-only. List/replay/discard/subscriptions read mocks via `api.*` →
   `src/lib/mockApi.ts` (`listEvents`, `publishEvent`, `updateEvent`,
-  `listAllSubscriptions`, …) backed by `MOCK_EVENTS` / `MOCK_SUBSCRIPTIONS`. The
+  `listAllSubscriptions`, …) backed by `MOCK_EVENTS` (`src/lib/mockData.ts`) /
+  `MOCK_SUBSCRIPTIONS`. `publishEvent` mints a real event from its input and
+  `updateEvent` writes the transition back into the `MOCK_EVENTS` array — both
+  used to be inert (`publishEvent` literally returned `MOCK_EVENTS[0]`, which the
+  store's id dedupe then swallowed, so every demo retry was a silent no-op, and
+  `updateEvent` returned a detached copy that the next 10s poll overwrote).
+  `MOCK_EVENTS` carries eight dead-letter/failed fixtures so the Dead Letter
+  filter can be watched draining to empty. The
   visualization, swimlane, and drawer use static fixtures from
   `src/lib/mock-dashboard-data.ts` (`SWARM_PERSONAS`, `SWARM_SOURCES`, `EVENT_TYPES`,
   `MOCK_SWIMLANE_EVENTS`, `SWIMLANE_WINDOW_MS`, `SwarmNode`). `EventBusStats` counters
@@ -116,7 +129,10 @@ per-node-id lookup of realistic mock JSON), syntax-highlighted by `highlightJson
   surface owns). Everything else routes through the `api` client, which is the mock
   layer in this repo.
 - **Types:** `PersonaEvent`, `PersonaEventSubscription`, `CreateEventInput`,
-  `EventStatus` (`src/lib/types.ts`); `SwarmNode`, `SwimlaneEvent`, `EventFlow`
+  `EventStatus` — `pending | processing | processed | failed | dead_letter |
+  discarded` (`src/lib/types.ts`); the transition table, `assertEventTransition`
+  and the `isEventRetryable` / `isEventDiscardable` predicates
+  (`src/lib/eventStatusFsm.ts`); `SwarmNode`, `SwimlaneEvent`, `EventFlow`
   (`src/lib/mock-dashboard-data.ts`); `Particle`, `BurstRing`, `Point`
   (`eventBusGeometry.ts`); `ConnectionStatus`, `ReplayLockedError`,
   `MAX_REPLAY_RETRIES` (`eventStore.ts`).
@@ -149,21 +165,37 @@ per-node-id lookup of realistic mock JSON), syntax-highlighted by `highlightJson
   (`EventsListPanel.tsx:43-46`), so switching to the Visualization/Swimlane/
   Subscriptions tabs unmounts the list and **stops the live stream/poll**; the
   title-bar connection dot then reflects the last status until you return.
-- **`EventBusStats` is decoupled from real connection state.** It hardcodes
-  `connected = true` (`EventBusStats.tsx:68`) and its three counters are random
-  walks on a `setInterval` — it always shows "Connected" and fake throughput
-  regardless of `connectionStatus`. Don't read it as live health; that's the
-  title-bar `ConnectionStatusIndicator`'s job.
+- **`EventBusStats` counters are simulated, but its connection state is real.**
+  It reads `connectionStatus` from `eventStore` (an earlier version of this doc
+  claimed it hardcoded `connected = true` — that is no longer true). The three
+  counters are still random walks on a `setInterval`, so don't read the
+  throughput numbers as live; the title-bar `ConnectionStatusIndicator` remains
+  the authority on stream health.
+- **The status FSM is the only writer of `event.status`.** `eventStore.transitionEvent`
+  calls `assertEventTransition` *before* its `set()`, so an illegal move throws
+  `IllegalEventTransitionError` and leaves the buffer untouched — a discarded event
+  cannot be resurrected and a processed one cannot be re-failed. The table lives in
+  `src/lib/eventStatusFsm.ts`:
+  `pending -> processing`; `processing -> processed | pending | failed | dead_letter`;
+  `failed -> processing | dead_letter | discarded`; `dead_letter -> processing | discarded`;
+  `processed` and `discarded` are terminal.
 - **Replay lockout & retry budget.** `replayEvent` counts the *attempt* up front
   (not success) and persists `retryCounts` to `localStorage`
   (`event-replay-retry-counts`); once an event hits `MAX_REPLAY_RETRIES = 3` it's
-  **replay-locked** and throws `ReplayLockedError`. This is intentional — the prior
-  shape only counted successes, so an always-failing handler could be retried
-  forever. `replayEvents` (bulk) pre-filters locked events as `skipped`, batches in
-  groups of 10 via `Promise.allSettled`, and trips a **circuit breaker** after 5
-  *consecutive* failures (resets on any success), returning
-  `{ succeeded, failed, aborted, skipped }`. `store.reset()` clears the persisted
-  counts.
+  **replay-locked**, is moved into `dead_letter`, and throws `ReplayLockedError`.
+  A retry transitions the ORIGINAL event `-> processing`, then `-> processed` on
+  success (via `api.updateEvent`, which had zero call sites before this) or
+  `-> failed` / `-> dead_letter` on failure depending on whether the budget is
+  spent (`statusAfterFailedAttempt`). `replayEvents` (bulk) is the same code path
+  per item — it pre-filters locked and non-retryable events as `skipped` (parking
+  locked ones in the dead letter as it goes), batches in groups of 10 via
+  `Promise.allSettled`, and trips a **circuit breaker** after 5 *consecutive*
+  failures (resets on any success), returning `{ succeeded, failed, aborted, skipped }`.
+- **Discard is the second verb the dead letter needs.** `discardEvent` /
+  `discardEvents` write `discarded` through `api.updateEvent` and track in-flight
+  rows in `discardingIds` (the mirror of `replayingIds`). Both are exposed per-row
+  in the actions column and in bulk from `EventsBulkRetryBar`. `store.reset()`
+  clears the persisted counts and both id sets.
 - **Counts attempts globally, not per-handler** — the retry budget is keyed by event
   id, and `localStorage` is shared across all browser tabs, so retries in one tab
   count against another. Lockout survives reloads but not `reset()`.
@@ -183,19 +215,55 @@ per-node-id lookup of realistic mock JSON), syntax-highlighted by `highlightJson
   `mockPayloadForNode` computes `s_cron.next_run` with `Date.now()` at call time
   (drawer render) — harmless for mock display but don't copy the pattern into a hook
   or `useMemo`.
+- **The particle loop is an AMBIENT loop, gated on BOTH signals.** An
+  `IntersectionObserver` in `EventBusVisualization.tsx` covers off-screen, and
+  `usePageVisibility()` inside `useEventBusParticles.ts` covers a backgrounded tab.
+  Before `c6de33f` only the observer could re-arm `requestAnimationFrame`, so returning
+  to a backgrounded tab left the bus frozen until the element's intersection state
+  happened to change. `inViewRef` is optimistically set true on FIRST activation only
+  (`startedRef`) — resetting it on a visibility change would restart a scrolled-away
+  loop. `useEventBusParticles.ts` no longer disables
+  `custom-animation/require-animation-gating`; `usePageVisibility` is an accepted gate.
+  The reduced-motion gate still lives one level up (`if (prefersReduced) return`, plus
+  `EventBusParticles` returning `null`), which is safe only because the parent loads the
+  component via `dynamic(..., { ssr: false })`. Do not server-render it.
 - **`_personaPos` monkeypatch.** Particles stash their outbound persona target via a
   cast-and-assign (`(particle as Particle & { _personaPos: Point })._personaPos`) in
   `useEventBusParticles` rather than on the typed `Particle` interface — fragile but
   intentional to keep the public geometry type clean.
 - **i18n.** All strings come from `t.eventsPage.*`, `t.dashboardUi.*`, `t.common.*`,
-  `t.executionsPage.*`, `t.memoriesPage.*`. Watch for stragglers: the `"Dead Letter"`
-  filter label (`EventsFiltersToolbar.tsx:60`) and the `"Fast"/"Normal"/"Slow"` +
-  `"ms"` duration qualifiers (`EventDrawerMetadata.tsx`) are **hardcoded English** —
-  fix these by adding keys to `en.ts` and all 13 locales if you go near them.
+  `t.executionsPage.*`, `t.memoriesPage.*`. The events surfaces are fully keyed as of
+  `aa75f5d` — the former stragglers (the `Dead Letter` filter chip, the `ms` suffix,
+  `Fast`/`Normal`/`Slow`, the swim-lane `now` / `-Nm` axis ticks, the raw
+  `success`/`failure`/`processing` legend keys and the `"... at ..."` dot `aria-label`)
+  now live under `eventsPage.deadLetter`, `eventsPage.durationMs` / `durationFast` /
+  `durationNormal` / `durationSlow`, and `eventsPage.swimlane.*`.
+- **The swim-lane axis has its own COMPACT keys** — `eventsPage.swimlane.axisNow` and
+  `axisMinutes` (`'{n}m'`) — deliberately NOT `dashboard.staleness.justNow` /
+  `minutesAgo`. Five absolutely positioned `text-sm` labels share one `1fr` column in
+  the `grid-cols-[8rem_1fr]` axis row, so these are chart-axis labels: translators get
+  the terse form (`сейчас`, `jetzt`), never the staleness-pill sentence. The number
+  still travels with its unit inside one interpolated message, so unit placement and
+  RTL stay the translator's call. Leave `dashboard.staleness.*` alone —
+  `StalenessIndicator` uses it and it is correct there. French `maintenant` is the
+  widest label in the set; it lands on the right-aligned rightmost tick, so it grows
+  away from its neighbour, but eyeball it first if the axis ever looks tight.
+- **`EventDrawerMetadata` reads duration strings from `useTranslation()` directly**,
+  not through the `labels` prop `EventDetailDrawer` passes for `timestamp`/`duration`.
+  Two sources in one component is deliberate, not drift: the prop shape is owned by
+  the drawer.
 - **Token drift.** `EventDrawerPayload` uses raw `text-white/60` and the visualization
   components use literal `rgba(...)` fills/strokes inside SVG (acceptable for SVG
   paint, but the `text-white/60` is a semantic-token violation — prefer
   `text-foreground/…` style tokens).
+- **Headerless columns carry `sr-only` names.** `DataTable` renders an ARIA table
+  (`role="table"`/`row"`/`columnheader"` divs, not a native `<table>`), so a
+  column's accessible name comes from its header content and there is no
+  `<th>`-style fallback. Five of the events columns are headerless by design
+  (select, status glyph, persona avatar, retry pill, actions); each ships its
+  name through the `ColumnName` `sr-only` wrapper in `EventsListColumns.tsx`
+  rather than an empty string. `Column.header` is typed `React.ReactNode` for
+  exactly this. If you add a headerless column here, wrap a name the same way.
 - **Star-topology chains.** `useEventTopology` connects all children of a `sourceId`
   to the *first* child (O(k), same connected component as all-pairs) — the chain
   count is correct but the implied graph edges are a star, not a clique. It runs only

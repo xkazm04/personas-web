@@ -64,8 +64,7 @@ export default function PrivacyPolicy({ changelog }: Props) {
         <p className="text-base leading-relaxed text-muted-dark">
           If you sign in with Google OAuth to use cloud features, we store your
           email address and basic profile information through Supabase (our
-          authentication provider). Paid cloud tiers may store agent execution
-          metadata on our servers to enable scheduling and remote execution.
+          authentication provider).
         </p>
       </section>
 

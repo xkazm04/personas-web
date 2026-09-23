@@ -1,6 +1,7 @@
 import { Loader2, RotateCcw } from "lucide-react";
 import JsonViewer from "@/components/dashboard/JsonViewer";
 import { useTranslation } from "@/i18n/useTranslation";
+import { isEventRetryable } from "@/lib/eventStatusFsm";
 import { relativeTime } from "@/lib/format";
 import type { PersonaEvent } from "@/lib/types";
 import { useEventStore } from "@/stores/eventStore";
@@ -20,7 +21,7 @@ export function EventExpandedContent({ event }: { event: PersonaEvent }) {
         <div className="rounded-xl border border-red-500/20 bg-red-500/5 p-3">
           <div className="flex items-start justify-between gap-3">
             <p className="text-sm text-red-400">{event.errorMessage}</p>
-            {event.status === "failed" && <RetryButton event={event} />}
+            {isEventRetryable(event.status) && <RetryButton event={event} />}
           </div>
         </div>
       )}

@@ -147,7 +147,6 @@ Pensez-y comme à une visite chez le médecin pour votre configuration Personas.
 - **Intégrité de la base de données** — vos fichiers de données locaux sont intacts et sains
 - **Statut des identifiants** — tous les identifiants stockés sont valides et fonctionnent
 - **Connectivité des fournisseurs** — vos fournisseurs d'IA sont joignables et répondent
-- **Connexion cloud** — votre connexion à l'orchestrateur est active (si configurée)
 
 ### Comment ça marche
 

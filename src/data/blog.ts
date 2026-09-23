@@ -102,7 +102,7 @@ Persistent failures trip the circuit breaker, preventing cascade failures. The b
 
 ## Real-World Impact
 
-In our testing, self-healing reduced manual intervention on agent pipelines by 94%. The median recovery time dropped from "whenever someone notices" to under 30 seconds.`,
+The median recovery time dropped from "whenever someone notices" to under 30 seconds.`,
   },
   {
     slug: "building-slack-triage-bot",
@@ -356,7 +356,7 @@ Platforms like CrewAI Cloud, LangChain's LangSmith, and Relevance AI follow the 
 
 ## The Desktop-First Model
 
-Personas and a few newer tools flip this model: the orchestration engine runs on your machine. Cloud execution is optional, added when you need 24/7 availability.
+Personas and a few newer tools flip this model: the orchestration engine runs on your machine.
 
 **Strengths:**
 - Complete data privacy — nothing leaves your device
@@ -366,9 +366,8 @@ Personas and a few newer tools flip this model: the orchestration engine runs on
 - No vendor lock-in — your agents are files on disk
 
 **Trade-offs:**
-- Requires a machine running for scheduled tasks (unless using cloud mode)
+- Requires a machine running for scheduled tasks
 - Initial setup is slightly more involved than a web signup
-- Team collaboration requires the cloud tier
 
 ## When Desktop-First Wins
 
@@ -383,13 +382,7 @@ Choose desktop-first when:
 Choose cloud-first when:
 - **You need always-on agents** without managing infrastructure — cloud platforms handle uptime, scaling, and monitoring.
 - **Your team is distributed** and needs real-time collaboration on agent configurations from day one.
-- **Data sensitivity is low** — the agents process public data or non-sensitive content.
-
-## The Hybrid Path
-
-Personas offers both. Build and test agents locally — your data stays private, iteration is instant, and there's no cost. When you need 24/7 execution, deploy specific agents to the cloud. Your credentials stay local; only the execution happens remotely.
-
-This hybrid model means you don't have to choose upfront. Start local, add cloud when the use case demands it.`,
+- **Data sensitivity is low** — the agents process public data or non-sensitive content.`,
   },
   {
     slug: "multi-agent-pipeline-tutorial",
@@ -584,23 +577,15 @@ Cloud agent platforms charge for execution. It starts small — a few dollars a 
 
 Personas desktop is free. Not freemium, not time-limited — free forever. You bring your own AI provider key and pay them directly for model usage. There's no markup, no per-agent pricing, no execution caps.
 
-Cloud execution is available when you need 24/7 availability, but it's optional. Most users find that local execution covers 90% of their use cases.
-
 ## When Cloud Still Makes Sense
 
-Local-first isn't dogma. There are genuine reasons to use cloud execution:
+Local-first isn't dogma. There are genuine reasons to choose a hosted cloud platform instead:
 
-- **Always-on scheduling** — if your machine sleeps, scheduled agents pause. Cloud execution keeps them running.
+- **Always-on scheduling** — if your machine sleeps, scheduled agents pause. A hosted platform keeps them running.
 - **Team collaboration** — shared agent libraries and pipeline editing require a synchronized backend.
-- **Scale** — if you need 10+ concurrent agents processing high-volume data streams, cloud workers distribute the load.
+- **Scale** — if you need 10+ concurrent agents processing high-volume data streams, a hosted platform distributes the load.
 
-The key difference: with Personas, cloud is an opt-in addition. With cloud-first platforms, it's the only option.
-
-## The Future Is Hybrid
-
-We believe the best architecture gives you both options without forcing a choice. Build and iterate locally — fast, private, free. Deploy to cloud when the use case demands it — specific agents, specific schedules, specific data that's already non-sensitive.
-
-Your data, your infrastructure, your choice.`,
+Personas is built for everything else: your data stays on your machine, under your control.`,
   },
 ];
 

@@ -47,24 +47,27 @@ times" is fully translated).
 
 Manual, Schedule, Webhook, Clipboard, File Watcher, Chain, Event-Based.
 
-## 5. Tier names: UNRESOLVED (owner decision)
+## 5. Tiers, pricing and cloud deployment: none (owner decision 2026-09-14)
 
-The English source names the paid tiers three different ways. This glossary does
-**not** pick one, and neither may a translator. Until the owner decides:
+**Decision:** there are no paid plans, tiers or prices, and no cloud deployment (no
+cloud orchestrator, no BYOI, no remote execution, no 24/7 hosted runs). The desktop app
+is free and open source and runs agents on the user's own machine. A translator must
+not introduce any of these, and must report any English unit that still carries one.
 
-- Keep whichever tier name the English unit uses, verbatim, in that unit.
-- Do not normalize a unit to another set, even when a neighbouring page uses it.
-- Report every unit you saw carrying a tier name, so the eventual decision has a
-  complete list to apply.
-
-| Set | Names as written | Where (verified 2026-09-14) |
+| Set | Names as written | State |
 | --- | --- | --- |
-| A | Local / Cloud / Enterprise, with feature rows "Everything in Free" and "Everything in Pro" | `src/i18n/en.ts` `pricing.local`, `pricing.cloud`, `pricing.enterprise`, `pricing.features.everythingInFree`, `pricing.features.everythingInPro` |
-| B | Starter, Pro, Team ("Cloud plans (Starter, Pro, Team)"; "Pro and Team plans") | `src/i18n/en.ts` FAQ answers to "How does the pricing model work?" and "Are there any limits on the number of agents?" |
-| C | Starter, Team, Builder ("Builder tier", "Team / Builder tier") | the guide prompt's former "Tier names" line; guide bodies `src/data/guide/content/triggers.ts`, `testing.ts`, `deployment.ts`, `credentials.ts` |
+| A | Local / Cloud / Enterprise, with feature rows "Everything in Free" and "Everything in Pro" | **Removed** from `src/i18n/*.ts` (`pricing.*` except `comingSoon`, which the waitlist modal renders) |
+| B | Starter, Pro, Team ("Cloud plans (Starter, Pro, Team)"; "Pro and Team plans") | **Removed** from the FAQ in all 14 locales; the FAQ JSON-LD follows `en.faqSection` |
+| C | Starter, Team, Builder ("Builder tier", "Team / Builder tier") | **Removed** from the guide bodies in English and all 13 locales |
+| D | Cloud execution, cloud orchestrator, BYOI, cloud deploy | **Removed:** seven guide topics, the FAQ BYOI and local-vs-cloud answers, the features card, the terminal demo step, the roadmap bar, blog and changelog passages |
+
+"Cloud" still correctly names third-party services: a cloud AI provider, cloud storage
+connectors, a synced cloud folder, an OS vendor's cloud speech service.
 
 Not a tier set: `roadmap.bars.solo` / `team` / `enterprise` (Solo, Team, Enterprise)
 are collaboration-phase labels on the roadmap.
 
-**Decision owed:** one canonical tier vocabulary, then a sweep of every row above in
-English first, then the 13 locales as a sync. Record the decision here with its date.
+## 6. Product names: Claude Code
+
+The Anthropic command-line tool Personas requires is **Claude Code** (owner decision
+2026-09-14; formerly written "Claude CLI"). Do not translate it; do not write "Claude CLI".

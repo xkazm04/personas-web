@@ -57,7 +57,7 @@ export function EventsFiltersToolbar({
             { key: "pending", label: labels.memoriesPage.status.pending, count: counts.pending },
             { key: "processed", label: labels.executionsPage.completed, count: counts.processed },
             { key: "failed", label: labels.executionsPage.failed, count: counts.failed },
-            { key: "dead_letter", label: "Dead Letter", count: counts.dead_letter },
+            { key: "dead_letter", label: labels.eventsPage.deadLetter, count: counts.dead_letter },
           ]}
           active={filter}
           onChange={setFilter}

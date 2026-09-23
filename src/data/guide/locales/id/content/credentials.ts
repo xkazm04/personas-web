@@ -10,7 +10,7 @@ Ketika Anda menjalankan agen, engine mendekripsi hanya kredensial spesifik yang 
 
 - **AES-256-GCM** — enkripsi terotentikasi (ciphertext setiap kredensial diperiksa integritasnya, sehingga file vault yang dirusak terdeteksi, bukan didekripsi secara diam-diam)
 - **Master key yang dibungkus OS keyring** — DPAPI di Windows, Keychain di macOS, Secret Service di Linux; tidak ada master password yang harus diketik setiap sesi
-- **Hanya-lokal secara default** — tidak ada yang diunggah; cloud deploy bersifat opt-in dan mengenkripsi dalam transit melalui TLS ke orkestrator pilihan Anda
+- **Hanya-lokal secara default** — tidak ada yang diunggah
 - **Referensi token dalam log** — trace agen dan ekspor menggunakan ID kredensial, bukan rahasia mentah
 - **Bukti gangguan** — tag autentikasi GCM menangkap setiap modifikasi pada file vault
 
@@ -43,10 +43,6 @@ Vault terikat ke akun pengguna OS Anda melalui OS keyring. Menyalin file vault k
 
 :::warning
 Jika Anda mengubah password akun OS di macOS atau Linux, keyring mungkin mengunci ulang wrapping key. Personas akan meminta kredensial baru pada run pertama setelah perubahan. Jika keyring dihapus (reset pabrik, penghapusan akun), vault menjadi tidak dapat dipulihkan — backup rahasia mentah secara eksternal jika Anda perlu pemulihan bencana di luar mesin lokal.
-:::
-
-:::tip
-Model hanya-lokal adalah default yang tepat untuk otomatisasi pribadi. Untuk pekerjaan tim / produksi di mana beberapa mesin membutuhkan kredensial yang sama, cloud deploy (tier Team / Builder) mereplikasi status vault melalui orkestrator dengan enkripsi end-to-end.
 :::
   `,
 

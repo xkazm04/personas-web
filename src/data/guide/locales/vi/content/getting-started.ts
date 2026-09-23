@@ -188,19 +188,19 @@ Hầu hết các nhà cung cấp đều cung cấp tín dụng dùng thử miễ
 
 Personas là một ứng dụng máy tính để bàn Tauri — backend Rust, frontend React, cơ sở dữ liệu SQLite cục bộ — và nó cố ý nhẹ. Hầu hết tính toán nặng xảy ra trên máy chủ của nhà cung cấp AI, không phải trên máy của bạn. Ứng dụng ở chế độ chờ với CPU gần bằng 0 và sử dụng vài trăm megabyte RAM; nó chỉ tăng quy mô khi các agent đang chạy cục bộ.
 
-Mã nhị phân đi kèm có dung lượng khoảng 90 MB sau khi cài đặt. Plugins (Artist để tạo hình ảnh, Obsidian Brain để tìm kiếm vector) có thể thêm vào dung lượng nếu bạn bật chúng.
+Mã nhị phân đi kèm có dung lượng khoảng 90 MB sau khi cài đặt. Các plugin như Obsidian Brain (tìm kiếm vector) có thể thêm vào dung lượng nếu bạn bật chúng.
 
 :::checklist
 - Windows 10+, macOS 12+ hoặc Ubuntu 20.04+ (phiên bản mới nhất được khuyến nghị)
 - Tối thiểu 4 GB RAM (8 GB+ được khuyến nghị nếu bạn sử dụng plugin embeddings / tìm kiếm vector)
-- 1 GB dung lượng đĩa trống (nhiều hơn nếu bạn bật mô hình cục bộ của plugin Artist)
+- 1 GB dung lượng đĩa trống
 - Băng thông rộng ổn định — thực thi agent bị ràng buộc bởi độ trễ API của nhà cung cấp AI
 - CPU dual-core hiện đại nào đó; quad-core hoặc tốt hơn được khuyến nghị cho các lần chạy đa agent song song
 :::
 
 ### Cách Hoạt Động
 
-Ứng dụng lưu trữ cơ sở dữ liệu của nó (\`personas.db\`), vault credential, lịch sử thực thi và cấu hình cục bộ trong thư mục dữ liệu ứng dụng dành riêng cho hệ điều hành của bạn. Không có gì được tải lên trừ khi bạn cố ý bật triển khai đám mây hoặc sử dụng nhà cung cấp AI đám mây. Plugin ship các mô hình cục bộ (ví dụ: tạo hình ảnh + Gemini vision của plugin Artist) tải xuống các tệp mô hình trong lần sử dụng đầu tiên.
+Ứng dụng lưu trữ cơ sở dữ liệu của nó (\`personas.db\`), vault credential, lịch sử thực thi và cấu hình cục bộ trong thư mục dữ liệu ứng dụng dành riêng cho hệ điều hành của bạn. Không có gì được tải lên trừ khi bạn sử dụng nhà cung cấp AI đám mây. Plugin ship các mô hình cục bộ tải xuống các tệp mô hình trong lần sử dụng đầu tiên.
 
 Bản build Windows sử dụng ONNX Runtime cho embedding khi tính năng vector-knowledge-base được bật; đây là phụ thuộc đơn lẻ lớn nhất trong trường hợp đó.
 

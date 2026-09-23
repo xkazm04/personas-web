@@ -10,7 +10,7 @@ Tab Lab pada editor setiap agen adalah tempat ini terjadi. Ia memiliki empat mod
 
 - **Tangkap regresi sejak dini** — pengujian setelah setiap perubahan adalah cara Anda menghindari "agen dulu berfungsi, apa yang saya rusak?"
 - **Bandingkan alternatif secara sistematis** — Arena dan A-B memungkinkan Anda memilih antar opsi dengan bukti daripada perasaan
-- **Hasilkan data fitness** — run Lab mengakumulasi skor per-prompt yang memberi makan genome evolution (tier Builder)
+- **Hasilkan data fitness** — run Lab mengakumulasi skor per-prompt yang memberi makan genome evolution
 - **Set input dapat digunakan kembali** — input uji disimpan per agen; prompt yang sama, data yang sama, perbandingan yang dapat diulang
 
 ### Cara Kerjanya
@@ -169,7 +169,7 @@ Eval adalah mode paling mahal. 3 prompt × 4 model × 5 input = 60 eksekusi, mas
   "rating-and-scoring-results": `
 ## Rating dan Penilaian Hasil
 
-Setelah pengujian Lab apa pun, setiap baris output memiliki kontrol rating: thumbs-up / thumbs-down untuk penilaian biner, atau skala 1-5 bintang untuk kasus bernuansa. Rating Anda memberi makan dua hal: skor fitness per-varian agen (digunakan untuk peringkat dalam matrix dan eval, dan sebagai tekanan seleksi genome-evolution pada tier Builder), dan sinyal preferensi pribadi di seluruh pengujian Anda dari waktu ke waktu.
+Setelah pengujian Lab apa pun, setiap baris output memiliki kontrol rating: thumbs-up / thumbs-down untuk penilaian biner, atau skala 1-5 bintang untuk kasus bernuansa. Rating Anda memberi makan dua hal: skor fitness per-varian agen (digunakan untuk peringkat dalam matrix dan eval, dan sebagai tekanan seleksi genome-evolution), dan sinyal preferensi pribadi di seluruh pengujian Anda dari waktu ke waktu.
 
 Rating bersifat pribadi — mereka mengkodekan penilaian Anda tentang kualitas, bukan metrik objektif. Itu disengaja; Anda adalah orang yang tahu apakah output agen sesuai dengan apa yang Anda butuhkan, dan itu adalah sinyal yang dioptimalkan sistem.
 
@@ -183,7 +183,7 @@ Rating bersifat pribadi — mereka mengkodekan penilaian Anda tentang kualitas, 
 
 ### Cara Kerjanya
 
-Rating disimpan terhadap eksekusi spesifik (trace, versi prompt, model, input). Agregator fitness membaca rating + metrik objektif (biaya, durasi, sukses) dan menghitung skor fitness per-varian yang digunakan dalam peringkat. Genome evolution (tier Builder) menggunakan rating sebagai tekanan seleksi utama untuk memilih prompt induk untuk dibiakkan.
+Rating disimpan terhadap eksekusi spesifik (trace, versi prompt, model, input). Agregator fitness membaca rating + metrik objektif (biaya, durasi, sukses) dan menghitung skor fitness per-varian yang digunakan dalam peringkat. Genome evolution menggunakan rating sebagai tekanan seleksi utama untuk memilih prompt induk untuk dibiakkan.
 
 :::tip
 Nilai berdasarkan apa yang sebenarnya Anda inginkan, bukan apa yang secara teknis mengesankan. Jawaban pendek yang benar sering mengalahkan yang panjang dan rumit. Sistem mengoptimalkan terhadap preferensi Anda, jadi rating yang jujur dan konsisten menghasilkan agen yang disetel dengan penilaian *Anda*.
@@ -193,7 +193,7 @@ Nilai berdasarkan apa yang sebenarnya Anda inginkan, bukan apa yang secara tekni
   "genome-evolution-basics": `
 ## Dasar-dasar Genome Evolution
 
-Genome evolution (tier Builder) secara otomatis membiakkan varian prompt baru dari uji masa lalu Anda yang dinilai terbaik. Setiap "generasi" memutasi dan menggabungkan ulang prompt yang berkinerja terbaik dari generasi sebelumnya; selama beberapa generasi, prompt menyatu pada konfigurasi yang secara konsisten mencetak lebih baik daripada titik awal Anda. Ini adalah pencarian evolusioner dengan rating Anda sebagai fungsi fitness.
+Genome evolution secara otomatis membiakkan varian prompt baru dari uji masa lalu Anda yang dinilai terbaik. Setiap "generasi" memutasi dan menggabungkan ulang prompt yang berkinerja terbaik dari generasi sebelumnya; selama beberapa generasi, prompt menyatu pada konfigurasi yang secara konsisten mencetak lebih baik daripada titik awal Anda. Ini adalah pencarian evolusioner dengan rating Anda sebagai fungsi fitness.
 
 Prosesnya tanpa pengawasan setelah Anda memulainya. Anda menyediakan prompt awal dan sinyal fitness (biasanya riwayat rating Anda plus metrik objektif opsional seperti biaya atau durasi), mengatur ukuran populasi dan jumlah generasi, dan membiarkannya berjalan. Trigger normal agen tetap dijeda selama evolusi untuk menjaga perbandingan tetap bersih.
 

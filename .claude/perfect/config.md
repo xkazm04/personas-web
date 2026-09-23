@@ -108,3 +108,23 @@ Authority: `.claude/CLAUDE.md` is binding in full; read `.claude/design.md` befo
 
 ## Skill improvement log
 - (migrate the existing entries from `$VAULT/PerfectWeb/config.md` on the first 2.3 run, then append here)
+- 2026-09-05 - **The `vault:` first candidate is a path from another machine** (`C:/Users/kazda/...`).
+  SKILL.md's init rule says to CREATE the first named root when none exists; doing that here would have
+  built a vault under a user that does not exist on this box. Resolved to the second candidate. Either
+  drop the dead candidate or reorder it.
+- 2026-09-05 - **`link-registry.mjs` does not scan `personas-web`.** `perfect` was declared in
+  `.ai/manifest.yaml` but the junction had to be made by hand. Every future skill adoption here hits this.
+- 2026-09-05 - **`src/i18n/*` as Class B is genuinely contended.** Three of four lots added keys in one
+  wave and one lot's 14 locale edits were swept into another's commit by `git commit --only`. Nothing was
+  lost and the ordering happened to be right (keys before consumers). Consider naming a locale owner per
+  wave the way feature docs already get one.
+- 2026-09-05 - **Lint has zero headroom**: `--max-warnings 24` with exactly 24 warnings present. Any
+  direction that adds one warning fails the gate. Brief builders to check this before they start, not after.
+- 2026-09-05 - **`MOCK_EVENTS` lives in `src/lib/mockData.ts`, not `mock-dashboard-data.ts`.** The overlay's
+  repo-law line ("extend `mockApi.ts` / `mock-dashboard-data.ts`") sent a builder to the wrong file. Both
+  exist; `mock-dashboard-data.ts` holds the swimlane/seeded-RNG fixtures, `mockData.ts` holds `MOCK_EVENTS`.
+- 2026-09-05 - **`vitest.config.ts` is a v3-shaped config on vitest 4.** `coverage.all` already broke the
+  typecheck tree-wide; the ESM-in-CJS config-loader warning is the next one due. Worth a direction.
+- 2026-09-05 - **Playwright is unreachable from a build session** (no dev server, and builders are forbidden
+  one). Any direction whose acceptance depends on a browser ships unverified and owes `/perfect smoke`.
+  Say so in the direction note at proposal time, not at wrap.

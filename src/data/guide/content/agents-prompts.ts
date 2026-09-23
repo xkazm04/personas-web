@@ -271,14 +271,14 @@ A "Drafts" or "Experimental" group at the top of your sidebar is a useful patter
   "disabling-and-archiving-agents": `
 ## Disabling and Archiving Agents
 
-Two ways to pause an agent without deleting it. **Disable** stops all triggers from firing and blocks manual runs; the agent stays visible in the sidebar with a muted icon so you remember it exists. **Archive** moves the agent into a hidden archive section out of the way of daily use; it stops triggering, doesn't count against tier limits, and can be restored at any time.
+Two ways to pause an agent without deleting it. **Disable** stops all triggers from firing and blocks manual runs; the agent stays visible in the sidebar with a muted icon so you remember it exists. **Archive** moves the agent into a hidden archive section out of the way of daily use; it stops triggering and can be restored at any time.
 
 Neither operation touches executions, settings, or version history. Archive is heavier — use it for agents you're done with for now but might want back. Disable is lighter — use it when you need to stop an agent temporarily without losing it from view.
 
 ### Key Points
 
 - **Disable** — pauses execution; agent still visible in the sidebar; one-click re-enable
-- **Archive** — hides the agent and frees up its slot against your tier limit; restorable forever
+- **Archive** — hides the agent; restorable forever
 - **Neither deletes** — settings, prompt history, and past executions are preserved
 - **Triggers respect disable** — a disabled agent ignores schedule/webhook/file-watcher events; they don't queue up for replay on re-enable
 

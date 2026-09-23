@@ -28,6 +28,7 @@ Each grid self-drives its own entrance animation with `whileInView`/`viewport={{
 - **Athena Fleet** (`DevToolsGrid` + `dev-tools-grid/`): a deterministic clock. A `setInterval` (`TICK_MS = 1200`) advances `tick`; `phase = tick % CYCLE` (CYCLE = 24) drives everything. Pure functions in `athenaFleetData.ts` compute each cell's `CellState` (`stateAt`), the orb's position/caption (`orbAt`), and per-cell status text (`cellStatusText`). Three acts: spawn (waves fill the 4×4), churn (three cells block on `ask` questions, one goes `stale`), triage (the orb visits `ORB_STOPS` in attention order, flips blocked cells to `resolving`, then they return to `working` until `doneAt`). `AthenaFleetParts.tsx` renders the cells and the floating orb (the same avatar the site tour uses).
 - **Second Brain graph** (`SecondBrainGraph`): an SVG (`viewBox="0 0 100 100"`, `preserveAspectRatio="none"`) drawing `EDGES` as gradient `motion.line`s (animated `pathLength`), positioned HTML node chips for `SATELLITES` + `CENTRAL`, and three expanding pulse rings. Data is in `secondBrainData.ts`; `SecondBrainSidePanel` lists `BACKLINKS`/`CAPTURES`.
 
+
 ## Key files
 | File | Role |
 | --- | --- |
@@ -47,6 +48,7 @@ Each grid self-drives its own entrance animation with `whileInView`/`viewport={{
 | `src/components/feature-sections/plugins/second-brain/SecondBrainGraph.tsx` | Animated SVG knowledge graph (edges, nodes, pulse rings) |
 | `src/components/feature-sections/plugins/second-brain/SecondBrainSidePanel.tsx` | Backlinks + recent-captures panel |
 | `src/data/guide/desktop-modules.ts` | Guide Find-in-App tree; its Plugins children derive from the manifest |
+| `src/components/feature-sections/plugins/second-brain/secondBrainData.ts` | `CENTRAL`/`SATELLITES`/`EDGES`/`BACKLINKS`/`CAPTURES`/`nodeById` |
 | `src/app/features/page.tsx` | Mounts the section at `#plugins` via `LazyPlugins` (`page.tsx:82-86`) |
 | `src/components/feature-sections/feature-lazy.tsx` | `LazyPlugins` scroll-gated dynamic import (`:47`) |
 
@@ -63,11 +65,11 @@ Each grid self-drives its own entrance animation with `whileInView`/`viewport={{
 - **Shared primitives** — `SectionWrapper` (`id="plugins"`, one-shot `staggerContainer` reveal), `SectionIntro`, and animation tokens `staggerContainer`/`fadeUp` from `@/lib/animations`.
 - **Brand theme** — `data.ts` assigns each plugin a `BRAND_VAR` color (cyan/purple); `PluginTabs`/`PluginCard` consume it through `color-mix` inline styles.
 - **Product tour** — the window carries `data-tour-diagram="plugins"` (`index.tsx:53`) and each tab a `data-plugin-key` (`PluginTabs.tsx:31`); the tour clicks `[data-plugin-key="dev-tools"]` (`src/lib/tour-script.ts:303`), so `dev-tools` must stay in the roster (guarded by the contract test).
-- **Static assets** — the fleet orb loads `/athena/athena_idle_loop.mp4` (poster `/athena/athena_baseline.jpg`). The six Artist tiles under `/imgs/features/plugins/artist/` are no longer referenced (left in place; owner decision pending).
+- **Static assets** — the fleet orb loads `/athena/athena_idle_loop.mp4` (poster `/athena/athena_baseline.jpg`). The six Artist tiles under `/imgs/features/plugins/artist/` were deleted with the plugin (60a4f19).
 
 ## Conventions & gotchas
 - **i18n violation (real issue):** the entire plugins tree imports `useTranslation` **zero** times — every user-facing string is hardcoded English. The `SectionIntro` heading and the derived description (`roster.ts` `pluginsIntro`), all `label`/`tagline`/`blurb` copy (`data.ts`), fleet status lines and captions (`DevToolsGrid.tsx:43-54`, `ORB_STOPS` in `athenaFleetData.ts`), `cellStatusText` phrases, vault stats, and "Recall a thought…" / "Capture" placeholders are all inline literals. This breaks the project's non-negotiable i18n rule. Migrate to `src/i18n/en.ts` (+ 14-locale lockstep) before adding more copy here; `pluginsIntro` would become an interpolated `{shipped}`/`{showcased}` string.
-- **Stale counts outside this context.** The tour narration `features6` (`src/i18n/en.ts`, 14 locales, and the recorded `/tour/features6.mp3`) still says "six purpose-built plugins", and the guide's getting-started copy still describes the Artist plugin. Both are owner tasks (audio regeneration; guide context).
+- **Stale counts outside this context.** The tour narration `features6` (`src/i18n/en.ts`, 14 locales, and the recorded `/tour/features6.mp3`) still says "six purpose-built plugins" - an owner task (audio regeneration). The guide's Artist mentions were removed in all 14 locales (60a4f19).
 - **Animation gating is partial (real issue).** `DevToolsGrid` and the second-brain pair (`SecondBrain` → `SecondBrainGraph`) correctly call `useReducedMotion` and short-circuit (no `setInterval`, no looping video, `duration: 0` on entrances). But `PluginCard` and `PluginTabs` use `motion` `whileInView`/`animate` with **no** reduced-motion check. The custom lint rule only flags `requestAnimationFrame`/`cancelAnimationFrame`, so framer `whileInView`-only motion slips past it. Gate these if you touch them.
 - **Token violations (real issue).** Raw `bg-[#0b0c12]` cell backgrounds and `rgba(34,211,238,…)` shadows in `AthenaFleetParts`. `data.ts` (and the orb's `border-brand-cyan`) uses `BRAND_VAR`/semantic tokens. The `color-mix` inline-style pattern in `PluginTabs`/`PluginCard` is the correct way to alpha a brand CSS var.
 - **Counter semantics.** `PluginCard`'s "plugin N of M" counts the *showcased* plugins (2), while the intro states the *shipped* count (4). The intro makes the difference explicit; don't "fix" one to match the other.

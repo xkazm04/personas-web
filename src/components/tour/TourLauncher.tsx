@@ -1,7 +1,8 @@
 "use client";
 
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
-import { motion, useReducedMotion } from "framer-motion";
+import { motion } from "framer-motion";
+import { useStillMotion } from "@/hooks/useStillMotion";
 import { Play } from "lucide-react";
 import { useTour } from "@/contexts/TourContext";
 import { useTranslation } from "@/i18n/useTranslation";
@@ -37,7 +38,7 @@ export default function TourLauncher({
 }) {
   const { t } = useTranslation();
   const { active, start } = useTour();
-  const reduced = useReducedMotion();
+  const reduced = useStillMotion();
 
   // The tour scripts (every tour for every page) are loaded on demand, not in
   // the above-fold chunk: this launcher sits in the hero, and the vast
@@ -110,6 +111,10 @@ export default function TourLauncher({
   return (
     <motion.button
       type="button"
+      // The tour's dialog cards restore focus here when they close. The button
+      // that opened the tour has unmounted by then (`if (active) return null`),
+      // so the trap cannot restore the original node — it looks this up instead.
+      data-tour-launcher
       onClick={handleStart}
       onPointerEnter={() => void loadSteps()}
       onFocus={() => void loadSteps()}

@@ -4,7 +4,7 @@
 ## What it does
 Tells a prospect *what the platform offers* and *why agents beat rigid workflows*, in two reusable marketing sections:
 
-- **Features cluster** (`sections/features`) — a bridge intro ("you've seen *why* agents win, here's *how*"), then four numbered feature cards: design with natural language, agents that coordinate, one-click cloud deploy, and full visibility. One hero card (01) plus a 3-up grid (02–04), each card carrying an inline mini-visual and two deep links into the in-product guide.
+- **Features cluster** (`sections/features`) — a bridge intro ("you've seen *why* agents win, here's *how*"), then three numbered feature cards: design with natural language, agents that coordinate, and full visibility. One hero card (01) plus a 2-up grid (02–03); the cloud deploy card was removed (owner ruling 2026-09-14: no cloud deployment), each card carrying an inline mini-visual and two deep links into the in-product guide.
 - **Vision grid** (`sections/vision-grid`) — six branded platform-capability tiles (Vault, Templates, BYOM, Monitoring, Lab, Orchestration). Each tile is an opaque illustration on idle, brightens on hover, and click-toggles a glass info panel with a description, a 3-item detail list, and a guide deep-link.
 
 Both are pure presentational marketing surfaces: static content, no data fetching, no stores.

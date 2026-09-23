@@ -1,7 +1,17 @@
 import type { Scenario } from "./types";
 
-export const CYCLE_MS = 6000;
-export const ANIMATION_DURATION_MS = 4000;
+export const RESULT_REVEAL_DELAY_MS = 300;
+export const RESULT_HOLD_MS = 2000;
+
+// The race is over when the slower of the two tracks finishes, so the result
+// reveal and the auto-advance are derived per scenario. The old fixed 4000/6000
+// pair matched no scenario: every race ended between 2.8s and 3.0s and then sat
+// idle before the result appeared.
+export const getScenarioRevealMs = (scenario: Scenario): number =>
+  Math.max(scenario.workflow.totalMs, scenario.agent.totalMs) + RESULT_REVEAL_DELAY_MS;
+
+export const getScenarioCycleMs = (scenario: Scenario): number =>
+  getScenarioRevealMs(scenario) + RESULT_HOLD_MS;
 
 export const scenarios: Scenario[] = [
   {

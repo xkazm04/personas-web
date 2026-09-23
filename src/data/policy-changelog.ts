@@ -8,21 +8,17 @@ export type PolicyMeta = {
 
 export const POLICY_META: Record<PolicyId, PolicyMeta> = {
   privacy: {
-    latestUpdateIso: "2026-04-01",
-    formattedUpdate: "April 2026",
+    latestUpdateIso: "2026-09-14",
+    formattedUpdate: "September 2026",
     changes: [
-      "Clarified that paid cloud tiers may store agent execution metadata to enable scheduling and remote runs.",
-      "Specified AES-256-GCM as the encryption standard used for credential storage in your OS keyring.",
-      "Named Supabase explicitly as our authentication and cloud storage provider.",
+      "Removed the statement that paid cloud tiers store agent execution metadata. Personas has no paid tiers and does not run agents remotely.",
     ],
   },
   terms: {
-    latestUpdateIso: "2026-04-01",
-    formattedUpdate: "April 2026",
+    latestUpdateIso: "2026-09-14",
+    formattedUpdate: "September 2026",
     changes: [
-      "Added a 30-day window for cloud data deletion upon termination request.",
-      "Clarified that you must hold your own valid subscriptions to any AI providers you connect.",
-      "Made explicit that we may suspend cloud accounts only for terms violations, never for inactivity.",
+      "Removed the description of optional paid cloud tiers. Personas has no paid tiers and does not run agents remotely.",
     ],
   },
   cookies: {

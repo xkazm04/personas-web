@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useRef } from "react";
+import { useShallow } from "zustand/react/shallow";
 import { captureExceptionScrubbed } from "@/lib/sentry-pii";
 import type { RealtimeChannel } from "@supabase/supabase-js";
 import { getSupabase } from "@/lib/supabase";
@@ -95,8 +96,9 @@ function refetchFor(table: string): (() => void) | null {
 }
 
 export function useSyncedRealtime(): void {
-  const isAuthenticated = useAuthStore((s) => s.isAuthenticated);
-  const isDemo = useAuthStore((s) => s.isDemo);
+  const { isAuthenticated, isDemo } = useAuthStore(
+    useShallow((s) => ({ isAuthenticated: s.isAuthenticated, isDemo: s.isDemo })),
+  );
   const timers = useRef<Map<string, ReturnType<typeof setTimeout>>>(new Map());
 
   useEffect(() => {

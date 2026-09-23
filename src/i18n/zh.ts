@@ -37,14 +37,13 @@ export const zh: Translations = {
     compareSection: {
       heading: "\u4e00\u5207\u90fd",
       headingGradient: "\u514d\u8d39",
-      description: "\u684c\u9762\u5e94\u7528\u53ca\u4e0b\u65b9\u7684\u6bcf\u9879\u529f\u80fd\u6c38\u4e45\u514d\u8d39\u3002\u6ca1\u6709\u5957\u9910\u5206\u7ea7\uff0c\u6ca1\u6709\u6309\u5e2d\u4f4d\u6536\u8d39\u2014\u2014\u53ea\u6709\u4e00\u4e2a\u5728\u4f60\u7684\u673a\u5668\u4e0a\u8fd0\u884c\u7684\u5b8c\u6574\u667a\u80fd\u4f53\u5e73\u53f0\u3002",
+      description: "\u684c\u9762\u5e94\u7528\u53ca\u4e0b\u65b9\u7684\u6bcf\u9879\u529f\u80fd\u6c38\u4e45\u514d\u8d39\uff1a\u4e00\u4e2a\u5728\u4f60\u7684\u673a\u5668\u4e0a\u8fd0\u884c\u7684\u5b8c\u6574\u667a\u80fd\u4f53\u5e73\u53f0\u3002",
       offerBadges: [
         "\u6c38\u4e45\u514d\u8d39",
         "\u81ea\u6258\u7ba1",
-        "\u65e0\u8fd0\u884c\u52a0\u4ef7",
         "\u5f00\u6e90"
       ],
-      offerBody: "Personas \u8fd0\u884c\u5728\u4f60\u81ea\u5df1\u7684\u8bbe\u5907\u4e0a\u3002\u6ca1\u6709\u7f16\u6392\u52a0\u4ef7\uff0c\u4e5f\u6ca1\u6709\u6309\u5e2d\u4f4d\u6536\u8d39\u3002\u4ed8\u8d39\u4e91\u670d\u52a1\u548c\u4f18\u5148\u652f\u6301\u662f\u53ef\u9009\u9879,\u5e76\u975e\u5fc5\u9700\u3002",
+      offerBody: "Personas \u8fd0\u884c\u5728\u4f60\u81ea\u5df1\u7684\u8bbe\u5907\u4e0a\u3002",
       ctaLabel: "\u514d\u8d39\u5f00\u59cb\u4f7f\u7528",
       readGuide: "\u9605\u8bfb\u6307\u5357",
       groups: {
@@ -129,38 +128,7 @@ export const zh: Translations = {
       slogan: "\u81ea\u52a8\u5316\u60a8\u7684\u5de5\u4f5c\u3002\u6536\u56de\u60a8\u7684\u65f6\u95f4\u3002"
     },
     pricing: {
-      local: "\u672c\u5730\u7248",
-      cloud: "\u4e91\u7aef\u7248",
-      enterprise: "\u4f01\u4e1a\u7248",
-      downloadLocal: "\u4e0b\u8f7d\u672c\u5730\u7248",
-      goCloud: "\u4f7f\u7528\u4e91\u7aef",
-      contactSales: "\u8054\u7cfb\u9500\u552e",
-      comingSoon: "\u5373\u5c06\u63a8\u51fa",
-      bestFor: "\u9002\u5408",
-      forever: "\u6c38\u4e45\u514d\u8d39",
-      mo: "/\u6708",
-      custom: "\u5b9a\u5236",
-      bestForLocal: "\u521a\u8d77\u6b65\u7684\u4e2a\u4eba\u5f00\u53d1\u8005",
-      bestForCloud: "\u5feb\u901f\u8fed\u4ee3\u7684\u4e2a\u4eba\u56e2\u961f",
-      bestForEnterprise: "\u6709\u5408\u89c4\u548c\u89c4\u6a21\u9700\u6c42\u7684\u7ec4\u7ec7",
-      features: {
-        unlimitedLocalAgents: "\u65e0\u9650\u672c\u5730\u667a\u80fd\u4f53",
-        localEventBus: "\u672c\u5730\u4e8b\u4ef6\u603b\u7ebf\u548c\u8c03\u5ea6\u5668",
-        fullObservability: "\u5b8c\u6574\u53ef\u89c2\u6d4b\u6027\u4eea\u8868\u677f",
-        designEngine: "\u8bbe\u8ba1\u5f15\u64ce",
-        teamCanvasLocal: "\u56e2\u961f\u753b\u5e03\uff08\u672c\u5730\uff09",
-        everythingInFree: "\u514d\u8d39\u7248\u6240\u6709\u529f\u80fd",
-        cloudWorkers3: "3 \u4e2a\u4e91\u7aef\u5de5\u4f5c\u8282\u70b9",
-        executions1000: "\u6bcf\u6708 1,000 \u6b21\u6267\u884c",
-        events10000: "\u6bcf\u6708 10,000 \u4e2a\u4e8b\u4ef6",
-        burstAutoScaling: "\u7a81\u53d1\u81ea\u52a8\u6269\u5c55",
-        everythingInPro: "\u4e13\u4e1a\u7248\u6240\u6709\u529f\u80fd",
-        ssoSaml: "\u901a\u8fc7 SAML \u548c OIDC \u8fdb\u884c SSO",
-        multiTenantRbac: "\u591a\u79df\u6237\u5de5\u4f5c\u533a\u4e0e RBAC",
-        auditTrailExport: "\u6267\u884c\u5ba1\u8ba1\u8ddf\u8e2a\u5bfc\u51fa",
-        dedicatedWorkers: "\u4e13\u7528\u4e91\u7aef\u5de5\u4f5c\u8282\u70b9\u548c SLA",
-        prioritySupport: "\u4f18\u5148\u652f\u6301"
-      }
+      comingSoon: "\u5373\u5c06\u63a8\u51fa"
     },
     hero: {
       downloadCta: "\u4e0b\u8f7d",
@@ -168,7 +136,7 @@ export const zh: Translations = {
       badge: "AI \u667a\u80fd\u4f53\u5e73\u53f0",
       headingLine1: "\u667a\u80fd\u4f53",
       headingLine2: "\u4e3a\u60a8\u5de5\u4f5c",
-      description: "\u7528\u81ea\u7136\u8bed\u8a00\u8bbe\u8ba1\u667a\u80fd\u4f53\u3002\u5728\u672c\u5730\u6216\u4e91\u7aef\u7f16\u6392\u5b83\u4eec\u3002",
+      description: "\u7528\u81ea\u7136\u8bed\u8a00\u8bbe\u8ba1\u667a\u80fd\u4f53\u3002\u5728\u4f60\u81ea\u5df1\u7684\u8bbe\u5907\u4e0a\u7f16\u6392\u5b83\u4eec\u3002",
       descriptionBold: "\u6ca1\u6709\u5de5\u4f5c\u6d41\u56fe\u8868\u3002\u6ca1\u6709\u667a\u80fd\u4f53\u96c6\u7fa4\u3002\u6ca1\u6709\u4ee3\u7801\u3002",
       mode2: "\u7b80\u5355\u8bbe\u7f6e",
       mode3: "\u514d\u8d39",
@@ -393,28 +361,20 @@ export const zh: Translations = {
       discordSubtitle: "\u52a0\u5165\u6211\u4eec\u7684 Discord \u793e\u533a\u83b7\u53d6\u5e2e\u52a9\u548c\u8ba8\u8bba\u3002",
       questions: [
         {
-          q: "What is Claude CLI and why do I need it?",
-          a: "Claude CLI is Anthropic's official command-line interface for interacting with Claude. Personas uses it under the hood to run your agents locally \u2014 it handles authentication, model access, and streaming responses. You'll need an active Claude Pro or Max subscription and the CLI installed before launching Personas."
+          q: "What is Claude Code and why do I need it?",
+          a: "Claude Code is Anthropic's official command-line tool for working with Claude. Personas uses it under the hood to run your agents locally. It handles authentication, model access, and streaming responses. You'll need an active Claude Pro or Max subscription and Claude Code installed before launching Personas."
         },
         {
           q: "Does Personas collect any telemetry or usage data?",
-          a: "No. Personas runs entirely on your machine with zero telemetry. We don't collect analytics, usage metrics, or any personal data. Your prompts, agent configurations, and execution logs never leave your device unless you explicitly enable cloud execution."
+          a: "No. Personas runs entirely on your machine with zero telemetry. We don't collect analytics, usage metrics, or any personal data. Your prompts, agent configurations, and execution logs never leave your device."
         },
         {
-          q: "How does the pricing model work?",
-          a: "The desktop app is free forever with unlimited local agents. Cloud plans (Starter, Pro, Team) add 24/7 execution, remote workers, and team features on top. You always need your own Claude subscription \u2014 we never touch your Anthropic bill. Think of Personas as the orchestration layer, and Claude as the engine."
-        },
-        {
-          q: "What is Bring Your Own Infrastructure (BYOI)?",
-          a: "BYOI lets you connect your own cloud provider credentials (e.g., Fly.io API tokens) instead of using our managed infrastructure. Personas provisions and manages the workers on your account, giving you unlimited execution without per-month caps \u2014 you only pay your cloud provider directly."
-        },
-        {
-          q: "What's the difference between local and cloud execution?",
-          a: "Local execution runs agents on your machine using Claude CLI \u2014 it's instant, free, and private, but stops when your computer sleeps. Cloud execution runs agents on remote workers 24/7, supports event-bus bridging across environments, and enables team collaboration. You can switch between modes per-agent."
+          q: "Is Personas free?",
+          a: "Yes. The desktop app is free and open source, with unlimited local agents. You need your own Claude subscription, and we never touch your Anthropic bill. Think of Personas as the orchestration layer, and Claude as the engine."
         },
         {
           q: "Are there any limits on the number of agents?",
-          a: "Locally, there are no limits \u2014 create as many agents as you want. Cloud plans have worker limits (1\u20135 depending on tier) and monthly execution caps. Pro and Team plans include burst auto-scaling for traffic spikes. BYOI removes all caps entirely."
+          a: "No. Create as many agents as you want."
         }
       ]
     },
@@ -425,10 +385,10 @@ export const zh: Translations = {
       downloadInstaller: "\u4e0b\u8f7d\u5b89\u88c5\u7a0b\u5e8f",
       downloadFor: "\u4e0b\u8f7d {platform} \u7248",
       joinWaitlist: "\u52a0\u5165\u7b49\u5f85\u5217\u8868",
-      connectCli: "\u8fde\u63a5 Claude CLI",
+      connectCli: "\u8fde\u63a5 Claude Code",
       launchAgent: "\u542f\u52a8\u7b2c\u4e00\u4e2a\u667a\u80fd\u4f53",
       exploreFirst: "\u5148\u63a2\u7d22\u529f\u80fd",
-      requiresCli: "\u9700\u8981 Claude CLI",
+      requiresCli: "\u9700\u8981 Claude Code",
       installerSize: "12 MB \u5b89\u88c5\u7a0b\u5e8f",
       noSignupLine: "\u65e0\u9700\u6ce8\u518c\uff0c\u65e0\u9700\u4fe1\u7528\u5361\u3002\u5728\u60a8\u81ea\u5df1\u7684\u7535\u8111\u4e0a\u8fd0\u884c\uff0c\u96f6\u9065\u6d4b\u3002",
       windows: "Windows",
@@ -617,7 +577,10 @@ export const zh: Translations = {
         cancelled: "\u5df2\u53d6\u6d88",
         pending: "\u5f85\u5904\u7406",
         approved: "\u5df2\u6279\u51c6",
-        rejected: "\u5df2\u62d2\u7edd"
+        rejected: "\u5df2\u62d2\u7edd",
+        processing: "\u5904\u7406\u4e2d",
+        dead_letter: "\u65e0\u6cd5\u6295\u9012",
+        discarded: "\u5df2\u4e22\u5f03"
       },
       testFlow: "\u6d4b\u8bd5\u6d41\u7a0b",
       eventTypes: "\u4e8b\u4ef6\u7c7b\u578b",
@@ -1206,6 +1169,13 @@ export const zh: Translations = {
       showRelatedEvents: "?? {count} ?????",
       retriedCount: "??? {count} ?",
       retryEvent: "????",
+      discardEvent: "\u4e22\u5f03\u4e8b\u4ef6",
+      columnSelect: "\u9009\u62e9",
+      columnState: "\u72b6\u6001",
+      columnPersona: "\u76ee\u6807\u89d2\u8272",
+      columnRetries: "\u91cd\u8bd5\u6b21\u6570",
+      columnActions: "\u64cd\u4f5c",
+      discardAll: "\u4e22\u5f03",
       searchPlaceholder: "???????????????...",
       clearSearch: "????",
       eventType: "????",
@@ -1247,7 +1217,20 @@ export const zh: Translations = {
       noMatchingSubscriptions: "\u6ca1\u6709\u5339\u914d\u7684\u8ba2\u9605",
       noSubscriptions: "\u6682\u65e0\u8ba2\u9605",
       noSubscriptionsDescription: "\u521b\u5efa\u8ba2\u9605\u4ee5\u5c06\u4e8b\u4ef6\u8def\u7531\u5230\u4f60\u7684\u667a\u80fd\u4f53",
+      deadLetter: "\u6b7b\u4fe1",
+      durationMs: "{n} \u6beb\u79d2",
+      durationFast: "\u5feb",
+      durationNormal: "\u6b63\u5e38",
+      durationSlow: "\u6162",
       swimlane: {
+        eventAt: "{time} \u7684 {type}",
+        axisNow: "\u73b0\u5728",
+        axisMinutes: "{n}\u5206",
+        status: {
+          success: "\u6210\u529f",
+          failure: "\u5931\u8d25",
+          processing: "\u5904\u7406\u4e2d"
+        },
         title: "\u4e8b\u4ef6\u6cf3\u9053",
         subtitle: "\u6309\u65f6\u95f4\u987a\u5e8f\u6392\u5217\u7684\u5404 persona \u4e8b\u4ef6\u8f68\u8ff9",
         empty: "\u6240\u9009\u65f6\u95f4\u8303\u56f4\u5185\u6ca1\u6709\u4e8b\u4ef6"
@@ -1410,7 +1393,7 @@ export const zh: Translations = {
         },
         platform: {
           title: "\u6838\u5fc3\u5e73\u53f0",
-          caption: "\u5f00\u53d1\u6a21\u5f0f\u3001\u4e91\u7aef\u6267\u884c\u3001\u8fde\u63a5\u5668\u3001\u8f7b\u677e\u5b89\u88c5"
+          caption: "\u5f00\u53d1\u6a21\u5f0f\u3001\u8fde\u63a5\u5668\u3001\u8f7b\u677e\u5b89\u88c5"
         },
         templates: {
           title: "\u6a21\u677f\u5e93",
@@ -1432,7 +1415,6 @@ export const zh: Translations = {
         enterprise: "\u4f01\u4e1a",
         devMode: "\u5f00\u53d1\u6a21\u5f0f",
         connectors: "\u8fde\u63a5\u5668",
-        cloudExecution: "\u4e91\u7aef\u6267\u884c",
         installersUpdates: "\u5b89\u88c5\u7a0b\u5e8f\u4e0e\u66f4\u65b0",
         allCategories: "\u6240\u6709\u7c7b\u522b",
         devops: "DevOps",
@@ -1454,7 +1436,6 @@ export const zh: Translations = {
         ssoAudit: "SSO \u00b7 \u5ba1\u8ba1",
         instantPreview: "\u5373\u65f6\u9884\u89c8",
         services: "{n} \u9879\u670d\u52a1",
-        runs247: "\u5168\u5929\u5019\u8fd0\u884c",
         autoUpdate: "\u81ea\u52a8\u66f4\u65b0",
         templatesTotal: "{n} / {total} \u4e2a\u6a21\u677f"
       },
@@ -1575,7 +1556,7 @@ export const zh: Translations = {
         memories: "\u4f60\u7684\u667a\u80fd\u4f53\u4f1a\u5b66\u4e60\u5e76\u8bb0\u4f4f\u7ecf\u9a8c\u3002\u7ba1\u7406\u5b83\u4eec\u77e5\u9053\u4ec0\u4e48,\u4ee5\u53ca\u5982\u4f55\u5229\u7528\u8fc7\u5f80\u7ecf\u9a8c\u3002",
         monitoring: "\u5b9e\u65f6\u8ffd\u8e2a\u6bcf\u4e00\u6b21\u6267\u884c\u3002\u67e5\u770b\u667a\u80fd\u4f53\u505a\u4e86\u4ec0\u4e48\u3001\u8868\u73b0\u5982\u4f55\u4ee5\u53ca\u82b1\u8d39\u591a\u5c11\u3002",
         testing: "\u8fd0\u884c\u7ade\u6280\u573a\u6d4b\u8bd5\u3001A/B \u5bf9\u6bd4,\u8ba9\u57fa\u56e0\u7ec4\u7cfb\u7edf\u8fdb\u5316\u51fa\u4f60\u6700\u597d\u7684\u63d0\u793a\u8bcd\u3002",
-        deployment: "\u5c06\u667a\u80fd\u4f53\u90e8\u7f72\u5230\u4e91\u7aef,\u8fde\u63a5 GitHub Actions\u3001GitLab CI \u548c n8n \u5de5\u4f5c\u6d41\u3002",
+        deployment: "\u5c06\u667a\u80fd\u4f53\u8fde\u63a5\u5230 GitHub Actions\u3001GitLab CI \u548c n8n \u5de5\u4f5c\u6d41\u3002",
         troubleshooting: "\u4fee\u590d\u5e38\u89c1\u95ee\u9898,\u7406\u89e3\u9519\u8bef\u4fe1\u606f,\u8ba9\u4f60\u7684\u667a\u80fd\u4f53\u91cd\u56de\u6b63\u8f68\u3002"
       },
       translationNotice: {
@@ -1592,7 +1573,7 @@ export const zh: Translations = {
       },
       security: {
         headline: "\u4f60\u7684\u79d8\u5bc6\u59cb\u7ec8\u5c5e\u4e8e\u4f60",
-        description: "\u6bcf\u4e00\u4e2a\u5bc6\u7801\u3001API \u5bc6\u94a5\u548c\u8bbf\u95ee\u4ee4\u724c\u90fd\u4f1a\u5728\u4f60\u7684\u8bbe\u5907\u4e0a\u4f7f\u7528\u94f6\u884c\u7ea7 AES-256 \u52a0\u5bc6\u3002\u4f60\u7684\u51ed\u636e\u5b58\u50a8\u5728\u4f60\u64cd\u4f5c\u7cfb\u7edf\u81ea\u5e26\u7684\u5b89\u5168\u4fdd\u9669\u5e93\u4e2d\u2014\u2014\u7edd\u4e0d\u4f1a\u4e0a\u4f20\u5230\u4e91\u7aef\u3002",
+        description: "\u6bcf\u4e00\u4e2a\u5bc6\u7801\u3001API \u5bc6\u94a5\u548c\u8bbf\u95ee\u4ee4\u724c\u90fd\u4f1a\u5728\u4f60\u7684\u8bbe\u5907\u4e0a\u4f7f\u7528\u94f6\u884c\u7ea7 AES-256 \u52a0\u5bc6\u3002\u4f60\u7684\u51ed\u636e\u5b58\u50a8\u5728\u4f60\u64cd\u4f5c\u7cfb\u7edf\u81ea\u5e26\u7684\u5b89\u5168\u4fdd\u9669\u5e93\u4e2d\u3002",
         cta: "\u4fdd\u62a4\u4f60\u7684\u8fde\u63a5"
       },
       "multi-provider": {

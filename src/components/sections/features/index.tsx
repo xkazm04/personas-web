@@ -22,7 +22,7 @@ export default function Features() {
 
       <motion.div variants={fadeUp} className="relative">
         <span className="pointer-events-none absolute -top-6 -left-2 select-none font-mono font-bold text-[6rem] sm:text-[8rem] leading-none text-white/60">
-          01–04
+          01–03
         </span>
 
         <SectionIntro
@@ -70,7 +70,7 @@ export default function Features() {
             />
           </svg>
 
-          <div className="grid gap-6 md:grid-cols-3">
+          <div className="grid gap-6 md:grid-cols-2">
             {features.slice(1).map((f) => {
               const Visual = FEATURE_VISUALS_BY_KEY[f.visualKey];
               return (

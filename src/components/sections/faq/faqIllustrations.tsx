@@ -1,7 +1,5 @@
 import type { ReactNode } from "react";
 import AgentGridIllustration from "@/components/illustrations/AgentGridIllustration";
-import CloudInfraIllustration from "@/components/illustrations/CloudInfraIllustration";
-import LocalCloudIllustration from "@/components/illustrations/LocalCloudIllustration";
 import PricingIllustration from "@/components/illustrations/PricingIllustration";
 import ShieldIllustration from "@/components/illustrations/ShieldIllustration";
 import TerminalIllustration from "@/components/illustrations/TerminalIllustration";
@@ -16,8 +14,6 @@ export const FAQ_ILLUSTRATIONS_BY_POSITION = [
   <TerminalIllustration key="terminal" />,
   <ShieldIllustration key="shield" />,
   <PricingIllustration key="pricing" />,
-  <CloudInfraIllustration key="cloud" />,
-  <LocalCloudIllustration key="local" />,
   <AgentGridIllustration key="grid" />,
 ];
 

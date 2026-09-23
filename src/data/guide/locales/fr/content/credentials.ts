@@ -10,7 +10,7 @@ Quand vous exécutez un agent, le moteur ne déchiffre que les identifiants spé
 
 - **AES-256-GCM** — chiffrement authentifié (le chiffré de chaque identifiant est vérifié en intégrité, donc un fichier coffre altéré est détecté, pas silencieusement déchiffré)
 - **Clé maître enveloppée par le porte-clés OS** — DPAPI sur Windows, Keychain sur macOS, Secret Service sur Linux ; pas de mot de passe maître à taper à chaque session
-- **Local uniquement par défaut** — rien n'est téléchargé ; le déploiement cloud est opt-in et chiffre en transit via TLS vers l'orchestrateur que vous avez choisi
+- **Local uniquement par défaut** — rien n'est téléchargé
 - **Références par jeton dans les journaux** — les traces et exports d'agents utilisent des ID d'identifiants, pas de secrets bruts
 - **Évident en cas d'altération** — les tags d'authentification GCM détectent toute modification du fichier coffre
 
@@ -43,10 +43,6 @@ Le coffre est lié à votre compte utilisateur OS via le porte-clés OS. Copier 
 
 :::warning
 Si vous changez votre mot de passe de compte OS sur macOS ou Linux, le porte-clés peut reverrouiller la clé d'enveloppement. Personas vous demandera le nouvel identifiant lors de la première exécution après le changement. Si le porte-clés est effacé (réinitialisation d'usine, suppression de compte), le coffre devient irrécupérable — sauvegardez les secrets bruts en externe si vous avez besoin de récupération après sinistre au-delà de la machine locale.
-:::
-
-:::tip
-Le modèle local uniquement est la bonne valeur par défaut pour l'automatisation personnelle. Pour le travail d'équipe / production où plusieurs machines ont besoin des mêmes identifiants, le déploiement cloud (niveau Team / Builder) réplique l'état du coffre via l'orchestrateur avec un chiffrement de bout en bout.
 :::
   `,
 

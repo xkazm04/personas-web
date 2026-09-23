@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useRef } from "react";
-import { useReducedMotion } from "framer-motion";
+import { useStillMotion } from "@/hooks/useStillMotion";
 import { useTour } from "@/contexts/TourContext";
 import { INTRO_START_DELAY_MS } from "@/hooks/useTourAudio";
 import AvatarCountdown from "./AvatarCountdown";
@@ -28,7 +28,7 @@ export default function AthenaCompanion({
   className?: string;
 }) {
   const { audioAnalyser, atIntro, playing, volume } = useTour();
-  const prefersReducedMotion = useReducedMotion();
+  const prefersReducedMotion = useStillMotion();
   const canvasRef = useRef<HTMLCanvasElement>(null);
 
   useEffect(() => {

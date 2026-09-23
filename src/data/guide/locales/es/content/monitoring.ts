@@ -113,7 +113,7 @@ El sistema etiqueta ejecuciones que parecen que podrían haberse ejecutado en un
 
 ### Cómo funciona
 
-La vista Usage agrupa los mismos registros de ejecución que la vista por agente pero en la dimensión de modelo en su lugar. El precio se configura por modelo en Settings → Engine, con valores predeterminados que coinciden con el precio público de cada proveedor; puedes sobreescribir si tienes una tarifa negociada o estás usando BYOI en un endpoint más barato.
+La vista Usage agrupa los mismos registros de ejecución que la vista por agente pero en la dimensión de modelo en su lugar. El precio se configura por modelo en Settings → Engine, con valores predeterminados que coinciden con el precio público de cada proveedor; puedes sobreescribir si tienes una tarifa negociada o un endpoint más barato.
 
 :::tip
 Una vez al mes, revisa la vista por modelo ordenada por coste total. La entrada superior es tu mayor oportunidad de ahorro: pásala a la arena del Lab contra el siguiente modelo más barato y comprueba si la calidad se mantiene. La mayoría de los agentes toleran bien una bajada de modelo; los que no, son los que realmente vale la pena el gasto.

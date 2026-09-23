@@ -50,7 +50,7 @@ export default function PlatformLayers() {
           heading="Built to"
           gradient="grow"
           trailing=" with you"
-          description="Four layers that work together to power your agents — from the interface you see to the cloud that runs them. Scroll to explore."
+          description="Four layers that work together to power your agents — from the interface you see to the engine that runs them. Scroll to explore."
         />
       </motion.div>
 

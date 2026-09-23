@@ -188,19 +188,19 @@ Die meisten Anbieter bieten kostenlose Testguthaben an. Verbinde zwei oder drei 
 
 Personas ist eine Tauri-Desktop-App — Rust-Backend, React-Frontend, lokale SQLite-Datenbank — und bewusst schlank gehalten. Der Großteil der schweren Rechenarbeit findet auf den Servern des KI-Anbieters statt, nicht auf deinem Rechner. Die App läuft im Leerlauf bei nahezu null CPU und nutzt ein paar hundert Megabyte RAM; sie skaliert nur, wenn Agenten aktiv lokal laufen.
 
-Das mitgelieferte Binary ist nach der Installation etwa 90 MB groß. Plugins (Artist für Bildgenerierung, Obsidian Brain für Vektorsuche) können diesen Footprint erhöhen, wenn du sie aktivierst.
+Das mitgelieferte Binary ist nach der Installation etwa 90 MB groß. Plugins wie Obsidian Brain (Vektorsuche) können diesen Footprint erhöhen, wenn du sie aktivierst.
 
 :::checklist
 - Windows 10+, macOS 12+ oder Ubuntu 20.04+ (neueste Version empfohlen)
 - Mindestens 4 GB RAM (8 GB+ empfohlen, wenn du die Embeddings- / Vektorsuche-Plugins nutzt)
-- 1 GB freier Festplattenspeicher (mehr, wenn du die lokalen Modelle des Artist-Plugins aktivierst)
+- 1 GB freier Festplattenspeicher
 - Stabile Breitbandverbindung — die Agentenausführung ist an die API-Latenz des KI-Anbieters gebunden
 - Jede moderne Dual-Core-CPU; Quad-Core oder besser empfohlen für parallele Multi-Agenten-Läufe
 :::
 
 ### So funktioniert es
 
-Die App speichert ihre Datenbank (\`personas.db\`), den Zugangsdaten-Tresor, den Ausführungsverlauf und die Konfiguration lokal in deinem OS-spezifischen App-Daten-Verzeichnis. Nichts wird hochgeladen, es sei denn, du aktivierst explizit Cloud-Deployment oder nutzt einen Cloud-KI-Anbieter. Plugins, die lokale Modelle ausliefern (z. B. das Artist-Plugin mit Bildgenerierung + Gemini-Vision), laden die Modelldateien bei der ersten Nutzung herunter.
+Die App speichert ihre Datenbank (\`personas.db\`), den Zugangsdaten-Tresor, den Ausführungsverlauf und die Konfiguration lokal in deinem OS-spezifischen App-Daten-Verzeichnis. Nichts wird hochgeladen, es sei denn, du nutzt einen Cloud-KI-Anbieter. Plugins, die lokale Modelle ausliefern, laden die Modelldateien bei der ersten Nutzung herunter.
 
 Der Windows-Build nutzt ONNX Runtime für Embeddings, wenn die Vektor-Wissensdatenbank-Funktion aktiviert ist; das ist in diesem Fall die größte Einzelabhängigkeit.
 

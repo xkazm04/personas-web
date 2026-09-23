@@ -1,6 +1,7 @@
 "use client";
 
 import { motion } from "framer-motion";
+import { useTranslation } from "@/i18n/useTranslation";
 import {
   SWIMLANE_WINDOW_MS,
   type SwarmNode,
@@ -29,6 +30,7 @@ export default function SwimlaneLane({
   hoveredId,
   onHover,
 }: SwimlaneLaneProps) {
+  const { t } = useTranslation();
   return (
     <div className="grid grid-cols-[8rem_1fr] items-center gap-3">
       <div className="flex items-center gap-2 text-sm font-medium text-foreground">
@@ -60,7 +62,12 @@ export default function SwimlaneLane({
               initial={{ opacity: 0, scale: 0.3 }}
               animate={{ opacity: 1, scale: 1 }}
               transition={{ duration: 0.15 }}
-              aria-label={`${ev.eventType} at ${new Date(ev.timestamp).toLocaleTimeString()}`}
+              aria-label={t.eventsPage.swimlane.eventAt
+                .replace("{type}", ev.eventType)
+                .replace(
+                  "{time}",
+                  new Date(ev.timestamp).toLocaleTimeString(),
+                )}
               className="absolute top-1/2 -translate-x-1/2 -translate-y-1/2 rounded-full transition-transform hover:scale-125 focus:scale-125 focus:outline-none"
               style={{
                 left: `${pct}%`,

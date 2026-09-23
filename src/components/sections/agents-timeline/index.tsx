@@ -7,7 +7,7 @@ import TerminalChrome from "@/components/TerminalChrome";
 import SectionIntro from "@/components/primitives/SectionIntro";
 import { ThemedChip } from "@/components/primitives";
 import { fadeUp } from "@/lib/animations";
-import { ANIMATION_DURATION_MS, CYCLE_MS, scenarios } from "./data";
+import { getScenarioCycleMs, getScenarioRevealMs, scenarios } from "./data";
 import TimelineControls from "./components/TimelineControls";
 import { ScenarioTrigger } from "./components/ScenarioTrigger";
 import { TimelineRaceBody } from "./components/TimelineRaceBody";
@@ -27,25 +27,25 @@ export default function AgentsTimeline() {
   const cycleTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
   const resultTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
   // For pause/resume of the in-flight race: when the current run started and how
-  // much of ANIMATION_DURATION_MS is still owed. Lets a pause freeze the result
-  // reveal (instead of it slamming in after 4s regardless) and resume finish it.
+  // much of the scenario's reveal delay is still owed. Lets a pause freeze the result
+  // reveal (instead of it slamming in regardless) and resume finish it.
   const raceStartRef = useRef(0);
-  const remainingRef = useRef(ANIMATION_DURATION_MS);
+  const remainingRef = useRef(0);
 
   const scenario = scenarios[activeIndex];
 
   const startAnimation = useCallback(() => {
     setIsPlaying(true);
     setShowResults(false);
-    remainingRef.current = ANIMATION_DURATION_MS;
+    remainingRef.current = getScenarioRevealMs(scenario);
     raceStartRef.current = Date.now();
 
     if (resultTimerRef.current) clearTimeout(resultTimerRef.current);
     resultTimerRef.current = setTimeout(() => {
       setShowResults(true);
       setIsPlaying(false);
-    }, ANIMATION_DURATION_MS);
-  }, []);
+    }, getScenarioRevealMs(scenario));
+  }, [scenario]);
 
   // Make `paused` actually hold the race's result reveal. Pausing (hover or the
   // Pause control) banks the remaining time and clears the result timer so
@@ -86,11 +86,11 @@ export default function AgentsTimeline() {
     if (cycleTimerRef.current) clearTimeout(cycleTimerRef.current);
     cycleTimerRef.current = setTimeout(() => {
       advanceScenario();
-    }, CYCLE_MS);
+    }, getScenarioCycleMs(scenario));
     return () => {
       if (cycleTimerRef.current) clearTimeout(cycleTimerRef.current);
     };
-  }, [activeIndex, paused, prefersReduced, advanceScenario]);
+  }, [activeIndex, paused, prefersReduced, advanceScenario, scenario]);
 
   useEffect(() => {
     return () => {

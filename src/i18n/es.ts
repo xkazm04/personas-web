@@ -37,14 +37,13 @@ export const es: Translations = {
     compareSection: {
       heading: "Todo es",
       headingGradient: "gratis",
-      description: "La aplicaci\u00f3n de escritorio y todas las funciones siguientes son gratuitas para siempre. Sin niveles, sin precio por puesto: solo una plataforma de agentes completa que se ejecuta en tu m\u00e1quina.",
+      description: "La aplicaci\u00f3n de escritorio y todas las funciones siguientes son gratuitas para siempre: una plataforma de agentes completa que se ejecuta en tu m\u00e1quina.",
       offerBadges: [
         "Gratis para siempre",
         "Autoalojado",
-        "Sin recargo por ejecuci\u00f3n",
         "C\u00f3digo abierto"
       ],
-      offerBody: "Personas se ejecuta en tu m\u00e1quina. Sin recargos de orquestaci\u00f3n ni precios por asiento. La nube de pago y el soporte prioritario son opcionales, no obligatorios.",
+      offerBody: "Personas se ejecuta en tu m\u00e1quina.",
       ctaLabel: "Empieza gratis",
       readGuide: "Leer la gu\u00eda",
       groups: {
@@ -129,38 +128,7 @@ export const es: Translations = {
       slogan: "Automatiza tu trabajo. Recupera tu tiempo."
     },
     pricing: {
-      local: "Local",
-      cloud: "Nube",
-      enterprise: "Empresa",
-      downloadLocal: "Descargar Local",
-      goCloud: "Ir a la Nube",
-      contactSales: "Contactar Ventas",
-      comingSoon: "Pr\u00f3ximamente",
-      bestFor: "Ideal para",
-      forever: "para siempre",
-      mo: "/mes",
-      custom: "Personalizado",
-      bestForLocal: "Desarrolladores individuales para comenzar",
-      bestForCloud: "Equipos individuales \u00e1giles",
-      bestForEnterprise: "Organizaciones con necesidades de cumplimiento y escala",
-      features: {
-        unlimitedLocalAgents: "Agentes locales ilimitados",
-        localEventBus: "Bus de eventos y planificador local",
-        fullObservability: "Panel de observabilidad completo",
-        designEngine: "Motor de dise\u00f1o",
-        teamCanvasLocal: "Lienzo de equipo (local)",
-        everythingInFree: "Todo en el plan Gratuito",
-        cloudWorkers3: "3 workers en la nube",
-        executions1000: "1.000 ejecuciones/mes",
-        events10000: "10.000 eventos/mes",
-        burstAutoScaling: "Auto-escalado por r\u00e1fagas",
-        everythingInPro: "Todo en Pro",
-        ssoSaml: "SSO v\u00eda SAML y OIDC",
-        multiTenantRbac: "Espacios de trabajo multi-tenant con RBAC",
-        auditTrailExport: "Exportaci\u00f3n de auditor\u00eda de ejecuciones",
-        dedicatedWorkers: "Workers dedicados en la nube y SLA",
-        prioritySupport: "Soporte prioritario"
-      }
+      comingSoon: "Pr\u00f3ximamente"
     },
     hero: {
       downloadCta: "Descargar",
@@ -168,7 +136,7 @@ export const es: Translations = {
       badge: "Plataforma de Agentes IA",
       headingLine1: "Agentes inteligentes",
       headingLine2: "que trabajan para ti",
-      description: "Dise\u00f1a agentes en lenguaje natural. Orqu\u00e9stalos de forma local o en la nube.",
+      description: "Dise\u00f1a agentes en lenguaje natural. Orqu\u00e9stalos en tu propia m\u00e1quina.",
       descriptionBold: "Sin diagramas de flujo. Sin enjambres de agentes. Sin c\u00f3digo.",
       mode2: "Configuraci\u00f3n sencilla",
       mode3: "Gratis",
@@ -393,28 +361,20 @@ export const es: Translations = {
       discordSubtitle: "\u00danete a nuestra comunidad de Discord para obtener ayuda y participar en discusiones.",
       questions: [
         {
-          q: "What is Claude CLI and why do I need it?",
-          a: "Claude CLI is Anthropic's official command-line interface for interacting with Claude. Personas uses it under the hood to run your agents locally \u2014 it handles authentication, model access, and streaming responses. You'll need an active Claude Pro or Max subscription and the CLI installed before launching Personas."
+          q: "What is Claude Code and why do I need it?",
+          a: "Claude Code is Anthropic's official command-line tool for working with Claude. Personas uses it under the hood to run your agents locally. It handles authentication, model access, and streaming responses. You'll need an active Claude Pro or Max subscription and Claude Code installed before launching Personas."
         },
         {
           q: "Does Personas collect any telemetry or usage data?",
-          a: "No. Personas runs entirely on your machine with zero telemetry. We don't collect analytics, usage metrics, or any personal data. Your prompts, agent configurations, and execution logs never leave your device unless you explicitly enable cloud execution."
+          a: "No. Personas runs entirely on your machine with zero telemetry. We don't collect analytics, usage metrics, or any personal data. Your prompts, agent configurations, and execution logs never leave your device."
         },
         {
-          q: "How does the pricing model work?",
-          a: "The desktop app is free forever with unlimited local agents. Cloud plans (Starter, Pro, Team) add 24/7 execution, remote workers, and team features on top. You always need your own Claude subscription \u2014 we never touch your Anthropic bill. Think of Personas as the orchestration layer, and Claude as the engine."
-        },
-        {
-          q: "What is Bring Your Own Infrastructure (BYOI)?",
-          a: "BYOI lets you connect your own cloud provider credentials (e.g., Fly.io API tokens) instead of using our managed infrastructure. Personas provisions and manages the workers on your account, giving you unlimited execution without per-month caps \u2014 you only pay your cloud provider directly."
-        },
-        {
-          q: "What's the difference between local and cloud execution?",
-          a: "Local execution runs agents on your machine using Claude CLI \u2014 it's instant, free, and private, but stops when your computer sleeps. Cloud execution runs agents on remote workers 24/7, supports event-bus bridging across environments, and enables team collaboration. You can switch between modes per-agent."
+          q: "Is Personas free?",
+          a: "Yes. The desktop app is free and open source, with unlimited local agents. You need your own Claude subscription, and we never touch your Anthropic bill. Think of Personas as the orchestration layer, and Claude as the engine."
         },
         {
           q: "Are there any limits on the number of agents?",
-          a: "Locally, there are no limits \u2014 create as many agents as you want. Cloud plans have worker limits (1\u20135 depending on tier) and monthly execution caps. Pro and Team plans include burst auto-scaling for traffic spikes. BYOI removes all caps entirely."
+          a: "No. Create as many agents as you want."
         }
       ]
     },
@@ -425,10 +385,10 @@ export const es: Translations = {
       downloadInstaller: "Descargar instalador",
       downloadFor: "Descargar para {platform}",
       joinWaitlist: "Unirse a la lista de espera",
-      connectCli: "Conectar Claude CLI",
+      connectCli: "Conectar Claude Code",
       launchAgent: "Lanzar primer agente",
       exploreFirst: "Explorar capacidades primero",
-      requiresCli: "Requiere Claude CLI",
+      requiresCli: "Requiere Claude Code",
       installerSize: "Instalador de 12 MB",
       noSignupLine: "Sin registro, sin tarjeta de cr\u00e9dito. Se ejecuta en tu equipo. Cero telemetr\u00eda.",
       windows: "Windows",
@@ -617,7 +577,10 @@ export const es: Translations = {
         cancelled: "Cancelado",
         pending: "Pendiente",
         approved: "Aprobado",
-        rejected: "Rechazado"
+        rejected: "Rechazado",
+        processing: "Procesando",
+        dead_letter: "No entregado",
+        discarded: "Descartado"
       },
       testFlow: "Probar flujo",
       eventTypes: "Tipos de eventos",
@@ -1206,6 +1169,13 @@ export const es: Translations = {
       showRelatedEvents: "Mostrar {count} eventos relacionados",
       retriedCount: "Reintentado {count} vez",
       retryEvent: "Reintentar evento",
+      discardEvent: "Descartar evento",
+      columnSelect: "Selecci\u00f3n",
+      columnState: "Estado",
+      columnPersona: "Persona destino",
+      columnRetries: "Reintentos",
+      columnActions: "Acciones",
+      discardAll: "Descartar",
       searchPlaceholder: "Buscar payloads, tipos de evento, or?genes, errores...",
       clearSearch: "Limpiar b?squeda",
       eventType: "Tipo de evento",
@@ -1247,7 +1217,20 @@ export const es: Translations = {
       noMatchingSubscriptions: "No hay suscripciones coincidentes",
       noSubscriptions: "No hay suscripciones",
       noSubscriptionsDescription: "Crea suscripciones para dirigir eventos a tus agentes",
+      deadLetter: "No entregados",
+      durationMs: "{n} ms",
+      durationFast: "R\u00e1pido",
+      durationNormal: "Normal",
+      durationSlow: "Lento",
       swimlane: {
+        eventAt: "{type} a las {time}",
+        axisNow: "ahora",
+        axisMinutes: "{n} min",
+        status: {
+          success: "\u00c9xito",
+          failure: "Fallo",
+          processing: "Procesando"
+        },
         title: "Carriles de eventos",
         subtitle: "Traza de eventos por persona ordenada en el tiempo",
         empty: "No hay eventos en la ventana seleccionada"
@@ -1410,7 +1393,7 @@ export const es: Translations = {
         },
         platform: {
           title: "Plataforma principal",
-          caption: "Modo dev, ejecuci\u00f3n en la nube, conectores, instalaciones sencillas"
+          caption: "Modo dev, conectores, instalaciones sencillas"
         },
         templates: {
           title: "Galer\u00eda de plantillas",
@@ -1432,7 +1415,6 @@ export const es: Translations = {
         enterprise: "Empresa",
         devMode: "Modo dev",
         connectors: "Conectores",
-        cloudExecution: "Ejecuci\u00f3n en la nube",
         installersUpdates: "Instaladores y actualizaciones",
         allCategories: "Todas las categor\u00edas",
         devops: "DevOps",
@@ -1454,7 +1436,6 @@ export const es: Translations = {
         ssoAudit: "SSO \u00b7 auditor\u00eda",
         instantPreview: "vista previa instant\u00e1nea",
         services: "{n} servicios",
-        runs247: "ejecuci\u00f3n 24/7",
         autoUpdate: "actualizaci\u00f3n autom\u00e1tica",
         templatesTotal: "{n} / {total} plantillas"
       },
@@ -1575,7 +1556,7 @@ export const es: Translations = {
         memories: "Tus agentes aprenden y recuerdan. Gestiona lo que saben y c\u00f3mo usan la experiencia pasada.",
         monitoring: "Sigue cada ejecuci\u00f3n en tiempo real. Observa qu\u00e9 hacen tus agentes, c\u00f3mo rinden y cu\u00e1nto cuestan.",
         testing: "Ejecuta pruebas de arena, comparaciones A/B y deja que el sistema Genome evolucione tus mejores prompts.",
-        deployment: "Implementa agentes en la nube, con\u00e9ctate a GitHub Actions, GitLab CI y flujos de n8n.",
+        deployment: "Conecta agentes a GitHub Actions, GitLab CI y flujos de n8n.",
         troubleshooting: "Soluciona problemas comunes, comprende los mensajes de error y pon a tus agentes de nuevo en marcha."
       },
       translationNotice: {
@@ -1592,7 +1573,7 @@ export const es: Translations = {
       },
       security: {
         headline: "Tus secretos son solo tuyos",
-        description: "Cada contrase\u00f1a, clave de API y token de acceso se cifra en tu dispositivo con cifrado AES-256 de nivel bancario. Tus credenciales se almacenan en la propia b\u00f3veda segura de tu sistema operativo \u2014 nunca se env\u00edan a la nube.",
+        description: "Cada contrase\u00f1a, clave de API y token de acceso se cifra en tu dispositivo con cifrado AES-256 de nivel bancario. Tus credenciales se almacenan en la propia b\u00f3veda segura de tu sistema operativo.",
         cta: "Asegura tus conexiones"
       },
       "multi-provider": {

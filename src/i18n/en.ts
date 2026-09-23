@@ -61,38 +61,7 @@
     slogan: string;
   };
   pricing: {
-    local: string;
-    cloud: string;
-    enterprise: string;
-    downloadLocal: string;
-    goCloud: string;
-    contactSales: string;
     comingSoon: string;
-    bestFor: string;
-    forever: string;
-    mo: string;
-    custom: string;
-    bestForLocal: string;
-    bestForCloud: string;
-    bestForEnterprise: string;
-    features: {
-      unlimitedLocalAgents: string;
-      localEventBus: string;
-      fullObservability: string;
-      designEngine: string;
-      teamCanvasLocal: string;
-      everythingInFree: string;
-      cloudWorkers3: string;
-      executions1000: string;
-      events10000: string;
-      burstAutoScaling: string;
-      everythingInPro: string;
-      ssoSaml: string;
-      multiTenantRbac: string;
-      auditTrailExport: string;
-      dedicatedWorkers: string;
-      prioritySupport: string;
-    };
   };
   hero: {
     downloadCta: string;
@@ -381,6 +350,9 @@
       pending: string;
       approved: string;
       rejected: string;
+      processing: string;
+      dead_letter: string;
+      discarded: string;
     };
     testFlow: string;
     eventTypes: string;
@@ -971,6 +943,13 @@
     showRelatedEvents: string;
     retriedCount: string;
     retryEvent: string;
+    discardEvent: string;
+    columnSelect: string;
+    columnState: string;
+    columnPersona: string;
+    columnRetries: string;
+    columnActions: string;
+    discardAll: string;
     searchPlaceholder: string;
     clearSearch: string;
     eventType: string;
@@ -1012,10 +991,23 @@
     noMatchingSubscriptions: string;
     noSubscriptions: string;
     noSubscriptionsDescription: string;
+    deadLetter: string;
+    durationMs: string;
+    durationFast: string;
+    durationNormal: string;
+    durationSlow: string;
     swimlane: {
       title: string;
       subtitle: string;
       empty: string;
+      eventAt: string;
+      axisNow: string;
+      axisMinutes: string;
+      status: {
+        success: string;
+        failure: string;
+        processing: string;
+      };
     };
     connectionStatus: {
       connected: string;
@@ -1182,7 +1174,6 @@
       enterprise: string;
       devMode: string;
       connectors: string;
-      cloudExecution: string;
       installersUpdates: string;
       allCategories: string;
       devops: string;
@@ -1204,7 +1195,6 @@
       ssoAudit: string;
       instantPreview: string;
       services: string;
-      runs247: string;
       autoUpdate: string;
       templatesTotal: string;
     };
@@ -1772,9 +1762,9 @@ export const en: Translations = {
   compareSection: {
     heading: 'Everything is',
     headingGradient: 'free',
-    description: 'The desktop app and every capability below ship free forever. No tiers, no per-seat pricing — just a complete agent platform running on your machine.',
-    offerBadges: ['Free forever', 'Self-hosted', 'No per-run markup', 'Open source'],
-    offerBody: 'Personas runs on your machine. No orchestration markup and no per-seat pricing. Paid cloud and priority support are optional.',
+    description: 'The desktop app and every capability below ship free forever: a complete agent platform running on your machine.',
+    offerBadges: ['Free forever', 'Self-hosted', 'Open source'],
+    offerBody: 'Personas runs on your machine.',
     ctaLabel: 'Get started free',
     readGuide: 'Read the guide',
     groups: {
@@ -1859,38 +1849,7 @@ export const en: Translations = {
     slogan: 'Automate your work. Reclaim your time.',
   },
   pricing: {
-    local: 'Local',
-    cloud: 'Cloud',
-    enterprise: 'Enterprise',
-    downloadLocal: 'Download Local',
-    goCloud: 'Go Cloud',
-    contactSales: 'Contact Sales',
     comingSoon: 'Coming Soon',
-    bestFor: 'Best for',
-    forever: 'forever',
-    mo: '/mo',
-    custom: 'Custom',
-    bestForLocal: 'Solo builders getting started',
-    bestForCloud: 'Fast-moving individual teams',
-    bestForEnterprise: 'Organizations with compliance & scale needs',
-    features: {
-      unlimitedLocalAgents: 'Unlimited local agents',
-      localEventBus: 'Local event bus & scheduler',
-      fullObservability: 'Full observability dashboard',
-      designEngine: 'Design engine',
-      teamCanvasLocal: 'Team canvas (local)',
-      everythingInFree: 'Everything in Free',
-      cloudWorkers3: '3 cloud workers',
-      executions1000: '1,000 executions/mo',
-      events10000: '10,000 events/mo',
-      burstAutoScaling: 'Burst auto-scaling',
-      everythingInPro: 'Everything in Pro',
-      ssoSaml: 'SSO via SAML & OIDC',
-      multiTenantRbac: 'Multi-tenant workspaces with RBAC',
-      auditTrailExport: 'Execution audit trail export',
-      dedicatedWorkers: 'Dedicated cloud workers & SLA',
-      prioritySupport: 'Priority support',
-    },
   },
   hero: {
     downloadCta: 'Download Personas',
@@ -1898,7 +1857,7 @@ export const en: Translations = {
     badge: 'AI Agent Platform',
     headingLine1: 'Intelligent agents',
     headingLine2: 'that work for you',
-    description: 'Design agents in natural language. Orchestrate them locally or in the cloud.',
+    description: 'Design agents in natural language. Orchestrate them on your own machine.',
     descriptionBold: 'No workflow diagrams. No agent swarms. No code.',
     mode2: 'Simple setup',
     mode3: 'Free',
@@ -2042,28 +2001,20 @@ export const en: Translations = {
     discordSubtitle: 'Join our Discord community for help and discussion.',
     questions: [
       {
-        q: 'What is Claude CLI and why do I need it?',
-        a: 'Claude CLI is Anthropic\'s official command-line interface for interacting with Claude. Personas uses it under the hood to run your agents locally \u2014 it handles authentication, model access, and streaming responses. You\'ll need an active Claude Pro or Max subscription and the CLI installed before launching Personas.',
+        q: 'What is Claude Code and why do I need it?',
+        a: 'Claude Code is Anthropic\'s official command-line tool for working with Claude. Personas uses it under the hood to run your agents locally. It handles authentication, model access, and streaming responses. You\'ll need an active Claude Pro or Max subscription and Claude Code installed before launching Personas.',
       },
       {
         q: 'Does Personas collect any telemetry or usage data?',
-        a: 'No. Personas runs entirely on your machine with zero telemetry. We don\'t collect analytics, usage metrics, or any personal data. Your prompts, agent configurations, and execution logs never leave your device unless you explicitly enable cloud execution.',
+        a: 'No. Personas runs entirely on your machine with zero telemetry. We don\'t collect analytics, usage metrics, or any personal data. Your prompts, agent configurations, and execution logs never leave your device.',
       },
       {
-        q: 'How does the pricing model work?',
-        a: 'The desktop app is free forever with unlimited local agents. Cloud plans (Starter, Pro, Team) add 24/7 execution, remote workers, and team features. You always need your own Claude subscription. We never touch your Anthropic bill. Think of Personas as the orchestration layer, and Claude as the engine.',
-      },
-      {
-        q: 'What is Bring Your Own Infrastructure (BYOI)?',
-        a: 'BYOI lets you connect your own cloud provider credentials (e.g., Fly.io API tokens) instead of using our managed infrastructure. Personas provisions and manages the workers on your account, giving you unlimited execution without per-month caps \u2014 you only pay your cloud provider directly.',
-      },
-      {
-        q: 'What\'s the difference between local and cloud execution?',
-        a: 'Local execution runs agents on your machine using Claude CLI. It\'s instant, free, and private, but stops when your computer sleeps. Cloud execution runs agents on remote workers 24/7, supports event-bus bridging across environments, and enables team collaboration. You can switch between modes per agent.',
+        q: 'Is Personas free?',
+        a: 'Yes. The desktop app is free and open source, with unlimited local agents. You need your own Claude subscription, and we never touch your Anthropic bill. Think of Personas as the orchestration layer, and Claude as the engine.',
       },
       {
         q: 'Are there any limits on the number of agents?',
-        a: 'Locally, there are no limits: create as many agents as you want. Cloud plans have worker limits (1 to 5 depending on tier) and monthly execution caps. Pro and Team plans include burst auto-scaling for traffic spikes. BYOI removes all caps.',
+        a: 'No. Create as many agents as you want.',
       },
     ],
   },
@@ -2074,10 +2025,10 @@ export const en: Translations = {
     downloadInstaller: 'Download installer',
     downloadFor: 'Download for {platform}',
     joinWaitlist: 'Join waitlist',
-    connectCli: 'Connect Claude CLI',
+    connectCli: 'Connect Claude Code',
     launchAgent: 'Launch first agent',
     exploreFirst: 'Explore capabilities first',
-    requiresCli: 'Requires Claude CLI',
+    requiresCli: 'Requires Claude Code',
     installerSize: '12 MB installer',
     noSignupLine: 'No signup, no credit card. Runs on your machine. Zero telemetry.',
     windows: 'Windows',
@@ -2267,6 +2218,9 @@ export const en: Translations = {
       pending: "Pending",
       approved: "Approved",
       rejected: "Rejected",
+      processing: "Processing",
+      dead_letter: "Dead letter",
+      discarded: "Discarded",
     },
     testFlow: "Test Flow",
     eventTypes: "Event Types",
@@ -2855,6 +2809,13 @@ export const en: Translations = {
     showRelatedEvents: 'Show {count} related events',
     retriedCount: 'Retried {count} time',
     retryEvent: 'Retry event',
+    discardEvent: 'Discard event',
+    columnSelect: 'Select',
+    columnState: 'State',
+    columnPersona: 'Target persona',
+    columnRetries: 'Retries',
+    columnActions: 'Actions',
+    discardAll: 'Discard',
     searchPlaceholder: 'Search payloads, event types, sources, errors...',
     clearSearch: 'Clear search',
     eventType: 'Event type',
@@ -2896,10 +2857,25 @@ export const en: Translations = {
     noMatchingSubscriptions: 'No matching subscriptions',
     noSubscriptions: 'No subscriptions',
     noSubscriptionsDescription: 'Create subscriptions to route events to your agents',
+    deadLetter: 'Dead Letter',
+    durationMs: '{n} ms',
+    durationFast: 'Fast',
+    durationNormal: 'Normal',
+    durationSlow: 'Slow',
     swimlane: {
       title: 'Event swim-lanes',
       subtitle: 'Time-ordered per-persona event trace',
       empty: 'No events in the selected window',
+      eventAt: '{type} at {time}',
+      // Chart-axis register: keep these terse in every locale, they are tick
+      // labels sharing one column. Not the staleness-pill sentence form.
+      axisNow: 'now',
+      axisMinutes: '{n}m',
+      status: {
+        success: 'Success',
+        failure: 'Failure',
+        processing: 'Processing',
+      },
     },
     connectionStatus: {
       connected: 'Real-time: connected',
@@ -3048,7 +3024,7 @@ export const en: Translations = {
       i18n: { title: 'Internationalization', caption: '{count} locales, hand-translated — each flag develops with coverage' },
       devices: { title: 'Device Support', caption: 'Personas on every machine you own' },
       collaboration: { title: 'Collaboration', caption: 'From one operator to the whole org' },
-      platform: { title: 'Core Platform', caption: 'Dev mode, cloud execution, connectors, painless installs' },
+      platform: { title: 'Core Platform', caption: 'Dev mode, connectors, painless installs' },
       templates: { title: 'Template Gallery', caption: 'Starter agents by category — live gallery counts' },
     },
     bars: {
@@ -3066,7 +3042,6 @@ export const en: Translations = {
       enterprise: 'Enterprise',
       devMode: 'Dev Mode',
       connectors: 'Connectors',
-      cloudExecution: 'Cloud execution',
       installersUpdates: 'Installers & updates',
       allCategories: 'All categories',
       devops: 'DevOps',
@@ -3088,7 +3063,6 @@ export const en: Translations = {
       ssoAudit: 'SSO · audit',
       instantPreview: 'instant preview',
       services: '{n} services',
-      runs247: '24/7 runs',
       autoUpdate: 'auto-update',
       templatesTotal: '{n} / {total} templates',
     },
@@ -3209,7 +3183,7 @@ export const en: Translations = {
       memories: "Your agents learn and remember. Manage what they know and how they use past experience.",
       monitoring: "Track every execution in real time. See what your agents do, how well they perform, and what they cost.",
       testing: "Run arena tests, A/B comparisons, and let the genome system evolve your best prompts.",
-      deployment: "Deploy agents to the cloud, connect to GitHub Actions, GitLab CI, and n8n workflows.",
+      deployment: "Connect agents to GitHub Actions, GitLab CI, and n8n workflows.",
       troubleshooting: "Fix common issues, understand error messages, and get your agents back on track.",
     },
     translationNotice: {
@@ -3226,7 +3200,7 @@ export const en: Translations = {
     },
     security: {
       headline: "Your secrets stay yours",
-      description: "Every password, API key, and access token is encrypted on your device using bank-grade AES-256 encryption. Your credentials are stored in your operating system's own secure vault — nothing is ever sent to the cloud.",
+      description: "Every password, API key, and access token is encrypted on your device using bank-grade AES-256 encryption. Your credentials are stored in your operating system's own secure vault.",
       cta: "Secure your connections",
     },
     "multi-provider": {

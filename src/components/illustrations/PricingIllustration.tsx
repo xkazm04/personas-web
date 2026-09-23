@@ -1,14 +1,7 @@
-// Single source for the tier labels/prices painted into this decorative SVG.
-// NOTE: the product currently ships no paid price tiers — the pricing section
-// is a free/self-hosted feature showcase (see components/sections/pricing) — so
-// these figures are stylized, illustrative art, not a live pricing commitment.
-// If real priced tiers are ever introduced, source these from that canonical
-// pricing data instead of hard-coding them here.
-const TIERS = [
-  { name: "Free", price: "$0" },
-  { name: "Starter", price: "$19" },
-  { name: "Pro", price: "$49" },
-] as const;
+// Decorative art for the FAQ "Is Personas free?" answer. The
+// product has no paid plans or tiers (owner ruling 2026-09-14): the desktop app
+// is free and open source, so the art paints one free card and no price ladder.
+const OFFER = { name: "Free", price: "$0", note: "Open source" } as const;
 
 export default function PricingIllustration() {
   return (
@@ -20,29 +13,14 @@ export default function PricingIllustration() {
         </linearGradient>
       </defs>
       <rect width="320" height="180" rx="12" fill="url(#faq-price-bg)" />
-      {/* Tier cards */}
-      {/* Free */}
-      <rect x="30" y="45" width="75" height="95" rx="6" fill="rgba(255,255,255,0.03)" stroke="rgba(52,211,153,0.25)" strokeWidth="1" />
-      <text x="67" y="68" fill="#34d399" opacity="0.7" fontSize="10" fontFamily="sans-serif" textAnchor="middle" fontWeight="600">{TIERS[0].name}</text>
-      <text x="67" y="85" fill="rgba(255,255,255,0.3)" fontSize="18" fontFamily="sans-serif" textAnchor="middle" fontWeight="700">{TIERS[0].price}</text>
-      <rect x="42" y="98" width="51" height="3" rx="1.5" fill="rgba(52,211,153,0.15)" />
-      <rect x="42" y="108" width="38" height="3" rx="1.5" fill="rgba(52,211,153,0.1)" />
-      <rect x="42" y="118" width="45" height="3" rx="1.5" fill="rgba(52,211,153,0.1)" />
-      {/* Starter */}
-      <rect x="122" y="45" width="75" height="95" rx="6" fill="rgba(255,255,255,0.03)" stroke="rgba(6,182,212,0.25)" strokeWidth="1" />
-      <text x="159" y="68" fill="#06b6d4" opacity="0.7" fontSize="10" fontFamily="sans-serif" textAnchor="middle" fontWeight="600">{TIERS[1].name}</text>
-      <text x="159" y="85" fill="rgba(255,255,255,0.3)" fontSize="18" fontFamily="sans-serif" textAnchor="middle" fontWeight="700">{TIERS[1].price}</text>
-      <rect x="134" y="98" width="51" height="3" rx="1.5" fill="rgba(6,182,212,0.15)" />
-      <rect x="134" y="108" width="38" height="3" rx="1.5" fill="rgba(6,182,212,0.1)" />
-      <rect x="134" y="118" width="45" height="3" rx="1.5" fill="rgba(6,182,212,0.1)" />
-      {/* Pro */}
-      <rect x="214" y="38" width="75" height="102" rx="6" fill="rgba(168,85,247,0.06)" stroke="rgba(168,85,247,0.35)" strokeWidth="1.5" />
-      <text x="251" y="61" fill="#a855f7" opacity="0.8" fontSize="10" fontFamily="sans-serif" textAnchor="middle" fontWeight="600">{TIERS[2].name}</text>
-      <text x="251" y="78" fill="rgba(255,255,255,0.4)" fontSize="18" fontFamily="sans-serif" textAnchor="middle" fontWeight="700">{TIERS[2].price}</text>
-      <rect x="226" y="91" width="51" height="3" rx="1.5" fill="rgba(168,85,247,0.2)" />
-      <rect x="226" y="101" width="38" height="3" rx="1.5" fill="rgba(168,85,247,0.15)" />
-      <rect x="226" y="111" width="45" height="3" rx="1.5" fill="rgba(168,85,247,0.15)" />
-      <rect x="226" y="121" width="30" height="3" rx="1.5" fill="rgba(168,85,247,0.1)" />
+      {/* Single free offer */}
+      <rect x="110" y="30" width="100" height="120" rx="8" fill="rgba(52,211,153,0.05)" stroke="rgba(52,211,153,0.35)" strokeWidth="1.5" />
+      <text x="160" y="56" fill="#34d399" opacity="0.8" fontSize="11" fontFamily="sans-serif" textAnchor="middle" fontWeight="600">{OFFER.name}</text>
+      <text x="160" y="80" fill="rgba(255,255,255,0.4)" fontSize="20" fontFamily="sans-serif" textAnchor="middle" fontWeight="700">{OFFER.price}</text>
+      <rect x="126" y="94" width="68" height="3" rx="1.5" fill="rgba(52,211,153,0.2)" />
+      <rect x="126" y="104" width="52" height="3" rx="1.5" fill="rgba(52,211,153,0.15)" />
+      <rect x="126" y="114" width="60" height="3" rx="1.5" fill="rgba(52,211,153,0.15)" />
+      <text x="160" y="138" fill="rgba(255,255,255,0.35)" fontSize="9" fontFamily="sans-serif" textAnchor="middle">{OFFER.note}</text>
     </svg>
   );
 }

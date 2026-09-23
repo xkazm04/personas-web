@@ -175,7 +175,18 @@ export type PersonaExecutionStatus =
   | "failed"
   | "cancelled";
 
-export type EventStatus = "pending" | "processed" | "failed";
+/**
+ * Event delivery states. `processing`, `dead_letter` and `discarded` complete
+ * the delivery FSM in `src/lib/eventStatusFsm.ts` — without them a failed
+ * event had no state to move to, so the dead letter lane could never drain.
+ */
+export type EventStatus =
+  | "pending"
+  | "processing"
+  | "processed"
+  | "failed"
+  | "dead_letter"
+  | "discarded";
 
 export type ReviewSeverity = "critical" | "warning" | "info";
 export type ReviewStatus = "pending" | "approved" | "rejected";

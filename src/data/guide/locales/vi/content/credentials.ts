@@ -10,7 +10,7 @@ Khi bạn chạy một agent, engine giải mã chỉ các credential cụ thể
 
 - **AES-256-GCM** — mã hóa được xác thực (mỗi ciphertext của credential được kiểm tra tính toàn vẹn, vì vậy một tệp vault bị giả mạo được phát hiện, không được giải mã âm thầm)
 - **Khóa chính được bao bọc bởi keyring hệ điều hành** — DPAPI trên Windows, Keychain trên macOS, Secret Service trên Linux; không cần mật khẩu chính phải gõ mỗi phiên
-- **Chỉ cục bộ theo mặc định** — không có gì được tải lên; triển khai đám mây là tùy chọn và mã hóa khi truyền qua TLS đến orchestrator bạn chọn
+- **Chỉ cục bộ theo mặc định** — không có gì được tải lên
 - **Tham chiếu token trong nhật ký** — trace và xuất khẩu của agent sử dụng ID credential, không phải bí mật thô
 - **Bằng chứng giả mạo** — thẻ xác thực GCM bắt bất kỳ sửa đổi nào với tệp vault
 
@@ -43,10 +43,6 @@ Vault được ràng buộc với tài khoản người dùng hệ điều hành
 
 :::warning
 Nếu bạn thay đổi mật khẩu tài khoản hệ điều hành của mình trên macOS hoặc Linux, keyring có thể khóa lại khóa bao bọc. Personas sẽ nhắc nhập credential mới trong lần chạy đầu tiên sau khi thay đổi. Nếu keyring bị xóa (factory reset, xóa tài khoản), vault trở nên không thể khôi phục — sao lưu các bí mật thô bên ngoài nếu bạn cần khôi phục thảm họa ngoài máy cục bộ.
-:::
-
-:::tip
-Mô hình chỉ cục bộ là mặc định phù hợp cho tự động hóa cá nhân. Đối với công việc team / production nơi nhiều máy cần cùng các credential, triển khai đám mây (gói Team / Builder) sao chép trạng thái vault qua orchestrator với mã hóa end-to-end.
 :::
   `,
 

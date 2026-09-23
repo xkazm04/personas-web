@@ -113,7 +113,7 @@ Das System taggt Läufe, die wie sie auf einem günstigeren Modell mit ähnliche
 
 ### So funktioniert es
 
-Die Usage-Ansicht gruppiert dieselben Ausführungsdatensätze wie die Pro-Agent-Ansicht, aber auf der Modell-Dimension. Die Preisgestaltung wird pro Modell in Settings → Engine konfiguriert, mit Standardwerten, die den öffentlichen Preisen jedes Anbieters entsprechen; du kannst überschreiben, wenn du einen ausgehandelten Tarif hast oder BYOI auf einem günstigeren Endpunkt nutzt.
+Die Usage-Ansicht gruppiert dieselben Ausführungsdatensätze wie die Pro-Agent-Ansicht, aber auf der Modell-Dimension. Die Preisgestaltung wird pro Modell in Settings → Engine konfiguriert, mit Standardwerten, die den öffentlichen Preisen jedes Anbieters entsprechen; du kannst überschreiben, wenn du einen ausgehandelten Tarif oder einen günstigeren Endpunkt hast.
 
 :::tip
 Einmal im Monat scanne die Pro-Modell-Ansicht sortiert nach Gesamtkosten. Der oberste Eintrag ist deine größte Einsparmöglichkeit — wirf ihn in die Lab-Arena gegen das nächst-günstigere Modell und sieh, ob die Qualität hält. Die meisten Agenten tolerieren eine Modell-Herabstufung gut; die, die es nicht tun, sind die, die die Ausgaben wirklich wert sind.

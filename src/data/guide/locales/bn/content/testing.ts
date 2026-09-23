@@ -10,7 +10,7 @@ export const content: Record<string, string> = {
 
 - **প্রথম দিকে regressions ধরুন** — প্রতিটি পরিবর্তনের পরে পরীক্ষা হল আপনি কীভাবে "এজেন্ট আগে কাজ করত, আমি কী ভেঙেছি?" এড়ান
 - **পদ্ধতিগতভাবে বিকল্পগুলি তুলনা করুন** — Arena এবং A-B আপনাকে gut feel-এর পরিবর্তে প্রমাণ সহ বিকল্পগুলির মধ্যে বেছে নিতে দেয়
-- **fitness data তৈরি করুন** — Lab রান per-prompt স্কোর জমা করে যা genome evolution (Builder tier) ফিড করে
+- **fitness data তৈরি করুন** — Lab রান per-prompt স্কোর জমা করে যা genome evolution ফিড করে
 - **পুনঃব্যবহারযোগ্য ইনপুট সেট** — পরীক্ষার ইনপুট প্রতি এজেন্টে সংরক্ষিত হয়; একই প্রম্পট, একই ডেটা, পুনরাবৃত্তিযোগ্য তুলনা
 
 ### এটি কীভাবে কাজ করে
@@ -169,7 +169,7 @@ Eval হল সবচেয়ে ব্যয়বহুল mode। 3 prompts 
   "rating-and-scoring-results": `
 ## ফলাফল রেটিং এবং স্কোরিং
 
-যেকোনো Lab পরীক্ষার পরে, প্রতিটি আউটপুট সারিতে rating নিয়ন্ত্রণ রয়েছে: binary বিচারের জন্য thumbs-up / thumbs-down, বা সূক্ষ্ম ক্ষেত্রে 1-5 star scale। আপনার ratings দুটি জিনিস ফিড করে: এজেন্টের per-variant fitness score (matrix এবং eval-এ ranking-এ ব্যবহৃত, এবং Builder tier-এ genome-evolution selection pressure হিসাবে), এবং সময়ের সাথে আপনার সমস্ত পরীক্ষা জুড়ে একটি ব্যক্তিগত preference signal।
+যেকোনো Lab পরীক্ষার পরে, প্রতিটি আউটপুট সারিতে rating নিয়ন্ত্রণ রয়েছে: binary বিচারের জন্য thumbs-up / thumbs-down, বা সূক্ষ্ম ক্ষেত্রে 1-5 star scale। আপনার ratings দুটি জিনিস ফিড করে: এজেন্টের per-variant fitness score (matrix এবং eval-এ ranking-এ ব্যবহৃত, এবং genome-evolution selection pressure হিসাবে), এবং সময়ের সাথে আপনার সমস্ত পরীক্ষা জুড়ে একটি ব্যক্তিগত preference signal।
 
 Ratings ব্যক্তিগত — তারা মানের আপনার বিচার এনকোড করে, একটি objective metric নয়। এটি ইচ্ছাকৃত; আপনি জানেন যে এজেন্টের আউটপুট আপনার যা প্রয়োজন তার সাথে মেলে কিনা, এবং এটি সেই সংকেত যা সিস্টেম optimize করে।
 
@@ -183,7 +183,7 @@ Ratings ব্যক্তিগত — তারা মানের আপন�
 
 ### এটি কীভাবে কাজ করে
 
-Ratings নির্দিষ্ট execution (trace, prompt version, model, input)-এর বিরুদ্ধে সংরক্ষিত হয়। fitness aggregator ratings + objective metrics (cost, duration, success) পড়ে এবং একটি per-variant fitness score গণনা করে যা ranking-এ ব্যবহৃত হয়। Genome evolution (Builder tier) parent prompts বাছাই করতে breeding-এর জন্য প্রাথমিক selection pressure হিসাবে ratings ব্যবহার করে।
+Ratings নির্দিষ্ট execution (trace, prompt version, model, input)-এর বিরুদ্ধে সংরক্ষিত হয়। fitness aggregator ratings + objective metrics (cost, duration, success) পড়ে এবং একটি per-variant fitness score গণনা করে যা ranking-এ ব্যবহৃত হয়। Genome evolution parent prompts বাছাই করতে breeding-এর জন্য প্রাথমিক selection pressure হিসাবে ratings ব্যবহার করে।
 
 :::tip
 আপনি যা চান তার উপর ভিত্তি করে rate করুন, প্রযুক্তিগতভাবে impressive নয়। একটি ছোট সঠিক উত্তর প্রায়শই একটি দীর্ঘ বিস্তৃত উত্তরের চেয়ে ভাল। সিস্টেমটি আপনার preferences-এর বিরুদ্ধে optimize করে, তাই সৎ, ধারাবাহিক ratings *আপনার* বিচারের জন্য টিউন করা এজেন্ট তৈরি করে।
@@ -193,7 +193,7 @@ Ratings নির্দিষ্ট execution (trace, prompt version, model, inp
   "genome-evolution-basics": `
 ## জিনোম ইভোলিউশন বেসিক
 
-Genome evolution (Builder tier) আপনার সেরা-rated past tests থেকে নতুন prompt variants স্বয়ংক্রিয়ভাবে breed করে। প্রতিটি "generation" পূর্ববর্তী generation থেকে শীর্ষ-পারফর্মিং prompts mutate এবং recombines করে; বেশ কয়েকটি generation-এর উপর, prompts এমন configurations-এ converge করে যা আপনার শুরুর বিন্দুর চেয়ে ধারাবাহিকভাবে ভাল স্কোর করে। এটি আপনার ratings-কে fitness function হিসাবে ব্যবহার করে evolutionary search।
+Genome evolution আপনার সেরা-rated past tests থেকে নতুন prompt variants স্বয়ংক্রিয়ভাবে breed করে। প্রতিটি "generation" পূর্ববর্তী generation থেকে শীর্ষ-পারফর্মিং prompts mutate এবং recombines করে; বেশ কয়েকটি generation-এর উপর, prompts এমন configurations-এ converge করে যা আপনার শুরুর বিন্দুর চেয়ে ধারাবাহিকভাবে ভাল স্কোর করে। এটি আপনার ratings-কে fitness function হিসাবে ব্যবহার করে evolutionary search।
 
 প্রক্রিয়াটি একবার শুরু করার পরে unattended। আপনি শুরুর prompt এবং fitness signal প্রদান করেন (সাধারণত আপনার rating history প্লাস ঐচ্ছিক objective metrics যেমন cost বা duration), population size এবং generation count সেট করেন এবং এটিকে চলতে দিন। এজেন্টের সাধারণ triggers evolution-এর সময় paused থাকে যাতে তুলনা পরিষ্কার থাকে।
 

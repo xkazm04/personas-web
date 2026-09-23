@@ -37,7 +37,11 @@ export default function EventBusVisualization({ className = "", onNodeClick, tri
     const io = new IntersectionObserver(([entry]) => {
       const wasInView = inViewRef.current;
       inViewRef.current = entry.isIntersecting;
-      if (entry.isIntersecting && !wasInView && !prefersReduced) {
+      if (entry.isIntersecting && !wasInView && !prefersReduced && !document.hidden) {
+        // The hook owns the visibility half of the guard; scrolling into view
+        // while the tab is hidden must not start a loop that would immediately
+        // stop itself, and any existing handle is released before re-arming.
+        if (rafRef.current) cancelAnimationFrame(rafRef.current);
         lastTimeRef.current = 0;
         rafRef.current = requestAnimationFrame(tick);
       }

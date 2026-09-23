@@ -21,7 +21,7 @@ import { EventDrawerHeader } from "./event-detail-drawer/EventDrawerHeader";
 import { EventDrawerMetadata } from "./event-detail-drawer/EventDrawerMetadata";
 import { EventDrawerPayload } from "./event-detail-drawer/EventDrawerPayload";
 import { EventDrawerSummary } from "./event-detail-drawer/EventDrawerSummary";
-import { useDialogFocusTrap } from "./event-detail-drawer/useDialogFocusTrap";
+import { useDialogFocusTrap } from "@/hooks/useDialogFocusTrap";
 
 const TITLE_ID = "event-detail-drawer-title";
 

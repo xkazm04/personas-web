@@ -188,19 +188,19 @@ Sebagian besar penyedia menawarkan kredit uji coba gratis. Hubungkan dua atau ti
 
 Personas adalah aplikasi desktop Tauri — backend Rust, frontend React, database SQLite lokal — dan sengaja dibuat ringan. Sebagian besar komputasi berat terjadi di server penyedia AI, bukan di mesin Anda. Aplikasi idle hampir-nol CPU dan menggunakan beberapa ratus megabyte RAM; ia meningkat hanya ketika agen aktif berjalan secara lokal.
 
-Binary yang disertakan sekitar 90 MB setelah pemasangan. Plugin (Artist untuk pembuatan gambar, Obsidian Brain untuk pencarian vektor) dapat menambah jejak itu jika Anda mengaktifkannya.
+Binary yang disertakan sekitar 90 MB setelah pemasangan. Plugin seperti Obsidian Brain (pencarian vektor) dapat menambah jejak itu jika Anda mengaktifkannya.
 
 :::checklist
 - Windows 10+, macOS 12+, atau Ubuntu 20.04+ (versi terbaru direkomendasikan)
 - Minimal 4 GB RAM (8 GB+ direkomendasikan jika Anda menggunakan plugin embedding / pencarian vektor)
-- 1 GB ruang disk kosong (lebih jika Anda mengaktifkan model lokal plugin Artist)
+- 1 GB ruang disk kosong
 - Broadband stabil — eksekusi agen dibatasi oleh latensi API penyedia AI
 - Setiap CPU dual-core modern; quad-core atau lebih baik direkomendasikan untuk run multi-agen paralel
 :::
 
 ### Cara Kerjanya
 
-Aplikasi menyimpan database-nya (\`personas.db\`), credential vault, riwayat eksekusi, dan konfigurasi secara lokal di direktori app-data khusus OS Anda. Tidak ada yang diunggah kecuali Anda secara eksplisit mengaktifkan deployment cloud atau menggunakan penyedia AI cloud. Plugin yang menyertakan model lokal (misalnya image-gen plugin Artist + Gemini vision) mengunduh file model pada penggunaan pertama.
+Aplikasi menyimpan database-nya (\`personas.db\`), credential vault, riwayat eksekusi, dan konfigurasi secara lokal di direktori app-data khusus OS Anda. Tidak ada yang diunggah kecuali Anda menggunakan penyedia AI cloud. Plugin yang menyertakan model lokal mengunduh file model pada penggunaan pertama.
 
 Build Windows menggunakan ONNX Runtime untuk embedding ketika fitur vector-knowledge-base diaktifkan; ini adalah dependensi tunggal terbesar dalam kasus tersebut.
 

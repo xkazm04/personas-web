@@ -113,7 +113,7 @@ Systém taguje běhy, které vypadají, že mohly běžet na levnějším modelu
 
 ### Jak to funguje
 
-Pohled Usage seskupuje stejné záznamy běhů jako pohled per-agent, ale v dimenzi modelu místo toho. Ceny jsou nakonfigurované per-model v Settings → Engine, s výchozími hodnotami odpovídajícími veřejným cenám každého poskytovatele; můžeš přepsat, pokud máš vyjednanou sazbu nebo používáš BYOI na levnějším endpointu.
+Pohled Usage seskupuje stejné záznamy běhů jako pohled per-agent, ale v dimenzi modelu místo toho. Ceny jsou nakonfigurované per-model v Settings → Engine, s výchozími hodnotami odpovídajícími veřejným cenám každého poskytovatele; můžeš přepsat, pokud máš vyjednanou sazbu nebo levnější endpoint.
 
 :::tip
 Jednou za měsíc prohlédni pohled per-model seřazený podle celkových nákladů. Vrchní záznam je tvou největší příležitostí k úsporám — hoď ho do arény Labu proti dalšímu levnějšímu modelu a podívej se, jestli kvalita drží. Většina agentů toleruje downgrade modelu v pohodě; ti, kteří ne, jsou ti, kteří si zaslouží své výdaje.
