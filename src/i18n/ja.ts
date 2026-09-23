@@ -604,7 +604,8 @@ export const ja: Translations = {
             synced: "\u540c\u671f"
           }
         }
-      }
+      },
+      related: "\u95a2\u9023"
     },
     dashboardUi: {
       status: {

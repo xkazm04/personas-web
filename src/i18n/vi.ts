@@ -604,7 +604,8 @@ export const vi: Translations = {
             synced: "\u0110\u00e3 \u0111\u1ed3ng b\u1ed9"
           }
         }
-      }
+      },
+      related: "Li\u00ean quan"
     },
     dashboardUi: {
       status: {

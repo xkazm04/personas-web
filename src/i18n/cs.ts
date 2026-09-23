@@ -604,7 +604,8 @@ export const cs: Translations = {
             synced: "Synchronizov\u00e1no"
           }
         }
-      }
+      },
+      related: "Souvisej\u00edc\u00ed"
     },
     dashboardUi: {
       status: {

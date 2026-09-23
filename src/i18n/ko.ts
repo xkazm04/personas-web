@@ -604,7 +604,8 @@ export const ko: Translations = {
             synced: "\ub3d9\uae30\ud654\ub428"
           }
         }
-      }
+      },
+      related: "\uad00\ub828"
     },
     dashboardUi: {
       status: {

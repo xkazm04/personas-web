@@ -604,7 +604,8 @@ export const de: Translations = {
             synced: "Synchronisiert"
           }
         }
-      }
+      },
+      related: "Verkn\u00fcpft"
     },
     dashboardUi: {
       status: {

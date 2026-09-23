@@ -368,6 +368,7 @@
         };
       };
     };
+    related: string;
   };
   dashboardUi: {
     status: {
@@ -2217,6 +2218,7 @@ export const en: Translations = {
         },
       },
     },
+    related: 'Related',
   },
   dashboardUi: {
     status: {

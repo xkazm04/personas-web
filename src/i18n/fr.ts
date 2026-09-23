@@ -604,7 +604,8 @@ export const fr: Translations = {
             synced: "Synchronis\u00e9e"
           }
         }
-      }
+      },
+      related: "Li\u00e9"
     },
     dashboardUi: {
       status: {

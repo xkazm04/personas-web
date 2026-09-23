@@ -604,7 +604,8 @@ export const zh: Translations = {
             synced: "\u5df2\u540c\u6b65"
           }
         }
-      }
+      },
+      related: "\u76f8\u5173"
     },
     dashboardUi: {
       status: {

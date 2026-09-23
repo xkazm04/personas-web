@@ -604,7 +604,8 @@ export const hi: Translations = {
             synced: "\u0938\u093f\u0902\u0915 \u0915\u093f\u092f\u093e"
           }
         }
-      }
+      },
+      related: "\u0938\u0902\u092c\u0902\u0927\u093f\u0924"
     },
     dashboardUi: {
       status: {

@@ -604,7 +604,8 @@ export const id: Translations = {
             synced: "Disinkronkan"
           }
         }
-      }
+      },
+      related: "Terkait"
     },
     dashboardUi: {
       status: {

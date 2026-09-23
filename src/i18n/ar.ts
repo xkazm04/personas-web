@@ -604,7 +604,8 @@ export const ar: Translations = {
             synced: "\u062a\u0645\u062a \u0627\u0644\u0645\u0632\u0627\u0645\u0646\u0629"
           }
         }
-      }
+      },
+      related: "\u0630\u0627\u062a \u0635\u0644\u0629"
     },
     dashboardUi: {
       status: {

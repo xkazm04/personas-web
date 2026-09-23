@@ -604,7 +604,8 @@ export const es: Translations = {
             synced: "Sincronizada"
           }
         }
-      }
+      },
+      related: "Relacionado"
     },
     dashboardUi: {
       status: {
