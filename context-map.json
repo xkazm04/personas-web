@@ -380,7 +380,10 @@
             "src/components/sections/platform-layers/index.tsx",
             "src/components/sections/platform-layers/types.ts",
             "src/components/sections/platform-layers/visuals.tsx",
-            "src/lib/event-bus-demo.ts"
+            "src/lib/event-bus-demo.ts",
+            "src/components/sections/orchestration-hub/playback.ts",
+            "src/components/sections/orchestration-hub/playback.test.ts",
+            "src/components/sections/orchestration-hub/PlaybackControls.tsx"
           ],
           "target": null,
           "apiRoutes": []
