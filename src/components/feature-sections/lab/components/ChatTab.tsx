@@ -1,7 +1,8 @@
 "use client";
 
 import { useState, useEffect, useRef, useCallback } from "react";
-import { motion, AnimatePresence, useReducedMotion } from "framer-motion";
+import { motion, AnimatePresence } from "framer-motion";
+import { useStillMotion } from "@/hooks/useStillMotion";
 import { MessageCircle, Bot, User, RotateCcw, Rocket } from "lucide-react";
 import { useTranslation } from "@/i18n/useTranslation";
 import { CHAT_SCRIPT } from "../data";
@@ -20,7 +21,7 @@ export default function ChatTab({
   onActivate: (id: string) => void;
 }) {
   const { t } = useTranslation();
-  const reduced = useReducedMotion() ?? false;
+  const reduced = useStillMotion();
   const [visible, setVisible] = useState<ChatMsg[]>(() =>
     reduced ? CHAT_SCRIPT : [],
   );

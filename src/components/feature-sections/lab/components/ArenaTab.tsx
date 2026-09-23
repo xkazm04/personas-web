@@ -1,7 +1,8 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import { motion, useReducedMotion } from "framer-motion";
+import { motion } from "framer-motion";
+import { useStillMotion } from "@/hooks/useStillMotion";
 import { usePageVisibility } from "@/hooks/usePageVisibility";
 import { Swords, Check, X } from "lucide-react";
 import { ARENA_ROUNDS } from "../data";
@@ -19,7 +20,7 @@ export default function ArenaTab({
   liveId: string;
 }) {
   const { t } = useTranslation();
-  const reduced = useReducedMotion() ?? false;
+  const reduced = useStillMotion();
   // Ambient round cycle: stop advancing rounds into a backgrounded tab.
   const tabHidden = usePageVisibility();
   const [currentRound, setCurrentRound] = useState(() =>

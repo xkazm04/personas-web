@@ -1,12 +1,13 @@
 "use client";
 
-import { motion, useReducedMotion } from "framer-motion";
+import { motion } from "framer-motion";
+import { useStillMotion } from "@/hooks/useStillMotion";
 import { Radar } from "lucide-react";
 import { EVAL_DIMENSIONS } from "../data";
 import TabBackdrop from "./TabBackdrop";
 
 export default function EvalTab() {
-  const reduced = useReducedMotion() ?? false;
+  const reduced = useStillMotion();
   const cx = 200;
   const cy = 200;
   const rMax = 130;

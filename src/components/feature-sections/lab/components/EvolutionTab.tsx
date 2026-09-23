@@ -1,6 +1,8 @@
 "use client";
 
-import { motion, useReducedMotion } from "framer-motion";
+import { motion } from "framer-motion";
+import { useStillMotion } from "@/hooks/useStillMotion";
+import { usePageVisibility } from "@/hooks/usePageVisibility";
 import { Dna, Play } from "lucide-react";
 import { BRAND_VAR } from "@/lib/brand-theme";
 import { GENOME_NODES } from "../data";
@@ -23,7 +25,11 @@ const TONE_FILL: Record<NodeTone, string> = {
 };
 
 export default function EvolutionTab() {
-  const reduced = useReducedMotion() ?? false;
+  // The best node's halo is an ambient loop: still under reduced motion, and
+  // parked while the tab is backgrounded.
+  const reduced = useStillMotion();
+  const tabHidden = usePageVisibility();
+  const still = reduced || tabHidden;
   const width = 600;
   const height = 320;
   const padY = 30;
@@ -135,8 +141,8 @@ export default function EvolutionTab() {
                     fill="none"
                     stroke={BRAND_VAR.amber}
                     strokeWidth={1.5}
-                    animate={reduced ? { opacity: 0.8, r: 16 } : { opacity: [0.3, 0.8, 0.3], r: [14, 18, 14] }}
-                    transition={reduced ? undefined : { duration: 2, repeat: Infinity }}
+                    animate={still ? { opacity: 0.8, r: 16 } : { opacity: [0.3, 0.8, 0.3], r: [14, 18, 14] }}
+                    transition={still ? undefined : { duration: 2, repeat: Infinity }}
                   />
                 )}
                 <circle
