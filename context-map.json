@@ -78,7 +78,9 @@
             "src/lib/landing-address.ts",
             "src/lib/landing-address.test.ts",
             "src/hooks/useHashArrival.ts",
-            "src/components/LandingHashArrival.tsx"
+            "src/components/LandingHashArrival.tsx",
+            "src/lib/release.ts",
+            "src/lib/release.test.ts"
           ],
           "target": null,
           "apiRoutes": []
