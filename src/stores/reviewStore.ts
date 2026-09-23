@@ -55,6 +55,7 @@ function parseManualReview(
   let content = "";
   let severity: ReviewSeverity = "critical";
   let reviewerNotes: string | null = null;
+  let recordedResolver: string | null = null;
   let parseError = false;
   try {
     const payload = JSON.parse(event.payload ?? "{}");
@@ -67,6 +68,7 @@ function parseManualReview(
       parseError = true;
     }
     reviewerNotes = payload.reviewerNotes ?? null;
+    if (typeof payload.resolvedBy === "string" && payload.resolvedBy) recordedResolver = payload.resolvedBy;
   } catch {
     content = event.payload ?? "";
     parseError = true;
@@ -83,7 +85,9 @@ function parseManualReview(
     reviewerNotes,
     createdAt: event.createdAt,
     resolvedAt: event.processedAt,
-    resolvedBy: status !== "pending" ? RESOLVED_BY_SYSTEM : null,
+    // Who the write recorded (writeVerdict); a verdict the feed reports with no
+    // recorded resolver was not given here, so it reads as the system's.
+    resolvedBy: status !== "pending" ? (recordedResolver ?? RESOLVED_BY_SYSTEM) : null,
     escalatedAt: null,
     personaName: p?.name,
     personaIcon: p?.icon ?? undefined,
@@ -199,10 +203,14 @@ async function withCrossTabLock<T>(
 const COMMIT_CONCURRENCY = 6;
 let windowTimer: { batchId: number; handle: ReturnType<typeof setTimeout> } | null = null;
 
-function writeVerdict(id: string, status: Verdict, notes?: string) {
+/**
+ * The one verdict write. `resolvedBy` travels in the metadata with the notes,
+ * so the next poll reads back who resolved the review (`parseManualReview`).
+ */
+function writeVerdict(id: string, status: Verdict, resolvedBy: string, notes?: string) {
   return api.updateEvent(id, {
     status: status === "approved" ? "processed" : "failed",
-    metadata: notes ? JSON.stringify({ reviewerNotes: notes }) : undefined,
+    metadata: JSON.stringify(notes ? { reviewerNotes: notes, resolvedBy } : { resolvedBy }),
   });
 }
 
@@ -318,7 +326,7 @@ export const useReviewStore = create<ReviewState>((set, get) => {
       while (cursor < ids.length) {
         const id = ids[cursor++];
         try {
-          await writeVerdict(id, batch.verdict, batch.notes[id]);
+          await writeVerdict(id, batch.verdict, RESOLVED_BY_REVIEWER, batch.notes[id]);
         } catch {
           failed.push(id);
         } finally {
@@ -385,12 +393,13 @@ export const useReviewStore = create<ReviewState>((set, get) => {
     setDraft: (id, text) => set((s) => ({ drafts: { ...s.drafts, [id]: text } })),
     dismissResult: () => set({ lastResult: null }),
     resolveReview: async (id, status, notes) => {
-      await writeVerdict(id, status, notes);
+      // Only machine actors call this (escalation); the verdict is the system's.
+      await writeVerdict(id, status, RESOLVED_BY_SYSTEM, notes);
       const resolvedAt = new Date().toISOString();
       set((s) =>
         derive(
           s.baseReviews.map((r) =>
-            r.id === id ? { ...r, status, resolvedAt, resolvedBy: RESOLVED_BY_REVIEWER, reviewerNotes: notes ?? r.reviewerNotes } : r,
+            r.id === id ? { ...r, status, resolvedAt, resolvedBy: RESOLVED_BY_SYSTEM, reviewerNotes: notes ?? r.reviewerNotes } : r,
           ),
           s.ledger,
         ),

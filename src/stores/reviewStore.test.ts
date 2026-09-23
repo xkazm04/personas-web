@@ -48,10 +48,13 @@ describe("reviewStore guards (unchanged behaviour)", () => {
     await load([ev("r1", "critical", 1), ev("r2", "critical", 1)]);
     await store().resolveReview("r1", "approved");
     await store().resolveReview("r2", "rejected", "nope");
-    expect(updateEvent).toHaveBeenNthCalledWith(1, "r1", { status: "processed", metadata: undefined });
+    expect(updateEvent).toHaveBeenNthCalledWith(1, "r1", {
+      status: "processed",
+      metadata: JSON.stringify({ resolvedBy: "System" }),
+    });
     expect(updateEvent).toHaveBeenNthCalledWith(2, "r2", {
       status: "failed",
-      metadata: JSON.stringify({ reviewerNotes: "nope" }),
+      metadata: JSON.stringify({ reviewerNotes: "nope", resolvedBy: "System" }),
     });
     expect(store().pendingReviewCount).toBe(0);
   });
@@ -62,7 +65,7 @@ describe("reviewStore guards (unchanged behaviour)", () => {
     await store().checkEscalations();
     expect(updateEvent).toHaveBeenCalledWith("old", {
       status: "processed",
-      metadata: JSON.stringify({ reviewerNotes: "Auto-approved: SLA expired" }),
+      metadata: JSON.stringify({ reviewerNotes: "Auto-approved: SLA expired", resolvedBy: "System" }),
     });
     expect(store().reviews[0].status).toBe("approved");
   });
@@ -91,7 +94,7 @@ describe("reviewStore decision ledger", () => {
     await vi.advanceTimersByTimeAsync(5000);
     expect(updateEvent).toHaveBeenCalledWith("r1", {
       status: "failed",
-      metadata: JSON.stringify({ reviewerNotes: "unsafe" }),
+      metadata: JSON.stringify({ reviewerNotes: "unsafe", resolvedBy: "You" }),
     });
   });
 
@@ -110,7 +113,7 @@ describe("reviewStore decision ledger", () => {
     await load([ev("r1", "critical", 1)]);
     (store().decide as (ids: string[], v: string) => void)(["r1"], "approved");
     (store().flushDecisions as () => void)();
-    await vi.waitFor(() => expect(updateEvent).toHaveBeenCalledWith("r1", { status: "processed", metadata: undefined }));
+    await vi.waitFor(() => expect(updateEvent).toHaveBeenCalledWith("r1", { status: "processed", metadata: JSON.stringify({ resolvedBy: "You" }) }));
   });
 
   it("a poll landing mid-window cannot repaint the verdict", async () => {

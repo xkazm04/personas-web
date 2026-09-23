@@ -60,7 +60,7 @@ describe("review store on the SLA rule", () => {
     expect(updateEvent).not.toHaveBeenCalled();
     store().flushDecisions();
     await vi.waitFor(() => expect(updateEvent).toHaveBeenCalledTimes(1));
-    expect(updateEvent).toHaveBeenCalledWith("old", { status: "failed", metadata: undefined });
+    expect(updateEvent).toHaveBeenCalledWith("old", { status: "failed", metadata: JSON.stringify({ resolvedBy: "You" }) });
   });
 
   it("checkEscalations escalates by the shared rule: overdue critical marked, due-soon critical untouched", async () => {

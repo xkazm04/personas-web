@@ -61,16 +61,25 @@ function delay(ms = 300): Promise<void> {
   return new Promise((r) => setTimeout(r, ms));
 }
 
-/** Folds `metadata.reviewerNotes` into the event payload, where
- *  `parseManualReview` reads it back. Unparseable input leaves the payload as is. */
-function mergeReviewerNotes(payload: string | null, metadata?: string): string | null {
+/** Reviewer metadata a verdict write carries into the stored payload. */
+const REVIEW_METADATA_FIELDS = ["reviewerNotes", "resolvedBy"] as const;
+
+/** Folds `metadata.reviewerNotes` / `metadata.resolvedBy` into the event payload,
+ *  where `parseManualReview` reads them back. Unparseable input leaves the payload as is. */
+function mergeReviewMetadata(payload: string | null, metadata?: string): string | null {
   if (!metadata) return payload;
   try {
-    const notes = (JSON.parse(metadata) as { reviewerNotes?: unknown }).reviewerNotes;
-    if (typeof notes !== "string") return payload;
+    const meta: unknown = JSON.parse(metadata);
+    if (!meta || typeof meta !== "object") return payload;
+    const fields: Record<string, string> = {};
+    for (const key of REVIEW_METADATA_FIELDS) {
+      const value = (meta as Record<string, unknown>)[key];
+      if (typeof value === "string") fields[key] = value;
+    }
+    if (Object.keys(fields).length === 0) return payload;
     const base: unknown = JSON.parse(payload ?? "{}");
     if (!base || typeof base !== "object" || Array.isArray(base)) return payload;
-    return JSON.stringify({ ...base, reviewerNotes: notes });
+    return JSON.stringify({ ...base, ...fields });
   } catch {
     return payload;
   }
@@ -184,7 +193,7 @@ export const mockApi: ApiClient = {
       ...ev,
       status: body.status,
       processedAt: new Date().toISOString(),
-      payload: mergeReviewerNotes(ev.payload, body.metadata),
+      payload: mergeReviewMetadata(ev.payload, body.metadata),
       // A drained dead letter stops showing its old failure once processed.
       errorMessage: body.status === "processed" ? null : ev.errorMessage,
     };
