@@ -80,7 +80,8 @@
             "src/hooks/useHashArrival.ts",
             "src/components/LandingHashArrival.tsx",
             "src/lib/release.ts",
-            "src/lib/release.test.ts"
+            "src/lib/release.test.ts",
+            "src/components/sections/get-started/conversionStillMotion.test.ts"
           ],
           "target": null,
           "apiRoutes": []
@@ -1674,7 +1675,8 @@
             "src/instrumentation.ts",
             "src/lib/analytics.ts",
             "src/lib/sentry-pii.ts",
-            "src/lib/sentry.ts"
+            "src/lib/sentry.ts",
+            "src/lib/analytics.download-click.test.ts"
           ],
           "target": null,
           "apiRoutes": [
