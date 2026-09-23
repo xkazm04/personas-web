@@ -575,6 +575,12 @@
       rejected: string;
       refused: string;
     };
+    /** SLA chip + header count. {when} = Intl.RelativeTimeFormat phrase ("in 16 minutes" / "16 hours ago"). */
+    sla: {
+      due: string;
+      wasDue: string;
+      overdueCount: string;
+    };
   };
   leaderboardPage: {
     title: string;
@@ -2453,6 +2459,11 @@ export const en: Translations = {
       approved: 'Reviews approved: {count}',
       rejected: 'Reviews rejected: {count}',
       refused: 'Some of these reviews already have a verdict pending. Undo it or wait for it to save.',
+    },
+    sla: {
+      due: 'Due {when}',
+      wasDue: 'Was due {when}',
+      overdueCount: 'Overdue: {n}',
     },
   },
   leaderboardPage: {

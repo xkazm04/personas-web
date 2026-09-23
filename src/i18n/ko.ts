@@ -810,6 +810,11 @@ export const ko: Translations = {
         approved: "\uc2b9\uc778\ud55c \ub9ac\ubdf0: {count}\uac74",
         rejected: "\uac70\ubd80\ud55c \ub9ac\ubdf0: {count}\uac74",
         refused: "\uc774 \ub9ac\ubdf0 \uc911 \uc77c\ubd80\uc5d0\ub294 \uc774\ubbf8 \ub300\uae30 \uc911\uc778 \uacb0\uc815\uc774 \uc788\uc2b5\ub2c8\ub2e4. \uc2e4\ud589 \ucde8\uc18c\ud558\uac70\ub098 \uc800\uc7a5\ub420 \ub54c\uae4c\uc9c0 \uae30\ub2e4\ub9ac\uc138\uc694."
+      },
+      sla: {
+        due: "{when} \ub9c8\uac10",
+        wasDue: "{when} \ub9c8\uac10\ub428",
+        overdueCount: "\uae30\ud55c \ucd08\uacfc: {n}"
       }
     },
     leaderboardPage: {

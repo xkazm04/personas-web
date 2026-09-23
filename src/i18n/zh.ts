@@ -810,6 +810,11 @@ export const zh: Translations = {
         approved: "\u5df2\u6279\u51c6\u7684\u5ba1\u6838\u9879\uff1a{count}",
         rejected: "\u5df2\u62d2\u7edd\u7684\u5ba1\u6838\u9879\uff1a{count}",
         refused: "\u5176\u4e2d\u90e8\u5206\u5ba1\u6838\u9879\u5df2\u6709\u5f85\u4fdd\u5b58\u7684\u51b3\u5b9a\u2014\u2014\u8bf7\u64a4\u9500\uff0c\u6216\u7b49\u5f85\u4fdd\u5b58\u5b8c\u6210\u3002"
+      },
+      sla: {
+        due: "{when}\u5230\u671f",
+        wasDue: "{when}\u5df2\u5230\u671f",
+        overdueCount: "\u5df2\u903e\u671f\uff1a{n}"
       }
     },
     leaderboardPage: {

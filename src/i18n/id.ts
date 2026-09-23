@@ -810,6 +810,11 @@ export const id: Translations = {
         approved: "Tinjauan disetujui: {count}",
         rejected: "Tinjauan ditolak: {count}",
         refused: "Beberapa tinjauan ini sudah memiliki keputusan yang tertunda \u2014 urungkan atau tunggu hingga tersimpan."
+      },
+      sla: {
+        due: "Jatuh tempo {when}",
+        wasDue: "Seharusnya selesai {when}",
+        overdueCount: "Lewat tenggat: {n}"
       }
     },
     leaderboardPage: {

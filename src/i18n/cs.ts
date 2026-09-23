@@ -810,6 +810,11 @@ export const cs: Translations = {
         approved: "Schv\u00e1len\u00e9 revize: {count}",
         rejected: "Zam\u00edtnut\u00e9 revize: {count}",
         refused: "U n\u011bkter\u00fdch z t\u011bchto reviz\u00ed u\u017e \u010dek\u00e1 rozhodnut\u00ed \u2014 vra\u0165te ho zp\u011bt, nebo po\u010dkejte, a\u017e se ulo\u017e\u00ed."
+      },
+      sla: {
+        due: "Term\u00edn {when}",
+        wasDue: "Term\u00edn vypr\u0161el {when}",
+        overdueCount: "Po term\u00ednu: {n}"
       }
     },
     leaderboardPage: {

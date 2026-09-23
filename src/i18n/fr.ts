@@ -810,6 +810,11 @@ export const fr: Translations = {
         approved: "Revues approuv\u00e9es : {count}",
         rejected: "Revues rejet\u00e9es : {count}",
         refused: "Certaines de ces revues ont d\u00e9j\u00e0 une d\u00e9cision en attente : annulez-la ou attendez qu'elle soit enregistr\u00e9e."
+      },
+      sla: {
+        due: "\u00c9ch\u00e9ance {when}",
+        wasDue: "\u00c9chue {when}",
+        overdueCount: "En retard : {n}"
       }
     },
     leaderboardPage: {

@@ -810,6 +810,11 @@ export const de: Translations = {
         approved: "Genehmigte Reviews: {count}",
         rejected: "Abgelehnte Reviews: {count}",
         refused: "F\u00fcr einige dieser Reviews steht bereits eine Entscheidung aus \u2014 mach sie r\u00fcckg\u00e4ngig oder warte, bis sie gespeichert ist."
+      },
+      sla: {
+        due: "F\u00e4llig {when}",
+        wasDue: "War f\u00e4llig {when}",
+        overdueCount: "\u00dcberf\u00e4llig: {n}"
       }
     },
     leaderboardPage: {
