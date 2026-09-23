@@ -5,8 +5,26 @@ import {
   SHOWCASE_KEYS,
   DEFAULT_SHOWCASE_KEY,
   assertShowcaseShipped,
+  fillTemplate,
   pluginsIntro,
+  SHOWCASE_COUNTS,
 } from "@/components/feature-sections/plugins/roster";
+import { en } from "@/i18n/en";
+import { ar } from "@/i18n/ar";
+import { bn } from "@/i18n/bn";
+import { cs } from "@/i18n/cs";
+import { de } from "@/i18n/de";
+import { es } from "@/i18n/es";
+import { fr } from "@/i18n/fr";
+import { hi } from "@/i18n/hi";
+import { id } from "@/i18n/id";
+import { ja } from "@/i18n/ja";
+import { ko } from "@/i18n/ko";
+import { ru } from "@/i18n/ru";
+import { vi } from "@/i18n/vi";
+import { zh } from "@/i18n/zh";
+
+const LOCALES = { en, ar, bn, cs, de, es, fr, hi, id, ja, ko, ru, vi, zh };
 
 /**
  * One desktop-plugin manifest drives the /features plugin showcase, the
@@ -55,18 +73,50 @@ describe("showcase roster", () => {
     expect(() => assertShowcaseShipped(["not-a-plugin"])).toThrow(/not-a-plugin/);
   });
 
-  it("derives both intro numbers instead of hand-typing a count", () => {
-    const shipped = shippedIds().length;
-    const intro = pluginsIntro(SHOWCASE_KEYS.length, shipped);
-    expect(intro).toMatch(/\bFour\b/);
-    expect(intro).toMatch(/\btwo\b/);
+  it("derives both intro numbers into the translated template instead of hand-typing a count", () => {
+    const copy = en.pluginShowcase;
+    expect(SHOWCASE_COUNTS).toEqual({ showcased: SHOWCASE_KEYS.length, shipped: shippedIds().length });
+    const intro = pluginsIntro(copy, SHOWCASE_COUNTS.showcased, SHOWCASE_COUNTS.shipped);
+    expect(intro).toMatch(/\b4\b/);
+    expect(intro).toMatch(/\b2\b/);
+    expect(intro).toContain(copy.introTail);
     // A different roster yields different numbers: the count is computed.
-    const other = pluginsIntro(3, 5);
-    expect(other).toMatch(/\bFive\b/);
-    expect(other).toMatch(/\bthree\b/);
-    expect(other).not.toMatch(/\b(Four|four|two)\b/);
-    // Out of the word table it falls back to digits rather than inventing one.
-    expect(pluginsIntro(2, 17)).toMatch(/\b17\b/);
+    const other = pluginsIntro(copy, 3, 5);
+    expect(other).toMatch(/\b5\b/);
+    expect(other).toMatch(/\b3\b/);
+    expect(other).not.toMatch(/\b[24]\b/);
+    // Every shipped plugin on stage switches to the "all of them" sentence.
+    const all = pluginsIntro(copy, 4, 4);
+    expect(all.startsWith(fillTemplate(copy.introAll, { shipped: 4 }))).toBe(true);
+    // Numbers go through the injected formatter (the component passes the locale's).
+    expect(pluginsIntro(copy, 2, 17, (n) => `<${n}>`)).toContain("<17>");
+  });
+
+  it("fills a template's placeholders and leaves unknown ones visible", () => {
+    expect(fillTemplate("plugin {current} of {total}", { current: 1, total: 2 })).toBe("plugin 1 of 2");
+    expect(fillTemplate("{a} and {a}", { a: "x" })).toBe("x and x");
+    expect(fillTemplate("{missing}", {})).toBe("{missing}");
+  });
+
+  it("every locale translates the showcase copy and interpolates every placeholder", () => {
+    for (const [code, t] of Object.entries(LOCALES)) {
+      const copy = t.pluginShowcase;
+      const some = pluginsIntro(copy, 2, 4);
+      const all = pluginsIntro(copy, 4, 4);
+      const counter = fillTemplate(copy.counter, { current: 1, total: 2 });
+      for (const s of [some, all, counter]) expect(s, `${code}: ${s}`).not.toMatch(/[{}]/);
+      expect(some, code).toMatch(/4/);
+      expect(some, code).toMatch(/2/);
+      expect(all, code).toMatch(/4/);
+      expect(counter, code).toMatch(/1/);
+      expect(counter, code).toMatch(/2/);
+      if (code !== "en") {
+        // Hand-translated, not an English placeholder.
+        expect(copy.introSome, code).not.toBe(en.pluginShowcase.introSome);
+        expect(copy.introTail, code).not.toBe(en.pluginShowcase.introTail);
+        expect(copy.taglines.devTools, code).not.toBe(en.pluginShowcase.taglines.devTools);
+      }
+    }
   });
 
   // Guards (green before by design in spirit: the tour and the Brain demo

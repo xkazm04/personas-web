@@ -1,7 +1,8 @@
 "use client";
 
 import { motion, AnimatePresence } from "framer-motion";
-import type { PluginDef, PluginKey, VariantDef } from "../types";
+import { fillTemplate } from "../roster";
+import type { PluginDef, PluginKey, ShowcaseCopy, VariantDef } from "../types";
 
 interface PluginCardProps {
   plugins: PluginDef[];
@@ -10,6 +11,7 @@ interface PluginCardProps {
   activeVariant: VariantDef;
   activeVariantKey: string;
   setVariantFor: (plugin: PluginKey, variantKey: string) => void;
+  copy: ShowcaseCopy;
 }
 
 export default function PluginCard({
@@ -19,6 +21,7 @@ export default function PluginCard({
   activeVariant,
   activeVariantKey,
   setVariantFor,
+  copy,
 }: PluginCardProps) {
   const PluginIcon = activePlugin.icon;
   const Variant = activeVariant.component;
@@ -46,7 +49,7 @@ export default function PluginCard({
                 {activePlugin.label}
               </div>
               <div className="text-base font-mono text-foreground/65">
-                {activePlugin.tagline}
+                {copy.taglines[activePlugin.taglineKey]}
               </div>
             </div>
           </div>
@@ -55,7 +58,10 @@ export default function PluginCard({
               className="h-2 w-2 rounded-full"
               style={{ backgroundColor: activePlugin.color }}
             />
-            plugin {plugins.findIndex((p) => p.key === active) + 1} of {plugins.length}
+            {fillTemplate(copy.counter, {
+              current: plugins.findIndex((p) => p.key === active) + 1,
+              total: plugins.length,
+            })}
           </div>
         </div>
 

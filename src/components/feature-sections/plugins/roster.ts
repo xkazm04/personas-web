@@ -29,25 +29,41 @@ export function assertShowcaseShipped(keys: readonly string[]): void {
   }
 }
 
-const NUMBER_WORDS = [
-  "zero", "one", "two", "three", "four", "five", "six",
-  "seven", "eight", "nine", "ten", "eleven", "twelve",
-];
+/** The intro's three translated fragments (`t.pluginShowcase`). */
+export interface IntroCopy {
+  /** Every shipped plugin is on stage. Placeholder: {shipped}. */
+  introAll: string;
+  /** Some are on stage. Placeholders: {shipped}, {showcased}. */
+  introSome: string;
+  introTail: string;
+}
 
-const inWords = (n: number) => NUMBER_WORDS[n] ?? String(n);
-const capitalize = (s: string) => s.charAt(0).toUpperCase() + s.slice(1);
+/** Replace each `{name}` with its value; an unknown placeholder stays visible. */
+export function fillTemplate(template: string, vars: Record<string, string | number>): string {
+  return template.replace(/\{(\w+)\}/g, (whole, name: string) =>
+    Object.hasOwn(vars, name) ? String(vars[name]) : whole,
+  );
+}
 
 /**
  * The section intro. Both numbers are computed: `shipped` from the desktop
  * manifest (the fact) and `showcased` from the roster, so the headline cannot
- * state a count nobody derived.
+ * state a count nobody derived. The sentence is a translated template; the
+ * caller passes its locale's number formatter (digits, not number words, so
+ * no locale needs a spell-out table).
  */
-export function pluginsIntro(showcased: number, shipped: number): string {
-  const lead =
-    showcased >= shipped
-      ? `${capitalize(inWords(shipped))} plugins ship with Personas, and every one is at work below.`
-      : `${capitalize(inWords(shipped))} plugins ship with Personas, and ${inWords(showcased)} of them are at work below.`;
-  return `${lead} Each is a self-contained workspace your agents can drive, sharing the same credentials and composing with the others. Switch a tab to meet another specialist.`;
+export function pluginsIntro(
+  copy: IntroCopy,
+  showcased: number,
+  shipped: number,
+  formatNumber: (n: number) => string = String,
+): string {
+  const vars = { shipped: formatNumber(shipped), showcased: formatNumber(showcased) };
+  const lead = fillTemplate(showcased >= shipped ? copy.introAll : copy.introSome, vars);
+  return `${lead} ${copy.introTail}`;
 }
 
-export const SHOWCASE_INTRO = pluginsIntro(SHOWCASE_KEYS.length, SHIPPED_DESKTOP_PLUGINS.length);
+export const SHOWCASE_COUNTS = {
+  showcased: SHOWCASE_KEYS.length,
+  shipped: SHIPPED_DESKTOP_PLUGINS.length,
+} as const;

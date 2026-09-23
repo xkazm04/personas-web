@@ -15,7 +15,7 @@ import type { PluginDef, PluginKey } from "./types";
 const DEMOS: Record<PluginKey, Omit<PluginDef, "key">> = {
   "dev-tools": {
     label: "Dev Tools",
-    tagline: "Parallel agent fleet, projects, triage",
+    taglineKey: "devTools",
     icon: Wrench,
     color: BRAND_VAR.cyan,
     variants: [
@@ -29,7 +29,7 @@ const DEMOS: Record<PluginKey, Omit<PluginDef, "key">> = {
   },
   "obsidian-brain": {
     label: "Brain",
-    tagline: "Your vault, agent-ready",
+    taglineKey: "brain",
     icon: Brain,
     color: BRAND_VAR.purple,
     variants: [

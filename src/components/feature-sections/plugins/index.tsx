@@ -5,13 +5,19 @@ import { motion } from "framer-motion";
 import SectionWrapper from "@/components/SectionWrapper";
 import SectionIntro from "@/components/primitives/SectionIntro";
 import { staggerContainer } from "@/lib/animations";
+import { useTranslation } from "@/i18n/useTranslation";
 import { PLUGINS } from "./data";
-import { DEFAULT_SHOWCASE_KEY, SHOWCASE_INTRO } from "./roster";
+import { DEFAULT_SHOWCASE_KEY, SHOWCASE_COUNTS, pluginsIntro } from "./roster";
 import type { PluginKey } from "./types";
 import PluginTabs from "./components/PluginTabs";
 import PluginCard from "./components/PluginCard";
 
 export default function Plugins() {
+  const { t, language } = useTranslation();
+  const copy = t.pluginShowcase;
+  const intro = pluginsIntro(copy, SHOWCASE_COUNTS.showcased, SHOWCASE_COUNTS.shipped, (n) =>
+    n.toLocaleString(language),
+  );
   const [active, setActive] = useState<PluginKey>(DEFAULT_SHOWCASE_KEY);
 
   const [variantByPlugin, setVariantByPlugin] = useState<
@@ -43,15 +49,20 @@ export default function Plugins() {
         variants={staggerContainer}
       >
         <SectionIntro
-          heading="Everything to"
-          gradient="plug in"
-          description={SHOWCASE_INTRO}
+          heading={copy.heading}
+          gradient={copy.headingGradient}
+          description={intro}
           className="mb-0"
         />
       </motion.div>
 
       <div data-tour-diagram="plugins">
-        <PluginTabs plugins={PLUGINS} active={active} onSelect={setActive} />
+        <PluginTabs
+          plugins={PLUGINS}
+          active={active}
+          onSelect={setActive}
+          copy={copy}
+        />
 
         <PluginCard
           plugins={PLUGINS}
@@ -60,6 +71,7 @@ export default function Plugins() {
           activeVariant={activeVariant}
           activeVariantKey={activeVariantKey}
           setVariantFor={setVariantFor}
+          copy={copy}
         />
       </div>
     </SectionWrapper>
