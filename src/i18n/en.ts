@@ -553,6 +553,18 @@
       wasDue: string;
       overdueCount: string;
     };
+    /** Detail-panel resolved line. {when} = Intl.RelativeTimeFormat phrase, {name} = resolver. */
+    resolved: string;
+    resolvedBy: string;
+    /** Display names for the store's resolvedBy sentinels (src/lib/review-display.ts). */
+    resolver: {
+      you: string;
+      system: string;
+    };
+    /** Shown in place of the escalation's persisted auto-approve reviewer note. */
+    autoApprovedNote: string;
+    /** Bulk commit progress bar. {count} = rows in the commit. */
+    bulkProcessing: string;
   };
   leaderboardPage: {
     title: string;
@@ -2260,7 +2272,7 @@ export const en: Translations = {
     noReviewsInFilter: "No reviews in this filter",
     refreshing: "Refreshing...",
     rejectSelectedTitle: "Reject selected reviews?",
-    rejectSelectedBody: "This will reject {count} selected review{plural}. You will have 5 seconds to undo this action.",
+    rejectSelectedBody: "This will reject the selected reviews ({count}). You will have 5 seconds to undo this action.",
     undo: "Undo",
     retry: "Retry",
     bulkFailedApprove: "{failed} of {total} failed to approve",
@@ -2435,6 +2447,14 @@ export const en: Translations = {
       wasDue: 'Was due {when}',
       overdueCount: 'Overdue: {n}',
     },
+    resolved: 'Resolved {when}',
+    resolvedBy: 'Resolved {when} by {name}',
+    resolver: {
+      you: 'you',
+      system: 'the system',
+    },
+    autoApprovedNote: 'Auto-approved: SLA expired',
+    bulkProcessing: 'Processing reviews: {count}',
   },
   leaderboardPage: {
     title: 'Leaderboard',

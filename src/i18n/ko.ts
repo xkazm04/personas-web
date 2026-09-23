@@ -604,7 +604,7 @@ export const ko: Translations = {
       noReviewsInFilter: "\uc774 \ud544\ud130\uc5d0 \ud574\ub2f9\ud558\ub294 \uac80\ud1a0 \ud56d\ubaa9\uc774 \uc5c6\uc2b5\ub2c8\ub2e4",
       refreshing: "\uc0c8\ub85c\uace0\uce68 \uc911...",
       rejectSelectedTitle: "\uc120\ud0dd\ud55c \uac80\ud1a0 \ud56d\ubaa9\uc744 \uac70\ubd80\ud558\uc2dc\uaca0\uc2b5\ub2c8\uae4c?",
-      rejectSelectedBody: "\uc120\ud0dd\ud55c {count}\uac1c\uc758 \uac80\ud1a0 \ud56d\ubaa9{plural}\uc774(\uac00) \uac70\ubd80\ub429\ub2c8\ub2e4. 5\ucd08 \uc774\ub0b4\uc5d0 \uc774 \uc791\uc5c5\uc744 \ucde8\uc18c\ud560 \uc218 \uc788\uc2b5\ub2c8\ub2e4.",
+      rejectSelectedBody: "\uc120\ud0dd\ud55c \ub9ac\ubdf0({count}\uac74)\uac00 \uac70\ubd80\ub429\ub2c8\ub2e4. 5\ucd08 \uc774\ub0b4\uc5d0 \uc774 \uc791\uc5c5\uc744 \ucde8\uc18c\ud560 \uc218 \uc788\uc2b5\ub2c8\ub2e4.",
       undo: "\uc2e4\ud589 \ucde8\uc18c",
       retry: "\ub2e4\uc2dc \uc2dc\ub3c4",
       bulkFailedApprove: "{total}\uac1c \uc911 {failed}\uac1c \uc2b9\uc778 \uc2e4\ud328",
@@ -778,7 +778,15 @@ export const ko: Translations = {
         due: "{when} \ub9c8\uac10",
         wasDue: "{when} \ub9c8\uac10\ub428",
         overdueCount: "\uae30\ud55c \ucd08\uacfc: {n}"
-      }
+      },
+      resolved: "{when} \ud574\uacb0\ub428",
+      resolvedBy: "{when} \ud574\uacb0\ub428 ({name})",
+      resolver: {
+        you: "\ubcf8\uc778",
+        system: "\uc2dc\uc2a4\ud15c"
+      },
+      autoApprovedNote: "\uc790\ub3d9 \uc2b9\uc778\ub428: SLA \ub9cc\ub8cc",
+      bulkProcessing: "\ub9ac\ubdf0 \ucc98\ub9ac \uc911: {count}\uac74"
     },
     leaderboardPage: {
       title: "\ub9ac\ub354\ubcf4\ub4dc",

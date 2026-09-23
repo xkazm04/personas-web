@@ -604,7 +604,7 @@ export const fr: Translations = {
       noReviewsInFilter: "Aucune r\u00e9vision dans ce filtre",
       refreshing: "Actualisation...",
       rejectSelectedTitle: "Rejeter les r\u00e9visions s\u00e9lectionn\u00e9es ?",
-      rejectSelectedBody: "Cela rejettera {count} r\u00e9vision{plural} s\u00e9lectionn\u00e9e. Vous aurez 5 secondes pour annuler cette action.",
+      rejectSelectedBody: "Cela rejettera les revues s\u00e9lectionn\u00e9es ({count}). Vous aurez 5 secondes pour annuler cette action.",
       undo: "Annuler",
       retry: "R\u00e9essayer",
       bulkFailedApprove: "\u00c9chec de l'approbation de {failed} sur {total}",
@@ -778,7 +778,15 @@ export const fr: Translations = {
         due: "\u00c9ch\u00e9ance {when}",
         wasDue: "\u00c9chue {when}",
         overdueCount: "En retard : {n}"
-      }
+      },
+      resolved: "R\u00e9solue {when}",
+      resolvedBy: "R\u00e9solue {when} par {name}",
+      resolver: {
+        you: "vous",
+        system: "le syst\u00e8me"
+      },
+      autoApprovedNote: "Approuv\u00e9e automatiquement : SLA expir\u00e9",
+      bulkProcessing: "Traitement des revues : {count}"
     },
     leaderboardPage: {
       title: "Classement",

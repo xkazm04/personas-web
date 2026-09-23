@@ -604,7 +604,7 @@ export const cs: Translations = {
       noReviewsInFilter: "V tomto filtru nejsou \u017e\u00e1dn\u00e9 revize",
       refreshing: "Obnovuje se...",
       rejectSelectedTitle: "Zam\u00edtnout vybran\u00e9 revize?",
-      rejectSelectedBody: "T\u00edmto zam\u00edtnete {count} vybran\u00fdch reviz\u00ed{plural}. Na vr\u00e1cen\u00ed akce budete m\u00edt 5 sekund.",
+      rejectSelectedBody: "T\u00edmto zam\u00edtnete vybran\u00e9 revize ({count}). Na vr\u00e1cen\u00ed akce budete m\u00edt 5 sekund.",
       undo: "Zp\u011bt",
       retry: "Zkusit znovu",
       bulkFailedApprove: "{failed} z {total} se nepoda\u0159ilo schv\u00e1lit",
@@ -778,7 +778,15 @@ export const cs: Translations = {
         due: "Term\u00edn {when}",
         wasDue: "Term\u00edn vypr\u0161el {when}",
         overdueCount: "Po term\u00ednu: {n}"
-      }
+      },
+      resolved: "Vy\u0159e\u0161eno {when}",
+      resolvedBy: "Vy\u0159e\u0161eno {when} ({name})",
+      resolver: {
+        you: "vy",
+        system: "syst\u00e9m"
+      },
+      autoApprovedNote: "Automaticky schv\u00e1leno: vypr\u0161ela lh\u016fta SLA",
+      bulkProcessing: "Zpracov\u00e1n\u00ed reviz\u00ed: {count}"
     },
     leaderboardPage: {
       title: "\u017deb\u0159\u00ed\u010dek",

@@ -604,7 +604,7 @@ export const id: Translations = {
       noReviewsInFilter: "Tidak ada tinjauan dalam filter ini",
       refreshing: "Menyegarkan...",
       rejectSelectedTitle: "Tolak tinjauan yang dipilih?",
-      rejectSelectedBody: "Ini akan menolak {count} tinjauan{plural} yang dipilih. Anda memiliki 5 detik untuk membatalkan tindakan ini.",
+      rejectSelectedBody: "Ini akan menolak tinjauan yang dipilih ({count}). Anda memiliki 5 detik untuk membatalkan tindakan ini.",
       undo: "Urungkan",
       retry: "Coba lagi",
       bulkFailedApprove: "{failed} dari {total} gagal disetujui",
@@ -778,7 +778,15 @@ export const id: Translations = {
         due: "Jatuh tempo {when}",
         wasDue: "Seharusnya selesai {when}",
         overdueCount: "Lewat tenggat: {n}"
-      }
+      },
+      resolved: "Diselesaikan {when}",
+      resolvedBy: "Diselesaikan {when} oleh {name}",
+      resolver: {
+        you: "Anda",
+        system: "sistem"
+      },
+      autoApprovedNote: "Disetujui otomatis: SLA terlewati",
+      bulkProcessing: "Memproses tinjauan: {count}"
     },
     leaderboardPage: {
       title: "Papan Peringkat",

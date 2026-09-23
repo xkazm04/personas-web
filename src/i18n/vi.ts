@@ -604,7 +604,7 @@ export const vi: Translations = {
       noReviewsInFilter: "Kh\u00f4ng c\u00f3 \u0111\u00e1nh gi\u00e1 n\u00e0o trong b\u1ed9 l\u1ecdc n\u00e0y",
       refreshing: "\u0110ang l\u00e0m m\u1edbi...",
       rejectSelectedTitle: "T\u1eeb ch\u1ed1i c\u00e1c \u0111\u00e1nh gi\u00e1 \u0111\u00e3 ch\u1ecdn?",
-      rejectSelectedBody: "Thao t\u00e1c n\u00e0y s\u1ebd t\u1eeb ch\u1ed1i {count} \u0111\u00e1nh gi\u00e1 \u0111\u00e3 ch\u1ecdn{plural}. B\u1ea1n s\u1ebd c\u00f3 5 gi\u00e2y \u0111\u1ec3 ho\u00e0n t\u00e1c.",
+      rejectSelectedBody: "Thao t\u00e1c n\u00e0y s\u1ebd t\u1eeb ch\u1ed1i c\u00e1c b\u1ea3n duy\u1ec7t \u0111\u00e3 ch\u1ecdn ({count}). B\u1ea1n s\u1ebd c\u00f3 5 gi\u00e2y \u0111\u1ec3 ho\u00e0n t\u00e1c.",
       undo: "Ho\u00e0n t\u00e1c",
       retry: "Th\u1eed l\u1ea1i",
       bulkFailedApprove: "{failed} tr\u00ean {total} kh\u00f4ng th\u1ec3 duy\u1ec7t",
@@ -778,7 +778,15 @@ export const vi: Translations = {
         due: "\u0110\u1ebfn h\u1ea1n {when}",
         wasDue: "\u0110\u00e3 qu\u00e1 h\u1ea1n t\u1eeb {when}",
         overdueCount: "Qu\u00e1 h\u1ea1n: {n}"
-      }
+      },
+      resolved: "\u0110\u00e3 x\u1eed l\u00fd {when}",
+      resolvedBy: "\u0110\u00e3 x\u1eed l\u00fd {when} b\u1edfi {name}",
+      resolver: {
+        you: "b\u1ea1n",
+        system: "h\u1ec7 th\u1ed1ng"
+      },
+      autoApprovedNote: "T\u1ef1 \u0111\u1ed9ng ph\u00ea duy\u1ec7t: \u0111\u00e3 qu\u00e1 h\u1ea1n SLA",
+      bulkProcessing: "\u0110ang x\u1eed l\u00fd b\u1ea3n duy\u1ec7t: {count}"
     },
     leaderboardPage: {
       title: "B\u1ea3ng x\u1ebfp h\u1ea1ng",

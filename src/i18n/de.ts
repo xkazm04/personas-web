@@ -604,7 +604,7 @@ export const de: Translations = {
       noReviewsInFilter: "Keine Reviews in diesem Filter",
       refreshing: "Wird aktualisiert...",
       rejectSelectedTitle: "Ausgew\u00e4hlte Reviews ablehnen?",
-      rejectSelectedBody: "Dadurch werden {count} ausgew\u00e4hlte Review{plural} abgelehnt. Sie haben 5 Sekunden Zeit, um diese Aktion r\u00fcckg\u00e4ngig zu machen.",
+      rejectSelectedBody: "Dadurch werden die ausgew\u00e4hlten Reviews ({count}) abgelehnt. Sie haben 5 Sekunden Zeit, um diese Aktion r\u00fcckg\u00e4ngig zu machen.",
       undo: "R\u00fcckg\u00e4ngig",
       retry: "Wiederholen",
       bulkFailedApprove: "{failed} von {total} konnten nicht genehmigt werden",
@@ -778,7 +778,15 @@ export const de: Translations = {
         due: "F\u00e4llig {when}",
         wasDue: "War f\u00e4llig {when}",
         overdueCount: "\u00dcberf\u00e4llig: {n}"
-      }
+      },
+      resolved: "Erledigt {when}",
+      resolvedBy: "Erledigt {when} durch {name}",
+      resolver: {
+        you: "Sie",
+        system: "das System"
+      },
+      autoApprovedNote: "Automatisch genehmigt: SLA abgelaufen",
+      bulkProcessing: "Reviews werden verarbeitet: {count}"
     },
     leaderboardPage: {
       title: "Rangliste",

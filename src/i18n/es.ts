@@ -604,7 +604,7 @@ export const es: Translations = {
       noReviewsInFilter: "No hay revisiones en este filtro",
       refreshing: "Actualizando...",
       rejectSelectedTitle: "\u00bfRechazar las revisiones seleccionadas?",
-      rejectSelectedBody: "Esto rechazar\u00e1 {count} revisi\u00f3n{plural} seleccionada. Tendr\u00e1s 5 segundos para deshacer esta acci\u00f3n.",
+      rejectSelectedBody: "Esto rechazar\u00e1 las revisiones seleccionadas ({count}). Tendr\u00e1s 5 segundos para deshacer esta acci\u00f3n.",
       undo: "Deshacer",
       retry: "Reintentar",
       bulkFailedApprove: "No se pudieron aprobar {failed} de {total}",
@@ -778,7 +778,15 @@ export const es: Translations = {
         due: "Vence {when}",
         wasDue: "Venci\u00f3 {when}",
         overdueCount: "Vencidas: {n}"
-      }
+      },
+      resolved: "Resuelta {when}",
+      resolvedBy: "Resuelta {when} por {name}",
+      resolver: {
+        you: "ti",
+        system: "el sistema"
+      },
+      autoApprovedNote: "Aprobada autom\u00e1ticamente: SLA vencido",
+      bulkProcessing: "Procesando revisiones: {count}"
     },
     leaderboardPage: {
       title: "Clasificaci\u00f3n",

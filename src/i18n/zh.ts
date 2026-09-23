@@ -604,7 +604,7 @@ export const zh: Translations = {
       noReviewsInFilter: "\u6b64\u7b5b\u9009\u6761\u4ef6\u4e0b\u6ca1\u6709\u5ba1\u6838",
       refreshing: "\u6b63\u5728\u5237\u65b0...",
       rejectSelectedTitle: "\u62d2\u7edd\u6240\u9009\u5ba1\u6838\uff1f",
-      rejectSelectedBody: "\u8fd9\u5c06\u62d2\u7edd {count} \u6761\u6240\u9009\u5ba1\u6838{plural}\u3002\u4f60\u6709 5 \u79d2\u949f\u53ef\u4ee5\u64a4\u9500\u6b64\u64cd\u4f5c\u3002",
+      rejectSelectedBody: "\u8fd9\u5c06\u62d2\u7edd\u6240\u9009\u5ba1\u6838\u9879\uff08{count} \u9879\uff09\u3002\u4f60\u6709 5 \u79d2\u949f\u53ef\u4ee5\u64a4\u9500\u6b64\u64cd\u4f5c\u3002",
       undo: "\u64a4\u9500",
       retry: "\u91cd\u8bd5",
       bulkFailedApprove: "{total} \u9879\u4e2d\u6709 {failed} \u9879\u6279\u51c6\u5931\u8d25",
@@ -778,7 +778,15 @@ export const zh: Translations = {
         due: "{when}\u5230\u671f",
         wasDue: "{when}\u5df2\u5230\u671f",
         overdueCount: "\u5df2\u903e\u671f\uff1a{n}"
-      }
+      },
+      resolved: "{when}\u5df2\u89e3\u51b3",
+      resolvedBy: "{name}\u4e8e{when}\u89e3\u51b3",
+      resolver: {
+        you: "\u4f60",
+        system: "\u7cfb\u7edf"
+      },
+      autoApprovedNote: "\u5df2\u81ea\u52a8\u6279\u51c6\uff1aSLA \u5df2\u5230\u671f",
+      bulkProcessing: "\u6b63\u5728\u5904\u7406\u5ba1\u6838\u9879\uff1a{count}"
     },
     leaderboardPage: {
       title: "\u6392\u884c\u699c",
