@@ -61,6 +61,21 @@ function delay(ms = 300): Promise<void> {
   return new Promise((r) => setTimeout(r, ms));
 }
 
+/** Folds `metadata.reviewerNotes` into the event payload, where
+ *  `parseManualReview` reads it back. Unparseable input leaves the payload as is. */
+function mergeReviewerNotes(payload: string | null, metadata?: string): string | null {
+  if (!metadata) return payload;
+  try {
+    const notes = (JSON.parse(metadata) as { reviewerNotes?: unknown }).reviewerNotes;
+    if (typeof notes !== "string") return payload;
+    const base: unknown = JSON.parse(payload ?? "{}");
+    if (!base || typeof base !== "object" || Array.isArray(base)) return payload;
+    return JSON.stringify({ ...base, reviewerNotes: notes });
+  } catch {
+    return payload;
+  }
+}
+
 export const mockApi: ApiClient = {
   listPersonas: async (): Promise<Persona[]> => {
     await delay();
@@ -130,9 +145,20 @@ export const mockApi: ApiClient = {
 
   updateEvent: async (id: string, body: { status: EventStatus; metadata?: string }): Promise<PersonaEvent> => {
     await delay();
-    const ev = MOCK_EVENTS.find((e) => e.id === id);
-    if (!ev) throw new ApiError(404, "Event not found");
-    return { ...ev, status: body.status, processedAt: new Date().toISOString() };
+    const idx = MOCK_EVENTS.findIndex((e) => e.id === id);
+    if (idx === -1) throw new ApiError(404, "Event not found");
+    // Write through to the in-session copy (demo-data-plane/network-faithful-mocks):
+    // the next listEvents — the review queue's 15s poll, the home page's fetch —
+    // must see the verdict, or every committed review snaps back to pending.
+    const ev = MOCK_EVENTS[idx];
+    const updated: PersonaEvent = {
+      ...ev,
+      status: body.status,
+      processedAt: new Date().toISOString(),
+      payload: mergeReviewerNotes(ev.payload, body.metadata),
+    };
+    MOCK_EVENTS[idx] = updated;
+    return { ...updated };
   },
 
   listSubscriptions: async (personaId: string): Promise<PersonaEventSubscription[]> => {
