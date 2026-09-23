@@ -13,6 +13,7 @@
  */
 import { getSupabase } from "./supabase";
 import { ApiError, type ApiClient } from "./api";
+import { halvesTrend } from "./observabilitySeries";
 import type {
   Persona,
   PersonaExecution,
@@ -87,12 +88,6 @@ function mapEventStatus(s: string): EventStatus {
   if (EVENT_STATUSES.has(s)) return s as EventStatus;
   console.warn(`[supabaseApi] unknown event status "${s}"; treating as "pending".`);
   return "pending";
-}
-
-/** Percentage change of `recent` vs `prior`; 0 when there's no prior baseline. */
-function pctChange(recent: number, prior: number): number {
-  if (prior === 0) return 0;
-  return ((recent - prior) / prior) * 100;
 }
 
 // ---------------------------------------------------------------------------
@@ -531,17 +526,10 @@ export const supabaseApi: ApiClient = {
         getSupabase().from("synced_personas").select("id").eq("enabled", true),
       )
     ).length;
-    // Period-over-period trend: compare the recent half of the daily series
-    // against the prior half (% change). Falls back to 0 with no baseline.
-    const mid = Math.floor(daily.length / 2);
-    const prior = daily.slice(0, mid);
-    const recent = daily.slice(mid);
-    const sum = (arr: DailyMetric[], f: (d: DailyMetric) => number) =>
-      arr.reduce((a, d) => a + f(d), 0);
-    const priorExec = sum(prior, (d) => d.executions);
-    const recentExec = sum(recent, (d) => d.executions);
-    const priorRate = priorExec > 0 ? sum(prior, (d) => d.successes) / priorExec : 0;
-    const recentRate = recentExec > 0 ? sum(recent, (d) => d.successes) / recentExec : 0;
+    // Period-over-period trend: no prior window is synced, so compare the
+    // recent half of the daily series against the earlier half — the same
+    // `periodTrend` rule the demo applies to its window vs prior window.
+    const trend = halvesTrend(daily);
 
     return {
       totalCost,
@@ -551,9 +539,9 @@ export const supabaseApi: ApiClient = {
       // rendered a healthy 95% fleet as "0.9%" in real cloud-sync mode.)
       successRate: totalExecutions > 0 ? (totalSuccesses / totalExecutions) * 100 : 0,
       activePersonas,
-      costTrend: pctChange(sum(recent, (d) => d.cost), sum(prior, (d) => d.cost)),
-      execTrend: pctChange(recentExec, priorExec),
-      successTrend: pctChange(recentRate, priorRate),
+      costTrend: trend.cost,
+      execTrend: trend.executions,
+      successTrend: trend.success,
     };
   },
 

@@ -14,6 +14,7 @@ import type {
   ToolUsageOverTime,
   ToolUsageByPersona,
 } from "./types";
+import { periodTrend } from "./observabilitySeries";
 
 // ---------------------------------------------------------------------------
 // Helpers
@@ -719,28 +720,56 @@ function daysAgo(d: number): string {
 // server render and the client, and between one card and the next.
 const DAILY_EXECUTIONS = [2, 3, 4, 3, 5, 4, 2, 3, 4, 3, 5, 3, 4, 2]; // Σ 47
 const DAILY_FAILURES = [0, 1, 0, 0, 1, 0, 0, 1, 0, 0, 1, 0, 1, 0]; //   Σ 5
-const DAILY_COST = [0.21, 0.31, 0.39, 0.31, 0.51, 0.41, 0.21, 0.31, 0.41, 0.31, 0.51, 0.31, 0.41, 0.21]; // Σ 4.82
+// Day 10 (three days ago) is the window's one genuine cost spike — z ≈ 3.2 —
+// so the Performance tab's anomaly banner has a real day to name; the rest of
+// the fortnight gave the difference back to keep the window at Σ 4.82.
+const DAILY_COST = [0.21, 0.31, 0.39, 0.31, 0.41, 0.35, 0.21, 0.31, 0.35, 0.31, 0.79, 0.31, 0.35, 0.21]; // Σ 4.82
 
-export const MOCK_DAILY_METRICS: DailyMetric[] = DAILY_EXECUTIONS.map((execs, i) => ({
-  date: daysAgo(13 - i),
-  cost: DAILY_COST[i],
-  executions: execs,
-  successes: execs - DAILY_FAILURES[i],
-  failures: DAILY_FAILURES[i],
-}));
+// The 14 days BEFORE the window, same magnitude: the Compare overlay plots it
+// under the window and the tiles' "vs last period" trends are its % change.
+const DAILY_PRIOR_EXECUTIONS = [3, 2, 3, 4, 3, 2, 3, 4, 3, 2, 4, 3, 4, 3]; // Σ 43
+const DAILY_PRIOR_FAILURES = [0, 0, 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0]; //    Σ 4
+const DAILY_PRIOR_COST = [0.29, 0.21, 0.31, 0.39, 0.29, 0.21, 0.31, 0.39, 0.29, 0.21, 0.41, 0.29, 0.41, 0.29]; // Σ 4.30
+
+function dailySeries(
+  executions: number[],
+  failures: number[],
+  cost: number[],
+  newestDaysAgo: number,
+): DailyMetric[] {
+  return executions.map((execs, i) => ({
+    date: daysAgo(newestDaysAgo + executions.length - 1 - i),
+    cost: cost[i],
+    executions: execs,
+    successes: execs - failures[i],
+    failures: failures[i],
+  }));
+}
+
+export const MOCK_DAILY_METRICS: DailyMetric[] = dailySeries(DAILY_EXECUTIONS, DAILY_FAILURES, DAILY_COST, 0);
+
+/** The prior 14-day window (27 → 14 days ago), oldest → newest. */
+export const MOCK_DAILY_PRIOR_METRICS: DailyMetric[] = dailySeries(
+  DAILY_PRIOR_EXECUTIONS,
+  DAILY_PRIOR_FAILURES,
+  DAILY_PRIOR_COST,
+  DAILY_EXECUTIONS.length,
+);
 
 const WINDOW_EXECUTIONS = DAILY_EXECUTIONS.reduce((a, b) => a + b, 0);
 const WINDOW_FAILURES = DAILY_FAILURES.reduce((a, b) => a + b, 0);
 const WINDOW_COST = DAILY_COST.reduce((a, b) => a + b, 0);
+const WINDOW_TREND = periodTrend(MOCK_DAILY_METRICS, MOCK_DAILY_PRIOR_METRICS);
 
 export const MOCK_OBSERVABILITY_METRICS: ObservabilityMetrics = {
   totalCost: +WINDOW_COST.toFixed(2),
   totalExecutions: WINDOW_EXECUTIONS,
   successRate: +(((WINDOW_EXECUTIONS - WINDOW_FAILURES) / WINDOW_EXECUTIONS) * 100).toFixed(1),
   activePersonas: MOCK_PERSONAS.filter((persona) => persona.enabled).length,
-  costTrend: 12.3,
-  execTrend: 8.5,
-  successTrend: -2.1,
+  // Rounded to 1 dp, as the tiles show them.
+  costTrend: +WINDOW_TREND.cost.toFixed(1),
+  execTrend: +WINDOW_TREND.executions.toFixed(1),
+  successTrend: +WINDOW_TREND.success.toFixed(1),
 };
 
 export const MOCK_PERSONA_SPEND: PersonaSpend[] = [
