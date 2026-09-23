@@ -53,8 +53,13 @@
  * detector is a local Windows tool by design.
  *
  * Two consequences worth knowing before anyone changes this:
- *   - Do NOT run this on a Linux checkout. It will report almost everything
- *     stale, and that number is about line endings, not translations.
+ *   - A bare comparison of these hashes on a Linux checkout reports almost
+ *     everything stale, and that number is about line endings, not
+ *     translations. The drift detector no longer compares bare hashes: it
+ *     verifies each pin at the English revision it was taken from, under the
+ *     named EOL/extractor variants below, and reports an EOL-only difference
+ *     as `instrument:eol` (./guide-drift.mjs). The pins themselves, and this
+ *     hash definition, are unchanged.
  *   - If portability is ever wanted, the cheap route is a .gitattributes
  *     forcing `eol=crlf` on the guide content, which makes every checkout
  *     match the pins that already exist. Normalising to LF instead would
@@ -81,7 +86,21 @@ export function hashContent(s) {
  * @returns {Record<string, string>} topicId -> raw body source
  */
 export function parseContentFile(filePath) {
-  const src = fs.readFileSync(filePath, "utf8");
+  return extractBodies(fs.readFileSync(filePath, "utf8"), filePath);
+}
+
+/**
+ * The scanner behind parseContentFile, over source TEXT rather than a path, so
+ * the drift classifier (./guide-drift.mjs) can run it over a file as it stood
+ * at an old git revision. Same bytes in, same bodies out: parseContentFile is
+ * exactly `extractBodies(readFileSync(path))`.
+ *
+ * @param {string} src     content-file source text
+ * @param {string} [label] names the file in the unterminated-literal error
+ * @returns {Record<string, string>} topicId -> raw body source
+ */
+export function extractBodies(src, label = "<source>") {
+  const filePath = label;
   const out = {};
   const keyRe = /"([a-z][a-z0-9-]+)":\s*`/g;
   let m;
@@ -123,7 +142,15 @@ export function parseContentFile(filePath) {
  * @param {string} filePath
  */
 export function parseTopicsFile(filePath) {
-  const src = fs.readFileSync(filePath, "utf8");
+  return parseTopicsSource(fs.readFileSync(filePath, "utf8"));
+}
+
+/**
+ * The parser behind parseTopicsFile, over source text (see extractBodies).
+ * @param {string} src
+ * @returns {Record<string, { title: string, description: string }>}
+ */
+export function parseTopicsSource(src) {
   const out = {};
   // Tolerate the fields appearing in any order with other fields between them.
   const blockRe =
@@ -144,6 +171,50 @@ export function parseTopicsFile(filePath) {
  */
 export function topicHashInput(meta, body) {
   return JSON.stringify({ title: meta.title, description: meta.description, body });
+}
+
+// ── Instrument variants ─────────────────────────────────────────────────────
+// The stored pins were not all taken by today's instrument. Two things about
+// the instrument have varied while the English text did not:
+//   - the extractor: pins taken before 071c13d used the truncating regex below;
+//   - line endings: a pin is over whatever EOL the checkout had on disk.
+// These exports name those variants so ./guide-drift.mjs can VERIFY a stored
+// pin against the English as it stood at a git revision - a closed set of
+// {scanner, legacy} x {crlf, lf}. They are never used to compute a new pin:
+// hashContent + topicHashInput + extractBodies over raw disk text remain the
+// one pin definition (emit-source-hashes.mjs), and no stored hash is rewritten.
+
+/**
+ * The pre-071c13d extractor, kept verbatim as a named instrument variant. It
+ * truncates a body at the first escaped code span followed by a comma; that is
+ * the point - it reproduces exactly what the old pins were computed over.
+ * A declared topic it cannot find hashed as "" in the old emitter; callers
+ * apply that `?? ""` themselves.
+ *
+ * @param {string} src content-file source text
+ * @returns {Record<string, string>}
+ */
+export function extractBodiesLegacy(src) {
+  const out = {};
+  const re = /"([a-z][a-z0-9-]+)":\s*`([\s\S]*?)`\s*,/g;
+  let m;
+  while ((m = re.exec(src)) !== null) {
+    out[m[1]] = m[2];
+  }
+  return out;
+}
+
+/**
+ * Rewrite every line ending in `text` to one form. "lf" collapses CRLF (and a
+ * lone CR) to LF; "crlf" does that first, then expands every LF to CRLF, so the
+ * result never carries a doubled CR.
+ *
+ * @param {string} text
+ * @param {"lf" | "crlf"} eol
+ */
+export function normaliseEol(text, eol) {
+  const lf = text.replace(/\r\n?/g, "\n");
+  return eol === "crlf" ? lf.replace(/\n/g, "\r\n") : lf;
 }
 
 /**
