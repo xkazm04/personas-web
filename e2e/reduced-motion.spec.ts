@@ -15,13 +15,11 @@ async function openSwarm(page: Page) {
   await page.goto("/how");
   // The showcase is lazy: bring its stage into view so it mounts and so the
   // in-view decider does not veto on its own (which would pause regardless).
-  // Retried: under reduced motion the page's first `section#event-bus` is
-  // replaced once during load, and a scroll aimed at the detached node throws.
-  await expect(async () => {
-    await page.locator("section#event-bus").first().scrollIntoViewIfNeeded({ timeout: 2_000 });
-    await page.locator(SWARM_SVG).scrollIntoViewIfNeeded({ timeout: 2_000 });
-  }).toPass({ timeout: 30_000 });
+  // No retry needed: the streamed `section#event-bus` is adopted, not replaced,
+  // under either preference (e2e/reduced-motion-hydration.spec.ts pins that).
+  await page.locator("section#event-bus").first().scrollIntoViewIfNeeded();
   const svg = page.locator(SWARM_SVG);
+  await svg.scrollIntoViewIfNeeded();
   await expect(svg).toBeInViewport();
   return svg;
 }
@@ -38,7 +36,7 @@ async function pausedInView(page: Page): Promise<boolean | null> {
     await svg.scrollIntoViewIfNeeded({ timeout: 2_000 });
     return await svg.evaluate((el) => (el as SVGSVGElement).animationsPaused());
   } catch {
-    return null; // replaced mid-read; the poll asks again
+    return null; // not yet scrollable into view; the poll asks again
   }
 }
 

@@ -3,7 +3,6 @@
 import { motion } from "framer-motion";
 import { usePathname } from "next/navigation";
 import { pageTransition, TRANSITION_NORMAL } from "@/lib/animations";
-import { useStillMotion } from "@/hooks/useStillMotion";
 
 /**
  * Per-navigation enter transition. Replaces `app/template.tsx`.
@@ -17,33 +16,37 @@ import { useStillMotion } from "@/hooks/useStillMotion";
  *
  * Enter-only by design: the old template's `exit` variant was a no-op (no
  * AnimatePresence wrapped it), so this matches the prior behavior exactly.
- * Reduced-motion users get no movement — but they still get the wrapper.
  *
- * That last point is load-bearing. This component wraps EVERY route, and it
- * used to return `<>{children}</>` when the preference was set. framer's
- * `useReducedMotion` answers `null` on the server and the real preference on
- * the client's first render, so for a reduced-motion visitor the server sent
- * a wrapper element the client's first render did not produce — a structural
- * hydration mismatch spanning the whole page body, on every navigation. React
- * recovers by discarding and re-rendering the entire tree on the client: the
- * most work possible for precisely the visitors who asked for less.
+ * Reduced motion is gated in CSS, and ONLY in CSS - this component must not
+ * read the preference in JS at all. Two past versions each cost reduced-motion
+ * visitors their whole server-rendered page:
  *
- * Two changes fix it, and both matter. `useStillMotion` makes the preference
- * SSR-safe (and live). Gating the ANIMATION PROPS rather than the element
- * keeps DOM shape constant across the correcting commit, so the accommodation
- * costs a stopped animation instead of a full-page reflow.
+ * 1. Returning `<>{children}</>` when reduced: framer's `useReducedMotion` is
+ *    `null` on the server, so the server sent a wrapper the client's first
+ *    render did not produce - a structural hydration mismatch.
+ * 2. Gating `initial`/`animate` on `useStillMotion`: SSR-safe, but the value
+ *    corrects one commit after hydration, and framer re-publishes
+ *    `initial`/`animate` as MotionContext. That context change reaches the
+ *    route's `loading.tsx` Suspense boundary (directly below) while it is still
+ *    streaming, and React answers an update to a pending dehydrated boundary by
+ *    discarding the streamed HTML and client-rendering the page - silently: no
+ *    hydration error, no overlay (e2e/reduced-motion-hydration.spec.ts).
+ *
+ * So every prop is constant, and `motion-reduce:` overrides framer's inline
+ * opacity/transform with `!important`: still from the first paint, even before
+ * hydration, and never a re-render of anything below.
  */
 export default function PageTransition({ children }: { children: React.ReactNode }) {
-  const prefersReducedMotion = useStillMotion();
   const pathname = usePathname();
 
   return (
     <motion.div
       key={pathname}
-      variants={prefersReducedMotion ? undefined : pageTransition}
-      initial={prefersReducedMotion ? false : "initial"}
-      animate={prefersReducedMotion ? undefined : "animate"}
-      transition={prefersReducedMotion ? undefined : TRANSITION_NORMAL}
+      className="motion-reduce:opacity-100! motion-reduce:transform-none!"
+      variants={pageTransition}
+      initial="initial"
+      animate="animate"
+      transition={TRANSITION_NORMAL}
     >
       {children}
     </motion.div>

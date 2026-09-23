@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useMemo, useRef } from "react";
-import { useReducedMotion } from "framer-motion";
+import { useStillMotion } from "@/hooks/useStillMotion";
 import { useActiveSectionId } from "@/contexts/SectionObserverContext";
 import { useTranslation } from "@/i18n/useTranslation";
 import { startArrival } from "@/hooks/useHashArrival";
@@ -11,7 +11,7 @@ import type { ScrollMapItem } from "@/lib/types";
 export default function ScrollMap({ items }: { items: ScrollMapItem[] }) {
   const { t } = useTranslation();
   const activeSectionId = useActiveSectionId();
-  const reduced = useReducedMotion() ?? false;
+  const reduced = useStillMotion();
 
   const activeIndex = useMemo(() => {
     const idx = items.findIndex((item) => item.href === `#${activeSectionId}`);
