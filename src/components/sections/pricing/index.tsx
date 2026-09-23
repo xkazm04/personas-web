@@ -8,6 +8,8 @@ import { SectionIntro } from "@/components/primitives";
 import { fadeUp, staggerContainer } from "@/lib/animations";
 import { useTranslation } from "@/i18n/useTranslation";
 import { DOWNLOAD_PLAN, ctaHref } from "@/lib/release";
+import { trackDownloadClick } from "@/lib/analytics";
+import { detectPlatformKey } from "@/components/waitlist-modal/waitlistUtils";
 import { FEATURE_GROUPS } from "./data";
 import FeatureGroupCard from "./FeatureGroupCard";
 
@@ -47,6 +49,7 @@ export default function Pricing() {
         <div className="mt-5 flex justify-center">
           <PrimaryCTA
             href={ctaHref(DOWNLOAD_PLAN)}
+            onClick={() => trackDownloadClick(DOWNLOAD_PLAN, "pricing", detectPlatformKey())}
             icon={Download}
             label={t.compareSection.ctaLabel}
           />

@@ -14,9 +14,14 @@ import { isMeasuredStat, useLiveStats } from "@/hooks/useLiveStats";
 import { useAnimationPauseRegister } from "@/hooks/useAnimationPause";
 import { useTranslation } from "@/i18n/useTranslation";
 import { DOWNLOAD_PLAN, ctaHref } from "@/lib/release";
+import { trackDownloadClick } from "@/lib/analytics";
+import { detectPlatformKey } from "@/components/waitlist-modal/waitlistUtils";
 import TourLauncher from "@/components/tour/TourLauncher";
 import CommandCenterIllustration from "./hero/CommandCenterIllustration";
 import HeroStatRow from "./hero/HeroStatRow";
+
+// The hero's download CTA reports itself (platform is read at click time, never in render).
+const trackHeroDownload = () => trackDownloadClick(DOWNLOAD_PLAN, "hero", detectPlatformKey());
 
 // `connectorCount`/`templateCount` are derived server-side — see `Hero.tsx`.
 export default function HeroClient({ connectorCount, templateCount }: { connectorCount: number; templateCount: number }) {
@@ -146,7 +151,7 @@ export default function HeroClient({ connectorCount, templateCount }: { connecto
             {/* /api/download only when the release plan says a download is live
                 (the same rule the route enforces); otherwise the always-present
                 download wrapper, not the inner id="download" of a lazy section. */}
-            <PrimaryCTA href={ctaHref(DOWNLOAD_PLAN)} icon={Download} label={t.hero.downloadCta} />
+            <PrimaryCTA href={ctaHref(DOWNLOAD_PLAN)} onClick={trackHeroDownload} icon={Download} label={t.hero.downloadCta} />
             <a
               href={GITHUB_URL}
               target="_blank"

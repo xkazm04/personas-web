@@ -93,7 +93,7 @@ export default function DownloadCTA() {
             {DOWNLOAD_PRIMARY ? (
               <PrimaryCTA
                 href={DOWNLOAD_PRIMARY.href}
-                onClick={() => trackDownloadClick(DOWNLOAD_PRIMARY.platform)}
+                onClick={() => trackDownloadClick(DOWNLOAD_PLAN, "download-cta", detectPlatformKey())}
                 icon={Download}
                 label={t.downloadSection.downloadFor.replace("{platform}", t.downloadSection.windows)}
                 variant="solid"

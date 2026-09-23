@@ -22,7 +22,7 @@ The old Local/Cloud/Enterprise tier cards are gone from this section (see gotcha
 | `src/app/page.tsx:56` | Mounts `LazyPricing` in the homepage section list (`wrapperId: "pricing"`) |
 
 ## Data & state
-- **Source:** fully static. **Stores:** none (no Zustand). **API routes:** none for content; CTA href is `ctaHref(DOWNLOAD_PLAN)` from the release authority `src/lib/release.ts`: `/api/download` only when the installer URL passes the same https + host-allowlist rule the route enforces, else the always-present `#download-section` wrapper. **Types:** `FeatureGroup`, `FeatureGroupId` (`data.ts`); copy typed by the `compareSection` shape in the `Translations` interface (`en.ts`). No live/orchestrator data.
+- **Source:** fully static. **Stores:** none (no Zustand). **API routes:** none for content; CTA href is `ctaHref(DOWNLOAD_PLAN)` from the release authority `src/lib/release.ts`: `/api/download` only when the installer URL passes the same https + host-allowlist rule the route enforces, else the always-present `#download-section` wrapper. The click reports `download_click` with `placement: "pricing"` via `trackDownloadClick` (`src/lib/analytics.ts`). **Types:** `FeatureGroup`, `FeatureGroupId` (`data.ts`); copy typed by the `compareSection` shape in the `Translations` interface (`en.ts`). No live/orchestrator data.
 
 ## Integration points
 - **`SectionWrapper` / `SectionIntro`** (`@/components/primitives`) — section chrome + gradient heading. Wrapper drives the `whileInView` stagger reveal.

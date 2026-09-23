@@ -39,7 +39,7 @@ Inside `PageShell`: the hero (`<div id="hero"><Hero /></div>`) followed by a `se
 ## Data & state
 - **Source:** Hero stats are live-ish — `useLiveStats()` (`src/hooks/useLiveStats.ts`) fetches `/api/stats` once per session (module-level cache) and falls back to `FALLBACK_STATS` (228 users, 42 agents, 120 templates, etc.). `totalUsers` is real waitlist count; `totalAgents`/`totalTemplates` are marketing defaults overridable server-side. Connector count is the static length of `@/data/connectors`. Roadmap progress (`completedCount`/`totalPhases`) drives the ring segments.
 - **Stores:** None (Zustand) on the homepage hero path. `SectionObserverProvider` (`@/contexts/SectionObserverContext`) tracks which section is in view for the scroll-map. `useAnimationPause` toggles a `.animations-paused` class on the offscreen hero.
-- **API routes:** `GET /api/stats` (via `useLiveStats`); the Download CTA's href is `ctaHref(DOWNLOAD_PLAN)` from `src/lib/release.ts` — `/api/download` only when the installer URL passes the same `resolveDownloadUrl` rule the route enforces, else the `#download-section` wrapper.
+- **API routes:** `GET /api/stats` (via `useLiveStats`); the Download CTA's href is `ctaHref(DOWNLOAD_PLAN)` from `src/lib/release.ts` — `/api/download` only when the installer URL passes the same `resolveDownloadUrl` rule the route enforces, else the `#download-section` wrapper. Its click reports `trackDownloadClick(DOWNLOAD_PLAN, "hero", detectPlatformKey())` (`src/lib/analytics.ts`), a `download_click` with `{ platform, placement, outcome }`.
 - **Types:** `SectionConfig` (`page.tsx:35`), `StageColor` (`@/lib/colors`), `PlatformStatsResponse` (`@/app/api/stats/route`).
 
 ## Integration points
