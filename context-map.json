@@ -233,7 +233,10 @@
             "src/components/feature-sections/plugins/types.ts",
             "src/data/desktop-plugins.ts",
             "src/data/desktop-plugins.test.ts",
-            "src/components/feature-sections/plugins/roster.ts"
+            "src/components/feature-sections/plugins/roster.ts",
+            "src/components/feature-sections/lab/ledger.ts",
+            "src/components/feature-sections/lab/ledger.test.ts",
+            "src/components/feature-sections/lab/components/VersionRail.tsx"
           ],
           "target": null,
           "apiRoutes": []
