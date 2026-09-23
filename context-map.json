@@ -1275,7 +1275,10 @@
             "src/hooks/useLiveStats.ts",
             "src/lib/chart-theme.tsx",
             "src/stores/systemStore.ts",
-            "src/lib/observabilitySeries.ts"
+            "src/lib/observabilitySeries.ts",
+            "src/lib/incidentThreads.ts",
+            "src/hooks/useFocusParam.ts",
+            "src/components/dashboard/RelatedIncidentLinks.tsx"
           ],
           "target": null,
           "apiRoutes": []
