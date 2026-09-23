@@ -21,11 +21,13 @@ export interface LandingAddress {
   id: string;
   /** Always in the DOM: the stage wrapper that receives the scroll first. */
   wrapperSelector: string;
-  /** The real section's id, present only once the section has mounted. */
+  /** The id that marks the mounted section, present only once it has mounted:
+   *  the section's own id or, where the wrapper owns the address id, the id of
+   *  the heading the section is labelled by (see `LABELLED_INNER`). */
   innerId: string;
   /** Finds the mounted section INSIDE its wrapper. A descendant match, so a
-   *  wrapper that repeats the section's id (`pricing`, `get-started`) is never
-   *  mistaken for the mounted section. */
+   *  wrapper that repeats the section's id (`pricing`) is never mistaken for
+   *  the mounted section. */
   innerSelector: string;
 }
 
@@ -45,6 +47,13 @@ const INNER_IDS: Readonly<Record<string, string>> = {
   vision: "vision-grid",
 };
 
+/** Addresses whose id the always-present wrapper owns (page.tsx `wrapperId`
+ *  === `anchorId`). An id is unique per document, so the mounted section
+ *  carries none and is found by the heading that labels it instead. */
+const LABELLED_INNER: Readonly<Record<string, string>> = {
+  "get-started": "get-started-heading",
+};
+
 const DECLARED = new Set(LANDING_SECTIONS.map((s) => s.id));
 
 /** `#download`, `download`, `#download-section` -> the download address;
@@ -59,6 +68,10 @@ export function resolveLandingAddress(hash: string): LandingAddress | null {
     return { id, wrapperSelector: "#hero", innerId: "hero", innerSelector: "#hero" };
   }
   const wrapperSelector = `[data-scroll-anchor="${id}"]`;
+  const labelledBy = LABELLED_INNER[id];
+  if (labelledBy) {
+    return { id, wrapperSelector, innerId: labelledBy, innerSelector: `${wrapperSelector} [aria-labelledby="${labelledBy}"]` };
+  }
   const innerId = INNER_IDS[id] ?? id;
   return { id, wrapperSelector, innerId, innerSelector: `${wrapperSelector} #${innerId}` };
 }

@@ -30,7 +30,9 @@ export default function GetStarted() {
   const Visual = STEP_VISUALS[active];
 
   return (
-    <SectionWrapper id="get-started" aria-labelledby="get-started-heading">
+    // No id: page.tsx's always-present wrapper owns `get-started` (ids are unique
+    // per document); `lib/landing-address.ts` finds this section by its label.
+    <SectionWrapper aria-labelledby="get-started-heading">
       <SectionIntro
         id="get-started-heading"
         heading="From download to"

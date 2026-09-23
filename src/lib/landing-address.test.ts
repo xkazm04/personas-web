@@ -89,6 +89,30 @@ describe("resolveLandingAddress", () => {
     }
   });
 
+  it("get-started's id is emitted once: the always-present wrapper holds it, the mounted section does not", () => {
+    // Two elements with id="get-started" is invalid HTML, and getElementById /
+    // a native `#get-started` jump silently pick whichever comes first.
+    const page = read("src/app/page.tsx");
+    const wrapperEmits = [...page.matchAll(/wrapperId:\s*"get-started"/g)].length;
+    const sectionEmits = walk(path.join(SRC_ROOT, "components", "sections")).reduce(
+      (n, file) => n + [...readFileSync(file, "utf8").matchAll(/\bid="get-started"/g)].length,
+      0,
+    );
+    expect({ wrapperEmits, sectionEmits }).toEqual({ wrapperEmits: 1, sectionEmits: 0 });
+  });
+
+  it("finds the mounted get-started section by its heading label, not by an id the wrapper owns", () => {
+    const address = resolveLandingAddress("#get-started")!;
+    expect(address.wrapperSelector).toBe('[data-scroll-anchor="get-started"]');
+    expect(address.innerSelector).toBe(
+      '[data-scroll-anchor="get-started"] [aria-labelledby="get-started-heading"]',
+    );
+    // ...and that label is really what the section carries.
+    expect(read("src/components/sections/get-started/index.tsx")).toMatch(
+      /<SectionWrapper aria-labelledby="get-started-heading">/,
+    );
+  });
+
   it("guard: every inner section id is rendered by some home section", () => {
     const ids = new Set<string>();
     for (const file of walk(path.join(SRC_ROOT, "components", "sections"))) {
