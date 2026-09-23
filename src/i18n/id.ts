@@ -1567,7 +1567,12 @@ export const id: Translations = {
         testing: "Jalankan tes arena, perbandingan A/B, dan biarkan sistem genome mengembangkan prompt terbaik Anda.",
         deployment: "Deploy agen ke cloud, hubungkan ke GitHub Actions, GitLab CI, dan alur kerja n8n.",
         troubleshooting: "Perbaiki masalah umum, pahami pesan error, dan kembalikan agen Anda ke jalur yang benar."
-      }
+      },
+      translationNotice: {
+        staleBody: "Versi bahasa Inggris halaman ini diperbarui setelah diterjemahkan.",
+        showTranslation: "Baca terjemahan lama",
+        showCurrent: "Tampilkan versi bahasa Inggris terbaru",
+      },
     },
     featurePages: {
       orchestration: {

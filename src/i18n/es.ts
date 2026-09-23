@@ -1567,7 +1567,12 @@ export const es: Translations = {
         testing: "Ejecuta pruebas de arena, comparaciones A/B y deja que el sistema Genome evolucione tus mejores prompts.",
         deployment: "Implementa agentes en la nube, con\u00e9ctate a GitHub Actions, GitLab CI y flujos de n8n.",
         troubleshooting: "Soluciona problemas comunes, comprende los mensajes de error y pon a tus agentes de nuevo en marcha."
-      }
+      },
+      translationNotice: {
+        staleBody: "La versi\u00f3n en ingl\u00e9s de esta p\u00e1gina se actualiz\u00f3 despu\u00e9s de traducirla.",
+        showTranslation: "Leer la traducci\u00f3n anterior",
+        showCurrent: "Mostrar la versi\u00f3n actual en ingl\u00e9s",
+      },
     },
     featurePages: {
       orchestration: {

@@ -1567,7 +1567,12 @@ export const de: Translations = {
         testing: "F\u0102\u013dhren Sie Arena-Tests, A/B-Vergleiche durch und lassen Sie das Genome-System Ihre besten Prompts weiterentwickeln.",
         deployment: "Stellen Sie Agenten in der Cloud bereit, verbinden Sie sie mit GitHub Actions, GitLab CI und n8n-Workflows.",
         troubleshooting: "Beheben Sie h\u00e4ufige Probleme, verstehen Sie Fehlermeldungen und bringen Sie Ihre Agenten wieder auf Kurs."
-      }
+      },
+      translationNotice: {
+        staleBody: "Die englische Version dieser Seite wurde nach der \u00dcbersetzung aktualisiert.",
+        showTranslation: "\u00c4ltere \u00dcbersetzung lesen",
+        showCurrent: "Aktuelle englische Version anzeigen",
+      },
     },
     featurePages: {
       orchestration: {

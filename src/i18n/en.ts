@@ -1304,6 +1304,11 @@
       deployment: string;
       troubleshooting: string;
     };
+    translationNotice: {
+      staleBody: string;
+      showTranslation: string;
+      showCurrent: string;
+    };
   };
   featurePages: {
     orchestration: { headline: string; description: string; cta: string };
@@ -3165,6 +3170,11 @@ export const en: Translations = {
       testing: "Run arena tests, A/B comparisons, and let the genome system evolve your best prompts.",
       deployment: "Deploy agents to the cloud, connect to GitHub Actions, GitLab CI, and n8n workflows.",
       troubleshooting: "Fix common issues, understand error messages, and get your agents back on track.",
+    },
+    translationNotice: {
+      staleBody: "This page was updated in English after it was translated.",
+      showTranslation: "Read the older translation",
+      showCurrent: "Show the current English version",
     },
   },
   featurePages: {

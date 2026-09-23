@@ -1567,7 +1567,12 @@ export const cs: Translations = {
         testing: "Spou\u0161t\u011bjte ar\u00e9nov\u00e9 testy, A/B porovn\u00e1n\u00ed a nechte syst\u00e9m genomu vyv\u00edjet va\u0161e nejlep\u0161\u00ed prompty.",
         deployment: "Nasa\u010fte agenty do cloudu, propojte se s GitHub Actions, GitLab CI a n8n pracovn\u00edmi postupy.",
         troubleshooting: "Opravte b\u011b\u017en\u00e9 probl\u00e9my, pochopte chybov\u00e9 zpr\u00e1vy a vra\u0165te sv\u00e9 agenty zp\u011bt na spr\u00e1vnou cestu."
-      }
+      },
+      translationNotice: {
+        staleBody: "Anglick\u00e1 verze t\u00e9to str\u00e1nky byla po p\u0159ekladu aktualizov\u00e1na.",
+        showTranslation: "\u010c\u00edst star\u0161\u00ed p\u0159eklad",
+        showCurrent: "Zobrazit aktu\u00e1ln\u00ed anglickou verzi",
+      },
     },
     featurePages: {
       orchestration: {

@@ -1567,7 +1567,12 @@ export const fr: Translations = {
         testing: "Ex\u00e9cutez des tests d'ar\u00e8ne, des comparaisons A/B, et laissez le syst\u00e8me de g\u00e9nome faire \u00e9voluer vos meilleurs prompts.",
         deployment: "D\u00e9ployez des agents sur le cloud, connectez-vous \u00e0 GitHub Actions, GitLab CI, et aux workflows n8n.",
         troubleshooting: "R\u00e9solvez les probl\u00e8mes courants, comprenez les messages d'erreur, et remettez vos agents sur les rails."
-      }
+      },
+      translationNotice: {
+        staleBody: "La version anglaise de cette page a \u00e9t\u00e9 mise \u00e0 jour apr\u00e8s sa traduction.",
+        showTranslation: "Lire l'ancienne traduction",
+        showCurrent: "Afficher la version anglaise actuelle",
+      },
     },
     featurePages: {
       orchestration: {

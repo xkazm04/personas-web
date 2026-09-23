@@ -1567,7 +1567,12 @@ export const vi: Translations = {
         testing: "Ch\u1ea1y c\u00e1c b\u00e0i ki\u1ec3m th\u1eed arena, so s\u00e1nh A/B, v\u00e0 \u0111\u1ec3 h\u1ec7 th\u1ed1ng genome ti\u1ebfn h\u00f3a c\u00e1c prompt t\u1ed1t nh\u1ea5t c\u1ee7a b\u1ea1n.",
         deployment: "Tri\u1ec3n khai agent l\u00ean cloud, k\u1ebft n\u1ed1i v\u1edbi GitHub Actions, GitLab CI, v\u00e0 quy tr\u00ecnh n8n.",
         troubleshooting: "Kh\u1eafc ph\u1ee5c c\u00e1c s\u1ef1 c\u1ed1 th\u01b0\u1eddng g\u1eb7p, hi\u1ec3u c\u00e1c th\u00f4ng b\u00e1o l\u1ed7i, v\u00e0 \u0111\u01b0a agent c\u1ee7a b\u1ea1n ho\u1ea1t \u0111\u1ed9ng tr\u1edf l\u1ea1i."
-      }
+      },
+      translationNotice: {
+        staleBody: "Phi\u00ean b\u1ea3n ti\u1ebfng Anh c\u1ee7a trang n\u00e0y \u0111\u00e3 \u0111\u01b0\u1ee3c c\u1eadp nh\u1eadt sau khi d\u1ecbch.",
+        showTranslation: "\u0110\u1ecdc b\u1ea3n d\u1ecbch c\u0169",
+        showCurrent: "Hi\u1ec7n phi\u00ean b\u1ea3n ti\u1ebfng Anh hi\u1ec7n t\u1ea1i",
+      },
     },
     featurePages: {
       orchestration: {
