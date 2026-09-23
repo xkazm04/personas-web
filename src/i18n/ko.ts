@@ -786,7 +786,12 @@ export const ko: Translations = {
         system: "\uc2dc\uc2a4\ud15c"
       },
       autoApprovedNote: "\uc790\ub3d9 \uc2b9\uc778\ub428: SLA \ub9cc\ub8cc",
-      bulkProcessing: "\ub9ac\ubdf0 \ucc98\ub9ac \uc911: {count}\uac74"
+      bulkProcessing: "\ub9ac\ubdf0 \ucc98\ub9ac \uc911: {count}\uac74",
+      severity: {
+        critical: "\uc2ec\uac01",
+        warning: "\uacbd\uace0",
+        info: "\uc815\ubcf4"
+      }
     },
     leaderboardPage: {
       title: "\ub9ac\ub354\ubcf4\ub4dc",

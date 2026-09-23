@@ -786,7 +786,12 @@ export const vi: Translations = {
         system: "h\u1ec7 th\u1ed1ng"
       },
       autoApprovedNote: "T\u1ef1 \u0111\u1ed9ng ph\u00ea duy\u1ec7t: \u0111\u00e3 qu\u00e1 h\u1ea1n SLA",
-      bulkProcessing: "\u0110ang x\u1eed l\u00fd b\u1ea3n duy\u1ec7t: {count}"
+      bulkProcessing: "\u0110ang x\u1eed l\u00fd b\u1ea3n duy\u1ec7t: {count}",
+      severity: {
+        critical: "Nghi\u00eam tr\u1ecdng",
+        warning: "C\u1ea3nh b\u00e1o",
+        info: "Th\u00f4ng tin"
+      }
     },
     leaderboardPage: {
       title: "B\u1ea3ng x\u1ebfp h\u1ea1ng",

@@ -786,7 +786,12 @@ export const es: Translations = {
         system: "el sistema"
       },
       autoApprovedNote: "Aprobada autom\u00e1ticamente: SLA vencido",
-      bulkProcessing: "Procesando revisiones: {count}"
+      bulkProcessing: "Procesando revisiones: {count}",
+      severity: {
+        critical: "Cr\u00edtica",
+        warning: "Advertencia",
+        info: "Informaci\u00f3n"
+      }
     },
     leaderboardPage: {
       title: "Clasificaci\u00f3n",

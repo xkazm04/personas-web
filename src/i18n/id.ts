@@ -786,7 +786,12 @@ export const id: Translations = {
         system: "sistem"
       },
       autoApprovedNote: "Disetujui otomatis: SLA terlewati",
-      bulkProcessing: "Memproses tinjauan: {count}"
+      bulkProcessing: "Memproses tinjauan: {count}",
+      severity: {
+        critical: "Kritis",
+        warning: "Peringatan",
+        info: "Info"
+      }
     },
     leaderboardPage: {
       title: "Papan Peringkat",

@@ -786,7 +786,12 @@ export const fr: Translations = {
         system: "le syst\u00e8me"
       },
       autoApprovedNote: "Approuv\u00e9e automatiquement : SLA expir\u00e9",
-      bulkProcessing: "Traitement des revues : {count}"
+      bulkProcessing: "Traitement des revues : {count}",
+      severity: {
+        critical: "Critique",
+        warning: "Avertissement",
+        info: "Info"
+      }
     },
     leaderboardPage: {
       title: "Classement",

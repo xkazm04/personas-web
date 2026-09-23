@@ -565,6 +565,12 @@
     autoApprovedNote: string;
     /** Bulk commit progress bar. {count} = rows in the commit. */
     bulkProcessing: string;
+    /** Standalone severity label (pill / detail header). The voice copy's severity words are inflected for its sentence. */
+    severity: {
+      critical: string;
+      warning: string;
+      info: string;
+    };
   };
   leaderboardPage: {
     title: string;
@@ -2455,6 +2461,11 @@ export const en: Translations = {
     },
     autoApprovedNote: 'Auto-approved: SLA expired',
     bulkProcessing: 'Processing reviews: {count}',
+    severity: {
+      critical: 'Critical',
+      warning: 'Warning',
+      info: 'Info',
+    },
   },
   leaderboardPage: {
     title: 'Leaderboard',

@@ -786,7 +786,12 @@ export const ja: Translations = {
         system: "\u30b7\u30b9\u30c6\u30e0"
       },
       autoApprovedNote: "\u81ea\u52d5\u627f\u8a8d\uff1aSLA\u671f\u9650\u5207\u308c",
-      bulkProcessing: "\u30ec\u30d3\u30e5\u30fc\u3092\u51e6\u7406\u4e2d\uff1a{count}\u4ef6"
+      bulkProcessing: "\u30ec\u30d3\u30e5\u30fc\u3092\u51e6\u7406\u4e2d\uff1a{count}\u4ef6",
+      severity: {
+        critical: "\u91cd\u5927",
+        warning: "\u8b66\u544a",
+        info: "\u60c5\u5831"
+      }
     },
     leaderboardPage: {
       title: "\u0103\u0083\u015e\u0103\u0083\u013d\u0103\u0083\u20ac\u0103\u0083\u013d\u0103\u0083\u015b\u0103\u0083\u013d\u0103\u0083\u2030",

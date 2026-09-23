@@ -786,7 +786,12 @@ export const de: Translations = {
         system: "das System"
       },
       autoApprovedNote: "Automatisch genehmigt: SLA abgelaufen",
-      bulkProcessing: "Reviews werden verarbeitet: {count}"
+      bulkProcessing: "Reviews werden verarbeitet: {count}",
+      severity: {
+        critical: "Kritisch",
+        warning: "Warnung",
+        info: "Info"
+      }
     },
     leaderboardPage: {
       title: "Rangliste",

@@ -786,7 +786,12 @@ export const cs: Translations = {
         system: "syst\u00e9m"
       },
       autoApprovedNote: "Automaticky schv\u00e1leno: vypr\u0161ela lh\u016fta SLA",
-      bulkProcessing: "Zpracov\u00e1n\u00ed reviz\u00ed: {count}"
+      bulkProcessing: "Zpracov\u00e1n\u00ed reviz\u00ed: {count}",
+      severity: {
+        critical: "Kritick\u00e1",
+        warning: "Varov\u00e1n\u00ed",
+        info: "Informace"
+      }
     },
     leaderboardPage: {
       title: "\u017deb\u0159\u00ed\u010dek",

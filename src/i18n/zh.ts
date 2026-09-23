@@ -786,7 +786,12 @@ export const zh: Translations = {
         system: "\u7cfb\u7edf"
       },
       autoApprovedNote: "\u5df2\u81ea\u52a8\u6279\u51c6\uff1aSLA \u5df2\u5230\u671f",
-      bulkProcessing: "\u6b63\u5728\u5904\u7406\u5ba1\u6838\u9879\uff1a{count}"
+      bulkProcessing: "\u6b63\u5728\u5904\u7406\u5ba1\u6838\u9879\uff1a{count}",
+      severity: {
+        critical: "\u4e25\u91cd",
+        warning: "\u8b66\u544a",
+        info: "\u4fe1\u606f"
+      }
     },
     leaderboardPage: {
       title: "\u6392\u884c\u699c",
