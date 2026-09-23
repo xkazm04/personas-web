@@ -1447,7 +1447,9 @@
             "src/hooks/useMaxScrollHeight.ts",
             "src/hooks/usePageVisibility.ts",
             "src/hooks/useTweenedNumber.ts",
-            "src/lib/animations.ts"
+            "src/lib/animations.ts",
+            "src/lib/motion/loop-gate.ts",
+            "src/hooks/useLoopGate.ts"
           ],
           "target": null,
           "apiRoutes": []
