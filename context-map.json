@@ -1132,7 +1132,8 @@
             "src/stores/reviewStore.sla.test.ts",
             "src/app/dashboard/reviews/review-due.tsx",
             "src/lib/review-display.ts",
-            "src/lib/review-queue-i18n.test.ts"
+            "src/lib/review-queue-i18n.test.ts",
+            "src/stores/reviewStore.resolver.test.ts"
           ],
           "target": null,
           "apiRoutes": []
