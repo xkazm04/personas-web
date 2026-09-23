@@ -2,12 +2,24 @@
 
 import { useState, useEffect, useRef, useCallback } from "react";
 import { motion, AnimatePresence, useReducedMotion } from "framer-motion";
-import { MessageCircle, Bot, User, RotateCcw } from "lucide-react";
+import { MessageCircle, Bot, User, RotateCcw, Rocket } from "lucide-react";
+import { useTranslation } from "@/i18n/useTranslation";
 import { CHAT_SCRIPT } from "../data";
 import type { ChatMsg } from "../types";
+import { REFINED_VERSION } from "../ledger";
 import TabBackdrop from "./TabBackdrop";
 
-export default function ChatTab() {
+/** `liveId` + `onActivate` come from the section's version ledger: the
+ *  script ends with "Want me to promote this?", and the done-state footer
+ *  answers it by activating the version this refinement minted. */
+export default function ChatTab({
+  liveId,
+  onActivate,
+}: {
+  liveId: string;
+  onActivate: (id: string) => void;
+}) {
+  const { t } = useTranslation();
   const reduced = useReducedMotion() ?? false;
   const [visible, setVisible] = useState<ChatMsg[]>(() =>
     reduced ? CHAT_SCRIPT : [],
@@ -135,8 +147,8 @@ export default function ChatTab() {
         </AnimatePresence>
       </div>
 
-      <div className="relative flex items-center gap-3 border-t border-foreground/[0.06] px-5 py-3">
-        <div className="flex-1 rounded-lg border border-foreground/[0.08] bg-foreground/[0.02] px-4 py-2 text-base text-foreground/60 font-mono">
+      <div className="relative flex flex-wrap items-center gap-3 border-t border-foreground/[0.06] px-5 py-3">
+        <div className="flex-1 min-w-[12rem] rounded-lg border border-foreground/[0.08] bg-foreground/[0.02] px-4 py-2 text-base text-foreground/60 font-mono">
           Tell the agent what to change…
         </div>
         <button
@@ -146,6 +158,21 @@ export default function ChatTab() {
         >
           <RotateCcw className="h-3 w-3" /> replay
         </button>
+        {phase === "done" &&
+          (liveId === REFINED_VERSION ? (
+            <span className="flex h-9 items-center gap-1.5 px-1 text-base font-mono uppercase tracking-wider text-brand-emerald">
+              {t.labVersions.nowLive.replace("{version}", REFINED_VERSION)}
+            </span>
+          ) : (
+            <button
+              type="button"
+              onClick={() => onActivate(REFINED_VERSION)}
+              className="flex h-9 items-center gap-1.5 rounded-lg border border-brand-emerald/40 bg-brand-emerald/10 px-3 text-base font-mono uppercase tracking-wider text-brand-emerald"
+            >
+              <Rocket className="h-3 w-3" aria-hidden />
+              {t.labVersions.activateVersion.replace("{version}", REFINED_VERSION)}
+            </button>
+          ))}
       </div>
     </div>
   );

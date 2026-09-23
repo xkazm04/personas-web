@@ -5,9 +5,20 @@ import { motion, useReducedMotion } from "framer-motion";
 import { usePageVisibility } from "@/hooks/usePageVisibility";
 import { Swords, Check, X } from "lucide-react";
 import { ARENA_ROUNDS } from "../data";
+import type { ArenaSide } from "../ledger";
+import { useTranslation } from "@/i18n/useTranslation";
 import TabBackdrop from "./TabBackdrop";
 
-export default function ArenaTab() {
+/** Contender labels project from the version ledger (`arenaContenders`), so
+ *  the arena and the version rail name — and rate — the same versions. */
+export default function ArenaTab({
+  contenders,
+  liveId,
+}: {
+  contenders: Record<ArenaSide, string>;
+  liveId: string;
+}) {
+  const { t } = useTranslation();
   const reduced = useReducedMotion() ?? false;
   // Ambient round cycle: stop advancing rounds into a backgrounded tab.
   const tabHidden = usePageVisibility();
@@ -98,8 +109,13 @@ export default function ArenaTab() {
                     {side}
                   </div>
                   <div className="text-base font-mono text-foreground/70">
-                    Version {side === "A" ? "v4.2" : "v4.3-challenger"}
+                    Version {contenders[side]}
                   </div>
+                  {contenders[side] === liveId && (
+                    <span className="text-base font-mono uppercase tracking-wider text-brand-emerald">
+                      {t.labVersions.live}
+                    </span>
+                  )}
                 </div>
                 {isWinner && (
                   <motion.div
