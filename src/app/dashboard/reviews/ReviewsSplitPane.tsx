@@ -8,6 +8,7 @@ import { EASE_CURVE, fadeUp, staggerContainer } from "@/lib/animations";
 import { useReviewBulkActions } from "@/hooks/useReviewBulkActions";
 import { usePolling } from "@/hooks/usePolling";
 import { useTranslation } from "@/i18n/useTranslation";
+import { orderByDue } from "@/lib/review-sla";
 import { useReviewStore } from "@/stores/reviewStore";
 import { ReviewDetailPanel } from "./reviews-split-pane/ReviewDetailPanel";
 import { ReviewList } from "./reviews-split-pane/ReviewList";
@@ -15,7 +16,7 @@ import { ReviewsBulkToolbar } from "./reviews-split-pane/ReviewsBulkToolbar";
 import { ReviewsSplitPaneToasts } from "./reviews-split-pane/ReviewsSplitPaneToasts";
 import { useReviewKeyboardShortcuts } from "./reviews-split-pane/useReviewKeyboardShortcuts";
 
-export default function ReviewsSplitPane() {
+export default function ReviewsSplitPane({ now }: { now: number }) {
   const { t } = useTranslation();
   const reviews = useReviewStore((s) => s.reviews);
   const reviewsLoading = useReviewStore((s) => s.reviewsLoading);
@@ -23,6 +24,7 @@ export default function ReviewsSplitPane() {
   const decide = useReviewStore((s) => s.decide);
   const checkEscalations = useReviewStore((s) => s.checkEscalations);
   const escalationEnabled = useReviewStore((s) => s.escalationEnabled);
+  const policy = useReviewStore((s) => s.escalationPolicy);
   const [filter, setFilter] = useState("all");
   const [selectedIdRaw, setSelectedId] = useState<string | null>(null);
 
@@ -39,12 +41,9 @@ export default function ReviewsSplitPane() {
 
   const filtered = useMemo(() => {
     const list = filter === "all" ? reviews : reviews.filter((r) => r.status === filter);
-    return [...list].sort((a, b) => {
-      if (a.status === "pending" && b.status !== "pending") return -1;
-      if (a.status !== "pending" && b.status === "pending") return 1;
-      return new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime();
-    });
-  }, [reviews, filter]);
+    // Pending by SLA deadline (most overdue first), then decided newest-first.
+    return orderByDue(list, policy, now);
+  }, [reviews, filter, policy, now]);
 
   const bulk = useReviewBulkActions(filtered);
   const bulkCount = bulk.selectedIds.size;
@@ -104,7 +103,7 @@ export default function ReviewsSplitPane() {
               <ReviewsBulkToolbar bulkCount={bulkCount} pendingInFiltered={bulk.pendingInFiltered} bulkResolving={bulk.bulkResolving} clearSelection={bulk.clearSelection} selectAll={bulk.selectAll} handleBulkAction={bulk.handleBulkAction} />
             )}
           </AnimatePresence>
-          <ReviewList listRef={listRef} filtered={filtered} selectedId={selectedId} selectedIds={bulk.selectedIds} toggleSelect={bulk.toggleSelect} setSelectedId={setSelectedId} />
+          <ReviewList listRef={listRef} now={now} filtered={filtered} selectedId={selectedId} selectedIds={bulk.selectedIds} toggleSelect={bulk.toggleSelect} setSelectedId={setSelectedId} />
           {reviewsLoading && (
             <div className="flex-shrink-0 flex items-center justify-center gap-1.5 py-1.5 border-t border-glass bg-white/[0.02]">
               <Loader2 className="h-3 w-3 animate-spin text-muted-dark" />
@@ -115,7 +114,7 @@ export default function ReviewsSplitPane() {
         <div className="w-[60%] flex flex-col">
           <AnimatePresence mode="wait">
             <motion.div key={selectedReview?.id ?? "empty"} initial={{ opacity: 0, x: 10 }} animate={{ opacity: 1, x: 0 }} exit={{ opacity: 0, x: -10 }} transition={{ duration: 0.15, ease: EASE_CURVE }} className="h-full">
-              <ReviewDetailPanel review={selectedReview} onResolve={(id, status) => decide([id], status)} />
+              <ReviewDetailPanel review={selectedReview} now={now} onResolve={(id, status) => decide([id], status)} />
             </motion.div>
           </AnimatePresence>
         </div>

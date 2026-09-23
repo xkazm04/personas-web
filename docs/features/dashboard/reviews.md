@@ -12,6 +12,8 @@ The operator can **approve**, **reject**, or **skip** an item, by click or by ke
 
 Every human verdict, on every path (button, key, focus card, bulk toolbar, retry), shows at once and is saved after a **5-second undo** window. Reviewer notes typed in the detail panel travel with the verdict however it was given.
 
+**Due-soonest triage.** Every pending review carries an SLA clock ("Due in 16 min." on the row, "Was due 16 hours ago" in the detail header and on the focus card): neutral while on track, amber once past its urgency threshold, rose once past its SLA. The queue is ordered by that deadline, so the most overdue review is on top (an old `info` review can outrank a fresh `critical` one), the page header shows "Overdue: N", and focus flow walks the queue in the same order: resolve the top card and the next most urgent follows.
+
 Beyond the manual click/keyboard path, pending items age against an **escalation SLA** (per severity): once the SLA expires the system either auto-approves or auto-escalates, so nothing risky sits forever and the rest of the fleet keeps moving. A separate **voice** option can read new review requests aloud. The value: a single human-in-the-loop gate that keeps unsafe actions from shipping while keeping throughput high.
 
 ## How it works
@@ -35,17 +37,23 @@ Rules the table enforces: a disjoint arm while a window is open **commits the op
 
 **Undo toast.** `ReviewUndoToast` (exported from `ReviewsSplitPaneToasts.tsx`, mounted by the split pane and by focus flow) renders `UndoToast` from `ledger.window`, keyed by `batchId`. `UndoToast` only displays the window's `deadline`; it owns no expiry timer.
 
-**Split-pane sorting & selection.** `ReviewsSplitPane.tsx:40` filters by status then sorts pending-first, newest-first. Selection state is derived (`selectedId` falls back to the first row), and the selected row is `scrollIntoView`'d on change. Per-row keyboard handling lives in `useReviewKeyboardShortcuts` (`j`/`k` move, `a`/`r` call `decide` for the pending selection, `Esc` clears a bulk selection); all handlers bail when focus is in an `INPUT`/`TEXTAREA`/`SELECT`.
+**The SLA rule** (`src/lib/review-sla.ts`, pure, every function takes `now`). `slaState(review, policy, now)` returns `{ phase: ok | due-soon | overdue, remainingMs (negative once overdue, never clamped), dueAt, urgency }`; an unparseable `createdAt` is treated as due now. On top of it: `orderByDue` (pending by `dueAt` ascending, ties by severity then age; decided rows after, newest-first by `createdAt` as before), `countOverdue`, `focusQueue` (pending ids in due order), `reconcileFocusQueue`, `escalationDue`, `validateEscalationPolicy` and `formatDue` (`Intl.RelativeTimeFormat`, so no per-unit strings live in the locales; minutes under 1 h, hours under 48 h, days beyond). The order keys on `dueAt`, which does not move with `now`, so the ticking clock never reshuffles a list. Nothing else multiplies `slaMinutes` (source scan in `review-sla.test.ts`).
+
+**Rows inside the undo window.** The ledger overlay is the truth everywhere: a row whose verdict is in the open 5 s window is a decided row. It sorts with the decided group, shows no clock, does not count as overdue, cannot be escalated and leaves the focus walk. Undo puts it back in exactly its due slot (and at the front of the focus walk). Tested in `review-sla.test.ts` and `src/stores/reviewStore.sla.test.ts`.
+
+**The clock** (`review-due.tsx`). `useReviewClock()` is the queue's one `now`: a lazy `useState(() => Date.now())`, re-sampled every 30 s while the tab is visible (`usePageVisibility`; a hidden tab stops it and it re-samples on return). Under reduced motion (`useStillMotion`) it is static, sampled on mount and on each return to the tab, never ticking in place. `page.tsx` owns it and passes `now` to the split pane (rows, detail) and focus flow; `/m/reviews` passes none, so `ReviewsFocusFlow` runs its own. `DueChip` renders the chip (design.md pill recipe) for pending rows only; the page header renders "Overdue: N" from `countOverdue`.
+
+**Split-pane sorting & selection.** `ReviewsSplitPane` filters by status then orders with `orderByDue`. Selection state is derived (`selectedId` falls back to the first row), and the selected row is `scrollIntoView`'d on change. Per-row keyboard handling lives in `useReviewKeyboardShortcuts` (`j`/`k` move, `a`/`r` call `decide` for the pending selection, `Esc` clears a bulk selection); all handlers bail when focus is in an `INPUT`/`TEXTAREA`/`SELECT`.
 
 **Bulk selection** (`useReviewBulkActions.ts`). Selection is a `Set<string>`; the shift-click anchor is stored as an *id* (not index) so polling/sorting can't make it point at the wrong row. Rejects go through a `ConfirmDialog` first; then the selection is passed to `decide`. The hook holds no timer or commit logic.
 
-**Focus flow queue.** `ReviewsFocusFlow` keeps its walk order in `queue` and reconciles it when the pending set changes (`reconcileQueue`): a decided card leaves because the overlay makes it non-pending; an undone or failed one returns to the front; new arrivals go to the back. Progress counts ids decided in this session that are no longer pending.
+**Focus flow queue.** `ReviewsFocusFlow` starts its walk from `focusQueue` (due order) and reconciles it when the pending set changes (`reconcileFocusQueue` in `review-sla.ts`): a decided card leaves because the overlay makes it non-pending; an undone or failed one returns to the front; new arrivals go to the back in due order; a skipped card stays where the operator put it. Progress counts ids decided in this session that are no longer pending.
 
 **Polling.** Split-pane runs `usePolling(fetchReviews, 15_000, true)` and, when escalation is enabled, a 30s `checkEscalations` interval. A `reviewFetchSeq` guards against out-of-order responses.
 
-**Escalation** (`reviewStore.ts:350`). `checkEscalations` scans pending, non-escalated items; if an item's age exceeds the per-severity `slaMinutes` it either `auto_approve`s (awaited resolve) or marks `escalatedAt`. Concurrency is triple-guarded: a per-id `escalationsInFlight` Set, a per-tab `escalationRunning` flag, and a cross-tab Web Lock (`navigator.locks.request("review-escalations", { ifAvailable: true })`) so only one tab runs the pass. Background tabs (`visibilityState === "hidden"`) skip entirely. The policy is persisted in `localStorage` and field-validated on load (partial/corrupt rules fall back to defaults with an aggregated Sentry warning).
+**Escalation** (`reviewStore.ts`, `checkEscalations`). It scans the overlaid `reviews` and acts where `escalationDue(review, policy, now)` holds (pending, not yet escalated, action not `none`, phase `overdue`): it either `auto_approve`s (awaited resolve) or marks `escalatedAt`. Concurrency is triple-guarded: a per-id `escalationsInFlight` Set, a per-tab `escalationRunning` flag, and a cross-tab Web Lock (`navigator.locks.request("review-escalations", { ifAvailable: true })`) so only one tab runs the pass. Background tabs (`visibilityState === "hidden"`) skip entirely. The policy is persisted in `localStorage`; both the load and `setEscalationPolicy` run `validateEscalationPolicy` (partial/corrupt rules fall back to defaults; the load emits an aggregated Sentry warning).
 
-**Urgency vs SLA** (`reviewUtils.ts`). `getUrgencyLevel` drives a cosmetic glow at shorter thresholds (critical 5m / warning 30m / info 120m) than the escalation SLAs (30m / 240m / 480m). A module-load assertion enforces `SLA >= urgency threshold` so a row can never auto-resolve while still rendering as calm.
+**Urgency vs SLA** (`review-sla.ts`). The urgency thresholds (critical 5m / warning 30m / info 120m) mark `due-soon`; the escalation SLAs (defaults 30m / 240m / 480m) mark `overdue`. `SLA >= urgency threshold` is enforced on **every** policy that enters the store: `validateEscalationPolicy` rejects a shorter SLA (`"<sev>.slaMinutes: below urgency threshold"`) and falls back to the default, and a module-load assertion checks the default itself, so a row can never auto-resolve while still rendering as calm. `reviewUtils.ts` re-exports the thresholds and `getUrgencyLevel` delegates to `slaState`.
 
 **Voice** (`useReviewVoice.ts`, `review-voice.ts`). A tiny framework-free pub/sub bus: `emitNewReview` (from realtime sync or the settings Preview button) fans out to `onNewReview` subscribers; `useReviewVoice` composes "New {severity} review from {persona}: {title}" and speaks it via Web Speech — only when `useReviewVoiceStore.enabled` is true. `speak` de-dups across tabs with a per-id Web Lock; `pickVoice` selects the best available voice from a curated, quality-ordered list per locale.
 
@@ -54,7 +62,9 @@ Rules the table enforces: a disjoint arm while a window is open **commits the op
 ## Key files
 | File | Role |
 | --- | --- |
-| `src/app/dashboard/reviews/page.tsx` | Route entry; header + split/focus mode toggle |
+| `src/app/dashboard/reviews/page.tsx` | Route entry; header ("Overdue: N") + split/focus mode toggle; owns the page clock |
+| `src/app/dashboard/reviews/review-due.tsx` | `useReviewClock` (the one `now`, visibility- and reduced-motion-gated) + `DueChip` |
+| `src/lib/review-sla.ts` | The one SLA rule: `slaState`, `orderByDue`, `countOverdue`, `focusQueue`, `reconcileFocusQueue`, `escalationDue`, `validateEscalationPolicy`, `formatDue`, `DEFAULT_ESCALATION_POLICY` (tests: `review-sla.test.ts`, `reviewFixtures.test.ts`, `src/stores/reviewStore.sla.test.ts`) |
 | `src/app/dashboard/reviews/ReviewsSplitPane.tsx` | List + detail layout; polling, escalation interval, filtering/sorting, keyboard wiring |
 | `src/app/dashboard/reviews/ReviewsFocusFlow.tsx` | One-card-at-a-time queue; `a`/`r`/`s`/`Esc` handling |
 | `src/app/dashboard/reviews/reviews-split-pane/ReviewList.tsx` · `ReviewRow.tsx` | Scrollable list + per-row render (select box, severity dot, status dot, parse-error flag) |
@@ -70,13 +80,13 @@ Rules the table enforces: a disjoint arm while a window is open **commits the op
 | `src/hooks/useReviewVoice.ts` | Bridges new-review signals to Web Speech |
 | `src/stores/reviewStore.ts` | Review state, ledger + its one timer, `decide`/`undoDecision`/`flushDecisions`, drafts, fetch, escalation policy + `checkEscalations` |
 | `src/stores/reviewVoiceStore.ts` | `enabled` toggle for voice (localStorage-persisted) |
-| `src/lib/reviewUtils.ts` | Urgency level, SLA countdown, audit analytics |
+| `src/lib/reviewUtils.ts` | Urgency level (delegates to `review-sla.ts`), audit analytics |
 | `src/lib/review-voice.ts` · `review-voice-data.ts` | Speech pub/sub + announcement composition; curated voice list |
 | `src/components/{UndoToast,BulkProgressBar,BulkResultToast,ConfirmDialog}.tsx` | Shared toast/dialog primitives consumed by the bulk flow |
 | `src/components/dashboard/BatchReviewModal.tsx` + `batch-review-modal/*` | Generic conflict-decision modal — used by the **Memories** page, not the review queue (see gotcha) |
 
 ## Data & state
-- **Source:** `manual_review` `PersonaEvent`s from `api.listEvents` — backed by mocks (`src/lib/mockData.ts`, e.g. the "Proposed Incident Mitigation" critical item) in demo mode; live data goes through the external orchestrator. Persona name/icon/color are joined from `usePersonaStore`.
+- **Source:** `manual_review` `PersonaEvent`s from `api.listEvents` — backed by mocks (`src/lib/mockData.ts`, `ev4`-`ev6` and `ev9`-`ev11`: 5 pending, of which 2 overdue, 2 due soon, 1 on track) in demo mode. The seeds are the ones the incident log describes (`inc_15` = `ev9`, `inc_9` = `ev10`), name fleet-roster personas only, and the pending count every badge shows (nav, mobile tab bar, Home triage, `/m/overview`) is pinned in `reviewFixtures.test.ts`; live data goes through the external orchestrator. Persona name/icon/color are joined from `usePersonaStore`.
 - **Stores:**
   - `useReviewStore` — `reviews` (overlaid), `baseReviews`, `reviewsLoading`, `pendingReviewCount`, `ledger`, `drafts`, `commitProgress`, `lastResult`, `refusal`, `escalationPolicy`, `escalationEnabled`. Actions: `fetchReviews`, `decide`, `undoDecision`, `flushDecisions`, `setDraft`, `dismissResult`, `resolveReview` (machine actors only), `checkEscalations`, `setEscalationPolicy`, `setEscalationEnabled`, `reset` (flushes an open window first). Escalation prefs persist in `localStorage` (`review-escalation-policy`, `review-escalation-enabled`) and survive sign-out; `reset` clears review data only.
   - `useReviewVoiceStore` — `enabled` + `setEnabled`, persisted to `localStorage` (`review-voice-enabled`), off by default, not reset on sign-out.
@@ -88,7 +98,7 @@ Rules the table enforces: a disjoint arm while a window is open **commits the op
 - **Persona store** — joins persona name/icon/color into each item; `PersonaAvatar`/`StatusBadge` for rendering.
 - **Shared primitives** — `UndoToast`, `BulkProgressBar`, `BulkResultToast`, `ConfirmDialog` (all consumed by the bulk flow); `FilterBar` for the status pills; `usePolling`, `useFocusTrap`.
 - **Realtime / voice** — `emitNewReview` is driven by realtime sync and the Settings "Preview" button; the voice toggle lives in `t.settingsPage.notifications.voice`.
-- **i18n** — namespaces `t.reviewsPage.*` (focus, parseError, undo), `t.dashboardUi.*` (most labels), `t.dashboard.reviews` (nav label), `t.guide…dashboardReviews` (product description), `t.memoriesPage.conflicts.*` (BatchReviewModal).
+- **i18n** — namespaces `t.reviewsPage.*` (focus, parseError, undo, sla), `t.dashboardUi.*` (most labels), `t.dashboard.reviews` (nav label), `t.guide…dashboardReviews` (product description), `t.memoriesPage.conflicts.*` (BatchReviewModal).
 - **Telemetry** — Sentry warnings on escalation-policy validation failures and voice errors.
 
 ## Conventions & gotchas
@@ -99,7 +109,8 @@ Rules the table enforces: a disjoint arm while a window is open **commits the op
 - **Verdict door:** never call `resolveReview` or `api.updateEvent` from a review surface; go through `decide` so the verdict gets the window, the overlap guard, the notes and the teardown flush. Keep `flushDecisions()` in the unmount of every surface that shows the undo toast.
 - **Derived counts:** `reviews` and `pendingReviewCount` are written only by `derive()` in `reviewStore.ts` (source scan in `review-ledger.test.ts`). Write `baseReviews` and re-derive; never patch `reviews` directly or the overlay is lost.
 - **Escalation concurrency:** auto-approve/escalate is a persistent write — keep all three guards (`escalationsInFlight`, `escalationRunning`, the cross-tab Web Lock) if you refactor `checkEscalations`, or you'll get duplicate audit rows/webhooks.
-- **Urgency < SLA invariant:** `reviewUtils.ts` throws at module load if any escalation SLA is shorter than its urgency threshold — respect it when tuning timings.
+- **Urgency < SLA invariant:** `validateEscalationPolicy` (`review-sla.ts`) refuses any SLA shorter than its urgency threshold on every policy it sees, and the module throws at load if the default breaks it. Respect it when tuning timings.
+- **One SLA rule, one clock:** never compute SLA age inline (a source scan fails on `slaMinutes *` outside `review-sla.ts`), and never call `Date.now()` in render: take `now` from `useReviewClock` or the page's prop. Adding a manual_review seed moves every pending badge; update the pinned count in `reviewFixtures.test.ts` on purpose.
 - **BatchReviewModal naming trap:** despite the "Review" name and its `batch-review-modal/` folder, `BatchReviewModal` operates on `MemoryItem` conflicts via `t.memoriesPage.conflicts.*` and belongs to the **Memories** page, not this queue. The review queue's batching lives in `useReviewBulkActions` + `ReviewsBulkToolbar`.
 - **ShortcutsHud not mounted:** `ShortcutsFooter`/`ShortcutsOverlay` aren't rendered by the reviews page today; the actual key handling is in `useReviewKeyboardShortcuts` and `ReviewsFocusFlow`. If you wire the HUD in, keep `REVIEW_SHORTCUTS` in sync with the real handlers.
 - **Demo-only:** the whole surface runs on mocks. To extend safely, add fields to `ManualReviewItem` + `parseManualReview`, seed `mockData.ts`, and keep `resolveReview`'s event-status mapping (`approved↔processed`, `rejected↔failed`) intact.

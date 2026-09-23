@@ -4,51 +4,43 @@ import { useEffect, useMemo, useState } from "react";
 import { AnimatePresence } from "framer-motion";
 
 import { useTranslation } from "@/i18n/useTranslation";
+import { focusQueue, reconcileFocusQueue } from "@/lib/review-sla";
 import { useReviewStore } from "@/stores/reviewStore";
 
 import { FocusEmptyState } from "./reviews-focus-flow/FocusEmptyState";
 import { FocusProgressHeader } from "./reviews-focus-flow/FocusProgressHeader";
 import { FocusReviewCard } from "./reviews-focus-flow/FocusReviewCard";
 import { ReviewUndoToast } from "./reviews-split-pane/ReviewsSplitPaneToasts";
-
-/** Keep the walk order for ids still pending; ids this session decided that
- *  came back (undo, failed write) go to the front, new arrivals to the back. */
-function reconcileQueue(queue: string[], pendingIds: string[], decided: ReadonlySet<string>): string[] {
-  const pending = new Set(pendingIds);
-  const kept = queue.filter((id) => pending.has(id));
-  const known = new Set(kept);
-  const added = pendingIds.filter((id) => !known.has(id));
-  return [...added.filter((id) => decided.has(id)), ...kept, ...added.filter((id) => !decided.has(id))];
-}
+import { useReviewClock } from "./review-due";
 
 interface Props {
   onExit: () => void;
+  /** The page's clock; /m/reviews passes none and the flow runs its own. */
+  now?: number;
 }
 
-export default function ReviewsFocusFlow({ onExit }: Props) {
+export default function ReviewsFocusFlow({ onExit, now: pageNow }: Props) {
   const { t } = useTranslation();
   const reviews = useReviewStore((state) => state.reviews);
   const decide = useReviewStore((state) => state.decide);
+  const policy = useReviewStore((state) => state.escalationPolicy);
+  const ownNow = useReviewClock(pageNow === undefined);
+  const now = pageNow ?? ownNow;
 
-  const pendingAll = useMemo(
-    () => reviews.filter((review) => review.status === "pending"),
-    [reviews],
-  );
+  // Pending ids in SLA order (most overdue first). The order keys on each
+  // row's deadline, so the ticking clock never reshuffles the walk.
+  const pendingIds = useMemo(() => focusQueue(reviews, policy, now), [reviews, policy, now]);
 
-  const [queue, setQueue] = useState<string[]>(() =>
-    pendingAll.map((review) => review.id),
-  );
+  const [queue, setQueue] = useState<string[]>(() => pendingIds);
   // Ids decided in this session; one that is pending again (undo / failed
   // write) stops counting as processed and returns to the front of the queue.
   const [decided, setDecided] = useState<ReadonlySet<string>>(() => new Set());
-  const [prevPendingKey, setPrevPendingKey] = useState(
-    pendingAll.map((review) => review.id).join("|"),
-  );
+  const [prevPendingKey, setPrevPendingKey] = useState(pendingIds.join("|"));
 
-  const nextKey = pendingAll.map((review) => review.id).join("|");
+  const nextKey = pendingIds.join("|");
   if (nextKey !== prevPendingKey) {
     setPrevPendingKey(nextKey);
-    setQueue((currentQueue) => reconcileQueue(currentQueue, pendingAll.map((review) => review.id), decided));
+    setQueue((currentQueue) => reconcileFocusQueue(currentQueue, pendingIds, decided));
   }
 
   // Flush-on-teardown: leaving focus (Esc, route change, /m tab switch)
@@ -64,7 +56,7 @@ export default function ReviewsFocusFlow({ onExit }: Props) {
     () => reviews.filter((review) => decided.has(review.id) && review.status !== "pending").length,
     [reviews, decided],
   );
-  const total = pendingAll.length + processedCount;
+  const total = pendingIds.length + processedCount;
   const position = processedCount + 1;
 
   // The card leaves the queue because the ledger's overlay makes it
@@ -141,6 +133,7 @@ export default function ReviewsFocusFlow({ onExit }: Props) {
         <FocusReviewCard
           key={current.id}
           review={current}
+          now={now}
           labels={{
             parseErrorDetail: t.reviewsPage.parseError.detail,
             parseErrorLabel: t.reviewsPage.parseError.label,

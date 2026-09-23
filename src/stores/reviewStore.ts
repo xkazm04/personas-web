@@ -8,8 +8,6 @@ import type {
   ManualReviewItem,
   ReviewSeverity,
   ReviewStatus,
-  EscalationAction,
-  EscalationRule,
   EscalationPolicy,
 } from "@/lib/types";
 import {
@@ -25,6 +23,9 @@ import {
   type RefusalReason,
   type Verdict,
 } from "@/lib/review-ledger";
+import { DEFAULT_ESCALATION_POLICY, escalationDue, validateEscalationPolicy } from "@/lib/review-sla";
+
+export { DEFAULT_ESCALATION_POLICY };
 
 const REVIEW_SEVERITIES: Set<string> = new Set<string>(["critical", "warning", "info"]);
 let reviewFetchSeq = 0;
@@ -96,63 +97,9 @@ function parseManualReview(
 
 const ESCALATION_POLICY_KEY = "review-escalation-policy";
 
-export const DEFAULT_ESCALATION_POLICY: EscalationPolicy = {
-  critical: { slaMinutes: 30, action: "escalate" },
-  warning: { slaMinutes: 240, action: "escalate" },
-  info: { slaMinutes: 480, action: "auto_approve" },
-};
-
-const VALID_ESCALATION_ACTIONS: ReadonlySet<string> = new Set<EscalationAction>([
-  "auto_approve",
-  "escalate",
-  "none",
-]);
-
-function isEscalationAction(v: unknown): v is EscalationAction {
-  return typeof v === "string" && VALID_ESCALATION_ACTIONS.has(v);
-}
-
-function isFinitePositive(v: unknown): v is number {
-  return typeof v === "number" && Number.isFinite(v) && v > 0;
-}
-
-// Field-by-field validator. Missing fields silently fall back to the default;
-// explicitly invalid values fall back AND get added to `rejections` so the
-// caller can emit a single aggregated Sentry warning. This is the safety net
-// the bug description called out: a partial/corrupt persisted policy like
-// `{"critical":{}}` used to spread over the defaults, leaving rule.action
-// undefined and rule.slaMinutes NaN, which silently disabled escalation
-// across all severities.
-function validateEscalationRule(
-  raw: unknown,
-  defaults: EscalationRule,
-  severity: ReviewSeverity,
-  rejections: string[],
-): EscalationRule {
-  if (raw === undefined || raw === null) return defaults;
-  if (typeof raw !== "object") {
-    rejections.push(`${severity}: stored as ${typeof raw}, expected object`);
-    return defaults;
-  }
-  const rec = raw as Record<string, unknown>;
-  let action: EscalationAction = defaults.action;
-  let slaMinutes: number = defaults.slaMinutes;
-  if (rec.action !== undefined) {
-    if (isEscalationAction(rec.action)) {
-      action = rec.action;
-    } else {
-      rejections.push(`${severity}.action: invalid value`);
-    }
-  }
-  if (rec.slaMinutes !== undefined) {
-    if (isFinitePositive(rec.slaMinutes)) {
-      slaMinutes = rec.slaMinutes;
-    } else {
-      rejections.push(`${severity}.slaMinutes: not finite positive`);
-    }
-  }
-  return { action, slaMinutes };
-}
+// The policy's defaults and its field validator (including the SLA >= urgency
+// threshold invariant) live in src/lib/review-sla.ts, the one SLA rule. Every
+// policy that enters the store passes through it.
 
 function loadEscalationPolicy(): EscalationPolicy {
   let raw: string | null;
@@ -186,28 +133,7 @@ function loadEscalationPolicy(): EscalationPolicy {
     );
     return DEFAULT_ESCALATION_POLICY;
   }
-  const rec = parsed as Record<string, unknown>;
-  const rejections: string[] = [];
-  const policy: EscalationPolicy = {
-    critical: validateEscalationRule(
-      rec.critical,
-      DEFAULT_ESCALATION_POLICY.critical,
-      "critical",
-      rejections,
-    ),
-    warning: validateEscalationRule(
-      rec.warning,
-      DEFAULT_ESCALATION_POLICY.warning,
-      "warning",
-      rejections,
-    ),
-    info: validateEscalationRule(
-      rec.info,
-      DEFAULT_ESCALATION_POLICY.info,
-      "info",
-      rejections,
-    ),
-  };
+  const { policy, rejections } = validateEscalationPolicy(parsed);
   if (rejections.length > 0) {
     Sentry.captureMessage(
       "reviewStore: escalation policy in localStorage failed field validation; rejected fields fell back to defaults",
@@ -469,7 +395,10 @@ export const useReviewStore = create<ReviewState>((set, get) => {
         ),
       );
     },
-    setEscalationPolicy: (policy) => {
+    setEscalationPolicy: (next) => {
+      // Same validator as the localStorage load: an SLA shorter than its
+      // urgency threshold (or any invalid field) falls back to the default.
+      const { policy } = validateEscalationPolicy(next);
       saveEscalationPolicy(policy);
       set({ escalationPolicy: policy });
     },
@@ -500,16 +429,11 @@ export const useReviewStore = create<ReviewState>((set, get) => {
         const { reviews, escalationPolicy, resolveReview } = get();
         const now = Date.now();
         for (const review of reviews) {
-          if (review.status !== "pending") continue;
-          if (review.escalatedAt) continue;
+          // One SLA rule (review-sla.ts). A row inside the undo window is
+          // non-pending in the overlay, so a human verdict beats the machine.
+          if (!escalationDue(review, escalationPolicy, now)) continue;
           if (escalationsInFlight.has(review.id)) continue;
-
           const rule = escalationPolicy[review.severity];
-          if (rule.action === "none") continue;
-
-          const ageMs = now - new Date(review.createdAt).getTime();
-          const slaMs = rule.slaMinutes * 60_000;
-          if (ageMs < slaMs) continue;
 
           escalationsInFlight.add(review.id);
           try {

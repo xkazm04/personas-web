@@ -6,13 +6,16 @@ import { useTranslation } from "@/i18n/useTranslation";
 import { relativeTime } from "@/lib/format";
 import type { ManualReviewItem } from "@/lib/types";
 import { useReviewStore } from "@/stores/reviewStore";
+import { DueChip } from "../review-due";
 import { reviewSeverityConfig } from "./reviewSeverityConfig";
 
 export function ReviewDetailPanel({
   review,
+  now,
   onResolve,
 }: {
   review: ManualReviewItem | null;
+  now: number;
   /** Notes are not passed: the store's `decide` reads the draft for the id. */
   onResolve: (id: string, status: "approved" | "rejected") => void;
 }) {
@@ -66,6 +69,7 @@ export function ReviewDetailPanel({
               <SevIcon className={`h-3 w-3 ${sev.color}`} />
               <span className={`text-sm font-medium capitalize ${sev.color}`}>{review.severity}</span>
               <span className="text-sm text-muted-dark">{relativeTime(review.createdAt)}</span>
+              <DueChip review={review} now={now} />
               {review.resolvedAt && (
                 <span className="text-sm text-muted-dark">
                   {t.observabilityPage.resolved} {relativeTime(review.resolvedAt)}

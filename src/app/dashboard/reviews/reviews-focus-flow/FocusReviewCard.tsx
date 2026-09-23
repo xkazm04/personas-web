@@ -11,16 +11,19 @@ import PersonaAvatar from "@/components/dashboard/PersonaAvatar";
 import { relativeTime } from "@/lib/format";
 import type { ManualReviewItem } from "@/lib/types";
 
+import { DueChip } from "../review-due";
 import { focusSeverityConfig } from "./focusSeverityConfig";
 
 export function FocusReviewCard({
   review,
+  now,
   labels,
   onApprove,
   onReject,
   onSkip,
 }: {
   review: ManualReviewItem;
+  now: number;
   labels: {
     parseErrorDetail: string;
     parseErrorLabel: string;
@@ -75,6 +78,7 @@ export function FocusReviewCard({
             <span className="text-sm text-muted-dark">
               {relativeTime(review.createdAt)}
             </span>
+            <DueChip review={review} now={now} />
           </div>
 
           {review.parseError && (

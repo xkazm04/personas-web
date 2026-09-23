@@ -1,82 +1,19 @@
 import type { ManualReviewItem, ReviewSeverity } from "@/lib/types";
-import { DEFAULT_ESCALATION_POLICY } from "@/stores/reviewStore";
+import { DEFAULT_ESCALATION_POLICY, URGENCY_THRESHOLD_MINUTES, slaState } from "@/lib/review-sla";
 
 /**
- * Visual urgency thresholds (minutes) per severity level.
- *
- * These drive the **UI-only** urgency glow in the review queue via
- * {@link getUrgencyLevel}. They are intentionally shorter than the escalation
- * SLA timers defined in `DEFAULT_ESCALATION_POLICY` (reviewStore.ts):
- *
- * | Severity | Urgency threshold | Escalation SLA |
- * |----------|-------------------|----------------|
- * | critical | 5 min             | 30 min         |
- * | warning  | 30 min            | 240 min (4 h)  |
- * | info     | 120 min (2 h)     | 480 min (8 h)  |
- *
- * **Urgency** is a cosmetic indicator — it makes the row glow to attract
- * attention but triggers no automated action.
- *
- * **Escalation SLA** (in reviewStore) drives real automated behaviour: once
- * the SLA expires the system either auto-approves or escalates depending on
- * the configured {@link EscalationPolicy}.
- *
- * The invariant `escalation SLA >= urgency threshold` must always hold; if it
- * doesn't, a review could be auto-approved while the UI still shows a calm
- * (non-urgent) state.  A runtime assertion below enforces this.
+ * Visual urgency thresholds (minutes) per severity. The SLA rule, its table and
+ * the `SLA >= urgency threshold` invariant live in `review-sla.ts`; this
+ * module re-exports the thresholds for existing readers.
  */
-export const severityThresholdMinutes: Record<ReviewSeverity, number> = {
-  critical: 5,
-  warning: 30,
-  info: 120,
-};
-
-// Runtime assertion: escalation SLA must always be >= urgency threshold.
-// Fires at module-load time so misconfigurations surface immediately.
-for (const sev of Object.keys(severityThresholdMinutes) as ReviewSeverity[]) {
-  const urgency = severityThresholdMinutes[sev];
-  const sla = DEFAULT_ESCALATION_POLICY[sev].slaMinutes;
-  if (sla < urgency) {
-    throw new Error(
-      `[reviewUtils] Escalation SLA for "${sev}" (${sla}m) is shorter than its urgency threshold (${urgency}m). ` +
-        `This would allow automated actions before the UI signals urgency.`,
-    );
-  }
-}
+export const severityThresholdMinutes: Readonly<Record<ReviewSeverity, number>> = URGENCY_THRESHOLD_MINUTES;
 
 /**
- * Urgency level: 0 when below threshold, ramps 0→1 over the next 2x threshold
- * (so full urgency at 3x the threshold).
+ * Urgency level: 0 when below threshold, ramps 0->1 over the next 2x threshold
+ * (so full urgency at 3x the threshold). Delegates to `slaState`.
  */
 export function getUrgencyLevel(createdAt: string, severity: ReviewSeverity, now = Date.now()): number {
-  const ageMs = now - new Date(createdAt).getTime();
-  const thresholdMs = severityThresholdMinutes[severity] * 60_000;
-  if (ageMs < thresholdMs) return 0;
-  return Math.min((ageMs - thresholdMs) / (thresholdMs * 2), 1);
-}
-
-/**
- * SLA countdown: returns remaining time, a human-readable label, and whether SLA expired.
- */
-export function getSlaCountdown(
-  createdAt: string,
-  slaMinutes: number,
-  now = Date.now(),
-): { remainingMs: number; label: string; expired: boolean } {
-  const slaMs = slaMinutes * 60_000;
-  const elapsed = now - new Date(createdAt).getTime();
-  const remainingMs = slaMs - elapsed;
-
-  if (remainingMs <= 0) return { remainingMs: 0, label: "Expired", expired: true };
-
-  const totalSec = Math.ceil(remainingMs / 1000);
-  const h = Math.floor(totalSec / 3600);
-  const m = Math.floor((totalSec % 3600) / 60);
-  const s = totalSec % 60;
-
-  if (h > 0) return { remainingMs, label: `${h}h ${m}m`, expired: false };
-  if (m > 0) return { remainingMs, label: `${m}m ${s}s`, expired: false };
-  return { remainingMs, label: `${s}s`, expired: false };
+  return slaState({ createdAt, severity }, DEFAULT_ESCALATION_POLICY, now).urgency;
 }
 
 export interface AuditAnalytics {

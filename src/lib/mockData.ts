@@ -568,6 +568,54 @@ export const MOCK_EVENTS: PersonaEvent[] = [
     useCaseId: null,
     createdAt: ago(60),
   },
+  // Review-queue seeds, so the SLA order has something to show: with ev4/ev5
+  // the pending queue is 2 overdue, 2 due soon, 1 on track. ev9 is the review
+  // inc_15 describes ("pending 3h, approaching its 4h SLA"); ev10 is the one
+  // inc_9 describes (a critical past its 30 min SLA when inc_9 was detected,
+  // 55 min ago). reviewFixtures.test.ts holds them to the fleet roster and to
+  // those incidents, and pins the pending count every badge shows.
+  {
+    id: id("ev", 9),
+    projectId: "mock-project",
+    eventType: "manual_review",
+    sourceType: "execution",
+    sourceId: id("e", 4),
+    targetPersonaId: id("p", 1),
+    payload: JSON.stringify({ title: "Override Failing Check on Dependency Bump", description: "The agent wants to approve PR #339 (bump axios 1.6 -> 1.7) although the flaky e2e check failed twice.\n\nEvidence:\n- Same spec failed on main yesterday\n- Unit and type checks green\n- Changelog lists no breaking changes", severity: "warning" }),
+    status: "pending",
+    errorMessage: null,
+    processedAt: null,
+    useCaseId: null,
+    createdAt: ago(180),
+  },
+  {
+    id: id("ev", 10),
+    projectId: "mock-project",
+    eventType: "manual_review",
+    sourceType: "execution",
+    sourceId: null,
+    targetPersonaId: id("p", 4),
+    payload: JSON.stringify({ title: "Revoke Leaked Deploy Token", description: "A deploy token for acme/infra was found in a public gist. The agent wants to revoke it now, which will fail any pipeline still using it until the new token is rolled out.\n\nBlast radius:\n- 3 CI pipelines\n- 1 scheduled backup job", severity: "critical" }),
+    status: "pending",
+    errorMessage: null,
+    processedAt: null,
+    useCaseId: null,
+    createdAt: ago(85),
+  },
+  {
+    id: id("ev", 11),
+    projectId: "mock-project",
+    eventType: "manual_review",
+    sourceType: "execution",
+    sourceId: null,
+    targetPersonaId: id("p", 3),
+    payload: JSON.stringify({ title: "Add Two Repositories to the Digest", description: "The agent wants to include acme/mobile and acme/docs in tomorrow's standup digest. Both repositories had activity from 4 team members this week.", severity: "info" }),
+    status: "pending",
+    errorMessage: null,
+    processedAt: null,
+    useCaseId: null,
+    createdAt: ago(20),
+  },
 ];
 
 // ---------------------------------------------------------------------------
