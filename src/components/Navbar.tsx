@@ -15,6 +15,7 @@ import NavbarLogoGlyph from "./NavbarLogoGlyph";
 const WaitlistModal = dynamic(() => import("./WaitlistModal"), { ssr: false });
 import { useTranslation } from "@/i18n/useTranslation";
 import { DOWNLOAD_ENDPOINT, DOWNLOAD_PLAN } from "@/lib/release";
+import { trackDownloadClick } from "@/lib/analytics";
 import { useMobileMenu } from "./navbar/useMobileMenu";
 import { detectPlatformKey, type PlatformKey } from "./waitlist-modal/waitlistUtils";
 
@@ -52,6 +53,9 @@ export default function Navbar() {
     // Same rule as every other download CTA and /api/download: go to the
     // installer only when the release plan says this platform downloads.
     if (DOWNLOAD_PLAN.platforms[key] === "download") {
+      // Report before leaving the page. The waitlist branch below reports
+      // itself as waitlist_open { entry_point: "navbar" } when the modal opens.
+      trackDownloadClick(DOWNLOAD_PLAN, "navbar", key);
       window.location.assign(DOWNLOAD_ENDPOINT);
       return;
     }

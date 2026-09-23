@@ -52,8 +52,11 @@ export function trackPageView(page: string) {
 }
 
 /** Which "Download" CTA was clicked. Every download CTA reports itself, so the
- *  funnel can tell the hero, the pricing offer and the download section apart. */
-export type DownloadPlacement = "download-cta" | "hero" | "pricing";
+ *  funnel can tell the hero, the pricing offer, the download section and the
+ *  navbar apart. The navbar reports only its installer branch: its waitlist
+ *  branch opens the modal, which reports `waitlist_open` with `entry_point:
+ *  "navbar"` instead. */
+export type DownloadPlacement = "download-cta" | "hero" | "pricing" | "navbar";
 
 /**
  * `download_click` attributes under this build's release plan. `outcome` is

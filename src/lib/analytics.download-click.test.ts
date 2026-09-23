@@ -38,6 +38,14 @@ describe("downloadClickAttributes", () => {
     });
   });
 
+  it("the navbar reports its installer click as the navbar placement", () => {
+    expect(downloadClickAttributes(LIVE, "navbar", "windows")).toEqual({
+      platform: "windows",
+      placement: "navbar",
+      outcome: "installer",
+    });
+  });
+
   it("carries nothing but platform, placement and outcome (no PII can ride along)", () => {
     expect(Object.keys(downloadClickAttributes(LIVE, "download-cta", "windows")).sort()).toEqual([
       "outcome",
@@ -74,5 +82,21 @@ describe("every download CTA reports its placement", () => {
     ["src/components/sections/DownloadCTA.tsx", "download-cta"],
   ])("%s calls trackDownloadClick with placement %s", (rel, placement) => {
     expect(read(rel)).toMatch(new RegExp(`trackDownloadClick\\(DOWNLOAD_PLAN,\\s*"${placement}"`));
+  });
+
+  it("the navbar reports download_click on its live-installer branch, before leaving the page", () => {
+    // The navbar picks per platform: an installer when the plan says this
+    // platform downloads (a full-page navigation), otherwise the waitlist modal,
+    // which reports itself as waitlist_open { entry_point: "navbar" }. Only the
+    // installer branch was silent. It must report BEFORE location.assign, and
+    // with the visitor's key - on this branch that key IS the installer's platform.
+    const src = read("src/components/Navbar.tsx");
+    const branch = src.match(/if \(DOWNLOAD_PLAN\.platforms\[key\] === "download"\) \{([\s\S]*?)\n {4}\}/);
+    expect(branch, "the live-installer branch").not.toBeNull();
+    const body = branch![1];
+    const track = body.indexOf('trackDownloadClick(DOWNLOAD_PLAN, "navbar", key)');
+    const leave = body.indexOf("window.location.assign(DOWNLOAD_ENDPOINT)");
+    expect(track, "trackDownloadClick in the installer branch").toBeGreaterThanOrEqual(0);
+    expect(leave).toBeGreaterThan(track);
   });
 });
