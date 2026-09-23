@@ -9,6 +9,8 @@
 // module/child id shape and the TOPIC_MODULE_MAP export intact.
 // ────────────────────────────────────────────────────────────────────
 
+import { SHIPPED_DESKTOP_PLUGINS } from "../desktop-plugins";
+
 export interface DesktopModule {
   id: string;
   label: string;
@@ -132,13 +134,11 @@ export const DESKTOP_MODULES: DesktopModule[] = [
     id: "plugins",
     label: "Plugins",
     icon: "Puzzle",
+    // Derived from the desktop plugin manifest (src/data/desktop-plugins.ts):
+    // edit that file, not this list, when the desktop plugin roster changes.
     children: [
       { id: "browse", label: "Browse" },
-      { id: "artist", label: "Artist" },
-      { id: "dev-tools", label: "Dev Tools" },
-      { id: "drive", label: "Drive" },
-      { id: "twin", label: "Twin" },
-      { id: "obsidian-brain", label: "Obsidian Brain" },
+      ...SHIPPED_DESKTOP_PLUGINS.map((p) => ({ id: p.id, label: p.label })),
     ],
   },
   {

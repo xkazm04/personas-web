@@ -6,12 +6,13 @@ import SectionWrapper from "@/components/SectionWrapper";
 import SectionIntro from "@/components/primitives/SectionIntro";
 import { staggerContainer } from "@/lib/animations";
 import { PLUGINS } from "./data";
+import { DEFAULT_SHOWCASE_KEY, SHOWCASE_INTRO } from "./roster";
 import type { PluginKey } from "./types";
 import PluginTabs from "./components/PluginTabs";
 import PluginCard from "./components/PluginCard";
 
 export default function Plugins() {
-  const [active, setActive] = useState<PluginKey>("dev-tools");
+  const [active, setActive] = useState<PluginKey>(DEFAULT_SHOWCASE_KEY);
 
   const [variantByPlugin, setVariantByPlugin] = useState<
     Record<PluginKey, string>
@@ -44,7 +45,7 @@ export default function Plugins() {
         <SectionIntro
           heading="Everything to"
           gradient="plug in"
-          description="Four purpose-built plugins shipped with Personas. Each one is a self-contained workspace your agents can drive, reuse shared credentials, and compose together. Switch a tab, meet a new specialist."
+          description={SHOWCASE_INTRO}
           className="mb-0"
         />
       </motion.div>

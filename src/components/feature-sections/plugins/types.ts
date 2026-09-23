@@ -1,10 +1,12 @@
 import type { LucideIcon } from "lucide-react";
+import type { ShowcaseKey } from "./roster";
 
-export type PluginKey =
-  | "artist"
-  | "dev-tools"
-  | "obsidian-brain"
-  | "research-lab";
+/**
+ * A showcased plugin's key. Derived from the roster, whose keys must be
+ * `shipped` in the desktop manifest (src/data/desktop-plugins.ts), so a removed
+ * plugin is a type error here rather than a tab on the page.
+ */
+export type PluginKey = ShowcaseKey;
 
 export interface VariantDef {
   key: string;
