@@ -621,7 +621,11 @@
             "src/data/guide/locales/zh/content/troubleshooting.ts",
             "src/data/guide/locales/zh/topics.ts",
             "scripts/i18n/guide-drift.mjs",
-            "src/lib/guide-drift.test.ts"
+            "src/lib/guide-drift.test.ts",
+            "scripts/i18n/emit-guide-status.mjs",
+            "src/data/guide/translation-status.ts",
+            "src/data/guide/getLocalized.test.ts",
+            "src/components/guide/TranslationNotice.tsx"
           ],
           "target": null,
           "apiRoutes": []
