@@ -15,7 +15,9 @@ import { CHROME_PAD_TOPIC, CHROME_TOC_STICKY } from "@/components/guide/guide-ch
 import { extractHeadings } from "@/components/guide/guide-markdown/extractHeadings";
 import type { GuideHeading } from "@/components/guide/guide-markdown/extractHeadings";
 import { TOPIC_MODULE_MAP } from "@/data/guide/desktop-modules";
-import { getLocalizedTopic } from "@/data/guide/getLocalized";
+import TranslationNotice from "@/components/guide/TranslationNotice";
+import { resolveTopicUnit } from "@/data/guide/getLocalized";
+import type { TopicUnitPreference, TopicUnitResolution } from "@/data/guide/getLocalized";
 import { useTranslation } from "@/i18n/useTranslation";
 import { useI18nStore } from "@/stores/i18nStore";
 import type { GuideCategory, GuideTopic } from "@/data/guide/types";
@@ -37,27 +39,25 @@ export default function TopicView({ category, topic, content, initialHeadings, p
   const didMountRef = useRef(false);
   // Locale-aware swap. The server renders the English content (no locale
   // signal in the URL or cookie today), and once the i18nStore hydrates on
-  // the client we re-resolve through getLocalizedTopic. Currently the
-  // i18nStore is hard-locked to 'en' (setLanguage is a no-op) — so this
-  // hook is dormant infrastructure until the locale switcher is wired up.
-  // When that day comes, no further change is needed here: the title,
-  // description, and body will swap independently with English fallback.
+  // the client we re-resolve through resolveTopicUnit, which serves ONE whole
+  // unit: the current translation, or - when the translation predates the
+  // current English - the whole English page with the older translation one
+  // tap away (`prefer`). The switcher is gated (LANGUAGE_SWITCHER_ENABLED), so
+  // in production this stays on the English path.
   const language = useI18nStore((s) => s.language);
-  const [localized, setLocalized] = useState({
-    title: topic.title,
-    description: topic.description,
-    body: content,
-  });
+  const [prefer, setPrefer] = useState<TopicUnitPreference | undefined>(undefined);
+  const [localized, setLocalized] = useState<TopicUnitResolution>(() => englishUnit(topic, content));
 
-  // Reset to the English content whenever the locale or topic changes. Done in
-  // render via the prev-state pattern (not in an effect) to satisfy React 19's
-  // "no synchronous setState in an effect" rule. For non-en locales this is the
-  // fallback shown until the async swap below resolves.
+  // Reset to the English content (and the reader's default preference) whenever
+  // the locale or topic changes. Done in render via the prev-state pattern (not
+  // in an effect) to satisfy React 19's "no synchronous setState in an effect"
+  // rule. For non-en locales this is the unit shown until the async swap resolves.
   const resetKey = `${language}|${topic.id}`;
   const [prevResetKey, setPrevResetKey] = useState(resetKey);
   if (resetKey !== prevResetKey) {
     setPrevResetKey(resetKey);
-    setLocalized({ title: topic.title, description: topic.description, body: content });
+    setPrefer(undefined);
+    setLocalized(englishUnit(topic, content));
   }
 
   // Skip the client parse on the initial render — page.tsx already extracted
@@ -79,13 +79,14 @@ export default function TopicView({ category, topic, content, initialHeadings, p
   useEffect(() => {
     if (language === "en") return;
     let cancelled = false;
-    getLocalizedTopic(language, topic.id, content).then((next) => {
+    const english = { title: topic.title, description: topic.description, body: content };
+    resolveTopicUnit(language, topic.id, english, { prefer }).then((next) => {
       if (!cancelled) setLocalized(next);
     });
     return () => {
       cancelled = true;
     };
-  }, [language, topic.id, content]);
+  }, [language, topic.id, topic.title, topic.description, content, prefer]);
 
   // On client-side topic change (prev/next nav or search), move focus to the
   // topic <h1> so screen-reader/keyboard users land on the new content and hear
@@ -148,7 +149,10 @@ export default function TopicView({ category, topic, content, initialHeadings, p
         )}
 
         {/* Content */}
-        <article className="mt-8">
+        <article
+          className="mt-8"
+          lang={localized.status === "source" ? undefined : localized.unit === "canonical" ? "en" : language}
+        >
           <h1
             ref={contentH1Ref}
             id="guide-topic-content"
@@ -166,6 +170,12 @@ export default function TopicView({ category, topic, content, initialHeadings, p
             <Clock className="h-3.5 w-3.5" aria-hidden="true" />
             {readingMinutes} min read
           </div>
+          {localized.alternate && (
+            <TranslationNotice
+              showing={localized.unit}
+              onToggle={() => setPrefer(localized.unit === "canonical" ? "translation" : "canonical")}
+            />
+          )}
           <div className="mt-8">
             <GuideMarkdown content={localized.body} />
           </div>
@@ -242,4 +252,15 @@ export default function TopicView({ category, topic, content, initialHeadings, p
       </div>
     </div>
   );
+}
+
+function englishUnit(topic: GuideTopic, content: string): TopicUnitResolution {
+  return {
+    title: topic.title,
+    description: topic.description,
+    body: content,
+    unit: "canonical",
+    status: "source",
+    alternate: null,
+  };
 }
