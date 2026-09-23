@@ -3,11 +3,34 @@ import BulkProgressBar from "@/components/BulkProgressBar";
 import BulkResultToast from "@/components/BulkResultToast";
 import ConfirmDialog from "@/components/ConfirmDialog";
 import UndoToast from "@/components/UndoToast";
+import { useTranslation } from "@/i18n/useTranslation";
+import { useReviewStore } from "@/stores/reviewStore";
+
+/** The decision ledger's open window, shown as an undo toast. Mounted by both
+ *  the split pane and the focus flow (desktop and /m), so every verdict path
+ *  shows the same 5 s undo. */
+export function ReviewUndoToast() {
+  const { t } = useTranslation();
+  const open = useReviewStore((s) => s.ledger.window);
+  const refusal = useReviewStore((s) => s.refusal);
+  const undoDecision = useReviewStore((s) => s.undoDecision);
+  const copy = t.reviewsPage.undo;
+  return (
+    <AnimatePresence>
+      {open && (
+        <UndoToast
+          key={open.batchId}
+          message={(open.verdict === "approved" ? copy.approved : copy.rejected).replace("{count}", String(open.ids.length))}
+          deadline={open.deadline}
+          onUndo={undoDecision}
+          notice={refusal?.reason === "overlap" && refusal.batchId === open.batchId ? copy.refused : undefined}
+        />
+      )}
+    </AnimatePresence>
+  );
+}
 
 export function ReviewsSplitPaneToasts({
-  undoState,
-  handleUndo,
-  handleUndoExpire,
   bulkProgress,
   bulkResult,
   dismissBulkResult,
@@ -19,9 +42,6 @@ export function ReviewsSplitPaneToasts({
   rejectTitle,
   rejectBody,
 }: {
-  undoState: { message: string } | null;
-  handleUndo: () => void;
-  handleUndoExpire: () => void;
   bulkProgress: { done: number; total: number; failed: number } | null;
   bulkResult: { total: number; successCount: number; failedIds: string[]; status: "approved" | "rejected" } | null;
   dismissBulkResult: () => void;
@@ -33,13 +53,12 @@ export function ReviewsSplitPaneToasts({
   rejectTitle: string;
   rejectBody: string;
 }) {
+  const windowOpen = useReviewStore((s) => s.ledger.window !== null);
   return (
     <>
+      <ReviewUndoToast />
       <AnimatePresence>
-        {undoState && <UndoToast message={undoState.message} durationMs={5000} onUndo={handleUndo} onExpire={handleUndoExpire} />}
-      </AnimatePresence>
-      <AnimatePresence>
-        {bulkProgress && !undoState && (
+        {bulkProgress && !windowOpen && (
           <BulkProgressBar
             done={bulkProgress.done}
             total={bulkProgress.total}

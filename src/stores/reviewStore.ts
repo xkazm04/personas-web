@@ -12,6 +12,19 @@ import type {
   EscalationRule,
   EscalationPolicy,
 } from "@/lib/types";
+import {
+  IDLE_LEDGER,
+  applyConfirmed,
+  countPending,
+  overlay,
+  transition,
+  type LedgerBatch,
+  type LedgerEffect,
+  type LedgerEvent,
+  type LedgerState,
+  type RefusalReason,
+  type Verdict,
+} from "@/lib/review-ledger";
 
 const REVIEW_SEVERITIES: Set<string> = new Set<string>(["critical", "warning", "info"]);
 let reviewFetchSeq = 0;
@@ -251,102 +264,229 @@ async function withCrossTabLock<T>(
 }
 
 // ---------------------------------------------------------------------------
+// Decision ledger plumbing — the store owns the one commit timer
+// ---------------------------------------------------------------------------
+
+// Cap concurrent PATCHes so a 100-item bulk approve doesn't thunder against the
+// orchestrator. Workers share a cursor so each id is claimed exactly once.
+const COMMIT_CONCURRENCY = 6;
+let windowTimer: { batchId: number; handle: ReturnType<typeof setTimeout> } | null = null;
+
+function writeVerdict(id: string, status: Verdict, notes?: string) {
+  return api.updateEvent(id, {
+    status: status === "approved" ? "processed" : "failed",
+    metadata: notes ? JSON.stringify({ reviewerNotes: notes }) : undefined,
+  });
+}
+
+/** The only place `reviews` and `pendingReviewCount` are derived. */
+function derive(baseReviews: ManualReviewItem[], ledger: LedgerState) {
+  const reviews = overlay(baseReviews, ledger);
+  return { baseReviews, ledger, reviews, pendingReviewCount: countPending(reviews) };
+}
+
+export interface CommitResult {
+  batchId: number;
+  total: number;
+  successCount: number;
+  failedIds: string[];
+  status: Verdict;
+}
+
+// ---------------------------------------------------------------------------
 // Store
 // ---------------------------------------------------------------------------
 
 interface ReviewState {
+  /** Server rows with the ledger's verdicts painted over them (`overlay`). */
   reviews: ManualReviewItem[];
+  /** Last server truth, before the overlay. */
+  baseReviews: ManualReviewItem[];
   reviewsLoading: boolean;
   pendingReviewCount: number;
+  ledger: LedgerState;
+  /** Reviewer-note drafts keyed by review id; every verdict path carries them. */
+  drafts: Record<string, string>;
+  /** Progress of an in-flight multi-row commit. */
+  commitProgress: { batchId: number; done: number; total: number; failed: number } | null;
+  /** Last commit that had failures (retry toast + reselect). */
+  lastResult: CommitResult | null;
+  /** Last refused arm; shown on the open undo toast. */
+  refusal: { reason: RefusalReason; batchId: number | null } | null;
   escalationPolicy: EscalationPolicy;
   escalationEnabled: boolean;
-  /** When true, automatic polling consumers (e.g. ReviewsSplitPane's usePolling)
-   *  must skip fetching. Set during the optimistic-undo window so a server poll
-   *  doesn't overwrite the local optimistic state and produce a status flicker. */
-  pollPaused: boolean;
   fetchReviews: () => Promise<void>;
-  resolveReview: (id: string, status: "approved" | "rejected", notes?: string) => Promise<void>;
+  /** The one door for every human verdict: opens a 5 s undoable window.
+   *  Returns false when the ledger refused the arm (see `refusal`). */
+  decide: (ids: string[], verdict: Verdict) => boolean;
+  undoDecision: () => void;
+  /** Teardown: commit the open window now (unmount, pagehide, sign-out). */
+  flushDecisions: () => void;
+  setDraft: (id: string, text: string) => void;
+  dismissResult: () => void;
+  /** Immediate write for machine actors (escalation). Humans go through `decide`. */
+  resolveReview: (id: string, status: Verdict, notes?: string) => Promise<void>;
   setEscalationPolicy: (policy: EscalationPolicy) => void;
   setEscalationEnabled: (enabled: boolean) => void;
-  setPollPaused: (paused: boolean) => void;
   checkEscalations: () => Promise<void>;
   reset: () => void;
 }
 
-export const useReviewStore = create<ReviewState>((set, get) => ({
-  reviews: [],
-  reviewsLoading: false,
-  pendingReviewCount: 0,
-  escalationPolicy: DEFAULT_ESCALATION_POLICY,
-  escalationEnabled: typeof window !== "undefined" && localStorage.getItem("review-escalation-enabled") === "true",
-  pollPaused: false,
-  fetchReviews: async () => {
-    // Skip the fetch entirely while an optimistic-undo window is open — a
-    // mid-window poll otherwise replaces the optimistic "approved"/"rejected"
-    // rows with the server's still-pending shape and produces a visible
-    // status flicker (and worse, lets a click on Undo race against a fresh
-    // array). Manual fetches that *want* to bypass the pause should use a
-    // separate path; the polling consumer respects it.
-    if (get().pollPaused) return;
-    const seq = ++reviewFetchSeq;
-    set({ reviewsLoading: true });
-    try {
-      const events = await api.listEvents({ eventType: "manual_review", limit: 100 });
-      const personas = usePersonaStore.getState().personas;
-      const personaMap = new Map(personas.map((p) => [p.id, p]));
-      const reviews = events
-        .map((e) => parseManualReview(e, personaMap))
-        .filter((r): r is ManualReviewItem => r !== null);
-      if (seq === reviewFetchSeq) {
-        set({
-          reviews,
-          pendingReviewCount: reviews.filter((r) => r.status === "pending").length,
-        });
-      }
-    } catch {
-      // leave stale
-    } finally {
-      if (seq === reviewFetchSeq) {
-        set({ reviewsLoading: false });
-      }
+export const useReviewStore = create<ReviewState>((set, get) => {
+  function dispatch(event: LedgerEvent): boolean {
+    const t = transition(get().ledger, event);
+    if (t.refused) {
+      set({ refusal: { reason: t.refused.reason, batchId: get().ledger.window?.batchId ?? null } });
+      return false;
     }
-  },
-  resolveReview: async (id, status, notes) => {
-    const mappedStatus = status === "approved" ? "processed" : "failed";
-    await api.updateEvent(id, {
-      status: mappedStatus,
-      metadata: notes ? JSON.stringify({ reviewerNotes: notes }) : undefined,
-    });
-    set((s) => {
-      const wasPending = s.reviews.find((r) => r.id === id)?.status === "pending";
-      return {
-        reviews: s.reviews.map((r) =>
-          r.id === id ? { ...r, status, resolvedAt: new Date().toISOString(), resolvedBy: "You" } : r,
+    if (t.state === get().ledger) return true;
+    let base = get().baseReviews;
+    if (t.settled) {
+      const { batch, okIds, failedIds } = t.settled;
+      base = applyConfirmed(base, batch, okIds);
+      // A fetch that left before the server had this write would repaint it.
+      reviewFetchSeq++;
+      set((s) => {
+        const drafts = { ...s.drafts };
+        for (const id of okIds) delete drafts[id];
+        return {
+          drafts,
+          commitProgress: s.commitProgress?.batchId === batch.batchId ? null : s.commitProgress,
+          lastResult: failedIds.length
+            ? { batchId: batch.batchId, total: batch.ids.length, successCount: okIds.length, failedIds, status: batch.verdict }
+            : s.lastResult,
+        };
+      });
+    }
+    set({ ...derive(base, t.state), refusal: event.type === "arm" ? null : get().refusal });
+    for (const e of t.effects) runEffect(e);
+    return true;
+  }
+
+  function runEffect(e: LedgerEffect) {
+    if (e.type === "schedule") {
+      if (windowTimer) clearTimeout(windowTimer.handle);
+      const handle = setTimeout(() => {
+        windowTimer = null;
+        dispatch({ type: "expire", batchId: e.batchId });
+      }, Math.max(0, e.deadline - Date.now()));
+      windowTimer = { batchId: e.batchId, handle };
+    } else if (e.type === "cancelTimer") {
+      if (windowTimer?.batchId === e.batchId) {
+        clearTimeout(windowTimer.handle);
+        windowTimer = null;
+      }
+    } else {
+      void commit(e.batch);
+    }
+  }
+
+  async function commit(batch: LedgerBatch) {
+    const { ids, batchId } = batch;
+    const failed: string[] = [];
+    let done = 0;
+    let cursor = 0;
+    if (ids.length > 1) set({ commitProgress: { batchId, done, total: ids.length, failed: 0 } });
+    const worker = async () => {
+      while (cursor < ids.length) {
+        const id = ids[cursor++];
+        try {
+          await writeVerdict(id, batch.verdict, batch.notes[id]);
+        } catch {
+          failed.push(id);
+        } finally {
+          done++;
+          if (get().commitProgress?.batchId === batchId) {
+            set({ commitProgress: { batchId, done, total: ids.length, failed: failed.length } });
+          }
+        }
+      }
+    };
+    await Promise.all(Array.from({ length: Math.min(COMMIT_CONCURRENCY, ids.length) }, worker));
+    dispatch({ type: "settled", batchId, failedIds: failed });
+  }
+
+  return {
+    reviews: [],
+    baseReviews: [],
+    reviewsLoading: false,
+    pendingReviewCount: 0,
+    ledger: IDLE_LEDGER,
+    drafts: {},
+    commitProgress: null,
+    lastResult: null,
+    refusal: null,
+    escalationPolicy: DEFAULT_ESCALATION_POLICY,
+    escalationEnabled: typeof window !== "undefined" && localStorage.getItem("review-escalation-enabled") === "true",
+    fetchReviews: async () => {
+      // No pause flag: the response is overlaid with the ledger at the point it
+      // is applied, so a poll (even one already in flight when a window opened)
+      // cannot repaint a pending verdict.
+      const seq = ++reviewFetchSeq;
+      set({ reviewsLoading: true });
+      try {
+        const events = await api.listEvents({ eventType: "manual_review", limit: 100 });
+        const personas = usePersonaStore.getState().personas;
+        const personaMap = new Map(personas.map((p) => [p.id, p]));
+        const reviews = events
+          .map((e) => parseManualReview(e, personaMap))
+          .filter((r): r is ManualReviewItem => r !== null);
+        if (seq === reviewFetchSeq) {
+          set((s) => derive(reviews, s.ledger));
+        }
+      } catch {
+        // leave stale
+      } finally {
+        if (seq === reviewFetchSeq) {
+          set({ reviewsLoading: false });
+        }
+      }
+    },
+    decide: (ids, verdict) => {
+      const drafts = get().drafts;
+      const notes: Record<string, string> = {};
+      for (const id of ids) if (drafts[id]?.trim()) notes[id] = drafts[id];
+      return dispatch({ type: "arm", ids, verdict, notes, now: Date.now() });
+    },
+    undoDecision: () => {
+      const w = get().ledger.window;
+      if (w) dispatch({ type: "undo", batchId: w.batchId });
+    },
+    flushDecisions: () => {
+      dispatch({ type: "flush" });
+    },
+    setDraft: (id, text) => set((s) => ({ drafts: { ...s.drafts, [id]: text } })),
+    dismissResult: () => set({ lastResult: null }),
+    resolveReview: async (id, status, notes) => {
+      await writeVerdict(id, status, notes);
+      const resolvedAt = new Date().toISOString();
+      set((s) =>
+        derive(
+          s.baseReviews.map((r) =>
+            r.id === id ? { ...r, status, resolvedAt, resolvedBy: "You", reviewerNotes: notes ?? r.reviewerNotes } : r,
+          ),
+          s.ledger,
         ),
-        pendingReviewCount: wasPending ? s.pendingReviewCount - 1 : s.pendingReviewCount,
-      };
-    });
-  },
-  setEscalationPolicy: (policy) => {
-    saveEscalationPolicy(policy);
-    set({ escalationPolicy: policy });
-  },
-  setEscalationEnabled: (enabled) => {
-    localStorage.setItem("review-escalation-enabled", String(enabled));
-    set({ escalationEnabled: enabled });
-  },
-  setPollPaused: (paused) => set({ pollPaused: paused }),
-  reset: () => {
-    // Bump the seq so any in-flight fetch from the previous user can't write back.
-    reviewFetchSeq++;
-    // Preserve escalationPolicy/escalationEnabled — those are browser-level prefs,
-    // not user data, and are also persisted in localStorage.
-    set({
-      reviews: [],
-      reviewsLoading: false,
-      pendingReviewCount: 0,
-    });
-  },
+      );
+    },
+    setEscalationPolicy: (policy) => {
+      saveEscalationPolicy(policy);
+      set({ escalationPolicy: policy });
+    },
+    setEscalationEnabled: (enabled) => {
+      localStorage.setItem("review-escalation-enabled", String(enabled));
+      set({ escalationEnabled: enabled });
+    },
+    reset: () => {
+      // A decision made before sign-out is still the operator's: commit it
+      // rather than drop it, then forget the rows.
+      get().flushDecisions();
+      // Bump the seq so any in-flight fetch from the previous user can't write back.
+      reviewFetchSeq++;
+      // Preserve escalationPolicy/escalationEnabled — those are browser-level prefs,
+      // not user data, and are also persisted in localStorage.
+      set({ ...derive([], get().ledger), reviewsLoading: false, drafts: {}, lastResult: null, refusal: null });
+    },
   checkEscalations: async () => {
     if (escalationRunning) return;
     if (!get().escalationEnabled) return;
@@ -378,11 +518,13 @@ export const useReviewStore = create<ReviewState>((set, get) => ({
               // and so escalationsInFlight covers the whole API round-trip.
               await resolveReview(review.id, "approved", "Auto-approved: SLA expired");
             } else if (rule.action === "escalate") {
-              set((s) => ({
-                reviews: s.reviews.map((r) =>
-                  r.id === review.id ? { ...r, escalatedAt: new Date().toISOString() } : r,
+              const escalatedAt = new Date().toISOString();
+              set((s) =>
+                derive(
+                  s.baseReviews.map((r) => (r.id === review.id ? { ...r, escalatedAt } : r)),
+                  s.ledger,
                 ),
-              }));
+              );
             }
           } finally {
             escalationsInFlight.delete(review.id);
@@ -393,9 +535,12 @@ export const useReviewStore = create<ReviewState>((set, get) => ({
       escalationRunning = false;
     }
   },
-}));
+  };
+});
 
-// Hydrate escalation policy from localStorage on client
+// Hydrate escalation policy from localStorage on client, and commit any open
+// decision window when the page goes away (flush-on-teardown).
 if (typeof window !== "undefined") {
   useReviewStore.setState({ escalationPolicy: loadEscalationPolicy() });
+  window.addEventListener("pagehide", () => useReviewStore.getState().flushDecisions());
 }

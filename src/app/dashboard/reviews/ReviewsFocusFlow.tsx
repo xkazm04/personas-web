@@ -9,6 +9,17 @@ import { useReviewStore } from "@/stores/reviewStore";
 import { FocusEmptyState } from "./reviews-focus-flow/FocusEmptyState";
 import { FocusProgressHeader } from "./reviews-focus-flow/FocusProgressHeader";
 import { FocusReviewCard } from "./reviews-focus-flow/FocusReviewCard";
+import { ReviewUndoToast } from "./reviews-split-pane/ReviewsSplitPaneToasts";
+
+/** Keep the walk order for ids still pending; ids this session decided that
+ *  came back (undo, failed write) go to the front, new arrivals to the back. */
+function reconcileQueue(queue: string[], pendingIds: string[], decided: ReadonlySet<string>): string[] {
+  const pending = new Set(pendingIds);
+  const kept = queue.filter((id) => pending.has(id));
+  const known = new Set(kept);
+  const added = pendingIds.filter((id) => !known.has(id));
+  return [...added.filter((id) => decided.has(id)), ...kept, ...added.filter((id) => !decided.has(id))];
+}
 
 interface Props {
   onExit: () => void;
@@ -17,7 +28,7 @@ interface Props {
 export default function ReviewsFocusFlow({ onExit }: Props) {
   const { t } = useTranslation();
   const reviews = useReviewStore((state) => state.reviews);
-  const resolveReview = useReviewStore((state) => state.resolveReview);
+  const decide = useReviewStore((state) => state.decide);
 
   const pendingAll = useMemo(
     () => reviews.filter((review) => review.status === "pending"),
@@ -27,7 +38,9 @@ export default function ReviewsFocusFlow({ onExit }: Props) {
   const [queue, setQueue] = useState<string[]>(() =>
     pendingAll.map((review) => review.id),
   );
-  const [processedCount, setProcessedCount] = useState(0);
+  // Ids decided in this session; one that is pending again (undo / failed
+  // write) stops counting as processed and returns to the front of the queue.
+  const [decided, setDecided] = useState<ReadonlySet<string>>(() => new Set());
   const [prevPendingKey, setPrevPendingKey] = useState(
     pendingAll.map((review) => review.id).join("|"),
   );
@@ -35,34 +48,35 @@ export default function ReviewsFocusFlow({ onExit }: Props) {
   const nextKey = pendingAll.map((review) => review.id).join("|");
   if (nextKey !== prevPendingKey) {
     setPrevPendingKey(nextKey);
-    setQueue(pendingAll.map((review) => review.id));
-    setProcessedCount(0);
+    setQueue((currentQueue) => reconcileQueue(currentQueue, pendingAll.map((review) => review.id), decided));
   }
+
+  // Flush-on-teardown: leaving focus (Esc, route change, /m tab switch)
+  // commits the open window instead of dropping it.
+  useEffect(() => () => useReviewStore.getState().flushDecisions(), []);
 
   const currentId = queue[0];
   const current = useMemo(
     () => reviews.find((review) => review.id === currentId) ?? null,
     [reviews, currentId],
   );
+  const processedCount = useMemo(
+    () => reviews.filter((review) => decided.has(review.id) && review.status !== "pending").length,
+    [reviews, decided],
+  );
   const total = pendingAll.length + processedCount;
   const position = processedCount + 1;
 
-  function advance() {
-    setQueue((currentQueue) => currentQueue.slice(1));
-    setProcessedCount((count) => count + 1);
-  }
-
-  function handleApprove() {
+  // The card leaves the queue because the ledger's overlay makes it
+  // non-pending, and returns if the verdict is undone or its write fails.
+  // A second verdict inside the 5 s window commits the first (flush-then-arm).
+  function handleVerdict(verdict: "approved" | "rejected") {
     if (!current) return;
-    void resolveReview(current.id, "approved");
-    advance();
+    const id = current.id;
+    if (decide([id], verdict)) setDecided((prev) => new Set(prev).add(id));
   }
-
-  function handleReject() {
-    if (!current) return;
-    void resolveReview(current.id, "rejected");
-    advance();
-  }
+  const handleApprove = () => handleVerdict("approved");
+  const handleReject = () => handleVerdict("rejected");
 
   function handleSkip() {
     setQueue((currentQueue) => [...currentQueue.slice(1), currentQueue[0]].filter(Boolean));
@@ -101,11 +115,14 @@ export default function ReviewsFocusFlow({ onExit }: Props) {
 
   if (!current) {
     return (
-      <FocusEmptyState
-        emptyLabel={t.reviewsPage.focus.empty}
-        exitLabel={t.reviewsPage.focus.exit}
-        onExit={onExit}
-      />
+      <>
+        <FocusEmptyState
+          emptyLabel={t.reviewsPage.focus.empty}
+          exitLabel={t.reviewsPage.focus.exit}
+          onExit={onExit}
+        />
+        <ReviewUndoToast />
+      </>
     );
   }
 
@@ -137,6 +154,7 @@ export default function ReviewsFocusFlow({ onExit }: Props) {
           onSkip={handleSkip}
         />
       </AnimatePresence>
+      <ReviewUndoToast />
     </div>
   );
 }

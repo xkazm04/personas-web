@@ -1,6 +1,6 @@
 "use client";
 
-import { useCallback, useEffect, useMemo, useRef, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import { AnimatePresence, motion } from "framer-motion";
 import { Loader2 } from "lucide-react";
 import FilterBar from "@/components/dashboard/FilterBar";
@@ -20,7 +20,7 @@ export default function ReviewsSplitPane() {
   const reviews = useReviewStore((s) => s.reviews);
   const reviewsLoading = useReviewStore((s) => s.reviewsLoading);
   const fetchReviews = useReviewStore((s) => s.fetchReviews);
-  const resolveReview = useReviewStore((s) => s.resolveReview);
+  const decide = useReviewStore((s) => s.decide);
   const checkEscalations = useReviewStore((s) => s.checkEscalations);
   const escalationEnabled = useReviewStore((s) => s.escalationEnabled);
   const [filter, setFilter] = useState("all");
@@ -70,18 +70,10 @@ export default function ReviewsSplitPane() {
     filtered,
     selectedReview,
     setSelectedId,
-    resolveReview,
+    decide,
     bulkCount,
     clearSelection: bulk.clearSelection,
-    resolveLocked: bulk.undoState !== null || bulk.bulkResolving,
   });
-
-  const handleResolve = useCallback(
-    (id: string, status: "approved" | "rejected", notes?: string) => {
-      void resolveReview(id, status, notes);
-    },
-    [resolveReview],
-  );
 
   const listRef = useRef<HTMLDivElement>(null);
   useEffect(() => {
@@ -123,15 +115,12 @@ export default function ReviewsSplitPane() {
         <div className="w-[60%] flex flex-col">
           <AnimatePresence mode="wait">
             <motion.div key={selectedReview?.id ?? "empty"} initial={{ opacity: 0, x: 10 }} animate={{ opacity: 1, x: 0 }} exit={{ opacity: 0, x: -10 }} transition={{ duration: 0.15, ease: EASE_CURVE }} className="h-full">
-              <ReviewDetailPanel review={selectedReview} onResolve={handleResolve} />
+              <ReviewDetailPanel review={selectedReview} onResolve={(id, status) => decide([id], status)} />
             </motion.div>
           </AnimatePresence>
         </div>
       </motion.div>
       <ReviewsSplitPaneToasts
-        undoState={bulk.undoState}
-        handleUndo={bulk.handleUndo}
-        handleUndoExpire={bulk.handleUndoExpire}
         bulkProgress={bulk.bulkProgress}
         bulkResult={bulk.bulkResult}
         dismissBulkResult={bulk.dismissBulkResult}

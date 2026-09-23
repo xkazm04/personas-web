@@ -1,10 +1,11 @@
-import { useRef, useState } from "react";
-import { AlertOctagon, Bookmark, Check, ClipboardCheck, Clock, Loader2, Terminal, X } from "lucide-react";
+import { useRef } from "react";
+import { AlertOctagon, Bookmark, Check, ClipboardCheck, Clock, Terminal, X } from "lucide-react";
 import PersonaAvatar from "@/components/dashboard/PersonaAvatar";
 import StatusBadge from "@/components/dashboard/StatusBadge";
 import { useTranslation } from "@/i18n/useTranslation";
 import { relativeTime } from "@/lib/format";
 import type { ManualReviewItem } from "@/lib/types";
+import { useReviewStore } from "@/stores/reviewStore";
 import { reviewSeverityConfig } from "./reviewSeverityConfig";
 
 export function ReviewDetailPanel({
@@ -12,20 +13,15 @@ export function ReviewDetailPanel({
   onResolve,
 }: {
   review: ManualReviewItem | null;
-  onResolve: (id: string, status: "approved" | "rejected", notes?: string) => void;
+  /** Notes are not passed: the store's `decide` reads the draft for the id. */
+  onResolve: (id: string, status: "approved" | "rejected") => void;
 }) {
   const { t } = useTranslation();
-  const [notes, setNotes] = useState(review?.reviewerNotes ?? "");
-  const [resolving, setResolving] = useState(false);
-  const [prevReviewKey, setPrevReviewKey] = useState(`${review?.id ?? ""}|${review?.reviewerNotes ?? ""}`);
+  // Drafts live in the review store keyed by id, so the keyboard a/r path and
+  // these buttons carry the same notes, and a draft survives switching rows.
+  const draft = useReviewStore((s) => (review ? s.drafts[review.id] : undefined));
+  const setDraft = useReviewStore((s) => s.setDraft);
   const notesRef = useRef<HTMLTextAreaElement>(null);
-
-  const nextReviewKey = `${review?.id ?? ""}|${review?.reviewerNotes ?? ""}`;
-  if (nextReviewKey !== prevReviewKey) {
-    setPrevReviewKey(nextReviewKey);
-    setNotes(review?.reviewerNotes ?? "");
-    setResolving(false);
-  }
 
   if (!review) {
     return (
@@ -53,14 +49,8 @@ export function ReviewDetailPanel({
   const SevIcon = sev.icon;
   const isPending = review.status === "pending";
 
-  const handleResolve = async (status: "approved" | "rejected") => {
-    setResolving(true);
-    try {
-      onResolve(review.id, status, notes || undefined);
-    } finally {
-      setResolving(false);
-    }
-  };
+  const notes = draft ?? review.reviewerNotes ?? "";
+  const setNotes = (value: string) => setDraft(review.id, value);
 
   return (
     <div className="flex flex-col h-full overflow-hidden">
@@ -87,7 +77,7 @@ export function ReviewDetailPanel({
         </div>
       </div>
       <ReviewDetailContent review={review} notes={notes} setNotes={setNotes} notesRef={notesRef} />
-      {isPending && <ReviewResolveActions resolving={resolving} onResolve={handleResolve} />}
+      {isPending && <ReviewResolveActions onResolve={(status) => onResolve(review.id, status)} />}
     </div>
   );
 }
@@ -170,17 +160,17 @@ function ReviewResolvedNotes({ notes }: { notes: string }) {
   );
 }
 
-function ReviewResolveActions({ resolving, onResolve }: { resolving: boolean; onResolve: (status: "approved" | "rejected") => void }) {
+function ReviewResolveActions({ onResolve }: { onResolve: (status: "approved" | "rejected") => void }) {
   const { t } = useTranslation();
   return (
     <div className="flex-shrink-0 border-t border-glass px-4 py-3 flex items-center gap-2">
-      <button onClick={() => void onResolve("approved")} disabled={resolving} className="flex-1 flex items-center justify-center gap-1.5 rounded-lg border border-emerald-500/30 bg-emerald-500/10 px-4 py-2 text-sm font-medium text-emerald-400 transition-all hover:bg-emerald-500/20 disabled:opacity-50">
-        {resolving ? <Loader2 className="h-3.5 w-3.5 animate-spin" /> : <Check className="h-3.5 w-3.5" />}
+      <button onClick={() => onResolve("approved")} className="flex-1 flex items-center justify-center gap-1.5 rounded-lg border border-emerald-500/30 bg-emerald-500/10 px-4 py-2 text-sm font-medium text-emerald-400 transition-all hover:bg-emerald-500/20">
+        <Check className="h-3.5 w-3.5" />
         {t.reviewsPage.focus.approve}
         <kbd className="ml-1 rounded border border-emerald-500/20 bg-emerald-500/5 px-1 py-px text-sm">A</kbd>
       </button>
-      <button onClick={() => void onResolve("rejected")} disabled={resolving} className="flex-1 flex items-center justify-center gap-1.5 rounded-lg border border-red-500/30 bg-red-500/10 px-4 py-2 text-sm font-medium text-red-400 transition-all hover:bg-red-500/20 disabled:opacity-50">
-        {resolving ? <Loader2 className="h-3.5 w-3.5 animate-spin" /> : <X className="h-3.5 w-3.5" />}
+      <button onClick={() => onResolve("rejected")} className="flex-1 flex items-center justify-center gap-1.5 rounded-lg border border-red-500/30 bg-red-500/10 px-4 py-2 text-sm font-medium text-red-400 transition-all hover:bg-red-500/20">
+        <X className="h-3.5 w-3.5" />
         {t.reviewsPage.focus.reject}
         <kbd className="ml-1 rounded border border-red-500/20 bg-red-500/5 px-1 py-px text-sm">R</kbd>
       </button>
