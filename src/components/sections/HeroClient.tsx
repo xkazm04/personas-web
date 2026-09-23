@@ -13,6 +13,7 @@ import HoneycombMark from "@/components/HoneycombMark";
 import { isMeasuredStat, useLiveStats } from "@/hooks/useLiveStats";
 import { useAnimationPauseRegister } from "@/hooks/useAnimationPause";
 import { useTranslation } from "@/i18n/useTranslation";
+import { DOWNLOAD_PLAN, ctaHref } from "@/lib/release";
 import TourLauncher from "@/components/tour/TourLauncher";
 import CommandCenterIllustration from "./hero/CommandCenterIllustration";
 import HeroStatRow from "./hero/HeroStatRow";
@@ -27,7 +28,6 @@ export default function HeroClient({ connectorCount, templateCount }: { connecto
   ];
   const liveStats = useLiveStats();
   const shouldReduceMotion = useReducedMotion();
-  const DOWNLOAD_URL = process.env.NEXT_PUBLIC_DOWNLOAD_URL;
   // Repo link is env-configurable; fall back to the canonical org used in the
   // footer so the CTA never dead-ends on github.com's generic homepage.
   const GITHUB_URL = process.env.NEXT_PUBLIC_GITHUB_URL ?? "https://github.com/personas-ai";
@@ -143,11 +143,10 @@ export default function HeroClient({ connectorCount, templateCount }: { connecto
           </motion.div>
 
           <motion.div variants={fadeUp} className="mt-12 flex w-full flex-col items-center justify-center gap-6 sm:w-auto sm:flex-row sm:flex-wrap lg:justify-start">
-            {/* Fallback targets the always-present wrapper (page.tsx wrapperId),
-                not the inner id="download" which lives inside a lazy, gated
-                section that isn't in the DOM on first paint. Scrolling to the
-                wrapper brings it into view and mounts the section. */}
-            <PrimaryCTA href={DOWNLOAD_URL ? "/api/download" : "#download-section"} icon={Download} label={t.hero.downloadCta} />
+            {/* /api/download only when the release plan says a download is live
+                (the same rule the route enforces); otherwise the always-present
+                download wrapper, not the inner id="download" of a lazy section. */}
+            <PrimaryCTA href={ctaHref(DOWNLOAD_PLAN)} icon={Download} label={t.hero.downloadCta} />
             <a
               href={GITHUB_URL}
               target="_blank"

@@ -9,6 +9,7 @@ import { fadeUp, staggerContainer } from "@/lib/animations";
 import { RELEASES, CHANGE_TYPE_META, type ChangeType } from "@/data/changelog";
 import { BRAND_VAR, tint, brandShadow } from "@/lib/brand-theme";
 import { formatDateLong as formatDate } from "@/lib/format-date";
+import { latestRelease } from "@/lib/release";
 
 // Labels + brand tokens come from the canonical CHANGE_TYPE_META in the data
 // module; only the per-type icon lives here (it carries a React dependency).
@@ -25,19 +26,9 @@ const releaseSectionId = (version: string) =>
 export default function ChangelogTimeline() {
   // Pick "Latest" by max(date), not by array index — RELEASES has no
   // sort-order invariant, so a contributor adding a 0.12.1 hotfix at the
-  // bottom would otherwise silently mislabel the wrong row.
-  const latestVersion = useMemo(() => {
-    let bestVersion: string | null = null;
-    let bestTs = -Infinity;
-    for (const r of RELEASES) {
-      const ts = Date.parse(r.date);
-      if (!Number.isNaN(ts) && ts > bestTs) {
-        bestTs = ts;
-        bestVersion = r.version;
-      }
-    }
-    return bestVersion;
-  }, []);
+  // bottom would otherwise silently mislabel the wrong row. The rule is the
+  // release authority's, shared with every other "latest release" reader.
+  const latestVersion = useMemo(() => latestRelease(RELEASES)?.version ?? null, []);
 
   return (
     <SectionWrapper id="changelog" aria-label="Changelog">

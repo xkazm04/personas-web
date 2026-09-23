@@ -13,7 +13,7 @@ The conversion surfaces for the not-yet-public desktop app:
 
 **`/api/waitlist`** (`src/app/api/waitlist/route.ts`). `POST` re-validates server-side: email via shared `isValidEmail` (≤254 chars + `EMAIL_RE`, `src/lib/validation.ts`), platform against the `VALID_PLATFORMS` whitelist (`macos`/`windows`/`linux`, `route.ts:47`). **Store selection:** the Supabase branch gates on `hasSupabaseServiceRole()` (`src/lib/server/env.ts`), NOT on `hasSupabaseEnv()` — `harden-voting-rls.sql` revokes all anon grants on `waitlist_entries`, so a URL+anon-only deployment has no writable client and must use the file store (full env matrix in the route header). A Supabase insert failure other than `23505` returns a retryable **503** (`Retry-After: 30`) and is reported to Sentry with the error *code* only, never the email. `GET` counts via three `head: true` / `count: "exact"` queries (one per platform) instead of selecting the whole table. Writes are serialized through `withWriteLock("waitlist", …)` to avoid TOCTOU races (`route.ts:142`), deduped by an in-memory `email:platform` Set, and appended to `.data/waitlist.json` via an atomic tmp-file rename (`src/lib/server/json-file-store.ts`). `GET` returns `{ counts: { macos, windows, linux } }` served from an in-memory count map. Per-IP sliding-window rate limits: 5 POST/min, 30 GET/min (`route.ts:51`).
 
-**`/api/download`** (`src/app/api/download/route.ts`). At **module load** it validates `NEXT_PUBLIC_DOWNLOAD_URL` once: parseable URL, `https:` protocol, and hostname in `ALLOWED_DOWNLOAD_HOSTS` (github + `*.personas.app` CDNs, `route.ts:10`). Any failure → `DOWNLOAD_URL = null` + a one-time Sentry `captureMessage` warning. `GET` 302s to the validated URL, or `redirect("/#download")` when null.
+**`/api/download`** (`src/app/api/download/route.ts`). At **module load** it resolves the installer URL once through `resolveDownloadUrl` from the release authority `src/lib/release.ts`: parseable URL, `https:` protocol, and hostname in `ALLOWED_DOWNLOAD_HOSTS` (github + `*.personas.app` CDNs, now declared in `release.ts`). Any failure → `DOWNLOAD_URL = null`; a misconfiguration (parse/protocol/host, not an empty env) also logs a one-time Sentry `captureMessage` warning. Every client CTA reads `downloadPlan`, built on the same resolution, so client and route agree. `GET` 302s to the validated URL, or `redirect("/#download")` when null.
 
 **Success animation.** `AnimatedCheckmark` (`waitlist-modal/AnimatedCheckmark.tsx`) draws a circle + check via framer-motion `pathLength` variants, gated on `useReducedMotion` (reduced → both strokes mount at `pathLength: 1`, so the cue still lands without the draw-on). The swap to the success/duplicate panel is announced through a persistent `aria-live="polite"` region that lives in the modal shell, outside the form↔panel swap. The duplicate path shows a static `Info` icon instead. Share copies `${origin}?ref=waitlist&platform=…` via `navigator.clipboard`, falling back to a hidden-textarea `execCommand("copy")` (`waitlistUtils.ts:8`), then to a manual "copy this link" input.
 
@@ -22,6 +22,7 @@ The conversion surfaces for the not-yet-public desktop app:
 | --- | --- |
 | `src/app/api/waitlist/route.ts` | GET counts / POST signup; validation, dedup, rate limit, file store |
 | `src/app/api/download/route.ts` | Allowlisted https redirect to the release artifact, else `/#download` |
+| `src/lib/release.ts` | Release authority shared with the client: `ALLOWED_DOWNLOAD_HOSTS`, `resolveDownloadUrl`, `rejectionMessage`, `downloadPlan` |
 | `src/components/WaitlistModal.tsx` | Modal shell: state machine, fetch, focus trap, share, Sentry |
 | `src/components/waitlist-modal/WaitlistForm.tsx` | Email input + early-beta checkbox + submit button |
 | `src/components/waitlist-modal/WaitlistHeader.tsx` | Platform icon, title, "people waiting" count, close |
@@ -36,7 +37,7 @@ The conversion surfaces for the not-yet-public desktop app:
 | `src/lib/validation.ts` | Shared `isValidEmail` (server source of truth) |
 
 ## Data & state
-- **Source:** Waitlist entries persisted to `.data/waitlist.json` on the local filesystem (dev-only — see gotchas). Counts/dedup held in module-scope in-memory `Map`/`Set`, rebuilt on first read. Download target comes from the `NEXT_PUBLIC_DOWNLOAD_URL` build-time env var.
+- **Source:** Waitlist entries persisted to `.data/waitlist.json` on the local filesystem (dev-only — see gotchas). Counts/dedup held in module-scope in-memory `Map`/`Set`, rebuilt on first read. Download target comes from the `NEXT_PUBLIC_DOWNLOAD_URL` build-time env var, read only by `src/lib/release.ts`.
 - **Stores:** No Zustand. `WaitlistModal` uses local component state (`status`, `email`, `submittedEmail`, `earlyBeta`, `waitlistCount`, `shareState`, `errorMsg`). The module-level count cache lives in `waitlistCounts.ts`. The modal is gated by an `open` prop from its parent (Download CTA / Navbar).
 - **API routes:** `GET /api/waitlist` → `{ counts }`; `POST /api/waitlist` → `{ message, count }`, `{ message, duplicate: true }`, or `{ error, code }` with 400 / 429 / **503 (retryable)**; `GET /api/download` → 302 redirect.
 - **Types:** `PlatformKey` (`windows`/`macos`/`linux`), `WaitlistStatus`, `ShareState` (`waitlistUtils.ts`); `WaitlistEntry`/`WaitlistData` (route-local); `t.waitlist` shape (`src/i18n/en.ts:780`).
@@ -63,7 +64,7 @@ The conversion surfaces for the not-yet-public desktop app:
 - **Double-submit is guarded on the handler, not the button:** the submit button is `disabled` while loading, but Enter in the email input still fires form submit, so `handleSubmit` returns early on `status === "loading"`. Removing that guard makes a held Enter key post N times and insert N rows.
 - **Share-copy timer is owned by a ref:** `markCopied` parks its 2s handle in `copyTimerRef` and the modal clears it on close *and* on unmount. It used to be a bare `setTimeout` that fired into an unmounted component.
 - **The manual-copy input focuses via a callback ref, not `autoFocus`:** it renders inside an `AnimatePresence` child, where `autoFocus` can grab focus while the node is still animating; the callback ref runs only on attach (and gets `null` on detach).
-- **Two independent download surfaces:** the CTA `/api/download` redirect and the navbar CTA are unrelated; the modal does not touch `/api/download` or `NEXT_PUBLIC_DOWNLOAD_URL`.
+- **One rule for every download surface:** the navbar CTA, the download CTA, the hero and pricing CTAs and `/api/download` all read `src/lib/release.ts`. The navbar sends the visitor to `/api/download` only when `DOWNLOAD_PLAN.platforms[detectPlatformKey()]` is `"download"`, and otherwise opens this modal; the modal itself does not touch `/api/download` or the env.
 
 ## Related docs
 - [Get Started & Download CTA](../marketing/get-started.md)

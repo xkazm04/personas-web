@@ -7,10 +7,9 @@ import PrimaryCTA from "@/components/PrimaryCTA";
 import { SectionIntro } from "@/components/primitives";
 import { fadeUp, staggerContainer } from "@/lib/animations";
 import { useTranslation } from "@/i18n/useTranslation";
+import { DOWNLOAD_PLAN, ctaHref } from "@/lib/release";
 import { FEATURE_GROUPS } from "./data";
 import FeatureGroupCard from "./FeatureGroupCard";
-
-const DOWNLOAD_URL = process.env.NEXT_PUBLIC_DOWNLOAD_URL;
 
 /**
  * Landing section — re-labelled from the old Pricing tiers to a feature-group
@@ -47,7 +46,7 @@ export default function Pricing() {
         </p>
         <div className="mt-5 flex justify-center">
           <PrimaryCTA
-            href={DOWNLOAD_URL ? "/api/download" : "#download-section"}
+            href={ctaHref(DOWNLOAD_PLAN)}
             icon={Download}
             label={t.compareSection.ctaLabel}
           />

@@ -13,6 +13,8 @@ import { useTranslation } from "@/i18n/useTranslation";
 import { fadeUp } from "@/lib/animations";
 import { trackDownloadClick, type WaitlistEntryPoint } from "@/lib/analytics";
 import { pickWaitlistPlatform } from "@/lib/landing-address";
+import { DOWNLOAD_PLAN, RELEASE_DATE_ENV, RELEASE_TITLE, SITE_VERSION, latestRelease, releasePulseDate } from "@/lib/release";
+import { RELEASES } from "@/data/changelog";
 import { detectPlatformKey } from "@/components/waitlist-modal/waitlistUtils";
 
 import { DownloadStepGrid } from "./download-cta/DownloadStepGrid";
@@ -22,14 +24,16 @@ import type { Platform } from "./download-cta/downloadCtaTypes";
 import { useDownloadPlatforms } from "./download-cta/useDownloadPlatforms";
 import { useFreshRelease } from "./download-cta/useFreshRelease";
 
-const APP_VERSION = process.env.NEXT_PUBLIC_APP_VERSION ?? "0.1.0";
-const RELEASE_TITLE = process.env.NEXT_PUBLIC_RELEASE_TITLE || "Latest";
-const RELEASE_DATE = process.env.NEXT_PUBLIC_RELEASE_DATE ?? "";
-const DOWNLOAD_URL = process.env.NEXT_PUBLIC_DOWNLOAD_URL;
+// Whether a download is live comes from the release authority - the same rule
+// /api/download enforces, so this section can never offer a download the route
+// refuses. The pulse date stays env-driven; the changelog date is wired behind
+// the off PULSE_FROM_CHANGELOG flag (see src/lib/release.ts).
+const DOWNLOAD_PRIMARY = DOWNLOAD_PLAN.primary.kind === "download" ? DOWNLOAD_PLAN.primary : null;
+const PULSE_DATE = releasePulseDate(RELEASE_DATE_ENV, latestRelease(RELEASES));
 
 export default function DownloadCTA() {
   const { t } = useTranslation();
-  const platforms = useDownloadPlatforms(DOWNLOAD_URL);
+  const platforms = useDownloadPlatforms(DOWNLOAD_PLAN);
   // The entry point travels with the platform so the funnel can tell the hero
   // CTA apart from the platform pills below it.
   const [waitlist, setWaitlist] = useState<{ platform: Platform; entryPoint: WaitlistEntryPoint } | null>(null);
@@ -43,9 +47,9 @@ export default function DownloadCTA() {
     setWaitlist({ platform, entryPoint });
     setWaitlistOpen(true);
   };
-  const isFresh = useFreshRelease(RELEASE_DATE);
+  const isFresh = useFreshRelease(PULSE_DATE);
   const downloadSteps = [
-    DOWNLOAD_URL ? t.downloadSection.downloadInstaller : t.downloadSection.joinWaitlist,
+    DOWNLOAD_PRIMARY ? t.downloadSection.downloadInstaller : t.downloadSection.joinWaitlist,
     t.downloadSection.connectCli,
     t.downloadSection.launchAgent,
   ];
@@ -66,7 +70,7 @@ export default function DownloadCTA() {
       <div data-tour-diagram="download" className="mx-auto max-w-2xl text-center">
         <motion.div variants={fadeUp}>
           <span className={`inline-block rounded-full border border-brand-cyan/20 bg-brand-cyan/5 px-3.5 py-1 text-base font-medium tracking-wider uppercase text-brand-cyan/70 font-mono mb-6${isFresh ? " animate-badge-pulse" : ""}`}>
-            v{APP_VERSION} - {RELEASE_TITLE}
+            v{SITE_VERSION} - {RELEASE_TITLE}
           </span>
         </motion.div>
 
@@ -86,10 +90,10 @@ export default function DownloadCTA() {
 
         <motion.div variants={fadeUp} className="mt-10">
           <div className="flex flex-col items-center justify-center gap-3 sm:flex-row">
-            {DOWNLOAD_URL ? (
+            {DOWNLOAD_PRIMARY ? (
               <PrimaryCTA
-                href="/api/download"
-                onClick={() => trackDownloadClick("windows")}
+                href={DOWNLOAD_PRIMARY.href}
+                onClick={() => trackDownloadClick(DOWNLOAD_PRIMARY.platform)}
                 icon={Download}
                 label={t.downloadSection.downloadFor.replace("{platform}", t.downloadSection.windows)}
                 variant="solid"
@@ -123,7 +127,7 @@ export default function DownloadCTA() {
           onWaitlist={(platform) => openWaitlist(platform, "platform-pill")}
         />
 
-        {DOWNLOAD_URL && (
+        {DOWNLOAD_PRIMARY && (
           <DownloadTrustSignals
             requiresCli={t.downloadSection.requiresCli}
             installerSize={t.downloadSection.installerSize}
