@@ -1,45 +1,51 @@
 import type { ComponentType } from "react";
 import dynamic from "next/dynamic";
+import * as homeSections from "@/components/sections/lazy";
+import * as howSections from "@/components/sections/how-lazy";
+import * as athenaSections from "@/components/sections/athena-lazy";
+import { buildPreviewRegistry } from "./derive";
 
 /**
- * Registry of sections available at /preview/[section]. Mapped by URL slug
- * to a dynamically-imported component.
+ * Sections available at /preview/[section] (dev-only - both preview routes 404
+ * in production).
  *
- * To add a section: add an entry below. The slug becomes the URL
- * (`/preview/{slug}`), the component is rendered inside the preview shell.
+ * Live sections are DERIVED, not listed: every `Lazy*` export of the tables the
+ * public pages load (/, /how, /athena) is previewable under its kebab-cased
+ * name (`LazyTeamCanvas` -> `/preview/team-canvas`), rendering the very
+ * component production mounts - same skeleton, same `ssr` flag. Export a new
+ * `Lazy*` section and it appears here; `registry.test.ts` pins that.
  *
- * The preview surface is dev-only — the page returns 404 in production
- * builds — so this registry can include experimental sections without
- * affecting the public site.
+ * Only this module (and the client `PreviewMount` that imports it) may read the
+ * tables as namespaces: they are "use client" modules, so a server component
+ * would see client references instead of enumerable exports.
  */
-export const PREVIEW_REGISTRY: Record<string, ComponentType> = {
+
+/**
+ * Previewable sections that are NOT reached through a lazy table: page-level
+ * direct mounts (hero + footer on /, roadmap + feature-voting on /roadmap) and
+ * components with no public mount at all. An extra may not reuse a live
+ * section's slug - `buildPreviewRegistry` throws.
+ *
+ * Sections that require runtime props (e.g. connections-catalog needs
+ * activeCategory + search state) are intentionally absent - register a wrapper
+ * that mounts them with default props if they need preview support.
+ */
+export const PREVIEW_EXTRAS: Record<string, ComponentType> = {
   hero: dynamic(() => import("@/components/sections/Hero")),
-  vision: dynamic(() => import("@/components/sections/vision-grid")),
-  features: dynamic(() => import("@/components/sections/features")),
-  pricing: dynamic(() => import("@/components/sections/pricing")),
-  faq: dynamic(() => import("@/components/sections/FAQ")),
-  "download-cta": dynamic(() => import("@/components/sections/DownloadCTA")),
-  "get-started": dynamic(() => import("@/components/sections/get-started")),
-  "orchestration-hub": dynamic(() => import("@/components/sections/orchestration-hub")),
-  "platform-command": dynamic(() => import("@/components/sections/platform-command")),
-  "platform-layers": dynamic(() => import("@/components/sections/platform-layers")),
-  "event-bus": dynamic(() => import("@/components/sections/event-bus-showcase")),
-  "agent-playground": dynamic(() => import("@/components/sections/agent-playground")),
-  "agents-chat": dynamic(() => import("@/components/sections/agents-chat")),
-  "agents-timeline": dynamic(() => import("@/components/sections/agents-timeline")),
-  "playground-split": dynamic(() => import("@/components/sections/playground-split")),
-  "playground-timeline": dynamic(() => import("@/components/sections/playground-timeline")),
-  "use-cases": dynamic(() => import("@/components/sections/use-cases")),
-  changelog: dynamic(() => import("@/components/sections/Changelog")),
+  footer: dynamic(() => import("@/components/sections/Footer")),
   roadmap: dynamic(() => import("@/components/sections/roadmap")),
   "feature-voting": dynamic(() => import("@/components/sections/feature-voting")),
-  footer: dynamic(() => import("@/components/sections/Footer")),
+  // Preview-only: no page mounts these.
+  features: dynamic(() => import("@/components/sections/features")),
+  "platform-command": dynamic(() => import("@/components/sections/platform-command")),
+  "agent-playground": dynamic(() => import("@/components/sections/agent-playground")),
+  "playground-timeline": dynamic(() => import("@/components/sections/playground-timeline")),
+  changelog: dynamic(() => import("@/components/sections/Changelog")),
 };
-// /athena page prototypes live at /preview/athena (own page with a tab
-// switcher over all in-flight variants) — not in this registry.
-// Sections that require runtime props (e.g. connections-catalog needs
-// activeCategory + search state) are intentionally excluded — register
-// a wrapper here that mounts them with default props if they need
-// preview support.
 
-export const PREVIEW_SLUGS = Object.keys(PREVIEW_REGISTRY).sort();
+export const PREVIEW_REGISTRY: ReadonlyMap<string, ComponentType> = buildPreviewRegistry<ComponentType>(
+  [homeSections, howSections, athenaSections],
+  PREVIEW_EXTRAS,
+);
+
+export const PREVIEW_SLUGS = [...PREVIEW_REGISTRY.keys()].sort();

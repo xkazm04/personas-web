@@ -20,7 +20,7 @@ Lets a visitor type a natural-language instruction (or pick one of four example 
 | `src/components/sections/agent-playground/components/ExampleChips.tsx` | The four selectable prompt chips; active-state tint, disabled-while-running |
 | `src/components/sections/agent-playground/components/PlaygroundForm.tsx` | Prompt input row + Run/Running/Reset button |
 | `src/components/sections/agent-playground/components/PlaygroundTerminal.tsx` | Scrollable output area, idle placeholder, per-line motion, blinking cursor (its own `useReducedMotion`) |
-| `src/app/preview/registry.ts:28` | The only mount point: `"agent-playground"` slug in the dev-only preview registry |
+| `src/app/preview/registry.ts:41` | The only mount point: `"agent-playground"` slug in the dev-only preview registry |
 
 ## Data & state
 - **Source:** static, hand-authored transcripts in `data.ts` (`examples`, `noMatchLines`). No external data.

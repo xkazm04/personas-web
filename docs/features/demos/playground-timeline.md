@@ -36,14 +36,14 @@ A self-contained "watch an agent think" demo. The user picks one of four example
 | `src/components/sections/playground-timeline/components/StageCard.tsx` | Per-stage card; status-driven styling, glow/shimmer/ring animations, status icon |
 | `src/components/sections/playground-timeline/components/PipelineProgressBar.tsx` | Top progress fill + glowing comet head; `role="progressbar"` |
 | `src/components/sections/playground-timeline/components/PipelinePanelFooter.tsx` | Stage counter, elapsed/remaining clock, "pipeline complete" badge |
-| `src/app/preview/registry.ts:32` | Registers the `playground-timeline` slug for the dev-only `/preview/[section]` harness |
+| `src/app/preview/registry.ts:42` | Registers the `playground-timeline` slug for the dev-only `/preview/[section]` harness |
 
 ## Data & state
 - **Source:** `data.ts` `examples` array (four `ExamplePrompt`s × seven hardcoded `TimelineStage`s; durations 400–900ms; `timing` strings like `+1.5s` are display-only labels, not used by the timer). **Stores:** none — all state is local to `usePipelineSimulation` (`useState`/`useRef`); no Zustand, no context. **API routes:** none — fully mocked/scripted; no fetch. **Types:** `TimelineStage`, `ExamplePrompt`, `StageStatus`, `TimelinePhase` (`types.ts`).
 
 ## Integration points
 
-- **Render surface:** only the dev-only preview harness at `/preview/playground-timeline` (via `PREVIEW_REGISTRY`, `src/app/preview/registry.ts:32`), which `notFound()`s in production (`src/app/preview/[section]/page.tsx:15-17`). It is **not** in the public homepage `sections[]` — the homepage `#playground` slot mounts `LazyPlaygroundSplit`, the split-view variant, instead (`src/app/page.tsx:51`).
+- **Render surface:** only the dev-only preview harness at `/preview/playground-timeline` (via `PREVIEW_EXTRAS`, `src/app/preview/registry.ts:42`), which `notFound()`s in production (`src/app/preview/[section]/page.tsx:15-17`). It is **not** in the public homepage `sections[]` — the homepage `#playground` slot mounts `LazyPlaygroundSplit`, the split-view variant, instead (`src/app/page.tsx:51`).
 - **Shared primitives:** `SectionWrapper`, `SectionIntro`, `TerminalPanel`, `TerminalChrome`, `ThemedChip`, and `fadeUp` from `@/lib/animations`.
 - **Sentry:** `captureExceptionScrubbed` from `src/lib/sentry-pii.ts` guards an out-of-range example index (defensive; unreachable from the UI since chips pass valid indices).
 - **Icons:** `lucide-react` plus the local `Github` brand icon (`@/components/icons/brand-icons`).
