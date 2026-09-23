@@ -236,7 +236,10 @@
             "src/components/feature-sections/plugins/roster.ts",
             "src/components/feature-sections/lab/ledger.ts",
             "src/components/feature-sections/lab/ledger.test.ts",
-            "src/components/feature-sections/lab/components/VersionRail.tsx"
+            "src/components/feature-sections/lab/components/VersionRail.tsx",
+            "src/components/feature-sections/lab/genome.ts",
+            "src/components/feature-sections/lab/genome.test.ts",
+            "src/components/feature-sections/lab/still-motion.test.ts"
           ],
           "target": null,
           "apiRoutes": []
