@@ -163,7 +163,7 @@ export default function EventBusShowcase({ telemetryAdapter }: { telemetryAdapte
               >
                 <TerminalChrome
                   title="message hub — live"
-                  info={`${snapshot.source} stream · ${snapshot.totalInFlight} being sent · ${snapshot.totalBacklog} waiting`}
+                  info={`${snapshot.totalInFlight} being sent · ${snapshot.totalBacklog} waiting`}
                   className="mb-4 pb-3"
                 />
 
