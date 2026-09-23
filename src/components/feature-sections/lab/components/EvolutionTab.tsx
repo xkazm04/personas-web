@@ -2,9 +2,25 @@
 
 import { motion, useReducedMotion } from "framer-motion";
 import { Dna, Play } from "lucide-react";
+import { BRAND_VAR } from "@/lib/brand-theme";
 import { GENOME_NODES } from "../data";
+import { bestLineage, genomeSummary, nodeTone, type NodeTone } from "../genome";
 import type { GenomeNode } from "../types";
 import TabBackdrop from "./TabBackdrop";
+
+// Module-level: GENOME_NODES is static, so the lineage and the header figures
+// are computed once, from the same data the tree draws.
+const LINEAGE = bestLineage(GENOME_NODES);
+const SUMMARY = genomeSummary(GENOME_NODES);
+const GENS = Array.from({ length: SUMMARY.generation + 1 }, (_, g) => g);
+const SPAN = Math.max(SUMMARY.generation, 1);
+
+// One colour per legend entry; the legend dots below use the same tokens.
+const TONE_FILL: Record<NodeTone, string> = {
+  lineage: BRAND_VAR.amber,
+  alive: BRAND_VAR.emerald,
+  culled: "currentColor",
+};
 
 export default function EvolutionTab() {
   const reduced = useReducedMotion() ?? false;
@@ -14,7 +30,7 @@ export default function EvolutionTab() {
 
   const nodeCoord = (n: GenomeNode) => ({
     cx: n.x * width,
-    cy: padY + (n.gen / 5) * (height - padY * 2),
+    cy: padY + (n.gen / SPAN) * (height - padY * 2),
   });
 
   return (
@@ -22,20 +38,25 @@ export default function EvolutionTab() {
       <TabBackdrop tab="evolution" />
       <div className="relative flex items-center justify-between border-b border-foreground/[0.06] px-5 py-3">
         <div className="flex items-center gap-2">
-          <Dna className="h-4 w-4 text-amber-400" />
+          <Dna className="h-4 w-4 text-brand-amber" />
           <span className="text-base font-mono font-semibold text-foreground uppercase tracking-wider">
             Genome tree
           </span>
         </div>
         <div className="flex items-center gap-4 text-base font-mono">
           <span className="text-foreground/70">
-            Gen <span className="text-foreground font-semibold tabular-nums">5</span>
+            Gen{" "}
+            <span className="text-foreground font-semibold tabular-nums">{SUMMARY.generation}</span>
           </span>
           <span className="text-foreground/70">
-            Best <span className="text-amber-400 font-semibold tabular-nums">94</span>
+            Best <span className="text-brand-amber font-semibold tabular-nums">{SUMMARY.best}</span>
           </span>
           <span className="text-foreground/70">
-            Lineage <span className="text-emerald-400 font-semibold">+52%</span>
+            Lineage{" "}
+            <span className="text-brand-emerald font-semibold tabular-nums">
+              {SUMMARY.lineageGainPct >= 0 ? "+" : ""}
+              {SUMMARY.lineageGainPct}%
+            </span>
           </span>
         </div>
       </div>
@@ -46,8 +67,8 @@ export default function EvolutionTab() {
           className="w-full h-[340px] text-foreground"
           preserveAspectRatio="xMidYMid meet"
         >
-          {[0, 1, 2, 3, 4, 5].map((g) => {
-            const y = padY + (g / 5) * (height - padY * 2);
+          {GENS.map((g) => {
+            const y = padY + (g / SPAN) * (height - padY * 2);
             return (
               <g key={g}>
                 <line
@@ -77,13 +98,15 @@ export default function EvolutionTab() {
             const parent = GENOME_NODES.find((p) => p.id === n.parent)!;
             const p1 = nodeCoord(parent);
             const p2 = nodeCoord(n);
-            const isBestPath = n.best || (n.alive && n.fitness > 80);
+            // An edge is on the lineage when its child is: the walk from the
+            // best node puts every ancestor, and so every such parent, in the set.
+            const isBestPath = LINEAGE.has(n.id);
             return (
               <motion.path
                 key={`b-${n.id}`}
                 d={`M ${p1.cx} ${p1.cy} C ${p1.cx} ${(p1.cy + p2.cy) / 2}, ${p2.cx} ${(p1.cy + p2.cy) / 2}, ${p2.cx} ${p2.cy}`}
                 fill="none"
-                stroke={isBestPath ? "#f59e0b" : "currentColor"}
+                stroke={isBestPath ? BRAND_VAR.amber : "currentColor"}
                 strokeOpacity={isBestPath ? 1 : 0.28}
                 strokeWidth={isBestPath ? 2 : 1}
                 initial={{ pathLength: 0, opacity: 0 }}
@@ -95,14 +118,7 @@ export default function EvolutionTab() {
 
           {GENOME_NODES.map((n) => {
             const { cx, cy } = nodeCoord(n);
-            const culledColor = "rgba(127,127,127,0.45)";
-            const fill = !n.alive
-              ? culledColor
-              : n.best
-                ? "#f59e0b"
-                : n.fitness > 80
-                  ? "#10b981"
-                  : "#06b6d4";
+            const tone = nodeTone(n, LINEAGE);
             const labelFill = !n.alive ? "currentColor" : "#ffffff";
             return (
               <motion.g
@@ -117,13 +133,19 @@ export default function EvolutionTab() {
                     cy={cy}
                     r={14}
                     fill="none"
-                    stroke="#f59e0b"
+                    stroke={BRAND_VAR.amber}
                     strokeWidth={1.5}
                     animate={reduced ? { opacity: 0.8, r: 16 } : { opacity: [0.3, 0.8, 0.3], r: [14, 18, 14] }}
                     transition={reduced ? undefined : { duration: 2, repeat: Infinity }}
                   />
                 )}
-                <circle cx={cx} cy={cy} r={8} fill={fill} />
+                <circle
+                  cx={cx}
+                  cy={cy}
+                  r={8}
+                  fill={TONE_FILL[tone]}
+                  fillOpacity={tone === "culled" ? 0.3 : 1}
+                />
                 <text
                   x={cx}
                   y={cy + 3}
@@ -144,7 +166,7 @@ export default function EvolutionTab() {
       <div className="relative flex items-center justify-between border-t border-foreground/[0.06] px-5 py-3 text-base font-mono">
         <span className="flex items-center gap-3">
           <span className="flex items-center gap-1.5">
-            <div className="h-2 w-2 rounded-full bg-amber-400" />
+            <div className="h-2 w-2 rounded-full bg-brand-amber" />
             <span className="text-foreground/85">best lineage</span>
           </span>
           <span className="flex items-center gap-1.5">
