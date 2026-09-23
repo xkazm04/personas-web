@@ -102,7 +102,9 @@ describe("resolveTopicUnit - whole-unit serving", () => {
     }
     expect(translated).toBeGreaterThan(0);
     expect(canonical).toBeGreaterThan(0);
-  });
+    // ~1.5k locale-module loads x 3 preferences: over the 5s default when the
+    // machine is busy (timed out twice under a parallel build), well under this.
+  }, 60_000);
 
   it("the reader's switch is a pure, reversible input: prefer translation, then back to current English", async () => {
     const en = englishUnit("installing-personas");
