@@ -32,7 +32,17 @@ import { useStillMotion } from "@/hooks/useStillMotion";
  * SSR-safe (and live). Gating the ANIMATION PROPS rather than the element
  * keeps DOM shape constant across the correcting commit, so the accommodation
  * costs a stopped animation instead of a full-page reflow.
+ *
+ * But "stopped" must mean stopped at the END state. The server cannot know the
+ * preference, so it always renders the `initial` variant: the wrapper arrives
+ * as `opacity: 0; translateY(20px)`. Removing `animate` on the correcting
+ * commit left nothing to carry it back, and every route rendered blank for a
+ * reduced-motion visitor (measured 2026-09-24 on /, /how, /security and
+ * /roadmap: settled opacity 0). So the target stays and only the travel goes:
+ * under reduced motion the wrapper snaps to `animate` with a zero-length
+ * transition, which is the resolved end state, never the first frame.
  */
+const INSTANT = { duration: 0 };
 export default function PageTransition({ children }: { children: React.ReactNode }) {
   const prefersReducedMotion = useStillMotion();
   const pathname = usePathname();
@@ -40,10 +50,10 @@ export default function PageTransition({ children }: { children: React.ReactNode
   return (
     <motion.div
       key={pathname}
-      variants={prefersReducedMotion ? undefined : pageTransition}
-      initial={prefersReducedMotion ? false : "initial"}
-      animate={prefersReducedMotion ? undefined : "animate"}
-      transition={prefersReducedMotion ? undefined : TRANSITION_NORMAL}
+      variants={pageTransition}
+      initial="initial"
+      animate="animate"
+      transition={prefersReducedMotion ? INSTANT : TRANSITION_NORMAL}
     >
       {children}
     </motion.div>
