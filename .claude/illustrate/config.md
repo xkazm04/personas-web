@@ -27,3 +27,9 @@ Read by the registry skill `illustrate` at start. Every key is optional.
   deleted. Owner's verdict on the round as a whole: the variants overflowed with
   descriptive text; the goal is an abstracted idea carried by illustration and
   animation, with a dominant visual structure and text labels only as support.
+- 2026-09-25 /features round 1 under 1.1.x (picture first): security (sealed-device,
+  nested-vault, vault-silhouette), AI models (router, two-sockets, effort-dial), memory
+  (sediment, constellation, run-twice). Text inside the art: 4-6 words per variant, runs
+  of 1-2 words, 1-5% of the area, against 139-197 words and 19-30 word runs in the
+  current sections. Gates green (tsc, eslint, vitest 547/547); 0 blank, 0 loops under
+  reduced motion. Owner decision pending.
