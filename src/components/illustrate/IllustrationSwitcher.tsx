@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useId, useState, type ComponentType, type KeyboardEvent } from "react";
+import { useId, useState, useSyncExternalStore, type ComponentType, type KeyboardEvent } from "react";
 import { BRAND_VAR, tint } from "@/lib/brand-theme";
 
 /**
@@ -14,6 +14,15 @@ import { BRAND_VAR, tint } from "@/lib/brand-theme";
  * read after mount, so hydration stays stable and a no-script reader sees the
  * current section.
  */
+// The query is external state: read it the way the hash-driven showcase does, so the
+// server and hydration render agree (null) and the real value lands on the next commit.
+const subscribe = (onChange: () => void) => {
+  window.addEventListener("popstate", onChange);
+  return () => window.removeEventListener("popstate", onChange);
+};
+const readQuery = () => new URLSearchParams(window.location.search).get("illustrate");
+const noQueryOnServer = () => null;
+
 export interface IllustrationVariant<P> {
   key: string;
   label: string;
@@ -33,17 +42,15 @@ export default function IllustrationSwitcher<P extends object>({
   align?: "center" | "start";
 }) {
   const uid = useId().replace(/:/g, "");
-  const [active, setActive] = useState(variants[0].key);
-
-  useEffect(() => {
-    const wanted = new URLSearchParams(window.location.search).get("illustrate");
-    if (!wanted) return;
-    const [sec, key] = wanted.split(":");
-    if (sec === section && variants.some((v) => v.key === key)) setActive(key);
-  }, [section, variants]);
+  const [picked, setPicked] = useState<string | null>(null);
+  const wanted = useSyncExternalStore(subscribe, readQuery, noQueryOnServer);
+  const [sec, fromQuery] = (wanted ?? "").split(":");
+  const linked = sec === section && variants.some((v) => v.key === fromQuery) ? fromQuery : null;
+  // A click wins over the link; with neither, the current section shows.
+  const active = picked ?? linked ?? variants[0].key;
 
   const select = (key: string) => {
-    setActive(key);
+    setPicked(key);
     const url = new URL(window.location.href);
     url.searchParams.set("illustrate", `${section}:${key}`);
     window.history.replaceState(null, "", url);

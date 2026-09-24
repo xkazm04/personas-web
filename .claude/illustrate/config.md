@@ -14,3 +14,11 @@ Read by the registry skill `illustrate` at start. Every key is optional.
 - worktree_root: C:/t/ (short paths; the default under .claude/worktrees/ is too deep for Windows)
 
 ## Run log
+
+- 2026-09-24 landing round 1 (branch illustrate/landing): hero, vision grid, use-cases,
+  3 directions each (hero: persona-card, contact-sheet, night-shift; vision:
+  real-surfaces, layer-stack, real-nouns; use-cases: persona-card, sigil-core,
+  job-matrix). Gates green (tsc, eslint on touched dirs, vitest 239/239). Capture: 12
+  tabs x 2 widths x 2 motion preferences, 0 blank, 0 infinite animations under reduced
+  motion (current hero runs 4 loops and current use-cases 1; every variant runs 0).
+  Owner decision pending.
