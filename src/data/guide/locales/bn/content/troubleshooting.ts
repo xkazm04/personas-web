@@ -147,7 +147,6 @@ built-in health check আপনার সম্পূর্ণ Personas installa
 - **Database integrity** — আপনার local data files অক্ষত এবং healthy
 - **Credential status** — সমস্ত সংরক্ষিত credentials valid এবং কাজ করছে
 - **Provider connectivity** — আপনার AI providers reachable এবং responding
-- **Cloud connection** — আপনার orchestrator connection active (যদি কনফিগার করা থাকে)
 
 ### এটি কীভাবে কাজ করে
 

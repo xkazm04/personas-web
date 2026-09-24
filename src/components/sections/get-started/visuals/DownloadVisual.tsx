@@ -1,7 +1,9 @@
 "use client";
 
-import { motion, useReducedMotion } from "framer-motion";
+import { motion } from "framer-motion";
 import { Download } from "lucide-react";
+import { useStillMotion } from "@/hooks/useStillMotion";
+import { usePageVisibility } from "@/hooks/usePageVisibility";
 import { BRAND_VAR, tint } from "@/lib/brand-theme";
 import { VisualFrame, VisualRow } from "./chrome";
 import type { VisualProps } from "./types";
@@ -14,7 +16,11 @@ const PLATFORMS = [
 
 export function DownloadVisual({ brand }: VisualProps) {
   const color = BRAND_VAR[brand];
-  const reduced = useReducedMotion() ?? false;
+  // Ambient loop: still for reduced motion and on a hidden tab. A rest pose
+  // (not `undefined`) so a loop already running is replaced, not left going.
+  const reduced = useStillMotion();
+  const hidden = usePageVisibility();
+  const still = reduced || hidden;
   return (
     <VisualFrame>
       <div
@@ -22,8 +28,8 @@ export function DownloadVisual({ brand }: VisualProps) {
         style={{ backgroundColor: tint(brand, 18) }}
       >
         <motion.div
-          animate={reduced ? undefined : { y: [0, 4, 0] }}
-          transition={reduced ? undefined : { duration: 1.8, repeat: Infinity, ease: "easeInOut" }}
+          animate={still ? { y: 0 } : { y: [0, 4, 0] }}
+          transition={still ? { duration: 0 } : { duration: 1.8, repeat: Infinity, ease: "easeInOut" }}
         >
           <Download className="h-10 w-10" style={{ color }} />
         </motion.div>

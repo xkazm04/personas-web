@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useReducer, useState } from "react";
 import { motion } from "framer-motion";
 import SectionWrapper from "@/components/SectionWrapper";
 import SectionIntro from "@/components/primitives/SectionIntro";
@@ -11,9 +11,15 @@ import ChatTab from "./components/ChatTab";
 import ArenaTab from "./components/ArenaTab";
 import EvolutionTab from "./components/EvolutionTab";
 import EvalTab from "./components/EvalTab";
+import VersionRail from "./components/VersionRail";
+import { arenaContenders, initialLedger, ledgerReducer } from "./ledger";
 
 export default function Lab() {
   const [active, setActive] = useState<LabTab>("chat");
+  // One version ledger for the whole section: the rail, the chat's promote
+  // answer and the arena's contender labels all project from it. Lazy
+  // initializer keeps the first render pure; every dispatch is a click.
+  const [ledger, dispatch] = useReducer(ledgerReducer, undefined, initialLedger);
 
   return (
     <SectionWrapper id="lab">
@@ -43,11 +49,22 @@ export default function Lab() {
           transition={{ duration: 0.35 }}
           className="mt-6 mx-auto max-w-4xl"
         >
-          {active === "chat" && <ChatTab />}
-          {active === "arena" && <ArenaTab />}
+          {active === "chat" && (
+            <ChatTab
+              liveId={ledger.liveId}
+              onActivate={(id) => dispatch({ type: "activate", id })}
+            />
+          )}
+          {active === "arena" && (
+            <ArenaTab contenders={arenaContenders(ledger)} liveId={ledger.liveId} />
+          )}
           {active === "evolution" && <EvolutionTab />}
           {active === "eval" && <EvalTab />}
         </motion.div>
+
+        <div className="mx-auto max-w-4xl">
+          <VersionRail ledger={ledger} dispatch={dispatch} />
+        </div>
       </div>
     </SectionWrapper>
   );

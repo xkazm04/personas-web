@@ -5,12 +5,9 @@ import { captureExceptionScrubbed } from "@/lib/sentry-pii";
 
 import { useAuthStore } from "@/stores/authStore";
 import { api } from "@/lib/api";
-import {
-  SPARKLINE_AGENTS,
-  SPARKLINE_COST,
-  SPARKLINE_EXECUTIONS,
-  SPARKLINE_SUCCESS,
-} from "@/lib/mock-dashboard-data";
+import { SPARKLINE_AGENTS } from "@/lib/mock-dashboard-data";
+import { MOCK_DAILY_METRICS } from "@/lib/mockData";
+import { sparklinesFromDaily } from "@/lib/observabilitySeries";
 
 export interface Sparklines {
   cost: number[];
@@ -28,9 +25,7 @@ export interface SparklinesResult {
 }
 
 const MOCK_SPARKLINES: Sparklines = {
-  cost: SPARKLINE_COST,
-  executions: SPARKLINE_EXECUTIONS,
-  success: SPARKLINE_SUCCESS,
+  ...sparklinesFromDaily(MOCK_DAILY_METRICS),
   agents: SPARKLINE_AGENTS,
 };
 
@@ -42,11 +37,12 @@ const EMPTY_SPARKLINES: Sparklines = {
 };
 
 /**
- * Metric-card sparkline series. Demo → the static seeded SPARKLINE_* fixtures
- * (unchanged). Real/supabase mode → daily series derived from the synced
- * observability rollup: cost, executions, and per-day success rate (%). The
- * "agents over time" sparkline has no synced source, so it stays empty and the
- * card renders a flat line rather than a fabricated trend.
+ * Metric-card sparkline series: cost, executions and per-day success rate (%),
+ * projected by `sparklinesFromDaily` from the same daily series the tiles total
+ * — MOCK_DAILY_METRICS in demo, the synced observability rollup in real mode.
+ * The "agents over time" sparkline has no synced source: demo keeps its seeded
+ * fixture, real mode stays empty and the card renders a flat line rather than
+ * a fabricated trend.
  */
 export function useSparklines(): SparklinesResult {
   const isDemo = useAuthStore((s) => s.isDemo);
@@ -67,14 +63,7 @@ export function useSparklines(): SparklinesResult {
       try {
         const daily = await api.getObservabilityDaily();
         if (cancelled) return;
-        setSparklines({
-          cost: daily.map((d) => d.cost),
-          executions: daily.map((d) => d.executions),
-          success: daily.map((d) =>
-            d.executions > 0 ? (d.successes / d.executions) * 100 : 0,
-          ),
-          agents: [],
-        });
+        setSparklines({ ...sparklinesFromDaily(daily), agents: [] });
         setError(null);
       } catch (err) {
         if (cancelled) return;

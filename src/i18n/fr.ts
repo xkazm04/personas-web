@@ -37,14 +37,13 @@ export const fr: Translations = {
     compareSection: {
       heading: "Tout est",
       headingGradient: "gratuit",
-      description: "L'application de bureau et toutes les fonctionnalit\u00e9s ci-dessous sont gratuites pour toujours. Pas de paliers, pas de tarif par utilisateur \u2014 juste une plateforme d'agents compl\u00e8te qui tourne sur votre machine.",
+      description: "L'application de bureau et toutes les fonctionnalit\u00e9s ci-dessous sont gratuites pour toujours\u00a0: une plateforme d'agents compl\u00e8te qui tourne sur votre machine.",
       offerBadges: [
         "Gratuit \u00e0 vie",
         "Auto-h\u00e9berg\u00e9",
-        "Aucune majoration par ex\u00e9cution",
         "Open source"
       ],
-      offerBody: "Personas fonctionne sur votre machine. Aucune majoration d'orchestration et aucune tarification par si\u00e8ge. Le cloud payant et le support prioritaire sont optionnels, pas obligatoires.",
+      offerBody: "Personas fonctionne sur votre machine.",
       ctaLabel: "Commencer gratuitement",
       readGuide: "Lire le guide",
       groups: {
@@ -129,38 +128,7 @@ export const fr: Translations = {
       slogan: "Automatisez votre travail. R\u00e9cup\u00e9rez votre temps."
     },
     pricing: {
-      local: "Local",
-      cloud: "Cloud",
-      enterprise: "Entreprise",
-      downloadLocal: "T\u00e9l\u00e9charger Local",
-      goCloud: "Passer au Cloud",
-      contactSales: "Contacter les ventes",
-      comingSoon: "Bient\u00f4t disponible",
-      bestFor: "Id\u00e9al pour",
-      forever: "pour toujours",
-      mo: "/mois",
-      custom: "Sur mesure",
-      bestForLocal: "Les cr\u00e9ateurs solo qui d\u00e9butent",
-      bestForCloud: "Les \u00e9quipes individuelles rapides",
-      bestForEnterprise: "Organisations avec besoins de conformit\u00e9 et d'\u00e9chelle",
-      features: {
-        unlimitedLocalAgents: "Agents locaux illimit\u00e9s",
-        localEventBus: "Bus d\u2019\u00e9v\u00e9nements local et planificateur",
-        fullObservability: "Tableau de bord d'observabilit\u00e9 complet",
-        designEngine: "Moteur de design",
-        teamCanvasLocal: "Canvas d\u2019\u00e9quipe (local)",
-        everythingInFree: "Tout ce qui est inclus dans Gratuit",
-        cloudWorkers3: "3 workers cloud",
-        executions1000: "1 000 ex\u00e9cutions/mois",
-        events10000: "10 000 \u00e9v\u00e9nements/mois",
-        burstAutoScaling: "Auto-scaling en rafale",
-        everythingInPro: "Tout ce qui est inclus dans Pro",
-        ssoSaml: "SSO via SAML et OIDC",
-        multiTenantRbac: "Espaces de travail multi-tenant avec RBAC",
-        auditTrailExport: "Export de la piste d\u2019audit des ex\u00e9cutions",
-        dedicatedWorkers: "Workers cloud d\u00e9di\u00e9s et SLA",
-        prioritySupport: "Support prioritaire"
-      }
+      comingSoon: "Bient\u00f4t disponible"
     },
     hero: {
       downloadCta: "T\u00e9l\u00e9charger",
@@ -168,7 +136,7 @@ export const fr: Translations = {
       badge: "Plateforme d\u2019agents IA",
       headingLine1: "Des agents intelligents",
       headingLine2: "qui travaillent pour vous",
-      description: "Concevez des agents en langage naturel. Orchestrez-les en local ou dans le cloud.",
+      description: "Concevez des agents en langage naturel. Orchestrez-les sur votre propre machine.",
       descriptionBold: "Pas de diagrammes. Pas d\u2019essaims d\u2019agents. Pas de code.",
       mode2: "Configuration simple",
       mode3: "Gratuit",
@@ -393,28 +361,20 @@ export const fr: Translations = {
       discordSubtitle: "Rejoignez notre communaut\u00e9 Discord pour de l'aide et des discussions.",
       questions: [
         {
-          q: "What is Claude CLI and why do I need it?",
-          a: "Claude CLI is Anthropic's official command-line interface for interacting with Claude. Personas uses it under the hood to run your agents locally \u2014 it handles authentication, model access, and streaming responses. You'll need an active Claude Pro or Max subscription and the CLI installed before launching Personas."
+          q: "What is Claude Code and why do I need it?",
+          a: "Claude Code is Anthropic's official command-line tool for working with Claude. Personas uses it under the hood to run your agents locally. It handles authentication, model access, and streaming responses. You'll need an active Claude Pro or Max subscription and Claude Code installed before launching Personas."
         },
         {
           q: "Does Personas collect any telemetry or usage data?",
-          a: "No. Personas runs entirely on your machine with zero telemetry. We don't collect analytics, usage metrics, or any personal data. Your prompts, agent configurations, and execution logs never leave your device unless you explicitly enable cloud execution."
+          a: "No. Personas runs entirely on your machine with zero telemetry. We don't collect analytics, usage metrics, or any personal data. Your prompts, agent configurations, and execution logs never leave your device."
         },
         {
-          q: "How does the pricing model work?",
-          a: "The desktop app is free forever with unlimited local agents. Cloud plans (Starter, Pro, Team) add 24/7 execution, remote workers, and team features on top. You always need your own Claude subscription \u2014 we never touch your Anthropic bill. Think of Personas as the orchestration layer, and Claude as the engine."
-        },
-        {
-          q: "What is Bring Your Own Infrastructure (BYOI)?",
-          a: "BYOI lets you connect your own cloud provider credentials (e.g., Fly.io API tokens) instead of using our managed infrastructure. Personas provisions and manages the workers on your account, giving you unlimited execution without per-month caps \u2014 you only pay your cloud provider directly."
-        },
-        {
-          q: "What's the difference between local and cloud execution?",
-          a: "Local execution runs agents on your machine using Claude CLI \u2014 it's instant, free, and private, but stops when your computer sleeps. Cloud execution runs agents on remote workers 24/7, supports event-bus bridging across environments, and enables team collaboration. You can switch between modes per-agent."
+          q: "Is Personas free?",
+          a: "Yes. The desktop app is free and open source, with unlimited local agents. You need your own Claude subscription, and we never touch your Anthropic bill. Think of Personas as the orchestration layer, and Claude as the engine."
         },
         {
           q: "Are there any limits on the number of agents?",
-          a: "Locally, there are no limits \u2014 create as many agents as you want. Cloud plans have worker limits (1\u20135 depending on tier) and monthly execution caps. Pro and Team plans include burst auto-scaling for traffic spikes. BYOI removes all caps entirely."
+          a: "No. Create as many agents as you want."
         }
       ]
     },
@@ -425,10 +385,10 @@ export const fr: Translations = {
       downloadInstaller: "T\u00e9l\u00e9charger l\u2019installeur",
       downloadFor: "T\u00e9l\u00e9charger pour {platform}",
       joinWaitlist: "Rejoindre la liste d\u2019attente",
-      connectCli: "Connecter Claude CLI",
+      connectCli: "Connecter Claude Code",
       launchAgent: "Lancer le premier agent",
       exploreFirst: "Explorer les capacit\u00e9s d\u2019abord",
-      requiresCli: "N\u00e9cessite Claude CLI",
+      requiresCli: "N\u00e9cessite Claude Code",
       installerSize: "Installeur de 12 Mo",
       noSignupLine: "Sans inscription, sans carte bancaire. Fonctionne sur votre machine. Z\u00e9ro t\u00e9l\u00e9m\u00e9trie.",
       windows: "Windows",
@@ -604,7 +564,8 @@ export const fr: Translations = {
             synced: "Synchronis\u00e9e"
           }
         }
-      }
+      },
+      related: "Li\u00e9"
     },
     dashboardUi: {
       status: {
@@ -643,7 +604,7 @@ export const fr: Translations = {
       noReviewsInFilter: "Aucune r\u00e9vision dans ce filtre",
       refreshing: "Actualisation...",
       rejectSelectedTitle: "Rejeter les r\u00e9visions s\u00e9lectionn\u00e9es ?",
-      rejectSelectedBody: "Cela rejettera {count} r\u00e9vision{plural} s\u00e9lectionn\u00e9e. Vous aurez 5 secondes pour annuler cette action.",
+      rejectSelectedBody: "Cela rejettera les revues s\u00e9lectionn\u00e9es ({count}). Vous aurez 5 secondes pour annuler cette action.",
       undo: "Annuler",
       retry: "R\u00e9essayer",
       bulkFailedApprove: "\u00c9chec de l'approbation de {failed} sur {total}",
@@ -807,6 +768,29 @@ export const fr: Translations = {
       parseError: {
         label: "Erreur d'analyse",
         detail: "Charge utile malform\u00e9e \u2014 escalad\u00e9e en critique jusqu'\u00e0 r\u00e9vision"
+      },
+      undo: {
+        approved: "Revues approuv\u00e9es : {count}",
+        rejected: "Revues rejet\u00e9es : {count}",
+        refused: "Certaines de ces revues ont d\u00e9j\u00e0 une d\u00e9cision en attente : annulez-la ou attendez qu'elle soit enregistr\u00e9e."
+      },
+      sla: {
+        due: "\u00c9ch\u00e9ance {when}",
+        wasDue: "\u00c9chue {when}",
+        overdueCount: "En retard : {n}"
+      },
+      resolved: "R\u00e9solue {when}",
+      resolvedBy: "R\u00e9solue {when} par {name}",
+      resolver: {
+        you: "vous",
+        system: "le syst\u00e8me"
+      },
+      autoApprovedNote: "Approuv\u00e9e automatiquement : SLA expir\u00e9",
+      bulkProcessing: "Traitement des revues : {count}",
+      severity: {
+        critical: "Critique",
+        warning: "Avertissement",
+        info: "Info"
       }
     },
     leaderboardPage: {
@@ -1088,7 +1072,6 @@ export const fr: Translations = {
       allSystemsHealthy: "Tous les syst?mes sont sains",
       noIssuesDetected: "Aucun probl?me d?tect? sur les services surveill?s",
       noSeverityIssues: "Aucun probl?me de s?v?rit? {severity}",
-      exampleDataNotice: "Des donn?es d?exemple sont affich?es. Les vraies analyses appara?tront quand les agents lanceront des ex?cutions.",
       toolInvocations: "Appels d?outils",
       distribution: "Distribution",
       usageOverTime: "Utilisation dans le temps",
@@ -1422,7 +1405,7 @@ export const fr: Translations = {
         },
         platform: {
           title: "Plateforme principale",
-          caption: "Mode dev, ex\u00e9cution cloud, connecteurs, installations sans effort"
+          caption: "Mode dev, connecteurs, installations sans effort"
         },
         templates: {
           title: "Galerie de mod\u00e8les",
@@ -1444,7 +1427,6 @@ export const fr: Translations = {
         enterprise: "Entreprise",
         devMode: "Mode dev",
         connectors: "Connecteurs",
-        cloudExecution: "Ex\u00e9cution cloud",
         installersUpdates: "Installateurs et mises \u00e0 jour",
         allCategories: "Toutes les cat\u00e9gories",
         devops: "DevOps",
@@ -1466,7 +1448,6 @@ export const fr: Translations = {
         ssoAudit: "SSO \u00b7 audit",
         instantPreview: "aper\u00e7u instantan\u00e9",
         services: "{n} services",
-        runs247: "ex\u00e9cution 24/7",
         autoUpdate: "mise \u00e0 jour automatique",
         templatesTotal: "{n} / {total} mod\u00e8les"
       },
@@ -1587,9 +1568,14 @@ export const fr: Translations = {
         memories: "Vos agents apprennent et se souviennent. G\u00e9rez ce qu'ils savent et comment ils utilisent leur exp\u00e9rience pass\u00e9e.",
         monitoring: "Suivez chaque ex\u00e9cution en temps r\u00e9el. Voyez ce que font vos agents, leur performance et leur co\u00fbt.",
         testing: "Ex\u00e9cutez des tests d'ar\u00e8ne, des comparaisons A/B, et laissez le syst\u00e8me de g\u00e9nome faire \u00e9voluer vos meilleurs prompts.",
-        deployment: "D\u00e9ployez des agents sur le cloud, connectez-vous \u00e0 GitHub Actions, GitLab CI, et aux workflows n8n.",
+        deployment: "Connectez vos agents \u00e0 GitHub Actions, GitLab CI et aux workflows n8n.",
         troubleshooting: "R\u00e9solvez les probl\u00e8mes courants, comprenez les messages d'erreur, et remettez vos agents sur les rails."
-      }
+      },
+      translationNotice: {
+        staleBody: "La version anglaise de cette page a \u00e9t\u00e9 mise \u00e0 jour apr\u00e8s sa traduction.",
+        showTranslation: "Lire l'ancienne traduction",
+        showCurrent: "Afficher la version anglaise actuelle",
+      },
     },
     featurePages: {
       orchestration: {
@@ -1599,7 +1585,7 @@ export const fr: Translations = {
       },
       security: {
         headline: "Vos secrets restent les v\u00f4tres",
-        description: "Chaque mot de passe, cl\u00e9 API et jeton d'acc\u00e8s est chiffr\u00e9 sur votre appareil gr\u00e2ce au chiffrement AES-256 de niveau bancaire. Vos identifiants sont stock\u00e9s dans le coffre-fort s\u00e9curis\u00e9 de votre propre syst\u00e8me d'exploitation \u2014 rien n'est jamais envoy\u00e9 au cloud.",
+        description: "Chaque mot de passe, cl\u00e9 API et jeton d'acc\u00e8s est chiffr\u00e9 sur votre appareil gr\u00e2ce au chiffrement AES-256 de niveau bancaire. Vos identifiants sont stock\u00e9s dans le coffre-fort s\u00e9curis\u00e9 de votre propre syst\u00e8me d'exploitation.",
         cta: "S\u00e9curisez vos connexions"
       },
       "multi-provider": {
@@ -2106,6 +2092,37 @@ export const fr: Translations = {
           samePerson: "la m\u00eame personne, partout",
           samePersonShort: "la m\u00eame personne, partout"
         }
+      }
+    },
+    orchestrationHub: {
+      previousTrigger: "D\u00e9clencheur pr\u00e9c\u00e9dent",
+      nextTrigger: "D\u00e9clencheur suivant"
+    },
+    labVersions: {
+      title: "Versions et notes",
+      hint: "Activez une version pour la mettre en production. Pour revenir en arri\u00e8re, r\u00e9activez la pr\u00e9c\u00e9dente.",
+      live: "En production",
+      experimental: "Exp\u00e9rimentale",
+      rating: "Note",
+      deltaVsBaseline: "\u0394 par rapport \u00e0 la r\u00e9f\u00e9rence",
+      baseline: "R\u00e9f\u00e9rence",
+      activate: "Activer",
+      activateVersion: "Activer {version}",
+      pinBaseline: "D\u00e9finir comme r\u00e9f\u00e9rence",
+      regression: "R\u00e9gression",
+      nowLive: "{version} est en production"
+    },
+    pluginShowcase: {
+      heading: "Tout se",
+      headingGradient: "branche",
+      introAll: "Personas est livr\u00e9 avec {shipped} plugins, et tous sont \u00e0 l'\u0153uvre ci-dessous.",
+      introSome: "Personas est livr\u00e9 avec {shipped} plugins, dont {showcased} sont \u00e0 l'\u0153uvre ci-dessous.",
+      introTail: "Chacun est un espace de travail autonome que vos agents peuvent piloter, avec les m\u00eames identifiants et en synergie avec les autres. Changez d'onglet pour rencontrer un autre sp\u00e9cialiste.",
+      tabsLabel: "Plugins pr\u00e9sent\u00e9s",
+      counter: "plugin {current} sur {total}",
+      taglines: {
+        devTools: "Flotte d'agents en parall\u00e8le, projets, tri",
+        brain: "Votre coffre, pr\u00eat pour les agents"
       }
     }
   };

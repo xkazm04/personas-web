@@ -1,7 +1,9 @@
 "use client";
 
-import { motion, useReducedMotion } from "framer-motion";
+import { motion } from "framer-motion";
 import { Sparkles } from "lucide-react";
+import { useStillMotion } from "@/hooks/useStillMotion";
+import { usePageVisibility } from "@/hooks/usePageVisibility";
 import { BRAND_VAR, tint } from "@/lib/brand-theme";
 import { SURFACE_GLASS, VisualFrame } from "./chrome";
 import type { VisualProps } from "./types";
@@ -18,7 +20,11 @@ const PERSONA_FIELDS = [
 
 export function CreateVisual({ brand }: VisualProps) {
   const color = BRAND_VAR[brand];
-  const reduced = useReducedMotion() ?? false;
+  // Ambient loop: still for reduced motion and on a hidden tab. A rest pose
+  // (not `undefined`) so a loop already running is replaced, not left going.
+  const reduced = useStillMotion();
+  const hidden = usePageVisibility();
+  const still = reduced || hidden;
   return (
     <VisualFrame>
       <div className="rounded-xl border p-4" style={SURFACE_GLASS}>
@@ -29,8 +35,8 @@ export function CreateVisual({ brand }: VisualProps) {
         <div className="font-mono text-base leading-relaxed text-foreground">
           &gt; {PROMPT}
           <motion.span
-            animate={reduced ? undefined : { opacity: [1, 0, 1] }}
-            transition={reduced ? undefined : { duration: 1, repeat: Infinity }}
+            animate={still ? { opacity: 1 } : { opacity: [1, 0, 1] }}
+            transition={still ? { duration: 0 } : { duration: 1, repeat: Infinity }}
             className="ml-0.5 inline-block"
           >
             _

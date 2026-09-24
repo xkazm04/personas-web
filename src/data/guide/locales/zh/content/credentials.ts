@@ -10,7 +10,7 @@ export const content: Record<string, string> = {
 
 - **AES-256-GCM** — 经过验证的加密(每个凭证的密文都经过完整性检查,所以被篡改的 vault 文件会被检测到,而不是静默解密)
 - **OS keyring 包装的主密钥** — Windows 上的 DPAPI、macOS 上的 Keychain、Linux 上的 Secret Service;每个会话不需要输入主密码
-- **默认仅本地** — 不上传任何内容;云部署是可选的,通过 TLS 加密传输到你选择的 orchestrator
+- **默认仅本地** — 不上传任何内容
 - **日志中的 token 引用** — agent 追踪和导出使用凭证 ID,而不是原始密钥
 - **防篡改** — GCM 认证标签捕获对 vault 文件的任何修改
 
@@ -43,10 +43,6 @@ Vault 通过 OS keyring 绑定到你的 OS 用户账户。将 vault 文件复制
 
 :::warning
 如果你在 macOS 或 Linux 上更改 OS 账户密码,keyring 可能会重新锁定包装密钥。更改后第一次运行时 Personas 会提示输入新凭证。如果 keyring 被擦除(出厂重置、账户删除),vault 将变得不可恢复 — 如果你需要超出本地机器的灾难恢复,请在外部备份原始密钥。
-:::
-
-:::tip
-仅本地模型是个人自动化的正确默认设置。对于多台机器需要相同凭证的团队/生产工作,云部署(Team / Builder 层级)通过 orchestrator 复制 vault 状态,并进行端到端加密。
 :::
   `,
 

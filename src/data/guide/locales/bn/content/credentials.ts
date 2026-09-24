@@ -10,7 +10,7 @@ export const content: Record<string, string> = {
 
 - **AES-256-GCM** — authenticated encryption (প্রতিটি ক্রেডেনশিয়ালের ciphertext integrity-checked, তাই একটি tampered vault file সনাক্ত করা হয়, নীরবে ডিক্রিপ্ট করা হয় না)
 - **OS keyring–wrapped master key** — Windows-এ DPAPI, macOS-এ Keychain, Linux-এ Secret Service; প্রতিটি সেশনে টাইপ করার কোনো master password নেই
-- **Local-only by default** — কিছুই আপলোড করা হয় না; cloud deploy opt-in এবং আপনার বেছে নেওয়া orchestrator-এ TLS-এর মাধ্যমে transit-এ এনক্রিপ্ট করে
+- **Local-only by default** — কিছুই আপলোড করা হয় না
 - **logs-এ token references** — agent traces এবং exports raw secrets নয়, credential IDs ব্যবহার করে
 - **Tamper-evident** — GCM authentication tags vault file-এর যেকোনো সংশোধন ধরে
 
@@ -43,10 +43,6 @@ OAuth credentials provider-এর refresh token-এর মাধ্যমে স
 
 :::warning
 আপনি যদি macOS বা Linux-এ আপনার OS account password পরিবর্তন করেন, keyring wrapping key পুনরায় লক করতে পারে। পরিবর্তনের পরে প্রথম রানে Personas নতুন ক্রেডেনশিয়ালের জন্য প্রম্পট করবে। যদি keyring মুছে ফেলা হয় (factory reset, account deletion), ভল্টটি পুনরুদ্ধারের অযোগ্য হয়ে যায় — স্থানীয় মেশিনের বাইরে disaster recovery প্রয়োজন হলে raw secrets বাহ্যিকভাবে ব্যাকআপ করুন।
-:::
-
-:::tip
-local-only মডেল ব্যক্তিগত অটোমেশনের জন্য সঠিক ডিফল্ট। team / production কাজের জন্য যেখানে একাধিক মেশিনের একই ক্রেডেনশিয়াল প্রয়োজন, cloud deploy (Team / Builder tier) end-to-end এনক্রিপশন সহ orchestrator-এর মাধ্যমে vault state প্রতিলিপি করে।
 :::
   `,
 

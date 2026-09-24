@@ -96,7 +96,7 @@ Plány respektují konfigurovatelnou časovou zónu. Ve výchozím nastavení ag
 :::
 
 :::tip
-Plánované spouštěče nedoplňují zmeškané běhy. Pokud je aplikace zavřená nebo je stroj uspaný, když projde plánovaný čas, ten běh se přeskočí. Pro kriticky důležitou plánovanou práci spusť cloudové nasazení (Builder tarif), aby orchestrátor zpracovával plánování server-side.
+Plánované spouštěče nedoplňují zmeškané běhy. Pokud je aplikace zavřená nebo je stroj uspaný, když projde plánovaný čas, ten běh se přeskočí.
 :::
   `,
 

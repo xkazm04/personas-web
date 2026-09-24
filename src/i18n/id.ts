@@ -37,14 +37,13 @@ export const id: Translations = {
     compareSection: {
       heading: "Semuanya",
       headingGradient: "gratis",
-      description: "Aplikasi desktop dan setiap kemampuan di bawah ini gratis selamanya. Tanpa tingkatan, tanpa biaya per kursi \u2014 hanya platform agen lengkap yang berjalan di mesin Anda.",
+      description: "Aplikasi desktop dan setiap kemampuan di bawah ini gratis selamanya: platform agen lengkap yang berjalan di mesin Anda.",
       offerBadges: [
         "Gratis selamanya",
         "Self-hosted",
-        "Tanpa markup per-run",
         "Open source"
       ],
-      offerBody: "Personas berjalan di mesin Anda. Tidak ada markup orkestrasi dan tidak ada harga per-kursi. Cloud berbayar dan dukungan prioritas bersifat opsional, bukan wajib.",
+      offerBody: "Personas berjalan di mesin Anda.",
       ctaLabel: "Mulai gratis",
       readGuide: "Baca panduan",
       groups: {
@@ -129,38 +128,7 @@ export const id: Translations = {
       slogan: "Otomatiskan pekerjaan Anda. Ambil kembali waktu Anda."
     },
     pricing: {
-      local: "Lokal",
-      cloud: "Cloud",
-      enterprise: "Enterprise",
-      downloadLocal: "Unduh Lokal",
-      goCloud: "Gunakan Cloud",
-      contactSales: "Hubungi Penjualan",
-      comingSoon: "Segera Hadir",
-      bestFor: "Terbaik untuk",
-      forever: "selamanya",
-      mo: "/bln",
-      custom: "Kustom",
-      bestForLocal: "Pengembang solo untuk memulai",
-      bestForCloud: "Tim individu yang bergerak cepat",
-      bestForEnterprise: "Organisasi dengan kebutuhan kepatuhan & skala",
-      features: {
-        unlimitedLocalAgents: "Agen lokal tak terbatas",
-        localEventBus: "Event bus & penjadwal lokal",
-        fullObservability: "Dasbor observabilitas penuh",
-        designEngine: "Mesin desain",
-        teamCanvasLocal: "Kanvas tim (lokal)",
-        everythingInFree: "Semua di paket Gratis",
-        cloudWorkers3: "3 worker cloud",
-        executions1000: "1.000 eksekusi/bln",
-        events10000: "10.000 event/bln",
-        burstAutoScaling: "Auto-scaling lonjakan",
-        everythingInPro: "Semua di Pro",
-        ssoSaml: "SSO via SAML & OIDC",
-        multiTenantRbac: "Workspace multi-tenant dengan RBAC",
-        auditTrailExport: "Ekspor jejak audit eksekusi",
-        dedicatedWorkers: "Worker cloud khusus & SLA",
-        prioritySupport: "Dukungan prioritas"
-      }
+      comingSoon: "Segera Hadir"
     },
     hero: {
       downloadCta: "Unduh",
@@ -168,7 +136,7 @@ export const id: Translations = {
       badge: "Platform Agen AI",
       headingLine1: "Agen cerdas",
       headingLine2: "yang bekerja untuk Anda",
-      description: "Desain agen dalam bahasa alami. Orkestrasi secara lokal atau di cloud.",
+      description: "Desain agen dalam bahasa alami. Orkestrasi di mesin Anda sendiri.",
       descriptionBold: "Tanpa diagram alur kerja. Tanpa gerombolan agen. Tanpa kode.",
       mode2: "Penyiapan sederhana",
       mode3: "Gratis",
@@ -393,28 +361,20 @@ export const id: Translations = {
       discordSubtitle: "Bergabunglah dengan komunitas Discord kami untuk bantuan dan diskusi.",
       questions: [
         {
-          q: "What is Claude CLI and why do I need it?",
-          a: "Claude CLI is Anthropic's official command-line interface for interacting with Claude. Personas uses it under the hood to run your agents locally \u2014 it handles authentication, model access, and streaming responses. You'll need an active Claude Pro or Max subscription and the CLI installed before launching Personas."
+          q: "What is Claude Code and why do I need it?",
+          a: "Claude Code is Anthropic's official command-line tool for working with Claude. Personas uses it under the hood to run your agents locally. It handles authentication, model access, and streaming responses. You'll need an active Claude Pro or Max subscription and Claude Code installed before launching Personas."
         },
         {
           q: "Does Personas collect any telemetry or usage data?",
-          a: "No. Personas runs entirely on your machine with zero telemetry. We don't collect analytics, usage metrics, or any personal data. Your prompts, agent configurations, and execution logs never leave your device unless you explicitly enable cloud execution."
+          a: "No. Personas runs entirely on your machine with zero telemetry. We don't collect analytics, usage metrics, or any personal data. Your prompts, agent configurations, and execution logs never leave your device."
         },
         {
-          q: "How does the pricing model work?",
-          a: "The desktop app is free forever with unlimited local agents. Cloud plans (Starter, Pro, Team) add 24/7 execution, remote workers, and team features on top. You always need your own Claude subscription \u2014 we never touch your Anthropic bill. Think of Personas as the orchestration layer, and Claude as the engine."
-        },
-        {
-          q: "What is Bring Your Own Infrastructure (BYOI)?",
-          a: "BYOI lets you connect your own cloud provider credentials (e.g., Fly.io API tokens) instead of using our managed infrastructure. Personas provisions and manages the workers on your account, giving you unlimited execution without per-month caps \u2014 you only pay your cloud provider directly."
-        },
-        {
-          q: "What's the difference between local and cloud execution?",
-          a: "Local execution runs agents on your machine using Claude CLI \u2014 it's instant, free, and private, but stops when your computer sleeps. Cloud execution runs agents on remote workers 24/7, supports event-bus bridging across environments, and enables team collaboration. You can switch between modes per-agent."
+          q: "Is Personas free?",
+          a: "Yes. The desktop app is free and open source, with unlimited local agents. You need your own Claude subscription, and we never touch your Anthropic bill. Think of Personas as the orchestration layer, and Claude as the engine."
         },
         {
           q: "Are there any limits on the number of agents?",
-          a: "Locally, there are no limits \u2014 create as many agents as you want. Cloud plans have worker limits (1\u20135 depending on tier) and monthly execution caps. Pro and Team plans include burst auto-scaling for traffic spikes. BYOI removes all caps entirely."
+          a: "No. Create as many agents as you want."
         }
       ]
     },
@@ -425,10 +385,10 @@ export const id: Translations = {
       downloadInstaller: "Unduh installer",
       downloadFor: "Unduh untuk {platform}",
       joinWaitlist: "Gabung daftar tunggu",
-      connectCli: "Hubungkan Claude CLI",
+      connectCli: "Hubungkan Claude Code",
       launchAgent: "Luncurkan agen pertama",
       exploreFirst: "Jelajahi kemampuan dulu",
-      requiresCli: "Memerlukan Claude CLI",
+      requiresCli: "Memerlukan Claude Code",
       installerSize: "Installer 12 MB",
       noSignupLine: "Tanpa pendaftaran, tanpa kartu kredit. Berjalan di mesin Anda. Nol telemetri.",
       windows: "Windows",
@@ -604,7 +564,8 @@ export const id: Translations = {
             synced: "Disinkronkan"
           }
         }
-      }
+      },
+      related: "Terkait"
     },
     dashboardUi: {
       status: {
@@ -643,7 +604,7 @@ export const id: Translations = {
       noReviewsInFilter: "Tidak ada tinjauan dalam filter ini",
       refreshing: "Menyegarkan...",
       rejectSelectedTitle: "Tolak tinjauan yang dipilih?",
-      rejectSelectedBody: "Ini akan menolak {count} tinjauan{plural} yang dipilih. Anda memiliki 5 detik untuk membatalkan tindakan ini.",
+      rejectSelectedBody: "Ini akan menolak tinjauan yang dipilih ({count}). Anda memiliki 5 detik untuk membatalkan tindakan ini.",
       undo: "Urungkan",
       retry: "Coba lagi",
       bulkFailedApprove: "{failed} dari {total} gagal disetujui",
@@ -807,6 +768,29 @@ export const id: Translations = {
       parseError: {
         label: "Kesalahan parsing",
         detail: "Payload tidak valid \u2014 dieskalasi menjadi kritis hingga ditinjau"
+      },
+      undo: {
+        approved: "Tinjauan disetujui: {count}",
+        rejected: "Tinjauan ditolak: {count}",
+        refused: "Beberapa tinjauan ini sudah memiliki keputusan yang tertunda \u2014 urungkan atau tunggu hingga tersimpan."
+      },
+      sla: {
+        due: "Jatuh tempo {when}",
+        wasDue: "Seharusnya selesai {when}",
+        overdueCount: "Lewat tenggat: {n}"
+      },
+      resolved: "Diselesaikan {when}",
+      resolvedBy: "Diselesaikan {when} oleh {name}",
+      resolver: {
+        you: "Anda",
+        system: "sistem"
+      },
+      autoApprovedNote: "Disetujui otomatis: SLA terlewati",
+      bulkProcessing: "Memproses tinjauan: {count}",
+      severity: {
+        critical: "Kritis",
+        warning: "Peringatan",
+        info: "Info"
       }
     },
     leaderboardPage: {
@@ -1088,7 +1072,6 @@ export const id: Translations = {
       allSystemsHealthy: "Semua sistem sehat",
       noIssuesDetected: "Tidak ada masalah terdeteksi di layanan yang dipantau",
       noSeverityIssues: "Tidak ada masalah tingkat {severity}",
-      exampleDataNotice: "Menampilkan data contoh. Analitik nyata akan muncul setelah agen mulai menjalankan eksekusi.",
       toolInvocations: "Pemanggilan alat",
       distribution: "Distribusi",
       usageOverTime: "Penggunaan dari waktu ke waktu",
@@ -1422,7 +1405,7 @@ export const id: Translations = {
         },
         platform: {
           title: "Platform Inti",
-          caption: "Mode dev, eksekusi cloud, konektor, instalasi tanpa repot"
+          caption: "Mode dev, konektor, instalasi tanpa repot"
         },
         templates: {
           title: "Galeri Templat",
@@ -1444,7 +1427,6 @@ export const id: Translations = {
         enterprise: "Perusahaan",
         devMode: "Mode dev",
         connectors: "Konektor",
-        cloudExecution: "Eksekusi cloud",
         installersUpdates: "Penginstal & pembaruan",
         allCategories: "Semua kategori",
         devops: "DevOps",
@@ -1466,7 +1448,6 @@ export const id: Translations = {
         ssoAudit: "SSO \u00b7 audit",
         instantPreview: "pratinjau instan",
         services: "{n} layanan",
-        runs247: "operasi 24/7",
         autoUpdate: "pembaruan otomatis",
         templatesTotal: "{n} / {total} templat"
       },
@@ -1587,9 +1568,14 @@ export const id: Translations = {
         memories: "Agen Anda belajar dan mengingat. Kelola apa yang mereka ketahui dan bagaimana mereka menggunakan pengalaman sebelumnya.",
         monitoring: "Pantau setiap eksekusi secara real time. Lihat apa yang dilakukan agen Anda, seberapa baik kinerjanya, dan berapa biayanya.",
         testing: "Jalankan tes arena, perbandingan A/B, dan biarkan sistem genome mengembangkan prompt terbaik Anda.",
-        deployment: "Deploy agen ke cloud, hubungkan ke GitHub Actions, GitLab CI, dan alur kerja n8n.",
+        deployment: "Hubungkan agen ke GitHub Actions, GitLab CI, dan alur kerja n8n.",
         troubleshooting: "Perbaiki masalah umum, pahami pesan error, dan kembalikan agen Anda ke jalur yang benar."
-      }
+      },
+      translationNotice: {
+        staleBody: "Versi bahasa Inggris halaman ini diperbarui setelah diterjemahkan.",
+        showTranslation: "Baca terjemahan lama",
+        showCurrent: "Tampilkan versi bahasa Inggris terbaru",
+      },
     },
     featurePages: {
       orchestration: {
@@ -1599,7 +1585,7 @@ export const id: Translations = {
       },
       security: {
         headline: "Rahasia Anda tetap milik Anda",
-        description: "Setiap kata sandi, API key, dan access token dienkripsi di perangkat Anda menggunakan enkripsi AES-256 setara bank. Kredensial Anda disimpan dalam vault aman milik sistem operasi Anda sendiri \u2014 tidak ada yang pernah dikirim ke cloud.",
+        description: "Setiap kata sandi, API key, dan access token dienkripsi di perangkat Anda menggunakan enkripsi AES-256 setara bank. Kredensial Anda disimpan dalam vault aman milik sistem operasi Anda sendiri.",
         cta: "Amankan koneksi Anda"
       },
       "multi-provider": {
@@ -2289,6 +2275,37 @@ export const id: Translations = {
           samePerson: "orang yang sama, di semuanya",
           samePersonShort: "orang yang sama, di semuanya"
         }
+      }
+    },
+    orchestrationHub: {
+      previousTrigger: "Trigger sebelumnya",
+      nextTrigger: "Trigger berikutnya"
+    },
+    labVersions: {
+      title: "Versi & penilaian",
+      hint: "Aktifkan sebuah versi untuk menayangkannya. Untuk kembali, aktifkan versi sebelumnya.",
+      live: "Tayang",
+      experimental: "Eksperimental",
+      rating: "Nilai",
+      deltaVsBaseline: "\u0394 terhadap acuan",
+      baseline: "Acuan",
+      activate: "Aktifkan",
+      activateVersion: "Aktifkan {version}",
+      pinBaseline: "Jadikan acuan",
+      regression: "Regresi",
+      nowLive: "{version} sudah tayang"
+    },
+    pluginShowcase: {
+      heading: "Semua siap",
+      headingGradient: "dipasang",
+      introAll: "Personas hadir dengan {shipped} plugin, dan semuanya sedang bekerja di bawah.",
+      introSome: "Personas hadir dengan {shipped} plugin, dan {showcased} di antaranya sedang bekerja di bawah.",
+      introTail: "Masing-masing adalah ruang kerja mandiri yang dapat dijalankan agen Anda, berbagi kredensial yang sama dan saling melengkapi. Ganti tab untuk bertemu spesialis lain.",
+      tabsLabel: "Plugin yang ditampilkan",
+      counter: "plugin {current} dari {total}",
+      taglines: {
+        devTools: "Armada agen paralel, proyek, triase",
+        brain: "Vault Anda, siap untuk agen"
       }
     }
   };

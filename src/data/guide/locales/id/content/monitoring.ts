@@ -113,7 +113,7 @@ Sistem menandai run yang terlihat seperti mereka bisa berjalan pada model yang l
 
 ### Cara Kerjanya
 
-Tampilan Usage mengelompokkan record eksekusi yang sama dengan tampilan per-agen tetapi pada dimensi model sebagai gantinya. Harga dikonfigurasi per-model di Settings → Engine, dengan default yang cocok dengan harga publik setiap provider; Anda dapat menimpa jika Anda memiliki tarif yang dinegosiasikan atau menggunakan BYOI pada endpoint yang lebih murah.
+Tampilan Usage mengelompokkan record eksekusi yang sama dengan tampilan per-agen tetapi pada dimensi model sebagai gantinya. Harga dikonfigurasi per-model di Settings → Engine, dengan default yang cocok dengan harga publik setiap provider; Anda dapat menimpa jika Anda memiliki tarif yang dinegosiasikan atau endpoint yang lebih murah.
 
 :::tip
 Sekali sebulan, pindai tampilan per-model yang diurutkan berdasarkan total biaya. Entri teratas adalah peluang penghematan terbesar Anda — masukkan ke arena Lab terhadap model berikutnya yang lebih murah dan lihat apakah kualitas bertahan. Sebagian besar agen mentoleransi penurunan model dengan baik; yang tidak adalah yang benar-benar layak pengeluarannya.

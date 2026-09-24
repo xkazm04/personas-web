@@ -409,26 +409,6 @@ export const topics: Record<string, { title: string; description: string }> = {
     description:
       "Un meta-agente integrado que revisa tus agentes destacados y puntúa cada ejecución de 0 a 5 con notas de entrenamiento concretas. Destaca un agente para incluirlo en el ámbito del Director; los veredictos aparecen como una columna de estrellas en Actividad y una pestaña Director en cada ejecución. Puede usar tu Obsidian Brain como memoria a largo plazo para que su entrenamiento mejore con el tiempo.",
   },
-  "local-vs-cloud-execution": {
-    title: "Ejecución local vs en la nube",
-    description:
-      "Entiende cuándo ejecutar agentes en tu máquina y cuándo en la nube. La ejecución local es ideal para pruebas y datos privados: tus agentes corren en tu propia computadora. La ejecución en la nube mantiene a tus agentes funcionando 24/7, incluso cuando tu computadora está apagada.",
-  },
-  "connecting-to-the-cloud-orchestrator": {
-    title: "Conectarse al orquestador en la nube",
-    description:
-      "Configurar la ejecución remota de agentes 24/7 para que tus agentes nunca duerman. El orquestador en la nube es un servicio que ejecuta tus agentes a toda hora sin necesidad de que tu computadora esté encendida. Conéctate una vez y tus agentes siempre estarán disponibles.",
-  },
-  "deploying-an-agent-to-the-cloud": {
-    title: "Desplegar un agente en la nube",
-    description:
-      "Publica agentes para ejecución continua con unos pocos clics. Selecciona un agente, elige tus ajustes de nube y pulsa desplegar: estará activo en segundos. Tu agente seguirá trabajando según su calendario incluso cuando cierres la app.",
-  },
-  "cloud-execution-monitoring": {
-    title: "Monitorización de ejecución en la nube",
-    description:
-      "Rastrea el rendimiento y los costes de los agentes remotos desde tu escritorio. Aunque tus agentes corran en la nube, puedes vigilarlos desde la comodidad de la app Personas. Verás el estado en vivo, los costes y los resultados igual que con los agentes locales.",
-  },
   "github-actions-integration": {
     title: "Integración con GitHub Actions",
     description:
@@ -443,21 +423,6 @@ export const topics: Record<string, { title: string; description: string }> = {
     title: "Integración con flujos de n8n",
     description:
       "Conecta los agentes de Personas con flujos de automatización de n8n. Si ya usas n8n para automatización, tus agentes de Personas pueden integrarse sin problemas. Esto te permite combinar la toma de decisiones impulsada por IA con la enorme biblioteca de integraciones de n8n.",
-  },
-  "byoi-bring-your-own-infrastructure": {
-    title: "BYOI — Trae tu propia infraestructura",
-    description:
-      "Usa tus propios servidores en la nube en vez de hosting gestionado. Si prefieres ejecutar todo en tu propia infraestructura por motivos de cumplimiento o coste, BYOI te da control total. Obtienes todos los beneficios de la ejecución en la nube sin la dependencia de un proveedor.",
-  },
-  "syncing-desktop-and-cloud": {
-    title: "Sincronizar escritorio y nube",
-    description:
-      "Mantén tus agentes locales y remotos sincronizados. Cuando haces cambios en tu escritorio, pueden enviarse automáticamente a la nube. Esto garantiza que la versión que se ejecuta de forma remota siempre esté al día con tus últimas mejoras.",
-  },
-  "cloud-troubleshooting": {
-    title: "Resolución de problemas en la nube",
-    description:
-      "Resolver problemas comunes de despliegue en la nube. Si tu agente en la nube no se comporta como esperas, esta guía te lleva por las causas y soluciones más frecuentes. Desde problemas de conexión hasta errores de permisos, encontrarás pasos claros para retomar el rumbo.",
   },
   "common-error-messages": {
     title: "Mensajes de error comunes",

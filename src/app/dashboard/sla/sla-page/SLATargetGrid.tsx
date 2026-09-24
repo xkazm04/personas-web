@@ -1,8 +1,9 @@
 import { useMemo, useState } from "react";
-import { AnimatePresence, motion, useReducedMotion } from "framer-motion";
+import { AnimatePresence, motion } from "framer-motion";
 import { AlertTriangle, CheckCircle2 } from "lucide-react";
 
 import FilterBar from "@/components/dashboard/FilterBar";
+import { useStillMotion } from "@/hooks/useStillMotion";
 import { fadeUp } from "@/lib/animations";
 import type { SLAMetricType, SLATarget } from "@/lib/mock-dashboard-data";
 
@@ -23,7 +24,7 @@ export function SLATargetGrid({
     filter: { all: string; atRisk: string; healthy: string };
   };
 }) {
-  const reduce = useReducedMotion();
+  const reduce = useStillMotion();
   const [filter, setFilter] = useState<StatusFilter>("all");
 
   const counts = useMemo(() => {

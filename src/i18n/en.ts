@@ -61,38 +61,7 @@
     slogan: string;
   };
   pricing: {
-    local: string;
-    cloud: string;
-    enterprise: string;
-    downloadLocal: string;
-    goCloud: string;
-    contactSales: string;
     comingSoon: string;
-    bestFor: string;
-    forever: string;
-    mo: string;
-    custom: string;
-    bestForLocal: string;
-    bestForCloud: string;
-    bestForEnterprise: string;
-    features: {
-      unlimitedLocalAgents: string;
-      localEventBus: string;
-      fullObservability: string;
-      designEngine: string;
-      teamCanvasLocal: string;
-      everythingInFree: string;
-      cloudWorkers3: string;
-      executions1000: string;
-      events10000: string;
-      burstAutoScaling: string;
-      everythingInPro: string;
-      ssoSaml: string;
-      multiTenantRbac: string;
-      auditTrailExport: string;
-      dedicatedWorkers: string;
-      prioritySupport: string;
-    };
   };
   hero: {
     downloadCta: string;
@@ -368,6 +337,7 @@
         };
       };
     };
+    related: string;
   };
   dashboardUi: {
     status: {
@@ -570,6 +540,36 @@
     parseError: {
       label: string;
       detail: string;
+    };
+    /** Undo toast of the review decision ledger ({count} = rows in the window). */
+    undo: {
+      approved: string;
+      rejected: string;
+      refused: string;
+    };
+    /** SLA chip + header count. {when} = Intl.RelativeTimeFormat phrase ("in 16 minutes" / "16 hours ago"). */
+    sla: {
+      due: string;
+      wasDue: string;
+      overdueCount: string;
+    };
+    /** Detail-panel resolved line. {when} = Intl.RelativeTimeFormat phrase, {name} = resolver. */
+    resolved: string;
+    resolvedBy: string;
+    /** Display names for the store's resolvedBy sentinels (src/lib/review-display.ts). */
+    resolver: {
+      you: string;
+      system: string;
+    };
+    /** Shown in place of the escalation's persisted auto-approve reviewer note. */
+    autoApprovedNote: string;
+    /** Bulk commit progress bar. {count} = rows in the commit. */
+    bulkProcessing: string;
+    /** Standalone severity label (pill / detail header). The voice copy's severity words are inflected for its sentence. */
+    severity: {
+      critical: string;
+      warning: string;
+      info: string;
     };
   };
   leaderboardPage: {
@@ -851,7 +851,6 @@
     allSystemsHealthy: string;
     noIssuesDetected: string;
     noSeverityIssues: string;
-    exampleDataNotice: string;
     toolInvocations: string;
     distribution: string;
     usageOverTime: string;
@@ -1192,7 +1191,6 @@
       enterprise: string;
       devMode: string;
       connectors: string;
-      cloudExecution: string;
       installersUpdates: string;
       allCategories: string;
       devops: string;
@@ -1214,7 +1212,6 @@
       ssoAudit: string;
       instantPreview: string;
       services: string;
-      runs247: string;
       autoUpdate: string;
       templatesTotal: string;
     };
@@ -1325,6 +1322,11 @@
       testing: string;
       deployment: string;
       troubleshooting: string;
+    };
+    translationNotice: {
+      staleBody: string;
+      showTranslation: string;
+      showCurrent: string;
     };
   };
   featurePages: {
@@ -1719,6 +1721,42 @@
       };
     };
   };
+  orchestrationHub: {
+    previousTrigger: string;
+    nextTrigger: string;
+  };
+  /** Lab version rail: the desktop Lab's Versions & Ratings table ({version} = a version id). */
+  labVersions: {
+    title: string;
+    hint: string;
+    live: string;
+    experimental: string;
+    rating: string;
+    deltaVsBaseline: string;
+    baseline: string;
+    activate: string;
+    activateVersion: string;
+    pinBaseline: string;
+    regression: string;
+    nowLive: string;
+  };
+  /**
+   * /features plugin showcase. {shipped}/{showcased} are derived counts (desktop manifest /
+   * roster); {current}/{total} are the open tab's position. Product names stay untranslated.
+   */
+  pluginShowcase: {
+    heading: string;
+    headingGradient: string;
+    introAll: string;
+    introSome: string;
+    introTail: string;
+    tabsLabel: string;
+    counter: string;
+    taglines: {
+      devTools: string;
+      brain: string;
+    };
+  };
 }
 
 export const en: Translations = {
@@ -1758,9 +1796,9 @@ export const en: Translations = {
   compareSection: {
     heading: 'Everything is',
     headingGradient: 'free',
-    description: 'The desktop app and every capability below ship free forever. No tiers, no per-seat pricing — just a complete agent platform running on your machine.',
-    offerBadges: ['Free forever', 'Self-hosted', 'No per-run markup', 'Open source'],
-    offerBody: 'Personas runs on your machine. No orchestration markup and no per-seat pricing. Paid cloud and priority support are optional, not required.',
+    description: 'The desktop app and every capability below ship free forever: a complete agent platform running on your machine.',
+    offerBadges: ['Free forever', 'Self-hosted', 'Open source'],
+    offerBody: 'Personas runs on your machine.',
     ctaLabel: 'Get started free',
     readGuide: 'Read the guide',
     groups: {
@@ -1835,7 +1873,7 @@ export const en: Translations = {
   },
   footer: {
     tagline: 'AI agents that work for you',
-    motto: 'AI agents that automate your work, so you can focus on what matters most.',
+    motto: 'AI agents that automate your work.',
     product: 'Product',
     resources: 'Resources',
     legal: 'Legal',
@@ -1845,46 +1883,15 @@ export const en: Translations = {
     slogan: 'Automate your work. Reclaim your time.',
   },
   pricing: {
-    local: 'Local',
-    cloud: 'Cloud',
-    enterprise: 'Enterprise',
-    downloadLocal: 'Download Local',
-    goCloud: 'Go Cloud',
-    contactSales: 'Contact Sales',
     comingSoon: 'Coming Soon',
-    bestFor: 'Best for',
-    forever: 'forever',
-    mo: '/mo',
-    custom: 'Custom',
-    bestForLocal: 'Solo builders getting started',
-    bestForCloud: 'Fast-moving individual teams',
-    bestForEnterprise: 'Organizations with compliance & scale needs',
-    features: {
-      unlimitedLocalAgents: 'Unlimited local agents',
-      localEventBus: 'Local event bus & scheduler',
-      fullObservability: 'Full observability dashboard',
-      designEngine: 'Design engine',
-      teamCanvasLocal: 'Team canvas (local)',
-      everythingInFree: 'Everything in Free',
-      cloudWorkers3: '3 cloud workers',
-      executions1000: '1,000 executions/mo',
-      events10000: '10,000 events/mo',
-      burstAutoScaling: 'Burst auto-scaling',
-      everythingInPro: 'Everything in Pro',
-      ssoSaml: 'SSO via SAML & OIDC',
-      multiTenantRbac: 'Multi-tenant workspaces with RBAC',
-      auditTrailExport: 'Execution audit trail export',
-      dedicatedWorkers: 'Dedicated cloud workers & SLA',
-      prioritySupport: 'Priority support',
-    },
   },
   hero: {
-    downloadCta: 'Download',
+    downloadCta: 'Download Personas',
     trustLine: 'No signup, no credit card. Runs on your machine. Zero telemetry.',
     badge: 'AI Agent Platform',
     headingLine1: 'Intelligent agents',
     headingLine2: 'that work for you',
-    description: 'Design agents in natural language. Orchestrate them locally or in the cloud.',
+    description: 'Design agents in natural language. Orchestrate them on your own machine.',
     descriptionBold: 'No workflow diagrams. No agent swarms. No code.',
     mode2: 'Simple setup',
     mode3: 'Free',
@@ -2028,28 +2035,20 @@ export const en: Translations = {
     discordSubtitle: 'Join our Discord community for help and discussion.',
     questions: [
       {
-        q: 'What is Claude CLI and why do I need it?',
-        a: 'Claude CLI is Anthropic\'s official command-line interface for interacting with Claude. Personas uses it under the hood to run your agents locally \u2014 it handles authentication, model access, and streaming responses. You\'ll need an active Claude Pro or Max subscription and the CLI installed before launching Personas.',
+        q: 'What is Claude Code and why do I need it?',
+        a: 'Claude Code is Anthropic\'s official command-line tool for working with Claude. Personas uses it under the hood to run your agents locally. It handles authentication, model access, and streaming responses. You\'ll need an active Claude Pro or Max subscription and Claude Code installed before launching Personas.',
       },
       {
         q: 'Does Personas collect any telemetry or usage data?',
-        a: 'No. Personas runs entirely on your machine with zero telemetry. We don\'t collect analytics, usage metrics, or any personal data. Your prompts, agent configurations, and execution logs never leave your device unless you explicitly enable cloud execution.',
+        a: 'No. Personas runs entirely on your machine with zero telemetry. We don\'t collect analytics, usage metrics, or any personal data. Your prompts, agent configurations, and execution logs never leave your device.',
       },
       {
-        q: 'How does the pricing model work?',
-        a: 'The desktop app is free forever with unlimited local agents. Cloud plans (Starter, Pro, Team) add 24/7 execution, remote workers, and team features on top. You always need your own Claude subscription \u2014 we never touch your Anthropic bill. Think of Personas as the orchestration layer, and Claude as the engine.',
-      },
-      {
-        q: 'What is Bring Your Own Infrastructure (BYOI)?',
-        a: 'BYOI lets you connect your own cloud provider credentials (e.g., Fly.io API tokens) instead of using our managed infrastructure. Personas provisions and manages the workers on your account, giving you unlimited execution without per-month caps \u2014 you only pay your cloud provider directly.',
-      },
-      {
-        q: 'What\'s the difference between local and cloud execution?',
-        a: 'Local execution runs agents on your machine using Claude CLI \u2014 it\'s instant, free, and private, but stops when your computer sleeps. Cloud execution runs agents on remote workers 24/7, supports event-bus bridging across environments, and enables team collaboration. You can switch between modes per-agent.',
+        q: 'Is Personas free?',
+        a: 'Yes. The desktop app is free and open source, with unlimited local agents. You need your own Claude subscription, and we never touch your Anthropic bill. Think of Personas as the orchestration layer, and Claude as the engine.',
       },
       {
         q: 'Are there any limits on the number of agents?',
-        a: 'Locally, there are no limits \u2014 create as many agents as you want. Cloud plans have worker limits (1\u20135 depending on tier) and monthly execution caps. Pro and Team plans include burst auto-scaling for traffic spikes. BYOI removes all caps entirely.',
+        a: 'No. Create as many agents as you want.',
       },
     ],
   },
@@ -2060,10 +2059,10 @@ export const en: Translations = {
     downloadInstaller: 'Download installer',
     downloadFor: 'Download for {platform}',
     joinWaitlist: 'Join waitlist',
-    connectCli: 'Connect Claude CLI',
+    connectCli: 'Connect Claude Code',
     launchAgent: 'Launch first agent',
     exploreFirst: 'Explore capabilities first',
-    requiresCli: 'Requires Claude CLI',
+    requiresCli: 'Requires Claude Code',
     installerSize: '12 MB installer',
     noSignupLine: 'No signup, no credit card. Runs on your machine. Zero telemetry.',
     windows: 'Windows',
@@ -2240,6 +2239,7 @@ export const en: Translations = {
         },
       },
     },
+    related: 'Related',
   },
   dashboardUi: {
     status: {
@@ -2278,7 +2278,7 @@ export const en: Translations = {
     noReviewsInFilter: "No reviews in this filter",
     refreshing: "Refreshing...",
     rejectSelectedTitle: "Reject selected reviews?",
-    rejectSelectedBody: "This will reject {count} selected review{plural}. You will have 5 seconds to undo this action.",
+    rejectSelectedBody: "This will reject the selected reviews ({count}). You will have 5 seconds to undo this action.",
     undo: "Undo",
     retry: "Retry",
     bulkFailedApprove: "{failed} of {total} failed to approve",
@@ -2442,6 +2442,29 @@ export const en: Translations = {
     parseError: {
       label: 'Parse error',
       detail: 'Malformed payload — escalated to critical until reviewed',
+    },
+    undo: {
+      approved: 'Reviews approved: {count}',
+      rejected: 'Reviews rejected: {count}',
+      refused: 'Some of these reviews already have a verdict pending. Undo it or wait for it to save.',
+    },
+    sla: {
+      due: 'Due {when}',
+      wasDue: 'Was due {when}',
+      overdueCount: 'Overdue: {n}',
+    },
+    resolved: 'Resolved {when}',
+    resolvedBy: 'Resolved {when} by {name}',
+    resolver: {
+      you: 'you',
+      system: 'the system',
+    },
+    autoApprovedNote: 'Auto-approved: SLA expired',
+    bulkProcessing: 'Processing reviews: {count}',
+    severity: {
+      critical: 'Critical',
+      warning: 'Warning',
+      info: 'Info',
     },
   },
   leaderboardPage: {
@@ -2723,7 +2746,6 @@ export const en: Translations = {
     allSystemsHealthy: 'All systems healthy',
     noIssuesDetected: 'No issues detected across monitored services',
     noSeverityIssues: 'No {severity} severity issues',
-    exampleDataNotice: 'Showing example data. Real analytics will appear once agents start running executions.',
     toolInvocations: 'Tool Invocations',
     distribution: 'Distribution',
     usageOverTime: 'Usage Over Time',
@@ -3048,7 +3070,7 @@ export const en: Translations = {
       i18n: { title: 'Internationalization', caption: '{count} locales, hand-translated — each flag develops with coverage' },
       devices: { title: 'Device Support', caption: 'Personas on every machine you own' },
       collaboration: { title: 'Collaboration', caption: 'From one operator to the whole org' },
-      platform: { title: 'Core Platform', caption: 'Dev mode, cloud execution, connectors, painless installs' },
+      platform: { title: 'Core Platform', caption: 'Dev mode, connectors, painless installs' },
       templates: { title: 'Template Gallery', caption: 'Starter agents by category — live gallery counts' },
     },
     bars: {
@@ -3066,7 +3088,6 @@ export const en: Translations = {
       enterprise: 'Enterprise',
       devMode: 'Dev Mode',
       connectors: 'Connectors',
-      cloudExecution: 'Cloud execution',
       installersUpdates: 'Installers & updates',
       allCategories: 'All categories',
       devops: 'DevOps',
@@ -3088,7 +3109,6 @@ export const en: Translations = {
       ssoAudit: 'SSO · audit',
       instantPreview: 'instant preview',
       services: '{n} services',
-      runs247: '24/7 runs',
       autoUpdate: 'auto-update',
       templatesTotal: '{n} / {total} templates',
     },
@@ -3209,8 +3229,13 @@ export const en: Translations = {
       memories: "Your agents learn and remember. Manage what they know and how they use past experience.",
       monitoring: "Track every execution in real time. See what your agents do, how well they perform, and what they cost.",
       testing: "Run arena tests, A/B comparisons, and let the genome system evolve your best prompts.",
-      deployment: "Deploy agents to the cloud, connect to GitHub Actions, GitLab CI, and n8n workflows.",
+      deployment: "Connect agents to GitHub Actions, GitLab CI, and n8n workflows.",
       troubleshooting: "Fix common issues, understand error messages, and get your agents back on track.",
+    },
+    translationNotice: {
+      staleBody: "This page was updated in English after it was translated.",
+      showTranslation: "Read the older translation",
+      showCurrent: "Show the current English version",
     },
   },
   featurePages: {
@@ -3221,12 +3246,12 @@ export const en: Translations = {
     },
     security: {
       headline: "Your secrets stay yours",
-      description: "Every password, API key, and access token is encrypted on your device using bank-grade AES-256 encryption. Your credentials are stored in your operating system's own secure vault — nothing is ever sent to the cloud.",
+      description: "Every password, API key, and access token is encrypted on your device using bank-grade AES-256 encryption. Your credentials are stored in your operating system's own secure vault.",
       cta: "Secure your connections",
     },
     "multi-provider": {
       headline: "Not locked to one AI",
-      description: "Use Claude, OpenAI, Gemini, or run models locally with Ollama. Switch between providers freely, assign different models to different agents, and if one provider goes down — your agents automatically switch to another.",
+      description: "Use Claude, OpenAI, Gemini, or run models locally with Ollama. Switch between providers freely and assign different models to different agents. If one provider goes down, your agents automatically switch to another.",
       cta: "Choose your AI",
     },
     genome: {
@@ -3717,6 +3742,37 @@ export const en: Translations = {
         samePerson: 'the same person, in all of them',
         samePersonShort: 'the same person, in all of them',
       },
+    },
+  },
+  orchestrationHub: {
+    previousTrigger: 'Previous trigger',
+    nextTrigger: 'Next trigger',
+  },
+  labVersions: {
+    title: 'Versions & ratings',
+    hint: 'Activate a version to put it live. To roll back, activate the previous one.',
+    live: 'Live',
+    experimental: 'Experimental',
+    rating: 'Rating',
+    deltaVsBaseline: 'Δ vs baseline',
+    baseline: 'Baseline',
+    activate: 'Activate',
+    activateVersion: 'Activate {version}',
+    pinBaseline: 'Pin as baseline',
+    regression: 'Regression',
+    nowLive: '{version} is live',
+  },
+  pluginShowcase: {
+    heading: 'Everything to',
+    headingGradient: 'plug in',
+    introAll: 'Personas ships with {shipped} plugins, and every one is at work below.',
+    introSome: 'Personas ships with {shipped} plugins, and {showcased} of them are at work below.',
+    introTail: 'Each is a self-contained workspace your agents can drive, sharing the same credentials and composing with the others. Switch a tab to meet another specialist.',
+    tabsLabel: 'Showcased plugins',
+    counter: 'plugin {current} of {total}',
+    taglines: {
+      devTools: 'Parallel agent fleet, projects, triage',
+      brain: 'Your vault, agent-ready',
     },
   },
 };

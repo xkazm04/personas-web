@@ -271,14 +271,14 @@ Skupina „Drafts" nebo „Experimental" na vrchu postranního panelu je užite�
   "disabling-and-archiving-agents": `
 ## Vypínání a archivace agentů
 
-Dva způsoby, jak pozastavit agenta bez smazání. **Disable** zastaví spouštění všech spouštěčů a zablokuje manuální běhy; agent zůstává viditelný v postranním panelu s tlumenou ikonou, takže si pamatuješ, že existuje. **Archive** přesune agenta do skryté sekce archivu mimo dosah každodenního používání; přestane se spouštět, nepočítá se proti limitům tarifu a kdykoli může být obnoven.
+Dva způsoby, jak pozastavit agenta bez smazání. **Disable** zastaví spouštění všech spouštěčů a zablokuje manuální běhy; agent zůstává viditelný v postranním panelu s tlumenou ikonou, takže si pamatuješ, že existuje. **Archive** přesune agenta do skryté sekce archivu mimo dosah každodenního používání; přestane se spouštět a kdykoli může být obnoven.
 
 Ani jedna operace se nedotýká běhů, nastavení ani historie verzí. Archive je těžší — použij ho pro agenty, se kterými jsi pro tuto chvíli skončil/a, ale možná je budeš chtít zpět. Disable je lehčí — použij ho, když potřebuješ agenta dočasně zastavit, aniž bys ho ztratil/a z dohledu.
 
 ### Klíčové body
 
 - **Disable** — pozastavuje běh; agent stále viditelný v postranním panelu; jedno kliknutí pro znovuzapnutí
-- **Archive** — skryje agenta a uvolní jeho slot proti tvému limitu tarifu; obnovitelné navždy
+- **Archive** — skryje agenta; obnovitelné navždy
 - **Ani jedno nemaže** — nastavení, historie promptu a minulé běhy jsou zachovány
 - **Spouštěče respektují disable** — vypnutý agent ignoruje události schedule/webhook/file-watcher; nestaví se do fronty pro přehrání po znovuzapnutí
 

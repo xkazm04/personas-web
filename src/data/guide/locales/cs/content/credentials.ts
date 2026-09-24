@@ -10,7 +10,7 @@ Když spustíš agenta, engine dešifruje pouze konkrétní přihlašovací úda
 
 - **AES-256-GCM** — autentizované šifrování (každý ciphertext přihlašovacího údaje je integrity-checkovaný, takže pozměněný soubor trezoru je detekován, ne tiše dešifrován)
 - **Hlavní klíč obalený OS keyringem** — DPAPI na Windows, Keychain na macOS, Secret Service na Linuxu; žádné hlavní heslo na psaní každou seanci
-- **Pouze lokální ve výchozím nastavení** — nic se nenahrává; cloudové nasazení je opt-in a šifruje v tranzitu přes TLS k tebou zvolenému orchestrátoru
+- **Pouze lokální ve výchozím nastavení** — nic se nenahrává
 - **Tokenové reference v logu** — agent trace a exporty používají ID přihlašovacích údajů, ne surová tajemství
 - **Důkaz pozměnění** — GCM autentizační tagy zachytí jakoukoli modifikaci souboru trezoru
 
@@ -43,10 +43,6 @@ Trezor je vázán k tvému OS uživatelskému účtu přes OS keyring. Kopírov�
 
 :::warning
 Pokud změníš heslo svého OS účtu na macOS nebo Linuxu, keyring může obalovací klíč znovu zamknout. Personas si vyžádají nové přihlašovací údaje při prvním běhu po změně. Pokud je keyring smazán (tovární reset, smazání účtu), trezor se stane neobnovitelným — zazálohuj surová tajemství externě, pokud potřebuješ disaster recovery nad rámec lokálního stroje.
-:::
-
-:::tip
-Model „pouze lokální" je správným výchozím pro osobní automatizaci. Pro týmovou / produkční práci, kde více strojů potřebuje stejné přihlašovací údaje, cloudové nasazení (Team / Builder tarif) replikuje stav trezoru přes orchestrátor s end-to-end šifrováním.
 :::
   `,
 

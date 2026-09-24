@@ -21,6 +21,7 @@ import StageSection from "@/components/StageSection";
 import SectionDivider from "@/components/SectionDivider";
 import LazyMount from "@/components/LazyMount";
 import PageShell from "@/components/PageShell";
+import LandingHashArrival from "@/components/LandingHashArrival";
 import { SCROLL_MAP_SECTIONS } from "@/lib/constants";
 import { faqJsonLd, organizationJsonLd, softwareJsonLd } from "./homeJsonLd";
 
@@ -83,6 +84,8 @@ export default function Home() {
       {/* Decorative cinematic illustration — top-left ambient layer */}
       <HeroAmbientIllustration />
       <Navbar />
+      {/* Lands /#download and every other declared address on its lazy section. */}
+      <LandingHashArrival />
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: safeJsonLd(organizationJsonLd) }}

@@ -10,7 +10,7 @@ Wenn du einen Agenten ausführst, entschlüsselt die Engine nur die spezifischen
 
 - **AES-256-GCM** — authentifizierte Verschlüsselung (jeder Zugangsdaten-Chiffretext wird auf Integrität geprüft, sodass eine manipulierte Tresor-Datei erkannt wird, nicht still entschlüsselt)
 - **OS-Keyring-umhüllter Hauptschlüssel** — DPAPI auf Windows, Keychain auf macOS, Secret Service auf Linux; kein Master-Passwort, das jede Sitzung getippt werden muss
-- **Standardmäßig nur lokal** — nichts wird hochgeladen; Cloud-Deploy ist Opt-in und verschlüsselt während der Übertragung via TLS zu deinem gewählten Orchestrator
+- **Standardmäßig nur lokal** — nichts wird hochgeladen
 - **Token-Referenzen in Logs** — Agenten-Traces und Exports nutzen Zugangsdaten-IDs, keine rohen Geheimnisse
 - **Manipulations-evident** — GCM-Authentifizierungs-Tags fangen jede Modifikation der Tresor-Datei ab
 
@@ -43,10 +43,6 @@ Der Tresor ist über das OS-Keyring an dein OS-Benutzerkonto gebunden. Das Kopie
 
 :::warning
 Wenn du dein OS-Konto-Passwort auf macOS oder Linux änderst, kann das Keyring den umhüllenden Schlüssel neu sperren. Personas wird beim ersten Lauf nach der Änderung nach der neuen Zugangsdaten fragen. Wenn das Keyring gelöscht wird (Werksreset, Kontolöschung), wird der Tresor unwiederherstellbar — sichere die Rohgeheimnisse extern, falls du Disaster Recovery über die lokale Maschine hinaus benötigst.
-:::
-
-:::tip
-Das Nur-lokal-Modell ist der richtige Standard für persönliche Automatisierung. Für Team-/Produktivarbeit, bei der mehrere Maschinen dieselben Zugangsdaten brauchen, repliziert das Cloud-Deploy (Team-/Builder-Tier) den Tresor-Zustand über den Orchestrator mit End-to-End-Verschlüsselung.
 :::
   `,
 

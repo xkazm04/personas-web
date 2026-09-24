@@ -61,6 +61,30 @@ function delay(ms = 300): Promise<void> {
   return new Promise((r) => setTimeout(r, ms));
 }
 
+/** Reviewer metadata a verdict write carries into the stored payload. */
+const REVIEW_METADATA_FIELDS = ["reviewerNotes", "resolvedBy"] as const;
+
+/** Folds `metadata.reviewerNotes` / `metadata.resolvedBy` into the event payload,
+ *  where `parseManualReview` reads them back. Unparseable input leaves the payload as is. */
+function mergeReviewMetadata(payload: string | null, metadata?: string): string | null {
+  if (!metadata) return payload;
+  try {
+    const meta: unknown = JSON.parse(metadata);
+    if (!meta || typeof meta !== "object") return payload;
+    const fields: Record<string, string> = {};
+    for (const key of REVIEW_METADATA_FIELDS) {
+      const value = (meta as Record<string, unknown>)[key];
+      if (typeof value === "string") fields[key] = value;
+    }
+    if (Object.keys(fields).length === 0) return payload;
+    const base: unknown = JSON.parse(payload ?? "{}");
+    if (!base || typeof base !== "object" || Array.isArray(base)) return payload;
+    return JSON.stringify({ ...base, ...fields });
+  } catch {
+    return payload;
+  }
+}
+
 /**
  * Monotonic id source for events minted by `publishEvent`. A counter rather
  * than `Math.random()` keeps demo ids stable and readable, and it never runs
@@ -159,19 +183,22 @@ export const mockApi: ApiClient = {
 
   updateEvent: async (id: string, body: { status: EventStatus; metadata?: string }): Promise<PersonaEvent> => {
     await delay();
-    const index = MOCK_EVENTS.findIndex((e) => e.id === id);
-    if (index === -1) throw new ApiError(404, "Event not found");
-    // Write the transition back into the fixture array. Returning a detached
-    // copy meant the next `listEvents` poll merged the stale status straight
-    // back over the store, so a drained dead letter row reappeared within 10s.
+    const idx = MOCK_EVENTS.findIndex((e) => e.id === id);
+    if (idx === -1) throw new ApiError(404, "Event not found");
+    // Write through to the in-session copy (demo-data-plane/network-faithful-mocks):
+    // the next listEvents — the review queue's 15s poll, the home page's fetch —
+    // must see the verdict, or every committed review snaps back to pending.
+    const ev = MOCK_EVENTS[idx];
     const updated: PersonaEvent = {
-      ...MOCK_EVENTS[index],
+      ...ev,
       status: body.status,
       processedAt: new Date().toISOString(),
-      errorMessage: body.status === "processed" ? null : MOCK_EVENTS[index].errorMessage,
+      payload: mergeReviewMetadata(ev.payload, body.metadata),
+      // A drained dead letter stops showing its old failure once processed.
+      errorMessage: body.status === "processed" ? null : ev.errorMessage,
     };
-    MOCK_EVENTS[index] = updated;
-    return updated;
+    MOCK_EVENTS[idx] = updated;
+    return { ...updated };
   },
 
   listSubscriptions: async (personaId: string): Promise<PersonaEventSubscription[]> => {

@@ -37,14 +37,13 @@ export const ja: Translations = {
     compareSection: {
       heading: "\u3059\u3079\u3066\u304c",
       headingGradient: "\u7121\u6599",
-      description: "\u30c7\u30b9\u30af\u30c8\u30c3\u30d7\u30a2\u30d7\u30ea\u3068\u4ee5\u4e0b\u306e\u3059\u3079\u3066\u306e\u6a5f\u80fd\u306f\u6c38\u4e45\u306b\u7121\u6599\u3067\u3059\u3002\u968e\u5c64\u3082\u30b7\u30fc\u30c8\u3054\u3068\u306e\u6599\u91d1\u3082\u306a\u304f\u3001\u3042\u306a\u305f\u306e\u30de\u30b7\u30f3\u3067\u52d5\u4f5c\u3059\u308b\u5b8c\u5168\u306a\u30a8\u30fc\u30b8\u30a7\u30f3\u30c8\u30d7\u30e9\u30c3\u30c8\u30d5\u30a9\u30fc\u30e0\u3067\u3059\u3002",
+      description: "\u30c7\u30b9\u30af\u30c8\u30c3\u30d7\u30a2\u30d7\u30ea\u3068\u4ee5\u4e0b\u306e\u3059\u3079\u3066\u306e\u6a5f\u80fd\u306f\u6c38\u4e45\u306b\u7121\u6599\u3002\u3042\u306a\u305f\u306e\u30de\u30b7\u30f3\u3067\u52d5\u4f5c\u3059\u308b\u5b8c\u5168\u306a\u30a8\u30fc\u30b8\u30a7\u30f3\u30c8\u30d7\u30e9\u30c3\u30c8\u30d5\u30a9\u30fc\u30e0\u3067\u3059\u3002",
       offerBadges: [
         "\u6c38\u4e45\u7121\u6599",
         "\u30bb\u30eb\u30d5\u30db\u30b9\u30c8",
-        "\u5b9f\u884c\u3054\u3068\u306e\u30de\u30fc\u30af\u30a2\u30c3\u30d7\u306a\u3057",
         "\u30aa\u30fc\u30d7\u30f3\u30bd\u30fc\u30b9"
       ],
-      offerBody: "Personas\u306f\u3042\u306a\u305f\u306e\u30de\u30b7\u30f3\u4e0a\u3067\u52d5\u4f5c\u3057\u307e\u3059\u3002\u30aa\u30fc\u30b1\u30b9\u30c8\u30ec\u30fc\u30b7\u30e7\u30f3\u306e\u30de\u30fc\u30af\u30a2\u30c3\u30d7\u3084\u30b7\u30fc\u30c8\u5358\u4f4d\u306e\u8ab2\u91d1\u306f\u3042\u308a\u307e\u305b\u3093\u3002\u6709\u6599\u30af\u30e9\u30a6\u30c9\u3068\u512a\u5148\u30b5\u30dd\u30fc\u30c8\u306f\u30aa\u30d7\u30b7\u30e7\u30f3\u3067\u3042\u308a\u3001\u5fc5\u9808\u3067\u306f\u3042\u308a\u307e\u305b\u3093\u3002",
+      offerBody: "Personas\u306f\u3042\u306a\u305f\u306e\u30de\u30b7\u30f3\u4e0a\u3067\u52d5\u4f5c\u3057\u307e\u3059\u3002",
       ctaLabel: "\u7121\u6599\u3067\u59cb\u3081\u308b",
       readGuide: "\u30ac\u30a4\u30c9\u3092\u8aad\u3080",
       groups: {
@@ -129,38 +128,7 @@ export const ja: Translations = {
       slogan: "\u4ed5\u4e8b\u3092\u81ea\u52d5\u5316\u3002\u6642\u9593\u3092\u53d6\u308a\u623b\u3059\u3002"
     },
     pricing: {
-      local: "\u30ed\u30fc\u30ab\u30eb",
-      cloud: "\u30af\u30e9\u30a6\u30c9",
-      enterprise: "\u30a8\u30f3\u30bf\u30fc\u30d7\u30e9\u30a4\u30ba",
-      downloadLocal: "\u30ed\u30fc\u30ab\u30eb\u7248\u3092\u30c0\u30a6\u30f3\u30ed\u30fc\u30c9",
-      goCloud: "\u30af\u30e9\u30a6\u30c9\u3078",
-      contactSales: "\u55b6\u696d\u306b\u9023\u7d61",
-      comingSoon: "\u8fd1\u65e5\u516c\u958b",
-      bestFor: "\u6700\u9069",
-      forever: "\u6c38\u4e45\u7121\u6599",
-      mo: "/\u6708",
-      custom: "\u30ab\u30b9\u30bf\u30e0",
-      bestForLocal: "\u59cb\u3081\u305f\u3070\u304b\u308a\u306e\u500b\u4eba\u30d3\u30eb\u30c0\u30fc",
-      bestForCloud: "\u30b9\u30d4\u30fc\u30c9\u91cd\u8996\u306e\u500b\u4eba\u30c1\u30fc\u30e0",
-      bestForEnterprise: "\u30b3\u30f3\u30d7\u30e9\u30a4\u30a2\u30f3\u30b9\u3068\u30b9\u30b1\u30fc\u30eb\u304c\u5fc5\u8981\u306a\u7d44\u7e54",
-      features: {
-        unlimitedLocalAgents: "\u7121\u5236\u9650\u306e\u30ed\u30fc\u30ab\u30eb\u30a8\u30fc\u30b8\u30a7\u30f3\u30c8",
-        localEventBus: "\u30ed\u30fc\u30ab\u30eb\u30a4\u30d9\u30f3\u30c8\u30d0\u30b9\u3068\u30b9\u30b1\u30b8\u30e5\u30fc\u30e9\u30fc",
-        fullObservability: "\u30d5\u30eb\u30aa\u30d6\u30b6\u30fc\u30d0\u30d3\u30ea\u30c6\u30a3\u30c0\u30c3\u30b7\u30e5\u30dc\u30fc\u30c9",
-        designEngine: "\u30c7\u30b6\u30a4\u30f3\u30a8\u30f3\u30b8\u30f3",
-        teamCanvasLocal: "\u30c1\u30fc\u30e0\u30ad\u30e3\u30f3\u30d0\u30b9\uff08\u30ed\u30fc\u30ab\u30eb\uff09",
-        everythingInFree: "Free\u306e\u5168\u6a5f\u80fd\u542b\u3080",
-        cloudWorkers3: "3\u3064\u306e\u30af\u30e9\u30a6\u30c9\u30ef\u30fc\u30ab\u30fc",
-        executions1000: "1,000\u56de/\u6708\u306e\u5b9f\u884c",
-        events10000: "10,000\u30a4\u30d9\u30f3\u30c8/\u6708",
-        burstAutoScaling: "\u30d0\u30fc\u30b9\u30c8\u30aa\u30fc\u30c8\u30b9\u30b1\u30fc\u30ea\u30f3\u30b0",
-        everythingInPro: "Pro\u306e\u5168\u6a5f\u80fd\u542b\u3080",
-        ssoSaml: "SAML\u3068OIDC\u306b\u3088\u308bSSO",
-        multiTenantRbac: "RBAC\u4ed8\u304d\u30de\u30eb\u30c1\u30c6\u30ca\u30f3\u30c8\u30ef\u30fc\u30af\u30b9\u30da\u30fc\u30b9",
-        auditTrailExport: "\u5b9f\u884c\u76e3\u67fb\u8a3c\u8de1\u30a8\u30af\u30b9\u30dd\u30fc\u30c8",
-        dedicatedWorkers: "\u5c02\u7528\u30af\u30e9\u30a6\u30c9\u30ef\u30fc\u30ab\u30fc\u3068SLA",
-        prioritySupport: "\u512a\u5148\u30b5\u30dd\u30fc\u30c8"
-      }
+      comingSoon: "\u8fd1\u65e5\u516c\u958b"
     },
     hero: {
       downloadCta: "\u30c0\u30a6\u30f3\u30ed\u30fc\u30c9",
@@ -168,7 +136,7 @@ export const ja: Translations = {
       badge: "AI \u30a8\u30fc\u30b8\u30a7\u30f3\u30c8\u30d7\u30e9\u30c3\u30c8\u30d5\u30a9\u30fc\u30e0",
       headingLine1: "\u30a4\u30f3\u30c6\u30ea\u30b8\u30a7\u30f3\u30c8\u30a8\u30fc\u30b8\u30a7\u30f3\u30c8",
       headingLine2: "\u304c\u3042\u306a\u305f\u306e\u305f\u3081\u306b\u50cd\u304f",
-      description: "\u81ea\u7136\u8a00\u8a9e\u3067\u30a8\u30fc\u30b8\u30a7\u30f3\u30c8\u3092\u8a2d\u8a08\u3002\u30ed\u30fc\u30ab\u30eb\u307e\u305f\u306f\u30af\u30e9\u30a6\u30c9\u3067\u30aa\u30fc\u30b1\u30b9\u30c8\u30ec\u30fc\u30b7\u30e7\u30f3\u3002",
+      description: "\u81ea\u7136\u8a00\u8a9e\u3067\u30a8\u30fc\u30b8\u30a7\u30f3\u30c8\u3092\u8a2d\u8a08\u3002\u3042\u306a\u305f\u81ea\u8eab\u306e\u30de\u30b7\u30f3\u4e0a\u3067\u30aa\u30fc\u30b1\u30b9\u30c8\u30ec\u30fc\u30b7\u30e7\u30f3\u3002",
       descriptionBold: "\u30ef\u30fc\u30af\u30d5\u30ed\u30fc\u56f3\u3082\u30a8\u30fc\u30b8\u30a7\u30f3\u30c8\u7fa4\u3082\u30b3\u30fc\u30c9\u3082\u4e0d\u8981\u3067\u3059\u3002",
       mode2: "\u7c21\u5358\u306a\u30bb\u30c3\u30c8\u30a2\u30c3\u30d7",
       mode3: "\u7121\u6599",
@@ -393,28 +361,20 @@ export const ja: Translations = {
       discordSubtitle: "\u30b5\u30dd\u30fc\u30c8\u3084\u30c7\u30a3\u30b9\u30ab\u30c3\u30b7\u30e7\u30f3\u306e\u305f\u3081\u306bDiscord\u30b3\u30df\u30e5\u30cb\u30c6\u30a3\u306b\u53c2\u52a0\u3057\u3066\u304f\u3060\u3055\u3044\u3002",
       questions: [
         {
-          q: "What is Claude CLI and why do I need it?",
-          a: "Claude CLI is Anthropic's official command-line interface for interacting with Claude. Personas uses it under the hood to run your agents locally \u2014 it handles authentication, model access, and streaming responses. You'll need an active Claude Pro or Max subscription and the CLI installed before launching Personas."
+          q: "What is Claude Code and why do I need it?",
+          a: "Claude Code is Anthropic's official command-line tool for working with Claude. Personas uses it under the hood to run your agents locally. It handles authentication, model access, and streaming responses. You'll need an active Claude Pro or Max subscription and Claude Code installed before launching Personas."
         },
         {
           q: "Does Personas collect any telemetry or usage data?",
-          a: "No. Personas runs entirely on your machine with zero telemetry. We don't collect analytics, usage metrics, or any personal data. Your prompts, agent configurations, and execution logs never leave your device unless you explicitly enable cloud execution."
+          a: "No. Personas runs entirely on your machine with zero telemetry. We don't collect analytics, usage metrics, or any personal data. Your prompts, agent configurations, and execution logs never leave your device."
         },
         {
-          q: "How does the pricing model work?",
-          a: "The desktop app is free forever with unlimited local agents. Cloud plans (Starter, Pro, Team) add 24/7 execution, remote workers, and team features on top. You always need your own Claude subscription \u2014 we never touch your Anthropic bill. Think of Personas as the orchestration layer, and Claude as the engine."
-        },
-        {
-          q: "What is Bring Your Own Infrastructure (BYOI)?",
-          a: "BYOI lets you connect your own cloud provider credentials (e.g., Fly.io API tokens) instead of using our managed infrastructure. Personas provisions and manages the workers on your account, giving you unlimited execution without per-month caps \u2014 you only pay your cloud provider directly."
-        },
-        {
-          q: "What's the difference between local and cloud execution?",
-          a: "Local execution runs agents on your machine using Claude CLI \u2014 it's instant, free, and private, but stops when your computer sleeps. Cloud execution runs agents on remote workers 24/7, supports event-bus bridging across environments, and enables team collaboration. You can switch between modes per-agent."
+          q: "Is Personas free?",
+          a: "Yes. The desktop app is free and open source, with unlimited local agents. You need your own Claude subscription, and we never touch your Anthropic bill. Think of Personas as the orchestration layer, and Claude as the engine."
         },
         {
           q: "Are there any limits on the number of agents?",
-          a: "Locally, there are no limits \u2014 create as many agents as you want. Cloud plans have worker limits (1\u20135 depending on tier) and monthly execution caps. Pro and Team plans include burst auto-scaling for traffic spikes. BYOI removes all caps entirely."
+          a: "No. Create as many agents as you want."
         }
       ]
     },
@@ -425,10 +385,10 @@ export const ja: Translations = {
       downloadInstaller: "\u30a4\u30f3\u30b9\u30c8\u30fc\u30e9\u30fc\u3092\u30c0\u30a6\u30f3\u30ed\u30fc\u30c9",
       downloadFor: "{platform} \u7248\u3092\u30c0\u30a6\u30f3\u30ed\u30fc\u30c9",
       joinWaitlist: "\u30a6\u30a7\u30a4\u30c8\u30ea\u30b9\u30c8\u306b\u53c2\u52a0",
-      connectCli: "Claude CLI\u3092\u63a5\u7d9a",
+      connectCli: "Claude Code\u3092\u63a5\u7d9a",
       launchAgent: "\u6700\u521d\u306e\u30a8\u30fc\u30b8\u30a7\u30f3\u30c8\u3092\u8d77\u52d5",
       exploreFirst: "\u307e\u305a\u6a5f\u80fd\u3092\u63a2\u7d22",
-      requiresCli: "Claude CLI\u304c\u5fc5\u8981",
+      requiresCli: "Claude Code\u304c\u5fc5\u8981",
       installerSize: "12 MB\u30a4\u30f3\u30b9\u30c8\u30fc\u30e9\u30fc",
       noSignupLine: "\u767b\u9332\u4e0d\u8981\u3001\u30af\u30ec\u30b8\u30c3\u30c8\u30ab\u30fc\u30c9\u4e0d\u8981\u3002\u3054\u81ea\u8eab\u306e\u30de\u30b7\u30f3\u3067\u52d5\u4f5c\u3057\u3001\u30c6\u30ec\u30e1\u30c8\u30ea\u30fc\u306f\u4e00\u5207\u3042\u308a\u307e\u305b\u3093\u3002",
       windows: "Windows",
@@ -604,7 +564,8 @@ export const ja: Translations = {
             synced: "\u540c\u671f"
           }
         }
-      }
+      },
+      related: "\u95a2\u9023"
     },
     dashboardUi: {
       status: {
@@ -643,7 +604,7 @@ export const ja: Translations = {
       noReviewsInFilter: "\u3053\u306e\u30d5\u30a3\u30eb\u30bf\u30fc\u306b\u8a72\u5f53\u3059\u308b\u30ec\u30d3\u30e5\u30fc\u306f\u3042\u308a\u307e\u305b\u3093",
       refreshing: "\u66f4\u65b0\u4e2d...",
       rejectSelectedTitle: "\u9078\u629e\u3057\u305f\u30ec\u30d3\u30e5\u30fc\u3092\u5374\u4e0b\u3057\u307e\u3059\u304b\uff1f",
-      rejectSelectedBody: "\u9078\u629e\u3057\u305f{count}\u4ef6\u306e\u30ec\u30d3\u30e5\u30fc{plural}\u3092\u5374\u4e0b\u3057\u307e\u3059\u3002\u3053\u306e\u64cd\u4f5c\u306f5\u79d2\u4ee5\u5185\u3067\u3042\u308c\u3070\u53d6\u308a\u6d88\u305b\u307e\u3059\u3002",
+      rejectSelectedBody: "\u9078\u629e\u3057\u305f\u30ec\u30d3\u30e5\u30fc\uff08{count}\u4ef6\uff09\u3092\u5374\u4e0b\u3057\u307e\u3059\u3002\u3053\u306e\u64cd\u4f5c\u306f5\u79d2\u4ee5\u5185\u3067\u3042\u308c\u3070\u53d6\u308a\u6d88\u305b\u307e\u3059\u3002",
       undo: "\u5143\u306b\u623b\u3059",
       retry: "\u518d\u8a66\u884c",
       bulkFailedApprove: "{total} \u4ef6\u4e2d {failed} \u4ef6\u306e\u627f\u8a8d\u306b\u5931\u6557\u3057\u307e\u3057\u305f",
@@ -807,6 +768,29 @@ export const ja: Translations = {
       parseError: {
         label: "\u89e3\u6790\u30a8\u30e9\u30fc",
         detail: "\u4e0d\u6b63\u306a\u5f62\u5f0f\u306e\u30da\u30a4\u30ed\u30fc\u30c9 \u2014 \u30ec\u30d3\u30e5\u30fc\u3055\u308c\u308b\u307e\u3067\u91cd\u5927\u3068\u3057\u3066\u6271\u308f\u308c\u307e\u3059"
+      },
+      undo: {
+        approved: "\u627f\u8a8d\u3057\u305f\u30ec\u30d3\u30e5\u30fc: {count}\u4ef6",
+        rejected: "\u5374\u4e0b\u3057\u305f\u30ec\u30d3\u30e5\u30fc: {count}\u4ef6",
+        refused: "\u3053\u308c\u3089\u306e\u30ec\u30d3\u30e5\u30fc\u306e\u4e00\u90e8\u306b\u306f\u4fdd\u7559\u4e2d\u306e\u5224\u65ad\u304c\u3042\u308a\u307e\u3059\u3002\u5143\u306b\u623b\u3059\u304b\u3001\u4fdd\u5b58\u3055\u308c\u308b\u307e\u3067\u304a\u5f85\u3061\u304f\u3060\u3055\u3044\u3002"
+      },
+      sla: {
+        due: "{when}\u306b\u671f\u9650",
+        wasDue: "{when}\u306b\u671f\u9650\u5207\u308c",
+        overdueCount: "\u671f\u9650\u8d85\u904e\uff1a{n}"
+      },
+      resolved: "{when}\u306b\u89e3\u6c7a",
+      resolvedBy: "{when}\u306b{name}\u304c\u89e3\u6c7a",
+      resolver: {
+        you: "\u3042\u306a\u305f",
+        system: "\u30b7\u30b9\u30c6\u30e0"
+      },
+      autoApprovedNote: "\u81ea\u52d5\u627f\u8a8d\uff1aSLA\u671f\u9650\u5207\u308c",
+      bulkProcessing: "\u30ec\u30d3\u30e5\u30fc\u3092\u51e6\u7406\u4e2d\uff1a{count}\u4ef6",
+      severity: {
+        critical: "\u91cd\u5927",
+        warning: "\u8b66\u544a",
+        info: "\u60c5\u5831"
       }
     },
     leaderboardPage: {
@@ -1088,7 +1072,6 @@ export const ja: Translations = {
       allSystemsHealthy: "?????????????",
       noIssuesDetected: "??????????????????????",
       noSeverityIssues: "{severity} ????????????",
-      exampleDataNotice: "???????????????????????????????????????????",
       toolInvocations: "???????",
       distribution: "??",
       usageOverTime: "??????",
@@ -1422,7 +1405,7 @@ export const ja: Translations = {
         },
         platform: {
           title: "\u30b3\u30a2\u30d7\u30e9\u30c3\u30c8\u30d5\u30a9\u30fc\u30e0",
-          caption: "\u958b\u767a\u30e2\u30fc\u30c9\u3001\u30af\u30e9\u30a6\u30c9\u5b9f\u884c\u3001\u30b3\u30cd\u30af\u30bf\u3001\u624b\u9593\u306e\u306a\u3044\u30a4\u30f3\u30b9\u30c8\u30fc\u30eb"
+          caption: "\u958b\u767a\u30e2\u30fc\u30c9\u3001\u30b3\u30cd\u30af\u30bf\u3001\u624b\u9593\u306e\u306a\u3044\u30a4\u30f3\u30b9\u30c8\u30fc\u30eb"
         },
         templates: {
           title: "\u30c6\u30f3\u30d7\u30ec\u30fc\u30c8\u30ae\u30e3\u30e9\u30ea\u30fc",
@@ -1444,7 +1427,6 @@ export const ja: Translations = {
         enterprise: "\u30a8\u30f3\u30bf\u30fc\u30d7\u30e9\u30a4\u30ba",
         devMode: "\u958b\u767a\u30e2\u30fc\u30c9",
         connectors: "\u30b3\u30cd\u30af\u30bf",
-        cloudExecution: "\u30af\u30e9\u30a6\u30c9\u5b9f\u884c",
         installersUpdates: "\u30a4\u30f3\u30b9\u30c8\u30fc\u30e9\u30fc\u3068\u66f4\u65b0",
         allCategories: "\u3059\u3079\u3066\u306e\u30ab\u30c6\u30b4\u30ea",
         devops: "DevOps",
@@ -1466,7 +1448,6 @@ export const ja: Translations = {
         ssoAudit: "SSO \u00b7 \u76e3\u67fb",
         instantPreview: "\u5373\u6642\u30d7\u30ec\u30d3\u30e5\u30fc",
         services: "{n} \u30b5\u30fc\u30d3\u30b9",
-        runs247: "24\u6642\u9593365\u65e5\u306e\u5b9f\u884c",
         autoUpdate: "\u81ea\u52d5\u66f4\u65b0",
         templatesTotal: "{n} / {total} \u30c6\u30f3\u30d7\u30ec\u30fc\u30c8"
       },
@@ -1587,9 +1568,14 @@ export const ja: Translations = {
         memories: "\u30a8\u30fc\u30b8\u30a7\u30f3\u30c8\u306f\u5b66\u7fd2\u3057\u3001\u8a18\u61b6\u3057\u307e\u3059\u3002\u30a8\u30fc\u30b8\u30a7\u30f3\u30c8\u304c\u77e5\u3063\u3066\u3044\u308b\u3053\u3068\u3068\u3001\u904e\u53bb\u306e\u7d4c\u9a13\u306e\u6d3b\u7528\u65b9\u6cd5\u3092\u7ba1\u7406\u3057\u307e\u3057\u3087\u3046\u3002",
         monitoring: "\u3059\u3079\u3066\u306e\u5b9f\u884c\u3092\u30ea\u30a2\u30eb\u30bf\u30a4\u30e0\u3067\u8ffd\u8de1\u3057\u307e\u3059\u3002\u30a8\u30fc\u30b8\u30a7\u30f3\u30c8\u306e\u52d5\u4f5c\u3001\u30d1\u30d5\u30a9\u30fc\u30de\u30f3\u30b9\u3001\u30b3\u30b9\u30c8\u3092\u78ba\u8a8d\u3067\u304d\u307e\u3059\u3002",
         testing: "\u30a2\u30ea\u30fc\u30ca\u30c6\u30b9\u30c8\u3084A/B\u6bd4\u8f03\u3092\u5b9f\u884c\u3057\u3001\u30b2\u30ce\u30e0\u30b7\u30b9\u30c6\u30e0\u306b\u6700\u9069\u306a\u30d7\u30ed\u30f3\u30d7\u30c8\u3092\u9032\u5316\u3055\u305b\u307e\u3057\u3087\u3046\u3002",
-        deployment: "\u30a8\u30fc\u30b8\u30a7\u30f3\u30c8\u3092\u30af\u30e9\u30a6\u30c9\u306b\u30c7\u30d7\u30ed\u30a4\u3057\u3001GitHub Actions\u3001GitLab CI\u3001n8n\u306e\u30ef\u30fc\u30af\u30d5\u30ed\u30fc\u306b\u63a5\u7d9a\u3057\u307e\u3059\u3002",
+        deployment: "\u30a8\u30fc\u30b8\u30a7\u30f3\u30c8\u3092GitHub Actions\u3001GitLab CI\u3001n8n\u306e\u30ef\u30fc\u30af\u30d5\u30ed\u30fc\u306b\u63a5\u7d9a\u3057\u307e\u3059\u3002",
         troubleshooting: "\u3088\u304f\u3042\u308b\u554f\u984c\u3092\u89e3\u6c7a\u3057\u3001\u30a8\u30e9\u30fc\u30e1\u30c3\u30bb\u30fc\u30b8\u3092\u7406\u89e3\u3057\u3066\u3001\u30a8\u30fc\u30b8\u30a7\u30f3\u30c8\u3092\u6b63\u5e38\u306a\u72b6\u614b\u306b\u623b\u3057\u307e\u3057\u3087\u3046\u3002"
-      }
+      },
+      translationNotice: {
+        staleBody: "\u3053\u306e\u30da\u30fc\u30b8\u306e\u82f1\u8a9e\u7248\u306f\u3001\u7ffb\u8a33\u5f8c\u306b\u66f4\u65b0\u3055\u308c\u307e\u3057\u305f\u3002",
+        showTranslation: "\u4ee5\u524d\u306e\u7ffb\u8a33\u3092\u8aad\u3080",
+        showCurrent: "\u6700\u65b0\u306e\u82f1\u8a9e\u7248\u3092\u8868\u793a",
+      },
     },
     featurePages: {
       orchestration: {
@@ -1599,7 +1585,7 @@ export const ja: Translations = {
       },
       security: {
         headline: "\u3042\u306a\u305f\u306e\u79d8\u5bc6\u306f\u3001\u3042\u306a\u305f\u306e\u3082\u306e",
-        description: "\u3059\u3079\u3066\u306e\u30d1\u30b9\u30ef\u30fc\u30c9\u3001API\u30ad\u30fc\u3001\u30a2\u30af\u30bb\u30b9\u30c8\u30fc\u30af\u30f3\u306f\u3001\u9280\u884c\u30ec\u30d9\u30eb\u306eAES-256\u6697\u53f7\u5316\u3092\u7528\u3044\u3066\u304a\u4f7f\u3044\u306e\u30c7\u30d0\u30a4\u30b9\u4e0a\u3067\u6697\u53f7\u5316\u3055\u308c\u307e\u3059\u3002\u8a8d\u8a3c\u60c5\u5831\u306f\u304a\u4f7f\u3044\u306e\u30aa\u30da\u30ec\u30fc\u30c6\u30a3\u30f3\u30b0\u30b7\u30b9\u30c6\u30e0\u81ea\u4f53\u306e\u5b89\u5168\u306a\u30dc\u30eb\u30c8\u306b\u4fdd\u5b58\u3055\u308c\u3001\u30af\u30e9\u30a6\u30c9\u306b\u9001\u4fe1\u3055\u308c\u308b\u3053\u3068\u306f\u3042\u308a\u307e\u305b\u3093\u3002",
+        description: "\u3059\u3079\u3066\u306e\u30d1\u30b9\u30ef\u30fc\u30c9\u3001API\u30ad\u30fc\u3001\u30a2\u30af\u30bb\u30b9\u30c8\u30fc\u30af\u30f3\u306f\u3001\u9280\u884c\u30ec\u30d9\u30eb\u306eAES-256\u6697\u53f7\u5316\u3092\u7528\u3044\u3066\u304a\u4f7f\u3044\u306e\u30c7\u30d0\u30a4\u30b9\u4e0a\u3067\u6697\u53f7\u5316\u3055\u308c\u307e\u3059\u3002\u8a8d\u8a3c\u60c5\u5831\u306f\u304a\u4f7f\u3044\u306e\u30aa\u30da\u30ec\u30fc\u30c6\u30a3\u30f3\u30b0\u30b7\u30b9\u30c6\u30e0\u81ea\u4f53\u306e\u5b89\u5168\u306a\u30dc\u30eb\u30c8\u306b\u4fdd\u5b58\u3055\u308c\u307e\u3059\u3002",
         cta: "\u63a5\u7d9a\u3092\u4fdd\u8b77\u3059\u308b"
       },
       "multi-provider": {
@@ -2289,6 +2275,37 @@ export const ja: Translations = {
           samePerson: "\u3069\u306e\u4f1a\u8a71\u3067\u3082\u3001\u540c\u3058\u4eba",
           samePersonShort: "\u3069\u306e\u4f1a\u8a71\u3067\u3082\u3001\u540c\u3058\u4eba"
         }
+      }
+    },
+    orchestrationHub: {
+      previousTrigger: "\u524d\u306e\u30c8\u30ea\u30ac\u30fc",
+      nextTrigger: "\u6b21\u306e\u30c8\u30ea\u30ac\u30fc"
+    },
+    labVersions: {
+      title: "\u30d0\u30fc\u30b8\u30e7\u30f3\u3068\u8a55\u4fa1",
+      hint: "\u30d0\u30fc\u30b8\u30e7\u30f3\u3092\u6709\u52b9\u5316\u3059\u308b\u3068\u672c\u756a\u306b\u53cd\u6620\u3055\u308c\u307e\u3059\u3002\u5143\u306b\u623b\u3059\u306b\u306f\u3001\u524d\u306e\u30d0\u30fc\u30b8\u30e7\u30f3\u3092\u6709\u52b9\u5316\u3057\u307e\u3059\u3002",
+      live: "\u672c\u756a",
+      experimental: "\u5b9f\u9a13\u7248",
+      rating: "\u8a55\u4fa1",
+      deltaVsBaseline: "\u30d9\u30fc\u30b9\u30e9\u30a4\u30f3\u3068\u306e\u5dee \u0394",
+      baseline: "\u30d9\u30fc\u30b9\u30e9\u30a4\u30f3",
+      activate: "\u6709\u52b9\u5316",
+      activateVersion: "{version} \u3092\u6709\u52b9\u5316",
+      pinBaseline: "\u30d9\u30fc\u30b9\u30e9\u30a4\u30f3\u306b\u8a2d\u5b9a",
+      regression: "\u30ea\u30b0\u30ec\u30c3\u30b7\u30e7\u30f3",
+      nowLive: "{version} \u304c\u672c\u756a\u7a3c\u50cd\u4e2d"
+    },
+    pluginShowcase: {
+      heading: "\u3059\u3079\u3066\u3092",
+      headingGradient: "\u30d7\u30e9\u30b0\u30a4\u30f3\u3067",
+      introAll: "Personas \u306b\u306f {shipped} \u500b\u306e\u30d7\u30e9\u30b0\u30a4\u30f3\u304c\u4ed8\u5c5e\u3057\u3001\u305d\u306e\u3059\u3079\u3066\u304c\u4e0b\u3067\u7a3c\u50cd\u3057\u3066\u3044\u307e\u3059\u3002",
+      introSome: "Personas \u306b\u306f {shipped} \u500b\u306e\u30d7\u30e9\u30b0\u30a4\u30f3\u304c\u4ed8\u5c5e\u3057\u3001\u305d\u306e\u3046\u3061 {showcased} \u500b\u304c\u4e0b\u3067\u7a3c\u50cd\u3057\u3066\u3044\u307e\u3059\u3002",
+      introTail: "\u305d\u308c\u305e\u308c\u304c\u30a8\u30fc\u30b8\u30a7\u30f3\u30c8\u306e\u64cd\u4f5c\u3067\u304d\u308b\u72ec\u7acb\u3057\u305f\u30ef\u30fc\u30af\u30b9\u30da\u30fc\u30b9\u3067\u3001\u540c\u3058\u8a8d\u8a3c\u60c5\u5831\u3092\u5171\u6709\u3057\u306a\u304c\u3089\u307b\u304b\u306e\u30d7\u30e9\u30b0\u30a4\u30f3\u3068\u7d44\u307f\u5408\u308f\u305b\u3066\u4f7f\u3048\u307e\u3059\u3002\u30bf\u30d6\u3092\u5207\u308a\u66ff\u3048\u3066\u3001\u5225\u306e\u5c02\u9580\u5bb6\u306b\u4f1a\u3063\u3066\u307f\u307e\u3057\u3087\u3046\u3002",
+      tabsLabel: "\u7d39\u4ecb\u4e2d\u306e\u30d7\u30e9\u30b0\u30a4\u30f3",
+      counter: "\u30d7\u30e9\u30b0\u30a4\u30f3 {current} / {total}",
+      taglines: {
+        devTools: "\u4e26\u5217\u30a8\u30fc\u30b8\u30a7\u30f3\u30c8\u7fa4\u3001\u30d7\u30ed\u30b8\u30a7\u30af\u30c8\u3001\u30c8\u30ea\u30a2\u30fc\u30b8",
+        brain: "\u3042\u306a\u305f\u306e Vault \u3092\u3001\u30a8\u30fc\u30b8\u30a7\u30f3\u30c8\u5bfe\u5fdc\u306b"
       }
     }
   };

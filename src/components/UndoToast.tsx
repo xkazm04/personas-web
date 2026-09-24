@@ -1,44 +1,48 @@
 "use client";
 
-import { useEffect, useState } from "react";
-import { motion, useReducedMotion } from "framer-motion";
+import { useEffect, useMemo, useState } from "react";
+import { motion } from "framer-motion";
 import { Undo2 } from "lucide-react";
 
+import { useStillMotion } from "@/hooks/useStillMotion";
 import { useTranslation } from "@/i18n/useTranslation";
 
+/**
+ * Display of a commit window's deadline. It owns no clock that decides
+ * anything: the caller's store commits at `deadline`; this only counts down.
+ * Remount it (via `key`) for each new window.
+ */
 export default function UndoToast({
   message,
-  durationMs,
+  deadline,
   onUndo,
-  onExpire,
+  notice,
 }: {
   message: string;
-  durationMs: number;
+  /** Epoch ms at which the window commits. */
+  deadline: number;
   onUndo: () => void;
-  onExpire: () => void;
+  /** Optional second line, e.g. why a newer action was refused. */
+  notice?: string;
 }) {
-  const { t } = useTranslation();
-  const reducedMotion = useReducedMotion();
-  const totalSeconds = Math.ceil(durationMs / 1000);
+  const { t, language } = useTranslation();
+  // "4s" / "4 s" / "4秒": the unit comes from Intl, not a locale string.
+  const seconds = useMemo(
+    () => new Intl.NumberFormat(language, { style: "unit", unit: "second", unitDisplay: "narrow" }),
+    [language],
+  );
+  const still = useStillMotion();
+  // Captured once at mount (lazy initializers may be impure).
+  const [durationMs] = useState(() => Math.max(0, deadline - Date.now()));
+  const totalSeconds = Math.max(1, Math.ceil(durationMs / 1000));
   const [secondsLeft, setSecondsLeft] = useState(totalSeconds);
-  const [prevTotal, setPrevTotal] = useState(totalSeconds);
-
-  if (totalSeconds !== prevTotal) {
-    setPrevTotal(totalSeconds);
-    setSecondsLeft(totalSeconds);
-  }
-
-  useEffect(() => {
-    const timer = setTimeout(onExpire, durationMs);
-    return () => clearTimeout(timer);
-  }, [durationMs, onExpire]);
 
   useEffect(() => {
     const interval = setInterval(() => {
-      setSecondsLeft((prev) => (prev > 1 ? prev - 1 : prev));
+      setSecondsLeft(Math.max(0, Math.ceil((deadline - Date.now()) / 1000)));
     }, 1000);
     return () => clearInterval(interval);
-  }, [totalSeconds]);
+  }, [deadline]);
 
   return (
     <motion.div
@@ -56,7 +60,7 @@ export default function UndoToast({
           {/* aria-hidden: the live region announces once on appearance; the
               per-second tick would otherwise re-announce every second. */}
           <span aria-hidden="true" className="ml-auto text-xs tabular-nums text-muted-dark">
-            {secondsLeft}s
+            {seconds.format(secondsLeft)}
           </span>
           <button
             onClick={onUndo}
@@ -66,11 +70,12 @@ export default function UndoToast({
             {t.dashboardUi.undo}
           </button>
         </div>
+        {notice && <p className="text-sm text-amber-300">{notice}</p>}
         <div aria-hidden="true" className="h-1 w-full overflow-hidden rounded-full bg-white/[0.06]">
           <div
             className="h-full rounded-full bg-brand-cyan/50"
             style={
-              reducedMotion
+              still
                 ? { width: `${(secondsLeft / totalSeconds) * 100}%` }
                 : {
                     width: "100%",

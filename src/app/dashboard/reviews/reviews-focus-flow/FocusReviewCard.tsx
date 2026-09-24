@@ -8,19 +8,23 @@ import {
 } from "lucide-react";
 
 import PersonaAvatar from "@/components/dashboard/PersonaAvatar";
-import { relativeTime } from "@/lib/format";
+import { useTranslation } from "@/i18n/useTranslation";
+import { formatAge } from "@/lib/review-display";
 import type { ManualReviewItem } from "@/lib/types";
 
+import { DueChip } from "../review-due";
 import { focusSeverityConfig } from "./focusSeverityConfig";
 
 export function FocusReviewCard({
   review,
+  now,
   labels,
   onApprove,
   onReject,
   onSkip,
 }: {
   review: ManualReviewItem;
+  now: number;
   labels: {
     parseErrorDetail: string;
     parseErrorLabel: string;
@@ -33,6 +37,7 @@ export function FocusReviewCard({
   onReject: () => void;
   onSkip: () => void;
 }) {
+  const { t, language } = useTranslation();
   const severity = focusSeverityConfig[review.severity];
   const SeverityIcon = severity.Icon;
 
@@ -55,13 +60,13 @@ export function FocusReviewCard({
         <div className="min-w-0 flex-1">
           <div className="flex flex-wrap items-center gap-2">
             <span className="text-base font-semibold text-foreground">
-              {review.personaName ?? "Unknown Agent"}
+              {review.personaName ?? t.eventsPage.unknownAgent}
             </span>
             <span
               className={`flex items-center gap-1 rounded-full border px-2 py-0.5 text-sm font-medium ${severity.pill}`}
             >
               <SeverityIcon className="h-3 w-3" />
-              {review.severity}
+              {t.reviewsPage.severity[review.severity]}
             </span>
             {review.parseError && (
               <span
@@ -73,8 +78,9 @@ export function FocusReviewCard({
               </span>
             )}
             <span className="text-sm text-muted-dark">
-              {relativeTime(review.createdAt)}
+              {formatAge(review.createdAt, now, language) ?? "-"}
             </span>
+            <DueChip review={review} now={now} />
           </div>
 
           {review.parseError && (

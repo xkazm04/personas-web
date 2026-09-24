@@ -113,7 +113,7 @@ cost meter একটি রান চলাকালীন tokens stream হও�
 
 ### এটি কীভাবে কাজ করে
 
-Usage view per-agent view-এর মতো একই execution records group করে কিন্তু এর পরিবর্তে model dimension-এ। Pricing Settings → Engine-এ per-model কনফিগার করা হয়, প্রতিটি provider-এর public pricing-এর সাথে মিলে যাওয়া defaults সহ; আপনি override করতে পারেন যদি আপনার একটি negotiated rate থাকে বা একটি সস্তা endpoint-এ BYOI ব্যবহার করছেন।
+Usage view per-agent view-এর মতো একই execution records group করে কিন্তু এর পরিবর্তে model dimension-এ। Pricing Settings → Engine-এ per-model কনফিগার করা হয়, প্রতিটি provider-এর public pricing-এর সাথে মিলে যাওয়া defaults সহ; আপনি override করতে পারেন যদি আপনার একটি negotiated rate বা একটি সস্তা endpoint থাকে।
 
 :::tip
 মাসে একবার, total cost দ্বারা sorted per-model view স্ক্যান করুন। শীর্ষ entry আপনার সঞ্চয়ের জন্য সবচেয়ে বড় সুযোগ — পরবর্তী সস্তা model-এর বিরুদ্ধে এটিকে Lab arena-তে ফেলে দিন এবং দেখুন গুণমান ধরে থাকে কিনা। বেশিরভাগ এজেন্ট একটি model downgrade ভাল সহ্য করে; যারা করে না তারাই যারা প্রকৃতপক্ষে spend-এর যোগ্য।

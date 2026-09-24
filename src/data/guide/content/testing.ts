@@ -10,7 +10,7 @@ The Lab tab on each agent's editor is where this happens. It's a single **Versio
 
 - **Catch regressions early** — testing after every change is how you avoid "the agent used to work, what did I break?"
 - **Compare alternatives systematically** — Arena and A-B let you choose between options with evidence rather than gut feel
-- **Generate fitness data** — Lab runs accumulate per-prompt scores that feed genome evolution (Builder tier)
+- **Generate fitness data** — Lab runs accumulate per-prompt scores that feed genome evolution
 - **Reusable input sets** — test inputs are saved per agent; same prompts, same data, repeatable comparisons
 
 ### How It Works
@@ -155,7 +155,7 @@ Measuring every version on every model gets expensive fast — N versions × M m
   "rating-and-scoring-results": `
 ## Rating and Scoring Results
 
-After any Lab test, each output row has rating controls: thumbs-up / thumbs-down for binary judgment, or a 1-5 star scale for nuanced cases. Your ratings feed two things: the agent's per-variant fitness score (used for ranking in the Versions & Ratings table, and as the genome-evolution selection pressure on Builder tier), and a personal preference signal across all your testing over time.
+After any Lab test, each output row has rating controls: thumbs-up / thumbs-down for binary judgment, or a 1-5 star scale for nuanced cases. Your ratings feed two things: the agent's per-variant fitness score (used for ranking in the Versions & Ratings table, and as the genome-evolution selection pressure), and a personal preference signal across all your testing over time.
 
 The ratings are personal — they encode your judgment of quality, not an objective metric. That's intentional; you're the one who knows whether the agent's output matches what you need, and that's the signal the system optimizes against.
 
@@ -169,7 +169,7 @@ The ratings are personal — they encode your judgment of quality, not an object
 
 ### How It Works
 
-Ratings are stored against the specific execution (trace, prompt version, model, input). The fitness aggregator reads ratings + objective metrics (cost, duration, success) and computes a per-variant fitness score that's used in ranking. Genome evolution (Builder tier) uses ratings as the primary selection pressure for choosing parent prompts to breed.
+Ratings are stored against the specific execution (trace, prompt version, model, input). The fitness aggregator reads ratings + objective metrics (cost, duration, success) and computes a per-variant fitness score that's used in ranking. Genome evolution uses ratings as the primary selection pressure for choosing parent prompts to breed.
 
 :::tip
 Rate based on what you actually want, not what's technically impressive. A short correct answer often beats a long elaborate one. The system optimizes against your preferences, so honest, consistent ratings produce agents tuned to *your* judgment.
@@ -179,7 +179,7 @@ Rate based on what you actually want, not what's technically impressive. A short
   "genome-evolution-basics": `
 ## Genome Evolution Basics
 
-Genome evolution (Builder tier) automatically breeds new prompt variants from your best-rated past tests. Each "generation" mutates and recombines the top-performing prompts from the previous generation; over several generations, the prompts converge on configurations that score consistently better than your starting point. It's evolutionary search with your ratings as the fitness function.
+Genome evolution automatically breeds new prompt variants from your best-rated past tests. Each "generation" mutates and recombines the top-performing prompts from the previous generation; over several generations, the prompts converge on configurations that score consistently better than your starting point. It's evolutionary search with your ratings as the fitness function.
 
 The process is unattended once you start it. You provide the starting prompt and the fitness signal (typically your rating history plus optional objective metrics like cost or duration), set the population size and generation count, and let it run. The agent's normal triggers stay paused during evolution to keep the comparison clean.
 

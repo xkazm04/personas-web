@@ -113,7 +113,7 @@ Le système marque les exécutions qui pourraient s'exécuter sur un modèle moi
 
 ### Comment ça marche
 
-La vue Utilisation regroupe les mêmes enregistrements d'exécution que la vue par agent mais sur la dimension modèle à la place. La tarification est configurée par modèle dans Paramètres → Moteur, avec des valeurs par défaut correspondant à la tarification publique de chaque fournisseur ; vous pouvez surcharger si vous avez un tarif négocié ou utilisez BYOI sur un point de terminaison moins cher.
+La vue Utilisation regroupe les mêmes enregistrements d'exécution que la vue par agent mais sur la dimension modèle à la place. La tarification est configurée par modèle dans Paramètres → Moteur, avec des valeurs par défaut correspondant à la tarification publique de chaque fournisseur ; vous pouvez surcharger si vous avez un tarif négocié ou un point de terminaison moins cher.
 
 :::tip
 Une fois par mois, scannez la vue par modèle triée par coût total. L'entrée du haut est votre plus grande opportunité d'économies — déposez-la dans l'arène du Lab contre le modèle moins cher suivant et voyez si la qualité tient. La plupart des agents tolèrent bien une rétrogradation de modèle ; ceux qui ne le font pas sont ceux qui méritent vraiment la dépense.

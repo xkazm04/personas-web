@@ -147,7 +147,6 @@ Ber to jako návštěvu u lékaře pro tvé nastavení Personas. Rychlá prohlí
 - **Integrita databáze** — tvé lokální datové soubory jsou nedotčené a zdravé
 - **Stav přihlašovacích údajů** — všechny uložené přihlašovací údaje jsou platné a fungují
 - **Konektivita poskytovatele** — tví AI poskytovatelé jsou dosažitelní a odpovídají
-- **Cloudové připojení** — připojení k tvému orchestrátoru je aktivní (pokud je nakonfigurované)
 
 ### Jak to funguje
 

@@ -1,7 +1,10 @@
 "use client";
 
-import { motion, useReducedMotion } from "framer-motion";
+import { motion } from "framer-motion";
 import { Loader2 } from "lucide-react";
+
+import { useStillMotion } from "@/hooks/useStillMotion";
+import { useTranslation } from "@/i18n/useTranslation";
 
 export default function BulkProgressBar({
   done,
@@ -14,7 +17,8 @@ export default function BulkProgressBar({
   failed?: number;
   label: string;
 }) {
-  const reducedMotion = useReducedMotion();
+  const { t } = useTranslation();
+  const reducedMotion = useStillMotion();
   const successPct = total > 0 ? Math.round(((done - failed) / total) * 100) : 0;
   const failPct = total > 0 ? Math.round((failed / total) * 100) : 0;
 
@@ -28,13 +32,13 @@ export default function BulkProgressBar({
       <div className="flex w-[min(calc(100vw-2rem),24rem)] flex-col gap-2 rounded-xl border border-glass-hover bg-surface/95 backdrop-blur-xl px-4 py-3 shadow-2xl">
         <div className="flex items-center gap-2">
           <Loader2
-            className={`h-3.5 w-3.5 text-brand-cyan ${reducedMotion ? "" : "animate-spin"}`}
+            className="h-3.5 w-3.5 text-brand-cyan motion-safe:animate-spin"
           />
           <span className="text-sm text-foreground">{label}</span>
           <span className="ml-auto flex items-center gap-1.5 text-xs tabular-nums text-muted-dark">
             {done}/{total}
             {failed > 0 && (
-              <span className="text-red-400">({failed} failed)</span>
+              <span className="text-red-400">({t.dashboardUi.status.failed}: {failed})</span>
             )}
           </span>
         </div>

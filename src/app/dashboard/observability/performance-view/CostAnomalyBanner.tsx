@@ -1,6 +1,8 @@
 import { useCallback, useState } from "react";
-import { AnimatePresence, motion, useReducedMotion } from "framer-motion";
+import { AnimatePresence, motion } from "framer-motion";
 import { AlertTriangle, X } from "lucide-react";
+import { usePageVisibility } from "@/hooks/usePageVisibility";
+import { useStillMotion } from "@/hooks/useStillMotion";
 import type { CostAnomaly } from "./performanceViewTypes";
 
 export function CostAnomalyBanner({
@@ -12,7 +14,10 @@ export function CostAnomalyBanner({
   label: string;
   dismissLabel: string;
 }) {
-  const reducedMotion = useReducedMotion();
+  // An ambient loop: still under reduced motion, and paused on a hidden tab.
+  const still = useStillMotion();
+  const hidden = usePageVisibility();
+  const pulse = !still && !hidden;
   const [dismissed, setDismissed] = useState<Set<string>>(new Set());
   const visible = anomalies.filter((anomaly) => !dismissed.has(anomaly.date));
   const handleDismiss = useCallback((date: string) => {
@@ -38,8 +43,8 @@ export function CostAnomalyBanner({
             className="flex items-center gap-3 rounded-xl border border-amber-500/20 bg-gradient-to-r from-amber-500/8 via-orange-500/5 to-amber-500/8 px-4 py-3"
           >
             <motion.div
-              animate={reducedMotion ? undefined : { scale: [1, 1.2, 1] }}
-              transition={{ duration: 2, repeat: Infinity, repeatDelay: 3 }}
+              animate={pulse ? { scale: [1, 1.2, 1] } : { scale: 1 }}
+              transition={pulse ? { duration: 2, repeat: Infinity, repeatDelay: 3 } : { duration: 0 }}
             >
               <AlertTriangle className="h-4 w-4 text-amber-400 flex-shrink-0" />
             </motion.div>

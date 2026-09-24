@@ -1,9 +1,10 @@
 "use client";
 
 import { useId, useState } from "react";
-import { AnimatePresence, motion, useReducedMotion } from "framer-motion";
+import { AnimatePresence, motion } from "framer-motion";
 import { ChevronDown } from "lucide-react";
 import Link from "next/link";
+import { useStillMotion } from "@/hooks/useStillMotion";
 
 function isExternal(href: string | null | undefined) {
   return Boolean(href) && (href!.startsWith("http") || href!.startsWith("//"));
@@ -11,7 +12,7 @@ function isExternal(href: string | null | undefined) {
 
 export function FooterLinkColumn({ title, links }: { title: string; links: { label: string; href: string }[] }) {
   const [open, setOpen] = useState(false);
-  const reduced = useReducedMotion() ?? false;
+  const reduced = useStillMotion();
   const panelId = useId();
 
   return (

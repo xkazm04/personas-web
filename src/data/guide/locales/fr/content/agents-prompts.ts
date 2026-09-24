@@ -271,14 +271,14 @@ Un groupe "Brouillons" ou "Expérimental" en haut de votre barre latérale est u
   "disabling-and-archiving-agents": `
 ## Désactiver et archiver des agents
 
-Deux façons de mettre en pause un agent sans le supprimer. **Désactiver** empêche tous les déclencheurs de se déclencher et bloque les exécutions manuelles ; l'agent reste visible dans la barre latérale avec une icône en sourdine pour que vous vous souveniez qu'il existe. **Archiver** déplace l'agent dans une section d'archive cachée à l'écart de l'utilisation quotidienne ; il cesse de se déclencher, ne compte pas dans les limites de niveau et peut être restauré à tout moment.
+Deux façons de mettre en pause un agent sans le supprimer. **Désactiver** empêche tous les déclencheurs de se déclencher et bloque les exécutions manuelles ; l'agent reste visible dans la barre latérale avec une icône en sourdine pour que vous vous souveniez qu'il existe. **Archiver** déplace l'agent dans une section d'archive cachée à l'écart de l'utilisation quotidienne ; il cesse de se déclencher et peut être restauré à tout moment.
 
 Aucune opération ne touche aux exécutions, aux paramètres ou à l'historique des versions. Archiver est plus lourd — utilisez-le pour les agents avec lesquels vous en avez fini pour l'instant mais que vous pourriez vouloir récupérer. Désactiver est plus léger — utilisez-le quand vous devez arrêter temporairement un agent sans le perdre de vue.
 
 ### Points clés
 
 - **Désactiver** — met en pause l'exécution ; l'agent reste visible dans la barre latérale ; réactivation en un clic
-- **Archiver** — masque l'agent et libère son emplacement par rapport à votre limite de niveau ; restaurable pour toujours
+- **Archiver** — masque l'agent ; restaurable pour toujours
 - **Aucune des deux ne supprime** — les paramètres, l'historique des prompts et les exécutions passées sont préservés
 - **Les déclencheurs respectent la désactivation** — un agent désactivé ignore les événements de planning/webhook/surveillance de fichiers ; ils ne sont pas mis en file d'attente pour rejeu à la réactivation
 

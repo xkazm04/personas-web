@@ -1,13 +1,13 @@
 "use client";
 
-import { useReducedMotion } from "framer-motion";
+import { useStillMotion } from "@/hooks/useStillMotion";
 import { Brain, Search, Sparkles } from "lucide-react";
 
 import { SecondBrainGraph } from "./second-brain/SecondBrainGraph";
 import { SecondBrainSidePanel } from "./second-brain/SecondBrainSidePanel";
 
 export default function SecondBrain() {
-  const reduced = useReducedMotion() ?? false;
+  const reduced = useStillMotion();
   const baseDelay = reduced ? 0 : 0.05;
 
   return (

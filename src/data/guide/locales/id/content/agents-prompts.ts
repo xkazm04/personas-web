@@ -271,14 +271,14 @@ Grup "Drafts" atau "Experimental" di bagian atas sidebar Anda adalah pola yang b
   "disabling-and-archiving-agents": `
 ## Menonaktifkan dan Mengarsipkan Agen
 
-Dua cara untuk menjeda agen tanpa menghapusnya. **Disable** menghentikan semua trigger agar tidak menyala dan memblokir run manual; agen tetap terlihat di sidebar dengan ikon yang diredupkan sehingga Anda ingat agen itu ada. **Archive** memindahkan agen ke bagian arsip tersembunyi jauh dari penggunaan sehari-hari; ia berhenti memicu, tidak diperhitungkan terhadap batas tier, dan dapat dipulihkan kapan saja.
+Dua cara untuk menjeda agen tanpa menghapusnya. **Disable** menghentikan semua trigger agar tidak menyala dan memblokir run manual; agen tetap terlihat di sidebar dengan ikon yang diredupkan sehingga Anda ingat agen itu ada. **Archive** memindahkan agen ke bagian arsip tersembunyi jauh dari penggunaan sehari-hari; ia berhenti memicu dan dapat dipulihkan kapan saja.
 
 Tidak ada operasi yang menyentuh eksekusi, pengaturan, atau riwayat versi. Archive lebih berat — gunakan untuk agen yang Anda selesaikan untuk saat ini tetapi mungkin Anda inginkan kembali. Disable lebih ringan — gunakan ketika Anda perlu menghentikan agen untuk sementara tanpa kehilangannya dari tampilan.
 
 ### Poin Kunci
 
 - **Disable** — jeda eksekusi; agen masih terlihat di sidebar; re-enable satu klik
-- **Archive** — sembunyikan agen dan bebaskan slotnya terhadap batas tier Anda; dapat dipulihkan selamanya
+- **Archive** — sembunyikan agen; dapat dipulihkan selamanya
 - **Tidak ada yang dihapus** — pengaturan, riwayat prompt, dan eksekusi masa lalu dipertahankan
 - **Trigger menghormati disable** — agen yang dinonaktifkan mengabaikan event schedule/webhook/file-watcher; mereka tidak antri untuk replay saat di-enable kembali
 

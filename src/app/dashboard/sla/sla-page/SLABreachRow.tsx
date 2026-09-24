@@ -11,7 +11,6 @@ export function SLABreachRow({
   breach,
   labels,
   reduce,
-  pulse,
   maxDuration,
   samePersonaCount,
   isOpen,
@@ -29,8 +28,7 @@ export function SLABreachRow({
     metricType: Record<SLAMetricType, string>;
     severity: Record<SLASeverity, string>;
   };
-  reduce: boolean | null;
-  pulse: string;
+  reduce: boolean;
   maxDuration: number;
   samePersonaCount: number;
   isOpen: boolean;
@@ -86,7 +84,7 @@ export function SLABreachRow({
         >
           {ongoing ? (
             <>
-              <span className={`h-1.5 w-1.5 rounded-full bg-rose-400 ${pulse}`} />
+              <span className="h-1.5 w-1.5 rounded-full bg-rose-400 motion-safe:animate-pulse" />
               {labels.ongoing}
             </>
           ) : (

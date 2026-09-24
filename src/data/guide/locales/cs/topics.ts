@@ -409,26 +409,6 @@ export const topics: Record<string, { title: string; description: string }> = {
     description:
       "Vestavěný meta-agent, který sleduje tvé agenty označené hvězdičkou a každý jejich běh ohodnotí skóre 0–5 s konkrétními koučovacími poznámkami. Přidej agenta do scope Directora tím, že mu dáš hvězdičku; verdikty se zobrazí jako sloupec hvězdiček v Aktivitě a karta Director na každém běhu. Může využívat tvůj Obsidian Brain jako dlouhodobou paměť, takže jeho koučink se časem zlepšuje.",
   },
-  "local-vs-cloud-execution": {
-    title: "Lokální vs cloudové spouštění",
-    description:
-      "Pochop, kdy spouštět agenty na svém počítači a kdy v cloudu. Lokální spouštění je skvělé pro testování a soukromá data — tví agenti běží přímo na tvém počítači. Cloudové spouštění drží tvé agenty 24/7 v chodu, i když je tvůj počítač vypnutý.",
-  },
-  "connecting-to-the-cloud-orchestrator": {
-    title: "Připojení ke cloud orchestrátoru",
-    description:
-      "Nastavení vzdáleného spouštění agentů 24/7, aby tví agenti nikdy nespali. Cloud orchestrátor je služba, která spouští tvé agenty nepřetržitě, aniž by tvůj počítač musel být zapnutý. Připoj se jednou a tví agenti jsou vždy dostupní.",
-  },
-  "deploying-an-agent-to-the-cloud": {
-    title: "Nasazení agenta do cloudu",
-    description:
-      "Publikace agentů pro nepřetržité spouštění několika kliknutími. Vyber agenta, zvol cloudová nastavení a stiskni nasadit — je živý během sekund. Tvůj agent bude pokračovat v práci podle svého plánu, i když aplikaci zavřeš.",
-  },
-  "cloud-execution-monitoring": {
-    title: "Monitoring cloudového spouštění",
-    description:
-      "Sleduj výkon a náklady vzdálených agentů ze své plochy. I když tvoji agenti běží v cloudu, můžeš je sledovat z pohodlí aplikace Personas. Vidíš živý stav, náklady a výsledky stejně jako u lokálních agentů.",
-  },
   "github-actions-integration": {
     title: "Integrace GitHub Actions",
     description:
@@ -443,21 +423,6 @@ export const topics: Record<string, { title: string; description: string }> = {
     title: "Integrace pracovních postupů n8n",
     description:
       "Propojení agentů Personas s automatizačními workflow n8n. Pokud už používáš n8n pro automatizaci, tvoji Personas agenti se mohou přímo zapojit. To ti umožní zkombinovat rozhodování poháněné AI s rozsáhlou knihovnou integrací n8n.",
-  },
-  "byoi-bring-your-own-infrastructure": {
-    title: "BYOI — Bring Your Own Infrastructure",
-    description:
-      "Použití vlastních cloudových serverů místo spravovaného hostingu. Pokud preferuješ spouštět vše na vlastní infrastruktuře z důvodů shody nebo nákladů, BYOI ti dává plnou kontrolu. Získáš všechny výhody cloudového spouštění bez závislosti na dodavateli.",
-  },
-  "syncing-desktop-and-cloud": {
-    title: "Synchronizace plochy a cloudu",
-    description:
-      "Udržuj své lokální a vzdálené agenty synchronizované. Když uděláš změny na ploše, mohou se automaticky odeslat do cloudu. Tím se zajistí, že verze běžící vzdáleně je vždy aktuální s tvými nejnovějšími vylepšeními.",
-  },
-  "cloud-troubleshooting": {
-    title: "Řešení problémů s cloudem",
-    description:
-      "Oprava běžných problémů s cloudovým nasazením. Pokud se tvůj cloudový agent nechová podle očekávání, tento průvodce tě provede nejčastějšími příčinami a opravami. Od problémů s připojením po chyby oprávnění najdeš jasné kroky, jak se vrátit do správného směru.",
   },
   "common-error-messages": {
     title: "Běžné chybové zprávy",

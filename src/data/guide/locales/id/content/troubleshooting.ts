@@ -147,7 +147,6 @@ Pikirkan itu sebagai kunjungan ke dokter untuk setup Personas Anda. Pemeriksaan 
 - **Integritas database** — file data lokal Anda utuh dan sehat
 - **Status kredensial** — semua kredensial yang disimpan valid dan berfungsi
 - **Konektivitas penyedia** — penyedia AI Anda dapat dijangkau dan merespons
-- **Koneksi cloud** — koneksi orkestrator Anda aktif (jika dikonfigurasi)
 
 ### Cara Kerjanya
 

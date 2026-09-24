@@ -200,7 +200,7 @@ El binario incluido pesa unos 90 MB tras la instalación. Los plugins como Obsid
 
 ### Cómo funciona
 
-La app almacena su base de datos (\`personas.db\`), la bóveda de credenciales, el historial de ejecuciones y la configuración localmente en el directorio de datos de la app específico de tu SO. Nada se sube salvo que actives explícitamente el despliegue en la nube o uses un proveedor de IA en la nube. Los plugins que incluyen modelos locales descargan los archivos del modelo en el primer uso.
+La app almacena su base de datos (\`personas.db\`), la bóveda de credenciales, el historial de ejecuciones y la configuración localmente en el directorio de datos de la app específico de tu SO. Nada se sube salvo que uses un proveedor de IA en la nube. Los plugins que incluyen modelos locales descargan los archivos del modelo en el primer uso.
 
 La compilación de Windows usa ONNX Runtime para embeddings cuando la función de base de conocimiento vectorial está activada; en ese caso es la dependencia más grande.
 
