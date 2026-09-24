@@ -1,9 +1,12 @@
 import { useMemo, useState } from "react";
-import { AnimatePresence, motion, useReducedMotion } from "framer-motion";
+import { AnimatePresence, motion } from "framer-motion";
 import { Clock } from "lucide-react";
 
 import FilterBar from "@/components/dashboard/FilterBar";
+import { useFocusParam } from "@/hooks/useFocusParam";
+import { useStillMotion } from "@/hooks/useStillMotion";
 import { fadeUp } from "@/lib/animations";
+import { initialBreachLogState } from "@/lib/incidentThreads";
 import type { SLABreach, SLAMetricType, SLASeverity } from "@/lib/mock-dashboard-data";
 
 import { SLABreachRow } from "./SLABreachRow";
@@ -31,10 +34,22 @@ export function SLABreachLog({
     severity: Record<SLASeverity, string>;
   };
 }) {
-  const reduce = useReducedMotion();
-  const pulse = reduce ? "" : "animate-pulse";
-  const [filter, setFilter] = useState<SeverityFilter>("all");
-  const [openId, setOpenId] = useState<string | null>(null);
+  const reduce = useStillMotion();
+  // A ?focus=<breach id> deep link opens that breach with no filter hiding it.
+  // The focus arrives one commit after hydration, so re-seed on change
+  // (prev-state pattern) as well as at mount.
+  const focusId = useFocusParam();
+  const [filter, setFilter] = useState<SeverityFilter>(() => initialBreachLogState(breaches, focusId).filter);
+  const [openId, setOpenId] = useState<string | null>(() => initialBreachLogState(breaches, focusId).openId);
+  const [seenFocus, setSeenFocus] = useState(focusId);
+  if (focusId !== seenFocus) {
+    setSeenFocus(focusId);
+    const next = initialBreachLogState(breaches, focusId);
+    if (next.openId) {
+      setFilter(next.filter);
+      setOpenId(next.openId);
+    }
+  }
 
   const counts = useMemo(() => {
     const tally: Record<SeverityFilter, number> = {
@@ -100,7 +115,6 @@ export function SLABreachLog({
                 breach={breach}
                 labels={labels}
                 reduce={reduce}
-                pulse={pulse}
                 maxDuration={maxDuration}
                 samePersonaCount={
                   filtered.filter(

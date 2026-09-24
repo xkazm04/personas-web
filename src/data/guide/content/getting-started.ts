@@ -258,7 +258,7 @@ The bundled binary is about 90 MB after install. Plugins such as Obsidian Brain 
 
 ### How It Works
 
-The app stores its database (\`personas.db\`), credential vault, execution history, and configuration locally in your OS-specific app-data directory. Nothing is uploaded unless you explicitly enable cloud deployment or use a cloud AI provider. Plugins that ship local models download the model files on first use.
+The app stores its database (\`personas.db\`), credential vault, execution history, and configuration locally in your OS-specific app-data directory. Nothing is uploaded unless you use a cloud AI provider. Plugins that ship local models download the model files on first use.
 
 The Windows build uses ONNX Runtime for embedding when the vector-knowledge-base feature is enabled; this is the largest single dependency in that case.
 

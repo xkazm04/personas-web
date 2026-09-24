@@ -1,19 +1,26 @@
 "use client";
 
-import { createContext, useContext, useEffect, useRef, useState, type ReactNode } from "react";
-import { useReducedMotion } from "framer-motion";
+import { createContext, useContext, useEffect, useMemo, useRef, useState, type ReactNode } from "react";
+import { useStillMotion } from "@/hooks/useStillMotion";
 
 export type QualityTier = "high" | "medium" | "low";
 
+/**
+ * Only the measured tier travels through context. The reduced-motion
+ * preference deliberately does not (see `useReducedMotionPreference`).
+ *
+ * This provider sits above every route's `loading.tsx` Suspense boundary, so
+ * any change to its value during load reaches that boundary while it may still
+ * be streaming - and React answers an update to a pending dehydrated boundary
+ * by discarding the streamed HTML and client-rendering the whole page. The
+ * value is therefore memoized on `tier`, which changes only after the
+ * idle-deferred frame measurement, never as a hydration correction.
+ */
 interface QualityState {
   tier: QualityTier;
-  reducedMotion: boolean;
 }
 
-const QualityContext = createContext<QualityState>({
-  tier: "high",
-  reducedMotion: false,
-});
+const QualityContext = createContext<QualityState>({ tier: "high" });
 
 /** Number of frame samples per evaluation window (~2 s at 60 fps). */
 const WINDOW_SIZE = 120;
@@ -33,9 +40,8 @@ function percentile90(sorted: Float64Array, len: number): number {
 }
 
 export function QualityProvider({ children }: { children: ReactNode }) {
-  const framerReduced = useReducedMotion();
+  const still = useStillMotion();
   const [tier, setTier] = useState<QualityTier>("high");
-  const [reducedMotion, setReducedMotion] = useState(false);
   const tierRef = useRef<QualityTier>("high");
   const rafRef = useRef(0);
   const lastFrameRef = useRef(0);
@@ -47,8 +53,9 @@ export function QualityProvider({ children }: { children: ReactNode }) {
   useEffect(() => {
     // Skip measurement in SSR or when reduced-motion is preferred
     if (typeof window === "undefined") return;
-    if (framerReduced) return;
-    if (window.matchMedia?.("(prefers-reduced-motion: reduce)").matches) return;
+    // `still` is false on the hydrating pass (server snapshot); the direct read
+    // keeps that pass from arming a measurement the correction would cancel.
+    if (still || window.matchMedia?.("(prefers-reduced-motion: reduce)").matches) return;
 
     let startTime = 0;
 
@@ -141,35 +148,27 @@ export function QualityProvider({ children }: { children: ReactNode }) {
       if (fallbackTimer !== undefined) clearTimeout(fallbackTimer);
       cancelAnimationFrame(rafRef.current);
     };
-  }, [framerReduced]);
+  }, [still]);
 
-  useEffect(() => {
-    if (typeof window === "undefined" || !window.matchMedia) return;
+  const value = useMemo(() => ({ tier }), [tier]);
 
-    const reducedMotionQuery = window.matchMedia("(prefers-reduced-motion: reduce)");
-
-    const applyReducedMotion = () => setReducedMotion(reducedMotionQuery.matches);
-
-    applyReducedMotion();
-
-    reducedMotionQuery.addEventListener("change", applyReducedMotion);
-
-    return () => {
-      reducedMotionQuery.removeEventListener("change", applyReducedMotion);
-    };
-  }, []);
-
-  return (
-    <QualityContext.Provider value={{ tier, reducedMotion }}>
-      {children}
-    </QualityContext.Provider>
-  );
+  return <QualityContext.Provider value={value}>{children}</QualityContext.Provider>;
 }
 
 export function useQualityTier(): QualityTier {
   return useContext(QualityContext).tier;
 }
 
+/**
+ * The visitor's reduced-motion preference, read by each consumer itself.
+ *
+ * It used to be provider state flipped from an effect and handed down through
+ * context - which, for reduced-motion visitors only, was a context change
+ * landing on the still-streaming route boundary during load (see the note on
+ * `QualityState`). Reading `useStillMotion` at the consumer keeps the same
+ * SSR-safe answer (false while hydrating, the truth one commit later) while
+ * the correction re-renders only the component that asked.
+ */
 export function useReducedMotionPreference(): boolean {
-  return useContext(QualityContext).reducedMotion;
+  return useStillMotion();
 }

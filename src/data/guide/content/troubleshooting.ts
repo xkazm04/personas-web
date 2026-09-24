@@ -147,7 +147,6 @@ Think of it as a visit to the doctor for your Personas setup. A quick check-up c
 - **Database integrity** — your local data files are intact and healthy
 - **Credential status** — all stored credentials are valid and working
 - **Provider connectivity** — your AI providers are reachable and responding
-- **Cloud connection** — your orchestrator connection is active (if configured)
 
 ### How It Works
 

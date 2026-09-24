@@ -6,22 +6,19 @@ export function useReviewKeyboardShortcuts({
   filtered,
   selectedReview,
   setSelectedId,
-  resolveReview,
+  decide,
   bulkCount,
   clearSelection,
-  resolveLocked = false,
 }: {
   selectedIndex: number;
   filtered: ManualReviewItem[];
   selectedReview: ManualReviewItem | null;
   setSelectedId: (id: string) => void;
-  resolveReview: (id: string, status: "approved" | "rejected", notes?: string) => Promise<void>;
+  /** The review store's ledger door. It carries the row's draft notes and
+   *  guards against racing an open or in-flight batch (flush or refuse). */
+  decide: (ids: string[], verdict: "approved" | "rejected") => boolean;
   bulkCount: number;
   clearSelection: () => void;
-  /** True while a bulk-undo window is open or a bulk commit is in flight. The
-   *  single-item a/r resolve must be inert then, or it races the deferred bulk
-   *  batch (double-commit / un-undoable audit decision). */
-  resolveLocked?: boolean;
 }) {
   useEffect(() => {
     const handler = (e: KeyboardEvent) => {
@@ -41,12 +38,12 @@ export function useReviewKeyboardShortcuts({
         e.preventDefault();
         const prevIdx = Math.max(selectedIndex - 1, 0);
         if (filtered[prevIdx]) setSelectedId(filtered[prevIdx].id);
-      } else if (e.key === "a" && selectedReview?.status === "pending" && !resolveLocked) {
+      } else if (e.key === "a" && selectedReview?.status === "pending") {
         e.preventDefault();
-        void resolveReview(selectedReview.id, "approved");
-      } else if (e.key === "r" && selectedReview?.status === "pending" && !resolveLocked) {
+        decide([selectedReview.id], "approved");
+      } else if (e.key === "r" && selectedReview?.status === "pending") {
         e.preventDefault();
-        void resolveReview(selectedReview.id, "rejected");
+        decide([selectedReview.id], "rejected");
       } else if (e.key === "Escape" && bulkCount > 0) {
         e.preventDefault();
         clearSelection();
@@ -55,5 +52,5 @@ export function useReviewKeyboardShortcuts({
 
     window.addEventListener("keydown", handler);
     return () => window.removeEventListener("keydown", handler);
-  }, [selectedIndex, filtered, selectedReview, resolveReview, bulkCount, clearSelection, setSelectedId, resolveLocked]);
+  }, [selectedIndex, filtered, selectedReview, decide, bulkCount, clearSelection, setSelectedId]);
 }

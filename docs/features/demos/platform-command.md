@@ -19,13 +19,13 @@ Renders a glass terminal panel that auto-types a scripted sequence of four `pers
 | `src/components/sections/platform-command/components/TerminalBackground.tsx` | Two ambient radial-gradient blobs (cyan/purple) |
 | `src/components/primitives/terminal/{TerminalHistory,TerminalLine,BlinkingCursor}.tsx` | Shared terminal render primitives |
 | `src/components/TerminalChrome.tsx` | Shared terminal titlebar (title/status/info) |
-| `src/app/preview/registry.ts:25` | Registers the `platform-command` preview slug |
+| `src/app/preview/registry.ts:40` | Registers the `platform-command` preview slug |
 
 ## Data & state
 - **Source:** static, hardcoded in `data.ts:4` (`commands: CommandSequence[]`) and `data.ts:89` (`summaryLines`) — no fetch, no i18n (all CLI strings are intentionally literal). **Stores:** none (no Zustand); all state is local to `useTerminalSequence` (`currentCommandIndex`, `typedText`, `outputLines`, `history`, `phase`, `showSummary`). **API routes:** none. **Types:** `OutputLine` / `CommandSequence` / `TerminalPhase` in `types.ts`; history reuses the shared `TerminalOutputLine` shape from `primitives/terminal/types.ts`.
 
 ## Integration points
-- **Preview harness only:** mounted via `PREVIEW_REGISTRY["platform-command"]` (`src/app/preview/registry.ts:25`), reachable at `/preview/platform-command`, which `notFound()`s in production (`src/app/preview/[section]/page.tsx:15`). It is **not** imported by `src/app/page.tsx` or any production page.
+- **Preview harness only:** mounted via `PREVIEW_EXTRAS["platform-command"]` (`src/app/preview/registry.ts:40`), reachable at `/preview/platform-command`, which `notFound()`s in production (`src/app/preview/[section]/page.tsx:15`). It is **not** imported by `src/app/page.tsx` or any production page.
 - **Brand theme:** badges and footer pull colors from `@/lib/brand-theme` (`BRAND_VAR`, `tint`, `BrandKey`) keyed by `commandBrands = ["purple","cyan","emerald","amber"]`.
 - **Shared primitives:** depends on `TerminalChrome`, `TerminalHistory`, `TerminalLine`, `BlinkingCursor`, `SectionIntro`, `SectionWrapper`, and `fadeUp` from `@/lib/animations`.
 - **Icons:** `lucide-react` (`Wand2`, `Zap`, `Cloud`, `Activity`).

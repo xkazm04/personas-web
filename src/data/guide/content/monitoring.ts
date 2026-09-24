@@ -149,7 +149,7 @@ The system tags runs that look like they could have run on a cheaper model with 
 
 ### How It Works
 
-The Usage view groups the same execution records as the per-agent view but on the model dimension instead. Pricing is configured per-model in Settings → Engine, with defaults matching each provider's public pricing; you can override if you have a negotiated rate or are using BYOI on a cheaper endpoint.
+The Usage view groups the same execution records as the per-agent view but on the model dimension instead. Pricing is configured per-model in Settings → Engine, with defaults matching each provider's public pricing; you can override if you have a negotiated rate or a cheaper endpoint.
 
 :::tip
 Once a month, scan the per-model view sorted by total cost. The top entry is your biggest opportunity for savings — drop it into the Lab arena against the next cheaper model and see if quality holds. Most agents tolerate a model downgrade fine; the ones that don't are the ones genuinely worth the spend.

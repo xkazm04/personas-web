@@ -7,21 +7,24 @@ import PrimaryCTA from "@/components/PrimaryCTA";
 import { SectionIntro } from "@/components/primitives";
 import { fadeUp, staggerContainer } from "@/lib/animations";
 import { useTranslation } from "@/i18n/useTranslation";
+import { DOWNLOAD_PLAN, ctaHref } from "@/lib/release";
+import { trackDownloadClick } from "@/lib/analytics";
+import { detectPlatformKey } from "@/components/waitlist-modal/waitlistUtils";
 import { FEATURE_GROUPS } from "./data";
 import FeatureGroupCard from "./FeatureGroupCard";
 
-const DOWNLOAD_URL = process.env.NEXT_PUBLIC_DOWNLOAD_URL;
-
 /**
  * Landing section — re-labelled from the old Pricing tiers to a feature-group
- * showcase sourced from /guide categories. Anchor remains `#pricing` so the
- * scroll-map and existing hash links keep working.
+ * showcase sourced from /guide categories. Anchor remains `#pricing` (held by
+ * the page.tsx stage wrapper) so the scroll-map and existing hash links keep working.
  */
 
 export default function Pricing() {
   const { t } = useTranslation();
   return (
-    <SectionWrapper id="pricing" aria-labelledby="compare-heading">
+    // No id: page.tsx's always-present wrapper owns `pricing` (ids are unique
+    // per document); `lib/landing-address.ts` finds this section by its label.
+    <SectionWrapper aria-labelledby="compare-heading">
       <SectionIntro
         id="compare-heading"
         heading={t.compareSection.heading}
@@ -30,7 +33,7 @@ export default function Pricing() {
       />
 
       {/* Offer framing — the section dropped its old price tiers, so restate the
-          actual offer (free, self-hosted, no markup) with a primary CTA. */}
+          actual offer (free, self-hosted, open source) with a primary CTA. */}
       <motion.div
         variants={fadeUp}
         className="mx-auto mt-10 max-w-3xl rounded-2xl border border-glass bg-white/[0.02] px-6 py-6 text-center backdrop-blur-sm"
@@ -47,7 +50,8 @@ export default function Pricing() {
         </p>
         <div className="mt-5 flex justify-center">
           <PrimaryCTA
-            href={DOWNLOAD_URL ? "/api/download" : "#download-section"}
+            href={ctaHref(DOWNLOAD_PLAN)}
+            onClick={() => trackDownloadClick(DOWNLOAD_PLAN, "pricing", detectPlatformKey())}
             icon={Download}
             label={t.compareSection.ctaLabel}
           />

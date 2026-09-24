@@ -409,26 +409,6 @@ export const topics: Record<string, { title: string; description: string }> = {
     description:
       "Ein eingebauter Meta-Agent, der deine markierten Agenten bewertet und jeden Lauf von 0–5 mit konkreten Coaching-Hinweisen einstuft. Markiere einen Agenten mit einem Stern, um ihn in den Zuständigkeitsbereich des Directors aufzunehmen. Urteile erscheinen als Sternespalte in der Aktivitätsansicht und als Director-Tab bei jedem Lauf. Kann dein Obsidian Brain als Langzeitgedächtnis nutzen, sodass das Coaching mit der Zeit besser wird.",
   },
-  "local-vs-cloud-execution": {
-    title: "Lokale vs. Cloud-Ausführung",
-    description:
-      "Verstehe, wann Agenten auf deinem Rechner laufen sollen und wann in der Cloud. Lokale Ausführung ist ideal für Tests und private Daten — deine Agenten laufen direkt auf deinem Computer. Cloud-Ausführung hält deine Agenten 24/7 am Laufen, auch wenn dein Computer aus ist.",
-  },
-  "connecting-to-the-cloud-orchestrator": {
-    title: "Mit dem Cloud-Orchestrator verbinden",
-    description:
-      "Richte eine 24/7 Remote-Agentenausführung ein, damit deine Agenten nie schlafen. Der Cloud-Orchestrator ist ein Dienst, der deine Agenten rund um die Uhr ausführt, ohne dass dein Computer eingeschaltet sein muss. Einmal verbinden, und deine Agenten sind immer verfügbar.",
-  },
-  "deploying-an-agent-to-the-cloud": {
-    title: "Einen Agenten in die Cloud deployen",
-    description:
-      "Veröffentliche Agenten für eine Always-on-Ausführung mit wenigen Klicks. Wähle einen Agenten, konfiguriere die Cloud-Einstellungen und drücke Deploy — in Sekunden ist er live. Dein Agent läuft weiter nach seinem Zeitplan, auch wenn du die App schließt.",
-  },
-  "cloud-execution-monitoring": {
-    title: "Cloud-Ausführungs-Monitoring",
-    description:
-      "Verfolge die Leistung und Kosten von Remote-Agenten von deinem Desktop aus. Auch wenn deine Agenten in der Cloud laufen, kannst du sie bequem aus der Personas-App heraus überwachen. Sieh Live-Status, Kosten und Ergebnisse, wie du es bei lokalen Agenten tust.",
-  },
   "github-actions-integration": {
     title: "GitHub Actions-Integration",
     description:
@@ -443,21 +423,6 @@ export const topics: Record<string, { title: string; description: string }> = {
     title: "n8n-Workflow-Integration",
     description:
       "Verbinde Personas-Agenten mit n8n-Automatisierungs-Workflows. Wenn du bereits n8n für Automatisierung nutzt, lassen sich deine Personas-Agenten direkt einbinden. So kombinierst du KI-gestützte Entscheidungsfindung mit der umfangreichen Integrationsbibliothek von n8n.",
-  },
-  "byoi-bring-your-own-infrastructure": {
-    title: "BYOI — Bring Your Own Infrastructure",
-    description:
-      "Nutze deine eigenen Cloud-Server statt verwaltetes Hosting. Wenn du aus Compliance- oder Kostengründen alles auf eigener Infrastruktur betreiben willst, gibt dir BYOI die volle Kontrolle. Du erhältst alle Vorteile der Cloud-Ausführung ohne Anbieterbindung.",
-  },
-  "syncing-desktop-and-cloud": {
-    title: "Desktop und Cloud synchronisieren",
-    description:
-      "Halte deine lokalen und Remote-Agenten synchron. Wenn du Änderungen auf dem Desktop vornimmst, können sie automatisch in die Cloud gepusht werden. So stellst du sicher, dass die remote laufende Version immer mit deinen neuesten Verbesserungen aktuell ist.",
-  },
-  "cloud-troubleshooting": {
-    title: "Cloud-Fehlerbehebung",
-    description:
-      "Behebe häufige Cloud-Deployment-Probleme. Wenn dein Cloud-Agent sich nicht wie erwartet verhält, führt dich diese Anleitung durch die häufigsten Ursachen und Lösungen. Von Verbindungsproblemen bis Berechtigungsfehlern findest du klare Schritte, um wieder auf Kurs zu kommen.",
   },
   "common-error-messages": {
     title: "Häufige Fehlermeldungen",

@@ -37,14 +37,13 @@ export const de: Translations = {
     compareSection: {
       heading: "Alles ist",
       headingGradient: "kostenlos",
-      description: "Die Desktop-App und jede Funktion unten bleiben f\u00fcr immer kostenlos. Keine Stufen, keine Geb\u00fchren pro Platz \u2013 einfach eine vollst\u00e4ndige Agentenplattform, die auf deinem Rechner l\u00e4uft.",
+      description: "Die Desktop-App und jede Funktion unten bleiben f\u00fcr immer kostenlos: eine vollst\u00e4ndige Agentenplattform, die auf deinem Rechner l\u00e4uft.",
       offerBadges: [
         "F\u00fcr immer kostenlos",
         "Selbst gehostet",
-        "Kein Aufschlag pro Ausf\u00fchrung",
         "Open Source"
       ],
-      offerBody: "Personas l\u00e4uft auf Ihrem eigenen Rechner. Kein Aufschlag f\u00fcr Orchestrierung und keine Preise pro Sitzplatz. Bezahlte Cloud- und Priority-Support-Optionen sind optional, nicht erforderlich.",
+      offerBody: "Personas l\u00e4uft auf Ihrem eigenen Rechner.",
       ctaLabel: "Kostenlos loslegen",
       readGuide: "Anleitung lesen",
       groups: {
@@ -129,38 +128,7 @@ export const de: Translations = {
       slogan: "Automatisieren Sie Ihre Arbeit. Gewinnen Sie Ihre Zeit zur\u00fcck."
     },
     pricing: {
-      local: "Lokal",
-      cloud: "Cloud",
-      enterprise: "Unternehmen",
-      downloadLocal: "Lokal herunterladen",
-      goCloud: "Zur Cloud",
-      contactSales: "Vertrieb kontaktieren",
-      comingSoon: "Demn\u00e4chst",
-      bestFor: "Ideal f\u00fcr",
-      forever: "f\u00fcr immer",
-      mo: "/Monat",
-      custom: "Individuell",
-      bestForLocal: "Einzelentwickler zum Einstieg",
-      bestForCloud: "Schnell arbeitende Einzelteams",
-      bestForEnterprise: "Organisationen mit Compliance- und Skalierungsanforderungen",
-      features: {
-        unlimitedLocalAgents: "Unbegrenzte lokale Agenten",
-        localEventBus: "Lokaler Event-Bus & Scheduler",
-        fullObservability: "Vollst\u00e4ndiges Observability-Dashboard",
-        designEngine: "Design-Engine",
-        teamCanvasLocal: "Team-Canvas (lokal)",
-        everythingInFree: "Alles im Free-Plan",
-        cloudWorkers3: "3 Cloud-Worker",
-        executions1000: "1.000 Ausf\u00fchrungen/Monat",
-        events10000: "10.000 Events/Monat",
-        burstAutoScaling: "Burst-Auto-Scaling",
-        everythingInPro: "Alles im Pro-Plan",
-        ssoSaml: "SSO \u00fcber SAML & OIDC",
-        multiTenantRbac: "Multi-Tenant-Workspaces mit RBAC",
-        auditTrailExport: "Ausf\u00fchrungs-Audit-Trail-Export",
-        dedicatedWorkers: "Dedizierte Cloud-Worker & SLA",
-        prioritySupport: "Priorit\u00e4ts-Support"
-      }
+      comingSoon: "Demn\u00e4chst"
     },
     hero: {
       downloadCta: "Herunterladen",
@@ -168,7 +136,7 @@ export const de: Translations = {
       badge: "KI-Agenten-Plattform",
       headingLine1: "Intelligente Agenten",
       headingLine2: "die f\u00fcr Sie arbeiten",
-      description: "Entwerfen Sie Agenten in nat\u00fcrlicher Sprache. Orchestrieren Sie sie lokal oder in der Cloud.",
+      description: "Entwerfen Sie Agenten in nat\u00fcrlicher Sprache. Orchestrieren Sie sie auf Ihrem eigenen Rechner.",
       descriptionBold: "Keine Workflow-Diagramme. Keine Agenten-Schw\u00e4rme. Kein Code.",
       mode2: "Einfache Einrichtung",
       mode3: "Kostenlos",
@@ -393,28 +361,20 @@ export const de: Translations = {
       discordSubtitle: "Treten Sie unserer Discord-Community f\u00fcr Hilfe und Diskussion bei.",
       questions: [
         {
-          q: "What is Claude CLI and why do I need it?",
-          a: "Claude CLI is Anthropic's official command-line interface for interacting with Claude. Personas uses it under the hood to run your agents locally \u2014 it handles authentication, model access, and streaming responses. You'll need an active Claude Pro or Max subscription and the CLI installed before launching Personas."
+          q: "What is Claude Code and why do I need it?",
+          a: "Claude Code is Anthropic's official command-line tool for working with Claude. Personas uses it under the hood to run your agents locally. It handles authentication, model access, and streaming responses. You'll need an active Claude Pro or Max subscription and Claude Code installed before launching Personas."
         },
         {
           q: "Does Personas collect any telemetry or usage data?",
-          a: "No. Personas runs entirely on your machine with zero telemetry. We don't collect analytics, usage metrics, or any personal data. Your prompts, agent configurations, and execution logs never leave your device unless you explicitly enable cloud execution."
+          a: "No. Personas runs entirely on your machine with zero telemetry. We don't collect analytics, usage metrics, or any personal data. Your prompts, agent configurations, and execution logs never leave your device."
         },
         {
-          q: "How does the pricing model work?",
-          a: "The desktop app is free forever with unlimited local agents. Cloud plans (Starter, Pro, Team) add 24/7 execution, remote workers, and team features on top. You always need your own Claude subscription \u2014 we never touch your Anthropic bill. Think of Personas as the orchestration layer, and Claude as the engine."
-        },
-        {
-          q: "What is Bring Your Own Infrastructure (BYOI)?",
-          a: "BYOI lets you connect your own cloud provider credentials (e.g., Fly.io API tokens) instead of using our managed infrastructure. Personas provisions and manages the workers on your account, giving you unlimited execution without per-month caps \u2014 you only pay your cloud provider directly."
-        },
-        {
-          q: "What's the difference between local and cloud execution?",
-          a: "Local execution runs agents on your machine using Claude CLI \u2014 it's instant, free, and private, but stops when your computer sleeps. Cloud execution runs agents on remote workers 24/7, supports event-bus bridging across environments, and enables team collaboration. You can switch between modes per-agent."
+          q: "Is Personas free?",
+          a: "Yes. The desktop app is free and open source, with unlimited local agents. You need your own Claude subscription, and we never touch your Anthropic bill. Think of Personas as the orchestration layer, and Claude as the engine."
         },
         {
           q: "Are there any limits on the number of agents?",
-          a: "Locally, there are no limits \u2014 create as many agents as you want. Cloud plans have worker limits (1\u20135 depending on tier) and monthly execution caps. Pro and Team plans include burst auto-scaling for traffic spikes. BYOI removes all caps entirely."
+          a: "No. Create as many agents as you want."
         }
       ]
     },
@@ -425,10 +385,10 @@ export const de: Translations = {
       downloadInstaller: "Installer herunterladen",
       downloadFor: "F\u00fcr {platform} herunterladen",
       joinWaitlist: "Warteliste beitreten",
-      connectCli: "Claude CLI verbinden",
+      connectCli: "Claude Code verbinden",
       launchAgent: "Ersten Agenten starten",
       exploreFirst: "Zuerst M\u00f6glichkeiten erkunden",
-      requiresCli: "Erfordert Claude CLI",
+      requiresCli: "Erfordert Claude Code",
       installerSize: "12 MB Installer",
       noSignupLine: "Keine Registrierung, keine Kreditkarte. L\u00e4uft auf Ihrem Rechner. Null Telemetrie.",
       windows: "Windows",
@@ -604,7 +564,8 @@ export const de: Translations = {
             synced: "Synchronisiert"
           }
         }
-      }
+      },
+      related: "Verkn\u00fcpft"
     },
     dashboardUi: {
       status: {
@@ -643,7 +604,7 @@ export const de: Translations = {
       noReviewsInFilter: "Keine Reviews in diesem Filter",
       refreshing: "Wird aktualisiert...",
       rejectSelectedTitle: "Ausgew\u00e4hlte Reviews ablehnen?",
-      rejectSelectedBody: "Dadurch werden {count} ausgew\u00e4hlte Review{plural} abgelehnt. Sie haben 5 Sekunden Zeit, um diese Aktion r\u00fcckg\u00e4ngig zu machen.",
+      rejectSelectedBody: "Dadurch werden die ausgew\u00e4hlten Reviews ({count}) abgelehnt. Sie haben 5 Sekunden Zeit, um diese Aktion r\u00fcckg\u00e4ngig zu machen.",
       undo: "R\u00fcckg\u00e4ngig",
       retry: "Wiederholen",
       bulkFailedApprove: "{failed} von {total} konnten nicht genehmigt werden",
@@ -807,6 +768,29 @@ export const de: Translations = {
       parseError: {
         label: "Parsing-Fehler",
         detail: "Fehlerhafte Payload \u2014 bis zur Pr\u00fcfung als kritisch eskaliert"
+      },
+      undo: {
+        approved: "Genehmigte Reviews: {count}",
+        rejected: "Abgelehnte Reviews: {count}",
+        refused: "F\u00fcr einige dieser Reviews steht bereits eine Entscheidung aus \u2014 mach sie r\u00fcckg\u00e4ngig oder warte, bis sie gespeichert ist."
+      },
+      sla: {
+        due: "F\u00e4llig {when}",
+        wasDue: "War f\u00e4llig {when}",
+        overdueCount: "\u00dcberf\u00e4llig: {n}"
+      },
+      resolved: "Erledigt {when}",
+      resolvedBy: "Erledigt {when} durch {name}",
+      resolver: {
+        you: "Sie",
+        system: "das System"
+      },
+      autoApprovedNote: "Automatisch genehmigt: SLA abgelaufen",
+      bulkProcessing: "Reviews werden verarbeitet: {count}",
+      severity: {
+        critical: "Kritisch",
+        warning: "Warnung",
+        info: "Info"
       }
     },
     leaderboardPage: {
@@ -1088,7 +1072,6 @@ export const de: Translations = {
       allSystemsHealthy: "Alle Systeme fehlerfrei",
       noIssuesDetected: "Keine Probleme in ?berwachten Diensten erkannt",
       noSeverityIssues: "Keine Probleme mit Schweregrad {severity}",
-      exampleDataNotice: "Es werden Beispieldaten angezeigt. Echte Analysen erscheinen, sobald Agenten Ausf?hrungen starten.",
       toolInvocations: "Tool-Aufrufe",
       distribution: "Verteilung",
       usageOverTime: "Nutzung im Zeitverlauf",
@@ -1422,7 +1405,7 @@ export const de: Translations = {
         },
         platform: {
           title: "Kernplattform",
-          caption: "Dev-Modus, Cloud-Ausf\u00fchrung, Konnektoren, m\u00fchelose Installation"
+          caption: "Dev-Modus, Konnektoren, m\u00fchelose Installation"
         },
         templates: {
           title: "Vorlagengalerie",
@@ -1444,7 +1427,6 @@ export const de: Translations = {
         enterprise: "Unternehmen",
         devMode: "Dev-Modus",
         connectors: "Konnektoren",
-        cloudExecution: "Cloud-Ausf\u00fchrung",
         installersUpdates: "Installer & Updates",
         allCategories: "Alle Kategorien",
         devops: "DevOps",
@@ -1466,7 +1448,6 @@ export const de: Translations = {
         ssoAudit: "SSO \u00b7 Audit",
         instantPreview: "sofortige Vorschau",
         services: "{n} Dienste",
-        runs247: "24/7-Ausf\u00fchrung",
         autoUpdate: "Auto-Update",
         templatesTotal: "{n} / {total} Vorlagen"
       },
@@ -1587,9 +1568,14 @@ export const de: Translations = {
         memories: "Ihre Agenten lernen und merken sich Dinge. Verwalten Sie, was sie wissen und wie sie vergangene Erfahrungen nutzen.",
         monitoring: "Verfolgen Sie jede Ausf\u0102\u013dhrung in Echtzeit. Sehen Sie, was Ihre Agenten tun, wie gut sie arbeiten und was sie kosten.",
         testing: "F\u0102\u013dhren Sie Arena-Tests, A/B-Vergleiche durch und lassen Sie das Genome-System Ihre besten Prompts weiterentwickeln.",
-        deployment: "Stellen Sie Agenten in der Cloud bereit, verbinden Sie sie mit GitHub Actions, GitLab CI und n8n-Workflows.",
+        deployment: "Verbinden Sie Agenten mit GitHub Actions, GitLab CI und n8n-Workflows.",
         troubleshooting: "Beheben Sie h\u00e4ufige Probleme, verstehen Sie Fehlermeldungen und bringen Sie Ihre Agenten wieder auf Kurs."
-      }
+      },
+      translationNotice: {
+        staleBody: "Die englische Version dieser Seite wurde nach der \u00dcbersetzung aktualisiert.",
+        showTranslation: "\u00c4ltere \u00dcbersetzung lesen",
+        showCurrent: "Aktuelle englische Version anzeigen",
+      },
     },
     featurePages: {
       orchestration: {
@@ -1599,7 +1585,7 @@ export const de: Translations = {
       },
       security: {
         headline: "Ihre Geheimnisse bleiben Ihre",
-        description: "Jedes Passwort, jeder API-Schl\u00fcssel und jedes Zugriffstoken wird auf Ihrem Ger\u00e4t mit bankentauglicher AES-256-Verschl\u00fcsselung verschl\u00fcsselt. Ihre Zugangsdaten werden im eigenen sicheren Tresor Ihres Betriebssystems gespeichert \u2014 nichts wird jemals in die Cloud gesendet.",
+        description: "Jedes Passwort, jeder API-Schl\u00fcssel und jedes Zugriffstoken wird auf Ihrem Ger\u00e4t mit bankentauglicher AES-256-Verschl\u00fcsselung verschl\u00fcsselt. Ihre Zugangsdaten werden im eigenen sicheren Tresor Ihres Betriebssystems gespeichert.",
         cta: "Sichern Sie Ihre Verbindungen"
       },
       "multi-provider": {
@@ -2103,6 +2089,37 @@ export const de: Translations = {
           samePerson: "dieselbe Person, in allen",
           samePersonShort: "dieselbe Person, in allen"
         }
+      }
+    },
+    orchestrationHub: {
+      previousTrigger: "Vorheriger Trigger",
+      nextTrigger: "N\u00e4chster Trigger"
+    },
+    labVersions: {
+      title: "Versionen & Bewertungen",
+      hint: "Aktiviere eine Version, um sie live zu schalten. Zum Zur\u00fcckrollen aktivierst du die vorherige.",
+      live: "Live",
+      experimental: "Experimentell",
+      rating: "Bewertung",
+      deltaVsBaseline: "\u0394 zur Baseline",
+      baseline: "Baseline",
+      activate: "Aktivieren",
+      activateVersion: "{version} aktivieren",
+      pinBaseline: "Als Baseline festlegen",
+      regression: "Regression",
+      nowLive: "{version} ist live"
+    },
+    pluginShowcase: {
+      heading: "Alles zum",
+      headingGradient: "Andocken",
+      introAll: "Personas bringt {shipped} Plugins mit, und alle sind unten im Einsatz.",
+      introSome: "Personas bringt {shipped} Plugins mit, {showcased} davon sind unten im Einsatz.",
+      introTail: "Jedes ist ein eigenst\u00e4ndiger Arbeitsbereich, den Ihre Agenten steuern k\u00f6nnen \u2013 mit denselben Anmeldedaten und im Zusammenspiel mit den anderen. Wechseln Sie den Tab, um einen weiteren Spezialisten kennenzulernen.",
+      tabsLabel: "Vorgestellte Plugins",
+      counter: "Plugin {current} von {total}",
+      taglines: {
+        devTools: "Parallele Agentenflotte, Projekte, Triage",
+        brain: "Ihr Vault, bereit f\u00fcr Agenten"
       }
     }
   };

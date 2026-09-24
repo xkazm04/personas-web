@@ -74,7 +74,14 @@
             "src/components/sections/get-started/visuals/WorkVisual.tsx",
             "src/components/sections/get-started/visuals/chrome.tsx",
             "src/components/sections/get-started/visuals/index.ts",
-            "src/components/sections/get-started/visuals/types.ts"
+            "src/components/sections/get-started/visuals/types.ts",
+            "src/lib/landing-address.ts",
+            "src/lib/landing-address.test.ts",
+            "src/hooks/useHashArrival.ts",
+            "src/components/LandingHashArrival.tsx",
+            "src/lib/release.ts",
+            "src/lib/release.test.ts",
+            "src/components/sections/get-started/conversionStillMotion.test.ts"
           ],
           "target": null,
           "apiRoutes": []
@@ -198,7 +205,7 @@
         },
         {
           "name": "Agent Lab & Plugin Ecosystem",
-          "description": "The Agent Lab (arena/chat/eval/evolution tabs) and the plugin ecosystem grid (dev tools fleet, second brain graph).",
+          "description": "The Agent Lab (arena/chat/eval/evolution tabs) and the plugin ecosystem grid (dev tools, second brain graph), projected from the desktop-plugin manifest.",
           "businessFeature": "Agent Lab & Plugin Ecosystem",
           "category": "ui",
           "filePaths": [
@@ -224,7 +231,16 @@
             "src/components/feature-sections/plugins/second-brain/SecondBrainGraph.tsx",
             "src/components/feature-sections/plugins/second-brain/SecondBrainSidePanel.tsx",
             "src/components/feature-sections/plugins/second-brain/secondBrainData.ts",
-            "src/components/feature-sections/plugins/types.ts"
+            "src/components/feature-sections/plugins/types.ts",
+            "src/data/desktop-plugins.ts",
+            "src/data/desktop-plugins.test.ts",
+            "src/components/feature-sections/plugins/roster.ts",
+            "src/components/feature-sections/lab/ledger.ts",
+            "src/components/feature-sections/lab/ledger.test.ts",
+            "src/components/feature-sections/lab/components/VersionRail.tsx",
+            "src/components/feature-sections/lab/genome.ts",
+            "src/components/feature-sections/lab/genome.test.ts",
+            "src/components/feature-sections/lab/still-motion.test.ts"
           ],
           "target": null,
           "apiRoutes": []
@@ -307,7 +323,10 @@
             "src/app/preview/[section]/page.tsx",
             "src/app/preview/page.tsx",
             "src/app/preview/registry.ts",
-            "src/app/todo/page.tsx"
+            "src/app/todo/page.tsx",
+            "src/app/preview/derive.ts",
+            "src/app/preview/registry.test.ts",
+            "src/app/preview/PreviewMount.tsx"
           ],
           "target": null,
           "apiRoutes": []
@@ -373,7 +392,12 @@
             "src/components/sections/platform-layers/index.tsx",
             "src/components/sections/platform-layers/types.ts",
             "src/components/sections/platform-layers/visuals.tsx",
-            "src/lib/event-bus-demo.ts"
+            "src/lib/event-bus-demo.ts",
+            "src/components/sections/orchestration-hub/playback.ts",
+            "src/components/sections/orchestration-hub/playback.test.ts",
+            "src/components/sections/orchestration-hub/PlaybackControls.tsx",
+            "src/components/sections/event-bus-showcase/figures.ts",
+            "src/components/sections/event-bus-showcase/figures.test.ts"
           ],
           "target": null,
           "apiRoutes": []
@@ -612,7 +636,13 @@
             "src/data/guide/locales/zh/content/testing.ts",
             "src/data/guide/locales/zh/content/triggers.ts",
             "src/data/guide/locales/zh/content/troubleshooting.ts",
-            "src/data/guide/locales/zh/topics.ts"
+            "src/data/guide/locales/zh/topics.ts",
+            "scripts/i18n/guide-drift.mjs",
+            "src/lib/guide-drift.test.ts",
+            "scripts/i18n/emit-guide-status.mjs",
+            "src/data/guide/translation-status.ts",
+            "src/data/guide/getLocalized.test.ts",
+            "src/components/guide/TranslationNotice.tsx"
           ],
           "target": null,
           "apiRoutes": []
@@ -1066,7 +1096,6 @@
           "filePaths": [
             "src/app/dashboard/reviews/ReviewsFocusFlow.tsx",
             "src/app/dashboard/reviews/ReviewsSplitPane.tsx",
-            "src/app/dashboard/reviews/ShortcutsHud.tsx",
             "src/app/dashboard/reviews/page.tsx",
             "src/app/dashboard/reviews/reviews-focus-flow/FocusEmptyState.tsx",
             "src/app/dashboard/reviews/reviews-focus-flow/FocusProgressHeader.tsx",
@@ -1080,10 +1109,6 @@
             "src/app/dashboard/reviews/reviews-split-pane/ReviewsSplitPaneToasts.tsx",
             "src/app/dashboard/reviews/reviews-split-pane/reviewSeverityConfig.ts",
             "src/app/dashboard/reviews/reviews-split-pane/useReviewKeyboardShortcuts.ts",
-            "src/app/dashboard/reviews/shortcuts-hud/ShortcutKeyChips.tsx",
-            "src/app/dashboard/reviews/shortcuts-hud/ShortcutsOverlayDialog.tsx",
-            "src/app/dashboard/reviews/shortcuts-hud/shortcutTypes.ts",
-            "src/app/dashboard/reviews/shortcuts-hud/usePlatformMod.ts",
             "src/components/BulkProgressBar.tsx",
             "src/components/BulkResultToast.tsx",
             "src/components/ConfirmDialog.tsx",
@@ -1096,9 +1121,19 @@
             "src/hooks/useReviewVoice.ts",
             "src/lib/review-voice-data.ts",
             "src/lib/review-voice.ts",
-            "src/lib/reviewUtils.ts",
             "src/stores/reviewStore.ts",
-            "src/stores/reviewVoiceStore.ts"
+            "src/stores/reviewVoiceStore.ts",
+            "src/lib/review-ledger.ts",
+            "src/lib/review-ledger.test.ts",
+            "src/stores/reviewStore.test.ts",
+            "src/lib/review-sla.ts",
+            "src/lib/review-sla.test.ts",
+            "src/lib/reviewFixtures.test.ts",
+            "src/stores/reviewStore.sla.test.ts",
+            "src/app/dashboard/reviews/review-due.tsx",
+            "src/lib/review-display.ts",
+            "src/lib/review-queue-i18n.test.ts",
+            "src/stores/reviewStore.resolver.test.ts"
           ],
           "target": null,
           "apiRoutes": []
@@ -1242,9 +1277,8 @@
             "src/app/dashboard/sla/sla-page/SLABreachRow.tsx",
             "src/app/dashboard/sla/sla-page/SLASummaryGrid.tsx",
             "src/app/dashboard/sla/sla-page/SLATargetGrid.tsx",
-            "src/app/dashboard/sla/sla-page/slaFormat.ts",
+            "src/lib/slaFormat.ts",
             "src/app/dashboard/sla/useSlaData.ts",
-            "src/components/dashboard/ChartAnnotation.tsx",
             "src/components/dashboard/CompareToggle.tsx",
             "src/components/dashboard/CostChartWithCompare.tsx",
             "src/components/dashboard/ExecChartWithCompare.tsx",
@@ -1252,9 +1286,6 @@
             "src/components/dashboard/HealthIssueRow.tsx",
             "src/components/dashboard/LatencyChart.tsx",
             "src/components/dashboard/MetricCard.tsx",
-            "src/components/dashboard/ObservabilityCharts.tsx",
-            "src/components/dashboard/ObservabilityCostChart.tsx",
-            "src/components/dashboard/ObservabilityExecChart.tsx",
             "src/components/dashboard/ObservabilitySpendPieChart.tsx",
             "src/components/dashboard/Sparkline.tsx",
             "src/components/dashboard/TrafficChart.tsx",
@@ -1265,7 +1296,13 @@
             "src/components/dashboard/usage-charts/usageChartTypes.ts",
             "src/hooks/useLiveStats.ts",
             "src/lib/chart-theme.tsx",
-            "src/stores/systemStore.ts"
+            "src/stores/systemStore.ts",
+            "src/lib/observabilitySeries.ts",
+            "src/lib/incidentThreads.ts",
+            "src/hooks/useFocusParam.ts",
+            "src/components/dashboard/RelatedIncidentLinks.tsx",
+            "src/app/dashboard/observability/observabilityStillMotion.test.ts",
+            "src/app/dashboard/observability/usageViewDemoPath.test.ts"
           ],
           "target": null,
           "apiRoutes": []
@@ -1370,15 +1407,17 @@
         },
         {
           "name": "System Health Panel",
-          "description": "System Health Panel: runtime / services / resources / integrations status cards with status dots, a disk-usage gauge, and illustrative install/configure actions (demo no-ops to a toast). New route /dashboard/health; demo-only.",
+          "description": "System Health Panel: runtime / services / resources / integrations status cards with status dots, a disk-usage gauge, and illustrative install/configure actions (demo-only: the row settles to ok in-session, plus a toast). New route /dashboard/health; demo-only.",
           "businessFeature": "System Health Panel",
           "category": "ui",
           "filePaths": [
             "src/app/dashboard/health/page.tsx",
-            "src/app/dashboard/health/health-page/healthFormat.ts",
+            "src/lib/healthFormat.ts",
             "src/app/dashboard/health/health-page/useSystemHealth.ts",
             "src/app/dashboard/health/health-page/HealthSectionCard.tsx",
-            "src/app/dashboard/health/health-page/DiskUsageBar.tsx"
+            "src/app/dashboard/health/health-page/DiskUsageBar.tsx",
+            "src/app/dashboard/health/health-page/healthActions.ts",
+            "src/app/dashboard/health/health-page/healthActions.test.ts"
           ],
           "target": null,
           "apiRoutes": []
@@ -1443,7 +1482,10 @@
             "src/hooks/useMaxScrollHeight.ts",
             "src/hooks/usePageVisibility.ts",
             "src/hooks/useTweenedNumber.ts",
-            "src/lib/animations.ts"
+            "src/lib/animations.ts",
+            "src/lib/motion/loop-gate.ts",
+            "src/hooks/useLoopGate.ts",
+            "src/contexts/reducedMotionHydration.test.ts"
           ],
           "target": null,
           "apiRoutes": []
@@ -1575,7 +1617,12 @@
             "e2e/tour.spec.ts",
             "e2e/use-cases.spec.ts",
             "next.config.ts",
-            "playwright.config.ts"
+            "playwright.config.ts",
+            "e2e/landing-hash-arrival.spec.ts",
+            "e2e/orchestration-hub.spec.ts",
+            "e2e/review-undo.spec.ts",
+            "e2e/reduced-motion.spec.ts",
+            "e2e/reduced-motion-hydration.spec.ts"
           ],
           "target": null,
           "apiRoutes": []
@@ -1631,7 +1678,8 @@
             "src/instrumentation.ts",
             "src/lib/analytics.ts",
             "src/lib/sentry-pii.ts",
-            "src/lib/sentry.ts"
+            "src/lib/sentry.ts",
+            "src/lib/analytics.download-click.test.ts"
           ],
           "target": null,
           "apiRoutes": [
@@ -1920,7 +1968,7 @@
     "Observability & Event Monitoring › Execution History & Streaming [ui] — 14 files",
     "Observability & Event Monitoring › Leaderboard & Rankings [ui] — 7 files",
     "Observability & Event Monitoring › Director Coaching [ui] — 11 files",
-    "Observability & Event Monitoring › Observability Charts & SLA [ui] — 53 files",
+    "Observability & Event Monitoring › Observability Charts & SLA [ui] — 55 files",
     "Observability & Event Monitoring › Event Bus & Stream Monitoring [ui] — 33 files",
     "Observability & Event Monitoring › Dashboard Home Overview [ui] — 23 files",
     "Platform Foundation: Shell, UI & Motion › Mobile App Shell & Views [ui] — 13 files",

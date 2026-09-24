@@ -4,6 +4,7 @@ import { ReviewRow } from "./ReviewRow";
 
 export function ReviewList({
   listRef,
+  now,
   filtered,
   selectedId,
   selectedIds,
@@ -11,6 +12,7 @@ export function ReviewList({
   setSelectedId,
 }: {
   listRef: React.RefObject<HTMLDivElement | null>;
+  now: number;
   filtered: ManualReviewItem[];
   selectedId: string | null;
   selectedIds: Set<string>;
@@ -30,6 +32,7 @@ export function ReviewList({
           <div key={review.id} data-review-row>
             <ReviewRow
               review={review}
+              now={now}
               isActive={review.id === selectedId}
               isSelected={selectedIds.has(review.id)}
               onToggleSelect={(e) => toggleSelect(review.id, e.shiftKey)}

@@ -13,12 +13,8 @@ import type { ReactNode } from "react";
 function DeployVisual() {
   return (
     <div className="flex items-center gap-2 font-mono text-base">
-      <span className="text-emerald-400/60">local</span>
-      <svg width="32" height="8" className="text-emerald-500/60">
-        <line x1="0" y1="4" x2="28" y2="4" stroke="currentColor" strokeWidth="1" strokeDasharray="3 3" />
-        <polygon points="26,1 30,4 26,7" fill="currentColor" />
-      </svg>
-      <span className="text-emerald-300">cloud 24/7</span>
+      <span className="text-emerald-400/60">runs on</span>
+      <span className="text-emerald-300">your machine</span>
     </div>
   );
 }

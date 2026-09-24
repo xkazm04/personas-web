@@ -10,7 +10,7 @@ La pestaña Lab en el editor de cada agente es donde esto ocurre. Tiene cuatro m
 
 - **Detecta regresiones pronto** — probar tras cada cambio es cómo evitas "el agente solía funcionar, ¿qué rompí?"
 - **Compara alternativas sistemáticamente** — Arena y A-B te dejan elegir entre opciones con evidencia en lugar de intuición
-- **Genera datos de fitness** — las ejecuciones del Lab acumulan puntuaciones por prompt que alimentan la evolución del genoma (nivel Builder)
+- **Genera datos de fitness** — las ejecuciones del Lab acumulan puntuaciones por prompt que alimentan la evolución del genoma
 - **Conjuntos de entrada reutilizables** — las entradas de prueba se guardan por agente; mismos prompts, mismos datos, comparaciones repetibles
 
 ### Cómo funciona
@@ -169,7 +169,7 @@ Eval es el modo más caro. 3 prompts × 4 modelos × 5 entradas = 60 ejecuciones
   "rating-and-scoring-results": `
 ## Calificar y puntuar resultados
 
-Tras cualquier prueba del Lab, cada fila de salida tiene controles de calificación: pulgar arriba / pulgar abajo para juicio binario, o una escala de 1-5 estrellas para casos matizados. Tus calificaciones alimentan dos cosas: la puntuación de fitness por variante del agente (usada para clasificar en matrix y eval, y como presión de selección de la evolución del genoma en el nivel Builder), y una señal de preferencia personal a través de todas tus pruebas con el tiempo.
+Tras cualquier prueba del Lab, cada fila de salida tiene controles de calificación: pulgar arriba / pulgar abajo para juicio binario, o una escala de 1-5 estrellas para casos matizados. Tus calificaciones alimentan dos cosas: la puntuación de fitness por variante del agente (usada para clasificar en matrix y eval, y como presión de selección de la evolución del genoma), y una señal de preferencia personal a través de todas tus pruebas con el tiempo.
 
 Las calificaciones son personales: codifican tu juicio de calidad, no una métrica objetiva. Eso es intencional; tú eres quien sabe si la salida del agente coincide con lo que necesitas, y esa es la señal contra la que el sistema optimiza.
 
@@ -183,7 +183,7 @@ Las calificaciones son personales: codifican tu juicio de calidad, no una métri
 
 ### Cómo funciona
 
-Las calificaciones se guardan contra la ejecución específica (traza, versión de prompt, modelo, entrada). El agregador de fitness lee calificaciones + métricas objetivas (coste, duración, éxito) y calcula una puntuación de fitness por variante que se usa en la clasificación. La evolución del genoma (nivel Builder) usa las calificaciones como la presión de selección principal para elegir prompts padres a cruzar.
+Las calificaciones se guardan contra la ejecución específica (traza, versión de prompt, modelo, entrada). El agregador de fitness lee calificaciones + métricas objetivas (coste, duración, éxito) y calcula una puntuación de fitness por variante que se usa en la clasificación. La evolución del genoma usa las calificaciones como la presión de selección principal para elegir prompts padres a cruzar.
 
 :::tip
 Califica según lo que realmente quieres, no lo que es técnicamente impresionante. Una respuesta corta y correcta suele ganar a una larga y elaborada. El sistema optimiza contra tus preferencias, así que calificaciones honestas y consistentes producen agentes afinados a *tu* juicio.
@@ -193,7 +193,7 @@ Califica según lo que realmente quieres, no lo que es técnicamente impresionan
   "genome-evolution-basics": `
 ## Fundamentos de la evolución del genoma
 
-La evolución del genoma (nivel Builder) cría automáticamente nuevas variantes de prompt a partir de tus pruebas pasadas mejor calificadas. Cada "generación" muta y recombina los prompts con mejor desempeño de la generación anterior; a lo largo de varias generaciones, los prompts convergen en configuraciones que puntúan consistentemente mejor que tu punto de partida. Es búsqueda evolutiva con tus calificaciones como función de fitness.
+La evolución del genoma cría automáticamente nuevas variantes de prompt a partir de tus pruebas pasadas mejor calificadas. Cada "generación" muta y recombina los prompts con mejor desempeño de la generación anterior; a lo largo de varias generaciones, los prompts convergen en configuraciones que puntúan consistentemente mejor que tu punto de partida. Es búsqueda evolutiva con tus calificaciones como función de fitness.
 
 El proceso es sin supervisión una vez iniciado. Tú proporcionas el prompt inicial y la señal de fitness (típicamente tu historial de calificaciones más métricas objetivas opcionales como coste o duración), fijas el tamaño de la población y el conteo de generaciones, y lo dejas correr. Los disparadores normales del agente quedan en pausa durante la evolución para mantener limpia la comparación.
 

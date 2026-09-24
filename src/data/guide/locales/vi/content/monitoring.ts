@@ -113,7 +113,7 @@ Hệ thống gắn thẻ các lần chạy có vẻ như có thể đã chạy t
 
 ### Cách Hoạt Động
 
-Chế độ xem Usage nhóm cùng các bản ghi thực thi như chế độ xem cho mỗi agent nhưng trên chiều mô hình thay thế. Định giá được cấu hình cho mỗi mô hình trong Settings → Engine, với các mặc định khớp với định giá công khai của mỗi nhà cung cấp; bạn có thể ghi đè nếu bạn có một mức giá đã thương lượng hoặc đang sử dụng BYOI trên một endpoint rẻ hơn.
+Chế độ xem Usage nhóm cùng các bản ghi thực thi như chế độ xem cho mỗi agent nhưng trên chiều mô hình thay thế. Định giá được cấu hình cho mỗi mô hình trong Settings → Engine, với các mặc định khớp với định giá công khai của mỗi nhà cung cấp; bạn có thể ghi đè nếu bạn có một mức giá đã thương lượng hoặc một endpoint rẻ hơn.
 
 :::tip
 Mỗi tháng một lần, quét chế độ xem cho mỗi mô hình được sắp xếp theo tổng chi phí. Mục đầu là cơ hội tiết kiệm lớn nhất của bạn — thả nó vào arena Lab so với mô hình rẻ hơn tiếp theo và xem chất lượng có giữ được không. Hầu hết các agent chịu được việc hạ cấp mô hình tốt; những agent không chịu được là những agent thực sự đáng chi tiêu.

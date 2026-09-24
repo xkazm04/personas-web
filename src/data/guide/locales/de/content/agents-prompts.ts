@@ -271,14 +271,14 @@ Eine "Drafts"- oder "Experimental"-Gruppe oben in deiner Seitenleiste ist ein n�
   "disabling-and-archiving-agents": `
 ## Agenten deaktivieren und archivieren
 
-Zwei Wege, einen Agenten zu pausieren, ohne ihn zu löschen. **Disable** stoppt alle Trigger und blockiert manuelle Läufe; der Agent bleibt in der Seitenleiste mit einem gedämpften Symbol sichtbar, damit du dich an seine Existenz erinnerst. **Archive** verschiebt den Agenten in einen versteckten Archivbereich aus dem Weg des täglichen Gebrauchs; er stoppt das Triggern, zählt nicht gegen die Tier-Limits und kann jederzeit wiederhergestellt werden.
+Zwei Wege, einen Agenten zu pausieren, ohne ihn zu löschen. **Disable** stoppt alle Trigger und blockiert manuelle Läufe; der Agent bleibt in der Seitenleiste mit einem gedämpften Symbol sichtbar, damit du dich an seine Existenz erinnerst. **Archive** verschiebt den Agenten in einen versteckten Archivbereich aus dem Weg des täglichen Gebrauchs; er stoppt das Triggern und kann jederzeit wiederhergestellt werden.
 
 Keine der Operationen berührt Ausführungen, Einstellungen oder Versionsverlauf. Archive ist schwerer — nutze es für Agenten, mit denen du erstmal fertig bist, die du aber vielleicht zurückwillst. Disable ist leichter — nutze es, wenn du einen Agenten vorübergehend stoppen musst, ohne ihn aus der Sicht zu verlieren.
 
 ### Wichtige Punkte
 
 - **Disable** — pausiert die Ausführung; Agent bleibt in der Seitenleiste sichtbar; Reaktivierung mit einem Klick
-- **Archive** — versteckt den Agenten und gibt seinen Platz gegen dein Tier-Limit frei; jederzeit wiederherstellbar
+- **Archive** — versteckt den Agenten; jederzeit wiederherstellbar
 - **Keines löscht** — Einstellungen, Prompt-Verlauf und vergangene Ausführungen werden bewahrt
 - **Trigger respektieren Disable** — ein deaktivierter Agent ignoriert Schedule-/Webhook-/File-Watcher-Ereignisse; sie sammeln sich nicht für die Wiedergabe bei Reaktivierung an
 

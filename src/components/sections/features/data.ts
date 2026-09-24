@@ -1,5 +1,5 @@
 import type { Variants } from "framer-motion";
-import { Wand2, Zap, Cloud, Activity } from "lucide-react";
+import { Wand2, Zap, Activity } from "lucide-react";
 import type { Feature, FeatureEntrance } from "./types";
 import { EASE_CURVE } from "@/lib/animations";
 
@@ -94,25 +94,10 @@ export const features: Feature[] = [
     ],
   },
   {
-    icon: Cloud,
-    accent: "emerald",
-    entrance: "fadeUp",
-    number: "03",
-    title: "One-click cloud deployment",
-    proof: "Hybrid execution",
-    description:
-      "When you need 24/7 operation, deploy your agents to the cloud with one click. Bring your own infrastructure or use ours.",
-    visualKey: "deploy",
-    guideTopics: [
-      { label: "Local vs cloud execution", category: "deployment", topic: "local-vs-cloud-execution" },
-      { label: "Cloud orchestrator setup", category: "deployment", topic: "connecting-to-the-cloud-orchestrator" },
-    ],
-  },
-  {
     icon: Activity,
     accent: "amber",
     entrance: "slideRight",
-    number: "04",
+    number: "03",
     title: "Full visibility",
     proof: "Operational telemetry",
     description:

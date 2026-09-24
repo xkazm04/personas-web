@@ -3,11 +3,20 @@
 
 import {
   MOCK_DAILY_METRICS,
+  MOCK_DAILY_PRIOR_METRICS,
   MOCK_OBSERVABILITY_METRICS,
   MOCK_PERSONA_SPEND,
   MOCK_PERSONAS,
   seededRandom,
 } from "./mockData";
+import {
+  anchorAnnotations,
+  detectCostAnomalies,
+  previousSeries,
+  type ChartAnnotation,
+  type ComparePoint,
+  type CostAnomaly,
+} from "./observabilitySeries";
 import type { HealthIssue } from "./types";
 
 function generateTimeSeries(
@@ -57,9 +66,10 @@ const [PR_REVIEW, INCIDENT, STANDUP, SECURITY, FEEDBACK] = FLEET;
 export const MOCK_FLEET_EXECUTIONS = MOCK_OBSERVABILITY_METRICS.totalExecutions;
 
 // ── Sparkline data for metric cards ─────────────────────────────────
+// The Performance tiles' cost / execution / success sparklines are not fixtures:
+// `useSparklines` projects them from MOCK_DAILY_METRICS with
+// `sparklinesFromDaily`, the same function the Supabase plane uses.
 
-export const SPARKLINE_COST = generateTimeSeries(14, (i) => 12 + i * 0.8 + Math.sin(i * 0.5) * 3, 4, 10);
-export const SPARKLINE_EXECUTIONS = generateTimeSeries(14, (i) => 40 + i * 2.5 + Math.sin(i * 0.7) * 8, 10, 20);
 // Centred on the fleet's actual terminal success rate (8 of 9 finished runs
 // ≈ 89%, and 89.4% across the 14-day window) so the trend line under the home
 // success ring cannot claim a different number than the ring above it.
@@ -93,53 +103,20 @@ export const MOCK_LATENCY_DATA: LatencyPoint[] = (() => {
   return result;
 })();
 
-// ── Period comparison mock data ─────────────────────────────────────
+// ── Performance-tab overlays ────────────────────────────────────────
+// Projections of the ONE daily root (MOCK_DAILY_METRICS, plus the prior window
+// MOCK_DAILY_PRIOR_METRICS) through `./observabilitySeries` — never separately
+// seeded. The Compare overlay, the tiles' "vs last period" trends, the anomaly
+// banner and the chart annotations therefore describe the same fortnight as
+// the headline tiles and the charts they sit on.
 
-export interface ComparePoint {
-  date: string;
-  current: number;
-  previous: number;
-}
+export type { ComparePoint, CostAnomaly, ChartAnnotation };
 
-export const MOCK_COST_COMPARE: ComparePoint[] = (() => {
-  const rng = seededRandom(88);
-  return Array.from({ length: 14 }, (_, i) => {
-    const d = new Date();
-    d.setDate(d.getDate() - (13 - i));
-    return {
-      date: `${String(d.getMonth() + 1).padStart(2, "0")}-${String(d.getDate()).padStart(2, "0")}`,
-      current: +(8 + i * 0.6 + Math.sin(i * 0.5) * 3 + rng() * 4).toFixed(2),
-      previous: +(6 + i * 0.4 + Math.sin(i * 0.5) * 2 + rng() * 3).toFixed(2),
-    };
-  });
-})();
+export const MOCK_COST_COMPARE: ComparePoint[] = previousSeries(MOCK_DAILY_METRICS, MOCK_DAILY_PRIOR_METRICS, "cost");
+export const MOCK_EXEC_COMPARE: ComparePoint[] = previousSeries(MOCK_DAILY_METRICS, MOCK_DAILY_PRIOR_METRICS, "executions");
 
-export const MOCK_EXEC_COMPARE: ComparePoint[] = (() => {
-  const rng = seededRandom(99);
-  return Array.from({ length: 14 }, (_, i) => {
-    const d = new Date();
-    d.setDate(d.getDate() - (13 - i));
-    return {
-      date: `${String(d.getMonth() + 1).padStart(2, "0")}-${String(d.getDate()).padStart(2, "0")}`,
-      current: Math.round(30 + i * 2 + Math.sin(i * 0.7) * 8 + rng() * 10),
-      previous: Math.round(22 + i * 1.5 + Math.sin(i * 0.7) * 6 + rng() * 8),
-    };
-  });
-})();
-
-// ── Cost anomaly data ───────────────────────────────────────────────
-
-export interface CostAnomaly {
-  date: string;
-  cost: number;
-  deviation: number; // sigma
-  topExecutionId: string;
-}
-
-export const MOCK_COST_ANOMALIES: CostAnomaly[] = [
-  { date: "2026-03-04", cost: 34.82, deviation: 2.7, topExecutionId: "exec_a9f3e2" },
-  { date: "2026-03-07", cost: 41.15, deviation: 3.1, topExecutionId: "exec_b7c1d4" },
-];
+/** Days at or past 2σ above the window's mean daily cost. */
+export const MOCK_COST_ANOMALIES: CostAnomaly[] = detectCostAnomalies(MOCK_DAILY_METRICS, 2);
 
 // ── Health issues with auto-healing ─────────────────────────────────
 
@@ -152,6 +129,8 @@ export const MOCK_COST_ANOMALIES: CostAnomaly[] = [
 export interface MockHealthIssue extends HealthIssue {
   isCircuitBreaker?: boolean;
   autoFixApplied?: string;
+  /** Demo incident thread this issue belongs to (see lib/incidentThreads.ts). */
+  causeKey?: string;
 }
 
 export const MOCK_HEALTH_ISSUES: MockHealthIssue[] = [
@@ -178,6 +157,7 @@ export const MOCK_HEALTH_ISSUES: MockHealthIssue[] = [
     detectedAt: new Date(Date.now() - 3 * 60_000).toISOString(),
     category: "circuit_breaker",
     isCircuitBreaker: true,
+    causeKey: "slack-circuit-break",
   },
   {
     id: "hi_3",
@@ -212,6 +192,7 @@ export const MOCK_HEALTH_ISSUES: MockHealthIssue[] = [
     personaName: SECURITY.name,
     detectedAt: new Date(Date.now() - 2 * 3600_000).toISOString(),
     category: "timeout",
+    causeKey: "security-latency",
   },
   // Fleet-level issue — no owning agent (personaId/personaName null exercises
   // the "infrastructure, not agent" branch every renderer has to handle).
@@ -403,18 +384,16 @@ export const EVENT_TYPES = [
 ];
 
 // ── Chart annotation marks ──────────────────────────────────────────
+// Anchored to real days of the chart's x axis (days before today), so recharts
+// can place every ReferenceLine. The deploy lands on the window's cost spike
+// (MOCK_COST_ANOMALIES); the Slack outage is today's open circuit-breaker
+// (MOCK_HEALTH_ISSUES hi_2, detected minutes ago).
 
-export interface ChartAnnotation {
-  date: string;
-  label: string;
-  type: "deployment" | "incident" | "milestone";
-}
-
-export const MOCK_ANNOTATIONS: ChartAnnotation[] = [
-  { date: "03-03", label: "v2.1 deployed", type: "deployment" },
-  { date: "03-05", label: "Slack outage", type: "incident" },
-  { date: "03-07", label: "1k executions", type: "milestone" },
-];
+export const MOCK_ANNOTATIONS: ChartAnnotation[] = anchorAnnotations(MOCK_DAILY_METRICS, [
+  { dayOffset: 9, label: "1k executions", type: "milestone" },
+  { dayOffset: 3, label: "v2.1 deployed", type: "deployment" },
+  { dayOffset: 0, label: "Slack outage", type: "incident" },
+]);
 
 // ── Memory actions for home page ────────────────────────────────────
 
@@ -752,6 +731,11 @@ export interface SLABreach {
   durationMinutes: number;
   severity: SLASeverity;
   summary: string;
+  /**
+   * Demo incident thread this breach belongs to (see lib/incidentThreads.ts).
+   * Its SLA target joins the thread by persona + metric, so targets carry none.
+   */
+  causeKey?: string;
 }
 
 export const MOCK_SLA_BREACHES: SLABreach[] = [
@@ -764,6 +748,7 @@ export const MOCK_SLA_BREACHES: SLABreach[] = [
     durationMinutes: 45,
     severity: "critical",
     summary: "Slack webhook circuit-broken; 3 retries exhausted.",
+    causeKey: "slack-circuit-break",
   },
   {
     id: "br_2",
@@ -774,6 +759,7 @@ export const MOCK_SLA_BREACHES: SLABreach[] = [
     durationMinutes: 180,
     severity: "major",
     summary: "P95 latency sustained above 30s target.",
+    causeKey: "security-latency",
   },
   {
     id: "br_3",
@@ -1690,6 +1676,8 @@ export interface HealthCheckItem {
   action?: HealthActionKind;
   /** Optional version/identifier suffix. */
   meta?: string;
+  /** Demo incident thread this check belongs to (see lib/incidentThreads.ts). */
+  causeKey?: string;
 }
 
 export interface HealthCheckSection {
@@ -1735,7 +1723,7 @@ export const MOCK_HEALTH_CHECKS: HealthCheckSection[] = [
     key: "integrations",
     items: [
       { id: "in_github", name: "GitHub", status: "ok", detail: "Authorized · 3 repos" },
-      { id: "in_slack", name: "Slack", status: "error", detail: "Webhook circuit-broken", action: "configure" },
+      { id: "in_slack", name: "Slack", status: "error", detail: "Webhook circuit-broken", action: "configure", causeKey: "slack-circuit-break" },
       { id: "in_gcal", name: "Google Calendar", status: "ok", detail: "Authorized" },
       { id: "in_openai", name: "OpenAI", status: "ok", detail: "Key valid" },
       { id: "in_stripe", name: "Stripe", status: "info", detail: "Not configured", action: "configure" },

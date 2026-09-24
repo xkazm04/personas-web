@@ -10,7 +10,7 @@ Der Lab-Tab im Editor jedes Agenten ist der Ort, wo das passiert. Er hat vier Mo
 
 - **Regressionen früh abfangen** — nach jeder Änderung zu testen ist, wie du "der Agent hat funktioniert, was habe ich kaputt gemacht?" vermeidest
 - **Alternativen systematisch vergleichen** — Arena und A-B lassen dich zwischen Optionen mit Evidenz statt Bauchgefühl wählen
-- **Fitness-Daten generieren** — Lab-Läufe sammeln Pro-Prompt-Werte, die die Genome-Evolution speisen (Builder-Tier)
+- **Fitness-Daten generieren** — Lab-Läufe sammeln Pro-Prompt-Werte, die die Genome-Evolution speisen
 - **Wiederverwendbare Eingabesätze** — Testeingaben werden pro Agent gespeichert; gleiche Prompts, gleiche Daten, wiederholbare Vergleiche
 
 ### So funktioniert es
@@ -169,7 +169,7 @@ Eval ist der teuerste Modus. 3 Prompts × 4 Modelle × 5 Eingaben = 60 Ausführu
   "rating-and-scoring-results": `
 ## Ergebnisse bewerten und einstufen
 
-Nach jedem Lab-Test hat jede Ausgabezeile Bewertungs-Steuerelemente: Daumen hoch / Daumen runter für binäre Beurteilung, oder eine 1-5-Stern-Skala für nuancierte Fälle. Deine Bewertungen speisen zwei Dinge: den Pro-Variante-Fitness-Score des Agenten (verwendet für Ranking in Matrix und Eval, und als Genome-Evolution-Selektionsdruck im Builder-Tier) und ein persönliches Präferenz-Signal über all deine Tests über die Zeit hinweg.
+Nach jedem Lab-Test hat jede Ausgabezeile Bewertungs-Steuerelemente: Daumen hoch / Daumen runter für binäre Beurteilung, oder eine 1-5-Stern-Skala für nuancierte Fälle. Deine Bewertungen speisen zwei Dinge: den Pro-Variante-Fitness-Score des Agenten (verwendet für Ranking in Matrix und Eval, und als Genome-Evolution-Selektionsdruck) und ein persönliches Präferenz-Signal über all deine Tests über die Zeit hinweg.
 
 Die Bewertungen sind persönlich — sie kodieren dein Qualitätsurteil, keine objektive Metrik. Das ist beabsichtigt; du bist derjenige, der weiß, ob die Ausgabe des Agenten dem entspricht, was du brauchst, und das ist das Signal, gegen das das System optimiert.
 
@@ -183,7 +183,7 @@ Die Bewertungen sind persönlich — sie kodieren dein Qualitätsurteil, keine o
 
 ### So funktioniert es
 
-Bewertungen werden gegen die spezifische Ausführung (Trace, Prompt-Version, Modell, Eingabe) gespeichert. Der Fitness-Aggregator liest Bewertungen + objektive Metriken (Kosten, Dauer, Erfolg) und berechnet einen Pro-Variante-Fitness-Score, der im Ranking verwendet wird. Genome-Evolution (Builder-Tier) nutzt Bewertungen als primären Selektionsdruck für die Wahl der Eltern-Prompts zum Züchten.
+Bewertungen werden gegen die spezifische Ausführung (Trace, Prompt-Version, Modell, Eingabe) gespeichert. Der Fitness-Aggregator liest Bewertungen + objektive Metriken (Kosten, Dauer, Erfolg) und berechnet einen Pro-Variante-Fitness-Score, der im Ranking verwendet wird. Genome-Evolution nutzt Bewertungen als primären Selektionsdruck für die Wahl der Eltern-Prompts zum Züchten.
 
 :::tip
 Bewerte basierend darauf, was du tatsächlich willst, nicht was technisch beeindruckend ist. Eine kurze korrekte Antwort schlägt oft eine lange ausgefeilte. Das System optimiert gegen deine Präferenzen, sodass ehrliche, konsistente Bewertungen Agenten produzieren, die auf *dein* Urteil abgestimmt sind.
@@ -193,7 +193,7 @@ Bewerte basierend darauf, was du tatsächlich willst, nicht was technisch beeind
   "genome-evolution-basics": `
 ## Grundlagen der Genome-Evolution
 
-Die Genome-Evolution (Builder-Tier) züchtet automatisch neue Prompt-Varianten aus deinen am besten bewerteten vergangenen Tests. Jede "Generation" mutiert und rekombiniert die leistungsstärksten Prompts aus der vorherigen Generation; über mehrere Generationen konvergieren die Prompts auf Konfigurationen, die konsistent besser abschneiden als dein Ausgangspunkt. Das ist Evolutionssuche mit deinen Bewertungen als Fitness-Funktion.
+Die Genome-Evolution züchtet automatisch neue Prompt-Varianten aus deinen am besten bewerteten vergangenen Tests. Jede "Generation" mutiert und rekombiniert die leistungsstärksten Prompts aus der vorherigen Generation; über mehrere Generationen konvergieren die Prompts auf Konfigurationen, die konsistent besser abschneiden als dein Ausgangspunkt. Das ist Evolutionssuche mit deinen Bewertungen als Fitness-Funktion.
 
 Der Prozess ist unbeaufsichtigt, sobald du ihn startest. Du gibst den Start-Prompt und das Fitness-Signal an (typischerweise dein Bewertungsverlauf plus optionale objektive Metriken wie Kosten oder Dauer), setzt die Populationsgröße und die Generationenanzahl, und lässt es laufen. Die normalen Trigger des Agenten bleiben während der Evolution pausiert, damit der Vergleich sauber bleibt.
 

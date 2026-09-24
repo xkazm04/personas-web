@@ -96,7 +96,7 @@ Zeitpläne respektieren eine konfigurierbare Zeitzone. Standardmäßig nutzt der
 :::
 
 :::tip
-Zeitplan-Trigger holen verpasste Läufe nicht nach. Wenn die App geschlossen ist oder die Maschine schläft, wenn eine geplante Zeit verstreicht, wird dieser Lauf übersprungen. Für unternehmenskritische geplante Arbeit nutze das Cloud-Deploy (Builder-Tier), damit der Orchestrator das Scheduling serverseitig übernimmt.
+Zeitplan-Trigger holen verpasste Läufe nicht nach. Wenn die App geschlossen ist oder die Maschine schläft, wenn eine geplante Zeit verstreicht, wird dieser Lauf übersprungen.
 :::
   `,
 

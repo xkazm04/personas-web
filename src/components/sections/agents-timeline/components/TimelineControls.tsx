@@ -3,7 +3,7 @@
 import { motion, useReducedMotion } from "framer-motion";
 import { Pause, Play, RotateCcw } from "lucide-react";
 import { fadeUp } from "@/lib/animations";
-import { CYCLE_MS, scenarios } from "../data";
+import { getScenarioCycleMs, scenarios } from "../data";
 
 export default function TimelineControls({
   activeIndex,
@@ -37,7 +37,7 @@ export default function TimelineControls({
                   className="absolute inset-y-0 left-0 rounded-full bg-gradient-to-r from-brand-cyan to-brand-purple"
                   initial={{ width: "0%" }}
                   animate={{ width: "100%" }}
-                  transition={{ duration: CYCLE_MS / 1000, ease: "linear" }}
+                  transition={{ duration: getScenarioCycleMs(s) / 1000, ease: "linear" }}
                   key={`progress-${s.id}`}
                 />
               )}

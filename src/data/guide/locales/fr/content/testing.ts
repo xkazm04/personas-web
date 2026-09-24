@@ -10,7 +10,7 @@ L'onglet Lab sur l'éditeur de chaque agent est l'endroit où cela se produit. I
 
 - **Attraper les régressions tôt** — tester après chaque changement est la façon d'éviter "l'agent fonctionnait, qu'est-ce que j'ai cassé ?"
 - **Comparer les alternatives systématiquement** — Arena et A-B vous permettent de choisir entre les options avec des preuves plutôt qu'à l'intuition
-- **Générer des données de fitness** — les exécutions Lab accumulent des scores par prompt qui alimentent l'évolution génomique (niveau Builder)
+- **Générer des données de fitness** — les exécutions Lab accumulent des scores par prompt qui alimentent l'évolution génomique
 - **Ensembles d'entrées réutilisables** — les entrées de test sont sauvegardées par agent ; mêmes prompts, mêmes données, comparaisons reproductibles
 
 ### Comment ça marche
@@ -169,7 +169,7 @@ Eval est le mode le plus cher. 3 prompts × 4 modèles × 5 entrées = 60 exécu
   "rating-and-scoring-results": `
 ## Noter et évaluer les résultats
 
-Après tout test Lab, chaque ligne de sortie a des contrôles de notation : pouce vers le haut / pouce vers le bas pour le jugement binaire, ou une échelle d'étoiles de 1 à 5 pour les cas nuancés. Vos notes alimentent deux choses : le score de fitness par variante de l'agent (utilisé pour le classement dans matrix et eval, et comme pression de sélection d'évolution génomique au niveau Builder), et un signal de préférence personnelle à travers tous vos tests dans le temps.
+Après tout test Lab, chaque ligne de sortie a des contrôles de notation : pouce vers le haut / pouce vers le bas pour le jugement binaire, ou une échelle d'étoiles de 1 à 5 pour les cas nuancés. Vos notes alimentent deux choses : le score de fitness par variante de l'agent (utilisé pour le classement dans matrix et eval, et comme pression de sélection d'évolution génomique), et un signal de préférence personnelle à travers tous vos tests dans le temps.
 
 Les notes sont personnelles — elles encodent votre jugement de qualité, pas une métrique objective. C'est intentionnel ; vous êtes celui qui sait si la sortie de l'agent correspond à ce dont vous avez besoin, et c'est le signal que le système optimise.
 
@@ -183,7 +183,7 @@ Les notes sont personnelles — elles encodent votre jugement de qualité, pas u
 
 ### Comment ça marche
 
-Les notes sont stockées contre l'exécution spécifique (trace, version de prompt, modèle, entrée). L'agrégateur de fitness lit les notes + métriques objectives (coût, durée, succès) et calcule un score de fitness par variante qui est utilisé dans le classement. L'évolution génomique (niveau Builder) utilise les notes comme pression de sélection principale pour choisir les prompts parents à élever.
+Les notes sont stockées contre l'exécution spécifique (trace, version de prompt, modèle, entrée). L'agrégateur de fitness lit les notes + métriques objectives (coût, durée, succès) et calcule un score de fitness par variante qui est utilisé dans le classement. L'évolution génomique utilise les notes comme pression de sélection principale pour choisir les prompts parents à élever.
 
 :::tip
 Notez en fonction de ce que vous voulez réellement, pas de ce qui est techniquement impressionnant. Une réponse courte et correcte bat souvent une longue élaborée. Le système optimise par rapport à vos préférences, donc des notes honnêtes et cohérentes produisent des agents adaptés à *votre* jugement.
@@ -193,7 +193,7 @@ Notez en fonction de ce que vous voulez réellement, pas de ce qui est technique
   "genome-evolution-basics": `
 ## Bases de l'évolution génomique
 
-L'évolution génomique (niveau Builder) élève automatiquement de nouvelles variantes de prompts à partir de vos meilleurs tests passés notés. Chaque "génération" mute et recombine les prompts les plus performants de la génération précédente ; sur plusieurs générations, les prompts convergent sur des configurations qui se notent constamment mieux que votre point de départ. C'est une recherche évolutionnaire avec vos notes comme fonction de fitness.
+L'évolution génomique élève automatiquement de nouvelles variantes de prompts à partir de vos meilleurs tests passés notés. Chaque "génération" mute et recombine les prompts les plus performants de la génération précédente ; sur plusieurs générations, les prompts convergent sur des configurations qui se notent constamment mieux que votre point de départ. C'est une recherche évolutionnaire avec vos notes comme fonction de fitness.
 
 Le processus est sans surveillance une fois que vous le démarrez. Vous fournissez le prompt de départ et le signal de fitness (typiquement votre historique de notes plus des métriques objectives optionnelles comme le coût ou la durée), définissez la taille de la population et le nombre de générations, et le laissez fonctionner. Les déclencheurs normaux de l'agent restent en pause pendant l'évolution pour garder la comparaison propre.
 

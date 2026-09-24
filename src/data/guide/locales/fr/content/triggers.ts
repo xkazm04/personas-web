@@ -96,7 +96,7 @@ Les plannings respectent un fuseau horaire configurable. Par défaut, l'agent ut
 :::
 
 :::tip
-Les déclencheurs planifiés ne rattrapent pas les exécutions manquées. Si l'application est fermée ou que la machine est en veille quand une heure planifiée passe, cette exécution est sautée. Pour le travail planifié critique, utilisez le déploiement cloud (niveau Builder) afin que l'orchestrateur gère la planification côté serveur.
+Les déclencheurs planifiés ne rattrapent pas les exécutions manquées. Si l'application est fermée ou que la machine est en veille quand une heure planifiée passe, cette exécution est sautée.
 :::
   `,
 

@@ -38,7 +38,6 @@ export const metadata: Metadata = {
     "agent orchestration",
     "AI workflow builder",
     "local AI agents",
-    "cloud AI agents",
     "natural language automation",
     "Claude AI",
     "OpenAI agents",

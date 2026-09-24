@@ -1,6 +1,8 @@
 "use client";
 
 import { motion } from "framer-motion";
+import { loopTransition } from "@/lib/motion/loop-gate";
+import { laneFigures } from "../figures";
 
 interface LaneMetric {
   id: string;
@@ -12,15 +14,12 @@ interface LaneMetric {
   color: string;
 }
 
-function clamp(value: number, min: number, max: number) {
-  return Math.max(min, Math.min(max, value));
-}
-
-function sanitize(value: number): number {
-  return Number.isFinite(value) ? Math.max(0, value) : 0;
-}
-
-export default function LanesView({ laneMetrics, inView }: { laneMetrics: LaneMetric[]; inView: boolean }) {
+/**
+ * `run` is the parent panel's loop-gate verdict (useLoopGate): the delivery
+ * dots travel only while no decider objects, and rest at the lane start
+ * otherwise.
+ */
+export default function LanesView({ laneMetrics, run }: { laneMetrics: LaneMetric[]; run: boolean }) {
   if (!laneMetrics || laneMetrics.length === 0) {
     return (
       <div className="flex min-h-40 items-center justify-center text-base font-mono text-muted">
@@ -32,11 +31,7 @@ export default function LanesView({ laneMetrics, inView }: { laneMetrics: LaneMe
   return (
     <div className="space-y-3">
       {laneMetrics.map((lane, i) => {
-        const queueDepth = sanitize(lane.queueDepth);
-        const latencyMs = sanitize(lane.latencyMs);
-        const eps = sanitize(lane.eps);
-        const depthRatio = clamp(queueDepth / 50, 0, 1);
-        const latencyRatio = clamp(latencyMs / 600, 0, 1);
+        const { queueDepth, deliveryMs, eps, queueFillPct } = laneFigures(lane);
         return (
           <motion.div
             key={lane.id}
@@ -54,7 +49,6 @@ export default function LanesView({ laneMetrics, inView }: { laneMetrics: LaneMe
               </div>
               <div className="flex items-center gap-2 text-base font-mono text-muted">
                 <span className="rounded-full border border-glass-hover px-2 py-0.5">{eps} msgs/s</span>
-                <span className="rounded-full border border-glass-hover px-2 py-0.5">{latencyMs} ms</span>
               </div>
             </div>
 
@@ -62,18 +56,18 @@ export default function LanesView({ laneMetrics, inView }: { laneMetrics: LaneMe
               <motion.div
                 className="absolute inset-y-0 left-0 rounded-full"
                 style={{
-                  width: `${Math.max(depthRatio * 100, 8)}%`,
+                  width: `${queueFillPct}%`,
                   background: `linear-gradient(90deg, ${lane.color}66, color-mix(in srgb, var(--brand-cyan) 60%, transparent))`,
                 }}
                 initial={{ width: 0 }}
-                animate={{ width: `${Math.max(depthRatio * 100, 8)}%` }}
+                animate={{ width: `${queueFillPct}%` }}
                 transition={{ duration: 0.6, ease: "easeOut" }}
               />
               <motion.div
                 className="absolute top-1/2 h-2 w-2 -translate-y-1/2 rounded-full"
                 style={{ backgroundColor: lane.color, boxShadow: `0 0 10px ${lane.color}` }}
-                animate={inView ? { x: ["0%", "2600%"] } : { x: "0%" }}
-                transition={{ duration: 2.8 + i * 0.35, repeat: inView ? Infinity : 0, ease: "linear" }}
+                animate={run ? { x: ["0%", "2600%"] } : { x: "0%" }}
+                transition={loopTransition(run, { duration: 2.8 + i * 0.35, ease: "linear" })}
               />
             </div>
 
@@ -82,7 +76,7 @@ export default function LanesView({ laneMetrics, inView }: { laneMetrics: LaneMe
                 Waiting: <span className="text-foreground/80">{queueDepth}</span>
               </div>
               <div className="rounded-lg border border-glass-hover bg-white/2 px-2 py-1">
-                Delivery time: <span className="text-foreground/80">{Math.round(latencyRatio * 100)}%</span>
+                Delivery time: <span className="text-foreground/80">{deliveryMs} ms</span>
               </div>
             </div>
           </motion.div>

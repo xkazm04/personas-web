@@ -1,6 +1,6 @@
 import { memo } from "react";
 import type { ReactNode } from "react";
-import { useReducedMotion } from "framer-motion";
+import { useStillMotion } from "@/hooks/useStillMotion";
 
 /**
  * Single source of truth for recharts axis / grid / series styling.
@@ -22,7 +22,7 @@ export function useChartAnimation(): {
   isAnimationActive: boolean;
   animationDuration: number;
 } {
-  const reduced = useReducedMotion() ?? false;
+  const reduced = useStillMotion();
   return { isAnimationActive: !reduced, animationDuration: reduced ? 0 : 700 };
 }
 

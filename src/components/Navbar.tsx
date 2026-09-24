@@ -14,6 +14,8 @@ import NavbarLogoGlyph from "./NavbarLogoGlyph";
 // (it is closed until a click).
 const WaitlistModal = dynamic(() => import("./WaitlistModal"), { ssr: false });
 import { useTranslation } from "@/i18n/useTranslation";
+import { DOWNLOAD_ENDPOINT, DOWNLOAD_PLAN } from "@/lib/release";
+import { trackDownloadClick } from "@/lib/analytics";
 import { useMobileMenu } from "./navbar/useMobileMenu";
 import { detectPlatformKey, type PlatformKey } from "./waitlist-modal/waitlistUtils";
 
@@ -47,7 +49,17 @@ export default function Navbar() {
 
   const openDownload = useCallback(() => {
     closeMobile();
-    setPlatformKey(detectPlatformKey());
+    const key = detectPlatformKey();
+    // Same rule as every other download CTA and /api/download: go to the
+    // installer only when the release plan says this platform downloads.
+    if (DOWNLOAD_PLAN.platforms[key] === "download") {
+      // Report before leaving the page. The waitlist branch below reports
+      // itself as waitlist_open { entry_point: "navbar" } when the modal opens.
+      trackDownloadClick(DOWNLOAD_PLAN, "navbar", key);
+      window.location.assign(DOWNLOAD_ENDPOINT);
+      return;
+    }
+    setPlatformKey(key);
     setModalRequested(true);
     setDownloadOpen(true);
   }, [closeMobile]);
@@ -95,9 +107,10 @@ export default function Navbar() {
         onDownloadClick={openDownload}
       />
 
-      {/* Desktop builds aren't shipping yet, so the CTA opens the canonical
-          waitlist flow (same intent as /api/download's fallback) instead of a
-          placeholder modal whose options downloaded nothing. */}
+      {/* While the release plan has nothing to download for the visitor's
+          platform, the CTA opens the canonical waitlist flow (same intent as
+          /api/download's fallback) instead of a placeholder modal whose options
+          downloaded nothing. */}
       {modalRequested && (
       <WaitlistModal
         platformKey={platformKey}

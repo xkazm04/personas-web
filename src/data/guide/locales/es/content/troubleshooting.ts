@@ -147,7 +147,6 @@ Piénsalo como una visita al médico para tu setup de Personas. Un chequeo rápi
 - **Integridad de la base de datos** — tus archivos de datos locales están intactos y saludables
 - **Estado de credenciales** — todas las credenciales almacenadas son válidas y funcionan
 - **Conectividad de proveedores** — tus proveedores de IA son alcanzables y responden
-- **Conexión a la nube** — la conexión a tu orquestador está activa (si está configurada)
 
 ### Cómo funciona
 

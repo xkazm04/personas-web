@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useMemo, useState } from "react";
 import { motion } from "framer-motion";
 import { HeartPulse } from "lucide-react";
 
@@ -12,22 +12,34 @@ import { useTranslation } from "@/i18n/useTranslation";
 import { fadeUp, staggerContainer } from "@/lib/animations";
 import type { HealthCheckItem } from "@/lib/mock-dashboard-data";
 import { DiskUsageBar } from "./health-page/DiskUsageBar";
+import { applyHealthResolutions, resolveHealthAction, type HealthResolutions } from "./health-page/healthActions";
 import { HealthSectionCard } from "./health-page/HealthSectionCard";
 import { useSystemHealth } from "./health-page/useSystemHealth";
 
 /**
  * System Health Panel — runtime / services / resources / integrations status
  * cards with status dots, a disk-usage gauge, and illustrative install/
- * configure actions (demo no-ops → toast). Mirrors the desktop overview's
- * System Health Panel; demo-only.
+ * configure actions (the row settles to ok in-session, plus a toast - see
+ * health-page/healthActions.ts). Mirrors the desktop overview's System Health
+ * Panel; demo-only.
  */
 export default function HealthPage() {
   const { t } = useTranslation();
   const labels = t.healthPage;
-  const { sections, diskUsage, isLoading, error, retry } = useSystemHealth();
+  const { sections: fetched, diskUsage, isLoading, error, retry } = useSystemHealth();
   const [toast, setToast] = useState<{ id: number; message: string } | null>(null);
+  const [resolutions, setResolutions] = useState<HealthResolutions>({});
+  const sections = useMemo(
+    () =>
+      applyHealthResolutions(fetched, resolutions, {
+        configure: labels.toast.configured,
+        install: labels.toast.installed,
+      }),
+    [fetched, resolutions, labels.toast.configured, labels.toast.installed],
+  );
 
   const handleAction = (item: HealthCheckItem) => {
+    setResolutions((prev) => resolveHealthAction(prev, item));
     const verb = item.action === "install" ? labels.toast.installed : labels.toast.configured;
     setToast((prev) => ({ id: (prev?.id ?? 0) + 1, message: `${item.name} ${verb}` }));
   };

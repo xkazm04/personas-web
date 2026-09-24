@@ -2,16 +2,18 @@
 
 import { motion } from "framer-motion";
 import { fadeUp } from "@/lib/animations";
-import type { PluginDef, PluginKey } from "../types";
+import type { PluginDef, PluginKey, ShowcaseCopy } from "../types";
 
 export default function PluginTabs({
   plugins,
   active,
   onSelect,
+  copy,
 }: {
   plugins: PluginDef[];
   active: PluginKey;
   onSelect: (key: PluginKey) => void;
+  copy: ShowcaseCopy;
 }) {
   return (
     <motion.div
@@ -21,7 +23,11 @@ export default function PluginTabs({
       viewport={{ once: true }}
       className="mt-10 mx-auto max-w-5xl"
     >
-      <div className="flex flex-wrap items-center justify-center gap-2">
+      <div
+        role="group"
+        aria-label={copy.tabsLabel}
+        className="flex flex-wrap items-center justify-center gap-2"
+      >
         {plugins.map((p) => {
           const PIcon = p.icon;
           const isActive = active === p.key;

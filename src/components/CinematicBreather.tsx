@@ -42,7 +42,8 @@ function TypewriterLine({
           {char === " " ? "\u00A0" : char}
         </span>
       ))}
-      {pulseAfter && !prefersReducedMotion && (
+      {/* Rendered either way: reduced motion gates the class, never the markup. */}
+      {pulseAfter && (
         <span
           className={`absolute inset-0 pointer-events-none bg-linear-to-r from-brand-cyan/0 via-brand-cyan/20 to-brand-purple/0 mix-blend-screen ${
             inView && !prefersReducedMotion ? "tw-pulse-reveal" : "tw-char-hidden"
@@ -125,8 +126,8 @@ function AmbientParticles() {
     enabled: !prefersReducedMotion,
   });
 
-  if (prefersReducedMotion) return null;
-
+  // Always rendered: with the compositor disabled the canvas simply stays
+  // blank, so reduced motion changes what is drawn, never the DOM shape.
   return (
     <canvas
       ref={canvasRef}

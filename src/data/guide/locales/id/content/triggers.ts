@@ -96,7 +96,7 @@ Jadwal menghormati timezone yang dapat dikonfigurasi. Secara default agen menggu
 :::
 
 :::tip
-Schedule trigger tidak mengisi kembali run yang terlewat. Jika aplikasi ditutup atau mesin sedang tidur ketika waktu terjadwal lewat, run itu dilewati. Untuk pekerjaan terjadwal yang sangat penting, jalankan cloud deploy (tier Builder) sehingga orkestrator menangani penjadwalan di sisi server.
+Schedule trigger tidak mengisi kembali run yang terlewat. Jika aplikasi ditutup atau mesin sedang tidur ketika waktu terjadwal lewat, run itu dilewati.
 :::
   `,
 

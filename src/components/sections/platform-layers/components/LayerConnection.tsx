@@ -11,11 +11,14 @@ export default function LayerConnection({
   from,
   to,
   spread,
+  run,
 }: {
   index: number;
   from: BrandKey;
   to: BrandKey;
   spread: Spring;
+  /** Loop-gate verdict from the stack (useLoopGate in ../index.tsx). */
+  run: boolean;
 }) {
   const gap = 120;
   const baseTop = (index + 1) * gap;
@@ -30,7 +33,7 @@ export default function LayerConnection({
 
   return (
     <motion.div className="absolute left-1/2 -translate-x-1/2 z-0" style={{ top: y, height, opacity }}>
-      <ConnectionPillar from={from} to={to} progress={1} />
+      <ConnectionPillar from={from} to={to} progress={1} run={run} />
     </motion.div>
   );
 }

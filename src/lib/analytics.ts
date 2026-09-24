@@ -1,5 +1,6 @@
 import * as Sentry from "@sentry/nextjs";
 import { COOKIE_CONSENT_KEY } from "@/lib/constants";
+import type { DownloadPlan } from "@/lib/release";
 
 // ── Consent-gated analytics (respects cookie consent state) ─────────────────
 
@@ -50,8 +51,33 @@ export function trackPageView(page: string) {
   trackEvent("page_view", { page });
 }
 
-export function trackDownloadClick(platform: string) {
-  trackEvent("download_click", { platform });
+/** Which "Download" CTA was clicked. Every download CTA reports itself, so the
+ *  funnel can tell the hero, the pricing offer, the download section and the
+ *  navbar apart. The navbar reports only its installer branch: its waitlist
+ *  branch opens the modal, which reports `waitlist_open` with `entry_point:
+ *  "navbar"` instead. */
+export type DownloadPlacement = "download-cta" | "hero" | "pricing" | "navbar";
+
+/**
+ * `download_click` attributes under this build's release plan. `outcome` is
+ * what the click did: `installer` (went to /api/download) or `waitlist` (no
+ * installer is configured, so the CTA leads to the download section's
+ * waitlist). `platform` is the installer's when one is live, otherwise the
+ * visitor's own - the waitlist they will be offered, as the waitlist events
+ * report it. PII: these three fields only.
+ */
+export function downloadClickAttributes(
+  plan: DownloadPlan,
+  placement: DownloadPlacement,
+  visitorPlatform: string,
+): Record<string, string> {
+  return plan.primary.kind === "download"
+    ? { platform: plan.primary.platform, placement, outcome: "installer" }
+    : { platform: visitorPlatform, placement, outcome: "waitlist" };
+}
+
+export function trackDownloadClick(plan: DownloadPlan, placement: DownloadPlacement, visitorPlatform: string) {
+  trackEvent("download_click", downloadClickAttributes(plan, placement, visitorPlatform));
 }
 
 /**

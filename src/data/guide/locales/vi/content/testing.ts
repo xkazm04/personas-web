@@ -10,7 +10,7 @@ Tab Lab trên trình chỉnh sửa của mỗi agent là nơi điều này xảy
 
 - **Bắt thoái lui sớm** — kiểm thử sau mỗi thay đổi là cách bạn tránh "agent đã từng hoạt động, tôi đã làm hỏng gì?"
 - **So sánh các lựa chọn thay thế một cách có hệ thống** — Arena và A-B cho phép bạn chọn giữa các tùy chọn bằng bằng chứng thay vì cảm giác
-- **Tạo dữ liệu fitness** — các lần chạy Lab tích lũy điểm cho mỗi prompt cung cấp cho genome evolution (gói Builder)
+- **Tạo dữ liệu fitness** — các lần chạy Lab tích lũy điểm cho mỗi prompt cung cấp cho genome evolution
 - **Các bộ đầu vào có thể tái sử dụng** — các đầu vào kiểm thử được lưu cho mỗi agent; cùng các prompt, cùng dữ liệu, so sánh có thể lặp lại
 
 ### Cách Hoạt Động
@@ -169,7 +169,7 @@ Eval là chế độ tốn kém nhất. 3 prompt × 4 mô hình × 5 đầu vào
   "rating-and-scoring-results": `
 ## Đánh Giá Và Chấm Điểm Kết Quả
 
-Sau bất kỳ bài kiểm thử Lab nào, mỗi hàng đầu ra có các điều khiển đánh giá: thumbs-up / thumbs-down để đánh giá nhị phân, hoặc thang điểm 1-5 sao cho các trường hợp tinh tế. Các đánh giá của bạn cung cấp hai thứ: điểm fitness cho mỗi biến thể của agent (được sử dụng để xếp hạng trong matrix và eval, và như áp lực lựa chọn genome-evolution trên gói Builder), và một tín hiệu sở thích cá nhân trên tất cả các kiểm thử của bạn theo thời gian.
+Sau bất kỳ bài kiểm thử Lab nào, mỗi hàng đầu ra có các điều khiển đánh giá: thumbs-up / thumbs-down để đánh giá nhị phân, hoặc thang điểm 1-5 sao cho các trường hợp tinh tế. Các đánh giá của bạn cung cấp hai thứ: điểm fitness cho mỗi biến thể của agent (được sử dụng để xếp hạng trong matrix và eval, và như áp lực lựa chọn genome-evolution), và một tín hiệu sở thích cá nhân trên tất cả các kiểm thử của bạn theo thời gian.
 
 Các đánh giá là cá nhân — chúng mã hóa phán đoán của bạn về chất lượng, không phải một chỉ số khách quan. Điều đó là cố ý; bạn là người biết liệu đầu ra của agent có khớp với những gì bạn cần hay không, và đó là tín hiệu mà hệ thống tối ưu hóa.
 
@@ -183,7 +183,7 @@ Các đánh giá là cá nhân — chúng mã hóa phán đoán của bạn về
 
 ### Cách Hoạt Động
 
-Các đánh giá được lưu trữ đối với lần thực thi cụ thể (trace, phiên bản prompt, mô hình, đầu vào). Bộ tổng hợp fitness đọc các đánh giá + các chỉ số khách quan (chi phí, thời lượng, thành công) và tính một điểm fitness cho mỗi biến thể được sử dụng trong xếp hạng. Genome evolution (gói Builder) sử dụng các đánh giá làm áp lực lựa chọn chính để chọn các prompt cha mẹ để lai tạo.
+Các đánh giá được lưu trữ đối với lần thực thi cụ thể (trace, phiên bản prompt, mô hình, đầu vào). Bộ tổng hợp fitness đọc các đánh giá + các chỉ số khách quan (chi phí, thời lượng, thành công) và tính một điểm fitness cho mỗi biến thể được sử dụng trong xếp hạng. Genome evolution sử dụng các đánh giá làm áp lực lựa chọn chính để chọn các prompt cha mẹ để lai tạo.
 
 :::tip
 Đánh giá dựa trên những gì bạn thực sự muốn, không phải những gì ấn tượng về mặt kỹ thuật. Một câu trả lời ngắn chính xác thường đánh bại một câu dài hoành tráng. Hệ thống tối ưu hóa theo sở thích của bạn, vì vậy các đánh giá trung thực, nhất quán tạo ra các agent được điều chỉnh theo phán đoán của *bạn*.
@@ -193,7 +193,7 @@ Các đánh giá được lưu trữ đối với lần thực thi cụ thể (t
   "genome-evolution-basics": `
 ## Cơ Bản Về Genome Evolution
 
-Genome evolution (gói Builder) tự động lai tạo các biến thể prompt mới từ các kiểm thử trước đây được đánh giá cao nhất của bạn. Mỗi "thế hệ" đột biến và tái tổ hợp các prompt hoạt động tốt nhất từ thế hệ trước đó; qua nhiều thế hệ, các prompt hội tụ trên các cấu hình ghi điểm nhất quán tốt hơn điểm khởi đầu của bạn. Đó là tìm kiếm tiến hóa với các đánh giá của bạn làm hàm fitness.
+Genome evolution tự động lai tạo các biến thể prompt mới từ các kiểm thử trước đây được đánh giá cao nhất của bạn. Mỗi "thế hệ" đột biến và tái tổ hợp các prompt hoạt động tốt nhất từ thế hệ trước đó; qua nhiều thế hệ, các prompt hội tụ trên các cấu hình ghi điểm nhất quán tốt hơn điểm khởi đầu của bạn. Đó là tìm kiếm tiến hóa với các đánh giá của bạn làm hàm fitness.
 
 Quá trình không giám sát khi bạn bắt đầu. Bạn cung cấp prompt khởi đầu và tín hiệu fitness (thường là lịch sử đánh giá của bạn cộng với các chỉ số khách quan tùy chọn như chi phí hoặc thời lượng), đặt kích thước quần thể và số thế hệ, và để nó chạy. Các trigger thông thường của agent vẫn tạm dừng trong tiến hóa để giữ cho so sánh sạch sẽ.
 

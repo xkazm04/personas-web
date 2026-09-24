@@ -8,7 +8,7 @@ import {
   useMemo,
   useSyncExternalStore,
 } from "react";
-import { motion, useInView, AnimatePresence } from "framer-motion";
+import { motion, AnimatePresence } from "framer-motion";
 import { Wand2 } from "lucide-react";
 import dynamic from "next/dynamic";
 import SectionWrapper from "@/components/SectionWrapper";
@@ -16,6 +16,7 @@ import SectionIntro from "@/components/primitives/SectionIntro";
 import { TerminalPanel } from "@/components/primitives";
 import TerminalChrome from "@/components/TerminalChrome";
 import { fadeUp } from "@/lib/animations";
+import { useLoopGate } from "@/hooks/useLoopGate";
 import { BRAND_VAR, tint } from "@/lib/brand-theme";
 import { createSnapshot, type QueueTelemetryAdapter } from "@/lib/event-bus-demo";
 import { queueRouteSeeds, defaultTelemetryAdapter, type QueueVariant } from "./data";
@@ -53,15 +54,17 @@ const noFlowHashOnServer = () => false;
 export default function EventBusShowcase({ telemetryAdapter }: { telemetryAdapter?: QueueTelemetryAdapter }) {
   const uid = useId();
   const containerRef = useRef<HTMLDivElement>(null);
-  const inView = useInView(containerRef, { margin: "200px", once: false });
+  // `tick` gates the telemetry feed (reduced motion abstains - numbers are not
+  // motion); `run` gates the lanes' travelling dots.
+  const { run, tick } = useLoopGate(containerRef, { rootMargin: "200px" });
   const [variant, setVariant] = useState<QueueVariant>("swarm");
   const [snapshot, setSnapshot] = useState(() => createSnapshot("bootstrap", queueRouteSeeds));
 
   useEffect(() => {
-    if (!inView) return;
+    if (!tick) return;
     const adapter = telemetryAdapter ?? defaultTelemetryAdapter;
     return adapter.subscribe(setSnapshot);
-  }, [telemetryAdapter, inView]);
+  }, [telemetryAdapter, tick]);
 
   // `false` on the server and for the hydration render, so the client's first
   // render still matches the server HTML; the real hash is picked up right after.
@@ -160,7 +163,7 @@ export default function EventBusShowcase({ telemetryAdapter }: { telemetryAdapte
               >
                 <TerminalChrome
                   title="message hub — live"
-                  info={`${snapshot.source} stream · ${snapshot.totalInFlight} being sent · ${snapshot.totalBacklog} waiting`}
+                  info={`${snapshot.totalInFlight} being sent · ${snapshot.totalBacklog} waiting`}
                   className="mb-4 pb-3"
                 />
 
@@ -170,7 +173,7 @@ export default function EventBusShowcase({ telemetryAdapter }: { telemetryAdapte
                   aria-labelledby={`${uid}-tab-${variant}`}
                 >
                   {variant === "swarm" && <SwarmView uid={uid} />}
-                  {variant === "lanes" && <LanesView laneMetrics={laneMetrics} inView={inView} />}
+                  {variant === "lanes" && <LanesView laneMetrics={laneMetrics} run={run} />}
                 </div>
               </TerminalPanel>
 

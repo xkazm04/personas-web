@@ -1,17 +1,26 @@
 "use client";
 
-import { useState } from "react";
+import { useMemo, useState } from "react";
 import { motion } from "framer-motion";
-import { Focus } from "lucide-react";
+import { AlarmClock, Focus } from "lucide-react";
 import { fadeUp, staggerContainer } from "@/lib/animations";
 import GradientText from "@/components/GradientText";
+import { countOverdue } from "@/lib/review-sla";
+import { useReviewStore } from "@/stores/reviewStore";
 import ReviewsSplitPane from "./ReviewsSplitPane";
 import ReviewsFocusFlow from "./ReviewsFocusFlow";
+import { useReviewClock } from "./review-due";
 import { useTranslation } from "@/i18n/useTranslation";
 
 export default function ReviewsPage() {
   const { t } = useTranslation();
   const [mode, setMode] = useState<"split" | "focus">("split");
+  // One clock for the page: the header count, the split pane's chips and the
+  // focus card all read the same `now`.
+  const now = useReviewClock();
+  const reviews = useReviewStore((s) => s.reviews);
+  const policy = useReviewStore((s) => s.escalationPolicy);
+  const overdue = useMemo(() => countOverdue(reviews, policy, now), [reviews, policy, now]);
 
   return (
     <motion.div initial="hidden" animate="visible" variants={staggerContainer}>
@@ -24,6 +33,15 @@ export default function ReviewsPage() {
             {t.dashboardUi.manualReviewsSubtitle}
           </p>
         </div>
+        {overdue > 0 && (
+          <span
+            role="status"
+            className="flex items-center gap-1.5 rounded-lg border border-rose-500/30 bg-rose-500/15 px-3 py-2 text-sm font-medium tabular-nums text-rose-300"
+          >
+            <AlarmClock className="h-3.5 w-3.5" aria-hidden />
+            {t.reviewsPage.sla.overdueCount.replace("{n}", String(overdue))}
+          </span>
+        )}
         {mode === "split" && (
           <button
             type="button"
@@ -38,9 +56,9 @@ export default function ReviewsPage() {
 
       <div data-tour-diagram="dashboard-reviews">
         {mode === "split" ? (
-          <ReviewsSplitPane />
+          <ReviewsSplitPane now={now} />
         ) : (
-          <ReviewsFocusFlow onExit={() => setMode("split")} />
+          <ReviewsFocusFlow now={now} onExit={() => setMode("split")} />
         )}
       </div>
     </motion.div>

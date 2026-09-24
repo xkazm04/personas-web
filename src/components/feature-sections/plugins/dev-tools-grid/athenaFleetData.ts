@@ -6,7 +6,7 @@
  * glows, a caption narrates beside her).
  *
  * One deterministic CYCLE, three acts:
- *   1. spawn   — a 4×4 grid of Claude CLI sessions fills in waves,
+ *   1. spawn   — a 4×4 grid of Claude Code sessions fills in waves,
  *   2. churn   — sessions change status on their own clocks: three block on
  *                questions, one goes stale,
  *   3. triage  — Athena's orb glides cell to cell and answers every blocker

@@ -37,14 +37,13 @@ export const vi: Translations = {
     compareSection: {
       heading: "M\u1ecdi th\u1ee9 \u0111\u1ec1u",
       headingGradient: "mi\u1ec5n ph\u00ed",
-      description: "\u1ee8ng d\u1ee5ng desktop v\u00e0 m\u1ecdi t\u00ednh n\u0103ng b\u00ean d\u01b0\u1edbi \u0111\u1ec1u mi\u1ec5n ph\u00ed v\u0129nh vi\u1ec5n. Kh\u00f4ng ph\u00e2n h\u1ea1ng, kh\u00f4ng t\u00ednh ph\u00ed theo s\u1ed1 ng\u01b0\u1eddi d\u00f9ng \u2014 ch\u1ec9 l\u00e0 m\u1ed9t n\u1ec1n t\u1ea3ng agent ho\u00e0n ch\u1ec9nh ch\u1ea1y tr\u00ean m\u00e1y c\u1ee7a b\u1ea1n.",
+      description: "\u1ee8ng d\u1ee5ng desktop v\u00e0 m\u1ecdi t\u00ednh n\u0103ng b\u00ean d\u01b0\u1edbi \u0111\u1ec1u mi\u1ec5n ph\u00ed v\u0129nh vi\u1ec5n: m\u1ed9t n\u1ec1n t\u1ea3ng agent ho\u00e0n ch\u1ec9nh ch\u1ea1y tr\u00ean m\u00e1y c\u1ee7a b\u1ea1n.",
       offerBadges: [
         "Mi\u1ec5n ph\u00ed v\u0129nh vi\u1ec5n",
         "T\u1ef1 l\u01b0u tr\u1eef",
-        "Kh\u00f4ng ph\u1ee5 ph\u00ed m\u1ed7i l\u01b0\u1ee3t ch\u1ea1y",
         "M\u00e3 ngu\u1ed3n m\u1edf"
       ],
-      offerBody: "Personas ch\u1ea1y tr\u00ean m\u00e1y c\u1ee7a b\u1ea1n. Kh\u00f4ng ph\u1ee5 ph\u00ed \u0111i\u1ec1u ph\u1ed1i, kh\u00f4ng t\u00ednh ph\u00ed theo s\u1ed1 ng\u01b0\u1eddi d\u00f9ng. Cloud tr\u1ea3 ph\u00ed v\u00e0 h\u1ed7 tr\u1ee3 \u01b0u ti\u00ean l\u00e0 t\u00f9y ch\u1ecdn, kh\u00f4ng b\u1eaft bu\u1ed9c.",
+      offerBody: "Personas ch\u1ea1y tr\u00ean m\u00e1y c\u1ee7a b\u1ea1n.",
       ctaLabel: "B\u1eaft \u0111\u1ea7u mi\u1ec5n ph\u00ed",
       readGuide: "\u0110\u1ecdc h\u01b0\u1edbng d\u1eabn",
       groups: {
@@ -129,38 +128,7 @@ export const vi: Translations = {
       slogan: "T\u1ef1 \u0111\u1ed9ng h\u00f3a c\u00f4ng vi\u1ec7c. L\u1ea5y l\u1ea1i th\u1eddi gian c\u1ee7a b\u1ea1n."
     },
     pricing: {
-      local: "C\u1ee5c b\u1ed9",
-      cloud: "\u0110\u00e1m m\u00e2y",
-      enterprise: "Doanh nghi\u1ec7p",
-      downloadLocal: "T\u1ea3i b\u1ea3n c\u1ee5c b\u1ed9",
-      goCloud: "D\u00f9ng \u0111\u00e1m m\u00e2y",
-      contactSales: "Li\u00ean h\u1ec7 b\u00e1n h\u00e0ng",
-      comingSoon: "S\u1eafp ra m\u1eaft",
-      bestFor: "Ph\u00f9 h\u1ee3p nh\u1ea5t cho",
-      forever: "m\u00e3i m\u00e3i",
-      mo: "/th\u00e1ng",
-      custom: "T\u00f9y ch\u1ec9nh",
-      bestForLocal: "Ng\u01b0\u1eddi x\u00e2y d\u1ef1ng c\u00e1 nh\u00e2n m\u1edbi b\u1eaft \u0111\u1ea7u",
-      bestForCloud: "\u0110\u1ed9i nh\u00f3m c\u00e1 nh\u00e2n l\u00e0m vi\u1ec7c nhanh",
-      bestForEnterprise: "T\u1ed5 ch\u1ee9c c\u00f3 nhu c\u1ea7u tu\u00e2n th\u1ee7 & m\u1edf r\u1ed9ng quy m\u00f4",
-      features: {
-        unlimitedLocalAgents: "T\u00e1c nh\u00e2n c\u1ee5c b\u1ed9 kh\u00f4ng gi\u1edbi h\u1ea1n",
-        localEventBus: "Bus s\u1ef1 ki\u1ec7n c\u1ee5c b\u1ed9 & b\u1ed9 l\u1eadp l\u1ecbch",
-        fullObservability: "B\u1ea3ng \u0111i\u1ec1u khi\u1ec3n gi\u00e1m s\u00e1t \u0111\u1ea7y \u0111\u1ee7",
-        designEngine: "C\u00f4ng c\u1ee5 thi\u1ebft k\u1ebf",
-        teamCanvasLocal: "Canvas nh\u00f3m (c\u1ee5c b\u1ed9)",
-        everythingInFree: "T\u1ea5t c\u1ea3 trong g\u00f3i Mi\u1ec5n ph\u00ed",
-        cloudWorkers3: "3 worker \u0111\u00e1m m\u00e2y",
-        executions1000: "1.000 l\u1ea7n th\u1ef1c thi/th\u00e1ng",
-        events10000: "10.000 s\u1ef1 ki\u1ec7n/th\u00e1ng",
-        burstAutoScaling: "T\u1ef1 \u0111\u1ed9ng m\u1edf r\u1ed9ng khi c\u1ea7n",
-        everythingInPro: "T\u1ea5t c\u1ea3 trong g\u00f3i Pro",
-        ssoSaml: "SSO qua SAML & OIDC",
-        multiTenantRbac: "Kh\u00f4ng gian l\u00e0m vi\u1ec7c \u0111a ng\u01b0\u1eddi d\u00f9ng v\u1edbi RBAC",
-        auditTrailExport: "Xu\u1ea5t nh\u1eadt k\u00fd ki\u1ec3m to\u00e1n th\u1ef1c thi",
-        dedicatedWorkers: "Worker \u0111\u00e1m m\u00e2y chuy\u00ean d\u1ee5ng & SLA",
-        prioritySupport: "H\u1ed7 tr\u1ee3 \u01b0u ti\u00ean"
-      }
+      comingSoon: "S\u1eafp ra m\u1eaft"
     },
     hero: {
       downloadCta: "T\u1ea3i xu\u1ed1ng",
@@ -168,7 +136,7 @@ export const vi: Translations = {
       badge: "N\u1ec1n t\u1ea3ng t\u00e1c nh\u00e2n AI",
       headingLine1: "T\u00e1c nh\u00e2n th\u00f4ng minh",
       headingLine2: "l\u00e0m vi\u1ec7c cho b\u1ea1n",
-      description: "Thi\u1ebft k\u1ebf t\u00e1c nh\u00e2n b\u1eb1ng ng\u00f4n ng\u1eef t\u1ef1 nhi\u00ean. \u0110i\u1ec1u ph\u1ed1i ch\u00fang t\u1ea1i m\u00e1y ho\u1eb7c tr\u00ean \u0111\u00e1m m\u00e2y.",
+      description: "Thi\u1ebft k\u1ebf t\u00e1c nh\u00e2n b\u1eb1ng ng\u00f4n ng\u1eef t\u1ef1 nhi\u00ean. \u0110i\u1ec1u ph\u1ed1i ch\u00fang ngay tr\u00ean m\u00e1y c\u1ee7a b\u1ea1n.",
       descriptionBold: "Kh\u00f4ng s\u01a1 \u0111\u1ed3 workflow. Kh\u00f4ng b\u1ea7y agent. Kh\u00f4ng c\u1ea7n vi\u1ebft code.",
       mode2: "C\u00e0i \u0111\u1eb7t \u0111\u01a1n gi\u1ea3n",
       mode3: "Mi\u1ec5n ph\u00ed",
@@ -393,28 +361,20 @@ export const vi: Translations = {
       discordSubtitle: "Tham gia c\u1ed9ng \u0111\u1ed3ng Discord c\u1ee7a ch\u00fang t\u00f4i \u0111\u1ec3 \u0111\u01b0\u1ee3c tr\u1ee3 gi\u00fap v\u00e0 th\u1ea3o lu\u1eadn.",
       questions: [
         {
-          q: "What is Claude CLI and why do I need it?",
-          a: "Claude CLI is Anthropic's official command-line interface for interacting with Claude. Personas uses it under the hood to run your agents locally \u2014 it handles authentication, model access, and streaming responses. You'll need an active Claude Pro or Max subscription and the CLI installed before launching Personas."
+          q: "What is Claude Code and why do I need it?",
+          a: "Claude Code is Anthropic's official command-line tool for working with Claude. Personas uses it under the hood to run your agents locally. It handles authentication, model access, and streaming responses. You'll need an active Claude Pro or Max subscription and Claude Code installed before launching Personas."
         },
         {
           q: "Does Personas collect any telemetry or usage data?",
-          a: "No. Personas runs entirely on your machine with zero telemetry. We don't collect analytics, usage metrics, or any personal data. Your prompts, agent configurations, and execution logs never leave your device unless you explicitly enable cloud execution."
+          a: "No. Personas runs entirely on your machine with zero telemetry. We don't collect analytics, usage metrics, or any personal data. Your prompts, agent configurations, and execution logs never leave your device."
         },
         {
-          q: "How does the pricing model work?",
-          a: "The desktop app is free forever with unlimited local agents. Cloud plans (Starter, Pro, Team) add 24/7 execution, remote workers, and team features on top. You always need your own Claude subscription \u2014 we never touch your Anthropic bill. Think of Personas as the orchestration layer, and Claude as the engine."
-        },
-        {
-          q: "What is Bring Your Own Infrastructure (BYOI)?",
-          a: "BYOI lets you connect your own cloud provider credentials (e.g., Fly.io API tokens) instead of using our managed infrastructure. Personas provisions and manages the workers on your account, giving you unlimited execution without per-month caps \u2014 you only pay your cloud provider directly."
-        },
-        {
-          q: "What's the difference between local and cloud execution?",
-          a: "Local execution runs agents on your machine using Claude CLI \u2014 it's instant, free, and private, but stops when your computer sleeps. Cloud execution runs agents on remote workers 24/7, supports event-bus bridging across environments, and enables team collaboration. You can switch between modes per-agent."
+          q: "Is Personas free?",
+          a: "Yes. The desktop app is free and open source, with unlimited local agents. You need your own Claude subscription, and we never touch your Anthropic bill. Think of Personas as the orchestration layer, and Claude as the engine."
         },
         {
           q: "Are there any limits on the number of agents?",
-          a: "Locally, there are no limits \u2014 create as many agents as you want. Cloud plans have worker limits (1\u20135 depending on tier) and monthly execution caps. Pro and Team plans include burst auto-scaling for traffic spikes. BYOI removes all caps entirely."
+          a: "No. Create as many agents as you want."
         }
       ]
     },
@@ -425,10 +385,10 @@ export const vi: Translations = {
       downloadInstaller: "T\u1ea3i tr\u00ecnh c\u00e0i \u0111\u1eb7t",
       downloadFor: "T\u1ea3i xu\u1ed1ng cho {platform}",
       joinWaitlist: "Tham gia danh s\u00e1ch ch\u1edd",
-      connectCli: "K\u1ebft n\u1ed1i Claude CLI",
+      connectCli: "K\u1ebft n\u1ed1i Claude Code",
       launchAgent: "Kh\u1edfi ch\u1ea1y t\u00e1c nh\u00e2n \u0111\u1ea7u ti\u00ean",
       exploreFirst: "Kh\u00e1m ph\u00e1 kh\u1ea3 n\u0103ng tr\u01b0\u1edbc",
-      requiresCli: "Y\u00eau c\u1ea7u Claude CLI",
+      requiresCli: "Y\u00eau c\u1ea7u Claude Code",
       installerSize: "Tr\u00ecnh c\u00e0i \u0111\u1eb7t 12 MB",
       noSignupLine: "Kh\u00f4ng c\u1ea7n \u0111\u0103ng k\u00fd, kh\u00f4ng c\u1ea7n th\u1ebb t\u00edn d\u1ee5ng. Ch\u1ea1y tr\u00ean m\u00e1y c\u1ee7a b\u1ea1n. Kh\u00f4ng \u0111o l\u01b0\u1eddng t\u1eeb xa.",
       windows: "Windows",
@@ -604,7 +564,8 @@ export const vi: Translations = {
             synced: "\u0110\u00e3 \u0111\u1ed3ng b\u1ed9"
           }
         }
-      }
+      },
+      related: "Li\u00ean quan"
     },
     dashboardUi: {
       status: {
@@ -643,7 +604,7 @@ export const vi: Translations = {
       noReviewsInFilter: "Kh\u00f4ng c\u00f3 \u0111\u00e1nh gi\u00e1 n\u00e0o trong b\u1ed9 l\u1ecdc n\u00e0y",
       refreshing: "\u0110ang l\u00e0m m\u1edbi...",
       rejectSelectedTitle: "T\u1eeb ch\u1ed1i c\u00e1c \u0111\u00e1nh gi\u00e1 \u0111\u00e3 ch\u1ecdn?",
-      rejectSelectedBody: "Thao t\u00e1c n\u00e0y s\u1ebd t\u1eeb ch\u1ed1i {count} \u0111\u00e1nh gi\u00e1 \u0111\u00e3 ch\u1ecdn{plural}. B\u1ea1n s\u1ebd c\u00f3 5 gi\u00e2y \u0111\u1ec3 ho\u00e0n t\u00e1c.",
+      rejectSelectedBody: "Thao t\u00e1c n\u00e0y s\u1ebd t\u1eeb ch\u1ed1i c\u00e1c b\u1ea3n duy\u1ec7t \u0111\u00e3 ch\u1ecdn ({count}). B\u1ea1n s\u1ebd c\u00f3 5 gi\u00e2y \u0111\u1ec3 ho\u00e0n t\u00e1c.",
       undo: "Ho\u00e0n t\u00e1c",
       retry: "Th\u1eed l\u1ea1i",
       bulkFailedApprove: "{failed} tr\u00ean {total} kh\u00f4ng th\u1ec3 duy\u1ec7t",
@@ -807,6 +768,29 @@ export const vi: Translations = {
       parseError: {
         label: "L\u1ed7i ph\u00e2n t\u00edch",
         detail: "Payload kh\u00f4ng \u0111\u00fang \u0111\u1ecbnh d\u1ea1ng \u2014 \u0111\u00e3 n\u00e2ng m\u1ee9c nghi\u00eam tr\u1ecdng l\u00ean nghi\u00eam tr\u1ecdng cho \u0111\u1ebfn khi \u0111\u01b0\u1ee3c xem x\u00e9t"
+      },
+      undo: {
+        approved: "B\u1ea3n duy\u1ec7t \u0111\u00e3 ch\u1ea5p thu\u1eadn: {count}",
+        rejected: "B\u1ea3n duy\u1ec7t \u0111\u00e3 t\u1eeb ch\u1ed1i: {count}",
+        refused: "M\u1ed9t s\u1ed1 b\u1ea3n duy\u1ec7t n\u00e0y \u0111\u00e3 c\u00f3 quy\u1ebft \u0111\u1ecbnh \u0111ang ch\u1edd \u2014 h\u00e3y ho\u00e0n t\u00e1c ho\u1eb7c \u0111\u1ee3i \u0111\u1ebfn khi \u0111\u01b0\u1ee3c l\u01b0u."
+      },
+      sla: {
+        due: "\u0110\u1ebfn h\u1ea1n {when}",
+        wasDue: "\u0110\u00e3 qu\u00e1 h\u1ea1n t\u1eeb {when}",
+        overdueCount: "Qu\u00e1 h\u1ea1n: {n}"
+      },
+      resolved: "\u0110\u00e3 x\u1eed l\u00fd {when}",
+      resolvedBy: "\u0110\u00e3 x\u1eed l\u00fd {when} b\u1edfi {name}",
+      resolver: {
+        you: "b\u1ea1n",
+        system: "h\u1ec7 th\u1ed1ng"
+      },
+      autoApprovedNote: "T\u1ef1 \u0111\u1ed9ng ph\u00ea duy\u1ec7t: \u0111\u00e3 qu\u00e1 h\u1ea1n SLA",
+      bulkProcessing: "\u0110ang x\u1eed l\u00fd b\u1ea3n duy\u1ec7t: {count}",
+      severity: {
+        critical: "Nghi\u00eam tr\u1ecdng",
+        warning: "C\u1ea3nh b\u00e1o",
+        info: "Th\u00f4ng tin"
       }
     },
     leaderboardPage: {
@@ -1088,7 +1072,6 @@ export const vi: Translations = {
       allSystemsHealthy: "T?t c? h? th?ng kh?e m?nh",
       noIssuesDetected: "Kh?ng ph?t hi?n v?n ?? tr?n c?c d?ch v? ???c gi?m s?t",
       noSeverityIssues: "Kh?ng c? v?n ?? m?c {severity}",
-      exampleDataNotice: "?ang hi?n th? d? li?u m?u. Ph?n t?ch th?c s? xu?t hi?n khi agent b?t ??u ch?y.",
       toolInvocations: "L??t g?i c?ng c?",
       distribution: "Ph?n b?",
       usageOverTime: "M?c d?ng theo th?i gian",
@@ -1422,7 +1405,7 @@ export const vi: Translations = {
         },
         platform: {
           title: "N\u1ec1n t\u1ea3ng c\u1ed1t l\u00f5i",
-          caption: "Ch\u1ebf \u0111\u1ed9 dev, th\u1ef1c thi \u0111\u00e1m m\u00e2y, tr\u00ecnh k\u1ebft n\u1ed1i, c\u00e0i \u0111\u1eb7t d\u1ec5 d\u00e0ng"
+          caption: "Ch\u1ebf \u0111\u1ed9 dev, tr\u00ecnh k\u1ebft n\u1ed1i, c\u00e0i \u0111\u1eb7t d\u1ec5 d\u00e0ng"
         },
         templates: {
           title: "Th\u01b0 vi\u1ec7n m\u1eabu",
@@ -1444,7 +1427,6 @@ export const vi: Translations = {
         enterprise: "Doanh nghi\u1ec7p",
         devMode: "Ch\u1ebf \u0111\u1ed9 dev",
         connectors: "Tr\u00ecnh k\u1ebft n\u1ed1i",
-        cloudExecution: "Th\u1ef1c thi \u0111\u00e1m m\u00e2y",
         installersUpdates: "Tr\u00ecnh c\u00e0i \u0111\u1eb7t & c\u1eadp nh\u1eadt",
         allCategories: "T\u1ea5t c\u1ea3 danh m\u1ee5c",
         devops: "DevOps",
@@ -1466,7 +1448,6 @@ export const vi: Translations = {
         ssoAudit: "SSO \u00b7 ki\u1ec3m to\u00e1n",
         instantPreview: "xem tr\u01b0\u1edbc t\u1ee9c th\u00ec",
         services: "{n} d\u1ecbch v\u1ee5",
-        runs247: "ch\u1ea1y 24/7",
         autoUpdate: "t\u1ef1 \u0111\u1ed9ng c\u1eadp nh\u1eadt",
         templatesTotal: "{n} / {total} m\u1eabu"
       },
@@ -1587,9 +1568,14 @@ export const vi: Translations = {
         memories: "Agent c\u1ee7a b\u1ea1n h\u1ecdc h\u1ecfi v\u00e0 ghi nh\u1edb. Qu\u1ea3n l\u00fd nh\u1eefng g\u00ec ch\u00fang bi\u1ebft v\u00e0 c\u00e1ch ch\u00fang s\u1eed d\u1ee5ng kinh nghi\u1ec7m tr\u01b0\u1edbc \u0111\u00f3.",
         monitoring: "Theo d\u00f5i m\u1ecdi l\u01b0\u1ee3t th\u1ef1c thi theo th\u1eddi gian th\u1ef1c. Xem agent c\u1ee7a b\u1ea1n l\u00e0m g\u00ec, hi\u1ec7u su\u1ea5t ra sao, v\u00e0 t\u1ed1n bao nhi\u00eau chi ph\u00ed.",
         testing: "Ch\u1ea1y c\u00e1c b\u00e0i ki\u1ec3m th\u1eed arena, so s\u00e1nh A/B, v\u00e0 \u0111\u1ec3 h\u1ec7 th\u1ed1ng genome ti\u1ebfn h\u00f3a c\u00e1c prompt t\u1ed1t nh\u1ea5t c\u1ee7a b\u1ea1n.",
-        deployment: "Tri\u1ec3n khai agent l\u00ean cloud, k\u1ebft n\u1ed1i v\u1edbi GitHub Actions, GitLab CI, v\u00e0 quy tr\u00ecnh n8n.",
+        deployment: "K\u1ebft n\u1ed1i agent v\u1edbi GitHub Actions, GitLab CI, v\u00e0 quy tr\u00ecnh n8n.",
         troubleshooting: "Kh\u1eafc ph\u1ee5c c\u00e1c s\u1ef1 c\u1ed1 th\u01b0\u1eddng g\u1eb7p, hi\u1ec3u c\u00e1c th\u00f4ng b\u00e1o l\u1ed7i, v\u00e0 \u0111\u01b0a agent c\u1ee7a b\u1ea1n ho\u1ea1t \u0111\u1ed9ng tr\u1edf l\u1ea1i."
-      }
+      },
+      translationNotice: {
+        staleBody: "Phi\u00ean b\u1ea3n ti\u1ebfng Anh c\u1ee7a trang n\u00e0y \u0111\u00e3 \u0111\u01b0\u1ee3c c\u1eadp nh\u1eadt sau khi d\u1ecbch.",
+        showTranslation: "\u0110\u1ecdc b\u1ea3n d\u1ecbch c\u0169",
+        showCurrent: "Hi\u1ec7n phi\u00ean b\u1ea3n ti\u1ebfng Anh hi\u1ec7n t\u1ea1i",
+      },
     },
     featurePages: {
       orchestration: {
@@ -1599,7 +1585,7 @@ export const vi: Translations = {
       },
       security: {
         headline: "B\u00ed m\u1eadt c\u1ee7a b\u1ea1n lu\u00f4n l\u00e0 c\u1ee7a b\u1ea1n",
-        description: "M\u1ecdi m\u1eadt kh\u1ea9u, API key v\u00e0 m\u00e3 truy c\u1eadp \u0111\u1ec1u \u0111\u01b0\u1ee3c m\u00e3 h\u00f3a tr\u00ean thi\u1ebft b\u1ecb c\u1ee7a b\u1ea1n b\u1eb1ng m\u00e3 h\u00f3a AES-256 c\u1ea5p ng\u00e2n h\u00e0ng. Th\u00f4ng tin \u0111\u0103ng nh\u1eadp c\u1ee7a b\u1ea1n \u0111\u01b0\u1ee3c l\u01b0u tr\u1eef trong kho b\u1ea3o m\u1eadt ri\u00eang c\u1ee7a h\u1ec7 \u0111i\u1ec1u h\u00e0nh \u2014 kh\u00f4ng bao gi\u1edd \u0111\u01b0\u1ee3c g\u1eedi l\u00ean cloud.",
+        description: "M\u1ecdi m\u1eadt kh\u1ea9u, API key v\u00e0 m\u00e3 truy c\u1eadp \u0111\u1ec1u \u0111\u01b0\u1ee3c m\u00e3 h\u00f3a tr\u00ean thi\u1ebft b\u1ecb c\u1ee7a b\u1ea1n b\u1eb1ng m\u00e3 h\u00f3a AES-256 c\u1ea5p ng\u00e2n h\u00e0ng. Th\u00f4ng tin \u0111\u0103ng nh\u1eadp c\u1ee7a b\u1ea1n \u0111\u01b0\u1ee3c l\u01b0u tr\u1eef trong kho b\u1ea3o m\u1eadt ri\u00eang c\u1ee7a h\u1ec7 \u0111i\u1ec1u h\u00e0nh.",
         cta: "B\u1ea3o m\u1eadt k\u1ebft n\u1ed1i c\u1ee7a b\u1ea1n"
       },
       "multi-provider": {
@@ -2289,6 +2275,37 @@ export const vi: Translations = {
           samePerson: "v\u1eabn l\u00e0 m\u1ed9t ng\u01b0\u1eddi, trong t\u1ea5t c\u1ea3",
           samePersonShort: "v\u1eabn l\u00e0 m\u1ed9t ng\u01b0\u1eddi, trong t\u1ea5t c\u1ea3"
         }
+      }
+    },
+    orchestrationHub: {
+      previousTrigger: "Tr\u00ecnh k\u00edch ho\u1ea1t tr\u01b0\u1edbc",
+      nextTrigger: "Tr\u00ecnh k\u00edch ho\u1ea1t ti\u1ebfp theo"
+    },
+    labVersions: {
+      title: "Phi\u00ean b\u1ea3n & \u0111\u00e1nh gi\u00e1",
+      hint: "K\u00edch ho\u1ea1t m\u1ed9t phi\u00ean b\u1ea3n \u0111\u1ec3 \u0111\u01b0a n\u00f3 v\u00e0o ho\u1ea1t \u0111\u1ed9ng. Mu\u1ed1n quay l\u1ea1i, h\u00e3y k\u00edch ho\u1ea1t phi\u00ean b\u1ea3n tr\u01b0\u1edbc \u0111\u00f3.",
+      live: "\u0110ang ch\u1ea1y",
+      experimental: "Th\u1eed nghi\u1ec7m",
+      rating: "\u0110i\u1ec3m",
+      deltaVsBaseline: "\u0394 so v\u1edbi m\u1ed1c chu\u1ea9n",
+      baseline: "M\u1ed1c chu\u1ea9n",
+      activate: "K\u00edch ho\u1ea1t",
+      activateVersion: "K\u00edch ho\u1ea1t {version}",
+      pinBaseline: "\u0110\u1eb7t l\u00e0m m\u1ed1c chu\u1ea9n",
+      regression: "Suy gi\u1ea3m",
+      nowLive: "{version} \u0111ang ch\u1ea1y"
+    },
+    pluginShowcase: {
+      heading: "M\u1ecdi th\u1ee9 \u0111\u1ec1u",
+      headingGradient: "c\u1eafm l\u00e0 ch\u1ea1y",
+      introAll: "Personas \u0111i k\u00e8m {shipped} plugin, v\u00e0 t\u1ea5t c\u1ea3 \u0111\u1ec1u \u0111ang ho\u1ea1t \u0111\u1ed9ng b\u00ean d\u01b0\u1edbi.",
+      introSome: "Personas \u0111i k\u00e8m {shipped} plugin, v\u00e0 {showcased} trong s\u1ed1 \u0111\u00f3 \u0111ang ho\u1ea1t \u0111\u1ed9ng b\u00ean d\u01b0\u1edbi.",
+      introTail: "M\u1ed7i plugin l\u00e0 m\u1ed9t kh\u00f4ng gian l\u00e0m vi\u1ec7c \u0111\u1ed9c l\u1eadp m\u00e0 agent c\u1ee7a b\u1ea1n c\u00f3 th\u1ec3 \u0111i\u1ec1u khi\u1ec3n, d\u00f9ng chung th\u00f4ng tin \u0111\u0103ng nh\u1eadp v\u00e0 k\u1ebft h\u1ee3p \u0111\u01b0\u1ee3c v\u1edbi c\u00e1c plugin kh\u00e1c. Chuy\u1ec3n tab \u0111\u1ec3 g\u1eb7p m\u1ed9t chuy\u00ean gia kh\u00e1c.",
+      tabsLabel: "C\u00e1c plugin \u0111\u01b0\u1ee3c gi\u1edbi thi\u1ec7u",
+      counter: "plugin {current} / {total}",
+      taglines: {
+        devTools: "\u0110\u1ed9i agent song song, d\u1ef1 \u00e1n, ph\u00e2n lo\u1ea1i",
+        brain: "Vault c\u1ee7a b\u1ea1n, s\u1eb5n s\u00e0ng cho agent"
       }
     }
   };

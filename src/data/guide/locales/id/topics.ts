@@ -409,26 +409,6 @@ export const topics: Record<string, { title: string; description: string }> = {
     description:
       "Meta-agen bawaan yang meninjau agen-agen berbintang Anda dan memberi skor setiap run dari 0–5 beserta catatan pelatihan yang konkret. Beri bintang pada agen untuk memasukkannya ke dalam cakupan Director; verdict ditampilkan sebagai kolom bintang di Activity dan tab Director pada setiap run. Dapat menggunakan Obsidian Brain Anda sebagai memori jangka panjang agar pelatihannya terus meningkat seiring waktu.",
   },
-  "local-vs-cloud-execution": {
-    title: "Eksekusi lokal vs cloud",
-    description:
-      "Memahami kapan harus menjalankan agen di mesin Anda vs di cloud. Eksekusi lokal bagus untuk pengujian dan data privat — agen Anda berjalan tepat di komputer Anda. Eksekusi cloud menjaga agen Anda tetap berjalan 24/7, bahkan ketika komputer Anda mati.",
-  },
-  "connecting-to-the-cloud-orchestrator": {
-    title: "Menghubungkan ke cloud orchestrator",
-    description:
-      "Menyiapkan eksekusi agen jarak jauh 24/7 sehingga agen Anda tidak pernah tidur. Cloud orchestrator adalah layanan yang menjalankan agen Anda sepanjang waktu tanpa membutuhkan komputer Anda menyala. Hubungkan sekali dan agen Anda selalu tersedia.",
-  },
-  "deploying-an-agent-to-the-cloud": {
-    title: "Men-deploy agen ke cloud",
-    description:
-      "Menerbitkan agen untuk eksekusi selalu-aktif dengan beberapa klik. Pilih agen, pilih pengaturan cloud Anda, dan tekan deploy — itu hidup dalam hitungan detik. Agen Anda akan terus bekerja sesuai jadwalnya bahkan ketika Anda menutup aplikasi.",
-  },
-  "cloud-execution-monitoring": {
-    title: "Pemantauan eksekusi cloud",
-    description:
-      "Melacak kinerja dan biaya agen jarak jauh dari desktop Anda. Meskipun agen Anda berjalan di cloud, Anda dapat memantaunya dari kenyamanan aplikasi Personas. Lihat status langsung, biaya, dan hasil seperti yang Anda lakukan untuk agen lokal.",
-  },
   "github-actions-integration": {
     title: "Integrasi GitHub Actions",
     description:
@@ -443,21 +423,6 @@ export const topics: Record<string, { title: string; description: string }> = {
     title: "Integrasi n8n workflow",
     description:
       "Menghubungkan agen Personas dengan workflow otomatisasi n8n. Jika Anda sudah menggunakan n8n untuk otomatisasi, agen Personas Anda dapat langsung terhubung. Ini memungkinkan Anda menggabungkan pengambilan keputusan bertenaga-AI dengan library integrasi luas n8n.",
-  },
-  "byoi-bring-your-own-infrastructure": {
-    title: "BYOI — Bring Your Own Infrastructure",
-    description:
-      "Menggunakan server cloud Anda sendiri alih-alih hosting terkelola. Jika Anda lebih suka menjalankan semuanya di infrastruktur Anda sendiri untuk alasan kepatuhan atau biaya, BYOI memberi Anda kontrol penuh. Anda mendapatkan semua manfaat eksekusi cloud tanpa vendor lock-in.",
-  },
-  "syncing-desktop-and-cloud": {
-    title: "Menyinkronkan desktop dan cloud",
-    description:
-      "Menjaga agen lokal dan jarak jauh Anda tetap sinkron. Saat Anda membuat perubahan di desktop, mereka dapat didorong ke cloud secara otomatis. Ini memastikan versi yang berjalan dari jarak jauh selalu terkini dengan peningkatan terbaru Anda.",
-  },
-  "cloud-troubleshooting": {
-    title: "Pemecahan masalah cloud",
-    description:
-      "Memperbaiki masalah deployment cloud yang umum. Jika agen cloud Anda tidak berperilaku seperti yang diharapkan, panduan ini memandu Anda melalui penyebab dan perbaikan yang paling umum. Dari masalah koneksi hingga error izin, Anda akan menemukan langkah-langkah yang jelas untuk kembali ke jalur.",
   },
   "common-error-messages": {
     title: "Pesan error umum",

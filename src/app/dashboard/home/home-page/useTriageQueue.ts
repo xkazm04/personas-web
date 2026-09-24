@@ -9,6 +9,7 @@ import {
   type IncidentSeverity,
   type SLASeverity,
 } from "@/lib/mock-dashboard-data";
+import { focusHref } from "@/lib/incidentThreads";
 import type { ReviewSeverity } from "@/lib/types";
 import { useAuthStore } from "@/stores/authStore";
 import { useReviewStore } from "@/stores/reviewStore";
@@ -94,7 +95,7 @@ export function useTriageQueue(): TriageItem[] {
           personaColor: PERSONA_COLOR[breach.persona],
           summary: breach.summary,
           startedAt: breach.startedAt,
-          href: "/dashboard/sla",
+          href: focusHref("slaBreach", breach.id),
         });
       }
       for (const issue of MOCK_HEALTH_ISSUES) {
@@ -108,7 +109,7 @@ export function useTriageQueue(): TriageItem[] {
           personaColor: issue.personaName ? PERSONA_COLOR[issue.personaName] : undefined,
           summary: issue.title,
           startedAt: issue.detectedAt,
-          href: "/dashboard/observability",
+          href: focusHref("healthIssue", issue.id),
         });
       }
     }

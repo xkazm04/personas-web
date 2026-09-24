@@ -1,23 +1,15 @@
 "use client";
 
 import { useMemo } from "react";
-import { motion } from "framer-motion";
-import { Lightbulb, Loader2 } from "lucide-react";
+import { Loader2 } from "lucide-react";
 import useSWR from "swr";
 
 import DashboardErrorBanner from "@/components/dashboard/DashboardErrorBanner";
 import { useTranslation } from "@/i18n/useTranslation";
 import { api } from "@/lib/api";
-import { fadeUp } from "@/lib/animations";
 import { CHART_COLORS } from "@/lib/constants";
-import { useAuthStore } from "@/stores/authStore";
 
-import {
-  MOCK_TOOL_USAGE,
-  MOCK_TOOL_USAGE_BY_PERSONA,
-  MOCK_TOOL_USAGE_OVER_TIME,
-  formatToolName,
-} from "./usage-view/usageViewData";
+import { formatToolName } from "./usage-view/usageViewData";
 import { useDeferredMount } from "./usage-view/useDeferredMount";
 import {
   UsageByPersonaCard,
@@ -29,30 +21,18 @@ const MAX_BAR_TOOLS = 15;
 
 export default function UsageView() {
   const { t } = useTranslation();
-  const isDemo = useAuthStore((s) => s.isDemo);
   const { data, isLoading: loading, error, mutate } = useSWR("usage", api.getUsageAnalytics, {
     dedupingInterval: 8_000,
     revalidateOnFocus: false,
     keepPreviousData: true,
   });
   const errorMsg = error instanceof Error ? error.message : error ? String(error) : null;
-  // Demo mode renders the illustrative MOCK_* fixtures (and the example-data
-  // notice). Real mode uses the genuine — possibly empty — analytics, never the
-  // mock; an empty real dataset renders the empty charts honestly.
-  const hasRealData = (data?.toolUsage ?? []).length > 0;
-  const useMock = isDemo && !hasRealData;
-  const toolUsage = useMemo(
-    () => (useMock ? MOCK_TOOL_USAGE : (data?.toolUsage ?? [])),
-    [useMock, data],
-  );
-  const toolUsageOverTime = useMemo(
-    () => (useMock ? MOCK_TOOL_USAGE_OVER_TIME : (data?.toolUsageOverTime ?? [])),
-    [useMock, data],
-  );
-  const toolUsageByPersona = useMemo(
-    () => (useMock ? MOCK_TOOL_USAGE_BY_PERSONA : (data?.toolUsageByPersona ?? [])),
-    [useMock, data],
-  );
+  // One data source in every mode: `api` routes to mockApi in demo (whose
+  // usage analytics are never empty) and to the live plane otherwise; an empty
+  // live dataset renders the empty charts honestly.
+  const toolUsage = useMemo(() => data?.toolUsage ?? [], [data]);
+  const toolUsageOverTime = useMemo(() => data?.toolUsageOverTime ?? [], [data]);
+  const toolUsageByPersona = useMemo(() => data?.toolUsageByPersona ?? [], [data]);
 
   const barData = useMemo(() => {
     const sorted = [...toolUsage].sort((a, b) => b.invocations - a.invocations);
@@ -151,13 +131,6 @@ export default function UsageView() {
     <div>
       {errorMsg && (
         <DashboardErrorBanner message={errorMsg} onRetry={() => void mutate()} />
-      )}
-
-      {useMock && (
-        <motion.div variants={fadeUp} className="mb-6 flex items-center gap-2 rounded-xl border border-amber-500/20 bg-amber-500/5 px-4 py-2.5 text-sm text-amber-400">
-          <Lightbulb className="h-3.5 w-3.5 flex-shrink-0" />
-          {t.observabilityPage.exampleDataNotice}
-        </motion.div>
       )}
 
       <UsageTopCharts

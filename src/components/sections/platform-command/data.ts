@@ -1,4 +1,4 @@
-import { Wand2, Zap, Cloud, Activity } from "lucide-react";
+import { Wand2, Zap, Activity } from "lucide-react";
 import type { CommandSequence, OutputLine } from "./types";
 
 export const commands: CommandSequence[] = [
@@ -43,27 +43,6 @@ export const commands: CommandSequence[] = [
     ],
   },
   {
-    command: "personas deploy --target cloud",
-    icon: Cloud,
-    pillar: "Deploy",
-    output: [
-      { text: "", color: "muted" },
-      { text: "  Packaging agents...", color: "cyan" },
-      { text: "  Uploading bundle [====            ]  25%", color: "emerald", delay: 200 },
-      { text: "  Uploading bundle [========        ]  50%", color: "emerald", delay: 200 },
-      { text: "  Uploading bundle [============    ]  75%", color: "emerald", delay: 200 },
-      { text: "  Uploading bundle [================] 100%", color: "emerald", delay: 200 },
-      { text: "", color: "muted" },
-      { text: "  Provisioning infrastructure...", color: "cyan" },
-      { text: "    ✓ Container runtime ready", color: "emerald", indent: 2 },
-      { text: "    ✓ Event bus connected", color: "emerald", indent: 2 },
-      { text: "    ✓ Secrets injected", color: "emerald", indent: 2 },
-      { text: "", color: "muted" },
-      { text: "  ✓ Deployed to cloud — running 24/7", color: "emerald" },
-      { text: "  🌐 https://agents.personas.dev/triage", color: "cyan" },
-    ],
-  },
-  {
     command: "personas monitor --live",
     icon: Activity,
     pillar: "Monitor",
@@ -89,7 +68,7 @@ export const commands: CommandSequence[] = [
 export const summaryLines: OutputLine[] = [
   { text: "", color: "muted" },
   { text: "  ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━", color: "muted" },
-  { text: "  Platform ready. 4 capabilities active.", color: "emerald" },
+  { text: "  Platform ready. 3 capabilities active.", color: "emerald" },
   { text: "  ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━", color: "muted" },
 ];
 
@@ -104,7 +83,7 @@ export const colorClasses: Record<OutputLine["color"], string> = {
 };
 
 /** Brand keys indexed by command position (for CommandBadge). */
-export const commandBrands = ["purple", "cyan", "emerald", "amber"] as const;
+export const commandBrands = ["purple", "cyan", "amber"] as const;
 
 export function getTypingDelay(): number {
   const base = 35;

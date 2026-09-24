@@ -1,0 +1,31 @@
+{
+  "_notes": [
+    "2026-09-14 --init over the sources below: US forms 255 (summarize x42, catalog x29, analyzer x16, analyze x14, behavior x12); UK forms 5 (cancelling x2, cancelled x2, grey x1) - migration debt, baselined, not swept.",
+    "2026-09-14 operator decision (fleet-wide): variant US.",
+    "dashes at adoption: em 1098, en 13 (spaced 0), hyphen-as-dash 54. 2026-09-14 operator decision (fleet-wide): em dash banned in product copy; existing em dashes are debt in the baseline. The standalone no-data placeholder glyph and code comments are out of scope.",
+    "quotes: straight double 448, curly double 12 -> straight. ellipsis: three dots 51, character 15 -> dots. Both held by count, see style-en.md.",
+    "case: 235 of 277 judgeable heading-class strings are Title Case (85%), but 231 of them are connector use-case titles (src/data/connectors.ts useCases[].title); src/i18n/en.ts is sentence case (14 Title Case headings). Declared: sentence case, with connector use-case titles recorded as a deliberate title-case element class (EN-CASE warns there, never blocks).",
+    "coverage at adoption: 3169 strings (2406 fragments) in 39 files; exclamation marks 4.",
+    "src/i18n/en.ts carried uncommitted sibling edits (+84 lines) when the baseline was written; those strings are baselined as they stood."
+  ],
+  "variant": "US",
+  "sources": [
+    { "path": "src/i18n/en.ts", "kind": "ts-module" },
+    { "path": "src/lib/seo.ts", "kind": "ts-module" },
+    { "path": "src/app/layout.tsx", "kind": "jsx" },
+    { "path": "src/components/sections/*/data.ts", "kind": "ts-module" },
+    { "path": "src/data/*.ts", "kind": "ts-module" },
+    { "path": "src/data/guide/content/*.ts", "kind": "ts-module" }
+  ],
+  "exclude": ["**/*.test.ts", "**/*.spec.ts", "src/components/sections/platform-command/data.ts"],
+  "dash": { "emDash": "ban" },
+  "quotes": "straight",
+  "ellipsis": "dots",
+  "case": { "style": "sentence" },
+  "terms": {
+    "accept": ["Personas", "Athena", "Claude", "Claude Code", "Claude Desktop", "GPT", "Gemini", "GitHub", "GitLab", "Gmail", "Outlook", "Slack", "Discord", "Notion", "Jira", "Linear", "Stripe", "Figma", "HubSpot", "Sentry", "OAuth", "MCP", "Whisper", "Piper", "ElevenLabs", "Firecrawl", "Bright Data", "Azure DevOps", "Microsoft Teams", "LinkedIn Ads", "Mission Control", "Decision Hub", "Credential Vault"],
+    "reject": []
+  },
+  "rules": {},
+  "baseline": ".ai/copy-baseline.json"
+}

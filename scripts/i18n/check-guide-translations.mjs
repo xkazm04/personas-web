@@ -1,18 +1,31 @@
 #!/usr/bin/env node
-// Drift detector for guide-content translations.
+// Drift detector for guide-content translations - a thin CLI over the
+// history-anchored classifier in ./guide-drift.mjs.
 //
-// Reads English source (src/data/guide/content/*.ts + topics.ts), computes
-// a content hash per topic, and compares against the per-locale
-// src/data/guide/locales/<lang>/_meta.json that records the source hash at
-// translation time. Any topic whose current hash differs from its locale's
-// recorded hash is drift-flagged.
+// Each locale's src/data/guide/locales/<lang>/_meta.json pins, per topic, the
+// hash of the English unit the translation was made from. A pin that differs
+// from today's hash is NOT assumed stale: the classifier finds the English
+// revision the pin was taken from (verifying it byte-for-byte under a closed
+// set of instrument variants), and reports only a real English change as
+// stale. Line-ending and extractor churn is named (instrument:eol,
+// instrument:extractor) and folded into fresh; a pin it cannot verify is
+// stale/unverified, never fresh. No pin is rewritten.
 //
 // Output:
-//   default        — human-readable summary
-//   --json         — machine-readable JSON for CI integration
-//   --strict       — exit 1 if any drift exists (release gate)
-//   --locale=<l>   — restrict to one locale
-//   --topic=<id>   — restrict to one topic across all locales
+//   default        - human-readable summary, every verdict with its cause
+//   --json         - machine-readable JSON (findings carry both hashes, the
+//                    anchor revision and, for content-stale, the English diff)
+//   --work-order   - per-topic re-translation list with the English line diff
+//                    since the anchor (feeds the refresh mode of
+//                    translate-guide-subagent-prompt.md); with --json, as JSON
+//   --strict       - exit 1 on stale (content | unverified) or missing;
+//                    instrument-only differences exit 0
+//   --locale=<l>   - restrict to one locale
+//   --topic=<id>   - restrict to one topic across all locales
+//
+// Exit codes: 0 ok, 1 drift under --strict, 2 usage / broken instrument,
+// 3 history unavailable (shallow clone, no git). A checkout without full
+// history gets exit 3 and no numbers - never a clean report.
 //
 // Companion: scripts/i18n/translate-guide-subagent-prompt.md
 // (the prompt template subagents use when bootstrapping or refreshing
@@ -23,125 +36,71 @@
 // must agree on the EXTRACTION as well as the digest, and a hand-copied
 // duplicate is exactly how they previously stayed identically wrong.
 
-import fs from "node:fs";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
 import { readEnglishGuide } from "./guide-source.mjs";
+import { createGitHistory, currentHashes, runDriftCheck, GUIDE_LOCALES, EXIT } from "./guide-drift.mjs";
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 const REPO_ROOT = path.resolve(__dirname, "..", "..");
 
-const LOCALES = ["zh", "ar", "hi", "ru", "id", "es", "fr", "bn", "ja", "vi", "de", "ko", "cs"];
-
 function parseArgs(argv) {
-  const flags = { json: false, strict: false, locale: null, topic: null };
+  const flags = { json: false, strict: false, workOrder: false, locale: null, topic: null };
   for (const a of argv) {
     if (a === "--json") flags.json = true;
     else if (a === "--strict") flags.strict = true;
+    else if (a === "--work-order") flags.workOrder = true;
     else if (a.startsWith("--locale=")) flags.locale = a.slice("--locale=".length);
     else if (a.startsWith("--topic=")) flags.topic = a.slice("--topic=".length);
   }
   return flags;
 }
 
-function readMeta(localeDir) {
-  const metaPath = path.join(localeDir, "_meta.json");
-  if (!fs.existsSync(metaPath)) return { topics: {} };
-  try {
-    return JSON.parse(fs.readFileSync(metaPath, "utf8"));
-  } catch {
-    return { topics: {} };
-  }
+function fail(message) {
+  console.error(`[guide-translations] ${message}`);
+  process.exitCode = EXIT.USAGE;
 }
 
 function main() {
   const flags = parseArgs(process.argv.slice(2));
 
-  const localesDir = path.join(REPO_ROOT, "src", "data", "guide", "locales");
-
-  // Build English source-of-truth hashes per topic. readEnglishGuide throws if
-  // the corpus is empty or a declared topic has no extractable body, so a
-  // "clean" report below always means it measured something real.
-  const { hashes: englishHashes, stats } = readEnglishGuide(REPO_ROOT);
-
-  // Compute drift per locale.
-  if (flags.locale && !LOCALES.includes(flags.locale)) {
-    console.error(
-      `[guide-translations] Unknown locale "${flags.locale}". Known: ${LOCALES.join(", ")}`,
-    );
-    process.exit(1);
-  }
-  if (flags.topic && !englishHashes[flags.topic]) {
-    console.error(`[guide-translations] Unknown topic "${flags.topic}" — not present in topics.ts.`);
-    process.exit(1);
+  if (flags.locale && !GUIDE_LOCALES.includes(flags.locale)) {
+    return fail(`Unknown locale "${flags.locale}". Known: ${GUIDE_LOCALES.join(", ")}`);
   }
 
-  const localesToCheck = flags.locale ? [flags.locale] : LOCALES;
-  const report = { generated: new Date().toISOString(), source: stats, locales: {} };
-  let totalDrift = 0;
-
-  for (const lang of localesToCheck) {
-    const localeDir = path.join(localesDir, lang);
-    const meta = readMeta(localeDir);
-    const localeReport = { stale: [], missing: [], orphaned: [], fresh: [] };
-
-    for (const topicId of Object.keys(englishHashes)) {
-      if (flags.topic && flags.topic !== topicId) continue;
-      const englishHash = englishHashes[topicId];
-      const localeMeta = meta.topics?.[topicId];
-      if (!localeMeta) {
-        localeReport.missing.push(topicId);
-        totalDrift++;
-      } else if (localeMeta.translatedFromHash !== englishHash) {
-        localeReport.stale.push({
-          topicId,
-          currentHash: englishHash,
-          translatedHash: localeMeta.translatedFromHash,
-          translatedAt: localeMeta.translatedAt,
-        });
-        totalDrift++;
-      } else {
-        localeReport.fresh.push(topicId);
-      }
-    }
-
-    // Orphaned: locale has a translation for a topic that no longer exists.
-    for (const topicId of Object.keys(meta.topics ?? {})) {
-      if (!englishHashes[topicId]) {
-        localeReport.orphaned.push(topicId);
-      }
-    }
-
-    report.locales[lang] = localeReport;
+  // readEnglishGuide asserts the instrument (non-empty corpus, every declared
+  // topic has a body) and is the pin definition emit-source-hashes.mjs uses.
+  let english;
+  try {
+    english = readEnglishGuide(REPO_ROOT);
+  } catch (err) {
+    return fail(err instanceof Error ? err.message : String(err));
+  }
+  if (flags.topic && !english.hashes[flags.topic]) {
+    return fail(`Unknown topic "${flags.topic}" - not present in topics.ts.`);
   }
 
-  if (flags.json) {
-    console.log(JSON.stringify(report, null, 2));
-  } else {
-    console.log(
-      `English source: ${stats.topicCount} topics, ${stats.bodyCount} bodies, ` +
-        `${stats.contentFiles} content file(s)\n`,
-    );
-    let any = false;
-    for (const [lang, r] of Object.entries(report.locales)) {
-      const issues = r.stale.length + r.missing.length + r.orphaned.length;
-      if (issues === 0) {
-        console.log(`${lang}: clean (${r.fresh.length} topics fresh)`);
-        continue;
-      }
-      any = true;
-      console.log(`${lang}: ${issues} issue(s)`);
-      if (r.missing.length) console.log(`  missing (${r.missing.length}): ${r.missing.slice(0, 5).join(", ")}${r.missing.length > 5 ? ", ..." : ""}`);
-      if (r.stale.length) console.log(`  stale   (${r.stale.length}): ${r.stale.slice(0, 5).map((s) => s.topicId).join(", ")}${r.stale.length > 5 ? ", ..." : ""}`);
-      if (r.orphaned.length) console.log(`  orphan  (${r.orphaned.length}): ${r.orphaned.slice(0, 5).join(", ")}${r.orphaned.length > 5 ? ", ..." : ""}`);
-    }
-    if (!any) console.log("\nAll locales fresh.");
-    console.log(`\nTotal drift: ${totalDrift} topic(s) across ${localesToCheck.length} locale(s)`);
+  const history = createGitHistory(REPO_ROOT);
+
+  // The classifier reads the working tree itself; it must hash it exactly as
+  // the emitter does, or every "exact" verdict is meaningless.
+  const mine = currentHashes(history);
+  const disagree = Object.keys(english.hashes).filter((id) => mine[id] !== english.hashes[id]);
+  if (disagree.length > 0 || Object.keys(mine).length !== Object.keys(english.hashes).length) {
+    return fail(`Classifier and emitter disagree on today's hash for ${disagree.length} topic(s): ${disagree.slice(0, 5).join(", ")}`);
   }
 
-  if (flags.strict && totalDrift > 0) process.exit(1);
-  process.exit(0);
+  const out = runDriftCheck({
+    history,
+    locales: flags.locale ? [flags.locale] : GUIDE_LOCALES,
+    flags,
+    now: new Date().toISOString(),
+  });
+  if (out.stdout) console.log(out.stdout);
+  if (out.stderr) console.error(out.stderr);
+  // exitCode, not exit(): exit() can truncate a large --json write to a pipe.
+  process.exitCode = out.exitCode;
 }
 
 main();

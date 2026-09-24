@@ -1,20 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 
-/**
- * Hostnames that may appear as the artifact source. Restricting to known
- * release/CDN origins prevents an attacker who can flip
- * NEXT_PUBLIC_DOWNLOAD_URL (env-var compromise, leaked .env, misconfigured
- * preview deploy) from turning /api/download into an open redirect to
- * malware, phishing, or a javascript:/data: URI.
- */
-const ALLOWED_DOWNLOAD_HOSTS = new Set<string>([
-  "github.com",
-  "objects.githubusercontent.com",
-  "release-assets.githubusercontent.com",
-  "personas.app",
-  "downloads.personas.app",
-  "cdn.personas.app",
-]);
+import { RAW_DOWNLOAD_URL, rejectionMessage, resolveDownloadUrl } from "@/lib/release";
 
 function reportInvalidEnv(reason: string, data: Record<string, unknown>): void {
   // Module-load validation runs exactly once per process, so a single Sentry
@@ -32,34 +18,17 @@ function reportInvalidEnv(reason: string, data: Record<string, unknown>): void {
     });
 }
 
-function validateDownloadUrl(raw: string | undefined): string | null {
-  if (!raw) return null;
-  let parsed: URL;
-  try {
-    parsed = new URL(raw);
-  } catch {
-    const msg =
-      "NEXT_PUBLIC_DOWNLOAD_URL is not a parseable URL; falling back to /#download.";
-    console.warn(`[api/download] ${msg}`);
-    reportInvalidEnv(msg, {});
-    return null;
-  }
-  if (parsed.protocol !== "https:") {
-    const msg = `NEXT_PUBLIC_DOWNLOAD_URL must use https (got ${parsed.protocol}); falling back to /#download.`;
-    console.warn(`[api/download] ${msg}`);
-    reportInvalidEnv(msg, { protocol: parsed.protocol });
-    return null;
-  }
-  if (!ALLOWED_DOWNLOAD_HOSTS.has(parsed.hostname)) {
-    const msg = `NEXT_PUBLIC_DOWNLOAD_URL host "${parsed.hostname}" is not in the allowlist; falling back to /#download.`;
-    console.warn(`[api/download] ${msg}`);
-    reportInvalidEnv(msg, { host: parsed.hostname });
-    return null;
-  }
-  return parsed.toString();
-}
+// The rule (https + host allowlist) lives in `@/lib/release`, the same
+// resolution every client CTA reads through `downloadPlan`, so a URL this route
+// refuses can never render as "Download for Windows".
+const RESOLUTION = resolveDownloadUrl(RAW_DOWNLOAD_URL);
+const DOWNLOAD_URL = RESOLUTION.live ? RESOLUTION.url : null;
 
-const DOWNLOAD_URL = validateDownloadUrl(process.env.NEXT_PUBLIC_DOWNLOAD_URL);
+const INVALID_ENV_MESSAGE = rejectionMessage(RESOLUTION);
+if (INVALID_ENV_MESSAGE && !RESOLUTION.live) {
+  console.warn(`[api/download] ${INVALID_ENV_MESSAGE}`);
+  reportInvalidEnv(INVALID_ENV_MESSAGE, { ...RESOLUTION.detail });
+}
 
 /**
  * GET /api/download

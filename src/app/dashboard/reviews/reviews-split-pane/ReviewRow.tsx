@@ -1,24 +1,27 @@
 import { AlertOctagon, CheckSquare, ChevronRight, Square } from "lucide-react";
 import { useTranslation } from "@/i18n/useTranslation";
-import { relativeTime } from "@/lib/format";
+import { formatAge } from "@/lib/review-display";
 import type { ManualReviewItem } from "@/lib/types";
+import { DueChip } from "../review-due";
 import { reviewSeverityConfig } from "./reviewSeverityConfig";
 import { ReviewStatusDot } from "./ReviewStatusDot";
 
 export function ReviewRow({
   review,
+  now,
   isActive,
   isSelected,
   onToggleSelect,
   onClick,
 }: {
   review: ManualReviewItem;
+  now: number;
   isActive: boolean;
   isSelected: boolean;
   onToggleSelect: (e: React.MouseEvent) => void;
   onClick: () => void;
 }) {
-  const { t } = useTranslation();
+  const { t, language } = useTranslation();
   const sev = reviewSeverityConfig[review.severity];
 
   return (
@@ -65,9 +68,13 @@ export function ReviewRow({
       <span className="flex-1 min-w-0 text-sm text-muted truncate">
         {review.content.split("\n")[0]}
       </span>
-      <span className="text-sm text-muted-dark flex-shrink-0 tabular-nums">
-        {relativeTime(review.createdAt)}
-      </span>
+      {review.status === "pending" ? (
+        <DueChip review={review} now={now} compact />
+      ) : (
+        <span className="text-sm text-muted-dark flex-shrink-0 tabular-nums">
+          {formatAge(review.createdAt, now, language, "short") ?? "-"}
+        </span>
+      )}
       {isActive && <ChevronRight className="h-3 w-3 text-brand-cyan flex-shrink-0" />}
     </div>
   );
