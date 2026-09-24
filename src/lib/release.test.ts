@@ -146,9 +146,7 @@ describe("the displayed version (owner decision: unchanged)", () => {
     // What feeds it is still the website's own package.json version.
     expect(read("next.config.ts")).toMatch(/NEXT_PUBLIC_APP_VERSION:\s*pkg\.version/);
     // Both surfaces render exactly that value.
-    // /illustrate prototype: the version ring renders from the "current" tab's file; the
-    // exported CommandCenterIllustration is a switcher. Follow whatever renders the ring.
-    expect(read("src/components/sections/hero/CommandCenterIllustration.current.tsx")).toContain("{SITE_VERSION}");
+    expect(read("src/components/sections/hero/CommandCenterIllustration.tsx")).toContain("{SITE_VERSION}");
     expect(read("src/components/sections/DownloadCTA.tsx")).toContain("v{SITE_VERSION}");
     // The release authority does not pull the changelog into every chunk that asks "is it live".
     expect(read(RELEASE_MODULE)).not.toMatch(/(from|import\()\s*["']@\/data\/changelog["']/);

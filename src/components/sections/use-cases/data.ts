@@ -1,4 +1,4 @@
-import type { Tool, AgentData, AgentStatus } from "./types";
+import type { Tool } from "./types";
 
 export const tools: Tool[] = [
   {
@@ -90,23 +90,3 @@ export const tools: Tool[] = [
     ],
   },
 ];
-
-export const initialAgents: AgentData[] = [
-  { name: "Email Triage", iconSrc: "/icons/connectors/gmail.svg", status: "running", executions: 12_847, rate: 94, color: "#06b6d4" },
-  { name: "Slack Digest", iconSrc: "/icons/connectors/slack.svg", status: "running", executions: 8_320, rate: 87, color: "#a855f7" },
-  { name: "PR Reviewer", iconSrc: "/icons/connectors/github.svg", status: "running", executions: 5_614, rate: 99, color: "#34d399" },
-  { name: "Deploy Monitor", iconSrc: "/icons/connectors/google-calendar.svg", status: "healing", executions: 3_271, rate: 72, color: "#f43f5e" },
-  { name: "Meeting Notes", iconSrc: "/icons/connectors/notion.svg", status: "idle", executions: 2_908, rate: 100, color: "#fbbf24" },
-  { name: "Doc Indexer", iconSrc: "/icons/connectors/google.svg", status: "running", executions: 1_456, rate: 91, color: "#60a5fa" },
-];
-
-// Exhaustive Record so adding a new AgentStatus without a style entry
-// becomes a tsc error rather than a runtime "cannot read property dot of
-// undefined" crash that blanks the whole AgentArmyGrid section.
-export const statusStyles: Record<AgentStatus, { dot: string; label: string }> = {
-  running: { dot: "bg-brand-emerald shadow-[0_0_6px_rgba(52,211,153,0.6)]", label: "Running" },
-  healing: { dot: "bg-brand-amber shadow-[0_0_6px_rgba(251,191,36,0.6)]", label: "Healing" },
-  idle: { dot: "bg-white/20", label: "Idle" },
-};
-
-export const AUTOPLAY_INTERVAL = 4000;

@@ -2,8 +2,8 @@
 
 import { useRef, type KeyboardEvent } from "react";
 import { BRAND_VAR, tint } from "@/lib/brand-theme";
-import type { StackLayer } from "./VisionGrid.layer-stack.data";
-import { LABELS_LEFT, STACK, slabMidY } from "./VisionGrid.layer-stack.plates";
+import type { StackLayer } from "./layers";
+import { LABELS_LEFT, STACK, slabMidY } from "./LayerPlates";
 
 /**
  * The flat, readable side of the exploded diagram: one callout per slab,
@@ -54,6 +54,8 @@ export function LayerLabels({
             id={`${idPrefix}-tab-${layer.card.id}`}
             type="button"
             role="tab"
+            // The guided tour steps through the layers by these ids (src/lib/tour-script.ts).
+            data-card-id={layer.card.id}
             aria-selected={on}
             aria-controls={panelId}
             tabIndex={on ? 0 : -1}

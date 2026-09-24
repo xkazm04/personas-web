@@ -4,7 +4,7 @@ import { ArrowDown, ArrowUp, ArrowUpRight, Check } from "lucide-react";
 import { BRAND_VAR, tint } from "@/lib/brand-theme";
 import { guideHref, openGuideLink } from "@/lib/guide-link";
 import { EYEBROW } from "@/lib/typography";
-import type { StackLayer } from "./VisionGrid.layer-stack.data";
+import type { StackLayer } from "./layers";
 
 /**
  * The tabpanel for the selected layer: which question it answers about the

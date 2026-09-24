@@ -3,8 +3,8 @@
 import { AnimatePresence, motion } from "framer-motion";
 import { Clock, Compass, DollarSign, Plug, Zap } from "lucide-react";
 import { BRAND_VAR, tint } from "@/lib/brand-theme";
-import ConnectorIcon from "./components/ConnectorIcon";
-import { tools } from "./data";
+import ConnectorIcon from "./ConnectorIcon";
+import { tools } from "../data";
 
 /**
  * A reduced persona card in the app's shape (PersonaOverviewCardList): health

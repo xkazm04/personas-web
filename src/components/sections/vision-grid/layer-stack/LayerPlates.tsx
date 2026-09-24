@@ -4,7 +4,7 @@ import { motion, type useAnimationControls, type Variants } from "framer-motion"
 
 type AnimationControls = ReturnType<typeof useAnimationControls>;
 import { BRAND_VAR, tint } from "@/lib/brand-theme";
-import type { StackLayer } from "./VisionGrid.layer-stack.data";
+import type { StackLayer } from "./layers";
 
 /**
  * The exploded stack: one isometric slab per layer, drawn with a 2D CSS

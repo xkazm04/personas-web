@@ -1,6 +1,6 @@
 import { Cpu, FlaskConical, KeyRound, LayoutGrid, Activity, Workflow, type LucideIcon } from "lucide-react";
 import type { BrandKey } from "@/lib/brand-theme";
-import { PLATFORM_CARDS, type PlatformCard } from "./data";
+import { PLATFORM_CARDS, type PlatformCard } from "../data";
 
 /**
  * Layer-stack variant data. The six layers are the six platform cards from

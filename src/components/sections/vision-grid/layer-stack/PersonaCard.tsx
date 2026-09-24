@@ -4,7 +4,7 @@ import Image from "next/image";
 import type { CSSProperties, ReactNode } from "react";
 import { Clock, Cpu, DollarSign, FlaskConical, Inbox, LayoutGrid, Lock, Zap } from "lucide-react";
 import { BRAND_VAR, STATE_COLORS, tint } from "@/lib/brand-theme";
-import { SAMPLE_CONNECTORS, SAMPLE_PERSONA, type CardPart, type StackLayer } from "./VisionGrid.layer-stack.data";
+import { SAMPLE_CONNECTORS, SAMPLE_PERSONA, type CardPart, type StackLayer } from "./layers";
 
 /**
  * The sample agent at the top of the stack, reduced from the app's persona

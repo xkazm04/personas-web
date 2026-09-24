@@ -3,8 +3,8 @@
 import { useRef, type KeyboardEvent } from "react";
 import { motion } from "framer-motion";
 import { Check, Pause, Play, RotateCcw } from "lucide-react";
-import ConnectorIcon from "./components/ConnectorIcon";
-import { tools } from "./data";
+import ConnectorIcon from "./ConnectorIcon";
+import { tools } from "../data";
 
 /**
  * The tab row of the eight real tools. Choosing one connects it to the persona

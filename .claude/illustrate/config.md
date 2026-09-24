@@ -22,3 +22,8 @@ Read by the registry skill `illustrate` at start. Every key is optional.
   tabs x 2 widths x 2 motion preferences, 0 blank, 0 infinite animations under reduced
   motion (current hero runs 4 loops and current use-cases 1; every variant runs 0).
   Owner decision pending.
+- 2026-09-24 owner decision on round 1: hero keeps CURRENT (the abstract ring), use-cases
+  takes PERSONA-CARD, platform takes LAYER-STACK; all other variants and the switcher
+  deleted. Owner's verdict on the round as a whole: the variants overflowed with
+  descriptive text; the goal is an abstracted idea carried by illustration and
+  animation, with a dominant visual structure and text labels only as support.

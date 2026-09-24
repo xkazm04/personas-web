@@ -2,9 +2,9 @@
 
 import { AnimatePresence, motion } from "framer-motion";
 import { Plus } from "lucide-react";
-import ConnectorIcon from "./components/ConnectorIcon";
-import { tools } from "./data";
-import { PERSONA } from "./UseCases.persona-card.card";
+import ConnectorIcon from "./ConnectorIcon";
+import { tools } from "../data";
+import { PERSONA } from "./PersonaCard";
 
 /**
  * The persona's capabilities: the focused tool's jobs in full (what it just
