@@ -95,3 +95,9 @@ next-env.d.ts
 /.claude/rules/ai-registry-access.md
 /.claude/rules/ai-registry-software-engineering.md
 # END ai-registry linked skills
+
+# ai-registry installer receipts and snapshots (machine state, never committed)
+.ai/registry-installation.local.json
+.ai/registry-releases/
+.ai/skill-runs.local.jsonl
+/.claude/skills/illustrate
