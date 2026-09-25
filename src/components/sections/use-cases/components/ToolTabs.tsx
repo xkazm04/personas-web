@@ -57,12 +57,12 @@ export default function ToolTabs({
   const Icon = playing ? Pause : complete ? RotateCcw : Play;
 
   return (
-    <div className="flex flex-col items-center gap-3">
+    <div className="flex flex-col items-center gap-3 stage:flex-row stage:gap-2">
       <div
         role="tablist"
         aria-label="Connect a tool to the persona"
         onKeyDown={onKey}
-        className="grid w-full grid-cols-4 gap-2 lg:grid-cols-8"
+        className="grid w-full grid-cols-4 gap-2 lg:grid-cols-8 stage:flex-1"
       >
         {tools.map((tl, i) => {
           const on = attached.includes(tl.id);
@@ -114,7 +114,7 @@ export default function ToolTabs({
         })}
       </div>
       {/* Reserved height so the reduced-motion form (no control) does not shift */}
-      <div className="h-7">
+      <div className="h-7 stage:shrink-0">
       {!still && (
         <button
           type="button"

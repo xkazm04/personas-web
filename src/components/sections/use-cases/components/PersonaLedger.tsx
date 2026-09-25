@@ -76,14 +76,14 @@ export default function CapabilityLedger({
       </div>
 
       {/* Ledger: one reserved row per tool, in data order */}
-      <ul className="flex flex-col gap-1.5" aria-label={`Jobs ${PERSONA.name} can do`}>
+      <ul className="grid gap-1.5 stage:grid-cols-2" aria-label={`Jobs ${PERSONA.name} can do`}>
         {tools.map((tl) => {
           const on = attached.includes(tl.id);
           const lit = focus === tl.id;
           return (
             <li
               key={tl.id}
-              className={`relative flex min-h-9 flex-wrap items-center gap-x-3 gap-y-1.5 rounded-lg border px-2.5 py-1.5 ${
+              className={`relative flex min-h-9 flex-wrap items-center gap-x-3 gap-y-1.5 rounded-lg border px-2.5 py-1.5 stage:flex-nowrap ${
                 on ? "bg-white/[0.02]" : "border-dashed border-glass"
               }`}
               style={on ? { borderColor: lit ? `${tl.color}90` : "var(--border-glass-hover)" } : undefined}
@@ -106,12 +106,12 @@ export default function CapabilityLedger({
                     animate={{ opacity: 1, x: 0 }}
                     exit={{ opacity: 0 }}
                     transition={fade}
-                    className="flex min-w-0 basis-full flex-wrap gap-1 sm:basis-auto"
+                    className="flex min-w-0 basis-full flex-wrap gap-1 sm:basis-auto stage:flex-nowrap stage:overflow-hidden stage:[mask-image:linear-gradient(to_right,black_80%,transparent)]"
                   >
                     {tl.useCases.map((uc) => (
                       <span
                         key={uc.title}
-                        className="rounded-md border border-glass bg-white/[0.03] px-1.5 py-0.5 font-mono text-xs text-muted"
+                        className="shrink-0 whitespace-nowrap rounded-md border border-glass bg-white/[0.03] px-1.5 py-0.5 font-mono text-xs text-muted"
                       >
                         {uc.title}
                       </span>

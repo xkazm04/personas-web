@@ -114,3 +114,27 @@
     min-height: var(--stage-h);
   }
 }
+
+/* ── Height tiers for DOM-built content ──
+   SVG art in a data-stage-slot grows with the screen on its own; a section
+   built from cards, rows and chips does not - on a 1440p monitor it kept its
+   laptop size and floated in the middle of the stage. `data-stage-zoom` on
+   the block under the intro scales that block up by tier. `zoom` (not a
+   transform) so text is re-rasterised crisp, layout reserves the scaled size,
+   and percentage widths still resolve against the unzoomed container - the
+   block grows taller and its type larger, never wider than the stage. */
+@media (min-width: 64rem) and (min-height: 56rem) {
+  [data-stage] [data-stage-zoom] {
+    zoom: 1.2;
+  }
+}
+@media (min-width: 80rem) and (min-height: 67.5rem) {
+  [data-stage] [data-stage-zoom] {
+    zoom: 1.35;
+  }
+}
+@media (min-width: 100rem) and (min-height: 78rem) {
+  [data-stage] [data-stage-zoom] {
+    zoom: 1.6;
+  }
+}

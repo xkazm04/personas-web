@@ -29,7 +29,6 @@ type ViewportName = (typeof VIEWPORTS)[number]["name"];
 
 /** `<route> <section id or aria-labelledby>` -> viewports it still overflows. */
 const KNOWN_OVERFLOW: Record<string, readonly ViewportName[]> = {
-  "/ use-cases": ["1366x768 laptop", "1536x864 laptop", "1440x900 laptop", "1920x1080 desktop"],
   "/ playground-split": ["1366x768 laptop", "1536x864 laptop", "1440x900 laptop"],
   "/ get-started-heading": ["1366x768 laptop", "1536x864 laptop", "1440x900 laptop"],
   "/ orchestration-hub": ["1366x768 laptop", "1536x864 laptop", "1440x900 laptop", "1920x1080 desktop"],

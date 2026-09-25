@@ -41,7 +41,8 @@ export default function UseCasesPersonaCard() {
         role="group"
         aria-label={`One persona, ${PERSONA.name}, shown as its card. Connecting each of ${tools.length} tools adds that tool's jobs, ${totalJobs} in all, while the persona's name, icon and colour stay the same.`}
         data-tour-diagram="tools"
-        className="mt-12 flex flex-col gap-8"
+        data-stage-zoom
+        className="mt-12 flex flex-col gap-8 stage:mt-0 stage:gap-[2.2svh]"
       >
         <ToolTabs
           uid={uid}
@@ -79,10 +80,10 @@ export default function UseCasesPersonaCard() {
         </div>
       </div>
 
-      <motion.div variants={fadeUp} className="mt-12 flex justify-center">
+      <motion.div variants={fadeUp} className="mt-12 flex justify-center stage:mt-[2.4svh]">
         <Link
           href="/templates"
-          className="group relative inline-flex items-center gap-3 overflow-hidden rounded-full border border-brand-cyan/30 bg-brand-cyan/5 px-8 py-4 text-base font-semibold text-foreground backdrop-blur-sm transition-all duration-300 hover:border-brand-cyan/50 hover:bg-brand-cyan/10 hover:shadow-[0_0_30px_rgba(6,182,212,0.2)]"
+          className="group relative inline-flex items-center gap-3 overflow-hidden rounded-full border border-brand-cyan/30 bg-brand-cyan/5 px-8 py-4 stage:py-2.5 text-base font-semibold text-foreground backdrop-blur-sm transition-all duration-300 hover:border-brand-cyan/50 hover:bg-brand-cyan/10 hover:shadow-[0_0_30px_rgba(6,182,212,0.2)]"
         >
           <div className="absolute inset-0 -translate-x-full bg-gradient-to-r from-transparent via-white/5 to-transparent transition-transform duration-700 group-hover:translate-x-full" />
           <LayoutGrid className="relative h-5 w-5 text-brand-cyan transition-transform duration-300 group-hover:-translate-y-0.5" />
