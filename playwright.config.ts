@@ -1,5 +1,10 @@
 import { defineConfig } from "@playwright/test";
 
+// The port is overridable because `reuseExistingServer` trusts whatever already
+// listens on it: on a machine that runs other projects' dev servers, :3002 can
+// be a different app entirely and every spec would run against it.
+const PORT = Number(process.env.PLAYWRIGHT_PORT ?? 3002);
+
 export default defineConfig({
   testDir: "./e2e",
   timeout: 60_000,
@@ -20,7 +25,7 @@ export default defineConfig({
   // produces friction without producing a record.
   failOnFlakyTests: !!process.env.CI,
   use: {
-    baseURL: "http://localhost:3002",
+    baseURL: `http://localhost:${PORT}`,
     trace: "on-first-retry",
     navigationTimeout: 30_000,
   },
@@ -28,8 +33,8 @@ export default defineConfig({
     { name: "chromium", use: { browserName: "chromium" } },
   ],
   webServer: {
-    command: "npm run build && npm run start -- --port 3002",
-    port: 3002,
+    command: `npm run build && npm run start -- --port ${PORT}`,
+    port: PORT,
     // Local convenience only — CI must never test against a stale server.
     reuseExistingServer: !process.env.CI,
     timeout: 120_000,
