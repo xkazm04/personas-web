@@ -102,15 +102,10 @@ export default function RootLayout({
             __html: `(function(){try{var T=['dark-midnight','dark-cyan','dark-bronze','dark-frost','dark-purple','dark-pink','dark-red','dark-matrix','light','light-ice','light-news'];var L=['light','light-ice','light-news'];var el=document.documentElement;var raw=null;try{raw=localStorage.getItem('personas-theme');}catch(e){}var id;if(raw){try{var p=JSON.parse(raw);if(p&&p.state&&T.indexOf(p.state.themeId)!==-1)id=p.state.themeId;}catch(e){}}if(!id){id=T[Math.floor(Math.random()*T.length)];try{localStorage.setItem('personas-theme',JSON.stringify({state:{themeId:id},version:0}));}catch(e){}}if(id!=='dark-midnight')el.setAttribute('data-theme',id);if(L.indexOf(id)===-1)el.classList.add('dark');else el.classList.remove('dark');el.setAttribute('lang','en');el.setAttribute('data-lang','en');el.removeAttribute('dir');}catch(e){}})();`,
           }}
         />
-        {/* App Router root layout persists this across pages; the `no-page-custom-font`
-            rule is pages-dir-oriented. Migrating 6 Noto CJK/RTL/Indic families to
-            next/font would bloat every client bundle regardless of active locale,
-            so we keep the single runtime stylesheet request. */}
-        {/* eslint-disable-next-line @next/next/no-page-custom-font */}
-        <link
-          rel="stylesheet"
-          href="https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@300;400;500;600;700&family=Noto+Sans+JP:wght@300;400;500;600;700&family=Noto+Sans+KR:wght@300;400;500;600;700&family=Noto+Sans+Arabic:wght@300;400;500;600;700&family=Noto+Sans+Devanagari:wght@300;400;500;600;700&family=Noto+Sans+Bengali:wght@300;400;500;600;700&display=swap"
-        />
+        {/* Noto families for the non-Latin locales are fetched on demand by the
+            i18n store (ensureLocaleFont in stores/i18nStore.ts), not linked here:
+            a stylesheet here blocked first paint on every page for fonts the
+            English-only production site never uses. */}
       </head>
       <body
         className={`${GeistSans.variable} ${GeistMono.variable} antialiased text-foreground`}

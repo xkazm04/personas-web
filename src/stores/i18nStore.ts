@@ -52,8 +52,37 @@ const RTL = new Set<Language>(LANGUAGES.filter((l) => l.rtl).map((l) => l.id));
  * sets `lang=en` on first paint, so this runs post-hydration when a locale is
  * actually selected (dev/QA), leaving the production English path untouched.
  */
+/**
+ * Noto family per non-Latin locale (see styles/typography.css). The stylesheet
+ * used to be a render-blocking <link> in the root layout, loading all six
+ * families' CSS on every page - in production, where the site is English-only
+ * and none of them is ever used. It is now fetched when a locale that needs it
+ * is applied, one family at a time.
+ */
+const NOTO_FAMILY: Partial<Record<Language, string>> = {
+  zh: "Noto+Sans+SC",
+  ja: "Noto+Sans+JP",
+  ko: "Noto+Sans+KR",
+  ar: "Noto+Sans+Arabic",
+  hi: "Noto+Sans+Devanagari",
+  bn: "Noto+Sans+Bengali",
+};
+
+function ensureLocaleFont(lang: Language) {
+  const family = NOTO_FAMILY[lang];
+  if (!family) return;
+  const id = `noto-font-${lang}`;
+  if (document.getElementById(id)) return;
+  const link = document.createElement("link");
+  link.id = id;
+  link.rel = "stylesheet";
+  link.href = `https://fonts.googleapis.com/css2?family=${family}:wght@300;400;500;600;700&display=swap`;
+  document.head.appendChild(link);
+}
+
 function applyLangToDOM(lang: Language) {
   if (typeof document === "undefined") return;
+  ensureLocaleFont(lang);
   const el = document.documentElement;
   el.setAttribute("lang", lang);
   el.setAttribute("data-lang", lang);
