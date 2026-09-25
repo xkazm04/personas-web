@@ -1,6 +1,6 @@
-﻿import type { Translations } from './en';
+﻿import type { LocaleTranslations } from './en';
 
-export const ko: Translations = {
+export const ko: LocaleTranslations = {
     notFound: {
       title: "\ud398\uc774\uc9c0\ub97c \ucc3e\uc744 \uc218 \uc5c6\uc2b5\ub2c8\ub2e4",
       description: "\ucc3e\uc73c\uc2dc\ub294 \ud398\uc774\uc9c0\uac00 \uc874\uc7ac\ud558\uc9c0 \uc54a\uac70\ub098 \uc774\ub3d9\ub418\uc5c8\uc2b5\ub2c8\ub2e4. \uc544\ub798 \uc911 \ud558\ub098\ub97c \uc774\uc6a9\ud574 \ubcf4\uc138\uc694:",

@@ -1,5 +1,6 @@
 import Image from "next/image";
 import { AnimatePresence, motion } from "framer-motion";
+import { useTranslation } from "@/i18n/useTranslation";
 import { cellStatusText, type CellState } from "./athenaFleetData";
 
 const CELL_STYLE: Record<
@@ -31,6 +32,7 @@ export function FleetCell({
   ask?: string;
   reduced: boolean;
 }) {
+  const words = useTranslation().t.pluginsExtra.fleet.cell;
   if (state === "hidden") {
     return <div className="rounded-lg border border-dashed border-foreground/[0.07]" aria-hidden="true" />;
   }
@@ -50,7 +52,7 @@ export function FleetCell({
         <span className="min-w-0 truncate text-[10px] text-foreground/85">{name}</span>
       </span>
       <span className={`min-w-0 truncate text-[10px] ${style.status}`}>
-        {cellStatusText(state, ask)}
+        {cellStatusText(state, words, ask)}
       </span>
     </motion.div>
   );

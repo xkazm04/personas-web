@@ -2,6 +2,7 @@
 
 import { Cpu } from "lucide-react";
 import TerminalChrome from "@/components/TerminalChrome";
+import { useTranslation } from "@/i18n/useTranslation";
 import type { FlowNode, PlaygroundPhase } from "../types";
 import ConnectionLine from "./ConnectionLine";
 import FlowNodeCard from "./FlowNodeCard";
@@ -73,6 +74,8 @@ export default function AgentMindPanel({
   phase: PlaygroundPhase;
   reduced: boolean;
 }) {
+  const { t } = useTranslation();
+  const copy = t.playgroundSection;
   const edges = computeEdges(nodes);
   const svgWidth = 600;
   const svgHeight =
@@ -82,7 +85,7 @@ export default function AgentMindPanel({
     <div className="stage:flex stage:min-h-0 stage:flex-col">
       <TerminalChrome
         title="agent-mind"
-        status={phase === "running" ? "thinking" : phase === "done" ? "complete" : "idle"}
+        status={copy.mindStatus[phase === "running" ? "running" : phase === "done" ? "done" : "idle"]}
         className="px-4 py-3"
       />
 
@@ -94,10 +97,10 @@ export default function AgentMindPanel({
                 <Cpu className="h-7 w-7 text-foreground" />
               </div>
               <p className="text-base text-foreground font-mono">
-                Agent mind visualization
+                {copy.mindIdleTitle}
               </p>
               <p className="text-base text-foreground font-mono">
-                Select a prompt to see the flowchart
+                {copy.mindIdleHint}
               </p>
             </div>
           </div>

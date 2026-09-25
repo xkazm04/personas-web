@@ -5,7 +5,8 @@ import { AnimatePresence, motion } from "framer-motion";
 import { ArrowRight, Bot, BookOpen } from "lucide-react";
 import { BRAND_VAR, tint } from "@/lib/brand-theme";
 import { EYEBROW } from "@/lib/typography";
-import { TRIGGERS } from "./data";
+import { useTranslation } from "@/i18n/useTranslation";
+import { TRIGGERS, triggerWords } from "./data";
 
 interface TriggerDetailProps {
   activeId: string;
@@ -21,7 +22,10 @@ interface TriggerDetailProps {
  */
 
 export default function TriggerDetail({ activeId, announce = false }: TriggerDetailProps) {
-  const activeTrigger = TRIGGERS.find((t) => t.id === activeId) ?? TRIGGERS[0];
+  const { t } = useTranslation();
+  const copy = t.orchestrationSection;
+  const activeTrigger = TRIGGERS.find((tr) => tr.id === activeId) ?? TRIGGERS[0];
+  const words = triggerWords(copy, activeTrigger);
   const activeVar = BRAND_VAR[activeTrigger.brand];
   const Icon = activeTrigger.icon;
 
@@ -52,24 +56,24 @@ export default function TriggerDetail({ activeId, announce = false }: TriggerDet
               </div>
               <div>
                 <div className={EYEBROW} style={{ color: activeVar }}>
-                  Trigger
+                  {copy.trigger}
                 </div>
                 <div className="text-xl font-bold text-foreground">
-                  {activeTrigger.label}
+                  {words.label}
                 </div>
               </div>
             </div>
 
             <p className="text-base text-foreground/80 leading-relaxed mb-4">
-              {activeTrigger.description}
+              {words.description}
             </p>
 
             <div className="mb-4">
               <div className={`${EYEBROW} mb-1`}>
-                Fires when
+                {copy.firesWhen}
               </div>
               <div className="text-base font-mono text-foreground">
-                {activeTrigger.example}
+                {words.example}
               </div>
             </div>
 
@@ -89,7 +93,7 @@ export default function TriggerDetail({ activeId, announce = false }: TriggerDet
               >
                 <Bot className="h-4 w-4" style={{ color: BRAND_VAR.cyan }} />
                 <span className="text-base font-semibold text-foreground">
-                  {activeTrigger.persona}
+                  {words.persona}
                 </span>
               </div>
             </div>
@@ -101,7 +105,7 @@ export default function TriggerDetail({ activeId, announce = false }: TriggerDet
                 style={{ color: activeVar }}
               >
                 <BookOpen className="h-4 w-4" />
-                <span>{activeTrigger.doc.label}</span>
+                <span>{words.docLabel}</span>
                 <ArrowRight className="h-3.5 w-3.5" />
               </Link>
             )}

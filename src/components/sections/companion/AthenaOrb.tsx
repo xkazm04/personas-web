@@ -4,6 +4,7 @@ import { useEffect, useId, useRef } from "react";
 import { motion } from "framer-motion";
 import { useLoopGate } from "@/hooks/useLoopGate";
 import { BRAND_VAR, brandShadow, tint, type BrandKey } from "@/lib/brand-theme";
+import { useTranslation } from "@/i18n/useTranslation";
 
 /**
  * AthenaOrb — the section's centerpiece "art". The real Athena avatar (the
@@ -24,6 +25,7 @@ const ORB_R = 92;
 const DOT_COUNT = 5;
 
 export default function AthenaOrb({ brand }: { brand: BrandKey }) {
+  const avatarAlt = useTranslation().t.companionSection.avatarAlt;
   const rootRef = useRef<HTMLDivElement | null>(null);
   const videoRef = useRef<HTMLVideoElement | null>(null);
   const { run, still: reduced } = useLoopGate(rootRef);
@@ -137,7 +139,7 @@ export default function AthenaOrb({ brand }: { brand: BrandKey }) {
           // eslint-disable-next-line @next/next/no-img-element -- static poster fallback; next/image adds no value for a fixed local asset
           <img
             src="/athena/athena_baseline_640.webp"
-            alt="Athena, the Personas companion"
+            alt={avatarAlt}
             className="h-full w-full object-cover"
           />
         ) : (
@@ -150,7 +152,7 @@ export default function AthenaOrb({ brand }: { brand: BrandKey }) {
             loop
             playsInline
             preload="none"
-            aria-label="Athena, the Personas companion"
+            aria-label={avatarAlt}
             className="h-full w-full object-cover"
           />
         )}

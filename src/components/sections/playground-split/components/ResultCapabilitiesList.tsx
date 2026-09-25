@@ -2,6 +2,7 @@
 
 import { AnimatePresence, motion } from "framer-motion";
 import { CheckCircle2 } from "lucide-react";
+import { useTranslation } from "@/i18n/useTranslation";
 import { RESULT_DIMENSIONS } from "../data";
 import type { ExamplePrompt, PlaygroundPhase } from "../types";
 
@@ -12,6 +13,8 @@ export default function ResultCapabilitiesList({
   phase: PlaygroundPhase;
   activeExampleData: ExamplePrompt | null;
 }) {
+  const { t } = useTranslation();
+  const copy = t.playgroundSection;
   return (
     <AnimatePresence>
       {phase === "done" && activeExampleData && (
@@ -24,7 +27,7 @@ export default function ResultCapabilitiesList({
           <div className="flex items-center gap-2 border-b border-brand-emerald/15 bg-brand-emerald/[0.06] px-4 py-2.5">
             <CheckCircle2 className="h-4 w-4 text-brand-emerald" />
             <span className="text-base font-mono uppercase tracking-wider text-brand-emerald">
-              Result
+              {copy.result}
             </span>
           </div>
           <ul className="divide-y divide-white/[0.05] stage:grid stage:grid-cols-2 stage:divide-y-0">
@@ -50,7 +53,7 @@ export default function ResultCapabilitiesList({
                       className="text-base font-mono uppercase tracking-wider"
                       style={{ color: dim.color }}
                     >
-                      {dim.label}
+                      {copy.dimensions[dim.key]}
                     </div>
                     <div className="mt-1 text-base text-foreground/90 leading-relaxed stage:line-clamp-2 stage:text-sm stage:leading-snug">
                       {value}

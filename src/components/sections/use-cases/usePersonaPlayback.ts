@@ -1,7 +1,7 @@
 "use client";
 
 import { useCallback, useEffect, useRef, useState, type RefObject } from "react";
-import { tools } from "./data";
+import { toolBases } from "./data";
 
 /**
  * Playback for the persona-card variant: one progress value, `attached.length`,
@@ -14,7 +14,7 @@ import { tools } from "./data";
 
 export const BEAT_MS = 1700;
 export const FIRST_BEAT_MS = 900;
-const ALL_IDS = tools.map((tl) => tl.id);
+const ALL_IDS = toolBases.map((tl) => tl.id);
 const REDUCE_QUERY = "(prefers-reduced-motion: reduce)";
 
 type Mode = "rest" | "playing" | "paused";

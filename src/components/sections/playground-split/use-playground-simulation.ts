@@ -1,8 +1,8 @@
 "use client";
 
 import { useCallback, useEffect, useRef, useState } from "react";
-import { buildFlowNodes, examples } from "./data";
-import type { FlowNode, PlaygroundPhase } from "./types";
+import { buildFlowNodes } from "./data";
+import type { ExamplePrompt, FlowNode, PlaygroundCopy, PlaygroundPhase } from "./types";
 import { captureExceptionScrubbed } from "@/lib/sentry-pii";
 import { usePageVisibility } from "@/hooks/usePageVisibility";
 
@@ -14,7 +14,7 @@ const TOTAL_DURATION_MS =
 
 let invalidIdxReported = false;
 
-export function usePlaygroundSimulation() {
+export function usePlaygroundSimulation(examples: ExamplePrompt[], nodeLabels: PlaygroundCopy["nodes"]) {
   const [activeExample, setActiveExample] = useState<number | null>(null);
   const [nodes, setNodes] = useState<FlowNode[]>([]);
   const [phase, setPhase] = useState<PlaygroundPhase>("idle");
@@ -72,7 +72,7 @@ export function usePlaygroundSimulation() {
         return;
       }
       clearAll();
-      const flowNodes = buildFlowNodes(example);
+      const flowNodes = buildFlowNodes(example, nodeLabels);
       setNodes(flowNodes);
       setIsRunning(true);
       setPhase("running");
@@ -121,7 +121,7 @@ export function usePlaygroundSimulation() {
         timeoutsRef.current.push(t2);
       });
     },
-    [clearAll]
+    [clearAll, examples, nodeLabels]
   );
 
   const handleExampleClick = useCallback(

@@ -7,6 +7,7 @@ import SectionIntro from "@/components/primitives/SectionIntro";
 import { fadeUp } from "@/lib/animations";
 import { useAutoCycle } from "@/hooks/useAutoCycle";
 import { BRAND_VAR, tint } from "@/lib/brand-theme";
+import { useTranslation } from "@/i18n/useTranslation";
 import { CAPABILITIES, AUTO_CYCLE_MS } from "./data";
 import AthenaOrb from "./AthenaOrb";
 
@@ -20,6 +21,8 @@ import AthenaOrb from "./AthenaOrb";
 const TAP_PAUSE_MS = AUTO_CYCLE_MS * 2;
 
 export default function Companion() {
+  const { t } = useTranslation();
+  const copy = t.companionSection;
   const [hovering, setHovering] = useState(false);
   const gridRef = useRef<HTMLDivElement | null>(null);
   const { active, setActive, pauseFor } = useAutoCycle({
@@ -35,10 +38,10 @@ export default function Companion() {
     <SectionWrapper fit="fill" id="companion" aria-labelledby="companion-heading">
       <SectionIntro
         id="companion-heading"
-        heading="Meet"
-        gradient="Athena"
-        trailing=", always on"
-        description="A persistent orb that lives on your desktop — hold it to talk, it remembers how you work, and it reaches out before you have to ask."
+        heading={copy.heading}
+        gradient={copy.headingGradient}
+        trailing={copy.headingTrailing}
+        description={copy.description}
       />
 
       <motion.div
@@ -72,7 +75,7 @@ export default function Companion() {
                   className="inline-block h-1.5 w-1.5 shrink-0 rounded-full"
                   style={{ backgroundColor: BRAND_VAR[activeCap.brand] }}
                 />
-                {activeCap.line}
+                {copy.capabilities[activeCap.id].line}
               </motion.p>
             </AnimatePresence>
           </div>
@@ -110,9 +113,9 @@ export default function Companion() {
                     <Icon className="h-5 w-5" aria-hidden="true" />
                   </span>
                   <span>
-                    <span className="block font-medium text-foreground">{cap.label}</span>
+                    <span className="block font-medium text-foreground">{copy.capabilities[cap.id].label}</span>
                     <span className="mt-1 block text-sm font-light leading-relaxed text-muted">
-                      {cap.blurb}
+                      {copy.capabilities[cap.id].blurb}
                     </span>
                   </span>
                 </button>

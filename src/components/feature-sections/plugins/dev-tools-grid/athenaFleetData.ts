@@ -1,3 +1,7 @@
+import type { Translations } from "@/i18n/en";
+
+type FleetCopy = Translations["pluginsExtra"]["fleet"];
+
 /**
  * Data + clock for the "fleet under Athena's watch" visual, mirroring the
  * desktop companion docs (personas/docs/features/companion): the floating
@@ -12,6 +16,9 @@
  *   3. triage  — Athena's orb glides cell to cell and answers every blocker
  *                herself; the whole fleet lands green with zero human
  *                interruptions. Loop.
+ *
+ * Session names are code (branch-style ids) and stay here; every sentence
+ * (questions, captions, status phrases) is `t.pluginsExtra.fleet` copy.
  */
 
 export const GRID = 4;
@@ -35,13 +42,13 @@ export interface FleetCellDef {
   /** Tick the session blocks (a question, or it goes quiet). */
   needsAt?: number;
   needKind?: "ask" | "stale";
-  /** The question the session is blocked on. */
-  ask?: string;
+  /** The question the session is blocked on (`t.pluginsExtra.fleet.asks`). */
+  askKey?: keyof FleetCopy["asks"];
 }
 
 export const CELLS: FleetCellDef[] = [
   { name: "auth-refactor", spawnTick: 0, doneAt: 15 },
-  { name: "flaky-tests", spawnTick: 1, doneAt: 18, needsAt: 5, needKind: "ask", ask: "Quarantine 3 flaky tests?" },
+  { name: "flaky-tests", spawnTick: 1, doneAt: 18, needsAt: 5, needKind: "ask", askKey: "flakyTests" },
   { name: "i18n-sweep", spawnTick: 1, doneAt: 16 },
   { name: "p99-latency", spawnTick: 1, doneAt: 18 },
   { name: "v0.4-release", spawnTick: 2, doneAt: 20, needsAt: 7, needKind: "stale" },
@@ -51,10 +58,10 @@ export const CELLS: FleetCellDef[] = [
   { name: "db-indexes", spawnTick: 2, doneAt: 20 },
   { name: "lint-sweep", spawnTick: 2, doneAt: 18 },
   { name: "sec-audit", spawnTick: 2, doneAt: 19 },
-  { name: "a11y-pass", spawnTick: 2, doneAt: 19, needsAt: 6, needKind: "ask", ask: "Apply the focus-ring fix?" },
+  { name: "a11y-pass", spawnTick: 2, doneAt: 19, needsAt: 6, needKind: "ask", askKey: "focusRing" },
   { name: "dep-bumps", spawnTick: 2, doneAt: 20 },
   { name: "changelog", spawnTick: 2, doneAt: 17 },
-  { name: "perf-budget", spawnTick: 2, doneAt: 21, needsAt: 8, needKind: "ask", ask: "Raise the LCP budget?" },
+  { name: "perf-budget", spawnTick: 2, doneAt: 21, needsAt: 8, needKind: "ask", askKey: "lcpBudget" },
   { name: "og-images", spawnTick: 2, doneAt: 21 },
 ];
 
@@ -62,16 +69,16 @@ export interface OrbStop {
   cell: number;
   arrive: number;
   depart: number;
-  /** Caption narrated beside the orb while she resolves the cell. */
-  caption: string;
+  /** Caption narrated beside the orb while she resolves the cell (`t.pluginsExtra.fleet.captions`). */
+  caption: keyof FleetCopy["captions"];
 }
 
 /** Athena's triage route — attention-order, one blocked cell at a time. */
 export const ORB_STOPS: OrbStop[] = [
-  { cell: 1, arrive: 9, depart: 11, caption: "✓ approved — quarantine 3" },
-  { cell: 11, arrive: 11, depart: 13, caption: "✓ approved — focus-ring fix" },
-  { cell: 4, arrive: 13, depart: 15, caption: "⚡ nudged — release resumed" },
-  { cell: 14, arrive: 15, depart: 17, caption: "✓ answered — keep 2.5s budget" },
+  { cell: 1, arrive: 9, depart: 11, caption: "quarantine" },
+  { cell: 11, arrive: 11, depart: 13, caption: "focusRing" },
+  { cell: 4, arrive: 13, depart: 15, caption: "release" },
+  { cell: 14, arrive: 15, depart: 17, caption: "budget" },
 ];
 
 const STOP_BY_CELL = new Map(ORB_STOPS.map((s) => [s.cell, s]));
@@ -108,7 +115,7 @@ export function orbAt(phase: number): {
   x: number;
   y: number;
   resolving: boolean;
-  caption: string | null;
+  caption: OrbStop["caption"] | null;
 } {
   for (const stop of ORB_STOPS) {
     if (phase >= stop.arrive && phase < stop.depart) {
@@ -119,19 +126,19 @@ export function orbAt(phase: number): {
 }
 
 /** The cell's second line — what it's doing, in one short phrase. */
-export function cellStatusText(state: CellState, ask?: string): string {
+export function cellStatusText(state: CellState, words: FleetCopy["cell"], ask?: string): string {
   switch (state) {
     case "spawning":
-      return "spawning…";
+      return words.spawning;
     case "awaiting":
-      return ask ?? "needs an answer";
+      return ask ?? words.needsAnswer;
     case "stale":
-      return "quiet for 4m";
+      return words.stale;
     case "resolving":
-      return "Athena responding…";
+      return words.resolving;
     case "done":
-      return "✓ done";
+      return words.done;
     default:
-      return "working…";
+      return words.working;
   }
 }

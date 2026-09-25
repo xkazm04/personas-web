@@ -6,6 +6,7 @@ import { motion } from "framer-motion";
 import { BRAND_VAR } from "@/lib/brand-theme";
 import { useLoopGate } from "@/hooks/useLoopGate";
 import { loopTransition } from "@/lib/motion/loop-gate";
+import { useTranslation } from "@/i18n/useTranslation";
 import { TRIGGERS, CENTER, RADIUS, nodePosition } from "./data";
 import HubNode from "./HubNode";
 
@@ -25,6 +26,7 @@ interface HubRingProps {
  * the gate switches their animate/transition props, never the elements.
  */
 export default function HubRing({ active, onSelect, userStopped = false }: HubRingProps) {
+  const { t } = useTranslation();
   const svgRef = useRef<SVGSVGElement>(null);
   const { run, still } = useLoopGate(svgRef, { userStopped });
   const uid = useId();
@@ -32,7 +34,7 @@ export default function HubRing({ active, onSelect, userStopped = false }: HubRi
   const activeVar = BRAND_VAR[activeTrigger.brand];
 
   return (
-    <svg ref={svgRef} viewBox="0 0 520 520" className="h-full w-full" role="group" aria-label="Trigger types">
+    <svg ref={svgRef} viewBox="0 0 520 520" className="h-full w-full" role="group" aria-label={t.orchestrationSection.ringLabel}>
       <defs>
         <radialGradient id={`${uid}-hub`} cx="50%" cy="50%">
           <stop offset="0%" stopColor={activeVar} stopOpacity="0.5" />

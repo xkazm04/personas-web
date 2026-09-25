@@ -1,6 +1,6 @@
-﻿import type { Translations } from './en';
+﻿import type { LocaleTranslations } from './en';
 
-export const id: Translations = {
+export const id: LocaleTranslations = {
     notFound: {
       title: "Halaman tidak ditemukan",
       description: "Halaman yang Anda cari tidak ada atau telah dipindahkan. Coba salah satu dari ini:",

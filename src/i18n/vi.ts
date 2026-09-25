@@ -1,6 +1,6 @@
-﻿import type { Translations } from './en';
+﻿import type { LocaleTranslations } from './en';
 
-export const vi: Translations = {
+export const vi: LocaleTranslations = {
     notFound: {
       title: "Kh\u00f4ng t\u00ecm th\u1ea5y trang",
       description: "Trang b\u1ea1n \u0111ang t\u00ecm kh\u00f4ng t\u1ed3n t\u1ea1i ho\u1eb7c \u0111\u00e3 \u0111\u01b0\u1ee3c chuy\u1ec3n \u0111i. H\u00e3y th\u1eed m\u1ed9t trong c\u00e1c m\u1ee5c sau:",

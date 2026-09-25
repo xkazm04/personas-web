@@ -4,6 +4,7 @@ import Image from "next/image";
 import { motion, AnimatePresence } from "framer-motion";
 import { Check } from "lucide-react";
 import type { CellDef, CellStatus } from "../../designMatrixShared";
+import { useTranslation } from "@/i18n/useTranslation";
 import { FLUID_MONO } from "../data";
 
 function AppsValue() {
@@ -39,6 +40,7 @@ export default function TileValue({
   def: CellDef;
   status: CellStatus;
 }) {
+  const { t } = useTranslation();
   return (
     <div className="relative z-10 px-5 pb-5">
       <div className="relative h-[60px] sm:h-[78px]">
@@ -65,7 +67,7 @@ export default function TileValue({
               className={`absolute inset-0 flex items-end ${FLUID_MONO} font-mono`}
               style={{ color: `${def.color}cc` }}
             >
-              analyzing intent…
+              {t.designMatrix.analyzing}
             </motion.div>
           )}
 

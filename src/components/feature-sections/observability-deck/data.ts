@@ -9,7 +9,7 @@ import {
   Gauge,
 } from "lucide-react";
 import { BRAND_VAR } from "@/lib/brand-theme";
-import type { ActivityRow, OverviewModule } from "./types";
+import type { ActivityRow, AgentId, OverviewModule } from "./types";
 
 export const baseActivity: ActivityRow[] = [
   {
@@ -38,13 +38,14 @@ export const baseActivity: ActivityRow[] = [
   },
 ];
 
-export const agentPool = [
-  "PR Reviewer",
-  "Email Triage",
-  "Slack Digest",
-  "Deploy Monitor",
-  "Doc Indexer",
-  "Meeting Notes",
+/** Sample agents in the deck; names are `t.observeSection.agents[id]`. */
+export const agentPool: AgentId[] = [
+  "prReviewer",
+  "emailTriage",
+  "slackDigest",
+  "deployMonitor",
+  "docIndexer",
+  "meetingNotes",
 ];
 
 export const eventPool = [
@@ -70,29 +71,25 @@ export const colorPool = [
 export const leftModules: OverviewModule[] = [
   {
     icon: PlayCircle,
-    title: "Executions",
-    blurb: "Every run, timed and traced",
+    id: "executions",
     color: BRAND_VAR.emerald,
     filterPrefix: "execution",
   },
   {
     icon: MessageSquare,
-    title: "Messages",
-    blurb: "Full I/O transcripts per step",
+    id: "messages",
     color: BRAND_VAR.cyan,
     filterPrefix: "message",
   },
   {
     icon: Radio,
-    title: "Events",
-    blurb: "Bus stream + replay + retries",
+    id: "events",
     color: BRAND_VAR.purple,
     filterPrefix: "event",
   },
   {
     icon: Brain,
-    title: "Memories",
-    blurb: "What agents learned, searchable",
+    id: "memories",
     color: BRAND_VAR.amber,
     filterPrefix: "memory",
   },
@@ -101,29 +98,25 @@ export const leftModules: OverviewModule[] = [
 export const rightModules: OverviewModule[] = [
   {
     icon: Activity,
-    title: "Activity",
-    blurb: "Live lanes across all personas",
+    id: "activity",
     color: BRAND_VAR.rose,
     filterPrefix: "review",
   },
   {
     icon: HeartPulse,
-    title: "Health",
-    blurb: "Status, healing, dead-letters",
+    id: "health",
     color: BRAND_VAR.blue,
     filterPrefix: "health",
   },
   {
     icon: Gauge,
-    title: "Analytics",
-    blurb: "Success rate, duration, cost",
+    id: "analytics",
     color: BRAND_VAR.rose,
     filterPrefix: "execution",
   },
   {
     icon: BookOpen,
-    title: "Knowledge",
-    blurb: "Cross-persona semantic search",
+    id: "knowledge",
     color: BRAND_VAR.amber,
     filterPrefix: "knowledge",
   },

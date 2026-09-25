@@ -1,6 +1,6 @@
-﻿import type { Translations } from './en';
+﻿import type { LocaleTranslations } from './en';
 
-export const ja: Translations = {
+export const ja: LocaleTranslations = {
     notFound: {
       title: "\u30da\u30fc\u30b8\u304c\u898b\u3064\u304b\u308a\u307e\u305b\u3093",
       description: "\u304a\u63a2\u3057\u306e\u30da\u30fc\u30b8\u306f\u5b58\u5728\u3057\u306a\u3044\u304b\u3001\u79fb\u52d5\u3055\u308c\u305f\u53ef\u80fd\u6027\u304c\u3042\u308a\u307e\u3059\u3002\u4ee5\u4e0b\u306e\u3044\u305a\u308c\u304b\u3092\u304a\u8a66\u3057\u304f\u3060\u3055\u3044\uff1a",

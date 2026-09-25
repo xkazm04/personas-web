@@ -29,14 +29,20 @@ interface RunProps {
   totalMs: number;
 }
 
-export function RunProgressBar({ startedAt, running, totalMs, reduced }: RunProps & { reduced: boolean }) {
+export function RunProgressBar({
+  startedAt,
+  running,
+  totalMs,
+  reduced,
+  label,
+}: RunProps & { reduced: boolean; label: string }) {
   const elapsed = useRunElapsed(startedAt, running, totalMs);
   const pct = totalMs > 0 ? Math.min(100, (elapsed / totalMs) * 100) : 0;
   return (
     <div
       className="relative h-1 bg-white/[0.03]"
       role="progressbar"
-      aria-label="Simulation progress"
+      aria-label={label}
       aria-valuenow={Math.round(pct)}
       aria-valuemin={0}
       aria-valuemax={100}

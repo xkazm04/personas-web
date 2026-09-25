@@ -1,153 +1,76 @@
 import type { BrandKey } from "@/lib/brand-theme";
 import type { GuideTopicRef } from "@/lib/guide-link";
+import type { Translations } from "@/i18n/en";
+
+/**
+ * The six platform cards: identity, colour, art and guide links. Every title,
+ * description, detail and guide-link label is translated copy in
+ * `t.visionStack.layers[id]`.
+ */
+
+export type PlatformCardId = keyof Translations["visionStack"]["layers"];
 
 export interface PlatformCard {
-  id: string;
-  title: string;
+  id: PlatformCardId;
   brand: BrandKey;
   images: { dark: string; light: string };
-  description: string;
-  details: string[];
-  guideTopics?: GuideTopicRef[];
+  /** Guide deep-links; the link text is `t.visionStack.layers[id].guide`. */
+  guideTopics?: Omit<GuideTopicRef, "label">[];
 }
 
 export const PLATFORM_CARDS: PlatformCard[] = [
   {
     id: "credential-vault",
-    title: "Vault",
     brand: "purple",
     images: {
       dark: "/imgs/platform/credential-vault-dark.png",
       light: "/imgs/platform/credential-vault-light.png",
     },
-    description:
-      "AES-256-GCM encryption with OS-native keyring integration. Your secrets never leave your device.",
-    details: [
-      "OS keyring on Windows, macOS, Linux",
-      "AI-assisted OAuth token refresh",
-      "Zero-knowledge local-first architecture",
-    ],
-    guideTopics: [
-      {
-        label: "How Personas keeps your data safe",
-        category: "credentials",
-        topic: "how-personas-keeps-your-data-safe",
-      },
-    ],
+    guideTopics: [{ category: "credentials", topic: "how-personas-keeps-your-data-safe" }],
   },
   {
     id: "templates",
-    title: "Templates",
     brand: "cyan",
     images: {
       dark: "/imgs/platform/templates-dark.png",
       light: "/imgs/platform/templates-light.png",
     },
-    description:
-      "Dozens of ready-made personas you can adopt with one click — from PR reviewer to morning brief.",
-    details: [
-      "40+ curated persona templates",
-      "One-click adoption into your canvas",
-      "Remix templates into your own library",
-    ],
-    guideTopics: [
-      {
-        label: "Browse template library",
-        category: "getting-started",
-        topic: "browsing-templates",
-      },
-    ],
+    guideTopics: [{ category: "getting-started", topic: "browsing-templates" }],
   },
   {
     id: "byom",
-    title: "BYOM",
     brand: "emerald",
     images: {
       dark: "/imgs/platform/byom-dark.png",
       light: "/imgs/platform/byom-light.png",
     },
-    description:
-      "Bring your own model. Run personas against Claude or local Ollama — your machine, your choice.",
-    details: [
-      "Claude (via the official CLI)",
-      "Ollama for fully local inference",
-      "Automatic failover between providers",
-    ],
-    guideTopics: [
-      {
-        label: "Creating a new agent",
-        category: "agents-prompts",
-        topic: "creating-a-new-agent",
-      },
-    ],
+    guideTopics: [{ category: "agents-prompts", topic: "creating-a-new-agent" }],
   },
   {
     id: "monitoring",
-    title: "Monitoring",
     brand: "rose",
     images: {
       dark: "/imgs/platform/monitoring-dark.png",
       light: "/imgs/platform/monitoring-light.png",
     },
-    description:
-      "Self-healing execution, human review queues, and persistent agent memory — watch every run in real time.",
-    details: [
-      "Self-healing engine with automatic recovery",
-      "Human-in-the-loop review queues",
-      "Per-agent long-term memory",
-    ],
-    guideTopics: [
-      {
-        label: "Self-healing explained",
-        category: "troubleshooting",
-        topic: "self-healing-explained",
-      },
-    ],
+    guideTopics: [{ category: "troubleshooting", topic: "self-healing-explained" }],
   },
   {
     id: "lab",
-    title: "Lab",
     brand: "amber",
     images: {
       dark: "/imgs/platform/lab-dark.png",
       light: "/imgs/platform/lab-light.png",
     },
-    description:
-      "Experiment with prompt variants, run A/B arenas, and let breeding cycles evolve higher-performing personas.",
-    details: [
-      "Arena for side-by-side prompt comparisons",
-      "Fitness scoring across test suites",
-      "Overnight breeding cycles",
-    ],
-    guideTopics: [
-      {
-        label: "Running a breeding cycle",
-        category: "testing",
-        topic: "running-a-breeding-cycle",
-      },
-    ],
+    guideTopics: [{ category: "testing", topic: "running-a-breeding-cycle" }],
   },
   {
     id: "orchestration",
-    title: "Orchestration",
     brand: "cyan",
     images: {
       dark: "/imgs/platform/orchestration-dark.png",
       light: "/imgs/platform/orchestration-light.png",
     },
-    description:
-      "Eight trigger types wake personas in parallel — schedule, webhook, file watcher, clipboard, event, and more.",
-    details: [
-      "Schedule, polling, webhook, event, composite",
-      "File watcher and clipboard triggers",
-      "App-focus trigger for contextual agents",
-    ],
-    guideTopics: [
-      {
-        label: "How triggers work",
-        category: "triggers",
-        topic: "how-triggers-work",
-      },
-    ],
+    guideTopics: [{ category: "triggers", topic: "how-triggers-work" }],
   },
 ];

@@ -3,6 +3,8 @@
 import { useEffect, useRef, useState } from "react";
 import Image from "next/image";
 import { useLoopGate } from "@/hooks/useLoopGate";
+import { useTranslation } from "@/i18n/useTranslation";
+import { fillTemplate } from "@/lib/fillTemplate";
 
 import { AthenaOrb, FleetCell } from "./dev-tools-grid/AthenaFleetParts";
 import {
@@ -25,6 +27,7 @@ export default function DevToolsGrid() {
   // Ambient tick and Athena's resolving pulse: both pause while the grid is
   // off screen or the tab is backgrounded (useLoopGate), not only in a hidden
   // tab as before.
+  const copy = useTranslation().t.pluginsExtra.fleet;
   const rootRef = useRef<HTMLDivElement | null>(null);
   const { run, still: reduced } = useLoopGate(rootRef);
   const [tick, setTick] = useState(INITIAL_TICK);
@@ -46,16 +49,16 @@ export default function DevToolsGrid() {
 
   const statusLine =
     phase < 3
-      ? `spawning ${spawned}/16…`
+      ? fillTemplate(copy.statusSpawning, { spawned })
       : phase < 9
         ? needs > 0
-          ? `${needs} blocked — Athena dispatching`
-          : "fleet working"
+          ? fillTemplate(copy.statusBlocked, { needs })
+          : copy.statusWorking
         : phase < 17
-          ? `Athena triaging · ${resolved}/4 resolved`
+          ? fillTemplate(copy.statusTriaging, { resolved })
           : done === CELLS.length
-            ? "16/16 green · 0 human interruptions"
-            : `wrapping up · ${done}/16 green`;
+            ? copy.statusAllGreen
+            : fillTemplate(copy.statusWrapping, { done });
 
   return (
     <div ref={rootRef} className="p-5">
@@ -71,15 +74,15 @@ export default function DevToolsGrid() {
             aria-hidden="true"
           />
           <div>
-            <div className="text-base font-semibold leading-tight text-foreground">Agent fleet</div>
-            <div className="text-base font-mono text-foreground/60">16 CLIs · Athena on watch</div>
+            <div className="text-base font-semibold leading-tight text-foreground">{copy.title}</div>
+            <div className="text-base font-mono text-foreground/60">{copy.subtitle}</div>
           </div>
         </div>
 
         <div className="flex flex-wrap items-center gap-1.5">
-          {needs > 0 && <SummaryPill dot="bg-violet-400" text="text-violet-300" label="Blocked" n={needs} />}
-          {working > 0 && <SummaryPill dot="bg-blue-400" text="text-blue-300" label="Working" n={working} />}
-          {done > 0 && <SummaryPill dot="bg-emerald-400" text="text-emerald-300" label="Done" n={done} />}
+          {needs > 0 && <SummaryPill dot="bg-violet-400" text="text-violet-300" label={copy.blocked} n={needs} />}
+          {working > 0 && <SummaryPill dot="bg-blue-400" text="text-blue-300" label={copy.working} n={working} />}
+          {done > 0 && <SummaryPill dot="bg-emerald-400" text="text-emerald-300" label={copy.done} n={done} />}
         </div>
       </div>
 
@@ -91,19 +94,19 @@ export default function DevToolsGrid() {
               key={cell.name}
               name={cell.name}
               state={states[i]}
-              ask={cell.ask}
+              ask={cell.askKey && copy.asks[cell.askKey]}
               reduced={reduced}
             />
           ))}
         </div>
-        <AthenaOrb x={orb.x} y={orb.y} resolving={orb.resolving} caption={orb.caption} reduced={!run} />
+        <AthenaOrb x={orb.x} y={orb.y} resolving={orb.resolving} caption={orb.caption && copy.captions[orb.caption]} reduced={!run} />
       </div>
 
       <div className="mt-4 flex items-center justify-between border-t border-foreground/[0.06] pt-3 text-base font-mono uppercase tracking-widest text-foreground/60">
         <span>{statusLine}</span>
         <span className="flex items-center gap-1.5">
           <span className="h-1.5 w-1.5 rounded-full bg-cyan-400 animate-pulse" aria-hidden="true" />
-          autonomous
+          {copy.autonomous}
         </span>
       </div>
     </div>

@@ -1766,6 +1766,7 @@
             "src/components/ThemeInit.tsx",
             "src/components/ThemeSwitcher.tsx",
             "src/lib/brand-theme.ts",
+            "src/lib/fillTemplate.ts",
             "src/lib/colors.ts",
             "src/lib/typography.ts",
             "src/stores/themeStore.ts"

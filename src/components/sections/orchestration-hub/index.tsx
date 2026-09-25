@@ -6,6 +6,7 @@ import SectionWrapper from "@/components/SectionWrapper";
 import { SectionIntro } from "@/components/primitives";
 import { fadeUp } from "@/lib/animations";
 import { useLoopGate } from "@/hooks/useLoopGate";
+import { useTranslation } from "@/i18n/useTranslation";
 import { TRIGGERS, AUTO_CYCLE_MS } from "./data";
 import { initialPlayback, nextDeadline, reducePlayback } from "./playback";
 import HubRing from "./HubRing";
@@ -54,6 +55,7 @@ export default function OrchestrationHub() {
     return () => clearTimeout(t);
   }, [state, systemHeld]);
 
+  const copy = useTranslation().t.orchestrationSection;
   const activeTrigger = TRIGGERS[state.active] ?? TRIGGERS[0];
   const stopped = state.mode === "stopped";
 
@@ -78,9 +80,9 @@ export default function OrchestrationHub() {
     >
       <SectionIntro
         id="orchestration-hub-heading"
-        heading="Orchestration"
-        gradient="hub"
-        description="Ten trigger types, one persona hub. Any signal can wake any agent — or launch one yourself. Pick a trigger to see it fire."
+        heading={copy.heading}
+        gradient={copy.headingGradient}
+        description={copy.description}
       />
 
       <motion.div variants={fadeUp} data-stage-slot className="mt-12 mx-auto w-full max-w-5xl stage:mt-0 stage:max-w-6xl">

@@ -1,6 +1,6 @@
-﻿import type { Translations } from './en';
+﻿import type { LocaleTranslations } from './en';
 
-export const zh: Translations = {
+export const zh: LocaleTranslations = {
     notFound: {
       title: "\u672a\u627e\u5230\u9875\u9762",
       description: "\u60a8\u8981\u67e5\u627e\u7684\u9875\u9762\u4e0d\u5b58\u5728\u6216\u5df2\u88ab\u79fb\u52a8\u3002\u8bf7\u5c1d\u8bd5\u4ee5\u4e0b\u9875\u9762\uff1a",

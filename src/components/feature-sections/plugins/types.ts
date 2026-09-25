@@ -12,10 +12,15 @@ export type PluginKey = ShowcaseKey;
 /** The showcase's translated copy (`t.pluginShowcase`). */
 export type ShowcaseCopy = Translations["pluginShowcase"];
 
+/** Copy for the showcase's demos (`t.pluginsExtra`). */
+export type PluginsExtraCopy = Translations["pluginsExtra"];
+
 export interface VariantDef {
   key: string;
+  /** A product name, shown untranslated. */
   label: string;
-  blurb: string;
+  /** Which translated blurb (`t.pluginsExtra.variantBlurbs`) the switcher shows. */
+  blurbKey: keyof PluginsExtraCopy["variantBlurbs"];
   component: React.ComponentType;
 }
 

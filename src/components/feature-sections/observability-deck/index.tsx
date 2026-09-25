@@ -5,11 +5,13 @@ import { motion } from "framer-motion";
 import SectionWrapper from "@/components/SectionWrapper";
 import SectionIntro from "@/components/primitives/SectionIntro";
 import { staggerContainer } from "@/lib/animations";
+import { useTranslation } from "@/i18n/useTranslation";
 import { leftModules, rightModules } from "./data";
 import ModuleTag from "./components/ModuleTag";
 import PulseGridDeck from "./variants/PulseGridDeck";
 
 export default function ObservabilityDeck() {
+  const copy = useTranslation().t.observeSection;
   const [filterPrefix, setFilterPrefix] = useState<string | null>(null);
 
   const handleTagClick = useCallback((prefix: string) => {
@@ -25,9 +27,9 @@ export default function ObservabilityDeck() {
         variants={staggerContainer}
       >
         <SectionIntro
-          heading="See everything,"
-          gradient="miss nothing"
-          description="Every run, message and event — live, in one dashboard."
+          heading={copy.heading}
+          gradient={copy.headingGradient}
+          description={copy.description}
           descriptionMaxWidth="max-w-xl"
           className="mb-0"
         />
@@ -45,7 +47,7 @@ export default function ObservabilityDeck() {
         <div className="flex flex-col gap-3">
           {leftModules.map((m) => (
             <ModuleTag
-              key={m.title}
+              key={m.id}
               mod={m}
               active={filterPrefix === m.filterPrefix}
               onClick={() => handleTagClick(m.filterPrefix)}
@@ -61,7 +63,7 @@ export default function ObservabilityDeck() {
         <div className="flex flex-col gap-3">
           {rightModules.map((m) => (
             <ModuleTag
-              key={m.title}
+              key={m.id}
               mod={m}
               active={filterPrefix === m.filterPrefix}
               onClick={() => handleTagClick(m.filterPrefix)}

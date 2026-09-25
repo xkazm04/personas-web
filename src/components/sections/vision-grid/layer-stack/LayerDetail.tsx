@@ -4,12 +4,14 @@ import { ArrowDown, ArrowUp, ArrowUpRight, Check } from "lucide-react";
 import { BRAND_VAR, tint } from "@/lib/brand-theme";
 import { guideHref, openGuideLink } from "@/lib/guide-link";
 import { EYEBROW } from "@/lib/typography";
+import { useTranslation } from "@/i18n/useTranslation";
+import { fillTemplate } from "@/lib/fillTemplate";
 import type { StackLayer } from "./layers";
 
 /**
  * The tabpanel for the selected layer: which question it answers about the
  * agent, what it is doing for the sample agent right now (the lit part of the
- * card), then the layer's own copy from data.ts. Every layer's one-line job is
+ * card), then the layer's own copy (`t.visionStack.layers`). Every layer's one-line job is
  * already visible in the stack; this adds the detail.
  */
 export function LayerDetail({
@@ -30,6 +32,8 @@ export function LayerDetail({
   next: StackLayer;
   onNext: () => void;
 }) {
+  const { t } = useTranslation();
+  const copy = t.visionStack;
   const color = BRAND_VAR[layer.brand];
   const Icon = layer.icon;
   return (
@@ -45,7 +49,7 @@ export function LayerDetail({
         style={{ background: `linear-gradient(90deg, transparent, ${tint(layer.brand, 60)}, transparent)` }}
       />
       <div className={EYEBROW}>
-        Layer {index + 1} of {total}
+        {fillTemplate(copy.layerOf, { current: index + 1, total })}
       </div>
       <div className="mt-3 flex items-center gap-3">
         <span
@@ -66,7 +70,7 @@ export function LayerDetail({
         className="mt-5 rounded-lg border border-glass bg-white/[0.03] py-2 pl-3 pr-3"
         style={{ borderLeft: `2px solid ${color}` }}
       >
-        <div className="text-xs text-muted">In this agent</div>
+        <div className="text-xs text-muted">{copy.inThisAgent}</div>
         <div className="mt-0.5 text-sm font-medium text-foreground">{layer.inAgent}</div>
       </div>
 
@@ -99,7 +103,7 @@ export function LayerDetail({
           className="group ml-auto flex cursor-pointer items-center gap-3 rounded-lg border border-glass bg-white/[0.02] px-3 py-2 text-left outline-none transition-colors hover:border-glass-hover focus-visible:ring-2 focus-visible:ring-brand-cyan/70"
         >
           <span className="flex flex-col">
-            <span className="text-xs text-muted">{index === total - 1 ? "Back to the top" : "Next layer down"}</span>
+            <span className="text-xs text-muted">{index === total - 1 ? copy.backToTop : copy.nextLayerDown}</span>
             <span className="text-sm font-medium text-foreground">
               {next.card.title}: <span className="font-normal text-muted">{next.question}</span>
             </span>

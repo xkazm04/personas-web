@@ -3,7 +3,7 @@ export function buildSparkline(values: number[]): number[] {
   return [...values].reverse();
 }
 
-export function Sparkline({ values, color }: { values: number[]; color: string }) {
+export function Sparkline({ values, color, label }: { values: number[]; color: string; label: string }) {
   const width = 64;
   const height = 20;
   if (values.length < 2) {
@@ -32,7 +32,7 @@ export function Sparkline({ values, color }: { values: number[]; color: string }
     .join(" ");
 
   return (
-    <svg width={width} height={height} role="img" aria-label="Duration trend">
+    <svg width={width} height={height} role="img" aria-label={label}>
       <polyline
         fill="none"
         stroke={color}

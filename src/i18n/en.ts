@@ -1757,7 +1757,559 @@
       brain: string;
     };
   };
+  // BEGIN pending-translation namespaces (English only; listed in PENDING_TRANSLATION)
+  useCasesPersona: {
+    groupLabel: string;
+    identityNote: string;
+    personaName: string;
+    personaDescription: string;
+    active: string;
+    jobOne: string;
+    jobMany: string;
+    noConnectors: string;
+    connectorCount: string;
+    connectedTools: string;
+    sampleTriggers: string;
+    sampleLastRun: string;
+    adds: string;
+    emptyJobs: string;
+    ledgerLabel: string;
+    notConnected: string;
+    tabsLabel: string;
+    connected: string;
+    pause: string;
+    replay: string;
+    play: string;
+  };
+  playgroundSection: {
+    heading: string;
+    headingGradient: string;
+    description: string;
+    reset: string;
+    splitView: string;
+    executing: string;
+    executionComplete: string;
+    srRunning: string;
+    srDone: string;
+    progressLabel: string;
+    editorStatus: {
+      running: string;
+      done: string;
+      idle: string;
+    };
+    mindStatus: {
+      running: string;
+      done: string;
+      idle: string;
+    };
+    instructionComment: string;
+    intentComment: string;
+    selectPrompt: string;
+    selectedTools: string;
+    result: string;
+    mindIdleTitle: string;
+    mindIdleHint: string;
+    nodes: {
+      parse: string;
+      select: string;
+      execute: string;
+      verify: string;
+      result: string;
+    };
+    dimensions: {
+      messages: string;
+      humanReview: string;
+      events: string;
+      memories: string;
+    };
+    tools: {
+      gmailApi: string;
+      nlpClassifier: string;
+      githubApi: string;
+      astAnalyzer: string;
+      testScanner: string;
+      slackApi: string;
+      summarizer: string;
+      calendarApi: string;
+      scheduleAnalyzer: string;
+    };
+    examples: {
+      gmail: {
+        label: string;
+        prompt: string;
+        messages: string;
+        humanReview: string;
+        memories: string;
+      };
+      pr: {
+        label: string;
+        prompt: string;
+        messages: string;
+        humanReview: string;
+        memories: string;
+      };
+      slack: {
+        label: string;
+        prompt: string;
+        messages: string;
+        humanReview: string;
+        memories: string;
+      };
+      schedule: {
+        label: string;
+        prompt: string;
+        messages: string;
+        humanReview: string;
+        memories: string;
+      };
+    };
+  };
+  orchestrationSection: {
+    heading: string;
+    headingGradient: string;
+    description: string;
+    ringLabel: string;
+    trigger: string;
+    firesWhen: string;
+    triggers: {
+      schedule: {
+        label: string;
+        description: string;
+        example: string;
+        persona: string;
+      };
+      polling: {
+        label: string;
+        description: string;
+        example: string;
+        persona: string;
+      };
+      webhook: {
+        label: string;
+        description: string;
+        persona: string;
+      };
+      file: {
+        label: string;
+        description: string;
+        persona: string;
+      };
+      clipboard: {
+        label: string;
+        description: string;
+        example: string;
+        persona: string;
+      };
+      focus: {
+        label: string;
+        description: string;
+        example: string;
+        persona: string;
+      };
+      event: {
+        label: string;
+        description: string;
+        persona: string;
+      };
+      chain: {
+        label: string;
+        description: string;
+        example: string;
+        persona: string;
+      };
+      composite: {
+        label: string;
+        description: string;
+        example: string;
+        persona: string;
+      };
+      manual: {
+        label: string;
+        description: string;
+        example: string;
+        persona: string;
+      };
+    };
+    docs: {
+      scheduleGuide: string;
+      howTriggersWork: string;
+      webhookGuide: string;
+      fileWatcherGuide: string;
+      clipboardMonitor: string;
+      eventBased: string;
+      chainGuide: string;
+      combining: string;
+    };
+  };
+  companionSection: {
+    heading: string;
+    headingGradient: string;
+    headingTrailing: string;
+    description: string;
+    avatarAlt: string;
+    capabilities: {
+      always: {
+        label: string;
+        blurb: string;
+        line: string;
+      };
+      voice: {
+        label: string;
+        blurb: string;
+        line: string;
+      };
+      memory: {
+        label: string;
+        blurb: string;
+        line: string;
+      };
+      proactive: {
+        label: string;
+        blurb: string;
+        line: string;
+      };
+    };
+  };
+  visionStack: {
+    heading: string;
+    headingGradient: string;
+    headingTrailing: string;
+    description: string;
+    groupLabel: string;
+    tabsLabel: string;
+    layerOf: string;
+    inThisAgent: string;
+    backToTop: string;
+    nextLayerDown: string;
+    persona: {
+      name: string;
+      active: string;
+      fromOrigin: string;
+      origin: string;
+      trigger: string;
+      lastRun: string;
+      credentialsLocal: string;
+    };
+    layers: {
+      orchestration: {
+        title: string;
+        description: string;
+        details: string[];
+        guide: string;
+        question: string;
+        job: string;
+        inAgent: string;
+      };
+      byom: {
+        title: string;
+        description: string;
+        details: string[];
+        guide: string;
+        question: string;
+        job: string;
+        inAgent: string;
+      };
+      templates: {
+        title: string;
+        description: string;
+        details: string[];
+        guide: string;
+        question: string;
+        job: string;
+        inAgent: string;
+      };
+      monitoring: {
+        title: string;
+        description: string;
+        details: string[];
+        guide: string;
+        question: string;
+        job: string;
+        inAgent: string;
+      };
+      lab: {
+        title: string;
+        description: string;
+        details: string[];
+        guide: string;
+        question: string;
+        job: string;
+        inAgent: string;
+      };
+      'credential-vault': {
+        title: string;
+        description: string;
+        details: string[];
+        guide: string;
+        question: string;
+        job: string;
+        inAgent: string;
+      };
+    };
+  };
+  designMatrix: {
+    heading: string;
+    headingGradient: string;
+    headingTrailing: string;
+    lede: string;
+    ledeStrong: string;
+    title: string;
+    subtitle: string;
+    status: {
+      running: string;
+      done: string;
+      idle: string;
+    };
+    replay: string;
+    cellsResolved: string;
+    footerStatus: {
+      done: string;
+      pending: string;
+    };
+    intent: string;
+    intentPlaceholder: string;
+    resolved: string;
+    analyzing: string;
+    userPrompt: string;
+    cells: {
+      tasks: {
+        label: string;
+        value: string;
+      };
+      apps: {
+        label: string;
+        value: string;
+      };
+      triggers: {
+        label: string;
+        value: string;
+      };
+      review: {
+        label: string;
+        value: string;
+      };
+      messages: {
+        label: string;
+        value: string;
+      };
+      memory: {
+        label: string;
+        value: string;
+      };
+      errors: {
+        label: string;
+        value: string;
+      };
+      events: {
+        label: string;
+        value: string;
+      };
+    };
+    questions: {
+      triggers: {
+        prompt: string;
+        options: string[];
+      };
+      review: {
+        prompt: string;
+        options: string[];
+      };
+    };
+  };
+  memorySection: {
+    heading: string;
+    headingGradient: string;
+    lede: string;
+    artLabel: string;
+    run1: string;
+    run12: string;
+    memory: string;
+    replay: string;
+  };
+  securitySection: {
+    heading: string;
+    headingGradient: string;
+    lede: string;
+    artLabel: string;
+    replay: string;
+    yourKeys: string;
+    rings: {
+      keychain: string;
+      device: string;
+    };
+  };
+  aiModelsSection: {
+    heading: string;
+    lede: string;
+    artLabel: string;
+    replay: string;
+    local: string;
+  };
+  observeSection: {
+    heading: string;
+    headingGradient: string;
+    description: string;
+    modules: {
+      executions: {
+        title: string;
+        blurb: string;
+      };
+      messages: {
+        title: string;
+        blurb: string;
+      };
+      events: {
+        title: string;
+        blurb: string;
+      };
+      memories: {
+        title: string;
+        blurb: string;
+      };
+      activity: {
+        title: string;
+        blurb: string;
+      };
+      health: {
+        title: string;
+        blurb: string;
+      };
+      analytics: {
+        title: string;
+        blurb: string;
+      };
+      knowledge: {
+        title: string;
+        blurb: string;
+      };
+    };
+    agents: {
+      prReviewer: string;
+      emailTriage: string;
+      slackDigest: string;
+      deployMonitor: string;
+      docIndexer: string;
+      meetingNotes: string;
+    };
+    status: {
+      snapshot: string;
+      streaming: string;
+      autoRefreshing: string;
+    };
+    chromeInfo: string;
+    metrics: {
+      successRate: string;
+      avgDuration: string;
+      avgCost: string;
+      activeAgents: string;
+    };
+    showAll: string;
+    footer: string;
+    idle: string;
+    durationTrend: string;
+    eventShort: {
+      'execution.completed': string;
+      'execution.started': string;
+      'message.sent': string;
+      'event.emitted': string;
+      'memory.stored': string;
+      'review.requested': string;
+      'knowledge.indexed': string;
+      'health.checked': string;
+    };
+  };
+  pluginsExtra: {
+    variantBlurbs: {
+      athenaFleet: string;
+      brain: string;
+    };
+    fleet: {
+      title: string;
+      subtitle: string;
+      blocked: string;
+      working: string;
+      done: string;
+      autonomous: string;
+      statusSpawning: string;
+      statusBlocked: string;
+      statusWorking: string;
+      statusTriaging: string;
+      statusAllGreen: string;
+      statusWrapping: string;
+      cell: {
+        spawning: string;
+        needsAnswer: string;
+        stale: string;
+        resolving: string;
+        done: string;
+        working: string;
+      };
+      asks: {
+        flakyTests: string;
+        focusRing: string;
+        lcpBudget: string;
+      };
+      captions: {
+        quarantine: string;
+        focusRing: string;
+        release: string;
+        budget: string;
+      };
+    };
+    brain: {
+      title: string;
+      recall: string;
+      capture: string;
+      vault: string;
+      notes: string;
+      links: string;
+      recallRate: string;
+      connections: string;
+      recentThoughts: string;
+      backlinkNotes: {
+        leonardo: string;
+        matrix: string;
+        agents: string;
+        roadmap: string;
+      };
+      captures: {
+        wire: string;
+        masks: string;
+        graph: string;
+      };
+    };
+  };
+  // END pending-translation namespaces
 }
+
+/**
+ * Namespaces migrated from hardcoded English on 2026-09-25 by owner decision
+ * ("Migrate hardcoded English, no need to translate for now"). They are
+ * English-only until translated: the 13 non-en locales may omit them (see
+ * `LocaleTranslations`), the runtime falls back to English via
+ * `mergeWithEnglishFallback`, and `scripts/check-i18n-coverage.mjs` skips them
+ * while printing the pending count. To translate one, add it to every locale
+ * file and remove it from this list - tsc then requires it everywhere.
+ */
+export const PENDING_TRANSLATION = [
+  'useCasesPersona',
+  'playgroundSection',
+  'orchestrationSection',
+  'companionSection',
+  'visionStack',
+  'designMatrix',
+  'memorySection',
+  'securitySection',
+  'aiModelsSection',
+  'observeSection',
+  'pluginsExtra',
+] as const;
+
+export type PendingNamespace = (typeof PENDING_TRANSLATION)[number];
+
+/** The shape a non-en locale file must satisfy: pending namespaces optional. */
+export type LocaleTranslations = Omit<Translations, PendingNamespace> &
+  Partial<Pick<Translations, PendingNamespace>>;
 
 export const en: Translations = {
   notFound: {
@@ -3775,4 +4327,558 @@ export const en: Translations = {
       brain: 'Your vault, agent-ready',
     },
   },
+  // BEGIN pending-translation namespaces (English only; listed in PENDING_TRANSLATION)
+  useCasesPersona: {
+    groupLabel: 'One persona, {persona}, shown as its card. Connecting each of {tools} tools adds that tool\'s jobs, {jobs} in all, while the persona\'s name, icon and colour stay the same.',
+    identityNote: 'Same name, same icon, same colour through every tool. Connecting a tool only adds jobs to this one persona.',
+    personaName: 'Chief of staff',
+    personaDescription: 'Keeps your inbox, channels, repos and calendar moving.',
+    active: 'Active',
+    jobOne: '{count} job',
+    jobMany: '{count} jobs',
+    noConnectors: 'No connectors yet',
+    connectorCount: '{attached} of {total} connectors',
+    connectedTools: 'Connected tools',
+    sampleTriggers: '3 triggers',
+    sampleLastRun: '2 min ago',
+    adds: '{tool} adds {count} jobs to {persona}',
+    emptyJobs: 'No tools connected yet. Each tool you connect adds its jobs to this same persona.',
+    ledgerLabel: 'Jobs {persona} can do',
+    notConnected: 'not connected',
+    tabsLabel: 'Connect a tool to the persona',
+    connected: 'connected',
+    pause: 'Pause',
+    replay: 'Replay',
+    play: 'Play',
+  },
+  playgroundSection: {
+    heading: 'The Agent',
+    headingGradient: 'Mind',
+    description: 'Watch the agent\'s thought process unfold in real time. Pick a prompt and see how it parses, plans, and executes.',
+    reset: 'Reset',
+    splitView: 'Split View',
+    executing: 'Executing...',
+    executionComplete: 'execution complete',
+    srRunning: 'Running simulation',
+    srDone: 'Execution complete \u2014 results available',
+    progressLabel: 'Simulation progress',
+    editorStatus: {
+      running: 'parsing',
+      done: 'parsed',
+      idle: 'ready',
+    },
+    mindStatus: {
+      running: 'thinking',
+      done: 'complete',
+      idle: 'idle',
+    },
+    instructionComment: '// Agent instruction',
+    intentComment: '// Detected intent:',
+    selectPrompt: 'Select a prompt to begin...',
+    selectedTools: 'Selected Tools',
+    result: 'Result',
+    mindIdleTitle: 'Agent mind visualization',
+    mindIdleHint: 'Select a prompt to see the flowchart',
+    nodes: {
+      parse: 'Parse Intent',
+      select: 'Select Tools',
+      execute: 'Execute',
+      verify: 'Verify',
+      result: 'Result',
+    },
+    dimensions: {
+      messages: 'Message',
+      humanReview: 'Human review',
+      events: 'Event emitted',
+      memories: 'Memory learned',
+    },
+    tools: {
+      gmailApi: 'Gmail API',
+      nlpClassifier: 'NLP Classifier',
+      githubApi: 'GitHub API',
+      astAnalyzer: 'AST Analyzer',
+      testScanner: 'Test Scanner',
+      slackApi: 'Slack API',
+      summarizer: 'Summarizer',
+      calendarApi: 'Calendar API',
+      scheduleAnalyzer: 'Schedule Analyzer',
+    },
+    examples: {
+      gmail: {
+        label: 'Triage my Gmail',
+        prompt: 'Triage my Gmail inbox and draft replies for urgent emails',
+        messages: 'Draft reply to sarah@acme.com \u2014 \u201cThanks for the update, I\u2019ll review by Friday.\u201d',
+        humanReview: 'Approve billing dispute reply before sending to legal@acme.com',
+        memories: 'legal@acme.com \u2192 always priority sender',
+      },
+      pr: {
+        label: 'Review this PR',
+        prompt: 'Review PR #142 for bugs, style issues, and missing tests',
+        messages: 'Inline comment on auth.ts:42 \u2014 \u201cMissing null check on user.session\u201d',
+        humanReview: 'Approve suggested refactor of loginFlow() before merge',
+        memories: 'Team prefers early-return over nested if-else',
+      },
+      slack: {
+        label: 'Summarize Slack',
+        prompt: 'Summarize #engineering and #product channels from the last 24h',
+        messages: 'Digest posted to #my-digest \u2014 \u201c3 decisions, 2 blockers, 1 release\u201d',
+        humanReview: 'Confirm which blocker to escalate to @oncall',
+        memories: '\u201cRelease cut\u201d is a recurring topic on Thursdays',
+      },
+      schedule: {
+        label: 'Optimize my schedule',
+        prompt: 'Analyze next week\'s calendar and block focus time',
+        messages: 'Added Tue 10\u201312 as \u201cDeep work \u2014 do not schedule\u201d',
+        humanReview: 'Approve moving 1:1 with Maya from Fri 2pm \u2192 Fri 4pm',
+        memories: 'You prefer mornings for deep work, afternoons for calls',
+      },
+    },
+  },
+  orchestrationSection: {
+    heading: 'Orchestration',
+    headingGradient: 'hub',
+    description: 'Ten trigger types, one persona hub. Any signal can wake any agent \u2014 or launch one yourself. Pick a trigger to see it fire.',
+    ringLabel: 'Trigger types',
+    trigger: 'Trigger',
+    firesWhen: 'Fires when',
+    triggers: {
+      schedule: {
+        label: 'Schedule',
+        description: 'Runs on a time-based schedule \u2014 a cron expression, a fixed interval, or a specific calendar time.',
+        example: 'Every morning at 08:00',
+        persona: 'Morning Brief',
+      },
+      polling: {
+        label: 'Polling',
+        description: 'Checks an external source on a fixed interval and fires when it detects a new or changed item.',
+        example: 'Every 5 min on Jira',
+        persona: 'Blocker Watcher',
+      },
+      webhook: {
+        label: 'Webhook',
+        description: 'Exposes a public URL; fires the moment an external service sends it a payload.',
+        persona: 'PR Reviewer',
+      },
+      file: {
+        label: 'File watcher',
+        description: 'Watches a folder path and fires whenever files are created, modified, or removed.',
+        persona: 'Doc Parser',
+      },
+      clipboard: {
+        label: 'Clipboard',
+        description: 'Fires when the OS clipboard receives content matching a pattern \u2014 URLs, tokens, or snippets.',
+        example: 'On copy of URL',
+        persona: 'Link Archiver',
+      },
+      focus: {
+        label: 'App focus',
+        description: 'Fires when you switch to a specific application window, so agents adapt to your current task.',
+        example: 'Switch to Figma',
+        persona: 'Design Notes',
+      },
+      event: {
+        label: 'Event',
+        description: 'Fires when another persona emits a named event on the internal event bus.',
+        persona: 'Delivery Agent',
+      },
+      chain: {
+        label: 'Chain',
+        description: 'Fires when an upstream persona finishes \u2014 one agent\'s output becomes the next agent\'s input.',
+        example: 'After Researcher runs',
+        persona: 'Report Writer',
+      },
+      composite: {
+        label: 'Composite',
+        description: 'Fires only when multiple underlying triggers satisfy a boolean condition together.',
+        example: 'Schedule AND webhook',
+        persona: 'Gate Agent',
+      },
+      manual: {
+        label: 'Manual',
+        description: 'Run an agent on demand \u2014 straight from the dashboard, the CLI, or a hotkey. No automation required.',
+        example: 'Click Run',
+        persona: 'Ad-hoc Task',
+      },
+    },
+    docs: {
+      scheduleGuide: 'Schedule triggers guide',
+      howTriggersWork: 'How triggers work',
+      webhookGuide: 'Webhook triggers guide',
+      fileWatcherGuide: 'File watcher guide',
+      clipboardMonitor: 'Clipboard monitor',
+      eventBased: 'Event-based triggers',
+      chainGuide: 'Chain triggers guide',
+      combining: 'Combining multiple triggers',
+    },
+  },
+  companionSection: {
+    heading: 'Meet',
+    headingGradient: 'Athena',
+    headingTrailing: ', always on',
+    description: 'A persistent orb that lives on your desktop \u2014 hold it to talk, it remembers how you work, and it reaches out before you have to ask.',
+    avatarAlt: 'Athena, the Personas companion',
+    capabilities: {
+      always: {
+        label: 'Always on, never in the way',
+        blurb: 'A floating orb lives on your desktop \u2014 her animated face is the interface. Drag it anywhere; it survives restarts and quietly pauses when you look away.',
+        line: 'I\'m right here whenever you need me.',
+      },
+      voice: {
+        label: 'Hold to talk',
+        blurb: 'Press and hold the orb to speak \u2014 voice in, voice out. Runs on-device with local Whisper, or in your browser. No chat window required.',
+        line: 'Hold to talk \u2014 I\'m listening.',
+      },
+      memory: {
+        label: 'Remembers what matters',
+        blurb: 'Athena keeps a long-term memory of your identity, goals, and how you work \u2014 and you\'re the editor. She never overwrites; every change is yours to approve.',
+        line: 'I remember your goals and how you work.',
+      },
+      proactive: {
+        label: 'Reaches out first',
+        blurb: 'She surfaces what needs you \u2014 a goal due soon, an aging backlog, runs that failed overnight \u2014 and can even schedule her own check-ins.',
+        line: 'Heads up \u2014 3 runs failed overnight.',
+      },
+    },
+  },
+  visionStack: {
+    heading: 'The',
+    headingGradient: 'platform',
+    headingTrailing: ' behind your agents',
+    description: 'Every agent you run stands on the same six layers. Pick one to see what it is doing for this one.',
+    groupLabel: 'An "{persona}" agent card with the six layers beneath it, top to bottom: {names}. Select a layer to see what it does for this agent.',
+    tabsLabel: 'Platform layers',
+    layerOf: 'Layer {current} of {total}',
+    inThisAgent: 'In this agent',
+    backToTop: 'Back to the top',
+    nextLayerDown: 'Next layer down',
+    persona: {
+      name: 'Inbox triage',
+      active: 'Active',
+      fromOrigin: 'from {origin}',
+      origin: 'Inbox Triage template',
+      trigger: 'Weekdays 08:00',
+      lastRun: '2 min ago',
+      credentialsLocal: 'Credentials stored locally',
+    },
+    layers: {
+      orchestration: {
+        title: 'Orchestration',
+        description: 'Eight trigger types wake personas in parallel \u2014 schedule, webhook, file watcher, clipboard, event, and more.',
+        details: [
+          'Schedule, polling, webhook, event, composite',
+          'File watcher and clipboard triggers',
+          'App-focus trigger for contextual agents',
+        ],
+        guide: 'How triggers work',
+        question: 'When does it run?',
+        job: 'Wakes it on a schedule, webhook, file or event',
+        inAgent: 'Schedule trigger: weekdays at 08:00',
+      },
+      byom: {
+        title: 'BYOM',
+        description: 'Bring your own model. Run personas against Claude or local Ollama \u2014 your machine, your choice.',
+        details: [
+          'Claude (via the official CLI)',
+          'Ollama for fully local inference',
+          'Automatic failover between providers',
+        ],
+        guide: 'Creating a new agent',
+        question: 'What does it think with?',
+        job: 'Runs it on Claude or on local Ollama',
+        inAgent: 'Claude, through the official CLI',
+      },
+      templates: {
+        title: 'Templates',
+        description: 'Dozens of ready-made personas you can adopt with one click \u2014 from PR reviewer to morning brief.',
+        details: [
+          'One-click adoption into your canvas',
+          'Remix templates into your own library',
+        ],
+        guide: 'Browse template library',
+        question: 'Where did it start?',
+        job: 'Starts it from a ready-made persona',
+        inAgent: 'Adopted from the Inbox Triage template',
+      },
+      monitoring: {
+        title: 'Monitoring',
+        description: 'Self-healing execution, human review queues, and persistent agent memory \u2014 watch every run in real time.',
+        details: [
+          'Self-healing engine with automatic recovery',
+          'Human-in-the-loop review queues',
+          'Per-agent long-term memory',
+        ],
+        guide: 'Self-healing explained',
+        question: 'Is it working?',
+        job: 'Traces every run and recovers failures',
+        inAgent: 'Last run 2 min ago, finished healthy',
+      },
+      lab: {
+        title: 'Lab',
+        description: 'Experiment with prompt variants, run A/B arenas, and let breeding cycles evolve higher-performing personas.',
+        details: [
+          'Arena for side-by-side prompt comparisons',
+          'Fitness scoring across test suites',
+          'Overnight breeding cycles',
+        ],
+        guide: 'Running a breeding cycle',
+        question: 'How does it get better?',
+        job: 'Tests prompt variants before you keep one',
+        inAgent: 'Prompt v3, kept after an arena comparison',
+      },
+      'credential-vault': {
+        title: 'Vault',
+        description: 'AES-256-GCM encryption with OS-native keyring integration. Your secrets never leave your device.',
+        details: [
+          'OS keyring on Windows, macOS, Linux',
+          'AI-assisted OAuth token refresh',
+          'Zero-knowledge local-first architecture',
+        ],
+        guide: 'How Personas keeps your data safe',
+        question: 'What can it touch?',
+        job: 'Its keys, encrypted on this device',
+        inAgent: 'Gmail, Slack and Calendar keys, stored locally',
+      },
+    },
+  },
+  designMatrix: {
+    heading: 'One sentence. One',
+    headingGradient: 'matrix',
+    headingTrailing: '.',
+    lede: 'Describe what you want.',
+    ledeStrong: 'Personas fills the matrix cell by cell and asks only when it needs you.',
+    title: 'Persona Matrix',
+    subtitle: 'intent at center \u00b7 8 dimensions radiate outward',
+    status: {
+      running: 'building',
+      done: 'ready to deploy',
+      idle: 'idle',
+    },
+    replay: 'replay',
+    cellsResolved: 'cells resolved',
+    footerStatus: {
+      done: 'deploy-ready',
+      pending: 'radiate from center',
+    },
+    intent: 'Intent',
+    intentPlaceholder: 'Describe what your agent should do\u2026',
+    resolved: '{filled}/{total} resolved',
+    analyzing: 'analyzing intent\u2026',
+    userPrompt: 'Triage my Gmail inbox and draft replies for urgent emails.',
+    cells: {
+      tasks: {
+        label: 'Tasks',
+        value: 'Triage inbox + draft replies for urgent',
+      },
+      apps: {
+        label: 'Apps & Services',
+        value: 'Gmail - Slack',
+      },
+      triggers: {
+        label: 'When It Runs',
+        value: 'Every 15 minutes',
+      },
+      review: {
+        label: 'Human Review',
+        value: 'Approve drafts before sending',
+      },
+      messages: {
+        label: 'Messages',
+        value: 'Post digest to #triage-inbox',
+      },
+      memory: {
+        label: 'Memory',
+        value: 'Learns sender priorities over time',
+      },
+      errors: {
+        label: 'Errors',
+        value: 'Retry 3x then alert on Slack',
+      },
+      events: {
+        label: 'Events',
+        value: 'Emits email.processed',
+      },
+    },
+    questions: {
+      triggers: {
+        prompt: 'How often should I check?',
+        options: [
+          'Every 15 min',
+          'Every hour',
+          'Real-time webhook',
+        ],
+      },
+      review: {
+        prompt: 'Send automatically or wait for approval?',
+        options: [
+          'Auto-send',
+          'Approve first',
+          'Ask only for urgent',
+        ],
+      },
+    },
+  },
+  memorySection: {
+    heading: 'Remembers what',
+    headingGradient: 'works',
+    lede: 'Your agents get better the more they work.',
+    artLabel: 'Run 1 wanders, fails twice and loops back; each failure is kept as a memory, and run 12 goes straight to the goal.',
+    run1: 'Run 1',
+    run12: 'Run 12',
+    memory: 'Memory',
+    replay: 'Replay the animation',
+  },
+  securitySection: {
+    heading: 'Your data never',
+    headingGradient: 'leaves',
+    lede: 'Every credential is encrypted on your device and kept in your OS\'s own vault.',
+    artLabel: 'Three nested rings, your device, the OS keychain and AES-256-GCM encryption, turn and lock one by one around your keys at the centre.',
+    replay: 'Replay the animation',
+    yourKeys: 'Your keys',
+    rings: {
+      keychain: 'OS keychain',
+      device: 'Device',
+    },
+  },
+  aiModelsSection: {
+    heading: 'Powered by {claude}. Private via {ollama}.',
+    lede: 'Two engines, one consistent agent runtime.',
+    artLabel: 'Tasks of different weight pass through one router: light, default and heavy ones go to Claude Haiku, Sonnet and Opus, while a locked private task stays on your machine with Ollama.',
+    replay: 'Replay animation',
+    local: 'Local',
+  },
+  observeSection: {
+    heading: 'See everything,',
+    headingGradient: 'miss nothing',
+    description: 'Every run, message and event \u2014 live, in one dashboard.',
+    modules: {
+      executions: {
+        title: 'Executions',
+        blurb: 'Every run, timed and traced',
+      },
+      messages: {
+        title: 'Messages',
+        blurb: 'Full I/O transcripts per step',
+      },
+      events: {
+        title: 'Events',
+        blurb: 'Bus stream + replay + retries',
+      },
+      memories: {
+        title: 'Memories',
+        blurb: 'What agents learned, searchable',
+      },
+      activity: {
+        title: 'Activity',
+        blurb: 'Live lanes across all personas',
+      },
+      health: {
+        title: 'Health',
+        blurb: 'Status, healing, dead-letters',
+      },
+      analytics: {
+        title: 'Analytics',
+        blurb: 'Success rate, duration, cost',
+      },
+      knowledge: {
+        title: 'Knowledge',
+        blurb: 'Cross-persona semantic search',
+      },
+    },
+    agents: {
+      prReviewer: 'PR Reviewer',
+      emailTriage: 'Email Triage',
+      slackDigest: 'Slack Digest',
+      deployMonitor: 'Deploy Monitor',
+      docIndexer: 'Doc Indexer',
+      meetingNotes: 'Meeting Notes',
+    },
+    status: {
+      snapshot: 'snapshot',
+      streaming: 'streaming',
+      autoRefreshing: 'auto-refreshing',
+    },
+    chromeInfo: 'pulse grid',
+    metrics: {
+      successRate: 'Success rate',
+      avgDuration: 'Avg duration',
+      avgCost: 'Avg cost',
+      activeAgents: 'Active agents',
+    },
+    showAll: 'Show all',
+    footer: 'Per-agent activity pulse',
+    idle: 'idle',
+    durationTrend: 'Duration trend',
+    eventShort: {
+      'execution.completed': 'done',
+      'execution.started': 'run',
+      'message.sent': 'msg',
+      'event.emitted': 'evt',
+      'memory.stored': 'mem',
+      'review.requested': 'rev',
+      'knowledge.indexed': 'kb',
+      'health.checked': 'ok',
+    },
+  },
+  pluginsExtra: {
+    variantBlurbs: {
+      athenaFleet: 'A grid of CLIs under Athena\'s watch \u2014 her orb glides to whatever blocks them and answers on-policy',
+      brain: 'Knowledge graph view \u2014 your notes, connected and alive',
+    },
+    fleet: {
+      title: 'Agent fleet',
+      subtitle: '16 CLIs \u00b7 Athena on watch',
+      blocked: 'Blocked',
+      working: 'Working',
+      done: 'Done',
+      autonomous: 'autonomous',
+      statusSpawning: 'spawning {spawned}/16\u2026',
+      statusBlocked: '{needs} blocked \u2014 Athena dispatching',
+      statusWorking: 'fleet working',
+      statusTriaging: 'Athena triaging \u00b7 {resolved}/4 resolved',
+      statusAllGreen: '16/16 green \u00b7 0 human interruptions',
+      statusWrapping: 'wrapping up \u00b7 {done}/16 green',
+      cell: {
+        spawning: 'spawning\u2026',
+        needsAnswer: 'needs an answer',
+        stale: 'quiet for 4m',
+        resolving: 'Athena responding\u2026',
+        done: '\u2713 done',
+        working: 'working\u2026',
+      },
+      asks: {
+        flakyTests: 'Quarantine 3 flaky tests?',
+        focusRing: 'Apply the focus-ring fix?',
+        lcpBudget: 'Raise the LCP budget?',
+      },
+      captions: {
+        quarantine: '\u2713 approved \u2014 quarantine 3',
+        focusRing: '\u2713 approved \u2014 focus-ring fix',
+        release: '\u26a1 nudged \u2014 release resumed',
+        budget: '\u2713 answered \u2014 keep 2.5s budget',
+      },
+    },
+    brain: {
+      title: 'Second brain',
+      recall: 'Recall a thought...',
+      capture: 'Capture',
+      vault: 'Vault:',
+      notes: 'notes',
+      links: 'links',
+      recallRate: 'recall',
+      connections: 'Connections',
+      recentThoughts: 'Recent thoughts',
+      backlinkNotes: {
+        leonardo: 'tile illustrations',
+        matrix: '3x3 layout - shipped',
+        agents: 'orchestrator notes',
+        roadmap: 'next milestone - queued',
+      },
+      captures: {
+        wire: 'Wire dev-tools tab to runner',
+        masks: 'Try gradient masks for tile borders',
+        graph: 'Backlink graph would be a great demo',
+      },
+    },
+  },
+  // END pending-translation namespaces
 };

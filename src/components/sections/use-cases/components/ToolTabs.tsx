@@ -4,7 +4,8 @@ import { useRef, type KeyboardEvent } from "react";
 import { motion } from "framer-motion";
 import { Check, Pause, Play, RotateCcw } from "lucide-react";
 import ConnectorIcon from "./ConnectorIcon";
-import { tools } from "../data";
+import { useTranslation } from "@/i18n/useTranslation";
+import type { Tool } from "../types";
 
 /**
  * The tab row of the eight real tools. Choosing one connects it to the persona
@@ -12,6 +13,7 @@ import { tools } from "../data";
  * while playback runs; the control at the end pauses, resumes or replays.
  */
 export default function ToolTabs({
+  tools,
   uid,
   panelId,
   attached,
@@ -25,6 +27,7 @@ export default function ToolTabs({
   onChoose,
   onToggle,
 }: {
+  tools: Tool[];
   uid: string;
   panelId: string;
   attached: string[];
@@ -38,6 +41,8 @@ export default function ToolTabs({
   onChoose: (id: string) => void;
   onToggle: () => void;
 }) {
+  const { t } = useTranslation();
+  const copy = t.useCasesPersona;
   const refs = useRef<Record<string, HTMLButtonElement | null>>({});
   const current = tools.findIndex((tl) => tl.id === focus);
 
@@ -53,14 +58,14 @@ export default function ToolTabs({
     refs.current[tools[n].id]?.focus();
   };
 
-  const label = playing ? "Pause" : complete ? "Replay" : "Play";
+  const label = playing ? copy.pause : complete ? copy.replay : copy.play;
   const Icon = playing ? Pause : complete ? RotateCcw : Play;
 
   return (
     <div className="flex flex-col items-center gap-3 stage:flex-row stage:gap-2">
       <div
         role="tablist"
-        aria-label="Connect a tool to the persona"
+        aria-label={copy.tabsLabel}
         onKeyDown={onKey}
         className="grid w-full grid-cols-4 gap-2 lg:grid-cols-8 stage:flex-1"
       >
@@ -93,7 +98,7 @@ export default function ToolTabs({
                 {on && (
                   <span className="absolute -right-1 -bottom-1 flex h-3 w-3 items-center justify-center rounded-full bg-brand-emerald">
                     <Check className="h-2 w-2 text-background" strokeWidth={3.5} aria-hidden />
-                    <span className="sr-only">connected</span>
+                    <span className="sr-only">{copy.connected}</span>
                   </span>
                 )}
               </span>

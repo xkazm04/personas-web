@@ -1,11 +1,13 @@
 "use client";
 
-import { useEffect, useId, useRef, useState } from "react";
+import { useEffect, useId, useMemo, useRef, useState } from "react";
 import { useAnimationControls, useInView } from "framer-motion";
 import SectionWrapper from "@/components/SectionWrapper";
 import SectionIntro from "@/components/primitives/SectionIntro";
 import { useStillMotion } from "@/hooks/useStillMotion";
-import { STACK_LAYERS, SAMPLE_PERSONA } from "./layer-stack/layers";
+import { useTranslation } from "@/i18n/useTranslation";
+import { fillTemplate } from "@/lib/fillTemplate";
+import { localizeStackLayers } from "./layer-stack/layers";
 import { LayerStackPersonaCard } from "./layer-stack/PersonaCard";
 import { LayerSlabs } from "./layer-stack/LayerPlates";
 import { LayerLabels } from "./layer-stack/LayerLabels";
@@ -28,6 +30,9 @@ export default function VisionGridLayerStack() {
   const panelId = `${uid}-panel`;
   const [active, setActive] = useState(0);
   const still = useStillMotion();
+  const { t } = useTranslation();
+  const copy = t.visionStack;
+  const STACK_LAYERS = useMemo(() => localizeStackLayers(copy), [copy]);
 
   const boxRef = useRef<HTMLDivElement>(null);
   const controls = useAnimationControls();
@@ -58,10 +63,10 @@ export default function VisionGridLayerStack() {
   return (
     <SectionWrapper fit="min" id="vision-grid" className="overflow-hidden">
       <SectionIntro
-        heading="The"
-        gradient="platform"
-        trailing=" behind your agents"
-        description="Every agent you run stands on the same six layers. Pick one to see what it is doing for this one."
+        heading={copy.heading}
+        gradient={copy.headingGradient}
+        trailing={copy.headingTrailing}
+        description={copy.description}
         className="relative z-10 mb-12 sm:mb-14"
       />
 
@@ -73,7 +78,7 @@ export default function VisionGridLayerStack() {
         <div
           ref={boxRef}
           role="group"
-          aria-label={`An "${SAMPLE_PERSONA.name}" agent card with the six layers beneath it, top to bottom: ${names}. Select a layer to see what it does for this agent.`}
+          aria-label={fillTemplate(copy.groupLabel, { persona: copy.persona.name, names })}
           className="relative mx-auto h-[570px] w-full max-w-[500px] [--s:96px] sm:h-[592px] sm:[--s:120px]"
         >
           <div className="absolute inset-x-0 top-0">

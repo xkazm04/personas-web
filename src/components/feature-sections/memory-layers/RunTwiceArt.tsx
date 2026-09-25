@@ -11,6 +11,7 @@ import {
 } from "framer-motion";
 import { RotateCcw } from "lucide-react";
 import { useStillMotion } from "@/hooks/useStillMotion";
+import { useTranslation } from "@/i18n/useTranslation";
 import { BRAND_VAR, tint } from "@/lib/brand-theme";
 import {
   BOTTOM_Y,
@@ -44,6 +45,7 @@ const pct = (v: number, of: number) => `${(v / of) * 100}%`;
 
 export default function RunTwiceArt() {
   const still = useStillMotion();
+  const copy = useTranslation().t.memorySection;
   const rootRef = useRef<HTMLDivElement>(null);
   const inView = useInView(rootRef, { once: true, amount: 0.4 });
   const p = useMotionValue(1);
@@ -82,7 +84,7 @@ export default function RunTwiceArt() {
       data-tour-diagram="memory"
       data-stage-art
       role="img"
-      aria-label="Run 1 wanders, fails twice and loops back; each failure is kept as a memory, and run 12 goes straight to the goal."
+      aria-label={copy.artLabel}
       className="relative mx-auto mt-8 w-full max-w-5xl rounded-2xl border border-glass bg-white/[0.02] sm:mt-10"
       style={{ "--art-ar": VIEW_W / VIEW_H } as CSSProperties}
     >
@@ -163,26 +165,26 @@ export default function RunTwiceArt() {
           className="absolute -translate-y-1/2 text-xs font-semibold tracking-wide text-foreground/60 sm:text-sm"
           style={{ left: pct(44, VIEW_W), top: pct(66, VIEW_H) }}
         >
-          Run 1
+          {copy.run1}
         </span>
         <span
           className="absolute -translate-y-1/2 text-xs font-semibold tracking-wide sm:text-sm"
           style={{ left: pct(44, VIEW_W), top: pct(292, VIEW_H), color: BRAND_VAR.cyan }}
         >
-          Run 12
+          {copy.run12}
         </span>
         <span
           className="absolute -translate-x-1/2 -translate-y-1/2 text-xs font-medium tracking-wide text-foreground/70 sm:text-sm"
           style={{ left: pct((FAILS[0].x + FAILS[1].x) / 2, VIEW_W), top: pct(MEM_Y, VIEW_H) }}
         >
-          Memory
+          {copy.memory}
         </span>
 
         <button
           type="button"
           onClick={play}
           disabled={still}
-          aria-label="Replay the animation"
+          aria-label={copy.replay}
           className="absolute right-2 top-2 flex h-7 w-7 items-center justify-center rounded-full border border-glass bg-white/[0.03] text-foreground/60 transition-colors hover:text-foreground disabled:opacity-40 sm:right-3 sm:top-3"
         >
           <RotateCcw className="h-3.5 w-3.5" aria-hidden />

@@ -3,6 +3,7 @@
 import { motion, useTransform, type MotionValue } from "framer-motion";
 import { Lock, Sparkles } from "lucide-react";
 import { BRAND_VAR, tint } from "@/lib/brand-theme";
+import { useTranslation } from "@/i18n/useTranslation";
 import {
   TOKENS,
   dockPulse,
@@ -70,6 +71,7 @@ function Route({ l, t, p }: { l: Layout; t: Token; p: MotionValue<number> }) {
 }
 
 export default function RouterArt({ l, p, className }: { l: Layout; p: MotionValue<number>; className: string }) {
+  const { t } = useTranslation();
   const { machine: m, claude: c, rail, stand } = l;
   const [rx, ry] = l.router;
   const icon = l.font * 1.1;
@@ -82,7 +84,7 @@ export default function RouterArt({ l, p, className }: { l: Layout; p: MotionVal
         <rect {...boxAttrs(stand.neck)} fill="currentColor" fillOpacity={0.18} />
         <rect {...boxAttrs(stand.foot)} rx={stand.foot.h / 2} fill="currentColor" fillOpacity={0.28} />
         <text x={l.machineLabel[0]} y={l.machineLabel[1]} fontSize={l.font * 0.85} fontWeight={600} fill="currentColor">
-          Local
+          {t.aiModelsSection.local}
         </text>
       </g>
 

@@ -1,23 +1,37 @@
 import { Cpu, FlaskConical, KeyRound, LayoutGrid, Activity, Workflow, type LucideIcon } from "lucide-react";
 import type { BrandKey } from "@/lib/brand-theme";
-import { PLATFORM_CARDS, type PlatformCard } from "../data";
+import type { GuideTopicRef } from "@/lib/guide-link";
+import type { Translations } from "@/i18n/en";
+import { PLATFORM_CARDS, type PlatformCard, type PlatformCardId } from "../data";
 
 /**
  * Layer-stack variant data. The six layers are the six platform cards from
- * `data.ts` (title, brand, description, details, guide link all come from
- * there); this file adds only what the stack needs to tell: the question each
- * layer answers about ONE agent, its one-line job, and where that layer shows
- * up on the sample persona card above the stack.
+ * `data.ts` (brand and guide link come from there); this file adds only what
+ * the stack needs to tell: where that layer shows up on the sample persona
+ * card above the stack. Every word (title, description, details, the question
+ * each layer answers about ONE agent, its one-line job, what it does for the
+ * sample agent) is translated copy in `t.visionStack`, joined in by
+ * `localizeStackLayers`.
  *
  * Order is top (nearest the agent) to bottom. Templates and Orchestration
  * share cyan in `data.ts`, so they are kept apart in the stack.
  */
 
+type VisionCopy = Translations["visionStack"];
+
 /** A part of the sample persona card that a layer is responsible for. */
 export type CardPart = "trigger" | "model" | "origin" | "run" | "prompt" | "keys";
 
+/** A platform card with its translated words. */
+export interface LocalizedCard {
+  id: PlatformCardId;
+  title: string;
+  description: string;
+  guideTopics?: GuideTopicRef[];
+}
+
 export interface StackLayer {
-  card: PlatformCard;
+  card: LocalizedCard;
   brand: BrandKey;
   icon: LucideIcon;
   question: string;
@@ -25,85 +39,59 @@ export interface StackLayer {
   /** What this layer is doing for the sample agent, in sample terms. */
   inAgent: string;
   part: CardPart;
-  /** `details` from data.ts, minus count claims that drift from the catalogue. */
+  /**
+   * The card's details. The copy omits the "40+ curated persona templates"
+   * count, which contradicts the shipped catalogue (the hero derives the real
+   * count); the stack does not repeat a count it cannot derive on the client.
+   */
   details: string[];
 }
 
-const byId = (id: string): PlatformCard => {
+const byId = (id: PlatformCardId): PlatformCard => {
   const card = PLATFORM_CARDS.find((c) => c.id === id);
   if (!card) throw new Error(`vision-grid layer-stack: no platform card "${id}"`);
   return card;
 };
 
-// "40+ curated persona templates" contradicts the shipped catalogue (the hero
-// derives the real count). The stack does not repeat a count it cannot derive
-// on the client without shipping the whole template catalogue.
-const withoutCounts = (details: string[]) => details.filter((d) => !/^\d+\+/.test(d));
-
-const spec: Array<Omit<StackLayer, "card" | "brand" | "details"> & { id: string }> = [
-  {
-    id: "orchestration",
-    icon: Workflow,
-    question: "When does it run?",
-    job: "Wakes it on a schedule, webhook, file or event",
-    inAgent: "Schedule trigger: weekdays at 08:00",
-    part: "trigger",
-  },
-  {
-    id: "byom",
-    icon: Cpu,
-    question: "What does it think with?",
-    job: "Runs it on Claude or on local Ollama",
-    inAgent: "Claude, through the official CLI",
-    part: "model",
-  },
-  {
-    id: "templates",
-    icon: LayoutGrid,
-    question: "Where did it start?",
-    job: "Starts it from a ready-made persona",
-    inAgent: "Adopted from the Inbox Triage template",
-    part: "origin",
-  },
-  {
-    id: "monitoring",
-    icon: Activity,
-    question: "Is it working?",
-    job: "Traces every run and recovers failures",
-    inAgent: "Last run 2 min ago, finished healthy",
-    part: "run",
-  },
-  {
-    id: "lab",
-    icon: FlaskConical,
-    question: "How does it get better?",
-    job: "Tests prompt variants before you keep one",
-    inAgent: "Prompt v3, kept after an arena comparison",
-    part: "prompt",
-  },
-  {
-    id: "credential-vault",
-    icon: KeyRound,
-    question: "What can it touch?",
-    job: "Its keys, encrypted on this device",
-    inAgent: "Gmail, Slack and Calendar keys, stored locally",
-    part: "keys",
-  },
+const spec: Array<{ id: PlatformCardId; icon: LucideIcon; part: CardPart }> = [
+  { id: "orchestration", icon: Workflow, part: "trigger" },
+  { id: "byom", icon: Cpu, part: "model" },
+  { id: "templates", icon: LayoutGrid, part: "origin" },
+  { id: "monitoring", icon: Activity, part: "run" },
+  { id: "lab", icon: FlaskConical, part: "prompt" },
+  { id: "credential-vault", icon: KeyRound, part: "keys" },
 ];
 
-export const STACK_LAYERS: StackLayer[] = spec.map(({ id, ...rest }) => {
-  const card = byId(id);
-  return { ...rest, card, brand: card.brand, details: withoutCounts(card.details) };
-});
+/** The stack, top to bottom, with every layer's translated words. */
+export function localizeStackLayers(copy: VisionCopy): StackLayer[] {
+  return spec.map(({ id, icon, part }) => {
+    const card = byId(id);
+    const words = copy.layers[id];
+    return {
+      card: {
+        id,
+        title: words.title,
+        description: words.description,
+        guideTopics: card.guideTopics?.map((ref) => ({ ...ref, label: words.guide })),
+      },
+      brand: card.brand,
+      icon,
+      question: words.question,
+      job: words.job,
+      inAgent: words.inAgent,
+      part,
+      details: words.details,
+    };
+  });
+}
 
-/** The sample agent on top of the stack. Persona colour is a brand token. */
+/**
+ * The sample agent on top of the stack. Persona colour is a brand token; its
+ * name, origin, trigger and last run are `t.visionStack.persona` copy.
+ */
 export const SAMPLE_PERSONA = {
-  name: "Inbox triage",
-  origin: "Inbox Triage template",
   brand: "blue" as BrandKey,
-  trigger: "Weekdays 08:00",
   model: "Claude",
-  lastRun: "2 min ago",
   spend: "$0.04",
   prompt: "prompt v3",
 };

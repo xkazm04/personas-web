@@ -17,95 +17,94 @@ import {
 } from "lucide-react";
 import { Github } from "@/components/icons/brand-icons";
 import type {
+  ExampleBase,
   ExamplePrompt,
   FlowNode,
   NodeStatus,
+  PlaygroundCopy,
   ResultDimension,
 } from "./types";
 
 export const RESULT_DIMENSIONS: ResultDimension[] = [
-  { key: "messages", label: "Message", icon: Inbox, color: "#06b6d4" },
-  { key: "humanReview", label: "Human review", icon: UserCheck, color: "#fbbf24" },
-  { key: "events", label: "Event emitted", icon: Radio, color: "#a855f7" },
-  { key: "memories", label: "Memory learned", icon: Brain, color: "#34d399" },
+  { key: "messages", icon: Inbox, color: "#06b6d4" },
+  { key: "humanReview", icon: UserCheck, color: "#fbbf24" },
+  { key: "events", icon: Radio, color: "#a855f7" },
+  { key: "memories", icon: Brain, color: "#34d399" },
 ];
 
-export const examples: ExamplePrompt[] = [
+/**
+ * The four sample prompts: identity, icons and the code-shaped text (intent
+ * ids, emitted events). Every natural-language string is translated copy in
+ * `t.playgroundSection`, joined in by `localizeExamples`.
+ */
+const EXAMPLE_BASES: ExampleBase[] = [
   {
-    label: "Triage my Gmail",
+    id: "gmail",
     icon: Mail,
     iconColor: "#ea4335",
-    prompt: "Triage my Gmail inbox and draft replies for urgent emails",
     intentText: "email_triage + auto_reply",
     tools: [
-      { label: "Gmail API", icon: Mail },
-      { label: "NLP Classifier", icon: Cpu },
+      { id: "gmailApi", icon: Mail },
+      { id: "nlpClassifier", icon: Cpu },
     ],
-    result: {
-      messages:
-        "Draft reply to sarah@acme.com — \u201CThanks for the update, I\u2019ll review by Friday.\u201D",
-      humanReview: "Approve billing dispute reply before sending to legal@acme.com",
-      events: "priority.email.triaged { sender: legal@acme.com }",
-      memories: "legal@acme.com \u2192 always priority sender",
-    },
+    event: "priority.email.triaged { sender: legal@acme.com }",
   },
   {
-    label: "Review this PR",
+    id: "pr",
     icon: Github,
     iconColor: "#8b5cf6",
-    prompt: "Review PR #142 for bugs, style issues, and missing tests",
     intentText: "code_review",
     tools: [
-      { label: "GitHub API", icon: Github },
-      { label: "AST Analyzer", icon: Search },
-      { label: "Test Scanner", icon: ShieldCheck },
+      { id: "githubApi", icon: Github },
+      { id: "astAnalyzer", icon: Search },
+      { id: "testScanner", icon: ShieldCheck },
     ],
-    result: {
-      messages:
-        "Inline comment on auth.ts:42 \u2014 \u201CMissing null check on user.session\u201D",
-      humanReview: "Approve suggested refactor of loginFlow() before merge",
-      events: "pr.review.needs_changes { pr: 142, blocker: true }",
-      memories: "Team prefers early-return over nested if-else",
-    },
+    event: "pr.review.needs_changes { pr: 142, blocker: true }",
   },
   {
-    label: "Summarize Slack",
+    id: "slack",
     icon: MessageSquare,
     iconColor: "#4a154b",
-    prompt: "Summarize #engineering and #product channels from the last 24h",
     intentText: "channel_digest",
     tools: [
-      { label: "Slack API", icon: MessageSquare },
-      { label: "Summarizer", icon: Sparkles },
+      { id: "slackApi", icon: MessageSquare },
+      { id: "summarizer", icon: Sparkles },
     ],
-    result: {
-      messages:
-        "Digest posted to #my-digest \u2014 \u201C3 decisions, 2 blockers, 1 release\u201D",
-      humanReview: "Confirm which blocker to escalate to @oncall",
-      events: "digest.ready { channels: [eng, product], items: 14 }",
-      memories: "\u201CRelease cut\u201D is a recurring topic on Thursdays",
-    },
+    event: "digest.ready { channels: [eng, product], items: 14 }",
   },
   {
-    label: "Optimize my schedule",
+    id: "schedule",
     icon: Calendar,
     iconColor: "#06b6d4",
-    prompt: "Analyze next week's calendar and block focus time",
     intentText: "schedule_optimize",
     tools: [
-      { label: "Calendar API", icon: Calendar },
-      { label: "Schedule Analyzer", icon: Clock },
+      { id: "calendarApi", icon: Calendar },
+      { id: "scheduleAnalyzer", icon: Clock },
     ],
-    result: {
-      messages: "Added Tue 10\u201312 as \u201CDeep work \u2014 do not schedule\u201D",
-      humanReview: "Approve moving 1:1 with Maya from Fri 2pm \u2192 Fri 4pm",
-      events: "calendar.focus_block.created { duration: 2h }",
-      memories: "You prefer mornings for deep work, afternoons for calls",
-    },
+    event: "calendar.focus_block.created { duration: 2h }",
   },
 ];
 
-export function buildFlowNodes(example: ExamplePrompt): FlowNode[] {
+/** Joins each sample prompt's identity with its translated words. */
+export function localizeExamples(copy: PlaygroundCopy): ExamplePrompt[] {
+  return EXAMPLE_BASES.map(({ id, tools, event, ...base }) => {
+    const words = copy.examples[id];
+    return {
+      ...base,
+      label: words.label,
+      prompt: words.prompt,
+      tools: tools.map((tool) => ({ label: copy.tools[tool.id], icon: tool.icon })),
+      result: {
+        messages: words.messages,
+        humanReview: words.humanReview,
+        events: event,
+        memories: words.memories,
+      },
+    };
+  });
+}
+
+export function buildFlowNodes(example: ExamplePrompt, labels: PlaygroundCopy["nodes"]): FlowNode[] {
   const nodes: FlowNode[] = [];
   const centerX = 280;
   let currentY = 30;
@@ -113,7 +112,7 @@ export function buildFlowNodes(example: ExamplePrompt): FlowNode[] {
 
   nodes.push({
     id: "parse",
-    label: "Parse Intent",
+    label: labels.parse,
     icon: Search,
     status: "pending",
     x: centerX,
@@ -123,7 +122,7 @@ export function buildFlowNodes(example: ExamplePrompt): FlowNode[] {
 
   nodes.push({
     id: "select",
-    label: "Select Tools",
+    label: labels.select,
     icon: Wrench,
     status: "pending",
     x: centerX,
@@ -152,7 +151,7 @@ export function buildFlowNodes(example: ExamplePrompt): FlowNode[] {
 
   nodes.push({
     id: "execute",
-    label: "Execute",
+    label: labels.execute,
     icon: Zap,
     status: "pending",
     x: centerX,
@@ -163,7 +162,7 @@ export function buildFlowNodes(example: ExamplePrompt): FlowNode[] {
 
   nodes.push({
     id: "verify",
-    label: "Verify",
+    label: labels.verify,
     icon: ShieldCheck,
     status: "pending",
     x: centerX,
@@ -174,7 +173,7 @@ export function buildFlowNodes(example: ExamplePrompt): FlowNode[] {
 
   nodes.push({
     id: "result",
-    label: "Result",
+    label: labels.result,
     icon: CheckCircle2,
     status: "pending",
     x: centerX,

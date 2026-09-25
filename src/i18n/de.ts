@@ -1,6 +1,6 @@
-﻿import type { Translations } from './en';
+﻿import type { LocaleTranslations } from './en';
 
-export const de: Translations = {
+export const de: LocaleTranslations = {
     notFound: {
       title: "Seite nicht gefunden",
       description: "Die gesuchte Seite existiert nicht oder wurde verschoben. Versuchen Sie stattdessen eine davon:",

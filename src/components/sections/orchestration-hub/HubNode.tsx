@@ -3,6 +3,7 @@
 import { motion } from "framer-motion";
 import { BRAND_VAR, tint } from "@/lib/brand-theme";
 import { SVGFocusRingRect } from "@/components/SVGFocusRing";
+import { useTranslation } from "@/i18n/useTranslation";
 import { NODE_SIZE, nodePosition, type TriggerDef } from "./data";
 
 interface HubNodeProps {
@@ -29,6 +30,8 @@ export default function HubNode({
   onSelect,
 }: HubNodeProps) {
   const p = nodePosition(index, total);
+  const { t } = useTranslation();
+  const label = t.orchestrationSection.triggers[trigger.id].label;
   const Icon = trigger.icon;
   const v = BRAND_VAR[trigger.brand];
 
@@ -37,7 +40,7 @@ export default function HubNode({
       data-trigger-id={trigger.id}
       role="button"
       tabIndex={0}
-      aria-label={trigger.label}
+      aria-label={label}
       aria-pressed={isActive}
       className="svg-focus-parent cursor-pointer focus-visible:outline-none"
       onClick={() => onSelect(trigger.id)}
@@ -85,7 +88,7 @@ export default function HubNode({
             className="text-base font-semibold leading-tight text-center px-1"
             style={{ color: isActive ? "var(--foreground)" : "var(--muted-dark)" }}
           >
-            {trigger.label}
+            {label}
           </span>
         </motion.div>
       </foreignObject>

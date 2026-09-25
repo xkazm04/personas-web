@@ -2,6 +2,7 @@
 
 import { backOut, easeIn, motion, useTransform, type MotionValue } from "framer-motion";
 import { BRAND_VAR, tint, type BrandKey } from "@/lib/brand-theme";
+import type { Translations } from "@/i18n/en";
 
 /* Geometry and moving parts of the nested-vault illustration (see .art.tsx for the beats). */
 export const W = 760;
@@ -16,14 +17,15 @@ interface RingSpec {
   color: BrandKey;
   turn: number;
   beat: [number, number];
-  label: string;
+  /** Engraved label: translated copy (`t.securitySection.rings`), or a literal technical name. */
+  label: { key: keyof Translations["securitySection"]["rings"] } | { literal: string };
   labelR: number;
 }
 
 export const RINGS: RingSpec[] = [
-  { r: 90, w: 18, color: "rose", turn: 270, beat: [0.2, 0.4], label: "AES-256-GCM", labelR: 111 },
-  { r: 142, w: 20, color: "purple", turn: -240, beat: [0.4, 0.6], label: "OS keychain", labelR: 164 },
-  { r: 196, w: 22, color: "cyan", turn: 210, beat: [0.6, 0.8], label: "Device", labelR: 216 },
+  { r: 90, w: 18, color: "rose", turn: 270, beat: [0.2, 0.4], label: { literal: "AES-256-GCM" }, labelR: 111 },
+  { r: 142, w: 20, color: "purple", turn: -240, beat: [0.4, 0.6], label: { key: "keychain" }, labelR: 164 },
+  { r: 196, w: 22, color: "cyan", turn: 210, beat: [0.6, 0.8], label: { key: "device" }, labelR: 216 },
 ];
 
 const rad = (deg: number) => (deg * Math.PI) / 180;
@@ -45,8 +47,19 @@ function gapDash(r: number) {
 
 export const rotateStyle = { transformBox: "fill-box", transformOrigin: "center" } as const;
 
-export function Ring({ spec, progress, pathId }: { spec: RingSpec; progress: MotionValue<number>; pathId: string }) {
-  const { r, w, color, turn, beat, label, labelR } = spec;
+export function Ring({
+  spec,
+  label,
+  progress,
+  pathId,
+}: {
+  spec: RingSpec;
+  /** The resolved engraved label. */
+  label: string;
+  progress: MotionValue<number>;
+  pathId: string;
+}) {
+  const { r, w, color, turn, beat, labelR } = spec;
   const [b0, b1] = beat;
   const rotate = useTransform(progress, [b0, b1], [0, turn], { ease: backOut });
   const latchX = useTransform(progress, [b1 - 0.04, b1], [14, 0], { ease: easeIn });

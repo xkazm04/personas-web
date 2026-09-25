@@ -1,16 +1,18 @@
 import { motion } from "framer-motion";
 import { FileText, Link2, Sparkles } from "lucide-react";
 
+import { useTranslation } from "@/i18n/useTranslation";
 import { BACKLINKS, CAPTURES } from "./secondBrainData";
 
 export function SecondBrainSidePanel({ reduced }: { reduced: boolean }) {
+  const copy = useTranslation().t.pluginsExtra.brain;
   return (
     <div className="flex flex-col gap-3 min-w-0">
       <div className="rounded-xl border border-purple-400/25 bg-purple-500/[0.05] px-4 py-3">
         <div className="flex items-center gap-2 mb-2">
           <Link2 className="h-3.5 w-3.5 text-purple-300" />
           <span className="text-base font-mono uppercase tracking-widest text-purple-300/85 font-semibold">
-            Connections
+            {copy.connections}
           </span>
           <span className="ml-auto text-base font-mono text-foreground/60 tabular-nums">
             {BACKLINKS.length}
@@ -35,7 +37,7 @@ export function SecondBrainSidePanel({ reduced }: { reduced: boolean }) {
                   {backlink.label}
                 </div>
                 <div className="text-base font-mono text-foreground/60 truncate">
-                  {backlink.note}
+                  {copy.backlinkNotes[backlink.noteKey]}
                 </div>
               </div>
             </motion.div>
@@ -47,13 +49,13 @@ export function SecondBrainSidePanel({ reduced }: { reduced: boolean }) {
         <div className="flex items-center gap-2 mb-2">
           <Sparkles className="h-3.5 w-3.5 text-amber-300" />
           <span className="text-base font-mono uppercase tracking-widest text-foreground/70 font-semibold">
-            Recent thoughts
+            {copy.recentThoughts}
           </span>
         </div>
         <div className="space-y-1.5">
           {CAPTURES.map((capture, index) => (
             <motion.div
-              key={capture.text}
+              key={capture.textKey}
               initial={{ opacity: 0 }}
               whileInView={{ opacity: 1 }}
               viewport={{ once: true }}
@@ -66,7 +68,7 @@ export function SecondBrainSidePanel({ reduced }: { reduced: boolean }) {
               <span className="text-foreground/60 tabular-nums shrink-0 w-8">
                 {capture.time}
               </span>
-              <span className="text-foreground/85 truncate">{capture.text}</span>
+              <span className="text-foreground/85 truncate">{copy.captures[capture.textKey]}</span>
             </motion.div>
           ))}
         </div>

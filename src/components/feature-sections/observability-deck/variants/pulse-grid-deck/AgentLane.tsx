@@ -2,6 +2,7 @@ import { useMemo } from "react";
 import { AnimatePresence, motion, useReducedMotion } from "framer-motion";
 import { Activity } from "lucide-react";
 
+import { useTranslation } from "@/i18n/useTranslation";
 import { EVENT_META } from "./pulseEventMeta";
 import { buildSparkline, Sparkline } from "./Sparkline";
 import type { Stats } from "./pulseGridTypes";
@@ -18,6 +19,7 @@ export function AgentLane({
   filterPrefix: string | null;
 }) {
   const reduced = useReducedMotion() ?? false;
+  const copy = useTranslation().t.observeSection;
   const pulses = useMemo(() => {
     const raw = stats?.pulses ?? [];
     return filterPrefix
@@ -59,7 +61,7 @@ export function AgentLane({
         }}
       >
         <LatestIcon className="h-3.5 w-3.5" />
-        {latestMeta?.short ?? "idle"}
+        {latest ? copy.eventShort[latest.eventType] : copy.idle}
       </div>
 
       <div className="relative h-7 flex items-center gap-1.5 overflow-hidden">
@@ -89,7 +91,7 @@ export function AgentLane({
       </div>
 
       <div className="flex items-center gap-3">
-        <Sparkline values={spark} color={color} />
+        <Sparkline label={copy.durationTrend} values={spark} color={color} />
         <div className="flex flex-col items-end text-base font-mono leading-tight">
           <span className="tabular-nums text-foreground/90">{pulseCount}</span>
           <span className="tabular-nums text-foreground/60">

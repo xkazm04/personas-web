@@ -1,7 +1,8 @@
 "use client";
 
 import { motion, AnimatePresence } from "framer-motion";
-import { fillTemplate } from "../roster";
+import { useTranslation } from "@/i18n/useTranslation";
+import { fillTemplate } from "@/lib/fillTemplate";
 import type { PluginDef, PluginKey, ShowcaseCopy, VariantDef } from "../types";
 
 interface PluginCardProps {
@@ -23,6 +24,7 @@ export default function PluginCard({
   setVariantFor,
   copy,
 }: PluginCardProps) {
+  const { t } = useTranslation();
   const PluginIcon = activePlugin.icon;
   const Variant = activeVariant.component;
   const hasMultipleVariants = activePlugin.variants.length > 1;
@@ -90,7 +92,7 @@ export default function PluginCard({
               })}
             </div>
             <div className="text-base font-mono uppercase tracking-widest text-foreground/60 hidden sm:block">
-              {activeVariant.blurb}
+              {t.pluginsExtra.variantBlurbs[activeVariant.blurbKey]}
             </div>
           </div>
         )}

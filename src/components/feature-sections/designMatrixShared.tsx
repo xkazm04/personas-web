@@ -3,15 +3,16 @@
 import { useCallback, useEffect, useRef, useState } from "react";
 import { useReducedMotion } from "framer-motion";
 
+import { useTranslation } from "@/i18n/useTranslation";
 import {
   CELLS,
-  USER_PROMPT,
   type CellKey,
 } from "./design-matrix/designMatrixCells";
 
 export {
   CELLS,
-  USER_PROMPT,
+  localizeCells,
+  type CellBase,
   type CellDef,
   type CellKey,
 } from "./design-matrix/designMatrixCells";
@@ -48,6 +49,8 @@ function createFilledStatuses(): Record<CellKey, CellStatus> {
 
 export function usePersonaMatrixBuild(): PersonaMatrixState {
   const prefersReducedMotion = useReducedMotion();
+  // The sentence typed into the intent tile (translated copy).
+  const userPrompt = useTranslation().t.designMatrix.userPrompt;
   const [statuses, setStatuses] = useState<Record<CellKey, CellStatus>>(createPendingStatuses);
   const [phase, setPhase] = useState<"idle" | "running" | "done">("idle");
   const [userTyped, setUserTyped] = useState("");
@@ -72,9 +75,9 @@ export function usePersonaMatrixBuild(): PersonaMatrixState {
 
     let cumulative = 0;
     const typeSpeed = 90;
-    for (let i = 1; i <= USER_PROMPT.length; i++) {
+    for (let i = 1; i <= userPrompt.length; i++) {
       const timeout = setTimeout(
-        () => setUserTyped(USER_PROMPT.slice(0, i)),
+        () => setUserTyped(userPrompt.slice(0, i)),
         cumulative,
       );
       timeoutsRef.current.push(timeout);
@@ -110,14 +113,14 @@ export function usePersonaMatrixBuild(): PersonaMatrixState {
 
     const doneTimeout = setTimeout(() => setPhase("done"), cumulative + 600);
     timeoutsRef.current.push(doneTimeout);
-  }, [clearAll, setCell]);
+  }, [clearAll, setCell, userPrompt]);
 
   const showFinal = useCallback(() => {
     clearAll();
-    setUserTyped(USER_PROMPT);
+    setUserTyped(userPrompt);
     setStatuses(createFilledStatuses());
     setPhase("done");
-  }, [clearAll]);
+  }, [clearAll, userPrompt]);
 
   useEffect(() => {
     if (hasRun.current) return;

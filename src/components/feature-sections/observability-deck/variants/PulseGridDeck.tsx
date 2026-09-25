@@ -5,6 +5,7 @@ import { useLoopGate } from "@/hooks/useLoopGate";
 
 import TerminalChrome from "@/components/TerminalChrome";
 import { BRAND_VAR } from "@/lib/brand-theme";
+import { useTranslation } from "@/i18n/useTranslation";
 
 import AnimatedMetric from "../components/AnimatedMetric";
 import { agentPool, colorPool, eventPool } from "../data";
@@ -61,6 +62,7 @@ export default function PulseGridDeck({
 }) {
   // The feed ticks only while the deck is on screen and the tab is visible
   // (useLoopGate's `tick`); it used to run for as long as the page was open.
+  const copy = useTranslation().t.observeSection;
   const rootRef = useRef<HTMLDivElement | null>(null);
   const { tick, still: reduced } = useLoopGate(rootRef);
   const [liveStats, setLiveStats] = useState<Stats>(emptyStats);
@@ -123,23 +125,23 @@ export default function PulseGridDeck({
     <div ref={rootRef} className="rounded-2xl border border-foreground/10 bg-background/95 overflow-hidden shadow-[0_10px_40px_rgba(0,0,0,0.08)] dark:shadow-[0_0_60px_rgba(0,0,0,0.3)]">
       <TerminalChrome
         title="observability-deck"
-        status={reduced ? "snapshot" : "streaming"}
-        info="pulse grid"
+        status={reduced ? copy.status.snapshot : copy.status.streaming}
+        info={copy.chromeInfo}
         className="px-5 py-3"
       />
 
       <div className="grid grid-cols-2 sm:grid-cols-4 divide-x divide-white/[0.04] border-b border-foreground/[0.04]">
-        <AnimatedMetric target={96.2} suffix="%" color={BRAND_VAR.emerald} label="Success rate" trend="+2.1%" />
-        <AnimatedMetric target={3.4} suffix="s" color={BRAND_VAR.cyan} label="Avg duration" trend="-0.8s" />
-        <AnimatedMetric target={0.14} prefix="$" suffix="" color={BRAND_VAR.amber} label="Avg cost" trend="-12%" />
-        <AnimatedMetric target={12} suffix="" color={BRAND_VAR.purple} label="Active agents" trend="+3" />
+        <AnimatedMetric target={96.2} suffix="%" color={BRAND_VAR.emerald} label={copy.metrics.successRate} trend="+2.1%" />
+        <AnimatedMetric target={3.4} suffix="s" color={BRAND_VAR.cyan} label={copy.metrics.avgDuration} trend="-0.8s" />
+        <AnimatedMetric target={0.14} prefix="$" suffix="" color={BRAND_VAR.amber} label={copy.metrics.avgCost} trend="-12%" />
+        <AnimatedMetric target={12} suffix="" color={BRAND_VAR.purple} label={copy.metrics.activeAgents} trend="+3" />
       </div>
 
       <div className="divide-y divide-foreground/[0.04]">
         {agentPool.map((agent, index) => (
           <AgentLane
             key={agent}
-            agent={agent}
+            agent={copy.agents[agent]}
             color={colorPool[index % colorPool.length]}
             stats={stats[agent]}
             filterPrefix={filterPrefix}
@@ -154,12 +156,12 @@ export default function PulseGridDeck({
             onClick={onClearFilter}
             className="text-brand-cyan hover:text-brand-cyan/80 transition-colors cursor-pointer"
           >
-            Show all
+            {copy.showAll}
           </button>
         ) : (
-          <span>Per-agent activity pulse</span>
+          <span>{copy.footer}</span>
         )}
-        <span className="text-brand-emerald">{reduced ? "snapshot" : "auto-refreshing"}</span>
+        <span className="text-brand-emerald">{reduced ? copy.status.snapshot : copy.status.autoRefreshing}</span>
       </div>
     </div>
   );

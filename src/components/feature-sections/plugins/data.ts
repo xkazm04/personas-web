@@ -22,7 +22,7 @@ const DEMOS: Record<PluginKey, Omit<PluginDef, "key">> = {
       {
         key: "athena-fleet",
         label: "Athena Fleet",
-        blurb: "A grid of CLIs under Athena's watch — her orb glides to whatever blocks them and answers on-policy",
+        blurbKey: "athenaFleet",
         component: DevToolsGrid,
       },
     ],
@@ -36,7 +36,7 @@ const DEMOS: Record<PluginKey, Omit<PluginDef, "key">> = {
       {
         key: "brain",
         label: "Second Brain",
-        blurb: "Knowledge graph view — your notes, connected and alive",
+        blurbKey: "brain",
         component: SecondBrain,
       },
     ],

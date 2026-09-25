@@ -1,6 +1,6 @@
 "use client";
 
-import { useId, useRef } from "react";
+import { useId, useMemo, useRef } from "react";
 import { motion } from "framer-motion";
 import { LayoutGrid, Lock } from "lucide-react";
 import Link from "next/link";
@@ -9,8 +9,9 @@ import SectionIntro from "@/components/primitives/SectionIntro";
 import { fadeUp } from "@/lib/animations";
 import { useTranslation } from "@/i18n/useTranslation";
 import { useStillMotion } from "@/hooks/useStillMotion";
-import { tools } from "./data";
-import PersonaCard, { PERSONA } from "./components/PersonaCard";
+import { fillTemplate } from "@/lib/fillTemplate";
+import { localizeTools } from "./data";
+import PersonaCard from "./components/PersonaCard";
 import CapabilityLedger from "./components/PersonaLedger";
 import ToolTabs from "./components/ToolTabs";
 import { BEAT_MS, FIRST_BEAT_MS, usePersonaPlayback } from "./usePersonaPlayback";
@@ -24,6 +25,8 @@ import { BEAT_MS, FIRST_BEAT_MS, usePersonaPlayback } from "./usePersonaPlayback
  */
 export default function UseCasesPersonaCard() {
   const { t } = useTranslation();
+  const copy = t.useCasesPersona;
+  const tools = useMemo(() => localizeTools(t.useCasesSection), [t]);
   const still = useStillMotion();
   const uid = useId().replace(/:/g, "");
   const panelId = `${uid}-jobs`;
@@ -39,7 +42,7 @@ export default function UseCasesPersonaCard() {
       <div
         ref={rootRef}
         role="group"
-        aria-label={`One persona, ${PERSONA.name}, shown as its card. Connecting each of ${tools.length} tools adds that tool's jobs, ${totalJobs} in all, while the persona's name, icon and colour stay the same.`}
+        aria-label={fillTemplate(copy.groupLabel, { persona: copy.personaName, tools: tools.length, jobs: totalJobs })}
         data-tour-diagram="tools"
         data-stage-zoom
         className="mt-12 flex flex-col gap-8 stage:mt-0 stage:gap-[2.2svh]"
@@ -49,6 +52,7 @@ export default function UseCasesPersonaCard() {
           panelId={panelId}
           attached={pb.attached}
           focus={pb.focus}
+          tools={tools}
           nextId={nextId}
           beatMs={pb.step === 0 ? FIRST_BEAT_MS : BEAT_MS}
           ticking={pb.ticking}
@@ -61,16 +65,14 @@ export default function UseCasesPersonaCard() {
 
         <div className="grid items-start gap-6 lg:grid-cols-[340px_1fr] lg:gap-8">
           <div className="flex flex-col gap-3 lg:sticky lg:top-24">
-            <PersonaCard attached={pb.attached} focus={pb.focus} still={still} />
+            <PersonaCard tools={tools} attached={pb.attached} focus={pb.focus} still={still} />
             <div className="flex items-start gap-2 px-1 text-xs leading-relaxed text-muted">
               <Lock className="mt-0.5 h-3 w-3 shrink-0 text-brand-cyan" aria-hidden />
-              <p>
-                Same name, same icon, same colour through every tool. Connecting a tool only adds jobs to this one
-                persona.
-              </p>
+              <p>{copy.identityNote}</p>
             </div>
           </div>
           <CapabilityLedger
+            tools={tools}
             attached={pb.attached}
             focus={pb.focus}
             still={still}

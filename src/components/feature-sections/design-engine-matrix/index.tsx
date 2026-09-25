@@ -1,9 +1,12 @@
 "use client";
 
+import { useMemo } from "react";
 import { motion } from "framer-motion";
 import { Sparkles } from "lucide-react";
+import { useTranslation } from "@/i18n/useTranslation";
 import {
   CELLS,
+  localizeCells,
   type CellKey,
   type CellDef,
   usePersonaMatrixBuild,
@@ -12,11 +15,12 @@ import MatrixTile from "./components/MatrixTile";
 import IntentTile from "./components/IntentTile";
 import RadiateOverlay from "./components/RadiateOverlay";
 
-const CELL_BY_KEY: Record<CellKey, CellDef> = Object.fromEntries(
-  CELLS.map((c) => [c.key, c]),
-) as Record<CellKey, CellDef>;
-
 export default function DesignEngineMatrix() {
+  const copy = useTranslation().t.designMatrix;
+  const CELL_BY_KEY = useMemo(
+    () => Object.fromEntries(localizeCells(copy).map((c) => [c.key, c])) as Record<CellKey, CellDef>,
+    [copy],
+  );
   const { statuses, phase, userTyped, replay, sectionRef } =
     usePersonaMatrixBuild();
 
@@ -42,10 +46,10 @@ export default function DesignEngineMatrix() {
               </div>
               <div>
                 <div className="text-base font-semibold text-foreground">
-                  Persona Matrix
+                  {copy.title}
                 </div>
                 <div className="text-base font-mono text-foreground/65">
-                  intent at center · 8 dimensions radiate outward
+                  {copy.subtitle}
                 </div>
               </div>
             </div>
@@ -60,18 +64,14 @@ export default function DesignEngineMatrix() {
                 }`}
               />
               <span className="text-base font-mono uppercase tracking-wider text-foreground/70">
-                {phase === "running"
-                  ? "building"
-                  : phase === "done"
-                    ? "ready to deploy"
-                    : "idle"}
+                {copy.status[phase]}
               </span>
               {phase === "done" && (
                 <button
                   onClick={replay}
                   className="text-base font-mono text-brand-cyan/80 hover:text-brand-cyan transition-colors"
                 >
-                  replay
+                  {copy.replay}
                 </button>
               )}
             </div>
@@ -107,10 +107,10 @@ export default function DesignEngineMatrix() {
               <span className="tabular-nums text-foreground/90 font-semibold">
                 {filledCount}/{CELLS.length}
               </span>
-              <span>cells resolved</span>
+              <span>{copy.cellsResolved}</span>
             </div>
             <span className="text-base font-mono uppercase tracking-wider text-foreground/60">
-              {phase === "done" ? "deploy-ready" : "radiate from center"}
+              {phase === "done" ? copy.footerStatus.done : copy.footerStatus.pending}
             </span>
           </div>
         </div>

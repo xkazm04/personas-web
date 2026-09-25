@@ -4,7 +4,9 @@ import { AnimatePresence, motion } from "framer-motion";
 import { Clock, Compass, DollarSign, Plug, Zap } from "lucide-react";
 import { BRAND_VAR, tint } from "@/lib/brand-theme";
 import ConnectorIcon from "./ConnectorIcon";
-import { tools } from "../data";
+import { useTranslation } from "@/i18n/useTranslation";
+import { fillTemplate } from "@/lib/fillTemplate";
+import type { Tool } from "../types";
 
 /**
  * A reduced persona card in the app's shape (PersonaOverviewCardList): health
@@ -15,13 +17,22 @@ import { tools } from "../data";
  * items are in the app.
  */
 
-export const PERSONA = {
-  name: "Chief of staff",
-  description: "Keeps your inbox, channels, repos and calendar moving.",
-  brand: "purple" as const,
-};
+/** Identity colour; the name and description are `t.useCasesPersona` copy. */
+export const PERSONA = { brand: "purple" as const };
 
-export default function PersonaCard({ attached, focus, still }: { attached: string[]; focus: string | null; still: boolean }) {
+export default function PersonaCard({
+  tools,
+  attached,
+  focus,
+  still,
+}: {
+  tools: Tool[];
+  attached: string[];
+  focus: string | null;
+  still: boolean;
+}) {
+  const { t } = useTranslation();
+  const copy = t.useCasesPersona;
   const jobs = attached.reduce((n, id) => n + (tools.find((tl) => tl.id === id)?.useCases.length ?? 0), 0);
   const spring = still ? { duration: 0 } : { type: "spring" as const, stiffness: 420, damping: 26 };
 
@@ -39,8 +50,8 @@ export default function PersonaCard({ attached, focus, still }: { attached: stri
           <Compass className="h-5 w-5" style={{ color: BRAND_VAR[PERSONA.brand] }} aria-hidden />
         </div>
         <div className="min-w-0 flex-1">
-          <p className="text-sm font-bold leading-tight text-foreground">{PERSONA.name}</p>
-          <p className="mt-1 text-xs leading-snug text-muted">{PERSONA.description}</p>
+          <p className="text-sm font-bold leading-tight text-foreground">{copy.personaName}</p>
+          <p className="mt-1 text-xs leading-snug text-muted">{copy.personaDescription}</p>
         </div>
       </div>
 
@@ -51,10 +62,10 @@ export default function PersonaCard({ attached, focus, still }: { attached: stri
           style={{ backgroundColor: tint("emerald", 8), borderColor: tint("emerald", 20) }}
         >
           <span className="h-1.5 w-1.5 rounded-full" style={{ background: BRAND_VAR.emerald }} aria-hidden />
-          Active
+          {copy.active}
         </span>
         <span className="font-mono text-xs tabular-nums text-muted">
-          {jobs} {jobs === 1 ? "job" : "jobs"}
+          {fillTemplate(jobs === 1 ? copy.jobOne : copy.jobMany, { count: jobs })}
         </span>
       </div>
 
@@ -62,9 +73,11 @@ export default function PersonaCard({ attached, focus, still }: { attached: stri
       <div className="px-4 pb-3">
         <div className="mb-1.5 flex items-center gap-1.5 text-xs text-muted-dark">
           <Plug className="h-3 w-3" aria-hidden />
-          {attached.length === 0 ? "No connectors yet" : `${attached.length} of ${tools.length} connectors`}
+          {attached.length === 0
+            ? copy.noConnectors
+            : fillTemplate(copy.connectorCount, { attached: attached.length, total: tools.length })}
         </div>
-        <ul className="flex flex-wrap gap-1.5" aria-label="Connected tools">
+        <ul className="flex flex-wrap gap-1.5" aria-label={copy.connectedTools}>
           {tools.map((tl) => {
             const on = attached.includes(tl.id);
             const lit = focus === tl.id;
@@ -96,10 +109,12 @@ export default function PersonaCard({ attached, focus, still }: { attached: stri
       {/* Footer: the app's trigger / last run / spend row (sample values) */}
       <div className="flex items-center gap-4 border-t border-glass px-4 py-2.5 font-mono text-xs tabular-nums text-muted">
         <span className="flex items-center gap-1">
-          <Zap className="h-3 w-3" aria-hidden />3 triggers
+          <Zap className="h-3 w-3" aria-hidden />
+          {copy.sampleTriggers}
         </span>
         <span className="flex items-center gap-1">
-          <Clock className="h-3 w-3" aria-hidden />2 min ago
+          <Clock className="h-3 w-3" aria-hidden />
+          {copy.sampleLastRun}
         </span>
         <span className="flex items-center gap-1">
           <DollarSign className="h-3 w-3" aria-hidden />0.04

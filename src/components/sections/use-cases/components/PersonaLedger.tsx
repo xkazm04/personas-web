@@ -3,29 +3,37 @@
 import { AnimatePresence, motion } from "framer-motion";
 import { Plus } from "lucide-react";
 import ConnectorIcon from "./ConnectorIcon";
-import { tools } from "../data";
-import { PERSONA } from "./PersonaCard";
+import { useTranslation } from "@/i18n/useTranslation";
+import { fillTemplate } from "@/lib/fillTemplate";
+import type { Tool } from "../types";
 
 /**
  * The persona's capabilities: the focused tool's jobs in full (what it just
  * added), then a ledger with one reserved row per real tool. Connected rows list
  * that tool's job titles; unconnected rows stay dashed. Every title and
- * description comes from `data.ts`.
+ * description comes from `t.useCasesSection` via `localizeTools`.
  */
 export default function CapabilityLedger({
+  tools,
   attached,
   focus,
   still,
   panelId,
   labelledBy,
 }: {
+  tools: Tool[];
   attached: string[];
   focus: string | null;
   still: boolean;
   panelId: string;
   labelledBy?: string;
 }) {
+  const { t } = useTranslation();
+  const copy = t.useCasesPersona;
   const active = tools.find((tl) => tl.id === focus) ?? null;
+  // "{tool}" renders bold, so the sentence is split around it.
+  const [addsBefore, addsAfter = ""] = copy.adds.split("{tool}");
+  const addsVars = { count: active?.useCases.length ?? 0, persona: copy.personaName };
   const fade = still ? { duration: 0 } : { duration: 0.28, ease: "easeOut" as const };
 
   return (
@@ -44,8 +52,9 @@ export default function CapabilityLedger({
               <p className="mb-2 flex items-center gap-2 text-xs text-muted">
                 <Plus className="h-3 w-3 text-brand-cyan" aria-hidden />
                 <span>
-                  <span className="font-semibold text-foreground">{active.name}</span> adds {active.useCases.length} jobs to{" "}
-                  {PERSONA.name}
+                  {fillTemplate(addsBefore, addsVars)}
+                  <span className="font-semibold text-foreground">{active.name}</span>
+                  {fillTemplate(addsAfter, addsVars)}
                 </span>
               </p>
               <ul className="grid gap-2 sm:grid-cols-3">
@@ -69,14 +78,14 @@ export default function CapabilityLedger({
               transition={fade}
               className="flex h-[132px] items-center justify-center rounded-lg border border-dashed border-glass-hover px-4 text-center text-xs text-muted"
             >
-              No tools connected yet. Each tool you connect adds its jobs to this same persona.
+              {copy.emptyJobs}
             </motion.p>
           )}
         </AnimatePresence>
       </div>
 
       {/* Ledger: one reserved row per tool, in data order */}
-      <ul className="grid gap-1.5 stage:grid-cols-2" aria-label={`Jobs ${PERSONA.name} can do`}>
+      <ul className="grid gap-1.5 stage:grid-cols-2" aria-label={fillTemplate(copy.ledgerLabel, { persona: copy.personaName })}>
         {tools.map((tl) => {
           const on = attached.includes(tl.id);
           const lit = focus === tl.id;
@@ -119,7 +128,7 @@ export default function CapabilityLedger({
                   </motion.span>
                 ) : (
                   <motion.span key="off" initial={false} exit={{ opacity: 0 }} transition={fade} className="text-xs text-muted-dark">
-                    not connected
+                    {copy.notConnected}
                   </motion.span>
                 )}
               </AnimatePresence>

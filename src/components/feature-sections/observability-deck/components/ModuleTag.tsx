@@ -1,6 +1,7 @@
 "use client";
 
 import { motion } from "framer-motion";
+import { useTranslation } from "@/i18n/useTranslation";
 import type { OverviewModule } from "../types";
 
 export default function ModuleTag({
@@ -12,6 +13,7 @@ export default function ModuleTag({
   active?: boolean;
   onClick?: () => void;
 }) {
+  const words = useTranslation().t.observeSection.modules[mod.id];
   const Icon = mod.icon;
   return (
     <motion.button
@@ -34,10 +36,10 @@ export default function ModuleTag({
       </div>
       <div className="min-w-0 flex-1">
         <div className="text-base font-semibold text-foreground leading-tight">
-          {mod.title}
+          {words.title}
         </div>
         <div className="mt-0.5 text-base text-foreground/65 leading-snug">
-          {mod.blurb}
+          {words.blurb}
         </div>
       </div>
     </motion.button>

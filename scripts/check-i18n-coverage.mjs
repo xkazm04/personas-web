@@ -9,7 +9,7 @@ const repoRoot = process.cwd();
 const i18nDir = path.join(repoRoot, "src", "i18n");
 const baselineLocale = "en";
 
-function loadLocale(locale) {
+function loadLocaleModule(locale) {
   const filename = path.join(i18nDir, `${locale}.ts`);
   const source = fs.readFileSync(filename, "utf8");
   const compiled = ts.transpileModule(source, {
@@ -31,11 +31,25 @@ function loadLocale(locale) {
   sandbox.exports = sandbox.module.exports;
   vm.runInNewContext(compiled, sandbox, { filename });
 
-  const translations = sandbox.module.exports[locale] ?? sandbox.exports[locale];
+  const moduleExports = sandbox.module.exports;
+  const translations = moduleExports[locale] ?? sandbox.exports[locale];
   if (!translations || typeof translations !== "object") {
     throw new Error(`Could not load exported locale "${locale}" from ${filename}`);
   }
-  return translations;
+  return { translations, moduleExports };
+}
+
+function loadLocale(locale) {
+  return loadLocaleModule(locale).translations;
+}
+
+function countLeaves(value) {
+  if (typeof value === "string") return 1;
+  if (Array.isArray(value)) return value.reduce((sum, item) => sum + countLeaves(item), 0);
+  if (value && typeof value === "object") {
+    return Object.values(value).reduce((sum, item) => sum + countLeaves(item), 0);
+  }
+  return 0;
 }
 
 function listLocaleFiles() {
@@ -102,7 +116,23 @@ function compareShape(expected, actual, pathParts, issues) {
 }
 
 const locales = listLocaleFiles();
-const baseline = loadLocale(baselineLocale);
+const { translations: fullBaseline, moduleExports: baselineExports } =
+  loadLocaleModule(baselineLocale);
+
+// Namespaces the owner decided to ship English-only for now (en.ts
+// PENDING_TRANSLATION). They are skipped here and reported, never failed on.
+const pendingNamespaces = Array.isArray(baselineExports.PENDING_TRANSLATION)
+  ? [...baselineExports.PENDING_TRANSLATION]
+  : [];
+for (const ns of pendingNamespaces) {
+  if (!(ns in fullBaseline)) {
+    console.error(`PENDING_TRANSLATION names "${ns}", which is not a namespace in en.ts.`);
+    process.exit(1);
+  }
+}
+const baseline = Object.fromEntries(
+  Object.entries(fullBaseline).filter(([ns]) => !pendingNamespaces.includes(ns)),
+);
 const targetLocales = locales.filter((locale) => locale !== baselineLocale);
 
 let failed = false;
@@ -120,6 +150,14 @@ for (const locale of targetLocales) {
   } else {
     console.log(`${locale}: 100%`);
   }
+}
+
+if (pendingNamespaces.length > 0) {
+  const pendingKeys = pendingNamespaces.reduce((sum, ns) => sum + countLeaves(fullBaseline[ns]), 0);
+  console.log(
+    `
+pending translation (English only, by owner decision): ${pendingKeys} keys in ${pendingNamespaces.length} namespaces: ${pendingNamespaces.join(", ")}`,
+  );
 }
 
 if (failed) {

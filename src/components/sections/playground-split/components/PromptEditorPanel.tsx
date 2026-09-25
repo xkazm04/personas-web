@@ -2,6 +2,7 @@
 
 import { AnimatePresence, motion } from "framer-motion";
 import TerminalChrome from "@/components/TerminalChrome";
+import { useTranslation } from "@/i18n/useTranslation";
 import type { ExamplePrompt, PlaygroundPhase } from "../types";
 import SyntaxPrompt from "./SyntaxPrompt";
 import ResultCapabilitiesList from "./ResultCapabilitiesList";
@@ -17,13 +18,13 @@ export default function PromptEditorPanel({
   phase: PlaygroundPhase;
   reduced: boolean;
 }) {
+  const { t } = useTranslation();
+  const copy = t.playgroundSection;
   return (
     <div className="border-b lg:border-b-0 lg:border-r border-glass stage:flex stage:min-h-0 stage:flex-col">
       <TerminalChrome
         title="prompt-editor"
-        status={
-          phase === "running" ? "parsing" : phase === "done" ? "parsed" : "ready"
-        }
+        status={copy.editorStatus[phase === "running" ? "running" : phase === "done" ? "done" : "idle"]}
         className="px-4 py-3"
       />
 
@@ -46,11 +47,11 @@ export default function PromptEditorPanel({
                     transition={{ duration: reduced ? 0 : 0.3 }}
                   >
                     <div className="font-mono text-base text-muted-dark mb-1">
-                      {"// Agent instruction"}
+                      {copy.instructionComment}
                     </div>
                     <SyntaxPrompt text={activeExampleData.prompt} />
                     <div className="font-mono text-base text-muted-dark mt-3">
-                      {"// Detected intent:"}
+                      {copy.intentComment}
                     </div>
                     <AnimatePresence>
                       {(phase === "running" || phase === "done") && (
@@ -72,7 +73,7 @@ export default function PromptEditorPanel({
               ) : (
                 <div className="flex items-center h-full">
                   <p className="font-mono text-base text-foreground">
-                    Select a prompt to begin...
+                    {copy.selectPrompt}
                   </p>
                 </div>
               )}
@@ -88,7 +89,7 @@ export default function PromptEditorPanel({
               transition={{ delay: reduced ? 0 : 0.8, duration: 0.4 }}
             >
               <div className="text-base font-mono uppercase tracking-wider text-muted-dark mb-2">
-                Selected Tools
+                {copy.selectedTools}
               </div>
               <div className="flex flex-wrap gap-2">
                 {activeExampleData.tools.map((tool, i) => (

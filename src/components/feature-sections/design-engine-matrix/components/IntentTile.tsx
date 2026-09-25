@@ -3,7 +3,8 @@
 import Image from "next/image";
 import { motion, useReducedMotion } from "framer-motion";
 import { Sparkles } from "lucide-react";
-import { USER_PROMPT } from "../../designMatrixShared";
+import { useTranslation } from "@/i18n/useTranslation";
+import { fillTemplate } from "@/lib/fillTemplate";
 import { INTENT_IMAGE, CELL_HEIGHT_CLASS, FLUID_MONO } from "../data";
 
 export default function IntentTile({
@@ -16,6 +17,7 @@ export default function IntentTile({
   filledCount: number;
 }) {
   const prefersReducedMotion = useReducedMotion();
+  const copy = useTranslation().t.designMatrix;
   const accent = phase === "done" ? "#34d399" : "#a855f7";
   const isActive = phase !== "idle";
   const animateGlow = phase === "running" && !prefersReducedMotion;
@@ -64,7 +66,7 @@ export default function IntentTile({
           className={`${FLUID_MONO} font-mono uppercase tracking-widest font-bold drop-shadow-[0_2px_6px_rgba(0,0,0,0.85)]`}
           style={{ color: accent }}
         >
-          Intent
+          {copy.intent}
         </div>
         <motion.div
           animate={
@@ -93,10 +95,10 @@ export default function IntentTile({
         <div className={`rounded-lg border border-foreground/[0.1] bg-background/60 backdrop-blur-sm px-3 py-2 sm:py-2.5 font-mono ${FLUID_MONO} text-foreground leading-relaxed h-[48px] sm:h-[60px] overflow-hidden`}>
           {userTyped || (
             <span className="text-foreground/60 italic">
-              Describe what your agent should do…
+              {copy.intentPlaceholder}
             </span>
           )}
-          {phase === "running" && userTyped.length < USER_PROMPT.length && (
+          {phase === "running" && userTyped.length < copy.userPrompt.length && (
             <span className="inline-block h-4 w-[2px] ml-0.5 translate-y-0.5 bg-brand-purple animate-pulse" />
           )}
         </div>
@@ -106,7 +108,7 @@ export default function IntentTile({
             className={`${FLUID_MONO} font-mono uppercase tracking-wider font-semibold drop-shadow-[0_2px_4px_rgba(0,0,0,0.9)]`}
             style={{ color: accent }}
           >
-            {filledCount}/8 resolved
+            {fillTemplate(copy.resolved, { filled: filledCount, total: 8 })}
           </span>
           <div className="h-1.5 w-20 rounded-full bg-foreground/[0.08] overflow-hidden">
             <motion.div
