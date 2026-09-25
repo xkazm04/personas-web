@@ -51,3 +51,16 @@ Read by the registry skill `illustrate` at start. Every key is optional.
   (sequential line; the app runs steps in parallel), healing (provider switch and a
   47ms figure it never shows), lab (six-axis radar; the app scores one composite) and
   pricing (UI modes are not price tiers) misrepresent the product.
+- 2026-09-25 round 3 under 1.2.0 (after the owner discarded round 2): landing on
+  `illustrate/landing-r3` - team-canvas (relay, missions, roster), get-started (handoff,
+  first-run, setup-map), pricing (bill, spend, download); /features on
+  `illustrate/features-r3` - healing (remedies, run-card, overnight), lab (head-to-head,
+  ratings, anatomy). One builder per section. No instrument flags on any variant
+  (58-82 words per section, labels 12-18px, 3-42% empty, one stage at 1366x657 and
+  1920x960). Cold read by 5 fresh reviewers (each saw 3 variants from different
+  sections, switcher hidden): pricing/download 5/5; relay, missions, roster, handoff,
+  setup-map, bill, remedies, run-card, overnight 4/5; first-run, spend, head-to-head,
+  ratings, anatomy 3/5 - the product-screen variants carried the app's jargon. Builder
+  found native Ollama DEFERRED in the app: the live AI-models router ("Private via
+  Ollama") and the pricing "BYOM - Claude or local Ollama" bullet over-claim. Review
+  page: C:/t/illustrate-r3/review/index.html. Owner decision pending.
