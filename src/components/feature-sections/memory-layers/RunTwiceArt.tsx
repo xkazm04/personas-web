@@ -1,6 +1,6 @@
 "use client";
 
-import { useCallback, useEffect, useRef } from "react";
+import { useCallback, useEffect, useRef, type CSSProperties } from "react";
 import {
   animate,
   motion,
@@ -80,9 +80,11 @@ export default function RunTwiceArt() {
       ref={rootRef}
       data-illustrate-art
       data-tour-diagram="memory"
+      data-stage-art
       role="img"
       aria-label="Run 1 wanders, fails twice and loops back; each failure is kept as a memory, and run 12 goes straight to the goal."
       className="relative mx-auto mt-8 w-full max-w-5xl rounded-2xl border border-glass bg-white/[0.02] sm:mt-10"
+      style={{ "--art-ar": VIEW_W / VIEW_H } as CSSProperties}
     >
       <div className="relative w-full" style={{ aspectRatio: `${VIEW_W} / ${VIEW_H}` }}>
         <svg

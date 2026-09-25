@@ -79,6 +79,24 @@
     min-height: 0;
     container-type: size;
   }
+  /* A slot that directly holds stage art centres it vertically. (Scoped with
+     :has so a slot that is itself a grid - the companion's - keeps its own
+     display.) */
+  [data-stage] [data-stage-slot]:has(> [data-stage-art]) {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+  }
+
+  /* Aspect-ratio art inside a slot: as wide as the stage allows, but never
+     taller than the slot. The component sets --art-ar (width / height) as a
+     number; the art keeps its own aspect-ratio box inside. */
+  [data-stage] [data-stage-art] {
+    width: min(100%, calc((100cqh - 4px) * var(--art-ar, 2)));
+    max-width: none;
+    margin-inline: auto;
+    margin-block: 0;
+  }
 
   /* Intro block (SectionIntro and hand-rolled intros that carry the attr). */
   [data-stage] [data-section-intro] {

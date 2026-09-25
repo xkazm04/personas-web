@@ -9,24 +9,24 @@ import RunTwiceArt from "./memory-layers/RunTwiceArt";
 
 export default function MemoryLayersRunTwice() {
   return (
-    <SectionWrapper fit="min" id="memory-layers" className="relative overflow-hidden">
+    <SectionWrapper fit="fill" id="memory-layers" className="overflow-hidden">
       {/* Atmospheric background */}
       <div className="absolute inset-0 pointer-events-none" aria-hidden>
         <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top,rgba(168,85,247,0.05)_0%,transparent_60%)]" />
         <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_bottom,rgba(6,182,212,0.04)_0%,transparent_60%)]" />
       </div>
 
-      <div className="text-center relative z-10">
+      <div className="text-center relative z-10" data-section-intro>
         <SectionHeading>
           Remembers what{" "}
           <GradientText className="drop-shadow-lg">works</GradientText>
         </SectionHeading>
-        <p className="mx-auto mt-4 max-w-xl text-foreground/85 font-light text-base md:text-lg">
+        <p data-section-lede className="mx-auto mt-4 max-w-xl text-foreground/85 font-light text-base md:text-lg">
           Your agents get better the more they work.
         </p>
       </div>
 
-      <div className="relative z-10">
+      <div className="relative z-10" data-stage-slot>
         <RunTwiceArt />
       </div>
     </SectionWrapper>

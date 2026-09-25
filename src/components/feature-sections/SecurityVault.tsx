@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState, type CSSProperties } from "react";
 import { animate, motion, useInView, useMotionValue } from "framer-motion";
 import { RotateCcw } from "lucide-react";
 import SectionWrapper from "@/components/SectionWrapper";
@@ -37,13 +37,14 @@ export default function SecurityVaultNestedVault() {
   }, [inView, still, run, progress]);
 
   return (
-    <SectionWrapper fit="min" id="security">
+    <SectionWrapper fit="fill" id="security">
       <motion.div
         initial="hidden"
         whileInView="visible"
         viewport={{ once: true }}
         variants={staggerContainer}
         className="text-center"
+        data-section-intro
       >
         <motion.div variants={fadeUp}>
           <SectionHeading>
@@ -53,18 +54,22 @@ export default function SecurityVaultNestedVault() {
         </motion.div>
         <motion.p
           variants={fadeUp}
+          data-section-lede
           className="mx-auto mt-4 max-w-2xl text-foreground/85 font-light text-base md:text-lg leading-relaxed"
         >
           Every credential is encrypted on your device and kept in your OS&apos;s own vault.
         </motion.p>
       </motion.div>
 
+      <div data-stage-slot>
       <div
         ref={artRef}
         data-illustrate-art
+        data-stage-art
+        style={{ "--art-ar": 19 / 12 } as CSSProperties}
         role="figure"
         aria-label="Three nested rings, your device, the OS keychain and AES-256-GCM encryption, turn and lock one by one around your keys at the centre."
-        className="relative mx-auto mt-10 aspect-square w-full max-w-4xl overflow-hidden rounded-3xl border border-glass bg-white/[0.02] sm:aspect-[19/12]"
+        className="relative mx-auto mt-10 aspect-square w-full max-w-4xl overflow-hidden rounded-2xl border border-glass bg-white/[0.02] sm:aspect-[19/12]"
       >
         <NestedVaultArt progress={progress} />
         <button
@@ -76,6 +81,7 @@ export default function SecurityVaultNestedVault() {
         >
           <RotateCcw className="h-4 w-4" aria-hidden />
         </button>
+      </div>
       </div>
     </SectionWrapper>
   );
