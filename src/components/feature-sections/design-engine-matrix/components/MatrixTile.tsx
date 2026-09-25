@@ -1,5 +1,6 @@
 "use client";
 
+import { memo } from "react";
 import Image from "next/image";
 import { motion, useReducedMotion } from "framer-motion";
 import { Check, Loader2 } from "lucide-react";
@@ -7,7 +8,7 @@ import type { CellDef, CellStatus } from "../../designMatrixShared";
 import { CELL_IMAGE, CELL_HEIGHT_CLASS, FLUID_DIMENSION } from "../data";
 import TileValue from "./TileValue";
 
-export default function MatrixTile({
+function MatrixTile({
   def,
   status,
 }: {
@@ -103,3 +104,9 @@ export default function MatrixTile({
     </motion.div>
   );
 }
+
+// Memoised: the intent tile types its sentence at ~11 characters a second,
+// and every keystroke re-rendered all eight tiles (each with framer motion and
+// a next/image) although their `def` and `status` had not changed - the build
+// hook keeps an untouched cell's status object identical.
+export default memo(MatrixTile);
