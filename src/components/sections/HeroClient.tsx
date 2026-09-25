@@ -1,7 +1,8 @@
 "use client";
 
 import { useMemo, useRef } from "react";
-import { motion, useTransform, useMotionValue, useSpring, useReducedMotion } from "framer-motion";
+import { motion, useTransform, useMotionValue, useSpring } from "framer-motion";
+import { useStillMotion } from "@/hooks/useStillMotion";
 import { Download, ChevronDown, Wand2, Gift, Sparkles } from "lucide-react";
 import { GithubIcon } from "@/components/icons/brand-icons";
 import { fadeUp, staggerContainer } from "@/lib/animations";
@@ -32,7 +33,12 @@ export default function HeroClient({ connectorCount, templateCount }: { connecto
     { label: t.hero.mode5, Icon: Sparkles },
   ];
   const liveStats = useLiveStats();
-  const shouldReduceMotion = useReducedMotion();
+  // useStillMotion, not framer's useReducedMotion: framer answers null on the
+  // server and true on a reduced-motion client, and the classes, handlers and
+  // style below branch on it - so every reduced-motion visitor got a hydration
+  // mismatch in the hero. useStillMotion hydrates with the server's answer and
+  // corrects after.
+  const shouldReduceMotion = useStillMotion();
   // Repo link is env-configurable; fall back to the canonical org used in the
   // footer so the CTA never dead-ends on github.com's generic homepage.
   const GITHUB_URL = process.env.NEXT_PUBLIC_GITHUB_URL ?? "https://github.com/personas-ai";
