@@ -1,7 +1,8 @@
 "use client";
 
-import { useId } from "react";
-import { motion, useReducedMotion } from "framer-motion";
+import { useId, useRef } from "react";
+import { motion } from "framer-motion";
+import { useLoopGate } from "@/hooks/useLoopGate";
 import { useAutoCycle } from "@/hooks/useAutoCycle";
 import { BRAND_VAR, tint } from "@/lib/brand-theme";
 import { GOAL, KPIS, kpiStatus, progressPct, health } from "./kpiData";
@@ -29,16 +30,19 @@ const SLOTS = STATIONS.length + 1;
 const SHIPPED_SLOT = STATIONS.length;
 
 export default function AssemblyLine() {
-  const reduced = useReducedMotion() ?? false;
+  // The conveyor dot and the station cascade run only while the line is on
+  // screen and the tab is visible; they used to run for the life of the page.
+  const rootRef = useRef<HTMLDivElement | null>(null);
+  const { run, still: reduced } = useLoopGate(rootRef);
   const uid = useId();
-  const { active } = useAutoCycle({ count: SLOTS, intervalMs: 1400 });
+  const { active } = useAutoCycle({ count: SLOTS, intervalMs: 1400, ref: rootRef });
 
   // A slot is "produced" once the run has reached or passed it.
   const reached = (slot: number) => reduced || slot <= active;
   const composite = health(KPIS);
 
   return (
-    <div className="mx-auto flex h-[420px] w-full max-w-4xl flex-col justify-center gap-6 px-2 py-4">
+    <div ref={rootRef} className="mx-auto flex h-[420px] w-full max-w-4xl flex-col justify-center gap-6 px-2 py-4">
       {/* The line: goal → stations → shipped */}
       <div className="flex items-stretch gap-3">
         {/* GOAL */}
@@ -57,14 +61,21 @@ export default function AssemblyLine() {
         {/* CONVEYOR + STATIONS */}
         <div className="relative flex flex-1 items-center">
           <div className="absolute inset-x-0 top-1/2 h-0.5 -translate-y-1/2 rounded-full" style={{ background: "rgba(var(--surface-overlay), 0.14)" }} />
-          {!reduced && (
+          {run && (
+            // A full-width track translated by its own width carries the dot
+            // across: transform only. It used to animate `left`, which forced a
+            // layout on every frame.
             <motion.span
               aria-hidden
-              className="absolute top-1/2 h-2 w-2 -translate-y-1/2 rounded-full"
-              style={{ background: BRAND_VAR.cyan, boxShadow: `0 0 10px ${tint("cyan", 60)}` }}
-              animate={{ left: ["0%", "100%"] }}
+              className="pointer-events-none absolute inset-x-0 top-1/2 h-2 -translate-y-1/2"
+              animate={{ x: ["0%", "100%"] }}
               transition={{ duration: 1.4 * SLOTS, repeat: Infinity, ease: "linear" }}
-            />
+            >
+              <span
+                className="absolute left-0 top-0 h-2 w-2 -translate-x-1/2 rounded-full"
+                style={{ background: BRAND_VAR.cyan, boxShadow: `0 0 10px ${tint("cyan", 60)}` }}
+              />
+            </motion.span>
           )}
           <div className="relative grid w-full grid-cols-4 gap-2">
             {STATIONS.map((s, i) => {

@@ -1,9 +1,9 @@
 "use client";
 
+import { useRef } from "react";
 import { motion } from "framer-motion";
 import { Sparkles } from "lucide-react";
-import { useStillMotion } from "@/hooks/useStillMotion";
-import { usePageVisibility } from "@/hooks/usePageVisibility";
+import { useLoopGate } from "@/hooks/useLoopGate";
 import { BRAND_VAR, tint } from "@/lib/brand-theme";
 import { SURFACE_GLASS, VisualFrame } from "./chrome";
 import type { VisualProps } from "./types";
@@ -20,14 +20,14 @@ const PERSONA_FIELDS = [
 
 export function CreateVisual({ brand }: VisualProps) {
   const color = BRAND_VAR[brand];
-  // Ambient loop: still for reduced motion and on a hidden tab. A rest pose
-  // (not `undefined`) so a loop already running is replaced, not left going.
-  const reduced = useStillMotion();
-  const hidden = usePageVisibility();
-  const still = reduced || hidden;
+  // Ambient loop: still for reduced motion, on a hidden tab and while off
+  // screen (useLoopGate). A rest pose (not `undefined`) so a loop already
+  // running is replaced, not left going.
+  const rootRef = useRef<HTMLDivElement | null>(null);
+  const still = !useLoopGate(rootRef).run;
   return (
     <VisualFrame>
-      <div className="rounded-xl border p-4" style={SURFACE_GLASS}>
+      <div ref={rootRef} className="rounded-xl border p-4" style={SURFACE_GLASS}>
         <div className="mb-2 flex items-center gap-2 text-base font-mono uppercase tracking-wider text-muted-dark">
           <Sparkles className="h-3.5 w-3.5" style={{ color }} />
           New persona

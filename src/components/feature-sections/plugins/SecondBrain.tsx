@@ -1,17 +1,21 @@
 "use client";
 
-import { useStillMotion } from "@/hooks/useStillMotion";
+import { useRef } from "react";
+import { useLoopGate } from "@/hooks/useLoopGate";
 import { Brain, Search, Sparkles } from "lucide-react";
 
 import { SecondBrainGraph } from "./second-brain/SecondBrainGraph";
 import { SecondBrainSidePanel } from "./second-brain/SecondBrainSidePanel";
 
 export default function SecondBrain() {
-  const reduced = useStillMotion();
+  // The graph's pulses loop only while it is on screen and the tab is visible;
+  // one-shot entrances still key off reduced motion alone.
+  const rootRef = useRef<HTMLDivElement | null>(null);
+  const { run, still: reduced } = useLoopGate(rootRef);
   const baseDelay = reduced ? 0 : 0.05;
 
   return (
-    <div className="p-5">
+    <div ref={rootRef} className="p-5">
       <div className="mb-3 flex flex-wrap items-center gap-2">
         <div className="flex items-center gap-2 rounded-lg border border-purple-400/30 bg-purple-500/[0.08] px-3 py-1.5">
           <Brain className="h-4 w-4 text-purple-300" />
@@ -32,7 +36,7 @@ export default function SecondBrain() {
       </div>
 
       <div className="grid md:grid-cols-[1.4fr_1fr] gap-3">
-        <SecondBrainGraph reduced={reduced} baseDelay={baseDelay} />
+        <SecondBrainGraph reduced={!run} baseDelay={baseDelay} />
         <SecondBrainSidePanel reduced={reduced} />
       </div>
 

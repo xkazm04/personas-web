@@ -1,8 +1,8 @@
 "use client";
 
-import { useId } from "react";
+import { useId, useRef } from "react";
 import { motion } from "framer-motion";
-import { useStillMotion } from "@/hooks/useStillMotion";
+import { useLoopGate } from "@/hooks/useLoopGate";
 import { BRAND_VAR } from "@/lib/brand-theme";
 import { SITE_VERSION } from "@/lib/release";
 import {
@@ -33,9 +33,13 @@ export default function CommandCenterIllustration({ publicBetaLabel }: Props) {
   // hydration warnings). Don't simplify to a hardcoded string — that
   // breaks both invariants.
   const uid = useId();
-  // Continuous loops (radar sweep, orbit, breathing core) are gated on reduced
-  // motion per the animation contract; the static structure renders either way.
-  const reduced = useStillMotion();
+  // Continuous loops (radar sweep, orbit, breathing core, constellation) run
+  // only while the card is on screen, the tab is visible and motion is allowed
+  // (useLoopGate); they used to be gated on reduced motion alone and kept
+  // spinning for a visitor scrolled all the way to the footer. The one-shot
+  // arc reveal still keys off `reduced`. The static structure renders either way.
+  const rootRef = useRef<HTMLDivElement | null>(null);
+  const { run: loop, still: reduced } = useLoopGate(rootRef);
   const arcGradientId = `${uid}-arcGrad`;
   const arcGlowId = `${uid}-arcGlow`;
   const sweepGradId = `${uid}-sweep`;
@@ -43,7 +47,7 @@ export default function CommandCenterIllustration({ publicBetaLabel }: Props) {
   const cyan = BRAND_VAR.cyan;
 
   return (
-    <div data-tour-diagram="command-center" className="relative flex items-center justify-center group">
+    <div ref={rootRef} data-tour-diagram="command-center" className="relative flex items-center justify-center group">
       <svg
         width="220"
         height="220"
@@ -81,7 +85,7 @@ export default function CommandCenterIllustration({ publicBetaLabel }: Props) {
         </defs>
 
         {/* Breathing core glow behind the version readout */}
-        {reduced ? (
+        {!loop ? (
           <circle cx={CX} cy={CY} r={46} fill={`url(#${coreGlowId})`} opacity={0.5} />
         ) : (
           <motion.circle
@@ -122,7 +126,7 @@ export default function CommandCenterIllustration({ publicBetaLabel }: Props) {
         })}
 
         {/* Radar sweep — rotates clockwise, grazing the progress ring */}
-        {!reduced && (
+        {loop && (
           <motion.path
             d={sweepPath}
             fill={`url(#${sweepGradId})`}
@@ -133,7 +137,7 @@ export default function CommandCenterIllustration({ publicBetaLabel }: Props) {
         )}
 
         {/* Inner dashed guide ring — slow counter-rotation for ambient life */}
-        {reduced ? (
+        {!loop ? (
           <circle
             cx={CX}
             cy={CY}
@@ -159,7 +163,7 @@ export default function CommandCenterIllustration({ publicBetaLabel }: Props) {
         )}
 
         {/* Orbiting agents — the constellation the command center orchestrates */}
-        <AgentConstellation cyan={cyan} reduced={reduced} />
+        <AgentConstellation cyan={cyan} reduced={!loop} />
       </svg>
 
       <div className="absolute inset-0 flex flex-col items-center justify-center">

@@ -1,7 +1,8 @@
 "use client";
 
-import { useCallback, useEffect, useRef, useState } from "react";
-import { useReducedMotion } from "framer-motion";
+import { useCallback, useEffect, useRef, useState, type RefObject } from "react";
+import { useIsVisible } from "./useIsVisible";
+import { useStillMotion } from "./useStillMotion";
 
 interface UseAutoCycleOptions {
   /** Number of items to cycle through. */
@@ -14,6 +15,11 @@ interface UseAutoCycleOptions {
   initial?: number;
   /** Whether to honor `prefers-reduced-motion`. Defaults to true. */
   respectReducedMotion?: boolean;
+  /**
+   * The element the cycle illustrates. When given, the cycle also pauses while
+   * it is off screen. Without it the cycle still pauses in a hidden tab.
+   */
+  ref?: RefObject<Element | null>;
 }
 
 /**
@@ -40,8 +46,14 @@ export function useAutoCycle({
   paused = false,
   initial = 0,
   respectReducedMotion = true,
+  ref,
 }: UseAutoCycleOptions) {
-  const reducedMotion = useReducedMotion() ?? false;
+  const reducedMotion = useStillMotion();
+  // A cycle used to tick for as long as the page was open - in a background tab
+  // and with its section scrolled far away. With no ref, useIsVisible only
+  // reports the tab state (its in-view answer stays at its initial `true`).
+  const noElement = useRef<Element | null>(null);
+  const visible = useIsVisible(ref ?? noElement);
   const [active, setActive] = useState(initial);
   const [prevCount, setPrevCount] = useState(count);
   const [internalPaused, setInternalPaused] = useState(false);
@@ -58,7 +70,7 @@ export function useAutoCycle({
     }
   }
 
-  const isPaused = paused || internalPaused || (respectReducedMotion && reducedMotion);
+  const isPaused = paused || internalPaused || !visible || (respectReducedMotion && reducedMotion);
 
   useEffect(() => {
     if (isPaused || count <= 1) return;

@@ -1,9 +1,9 @@
 "use client";
 
+import { useRef } from "react";
 import { motion } from "framer-motion";
 import { Download } from "lucide-react";
-import { useStillMotion } from "@/hooks/useStillMotion";
-import { usePageVisibility } from "@/hooks/usePageVisibility";
+import { useLoopGate } from "@/hooks/useLoopGate";
 import { BRAND_VAR, tint } from "@/lib/brand-theme";
 import { VisualFrame, VisualRow } from "./chrome";
 import type { VisualProps } from "./types";
@@ -16,14 +16,15 @@ const PLATFORMS = [
 
 export function DownloadVisual({ brand }: VisualProps) {
   const color = BRAND_VAR[brand];
-  // Ambient loop: still for reduced motion and on a hidden tab. A rest pose
-  // (not `undefined`) so a loop already running is replaced, not left going.
-  const reduced = useStillMotion();
-  const hidden = usePageVisibility();
-  const still = reduced || hidden;
+  // Ambient loop: still for reduced motion, on a hidden tab and while off
+  // screen (useLoopGate). A rest pose (not `undefined`) so a loop already
+  // running is replaced, not left going.
+  const rootRef = useRef<HTMLDivElement | null>(null);
+  const still = !useLoopGate(rootRef).run;
   return (
     <VisualFrame>
       <div
+        ref={rootRef}
         className="mx-auto flex h-20 w-20 items-center justify-center rounded-2xl"
         style={{ backgroundColor: tint(brand, 18) }}
       >

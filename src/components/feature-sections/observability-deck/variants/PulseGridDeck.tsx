@@ -1,7 +1,7 @@
 "use client";
 
-import { useEffect, useMemo, useState } from "react";
-import { useReducedMotion } from "framer-motion";
+import { useEffect, useMemo, useRef, useState } from "react";
+import { useLoopGate } from "@/hooks/useLoopGate";
 
 import TerminalChrome from "@/components/TerminalChrome";
 import { BRAND_VAR } from "@/lib/brand-theme";
@@ -59,7 +59,10 @@ export default function PulseGridDeck({
   filterPrefix: string | null;
   onClearFilter: () => void;
 }) {
-  const reduced = useReducedMotion();
+  // The feed ticks only while the deck is on screen and the tab is visible
+  // (useLoopGate's `tick`); it used to run for as long as the page was open.
+  const rootRef = useRef<HTMLDivElement | null>(null);
+  const { tick, still: reduced } = useLoopGate(rootRef);
   const [liveStats, setLiveStats] = useState<Stats>(emptyStats);
 
   // Reduced motion: derive the populated end-state during render rather than
@@ -74,7 +77,7 @@ export default function PulseGridDeck({
   useEffect(() => {
     // The live deck fills in via this interval, which we intentionally never
     // start under reduced motion — `reducedStats` above carries that case.
-    if (reduced) return;
+    if (reduced || !tick) return;
     const id = setInterval(() => {
       const agent = agentPool[Math.floor(Math.random() * agentPool.length)];
       const eventType = eventPool[
@@ -114,10 +117,10 @@ export default function PulseGridDeck({
       });
     }, 900 + Math.random() * 700);
     return () => clearInterval(id);
-  }, [reduced]);
+  }, [reduced, tick]);
 
   return (
-    <div className="rounded-2xl border border-foreground/10 bg-background/80 backdrop-blur-xl overflow-hidden shadow-[0_10px_40px_rgba(0,0,0,0.08)] dark:shadow-[0_0_60px_rgba(0,0,0,0.3)]">
+    <div ref={rootRef} className="rounded-2xl border border-foreground/10 bg-background/80 backdrop-blur-xl overflow-hidden shadow-[0_10px_40px_rgba(0,0,0,0.08)] dark:shadow-[0_0_60px_rgba(0,0,0,0.3)]">
       <TerminalChrome
         title="observability-deck"
         status={reduced ? "snapshot" : "streaming"}

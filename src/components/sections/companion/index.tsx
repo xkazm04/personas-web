@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useRef, useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import SectionWrapper from "@/components/SectionWrapper";
 import SectionIntro from "@/components/primitives/SectionIntro";
@@ -21,10 +21,12 @@ const TAP_PAUSE_MS = AUTO_CYCLE_MS * 2;
 
 export default function Companion() {
   const [hovering, setHovering] = useState(false);
+  const gridRef = useRef<HTMLDivElement | null>(null);
   const { active, setActive, pauseFor } = useAutoCycle({
     count: CAPABILITIES.length,
     intervalMs: AUTO_CYCLE_MS,
     paused: hovering,
+    ref: gridRef,
   });
 
   const activeCap = CAPABILITIES[active] ?? CAPABILITIES[0];
@@ -40,6 +42,7 @@ export default function Companion() {
       />
 
       <motion.div
+        ref={gridRef}
         variants={fadeUp}
         data-stage-slot
         className="mt-12 grid grid-cols-1 items-center gap-10 lg:grid-cols-2 lg:gap-16 stage:mt-0 stage:content-center"

@@ -1,9 +1,8 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import Image from "next/image";
-import { useStillMotion } from "@/hooks/useStillMotion";
-import { usePageVisibility } from "@/hooks/usePageVisibility";
+import { useLoopGate } from "@/hooks/useLoopGate";
 
 import { AthenaOrb, FleetCell } from "./dev-tools-grid/AthenaFleetParts";
 import {
@@ -23,17 +22,18 @@ const INITIAL_TICK = 12;
 const NEEDS_STATES: CellState[] = ["awaiting", "stale"];
 
 export default function DevToolsGrid() {
-  const reduced = useStillMotion();
-  // Ambient tick: pause it while the tab is backgrounded, matching the
-  // visibility discipline the canvas systems and use-playground-simulation use.
-  const tabHidden = usePageVisibility();
+  // Ambient tick and Athena's resolving pulse: both pause while the grid is
+  // off screen or the tab is backgrounded (useLoopGate), not only in a hidden
+  // tab as before.
+  const rootRef = useRef<HTMLDivElement | null>(null);
+  const { run, still: reduced } = useLoopGate(rootRef);
   const [tick, setTick] = useState(INITIAL_TICK);
 
   useEffect(() => {
-    if (reduced || tabHidden) return;
+    if (!run) return;
     const id = setInterval(() => setTick((t) => t + 1), TICK_MS);
     return () => clearInterval(id);
-  }, [reduced, tabHidden]);
+  }, [run]);
 
   const phase = tick % CYCLE;
   const states = CELLS.map((_, i) => stateAt(i, phase));
@@ -58,7 +58,7 @@ export default function DevToolsGrid() {
             : `wrapping up · ${done}/16 green`;
 
   return (
-    <div className="p-5">
+    <div ref={rootRef} className="p-5">
       {/* Header — the fleet, with Athena on watch */}
       <div className="mb-3 flex flex-wrap items-center justify-between gap-3">
         <div className="flex items-center gap-2.5">
@@ -96,7 +96,7 @@ export default function DevToolsGrid() {
             />
           ))}
         </div>
-        <AthenaOrb x={orb.x} y={orb.y} resolving={orb.resolving} caption={orb.caption} reduced={reduced} />
+        <AthenaOrb x={orb.x} y={orb.y} resolving={orb.resolving} caption={orb.caption} reduced={!run} />
       </div>
 
       <div className="mt-4 flex items-center justify-between border-t border-foreground/[0.06] pt-3 text-base font-mono uppercase tracking-widest text-foreground/60">
