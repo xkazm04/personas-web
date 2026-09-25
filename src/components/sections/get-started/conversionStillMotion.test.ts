@@ -8,7 +8,8 @@ import { fileURLToPath } from "node:url";
  * footer) go through `useStillMotion` (SSR-safe, live), never framer's
  * `useReducedMotion` (samples once on the client, answers null on the server).
  * The two infinite loops in the Get Started visuals are ambient, so they also
- * stop on a backgrounded tab (`usePageVisibility`).
+ * stop on a backgrounded tab and off screen: they go through `useLoopGate`,
+ * which reads useStillMotion and usePageVisibility itself and adds in-view.
  *
  * Source scan with comments stripped, so a doc comment naming the old hook does
  * not trip it and a commented-out call does not satisfy it.
@@ -43,17 +44,21 @@ describe("conversion reduced-motion reads", () => {
     expect(read(rel)).not.toMatch(/\buseReducedMotion\b/);
   });
 
-  it.each(GATED_FILES)("%s reads the preference through useStillMotion", (rel) => {
+  it.each(GATED_FILES)("%s reads the preference through useStillMotion (directly or via useLoopGate)", (rel) => {
     const src = read(rel);
-    expect(src).toMatch(/import\s*\{[^}]*\buseStillMotion\b[^}]*\}\s*from\s*"@\/hooks\/useStillMotion"/);
-    expect(src).toMatch(/\buseStillMotion\(\)/);
+    const direct =
+      /import\s*\{[^}]*\buseStillMotion\b[^}]*\}\s*from\s*"@\/hooks\/useStillMotion"/.test(src) &&
+      /\buseStillMotion\(\)/.test(src);
+    const viaGate =
+      /import\s*\{[^}]*\buseLoopGate\b[^}]*\}\s*from\s*"@\/hooks\/useLoopGate"/.test(src) && /\buseLoopGate\(/.test(src);
+    expect(direct || viaGate).toBe(true);
   });
 
-  it.each(AMBIENT_LOOPS)("%s stops its infinite loop on a hidden tab", (rel) => {
+  it.each(AMBIENT_LOOPS)("%s stops its infinite loop on a hidden tab and off screen", (rel) => {
     const src = read(rel);
     expect(src).toMatch(/repeat:\s*Infinity/);
-    expect(src).toMatch(/import\s*\{[^}]*\busePageVisibility\b[^}]*\}\s*from\s*"@\/hooks\/usePageVisibility"/);
-    expect(src).toMatch(/\busePageVisibility\(\)/);
+    expect(src).toMatch(/import\s*\{[^}]*\buseLoopGate\b[^}]*\}\s*from\s*"@\/hooks\/useLoopGate"/);
+    expect(src).toMatch(/\buseLoopGate\(/);
   });
 });
 
