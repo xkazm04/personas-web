@@ -34,7 +34,9 @@ export default function AthenaOrb({ brand }: { brand: BrandKey }) {
   });
 
   return (
-    <div className="relative mx-auto aspect-square w-full max-w-[360px]">
+    // On the stage the orb is sized from the slot's height (a size container),
+    // leaving room for the speech line under it.
+    <div className="relative mx-auto aspect-square w-full max-w-[360px] stage:max-w-[min(34rem,calc(100cqh_-_5.5rem))]">
       <svg
         viewBox={`0 0 ${SIZE} ${SIZE}`}
         className="absolute inset-0 h-full w-full"

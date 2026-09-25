@@ -30,10 +30,9 @@ export default function Companion() {
   const activeCap = CAPABILITIES[active] ?? CAPABILITIES[0];
 
   return (
-    <SectionWrapper fit="min" id="companion" aria-labelledby="companion-heading">
+    <SectionWrapper fit="fill" id="companion" aria-labelledby="companion-heading">
       <SectionIntro
         id="companion-heading"
-        eyebrow="Companion"
         heading="Meet"
         gradient="Athena"
         trailing=", always on"
@@ -42,7 +41,8 @@ export default function Companion() {
 
       <motion.div
         variants={fadeUp}
-        className="mt-12 grid grid-cols-1 items-center gap-10 lg:grid-cols-2 lg:gap-16"
+        data-stage-slot
+        className="mt-12 grid grid-cols-1 items-center gap-10 lg:grid-cols-2 lg:gap-16 stage:mt-0 stage:content-center"
       >
         {/* Orb stage */}
         <div
@@ -53,7 +53,7 @@ export default function Companion() {
           <AthenaOrb brand={activeCap.brand} />
 
           {/* Athena's "speech" — a small panel the orb morphs into, changing per capability */}
-          <div className="mx-auto mt-4 flex min-h-[3.5rem] max-w-sm items-center justify-center">
+          <div className="mx-auto mt-4 flex min-h-[3.5rem] max-w-sm items-center justify-center stage:mt-[1.5svh]">
             <AnimatePresence mode="wait">
               <motion.p
                 key={activeCap.id}
@@ -76,7 +76,7 @@ export default function Companion() {
         </div>
 
         {/* Capability list */}
-        <ul className="flex flex-col gap-3">
+        <ul data-stage-zoom className="flex flex-col gap-3 stage:gap-2">
           {CAPABILITIES.map((cap, i) => {
             const isActive = cap.id === activeCap.id;
             const Icon = cap.icon;
@@ -90,7 +90,7 @@ export default function Companion() {
                     pauseFor(TAP_PAUSE_MS);
                   }}
                   aria-pressed={isActive}
-                  className={`flex w-full items-start gap-4 rounded-2xl border p-4 text-left transition-colors ${
+                  className={`flex w-full items-start gap-4 rounded-2xl border p-4 text-left transition-colors stage:p-3 ${
                     isActive ? "" : "border-glass"
                   }`}
                   style={{
