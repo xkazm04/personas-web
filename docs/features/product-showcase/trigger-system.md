@@ -1,5 +1,7 @@
 # Trigger System
-> A radial trigger-type wheel that auto-fires and drives a synced detail panel · **Route:** `/features` (deep-dive section) · **Status:** Live
+> A radial trigger-type wheel that auto-fires and drives a synced detail panel · **Route:** `/features` (deep-dive section) · **Status:** Removed
+
+> **Removed from the codebase.** `src/components/feature-sections/TriggerSystem.tsx` and `trigger-system/` were deleted as dead code in 72dae5f (2026-09-15, knip sweep); it was never mounted on `/features`, and the `/todo` scratch page that hosted it no longer exists. Everything below describes the deleted component and is kept only as history. The live trigger showcase is the homepage orchestration hub — see [orchestration-hub](../demos/orchestration-hub.md).
 
 ## What it does
 Shows the eight ways an agent can be started — Manual, Schedule, Webhook, Clipboard, File Watch, Chain, Event Bus, Polling — laid out as nodes around a circular "wheel". A central hub pulses as triggers periodically "fire" on their own, and the selected trigger's name, description, plain-language detail, and a concrete example (a cron line, a webhook path, a regex, a chain) appear in a detail panel beside the wheel. Visitors can click any node (or the dot strip under the panel) to inspect a specific trigger. The message to the reader: agents run *when and how you want*, and you can mix and match the eight starters for any workflow.

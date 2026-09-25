@@ -1,42 +1,44 @@
 # Memory Layers
-> Geological memory-layer stack that animates agent learning as importance-ranked pills settling into category strata · **Route:** `/features` (deep-dive section) · **Status:** Live
+> "Run twice" illustration: the same task run twice — run 1 wanders and fails, run 12 goes straight to the goal because the failures were kept as memory · **Route:** `/features` (deep-dive section) · **Status:** Live
 
 ## What it does
-Shows how Personas agents remember. A glassy "cortical-layers-view" panel renders four stacked geological layers — **Learning**, **Preference**, **Technical**, **Constraint** — each holding memory pills (e.g. *"Deploy window: Tue–Thu 10am–4pm only"*). Pills carry a source (`Exec #847`), an importance score (1–10) shown as a vertical fill bar, and rank highest-importance-first inside their layer. A left-hand depth scale (10 → 2, "Importance"/"depth") and a bottom legend frame the stack. Roughly every 5.5–8s a new memory drops in with a sparkle badge and glow, the layer prunes to its 3 most-recent entries per category, and the header memory count updates — visually telling the marketing story that agents "get smarter the more they work."
+Shows how Personas agents remember. Under the heading **"Remembers what works"** and the one-line lede *"Your agents get better the more they work."*, a single SVG illustration draws two tracks from the same start to the same goal. **Run 1** (top, dim) wanders along a curvy path with two retry loops; a red cross marks each failure. Each failure then drops a coloured **memory chip** (amber, purple) down a dashed tether onto **Run 12**'s track (bottom, cyan→emerald), and run 12 draws straight and fast to the goal, lighting each chip as it passes; a ring pulses at its flag. A small replay button in the corner re-plays the 2.8s animation — telling the marketing story that agents "get smarter the more they work."
 
 ## How it works
-`MemoryLayers` is the section wrapper: heading, blurb, the diagram, and four capability pills, all under a `SectionWrapper` with `whileInView` stagger. It renders `MemoryLayersStack`, which is just a re-export of `memory-layers-stack/index.tsx`. The stack calls `useMemoryFeed()` (in `memoryShared.tsx`) for live state, groups memories by `CATEGORIES`, and lays out a header (Layers/Brain/Search icons + live count), a `DepthScale` rail, a `LayoutGroup`-wrapped column of four `GeologicalLayer`s, and a `StackLegend`.
+`MemoryLayers.tsx` (default export `MemoryLayersRunTwice`, an `/illustrate` 1.1.0 "run-twice" variant) is a `SectionWrapper(fit="fill", id="memory-layers")` with a hand-rolled intro (`data-section-intro` / `data-section-lede`, so it takes the stage gap) and a `data-stage-slot` holding `RunTwiceArt`.
 
-`useMemoryFeed` seeds 5 `initialMemories`, then on an interval (`5500 + Math.random()*2500` ms) pulls the next template from a 5-item `newMemoryPool` (round-robin via `poolIdxRef`), assigns a fresh id and `Date.now()` timestamp, appends it, then rebuilds the list keeping only the **3 most-recent per category**. The new id is set as `freshId` for 1800ms (a `setTimeout` clears it). Each `GeologicalLayer` insets/dims by depth index, sorts its pills by importance desc, and animates pill enter/exit/reorder via `AnimatePresence mode="popLayout"` + per-pill `layoutId`. `MemoryPill` paints category color into border/background/shadow, draws the importance fill bar, and shows a `Sparkles` badge while `isFresh`.
+`RunTwiceArt` drives every beat from one framer `MotionValue` `p` (0..1) animated linearly over `DURATION = 2.8`s (`RunTwiceArt.tsx:43`):
+- **A 0.00–0.50** run 1 draws piece by piece (`Run1Piece` opacity per sampled chunk); red `FailCross`es appear at the loop apexes.
+- **B 0.50–0.64** each cross releases a `MemoryChip` that drops to run 12's track.
+- **C 0.64–0.88** run 12's gradient line grows via `scaleX`; chips light as the traveller passes.
+- **D 0.88–1.00** the goal ring scales/fades in.
+
+`p` starts at `1` (the finished comparison), so the server render and reduced motion show the end state. `useInView(rootRef, { once: true, amount: 0.4 })` triggers `play()` (reset `p` to 0, `animate` to 1) once; the replay button calls `play()` again. Geometry (viewBox 1000×420, the cubic run-1 path sampled into chunks, failure points, lane y's) is computed once at module scope in `runTwiceGeometry.ts`, so server and client draw identical SVG with no DOM measurement. Only three words sit in the picture (`Run 1`, `Run 12`, `Memory`), positioned as HTML spans by viewBox percentages.
+
+**Stage fit (desktop).** The art root carries `data-stage-art` with `--art-ar: VIEW_W / VIEW_H` (`RunTwiceArt.tsx:85-89`), so on the stage (`src/styles/stage.css`) it is `min(100%, slot height × 1000/420)` wide — as wide as the stage allows, never taller than the screen, and growing on a monitor.
 
 ## Key files
 | File | Role |
 | --- | --- |
-| `src/components/feature-sections/MemoryLayers.tsx` | Section shell: heading, blurb, capability pills, `data-tour-diagram="memory"` wrapper |
-| `src/components/feature-sections/MemoryLayersStack.tsx` | One-line re-export of `./memory-layers-stack/index` |
-| `src/components/feature-sections/memoryShared.tsx` | Types, `CATEGORIES`/`CATEGORY_META`, seed + pool data, `useMemoryFeed()` hook |
-| `src/components/feature-sections/memory-layers-stack/index.tsx` | Stack container: header, grouping, `DepthScale` + `LayoutGroup` + `StackLegend` layout |
-| `.../memory-layers-stack/components/DepthScale.tsx` | Left importance/depth axis (10→2), md+ only |
-| `.../memory-layers-stack/components/GeologicalLayer.tsx` | One category stratum; depth inset/opacity, pill sort + `AnimatePresence` |
-| `.../memory-layers-stack/components/MemoryPill.tsx` | Single memory chip: importance bar, source, imp score, fresh sparkle badge |
-| `.../memory-layers-stack/components/StackLegend.tsx` | Bottom category color legend |
+| `src/components/feature-sections/MemoryLayers.tsx` | Section shell: heading, lede, stage slot around the art |
+| `src/components/feature-sections/memory-layers/RunTwiceArt.tsx` | The illustration: progress value, in-view play, replay button, SVG + labels; `data-tour-diagram="memory"` |
+| `src/components/feature-sections/memory-layers/runTwiceParts.tsx` | Beat helpers (`beat`, `r1Of`, `r2Of`, `easeOut`) and animated marks: `Run1Piece`, `FailCross`, `MemoryChip`, `Flag`; chip colours `CHIPS` |
+| `src/components/feature-sections/memory-layers/runTwiceGeometry.ts` | Module-scope geometry: `VIEW_W/H`, `START_X`/`GOAL_X`, `TOP_Y`/`BOTTOM_Y`/`MEM_Y`, run-1 segments + sampling (`RUN1_CHUNKS`, `run1At`), `FAILS`/`FAIL_AT` |
 
 ## Data & state
-- **Source:** fully self-contained mock — `initialMemories` (5) + `newMemoryPool` (5 templates) hardcoded in `memoryShared.tsx:55`/`63`. No fetch, no orchestrator, no Supabase. **Stores:** none global; local `useState` in `useMemoryFeed` (`memories`, `freshId`) plus `nextIdRef`/`poolIdxRef`. **API routes:** none. **Types:** `Memory`, `Category`, `CATEGORIES`, `CATEGORY_META` exported from `memoryShared.tsx:8`–`51`.
+- **Source:** fully static — geometry constants in `runTwiceGeometry.ts`; copy in the `memorySection` namespace of `src/i18n/en.ts` (heading, lede, `artLabel`, `run1`, `run12`, `memory`, `replay`). No fetch, no orchestrator, no Supabase. **Stores:** none; one framer `MotionValue` plus a ref to the running animation's controls. **API routes:** none.
 
 ## Integration points
-- **`/features` page:** mounted via `LazyMemoryLayers` (`feature-lazy.tsx:11`, `createLazySection(..., { ssr: false })`) inside `<StageSection id="memory-layers">` + `<LazyMount minHeight={760}>` (`src/app/features/page.tsx:46`). Scroll-map anchor `#memory-layers` ("MEMORY", `page.tsx:21`).
-- **Guided tour:** step `id: "memory"` in `src/lib/tour-script.ts:253` spotlights `[data-tour-diagram="memory"]` (set in `MemoryLayers.tsx:45`) and scrolls to `#memory-layers`.
-- **`/todo` page:** also imports `MemoryLayers` directly (`src/app/todo/page.tsx:4`).
+- **`/features` page:** mounted via `LazyMemoryLayers` (`feature-lazy.tsx:11`, `createLazySection(..., { ssr: false })`) inside `<StageSection id="memory-layers">` + `<LazyMount minHeight={760}>` (`src/app/features/page.tsx:66-69`). Scroll-map anchor `#memory-layers` ("MEMORY", `page.tsx:43`).
+- **Guided tour:** step `id: "memory"` in `src/lib/tour-script.ts:254` spotlights `[data-tour-diagram="memory"]` (set on the art root, `RunTwiceArt.tsx:84`) and scrolls to `#memory-layers`.
 - Conceptually mirrors the dashboard Knowledge Base surface (live agent memory) — see related docs.
 
 ## Conventions & gotchas
-- **i18n — NOT followed. All copy is hardcoded English**, violating the repo's "every user-facing string lives in `en.ts`" rule. Hardcoded strings include the heading "Remembers what works" / blurb (`MemoryLayers.tsx:28`,`36`), the 4 capability pills (`MemoryLayers.tsx:60`), header labels `cortical-layers-view`/`memories`/`instant recall` (`index.tsx:31`,`38`,`42`), `DepthScale` "Importance"/"depth", `GeologicalLayer` "… layer" / "memory"/"memories" / "no memories in this layer yet", and `CATEGORY_META.label` + all seed/pool memory titles/sources. None route through `useTranslation()`.
-- **React 19 purity caveat:** `const NOW = Date.now()` at module scope (`memoryShared.tsx:53`) and `Math.random()` in the interval delay (`:106`) — both are outside render (module init / effect body), so they don't trip the in-render impurity rule, but seed timestamps are import-time, not render-time.
-- **Animation gating — OK.** `useMemoryFeed` short-circuits its interval when `useReducedMotion()` is true (`memoryShared.tsx:104`); `GeologicalLayer` swaps its pulsing dot to a static state under reduced motion (`:51`). The custom lint rule is satisfied (no raw `requestAnimationFrame`; framer-motion drives all motion).
-- **Tailwind tokens:** mostly semantic (`text-foreground`, `border-foreground/10`, `bg-background`), but category colors are **raw hex** in `CATEGORY_META` (`#06b6d4`, `#a855f7`, `#fbbf24`, `#f43f5e`) consumed via inline `style`, and the stack uses a `force-dark` wrapper + raw `rgba()`/`white/[0.0x]` gradients (`index.tsx:26`,`63`). Several `text-foreground/60` usages sit at the WCAG-AA lint threshold (allowed, not below).
-- **SSR:** the section is `ssr: false` lazy-loaded, so the live feed never runs on the server (avoids hydration mismatch from time-based state).
-- **Pruning is per-category, not global:** the header count caps at 12 (4 categories × 3 kept), and the oldest memory in a category silently exits when a 4th arrives.
+- **i18n — migrated, English-only for now.** All copy lives in `t.memorySection` (read via `useTranslation()` in both `MemoryLayers.tsx` and `RunTwiceArt.tsx`). `memorySection` is listed in `PENDING_TRANSLATION` in `en.ts`, so the 13 other locales fall back to English until it is translated.
+- **Animation gating — followed.** The gate is `useStillMotion` (`RunTwiceArt.tsx:47`): when still, the effect stops any running animation and pins `p` to 1, and the replay button is `disabled`. DOM shape is identical either way (only `p` differs), so there is no hydration mismatch. The animation is one-shot, not an ambient loop, so no visibility gate is needed.
+- **Tailwind tokens:** SVG colours come from `BRAND_VAR` / `tint()` (`@/lib/brand-theme`) and `currentColor` + `text-foreground`; the frame uses `border-glass`. `bg-white/[0.02]` on the frame and replay button is a raw-colour exception.
+- **SSR:** the section is `ssr: false` lazy-loaded; even so, the art is written to render its end state without client state.
+- **Accessibility:** the art root is `role="img"` with `aria-label={copy.artLabel}`; the SVG itself is `aria-hidden`.
 
 ## Related docs
 - [Multi-Provider AI](multi-provider-ai.md)

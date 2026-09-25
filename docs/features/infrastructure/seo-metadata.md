@@ -19,7 +19,7 @@ Both export `OG_SIZE = 1200×630`; `og-frame.tsx` also exports `OG_CONTENT_TYPE 
 | File | Role |
 | --- | --- |
 | `src/lib/seo.ts` | Shared SEO constants + `safeJsonLd()` script-escaper; canonical `SITE_URL`/`SITE_NAME`/`SITE_DESCRIPTION`/`TWITTER_HANDLE`/`BG_NEAR_BLACK` |
-| `src/app/layout.tsx:24` | Root `metadata` object (title template, OG, Twitter, canonical, keywords) consumed by every route |
+| `src/app/layout.tsx:27` | Root `metadata` object (title template, OG, Twitter, canonical, keywords) consumed by every route |
 | `src/lib/og-frame.tsx` | `OgFrame` centered hero OG template; exports `OG_SIZE`, `OG_CONTENT_TYPE` |
 | `src/lib/og.tsx` | `ogCard` badge/title/subtitle OG template for data-driven routes |
 | `src/app/opengraph-image.tsx` | Root/home OG image (`OgFrame`, `revalidate=86400`) |

@@ -22,7 +22,7 @@ Each `FAQCard` (`FAQ.tsx:16`) owns its own `open` boolean (`useState`). The trig
 - **Mobile (single stacked column, `<md`):** Up/Down wrap through all items in reading order; Home/End jump to first/last.
 - **Desktop (two columns, `md+`):** Up/Down stay *within* a column (wrap at column ends); Left/Right cross between columns; Home/End jump to column start/end. This keeps focus order matching the on-screen spatial layout instead of the DOM order.
 
-Section motion comes from `SectionWrapper` (`whileInView` `staggerContainer`, `once: true`); cards and header/CTA are `fadeUp` children. The `<section id="faq">` is labelled by the header's `id="faq-heading"` via `aria-labelledby`.
+Section motion comes from `SectionWrapper` (`whileInView` `staggerContainer`, `once: true`); cards and header/CTA are `fadeUp` children. The `<section id="faq">` is labelled by the header's `id="faq-heading"` via `aria-labelledby`. It is `SectionWrapper fit="min"` (`FAQ.tsx:142`): on the desktop stage (`src/styles/stage.css`) it is at least one screen high with its content centred, and grows when a reader opens answers - which is why the page's scroll snap is `proximity`, never `mandatory`.
 
 ## Key files
 
@@ -36,9 +36,9 @@ Section motion comes from `SectionWrapper` (`whileInView` `staggerContainer`, `o
 | `src/i18n/en.ts` (`faqSection`, line ~1307) | Source of truth for all copy: `heading`, `headingGradient`, `subtitle`, `questions[]`, and CTA strings. |
 
 ## Data & state
-- **Source:** `t.faqSection` from `useTranslation()` — `heading`, `headingGradient`, `subtitle`, `questions: {q,a}[]`, `stillQuestions`, `discordSubtitle`, `joinDiscord` (interface at `src/i18n/en.ts:170`, en values at `:1307`). **Stores:** none (no Zustand). **API routes:** none — fully static. **Types:** `FAQItem` (`faqIllustrations.tsx:9`); translation shape `Translations.faqSection`.
+- **Source:** `t.faqSection` from `useTranslation()` — `heading`, `headingGradient`, `subtitle`, `questions: {q,a}[]`, `stillQuestions`, `discordSubtitle`, `joinDiscord` (interface at `src/i18n/en.ts:144`, en values at `:2581`). **Stores:** none (no Zustand). **API routes:** none — fully static. **Types:** `FAQItem` (`faqIllustrations.tsx:7`); translation shape `Translations.faqSection`.
 - **Local state:** per-card `open: boolean`; `buttonRefs` ref array for focus; `useIsMobile()` (matchMedia, `<768px`) selects the keyboard-nav mode.
-- **Constants:** `DISCORD_INVITE_URL` (`src/lib/constants.ts:36`) = `NEXT_PUBLIC_DISCORD_INVITE_URL` env or `https://discord.gg/personas` fallback.
+- **Constants:** `DISCORD_INVITE_URL` (`src/lib/constants.ts:38`) = `NEXT_PUBLIC_DISCORD_INVITE_URL` env or `https://discord.gg/personas` fallback.
 
 ## Integration points
 - **i18n lockstep:** adding/removing a FAQ requires editing `questions[]` in all 14 locales (the array length is the shape) **and** updating `FAQ_ILLUSTRATIONS_BY_POSITION` to keep counts aligned.
@@ -47,7 +47,7 @@ Section motion comes from `SectionWrapper` (`whileInView` `staggerContainer`, `o
 - **Animation primitives:** `fadeUp`, `staggerContainer`, `TRANSITION_FAST`, `TRANSITION_NORMAL` from `src/lib/animations.ts`; `SectionWrapper` for the in-view reveal.
 
 ## Conventions & gotchas
-- **Illustration↔question coupling is positional, not semantic.** `FAQ_ILLUSTRATIONS_BY_POSITION` (`faqIllustrations.tsx:15`) maps array *index* → SVG. Reorder or insert a question and the illustrations silently shift out of sync with the copy (e.g. the pricing SVG lands on a non-pricing answer). `warnOnFaqIllustrationDrift()` (`faqIllustrations.tsx:26`) only `console.warn`s on a **count mismatch** in non-production — it cannot catch a reorder, and a too-short list just falls back to the Terminal SVG with no warning.
+- **Illustration↔question coupling is positional, not semantic.** `FAQ_ILLUSTRATIONS_BY_POSITION` (`faqIllustrations.tsx:13`) maps array *index* → SVG. Reorder or insert a question and the illustrations silently shift out of sync with the copy (e.g. the pricing SVG lands on a non-pricing answer). `warnOnFaqIllustrationDrift()` (`faqIllustrations.tsx:26`) only `console.warn`s on a **count mismatch** in non-production — it cannot catch a reorder, and a too-short list just falls back to the Terminal SVG with no warning.
 - **a11y — illustrations have no accessible name.** The SVGs are decorative but carry no `role="img"`/`aria-label` *and* no `aria-hidden="true"`, so screen readers may surface their raw `<text>` content (e.g. "$ claude --version", "✓ 3 agents running") inside the answer region with no context. Consider `aria-hidden` on the illustration wrapper (`FAQ.tsx:71-75`).
 - **a11y — panel is a sibling of its trigger, not a child group.** Each card is a standalone disclosure (`aria-expanded`/`aria-controls` on the button, `role="region"`/`aria-labelledby` on the panel). There is no `role="list"`/listitem or a single accordion group, so this reads as N independent disclosures, not a grouped accordion — intentional, but note it if changing semantics.
 - **a11y — keyboard nav is custom and 2D.** Arrow-key focus movement is hand-rolled (`FAQ.tsx:109`) and *branches on viewport width* via `useIsMobile()`. The desktop Left/Right cross-column logic assumes exactly the `Math.ceil(len/2)` split; changing the column split or grid breakpoint (`md:grid-cols-2` vs. the `768px` in `useIsMobile`) will desync focus order from layout. SSR snapshot of `useIsMobile` is `false` (desktop), so first paint uses the two-column key map.

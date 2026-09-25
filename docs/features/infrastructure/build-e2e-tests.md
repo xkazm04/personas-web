@@ -1,5 +1,5 @@
 # Build Config & E2E Tests
-> Next.js build/runtime config (Sentry, CSP, image formats) plus the 13-spec Playwright suite — the project's only automated test layer. · **Route:** n/a (build/test) · **Status:** Config + Playwright e2e
+> Next.js build/runtime config (Sentry, CSP, image formats) plus the 17-spec Playwright suite — the project's only automated test layer. · **Route:** n/a (build/test) · **Status:** Config + Playwright e2e
 
 ## What it does
 Defines how personas-web builds and runs in production, and how it is verified end-to-end. `next.config.ts` wires Sentry source-map upload, modern image formats, env injection, and a full set of security headers (incl. a hand-tuned CSP). `playwright.config.ts` drives a single-browser (chromium) e2e suite that boots a real production build and exercises the public marketing/content routes through the browser. There is **no unit-test runner** — Playwright is the entire test pyramid here, so anything not reachable by a public route URL is effectively untested.
@@ -7,13 +7,13 @@ Defines how personas-web builds and runs in production, and how it is verified e
 ## How it works
 **Build** (`npm run build` → `next build`): `next.config.ts` reads `package.json` for the version, injects `NEXT_PUBLIC_APP_VERSION`/`RELEASE_TITLE`/`RELEASE_DATE` as build-time env, sets `next/image` to emit AVIF→WebP (with allowed qualities `[75, 80]`), and attaches `securityHeaders` to every route via `headers()`. The whole config is wrapped in `withSentryConfig(...)`, which uploads source maps when `SENTRY_ORG`/`SENTRY_PROJECT` (and an auth token) are present and then deletes them so they never ship to the client (`next.config.ts:88-100`).
 
-**Test** (`npm run test:e2e` → `playwright test`): Playwright's `webServer` runs `npm run build && npm run start -- --port 3002` and waits up to 120s for port 3002, with `reuseExistingServer: true` so a dev can keep a server running between runs (`playwright.config.ts:18-23`). Specs hit `baseURL` `http://localhost:3002`, run **serially** (`fullyParallel: false`, `workers: 1`), with `retries: 0` and `trace: "on-first-retry"` (which, with zero retries, means traces effectively never capture — see gotchas). Each spec is a `test.describe` of `page.goto(route)` + role/text/`data-*` assertions.
+**Test** (`npm run test:e2e` → `playwright test`): Playwright's `webServer` runs `npm run build && npm run start -- --port $PORT` and waits up to 120s for that port, with `reuseExistingServer: !CI` so a dev can keep a server running between runs (`playwright.config.ts:35-41`). `PORT` is `PLAYWRIGHT_PORT` (default `3002`, `playwright.config.ts:6`) — overridable because `reuseExistingServer` trusts whatever already listens there, which on a machine running other projects' dev servers may be a different app. Specs hit `baseURL` `http://localhost:$PORT`, run **serially** (`fullyParallel: false`, `workers: 1`), with `retries: 0` and `trace: "on-first-retry"` (which, with zero retries, means traces effectively never capture — see gotchas). Each spec is a `test.describe` of `page.goto(route)` + role/text/`data-*` assertions.
 
 ## Key files
 | File | Role |
 | --- | --- |
 | `next.config.ts` | Build/runtime config: Sentry wrap, image formats, env injection, security headers + CSP |
-| `playwright.config.ts` | Test runner config: chromium project, baseURL :3002, `webServer` build-and-start, serial single-worker |
+| `playwright.config.ts` | Test runner config: chromium project, baseURL `:$PLAYWRIGHT_PORT` (default 3002), `webServer` build-and-start, serial single-worker |
 | `e2e/guide.spec.ts` | Largest spec (~25 tests): guide hub/sidebar/category/topic nav, markdown blocks, module badges, JSON-LD |
 | `e2e/tour.spec.ts` | Largest describe set: Autopilot tour engine (homepage + /features + /roadmap), deep link, mobile, a11y |
 | `e2e/cookie-consent.spec.ts` | Global consent banner: localStorage persistence, Accept All / Essential Only, legal link |
@@ -22,7 +22,8 @@ Defines how personas-web builds and runs in production, and how it is verified e
 | `e2e/orchestration-hub.spec.ts` | Home hub playback: auto-cycle, Pause holds the `n / N` indicator past a full cycle, Next steps one, Play resumes |
 | `e2e/review-undo.spec.ts` | `/dashboard/reviews` (demo): approve -> undo toast -> Undo restores; a committed verdict survives the next poll |
 | `e2e/reduced-motion.spec.ts` | `/how` SwarmView under `contextOptions.reducedMotion`: SVG timeline paused + rest pose visible, with a no-preference control |
-| `e2e/reduced-motion-hydration.spec.ts` | `/how` under both preferences: the streamed `section#event-bus` is adopted, never discarded and client-rendered again (MutationObserver installed by `addInitScript`) |
+| `e2e/reduced-motion-hydration.spec.ts` | `/how` under both preferences: the streamed `section#event-bus` is adopted, never discarded and client-rendered again (MutationObserver installed by `addInitScript`); `/` and `/features` under reduced motion raise no "Hydration failed" pageerror (the `FloatingParticles` regression) |
+| `e2e/stage-fit.spec.ts` | Desktop stage fit (`src/styles/stage.css`): every `[data-stage]` section on `/` and `/features` at five inner viewports (1366x657 to 2560x1300) must be no taller than the screen under the navbar and must not spill >2px below itself (lowest visible box, clipped by overflow-hiding ancestors); `KNOWN_OVERFLOW` is a shrink-only ratchet (an entry that stops overflowing fails too) |
 | `package.json` scripts | `build` / `start` / `lint` / `typecheck` / `test:unit` / `test:e2e` |
 
 ## Data & state

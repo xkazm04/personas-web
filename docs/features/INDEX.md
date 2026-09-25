@@ -66,9 +66,9 @@ Status legend: ✅ written · ⬜ planned
 | Doc | Surface |
 | --- | --- |
 | ✅ [homepage-hero](marketing/homepage-hero.md) | Hero, command-center, stat row, social proof |
-| ✅ [why-agents](marketing/why-agents.md) | Agent-vs-workflow scenario duels |
-| ✅ [use-cases](marketing/use-cases.md) | Agent-army grid + tool selection |
-| ✅ [features-overview](marketing/features-overview.md) | `/features` page + vision grid |
+| ✅ [why-agents](marketing/why-agents.md) | Agent-vs-workflow scenario duels (retired section; kept as history) |
+| ✅ [use-cases](marketing/use-cases.md) | Tool tabs + persona card + ledger playback |
+| ✅ [features-overview](marketing/features-overview.md) | `/features` page + vision layer stack |
 | ✅ [pricing](marketing/pricing.md) | Pricing tier cards |
 | ✅ [get-started](marketing/get-started.md) | Get-started steps + download CTA |
 | ✅ [faq](marketing/faq.md) | FAQ accordion |
@@ -80,14 +80,14 @@ Status legend: ✅ written · ⬜ planned
 | Doc | Surface |
 | --- | --- |
 | ✅ [observability-deck](product-showcase/observability-deck.md) | Live pulse-grid deck |
-| ✅ [security-vault](product-showcase/security-vault.md) | Security vault pillars |
+| ✅ [security-vault](product-showcase/security-vault.md) | Nested-vault security illustration |
 | ✅ [agent-lab](product-showcase/agent-lab.md) | Arena / chat / eval / evolution tabs |
 | ✅ [plugin-ecosystem](product-showcase/plugin-ecosystem.md) | Plugin grid + second brain |
-| ✅ [memory-layers](product-showcase/memory-layers.md) | Geological memory stack |
-| ✅ [multi-provider-ai](product-showcase/multi-provider-ai.md) | Multi-provider routing |
+| ✅ [memory-layers](product-showcase/memory-layers.md) | "Run twice" memory illustration |
+| ✅ [multi-provider-ai](product-showcase/multi-provider-ai.md) | Multi-provider router illustration |
 | ✅ [design-engine](product-showcase/design-engine.md) | Design-engine intent matrix |
 | ✅ [healing-circuit](product-showcase/healing-circuit.md) | Self-healing circuit |
-| ✅ [trigger-system](product-showcase/trigger-system.md) | Trigger automation wheel |
+| ✅ [trigger-system](product-showcase/trigger-system.md) | Trigger automation wheel (removed; kept as history) |
 
 ### demos/ — Interactive Demos & Playground
 

@@ -7,7 +7,7 @@ The section a reader reaches under the "Compare" / Pricing anchor on the homepag
 The old Local/Cloud/Enterprise tier cards are gone from this section (see gotchas — the `t.pricing.*` tier copy still exists but is no longer rendered as a pricing surface).
 
 ## How it works
-`Pricing` (`index.tsx`) renders a `SectionWrapper aria-labelledby="compare-heading"` (no id - see gotchas) with a `SectionIntro` header, a static offer band, then maps `FEATURE_GROUPS` to a `FeatureGroupCard` each inside a `staggerContainer` motion grid (`whileInView`, `once: true`). It is loaded on the homepage as `LazyPricing` (`src/components/sections/lazy.tsx:127`) and placed by the `sections` array in `src/app/page.tsx:56` with `wrapperId: "pricing"` (purple stage). Not rendered on `/features`.
+`Pricing` (`index.tsx`) renders a `SectionWrapper fit="min" aria-labelledby="compare-heading"` (no id - see gotchas; `fit="min"` makes it at least one desktop stage high, `src/styles/stage.css`) with a `SectionIntro` header, a static offer band, then maps `FEATURE_GROUPS` to a `FeatureGroupCard` each inside a `staggerContainer` motion grid (`whileInView`, `once: true`). It is loaded on the homepage as `LazyPricing` (`src/components/sections/lazy.tsx:122`) and placed by the `sections` array in `src/app/page.tsx:59` with `wrapperId: "pricing"` (purple stage). Not rendered on `/features`.
 
 `FEATURE_GROUPS` (`data.ts`) holds only the **non-translatable structure** per group: stable `id`, a lucide `icon`, a `brand` color key, and a `guideHref`. `FeatureGroupCard` reads the translatable copy from `t.compareSection.groups[group.id]` (`{ title, tagline, concepts[] }`) — so the card body is fully i18n-driven, keyed by `id`. Brand color flows through `BRAND_VAR[brand]` / `tint` / `brandShadow` from `brand-theme.ts` into the icon chip, title glow, divider gradient, check marks, and guide link.
 
@@ -17,9 +17,9 @@ The old Local/Cloud/Enterprise tier cards are gone from this section (see gotcha
 | `src/components/sections/pricing/index.tsx` | Section: SectionIntro, static "free forever" offer band + CTA, stagger grid of cards |
 | `src/components/sections/pricing/data.ts` | `FeatureGroup` type, `FeatureGroupId` union, `FEATURE_GROUPS` (icon/brand/guideHref only) |
 | `src/components/sections/pricing/FeatureGroupCard.tsx` | Single brand card: icon chip, title+tagline, concept checklist, guide link |
-| `src/i18n/en.ts:1033` | `compareSection` source copy: heading, description, `readGuide`, per-group `{title, tagline, concepts[]}` |
-| `src/components/sections/lazy.tsx:127` | `LazyPricing` code-split wrapper |
-| `src/app/page.tsx:56` | Mounts `LazyPricing` in the homepage section list (`wrapperId: "pricing"`) |
+| `src/i18n/en.ts:2348` | `compareSection` source copy: heading, description, `readGuide`, per-group `{title, tagline, concepts[]}` |
+| `src/components/sections/lazy.tsx:122` | `LazyPricing` code-split wrapper |
+| `src/app/page.tsx:59` | Mounts `LazyPricing` in the homepage section list (`wrapperId: "pricing"`) |
 
 ## Data & state
 - **Source:** fully static. **Stores:** none (no Zustand). **API routes:** none for content; CTA href is `ctaHref(DOWNLOAD_PLAN)` from the release authority `src/lib/release.ts`: `/api/download` only when the installer URL passes the same https + host-allowlist rule the route enforces, else the always-present `#download-section` wrapper. The click reports `download_click` with `placement: "pricing"` via `trackDownloadClick` (`src/lib/analytics.ts`). **Types:** `FeatureGroup`, `FeatureGroupId` (`data.ts`); copy typed by the `compareSection` shape in the `Translations` interface (`en.ts`). No live/orchestrator data.
@@ -29,7 +29,7 @@ The old Local/Cloud/Enterprise tier cards are gone from this section (see gotcha
 - **`BrandCard`** (`@/components/primitives`) — themed card surface; `brand-theme.ts` (`BRAND_VAR`, `tint`, `brandShadow`) supplies all per-brand color.
 - **`PrimaryCTA`** + lucide `Download` — the offer CTA.
 - **`/guide/<group>`** — each card deep-links into the product guide (`guideHref`). Card `id`s mirror guide categories.
-- **`SCROLL_MAP_SECTIONS`** (`src/lib/constants.ts:19`) — `#pricing` anchor labeled "Compare" in the scroll map; nav and any existing `#pricing` hash links still resolve here.
+- **`SCROLL_MAP_SECTIONS`** (`src/lib/constants.ts:21`) — `#pricing` anchor labeled "Compare" in the scroll map; nav and any existing `#pricing` hash links still resolve here.
 - **Navbar / `t.nav.pricing`** ("Pricing") still labels the link to this anchor.
 
 ## Conventions & gotchas

@@ -48,8 +48,8 @@ i18n bundle entirely. **Gated — see scope note above.**
 | ID | Sev | Finding | Fix | Status |
 |---|---|---|---|---|
 | A-01 | High | `i18nStore.setLanguage` was a no-op; `language` hard-locked to `'en'`; no switcher; no `persist`. | **Infra built behind a dev flag (🟡).** `setLanguage` is now real + `persist`ed; added `LanguageSwitcher` (footer) + `<html lang>`/`dir` RTL handling. **Gated by `NEXT_PUBLIC_SHOW_LANGUAGE_SWITCHER`** (default off) — off ⇒ switcher renders null, `setLanguage` no-ops, persisted locale forced to `en`, so **production stays English-only, byte-identical**. `useTranslation` was already fully wired (lazy-load + en fallback). **Not shipped:** flag stays off until the corrupt non-en bundles are repaired (the switcher exists to QA them). A-02..A-13/A-16 (translation completeness + corruption) remain the gating data work — out-of-scope bulk migration per CLAUDE.md / your active i18n pipeline. | 🟡 |
-| A-02 | High | ~118 of ~582 `.tsx` use `useTranslation`; much UI copy is hardcoded English. | Inventory + scoped migration plan. | 🔵 |
-| A-03 | High | Entire `/features` product-showcase tree hardcoded English (all 9 sections). | Per-section i18n migration (14-locale). | 🔵 |
+| A-02 | High | ~118 of ~582 `.tsx` use `useTranslation`; much UI copy is hardcoded English. | Inventory + scoped migration plan. **2026-09-25:** ~260 of ~670 `.tsx` now use it; the revamped landing + `/features` sections moved 372 keys into 11 English-only `PENDING_TRANSLATION` namespaces in `en.ts` (hardcoded-string reporter 489 → 400 repo-wide). | 🟡 |
+| A-03 | High | Entire `/features` product-showcase tree hardcoded English (all 9 sections). | Per-section i18n migration (14-locale). **Partly done (2026-09-25):** design, memory, security, multi-provider, observe and plugins copy now lives in `designMatrix` / `memorySection` / `securitySection` / `aiModelsSection` / `observeSection` / `pluginsExtra` — English-only, pending translation. Healing and lab (being replaced by `/illustrate`) are still hardcoded. | 🟡 |
 | A-04 | High | Marketing hardcoded English: why-agents (`data.ts`+RoleSelector), features cluster, get-started+`TOUR_STEPS`, hero (`HeroClient.tsx:142,160`), `SocialProof.tsx`+`testimonials.ts`, pricing offer band. | Migrate per section. | 🔵 |
 | A-05 | Med | Connectors catalog + Extend card + connector modal hardcoded English. | Migrate. | 🔵 |
 | A-06 | Med | Legal hub (3 policies + tabs + `metadata`) hardcoded English. | Migrate. | 🔵 |
@@ -74,7 +74,7 @@ Safe, low-risk cleanups (remove or wire up). Good early wins.
 |---|---|---|---|---|
 | B-01 | Low | `AgentDetailDrawer.tsx` fully built but imported nowhere (page expands `AgentDetail` inline). | **Deleted** (0 importers; 2 descriptive comments in `AgentMetrics`/`useDialogFocusTrap` left as-is). | 🟢 |
 | B-02 | Low | `personaStore` optimistic update/rollback/commit infra has no caller in `src/`. | Wire into execute path or remove. | 🔴 |
-| B-03 | Low | `HeroTransition.tsx` orphaned (real seam is `SectionDivider`); `t.heroTransition.*` dead. | **Component deleted.** `t.heroTransition.*` keys now orphaned across the interface + 14 locales → lockstep removal tracked under A-14. | 🟢 |
+| B-03 | Low | `HeroTransition.tsx` orphaned (real seam was `SectionDivider`, itself deleted 2026-09-25 — it rendered at height 0); `t.heroTransition.*` dead. | **Component deleted.** `t.heroTransition.*` keys now orphaned across the interface + 14 locales → lockstep removal tracked under A-14. | 🟢 |
 | B-04 | Low | `dashboard/knowledge/derived.ts` orphaned, docstring falsely claims it backs table/graph. | **Deleted** (0 importers). | 🟢 |
 | B-05 | Low | `ObservabilityCharts.tsx` + `ChartAnnotation.tsx` zero importers; `ObservabilityCostChart`/`ExecChart` unused near-dupes of `*WithCompare`. | **Deleted all 4** (0 module importers; the `ChartAnnotation` *type* lives in `mock-dashboard-data` and is untouched). | 🟢 |
 | B-06 | Low | `observability-deck/useActivityFeed.ts` + `ActivityFeed.tsx` never imported (live variant = `PulseGridDeck`). | **Deleted both.** | 🟢 |
@@ -104,7 +104,7 @@ pulse (agent-lab) · `PluginCard`/`PluginTabs`
 `FooterLinkColumn` accordion · `MobileTopicTOC`+`SearchResultsPopover` (guide) ·
 `HealthyShieldIllustration` SMIL `animateMotion` (also not paused by the global
 prefers-reduced-motion CSS) · `BlinkingCursor`/`TerminalLine` · vision-grid CSS transitions +
-`FeatureBridge` bounce · get-started looping visuals · entire knowledge cluster graph ·
+`FeatureBridge` bounce · ~~get-started looping visuals~~ (gated by `useLoopGate`, 2026-09-25) · entire knowledge cluster graph ·
 trigger-wheel entrance · `healing-circuit` freezes with no static fallback frame.
 
 | ID | Sev | Finding | Fix | Status |
