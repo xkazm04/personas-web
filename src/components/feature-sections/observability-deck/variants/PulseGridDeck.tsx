@@ -120,7 +120,7 @@ export default function PulseGridDeck({
   }, [reduced, tick]);
 
   return (
-    <div ref={rootRef} className="rounded-2xl border border-foreground/10 bg-background/80 backdrop-blur-xl overflow-hidden shadow-[0_10px_40px_rgba(0,0,0,0.08)] dark:shadow-[0_0_60px_rgba(0,0,0,0.3)]">
+    <div ref={rootRef} className="rounded-2xl border border-foreground/10 bg-background/95 overflow-hidden shadow-[0_10px_40px_rgba(0,0,0,0.08)] dark:shadow-[0_0_60px_rgba(0,0,0,0.3)]">
       <TerminalChrome
         title="observability-deck"
         status={reduced ? "snapshot" : "streaming"}

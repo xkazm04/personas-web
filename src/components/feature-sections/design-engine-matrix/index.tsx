@@ -34,7 +34,7 @@ export default function DesignEngineMatrix() {
         transition={{ duration: 0.6 }}
         className="mx-auto max-w-6xl stage:h-full stage:max-w-none"
       >
-        <div className="force-dark rounded-2xl border border-foreground/[0.08] bg-background/80 backdrop-blur-xl overflow-hidden shadow-[0_0_80px_rgba(0,0,0,0.4)] stage:flex stage:h-full stage:flex-col">
+        <div className="force-dark rounded-2xl border border-foreground/[0.08] bg-background/95 overflow-hidden shadow-[0_0_80px_rgba(0,0,0,0.4)] stage:flex stage:h-full stage:flex-col">
           <div className="flex items-center justify-between border-b border-foreground/[0.06] px-5 py-3">
             <div className="flex items-center gap-3">
               <div className="flex h-9 w-9 items-center justify-center rounded-full bg-brand-purple/15">

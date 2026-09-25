@@ -91,6 +91,7 @@ export default function PlaygroundSplit() {
       >
         <TerminalPanel
           shadow="hero"
+          glass={false}
           className="stage:flex stage:h-full stage:flex-col"
           bodyClassName="stage:flex stage:min-h-0 stage:flex-1 stage:flex-col"
           footer={
