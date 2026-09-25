@@ -2,9 +2,8 @@
 
 import { useEffect, useId, useRef, useState } from "react";
 import { useAnimationControls, useInView } from "framer-motion";
-import GradientText from "@/components/GradientText";
-import SectionHeading from "@/components/SectionHeading";
 import SectionWrapper from "@/components/SectionWrapper";
+import SectionIntro from "@/components/primitives/SectionIntro";
 import { useStillMotion } from "@/hooks/useStillMotion";
 import { STACK_LAYERS, SAMPLE_PERSONA } from "./layer-stack/layers";
 import { LayerStackPersonaCard } from "./layer-stack/PersonaCard";
@@ -57,18 +56,18 @@ export default function VisionGridLayerStack() {
   const names = STACK_LAYERS.map((l) => l.card.title).join(", ");
 
   return (
-    <SectionWrapper fit="min" id="vision-grid" className="relative overflow-hidden">
-      <div className="relative z-10 mx-auto mb-12 max-w-3xl text-center sm:mb-14">
-        <SectionHeading>
-          The <GradientText>platform</GradientText> behind your agents
-        </SectionHeading>
-        <p className="mx-auto mt-6 max-w-2xl text-base font-light leading-relaxed text-muted">
-          Every agent you run stands on the same six layers. Pick one to see what it is doing for this one.
-        </p>
-      </div>
+    <SectionWrapper fit="min" id="vision-grid" className="overflow-hidden">
+      <SectionIntro
+        heading="The"
+        gradient="platform"
+        trailing=" behind your agents"
+        description="Every agent you run stands on the same six layers. Pick one to see what it is doing for this one."
+        className="relative z-10 mb-12 sm:mb-14"
+      />
 
       <div
         data-tour-diagram="platform"
+        data-stage-fixed
         className="relative z-10 mx-auto grid max-w-5xl grid-cols-1 items-stretch gap-6 lg:grid-cols-[minmax(0,500px)_minmax(0,1fr)] lg:gap-10"
       >
         <div

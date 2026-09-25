@@ -138,3 +138,35 @@
     zoom: 1.6;
   }
 }
+
+/* ── Height tiers for fixed-size compositions ──
+   A few illustrations are laid out in fixed pixels (a 592px layer stack, a
+   station line) because their parts are positioned against each other.
+   `data-stage-fixed` scales such a block as a whole - down on short laptop
+   screens, up on tall monitors - so it keeps its proportions and fits the
+   stage. Designed for a composition about 600px tall. */
+@media (min-width: 64rem) and (min-height: 37.5rem) and (max-height: 42.99rem) {
+  [data-stage] [data-stage-fixed] {
+    zoom: 0.68;
+  }
+}
+@media (min-width: 64rem) and (min-height: 43rem) and (max-height: 47.99rem) {
+  [data-stage] [data-stage-fixed] {
+    zoom: 0.78;
+  }
+}
+@media (min-width: 64rem) and (min-height: 48rem) and (max-height: 55.99rem) {
+  [data-stage] [data-stage-fixed] {
+    zoom: 0.87;
+  }
+}
+@media (min-width: 80rem) and (min-height: 67.5rem) {
+  [data-stage] [data-stage-fixed] {
+    zoom: 1.15;
+  }
+}
+@media (min-width: 100rem) and (min-height: 78rem) {
+  [data-stage] [data-stage-fixed] {
+    zoom: 1.35;
+  }
+}
