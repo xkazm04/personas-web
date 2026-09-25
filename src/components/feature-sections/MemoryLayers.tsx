@@ -1,19 +1,34 @@
 "use client";
 
-import IllustrationSwitcher from "@/components/illustrate/IllustrationSwitcher";
-import Current from "./MemoryLayers.current";
-import V_sediment from "./MemoryLayers.sediment";
-import V_constellation from "./MemoryLayers.constellation";
-import V_run_twice from "./MemoryLayers.run-twice";
+import GradientText from "@/components/GradientText";
+import SectionHeading from "@/components/SectionHeading";
+import SectionWrapper from "@/components/SectionWrapper";
+import RunTwiceArt from "./memory-layers/RunTwiceArt";
 
-/* /illustrate prototype (1.1.0, picture first): current + three directions. */
-const VARIANTS = [
-  { key: "current", label: "Current", hint: "Layered memory list", Component: Current },
-  { key: "sediment", label: "Sediment", hint: "Every run settles into layers", Component: V_sediment },
-  { key: "constellation", label: "Constellation", hint: "Memories link and light on recall", Component: V_constellation },
-  { key: "run-twice", label: "Run 1 vs run 12", hint: "The same task, before and after memory", Component: V_run_twice },
-];
+/* /illustrate 1.1.0, variant "run-twice": the same task, run 1 versus run 12. */
 
-export default function MemoryLayers() {
-  return <IllustrationSwitcher section="memory" variants={VARIANTS} props={{}} />;
+export default function MemoryLayersRunTwice() {
+  return (
+    <SectionWrapper id="memory-layers" className="relative overflow-hidden">
+      {/* Atmospheric background */}
+      <div className="absolute inset-0 pointer-events-none" aria-hidden>
+        <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top,rgba(168,85,247,0.05)_0%,transparent_60%)]" />
+        <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_bottom,rgba(6,182,212,0.04)_0%,transparent_60%)]" />
+      </div>
+
+      <div className="text-center relative z-10">
+        <SectionHeading>
+          Remembers what{" "}
+          <GradientText className="drop-shadow-lg">works</GradientText>
+        </SectionHeading>
+        <p className="mx-auto mt-4 max-w-xl text-foreground/85 font-light text-base md:text-lg">
+          Your agents get better the more they work.
+        </p>
+      </div>
+
+      <div className="relative z-10">
+        <RunTwiceArt />
+      </div>
+    </SectionWrapper>
+  );
 }

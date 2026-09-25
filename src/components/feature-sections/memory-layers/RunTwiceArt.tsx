@@ -23,8 +23,8 @@ import {
   VIEW_H,
   VIEW_W,
   run1At,
-} from "./MemoryLayers.run-twice.geometry";
-import { FailCross, Flag, MemoryChip, Run1Piece, beat, easeOut, r1Of, r2Of } from "./MemoryLayers.run-twice.parts";
+} from "./runTwiceGeometry";
+import { FailCross, Flag, MemoryChip, Run1Piece, beat, easeOut, r1Of, r2Of } from "./runTwiceParts";
 
 /*
  * /illustrate 1.1.0, variant "run-twice" (transformation).

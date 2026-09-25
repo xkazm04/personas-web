@@ -2,7 +2,7 @@
 
 import { motion, useTransform, type MotionValue } from "framer-motion";
 import { BRAND_VAR, tint, type BrandKey } from "@/lib/brand-theme";
-import { BOTTOM_Y, FAIL_AT, FAILS, GOAL_X, RUN1_PIECES, START_X } from "./MemoryLayers.run-twice.geometry";
+import { BOTTOM_Y, FAIL_AT, FAILS, GOAL_X, RUN1_PIECES, START_X } from "./runTwiceGeometry";
 
 /* Beat timing and the animated marks of the "run-twice" memory illustration. */
 

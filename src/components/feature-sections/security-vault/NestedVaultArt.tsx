@@ -4,7 +4,7 @@ import { useId } from "react";
 import { easeOut, motion, useTransform, type MotionValue } from "framer-motion";
 import { KeyRound } from "lucide-react";
 import { BRAND_VAR, tint } from "@/lib/brand-theme";
-import { Bolts, H, RINGS, Ring, W, rotateStyle } from "./SecurityVault.nested-vault.parts";
+import { Bolts, H, RINGS, Ring, W, rotateStyle } from "./nestedVaultParts";
 
 /*
  * Geometry (viewBox 760 x 480, drawn around the vault centre at 0,0).

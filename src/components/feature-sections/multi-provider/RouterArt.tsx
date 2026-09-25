@@ -13,7 +13,7 @@ import {
   type LaneKey,
   type Layout,
   type Token,
-} from "./MultiProviderAI.router.geometry";
+} from "./routerGeometry";
 
 /* The drawing for the "router" variant. Ollama is a user-chosen lane, not an
  * automatic fallback: the app's failover chain is Claude-only (engine/failover.rs). */

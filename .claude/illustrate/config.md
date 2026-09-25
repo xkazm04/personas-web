@@ -33,3 +33,7 @@ Read by the registry skill `illustrate` at start. Every key is optional.
   of 1-2 words, 1-5% of the area, against 139-197 words and 19-30 word runs in the
   current sections. Gates green (tsc, eslint, vitest 547/547); 0 blank, 0 loops under
   reduced motion. Owner decision pending.
+- 2026-09-25 owner decision on the /features round: memory takes RUN-TWICE, AI models
+  take ROUTER, security takes NESTED-VAULT; all other variants, the current versions,
+  their orphaned helpers and the switcher deleted. All three winners came from the
+  picture-first (1.1.x) round.
