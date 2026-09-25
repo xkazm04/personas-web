@@ -9,7 +9,7 @@ import RunTwiceArt from "./memory-layers/RunTwiceArt";
 
 export default function MemoryLayersRunTwice() {
   return (
-    <SectionWrapper id="memory-layers" className="relative overflow-hidden">
+    <SectionWrapper fit="min" id="memory-layers" className="relative overflow-hidden">
       {/* Atmospheric background */}
       <div className="absolute inset-0 pointer-events-none" aria-hidden>
         <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top,rgba(168,85,247,0.05)_0%,transparent_60%)]" />

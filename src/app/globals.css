@@ -2,12 +2,17 @@
 @import "../styles/tokens.css";
 @import "../styles/themes.css";
 @import "../styles/typography.css";
+@import "../styles/stage.css";
 
 /* ── Tailwind dark variant bridge ──
    Themes are selected via html[data-theme], and every dark preset is prefixed
    `dark-…`. Map Tailwind's `dark:` variant onto that scheme so `dark:block`
    et al. flip with manual theme switches, not only OS `prefers-color-scheme`. */
 @custom-variant dark (&:where([data-theme^="dark-"] *, [data-theme^="dark-"], .dark *, .dark));
+
+/* Desktop viewport tall enough for one-section-per-screen layout; the rules
+   and tokens behind it live in styles/stage.css. */
+@custom-variant stage (@media (min-width: 64rem) and (min-height: 37.5rem));
 
 /* ── Bridge shared tokens into Tailwind @theme ──
    Raw values live in packages/tokens/tokens.css — do NOT duplicate here. */
@@ -578,20 +583,6 @@ html {
   );
   animation: conic-rotate 4s linear infinite;
   border-radius: 16px;
-}
-
-@keyframes section-divider-scroll-reveal {
-  0% { opacity: 0; transform: scaleX(0.6); }
-  30% { opacity: 0.15; transform: scaleX(1); }
-  70% { opacity: 0.15; transform: scaleX(1); }
-  100% { opacity: 0; transform: scaleX(0.6); }
-}
-
-.section-divider-scroll {
-  animation-name: section-divider-scroll-reveal;
-  animation-duration: 1ms;
-  animation-fill-mode: both;
-  transform-origin: center;
 }
 
 @keyframes typewriter-line-reveal {

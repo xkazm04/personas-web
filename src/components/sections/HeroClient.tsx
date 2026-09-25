@@ -79,6 +79,10 @@ export default function HeroClient({ connectorCount, templateCount }: { connecto
       className="noise relative flex min-h-screen items-center justify-center overflow-hidden px-4 sm:px-6"
       style={{ contain: "layout style paint" }}
       data-animate-when-visible
+      // Stage mode (styles/stage.css): exactly 100svh with the content held
+      // below the fixed navbar, so the CTAs and trust line are on the first
+      // screen of a 1366x768 laptop instead of under its fold.
+      data-stage-hero
       // useAnimationPause toggles .animations-paused via classList; suppress
       // hydration warnings caused by observer-driven class mutations
       suppressHydrationWarning
@@ -90,7 +94,7 @@ export default function HeroClient({ connectorCount, templateCount }: { connecto
         initial="hidden"
         animate="visible"
         variants={staggerContainer}
-        className="relative z-10 mx-auto max-w-6xl w-full grid gap-12 lg:grid-cols-[1fr_auto] items-center"
+        className="relative z-10 mx-auto max-w-6xl w-full grid gap-12 lg:grid-cols-[1fr_auto] items-center stage:max-w-(--stage-max-w)"
       >
         {/* Left — text */}
         <div className="text-center lg:text-left">
@@ -108,7 +112,7 @@ export default function HeroClient({ connectorCount, templateCount }: { connecto
             </span>
           </motion.div>
 
-          <motion.div variants={fadeUp} className="mt-8 relative">
+          <motion.div variants={fadeUp} className="mt-8 relative stage:mt-[2.4svh]">
             <SectionHeading as="h1" id="hero-heading" className="leading-[1.05]">
               <span className="block text-transparent bg-clip-text bg-linear-to-b from-foreground to-foreground/70 drop-shadow-[0_0_20px_color-mix(in_srgb,var(--foreground)_10%,transparent)]">
                 {t.hero.headingLine1}
@@ -121,12 +125,12 @@ export default function HeroClient({ connectorCount, templateCount }: { connecto
 
           <motion.div
             variants={fadeUp}
-            className="mx-auto lg:mx-0 mt-8 h-px w-40 bg-linear-to-r from-brand-cyan/40 via-brand-purple/30 to-transparent shadow-[0_0_10px_color-mix(in_srgb,var(--brand-cyan)_50%,transparent)]"
+            className="mx-auto lg:mx-0 mt-8 stage:mt-[2.4svh] h-px w-40 bg-linear-to-r from-brand-cyan/40 via-brand-purple/30 to-transparent shadow-[0_0_10px_color-mix(in_srgb,var(--brand-cyan)_50%,transparent)]"
           />
 
           <motion.p
             variants={fadeUp}
-            className="mx-auto lg:mx-0 mt-8 max-w-2xl text-lg leading-relaxed text-muted-dark md:text-xl font-light"
+            className="mx-auto lg:mx-0 mt-8 stage:mt-[2.4svh] max-w-2xl text-lg leading-relaxed text-muted-dark md:text-xl font-light"
           >
             {t.hero.description}{" "}
             <span className="text-foreground/80 font-medium drop-shadow-[0_0_5px_color-mix(in_srgb,var(--foreground)_50%,transparent)]">
@@ -134,7 +138,7 @@ export default function HeroClient({ connectorCount, templateCount }: { connecto
             </span>
           </motion.p>
 
-          <motion.div variants={fadeUp} className="mt-8 flex flex-wrap items-center justify-center gap-3 lg:justify-start">
+          <motion.div variants={fadeUp} className="mt-8 stage:mt-[2.4svh] flex flex-wrap items-center justify-center gap-3 lg:justify-start">
             {differentiators.map(({ label, Icon }) => (
               <motion.span
                 key={label}
@@ -147,7 +151,7 @@ export default function HeroClient({ connectorCount, templateCount }: { connecto
             ))}
           </motion.div>
 
-          <motion.div variants={fadeUp} className="mt-12 flex w-full flex-col items-center justify-center gap-6 sm:w-auto sm:flex-row sm:flex-wrap lg:justify-start">
+          <motion.div variants={fadeUp} className="mt-12 stage:mt-[3.6svh] flex w-full flex-col items-center justify-center gap-6 sm:w-auto sm:flex-row sm:flex-wrap lg:justify-start">
             {/* /api/download only when the release plan says a download is live
                 (the same rule the route enforces); otherwise the always-present
                 download wrapper, not the inner id="download" of a lazy section. */}

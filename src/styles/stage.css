@@ -1,0 +1,116 @@
+/* ── Stage fit: one section per viewport on desktop ──────────────────────
+   Every marketing section sized from the viewport's HEIGHT as well as its
+   width, so a 1366x768 laptop and a 2560x1440 monitor each see exactly one
+   section per screen. Measured before this existed (2026-09-25): every
+   section sat at a fixed 911-1704px on every viewport, 1.6-3x a laptop's
+   usable height, because padding, heading size and art were all pixel-fixed.
+
+   Scope: `stage` = (min-width: 64rem) and (min-height: 37.5rem). Below it
+   (phones, tablets, very short windows) sections keep their natural flow.
+   The variant of the same name (globals.css) lets components add their own
+   stage-only classes.
+
+   How a section opts in: `<SectionWrapper fit="fill" | "min">` renders
+   `data-stage`, which the rules below turn into a viewport-high flex column:
+   - fill: exactly one stage high. Put the dominant visual in a
+     `data-stage-slot` element; it takes the height left after the intro and
+     is a size container, so art inside can size itself with `cqh`/`cqw`
+     (e.g. `width: min(100%, 100cqh * 16 / 9)`).
+   - min:  at least one stage high, content centred (text sections whose
+     height the reader controls, like an accordion).
+
+   These rules are deliberately unlayered: unlayered CSS outranks Tailwind's
+   `@layer utilities`, so the stage values override the mobile-first
+   `mb-12` / `mt-6` / `py-36` the components already carry without every
+   call site being rewritten. */
+
+:root {
+  /* Fixed navbar: py-4 + 44px controls + border, measured 86px. */
+  --nav-h: 5.375rem;
+  --stage-h: calc(100svh - var(--nav-h));
+  --stage-pad-y: clamp(1rem, 3.2svh, 3.5rem);
+  /* Intro → visual gap. */
+  --stage-gap: clamp(0.875rem, 2.6svh, 2.5rem);
+  /* Content width: wide enough that a section's content sits in one row,
+     leaving a 7rem gutter each side for the fixed scroll map (ticks plus
+     the active label at rest; ScrollMap.tsx). */
+  --stage-max-w: min(100vw - 14rem, 100rem);
+  /* Display sizes follow the smaller of width and height, so a short
+     laptop screen gets a shorter heading instead of a wrapped one. */
+  --display-1: clamp(2.5rem, min(5.4vw, 8.6svh), 5.5rem);
+  --display-2: clamp(1.875rem, min(3.6vw, 5.6svh), 4.5rem);
+}
+
+@media (min-width: 64rem) and (min-height: 37.5rem) {
+  html {
+    /* Proximity, never mandatory: a section taller than the viewport (an
+       opened FAQ) must stay scrollable, and a reader who stops between two
+       sections is nudged, not captured. */
+    scroll-snap-type: y proximity;
+    scroll-padding-top: var(--nav-h);
+  }
+
+  [data-stage] {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    padding-block: var(--stage-pad-y);
+    scroll-snap-align: start;
+  }
+  [data-stage="fill"] {
+    height: var(--stage-h);
+  }
+  [data-stage="min"] {
+    min-height: var(--stage-h);
+  }
+
+  [data-stage] > [data-stage-inner] {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    flex: 1 1 auto;
+    min-height: 0;
+    max-width: var(--stage-max-w);
+  }
+
+  /* The dominant visual: whatever height is left after the intro. */
+  [data-stage] [data-stage-slot] {
+    flex: 1 1 0;
+    min-height: 0;
+    container-type: size;
+  }
+
+  /* Intro block (SectionIntro and hand-rolled intros that carry the attr). */
+  [data-stage] [data-section-intro] {
+    margin-bottom: var(--stage-gap);
+  }
+  [data-stage] [data-section-intro] [data-section-eyebrow] {
+    margin-bottom: 0.5rem;
+    font-size: 0.875rem;
+  }
+  [data-stage] [data-section-intro] [data-section-lede] {
+    margin-top: clamp(0.5rem, 1.4svh, 1rem);
+  }
+  [data-stage] h2[data-section-heading] {
+    font-size: var(--display-2);
+  }
+
+  /* The hero sits under the navbar: a full 100svh, content below the bar. */
+  [data-stage-hero] {
+    height: 100svh;
+    min-height: 0;
+    padding-top: var(--nav-h);
+    scroll-snap-align: start;
+    scroll-margin-top: calc(-1 * var(--nav-h));
+  }
+  [data-stage-hero] h1[data-section-heading] {
+    font-size: var(--display-1);
+  }
+
+  /* Lazy placeholders reserve exactly what the mounted stage will take, so
+     nothing below shifts when a section mounts and scroll-map jumps land on
+     the section they name. */
+  [data-lazy-placeholder] {
+    min-height: var(--stage-h);
+  }
+}

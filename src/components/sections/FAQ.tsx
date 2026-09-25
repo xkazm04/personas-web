@@ -139,7 +139,7 @@ export default function FAQ() {
     };
 
   return (
-    <SectionWrapper id="faq" aria-labelledby="faq-heading">
+    <SectionWrapper fit="min" id="faq" aria-labelledby="faq-heading">
       <FAQHeader heading={t.faqSection.heading} headingGradient={t.faqSection.headingGradient} subtitle={t.faqSection.subtitle} />
 
       {/* Two-column FAQ grid */}

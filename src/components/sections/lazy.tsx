@@ -5,7 +5,7 @@ import { P, Ps, Pm, SectionSkeleton, createLazySection } from "./LazySection";
 /* ── Vision skeleton: tags + heading + terminal dashboard card ── */
 function VisionSkeleton() {
   return (
-    <section className="relative px-6 py-20 md:py-24">
+    <section data-lazy-placeholder className="relative px-6 py-20 md:py-24">
       <div className="mx-auto max-w-3xl flex flex-col items-center">
         {/* Pill tags */}
         <div className="flex gap-3">
@@ -42,7 +42,7 @@ function VisionSkeleton() {
    so the swap from skeleton to content doesn't jump. ── */
 function PricingSkeleton() {
   return (
-    <section className="relative px-6 py-24 md:py-32">
+    <section data-lazy-placeholder className="relative px-6 py-24 md:py-32">
       <div className="mx-auto max-w-6xl flex flex-col items-center">
         {/* Heading + description */}
         <div className={`h-10 w-2/3 max-w-md sm:h-12 ${Ps}`} />
@@ -85,7 +85,7 @@ function PricingSkeleton() {
 /* ── FAQ skeleton: heading + 2-column stacked question bars ── */
 function FAQSkeleton() {
   return (
-    <section className="relative px-6 py-24 md:py-32">
+    <section data-lazy-placeholder className="relative px-6 py-24 md:py-32">
       <div className="mx-auto max-w-6xl flex flex-col items-center">
         {/* Heading */}
         <div className={`h-10 w-2/3 max-w-md sm:h-12 ${Ps}`} />

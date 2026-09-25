@@ -33,7 +33,7 @@ export default function UseCasesPersonaCard() {
   const totalJobs = tools.reduce((n, tl) => n + tl.useCases.length, 0);
 
   return (
-    <SectionWrapper id="use-cases">
+    <SectionWrapper fit="min" id="use-cases">
       <SectionIntro heading={t.useCasesSection.heading} gradient={t.useCasesSection.headingGradient} />
 
       <div

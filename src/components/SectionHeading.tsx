@@ -19,7 +19,10 @@ export default function SectionHeading({
   return (
     <Tag
       id={id}
-      className={`text-balance break-words font-extrabold tracking-tight drop-shadow-md ${scaleClasses[Tag]} ${className}`}
+      data-section-heading
+      // Explicit leading: without it the heading inherited the body's 1.5, so a
+      // two-line 72px heading spent 216px on height and read as two headings.
+      className={`text-balance break-words font-extrabold leading-[1.08] tracking-tight drop-shadow-md ${scaleClasses[Tag]} ${className}`}
     >
       {children}
     </Tag>

@@ -14,7 +14,7 @@ import AssemblyLine from "./variants/AssemblyLine";
  */
 export default function TeamCanvas() {
   return (
-    <SectionWrapper id="team-canvas" aria-labelledby="team-canvas-heading">
+    <SectionWrapper fit="min" id="team-canvas" aria-labelledby="team-canvas-heading">
       <SectionIntro
         id="team-canvas-heading"
         eyebrow="Team canvas"

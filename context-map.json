@@ -1575,7 +1575,6 @@
             "src/components/NavbarMobileMenu.tsx",
             "src/components/PageShell.tsx",
             "src/components/SectionBreadcrumb.tsx",
-            "src/components/SectionDivider.tsx",
             "src/components/SectionHeading.tsx",
             "src/components/SectionWrapper.tsx",
             "src/components/SkipLink.tsx",
@@ -1583,7 +1582,8 @@
             "src/components/navbar/DesktopNav.tsx",
             "src/components/navbar/MobilePanel.tsx",
             "src/components/navbar/useMobileMenu.ts",
-            "src/components/navbar/useRoutes.ts"
+            "src/components/navbar/useRoutes.ts",
+            "src/styles/stage.css"
           ],
           "target": null,
           "apiRoutes": []

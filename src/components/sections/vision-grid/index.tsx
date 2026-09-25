@@ -57,7 +57,7 @@ export default function VisionGridLayerStack() {
   const names = STACK_LAYERS.map((l) => l.card.title).join(", ");
 
   return (
-    <SectionWrapper id="vision-grid" className="relative overflow-hidden">
+    <SectionWrapper fit="min" id="vision-grid" className="relative overflow-hidden">
       <div className="relative z-10 mx-auto mb-12 max-w-3xl text-center sm:mb-14">
         <SectionHeading>
           The <GradientText>platform</GradientText> behind your agents

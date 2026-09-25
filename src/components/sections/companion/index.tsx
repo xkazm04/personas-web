@@ -30,7 +30,7 @@ export default function Companion() {
   const activeCap = CAPABILITIES[active] ?? CAPABILITIES[0];
 
   return (
-    <SectionWrapper id="companion" aria-labelledby="companion-heading">
+    <SectionWrapper fit="min" id="companion" aria-labelledby="companion-heading">
       <SectionIntro
         id="companion-heading"
         eyebrow="Companion"

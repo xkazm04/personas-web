@@ -22,7 +22,7 @@ export default function Lab() {
   const [ledger, dispatch] = useReducer(ledgerReducer, undefined, initialLedger);
 
   return (
-    <SectionWrapper id="lab">
+    <SectionWrapper fit="min" id="lab">
       <motion.div
         initial="hidden"
         whileInView="visible"

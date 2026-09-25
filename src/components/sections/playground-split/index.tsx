@@ -35,7 +35,7 @@ export default function PlaygroundSplit() {
   const remainingMs = Math.max(0, totalDurationMs - elapsedMs);
 
   return (
-    <SectionWrapper id="playground-split">
+    <SectionWrapper fit="min" id="playground-split">
       <SectionIntro
         heading="The Agent"
         gradient="Mind"

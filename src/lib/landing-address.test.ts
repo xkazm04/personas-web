@@ -109,7 +109,7 @@ describe("resolveLandingAddress", () => {
     );
     // ...and that label is really what the section carries.
     expect(read("src/components/sections/get-started/index.tsx")).toMatch(
-      /<SectionWrapper aria-labelledby="get-started-heading">/,
+      /<SectionWrapper\b[^>]*\baria-labelledby="get-started-heading"/,
     );
   });
 
@@ -131,7 +131,7 @@ describe("resolveLandingAddress", () => {
     expect(address.innerSelector).toBe('[data-scroll-anchor="pricing"] [aria-labelledby="compare-heading"]');
     // ...and that label is really what the section carries, on the heading it names.
     const section = read("src/components/sections/pricing/index.tsx");
-    expect(section).toMatch(/<SectionWrapper aria-labelledby="compare-heading">/);
+    expect(section).toMatch(/<SectionWrapper\b[^>]*\baria-labelledby="compare-heading"/);
     expect(section).toMatch(/<SectionIntro\s+id="compare-heading"/);
   });
 

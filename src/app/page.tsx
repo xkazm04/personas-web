@@ -18,7 +18,6 @@ import {
   LazyGetStarted,
 } from "@/components/sections/lazy";
 import StageSection from "@/components/StageSection";
-import SectionDivider from "@/components/SectionDivider";
 import LazyMount from "@/components/LazyMount";
 import PageShell from "@/components/PageShell";
 import LandingHashArrival from "@/components/LandingHashArrival";
@@ -35,8 +34,6 @@ interface SectionConfig {
   glow: "cyan" | "purple" | "emerald";
   fromColor: StageColor;
   toColor?: StageColor;
-  dividerFrom: StageColor;
-  dividerTo: StageColor;
   wrapperId?: string;
   /** The `SCROLL_MAP_SECTIONS` id this stage hosts. Emitted as
    *  `data-scroll-anchor` on the stage's always-present wrapper so the scroll
@@ -52,16 +49,16 @@ interface SectionConfig {
 }
 
 const sections: SectionConfig[] = [
-  { Component: LazyUseCases,           glow: "emerald", fromColor: "cyan",    toColor: "emerald", dividerFrom: "cyan",    dividerTo: "emerald", wrapperId: "tools", anchorId: "use-cases", gate: true },
-  { Component: LazyPlaygroundSplit,    glow: "cyan",    fromColor: "emerald", toColor: "cyan",    dividerFrom: "emerald", dividerTo: "cyan", wrapperId: "playground", anchorId: "playground-split", gate: true },
-  { Component: LazyGetStarted,         glow: "emerald", fromColor: "cyan",    toColor: "emerald", dividerFrom: "cyan",    dividerTo: "emerald", wrapperId: "get-started", anchorId: "get-started", gate: true },
-  { Component: LazyOrchestrationHub,   glow: "cyan",    fromColor: "emerald", toColor: "cyan",    dividerFrom: "emerald", dividerTo: "cyan",    wrapperId: "pipelines", anchorId: "pipelines", gate: true },
-  { Component: LazyTeamCanvas,         glow: "purple",  fromColor: "cyan",    toColor: "purple",  dividerFrom: "cyan",    dividerTo: "purple", anchorId: "team-canvas", gate: true },
-  { Component: LazyCompanion,          glow: "purple",  fromColor: "purple",  toColor: "purple",  dividerFrom: "purple",  dividerTo: "purple", anchorId: "companion", gate: true },
-  { Component: LazyVision,            glow: "purple",  fromColor: "purple",  toColor: "purple",  dividerFrom: "purple",  dividerTo: "purple", wrapperId: "vision", anchorId: "vision" },
-  { Component: LazyPricing,           glow: "purple",  fromColor: "purple",  toColor: "purple",  dividerFrom: "purple",  dividerTo: "purple", wrapperId: "pricing", anchorId: "pricing" },
-  { Component: LazyFAQ,               glow: "cyan",    fromColor: "purple",  toColor: "cyan",    dividerFrom: "purple",  dividerTo: "cyan", anchorId: "faq" },
-  { Component: LazyDownloadCTA,        glow: "cyan",    fromColor: "cyan",                        dividerFrom: "cyan",    dividerTo: "cyan", wrapperId: "download-section", anchorId: "download", gate: true },
+  { Component: LazyUseCases,           glow: "emerald", fromColor: "cyan",    toColor: "emerald", wrapperId: "tools", anchorId: "use-cases", gate: true },
+  { Component: LazyPlaygroundSplit,    glow: "cyan",    fromColor: "emerald", toColor: "cyan",    wrapperId: "playground", anchorId: "playground-split", gate: true },
+  { Component: LazyGetStarted,         glow: "emerald", fromColor: "cyan",    toColor: "emerald", wrapperId: "get-started", anchorId: "get-started", gate: true },
+  { Component: LazyOrchestrationHub,   glow: "cyan",    fromColor: "emerald", toColor: "cyan",    wrapperId: "pipelines", anchorId: "pipelines", gate: true },
+  { Component: LazyTeamCanvas,         glow: "purple",  fromColor: "cyan",    toColor: "purple",  anchorId: "team-canvas", gate: true },
+  { Component: LazyCompanion,          glow: "purple",  fromColor: "purple",  toColor: "purple",  anchorId: "companion", gate: true },
+  { Component: LazyVision,            glow: "purple",  fromColor: "purple",  toColor: "purple",  wrapperId: "vision", anchorId: "vision" },
+  { Component: LazyPricing,           glow: "purple",  fromColor: "purple",  toColor: "purple",  wrapperId: "pricing", anchorId: "pricing" },
+  { Component: LazyFAQ,               glow: "cyan",    fromColor: "purple",  toColor: "cyan",    anchorId: "faq" },
+  { Component: LazyDownloadCTA,        glow: "cyan",    fromColor: "cyan",                        wrapperId: "download-section", anchorId: "download", gate: true },
 ];
 
 /* Drift guard: every scroll-map dot must have a stage that can receive it.
@@ -104,7 +101,7 @@ export default function Home() {
           <Hero />
         </div>
 
-        {sections.map(({ Component, glow, fromColor, toColor, dividerFrom, dividerTo, wrapperId, anchorId, gate }, i) => {
+        {sections.map(({ Component, glow, fromColor, toColor, wrapperId, anchorId, gate }, i) => {
           const stage = (
             <StageSection key={i} glow={glow} fromColor={fromColor} toColor={toColor}>
               {gate ? (
@@ -117,12 +114,13 @@ export default function Home() {
             </StageSection>
           );
 
+          // No divider between stages: the stage's own from/to gradients carry
+          // the colour hand-off. The SectionDivider that used to sit here
+          // rendered at height 0 (invisible) while still mounting an SVG, a
+          // blur-3xl layer and a scroll-driven animation per section.
           return (
-            <div key={i}>
-              <SectionDivider from={dividerFrom} to={dividerTo} />
-              <div id={wrapperId} data-scroll-anchor={anchorId}>
-                {stage}
-              </div>
+            <div key={i} id={wrapperId} data-scroll-anchor={anchorId}>
+              {stage}
             </div>
           );
         })}

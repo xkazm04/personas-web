@@ -9,7 +9,7 @@ import DesignEngineMatrix from "./DesignEngineMatrix";
 
 export default function DesignEngine() {
   return (
-    <SectionWrapper id="design">
+    <SectionWrapper fit="min" id="design">
       <motion.div
         initial="hidden"
         whileInView="visible"

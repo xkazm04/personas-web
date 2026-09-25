@@ -27,7 +27,7 @@ export default function HealingCircuit() {
     : { x: 0, y: 0 };
 
   return (
-    <SectionWrapper id="healing-circuit" className="relative overflow-hidden">
+    <SectionWrapper fit="min" id="healing-circuit" className="relative overflow-hidden">
       <motion.div
         initial="hidden"
         whileInView="visible"

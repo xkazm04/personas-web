@@ -17,7 +17,7 @@ export default function ObservabilityDeck() {
   }, []);
 
   return (
-    <SectionWrapper id="observe">
+    <SectionWrapper fit="min" id="observe">
       <motion.div
         initial="hidden"
         whileInView="visible"

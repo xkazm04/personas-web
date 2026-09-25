@@ -37,7 +37,7 @@ export default function SecurityVaultNestedVault() {
   }, [inView, still, run, progress]);
 
   return (
-    <SectionWrapper id="security">
+    <SectionWrapper fit="min" id="security">
       <motion.div
         initial="hidden"
         whileInView="visible"

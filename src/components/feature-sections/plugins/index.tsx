@@ -41,7 +41,7 @@ export default function Plugins() {
   };
 
   return (
-    <SectionWrapper id="plugins">
+    <SectionWrapper fit="min" id="plugins">
       <motion.div
         initial="hidden"
         whileInView="visible"

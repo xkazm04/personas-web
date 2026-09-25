@@ -72,6 +72,7 @@ export default function OrchestrationHub() {
 
   return (
     <SectionWrapper
+      fit="min"
       id="orchestration-hub"
       aria-labelledby="orchestration-hub-heading"
     >

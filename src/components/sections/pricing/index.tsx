@@ -24,7 +24,7 @@ export default function Pricing() {
   return (
     // No id: page.tsx's always-present wrapper owns `pricing` (ids are unique
     // per document); `lib/landing-address.ts` finds this section by its label.
-    <SectionWrapper aria-labelledby="compare-heading">
+    <SectionWrapper fit="min" aria-labelledby="compare-heading">
       <SectionIntro
         id="compare-heading"
         heading={t.compareSection.heading}

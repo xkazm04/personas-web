@@ -39,7 +39,7 @@ export default function MultiProviderAIRouter() {
   }, [inView, play]);
 
   return (
-    <SectionWrapper id="multi-provider">
+    <SectionWrapper fit="min" id="multi-provider">
       <div className="text-center">
         <SectionHeading>
           Powered by{" "}

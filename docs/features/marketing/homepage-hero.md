@@ -4,12 +4,12 @@
 ## What it does
 `/` is the marketing homepage. Above the fold it shows the **hero**: a headline + subhead built from gradient text, a brand badge, three "differentiator" pills, two CTAs (Download, View on GitHub) plus a guided-tour launcher, and a fine-print reassurance line. On desktop the right side carries a 3D-tilting glass card holding the **command-center illustration** — a 220×220 SVG roadmap-progress ring with a rotating radar sweep, breathing core, orbiting satellite, and the app version in the middle. A 3-up **stat row** (agents / connectors / templates) appears under the card on desktop and in a dedicated card under the CTAs on mobile.
 
-Below the hero, the rest of the page is a sequence of marketing sections (use-cases, why-agents, playground, get-started, orchestration hub, vision, pricing, FAQ, download CTA), each separated by a colored `SectionDivider` and wrapped in a `StageSection` glow. Most are **lazy-loaded** and many are **deferred** until you scroll near them, so the initial bundle and first paint stay light. The page also injects three **JSON-LD** blocks (Organization, SoftwareApplication, FAQPage) for SEO.
+Below the hero, the rest of the page is a sequence of marketing sections (use-cases, why-agents, playground, get-started, orchestration hub, vision, pricing, FAQ, download CTA), each wrapped in a `StageSection` glow whose from/to gradients carry the colour hand-off. On desktop every section is one viewport high (the stage system, `src/styles/stage.css`), and the page snaps between them with `scroll-snap-type: y proximity`. Most are **lazy-loaded** and many are **deferred** until you scroll near them, so the initial bundle and first paint stay light. The page also injects three **JSON-LD** blocks (Organization, SoftwareApplication, FAQPage) for SEO.
 
 ## How it works
 `src/app/page.tsx` (`Home`, a server component) is the composition root. It wraps everything in a `SectionObserverProvider` seeded with the scroll-map section ids (derived from `SCROLL_MAP_SECTIONS`), renders a decorative ambient `next/image` in the top-left, then `Navbar`, the three JSON-LD `<script>` tags, a `PageShell` (passing `scrollMapItems`), and `Footer`.
 
-Inside `PageShell`: the hero (`<div id="hero"><Hero /></div>`) followed by a `sections` config array (`page.tsx:48`) mapped to `StageSection` + `SectionDivider` pairs. Each entry carries a `glow`, `fromColor`/`toColor` stage gradient, divider colors, an optional `wrapperId` (the scroll-target anchor), and an optional `gate` flag.
+Inside `PageShell`: the hero (`<div id="hero"><Hero /></div>`) followed by a `sections` config array (`page.tsx:48`) mapped to `StageSection` wrappers. Each entry carries a `glow`, `fromColor`/`toColor` stage gradient, an optional `wrapperId` (the scroll-target anchor), and an optional `gate` flag.
 
 **Lazy + gated orchestration.** `lazy.tsx` exports `Lazy*` components built by `createLazySection()` (`LazySection.tsx:40`), a thin wrapper over `next/dynamic` with a `loading` skeleton and an `ssr` flag. The SSR decision tree is documented in `LazySection.tsx:25` — `ssr: true` for above/near-fold crawlable sections (Vision, Pricing, FAQ), `ssr: false` for browser-only / heavy framer-motion subtrees (UseCases, WhyAgents, PlaygroundSplit, GetStarted, OrchestrationHub, DownloadCTA). Separately, the `gate: true` flag in `page.tsx` wraps a section in `LazyMount minHeight={640}`, deferring its actual mount until ~1 viewport away so chunks load on scroll rather than all at once. Custom skeletons (`VisionSkeleton`, `PricingSkeleton`, `FAQSkeleton`) in `lazy.tsx` mirror their live layouts to avoid swap-jump; everything else falls back to `SectionSkeleton`.
 
@@ -25,7 +25,7 @@ Inside `PageShell`: the hero (`<div id="hero"><Hero /></div>`) followed by a `se
 ## Key files
 | File | Role |
 | --- | --- |
-| `src/app/page.tsx` | Homepage composition root: ambient image, JSON-LD, hero, `sections` config → `StageSection`/`SectionDivider`/`LazyMount` map |
+| `src/app/page.tsx` | Homepage composition root: ambient image, JSON-LD, hero, `sections` config → `StageSection`/`LazyMount` map |
 | `src/app/homeJsonLd.ts` | Static Organization / SoftwareApplication / FAQPage JSON-LD objects |
 | `src/components/sections/Hero.tsx` | Server shim rendering `HeroClient` |
 | `src/components/sections/HeroClient.tsx` | Hero UI: heading, CTAs, differentiators, 3D-tilt card, stat row; reads `t.hero.*` + `useLiveStats` |
@@ -44,7 +44,8 @@ Inside `PageShell`: the hero (`<div id="hero"><Hero /></div>`) followed by a `se
 
 ## Integration points
 - **`PageShell` / `Navbar` / `Footer`** — layout chrome wrapping the hero and sections; `scrollMapItems` (from `SCROLL_MAP_SECTIONS`) feed the scroll-map nav. See platform/layout-navigation.
-- **`StageSection` + `SectionDivider`** — provide the per-section glow background and the colored gradient seams between sections; colors come from the `sections` config.
+- **`StageSection`** — provides the per-section glow background and the colored gradient seams between sections; colors come from the `sections` config. (`SectionDivider` was removed 2026-09-25: it rendered at height 0 while still mounting an SVG, a blur layer and a scroll timeline per section.)
+- **Stage fit** — `SectionWrapper fit="fill"|"min"` sets `data-stage`; `src/styles/stage.css` sizes it to `100svh - --nav-h` at `min-width:64rem and min-height:37.5rem`, scales headings by `min(vw, svh)`, and reserves the same height in `LazyMount` placeholders. `e2e/stage-fit.spec.ts` measures it (with a shrinking `KNOWN_OVERFLOW` ratchet).
 - **`LazyMount`** — defers mount of `gate: true` sections; pairs with `createLazySection`'s code-splitting.
 - **`useTranslation()` / `@/i18n/en.ts`** — all hero copy (`t.hero.*`); 14-locale lockstep.
 - **`useReducedMotion` (framer-motion)** — gates the hero tilt, badge shimmer, scroll-hint, page transition, and every illustration loop.
