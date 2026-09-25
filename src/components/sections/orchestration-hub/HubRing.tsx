@@ -1,5 +1,6 @@
 "use client";
 
+import Image from "next/image";
 import { useId, useRef } from "react";
 import { motion } from "framer-motion";
 import { BRAND_VAR } from "@/lib/brand-theme";
@@ -112,16 +113,23 @@ export default function HubRing({ active, onSelect, userStopped = false }: HubRi
         />
         <foreignObject x={CENTER - 60} y={CENTER - 60} width={120} height={120}>
           <div className="h-full w-full overflow-hidden rounded-full">
-            <img
+            {/* next/image: a 120px WebP instead of two ~114 KB PNGs, and lazy, so
+                the theme's hidden image (display:none) is never fetched - a plain
+                <img> downloads both. */}
+            <Image
               src="/imgs/guide/agents-prompts-dark.png"
               alt=""
               aria-hidden="true"
+              width={120}
+              height={120}
               className="hidden dark:block h-full w-full object-cover"
             />
-            <img
+            <Image
               src="/imgs/guide/agents-prompts-light.png"
               alt=""
               aria-hidden="true"
+              width={120}
+              height={120}
               className="block dark:hidden h-full w-full object-cover"
             />
           </div>

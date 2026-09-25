@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import dynamic from "next/dynamic";
 import { motion } from "framer-motion";
 import { Download } from "lucide-react";
 
@@ -8,7 +9,6 @@ import GradientText from "@/components/GradientText";
 import PrimaryCTA from "@/components/PrimaryCTA";
 import SectionHeading from "@/components/SectionHeading";
 import SectionWrapper from "@/components/SectionWrapper";
-import WaitlistModal from "@/components/WaitlistModal";
 import { useTranslation } from "@/i18n/useTranslation";
 import { fadeUp } from "@/lib/animations";
 import { trackDownloadClick, type WaitlistEntryPoint } from "@/lib/analytics";
@@ -23,6 +23,10 @@ import { PlatformPills } from "./download-cta/PlatformPills";
 import type { Platform } from "./download-cta/downloadCtaTypes";
 import { useDownloadPlatforms } from "./download-cta/useDownloadPlatforms";
 import { useFreshRelease } from "./download-cta/useFreshRelease";
+
+// Opened only on click (and only when no installer is configured) - loaded
+// on demand, as the navbar already does, not bundled into this section.
+const WaitlistModal = dynamic(() => import("@/components/WaitlistModal"), { ssr: false });
 
 // Whether a download is live comes from the release authority - the same rule
 // /api/download enforces, so this section can never offer a download the route
