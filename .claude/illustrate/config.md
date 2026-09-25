@@ -12,6 +12,7 @@ Read by the registry skill `illustrate` at start. Every key is optional.
 - dev_url: http://localhost:3918
 - gates: npm run typecheck, npm run lint, npx vitest run
 - worktree_root: C:/t/ (short paths; the default under .claude/worktrees/ is too deep for Windows)
+- stage: sections use the desktop stage system (src/styles/stage.css). A `data-stage-slot` gives the art its MAXIMUM box, not its size: size the art to its content and centre it; never scale a picture up to fill a full-screen slot. Worktree dev servers need `next dev --webpack` (Turbopack rejects the junctioned node_modules).
 
 ## Run log
 
@@ -37,3 +38,16 @@ Read by the registry skill `illustrate` at start. Every key is optional.
   take ROUTER, security takes NESTED-VAULT; all other variants, the current versions,
   their orphaned helpers and the switcher deleted. All three winners came from the
   picture-first (1.1.x) round.
+- 2026-09-25 revamp round (1.1.1, built into the stage-fit slot): team canvas, get
+  started, pricing (landing) and healing, lab (/features), three directions each.
+  Owner decision: ALL DISCARDED - "huge illustrations representing very little,
+  cutting all text leading into no idea what is meant behind. Balancing of
+  visual/text part was not successful, so sizing and fidelity of the visual side."
+  Branches illustrate/landing-r2 and illustrate/features-r2 deleted. The director's
+  brief contributed (art to fill the slot, lede shortened, eyebrow dropped). Skill
+  reworked to 1.2.0 (balance, size to content, cold-read and competitor-swap tests,
+  SPARSE/TINY-LABELS/TEXT-THIN flags) on registry branch skills/illustrate-balance.
+  Keep from the round: builders' source-app checks found the CURRENT team canvas
+  (sequential line; the app runs steps in parallel), healing (provider switch and a
+  47ms figure it never shows), lab (six-axis radar; the app scores one composite) and
+  pricing (UI modes are not price tiers) misrepresent the product.
