@@ -249,6 +249,14 @@ html {
   50% { box-shadow: 0 0 40px rgba(6, 182, 212, 0.3); }
 }
 
+/* Opacity-only glow: crossfade a layer that carries the peak shadow over one
+   that carries the resting shadow. Compositor-only, unlike animating
+   box-shadow, which repaints every frame. */
+@keyframes glow-crossfade {
+  0%, 100% { opacity: 0; }
+  50% { opacity: 1; }
+}
+
 @keyframes scroll-hint {
   0%, 100% { opacity: 0.4; transform: translateY(0); }
   50% { opacity: 0.8; transform: translateY(6px); }
@@ -340,6 +348,7 @@ html {
   .animate-gradient-sweep { animation: gradient-sweep 6s ease infinite; background-size: 200% 200%; }
   .animate-glow-border { animation: glow-border 3s ease-in-out infinite; }
   .animate-glow-pulse { animation: glow-pulse 3s ease-in-out infinite; }
+  .animate-glow-crossfade { animation: glow-crossfade 3s ease-in-out infinite; }
   .animate-scroll-hint { animation: scroll-hint 2s ease-in-out infinite; }
   .animate-bar-grow { animation: bar-grow 0.8s ease-out forwards; transform-origin: bottom; }
   .animate-spin-slow { animation: spin-slow 30s linear infinite; }
