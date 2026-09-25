@@ -105,7 +105,7 @@ export default function Home() {
           const stage = (
             <StageSection key={i} glow={glow} fromColor={fromColor} toColor={toColor}>
               {gate ? (
-                <LazyMount minHeight={640}>
+                <LazyMount stage minHeight={640}>
                   <Component />
                 </LazyMount>
               ) : (

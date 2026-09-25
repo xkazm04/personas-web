@@ -125,10 +125,12 @@
     font-size: var(--display-1);
   }
 
-  /* Lazy placeholders reserve exactly what the mounted stage will take, so
-     nothing below shifts when a section mounts and scroll-map jumps land on
-     the section they name. */
-  [data-lazy-placeholder] {
+  /* A LazyMount whose content is a stage (<LazyMount stage>) reserves exactly
+     one stage - in its placeholder and in the section skeleton that shows
+     while the chunk loads - so nothing below shifts when it mounts and
+     scroll-map jumps land on the section they name. Opt-in: other LazyMounts
+     (the dashboard's measured 1690px one) keep their own reservation. */
+  [data-lazy-stage] [data-lazy-placeholder] {
     min-height: var(--stage-h);
   }
 }

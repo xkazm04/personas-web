@@ -21,12 +21,16 @@ export default function LazyMount({
   rootMargin = "800px 0px",
   label,
   className,
+  stage = false,
 }: {
   children: ReactNode;
   minHeight?: number;
   rootMargin?: string;
   label?: string;
   className?: string;
+  /** The content is a desktop stage section (styles/stage.css): on the stage
+   *  the placeholder reserves one stage instead of `minHeight`. */
+  stage?: boolean;
 }) {
   const ref = useRef<HTMLDivElement | null>(null);
   const [shown, setShown] = useState(false);
@@ -55,7 +59,7 @@ export default function LazyMount({
   }, [shown, rootMargin]);
 
   return (
-    <div ref={ref} className={className}>
+    <div ref={ref} className={className} data-lazy-stage={stage ? "" : undefined}>
       {shown ? (
         children
       ) : (

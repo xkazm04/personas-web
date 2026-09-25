@@ -64,43 +64,43 @@ export default function FeaturesPage() {
       </StageSection>
 
       <StageSection id="memory-layers" glow="purple" fromColor="purple" toColor="purple">
-        <LazyMount minHeight={760} label="Memory">
+        <LazyMount stage minHeight={760} label="Memory">
           <LazyMemoryLayers />
         </LazyMount>
       </StageSection>
 
       <StageSection id="healing-circuit" glow="emerald" fromColor="purple" toColor="rose">
-        <LazyMount minHeight={760} label="Healing">
+        <LazyMount stage minHeight={760} label="Healing">
           <LazyHealingCircuit />
         </LazyMount>
       </StageSection>
 
       <StageSection id="security" glow="emerald" fromColor="rose" toColor="rose">
-        <LazyMount minHeight={760} label="Security">
+        <LazyMount stage minHeight={760} label="Security">
           <LazySecurityVault />
         </LazyMount>
       </StageSection>
 
       <StageSection id="multi-provider" glow="cyan" fromColor="rose" toColor="cyan">
-        <LazyMount minHeight={760} label="AI models">
+        <LazyMount stage minHeight={760} label="AI models">
           <LazyMultiProviderAI />
         </LazyMount>
       </StageSection>
 
       <StageSection id="observe" glow="emerald" fromColor="cyan" toColor="emerald">
-        <LazyMount minHeight={820} label="Observe">
+        <LazyMount stage minHeight={820} label="Observe">
           <LazyObservabilityDeck />
         </LazyMount>
       </StageSection>
 
       <StageSection id="lab" glow="cyan" fromColor="emerald" toColor="cyan">
-        <LazyMount minHeight={820} label="Lab">
+        <LazyMount stage minHeight={820} label="Lab">
           <LazyLab />
         </LazyMount>
       </StageSection>
 
       <StageSection id="plugins" glow="purple" fromColor="cyan" toColor="purple">
-        <LazyMount minHeight={820} label="Plugins">
+        <LazyMount stage minHeight={820} label="Plugins">
           <LazyPlugins />
         </LazyMount>
       </StageSection>
