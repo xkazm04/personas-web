@@ -3767,7 +3767,7 @@ export const en: Translations = {
     headingGradient: 'plug in',
     introAll: 'Personas ships with {shipped} plugins, and every one is at work below.',
     introSome: 'Personas ships with {shipped} plugins, and {showcased} of them are at work below.',
-    introTail: 'Each is a self-contained workspace your agents can drive, sharing the same credentials and composing with the others. Switch a tab to meet another specialist.',
+    introTail: 'Switch tabs to meet each one.',
     tabsLabel: 'Showcased plugins',
     counter: 'plugin {current} of {total}',
     taglines: {

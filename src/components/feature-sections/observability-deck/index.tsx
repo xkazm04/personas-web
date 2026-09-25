@@ -27,7 +27,7 @@ export default function ObservabilityDeck() {
         <SectionIntro
           heading="See everything,"
           gradient="miss nothing"
-          description="Watch your agents work in real time. Every execution, message, event, and memory — streaming through one dashboard, zero setup required."
+          description="Every run, message and event — live, in one dashboard."
           descriptionMaxWidth="max-w-xl"
           className="mb-0"
         />
@@ -35,11 +35,12 @@ export default function ObservabilityDeck() {
 
       <motion.div
         data-tour-diagram="observe"
+        data-stage-fixed
         initial={{ opacity: 0, y: 30 }}
         whileInView={{ opacity: 1, y: 0 }}
         viewport={{ once: true }}
         transition={{ duration: 0.6 }}
-        className="mt-16 mx-auto max-w-6xl grid gap-6 lg:grid-cols-[minmax(0,200px)_minmax(0,1fr)_minmax(0,200px)] items-start"
+        className="mt-16 stage:mt-0 mx-auto max-w-6xl grid gap-6 lg:grid-cols-[minmax(0,200px)_minmax(0,1fr)_minmax(0,200px)] items-start"
       >
         <div className="flex flex-col gap-3">
           {leftModules.map((m) => (

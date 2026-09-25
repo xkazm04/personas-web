@@ -56,7 +56,7 @@ export default function Plugins() {
         />
       </motion.div>
 
-      <div data-tour-diagram="plugins">
+      <div data-tour-diagram="plugins" data-stage-fixed>
         <PluginTabs
           plugins={PLUGINS}
           active={active}

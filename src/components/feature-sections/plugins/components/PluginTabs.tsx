@@ -21,7 +21,7 @@ export default function PluginTabs({
       initial="hidden"
       whileInView="visible"
       viewport={{ once: true }}
-      className="mt-10 mx-auto max-w-5xl"
+      className="mt-10 mx-auto max-w-5xl stage:mt-[2svh]"
     >
       <div
         role="group"

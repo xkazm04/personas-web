@@ -33,7 +33,7 @@ export default function PluginCard({
       whileInView={{ opacity: 1, y: 0 }}
       viewport={{ once: true }}
       transition={{ duration: 0.5 }}
-      className="mt-8 mx-auto max-w-4xl"
+      className="mt-8 mx-auto max-w-4xl stage:mt-[1.6svh]"
     >
       <div className="force-dark rounded-2xl border border-foreground/[0.08] bg-background/80 backdrop-blur-xl overflow-hidden shadow-[0_0_60px_rgba(0,0,0,0.4)]">
         <div className="flex items-center justify-between border-b border-foreground/[0.06] px-5 py-3">
