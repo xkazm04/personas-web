@@ -72,7 +72,7 @@ export default function OrchestrationHub() {
 
   return (
     <SectionWrapper
-      fit="min"
+      fit="fill"
       id="orchestration-hub"
       aria-labelledby="orchestration-hub-heading"
     >
@@ -83,9 +83,9 @@ export default function OrchestrationHub() {
         description="Ten trigger types, one persona hub. Any signal can wake any agent — or launch one yourself. Pick a trigger to see it fire."
       />
 
-      <motion.div variants={fadeUp} className="mt-12 mx-auto max-w-5xl">
+      <motion.div variants={fadeUp} data-stage-slot className="mt-12 mx-auto w-full max-w-5xl stage:mt-0 stage:max-w-6xl">
         <div
-          className="rounded-3xl border p-6 sm:p-10 overflow-hidden"
+          className="rounded-2xl border p-6 sm:p-10 overflow-hidden stage:flex stage:h-full stage:items-center stage:p-[2.4svh]"
           style={{
             borderColor: "var(--border-glass-hover)",
             backgroundColor: "rgba(var(--surface-overlay), 0.02)",
@@ -96,11 +96,13 @@ export default function OrchestrationHub() {
           <div
             ref={diagramRef}
             data-tour-diagram="orchestration"
-            className="grid grid-cols-1 lg:grid-cols-[1.2fr_1fr] gap-8 items-center"
+            className="grid grid-cols-1 lg:grid-cols-[1.2fr_1fr] gap-8 items-center stage:w-full"
           >
             <div>
               <div
-                className="relative mx-auto w-full max-w-[560px] aspect-square"
+                // On the stage the ring is sized from the slot's height (it is a
+                // size container), leaving room for the playback controls.
+                className="relative mx-auto w-full max-w-[560px] aspect-square stage:w-[min(100%,44rem,calc(100cqh_-_7rem))] stage:max-w-none"
                 onPointerEnter={onPointer("POINTER_ENTER")}
                 onPointerLeave={onPointer("POINTER_LEAVE")}
                 onFocus={() => dispatch({ type: "FOCUS_IN", now: Date.now() })}
@@ -117,7 +119,9 @@ export default function OrchestrationHub() {
                 onNext={() => dispatch({ type: "NEXT" })}
               />
             </div>
-            <TriggerDetail activeId={activeTrigger.id} announce={stopped} />
+            <div data-stage-zoom>
+              <TriggerDetail activeId={activeTrigger.id} announce={stopped} />
+            </div>
           </div>
         </div>
       </motion.div>
