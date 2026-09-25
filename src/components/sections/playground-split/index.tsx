@@ -1,25 +1,28 @@
 "use client";
 
-import { motion, useReducedMotion } from "framer-motion";
-import { Clock, Hourglass, RotateCcw } from "lucide-react";
+import { useEffect, useRef } from "react";
+import { motion, useInView } from "framer-motion";
+import { RotateCcw } from "lucide-react";
 import SectionWrapper from "@/components/SectionWrapper";
 import SectionIntro from "@/components/primitives/SectionIntro";
 import { ThemedChip, TerminalPanel } from "@/components/primitives";
 import { fadeUp } from "@/lib/animations";
+import { useStillMotion } from "@/hooks/useStillMotion";
 import { examples } from "./data";
 import { usePlaygroundSimulation } from "./use-playground-simulation";
 import PromptEditorPanel from "./components/PromptEditorPanel";
 import AgentMindPanel from "./components/AgentMindPanel";
+import { RunProgressBar, RunTimer } from "./components/RunClock";
 
 export default function PlaygroundSplit() {
-  const reduced = useReducedMotion() ?? false;
+  const reduced = useStillMotion();
 
   const {
     activeExample,
     nodes,
     phase,
     isRunning,
-    elapsedMs,
+    startedAt,
     totalDurationMs,
     handleExampleClick,
     handleReset,
@@ -28,14 +31,22 @@ export default function PlaygroundSplit() {
   const activeExampleData =
     activeExample !== null ? examples[activeExample] : null;
 
-  const progressPercent =
-    totalDurationMs > 0
-      ? Math.min(100, (elapsedMs / totalDurationMs) * 100)
-      : 0;
-  const remainingMs = Math.max(0, totalDurationMs - elapsedMs);
+  // The first screen of this section used to be two empty panes ("Select a
+  // prompt to begin"). Play the first prompt once when the section is on
+  // screen; the visitor can pick another at any time. Not under reduced motion
+  // (a run is motion the visitor did not start), and never more than once.
+  const panelRef = useRef<HTMLDivElement | null>(null);
+  const inView = useInView(panelRef, { once: true, amount: 0.5 });
+  const autoplayed = useRef(false);
+  useEffect(() => {
+    if (!inView || reduced || autoplayed.current) return;
+    autoplayed.current = true;
+    const t = setTimeout(() => handleExampleClick(0), 700);
+    return () => clearTimeout(t);
+  }, [inView, reduced, handleExampleClick]);
 
   return (
-    <SectionWrapper fit="min" id="playground-split">
+    <SectionWrapper fit="fill" id="playground-split">
       <SectionIntro
         heading="The Agent"
         gradient="Mind"
@@ -44,7 +55,7 @@ export default function PlaygroundSplit() {
 
       <motion.div
         variants={fadeUp}
-        className="mb-6 flex flex-wrap gap-2 justify-center"
+        className="mb-6 flex flex-wrap gap-2 justify-center stage:mb-[2svh]"
       >
         {examples.map((ex, i) => (
           <ThemedChip
@@ -71,9 +82,17 @@ export default function PlaygroundSplit() {
         )}
       </motion.div>
 
-      <motion.div data-tour-diagram="agent-mind" variants={fadeUp} className="mx-auto max-w-5xl">
+      <motion.div
+        ref={panelRef}
+        data-tour-diagram="agent-mind"
+        data-stage-slot
+        variants={fadeUp}
+        className="mx-auto w-full max-w-5xl"
+      >
         <TerminalPanel
           shadow="hero"
+          className="stage:flex stage:h-full stage:flex-col"
+          bodyClassName="stage:flex stage:min-h-0 stage:flex-1 stage:flex-col"
           footer={
             <>
               <div className="flex items-center gap-3 text-base font-mono tracking-wider uppercase text-muted-dark">
@@ -90,32 +109,7 @@ export default function PlaygroundSplit() {
               </div>
               <div className="flex items-center gap-4">
                 {(phase === "running" || phase === "done") && (
-                  <motion.div
-                    initial={{ opacity: 0 }}
-                    animate={{ opacity: 1 }}
-                    className="flex items-center gap-3"
-                  >
-                    <div className="flex items-center gap-1.5">
-                      <Clock className="h-3 w-3 text-muted-dark" />
-                      <span
-                        className={`text-base font-mono tabular-nums ${
-                          phase === "done"
-                            ? "text-brand-emerald/60"
-                            : "text-muted-dark"
-                        }`}
-                      >
-                        {(elapsedMs / 1000).toFixed(1)}s
-                      </span>
-                    </div>
-                    {isRunning && remainingMs > 0 && (
-                      <div className="flex items-center gap-1.5">
-                        <Hourglass className="h-3 w-3 text-brand-cyan/60" />
-                        <span className="text-base font-mono tabular-nums text-brand-cyan/60">
-                          ~{(remainingMs / 1000).toFixed(1)}s
-                        </span>
-                      </div>
-                    )}
-                  </motion.div>
+                  <RunTimer startedAt={startedAt} running={isRunning} totalMs={totalDurationMs} done={phase === "done"} />
                 )}
                 {phase === "done" && (
                   <motion.span
@@ -131,39 +125,9 @@ export default function PlaygroundSplit() {
           }
         >
           {phase !== "idle" && (
-            <div
-              className="relative h-1 bg-white/[0.03]"
-              role="progressbar"
-              aria-label="Simulation progress"
-              aria-valuenow={Math.round(progressPercent)}
-              aria-valuemin={0}
-              aria-valuemax={100}
-            >
-              <div
-                className="absolute inset-y-0 left-0"
-                style={{
-                  width: `${progressPercent}%`,
-                  background:
-                    "linear-gradient(90deg, #06b6d4, #a855f7, #34d399)",
-                  transition: reduced ? "none" : "width 0.1s linear",
-                }}
-              />
-              {isRunning && !reduced && (
-                <motion.div
-                  className="absolute top-1/2 -translate-y-1/2 w-2.5 h-2.5 rounded-full bg-brand-cyan"
-                  style={{
-                    left: `${progressPercent}%`,
-                    boxShadow: "0 0 10px 3px rgba(6,182,212,0.5)",
-                    marginLeft: "-5px",
-                    transition: "left 0.1s linear",
-                  }}
-                  animate={{ opacity: [0.6, 1, 0.6] }}
-                  transition={{ duration: 0.8, repeat: Infinity }}
-                />
-              )}
-            </div>
+            <RunProgressBar startedAt={startedAt} running={isRunning} totalMs={totalDurationMs} reduced={reduced} />
           )}
-          <div className="grid grid-cols-1 lg:grid-cols-2 min-h-[520px]">
+          <div className="grid grid-cols-1 lg:grid-cols-2 min-h-[520px] stage:min-h-0 stage:flex-1">
             <PromptEditorPanel
               activeExample={activeExample}
               activeExampleData={activeExampleData}

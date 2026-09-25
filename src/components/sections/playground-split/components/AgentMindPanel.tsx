@@ -79,16 +79,16 @@ export default function AgentMindPanel({
     nodes.length > 0 ? Math.max(...nodes.map((n) => n.y)) + 60 : 400;
 
   return (
-    <div>
+    <div className="stage:flex stage:min-h-0 stage:flex-col">
       <TerminalChrome
         title="agent-mind"
         status={phase === "running" ? "thinking" : phase === "done" ? "complete" : "idle"}
         className="px-4 py-3"
       />
 
-      <div className="relative p-4 overflow-hidden" style={{ minHeight: 460 }}>
+      <div className="relative min-h-[460px] overflow-hidden p-4 stage:min-h-0 stage:flex-1">
         {phase === "idle" ? (
-          <div className="flex h-full items-center justify-center min-h-[400px]">
+          <div className="flex h-full items-center justify-center min-h-[400px] stage:min-h-0">
             <div className="text-center space-y-3">
               <div className="mx-auto w-16 h-16 rounded-2xl border border-glass bg-white/[0.02] flex items-center justify-center">
                 <Cpu className="h-7 w-7 text-foreground" />
@@ -105,7 +105,9 @@ export default function AgentMindPanel({
           <svg
             width="100%"
             height={svgHeight}
-            className="mx-auto block max-w-full"
+            // On the stage the chart fits the pane's height through its viewBox
+            // instead of forcing the pane to the chart's natural 460px.
+            className="mx-auto block max-w-full stage:absolute stage:inset-4 stage:h-[calc(100%-2rem)] stage:w-[calc(100%-2rem)]"
             viewBox={`0 0 ${svgWidth} ${svgHeight}`}
             preserveAspectRatio="xMidYMin meet"
           >

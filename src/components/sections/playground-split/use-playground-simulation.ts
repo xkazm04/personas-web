@@ -19,19 +19,16 @@ export function usePlaygroundSimulation() {
   const [nodes, setNodes] = useState<FlowNode[]>([]);
   const [phase, setPhase] = useState<PlaygroundPhase>("idle");
   const [isRunning, setIsRunning] = useState(false);
-  const [elapsedMs, setElapsedMs] = useState(0);
+  // When the current run started; the clock that displays it ticks on its own
+  // (components/RunClock.tsx) so a run does not re-render the whole section.
+  const [startedAt, setStartedAt] = useState<number | null>(null);
   const timeoutsRef = useRef<ReturnType<typeof setTimeout>[]>([]);
-  const timerRef = useRef<ReturnType<typeof setInterval> | null>(null);
 
   const isHidden = usePageVisibility();
 
   const clearAll = useCallback(() => {
     timeoutsRef.current.forEach(clearTimeout);
     timeoutsRef.current = [];
-    if (timerRef.current) {
-      clearInterval(timerRef.current);
-      timerRef.current = null;
-    }
   }, []);
 
   useEffect(() => clearAll, [clearAll]);
@@ -47,7 +44,7 @@ export function usePlaygroundSimulation() {
       const reset = setTimeout(() => {
         setIsRunning(false);
         setPhase("idle");
-        setElapsedMs(0);
+        setStartedAt(null);
         setNodes([]);
         setActiveExample(null);
       }, 0);
@@ -79,12 +76,7 @@ export function usePlaygroundSimulation() {
       setNodes(flowNodes);
       setIsRunning(true);
       setPhase("running");
-      setElapsedMs(0);
-
-      const startTime = Date.now();
-      timerRef.current = setInterval(() => {
-        setElapsedMs(Math.min(Date.now() - startTime, TOTAL_DURATION_MS));
-      }, 50);
+      setStartedAt(Date.now());
 
       const toolIds = flowNodes
         .filter((n) => n.id.startsWith("tool-"))
@@ -124,11 +116,6 @@ export function usePlaygroundSimulation() {
           if (stepIdx === sequence.length - 1) {
             setIsRunning(false);
             setPhase("done");
-            setElapsedMs(TOTAL_DURATION_MS);
-            if (timerRef.current) {
-              clearInterval(timerRef.current);
-              timerRef.current = null;
-            }
           }
         }, doneDelay);
         timeoutsRef.current.push(t2);
@@ -156,7 +143,7 @@ export function usePlaygroundSimulation() {
     setNodes([]);
     setIsRunning(false);
     setPhase("idle");
-    setElapsedMs(0);
+    setStartedAt(null);
   }, [clearAll]);
 
   return {
@@ -164,7 +151,7 @@ export function usePlaygroundSimulation() {
     nodes,
     phase,
     isRunning,
-    elapsedMs,
+    startedAt,
     totalDurationMs: TOTAL_DURATION_MS,
     handleExampleClick,
     handleReset,

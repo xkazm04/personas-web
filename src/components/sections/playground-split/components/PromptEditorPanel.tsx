@@ -18,7 +18,7 @@ export default function PromptEditorPanel({
   reduced: boolean;
 }) {
   return (
-    <div className="border-b lg:border-b-0 lg:border-r border-glass">
+    <div className="border-b lg:border-b-0 lg:border-r border-glass stage:flex stage:min-h-0 stage:flex-col">
       <TerminalChrome
         title="prompt-editor"
         status={
@@ -27,7 +27,7 @@ export default function PromptEditorPanel({
         className="px-4 py-3"
       />
 
-      <div className="p-5 space-y-5">
+      <div className="p-5 space-y-5 stage:min-h-0 stage:flex-1 stage:space-y-3 stage:overflow-y-auto stage:overscroll-contain stage:p-4">
         <div className="rounded-xl border border-glass bg-white/[0.02] p-4">
           <div className="flex gap-4">
             <div className="flex flex-col items-end font-mono text-base text-muted-dark leading-relaxed select-none pt-[2px]">

@@ -27,7 +27,7 @@ export default function ResultCapabilitiesList({
               Result
             </span>
           </div>
-          <ul className="divide-y divide-white/[0.05]">
+          <ul className="divide-y divide-white/[0.05] stage:grid stage:grid-cols-2 stage:divide-y-0">
             {RESULT_DIMENSIONS.map((dim, i) => {
               const Icon = dim.icon;
               const value = activeExampleData.result[dim.key];
@@ -37,7 +37,7 @@ export default function ResultCapabilitiesList({
                   initial={{ opacity: 0, x: -6 }}
                   animate={{ opacity: 1, x: 0 }}
                   transition={{ delay: 0.1 + i * 0.08, duration: 0.3 }}
-                  className="flex items-start gap-3 px-4 py-3"
+                  className="flex items-start gap-3 px-4 py-3 stage:gap-2 stage:px-3 stage:py-2"
                 >
                   <div
                     className="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg"
@@ -52,7 +52,7 @@ export default function ResultCapabilitiesList({
                     >
                       {dim.label}
                     </div>
-                    <div className="mt-1 text-base text-foreground/90 leading-relaxed">
+                    <div className="mt-1 text-base text-foreground/90 leading-relaxed stage:line-clamp-2 stage:text-sm stage:leading-snug">
                       {value}
                     </div>
                   </div>
