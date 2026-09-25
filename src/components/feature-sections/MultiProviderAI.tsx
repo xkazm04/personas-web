@@ -1,6 +1,6 @@
 "use client";
 
-import { useCallback, useEffect, useRef } from "react";
+import { useCallback, useEffect, useRef, type CSSProperties } from "react";
 import { animate, useInView, useMotionValue, type AnimationPlaybackControls } from "framer-motion";
 import { RotateCcw } from "lucide-react";
 import SectionWrapper from "@/components/SectionWrapper";
@@ -39,19 +39,26 @@ export default function MultiProviderAIRouter() {
   }, [inView, play]);
 
   return (
-    <SectionWrapper fit="min" id="multi-provider">
-      <div className="text-center">
+    <SectionWrapper fit="fill" id="multi-provider">
+      <div className="text-center" data-section-intro>
         <SectionHeading>
           Powered by{" "}
           <GradientText className="drop-shadow-lg">Claude</GradientText>.
           Private via <GradientText className="drop-shadow-lg">Ollama</GradientText>.
         </SectionHeading>
-        <p className="mx-auto mt-6 max-w-2xl text-foreground/85 font-light">
+        <p data-section-lede className="mx-auto mt-4 max-w-2xl text-foreground/85 font-light md:text-lg">
           Two engines, one consistent agent runtime.
         </p>
       </div>
 
-      <div ref={ref} className="relative mx-auto mt-10 max-w-5xl">
+      <div data-stage-slot>
+      <div
+        ref={ref}
+        data-stage-art
+        // The wide router plus its frame padding (p-5): about 1040 x 480.
+        style={{ "--art-ar": 1040 / 480 } as CSSProperties}
+        className="relative mx-auto mt-10 max-w-5xl"
+      >
         <div
           data-illustrate-art
           role="img"
@@ -69,6 +76,7 @@ export default function MultiProviderAIRouter() {
         >
           <RotateCcw className="h-4 w-4" aria-hidden="true" />
         </button>
+      </div>
       </div>
     </SectionWrapper>
   );
