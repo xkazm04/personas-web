@@ -10,8 +10,12 @@ import { useTranslation } from "@/i18n/useTranslation";
 import { DOWNLOAD_PLAN, ctaHref } from "@/lib/release";
 import { trackDownloadClick } from "@/lib/analytics";
 import { detectPlatformKey } from "@/components/waitlist-modal/waitlistUtils";
+import IllustrationSwitcher from "@/components/illustrate/IllustrationSwitcher";
 import { FEATURE_GROUPS } from "./data";
 import FeatureGroupCard from "./FeatureGroupCard";
+import PricingBill from "./Pricing.bill";
+import PricingSpend from "./Pricing.spend";
+import PricingDownload from "./Pricing.download";
 
 /**
  * Landing section — re-labelled from the old Pricing tiers to a feature-group
@@ -19,7 +23,25 @@ import FeatureGroupCard from "./FeatureGroupCard";
  * the page.tsx stage wrapper) so the scroll-map and existing hash links keep working.
  */
 
+/* /illustrate round 3 prototype: the current section plus three directions,
+ * switchable by tab. The current body stays in this file because
+ * lib/landing-address.test.ts and lib/analytics.download-click.test.ts read it. */
 export default function Pricing() {
+  return (
+    <IllustrationSwitcher
+      section="pricing"
+      props={{}}
+      variants={[
+        { key: "current", label: "Current", hint: "Offer box + six feature cards", Component: PricingCurrent },
+        { key: "bill", label: "Bill", hint: "Who you pay for one agent run", Component: PricingBill },
+        { key: "spend", label: "Spend", hint: "The app's own usage view", Component: PricingSpend },
+        { key: "download", label: "Download", hint: "What ships free vs what you plug in", Component: PricingDownload },
+      ]}
+    />
+  );
+}
+
+function PricingCurrent() {
   const { t } = useTranslation();
   return (
     // No id: page.tsx's always-present wrapper owns `pricing` (ids are unique

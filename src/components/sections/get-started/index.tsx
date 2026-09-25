@@ -11,6 +11,10 @@ import { AUTO_ADVANCE_MS } from "./data";
 import { STEP_VISUALS } from "./visuals";
 import StepChip from "./StepChip";
 import StepContent from "./StepContent";
+import IllustrationSwitcher from "@/components/illustrate/IllustrationSwitcher";
+import GetStartedHandoff from "./GetStarted.handoff";
+import GetStartedFirstRun from "./GetStarted.first-run";
+import GetStartedSetupMap from "./GetStarted.setup-map";
 
 /**
  * GetStarted — the 5-step onboarding section that replaced the old /tour
@@ -18,7 +22,25 @@ import StepContent from "./StepContent";
  * on the right side of the content card.
  */
 
+/* /illustrate round 3 prototype: the current section plus three directions,
+ * switchable by tab. The current body stays in this file because
+ * lib/landing-address.test.ts reads its SectionWrapper label here. */
 export default function GetStarted() {
+  return (
+    <IllustrationSwitcher
+      section="get-started"
+      props={{}}
+      variants={[
+        { key: "current", label: "Current", hint: "Five chips + a prose card per step", Component: GetStartedCurrent },
+        { key: "handoff", label: "Hand-off", hint: "You set it up once; it runs after", Component: GetStartedHandoff },
+        { key: "first-run", label: "First run", hint: "The app's own five-step setup", Component: GetStartedFirstRun },
+        { key: "setup-map", label: "Setup map", hint: "What each step puts on your computer", Component: GetStartedSetupMap },
+      ]}
+    />
+  );
+}
+
+function GetStartedCurrent() {
   const [hovered, setHovered] = useState(false);
   const { active, setActive, setPaused } = useAutoCycle({
     count: TOUR_STEPS.length,
