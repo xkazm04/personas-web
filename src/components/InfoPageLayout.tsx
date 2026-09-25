@@ -42,8 +42,9 @@ export default function InfoPageLayout({
           <SectionBreadcrumb items={breadcrumbItems} />
         )}
         <MobilePageTOC items={scrollMapItems} />
-        {/* Spacer for fixed navbar */}
-        <div className="h-24" />
+        {/* Spacer for fixed navbar (exactly the bar on the desktop stage, so the
+            first stage starts right under it) */}
+        <div className="h-24 stage:h-(--nav-h)" />
         {tourId && (
           <div className="mb-10 flex justify-center">
             <TourLauncher tourId={tourId} bridgeHref={tourBridgeHref} bridgeKey={tourBridgeKey} />

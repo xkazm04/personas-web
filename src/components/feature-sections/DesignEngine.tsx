@@ -5,6 +5,7 @@ import GradientText from "@/components/GradientText";
 import SectionHeading from "@/components/SectionHeading";
 import SectionWrapper from "@/components/SectionWrapper";
 import { fadeUp, staggerContainer } from "@/lib/animations";
+import TourLauncher from "@/components/tour/TourLauncher";
 import DesignEngineMatrix from "./DesignEngineMatrix";
 
 export default function DesignEngine() {
@@ -34,6 +35,9 @@ export default function DesignEngine() {
             Personas fills the matrix cell by cell and asks only when it needs you.
           </span>
         </motion.p>
+        <motion.div variants={fadeUp} className="mt-4 flex justify-center stage:mt-[1.2svh]">
+          <TourLauncher tourId="features" bridgeHref="/demo?tour=1" bridgeKey="dashboard" />
+        </motion.div>
       </motion.div>
 
       <motion.div
