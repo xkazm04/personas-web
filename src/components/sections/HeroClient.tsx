@@ -216,7 +216,9 @@ export default function HeroClient({ connectorCount, templateCount }: { connecto
         </motion.div>
       </motion.div>
 
-      <div className="absolute bottom-8 left-1/2 z-10 -translate-x-1/2">
+      {/* Hidden on short desktop screens, where it sat on the trust line; the
+          page snaps to the next section there anyway. */}
+      <div className="absolute bottom-8 left-1/2 z-10 -translate-x-1/2 [@media(min-width:64rem)_and_(max-height:47.99rem)]:hidden">
         <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 1.5, duration: 1 }} className="flex flex-col items-center gap-1">
           <span className="text-base tracking-widest uppercase text-muted-dark">{t.hero.scroll}</span>
           <ChevronDown className={`h-4 w-4 text-muted-dark${shouldReduceMotion ? "" : " animate-scroll-hint"}`} />
