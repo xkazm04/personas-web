@@ -9,13 +9,14 @@ import DesignEngineMatrix from "./DesignEngineMatrix";
 
 export default function DesignEngine() {
   return (
-    <SectionWrapper fit="min" id="design">
+    <SectionWrapper fit="fill" id="design">
       <motion.div
         initial="hidden"
         whileInView="visible"
         viewport={{ once: true }}
         variants={staggerContainer}
         className="text-center"
+        data-section-intro
       >
         <motion.div variants={fadeUp}>
           <SectionHeading>
@@ -25,10 +26,10 @@ export default function DesignEngine() {
         </motion.div>
         <motion.p
           variants={fadeUp}
-          className="mx-auto mt-4 max-w-2xl text-foreground/85 font-light text-base md:text-lg"
+          data-section-lede
+          className="mx-auto mt-4 max-w-4xl text-foreground/85 font-light text-base md:text-lg"
         >
-          Every persona is eight cells of truth — tasks, apps, triggers, review,
-          messages, memory, errors, events. Describe what you want;{" "}
+          Describe what you want.{" "}
           <span className="text-foreground font-medium">
             Personas fills the matrix cell by cell and asks only when it needs you.
           </span>
@@ -41,6 +42,7 @@ export default function DesignEngine() {
         whileInView={{ opacity: 1, y: 0 }}
         viewport={{ once: true }}
         transition={{ duration: 0.5 }}
+        data-stage-slot
         className="mt-10"
       >
         <DesignEngineMatrix />

@@ -90,7 +90,7 @@ export default function Companion() {
                     pauseFor(TAP_PAUSE_MS);
                   }}
                   aria-pressed={isActive}
-                  className={`flex w-full items-start gap-4 rounded-2xl border p-4 text-left transition-colors stage:p-3 ${
+                  className={`flex w-full items-start gap-4 rounded-2xl border p-4 text-left transition-colors stage:gap-3 stage:px-3 stage:py-2.5 ${
                     isActive ? "" : "border-glass"
                   }`}
                   style={{

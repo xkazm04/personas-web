@@ -61,7 +61,7 @@ export default function MatrixTile({
         )}
       </div>
 
-      <div className="relative z-10 flex items-start justify-between px-5 pt-5">
+      <div className="relative z-10 flex items-start justify-between px-5 pt-5 stage:px-4 stage:pt-3">
         <div
           className={`${FLUID_DIMENSION} font-mono uppercase tracking-widest font-bold leading-tight drop-shadow-[0_2px_6px_rgba(0,0,0,0.85)]`}
           style={{

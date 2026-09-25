@@ -25,16 +25,16 @@ export default function DesignEngineMatrix() {
   ).length;
 
   return (
-    <div>
+    <div className="stage:h-full">
       <div ref={sectionRef} />
       <motion.div
         initial={{ opacity: 0, y: 30 }}
         whileInView={{ opacity: 1, y: 0 }}
         viewport={{ once: true }}
         transition={{ duration: 0.6 }}
-        className="mx-auto max-w-6xl"
+        className="mx-auto max-w-6xl stage:h-full stage:max-w-none"
       >
-        <div className="force-dark rounded-2xl border border-foreground/[0.08] bg-background/80 backdrop-blur-xl overflow-hidden shadow-[0_0_80px_rgba(0,0,0,0.4)]">
+        <div className="force-dark rounded-2xl border border-foreground/[0.08] bg-background/80 backdrop-blur-xl overflow-hidden shadow-[0_0_80px_rgba(0,0,0,0.4)] stage:flex stage:h-full stage:flex-col">
           <div className="flex items-center justify-between border-b border-foreground/[0.06] px-5 py-3">
             <div className="flex items-center gap-3">
               <div className="flex h-9 w-9 items-center justify-center rounded-full bg-brand-purple/15">
@@ -77,11 +77,13 @@ export default function DesignEngineMatrix() {
             </div>
           </div>
 
-          <div className="relative">
+          <div className="relative stage:min-h-0 stage:flex-1">
             {/* Connector spokes render the "radiate from center" metaphor; a
                 command packet travels out to each card as it's engaged. */}
             <RadiateOverlay statuses={statuses} />
-            <div className="p-5 md:p-6 grid grid-cols-1 md:grid-cols-3 gap-3 sm:gap-4 md:gap-5">
+            {/* On the stage the grid takes the height left under the header in three
+                rows; the middle row (the intent tile's sentence and progress) is taller. */}
+            <div className="p-5 md:p-6 grid grid-cols-1 md:grid-cols-3 gap-3 sm:gap-4 md:gap-5 stage:h-full stage:grid-rows-[minmax(0,1fr)_minmax(0,1.35fr)_minmax(0,1fr)] stage:gap-2.5 stage:p-3">
               <MatrixTile def={CELL_BY_KEY.tasks} status={statuses.tasks} />
               <MatrixTile def={CELL_BY_KEY.apps} status={statuses.apps} />
               <MatrixTile def={CELL_BY_KEY.triggers} status={statuses.triggers} />
@@ -100,7 +102,7 @@ export default function DesignEngineMatrix() {
             </div>
           </div>
 
-          <div className="flex items-center justify-between border-t border-foreground/[0.06] px-5 py-2.5 bg-foreground/[0.01]">
+          <div className="flex items-center justify-between border-t border-foreground/[0.06] px-5 py-2.5 bg-foreground/[0.01] stage:hidden">
             <div className="flex items-center gap-2 text-base font-mono uppercase tracking-wider text-foreground/60">
               <span className="tabular-nums text-foreground/90 font-semibold">
                 {filledCount}/{CELLS.length}

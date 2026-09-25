@@ -59,7 +59,7 @@ export default function IntentTile({
         />
       </div>
 
-      <div className="relative z-10 flex items-start justify-between px-5 pt-5">
+      <div className="relative z-10 flex items-start justify-between px-5 pt-5 stage:px-4 stage:pt-3">
         <div
           className={`${FLUID_MONO} font-mono uppercase tracking-widest font-bold drop-shadow-[0_2px_6px_rgba(0,0,0,0.85)]`}
           style={{ color: accent }}
@@ -89,7 +89,7 @@ export default function IntentTile({
 
       <div className="flex-1" />
 
-      <div className="relative z-10 px-5 pb-5 space-y-3">
+      <div className="relative z-10 px-5 pb-5 space-y-3 stage:space-y-2 stage:px-4 stage:pb-3">
         <div className={`rounded-lg border border-foreground/[0.1] bg-background/60 backdrop-blur-sm px-3 py-2 sm:py-2.5 font-mono ${FLUID_MONO} text-foreground leading-relaxed h-[48px] sm:h-[60px] overflow-hidden`}>
           {userTyped || (
             <span className="text-foreground/60 italic">

@@ -32,7 +32,6 @@ const KNOWN_OVERFLOW: Record<string, readonly ViewportName[]> = {
   "/ get-started-heading": ["1366x768 laptop", "1536x864 laptop", "1440x900 laptop"],
   "/ team-canvas": ["1366x768 laptop", "1536x864 laptop", "1440x900 laptop"],
   "/ compare-heading": ["1366x768 laptop", "1536x864 laptop", "1440x900 laptop", "1920x1080 desktop", "2560x1440 desktop"],
-  "/features design": ["1366x768 laptop", "1536x864 laptop", "1440x900 laptop", "1920x1080 desktop", "2560x1440 desktop"],
   "/features healing-circuit": ["1366x768 laptop", "1536x864 laptop", "1440x900 laptop"],
   "/features lab": ["1366x768 laptop", "1536x864 laptop", "1440x900 laptop", "1920x1080 desktop"],
 };
@@ -60,10 +59,43 @@ for (const route of ["/", "/features"]) {
         const navHeight = parseFloat(getComputedStyle(document.documentElement).getPropertyValue("--nav-h")) * 16;
         return {
           stage: window.innerHeight - navHeight,
-          rows: Array.from(document.querySelectorAll<HTMLElement>("[data-stage]")).map((el) => ({
-            key: el.id || el.getAttribute("aria-labelledby") || "(unnamed)",
-            height: Math.round(el.getBoundingClientRect().height),
-          })),
+          rows: Array.from(document.querySelectorAll<HTMLElement>("[data-stage]")).map((el) => {
+            // A fit="fill" section is forced to one stage high, so its height
+            // alone cannot show overflow: content can spill past its bottom edge
+            // and sit under the next section. Measure the lowest visible box,
+            // clipped by any overflow-hiding ancestor (and SVG viewports).
+            // Decorative layers - absolutely positioned and pointer-events:none,
+            // like a slowly spinning ring whose rotated bounding box is its
+            // diagonal - are not content and are skipped.
+            const decorative = (n: Element) => {
+              for (let a: Element | null = n; a && a !== el; a = a.parentElement) {
+                const cs = getComputedStyle(a);
+                if (cs.position === "absolute" && cs.pointerEvents === "none") return true;
+              }
+              return false;
+            };
+            const box = el.getBoundingClientRect();
+            let lowest = box.top;
+            for (const node of Array.from(el.querySelectorAll("*"))) {
+              const style = getComputedStyle(node);
+              if (style.position === "fixed" || style.display === "none" || style.visibility === "hidden") continue;
+              if (decorative(node)) continue;
+              const rect = node.getBoundingClientRect();
+              if (!rect.width || !rect.height) continue;
+              let bottom = rect.bottom;
+              for (let a = node.parentElement; a && a !== el; a = a.parentElement) {
+                if (getComputedStyle(a).overflowY !== "visible" || a.tagName.toLowerCase() === "svg") {
+                  bottom = Math.min(bottom, a.getBoundingClientRect().bottom);
+                }
+              }
+              lowest = Math.max(lowest, bottom);
+            }
+            return {
+              key: el.id || el.getAttribute("aria-labelledby") || "(unnamed)",
+              height: Math.round(box.height),
+              spill: Math.round(lowest - box.bottom),
+            };
+          }),
         };
       });
 
@@ -74,8 +106,9 @@ for (const route of ["/", "/features"]) {
       for (const row of sections.rows) {
         const key = `${route} ${row.key}`;
         const exempt = KNOWN_OVERFLOW[key]?.includes(viewport.name) ?? false;
-        const overflows = row.height > sections.stage + 1;
-        if (overflows && !exempt) overflowing.push(`${key}: ${row.height}px > ${Math.round(sections.stage)}px`);
+        const overflows = row.height > sections.stage + 1 || row.spill > 2;
+        if (overflows && !exempt)
+          overflowing.push(`${key}: ${row.height}px (content spills ${row.spill}px) vs ${Math.round(sections.stage)}px stage`);
         if (!overflows && exempt) staleExemptions.push(`${key} now fits - remove it from KNOWN_OVERFLOW`);
       }
       expect(overflowing, "sections taller than one screen").toEqual([]);

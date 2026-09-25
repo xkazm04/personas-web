@@ -55,9 +55,12 @@ export default function DownloadCTA() {
   ];
 
   return (
-    <SectionWrapper fit="min" id="download" aria-labelledby="download-heading" className="noise py-40 md:py-48">
+    // Padding comes from SectionWrapper (and the stage on desktop): the old
+    // py-40 md:py-48 here only won or lost against the wrapper's py-20 /
+    // md:py-36 by stylesheet order.
+    <SectionWrapper fit="min" id="download" aria-labelledby="download-heading" className="noise">
       <div className="pointer-events-none absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2">
-        <div className="animate-spin-slow h-[min(500px,86vw)] w-[min(500px,86vw)]" style={{ animationDuration: "40s" }}>
+        <div className="animate-spin-slow h-[min(500px,86vw)] w-[min(500px,86vw)] stage:h-[min(500px,calc(var(--stage-h)*0.9))] stage:w-[min(500px,calc(var(--stage-h)*0.9))]" style={{ animationDuration: "40s" }}>
           <svg viewBox="0 0 500 500" className="h-full w-full">
             <circle cx="250" cy="250" r="240" fill="none" stroke="color-mix(in srgb, var(--brand-cyan) 2.5%, transparent)" strokeWidth="0.5" strokeDasharray="4 16" />
             <circle cx="250" cy="10" r="2" fill="color-mix(in srgb, var(--brand-cyan) 12%, transparent)" />
