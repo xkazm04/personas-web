@@ -1,9 +1,9 @@
 "use client";
 
 import { BRAND_VAR, STATE_COLORS } from "@/lib/brand-theme";
+import { useTranslation } from "@/i18n/useTranslation";
 import {
   STATUS_BRAND,
-  STATUS_LABEL,
   kpiStatus,
   progressPct,
   type Kpi,
@@ -63,6 +63,7 @@ export function StatusDot({ status, size = 8 }: { status: KpiStatus; size?: numb
 
 /** Traffic-light verdict chip. */
 export function StatusPill({ status, className = "" }: { status: KpiStatus; className?: string }) {
+  const { t } = useTranslation();
   const c = statusColor(status);
   return (
     <span
@@ -70,7 +71,7 @@ export function StatusPill({ status, className = "" }: { status: KpiStatus; clas
       style={{ color: c, backgroundColor: `color-mix(in srgb, ${c} 16%, transparent)` }}
     >
       <span className="h-1.5 w-1.5 rounded-full" style={{ background: c }} />
-      {STATUS_LABEL[status]}
+      {t.teamCanvasSection.status[status]}
     </span>
   );
 }
@@ -80,6 +81,8 @@ export function StatusPill({ status, className = "" }: { status: KpiStatus; clas
  * current value as a marker, and the target as a flag. The "steer by KPI" affordance.
  */
 export function CalibrationTrack({ kpi, height = 26 }: { kpi: Kpi; height?: number }) {
+  const { t } = useTranslation();
+  const copy = t.teamCanvasSection;
   const status = kpiStatus(kpi);
   const lo = Math.min(kpi.baseline, kpi.target, kpi.critAt, kpi.current);
   const hi = Math.max(kpi.baseline, kpi.target, kpi.critAt, kpi.current);
@@ -122,8 +125,8 @@ export function CalibrationTrack({ kpi, height = 26 }: { kpi: Kpi; height?: numb
         />
       </div>
       <div className="mt-1 flex justify-between text-xs tabular-nums text-muted">
-        <span>base {kpi.baseline}{kpi.unit}</span>
-        <span style={{ color: STATE_COLORS.success }}>target {kpi.target}{kpi.unit}</span>
+        <span>{copy.base} {kpi.baseline}{kpi.unit}</span>
+        <span style={{ color: STATE_COLORS.success }}>{copy.target} {kpi.target}{kpi.unit}</span>
       </div>
     </div>
   );

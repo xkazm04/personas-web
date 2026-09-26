@@ -3,6 +3,7 @@
 import { motion } from "framer-motion";
 import SectionWrapper from "@/components/SectionWrapper";
 import SectionIntro from "@/components/primitives/SectionIntro";
+import { useTranslation } from "@/i18n/useTranslation";
 import { fadeUp } from "@/lib/animations";
 import AssemblyLine from "./variants/AssemblyLine";
 
@@ -13,13 +14,15 @@ import AssemblyLine from "./variants/AssemblyLine";
  * Deliberately distinct from the OrchestrationHub (which shows triggers).
  */
 export default function TeamCanvas() {
+  const { t } = useTranslation();
+  const copy = t.teamCanvasSection;
   return (
     <SectionWrapper fit="min" id="team-canvas" aria-labelledby="team-canvas-heading">
       <SectionIntro
         id="team-canvas-heading"
-        heading="From goal to"
-        gradient="shipped"
-        description="Triggers wake a single agent — the team canvas wires many. A goal fans out to personas that move real KPIs toward target along the line, then converges into a reviewed, shippable release."
+        heading={copy.heading}
+        gradient={copy.headingGradient}
+        description={copy.lede}
       />
 
       <motion.div variants={fadeUp} className="mt-10 stage:mt-0" data-stage-zoom>

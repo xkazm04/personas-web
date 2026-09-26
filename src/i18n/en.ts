@@ -1758,6 +1758,20 @@
     };
   };
   // BEGIN pending-translation namespaces (English only; listed in PENDING_TRANSLATION)
+  teamCanvasSection: {
+    heading: string;
+    headingGradient: string;
+    lede: string;
+    goalLabel: string;
+    goal: string;
+    shipped: string;
+    compositeHealth: string;
+    base: string;
+    target: string;
+    stations: Record<"plan" | "build" | "test" | "review", { label: string; sub: string }>;
+    kpis: Record<"leadTime" | "coverage" | "errorRate" | "review" | "cost" | "adoption", string>;
+    status: Record<"met" | "ok" | "warn" | "crit", string>;
+  };
   pricingSection: {
     heading: string;
     headingGradient: string;
@@ -2329,6 +2343,7 @@
  */
 export const PENDING_TRANSLATION = [
   'useCasesPersona',
+  'teamCanvasSection',
   'pricingSection',
   'playgroundSection',
   'orchestrationSection',
@@ -4366,6 +4381,32 @@ export const en: Translations = {
     },
   },
   // BEGIN pending-translation namespaces (English only; listed in PENDING_TRANSLATION)
+  teamCanvasSection: {
+    heading: 'From goal to',
+    headingGradient: 'shipped',
+    lede: 'Triggers wake a single agent — the team canvas wires many. A goal fans out to personas that move real KPIs toward target along the line, then converges into a reviewed, shippable release.',
+    goalLabel: 'Goal',
+    goal: 'Ship the v0.5 release',
+    shipped: 'Shipped',
+    compositeHealth: 'composite health',
+    base: 'base',
+    target: 'target',
+    stations: {
+      plan: { label: 'Plan', sub: 'scope + estimate' },
+      build: { label: 'Build', sub: 'implement' },
+      test: { label: 'Test', sub: 'verify' },
+      review: { label: 'Review', sub: 'approve' },
+    },
+    kpis: {
+      leadTime: 'Lead time',
+      coverage: 'Test coverage',
+      errorRate: 'Error rate',
+      review: 'Review pass rate',
+      cost: 'Cost / run',
+      adoption: 'Weekly users',
+    },
+    status: { met: 'Target met', ok: 'On track', warn: 'At risk', crit: 'Off track' },
+  },
   pricingSection: {
     heading: 'Personas is',
     headingGradient: 'free',
