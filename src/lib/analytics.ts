@@ -109,8 +109,10 @@ export function trackFeatureVote(featureId: string, action: "upvote" | "undo") {
   trackEvent("feature_vote", { feature: featureId, action });
 }
 
-export function trackFeatureRequest(text?: string) {
-  trackEvent("feature_request", text ? { text: text.slice(0, 200) } : undefined);
+// Counts only. The request's text is user content, and it already has its home in
+// /api/feature-requests; a copy here would be a second destination for it.
+export function trackFeatureRequest() {
+  trackEvent("feature_request");
 }
 
 export function trackFeatureComment(featureId: string, action: "add" | "reply") {

@@ -58,7 +58,7 @@ export default function CustomFeatureRequest() {
       return;
     }
 
-    trackFeatureRequest(text);
+    trackFeatureRequest();
     setSubmitted(true);
     setValue("");
     setSaving(false);

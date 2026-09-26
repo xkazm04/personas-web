@@ -43,7 +43,7 @@ Wires Sentry error reporting into the client, edge, and server runtimes from one
 - **`scrubBreadcrumb` is lighter than the event path.** The standalone breadcrumb hook only scrubs `message` and deletes `SENSITIVE_FIELDS` keys — it does NOT run `scrubData` on remaining `data` values (the in-event breadcrumb pass in `scrubEvent` does). Non-sensitive-keyed string values in standalone breadcrumbs are unscrubbed.
 - **`STATS_ADMIN_TOKEN` is not in `.env.example`.** The purge auth env var is undocumented in the env template; unset → `isAdminAuthorized` returns `false` and DELETE/POST return 503. Document it before relying on purge in any deployed environment. The check itself is constant-time (`timingSafeEqual`) but length-leaks via the early `a.length !== b.length` return.
 - **`POST = DELETE`.** The purge handler is aliased to POST, so a POST with the bearer token also purges — intentional but easy to miss.
-- **Analytics queue is unbounded in time, bounded in size.** Pre-consent events FIFO-drop past 50; nothing persists across reloads. Metric attributes are low-cardinality strings only (e.g. `trackFeatureRequest` truncates text to 200 chars).
+- **Analytics queue is unbounded in time, bounded in size.** Pre-consent events FIFO-drop past 50; nothing persists across reloads. Metric attributes are low-cardinality strings from closed sets only; no user-typed text rides in one (`trackFeatureRequest` sends the count, the text goes to `/api/feature-requests`).
 - **`tracesSampleRate: 0`.** Performance/trace sampling is disabled by default; only errors and explicit metrics flow.
 
 ## Related docs
