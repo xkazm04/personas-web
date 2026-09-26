@@ -17,15 +17,14 @@ export default function TeamCanvas() {
     <SectionWrapper fit="min" id="team-canvas" aria-labelledby="team-canvas-heading">
       <SectionIntro
         id="team-canvas-heading"
-        eyebrow="Team canvas"
         heading="From goal to"
         gradient="shipped"
         description="Triggers wake a single agent — the team canvas wires many. A goal fans out to personas that move real KPIs toward target along the line, then converges into a reviewed, shippable release."
       />
 
-      <motion.div variants={fadeUp} className="mt-10">
+      <motion.div variants={fadeUp} className="mt-10 stage:mt-0" data-stage-zoom>
         <div
-          className="mx-auto max-w-5xl rounded-3xl border p-4 sm:p-8"
+          className="mx-auto max-w-5xl rounded-2xl border p-4 sm:p-8 stage:p-5"
           style={{
             borderColor: "var(--border-glass-hover)",
             backgroundColor: "rgba(var(--surface-overlay), 0.02)",

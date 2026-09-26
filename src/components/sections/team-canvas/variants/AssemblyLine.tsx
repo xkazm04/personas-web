@@ -42,7 +42,7 @@ export default function AssemblyLine() {
   const composite = health(KPIS);
 
   return (
-    <div ref={rootRef} className="mx-auto flex h-[420px] w-full max-w-4xl flex-col justify-center gap-6 px-2 py-4">
+    <div ref={rootRef} className="mx-auto flex h-[420px] w-full max-w-4xl flex-col justify-center gap-6 px-2 py-4 stage:h-auto">
       {/* The line: goal → stations → shipped */}
       <div className="flex items-stretch gap-3">
         {/* GOAL */}
