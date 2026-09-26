@@ -64,9 +64,9 @@ export default function ArenaTab({
   }
 
   return (
-    <div className="relative flex flex-col rounded-xl border border-foreground/[0.10] bg-background/80 backdrop-blur-xl overflow-hidden">
+    <div className="relative flex flex-col rounded-xl border border-foreground/[0.10] bg-background/80 backdrop-blur-xl overflow-hidden stage:h-full">
       <TabBackdrop tab="arena" />
-      <div className="relative flex items-center justify-between border-b border-foreground/[0.06] px-5 py-3">
+      <div className="relative flex items-center justify-between border-b border-foreground/[0.06] px-5 py-3 stage:py-2">
         <div className="flex items-center gap-2">
           <Swords className="h-4 w-4 text-brand-purple" />
           <span className="text-base font-mono font-semibold text-foreground uppercase tracking-wider">
@@ -83,14 +83,14 @@ export default function ArenaTab({
         </div>
       </div>
 
-      <div className="relative border-b border-foreground/[0.06] px-5 py-3 bg-foreground/[0.02]">
-        <div className="text-base font-mono uppercase tracking-widest text-foreground/60 mb-1">
+      <div className="relative border-b border-foreground/[0.06] px-5 py-3 bg-foreground/[0.02] stage:flex stage:items-baseline stage:gap-3 stage:py-2">
+        <div className="text-base font-mono uppercase tracking-widest text-foreground/60 mb-1 stage:mb-0 stage:shrink-0">
           Input
         </div>
         <div className="font-mono text-base text-foreground/90">&gt; {round.input}</div>
       </div>
 
-      <div className="relative grid grid-cols-1 sm:grid-cols-2 divide-y sm:divide-y-0 sm:divide-x divide-foreground/[0.10]">
+      <div className="relative grid grid-cols-1 sm:grid-cols-2 stage:min-h-0 stage:flex-1 divide-y sm:divide-y-0 sm:divide-x divide-foreground/[0.10]">
         {(["A", "B"] as const).map((side) => {
           const isWinner = phase === "result" && round.winner === side;
           const isLoser = phase === "result" && round.winner !== side;
@@ -99,7 +99,7 @@ export default function ArenaTab({
           return (
             <div
               key={`${side}-${currentRound}`}
-              className="relative px-5 py-6 min-h-[160px] flex flex-col"
+              className="relative px-5 py-6 min-h-[160px] stage:min-h-0 stage:py-4 flex flex-col"
             >
               <div className="flex items-center justify-between mb-3">
                 <div className="flex items-center gap-2">
@@ -154,7 +154,7 @@ export default function ArenaTab({
                 )}
               </div>
               <div className="flex-1 flex flex-col justify-center">
-                <div className="text-3xl font-bold font-mono tabular-nums" style={{ color }}>
+                <div className="text-3xl font-bold font-mono tabular-nums [@container(min-height:26rem)]:text-5xl" style={{ color }}>
                   {phase === "fighting" ? "…" : score}
                 </div>
                 <div className="text-base font-mono uppercase tracking-widest text-foreground/60 mt-0.5">
@@ -176,7 +176,7 @@ export default function ArenaTab({
         })}
       </div>
 
-      <div className="relative flex items-center justify-between border-t border-foreground/[0.06] px-5 py-3 text-base font-mono">
+      <div className="relative flex items-center justify-between border-t border-foreground/[0.06] px-5 py-3 stage:py-2 text-base font-mono">
         <span className="flex items-center gap-4">
           <span className="flex items-center gap-1.5">
             <div className="h-2 w-2 rounded-full bg-brand-cyan" />

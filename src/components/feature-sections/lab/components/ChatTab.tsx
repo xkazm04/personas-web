@@ -72,9 +72,9 @@ export default function ChatTab({
   }, [reduced, run]);
 
   return (
-    <div className="relative flex flex-col rounded-xl border border-foreground/[0.10] bg-background/80 backdrop-blur-xl overflow-hidden">
+    <div className="relative flex flex-col rounded-xl border border-foreground/[0.10] bg-background/80 backdrop-blur-xl overflow-hidden stage:h-full">
       <TabBackdrop tab="chat" />
-      <div className="relative flex items-center justify-between border-b border-foreground/[0.06] px-5 py-3">
+      <div className="relative flex items-center justify-between border-b border-foreground/[0.06] px-5 py-3 stage:py-2">
         <div className="flex items-center gap-2">
           <MessageCircle className="h-4 w-4 text-brand-cyan" />
           <span className="text-base font-mono font-semibold text-foreground uppercase tracking-wider">
@@ -93,7 +93,7 @@ export default function ChatTab({
 
       <div
         ref={containerRef}
-        className="relative h-[340px] overflow-y-auto px-5 py-4 space-y-3 scrollbar-hide"
+        className="relative h-[340px] stage:h-auto stage:min-h-0 stage:flex-1 overflow-y-auto px-5 py-4 space-y-3 scrollbar-hide"
       >
         <AnimatePresence initial={false}>
           {visible.map((msg, i) => {
@@ -148,7 +148,7 @@ export default function ChatTab({
         </AnimatePresence>
       </div>
 
-      <div className="relative flex flex-wrap items-center gap-3 border-t border-foreground/[0.06] px-5 py-3">
+      <div className="relative flex flex-wrap items-center gap-3 border-t border-foreground/[0.06] px-5 py-3 stage:py-2">
         <div className="flex-1 min-w-[12rem] rounded-lg border border-foreground/[0.08] bg-foreground/[0.02] px-4 py-2 text-base text-foreground/60 font-mono">
           Tell the agent what to change…
         </div>

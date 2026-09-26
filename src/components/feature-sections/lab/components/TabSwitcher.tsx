@@ -18,7 +18,7 @@ export default function TabSwitcher({
       initial="hidden"
       whileInView="visible"
       viewport={{ once: true }}
-      className="mt-10 mx-auto max-w-2xl"
+      className="mt-10 mx-auto max-w-2xl stage:mt-0 stage:w-full stage:shrink-0"
     >
       <div className="flex items-center gap-1 rounded-xl border border-foreground/[0.08] bg-foreground/[0.02] p-1">
         {TABS.map((tab) => {
@@ -30,7 +30,7 @@ export default function TabSwitcher({
               data-lab-tab={tab.key}
               onClick={() => onSelect(tab.key)}
               aria-pressed={isActive}
-              className={`flex-1 flex items-center justify-center gap-2 rounded-lg px-3 py-2.5 text-base font-medium transition-all duration-200 ${
+              className={`flex-1 flex items-center justify-center gap-2 rounded-lg px-3 py-2.5 stage:py-2 text-base font-medium transition-all duration-200 ${
                 isActive
                   ? "bg-foreground/[0.08] text-foreground shadow-sm"
                   : "text-foreground/60 hover:text-foreground/85 hover:bg-foreground/[0.04]"
@@ -48,7 +48,7 @@ export default function TabSwitcher({
           );
         })}
       </div>
-      <div className="mt-3 text-center text-base font-mono text-foreground/60 uppercase tracking-widest">
+      <div className="mt-3 stage:mt-2 text-center text-base font-mono text-foreground/60 uppercase tracking-widest">
         {TABS.find((t) => t.key === active)?.blurb}
       </div>
     </motion.div>

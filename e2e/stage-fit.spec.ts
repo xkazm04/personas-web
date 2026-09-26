@@ -29,7 +29,6 @@ type ViewportName = (typeof VIEWPORTS)[number]["name"];
 
 /** `<route> <section id or aria-labelledby>` -> viewports it still overflows. */
 const KNOWN_OVERFLOW: Record<string, readonly ViewportName[]> = {
-  "/features lab": ["1366x768 laptop", "1536x864 laptop", "1440x900 laptop", "1920x1080 desktop"],
 };
 
 /** Scroll the whole page so every LazyMount gate opens and every chunk mounts. */
