@@ -37,46 +37,18 @@ function VisionSkeleton() {
   );
 }
 
-/* ── Pricing skeleton: heading + offer banner + 3 feature-group cards ──
-   Mirrors the live section (SectionIntro + offer framing + FeatureGroupCard grid)
-   so the swap from skeleton to content doesn't jump. ── */
+/* ── Pricing skeleton: heading + lede + one wide illustration + CTA ──
+   Mirrors the live section (SectionIntro, the "bill" diagram, the download
+   button) so the swap from skeleton to content does not jump. ── */
 function PricingSkeleton() {
   return (
     <section data-lazy-placeholder className="relative px-6 py-24 md:py-32">
-      <div className="mx-auto max-w-6xl flex flex-col items-center">
-        {/* Heading + description */}
-        <div className={`h-10 w-2/3 max-w-md sm:h-12 ${Ps}`} />
-        <div className={`mt-4 h-4 w-1/2 max-w-sm ${Pm}`} />
-
-        {/* Offer banner */}
-        <div className={`mt-10 h-32 w-full max-w-3xl ${P}`} />
-
-        {/* Three feature-group cards (icon + title/tagline + concept lines + link) */}
-        <div className="mt-14 grid gap-5 sm:grid-cols-2 lg:grid-cols-3 w-full max-w-6xl">
-          {[4, 4, 5].map((conceptCount, i) => (
-            <div key={i} className={`${P} flex flex-col gap-4 p-6`}>
-              {/* Header: icon square + title/tagline */}
-              <div className="flex items-start gap-3">
-                <div className={`${Pm} h-12 w-12 !rounded-xl shrink-0`} />
-                <div className="flex-1 space-y-2">
-                  <div className={`${Pm} h-6 w-3/4`} />
-                  <div className={`${Pm} h-3 w-1/2`} />
-                </div>
-              </div>
-              {/* Divider */}
-              <div className="h-px w-full bg-white/[0.04]" />
-              {/* Concept lines */}
-              {Array.from({ length: conceptCount }).map((_, j) => (
-                <div key={j} className="flex items-center gap-2.5">
-                  <div className={`${Pm} h-4 w-4 !rounded shrink-0`} />
-                  <div className={`${Pm} h-3 flex-1`} style={{ maxWidth: 150 + j * 15 }} />
-                </div>
-              ))}
-              {/* Read guide link */}
-              <div className={`${Pm} h-4 w-28 mt-1`} />
-            </div>
-          ))}
-        </div>
+      <div className="mx-auto max-w-5xl flex flex-col items-center">
+        <div className={`h-10 w-1/2 max-w-sm sm:h-12 ${Ps}`} />
+        <div className={`mt-4 h-4 w-2/3 max-w-2xl ${Pm}`} />
+        <div className={`mt-2 h-4 w-1/2 max-w-xl ${Pm}`} />
+        <div className={`mt-8 w-full max-w-[1000px] aspect-[5/2] ${P}`} />
+        <div className={`mt-5 h-12 w-48 !rounded-full ${Pm}`} />
       </div>
     </section>
   );

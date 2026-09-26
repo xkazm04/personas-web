@@ -1,78 +1,35 @@
 "use client";
 
-import { useState } from "react";
-import { AnimatePresence, motion } from "framer-motion";
 import SectionWrapper from "@/components/SectionWrapper";
-import { SectionIntro, BrandCard } from "@/components/primitives";
-import { fadeUp } from "@/lib/animations";
-import { useAutoCycle } from "@/hooks/useAutoCycle";
-import { TOUR_STEPS } from "@/data/tour";
-import { AUTO_ADVANCE_MS } from "./data";
-import { STEP_VISUALS } from "./visuals";
-import StepChip from "./StepChip";
-import StepContent from "./StepContent";
+import SectionHeading from "@/components/SectionHeading";
+import GradientText from "@/components/GradientText";
+import { useTranslation } from "@/i18n/useTranslation";
+import LifecycleArt from "./LifecycleArt";
+import LifecyclePhone from "./LifecyclePhone";
 
 /**
- * GetStarted — the 5-step onboarding section that replaced the old /tour
- * page. Each step has a chip in the selector and its own animated visual
- * on the right side of the content card.
+ * GetStarted - the persona lifecycle over one week (/illustrate r3, "handoff"):
+ * you set the agent up once; it runs on its own; the Overseer companion and the
+ * Lab improve it, and each fix you approve makes it better.
  */
-
 export default function GetStarted() {
-  const [hovered, setHovered] = useState(false);
-  const { active, setActive, setPaused } = useAutoCycle({
-    count: TOUR_STEPS.length,
-    intervalMs: AUTO_ADVANCE_MS,
-    paused: hovered,
-  });
-
-  const step = TOUR_STEPS[active];
-  const Visual = STEP_VISUALS[active];
-
+  const copy = useTranslation().t.getStartedSection;
   return (
     // No id: page.tsx's always-present wrapper owns `get-started` (ids are unique
     // per document); `lib/landing-address.ts` finds this section by its label.
-    <SectionWrapper fit="min" aria-labelledby="get-started-heading">
-      <SectionIntro
-        id="get-started-heading"
-        heading="From download to"
-        gradient="running agents"
-        description="Five steps. No cloud signup, no credit card — just your machine and your tools."
-      />
-
-      {/* Step chips */}
-      <motion.div
-        variants={fadeUp}
-        className="mt-12 mx-auto max-w-5xl flex flex-wrap justify-center gap-2"
-        onMouseEnter={() => setHovered(true)}
-        onMouseLeave={() => setHovered(false)}
-      >
-        {TOUR_STEPS.map((s, i) => (
-          <StepChip
-            key={s.id}
-            step={s}
-            isActive={i === active}
-            onClick={() => {
-              setActive(i);
-              setPaused(true);
-            }}
-          />
-        ))}
-      </motion.div>
-
-      {/* Step content card */}
-      <motion.div variants={fadeUp} className="mt-10 mx-auto max-w-5xl">
-        <BrandCard interactive={false} gradientWash={false}>
-          <AnimatePresence mode="wait">
-            <StepContent
-              step={step}
-              brand={step.brand}
-              icon={step.icon}
-              visual={Visual}
-            />
-          </AnimatePresence>
-        </BrandCard>
-      </motion.div>
+    <SectionWrapper fit="fill" aria-labelledby="get-started-heading">
+      <div className="text-center" data-section-intro>
+        <SectionHeading id="get-started-heading">
+          {copy.heading} <GradientText className="drop-shadow-lg">{copy.headingGradient}</GradientText>
+        </SectionHeading>
+        <p data-section-lede className="mx-auto mt-4 max-w-3xl text-base font-light leading-relaxed text-foreground/85 md:text-lg">
+          {copy.lede}
+        </p>
+      </div>
+      <div data-stage-slot>
+        <LifecycleArt />
+        <LifecyclePhone />
+      </div>
     </SectionWrapper>
   );
 }
