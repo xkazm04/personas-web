@@ -64,3 +64,17 @@ Read by the registry skill `illustrate` at start. Every key is optional.
   found native Ollama DEFERRED in the app: the live AI-models router ("Private via
   Ollama") and the pricing "BYOM - Claude or local Ollama" bullet over-claim. Review
   page: C:/t/illustrate-r3/review/index.html. Owner decision pending.
+- 2026-09-26 owner decision on round 3: team canvas keeps CURRENT ("although
+  factually more correct, no visual representation beat the quality of the current
+  variant"); get started takes HANDOFF as style, content reworked to the real
+  lifecycle with self-improvement (Overseer companion = the app's Director, Lab,
+  your approval; no internal "Lab v2" label); pricing takes BILL without the per-run
+  API-price chip (only the user's Claude plan is paid); healing: OVERNIGHT wins the
+  round but stays behind a two-tab switcher with CURRENT for a side-by-side decision
+  (switcher live on revamp/stage-fit - debt until decided); lab stays CURRENT and is
+  fitted tab by tab. Proposed lessons for the skill (not yet written to the registry):
+  (1) visual craft can outrank fidelity for an owner - score "visual quality vs the
+  current" explicitly instead of assuming a more-correct variant wins; (2) a picked
+  style can still need a content pass from the source app - plan a "winner deepening"
+  step before consolidation; (3) product-true variants imported the app's jargon and
+  scored lowest in the cold read (3/5) - real content must still be plain-worded.
