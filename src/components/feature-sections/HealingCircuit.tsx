@@ -2,17 +2,16 @@
 
 import IllustrationSwitcher, { type IllustrationVariant } from "@/components/illustrate/IllustrationSwitcher";
 import HealingCircuitCurrent from "./healing-circuit/index";
-import HealingCircuitRemedies from "./HealingCircuit.remedies";
-import HealingCircuitRunCard from "./HealingCircuit.run-card";
 import HealingCircuitOvernight from "./HealingCircuit.overnight";
 
-/* /illustrate r3 prototype: the current circuit board plus three directions, one
- * at a time; "current" is the default. Consolidation deletes the switcher. */
+/* /illustrate round 3, owner decision 2026-09-26: "overnight" won the round, but
+ * the owner wants it side by side with the current circuit board before deciding.
+ * Two tabs, current first (default). The overnight copy stays in its WORDS const
+ * until the pick is final; the final consolidation deletes this switcher and moves
+ * the winner's copy into en.ts. */
 
 const VARIANTS: IllustrationVariant<object>[] = [
   { key: "current", label: "Current", hint: "Circuit board", Component: HealingCircuitCurrent },
-  { key: "remedies", label: "Remedies", hint: "Four failures, four fixes", Component: HealingCircuitRemedies },
-  { key: "run-card", label: "Run card", hint: "What you see in the app", Component: HealingCircuitRunCard },
   { key: "overnight", label: "Overnight", hint: "A night of runs, one issue left", Component: HealingCircuitOvernight },
 ];
 
