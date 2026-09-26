@@ -4,6 +4,7 @@ import { motion } from "framer-motion";
 import { fadeUp } from "@/lib/animations";
 import { TABS } from "../data";
 import type { LabTab } from "../types";
+import { useTranslation } from "@/i18n/useTranslation";
 
 export default function TabSwitcher({
   active,
@@ -12,6 +13,7 @@ export default function TabSwitcher({
   active: LabTab;
   onSelect: (tab: LabTab) => void;
 }) {
+  const tabs = useTranslation().t.labSection.tabs;
   return (
     <motion.div
       variants={fadeUp}
@@ -43,13 +45,13 @@ export default function TabSwitcher({
                 className="h-4 w-4"
                 style={{ color: isActive ? tab.color : undefined }}
               />
-              <span className="hidden sm:inline">{tab.label}</span>
+              <span className="hidden sm:inline">{tabs[tab.key].label}</span>
             </button>
           );
         })}
       </div>
       <div className="mt-3 stage:mt-2 text-center text-base font-mono text-foreground/60 uppercase tracking-widest">
-        {TABS.find((t) => t.key === active)?.blurb}
+        {tabs[active].blurb}
       </div>
     </motion.div>
   );

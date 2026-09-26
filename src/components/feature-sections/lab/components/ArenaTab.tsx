@@ -8,6 +8,7 @@ import { Swords, Check, X } from "lucide-react";
 import { ARENA_ROUNDS } from "../data";
 import type { ArenaSide } from "../ledger";
 import { useTranslation } from "@/i18n/useTranslation";
+import { fillTemplate } from "@/lib/fillTemplate";
 import TabBackdrop from "./TabBackdrop";
 
 /** Contender labels project from the version ledger (`arenaContenders`), so
@@ -20,6 +21,7 @@ export default function ArenaTab({
   liveId: string;
 }) {
   const { t } = useTranslation();
+  const copy = t.labSection.arena;
   const reduced = useStillMotion();
   // Ambient round cycle: stop advancing rounds into a backgrounded tab.
   const tabHidden = usePageVisibility();
@@ -70,24 +72,22 @@ export default function ArenaTab({
         <div className="flex items-center gap-2">
           <Swords className="h-4 w-4 text-brand-purple" />
           <span className="text-base font-mono font-semibold text-foreground uppercase tracking-wider">
-            Prompt arena
+            {copy.title}
           </span>
         </div>
         <div className="flex items-center gap-3 text-base font-mono">
           <span className="text-foreground/70">
-            Round{" "}
-            <span className="text-foreground tabular-nums font-semibold">
-              {currentRound + 1}/{ARENA_ROUNDS.length}
-            </span>
+            {copy.round}{" "}
+            <span className="text-foreground tabular-nums font-semibold">{currentRound + 1}/{ARENA_ROUNDS.length}</span>
           </span>
         </div>
       </div>
 
       <div className="relative border-b border-foreground/[0.06] px-5 py-3 bg-foreground/[0.02] stage:flex stage:items-baseline stage:gap-3 stage:py-2">
         <div className="text-base font-mono uppercase tracking-widest text-foreground/60 mb-1 stage:mb-0 stage:shrink-0">
-          Input
+          {copy.input}
         </div>
-        <div className="font-mono text-base text-foreground/90">&gt; {round.input}</div>
+        <div className="font-mono text-base text-foreground/90">&gt; {copy.inputs[round.input]}</div>
       </div>
 
       <div className="relative grid grid-cols-1 sm:grid-cols-2 stage:min-h-0 stage:flex-1 divide-y sm:divide-y-0 sm:divide-x divide-foreground/[0.10]">
@@ -110,7 +110,7 @@ export default function ArenaTab({
                     {side}
                   </div>
                   <div className="text-base font-mono text-foreground/70">
-                    Version {contenders[side]}
+                    {fillTemplate(copy.version, { version: contenders[side] })}
                   </div>
                   {contenders[side] === liveId && (
                     <span className="text-base font-mono uppercase tracking-wider text-brand-emerald">
@@ -124,7 +124,7 @@ export default function ArenaTab({
                     initial={{ scale: 0, rotate: -20, opacity: 0 }}
                     animate={{ scale: 1, rotate: 0, opacity: 1 }}
                     transition={{ type: "spring", stiffness: 320, damping: 18 }}
-                    aria-label={`Version ${side} wins this round`}
+                    aria-label={fillTemplate(copy.winsAria, { version: side })}
                     className="flex items-center gap-1 rounded-full border px-2 py-0.5 text-base font-mono uppercase tracking-widest"
                     style={{ borderColor: color, color }}
                   >
@@ -136,7 +136,7 @@ export default function ArenaTab({
                     >
                       <Check className="h-3 w-3" strokeWidth={3} />
                     </motion.span>
-                    win
+                    {copy.win}
                   </motion.div>
                 )}
                 {isLoser && (
@@ -145,11 +145,11 @@ export default function ArenaTab({
                     initial={{ scale: 0, rotate: 20, opacity: 0 }}
                     animate={{ scale: 1, rotate: 0, opacity: 1 }}
                     transition={{ type: "spring", stiffness: 320, damping: 18 }}
-                    aria-label={`Version ${side} loses this round`}
+                    aria-label={fillTemplate(copy.losesAria, { version: side })}
                     className="flex items-center gap-1 rounded-full border border-brand-rose/60 px-2 py-0.5 text-base font-mono uppercase tracking-widest text-brand-rose/90"
                   >
                     <X className="h-3 w-3" strokeWidth={3} />
-                    lose
+                    {copy.lose}
                   </motion.div>
                 )}
               </div>
@@ -158,7 +158,7 @@ export default function ArenaTab({
                   {phase === "fighting" ? "…" : score}
                 </div>
                 <div className="text-base font-mono uppercase tracking-widest text-foreground/60 mt-0.5">
-                  fitness score
+                  {copy.fitnessScore}
                 </div>
                 <div className="mt-3 h-1 w-full rounded-full bg-foreground/[0.04] overflow-hidden">
                   <motion.div
@@ -180,17 +180,17 @@ export default function ArenaTab({
         <span className="flex items-center gap-4">
           <span className="flex items-center gap-1.5">
             <div className="h-2 w-2 rounded-full bg-brand-cyan" />
-            <span className="text-foreground/85">Version A</span>
+            <span className="text-foreground/85">{fillTemplate(copy.version, { version: "A" })}</span>
             <span className="text-foreground font-semibold tabular-nums">{wins.A}</span>
           </span>
           <span className="flex items-center gap-1.5">
             <div className="h-2 w-2 rounded-full bg-brand-purple" />
-            <span className="text-foreground/85">Version B</span>
+            <span className="text-foreground/85">{fillTemplate(copy.version, { version: "B" })}</span>
             <span className="text-foreground font-semibold tabular-nums">{wins.B}</span>
           </span>
         </span>
         <span className="text-foreground/60 uppercase tracking-wider">
-          {phase === "fighting" ? "fighting…" : "round complete"}
+          {phase === "fighting" ? copy.fighting : copy.roundComplete}
         </span>
       </div>
     </div>

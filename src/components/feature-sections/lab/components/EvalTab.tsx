@@ -3,11 +3,14 @@
 import { motion } from "framer-motion";
 import { useStillMotion } from "@/hooks/useStillMotion";
 import { Radar } from "lucide-react";
-import { EVAL_DIMENSIONS } from "../data";
+import { EVAL_DIMENSIONS, EVAL_SAMPLE_RUNS } from "../data";
+import { useTranslation } from "@/i18n/useTranslation";
+import { fillTemplate } from "@/lib/fillTemplate";
 import TabBackdrop from "./TabBackdrop";
 import { useStageBox } from "../useStageBox";
 
 export default function EvalTab() {
+  const copy = useTranslation().t.labSection.eval;
   const reduced = useStillMotion();
   // On the desktop stage the radar is height-bound: crop the viewBox to the
   // chart and its labels, and size the labels to read ~15px at any height.
@@ -47,18 +50,18 @@ export default function EvalTab() {
         <div className="flex items-center gap-2">
           <Radar className="h-4 w-4 text-brand-emerald" />
           <span className="text-base font-mono font-semibold text-foreground uppercase tracking-wider">
-            Eval radar
+            {copy.title}
           </span>
         </div>
         <div className="flex items-center gap-4 text-base font-mono">
           <span className="text-foreground/70">
-            Avg{" "}
+            {copy.avg}{" "}
             <span className="text-brand-emerald font-semibold tabular-nums">
               {avgScore}
             </span>
           </span>
           <span className="text-foreground/70">
-            Δ vs baseline{" "}
+            {copy.deltaVsBaseline}{" "}
             <span className="text-brand-emerald font-semibold">
               +{avgScore - avgBaseline}
             </span>
@@ -122,7 +125,7 @@ export default function EvalTab() {
               const p = axisPoint(i, (d.score / 100) * rMax);
               const labelP = axisPoint(i, rMax + 22);
               return (
-                <g key={d.label}>
+                <g key={d.key}>
                   <motion.circle
                     cx={p.x}
                     cy={p.y}
@@ -141,7 +144,7 @@ export default function EvalTab() {
                     fontFamily="monospace"
                     opacity={0.85}
                   >
-                    {d.label}
+                    {copy.dimensions[d.key]}
                   </text>
                 </g>
               );
@@ -154,13 +157,13 @@ export default function EvalTab() {
             const delta = d.score - d.baseline;
             return (
               <motion.div
-                key={d.label}
+                key={d.key}
                 initial={{ opacity: 0, x: 10 }}
                 animate={{ opacity: 1, x: 0 }}
                 transition={{ delay: 0.5 + i * 0.08 }}
                 className="flex items-center justify-between rounded-lg border border-foreground/[0.06] bg-foreground/[0.02] px-3 py-2 stage:max-h-11 stage:min-h-0 stage:flex-1 stage:py-0"
               >
-                <span className="text-base font-mono text-foreground/85">{d.label}</span>
+                <span className="text-base font-mono text-foreground/85">{copy.dimensions[d.key]}</span>
                 <span className="flex items-center gap-2 font-mono text-base tabular-nums">
                   <span className="text-foreground font-semibold">{d.score}</span>
                   <span className="text-brand-emerald">+{delta}</span>
@@ -174,14 +177,14 @@ export default function EvalTab() {
       <div className="relative flex items-center justify-between border-t border-foreground/[0.06] px-5 py-3 stage:py-2 text-base font-mono">
         <span className="flex items-center gap-3 text-foreground/70">
           <span className="flex items-center gap-1.5">
-            <div className="h-2 w-2 rounded-full bg-brand-emerald" /> current
+            <div className="h-2 w-2 rounded-full bg-brand-emerald" /> {copy.current}
           </span>
           <span className="flex items-center gap-1.5">
-            <div className="h-2 w-2 rounded-full border border-foreground/40" /> baseline
+            <div className="h-2 w-2 rounded-full border border-foreground/40" /> {copy.baseline}
           </span>
         </span>
         <span className="uppercase tracking-wider text-foreground/60">
-          6 dimensions · 50 sample runs
+          {fillTemplate(copy.footer, { dimensions: n, runs: EVAL_SAMPLE_RUNS })}
         </span>
       </div>
     </div>

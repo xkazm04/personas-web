@@ -1,24 +1,29 @@
 import type { LucideIcon } from "lucide-react";
+import type { Translations } from "@/i18n/en";
 
 export type LabTab = "chat" | "arena" | "evolution" | "eval";
 
+type LabCopy = Translations["labSection"];
+
+/** Words live in `labSection` (en.ts); data carries ids and numbers only. */
+export type ChatMessageKey = keyof LabCopy["chat"]["messages"];
+export type ArenaInputKey = keyof LabCopy["arena"]["inputs"];
+export type EvalDimensionKey = keyof LabCopy["eval"]["dimensions"];
+
 export interface TabDef {
   key: LabTab;
-  label: string;
   icon: LucideIcon;
   color: string;
-  blurb: string;
 }
 
-export interface ChatMsg {
-  role: "user" | "assistant" | "diff";
-  content: string;
-  delay: number;
-}
+/** A spoken line names its copy key; an applied diff is config text, kept in code. */
+export type ChatMsg =
+  | { role: "user" | "assistant"; message: ChatMessageKey; delay: number }
+  | { role: "diff"; content: string; delay: number };
 
 export interface Round {
   id: number;
-  input: string;
+  input: ArenaInputKey;
   winner: "A" | "B";
   scoreA: number;
   scoreB: number;

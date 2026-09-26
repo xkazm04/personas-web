@@ -10,6 +10,8 @@ import { bestLineage, genomeSummary, nodeTone, type NodeTone } from "../genome";
 import type { GenomeNode } from "../types";
 import TabBackdrop from "./TabBackdrop";
 import { useStageBox } from "../useStageBox";
+import { useTranslation } from "@/i18n/useTranslation";
+import { fillTemplate } from "@/lib/fillTemplate";
 
 // Module-level: GENOME_NODES is static, so the lineage and the header figures
 // are computed once, from the same data the tree draws.
@@ -26,6 +28,7 @@ const TONE_FILL: Record<NodeTone, string> = {
 };
 
 export default function EvolutionTab() {
+  const copy = useTranslation().t.labSection.evolution;
   // The best node's halo is an ambient loop: still under reduced motion, and
   // parked while the tab is backgrounded.
   const reduced = useStillMotion();
@@ -49,20 +52,18 @@ export default function EvolutionTab() {
         <div className="flex items-center gap-2">
           <Dna className="h-4 w-4 text-brand-amber" />
           <span className="text-base font-mono font-semibold text-foreground uppercase tracking-wider">
-            Genome tree
+            {copy.title}
           </span>
         </div>
         <div className="flex items-center gap-4 text-base font-mono">
           <span className="text-foreground/70">
-            Gen{" "}
-            <span className="text-foreground font-semibold tabular-nums">{SUMMARY.generation}</span>
+            {copy.gen} <span className="text-foreground font-semibold tabular-nums">{SUMMARY.generation}</span>
           </span>
           <span className="text-foreground/70">
-            Best <span className="text-brand-amber font-semibold tabular-nums">{SUMMARY.best}</span>
+            {copy.best} <span className="text-brand-amber font-semibold tabular-nums">{SUMMARY.best}</span>
           </span>
           <span className="text-foreground/70">
-            Lineage{" "}
-            <span className="text-brand-emerald font-semibold tabular-nums">
+            {copy.lineage} <span className="text-brand-emerald font-semibold tabular-nums">
               {SUMMARY.lineageGainPct >= 0 ? "+" : ""}
               {SUMMARY.lineageGainPct}%
             </span>
@@ -97,7 +98,7 @@ export default function EvolutionTab() {
                   fontSize={16}
                   fontFamily="monospace"
                 >
-                  G{g}
+                  {fillTemplate(copy.genAxis, { gen: g })}
                 </text>
               </g>
             );
@@ -176,19 +177,19 @@ export default function EvolutionTab() {
         <span className="flex items-center gap-3">
           <span className="flex items-center gap-1.5">
             <div className="h-2 w-2 rounded-full bg-brand-amber" />
-            <span className="text-foreground/85">best lineage</span>
+            <span className="text-foreground/85">{copy.bestLineage}</span>
           </span>
           <span className="flex items-center gap-1.5">
             <div className="h-2 w-2 rounded-full bg-brand-emerald" />
-            <span className="text-foreground/85">alive</span>
+            <span className="text-foreground/85">{copy.alive}</span>
           </span>
           <span className="flex items-center gap-1.5">
             <div className="h-2 w-2 rounded-full bg-foreground/30" />
-            <span className="text-foreground/85">culled</span>
+            <span className="text-foreground/85">{copy.culled}</span>
           </span>
         </span>
         <button className="flex items-center gap-1.5 rounded-lg border border-amber-500/40 bg-amber-500/15 px-3 py-1 text-amber-700 dark:text-amber-300 uppercase tracking-wider">
-          <Play className="h-3 w-3" /> breed next gen
+          <Play className="h-3 w-3" /> {copy.breed}
         </button>
       </div>
     </div>

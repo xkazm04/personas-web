@@ -13,8 +13,10 @@ import EvolutionTab from "./components/EvolutionTab";
 import EvalTab from "./components/EvalTab";
 import VersionRail from "./components/VersionRail";
 import { arenaContenders, initialLedger, ledgerReducer } from "./ledger";
+import { useTranslation } from "@/i18n/useTranslation";
 
 export default function Lab() {
+  const copy = useTranslation().t.labSection;
   const [active, setActive] = useState<LabTab>("chat");
   // One version ledger for the whole section: the rail, the chat's promote
   // answer and the arena's contender labels all project from it. Lazy
@@ -30,9 +32,9 @@ export default function Lab() {
         variants={staggerContainer}
       >
         <SectionIntro
-          heading="The"
-          gradient="Lab"
-          description="Four ways to make your personas better — chat with them, fight them against each other, evolve them across generations, or score them on the dimensions that matter. Every improvement you keep is versioned and reversible."
+          heading={copy.heading}
+          gradient={copy.headingGradient}
+          description={copy.lede}
           descriptionMaxWidth="max-w-2xl stage:max-w-4xl"
           className="mb-0"
         />
