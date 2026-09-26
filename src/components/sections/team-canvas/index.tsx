@@ -1,21 +1,39 @@
 "use client";
 
-import IllustrationSwitcher, { type IllustrationVariant } from "@/components/illustrate/IllustrationSwitcher";
-import TeamCanvasCurrent from "./TeamCanvas.current";
-import TeamCanvasRelay from "./TeamCanvas.relay";
-import TeamCanvasMissions from "./TeamCanvas.missions";
-import TeamCanvasRoster from "./TeamCanvas.roster";
+import { motion } from "framer-motion";
+import SectionWrapper from "@/components/SectionWrapper";
+import SectionIntro from "@/components/primitives/SectionIntro";
+import { fadeUp } from "@/lib/animations";
+import AssemblyLine from "./variants/AssemblyLine";
 
-/* /illustrate round 3 (skill 1.2.0): the current section plus three directions.
- * "current" is the default tab; `?illustrate=team-canvas:<key>` links a variant. */
-
-const VARIANTS: IllustrationVariant<Record<string, never>>[] = [
-  { key: "current", label: "Current", hint: "Assembly line + KPIs", Component: TeamCanvasCurrent },
-  { key: "relay", label: "Relay", hint: "The step graph, with the QA loop", Component: TeamCanvasRelay },
-  { key: "missions", label: "Missions", hint: "The app's Missions view", Component: TeamCanvasMissions },
-  { key: "roster", label: "Roster", hint: "One goal, matched to the team", Component: TeamCanvasRoster },
-];
-
+/**
+ * Team Canvas — the multi-agent pipeline story, reframed around the desktop
+ * Factory/KPI mechanism: a goal fans out to personas that move measurable KPIs
+ * toward target along an assembly line and converge into a reviewed release.
+ * Deliberately distinct from the OrchestrationHub (which shows triggers).
+ */
 export default function TeamCanvas() {
-  return <IllustrationSwitcher section="team-canvas" variants={VARIANTS} props={{}} />;
+  return (
+    <SectionWrapper fit="min" id="team-canvas" aria-labelledby="team-canvas-heading">
+      <SectionIntro
+        id="team-canvas-heading"
+        eyebrow="Team canvas"
+        heading="From goal to"
+        gradient="shipped"
+        description="Triggers wake a single agent — the team canvas wires many. A goal fans out to personas that move real KPIs toward target along the line, then converges into a reviewed, shippable release."
+      />
+
+      <motion.div variants={fadeUp} className="mt-10">
+        <div
+          className="mx-auto max-w-5xl rounded-3xl border p-4 sm:p-8"
+          style={{
+            borderColor: "var(--border-glass-hover)",
+            backgroundColor: "rgba(var(--surface-overlay), 0.02)",
+          }}
+        >
+          <AssemblyLine />
+        </div>
+      </motion.div>
+    </SectionWrapper>
+  );
 }

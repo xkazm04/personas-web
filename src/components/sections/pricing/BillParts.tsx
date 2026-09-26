@@ -3,7 +3,7 @@
 import { motion, useTransform, type MotionValue } from "framer-motion";
 import type { LucideIcon } from "lucide-react";
 import { BRAND_VAR, tint, type BrandKey } from "@/lib/brand-theme";
-import { BEAT_START, along, beat, type Box, type Pt } from "./Pricing.bill.geometry";
+import { BEAT_START, along, beat, type Box, type Pt } from "./billGeometry";
 
 /* Drawn pieces of the "bill" illustration: nodes, the travelling run, the coin. */
 

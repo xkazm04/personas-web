@@ -1758,6 +1758,21 @@
     };
   };
   // BEGIN pending-translation namespaces (English only; listed in PENDING_TRANSLATION)
+  pricingSection: {
+    heading: string;
+    headingGradient: string;
+    lede: string;
+    artLabel: string;
+    replay: string;
+    computer: string;
+    tag: string;
+    personas: string;
+    cli: string;
+    anthropic: string;
+    claude: string;
+    plan: string;
+    beats: string[];
+  };
   useCasesPersona: {
     groupLabel: string;
     identityNote: string;
@@ -2279,6 +2294,27 @@
       };
     };
   };
+  getStartedSection: {
+    heading: string;
+    headingGradient: string;
+    lede: string;
+    artLabel: string;
+    replay: string;
+    lanes: { you: string; improve: string; agent: string };
+    trigger: string;
+    days: { mon: string; tue: string; wed: string; thu: string; fri: string };
+    steps: { install: string; connect: string; describe: string; promote: string };
+    claudeCode: string;
+    firstRun: string;
+    healed: { top: string; bottom: string };
+    overseer: string;
+    coachingNote: string;
+    lab: string;
+    arena: string;
+    approve: string;
+    scoreBefore: string;
+    scoreAfter: string;
+  };
   // END pending-translation namespaces
 }
 
@@ -2293,6 +2329,7 @@
  */
 export const PENDING_TRANSLATION = [
   'useCasesPersona',
+  'pricingSection',
   'playgroundSection',
   'orchestrationSection',
   'companionSection',
@@ -2303,6 +2340,7 @@ export const PENDING_TRANSLATION = [
   'aiModelsSection',
   'observeSection',
   'pluginsExtra',
+  'getStartedSection',
 ] as const;
 
 export type PendingNamespace = (typeof PENDING_TRANSLATION)[number];
@@ -4328,6 +4366,21 @@ export const en: Translations = {
     },
   },
   // BEGIN pending-translation namespaces (English only; listed in PENDING_TRANSLATION)
+  pricingSection: {
+    heading: 'Personas is',
+    headingGradient: 'free',
+    lede: "The app, its MIT source and every feature cost nothing, with no account or licence key. Your agents run through Claude Code on your own Claude Pro or Max plan, so the only bill is Anthropic's.",
+    artLabel: 'An agent run leaves Personas on your computer, passes the Claude Code CLI and reaches Claude at Anthropic. Personas is tagged $0 with an MIT licence; the only payment line runs from your Claude Pro or Max plan to Anthropic.',
+    replay: 'Replay the illustration',
+    computer: 'Your computer',
+    tag: '$0, MIT licence',
+    personas: 'Personas',
+    cli: 'Claude Code CLI',
+    anthropic: 'Anthropic',
+    claude: 'Claude',
+    plan: 'Your Claude Pro or Max plan',
+    beats: ['Run starts', 'On your plan', 'Claude works', 'No bill from Personas'],
+  },
   useCasesPersona: {
     groupLabel: 'One persona, {persona}, shown as its card. Connecting each of {tools} tools adds that tool\'s jobs, {jobs} in all, while the persona\'s name, icon and colour stay the same.',
     identityNote: 'Same name, same icon, same colour through every tool. Connecting a tool only adds jobs to this one persona.',
@@ -4879,6 +4932,32 @@ export const en: Translations = {
         graph: 'Backlink graph would be a great demo',
       },
     },
+  },
+  getStartedSection: {
+    heading: 'From download to',
+    headingGradient: 'running agents',
+    lede: 'Set it up once, with Claude Code signed in: Personas runs your agents through it, on your own Claude plan. Then the agent runs by itself and keeps improving: the Overseer companion reviews its runs, the Lab measures each fix, and you approve it.',
+    artLabel: 'A week in three lanes. On Monday you install Personas with Claude Code signed in, connect Gmail and Slack, describe the agent, then test and promote it, and it runs once. From Tuesday it runs daily at 08:00, and the Tuesday run heals itself with a retry. The Overseer companion reads the runs, rated 3 of 5, and writes a coaching note; the Lab measures the fix in its Arena; you approve it; and the Friday run is rated 4 of 5.',
+    replay: 'Replay the animation',
+    lanes: { you: 'You', improve: 'Self-improvement', agent: 'Your agent' },
+    trigger: 'Daily 08:00',
+    days: { mon: 'Mon', tue: 'Tue', wed: 'Wed', thu: 'Thu', fri: 'Fri' },
+    steps: {
+      install: 'Install Personas',
+      connect: 'Connect Gmail, Slack',
+      describe: 'Describe the agent',
+      promote: 'Test & promote',
+    },
+    claudeCode: 'Claude Code signed in',
+    firstRun: 'First run',
+    healed: { top: 'healed', bottom: 'via retry' },
+    overseer: 'Overseer',
+    coachingNote: 'Coaching note',
+    lab: 'Lab',
+    arena: 'Arena',
+    approve: 'Approve',
+    scoreBefore: '3/5',
+    scoreAfter: '4/5',
   },
   // END pending-translation namespaces
 };

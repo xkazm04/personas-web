@@ -22,7 +22,6 @@ export interface BillLayout {
   tag: Box;
   personas: Box;
   cli: Box;
-  chip: Box;
   cloud: Box;
   cloudLegend: Pt;
   claude: Box;
@@ -44,7 +43,6 @@ export const WIDE: BillLayout = {
   tag: { x: 48, y: 40, w: 200, h: 36 },
   personas: { x: 48, y: 96, w: 200, h: 80 },
   cli: { x: 316, y: 96, w: 224, h: 80 },
-  chip: { x: 48, y: 192, w: 262, h: 62 },
   cloud: { x: 636, y: 16, w: 320, h: 250 },
   cloudLegend: [660, 64],
   claude: { x: 686, y: 96, w: 220, h: 80 },
@@ -76,7 +74,6 @@ export const TALL: BillLayout = {
   tag: { x: 32, y: 32, w: 190, h: 34 },
   personas: { x: 32, y: 90, w: 336, h: 72 },
   cli: { x: 32, y: 196, w: 336, h: 72 },
-  chip: { x: 32, y: 296, w: 262, h: 64 },
   cloud: { x: 12, y: 440, w: 376, h: 160 },
   cloudLegend: [32, 474],
   claude: { x: 32, y: 500, w: 336, h: 72 },
@@ -129,8 +126,7 @@ export const beat = (p: number, from: number, to: number) => clamp01((p - from) 
  *   0.00-0.30  the run travels Personas -> Claude Code CLI -> Claude
  *   0.30-0.45  Claude works (a ring pulses)
  *   0.45-0.62  the result returns to Personas
- *   0.60-0.70  the cost chip appears: API price, included in your plan
  *   0.70-0.92  the plan's payment runs from the wallet to Anthropic
  *   0.90-1.00  the $0 tag on Personas settles
  */
-export const BEAT_START = [0, 0.12, 0.3, 0.6];
+export const BEAT_START = [0, 0.12, 0.3, 0.9];
