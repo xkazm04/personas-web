@@ -31,7 +31,6 @@ type ViewportName = (typeof VIEWPORTS)[number]["name"];
 const KNOWN_OVERFLOW: Record<string, readonly ViewportName[]> = {
   "/ get-started-heading": ["1366x768 laptop", "1536x864 laptop", "1440x900 laptop"],
   "/ compare-heading": ["1366x768 laptop", "1536x864 laptop", "1440x900 laptop", "1920x1080 desktop", "2560x1440 desktop"],
-  "/features healing-circuit": ["1366x768 laptop", "1536x864 laptop", "1440x900 laptop"],
   "/features lab": ["1366x768 laptop", "1536x864 laptop", "1440x900 laptop", "1920x1080 desktop"],
 };
 

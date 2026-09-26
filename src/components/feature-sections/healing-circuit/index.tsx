@@ -49,9 +49,10 @@ export default function HealingCircuit() {
         whileInView={{ opacity: 1, y: 0 }}
         viewport={{ once: true }}
         transition={{ duration: 0.6, delay: 0.2 }}
-        className="mt-16 mx-auto max-w-4xl relative z-10"
+        className="mt-16 mx-auto max-w-4xl relative z-10 stage:mt-0"
+        data-stage-fixed
       >
-        <div data-tour-diagram="healing" className="force-dark rounded-2xl border border-foreground/8 bg-background/85 backdrop-blur-xl overflow-hidden shadow-[0_0_80px_rgba(0,0,0,0.4)]">
+        <div data-tour-diagram="healing" className="force-dark rounded-2xl border border-foreground/8 bg-background/95 overflow-hidden shadow-[0_0_80px_rgba(0,0,0,0.4)]">
           <CircuitHeader activeStage={activeStage} cycleIndex={cycleIndex} />
 
           <div className="flex flex-col lg:flex-row">
