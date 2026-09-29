@@ -2407,6 +2407,20 @@
       };
     };
   };
+  landingNext: {
+    skins: { label: string; default: string; deck: string; blueprint: string };
+    // ln:hero
+    // ln:rack
+    // ln:concepts
+    // ln:setup
+    // ln:runs
+    // ln:triggers
+    // ln:team
+    // ln:companion
+    // ln:nocloud
+    // ln:design
+    // ln:download
+  };
   // END pending-translation namespaces
 }
 
@@ -2435,6 +2449,7 @@ export const PENDING_TRANSLATION = [
   'pluginsExtra',
   'getStartedSection',
   'labSection',
+  'landingNext',
 ] as const;
 
 export type PendingNamespace = (typeof PENDING_TRANSLATION)[number];
@@ -5151,6 +5166,20 @@ export const en: Translations = {
         safety: 'Safety',
       },
     },
+  },
+  landingNext: {
+    skins: { label: 'Landing style', default: 'Personas', deck: 'Deck', blueprint: 'Blueprint' },
+    // ln:hero
+    // ln:rack
+    // ln:concepts
+    // ln:setup
+    // ln:runs
+    // ln:triggers
+    // ln:team
+    // ln:companion
+    // ln:nocloud
+    // ln:design
+    // ln:download
   },
   // END pending-translation namespaces
 };

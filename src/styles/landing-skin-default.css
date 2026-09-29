@@ -1,0 +1,72 @@
+/* Default landing skin: the site's own brand. Every token is derived from the
+   site theme's semantic tokens, so all 11 site themes restyle the landing. */
+[data-landing-skin="default"] {
+  --ln-f-display: var(--font-sans), system-ui, sans-serif;
+  --ln-f-silk: var(--font-sans), system-ui, sans-serif;
+  --ln-f-lcd: var(--font-mono), ui-monospace, monospace;
+  --ln-f-hand: var(--font-sans), system-ui, sans-serif;
+  --ln-f-body: var(--font-sans), system-ui, sans-serif;
+
+  --ln-bg: var(--background);
+  --ln-ink: var(--foreground);
+  --ln-text: var(--muted-dark);
+  --ln-muted: var(--muted-foreground);
+  --ln-rule: var(--foreground);
+  --ln-hl: #ffffff;
+  --ln-hk: 0.35;
+  --ln-shade: #000000;
+  --ln-sk: 1;
+  --ln-glow: 0 0 calc(0.6 * var(--ln-u)) color-mix(in srgb, var(--primary) 40%, transparent);
+
+  --ln-signal: var(--primary);
+  --ln-signal-2: color-mix(in oklab, var(--primary) 70%, var(--foreground));
+  --ln-signal-edge: color-mix(in oklab, var(--primary) 55%, #000);
+  --ln-on-signal: var(--background);
+
+  /* body ("plastic") ramp: low stop, mid, high */
+  --ln-p0: color-mix(in oklab, var(--background) 60%, #000);
+  --ln-pm: color-mix(in oklab, var(--background) 92%, var(--foreground));
+  --ln-p1: color-mix(in oklab, var(--background) 82%, var(--foreground));
+  --ln-plastic: var(--ln-pm);
+  --ln-plastic-hi: var(--ln-p1);
+  --ln-plastic-lo: color-mix(in oklab, var(--background) 96%, #000);
+  --ln-p-lo: color-mix(in oklab, var(--background) 88%, #000);
+  --ln-cap: var(--ln-p1);
+  --ln-cap-edge: color-mix(in oklab, var(--background) 70%, #000);
+  --ln-white: var(--foreground);
+
+  /* wells and the display */
+  --ln-w0: #000;
+  --ln-w1: color-mix(in oklab, var(--background) 70%, var(--foreground));
+  --ln-well: color-mix(in oklab, var(--background) 55%, #000);
+  --ln-lcd-bg: color-mix(in oklab, var(--background) 40%, #000);
+  --ln-lcd: color-mix(in oklab, var(--primary) 62%, #fff);
+  --ln-lcd-2: #e8ecf2;
+  --ln-lcd-dim: color-mix(in oklab, var(--primary) 70%, #000);
+  --ln-q0: color-mix(in oklab, var(--background) 86%, var(--foreground));
+  --ln-q1: color-mix(in oklab, var(--background) 76%, var(--foreground));
+
+  /* printed things keep their own light in every theme */
+  --ln-paper: #f4f1ea;
+  --ln-hand: #233257;
+  --ln-hand-bg: #233257;
+  --ln-pp0: #6d685f;
+  --ln-ppm: #d8d4cb;
+  --ln-pp1: #fdfcf9;
+  --ln-p-ink: #1c1c1e;
+  --ln-p-text: #3a3a3c;
+  --ln-p-muted: #55524c;
+  --ln-p-rule: #3a3a3c;
+  --ln-p-hk: 1;
+  --ln-p-cap: #ece9e2;
+  --ln-p-cap-edge: #b1ab9f;
+
+  --ln-ok: var(--status-success);
+  --ln-bad: var(--status-error);
+  --ln-c-tomato: #e2553b;
+  --ln-c-butter: #f1c94a;
+  --ln-c-sky: #7fb4d8;
+  --ln-c-mint: #8ccba5;
+  --ln-c-lilac: #b8a2d9;
+  --ln-c-graphite: #4a4a4f;
+}

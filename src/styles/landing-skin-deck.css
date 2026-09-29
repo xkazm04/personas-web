@@ -1,0 +1,38 @@
+/* Deck skin: warm plastic hardware, orange signal, amber-on-black display.
+   Light by default; dark themes (`html.dark`) get the smoked-bronze variant. */
+[data-landing-skin="deck"] {
+  --ln-f-display: "Bahnschrift", "Helvetica Neue", "Arial Black", Arial, sans-serif;
+  --ln-f-silk: "Bahnschrift SemiCondensed", "DIN Alternate", "Arial Narrow", sans-serif;
+  --ln-f-lcd: "Cascadia Mono", "Cascadia Code", Consolas, "SF Mono", Menlo, monospace;
+  --ln-f-hand: "Ink Free", "Segoe Print", "Bradley Hand", "Marker Felt", cursive;
+  --ln-f-body: "Segoe UI Variable Text", "Segoe UI", -apple-system, BlinkMacSystemFont, "Helvetica Neue", Arial, sans-serif;
+
+  --ln-p0: #6d685f; --ln-pm: #d8d4cb; --ln-p1: #fdfcf9;
+  --ln-w0: #0b0b0c; --ln-w1: #6a6a70; --ln-q0: #d6cbb2; --ln-q1: #fffdf8;
+  --ln-pp0: #6d685f; --ln-ppm: #d8d4cb; --ln-pp1: #fdfcf9;
+  --ln-bg: #d8d4cb; --ln-cap: #ece9e2; --ln-cap-edge: #b1ab9f;
+  --ln-plastic: #dcd8cf; --ln-plastic-hi: #ece9e2; --ln-plastic-lo: #c9c4b9; --ln-p-lo: #b9b4a9;
+  --ln-ink: #1c1c1e; --ln-text: #3a3a3c; --ln-muted: #55524c;
+  --ln-signal: #ff5a1f; --ln-signal-2: #ff7a45; --ln-signal-edge: #b23a0d; --ln-on-signal: #1c1c1e;
+  --ln-well: #141416; --ln-lcd-bg: #121113; --ln-lcd: #ff7a3d; --ln-lcd-2: #efe6d4; --ln-lcd-dim: #c0714b;
+  --ln-paper: #f6f1e4; --ln-hand: #233257; --ln-hand-bg: #233257; --ln-ok: #4f9c6f; --ln-bad: #e2553b;
+  --ln-shade: #32281e; --ln-sk: 1; --ln-hl: #fff; --ln-hk: 1; --ln-rule: #3a3a3c; --ln-white: #fff;
+  --ln-p-ink: #1c1c1e; --ln-p-text: #3a3a3c; --ln-p-muted: #55524c; --ln-p-rule: #3a3a3c; --ln-p-hk: 1;
+  --ln-p-cap: #ece9e2; --ln-p-cap-edge: #b1ab9f;
+  --ln-c-tomato: #e2553b; --ln-c-butter: #f1c94a; --ln-c-sky: #7fb4d8;
+  --ln-c-mint: #8ccba5; --ln-c-lilac: #b8a2d9; --ln-c-graphite: #4a4a4f;
+  --ln-glow: none;
+}
+.dark [data-landing-skin="deck"] {
+  --ln-p0: #030303; --ln-pm: #1b1a18; --ln-p1: #4b4740;
+  --ln-w0: #000; --ln-w1: #3e3b37; --ln-q0: #c7b997; --ln-q1: #f3e9d3;
+  --ln-bg: #191816; --ln-cap: #35322d; --ln-cap-edge: #0a0908;
+  --ln-plastic: #23211e; --ln-plastic-hi: #34312c; --ln-plastic-lo: #141311; --ln-p-lo: #0f0e0d;
+  --ln-ink: #f4ede0; --ln-text: #d8d0c2; --ln-muted: #aba293;
+  --ln-signal: #c9934b; --ln-signal-2: #ddae6a; --ln-signal-edge: #7a5220; --ln-on-signal: #15120e;
+  --ln-well: #0a0a09; --ln-lcd-bg: #0b0906; --ln-lcd: #ffb340; --ln-lcd-2: #f2e4c6; --ln-lcd-dim: #b98746;
+  --ln-paper: #efe4cb; --ln-hand-bg: #e6d3ae; --ln-ok: #5fa57c; --ln-bad: #d8573f;
+  --ln-shade: #000; --ln-sk: 1.35; --ln-hl: #ffeccd; --ln-hk: 0.14; --ln-rule: #d8d0c2; --ln-white: #46423b;
+  --ln-c-tomato: #c4553e; --ln-c-butter: #d6ab45; --ln-c-sky: #6893b3;
+  --ln-c-mint: #6fa888; --ln-c-lilac: #9582b6; --ln-c-graphite: #5b5750;
+}

@@ -3,6 +3,7 @@
 import { useState } from "react";
 import ThemeSwitcher from "@/components/ThemeSwitcher";
 import LanguageSwitcher from "@/components/LanguageSwitcher";
+import LandingSkinSwitcher from "@/components/landing/LandingSkinSwitcher";
 
 export function FooterCopyright({ copyright, slogan }: { copyright: string; slogan: string }) {
   return (
@@ -12,6 +13,7 @@ export function FooterCopyright({ copyright, slogan }: { copyright: string; slog
           footer layout is unchanged unless NEXT_PUBLIC_SHOW_LANGUAGE_SWITCHER. */}
       <div className="flex items-center gap-3">
         <ThemeSwitcher />
+        <LandingSkinSwitcher />
         <LanguageSwitcher />
       </div>
       <span className="text-muted-dark flex items-center gap-2">

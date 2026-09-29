@@ -1,0 +1,21 @@
+/* Blueprint skin: ink-on-vellum drawing set (light) and a night plot (dark).
+   Owned by the blueprint pass; these tokens are the starting mapping. */
+[data-landing-skin="blueprint"] {
+  --ln-f-display: "Bahnschrift Condensed", "Bahnschrift SemiCondensed", "DIN Condensed", "Barlow Condensed", "Arial Narrow", sans-serif;
+  --ln-f-silk: "Bahnschrift", "DIN Alternate", "Barlow", "Arial Narrow", sans-serif;
+  --ln-f-lcd: "Cascadia Mono", "SF Mono", Consolas, Menlo, monospace;
+  --ln-f-hand: "Ink Free", "Segoe Print", "Bradley Hand", cursive;
+  --ln-f-body: "Segoe UI Variable Text", "Segoe UI", -apple-system, "Helvetica Neue", Arial, sans-serif;
+
+  --ln-bg: #f2efe6; --ln-paper: #f2efe6;
+  --ln-ink: #23252b; --ln-text: #474a55; --ln-muted: #4f5260; --ln-rule: #2438c8;
+  --ln-signal: #2438c8; --ln-signal-2: #3f55e0; --ln-signal-edge: #1a2a9e; --ln-on-signal: #f2efe6;
+  --ln-ok: #5e9a9a; --ln-bad: #e8452c;
+  --ln-glow: none;
+}
+.dark [data-landing-skin="blueprint"] {
+  --ln-bg: #0e2a5e; --ln-paper: #0e2a5e;
+  --ln-ink: #e3eaf8; --ln-text: #b4c5e6; --ln-muted: #b4c5e6; --ln-rule: #eef3ff;
+  --ln-signal: #eef3ff; --ln-signal-2: #c9d8f5; --ln-signal-edge: #bfd2ff; --ln-on-signal: #0e2a5e;
+  --ln-ok: #8ad6d2; --ln-bad: #ff8e73;
+}
