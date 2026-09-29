@@ -1,6 +1,7 @@
 "use client";
 
 import { useCallback, useEffect, useRef, useState, type RefObject } from "react";
+import { useHydrated } from "@/hooks/useHydrated";
 import { useIsVisible } from "@/hooks/useIsVisible";
 import { useStillMotion } from "@/hooks/useStillMotion";
 import { useSequencer, type Step } from "./useSequencer";
@@ -58,6 +59,7 @@ export function useConceptFigure<S extends string>({
 }: Options<S>): ConceptFigureState<S> {
   const ref = useRef<HTMLElement | null>(null);
   const still = useStillMotion();
+  const hydrated = useHydrated();
   const visible = useIsVisible(ref, { threshold: 0.35 });
   const { run, cancel } = useSequencer();
   const [states, setStates] = useState<readonly S[]>(all);
@@ -88,12 +90,23 @@ export function useConceptFigure<S extends string>({
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [still, cancel, run, script]);
 
-  // First arrival on screen: play once.
+  // First arrival on screen: play once. Waits for hydration so the reduced-motion
+  // preference is the real one (the server snapshot says "motion is fine").
   useEffect(() => {
-    if (!visible || started.current || still) return;
+    if (!hydrated || !visible || started.current || still) return;
     started.current = true;
     play();
-  }, [visible, still, play]);
+  }, [hydrated, visible, still, play]);
 
-  return { ref, states, play, playing, live: visible && !still, still, snapping };
+  // StrictMode (dev) unmounts and remounts effects, and `useSequencer` cancels on
+  // unmount: allow the first-arrival play to run again after such a remount.
+  useEffect(
+    () => () => {
+      started.current = false;
+    },
+    [],
+  );
+
+  // Reduced motion always shows the finished frame, whatever an earlier play left.
+  return { ref, states: still ? all : states, play, playing, live: visible && !still, still, snapping };
 }

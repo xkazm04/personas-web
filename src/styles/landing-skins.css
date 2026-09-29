@@ -33,6 +33,13 @@
   background: var(--ln-bg);
 }
 
+/* Phones: the composition is re-proportioned (one unit = 1/39 of the width) so art and text stay usable. */
+@media (max-width: 760px) {
+  .ln-root {
+    --ln-u: calc(100vw / 39);
+  }
+}
+
 .ln-paper {
   --ln-ink: var(--ln-p-ink);
   --ln-text: var(--ln-p-text);
