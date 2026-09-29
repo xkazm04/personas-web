@@ -2418,7 +2418,7 @@
     // ln:team
     // ln:companion
     // ln:nocloud
-    // ln:design
+    // ln:conceptsB
     // ln:download
   };
   // END pending-translation namespaces
@@ -5178,7 +5178,7 @@ export const en: Translations = {
     // ln:team
     // ln:companion
     // ln:nocloud
-    // ln:design
+    // ln:conceptsB
     // ln:download
   },
   // END pending-translation namespaces
