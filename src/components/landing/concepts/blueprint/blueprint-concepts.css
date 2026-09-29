@@ -1,0 +1,174 @@
+/* Blueprint concept figures: six plotted drawings on drawing plates.
+   Everything is scoped to the blueprint skin. Colour roles come from the skin's tokens
+   (rule = plotter ink, ink = graphite text, text = secondary, bg = the sheet); only the two
+   accents the drawings need beyond the contract are literals, taken from the contest prototype:
+   revision red and highlighter yellow. */
+
+/* ---- colour roles (local; also on the frame so the stamp button can use them) ---- */
+[data-landing-skin="blueprint"] :is(.ln-bpf, .ln-ci) {
+  --bp-ink: var(--ln-rule);
+  --bp-pap: var(--ln-bg);
+  --bp-g: var(--ln-ink);
+  --bp-g2: var(--ln-text);
+  --bp-red: #e8452c;
+  --bp-redink: #b3301a;
+  --bp-hi: #f4d23c;
+  --bp-ease: cubic-bezier(.45, 0, .25, 1);
+}
+.dark [data-landing-skin="blueprint"] :is(.ln-bpf, .ln-ci) {
+  --bp-red: #ff8e73;
+  --bp-redink: #ffb19e;
+  --bp-hi: #ffd64a;
+}
+
+/* ---- the grid of plates: two columns, so a 640-unit drawing keeps readable type ---- */
+[data-landing-skin="blueprint"] .ln-ci-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: calc(5.4 * var(--ln-u)) calc(4 * var(--ln-u)); }
+
+/* ---- the drawing plate (replaces the plastic card) ---- */
+[data-landing-skin="blueprint"] .ln-ci {
+  padding: 6px 6px 0;
+  border-radius: 0;
+  background: none;
+  box-shadow: none;
+}
+[data-landing-skin="blueprint"] .ln-ci::before,
+[data-landing-skin="blueprint"] .ln-ci::after { display: none; }
+[data-landing-skin="blueprint"] .ln-ci-stage {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  aspect-ratio: auto;
+  overflow: visible;
+  border-radius: 0;
+  padding: 16px 18px 14px;
+  background: color-mix(in srgb, var(--ln-bg) 90%, transparent);
+  border: 1.5px solid var(--ln-rule);
+  outline: 1px solid color-mix(in srgb, var(--ln-rule) 40%, transparent);
+  outline-offset: 4px;
+  box-shadow: none;
+}
+[data-landing-skin="blueprint"] .ln-ci-art { position: relative; inset: auto; grid-area: 1 / 1; min-width: 0; }
+[data-landing-skin="blueprint"] .ln-ci-stage > .ln-bpf { grid-area: 1 / 1; }
+
+/* caption: sheet number in a box, condensed title in plotter ink */
+[data-landing-skin="blueprint"] .ln-ci-cap { padding: calc(2.6 * var(--ln-u)) 0 0; }
+[data-landing-skin="blueprint"] .ln-ci-no {
+  top: 0;
+  padding: .2em .5em .1em;
+  border-radius: 0;
+  font-family: var(--ln-f-display);
+  font-weight: 700;
+  font-size: max(14px, calc(2 * var(--ln-u)));
+  letter-spacing: .04em;
+  color: var(--ln-rule);
+  background: none;
+  border: 1.5px solid var(--ln-rule);
+  text-shadow: none;
+  box-shadow: none;
+}
+[data-landing-skin="blueprint"] .ln-ci-t { font-stretch: condensed; letter-spacing: 0; color: var(--ln-rule); font-size: max(24px, calc(3.2 * var(--ln-u))); }
+[data-landing-skin="blueprint"] .ln-ci-line { color: var(--ln-text); }
+[data-landing-skin="blueprint"] .ln-ci-turn[aria-disabled="true"] { opacity: .7; }
+
+/* the stamp key: revision-red outline, fills on hover and while pressed */
+[data-landing-skin="blueprint"] .ln-bp-stampbtn {
+  font-family: var(--ln-f-silk);
+  font-weight: 700;
+  font-size: max(13px, calc(1.3 * var(--ln-u)));
+  letter-spacing: .06em;
+  text-transform: uppercase;
+  color: var(--bp-redink);
+  background: var(--ln-bg);
+  border: 1.5px solid var(--bp-red);
+  border-radius: 0;
+  padding: calc(1.1 * var(--ln-u)) calc(1.5 * var(--ln-u));
+  cursor: pointer;
+  user-select: none;
+  touch-action: manipulation;
+}
+[data-landing-skin="blueprint"] .ln-bp-stampbtn:hover,
+[data-landing-skin="blueprint"] .ln-bp-stampbtn[aria-pressed="true"] { background: var(--bp-redink); border-color: var(--bp-redink); color: var(--ln-bg); }
+[data-landing-skin="blueprint"] .ln-bp-stampbtn:focus-visible { outline: 2.5px solid var(--ln-rule); outline-offset: 3px; }
+[data-landing-skin="blueprint"] .ln-bp-pan { display: none; flex-basis: 100%; font-family: var(--ln-f-lcd); font-size: 12px; color: var(--ln-rule); }
+
+/* ---- linework ---- */
+.ln-bpf { display: block; width: 100%; height: auto; overflow: visible; }
+.ln-bp-defs { position: absolute; width: 0; height: 0; overflow: hidden; }
+.ln-bpf * { transform-box: view-box; }
+.ln-bpf .ln-bp-l { fill: none; stroke: var(--bp-ink); stroke-width: 1.6; stroke-linecap: round; stroke-linejoin: round; }
+.ln-bpf .ln-bp-l0 { stroke-width: 1; }
+.ln-bpf .ln-bp-l2 { stroke-width: 2.6; }
+.ln-bpf .ln-bp-l3 { stroke-width: 4.2; }
+.ln-bpf .ln-bp-dsh { stroke-dasharray: 7 6; }
+.ln-bpf .ln-bp-cl { stroke-dasharray: 24 5 3 5; }
+.ln-bpf .ln-bp-r { stroke: var(--bp-red); }
+.ln-bpf .ln-bp-rough { stroke: var(--bp-g2); stroke-width: 2; }
+.ln-bpf .ln-bp-k { fill: var(--bp-ink); }
+.ln-bpf .ln-bp-pp { fill: var(--bp-pap); }
+.ln-bpf .ln-bp-hz { fill: url(#bp-hatch); stroke: none; }
+.ln-bpf .ln-bp-mk { color: var(--bp-ink); }
+.ln-bpf text { font-family: var(--ln-f-lcd); font-size: 17px; fill: var(--bp-g); letter-spacing: .02em; text-transform: uppercase; paint-order: stroke; stroke: var(--bp-pap); stroke-width: 5px; stroke-linejoin: round; }
+.ln-bpf .ln-bp-tk { fill: var(--bp-ink); }
+.ln-bpf .ln-bp-g2 { fill: var(--bp-g2); }
+.ln-bpf .ln-bp-rd { fill: var(--bp-redink); }
+.ln-bpf .ln-bp-tt { font-family: var(--ln-f-silk); font-weight: 600; font-size: 21px; letter-spacing: .08em; fill: var(--bp-ink); }
+.ln-bpf .ln-bp-body { font-family: var(--ln-f-body); font-size: 22px; letter-spacing: 0; text-transform: none; }
+.ln-bpf .ln-bp-hand { font-family: var(--ln-f-hand); font-size: 25px; letter-spacing: 0; text-transform: none; fill: var(--bp-redink); }
+.ln-bpf .ln-bp-stamp { font-family: var(--ln-f-silk); font-weight: 700; font-size: 22px; letter-spacing: .14em; }
+
+/* ---- plotting: a stroke draws itself (`p`), a part fades in (`f`), both driven by the `run` state ---- */
+.ln-bp-p { stroke-dasharray: 1 1; stroke-dashoffset: 1; transition: stroke-dashoffset var(--ln-t, .9s) var(--bp-ease, ease) var(--ln-d, 0s); }
+.ln-st-run .ln-bp-p { stroke-dashoffset: 0; }
+.ln-bp-f { opacity: 0; transition: opacity .5s ease var(--ln-d, 0s); }
+.ln-st-run .ln-bp-f { opacity: 1; }
+
+/* ---- A-06: the door ---- */
+.ln-bp-tok { transition: transform .8s var(--bp-ease, ease); }
+.ln-st-n1 .ln-bp-tok { transform: translateX(100px); }
+.ln-st-n2 .ln-bp-tok { transform: translateX(200px); }
+.ln-st-n3 .ln-bp-tok { transform: translateX(300px); }
+.ln-st-door .ln-bp-tok { transform: translateX(335px); }
+.ln-bp-passed .ln-bp-tok { transform: translateX(470px); transition-delay: .45s; }
+.ln-bp-leaf { transform-origin: 447px 160px; transition: transform 1s var(--bp-ease, ease) .1s; }
+.ln-bp-passed .ln-bp-leaf { transform: rotate(-90deg); }
+.ln-bp-stp { opacity: 0; transform-box: fill-box; transform-origin: 50% 50%; transform: scale(1.5); }
+.ln-bp-passed .ln-bp-stp { opacity: 1; transform: none; transition: opacity .3s ease, transform .5s cubic-bezier(.3, 1.5, .5, 1); }
+.ln-bp-trun { opacity: 0; transition: opacity .4s; }
+.ln-bp-passed .ln-bp-trun { opacity: 1; }
+.ln-bp-passed .ln-bp-thld { opacity: 0; transition-delay: 0s; }
+
+/* ---- A-05: the switchboard ---- */
+.ln-bp-blade { transform: rotate(-28deg); transition: transform .35s cubic-bezier(.3, 1.4, .5, 1); }
+.ln-bp-blade.ln-bp-on { transform: none; }
+.ln-bp-pulse-h, .ln-bp-pulse-i { fill: none; stroke-linecap: round; opacity: 0; }
+.ln-bp-pulse-h { stroke: var(--bp-hi); stroke-width: 10; }
+.ln-bp-pulse-i { stroke: var(--bp-ink); stroke-width: 3.2; }
+.ln-bp-pulse-h.ln-bp-lit, .ln-bp-pulse-i.ln-bp-lit { opacity: 1; }
+.ln-bp-pulse-h.ln-bp-go, .ln-bp-pulse-i.ln-bp-go { opacity: 1; stroke-dasharray: 1 1; animation: ln-bp-flow .9s var(--bp-ease, ease) forwards; }
+@keyframes ln-bp-flow { from { stroke-dashoffset: 1; } to { stroke-dashoffset: 0; } }
+.ln-bp-wake { opacity: 0; }
+.ln-bp-wake.ln-bp-lit { opacity: 1; }
+.ln-bp-wake.ln-bp-go { animation: ln-bp-in .35s ease .8s both; }
+.ln-bp-load { opacity: .45; }
+.ln-bp-load.ln-bp-lit { opacity: 1; }
+.ln-bp-load.ln-bp-go { animation: ln-bp-in .35s ease .8s both; }
+@keyframes ln-bp-in { from { opacity: .0; } to { opacity: 1; } }
+.ln-bp-load.ln-bp-go { animation-name: ln-bp-wakep; }
+@keyframes ln-bp-wakep { from { opacity: .45; } to { opacity: 1; } }
+
+/* the ten switches are real buttons laid over the drawn rows */
+.ln-bp-ovl { grid-area: 1 / 1; position: relative; pointer-events: none; }
+.ln-bp-sw {
+  position: absolute; left: 3.1%; width: 51.9%; height: 9.1%; top: var(--ln-y);
+  padding: 0; border: 0; border-radius: 0; background: none; cursor: pointer; pointer-events: auto;
+}
+.ln-bp-sw:hover { background: color-mix(in srgb, var(--ln-rule) 8%, transparent); }
+.ln-bp-sw[aria-pressed="true"] { background: color-mix(in srgb, var(--bp-hi) 30%, transparent); box-shadow: inset 3px 0 0 var(--ln-rule); }
+.ln-bp-sw:focus-visible { outline: 2.5px solid var(--ln-rule); outline-offset: 1px; }
+
+/* ---- narrow: one column; the plate scrolls sideways so the drawing keeps a readable size ---- */
+@media (max-width: 760px) {
+  [data-landing-skin="blueprint"] .ln-ci-grid { grid-template-columns: minmax(0, 1fr); gap: calc(5 * var(--ln-u)); }
+  [data-landing-skin="blueprint"] .ln-ci-stage { grid-template-columns: minmax(540px, 1fr); overflow-x: auto; overflow-y: hidden; padding: 12px 12px 10px; outline: 0; }
+  [data-landing-skin="blueprint"] .ln-bp-pan { display: block; }
+  [data-landing-skin="blueprint"] .ln-ci-t { font-size: max(28px, calc(3.2 * var(--ln-u))); }
+}
