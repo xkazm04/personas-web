@@ -20,6 +20,10 @@ interface Props<S extends string> {
   figure: ConceptFigureState<S>;
   /** The stage art: an `<svg className="ln-ci-svg">` in the figure's own viewBox. */
   children: ReactNode;
+  /** Interactive controls laid over the stage. They sit beside the `img` art, not inside it, so they stay reachable. */
+  controls?: ReactNode;
+  /** Extra keys beside Replay (e.g. the approval key). */
+  actions?: ReactNode;
 }
 
 /**
@@ -38,6 +42,8 @@ export default function ConceptFigure<S extends string>({
   replayLabel,
   figure,
   children,
+  controls,
+  actions,
 }: Props<S>) {
   const { ref, states, play, playing, live, still, snapping } = figure;
   const cls = [
@@ -52,9 +58,16 @@ export default function ConceptFigure<S extends string>({
 
   return (
     <figure ref={ref as React.RefObject<HTMLElement>} className={cls} data-ci={id} aria-labelledby={`ci-${id}-t`}>
-      <div className="ln-ci-stage" role="img" aria-label={description}>
-        {children}
-      </div>
+      {controls ? (
+        <div className="ln-ci-stage">
+          <div className="ln-ci-art" role="img" aria-label={description}>{children}</div>
+          {controls}
+        </div>
+      ) : (
+        <div className="ln-ci-stage" role="img" aria-label={description}>
+          {children}
+        </div>
+      )}
       <figcaption className="ln-ci-cap">
         <div className="ln-ci-head">
           <span className="ln-ci-no" aria-hidden="true">{index}</span>
@@ -72,6 +85,7 @@ export default function ConceptFigure<S extends string>({
             >
               {replayLabel}
             </LnKeyButton>
+            {actions}
           </div>
           <span className="ln-caption">{stylisedLabel}</span>
         </div>
