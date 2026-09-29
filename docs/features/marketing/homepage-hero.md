@@ -1,6 +1,8 @@
 # Homepage & Hero
 > The public homepage entry point: animated hero, SVG command-center illustration, live stat row, and lazy-loaded section orchestration · **Route:** `/` · **Status:** Live
 
+> **Superseded on `/`.** The home page now mounts the ported landing described in [landing-skins](landing-skins.md). This doc describes the previous hero and section stack, which are still in the tree and reachable at `/preview/<section>`.
+
 ## What it does
 `/` is the marketing homepage. Above the fold it shows the **hero**: a headline + subhead built from gradient text, a brand badge, three "differentiator" pills, two CTAs (Download, View on GitHub) plus a guided-tour launcher, and a fine-print reassurance line. On desktop the right side carries a 3D-tilting glass card holding the **command-center illustration** — a 220×220 SVG roadmap-progress ring with a rotating radar sweep, breathing core, orbiting satellite, and the app version in the middle. A 3-up **stat row** (agents / connectors / templates) appears under the card on desktop and in a dedicated card under the CTAs on mobile.
 
