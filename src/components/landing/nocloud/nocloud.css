@@ -1,0 +1,94 @@
+/* No-cloud section: exploded view, callouts, FAQ. Tokens only; see landing-skins.css. */
+.ln-nc{display:grid;grid-template-columns:calc(70 * var(--ln-u)) 1fr;gap:calc(4 * var(--ln-u));align-items:center;margin-top:calc(3 * var(--ln-u))}
+.ln-nc>*{min-width:0}
+.ln-nc svg{width:100%;height:auto;display:block;overflow:visible}
+.ln-nc-fig .ln-caption{margin-top:calc(1 * var(--ln-u))}
+.ln-callouts{list-style:none;margin:0;padding:0;display:grid;gap:calc(3.4 * var(--ln-u))}
+.ln-callouts li{display:grid;grid-template-columns:calc(5.2 * var(--ln-u)) 1fr;gap:calc(1.8 * var(--ln-u))}
+.ln-callouts .ln-n{width:calc(4.6 * var(--ln-u));height:calc(4.6 * var(--ln-u));border-radius:50%;display:grid;place-items:center;background:var(--ln-ink);color:var(--ln-bg);font-family:var(--ln-f-display);font-weight:700;font-size:max(14px,calc(2.2 * var(--ln-u)));transition:background .25s,color .25s}
+.ln-callouts h3{margin:0;font-family:var(--ln-f-display);font-weight:700;font-size:calc(3.6 * var(--ln-u));letter-spacing:-.03em;color:var(--ln-ink);line-height:1}
+.ln-callouts li{transition:opacity .25s}
+.ln-callout-btn{all:unset;box-sizing:border-box;cursor:pointer;display:inline-block;border-radius:calc(.6 * var(--ln-u))}
+.ln-callout-btn:focus-visible{outline:2px solid var(--ln-signal);outline-offset:calc(.6 * var(--ln-u))}
+.ln-callouts li.ln-on .ln-n{background:var(--ln-signal);color:var(--ln-on-signal)}
+.ln-callouts p{margin:calc(.8 * var(--ln-u)) 0 0;max-width:44ch}
+.ln-nono{margin-top:calc(5 * var(--ln-u));display:flex;flex-wrap:wrap;gap:calc(1.6 * var(--ln-u)) calc(4 * var(--ln-u));font-family:var(--ln-f-display);font-weight:700;font-size:calc(5 * var(--ln-u));letter-spacing:-.035em;color:var(--ln-ink);line-height:1}
+.ln-nono span:not(.sr-only){position:relative}
+.ln-nono span:not(.sr-only)::after{content:"";position:absolute;left:-.1em;right:-.1em;top:52%;height:.09em;background:var(--ln-signal);transform:rotate(-2deg)}
+.ln-faq{margin-top:calc(7 * var(--ln-u));display:grid;grid-template-columns:calc(36 * var(--ln-u)) 1fr;gap:calc(5 * var(--ln-u));align-items:start}
+.ln-faq h3{margin:0;font-family:var(--ln-f-display);font-weight:700;font-size:calc(4.4 * var(--ln-u));letter-spacing:-.03em;color:var(--ln-ink);line-height:1}
+.ln-faq-list{border-top:2px solid var(--ln-ink)}
+.ln-faq details{border-bottom:1px dashed color-mix(in srgb, var(--ln-rule) 40%, transparent)}
+.ln-faq summary{list-style:none;cursor:pointer;display:grid;grid-template-columns:calc(6 * var(--ln-u)) 1fr calc(3 * var(--ln-u));align-items:center;gap:calc(1 * var(--ln-u));padding:calc(2 * var(--ln-u)) calc(.6 * var(--ln-u));font-weight:600;font-size:max(17px,calc(2.1 * var(--ln-u)));color:var(--ln-ink)}
+.ln-faq summary::-webkit-details-marker{display:none}
+.ln-faq summary span:first-child{font-family:var(--ln-f-lcd);font-weight:400;color:var(--ln-muted);font-size:max(14px,calc(1.5 * var(--ln-u)))}
+.ln-faq summary b{width:calc(2.6 * var(--ln-u));height:calc(2.6 * var(--ln-u));border-radius:calc(.6 * var(--ln-u));display:grid;place-items:center;background:var(--ln-cap);box-shadow:0 calc(.25 * var(--ln-u)) 0 color-mix(in oklab,var(--ln-pm) 64%,var(--ln-p0));font-family:var(--ln-f-lcd);transition:transform .3s}
+.ln-faq details[open] summary b{transform:rotate(45deg);color:var(--ln-on-signal);background:var(--ln-signal);box-shadow:0 calc(.25 * var(--ln-u)) 0 var(--ln-signal-edge)}
+.ln-faq details p{margin:0 0 calc(2.2 * var(--ln-u)) calc(7 * var(--ln-u));max-width:56ch}
+
+/* exploded view: fills come from the skin tokens, never from the art */
+.ln-x-guide{stroke:var(--ln-text);stroke-opacity:.35;stroke-dasharray:4 5;fill:none}
+.ln-x-l{transition:opacity .3s;--ln-x-t:var(--ln-cap);--ln-x-l:color-mix(in oklab,var(--ln-cap) 82%,#000);--ln-x-r:color-mix(in oklab,var(--ln-cap) 66%,#000)}
+.ln-x-l2{--ln-x-t:var(--ln-w1);--ln-x-l:color-mix(in oklab,var(--ln-w1) 72%,#000);--ln-x-r:color-mix(in oklab,var(--ln-w1) 55%,#000)}
+.ln-x-l3{--ln-x-t:var(--ln-q1);--ln-x-l:color-mix(in oklab,var(--ln-q1) 84%,#000);--ln-x-r:color-mix(in oklab,var(--ln-q1) 70%,#000)}
+.ln-x-top{fill:var(--ln-x-t);stroke:color-mix(in srgb,var(--ln-hl) calc(60% * var(--ln-hk)),transparent);stroke-width:1}
+.ln-x-left{fill:var(--ln-x-l)}
+.ln-x-right{fill:var(--ln-x-r)}
+.ln-x-well{fill:var(--ln-lcd-bg)}
+.ln-x-edge-sig{stroke:var(--ln-signal);stroke-width:1}
+.ln-x-edge-ok{stroke:var(--ln-c-mint);stroke-width:1}
+.ln-x-trace{stroke:color-mix(in srgb,var(--ln-signal) 55%,transparent);stroke-width:1.5}
+.ln-x-t{font-family:var(--ln-f-silk);font-weight:700;letter-spacing:1px;font-size:16px}
+.ln-x-t-lcd{fill:var(--ln-lcd-2)}
+.ln-x-t-lcd2{fill:var(--ln-lcd-2)}
+.ln-x-t-sig{fill:color-mix(in oklab,var(--ln-signal) 40%,#fff);font-size:15px}
+.ln-x-t-ok{fill:var(--ln-c-mint);font-size:15px}
+.ln-x-t-ink{fill:var(--ln-ink)}
+.ln-x-cap{fill:var(--ln-p-cap,var(--ln-cap));stroke:var(--ln-cap-edge);stroke-width:1}
+.ln-x-sig{fill:var(--ln-signal)}
+.ln-x-dial-lo{fill:var(--ln-cap-edge)}
+.ln-x-dial-hi{fill:var(--ln-p-cap,var(--ln-cap))}
+.ln-x-grille{fill:color-mix(in oklab,var(--ln-cap) 85%,#000)}
+.ln-x-cart{fill:var(--ln-c-butter)}
+.ln-x-cart-label{fill:var(--ln-paper)}
+.ln-x-inset{fill:color-mix(in oklab,var(--ln-q1) 82%,#000)}
+.ln-x-port{fill:var(--ln-well)}
+.ln-x-ring{fill:none;stroke:var(--ln-text);stroke-width:3}
+.ln-x-cross{stroke:var(--ln-signal);stroke-width:4;stroke-linecap:round;fill:none}
+.ln-x-cross-lg{stroke-width:5}
+.ln-x-ghost{stroke:var(--ln-text);stroke-width:3;stroke-dasharray:6 6;opacity:.6;fill:none}
+.ln-x-ghost-dot{stroke-width:2;stroke-dasharray:3 3}
+.ln-x-mark line{stroke:var(--ln-ink);stroke-width:1.5}
+.ln-x-mark circle{fill:var(--ln-ink)}
+.ln-x-mark text{fill:var(--ln-bg);font-family:var(--ln-f-display);font-weight:700;font-size:17px}
+/* pressing or pointing at a callout puts its layer forward */
+.ln-x-on-1 .ln-x-l2,.ln-x-on-1 .ln-x-l3,.ln-x-on-2 .ln-x-l1,.ln-x-on-2 .ln-x-l3,.ln-x-on-3 .ln-x-l1,.ln-x-on-3 .ln-x-l2{opacity:.32}
+/* the layers separate once, when the figure first scrolls into view */
+.ln-x-play .ln-x-l1{animation:ln-x-l1 1.1s var(--ln-spring) backwards}
+.ln-x-play .ln-x-l2{animation:ln-x-l2 1.1s var(--ln-spring) backwards}
+.ln-x-play .ln-x-mark,.ln-x-play .ln-x-guide{animation:ln-x-fade .9s .5s ease-out backwards}
+@keyframes ln-x-l1{from{transform:translateY(195px)}}
+@keyframes ln-x-l2{from{transform:translateY(100px)}}
+@keyframes ln-x-fade{from{opacity:0}}
+@media (prefers-reduced-motion:reduce){.ln-x-play *{animation:none!important}.ln-x-l,.ln-callouts li{transition:none}}
+/* blueprint: a line drawing, so faces are tints of the ink over the sheet */
+[data-landing-skin="blueprint"] .ln-x-l{--ln-x-t:color-mix(in srgb,var(--ln-ink) 5%,var(--ln-bg));--ln-x-l:color-mix(in srgb,var(--ln-ink) 11%,var(--ln-bg));--ln-x-r:color-mix(in srgb,var(--ln-ink) 17%,var(--ln-bg))}
+[data-landing-skin="blueprint"] .ln-x-top,[data-landing-skin="blueprint"] .ln-x-left,[data-landing-skin="blueprint"] .ln-x-right{stroke:var(--ln-ink);stroke-width:1.2}
+[data-landing-skin="blueprint"] .ln-x-well,[data-landing-skin="blueprint"] .ln-x-inset,[data-landing-skin="blueprint"] .ln-x-port,[data-landing-skin="blueprint"] .ln-x-grille{fill:color-mix(in srgb,var(--ln-ink) 12%,var(--ln-bg));stroke:var(--ln-ink);stroke-width:1}
+[data-landing-skin="blueprint"] .ln-x-cap,[data-landing-skin="blueprint"] .ln-x-dial-hi{fill:var(--ln-bg);stroke:var(--ln-ink);stroke-width:1.2}
+[data-landing-skin="blueprint"] .ln-x-dial-lo{fill:var(--ln-ink)}
+[data-landing-skin="blueprint"] .ln-x-cart{fill:color-mix(in srgb,var(--ln-signal) 40%,var(--ln-bg));stroke:var(--ln-ink);stroke-width:1.2}
+[data-landing-skin="blueprint"] .ln-x-cart-label{stroke:var(--ln-ink);stroke-width:1}
+[data-landing-skin="blueprint"] .ln-x-t-lcd,[data-landing-skin="blueprint"] .ln-x-t-lcd2{fill:var(--ln-ink)}
+[data-landing-skin="blueprint"] .ln-x-t-sig{fill:var(--ln-signal-2)}
+[data-landing-skin="blueprint"] .ln-x-t-ok{fill:var(--ln-ok)}
+[data-landing-skin="blueprint"] .ln-x-edge-ok{stroke:var(--ln-ok)}
+/* phone: the shared responsive sheet loads before this file, so repeat its rules with more weight */
+@media (max-width:760px){
+.ln-root .ln-nc{grid-template-columns:1fr;gap:calc(3 * var(--ln-u))}
+.ln-root .ln-callouts h3{font-size:calc(3 * var(--ln-u))}
+.ln-root .ln-nono{font-size:calc(3.4 * var(--ln-u))}
+.ln-root .ln-faq{grid-template-columns:1fr;gap:calc(2 * var(--ln-u))}
+.ln-root .ln-faq summary{grid-template-columns:calc(4.6 * var(--ln-u)) 1fr calc(3 * var(--ln-u));font-size:17px}
+.ln-root .ln-faq details p{margin-left:0}
+}
