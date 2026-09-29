@@ -1,6 +1,9 @@
 "use client";
 
 import { createContext, useContext, type ReactNode } from "react";
+import LnSprite from "./shared/LnSprite";
+import "./shared/ln-base.css";
+import "./shared/ln-responsive.css";
 import { useHydrated } from "@/hooks/useHydrated";
 import {
   DEFAULT_LANDING_SKIN,
@@ -31,6 +34,7 @@ export default function LandingSkinScope({ children }: { children: ReactNode }) 
   return (
     <SkinContext.Provider value={skin}>
       <div data-landing-skin={skin} className="ln-root">
+        <LnSprite />
         {children}
       </div>
     </SkinContext.Provider>
