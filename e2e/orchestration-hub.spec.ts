@@ -15,9 +15,9 @@ const CYCLE_MS = 9_600;
 const ADVANCE_TIMEOUT = CYCLE_MS + 6_000;
 
 async function openHub(page: Page) {
-  // The home page's landing no longer mounts the hub (it now tells the trigger
-  // story with `components/landing/triggers`); the section itself is unchanged
-  // and stays reachable through the preview registry.
+  // Dev only: the home page's landing no longer mounts the hub (it tells the
+  // trigger story with `components/landing/triggers`), and `/preview/*` is a
+  // 404 in production, so this cannot run against a production build.
   await page.goto("/preview/orchestration-hub");
   const hub = page.locator("#orchestration-hub");
   await expect(hub).toBeVisible();
@@ -37,7 +37,10 @@ async function position(indicator: Locator): Promise<{ n: number; count: number 
 
 const after = (n: number, count: number) => (n % count) + 1;
 
-test.describe("Orchestration hub playback", () => {
+// Skipped while the hub is mounted on no production page. Re-enable if it is
+// remounted (point `openHub` back at the page that mounts it), or delete this
+// spec together with `components/sections/orchestration-hub`.
+test.describe.skip("Orchestration hub playback", () => {
   // A saved consent keeps the cookie banner from covering the controls.
   test.beforeEach(async ({ page }) => {
     await page.addInitScript(() => localStorage.setItem("personas-cookie-consent", "essential"));

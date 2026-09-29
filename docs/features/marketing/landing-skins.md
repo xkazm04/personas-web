@@ -36,10 +36,10 @@ The footer carries a small **Personas | Deck | Blueprint** switch (only on `/`).
 ## Integration points
 - **Footer** mounts the switcher next to the site theme switcher (`sections/footer/FooterCopyright.tsx`).
 - **Guided tour** targets the sections through `data-tour-diagram`; its narration still describes the previous visuals (see gotchas).
-- **`/preview/<section>`** still renders the previous landing's sections (`sections/lazy.tsx` exports are untouched).
+- **`/preview/<section>`** (dev only, 404 in production) still renders the previous landing's sections (`sections/lazy.tsx` exports are untouched).
 
 ## Conventions & gotchas
-- The previous landing sections (`Hero`, `UseCases`, `PlaygroundSplit`, `GetStarted`, `OrchestrationHub`, `TeamCanvas`, `Companion`, `VisionGrid`, `DownloadCTA`) are no longer mounted on `/` but are kept and reachable through `/preview`; `homepage-hero.md` describes them. Decide later whether to delete them.
+- The previous landing sections (`Hero`, `UseCases`, `PlaygroundSplit`, `GetStarted`, `OrchestrationHub`, `TeamCanvas`, `Companion`, `VisionGrid`, `DownloadCTA`) are no longer mounted on `/` but are kept (previewable in dev at `/preview/<section>`); `homepage-hero.md` describes them. `e2e/orchestration-hub.spec.ts` is skipped because the hub is mounted on no production page. Decide later whether to delete them.
 - The new sections are not `data-stage` sections, so the one-section-per-viewport stage fit no longer covers `/` (Pricing and FAQ still do).
 - The guided tour's home steps still speak about the old visuals; the narration and audio need a review pass.
 - Pricing and FAQ keep the site styling and sit outside the skin scope; on Deck and Blueprint they read as a change of surface.
