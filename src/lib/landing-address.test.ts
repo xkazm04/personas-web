@@ -51,8 +51,13 @@ describe("resolveLandingAddress", () => {
 
   it("treats the external wrapper ids as aliases of the declared address", () => {
     expect(resolveLandingAddress("#download-section")?.id).toBe("download");
-    expect(resolveLandingAddress("#tools")?.id).toBe("use-cases");
-    expect(resolveLandingAddress("#playground")?.id).toBe("playground-split");
+    expect(resolveLandingAddress("#tools")?.id).toBe("personas");
+    expect(resolveLandingAddress("#playground")?.id).toBe("concepts");
+    expect(resolveLandingAddress("#pipelines")?.id).toBe("triggers");
+    expect(resolveLandingAddress("#vision")?.id).toBe("private");
+    // ids of the previous landing's sections keep resolving too.
+    expect(resolveLandingAddress("#use-cases")?.id).toBe("personas");
+    expect(resolveLandingAddress("#playground-split")?.id).toBe("concepts");
   });
 
   it("returns null for anything outside the declared address space", () => {
@@ -89,28 +94,23 @@ describe("resolveLandingAddress", () => {
     }
   });
 
-  it("get-started's id is emitted once: the always-present wrapper holds it, the mounted section does not", () => {
+  it("get-started's id is emitted once: the mounted section holds it, the page wrapper does not", () => {
     // Two elements with id="get-started" is invalid HTML, and getElementById /
     // a native `#get-started` jump silently pick whichever comes first.
     const page = read("src/app/page.tsx");
     const wrapperEmits = [...page.matchAll(/wrapperId:\s*"get-started"/g)].length;
-    const sectionEmits = walk(path.join(SRC_ROOT, "components", "sections")).reduce(
-      (n, file) => n + [...readFileSync(file, "utf8").matchAll(/\bid="get-started"/g)].length,
+    const dirs = ["sections", "landing"].flatMap((d) => walk(path.join(SRC_ROOT, "components", d)));
+    const sectionEmits = dirs.reduce(
+      (count, file) => count + [...readFileSync(file, "utf8").matchAll(/\bid="get-started"/g)].length,
       0,
     );
-    expect({ wrapperEmits, sectionEmits }).toEqual({ wrapperEmits: 1, sectionEmits: 0 });
+    expect({ wrapperEmits, sectionEmits }).toEqual({ wrapperEmits: 0, sectionEmits: 1 });
   });
 
-  it("finds the mounted get-started section by its heading label, not by an id the wrapper owns", () => {
+  it("finds the mounted get-started section by its own id inside the always-present wrapper", () => {
     const address = resolveLandingAddress("#get-started")!;
     expect(address.wrapperSelector).toBe('[data-scroll-anchor="get-started"]');
-    expect(address.innerSelector).toBe(
-      '[data-scroll-anchor="get-started"] [aria-labelledby="get-started-heading"]',
-    );
-    // ...and that label is really what the section carries.
-    expect(read("src/components/sections/get-started/index.tsx")).toMatch(
-      /<SectionWrapper\b[^>]*\baria-labelledby="get-started-heading"/,
-    );
+    expect(address.innerSelector).toBe('[data-scroll-anchor="get-started"] #get-started');
   });
 
   it("pricing's id is emitted once: the always-present wrapper holds it, the mounted section does not", () => {
@@ -137,8 +137,10 @@ describe("resolveLandingAddress", () => {
 
   it("guard: every inner section id is rendered by some home section", () => {
     const ids = new Set<string>();
-    for (const file of walk(path.join(SRC_ROOT, "components", "sections"))) {
-      for (const m of readFileSync(file, "utf8").matchAll(/\bid="([^"]+)"/g)) ids.add(m[1]);
+    for (const dir of ["sections", "landing"]) {
+      for (const file of walk(path.join(SRC_ROOT, "components", dir))) {
+        for (const m of readFileSync(file, "utf8").matchAll(/\bid="([^"]+)"/g)) ids.add(m[1]);
+      }
     }
     for (const { id } of LANDING_SECTIONS) {
       if (id === "hero") continue;

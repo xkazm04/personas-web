@@ -25,7 +25,7 @@ export default function LandingNoCloud() {
     .join(" ");
 
   return (
-    <section id="private" className="ln-sec" aria-labelledby="private-h">
+    <section id="private" data-tour-diagram="platform" className="ln-sec" aria-labelledby="private-h">
       <div className="ln-wrap">
         <LnSectionHead kicker={n.kicker} headingId="private-h" heading={n.heading} accent="." />
         <div className="ln-nc">

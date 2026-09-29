@@ -16,7 +16,7 @@ export default function LandingConcepts() {
   const { t } = useTranslation();
   const c = t.landingNext.concepts;
   return (
-    <section id="concepts" className="ln-sec" aria-labelledby="concepts-h">
+    <section id="concepts" data-tour-diagram="agent-mind" className="ln-sec" aria-labelledby="concepts-h">
       <ConceptDefs />
       <div className="ln-wrap">
         <LnSectionHead kicker={c.kicker} headingId="concepts-h" heading={c.heading} accent={c.accent} lede={c.lede} />

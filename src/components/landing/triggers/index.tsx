@@ -53,7 +53,7 @@ export default function LandingTriggers() {
       : c.stateOf.replace("{n}", pad(shown + 1)).replace("{total}", String(total));
 
   return (
-    <section id="triggers" className="ln-sec" aria-labelledby="triggers-h">
+    <section id="triggers" data-tour-diagram="orchestration" className="ln-sec" aria-labelledby="triggers-h">
       <div className="ln-wrap">
         <LnSectionHead kicker={c.kicker} headingId="triggers-h" heading={c.heading} accent={c.accent} />
         <div ref={panelRef} className={`ln-tp${live ? " ln-live" : ""}`}>

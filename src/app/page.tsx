@@ -2,21 +2,21 @@ import type { ComponentType } from "react";
 import type { StageColor } from "@/lib/colors";
 import { safeJsonLd } from "@/lib/seo";
 import Navbar from "@/components/Navbar";
-import Hero from "@/components/sections/Hero";
-import HeroAmbientIllustration from "@/components/sections/hero/HeroAmbientIllustration";
+import LandingHero from "@/components/landing/hero";
+import LandingSkinScope from "@/components/landing/LandingSkinScope";
 import Footer from "@/components/sections/Footer";
+import { LazyFAQ, LazyPricing } from "@/components/sections/lazy";
 import {
-  LazyDownloadCTA,
-  LazyFAQ,
-  LazyOrchestrationHub,
+  LazyRack,
+  LazyConcepts,
+  LazySetup,
+  LazyRuns,
+  LazyTriggers,
+  LazyTeam,
   LazyCompanion,
-  LazyTeamCanvas,
-  LazyPricing,
-  LazyUseCases,
-  LazyVision,
-  LazyPlaygroundSplit,
-  LazyGetStarted,
-} from "@/components/sections/lazy";
+  LazyNoCloud,
+  LazyDownload,
+} from "@/components/landing/lazy";
 import StageSection from "@/components/StageSection";
 import LazyMount from "@/components/LazyMount";
 import PageShell from "@/components/PageShell";
@@ -29,42 +29,47 @@ const scrollMapItems = SCROLL_MAP_SECTIONS.map((s) => ({
   href: `#${s.id}`,
 }));
 
-interface SectionConfig {
+/** A ported landing section (skin-aware, `components/landing`). Its own root
+ *  carries the address id; the always-present wrapper carries the legacy alias
+ *  (`wrapperId`) that external links and the guided tour still use. */
+interface LandingEntry {
+  Component: ComponentType;
+  anchorId: string;
+  wrapperId?: string;
+}
+
+/** A site-styled stage section kept from the previous landing. */
+interface StageEntry {
   Component: ComponentType;
   glow: "cyan" | "purple" | "emerald";
   fromColor: StageColor;
   toColor?: StageColor;
   wrapperId?: string;
-  /** The `SCROLL_MAP_SECTIONS` id this stage hosts. Emitted as
-   *  `data-scroll-anchor` on the stage's always-present wrapper so the scroll
-   *  map can reach the section before it has mounted — several of these ids
-   *  live inside `ssr: false` + gated components and are simply not in the DOM
-   *  on first paint. Kept separate from `wrapperId` because the wrapper ids are
-   *  external anchor targets (`#tools`, `#download-section`) that must not
-   *  change, and because the mounted section renders the same id itself. */
   anchorId: string;
-  /** Defer mount until ~1 viewport away. Set on ssr:false sections (which add
-   *  nothing to SSR anyway) so their chunks load as you scroll, not all at once. */
-  gate?: boolean;
 }
 
-const sections: SectionConfig[] = [
-  { Component: LazyUseCases,           glow: "emerald", fromColor: "cyan",    toColor: "emerald", wrapperId: "tools", anchorId: "use-cases", gate: true },
-  { Component: LazyPlaygroundSplit,    glow: "cyan",    fromColor: "emerald", toColor: "cyan",    wrapperId: "playground", anchorId: "playground-split", gate: true },
-  { Component: LazyGetStarted,         glow: "emerald", fromColor: "cyan",    toColor: "emerald", wrapperId: "get-started", anchorId: "get-started", gate: true },
-  { Component: LazyOrchestrationHub,   glow: "cyan",    fromColor: "emerald", toColor: "cyan",    wrapperId: "pipelines", anchorId: "pipelines", gate: true },
-  { Component: LazyTeamCanvas,         glow: "purple",  fromColor: "cyan",    toColor: "purple",  anchorId: "team-canvas", gate: true },
-  { Component: LazyCompanion,          glow: "purple",  fromColor: "purple",  toColor: "purple",  anchorId: "companion", gate: true },
-  { Component: LazyVision,            glow: "purple",  fromColor: "purple",  toColor: "purple",  wrapperId: "vision", anchorId: "vision" },
-  { Component: LazyPricing,           glow: "purple",  fromColor: "purple",  toColor: "purple",  wrapperId: "pricing", anchorId: "pricing" },
-  { Component: LazyFAQ,               glow: "cyan",    fromColor: "purple",  toColor: "cyan",    anchorId: "faq" },
-  { Component: LazyDownloadCTA,        glow: "cyan",    fromColor: "cyan",                        wrapperId: "download-section", anchorId: "download", gate: true },
+const landingSections: LandingEntry[] = [
+  { Component: LazyRack,      anchorId: "personas",    wrapperId: "tools" },
+  { Component: LazyConcepts,  anchorId: "concepts",    wrapperId: "playground" },
+  { Component: LazySetup,     anchorId: "get-started" },
+  { Component: LazyRuns,      anchorId: "runs" },
+  { Component: LazyTriggers,  anchorId: "triggers",    wrapperId: "pipelines" },
+  { Component: LazyTeam,      anchorId: "team-canvas" },
+  { Component: LazyCompanion, anchorId: "companion" },
+  { Component: LazyNoCloud,   anchorId: "private",     wrapperId: "vision" },
 ];
+
+const stageSections: StageEntry[] = [
+  { Component: LazyPricing, glow: "purple", fromColor: "purple", toColor: "purple", wrapperId: "pricing", anchorId: "pricing" },
+  { Component: LazyFAQ,     glow: "cyan",   fromColor: "purple", toColor: "cyan",   anchorId: "faq" },
+];
+
+const downloadSection: LandingEntry = { Component: LazyDownload, anchorId: "download", wrapperId: "download-section" };
 
 /* Drift guard: every scroll-map dot must have a stage that can receive it.
    `hero` is served by the always-present `<div id="hero">` below. */
 if (process.env.NODE_ENV !== "production") {
-  const covered = new Set(["hero", ...sections.map((s) => s.anchorId)]);
+  const covered = new Set(["hero", ...landingSections, ...stageSections, downloadSection].map((s) => (typeof s === "string" ? s : s.anchorId)));
   const orphans = SCROLL_MAP_SECTIONS.filter((s) => !covered.has(s.id)).map((s) => s.id);
   if (orphans.length > 0) {
     console.warn("[home] scroll-map sections with no anchor on the page:", orphans);
@@ -72,14 +77,20 @@ if (process.env.NODE_ENV !== "production") {
 }
 
 export default function Home() {
+  const renderLanding = ({ Component, anchorId, wrapperId }: LandingEntry) => (
+    <div key={anchorId} id={wrapperId} data-scroll-anchor={anchorId}>
+      <LazyMount minHeight={640}>
+        <Component />
+      </LazyMount>
+    </div>
+  );
+
   return (
     // No `SectionObserverProvider` here: `PageShell` mounts one for the same
     // ids, and every consumer (ScrollMap, MobilePageTOC, SectionBreadcrumb)
     // lives inside it. A second provider only duplicated the Intersection-
     // and MutationObserver over `document.body`'s whole subtree.
     <>
-      {/* Decorative cinematic illustration — top-left ambient layer */}
-      <HeroAmbientIllustration />
       <Navbar />
       {/* Lands /#download and every other declared address on its lazy section. */}
       <LandingHashArrival />
@@ -96,34 +107,22 @@ export default function Home() {
         dangerouslySetInnerHTML={{ __html: safeJsonLd(faqJsonLd) }}
       />
       <PageShell scrollMapItems={scrollMapItems}>
+        {/* The landing's own skin scope (footer switcher: Personas / Deck /
+            Blueprint). Pricing and FAQ below keep the site's styling. */}
+        <LandingSkinScope>
+          <LandingHero />
+          {landingSections.map(renderLanding)}
+        </LandingSkinScope>
 
-        <div id="hero">
-          <Hero />
-        </div>
-
-        {sections.map(({ Component, glow, fromColor, toColor, wrapperId, anchorId, gate }, i) => {
-          const stage = (
-            <StageSection key={i} glow={glow} fromColor={fromColor} toColor={toColor}>
-              {gate ? (
-                <LazyMount stage minHeight={640}>
-                  <Component />
-                </LazyMount>
-              ) : (
-                <Component />
-              )}
+        {stageSections.map(({ Component, glow, fromColor, toColor, wrapperId, anchorId }) => (
+          <div key={anchorId} id={wrapperId} data-scroll-anchor={anchorId}>
+            <StageSection glow={glow} fromColor={fromColor} toColor={toColor}>
+              <Component />
             </StageSection>
-          );
+          </div>
+        ))}
 
-          // No divider between stages: the stage's own from/to gradients carry
-          // the colour hand-off. The SectionDivider that used to sit here
-          // rendered at height 0 (invisible) while still mounting an SVG, a
-          // blur-3xl layer and a scroll-driven animation per section.
-          return (
-            <div key={i} id={wrapperId} data-scroll-anchor={anchorId}>
-              {stage}
-            </div>
-          );
-        })}
+        <LandingSkinScope>{renderLanding(downloadSection)}</LandingSkinScope>
       </PageShell>
       <Footer />
     </>

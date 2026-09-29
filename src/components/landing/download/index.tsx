@@ -53,7 +53,7 @@ export default function LandingDownload() {
   const meta = n.installerMeta.replace("{version}", SITE_VERSION).replace("{title}", RELEASE_TITLE);
 
   return (
-    <section id="download" className="ln-sec ln-box-sec" aria-labelledby="download-h">
+    <section id="download" data-tour-diagram="download" className="ln-sec ln-box-sec" aria-labelledby="download-h">
       <div className="ln-wrap ln-boxwrap">
         <div>
           <p className="ln-idx">{n.kicker}</p>

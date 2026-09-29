@@ -40,7 +40,7 @@ export default function LandingRack() {
   const stageStyle = { "--ln-pc": p ? colorVar(PERSONA_META[shown].color) : "var(--ln-signal)" } as CSSProperties;
 
   return (
-    <section id="personas" className="ln-sec ln-rack-sec" aria-labelledby="personas-h">
+    <section id="personas" data-tour-diagram="tools" className="ln-sec ln-rack-sec" aria-labelledby="personas-h">
       <div className="ln-wrap">
         <div className="ln-rack-head">
           <LnSectionHead kicker={r.kicker} headingId="personas-h" heading={r.heading} accent={r.headingAccent} />

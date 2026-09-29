@@ -2408,6 +2408,8 @@
     };
   };
   landingNext: {
+    // ln:heroBlueprint
+    // ln:conceptsBlueprint
     skins: { label: string; default: string; deck: string; blueprint: string };
     hero: {
       kicker: string;
@@ -5399,6 +5401,8 @@ export const en: Translations = {
     },
   },
   landingNext: {
+    // ln:heroBlueprint
+    // ln:conceptsBlueprint
     skins: { label: 'Landing style', default: 'Personas', deck: 'Deck', blueprint: 'Blueprint' },
     hero: {
       kicker: 'Personas · agents on your machine',

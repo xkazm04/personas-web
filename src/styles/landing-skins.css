@@ -33,6 +33,17 @@
   background: var(--ln-bg);
 }
 
+/* Desktop: the fixed scroll map lives in the right 7rem, so the landing composes into the rest. */
+@media (min-width: 64rem) {
+  .ln-root {
+    --ln-u: min(calc((100vw - 7rem) / 144), calc(100vh / 88));
+  }
+  /* The gutter sits on the sections, so the skin background stays continuous. */
+  .ln-sec {
+    padding-right: 7rem;
+  }
+}
+
 /* Phones: the composition is re-proportioned (one unit = 1/39 of the width) so art and text stay usable. */
 @media (max-width: 760px) {
   .ln-root {
