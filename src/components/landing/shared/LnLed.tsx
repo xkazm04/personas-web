@@ -9,7 +9,7 @@ export default function LnLed({
   return (
     <i
       aria-hidden="true"
-      className={["ln-led", state !== "off" && state, className].filter(Boolean).join(" ")}
+      className={["ln-led", state !== "off" && `ln-${state}`, className].filter(Boolean).join(" ")}
     />
   );
 }
