@@ -7,6 +7,9 @@
   --ln-f-hand: var(--font-sans), system-ui, sans-serif;
   --ln-f-body: var(--font-sans), system-ui, sans-serif;
 
+  --ln-noise: none;
+  --ln-spring: cubic-bezier(0.3, 1.4, 0.5, 1);
+  --ln-bar: 0px;
   --ln-bg: var(--background);
   --ln-ink: var(--foreground);
   --ln-text: var(--muted-dark);

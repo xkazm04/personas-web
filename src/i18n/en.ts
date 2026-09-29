@@ -2408,8 +2408,127 @@
     };
   };
   landingNext: {
-    // ln:heroBlueprint
-    // ln:conceptsBlueprint
+    heroBlueprint: {
+      artLabel: string;
+      fig: string;
+      dimDiameter: string;
+      dimRadius: string;
+      dimStem: string;
+      dimAngle: string;
+      datum: string;
+      datumNote: string;
+      redline: string;
+      caption: string;
+      replot: string;
+    };
+    conceptsBlueprint: {
+      replay: string;
+      stylised: string;
+      pan: string;
+      label: {
+        no: string;
+        title: string;
+        line: string;
+        description: string;
+        youWrite: string;
+        l1: string;
+        m1: string;
+        l2: string;
+        m2: string;
+        l3: string;
+        m3: string;
+        l4: string;
+        l5: string;
+        l6: string;
+        m6: string;
+        daily: string;
+        inbox: string;
+        drafts: string;
+        slack: string;
+        persona: string;
+        exists: string;
+      };
+      patch: {
+        no: string;
+        title: string;
+        line: string;
+        description: string;
+        section: string;
+        agents: string;
+        keys: string;
+        free: string;
+        telemetry: string;
+        capped: string;
+        foot: string;
+      };
+      memory: {
+        no: string;
+        title: string;
+        line: string;
+        description: string;
+        run1: string;
+        run12: string;
+        memory: string;
+        foot: string;
+      };
+      heal: {
+        no: string;
+        title: string;
+        line: string;
+        description: string;
+        header: string;
+        start: string;
+        failed: string;
+        retry: string;
+        healedVia: string;
+        done: string;
+        revision: string;
+        noteHead: string;
+        note1: string;
+        note2: string;
+      };
+      triggers: {
+        no: string;
+        title: string;
+        line: string;
+        description: string;
+        group: string;
+        agent: string;
+        waiting: string;
+        awake: string;
+        woken: string;
+        manual: string;
+        schedule: string;
+        polling: string;
+        webhook: string;
+        event: string;
+        file: string;
+        clipboard: string;
+        focus: string;
+        chain: string;
+        composite: string;
+      };
+      approve: {
+        no: string;
+        title: string;
+        line: string;
+        description: string;
+        install: string;
+        describe: string;
+        connect: string;
+        test: string;
+        gate: string;
+        runsDaily: string;
+        held: string;
+        running: string;
+        yourStamp: string;
+        approved: string;
+        press: string;
+        undo: string;
+        liveApproved: string;
+        liveUndone: string;
+      };
+    };
     skins: { label: string; default: string; deck: string; blueprint: string };
     hero: {
       kicker: string;
@@ -5401,8 +5520,127 @@ export const en: Translations = {
     },
   },
   landingNext: {
-    // ln:heroBlueprint
-    // ln:conceptsBlueprint
+    heroBlueprint: {
+      artLabel: 'The Personas mark drawn with its construction geometry: a circle of radius one unit with two opposite quadrants inked, a stem two and a half units long and a forty-five degree tick. Stylised drawing.',
+      fig: 'Fig. 00: the datum P',
+      dimDiameter: 'Dia 2u',
+      dimRadius: 'r = 1u',
+      dimStem: 'stem 2.5u',
+      dimAngle: '45 deg',
+      datum: 'Datum',
+      datumNote: 'quadrants inked',
+      redline: 'runs here.',
+      caption: 'Stylised drawing',
+      replot: 'Replot',
+    },
+    conceptsBlueprint: {
+      replay: 'Replay',
+      stylised: 'Stylised illustration',
+      pan: 'Drag the drawing sideways to see all of it.',
+      label: {
+        no: 'A-01',
+        title: 'Describe it. That is the agent.',
+        line: 'Say what it should do in plain words. Each underlined phrase draws the part it asks for.',
+        description: 'Stylised illustration. A sentence in plain words: every morning, sort my inbox, draft replies to anything urgent, then post a summary in Slack. Each underlined phrase draws a part of the agent: a daily 08:00 schedule, an inbox port, a drafts tray and a Slack port. Then the agent itself is drawn. It exists.',
+        youWrite: 'You write',
+        l1: 'Every morning,',
+        m1: 'Every morning',
+        l2: 'sort my inbox,',
+        m2: 'my inbox',
+        l3: 'draft replies',
+        m3: 'draft replies',
+        l4: 'to anything urgent,',
+        l5: 'then post a',
+        l6: 'summary in Slack.',
+        m6: 'summary in Slack.',
+        daily: 'Daily 08:00',
+        inbox: 'Inbox',
+        drafts: 'Drafts',
+        slack: 'Slack',
+        persona: 'Your agent',
+        exists: 'Ready to test',
+      },
+      patch: {
+        no: 'A-02',
+        title: 'Nothing leaves your machine.',
+        line: 'Your agents run on your machine. Zero telemetry, no account.',
+        description: 'Stylised illustration, a section cut through your machine. Thick hatched walls enclose your agents and a vault that keeps keys encrypted on this device. A price tag reads free. A line labelled telemetry runs toward the wall and is capped well short of it: nothing is sent home.',
+        section: 'Section A-A: your machine',
+        agents: 'Your agents',
+        keys: 'Keys encrypted here',
+        free: 'Free',
+        telemetry: 'Telemetry',
+        capped: 'Capped',
+        foot: 'Nothing crosses the wall. Nothing is sent home.',
+      },
+      memory: {
+        no: 'A-03',
+        title: 'It remembers what works.',
+        line: 'Each run starts from what the last one learned.',
+        description: 'Stylised illustration. Run 1 wanders to its goal and snags twice, drawn in pencil. Only the stretches that worked are projected down, like projection lines in a drawing, and run 12 draws a straight line to the goal.',
+        run1: 'Run 1',
+        run12: 'Run 12',
+        memory: 'Memory: keeps what worked',
+        foot: 'Only what worked is carried down.',
+      },
+      heal: {
+        no: 'A-04',
+        title: 'It hits an error, then fixes itself.',
+        line: 'A failed run retries on its own, then the Overseer writes down how to avoid it.',
+        description: 'Stylised illustration. A run is drawn as a line from 08:00 to done. The line breaks where a step fails. A retry arc bridges the break and the run finishes. Then the Overseer circles the break in red and writes a coaching note, which waits for your approval.',
+        header: 'One run, daily 08:00',
+        start: 'Start',
+        failed: 'Failed',
+        retry: 'Retry',
+        healedVia: 'Healed via retry',
+        done: 'Done',
+        revision: 'B',
+        noteHead: 'Coaching note, Overseer',
+        note1: 'Fetch in smaller batches.',
+        note2: 'Proposed. Kept only if you approve.',
+      },
+      triggers: {
+        no: 'A-05',
+        title: 'Ten ways to wake it.',
+        line: 'A schedule, a webhook, a file that changes, the app you open: any signal can start an agent.',
+        description: 'Stylised illustration, a wiring diagram. Ten switches, one for each trigger type, feed one line into your agent. Close any switch and its circuit carries the signal that wakes the agent.',
+        group: 'Pick a trigger to wake the agent',
+        agent: 'Your agent',
+        waiting: 'Waiting',
+        awake: 'Awake: {name}',
+        woken: 'Woken by {name}.',
+        manual: 'Manual',
+        schedule: 'Schedule',
+        polling: 'Polling',
+        webhook: 'Webhook',
+        event: 'Event',
+        file: 'File watcher',
+        clipboard: 'Clipboard',
+        focus: 'App focus',
+        chain: 'Chain',
+        composite: 'Composite',
+      },
+      approve: {
+        no: 'A-06',
+        title: 'Nothing ships without your yes.',
+        line: 'Every change waits at the door until you press your stamp.',
+        description: 'Stylised illustration, a floor plan. An agent walks a corridor past four stations: install, describe, connect, test. At the end is a door marked approve. The door stays shut until you press your stamp; then it swings open and the agent goes through to run daily.',
+        install: 'Install',
+        describe: 'Describe',
+        connect: 'Connect',
+        test: 'Test',
+        gate: '5 · Approve',
+        runsDaily: 'Runs daily',
+        held: 'Held for you',
+        running: 'Running, 08:00',
+        yourStamp: 'Your stamp',
+        approved: 'Approved',
+        press: 'Approve it',
+        undo: 'Approved. Undo',
+        liveApproved: 'Approved. The door opens.',
+        liveUndone: 'Approval withdrawn. The door closes.',
+      },
+    },
     skins: { label: 'Landing style', default: 'Personas', deck: 'Deck', blueprint: 'Blueprint' },
     hero: {
       kicker: 'Personas · agents on your machine',
@@ -5677,15 +5915,15 @@ export const en: Translations = {
       artIdle: 'Idle',
       artChanged: 'Changed',
       items: [
-        { name: 'Manual', desc: 'You launch it. Run an agent on demand from the dashboard, the CLI or a hotkey.' },
-        { name: 'Schedule', desc: 'Runs on a time-based schedule: a cron expression, a fixed interval or a calendar time.' },
-        { name: 'Polling', desc: 'Checks a source on an interval and wakes the agent when something new or changed shows up.' },
-        { name: 'Webhook', desc: 'An outside service sends a payload to a public URL and the agent wakes at once.' },
-        { name: 'Event', desc: 'Another persona emits a named event on the internal event bus.' },
-        { name: 'File watcher', desc: 'A file or folder is created, changed or removed.' },
-        { name: 'Clipboard', desc: 'You copy something that matches a pattern, such as a URL, a token or a snippet.' },
-        { name: 'App focus', desc: 'You switch to a specific app window, so agents adapt to what you are doing.' },
-        { name: 'Chain', desc: 'An upstream agent finishes and its output becomes the next agent\'s input.' },
+        { name: 'Manual', desc: 'You launch it. Run an agent on demand from the dashboard, the CLI or a hotkey.' },
+        { name: 'Schedule', desc: 'Runs on a time-based schedule: a cron expression, a fixed interval or a calendar time.' },
+        { name: 'Polling', desc: 'Checks a source on an interval and wakes the agent when something new or changed shows up.' },
+        { name: 'Webhook', desc: 'An outside service sends a payload to a public URL and the agent wakes at once.' },
+        { name: 'Event', desc: 'Another persona emits a named event on the internal event bus.' },
+        { name: 'File watcher', desc: 'A file or folder is created, changed or removed.' },
+        { name: 'Clipboard', desc: 'You copy something that matches a pattern, such as a URL, a token or a snippet.' },
+        { name: 'App focus', desc: 'You switch to a specific app window, so agents adapt to what you are doing.' },
+        { name: 'Chain', desc: 'An upstream agent finishes and its output becomes the next agent\'s input.' },
         { name: 'Composite', desc: 'Several triggers combined: the agent wakes only when they satisfy the condition together.' },
       ],
     },

@@ -68,6 +68,9 @@ const eslintConfig = defineConfig([
     "node_modules/**",
     ".claude/**",
     ".icon-gen-work/**",
+    // Local design-contest scratch (git-excluded): prototypes and staged copies of source.
+    ".contest/**",
+    ".contest-stage/**",
     "test-results/**",
     "playwright-report/**",
     "coverage/**",

@@ -7,6 +7,9 @@
   --ln-f-hand: "Ink Free", "Segoe Print", "Bradley Hand", "Marker Felt", cursive;
   --ln-f-body: "Segoe UI Variable Text", "Segoe UI", -apple-system, BlinkMacSystemFont, "Helvetica Neue", Arial, sans-serif;
 
+  --ln-noise: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='180' height='180'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='2' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='.10'/%3E%3C/svg%3E");
+  --ln-spring: cubic-bezier(0.3, 1.4, 0.5, 1);
+  --ln-bar: 0px;
   --ln-p0: #6d685f; --ln-pm: #d8d4cb; --ln-p1: #fdfcf9;
   --ln-w0: #0b0b0c; --ln-w1: #6a6a70; --ln-q0: #d6cbb2; --ln-q1: #fffdf8;
   --ln-pp0: #6d685f; --ln-ppm: #d8d4cb; --ln-pp1: #fdfcf9;
