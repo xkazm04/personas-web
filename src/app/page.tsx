@@ -2,10 +2,24 @@ import type { ComponentType } from "react";
 import type { StageColor } from "@/lib/colors";
 import { safeJsonLd } from "@/lib/seo";
 import Navbar from "@/components/Navbar";
+import Hero from "@/components/sections/Hero";
+import HeroAmbientIllustration from "@/components/sections/hero/HeroAmbientIllustration";
 import LandingHero from "@/components/landing/hero";
+import LandingBySkin from "@/components/landing/LandingBySkin";
 import LandingSkinScope from "@/components/landing/LandingSkinScope";
 import Footer from "@/components/sections/Footer";
-import { LazyFAQ, LazyPricing } from "@/components/sections/lazy";
+import {
+  LazyCompanion as LazyLegacyCompanion,
+  LazyDownloadCTA,
+  LazyFAQ,
+  LazyGetStarted,
+  LazyOrchestrationHub,
+  LazyPlaygroundSplit,
+  LazyPricing,
+  LazyTeamCanvas,
+  LazyUseCases,
+  LazyVision,
+} from "@/components/sections/lazy";
 import {
   LazyRack,
   LazyConcepts,
@@ -19,15 +33,17 @@ import {
 } from "@/components/landing/lazy";
 import StageSection from "@/components/StageSection";
 import LazyMount from "@/components/LazyMount";
-import PageShell from "@/components/PageShell";
 import LandingHashArrival from "@/components/LandingHashArrival";
 import { SCROLL_MAP_SECTIONS } from "@/lib/constants";
 import { faqJsonLd, organizationJsonLd, softwareJsonLd } from "./homeJsonLd";
 
-const scrollMapItems = SCROLL_MAP_SECTIONS.map((s) => ({
+const toMapItem = (s: { id: string; label: string }) => ({
   label: s.label.toUpperCase(),
   href: `#${s.id}`,
-}));
+});
+const modernScrollMap = SCROLL_MAP_SECTIONS.map(toMapItem);
+/** The previous landing has no "Runs" section; its dot would scroll nowhere. */
+const legacyScrollMap = SCROLL_MAP_SECTIONS.filter((s) => s.id !== "runs").map(toMapItem);
 
 /** A ported landing section (skin-aware, `components/landing`). Its own root
  *  carries the address id; the always-present wrapper carries the legacy alias
@@ -62,6 +78,21 @@ const landingSections: LandingEntry[] = [
 const stageSections: StageEntry[] = [
   { Component: LazyPricing, glow: "purple", fromColor: "purple", toColor: "purple", wrapperId: "pricing", anchorId: "pricing" },
   { Component: LazyFAQ,     glow: "cyan",   fromColor: "purple", toColor: "cyan",   anchorId: "faq" },
+];
+
+/** The previous landing, shown for the default skin (Personas). Each wrapper
+ *  carries the address id of the equivalent rebuilt section, so the scroll map,
+ *  the guided tour and hash links reach it exactly as they reach the new one. */
+const legacySections: (StageEntry & { gate?: boolean })[] = [
+  { Component: LazyUseCases,         glow: "emerald", fromColor: "cyan",    toColor: "emerald", wrapperId: "tools",       anchorId: "personas",    gate: true },
+  { Component: LazyPlaygroundSplit,  glow: "cyan",    fromColor: "emerald", toColor: "cyan",    wrapperId: "playground",  anchorId: "concepts",    gate: true },
+  { Component: LazyGetStarted,       glow: "emerald", fromColor: "cyan",    toColor: "emerald", anchorId: "get-started", gate: true },
+  { Component: LazyOrchestrationHub, glow: "cyan",    fromColor: "emerald", toColor: "cyan",    wrapperId: "pipelines",   anchorId: "triggers",    gate: true },
+  { Component: LazyTeamCanvas,       glow: "purple",  fromColor: "cyan",    toColor: "purple",  anchorId: "team-canvas", gate: true },
+  { Component: LazyLegacyCompanion,  glow: "purple",  fromColor: "purple",  toColor: "purple",  anchorId: "companion",   gate: true },
+  { Component: LazyVision,           glow: "purple",  fromColor: "purple",  toColor: "purple",  wrapperId: "vision",      anchorId: "private" },
+  ...stageSections, // Compare and FAQ are the same on both landings.
+  { Component: LazyDownloadCTA,      glow: "cyan",    fromColor: "cyan",                          wrapperId: "download-section", anchorId: "download", gate: true },
 ];
 
 const downloadSection: LandingEntry = { Component: LazyDownload, anchorId: "download", wrapperId: "download-section" };
@@ -106,24 +137,51 @@ export default function Home() {
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: safeJsonLd(faqJsonLd) }}
       />
-      <PageShell scrollMapItems={scrollMapItems}>
-        {/* The landing's own skin scope (footer switcher: Personas / Deck /
-            Blueprint). Pricing and FAQ below keep the site's styling. */}
-        <LandingSkinScope>
-          <LandingHero />
-          {landingSections.map(renderLanding)}
-        </LandingSkinScope>
+      <LandingBySkin
+        legacyAmbient={<HeroAmbientIllustration />}
+        legacyScrollMap={legacyScrollMap}
+        legacy={
+          <>
+            <div id="hero">
+              <Hero />
+            </div>
+            {legacySections.map(({ Component, glow, fromColor, toColor, wrapperId, anchorId, gate }) => (
+              <div key={anchorId} id={wrapperId} data-scroll-anchor={anchorId}>
+                <StageSection glow={glow} fromColor={fromColor} toColor={toColor}>
+                  {gate ? (
+                    <LazyMount stage minHeight={640}>
+                      <Component />
+                    </LazyMount>
+                  ) : (
+                    <Component />
+                  )}
+                </StageSection>
+              </div>
+            ))}
+          </>
+        }
+        modernScrollMap={modernScrollMap}
+        modern={
+          <>
+            {/* The rebuilt landing's skin scope (footer switcher: Deck /
+                Blueprint). Pricing and FAQ below keep the site's styling. */}
+            <LandingSkinScope>
+              <LandingHero />
+              {landingSections.map(renderLanding)}
+            </LandingSkinScope>
 
-        {stageSections.map(({ Component, glow, fromColor, toColor, wrapperId, anchorId }) => (
-          <div key={anchorId} id={wrapperId} data-scroll-anchor={anchorId}>
-            <StageSection glow={glow} fromColor={fromColor} toColor={toColor}>
-              <Component />
-            </StageSection>
-          </div>
-        ))}
+            {stageSections.map(({ Component, glow, fromColor, toColor, wrapperId, anchorId }) => (
+              <div key={anchorId} id={wrapperId} data-scroll-anchor={anchorId}>
+                <StageSection glow={glow} fromColor={fromColor} toColor={toColor}>
+                  <Component />
+                </StageSection>
+              </div>
+            ))}
 
-        <LandingSkinScope>{renderLanding(downloadSection)}</LandingSkinScope>
-      </PageShell>
+            <LandingSkinScope>{renderLanding(downloadSection)}</LandingSkinScope>
+          </>
+        }
+      />
       <Footer />
     </>
   );

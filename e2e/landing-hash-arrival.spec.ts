@@ -10,10 +10,10 @@ import { test, expect, type Page } from "@playwright/test";
  * this is the same journey against the live DOM.
  */
 
-// The mounted section (`#download`, labelled by `#download-h`) inside
+// The mounted section (`#download`, labelled by `#download-heading`) inside
 // the always-present wrapper (`data-scroll-anchor="download"`).
 const SECTION = '[data-scroll-anchor="download"] #download';
-const HEADING = "#download-h";
+const HEADING = "#download-heading";
 
 async function expectLandedOnDownload(page: Page) {
   const section = page.locator(SECTION);

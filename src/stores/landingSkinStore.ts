@@ -6,12 +6,13 @@ import { persist } from "zustand/middleware";
  * `data-landing-skin` on `LandingSkinScope`, never on `<html>`), so it composes
  * with the site's own 11 themes instead of competing with them.
  *
- * - `default`   the site's brand: every landing token is derived from the
- *               active site theme's semantic tokens.
+ * - `default`   "Personas": the previous, site-styled landing (`app/page.tsx`
+ *               renders it through `LandingBySkin`). What every visitor sees first.
  * - `deck`      the hardware "Agent Deck" identity from the brand contest.
  * - `blueprint` the "Drawing Set" identity from the brand contest.
  *
- * The non-default skins are explorations kept behind the footer switcher.
+ * Deck and Blueprint mount the rebuilt landing; they are explorations kept
+ * behind the footer switcher.
  */
 export type LandingSkinId = "default" | "deck" | "blueprint";
 
