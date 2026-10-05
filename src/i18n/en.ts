@@ -2766,6 +2766,26 @@
       };
     };
   };
+  featuresLab: {
+    design: {
+      label: string;
+    };
+    memory: {
+      label: string;
+    };
+    healing: {
+      label: string;
+    };
+    models: {
+      label: string;
+    };
+    observe: {
+      label: string;
+    };
+    plugins: {
+      label: string;
+    };
+  };
   // END pending-translation namespaces
 }
 
@@ -2796,6 +2816,7 @@ export const PENDING_TRANSLATION = [
   'labSection',
   'fleetPlayground',
   'landingSections',
+  'featuresLab',
 ] as const;
 
 export type PendingNamespace = (typeof PENDING_TRANSLATION)[number];
@@ -5881,6 +5902,26 @@ export const en: Translations = {
         },
         onYourPc: 'On your PC',
       },
+    },
+  },
+  featuresLab: {
+    design: {
+      label: 'Features lab: One sentence. One matrix.',
+    },
+    memory: {
+      label: 'Features lab: Remembers what works',
+    },
+    healing: {
+      label: 'Features lab: Fixes itself when things break',
+    },
+    models: {
+      label: 'Features lab: Powered by Claude. Private via Ollama.',
+    },
+    observe: {
+      label: 'Features lab: See everything, miss nothing',
+    },
+    plugins: {
+      label: 'Features lab: Everything to plug in',
     },
   },
   // END pending-translation namespaces
