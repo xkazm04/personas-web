@@ -1373,6 +1373,12 @@ export const ja: LocaleTranslations = {
       backToHome: "??????",
       customTrigger: "????????"
     },
+    connectorModal: {
+      simulatedLabel: "\u30b7\u30df\u30e5\u30ec\u30fc\u30b7\u30e7\u30f3\u4f8b \u00b7 \u5b9f\u969b\u306b\u306f\u4f55\u3082\u5b9f\u884c\u3055\u308c\u307e\u305b\u3093",
+      connecting: "{label} \u306b\u63a5\u7d9a\u3057\u3066\u3044\u307e\u3059\u2026",
+      working: "\u5b9f\u884c\u4e2d: {task}",
+      done: "\u5b8c\u4e86: {task}"
+    },
     roadmapSection: {
       inProgress: "\u9032\u884c\u4e2d",
       next: "\u6b21\u306e\u4e88\u5b9a",

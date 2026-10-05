@@ -1373,6 +1373,12 @@ export const de: LocaleTranslations = {
       backToHome: "Zur Startseite",
       customTrigger: "Benutzerdefinierter Trigger"
     },
+    connectorModal: {
+      simulatedLabel: "Simuliertes Beispiel \u00b7 es wird nichts ausgef\u00fchrt",
+      connecting: "Verbindung zu {label} wird hergestellt\u2026",
+      working: "In Arbeit: {task}",
+      done: "Erledigt: {task}"
+    },
     roadmapSection: {
       inProgress: "In Bearbeitung",
       next: "Als N\u00e4chstes",

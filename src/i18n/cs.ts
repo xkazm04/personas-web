@@ -1373,6 +1373,12 @@ export const cs: LocaleTranslations = {
       backToHome: "Zp?t dom?",
       customTrigger: "Vlastn? spou?t??"
     },
+    connectorModal: {
+      simulatedLabel: "Simulovan\u00fd p\u0159\u00edklad \u00b7 nic se nespou\u0161t\u00ed",
+      connecting: "P\u0159ipojov\u00e1n\u00ed k {label}\u2026",
+      working: "Pracuji na: {task}",
+      done: "Hotovo: {task}"
+    },
     roadmapSection: {
       inProgress: "Prob\u00edh\u00e1",
       next: "Dal\u0161\u00ed",

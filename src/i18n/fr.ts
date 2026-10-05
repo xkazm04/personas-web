@@ -1373,6 +1373,12 @@ export const fr: LocaleTranslations = {
       backToHome: "Retour ? l?accueil",
       customTrigger: "D?clencheur personnalis?"
     },
+    connectorModal: {
+      simulatedLabel: "Exemple simul\u00e9 \u00b7 rien n\u2019est ex\u00e9cut\u00e9",
+      connecting: "Connexion \u00e0 {label}\u2026",
+      working: "En cours : {task}",
+      done: "Termin\u00e9 : {task}"
+    },
     roadmapSection: {
       inProgress: "En cours",
       next: "Suivant",

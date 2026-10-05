@@ -1373,6 +1373,12 @@ export const vi: LocaleTranslations = {
       backToHome: "V? trang ch?",
       customTrigger: "Tr?nh k?ch ho?t t?y ch?nh"
     },
+    connectorModal: {
+      simulatedLabel: "V\u00ed d\u1ee5 m\u00f4 ph\u1ecfng \u00b7 kh\u00f4ng c\u00f3 g\u00ec th\u1ef1c s\u1ef1 ch\u1ea1y",
+      connecting: "\u0110ang k\u1ebft n\u1ed1i t\u1edbi {label}\u2026",
+      working: "\u0110ang th\u1ef1c hi\u1ec7n: {task}",
+      done: "Xong: {task}"
+    },
     roadmapSection: {
       inProgress: "\u0110ang th\u1ef1c hi\u1ec7n",
       next: "Ti\u1ebfp theo",

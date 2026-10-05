@@ -1373,6 +1373,12 @@ export const es: LocaleTranslations = {
       backToHome: "Volver al inicio",
       customTrigger: "Disparador personalizado"
     },
+    connectorModal: {
+      simulatedLabel: "Ejemplo simulado \u00b7 no se ejecuta nada",
+      connecting: "Conectando con {label}\u2026",
+      working: "Trabajando en: {task}",
+      done: "Hecho: {task}"
+    },
     roadmapSection: {
       inProgress: "En Progreso",
       next: "Siguiente",

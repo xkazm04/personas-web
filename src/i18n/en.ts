@@ -1152,6 +1152,12 @@
     backToHome: string;
     customTrigger: string;
   };
+  connectorModal: {
+    simulatedLabel: string;
+    connecting: string;
+    working: string;
+    done: string;
+  };
   roadmapSection: {
     inProgress: string;
     next: string;
@@ -4114,6 +4120,12 @@ export const en: Translations = {
     browseTemplates: 'Browse templates',
     backToHome: 'Back to home',
     customTrigger: 'Custom trigger',
+  },
+  connectorModal: {
+    simulatedLabel: 'Simulated example · nothing runs',
+    connecting: 'Connecting to {label}…',
+    working: 'Working on: {task}',
+    done: 'Done: {task}',
   },
   roadmapSection: {
     inProgress: 'In Progress',

@@ -1,61 +1,40 @@
 "use client";
 
-import { useState, useEffect, useRef } from "react";
+import { useState, useEffect, useMemo, useRef } from "react";
 import { motion, useReducedMotion } from "framer-motion";
 import { Terminal, ChevronRight } from "lucide-react";
 import type { Connector } from "@/data/connectors";
-
-function generateSimOutput(connector: Connector): { text: string; delay: number }[] {
-  const uc = connector.useCases[0];
-  const now = new Date();
-  const ts = (offsetMs: number) => {
-    const d = new Date(now.getTime() + offsetMs);
-    return d.toISOString().slice(11, 23);
-  };
-
-  return [
-    { text: `$ ${uc.command}`, delay: 0 },
-    { text: `[${ts(0)}] Connecting to ${connector.label}...`, delay: 600 },
-    { text: `[${ts(820)}] Connected. Fetching data...`, delay: 1200 },
-    { text: `[${ts(1540)}] Working on ${uc.title.toLowerCase()}...`, delay: 1800 },
-    { text: `[${ts(2300)}] Found 24 results. Filtering...`, delay: 2400 },
-    { text: `[${ts(3100)}] All done! 3 items updated.`, delay: 3200 },
-    { text: `[${ts(3400)}] Finished in 3.4s`, delay: 3800 },
-  ];
-}
+import { useTranslation } from "@/i18n/useTranslation";
+import { buildTerminalScript } from "../terminalScript";
 
 export default function TerminalSimulator({ connector }: { connector: Connector }) {
-  const [lines, setLines] = useState<string[]>([]);
-  const [done, setDone] = useState(false);
+  const { t } = useTranslation();
+  const strings = t.connectorModal;
+  // Simulated: the script is narrated from this connector's own data, and nothing runs.
+  const script = useMemo(() => buildTerminalScript(connector, strings), [connector, strings]);
+  const [shown, setShown] = useState(0);
+  const done = shown >= script.length;
   const reduced = useReducedMotion();
   const containerRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
-    const outputs = generateSimOutput(connector);
-    const timers: ReturnType<typeof setTimeout>[] = [];
-
-    outputs.forEach((o, i) => {
-      const t = setTimeout(() => {
-        setLines((prev) => [...prev, o.text]);
-        if (i === outputs.length - 1) setDone(true);
-      }, o.delay);
-      timers.push(t);
-    });
-
+    const timers = script.map((line, i) =>
+      setTimeout(() => setShown((prev) => Math.max(prev, i + 1)), line.delay),
+    );
     return () => timers.forEach(clearTimeout);
-  }, [connector]);
+  }, [script]);
 
   useEffect(() => {
     if (containerRef.current) {
       containerRef.current.scrollTop = containerRef.current.scrollHeight;
     }
-  }, [lines]);
+  }, [shown]);
 
   return (
     <div className="mt-4 overflow-hidden rounded-xl border border-glass bg-black/60">
       <div className="flex items-center gap-2 border-b border-glass px-4 py-2.5">
         <Terminal className="h-3.5 w-3.5" style={{ color: connector.color }} />
-        <span className="text-base font-mono text-muted-dark">Live preview</span>
+        <span className="text-base font-mono text-muted-dark">{strings.simulatedLabel}</span>
         <div className="ml-auto flex gap-1.5">
           <div className="h-2 w-2 rounded-full bg-white/10" />
           <div className="h-2 w-2 rounded-full bg-white/10" />
@@ -64,21 +43,20 @@ export default function TerminalSimulator({ connector }: { connector: Connector 
       </div>
 
       <div ref={containerRef} className="max-h-52 overflow-y-auto p-4 font-mono text-base leading-relaxed">
-        {lines.map((line, i) => {
-          const isCommand = line.startsWith("$");
-          const isDone = line.includes("Finished in");
-          const isSuccess = line.includes("All done!");
+        {script.slice(0, shown).map((line, i) => {
+          const isPrompt = line.kind === "prompt";
+          const isSuccess = line.kind === "success";
           return (
             <motion.div
               key={i}
               initial={{ opacity: 0, x: -8 }}
               animate={{ opacity: 1, x: 0 }}
               transition={{ duration: 0.2 }}
-              className={isCommand ? "text-white font-semibold" : isDone || isSuccess ? "" : "text-muted"}
-              style={isDone || isSuccess ? { color: connector.color } : undefined}
+              className={isPrompt ? "text-white font-semibold" : isSuccess ? "" : "text-muted"}
+              style={isSuccess ? { color: connector.color } : undefined}
             >
-              {isCommand && <ChevronRight className="mr-1 inline h-3 w-3" style={{ color: connector.color }} />}
-              {line}
+              {isPrompt && <ChevronRight className="mr-1 inline h-3 w-3" style={{ color: connector.color }} />}
+              {line.text}
             </motion.div>
           );
         })}

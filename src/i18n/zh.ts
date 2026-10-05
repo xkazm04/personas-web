@@ -1373,6 +1373,12 @@ export const zh: LocaleTranslations = {
       backToHome: "????",
       customTrigger: "??????"
     },
+    connectorModal: {
+      simulatedLabel: "\u6a21\u62df\u793a\u4f8b \u00b7 \u4e0d\u4f1a\u5b9e\u9645\u8fd0\u884c",
+      connecting: "\u6b63\u5728\u8fde\u63a5 {label}\u2026",
+      working: "\u6b63\u5728\u5904\u7406\uff1a{task}",
+      done: "\u5b8c\u6210\uff1a{task}"
+    },
     roadmapSection: {
       inProgress: "\u8fdb\u884c\u4e2d",
       next: "\u4e0b\u4e00\u6b65",

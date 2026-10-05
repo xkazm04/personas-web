@@ -1373,6 +1373,12 @@ export const id: LocaleTranslations = {
       backToHome: "Kembali ke beranda",
       customTrigger: "Pemicu kustom"
     },
+    connectorModal: {
+      simulatedLabel: "Contoh simulasi \u00b7 tidak ada yang dijalankan",
+      connecting: "Menghubungkan ke {label}\u2026",
+      working: "Mengerjakan: {task}",
+      done: "Selesai: {task}"
+    },
     roadmapSection: {
       inProgress: "Sedang Berjalan",
       next: "Selanjutnya",

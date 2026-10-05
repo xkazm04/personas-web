@@ -1373,6 +1373,12 @@ export const ko: LocaleTranslations = {
       backToHome: "??? ????",
       customTrigger: "??? ?? ???"
     },
+    connectorModal: {
+      simulatedLabel: "\uc2dc\ubbac\ub808\uc774\uc158 \uc608\uc2dc \u00b7 \uc2e4\uc81c\ub85c \uc2e4\ud589\ub418\uc9c0 \uc54a\uc74c",
+      connecting: "{label}\uc5d0 \uc5f0\uacb0\ud558\ub294 \uc911\u2026",
+      working: "\uc791\uc5c5 \uc911: {task}",
+      done: "\uc644\ub8cc: {task}"
+    },
     roadmapSection: {
       inProgress: "\uc9c4\ud589 \uc911",
       next: "\ub2e4\uc74c",

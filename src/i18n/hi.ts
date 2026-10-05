@@ -1373,6 +1373,12 @@ export const hi: LocaleTranslations = {
       backToHome: "??? ?? ????",
       customTrigger: "????? ??????"
     },
+    connectorModal: {
+      simulatedLabel: "\u0938\u093f\u092e\u094d\u092f\u0941\u0932\u0947\u091f\u0947\u0921 \u0909\u0926\u093e\u0939\u0930\u0923 \u00b7 \u0905\u0938\u0932 \u092e\u0947\u0902 \u0915\u0941\u091b \u0928\u0939\u0940\u0902 \u091a\u0932\u0924\u093e",
+      connecting: "{label} \u0938\u0947 \u0915\u0928\u0947\u0915\u094d\u091f \u0939\u094b \u0930\u0939\u093e \u0939\u0948\u2026",
+      working: "\u0907\u0938 \u092a\u0930 \u0915\u093e\u092e \u091a\u0932 \u0930\u0939\u093e \u0939\u0948: {task}",
+      done: "\u092a\u0942\u0930\u093e \u0939\u0941\u0906: {task}"
+    },
     roadmapSection: {
       inProgress: "\u092a\u094d\u0930\u0917\u0924\u093f \u092e\u0947\u0902",
       next: "\u0905\u0917\u0932\u093e",
