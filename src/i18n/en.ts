@@ -1089,6 +1089,38 @@
     heading: string;
     description: string;
   };
+  cookiePolicy: {
+    tldr: string[];
+    lastUpdated: string;
+    approachHeading: string;
+    approachBody: string;
+    registerHeading: string;
+    registerIntro: string;
+    categories: Record<"necessary" | "preferences" | "functional" | "analytics", { title: string; description: string }>;
+    mechanisms: { cookie: string; localStorage: string };
+    lifetimes: { oneYear: string; untilCleared: string; untilSignOut: string };
+    purposes: {
+      consent: string;
+      authSession: string;
+      theme: string;
+      language: string;
+      fullSite: string;
+      tourVolume: string;
+      dashboardPrefs: string;
+      tourSeen: string;
+      policySeen: string;
+      dashboardActivity: string;
+      checklist: string;
+      voting: string;
+    };
+    notUsedHeading: string;
+    notUsed: string[];
+    thirdPartyHeading: string;
+    thirdPartyBody: string;
+    managingHeading: string;
+    managingBody: string;
+    manageButton: string;
+  };
   waitlist: {
     title: string;
     emailPlaceholder: string;
@@ -4057,6 +4089,71 @@ export const en: Translations = {
     title: 'Legal',
     heading: 'Legal pages coming soon',
     description: 'Our privacy policy and terms of service are being finalized. In the meantime, if you have any questions please reach out to us.',
+  },
+  cookiePolicy: {
+    tldr: [
+      'This site sets one cookie of its own (prefer-full, for the mobile view) and keeps a few settings in your browser\'s local storage. Every item is listed below.',
+      'No advertising, cross-site tracking, or fingerprinting of any kind.',
+      'You can clear all of it anytime in your browser settings.',
+    ],
+    lastUpdated: 'Last updated: {date}',
+    approachHeading: 'Our approach to cookies and storage',
+    approachBody: 'We store only what the site needs. Browser storage such as local storage counts as a cookie under EU rules, so the list below covers both. We do not use advertising cookies, tracking pixels, or fingerprinting.',
+    registerHeading: 'What we store on your device',
+    registerIntro: 'Every cookie and storage key this website writes, grouped by purpose. A name ending in * stands for a family of keys, such as one per policy or checklist.',
+    categories: {
+      necessary: {
+        title: 'Strictly necessary',
+        description: 'Needed for the site to do what you asked. They are always on.',
+      },
+      preferences: {
+        title: 'Preferences',
+        description: 'Remember choices you made, so the site looks and behaves the way you set it.',
+      },
+      functional: {
+        title: 'Functional',
+        description: 'Keep features working across visits: your progress, what you have already seen, and your votes.',
+      },
+      analytics: {
+        title: 'Analytics',
+        description: 'Nothing is stored for analytics. If you choose "Accept All" in the cookie banner, the site counts page views and a few key actions anonymously, without writing anything to your device. If you choose "Essential Only", nothing is counted.',
+      },
+    },
+    mechanisms: {
+      cookie: 'Cookie',
+      localStorage: 'Local storage',
+    },
+    lifetimes: {
+      oneYear: '1 year',
+      untilCleared: 'Until you clear it',
+      untilSignOut: 'Until you sign out',
+    },
+    purposes: {
+      consent: 'Remembers your choice in the cookie banner.',
+      authSession: 'Keeps you signed in to the dashboard. Written by Supabase, our sign-in provider, and only if you sign in.',
+      theme: 'Remembers the color theme you picked.',
+      language: 'Remembers the language you picked.',
+      fullSite: 'On a phone, remembers that you chose the full site instead of the mobile view.',
+      tourVolume: 'Remembers the narration volume of the guided tour.',
+      dashboardPrefs: 'Remembers your dashboard views, filters, and settings, such as review escalation and read-aloud.',
+      tourSeen: 'Remembers that you have seen the guided tour, so it is not offered again.',
+      policySeen: 'Remembers when you last read each policy on this page, so updates can be flagged.',
+      dashboardActivity: 'Remembers when you last opened the dashboard and how often a demo event was retried.',
+      checklist: 'Remembers which guide checklist items you ticked.',
+      voting: 'A random ID that lets you vote once per feature, and a random nickname (such as SwiftFox) shown on your comments. Both are sent with your votes and comments, and neither contains personal information.',
+    },
+    notUsedHeading: 'What we do not use',
+    notUsed: [
+      'No advertising or remarketing cookies',
+      'No cross-site tracking',
+      'No social media tracking pixels',
+      'No analytics cookies or analytics storage',
+    ],
+    thirdPartyHeading: 'Third-party cookies',
+    thirdPartyBody: 'If you sign in, you pass through Supabase, our sign-in provider, and the account provider you choose, such as Google. They may set cookies on their own domains during sign-in, under their own policies. We do not use those cookies for tracking.',
+    managingHeading: 'Managing cookies and storage',
+    managingBody: 'You can clear or block cookies and site data in your browser settings at any time. Clearing them signs you out and resets your preferences. For questions, reach out to {email}.',
+    manageButton: 'Manage cookie preferences',
   },
   waitlist: {
     title: 'Personas for {platform}',

@@ -24,12 +24,12 @@ export const POLICY_META: Record<PolicyId, PolicyMeta> = {
     ],
   },
   cookies: {
-    latestUpdateIso: "2026-04-01",
-    formattedUpdate: "April 2026",
+    latestUpdateIso: "2026-10-05",
+    formattedUpdate: "October 2026",
     changes: [
-      "Limited the cookie set to two essentials: authentication session and theme preference.",
-      "Reaffirmed no advertising, analytics, or fingerprinting cookies are used.",
-      "Documented that Supabase OAuth flows may set strictly functional cookies.",
+      "Corrected the claim that the site uses two cookies. It sets one cookie of its own (prefer-full, for the mobile view); the sign-in session and theme live in local storage, not cookies.",
+      "Listed every cookie and local storage key the site writes, by purpose, with its lifetime, including the voting ID and comment nickname that were missing.",
+      "Clarified that analytics store nothing on your device and run only after you choose \"Accept All\".",
     ],
   },
 };

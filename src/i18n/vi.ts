@@ -2314,5 +2314,70 @@ export const vi: LocaleTranslations = {
         devTools: "\u0110\u1ed9i agent song song, d\u1ef1 \u00e1n, ph\u00e2n lo\u1ea1i",
         brain: "Vault c\u1ee7a b\u1ea1n, s\u1eb5n s\u00e0ng cho agent"
       }
+    },
+    cookiePolicy: {
+      tldr: [
+        "Trang web n\u00e0y ch\u1ec9 \u0111\u1eb7t m\u1ed9t cookie c\u1ee7a ri\u00eang m\u00ecnh (prefer-full, cho ch\u1ebf \u0111\u1ed9 xem di \u0111\u1ed9ng) v\u00e0 l\u01b0u m\u1ed9t v\u00e0i c\u00e0i \u0111\u1eb7t trong b\u1ed9 nh\u1edb c\u1ee5c b\u1ed9 c\u1ee7a tr\u00ecnh duy\u1ec7t. M\u1ecdi m\u1ee5c \u0111\u1ec1u \u0111\u01b0\u1ee3c li\u1ec7t k\u00ea b\u00ean d\u01b0\u1edbi.",
+        "Kh\u00f4ng qu\u1ea3ng c\u00e1o, kh\u00f4ng theo d\u00f5i ch\u00e9o trang v\u00e0 kh\u00f4ng l\u1ea5y d\u1ea5u v\u00e2n tay thi\u1ebft b\u1ecb d\u01b0\u1edbi b\u1ea5t k\u1ef3 h\u00ecnh th\u1ee9c n\u00e0o.",
+        "B\u1ea1n c\u00f3 th\u1ec3 x\u00f3a t\u1ea5t c\u1ea3 b\u1ea5t c\u1ee9 l\u00fac n\u00e0o trong c\u00e0i \u0111\u1eb7t tr\u00ecnh duy\u1ec7t."
+      ],
+      lastUpdated: "C\u1eadp nh\u1eadt l\u1ea7n cu\u1ed1i: {date}",
+      approachHeading: "C\u00e1ch ch\u00fang t\u00f4i s\u1eed d\u1ee5ng cookie v\u00e0 b\u1ed9 nh\u1edb",
+      approachBody: "Ch\u00fang t\u00f4i ch\u1ec9 l\u01b0u nh\u1eefng g\u00ec trang web c\u1ea7n. Theo quy \u0111\u1ecbnh c\u1ee7a EU, b\u1ed9 nh\u1edb tr\u00ecnh duy\u1ec7t nh\u01b0 b\u1ed9 nh\u1edb c\u1ee5c b\u1ed9 \u0111\u01b0\u1ee3c coi nh\u01b0 cookie, n\u00ean danh s\u00e1ch b\u00ean d\u01b0\u1edbi bao g\u1ed3m c\u1ea3 hai. Ch\u00fang t\u00f4i kh\u00f4ng d\u00f9ng cookie qu\u1ea3ng c\u00e1o, pixel theo d\u00f5i hay k\u1ef9 thu\u1eadt l\u1ea5y d\u1ea5u v\u00e2n tay.",
+      registerHeading: "Nh\u1eefng g\u00ec ch\u00fang t\u00f4i l\u01b0u tr\u00ean thi\u1ebft b\u1ecb c\u1ee7a b\u1ea1n",
+      registerIntro: "M\u1ecdi cookie v\u00e0 kh\u00f3a l\u01b0u tr\u1eef m\u00e0 trang web n\u00e0y ghi, \u0111\u01b0\u1ee3c nh\u00f3m theo m\u1ee5c \u0111\u00edch. T\u00ean k\u1ebft th\u00fac b\u1eb1ng * \u0111\u1ea1i di\u1ec7n cho m\u1ed9t nh\u00f3m kh\u00f3a, v\u00ed d\u1ee5 m\u1ed7i ch\u00ednh s\u00e1ch ho\u1eb7c m\u1ed7i danh s\u00e1ch ki\u1ec3m tra m\u1ed9t kh\u00f3a.",
+      categories: {
+        necessary: {
+          title: "Th\u1ef1c s\u1ef1 c\u1ea7n thi\u1ebft",
+          description: "C\u1ea7n \u0111\u1ec3 trang web l\u00e0m \u0111\u01b0\u1ee3c \u0111i\u1ec1u b\u1ea1n y\u00eau c\u1ea7u. Lu\u00f4n b\u1eadt."
+        },
+        preferences: {
+          title: "T\u00f9y ch\u1ecdn",
+          description: "Ghi nh\u1edb l\u1ef1a ch\u1ecdn c\u1ee7a b\u1ea1n \u0111\u1ec3 trang web hi\u1ec3n th\u1ecb v\u00e0 ho\u1ea1t \u0111\u1ed9ng theo c\u00e1ch b\u1ea1n \u0111\u00e3 thi\u1ebft l\u1eadp."
+        },
+        functional: {
+          title: "Ch\u1ee9c n\u0103ng",
+          description: "Gi\u1eef cho c\u00e1c t\u00ednh n\u0103ng ho\u1ea1t \u0111\u1ed9ng gi\u1eefa c\u00e1c l\u1ea7n truy c\u1eadp: ti\u1ebfn \u0111\u1ed9 c\u1ee7a b\u1ea1n, nh\u1eefng g\u00ec b\u1ea1n \u0111\u00e3 xem v\u00e0 phi\u1ebfu b\u1ea7u c\u1ee7a b\u1ea1n."
+        },
+        analytics: {
+          title: "Ph\u00e2n t\u00edch",
+          description: "Kh\u00f4ng l\u01b0u g\u00ec cho m\u1ee5c \u0111\u00edch ph\u00e2n t\u00edch. N\u1ebfu b\u1ea1n ch\u1ecdn \"Accept All\" tr\u00ean bi\u1ec3u ng\u1eef cookie, trang web \u0111\u1ebfm \u1ea9n danh l\u01b0\u1ee3t xem trang v\u00e0 m\u1ed9t v\u00e0i thao t\u00e1c ch\u00ednh m\u00e0 kh\u00f4ng ghi g\u00ec l\u00ean thi\u1ebft b\u1ecb c\u1ee7a b\u1ea1n. N\u1ebfu b\u1ea1n ch\u1ecdn \"Essential Only\", kh\u00f4ng c\u00f3 g\u00ec \u0111\u01b0\u1ee3c \u0111\u1ebfm."
+        }
+      },
+      mechanisms: {
+        cookie: "Cookie",
+        localStorage: "B\u1ed9 nh\u1edb c\u1ee5c b\u1ed9"
+      },
+      lifetimes: {
+        oneYear: "1 n\u0103m",
+        untilCleared: "Cho \u0111\u1ebfn khi b\u1ea1n x\u00f3a",
+        untilSignOut: "Cho \u0111\u1ebfn khi b\u1ea1n \u0111\u0103ng xu\u1ea5t"
+      },
+      purposes: {
+        consent: "Ghi nh\u1edb l\u1ef1a ch\u1ecdn c\u1ee7a b\u1ea1n tr\u00ean bi\u1ec3u ng\u1eef cookie.",
+        authSession: "Gi\u1eef b\u1ea1n \u0111\u0103ng nh\u1eadp v\u00e0o b\u1ea3ng \u0111i\u1ec1u khi\u1ec3n. Do Supabase, nh\u00e0 cung c\u1ea5p \u0111\u0103ng nh\u1eadp c\u1ee7a ch\u00fang t\u00f4i, ghi v\u00e0 ch\u1ec9 khi b\u1ea1n \u0111\u0103ng nh\u1eadp.",
+        theme: "Ghi nh\u1edb ch\u1ee7 \u0111\u1ec1 m\u00e0u b\u1ea1n \u0111\u00e3 ch\u1ecdn.",
+        language: "Ghi nh\u1edb ng\u00f4n ng\u1eef b\u1ea1n \u0111\u00e3 ch\u1ecdn.",
+        fullSite: "Tr\u00ean \u0111i\u1ec7n tho\u1ea1i, ghi nh\u1edb r\u1eb1ng b\u1ea1n \u0111\u00e3 ch\u1ecdn trang \u0111\u1ea7y \u0111\u1ee7 thay v\u00ec ch\u1ebf \u0111\u1ed9 xem di \u0111\u1ed9ng.",
+        tourVolume: "Ghi nh\u1edb \u00e2m l\u01b0\u1ee3ng l\u1eddi d\u1eabn c\u1ee7a chuy\u1ebfn tham quan c\u00f3 h\u01b0\u1edbng d\u1eabn.",
+        dashboardPrefs: "Ghi nh\u1edb ch\u1ebf \u0111\u1ed9 xem, b\u1ed9 l\u1ecdc v\u00e0 c\u00e0i \u0111\u1eb7t b\u1ea3ng \u0111i\u1ec1u khi\u1ec3n c\u1ee7a b\u1ea1n, nh\u01b0 chuy\u1ec3n c\u1ea5p \u0111\u00e1nh gi\u00e1 v\u00e0 \u0111\u1ecdc to.",
+        tourSeen: "Ghi nh\u1edb r\u1eb1ng b\u1ea1n \u0111\u00e3 xem chuy\u1ebfn tham quan c\u00f3 h\u01b0\u1edbng d\u1eabn \u0111\u1ec3 kh\u00f4ng \u0111\u1ec1 xu\u1ea5t l\u1ea1i.",
+        policySeen: "Ghi nh\u1edb l\u1ea7n cu\u1ed1i b\u1ea1n \u0111\u1ecdc t\u1eebng ch\u00ednh s\u00e1ch tr\u00ean trang n\u00e0y \u0111\u1ec3 c\u00f3 th\u1ec3 \u0111\u00e1nh d\u1ea5u c\u00e1c b\u1ea3n c\u1eadp nh\u1eadt.",
+        dashboardActivity: "Ghi nh\u1edb l\u1ea7n cu\u1ed1i b\u1ea1n m\u1edf b\u1ea3ng \u0111i\u1ec1u khi\u1ec3n v\u00e0 s\u1ed1 l\u1ea7n m\u1ed9t s\u1ef1 ki\u1ec7n demo \u0111\u01b0\u1ee3c th\u1eed l\u1ea1i.",
+        checklist: "Ghi nh\u1edb nh\u1eefng m\u1ee5c trong danh s\u00e1ch ki\u1ec3m tra c\u1ee7a h\u01b0\u1edbng d\u1eabn m\u00e0 b\u1ea1n \u0111\u00e3 \u0111\u00e1nh d\u1ea5u.",
+        voting: "M\u1ed9t ID ng\u1eabu nhi\u00ean cho ph\u00e9p b\u1ea1n b\u00ecnh ch\u1ecdn m\u1ed7i t\u00ednh n\u0103ng m\u1ed9t l\u1ea7n, v\u00e0 m\u1ed9t bi\u1ec7t danh ng\u1eabu nhi\u00ean (nh\u01b0 SwiftFox) hi\u1ec3n th\u1ecb tr\u00ean b\u00ecnh lu\u1eadn c\u1ee7a b\u1ea1n. C\u1ea3 hai \u0111\u01b0\u1ee3c g\u1eedi k\u00e8m phi\u1ebfu b\u1ea7u v\u00e0 b\u00ecnh lu\u1eadn c\u1ee7a b\u1ea1n, v\u00e0 kh\u00f4ng c\u00e1i n\u00e0o ch\u1ee9a th\u00f4ng tin c\u00e1 nh\u00e2n."
+      },
+      notUsedHeading: "Nh\u1eefng g\u00ec ch\u00fang t\u00f4i kh\u00f4ng d\u00f9ng",
+      notUsed: [
+        "Kh\u00f4ng c\u00f3 cookie qu\u1ea3ng c\u00e1o hay ti\u1ebfp th\u1ecb l\u1ea1i",
+        "Kh\u00f4ng theo d\u00f5i ch\u00e9o trang",
+        "Kh\u00f4ng c\u00f3 pixel theo d\u00f5i c\u1ee7a m\u1ea1ng x\u00e3 h\u1ed9i",
+        "Kh\u00f4ng c\u00f3 cookie hay b\u1ed9 nh\u1edb d\u00f9ng cho ph\u00e2n t\u00edch"
+      ],
+      thirdPartyHeading: "Cookie c\u1ee7a b\u00ean th\u1ee9 ba",
+      thirdPartyBody: "N\u1ebfu b\u1ea1n \u0111\u0103ng nh\u1eadp, b\u1ea1n s\u1ebd \u0111i qua Supabase, nh\u00e0 cung c\u1ea5p \u0111\u0103ng nh\u1eadp c\u1ee7a ch\u00fang t\u00f4i, v\u00e0 nh\u00e0 cung c\u1ea5p t\u00e0i kho\u1ea3n b\u1ea1n ch\u1ecdn, nh\u01b0 Google. H\u1ecd c\u00f3 th\u1ec3 \u0111\u1eb7t cookie tr\u00ean t\u00ean mi\u1ec1n c\u1ee7a ch\u00ednh h\u1ecd trong l\u00fac \u0111\u0103ng nh\u1eadp, theo ch\u00ednh s\u00e1ch ri\u00eang c\u1ee7a h\u1ecd. Ch\u00fang t\u00f4i kh\u00f4ng d\u00f9ng c\u00e1c cookie \u0111\u00f3 \u0111\u1ec3 theo d\u00f5i.",
+      managingHeading: "Qu\u1ea3n l\u00fd cookie v\u00e0 b\u1ed9 nh\u1edb",
+      managingBody: "B\u1ea1n c\u00f3 th\u1ec3 x\u00f3a ho\u1eb7c ch\u1eb7n cookie v\u00e0 d\u1eef li\u1ec7u trang web trong c\u00e0i \u0111\u1eb7t tr\u00ecnh duy\u1ec7t b\u1ea5t c\u1ee9 l\u00fac n\u00e0o. X\u00f3a ch\u00fang s\u1ebd \u0111\u0103ng xu\u1ea5t b\u1ea1n v\u00e0 \u0111\u1eb7t l\u1ea1i c\u00e1c t\u00f9y ch\u1ecdn. N\u1ebfu c\u00f3 c\u00e2u h\u1ecfi, h\u00e3y li\u00ean h\u1ec7 {email}.",
+      manageButton: "Qu\u1ea3n l\u00fd t\u00f9y ch\u1ecdn cookie"
     }
   };

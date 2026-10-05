@@ -2128,5 +2128,70 @@ export const de: LocaleTranslations = {
         devTools: "Parallele Agentenflotte, Projekte, Triage",
         brain: "Ihr Vault, bereit f\u00fcr Agenten"
       }
+    },
+    cookiePolicy: {
+      tldr: [
+        "Diese Website setzt ein einziges eigenes Cookie (prefer-full, f\u00fcr die Mobilansicht) und speichert einige Einstellungen im lokalen Speicher Ihres Browsers. Jeder Eintrag ist unten aufgef\u00fchrt.",
+        "Keine Werbung, kein website\u00fcbergreifendes Tracking und kein Fingerprinting jeglicher Art.",
+        "Sie k\u00f6nnen alles jederzeit in Ihren Browsereinstellungen l\u00f6schen."
+      ],
+      lastUpdated: "Zuletzt aktualisiert: {date}",
+      approachHeading: "Unser Umgang mit Cookies und Speicher",
+      approachBody: "Wir speichern nur, was die Website braucht. Browserspeicher wie der lokale Speicher gilt nach EU-Recht wie ein Cookie, deshalb umfasst die Liste unten beides. Wir verwenden keine Werbe-Cookies, keine Tracking-Pixel und kein Fingerprinting.",
+      registerHeading: "Was wir auf Ihrem Ger\u00e4t speichern",
+      registerIntro: "Alle Cookies und Speicherschl\u00fcssel, die diese Website schreibt, nach Zweck gruppiert. Ein Name, der auf * endet, steht f\u00fcr eine Gruppe von Schl\u00fcsseln, etwa einen pro Richtlinie oder Checkliste.",
+      categories: {
+        necessary: {
+          title: "Unbedingt erforderlich",
+          description: "N\u00f6tig, damit die Website tut, was Sie angefordert haben. Sie sind immer aktiv."
+        },
+        preferences: {
+          title: "Pr\u00e4ferenzen",
+          description: "Merken sich Ihre Entscheidungen, damit die Website so aussieht und sich so verh\u00e4lt, wie Sie es eingestellt haben."
+        },
+        functional: {
+          title: "Funktional",
+          description: "Halten Funktionen \u00fcber Besuche hinweg am Laufen: Ihren Fortschritt, was Sie schon gesehen haben, und Ihre Stimmen."
+        },
+        analytics: {
+          title: "Analyse",
+          description: "F\u00fcr Analysen wird nichts gespeichert. Wenn Sie im Cookie-Banner \"Accept All\" w\u00e4hlen, z\u00e4hlt die Website Seitenaufrufe und einige wichtige Aktionen anonym, ohne etwas auf Ihr Ger\u00e4t zu schreiben. Wenn Sie \"Essential Only\" w\u00e4hlen, wird nichts gez\u00e4hlt."
+        }
+      },
+      mechanisms: {
+        cookie: "Cookie",
+        localStorage: "Lokaler Speicher"
+      },
+      lifetimes: {
+        oneYear: "1 Jahr",
+        untilCleared: "Bis Sie ihn l\u00f6schen",
+        untilSignOut: "Bis Sie sich abmelden"
+      },
+      purposes: {
+        consent: "Merkt sich Ihre Auswahl im Cookie-Banner.",
+        authSession: "H\u00e4lt Sie im Dashboard angemeldet. Wird von Supabase, unserem Anmeldeanbieter, geschrieben, und nur, wenn Sie sich anmelden.",
+        theme: "Merkt sich das von Ihnen gew\u00e4hlte Farbschema.",
+        language: "Merkt sich die von Ihnen gew\u00e4hlte Sprache.",
+        fullSite: "Merkt sich auf dem Smartphone, dass Sie die vollst\u00e4ndige Website statt der Mobilansicht gew\u00e4hlt haben.",
+        tourVolume: "Merkt sich die Lautst\u00e4rke der Sprecherstimme in der gef\u00fchrten Tour.",
+        dashboardPrefs: "Merkt sich Ihre Dashboard-Ansichten, -Filter und -Einstellungen, etwa Review-Eskalation und Vorlesen.",
+        tourSeen: "Merkt sich, dass Sie die gef\u00fchrte Tour gesehen haben, damit sie nicht erneut angeboten wird.",
+        policySeen: "Merkt sich, wann Sie die einzelnen Richtlinien auf dieser Seite zuletzt gelesen haben, damit Aktualisierungen markiert werden k\u00f6nnen.",
+        dashboardActivity: "Merkt sich, wann Sie das Dashboard zuletzt ge\u00f6ffnet haben und wie oft ein Demo-Ereignis wiederholt wurde.",
+        checklist: "Merkt sich, welche Punkte der Checklisten im Leitfaden Sie abgehakt haben.",
+        voting: "Eine zuf\u00e4llige ID, mit der Sie pro Funktion nur einmal abstimmen k\u00f6nnen, und ein zuf\u00e4lliger Spitzname (zum Beispiel SwiftFox), der bei Ihren Kommentaren angezeigt wird. Beide werden mit Ihren Stimmen und Kommentaren gesendet, und keiner enth\u00e4lt personenbezogene Daten."
+      },
+      notUsedHeading: "Was wir nicht verwenden",
+      notUsed: [
+        "Keine Werbe- oder Remarketing-Cookies",
+        "Kein website\u00fcbergreifendes Tracking",
+        "Keine Tracking-Pixel sozialer Netzwerke",
+        "Keine Analyse-Cookies und kein Analysespeicher"
+      ],
+      thirdPartyHeading: "Cookies von Drittanbietern",
+      thirdPartyBody: "Wenn Sie sich anmelden, durchlaufen Sie Supabase, unseren Anmeldeanbieter, und den Kontoanbieter Ihrer Wahl, etwa Google. Diese k\u00f6nnen w\u00e4hrend der Anmeldung Cookies auf ihren eigenen Domains setzen, nach ihren eigenen Richtlinien. Wir verwenden diese Cookies nicht zum Tracking.",
+      managingHeading: "Cookies und Speicher verwalten",
+      managingBody: "Sie k\u00f6nnen Cookies und Websitedaten jederzeit in Ihren Browsereinstellungen l\u00f6schen oder blockieren. Dadurch werden Sie abgemeldet und Ihre Pr\u00e4ferenzen zur\u00fcckgesetzt. Bei Fragen wenden Sie sich an {email}.",
+      manageButton: "Cookie-Einstellungen verwalten"
     }
   };

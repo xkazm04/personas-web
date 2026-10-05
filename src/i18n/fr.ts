@@ -2131,5 +2131,70 @@ export const fr: LocaleTranslations = {
         devTools: "Flotte d'agents en parall\u00e8le, projets, tri",
         brain: "Votre coffre, pr\u00eat pour les agents"
       }
+    },
+    cookiePolicy: {
+      tldr: [
+        "Ce site d\u00e9pose un seul cookie qui lui est propre (prefer-full, pour l'affichage mobile) et conserve quelques r\u00e9glages dans le stockage local de votre navigateur. Chaque \u00e9l\u00e9ment est list\u00e9 ci-dessous.",
+        "Aucune publicit\u00e9, aucun suivi intersites, aucune empreinte num\u00e9rique, de quelque nature que ce soit.",
+        "Vous pouvez tout effacer \u00e0 tout moment dans les r\u00e9glages de votre navigateur."
+      ],
+      lastUpdated: "Derni\u00e8re mise \u00e0 jour\u00a0: {date}",
+      approachHeading: "Notre approche des cookies et du stockage",
+      approachBody: "Nous ne conservons que ce dont le site a besoin. Selon les r\u00e8gles de l'UE, le stockage du navigateur, comme le stockage local, est trait\u00e9 comme un cookie\u00a0; la liste ci-dessous couvre donc les deux. Nous n'utilisons ni cookies publicitaires, ni pixels de suivi, ni empreinte num\u00e9rique.",
+      registerHeading: "Ce que nous stockons sur votre appareil",
+      registerIntro: "Tous les cookies et cl\u00e9s de stockage que ce site \u00e9crit, regroup\u00e9s par finalit\u00e9. Un nom se terminant par * d\u00e9signe une famille de cl\u00e9s, par exemple une par politique ou par liste de contr\u00f4le.",
+      categories: {
+        necessary: {
+          title: "Strictement n\u00e9cessaires",
+          description: "Indispensables pour que le site fasse ce que vous avez demand\u00e9. Ils sont toujours actifs."
+        },
+        preferences: {
+          title: "Pr\u00e9f\u00e9rences",
+          description: "M\u00e9morisent vos choix pour que le site s'affiche et se comporte comme vous l'avez r\u00e9gl\u00e9."
+        },
+        functional: {
+          title: "Fonctionnels",
+          description: "Assurent la continuit\u00e9 des fonctionnalit\u00e9s d'une visite \u00e0 l'autre\u00a0: votre progression, ce que vous avez d\u00e9j\u00e0 vu et vos votes."
+        },
+        analytics: {
+          title: "Mesure d'audience",
+          description: "Rien n'est stock\u00e9 pour la mesure d'audience. Si vous choisissez \"Accept All\" dans le bandeau cookies, le site compte anonymement les pages vues et quelques actions cl\u00e9s, sans rien \u00e9crire sur votre appareil. Si vous choisissez \"Essential Only\", rien n'est compt\u00e9."
+        }
+      },
+      mechanisms: {
+        cookie: "Cookie",
+        localStorage: "Stockage local"
+      },
+      lifetimes: {
+        oneYear: "1 an",
+        untilCleared: "Jusqu'\u00e0 ce que vous l'effaciez",
+        untilSignOut: "Jusqu'\u00e0 votre d\u00e9connexion"
+      },
+      purposes: {
+        consent: "M\u00e9morise votre choix dans le bandeau cookies.",
+        authSession: "Vous garde connect\u00e9 au tableau de bord. \u00c9crit par Supabase, notre fournisseur de connexion, et uniquement si vous vous connectez.",
+        theme: "M\u00e9morise le th\u00e8me de couleurs que vous avez choisi.",
+        language: "M\u00e9morise la langue que vous avez choisie.",
+        fullSite: "Sur un t\u00e9l\u00e9phone, m\u00e9morise que vous avez choisi le site complet plut\u00f4t que l'affichage mobile.",
+        tourVolume: "M\u00e9morise le volume de la narration de la visite guid\u00e9e.",
+        dashboardPrefs: "M\u00e9morise vos vues, filtres et r\u00e9glages du tableau de bord, comme l'escalade des revues et la lecture \u00e0 voix haute.",
+        tourSeen: "M\u00e9morise que vous avez vu la visite guid\u00e9e, pour ne pas vous la proposer \u00e0 nouveau.",
+        policySeen: "M\u00e9morise la derni\u00e8re fois que vous avez lu chaque politique de cette page, afin de signaler les mises \u00e0 jour.",
+        dashboardActivity: "M\u00e9morise la derni\u00e8re fois que vous avez ouvert le tableau de bord et le nombre de nouvelles tentatives d'un \u00e9v\u00e9nement de d\u00e9monstration.",
+        checklist: "M\u00e9morise les \u00e9l\u00e9ments des listes de contr\u00f4le du guide que vous avez coch\u00e9s.",
+        voting: "Un identifiant al\u00e9atoire qui vous permet de voter une seule fois par fonctionnalit\u00e9, et un pseudonyme al\u00e9atoire (par exemple SwiftFox) affich\u00e9 sur vos commentaires. Les deux sont envoy\u00e9s avec vos votes et commentaires, et aucun ne contient d'informations personnelles."
+      },
+      notUsedHeading: "Ce que nous n'utilisons pas",
+      notUsed: [
+        "Aucun cookie publicitaire ou de remarketing",
+        "Aucun suivi intersites",
+        "Aucun pixel de suivi des r\u00e9seaux sociaux",
+        "Aucun cookie ni stockage de mesure d'audience"
+      ],
+      thirdPartyHeading: "Cookies tiers",
+      thirdPartyBody: "Si vous vous connectez, vous passez par Supabase, notre fournisseur de connexion, et par le fournisseur de compte de votre choix, comme Google. Ceux-ci peuvent d\u00e9poser des cookies sur leurs propres domaines pendant la connexion, selon leurs propres politiques. Nous n'utilisons pas ces cookies pour vous suivre.",
+      managingHeading: "G\u00e9rer les cookies et le stockage",
+      managingBody: "Vous pouvez effacer ou bloquer les cookies et les donn\u00e9es du site \u00e0 tout moment dans les r\u00e9glages de votre navigateur. Les effacer vous d\u00e9connecte et r\u00e9initialise vos pr\u00e9f\u00e9rences. Pour toute question, \u00e9crivez-nous \u00e0 {email}.",
+      manageButton: "G\u00e9rer les pr\u00e9f\u00e9rences de cookies"
     }
   };

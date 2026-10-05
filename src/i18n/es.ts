@@ -2124,5 +2124,70 @@ export const es: LocaleTranslations = {
         devTools: "Flota de agentes en paralelo, proyectos, triaje",
         brain: "Tu b\u00f3veda, lista para agentes"
       }
+    },
+    cookiePolicy: {
+      tldr: [
+        "Este sitio usa una sola cookie propia (prefer-full, para la vista m\u00f3vil) y guarda algunos ajustes en el almacenamiento local de tu navegador. Cada elemento aparece en la lista de abajo.",
+        "Sin publicidad, sin seguimiento entre sitios y sin huella digital de ning\u00fan tipo.",
+        "Puedes borrarlo todo en cualquier momento desde los ajustes de tu navegador."
+      ],
+      lastUpdated: "\u00daltima actualizaci\u00f3n: {date}",
+      approachHeading: "Nuestro enfoque sobre cookies y almacenamiento",
+      approachBody: "Solo guardamos lo que el sitio necesita. Seg\u00fan las normas de la UE, el almacenamiento del navegador, como el almacenamiento local, cuenta como una cookie, as\u00ed que la lista de abajo incluye ambos. No usamos cookies publicitarias, p\u00edxeles de seguimiento ni huella digital.",
+      registerHeading: "Lo que guardamos en tu dispositivo",
+      registerIntro: "Todas las cookies y claves de almacenamiento que escribe este sitio, agrupadas por finalidad. Un nombre que termina en * representa una familia de claves, por ejemplo una por pol\u00edtica o lista de comprobaci\u00f3n.",
+      categories: {
+        necessary: {
+          title: "Estrictamente necesarias",
+          description: "Necesarias para que el sitio haga lo que pediste. Siempre est\u00e1n activas."
+        },
+        preferences: {
+          title: "Preferencias",
+          description: "Recuerdan lo que elegiste para que el sitio se vea y funcione como lo configuraste."
+        },
+        functional: {
+          title: "Funcionales",
+          description: "Mantienen las funciones entre visitas: tu progreso, lo que ya viste y tus votos."
+        },
+        analytics: {
+          title: "Anal\u00edtica",
+          description: "No se guarda nada para anal\u00edtica. Si eliges \"Accept All\" en el banner de cookies, el sitio cuenta de forma an\u00f3nima las p\u00e1ginas vistas y algunas acciones clave, sin escribir nada en tu dispositivo. Si eliges \"Essential Only\", no se cuenta nada."
+        }
+      },
+      mechanisms: {
+        cookie: "Cookie",
+        localStorage: "Almacenamiento local"
+      },
+      lifetimes: {
+        oneYear: "1 a\u00f1o",
+        untilCleared: "Hasta que lo borres",
+        untilSignOut: "Hasta que cierres sesi\u00f3n"
+      },
+      purposes: {
+        consent: "Recuerda lo que elegiste en el banner de cookies.",
+        authSession: "Mantiene tu sesi\u00f3n iniciada en el panel. La escribe Supabase, nuestro proveedor de inicio de sesi\u00f3n, y solo si inicias sesi\u00f3n.",
+        theme: "Recuerda el tema de color que elegiste.",
+        language: "Recuerda el idioma que elegiste.",
+        fullSite: "En un tel\u00e9fono, recuerda que elegiste el sitio completo en lugar de la vista m\u00f3vil.",
+        tourVolume: "Recuerda el volumen de la narraci\u00f3n del recorrido guiado.",
+        dashboardPrefs: "Recuerda tus vistas, filtros y ajustes del panel, como la escalada de revisiones y la lectura en voz alta.",
+        tourSeen: "Recuerda que ya viste el recorrido guiado, para no ofrec\u00e9rtelo de nuevo.",
+        policySeen: "Recuerda cu\u00e1ndo le\u00edste por \u00faltima vez cada pol\u00edtica de esta p\u00e1gina, para poder se\u00f1alar las actualizaciones.",
+        dashboardActivity: "Recuerda cu\u00e1ndo abriste el panel por \u00faltima vez y cu\u00e1ntas veces se reintent\u00f3 un evento de demostraci\u00f3n.",
+        checklist: "Recuerda qu\u00e9 elementos de las listas de comprobaci\u00f3n de la gu\u00eda marcaste.",
+        voting: "Un ID aleatorio que te permite votar una sola vez por funci\u00f3n, y un apodo aleatorio (como SwiftFox) que aparece en tus comentarios. Ambos se env\u00edan con tus votos y comentarios, y ninguno contiene informaci\u00f3n personal."
+      },
+      notUsedHeading: "Lo que no usamos",
+      notUsed: [
+        "Ni cookies de publicidad ni de remarketing",
+        "Ning\u00fan seguimiento entre sitios",
+        "Ning\u00fan p\u00edxel de seguimiento de redes sociales",
+        "Ni cookies ni almacenamiento de anal\u00edtica"
+      ],
+      thirdPartyHeading: "Cookies de terceros",
+      thirdPartyBody: "Si inicias sesi\u00f3n, pasas por Supabase, nuestro proveedor de inicio de sesi\u00f3n, y por el proveedor de cuenta que elijas, como Google. Pueden establecer cookies en sus propios dominios durante el inicio de sesi\u00f3n, seg\u00fan sus propias pol\u00edticas. No usamos esas cookies para hacer seguimiento.",
+      managingHeading: "Gestionar cookies y almacenamiento",
+      managingBody: "Puedes borrar o bloquear las cookies y los datos del sitio desde los ajustes de tu navegador en cualquier momento. Al borrarlos se cierra tu sesi\u00f3n y se restablecen tus preferencias. Si tienes preguntas, escr\u00edbenos a {email}.",
+      manageButton: "Gestionar preferencias de cookies"
     }
   };

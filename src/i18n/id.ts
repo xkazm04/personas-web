@@ -2314,5 +2314,70 @@ export const id: LocaleTranslations = {
         devTools: "Armada agen paralel, proyek, triase",
         brain: "Vault Anda, siap untuk agen"
       }
+    },
+    cookiePolicy: {
+      tldr: [
+        "Situs ini hanya memasang satu cookie miliknya sendiri (prefer-full, untuk tampilan seluler) dan menyimpan beberapa pengaturan di penyimpanan lokal browser Anda. Setiap item tercantum di bawah.",
+        "Tanpa iklan, pelacakan lintas situs, atau sidik jari digital dalam bentuk apa pun.",
+        "Anda dapat menghapus semuanya kapan saja di pengaturan browser."
+      ],
+      lastUpdated: "Terakhir diperbarui: {date}",
+      approachHeading: "Pendekatan kami terhadap cookie dan penyimpanan",
+      approachBody: "Kami hanya menyimpan apa yang dibutuhkan situs. Menurut aturan UE, penyimpanan browser seperti penyimpanan lokal diperlakukan sama dengan cookie, jadi daftar di bawah mencakup keduanya. Kami tidak menggunakan cookie iklan, piksel pelacak, atau sidik jari digital.",
+      registerHeading: "Apa yang kami simpan di perangkat Anda",
+      registerIntro: "Semua cookie dan kunci penyimpanan yang ditulis situs ini, dikelompokkan menurut tujuannya. Nama yang diakhiri * mewakili sekelompok kunci, misalnya satu untuk setiap kebijakan atau daftar periksa.",
+      categories: {
+        necessary: {
+          title: "Sangat diperlukan",
+          description: "Dibutuhkan agar situs dapat melakukan apa yang Anda minta. Selalu aktif."
+        },
+        preferences: {
+          title: "Preferensi",
+          description: "Mengingat pilihan Anda, agar situs tampil dan berperilaku sesuai pengaturan Anda."
+        },
+        functional: {
+          title: "Fungsional",
+          description: "Menjaga fitur tetap berjalan antarkunjungan: kemajuan Anda, apa yang sudah Anda lihat, dan suara Anda."
+        },
+        analytics: {
+          title: "Analitik",
+          description: "Tidak ada yang disimpan untuk analitik. Jika Anda memilih \"Accept All\" di banner cookie, situs menghitung tampilan halaman dan beberapa tindakan utama secara anonim, tanpa menulis apa pun ke perangkat Anda. Jika Anda memilih \"Essential Only\", tidak ada yang dihitung."
+        }
+      },
+      mechanisms: {
+        cookie: "Cookie",
+        localStorage: "Penyimpanan lokal"
+      },
+      lifetimes: {
+        oneYear: "1 tahun",
+        untilCleared: "Sampai Anda menghapusnya",
+        untilSignOut: "Sampai Anda keluar"
+      },
+      purposes: {
+        consent: "Mengingat pilihan Anda di banner cookie.",
+        authSession: "Menjaga Anda tetap masuk ke dasbor. Ditulis oleh Supabase, penyedia login kami, dan hanya jika Anda masuk.",
+        theme: "Mengingat tema warna yang Anda pilih.",
+        language: "Mengingat bahasa yang Anda pilih.",
+        fullSite: "Di ponsel, mengingat bahwa Anda memilih situs lengkap alih-alih tampilan seluler.",
+        tourVolume: "Mengingat volume narasi tur terpandu.",
+        dashboardPrefs: "Mengingat tampilan, filter, dan pengaturan dasbor Anda, seperti eskalasi tinjauan dan baca dengan suara.",
+        tourSeen: "Mengingat bahwa Anda sudah melihat tur terpandu, agar tidak ditawarkan lagi.",
+        policySeen: "Mengingat kapan terakhir kali Anda membaca setiap kebijakan di halaman ini, agar pembaruan dapat ditandai.",
+        dashboardActivity: "Mengingat kapan terakhir kali Anda membuka dasbor dan berapa kali sebuah peristiwa demo dicoba ulang.",
+        checklist: "Mengingat item daftar periksa panduan mana yang sudah Anda centang.",
+        voting: "ID acak yang memungkinkan Anda memberi suara sekali per fitur, dan nama panggilan acak (seperti SwiftFox) yang ditampilkan pada komentar Anda. Keduanya dikirim bersama suara dan komentar Anda, dan tidak satu pun berisi informasi pribadi."
+      },
+      notUsedHeading: "Yang tidak kami gunakan",
+      notUsed: [
+        "Tidak ada cookie iklan atau pemasaran ulang",
+        "Tidak ada pelacakan lintas situs",
+        "Tidak ada piksel pelacak media sosial",
+        "Tidak ada cookie analitik atau penyimpanan analitik"
+      ],
+      thirdPartyHeading: "Cookie pihak ketiga",
+      thirdPartyBody: "Jika Anda masuk, Anda melewati Supabase, penyedia login kami, dan penyedia akun pilihan Anda, seperti Google. Mereka dapat memasang cookie di domain mereka sendiri selama proses masuk, sesuai kebijakan mereka sendiri. Kami tidak menggunakan cookie tersebut untuk pelacakan.",
+      managingHeading: "Mengelola cookie dan penyimpanan",
+      managingBody: "Anda dapat menghapus atau memblokir cookie dan data situs di pengaturan browser kapan saja. Menghapusnya akan membuat Anda keluar dan mengatur ulang preferensi Anda. Untuk pertanyaan, hubungi {email}.",
+      manageButton: "Kelola preferensi cookie"
     }
   };

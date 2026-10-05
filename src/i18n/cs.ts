@@ -2158,5 +2158,70 @@ export const cs: LocaleTranslations = {
         devTools: "Paraleln\u00ed flotila agent\u016f, projekty, t\u0159\u00edd\u011bn\u00ed",
         brain: "V\u00e1\u0161 trezor, p\u0159ipraven\u00fd pro agenty"
       }
+    },
+    cookiePolicy: {
+      tldr: [
+        "Tento web nastavuje jedin\u00fd vlastn\u00ed cookie (prefer-full, pro mobiln\u00ed zobrazen\u00ed) a n\u011bkolik nastaven\u00ed ukl\u00e1d\u00e1 do m\u00edstn\u00edho \u00falo\u017ei\u0161t\u011b va\u0161eho prohl\u00ed\u017ee\u010de. Ka\u017ed\u00e1 polo\u017eka je uvedena n\u00ed\u017ee.",
+        "\u017d\u00e1dn\u00e1 reklama, sledov\u00e1n\u00ed nap\u0159\u00ed\u010d weby ani fingerprinting jak\u00e9hokoli druhu.",
+        "V\u0161e m\u016f\u017eete kdykoli vymazat v nastaven\u00ed prohl\u00ed\u017ee\u010de."
+      ],
+      lastUpdated: "Naposledy aktualizov\u00e1no: {date}",
+      approachHeading: "N\u00e1\u0161 p\u0159\u00edstup k cookies a \u00falo\u017ei\u0161ti",
+      approachBody: "Ukl\u00e1d\u00e1me jen to, co web pot\u0159ebuje. \u00dalo\u017ei\u0161t\u011b prohl\u00ed\u017ee\u010de, nap\u0159\u00edklad m\u00edstn\u00ed \u00falo\u017ei\u0161t\u011b, se podle pravidel EU posuzuje stejn\u011b jako cookie, proto seznam n\u00ed\u017ee zahrnuje oboj\u00ed. Nepou\u017e\u00edv\u00e1me reklamn\u00ed cookies, sledovac\u00ed pixely ani fingerprinting.",
+      registerHeading: "Co ukl\u00e1d\u00e1me do va\u0161eho za\u0159\u00edzen\u00ed",
+      registerIntro: "V\u0161echny cookies a kl\u00ed\u010de \u00falo\u017ei\u0161t\u011b, kter\u00e9 tento web zapisuje, seskupen\u00e9 podle \u00fa\u010delu. N\u00e1zev kon\u010d\u00edc\u00ed znakem * ozna\u010duje skupinu kl\u00ed\u010d\u016f, nap\u0159\u00edklad jeden pro ka\u017edou z\u00e1sadu nebo kontroln\u00ed seznam.",
+      categories: {
+        necessary: {
+          title: "Nezbytn\u011b nutn\u00e9",
+          description: "Pot\u0159ebn\u00e9 k tomu, aby web ud\u011blal, o co jste po\u017e\u00e1dali. Jsou v\u017edy zapnut\u00e9."
+        },
+        preferences: {
+          title: "P\u0159edvolby",
+          description: "Pamatuj\u00ed si va\u0161e volby, aby web vypadal a choval se tak, jak jste si ho nastavili."
+        },
+        functional: {
+          title: "Funk\u010dn\u00ed",
+          description: "Udr\u017euj\u00ed funkce v chodu mezi n\u00e1v\u0161t\u011bvami: v\u00e1\u0161 postup, co jste u\u017e vid\u011bli, a va\u0161e hlasy."
+        },
+        analytics: {
+          title: "Analytika",
+          description: "Pro analytiku se nic neukl\u00e1d\u00e1. Pokud v li\u0161t\u011b cookies zvol\u00edte \"Accept All\", web anonymn\u011b po\u010d\u00edt\u00e1 zobrazen\u00ed str\u00e1nek a n\u011bkolik kl\u00ed\u010dov\u00fdch akc\u00ed, ani\u017e by cokoli zapisoval do va\u0161eho za\u0159\u00edzen\u00ed. Pokud zvol\u00edte \"Essential Only\", nepo\u010d\u00edt\u00e1 se nic."
+        }
+      },
+      mechanisms: {
+        cookie: "Cookie",
+        localStorage: "M\u00edstn\u00ed \u00falo\u017ei\u0161t\u011b"
+      },
+      lifetimes: {
+        oneYear: "1 rok",
+        untilCleared: "Dokud ho nevyma\u017eete",
+        untilSignOut: "Dokud se neodhl\u00e1s\u00edte"
+      },
+      purposes: {
+        consent: "Pamatuje si va\u0161i volbu v li\u0161t\u011b cookies.",
+        authSession: "Udr\u017euje v\u00e1s p\u0159ihl\u00e1\u0161en\u00e9 k n\u00e1st\u011bnce. Zapisuje ho Supabase, n\u00e1\u0161 poskytovatel p\u0159ihl\u00e1\u0161en\u00ed, a to jen pokud se p\u0159ihl\u00e1s\u00edte.",
+        theme: "Pamatuje si zvolen\u00fd barevn\u00fd motiv.",
+        language: "Pamatuje si zvolen\u00fd jazyk.",
+        fullSite: "Na telefonu si pamatuje, \u017ee jste m\u00edsto mobiln\u00edho zobrazen\u00ed zvolili plnou verzi webu.",
+        tourVolume: "Pamatuje si hlasitost koment\u00e1\u0159e v pr\u016fvodci.",
+        dashboardPrefs: "Pamatuje si va\u0161e zobrazen\u00ed, filtry a nastaven\u00ed n\u00e1st\u011bnky, nap\u0159\u00edklad eskalaci recenz\u00ed a p\u0159ed\u010d\u00edt\u00e1n\u00ed.",
+        tourSeen: "Pamatuje si, \u017ee jste pr\u016fvodce u\u017e vid\u011bli, aby se znovu nenab\u00edzel.",
+        policySeen: "Pamatuje si, kdy jste naposledy \u010detli jednotliv\u00e9 z\u00e1sady na t\u00e9to str\u00e1nce, aby bylo mo\u017en\u00e9 ozna\u010dit aktualizace.",
+        dashboardActivity: "Pamatuje si, kdy jste naposledy otev\u0159eli n\u00e1st\u011bnku a kolikr\u00e1t se opakovala uk\u00e1zkov\u00e1 ud\u00e1lost.",
+        checklist: "Pamatuje si, kter\u00e9 polo\u017eky kontroln\u00edch seznam\u016f v pr\u016fvodci jste za\u0161krtli.",
+        voting: "N\u00e1hodn\u00e9 ID, d\u00edky kter\u00e9mu m\u016f\u017eete pro ka\u017edou funkci hlasovat jen jednou, a n\u00e1hodn\u00e1 p\u0159ezd\u00edvka (nap\u0159\u00edklad SwiftFox) zobrazen\u00e1 u va\u0161ich koment\u00e1\u0159\u016f. Oboj\u00ed se odes\u00edl\u00e1 s va\u0161imi hlasy a koment\u00e1\u0159i a ani jedno neobsahuje osobn\u00ed \u00fadaje."
+      },
+      notUsedHeading: "Co nepou\u017e\u00edv\u00e1me",
+      notUsed: [
+        "\u017d\u00e1dn\u00e9 reklamn\u00ed ani remarketingov\u00e9 cookies",
+        "\u017d\u00e1dn\u00e9 sledov\u00e1n\u00ed nap\u0159\u00ed\u010d weby",
+        "\u017d\u00e1dn\u00e9 sledovac\u00ed pixely soci\u00e1ln\u00edch s\u00edt\u00ed",
+        "\u017d\u00e1dn\u00e9 analytick\u00e9 cookies ani analytick\u00e9 \u00falo\u017ei\u0161t\u011b"
+      ],
+      thirdPartyHeading: "Cookies t\u0159et\u00edch stran",
+      thirdPartyBody: "Pokud se p\u0159ihl\u00e1s\u00edte, projdete p\u0159es Supabase, na\u0161eho poskytovatele p\u0159ihl\u00e1\u0161en\u00ed, a p\u0159es poskytovatele \u00fa\u010dtu, kter\u00e9ho si zvol\u00edte, nap\u0159\u00edklad Google. Ti mohou b\u011bhem p\u0159ihl\u00e1\u0161en\u00ed nastavit cookies na sv\u00fdch vlastn\u00edch dom\u00e9n\u00e1ch podle sv\u00fdch vlastn\u00edch z\u00e1sad. Tyto cookies nepou\u017e\u00edv\u00e1me ke sledov\u00e1n\u00ed.",
+      managingHeading: "Spr\u00e1va cookies a \u00falo\u017ei\u0161t\u011b",
+      managingBody: "Cookies a data webu m\u016f\u017eete kdykoli vymazat nebo zablokovat v nastaven\u00ed prohl\u00ed\u017ee\u010de. Jejich vymaz\u00e1n\u00edm se odhl\u00e1s\u00edte a obnov\u00edte sv\u00e9 p\u0159edvolby. S dotazy se obra\u0165te na {email}.",
+      manageButton: "Spravovat p\u0159edvolby cookies"
     }
   };
