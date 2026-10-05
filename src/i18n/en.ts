@@ -1271,7 +1271,6 @@
     subheading: string;
     features: {
       macos: { title: string; description: string };
-      i18n: { title: string; description: string };
       dashboard: { title: string; description: string };
       enterprise: { title: string; description: string };
     };
@@ -4515,10 +4514,6 @@ export const en: Translations = {
       macos: {
         title: 'macOS Support',
         description: 'Full native macOS build with Apple Silicon optimization, Spotlight integration, and menu bar agent controls.',
-      },
-      i18n: {
-        title: 'Internationalization',
-        description: 'Multi-language agent instructions, localized UI, and region-aware scheduling for worldwide teams.',
       },
       dashboard: {
         title: 'Web Dashboard',

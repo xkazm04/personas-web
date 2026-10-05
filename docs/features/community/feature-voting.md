@@ -4,7 +4,7 @@
 ## What it does
 A homepage section (`#vote`) where visitors shape the roadmap without signing in:
 
-- **Vote / unvote** — one tap toggles an upvote on a roadmap feature (`macos`, `i18n`, `dashboard`, `enterprise`). The count updates optimistically and rolls back on API failure. Displayed count = a marketing **seed** (`feature.votes`) + the live API count.
+- **Vote / unvote** — one tap toggles an upvote on a roadmap feature (`macos`, `dashboard`, `enterprise`). Internationalization (`i18n`) was removed from the votable set and from every `ALLOWED_FEATURES` allowlist on 2026-10-05: the desktop app ships 14 UI locales, so the feature is done (roadmap phase 6 is `completed` and `public/roadmap/v1.json` item 4 is `completed`). Votes already stored under `i18n` stay in the database but are no longer shown. The count updates optimistically and rolls back on API failure. Displayed count = a marketing **seed** (`feature.votes`) + the live API count.
 - **Boost** — if a Ko-fi username is configured, each card shows a rocket button opening `$5 / $15 / $25` tiers. Clicking a tier optimistically adds the tier weight to the feature's boost total and opens the Ko-fi page in a new tab. Each voter contributes **one boost per feature** (re-boosting replaces the prior tier, not stacks).
 - **Comment threads** — per-feature, collapsible discussion with one level of replies. Author is an auto-generated anonymous handle (e.g. `SwiftFox`). Comments post optimistically.
 - **Custom requests** — a free-text box ("Something else in mind?") posts a suggestion (max 1000 chars) with inline success/error/rate-limit feedback.

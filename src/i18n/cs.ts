@@ -1476,10 +1476,6 @@ export const cs: LocaleTranslations = {
           title: "Podpora macOS",
           description: "Plnohodnotn\u00fd nativn\u00ed build pro macOS s optimalizac\u00ed pro Apple Silicon, integrac\u00ed Spotlight a ovl\u00e1d\u00e1n\u00edm agent\u016f v panelu nab\u00eddek."
         },
-        i18n: {
-          title: "Internacionalizace",
-          description: "V\u00edcejazy\u010dn\u00e9 instrukce pro agenty, lokalizovan\u00e9 rozhran\u00ed a pl\u00e1nov\u00e1n\u00ed s ohledem na region pro celosv\u011btov\u00e9 t\u00fdmy."
-        },
         dashboard: {
           title: "Webov\u00fd dashboard",
           description: "Prohl\u00ed\u017ee\u010dov\u00fd dashboard pro sledov\u00e1n\u00ed agent\u016f v re\u00e1ln\u00e9m \u010dase, historii spu\u0161t\u011bn\u00ed a spr\u00e1vu flotily z libovoln\u00e9ho za\u0159\u00edzen\u00ed."

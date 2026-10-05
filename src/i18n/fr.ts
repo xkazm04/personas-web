@@ -1476,10 +1476,6 @@ export const fr: LocaleTranslations = {
           title: "Prise en charge de macOS",
           description: "Version macOS enti\u00e8rement native avec optimisation Apple Silicon, int\u00e9gration Spotlight et contr\u00f4les d\u2019agents dans la barre de menus."
         },
-        i18n: {
-          title: "Internationalisation",
-          description: "Instructions d'agent multilingues, interface localis\u00e9e, et planification tenant compte des fuseaux r\u00e9gionaux pour les \u00e9quipes internationales."
-        },
         dashboard: {
           title: "Tableau de bord web",
           description: "Tableau de bord dans le navigateur pour la surveillance des agents en temps r\u00e9el, l\u2019historique d\u2019ex\u00e9cution et la gestion de flotte depuis n\u2019importe quel appareil."

@@ -1476,10 +1476,6 @@ export const id: LocaleTranslations = {
           title: "Dukungan macOS",
           description: "Build macOS native sepenuhnya dengan optimasi Apple Silicon, integrasi Spotlight, dan kontrol agen dari menu bar."
         },
-        i18n: {
-          title: "Internasionalisasi",
-          description: "Instruksi agen multibahasa, antarmuka terlokalisasi, dan penjadwalan yang sadar wilayah untuk tim di seluruh dunia."
-        },
         dashboard: {
           title: "Dasbor Web",
           description: "Dasbor berbasis browser untuk pemantauan agen real-time, riwayat eksekusi, dan manajemen armada dari perangkat apa pun."

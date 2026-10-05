@@ -1476,10 +1476,6 @@ export const de: LocaleTranslations = {
           title: "macOS-Unterst\u00fctzung",
           description: "Vollst\u00e4ndig native macOS-Version mit Apple-Silicon-Optimierung, Spotlight-Integration und Agentensteuerung in der Men\u00fcleiste."
         },
-        i18n: {
-          title: "Internationalisierung",
-          description: "Mehrsprachige Agentenanweisungen, lokalisierte Oberfl\u00e4che und regionsbewusste Planung f\u00fcr Teams weltweit."
-        },
         dashboard: {
           title: "Web-Dashboard",
           description: "Browserbasiertes Dashboard f\u00fcr Echtzeit-Agenten\u00fcberwachung, Ausf\u00fchrungsverlauf und Flottenverwaltung von jedem Ger\u00e4t aus."

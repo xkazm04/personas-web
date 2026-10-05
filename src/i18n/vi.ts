@@ -1476,10 +1476,6 @@ export const vi: LocaleTranslations = {
           title: "H\u1ed7 tr\u1ee3 macOS",
           description: "B\u1ea3n build macOS g\u1ed1c \u0111\u1ea7y \u0111\u1ee7 v\u1edbi t\u1ed1i \u01b0u h\u00f3a Apple Silicon, t\u00edch h\u1ee3p Spotlight, v\u00e0 \u0111i\u1ec1u khi\u1ec3n agent tr\u00ean thanh menu."
         },
-        i18n: {
-          title: "Qu\u1ed1c t\u1ebf h\u00f3a",
-          description: "H\u01b0\u1edbng d\u1eabn agent \u0111a ng\u00f4n ng\u1eef, giao di\u1ec7n b\u1ea3n \u0111\u1ecba h\u00f3a, v\u00e0 l\u1eadp l\u1ecbch nh\u1eadn bi\u1ebft khu v\u1ef1c cho c\u00e1c \u0111\u1ed9i nh\u00f3m to\u00e0n c\u1ea7u."
-        },
         dashboard: {
           title: "B\u1ea3ng \u0111i\u1ec1u khi\u1ec3n web",
           description: "B\u1ea3ng \u0111i\u1ec1u khi\u1ec3n d\u1ef1a tr\u00ean tr\u00ecnh duy\u1ec7t \u0111\u1ec3 theo d\u00f5i agent theo th\u1eddi gian th\u1ef1c, l\u1ecbch s\u1eed th\u1ef1c thi v\u00e0 qu\u1ea3n l\u00fd \u0111\u1ed9i agent t\u1eeb b\u1ea5t k\u1ef3 thi\u1ebft b\u1ecb n\u00e0o."

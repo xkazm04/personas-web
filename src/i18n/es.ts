@@ -1476,10 +1476,6 @@ export const es: LocaleTranslations = {
           title: "Compatibilidad con macOS",
           description: "Compilaci\u00f3n de macOS totalmente nativa con optimizaci\u00f3n para Apple Silicon, integraci\u00f3n con Spotlight y controles de agentes desde la barra de men\u00fas."
         },
-        i18n: {
-          title: "Internacionalizaci\u00f3n",
-          description: "Instrucciones de agentes multiling\u00fces, interfaz localizada y programaci\u00f3n adaptada a la regi\u00f3n para equipos de todo el mundo."
-        },
         dashboard: {
           title: "Panel web",
           description: "Panel basado en navegador para la supervisi\u00f3n de agentes en tiempo real, el historial de ejecuci\u00f3n y la gesti\u00f3n de flotas desde cualquier dispositivo."
