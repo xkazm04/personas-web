@@ -2699,21 +2699,123 @@
   landingLab: {
     heroA: {
       label: string;
+      stylised: string;
+      a1: { line1: string; line2: string; sub: string; aria: string; legendEvents: string; legendAgents: string; legendOverseer: string };
+      a2: { line1: string; line2: string; sub: string; aria: string; layerEvents: string; layerPersonas: string; layerTeams: string; layerOverseer: string };
+      a3: { line1: string; line2: string; sub: string; aria: string; tagEvent: string; tagTeam: string; tagOverseer: string };
     };
     heroB: {
       label: string;
+      b1: {
+        line1: string;
+        line2: string;
+        sub: string;
+        aria: string;
+        events: string[];
+        handled: string;
+        yourEvent: string;
+        sendEvent: string;
+        skipIntro: string;
+      };
+      b2: {
+        line1: string;
+        line2: string;
+        sub: string;
+        aria: string;
+        events: string[];
+        done: string[];
+      };
+      b3: {
+        line1: string;
+        line2: string;
+        sub: string;
+        aria: string;
+        teams: string[];
+        delivered: string;
+      };
     };
     useCases: {
       label: string;
+      artLabel: string;
+      needs: { reach: string; notes: string; book: string; track: string; code: string; pay: string };
+      status: string;
+      controls: string;
+      prevCase: string;
+      nextCase: string;
+      capabilities: string;
+      jobsCount: string;
     };
     agentMind: {
       label: string;
+      stylised: string;
+      idleHint: string;
+      illustration: string;
+      wholePlan: string;
+      outcomeTitle: string;
+      underAttention: string;
+      beats: {
+        parse: string;
+        select: string;
+        tools: string;
+        execute: string;
+        verify: string;
+        result: string;
+      };
     };
     hub: {
       label: string;
+      /** The agent a trigger wakes (V1 fact label, V2/V3 story beat). */
+      wakes: string;
     };
     getStarted: {
       label: string;
+      replay: string;
+      stylised: string;
+      gmail: string;
+      slack: string;
+      steps: {
+        install: { title: string; line: string };
+        describe: { title: string; line: string };
+        build: { title: string; line: string };
+        run: { title: string; line: string };
+        away: { title: string; line: string };
+      };
+      v1: {
+        lede: string;
+        artLabel: string;
+        agent: string;
+        morning: string;
+        newEmail: string;
+      };
+      v2: {
+        lede: string;
+        artLabel: string;
+        machine: string;
+        app: string;
+        phrases: { when: string; read: string; think: string; send: string };
+        question: string;
+        answer: string;
+        parts: { when: string; read: string; think: string; send: string };
+        agent: string;
+        on: string;
+        tested: string;
+        posted: string;
+        rail: { install: string; describe: string; build: string; run: string };
+      };
+      v3: {
+        lede: string;
+        artLabel: string;
+        yours: string;
+        yoursLine: string;
+        its: string;
+        itsLine: string;
+        setup: { install: string; describe: string; connect: string };
+        day: string;
+        dayParts: { coffee: string; meetings: string; lunch: string; focus: string; home: string; asleep: string };
+        triggers: { schedule: string; email: string };
+        runs: { client: string; invoice: string; overnight: string; digest: string };
+        onYourPc: string;
+      };
     };
   };
   // END pending-translation namespaces
@@ -5755,21 +5857,164 @@ export const en: Translations = {
   landingLab: {
     heroA: {
       label: 'Landing lab: hero seat A',
+      stylised: 'Stylised illustration',
+      a1: {
+        line1: 'Events in.',
+        line2: 'Work out.',
+        sub: 'Local-first AI agents that react to what happens, work as teams and answer to an Overseer.',
+        aria: 'Animated field: events stream into teams of agents and their results return to an Overseer.',
+        legendEvents: 'Events',
+        legendAgents: 'Agents',
+        legendOverseer: 'Overseer',
+      },
+      a2: {
+        line1: 'Many agents.',
+        line2: 'One Overseer.',
+        sub: 'Events wake personas, personas form teams, and an Overseer keeps every layer sharp. All on your machine.',
+        aria: 'Four glass layers, from events up through personas and teams to the Overseer, with light rising through them.',
+        layerEvents: 'Events',
+        layerPersonas: 'Personas',
+        layerTeams: 'Teams',
+        layerOverseer: 'Overseer',
+      },
+      a3: {
+        line1: 'Agents,',
+        line2: 'working as one.',
+        sub: 'Personas that listen for events, team up and keep improving, woven together on your own machine.',
+        aria: 'Ribbons of light flowing across the screen and weaving together at a bright centre.',
+        tagEvent: 'Event',
+        tagTeam: 'Team',
+        tagOverseer: 'Overseer',
+      },
     },
     heroB: {
       label: 'Landing lab: hero seat B',
+      b1: {
+        line1: 'A crew of AI agents,',
+        line2: 'alive on your machine.',
+        sub: 'They wake on events, team up, and get it done. Privately.',
+        aria: 'Animated illustration: a swarm of AI agents drifting in teams. Whenever an event arrives, the nearest team gathers around it, works it, and lets go.',
+        events: ['New email', 'Invoice in', 'PR opened', '9:00 standup', 'File changed', 'Price alert', 'Ticket filed'],
+        handled: 'Handled',
+        yourEvent: 'Your event',
+        sendEvent: 'Send an event',
+        skipIntro: 'Skip intro',
+      },
+      b2: {
+        line1: 'One event in.',
+        line2: 'A whole team on it.',
+        sub: 'A hive of AI agents on your own machine, coached and always on.',
+        aria: 'Animated illustration: events fall onto a honeycomb of AI agents, ripple through a team of cells, and rise again as finished work.',
+        events: ['Invoice in', 'New lead', 'Build failed'],
+        done: ['Booked', 'Qualified', 'Fixed'],
+      },
+      b3: {
+        line1: 'Work comes back',
+        line2: 'already done.',
+        sub: 'Teams of AI agents, coached and running deep inside your own machine.',
+        aria: 'Animated illustration: rings of AI agent teams fly out of the depth of your machine toward you, each one carrying a finished job.',
+        teams: ['Inbox triage', 'Code review', 'Research brief', 'Weekly report', 'Support replies', 'Release notes', 'Lead scoring'],
+        delivered: 'Delivered',
+      },
     },
     useCases: {
       label: 'Landing lab: one persona, many capabilities',
+      artLabel: 'Animation: one persona, {persona}, meets one job at a time and picks the tool for it from your connectors.',
+      needs: {
+        reach: 'Write to a client',
+        notes: 'Keep meeting notes',
+        book: 'Book the follow-up',
+        track: 'Track the tasks',
+        code: 'Review the code',
+        pay: 'Chase a failed payment',
+      },
+      status: 'Job {n} of {total}: {need}. Picked {tool} out of {options}.',
+      controls: 'Animation playback',
+      prevCase: 'Previous job',
+      nextCase: 'Next job',
+      capabilities: 'Capabilities',
+      jobsCount: '{count} of {total} jobs covered',
     },
     agentMind: {
       label: 'Landing lab: the agent mind',
+      stylised: 'Stylised simulation · no model is called',
+      idleHint: 'Pick a prompt and watch it think',
+      illustration: 'Illustration: how the agent works through the selected prompt, from reading it to handing back the result',
+      wholePlan: 'Whole plan',
+      outcomeTitle: 'What comes back',
+      underAttention: 'Now',
+      beats: {
+        parse: 'Reads what you asked for',
+        select: 'Picks the right tools',
+        tools: 'Works inside your apps',
+        execute: 'Does the work',
+        verify: 'Checks its own work',
+        result: 'Hands back the outcome',
+      },
     },
     hub: {
       label: 'Landing lab: orchestration hub',
+      wakes: 'Wakes',
     },
     getStarted: {
       label: 'Landing lab: from download to running agents',
+      replay: 'Replay the animation',
+      stylised: 'Stylised illustration',
+      gmail: 'Gmail',
+      slack: 'Slack',
+      steps: {
+        install: { title: 'Install Personas', line: 'A Windows app that runs your agents through Claude Code.' },
+        describe: { title: 'Say what you want', line: 'In plain words. It asks a few questions back.' },
+        build: { title: 'It builds and connects', line: 'Gmail and Slack keys stay in a vault on your PC.' },
+        run: { title: 'It runs on its own', line: 'Every morning at 8, or the moment a new email lands.' },
+        away: { title: 'You get on with your day', line: 'It keeps working on your machine. Zero telemetry.' },
+      },
+      v1: {
+        lede: 'Four stops from the installer to an agent that runs its own loop without you.',
+        artLabel: 'Stylised trail map. Stop one: install Personas. Stop two: say what you want in plain words. Stop three: it builds the agent and connects Gmail and Slack, with the keys in a vault on your PC. Stop four: it runs every morning at 8 or when a new email lands. The trail ends in a loop your agent keeps running while you get on with your day.',
+        agent: 'Your agent',
+        morning: '08:00',
+        newEmail: 'New email',
+      },
+      v2: {
+        lede: 'One sentence in, a working agent out, assembled on your own machine.',
+        artLabel: 'Stylised assembly on your PC. You type: every morning at 8, go through my inbox, pick the highlights and post them to Slack. Personas asks which Slack channel, and you answer team-daily. Each phrase becomes a part of the agent: a daily 08:00 trigger, a Gmail reader, a summarizer and a Slack poster, with the keys in an encrypted vault. The test passes, you switch it on, and each run posts the highlights to Slack.',
+        machine: 'Your PC',
+        app: 'Personas',
+        phrases: {
+          when: 'Every morning at 8,',
+          read: 'go through my inbox,',
+          think: 'pick the highlights',
+          send: 'and post them to Slack.',
+        },
+        question: 'Which Slack channel?',
+        answer: '#team-daily',
+        parts: { when: 'Daily 08:00', read: 'Read Gmail', think: 'Summarize', send: 'Post to Slack' },
+        agent: 'Your agent',
+        on: 'On',
+        tested: 'Test passed',
+        posted: '6 highlights posted',
+        rail: { install: 'Install', describe: 'Say it', build: 'It assembles', run: 'Switch it on' },
+      },
+      v3: {
+        lede: 'A few minutes of your day, once. Then it works around the clock while you live yours.',
+        artLabel: 'Stylised 24-hour dial. On day one you spend a few minutes at 09:00: install Personas, say what you want, connect Gmail and Slack. Around the dial your day goes on: meetings, lunch, focus time, home, sleep. On the inner ring your agent runs on its own: at 11:20 and 15:45 when new emails land, at 02:10 overnight, and at 08:00 it posts the morning digest to Slack.',
+        yours: 'Your few minutes',
+        yoursLine: 'Once, on day one.',
+        its: 'Its whole day',
+        itsLine: 'Every run, on its own.',
+        setup: { install: 'Install Personas', describe: 'Say what you want', connect: 'Connect Gmail and Slack' },
+        day: 'Day {n}',
+        dayParts: { coffee: 'Coffee', meetings: 'Meetings', lunch: 'Lunch', focus: 'Focus time', home: 'Home', asleep: 'Asleep' },
+        triggers: { schedule: 'Schedule', email: 'New email' },
+        runs: {
+          client: 'Client email flagged in Slack',
+          invoice: 'Invoice summarized in Slack',
+          overnight: 'Overnight email queued for the digest',
+          digest: 'Morning digest: 6 highlights posted',
+        },
+        onYourPc: 'On your PC',
+      },
     },
   },
   // END pending-translation namespaces

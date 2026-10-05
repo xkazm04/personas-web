@@ -1,0 +1,246 @@
+/* B2 "Hive": a honeycomb floor in perspective. Every colour derives from the
+   site tokens; every loop runs on transform/opacity, pauses with the page's
+   off-screen and hidden-tab classes, and reduced motion gets a composed still
+   (all three teams caught mid-work). */
+
+.scene {
+  --horizon: 47%;
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+  perspective: 105svh;
+  perspective-origin: 50% var(--horizon);
+}
+
+.plane {
+  position: absolute;
+  left: 50%;
+  top: var(--horizon);
+  width: 260svh;
+  height: 84svh;
+  margin-left: -130svh;
+  transform-origin: 50% 0;
+  transform: rotateX(64deg) rotateZ(calc(var(--tilt, 0) * 2.5deg));
+  transform-style: preserve-3d;
+  transition: transform 1.2s cubic-bezier(0.2, 0.8, 0.2, 1);
+}
+
+.svg {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  overflow: visible;
+}
+
+.lattice {
+  -webkit-mask-image: linear-gradient(to bottom, transparent 0%, black 22%);
+  mask-image: linear-gradient(to bottom, transparent 0%, black 22%);
+}
+.lattice path {
+  fill: none;
+  stroke: color-mix(in oklab, var(--brand-cyan) 38%, transparent);
+  stroke-width: 1.8;
+}
+/* Light pooled on the floor: a wide glow at the centre, and one under each
+   team while it works. */
+.glow {
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(ellipse 34% 60% at 50% 55%, color-mix(in oklab, var(--brand-cyan) 16%, transparent), transparent 70%);
+  -webkit-mask-image: linear-gradient(to bottom, transparent 0%, black 30%);
+  mask-image: linear-gradient(to bottom, transparent 0%, black 30%);
+}
+.pool {
+  position: absolute;
+  width: 46svh;
+  height: 46svh;
+  margin: -23svh 0 0 -23svh;
+  border-radius: 50%;
+  background: radial-gradient(circle, color-mix(in oklab, var(--hue) 34%, transparent), transparent 65%);
+  opacity: 0;
+  animation: cell-lit 9s linear infinite both;
+}
+.sweepTrack {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+  -webkit-mask-image: linear-gradient(to bottom, transparent 0%, black 30%);
+  mask-image: linear-gradient(to bottom, transparent 0%, black 30%);
+}
+
+.cell {
+  fill: var(--hue);
+  stroke: color-mix(in oklab, var(--hue) 60%, var(--foreground));
+  stroke-width: 2;
+  opacity: 0;
+  animation: cell-lit 9s linear infinite both;
+}
+.halo {
+  fill: var(--hue);
+  fill-opacity: 0.22;
+  opacity: 0;
+  animation: cell-lit 9s linear infinite both;
+}
+.link {
+  fill: none;
+  stroke: var(--foreground);
+  stroke-width: 5;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  stroke-dasharray: var(--len);
+  stroke-dashoffset: var(--len);
+  opacity: 0;
+  animation: link-draw 9s linear infinite both;
+}
+.twinkle {
+  fill: var(--brand-cyan);
+  opacity: 0;
+  animation: twinkle 7s ease-in-out infinite both;
+}
+
+.ripple {
+  position: absolute;
+  width: 12svh;
+  height: 12svh;
+  margin: -6svh 0 0 -6svh;
+  border: 3px solid var(--hue);
+  border-radius: 50%;
+  opacity: 0;
+  animation: ripple 9s ease-out infinite both;
+}
+
+.sweep {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  width: 26%;
+  background: linear-gradient(90deg, transparent, color-mix(in oklab, var(--foreground) 9%, transparent), transparent);
+  animation: sweep 16s linear infinite both;
+}
+
+/* Something standing up out of the floor at a cell: rotated a quarter turn
+   about its own base, so it rises toward the viewer like a light pillar. */
+.stand {
+  position: absolute;
+  width: 0;
+  height: 34svh;
+  transform-origin: 50% 100%;
+  transform: translate(-50%, -100%) rotateX(-90deg);
+  transform-style: preserve-3d;
+}
+.drop {
+  position: absolute;
+  bottom: 0;
+  left: -0.45svh;
+  width: 0.9svh;
+  height: 9svh;
+  border-radius: 999px;
+  background: linear-gradient(to bottom, transparent, var(--hue) 60%, color-mix(in oklab, var(--hue) 40%, var(--foreground)));
+  opacity: 0;
+  animation: drop 9s cubic-bezier(0.55, 0, 0.9, 0.45) infinite both;
+}
+.beam {
+  position: absolute;
+  bottom: 0;
+  left: -0.6svh;
+  width: 1.2svh;
+  height: 100%;
+  transform-origin: 50% 100%;
+  background: linear-gradient(to top, var(--hue), color-mix(in oklab, var(--hue) 40%, transparent) 55%, transparent);
+  opacity: 0;
+  animation: beam 9s ease-out infinite both;
+}
+.chip {
+  position: absolute;
+  left: 0;
+  display: flex;
+  align-items: center;
+  gap: 0.4em;
+  white-space: nowrap;
+  border: 1px solid color-mix(in oklab, var(--hue) 70%, transparent);
+  border-radius: 999px;
+  background: color-mix(in oklab, var(--background) 82%, transparent);
+  padding: 0.3em 0.8em;
+  font-family: var(--font-mono);
+  font-size: clamp(0.75rem, 1.3svh, 1rem);
+  font-weight: 600;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: color-mix(in oklab, var(--hue) 75%, var(--foreground));
+  opacity: 0;
+}
+.chipEvent {
+  bottom: 8svh;
+  animation: chip-event 9s ease-out infinite both;
+}
+.chipDone {
+  bottom: 9svh;
+  animation: chip-done 9s ease-out infinite both;
+}
+
+@keyframes drop {
+  0% { transform: translateY(-24svh); opacity: 0; }
+  2% { opacity: 1; }
+  8% { transform: translateY(0); opacity: 1; }
+  10%, 100% { transform: translateY(0); opacity: 0; }
+}
+@keyframes chip-event {
+  0%, 6% { transform: translate(-50%, 0.6svh); opacity: 0; }
+  10%, 40% { transform: translate(-50%, 0); opacity: 1; }
+  48%, 100% { transform: translate(-50%, 0); opacity: 0; }
+}
+@keyframes ripple {
+  0%, 8% { transform: scale(0.2); opacity: 0; }
+  9% { opacity: 0.9; }
+  26%, 100% { transform: scale(3.4); opacity: 0; }
+}
+@keyframes cell-lit {
+  0% { opacity: 0; }
+  2% { opacity: 0.9; }
+  38% { opacity: 0.65; }
+  48%, 100% { opacity: 0; }
+}
+@keyframes link-draw {
+  0% { stroke-dashoffset: var(--len); opacity: 0.85; }
+  20% { stroke-dashoffset: 0; opacity: 0.85; }
+  44% { stroke-dashoffset: 0; opacity: 0.6; }
+  52%, 100% { stroke-dashoffset: 0; opacity: 0; }
+}
+@keyframes beam {
+  0% { transform: scaleY(0); opacity: 1; }
+  8% { transform: scaleY(1); opacity: 0.95; }
+  20% { opacity: 0.6; }
+  28%, 100% { transform: scaleY(1); opacity: 0; }
+}
+@keyframes chip-done {
+  0% { transform: translate(-50%, 2svh); opacity: 0; }
+  5% { opacity: 1; }
+  20% { transform: translate(-50%, -4svh); opacity: 1; }
+  26% { opacity: 1; }
+  32%, 100% { transform: translate(-50%, -5svh); opacity: 0; }
+}
+@keyframes twinkle {
+  0%, 100% { opacity: 0; }
+  50% { opacity: 0.35; }
+}
+@keyframes sweep {
+  0% { transform: translateX(-110%); }
+  100% { transform: translateX(400%); }
+}
+
+/* Reduced motion: a calm, complete frame - every team caught mid-work. */
+@media (prefers-reduced-motion: reduce) {
+  .plane { transition: none; }
+  .cell, .halo { animation: none; opacity: 0.75; }
+  .link { animation: none; stroke-dashoffset: 0; opacity: 0.7; }
+  .twinkle { animation: none; opacity: 0.18; }
+  .ripple { animation: none; transform: scale(1.8); opacity: 0.35; }
+  .sweep { animation: none; opacity: 0; }
+  .pool { animation: none; opacity: 0.8; }
+  .drop { animation: none; opacity: 0; }
+  .beam { animation: none; transform: scaleY(0.8); opacity: 0.7; }
+  .chipEvent { animation: none; transform: translate(-50%, 0); opacity: 1; }
+  .chipDone { animation: none; transform: translate(-50%, -3svh); opacity: 1; }
+}
