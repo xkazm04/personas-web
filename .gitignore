@@ -95,6 +95,7 @@ next-env.d.ts
 /.claude/skills/illustrate
 /.claude/skills/native-copy
 /.claude/skills/scan-sweep
+/.claude/skills/contest
 /.claude/rules/ai-registry-access.md
 /.claude/rules/ai-registry-software-engineering.md
 /.claude/rules/ai-registry-localization.md
