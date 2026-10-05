@@ -56,7 +56,7 @@ const MARGIN = 14;
 export function layoutCity(agents: FleetAgent[], teams: FleetTeam[], W: number, H: number): CityLayout {
   const sky = Math.round(Math.min(96, Math.max(48, H * 0.085)));
   const street = Math.round(Math.min(44, Math.max(28, H * 0.05)));
-  let ground = H - street;
+  const ground = H - street;
   const vis = teams.filter((t) => agents.some((a) => a.team === t.id));
   const members = vis.map((t) => agents.filter((a) => a.team === t.id));
   const pitch = (W - 2 * MARGIN) / Math.max(1, vis.length);
@@ -85,23 +85,36 @@ export function layoutCity(agents: FleetAgent[], teams: FleetTeam[], W: number, 
     if (score <= best.area) continue;
     best = { area: score, ww: s, wh, gap: g, pad: p, cols: c, rows: r };
   }
-  const { ww, gap, pad, cols, rows } = best;
-  let { wh } = best;
-  let vgap = gap;
+  const { gap, pad } = best;
+  let { ww, wh, cols, rows } = best;
 
   // Use the height: the tallest roof sits ~17% down the field. Floors stretch
-  // up to 2:1, then the space between them grows. A fleet of 10 keeps its
-  // near-square windows and is centred instead (half the slack becomes plaza).
-  const tallest = Math.max(1, ...rows);
+  // up to 2:1; a small fleet (few floors) may stack its windows in a single
+  // column and widen them at 2:1 as far as the slots allow; then the space
+  // between floors grows (up to a window's height), and anything left is a
+  // taller ground floor.
   const roofLine = Math.max(sky + 34, Math.round(H * 0.17));
-  const avail = () => ground - roofLine - 2 * pad - SIGN;
-  if (agents.length > 10) {
-    wh = Math.max(wh, Math.min(2 * ww, Math.floor((avail() - (tallest - 1) * gap) / tallest)));
-    if (tallest > 1) vgap = Math.max(gap, Math.min(Math.round(wh * 0.6), Math.floor((avail() - tallest * wh) / (tallest - 1))));
-  } else {
-    const slack = avail() - tallest * wh - (tallest - 1) * gap;
-    if (slack > 0) ground -= Math.round(slack / 2);
+  const avail = ground - roofLine - 2 * pad - SIGN;
+  const stretch = (c: number[], r: number[], w0: number) => {
+    const t = Math.max(1, ...r);
+    const fit = Math.floor((avail - (t - 1) * gap) / t);
+    const widest = Math.min(...c.map((n) => Math.floor((maxBw - 2 * pad - (n - 1) * gap) / n)));
+    const w = Math.max(w0, Math.min(widest, Math.floor(fit / 2)));
+    return { w, h: Math.max(best.wh, Math.min(2 * w, fit)), t };
+  };
+  let st = stretch(cols, rows, ww);
+  const ones = members.map(() => 1);
+  const solo = stretch(ones, members.map((m) => m.length), Math.min(ww, maxBw - 2 * pad));
+  if (solo.w * solo.h > st.w * st.h && solo.w <= maxBw - 2 * pad) {
+    cols = ones;
+    rows = members.map((m) => m.length);
+    st = solo;
   }
+  ww = st.w;
+  wh = st.h;
+  const tallest = st.t;
+  const vgap = tallest > 1 ? Math.max(gap, Math.min(wh, Math.floor((avail - tallest * wh) / (tallest - 1)))) : gap;
+  const lobby = Math.max(0, avail - tallest * wh - (tallest - 1) * vgap);
 
   const out: CityLayout = { W, H, sky, ground, ww, wh, gap, vgap, pad, pitch, teams: [], win: new Map() };
   vis.forEach((t, i) => {
@@ -110,7 +123,7 @@ export function layoutCity(agents: FleetAgent[], teams: FleetTeam[], W: number, 
     const r = rows[i];
     const inner = c * ww + (c - 1) * gap;
     const w = Math.min(maxBw, Math.max(inner + 2 * pad, pitch * 0.86));
-    const top = ground - (2 * pad + r * (wh + vgap) - vgap + SIGN);
+    const top = ground - (2 * pad + r * (wh + vgap) - vgap + SIGN + lobby);
     const cx = MARGIN + pitch * (i + 0.5);
     const b: BuildingBox = { t, i, cx, w, top, n: mem.length, cols: c, rows: r, mem, wins: [], anchor: ornamentAnchor(t.id, top) };
     const x0 = cx - inner / 2;
