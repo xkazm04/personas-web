@@ -93,7 +93,7 @@ export default function CityField({ L, scale, copy, still, att, byId, meters, pr
           ))}
           <AgentWires layout={L} agentId={attAgent?.id ?? null} />
           <Packets packet={packet} layout={L} paused={!!dolly} />
-          <Vehicles procs={procs} W={L.W} ground={L.ground} street={L.H - L.ground} />
+          <Vehicles procs={procs} W={L.W} ground={L.ground} street={Math.min(44, L.H - L.ground)} />
         </svg>
       </div>
       {anchor && !dolly && (

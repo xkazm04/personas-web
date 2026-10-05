@@ -39,7 +39,10 @@ export interface CityLayout {
   ground: number;
   ww: number;
   wh: number;
+  /** Between windows side by side. */
   gap: number;
+  /** Between floors; grows when the windows alone cannot fill the height. */
+  vgap: number;
   pad: number;
   pitch: number;
   teams: BuildingBox[];
@@ -53,7 +56,7 @@ const MARGIN = 14;
 export function layoutCity(agents: FleetAgent[], teams: FleetTeam[], W: number, H: number): CityLayout {
   const sky = Math.round(Math.min(96, Math.max(48, H * 0.085)));
   const street = Math.round(Math.min(44, Math.max(28, H * 0.05)));
-  const ground = H - street;
+  let ground = H - street;
   const vis = teams.filter((t) => agents.some((a) => a.team === t.id));
   const members = vis.map((t) => agents.filter((a) => a.team === t.id));
   const pitch = (W - 2 * MARGIN) / Math.max(1, vis.length);
@@ -82,22 +85,38 @@ export function layoutCity(agents: FleetAgent[], teams: FleetTeam[], W: number, 
     if (score <= best.area) continue;
     best = { area: score, ww: s, wh, gap: g, pad: p, cols: c, rows: r };
   }
-  const { ww, wh, gap, pad, cols, rows } = best;
+  const { ww, gap, pad, cols, rows } = best;
+  let { wh } = best;
+  let vgap = gap;
 
-  const out: CityLayout = { W, H, sky, ground, ww, wh, gap, pad, pitch, teams: [], win: new Map() };
+  // Use the height: the tallest roof sits ~17% down the field. Floors stretch
+  // up to 2:1, then the space between them grows. A fleet of 10 keeps its
+  // near-square windows and is centred instead (half the slack becomes plaza).
+  const tallest = Math.max(1, ...rows);
+  const roofLine = Math.max(sky + 34, Math.round(H * 0.17));
+  const avail = () => ground - roofLine - 2 * pad - SIGN;
+  if (agents.length > 10) {
+    wh = Math.max(wh, Math.min(2 * ww, Math.floor((avail() - (tallest - 1) * gap) / tallest)));
+    if (tallest > 1) vgap = Math.max(gap, Math.min(Math.round(wh * 0.6), Math.floor((avail() - tallest * wh) / (tallest - 1))));
+  } else {
+    const slack = avail() - tallest * wh - (tallest - 1) * gap;
+    if (slack > 0) ground -= Math.round(slack / 2);
+  }
+
+  const out: CityLayout = { W, H, sky, ground, ww, wh, gap, vgap, pad, pitch, teams: [], win: new Map() };
   vis.forEach((t, i) => {
     const mem = members[i];
     const c = cols[i];
     const r = rows[i];
     const inner = c * ww + (c - 1) * gap;
     const w = Math.min(maxBw, Math.max(inner + 2 * pad, pitch * 0.86));
-    const top = ground - (2 * pad + r * (wh + gap) - gap + SIGN);
+    const top = ground - (2 * pad + r * (wh + vgap) - vgap + SIGN);
     const cx = MARGIN + pitch * (i + 0.5);
     const b: BuildingBox = { t, i, cx, w, top, n: mem.length, cols: c, rows: r, mem, wins: [], anchor: ornamentAnchor(t.id, top) };
     const x0 = cx - inner / 2;
     mem.forEach((a, k) => {
       const row = Math.floor(k / c);
-      const box: WinBox = { a, x: Math.round(x0 + (k % c) * (ww + gap)), y: Math.round(top + pad + row * (wh + gap)), w: ww, h: wh, row, b };
+      const box: WinBox = { a, x: Math.round(x0 + (k % c) * (ww + gap)), y: Math.round(top + pad + row * (wh + vgap)), w: ww, h: wh, row, b };
       b.wins.push(box);
       out.win.set(a.id, box);
     });
@@ -113,7 +132,7 @@ export function emptySlots(L: CityLayout, b: BuildingBox): { x: number; y: numbe
   for (let k = b.n; k < b.cols * b.rows; k++) {
     out.push({
       x: Math.round(b.cx - inner / 2 + (k % b.cols) * (L.ww + L.gap)),
-      y: Math.round(b.top + L.pad + Math.floor(k / b.cols) * (L.wh + L.gap)),
+      y: Math.round(b.top + L.pad + Math.floor(k / b.cols) * (L.wh + L.vgap)),
     });
   }
   return out;
