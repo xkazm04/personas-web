@@ -2916,7 +2916,7 @@ export const en: Translations = {
           'OS-native keyring',
           'AI-assisted OAuth',
           'Automatic token refresh',
-          'Zero telemetry, local-first',
+          'Local-first, anonymous telemetry only',
         ],
       },
       monitoring: {
@@ -2959,7 +2959,7 @@ export const en: Translations = {
   },
   hero: {
     downloadCta: 'Download Personas',
-    trustLine: 'No signup, no credit card. Runs on your machine. Zero telemetry.',
+    trustLine: 'No signup, no credit card. Runs on your machine.',
     badge: 'AI Agent Platform',
     headingLine1: 'Intelligent agents',
     headingLine2: 'that work for you',
@@ -3112,7 +3112,7 @@ export const en: Translations = {
       },
       {
         q: 'Does Personas collect any telemetry or usage data?',
-        a: 'No. Personas runs entirely on your machine with zero telemetry. We don\'t collect analytics, usage metrics, or any personal data. Your prompts, agent configurations, and execution logs never leave your device.',
+        a: 'Only anonymous diagnostics. Release builds of the desktop app send error reports and anonymous usage signals (app sessions, which sections you open, key actions) to Sentry. IP addresses, emails, and usernames are stripped first, and your prompts, agent configurations, credentials, and execution logs are never included. You can turn off usage signals in Settings > Account.',
       },
       {
         q: 'Is Personas free?',
@@ -3136,7 +3136,7 @@ export const en: Translations = {
     exploreFirst: 'Explore capabilities first',
     requiresCli: 'Requires Claude Code',
     installerSize: '12 MB installer',
-    noSignupLine: 'No signup, no credit card. Runs on your machine. Zero telemetry.',
+    noSignupLine: 'No signup, no credit card. Runs on your machine.',
     windows: 'Windows',
     macos: 'macOS',
     linux: 'Linux',

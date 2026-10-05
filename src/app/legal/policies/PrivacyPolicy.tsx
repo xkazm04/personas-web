@@ -10,7 +10,11 @@ export default function PrivacyPolicy({ changelog }: Props) {
           TL;DR
         </p>
         <ul className="mt-3 space-y-2 text-sm leading-relaxed text-foreground/80">
-          <li>Your data stays on your device — zero telemetry by default.</li>
+          <li>
+            Your agents and data stay on your device. The desktop app sends
+            only anonymous error reports and usage signals, and you can turn
+            most of them off.
+          </li>
           <li>
             API keys are encrypted with AES-256 and never leave your machine.
           </li>
@@ -29,9 +33,10 @@ export default function PrivacyPolicy({ changelog }: Props) {
         </h2>
         <p className="text-base leading-relaxed text-muted-dark">
           Personas is built on a simple principle: your data belongs to you.
-          Our desktop app is local-first with zero telemetry by default. We do
-          not collect, transmit, or analyze your usage data unless you
-          explicitly opt in to cloud features.
+          Our desktop app is local-first. Your agents, prompts, outputs, and
+          credentials are never sent to us. The only data the app sends us is
+          the anonymous diagnostics described under &quot;Desktop App Error
+          Reports and Usage Signals&quot; below.
         </p>
       </section>
 
@@ -42,7 +47,34 @@ export default function PrivacyPolicy({ changelog }: Props) {
         <p className="text-base leading-relaxed text-muted-dark">
           Everything the Personas desktop app creates — your agents, pipelines,
           execution history, and configuration — lives on your local machine.
-          None of this data is transmitted to our servers or any third party.
+          None of it is transmitted to our servers. When an agent runs, its
+          prompt goes directly from your machine to the AI provider you chose
+          (Claude by Anthropic, or a local Ollama model that never leaves your
+          machine).
+        </p>
+      </section>
+
+      <section className="space-y-3">
+        <h2 className="text-xl font-semibold text-foreground">
+          Desktop App Error Reports and Usage Signals
+        </h2>
+        <p className="text-base leading-relaxed text-muted-dark">
+          Release builds of the desktop app send error reports (error message,
+          stack trace, operating system, architecture, and app version) and
+          anonymous usage signals (app sessions, which sections and tabs you
+          open, key actions such as creating an agent, and one-time milestones)
+          to Sentry. Sessions and milestones are tied only to a random device or
+          install ID. IP addresses, email addresses, usernames, and request
+          bodies and headers are stripped before anything is sent. There are no
+          performance traces, no session replays, and no user identity, and
+          your prompts, persona content, and credentials are never included.
+        </p>
+        <p className="text-base leading-relaxed text-muted-dark">
+          You can turn off usage signals and error reports from the app&apos;s
+          interface at first launch or at any time in Settings &gt; Account.
+          Crash reports from the app&apos;s native core are not covered by that
+          switch yet. Development builds and builds you compile from source
+          send nothing.
         </p>
       </section>
 
@@ -73,8 +105,11 @@ export default function PrivacyPolicy({ changelog }: Props) {
           Website Analytics
         </h2>
         <p className="text-base leading-relaxed text-muted-dark">
-          This website collects basic, anonymous page-view analytics to help us
-          understand which pages are useful. We do not track individual users,
+          If you choose &quot;Accept All&quot; in the cookie banner, this website
+          counts page views and a few key actions (download clicks, waitlist
+          sign-ups, feature votes, and comments) anonymously to help us
+          understand which pages are useful. If you choose &quot;Essential
+          Only&quot;, nothing is counted. We do not track individual users,
           build advertising profiles, or sell data to third parties.
         </p>
       </section>
@@ -90,7 +125,8 @@ export default function PrivacyPolicy({ changelog }: Props) {
           </li>
           <li>
             <strong className="text-foreground/80">Sentry</strong> — error
-            tracking on this website only (not in the desktop app)
+            tracking and the anonymous counts above on this website, and the
+            desktop app&apos;s error reports and usage signals
           </li>
         </ul>
       </section>

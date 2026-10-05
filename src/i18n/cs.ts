@@ -89,7 +89,7 @@ export const cs: LocaleTranslations = {
             "Nativn\u00ed kl\u00ed\u010denka OS",
             "OAuth s podporou AI",
             "Automatick\u00e1 obnova token\u016f",
-            "Nulov\u00e1 telemetrie, local-first"
+            "Local-first, jen anonymn\u00ed telemetrie"
           ]
         },
         monitoring: {
@@ -132,7 +132,7 @@ export const cs: LocaleTranslations = {
     },
     hero: {
       downloadCta: "St\u00e1hnout",
-      trustLine: "Bez registrace, bez platebn\u00ed karty. B\u011b\u017e\u00ed na va\u0161em po\u010d\u00edta\u010di. Nulov\u00e1 telemetrie.",
+      trustLine: "Bez registrace, bez platebn\u00ed karty. B\u011b\u017e\u00ed na va\u0161em po\u010d\u00edta\u010di.",
       badge: "Platforma AI agent\u016f",
       headingLine1: "Inteligentn\u00ed agenti",
       headingLine2: "kte\u0159\u00ed pracuj\u00ed pro v\u00e1s",
@@ -365,8 +365,8 @@ export const cs: LocaleTranslations = {
           a: "Claude Code is Anthropic's official command-line tool for working with Claude. Personas uses it under the hood to run your agents locally. It handles authentication, model access, and streaming responses. You'll need an active Claude Pro or Max subscription and Claude Code installed before launching Personas."
         },
         {
-          q: "Does Personas collect any telemetry or usage data?",
-          a: "No. Personas runs entirely on your machine with zero telemetry. We don't collect analytics, usage metrics, or any personal data. Your prompts, agent configurations, and execution logs never leave your device."
+          q: "Sb\u00edr\u00e1 Personas n\u011bjakou telemetrii nebo \u00fadaje o pou\u017e\u00edv\u00e1n\u00ed?",
+          a: "Pouze anonymn\u00ed diagnostiku. Vydan\u00e9 verze desktopov\u00e9 aplikace odes\u00edlaj\u00ed do slu\u017eby Sentry hl\u00e1\u0161en\u00ed chyb a anonymn\u00ed sign\u00e1ly o pou\u017e\u00edv\u00e1n\u00ed (relace aplikace, kter\u00e9 sekce otev\u00edr\u00e1te, kl\u00ed\u010dov\u00e9 akce). IP adresy, e-maily a u\u017eivatelsk\u00e1 jm\u00e9na se p\u0159edem odstran\u00ed a va\u0161e prompty, konfigurace agent\u016f, p\u0159ihla\u0161ovac\u00ed \u00fadaje ani z\u00e1znamy o b\u011bz\u00edch nejsou nikdy zahrnuty. Sign\u00e1ly o pou\u017e\u00edv\u00e1n\u00ed m\u016f\u017eete vypnout v Nastaven\u00ed > \u00da\u010det."
         },
         {
           q: "Is Personas free?",
@@ -390,7 +390,7 @@ export const cs: LocaleTranslations = {
       exploreFirst: "Nejd\u0159\u00edve prozkoumat mo\u017enosti",
       requiresCli: "Vy\u017eaduje Claude Code",
       installerSize: "12 MB instal\u00e1tor",
-      noSignupLine: "\u017d\u00e1dn\u00e1 registrace, \u017e\u00e1dn\u00e1 platebn\u00ed karta. B\u011b\u017e\u00ed na va\u0161em po\u010d\u00edta\u010di. Nulov\u00e1 telemetrie.",
+      noSignupLine: "\u017d\u00e1dn\u00e1 registrace, \u017e\u00e1dn\u00e1 platebn\u00ed karta. B\u011b\u017e\u00ed na va\u0161em po\u010d\u00edta\u010di.",
       windows: "Windows",
       macos: "macOS",
       linux: "Linux"

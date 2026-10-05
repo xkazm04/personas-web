@@ -8,10 +8,12 @@ export type PolicyMeta = {
 
 export const POLICY_META: Record<PolicyId, PolicyMeta> = {
   privacy: {
-    latestUpdateIso: "2026-09-14",
-    formattedUpdate: "September 2026",
+    latestUpdateIso: "2026-10-05",
+    formattedUpdate: "October 2026",
     changes: [
-      "Removed the statement that paid cloud tiers store agent execution metadata. Personas has no paid tiers and does not run agents remotely.",
+      "Corrected the statement that the desktop app has zero telemetry. Release builds send anonymous error reports and usage signals to Sentry; the new section lists what is sent, what is never sent, and how to turn it off.",
+      "Corrected the statement that Sentry runs on this website only. It also receives the desktop app's error reports and usage signals.",
+      "Clarified that website analytics run only after you choose \"Accept All\", and that agent prompts go directly to the AI provider you choose.",
     ],
   },
   terms: {

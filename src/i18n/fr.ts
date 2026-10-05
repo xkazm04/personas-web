@@ -89,7 +89,7 @@ export const fr: LocaleTranslations = {
             "Trousseau natif du syst\u00e8me",
             "OAuth assist\u00e9 par IA",
             "Renouvellement automatique des jetons",
-            "Z\u00e9ro t\u00e9l\u00e9m\u00e9trie, local d'abord"
+            "Local d'abord, t\u00e9l\u00e9m\u00e9trie anonyme uniquement"
           ]
         },
         monitoring: {
@@ -132,7 +132,7 @@ export const fr: LocaleTranslations = {
     },
     hero: {
       downloadCta: "T\u00e9l\u00e9charger",
-      trustLine: "Aucune inscription, aucune carte bancaire. Fonctionne sur votre machine. Z\u00e9ro t\u00e9l\u00e9m\u00e9trie.",
+      trustLine: "Aucune inscription, aucune carte bancaire. Fonctionne sur votre machine.",
       badge: "Plateforme d\u2019agents IA",
       headingLine1: "Des agents intelligents",
       headingLine2: "qui travaillent pour vous",
@@ -365,8 +365,8 @@ export const fr: LocaleTranslations = {
           a: "Claude Code is Anthropic's official command-line tool for working with Claude. Personas uses it under the hood to run your agents locally. It handles authentication, model access, and streaming responses. You'll need an active Claude Pro or Max subscription and Claude Code installed before launching Personas."
         },
         {
-          q: "Does Personas collect any telemetry or usage data?",
-          a: "No. Personas runs entirely on your machine with zero telemetry. We don't collect analytics, usage metrics, or any personal data. Your prompts, agent configurations, and execution logs never leave your device."
+          q: "Personas collecte-t-il de la t\u00e9l\u00e9m\u00e9trie ou des donn\u00e9es d'utilisation\u00a0?",
+          a: "Uniquement des diagnostics anonymes. Les versions publi\u00e9es de l'application de bureau envoient \u00e0 Sentry des rapports d'erreur et des signaux d'utilisation anonymes (sessions de l'application, sections que vous ouvrez, actions cl\u00e9s). Les adresses IP, e-mails et noms d'utilisateur sont supprim\u00e9s au pr\u00e9alable, et vos prompts, configurations d'agents, identifiants et journaux d'ex\u00e9cution ne sont jamais inclus. Vous pouvez d\u00e9sactiver les signaux d'utilisation dans Param\u00e8tres > Compte."
         },
         {
           q: "Is Personas free?",
@@ -390,7 +390,7 @@ export const fr: LocaleTranslations = {
       exploreFirst: "Explorer les capacit\u00e9s d\u2019abord",
       requiresCli: "N\u00e9cessite Claude Code",
       installerSize: "Installeur de 12 Mo",
-      noSignupLine: "Sans inscription, sans carte bancaire. Fonctionne sur votre machine. Z\u00e9ro t\u00e9l\u00e9m\u00e9trie.",
+      noSignupLine: "Sans inscription, sans carte bancaire. Fonctionne sur votre machine.",
       windows: "Windows",
       macos: "macOS",
       linux: "Linux"

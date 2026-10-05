@@ -16,7 +16,7 @@ export const SECURITY_PILLARS: SecurityPillar[] = [
     icon: "Monitor",
     color: "#06b6d4",
     details: [
-      "All AI model calls go directly from your machine to the provider (Anthropic, OpenAI, Google)",
+      "AI model calls go directly from your machine to Claude (Anthropic), or stay on it with a local Ollama model",
       "No Personas relay servers sit between you and your AI provider",
       "Agent configurations stored as local encrypted files",
       "Execution logs stay on disk — never uploaded or synced",
@@ -38,17 +38,18 @@ export const SECURITY_PILLARS: SecurityPillar[] = [
     ],
   },
   {
-    title: "Zero Telemetry",
+    title: "Minimal, Anonymous Telemetry",
     description:
-      "Personas collects no usage analytics, no crash reports, no feature flags, no A/B test data. There is no phone-home behavior whatsoever.",
+      "Release builds send error reports and a few anonymous usage signals to Sentry, so we can fix crashes and see which features get used. Your agents, prompts, outputs, and credentials are never part of them.",
     icon: "EyeOff",
     color: "#a855f7",
     details: [
-      "No Google Analytics, Mixpanel, Segment, or similar tracking",
-      "No anonymous usage statistics",
-      "No crash reporting (Sentry, Bugsnag, etc.)",
-      "No feature flag services checking remote state",
-      "Open-source — you can verify this yourself",
+      "Sent: error messages, stack traces, OS, architecture, and app version",
+      "Sent: anonymous app sessions, feature visits, and key actions, tied only to a random device or install ID",
+      "Stripped before sending: IP address, email, username, request bodies, and headers",
+      "Never collected: performance traces, session replays, user identity, persona content, or credentials",
+      "Usage signals and interface error reports can be turned off at first launch or in Settings > Account. Crash reports from the app's native core are not covered by that switch yet",
+      "Development builds and builds you compile from source send nothing",
     ],
   },
   {
@@ -163,7 +164,7 @@ export const SECURITY_FAQS: SecurityFAQ[] = [
   {
     question: "Does Personas send data to the cloud?",
     answer:
-      "No. Personas runs entirely on your desktop. Your data never leaves your machine. AI model calls go directly from your device to your chosen provider — Personas never relays or stores them.",
+      "Your agents, prompts, outputs, and credentials stay on your desktop. AI model calls go directly from your device to your chosen provider; Personas never relays or stores them. The only data release builds send to us is anonymous error reports and usage signals (see the telemetry question below).",
   },
   {
     question: "How are credentials stored?",
@@ -173,7 +174,7 @@ export const SECURITY_FAQS: SecurityFAQ[] = [
   {
     question: "Does Personas collect telemetry?",
     answer:
-      "No. Zero analytics, crash reports, or phone-home behavior. There are no tracking scripts, no anonymous usage statistics, and no feature flag services checking remote state.",
+      "A little, and only anonymously. Release builds send error reports (message, stack trace, OS, app version) and anonymous usage signals (app sessions, which sections you open, key actions) to Sentry. IP addresses, emails, usernames, and request data are stripped first; there are no performance traces, no session replays, and no user identity. Your prompts, persona content, and credentials are never included. You can turn off usage signals and interface error reports at first launch or in Settings > Account; crash reports from the native core are not covered by that switch yet. Development builds send nothing.",
   },
   {
     question: "Can my employer see my agent data?",
@@ -183,12 +184,12 @@ export const SECURITY_FAQS: SecurityFAQ[] = [
   {
     question: "What happens if I uninstall Personas?",
     answer:
-      "All data is removed with the application. There are no cloud accounts, no remote backups, and no residual data on external servers. Deleting the application folder is a complete erasure.",
+      "All data is removed with the application. There are no cloud accounts and no remote backups of your agents or data; only the anonymous error reports and usage signals described above remain with Sentry, and they carry no identity. Deleting the application folder is a complete erasure.",
   },
 ];
 
 export const ARCHITECTURE_LAYERS: ArchitectureLayer[] = [
-  { name: "Your AI Provider", description: "Direct API calls to Anthropic, OpenAI, Google — your keys, your account", color: "#06b6d4", detail: "Direct, encrypted API calls with no relay or proxy — your keys, your account, your rate limits." },
+  { name: "Your AI Provider", description: "Direct calls to Claude (Anthropic), or a local Ollama model: your account, your keys", color: "#06b6d4", detail: "Direct, encrypted API calls with no relay or proxy — your keys, your account, your rate limits." },
   { name: "Personas Engine", description: "Local orchestration, scheduling, healing, tracing — runs on your machine", color: "#a855f7", detail: "Multi-agent orchestration, healing, scheduling, and tracing — everything runs as a local process." },
   { name: "Encrypted Vault", description: "AES-256-GCM credentials stored in OS keyring — never in plaintext", color: "#34d399", detail: "AES-256-GCM with OS-native keyring integration — DPAPI on Windows, Keychain on macOS, libsecret on Linux." },
   { name: "Your Machine", description: "Windows, macOS, or Linux — your hardware, your security controls", color: "#fbbf24", detail: "Full control over hardware, network policies, and OS security — air-gap capable with local LLMs." },

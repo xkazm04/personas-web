@@ -89,7 +89,7 @@ export const zh: LocaleTranslations = {
             "\u64cd\u4f5c\u7cfb\u7edf\u539f\u751f\u5bc6\u94a5\u4e32",
             "AI \u8f85\u52a9\u7684 OAuth",
             "\u81ea\u52a8\u5237\u65b0\u4ee4\u724c",
-            "\u96f6\u9065\u6d4b\uff0c\u672c\u5730\u4f18\u5148"
+            "\u672c\u5730\u4f18\u5148\uff0c\u4ec5\u533f\u540d\u9065\u6d4b"
           ]
         },
         monitoring: {
@@ -132,7 +132,7 @@ export const zh: LocaleTranslations = {
     },
     hero: {
       downloadCta: "\u4e0b\u8f7d",
-      trustLine: "\u65e0\u9700\u6ce8\u518c,\u65e0\u9700\u4fe1\u7528\u5361\u3002\u8fd0\u884c\u5728\u4f60\u81ea\u5df1\u7684\u8bbe\u5907\u4e0a\u3002\u96f6\u9065\u6d4b\u3002",
+      trustLine: "\u65e0\u9700\u6ce8\u518c,\u65e0\u9700\u4fe1\u7528\u5361\u3002\u8fd0\u884c\u5728\u4f60\u81ea\u5df1\u7684\u8bbe\u5907\u4e0a\u3002",
       badge: "AI \u667a\u80fd\u4f53\u5e73\u53f0",
       headingLine1: "\u667a\u80fd\u4f53",
       headingLine2: "\u4e3a\u60a8\u5de5\u4f5c",
@@ -365,8 +365,8 @@ export const zh: LocaleTranslations = {
           a: "Claude Code is Anthropic's official command-line tool for working with Claude. Personas uses it under the hood to run your agents locally. It handles authentication, model access, and streaming responses. You'll need an active Claude Pro or Max subscription and Claude Code installed before launching Personas."
         },
         {
-          q: "Does Personas collect any telemetry or usage data?",
-          a: "No. Personas runs entirely on your machine with zero telemetry. We don't collect analytics, usage metrics, or any personal data. Your prompts, agent configurations, and execution logs never leave your device."
+          q: "Personas \u4f1a\u6536\u96c6\u9065\u6d4b\u6216\u4f7f\u7528\u6570\u636e\u5417\uff1f",
+          a: "\u53ea\u6536\u96c6\u533f\u540d\u8bca\u65ad\u4fe1\u606f\u3002\u684c\u9762\u5e94\u7528\u7684\u6b63\u5f0f\u7248\u672c\u4f1a\u5411 Sentry \u53d1\u9001\u9519\u8bef\u62a5\u544a\u548c\u533f\u540d\u4f7f\u7528\u4fe1\u53f7\uff08\u5e94\u7528\u4f1a\u8bdd\u3001\u60a8\u6253\u5f00\u7684\u7248\u5757\u3001\u5173\u952e\u64cd\u4f5c\uff09\u3002IP \u5730\u5740\u3001\u7535\u5b50\u90ae\u4ef6\u548c\u7528\u6237\u540d\u4f1a\u5148\u88ab\u79fb\u9664\uff0c\u60a8\u7684\u63d0\u793a\u8bcd\u3001\u667a\u80fd\u4f53\u914d\u7f6e\u3001\u51ed\u636e\u548c\u6267\u884c\u65e5\u5fd7\u7edd\u4e0d\u4f1a\u5305\u542b\u5728\u5185\u3002\u60a8\u53ef\u4ee5\u5728\u201c\u8bbe\u7f6e > \u8d26\u6237\u201d\u4e2d\u5173\u95ed\u4f7f\u7528\u4fe1\u53f7\u3002"
         },
         {
           q: "Is Personas free?",
@@ -390,7 +390,7 @@ export const zh: LocaleTranslations = {
       exploreFirst: "\u5148\u63a2\u7d22\u529f\u80fd",
       requiresCli: "\u9700\u8981 Claude Code",
       installerSize: "12 MB \u5b89\u88c5\u7a0b\u5e8f",
-      noSignupLine: "\u65e0\u9700\u6ce8\u518c\uff0c\u65e0\u9700\u4fe1\u7528\u5361\u3002\u5728\u60a8\u81ea\u5df1\u7684\u7535\u8111\u4e0a\u8fd0\u884c\uff0c\u96f6\u9065\u6d4b\u3002",
+      noSignupLine: "\u65e0\u9700\u6ce8\u518c\uff0c\u65e0\u9700\u4fe1\u7528\u5361\u3002\u5728\u60a8\u81ea\u5df1\u7684\u7535\u8111\u4e0a\u8fd0\u884c\u3002",
       windows: "Windows",
       macos: "macOS",
       linux: "Linux"

@@ -89,7 +89,7 @@ export const es: LocaleTranslations = {
             "Llavero nativo del SO",
             "OAuth asistido por IA",
             "Renovaci\u00f3n autom\u00e1tica de tokens",
-            "Cero telemetr\u00eda, local primero"
+            "Local primero, solo telemetr\u00eda an\u00f3nima"
           ]
         },
         monitoring: {
@@ -132,7 +132,7 @@ export const es: LocaleTranslations = {
     },
     hero: {
       downloadCta: "Descargar",
-      trustLine: "Sin registro, sin tarjeta de cr\u00e9dito. Se ejecuta en tu m\u00e1quina. Cero telemetr\u00eda.",
+      trustLine: "Sin registro, sin tarjeta de cr\u00e9dito. Se ejecuta en tu m\u00e1quina.",
       badge: "Plataforma de Agentes IA",
       headingLine1: "Agentes inteligentes",
       headingLine2: "que trabajan para ti",
@@ -365,8 +365,8 @@ export const es: LocaleTranslations = {
           a: "Claude Code is Anthropic's official command-line tool for working with Claude. Personas uses it under the hood to run your agents locally. It handles authentication, model access, and streaming responses. You'll need an active Claude Pro or Max subscription and Claude Code installed before launching Personas."
         },
         {
-          q: "Does Personas collect any telemetry or usage data?",
-          a: "No. Personas runs entirely on your machine with zero telemetry. We don't collect analytics, usage metrics, or any personal data. Your prompts, agent configurations, and execution logs never leave your device."
+          q: "\u00bfPersonas recopila telemetr\u00eda o datos de uso?",
+          a: "Solo diagn\u00f3sticos an\u00f3nimos. Las versiones publicadas de la app de escritorio env\u00edan a Sentry informes de errores y se\u00f1ales de uso an\u00f3nimas (sesiones de la app, qu\u00e9 secciones abres, acciones clave). Antes de enviarlos se eliminan las direcciones IP, los correos electr\u00f3nicos y los nombres de usuario, y tus prompts, configuraciones de agentes, credenciales y registros de ejecuci\u00f3n nunca se incluyen. Puedes desactivar las se\u00f1ales de uso en Ajustes > Cuenta."
         },
         {
           q: "Is Personas free?",
@@ -390,7 +390,7 @@ export const es: LocaleTranslations = {
       exploreFirst: "Explorar capacidades primero",
       requiresCli: "Requiere Claude Code",
       installerSize: "Instalador de 12 MB",
-      noSignupLine: "Sin registro, sin tarjeta de cr\u00e9dito. Se ejecuta en tu equipo. Cero telemetr\u00eda.",
+      noSignupLine: "Sin registro, sin tarjeta de cr\u00e9dito. Se ejecuta en tu equipo.",
       windows: "Windows",
       macos: "macOS",
       linux: "Linux"

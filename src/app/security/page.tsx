@@ -46,8 +46,9 @@ export default function SecurityPage() {
             </SectionHeading>
             <p className="mx-auto mt-6 max-w-2xl text-base text-muted leading-relaxed font-light">
               Unlike cloud AI platforms, Personas runs entirely on your desktop.
-              AES-256 encryption, OS-native keyring, zero telemetry, air-gap
-              capable. Privacy by architecture, not by policy.
+              AES-256 encryption, OS-native keyring, anonymous telemetry with
+              personal data stripped, air-gap capable. Privacy by architecture,
+              not by policy.
             </p>
           </motion.div>
           <SecurityPillarsGrid />

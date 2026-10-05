@@ -89,7 +89,7 @@ export const vi: LocaleTranslations = {
             "Keyring g\u1ed1c c\u1ee7a h\u1ec7 \u0111i\u1ec1u h\u00e0nh",
             "OAuth h\u1ed7 tr\u1ee3 b\u1edfi AI",
             "T\u1ef1 \u0111\u1ed9ng l\u00e0m m\u1edbi token",
-            "Kh\u00f4ng telemetry, \u01b0u ti\u00ean c\u1ee5c b\u1ed9"
+            "\u01afu ti\u00ean c\u1ee5c b\u1ed9, ch\u1ec9 telemetry \u1ea9n danh"
           ]
         },
         monitoring: {
@@ -132,7 +132,7 @@ export const vi: LocaleTranslations = {
     },
     hero: {
       downloadCta: "T\u1ea3i xu\u1ed1ng",
-      trustLine: "Kh\u00f4ng c\u1ea7n \u0111\u0103ng k\u00fd, kh\u00f4ng c\u1ea7n th\u1ebb t\u00edn d\u1ee5ng. Ch\u1ea1y tr\u00ean m\u00e1y c\u1ee7a b\u1ea1n. Kh\u00f4ng thu th\u1eadp d\u1eef li\u1ec7u telemetry.",
+      trustLine: "Kh\u00f4ng c\u1ea7n \u0111\u0103ng k\u00fd, kh\u00f4ng c\u1ea7n th\u1ebb t\u00edn d\u1ee5ng. Ch\u1ea1y tr\u00ean m\u00e1y c\u1ee7a b\u1ea1n.",
       badge: "N\u1ec1n t\u1ea3ng t\u00e1c nh\u00e2n AI",
       headingLine1: "T\u00e1c nh\u00e2n th\u00f4ng minh",
       headingLine2: "l\u00e0m vi\u1ec7c cho b\u1ea1n",
@@ -365,8 +365,8 @@ export const vi: LocaleTranslations = {
           a: "Claude Code is Anthropic's official command-line tool for working with Claude. Personas uses it under the hood to run your agents locally. It handles authentication, model access, and streaming responses. You'll need an active Claude Pro or Max subscription and Claude Code installed before launching Personas."
         },
         {
-          q: "Does Personas collect any telemetry or usage data?",
-          a: "No. Personas runs entirely on your machine with zero telemetry. We don't collect analytics, usage metrics, or any personal data. Your prompts, agent configurations, and execution logs never leave your device."
+          q: "Personas c\u00f3 thu th\u1eadp telemetry hay d\u1eef li\u1ec7u s\u1eed d\u1ee5ng kh\u00f4ng?",
+          a: "Ch\u1ec9 d\u1eef li\u1ec7u ch\u1ea9n \u0111o\u00e1n \u1ea9n danh. C\u00e1c b\u1ea3n ph\u00e1t h\u00e0nh c\u1ee7a \u1ee9ng d\u1ee5ng m\u00e1y t\u00ednh g\u1eedi b\u00e1o c\u00e1o l\u1ed7i v\u00e0 t\u00edn hi\u1ec7u s\u1eed d\u1ee5ng \u1ea9n danh (phi\u00ean \u1ee9ng d\u1ee5ng, c\u00e1c m\u1ee5c b\u1ea1n m\u1edf, thao t\u00e1c ch\u00ednh) \u0111\u1ebfn Sentry. \u0110\u1ecba ch\u1ec9 IP, email v\u00e0 t\u00ean ng\u01b0\u1eddi d\u00f9ng \u0111\u01b0\u1ee3c lo\u1ea1i b\u1ecf tr\u01b0\u1edbc, c\u00f2n prompt, c\u1ea5u h\u00ecnh agent, th\u00f4ng tin x\u00e1c th\u1ef1c v\u00e0 nh\u1eadt k\u00fd th\u1ef1c thi c\u1ee7a b\u1ea1n kh\u00f4ng bao gi\u1edd \u0111\u01b0\u1ee3c g\u1eedi k\u00e8m. B\u1ea1n c\u00f3 th\u1ec3 t\u1eaft t\u00edn hi\u1ec7u s\u1eed d\u1ee5ng trong C\u00e0i \u0111\u1eb7t > T\u00e0i kho\u1ea3n."
         },
         {
           q: "Is Personas free?",
@@ -390,7 +390,7 @@ export const vi: LocaleTranslations = {
       exploreFirst: "Kh\u00e1m ph\u00e1 kh\u1ea3 n\u0103ng tr\u01b0\u1edbc",
       requiresCli: "Y\u00eau c\u1ea7u Claude Code",
       installerSize: "Tr\u00ecnh c\u00e0i \u0111\u1eb7t 12 MB",
-      noSignupLine: "Kh\u00f4ng c\u1ea7n \u0111\u0103ng k\u00fd, kh\u00f4ng c\u1ea7n th\u1ebb t\u00edn d\u1ee5ng. Ch\u1ea1y tr\u00ean m\u00e1y c\u1ee7a b\u1ea1n. Kh\u00f4ng \u0111o l\u01b0\u1eddng t\u1eeb xa.",
+      noSignupLine: "Kh\u00f4ng c\u1ea7n \u0111\u0103ng k\u00fd, kh\u00f4ng c\u1ea7n th\u1ebb t\u00edn d\u1ee5ng. Ch\u1ea1y tr\u00ean m\u00e1y c\u1ee7a b\u1ea1n.",
       windows: "Windows",
       macos: "macOS",
       linux: "Linux"

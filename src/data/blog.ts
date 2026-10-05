@@ -38,26 +38,26 @@ export const BLOG_POSTS: BlogPost[] = [
     slug: "introducing-personas",
     title: "Free Desktop AI Agent Orchestration: Introducing Personas",
     description:
-      "Build, orchestrate, and monitor multi-agent AI pipelines from your desktop. Free forever, fully private, zero telemetry.",
+      "Build, orchestrate, and monitor multi-agent AI pipelines from your desktop. Free forever, local-first, with only anonymous telemetry.",
     category: "announcement",
     author: "Personas Team",
     date: "2026-03-15",
     readingTime: 5,
     featured: true,
-    content: `Personas is a desktop application for building and orchestrating AI agent pipelines. Unlike cloud platforms that process your data on remote servers, Personas runs entirely on your machine — your prompts, credentials, and outputs never leave your device.
+    content: `Personas is a desktop application for building and orchestrating AI agent pipelines. Unlike cloud platforms that process your data on remote servers, Personas runs entirely on your machine: your prompts, credentials, and outputs never leave your device.
 
 ## Why Desktop-First?
 
-The AI agent ecosystem has exploded with cloud platforms: CrewAI, LangChain, Relevance AI, and dozens more. They all share one fundamental limitation — your data flows through their servers. For developers working with proprietary code, sensitive credentials, or regulated data, that's a non-starter.
+The AI agent ecosystem has exploded with cloud platforms: CrewAI, LangChain, Relevance AI, and dozens more. They all share one fundamental limitation: your data flows through their servers. For developers working with proprietary code, sensitive credentials, or regulated data, that's a non-starter.
 
-Personas takes a different approach. The entire orchestration engine runs locally. Your AES-256 encrypted credential vault uses OS-native keyring integration. There's no telemetry, no analytics, no phone-home behavior.
+Personas takes a different approach. The entire orchestration engine runs locally. Your AES-256 encrypted credential vault uses OS-native keyring integration. The only data it sends home is anonymous error reports and usage signals, with IP addresses, emails, and usernames stripped and your prompts and credentials never included.
 
 ## What You Can Build
 
-- **Multi-agent pipelines** — Chain agents together on a visual canvas. One agent's output feeds the next.
-- **Automated triggers** — Cron schedules, webhooks, clipboard monitoring, file watchers, and custom event chains.
-- **Self-healing execution** — Automatic failure detection with model failover and circuit-breaker patterns.
-- **40+ integrations** — Slack, GitHub, Jira, PostgreSQL, MongoDB, AWS, and more — all authenticated through the encrypted vault.
+- **Multi-agent pipelines**: Chain agents together on a visual canvas. One agent's output feeds the next.
+- **Automated triggers**: Cron schedules, webhooks, clipboard monitoring, file watchers, and custom event chains.
+- **Self-healing execution**: Automatic failure detection with model failover and circuit-breaker patterns.
+- **40+ integrations**: Slack, GitHub, Jira, PostgreSQL, MongoDB, AWS, and more, all authenticated through the encrypted vault.
 
 ## Getting Started
 

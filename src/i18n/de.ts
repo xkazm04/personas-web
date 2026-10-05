@@ -89,7 +89,7 @@ export const de: LocaleTranslations = {
             "OS-eigener Schl\u00fcsselbund",
             "KI-gest\u00fctztes OAuth",
             "Automatische Token-Erneuerung",
-            "Keine Telemetrie, lokal zuerst"
+            "Lokal zuerst, nur anonyme Telemetrie"
           ]
         },
         monitoring: {
@@ -132,7 +132,7 @@ export const de: LocaleTranslations = {
     },
     hero: {
       downloadCta: "Herunterladen",
-      trustLine: "Keine Anmeldung, keine Kreditkarte. L\u00e4uft auf Ihrem Rechner. Keine Telemetrie.",
+      trustLine: "Keine Anmeldung, keine Kreditkarte. L\u00e4uft auf Ihrem Rechner.",
       badge: "KI-Agenten-Plattform",
       headingLine1: "Intelligente Agenten",
       headingLine2: "die f\u00fcr Sie arbeiten",
@@ -365,8 +365,8 @@ export const de: LocaleTranslations = {
           a: "Claude Code is Anthropic's official command-line tool for working with Claude. Personas uses it under the hood to run your agents locally. It handles authentication, model access, and streaming responses. You'll need an active Claude Pro or Max subscription and Claude Code installed before launching Personas."
         },
         {
-          q: "Does Personas collect any telemetry or usage data?",
-          a: "No. Personas runs entirely on your machine with zero telemetry. We don't collect analytics, usage metrics, or any personal data. Your prompts, agent configurations, and execution logs never leave your device."
+          q: "Erfasst Personas Telemetrie- oder Nutzungsdaten?",
+          a: "Nur anonyme Diagnosedaten. Release-Builds der Desktop-App senden Fehlerberichte und anonyme Nutzungssignale (App-Sitzungen, welche Bereiche Sie \u00f6ffnen, wichtige Aktionen) an Sentry. IP-Adressen, E-Mail-Adressen und Benutzernamen werden vorher entfernt, und Ihre Prompts, Agent-Konfigurationen, Zugangsdaten und Ausf\u00fchrungsprotokolle sind nie enthalten. Die Nutzungssignale k\u00f6nnen Sie unter Einstellungen > Konto abschalten."
         },
         {
           q: "Is Personas free?",
@@ -390,7 +390,7 @@ export const de: LocaleTranslations = {
       exploreFirst: "Zuerst M\u00f6glichkeiten erkunden",
       requiresCli: "Erfordert Claude Code",
       installerSize: "12 MB Installer",
-      noSignupLine: "Keine Registrierung, keine Kreditkarte. L\u00e4uft auf Ihrem Rechner. Null Telemetrie.",
+      noSignupLine: "Keine Registrierung, keine Kreditkarte. L\u00e4uft auf Ihrem Rechner.",
       windows: "Windows",
       macos: "macOS",
       linux: "Linux"

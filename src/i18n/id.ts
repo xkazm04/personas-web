@@ -89,7 +89,7 @@ export const id: LocaleTranslations = {
             "Keyring asli OS",
             "OAuth dengan bantuan AI",
             "Penyegaran token otomatis",
-            "Tanpa telemetri, mengutamakan lokal"
+            "Mengutamakan lokal, hanya telemetri anonim"
           ]
         },
         monitoring: {
@@ -132,7 +132,7 @@ export const id: LocaleTranslations = {
     },
     hero: {
       downloadCta: "Unduh",
-      trustLine: "Tanpa pendaftaran, tanpa kartu kredit. Berjalan di mesin Anda. Nol telemetri.",
+      trustLine: "Tanpa pendaftaran, tanpa kartu kredit. Berjalan di mesin Anda.",
       badge: "Platform Agen AI",
       headingLine1: "Agen cerdas",
       headingLine2: "yang bekerja untuk Anda",
@@ -365,8 +365,8 @@ export const id: LocaleTranslations = {
           a: "Claude Code is Anthropic's official command-line tool for working with Claude. Personas uses it under the hood to run your agents locally. It handles authentication, model access, and streaming responses. You'll need an active Claude Pro or Max subscription and Claude Code installed before launching Personas."
         },
         {
-          q: "Does Personas collect any telemetry or usage data?",
-          a: "No. Personas runs entirely on your machine with zero telemetry. We don't collect analytics, usage metrics, or any personal data. Your prompts, agent configurations, and execution logs never leave your device."
+          q: "Apakah Personas mengumpulkan telemetri atau data penggunaan?",
+          a: "Hanya diagnostik anonim. Build rilis aplikasi desktop mengirim laporan kesalahan dan sinyal penggunaan anonim (sesi aplikasi, bagian yang Anda buka, tindakan utama) ke Sentry. Alamat IP, email, dan nama pengguna dihapus terlebih dahulu, dan prompt, konfigurasi agen, kredensial, serta log eksekusi Anda tidak pernah disertakan. Anda dapat mematikan sinyal penggunaan di Pengaturan > Akun."
         },
         {
           q: "Is Personas free?",
@@ -390,7 +390,7 @@ export const id: LocaleTranslations = {
       exploreFirst: "Jelajahi kemampuan dulu",
       requiresCli: "Memerlukan Claude Code",
       installerSize: "Installer 12 MB",
-      noSignupLine: "Tanpa pendaftaran, tanpa kartu kredit. Berjalan di mesin Anda. Nol telemetri.",
+      noSignupLine: "Tanpa pendaftaran, tanpa kartu kredit. Berjalan di mesin Anda.",
       windows: "Windows",
       macos: "macOS",
       linux: "Linux"
