@@ -2696,6 +2696,26 @@
       };
     };
   };
+  landingLab: {
+    heroA: {
+      label: string;
+    };
+    heroB: {
+      label: string;
+    };
+    useCases: {
+      label: string;
+    };
+    agentMind: {
+      label: string;
+    };
+    hub: {
+      label: string;
+    };
+    getStarted: {
+      label: string;
+    };
+  };
   // END pending-translation namespaces
 }
 
@@ -2725,6 +2745,7 @@ export const PENDING_TRANSLATION = [
   'getStartedSection',
   'labSection',
   'fleetPlayground',
+  'landingLab',
 ] as const;
 
 export type PendingNamespace = (typeof PENDING_TRANSLATION)[number];
@@ -5729,6 +5750,26 @@ export const en: Translations = {
         queued: '{label} · queued',
         done: '{label} · done {age}',
       },
+    },
+  },
+  landingLab: {
+    heroA: {
+      label: 'Landing lab: hero seat A',
+    },
+    heroB: {
+      label: 'Landing lab: hero seat B',
+    },
+    useCases: {
+      label: 'Landing lab: one persona, many capabilities',
+    },
+    agentMind: {
+      label: 'Landing lab: the agent mind',
+    },
+    hub: {
+      label: 'Landing lab: orchestration hub',
+    },
+    getStarted: {
+      label: 'Landing lab: from download to running agents',
     },
   },
   // END pending-translation namespaces
