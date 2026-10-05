@@ -12,7 +12,7 @@ Incidents is the fleet's audit-log inbox: every notable event the orchestrator r
 It mirrors the desktop overview's Incidents Inbox (`sub_incidents`). Like the rest of `/dashboard/*`, all data is **mock** — incidents have no synced source in this repo.
 
 ## How it works
-The page (`src/app/dashboard/incidents/page.tsx`) is a `"use client"` component in a `staggerContainer`/`fadeUp` tree. It loads incidents via `useAuditIncidents` (SWR over a standalone mock fetcher) and reads filter/group state from the persisted `useIncidentsFilterStore`. A `useMemo` runs `applyIncidentFilters` (status/severity/source/persona → severity-then-recency sort); the result feeds `IncidentList`, which calls `groupIncidents` for the chosen dimension. A `selected` state drives the detail modal.
+The page (`src/components/dashboard/views/incidents/index.tsx`) is a `"use client"` component in a `staggerContainer`/`fadeUp` tree. It loads incidents via `useAuditIncidents` (SWR over a standalone mock fetcher) and reads filter/group state from the persisted `useIncidentsFilterStore`. A `useMemo` runs `applyIncidentFilters` (status/severity/source/persona → severity-then-recency sort); the result feeds `IncidentList`, which calls `groupIncidents` for the chosen dimension. A `selected` state drives the detail modal.
 
 Key behaviors:
 - **Persisted filters** — `useIncidentsFilterStore` mirrors `dashboardFilterStore`: a manual `hydrate()`/`persist()` pair keyed `incidents-filter-state`, type-guarding every field on load and writing after each mutation. Hydration runs once after store creation (SSR-safe).
@@ -23,16 +23,16 @@ Key behaviors:
 ## Key files
 | File | Role |
 | --- | --- |
-| `src/app/dashboard/incidents/page.tsx` | Page shell: load, filter memo, KPI/filters/group-by/list/modal layout |
-| `src/app/dashboard/incidents/incidents-page/incidentFormat.ts` | Severity/status/source tint + icon maps; `applyIncidentFilters` + `groupIncidents`; filter/group types |
-| `src/app/dashboard/incidents/incidents-page/useIncidentsFilterStore.ts` | Zustand store (status/severity/source/persona/groupBy) persisted to localStorage |
-| `src/app/dashboard/incidents/incidents-page/useAuditIncidents.ts` | SWR over the standalone `getAuditIncidents` mock fetcher |
-| `src/app/dashboard/incidents/incidents-page/IncidentsKpiHeader.tsx` | Open/total headline + severity + source breakdown (from the full set) |
-| `src/app/dashboard/incidents/incidents-page/IncidentsFilters.tsx` | Status/severity/source/persona `FilterBar`s + clear button (reads the store) |
-| `src/app/dashboard/incidents/incidents-page/IncidentsGroupByTabs.tsx` | Group-by segmented control (roving tabindex, mirrors `EventsPageTabs`) |
-| `src/app/dashboard/incidents/incidents-page/IncidentRow.tsx` | One incident row: severity rail + meta + status badge → opens modal |
-| `src/app/dashboard/incidents/incidents-page/IncidentList.tsx` | Flat or collapsible-grouped rendering of the filtered incidents |
-| `src/app/dashboard/incidents/incidents-page/IncidentDetailModal.tsx` | Row→detail modal (description, meta grid, recommendation) on shared `Modal` |
+| `src/components/dashboard/views/incidents/index.tsx` | Page shell: load, filter memo, KPI/filters/group-by/list/modal layout |
+| `src/components/dashboard/views/incidents/incidents-page/incidentFormat.ts` | Severity/status/source tint + icon maps; `applyIncidentFilters` + `groupIncidents`; filter/group types |
+| `src/components/dashboard/views/incidents/incidents-page/useIncidentsFilterStore.ts` | Zustand store (status/severity/source/persona/groupBy) persisted to localStorage |
+| `src/components/dashboard/views/incidents/incidents-page/useAuditIncidents.ts` | SWR over the standalone `getAuditIncidents` mock fetcher |
+| `src/components/dashboard/views/incidents/incidents-page/IncidentsKpiHeader.tsx` | Open/total headline + severity + source breakdown (from the full set) |
+| `src/components/dashboard/views/incidents/incidents-page/IncidentsFilters.tsx` | Status/severity/source/persona `FilterBar`s + clear button (reads the store) |
+| `src/components/dashboard/views/incidents/incidents-page/IncidentsGroupByTabs.tsx` | Group-by segmented control (roving tabindex, mirrors `EventsPageTabs`) |
+| `src/components/dashboard/views/incidents/incidents-page/IncidentRow.tsx` | One incident row: severity rail + meta + status badge → opens modal |
+| `src/components/dashboard/views/incidents/incidents-page/IncidentList.tsx` | Flat or collapsible-grouped rendering of the filtered incidents |
+| `src/components/dashboard/views/incidents/incidents-page/IncidentDetailModal.tsx` | Row→detail modal (description, meta grid, recommendation) on shared `Modal` |
 
 ## Data & state
 - **Source:** Demo-only. `MOCK_AUDIT_INCIDENTS` (16 deterministic incidents, dates stamped at module load) + `INCIDENT_SEVERITIES` / `INCIDENT_STATUSES` / `INCIDENT_SOURCES` / `MOCK_OPEN_INCIDENTS` live in `src/lib/mock-dashboard-data.ts`. `getAuditIncidents()` is a standalone fetcher in `src/lib/mockApi.ts`.

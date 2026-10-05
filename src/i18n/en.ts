@@ -178,7 +178,17 @@
     knowledge: string;
     settings: string;
     leaderboard: string;
-    playground: string;
+    personas: string;
+    missionControl: string;
+    /** aria-label of the dashboard's level-1 section rail. */
+    navSectionsLabel: string;
+    /** Captions of the Overview section's level-2 groups. */
+    navGroups: {
+      mission: string;
+      monitoring: string;
+      reliability: string;
+      memory: string;
+    };
     director: string;
     sla: string;
     incidents: string;
@@ -1434,7 +1444,6 @@
     features5: string;
     features6: string;
     dashboardHome: string;
-    dashboardAgents: string;
     dashboardExecutions: string;
     dashboardEvents: string;
     dashboardReviews: string;
@@ -2408,7 +2417,7 @@
       };
     };
   };
-  fleetPlayground: {
+  personasMonitor: {
     title: string;
     lede: string;
     demoBadge: string;
@@ -2744,7 +2753,7 @@ export const PENDING_TRANSLATION = [
   'pluginsExtra',
   'getStartedSection',
   'labSection',
-  'fleetPlayground',
+  'personasMonitor',
   'landingLab',
 ] as const;
 
@@ -3075,7 +3084,15 @@ export const en: Translations = {
     knowledge: 'Knowledge',
     settings: 'Settings',
     leaderboard: 'Leaderboard',
-    playground: 'Playground',
+    personas: 'Personas',
+    missionControl: 'Mission Control',
+    navSectionsLabel: 'Dashboard sections',
+    navGroups: {
+      mission: 'Mission',
+      monitoring: 'Monitoring',
+      reliability: 'Reliability',
+      memory: 'Memory',
+    },
     director: 'Director',
     sla: 'SLA',
     incidents: 'Incidents',
@@ -4354,7 +4371,6 @@ export const en: Translations = {
     features5: 'Great agents are rarely right the first time, so the Lab is where you refine them. Chat with a persona to coach it, pit two versions against each other in the arena, evolve it across generations, or score it on the dimensions that matter. Every improvement you keep is versioned and reversible.',
     features6: 'Personas ships with six purpose-built plugins, each a self-contained workspace your agents can drive. Take Dev Tools: it turns a persona into a coding teammate that runs tasks, reads the output, and iterates. Switch a tab and you meet another specialist — all sharing the same credentials and memory.',
     dashboardHome: 'Welcome to mission control — your whole fleet on one screen. Up top, the vitals: success rate, runs in flight, active agents, open alerts, and reviews waiting on you. Below that, the optimizer surfaces one high-leverage fix at a time — right now, a routing change that trims cost without touching quality. The two panels beneath track each agent\'s health and the new memories they\'ve learned and want to promote. Then the live picture: every execution as it lands on the left, fourteen days of traffic and errors on the right. The heatmap shows runs per agent, day by day, and the bottom row rounds it out — your top performers, the next scheduled routines, and every credential rotation. One page, the entire operation.',
-    dashboardAgents: 'This is your roster. Each card is a persona — a single agent with one identity and a set of skills it can compose. The portrait is generated to match its character; below it, the live stats: success rate, runs, and spend. Hit Execute to run one on demand, or open Details to inspect its configuration and recent history. Five agents here, each quietly doing one job well.',
     dashboardExecutions: 'Every run the fleet has made lives here, newest first. The table shows the persona, status, duration, cost, and when it started — filter down to just the failures, or the ones still running. Click any row and the full execution opens: a metrics strip, any error explanation, and the live output streaming line by line, exactly as the agent produced it.',
     dashboardEvents: 'Agents don\'t work in isolation — they react to events. This is the event bus: every signal flowing through the system, from schedules and webhooks to messages between agents. Each row shows the event type, its source, status, and how long ago it fired. Failed events can be retried in place, and related events chain together so you can follow a single cascade end to end.',
     dashboardReviews: 'Some decisions need a human. When an agent hits something it shouldn\'t decide alone, it pauses and routes the call here. Each item carries the persona, the context, and the action it\'s proposing — approve it, reject it, or skip for later, by click or by keyboard. Nothing risky ships without your sign-off, and the queue keeps the rest of the fleet moving while you decide.',
@@ -5464,12 +5480,12 @@ export const en: Translations = {
       },
     },
   },
-  fleetPlayground: {
-    title: 'Fleet playground',
-    lede: 'Prototypes for a fleet dashboard that holds 10 to 100 agents: who needs you, what is moving, where to go next.',
+  personasMonitor: {
+    title: 'Personas',
+    lede: 'Every persona you run on one screen: who needs you, what is moving, where to go next.',
     demoBadge: 'Demo fleet',
     artBadge: 'Stylised illustration',
-    viewsLabel: 'Prototype',
+    viewsLabel: 'View',
     views: {
       board: 'Board',
       city: 'Night shift',
@@ -5479,7 +5495,7 @@ export const en: Translations = {
       city: 'Showcase: the fleet as a city at night, one building per team',
     },
     scaleLabel: 'Agents',
-    loading: 'Loading the prototype',
+    loading: 'Loading your personas',
     rail: {
       title: 'Needs you',
       empty: 'Nobody is waiting on you.',

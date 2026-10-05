@@ -45,29 +45,29 @@ In this repo it is **demo-only**: everything renders from in-process fixtures. A
 
 | File | Role |
 | --- | --- |
-| `src/app/dashboard/observability/page.tsx` | Route page; Performance/Usage tab switch via `FilterBar` |
-| `src/app/dashboard/observability/PerformanceView.tsx` | Performance tab; SWR `getObservability`, derives chart data, health/budget/anomaly logic |
-| `src/app/dashboard/observability/UsageView.tsx` | Usage tab; SWR `getUsageAnalytics`, top-N bar + distribution + over-time + per-persona, deferred mount |
-| `src/app/dashboard/observability/performance-view/PerformanceMetricsGrid.tsx` | Four KPI `MetricCard`s with sparklines |
-| `src/app/dashboard/observability/performance-view/PerformanceChartGrid.tsx` | Cost + Exec `GlowCard`s; dynamic `*WithCompare` charts, compare title |
-| `src/app/dashboard/observability/performance-view/PerformanceLatencyCard.tsx` | Latency p50/p95/p99 card; dynamic `LatencyChart`, empty state |
-| `src/app/dashboard/observability/performance-view/PerformanceSpendCard.tsx` | Spend-by-agent donut + per-persona budget bars |
-| `src/app/dashboard/observability/performance-view/PerformanceHealthPanel.tsx` | Health-issue list, severity chips, Run-Analysis demo, healthy empty state |
-| `src/app/dashboard/observability/performance-view/PerformanceHealthIssueRow.tsx` | One issue row; severity styling, auto-fix/circuit-breaker pills, expandable fix detail, `?focus=` ring + Related chips |
-| `src/app/dashboard/observability/performance-view/SeverityFilterChips.tsx` | All/Critical/High/Medium/Low filter pills with counts |
-| `src/app/dashboard/observability/performance-view/CostAnomalyBanner.tsx` | Dismissible per-date cost-anomaly banners (demo only) |
-| `src/app/dashboard/observability/performance-view/performanceViewTypes.ts` | `BUDGET_THRESHOLD` (0.8), `SeverityFilter`, `ObservabilityLabels` (derived from i18n) |
-| `src/app/dashboard/observability/performance-view/useLatencyData.ts` | Latency source: `MOCK_LATENCY_DATA` (demo) vs. per-day p50/p95/p99 from `listExecutions` |
-| `src/app/dashboard/observability/performance-view/useSparklines.ts` | Metric-tile sparklines: `sparklinesFromDaily` over `MOCK_DAILY_METRICS` (demo) or `getObservabilityDaily` (real); agents series is `SPARKLINE_AGENTS` (demo) / empty (real) |
-| `src/app/dashboard/observability/usage-view/UsageChartCards.tsx` | Usage card wrappers; per-export dynamic chart imports + skeletons |
-| `src/app/dashboard/observability/usage-view/usageViewData.ts` | `formatToolName` cache (no fixtures - demo usage comes from `mockApi`) |
-| `src/app/dashboard/observability/usage-view/useDeferredMount.ts` | IntersectionObserver hook — mount a card only when near viewport |
-| `src/app/dashboard/observability/ActivityMetricsView.tsx` | Activity tab; compare toggle, Athena/value row + Athena lane row |
-| `src/app/dashboard/observability/activity-view/useActivityMetrics.ts` | SWR over `getActivityMetrics` (usage, rollup, action mix, ledger) |
-| `src/app/dashboard/observability/activity-view/AthenaUsageCard.tsx` | Stacked cost-by-action area (invoke/recall/fallback) + prev-period overlay |
-| `src/app/dashboard/observability/activity-view/ValueRollupCard.tsx` | Value-delivered rate + cost-per-value + outcome bar |
-| `src/app/dashboard/observability/activity-view/AthenaActionMixCard.tsx` | Op-grammar cost breakdown (chat / fleet_spawn / canvas_control / recall / nudges / triage legs) |
-| `src/app/dashboard/observability/activity-view/AthenaSpendLane.tsx` | Turn-ledger totals (turns, cost, avg/turn, tokens) + Athena-vs-fleet ratio |
+| `src/components/dashboard/views/observability/index.tsx` | Route page; Performance/Usage tab switch via `FilterBar` |
+| `src/components/dashboard/views/observability/PerformanceView.tsx` | Performance tab; SWR `getObservability`, derives chart data, health/budget/anomaly logic |
+| `src/components/dashboard/views/observability/UsageView.tsx` | Usage tab; SWR `getUsageAnalytics`, top-N bar + distribution + over-time + per-persona, deferred mount |
+| `src/components/dashboard/views/observability/performance-view/PerformanceMetricsGrid.tsx` | Four KPI `MetricCard`s with sparklines |
+| `src/components/dashboard/views/observability/performance-view/PerformanceChartGrid.tsx` | Cost + Exec `GlowCard`s; dynamic `*WithCompare` charts, compare title |
+| `src/components/dashboard/views/observability/performance-view/PerformanceLatencyCard.tsx` | Latency p50/p95/p99 card; dynamic `LatencyChart`, empty state |
+| `src/components/dashboard/views/observability/performance-view/PerformanceSpendCard.tsx` | Spend-by-agent donut + per-persona budget bars |
+| `src/components/dashboard/views/observability/performance-view/PerformanceHealthPanel.tsx` | Health-issue list, severity chips, Run-Analysis demo, healthy empty state |
+| `src/components/dashboard/views/observability/performance-view/PerformanceHealthIssueRow.tsx` | One issue row; severity styling, auto-fix/circuit-breaker pills, expandable fix detail, `?focus=` ring + Related chips |
+| `src/components/dashboard/views/observability/performance-view/SeverityFilterChips.tsx` | All/Critical/High/Medium/Low filter pills with counts |
+| `src/components/dashboard/views/observability/performance-view/CostAnomalyBanner.tsx` | Dismissible per-date cost-anomaly banners (demo only) |
+| `src/components/dashboard/views/observability/performance-view/performanceViewTypes.ts` | `BUDGET_THRESHOLD` (0.8), `SeverityFilter`, `ObservabilityLabels` (derived from i18n) |
+| `src/components/dashboard/views/observability/performance-view/useLatencyData.ts` | Latency source: `MOCK_LATENCY_DATA` (demo) vs. per-day p50/p95/p99 from `listExecutions` |
+| `src/components/dashboard/views/observability/performance-view/useSparklines.ts` | Metric-tile sparklines: `sparklinesFromDaily` over `MOCK_DAILY_METRICS` (demo) or `getObservabilityDaily` (real); agents series is `SPARKLINE_AGENTS` (demo) / empty (real) |
+| `src/components/dashboard/views/observability/usage-view/UsageChartCards.tsx` | Usage card wrappers; per-export dynamic chart imports + skeletons |
+| `src/components/dashboard/views/observability/usage-view/usageViewData.ts` | `formatToolName` cache (no fixtures - demo usage comes from `mockApi`) |
+| `src/components/dashboard/views/observability/usage-view/useDeferredMount.ts` | IntersectionObserver hook — mount a card only when near viewport |
+| `src/components/dashboard/views/observability/ActivityMetricsView.tsx` | Activity tab; compare toggle, Athena/value row + Athena lane row |
+| `src/components/dashboard/views/observability/activity-view/useActivityMetrics.ts` | SWR over `getActivityMetrics` (usage, rollup, action mix, ledger) |
+| `src/components/dashboard/views/observability/activity-view/AthenaUsageCard.tsx` | Stacked cost-by-action area (invoke/recall/fallback) + prev-period overlay |
+| `src/components/dashboard/views/observability/activity-view/ValueRollupCard.tsx` | Value-delivered rate + cost-per-value + outcome bar |
+| `src/components/dashboard/views/observability/activity-view/AthenaActionMixCard.tsx` | Op-grammar cost breakdown (chat / fleet_spawn / canvas_control / recall / nudges / triage legs) |
+| `src/components/dashboard/views/observability/activity-view/AthenaSpendLane.tsx` | Turn-ledger totals (turns, cost, avg/turn, tokens) + Athena-vs-fleet ratio |
 | `src/components/dashboard/CompareToggle.tsx` | Shared compare pill (`aria-pressed`, tap scale) |
 | `src/components/dashboard/CostChartWithCompare.tsx` | Cost area chart + previous-period overlay + annotations |
 | `src/components/dashboard/ExecChartWithCompare.tsx` | Exec stacked-bar (Bar→ComposedChart in compare) + annotations |

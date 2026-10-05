@@ -27,12 +27,12 @@ The dashboard nav badge next to "Executions" shows the count of active (running 
 
 | File | Role |
 | --- | --- |
-| `src/app/dashboard/executions/page.tsx` | Page: list load, poll gating, filter/paging state, modal selection |
-| `src/app/dashboard/executions/executions-page/ExecutionsFilters.tsx` | Status filter pills (wraps shared `FilterBar`) + loading spinner |
-| `src/app/dashboard/executions/executions-page/buildExecutionColumns.tsx` | Column defs + per-status row border class + cancel button |
-| `src/app/dashboard/executions/executions-page/ExecutionsEmptyState.tsx` | Empty vs. filtered-empty states (distinct copy + "show all" action) |
-| `src/app/dashboard/executions/executions-page/ExecutionDetailModal.tsx` | Detail modal: persona header, KPI strip, error, output viewer |
-| `src/app/dashboard/executions/executions-page/ExecutionOutput.tsx` | Terminal-style output viewer; sticky-bottom auto-follow + jump pill |
+| `src/components/dashboard/views/executions/index.tsx` | Page: list load, poll gating, filter/paging state, modal selection |
+| `src/components/dashboard/views/executions/executions-page/ExecutionsFilters.tsx` | Status filter pills (wraps shared `FilterBar`) + loading spinner |
+| `src/components/dashboard/views/executions/executions-page/buildExecutionColumns.tsx` | Column defs + per-status row border class + cancel button |
+| `src/components/dashboard/views/executions/executions-page/ExecutionsEmptyState.tsx` | Empty vs. filtered-empty states (distinct copy + "show all" action) |
+| `src/components/dashboard/views/executions/executions-page/ExecutionDetailModal.tsx` | Detail modal: persona header, KPI strip, error, output viewer |
+| `src/components/dashboard/views/executions/executions-page/ExecutionOutput.tsx` | Terminal-style output viewer; sticky-bottom auto-follow + jump pill |
 | `src/hooks/useExecutionPolling.ts` | Offset-based output polling; stops on terminal status; 500-line cap |
 | `src/hooks/usePolling.ts` | Generic interval poller; visibility-gated; clamps sub-16ms intervals |
 | `src/stores/executionStore.ts` | `rawExecutions`, `activeCount`, fetch/cancel; enrichment selector |

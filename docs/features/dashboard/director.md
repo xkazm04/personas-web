@@ -20,7 +20,7 @@ The demo story: ResearchAgent and CodeReviewer are improving, DataProcessor is f
 
 ## How it works
 
-**Data hook — `useDirectorData()`** (`src/app/dashboard/director/useDirectorData.ts`). SWR over the standalone mock fetcher `getDirectorSnapshot()` (`src/lib/mockApi.ts`) — the same demo-only pattern as `useActivityMetrics`: `revalidateOnFocus: false`, 60s dedupe, `retry` = `mutate`. There is no real-mode branch; the Director has no synced source in this repo.
+**Data hook — `useDirectorData()`** (`src/components/dashboard/views/director/useDirectorData.ts`). SWR over the standalone mock fetcher `getDirectorSnapshot()` (`src/lib/mockApi.ts`) — the same demo-only pattern as `useActivityMetrics`: `revalidateOnFocus: false`, 60s dedupe, `retry` = `mutate`. There is no real-mode branch; the Director has no synced source in this repo.
 
 **Mock fixtures** (`src/lib/mock-dashboard-data.ts`, "Director" section): `MOCK_DIRECTOR_PORTFOLIO` (period, total cost, assessed-run breakdown, six score bands, five-agent roster, scope counters, avg score) and `MOCK_DIRECTOR_VERDICTS` (six coaching notes across severities/categories). Roster timestamps are `Date.now()` offsets at module load. Verdict titles and persona names are fixture data shown verbatim (same convention as `MOCK_HEALTH_CHECKS` details).
 
@@ -47,18 +47,18 @@ The demo story: ResearchAgent and CodeReviewer are improving, DataProcessor is f
 
 | File | Role |
 | --- | --- |
-| `src/app/dashboard/director/page.tsx` | Page shell, facet state, `now` snapshot, skeleton/error handling |
-| `src/app/dashboard/director/useDirectorData.ts` | SWR hook over the mock fetcher |
-| `src/app/dashboard/director/director-page/directorMeta.ts` | Pure score/momentum/attention/facet/sparkline derivations |
-| `src/app/dashboard/director/director-page/DirectorKpiGrid.tsx` | Portfolio scorecard (4 KPI tiles) |
-| `src/app/dashboard/director/director-page/MomentumStrip.tsx` | Improving/flat/declining filter chips |
-| `src/app/dashboard/director/director-page/ValueBreakdownCard.tsx` | Stacked value-outcome bar + legend |
-| `src/app/dashboard/director/director-page/ScoreDistributionCard.tsx` | 0–5 verdict histogram card; defers `ScoreDistributionChart` |
+| `src/components/dashboard/views/director/index.tsx` | Page shell, facet state, `now` snapshot, skeleton/error handling |
+| `src/components/dashboard/views/director/useDirectorData.ts` | SWR hook over the mock fetcher |
+| `src/components/dashboard/views/director/director-page/directorMeta.ts` | Pure score/momentum/attention/facet/sparkline derivations |
+| `src/components/dashboard/views/director/director-page/DirectorKpiGrid.tsx` | Portfolio scorecard (4 KPI tiles) |
+| `src/components/dashboard/views/director/director-page/MomentumStrip.tsx` | Improving/flat/declining filter chips |
+| `src/components/dashboard/views/director/director-page/ValueBreakdownCard.tsx` | Stacked value-outcome bar + legend |
+| `src/components/dashboard/views/director/director-page/ScoreDistributionCard.tsx` | 0–5 verdict histogram card; defers `ScoreDistributionChart` |
 | `src/components/dashboard/ScoreDistributionChart.tsx` | The Recharts histogram itself (click-to-filter), lazy-loaded |
-| `src/app/dashboard/director/director-page/CoachingTable.tsx` | Per-agent verdict-history table |
-| `src/app/dashboard/director/director-page/AttentionTriageBar.tsx` | Attention flag chips + clear-chip |
-| `src/app/dashboard/director/director-page/scoreVisuals.tsx` | Score sparkline + delta arrow |
-| `src/app/dashboard/director/director-page/VerdictFeedCard.tsx` | Recent coaching-verdict feed |
+| `src/components/dashboard/views/director/director-page/CoachingTable.tsx` | Per-agent verdict-history table |
+| `src/components/dashboard/views/director/director-page/AttentionTriageBar.tsx` | Attention flag chips + clear-chip |
+| `src/components/dashboard/views/director/director-page/scoreVisuals.tsx` | Score sparkline + delta arrow |
+| `src/components/dashboard/views/director/director-page/VerdictFeedCard.tsx` | Recent coaching-verdict feed |
 | `src/lib/mockApi.ts` | `getDirectorSnapshot()` standalone demo fetcher |
 | `src/lib/mock-dashboard-data.ts` | Director types + `MOCK_DIRECTOR_PORTFOLIO` / `MOCK_DIRECTOR_VERDICTS` |
 

@@ -1180,7 +1180,7 @@ export const MOCK_FLEET_RECOMMENDATION: FleetRecommendation = {
   impact: "≈ $48/month saved",
   personaName: FEEDBACK.name,
   actionLabel: "Review routing policy",
-  actionHref: "/dashboard/agents",
+  actionHref: "/dashboard/personas",
 };
 
 export const MOCK_HEALTH_DIGEST: HealthDigest = {

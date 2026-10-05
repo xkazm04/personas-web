@@ -41,7 +41,7 @@ Separately, a small standalone `apiFetch` wrapper serves the marketing-side Next
 - **Auth session** — the Proxy reads `isDemo` to route, and `orchestratorFetch` reads `initialized`/`accessToken`; the dashboard's `AuthProvider` must initialize the store before any live call (the wrapper throws otherwise). See [Authentication & User Session](authentication-session.md).
 - **Supabase mirror** — `supabaseApi` is the third dispatch target (`NEXT_PUBLIC_DATA_SOURCE=supabase`), a read-only desktop→Supabase sync mirror implementing the same `ApiClient`.
 - **Sentry** — `listAllSubscriptions` reports per-persona failures via `Sentry.captureException` with a `listAllSubscriptions` tag.
-- **Every dashboard page** — Overview, Agents, Executions, Events, Reviews, Observability, Usage all consume `api`; the visualization-only pages (SLA, Leaderboard, Memories, Messages, Knowledge) read directly from `mock-dashboard-data.ts` fixtures rather than through `api`.
+- **Every dashboard page** — Overview, Executions, Events, Reviews, Observability, Usage all consume `api`; the visualization-only pages (SLA, Leaderboard, Memories, Messages, Knowledge) read directly from `mock-dashboard-data.ts` fixtures rather than through `api`.
 
 ## Conventions & gotchas
 - **`src/proxy.ts` is NOT the API proxy.** Despite the name, it's a Next-middleware-shaped mobile-UA redirect (`/dashboard/*` → `/m/overview`) gated by a `prefer-full` cookie. It exports `proxy()` + a `matcher` config but **nothing imports it**, and there is no `src/middleware.ts` — Next.js only auto-runs a file literally named `middleware.ts`. So as wired today this redirect is **dormant/dead code**; the "proxy" that actually dispatches demo-vs-live is the `Proxy` in `api.ts`. Don't conflate the two.

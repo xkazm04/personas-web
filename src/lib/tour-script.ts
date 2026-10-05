@@ -27,7 +27,6 @@ export type TourNarrationKey =
   | "features5"
   | "features6"
   | "dashboardHome"
-  | "dashboardAgents"
   | "dashboardExecutions"
   | "dashboardEvents"
   | "dashboardReviews"
@@ -306,7 +305,7 @@ export const FEATURES_TOUR_STEPS: TourStep[] = [
 
 // /dashboard — one recording per page. The home clip is a single ~46s track
 // whose spotlight sweeps the six home regions in time with the narration; each
-// dashboard tab (Agents, Executions, Events, Reviews) is then its own step on
+// dashboard view (Executions, Events, Reviews) is then its own step on
 // its own route, navigated to in turn. `dwellMs` is only the audio-error
 // fallback here — auto-advance is driven by each clip's `ended` event. No
 // bridge: Reviews is the end of the journey.
@@ -326,15 +325,6 @@ export const DASHBOARD_TOUR_STEPS: TourStep[] = [
     narration: "dashboardHome",
     dwellMs: 48000,
     audioSrc: "/tour/dashboardHome.mp3",
-  },
-  {
-    id: "agents",
-    route: "/dashboard/agents",
-    scrollTarget: '[data-tour-diagram="dashboard-agents"]',
-    spotlightTarget: '[data-tour-diagram="dashboard-agents"]',
-    narration: "dashboardAgents",
-    dwellMs: 27000,
-    audioSrc: "/tour/dashboardAgents.mp3",
   },
   {
     id: "executions",

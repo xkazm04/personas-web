@@ -84,6 +84,15 @@ const nextConfig: NextConfig = {
       },
     ];
   },
+  // Retired dashboard views that external links still point at. Personas
+  // replaced both the Agents grid and the fleet Playground (2026-10-05).
+  // Temporary (307) so the targets can still move.
+  async redirects() {
+    return [
+      { source: "/dashboard/agents", destination: "/dashboard/personas", permanent: false },
+      { source: "/dashboard/playground", destination: "/dashboard/personas", permanent: false },
+    ];
+  },
 };
 
 // DevInspector — dev-only source-location stamping (press `;` then `i`, then

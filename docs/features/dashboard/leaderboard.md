@@ -18,7 +18,7 @@ It then renders two side-by-side panels (a 5-column grid: table spans 3, radar s
 
 ## How it works
 
-**Data hook — `useLeaderboardData()`** (`src/app/dashboard/leaderboard/useLeaderboardData.ts`). Returns `{ personas, loading, error }`. Mode is decided once per session from `authStore.isDemo` (`useLeaderboardData.ts:25`):
+**Data hook — `useLeaderboardData()`** (`src/components/dashboard/views/leaderboard/useLeaderboardData.ts`). Returns `{ personas, loading, error }`. Mode is decided once per session from `authStore.isDemo` (`useLeaderboardData.ts:25`):
 - **Demo mode** (this repo's default): the `useState` initializer seeds `MOCK_LEADERBOARD`, `loading` starts `false`, and the effect early-returns (`if (useMock) return;` at `useLeaderboardData.ts:38`) — no fetch runs.
 - **Real/Supabase mode**: the effect calls `getSyncedLeaderboard()` (`src/lib/supabaseApi.ts:754`), which reads the `synced_leaderboard` view and normalizes per-persona execution stats into the five radar axes + composite. Errors are captured to Sentry with `tags: { scope: "useLeaderboardData" }` (`useLeaderboardData.ts:50`) and surfaced via `error`. A `cancelled` flag guards the async setState on unmount.
 
@@ -45,17 +45,17 @@ It then renders two side-by-side panels (a 5-column grid: table spans 3, radar s
 
 | File | Role |
 | --- | --- |
-| `src/app/dashboard/leaderboard/page.tsx` | Page shell: selection/benchmark state, `rankDim` state, `radarData`/`top` memos, podium + tabs above the 5-col grid. |
-| `src/app/dashboard/leaderboard/leaderboard-page/LeaderboardPodium.tsx` | Top-3 podium cards with medals + animated score ring (reduced-motion gated); click selects → radar. |
-| `src/app/dashboard/leaderboard/leaderboard-page/RankDimensionTabs.tsx` | Rank-dimension segmented control (roving tabindex) driving the podium. |
-| `src/app/dashboard/leaderboard/leaderboard-page/leaderboardRank.ts` | Pure rank-dimension helpers: `RANK_DIMENSIONS`, `dimensionScore`, `rankByDimension`. |
-| `src/app/dashboard/leaderboard/useLeaderboardData.ts` | Data hook: demo mock vs. Supabase `getSyncedLeaderboard`, loading/error state, Sentry capture. |
-| `src/app/dashboard/leaderboard/leaderboard-page/LeaderboardTable.tsx` | Sortable ranked table: sort state, rank/order memos, row rendering, selection highlight. |
-| `src/app/dashboard/leaderboard/leaderboard-page/LeaderboardSortHeader.tsx` | Per-column sort button with chevron pair + active-cyan state + `aria-label`. |
-| `src/app/dashboard/leaderboard/leaderboard-page/leaderboardSort.ts` | Pure sort/rank helpers: `rankByComposite`, `defaultDirFor`, `sortPersonas`. |
-| `src/app/dashboard/leaderboard/leaderboard-page/LeaderboardRadarCard.tsx` | Radar card chrome; defers `LeaderboardRadarChart`. |
+| `src/components/dashboard/views/leaderboard/index.tsx` | Page shell: selection/benchmark state, `rankDim` state, `radarData`/`top` memos, podium + tabs above the 5-col grid. |
+| `src/components/dashboard/views/leaderboard/leaderboard-page/LeaderboardPodium.tsx` | Top-3 podium cards with medals + animated score ring (reduced-motion gated); click selects → radar. |
+| `src/components/dashboard/views/leaderboard/leaderboard-page/RankDimensionTabs.tsx` | Rank-dimension segmented control (roving tabindex) driving the podium. |
+| `src/components/dashboard/views/leaderboard/leaderboard-page/leaderboardRank.ts` | Pure rank-dimension helpers: `RANK_DIMENSIONS`, `dimensionScore`, `rankByDimension`. |
+| `src/components/dashboard/views/leaderboard/useLeaderboardData.ts` | Data hook: demo mock vs. Supabase `getSyncedLeaderboard`, loading/error state, Sentry capture. |
+| `src/components/dashboard/views/leaderboard/leaderboard-page/LeaderboardTable.tsx` | Sortable ranked table: sort state, rank/order memos, row rendering, selection highlight. |
+| `src/components/dashboard/views/leaderboard/leaderboard-page/LeaderboardSortHeader.tsx` | Per-column sort button with chevron pair + active-cyan state + `aria-label`. |
+| `src/components/dashboard/views/leaderboard/leaderboard-page/leaderboardSort.ts` | Pure sort/rank helpers: `rankByComposite`, `defaultDirFor`, `sortPersonas`. |
+| `src/components/dashboard/views/leaderboard/leaderboard-page/LeaderboardRadarCard.tsx` | Radar card chrome; defers `LeaderboardRadarChart`. |
 | `src/components/dashboard/LeaderboardRadarChart.tsx` | The Recharts radar itself (selected-vs-benchmark overlay, reduced-motion-gated animation), lazy-loaded. |
-| `src/app/dashboard/leaderboard/leaderboard-page/leaderboardStyles.tsx` | Visual helpers: `compositeBand`, `medalStyle`, `TrendIcon`, `RankBadge`. |
+| `src/components/dashboard/views/leaderboard/leaderboard-page/leaderboardStyles.tsx` | Visual helpers: `compositeBand`, `medalStyle`, `TrendIcon`, `RankBadge`. |
 | `src/lib/mock-dashboard-data.ts` | `LeaderboardPersona` / `LeaderboardTrend` types + `MOCK_LEADERBOARD` fixture (`:536`–`:606`). |
 | `src/lib/supabaseApi.ts` | `getSyncedLeaderboard()` real-data normalizer over the `synced_leaderboard` view (`:754`). |
 

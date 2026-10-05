@@ -18,6 +18,9 @@ const approveToast = (page: Page) =>
 /** A demo session is in-memory: enter it via /demo, then navigate client-side. */
 async function openReviewsInDemo(page: Page) {
   await page.goto("/demo");
+  await page.waitForURL("**/dashboard/personas");
+  // Reviews sits in Overview's level-2 panel, which opens with the section.
+  await page.locator("a[href='/dashboard/home']").first().click();
   await page.waitForURL("**/dashboard/home");
   await page.locator("a[href='/dashboard/reviews']").first().click();
   await page.waitForURL("**/dashboard/reviews");

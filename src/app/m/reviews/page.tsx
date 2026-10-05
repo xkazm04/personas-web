@@ -4,7 +4,7 @@ import { useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { motion } from "framer-motion";
 
-import ReviewsFocusFlow from "@/app/dashboard/reviews/ReviewsFocusFlow";
+import ReviewsFocusFlow from "@/components/dashboard/views/reviews/ReviewsFocusFlow";
 import { useReviewStore } from "@/stores/reviewStore";
 import { useTranslation } from "@/i18n/useTranslation";
 import { fadeUp, staggerContainer } from "@/lib/animations";

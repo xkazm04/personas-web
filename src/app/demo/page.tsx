@@ -28,8 +28,11 @@ export default function DemoEntryPage() {
   useEffect(() => {
     // Forward any query (notably `?tour=1` from the /features bridge) so the
     // dashboard's TourLauncher can autostart on arrival.
+    // The demo opens on Personas, the dashboard's main view; the guided tour
+    // starts from Mission Control, where its launcher lives.
     const search = window.location.search;
-    const target = `/dashboard/home${search}`;
+    const view = new URLSearchParams(search).has("tour") ? "home" : "personas";
+    const target = `/dashboard/${view}${search}`;
     try {
       enterDemo();
       router.replace(target);
@@ -59,7 +62,7 @@ export default function DemoEntryPage() {
             The demo could not start automatically.
           </span>
           <Link
-            href="/dashboard/home"
+            href="/dashboard/personas"
             className="rounded-lg border border-glass px-4 py-2 text-base text-brand-cyan hover:bg-white/5"
           >
             Open the demo

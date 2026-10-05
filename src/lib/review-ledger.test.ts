@@ -167,7 +167,7 @@ function walk(dir: string): string[] {
 describe("review ledger: source scans", () => {
   it("no review surface or hook calls resolveReview( directly", () => {
     const files = [
-      ...walk(path.join(SRC, "app/dashboard/reviews")),
+      ...walk(path.join(SRC, "components/dashboard/views/reviews")),
       ...walk(path.join(SRC, "app/m/reviews")),
       path.join(SRC, "hooks/useReviewBulkActions.ts"),
     ];
