@@ -16,7 +16,7 @@ Top to bottom:
 
 **Cross-filtering:** one facet is active at a time (momentum chip, score band, or attention flag); activating another replaces it, re-clicking clears it, and an ✕ clear-chip naming the facet appears in the table header.
 
-The demo story: ResearchAgent and CodeReviewer are improving, DataProcessor is flat and stale, NotifyBot is declining into low scores, and ReportGen has never been reviewed.
+The demo story runs on the shared demo fleet (`FLEET`, the same five agents every dashboard page shows), with momentum matching the leaderboard trends: Incident Responder and PR Review Agent are improving, Security Scanner (disabled) is flat and stale, Daily Standup Digest is declining into low scores, and Customer Feedback Analyzer has never been reviewed. `src/lib/mockFleetConsistency.test.ts` holds the roster and verdicts to `FLEET`.
 
 ## How it works
 
@@ -79,7 +79,7 @@ The demo story: ResearchAgent and CodeReviewer are improving, DataProcessor is f
 
 - **Desktop parity, trimmed:** the desktop Director tab also has period pills (7d/30d/90d), model-efficiency and issues-by-category panels, review actions ("Review all in scope", stale sweep), an add-to-scope modal, per-agent detail modals with full coaching history, Obsidian long-term memory, and the Director's Lab / campaign report. The web demo deliberately renders the read-only scorecard story only; the period label is static ("Last 30 days" from the fixture).
 - **Verdict titles are English fixtures** — data, not UI strings; the same convention as other mock detail text. All labels/hints are i18n.
-- The roster's `lastReviewedAt` offsets are computed at module load, so DataProcessor's 16-day-old review always trips the 14-day stale rule regardless of when the demo runs.
+- The roster's `lastReviewedAt` offsets are computed at module load, so Security Scanner's 16-day-old review always trips the 14-day stale rule regardless of when the demo runs.
 - `attentionFlags` returns `needsReview` *exclusively* — a never-scored agent can't also be stale/low (desktop parity).
 - One facet at a time; there is intentionally no multi-select filtering.
 
