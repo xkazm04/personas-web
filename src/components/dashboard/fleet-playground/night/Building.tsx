@@ -123,7 +123,7 @@ function Window({ wv, copy, still, att, onHover, onFocusAtt, onOpenAgent }: Wind
       onKeyDown={activate(() => onOpenAgent(a.id))}
     >
       <rect x={x - 4} y={y - 4} width={w + 8} height={h + 8} fill="transparent" />
-      <WindowArt a={a} x={x} y={y} w={w} h={h} hue={b.t.hue} still={still} />
+      <WindowArt a={a} x={x} y={y} w={w} h={h} hue={b.t.hue} still={still} callsign={a.callsign} />
       <rect className={s.ring} x={x - 4} y={y - 4} width={w + 8} height={h + 9} rx={4} fill="none" style={{ stroke: "var(--foreground)" }} strokeWidth={2.5} />
       {!still && <rect className={s.lightsOn} x={x - 1} y={y - 1} width={w + 2} height={h + 2} style={{ fill: "var(--ns-glass)", ["--d" as string]: `${delay.toFixed(2)}s` }} />}
     </g>

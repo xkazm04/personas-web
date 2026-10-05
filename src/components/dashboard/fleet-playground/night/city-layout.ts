@@ -57,25 +57,32 @@ export function layoutCity(agents: FleetAgent[], teams: FleetTeam[], W: number, 
   const vis = teams.filter((t) => agents.some((a) => a.team === t.id));
   const members = vis.map((t) => agents.filter((a) => a.team === t.id));
   const pitch = (W - 2 * MARGIN) / Math.max(1, vis.length);
-  const maxBw = pitch - Math.min(28, Math.max(10, pitch * 0.12));
+  // Buildings take ~88% of their slot; at least 10px of street between them.
+  const maxBw = Math.min(pitch * 0.9, pitch - 10);
   const bodyMax = ground - sky - ORNAMENT;
 
-  // The largest window width at which every team fits its slot.
-  let ww = 10, gap = 4, pad = 8, cols: number[] = members.map(() => 1), rows = cols;
+  // Try every window width; per building use as many columns (1-3) as fit the
+  // slot, and keep the size whose windows have the most area while staying
+  // close to square (height 0.8x-1.35x the width) - discounted when the
+  // windows cover too little of the facade, so towers do not end up as one
+  // thin column of lights on a wide blank wall.
+  let best = { area: 0, ww: 10, wh: 12, gap: 3, pad: 6, cols: members.map(() => 1), rows: members.map((m) => m.length) };
   for (let s = 130; s >= 10; s--) {
-    const g = Math.max(4, Math.round(s * 0.26));
-    const p = Math.max(8, Math.round(s * 0.28));
-    const c = members.map((m) => Math.min(m.length, Math.floor((maxBw - 2 * p + g) / (s + g))));
+    const g = Math.max(3, Math.round(s * 0.18));
+    const p = Math.max(6, Math.round(s * 0.2));
+    const c = members.map((m) => Math.min(m.length, 3, Math.floor((maxBw - 2 * p + g) / (s + g))));
     if (c.some((x) => x < 1)) continue;
     const r = members.map((m, i) => Math.ceil(m.length / c[i]));
     const tallest = Math.max(...r);
-    if (2 * p + tallest * (s + g) - g + SIGN > bodyMax) continue;
-    ww = s; gap = g; pad = p; cols = c; rows = r;
-    break;
+    const wh = Math.min(Math.round(s * 1.35), Math.floor((bodyMax - 2 * p - SIGN - (tallest - 1) * g) / tallest));
+    if (wh < s * 0.8) continue;
+    const busiest = c[members.reduce((m, x, i) => (x.length > members[m].length ? i : m), 0)];
+    const cover = Math.min(1, (busiest * s + (busiest - 1) * g) / (maxBw * 0.7));
+    const score = s * wh * cover;
+    if (score <= best.area) continue;
+    best = { area: score, ww: s, wh, gap: g, pad: p, cols: c, rows: r };
   }
-  // Windows then grow taller into the spare height (up to 1.7x their width).
-  const tallest = Math.max(1, ...rows);
-  const wh = Math.floor(Math.min(ww * 1.7, (bodyMax - 2 * pad - SIGN - (tallest - 1) * gap) / tallest));
+  const { ww, wh, gap, pad, cols, rows } = best;
 
   const out: CityLayout = { W, H, sky, ground, ww, wh, gap, pad, pitch, teams: [], win: new Map() };
   vis.forEach((t, i) => {
@@ -83,7 +90,7 @@ export function layoutCity(agents: FleetAgent[], teams: FleetTeam[], W: number, 
     const c = cols[i];
     const r = rows[i];
     const inner = c * ww + (c - 1) * gap;
-    const w = Math.min(maxBw, Math.max(inner + 2 * pad, Math.min(maxBw, 96)));
+    const w = Math.min(maxBw, Math.max(inner + 2 * pad, pitch * 0.86));
     const top = ground - (2 * pad + r * (wh + gap) - gap + SIGN);
     const cx = MARGIN + pitch * (i + 0.5);
     const b: BuildingBox = { t, i, cx, w, top, n: mem.length, cols: c, rows: r, mem, wins: [], anchor: ornamentAnchor(t.id, top) };

@@ -8,7 +8,7 @@ import s from "./night.module.css";
 /**
  * One workstation on the open-plan floor, seen from behind the chair, in the
  * shared state language: working is a persona typing at a lit cyan screen
- * with its progress under the desk; needs is a raised lantern in the needs
+ * with its progress along the desk edge; needs is a raised lantern in the needs
  * colour with a halo and a badge saying why; resting is a dim screen and a
  * slumped persona (a lamp when queued); off is a covered desk and an empty
  * chair. Drawn in a 100 x 88 box. Stylised illustration.
@@ -63,8 +63,8 @@ export default function DeskArt({ a, still }: { a: FleetAgent; still: boolean })
 
       {att === "working" && (
         <g>
-          <rect x={10} y={84} width={80} height={3} rx={1.5} style={{ fill: "var(--ns-rail)" }} />
-          <rect x={10} y={84} width={80 * (a.progress ?? 0)} height={3} rx={1.5} style={{ fill: "var(--brand-cyan)", transition: "width .8s" }} />
+          <rect x={10} y={41} width={80} height={3} rx={1.5} style={{ fill: "var(--ns-rail)" }} />
+          <rect x={10} y={41} width={80 * (a.progress ?? 0)} height={3} rx={1.5} style={{ fill: "var(--brand-cyan)", transition: "width .8s" }} />
         </g>
       )}
       {att === "needs" && (

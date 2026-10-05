@@ -2,11 +2,15 @@ import { ATTENTION_COLOR, attentionOf, needsTone } from "../attention";
 import { needsYou, type FleetAgent } from "../fleet-data";
 import { activate, type Att } from "./Building";
 import DeskArt from "./DeskArt";
+import { CallsignLabel } from "./WindowArt";
 import { DESK_VB, type FloorLayout } from "./floor-layout";
 import { AgentCardBody, HoverCard, TeamCardBody, type Anchor } from "./HoverCard";
 import { hue, hueText, textTone } from "./palette";
 import { fill, stateWord, type CityCopy, type OfficeCopy } from "./vocab";
 import s from "./night.module.css";
+
+/** Desks narrower than this carry no callsign (it would crowd the persona). */
+const DESK_LABEL_MIN = 80;
 
 interface FloorFieldProps {
   F: FloorLayout;
@@ -27,11 +31,10 @@ interface FloorFieldProps {
  * the department; a desk opens straight into the agent's room.
  */
 export default function FloorField({ F, city, copy, still, att, simMs, setHover, setFocus, openAgent, openTeam }: FloorFieldProps) {
-  const k = F.dw / DESK_VB.w;
   const attDesk = att?.kind === "agent" ? F.desk.get(att.id) : undefined;
   const attZone = att?.kind === "team" ? F.zones.find((z) => z.t.id === att.id) : undefined;
   let anchor: Anchor | null = null;
-  if (attDesk) anchor = { x: attDesk.x, y: attDesk.y, w: F.dw, h: F.dh };
+  if (attDesk) anchor = { x: attDesk.x, y: attDesk.y, w: attDesk.w, h: attDesk.h };
   else if (attZone) anchor = { x: attZone.x, y: attZone.y, w: Math.min(attZone.w, 220), h: 40 };
 
   return (
@@ -81,11 +84,14 @@ export default function FloorField({ F, city, copy, still, att, simMs, setHover,
                     onClick={(e) => openAgent(d.a.id, e.currentTarget)}
                     onKeyDown={activate(() => openAgent(d.a.id, document.getElementById(`ns-desk-${d.a.id}`) as Element))}
                   >
-                    <rect x={d.x} y={d.y} width={F.dw} height={F.dh} fill="transparent" />
-                    <g transform={`translate(${d.x} ${d.y}) scale(${k})`}>
+                    <rect x={d.x} y={d.y} width={d.w} height={d.h} fill="transparent" />
+                    <g transform={`translate(${d.x} ${d.y}) scale(${d.w / DESK_VB.w})`}>
                       <DeskArt a={d.a} still={still} />
                     </g>
-                    <rect className={s.ring} x={d.x - 3} y={d.y - 3} width={F.dw + 6} height={F.dh + 6} rx={6} fill="none" style={{ stroke: "var(--foreground)" }} strokeWidth={2} />
+                    {d.w >= DESK_LABEL_MIN && (attentionOf(d.a) === "needs" || attentionOf(d.a) === "working") && (
+                      <CallsignLabel text={d.a.callsign} cx={d.x + d.w / 2} y={d.y + d.h - 16} onTone={false} />
+                    )}
+                    <rect className={s.ring} x={d.x - 3} y={d.y - 3} width={d.w + 6} height={d.h + 6} rx={6} fill="none" style={{ stroke: "var(--foreground)" }} strokeWidth={2} />
                   </g>
                 );
               })}

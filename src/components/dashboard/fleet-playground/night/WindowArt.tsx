@@ -14,6 +14,8 @@ interface WindowArtProps {
   h: number;
   hue: number;
   still: boolean;
+  /** Shown on needs and working windows when it fits (12px mono). */
+  callsign?: string;
 }
 
 const INK = { fill: "var(--ns-ink)" };
@@ -25,8 +27,10 @@ const INK = { fill: "var(--ns-ink)" };
  * failed or critical) with a glyph for why; resting is dark glass with a faint
  * figure (a dim lamp when queued); off is shutters.
  */
-export default function WindowArt({ a, x, y, w, h, hue, still }: WindowArtProps) {
+export default function WindowArt({ a, x, y, w, h, hue, still, callsign }: WindowArtProps) {
   const att = attentionOf(a);
+  const label = callsign && (att === "needs" || att === "working") && labelFits(callsign, w, h) ? callsign : null;
+  const top = label ? LABEL_H : 0;
   const frame = hueTone(hue, 52, 52, 40);
   const cx = x + w / 2;
   const tone = att === "needs" ? ATTENTION_COLOR[needsTone(a)] : "";
@@ -39,7 +43,7 @@ export default function WindowArt({ a, x, y, w, h, hue, still }: WindowArtProps)
         <g>
           <rect x={x} y={y} width={w} height={h} style={{ fill: tone }} opacity={0.88} />
           <rect x={x + 2} y={y + 2} width={w - 4} height={h - 4} fill="none" style={{ stroke: "var(--foreground)" }} strokeWidth={1} opacity={0.35} />
-          <Glyph rank={rankOf(a as FleetAgent)} cx={cx} cy={y + h / 2} size={Math.min(w, h) * 0.58} />
+          <Glyph rank={rankOf(a as FleetAgent)} cx={cx} cy={y + top + (h - top) / 2} size={Math.min(w, h - top) * 0.58} />
           {a.enabled && a.state === "running" && (
             <rect x={x} y={y + h - 3} width={w * (a.progress ?? 0)} height={3} style={{ fill: ATTENTION_COLOR.working }} />
           )}
@@ -50,6 +54,7 @@ export default function WindowArt({ a, x, y, w, h, hue, still }: WindowArtProps)
         Array.from({ length: Math.ceil(h / 5) }, (_, k) => (
           <rect key={k} x={x} y={y + k * 5} width={w} height={Math.min(3, h - k * 5)} style={{ fill: "var(--ns-rail)" }} />
         ))}
+      {label && <CallsignLabel text={label} cx={cx} y={y} onTone={att === "needs"} />}
       <rect x={x} y={y} width={w} height={h} rx={2} fill="none" style={{ stroke: frame }} strokeWidth={2} />
       <rect x={x - 2} y={y + h} width={w + 4} height={3} style={{ fill: hueTone(hue, 40, 44, 34) }} />
       {a.unreadMessages.length > 0 && (
@@ -58,6 +63,29 @@ export default function WindowArt({ a, x, y, w, h, hue, still }: WindowArtProps)
           <path d={`M ${x + 3} ${y + h - 11} l 6 4.5 l 6 -4.5`} style={{ stroke: "var(--background)" }} strokeWidth={1} fill="none" />
         </g>
       )}
+    </g>
+  );
+}
+
+const LABEL_H = 15;
+
+/** Does a 12px mono callsign fit on this window (or desk) with room to spare? */
+export function labelFits(callsign: string, w: number, h: number): boolean {
+  return callsign.length * 7.2 + 4 <= w && h >= 34;
+}
+
+/**
+ * The agent's callsign across the top of its window: ink straight on the lit
+ * needs colour, or on a dark plate over a working window. 12px, never smaller.
+ */
+export function CallsignLabel({ text, cx, y, onTone }: { text: string; cx: number; y: number; onTone: boolean }) {
+  const w = text.length * 7.2 + 4;
+  return (
+    <g pointerEvents="none">
+      {!onTone && <rect x={cx - w / 2} y={y + 1.5} width={w} height={LABEL_H - 2} rx={2} style={{ fill: "var(--ns-panel)" }} />}
+      <text x={cx} y={y + 12} textAnchor="middle" fontSize={12} fontWeight={700} className="font-mono" style={onTone ? INK : { fill: "var(--foreground)" }}>
+        {text}
+      </text>
     </g>
   );
 }

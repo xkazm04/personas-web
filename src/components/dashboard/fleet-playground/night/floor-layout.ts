@@ -1,8 +1,9 @@
 import type { FleetAgent, FleetTeam } from "../fleet-data";
 
 /* The office floor: one department zone per team, one desk per agent, laid
-   out to the field's real size. Every desk on the floor is one size, the
-   largest at which every zone holds its whole team. */
+   out to the field's real size. The zone grid is the one that gives the
+   biggest desks; inside each zone the desks grow to fill it and spread evenly
+   across its whole width and height, so no zone has an empty band. */
 
 /** Desk art is drawn in a 100 x 88 box. */
 export const DESK_VB = { w: 100, h: 88 };
@@ -11,7 +12,7 @@ const PAD = 8;
 const GAP = 12;
 const MARGIN = 12;
 
-export interface DeskBox { a: FleetAgent; x: number; y: number; z: Zone }
+export interface DeskBox { a: FleetAgent; x: number; y: number; w: number; h: number; z: Zone }
 
 export interface Zone {
   t: FleetTeam;
@@ -26,9 +27,6 @@ export interface Zone {
 export interface FloorLayout {
   W: number;
   H: number;
-  /** Desk width in px (height follows the art's aspect). */
-  dw: number;
-  dh: number;
   zones: Zone[];
   desk: Map<string, DeskBox>;
 }
@@ -58,12 +56,10 @@ export function layoutFloor(agents: FleetAgent[], teams: FleetTeam[], W: number,
     const d = Math.min(...members.map((m) => fitDesks(m.length, zw - 2 * PAD, zh - LABEL_H - PAD).d));
     if (d > plan.d) plan = { zc, zr, d };
   }
-  const dw = Math.floor(Math.min(plan.d, 150));
-  const dh = Math.floor((dw * DESK_VB.h) / DESK_VB.w);
   const zw = (W - 2 * MARGIN - (plan.zc - 1) * GAP) / plan.zc;
   const zh = (H - 2 * MARGIN - (plan.zr - 1) * GAP) / plan.zr;
 
-  const out: FloorLayout = { W, H, dw, dh, zones: [], desk: new Map() };
+  const out: FloorLayout = { W, H, zones: [], desk: new Map() };
   vis.forEach((t, i) => {
     const z: Zone = {
       t,
@@ -76,12 +72,22 @@ export function layoutFloor(agents: FleetAgent[], teams: FleetTeam[], W: number,
     };
     const innerW = z.w - 2 * PAD;
     const innerH = z.h - LABEL_H - PAD;
-    const cols = Math.max(1, Math.min(members[i].length, Math.floor(innerW / dw)));
-    const rows = Math.ceil(members[i].length / cols);
-    const gx = (innerW - cols * dw) / (cols + 1);
-    const gy = Math.max(0, (innerH - rows * dh) / (rows + 1));
+    const n = members[i].length;
+    // This zone's own best fit (a little air between desks), capped so a
+    // small team does not get furniture twice the size of its neighbours'.
+    const fit = fitDesks(n, innerW * 0.94, innerH * 0.94);
+    const w = Math.floor(Math.min(fit.d, plan.d * 1.3, 160));
+    const h = Math.floor((w * DESK_VB.h) / DESK_VB.w);
+    const cols = fit.cols;
+    const rows = Math.ceil(n / cols);
+    // Space-evenly in both axes: the slack becomes equal gaps, top to bottom.
+    const gx = (innerW - cols * w) / (cols + 1);
+    const gy = (innerH - rows * h) / (rows + 1);
     members[i].forEach((a, j) => {
-      const box = { a, x: Math.round(z.x + PAD + gx + (j % cols) * (dw + gx)), y: Math.round(z.y + LABEL_H + gy + Math.floor(j / cols) * (dh + gy)), z };
+      const inRow = j < (rows - 1) * cols ? cols : n - (rows - 1) * cols;
+      // A short last row is centred under the rows above it.
+      const rowX = z.x + PAD + (innerW - inRow * w - (inRow - 1) * gx) / 2;
+      const box = { a, x: Math.round(rowX + (j % cols) * (w + gx)), y: Math.round(z.y + LABEL_H + gy + Math.floor(j / cols) * (h + gy)), w, h, z };
       z.desks.push(box);
       out.desk.set(a.id, box);
     });
