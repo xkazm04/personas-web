@@ -3,8 +3,7 @@ import { mulberry32 } from "./palette";
 
 /* ── Night Shift's live demo state ──────────────────────────────────
  *
- * One module-level store shared by the city and the office, so a review you
- * approve inside a building is gone when you walk back out to the street.
+ * A module-level store, so the city keeps its state across tab switches.
  * It is a seeded simulation of the demo fleet: runs progress, queued agents
  * pick up work, failed ones self-heal, messages travel. Event texts it writes
  * are demo data in the same voice as `fleet.json`, not interface copy.
@@ -156,45 +155,3 @@ export function simStep(scale: number, elapsedMs: number) {
 
   commit({ ...state, agents: d.agents, events: d.events, simMs: state.simMs + elapsedMs, packet });
 }
-
-export type AgentAction = "approve" | "sendback" | "retry" | "answer" | "accept" | "read";
-
-/** A decision made from the agent's room. */
-export function act(agentId: string, kind: AgentAction, reviewId?: string) {
-  const d = draft();
-  const a = d.edit(agentId);
-  if (kind === "approve" || kind === "sendback") {
-    const r = a.reviews.find((x) => x.id === reviewId);
-    if (!r) return;
-    a.reviews = a.reviews.filter((x) => x.id !== reviewId);
-    d.log(a.id, "review_requested", `${kind === "approve" ? "You approved" : "You sent back"}: ${r.title}`);
-    if (!a.reviews.length && a.state === "attention") a.state = "idle";
-    if (kind === "sendback" && a.enabled && (a.state === "idle" || a.state === "attention")) startRun(a, `Reworking: ${r.title}`);
-  } else if (kind === "retry") {
-    startRun(a, `Retrying: ${taskFor(a.team)}`);
-    d.log(a.id, "self_heal", "Retry started by you");
-  } else if (kind === "answer") {
-    startRun(a, taskFor(a.team));
-    a.progress = 0.35;
-    d.log(a.id, "message", "Got your answer, resuming the run");
-  } else if (kind === "accept") {
-    a.state = a.reviews.length ? "attention" : "idle";
-    a.task = null;
-    d.log(a.id, "run_completed", "Draft accepted and filed");
-  } else {
-    a.unreadMessages = [];
-  }
-  commit({ ...state, agents: d.agents, events: d.events });
-}
-
-/* The city hands the office the window you clicked. Read it in a lazy state
-   initializer (StrictMode may call that twice, so reading never consumes it)
-   and clear it from an effect once the office has mounted. */
-let pendingAgent: string | null = null;
-export function setPendingAgent(id: string) {
-  pendingAgent = id;
-}
-export function clearPendingAgent() {
-  pendingAgent = null;
-}
-export const peekPendingAgent = () => pendingAgent;

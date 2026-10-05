@@ -19,11 +19,8 @@
   --ns-ink: var(--background);
   --ns-shadow: color-mix(in oklab, var(--background) 70%, transparent);
   --ns-panel: color-mix(in oklab, var(--background) 88%, transparent);
-  --ns-paper: color-mix(in oklab, var(--foreground) 90%, var(--brand-purple));
   --ns-lamp: color-mix(in oklab, var(--brand-amber) 70%, var(--foreground));
   --ns-wire: color-mix(in oklab, var(--brand-cyan) 70%, var(--foreground));
-  --ns-monitor: color-mix(in oklab, var(--background) 76%, var(--foreground));
-  --ns-room: color-mix(in oklab, var(--background) 93%, var(--primary));
   --ns-text-mix: 100%;
 }
 
@@ -49,19 +46,11 @@
   --ns-ink: color-mix(in oklab, var(--foreground) 88%, var(--background));
   --ns-shadow: color-mix(in oklab, var(--foreground) 22%, transparent);
   --ns-panel: color-mix(in oklab, var(--background) 92%, transparent);
-  --ns-paper: var(--background);
-  --ns-monitor: color-mix(in oklab, var(--foreground) 78%, var(--background));
-  --ns-room: color-mix(in oklab, var(--background) 90%, var(--foreground));
   --ns-text-mix: 42%;
 }
 
 /* ── field ── */
-.cityWrap {
-  position: absolute;
-  inset: 0;
-  transform-origin: 0 0;
-  transition: transform 0.7s cubic-bezier(0.6, 0.05, 0.3, 1), opacity 0.45s ease 0.3s;
-}
+.cityWrap { position: absolute; inset: 0; }
 
 /* ── buildings & windows ── */
 .bldg { transition: opacity 0.45s ease, transform 0.5s cubic-bezier(0.22, 0.8, 0.24, 1); transform-box: fill-box; transform-origin: 50% 100%; }
@@ -81,7 +70,6 @@
 /* ambient art loops (only rendered when motion is allowed) */
 .breath { animation: breath 4.8s ease-in-out infinite; }
 @keyframes breath { 0%, 100% { opacity: 0.62; } 50% { opacity: 0.92; } }
-.blink { animation: blink 1.6s ease-in-out infinite; }
 .slowBlink { animation: blink 3.2s ease-in-out infinite; }
 @keyframes blink { 0%, 100% { opacity: 0.25; } 50% { opacity: 1; } }
 .beacon { animation: beacon 1.8s ease-in-out infinite; transform-box: fill-box; transform-origin: 50% 50%; }
@@ -92,7 +80,6 @@
 @keyframes wave { 0%, 100% { transform: skewY(0); } 50% { transform: skewY(-8deg) scaleX(0.92); } }
 .typing { animation: typing 1.8s steps(6) infinite; transform-box: fill-box; transform-origin: 0 50%; }
 @keyframes typing { 0% { transform: scaleX(0.2); } 100% { transform: scaleX(1); } }
-.shadow * { fill: var(--ns-shadow) !important; stroke: var(--ns-shadow) !important; }
 
 /* ── strips ── */
 .tickerIn { display: inline-block; animation: tickerIn 0.5s ease both; }

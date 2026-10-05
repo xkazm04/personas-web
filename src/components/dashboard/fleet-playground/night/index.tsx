@@ -1,6 +1,6 @@
 "use client";
 
-import { useCallback, useEffect, useMemo, useRef, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import { useTranslation } from "@/i18n/useTranslation";
 import { useStillMotion } from "@/hooks/useStillMotion";
 import FleetFrame from "../FleetFrame";
@@ -11,28 +11,21 @@ import CityField from "./CityField";
 import { layoutCity } from "./city-layout";
 import Legend from "./Legend";
 import { meters } from "./Moon";
-import { setPendingAgent } from "./nightStore";
 import { railItems } from "./rail";
 import { AttentionSummary, BottomStrip, MeterChips } from "./Strips";
 import { useFieldSize } from "./useFieldSize";
 import { ranked, useNightSim } from "./useNightSim";
 import s from "./night.module.css";
 
-interface NightCityProps {
-  scale: FleetScale;
-  onOpenTeam: (teamId: string) => void;
-}
-
-const DOLLY_MS = 650;
-
 /**
- * Variant 2, "Night Shift": the fleet as a small city at night. Each team is a
- * building drawn for its trade, each agent a window in the playground's shared
- * state language; every window that needs you lights a beacon on its roof and
- * a row in the rail. Open a building and the camera dollies in before the
- * office takes over. Demo fleet, stylised illustration.
+ * Variant 2, "Night Shift": the fleet as a small city at night, kept as a
+ * presentation piece. Each team is a building drawn for its trade, each agent
+ * a window in the playground's shared state language; every window that needs
+ * you lights a beacon on its roof and a row in the rail. Hovering shows a card;
+ * clicking a window, a building or a rail row pins it (Esc or a click on the
+ * sky unpins). Demo fleet, stylised illustration.
  */
-export default function NightCity({ scale, onOpenTeam }: NightCityProps) {
+export default function NightCity({ scale }: { scale: FleetScale }) {
   const { t } = useTranslation();
   const copy = t.fleetPlayground.city;
   const still = useStillMotion();
@@ -42,38 +35,22 @@ export default function NightCity({ scale, onOpenTeam }: NightCityProps) {
 
   const [hover, setHover] = useState<Att>(null);
   const [focus, setFocus] = useState<Att>(null);
+  const [pinned, setPinned] = useState<Att>(null);
   const [legend, setLegend] = useState(false);
-  const [dolly, setDolly] = useState<string | null>(null);
-  const timer = useRef(0);
   const legendBtn = useRef<HTMLButtonElement>(null);
-  useEffect(() => () => window.clearTimeout(timer.current), []);
 
   const L = useMemo(() => (field.w && field.h ? layoutCity(sim.scoped, FLEET.teams, field.w, field.h) : null), [sim.scoped, field.w, field.h]);
   const queue = useMemo(() => ranked(sim.scoped), [sim.scoped]);
   const items = useMemo(() => railItems(copy, queue, sim.simMs), [copy, queue, sim.simMs]);
   const usage = meters(sim.simMs);
-  const att = dolly ? null : hover ?? focus;
+  // Hover wins while it lasts; the pinned card comes back when it ends.
+  const att = hover ?? focus ?? pinned;
   const attAgentId = att?.kind === "agent" ? att.id : null;
+  const pinAgent = (id: string) => setPinned({ kind: "agent", id });
+  const pinTeam = (id: string) => setPinned({ kind: "team", id });
 
-  const goInside = useCallback(
-    (teamId: string) => {
-      if (still) return onOpenTeam(teamId);
-      setDolly(teamId);
-      timer.current = window.setTimeout(() => onOpenTeam(teamId), DOLLY_MS);
-    },
-    [still, onOpenTeam],
-  );
-  const openAgent = useCallback(
-    (id: string) => {
-      const a = sim.byId.get(id);
-      if (!a) return;
-      setPendingAgent(id);
-      goInside(a.team);
-    },
-    [sim.byId, goInside],
-  );
-
-  // N walks everyone who needs you, most urgent first; Escape closes the legend.
+  // N walks everyone who needs you, most urgent first; Escape closes the
+  // legend first, then unpins the card.
   useEffect(() => {
     const onKey = (e: KeyboardEvent) => {
       const tag = (e.target as HTMLElement | null)?.tagName;
@@ -82,6 +59,9 @@ export default function NightCity({ scale, onOpenTeam }: NightCityProps) {
         e.preventDefault();
         setLegend(false);
         legendBtn.current?.focus();
+      } else if (e.key === "Escape" && pinned) {
+        e.preventDefault();
+        setPinned(null);
       } else if ((e.key === "n" || e.key === "N") && queue.length) {
         e.preventDefault();
         const cur = queue.findIndex((a) => a.id === attAgentId);
@@ -90,7 +70,7 @@ export default function NightCity({ scale, onOpenTeam }: NightCityProps) {
     };
     window.addEventListener("keydown", onKey);
     return () => window.removeEventListener("keydown", onKey);
-  }, [legend, queue, attAgentId]);
+  }, [legend, pinned, queue, attAgentId]);
 
   const top = (
     <>
@@ -127,11 +107,12 @@ export default function NightCity({ scale, onOpenTeam }: NightCityProps) {
           procs={sim.procs}
           packet={sim.packet}
           simMs={sim.simMs}
-          dolly={dolly}
+          pinned={pinned}
           setHover={setHover}
           setFocus={setFocus}
-          openAgent={openAgent}
-          openTeam={goInside}
+          pinAgent={pinAgent}
+          pinTeam={pinTeam}
+          unpin={() => setPinned(null)}
         />
       )}
       {legend && <Legend copy={copy} still={still} />}
@@ -144,7 +125,7 @@ export default function NightCity({ scale, onOpenTeam }: NightCityProps) {
         label={copy.label}
         top={top}
         main={main}
-        rail={<NeedsYouRail items={items} activeId={attAgentId} onHover={(id) => setHover(id ? { kind: "agent", id } : null)} onSelect={openAgent} />}
+        rail={<NeedsYouRail items={items} activeId={attAgentId} onHover={(id) => setHover(id ? { kind: "agent", id } : null)} onSelect={pinAgent} />}
         bottom={<BottomStrip copy={copy} events={sim.scopedEvents} byId={sim.byId} procs={sim.procs} simMs={sim.simMs} />}
       />
     </div>

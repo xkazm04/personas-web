@@ -11,15 +11,15 @@ import StageLoading from "./StageLoading";
    their own artwork, none of which belongs in the route's first load. */
 const BoardPrototype = dynamic(() => import("./board"), { ssr: false, loading: StageLoading });
 const NightCity = dynamic(() => import("./night"), { ssr: false, loading: StageLoading });
-const OfficeScene = dynamic(() => import("./night/Office"), { ssr: false, loading: StageLoading });
 
-type View = "board" | "city" | "office";
-const VIEWS: readonly View[] = ["board", "city", "office"];
+type View = "board" | "city";
+const VIEWS: readonly View[] = ["board", "city"];
 
 /**
  * `/dashboard/playground`: the dashboard-fleet contest's prototypes ported
- * into the site's theme. Board is variant 1 (the monitor, relit); Night shift
- * and Office are variant 2 (the fleet as a city, and its office floor). One
+ * into the site's theme. Board (variant 1, the monitor relit) is the baseline
+ * design; Night shift (variant 2, the fleet as a city) is kept as a showcase
+ * for presentation screenshots and video, without drill-down. One
  * thin toolbar row; the stage takes the rest of the viewport, edge to edge
  * (the dashboard layout drops its padding for this route).
  */
@@ -28,13 +28,6 @@ export default function FleetPlayground() {
   const copy = t.fleetPlayground;
   const [view, setView] = useState<View>("board");
   const [scale, setScale] = useState<FleetScale>(DEFAULT_FLEET_SCALE);
-  /** Office's open team; null shows the whole office floor (its L0). */
-  const [teamId, setTeamId] = useState<string | null>(null);
-
-  const openTeam = (id: string) => {
-    setTeamId(id);
-    setView("office");
-  };
 
   const moveView = (delta: number) => {
     const next = VIEWS[(VIEWS.indexOf(view) + delta + VIEWS.length) % VIEWS.length];
@@ -76,10 +69,7 @@ export default function FleetPlayground() {
               aria-controls="fleet-stage"
               tabIndex={view === id ? 0 : -1}
               title={copy.viewHints[id]}
-              onClick={() => {
-                if (id === "office" && view !== "office") setTeamId(null);
-                setView(id);
-              }}
+              onClick={() => setView(id)}
               className={`rounded-lg px-3 py-1 text-sm font-medium transition-colors focus-visible:outline-2 focus-visible:outline-brand-cyan ${
                 view === id ? "bg-brand-cyan/15 text-foreground" : "text-muted-dark hover:text-foreground"
               }`}
@@ -114,10 +104,7 @@ export default function FleetPlayground() {
         className="relative min-h-0 flex-1 overflow-hidden bg-background"
       >
         {view === "board" && <BoardPrototype scale={scale} />}
-        {view === "city" && <NightCity scale={scale} onOpenTeam={openTeam} />}
-        {view === "office" && (
-          <OfficeScene scale={scale} teamId={teamId} onTeamChange={setTeamId} />
-        )}
+        {view === "city" && <NightCity scale={scale} />}
       </section>
     </div>
   );

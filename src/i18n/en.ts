@@ -2417,12 +2417,10 @@
     views: {
       board: string;
       city: string;
-      office: string;
     };
     viewHints: {
       board: string;
       city: string;
-      office: string;
     };
     scaleLabel: string;
     rail: {
@@ -2669,8 +2667,7 @@
       reviewsMany: string;
       unreadOne: string;
       unreadMany: string;
-      openRoom: string;
-      stepInside: string;
+      pinHint: string;
       teamLine: string;
       windowAria: string;
       buildingAria: string;
@@ -2696,83 +2693,6 @@
         running: string;
         queued: string;
         done: string;
-      };
-    };
-    office: {
-      label: string;
-      floorLabel: string;
-      zoneAria: string;
-      deskAria: string;
-      back: string;
-      floor: string;
-      breadcrumb: string;
-      escHint: string;
-      teamsLabel: string;
-      counts: string;
-      runsToday: string;
-      successRate: string;
-      costToday: string;
-      latestHeading: string;
-      quiet: string;
-      noRun: string;
-      cutawayNote: string;
-      artNote: string;
-      where: {
-        work: string;
-        desk: string;
-        rest: string;
-      };
-      healthPill: string;
-      health: {
-        healthy: string;
-        degraded: string;
-        critical: string;
-      };
-      summaryLine: string;
-      currentRun: string;
-      needsDecision: string;
-      noDecisions: string;
-      moreAfter: string;
-      latestFrom: string;
-      nothingLogged: string;
-      success: string;
-      healthLabel: string;
-      last12: string;
-      newestFirst: string;
-      runsPerHour: string;
-      runsTotal: string;
-      now: string;
-      messages: string;
-      markRead: string;
-      inboxClear: string;
-      more: string;
-      approve: string;
-      sendBack: string;
-      severity: {
-        critical: string;
-        warning: string;
-        info: string;
-      };
-      status: {
-        completed: string;
-        failed: string;
-      };
-      run: {
-        off: string;
-        offSub: string;
-        progress: string;
-        lastFailed: string;
-        failedSub: string;
-        retry: string;
-        waiting: string;
-        inputSub: string;
-        answer: string;
-        draftReady: string;
-        draftSub: string;
-        accept: string;
-        queued: string;
-        queuedSub: string;
-        idleSub: string;
       };
     };
   };
@@ -5532,12 +5452,10 @@ export const en: Translations = {
     views: {
       board: 'Board',
       city: 'Night shift',
-      office: 'Office',
     },
     viewHints: {
       board: 'Every agent on one board, grouped by team',
-      city: 'The fleet as a city at night: one building per team',
-      office: 'Inside one team: a room per agent',
+      city: 'Showcase: the fleet as a city at night, one building per team',
     },
     scaleLabel: 'Agents',
     loading: 'Loading the prototype',
@@ -5784,11 +5702,10 @@ export const en: Translations = {
       reviewsMany: '{n} reviews · oldest {age}',
       unreadOne: '1 unread message',
       unreadMany: '{n} unread messages',
-      openRoom: 'Enter or click to open the room',
-      stepInside: 'Enter or click to step inside',
+      pinHint: 'Click to pin this card · Esc to unpin',
       teamLine: '{n} windows · {run} at work · {ny} need you · {runs} runs today',
       windowAria: '{callsign} {name}, {team}, {state}',
-      buildingAria: '{team} building, {n} agents, {ny} need you. Open the team',
+      buildingAria: '{team} building, {n} agents, {ny} need you',
       tickerLabel: 'Newest events',
       live: 'Live',
       hintNext: 'next that needs you',
@@ -5811,83 +5728,6 @@ export const en: Translations = {
         running: '{label} · running {t}',
         queued: '{label} · queued',
         done: '{label} · done {age}',
-      },
-    },
-    office: {
-      label: 'Office: one team, a room per agent',
-      floorLabel: 'The office floor: one department per team, one desk per agent',
-      zoneAria: '{team} department, {n} desks, {ny} need you. Open the team',
-      deskAria: '{callsign} {name}, {team}, {state}. Open the desk',
-      back: 'Back',
-      floor: 'Office floor',
-      breadcrumb: 'Breadcrumb',
-      escHint: 'Esc goes up one level',
-      teamsLabel: 'Team',
-      counts: '{n} agents · {run} at work',
-      runsToday: 'runs today',
-      successRate: 'success rate',
-      costToday: 'cost today',
-      latestHeading: 'Latest on these floors',
-      quiet: 'Quiet tonight.',
-      noRun: 'No run in progress',
-      cutawayNote: 'Stylised cutaway illustration',
-      artNote: 'Stylised illustration · {callsign} at {where}',
-      where: {
-        work: 'work',
-        desk: 'the desk',
-        rest: 'rest, shutters down',
-      },
-      healthPill: 'health {h}',
-      health: {
-        healthy: 'healthy',
-        degraded: 'degraded',
-        critical: 'critical',
-      },
-      summaryLine: '{team} · {runs} runs today · last 12: {ok} completed, {bad} failed',
-      currentRun: 'Current run',
-      needsDecision: 'Needs your decision',
-      noDecisions: 'No decisions waiting on you.',
-      moreAfter: '+ {n} more after these',
-      latestFrom: 'Latest from {callsign}',
-      nothingLogged: 'Nothing logged yet tonight.',
-      success: 'success',
-      healthLabel: 'health',
-      last12: 'Last 12 runs',
-      newestFirst: 'newest first',
-      runsPerHour: 'Runs per hour · 24h',
-      runsTotal: '{n} runs',
-      now: 'now',
-      messages: 'Messages · {n} unread',
-      markRead: 'Mark read',
-      inboxClear: 'Inbox clear.',
-      more: '+ {n} more',
-      approve: 'Approve',
-      sendBack: 'Send back',
-      severity: {
-        critical: 'critical',
-        warning: 'warning',
-        info: 'info',
-      },
-      status: {
-        completed: 'completed',
-        failed: 'failed',
-      },
-      run: {
-        off: 'Switched off. This agent takes no new work.',
-        offSub: 'Its shutters are down in the city view.',
-        progress: '{pct}% · running for {t} · {n} live tool calls',
-        lastFailed: 'Last run failed',
-        failedSub: 'Agents self-heal by retry; the Overseer gets a note either way.',
-        retry: 'Retry the run',
-        waiting: 'Waiting for an answer',
-        inputSub: 'It paused mid-run and is holding up a lantern for you. Answering resumes the run (simulated).',
-        answer: 'Answer and resume',
-        draftReady: 'Draft ready for review',
-        draftSub: 'The draft is on the desk.',
-        accept: 'Accept the draft',
-        queued: 'Queued',
-        queuedSub: 'Starts when a slot frees up.',
-        idleSub: 'Last run {status} · {n} runs so far today',
       },
     },
   },

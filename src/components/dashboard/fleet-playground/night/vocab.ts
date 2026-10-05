@@ -4,7 +4,6 @@ import { SEVERITY_COLOR, STATE_COLOR } from "./palette";
 import { rankOf } from "./useNightSim";
 
 export type CityCopy = Translations["fleetPlayground"]["city"];
-export type OfficeCopy = Translations["fleetPlayground"]["office"];
 
 /** `fill("{n} runs", { n: 3 })` -> "3 runs". */
 export function fill(tpl: string, vars: Record<string, string | number>): string {

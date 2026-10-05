@@ -20,8 +20,8 @@ interface BuildingProps {
   attTeam: boolean;
   onHover: (att: Att) => void;
   onFocusAtt: (att: Att) => void;
-  onOpenAgent: (id: string) => void;
-  onOpenTeam: (teamId: string) => void;
+  onPinAgent: (id: string) => void;
+  onPinTeam: (teamId: string) => void;
 }
 
 export const activate = (fn: () => void) => (e: KeyboardEvent) => {
@@ -31,7 +31,7 @@ export const activate = (fn: () => void) => (e: KeyboardEvent) => {
   }
 };
 
-function Building({ b, L, copy, still, lifted, attAgent, attTeam, onHover, onFocusAtt, onOpenAgent, onOpenTeam }: BuildingProps) {
+function Building({ b, L, copy, still, lifted, attAgent, attTeam, onHover, onFocusAtt, onPinAgent, onPinTeam }: BuildingProps) {
   const { t } = b;
   const tones = teamTones(t.hue);
   const x0 = b.cx - b.w / 2;
@@ -51,8 +51,8 @@ function Building({ b, L, copy, still, lifted, attAgent, attTeam, onHover, onFoc
         onMouseLeave={() => onHover(null)}
         onFocus={() => onFocusAtt(team)}
         onBlur={() => onFocusAtt(null)}
-        onClick={() => onOpenTeam(t.id)}
-        onKeyDown={activate(() => onOpenTeam(t.id))}
+        onClick={() => onPinTeam(t.id)}
+        onKeyDown={activate(() => onPinTeam(t.id))}
       >
         <rect x={x0 + 6} y={b.top + 6} width={b.w} height={bodyH - 6} style={{ fill: "var(--ns-shadow)" }} />
         <rect x={x0} y={b.top} width={b.w} height={bodyH} style={{ fill: tones.body }} />
@@ -70,7 +70,7 @@ function Building({ b, L, copy, still, lifted, attAgent, attTeam, onHover, onFoc
       </g>
       {needs.map((wv) => <Beacon key={wv.a.id} wv={wv} top={b.top} still={still} />)}
       {b.wins.map((wv) => (
-        <Window key={wv.a.id} wv={wv} copy={copy} still={still} att={attAgent === wv.a.id} onHover={onHover} onFocusAtt={onFocusAtt} onOpenAgent={onOpenAgent} />
+        <Window key={wv.a.id} wv={wv} copy={copy} still={still} att={attAgent === wv.a.id} onHover={onHover} onFocusAtt={onFocusAtt} onPinAgent={onPinAgent} />
       ))}
     </g>
   );
@@ -101,10 +101,10 @@ interface WindowProps {
   att: boolean;
   onHover: (att: Att) => void;
   onFocusAtt: (att: Att) => void;
-  onOpenAgent: (id: string) => void;
+  onPinAgent: (id: string) => void;
 }
 
-function Window({ wv, copy, still, att, onHover, onFocusAtt, onOpenAgent }: WindowProps) {
+function Window({ wv, copy, still, att, onHover, onFocusAtt, onPinAgent }: WindowProps) {
   const { a, x, y, w, h, b } = wv;
   const me = { kind: "agent" as const, id: a.id };
   const delay = 0.15 + b.i * 0.09 + wv.row * 0.06 + ((Number(a.id.slice(1)) * 37) % 35) / 100;
@@ -119,8 +119,8 @@ function Window({ wv, copy, still, att, onHover, onFocusAtt, onOpenAgent }: Wind
       onMouseLeave={() => onHover(null)}
       onFocus={() => onFocusAtt(me)}
       onBlur={() => onFocusAtt(null)}
-      onClick={() => onOpenAgent(a.id)}
-      onKeyDown={activate(() => onOpenAgent(a.id))}
+      onClick={() => onPinAgent(a.id)}
+      onKeyDown={activate(() => onPinAgent(a.id))}
     >
       <rect x={x - 4} y={y - 4} width={w + 8} height={h + 8} fill="transparent" />
       <WindowArt a={a} x={x} y={y} w={w} h={h} hue={b.t.hue} still={still} callsign={a.callsign} />

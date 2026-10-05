@@ -23,7 +23,7 @@ interface Flight {
  * launched under reduced motion or in a background tab, and the loop stops as
  * soon as the sky is empty.
  */
-export default function Packets({ packet, layout, paused }: { packet: Packet | null; layout: CityLayout; paused: boolean }) {
+export default function Packets({ packet, layout }: { packet: Packet | null; layout: CityLayout }) {
   const still = useStillMotion();
   const hidden = usePageVisibility();
   const gRef = useRef<SVGGElement>(null);
@@ -34,7 +34,7 @@ export default function Packets({ packet, layout, paused }: { packet: Packet | n
   useEffect(() => {
     const g = gRef.current;
     // The layout is rebuilt on every tick; launch each packet once only.
-    if (!packet || packet.id === lastId.current || !g || still || hidden || paused) return;
+    if (!packet || packet.id === lastId.current || !g || still || hidden) return;
     lastId.current = packet.id;
     const d = arcPath(layout, packet.from, packet.to);
     if (!d) return;
@@ -78,11 +78,11 @@ export default function Packets({ packet, layout, paused }: { packet: Packet | n
       if (list.length) raf.current = requestAnimationFrame(frame);
     };
     if (!raf.current) raf.current = requestAnimationFrame(frame);
-  }, [packet, layout, still, hidden, paused]);
+  }, [packet, layout, still, hidden]);
 
-  // Leaving (or going still / hidden) clears the sky.
+  // Going still or hidden clears the sky.
   useEffect(() => {
-    if (!(still || hidden || paused)) return;
+    if (!(still || hidden)) return;
     cancelAnimationFrame(raf.current);
     raf.current = 0;
     for (const p of flights.current.splice(0)) {
@@ -90,7 +90,7 @@ export default function Packets({ packet, layout, paused }: { packet: Packet | n
       p.halo.remove();
       p.dot.remove();
     }
-  }, [still, hidden, paused]);
+  }, [still, hidden]);
 
   useEffect(() => () => cancelAnimationFrame(raf.current), []);
 
