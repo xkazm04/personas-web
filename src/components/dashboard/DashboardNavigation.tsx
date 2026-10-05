@@ -16,6 +16,7 @@ import {
   Shield,
   Siren,
   Trophy,
+  FlaskConical,
 } from "lucide-react";
 import { useSystemStore } from "@/stores/systemStore";
 import { useReviewStore } from "@/stores/reviewStore";
@@ -46,6 +47,7 @@ export const navItemDefs = [
   { key: "incidents", labelKey: "incidents" as const, icon: Siren, href: "/dashboard/incidents", scoped: false },
   { key: "health", labelKey: "health" as const, icon: HeartPulse, href: "/dashboard/health", scoped: false },
   { key: "knowledge", labelKey: "knowledge" as const, icon: Brain, href: "/dashboard/knowledge", scoped: true },
+  { key: "playground", labelKey: "playground" as const, icon: FlaskConical, href: "/dashboard/playground", scoped: false },
   { key: "settings", labelKey: "settings" as const, icon: Settings, href: "/dashboard/settings", scoped: false },
 ] as const;
 

@@ -406,6 +406,7 @@ export const zh: LocaleTranslations = {
       knowledge: "\u77e5\u8bc6\u5e93",
       settings: "\u8bbe\u7f6e",
       leaderboard: "\u6392\u884c\u699c",
+      playground: "\u8bd5\u9a8c\u573a",
       director: "\u5bfc\u6f14",
       sla: "SLA",
       incidents: "\u4e8b\u4ef6",

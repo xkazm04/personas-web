@@ -406,6 +406,7 @@ export const ru: LocaleTranslations = {
       knowledge: "\u0411\u0430\u0437\u0430 \u0437\u043d\u0430\u043d\u0438\u0439",
       settings: "\u041d\u0430\u0441\u0442\u0440\u043e\u0439\u043a\u0438",
       leaderboard: "\u0420\u0435\u0439\u0442\u0438\u043d\u0433",
+      playground: "\u041f\u0435\u0441\u043e\u0447\u043d\u0438\u0446\u0430",
       director: "\u0420\u0435\u0436\u0438\u0441\u0441\u0451\u0440",
       sla: "SLA",
       incidents: "\u0418\u043d\u0446\u0438\u0434\u0435\u043d\u0442\u044b",

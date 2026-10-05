@@ -406,6 +406,7 @@ export const vi: LocaleTranslations = {
       knowledge: "Ki\u1ebfn th\u1ee9c",
       settings: "C\u00e0i \u0111\u1eb7t",
       leaderboard: "B\u1ea3ng x\u1ebfp h\u1ea1ng",
+      playground: "S\u00e2n th\u1eed nghi\u1ec7m",
       director: "\u0110\u1ea1o di\u1ec5n",
       sla: "SLA",
       incidents: "S\u1ef1 c\u1ed1",

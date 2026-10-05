@@ -406,6 +406,7 @@ export const id: LocaleTranslations = {
       knowledge: "Pengetahuan",
       settings: "Pengaturan",
       leaderboard: "Papan Peringkat",
+      playground: "Taman Uji",
       director: "Sutradara",
       sla: "SLA",
       incidents: "Insiden",

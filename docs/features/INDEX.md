@@ -59,6 +59,7 @@ Status legend: ✅ written · ⬜ planned
 | ✅ [health](dashboard/health.md) | `/dashboard/health` | Health |
 | ✅ [knowledge](dashboard/knowledge.md) | `/dashboard/knowledge` | Knowledge |
 | ✅ [settings](dashboard/settings.md) | `/dashboard/settings` | Settings |
+| ✅ [playground](dashboard/playground.md) | `/dashboard/playground` | Playground (fleet prototypes) |
 | ✅ [shell-chrome](dashboard/shell-chrome.md) | `/dashboard/*` | (layout, sidebar, realtime) |
 
 ### marketing/ — Marketing & Landing

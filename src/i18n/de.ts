@@ -406,6 +406,7 @@ export const de: LocaleTranslations = {
       knowledge: "Wissen",
       settings: "Einstellungen",
       leaderboard: "Rangliste",
+      playground: "Spielwiese",
       director: "Regisseur",
       sla: "SLA",
       incidents: "Vorf\u00e4lle",

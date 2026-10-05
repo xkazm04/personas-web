@@ -406,6 +406,7 @@ export const ja: LocaleTranslations = {
       knowledge: "\u30ca\u30ec\u30c3\u30b8",
       settings: "\u8a2d\u5b9a",
       leaderboard: "\u0103\u0083\u015e\u0103\u0083\u013d\u0103\u0083\u20ac\u0103\u0083\u013d\u0103\u0083\u015b\u0103\u0083\u013d\u0103\u0083\u2030",
+      playground: "\u30d7\u30ec\u30a4\u30b0\u30e9\u30a6\u30f3\u30c9",
       director: "\u30c7\u30a3\u30ec\u30af\u30bf\u30fc",
       sla: "SLA",
       incidents: "\u30a4\u30f3\u30b7\u30c7\u30f3\u30c8",

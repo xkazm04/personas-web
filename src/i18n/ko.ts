@@ -406,6 +406,7 @@ export const ko: LocaleTranslations = {
       knowledge: "\uc9c0\uc2dd",
       settings: "\uc124\uc815",
       leaderboard: "\ub9ac\ub354\ubcf4\ub4dc",
+      playground: "\ud50c\ub808\uc774\uadf8\ub77c\uc6b4\ub4dc",
       director: "\ub514\ub809\ud130",
       sla: "SLA",
       incidents: "\uc778\uc2dc\ub358\ud2b8",

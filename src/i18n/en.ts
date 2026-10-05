@@ -178,6 +178,7 @@
     knowledge: string;
     settings: string;
     leaderboard: string;
+    playground: string;
     director: string;
     sla: string;
     incidents: string;
@@ -2407,6 +2408,393 @@
       };
     };
   };
+  fleetPlayground: {
+    title: string;
+    lede: string;
+    demoBadge: string;
+    artBadge: string;
+    viewsLabel: string;
+    views: {
+      board: string;
+      city: string;
+      office: string;
+    };
+    viewHints: {
+      board: string;
+      city: string;
+      office: string;
+    };
+    scaleLabel: string;
+    loading: string;
+    board: {
+      label: string;
+      states: {
+        running: string;
+        failed: string;
+        input_required: string;
+        draft_ready: string;
+        queued: string;
+        attention: string;
+        idle: string;
+        off: string;
+      };
+      shortStates: {
+        running: string;
+        failed: string;
+        input_required: string;
+        draft_ready: string;
+        queued: string;
+        attention: string;
+        idle: string;
+        off: string;
+      };
+      reasons: {
+        failed: string;
+        input_required: string;
+        critical: string;
+        draft_ready: string;
+        warning: string;
+        info: string;
+      };
+      severity: {
+        critical: string;
+        warning: string;
+        info: string;
+      };
+      health: {
+        healthy: string;
+        degraded: string;
+        critical: string;
+      };
+      tasks: {
+        toolTimeout: string;
+        revising: string;
+        resuming: string;
+        retrying: string;
+        nextBatch: string;
+        resting: string;
+        draftFallback: string;
+      };
+      kinds: {
+        run_completed: string;
+        run_failed: string;
+        review_requested: string;
+        message: string;
+        handoff: string;
+        self_heal: string;
+        decision: string;
+      };
+      simEvents: {
+        run_completed: string;
+        run_failed: string;
+        self_heal: string;
+      };
+      decisions: {
+        approve: string;
+        sendback: string;
+        retry: string;
+        answer: string;
+        read: string;
+        readOne: string;
+      };
+      toasts: {
+        approve: string;
+        sendback: string;
+        retry: string;
+        answer: string;
+        read: string;
+        readOne: string;
+        next: string;
+        nobody: string;
+      };
+      time: {
+        justNow: string;
+        minutesAgo: string;
+        hoursAgo: string;
+        daysAgo: string;
+      };
+      nav: {
+        fleet: string;
+        back: string;
+        backToFleet: string;
+        backToTeam: string;
+        breadcrumb: string;
+        fleetMeta: string;
+        nextHint: string;
+        escHint: string;
+      };
+      spot: {
+        label: string;
+        verdict: string;
+        agents: string;
+        needsYouOne: string;
+        needsYouMany: string;
+        allClear: string;
+        ofAgents: string;
+        working: string;
+        queued: string;
+        resting: string;
+        needsYou: string;
+        ranked: string;
+        queueMore: string;
+        next: string;
+        emptyFleet: string;
+        emptyTeam: string;
+        team: string;
+        inView: string;
+        inViewOne: string;
+        needsYouHere: string;
+        needCount: string;
+        needCountOne: string;
+        allClearTeam: string;
+        runsToday: string;
+        success: string;
+        costToday: string;
+        stylised: string;
+        health: string;
+        progress: string;
+        successShort: string;
+        runningFor: string;
+        toolCalls: string;
+        reviews: string;
+        unread: string;
+        last12: string;
+        newestFirst: string;
+        last12Aria: string;
+        runs24h: string;
+        runsCount: string;
+        runsCountOne: string;
+      };
+      bay: {
+        agentsCount: string;
+        agentsCountOne: string;
+        running: string;
+        aria: string;
+      };
+      tile: {
+        reviews: string;
+        reviewsOne: string;
+        unread: string;
+        needsYou: string;
+      };
+      team: {
+        title: string;
+        titleOne: string;
+        runsToday: string;
+      };
+      agent: {
+        emblemCaption: string;
+        traceCaption: string;
+        currentRun: string;
+        runStatus: string;
+        recentEvents: string;
+        nothingLogged: string;
+        retry: string;
+        retryNote: string;
+        answer: string;
+        answerNote: string;
+        queuedNote: string;
+        draftNote: string;
+        started: string;
+        lastResult: string;
+        state: string;
+        health: string;
+        runsToday: string;
+        successRate: string;
+        liveToolCalls: string;
+        reviewsCount: string;
+        oldestDecides: string;
+        approve: string;
+        sendBack: string;
+        waiting: string;
+        noDecisions: string;
+        unreadCount: string;
+        markRead: string;
+        inboxClear: string;
+        steps: {
+          plan: string;
+          gather: string;
+          tools: string;
+          check: string;
+          write: string;
+          handoff: string;
+        };
+        results: {
+          completed: string;
+          failed: string;
+        };
+      };
+      band: {
+        pace: string;
+        planNote: string;
+        used: string;
+        hot: string;
+        onPace: string;
+        headroom: string;
+        elapsed: string;
+        system: string;
+        systemNote: string;
+        procRunning: string;
+        procDone: string;
+        procQueued: string;
+        live: string;
+        liveNote: string;
+      };
+    };
+    city: {
+      label: string;
+      needsYouOne: string;
+      needsYouMany: string;
+      summary: string;
+      states: {
+        running: string;
+        failed: string;
+        input_required: string;
+        draft_ready: string;
+        queued: string;
+        attention: string;
+        idle: string;
+        off: string;
+      };
+      reasons: {
+        failed: string;
+        input: string;
+        critical: string;
+        criticalMany: string;
+        draft: string;
+        review: string;
+        reviewMany: string;
+        info: string;
+        infoMany: string;
+      };
+      moon: {
+        fiveHour: string;
+        sevenDay: string;
+        hot: string;
+        onPace: string;
+        windowGone: string;
+        weekGone: string;
+        resetsIn: string;
+      };
+      ago: {
+        now: string;
+        min: string;
+        hour: string;
+        day: string;
+      };
+      runningFor: string;
+      reviewsOne: string;
+      reviewsMany: string;
+      unreadOne: string;
+      unreadMany: string;
+      openRoom: string;
+      stepInside: string;
+      teamLine: string;
+      windowAria: string;
+      buildingAria: string;
+      tickerLabel: string;
+      live: string;
+      hintNext: string;
+      legendButton: string;
+      legendTitle: string;
+      legend: {
+        running: string;
+        idle: string;
+        queued: string;
+        failed: string;
+        input: string;
+        draft: string;
+        off: string;
+        reviews: string;
+        unread: string;
+      };
+      legendNote: string;
+      vehicles: {
+        done: string;
+        waiting: string;
+        running: string;
+      };
+    };
+    office: {
+      label: string;
+      back: string;
+      city: string;
+      breadcrumb: string;
+      escHint: string;
+      teamsLabel: string;
+      counts: string;
+      needOne: string;
+      needMany: string;
+      runsToday: string;
+      successRate: string;
+      costToday: string;
+      needsYouHeading: string;
+      calm: string;
+      latestHeading: string;
+      quiet: string;
+      noRun: string;
+      cutawayNote: string;
+      roomHint: string;
+      artNote: string;
+      where: {
+        work: string;
+        desk: string;
+        rest: string;
+      };
+      healthPill: string;
+      health: {
+        healthy: string;
+        degraded: string;
+        critical: string;
+      };
+      summaryLine: string;
+      currentRun: string;
+      needsDecision: string;
+      noDecisions: string;
+      moreAfter: string;
+      latestFrom: string;
+      nothingLogged: string;
+      success: string;
+      healthLabel: string;
+      last12: string;
+      newestFirst: string;
+      runsPerHour: string;
+      runsTotal: string;
+      now: string;
+      messages: string;
+      markRead: string;
+      inboxClear: string;
+      more: string;
+      approve: string;
+      sendBack: string;
+      severity: {
+        critical: string;
+        warning: string;
+        info: string;
+      };
+      status: {
+        completed: string;
+        failed: string;
+      };
+      run: {
+        off: string;
+        offSub: string;
+        progress: string;
+        lastFailed: string;
+        failedSub: string;
+        retry: string;
+        waiting: string;
+        inputSub: string;
+        answer: string;
+        draftReady: string;
+        draftSub: string;
+        accept: string;
+        queued: string;
+        queuedSub: string;
+        idleSub: string;
+      };
+    };
+  };
   // END pending-translation namespaces
 }
 
@@ -2435,6 +2823,7 @@ export const PENDING_TRANSLATION = [
   'pluginsExtra',
   'getStartedSection',
   'labSection',
+  'fleetPlayground',
 ] as const;
 
 export type PendingNamespace = (typeof PENDING_TRANSLATION)[number];
@@ -2764,6 +3153,7 @@ export const en: Translations = {
     knowledge: 'Knowledge',
     settings: 'Settings',
     leaderboard: 'Leaderboard',
+    playground: 'Playground',
     director: 'Director',
     sla: 'SLA',
     incidents: 'Incidents',
@@ -5149,6 +5539,393 @@ export const en: Translations = {
         latency: 'Latency',
         cost: 'Cost',
         safety: 'Safety',
+      },
+    },
+  },
+  fleetPlayground: {
+    title: 'Fleet playground',
+    lede: 'Prototypes for a fleet dashboard that holds 10 to 100 agents: who needs you, what is moving, where to go next.',
+    demoBadge: 'Demo fleet',
+    artBadge: 'Stylised illustration',
+    viewsLabel: 'Prototype',
+    views: {
+      board: 'Board',
+      city: 'Night shift',
+      office: 'Office',
+    },
+    viewHints: {
+      board: 'Every agent on one board, grouped by team',
+      city: 'The fleet as a city at night: one building per team',
+      office: 'Inside one team: a room per agent',
+    },
+    scaleLabel: 'Agents',
+    loading: 'Loading the prototype',
+    board: {
+      label: 'Board: agents grouped by team',
+      states: {
+        running: 'Running',
+        failed: 'Failed',
+        input_required: 'Waiting for input',
+        draft_ready: 'Draft ready',
+        queued: 'Queued',
+        attention: 'Review pending',
+        idle: 'Resting',
+        off: 'Off (disabled)',
+      },
+      shortStates: {
+        running: 'Running',
+        failed: 'Failed',
+        input_required: 'Needs input',
+        draft_ready: 'Draft ready',
+        queued: 'Queued',
+        attention: 'Review',
+        idle: 'Resting',
+        off: 'Off',
+      },
+      reasons: {
+        failed: 'Run failed',
+        input_required: 'Needs your answer',
+        critical: 'Critical review',
+        draft_ready: 'Draft ready',
+        warning: 'Review',
+        info: 'Review',
+      },
+      severity: {
+        critical: 'Critical',
+        warning: 'Warning',
+        info: 'Info',
+      },
+      health: {
+        healthy: 'Healthy',
+        degraded: 'Degraded',
+        critical: 'Critical',
+      },
+      tasks: {
+        toolTimeout: 'Last run failed: tool timeout',
+        revising: 'Revising the draft',
+        resuming: 'Resuming with your answer',
+        retrying: 'Retrying the last run',
+        nextBatch: 'Working the next batch',
+        resting: 'Resting between runs',
+        draftFallback: 'Draft ready for review',
+      },
+      kinds: {
+        run_completed: 'Run completed',
+        run_failed: 'Run failed',
+        review_requested: 'Review requested',
+        message: 'Message',
+        handoff: 'Handoff',
+        self_heal: 'Self-heal',
+        decision: 'Your decision',
+      },
+      simEvents: {
+        run_completed: 'Run completed',
+        run_failed: 'Run failed: tool timeout',
+        self_heal: 'Retry succeeded, wrote a note for the Overseer',
+      },
+      decisions: {
+        approve: 'You approved: {title}',
+        sendback: 'You sent back: {title}',
+        retry: 'You retried the failed run',
+        answer: 'You answered; the run resumed',
+        read: 'You read {n} messages',
+        readOne: 'You read {n} message',
+      },
+      toasts: {
+        approve: '{callsign}: approved “{title}”',
+        sendback: '{callsign}: sent back “{title}”',
+        retry: '{callsign}: retrying from the start',
+        answer: '{callsign}: answer sent, run resumed',
+        read: '{callsign}: {n} messages marked read',
+        readOne: '{callsign}: {n} message marked read',
+        next: '{i} of {n} needing you: {callsign} {name}',
+        nobody: 'Nobody needs you right now',
+      },
+      time: {
+        justNow: 'just now',
+        minutesAgo: '{n}m ago',
+        hoursAgo: '{n}h ago',
+        daysAgo: '{n}d ago',
+      },
+      nav: {
+        fleet: 'Fleet',
+        back: 'Back',
+        backToFleet: 'Back to fleet',
+        backToTeam: 'Back to {team}',
+        breadcrumb: 'Breadcrumb',
+        fleetMeta: '{agents} agents in {teams} teams',
+        nextHint: 'next agent that needs you',
+        escHint: 'back',
+      },
+      spot: {
+        label: 'Focus stage',
+        verdict: 'Fleet verdict',
+        agents: '{n} agents',
+        needsYouOne: 'needs you',
+        needsYouMany: 'need you',
+        allClear: 'all clear',
+        ofAgents: 'of {n} agents',
+        working: 'working',
+        queued: 'queued',
+        resting: 'resting',
+        needsYou: 'Needs you',
+        ranked: 'ranked',
+        queueMore: '{n} total, scroll or',
+        next: 'next',
+        emptyFleet: 'Nobody needs you right now. The fleet is running itself.',
+        emptyTeam: 'Nobody in {team} needs you. {n} working.',
+        team: 'Team',
+        inView: '{n} agents in view',
+        inViewOne: '{n} agent in view',
+        needsYouHere: 'Needs you here',
+        needCount: '{n} need you',
+        needCountOne: '{n} needs you',
+        allClearTeam: 'All clear',
+        runsToday: 'Runs today',
+        success: 'Success',
+        costToday: 'Cost today',
+        stylised: 'Stylised illustration',
+        health: 'Health: {health}',
+        progress: 'progress',
+        successShort: 'success',
+        runningFor: 'Running for',
+        toolCalls: 'Tool calls',
+        reviews: 'Reviews',
+        unread: 'Unread',
+        last12: 'Last 12 runs',
+        newestFirst: 'newest first',
+        last12Aria: 'Last 12 runs, newest first: {n} failed',
+        runs24h: 'Runs, last 24h',
+        runsCount: '{n} runs',
+        runsCountOne: '{n} run',
+      },
+      bay: {
+        agentsCount: '{n} agents',
+        agentsCountOne: '{n} agent',
+        running: '{n} running',
+        aria: '{team} team: {agents}, {running} running, {need}. Open team',
+      },
+      tile: {
+        reviews: '{n} pending reviews ({severity})',
+        reviewsOne: '{n} pending review ({severity})',
+        unread: '{n} unread',
+        needsYou: 'needs you',
+      },
+      team: {
+        title: '{team} team, {n} agents',
+        titleOne: '{team} team, {n} agent',
+        runsToday: 'runs today',
+      },
+      agent: {
+        emblemCaption: 'Persona emblem, stylised illustration',
+        traceCaption: 'Run trace: stylised illustration',
+        currentRun: 'Current run',
+        runStatus: 'Run status',
+        recentEvents: 'Recent events',
+        nothingLogged: 'Nothing logged in the last 14 hours.',
+        retry: 'Retry run',
+        retryNote: 'The Overseer will note the failure',
+        answer: 'Answer and resume',
+        answerNote: 'It paused for a decision',
+        queuedNote: 'Starts when a slot frees up',
+        draftNote: 'Approve the review on the right to publish',
+        started: 'Started',
+        lastResult: 'Last result',
+        state: 'State',
+        health: 'Health',
+        runsToday: 'Runs today',
+        successRate: 'success rate',
+        liveToolCalls: 'Live tool calls',
+        reviewsCount: 'Reviews, {n}',
+        oldestDecides: 'oldest decides rank',
+        approve: 'Approve',
+        sendBack: 'Send back',
+        waiting: 'waiting {age}',
+        noDecisions: 'No decisions waiting.',
+        unreadCount: 'Unread messages, {n}',
+        markRead: 'Mark read',
+        inboxClear: 'Inbox clear.',
+        steps: {
+          plan: 'Plan',
+          gather: 'Gather',
+          tools: 'Tool calls',
+          check: 'Check',
+          write: 'Write',
+          handoff: 'Hand off',
+        },
+        results: {
+          completed: 'Completed',
+          failed: 'Failed',
+        },
+      },
+      band: {
+        pace: 'Usage pace',
+        planNote: '{plan} plan, tick marks time elapsed',
+        used: '{label} used',
+        hot: 'running hot',
+        onPace: 'on pace',
+        headroom: 'headroom',
+        elapsed: '{pct}% of window elapsed, resets in {time}',
+        system: 'System',
+        systemNote: 'app-level work',
+        procRunning: 'running {time}',
+        procDone: 'done {ago}',
+        procQueued: 'queued',
+        live: 'Live',
+        liveNote: 'newest events',
+      },
+    },
+    city: {
+      label: 'The city: one building per team, one window per agent',
+      needsYouOne: 'window needs you',
+      needsYouMany: 'windows need you',
+      summary: '{running} at work · {queued} waiting their turn · {idle} dark · {off} shuttered',
+      states: {
+        running: 'at work {pct}%',
+        failed: 'failed',
+        input_required: 'waiting for your answer',
+        draft_ready: 'draft ready for review',
+        queued: 'waiting its turn',
+        attention: 'idle, reviews waiting',
+        idle: 'idle',
+        off: 'switched off',
+      },
+      reasons: {
+        failed: 'run failed',
+        input: 'needs answer',
+        critical: 'critical',
+        criticalMany: 'critical ×{n}',
+        draft: 'draft ready',
+        review: 'review',
+        reviewMany: 'review ×{n}',
+        info: 'info review',
+        infoMany: 'info ×{n}',
+      },
+      moon: {
+        fiveHour: 'Moon · 5-hour window',
+        sevenDay: 'Halo · 7-day',
+        hot: 'running hot',
+        onPace: 'on pace',
+        windowGone: '{pct}% of window gone',
+        weekGone: '{pct}% of week gone',
+        resetsIn: 'resets in {t}',
+      },
+      ago: {
+        now: 'just now',
+        min: '{n}m ago',
+        hour: '{n}h ago',
+        day: '{n}d ago',
+      },
+      runningFor: 'running for {t} · {n} live tool calls',
+      reviewsOne: '1 review · oldest {age}',
+      reviewsMany: '{n} reviews · oldest {age}',
+      unreadOne: '1 unread message',
+      unreadMany: '{n} unread messages',
+      openRoom: 'Enter or click to open the room',
+      stepInside: 'Enter or click to step inside',
+      teamLine: '{n} windows · {run} at work · {ny} need you · {runs} runs today',
+      windowAria: '{callsign} {name}, {team}, {state}',
+      buildingAria: '{team} building, {n} agents, {ny} need you. Open the team',
+      tickerLabel: 'Newest events',
+      live: 'Live',
+      hintNext: 'next that needs you',
+      legendButton: 'Legend',
+      legendTitle: 'How to read a window',
+      legend: {
+        running: 'At work · light rises with progress',
+        idle: 'Idle · dark glass, curtains',
+        queued: 'Waiting its turn · dim lamp',
+        failed: 'Failed · red glass, beacon on the sill',
+        input: 'Waiting for your answer · lantern',
+        draft: 'Draft ready · paper in the window',
+        off: 'Switched off · shutters',
+        reviews: 'Reviews waiting · flag in top severity',
+        unread: 'Unread messages · envelope',
+      },
+      legendNote: 'Beams and sky lanterns mark every window that needs you. Wires are who talks to whom; moving lights are messages and handoffs.',
+      vehicles: {
+        done: 'parked · done {age}',
+        waiting: 'waiting at the stop',
+        running: 'running · {t}',
+      },
+    },
+    office: {
+      label: 'Office: one team, a room per agent',
+      back: 'Back',
+      city: 'City',
+      breadcrumb: 'Breadcrumb',
+      escHint: 'Esc goes up one level',
+      teamsLabel: 'Team',
+      counts: '{n} agents · {run} at work',
+      needOne: '1 needs you',
+      needMany: '{n} need you',
+      runsToday: 'runs today',
+      successRate: 'success rate',
+      costToday: 'cost today',
+      needsYouHeading: 'Needs you on these floors',
+      calm: 'Nobody here needs you. The floors are calm.',
+      latestHeading: 'Latest on these floors',
+      quiet: 'Quiet tonight.',
+      noRun: 'No run in progress',
+      cutawayNote: 'Stylised cutaway illustration',
+      roomHint: 'Enter or click to open the room',
+      artNote: 'Stylised illustration · {callsign} at {where}',
+      where: {
+        work: 'work',
+        desk: 'the desk',
+        rest: 'rest, shutters down',
+      },
+      healthPill: 'health {h}',
+      health: {
+        healthy: 'healthy',
+        degraded: 'degraded',
+        critical: 'critical',
+      },
+      summaryLine: '{team} · {runs} runs today · last 12: {ok} completed, {bad} failed',
+      currentRun: 'Current run',
+      needsDecision: 'Needs your decision',
+      noDecisions: 'No decisions waiting on you.',
+      moreAfter: '+ {n} more after these',
+      latestFrom: 'Latest from {callsign}',
+      nothingLogged: 'Nothing logged yet tonight.',
+      success: 'success',
+      healthLabel: 'health',
+      last12: 'Last 12 runs',
+      newestFirst: 'newest first',
+      runsPerHour: 'Runs per hour · 24h',
+      runsTotal: '{n} runs',
+      now: 'now',
+      messages: 'Messages · {n} unread',
+      markRead: 'Mark read',
+      inboxClear: 'Inbox clear.',
+      more: '+ {n} more',
+      approve: 'Approve',
+      sendBack: 'Send back',
+      severity: {
+        critical: 'critical',
+        warning: 'warning',
+        info: 'info',
+      },
+      status: {
+        completed: 'completed',
+        failed: 'failed',
+      },
+      run: {
+        off: 'Switched off. This agent takes no new work.',
+        offSub: 'Its shutters are down in the city view.',
+        progress: '{pct}% · running for {t} · {n} live tool calls',
+        lastFailed: 'Last run failed',
+        failedSub: 'Agents self-heal by retry; the Overseer gets a note either way.',
+        retry: 'Retry the run',
+        waiting: 'Waiting for an answer',
+        inputSub: 'It paused mid-run and is holding up a lantern for you. Answering resumes the run (simulated).',
+        answer: 'Answer and resume',
+        draftReady: 'Draft ready for review',
+        draftSub: 'The draft is on the desk.',
+        accept: 'Accept the draft',
+        queued: 'Queued',
+        queuedSub: 'Starts when a slot frees up.',
+        idleSub: 'Last run {status} · {n} runs so far today',
       },
     },
   },

@@ -1,0 +1,145 @@
+/* Night Shift: the city. Every colour derives from the site tokens; the light
+   themes turn the night into dusk (no stars, a pale moon, ink figures). */
+
+.theme {
+  --ns-sky-top: color-mix(in oklab, var(--background) 95%, var(--primary));
+  --ns-sky-mid: color-mix(in oklab, var(--background) 86%, var(--primary));
+  --ns-sky-low: color-mix(in oklab, var(--background) 74%, var(--primary));
+  --ns-horizon: color-mix(in oklab, var(--primary) 38%, transparent);
+  --ns-far: color-mix(in oklab, var(--background) 84%, var(--primary));
+  --ns-far2: color-mix(in oklab, var(--background) 80%, var(--primary));
+  --ns-ground: color-mix(in oklab, var(--background) 76%, var(--primary));
+  --ns-street: color-mix(in oklab, var(--background) 92%, var(--primary));
+  --ns-rail: color-mix(in oklab, var(--background) 66%, var(--primary));
+  --ns-star: var(--foreground);
+  --ns-star-op: 1;
+  --ns-moon: color-mix(in oklab, var(--foreground) 92%, var(--brand-cyan));
+  --ns-moon-dark: color-mix(in oklab, var(--background) 78%, var(--primary));
+  --ns-glass: color-mix(in oklab, var(--background) 90%, var(--primary));
+  --ns-ink: var(--background);
+  --ns-shadow: color-mix(in oklab, var(--background) 70%, transparent);
+  --ns-panel: color-mix(in oklab, var(--background) 88%, transparent);
+  --ns-paper: color-mix(in oklab, var(--foreground) 90%, var(--brand-purple));
+  --ns-lamp: color-mix(in oklab, var(--brand-amber) 70%, var(--foreground));
+  --ns-wire: color-mix(in oklab, var(--brand-cyan) 70%, var(--foreground));
+  --ns-monitor: color-mix(in oklab, var(--background) 76%, var(--foreground));
+  --ns-room: color-mix(in oklab, var(--background) 93%, var(--primary));
+  --ns-text-mix: 100%;
+  position: relative;
+  isolation: isolate;
+  background: linear-gradient(180deg, var(--ns-sky-top) 0%, var(--ns-sky-mid) 45%, var(--ns-sky-low) 82%, var(--ns-street) 100%);
+}
+
+:global([data-theme^="light"]) .theme {
+  --ns-sky-top: color-mix(in oklab, var(--background) 66%, var(--primary));
+  --ns-sky-mid: color-mix(in oklab, var(--background) 84%, var(--primary));
+  --ns-sky-low: color-mix(in oklab, var(--background) 88%, var(--brand-amber));
+  --ns-horizon: color-mix(in oklab, var(--brand-amber) 34%, transparent);
+  --ns-far: color-mix(in oklab, var(--background) 72%, var(--primary));
+  --ns-far2: color-mix(in oklab, var(--background) 80%, var(--primary));
+  --ns-ground: color-mix(in oklab, var(--foreground) 30%, var(--background));
+  --ns-street: color-mix(in oklab, var(--foreground) 14%, var(--background));
+  --ns-rail: color-mix(in oklab, var(--foreground) 34%, var(--background));
+  --ns-star-op: 0;
+  --ns-moon: var(--background);
+  --ns-moon-dark: color-mix(in oklab, var(--background) 62%, var(--primary));
+  --ns-glass: color-mix(in oklab, var(--foreground) 24%, var(--background));
+  --ns-ink: color-mix(in oklab, var(--foreground) 88%, var(--background));
+  --ns-shadow: color-mix(in oklab, var(--foreground) 22%, transparent);
+  --ns-panel: color-mix(in oklab, var(--background) 92%, transparent);
+  --ns-paper: var(--background);
+  --ns-monitor: color-mix(in oklab, var(--foreground) 78%, var(--background));
+  --ns-room: color-mix(in oklab, var(--background) 90%, var(--foreground));
+  --ns-text-mix: 42%;
+}
+
+/* ── stage ── */
+.stage {
+  position: absolute;
+  left: 0;
+  top: 0;
+  transform-origin: 0 0;
+  overflow: visible;
+}
+.cityWrap {
+  position: absolute;
+  inset: 0;
+  transform-origin: 0 0;
+  transition: transform 0.7s cubic-bezier(0.6, 0.05, 0.3, 1), opacity 0.45s ease 0.3s;
+}
+.overflowSvg { position: absolute; left: 0; top: 0; overflow: visible; }
+.inert { pointer-events: none; }
+
+/* ── buildings & windows ── */
+.bldg { transition: opacity 0.45s ease, transform 0.5s cubic-bezier(0.22, 0.8, 0.24, 1); transform-box: fill-box; transform-origin: 50% 100%; }
+.hasAtt .bldg { opacity: 0.62; }
+.hasAtt .bldg.lift { opacity: 1; transform: translateY(-8px); }
+/* `backwards`, not `both`: a held end frame would pin `transform` and stop .lift. */
+.rise { animation: rise 0.75s cubic-bezier(0.22, 0.8, 0.24, 1) backwards; }
+@keyframes rise { from { transform: scaleY(0.35); opacity: 0; } to { transform: none; opacity: 1; } }
+.bshape, .win { cursor: pointer; outline: none; }
+.ring, .bring, .glow { opacity: 0; transition: opacity 0.2s; }
+.glow { pointer-events: none; }
+.win:hover .ring, .win:focus .ring, .win.att .ring, .win.att .glow { opacity: 1; }
+.win:focus-visible .ring { stroke: var(--foreground); stroke-width: 3; }
+.bshape:focus-visible .bring, .bshape.att .bring { opacity: 1; }
+.lightsOn { animation: lightsOn 0.6s ease var(--d, 0s) both; pointer-events: none; }
+@keyframes lightsOn { from { opacity: 1; } to { opacity: 0; } }
+
+/* ambient art loops (only rendered when motion is allowed) */
+.breath { animation: breath 4.8s ease-in-out infinite; }
+@keyframes breath { 0%, 100% { opacity: 0.62; } 50% { opacity: 0.92; } }
+.blink { animation: blink 1.6s ease-in-out infinite; }
+.slowBlink { animation: blink 3.2s ease-in-out infinite; }
+@keyframes blink { 0%, 100% { opacity: 0.25; } 50% { opacity: 1; } }
+.smoke { animation: smoke 6s linear infinite; transform-box: fill-box; transform-origin: 50% 50%; }
+@keyframes smoke { 0% { transform: translate(0, 0) scale(0.6); opacity: 0; } 25% { opacity: 0.35; } 100% { transform: translate(14px, -46px) scale(1.6); opacity: 0; } }
+.wave { animation: wave 3.5s ease-in-out infinite; transform-box: fill-box; transform-origin: 0 50%; }
+@keyframes wave { 0%, 100% { transform: skewY(0); } 50% { transform: skewY(-8deg) scaleX(0.92); } }
+.typing { animation: typing 1.8s steps(6) infinite; transform-box: fill-box; transform-origin: 0 50%; }
+@keyframes typing { 0% { transform: scaleX(0.2); } 100% { transform: scaleX(1); } }
+.shadow * { fill: var(--ns-shadow) !important; stroke: var(--ns-shadow) !important; }
+
+/* ── sky overlays ── */
+.fade { transition: opacity 0.4s ease; }
+.hasAtt .dimOnAtt { opacity: 0.16; }
+.display { opacity: 0; transform: translateY(10px); transition: opacity 0.35s ease, transform 0.45s ease; pointer-events: none; }
+.display.on { opacity: 1; transform: none; }
+.display::before {
+  content: "";
+  position: absolute;
+  inset: -60px -120px;
+  z-index: -1;
+  background: radial-gradient(closest-side, var(--ns-panel), color-mix(in oklab, var(--ns-panel) 70%, transparent) 60%, transparent);
+}
+.pop { animation: pop 0.7s cubic-bezier(0.22, 0.8, 0.24, 1); }
+@keyframes pop { 35% { transform: scale(1.18); } }
+
+/* ── lantern tags ── */
+.tag {
+  position: absolute;
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  height: 28px;
+  padding: 0 10px 0 8px;
+  border-radius: 8px;
+  white-space: nowrap;
+  cursor: pointer;
+  background: var(--ns-panel);
+  border: 1px solid var(--c);
+  box-shadow: 0 0 18px -4px var(--c);
+  transition: transform 0.25s ease, left 0.5s ease, top 0.5s ease;
+}
+.tag:hover { transform: translateY(-2px); }
+.tagIn { animation: tagIn 0.6s cubic-bezier(0.22, 0.8, 0.24, 1) both; }
+@keyframes tagIn { from { opacity: 0; transform: translateY(12px); } to { opacity: 1; transform: none; } }
+.lantern { width: 9px; height: 12px; border-radius: 3px 3px 5px 5px; background: var(--c); box-shadow: 0 0 10px var(--c); }
+
+/* ── ticker ── */
+.tk { position: absolute; top: 0; height: 100%; transition: transform 0.7s cubic-bezier(0.22, 0.8, 0.24, 1); }
+.tkIn { animation: tkIn 0.6s ease both; }
+@keyframes tkIn { from { opacity: 0; transform: translateX(-40px); } }
+.liveDot { animation: blink 1.6s ease-in-out infinite; }
+
+.still *, .still *::before, .still *::after { animation: none !important; transition-duration: 0.01ms !important; }

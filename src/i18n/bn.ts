@@ -406,6 +406,7 @@ export const bn: LocaleTranslations = {
       knowledge: "\u099c\u09cd\u099e\u09be\u09a8",
       settings: "\u09b8\u09c7\u099f\u09bf\u0982\u09b8",
       leaderboard: "\u09b2\u09bf\u09a1\u09be\u09b0\u09ac\u09cb\u09b0\u09cd\u09a1",
+      playground: "\u09aa\u09cd\u09b2\u09c7\u0997\u09cd\u09b0\u09be\u0989\u09a8\u09cd\u09a1",
       director: "\u09aa\u09b0\u09bf\u099a\u09be\u09b2\u0995",
       sla: "SLA",
       incidents: "\u0987\u09a8\u09b8\u09bf\u09a1\u09c7\u09a8\u09cd\u099f",

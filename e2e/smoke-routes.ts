@@ -87,6 +87,7 @@ const DASHBOARD: readonly SmokeRoute[] = [
   { path: "/dashboard/incidents", name: "incidents", tag: "dashboard" },
   { path: "/dashboard/health", name: "system health", tag: "dashboard" },
   { path: "/dashboard/knowledge", name: "knowledge base", tag: "dashboard" },
+  { path: "/dashboard/playground", name: "fleet playground", tag: "dashboard" },
   { path: "/dashboard/settings", name: "settings", tag: "dashboard" },
 ];
 
