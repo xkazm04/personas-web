@@ -17,7 +17,7 @@ export function ogCard({
   badge,
   badgeColor = "#06b6d4",
   accentColor = "#06b6d4",
-  footer = "personas.ai",
+  footer = "personas.so",
 }: OgCardProps) {
   return new ImageResponse(
     (

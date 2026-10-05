@@ -112,7 +112,7 @@ export function OgFrame({
           fontWeight: 500,
         }}
       >
-        personas.ai
+        personas.so
       </div>
     </div>
   );
