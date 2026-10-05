@@ -298,27 +298,67 @@ create table if not exists public.synced_triggers (
 create index if not exists idx_synced_triggers_user on public.synced_triggers (user_id);
 create index if not exists idx_synced_triggers_next on public.synced_triggers (user_id, next_trigger_at);
 
+-- ── fleet dispatch queue (the twelfth synced table) ───────────────────
+-- Mirrors the desktop writer (personas src-tauri/src/cloud/sync/rows.rs,
+-- `SyncedFleetQueueRow`). NOT cursor-synced: each pass upserts the whole
+-- queued set stamped with its own `synced_at`, then deletes this device's
+-- rows with an older stamp. `synced_at` is therefore written BY THE DESKTOP
+-- (never defaulted, never touched by the trigger below) and is the web's
+-- staleness signal: an ordering older than ~45s must not be shown as live.
+-- Deliberately absent: cwd, spawn args, claude session id, budget columns.
+create table if not exists public.synced_fleet_queue (
+  user_id        uuid        not null default auth.uid() references auth.users(id) on delete cascade,
+  device_id      text        not null,
+  session_id     text        not null,
+  rank           integer     not null,
+  lane           integer,
+  reserved_band  integer,
+  origin         text        not null,
+  state          text        not null,
+  label          text        not null,
+  persona_id     text,
+  goal_id        text,
+  queued_at_ms   bigint      not null,
+  not_before_ms  bigint,
+  synced_at      timestamptz not null,
+  primary key (user_id, device_id, session_id)
+);
+create index if not exists idx_synced_fleet_queue_user_rank on public.synced_fleet_queue (user_id, device_id, rank);
+
 -- =====================================================================
--- PHASE 2 — approval-gated remote operations (scaffold; not wired yet)
+-- PHASE 2 — approval-gated remote operations
 -- ---------------------------------------------------------------------
--- The web writes a request row; the desktop (same user) subscribes via
--- Realtime, materializes a companion-approval card, and only executes
--- LOCALLY after the user explicitly approves. Both sides are the same
--- user, so RLS is the single auth.uid() rule. No execution or credential
--- ever leaves the device.
+-- The web inserts a request row (status 'pending', target_device_id). The
+-- desktop leader POLLS every ~15s (personas src-tauri/src/cloud/remote_commands.rs;
+-- not Realtime), raises an approval card, and runs nothing until the
+-- operator approves. Approve claims the row with a compare-and-set
+-- (pending -> executing, scoped to the device), so a double approval is a
+-- no-op. Final states: completed (execution_id for run_persona, result_ref
+-- for queue verbs) | failed (error_message) | rejected (operator, or an
+-- unknown command_type: 'unsupported_command_type: ...') | expired (the
+-- desktop expires rows whose requested_at is older than 1h).
+-- Payloads: run_persona uses persona_id + prompt; queue verbs carry
+-- camelCase JSON in `prompt` and always name session ids, never ranks:
+--   queue_reorder  {"sessionIds":[...]}  head first, at least 2
+--   queue_set_lane {"sessionId":"...","lane":n|null}
+--   queue_cancel   {"sessionId":"..."}
+-- `params` and `expires_at` are reserved; the desktop does not read them.
+-- Both sides are the same user, so RLS is the single auth.uid() rule. No
+-- execution or credential ever leaves the device.
 -- =====================================================================
 create table if not exists public.pending_commands (
   id              uuid primary key default gen_random_uuid(),
   user_id         uuid not null default auth.uid() references auth.users(id) on delete cascade,
   target_device_id text,
   persona_id      text,
-  command_type    text not null check (command_type in ('run_persona','cancel_execution')),
+  command_type    text not null,   -- allowed set: see the constraint below
   prompt          text,
   params          jsonb,
   status          text not null default 'pending'
                   check (status in ('pending','approved','rejected','executing','completed','failed','expired')),
   requested_from  text,            -- 'web' | 'api'
   execution_id    text,            -- set by desktop once it spawns the local run
+  result_ref      text,            -- set by desktop when a non-run verb completes
   error_message   text,
   requested_at    timestamptz not null default now(),
   resolved_at     timestamptz,
@@ -327,6 +367,12 @@ create table if not exists public.pending_commands (
   updated_at      timestamptz not null default now()
 );
 create index if not exists idx_pending_commands_user_status on public.pending_commands (user_id, status);
+-- Idempotent upgrades for an already-deployed table: the result column the
+-- desktop writes for queue verbs, and the command set it accepts.
+alter table public.pending_commands add column if not exists result_ref text;
+alter table public.pending_commands drop constraint if exists pending_commands_command_type_check;
+alter table public.pending_commands add constraint pending_commands_command_type_check
+  check (command_type in ('run_persona','cancel_execution','queue_reorder','queue_set_lane','queue_cancel'));
 create index if not exists idx_pending_commands_device on public.pending_commands (target_device_id, status);
 
 -- =====================================================================
@@ -344,6 +390,7 @@ alter table public.synced_memories           enable row level security;
 alter table public.synced_knowledge_patterns enable row level security;
 alter table public.synced_healing_issues     enable row level security;
 alter table public.synced_triggers           enable row level security;
+alter table public.synced_fleet_queue        enable row level security;
 alter table public.pending_commands          enable row level security;
 
 -- One owner-only policy per table covering all verbs. Re-runnable.
@@ -354,7 +401,7 @@ declare
     'synced_devices','synced_personas','synced_executions','synced_events',
     'synced_manual_reviews','synced_messages','synced_metrics_snapshots',
     'synced_tool_usage','synced_memories','synced_knowledge_patterns',
-    'synced_healing_issues','synced_triggers','pending_commands'
+    'synced_healing_issues','synced_triggers','synced_fleet_queue','pending_commands'
   ];
 begin
   foreach t in array tables loop
@@ -375,7 +422,7 @@ declare
     'synced_devices','synced_personas','synced_executions','synced_events',
     'synced_manual_reviews','synced_messages','synced_metrics_snapshots',
     'synced_tool_usage','synced_memories','synced_knowledge_patterns',
-    'synced_healing_issues','synced_triggers','pending_commands'
+    'synced_healing_issues','synced_triggers','synced_fleet_queue','pending_commands'
   ];
 begin
   foreach t in array tables loop
@@ -449,8 +496,42 @@ grant select on public.synced_persona_spend to authenticated;
 grant select on public.synced_leaderboard to authenticated;
 
 -- =====================================================================
--- Realtime — publish row changes on the busiest synced tables so the web
--- dashboard can subscribe live (useSyncedRealtime) instead of polling.
+-- synced_at freshness — the desktop's upserts never send synced_at, so on
+-- the cursor tables an update kept the FIRST insert's stamp. This trigger
+-- re-stamps every update so `synced_at` means "last written by the
+-- desktop". synced_fleet_queue is excluded: its stamp is the desktop's
+-- reconcile key and must stay exactly what the desktop sent.
+-- =====================================================================
+create or replace function public.touch_synced_at() returns trigger
+  language plpgsql as $$
+begin
+  new.synced_at := now();
+  return new;
+end $$;
+
+do $$
+declare
+  t text;
+  tables text[] := array[
+    'synced_personas','synced_executions','synced_events',
+    'synced_manual_reviews','synced_messages','synced_metrics_snapshots',
+    'synced_tool_usage','synced_memories','synced_knowledge_patterns',
+    'synced_healing_issues','synced_triggers'
+  ];
+begin
+  foreach t in array tables loop
+    execute format('drop trigger if exists trg_touch_synced_at on public.%I', t);
+    execute format(
+      'create trigger trg_touch_synced_at before update on public.%I
+         for each row execute function public.touch_synced_at()', t);
+  end loop;
+end $$;
+
+-- =====================================================================
+-- Realtime — publish row changes so the web dashboard can subscribe live
+-- (useSyncedRealtime) instead of polling: the busiest synced tables, the
+-- inbox-style tables, the fleet queue, and pending_commands (so the web
+-- can follow a command from pending to its outcome).
 -- RLS still applies on the Realtime socket: each user only receives changes
 -- to their own rows. Idempotent — only adds a table not already published.
 -- =====================================================================
@@ -459,7 +540,8 @@ declare
   t text;
   tables text[] := array[
     'synced_personas','synced_executions','synced_events',
-    'synced_manual_reviews','synced_devices'
+    'synced_manual_reviews','synced_devices','synced_messages',
+    'synced_healing_issues','synced_fleet_queue','pending_commands'
   ];
 begin
   foreach t in array tables loop
