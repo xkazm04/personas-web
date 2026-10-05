@@ -245,6 +245,64 @@ S-sized. Run `/scan-sweep --one <context>` to land them through the normal gates
 
 ---
 
+### Defect resolution: 2026-10-06
+
+Fixed by six parallel builders, plus the coordinator. Every gate passed on the combined tree
+except `copy:check` (see below). That covers `typecheck`, `lint`, `test:unit` (614),
+`check:i18n-coverage`, `check:i18n-encoding`, `check:guide-content`, `check:guide-translations`,
+`build` and `check:bundle` (41 routes within budget).
+
+Owner decisions applied: D3 rewrites the copy; D9 makes `personas.so` canonical; D1 routes the
+button to install; D18 deletes the stats route.
+
+| # | Outcome | Commit(s) |
+|---|---|---|
+| D1 | "Use This Template" opens the install modal; the dead deep link and the timer code are removed. | `4a4f233` |
+| D2 | **Not a defect fix.** This is the gallery API the desktop calls (theme T2), so it stays a direction. | — |
+| D3 | Every "zero telemetry" claim is replaced with what the app actually sends. The copy mentions the opt-out and says it doesn't cover native crash reports. The provider list now reads Claude (Anthropic) or a local Ollama model. | `1bfd12a` |
+| D4 | The cookie policy is rendered from `src/data/storage-register.ts`, and a test fails if the site writes a storage key the register doesn't list. | `1bd4c75` |
+| D5 | In Supabase mode, `getExecution` honours the poll offset. | `3357036` |
+| D6 | **Blocked on the desktop repo.** The desktop poller (`remote_commands.rs`) accepts only `run_persona` and `queue_*`, and rejects `cancel_execution`. It needs a handler first. | — |
+| D7 | Health, Incidents and Director show an honest empty state for live workspaces (`useDemoOnlySWR`). | `f2b0d4b`, `049e8de` |
+| D8 | Internationalization reads as completed in `v1.json`, and it is removed from the votable set across all 14 locales. | `5d695e9` |
+| D9 | `SITE_URL` defaults to `personas.so`; the OG footers and the guide JSON-LD follow it. | `4b52f36` |
+| D10 | **Needs a decision.** The desktop only has v0.4.0, v1.0.0 and v1.1.0. The site's 0.5.0 through 0.16.0 and 0.11.2 never existed. Delete those 13 versions, or keep them re-dated? | — |
+| D11 | The flow composer CTA now links to `/#download` and no longer promises an import. | `14bde1b` |
+| D12 | Race totals are computed from the steps, the invented durations are gone, the "% faster" line only shows when both tracks finish, and the chat and the race now agree on 47 minutes. | `280cc27` |
+| D13 | The hub's trigger ids use the desktop `TriggerKind` spelling, and a test pins them. | `25f1949` |
+| D14 | **Doesn't reproduce today.** The `playgroundSection` strings are English-only, so the English label always matches. The bug is still latent: it comes back once that section is translated. | — |
+| D15 | The "Try it" terminal plays a script built from each connector's own data, is labelled as a simulation, and no longer shows the fake `personas run` command. | `5374e8c` |
+| D16 | Malformed `:::` directives fail `check:guide-content` and warn in dev. These actually **hung** the renderer; they weren't just dropped. | `db30651` |
+| D17 | The ticker honours the provider overrides. Settings gets an "Escalate overdue reviews" switch, and its storage is guarded against blocked site data. | `ab2a07f`, `2cd6faf` |
+| D18 | `/api/stats` and `useLiveStats` are deleted (749 lines). There were no consumers in this repo or the desktop. | `aa81d17` |
+| D19 | The header of `types.ts` now calls the file the web's own contract. No fields drifted that the web actually reads. | `4a2d3fb` |
+| D20 | Director uses the shared fleet, the gitlab dead letter is consistent, and the memories are unique, each with its own title. | `49c29aa`, `e76a388` |
+| D21 | `context-map.json`: 94 dead paths are pruned and 128 files attached. `/athena` (~101 files) and features-lab (~135) still have no context; they need a Vibeman refresh. | `0024632` |
+| D22 | Docs corrected: `proxy.ts` is live, `SetupCTA` is rendered, the security FAQ is derived, and the healing switcher is described. | `0758133` |
+
+**`copy:check` is red at HEAD**, and none of these fixes caused it. There are 41 new em-dash and UK-spelling
+errors, all in strings from the two lab commits (`fd3853a`, `076157d`). The pre-push hook runs this
+check, so pushing will fail until they are fixed or baselined.
+
+**New defects the builders found and did not fix:**
+
+| # | Defect | Kind |
+|---|---|---|
+| N1 | The security page heading and blog post 1 say prompts "never leave your device", but agent prompts go to Anthropic. | false claim, i18n ×14 |
+| N2 | The `CookieConsent` banner says "No tracking" even though "Accept All" enables anonymous counts, and its text is hardcoded English. | false claim + i18n |
+| N3 | Desktop: the telemetry opt-out doesn't reach the Rust `sentry::init`, so native crash reports and sessions keep running when the user switches it off. | desktop repo |
+| N4 | Escalation: the new switch shows in live workspaces too. Turning it on auto-approves real Info reviews after 8 hours (in orchestrator mode). Should it be demo-only? | **owner decision** |
+| N5 | `src/proxy.ts` is live: phone visitors are redirected to `/m/*` today, despite the FINDINGS B-12 decision to "leave dormant until /m is ship-ready". | **owner decision** |
+| N6 | `parseBlocks` also hangs on malformed headings (`#####`, `#tag`, an indented `# x`). | S fix |
+| N7 | The Observability Activity tab (`useActivityMetrics.ts`) lacks the D7 demo gate. | S fix |
+| N8 | The templates gallery copy says "adopt with one click… no setup required" (the same overclaim as D1). | copy, i18n ×14 |
+| N9 | The vote grid has 2 columns and now shows 3 cards, which leaves an orphan card. | S fix |
+| N10 | The chat's staging scenario says "ready in 90 seconds" at timestamp 0:12. | copy |
+| N11 | There are two Obsidian connector entries with the same label and the same use cases. | data |
+| N12 | Desktop: `gallery.rs:43`, `ShareAgentButton.tsx:28` and `TeamPublishButton.tsx:30` default to `personas.ai`, but `personas.so` is now canonical. | desktop repo |
+| N13 | Stale docs: `sla.md:14` uses retired agent names, and `orchestrator-client-mocks.md:21` describes a mock cursor that no longer exists. | docs |
+| N14 | The security compliance rows "No third-party sub-processor inventory / No consent management" are questionable now that Sentry is disclosed. "LM Studio" and "40+ connectors" have no backing in the code. | **legal / owner** |
+
 ## All cards
 
 Fill in the Verdict column. Full cards live in the group files linked in each heading.
