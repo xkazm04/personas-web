@@ -94,23 +94,24 @@ describe("resolveLandingAddress", () => {
     }
   });
 
-  it("get-started's id is emitted once: the mounted section holds it, the page wrapper does not", () => {
+  it("get-started's id is emitted once: the always-present wrapper holds it, the mounted section does not", () => {
     // Two elements with id="get-started" is invalid HTML, and getElementById /
     // a native `#get-started` jump silently pick whichever comes first.
     const page = read("src/app/page.tsx");
-    const wrapperEmits = [...page.matchAll(/wrapperId:\s*"get-started"/g)].length;
-    const dirs = ["sections", "landing"].flatMap((d) => walk(path.join(SRC_ROOT, "components", d)));
-    const sectionEmits = dirs.reduce(
+    const wrapperEmits = [...page.matchAll(/anchorId:\s*"get-started"/g)].length;
+    const sectionEmits = walk(path.join(SRC_ROOT, "components", "sections")).reduce(
       (count, file) => count + [...readFileSync(file, "utf8").matchAll(/\bid="get-started"/g)].length,
       0,
     );
-    expect({ wrapperEmits, sectionEmits }).toEqual({ wrapperEmits: 0, sectionEmits: 1 });
+    expect({ wrapperEmits, sectionEmits }).toEqual({ wrapperEmits: 1, sectionEmits: 0 });
   });
 
-  it("finds the mounted get-started section by its own id inside the always-present wrapper", () => {
+  it("finds the mounted get-started section by its heading label inside the always-present wrapper", () => {
     const address = resolveLandingAddress("#get-started")!;
     expect(address.wrapperSelector).toBe('[data-scroll-anchor="get-started"]');
-    expect(address.innerSelector).toBe('[data-scroll-anchor="get-started"] #get-started');
+    expect(address.innerSelector).toBe('[data-scroll-anchor="get-started"] [aria-labelledby="get-started-heading"]');
+    const section = read("src/components/sections/get-started/index.tsx");
+    expect(section).toMatch(/<SectionWrapper\b[^>]*\baria-labelledby="get-started-heading"/);
   });
 
   it("pricing's id is emitted once: the always-present wrapper holds it, the mounted section does not", () => {
@@ -137,10 +138,8 @@ describe("resolveLandingAddress", () => {
 
   it("guard: every inner section id is rendered by some home section", () => {
     const ids = new Set<string>();
-    for (const dir of ["sections", "landing"]) {
-      for (const file of walk(path.join(SRC_ROOT, "components", dir))) {
-        for (const m of readFileSync(file, "utf8").matchAll(/\bid="([^"]+)"/g)) ids.add(m[1]);
-      }
+    for (const file of walk(path.join(SRC_ROOT, "components", "sections"))) {
+      for (const m of readFileSync(file, "utf8").matchAll(/\bid="([^"]+)"/g)) ids.add(m[1]);
     }
     for (const { id } of LANDING_SECTIONS) {
       if (id === "hero") continue;

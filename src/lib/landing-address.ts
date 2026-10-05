@@ -36,8 +36,8 @@ export interface LandingAddress {
  *  forever. The test fails if page.tsx grows a wrapper this table misses. */
 const ALIASES: Readonly<Record<string, string>> = {
   "download-section": "download",
-  // The landing was rebuilt around the personas/concepts/triggers story; the
-  // old section ids stay resolvable because links and the guided tour use them.
+  // The declared ids name the story (personas/concepts/triggers/private); the
+  // sections' own ids stay resolvable because links and the guided tour use them.
   tools: "personas",
   "use-cases": "personas",
   playground: "concepts",
@@ -49,12 +49,18 @@ const ALIASES: Readonly<Record<string, string>> = {
 };
 
 /** Declared ids whose mounted section renders a different id. */
-const INNER_IDS: Readonly<Record<string, string>> = {};
+const INNER_IDS: Readonly<Record<string, string>> = {
+  personas: "use-cases",
+  concepts: "playground-split",
+  triggers: "orchestration-hub",
+  private: "vision-grid",
+};
 
 /** Addresses whose id the always-present wrapper owns (page.tsx `wrapperId`
  *  === `anchorId`). An id is unique per document, so the mounted section
  *  carries none and is found by the heading that labels it instead. */
 const LABELLED_INNER: Readonly<Record<string, string>> = {
+  "get-started": "get-started-heading",
   pricing: "compare-heading",
 };
 

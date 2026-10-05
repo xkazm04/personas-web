@@ -66,7 +66,6 @@ Status legend: ✅ written · ⬜ planned
 | Doc | Surface |
 | --- | --- |
 | ✅ [homepage-hero](marketing/homepage-hero.md) | Hero, command-center, stat row, social proof |
-| ✅ [landing-skins](marketing/landing-skins.md) | The `/` section stack and its Personas / Deck / Blueprint skins |
 | ✅ [why-agents](marketing/why-agents.md) | Agent-vs-workflow scenario duels (retired section; kept as history) |
 | ✅ [use-cases](marketing/use-cases.md) | Tool tabs + persona card + ledger playback |
 | ✅ [features-overview](marketing/features-overview.md) | `/features` page + vision layer stack |

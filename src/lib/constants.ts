@@ -14,7 +14,6 @@ export const LANDING_SECTIONS: LandingSection[] = [
   { id: "personas", label: "Personas" },
   { id: "concepts", label: "At a glance" },
   { id: "get-started", label: "Get Started" },
-  { id: "runs", label: "Runs" },
   { id: "triggers", label: "Triggers" },
   { id: "team-canvas", label: "Team Canvas" },
   { id: "companion", label: "Companion" },

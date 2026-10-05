@@ -1,4 +1,0 @@
-/* Text floors for the example-persona card: the art scales with its parent, the words must not fall under 12px. */
-.ln-cart .ln-cl-top{font-size:max(12px,.95em);letter-spacing:.03em}
-.ln-cart .ln-cl-hand{font-size:max(12px,1.72em)}
-.ln-cbtn .ln-cl-top span{display:none}
