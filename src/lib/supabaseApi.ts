@@ -340,17 +340,23 @@ export const supabaseApi: ApiClient = {
     return r.map(mapExecution);
   },
 
-  getExecution: async (id: string): Promise<ExecutionDetail> => {
+  // Same contract as the orchestrator's GET /api/executions/:id?offset=N and the
+  // mock: `output` is only the lines past the caller's cursor, `outputLines` the
+  // total. The sync row always carries the FULL buffer, so slice it here —
+  // returning it whole made the 1s poller re-append the log on every tick.
+  getExecution: async (id: string, offset?: number): Promise<ExecutionDetail> => {
     const r = await rows<ExecutionRow>(
       getSupabase().from("synced_executions").select("*").eq("id", id).limit(1),
     );
     if (r.length === 0) throw new ApiError(404, "Execution not found");
     const e = r[0];
-    const output = e.output_data ? e.output_data.split("\n") : [];
+    const all = e.output_data ? e.output_data.split("\n") : [];
+    const from = Math.max(0, Math.floor(offset ?? 0));
+    const output = all.slice(from);
     return {
       executionId: e.id,
       status: mapStatus(e.status),
-      outputLines: output.length,
+      outputLines: all.length,
       output,
       durationMs: e.duration_ms ?? undefined,
       sessionId: e.claude_session_id ?? undefined,
