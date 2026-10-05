@@ -16,7 +16,7 @@ A self-contained, auto-playing diagram that tells the "fixes itself" story. It r
 ## Key files
 | File | Role |
 | --- | --- |
-| `src/components/feature-sections/HealingCircuit.tsx` | Public entry — re-exports `./healing-circuit/index` |
+| `src/components/feature-sections/HealingCircuit.tsx` | Public entry — an `IllustrationSwitcher` with two tabs: "Current" (this circuit board, `./healing-circuit/index`, the default) and "Overnight" (`HealingCircuit.overnight.tsx` + `.overnight.parts.tsx`, a night of runs with one issue left), shown side by side until the owner picks one (decision 2026-09-26) |
 | `src/components/feature-sections/healing-circuit/index.tsx` | Section composition (intro + glass card + all subcomponents) |
 | `src/components/feature-sections/healing-circuit/useHealingCycle.ts` | Failure→recovery state machine + `getConnectionStatus`/`getNodeStatus` |
 | `src/components/feature-sections/healing-circuit/data.ts` | `healingStages`, `nodes`, `connections`, `breakableConnections`, color maps, `sparkSeeds`, `getPathMidpoint` |
