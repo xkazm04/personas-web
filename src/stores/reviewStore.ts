@@ -152,8 +152,33 @@ function loadEscalationPolicy(): EscalationPolicy {
   return policy;
 }
 
+// Storage can throw (blocked site data, private mode); the prefs then live in
+// memory for the session rather than breaking the toggle that set them.
 function saveEscalationPolicy(policy: EscalationPolicy): void {
-  localStorage.setItem(ESCALATION_POLICY_KEY, JSON.stringify(policy));
+  try {
+    localStorage.setItem(ESCALATION_POLICY_KEY, JSON.stringify(policy));
+  } catch {
+    /* in-memory only */
+  }
+}
+
+const ESCALATION_ENABLED_KEY = "review-escalation-enabled";
+
+function loadEscalationEnabled(): boolean {
+  if (typeof window === "undefined") return false;
+  try {
+    return localStorage.getItem(ESCALATION_ENABLED_KEY) === "true";
+  } catch {
+    return false;
+  }
+}
+
+function saveEscalationEnabled(enabled: boolean): void {
+  try {
+    localStorage.setItem(ESCALATION_ENABLED_KEY, String(enabled));
+  } catch {
+    /* in-memory only */
+  }
 }
 
 // ---------------------------------------------------------------------------
@@ -352,7 +377,7 @@ export const useReviewStore = create<ReviewState>((set, get) => {
     lastResult: null,
     refusal: null,
     escalationPolicy: DEFAULT_ESCALATION_POLICY,
-    escalationEnabled: typeof window !== "undefined" && localStorage.getItem("review-escalation-enabled") === "true",
+    escalationEnabled: loadEscalationEnabled(),
     fetchReviews: async () => {
       // No pause flag: the response is overlaid with the ledger at the point it
       // is applied, so a poll (even one already in flight when a window opened)
@@ -413,7 +438,7 @@ export const useReviewStore = create<ReviewState>((set, get) => {
       set({ escalationPolicy: policy });
     },
     setEscalationEnabled: (enabled) => {
-      localStorage.setItem("review-escalation-enabled", String(enabled));
+      saveEscalationEnabled(enabled);
       set({ escalationEnabled: enabled });
     },
     reset: () => {
