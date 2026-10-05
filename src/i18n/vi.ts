@@ -485,6 +485,99 @@ export const vi: LocaleTranslations = {
         }
       },
       home: {
+        mission: {
+          windowNote: "Số liệu trong 14 ngày gần nhất",
+          hint: "Nhấn 1 đến 8 để mở một chỉ số, Esc để quay lại",
+          wallLabel: "Các chỉ số của đội tác nhân",
+          openDimension: "Mở {label}",
+          backToWall: "Quay lại tổng quan",
+          railLabel: "Tất cả chỉ số",
+          verdicts: {
+            pending: "Đang đo",
+            failed: "Không khả dụng",
+            unmeasured: "Chưa đo",
+            ok: "Ổn định",
+            watch: "Cần theo dõi",
+            yours: "Đang chờ bạn",
+            act: "Cần bạn xử lý"
+          },
+          dims: {
+            outcomes: {
+              label: "Kết quả",
+              question: "Các lần chạy có thành công không?"
+            },
+            agents: {
+              label: "Tác nhân",
+              question: "Có tác nhân nào đang gặp khó không?"
+            },
+            queue: {
+              label: "Đang chờ bạn",
+              question: "Việc gì cần bạn ra tay?"
+            },
+            recovery: {
+              label: "Tự phục hồi",
+              question: "Đội tác nhân có tự khắc phục không?"
+            },
+            spend: {
+              label: "Chi tiêu",
+              question: "Chi tiêu có bình thường không?"
+            },
+            autonomy: {
+              label: "Tự chủ",
+              question: "Việc gì chạy mà không cần bạn?"
+            },
+            vault: {
+              label: "Kho khóa",
+              question: "Thông tin xác thực có ổn không?"
+            },
+            instruments: {
+              label: "Nguồn đo",
+              question: "Trang này có được cập nhật không?"
+            }
+          },
+          evidence: {
+            outcomes: "Lần chạy {runs} · thất bại {failed}",
+            noRuns: "Không có lần chạy nào trong khoảng này",
+            agents: "Ngừng hoạt động {critical} · suy giảm {degraded} · bình thường {healthy}",
+            queue: "Cảnh báo {alerts} · đánh giá {reviews} · bộ nhớ {memory} · chưa đọc {reports}",
+            queueEmpty: "Không có việc gì đang chờ bạn",
+            recovery: "Đang mở {open} · tạm dừng {paused} · tự khắc phục {fixed}",
+            spendSpikes: "Chi phí tăng vọt: {n}",
+            spendPerDay: "{value} mỗi ngày",
+            autonomy: "Đã lên lịch {n} · lần tới sau {time}",
+            autonomyEmpty: "Chưa có lịch nào",
+            vault: "Quá hạn {overdue} · bất thường {anomalies} · sự kiện {events}",
+            instruments: "Nguồn lỗi: {failed}",
+            instrumentsOk: "Mọi nguồn đều đã phản hồi",
+            pending: "Đang chờ số liệu đầu tiên",
+            unmeasured: "Chưa có nguồn đồng bộ cho mục này"
+          },
+          scoreSuffix: "/100",
+          detail: {
+            issuesTitle: "Sự cố cần phục hồi",
+            issuesEmpty: "Không có sự cố cần phục hồi nào trong khoảng này.",
+            issueStatus: {
+              open: "Đang mở",
+              auto_fixed: "Đã tự khắc phục",
+              resolved: "Đã giải quyết"
+            },
+            pausedBadge: "Tạm dừng",
+            costTitle: "Chi phí theo ngày",
+            costSpike: "Chi phí tăng vọt",
+            sourcesTitle: "Nguồn",
+            sourceStatus: {
+              pending: "Đang chờ",
+              ok: "Đã phản hồi",
+              failed: "Thất bại"
+            },
+            sources: {
+              observability: "Giám sát",
+              healing: "Sự cố cần phục hồi",
+              reviews: "Đánh giá",
+              routines: "Quy trình"
+            }
+          }
+        },
         vitals: {
           runs: "L\u1ea7n ch\u1ea1y",
           alerts: "C\u1ea3nh b\u00e1o"

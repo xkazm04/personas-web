@@ -485,6 +485,99 @@ export const fr: LocaleTranslations = {
         }
       },
       home: {
+        mission: {
+          windowNote: "Mesures des 14 derniers jours",
+          hint: "Appuyez sur 1 \u00e0 8 pour ouvrir une dimension, Esc pour revenir",
+          wallLabel: "Dimensions de la flotte",
+          openDimension: "Ouvrir {label}",
+          backToWall: "Retour au tableau",
+          railLabel: "Toutes les dimensions",
+          verdicts: {
+            pending: "Mesure en cours",
+            failed: "Indisponible",
+            unmeasured: "Non mesur\u00e9",
+            ok: "Stable",
+            watch: "\u00c0 surveiller",
+            yours: "Vous attend",
+            act: "Action requise"
+          },
+          dims: {
+            outcomes: {
+              label: "R\u00e9sultats",
+              question: "Les ex\u00e9cutions r\u00e9ussissent-elles ?"
+            },
+            agents: {
+              label: "Agents",
+              question: "Un agent est-il en difficult\u00e9 ?"
+            },
+            queue: {
+              label: "Vous attend",
+              question: "Qu\u2019est-ce qui attend votre intervention ?"
+            },
+            recovery: {
+              label: "Auto-r\u00e9paration",
+              question: "La flotte se r\u00e9pare-t-elle seule ?"
+            },
+            spend: {
+              label: "D\u00e9penses",
+              question: "Les d\u00e9penses sont-elles ma\u00eetris\u00e9es ?"
+            },
+            autonomy: {
+              label: "Autonomie",
+              question: "Qu\u2019est-ce qui tourne sans vous ?"
+            },
+            vault: {
+              label: "Coffre",
+              question: "Les identifiants sont-ils sains ?"
+            },
+            instruments: {
+              label: "Instruments",
+              question: "Cette page est-elle \u00e0 jour ?"
+            }
+          },
+          evidence: {
+            outcomes: "Ex\u00e9cutions {runs} \u00b7 \u00e9checs {failed}",
+            noRuns: "Aucune ex\u00e9cution sur cette p\u00e9riode",
+            agents: "Panne {critical} \u00b7 d\u00e9grad\u00e9s {degraded} \u00b7 op\u00e9rationnels {healthy}",
+            queue: "Alertes {alerts} \u00b7 revues {reviews} \u00b7 m\u00e9moire {memory} \u00b7 non lus {reports}",
+            queueEmpty: "Rien ne vous attend",
+            recovery: "Ouverts {open} \u00b7 en pause {paused} \u00b7 auto-corrig\u00e9s {fixed}",
+            spendSpikes: "Pics de co\u00fbt : {n}",
+            spendPerDay: "{value} par jour",
+            autonomy: "Planifi\u00e9es {n} \u00b7 prochaine dans {time}",
+            autonomyEmpty: "Rien de planifi\u00e9",
+            vault: "En retard {overdue} \u00b7 anomalies {anomalies} \u00b7 \u00e9v\u00e9nements {events}",
+            instruments: "Sources en \u00e9chec : {failed}",
+            instrumentsOk: "Toutes les sources ont r\u00e9pondu",
+            pending: "En attente de la premi\u00e8re mesure",
+            unmeasured: "Aucune source synchronis\u00e9e pour l\u2019instant"
+          },
+          scoreSuffix: "/100",
+          detail: {
+            issuesTitle: "Incidents d\u2019auto-r\u00e9paration",
+            issuesEmpty: "Aucun incident d\u2019auto-r\u00e9paration sur cette p\u00e9riode.",
+            issueStatus: {
+              open: "Ouvert",
+              auto_fixed: "Auto-corrig\u00e9",
+              resolved: "R\u00e9solu"
+            },
+            pausedBadge: "En pause",
+            costTitle: "Co\u00fbt par jour",
+            costSpike: "Pic de co\u00fbt",
+            sourcesTitle: "Sources",
+            sourceStatus: {
+              pending: "En attente",
+              ok: "A r\u00e9pondu",
+              failed: "\u00c9chec"
+            },
+            sources: {
+              observability: "Observabilit\u00e9",
+              healing: "Incidents d\u2019auto-r\u00e9paration",
+              reviews: "Revues",
+              routines: "Routines"
+            }
+          }
+        },
         vitals: {
           runs: "Ex\u00e9cutions",
           alerts: "Alertes"

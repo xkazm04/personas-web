@@ -485,6 +485,99 @@ export const cs: LocaleTranslations = {
         }
       },
       home: {
+        mission: {
+          windowNote: "\u00dadaje za posledn\u00edch 14 dn\u00ed",
+          hint: "Kl\u00e1vesami 1 a\u017e 8 otev\u0159ete dimenzi, Esc v\u00e1s vr\u00e1t\u00ed zp\u011bt",
+          wallLabel: "Dimenze flotily",
+          openDimension: "Otev\u0159\u00edt {label}",
+          backToWall: "Zp\u011bt na p\u0159ehled",
+          railLabel: "V\u0161echny dimenze",
+          verdicts: {
+            pending: "M\u011b\u0159\u00ed se",
+            failed: "Nedostupn\u00e9",
+            unmeasured: "Nem\u011b\u0159eno",
+            ok: "Stabiln\u00ed",
+            watch: "Sledovat",
+            yours: "\u010cek\u00e1 na v\u00e1s",
+            act: "Pot\u0159ebuje v\u00e1s"
+          },
+          dims: {
+            outcomes: {
+              label: "V\u00fdsledky",
+              question: "Da\u0159\u00ed se spu\u0161t\u011bn\u00edm?"
+            },
+            agents: {
+              label: "Agenti",
+              question: "M\u00e1 n\u011bkter\u00fd agent pot\u00ed\u017ee?"
+            },
+            queue: {
+              label: "\u010cek\u00e1 na v\u00e1s",
+              question: "Co pot\u0159ebuje v\u00e1\u0161 z\u00e1sah?"
+            },
+            recovery: {
+              label: "Samooprava",
+              question: "Opravuje se flotila sama?"
+            },
+            spend: {
+              label: "V\u00fddaje",
+              question: "Jsou v\u00fddaje v norm\u011b?"
+            },
+            autonomy: {
+              label: "Autonomie",
+              question: "Co b\u011b\u017e\u00ed bez v\u00e1s?"
+            },
+            vault: {
+              label: "Trezor",
+              question: "Jsou p\u0159ihla\u0161ovac\u00ed \u00fadaje v po\u0159\u00e1dku?"
+            },
+            instruments: {
+              label: "P\u0159\u00edstroje",
+              question: "Je tato str\u00e1nka aktu\u00e1ln\u00ed?"
+            }
+          },
+          evidence: {
+            outcomes: "Spu\u0161t\u011bn\u00ed {runs} \u00b7 selhalo {failed}",
+            noRuns: "V tomto obdob\u00ed \u017e\u00e1dn\u00e1 spu\u0161t\u011bn\u00ed",
+            agents: "V\u00fdpadek {critical} \u00b7 omezeno {degraded} \u00b7 v provozu {healthy}",
+            queue: "Upozorn\u011bn\u00ed {alerts} \u00b7 recenze {reviews} \u00b7 pam\u011b\u0165 {memory} \u00b7 nep\u0159e\u010dteno {reports}",
+            queueEmpty: "Nic na v\u00e1s ne\u010dek\u00e1",
+            recovery: "Otev\u0159eno {open} \u00b7 pozastaveno {paused} \u00b7 opraveno automaticky {fixed}",
+            spendSpikes: "N\u00e1kladov\u00e9 \u0161pi\u010dky: {n}",
+            spendPerDay: "{value} za den",
+            autonomy: "Napl\u00e1nov\u00e1no {n} \u00b7 dal\u0161\u00ed za {time}",
+            autonomyEmpty: "Nic napl\u00e1nov\u00e1no",
+            vault: "Po term\u00ednu {overdue} \u00b7 anom\u00e1lie {anomalies} \u00b7 ud\u00e1losti {events}",
+            instruments: "Selhan\u00e9 zdroje: {failed}",
+            instrumentsOk: "V\u0161echny zdroje odpov\u011bd\u011bly",
+            pending: "\u010cek\u00e1 se na prvn\u00ed m\u011b\u0159en\u00ed",
+            unmeasured: "Zat\u00edm pro to nen\u00ed synchronizovan\u00fd zdroj"
+          },
+          scoreSuffix: "/100",
+          detail: {
+            issuesTitle: "Probl\u00e9my samoopravy",
+            issuesEmpty: "V tomto obdob\u00ed \u017e\u00e1dn\u00e9 probl\u00e9my samoopravy.",
+            issueStatus: {
+              open: "Otev\u0159eno",
+              auto_fixed: "Automaticky opraveno",
+              resolved: "Vy\u0159e\u0161eno"
+            },
+            pausedBadge: "Pozastaveno",
+            costTitle: "N\u00e1klady po dnech",
+            costSpike: "N\u00e1kladov\u00e1 \u0161pi\u010dka",
+            sourcesTitle: "Zdroje",
+            sourceStatus: {
+              pending: "\u010cek\u00e1",
+              ok: "Odpov\u011bd\u011bl",
+              failed: "Selhal"
+            },
+            sources: {
+              observability: "Pozorovatelnost",
+              healing: "Probl\u00e9my samoopravy",
+              reviews: "Recenze",
+              routines: "Rutiny"
+            }
+          }
+        },
         vitals: {
           runs: "Spu\u0161t\u011bn\u00ed",
           alerts: "Upozorn\u011bn\u00ed"

@@ -4,7 +4,6 @@ import {
   MOCK_COST_ANOMALIES,
   MOCK_COST_COMPARE,
   MOCK_EXEC_COMPARE,
-  SPARKLINE_SUCCESS,
 } from "./mock-dashboard-data";
 import {
   MOCK_DAILY_METRICS,
@@ -92,12 +91,5 @@ describe("guards: the numbers other screens already reconcile against", () => {
     expect(+sum(MOCK_PERSONA_SPEND.map((p) => p.totalCost)).toFixed(2)).toBe(
       MOCK_OBSERVABILITY_METRICS.totalCost,
     );
-  });
-
-  it("SPARKLINE_SUCCESS is unchanged (home VitalsConsole renders it)", () => {
-    expect(SPARKLINE_SUCCESS.map((v) => +v.toFixed(6))).toEqual([
-      88.00047, 91.060522, 91.488388, 92.315125, 92.964755, 91.865443, 90.849067,
-      89.736847, 88.582662, 86.754012, 86.739717, 86.310176, 86.869427, 85.423963,
-    ]);
   });
 });

@@ -485,6 +485,99 @@ export const id: LocaleTranslations = {
         }
       },
       home: {
+        mission: {
+          windowNote: "Data mencakup 14 hari terakhir",
+          hint: "Tekan 1 sampai 8 untuk membuka dimensi, Esc untuk kembali",
+          wallLabel: "Dimensi armada",
+          openDimension: "Buka {label}",
+          backToWall: "Kembali ke ikhtisar",
+          railLabel: "Semua dimensi",
+          verdicts: {
+            pending: "Mengukur",
+            failed: "Tidak tersedia",
+            unmeasured: "Belum diukur",
+            ok: "Stabil",
+            watch: "Pantau",
+            yours: "Menunggu Anda",
+            act: "Perlu tindakan Anda"
+          },
+          dims: {
+            outcomes: {
+              label: "Hasil",
+              question: "Apakah eksekusi berhasil?"
+            },
+            agents: {
+              label: "Agen",
+              question: "Adakah agen yang bermasalah?"
+            },
+            queue: {
+              label: "Menunggu Anda",
+              question: "Apa yang perlu Anda tangani?"
+            },
+            recovery: {
+              label: "Pemulihan mandiri",
+              question: "Apakah armada memulihkan dirinya sendiri?"
+            },
+            spend: {
+              label: "Pengeluaran",
+              question: "Apakah pengeluaran wajar?"
+            },
+            autonomy: {
+              label: "Otonomi",
+              question: "Apa yang berjalan tanpa Anda?"
+            },
+            vault: {
+              label: "Brankas",
+              question: "Apakah kredensial aman?"
+            },
+            instruments: {
+              label: "Instrumen",
+              question: "Apakah halaman ini mutakhir?"
+            }
+          },
+          evidence: {
+            outcomes: "Eksekusi {runs} · gagal {failed}",
+            noRuns: "Tidak ada eksekusi dalam periode ini",
+            agents: "Gangguan {critical} · menurun {degraded} · normal {healthy}",
+            queue: "Peringatan {alerts} · tinjauan {reviews} · memori {memory} · belum dibaca {reports}",
+            queueEmpty: "Tidak ada yang menunggu Anda",
+            recovery: "Terbuka {open} · dijeda {paused} · diperbaiki otomatis {fixed}",
+            spendSpikes: "Lonjakan biaya: {n}",
+            spendPerDay: "{value} per hari",
+            autonomy: "Terjadwal {n} · berikutnya dalam {time}",
+            autonomyEmpty: "Tidak ada yang terjadwal",
+            vault: "Terlambat {overdue} · anomali {anomalies} · event {events}",
+            instruments: "Sumber gagal: {failed}",
+            instrumentsOk: "Semua sumber merespons",
+            pending: "Menunggu pembacaan pertama",
+            unmeasured: "Belum ada sumber tersinkron untuk ini"
+          },
+          scoreSuffix: "/100",
+          detail: {
+            issuesTitle: "Masalah pemulihan",
+            issuesEmpty: "Tidak ada masalah pemulihan dalam periode ini.",
+            issueStatus: {
+              open: "Terbuka",
+              auto_fixed: "Diperbaiki otomatis",
+              resolved: "Selesai"
+            },
+            pausedBadge: "Dijeda",
+            costTitle: "Biaya per hari",
+            costSpike: "Lonjakan biaya",
+            sourcesTitle: "Sumber",
+            sourceStatus: {
+              pending: "Menunggu",
+              ok: "Merespons",
+              failed: "Gagal"
+            },
+            sources: {
+              observability: "Observabilitas",
+              healing: "Masalah pemulihan",
+              reviews: "Tinjauan",
+              routines: "Rutinitas"
+            }
+          }
+        },
         vitals: {
           runs: "Eksekusi",
           alerts: "Peringatan"

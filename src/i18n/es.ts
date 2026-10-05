@@ -485,6 +485,99 @@ export const es: LocaleTranslations = {
         }
       },
       home: {
+        mission: {
+          windowNote: "Lecturas de los \u00faltimos 14 d\u00edas",
+          hint: "Pulsa 1 a 8 para abrir una dimensi\u00f3n, Esc para volver",
+          wallLabel: "Dimensiones de la flota",
+          openDimension: "Abrir {label}",
+          backToWall: "Volver al panel",
+          railLabel: "Todas las dimensiones",
+          verdicts: {
+            pending: "Midiendo",
+            failed: "No disponible",
+            unmeasured: "Sin medir",
+            ok: "Estable",
+            watch: "Vigilar",
+            yours: "Te espera",
+            act: "Te necesita"
+          },
+          dims: {
+            outcomes: {
+              label: "Resultados",
+              question: "\u00bfLas ejecuciones tienen \u00e9xito?"
+            },
+            agents: {
+              label: "Agentes",
+              question: "\u00bfAlg\u00fan agente tiene problemas?"
+            },
+            queue: {
+              label: "Te espera",
+              question: "\u00bfQu\u00e9 necesita tu intervenci\u00f3n?"
+            },
+            recovery: {
+              label: "Autorreparaci\u00f3n",
+              question: "\u00bfLa flota se repara sola?"
+            },
+            spend: {
+              label: "Gasto",
+              question: "\u00bfEl gasto est\u00e1 bajo control?"
+            },
+            autonomy: {
+              label: "Autonom\u00eda",
+              question: "\u00bfQu\u00e9 funciona sin ti?"
+            },
+            vault: {
+              label: "B\u00f3veda",
+              question: "\u00bfLas credenciales est\u00e1n en orden?"
+            },
+            instruments: {
+              label: "Instrumentos",
+              question: "\u00bfEsta p\u00e1gina est\u00e1 al d\u00eda?"
+            }
+          },
+          evidence: {
+            outcomes: "Ejecuciones {runs} \u00b7 fallidas {failed}",
+            noRuns: "Sin ejecuciones en este periodo",
+            agents: "Ca\u00edda {critical} \u00b7 degradados {degraded} \u00b7 operativos {healthy}",
+            queue: "Alertas {alerts} \u00b7 revisiones {reviews} \u00b7 memoria {memory} \u00b7 sin leer {reports}",
+            queueEmpty: "Nada te espera",
+            recovery: "Abiertas {open} \u00b7 en pausa {paused} \u00b7 autocorregidas {fixed}",
+            spendSpikes: "Picos de costo: {n}",
+            spendPerDay: "{value} por d\u00eda",
+            autonomy: "Programadas {n} \u00b7 pr\u00f3xima en {time}",
+            autonomyEmpty: "Nada programado",
+            vault: "Vencidas {overdue} \u00b7 anomal\u00edas {anomalies} \u00b7 eventos {events}",
+            instruments: "Fuentes con fallos: {failed}",
+            instrumentsOk: "Todas las fuentes respondieron",
+            pending: "Esperando la primera lectura",
+            unmeasured: "A\u00fan no hay una fuente sincronizada para esto"
+          },
+          scoreSuffix: "/100",
+          detail: {
+            issuesTitle: "Incidencias de autorreparaci\u00f3n",
+            issuesEmpty: "Sin incidencias de autorreparaci\u00f3n en este periodo.",
+            issueStatus: {
+              open: "Abierta",
+              auto_fixed: "Autocorregida",
+              resolved: "Resuelta"
+            },
+            pausedBadge: "En pausa",
+            costTitle: "Costo por d\u00eda",
+            costSpike: "Pico de costo",
+            sourcesTitle: "Fuentes",
+            sourceStatus: {
+              pending: "En espera",
+              ok: "Respondi\u00f3",
+              failed: "Fall\u00f3"
+            },
+            sources: {
+              observability: "Observabilidad",
+              healing: "Incidencias de autorreparaci\u00f3n",
+              reviews: "Revisiones",
+              routines: "Rutinas"
+            }
+          }
+        },
         vitals: {
           runs: "Ejecuciones",
           alerts: "Alertas"

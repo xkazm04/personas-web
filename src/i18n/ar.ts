@@ -485,6 +485,99 @@ export const ar: LocaleTranslations = {
         }
       },
       home: {
+        mission: {
+          windowNote: "القراءات تغطي آخر 14 يومًا",
+          hint: "اضغط 1–8 لفتح مؤشر، وEsc للعودة",
+          wallLabel: "مؤشرات الأسطول",
+          openDimension: "فتح {label}",
+          backToWall: "العودة إلى اللوحة",
+          railLabel: "كل المؤشرات",
+          verdicts: {
+            pending: "قيد القياس",
+            failed: "غير متاح",
+            unmeasured: "غير مُقاس",
+            ok: "مستقر",
+            watch: "تحت المراقبة",
+            yours: "بانتظارك",
+            act: "يحتاج تدخلك",
+          },
+          dims: {
+            outcomes: {
+              label: "النتائج",
+              question: "هل تنجح التشغيلات؟",
+            },
+            agents: {
+              label: "الوكلاء",
+              question: "هل يواجه أي وكيل صعوبة؟",
+            },
+            queue: {
+              label: "بانتظارك",
+              question: "ما الذي يحتاج تدخلك؟",
+            },
+            recovery: {
+              label: "الإصلاح الذاتي",
+              question: "هل يُصلح الأسطول نفسه؟",
+            },
+            spend: {
+              label: "الإنفاق",
+              question: "هل الإنفاق ضمن المعتاد؟",
+            },
+            autonomy: {
+              label: "الاستقلالية",
+              question: "ما الذي يعمل دونك؟",
+            },
+            vault: {
+              label: "الخزنة",
+              question: "هل بيانات الاعتماد سليمة؟",
+            },
+            instruments: {
+              label: "الأدوات",
+              question: "هل هذه الصفحة محدّثة؟",
+            },
+          },
+          evidence: {
+            outcomes: "التشغيلات {runs} · الفاشلة {failed}",
+            noRuns: "لا تشغيلات في هذه الفترة",
+            agents: "انقطاع {critical} · متدهور {degraded} · يعمل {healthy}",
+            queue: "التنبيهات {alerts} · المراجعات {reviews} · الذاكرة {memory} · غير المقروءة {reports}",
+            queueEmpty: "لا شيء بانتظارك",
+            recovery: "مفتوحة {open} · متوقفة مؤقتًا {paused} · مُصلحة تلقائيًا {fixed}",
+            spendSpikes: "قفزات التكلفة: {n}",
+            spendPerDay: "{value} يوميًا",
+            autonomy: "مجدولة {n} · التالية خلال {time}",
+            autonomyEmpty: "لا شيء مجدول",
+            vault: "متأخرة {overdue} · حالات شاذة {anomalies} · أحداث {events}",
+            instruments: "المصادر الفاشلة: {failed}",
+            instrumentsOk: "استجابت كل المصادر",
+            pending: "بانتظار القراءة الأولى",
+            unmeasured: "لا يوجد مصدر متزامن لهذا بعد",
+          },
+          scoreSuffix: "/100",
+          detail: {
+            issuesTitle: "مشكلات الإصلاح الذاتي",
+            issuesEmpty: "لا توجد مشكلات إصلاح ذاتي في هذه الفترة.",
+            issueStatus: {
+              open: "مفتوحة",
+              auto_fixed: "مُصلحة تلقائيًا",
+              resolved: "محلولة",
+            },
+            pausedBadge: "متوقف مؤقتًا",
+            costTitle: "التكلفة حسب اليوم",
+            costSpike: "قفزة في التكلفة",
+            sourcesTitle: "المصادر",
+            sourceStatus: {
+              pending: "قيد الانتظار",
+              ok: "استجاب",
+              failed: "فشل",
+            },
+            sources: {
+              observability: "المراقبة",
+              healing: "مشكلات الإصلاح الذاتي",
+              reviews: "المراجعات",
+              routines: "المهام الروتينية",
+            },
+          },
+        },
         vitals: {
           runs: "\u0639\u0645\u0644\u064a\u0627\u062a \u0627\u0644\u062a\u0634\u063a\u064a\u0644",
           alerts: "\u0627\u0644\u062a\u0646\u0628\u064a\u0647\u0627\u062a"

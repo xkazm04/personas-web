@@ -485,6 +485,99 @@ export const ru: LocaleTranslations = {
         }
       },
       home: {
+        mission: {
+          windowNote: "Показания за последние 14 дней",
+          hint: "Нажмите 1–8, чтобы открыть параметр, Esc — чтобы вернуться",
+          wallLabel: "Параметры флота",
+          openDimension: "Открыть: {label}",
+          backToWall: "Назад к панели",
+          railLabel: "Все параметры",
+          verdicts: {
+            pending: "Измеряется",
+            failed: "Недоступно",
+            unmeasured: "Не измеряется",
+            ok: "Стабильно",
+            watch: "Под наблюдением",
+            yours: "Ждёт вас",
+            act: "Требует действий",
+          },
+          dims: {
+            outcomes: {
+              label: "Результаты",
+              question: "Запуски проходят успешно?",
+            },
+            agents: {
+              label: "Агенты",
+              question: "Есть ли агенты с проблемами?",
+            },
+            queue: {
+              label: "Ждёт вас",
+              question: "Что требует вашего участия?",
+            },
+            recovery: {
+              label: "Самовосстановление",
+              question: "Флот восстанавливается сам?",
+            },
+            spend: {
+              label: "Расходы",
+              question: "Расходы в норме?",
+            },
+            autonomy: {
+              label: "Автономность",
+              question: "Что работает без вас?",
+            },
+            vault: {
+              label: "Хранилище",
+              question: "Учётные данные в порядке?",
+            },
+            instruments: {
+              label: "Приборы",
+              question: "Данные на странице актуальны?",
+            },
+          },
+          evidence: {
+            outcomes: "Запуски {runs} · сбои {failed}",
+            noRuns: "Нет запусков за этот период",
+            agents: "Сбой {critical} · деградация {degraded} · в норме {healthy}",
+            queue: "Оповещения {alerts} · проверки {reviews} · память {memory} · непрочитано {reports}",
+            queueEmpty: "Вас ничего не ждёт",
+            recovery: "Открыто {open} · приостановлено {paused} · исправлено автоматически {fixed}",
+            spendSpikes: "Скачки расходов: {n}",
+            spendPerDay: "{value} в день",
+            autonomy: "Запланировано {n} · следующий через {time}",
+            autonomyEmpty: "Ничего не запланировано",
+            vault: "Просрочено {overdue} · аномалии {anomalies} · события {events}",
+            instruments: "Источники со сбоем: {failed}",
+            instrumentsOk: "Все источники ответили",
+            pending: "Ожидание первого показания",
+            unmeasured: "Для этого пока нет синхронизированного источника",
+          },
+          scoreSuffix: "/100",
+          detail: {
+            issuesTitle: "Проблемы самовосстановления",
+            issuesEmpty: "За этот период проблем самовосстановления нет.",
+            issueStatus: {
+              open: "Открыта",
+              auto_fixed: "Исправлена автоматически",
+              resolved: "Решена",
+            },
+            pausedBadge: "Приостановлено",
+            costTitle: "Расходы по дням",
+            costSpike: "Скачок расходов",
+            sourcesTitle: "Источники",
+            sourceStatus: {
+              pending: "Ожидание",
+              ok: "Ответил",
+              failed: "Сбой",
+            },
+            sources: {
+              observability: "Наблюдаемость",
+              healing: "Проблемы самовосстановления",
+              reviews: "Проверки",
+              routines: "Регулярные задачи",
+            },
+          },
+        },
         vitals: {
           runs: "\u0417\u0430\u043f\u0443\u0441\u043a\u0438",
           alerts: "\u041e\u043f\u043e\u0432\u0435\u0449\u0435\u043d\u0438\u044f"

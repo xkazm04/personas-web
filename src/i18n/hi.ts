@@ -485,6 +485,99 @@ export const hi: LocaleTranslations = {
         }
       },
       home: {
+        mission: {
+          windowNote: "रीडिंग पिछले 14 दिनों की हैं",
+          hint: "कोई आयाम खोलने के लिए 1–8 दबाएँ, लौटने के लिए Esc",
+          wallLabel: "फ़्लीट के आयाम",
+          openDimension: "{label} खोलें",
+          backToWall: "पैनल पर लौटें",
+          railLabel: "सभी आयाम",
+          verdicts: {
+            pending: "माप जारी",
+            failed: "अनुपलब्ध",
+            unmeasured: "मापा नहीं गया",
+            ok: "स्थिर",
+            watch: "नज़र रखें",
+            yours: "आपकी प्रतीक्षा में",
+            act: "आपकी ज़रूरत है",
+          },
+          dims: {
+            outcomes: {
+              label: "परिणाम",
+              question: "क्या रन सफल हो रहे हैं?",
+            },
+            agents: {
+              label: "एजेंट",
+              question: "क्या कोई एजेंट मुश्किल में है?",
+            },
+            queue: {
+              label: "आपकी प्रतीक्षा में",
+              question: "किस काम में आपकी ज़रूरत है?",
+            },
+            recovery: {
+              label: "सेल्फ़-हीलिंग",
+              question: "क्या फ़्लीट खुद को ठीक कर रहा है?",
+            },
+            spend: {
+              label: "खर्च",
+              question: "क्या खर्च सामान्य है?",
+            },
+            autonomy: {
+              label: "स्वायत्तता",
+              question: "आपके बिना क्या चलता है?",
+            },
+            vault: {
+              label: "वॉल्ट",
+              question: "क्या क्रेडेंशियल ठीक हैं?",
+            },
+            instruments: {
+              label: "उपकरण",
+              question: "क्या यह पेज अद्यतन है?",
+            },
+          },
+          evidence: {
+            outcomes: "रन {runs} · विफल {failed}",
+            noRuns: "इस अवधि में कोई रन नहीं",
+            agents: "ठप {critical} · प्रभावित {degraded} · चालू {healthy}",
+            queue: "अलर्ट {alerts} · समीक्षाएँ {reviews} · स्मृति {memory} · अपठित {reports}",
+            queueEmpty: "आपकी प्रतीक्षा में कुछ नहीं है",
+            recovery: "खुली {open} · रोकी गई {paused} · स्वतः ठीक {fixed}",
+            spendSpikes: "लागत में उछाल: {n}",
+            spendPerDay: "{value} प्रति दिन",
+            autonomy: "शेड्यूल {n} · अगला {time} में",
+            autonomyEmpty: "कुछ भी शेड्यूल नहीं है",
+            vault: "अतिदेय {overdue} · विसंगतियाँ {anomalies} · इवेंट {events}",
+            instruments: "विफल स्रोत: {failed}",
+            instrumentsOk: "हर स्रोत ने जवाब दिया",
+            pending: "पहली रीडिंग की प्रतीक्षा है",
+            unmeasured: "इसके लिए अभी कोई सिंक किया गया स्रोत नहीं",
+          },
+          scoreSuffix: "/100",
+          detail: {
+            issuesTitle: "सेल्फ़-हीलिंग समस्याएँ",
+            issuesEmpty: "इस अवधि में कोई सेल्फ़-हीलिंग समस्या नहीं।",
+            issueStatus: {
+              open: "खुली",
+              auto_fixed: "स्वतः ठीक",
+              resolved: "हल हुई",
+            },
+            pausedBadge: "रोका गया",
+            costTitle: "दिन के अनुसार लागत",
+            costSpike: "लागत में उछाल",
+            sourcesTitle: "स्रोत",
+            sourceStatus: {
+              pending: "प्रतीक्षा में",
+              ok: "जवाब मिला",
+              failed: "विफल",
+            },
+            sources: {
+              observability: "ऑब्ज़र्वेबिलिटी",
+              healing: "सेल्फ़-हीलिंग समस्याएँ",
+              reviews: "समीक्षाएँ",
+              routines: "रूटीन",
+            },
+          },
+        },
         vitals: {
           runs: "\u0930\u0928",
           alerts: "\u0905\u0932\u0930\u094d\u091f"

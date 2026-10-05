@@ -41,7 +41,8 @@ interface ViewTraits {
 
 const TRAITS: Record<DashboardViewId, ViewTraits> = {
   personas: { scoped: false, fullBleed: true },
-  home: { scoped: true, fullBleed: false },
+  // Mission Control reads its own fixed 14-day window (it says so in its header).
+  home: { scoped: false, fullBleed: false },
   reviews: { scoped: true, fullBleed: false },
   executions: { scoped: true, fullBleed: false },
   events: { scoped: true, fullBleed: false },

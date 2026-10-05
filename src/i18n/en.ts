@@ -259,6 +259,67 @@
       };
     };
     home: {
+      /** Mission Control's annunciator wall (desktop parity, 2026-10). */
+      mission: {
+        windowNote: string;
+        hint: string;
+        wallLabel: string;
+        /** {label} = the dimension's label. */
+        openDimension: string;
+        backToWall: string;
+        railLabel: string;
+        verdicts: {
+          pending: string;
+          failed: string;
+          unmeasured: string;
+          ok: string;
+          watch: string;
+          yours: string;
+          act: string;
+        };
+        dims: {
+          outcomes: { label: string; question: string };
+          agents: { label: string; question: string };
+          queue: { label: string; question: string };
+          recovery: { label: string; question: string };
+          spend: { label: string; question: string };
+          autonomy: { label: string; question: string };
+          vault: { label: string; question: string };
+          instruments: { label: string; question: string };
+        };
+        /** One line under each cell's figure. Placeholders in braces are numbers. */
+        evidence: {
+          outcomes: string;
+          noRuns: string;
+          agents: string;
+          queue: string;
+          queueEmpty: string;
+          recovery: string;
+          spendSpikes: string;
+          /** {value} = a currency amount. */
+          spendPerDay: string;
+          /** {time} = a compact duration such as 6m. */
+          autonomy: string;
+          autonomyEmpty: string;
+          vault: string;
+          instruments: string;
+          instrumentsOk: string;
+          pending: string;
+          unmeasured: string;
+        };
+        scoreSuffix: string;
+        detail: {
+          issuesTitle: string;
+          issuesEmpty: string;
+          issueStatus: { open: string; auto_fixed: string; resolved: string };
+          pausedBadge: string;
+          costTitle: string;
+          costSpike: string;
+          sourcesTitle: string;
+          sourceStatus: { pending: string; ok: string; failed: string };
+          sources: { observability: string; healing: string; reviews: string; routines: string };
+        };
+      };
       vitals: {
         runs: string;
         alerts: string;
@@ -3163,6 +3224,67 @@ export const en: Translations = {
       },
     },
     home: {
+      mission: {
+        windowNote: 'Readings cover the last 14 days',
+        hint: 'Press 1 to 8 to open a dimension, Esc to return',
+        wallLabel: 'Fleet dimensions',
+        openDimension: 'Open {label}',
+        backToWall: 'Back to the wall',
+        railLabel: 'All dimensions',
+        verdicts: {
+          pending: 'Measuring',
+          failed: 'Unavailable',
+          unmeasured: 'Not measured',
+          ok: 'Steady',
+          watch: 'Watch',
+          yours: 'Waiting on you',
+          act: 'Needs you',
+        },
+        dims: {
+          outcomes: { label: 'Outcomes', question: 'Are runs succeeding?' },
+          agents: { label: 'Agents', question: 'Is any agent struggling?' },
+          queue: { label: 'Waiting on you', question: 'What needs your hand?' },
+          recovery: { label: 'Self-healing', question: 'Is the fleet fixing itself?' },
+          spend: { label: 'Spend', question: 'Is spend behaving?' },
+          autonomy: { label: 'Autonomy', question: 'What runs without you?' },
+          vault: { label: 'Vault', question: 'Are credentials sound?' },
+          instruments: { label: 'Instruments', question: 'Is this page up to date?' },
+        },
+        evidence: {
+          outcomes: 'Runs {runs} · failed {failed}',
+          noRuns: 'No runs in this window',
+          agents: 'Outage {critical} · degraded {degraded} · operational {healthy}',
+          queue: 'Alerts {alerts} · reviews {reviews} · memory {memory} · unread {reports}',
+          queueEmpty: 'Nothing waits for you',
+          recovery: 'Open {open} · paused {paused} · auto-fixed {fixed}',
+          spendSpikes: 'Cost spikes: {n}',
+          spendPerDay: '{value} per day',
+          autonomy: 'Scheduled {n} · next in {time}',
+          autonomyEmpty: 'Nothing scheduled',
+          vault: 'Overdue {overdue} · anomalies {anomalies} · events {events}',
+          instruments: 'Failed sources: {failed}',
+          instrumentsOk: 'Every source answered',
+          pending: 'Waiting for the first reading',
+          unmeasured: 'No synced source for this yet',
+        },
+        scoreSuffix: '/100',
+        detail: {
+          issuesTitle: 'Healing issues',
+          issuesEmpty: 'No healing issues in this window.',
+          issueStatus: { open: 'Open', auto_fixed: 'Auto-fixed', resolved: 'Resolved' },
+          pausedBadge: 'Paused',
+          costTitle: 'Cost by day',
+          costSpike: 'Cost spike',
+          sourcesTitle: 'Sources',
+          sourceStatus: { pending: 'Waiting', ok: 'Answered', failed: 'Failed' },
+          sources: {
+            observability: 'Observability',
+            healing: 'Healing issues',
+            reviews: 'Reviews',
+            routines: 'Routines',
+          },
+        },
+      },
       vitals: {
         runs: 'Runs',
         alerts: 'Alerts',

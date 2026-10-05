@@ -485,6 +485,99 @@ export const ja: LocaleTranslations = {
         }
       },
       home: {
+        mission: {
+          windowNote: "直近14日間の計測値です",
+          hint: "1〜8 キーで観点を開き、Esc キーで戻ります",
+          wallLabel: "フリートの観点",
+          openDimension: "{label}を開く",
+          backToWall: "一覧に戻る",
+          railLabel: "すべての観点",
+          verdicts: {
+            pending: "計測中",
+            failed: "取得不可",
+            unmeasured: "未計測",
+            ok: "安定",
+            watch: "要注意",
+            yours: "あなたの対応待ち",
+            act: "対応が必要"
+          },
+          dims: {
+            outcomes: {
+              label: "成果",
+              question: "実行は成功していますか？"
+            },
+            agents: {
+              label: "エージェント",
+              question: "不調なエージェントはありますか？"
+            },
+            queue: {
+              label: "あなたの対応待ち",
+              question: "あなたの手が必要なものは？"
+            },
+            recovery: {
+              label: "自己修復",
+              question: "フリートは自力で回復していますか？"
+            },
+            spend: {
+              label: "支出",
+              question: "支出は想定どおりですか？"
+            },
+            autonomy: {
+              label: "自律性",
+              question: "あなたなしで何が動いていますか？"
+            },
+            vault: {
+              label: "ボルト",
+              question: "認証情報は健全ですか？"
+            },
+            instruments: {
+              label: "計器",
+              question: "このページは最新ですか？"
+            }
+          },
+          evidence: {
+            outcomes: "実行 {runs} · 失敗 {failed}",
+            noRuns: "この期間に実行はありません",
+            agents: "停止 {critical} · 低下 {degraded} · 正常 {healthy}",
+            queue: "アラート {alerts} · レビュー {reviews} · メモリ {memory} · 未読 {reports}",
+            queueEmpty: "対応待ちはありません",
+            recovery: "未解決 {open} · 一時停止 {paused} · 自動修正 {fixed}",
+            spendSpikes: "コスト急増: {n}",
+            spendPerDay: "1日あたり {value}",
+            autonomy: "予定 {n} · 次回まで {time}",
+            autonomyEmpty: "予定はありません",
+            vault: "期限超過 {overdue} · 異常 {anomalies} · イベント {events}",
+            instruments: "失敗したソース: {failed}",
+            instrumentsOk: "すべてのソースが応答しました",
+            pending: "最初の計測を待っています",
+            unmeasured: "同期済みのソースがまだありません"
+          },
+          scoreSuffix: "/100",
+          detail: {
+            issuesTitle: "修復課題",
+            issuesEmpty: "この期間に修復課題はありません。",
+            issueStatus: {
+              open: "未解決",
+              auto_fixed: "自動修正済み",
+              resolved: "解決済み"
+            },
+            pausedBadge: "一時停止中",
+            costTitle: "日別コスト",
+            costSpike: "コスト急増",
+            sourcesTitle: "ソース",
+            sourceStatus: {
+              pending: "待機中",
+              ok: "応答済み",
+              failed: "失敗"
+            },
+            sources: {
+              observability: "オブザーバビリティ",
+              healing: "修復課題",
+              reviews: "レビュー",
+              routines: "ルーティン"
+            }
+          }
+        },
         vitals: {
           runs: "\u5b9f\u884c\u6570",
           alerts: "\u30a2\u30e9\u30fc\u30c8"

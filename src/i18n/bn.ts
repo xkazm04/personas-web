@@ -485,6 +485,99 @@ export const bn: LocaleTranslations = {
         }
       },
       home: {
+        mission: {
+          windowNote: "গত 14 দিনের রিডিং",
+          hint: "কোনো মাত্রা খুলতে 1–8 চাপুন, ফিরতে Esc",
+          wallLabel: "ফ্লিটের মাত্রা",
+          openDimension: "{label} খুলুন",
+          backToWall: "প্যানেলে ফিরুন",
+          railLabel: "সব মাত্রা",
+          verdicts: {
+            pending: "মাপা হচ্ছে",
+            failed: "অনুপলব্ধ",
+            unmeasured: "মাপা হয়নি",
+            ok: "স্থির",
+            watch: "নজরে রাখুন",
+            yours: "আপনার অপেক্ষায়",
+            act: "আপনাকে দরকার",
+          },
+          dims: {
+            outcomes: {
+              label: "ফলাফল",
+              question: "রানগুলো কি সফল হচ্ছে?",
+            },
+            agents: {
+              label: "এজেন্ট",
+              question: "কোনো এজেন্ট কি সমস্যায় আছে?",
+            },
+            queue: {
+              label: "আপনার অপেক্ষায়",
+              question: "কোথায় আপনার হাত লাগবে?",
+            },
+            recovery: {
+              label: "সেলফ-হিলিং",
+              question: "ফ্লিট কি নিজেকে সারিয়ে নিচ্ছে?",
+            },
+            spend: {
+              label: "খরচ",
+              question: "খরচ কি স্বাভাবিক আছে?",
+            },
+            autonomy: {
+              label: "স্বায়ত্তশাসন",
+              question: "আপনাকে ছাড়া কী চলে?",
+            },
+            vault: {
+              label: "ভল্ট",
+              question: "ক্রেডেনশিয়াল কি ঠিক আছে?",
+            },
+            instruments: {
+              label: "ইন্সট্রুমেন্ট",
+              question: "এই পেজ কি হালনাগাদ?",
+            },
+          },
+          evidence: {
+            outcomes: "রান {runs} · ব্যর্থ {failed}",
+            noRuns: "এই সময়সীমায় কোনো রান নেই",
+            agents: "বিভ্রাট {critical} · অবনত {degraded} · সচল {healthy}",
+            queue: "সতর্কতা {alerts} · পর্যালোচনা {reviews} · স্মৃতি {memory} · অপঠিত {reports}",
+            queueEmpty: "আপনার জন্য কিছুই অপেক্ষায় নেই",
+            recovery: "খোলা {open} · বিরতিতে {paused} · স্বয়ংক্রিয়ভাবে সারানো {fixed}",
+            spendSpikes: "খরচের উল্লম্ফন: {n}",
+            spendPerDay: "প্রতিদিন {value}",
+            autonomy: "নির্ধারিত {n} · পরেরটি {time} পরে",
+            autonomyEmpty: "কিছুই নির্ধারিত নেই",
+            vault: "মেয়াদোত্তীর্ণ {overdue} · অসংগতি {anomalies} · ইভেন্ট {events}",
+            instruments: "ব্যর্থ উৎস: {failed}",
+            instrumentsOk: "প্রতিটি উৎস সাড়া দিয়েছে",
+            pending: "প্রথম রিডিংয়ের অপেক্ষায়",
+            unmeasured: "এর জন্য এখনো কোনো সিঙ্ক করা উৎস নেই",
+          },
+          scoreSuffix: "/100",
+          detail: {
+            issuesTitle: "সেলফ-হিলিং সমস্যা",
+            issuesEmpty: "এই সময়সীমায় কোনো সেলফ-হিলিং সমস্যা নেই।",
+            issueStatus: {
+              open: "খোলা",
+              auto_fixed: "স্বয়ংক্রিয়ভাবে সারানো",
+              resolved: "সমাধান হয়েছে",
+            },
+            pausedBadge: "বিরতিতে",
+            costTitle: "দিনভিত্তিক খরচ",
+            costSpike: "খরচের উল্লম্ফন",
+            sourcesTitle: "উৎস",
+            sourceStatus: {
+              pending: "অপেক্ষমাণ",
+              ok: "সাড়া দিয়েছে",
+              failed: "ব্যর্থ",
+            },
+            sources: {
+              observability: "অবজার্ভেবিলিটি",
+              healing: "সেলফ-হিলিং সমস্যা",
+              reviews: "পর্যালোচনা",
+              routines: "রুটিন",
+            },
+          },
+        },
         vitals: {
           runs: "\u09b0\u09be\u09a8",
           alerts: "\u09b8\u09a4\u09b0\u09cd\u0995\u09a4\u09be"

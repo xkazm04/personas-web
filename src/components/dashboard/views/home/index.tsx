@@ -1,213 +1,142 @@
 "use client";
 
-import { useEffect, useMemo, useState } from "react";
-import { motion } from "framer-motion";
+import { useEffect, useRef } from "react";
+import { useSearchParams } from "next/navigation";
 
-import FleetOptimizationCard from "@/components/dashboard/FleetOptimizationCard";
-import LazyMount from "@/components/LazyMount";
+import GradientText from "@/components/GradientText";
+import { navigateDashboard } from "@/components/dashboard/spa/navigate";
 import TourLauncher from "@/components/tour/TourLauncher";
-import { useTranslation } from "@/i18n/useTranslation";
-import { fadeUp, staggerContainer } from "@/lib/animations";
-import {
-  MOCK_FLEET_EXECUTIONS,
-  MOCK_FLEET_RECOMMENDATION,
-} from "@/lib/mock-dashboard-data";
-import { useAuthStore } from "@/stores/authStore";
-import { useShallow } from "zustand/react/shallow";
-import { useExecutionStore, useEnrichedExecutions } from "@/stores/executionStore";
-import { usePersonaStore } from "@/stores/personaStore";
-import { useReviewStore } from "@/stores/reviewStore";
-import { useSystemStore } from "@/stores/systemStore";
-
-import { ApprovedWorkCard } from "./home-page/ApprovedWorkCard";
-import { DashboardGreetingHeader } from "./home-page/DashboardGreetingHeader";
-import { FleetSessionsStrip } from "./home-page/FleetSessionsStrip";
-import { InstrumentsBay } from "./home-page/InstrumentsBay";
-import { RecentActivityCard } from "@/components/dashboard/RecentActivityCard";
-import { StatusTicker } from "./home-page/StatusTicker";
-import { TriagePane } from "./home-page/TriagePane";
-import { VitalsConsole } from "./home-page/VitalsConsole";
-import { useDeferredObservability } from "./home-page/useDeferredObservability";
 import { useGreeting } from "@/hooks/useGreeting";
-import { useLastVisit } from "./home-page/useLastVisit";
+import { useTranslation } from "@/i18n/useTranslation";
+import { useAuthStore } from "@/stores/authStore";
+import { useLiveClock } from "./home-page/useLiveClock";
+import { DimDetail } from "./mission/DimDetail";
+import { describeDimension, type DimensionView } from "./mission/dimensions";
+import { DIMENSION_IDS, isDimensionId, type DimensionId } from "./mission/readings";
+import { useMissionReadings } from "./mission/useMissionReadings";
+import { WallCell } from "./mission/WallCell";
+import { WallDetail } from "./mission/WallDetail";
+
+const HOME = "/dashboard/home";
+const hrefFor = (id: DimensionId) => `${HOME}?dim=${id}`;
+
+/** The guided tour's spotlight targets, carried over from the old cockpit regions. */
+const TOUR_ANCHORS: Partial<Record<DimensionId, { tourTarget: string }>> = {
+  outcomes: { tourTarget: "dashboard-activity" },
+  agents: { tourTarget: "dashboard-heatmap" },
+  queue: { tourTarget: "dashboard-intelligence" },
+  recovery: { tourTarget: "dashboard-fleet" },
+  instruments: { tourTarget: "dashboard-instruments" },
+};
 
 /**
- * Mission Control — the dashboard home, restructured to mirror the desktop
- * overview's mission-control IA: a top fleet recommendation, a 3-column cockpit
- * (Triage / Vitals Console / Activity Stream), a live status ticker, then the
- * below-fold Instruments Bay (deferred via LazyMount).
+ * Mission Control, in sync with the desktop app's annunciator wall: eight
+ * dimensions of fleet health, each a lamp, a figure and one line of
+ * evidence, lit only when it needs you. Opening one (click, or keys 1-8) shows
+ * its evidence beside a rail of the other seven; the open dimension lives in
+ * the URL (`?dim=`), so it survives a reload and the back button closes it.
  */
-export default function DashboardHomePage() {
+export default function MissionControlView() {
   const { t } = useTranslation();
-  const { user, isDemo } = useAuthStore(
-    useShallow((state) => ({ user: state.user, isDemo: state.isDemo })),
-  );
-  const personas = usePersonaStore((state) => state.personas);
-  const executions = useEnrichedExecutions();
-  const pendingReviewCount = useReviewStore((state) => state.pendingReviewCount);
-  const health = useSystemStore((state) => state.health);
-  const fetchExecutions = useExecutionStore((state) => state.fetchExecutions);
-  const executionsLoading = useExecutionStore((state) => state.executionsLoading);
-  const fetchReviews = useReviewStore((state) => state.fetchReviews);
-
-  // `executionsLoading` only flips true once the effect below has run, so on
-  // the very first paint it is false while the list is still empty. This latch
-  // covers that window: without it the cockpit paints a rose 0% ring, an empty
-  // activity stream and a "0%" ticker tick before the first mock response
-  // (~300ms) lands, then jumps. Cleared once the initial fetches settle.
-  const [awaitingFirstLoad, setAwaitingFirstLoad] = useState(true);
-  const cockpitLoading = awaitingFirstLoad || executionsLoading;
-
-  // Deferred below-the-fold observability fetch (loading/error/retry surfaced
-  // to the Traffic & Errors chart).
-  const {
-    instrumentsRef,
-    loadObservability,
-    dailyMetrics,
-    observabilityLoading,
-    observabilityError: observabilityErrorMsg,
-    retryObservability,
-    fetchedAt: observabilityFetchedAt,
-  } = useDeferredObservability();
-
-  useEffect(() => {
-    let cancelled = false;
-    void Promise.allSettled([fetchExecutions(), fetchReviews()]).then(() => {
-      if (!cancelled) setAwaitingFirstLoad(false);
-    });
-    return () => {
-      cancelled = true;
-    };
-  }, [fetchExecutions, fetchReviews]);
-
+  const copy = t.dashboard.home.mission;
+  const user = useAuthStore((state) => state.user);
   const greeting = useGreeting(t.dashboard.greeting);
-  const lastVisitedAt = useLastVisit();
   const displayName = user?.user_metadata?.full_name?.split(" ")[0] ?? t.dashboard.greetingFallback;
 
-  const recentExecs = useMemo(() => executions.slice(0, 12), [executions]);
-  const stats = useMemo(() => {
-    const total = executions.length;
-    const completed = executions.filter((execution) => execution.status === "completed").length;
-    const failed = executions.filter((execution) => execution.status === "failed").length;
-    const running = executions.filter(
-      (execution) => execution.status === "running" || execution.status === "queued",
-    ).length;
-    // Success rate is completed ÷ FINISHED runs. Dividing by every loaded run
-    // counted still-running, queued and cancelled executions as failures, which
-    // scored a healthy fleet at 43% (amber) while the sparkline underneath and
-    // the observability page both reported ~89%.
-    const terminal = completed + failed;
-    return {
-      total,
-      successRate: terminal > 0 ? Math.round((completed / terminal) * 100) : 0,
-      running,
-      activeAgents: personas.filter((persona) => persona.enabled).length,
-    };
-  }, [executions, personas]);
+  const now = useLiveClock();
+  const { readings, sources, daily, issues } = useMissionReadings(now);
+  const dims = DIMENSION_IDS.map((id, index) => describeDimension(id, index, readings, copy, now));
 
-  const chartData = useMemo(
-    () =>
-      dailyMetrics.map((metric) => ({
-        date: metric.date.slice(5),
-        Executions: metric.executions,
-        Errors: metric.failures,
-      })),
-    [dailyMetrics],
-  );
+  const param = useSearchParams().get("dim");
+  const openId = isDimensionId(param) ? param : null;
+  const open = openId ? dims.find((dim) => dim.id === openId) ?? null : null;
+
+  useWallKeys(openId);
+  useWallFocus(openId);
 
   return (
-    <motion.div initial="hidden" animate="visible" variants={staggerContainer}>
-      <motion.div variants={fadeUp} className="mb-6 flex items-start justify-between gap-4">
-        <DashboardGreetingHeader
-          greeting={greeting}
-          displayName={displayName}
-          lastVisitedAt={lastVisitedAt}
-        />
-        <TourLauncher tourId="dashboard" />
-      </motion.div>
-
-      {/* Fleet optimization is a heuristic recommendation with no synced
-          source — demo only; real mode omits it entirely. */}
-      {isDemo && (
-        <motion.div variants={fadeUp} data-tour-diagram="dashboard-fleet" className="mb-6">
-          <FleetOptimizationCard
-            recommendation={MOCK_FLEET_RECOMMENDATION}
-            executionCount={Math.max(stats.total, MOCK_FLEET_EXECUTIONS)}
-          />
-        </motion.div>
-      )}
-
-      {/* Cockpit: Triage · Vitals · Activity */}
-      <div className="grid gap-6 lg:grid-cols-3">
-        <motion.div variants={fadeUp}>
-          <TriagePane />
-        </motion.div>
-        <motion.div variants={fadeUp} data-tour-diagram="dashboard-vitals">
-          <VitalsConsole
-            successRate={stats.successRate}
-            runs={stats.total}
-            agents={stats.activeAgents}
-            reviews={pendingReviewCount}
-            loading={cockpitLoading}
-          />
-        </motion.div>
-        <motion.div variants={fadeUp} data-tour-diagram="dashboard-activity">
-          <RecentActivityCard
-            executions={recentExecs}
-            runningCount={stats.running}
-            loading={cockpitLoading}
-            labels={{
-              title: t.dashboard.recentActivity,
-              running: t.dashboard.running,
-              noExecutionsYet: t.dashboard.noExecutionsYet,
-              executeToSee: t.dashboard.executeToSee,
-            }}
-          />
-        </motion.div>
-      </div>
-
-      {/* Current-era Mission Control: fleet session ledger + approved-work
-          reconciliation. Pure fixtures with no synced source — demo only,
-          like the fleet recommendation above. */}
-      {isDemo && (
-        <div className="mt-6 grid gap-6 lg:grid-cols-3">
-          <motion.div variants={fadeUp} className="lg:col-span-2">
-            <FleetSessionsStrip />
-          </motion.div>
-          <motion.div variants={fadeUp}>
-            <ApprovedWorkCard />
-          </motion.div>
+    <div>
+      <header className="mb-6 flex items-start justify-between gap-4">
+        <div className="min-w-0">
+          <h1 className="text-2xl font-bold tracking-tight">
+            <GradientText variant="silver">{t.dashboard.missionControl}</GradientText>
+          </h1>
+          <p className="mt-1 text-base text-muted-dark">
+            {greeting}, {displayName} · {copy.windowNote}
+          </p>
         </div>
+        <TourLauncher tourId="dashboard" />
+      </header>
+
+      {open ? (
+        <WallDetail
+          dims={dims}
+          open={open}
+          onSelect={(dim: DimensionView) => navigateDashboard(hrefFor(dim.id), { replace: true })}
+          onBack={() => navigateDashboard(HOME)}
+        >
+          <DimDetail id={open.id} readings={readings} sources={sources} daily={daily} issues={issues} />
+        </WallDetail>
+      ) : (
+        <>
+          <ul aria-label={copy.wallLabel} data-tour-diagram="dashboard-vitals" className="grid gap-4 sm:grid-cols-2 xl:grid-cols-4">
+            {dims.map((dim) => (
+              <li key={dim.id} data-tour-diagram={TOUR_ANCHORS[dim.id]?.tourTarget} className="flex">
+                <WallCell dim={dim} onOpen={() => navigateDashboard(hrefFor(dim.id))} />
+              </li>
+            ))}
+          </ul>
+          <p className="mt-4 hidden text-sm text-muted-dark md:block">{copy.hint}</p>
+        </>
       )}
-
-      <motion.div variants={fadeUp} className="mt-6">
-        <StatusTicker
-          successRate={stats.successRate}
-          agents={stats.activeAgents}
-          loading={cockpitLoading}
-        />
-      </motion.div>
-
-      {/* Below the fold: deferred instruments bay (charts, heatmap, panels). */}
-      <div ref={instrumentsRef} className="mt-6">
-        {/* Reserve the bay's measured height (headless Chromium, demo mode):
-            1689px at >=1280px wide — see home-overview.md for the per-section
-            breakdown. Below `lg` the grids stack to ~2.7k, which no single
-            reserve covers. The old 720 under-reserved by ~1000px. */}
-        <LazyMount minHeight={1690} label={t.dashboard.home.cockpit.instrumentsTitle}>
-          <InstrumentsBay
-            chartData={chartData}
-            loadObservability={loadObservability}
-            observabilityLoading={observabilityLoading}
-            observabilityError={observabilityErrorMsg}
-            onRetryObservability={() => void retryObservability()}
-            fetchedAt={observabilityFetchedAt}
-            personasCount={personas.length}
-            executionsCount={stats.total}
-            workersTotal={health?.workers.total ?? 0}
-          />
-        </LazyMount>
-      </div>
-    </motion.div>
+    </div>
   );
+}
+
+/** 1-8 open a dimension, Esc returns to the wall, Up/Down walk the open rail. */
+function useWallKeys(openId: DimensionId | null) {
+  useEffect(() => {
+    const onKey = (event: KeyboardEvent) => {
+      if (event.metaKey || event.ctrlKey || event.altKey || event.defaultPrevented) return;
+      const target = event.target;
+      if (target instanceof Element && target.closest("input, textarea, select, [contenteditable='true'], [role='dialog']")) return;
+
+      const digit = Number(event.key);
+      if (Number.isInteger(digit) && digit >= 1 && digit <= DIMENSION_IDS.length) {
+        event.preventDefault();
+        navigateDashboard(hrefFor(DIMENSION_IDS[digit - 1]), { replace: openId !== null });
+        return;
+      }
+      if (!openId) return;
+      if (event.key === "Escape") {
+        event.preventDefault();
+        navigateDashboard(HOME);
+      } else if (event.key === "ArrowDown" || event.key === "ArrowUp") {
+        event.preventDefault();
+        const step = event.key === "ArrowDown" ? 1 : -1;
+        const next = (DIMENSION_IDS.indexOf(openId) + step + DIMENSION_IDS.length) % DIMENSION_IDS.length;
+        navigateDashboard(hrefFor(DIMENSION_IDS[next]), { replace: true });
+      }
+    };
+    document.addEventListener("keydown", onKey);
+    return () => document.removeEventListener("keydown", onKey);
+  }, [openId]);
+}
+
+/**
+ * Keep keyboard focus where the eye goes: onto the detail's heading when a
+ * dimension opens, back onto its cell when the wall returns.
+ */
+function useWallFocus(openId: DimensionId | null) {
+  const previous = useRef<DimensionId | null>(openId);
+  useEffect(() => {
+    const last = previous.current;
+    previous.current = openId;
+    if (openId === last) return;
+    if (openId) {
+      document.getElementById("mission-detail-title")?.focus({ preventScroll: true });
+    } else if (last) {
+      document.querySelector<HTMLElement>(`[data-mission-dim="${last}"]`)?.focus({ preventScroll: true });
+    }
+  }, [openId]);
 }

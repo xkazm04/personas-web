@@ -485,6 +485,99 @@ export const ko: LocaleTranslations = {
         }
       },
       home: {
+        mission: {
+          windowNote: "최근 14일 기준 수치입니다",
+          hint: "1~8 키로 지표를 열고 Esc 키로 돌아갑니다",
+          wallLabel: "플릿 지표",
+          openDimension: "{label} 열기",
+          backToWall: "전체 보기로 돌아가기",
+          railLabel: "모든 지표",
+          verdicts: {
+            pending: "측정 중",
+            failed: "확인 불가",
+            unmeasured: "측정 안 됨",
+            ok: "안정",
+            watch: "주의",
+            yours: "내 확인 대기",
+            act: "조치 필요"
+          },
+          dims: {
+            outcomes: {
+              label: "결과",
+              question: "실행이 성공하고 있나요?"
+            },
+            agents: {
+              label: "에이전트",
+              question: "어려움을 겪는 에이전트가 있나요?"
+            },
+            queue: {
+              label: "내 확인 대기",
+              question: "직접 처리할 일이 있나요?"
+            },
+            recovery: {
+              label: "자가 복구",
+              question: "플릿이 스스로 복구하고 있나요?"
+            },
+            spend: {
+              label: "지출",
+              question: "지출이 정상 범위인가요?"
+            },
+            autonomy: {
+              label: "자율성",
+              question: "내가 없어도 무엇이 실행되나요?"
+            },
+            vault: {
+              label: "볼트",
+              question: "자격 증명은 안전한가요?"
+            },
+            instruments: {
+              label: "계측",
+              question: "이 페이지는 최신 상태인가요?"
+            }
+          },
+          evidence: {
+            outcomes: "실행 {runs} · 실패 {failed}",
+            noRuns: "이 기간에 실행이 없습니다",
+            agents: "중단 {critical} · 저하 {degraded} · 정상 {healthy}",
+            queue: "알림 {alerts} · 리뷰 {reviews} · 메모리 {memory} · 읽지 않음 {reports}",
+            queueEmpty: "기다리는 항목이 없습니다",
+            recovery: "미해결 {open} · 일시 중지 {paused} · 자동 수정 {fixed}",
+            spendSpikes: "비용 급증: {n}",
+            spendPerDay: "하루 {value}",
+            autonomy: "예약 {n} · 다음 실행까지 {time}",
+            autonomyEmpty: "예약된 작업이 없습니다",
+            vault: "기한 초과 {overdue} · 이상 징후 {anomalies} · 이벤트 {events}",
+            instruments: "실패한 소스: {failed}",
+            instrumentsOk: "모든 소스가 응답했습니다",
+            pending: "첫 측정을 기다리는 중",
+            unmeasured: "아직 동기화된 소스가 없습니다"
+          },
+          scoreSuffix: "/100",
+          detail: {
+            issuesTitle: "복구 이슈",
+            issuesEmpty: "이 기간에 복구 이슈가 없습니다.",
+            issueStatus: {
+              open: "미해결",
+              auto_fixed: "자동 수정됨",
+              resolved: "해결됨"
+            },
+            pausedBadge: "일시 중지됨",
+            costTitle: "일별 비용",
+            costSpike: "비용 급증",
+            sourcesTitle: "소스",
+            sourceStatus: {
+              pending: "대기 중",
+              ok: "응답함",
+              failed: "실패"
+            },
+            sources: {
+              observability: "관측성",
+              healing: "복구 이슈",
+              reviews: "리뷰",
+              routines: "루틴"
+            }
+          }
+        },
         vitals: {
           runs: "\uc2e4\ud589 \uc218",
           alerts: "\uc54c\ub9bc"

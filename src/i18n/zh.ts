@@ -485,6 +485,99 @@ export const zh: LocaleTranslations = {
         }
       },
       home: {
+        mission: {
+          windowNote: "数据涵盖最近 14 天",
+          hint: "按 1 到 8 打开对应维度，按 Esc 返回",
+          wallLabel: "集群维度",
+          openDimension: "打开{label}",
+          backToWall: "返回总览",
+          railLabel: "全部维度",
+          verdicts: {
+            pending: "测量中",
+            failed: "不可用",
+            unmeasured: "未测量",
+            ok: "平稳",
+            watch: "需关注",
+            yours: "等你处理",
+            act: "需要你介入"
+          },
+          dims: {
+            outcomes: {
+              label: "结果",
+              question: "运行是否成功？"
+            },
+            agents: {
+              label: "智能体",
+              question: "有智能体出状况吗？"
+            },
+            queue: {
+              label: "等你处理",
+              question: "哪些事需要你亲自处理？"
+            },
+            recovery: {
+              label: "自愈",
+              question: "集群在自我修复吗？"
+            },
+            spend: {
+              label: "支出",
+              question: "支出是否正常？"
+            },
+            autonomy: {
+              label: "自主运行",
+              question: "哪些工作无需你参与？"
+            },
+            vault: {
+              label: "保险库",
+              question: "凭据是否安全？"
+            },
+            instruments: {
+              label: "数据源",
+              question: "本页数据是否最新？"
+            }
+          },
+          evidence: {
+            outcomes: "运行 {runs} · 失败 {failed}",
+            noRuns: "此时间段内没有运行",
+            agents: "中断 {critical} · 降级 {degraded} · 正常 {healthy}",
+            queue: "告警 {alerts} · 审查 {reviews} · 记忆 {memory} · 未读 {reports}",
+            queueEmpty: "没有等你处理的事项",
+            recovery: "未解决 {open} · 已暂停 {paused} · 自动修复 {fixed}",
+            spendSpikes: "成本激增：{n}",
+            spendPerDay: "每天 {value}",
+            autonomy: "已排程 {n} · {time} 后执行下一次",
+            autonomyEmpty: "暂无排程",
+            vault: "逾期 {overdue} · 异常 {anomalies} · 事件 {events}",
+            instruments: "失败的数据源：{failed}",
+            instrumentsOk: "所有数据源均已响应",
+            pending: "正在等待首次读数",
+            unmeasured: "暂无已同步的数据源"
+          },
+          scoreSuffix: "/100",
+          detail: {
+            issuesTitle: "自愈问题",
+            issuesEmpty: "此时间段内没有自愈问题。",
+            issueStatus: {
+              open: "未解决",
+              auto_fixed: "已自动修复",
+              resolved: "已解决"
+            },
+            pausedBadge: "已暂停",
+            costTitle: "每日成本",
+            costSpike: "成本激增",
+            sourcesTitle: "数据源",
+            sourceStatus: {
+              pending: "等待中",
+              ok: "已响应",
+              failed: "失败"
+            },
+            sources: {
+              observability: "可观测性",
+              healing: "自愈问题",
+              reviews: "审查",
+              routines: "例程"
+            }
+          }
+        },
         vitals: {
           runs: "\u8fd0\u884c\u6b21\u6570",
           alerts: "\u544a\u8b66"

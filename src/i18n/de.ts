@@ -485,6 +485,99 @@ export const de: LocaleTranslations = {
         }
       },
       home: {
+        mission: {
+          windowNote: "Messwerte der letzten 14 Tage",
+          hint: "1 bis 8 \u00f6ffnet eine Dimension, Esc f\u00fchrt zur\u00fcck",
+          wallLabel: "Dimensionen der Flotte",
+          openDimension: "{label} \u00f6ffnen",
+          backToWall: "Zur\u00fcck zur \u00dcbersicht",
+          railLabel: "Alle Dimensionen",
+          verdicts: {
+            pending: "Wird gemessen",
+            failed: "Nicht verf\u00fcgbar",
+            unmeasured: "Nicht gemessen",
+            ok: "Stabil",
+            watch: "Beobachten",
+            yours: "Wartet auf Sie",
+            act: "Braucht Sie"
+          },
+          dims: {
+            outcomes: {
+              label: "Ergebnisse",
+              question: "Gelingen die L\u00e4ufe?"
+            },
+            agents: {
+              label: "Agenten",
+              question: "Hat ein Agent Probleme?"
+            },
+            queue: {
+              label: "Wartet auf Sie",
+              question: "Was braucht Ihr Zutun?"
+            },
+            recovery: {
+              label: "Selbstheilung",
+              question: "Repariert sich die Flotte selbst?"
+            },
+            spend: {
+              label: "Ausgaben",
+              question: "Bleiben die Ausgaben im Rahmen?"
+            },
+            autonomy: {
+              label: "Autonomie",
+              question: "Was l\u00e4uft ohne Sie?"
+            },
+            vault: {
+              label: "Tresor",
+              question: "Sind die Zugangsdaten in Ordnung?"
+            },
+            instruments: {
+              label: "Instrumente",
+              question: "Ist diese Seite aktuell?"
+            }
+          },
+          evidence: {
+            outcomes: "L\u00e4ufe {runs} \u00b7 fehlgeschlagen {failed}",
+            noRuns: "Keine L\u00e4ufe in diesem Zeitraum",
+            agents: "Ausfall {critical} \u00b7 beeintr\u00e4chtigt {degraded} \u00b7 betriebsbereit {healthy}",
+            queue: "Warnungen {alerts} \u00b7 Reviews {reviews} \u00b7 Ged\u00e4chtnis {memory} \u00b7 ungelesen {reports}",
+            queueEmpty: "Nichts wartet auf Sie",
+            recovery: "Offen {open} \u00b7 pausiert {paused} \u00b7 automatisch behoben {fixed}",
+            spendSpikes: "Kostenspitzen: {n}",
+            spendPerDay: "{value} pro Tag",
+            autonomy: "Geplant {n} \u00b7 n\u00e4chster in {time}",
+            autonomyEmpty: "Nichts geplant",
+            vault: "\u00dcberf\u00e4llig {overdue} \u00b7 Anomalien {anomalies} \u00b7 Ereignisse {events}",
+            instruments: "Fehlgeschlagene Quellen: {failed}",
+            instrumentsOk: "Alle Quellen haben geantwortet",
+            pending: "Warte auf den ersten Messwert",
+            unmeasured: "Noch keine synchronisierte Quelle daf\u00fcr"
+          },
+          scoreSuffix: "/100",
+          detail: {
+            issuesTitle: "Selbstheilungsf\u00e4lle",
+            issuesEmpty: "Keine Selbstheilungsf\u00e4lle in diesem Zeitraum.",
+            issueStatus: {
+              open: "Offen",
+              auto_fixed: "Automatisch behoben",
+              resolved: "Gel\u00f6st"
+            },
+            pausedBadge: "Pausiert",
+            costTitle: "Kosten pro Tag",
+            costSpike: "Kostenspitze",
+            sourcesTitle: "Quellen",
+            sourceStatus: {
+              pending: "Ausstehend",
+              ok: "Beantwortet",
+              failed: "Fehlgeschlagen"
+            },
+            sources: {
+              observability: "Observability",
+              healing: "Selbstheilungsf\u00e4lle",
+              reviews: "Reviews",
+              routines: "Routinen"
+            }
+          }
+        },
         vitals: {
           runs: "L\u00e4ufe",
           alerts: "Warnungen"
