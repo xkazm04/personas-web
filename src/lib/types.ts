@@ -1,5 +1,11 @@
 // ---------------------------------------------------------------------------
-// Domain types — mirrors personas-cloud/packages/shared/src/types.ts
+// Domain types — the web's OWN display contract, and the source of truth for
+// it. Every ApiClient backend (realApi, supabaseApi, mockApi) maps into these
+// shapes. They started as a subset of personas-cloud's
+// packages/shared/src/types.ts but are not kept in sync with it and have
+// diverged on purpose: fields the dashboard never reads are omitted, and
+// EventStatus follows the web's delivery FSM (src/lib/eventStatusFsm.ts), not
+// the orchestrator's. Map at the backend adapter; do not assume parity.
 // ---------------------------------------------------------------------------
 
 export interface Persona {
