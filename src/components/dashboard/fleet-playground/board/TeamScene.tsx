@@ -4,9 +4,10 @@ import { motion } from "framer-motion";
 import type { CSSProperties } from "react";
 import type { FleetTeam } from "../fleet-data";
 import Emblem from "./Emblem";
-import { Badges, type Rect } from "./Tile";
+import { needGlyph, type Rect } from "./Tile";
+import { attentionOf, needsTone } from "../attention";
 import { agentAria, shortState, taskText, type BoardCopy } from "./copy";
-import { fill, gridFit, needs, plural, type SimAgent } from "./model";
+import { fill, gridFit, orderInBay, plural, type SimAgent } from "./model";
 import type { BoardNav } from "./useBoardNav";
 import b from "./board.module.css";
 import s from "./tiles.module.css";
@@ -22,12 +23,15 @@ interface TeamSceneProps {
   nav: BoardNav;
   still: boolean;
   live: boolean;
+  /** The agent scene is open on top: keep this mounted but out of reach. */
+  covered: boolean;
 }
 
 const G = 14;
 
 /** A team opened up: every agent a card with its emblem, task and last 24h. */
-export default function TeamScene({ team, list, from, width, height, copy, nav, still, live }: TeamSceneProps) {
+export default function TeamScene({ team, list: unordered, from, width, height, copy, nav, still, live, covered }: TeamSceneProps) {
+  const list = orderInBay(unordered);
   const fit = gridFit(list.length, width, height, G, 460, 300);
   const gw = fit.cols * fit.tw + (fit.cols - 1) * G;
   const gh = fit.rows * fit.th + (fit.rows - 1) * G;
@@ -38,6 +42,7 @@ export default function TeamScene({ team, list, from, width, height, copy, nav, 
   return (
     <motion.section
       aria-label={fill(plural(list.length, copy.team.titleOne, copy.team.title), { team: team.name, n: list.length })}
+      inert={covered}
       className="absolute inset-0 origin-top-left"
       initial={still ? { opacity: 0 } : collapsed}
       animate={{ x: 0, y: 0, scaleX: 1, scaleY: 1, opacity: 1 }}
@@ -52,7 +57,11 @@ export default function TeamScene({ team, list, from, width, height, copy, nav, 
         const run = a.state === "running";
         const m = Math.max(1, ...a.spark24h);
         const att = nav.att?.type === "agent" && nav.att.id === a.id;
-        const cls = [s.card, s[`s-${a.state}`], needs(a) && s.need, !a.enabled && s.off, att && s.cardAtt].filter(Boolean).join(" ");
+        const pile = attentionOf(a);
+        const cls = [
+          s.card, pile === "working" && s.cardWorking, pile === "needs" && s.cardNeeds, pile === "needs" && needsTone(a) === "critical" && s.critical,
+          pile === "off" && s.cardOff, att && s.cardAtt,
+        ].filter(Boolean).join(" ");
         return (
           <div
             key={a.id}
@@ -63,7 +72,7 @@ export default function TeamScene({ team, list, from, width, height, copy, nav, 
             className={`${cls} flex flex-col`}
             style={{
               left: ox + (j % fit.cols) * (fit.tw + G), top: oy + Math.floor(j / fit.cols) * (fit.th + G),
-              width: fit.tw, height: fit.th, "--glow": `var(--st-${a.state})`,
+              width: fit.tw, height: fit.th, "--glow": pile === "needs" ? "var(--tone)" : pile === "working" ? "var(--at-working)" : "var(--border-glass-strong)",
             } as CSSProperties}
             onMouseEnter={() => nav.attend({ type: "agent", id: a.id })}
             onMouseLeave={nav.unattend}
@@ -94,7 +103,11 @@ export default function TeamScene({ team, list, from, width, height, copy, nav, 
               <span className={`${s.spark} flex h-7 flex-1 items-end gap-0.5`} aria-hidden="true">
                 {a.spark24h.map((v, i) => <i key={i} style={{ height: `${Math.max(6, (v / m) * 100).toFixed(0)}%` }} />)}
               </span>
-              <Badges agent={a} />
+              {pile === "needs" && (
+                <span className="text-2xl font-extrabold leading-none" style={{ color: "color-mix(in oklab, var(--tone) 80%, var(--foreground))" }} aria-hidden="true">
+                  {needGlyph(a)}
+                </span>
+              )}
               <span className="whitespace-nowrap text-right text-xs text-muted-dark">
                 <b className="block text-base text-foreground">{a.runsToday}</b>
                 {copy.team.runsToday}

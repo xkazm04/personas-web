@@ -1,51 +1,65 @@
-/* Team bays and agent tiles. State variables come from board.module.css .root. */
+/* Team bays and agent tiles in the shared four-pile language (attention.ts):
+   working = lit cyan and moving, needs = the loudest thing on screen (solid
+   amber, red when failed or critical), resting = a dim ghost, off = hatched.
+   --at-* are set on the board root from ATTENTION_COLOR, so the colours are
+   the same tokens every prototype uses. */
 
 .bay {
   position: absolute;
-  border-radius: 16px;
-  cursor: pointer;
-  background: linear-gradient(180deg, hsl(var(--h) 70% 55% / 0.08), hsl(var(--h) 70% 50% / 0.015) 60%);
-  box-shadow: inset 0 0 0 1px var(--border-glass-strong);
+  border-radius: 14px;
+  background: linear-gradient(180deg, hsl(var(--h) 70% 55% / 0.07), hsl(var(--h) 70% 50% / 0.01) 70%);
+  box-shadow: inset 0 0 0 1px var(--border-glass);
   transition: left 0.6s var(--ease), top 0.6s var(--ease), width 0.6s var(--ease), height 0.6s var(--ease), box-shadow 0.3s;
 }
-.bay::before {
-  content: "";
-  position: absolute;
-  left: 16px;
-  right: 16px;
-  top: 0;
-  height: 2px;
+.bayAtt { box-shadow: inset 0 0 0 1px hsl(var(--h) var(--hue-s) var(--hue-l) / 0.5); }
+.hueTick {
+  width: 3px;
+  height: 14px;
   border-radius: 2px;
-  background: linear-gradient(90deg, hsl(var(--h) var(--hue-s) var(--hue-l) / 0.9), transparent);
+  background: hsl(var(--h) var(--hue-s) var(--hue-l));
+  box-shadow: 0 0 10px hsl(var(--h) var(--hue-s) var(--hue-l) / 0.6);
 }
-.bay:hover,
-.bayAtt {
-  box-shadow: inset 0 0 0 1px hsl(var(--h) var(--hue-s) var(--hue-l) / 0.45), 0 0 40px hsl(var(--h) 70% 50% / 0.1);
+.needCount {
+  background: var(--at-warning);
+  color: color-mix(in oklab, var(--at-warning) 15%, black);
 }
-.needPill {
-  border: 1px solid var(--st-attention);
-  background: color-mix(in oklab, var(--st-attention) 22%, transparent);
-  color: var(--foreground);
-}
-.runDot {
-  width: 8px;
-  height: 8px;
-  border-radius: 50%;
-  background: var(--st-running);
-  box-shadow: 0 0 8px var(--st-running);
-}
+.needCountCritical { background: var(--at-critical); color: color-mix(in oklab, var(--at-critical) 15%, black); }
 
 .tile {
+  --tone: var(--at-warning);
   position: absolute;
   overflow: hidden;
   border-radius: 10px;
   cursor: pointer;
   text-align: left;
-  border: 1px solid color-mix(in oklab, var(--muted-foreground) 16%, transparent);
-  background-color: color-mix(in oklab, var(--muted-foreground) 6%, transparent);
+  border: 1px solid transparent;
+  transition: left 0.7s var(--ease), top 0.7s var(--ease), width 0.6s var(--ease), height 0.6s var(--ease),
+    background-color 0.4s, border-color 0.4s, box-shadow 0.4s, color 0.4s;
+}
+.tile:focus-visible { outline: 2px solid var(--foreground); outline-offset: 2px; z-index: 6; }
+.att { outline: 2px solid var(--foreground); outline-offset: 2px; z-index: 5; }
+
+/* resting: a ghost that still names itself */
+.resting {
+  background: color-mix(in oklab, var(--foreground) 3%, transparent);
+  border-color: color-mix(in oklab, var(--foreground) 11%, transparent);
   color: var(--muted-dark);
-  transition: left 0.6s var(--ease), top 0.6s var(--ease), width 0.6s var(--ease), height 0.6s var(--ease),
-    translate 0.3s var(--ease), background-color 0.5s, border-color 0.5s, box-shadow 0.5s;
+}
+.queued { border-style: dashed; border-color: color-mix(in oklab, var(--foreground) 22%, transparent); }
+
+/* off: hatched and quieter still */
+.off {
+  background: repeating-linear-gradient(135deg, color-mix(in oklab, var(--foreground) 7%, transparent) 0 2px, transparent 2px 7px);
+  border-color: color-mix(in oklab, var(--foreground) 7%, transparent);
+  color: var(--muted-foreground);
+}
+
+/* working: lit, with its progress rising inside it */
+.working {
+  background: color-mix(in oklab, var(--at-working) 9%, var(--background));
+  border-color: color-mix(in oklab, var(--at-working) 55%, transparent);
+  color: color-mix(in oklab, var(--at-working) 62%, var(--foreground));
+  box-shadow: 0 0 16px color-mix(in oklab, var(--at-working) 16%, transparent);
 }
 .fill {
   position: absolute;
@@ -53,95 +67,70 @@
   transform-origin: 50% 100%;
   transform: scaleY(var(--p, 0));
   transition: transform 1.2s var(--ease);
-  background: linear-gradient(0deg, color-mix(in oklab, var(--st-running) 16%, transparent), transparent);
+  background: linear-gradient(0deg, color-mix(in oklab, var(--at-working) 26%, transparent), color-mix(in oklab, var(--at-working) 6%, transparent));
   pointer-events: none;
 }
 .sweep {
   position: absolute;
   inset: 0 0 auto;
-  height: 60%;
+  height: 55%;
   pointer-events: none;
-  background: linear-gradient(180deg, transparent, color-mix(in oklab, var(--st-running) 14%, transparent), transparent);
-  animation: sweep 3.6s linear infinite;
+  background: linear-gradient(180deg, transparent, color-mix(in oklab, var(--at-working) 18%, transparent), transparent);
+  animation: sweep 3.2s linear infinite;
   animation-delay: var(--sd, 0s);
 }
-@keyframes sweep { from { transform: translateY(-110%); } to { transform: translateY(190%); } }
+@keyframes sweep { from { transform: translateY(-110%); } to { transform: translateY(200%); } }
 .bar {
   position: absolute;
   left: 0;
   bottom: 0;
   height: 3px;
   width: calc(var(--p, 0) * 100%);
-  background: linear-gradient(90deg, color-mix(in oklab, var(--st-ok) 55%, transparent), var(--st-running));
-  box-shadow: 0 0 8px var(--st-running);
+  background: var(--at-working);
+  box-shadow: 0 0 8px var(--at-working);
   transition: width 1.2s var(--ease);
 }
 
-.s-running { background-color: color-mix(in oklab, var(--st-running) 5%, transparent); border-color: color-mix(in oklab, var(--st-running) 26%, transparent); color: color-mix(in oklab, var(--st-running) 60%, var(--foreground)); }
-.s-queued { background-color: transparent; border: 1.5px dashed color-mix(in oklab, var(--st-queued) 60%, transparent); color: color-mix(in oklab, var(--st-queued) 75%, var(--foreground)); }
-.off {
-  background-image: repeating-linear-gradient(135deg, color-mix(in oklab, var(--muted-foreground) 14%, transparent) 0 2px, transparent 2px 7px);
+/* needs: solid tone, thick halo; the glyph says why */
+.needs {
+  z-index: 2;
+  background: var(--tone);
+  border-color: var(--tone);
+  color: color-mix(in oklab, var(--tone) 14%, black);
+  box-shadow: 0 0 0 2px color-mix(in oklab, var(--tone) 35%, transparent), 0 0 24px color-mix(in oklab, var(--tone) 45%, transparent);
 }
-.need { z-index: 2; color: var(--foreground); translate: 0 -2px; }
-.s-failed { background-color: color-mix(in oklab, var(--st-failed) 22%, transparent); border-color: color-mix(in oklab, var(--st-failed) 85%, transparent); box-shadow: 0 0 0 1px color-mix(in oklab, var(--st-failed) 35%, transparent), 0 0 24px color-mix(in oklab, var(--st-failed) 40%, transparent); }
-.s-input_required { background-color: color-mix(in oklab, var(--st-input_required) 22%, transparent); border-color: color-mix(in oklab, var(--st-input_required) 90%, transparent); box-shadow: 0 0 0 1px color-mix(in oklab, var(--st-input_required) 35%, transparent), 0 0 24px color-mix(in oklab, var(--st-input_required) 38%, transparent); }
-.s-draft_ready { background-color: color-mix(in oklab, var(--st-draft_ready) 22%, transparent); border-color: color-mix(in oklab, var(--st-draft_ready) 85%, transparent); box-shadow: 0 0 22px color-mix(in oklab, var(--st-draft_ready) 35%, transparent); }
-.s-draft_ready::after {
-  content: "";
-  position: absolute;
-  right: 0;
-  bottom: 0;
-  width: 14px;
-  height: 14px;
-  border-top-left-radius: 3px;
-  background: linear-gradient(135deg, var(--background) 50%, color-mix(in oklab, var(--st-draft_ready) 70%, var(--foreground)) 50%);
+.critical { --tone: var(--at-critical); }
+.pulse { animation: halo 2.2s ease-out infinite; }
+@keyframes halo {
+  0% { box-shadow: 0 0 0 0 color-mix(in oklab, var(--tone) 70%, transparent), 0 0 24px color-mix(in oklab, var(--tone) 45%, transparent); }
+  70%, 100% { box-shadow: 0 0 0 9px transparent, 0 0 24px color-mix(in oklab, var(--tone) 45%, transparent); }
 }
-.s-attention { background-color: color-mix(in oklab, var(--st-attention) 15%, transparent); border-color: color-mix(in oklab, var(--st-attention) 75%, transparent); box-shadow: 0 0 20px color-mix(in oklab, var(--st-attention) 28%, transparent); }
-.need.s-running { border-color: color-mix(in oklab, var(--st-attention) 70%, transparent); box-shadow: 0 0 20px color-mix(in oklab, var(--st-attention) 26%, transparent); }
-.tile:hover,
-.att { border-color: color-mix(in oklab, var(--foreground) 85%, transparent); z-index: 4; }
-.tile:focus-visible { outline: 2px solid var(--foreground); outline-offset: 2px; z-index: 5; }
+.glyph { font-weight: 800; line-height: 1; letter-spacing: -0.02em; }
 
-/* The fracture keeps to a corner the labels never use: the upper right of a
-   pillar (its callsign sits bottom-left), the middle right of a wider tile
-   (between its header row and its name). */
-.frac { position: absolute; pointer-events: none; stroke: color-mix(in oklab, var(--st-failed) 45%, var(--foreground)); }
-.fracXs { left: 52%; right: 0; top: 0; bottom: 48%; }
-.fracWide { left: 58%; right: 0; top: 34%; bottom: 36%; }
-/* A pillar's folded corner stays clear of its callsign. */
-.xs.s-draft_ready::after { width: 10px; height: 10px; }
-.ring {
-  position: absolute;
-  inset: 2px;
-  border-radius: 8px;
-  border: 2px solid var(--st-input_required);
-  pointer-events: none;
-  opacity: 0.6;
+.mailDot {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: var(--status-info);
+  box-shadow: 0 0 0 1.5px var(--background);
 }
-.ringLive { animation: ringp 2.2s var(--ease) infinite; }
-@keyframes ringp { 0% { opacity: 0.9; transform: scale(0.9); } 70% { opacity: 0; transform: scale(1.04); } 100% { opacity: 0; } }
-
-.flash { animation: flash 1.1s var(--ease); }
-@keyframes flash { 0% { box-shadow: 0 0 0 2px var(--foreground), 0 0 40px color-mix(in oklab, var(--foreground) 60%, transparent); } }
-.rise { animation: rise 0.7s var(--ease) both; animation-delay: var(--ad, 0s); }
-@keyframes rise { from { opacity: 0; translate: 0 14px; } }
-
-/* Badges: pending reviews (by top severity) and unread mail. */
-.badge {
+.reviewBadge {
   min-width: 18px;
   height: 18px;
-  padding: 0 5px;
+  padding: 0 4px;
   border-radius: 9px;
   font: 700 12px/18px var(--font-sans);
   text-align: center;
+  background: color-mix(in oklab, black 70%, var(--tone));
+  color: var(--tone);
 }
-.rv-critical { background: var(--sev-critical); color: color-mix(in oklab, var(--sev-critical) 20%, black); box-shadow: 0 0 10px color-mix(in oklab, var(--sev-critical) 60%, transparent); }
-.rv-warning { background: var(--sev-warning); color: color-mix(in oklab, var(--sev-warning) 20%, black); box-shadow: 0 0 10px color-mix(in oklab, var(--sev-warning) 45%, transparent); }
-.rv-info { background: var(--sev-info); color: color-mix(in oklab, var(--sev-info) 20%, black); box-shadow: 0 0 10px color-mix(in oklab, var(--sev-info) 45%, transparent); }
-.mail { color: var(--foreground); background: color-mix(in oklab, var(--background) 70%, transparent); box-shadow: inset 0 0 0 1.5px color-mix(in oklab, var(--sev-info) 70%, var(--foreground)); }
 
-/* Team scene cards. */
+.rise { animation: rise 0.7s var(--ease) both; animation-delay: var(--ad, 0s); }
+@keyframes rise { from { opacity: 0; translate: 0 12px; } }
+
+/* Team scene cards (L1). */
 .card {
+  --tone: var(--at-warning);
   position: absolute;
   overflow: hidden;
   border-radius: 16px;
@@ -156,7 +145,9 @@
 .card:focus-visible,
 .cardAtt { border-color: color-mix(in oklab, var(--foreground) 60%, transparent); translate: 0 -3px; }
 .card:focus-visible { outline: 2px solid var(--foreground); outline-offset: 2px; }
-.card.s-failed, .card.s-input_required, .card.s-draft_ready { background-color: transparent; }
+.cardWorking { border-color: color-mix(in oklab, var(--at-working) 45%, transparent); }
+.cardNeeds { border-color: var(--tone); box-shadow: 0 0 0 1px var(--tone), 0 0 28px color-mix(in oklab, var(--tone) 22%, transparent); }
+.cardOff { background-image: repeating-linear-gradient(135deg, color-mix(in oklab, var(--foreground) 6%, transparent) 0 2px, transparent 2px 8px); }
 .cardGlow {
   position: absolute;
   right: -40px;
@@ -171,4 +162,4 @@
 .spark i { flex: 1; min-height: 2px; border-radius: 1px; background: hsl(var(--h) var(--hue-s) var(--hue-l) / 0.6); }
 
 .still,
-.still * { animation: none !important; transition-property: opacity, background-color, border-color, box-shadow !important; }
+.still * { animation: none !important; transition-property: opacity, background-color, border-color, box-shadow, color !important; }

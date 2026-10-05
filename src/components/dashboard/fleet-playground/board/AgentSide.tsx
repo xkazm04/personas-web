@@ -22,7 +22,7 @@ const smallBtn = "rounded-lg px-3 py-1.5 text-sm font-semibold transition-transf
 export default function AgentSide({ agent: a, simMs, copy, leaving, still, onReview, onRead }: AgentSideProps) {
   const reviews = [...a.reviews].sort((x, y) => SEV_ORDER[x.severity] - SEV_ORDER[y.severity] || y.ageMin - x.ageMin);
   const kv: [string, string | number][] = [
-    [copy.spot.runsToday, a.runsToday], [copy.spot.success, pct(a.successRate)], [copy.spot.costToday, `$${a.costTodayUsd.toFixed(2)}`],
+    [copy.stats.runsToday, a.runsToday], [copy.stats.success, pct(a.successRate)], [copy.stats.costToday, `$${a.costTodayUsd.toFixed(2)}`],
   ];
   return (
     <div className="h-full overflow-y-auto pb-8 [mask-image:linear-gradient(180deg,#000_90%,transparent)]">

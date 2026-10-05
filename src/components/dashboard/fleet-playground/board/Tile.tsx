@@ -1,11 +1,10 @@
 "use client";
 
 import type { CSSProperties } from "react";
-import { topSeverity } from "../fleet-data";
+import { attentionOf, needsTone } from "../attention";
 import Emblem from "./Emblem";
-import { agentAria, stateText, taskText, type BoardCopy } from "./copy";
-import { needs, type SimAgent } from "./model";
-import b from "./board.module.css";
+import { agentAria, shortState, taskText, type BoardCopy } from "./copy";
+import { pct, type SimAgent } from "./model";
 import s from "./tiles.module.css";
 
 export type Tier = "xs" | "md" | "lg";
@@ -16,7 +15,6 @@ interface TileProps {
   rect: Rect;
   copy: BoardCopy;
   att: boolean;
-  flash: boolean;
   live: boolean;
   /** Arrival delay (s) for the first-paint rise; null after arrival. */
   riseDelay: number | null;
@@ -26,60 +24,58 @@ interface TileProps {
 }
 
 export function tierOf(r: Rect): Tier {
-  if (r.h < 64 || r.w < 88) return "xs";
-  return r.w >= 200 && r.h >= 130 ? "lg" : "md";
+  if (r.w < 96 || r.h < 70) return "xs";
+  return r.w >= 210 && r.h >= 150 ? "lg" : "md";
 }
 
-/** A fracture across a failed tile. */
-function Fracture({ tier }: { tier: Tier }) {
-  return (
-    <span className={`${s.frac} ${tier === "xs" ? s.fracXs : s.fracWide}`} aria-hidden="true">
-      <svg className="block h-full w-full" viewBox="0 0 100 100" preserveAspectRatio="none" fill="none">
-        <polyline points="64,0 50,28 72,41 40,66 54,79 36,100" strokeWidth="1.6" vectorEffect="non-scaling-stroke" />
-        <polyline points="50,28 24,34" strokeWidth="1.2" vectorEffect="non-scaling-stroke" opacity=".6" />
-      </svg>
-    </span>
-  );
+/** Why an agent needs you, as one glyph: failed, waiting, draft, or reviews. */
+export function needGlyph(a: SimAgent): string {
+  if (a.state === "failed") return "!";
+  if (a.state === "input_required") return "?";
+  if (a.state === "draft_ready") return "✎";
+  return String(a.reviews.length);
 }
 
-export function Badges({ agent }: { agent: SimAgent }) {
-  const sev = topSeverity(agent);
-  return (
-    <span className="flex gap-0.5" aria-hidden="true">
-      {agent.unreadMessages.length > 0 && <span className={`${s.badge} ${s.mail}`}>{agent.unreadMessages.length}</span>}
-      {sev && <span className={`${s.badge} ${s[`rv-${sev}`]}`}>{agent.reviews.length}</span>}
-    </span>
-  );
-}
-
-/** One agent on the board. Its form follows the room it has: a callsign
- *  pillar at 99 agents, a named tile at 30, a task card at 10. */
-export default function Tile({ agent: a, rect, copy, att, flash, live, riseDelay, onAttend, onUnattend, onOpen }: TileProps) {
+/**
+ * One agent, drawn to be sorted by the eye before it is read: lit and
+ * filling while it works, a solid amber or red block with a glyph when it
+ * needs you, a ghost while it rests, hatched when off. The callsign is always
+ * there; bigger tiles (30 and 10 agents, large screens) add name and task.
+ */
+export default function Tile({ agent: a, rect, copy, att, live, riseDelay, onAttend, onUnattend, onOpen }: TileProps) {
   const tier = tierOf(rect);
-  const need = needs(a);
+  const pile = attentionOf(a);
+  const needs = pile === "needs";
   const running = a.state === "running";
   const cls = [
-    s.tile, s[`s-${a.state}`], !a.enabled && s.off, need && s.need, att && s.att, flash && s.flash,
-    riseDelay != null && s.rise, tier === "xs" && s.xs,
+    s.tile, s[pile], needs && needsTone(a) === "critical" && s.critical, needs && live && s.pulse,
+    pile === "resting" && a.state === "queued" && s.queued, att && s.att, riseDelay != null && s.rise,
   ].filter(Boolean).join(" ");
   const style = {
     left: rect.x, top: rect.y, width: rect.w, height: rect.h,
     "--p": running ? a.progress ?? 0 : 0,
-    "--sd": `${(-(a.idx * 0.37) % 3.6).toFixed(2)}s`,
+    "--sd": `${(-(a.idx * 0.37) % 3.2).toFixed(2)}s`,
     "--ad": riseDelay != null ? `${riseDelay.toFixed(3)}s` : undefined,
   } as CSSProperties;
-  const emblemSize = tier === "lg" ? "h-11 w-11" : tier === "md" ? "h-6 w-6" : "h-4 w-4";
+  const glyphSize = Math.round(tier === "xs" ? Math.min(rect.h * 0.42, rect.w * 0.4, 56) : Math.min(rect.h * 0.3, 36));
+  // The glyph already counts reviews unless the state itself is the reason.
+  const extraReviews = a.reviews.length > 0 && (a.state === "failed" || a.state === "input_required" || a.state === "draft_ready");
+  const marks = a.unreadMessages.length > 0 || extraReviews;
+  const glyph = needs ? (
+    <span className={`${s.glyph} shrink-0`} style={{ fontSize: glyphSize }}>{needGlyph(a)}</span>
+  ) : null;
 
   return (
     <div
       role="button"
       tabIndex={0}
       data-tile={a.id}
+      data-agent-id={a.id}
       aria-label={agentAria(a, copy)}
       className={cls}
       style={style}
-      onMouseEnter={onAttend}
-      onMouseLeave={onUnattend}
+      onPointerEnter={onAttend}
+      onPointerLeave={onUnattend}
       onFocus={onAttend}
       onBlur={onUnattend}
       onClick={(e) => onOpen(e.currentTarget)}
@@ -90,46 +86,40 @@ export default function Tile({ agent: a, rect, copy, att, flash, live, riseDelay
         }
       }}
     >
-      {running && <span className={s.fill} aria-hidden="true" />}
-      {running && live && <span className={s.sweep} aria-hidden="true" />}
-      {running && tier !== "lg" && <span className={s.bar} aria-hidden="true" />}
-      {a.state === "failed" && <Fracture tier={tier} />}
-      {a.state === "input_required" && <span className={`${s.ring} ${live ? s.ringLive : ""}`} aria-hidden="true" />}
-      <span className="absolute right-1 top-1 z-[1]"><Badges agent={a} /></span>
+      {running && !needs && <span className={s.fill} aria-hidden="true" />}
+      {running && !needs && live && <span className={s.sweep} aria-hidden="true" />}
+      {running && <span className={s.bar} aria-hidden="true" />}
 
-      {tier === "xs" && (
-        <span className={`relative flex h-full flex-col items-start p-1.5 ${rect.h >= 40 ? "justify-between" : "justify-end"}`}>
-          {rect.h >= 40 && <span className={`${emblemSize} opacity-80`}><Emblem agent={a} /></span>}
-          <span className="whitespace-nowrap font-mono text-xs font-semibold leading-none tracking-tight">{a.callsign}</span>
-        </span>
-      )}
-      {tier === "md" && (
-        <span className="relative flex h-full flex-col justify-between p-2">
-          <span className="flex items-center gap-2">
-            <span className={emblemSize}><Emblem agent={a} /></span>
-            <span className="font-mono text-xs font-semibold">{a.callsign}</span>
+      <span className="relative flex h-full flex-col p-2" aria-hidden="true">
+        {/* Top row: the callsign keeps its own lane; at medium+ the glyph sits at its end. */}
+        <span className="flex items-start gap-2">
+          {tier === "lg" && <span className="h-8 w-8 shrink-0"><Emblem agent={a} /></span>}
+          <span className="min-w-0 flex-1">
+            <span className={`block whitespace-nowrap font-mono font-semibold leading-tight ${tier === "xs" ? "text-xs" : "text-sm"}`}>{a.callsign}</span>
+            {tier !== "xs" && rect.h >= 84 && <span className="block truncate text-xs font-medium">{shortState(a, copy)}</span>}
           </span>
-          <span className="line-clamp-2 pr-3 text-xs leading-tight text-foreground">{a.name}</span>
+          {tier !== "xs" && glyph}
         </span>
-      )}
-      {tier === "lg" && (
-        <span className="relative flex h-full flex-col p-3">
-          <span className="flex items-center gap-3">
-            <span className={`${emblemSize} shrink-0`}><Emblem agent={a} /></span>
-            <span className="min-w-0">
-              <span className="block font-mono text-sm font-semibold">{a.callsign}</span>
-              <span className={`block truncate text-xs ${b[`ink-${a.enabled ? a.state : "off"}`]}`}>{stateText(a, copy)}</span>
+
+        {tier !== "xs" && (
+          <span className="mt-auto min-w-0">
+            <span className={`block font-semibold leading-tight ${tier === "lg" ? "line-clamp-2 text-base" : "line-clamp-2 text-xs"} ${pile === "working" || needs ? "" : "text-muted-dark"}`}>
+              {a.name}
             </span>
+            {tier === "lg" && <span className="mt-0.5 block truncate text-xs">{taskText(a, copy, copy.tasks.resting)}</span>}
           </span>
-          <span className="mt-auto line-clamp-2 text-lg font-semibold leading-tight text-foreground">{a.name}</span>
-          <span className="mt-1 truncate pr-3 text-sm text-muted-dark">{taskText(a, copy)}</span>
-          {running && (
-            <span className="mt-2 block h-1.5 overflow-hidden rounded-full bg-[color-mix(in_oklab,var(--foreground)_10%,transparent)]">
-              <span className="block h-full rounded-full bg-[var(--st-running)] transition-[width] duration-1000" style={{ width: `${(a.progress ?? 0) * 100}%` }} />
-            </span>
-          )}
-        </span>
-      )}
+        )}
+
+        {/* Bottom row: progress and the quiet badges on the left; on a pillar, the glyph on the right. */}
+        {(tier === "xs" || marks) && (
+          <span className={`flex items-end gap-1.5 ${tier === "xs" ? "mt-auto" : "mt-1"}`}>
+            {tier === "xs" && running && !needs && <span className="text-xs tabular-nums">{pct(a.progress ?? 0)}</span>}
+            {a.unreadMessages.length > 0 && <i className={`${s.mailDot} mb-1`} />}
+            {extraReviews && <span className={s.reviewBadge}>{a.reviews.length}</span>}
+            {tier === "xs" && <span className="ml-auto">{glyph}</span>}
+          </span>
+        )}
+      </span>
     </div>
   );
 }

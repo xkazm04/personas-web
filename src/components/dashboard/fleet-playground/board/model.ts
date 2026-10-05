@@ -2,11 +2,11 @@ import {
   FLEET,
   needsYou,
   topSeverity,
-  type AgentState,
   type FleetAgent,
   type FleetEvent,
   type Severity,
 } from "../fleet-data";
+import { attentionOf, type Attention } from "../attention";
 
 /* ── Board model: the live copy of the fleet and the rules that rank it ── */
 
@@ -51,11 +51,6 @@ export const MESSAGE_TEXTS = Array.from(
   new Set(FLEET.timeline.filter((e) => e.kind === "message" || e.kind === "handoff").map((e) => e.text)),
 );
 
-/** Order of the composition bar: what needs you first, the calm mass last. */
-export const COMP_ORDER: readonly AgentState[] = [
-  "failed", "input_required", "draft_ready", "attention", "running", "queued", "idle",
-];
-
 const SEV_ORDER: Record<Severity, number> = { critical: 0, warning: 1, info: 2 };
 
 export const needs = needsYou;
@@ -98,14 +93,6 @@ export function needAgeMs(a: SimAgent, simMs: number, events: BoardEvent[]): num
   if (a.reviews.length) return (oldestAge(a) + simMs / 60_000) * 60_000;
   const ev = events.find((e) => e.agentId === a.id && e.kind === "run_failed");
   return ev ? FLEET.nowMs + simMs - ev.tsMs : null;
-}
-
-export function counts(list: FleetAgent[]): Record<AgentState, number> {
-  const c: Record<AgentState, number> = {
-    running: 0, failed: 0, input_required: 0, draft_ready: 0, queued: 0, attention: 0, idle: 0,
-  };
-  for (const a of list) c[a.state]++;
-  return c;
 }
 
 /** The densest grid of `n` cells that fits `w`×`h`, with sane tile proportions
@@ -175,3 +162,15 @@ export const pct = (x: number) => `${Math.round(x * 100)}%`;
 
 /** The singular or plural template for a count (English copy; one/other). */
 export const plural = (n: number, one: string, many: string) => (n === 1 ? one : many);
+
+const ATTENTION_RANK: Record<Attention, number> = { needs: 0, working: 1, resting: 2, off: 3 };
+
+/** A bay's reading order: needs first (most urgent first), then working,
+ *  resting, off; fleet order within each pile. It depends only on state, so
+ *  tiles move only when an agent changes pile, not on every tick. */
+export function orderInBay(list: SimAgent[]): SimAgent[] {
+  return [...list].sort((x, y) => {
+    const ax = attentionOf(x), ay = attentionOf(y);
+    return ATTENTION_RANK[ax] - ATTENTION_RANK[ay] || (ax === "needs" ? rank(x) - rank(y) : 0) || x.idx - y.idx;
+  });
+}

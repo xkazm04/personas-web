@@ -35,12 +35,14 @@ interface MoonProps {
  * for the time gone. Amber when usage runs ahead of time.
  */
 export default function Moon({ cx, cy, r, five, seven, clipId = "ns-moon-clip" }: MoonProps) {
-  const R = r + 16;
+  const R = r + Math.max(6, r * 0.35);
+  const k = r / 46;
   const C = 2 * Math.PI * R;
   const lit = Math.max(0, Math.min(1, five.used / 100));
   const e5y = cy + r - 2 * r * five.elapsed;
   const t = -Math.PI / 2 + seven.elapsed * 2 * Math.PI;
-  const tick = `M ${f1(cx + Math.cos(t) * (R - 8))} ${f1(cy + Math.sin(t) * (R - 8))} L ${f1(cx + Math.cos(t) * (R + 8))} ${f1(cy + Math.sin(t) * (R + 8))}`;
+  const tk = Math.max(4, 8 * r / 46);
+  const tick = `M ${f1(cx + Math.cos(t) * (R - tk))} ${f1(cy + Math.sin(t) * (R - tk))} L ${f1(cx + Math.cos(t) * (R + tk))} ${f1(cy + Math.sin(t) * (R + tk))}`;
   return (
     <g aria-hidden="true">
       <circle cx={cx} cy={cy} r={r * 3} style={{ fill: "var(--ns-moon)" }} opacity={0.06} />
@@ -52,21 +54,21 @@ export default function Moon({ cx, cy, r, five, seven, clipId = "ns-moon-clip" }
       <g clipPath={`url(#${clipId})`}>
         <rect x={cx - r} y={f1(cy + r - 2 * r * lit)} width={2 * r} height={f1(2 * r * lit)} style={{ fill: "var(--ns-moon)", transition: "y .8s, height .8s" }} />
         <g style={{ fill: "var(--text-secondary)" }}>
-          <circle cx={cx - 14} cy={cy + 12} r={8} opacity={0.35} />
-          <circle cx={cx + 16} cy={cy + 22} r={5} opacity={0.3} />
-          <circle cx={cx + 10} cy={cy - 18} r={6} opacity={0.22} />
+          <circle cx={cx - 14 * k} cy={cy + 12 * k} r={8 * k} opacity={0.35} />
+          <circle cx={cx + 16 * k} cy={cy + 22 * k} r={5 * k} opacity={0.3} />
+          <circle cx={cx + 10 * k} cy={cy - 18 * k} r={6 * k} opacity={0.22} />
         </g>
-        <path d={`M ${cx - r} ${f1(e5y)} L ${cx + r} ${f1(e5y)}`} style={{ stroke: "var(--brand-cyan)" }} strokeWidth={2} strokeDasharray="4 3" />
+        <path d={`M ${cx - r} ${f1(e5y)} L ${cx + r} ${f1(e5y)}`} style={{ stroke: "var(--brand-cyan)" }} strokeWidth={Math.max(1, 2 * k)} strokeDasharray="4 3" />
       </g>
       <circle cx={cx} cy={cy} r={r} fill="none" style={{ stroke: "var(--ns-moon)" }} strokeOpacity={0.4} strokeWidth={1.2} />
-      <circle cx={cx} cy={cy} r={R} fill="none" style={{ stroke: "var(--text-secondary)" }} strokeOpacity={0.25} strokeWidth={4} />
+      <circle cx={cx} cy={cy} r={R} fill="none" style={{ stroke: "var(--text-secondary)" }} strokeOpacity={0.25} strokeWidth={Math.max(2, 4 * k)} />
       <circle
         cx={cx}
         cy={cy}
         r={R}
         fill="none"
         style={{ stroke: seven.hot ? "var(--status-warning)" : "var(--brand-cyan)" }}
-        strokeWidth={4}
+        strokeWidth={Math.max(2, 4 * k)}
         strokeLinecap="round"
         strokeDasharray={`${f1((C * seven.used) / 100)} ${f1(C)}`}
         transform={`rotate(-90 ${cx} ${cy})`}

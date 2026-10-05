@@ -57,7 +57,7 @@ export default function AgentScene({ agent: a, simMs, events, copy, still, live,
   return (
     <motion.section
       aria-label={`${a.callsign} ${a.name}`}
-      className="absolute inset-0 z-10 grid grid-cols-[minmax(260px,30%)_minmax(0,1fr)_minmax(260px,31%)] overflow-hidden rounded-3xl shadow-[inset_0_0_0_1px_var(--border-glass-strong),0_40px_120px_rgb(0_0_0/0.35)]"
+      className="absolute inset-0 z-10 grid grid-cols-[minmax(220px,26%)_minmax(0,1fr)_minmax(260px,30%)] overflow-hidden rounded-3xl shadow-[inset_0_0_0_1px_var(--border-glass-strong),0_40px_120px_rgb(0_0_0/0.35)]"
       style={{
         "--h": a.hue,
         background: `radial-gradient(60% 70% at 14% 30%, hsl(${a.hue} 80% 55% / 0.16), transparent 70%), linear-gradient(180deg, color-mix(in oklab, var(--surface) 97%, transparent), color-mix(in oklab, var(--background) 97%, transparent))`,

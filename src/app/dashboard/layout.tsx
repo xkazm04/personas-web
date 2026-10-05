@@ -17,15 +17,19 @@ const SCOPED_ROUTE_PREFIXES = navItemDefs
   .filter((item) => item.scoped)
   .map((item) => item.href);
 
+// Routes whose page owns the whole content area edge to edge (no max width, no
+// page padding): the fleet playground's stage is sized to the viewport.
+const FULL_BLEED_PREFIXES = ["/dashboard/playground"];
+
 export default function DashboardLayout({
   children,
 }: {
   children: React.ReactNode;
 }) {
   const pathname = usePathname();
-  const showScope = SCOPED_ROUTE_PREFIXES.some((prefix) =>
-    pathname === prefix || pathname.startsWith(`${prefix}/`),
-  );
+  const matches = (prefix: string) => pathname === prefix || pathname.startsWith(`${prefix}/`);
+  const showScope = SCOPED_ROUTE_PREFIXES.some(matches);
+  const fullBleed = FULL_BLEED_PREFIXES.some(matches);
 
   return (
     <AuthProvider>
@@ -39,9 +43,12 @@ export default function DashboardLayout({
             <DashboardNavbar />
             <div className="flex flex-1">
               <DashboardNavigation />
-              <main id="main-content" className="min-w-0 flex-1 overflow-auto px-3 py-5 pb-20 sm:px-6 sm:py-8 md:pb-8">
+              <main
+                id="main-content"
+                className={`min-w-0 flex-1 overflow-auto ${fullBleed ? "pb-20 md:pb-0" : "px-3 py-5 pb-20 sm:px-6 sm:py-8 md:pb-8"}`}
+              >
                 <DashboardErrorBoundary resetKey={pathname}>
-                  <div className="mx-auto max-w-7xl">
+                  <div className={fullBleed ? undefined : "mx-auto max-w-7xl"}>
                     {showScope && <DashboardScopeBar />}
                     {children}
                   </div>

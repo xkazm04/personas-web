@@ -133,24 +133,3 @@ export default function Ornament({ teamId, cx, top, w, hue, still }: OrnamentPro
       return <rect x={x0} y={top - 10} width={w} height={10} style={{ fill: R }} />;
   }
 }
-
-/** Street-level dressing: a garden and lamp by the house, steps by the bank and court. */
-export function GroundDecor({ teamId, cx, w, ground, hue }: { teamId: string; cx: number; w: number; ground: number; hue: number }) {
-  const x0 = cx - w / 2;
-  const x1 = cx + w / 2;
-  if (teamId === "people") {
-    return (
-      <g>
-        <circle cx={x0 - 8} cy={ground - 10} r={12} style={{ fill: "color-mix(in oklab, var(--brand-emerald) 22%, var(--background))" }} />
-        <circle cx={x0 - 20} cy={ground - 6} r={9} style={{ fill: "color-mix(in oklab, var(--brand-emerald) 16%, var(--background))" }} />
-        <rect x={x1 + 9} y={ground - 64} width={3} height={64} style={{ fill: "var(--ns-rail)" }} />
-        <circle cx={x1 + 10.5} cy={ground - 66} r={5} style={{ fill: LAMP }} />
-        <circle cx={x1 + 10.5} cy={ground - 66} r={22} style={{ fill: LAMP }} opacity={0.1} />
-      </g>
-    );
-  }
-  if (teamId === "finance" || teamId === "legal") {
-    return <rect x={x0 - 10} y={ground - 6} width={w + 20} height={6} style={{ fill: teamTones(hue).roof }} />;
-  }
-  return null;
-}

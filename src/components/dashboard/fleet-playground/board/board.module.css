@@ -43,11 +43,6 @@
 .ink-idle, .ink-off { color: var(--muted-dark); }
 
 .teamInk { color: hsl(var(--h) var(--hue-s) var(--hue-l)); }
-.teamSwatch {
-  background: hsl(var(--h) var(--hue-s) var(--hue-l));
-  box-shadow: 0 0 16px hsl(var(--h) var(--hue-s) var(--hue-l) / 0.55);
-}
-
 /* ── Emblem ── */
 .emblem {
   --em-main: hsl(var(--h) 85% 68%);
@@ -71,41 +66,11 @@
 .orbitLive { animation: orbit 40s linear infinite; }
 @keyframes orbit { to { transform: rotate(360deg); } }
 
-/* ── Spotlight ── */
-.spot {
-  background:
-    radial-gradient(110% 60% at 50% 0%, color-mix(in oklab, var(--brand-cyan) 11%, transparent), transparent 70%),
-    linear-gradient(180deg, color-mix(in oklab, var(--surface) 92%, transparent), color-mix(in oklab, var(--background) 70%, transparent));
-  box-shadow: inset 0 0 0 1px var(--border-glass-strong), 0 30px 80px rgb(0 0 0 / 0.25);
-}
-.beam {
-  position: absolute;
-  left: 50%;
-  top: -40px;
-  width: 140%;
-  height: 120%;
-  transform: translateX(-50%);
-  pointer-events: none;
-  background: linear-gradient(180deg, color-mix(in oklab, var(--foreground) 7%, transparent), transparent 80%);
-  clip-path: polygon(40% 0, 60% 0, 100% 100%, 0 100%);
-}
+/* ── Spotlight art (agent scene): drifts against the pointer ── */
 .spotArt {
   transform: translate(calc(var(--px) * -18px), calc(var(--py) * -14px));
   transition: transform 0.6s var(--ease);
 }
-.verdictNum {
-  font-variant-numeric: tabular-nums;
-  color: color-mix(in oklab, var(--st-attention) 80%, var(--foreground));
-  text-shadow: 0 0 40px color-mix(in oklab, var(--st-attention) 35%, transparent);
-}
-.verdictOk {
-  color: color-mix(in oklab, var(--st-ok) 80%, var(--foreground));
-  text-shadow: 0 0 40px color-mix(in oklab, var(--st-ok) 35%, transparent);
-}
-.bump { animation: bump 0.7s var(--ease); }
-@keyframes bump { 30% { transform: scale(1.08); } }
-.queue { scrollbar-width: thin; scrollbar-color: var(--border-glass-strong) transparent; }
-
 /* Reason chips and state pills share one recipe: tinted fill, state ink. */
 .chip {
   display: inline-flex;
@@ -129,4 +94,3 @@
 .r-warning { color: color-mix(in oklab, var(--st-attention) 72%, var(--foreground)); }
 .r-info { color: color-mix(in oklab, var(--sev-info) 78%, var(--foreground)); }
 
-.compbar i { display: block; height: 100%; transition: flex-grow 0.6s var(--ease); }

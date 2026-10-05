@@ -1,6 +1,8 @@
 import type { Translations } from "@/i18n/en";
-import { FLEET, topSeverity } from "../fleet-data";
-import { TEAM_BY_ID, fill, needs, pct, plural, topReview, type BoardEvent, type SimAgent } from "./model";
+import { FLEET, formatAge, topSeverity } from "../fleet-data";
+import { needsTone } from "../attention";
+import type { RailItem } from "../NeedsYouRail";
+import { TEAM_BY_ID, fill, needAgeMs, needs, pct, plural, queueOf, reasonOf, topReview, type BoardEvent, type SimAgent } from "./model";
 
 /** The board's copy (`t.fleetPlayground.board`). */
 export type BoardCopy = Translations["fleetPlayground"]["board"];
@@ -61,3 +63,20 @@ export function hm(tsMs: number): string {
 
 /** Sim time -> epoch ms on the demo clock. */
 export const simNow = (simMs: number) => FLEET.nowMs + simMs;
+
+/** The ranked needs-you queue as rail rows: why (from copy), what about, how long. */
+export function railItems(scope: SimAgent[], simMs: number, events: BoardEvent[], c: BoardCopy): RailItem[] {
+  return queueOf(scope).map((a) => {
+    const r = reasonOf(a);
+    const title = r.title ?? (r.cls === "draft_ready" ? c.tasks.draftFallback : null);
+    const age = needAgeMs(a, simMs, events);
+    return {
+      id: a.id,
+      callsign: a.callsign,
+      name: a.name,
+      reason: title ? `${c.reasons[r.cls]} · ${title}` : c.reasons[r.cls],
+      tone: needsTone(a),
+      age: age != null ? formatAge(age) : undefined,
+    };
+  });
+}

@@ -1,8 +1,7 @@
 "use client";
 
 import type { ReactNode } from "react";
-import type { AgentState } from "../fleet-data";
-import { COMP_ORDER, counts, fill, type ReasonClass, type SimAgent } from "./model";
+import { fill, type ReasonClass, type SimAgent } from "./model";
 import type { BoardCopy } from "./copy";
 import b from "./board.module.css";
 
@@ -37,7 +36,7 @@ export function Ring({ frac, size, stroke, running, label, valueClass = "text-3x
 export function Beads({ agent, copy }: { agent: SimAgent; copy: BoardCopy }) {
   const failed = agent.recentStatuses.filter((x) => x === "failed").length;
   return (
-    <div className="mt-2 flex gap-1.5" role="img" aria-label={fill(copy.spot.last12Aria, { n: failed })}>
+    <div className="mt-2 flex gap-1.5" role="img" aria-label={fill(copy.stats.last12Aria, { n: failed })}>
       {agent.recentStatuses.map((st, i) => (
         <i
           key={i}
@@ -65,30 +64,6 @@ export function Bars({ agent, height = 48 }: { agent: SimAgent; height?: number 
         />
       ))}
     </div>
-  );
-}
-
-/** The fleet's composition by state, with a legend. */
-export function CompBar({ list, copy }: { list: SimAgent[]; copy: BoardCopy }) {
-  const c = counts(list);
-  const present = COMP_ORDER.filter((st) => c[st]);
-  const op = (st: AgentState) => (st === "idle" ? 0.55 : st === "queued" ? 0.7 : 0.95);
-  return (
-    <>
-      <div className={`${b.compbar} mt-3 flex h-2.5 gap-0.5 overflow-hidden rounded-md`} aria-hidden="true">
-        {present.map((st) => (
-          <i key={st} style={{ flexGrow: c[st], background: `var(--st-${st})`, opacity: op(st) }} />
-        ))}
-      </div>
-      <div className="mt-2 flex flex-wrap gap-x-3.5 gap-y-1 text-xs text-muted-dark">
-        {present.map((st) => (
-          <span key={st} className="inline-flex items-center gap-1.5">
-            <i className="inline-block h-2.5 w-2.5 rounded-sm" style={{ background: `var(--st-${st})` }} />
-            {c[st]} {copy.states[st].toLowerCase()}
-          </span>
-        ))}
-      </div>
-    </>
   );
 }
 

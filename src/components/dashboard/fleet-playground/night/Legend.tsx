@@ -18,14 +18,14 @@ const note = (id: string) => ({ id, text: "", ageMin: 0 });
 export default function Legend({ copy, still }: { copy: CityCopy; still: boolean }) {
   const L = copy.legend;
   const rows: [WindowAgent, string][] = [
-    [mk("running"), L.running],
-    [mk("idle"), L.idle],
-    [mk("queued"), L.queued],
+    [mk("running"), L.working],
     [mk("failed"), L.failed],
     [mk("input_required"), L.input],
     [mk("draft_ready"), L.draft],
+    [mk("idle", { reviews: [review("warning"), review("critical")] }), L.review],
+    [mk("queued"), L.queued],
+    [mk("idle"), L.idle],
     [mk("idle", { enabled: false }), L.off],
-    [mk("idle", { reviews: [review("warning"), review("critical")] }), L.reviews],
     [mk("idle", { unreadMessages: [note("a"), note("b")] }), L.unread],
   ];
   return (
@@ -33,7 +33,7 @@ export default function Legend({ copy, still }: { copy: CityCopy; still: boolean
       id="ns-legend"
       role="dialog"
       aria-label={copy.legendTitle}
-      className="absolute right-9 top-14 z-30 w-[360px] rounded-2xl border border-glass-hover px-4 py-3.5 shadow-2xl"
+      className="absolute right-3 top-3 z-30 w-[340px] rounded-2xl border border-glass-hover px-4 py-3.5 shadow-2xl"
       style={{ background: "color-mix(in oklab, var(--background) 96%, transparent)" }}
     >
       <h4 className="mb-2 text-[15px] font-semibold uppercase tracking-widest text-muted-dark">{copy.legendTitle}</h4>

@@ -25,7 +25,6 @@ export function useBoardNav({ scope, scale, stageRef, still, toast, nextToast, n
   const [agentOpen, setAgentOpen] = useState<string | null>(null);
   const [att, setAtt] = useState<Attention>(null);
   const [nextIdx, setNextIdx] = useState(-1);
-  const [flashId, setFlashId] = useState<string | null>(null);
   const unattTimer = useRef(0);
   const teamOrigin = useRef<HTMLElement | null>(null);
   const agentOrigin = useRef<HTMLElement | null>(null);
@@ -110,10 +109,6 @@ export function useBoardNav({ scope, scale, stageRef, still, toast, nextToast, n
     if (teamOpen && teamOpen !== a.team) setTeamOpen(null);
     const sel = teamOpen === a.team ? `[data-card="${a.id}"]` : `[data-tile="${a.id}"]`;
     focusLater([sel], teamOpen && teamOpen !== a.team ? 420 : 0);
-    if (!still) {
-      setFlashId(a.id);
-      window.setTimeout(() => setFlashId(null), 1100);
-    }
   };
 
   const onKey = useEffectEvent((e: KeyboardEvent) => {
@@ -135,7 +130,7 @@ export function useBoardNav({ scope, scale, stageRef, still, toast, nextToast, n
   }, []);
 
   return {
-    teamOpen, agentOpen, att, flashId,
+    teamOpen, agentOpen, att,
     attend, unattend, openTeam, closeTeam, openAgent, closeAgent, back, nextNeeds,
   };
 }

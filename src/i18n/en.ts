@@ -2425,6 +2425,17 @@
       office: string;
     };
     scaleLabel: string;
+    rail: {
+      title: string;
+      empty: string;
+      listLabel: string;
+    };
+    attention: {
+      needs: string;
+      working: string;
+      resting: string;
+      off: string;
+    };
     loading: string;
     board: {
       label: string;
@@ -2513,62 +2524,25 @@
         hoursAgo: string;
         daysAgo: string;
       };
+      top: {
+        needsOne: string;
+        needsMany: string;
+        allClear: string;
+      };
       nav: {
         fleet: string;
         back: string;
         backToFleet: string;
         backToTeam: string;
         breadcrumb: string;
-        fleetMeta: string;
         nextHint: string;
         escHint: string;
-      };
-      spot: {
-        label: string;
-        verdict: string;
-        agents: string;
-        needsYouOne: string;
-        needsYouMany: string;
-        allClear: string;
-        ofAgents: string;
-        working: string;
-        queued: string;
-        resting: string;
-        needsYou: string;
-        ranked: string;
-        queueMore: string;
-        next: string;
-        emptyFleet: string;
-        emptyTeam: string;
-        team: string;
-        inView: string;
-        inViewOne: string;
-        needsYouHere: string;
-        needCount: string;
-        needCountOne: string;
-        allClearTeam: string;
-        runsToday: string;
-        success: string;
-        costToday: string;
-        stylised: string;
-        health: string;
-        progress: string;
-        successShort: string;
-        runningFor: string;
-        toolCalls: string;
-        reviews: string;
-        unread: string;
-        last12: string;
-        newestFirst: string;
-        last12Aria: string;
-        runs24h: string;
-        runsCount: string;
-        runsCountOne: string;
       };
       bay: {
         agentsCount: string;
         agentsCountOne: string;
-        running: string;
+        needCount: string;
+        needCountOne: string;
         aria: string;
       };
       tile: {
@@ -2577,10 +2551,26 @@
         unread: string;
         needsYou: string;
       };
+      card: {
+        reviews: string;
+        reviewsOne: string;
+        unread: string;
+        unreadOne: string;
+      };
       team: {
         title: string;
         titleOne: string;
         runsToday: string;
+      };
+      stats: {
+        runsToday: string;
+        success: string;
+        costToday: string;
+        progress: string;
+        runningFor: string;
+        last12: string;
+        last12Aria: string;
+        runs24h: string;
       };
       agent: {
         emblemCaption: string;
@@ -2625,15 +2615,12 @@
         };
       };
       band: {
-        pace: string;
-        planNote: string;
         used: string;
         hot: string;
         onPace: string;
         headroom: string;
         elapsed: string;
         system: string;
-        systemNote: string;
         procRunning: string;
         procDone: string;
         procQueued: string;
@@ -2643,9 +2630,6 @@
     };
     city: {
       label: string;
-      needsYouOne: string;
-      needsYouMany: string;
-      summary: string;
       states: {
         running: string;
         failed: string;
@@ -2668,12 +2652,10 @@
         infoMany: string;
       };
       moon: {
-        fiveHour: string;
-        sevenDay: string;
+        five: string;
+        seven: string;
         hot: string;
         onPace: string;
-        windowGone: string;
-        weekGone: string;
         resetsIn: string;
       };
       ago: {
@@ -2698,43 +2680,42 @@
       legendButton: string;
       legendTitle: string;
       legend: {
-        running: string;
-        idle: string;
-        queued: string;
+        working: string;
         failed: string;
         input: string;
         draft: string;
+        review: string;
+        queued: string;
+        idle: string;
         off: string;
-        reviews: string;
         unread: string;
       };
       legendNote: string;
-      vehicles: {
-        done: string;
-        waiting: string;
+      processes: {
+        label: string;
         running: string;
+        queued: string;
+        done: string;
       };
     };
     office: {
       label: string;
+      floorLabel: string;
+      zoneAria: string;
+      deskAria: string;
       back: string;
-      city: string;
+      floor: string;
       breadcrumb: string;
       escHint: string;
       teamsLabel: string;
       counts: string;
-      needOne: string;
-      needMany: string;
       runsToday: string;
       successRate: string;
       costToday: string;
-      needsYouHeading: string;
-      calm: string;
       latestHeading: string;
       quiet: string;
       noRun: string;
       cutawayNote: string;
-      roomHint: string;
       artNote: string;
       where: {
         work: string;
@@ -5560,6 +5541,17 @@ export const en: Translations = {
     },
     scaleLabel: 'Agents',
     loading: 'Loading the prototype',
+    rail: {
+      title: 'Needs you',
+      empty: 'Nobody is waiting on you.',
+      listLabel: 'Agents that need you, most urgent first',
+    },
+    attention: {
+      needs: 'need you',
+      working: 'working',
+      resting: 'resting',
+      off: 'off',
+    },
     board: {
       label: 'Board: agents grouped by team',
       states: {
@@ -5647,63 +5639,26 @@ export const en: Translations = {
         hoursAgo: '{n}h ago',
         daysAgo: '{n}d ago',
       },
+      top: {
+        needsOne: 'needs you',
+        needsMany: 'need you',
+        allClear: 'all clear',
+      },
       nav: {
         fleet: 'Fleet',
         back: 'Back',
         backToFleet: 'Back to fleet',
         backToTeam: 'Back to {team}',
         breadcrumb: 'Breadcrumb',
-        fleetMeta: '{agents} agents in {teams} teams',
         nextHint: 'next agent that needs you',
         escHint: 'back',
-      },
-      spot: {
-        label: 'Focus stage',
-        verdict: 'Fleet verdict',
-        agents: '{n} agents',
-        needsYouOne: 'needs you',
-        needsYouMany: 'need you',
-        allClear: 'all clear',
-        ofAgents: 'of {n} agents',
-        working: 'working',
-        queued: 'queued',
-        resting: 'resting',
-        needsYou: 'Needs you',
-        ranked: 'ranked',
-        queueMore: '{n} total, scroll or',
-        next: 'next',
-        emptyFleet: 'Nobody needs you right now. The fleet is running itself.',
-        emptyTeam: 'Nobody in {team} needs you. {n} working.',
-        team: 'Team',
-        inView: '{n} agents in view',
-        inViewOne: '{n} agent in view',
-        needsYouHere: 'Needs you here',
-        needCount: '{n} need you',
-        needCountOne: '{n} needs you',
-        allClearTeam: 'All clear',
-        runsToday: 'Runs today',
-        success: 'Success',
-        costToday: 'Cost today',
-        stylised: 'Stylised illustration',
-        health: 'Health: {health}',
-        progress: 'progress',
-        successShort: 'success',
-        runningFor: 'Running for',
-        toolCalls: 'Tool calls',
-        reviews: 'Reviews',
-        unread: 'Unread',
-        last12: 'Last 12 runs',
-        newestFirst: 'newest first',
-        last12Aria: 'Last 12 runs, newest first: {n} failed',
-        runs24h: 'Runs, last 24h',
-        runsCount: '{n} runs',
-        runsCountOne: '{n} run',
       },
       bay: {
         agentsCount: '{n} agents',
         agentsCountOne: '{n} agent',
-        running: '{n} running',
-        aria: '{team} team: {agents}, {running} running, {need}. Open team',
+        needCount: '{n} need you',
+        needCountOne: '{n} needs you',
+        aria: '{team} team: {agents}, {running} working, {need}. Open team',
       },
       tile: {
         reviews: '{n} pending reviews ({severity})',
@@ -5711,10 +5666,26 @@ export const en: Translations = {
         unread: '{n} unread',
         needsYou: 'needs you',
       },
+      card: {
+        reviews: '{n} reviews, oldest {age}',
+        reviewsOne: '{n} review, {age} old',
+        unread: '{n} unread messages',
+        unreadOne: '{n} unread message',
+      },
       team: {
         title: '{team} team, {n} agents',
         titleOne: '{team} team, {n} agent',
         runsToday: 'runs today',
+      },
+      stats: {
+        runsToday: 'Runs today',
+        success: 'Success',
+        costToday: 'Cost today',
+        progress: 'progress',
+        runningFor: 'Running for',
+        last12: 'Last 12 runs',
+        last12Aria: 'Last 12 runs, newest first: {n} failed',
+        runs24h: 'Runs, last 24h',
       },
       agent: {
         emblemCaption: 'Persona emblem, stylised illustration',
@@ -5759,27 +5730,21 @@ export const en: Translations = {
         },
       },
       band: {
-        pace: 'Usage pace',
-        planNote: '{plan} plan, tick marks time elapsed',
         used: '{label} used',
         hot: 'running hot',
         onPace: 'on pace',
         headroom: 'headroom',
         elapsed: '{pct}% of window elapsed, resets in {time}',
         system: 'System',
-        systemNote: 'app-level work',
         procRunning: 'running {time}',
         procDone: 'done {ago}',
         procQueued: 'queued',
         live: 'Live',
-        liveNote: 'newest events',
+        liveNote: 'Newest events',
       },
     },
     city: {
       label: 'The city: one building per team, one window per agent',
-      needsYouOne: 'window needs you',
-      needsYouMany: 'windows need you',
-      summary: '{running} at work · {queued} waiting their turn · {idle} dark · {off} shuttered',
       states: {
         running: 'at work {pct}%',
         failed: 'failed',
@@ -5793,7 +5758,7 @@ export const en: Translations = {
       reasons: {
         failed: 'run failed',
         input: 'needs answer',
-        critical: 'critical',
+        critical: 'critical review',
         criticalMany: 'critical ×{n}',
         draft: 'draft ready',
         review: 'review',
@@ -5802,12 +5767,10 @@ export const en: Translations = {
         infoMany: 'info ×{n}',
       },
       moon: {
-        fiveHour: 'Moon · 5-hour window',
-        sevenDay: 'Halo · 7-day',
+        five: '5-hour {pct}%',
+        seven: '7-day {pct}%',
         hot: 'running hot',
         onPace: 'on pace',
-        windowGone: '{pct}% of window gone',
-        weekGone: '{pct}% of week gone',
         resetsIn: 'resets in {t}',
       },
       ago: {
@@ -5832,43 +5795,42 @@ export const en: Translations = {
       legendButton: 'Legend',
       legendTitle: 'How to read a window',
       legend: {
-        running: 'At work · light rises with progress',
-        idle: 'Idle · dark glass, curtains',
-        queued: 'Waiting its turn · dim lamp',
-        failed: 'Failed · red glass, beacon on the sill',
-        input: 'Waiting for your answer · lantern',
-        draft: 'Draft ready · paper in the window',
-        off: 'Switched off · shutters',
-        reviews: 'Reviews waiting · flag in top severity',
+        working: 'Working · lit, light rises with progress',
+        failed: 'Needs you · failed run, beacon on the roof',
+        input: 'Needs you · waiting for your answer',
+        draft: 'Needs you · draft ready to review',
+        review: 'Needs you · review waiting, flag in its severity',
+        queued: 'Resting · queued, a dim lamp',
+        idle: 'Resting · idle, curtains drawn',
+        off: 'Off · shutters down',
         unread: 'Unread messages · envelope',
       },
-      legendNote: 'Beams and sky lanterns mark every window that needs you. Wires are who talks to whom; moving lights are messages and handoffs.',
-      vehicles: {
-        done: 'parked · done {age}',
-        waiting: 'waiting at the stop',
-        running: 'running · {t}',
+      legendNote: 'Every window that needs you lights a beacon on its roof; the rail lists them, most urgent first. Wires are who talks to whom; moving lights are messages and handoffs.',
+      processes: {
+        label: 'System processes',
+        running: '{label} · running {t}',
+        queued: '{label} · queued',
+        done: '{label} · done {age}',
       },
     },
     office: {
       label: 'Office: one team, a room per agent',
+      floorLabel: 'The office floor: one department per team, one desk per agent',
+      zoneAria: '{team} department, {n} desks, {ny} need you. Open the team',
+      deskAria: '{callsign} {name}, {team}, {state}. Open the desk',
       back: 'Back',
-      city: 'City',
+      floor: 'Office floor',
       breadcrumb: 'Breadcrumb',
       escHint: 'Esc goes up one level',
       teamsLabel: 'Team',
       counts: '{n} agents · {run} at work',
-      needOne: '1 needs you',
-      needMany: '{n} need you',
       runsToday: 'runs today',
       successRate: 'success rate',
       costToday: 'cost today',
-      needsYouHeading: 'Needs you on these floors',
-      calm: 'Nobody here needs you. The floors are calm.',
       latestHeading: 'Latest on these floors',
       quiet: 'Quiet tonight.',
       noRun: 'No run in progress',
       cutawayNote: 'Stylised cutaway illustration',
-      roomHint: 'Enter or click to open the room',
       artNote: 'Stylised illustration · {callsign} at {where}',
       where: {
         work: 'work',

@@ -65,7 +65,7 @@ export default function RunCard({ agent: a, simMs, events, copy, live, onAct }: 
   const frac = run ? a.progress ?? 0 : a.successRate;
   const runFor = simMs - (a.startSim ?? 0);
   const facts: [string, string | number][] = run
-    ? [[copy.spot.runningFor, formatRunFor(runFor)], [copy.agent.liveToolCalls, a.liveToolCalls],
+    ? [[copy.stats.runningFor, formatRunFor(runFor)], [copy.agent.liveToolCalls, a.liveToolCalls],
       [copy.agent.started, `${hm(FLEET.nowMs + simMs - runFor)} UTC`], [copy.agent.health, copy.health[a.health]]]
     : [[copy.agent.state, stateText(a, copy)], [copy.agent.health, copy.health[a.health]],
       [copy.agent.runsToday, a.runsToday], [copy.agent.lastResult, copy.agent.results[a.recentStatuses[0]]]];
@@ -81,7 +81,7 @@ export default function RunCard({ agent: a, simMs, events, copy, live, onAct }: 
       </Overline>
       <p className="mt-1.5 line-clamp-2 text-[clamp(1.125rem,4.4cqh,1.5rem)] font-semibold leading-tight tracking-tight text-foreground">{taskText(a, copy, copy.tasks.resting)}</p>
       <div className="mt-3 grid grid-cols-[auto_1fr] items-center gap-5">
-        <Ring frac={frac} size={150} stroke={run ? 12 : 6} running={run} label={run ? copy.spot.progress : copy.agent.successRate} valueClass="text-[clamp(1.5rem,6cqh,2.25rem)]" className="size-[clamp(88px,24cqh,150px)]" />
+        <Ring frac={frac} size={150} stroke={run ? 12 : 6} running={run} label={run ? copy.stats.progress : copy.agent.successRate} valueClass="text-[clamp(1.5rem,6cqh,2.25rem)]" className="size-[clamp(88px,24cqh,150px)]" />
         <dl className="grid grid-cols-2 gap-x-5 gap-y-2">
           {facts.map(([k, v]) => (
             <div key={k}>
@@ -110,9 +110,9 @@ export default function RunCard({ agent: a, simMs, events, copy, live, onAct }: 
         {a.state === "draft_ready" && <span className={`text-base ${b["ink-draft_ready"]}`}>{copy.agent.draftNote}</span>}
       </div>
       <div className="mt-auto grid grid-cols-[auto_1fr] gap-6 pt-2">
-        <div><Overline>{copy.spot.last12}</Overline><Beads agent={a} copy={copy} /></div>
+        <div><Overline>{copy.stats.last12}</Overline><Beads agent={a} copy={copy} /></div>
         <div>
-          <Overline className="justify-between"><span>{copy.spot.runs24h}</span><span className="tracking-normal">{a.spark24h.reduce((x, v) => x + v, 0)}</span></Overline>
+          <Overline className="justify-between"><span>{copy.stats.runs24h}</span><span className="tracking-normal">{a.spark24h.reduce((x, v) => x + v, 0)}</span></Overline>
           <Bars agent={a} height={34} />
         </div>
       </div>

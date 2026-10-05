@@ -3,159 +3,149 @@
 import { useEffect, useMemo, useRef, useState } from "react";
 import { useTranslation } from "@/i18n/useTranslation";
 import { useStillMotion } from "@/hooks/useStillMotion";
+import FleetFrame from "../FleetFrame";
+import NeedsYouRail from "../NeedsYouRail";
 import { FLEET, type FleetScale } from "../fleet-data";
 import AgentRoom from "./AgentRoom";
+import type { Att } from "./Building";
 import Cutaway from "./Cutaway";
+import FloorView from "./FloorView";
 import { clearPendingAgent, peekPendingAgent } from "./nightStore";
-import OfficeInfo from "./OfficeInfo";
-import { hueText, textTone } from "./palette";
+import { railItems } from "./rail";
+import { AttentionSummary, BottomStrip, Chip } from "./Strips";
+import { TeamFooter, TeamTop } from "./TeamParts";
 import { ranked, useNightSim } from "./useNightSim";
 import s from "./night.module.css";
 import o from "./office.module.css";
 
 interface OfficeSceneProps {
   scale: FleetScale;
-  teamId: string;
-  onTeamChange: (teamId: string) => void;
-  onBack: () => void;
+  /** null: the whole office floor (L0); a team: its building opened up (L1). */
+  teamId: string | null;
+  onTeamChange: (teamId: string | null) => void;
 }
 
 /**
- * Variant 2, "Night Shift": one team's building opened up. The roof stays on
- * top and every floor becomes rooms, a persona at each desk acting out its
- * state; open a room and the agent's own scene grows out of it. Escape steps
- * back one level: agent to office, office to the city.
+ * Variant 2, "Night Shift", inside. L0 is the whole fleet as one open-plan
+ * floor; L1 is one department's building cut away into rooms; L2 is one
+ * agent's room over the whole frame. Escape steps back one level, to wherever
+ * the agent was opened from.
  */
-export default function OfficeScene({ scale, teamId, onTeamChange, onBack }: OfficeSceneProps) {
+export default function OfficeScene({ scale, teamId, onTeamChange }: OfficeSceneProps) {
   const { t } = useTranslation();
   const city = t.fleetPlayground.city;
   const copy = t.fleetPlayground.office;
   const still = useStillMotion();
   const sim = useNightSim(scale);
 
-  // The window clicked in the city opens straight into its room.
+  // A window clicked in the city opens straight into its room (from L1).
   const [agentId, setAgentId] = useState<string | null>(() => peekPendingAgent());
   useEffect(() => clearPendingAgent(), []);
-  const [origin, setOrigin] = useState({ x: "60%", y: "50%" });
-  const [attend, setAttend] = useState<string | null>(null);
+  const [origin, setOrigin] = useState({ x: "50%", y: "50%" });
+  const [hover, setHover] = useState<Att>(null);
+  const [focus, setFocus] = useState<Att>(null);
   const rootRef = useRef<HTMLDivElement>(null);
   const returnTo = useRef<string | null>(null);
 
-  // Only teams with agents at this scale have a building; fall back to the first.
   const present = useMemo(() => FLEET.teams.filter((tm) => sim.scoped.some((a) => a.team === tm.id)), [sim.scoped]);
-  const team = present.find((tm) => tm.id === teamId) ?? present[0];
-  const members = sim.scoped.filter((a) => a.team === team.id);
+  const team = teamId ? present.find((tm) => tm.id === teamId) ?? present[0] : null;
+  const members = team ? sim.scoped.filter((a) => a.team === team.id) : sim.scoped;
   const agent = agentId ? sim.scoped.find((a) => a.id === agentId) ?? null : null;
-  const agentTeam = agent ? FLEET.teams.find((tm) => tm.id === agent.team) ?? team : team;
+  const queue = useMemo(() => ranked(members), [members]);
+  const items = useMemo(() => railItems(city, queue, sim.simMs), [city, queue, sim.simMs]);
+  const att = hover ?? focus;
 
-  const openAgent = (id: string, el?: HTMLElement) => {
-    const a = sim.byId.get(id);
+  const openAgent = (id: string, el?: Element | null) => {
     const root = rootRef.current;
-    if (!a) return;
-    if (a.team !== team.id) onTeamChange(a.team);
     if (el && root) {
       const r = el.getBoundingClientRect();
       const R = root.getBoundingClientRect();
       setOrigin({ x: `${r.left + r.width / 2 - R.left}px`, y: `${r.top + r.height / 2 - R.top}px` });
     }
     returnTo.current = id;
-    setAttend(null);
+    setHover(null);
+    setFocus(null);
     setAgentId(id);
   };
-  const closeAgent = () => setAgentId(null);
+  const toFloor = () => { setAgentId(null); onTeamChange(null); };
+  const toTeam = (id: string) => { setAgentId(null); onTeamChange(id); };
+  const fieldEl = (id: string) => document.getElementById(team ? `ns-room-${id}` : `ns-desk-${id}`);
 
-  // Hand focus back to the room the agent was opened from.
+  // Hand focus back to the room or desk the agent was opened from.
   useEffect(() => {
     if (agent || !returnTo.current) return;
-    document.getElementById(`ns-room-${returnTo.current}`)?.focus({ preventScroll: true });
+    fieldEl(returnTo.current)?.focus({ preventScroll: true });
     returnTo.current = null;
-  }, [agent]);
+  });
 
   useEffect(() => {
     const onKey = (e: KeyboardEvent) => {
       const tag = (e.target as HTMLElement | null)?.tagName;
       if (e.ctrlKey || e.metaKey || e.altKey || tag === "INPUT" || tag === "TEXTAREA") return;
       if (e.key === "Escape") {
+        if (agentId) { e.preventDefault(); setAgentId(null); }
+        else if (teamId) { e.preventDefault(); onTeamChange(null); }
+      } else if ((e.key === "n" || e.key === "N") && queue.length) {
         e.preventDefault();
-        if (agentId) setAgentId(null);
-        else onBack();
-      } else if (e.key === "n" || e.key === "N") {
-        const queue = ranked(sim.scoped);
-        if (!queue.length) return;
-        e.preventDefault();
-        const next = queue[(queue.findIndex((a) => a.id === agentId) + 1) % queue.length];
-        if (next.team !== team.id) onTeamChange(next.team);
-        setAgentId(next.id);
+        setAgentId(queue[(queue.findIndex((a) => a.id === agentId) + 1) % queue.length].id);
       }
     };
     window.addEventListener("keydown", onKey);
     return () => window.removeEventListener("keydown", onKey);
-  }, [agentId, sim.scoped, team.id, onBack, onTeamChange]);
+  }, [agentId, teamId, queue, onTeamChange]);
+
+  const runs = sim.scoped.reduce((n, a) => n + a.runsToday, 0);
+  const cost = sim.scoped.reduce((n, a) => n + a.costTodayUsd, 0);
+  const success = sim.scoped.reduce((n, a) => n + a.successRate, 0) / Math.max(1, sim.scoped.length);
+
+  const top = team ? (
+    <TeamTop copy={copy} team={team} teams={present} scoped={sim.scoped} onFloor={toFloor} onTeam={toTeam} />
+  ) : (
+    <>
+      <AttentionSummary agents={sim.scoped} />
+      <div className="ml-auto flex items-center gap-1.5">
+        <Chip><b className="text-foreground">{runs}</b> {copy.runsToday}</Chip>
+        <Chip><b className="text-foreground">{Math.round(success * 100)}%</b> {copy.successRate}</Chip>
+        <Chip><b className="text-foreground">${cost.toFixed(2)}</b> {copy.costToday}</Chip>
+      </div>
+    </>
+  );
+
+  const main = team ? (
+    <div className={`${s.sky} absolute inset-0 overflow-hidden px-4 pb-2 pt-3`} style={{ ["--team" as string]: `hsl(${team.hue} 50% 50%)` }}>
+      <div className={o.bg} />
+      <div className={`relative h-full ${still ? "" : o.enter}`}>
+        <Cutaway key={`${team.id}-${scale}`} team={team} members={members} city={city} copy={copy} still={still} onOpen={openAgent} onAttend={(id) => setHover(id ? { kind: "agent", id } : null)} />
+      </div>
+    </div>
+  ) : (
+    <FloorView scoped={sim.scoped} city={city} copy={copy} still={still} att={att} simMs={sim.simMs} setHover={setHover} setFocus={setFocus} openAgent={openAgent} openTeam={toTeam} />
+  );
 
   return (
-    <div
-      ref={rootRef}
-      role="group"
-      aria-label={copy.label}
-      className={`${s.theme} ${still ? s.still : ""} h-full w-full overflow-hidden`}
-      style={{ ["--team" as string]: `hsl(${team.hue} 50% 50%)` }}
-    >
-      <div className={o.bg} />
-      {/* Normal flow, top to bottom: navigation, the team switcher (one row,
-          scrolls sideways when the teams outgrow it), then the floors. */}
-      <div inert={!!agent} className={`absolute inset-0 flex flex-col gap-3 px-6 pb-3 pt-3 ${still ? "" : o.enter}`}>
-        <header className="flex flex-none items-center gap-3 text-base">
-          <button type="button" onClick={onBack} className="flex-none rounded-lg border border-brand-cyan/50 px-3 py-1 text-foreground transition-colors hover:bg-brand-cyan/10 focus-visible:outline-2 focus-visible:outline-brand-cyan" style={{ background: "var(--ns-panel)" }}>
-            ← {copy.back}
-          </button>
-          <nav aria-label={copy.breadcrumb} className="flex min-w-0 items-center gap-2">
-            <button type="button" onClick={onBack} className="text-muted-dark hover:text-foreground hover:underline">{copy.city}</button>
-            <span className="text-muted-dark">›</span>
-            <span aria-current="page" className="truncate font-semibold text-foreground">{team.name}</span>
-          </nav>
-          <span className="ml-auto flex-none text-[13px] text-muted-dark">{copy.escHint}</span>
-        </header>
-        <div role="group" aria-label={copy.teamsLabel} className={`${o.switcher} flex flex-none gap-1.5 overflow-x-auto pb-1`}>
-          {present.map((tm) => {
-            const ny = ranked(sim.scoped.filter((a) => a.team === tm.id)).length;
-            return (
-              <button
-                key={tm.id}
-                type="button"
-                aria-pressed={tm.id === team.id}
-                onClick={() => { setAgentId(null); onTeamChange(tm.id); }}
-                className={`flex flex-none items-center gap-1.5 whitespace-nowrap rounded-full border px-2.5 py-0.5 text-[13px] transition-colors focus-visible:outline-2 focus-visible:outline-brand-cyan ${tm.id === team.id ? "border-glass-strong text-foreground" : "border-glass text-muted-dark hover:text-foreground"}`}
-                style={tm.id === team.id ? { background: `color-mix(in oklab, ${hueText(tm.hue)} 16%, transparent)` } : undefined}
-              >
-                <i className="h-2 w-2 rounded-full" style={{ background: hueText(tm.hue) }} />
-                {tm.name}
-                {ny > 0 && <span className="font-semibold" style={{ color: textTone("var(--status-warning)") }}>{ny}</span>}
-              </button>
-            );
-          })}
-        </div>
-
-        <div className="grid min-h-0 flex-1 grid-cols-[minmax(260px,28%)_1fr] gap-6">
-          <OfficeInfo
-            team={team}
-            members={members}
-            events={sim.scopedEvents}
-            byId={sim.byId}
-            focus={attend ? members.find((a) => a.id === attend) ?? null : null}
-            simMs={sim.simMs}
-            city={city}
-            copy={copy}
-            onOpen={(id) => openAgent(id, document.getElementById(`ns-room-${id}`) ?? undefined)}
-          />
-          <Cutaway key={`${team.id}-${scale}`} team={team} members={members} city={city} copy={copy} still={still} onOpen={openAgent} onAttend={setAttend} />
-        </div>
+    <div ref={rootRef} className={`${s.theme} ${still ? s.still : ""} relative h-full`}>
+      <div inert={!!agent} className="h-full">
+        <FleetFrame
+          label={team ? copy.label : copy.floorLabel}
+          top={top}
+          main={main}
+          rail={
+            <NeedsYouRail
+              items={items}
+              activeId={att?.kind === "agent" ? att.id : null}
+              onHover={(id) => setHover(id ? { kind: "agent", id } : null)}
+              onSelect={(id) => openAgent(id, fieldEl(id))}
+              footer={team ? <TeamFooter copy={copy} members={members} events={sim.scopedEvents} byId={sim.byId} /> : undefined}
+            />
+          }
+          bottom={<BottomStrip copy={city} events={sim.scopedEvents} byId={sim.byId} procs={sim.procs} simMs={sim.simMs} />}
+        />
       </div>
-
       {agent && (
         <AgentRoom
           key={agent.id}
           a={agent}
-          team={agentTeam}
+          team={FLEET.teams.find((tm) => tm.id === agent.team) ?? present[0]}
           events={sim.scopedEvents}
           byId={sim.byId}
           simMs={sim.simMs}
@@ -163,8 +153,9 @@ export default function OfficeScene({ scale, teamId, onTeamChange, onBack }: Off
           city={city}
           copy={copy}
           still={still}
-          onBack={closeAgent}
-          onCity={onBack}
+          onBack={() => setAgentId(null)}
+          onFloor={toFloor}
+          onTeam={() => toTeam(agent.team)}
         />
       )}
     </div>

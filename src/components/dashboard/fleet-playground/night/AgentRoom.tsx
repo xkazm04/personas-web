@@ -21,18 +21,20 @@ interface AgentRoomProps {
   city: CityCopy;
   copy: OfficeCopy;
   still: boolean;
+  /** One level up: the team, or the floor if the desk was opened from there. */
   onBack: () => void;
-  onCity: () => void;
+  onFloor: () => void;
+  onTeam: () => void;
 }
 
 const HEALTH_COLOR = { healthy: "var(--brand-cyan)", degraded: "var(--status-warning)", critical: "var(--status-error)" } as const;
 
 /**
- * One agent's room filling the frame: the persona at its desk under its own
+ * One agent's room over the whole frame: the persona at its desk under its own
  * window on the night, and beside it the run, the decisions waiting on you,
  * the day's numbers and the inbox. Grows out of the room you opened.
  */
-export default function AgentRoom({ a, team, events, byId, simMs, origin, city, copy, still, onBack, onCity }: AgentRoomProps) {
+export default function AgentRoom({ a, team, events, byId, simMs, origin, city, copy, still, onBack, onFloor, onTeam }: AgentRoomProps) {
   const titleRef = useRef<HTMLDivElement>(null);
   useEffect(() => titleRef.current?.focus({ preventScroll: true }), [a.id]);
 
@@ -54,9 +56,9 @@ export default function AgentRoom({ a, team, events, byId, simMs, origin, city, 
         <button type="button" onClick={onBack} className="rounded-lg border border-brand-cyan/50 px-3 py-1 text-foreground transition-colors hover:bg-brand-cyan/10 focus-visible:outline-2 focus-visible:outline-brand-cyan" style={{ background: "var(--ns-panel)" }}>
           ← {copy.back}
         </button>
-        <button type="button" onClick={onCity} className="text-muted-dark hover:text-foreground hover:underline">{copy.city}</button>
+        <button type="button" onClick={onFloor} className="text-muted-dark hover:text-foreground hover:underline">{copy.floor}</button>
         <span className="text-muted-dark">›</span>
-        <button type="button" onClick={onBack} className="text-muted-dark hover:text-foreground hover:underline">{team.name}</button>
+        <button type="button" onClick={onTeam} className="text-muted-dark hover:text-foreground hover:underline">{team.name}</button>
         <span className="text-muted-dark">›</span>
         <span aria-current="page" className="font-semibold text-foreground">{a.callsign} {a.name}</span>
         <span className="ml-2 text-[13px] text-muted-dark">{copy.escHint}</span>
