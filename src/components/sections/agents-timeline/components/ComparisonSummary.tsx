@@ -3,6 +3,7 @@
 import { AnimatePresence, motion } from "framer-motion";
 import { Check, X, Zap } from "lucide-react";
 import type { Scenario } from "../types";
+import { speedupPercent } from "../data";
 
 export default function ComparisonSummary({
   scenario,
@@ -11,6 +12,9 @@ export default function ComparisonSummary({
   scenario: Scenario;
   showResults: boolean;
 }) {
+  // Only a race both tracks finished can claim a speed-up; against a workflow
+  // that ended stuck the grid above (FAILED vs RESOLVED) is the whole story.
+  const speedup = speedupPercent(scenario);
   return (
     <AnimatePresence>
       {showResults && (
@@ -59,23 +63,20 @@ export default function ComparisonSummary({
             </div>
           </div>
 
+          {speedup !== null && (
           <div className="mt-4 pt-3 border-t border-glass">
             <div className="flex items-center justify-center gap-2">
               <Zap className="h-3.5 w-3.5 text-brand-cyan" />
               <span className="text-base font-mono text-brand-cyan/70">
                 Agent resolved{" "}
                 <span className="text-brand-cyan font-bold">
-                  {(
-                    ((scenario.workflow.totalMs - scenario.agent.totalMs) /
-                      scenario.workflow.totalMs) *
-                    100
-                  ).toFixed(0)}
-                  %
+                  {speedup}%
                 </span>{" "}
                 faster
               </span>
             </div>
           </div>
+          )}
         </motion.div>
       )}
     </AnimatePresence>

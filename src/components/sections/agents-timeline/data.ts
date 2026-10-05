@@ -13,7 +13,36 @@ export const getScenarioRevealMs = (scenario: Scenario): number =>
 export const getScenarioCycleMs = (scenario: Scenario): number =>
   getScenarioRevealMs(scenario) + RESULT_HOLD_MS;
 
-export const scenarios: Scenario[] = [
+type Track = Scenario["workflow"];
+type ScenarioSource = Omit<Scenario, "workflow" | "agent"> & {
+  workflow: Omit<Track, "totalMs">;
+  agent: Omit<Track, "totalMs">;
+};
+
+// A track's total is what its timer counts, so it is summed from the steps
+// rather than typed beside them. Result lines name no durations of their own:
+// the timer above them is the only clock the race shows.
+const withTotal = (track: Omit<Track, "totalMs">): Track => ({
+  ...track,
+  totalMs: track.steps.reduce((ms, step) => ms + step.durationMs, 0),
+});
+
+/** A track resolved when its last step did not end in an error. */
+export const trackResolved = (track: Pick<Track, "steps">): boolean =>
+  track.steps.at(-1)?.status !== "error";
+
+/**
+ * How much faster the agent finished, as a whole percent of the workflow's
+ * time, or `null` when the workflow never resolved: a workflow that ends stuck
+ * has no finishing time to beat, so no speed-up can be measured against it.
+ */
+export const speedupPercent = (scenario: Scenario): number | null => {
+  const { workflow, agent } = scenario;
+  if (!trackResolved(workflow) || !trackResolved(agent) || workflow.totalMs <= 0) return null;
+  return Math.round(((workflow.totalMs - agent.totalMs) / workflow.totalMs) * 100);
+};
+
+const SCENARIO_SOURCES: ScenarioSource[] = [
   {
     id: "ambiguous-email",
     name: "Ambiguous Email",
@@ -26,8 +55,7 @@ export const scenarios: Scenario[] = [
         { label: "No rule for this situation", durationMs: 600, status: "error" },
         { label: "STUCK", durationMs: 0, status: "error" },
       ],
-      totalMs: 3000,
-      result: "Stuck. No one helps the customer for hours.",
+      result: "Stuck. Handed to a person; the customer waits 47 minutes.",
     },
     agent: {
       steps: [
@@ -36,8 +64,7 @@ export const scenarios: Scenario[] = [
         { label: "Update the address", durationMs: 400, status: "ok" },
         { label: "Send confirmation", durationMs: 300, status: "ok" },
       ],
-      totalMs: 1800,
-      result: "Resolved in 4 seconds. Customer delighted.",
+      result: "Address updated. Customer delighted.",
     },
   },
   {
@@ -52,7 +79,6 @@ export const scenarios: Scenario[] = [
         { label: "Can't handle split refunds", durationMs: 500, status: "error" },
         { label: "System gives up", durationMs: 0, status: "error" },
       ],
-      totalMs: 2600,
       result: "Handed off to finance team. Customer waits 3 days.",
     },
     agent: {
@@ -62,7 +88,6 @@ export const scenarios: Scenario[] = [
         { label: "Refund to credit card", durationMs: 500, status: "ok" },
         { label: "Notify customer", durationMs: 300, status: "ok" },
       ],
-      totalMs: 1700,
       result: "Both refunds processed instantly.",
     },
   },
@@ -78,7 +103,6 @@ export const scenarios: Scenario[] = [
         { label: "12 services need manual changes", durationMs: 800, status: "error" },
         { label: "Too many paths to handle", durationMs: 0, status: "error" },
       ],
-      totalMs: 3000,
       result: "Half-finished. 6 out of 12 services broken.",
     },
     agent: {
@@ -88,8 +112,7 @@ export const scenarios: Scenario[] = [
         { label: "Deploy and verify each one", durationMs: 500, status: "ok" },
         { label: "Confirm everything works", durationMs: 300, status: "ok" },
       ],
-      totalMs: 1900,
-      result: "Full staging environment in 90 seconds.",
+      result: "Full staging environment, all 12 services verified.",
     },
   },
   {
@@ -104,7 +127,6 @@ export const scenarios: Scenario[] = [
         { label: "Three retries all fail", durationMs: 700, status: "error" },
         { label: "Everything gets undone", durationMs: 0, status: "error" },
       ],
-      totalMs: 2800,
       result: "147 good transactions undone because of 1 failure.",
     },
     agent: {
@@ -114,7 +136,6 @@ export const scenarios: Scenario[] = [
         { label: "Server recovers", durationMs: 400, status: "ok" },
         { label: "Finish the rest", durationMs: 500, status: "ok" },
       ],
-      totalMs: 2000,
       result: "All 200 transactions processed. Zero data loss.",
     },
   },
@@ -130,7 +151,6 @@ export const scenarios: Scenario[] = [
         { label: "System can't combine discounts", durationMs: 500, status: "error" },
         { label: "No rule for this situation", durationMs: 0, status: "error" },
       ],
-      totalMs: 2300,
       result: "Request denied. Frustrated customer asks for a manager.",
     },
     agent: {
@@ -140,8 +160,13 @@ export const scenarios: Scenario[] = [
         { label: "Compose personal response", durationMs: 400, status: "ok" },
         { label: "Offer loyalty bonus", durationMs: 300, status: "ok" },
       ],
-      totalMs: 1600,
       result: "Customer keeps better rate + gets loyalty perk.",
     },
   },
 ];
+
+export const scenarios: Scenario[] = SCENARIO_SOURCES.map((s) => ({
+  ...s,
+  workflow: withTotal(s.workflow),
+  agent: withTotal(s.agent),
+}));
