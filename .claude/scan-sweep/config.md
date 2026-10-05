@@ -72,3 +72,9 @@ Repo law a builder will trip - `.claude/CLAUDE.md` binds in full; read `.claude/
   out twice while four builders loaded the machine; give tree-wide sweep tests an explicit budget.
 - 2026-09-23: the ~800-changed-line card ceiling was read inconsistently - 4 of 12 builders reported
   1160-1660 lines counting tests + 14 locale files. State whether tests and locale files count.
+- 2026-10-05 (ideas-only, ad-hoc `moonshot-architect` lens, 8 parallel scouts x 57 contexts): the
+  scouts converged without seeing each other - the same "seeded world engine" came back from four
+  groups and nine more pairs were near-duplicates. A whole-map ideas run needs a coordinator
+  synthesis pass (themes + merge candidates) or the deck asks the owner the same question 4 times.
+  Grounding against `../personas` (desktop) produced the run's sharpest defects (dead deep link,
+  404'd gallery contract, false zero-telemetry claim); give scouts the sibling path up front.
