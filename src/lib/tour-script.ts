@@ -174,7 +174,7 @@ export const HOME_TOUR_STEPS: TourStep[] = [
     audioSrc: "/tour/step3.mp3",
     actions: [
       { atMs: 2500, run: () => clickTarget('[data-trigger-id="schedule"]') },
-      { atMs: 5000, run: () => clickTarget('[data-trigger-id="event"]') },
+      { atMs: 5000, run: () => clickTarget('[data-trigger-id="event_listener"]') },
       { atMs: 7500, run: () => clickTarget('[data-trigger-id="polling"]') },
       { atMs: 10000, run: () => clickTarget('[data-trigger-id="webhook"]') },
     ],

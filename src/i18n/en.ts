@@ -1965,7 +1965,7 @@
         description: string;
         persona: string;
       };
-      file: {
+      file_watcher: {
         label: string;
         description: string;
         persona: string;
@@ -1976,13 +1976,13 @@
         example: string;
         persona: string;
       };
-      focus: {
+      app_focus: {
         label: string;
         description: string;
         example: string;
         persona: string;
       };
-      event: {
+      event_listener: {
         label: string;
         description: string;
         persona: string;
@@ -5138,7 +5138,7 @@ export const en: Translations = {
         description: 'Exposes a public URL; fires the moment an external service sends it a payload.',
         persona: 'PR Reviewer',
       },
-      file: {
+      file_watcher: {
         label: 'File watcher',
         description: 'Watches a folder path and fires whenever files are created, modified, or removed.',
         persona: 'Doc Parser',
@@ -5149,13 +5149,13 @@ export const en: Translations = {
         example: 'On copy of URL',
         persona: 'Link Archiver',
       },
-      focus: {
+      app_focus: {
         label: 'App focus',
         description: 'Fires when you switch to a specific application window, so agents adapt to your current task.',
         example: 'Switch to Figma',
         persona: 'Design Notes',
       },
-      event: {
+      event_listener: {
         label: 'Event',
         description: 'Fires when another persona emits a named event on the internal event bus.',
         persona: 'Delivery Agent',

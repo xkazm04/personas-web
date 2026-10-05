@@ -19,15 +19,15 @@ One trigger is **active** at a time: its tile is lit from inside in its own colo
 
 **Art (`RingArt.tsx`, `AgentLens.tsx`).** `RingArt` is the SVG instrument: bezel, track, ten spokes, ambient drift, the comet and shockwave on the active spoke (`useId`-scoped gradients, `loopTransition(live, ...)` on every loop, `Spin` for rotations). Stopped, the comet rests just short of the lens with the shockwave mid-ring, so a still frame still tells the story. `AgentLens` is the portrait behind a glass lens that swells per beat, plus the woken agent's name (`copy.triggers[id].persona`). `shared/Spin.tsx` rotates SVG content about a point (framer pivots on the fill-box centre, so content is drawn around (0, 0) inside an invisible circle).
 
-**Tiles (`RingNodes.tsx`).** Ten real `<button>`s over the art, each `data-trigger-id`, `aria-pressed`, glass at rest and lit/scaled when active, with a pulse border on each beat (`timedLoop(live && on, ...)`). `data-trigger-id` is the guided tour's click target (the Athena tour clicks schedule, event, polling, webhook). Labels are `t.orchestrationSection.triggers[id].label`.
+**Tiles (`RingNodes.tsx`).** Ten real `<button>`s over the art, each `data-trigger-id`, `aria-pressed`, glass at rest and lit/scaled when active, with a pulse border on each beat (`timedLoop(live && on, ...)`). `data-trigger-id` is the guided tour's click target (the Athena tour clicks schedule, event_listener, polling, webhook). Labels are `t.orchestrationSection.triggers[id].label`.
 
-**Detail (`DetailPanel.tsx`, `shared/TriggerScene.tsx`, `shared/scenes-{a,b,c}.tsx`).** `AnimatePresence mode="wait"` cross-fades per trigger (`duration: 0` when still). `aria-live` is `polite` only while the hub is stopped, `off` during autoplay. `TriggerScene` renders the decorative 160x120 vignette from `SCENES` (`shared/scenes.ts`: one scene per `TriggerId`; scenes-a: schedule, polling, webhook; scenes-b: file, clipboard, focus, event; scenes-c: chain, composite, manual); each acts out its trigger once per beat while `run`, rests on the "it fired" pose otherwise. `shared/scene-kit.ts` holds the theme-token ink, `mix`, `polar`, `timedLoop`, `SceneProps`.
+**Detail (`DetailPanel.tsx`, `shared/TriggerScene.tsx`, `shared/scenes-{a,b,c}.tsx`).** `AnimatePresence mode="wait"` cross-fades per trigger (`duration: 0` when still). `aria-live` is `polite` only while the hub is stopped, `off` during autoplay. `TriggerScene` renders the decorative 160x120 vignette from `SCENES` (`shared/scenes.ts`: one scene per `TriggerId`; scenes-a: schedule, polling, webhook; scenes-b: file_watcher, clipboard, app_focus, event_listener; scenes-c: chain, composite, manual); each acts out its trigger once per beat while `run`, rests on the "it fired" pose otherwise. `shared/scene-kit.ts` holds the theme-token ink, `mix`, `polar`, `timedLoop`, `SceneProps`.
 
 **Controls (`shared/HubControls.tsx`).** The pill: icon-only Previous/Next (`aria-label` from `t.orchestrationHub.previousTrigger` / `nextTrigger`, chevrons mirrored under RTL), a Pause/Play toggle labelled `t.tour.pause` / `t.tour.play` (the label changes, so no `aria-pressed`), and a tabular `n / N` in its own element. The countdown ring is an SVG circle driven by the CSS keyframe `hub-countdown` over `AUTO_CYCLE_MS`, keyed on `active-playing` to restart, paused while `hub.held`, absent when stopped or still.
 
 **Stage fit.** `fit="fill"`; the ring box is `stage:w-[min(100%,100cqh)]` (square, as large as the slot allows) and the detail card is height-capped `stage:h-[min(calc(100%-4.5rem),80cqh)]`.
 
-**Trigger catalog (`data.ts`).** `TRIGGERS: TriggerDef[]` (ten entries: `id`, lucide `icon`, `brand` key, optional `exampleCode`, optional `doc`), `triggerWords(copy, trigger)` joins them with `t.orchestrationSection.triggers[id]`, and `AUTO_CYCLE_MS = 9600`.
+**Trigger catalog (`data.ts`).** `TRIGGERS: TriggerDef[]` (ten entries: `id` - the desktop's `TriggerKind` spelling, so `file_watcher`, `app_focus`, `event_listener` rather than short forms; it is also the `t.orchestrationSection.triggers` key - lucide `icon`, `brand` key, optional `exampleCode`, optional `doc`), `triggerWords(copy, trigger)` joins them with `t.orchestrationSection.triggers[id]`, and `AUTO_CYCLE_MS = 9600`.
 
 ## Key files
 
@@ -35,6 +35,7 @@ One trigger is **active** at a time: its tile is lit from inside in its own colo
 | --- | --- |
 | `src/components/sections/orchestration-hub/index.tsx` | Section shell: intro, ring group (`RingArt` + `AgentLens` + `RingNodes`), `DetailPanel`, `HubControls` |
 | `src/components/sections/orchestration-hub/playback.ts` | Pure playback reducer: user stop vs transient holds, banked remainder, `nextDeadline` |
+| `src/components/sections/orchestration-hub/data.test.ts` | Pins the ten trigger ids to a dated snapshot of the desktop's `TriggerKind` |
 | `src/components/sections/orchestration-hub/playback.test.ts` | Contract for the machine + tour-target guards (`data-trigger-id` in `RingNodes.tsx`) |
 | `src/components/sections/orchestration-hub/shared/useHubPlayback.ts` | Hook: machine + timer + loop-gate system hold + hold props |
 | `src/components/sections/orchestration-hub/shared/useDialSteps.ts` | Shortest-way cumulative dial steps |

@@ -16,6 +16,7 @@ import type { Translations } from "@/i18n/en";
 
 /**
  * Real trigger catalog — mirrors personas/src/features/triggers/sub_triggers/configs.
+ * Ids are the desktop's `TriggerKind` spelling (data.test.ts holds the snapshot).
  * Each trigger maps to a brand key (not hex) so it adapts to light themes.
  * Identity, icon and links live here; every label, description, sample
  * persona and natural-language firing condition is translated copy in
@@ -60,7 +61,7 @@ export const TRIGGERS: TriggerDef[] = [
     doc: { labelKey: "webhookGuide", href: "/guide/triggers/webhook-triggers" },
   },
   {
-    id: "file",
+    id: "file_watcher",
     icon: FolderOpen,
     brand: "amber",
     exampleCode: "~/inbox/*.pdf",
@@ -73,13 +74,13 @@ export const TRIGGERS: TriggerDef[] = [
     doc: { labelKey: "clipboardMonitor", href: "/guide/triggers/clipboard-monitor" },
   },
   {
-    id: "focus",
+    id: "app_focus",
     icon: Focus,
     brand: "purple",
     doc: { labelKey: "howTriggersWork", href: "/guide/triggers/how-triggers-work" },
   },
   {
-    id: "event",
+    id: "event_listener",
     icon: Radio,
     brand: "emerald",
     exampleCode: "digest.ready",
