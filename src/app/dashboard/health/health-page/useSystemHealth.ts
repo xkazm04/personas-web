@@ -1,13 +1,14 @@
 "use client";
 
-import useSWR from "swr";
-
+import { useDemoOnlySWR } from "@/hooks/useDemoOnlySWR";
 import { getSystemHealth } from "@/lib/mockApi";
 import type { HealthCheckSection } from "@/lib/mock-dashboard-data";
 
 /**
  * System-health snapshot for the System Health Panel. Demo-only — sourced from
- * the standalone mock fetcher, with SWR providing a brief loading state.
+ * the standalone mock fetcher, with SWR providing a brief loading state. Host
+ * checks have no synced source, so a real (non-demo) session fetches nothing
+ * and gets `liveUnavailable` (see useDemoOnlySWR).
  */
 export function useSystemHealth(): {
   sections: HealthCheckSection[];
@@ -15,17 +16,12 @@ export function useSystemHealth(): {
   isLoading: boolean;
   error: string | null;
   retry: () => void;
+  liveUnavailable: boolean;
 } {
-  const { data, isLoading, error, mutate } = useSWR("system-health", getSystemHealth, {
-    revalidateOnFocus: false,
-    revalidateOnReconnect: false,
-    dedupingInterval: 60_000,
-  });
+  const { data, ...rest } = useDemoOnlySWR("system-health", getSystemHealth);
   return {
     sections: data?.sections ?? [],
     diskUsage: data?.diskUsage ?? { usedGb: 0, totalGb: 0 },
-    isLoading,
-    error: error instanceof Error ? error.message : error ? String(error) : null,
-    retry: () => void mutate(),
+    ...rest,
   };
 }

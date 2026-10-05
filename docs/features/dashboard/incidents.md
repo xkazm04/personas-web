@@ -16,7 +16,7 @@ The page (`src/app/dashboard/incidents/page.tsx`) is a `"use client"` component 
 
 Key behaviors:
 - **Persisted filters** — `useIncidentsFilterStore` mirrors `dashboardFilterStore`: a manual `hydrate()`/`persist()` pair keyed `incidents-filter-state`, type-guarding every field on load and writing after each mutation. Hydration runs once after store creation (SSR-safe).
-- **Demo-only fetch** — `getAuditIncidents` is a *standalone* export in `mockApi.ts` (not part of the `ApiClient` interface, so no real/supabase client changes); the hook calls it directly via SWR for a brief loading state.
+- **Demo-only fetch** — `getAuditIncidents` is a *standalone* export in `mockApi.ts` (not part of the `ApiClient` interface, so no real/supabase client changes); the hook calls it through `useDemoOnlySWR` (`src/hooks/useDemoOnlySWR.ts`), SWR keyed on `isDemo`, for a brief loading state. In a real (non-demo) session nothing is fetched and the page renders an `EmptyState` (`t.dashboardUi.liveUnavailableTitle` / `liveUnavailableDescription`) instead of the KPI header, filters and list.
 - **Grouping** — `groupIncidents` buckets by agent (busiest first) / severity (worst first) / source (canonical order) / none (single group); each group keeps the severity-then-recency order. Sections collapse via a local `Set<string>` of collapsed keys.
 - **Nav badge** — `MOCK_OPEN_INCIDENTS` (open + escalated) drives the sidebar badge, matching the KPI headline.
 
@@ -26,7 +26,7 @@ Key behaviors:
 | `src/app/dashboard/incidents/page.tsx` | Page shell: load, filter memo, KPI/filters/group-by/list/modal layout |
 | `src/app/dashboard/incidents/incidents-page/incidentFormat.ts` | Severity/status/source tint + icon maps; `applyIncidentFilters` + `groupIncidents`; filter/group types |
 | `src/app/dashboard/incidents/incidents-page/useIncidentsFilterStore.ts` | Zustand store (status/severity/source/persona/groupBy) persisted to localStorage |
-| `src/app/dashboard/incidents/incidents-page/useAuditIncidents.ts` | SWR over the standalone `getAuditIncidents` mock fetcher |
+| `src/app/dashboard/incidents/incidents-page/useAuditIncidents.ts` | Demo-gated SWR (`useDemoOnlySWR`) over the standalone `getAuditIncidents` mock fetcher |
 | `src/app/dashboard/incidents/incidents-page/IncidentsKpiHeader.tsx` | Open/total headline + severity + source breakdown (from the full set) |
 | `src/app/dashboard/incidents/incidents-page/IncidentsFilters.tsx` | Status/severity/source/persona `FilterBar`s + clear button (reads the store) |
 | `src/app/dashboard/incidents/incidents-page/IncidentsGroupByTabs.tsx` | Group-by segmented control (roving tabindex, mirrors `EventsPageTabs`) |
@@ -47,7 +47,7 @@ Key behaviors:
 - **Format/util** — `relativeTime` from `src/lib/format.ts`.
 
 ## Conventions & gotchas
-- **Demo-only:** all incidents are mock fixtures; `getAuditIncidents` never touches the real orchestrator. The fetcher is deliberately standalone (off the `ApiClient` proxy) so the surface works in both demo and real mode without a real source.
+- **Demo-only:** all incidents are mock fixtures; `getAuditIncidents` never touches the real orchestrator. The fetcher is deliberately standalone (off the `ApiClient` proxy); incidents have no real source, so real mode shows the live-unavailable empty state rather than the fixture.
 - **i18n 14-locale lockstep:** new keys under `t.dashboard` / `t.incidentsPage` must be added to `en.ts` and hand-translated into all 13 locales in the same commit. Non-Latin values may be written as `\uXXXX` escapes to sidestep the locale files' mojibake-on-disk hazard. Incident titles, descriptions, categories, recommendations, and persona names are **verbatim demo data** (English) — not translated, consistent with other mock-sourced surfaces.
 - **Persisted filters:** `useIncidentsFilterStore` type-guards every persisted field on hydrate; a corrupt/stale payload falls back to defaults rather than landing an out-of-range filter.
 - **React 19 purity:** filtering/grouping run in `useMemo` (deterministic — no `Date.now`/`Math.random`); incident dates are stamped once at module load in the mock fixture. The collapsed-set uses a lazy `useState(() => new Set())` initializer.

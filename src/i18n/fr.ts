@@ -668,7 +668,9 @@ export const fr: LocaleTranslations = {
       noDataAvailable: "Aucune donn\u00e9e disponible pour l'instant",
       errors: "Erreurs",
       totalLower: "total",
-      copyPayload: "Copier la charge utile"
+      copyPayload: "Copier la charge utile",
+      liveUnavailableTitle: "Pas encore disponible pour les espaces de travail r\u00e9els",
+      liveUnavailableDescription: "Cette vue ne fonctionne qu'avec des donn\u00e9es de d\u00e9monstration. Votre espace de travail ne synchronise pas encore ces donn\u00e9es, elle reste donc vide plut\u00f4t que d'afficher des donn\u00e9es d'exemple."
     },
     memoriesPage: {
       title: "M\u00e9moires",

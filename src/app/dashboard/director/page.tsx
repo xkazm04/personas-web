@@ -2,10 +2,11 @@
 
 import { useState } from "react";
 import { motion } from "framer-motion";
-import { Clapperboard } from "lucide-react";
+import { Clapperboard, CloudOff } from "lucide-react";
 
 import GradientText from "@/components/GradientText";
 import DashboardErrorBanner from "@/components/dashboard/DashboardErrorBanner";
+import EmptyState from "@/components/dashboard/EmptyState";
 import SkeletonCard, { SkeletonChart } from "@/components/dashboard/SkeletonCard";
 import StalenessIndicator from "@/components/dashboard/StalenessIndicator";
 import { useTranslation } from "@/i18n/useTranslation";
@@ -26,12 +27,13 @@ import { useDirectorData } from "./useDirectorData";
  * score distribution, per-agent verdict history, and the recent coaching
  * feed. One roster facet is active at a time (momentum chip, score band, or
  * attention flag); re-clicking clears it. Demo-only — mirrors the desktop
- * overview's Director tab on mock data.
+ * overview's Director tab on mock data; a real (non-demo) session sees an
+ * empty state instead.
  */
 export default function DirectorPage() {
   const { t } = useTranslation();
   const lp = t.directorPage;
-  const { portfolio, verdicts, isLoading, error, retry } = useDirectorData();
+  const { portfolio, verdicts, isLoading, error, retry, liveUnavailable } = useDirectorData();
   const [facet, setFacet] = useState<RosterFacet | null>(null);
   // Snapshot the clock once per mount: attention flags and staleness are
   // stable for the life of the page (React 19 purity — no Date.now in render).
@@ -55,13 +57,21 @@ export default function DirectorPage() {
               {lp.periodLabel.replace("{n}", String(portfolio.periodDays))}
             </span>
           )}
-          <StalenessIndicator fetchedAt={now} />
+          {!liveUnavailable && <StalenessIndicator fetchedAt={now} />}
         </div>
       </motion.div>
 
       {error && !portfolio && <DashboardErrorBanner message={error} onRetry={retry} />}
 
-      {isLoading || !portfolio ? (
+      {liveUnavailable ? (
+        <motion.div variants={fadeUp}>
+          <EmptyState
+            icon={CloudOff}
+            title={t.dashboardUi.liveUnavailableTitle}
+            description={t.dashboardUi.liveUnavailableDescription}
+          />
+        </motion.div>
+      ) : isLoading || !portfolio ? (
         <div className="space-y-6" aria-busy="true">
           <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
             <SkeletonCard lines={2} />

@@ -2,7 +2,7 @@
 
 import { useMemo, useState } from "react";
 import { motion } from "framer-motion";
-import { SearchX, ShieldCheck, Siren } from "lucide-react";
+import { CloudOff, SearchX, ShieldCheck, Siren } from "lucide-react";
 
 import GradientText from "@/components/GradientText";
 import DashboardErrorBanner from "@/components/dashboard/DashboardErrorBanner";
@@ -24,12 +24,13 @@ import { useIncidentsFilterStore } from "@/stores/incidentsFilterStore";
  * Incidents Inbox — audit-log incidents across the fleet. KPI header, status /
  * severity / source / persona filters (persisted), a group-by control with
  * collapsible sections, and a row→detail modal. Mirrors the desktop overview's
- * Incidents Inbox; demo-only (sourced from the mock layer).
+ * Incidents Inbox; demo-only (sourced from the mock layer) — a real (non-demo)
+ * session sees an empty state instead.
  */
 export default function IncidentsPage() {
   const { t } = useTranslation();
   const labels = t.incidentsPage;
-  const { incidents, isLoading, error, retry } = useAuditIncidents();
+  const { incidents, isLoading, error, retry, liveUnavailable } = useAuditIncidents();
 
   const status = useIncidentsFilterStore((s) => s.status);
   const severity = useIncidentsFilterStore((s) => s.severity);
@@ -68,7 +69,15 @@ export default function IncidentsPage() {
         </motion.div>
       )}
 
-      {isLoading ? (
+      {liveUnavailable ? (
+        <motion.div variants={fadeUp}>
+          <EmptyState
+            icon={CloudOff}
+            title={t.dashboardUi.liveUnavailableTitle}
+            description={t.dashboardUi.liveUnavailableDescription}
+          />
+        </motion.div>
+      ) : isLoading ? (
         <div className="space-y-6">
           <SkeletonCard lines={2} />
           <SkeletonCard lines={6} />

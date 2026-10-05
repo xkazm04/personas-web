@@ -668,7 +668,9 @@ export const vi: LocaleTranslations = {
       noDataAvailable: "Ch\u01b0a c\u00f3 d\u1eef li\u1ec7u",
       errors: "L\u1ed7i",
       totalLower: "t\u1ed5ng",
-      copyPayload: "Sao ch\u00e9p payload"
+      copyPayload: "Sao ch\u00e9p payload",
+      liveUnavailableTitle: "Ch\u01b0a kh\u1ea3 d\u1ee5ng cho kh\u00f4ng gian l\u00e0m vi\u1ec7c th\u1ef1c",
+      liveUnavailableDescription: "M\u00e0n h\u00ecnh n\u00e0y ch\u1ec9 ch\u1ea1y tr\u00ean d\u1eef li\u1ec7u demo. Kh\u00f4ng gian l\u00e0m vi\u1ec7c c\u1ee7a b\u1ea1n ch\u01b0a \u0111\u1ed3ng b\u1ed9 d\u1eef li\u1ec7u n\u00e0y, n\u00ean m\u00e0n h\u00ecnh \u0111\u1ec3 tr\u1ed1ng thay v\u00ec hi\u1ec3n th\u1ecb d\u1eef li\u1ec7u m\u1eabu."
     },
     memoriesPage: {
       title: "B\u1ed9 nh\u1edb",

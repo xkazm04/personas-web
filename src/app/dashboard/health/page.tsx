@@ -2,11 +2,12 @@
 
 import { useMemo, useState } from "react";
 import { motion } from "framer-motion";
-import { HeartPulse } from "lucide-react";
+import { CloudOff, HeartPulse } from "lucide-react";
 
 import GradientText from "@/components/GradientText";
 import ExecuteToast from "@/components/dashboard/ExecuteToast";
 import DashboardErrorBanner from "@/components/dashboard/DashboardErrorBanner";
+import EmptyState from "@/components/dashboard/EmptyState";
 import SkeletonCard from "@/components/dashboard/SkeletonCard";
 import { useTranslation } from "@/i18n/useTranslation";
 import { fadeUp, staggerContainer } from "@/lib/animations";
@@ -21,12 +22,12 @@ import { useSystemHealth } from "./health-page/useSystemHealth";
  * cards with status dots, a disk-usage gauge, and illustrative install/
  * configure actions (the row settles to ok in-session, plus a toast - see
  * health-page/healthActions.ts). Mirrors the desktop overview's System Health
- * Panel; demo-only.
+ * Panel; demo-only — a real (non-demo) session sees an empty state instead.
  */
 export default function HealthPage() {
   const { t } = useTranslation();
   const labels = t.healthPage;
-  const { sections: fetched, diskUsage, isLoading, error, retry } = useSystemHealth();
+  const { sections: fetched, diskUsage, isLoading, error, retry, liveUnavailable } = useSystemHealth();
   const [toast, setToast] = useState<{ id: number; message: string } | null>(null);
   const [resolutions, setResolutions] = useState<HealthResolutions>({});
   const sections = useMemo(
@@ -68,7 +69,15 @@ export default function HealthPage() {
         </motion.div>
       )}
 
-      {isLoading ? (
+      {liveUnavailable ? (
+        <motion.div variants={fadeUp}>
+          <EmptyState
+            icon={CloudOff}
+            title={t.dashboardUi.liveUnavailableTitle}
+            description={t.dashboardUi.liveUnavailableDescription}
+          />
+        </motion.div>
+      ) : isLoading ? (
         <div className="grid gap-6 lg:grid-cols-2">
           <SkeletonCard lines={5} />
           <SkeletonCard lines={5} />

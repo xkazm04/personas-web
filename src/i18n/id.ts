@@ -668,7 +668,9 @@ export const id: LocaleTranslations = {
       noDataAvailable: "Belum ada data tersedia",
       errors: "Kesalahan",
       totalLower: "total",
-      copyPayload: "Salin payload"
+      copyPayload: "Salin payload",
+      liveUnavailableTitle: "Belum tersedia untuk workspace live",
+      liveUnavailableDescription: "Tampilan ini hanya berjalan dengan data demo. Workspace Anda belum menyinkronkan data ini, jadi tampilan ini tetap kosong alih-alih menampilkan data contoh."
     },
     memoriesPage: {
       title: "Memori",

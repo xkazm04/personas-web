@@ -20,7 +20,7 @@ The demo story: ResearchAgent and CodeReviewer are improving, DataProcessor is f
 
 ## How it works
 
-**Data hook — `useDirectorData()`** (`src/app/dashboard/director/useDirectorData.ts`). SWR over the standalone mock fetcher `getDirectorSnapshot()` (`src/lib/mockApi.ts`) — the same demo-only pattern as `useActivityMetrics`: `revalidateOnFocus: false`, 60s dedupe, `retry` = `mutate`. There is no real-mode branch; the Director has no synced source in this repo.
+**Data hook — `useDirectorData()`** (`src/app/dashboard/director/useDirectorData.ts`). SWR over the standalone mock fetcher `getDirectorSnapshot()` (`src/lib/mockApi.ts`) — the same demo-only pattern as `useActivityMetrics`: `revalidateOnFocus: false`, 60s dedupe, `retry` = `mutate`. The fetch goes through `useDemoOnlySWR` (`src/hooks/useDemoOnlySWR.ts`), SWR keyed on `isDemo`: the Director has no synced source in this repo, so a real (non-demo) session fetches nothing and the page renders an `EmptyState` (`t.dashboardUi.liveUnavailableTitle` / `liveUnavailableDescription`) with no staleness pill.
 
 **Mock fixtures** (`src/lib/mock-dashboard-data.ts`, "Director" section): `MOCK_DIRECTOR_PORTFOLIO` (period, total cost, assessed-run breakdown, six score bands, five-agent roster, scope counters, avg score) and `MOCK_DIRECTOR_VERDICTS` (six coaching notes across severities/categories). Roster timestamps are `Date.now()` offsets at module load. Verdict titles and persona names are fixture data shown verbatim (same convention as `MOCK_HEALTH_CHECKS` details).
 
@@ -48,7 +48,7 @@ The demo story: ResearchAgent and CodeReviewer are improving, DataProcessor is f
 | File | Role |
 | --- | --- |
 | `src/app/dashboard/director/page.tsx` | Page shell, facet state, `now` snapshot, skeleton/error handling |
-| `src/app/dashboard/director/useDirectorData.ts` | SWR hook over the mock fetcher |
+| `src/app/dashboard/director/useDirectorData.ts` | Demo-gated SWR hook (`useDemoOnlySWR`) over the mock fetcher |
 | `src/app/dashboard/director/director-page/directorMeta.ts` | Pure score/momentum/attention/facet/sparkline derivations |
 | `src/app/dashboard/director/director-page/DirectorKpiGrid.tsx` | Portfolio scorecard (4 KPI tiles) |
 | `src/app/dashboard/director/director-page/MomentumStrip.tsx` | Improving/flat/declining filter chips |
