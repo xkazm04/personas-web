@@ -668,7 +668,9 @@ export const cs: LocaleTranslations = {
       noDataAvailable: "Zat\u00edm nejsou k dispozici \u017e\u00e1dn\u00e1 data",
       errors: "Chyby",
       totalLower: "celkem",
-      copyPayload: "Kop\u00edrovat payload"
+      copyPayload: "Kop\u00edrovat payload",
+      liveUnavailableTitle: "Pro \u017eiv\u00e9 pracovn\u00ed prostory zat\u00edm nen\u00ed k dispozici",
+      liveUnavailableDescription: "Toto zobrazen\u00ed b\u011b\u017e\u00ed jen na uk\u00e1zkov\u00fdch datech. V\u00e1\u0161 pracovn\u00ed prostor tato data zat\u00edm nesynchronizuje, proto z\u016fst\u00e1v\u00e1 pr\u00e1zdn\u00e9, m\u00edsto aby ukazovalo uk\u00e1zkov\u00e1 data."
     },
     memoriesPage: {
       title: "Pam\u011bti",

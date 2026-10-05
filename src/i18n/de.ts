@@ -668,7 +668,9 @@ export const de: LocaleTranslations = {
       noDataAvailable: "Noch keine Daten verf\u00fcgbar",
       errors: "Fehler",
       totalLower: "gesamt",
-      copyPayload: "Payload kopieren"
+      copyPayload: "Payload kopieren",
+      liveUnavailableTitle: "F\u00fcr Live-Workspaces noch nicht verf\u00fcgbar",
+      liveUnavailableDescription: "Diese Ansicht l\u00e4uft nur mit Demodaten. Ihr Workspace synchronisiert diese Daten noch nicht, daher bleibt sie leer, statt Beispieldaten anzuzeigen."
     },
     memoriesPage: {
       title: "Erinnerungen",

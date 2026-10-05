@@ -668,7 +668,9 @@ export const es: LocaleTranslations = {
       noDataAvailable: "A\u00fan no hay datos disponibles",
       errors: "Errores",
       totalLower: "total",
-      copyPayload: "Copiar payload"
+      copyPayload: "Copiar payload",
+      liveUnavailableTitle: "A\u00fan no disponible para espacios de trabajo en vivo",
+      liveUnavailableDescription: "Esta vista solo funciona con datos de demostraci\u00f3n. Tu espacio de trabajo a\u00fan no sincroniza estos datos, as\u00ed que queda vac\u00eda en lugar de mostrar datos de ejemplo."
     },
     memoriesPage: {
       title: "Memorias",

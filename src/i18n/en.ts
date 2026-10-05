@@ -441,6 +441,9 @@
     errors: string;
     totalLower: string;
     copyPayload: string;
+    /** Empty state for a demo-only view (no synced source) in a real, non-demo session. */
+    liveUnavailableTitle: string;
+    liveUnavailableDescription: string;
   };
   memoriesPage: {
     title: string;
@@ -3447,6 +3450,8 @@ export const en: Translations = {
     errors: "Errors",
     totalLower: "total",
     copyPayload: "Copy payload",
+    liveUnavailableTitle: "Not available for live workspaces yet",
+    liveUnavailableDescription: "This view runs on demo data only. Your workspace doesn't sync this data yet, so it stays empty rather than showing sample data.",
   },
   memoriesPage: {
     title: 'Memories',
