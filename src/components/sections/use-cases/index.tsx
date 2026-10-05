@@ -1,97 +1,93 @@
 "use client";
 
-import { useId, useMemo, useRef } from "react";
+import { useRef } from "react";
 import { motion } from "framer-motion";
-import { LayoutGrid, Lock } from "lucide-react";
-import Link from "next/link";
-import SectionWrapper from "@/components/SectionWrapper";
-import SectionIntro from "@/components/primitives/SectionIntro";
-import { fadeUp } from "@/lib/animations";
-import { useTranslation } from "@/i18n/useTranslation";
 import { useStillMotion } from "@/hooks/useStillMotion";
-import { fillTemplate } from "@/lib/fillTemplate";
-import { localizeTools } from "./data";
-import PersonaCard from "./components/PersonaCard";
-import CapabilityLedger from "./components/PersonaLedger";
-import ToolTabs from "./components/ToolTabs";
-import { BEAT_MS, FIRST_BEAT_MS, usePersonaPlayback } from "./usePersonaPlayback";
+import { BRAND_VAR, tint } from "@/lib/brand-theme";
+import { CASES, TOOLS, brandTint } from "./shared/catalog";
+import { CHOOSE, CONSIDER, DOCK, NEED, SCAN } from "./shared/cycle";
+import CaseStage from "./shared/CaseStage";
+import { useCaseCopy } from "./shared/useCaseCopy";
+import { useCaseCycle, type Beats } from "./shared/useCaseCycle";
+import PersonaHand from "./PersonaHand";
+import Reel, { CELL, type ReelState } from "./Reel";
+import { PAYLINE_ROW } from "./reels";
+
+const BEATS: Beats = [900, 800, 1900, 900, 1300];
+/** Layout in cqw of the art box. */
+const HAND_W = 23;
+const REELS_X = 25.5;
+const GAP = 1.1;
+const HEAD = 4.6;
+const REEL_W = (100 - REELS_X - GAP * (CASES.length - 1)) / CASES.length;
+const PAY_Y = HEAD + PAYLINE_ROW * CELL;
 
 /**
- * Use-cases, persona-card variant. Claim: one persona keeps its identity and
- * picks up many jobs across your tools. One app-style persona card; each tool
- * connected adds a tile to its connector row and that tool's real jobs to its
- * capabilities. Name, icon and colour never change. Plays through the eight
- * tools once on view (pausable); reduced motion shows every tool attached.
+ * One persona, many capabilities - "Slot reels" (winner of the 2026-10-05 landing review). Six reels, one per need, each loaded with the real tools
+ * that could answer it. The need lights over its reel, the reel spins through
+ * its options and stops with the chosen tool on the payline - which runs
+ * straight into the persona's card, where the tool is dealt into its hand.
+ * By the last reel the payline reads as the persona's whole toolkit.
  */
-export default function UseCasesPersonaCard() {
-  const { t } = useTranslation();
-  const copy = t.useCasesPersona;
-  const tools = useMemo(() => localizeTools(t.useCasesSection), [t]);
+export default function UseCases() {
   const still = useStillMotion();
-  const uid = useId().replace(/:/g, "");
-  const panelId = `${uid}-jobs`;
-  const rootRef = useRef<HTMLDivElement | null>(null);
-  const pb = usePersonaPlayback(rootRef, still);
-  const nextId = tools.find((tl) => !pb.attached.includes(tl.id))?.id ?? null;
-  const totalJobs = tools.reduce((n, tl) => n + tl.useCases.length, 0);
+  const copy = useCaseCopy();
+  const artRef = useRef<HTMLDivElement>(null);
+  const pb = useCaseCycle(artRef, still, BEATS);
+  const { phase, active, moving } = pb;
+
+  const stateOf = (i: number): ReelState => {
+    if (pb.docked[i]) return "locked";
+    if (i !== active) return "waiting";
+    if (phase === NEED) return "need";
+    if (phase === CONSIDER) return "consider";
+    if (phase === SCAN) return "spinning";
+    return phase === CHOOSE ? "locked" : "waiting";
+  };
+  const reelCenter = (i: number) => REELS_X + i * (REEL_W + GAP) + REEL_W / 2;
 
   return (
-    <SectionWrapper fit="min" id="use-cases">
-      <SectionIntro heading={t.useCasesSection.heading} gradient={t.useCasesSection.headingGradient} />
-
+    <CaseStage ar={100 / 40} artRef={artRef} pb={pb} copy={copy}>
+      {/* payline: from the persona's card across every reel */}
       <div
-        ref={rootRef}
-        role="group"
-        aria-label={fillTemplate(copy.groupLabel, { persona: copy.personaName, tools: tools.length, jobs: totalJobs })}
-        data-tour-diagram="tools"
-        data-stage-zoom
-        className="mt-12 flex flex-col gap-8 stage:mt-0 stage:gap-[2.2svh]"
-      >
-        <ToolTabs
-          uid={uid}
-          panelId={panelId}
-          attached={pb.attached}
-          focus={pb.focus}
-          tools={tools}
-          nextId={nextId}
-          beatMs={pb.step === 0 ? FIRST_BEAT_MS : BEAT_MS}
-          ticking={pb.ticking}
-          playing={pb.playing}
-          complete={pb.complete}
-          still={still}
-          onChoose={pb.choose}
-          onToggle={pb.toggle}
+        aria-hidden="true"
+        className="absolute border-y border-brand-cyan/30 transition-[background,box-shadow] duration-700"
+        style={{
+          left: `${HAND_W - 1}cqw`,
+          right: 0,
+          top: `${PAY_Y}cqw`,
+          height: `${CELL}cqw`,
+          background: `linear-gradient(90deg, ${tint("cyan", pb.finale ? 26 : 14)}, ${tint("cyan", pb.finale ? 12 : 3)})`,
+          boxShadow: pb.finale ? `0 0 3cqw ${tint("cyan", 22)}` : "none",
+        }}
+      />
+      {phase === DOCK && moving && (
+        <motion.span
+          key={`${pb.run}-${active}`}
+          aria-hidden="true"
+          className="absolute rounded-full"
+          style={{ top: `${PAY_Y + CELL / 2 - 0.5}cqw`, height: "1cqw", width: "6cqw", background: `linear-gradient(90deg, transparent, ${brandTint(TOOLS[CASES[active].chosen], 80)}, transparent)` }}
+          initial={{ left: `${reelCenter(active) - 3}cqw`, opacity: 1 }}
+          animate={{ left: `${HAND_W - 6}cqw`, opacity: [1, 1, 0] }}
+          transition={{ duration: 0.7, ease: "easeIn" }}
         />
+      )}
 
-        <div className="grid items-start gap-6 lg:grid-cols-[340px_1fr] lg:gap-8">
-          <div className="flex flex-col gap-3 lg:sticky lg:top-24">
-            <PersonaCard tools={tools} attached={pb.attached} focus={pb.focus} still={still} />
-            <div className="flex items-start gap-2 px-1 text-xs leading-relaxed text-muted">
-              <Lock className="mt-0.5 h-3 w-3 shrink-0 text-brand-cyan" aria-hidden />
-              <p>{copy.identityNote}</p>
-            </div>
-          </div>
-          <CapabilityLedger
-            tools={tools}
-            attached={pb.attached}
-            focus={pb.focus}
-            still={still}
-            panelId={panelId}
-            labelledBy={pb.focus ? `${uid}-tool-${pb.focus}` : undefined}
-          />
-        </div>
+      <div className="absolute inset-y-0 left-0" style={{ width: `${HAND_W}cqw` }}>
+        <PersonaHand docked={pb.docked} moving={moving} name={copy.persona} description={copy.personaDescription} caption={copy.capabilities} />
       </div>
 
-      <motion.div variants={fadeUp} className="mt-12 flex justify-center stage:mt-[2.4svh]">
-        <Link
-          href="/templates"
-          className="group relative inline-flex items-center gap-3 overflow-hidden rounded-full border border-brand-cyan/30 bg-brand-cyan/5 px-8 py-4 stage:py-2.5 text-base font-semibold text-foreground backdrop-blur-sm transition-all duration-300 hover:border-brand-cyan/50 hover:bg-brand-cyan/10 hover:shadow-[0_0_30px_rgba(6,182,212,0.2)]"
-        >
-          <div className="absolute inset-0 -translate-x-full bg-gradient-to-r from-transparent via-white/5 to-transparent transition-transform duration-700 group-hover:translate-x-full" />
-          <LayoutGrid className="relative h-5 w-5 text-brand-cyan transition-transform duration-300 group-hover:-translate-y-0.5" />
-          <span className="relative">{t.useCasesSection.browseTemplates}</span>
-        </Link>
-      </motion.div>
-    </SectionWrapper>
+      <div className="absolute inset-y-0 right-0 flex" style={{ left: `${REELS_X}cqw`, gap: `${GAP}cqw` }}>
+        {CASES.map((c, i) => (
+          <Reel key={c.need} c={c} state={stateOf(i)} label={copy.need(i)} moving={moving} spinMs={BEATS[SCAN] * 0.95} />
+        ))}
+      </div>
+
+      <div
+        aria-hidden="true"
+        className="absolute rounded-full"
+        style={{ left: `${HAND_W + 0.3}cqw`, top: `${PAY_Y + CELL / 2 - 0.6}cqw`, width: "1.2cqw", height: "1.2cqw", background: BRAND_VAR.cyan, boxShadow: `0 0 1.6cqw ${tint("cyan", 70)}` }}
+      />
+    </CaseStage>
   );
 }

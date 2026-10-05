@@ -6,7 +6,7 @@ import { en } from "../src/i18n/en";
  * visitor owns playback (src/components/sections/orchestration-hub/playback.ts):
  * Pause is a stop only Play lifts, Next steps by one (and stops), Play resumes
  * the cycle. The reducer is unit-tested; this drives the rendered controls
- * (PlaybackControls.tsx) and reads the "n / N" position indicator.
+ * (shared/HubControls.tsx) and reads the "n / N" position indicator.
  */
 
 // AUTO_CYCLE_MS in orchestration-hub/data.ts is 9.6s. Waits below are bounded

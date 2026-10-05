@@ -28,6 +28,7 @@ export const metadata: Metadata = {
 };
 
 import DesignEngine from "@/components/feature-sections/DesignEngine";
+import MurmurationHero from "@/components/feature-sections/murmuration-hero";
 import {
   LazyMemoryLayers,
   LazyHealingCircuit,
@@ -39,6 +40,7 @@ import {
 } from "@/components/feature-sections/feature-lazy";
 
 const scrollMapItems = [
+  { label: "OVERVIEW", href: "#overview" },
   { label: "DESIGN", href: "#design" },
   { label: "MEMORY", href: "#memory-layers" },
   { label: "HEALING", href: "#healing-circuit" },
@@ -59,7 +61,11 @@ export default function FeaturesPage() {
           code-split + scroll-gated via LazyMount so their chunks load as the
           reader approaches, not all at once on first paint. The anchor id lives
           on the always-rendered StageSection so the scroll-map keeps working. */}
-      <StageSection glow="purple" showTopLine={false} toColor="purple">
+      <div id="overview">
+        <MurmurationHero />
+      </div>
+
+      <StageSection glow="purple" fromColor="purple" toColor="purple">
         <DesignEngine />
       </StageSection>
 

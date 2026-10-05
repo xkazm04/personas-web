@@ -117,16 +117,5 @@ export function triggerWords(copy: OrchestrationCopy, trigger: TriggerDef) {
   };
 }
 
-/* Ring geometry — exported so the visual and helper share one source. */
-export const CENTER = 260;
-export const RADIUS = 200;
-export const NODE_SIZE = 96;
+/** How long the hub dwells on a trigger before auto-advancing. */
 export const AUTO_CYCLE_MS = 9600;
-
-export function nodePosition(index: number, total: number) {
-  const angle = (index / total) * Math.PI * 2 - Math.PI / 2;
-  return {
-    x: CENTER + Math.cos(angle) * RADIUS,
-    y: CENTER + Math.sin(angle) * RADIUS,
-  };
-}

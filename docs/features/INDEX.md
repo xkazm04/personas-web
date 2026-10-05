@@ -66,12 +66,12 @@ Status legend: ✅ written · ⬜ planned
 
 | Doc | Surface |
 | --- | --- |
-| ✅ [homepage-hero](marketing/homepage-hero.md) | Hero, command-center, stat row, social proof |
+| ✅ [homepage-hero](marketing/homepage-hero.md) | "Hive" hero (honeycomb floor, events hand off cell to cell), lazy section orchestration, JSON-LD |
 | ✅ [why-agents](marketing/why-agents.md) | Agent-vs-workflow scenario duels (retired section; kept as history) |
-| ✅ [use-cases](marketing/use-cases.md) | Tool tabs + persona card + ledger playback |
-| ✅ [features-overview](marketing/features-overview.md) | `/features` page + vision layer stack |
+| ✅ [use-cases](marketing/use-cases.md) | "Slot reels": six needs spin through real connectors onto the persona card |
+| ✅ [features-overview](marketing/features-overview.md) | `/features` "Murmuration" swarm hero + features cluster + vision layer stack |
 | ✅ [pricing](marketing/pricing.md) | Pricing tier cards |
-| ✅ [get-started](marketing/get-started.md) | Get-started steps + download CTA |
+| ✅ [get-started](marketing/get-started.md) | "Your day, its day" 24-hour dial + download CTA |
 | ✅ [faq](marketing/faq.md) | FAQ accordion |
 | ✅ [footer](marketing/footer.md) | Footer + primary CTA |
 | ✅ [guided-tour](marketing/guided-tour.md) | Athena guided product tour |
@@ -95,14 +95,14 @@ Status legend: ✅ written · ⬜ planned
 | Doc | Surface |
 | --- | --- |
 | ✅ [flow-composer](demos/flow-composer.md) | Visual flow composer + `/playground` |
-| ✅ [orchestration-hub](demos/orchestration-hub.md) | Orchestration hub graph |
+| ✅ [orchestration-hub](demos/orchestration-hub.md) | Orchestration hub: lit instrument ring of ten triggers, comet, per-trigger vignettes |
 | ✅ [event-bus-showcase](demos/event-bus-showcase.md) | Animated event-bus showcase |
 | ✅ [platform-layers](demos/platform-layers.md) | Platform layer stack |
 | ✅ [platform-command](demos/platform-command.md) | Terminal/CLI command sequence |
 | ✅ [agents-timeline](demos/agents-timeline.md) | Agent execution timeline race |
 | ✅ [agent-playground](demos/agent-playground.md) | Playground terminal demo |
 | ✅ [agents-chat](demos/agents-chat.md) | Multi-agent chat race |
-| ✅ [playground-split](demos/playground-split.md) | Split-view playground |
+| ✅ [playground-split](demos/playground-split.md) | Agent Mind "Camera": script of sample prompts, camera dolly through the beats, outcome cards |
 | ✅ [playground-timeline](demos/playground-timeline.md) | Pipeline timeline sim |
 | ✅ [preview-harness](demos/preview-harness.md) | Section preview/demo harness |
 

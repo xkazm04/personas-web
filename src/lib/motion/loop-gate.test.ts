@@ -180,11 +180,12 @@ describe("adoption - the visualizer sections read the gate, not the raw inputs",
     expect(hook).not.toMatch(/\bIntersectionObserver\b/);
   });
 
-  it("guard: HubRing gates props, not elements, on the motion preference", () => {
-    const ring = readStripped(
-      path.join(REPO_ROOT, "src", "components", "sections", "orchestration-hub", "HubRing.tsx"),
-    );
-    expect(ring).not.toMatch(/\breduced\s*\?\s*\(/);
-    expect(ring).not.toMatch(/!\s*reduced\s*&&/);
-  });
+  it.each(["RingArt.tsx", "RingNodes.tsx", "AgentLens.tsx"])(
+    "guard: the hub's %s gates props, not elements, on the motion preference",
+    (file) => {
+      const ring = readStripped(path.join(REPO_ROOT, "src", "components", "sections", "orchestration-hub", file));
+      expect(ring).not.toMatch(/\b(reduced|still)\s*\?\s*\(/);
+      expect(ring).not.toMatch(/!\s*(reduced|still)\s*&&/);
+    },
+  );
 });

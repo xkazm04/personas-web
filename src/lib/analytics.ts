@@ -56,7 +56,7 @@ export function trackPageView(page: string) {
  *  navbar apart. The navbar reports only its installer branch: its waitlist
  *  branch opens the modal, which reports `waitlist_open` with `entry_point:
  *  "navbar"` instead. */
-export type DownloadPlacement = "download-cta" | "hero" | "pricing" | "navbar";
+export type DownloadPlacement = "download-cta" | "hero" | "features-hero" | "pricing" | "navbar";
 
 /**
  * `download_click` attributes under this build's release plan. `outcome` is

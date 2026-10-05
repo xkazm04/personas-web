@@ -1,155 +1,50 @@
 "use client";
 
-import { useEffect, useMemo, useRef } from "react";
-import { motion, useInView } from "framer-motion";
-import { RotateCcw } from "lucide-react";
+import { useRef } from "react";
+import { motion } from "framer-motion";
 import SectionWrapper from "@/components/SectionWrapper";
 import SectionIntro from "@/components/primitives/SectionIntro";
-import { ThemedChip, TerminalPanel } from "@/components/primitives";
 import { fadeUp } from "@/lib/animations";
-import { useStillMotion } from "@/hooks/useStillMotion";
-import { useTranslation } from "@/i18n/useTranslation";
-import { localizeExamples } from "./data";
-import { usePlaygroundSimulation } from "./use-playground-simulation";
-import PromptEditorPanel from "./components/PromptEditorPanel";
-import AgentMindPanel from "./components/AgentMindPanel";
-import { RunProgressBar, RunTimer } from "./components/RunClock";
+import { tint } from "@/lib/brand-theme";
+import { useMindRun } from "./shared/useMindRun";
+import Script from "./Script";
+import CameraStage from "./CameraStage";
 
+/**
+ * The Agent Mind, "Camera" (winner of the 2026-10-05 landing review): the same two panes and six
+ * beats, restaged as a film. The prompt editor is the script (the sample
+ * prompts are its scenes); the agent mind is a deep, lit space the camera
+ * travels through, framing each beat at display size with subtitles, then
+ * pulling back to the whole plan as the four outcomes rise into frame.
+ */
 export default function PlaygroundSplit() {
-  const reduced = useStillMotion();
-  const { t } = useTranslation();
-  const copy = t.playgroundSection;
-  const examples = useMemo(() => localizeExamples(copy), [copy]);
-
-  const {
-    activeExample,
-    nodes,
-    phase,
-    isRunning,
-    startedAt,
-    totalDurationMs,
-    handleExampleClick,
-    handleReset,
-  } = usePlaygroundSimulation(examples, copy.nodes);
-
-  const activeExampleData =
-    activeExample !== null ? examples[activeExample] : null;
-
-  // The first screen of this section used to be two empty panes ("Select a
-  // prompt to begin"). Play the first prompt once when the section is on
-  // screen; the visitor can pick another at any time. Not under reduced motion
-  // (a run is motion the visitor did not start), and never more than once.
-  const panelRef = useRef<HTMLDivElement | null>(null);
-  const inView = useInView(panelRef, { once: true, amount: 0.5 });
-  const autoplayed = useRef(false);
-  useEffect(() => {
-    if (!inView || reduced || autoplayed.current) return;
-    autoplayed.current = true;
-    const t = setTimeout(() => handleExampleClick(0), 700);
-    return () => clearTimeout(t);
-  }, [inView, reduced, handleExampleClick]);
-
+  const panelRef = useRef<HTMLDivElement>(null);
+  const run = useMindRun(panelRef, 1.7);
   return (
     <SectionWrapper fit="fill" id="playground-split">
-      <SectionIntro
-        heading={copy.heading}
-        gradient={copy.headingGradient}
-        description={copy.description}
-      />
-
-      <motion.div
-        variants={fadeUp}
-        className="mb-6 flex flex-wrap gap-2 justify-center stage:mb-[2svh]"
-      >
-        {examples.map((ex, i) => (
-          <ThemedChip
-            key={i}
-            active={activeExample === i}
-            onClick={() => handleExampleClick(i)}
-            disabled={isRunning}
-            size="sm"
-            icon={
-              <ex.icon className="h-3.5 w-3.5" style={{ color: ex.iconColor }} />
-            }
-          >
-            {ex.label}
-          </ThemedChip>
-        ))}
-        {phase === "done" && (
-          <button
-            onClick={handleReset}
-            className="flex items-center gap-1.5 rounded-full border border-glass-hover px-4 py-2 text-base font-medium text-muted-dark hover:border-white/20 hover:text-foreground hover:bg-white/5 transition-all"
-          >
-            <RotateCcw className="h-3.5 w-3.5" />
-            {copy.reset}
-          </button>
-        )}
-      </motion.div>
-
+      <SectionIntro heading={run.copy.heading} gradient={run.copy.headingGradient} description={run.copy.description} />
       <motion.div
         ref={panelRef}
         data-tour-diagram="agent-mind"
         data-stage-slot
         variants={fadeUp}
-        className="mx-auto w-full max-w-5xl"
+        className="mx-auto w-full max-w-7xl"
       >
-        <TerminalPanel
-          shadow="hero"
-          glass={false}
-          className="stage:flex stage:h-full stage:flex-col"
-          bodyClassName="stage:flex stage:min-h-0 stage:flex-1 stage:flex-col"
-          footer={
-            <>
-              <div className="flex items-center gap-3 text-base font-mono tracking-wider uppercase text-muted-dark">
-                <span>{copy.splitView}</span>
-                {isRunning && (
-                  <motion.span
-                    initial={{ opacity: 0 }}
-                    animate={{ opacity: 1 }}
-                    className="text-brand-cyan/60"
-                  >
-                    {copy.executing}
-                  </motion.span>
-                )}
-              </div>
-              <div className="flex items-center gap-4">
-                {(phase === "running" || phase === "done") && (
-                  <RunTimer startedAt={startedAt} running={isRunning} totalMs={totalDurationMs} done={phase === "done"} />
-                )}
-                {phase === "done" && (
-                  <motion.span
-                    initial={{ opacity: 0 }}
-                    animate={{ opacity: 1 }}
-                    className="text-base font-mono tracking-wider uppercase text-brand-emerald/60"
-                  >
-                    {copy.executionComplete}
-                  </motion.span>
-                )}
-              </div>
-            </>
-          }
+        <div
+          className="grid h-full overflow-hidden rounded-[1.5rem] border border-glass-hover lg:grid-cols-[minmax(17rem,3fr)_minmax(0,7fr)]"
+          style={{
+            background: "color-mix(in srgb, var(--background) 96%, var(--brand-purple))",
+            boxShadow: `inset 0 1px 0 rgba(var(--surface-overlay),0.08), 0 50px 120px -50px ${tint("purple", 40)}`,
+          }}
         >
-          {phase !== "idle" && (
-            <RunProgressBar label={copy.progressLabel} startedAt={startedAt} running={isRunning} totalMs={totalDurationMs} reduced={reduced} />
-          )}
-          <div className="grid grid-cols-1 lg:grid-cols-2 min-h-[520px] stage:min-h-0 stage:flex-1">
-            <PromptEditorPanel
-              activeExample={activeExample}
-              activeExampleData={activeExampleData}
-              phase={phase}
-              reduced={reduced}
-            />
-            <AgentMindPanel nodes={nodes} phase={phase} reduced={reduced} />
+          <div className="border-b border-glass lg:border-b-0 lg:border-r">
+            <Script run={run} />
           </div>
-          {/* Phase changes are otherwise visual-only; announce them to AT. */}
-          <p className="sr-only" role="status" aria-live="polite">
-            {phase === "running"
-              ? copy.srRunning
-              : phase === "done"
-                ? copy.srDone
-                : ""}
-          </p>
-        </TerminalPanel>
+          <CameraStage run={run} />
+        </div>
+        <p className="sr-only" role="status" aria-live="polite">
+          {run.isRunning ? run.copy.srRunning : run.phase === "done" ? run.copy.srDone : ""}
+        </p>
       </motion.div>
     </SectionWrapper>
   );

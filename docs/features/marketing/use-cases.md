@@ -1,59 +1,71 @@
 # Use Cases
-> The "one persona, many capabilities" section — one app-style persona card picks up jobs as each of eight real tools connects to it, with a tab row, a capability ledger and a pausable one-shot playback. · **Route:** `/` (homepage section, anchor `#use-cases`, wrapper `#tools`) · **Status:** Live
+> The "one persona, many capabilities" section as "Slot reels": six needs, each a reel of real connector tools that spins and stops on the one the persona picks, dealt into its card · **Route:** `/` (homepage section, anchor `#use-cases`, address `personas`, wrapper `#tools`) · **Status:** Live
 
 ## What it does
 
-A public homepage section (heading "One persona, **many capabilities**") that makes one claim: a single persona keeps its identity (name, icon, colour) while it picks up many jobs across the tools you already use. It has three parts:
+A public homepage section (heading "One persona, **many capabilities**") that makes one claim: a single persona keeps its identity while it reaches for the right tool for each job from the connectors you already use. The art is a slot machine:
 
-1. **Tool tabs** — eight connector tabs (Gmail, Slack, GitHub, Google Drive, Jira, Notion, Calendar, Figma). A connected tool carries a green check. At the end of the row a **Pause / Play / Replay** control drives the playback.
-2. **Persona card** — a reduced copy of the app's persona card ("Chief of staff"): health stripe, tinted icon frame, name + description, an "Active" chip with a live job count, a row of eight connector slots that fill as tools attach (dashed while empty), and a sample trigger / last-run / spend footer. A lock note under it says identity never changes.
-3. **Capability ledger** — the focused tool's jobs in full (title + description, "adds N jobs to …"), then one reserved row per tool: connected rows list that tool's job titles, unconnected rows stay dashed ("not connected").
+1. **Six reels**, one per need ("Write to a client", "Keep meeting notes", "Book the follow-up", "Track the work", "Ship the code", "Get paid"), each loaded with 4 to 6 real tools (Slack, Outlook, Gmail, Teams, Discord, Telegram for "reach", and so on). The need lights over its reel, the reel winds up, spins and stops with the chosen tool on the **payline**.
+2. **The persona card** on the left ("Chief of staff", with the product's own persona art and a hand of six capability slots). The payline runs straight into it; each won tool is dealt into the next slot.
+3. **The finale:** after the sixth reel the payline glows and reads as the persona's whole toolkit, then the loop restarts.
 
-When the section scrolls into view the card empties and the eight tools connect one by one (a thin progress bar under the next tab shows the beat), then it rests with everything attached. Picking a tab stops playback and focuses that tool. Under reduced motion there is no playback and no control: every tool is shown attached. A "Browse All Templates" button links to `/templates`.
+A control pill under the art (Previous, Pause/Play, Next, Replay, "n / 6") lets the visitor step or stop; once they do, playback never re-arms itself. A status line (screen-reader only) names the current need, the options and the chosen tool. Under reduced motion there is no autoplay: the section rests on the first case, fully composed, and the visitor can still step or press Play.
 
-The tool list and jobs are illustrative marketing copy, not live integrations.
+The tools are a curated slice of the real connector catalog; which one is "chosen" per need is scripted marketing copy, not live behaviour.
 
 ## How it works
 
-**Composition (`index.tsx`).** `UseCasesPersonaCard` renders `SectionWrapper fit="min" id="use-cases"` (`index.tsx:39`) with a `SectionIntro`, then a `role="group"` container (`rootRef`, `data-tour-diagram="tools"`, `data-stage-zoom`, `index.tsx:42-49`) holding `ToolTabs` and a two-column grid of `PersonaCard` (sticky on `lg`) and `CapabilityLedger`. Tools come from `localizeTools(t.useCasesSection)` (`data.ts`), which joins each `toolBases` entry (id, icon, colour) with its translated name and jobs. `useId()` is stripped of colons (`index.tsx:31`) to build the tab / tabpanel ids.
+**Composition (`index.tsx`).** `UseCases` builds `pb = useCaseCycle(artRef, still, BEATS)` (`BEATS = [900, 800, 1900, 900, 1300]` ms for NEED, CONSIDER, SCAN, CHOOSE, DOCK; `index.tsx:16`) and lays everything out in `cqw` units of the art box (`HAND_W`, `REELS_X`, `REEL_W`, `PAY_Y`). It maps `CASES` to `Reel`s with a `ReelState` (`waiting | need | consider | spinning | locked`) derived from the phase, draws the payline (brighter when `pb.finale`), a `motion.span` comet that flies from the active reel to the card during DOCK, and the `PersonaHand`.
 
-**Playback (`usePersonaPlayback.ts`).** One progress value — `attached.length` — walks 0 → 8 once. The resting state (server render, reduced motion, finished, paused) is every tool attached with the first focused, so SSR and reduced-motion markup are the full card. On the client an `IntersectionObserver` with a 240px bottom margin arms playback once, just before the box scrolls in: it resets to an empty card unless the visitor already chose a tool (`touched`). A second observer sets `inView` at ≥30% visibility; a `setTimeout` beat (`FIRST_BEAT_MS` 900, then `BEAT_MS` 1700) attaches the next tool only while `ticking` (playing + in view + not still). `choose(id)` pauses and attaches/focuses that tool; `toggle()` pauses, resumes, or replays from empty when complete.
+**Stage (`shared/CaseStage.tsx`).** `SectionWrapper fit="fill" id="use-cases"` (`CaseStage.tsx:34`), `SectionIntro` heading, then one `data-stage-slot` holding the `data-stage-art` box: `role="img"`, `data-tour-diagram="tools"` (the home tour's first step spotlights it), a fixed aspect ratio (`ar` = 100/40) and `containerType: inline-size`, so every size is in `cqw` and proportions hold from a laptop to a 1080p monitor. Below: `CycleControls` and the `sr-only` live status (`aria-live` is `off` while playing, `polite` when stepping).
 
-**Tabs (`ToolTabs.tsx`).** A `role="tablist"` (4 columns, 8 on `lg`) with roving `tabIndex`; arrow keys, Home and End call `onChoose` and move focus. The beat bar is a `motion.span` animating `scaleX` over `beatMs`. The pause/play/replay button sits in a fixed-height slot so the reduced-motion form (no button) does not shift layout.
+**Playback reducer (`shared/cycle.ts`).** Pure, clock-free (testable, no `Date.now()` in render). Position is `(caseIdx, phase)` over five phases `NEED -> CONSIDER -> SCAN -> CHOOSE -> DOCK`; after the last case a FINALE (`caseIdx === count`) rests, then loops (`run` bumps so timers restart). Actions: `ARM`, `TICK`, `PAUSE`, `PLAY`, `REPLAY`, `NEXT`, `PREV`. The initial and resting state is case 0 at DOCK. `ARM` is a no-op once `armed`, which any visitor action sets (WCAG 2.2.2: their stop is open-ended). `shared/cycle.test.ts` covers it.
 
-**Ledger (`PersonaLedger.tsx`, default export `CapabilityLedger`).** The focused tool's panel (`role="tabpanel"`, `aria-live="polite"`) cross-fades via `AnimatePresence mode="wait"`; the `adds` sentence is split around `{tool}` so the tool name renders bold, and both halves go through `fillTemplate`. Transitions collapse to `duration: 0` when `still`.
+**Hook (`shared/useCaseCycle.ts`).** An `IntersectionObserver` (thresholds 0 / 0.35 / 0.7) sets `inView` and dispatches `ARM` at 35% unless `prefers-reduced-motion` matches. A `setTimeout` per beat ticks only while `playing && inView && !hidden (usePageVisibility) && (!still || userPlayed)`. It returns `active`, `phase`, `finale`, `docked[]`, `playing`, `ticking`, `moving` (false = jump, for reduced motion without a visitor Play) and the `toggle/replay/next/prev` handlers.
 
-**Stage fit.** `fit="min"`, and the block under the intro carries `data-stage-zoom`, so on tall monitors it scales up by height tier (1.2 / 1.35 / 1.6, `src/styles/stage.css:144-158`) instead of floating at laptop size. On the stage the pause control sits at the end of the tab row (`stage:flex-row`, `ToolTabs.tsx:65`), the ledger is two columns (`stage:grid-cols-2`, `PersonaLedger.tsx:88`) and a connected row stays on one line, its chips fading out at the edge (`PersonaLedger.tsx:118`). Measured by `e2e/stage-fit.spec.ts`: one stage (571px) at 1366x768.
+**Catalog (`shared/catalog.ts`).** `TOOLS` (id, label, icon basename under `/public/tools/`, brand colour) is a hand-copied slice of `src/data/connectors.ts`, so the landing chunk does not import the whole catalog. `CASES` is the script (`need`, ordered `candidates`, `chosen`, never first), `BYSTANDERS` the field no case considers. `brandTint`/`brandInk` use `color-mix` so near-black brands stay readable per theme. `shared/catalog.test.ts` holds every tool to its catalog row (label, icon, colour, file exists) and checks no candidate repeats across cases.
+
+**Reels (`Reel.tsx`, `reels.ts`).** `reels.ts` builds each strip (candidates repeated 4 times plus a 3-cell tail), the start and end stop indices and the `translateY` that puts an index on the payline (`PAYLINE_ROW`). `Reel` animates the strip over `spinMs` with an overshooting ease; `PersonaHand.tsx` renders the card and deals tools in; `shared/ToolGlyph.tsx` paints a glyph as a CSS mask of the SVG (`bg-current`).
+
+**Copy (`shared/useCaseCopy.ts`).** Heading from `t.useCasesSection.heading` / `headingGradient`, persona name and description from `t.useCasesPersona`, everything else from `t.landingSections.useCases` (`artLabel`, `needs`, `status`, `controls`, `prevCase`, `nextCase`, `capabilities`, `jobsCount`), filled with `fillTemplate`.
+
+**Stage fit.** `fit="fill"`: exactly one desktop stage (`src/styles/stage.css`); the art box sizes to the slot by aspect ratio.
 
 ## Key files
 
 | File | Role |
 | --- | --- |
-| `src/components/sections/use-cases/index.tsx` | Section shell: intro, tabs, persona card + ledger grid, templates CTA |
-| `src/components/sections/use-cases/usePersonaPlayback.ts` | Arm-once, in-view-only playback state (`attached`, `focus`, `choose`, `toggle`); `BEAT_MS` / `FIRST_BEAT_MS` |
-| `src/components/sections/use-cases/data.ts` | `toolBases[]` (id, icon, colour) + `localizeTools()` |
-| `src/components/sections/use-cases/types.ts` | `ToolId`, `ToolBase`, `Tool`, `ToolIcon` |
-| `src/components/sections/use-cases/components/ToolTabs.tsx` | Tab row, beat bar, pause/play/replay control |
-| `src/components/sections/use-cases/components/PersonaCard.tsx` | App-shaped persona card; connector slots fill as tools attach |
-| `src/components/sections/use-cases/components/PersonaLedger.tsx` | `CapabilityLedger`: focused tool's jobs + one row per tool |
-| `src/components/sections/use-cases/components/ConnectorIcon.tsx` | `next/image` glyph, flattened to one tone via `.connector-icon` |
+| `src/components/sections/use-cases/index.tsx` | Section body: reels, payline, comet, persona hand; `BEATS` |
+| `src/components/sections/use-cases/shared/CaseStage.tsx` | Shell: `id="use-cases"`, intro, art box (`data-tour-diagram="tools"`), controls, sr-only status |
+| `src/components/sections/use-cases/shared/cycle.ts` | Pure playback reducer (phases, ARM/TICK/PAUSE/PLAY/REPLAY/NEXT/PREV) |
+| `src/components/sections/use-cases/shared/useCaseCycle.ts` | Timer + in-view/hidden/still gating over the reducer |
+| `src/components/sections/use-cases/shared/CycleControls.tsx` | Previous / Pause-Play / Next / Replay pill and "n / N" |
+| `src/components/sections/use-cases/shared/catalog.ts` | `TOOLS` (real connector slice), `CASES` script, `BYSTANDERS`, tint helpers |
+| `src/components/sections/use-cases/shared/catalog.test.ts` | Pins every tool to its `connectors.ts` row and icon file |
+| `src/components/sections/use-cases/shared/useCaseCopy.ts` | Copy assembly (`useCasesSection` heading + `landingSections.useCases`) |
+| `src/components/sections/use-cases/shared/ToolGlyph.tsx` | Masked-SVG tool glyph |
+| `src/components/sections/use-cases/Reel.tsx`, `reels.ts` | One reel and its strip maths |
+| `src/components/sections/use-cases/PersonaHand.tsx` | Persona card with six capability slots |
+| `src/components/sections/use-cases/components/ConnectorIcon.tsx` | `next/image` glyph flattened by `.connector-icon`; no longer used here, still used by Athena onboarding |
 
 ## Data & state
-- **Source:** static — `toolBases` in `data.ts`; names and jobs are copy. No fetch. **Stores:** none; state lives in `usePersonaPlayback`. **API routes:** none. **Types:** `types.ts`.
-- **Copy:** `t.useCasesSection.*` (heading, `browseTemplates`, and per-tool `{ name, cases[] }`) and `t.useCasesPersona.*` (persona name/description, card and ledger labels, tab/control labels, aria templates). `useCasesPersona` is listed in `PENDING_TRANSLATION` (`src/i18n/en.ts:2294`): English only by owner decision, optional in the 13 locale files (`LocaleTranslations`), with the runtime falling back to English.
+- **Source:** static; the script is `CASES` + `TOOLS`. No fetch, no stores, no API routes. State lives in `useCaseCycle` (a `useReducer`) plus an `inView` flag.
+- **Copy:** `t.landingSections.useCases.*` and `t.useCasesPersona.*` (persona name/description, `pause`/`play`/`replay`) plus the live `t.useCasesSection.heading` / `headingGradient`. `landingSections` and `useCasesPersona` are in `PENDING_TRANSLATION` (`src/i18n/en.ts`): English only, the 13 other locales fall back at runtime, pending a namespace translation.
 
 ## Integration points
-- `SectionWrapper` (`fit="min"`, anchor `id="use-cases"`) and `SectionIntro`; the page wraps it in `#tools` (`src/app/page.tsx:52`).
-- `fillTemplate` from `src/lib/fillTemplate.ts` fills the aria and count templates.
-- Connector glyphs are `next/image` from `/public/icons/connectors/*.svg`; `.connector-icon` (`src/app/globals.css:962`) flattens them per theme. The same assets back the **Connectors catalog** page.
-- The CTA links to `/templates`; `data-tour-diagram="tools"` hooks the guided tour.
+- `SectionWrapper` (`fit="fill"`, `id="use-cases"`) and `SectionIntro`; `src/app/page.tsx` wraps it in `#tools` with `data-scroll-anchor="personas"` (`lib/landing-address.ts` maps `tools` and `use-cases` to `personas`).
+- `fillTemplate` (`src/lib/fillTemplate.ts`) fills the status, aria and count templates.
+- Glyphs are the catalog's own monochrome SVGs under `/public/tools/`; the data row source is `src/data/connectors.ts` (the **Connectors catalog** page).
+- `data-tour-diagram="tools"` hooks the guided tour.
+- `useStillMotion`, `usePageVisibility`, `BRAND_VAR`/`tint` (`src/lib/brand-theme.ts`).
 
 ## Conventions & gotchas
-- **Resting state is the full card.** SSR and reduced motion render every tool attached; playback is armed only from `IntersectionObserver` callbacks on the client and re-checks `prefers-reduced-motion` at arm time. Don't seed an empty card in initial state — it would change server markup and hide the claim from reduced-motion visitors.
-- **Animation gating:** `useStillMotion` (`index.tsx:30`) — no playback, no beat bar, no control, zero-duration transitions when still. Ticking also stops when less than 30% of the block is visible.
-- **`useId()` colon strip:** ids like `:r5:` are invalid in CSS selectors / `url(#)` references; `index.tsx:31` strips them.
-- **i18n drift:** the `useCasesSection` interface still declares `integrations`, `patterns`, `description`, `autoplayHint`, `whatCanAutomate` and a `stripe` tool that this section does not render. The spend figure `0.04` in the card footer is a literal number.
-- **Tokens:** mostly semantic; data-driven brand colours (tool `color`) go through inline `style` on purpose.
+- **Replaced on 2026-10-05** by the winner of the landing review ("Slot reels"). The previous tool tabs, persona card and capability ledger (`usePersonaPlayback`, `ToolTabs`, `PersonaLedger`, the `toolBases` data and the "Browse All Templates" button) are in git history.
+- **Resting state is a composed frame.** SSR, reduced motion and a visitor's stop all show case 0 at DOCK; playback arms only from `IntersectionObserver` callbacks on the client and re-checks `prefers-reduced-motion` at arm time. Don't seed an empty state: it would change server markup.
+- **Keep the catalog honest.** Adding or renaming a tool means editing `TOOLS` to match `src/data/connectors.ts` (label, icon, colour) and the icon file; `catalog.test.ts` fails the unit run otherwise. A chosen tool must not be the first candidate and no tool may repeat across cases.
+- **Animation gating:** `useStillMotion` (`index.tsx`) plus `usePageVisibility` and the 35% in-view rule in `useCaseCycle`; `moving` false makes transitions jump instead of animate.
+- **English-only copy** in `landingSections.useCases`; the `useCasesSection` interface still declares unused keys (`integrations`, `patterns`, `description`, `autoplayHint`, `whatCanAutomate`, per-tool `cases`) from the old section.
+- **Tokens:** semantic classes plus `tint()`/`color-mix` for brand colours; tool colours go through inline `style` on purpose.
 
 ## Related docs
 - [Why Agents](why-agents.md)

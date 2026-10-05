@@ -7,8 +7,8 @@ import { fileURLToPath } from "node:url";
  * Reduced-motion reads in the Conversion context (Get Started, download CTA,
  * footer) go through `useStillMotion` (SSR-safe, live), never framer's
  * `useReducedMotion` (samples once on the client, answers null on the server).
- * Get Started's lifecycle illustration plays once when in view and has no
- * infinite loop (the carousel visuals that looped were removed with it).
+ * Get Started's day dial (shared/motion.ts) plays its setup once when in view
+ * and sweeps the day only while visible, never under reduced motion.
  *
  * Source scan with comments stripped, so a doc comment naming the old hook does
  * not trip it and a commented-out call does not satisfy it.
@@ -29,7 +29,7 @@ function read(rel: string): string {
 const GATED_FILES = [
   "src/components/sections/download-cta/DownloadStepGrid.tsx",
   "src/components/sections/footer/FooterLinkColumn.tsx",
-  "src/components/sections/get-started/lifecycleParts.tsx",
+  "src/components/sections/get-started/shared/motion.ts",
 ];
 
 describe("conversion reduced-motion reads", () => {

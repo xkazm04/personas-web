@@ -3,8 +3,7 @@ import type { StageColor } from "@/lib/colors";
 import { safeJsonLd } from "@/lib/seo";
 import Navbar from "@/components/Navbar";
 import PageShell from "@/components/PageShell";
-import Hero from "@/components/sections/Hero";
-import HeroAmbientIllustration from "@/components/sections/hero/HeroAmbientIllustration";
+import HiveHero from "@/components/sections/hero-hive";
 import Footer from "@/components/sections/Footer";
 import {
   LazyCompanion,
@@ -87,10 +86,9 @@ export default function Home() {
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: safeJsonLd(faqJsonLd) }}
       />
-      <HeroAmbientIllustration />
       <PageShell scrollMapItems={scrollMapItems}>
         <div id="hero">
-          <Hero />
+          <HiveHero />
         </div>
         {sections.map(({ Component, glow, fromColor, toColor, wrapperId, anchorId, gate }) => (
           <div key={anchorId} id={wrapperId} data-scroll-anchor={anchorId}>

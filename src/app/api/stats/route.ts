@@ -94,10 +94,10 @@ const CACHE_CONTROL_BYPASS = "no-store";
  * floor still applies; it is simply no longer silent.
  *
  * NOTE on `totalTemplates`: this 120 is a marketing target, not the shipped
- * catalog — `src/lib/templates.ts` holds 57 templates. The hero no longer
- * reads this field; it derives its template figure from the catalog itself
- * (`src/components/sections/Hero.tsx`), which is checkable against the
- * gallery. Keep that in mind before wiring this field to a public surface.
+ * catalog — `src/lib/templates.ts` holds 57 templates. No public surface
+ * reads this field (the old hero's stat row derived its figure from the
+ * catalog, and the 2026-10-05 Hive hero shows none). Keep that in mind before
+ * wiring this field to a public surface.
  */
 const MINIMUM_DISPLAY_VALUES: PlatformStats = {
   totalUsers: 228,

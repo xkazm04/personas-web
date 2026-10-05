@@ -54,8 +54,8 @@ export interface SmokeRoute {
 
 /** Marketing, content and public product surfaces — reached by hard navigation. */
 const PUBLIC: readonly SmokeRoute[] = [
-  { path: "/", name: "home", tag: "public", expectText: "Intelligent agents" },
-  { path: "/features", name: "features", tag: "public" },
+  { path: "/", name: "home", tag: "public", expectText: "A whole team on it" },
+  { path: "/features", name: "features", tag: "public", expectText: "alive on your machine" },
   { path: "/how", name: "how it works", tag: "public" },
   { path: "/connections", name: "connectors", tag: "public" },
   { path: "/templates", name: "templates gallery", tag: "public", expectText: "Agent Templates" },
