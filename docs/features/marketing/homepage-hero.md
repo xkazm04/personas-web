@@ -37,7 +37,7 @@ Below the hero, the rest of the page is a sequence of marketing sections (use-ca
 
 ## Data & state
 - **Copy:** `t.landingSections.hero.*` (headline, subhead, aria, event/done chips) plus `t.hero.downloadCta` / `viewOnGithub` / `trustLine`. `landingSections` is in `PENDING_TRANSLATION` (`src/i18n/en.ts`): English only, the 13 other locales fall back at runtime.
-- **No data fetch, no stores.** The hero shows no live numbers. `/api/stats` and `useLiveStats` still exist (waitlist counts), but `totalTemplates` is now read by no public surface (see the note in `src/app/api/stats/route.ts`).
+- **No data fetch, no stores.** The hero shows no live numbers. (The unused `/api/stats` route and `useLiveStats` hook were deleted on 2026-10-05; the waitlist count comes from `/api/waitlist` via `waitlistCounts.ts`.)
 - **State:** `SectionObserverContext` tracks the section in view for the scroll map; the only hero state is the `--tilt` CSS variable.
 - **Download CTA:** `ctaHref(DOWNLOAD_PLAN)` from `src/lib/release.ts`; tracked as `download_click` with `{ platform, placement: "hero", outcome }`.
 

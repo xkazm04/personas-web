@@ -1,6 +1,5 @@
 /**
- * Module-level "people waiting" count cache (same shape as
- * src/hooks/useLiveStats.ts).
+ * Module-level "people waiting" count cache.
  *
  * The waitlist modal has two mount points (navbar + download CTA) and re-opens
  * freely, so an un-cached GET on every open meant one request per open, per
