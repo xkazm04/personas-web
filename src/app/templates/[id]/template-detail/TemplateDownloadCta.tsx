@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { Check, Copy, Download, ExternalLink } from "lucide-react";
+import { Check, Copy, Download } from "lucide-react";
 import { motion } from "framer-motion";
 
 import { fadeUp } from "@/lib/animations";
@@ -9,10 +9,10 @@ interface TemplateDownloadCtaProps {
   copied: boolean;
   copyFailed: boolean;
   onCopy: () => void;
-  onOpenInPersonas: () => void;
+  onGetPersonas: () => void;
 }
 
-export function TemplateDownloadCta({ copied, copyFailed, onCopy, onOpenInPersonas }: TemplateDownloadCtaProps) {
+export function TemplateDownloadCta({ copied, copyFailed, onCopy, onGetPersonas }: TemplateDownloadCtaProps) {
   const { t } = useTranslation();
 
   return (
@@ -23,8 +23,8 @@ export function TemplateDownloadCta({ copied, copyFailed, onCopy, onOpenInPerson
           <h2 className="text-xl font-semibold text-foreground">{t.templatesPage.getStartedTitle}</h2>
           <p className="max-w-md text-base text-muted-dark">{t.templatesPage.getStartedDescription}</p>
           <div className="mt-2 flex flex-wrap justify-center gap-3">
-            <button onClick={onOpenInPersonas} className="inline-flex items-center gap-2 rounded-xl bg-brand-purple px-5 py-2.5 text-base font-medium text-white transition-colors hover:bg-brand-purple/80">
-              <ExternalLink className="h-4 w-4" /> {t.templatesPage.openInPersonas}
+            <button onClick={onGetPersonas} className="inline-flex items-center gap-2 rounded-xl bg-brand-purple px-5 py-2.5 text-base font-medium text-white transition-colors hover:bg-brand-purple/80">
+              <Download className="h-4 w-4" /> {t.templatesPage.useTemplate}
             </button>
             <button onClick={onCopy} className="inline-flex items-center gap-2 rounded-xl border border-glass-hover bg-white/5 px-5 py-2.5 text-base font-medium text-foreground transition-colors hover:bg-white/10">
               {copied ? <Check className="h-4 w-4 text-green-400" /> : <Copy className="h-4 w-4" />}

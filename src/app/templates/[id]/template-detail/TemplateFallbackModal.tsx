@@ -33,8 +33,8 @@ export function TemplateFallbackModal({ open, onClose, onCopy }: TemplateFallbac
               <div className="flex h-14 w-14 items-center justify-center rounded-2xl border border-brand-purple/20 bg-brand-purple/10">
                 <Download className="h-7 w-7 text-brand-purple" />
               </div>
-              <h3 className="text-lg font-semibold text-foreground">{t.templatesPage.appNotFoundTitle}</h3>
-              <p className="text-sm leading-relaxed text-muted-dark">{t.templatesPage.appNotFoundDescription}</p>
+              <h3 className="text-lg font-semibold text-foreground">{t.templatesPage.installTitle}</h3>
+              <p className="text-sm leading-relaxed text-muted-dark">{t.templatesPage.installDescription}</p>
               <div className="mt-1 flex w-full flex-col gap-2">
                 <Link href="/#download" onClick={onClose} className="inline-flex items-center justify-center gap-2 rounded-xl bg-brand-purple px-5 py-2.5 text-base font-medium text-white transition-colors hover:bg-brand-purple/80">
                   <Download className="h-4 w-4" /> {t.hero.downloadForWindows}

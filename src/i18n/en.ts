@@ -1142,10 +1142,10 @@
     copyConfiguration: string;
     getStartedTitle: string;
     getStartedDescription: string;
-    openInPersonas: string;
+    useTemplate: string;
     moreTemplates: string;
-    appNotFoundTitle: string;
-    appNotFoundDescription: string;
+    installTitle: string;
+    installDescription: string;
     templateNotFound: string;
     templateNotFoundDescription: string;
     browseTemplates: string;
@@ -4104,11 +4104,11 @@ export const en: Translations = {
     copyFailed: 'Copy failed',
     copyConfiguration: 'Copy Configuration',
     getStartedTitle: 'Get Started with This Template',
-    getStartedDescription: 'Import this template directly into Personas, or copy the configuration to customize it yourself.',
-    openInPersonas: 'Open in Personas',
+    getStartedDescription: 'Download the Personas desktop app to build an agent like this one, or copy the configuration as a starting point.',
+    useTemplate: 'Use This Template',
     moreTemplates: 'More {category} Templates',
-    appNotFoundTitle: 'Personas App Not Found',
-    appNotFoundDescription: "It looks like Personas isn't installed on your device yet. Download it to import templates directly, or copy the configuration to set it up manually.",
+    installTitle: 'Get Personas to use this template',
+    installDescription: 'Templates are set up in the Personas desktop app, not in the browser. Download the app to build an agent like this one, or copy the configuration as a starting point.',
     templateNotFound: 'Template not found',
     templateNotFoundDescription: "This template doesn't exist or has been retired. Browse the gallery for the current collection.",
     browseTemplates: 'Browse templates',
