@@ -513,21 +513,22 @@ const MEMORY_TITLE_POOL: Record<MemoryAction["type"], string[]> = {
   ],
 };
 
-function pickTitle(
-  type: MemoryAction["type"],
-  seed: number,
-): string {
-  const pool = MEMORY_TITLE_POOL[type];
-  return pool[seed % pool.length];
-}
+// One memory per pool title: 5 types x 4 titles = 20 distinct memories. (The
+// set used to be 60 built from these 20 titles, so every title showed 3 times.)
+const MEMORIES_PER_TYPE = 4;
 
 export const MOCK_MEMORIES: MemoryItem[] = (() => {
-  const rng = seededRandom(555);
+  // Seed chosen so the 20 still show every status (12 active, 5 pending,
+  // 3 archived) and 3 conflicts.
+  const rng = seededRandom(580);
   const items: MemoryItem[] = [];
-  const total = 60;
+  const total = MEMORY_TYPES.length * MEMORIES_PER_TYPE;
   for (let i = 0; i < total; i++) {
     const type = MEMORY_TYPES[i % MEMORY_TYPES.length];
-    const persona = MEMORY_PERSONAS[i % MEMORY_PERSONAS.length];
+    const round = Math.floor(i / MEMORY_TYPES.length);
+    // Offset the persona by the round so each agent holds a mix of types
+    // instead of owning exactly one.
+    const persona = MEMORY_PERSONAS[(i + round) % MEMORY_PERSONAS.length];
     const statusRoll = rng();
     const status: MemoryStatus =
       statusRoll < 0.65
@@ -549,7 +550,7 @@ export const MOCK_MEMORIES: MemoryItem[] = (() => {
     items.push({
       id: `mem_${i + 1}`,
       type,
-      title: pickTitle(type, i),
+      title: MEMORY_TITLE_POOL[type][round],
       description: `Learned from ${usageCount} ${persona} executions. Confidence ${score}/10 with consistent positive outcomes across the observed window.`,
       persona,
       score,
@@ -1921,9 +1922,12 @@ export const MOCK_APPROVED_WORK: ApprovedWorkItem[] = [
 // ── Director (coaching command center) ──────────────────────────────
 // Mirrors the desktop overview's Director tab: a system-owned meta-persona
 // that scores every starred agent's latest run on a 0–5 verdict scale and
-// tracks whether coaching moves the needle. Demo-only; the story is a small
-// fleet where two agents are improving, one is flat-and-stale, one is
-// declining into low scores, and one has never been reviewed.
+// tracks whether coaching moves the needle. Demo-only, and cast on the shared
+// FLEET so the Director judges the same five agents every other page shows,
+// with momentum matching the leaderboard trends: Incident Responder and PR
+// Review Agent improving, Security Scanner (disabled) flat-and-stale, Daily
+// Standup Digest declining into low scores (the Slack retry storm), and
+// Customer Feedback Analyzer never reviewed.
 
 export type DirectorMomentum = "improving" | "flat" | "declining";
 export type DirectorSeverity = "info" | "warning" | "error";
@@ -1996,9 +2000,9 @@ export interface DirectorVerdict {
 
 const DIRECTOR_ROSTER: DirectorRosterEntry[] = [
   {
-    id: "p-research",
-    name: "ResearchAgent",
-    color: "#06b6d4",
+    id: INCIDENT.id,
+    name: INCIDENT.name,
+    color: INCIDENT.color,
     latestScore: 5,
     scoreTrend: [3, 4, 4, 4, 5],
     valueDeliveredRate: 0.86,
@@ -2006,9 +2010,9 @@ const DIRECTOR_ROSTER: DirectorRosterEntry[] = [
     lastReviewedAt: new Date(Date.now() - 2 * 3600_000).toISOString(),
   },
   {
-    id: "p-codereview",
-    name: "CodeReviewer",
-    color: "#34d399",
+    id: PR_REVIEW.id,
+    name: PR_REVIEW.name,
+    color: PR_REVIEW.color,
     latestScore: 4,
     scoreTrend: [2, 3, 3, 4],
     valueDeliveredRate: 0.78,
@@ -2016,9 +2020,9 @@ const DIRECTOR_ROSTER: DirectorRosterEntry[] = [
     lastReviewedAt: new Date(Date.now() - 26 * 3600_000).toISOString(),
   },
   {
-    id: "p-dataproc",
-    name: "DataProcessor",
-    color: "#fbbf24",
+    id: SECURITY.id,
+    name: SECURITY.name,
+    color: SECURITY.color,
     latestScore: 3,
     scoreTrend: [3, 3, 3],
     valueDeliveredRate: 0.64,
@@ -2026,19 +2030,19 @@ const DIRECTOR_ROSTER: DirectorRosterEntry[] = [
     lastReviewedAt: new Date(Date.now() - 16 * 24 * 3600_000).toISOString(),
   },
   {
-    id: "p-notify",
-    name: "NotifyBot",
-    color: "#a855f7",
+    id: STANDUP.id,
+    name: STANDUP.name,
+    color: STANDUP.color,
     latestScore: 2,
     scoreTrend: [4, 4, 3, 2],
     valueDeliveredRate: 0.41,
     totalExecutions: 388,
-    lastReviewedAt: new Date(Date.now() - 5 * 3600_000).toISOString(),
+    lastReviewedAt: new Date(Date.now() - 3 * 3600_000).toISOString(),
   },
   {
-    id: "p-reportgen",
-    name: "ReportGen",
-    color: "#f43f5e",
+    id: FEEDBACK.id,
+    name: FEEDBACK.name,
+    color: FEEDBACK.color,
     latestScore: null,
     scoreTrend: [],
     valueDeliveredRate: 0.57,
@@ -2070,9 +2074,9 @@ export const MOCK_DIRECTOR_PORTFOLIO: DirectorPortfolio = {
 export const MOCK_DIRECTOR_VERDICTS: DirectorVerdict[] = [
   {
     id: "dv-1",
-    personaId: "p-notify",
-    personaName: "NotifyBot",
-    personaColor: "#a855f7",
+    personaId: STANDUP.id,
+    personaName: STANDUP.name,
+    personaColor: STANDUP.color,
     severity: "error",
     category: "health",
     title: "Slack webhook retry storm burns spend on dead endpoints",
@@ -2080,29 +2084,19 @@ export const MOCK_DIRECTOR_VERDICTS: DirectorVerdict[] = [
   },
   {
     id: "dv-2",
-    personaId: "p-notify",
-    personaName: "NotifyBot",
-    personaColor: "#a855f7",
+    personaId: STANDUP.id,
+    personaName: STANDUP.name,
+    personaColor: STANDUP.color,
     severity: "warning",
     category: "prompt",
-    title: "Digest prompt drifts from the notification template",
+    title: "Digest prompt drifts from the standup template",
     createdAt: new Date(Date.now() - 5 * 3600_000).toISOString(),
   },
   {
-    id: "dv-3",
-    personaId: "p-dataproc",
-    personaName: "DataProcessor",
-    personaColor: "#fbbf24",
-    severity: "warning",
-    category: "triggers",
-    title: "Polling trigger fires 4x more often than the data changes",
-    createdAt: new Date(Date.now() - 27 * 3600_000).toISOString(),
-  },
-  {
     id: "dv-4",
-    personaId: "p-codereview",
-    personaName: "CodeReviewer",
-    personaColor: "#34d399",
+    personaId: PR_REVIEW.id,
+    personaName: PR_REVIEW.name,
+    personaColor: PR_REVIEW.color,
     severity: "info",
     category: "usefulness",
     title: "Review summaries restate the diff instead of judging it",
@@ -2110,23 +2104,33 @@ export const MOCK_DIRECTOR_VERDICTS: DirectorVerdict[] = [
   },
   {
     id: "dv-5",
-    personaId: "p-research",
-    personaName: "ResearchAgent",
-    personaColor: "#06b6d4",
+    personaId: INCIDENT.id,
+    personaName: INCIDENT.name,
+    personaColor: INCIDENT.color,
     severity: "info",
     category: "memory",
-    title: "Recall surfaces near-duplicate memories from the same crawl",
+    title: "Recall surfaces near-duplicate memories from the same outage",
     createdAt: new Date(Date.now() - 2 * 24 * 3600_000).toISOString(),
   },
   {
+    id: "dv-3",
+    personaId: SECURITY.id,
+    personaName: SECURITY.name,
+    personaColor: SECURITY.color,
+    severity: "warning",
+    category: "triggers",
+    title: "Scan schedule fires 4x more often than the repos change",
+    createdAt: new Date(Date.now() - 16 * 24 * 3600_000).toISOString(),
+  },
+  {
     id: "dv-6",
-    personaId: "p-dataproc",
-    personaName: "DataProcessor",
-    personaColor: "#fbbf24",
+    personaId: SECURITY.id,
+    personaName: SECURITY.name,
+    personaColor: SECURITY.color,
     severity: "info",
     category: "credentials",
-    title: "Vault token scoped wider than the jobs it runs",
-    createdAt: new Date(Date.now() - 3 * 24 * 3600_000).toISOString(),
+    title: "Vault token scoped wider than the scans it runs",
+    createdAt: new Date(Date.now() - 16 * 24 * 3600_000 - 2 * 3600_000).toISOString(),
   },
 ];
 
