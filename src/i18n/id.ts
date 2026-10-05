@@ -1270,6 +1270,10 @@ export const id: LocaleTranslations = {
         title: "Notifikasi",
         subtitle: "Peringatan penyembuhan otomatis dan ringkasan",
         weeklyDigest: "Ringkasan kesehatan mingguan",
+        escalation: {
+          label: "Eskalasikan tinjauan yang lewat tenggat",
+          description: "Tinjauan tertunda yang melewati SLA-nya akan dieskalasi. Jika kebijakan menetapkannya, tinjauan justru disetujui otomatis (secara default, tinjauan Info setelah 8 jam)."
+        },
         voice: {
           label: "Umumkan ulasan baru dengan suara",
           preview: "Pratinjau",

@@ -1,7 +1,7 @@
 "use client";
 
 import { useRef } from "react";
-import { Bell, Volume2 } from "lucide-react";
+import { AlarmClock, Bell, Volume2 } from "lucide-react";
 
 import GlowCard from "@/components/GlowCard";
 import { useTranslation } from "@/i18n/useTranslation";
@@ -14,7 +14,9 @@ import { armSpeech, emitNewReview } from "@/lib/review-voice";
 import { SettingToggle } from "./SettingToggle";
 
 /** Healing-alert severity toggles + weekly digest (persisted in settingsStore),
- *  plus the spoken new-review announcement toggle (persisted in reviewVoiceStore). */
+ *  the spoken new-review announcement toggle (persisted in reviewVoiceStore),
+ *  and the review escalation ladder on/off switch (reviewStore; off by default,
+ *  read by the Reviews split pane to run `checkEscalations`). */
 export function NotificationsCard() {
   const { t } = useTranslation();
   const n = t.settingsPage.notifications;
@@ -22,6 +24,9 @@ export function NotificationsCard() {
   const setAlertSeverity = useSettingsStore((s) => s.setAlertSeverity);
   const digest = useSettingsStore((s) => s.weeklyDigest);
   const setWeeklyDigest = useSettingsStore((s) => s.setWeeklyDigest);
+
+  const escalationEnabled = useReviewStore((s) => s.escalationEnabled);
+  const setEscalationEnabled = useReviewStore((s) => s.setEscalationEnabled);
 
   const voiceEnabled = useReviewVoiceStore((s) => s.enabled);
   const setVoiceEnabled = useReviewVoiceStore((s) => s.setEnabled);
@@ -88,6 +93,14 @@ export function NotificationsCard() {
             {n.voice.preview}
           </button>
           <SettingToggle on={voiceEnabled} onChange={handleVoiceToggle} label={n.voice.label} />
+        </div>
+        <div className="py-2.5">
+          <div className="flex items-center gap-3">
+            <AlarmClock className="h-3.5 w-3.5 flex-shrink-0 text-rose-400" aria-hidden />
+            <span className="flex-1 text-sm text-foreground">{n.escalation.label}</span>
+            <SettingToggle on={escalationEnabled} onChange={setEscalationEnabled} label={n.escalation.label} />
+          </div>
+          <p className="mt-1 text-sm text-muted-dark">{n.escalation.description}</p>
         </div>
       </div>
     </GlowCard>

@@ -1050,6 +1050,11 @@
       title: string;
       subtitle: string;
       weeklyDigest: string;
+      /** Review escalation ladder on/off (reviewStore.escalationEnabled). */
+      escalation: {
+        label: string;
+        description: string;
+      };
       voice: {
         label: string;
         preview: string;
@@ -4053,6 +4058,10 @@ export const en: Translations = {
       title: 'Notifications',
       subtitle: 'Healing alerts and digests',
       weeklyDigest: 'Weekly health digest',
+      escalation: {
+        label: "Escalate overdue reviews",
+        description: "Pending reviews that pass their SLA are escalated. Where the policy says so, they are approved automatically instead (by default, Info reviews after 8 hours).",
+      },
       voice: {
         label: 'Announce new reviews aloud',
         preview: 'Preview',

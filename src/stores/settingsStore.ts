@@ -37,6 +37,22 @@ const DEFAULTS = {
   providerOverrides: {} as Record<string, boolean>,
 };
 
+/** A provider's effective allow-list state: the Settings override, else its default. */
+export function isProviderAllowed(
+  provider: { id: string; allowed: boolean },
+  overrides: Record<string, boolean>,
+): boolean {
+  return overrides[provider.id] ?? provider.allowed;
+}
+
+/** How many providers the fleet may use once the Settings overrides apply. */
+export function countAllowedProviders(
+  providers: ReadonlyArray<{ id: string; allowed: boolean }>,
+  overrides: Record<string, boolean>,
+): number {
+  return providers.filter((p) => isProviderAllowed(p, overrides)).length;
+}
+
 function persistSnapshot(): void {
   const { alertSeverity, weeklyDigest, providerOverrides } = useSettingsStore.getState();
   try {

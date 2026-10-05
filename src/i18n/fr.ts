@@ -1270,6 +1270,10 @@ export const fr: LocaleTranslations = {
         title: "Notifications",
         subtitle: "Alertes d'auto-r\u00e9paration et r\u00e9sum\u00e9s",
         weeklyDigest: "R\u00e9sum\u00e9 hebdomadaire de sant\u00e9",
+        escalation: {
+          label: "Escalader les r\u00e9visions en retard",
+          description: "Les r\u00e9visions en attente qui d\u00e9passent leur SLA sont escalad\u00e9es. Lorsque la politique le pr\u00e9voit, elles sont plut\u00f4t approuv\u00e9es automatiquement (par d\u00e9faut, les r\u00e9visions Info apr\u00e8s 8 heures)."
+        },
         voice: {
           label: "Annoncer les nouvelles r\u00e9visions \u00e0 voix haute",
           preview: "Aper\u00e7u",

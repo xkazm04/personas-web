@@ -15,6 +15,7 @@ import {
   MOCK_UPCOMING_ROUTINES,
 } from "@/lib/mock-dashboard-data";
 import { useAuthStore } from "@/stores/authStore";
+import { countAllowedProviders, useSettingsStore } from "@/stores/settingsStore";
 import { effectiveNextRunMs, untilLabel } from "./relativeLabels";
 import { useLiveClock } from "./useLiveClock";
 import { useOpenAlertCount } from "./useOpenAlertCount";
@@ -43,7 +44,9 @@ export interface TickerItem {
  * source, so they are gated on `isDemo` — the same gate `VaultChangesCard` and
  * `InstrumentsBay` use. Without it the strip asserted demo numbers as fact in
  * supabase/orchestrator mode. Success rate, agent count and open alerts come
- * from live stores and are shown in both modes.
+ * from live stores and are shown in both modes. The provider count honours the
+ * Settings allow-list overrides (`settingsStore.providerOverrides`), so a
+ * provider switched off in Settings drops out of the ticker.
  *
  * The next-routine ETA is formatted against `useLiveClock` — the same countdown
  * `UpcomingRoutinesCard` renders, so the two can't disagree once the page has
@@ -61,8 +64,9 @@ export function useTickerItems({
   const openAlerts = useOpenAlertCount();
   const isDemo = useAuthStore((s) => s.isDemo);
   const now = useLiveClock();
+  const providerOverrides = useSettingsStore((s) => s.providerOverrides);
 
-  const providers = isDemo ? MOCK_MODEL_PROVIDERS.filter((p) => p.allowed).length : null;
+  const providers = isDemo ? countAllowedProviders(MOCK_MODEL_PROVIDERS, providerOverrides) : null;
   const next = isDemo ? MOCK_UPCOMING_ROUTINES[0] : undefined;
 
   return [

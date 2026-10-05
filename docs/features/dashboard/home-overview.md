@@ -66,7 +66,7 @@ Subcomponents each own a slice:
 | `src/app/dashboard/home/home-page/useUpcomingRoutines.ts` | `MOCK_UPCOMING_ROUTINES` or filtered/sorted `getSyncedTriggers()` (carries raw `nextRunAt`, not a baked label) |
 | `src/app/dashboard/home/home-page/useLiveClock.ts` | Shared relative-time clock: state-held `now`, visibility-suspended, catch-up on resume |
 | `src/app/dashboard/home/home-page/relativeLabels.ts` | Compact `6m`/`1h`/`1d` labels + cadence roll-forward (`relativeLabels.test.ts`) |
-| `src/app/dashboard/home/home-page/useTickerItems.ts` | Builds the ticker's frames; owns the demo gate on providers + next routine |
+| `src/app/dashboard/home/home-page/useTickerItems.ts` | Builds the ticker's frames; owns the demo gate on providers + next routine; the provider count applies the Settings allow-list overrides (`countAllowedProviders`) |
 
 ## Data & state
 - **Source:** Demo-only in this repo. `api` is a Proxy (`src/lib/api.ts:361`) that dispatches to `mockApi` whenever `useAuthStore.isDemo` is true; otherwise to `supabaseApi` (`NEXT_PUBLIC_DATA_SOURCE=supabase`) or `realApi` (orchestrator REST). Fixtures live in `src/lib/mock-dashboard-data.ts` (`MOCK_FLEET_RECOMMENDATION`, `MOCK_FLEET_EXECUTIONS`, `MOCK_HEALTH_ISSUES`, `MOCK_HEALTH_DIGEST`, `MOCK_SLA_BREACHES`, `MOCK_EXECUTION_HEATMAP`, `MOCK_LEADERBOARD`, `MOCK_UPCOMING_ROUTINES`, `MOCK_VAULT_CHANGES`, `MOCK_MODEL_PROVIDERS`, `SPARKLINE_SUCCESS`, `HEATMAP_DAYS = 7`) and `src/lib/mockApi.ts`.

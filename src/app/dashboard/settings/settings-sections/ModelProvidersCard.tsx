@@ -7,7 +7,7 @@ import { useTranslation } from "@/i18n/useTranslation";
 import { fadeUp } from "@/lib/animations";
 import { MOCK_MODEL_PROVIDERS } from "@/lib/mock-dashboard-data";
 import { useAuthStore } from "@/stores/authStore";
-import { useSettingsStore } from "@/stores/settingsStore";
+import { isProviderAllowed, useSettingsStore } from "@/stores/settingsStore";
 import { SettingToggle } from "./SettingToggle";
 
 /** BYOM policy: which model providers the fleet may use. Persisted in
@@ -32,7 +32,7 @@ export function ModelProvidersCard() {
       </div>
       <div className="divide-y divide-glass">
         {MOCK_MODEL_PROVIDERS.map((m) => {
-          const on = overrides[m.id] ?? m.allowed;
+          const on = isProviderAllowed(m, overrides);
           return (
             <div key={m.id} className="flex items-center gap-3 py-2.5">
               <div className="min-w-0 flex-1">

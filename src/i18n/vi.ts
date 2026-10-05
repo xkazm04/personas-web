@@ -1270,6 +1270,10 @@ export const vi: LocaleTranslations = {
         title: "Th\u00f4ng b\u00e1o",
         subtitle: "C\u1ea3nh b\u00e1o t\u1ef1 ph\u1ee5c h\u1ed3i v\u00e0 b\u1ea3n t\u00f3m t\u1eaft",
         weeklyDigest: "T\u00f3m t\u1eaft s\u1ee9c kh\u1ecfe h\u00e0ng tu\u1ea7n",
+        escalation: {
+          label: "Chuy\u1ec3n c\u1ea5p c\u00e1c \u0111\u00e1nh gi\u00e1 qu\u00e1 h\u1ea1n",
+          description: "C\u00e1c \u0111\u00e1nh gi\u00e1 \u0111ang ch\u1edd v\u01b0\u1ee3t qu\u00e1 SLA s\u1ebd \u0111\u01b0\u1ee3c chuy\u1ec3n c\u1ea5p. N\u1ebfu ch\u00ednh s\u00e1ch quy \u0111\u1ecbnh, ch\u00fang s\u1ebd \u0111\u01b0\u1ee3c t\u1ef1 \u0111\u1ed9ng ph\u00ea duy\u1ec7t thay v\u00e0o \u0111\u00f3 (m\u1eb7c \u0111\u1ecbnh: \u0111\u00e1nh gi\u00e1 Th\u00f4ng tin sau 8 gi\u1edd)."
+        },
         voice: {
           label: "\u0110\u1ecdc to th\u00f4ng b\u00e1o \u0111\u00e1nh gi\u00e1 m\u1edbi",
           preview: "Xem tr\u01b0\u1edbc",

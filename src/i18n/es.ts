@@ -1270,6 +1270,10 @@ export const es: LocaleTranslations = {
         title: "Notificaciones",
         subtitle: "Alertas de auto-reparaci\u00f3n y res\u00famenes",
         weeklyDigest: "Resumen semanal de estado",
+        escalation: {
+          label: "Escalar revisiones vencidas",
+          description: "Las revisiones pendientes que superan su SLA se escalan. Si la pol\u00edtica lo indica, se aprueban autom\u00e1ticamente en su lugar (por defecto, las revisiones de Informaci\u00f3n tras 8 horas)."
+        },
         voice: {
           label: "Anunciar nuevas revisiones en voz alta",
           preview: "Vista previa",

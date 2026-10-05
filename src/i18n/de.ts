@@ -1270,6 +1270,10 @@ export const de: LocaleTranslations = {
         title: "Benachrichtigungen",
         subtitle: "Healing-Warnungen und Berichte",
         weeklyDigest: "W\u00f6chentlicher Zustandsbericht",
+        escalation: {
+          label: "\u00dcberf\u00e4llige Reviews eskalieren",
+          description: "Ausstehende Reviews, die ihr SLA \u00fcberschreiten, werden eskaliert. Wo die Richtlinie es vorsieht, werden sie stattdessen automatisch genehmigt (standardm\u00e4\u00dfig Info-Reviews nach 8 Stunden)."
+        },
         voice: {
           label: "Neue Reviews laut ansagen",
           preview: "Vorschau",

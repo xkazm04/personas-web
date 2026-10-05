@@ -1270,6 +1270,10 @@ export const cs: LocaleTranslations = {
         title: "Ozn\u00e1men\u00ed",
         subtitle: "Upozorn\u011bn\u00ed na opravy a souhrny",
         weeklyDigest: "T\u00fddenn\u00ed souhrn zdrav\u00ed",
+        escalation: {
+          label: "Eskalovat revize po term\u00ednu",
+          description: "\u010cekaj\u00edc\u00ed revize, kter\u00e9 p\u0159ekro\u010d\u00ed svou SLA, se eskaluj\u00ed. Pokud to z\u00e1sady ur\u010duj\u00ed, m\u00edsto toho se automaticky schv\u00e1l\u00ed (ve v\u00fdchoz\u00edm nastaven\u00ed revize Informace po 8 hodin\u00e1ch)."
+        },
         voice: {
           label: "Oznamovat nov\u00e9 revize nahlas",
           preview: "N\u00e1hled",
