@@ -1,6 +1,127 @@
 "use client";
 
-/** Features lab - One sentence. One matrix., variant V2. Placeholder; the builder replaces this file. */
+import { useRef, type CSSProperties } from "react";
+import { motion } from "framer-motion";
+import SectionWrapper from "@/components/SectionWrapper";
+import { useStillMotion } from "@/hooks/useStillMotion";
+import { useDesignCopy, valueOf } from "../shared/copy";
+import DesignIntro from "../shared/DesignIntro";
+import { DIM_BY_KEY, DIMS, type DimKey } from "../shared/dims";
+import LabTourScope from "../shared/LabTourScope";
+import ReplayButton from "../shared/ReplayButton";
+import ToolMark from "../shared/ToolMark";
+import { dimPhase, stepOf, type DimPhase } from "../shared/timeline";
+import { useBuildClock } from "../shared/useBuildClock";
+import Band from "./Band";
+import Callout, { LABEL_SIZE, textInk, VALUE_SIZE } from "./Callout";
+import { AR, CALLOUTS, CORE, H, PLUG_HEAD, PLUGS, STEPS, u, W } from "./geometry";
+import Parts from "./Parts";
+import { SheetGrid, TitleBlock } from "./Sheet";
+import TestRun from "./TestRun";
+
+const TYPE = stepOf(STEPS, "type");
+const READ = stepOf(STEPS, "read");
+const FINALE = stepOf(STEPS, "finale");
+
+/**
+ * V2 - the blueprint. The sentence is the brief at the top of a drawing
+ * sheet; Personas draws the agent it describes as the machine it will run as
+ * (schedule, agent, apps, memory, review gate, messages, events, error loop),
+ * inking each part as it decides it and annotating the decision. Finished,
+ * one email test-runs the machine and the sheet is stamped ready.
+ */
+export function DesignBlueprint() {
+  const copy = useDesignCopy();
+  const still = useStillMotion();
+  const artRef = useRef<HTMLDivElement>(null);
+  const clock = useBuildClock(artRef, STEPS, still);
+  const { at, moving, run, done } = clock;
+  const phases = Object.fromEntries(DIMS.map((d) => [d.key, dimPhase(STEPS, at, d.key)])) as Record<DimKey, DimPhase>;
+  const asking = copy.dims.find((d) => phases[d.key] === "asking");
+  const byKey = Object.fromEntries(copy.dims.map((d) => [d.key, d])) as Record<DimKey, (typeof copy.dims)[number]>;
+  const tasks = byKey.tasks;
+  const appsInk = phases.apps !== "pending";
+  const running = moving && at === FINALE;
+
+  return (
+    <SectionWrapper fit="fill" id="design">
+      <DesignIntro copy={copy} lede={copy.lab.v2.lede} />
+      <div data-stage-slot className="mt-8 stage:mt-0">
+        <div
+          ref={artRef}
+          data-stage-art
+          data-tour-diagram="design"
+          className="relative w-full select-none overflow-hidden border"
+          style={{
+            "--art-ar": AR,
+            aspectRatio: AR,
+            containerType: "inline-size",
+            borderRadius: "1.2cqw",
+            borderColor: "color-mix(in srgb, var(--brand-cyan) 28%, transparent)",
+            background: "radial-gradient(80% 90% at 35% 45%, color-mix(in srgb, var(--brand-cyan) 7%, transparent), transparent 70%), color-mix(in srgb, var(--background) 82%, transparent)",
+          } as CSSProperties}
+        >
+          <svg className="absolute inset-0 h-full w-full" viewBox={`0 0 ${W} ${H}`} role="img" aria-label={copy.lab.artLabel}>
+            <SheetGrid />
+            <Parts phases={phases} moving={moving} pulse={moving && clock.ticking} />
+            {done && <TestRun running={running} run={run} />}
+          </svg>
+
+          <Band copy={copy} run={run} typing={at >= TYPE} read={at >= READ} asking={asking} moving={moving} onAnswer={clock.answer} />
+          <div className="absolute" style={{ right: u(20), top: u(28) }}>
+            <ReplayButton label={copy.lab.replay} onClick={clock.replay} />
+          </div>
+
+          {/* the agent itself: its task is written inside the core */}
+          <div className="absolute flex flex-col" style={{ left: u(CORE.x), top: u(CORE.y), width: u(CORE.w), height: u(CORE.h), padding: `0 ${u(12)}` }}>
+            <span className="flex items-center font-mono font-bold uppercase tracking-[0.12em] transition-colors duration-500" style={{ height: u(30), fontSize: LABEL_SIZE, color: phases.tasks !== "pending" ? textInk(tasks.ink) : "color-mix(in srgb, var(--foreground) 62%, transparent)" }}>
+              {tasks.label}
+            </span>
+            <motion.span
+              className="mt-[0.6cqw] font-medium leading-snug text-foreground"
+              style={{ fontSize: VALUE_SIZE }}
+              initial={false}
+              animate={{ opacity: phases.tasks === "resolved" ? 1 : 0 }}
+              transition={{ duration: moving ? 0.5 : 0, delay: moving ? 0.3 : 0 }}
+            >
+              {tasks.value}
+            </motion.span>
+          </div>
+
+          {PLUGS.map((p) => (
+            <span key={p.tool} className="absolute flex items-center justify-center" style={{ left: u(p.x - PLUG_HEAD.w / 2), top: u(PLUG_HEAD.top), width: u(PLUG_HEAD.w), height: u(PLUG_HEAD.h) }}>
+              <ToolMark name={p.tool} style={{ width: u(18), height: u(18), color: appsInk ? DIM_BY_KEY.apps.ink : "rgba(var(--surface-overlay), 0.25)", transition: "color .6s" }} />
+            </span>
+          ))}
+
+          {copy.dims
+            .filter((d) => d.key !== "tasks")
+            .map((d) => (
+              <Callout key={d.key} d={d} box={CALLOUTS[d.key as Exclude<DimKey, "tasks">]} phase={phases[d.key]} value={valueOf(d, clock.answers)} source={copy.lab.sources[d.source]} moving={moving} />
+            ))}
+
+          <motion.span
+            className="absolute flex items-center gap-2 font-mono uppercase tracking-[0.14em] text-foreground/75"
+            style={{ left: u(22), top: u(404), fontSize: LABEL_SIZE }}
+            initial={false}
+            animate={{ opacity: running ? 1 : 0 }}
+            transition={{ duration: moving ? 0.4 : 0 }}
+          >
+            <span className="h-2 w-2 rounded-full bg-brand-cyan" aria-hidden="true" />
+            {copy.lab.v2.testRun}
+          </motion.span>
+          <TitleBlock copy={copy} done={at > FINALE} moving={moving} />
+        </div>
+      </div>
+    </SectionWrapper>
+  );
+}
+
+/** The lab slot: the section inside a stand-in tour provider (see LabTourScope). */
 export default function LabVariant() {
-  return <div className="flex min-h-[60vh] items-center justify-center text-muted-dark">One sentence. One matrix. - V2</div>;
+  return (
+    <LabTourScope>
+      <DesignBlueprint />
+    </LabTourScope>
+  );
 }
