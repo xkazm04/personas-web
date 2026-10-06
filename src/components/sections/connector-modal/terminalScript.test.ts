@@ -59,11 +59,11 @@ describe("buildTerminalScript", () => {
   });
 
   it("plays a different script for every connector (no shared canned run)", () => {
-    // Two catalog entries (the two Obsidian bridges) share a label and use cases,
-    // so the honest bound is one script per distinct label + first use case.
-    const identities = new Set(connectors.map((c) => JSON.stringify([c.label, c.useCases[0]])));
-    expect(identities.size).toBeGreaterThan(100);
-    expect(new Set(connectors.map(scriptText)).size).toBe(identities.size);
+    // Every catalog entry has its own label (the two Obsidian connectors used to
+    // share one, with identical use cases), so every entry plays its own script.
+    expect(connectors.length).toBeGreaterThan(100);
+    expect(new Set(connectors.map((c) => c.label)).size).toBe(connectors.length);
+    expect(new Set(connectors.map(scriptText)).size).toBe(connectors.length);
   });
 
   it("invents no results, counts or timings and shows no CLI command", () => {
