@@ -148,7 +148,7 @@ Status legend: ✅ written · ⬜ planned
 | ✅ [layout-navigation](platform/layout-navigation.md) | Root layout, navbar, page shell |
 | ✅ [shared-ui-primitives](platform/shared-ui-primitives.md) | Brand cards, terminal, icons, illustrations |
 | ✅ [animation-motion](platform/animation-motion.md) | Motion system + gating hooks |
-| ✅ [mobile-app-shell](platform/mobile-app-shell.md) | `/m` mobile experience |
+| ✅ [mobile-app-shell](platform/mobile-app-shell.md) | `/m` mobile experience: rebuilding (old views deleted, URLs redirect; see the /m revival plan) |
 | ✅ [theme-system](platform/theme-system.md) | Multi-variant theme system |
 | ✅ [internationalization](platform/internationalization.md) | 14-locale UI bundle |
 | ✅ [shared-utilities](platform/shared-utilities.md) | Types, hooks, formatting, validation |

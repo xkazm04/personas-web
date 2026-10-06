@@ -1533,24 +1533,11 @@
       "contexts": [
         {
           "name": "Mobile App Shell & Views",
-          "description": "Dedicated mobile experience: the /m route shell (overview, alerts, messages, reviews) and mobile UI primitives (app bar, tab bar, sheets, stat cards).",
+          "description": "Mobile experience, being rebuilt (docs/concepts/mobile-revival/PLAN.md): the old /m views were deleted 2026-10-06 and their URLs redirect (next.config.ts); the kept bottom-sheet primitive waits for the new /m.",
           "businessFeature": "Mobile App Shell & Views",
           "category": "ui",
           "filePaths": [
-            "src/app/m/alerts/page.tsx",
-            "src/app/m/layout.tsx",
-            "src/app/m/messages/page.tsx",
-            "src/app/m/overview/page.tsx",
-            "src/app/m/page.tsx",
-            "src/app/m/reviews/page.tsx",
-            "src/components/mobile/MobileAppBar.tsx",
-            "src/components/mobile/MobilePageTransition.tsx",
-            "src/components/mobile/MobileSheet.tsx",
-            "src/components/mobile/MobileShell.tsx",
-            "src/components/mobile/MobileStatCard.tsx",
-            "src/components/mobile/MobileTabBar.tsx",
-            "src/components/mobile/MobileThreadSheet.tsx",
-            "src/components/mobile/ViewFullSiteLink.tsx"
+            "src/components/primitives/BottomSheet.tsx"
           ],
           "target": null,
           "apiRoutes": []
@@ -2064,7 +2051,7 @@
     "Observability & Event Monitoring › Observability Charts & SLA [ui] — 55 files",
     "Observability & Event Monitoring › Event Bus & Stream Monitoring [ui] — 33 files",
     "Observability & Event Monitoring › Dashboard Home Overview [ui] — 23 files",
-    "Platform Foundation: Shell, UI & Motion › Mobile App Shell & Views [ui] — 13 files",
+    "Platform Foundation: Shell, UI & Motion › Mobile App Shell & Views [ui] — 1 file",
     "Platform Foundation: Shell, UI & Motion › Animation & Motion System [lib] — 24 files",
     "Platform Foundation: Shell, UI & Motion › Shared UI Primitives & Illustrations [ui] — 25 files",
     "Platform Foundation: Shell, UI & Motion › Dashboard Shell, Chrome & Realtime [ui] — 20 files",

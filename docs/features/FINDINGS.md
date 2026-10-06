@@ -83,7 +83,7 @@ Safe, low-risk cleanups (remove or wire up). Good early wins.
 | B-09 | Low | Ambient `AmbientOrbs`/`ParallaxAccents`/`TopoBackground` mounted nowhere. | Mount or mark drop-in only. | 🔴 |
 | B-10 | Med | `/changelog` link in `Changelog.tsx:76` was dead (no `src/app/changelog`). *(The `Changelog` card itself is only mounted via the dev `/preview` harness — `LazyChangelog` is otherwise unmounted; cleanup tracked separately.)* | **Done** — link → `/roadmap#changelog` (a real anchor on `/roadmap`). | 🟢 |
 | B-11 | Low | `tool-catalogue.ts` `CORE_TOOL_IDS`/`CORE_TOOLS` exported for FlowComposer but unused (it has its own `TOOL_CATALOGUE`); two 20-tool lists duplicated. | Dedup. | 🔴 |
-| B-12 | Med | `src/proxy.ts` is complete middleware (matcher `/dashboard/:path*`, mobile-UA → `/m/overview`, `prefer-full` escape hatch) but named `proxy.ts`, so Next never loads it — the `/m` redirect **does not run** (`/m` is reachable only by direct URL). | **Decision: leave dormant (deferred-by-design).** Stays inert until `/m` is ship-ready — needs a "view full site" opt-out (the `prefer-full` cookie has no UI setter today) + mobile QA. To wire later: move `proxy.ts`→`src/middleware.ts` + rename `proxy`→`middleware` (config unchanged; no importers to update). **Correction 2026-10-05: the premise is false.** Next 16 renamed Middleware to Proxy, so `src/proxy.ts` exporting `proxy()` IS the convention and runs: the mobile redirect is live (path-mapped to the closest `/m/*` view), and the "leave dormant" decision never took effect. | ⚪ |
+| B-12 | Med | `src/proxy.ts` is complete middleware (matcher `/dashboard/:path*`, mobile-UA → `/m/overview`, `prefer-full` escape hatch) but named `proxy.ts`, so Next never loads it — the `/m` redirect **does not run** (`/m` is reachable only by direct URL). | **Decision: leave dormant (deferred-by-design).** Stays inert until `/m` is ship-ready — needs a "view full site" opt-out (the `prefer-full` cookie has no UI setter today) + mobile QA. To wire later: move `proxy.ts`→`src/middleware.ts` + rename `proxy`→`middleware` (config unchanged; no importers to update). **Correction 2026-10-05: the premise is false.** Next 16 renamed Middleware to Proxy, so `src/proxy.ts` exporting `proxy()` IS the convention and runs: the mobile redirect is live (path-mapped to the closest `/m/*` view), and the "leave dormant" decision never took effect. **Resolved 2026-10-06 by owner decision M1** (`docs/concepts/mobile-revival/PLAN.md`): `src/proxy.ts` deleted with the old `/m` tree; old `/m` URLs are temporary 307 redirects in `next.config.ts`; each `/m` revival phase re-enables a phone redirect for its own scope when it ships. | 🟢 |
 | B-13 | Low | SSE proxies dormant in demo: `/api/executions/[id]/stream` has no consumer (detail viewer polls); `/api/events/stream` only runs non-demo. | Document / wire when live. | 🔴 |
 | B-14 | Low | Agent-lab `EvolutionTab` "breed next gen" button has no `onClick`; chat input is a static div. | Wire or mark decorative. | 🔴 |
 | B-15 | Low | `mockAuth.ts:22` `mockInitialize` unused by live flow. | **Removed** (0 callers; `mockSignIn`/`mockSignOut` retained). | 🟢 |
@@ -185,7 +185,7 @@ trigger-wheel entrance · `healing-circuit` freezes with no static fallback fram
 | ID | Sev | Finding | Fix | Status |
 |---|---|---|---|---|
 | I-01 | Low | Unused `NavbarMobileMenu.tsx` lacks focus trap/scroll lock (live `MobilePanel` is fine). | **Deleted** the unused variant (0 importers). | 🟢 |
-| I-02 | Med | `MobileSheet` lacks `aria-labelledby`/focus-trap/focus-return despite `role="dialog"`. | **Done** — wired `useFocusTrap` (initial focus + Tab cycle + restore on close) + `aria-labelledby` on the sheet title. | 🟢 |
+| I-02 | Med | `MobileSheet` lacks `aria-labelledby`/focus-trap/focus-return despite `role="dialog"`. | **Done** — wired `useFocusTrap` (initial focus + Tab cycle + restore on close) + `aria-labelledby` on the sheet title. (2026-10-06: the sheet moved to `src/components/primitives/BottomSheet.tsx` when `/m` was deleted.) | 🟢 |
 | I-03 | Med | Connector modal lacks focus trap / `role="dialog"` / focus restore. | **Done** — added `role="dialog"`/`aria-modal`/`aria-label` (connector name) + `useFocusTrap`. | 🟢 |
 | I-04 | Low | FAQ decorative SVGs lack `aria-hidden` → raw `<text>` leaks into the answer region. | **Done** — `aria-hidden` on the FAQ illustration wrapper (`FAQ.tsx`), hiding the decorative `<text>` from the answer `role="region"`. | 🟢 |
 | I-05 | Med | Orchestration-hub SVG is `aria-hidden` yet nodes are clickable `<g onClick>` with no role/tabindex/key handler (mouse-only). | **Done** — `HubNode` nodes now `role="button"`/`tabIndex`/`aria-label`/`aria-pressed` + Enter/Space handler + `SVGFocusRingRect` (matches the `FlowNodes` pattern); `HubRing` svg un-hidden (`role="group"`). | 🟢 |
@@ -200,7 +200,7 @@ trigger-wheel entrance · `healing-circuit` freezes with no static fallback fram
 | ID | Sev | Finding | Fix | Status |
 |---|---|---|---|---|
 | J-01 | Med | 4 e2e specs (`community`, `compare`, `download`, `use-cases`) target routes with no `page.tsx` → would 404. | Repoint or remove stale specs. | 🔴 |
-| J-02 | Med | Zero e2e for `/dashboard/*` (14 pages), `/m/*`, and the Supabase voting flow. | Add smoke specs. | 🔴 |
+| J-02 | Med | Zero e2e for `/dashboard/*` (14 pages), `/m/*` (deleted 2026-10-06; phone checks now live in the Playwright `mobile` project), and the Supabase voting flow. | Add smoke specs. | 🔴 |
 | J-03 | Low | `trace: "on-first-retry"` with `retries: 0` → traces never produced; 2 skipped connections-modal tests; timing-based playground/tour waits are flaky. | Set retries or change trace mode; de-flake. | 🔴 |
 
 ---
@@ -214,7 +214,7 @@ Ordered by (low risk × high value) first; gated themes last.
 3. **Wave 3 — Copy drift & data integrity** (F-01..F-07, E-07): literal/text + sort fixes.
 4. **Wave 4 — Reduced-motion gating** (C-01) + **tokens** (D-01): a11y + the missing `--surface`.
 5. **Wave 5 — Accessibility dialogs** (I-02, I-03, I-05): focus traps + keyboard ops.
-6. **Wave 6 — Reliability** (H-02, H-03, B-12): purity, scroll-lock, the dormant `/m` middleware.
+6. **Wave 6 — Reliability** (H-02, H-03, B-12): purity, scroll-lock, the `/m` redirect (B-12, resolved 2026-10-06 by M1).
 7. **Gated — needs decision**: Theme A (i18n campaign), Theme G (security), E-04/E-05/E-06 (ship/cut calls).
 
 Each fix = its own atomic commit referencing its ID (e.g. `Refs: docs/features/FINDINGS.md E-02`).

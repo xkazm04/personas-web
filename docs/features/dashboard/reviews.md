@@ -8,7 +8,7 @@ Some agent decisions shouldn't be made by the agent alone. When an agent hits on
 The operator can **approve**, **reject**, or **skip** an item, by click or by keyboard, and can attach reviewer notes when resolving. Two ways to work the queue:
 
 - **Split-pane** (default) — a filterable list (All / Pending / Approved / Rejected) on the left, a detail panel on the right. Supports multi-select with a bulk toolbar (select-all, bulk approve/reject), shift-click range selection, a confirm dialog before bulk rejects, and `j`/`k`/`a`/`r` keyboard navigation.
-- **Focus flow** — a distraction-free, one-card-at-a-time mode that walks the pending queue. `a` approves, `r` rejects, `s` sends the current item to the back of the queue, `Esc` exits. A progress header shows position and a fill bar. Focus flow also mounts on mobile at `/m/reviews`.
+- **Focus flow** — a distraction-free, one-card-at-a-time mode that walks the pending queue. `a` approves, `r` rejects, `s` sends the current item to the back of the queue, `Esc` exits. A progress header shows position and a fill bar. (The old `/m/reviews` phone wrapper was deleted 2026-10-06; that URL now redirects here.)
 
 Every human verdict, on every path (button, key, focus card, bulk toolbar, retry), shows at once and is saved after a **5-second undo** window. Reviewer notes typed in the detail panel travel with the verdict however it was given.
 
@@ -25,7 +25,7 @@ Beyond the manual click/keyboard path, pending items age against an **escalation
 **Decision ledger: one door for every verdict** (`src/lib/review-ledger.ts` + `reviewStore.ts`). The ledger is a pure transition table: `idle -> window (5 s, undoable) -> in flight -> idle`, with `undo` dropping the window. `transition(state, event)` returns the next state plus effects (`schedule`, `cancelTimer`, `commit`); the store holds `ledger`, owns the **one** window timer and runs the effects. Store API, the only way a human verdict is written:
 - `decide(ids, verdict): boolean` arms a window. Notes come from `drafts[id]`. Returns `false` when refused (see `refusal`).
 - `undoDecision()` cancels the open window (no write).
-- `flushDecisions()` commits the open window now. Called on teardown: split-pane unmount (`useReviewBulkActions`), focus-flow unmount (desktop and `/m/reviews`), `pagehide` (registered once in `reviewStore.ts`) and `reset()` (sign-out).
+- `flushDecisions()` commits the open window now. Called on teardown: split-pane unmount (`useReviewBulkActions`), focus-flow unmount, `pagehide` (registered once in `reviewStore.ts`) and `reset()` (sign-out).
 - `setDraft(id, text)` / `drafts`: reviewer-note drafts keyed by review id. `ReviewDetailPanel` edits them, so keyboard `a`/`r` and the buttons carry the same notes. Cleared once the write succeeds.
 - `commitProgress` (multi-row commit in flight), `lastResult` + `dismissResult` (a commit with failures), `refusal` (last refused arm).
 
