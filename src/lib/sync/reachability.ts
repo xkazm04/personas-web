@@ -122,12 +122,14 @@ export function actionsEnabled(tier: ReachabilityTier): boolean {
 }
 
 /**
- * The desktop download CTA shows only where the user cannot sync (PLAN M7):
- * the anonymous tiers and never-synced. A synced user whose desktop is merely
- * closed is told to open it, not to download it again.
+ * The desktop download CTA shows only where a real user cannot sync (PLAN M7):
+ * no account, or an account whose desktop has never synced. A synced user whose
+ * desktop is merely closed is told to open it, not to download it again, and the
+ * demo never shows it (owner, 2026-10-06): the demo is a tour of the dashboard,
+ * not a sign-up funnel.
  */
 export function showsDownloadCta(tier: ReachabilityTier): boolean {
-  return tier === "demo" || tier === "no-account" || tier === "never-synced";
+  return tier === "no-account" || tier === "never-synced";
 }
 
 /** Parse the demo `?desktop=` switch from a query string. */

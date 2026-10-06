@@ -29,6 +29,12 @@ async function openDemo(page: Page, query = "") {
 const DOWNLOAD = "Send the download to my computer";
 
 test.describe("phone Personas (demo)", () => {
+  test("the demo never offers the desktop download (owner, 2026-10-06)", async ({ page }) => {
+    await openDemo(page);
+    await expect(page.getByRole("button", { name: /^Pause / }).first()).toBeVisible();
+    await expect(page.getByRole("button", { name: DOWNLOAD })).toHaveCount(0);
+  });
+
   test("Pause: Sending... -> Working... -> Done within 3 s, the row reads Paused, and Resume reverses it", async ({ page }) => {
     await openDemo(page);
     const pause = page.getByRole("button", { name: /^Pause / }).first();

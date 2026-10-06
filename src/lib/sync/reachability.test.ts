@@ -94,9 +94,9 @@ describe("what each tier allows (M7, M12)", () => {
     expect(enabled).toEqual(["demo", "online"]);
   });
 
-  it("the download CTA shows only where the user cannot sync", () => {
+  it("the download CTA shows only where a real user cannot sync - never in the demo (owner, 2026-10-06)", () => {
     const cta = (["demo", "no-account", "never-synced", "offline", "online-unpaired", "online"] as const).filter(showsDownloadCta);
-    expect(cta).toEqual(["demo", "no-account", "never-synced"]);
+    expect(cta).toEqual(["no-account", "never-synced"]);
   });
 
   it("parses the demo switch, defaulting to online", () => {
