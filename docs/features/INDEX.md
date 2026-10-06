@@ -80,14 +80,14 @@ Status legend: ✅ written · ⬜ planned
 
 | Doc | Surface |
 | --- | --- |
-| ✅ [observability-deck](product-showcase/observability-deck.md) | Live pulse-grid deck |
+| ✅ [observability-deck](product-showcase/observability-deck.md) | "On the record" printer tape + day's statement |
 | ✅ [security-vault](product-showcase/security-vault.md) | Nested-vault security illustration |
 | ✅ [agent-lab](product-showcase/agent-lab.md) | Arena / chat / eval / evolution tabs |
-| ✅ [plugin-ecosystem](product-showcase/plugin-ecosystem.md) | Plugin grid + second brain |
-| ✅ [memory-layers](product-showcase/memory-layers.md) | "Run twice" memory illustration |
-| ✅ [multi-provider-ai](product-showcase/multi-provider-ai.md) | Multi-provider router illustration |
-| ✅ [design-engine](product-showcase/design-engine.md) | Design-engine intent matrix |
-| ✅ [healing-circuit](product-showcase/healing-circuit.md) | Self-healing circuit |
+| ✅ [plugin-ecosystem](product-showcase/plugin-ecosystem.md) | Plug-in bay: Dev Tools, Brain, Drive, Twin cartridges |
+| ✅ [memory-layers](product-showcase/memory-layers.md) | "Growth rings" memory illustration |
+| ✅ [multi-provider-ai](product-showcase/multi-provider-ai.md) | Lit model router (Claude vs Ollama) |
+| ✅ [design-engine](product-showcase/design-engine.md) | Design-engine blueprint sheet |
+| ✅ [healing-circuit](product-showcase/healing-circuit.md) | Self-healing run circuit |
 | ✅ [trigger-system](product-showcase/trigger-system.md) | Trigger automation wheel (removed; kept as history) |
 
 ### demos/ — Interactive Demos & Playground

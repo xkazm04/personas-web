@@ -77,9 +77,9 @@ describe("showcase roster", () => {
     const copy = en.pluginShowcase;
     expect(SHOWCASE_COUNTS).toEqual({ showcased: SHOWCASE_KEYS.length, shipped: shippedIds().length });
     const intro = pluginsIntro(copy, SHOWCASE_COUNTS.showcased, SHOWCASE_COUNTS.shipped);
+    // All four shipped plugins are on stage, so the intro says "every one".
     expect(intro).toMatch(/\b4\b/);
-    expect(intro).toMatch(/\b2\b/);
-    expect(intro).toContain(copy.introTail);
+    expect(intro.startsWith(fillTemplate(copy.introAll, { shipped: 4 }))).toBe(true);
     // A different roster yields different numbers: the count is computed.
     const other = pluginsIntro(copy, 3, 5);
     expect(other).toMatch(/\b5\b/);

@@ -4,7 +4,6 @@ import * as homeSections from "@/components/sections/lazy";
 import * as howSections from "@/components/sections/how-lazy";
 import * as athenaSections from "@/components/sections/athena-lazy";
 import { buildPreviewRegistry } from "./derive";
-import { LAB_EXTRAS } from "./lab";
 
 /**
  * Sections available at /preview/[section] (dev-only - both preview routes 404
@@ -42,8 +41,6 @@ export const PREVIEW_EXTRAS: Record<string, ComponentType> = {
   "agent-playground": dynamic(() => import("@/components/sections/agent-playground")),
   "playground-timeline": dynamic(() => import("@/components/sections/playground-timeline")),
   changelog: dynamic(() => import("@/components/sections/Changelog")),
-  // Features lab prototypes (lab.ts).
-  ...LAB_EXTRAS,
 };
 
 export const PREVIEW_REGISTRY: ReadonlyMap<string, ComponentType> = buildPreviewRegistry<ComponentType>(

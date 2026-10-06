@@ -1,120 +1,120 @@
 # Design Engine
-> A self-building "Persona Matrix" that turns one sentence into eight populated capability cells radiating from a central intent tile · **Route:** `/features` (deep-dive section) · **Status:** Live
+> A "blueprint" drawing sheet on which one typed sentence becomes the machine an agent runs as, decided across the app's eight real dimensions, then test-run and stamped ready to deploy · **Route:** `/features` (deep-dive section) · **Status:** Live
 
 ## What it does
-The Design Engine is the opening section of the `/features` page. It dramatizes
-the product's core promise — *"One sentence. One matrix."* — by animating a
-persona being assembled live. A user prompt ("Triage my Gmail inbox and draft
-replies for urgent emails.") types itself into a glowing center tile, then the
-eight surrounding dimensions — **Tasks, Apps & Services, When It Runs, Human
-Review, Messages, Memory, Errors, Events** — light up one by one. Each cell
-"thinks", optionally asks a clarifying question (with multiple-choice chips and
-a pre-picked answer), then fills with its resolved value. A spoke overlay fires
-a glowing "command packet" from the center out to each cell as it is engaged,
-selling the "intent at center · 8 dimensions radiate outward" metaphor. When
-all eight cells resolve, the header flips to **ready to deploy** and a `replay`
-button appears.
+The Design Engine is the opening section of the `/features` page and carries its
+promise, *"One sentence. One matrix."* A sentence ("Triage my Gmail inbox and
+draft replies for urgent emails.") is typed at the top of an engineering drawing
+sheet. Personas then draws the agent that sentence describes as a machine:
+schedule clock, the agent core with its task written inside, Gmail and Slack
+plugs, a memory tank, a review gate, a message bubble, an events mast and an
+error loop. Each part starts as faint dashed construction lines and is inked in
+its dimension's colour at the moment Personas decides it, with a leader line to
+an annotation saying what was decided and whether it came from **your words**,
+**a question** or **Personas' inference**.
+
+Personas asks only two questions (how often to run, whether to approve drafts
+first), shown as real answer buttons; if the visitor does nothing it takes the
+suggested answer. When all eight dimensions are decided, one email test-runs the
+finished machine (through the review gate, into a message, out as an event) and
+the title block is stamped **Ready to deploy**. A **replay** button runs it again.
+The section also hosts the page's guided-tour launcher.
 
 ## How it works
-`DesignEngine.tsx` is a `SectionWrapper(fit="fill", id="design")` with a heading,
-a one-line lede, the `/features` **tour launcher** (`TourLauncher tourId="features"`,
-bridging to `/demo?tour=1`; it moved here from `InfoPageLayout`'s slot so the first
-stage starts under the navbar) and the `DesignEngineMatrix` diagram below. The matrix
-(`design-engine-matrix/index.tsx`) lays out a CSS `grid-cols-3` of nine tiles:
-eight `MatrixTile`s around one `IntentTile` at the center, with a `RadiateOverlay`
-SVG absolutely positioned on top.
+`design-blueprint/index.tsx` (`DesignBlueprint`) is a `SectionWrapper(fit="fill",
+id="design")` (`:46`) holding `DesignIntro` (heading, lede, `TourLauncher
+tourId="features"` bridging to `/demo?tour=1`) and a `data-stage-slot` around the
+art box (`:48-52`). The art box is `data-stage-art` with `--art-ar` = `AR` (a
+1000 x 435 drawing, `geometry.ts`) and `containerType: inline-size`, so every size
+is in `cqw` (`u(n)` = `n/10 cqw`); on the stage `src/styles/stage.css`
+(`[data-stage-art]`, ~`:94`) fits it to the height left under the intro. It
+carries `data-tour-diagram="design"` (`:52`).
 
-**Stage fit (desktop).** The matrix wrapper is the section's `data-stage-slot`, so on
-the stage (`src/styles/stage.css`) the 3×3 grid takes the height left under the
-matrix header in `minmax(0, fr)` rows (the intent row 1.35×), tiles drop their
-260/320px minimum (`stage:min-h-0` in `data.ts`), dimension labels size by screen
-height, and the footer counter hides (`stage:hidden`).
+Layers inside the box: an SVG (`SheetGrid`, `Parts`, and `TestRun` once `done`),
+`Band` (the brief line, which turns into the question + answer buttons while a
+dimension is `asking`), the replay button, the core's task text, connector
+`ToolMark` plugs, one `Callout` per non-task dimension (`CALLOUTS` geometry), a
+"test run" caption and the `TitleBlock` with the stamp (`Sheet.tsx`).
 
-The animation is driven entirely by `usePersonaMatrixBuild()` in
-`designMatrixShared.tsx`. An `IntersectionObserver` (rootMargin `-80px`, watching
-an empty sentinel `<div ref={sectionRef}>`) fires `runBuild()` once when the
-section scrolls into view. `runBuild` schedules a long chain of `setTimeout`s
-into a `timeoutsRef` array: first the prompt types in at 90ms/char, then for each
-cell — `thinking` (1650ms) → optional `asking` (4200ms) → `answered` (1800ms) →
-`filled` (1200ms) — advancing a `cumulative` cursor. Under reduced motion the
-observer calls `showFinal()` instead, jumping straight to the resolved end-state. `phase` runs `idle → running
-→ done`. All timeouts are cleared on unmount and on `replay`.
+**Clock.** `shared/useBuildClock.ts` is a `useReducer` stepping through `STEPS`
+(`geometry.ts:61`, built by `makeTimeline` in `shared/timeline.ts`): `type` ->
+`read` -> per dimension `engage` [-> `ask`] -> `resolve` -> `finale`. `ask` steps
+exist only for `ASKED` (`triggers`, `review`); they wait for `answer()` or time
+out after 5.6s and keep the suggestion. The clock arms once when the art is 35%
+on screen (`ARM_RATIO`) and ticks only while in view and the tab is foregrounded
+(`usePageVisibility`). `dimPhase()` derives each dimension's `pending | engaged |
+asking | resolved` phase from the step index; `valueOf()` (`shared/copy.ts`)
+returns the visitor's answer instead of the default.
 
-Per-cell rendering: `MatrixTile` shows the Leonardo background image, dimension
-label, a spinner while `thinking`, a spring-animated check on `filled`, and a
-pulsing border ring while `asking`. `TileValue` is the `AnimatePresence`
-state machine that swaps the cell body between pending skeleton bars →
-`analyzing intent…` → question chips → answered value → final value (the `apps`
-cell renders custom Gmail/Slack SVG badges instead of plain text). `IntentTile`
-holds the typewriter prompt box, a rotating Sparkles badge, and a `filledCount/8`
-progress bar; its accent shifts purple → emerald when `phase === "done"`.
-`MatrixTile` is `memo`-wrapped so the ~11 chars/s typing in the intent tile no
-longer re-renders all eight tiles (untouched cells keep an identical status object).
-The matrix panel uses an almost-opaque `bg-background/95` instead of `backdrop-blur-xl`.
+`Parts.tsx` + `paths.ts` ink each part (stroke, then soft fill). `TestRun.tsx` is
+the one-shot finale (`RUN_MS` 4.2s, `RUN_T` keyframes): token travels the pipe, the
+gate door lifts, the memory tank fills a little, the token leaves from the mast.
+`shared/Sentence.tsx` types the sentence and highlights the keywords that drove
+decisions.
 
 ## Key files
 | File | Role |
 | --- | --- |
-| `src/components/feature-sections/DesignEngine.tsx` | Section shell: heading, lede, tour launcher, renders the matrix (stage slot) |
-| `src/components/feature-sections/DesignEngineMatrix.tsx` | One-line re-export of `./design-engine-matrix/index` |
-| `src/components/feature-sections/designMatrixShared.tsx` | `usePersonaMatrixBuild` hook (timeout choreography, phase/state machine; reads `t.designMatrix.userPrompt`), re-exports cell types + `localizeCells` |
-| `src/components/feature-sections/design-engine-matrix/index.tsx` | 3×3 grid layout, header/footer chrome, replay button, wires tiles + overlay |
-| `src/components/feature-sections/design-engine-matrix/data.ts` | `CELL_IMAGE`/`INTENT_IMAGE` paths, fluid type + height Tailwind classes (with `stage:` overrides) |
-| `src/components/feature-sections/design-matrix/designMatrixCells.ts` | `CELLS` cell identities (`CellBase`: key, icon, color, optional `question` id + `picked`); `localizeCells(copy)` joins in the translated label/value/question words |
-| `src/components/feature-sections/design-engine-matrix/components/MatrixTile.tsx` | One dimension tile (memoised): image, label, spinner/check, asking ring |
-| `src/components/feature-sections/design-engine-matrix/components/IntentTile.tsx` | Center tile: typewriter prompt, rotating badge, progress bar |
-| `src/components/feature-sections/design-engine-matrix/components/RadiateOverlay.tsx` | SVG spokes + animated command packets from center to cells |
-| `src/components/feature-sections/design-engine-matrix/components/TileValue.tsx` | Per-state `AnimatePresence` cell body (skeleton/thinking/asking/answered/filled) |
-| `public/imgs/features/matrix/*.png` | 9 Leonardo backgrounds: 8 cell images + `intent.png` (all present) |
-| `public/tools/gmail.svg`, `public/tools/slack.svg` | App badges rendered in the filled `apps` cell |
+| `src/components/feature-sections/design-blueprint/index.tsx` | Section shell + art box composition; per-dimension phases; core task text; `data-tour-diagram="design"` |
+| `design-blueprint/geometry.ts` | Sheet coordinates (`W`, `H`, `AR`, `CLOCK`, `CORE`, `GATE`, `TANK`, `CALLOUTS`, ...), `u()` cqw helper, `STEPS` pacing, test-run keyframes |
+| `design-blueprint/paths.ts`, `Parts.tsx` | SVG paths per part; inking, fill and leader-line animation |
+| `design-blueprint/Band.tsx` | Brief line that becomes the question; answer buttons (`aria-label` marks the suggested one) |
+| `design-blueprint/Callout.tsx` | Per-dimension annotation (label + source, decision when resolved); `LABEL_SIZE`/`VALUE_SIZE`/`textInk` |
+| `design-blueprint/Sheet.tsx` | `SheetGrid` (grid, registration corners) and `TitleBlock` ("Ready to deploy" stamp) |
+| `design-blueprint/TestRun.tsx` | Finale: one email through the machine |
+| `design-blueprint/shared/dims.ts` | The eight `DIMS` (key, theme-token ink, source `said/asked/inferred`, connector marks) and `ASKED` |
+| `design-blueprint/shared/timeline.ts`, `useBuildClock.ts` | Step list, phase derivation, view/visibility-gated clock, answers, replay |
+| `design-blueprint/shared/copy.ts` | `useDesignCopy()` joins `designMatrix` + `featuresSections.design` into `DimCopy[]`; `valueOf` |
+| `design-blueprint/shared/DesignIntro.tsx` | Heading, lede, `TourLauncher` |
+| `design-blueprint/shared/Sentence.tsx`, `DecisionText.tsx`, `ToolMark.tsx`, `ReplayButton.tsx` | Typed sentence with keyword highlighting, decision text, masked brand marks (`public/tools/*.svg`), replay button |
+| `src/app/features/page.tsx` | Mounts it directly (`:30` import, `:68-70` inside a `StageSection`) |
 
 ## Data & state
-- **Source:** Fully static — cell identities in `CELLS` (`designMatrixCells.ts`); every word (labels, values, questions, the typed prompt, chrome) in the `designMatrix` namespace of `src/i18n/en.ts`. No mock API, no fetch.
-- **Stores:** None (no Zustand). All state is local `useState` inside `usePersonaMatrixBuild` (`statuses`, `phase`, `userTyped`) plus refs (`timeoutsRef`, `hasRun`, `sectionRef`).
-- **API routes:** None.
-- **Types:** `CellKey`, `CellBase`, `CellDef`, `CellState` (`"pending" | "thinking" | "asking" | "answered" | "filled"`), `CellStatus`, `PersonaMatrixState` — defined in `designMatrixCells.ts` / `designMatrixShared.tsx`.
+- **Source:** static. Dimension identities in `shared/dims.ts` (the desktop app's
+  order is use-cases, connectors, triggers, human-review, memory, error-handling,
+  messages, events; here under the live section's keys). Words: `designMatrix`
+  (heading, `userPrompt`, `cells.<key>.label/value`, `questions.triggers|review`)
+  reused from the older section, plus `featuresSections.design` (`artLabel`,
+  `persona`, `yourSentence`, `ready`, `replay`, `asks`, `suggested`, `sources`,
+  `keywords`, `v2.lede/sheet/stylised/testRun`). No fetch, no API routes.
+- **State:** local only - `useReducer` in `useBuildClock` (`at`, `run`, `answers`,
+  `userPlayed`) plus an `inView` flag. No Zustand.
+- **Default answers:** `PICKED` in `shared/copy.ts` (`triggers` 0, `review` 1).
 
 ## Integration points
-- Rendered as the first, **eager** (non-lazy) section on `/features`
-  (`src/app/features/page.tsx:63`), wrapped in `StageSection`; kept a static
-  import for LCP/SEO while the rest of the page is `LazyMount`-gated.
-- The `#design` anchor is the first entry in that page's scroll-map nav
-  (`features/page.tsx:42`).
-- `DesignEngine.tsx` carries `data-tour-diagram="design"` (`:45`), so the
-  guided product tour can spotlight this diagram, and hosts the page's
-  `TourLauncher` (`:40`).
-- Depends on shared `fadeUp`/`staggerContainer` variants from `@/lib/animations`,
-  `SectionWrapper`, `SectionHeading`, `GradientText`, and `next/image`.
+- First section after the murmuration hero on `/features`; statically imported
+  (not lazy) for LCP/SEO.
+- `#design` is the first scroll-map target of the page; the id sits on the
+  `SectionWrapper` (`index.tsx:46`), keep it there.
+- `data-tour-diagram="design"` lets the product tour spotlight the art; the
+  `features` `TourLauncher` lives in `DesignIntro` (not in `InfoPageLayout`) so the
+  first stage clears the fold.
+- Depends on `SectionWrapper`, `SectionHeading`, `GradientText`,
+  `fadeUp`/`staggerContainer`, `useStillMotion`, `usePageVisibility`, `fillTemplate`.
 
 ## Conventions & gotchas
-- **i18n — migrated, English-only for now.** All copy (heading, lede, cell
-  labels/values/questions, the typed prompt, header/footer chrome, "analyzing
-  intent…", "{filled}/{total} resolved") lives in the `designMatrix` namespace of
-  `src/i18n/en.ts`, read via `useTranslation()`. `designMatrix` is listed in
-  `PENDING_TRANSLATION`, so the 13 other locales fall back to English until it is
-  translated (add it to every locale, then remove it from the list).
-- **Animation gating — followed.** `useReducedMotion` is honored in the build
-  hook (the observer calls `showFinal()` instead of `runBuild()`, and `replay`
-  takes the same instant path), `IntentTile` (no glow pulse / badge rotation),
-  `MatrixTile` (static asking ring), and `RadiateOverlay` (no command-packet
-  dispatch). Reduced-motion users see the fully resolved matrix, no choreography.
-- **Radiate overlay is desktop-only.** The SVG is `hidden … md:block` and uses
-  a `viewBox="0 0 3 3"` with `preserveAspectRatio="none"`, so spoke endpoints
-  track the responsive 3×3 grid centers without DOM measurement. The command
-  packets are drawn as **zero-length round-capped `<line>`s** (not `<circle>`s)
-  precisely because the non-uniform viewBox scale would distort a circle into an
-  ellipse — keep this trick if you touch the overlay.
-- **Color tokens — partially off-convention.** Cell accents are **raw hex**
-  (`#06b6d4`, `#a855f7`, …) in `designMatrixCells.ts` and inline `style`
-  colors/box-shadows throughout, rather than semantic Tailwind tokens. This is
-  deliberate (per-cell dynamic theming via inline style), but note it diverges
-  from convention #2; the `force-dark` wrapper pins the diagram to dark styling.
-- **Dead field:** `CellStatus.answer?: number` is only set by
-  `createFilledStatuses` (the reduced-motion end-state) and never read; the picked
-  answer is sourced from `def.question.picked` instead.
-- **Replay re-arm caveat:** `replay` resets `hasRun.current = false` and reruns,
-  but the `IntersectionObserver` was already `disconnect()`ed after the first
-  fire, so re-entry won't auto-trigger again — replay is the only re-run path.
+- **Replaced 2026-10-06** by the winner of the /features review. The previous
+  implementation (`DesignEngine.tsx`, the 3x3 persona matrix with `RadiateOverlay`,
+  and its `public/imgs/features/matrix/*.png` Leonardo backgrounds, now deleted) is
+  in git history.
+- **i18n - English-only for now.** `designMatrix` and `featuresSections` are both in
+  `PENDING_TRANSLATION` (`src/i18n/en.ts:3077`); the 13 other locales fall back to
+  English. `featuresSections.design` still carries review-era keys nothing reads
+  (`v3.*`, `reading`, `decided`); only the keys listed above are used.
+- **Motion gating.** Under `useStillMotion()` the clock reports the final step, so
+  reduced-motion visitors get the finished, stamped sheet with no choreography (the
+  IntersectionObserver also skips ARM under the media query). Replay sets
+  `userPlayed`, because pressing it is a request for motion. DOM shape is constant
+  (opacity/transform only), so SSR and the first client render agree. The clock
+  stops off-screen and with the tab hidden.
+- **Colour.** Inks are theme tokens (`--brand-*`, `--status-info`, `color-mix`), so
+  every site theme recolours the sheet; no raw hex. Small labels use `textInk()` to
+  lift contrast.
+- **Sizing.** All type is `cqw` with `max(px, cqw)` floors; the drawing is a fixed
+  1000 x 435 coordinate space - change `geometry.ts` constants together (parts,
+  callouts, leaders, test-run keyframes).
+- The title block carries a "stylised drawing" disclosure (`v2.stylised`); keep it,
+  the sheet is an illustration, not a screenshot.
 
 ## Related docs
 - [Multi-Provider AI](multi-provider-ai.md)

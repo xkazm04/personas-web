@@ -2819,9 +2819,8 @@
       };
     };
   };
-  featuresLab: {
+  featuresSections: {
     design: {
-      label: string;
       artLabel: string;
       persona: string;
       yourSentence: string;
@@ -2854,7 +2853,6 @@
       };
     };
     memory: {
-      label: string;
       stylised: string;
       categories: { fact: string; decision: string; insight: string; learning: string; warning: string };
       v1: { artLabel: string; retries: string; noRetries: string; recalled: string };
@@ -2888,7 +2886,6 @@
       };
     };
     healing: {
-      label: string;
       heading: string;
       headingGradient: string;
       stylised: string;
@@ -2945,7 +2942,6 @@
       };
     };
     models: {
-      label: string;
       stylised: string;
       yourMachine: string;
       viaClaudeCode: string;
@@ -2961,7 +2957,6 @@
       v3: { lede: string; artLabel: string; agentsTitle: string; onThisPc: string; hint: string; swap: string };
     };
     observe: {
-      label: string;
       stylised: string;
       v1: { lede: string; artLabel: string; now: string; secondsAgo: string; failed: string; filtered: string };
       v2: {
@@ -3025,20 +3020,46 @@
       };
     };
     plugins: {
-      label: string;
-      lede: string;
-      pluginsLabel: string;
-      connectorsLabel: string;
-      agentsLabel: string;
-      toolCount: string;
-      categoryCount: string;
       more: string;
-      pickLabel: string;
+      stylised: string;
       taglines: { drive: string; twin: string };
-      adds: Record<"devTools" | "brain" | "drive" | "twin", [string, string, string]>;
-      v1: { artLabel: string; reach: string; alsoShips: string };
-      v2: { artLabel: string; powered: string; bank: string };
-      v3: { artLabel: string; layerAgents: string; layerPlugins: string; layerConnectors: string };
+      v1: { artLabel: string; reach: string };
+      drive: {
+        title: string;
+        where: string;
+        files: string;
+        browse: string;
+        folder: string;
+        kept: string;
+        statusLanding: string;
+        statusUpdating: string;
+        statusKept: string;
+        survives: string;
+        agents: { report: string; design: string; leads: string; video: string; notes: string };
+      };
+      twin: {
+        you: string;
+        intent: string;
+        name: string;
+        speaksAs: string;
+        traits: { identity: string; tone: string; memory: string };
+        recalled: string;
+        recallFact: string;
+        tracked: string;
+        typing: string;
+        sender: string;
+        contact: string;
+        alsoReaches: string;
+        channels: {
+          slack: { tone: string; message: string; reply: string };
+          gmail: { tone: string; subject: string; message: string; signoff: string; reply: string };
+          linkedin: { tone: string; message: string; reply: string };
+        };
+        statusListening: string;
+        statusRecalling: string;
+        statusMirroring: string;
+        statusReplies: string;
+      };
     };
   };
   // END pending-translation namespaces
@@ -3071,7 +3092,7 @@ export const PENDING_TRANSLATION = [
   'labSection',
   'fleetPlayground',
   'landingSections',
-  'featuresLab',
+  'featuresSections',
 ] as const;
 
 export type PendingNamespace = (typeof PENDING_TRANSLATION)[number];
@@ -6239,9 +6260,8 @@ export const en: Translations = {
       },
     },
   },
-  featuresLab: {
+  featuresSections: {
     design: {
-      label: 'Features lab: One sentence. One matrix.',
       artLabel: 'Stylised illustration: the sentence "Triage my Gmail inbox and draft replies for urgent emails" becomes a complete agent. Personas decides its task, apps (Gmail and Slack), schedule, human review, messages, memory, error handling and events, and asks only two questions: how often to run and whether to approve drafts first.',
       persona: 'Inbox Triage',
       yourSentence: 'Your sentence',
@@ -6274,7 +6294,6 @@ export const en: Translations = {
       },
     },
     memory: {
-      label: 'Features lab: Remembers what works',
       stylised: 'Stylised',
       categories: { fact: 'Fact', decision: 'Decision', insight: 'Insight', learning: 'Learning', warning: 'Warning' },
       v1: {
@@ -6319,7 +6338,6 @@ export const en: Translations = {
       },
     },
     healing: {
-      label: 'Features lab: Fixes itself when things break',
       heading: 'Fixes itself when things',
       headingGradient: 'break',
       stylised: 'Stylised',
@@ -6432,7 +6450,6 @@ export const en: Translations = {
       },
     },
     models: {
-      label: 'Features lab: Powered by Claude. Private via Ollama.',
       stylised: 'Stylised',
       yourMachine: 'Your machine',
       viaClaudeCode: 'via Claude Code',
@@ -6464,7 +6481,6 @@ export const en: Translations = {
       },
     },
     observe: {
-      label: 'Features lab: See everything, miss nothing',
       stylised: 'Stylised data',
       v1: {
         lede: 'Every run, message and event, live in one deck. Pick a stream to light it up across the whole fleet.',
@@ -6585,40 +6601,63 @@ export const en: Translations = {
       },
     },
     plugins: {
-      label: 'Features lab: Everything to plug in',
-      lede: '{plugins} plugins add new abilities to the app. {connectors} connectors reach the tools you already use.',
-      pluginsLabel: 'Plugins',
-      connectorsLabel: 'Connectors',
-      agentsLabel: 'Your agents',
-      toolCount: '{count} tools',
-      categoryCount: '{count} categories',
       more: '+{count}',
-      pickLabel: 'Choose a plugin',
+      stylised: 'Stylised',
       taglines: {
         drive: "Your agents' exports, kept and browsable",
         twin: "Speaks as you, in each channel's tone",
       },
-      adds: {
-        devTools: ['Sessions side by side', 'Every project in one place', 'Blockers answered by Athena'],
-        brain: ['Semantic search', 'Backlink walking', 'Daily journal'],
-        drive: ['Agent exports', 'Survives upgrades', 'Browsable files'],
-        twin: ['Your identity', 'Per-channel tone', 'Memory recall'],
-      },
       v1: {
-        artLabel: 'Stylised plugin window: pick a plugin to watch it work.',
+        artLabel: 'Stylised plugin window: plug in a plugin to watch it work.',
         reach: 'Connects to {count} tools',
-        alsoShips: 'Also in the app',
       },
-      v2: {
-        artLabel: 'Stylised power strip: four plugins and a bank of connector plugs, all wired into Personas.',
-        powered: 'plugged in',
-        bank: 'Connectors',
+      drive: {
+        title: 'Local drive',
+        where: 'Saved in your app data',
+        files: '{count} files',
+        browse: 'Browse',
+        folder: 'exports',
+        kept: 'kept',
+        statusLanding: 'Exports landing · {count}/{total}',
+        statusUpdating: 'Updating Personas to {version}',
+        statusKept: 'Updated to {version} · every file kept',
+        survives: 'Survives upgrades',
+        agents: {
+          report: 'Report writer',
+          design: 'Designer',
+          leads: 'Lead scout',
+          video: 'Video editor',
+          notes: 'Scribe',
+        },
       },
-      v3: {
-        artLabel: 'Stylised exploded view: your agents at the base, plugins above them, your tools on top.',
-        layerAgents: 'Run by Personas',
-        layerPlugins: 'Adds new abilities',
-        layerConnectors: 'Reaches your tools',
+      twin: {
+        you: 'You',
+        intent: 'Tell Dana the fix ships Thursday.',
+        name: 'Your twin',
+        speaksAs: 'Speaks as you',
+        traits: { identity: 'Your identity', tone: 'Tone per channel', memory: 'Memory recall' },
+        recalled: 'Recalled',
+        recallFact: 'Dana reported the export bug',
+        tracked: 'Replies tracked',
+        typing: 'Writing as you',
+        sender: 'Sam',
+        contact: 'Dana',
+        alsoReaches: 'Same voice, any channel',
+        channels: {
+          slack: { tone: 'Casual', message: "Fix lands Thursday 🚀 I'll ping you when it's live!", reply: '🙌 legend, thanks!' },
+          gmail: {
+            tone: 'Formal',
+            subject: 'Re: Export bug',
+            message: 'Hi Dana, I can confirm the fix ships on Thursday.',
+            signoff: 'Kind regards, Sam',
+            reply: 'Thank you, Sam.',
+          },
+          linkedin: { tone: 'Warm', message: 'Thanks again for flagging this, Dana. The fix ships Thursday!', reply: 'Great news, thank you!' },
+        },
+        statusListening: 'Listening to you',
+        statusRecalling: 'Recalling who Dana is',
+        statusMirroring: 'Mirroring to {count} channels',
+        statusReplies: 'Replies back \u00b7 {count}/{total}',
       },
     },
   },

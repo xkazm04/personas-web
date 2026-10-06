@@ -11,7 +11,7 @@ import {
   type ShippedPluginId,
 } from "@/data/desktop-plugins";
 
-export const SHOWCASE_KEYS = ["dev-tools", "obsidian-brain"] as const satisfies readonly ShippedPluginId[];
+export const SHOWCASE_KEYS = ["dev-tools", "obsidian-brain", "drive", "twin"] as const satisfies readonly ShippedPluginId[];
 
 export type ShowcaseKey = (typeof SHOWCASE_KEYS)[number];
 

@@ -27,7 +27,7 @@ export const metadata: Metadata = {
   },
 };
 
-import DesignEngine from "@/components/feature-sections/DesignEngine";
+import DesignEngine from "@/components/feature-sections/design-blueprint";
 import MurmurationHero from "@/components/feature-sections/murmuration-hero";
 import {
   LazyMemoryLayers,

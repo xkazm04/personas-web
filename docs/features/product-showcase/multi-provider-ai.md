@@ -1,46 +1,96 @@
 # Multi-Provider AI
-> "Router" illustration of the two-engine AI routing story: tasks of different weight go to the matching Claude model; the locked private task stays on your machine with Ollama. · **Route:** `/features` (deep-dive section) · **Status:** Live
+> "Router, lit": four agents on your machine each send their thinking through a per-agent pick to the engine that suits them: Claude (via Claude Code) at Opus, Sonnet or Haiku weight, or Ollama on the machine for the private one · **Route:** `/features` (deep-dive section) · **Status:** Live
 
 ## What it does
-Presents how Personas routes work across AI engines. The narrative is deliberately narrow: **Claude is the primary engine**, and **Ollama** is the user-chosen path for private or offline runs. Under the heading "Powered by **Claude**. Private via **Ollama**." and the lede "Two engines, one consistent agent runtime.", one SVG shows a machine ("Local") holding a queue rail and a router, and a Claude box beside it with three stations — **Haiku**, **Sonnet**, **Opus**. Four task tokens of different sizes leave the rail in a deliberately mixed order: the heavy one docks at Opus, the light one at Haiku, the default one at Sonnet, and a **locked** token turns off to the **Ollama** station inside the machine. Each lane lights as it is used and its station ring swells on docking. A replay button in the corner re-plays it.
+Presents how Personas routes work across AI engines. The story is deliberately
+narrow: **Claude is the primary engine** (reached through Claude Code), and
+**Ollama** is the user-chosen path for private or offline work. Under the heading
+"Powered by **Claude**. Private via **Ollama**." one drawing shows a machine
+("Your machine") on the left with four agent rows (code review, inbox, journal,
+brief) and, on the right, a Claude box with three stations: **Opus** (largest),
+**Sonnet**, **Haiku**, each with a short trait line. One by one each agent's
+"thinking" orb leaves its row, passes the **per-agent pick** hub, and docks at its
+engine: code review to Opus, inbox to Haiku, brief to Sonnet, while the journal
+agent (marked with a lock) turns down to **Ollama inside the machine**, which gains a
+dashed shield. Each row then names its engine ("-> Opus"). Once docked, small pulses
+keep every line busy. A replay button restarts the 4.6 s story.
 
-It is a presentational marketing section — no inputs, no live data, no model calls happen here.
+It is a presentational marketing section: no inputs, no live data, no model calls.
 
 ## How it works
-`MultiProviderAI.tsx` (default export `MultiProviderAIRouter`, an `/illustrate` "router" variant) is a `SectionWrapper(fit="fill", id="multi-provider")` with an intro (`data-section-intro` / `data-section-lede`) and a `data-stage-slot` holding the art frame. The heading is one template (`aiModelsSection.heading`) split on `{claude}` / `{ollama}`; those slots render as `GradientText` product names (`MultiProviderAI.tsx:19`, `:49-57`).
+`models-router/index.tsx` (`MultiProviderAI`) is a `SectionWrapper(fit="fill",
+id="multi-provider")` with `Intro` (heading + lede) and an `ArtBox` (`data-stage-slot` >
+`data-stage-art`, `--art-ar` = 1200/560, inline-size container). The SVG is `role="img"`
+with `aria-label={v1.artLabel}`; layers in paint order: `Defs`, `Backdrop` (machine and
+Claude panels, the single port, "Your machine" / "via Claude Code" labels), `Stations`,
+`Agents`, then the hub drawn last so orbs pass under it, plus the replay button and a
+`StylisedTag`.
 
-One framer `MotionValue` `p` (0..1) drives the whole drawing over `DURATION = 3.6`s (`:17`). It starts at `1` (every task docked) for the server render and first paint; `useInView(ref, { once: true, amount: 0.4 })` calls `play()` (reset to 0, `animate` to 1) once, and the replay button calls it again. Under still motion `play()` pins `p` to 1 instead.
+**Two motion values.** `usePlay(ref, DURATION)` (`shared/motion.ts`) gives `p` (0..1, played
+once at 35% in view, `play()` replays; rests at 1 on the server and when still).
+`useLoop(ref, 3.2, 0.3)` is the ambient pulse phase: runs only while in view and the tab is
+foregrounded (`useIsVisible`), and rests at 0.3 under reduced motion.
 
-`RouterArt` renders one `Layout` from `routerGeometry.ts`: `WIDE` (1000×440, `md:` and up) or `TALL` (mobile), both mounted with `hidden`/`md:hidden`. Each `Token` (`TOKENS`, `routerGeometry.ts:55-60`) has its own window (`start`, `TOKEN_SPAN = 0.4`); `tokenQ` maps `p` to the token's progress, `tokenAt` moves it along the rail then a cubic Bézier into its lane, `laneLit` lights the lane once it enters, and `dockPulse` swells the station ring near the end.
-
-**Stage fit (desktop).** The frame is `data-stage-art` with `--art-ar: 1040/480` (the wide router plus its padding, `MultiProviderAI.tsx:67-69`), so on the stage (`src/styles/stage.css`) it is `min(100%, slot height × 1040/480)` wide — it fills a laptop's stage and grows on a monitor instead of staying a 1024px strip.
+**Geometry** (`geometry.ts`, viewBox 1200 x 560): `MACHINE`, `CLOUD`, `HUB`, `PORT`,
+`STATIONS` (centre + radius; size reads as weight), `ROW`, and `AGENTS` (engine, row y,
+orb size, `start` offset, `lock`) in a deliberately mixed departure order so the sorting
+reads. `route(a)` builds each agent's cubic path (row socket -> hub -> port -> station, or
+hub -> down to Ollama); `ROUTES` caches segment lengths so speed is even; `at(i, u)` gives
+a point by length; `own`/`orbU`/`docked`/`swell` derive per-agent progress from `p`.
+Float output is rounded with `r2` so server and browser agree on hydration.
 
 ## Key files
 | File | Role |
 | --- | --- |
-| `src/components/feature-sections/MultiProviderAI.tsx` | Section shell: templated heading, lede, progress value + in-view play, replay, stage slot/art frame |
-| `src/components/feature-sections/multi-provider/RouterArt.tsx` | The SVG for one layout: machine + "Local" label, Claude box, rail, lanes, stations, tokens (lock icon on the private one), lane labels |
-| `src/components/feature-sections/multi-provider/routerGeometry.ts` | `WIDE`/`TALL` layouts, `TOKENS`, `tokenQ`/`tokenAt`/`laneLit`/`dockPulse`/`laneD` |
-| `src/app/features/page.tsx` | Mounts it under `StageSection#multi-provider`; defines the scroll-map entry |
-| `src/components/feature-sections/feature-lazy.tsx` | `LazyMultiProviderAI` code-split wrapper (`ssr: false`) |
-| `src/components/SectionWrapper.tsx` | Section shell (`fit` → `data-stage`) |
-| `src/components/SectionHeading.tsx`, `src/components/GradientText.tsx` | Heading scale + gradient brand text |
+| `src/components/feature-sections/models-router/index.tsx` | Section shell and SVG composition, hub, replay |
+| `models-router/geometry.ts` | Layout constants, `AGENTS`, routes, progress helpers (`orbU`, `docked`, `swell`) |
+| `models-router/Agents.tsx` | Agent rows, travelling orbs, lit routes, ambient `Pulse`s, lock glyph on the private one |
+| `models-router/Stations.tsx` | Opus/Sonnet/Haiku/Ollama stations: halo swell on docking, Ollama shield ring, trait lines |
+| `models-router/Backdrop.tsx` | `Defs` gradients, machine and Claude panels, port, place labels |
+| `models-router/shared/Frame.tsx` | `Intro` (templated heading), `ArtBox`, `frame()`, `ReplayButton`, `StylisedTag` |
+| `models-router/shared/motion.ts` | `usePlay`, `useLoop`, palette (`CLAUDE` = amber, `LOCAL` = emerald), `mix`, `ease`, `r2` |
+| `src/components/feature-sections/feature-lazy.tsx` | `LazyMultiProviderAI` imports the folder (`:29-33`) |
 
 ## Data & state
-- **Source:** static — geometry and tokens in `routerGeometry.ts`; copy in the `aiModelsSection` namespace of `src/i18n/en.ts` (`heading` template, `lede`, `artLabel`, `replay`, `local`). **Stores:** none. **API routes:** none — nothing is fetched and no model is actually called. **Types:** `LaneKey`, `Lane`, `Layout`, `Token` exported from `routerGeometry.ts`.
+- **Source:** static. Words: `aiModelsSection.heading` (template split on `{claude}` /
+  `{ollama}` into `GradientText` names) and `.replay` (older namespace, reused), plus
+  `featuresSections.models` (`stylised`, `yourMachine`, `viaClaudeCode`, `traits.*`,
+  `agents.*`, `v1.lede|artLabel|pick`) in `src/i18n/en.ts`. Product/model names (Claude,
+  Ollama, Haiku, Sonnet, Opus) are literals on purpose.
+- **State:** two framer `MotionValue`s (`p`, loop phase) and a ref to the running
+  animation; no Zustand, no fetch, no API routes.
+- **Agent-to-engine mapping is illustrative:** `Agent.engine` is hard-coded per agent in
+  `geometry.ts`; nothing is routed.
 
 ## Integration points
-- **Features page:** rendered via `LazyMultiProviderAI` → `LazyMount minHeight={760}` → `StageSection id="multi-provider"` (`src/app/features/page.tsx:84-88`); scroll-map anchor `#multi-provider`, labelled "AI MODELS" (`:46`).
-- **Lazy loader:** `createLazySection` / `SectionSkeleton` from `src/components/sections/LazySection` (`src/components/feature-sections/feature-lazy.tsx:3,29-33`).
-- **Not on the homepage:** `/features`-only.
+- `LazyMultiProviderAI` (`ssr: false`) in `<StageSection id="multi-provider" glow="cyan">` +
+  `<LazyMount stage minHeight={760} label="AI models">` (`src/app/features/page.tsx:90-94`);
+  scroll-map `AI MODELS` -> `#multi-provider` (`page.tsx:48`).
+- `/features` only; not on the homepage.
 
 ## Conventions & gotchas
-- **i18n — migrated, English-only for now.** All copy lives in `t.aiModelsSection` (`MultiProviderAI.tsx` and `RouterArt.tsx`). Product/model names (`Claude`, `Ollama`, `Haiku`, `Sonnet`, `Opus`) stay literals on purpose. `aiModelsSection` is listed in `PENDING_TRANSLATION` in `en.ts`, so the 13 other locales fall back to English until it is translated.
-- **An orphaned i18n namespace still exists** and contradicts the section. `featurePages["multi-provider"]` (`src/i18n/en.ts:1335` interface, `:3804` values: "Not locked to one AI" / "Use Claude, OpenAI, Gemini, or run models locally with Ollama… automatically switch…") is mirrored across all locales but **nothing in `src/` outside `i18n/` reads `featurePages`**. It advertises four providers with automatic failover; the shipped art tells the two-engine story, and `RouterArt.tsx:19-20` notes Ollama is a user-chosen lane, not an automatic fallback (the app's failover chain is Claude-only). Do not wire the component to that namespace as-is.
-- **Animation gating — followed.** `useStillMotion` (`MultiProviderAI.tsx:24`) pins `p` to 1; the drawing's DOM shape never changes. One-shot, not an ambient loop.
-- **Colour tokens.** Claude is drawn in `text-orange-500 dark:text-orange-400` and Ollama in `text-emerald-600 dark:text-emerald-400` (raw Tailwind palette, `RouterArt.tsx:22-24`) rather than brand tokens; the frame uses `border-glass` with a `bg-white/[0.02]` fill.
-- **Provider claims are marketing, not runtime truth in this repo.** The dashboard is mock-only; this section describes the desktop app's behaviour, not anything wired up in personas-web.
-- **Lint watch:** the replay button sits at `text-foreground/60`, exactly the WCAG floor for `custom-a11y/no-low-text-opacity`. Keep new strings ≥ `/60`.
+- **Replaced 2026-10-06** by the winner of the /features review. The previous
+  implementation (`MultiProviderAI.tsx` and `multi-provider/` `RouterArt` with the
+  wide/tall router layouts) is in git history.
+- **i18n - English-only for now.** `aiModelsSection` and `featuresSections` are in
+  `PENDING_TRANSLATION`; the other 13 locales fall back to English. Unread leftovers:
+  `aiModelsSection.lede|artLabel|local`, `featuresSections.models.v2|v3` and
+  `agents.support`.
+- **Orphaned namespace still contradicts the section.** `featurePages["multi-provider"]`
+  ("Not locked to one AI", four providers, automatic switching) is mirrored across all
+  locales but nothing outside `i18n/` reads it. The shipped art tells the two-engine story
+  (Ollama is a user-chosen lane, not an automatic fallback). Do not wire the component to
+  that namespace as-is.
+- **Motion gating.** `useStillMotion` pins `p` to 1 (everything docked) and the loop to its
+  rest value; the replay button is `disabled`. DOM shape never changes. The story is
+  one-shot; the ambient pulse loop stops off-screen, in a hidden tab and when still.
+- **Colour.** Claude is amber and Ollama emerald via `BRAND_VAR` (theme tokens); the
+  frame's replay button uses `border-glass` and `bg-background/70`. The "Stylised" tag is
+  `text-muted-dark/80`.
+- **Provider claims are marketing, not runtime truth in this repo.** The dashboard is
+  mock-only; this describes the desktop app's behaviour.
+- **Lint watch:** the replay button is `text-foreground/70`; keep text opacities at or
+  above `/60` (`custom-a11y/no-low-text-opacity`).
 
 ## Related docs
 - [Memory Layers](memory-layers.md)
