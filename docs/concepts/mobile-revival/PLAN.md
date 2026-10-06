@@ -18,6 +18,13 @@ The survey this plan rests on, with anchors, is [SURVEY.md](SURVEY.md).
 | M6 | **Agent management is the core of the mobile dashboard.** | Phase 2 is designed around viewing and managing agents from the phone, not around a read-only overview. |
 | M7 | **The download CTA appears only when the user cannot sync to their app.** | A signed-in user whose desktop app syncs sees no download CTA inside the mobile dashboard. Anonymous visitors on the public `/m` and `/m2` always see it. The signal "can sync" is defined in `PHASE2-SURVEY.md`. |
 | M8 | **The CTA uses real actions only.** | There is no email service on the site, so "email me the link" is dropped. The CTA offers the native share sheet, copy link, and an `.ics` reminder (`src/components/mobile-landing/shared/handoff.ts`, `eedeab5`), plus the existing waitlist API for macOS and Linux. |
+| M9 | **A paired device is trusted (2026-10-06).** | Commands from a paired device run with no per-command approval on the desktop. This loosens a policy on purpose: per-command approval is replaced by device-level trust, with revocation. |
+| M10 | **v1 remote actions: pause/resume personas and cancellation.** The desktop already has these actions; web and mobile need the sync mechanism. Also sync the **Notes module** (goal management) and **chat conversations** with agents. | This needs new command types, desktop handlers, and new synced tables. More data goes to the cloud (notes, chat), so the owner signs off on each table in the spec. |
+| M11 | **Production runs on the live Supabase data source.** | The sync signal and commands exist in production. Demo mode remains for visitors. |
+| M12 | **Actions are blocked while the desktop is offline.** Commands are not queued: the desktop is assumed not to come online by itself. | The online gate is the `synced_devices` heartbeat freshness. When the desktop is offline, the UI says "open Personas on your computer". |
+| M13 | **The mobile dashboard is phone layouts of `/dashboard/*`**, not `/m/<view>`. | `/m` and `/m2` stay as the public landings. The old `/m/<view>` redirects to `/dashboard/*` stay. |
+| M14 | **I build both repos:** desktop `../personas` and web, plus the SQL. | Cross-repo slices land end to end, starting with pause/resume. Commits go to each repo's current branch, never pushed. |
+| M15 | **Merge `dashboard/spa` first.** | Phone layouts are built on the SPA structure. |
 | — | Route paths. | `/m` stays the mobile root. The old `/m/overview`, `/m/alerts`, `/m/messages` and `/m/reviews` pages are deleted (owner-approved), and their URLs are kept alive as redirects. |
 
 ## Phase 0: clear the ground (in progress)
