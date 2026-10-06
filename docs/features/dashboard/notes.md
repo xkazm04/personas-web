@@ -56,7 +56,7 @@ The desktop Notepad keeps a short list of goals (at most 10 in a working slot) p
 ## Conventions & gotchas
 - **Read-only by contract.** Do not add write affordances without a command verb (`note_create`, `notepad_set_review_verdict`) on the desktop side first.
 - **The `?desktop=` switch is read when a view mounts**, from the URL, and a nav link carries no query. The phone spec moves with `history.pushState` to keep it.
-- **Markdown** goes through `MarkdownReport` (React elements only, no HTML injection). Its links are not scheme-filtered; React 19 blocks `javascript:` URLs.
+- **Markdown** goes through `MarkdownReport` (React elements only, no HTML injection). Its links are scheme-filtered (`markdown-report/safeHref.ts`: `http(s)`, `mailto`, same-site paths and fragments; anything else renders as plain text), since synced bodies can quote what a persona read through its connectors.
 - **Motion:** the view adds none of its own; the sheet and modal primitives own theirs.
 - **Bundle:** the view is its own lazy chunk; the dashboard's first load gains only the registry entries, the label resolver and `notesStore` (imported by `useSyncedRealtime`).
 
