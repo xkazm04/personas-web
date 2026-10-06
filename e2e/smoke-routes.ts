@@ -27,10 +27,10 @@
  * not the content set.
  */
 
-export type SmokeTag = "public" | "dashboard" | "mobile" | "dev";
+export type SmokeTag = "public" | "dashboard" | "dev";
 
 export interface SmokeRoute {
-  /** Path to visit. For `dashboard`/`mobile` this is reached by in-app navigation. */
+  /** Path to visit. For `dashboard` this is reached by in-app navigation. */
   readonly path: string;
   /** Short name used in the test title. */
   readonly name: string;
@@ -91,19 +91,14 @@ const DASHBOARD: readonly SmokeRoute[] = [
   { path: "/dashboard/settings", name: "settings", tag: "dashboard" },
 ];
 
-/** The separate mobile route tree. Same in-memory demo constraint. */
-const MOBILE: readonly SmokeRoute[] = [
-  { path: "/m/overview", name: "mobile overview", tag: "mobile" },
-  { path: "/m/reviews", name: "mobile reviews", tag: "mobile" },
-  { path: "/m/messages", name: "mobile messages", tag: "mobile" },
-  { path: "/m/alerts", name: "mobile alerts", tag: "mobile" },
-];
+// The old /m route tree was deleted while /m is rebuilt (docs/concepts/
+// mobile-revival/PLAN.md); its URLs are temporary redirects, checked at a
+// phone viewport by e2e/mobile/baseline.spec.ts (Playwright project "mobile").
 
-export const SMOKE_ROUTES: readonly SmokeRoute[] = [...PUBLIC, ...DASHBOARD, ...MOBILE];
+export const SMOKE_ROUTES: readonly SmokeRoute[] = [...PUBLIC, ...DASHBOARD];
 
 export const PUBLIC_ROUTES = PUBLIC;
 export const DASHBOARD_ROUTES = DASHBOARD;
-export const MOBILE_ROUTES = MOBILE;
 
 /**
  * One concrete instance per parameterised route. Kept separate because these

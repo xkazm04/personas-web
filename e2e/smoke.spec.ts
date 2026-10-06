@@ -3,7 +3,6 @@ import {
   DASHBOARD_ROUTES,
   DETAIL_ROUTES,
   FAILURE_MARKERS,
-  MOBILE_ROUTES,
   MUST_404_IN_PRODUCTION,
   PUBLIC_ROUTES,
   type SmokeRoute,
@@ -39,7 +38,7 @@ const MIN_CONTENT_CHARS = 200;
  *
  * This is not the suite dodging an inconvenience. The banner is a fixed,
  * bottom-centred overlay, and on a phone viewport it lands exactly on the
- * mobile tab bar and intercepts its clicks — so a first-visit mobile user
+ * dashboard's mobile bottom nav and intercepts its clicks — so a first-visit mobile user
  * cannot use the primary navigation until they answer it. On desktop it misses
  * the left sidebar and nothing notices. That asymmetry is a real finding and it
  * is reported as one; what it must not do is decide the outcome of every other
@@ -54,8 +53,7 @@ async function acceptCookies(page: Page): Promise<void> {
     try {
       window.localStorage.setItem("personas-cookie-consent", "all");
     } catch {
-      // Storage can be unavailable; the banner is then a pre-existing condition
-      // and the click fallback in the mobile walk still applies.
+      // Storage can be unavailable; the banner is then a pre-existing condition.
     }
   });
 }
@@ -163,39 +161,6 @@ test.describe("dashboard", () => {
       await assertRendered(page, route);
       // Fail at the first bad route rather than at the end, so the report names
       // the page that broke instead of the last one visited.
-      assertClean(route, w);
-    }
-  });
-});
-
-// ── Mobile: its own tree, same in-memory demo constraint ────────────────────
-
-test.describe("mobile", () => {
-  test(`smoke [mobile] enters demo and walks the mobile tree`, async ({ page }) => {
-    await acceptCookies(page);
-    const w = watch(page);
-    await page.setViewportSize({ width: 390, height: 844 });
-    await page.goto("/m/overview");
-
-    const tryDemo = page.getByRole("button", { name: "Try Demo" });
-    if (await tryDemo.isVisible().catch(() => false)) await tryDemo.click();
-
-    for (const route of MOBILE_ROUTES) {
-      const link = page.locator(`a[href="${route.path}"]`).first();
-      if (await link.isVisible().catch(() => false)) {
-        await link.click();
-        await page.waitForURL(`**${route.path}`);
-      } else {
-        // Not in the tab bar — alerts consolidates several desktop routes. A
-        // hard navigation drops the in-memory demo session, so the auth guard
-        // renders its prompt in place and the demo entry has to be taken again;
-        // it resolves on the same URL rather than redirecting.
-        await page.goto(route.path);
-        const retry = page.getByRole("button", { name: "Try Demo" });
-        if (await retry.isVisible().catch(() => false)) await retry.click();
-        await expect(retry).toBeHidden();
-      }
-      await assertRendered(page, route);
       assertClean(route, w);
     }
   });

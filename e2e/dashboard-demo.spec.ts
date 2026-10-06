@@ -2,8 +2,8 @@ import { test, expect } from "@playwright/test";
 
 // Smoke coverage for the demo dashboard — the flagship product-preview
 // surface. Demo mode is in-memory (never persisted), so every hard
-// navigation must re-enter it: /demo auto-enters, dashboard/mobile
-// sign-in prompts offer an explicit "Try Demo".
+// navigation must re-enter it: /demo auto-enters, the dashboard's
+// sign-in prompt offers an explicit "Try Demo".
 test.describe("Dashboard demo", () => {
   test("/demo enters demo mode and lands on dashboard home with a demo badge", async ({ page }) => {
     await page.goto("/demo");
@@ -20,16 +20,17 @@ test.describe("Dashboard demo", () => {
     await expect(page.locator("a[href^='/dashboard/']").first()).toBeVisible();
   });
 
-  test("mobile dashboard is reachable via Try Demo on its sign-in prompt", async ({ page }) => {
-    await page.setViewportSize({ width: 390, height: 844 });
+  test("an old /m link lands on the dashboard and its demo entry still works", async ({ page }) => {
+    // The /m views were deleted while /m is rebuilt; their URLs are temporary
+    // redirects to the desktop equivalents (next.config.ts redirects()).
     await page.goto("/m/overview");
+    await page.waitForURL("**/dashboard/home");
     // A hard navigation resets the in-memory session, so the auth guard
     // shows the sign-in prompt with its always-available demo entry.
     const tryDemo = page.getByRole("button", { name: "Try Demo" });
     await expect(tryDemo).toBeVisible();
     await tryDemo.click();
-    // Overview renders with the mobile tab bar once demo mode is active
-    await expect(page.locator("a[href='/m/reviews']").first()).toBeVisible();
+    await expect(page.locator("a[href^='/dashboard/']").first()).toBeVisible();
     await expect(tryDemo).not.toBeVisible();
   });
 });
