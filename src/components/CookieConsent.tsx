@@ -95,9 +95,9 @@ export default function CookieConsent() {
           animate={{ y: 0, opacity: 1 }}
           exit={{ y: 80, opacity: 0 }}
           transition={{ duration: 0.35, ease: EASE_CURVE }}
-          className="fixed bottom-0 inset-x-0 z-50 flex justify-center p-4"
+          className="pointer-events-none fixed bottom-0 inset-x-0 z-50 flex justify-center p-4"
         >
-          <div className="relative w-full max-w-4xl rounded-2xl bg-card-bg/95 backdrop-blur-xl border border-glass-hover px-6 py-4 shadow-2xl">
+          <div className="pointer-events-auto relative w-full max-w-4xl rounded-2xl bg-card-bg/95 backdrop-blur-xl border border-glass-hover px-6 py-4 shadow-2xl">
             <button
               onClick={() => accept("essential")}
               className="absolute top-2 right-2 inline-flex h-8 w-8 items-center justify-center rounded-md text-muted-dark hover:text-muted hover:bg-white/[0.06] transition-colors"
