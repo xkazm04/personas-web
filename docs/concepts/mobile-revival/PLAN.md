@@ -25,6 +25,10 @@ The survey this plan rests on, with anchors, is [SURVEY.md](SURVEY.md).
 | M13 | **The mobile dashboard is phone layouts of `/dashboard/*`**, not `/m/<view>`. | `/m` and `/m2` stay as the public landings. The old `/m/<view>` redirects to `/dashboard/*` stay. |
 | M14 | **I build both repos:** desktop `../personas` and web, plus the SQL. | Cross-repo slices land end to end, starting with pause/resume. Commits go to each repo's current branch, never pushed. |
 | M15 | **Merge `dashboard/spa` first.** | Phone layouts are built on the SPA structure. |
+| M16 | **The phase 2 migration is approved (2026-10-06).** | The SQL from PHASE2-SPEC §2.1, §3.2 and §4.1 goes into `scripts/setup-sync-db.sql`. The owner runs `npm run db:migrate:sync` on prod. |
+| M17 | **Paired phones auto-run every v1 verb**, including the spending ones (`run_persona`, `chat_send`). | No desktop prompt and no daily cap. The trust boundary is the device key plus desktop-side revocation (spec §3.5). |
+| M18 | **Chat: both kinds, Athena first.** | Athena's companion threads (the send path is already in Rust) land first. Persona chat follows after the chat turn moves into the Rust core. |
+| M19 | **Notes and chat sync are separate opt-ins, off by default.** | Each is a separate desktop toggle. The privacy policy and the storage register are updated when each lands. |
 | — | Route paths. | `/m` stays the mobile root. The old `/m/overview`, `/m/alerts`, `/m/messages` and `/m/reviews` pages are deleted (owner-approved), and their URLs are kept alive as redirects. |
 
 ## Phase 0: clear the ground (in progress)
