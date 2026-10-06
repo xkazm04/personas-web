@@ -41,25 +41,25 @@ function EventBusShowcaseSkeleton() {
 }
 
 export const LazyEventBusShowcase = createLazySection(
-  () => import("@/components/sections/event-bus-showcase"),
+  () => import("@/components/sections/event-hub"),
   EventBusShowcaseSkeleton,
   { ssr: false },
 );
 
 export const LazyAgentsTimeline = createLazySection(
-  () => import("@/components/sections/agents-timeline"),
+  () => import("@/components/sections/agents-race"),
   SectionSkeleton,
   { ssr: false },
 );
 
 export const LazyAgentsChat = createLazySection(
-  () => import("@/components/sections/agents-chat"),
+  () => import("@/components/sections/agents-chat-split"),
   SectionSkeleton,
   { ssr: false },
 );
 
 export const LazyPlatformLayers = createLazySection(
-  () => import("@/components/sections/platform-layers"),
+  () => import("@/components/sections/growth-dial"),
   SectionSkeleton,
   { ssr: false },
 );

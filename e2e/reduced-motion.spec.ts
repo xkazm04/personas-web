@@ -1,83 +1,73 @@
 import { test, expect, type Page } from "@playwright/test";
 
 /**
- * Reduced motion on /how's event-bus SwarmView: the diagram's loops are SMIL
- * (`<animate repeatCount="indefinite">`), which neither framer nor the CSS
- * reduced-motion reset reaches. `useSvgTimelineGate` (src/hooks/useLoopGate.ts)
- * pauses the SVG's own timeline when the loop gate says no, and SwarmView
- * flattens the animated values to a visible rest pose, so a visitor who asked
- * for less motion gets a still diagram - not a blank one.
+ * Reduced motion on /how's event hub (the "Agents that talk to each other"
+ * section): its relays, ring sweeps and hub pulses are framer loops driven by
+ * `useLoopGate` (src/hooks/useLoopGate.ts) and a step clock that only advances
+ * while the gate says yes. A visitor who asked for less motion must get a
+ * still, complete diagram - not a blank one, and not a slower loop.
+ *
+ * The instrument is the illustration itself: two pixel snapshots of the hub
+ * art taken ~1.5s apart are identical when it holds still and differ when it
+ * runs. The control case (no preference) proves the comparison can tell.
  */
 
-const SWARM_SVG = '#event-bus [role="tabpanel"] svg[viewBox="0 0 100 100"]';
+const HUB_ART = '#event-bus [role="tabpanel"] [role="img"]';
 
-async function openSwarm(page: Page) {
+async function openHub(page: Page) {
   await page.goto("/how");
-  // The showcase is lazy: bring its stage into view so it mounts and so the
-  // in-view decider does not veto on its own (which would pause regardless).
-  // No retry needed: the streamed `section#event-bus` is adopted, not replaced,
-  // under either preference (e2e/reduced-motion-hydration.spec.ts pins that).
+  // The section is lazy: bring its stage into view so it mounts and the
+  // in-view half of the loop gate does not veto on its own.
   await page.locator("section#event-bus").first().scrollIntoViewIfNeeded();
-  const svg = page.locator(SWARM_SVG);
-  await svg.scrollIntoViewIfNeeded();
-  await expect(svg).toBeInViewport();
-  return svg;
+  const art = page.locator(HUB_ART);
+  await art.scrollIntoViewIfNeeded();
+  await expect(art).toBeInViewport();
+  // Let the entrance reveal settle before sampling.
+  await page.waitForTimeout(1_500);
+  return art;
 }
 
-/**
- * Whether the swarm's SVG timeline is paused, read with the SVG in view. The
- * page keeps settling while lazy stages above it load, which can push the SVG
- * out of view - and out-of-view is a veto of its own - so every read first
- * brings it back.
- */
-async function pausedInView(page: Page): Promise<boolean | null> {
-  const svg = page.locator(SWARM_SVG);
-  try {
-    await svg.scrollIntoViewIfNeeded({ timeout: 2_000 });
-    return await svg.evaluate((el) => (el as SVGSVGElement).animationsPaused());
-  } catch {
-    return null; // not yet scrollable into view; the poll asks again
-  }
+async function twoSnapshots(page: Page) {
+  const art = page.locator(HUB_ART);
+  await art.scrollIntoViewIfNeeded();
+  const a = await art.screenshot({ animations: "allow" });
+  await page.waitForTimeout(1_500);
+  await art.scrollIntoViewIfNeeded();
+  const b = await art.screenshot({ animations: "allow" });
+  return { a, b };
 }
 
-test.describe("Reduced motion: event-bus swarm", () => {
+test.describe("Reduced motion: event hub", () => {
   test.describe("with prefers-reduced-motion: reduce", () => {
     test.use({ contextOptions: { reducedMotion: "reduce" } });
 
-    test("the swarm renders a still, visible diagram", async ({ page }) => {
-      const svg = await openSwarm(page);
+    test("the hub renders a still, visible diagram", async ({ page }) => {
+      const art = await openHub(page);
+      const { a, b } = await twoSnapshots(page);
+      expect(b.equals(a), "the hub art moved under reduced motion").toBe(true);
 
-      // The SVG timeline is paused while in view ...
-      await expect.poll(() => pausedInView(page)).toBe(true);
-      await expect(svg).toBeInViewport();
-      // ... and actually holds still: document time does not move.
-      const t0 = await svg.evaluate((el) => (el as SVGSVGElement).getCurrentTime());
-      await page.waitForTimeout(1_000); // bounded: a running timeline would advance ~1s here
-      const t1 = await svg.evaluate((el) => (el as SVGSVGElement).getCurrentTime());
-      expect(t1).toBe(t0);
-
-      // Every tool node sits at its visible rest pose, not faded out.
-      const opacities = await svg.evaluate((el) =>
-        Array.from(el.querySelectorAll(":scope > g")).map((g) => Number(getComputedStyle(g).opacity)),
+      // Still, not blank: every tool on the orbit is drawn at a readable opacity.
+      const opacities = await art.evaluate((el) =>
+        Array.from(el.querySelectorAll("[data-tool]")).map((n) => {
+          let o = 1;
+          for (let x: Element | null = n; x && x !== el; x = x.parentElement) o *= Number(getComputedStyle(x).opacity);
+          return o;
+        }),
       );
       expect(opacities.length).toBeGreaterThan(0);
-      for (const o of opacities) expect(o).toBeGreaterThan(0.5);
+      for (const o of opacities) expect(o).toBeGreaterThan(0.3);
     });
   });
 
   // Control: without the preference the same diagram animates while in view,
-  // so the assertions above are about reduced motion, not a timeline that
-  // never started.
+  // so the assertion above is about reduced motion, not art that never moves.
   test.describe("without a motion preference", () => {
     test.use({ contextOptions: { reducedMotion: "no-preference" } });
 
-    test("the swarm's timeline runs while in view", async ({ page }) => {
-      const svg = await openSwarm(page);
-      await expect.poll(() => pausedInView(page)).toBe(false);
-      const t0 = await svg.evaluate((el) => (el as SVGSVGElement).getCurrentTime());
-      await expect
-        .poll(() => svg.evaluate((el) => (el as SVGSVGElement).getCurrentTime()), { timeout: 5_000 })
-        .toBeGreaterThan(t0);
+    test("the hub animates while in view", async ({ page }) => {
+      await openHub(page);
+      const { a, b } = await twoSnapshots(page);
+      expect(b.equals(a), "the hub art never moved").toBe(false);
     });
   });
 });

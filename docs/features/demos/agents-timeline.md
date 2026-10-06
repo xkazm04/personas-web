@@ -1,49 +1,126 @@
-# Agent Execution Timeline Race
-> An animated head-to-head that races a rigid Workflow against an intelligent Agent through the same scenario, step by step · **Route:** `/how` (first stage section) · **Status:** Live
+# Off the Rails (Agents Timeline)
+> A stylised contour map where a fixed-rules train stalls on the scenario's snag while the agent's route draws around it, through four labelled waypoints, to the flag · **Route:** `/how` (first stage section, anchor `#agents-timeline`) · **Status:** Live
 
 ## What it does
-Pits two approaches against each other on the same real-world problem and lets you watch them run side by side. The top track ("Workflow") represents a rigid rule-based system; the bottom track ("Agent") represents an intelligent agent. Each track fills in its steps left-to-right behind a moving time cursor, with a live per-track race timer counting up in seconds. The Workflow reliably hits a step it has no rule for and dies with a red ✗ ("FAILED"); the Agent reasons through and finishes with a green ✓ ("RESOLVED"). When both finish, a result card under each track and a comparison summary appear, showing both total times. A "% faster" line appears only when both tracks resolved, which no current scenario does: a speed-up over a workflow that ended stuck is not a measurement, so it is not shown. Five scenarios — ambiguous email, split-payment refund, staging setup, batch error recovery, VIP legacy discount — auto-cycle every 6s; you can click a scenario chip, scrub via the progress-bar pills, replay, or pause. The takeaway, set by the heading "The Race Is Already Over", is that agents handle the messy edge cases workflows can't.
+Answers "why an agent and not a workflow?" with one picture. On a dotted contour map, a
+**request** (cyan pin, with the customer's words on a card top-left) and a **destination flag**
+(emerald, top-right) are joined by a straight **railway**. Halfway along it sits the scenario's
+**snag**: a barrier with fallen rocks and a rose label naming the problem ("Two requests in one
+email", "Paid with two cards", ...).
+
+- **Fixed rules** are a train. It leaves first and runs fast, brakes into the snag, puts its
+  hazard lights on, and a rose **stall clock** starts turning beside it with the cost ("waits 47
+  minutes for a person.", "147 good payments undone.").
+- **The agent** leaves at the same moment as an emerald route that bends around the snag. It
+  draws leg by leg behind a glowing marker, lighting four **waypoints**, the steps it took
+  ("Reads the whole message", "Spots the real request", ...), and reaches the flag, which flares;
+  the result ("Address updated.") appears top-right under "Done".
+
+Five scenarios (ambiguous email, split payment refund, staging setup, error recovery, VIP legacy
+discount) play in turn. Chips above the map pick one, and the active chip's underline fills with
+the story clock. **Replay** restarts the current one. A "Stylised" tag marks the art as designed,
+not a screenshot.
 
 ## How it works
-The container `index.tsx` owns all timing and four pieces of `useState`: `activeIndex` (current scenario), `isPlaying`, `showResults`, and `paused`. Two `setTimeout` handles live in refs — `resultTimerRef` (the per-race animation clock) and `cycleTimerRef` (the auto-advance clock). `startAnimation` (`index.tsx:26`) flips `isPlaying` on, clears results, and schedules `showResults = true` / `isPlaying = false` after `ANIMATION_DURATION_MS` (4000ms). A `useEffect` keyed on `activeIndex` re-runs `startAnimation` on every scenario change, wrapped in `queueMicrotask` to keep the `setState` out of the effect body (React 19 rule). A second `useEffect` (`index.tsx:45`) schedules `advanceScenario` after `CYCLE_MS` (6000ms) — but bails entirely when `paused || prefersReduced`, so reduced-motion users never auto-cycle. A third effect clears both timers on unmount.
+**Story clock.** `useStory` (`shared/motion.ts:48`) owns one framer `MotionValue` `p` that runs
+0 -> 1 linearly over `DURATION` (10 s, `data.ts:10`) once the art is 30% in view (`useInView`,
+`:52`). The animation is restarted on every `index:run` key change (`:63-82`) and paused/played
+when `halted` (off-screen or hidden tab via `useIsVisible`, or the unused `paused` option)
+changes (`:84-89`). When a run completes, `doneKey` marks it done; if nobody has picked a
+scenario, the next one plays after `hold` (3.5 s, `index.tsx:59`; `motion.ts:91-97`).
+`choose(i)` (`:99`) sets the index, bumps `run` and latches `picked`, which turns auto-advance off
+for good. `replay` (`:104`) only bumps `run`.
 
-`TimelineRaceBody` renders two `RaceTrack`s (Workflow with `GitBranch`, Agent with `Sparkles`), a divider with a `Zap` node, and the `ComparisonSummary`. Each `RaceTrack` wraps `Track` in an `AnimatePresence mode="wait"` keyed on `wf-${id}`/`ag-${id}` so switching scenarios cross-fades the whole track. Inside `Track`, three things animate off `isActive` (`= isPlaying`): a `TimeCursor` (a vertical gradient line sweeping `left: 0%→100%` over `totalMs`), a progress bar growing `width: 0%→100%`, and the row of `StepBlock`s. Each `StepBlock` fades/slides in on a stagger (`delay = index * 0.35s`); error steps add a small shake (`rotate: [0,-1,1,-0.5,0]`) and workflow error steps draw an SVG jagged "broken" path. A terminal-style `RaceTimer` runs its own `requestAnimationFrame` loop measuring `performance.now()` elapsed against `durationMs`, rendering `Time: X.Xs`. Once `showResults` is true, each track's `ResultCard` and the two-column `ComparisonSummary` spring into view; the summary renders its "% faster" line from `speedupPercent(scenario)` (`data.ts`), which returns `null`, hiding the line, unless both tracks resolved (`trackResolved`: last step not `error`).
+**Everything reads `p`.** No component holds its own timer; all motion is `useTransform(p, ...)`
+over windows of the story, using `seg(p, a, b)` (`motion.ts:25`):
+- **Train** (`Movers.tsx:13`) - `trainAt(p)` (`data.ts:62`) eases the train over `TRAIN = [0.03,
+  0.27]` to `STOP_T` (0.4 of the rail, short of the snag at `SNAG_T` 0.5) with a short decaying
+  jolt; hazard lights blink after 0.27; the stall clock fades in over 0.29-0.33 and its hand turns
+  through the rest of the story.
+- **Route** (`Movers.tsx:64`) - five Catmull-Rom legs `LEGS` (`data.ts:31`) through `START`, the
+  four `WAYPOINTS` (`:22`) and `END`; each `Leg` (`Movers.tsx:43`) draws its `pathLength` over
+  `legWindow(i)` (0.165 each from `AGENT_GO` 0.05, `data.ts:47-51`) and lights its waypoint as it
+  lands; the marker follows `markerAt(p)` (`:54`). `ARRIVE` is 0.875.
+- **Map** (`Map.tsx`) - `Terrain` (`:12`, contour ellipses from `CONTOURS`, `data.ts:71`) is
+  static; `Railway` (`:25`) draws sleepers and rails, the snag barrier (with a rose glow that hits
+  when the train stops, `:26`) and the start/end markers, plus the arrival flare (`:27-28`).
+- **Labels** (`Labels.tsx:35`) - an HTML layer over the SVG: request card (`:45`), legend
+  (`:58`), snag label (`:69`), stall note (`:75`), waypoint texts at hand-placed offsets
+  (`ANCHOR`, `:16`), and the arrival block (`:88`).
 
-Note: the animation duration (4s) and per-track `totalMs` values (~1.6–3s) are independent constants — the timers and cursors run on `totalMs`, while the results gate fires on the fixed `ANIMATION_DURATION_MS`.
+**One coordinate system.** `ArtBox` (`shared/Frame.tsx:22`) is an aspect-locked box (`W x H` =
+1200 x 560, `data.ts:8-9`) with `container-type: inline-size`; `frame(w, h)` (`:42`) returns
+`place()` (percent positions in viewBox units) and `fs()` (font size in viewBox units with a pixel
+floor), so the SVG and the HTML labels scale together. `Scene` (`index.tsx:23`) is keyed by
+scenario index, so a scenario change remounts the art with a 0.35 s fade.
 
 ## Key files
 | File | Role |
 | --- | --- |
-| `src/components/sections/agents-timeline/index.tsx` | Container: scenario state, race/cycle timers, reduced-motion gating, chips + controls layout |
-| `src/components/sections/agents-timeline/data.ts` | The 5 scenarios + `CYCLE_MS` (6000) / `ANIMATION_DURATION_MS` (4000) constants |
-| `src/components/sections/agents-timeline/types.ts` | `Scenario` and `TrackStep` interfaces |
-| `src/components/sections/agents-timeline/components/TimelineRaceBody.tsx` | Lays out both tracks + divider + summary; wraps each `Track` in keyed `AnimatePresence` |
-| `src/components/sections/agents-timeline/components/Track.tsx` | One track: time cursor, progress bar, step row, terminal-style finish marker, result card |
-| `src/components/sections/agents-timeline/components/StepBlock.tsx` | A single step pill: status color/icon, staggered entrance, error shake + broken-path SVG |
-| `src/components/sections/agents-timeline/components/RaceTimer.tsx` | rAF-driven elapsed-seconds counter per track |
-| `src/components/sections/agents-timeline/components/ResultCard.tsx` | Per-track FAILED/RESOLVED outcome card (gated by `showResults`) |
-| `src/components/sections/agents-timeline/components/ComparisonSummary.tsx` | Two-column totals; "Agent resolved N% faster" only when `speedupPercent` is non-null |
-| `src/components/sections/agents-timeline/components/ScenarioTrigger.tsx` | Cross-fading "Scenario trigger" prompt card above the race |
-| `src/components/sections/agents-timeline/components/TimelineControls.tsx` | Progress-pill scrubber + Replay / Pause-Resume buttons |
-| `src/components/sections/how-lazy.tsx` | `LazyAgentsTimeline` dynamic import (`ssr: false`) |
-| `src/app/how/page.tsx` | Mounts `<LazyAgentsTimeline/>` inside the first `StageSection` |
+| `src/components/sections/agents-race/index.tsx` | Section: `useStory`, chips + Replay, `ArtBox`, keyed `Scene`, sr-only result announcement |
+| `src/components/sections/agents-race/shared/motion.ts` | `useStory` clock; palette (`RULES` rose, `WARN` amber, `AGENT` emerald, `CYAN`); `seg`/`lerp`/`fill` helpers |
+| `src/components/sections/agents-race/shared/Frame.tsx` | `useTimelineCopy`, `Intro` (`SectionIntro`), `ArtBox`, `frame()`, `StylisedTag`, `ReplayButton`, `PauseButton`, `ScenarioChips` |
+| `src/components/sections/agents-race/data.ts` | Geometry and timing: `W`/`H`/`DURATION`, rail, snag, `WAYPOINTS`, `LEGS`, `TRAIN`, `legWindow`, `markerAt`, `trainAt`, `CONTOURS` |
+| `src/components/sections/agents-race/Map.tsx` | `Terrain` and `Railway` (rails, snag, start/end, arrival flare) |
+| `src/components/sections/agents-race/Movers.tsx` | `Train` (+ stall clock) and `Route` (legs, waypoints, marker) |
+| `src/components/sections/agents-race/Labels.tsx` | HTML text layer placed in viewBox units |
+| `src/components/sections/how-lazy.tsx` (`:49-53`) | `LazyAgentsTimeline` imports `agents-race` (`ssr: false`, `SectionSkeleton`) |
+| `src/app/how/page.tsx` (`:56-58`) | Mounts it in the first `StageSection id="agents-timeline"` |
 
 ## Data & state
-- **Source:** fully static, in-repo `scenarios` array in `data.ts` — no fetch, no orchestrator call, no mock-API call. **Stores:** none; all state is local `useState`/`useRef` in `index.tsx` (`activeIndex`, `isPlaying`, `showResults`, `paused` + two timer refs). Child `RaceTimer` holds its own `elapsed` state and rAF ref. **API routes:** none. **Types:** `Scenario` (`id`, `name`, `trigger`, and `workflow`/`agent` each `{ steps, totalMs, result }`; `data.ts` derives each `totalMs` from its steps (`withTotal`), so the timer and the steps cannot disagree, and result lines name no durations of their own - `data.test.ts` guards this and that the ambiguous-email wait matches the chat's 47-minute hand-off) and `TrackStep` (`label`, `durationMs`, `status: "ok"|"warn"|"error"`) in `types.ts`.
+- **Source:** static. Geometry and timing in `data.ts`; every word in
+  `t.howSections.timeline` (`src/i18n/en.ts`): `heading`, `scenarios[]` (`name`, `trigger` are
+  read here) and `v3` (`lede`, `artLabel`, legend/stage labels, `announce`, and `cases[]` with
+  `snag`, `wait`, `waypoints[4]`, `result`). Scenarios and cases are matched by index. No fetch,
+  no mock API, no API routes.
+- **State:** all inside `useStory`: `index`, `run`, `picked`, `doneKey`, the `p` motion value and
+  the animation controls ref. No Zustand.
+- **Unused copy:** `timeline.scenarios[].rules`, `rulesResult`, `agent`, `agentResult` and
+  `timeline.pause`/`resume` are typed and filled but nothing in `agents-race` reads them (left from
+  the prototype round's other variants).
 
 ## Integration points
-- Wrapped by `SectionWrapper` (anchor `id="agents-timeline"`, the `AGENTS: TIMELINE` scroll-map target on `/how`) and `SectionIntro` for the heading/description. Uses `TerminalChrome` for the `agents-vs-workflows.race` window header (status `racing`/`complete`/`ready`) and `ThemedChip` for the scenario selector chips.
-- Mounted only on `/how` via `LazyAgentsTimeline` in `how-lazy.tsx` (dynamic `import()` with `ssr: false`, `SectionSkeleton` fallback), placed in the first `StageSection` (`glow="cyan"`) in `src/app/how/page.tsx`. Far below the fold, so it client-hydrates lazily.
-- Animations use `fadeUp` from `src/lib/animations.ts` and `framer-motion`; icons are `lucide-react`. Hover over the race panel sets `paused` (`index.tsx:103-104`).
+- **`/how`** - `StageSection id="agents-timeline" glow="cyan"` (`how/page.tsx:56`); the scroll map
+  item `AGENTS: TIMELINE` targets `#agents-timeline` (`:18`). The page puts the id on the
+  `StageSection` because the lazy chunk is absent from the server HTML; the component's own
+  `SectionWrapper id="agents-timeline"` (`index.tsx:64`) repeats it.
+- **Stage fit** - `SectionWrapper fit="fill"` (exactly one viewport under the navbar, intro at the
+  shared heading height, `src/styles/stage.css`); `ArtBox` carries `data-stage-slot` /
+  `data-stage-art` with `--art-ar`, so the map is as wide as the stage allows and never taller
+  than the slot.
+- **Shared** - `SectionWrapper`, `SectionIntro`, `useStillMotion`, `useIsVisible`, `BRAND_VAR`
+  (`src/lib/brand-theme.ts`), `lucide-react` icons.
 
 ## Conventions & gotchas
-- **Copy is hardcoded English, not i18n.** The `SectionIntro` heading/gradient/description (`index.tsx:69-72`), the `aria-label` (`index.tsx:66`), the `TerminalChrome` title/status, the "Scenario trigger" / FAILED / RESOLVED / "Agent resolved N% faster" / "Race N of M" labels, and every `scenario.name`/`trigger`/step `label`/`result` string in `data.ts` are inline literals. None route through `useTranslation()` / `t.*`. This violates the repo's hard i18n rule (CLAUDE.md §1) — a localization pass must lift all of it into `src/i18n/en.ts` and the 13 other locales.
-- **Does not use the shared `useAutoCycle` hook.** `index.tsx` hand-rolls its own `setTimeout`-based auto-advance (`index.tsx:45-54`) even though `src/hooks/useAutoCycle.ts` exists and its docstring explicitly names `AgentsTimeline` as one of the call sites it was meant to replace. The bespoke loop works but duplicates pause/reduced-motion logic the hook already centralizes; consider migrating.
-- **Reduced-motion gating is partial.** The auto-cycle effect short-circuits on `prefersReduced` (`index.tsx:46`), `TimeCursor` returns `null` for reduced-motion users (`Track.tsx:18-19`), `StepBlock` drops its entrance to ~0.1s and skips the error shake/broken-path SVG (`StepBlock.tsx:51,57,73`), and `RaceTimer` jumps straight to `durationMs` instead of running the rAF loop (`RaceTimer.tsx:29-31`). **But** the per-track progress bar (`Track.tsx:88-99`), the finish marker spring (`Track.tsx:113`), `ResultCard`, `ComparisonSummary`, `ScenarioTrigger`, and the track cross-fade in `TimelineRaceBody` are **not** gated and still animate. `RaceTimer` correctly imports/uses `useReducedMotion` so the `custom-animation/require-animation-gating` lint rule (the only file here using `requestAnimationFrame`) is satisfied.
-- **The "race" is choreographed, not measured.** Both tracks reveal on the same step stagger and the results gate fires after a fixed 4s regardless of each track's `totalMs`. The Agent always wins because the data says so — `workflow` always ends in `error` steps, `agent` always in `ok` steps. The displayed timer seconds (`totalMs/1000`) and the (currently hidden) "% faster" figure are computed from the static data, not from real execution.
-- **Two race chip UIs coexist.** The `ThemedChip` row at the top (`index.tsx:80-93`) and the progress-pill scrubber in `TimelineControls` both select scenarios and both set `paused = true` on click; the pills also show an auto-cycle progress fill. Keep their `onSelect` behavior in sync if you touch one.
-- **`queueMicrotask` around `setState` is deliberate** (`index.tsx:42`, `RaceTimer.tsx:25,30`) — it keeps synchronous `setState` out of `useEffect` bodies per React 19 rules (CLAUDE.md §4). Don't "simplify" it back into a direct call.
+- **Replaced 2026-10-06** by the owner-picked winner of the /how prototype review ("Off the
+  rails"). The previous race (`src/components/sections/agents-timeline/`: two tracks of step
+  pills, rAF race timers, `ComparisonSummary`, `data.test.ts`) is deleted and lives in git history.
+- **i18n - English only, pending translation.** All copy is in `howSections`, which is listed in
+  `PENDING_TRANSLATION` (`src/i18n/en.ts`); the 13 other locales fall back to English until the
+  namespace is translated into every locale and removed from the list.
+- **Below the desktop stage the map scrolls sideways inside its own box.** Under `lg`, `ArtBox`
+  gives the art a `min-w-[60rem]` and its wrapper `overflow-x-auto` (`Frame.tsx:31-32`), so on
+  phones and narrow tablets the map pans horizontally inside the section; the page itself does not
+  scroll sideways. There is no compact phone layout.
+- **Reduced motion is a finished frame.** Under `useStillMotion`, `p` rests at 1 (`motion.ts:66-69`):
+  the train sits stalled, the route is fully drawn and the result is shown; nothing auto-advances
+  and Replay is disabled (`index.tsx:68`). Markup never depends on the preference. The 0.35 s
+  scene fade on scenario change (`index.tsx:26`) is not gated.
+- **Picking a scenario stops the cycle permanently.** `picked` is never reset and there is no
+  resume control on this section; `PauseButton` (`Frame.tsx:75`), `holdCycle` and the `ArtBox`
+  pointer handlers exist but are not wired here.
+- **The race is choreographed, not measured.** The train always stalls and the agent always
+  arrives because the timing windows say so; stall costs (`wait`) are copy. The figures (47
+  minutes, 3 days, 6 of 12 services) match the chat section's outcomes by hand - the old
+  `data.test.ts` guard went with the old folder.
+- **Accessibility.** The SVG is `role="img"` with `v3.artLabel`; chips are real buttons with
+  `aria-pressed` and a full `showScenario` label; a polite sr-only status line announces the
+  finished scenario (`index.tsx:74-76`).
+- **Hand-placed labels.** Waypoint label offsets (`ANCHOR`, `Labels.tsx:16`) and `STALL_CLOCK`
+  (`Movers.tsx:11`) are tuned to the current `WAYPOINTS`; moving a waypoint means re-checking its
+  label.
 
 ## Related docs
-- [Multi-Agent Chat](agents-chat.md)
+- [Split Screen, One Clock (Agents Chat)](agents-chat.md)
+- [How It Works page](../content/how-it-works.md)
 - [Feature index](../INDEX.md)

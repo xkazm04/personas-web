@@ -42,7 +42,9 @@ async function mountEverything(page: Page) {
   await page.waitForTimeout(1000);
 }
 
-for (const route of ["/", "/features", "/athena"]) {
+// /how is fit-checked but not snap-checked: its role selector and breather are
+// not stages yet, so it keeps proximity snapping.
+for (const route of ["/", "/features", "/athena", "/how"]) {
   for (const viewport of VIEWPORTS) {
     test(`${route} fits one section per screen at ${viewport.name}`, async ({ page }) => {
       test.setTimeout(120_000);
@@ -147,7 +149,15 @@ for (const route of ["/", "/features", "/athena"]) {
     const headings: number[] = [];
     for (let i = 0; i < 4; i++) {
       await page.keyboard.press("PageDown");
-      await page.waitForTimeout(1200);
+      // Wait for the smooth scroll and its snap to settle (a fixed wait read
+      // mid-scroll under parallel load): scrollY unchanged across 250ms.
+      let last = -1;
+      for (let t = 0; t < 20; t++) {
+        await page.waitForTimeout(250);
+        const y = await page.evaluate(() => window.scrollY);
+        if (y === last) break;
+        last = y;
+      }
       const at = await page.evaluate(() => {
         const navHeight = parseFloat(getComputedStyle(document.documentElement).getPropertyValue("--nav-h")) * 16;
         const tops = Array.from(document.querySelectorAll<HTMLElement>("[data-stage]")).map((el) => el.getBoundingClientRect().top - navHeight);

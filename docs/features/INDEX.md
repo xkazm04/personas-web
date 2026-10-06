@@ -94,14 +94,14 @@ Status legend: ✅ written · ⬜ planned
 
 | Doc | Surface |
 | --- | --- |
-| ✅ [flow-composer](demos/flow-composer.md) | Visual flow composer + `/playground` |
+| ✅ [flow-composer](demos/flow-composer.md) | Visual flow composer (opens from the `/how` event hub) + `/playground` |
 | ✅ [orchestration-hub](demos/orchestration-hub.md) | Orchestration hub: lit instrument ring of ten triggers, comet, per-trigger vignettes |
-| ✅ [event-bus-showcase](demos/event-bus-showcase.md) | Animated event-bus showcase |
-| ✅ [platform-layers](demos/platform-layers.md) | Platform layer stack |
+| ✅ [event-bus-showcase](demos/event-bus-showcase.md) | Event hub: tool logos on a tilted orbit, relays through a glass hub, Live/Performance tabs, build-a-flow |
+| ✅ [platform-layers](demos/platform-layers.md) | Growth dial: one laptop, 1 to 40 agents from Day 1 to Year 1, four layers lighting |
 | ✅ [platform-command](demos/platform-command.md) | Terminal/CLI command sequence |
-| ✅ [agents-timeline](demos/agents-timeline.md) | Agent execution timeline race |
+| ✅ [agents-timeline](demos/agents-timeline.md) | Off the rails: fixed-rules train stalls on a snag, the agent's route goes around it |
 | ✅ [agent-playground](demos/agent-playground.md) | Playground terminal demo |
-| ✅ [agents-chat](demos/agents-chat.md) | Multi-agent chat race |
+| ✅ [agents-chat](demos/agents-chat.md) | Split screen, one clock: scripted bot vs agent answering one customer message |
 | ✅ [playground-split](demos/playground-split.md) | Agent Mind "Camera": script of sample prompts, camera dolly through the beats, outcome cards |
 | ✅ [playground-timeline](demos/playground-timeline.md) | Pipeline timeline sim |
 | ✅ [preview-harness](demos/preview-harness.md) | Section preview/demo harness |
