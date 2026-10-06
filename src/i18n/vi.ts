@@ -186,8 +186,7 @@ export const vi: LocaleTranslations = {
       checking: "\u0110ang ki\u1ec3m tra\u2026",
       connected: "\u0110\u00e3 k\u1ebft n\u1ed1i",
       disconnected: "M\u1ea5t k\u1ebft n\u1ed1i",
-      demo: "Demo",
-      viewFullSite: "Xem trang \u0111\u1ea7y \u0111\u1ee7"
+      demo: "Demo"
     },
     useCasesSection: {
       heading: "M\u1ed9t persona,",
@@ -2319,7 +2318,7 @@ export const vi: LocaleTranslations = {
     },
     cookiePolicy: {
       tldr: [
-        "Trang web n\u00e0y ch\u1ec9 \u0111\u1eb7t m\u1ed9t cookie c\u1ee7a ri\u00eang m\u00ecnh (prefer-full, cho ch\u1ebf \u0111\u1ed9 xem di \u0111\u1ed9ng) v\u00e0 l\u01b0u m\u1ed9t v\u00e0i c\u00e0i \u0111\u1eb7t trong b\u1ed9 nh\u1edb c\u1ee5c b\u1ed9 c\u1ee7a tr\u00ecnh duy\u1ec7t. M\u1ecdi m\u1ee5c \u0111\u1ec1u \u0111\u01b0\u1ee3c li\u1ec7t k\u00ea b\u00ean d\u01b0\u1edbi.",
+        "Trang web n\u00e0y kh\u00f4ng \u0111\u1eb7t cookie n\u00e0o c\u1ee7a ri\u00eang m\u00ecnh v\u00e0 l\u01b0u m\u1ed9t v\u00e0i c\u00e0i \u0111\u1eb7t trong b\u1ed9 nh\u1edb c\u1ee5c b\u1ed9 c\u1ee7a tr\u00ecnh duy\u1ec7t. M\u1ecdi m\u1ee5c \u0111\u1ec1u \u0111\u01b0\u1ee3c li\u1ec7t k\u00ea b\u00ean d\u01b0\u1edbi.",
         "Kh\u00f4ng qu\u1ea3ng c\u00e1o, kh\u00f4ng theo d\u00f5i ch\u00e9o trang v\u00e0 kh\u00f4ng l\u1ea5y d\u1ea5u v\u00e2n tay thi\u1ebft b\u1ecb d\u01b0\u1edbi b\u1ea5t k\u1ef3 h\u00ecnh th\u1ee9c n\u00e0o.",
         "B\u1ea1n c\u00f3 th\u1ec3 x\u00f3a t\u1ea5t c\u1ea3 b\u1ea5t c\u1ee9 l\u00fac n\u00e0o trong c\u00e0i \u0111\u1eb7t tr\u00ecnh duy\u1ec7t."
       ],
@@ -2360,7 +2359,6 @@ export const vi: LocaleTranslations = {
         authSession: "Gi\u1eef b\u1ea1n \u0111\u0103ng nh\u1eadp v\u00e0o b\u1ea3ng \u0111i\u1ec1u khi\u1ec3n. Do Supabase, nh\u00e0 cung c\u1ea5p \u0111\u0103ng nh\u1eadp c\u1ee7a ch\u00fang t\u00f4i, ghi v\u00e0 ch\u1ec9 khi b\u1ea1n \u0111\u0103ng nh\u1eadp.",
         theme: "Ghi nh\u1edb ch\u1ee7 \u0111\u1ec1 m\u00e0u b\u1ea1n \u0111\u00e3 ch\u1ecdn.",
         language: "Ghi nh\u1edb ng\u00f4n ng\u1eef b\u1ea1n \u0111\u00e3 ch\u1ecdn.",
-        fullSite: "Tr\u00ean \u0111i\u1ec7n tho\u1ea1i, ghi nh\u1edb r\u1eb1ng b\u1ea1n \u0111\u00e3 ch\u1ecdn trang \u0111\u1ea7y \u0111\u1ee7 thay v\u00ec ch\u1ebf \u0111\u1ed9 xem di \u0111\u1ed9ng.",
         tourVolume: "Ghi nh\u1edb \u00e2m l\u01b0\u1ee3ng l\u1eddi d\u1eabn c\u1ee7a chuy\u1ebfn tham quan c\u00f3 h\u01b0\u1edbng d\u1eabn.",
         dashboardPrefs: "Ghi nh\u1edb ch\u1ebf \u0111\u1ed9 xem, b\u1ed9 l\u1ecdc v\u00e0 c\u00e0i \u0111\u1eb7t b\u1ea3ng \u0111i\u1ec1u khi\u1ec3n c\u1ee7a b\u1ea1n, nh\u01b0 chuy\u1ec3n c\u1ea5p \u0111\u00e1nh gi\u00e1 v\u00e0 \u0111\u1ecdc to.",
         tourSeen: "Ghi nh\u1edb r\u1eb1ng b\u1ea1n \u0111\u00e3 xem chuy\u1ebfn tham quan c\u00f3 h\u01b0\u1edbng d\u1eabn \u0111\u1ec3 kh\u00f4ng \u0111\u1ec1 xu\u1ea5t l\u1ea1i.",

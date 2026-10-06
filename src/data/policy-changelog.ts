@@ -24,10 +24,11 @@ export const POLICY_META: Record<PolicyId, PolicyMeta> = {
     ],
   },
   cookies: {
-    latestUpdateIso: "2026-10-05",
+    latestUpdateIso: "2026-10-06",
     formattedUpdate: "October 2026",
     changes: [
-      "Corrected the claim that the site uses two cookies. It sets one cookie of its own (prefer-full, for the mobile view); the sign-in session and theme live in local storage, not cookies.",
+      "Removed the prefer-full cookie. It belonged to a mobile view that has been retired, so the site now sets no cookies of its own.",
+      "Corrected the claim that the site uses two cookies. The sign-in session and theme live in local storage, not cookies.",
       "Listed every cookie and local storage key the site writes, by purpose, with its lifetime, including the voting ID and comment nickname that were missing.",
       "Clarified that analytics store nothing on your device and run only after you choose \"Accept All\".",
     ],

@@ -186,8 +186,7 @@ export const id: LocaleTranslations = {
       checking: "Memeriksa\u2026",
       connected: "Terhubung",
       disconnected: "Terputus",
-      demo: "Demo",
-      viewFullSite: "Lihat situs lengkap"
+      demo: "Demo"
     },
     useCasesSection: {
       heading: "Satu persona,",
@@ -2319,7 +2318,7 @@ export const id: LocaleTranslations = {
     },
     cookiePolicy: {
       tldr: [
-        "Situs ini hanya memasang satu cookie miliknya sendiri (prefer-full, untuk tampilan seluler) dan menyimpan beberapa pengaturan di penyimpanan lokal browser Anda. Setiap item tercantum di bawah.",
+        "Situs ini tidak memasang cookie miliknya sendiri dan menyimpan beberapa pengaturan di penyimpanan lokal browser Anda. Setiap item tercantum di bawah.",
         "Tanpa iklan, pelacakan lintas situs, atau sidik jari digital dalam bentuk apa pun.",
         "Anda dapat menghapus semuanya kapan saja di pengaturan browser."
       ],
@@ -2360,7 +2359,6 @@ export const id: LocaleTranslations = {
         authSession: "Menjaga Anda tetap masuk ke dasbor. Ditulis oleh Supabase, penyedia login kami, dan hanya jika Anda masuk.",
         theme: "Mengingat tema warna yang Anda pilih.",
         language: "Mengingat bahasa yang Anda pilih.",
-        fullSite: "Di ponsel, mengingat bahwa Anda memilih situs lengkap alih-alih tampilan seluler.",
         tourVolume: "Mengingat volume narasi tur terpandu.",
         dashboardPrefs: "Mengingat tampilan, filter, dan pengaturan dasbor Anda, seperti eskalasi tinjauan dan baca dengan suara.",
         tourSeen: "Mengingat bahwa Anda sudah melihat tur terpandu, agar tidak ditawarkan lagi.",

@@ -186,8 +186,7 @@ export const de: LocaleTranslations = {
       checking: "Wird gepr\u00fcft\u2026",
       connected: "Verbunden",
       disconnected: "Getrennt",
-      demo: "Demo",
-      viewFullSite: "Vollst\u00e4ndige Website anzeigen"
+      demo: "Demo"
     },
     useCasesSection: {
       heading: "Eine Persona,",
@@ -2133,7 +2132,7 @@ export const de: LocaleTranslations = {
     },
     cookiePolicy: {
       tldr: [
-        "Diese Website setzt ein einziges eigenes Cookie (prefer-full, f\u00fcr die Mobilansicht) und speichert einige Einstellungen im lokalen Speicher Ihres Browsers. Jeder Eintrag ist unten aufgef\u00fchrt.",
+        "Diese Website setzt keine eigenen Cookies und speichert einige Einstellungen im lokalen Speicher Ihres Browsers. Jeder Eintrag ist unten aufgef\u00fchrt.",
         "Keine Werbung, kein website\u00fcbergreifendes Tracking und kein Fingerprinting jeglicher Art.",
         "Sie k\u00f6nnen alles jederzeit in Ihren Browsereinstellungen l\u00f6schen."
       ],
@@ -2174,7 +2173,6 @@ export const de: LocaleTranslations = {
         authSession: "H\u00e4lt Sie im Dashboard angemeldet. Wird von Supabase, unserem Anmeldeanbieter, geschrieben, und nur, wenn Sie sich anmelden.",
         theme: "Merkt sich das von Ihnen gew\u00e4hlte Farbschema.",
         language: "Merkt sich die von Ihnen gew\u00e4hlte Sprache.",
-        fullSite: "Merkt sich auf dem Smartphone, dass Sie die vollst\u00e4ndige Website statt der Mobilansicht gew\u00e4hlt haben.",
         tourVolume: "Merkt sich die Lautst\u00e4rke der Sprecherstimme in der gef\u00fchrten Tour.",
         dashboardPrefs: "Merkt sich Ihre Dashboard-Ansichten, -Filter und -Einstellungen, etwa Review-Eskalation und Vorlesen.",
         tourSeen: "Merkt sich, dass Sie die gef\u00fchrte Tour gesehen haben, damit sie nicht erneut angeboten wird.",

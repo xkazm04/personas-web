@@ -186,8 +186,7 @@ export const es: LocaleTranslations = {
       checking: "Comprobando\u2026",
       connected: "Conectado",
       disconnected: "Desconectado",
-      demo: "Demo",
-      viewFullSite: "Ver sitio completo"
+      demo: "Demo"
     },
     useCasesSection: {
       heading: "Una persona,",
@@ -2129,7 +2128,7 @@ export const es: LocaleTranslations = {
     },
     cookiePolicy: {
       tldr: [
-        "Este sitio usa una sola cookie propia (prefer-full, para la vista m\u00f3vil) y guarda algunos ajustes en el almacenamiento local de tu navegador. Cada elemento aparece en la lista de abajo.",
+        "Este sitio no usa cookies propias y guarda algunos ajustes en el almacenamiento local de tu navegador. Cada elemento aparece en la lista de abajo.",
         "Sin publicidad, sin seguimiento entre sitios y sin huella digital de ning\u00fan tipo.",
         "Puedes borrarlo todo en cualquier momento desde los ajustes de tu navegador."
       ],
@@ -2170,7 +2169,6 @@ export const es: LocaleTranslations = {
         authSession: "Mantiene tu sesi\u00f3n iniciada en el panel. La escribe Supabase, nuestro proveedor de inicio de sesi\u00f3n, y solo si inicias sesi\u00f3n.",
         theme: "Recuerda el tema de color que elegiste.",
         language: "Recuerda el idioma que elegiste.",
-        fullSite: "En un tel\u00e9fono, recuerda que elegiste el sitio completo en lugar de la vista m\u00f3vil.",
         tourVolume: "Recuerda el volumen de la narraci\u00f3n del recorrido guiado.",
         dashboardPrefs: "Recuerda tus vistas, filtros y ajustes del panel, como la escalada de revisiones y la lectura en voz alta.",
         tourSeen: "Recuerda que ya viste el recorrido guiado, para no ofrec\u00e9rtelo de nuevo.",

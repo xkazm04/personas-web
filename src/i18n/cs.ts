@@ -186,8 +186,7 @@ export const cs: LocaleTranslations = {
       checking: "Kontrola\u2026",
       connected: "P\u0159ipojeno",
       disconnected: "Odpojeno",
-      demo: "Demo",
-      viewFullSite: "Zobrazit plnou verzi"
+      demo: "Demo"
     },
     useCasesSection: {
       heading: "Jedna persona,",
@@ -2163,7 +2162,7 @@ export const cs: LocaleTranslations = {
     },
     cookiePolicy: {
       tldr: [
-        "Tento web nastavuje jedin\u00fd vlastn\u00ed cookie (prefer-full, pro mobiln\u00ed zobrazen\u00ed) a n\u011bkolik nastaven\u00ed ukl\u00e1d\u00e1 do m\u00edstn\u00edho \u00falo\u017ei\u0161t\u011b va\u0161eho prohl\u00ed\u017ee\u010de. Ka\u017ed\u00e1 polo\u017eka je uvedena n\u00ed\u017ee.",
+        "Tento web nenastavuje \u017e\u00e1dn\u00e9 vlastn\u00ed cookies a n\u011bkolik nastaven\u00ed ukl\u00e1d\u00e1 do m\u00edstn\u00edho \u00falo\u017ei\u0161t\u011b va\u0161eho prohl\u00ed\u017ee\u010de. Ka\u017ed\u00e1 polo\u017eka je uvedena n\u00ed\u017ee.",
         "\u017d\u00e1dn\u00e1 reklama, sledov\u00e1n\u00ed nap\u0159\u00ed\u010d weby ani fingerprinting jak\u00e9hokoli druhu.",
         "V\u0161e m\u016f\u017eete kdykoli vymazat v nastaven\u00ed prohl\u00ed\u017ee\u010de."
       ],
@@ -2204,7 +2203,6 @@ export const cs: LocaleTranslations = {
         authSession: "Udr\u017euje v\u00e1s p\u0159ihl\u00e1\u0161en\u00e9 k n\u00e1st\u011bnce. Zapisuje ho Supabase, n\u00e1\u0161 poskytovatel p\u0159ihl\u00e1\u0161en\u00ed, a to jen pokud se p\u0159ihl\u00e1s\u00edte.",
         theme: "Pamatuje si zvolen\u00fd barevn\u00fd motiv.",
         language: "Pamatuje si zvolen\u00fd jazyk.",
-        fullSite: "Na telefonu si pamatuje, \u017ee jste m\u00edsto mobiln\u00edho zobrazen\u00ed zvolili plnou verzi webu.",
         tourVolume: "Pamatuje si hlasitost koment\u00e1\u0159e v pr\u016fvodci.",
         dashboardPrefs: "Pamatuje si va\u0161e zobrazen\u00ed, filtry a nastaven\u00ed n\u00e1st\u011bnky, nap\u0159\u00edklad eskalaci recenz\u00ed a p\u0159ed\u010d\u00edt\u00e1n\u00ed.",
         tourSeen: "Pamatuje si, \u017ee jste pr\u016fvodce u\u017e vid\u011bli, aby se znovu nenab\u00edzel.",

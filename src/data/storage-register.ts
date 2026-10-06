@@ -9,12 +9,12 @@
  * POLICY_META.cookies in src/data/policy-changelog.ts. The user-facing purpose
  * text lives in the `cookiePolicy.purposes` i18n namespace (all 14 locales).
  *
- * Writers, as of 2026-10-05:
+ * Writers, as of 2026-10-06. The site sets no cookie of its own: the only one,
+ * prefer-full, left with the old /m view (docs/concepts/mobile-revival/PLAN.md).
  *   personas-cookie-consent ............ src/components/CookieConsent.tsx (COOKIE_CONSENT_KEY)
  *   sb-<project>-auth-token ............ supabase-js default session storage (src/lib/supabase.ts)
  *   personas-theme ..................... src/stores/themeStore.ts (zustand persist)
  *   personas-language .................. src/stores/i18nStore.ts (zustand persist)
- *   prefer-full (cookie) ............... src/components/mobile/ViewFullSiteLink.tsx, read in src/proxy.ts
  *   personas-tour-volume ............... src/hooks/useTourVolume.ts
  *   dashboard prefs .................... src/stores/{dashboardFilterStore,incidentsFilterStore,settingsStore,
  *                                        reviewStore,reviewVoiceStore}.ts, src/app/dashboard/knowledge/page.tsx
@@ -55,7 +55,6 @@ export const STORAGE_REGISTER: StorageEntry[] = [
   // Preferences
   { names: ["personas-theme"], mechanism: "localStorage", category: "preferences", lifetime: "untilCleared", purpose: "theme" },
   { names: ["personas-language"], mechanism: "localStorage", category: "preferences", lifetime: "untilCleared", purpose: "language" },
-  { names: ["prefer-full"], mechanism: "cookie", category: "preferences", lifetime: "oneYear", purpose: "fullSite" },
   { names: ["personas-tour-volume"], mechanism: "localStorage", category: "preferences", lifetime: "untilCleared", purpose: "tourVolume" },
   {
     names: [

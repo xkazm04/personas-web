@@ -186,8 +186,7 @@ export const fr: LocaleTranslations = {
       checking: "V\u00e9rification\u2026",
       connected: "Connect\u00e9",
       disconnected: "D\u00e9connect\u00e9",
-      demo: "D\u00e9mo",
-      viewFullSite: "Afficher le site complet"
+      demo: "D\u00e9mo"
     },
     useCasesSection: {
       heading: "Un persona,",
@@ -2136,7 +2135,7 @@ export const fr: LocaleTranslations = {
     },
     cookiePolicy: {
       tldr: [
-        "Ce site d\u00e9pose un seul cookie qui lui est propre (prefer-full, pour l'affichage mobile) et conserve quelques r\u00e9glages dans le stockage local de votre navigateur. Chaque \u00e9l\u00e9ment est list\u00e9 ci-dessous.",
+        "Ce site ne d\u00e9pose aucun cookie qui lui soit propre et conserve quelques r\u00e9glages dans le stockage local de votre navigateur. Chaque \u00e9l\u00e9ment est list\u00e9 ci-dessous.",
         "Aucune publicit\u00e9, aucun suivi intersites, aucune empreinte num\u00e9rique, de quelque nature que ce soit.",
         "Vous pouvez tout effacer \u00e0 tout moment dans les r\u00e9glages de votre navigateur."
       ],
@@ -2177,7 +2176,6 @@ export const fr: LocaleTranslations = {
         authSession: "Vous garde connect\u00e9 au tableau de bord. \u00c9crit par Supabase, notre fournisseur de connexion, et uniquement si vous vous connectez.",
         theme: "M\u00e9morise le th\u00e8me de couleurs que vous avez choisi.",
         language: "M\u00e9morise la langue que vous avez choisie.",
-        fullSite: "Sur un t\u00e9l\u00e9phone, m\u00e9morise que vous avez choisi le site complet plut\u00f4t que l'affichage mobile.",
         tourVolume: "M\u00e9morise le volume de la narration de la visite guid\u00e9e.",
         dashboardPrefs: "M\u00e9morise vos vues, filtres et r\u00e9glages du tableau de bord, comme l'escalade des revues et la lecture \u00e0 voix haute.",
         tourSeen: "M\u00e9morise que vous avez vu la visite guid\u00e9e, pour ne pas vous la proposer \u00e0 nouveau.",

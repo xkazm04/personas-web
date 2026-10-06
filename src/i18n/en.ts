@@ -120,7 +120,6 @@
     connected: string;
     disconnected: string;
     demo: string;
-    viewFullSite: string;
   };
   useCasesSection: {
     heading: string;
@@ -1112,7 +1111,6 @@
       authSession: string;
       theme: string;
       language: string;
-      fullSite: string;
       tourVolume: string;
       dashboardPrefs: string;
       tourSeen: string;
@@ -3284,7 +3282,6 @@ export const en: Translations = {
     connected: 'Connected',
     disconnected: 'Disconnected',
     demo: 'Demo',
-    viewFullSite: 'View full site',
   },
   useCasesSection: {
     heading: 'One persona,',
@@ -4336,7 +4333,7 @@ export const en: Translations = {
   },
   cookiePolicy: {
     tldr: [
-      'This site sets one cookie of its own (prefer-full, for the mobile view) and keeps a few settings in your browser\'s local storage. Every item is listed below.',
+      'This site sets no cookies of its own and keeps a few settings in your browser\'s local storage. Every item is listed below.',
       'No advertising, cross-site tracking, or fingerprinting of any kind.',
       'You can clear all of it anytime in your browser settings.',
     ],
@@ -4377,7 +4374,6 @@ export const en: Translations = {
       authSession: 'Keeps you signed in to the dashboard. Written by Supabase, our sign-in provider, and only if you sign in.',
       theme: 'Remembers the color theme you picked.',
       language: 'Remembers the language you picked.',
-      fullSite: 'On a phone, remembers that you chose the full site instead of the mobile view.',
       tourVolume: 'Remembers the narration volume of the guided tour.',
       dashboardPrefs: 'Remembers your dashboard views, filters, and settings, such as review escalation and read-aloud.',
       tourSeen: 'Remembers that you have seen the guided tour, so it is not offered again.',
