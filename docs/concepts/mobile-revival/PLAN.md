@@ -129,7 +129,7 @@ Each runs on the same demo and live data plane the desktop views use, behind `us
 |---|---|
 | 0: clear the ground | **done 2026-10-06**: `dfc34a4`, `e1984d1`, `188f0bc`, `3eb281d`, `7caf9bd`, `b56b6ba`, `04ef958` |
 | 1: mobile landing | **ported 2026-10-06**: `/m` Hive Reels (`4c766fa`, `fb70cff`; 994.7 KB) and `/m2` Around the Clock (`0db4712`; 1010.2 KB), both noindex, no redirect yet; phone e2e 23/23. Launch (translate x13, proxy for `/`, robots) waits on the owner trying `/m2` on a phone |
-| 2: mobile dashboard | surveying agent management + sync signal (`PHASE2-SURVEY.md`); design waits on the `dashboard/spa` merge |
+| 2: mobile dashboard | spec `PHASE2-SPEC.md`. **E2E-1 web half landed 2026-10-06**: M0 SQL (`57090b3`, owner runs `npm run db:migrate:sync`), copy (`18e1ff9`), command plane core (M4 + M5), phone Personas layout + pairing card (M6, Pause/Resume, demo `?desktop=offline\|never`); phone e2e 4/4. Desktop half (M1-M3) in `../personas` |
 
 ## Phase 1 contest brief (draft for `/contest --landing`)
 

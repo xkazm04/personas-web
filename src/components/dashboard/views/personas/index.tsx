@@ -6,6 +6,8 @@ import { Bot } from "lucide-react";
 import { useTranslation } from "@/i18n/useTranslation";
 import { DEFAULT_FLEET_SCALE, FLEET_SCALES, type FleetScale } from "@/components/dashboard/fleet-monitor/fleet-data";
 import StageLoading from "@/components/dashboard/fleet-monitor/StageLoading";
+import { useIsMobile } from "@/hooks/useIsMobile";
+import PhonePersonas from "./phone/PhonePersonas";
 
 /* Each view is a client-only chunk: they carry the 130 KB demo fleet and
    their own artwork, none of which belongs in the dashboard's first load. */
@@ -16,13 +18,25 @@ type View = "board" | "city";
 const VIEWS: readonly View[] = ["board", "city"];
 
 /**
- * `/dashboard/personas`: the dashboard's main view, every persona in the fleet
+ * `/dashboard/personas`. At phone width it is agent management (the persona
+ * list with Pause/Resume, PLAN M13: a phone layout of this view, not a new
+ * route); from 768 px up it is the fleet stage below, unchanged. The view is
+ * client-only (next/dynamic ssr:false), so choosing by media query cannot
+ * mismatch a server render.
+ */
+export default function PersonasView() {
+  const phone = useIsMobile();
+  return phone ? <PhonePersonas /> : <PersonasStage />;
+}
+
+/**
+ * The desktop stage: the dashboard's main view, every persona in the fleet
  * on one screen. Board (every agent in team bays, drill-down to team and
  * agent) is the working view; Night shift (the fleet as a city) is kept as a
  * showcase without drill-down. One thin toolbar row; the stage takes the rest
  * of the viewport, edge to edge (the view is full-bleed in `spa/views.ts`).
  */
-export default function PersonasView() {
+function PersonasStage() {
   const { t } = useTranslation();
   const copy = t.personasMonitor;
   const [view, setView] = useState<View>("board");

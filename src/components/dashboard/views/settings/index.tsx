@@ -15,6 +15,7 @@ import { SettingsHeader } from "./SettingsHeader";
 import { ModelProvidersCard } from "./settings-sections/ModelProvidersCard";
 import { NotificationsCard } from "./settings-sections/NotificationsCard";
 import { RotationOverviewCard } from "./settings-sections/RotationOverviewCard";
+import { PhoneControlCard } from "./settings-sections/PhoneControlCard";
 
 export default function SettingsPage() {
   const { user, signOut, isDemo, isSigningOut } = useAuthStore(
@@ -139,6 +140,7 @@ export default function SettingsPage() {
           </div>
         </GlowCard>
 
+        <PhoneControlCard />
         <NotificationsCard />
         <ModelProvidersCard />
         <RotationOverviewCard />
