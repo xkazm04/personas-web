@@ -1089,7 +1089,8 @@
             "src/components/dashboard/views/settings/settings-sections/NotificationsCard.tsx",
             "src/components/dashboard/views/settings/settings-sections/RotationOverviewCard.tsx",
             "src/components/dashboard/views/settings/settings-sections/SettingToggle.tsx",
-            "src/stores/settingsStore.ts"
+            "src/stores/settingsStore.ts",
+            "src/components/dashboard/views/settings/settings-sections/PhoneControlCard.tsx"
           ],
           "target": null,
           "apiRoutes": []
@@ -1182,7 +1183,7 @@
         },
         {
           "name": "Agents (Personas) Management",
-          "description": "Dashboard agent/persona list and detail drawer (detail, subscriptions, memory actions, metrics) with optimistic persona-store updates.",
+          "description": "Dashboard agent/persona list and detail drawer (detail, subscriptions, memory actions, metrics) with optimistic persona-store updates. Also the phone command plane (/m revival phase 2): commandStore sends a verb (pause/resume) as a signed pending_commands row and follows it to its outcome; lib/commands holds the envelope (fixture-pinned key order), the single key holder (signer.ts), pairing proof, reducer, and the live and demo planes.",
           "businessFeature": "Agents (Personas) Management",
           "category": "ui",
           "filePaths": [
@@ -1195,7 +1196,21 @@
             "src/components/dashboard/subscriptions-panel/SubscriptionCard.tsx",
             "src/components/dashboard/subscriptions-panel/SubscriptionsToolbar.tsx",
             "src/components/dashboard/subscriptions-panel/subscriptionTypes.ts",
-            "src/stores/personaStore.ts"
+            "src/stores/personaStore.ts",
+            "src/stores/commandStore.ts",
+            "src/lib/commands/envelope.ts",
+            "src/lib/commands/envelope.test.ts",
+            "src/lib/commands/signer.ts",
+            "src/lib/commands/pairing.ts",
+            "src/lib/commands/pairing.test.ts",
+            "src/lib/commands/commandReducer.ts",
+            "src/lib/commands/commandReducer.test.ts",
+            "src/lib/commands/liveCommandPlane.ts",
+            "src/lib/commands/controllerPlane.ts",
+            "src/lib/commands/mockCommandPlane.ts",
+            "src/lib/commands/mockCommandPlane.test.ts",
+            "fixtures/command-envelope-v1.json",
+            "scripts/gen-command-envelope-fixture.mjs"
           ],
           "target": null,
           "apiRoutes": []
@@ -1254,7 +1269,11 @@
             "src/components/dashboard/fleet-monitor/night/rail.ts",
             "src/components/dashboard/fleet-monitor/night/useFieldSize.ts",
             "src/components/dashboard/fleet-monitor/night/useNightSim.ts",
-            "src/components/dashboard/fleet-monitor/night/vocab.ts"
+            "src/components/dashboard/fleet-monitor/night/vocab.ts",
+            "src/components/dashboard/views/personas/phone/PhonePersonas.tsx",
+            "src/components/dashboard/views/personas/phone/PhonePersonaRow.tsx",
+            "src/components/dashboard/views/personas/phone/ReachabilityNotice.tsx",
+            "src/components/dashboard/views/personas/phone/CommandChip.tsx"
           ],
           "target": null,
           "apiRoutes": 0
@@ -1585,7 +1604,8 @@
             "src/components/mobile-landing/hive/useHeroBeat.ts",
             "src/components/mobile-landing/hive/useHiveCopy.ts",
             "src/components/mobile-landing/hive/useReel.ts",
-            "src/components/mobile-landing/hive/useSwap.ts"
+            "src/components/mobile-landing/hive/useSwap.ts",
+            "e2e/mobile/dashboard-personas.spec.ts"
           ],
           "target": null,
           "apiRoutes": []
@@ -1756,13 +1776,19 @@
         },
         {
           "name": "Supabase Client",
-          "description": "Optional anon-key-only Supabase client and the typed query helpers used by roadmap and voting (guarded so the app falls back to mocks when unconfigured).",
+          "description": "Optional anon-key-only Supabase client and the typed query helpers used by roadmap and voting (guarded so the app falls back to mocks when unconfigured). Also the desktop sync schema (scripts/setup-sync-db.sql: synced_* mirror, pending_commands contract v1, command_controllers, server-stamped heartbeat) and the online gate: reachability tiers (120 s heartbeat), useSyncReachability, deviceStore, controllerStore.",
           "businessFeature": "Supabase Client",
           "category": "lib",
           "filePaths": [
             "src/lib/supabase-admin.ts",
             "src/lib/supabase.ts",
-            "src/lib/supabaseApi.ts"
+            "src/lib/supabaseApi.ts",
+            "scripts/setup-sync-db.sql",
+            "src/lib/sync/reachability.ts",
+            "src/lib/sync/reachability.test.ts",
+            "src/hooks/useSyncReachability.ts",
+            "src/stores/deviceStore.ts",
+            "src/stores/controllerStore.ts"
           ],
           "target": null,
           "apiRoutes": []
@@ -2092,23 +2118,23 @@
     "Connectors & Templates › Templates Gallery & Detail [ui] — 18 files",
     "Connectors & Templates › Connector Detail Modal [ui] — 7 files",
     "Connectors & Templates › Connectors Catalog [ui] — 10 files",
-    "Agent Operations Dashboard › Messages & Settings [ui] — 10 files",
+    "Agent Operations Dashboard › Messages & Settings [ui] — 14 files",
     "Agent Operations Dashboard › Knowledge Base [ui] — 27 files",
     "Agent Operations Dashboard › Manual Review Queue [ui] — 35 files",
-    "Agent Operations Dashboard › Agents (Personas) Management [ui] — 18 files",
+    "Agent Operations Dashboard › Agents (Personas) Management [ui] — 24 files",
     "Observability & Event Monitoring › Execution History & Streaming [ui] — 14 files",
     "Observability & Event Monitoring › Leaderboard & Rankings [ui] — 7 files",
     "Observability & Event Monitoring › Director Coaching [ui] — 11 files",
     "Observability & Event Monitoring › Observability Charts & SLA [ui] — 55 files",
     "Observability & Event Monitoring › Event Bus & Stream Monitoring [ui] — 33 files",
     "Observability & Event Monitoring › Dashboard Home Overview [ui] — 23 files",
-    "Platform Foundation: Shell, UI & Motion › Mobile App Shell & Views [ui] — 51 files",
+    "Platform Foundation: Shell, UI & Motion › Mobile App Shell & Views [ui] — 52 files",
     "Platform Foundation: Shell, UI & Motion › Animation & Motion System [lib] — 24 files",
     "Platform Foundation: Shell, UI & Motion › Shared UI Primitives & Illustrations [ui] — 25 files",
     "Platform Foundation: Shell, UI & Motion › Dashboard Shell, Chrome & Realtime [ui] — 20 files",
     "Platform Foundation: Shell, UI & Motion › Layout, Navigation & Page Shell [ui] — 23 files",
     "Infrastructure & Telemetry › Build Config & E2E Tests [test] — 15 files",
-    "Infrastructure & Telemetry › Supabase Client [lib] — 2 files",
+    "Infrastructure & Telemetry › Supabase Client [lib] — 9 files",
     "Infrastructure & Telemetry › SEO & Social Metadata [config] — 15 files",
     "Infrastructure & Telemetry › Error Monitoring & Analytics [config] — 9 files",
     "Infrastructure & Telemetry › Orchestrator API Client & Mock Data [lib] — 8 files",
@@ -2116,7 +2142,7 @@
     "Theming, i18n & Shared Utilities › Shared Types, Utilities & Hooks [lib] — 15 files",
     "Theming, i18n & Shared Utilities › Theme System [lib] — 6 files",
     "Theming, i18n & Shared Utilities › Internationalization (14 locales) [lib] — 16 files",
-    "Agent Operations Dashboard › Fleet Playground (prototypes) [ui] — 50 files"
+    "Agent Operations Dashboard › Fleet Playground (prototypes) [ui] — 53 files"
   ],
   "summary": {
     "totalGroups": 12,
