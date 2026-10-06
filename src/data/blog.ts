@@ -44,7 +44,7 @@ export const BLOG_POSTS: BlogPost[] = [
     date: "2026-03-15",
     readingTime: 5,
     featured: true,
-    content: `Personas is a desktop application for building and orchestrating AI agent pipelines. Unlike cloud platforms that process your data on remote servers, Personas runs on your machine: your credentials, agents, and outputs stay on your device, and your prompts go only to the AI provider you choose, or nowhere at all with a local Ollama model.
+    content: `Personas is a desktop application for building and orchestrating AI agent pipelines. Unlike cloud platforms that process your data on remote servers, Personas runs on your machine: your agents and outputs stay on your device unless you turn on optional cloud sync, your credentials never leave it, and your prompts go only to the AI provider you choose, or nowhere at all with a local Ollama model.
 
 ## Why Desktop-First?
 
@@ -323,7 +323,7 @@ Each refinement takes seconds. Run again, compare, and iterate until the output 
 
 ## Why This Works Locally
 
-Your emails contain some of the most sensitive content you handle: financial data, legal discussions, personal information. Running this agent locally means your inbox is never copied to an agent platform's servers. The email text goes only to the AI model you choose to process it (or nowhere at all with a local Ollama model), and your credentials, results, and history stay on your device.
+Your emails contain some of the most sensitive content you handle: financial data, legal discussions, personal information. Running this agent locally means your inbox is never copied to an agent platform's servers. The email text goes only to the AI model you choose to process it (or nowhere at all with a local Ollama model), and your credentials stay on your device, as do your results and history unless you turn on optional cloud sync.
 
 Compare this to cloud-based email assistants that upload your inbox to third-party servers. With Personas, you get the automation without the privacy tradeoff.`,
   },
@@ -520,7 +520,7 @@ Personas is designed for exactly this. You describe what you want in plain Engli
 
 Notice what all these agents have in common: they take unstructured input from multiple sources, apply judgment, and produce structured output. That's exactly what AI agents do best, and exactly what takes humans the most time.
 
-None of these require code. You describe the task, connect the tools, and set a trigger. The agent handles the rest, running quietly on your machine and sending your data only to the AI model you choose.`,
+None of these require code. You describe the task, connect the tools, and set a trigger. The agent handles the rest, running quietly on your machine and sending your data only to the AI model you choose (and, if you turn on cloud sync, a copy to your own account).`,
   },
   {
     slug: "why-local-first-ai-matters",
@@ -585,7 +585,7 @@ Local-first isn't dogma. There are genuine reasons to choose a hosted cloud plat
 - **Team collaboration**: shared agent libraries and pipeline editing require a synchronized backend.
 - **Scale**: if you need 10+ concurrent agents processing high-volume data streams, a hosted platform distributes the load.
 
-Personas is built for everything else: your agents, history, and credentials stay on your machine, and your prompts go only where you send them.`,
+Personas is built for everything else: your agents and history stay on your machine unless you turn on optional cloud sync, your credentials never leave it, and your prompts go only where you send them.`,
   },
 ];
 

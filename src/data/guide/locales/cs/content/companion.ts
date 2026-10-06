@@ -123,7 +123,7 @@ Otevři **Companion → Memory** a uvidíš vše, co Athena ví. Brain Viewer zo
 
 ### Soukromí
 
-Data mozku — všech pět úrovní paměti — žijí na tvém počítači ve složce \`~/.personas/companion-brain/\`. Nic se neukládá do cloudové databáze. Pokud používáš lokální enginy Whisper STT a Piper TTS, žádný zvuk také neopustí tvůj počítač.
+Data mozku — všech pět úrovní paměti — žijí na tvém počítači ve složce \`~/.personas/companion-brain/\`. Nic z toho se neukládá do cloudové databáze, s jedinou volitelnou výjimkou: když v nastavení cloudové synchronizace desktopové aplikace zapneš „Synchronizovat chaty“ (ve výchozím stavu vypnuto), tvoje konverzace s ní se zkopírují do tvého účtu Personas, se zamaskovaným vším, co vypadá jako klíč, abys je mohl číst a odpovídat na ně z telefonu. Vypnutím se tato kopie smaže. Pokud používáš lokální enginy Whisper STT a Piper TTS, žádný zvuk také neopustí tvůj počítač.
 
 :::tip
 Vstupní rozhovor je krátký (pár minut) a okamžitě přináší výsledky — prvních pár odpovědí Atheny po dobrém rozhovoru je znatelně přesnějších. Proveď ho před svou první skutečnou seancí.

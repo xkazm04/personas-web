@@ -12,14 +12,14 @@ export const SECURITY_PILLARS: SecurityPillar[] = [
   {
     title: "Local-First Architecture",
     description:
-      "Your agents, run history, and credentials stay on your machine, because the whole orchestration engine runs on your desktop. Your prompts go only to the AI provider you choose, or nowhere at all with a local Ollama model.",
+      "Your agents and their run history live on your machine, because the whole orchestration engine runs on your desktop, and your credentials never leave it. Your prompts go only to the AI provider you choose, or nowhere at all with a local Ollama model. Cloud sync to your own account is optional and off until you turn it on.",
     icon: "Monitor",
     color: "#06b6d4",
     details: [
       "AI model calls go directly from your machine to Claude (Anthropic), or stay on it with a local Ollama model",
       "No Personas relay servers sit between you and your AI provider",
       "Agent configurations stored as local encrypted files",
-      "Execution logs stay on disk — never uploaded or synced",
+      "Execution logs stay on disk unless you turn on optional cloud sync",
       "Works fully offline for local LLM configurations",
     ],
   },
@@ -78,7 +78,7 @@ export interface CompliancePoint {
 export const COMPLIANCE_POINTS: CompliancePoint[] = [
   {
     label: "GDPR",
-    description: "Personas never receives your data, so you need no data processing agreement with Personas. Personal data in a prompt goes only to the AI provider you choose, under your own agreement with them, or nowhere with a local model.",
+    description: "With cloud sync off (the default), Personas never receives your data, so you need no data processing agreement with Personas. Personal data in a prompt goes only to the AI provider you choose, under your own agreement with them, or nowhere with a local model. If you turn on cloud sync, the synced data is stored in your account with Supabase.",
     status: "simplified",
     checklist: [
       "No Data Processing Agreement (DPA) required with Personas",
@@ -90,7 +90,7 @@ export const COMPLIANCE_POINTS: CompliancePoint[] = [
   },
   {
     label: "HIPAA",
-    description: "PHI never transits through Personas infrastructure. Your AI provider relationship is direct.",
+    description: "With cloud sync off (the default), PHI never transits through Personas infrastructure, and your AI provider relationship is direct.",
     status: "simplified",
     checklist: [
       "No Business Associate Agreement (BAA) needed with Personas",
@@ -102,10 +102,10 @@ export const COMPLIANCE_POINTS: CompliancePoint[] = [
   },
   {
     label: "SOC 2",
-    description: "Not applicable — Personas has no cloud infrastructure to audit. Your existing device security controls apply.",
+    description: "Not applicable while cloud sync is off (the default): Personas runs entirely on your device, so your existing device security controls apply. Optional cloud sync stores the data you sync with Supabase.",
     status: "not-applicable",
     checklist: [
-      "No cloud infrastructure to audit or certify",
+      "Nothing on the Personas side to audit or certify while cloud sync is off",
       "No shared-tenancy risk to evaluate",
       "No vendor security questionnaire to complete for Personas",
       "Your device-level controls are the only scope",
@@ -113,10 +113,10 @@ export const COMPLIANCE_POINTS: CompliancePoint[] = [
   },
   {
     label: "Data Residency",
-    description: "Everything Personas stores resides wherever your machine is. No cross-border transfers through Personas.",
+    description: "With cloud sync off (the default), everything Personas stores resides wherever your machine is. No cross-border transfers through Personas.",
     status: "built-in",
     checklist: [
-      "Agents, history, and credentials physically stay on your hardware",
+      "Agents and history stay on your hardware unless you turn on cloud sync; credentials always do",
       "No replication to foreign data centers",
       "Jurisdiction is wherever your machine is located",
       "No multi-region failover moving data silently",
@@ -135,13 +135,13 @@ export const COMPLIANCE_POINTS: CompliancePoint[] = [
   },
   {
     label: "Right to Erasure",
-    description: "Delete the application folder. Done. No cloud accounts, no remote data, no deactivation requests.",
+    description: "Delete the application folder. Done. If you turned on cloud sync, also ask us to delete the synced copy.",
     status: "built-in",
     checklist: [
-      "Uninstall removes all data — no cloud residue",
-      "No account deactivation request needed",
-      "No waiting period for data deletion",
-      "No hidden backups on remote servers",
+      "Uninstall removes all local data",
+      "Turning off Sync notes or Sync chats deletes those synced copies",
+      "Other synced data is deleted on request",
+      "No waiting period for local data deletion",
     ],
   },
 ];
@@ -164,7 +164,7 @@ export const SECURITY_FAQS: SecurityFAQ[] = [
   {
     question: "Does Personas send data to the cloud?",
     answer:
-      "Your agents, outputs, run history, and credentials stay on your desktop. When an agent runs, its prompt goes directly from your device to the AI provider you chose (Claude by Anthropic), or stays on your machine with a local Ollama model; Personas never relays or stores it. The only data release builds send to us is anonymous error reports and usage signals (see the telemetry question below).",
+      "Only what you choose. By default your agents, outputs, run history, and credentials stay on your desktop. When an agent runs, its prompt goes directly from your device to the AI provider you chose (Claude by Anthropic), or stays on your machine with a local Ollama model; Personas never relays it. Release builds send us anonymous error reports and usage signals (see the telemetry question below). Cloud sync is optional and off until you turn it on: it copies your agents and runs to your own account so you can follow them on the web, notes and Athena chats sync only behind their own switches, and credentials never sync. The Privacy Policy lists exactly what syncs.",
   },
   {
     question: "How are credentials stored?",
@@ -179,12 +179,12 @@ export const SECURITY_FAQS: SecurityFAQ[] = [
   {
     question: "Can my employer see my agent data?",
     answer:
-      "Only if they have access to your machine. Personas stores everything locally — there is no admin console, no centralized server, and no way for anyone to remotely view your agents, prompts, or outputs.",
+      "Only if they have access to your machine, or to your Personas account if you turn on cloud sync. There is no admin console and no organization view: synced data can be read only by your own signed-in account.",
   },
   {
     question: "What happens if I uninstall Personas?",
     answer:
-      "All data is removed with the application. There are no cloud accounts and no remote backups of your agents or data; only the anonymous error reports and usage signals described above remain with Sentry, and they carry no identity. Deleting the application folder is a complete erasure.",
+      "All local data is removed with the application. If you turned on cloud sync, the synced copy stays in your account until you ask us to delete it (turning off Sync notes or Sync chats deletes those copies yourself). Otherwise only the anonymous error reports and usage signals described above remain with Sentry, and they carry no identity.",
   },
 ];
 

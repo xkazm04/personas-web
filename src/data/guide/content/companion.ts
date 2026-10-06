@@ -140,7 +140,7 @@ On the receiving machine the import **merges** rather than overwrites. Anything 
 
 ### Privacy
 
-The brain data — all five memory tiers — lives on your machine at \`~/.personas/companion-brain/\`. Nothing is stored in a cloud database. If you use the local Whisper STT and Piper TTS engines, no audio leaves your machine either.
+The brain data — all five memory tiers — lives on your machine at \`~/.personas/companion-brain/\`. None of it is stored in a cloud database, with one opt-in exception: if you turn on Sync chats in the desktop app's cloud sync settings (off by default), your conversations with her are copied to your Personas account, with anything that looks like a key masked, so you can read and answer them on your phone. Turning it off deletes that copy. If you use the local Whisper STT and Piper TTS engines, no audio leaves your machine either.
 
 :::tip
 The intake interview is short (a few minutes) and pays dividends immediately — Athena's first handful of replies after a good intake are noticeably more on-point. Run it before your first real session.

@@ -121,7 +121,7 @@ Mở **Companion → Memory** để xem mọi thứ Athena biết. Brain Viewer 
 
 ### Quyền riêng tư
 
-Dữ liệu não — tất cả năm tầng bộ nhớ — nằm trên máy của bạn tại \`~/.personas/companion-brain/\`. Không có gì được lưu trong cơ sở dữ liệu đám mây. Nếu bạn sử dụng engine STT Whisper cục bộ và TTS Piper, không có âm thanh nào rời khỏi máy của bạn.
+Dữ liệu não — tất cả năm tầng bộ nhớ — nằm trên máy của bạn tại \`~/.personas/companion-brain/\`. Không có gì trong số đó được lưu trong cơ sở dữ liệu đám mây, trừ một ngoại lệ do bạn tự bật: nếu bạn bật "Đồng bộ trò chuyện" trong cài đặt đồng bộ đám mây của ứng dụng máy tính (mặc định tắt), các cuộc trò chuyện của bạn với cô ấy được sao chép vào tài khoản Personas của bạn, với mọi thứ trông giống khóa đều bị che, để bạn có thể đọc và trả lời trên điện thoại. Tắt nó sẽ xóa bản sao đó. Nếu bạn sử dụng engine STT Whisper cục bộ và TTS Piper, không có âm thanh nào rời khỏi máy của bạn.
 
 :::tip
 Cuộc phỏng vấn nhập liệu ngắn (vài phút) và trả lại lợi ích ngay lập tức — một vài phản hồi đầu tiên của Athena sau khi nhập liệu tốt đáng chú ý hơn nhiều. Hãy chạy nó trước phiên thực sự đầu tiên của bạn.

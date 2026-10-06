@@ -8215,7 +8215,7 @@ export const en: Translations = {
           short: 'Personas, $0',
           body: [
             'Personas runs here, on your computer: the app, its MIT-licensed source and every feature are free.',
-            'No account and no license key. Your agents, credentials and run history stay on this machine.',
+            'No account and no license key. Your agents and run history stay on this machine unless you turn on cloud sync, and your credentials never leave it.',
           ],
         },
         {
@@ -8343,7 +8343,7 @@ export const en: Translations = {
       },
     },
     footer: {
-      facts: 'Personas is free and open source (MIT), with no account and no license key. Agents, credentials and run history stay on your computer; prompts go to the AI provider you run, Claude via Anthropic. The app sends minimal, anonymous error and usage signals, and you can switch usage signals off in Settings.',
+      facts: 'Personas is free and open source (MIT), with no account and no license key. Agents and run history stay on your computer unless you turn on optional cloud sync, credentials never leave it, and prompts go to the AI provider you run, Claude via Anthropic. The app sends minimal, anonymous error and usage signals, and you can switch usage signals off in Settings.',
       stylized: 'The clock, its times and the day around it are a stylized illustration, not a product claim. Athena\'s portrait is the only real product image on this page.',
     },
   },

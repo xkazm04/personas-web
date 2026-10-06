@@ -200,7 +200,7 @@ Das mitgelieferte Binary ist nach der Installation etwa 90 MB groß. Plugins wie
 
 ### So funktioniert es
 
-Die App speichert ihre Datenbank (\`personas.db\`), den Zugangsdaten-Tresor, den Ausführungsverlauf und die Konfiguration lokal in deinem OS-spezifischen App-Daten-Verzeichnis. Nichts wird hochgeladen, es sei denn, du nutzt einen Cloud-KI-Anbieter. Plugins, die lokale Modelle ausliefern, laden die Modelldateien bei der ersten Nutzung herunter.
+Die App speichert ihre Datenbank (\`personas.db\`), den Zugangsdaten-Tresor, den Ausführungsverlauf und die Konfiguration lokal in deinem OS-spezifischen App-Daten-Verzeichnis. Hochgeladen wird nur, was du als Prompt an einen Cloud-KI-Anbieter sendest, es sei denn, du schaltest die optionale Cloud-Synchronisierung ein, die deine Agenten und ihre Ausführungen in dein Personas-Konto kopiert (nie deine Zugangsdaten). Plugins, die lokale Modelle ausliefern, laden die Modelldateien bei der ersten Nutzung herunter.
 
 Der Windows-Build nutzt ONNX Runtime für Embeddings, wenn die Vektor-Wissensdatenbank-Funktion aktiviert ist; das ist in diesem Fall die größte Einzelabhängigkeit.
 
