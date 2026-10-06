@@ -1,4 +1,5 @@
 import type { ChatScenario } from "./types";
+import { parseClock } from "./timeline-utils";
 
 export const MSG_INTERVAL_MS = 800;
 export const SATISFACTION_REVEAL_MS = 400;
@@ -16,6 +17,9 @@ export function getScenarioCycleMs(
     maxMsgs * interval + SATISFACTION_REVEAL_MS + SATISFACTION_DWELL_MS,
   );
 }
+
+/** When the staging agent finishes; its "ready in N seconds" line is read off this clock. */
+const STAGING_READY_AT = "0:12";
 
 export const scenarios: ChatScenario[] = [
   {
@@ -88,8 +92,8 @@ export const scenarios: ChatScenario[] = [
         { sender: "bot", text: "I'll enumerate all 12 production services first, then modify each config systematically.", tone: "thinking", timestamp: "0:02" },
         { sender: "bot", text: "Cloning configs for all 12 services with debug logging overrides applied.", tone: "neutral", timestamp: "0:05" },
         { sender: "bot", text: "Deploying services sequentially with health checks after each...", tone: "neutral", timestamp: "0:08" },
-        { sender: "bot", text: "All 12 services deployed and verified healthy. Debug logging active across the board.", tone: "success", timestamp: "0:12" },
-        { sender: "system", text: "RESOLVED. Full staging environment ready in 90 seconds.", tone: "success", timestamp: "0:12" },
+        { sender: "bot", text: "All 12 services deployed and verified healthy. Debug logging active across the board.", tone: "success", timestamp: STAGING_READY_AT },
+        { sender: "system", text: `RESOLVED. Full staging environment ready in ${parseClock(STAGING_READY_AT)} seconds.`, tone: "success", timestamp: STAGING_READY_AT },
       ],
       satisfaction: 5,
     },
