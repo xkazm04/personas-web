@@ -1,7 +1,6 @@
 import { describe, it, expect } from "vitest";
 import { GUIDE_TOPICS } from "@/data/guide/topics";
 import type { GuideTopicRef } from "@/lib/guide-link";
-import { features } from "@/components/sections/features/data";
 import { PLATFORM_CARDS } from "@/components/sections/vision-grid/data";
 
 /**
@@ -17,9 +16,6 @@ import { PLATFORM_CARDS } from "@/components/sections/vision-grid/data";
 // Collect every hand-authored ref with a human-readable source label so a
 // failure names exactly which surface to fix.
 const HAND_AUTHORED_REFS: { source: string; ref: Pick<GuideTopicRef, "category" | "topic"> }[] = [
-  ...features.flatMap((f) =>
-    (f.guideTopics ?? []).map((ref) => ({ source: `features/data.ts (${f.title})`, ref })),
-  ),
   ...PLATFORM_CARDS.flatMap((c) =>
     (c.guideTopics ?? []).map((ref) => ({ source: `vision-grid/data.ts (${c.id})`, ref })),
   ),

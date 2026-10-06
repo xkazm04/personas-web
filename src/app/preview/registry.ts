@@ -36,11 +36,7 @@ export const PREVIEW_EXTRAS: Record<string, ComponentType> = {
   roadmap: dynamic(() => import("@/components/sections/roadmap")),
   "feature-voting": dynamic(() => import("@/components/sections/feature-voting")),
   // Preview-only: no page mounts these.
-  features: dynamic(() => import("@/components/sections/features")),
   "platform-command": dynamic(() => import("@/components/sections/platform-command")),
-  "agent-playground": dynamic(() => import("@/components/sections/agent-playground")),
-  "playground-timeline": dynamic(() => import("@/components/sections/playground-timeline")),
-  changelog: dynamic(() => import("@/components/sections/Changelog")),
 };
 
 export const PREVIEW_REGISTRY: ReadonlyMap<string, ComponentType> = buildPreviewRegistry<ComponentType>(
