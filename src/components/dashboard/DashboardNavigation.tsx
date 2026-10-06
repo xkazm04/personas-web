@@ -8,10 +8,11 @@ import { useExecutionStore } from "@/stores/executionStore";
 import { useAuthStore } from "@/stores/authStore";
 import { MOCK_HEALTH_ALERTS, MOCK_OPEN_INCIDENTS, MOCK_UNREAD_MESSAGES } from "@/lib/mock-dashboard-data";
 import { dashboardHref, viewIdFromPath, type DashboardViewId } from "@/components/dashboard/spa/views";
-import { navSections, type NavGroupKey, type NavSectionDef } from "./navRegistry";
+import { navSections, type NavGroupKey, type NavLabelKey, type NavSectionDef } from "./navRegistry";
 import DesktopSidebar from "./DesktopSidebar";
 import MobileBottomNav from "./MobileBottomNav";
 import { useTranslation } from "@/i18n/useTranslation";
+import type { Translations } from "@/i18n/en";
 
 export interface NavLeaf {
   view: DashboardViewId;
@@ -35,13 +36,19 @@ function sectionViews(section: NavSectionDef): DashboardViewId[] {
   return section.view ? [section.view] : [];
 }
 
+/** A nav label: `t.dashboard`, or the pending `mobile` namespace for a view not yet translated. */
+function navLabel(t: Translations, key: NavLabelKey): string {
+  if (key === "notes") return t.mobile.notes.nav;
+  return t.dashboard[key];
+}
+
 export function useNavSections(): NavSection[] {
   const { t } = useTranslation();
   return navSections.map((section) => {
     const views = sectionViews(section);
     return {
       key: section.key,
-      label: t.dashboard[section.labelKey],
+      label: navLabel(t, section.labelKey),
       icon: section.icon,
       href: dashboardHref(views[0]),
       views,
@@ -51,7 +58,7 @@ export function useNavSections(): NavSection[] {
         items: group.items.map((item) => ({
           view: item.view,
           href: dashboardHref(item.view),
-          label: t.dashboard[item.labelKey],
+          label: navLabel(t, item.labelKey),
           icon: item.icon,
         })),
       })),

@@ -4,12 +4,16 @@ import { useState } from "react";
 import { usePathname } from "next/navigation";
 import { motion, useReducedMotion } from "framer-motion";
 import { useNavLeaves, useNavState, type NavLeaf } from "./DashboardNavigation";
+import { PHONE_BAR_VIEWS } from "./navRegistry";
 import { DashLink, handleDashLinkClick } from "@/components/dashboard/spa/navigate";
 import type { DashboardViewId } from "@/components/dashboard/spa/views";
 import { useTranslation } from "@/i18n/useTranslation";
 
 export default function MobileBottomNav() {
   const navItems = useNavLeaves();
+  // The bar is a chosen set in a fixed order (PHONE_BAR_VIEWS); the rest go under More.
+  const barItems = PHONE_BAR_VIEWS.flatMap((view) => navItems.filter((item) => item.view === view));
+  const moreItems = navItems.filter((item) => !PHONE_BAR_VIEWS.includes(item.view));
   const { isViewActive, getBadge } = useNavState();
   const reducedMotion = useReducedMotion();
   const tapProps = reducedMotion ? undefined : { whileTap: { scale: 0.95 } };
@@ -20,7 +24,7 @@ export default function MobileBottomNav() {
     // overlay instead, the menu closes silently and the user has to tap twice.
     <nav className="fixed inset-x-0 bottom-0 z-50 border-t border-glass bg-background/95 backdrop-blur-xl md:hidden safe-bottom">
       <div className="flex items-center justify-around px-1 py-1">
-        {navItems.slice(0, 5).map((item) => {
+        {barItems.map((item) => {
           const active = isViewActive(item.view);
           const Icon = item.icon;
           const badge = getBadge(item.view);
@@ -53,7 +57,7 @@ export default function MobileBottomNav() {
             </motion.a>
           );
         })}
-        <MobileMoreMenu items={navItems.slice(5)} isViewActive={isViewActive} tapProps={tapProps} />
+        <MobileMoreMenu items={moreItems} isViewActive={isViewActive} tapProps={tapProps} />
       </div>
     </nav>
   );

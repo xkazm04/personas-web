@@ -3638,6 +3638,45 @@
       noDevice: string;
       unpair: string;
     };
+    /** `/dashboard/notes`: the desktop Notepad's goals, read-only (PHASE2-SPEC.md 5.1). */
+    notes: {
+      nav: string;
+      title: string;
+      lede: string;
+      loading: string;
+      error: string;
+      retry: string;
+      emptyTitle: string;
+      emptyBody: string;
+      noProject: string;
+      goals: string;
+      goalsOne: string;
+      needsReview: string;
+      totalNeedsReview: string;
+      unread: string;
+      offlineNote: string;
+      demoNote: string;
+      status: {
+        draft: string;
+        published: string;
+        in_progress: string;
+        completed: string;
+        scoped: string;
+        cut: string;
+        shipped: string;
+      };
+      sheet: {
+        status: string;
+        planRail: string;
+        brainstormRail: string;
+        dispatch: { fleet: string; athena_goals: string };
+        updated: string;
+        reviewsHint: string;
+        runSummary: string;
+        body: string;
+        noBody: string;
+      };
+    };
   };
   // END pending-translation namespaces
 }
@@ -8206,6 +8245,44 @@ export const en: Translations = {
       error: 'Pairing didn\'t work: {reason}',
       noDevice: 'No synced computer found. Turn on sync in Personas on your computer first.',
       unpair: 'Unpair this phone',
+    },
+    notes: {
+      nav: 'Notes',
+      title: 'Notes',
+      lede: 'Your goals from the Notepad in Personas, by project. Read-only here: edit them on your computer.',
+      loading: 'Loading your notes...',
+      error: 'Couldn\'t load your notes.',
+      retry: 'Try again',
+      emptyTitle: 'No notes synced',
+      emptyBody: 'Notes stay on your computer unless you choose to sync them. In Personas on your computer, open Settings, then Cloud sync, and turn on Sync notes. It\'s off by default.',
+      noProject: 'No project',
+      goals: '{count} goals',
+      goalsOne: '1 goal',
+      needsReview: '{count} to review',
+      totalNeedsReview: 'Needs review: {count}',
+      unread: '{count} unread',
+      offlineNote: 'These are your notes as of the last sync.',
+      demoNote: 'Demo: sample goals from a simulated computer.',
+      status: {
+        draft: 'Draft',
+        published: 'Published',
+        in_progress: 'In progress',
+        completed: 'Completed',
+        scoped: 'Scoped',
+        cut: 'Cut',
+        shipped: 'Shipped',
+      },
+      sheet: {
+        status: 'Status',
+        planRail: 'Plan',
+        brainstormRail: 'Brainstorm',
+        dispatch: { fleet: 'Handed to Fleet', athena_goals: 'Handed to Athena' },
+        updated: 'Updated {ago}',
+        reviewsHint: 'Open the note in Personas on your computer to answer its reviews.',
+        runSummary: 'Run summary',
+        body: 'Note',
+        noBody: 'This note has no body yet.',
+      },
     },
   },
   // END pending-translation namespaces

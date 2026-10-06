@@ -14,6 +14,7 @@ import { useSystemStore } from "@/stores/systemStore";
 import { useDeviceStore } from "@/stores/deviceStore";
 import { useCommandStore } from "@/stores/commandStore";
 import { useControllerStore } from "@/stores/controllerStore";
+import { useNotesStore } from "@/stores/notesStore";
 import { emitNewReview } from "@/lib/review-voice";
 import type { ReviewSeverity } from "@/lib/types";
 
@@ -40,6 +41,7 @@ const WATCHED_TABLES = [
   "synced_events",
   "synced_manual_reviews",
   "synced_devices",
+  "synced_notes",
 ] as const;
 
 const REVIEW_SEVERITIES = new Set<string>(["critical", "warning", "info"]);
@@ -94,6 +96,10 @@ function refetchFor(table: string): (() => void) | null {
         void useSystemStore.getState().fetchHealth();
         void useSystemStore.getState().fetchStatus();
       };
+    case "synced_notes":
+      // A full-set replace lands as a burst of upserts and deletes; the
+      // debounce above folds it into one refetch.
+      return () => void useNotesStore.getState().fetchNotes();
     default:
       return null;
   }

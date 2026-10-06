@@ -79,6 +79,7 @@ const DASHBOARD: readonly SmokeRoute[] = [
   // Menu order: Personas (the landing view), then Overview's level-2 views
   // (visible only while Overview is open), then the remaining sections.
   { path: "/dashboard/personas", name: "personas", tag: "dashboard" },
+  { path: "/dashboard/notes", name: "notes", tag: "dashboard", expectSelector: "[data-note-zone]" },
   { path: "/dashboard/home", name: "mission control", tag: "dashboard" },
   { path: "/dashboard/reviews", name: "review queue", tag: "dashboard" },
   { path: "/dashboard/executions", name: "executions", tag: "dashboard" },

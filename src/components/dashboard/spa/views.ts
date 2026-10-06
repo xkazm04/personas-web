@@ -12,6 +12,7 @@
  */
 export const DASHBOARD_VIEW_IDS = [
   "personas",
+  "notes",
   "home",
   "reviews",
   "executions",
@@ -41,6 +42,8 @@ interface ViewTraits {
 
 const TRAITS: Record<DashboardViewId, ViewTraits> = {
   personas: { scoped: false, fullBleed: true },
+  // Notes are grouped by the desktop's projects, not by the persona scope.
+  notes: { scoped: false, fullBleed: false },
   // Mission Control reads its own fixed 14-day window (it says so in its header).
   home: { scoped: false, fullBleed: false },
   reviews: { scoped: true, fullBleed: false },

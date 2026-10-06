@@ -46,6 +46,7 @@ Status legend: ✅ written · ⬜ planned
 | Doc | Route | Nav label |
 | --- | --- | --- |
 | ✅ [personas](dashboard/personas.md) | `/dashboard/personas` | Personas (main view; fleet monitor) |
+| ✅ [notes](dashboard/notes.md) | `/dashboard/notes` | Notes (desktop Notepad goals, read-only) |
 | ✅ [home-overview](dashboard/home-overview.md) | `/dashboard/home` | Overview › Mission Control |
 | ✅ [executions](dashboard/executions.md) | `/dashboard/executions` | Executions |
 | ✅ [events](dashboard/events.md) | `/dashboard/events` | Events |

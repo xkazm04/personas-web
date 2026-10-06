@@ -23,6 +23,7 @@ function ViewLoading() {
    next/dynamic reuses the same module promise. */
 const LOADERS = {
   personas: () => import("@/components/dashboard/views/personas"),
+  notes: () => import("@/components/dashboard/views/notes"),
   home: () => import("@/components/dashboard/views/home"),
   reviews: () => import("@/components/dashboard/views/reviews"),
   executions: () => import("@/components/dashboard/views/executions"),
@@ -40,6 +41,7 @@ const LOADERS = {
 
 const VIEWS: Record<DashboardViewId, ComponentType> = {
   personas: dynamic(LOADERS.personas, { ssr: false, loading: StageLoading }),
+  notes: dynamic(LOADERS.notes, { ssr: false, loading: ViewLoading }),
   home: dynamic(LOADERS.home, { ssr: false, loading: ViewLoading }),
   reviews: dynamic(LOADERS.reviews, { ssr: false, loading: ViewLoading }),
   executions: dynamic(LOADERS.executions, { ssr: false, loading: ViewLoading }),

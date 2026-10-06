@@ -26,6 +26,7 @@ import type {
   PersonaExecutionStatus,
   EventStatus,
 } from "./types";
+import type { SyncedNote } from "./notes/notesModel";
 
 // ---------------------------------------------------------------------------
 // Error
@@ -149,6 +150,8 @@ export interface ApiClient {
   getObservabilityPersonaSpend(): Promise<PersonaSpend[]>;
   getObservabilityHealthIssues(): Promise<HealthIssue[]>;
   getUsageAnalytics(): Promise<{ toolUsage: ToolUsageSummary[]; toolUsageOverTime: ToolUsageOverTime[]; toolUsageByPersona: ToolUsageByPersona[] }>;
+  /** The desktop Notepad's goals (`synced_notes`, PHASE2-SPEC.md 5.1). Read-only. */
+  listNotes(): Promise<SyncedNote[]>;
 }
 
 // ---------------------------------------------------------------------------
@@ -335,6 +338,11 @@ const realApi: ApiClient = {
           toolUsageOverTime: ToolUsageOverTime[];
           toolUsageByPersona: ToolUsageByPersona[];
         }>("/api/usage"),
+
+      // Notes are a sync-mirror class (synced_notes): the orchestrator has no
+      // notes endpoint, and on this plane the desktop is unreachable anyway
+      // (reachability reads "never synced"), so there is nothing to list.
+      listNotes: async () => [],
     };
 
 /**

@@ -25,6 +25,7 @@ import {
   MOCK_DIRECTOR_VERDICTS,
   MOCK_ATHENA_ACTION_MIX,
   MOCK_ATHENA_LEDGER,
+  MOCK_NOTES,
   type AthenaActionCost,
   type AthenaLedgerTotals,
   type AthenaUsagePoint,
@@ -35,6 +36,7 @@ import {
   type ValueRollup,
 } from "./mock-dashboard-data";
 import { ApiError, type ApiClient } from "./api";
+import type { SyncedNote } from "./notes/notesModel";
 import type {
   Persona,
   PersonaExecution,
@@ -322,6 +324,11 @@ export const mockApi: ApiClient = {
       toolUsageOverTime: [...MOCK_TOOL_USAGE_OVER_TIME],
       toolUsageByPersona: [...MOCK_TOOL_USAGE_BY_PERSONA],
     };
+  },
+
+  listNotes: async (): Promise<SyncedNote[]> => {
+    await delay(250);
+    return MOCK_NOTES.map((note) => ({ ...note }));
   },
 };
 

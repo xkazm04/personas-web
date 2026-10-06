@@ -16,6 +16,7 @@ import { ApiError, type ApiClient } from "./api";
 import { halvesTrend } from "./observabilitySeries";
 import { EVENT_STATUS_TRANSITIONS } from "./eventStatusFsm";
 import { DEVICE_FRESH_MS } from "./sync/reachability";
+import { SYNCED_NOTE_COLUMNS, mapNoteRow, type SyncedNoteRow } from "./notes/notesModel";
 import type {
   Persona,
   PersonaExecution,
@@ -633,6 +634,20 @@ export const supabaseApi: ApiClient = {
     );
 
     return { toolUsage, toolUsageOverTime, toolUsageByPersona };
+  },
+
+  // The desktop pushes notes only while its "Sync notes" opt-in is on (PLAN
+  // M19, default off), as a full-set replace: an empty result is "not synced
+  // or no notes", never an error. Rows with a status the CHECK does not know
+  // are dropped by the mapper rather than drawn with an invented one.
+  listNotes: async () => {
+    const r = await rows<SyncedNoteRow>(
+      getSupabase().from("synced_notes").select(SYNCED_NOTE_COLUMNS).order("updated_at", { ascending: false }),
+    );
+    return r.flatMap((row) => {
+      const note = mapNoteRow(row);
+      return note ? [note] : [];
+    });
   },
 };
 

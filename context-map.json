@@ -1277,6 +1277,26 @@
           ],
           "target": null,
           "apiRoutes": 0
+        },
+        {
+          "name": "Notes (Goal Board)",
+          "description": "The /dashboard/notes view (/m revival phase 2, PHASE2-SPEC 5.1): the desktop Notepad's goals from synced_notes, zoned by project with status-rail glyphs, review/unread counts and a read-only body sheet; notesModel holds the rails, ordering, zones and the row mapper; notesStore fetches through the api proxy (MOCK_NOTES in demo).",
+          "businessFeature": "Notes (Goal Board)",
+          "category": "ui",
+          "filePaths": [
+            "src/components/dashboard/views/notes/index.tsx",
+            "src/components/dashboard/views/notes/NoteZoneCard.tsx",
+            "src/components/dashboard/views/notes/NoteCard.tsx",
+            "src/components/dashboard/views/notes/RailGlyph.tsx",
+            "src/components/dashboard/views/notes/NoteDetail.tsx",
+            "src/lib/notes/notesModel.ts",
+            "src/lib/notes/notesModel.test.ts",
+            "src/stores/notesStore.ts",
+            "e2e/mobile/dashboard-notes.spec.ts",
+            "e2e/dashboard-notes.spec.ts"
+          ],
+          "target": null,
+          "apiRoutes": []
         }
       ]
     },
@@ -2142,14 +2162,15 @@
     "Theming, i18n & Shared Utilities › Shared Types, Utilities & Hooks [lib] — 15 files",
     "Theming, i18n & Shared Utilities › Theme System [lib] — 6 files",
     "Theming, i18n & Shared Utilities › Internationalization (14 locales) [lib] — 16 files",
-    "Agent Operations Dashboard › Fleet Playground (prototypes) [ui] — 53 files"
+    "Agent Operations Dashboard › Fleet Playground (prototypes) [ui] — 53 files",
+    "Agent Operations Dashboard › Notes (Goal Board) [ui] — 10 files"
   ],
   "summary": {
     "totalGroups": 12,
-    "totalContexts": 55,
-    "totalFiles": 1102,
+    "totalContexts": 56,
+    "totalFiles": 1112,
     "categories": {
-      "ui": 40,
+      "ui": 41,
       "data": 2,
       "lib": 8,
       "api": 2,
