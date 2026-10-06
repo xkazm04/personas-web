@@ -19,8 +19,7 @@ const TICK_STEP = 1 / TRAVEL;
  * (`hushed`) the passing chips fall back so nothing talks over her.
  */
 export default function Stream({ phase, live, reduced, hushed }: { phase: number; live: boolean; reduced: boolean; hushed: boolean }) {
-  const { t } = useTranslation();
-  const lab = t.athenaSections.hero;
+  const q = useTranslation().t.athenaSections.quiet;
 
   return (
     <div className="pointer-events-none absolute inset-x-0 top-[var(--line-y)] h-0">
@@ -67,10 +66,10 @@ export default function Stream({ phase, live, reduced, hushed }: { phase: number
               transition={{ duration: 0.6 }}
             >
               <span
-                className={`whitespace-nowrap rounded-full border border-solid bg-background/80 px-3 py-1 font-mono uppercase tracking-[0.14em] backdrop-blur-sm ${matter ? "text-sm text-foreground stage:text-[clamp(0.875rem,1.3cqh,1.25rem)]" : "text-xs text-muted-dark stage:text-[clamp(0.75rem,1.1cqh,1.0625rem)]"}`}
+                className={`whitespace-nowrap rounded-full border border-solid bg-background/80 px-3 py-1 font-mono uppercase tracking-[0.14em] backdrop-blur-sm ${matter ? "text-base text-foreground stage:text-[clamp(1rem,2.4cqh,1.5rem)]" : "text-base text-muted-dark stage:text-[clamp(1rem,2cqh,1.25rem)]"}`}
                 style={{ borderColor: matter ? tint("amber", 70) : "rgba(var(--surface-overlay), 0.14)" }}
               >
-                {matter ? lab.moments[e.copy].event : lab.quiet.passed[e.copy]}
+                {matter ? q.moments[e.copy].event : q.passed[e.copy]}
               </span>
               <span className="h-7 w-px" style={{ background: matter ? tint("amber", 60) : "rgba(var(--surface-overlay), 0.18)" }} />
               <span

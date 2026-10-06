@@ -3061,14 +3061,15 @@
     };
   };
   athenaSections: {
-    hero: {
+    quiet: {
+      nav: string;
+      intro: { eyebrow: string; heading: string; gradient: string };
+      aria: string;
       moments: { event: string; line: string }[];
-      quiet: {
-        aria: string;
-        passed: string[];
-        status: string;
-        now: string;
-      };
+      passed: string[];
+      status: string;
+      statusShort: string;
+      now: string;
     };
     onboarding: {
       v2: {
@@ -6732,18 +6733,19 @@ export const en: Translations = {
     },
   },
   athenaSections: {
-    hero: {
+    quiet: {
+      nav: 'QUIET',
+      intro: { eyebrow: 'All day, in the background', heading: 'Quiet until it', gradient: 'matters' },
+      aria: 'Your day streams past Athena along one line of light. She lets the noise go by and speaks up only when something matters: a moved meeting, a broken build, a client\'s reply.',
       moments: [
         { event: '3pm moved', line: '3pm moved. Prep is ready.' },
         { event: 'Build failed', line: 'Build broke overnight. Fix drafted.' },
         { event: 'Client replied', line: 'Client replied. Draft is waiting.' },
       ],
-      quiet: {
-        aria: 'Your day streaming past Athena: she lets the noise pass and speaks only when something matters',
-        passed: ['Newsletter', 'Build passed', 'Calendar sync', 'Auto-reply', '12 new likes', 'Backup done'],
-        status: '{events} events today · she spoke {spoken} times',
-        now: 'Now',
-      },
+      passed: ['Newsletter', 'Build passed', 'Calendar sync', 'Auto-reply', '12 new likes', 'Backup done'],
+      status: '{events} events today · she spoke {spoken} times',
+      statusShort: '{events} events · she spoke {spoken}',
+      now: 'Now',
     },
     onboarding: {
       v2: {

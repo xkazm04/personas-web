@@ -1,5 +1,6 @@
 /**
- * "The Quiet Line" (hero v3) - choreography as data. No JSX.
+ * "Quiet until it matters" (/athena section 2, born as hero lab v3 "The
+ * Quiet Line") - choreography as data. No JSX.
  *
  * Your day streams right to left along one long line of light; Athena is the
  * bright point at its centre ("now"). Every event crosses her. Most she lets

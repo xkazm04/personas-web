@@ -1,38 +1,23 @@
 "use client";
 
-import { useRef, useState } from "react";
 import { AnimatePresence, motion } from "framer-motion";
 import { useTranslation } from "@/i18n/useTranslation";
 import { BRAND_VAR, brandShadow, tint } from "@/lib/brand-theme";
-import { SPRING_POP } from "@/components/athena/stage/athena-tokens";
+import { ANNOTATION_DIM, SPRING_POP } from "@/components/athena/stage/athena-tokens";
 import { BARS, momentAt } from "./data";
 
 /**
- * Athena on the line: the bright point at its centre (a real button - press
- * it and she answers you), the voice the line swells into when she speaks,
- * and the one sentence she says. At rest every bar is a hairline, so the
- * voice is literally the line itself, risen.
+ * Athena on the line: the bright point at its centre, the voice the line
+ * swells into when she speaks, and the one sentence she says. At rest every
+ * bar is a hairline, so the voice is literally the line itself, risen. (The
+ * hero's orb is the page's one interactive "press and she answers" toy; here
+ * she is drawn, not pressed.)
  */
 export default function Voice({ phase, live, reduced }: { phase: number; live: boolean; reduced: boolean }) {
-  const { t } = useTranslation();
-  const lab = t.athenaSections.hero;
-  const c = t.athenaPage.hero;
+  const q = useTranslation().t.athenaSections.quiet;
   const mo = momentAt(phase);
-  const [ack, setAck] = useState(false);
-  const timer = useRef<number | undefined>(undefined);
-
-  const acknowledge = () => {
-    setAck(true);
-    window.clearTimeout(timer.current);
-    timer.current = window.setTimeout(() => setAck(false), 2600);
-  };
-
-  const speaking = mo.speaking || ack;
-  const said = ack
-    ? { key: "ack", line: c.acknowledgeLine }
-    : mo.speaking
-      ? { key: `m${mo.m}`, line: lab.moments[mo.m].line }
-      : null;
+  const speaking = mo.speaking;
+  const said = speaking ? { key: `m${mo.m}`, line: q.moments[mo.m].line } : null;
 
   return (
     <div className="absolute inset-x-0 top-[var(--line-y)] h-0">
@@ -71,24 +56,21 @@ export default function Voice({ phase, live, reduced }: { phase: number; live: b
           animate={mo.arriving && live ? { opacity: [0.9, 0], scale: [1, 4.5] } : { opacity: 0, scale: 1 }}
           transition={{ duration: 1, ease: "easeOut" }}
         />
-        <button
-          type="button"
-          aria-label={c.orbAria}
-          onClick={acknowledge}
-          className="relative h-full w-full cursor-pointer rounded-full focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-brand-cyan"
+        <span
+          aria-hidden="true"
+          className="absolute inset-0 rounded-full"
           style={{
-            background: `radial-gradient(circle at 40% 35%, var(--foreground), ${BRAND_VAR.cyan} 55%)`,
+            background: `radial-gradient(circle at 40% 35%, color-mix(in oklab, var(--foreground) 55%, ${BRAND_VAR.cyan}), ${BRAND_VAR.cyan} 60%)`,
             boxShadow: `${brandShadow("cyan", 30, 70)}, ${brandShadow("cyan", 90, 35)}`,
           }}
         />
-        <span className={`pointer-events-none absolute left-1/2 top-8 -translate-x-1/2 font-mono text-xs uppercase tracking-[0.2em] text-muted-dark transition-opacity duration-500 ${speaking ? "opacity-0" : "opacity-100"}`}>
-          {lab.quiet.now}
+        <span className={`pointer-events-none absolute left-1/2 top-[calc(100%+0.75rem)] -translate-x-1/2 ${ANNOTATION_DIM} transition-opacity duration-500 ${speaking ? "opacity-0" : "opacity-100"}`}>
+          {q.now}
         </span>
       </div>
 
       {/* What she says */}
       <div
-        aria-live="polite"
         className="pointer-events-none absolute inset-x-0 flex justify-center px-6"
         style={{ bottom: "calc(var(--wave-h) / 2 + 1.25rem)" }}
       >

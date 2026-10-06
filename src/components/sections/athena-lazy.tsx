@@ -47,6 +47,10 @@ export const LazyAthenaHero = createLazySection(
   { ssr: false },
 );
 
+export const LazyQuietLine = scene(
+  () => import("@/components/athena/sections/quiet-line"),
+);
+
 export const LazyOnboardingPartner = scene(
   () => import("@/components/athena/sections/onboarding-partner/moving-in"),
 );

@@ -4,6 +4,7 @@ import InfoPageLayout from "@/components/InfoPageLayout";
 import { useTranslation } from "@/i18n/useTranslation";
 import {
   LazyAthenaHero,
+  LazyQuietLine,
   LazyOnboardingPartner,
   LazyFleetOrchestration,
   LazyHerWorkshop,
@@ -14,7 +15,7 @@ import {
 
 /*
  * /athena — the page Athena earned once she outgrew a single homepage
- * section. Seven scenes, each a self-playing loop gated on being in view.
+ * section. Eight scenes, each a self-playing loop gated on being in view.
  *
  * Composition notes, so the next editor does not undo them:
  *
@@ -31,10 +32,11 @@ import {
  * - Every section is a desktop stage (styles/stage.css): the hero one full
  *   screen, every other one exactly one stage under the navbar, so the page
  *   snaps one section per scroll like the landing and /features (`snap`).
- * - Order is the argument: she introduces herself, sets your workspace up
- *   with you, turns a sentence into a working team, shows the machinery that
- *   answers to her, widens to the whole portfolio, grows over time, and
- *   closes by arriving back at one presence.
+ * - Order is the argument: she introduces herself, shows why she can stay on
+ *   all day (quiet until something matters - the hero's tagline, drawn), sets
+ *   your workspace up with you, turns a sentence into a working team, shows
+ *   the machinery that answers to her, widens to the whole portfolio, grows
+ *   over time, and closes by arriving back at one presence.
  */
 
 export default function AthenaPage() {
@@ -45,6 +47,7 @@ export default function AthenaPage() {
   // scroll-map rail and the mobile TOC both render them as visible text.
   const scrollMapItems = [
     { label: nav.meet, href: "#meet" },
+    { label: t.athenaSections.quiet.nav, href: "#quiet" },
     { label: nav.onboarding, href: "#onboarding" },
     { label: nav.fleet, href: "#fleet" },
     { label: nav.workshop, href: "#workshop" },
@@ -60,6 +63,10 @@ export default function AthenaPage() {
           /features hero does the same. */}
       <div id="meet" className="scroll-mt-24 stage:-mt-(--nav-h)">
         <LazyAthenaHero />
+      </div>
+
+      <div id="quiet" className="scroll-mt-24">
+        <LazyQuietLine />
       </div>
 
       <div id="onboarding" className="scroll-mt-24">
