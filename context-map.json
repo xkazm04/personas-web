@@ -1642,7 +1642,8 @@
             "src/components/mobile-landing/hive/useSwap.ts",
             "e2e/mobile/dashboard-personas.spec.ts",
             "src/hooks/useKeyboardInset.ts",
-            "src/hooks/useKeyboardInset.test.ts"
+            "src/hooks/useKeyboardInset.test.ts",
+            "e2e/mobile/dashboard-chat.spec.ts"
           ],
           "target": null,
           "apiRoutes": []

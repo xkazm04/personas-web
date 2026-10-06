@@ -17,17 +17,10 @@ import { halvesTrend } from "./observabilitySeries";
 import { EVENT_STATUS_TRANSITIONS } from "./eventStatusFsm";
 import { DEVICE_FRESH_MS } from "./sync/reachability";
 import { SYNCED_NOTE_COLUMNS, mapNoteRow, type SyncedNoteRow } from "./notes/notesModel";
-import {
-  ATHENA_PERSONA_ID,
-  CHAT_MESSAGE_COLUMNS,
-  CHAT_SESSION_COLUMNS,
-  chatSendParams,
-  mapChatMessageRow,
-  mapChatSessionRow,
-  sortMessages,
-  type ChatMessageRow,
-  type ChatSessionRow,
-} from "./chat/chatModel";
+import type { ChatMessageRow, ChatSessionRow } from "./chat/chatModel";
+
+/** The chat model, loaded with the first chat call: chat is not in the dashboard's first load. */
+const chatModel = () => import("./chat/chatModel");
 import type {
   Persona,
   PersonaExecution,
@@ -688,6 +681,7 @@ export const supabaseApi: ApiClient = {
   // opt-in is on (PLAN M19, default off), so an empty list is "not synced or
   // no chats", never an error. Keys are composite (device, kind, id).
   listChatSessions: async ({ threadKind, personaId }) => {
+    const { CHAT_SESSION_COLUMNS, mapChatSessionRow } = await chatModel();
     let query = getSupabase().from("synced_chat_sessions").select(CHAT_SESSION_COLUMNS).eq("thread_kind", threadKind);
     if (threadKind === "persona" && personaId) query = query.eq("persona_id", personaId);
     const r = await rows<ChatSessionRow>(query.order("updated_at", { ascending: false }).limit(50));
@@ -699,6 +693,7 @@ export const supabaseApi: ApiClient = {
 
   // The newest 200 messages of the thread, returned oldest first.
   listChatMessages: async ({ threadKind, deviceId, sessionId }) => {
+    const { CHAT_MESSAGE_COLUMNS, mapChatMessageRow, sortMessages } = await chatModel();
     let query = getSupabase()
       .from("synced_chat_messages")
       .select(CHAT_MESSAGE_COLUMNS)
@@ -717,6 +712,7 @@ export const supabaseApi: ApiClient = {
   // A chat_send command (spec 5.3) to the desktop that holds the thread:
   // persona_id and envelope.persona are the persona, or 'athena'.
   sendChatMessage: async (input) => {
+    const { ATHENA_PERSONA_ID, chatSendParams } = await chatModel();
     const params = chatSendParams(input.sessionId, input.message);
     if (!params) throw new ApiError(400, input.message.trim() ? "message_too_long" : "empty_message");
     const personaId = input.threadKind === "athena" ? ATHENA_PERSONA_ID : input.personaId;

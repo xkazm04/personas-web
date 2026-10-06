@@ -39,14 +39,12 @@ import {
 } from "./mock-dashboard-data";
 import { ApiError, type ApiClient, type CommandAck } from "./api";
 import type { SyncedNote } from "./notes/notesModel";
-import {
-  ATHENA_PERSONA_ID,
-  chatSendParams,
-  type ChatMessage,
-  type ChatSendInput,
-  type ChatSession,
-  type ChatThreadRef,
-  type ListChatSessionsInput,
+import type {
+  ChatMessage,
+  ChatSendInput,
+  ChatSession,
+  ChatThreadRef,
+  ListChatSessionsInput,
 } from "./chat/chatModel";
 import type {
   Persona,
@@ -376,6 +374,8 @@ export const mockApi: ApiClient = {
   },
 
   sendChatMessage: async (input: ChatSendInput): Promise<CommandAck> => {
+    // Lazy, like the command plane: chat is not in the dashboard's first load.
+    const { ATHENA_PERSONA_ID, chatSendParams } = await import("./chat/chatModel");
     const params = chatSendParams(input.sessionId, input.message);
     if (!params) throw new ApiError(400, input.message.trim() ? "message_too_long" : "empty_message");
     const personaId = input.threadKind === "athena" ? ATHENA_PERSONA_ID : input.personaId;
