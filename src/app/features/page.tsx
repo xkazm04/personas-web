@@ -56,7 +56,7 @@ export default function FeaturesPage() {
     // The tour launcher lives in the Design section's intro (DesignEngine),
     // not in the layout's slot above the first section: there it pushed the
     // first stage ~94px under a laptop's fold.
-    <InfoPageLayout scrollMapItems={scrollMapItems}>
+    <InfoPageLayout scrollMapItems={scrollMapItems} snap>
       {/* First section stays eager (above the fold) for LCP + SEO. The rest are
           code-split + scroll-gated via LazyMount so their chunks load as the
           reader approaches, not all at once on first paint. The anchor id lives

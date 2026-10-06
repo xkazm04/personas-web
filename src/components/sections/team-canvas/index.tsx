@@ -25,7 +25,7 @@ export default function TeamCanvas() {
         description={copy.lede}
       />
 
-      <motion.div variants={fadeUp} className="mt-10 stage:mt-0" data-stage-zoom>
+      <motion.div variants={fadeUp} className="mt-10 stage:mt-0" data-stage-body data-stage-zoom>
         <div
           className="mx-auto max-w-5xl rounded-2xl border p-4 sm:p-8 stage:p-5"
           style={{

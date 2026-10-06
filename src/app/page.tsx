@@ -86,7 +86,7 @@ export default function Home() {
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: safeJsonLd(faqJsonLd) }}
       />
-      <PageShell scrollMapItems={scrollMapItems}>
+      <PageShell scrollMapItems={scrollMapItems} snap>
         <div id="hero">
           <HiveHero />
         </div>

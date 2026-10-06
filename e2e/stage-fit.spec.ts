@@ -111,3 +111,59 @@ for (const route of ["/", "/features"]) {
     });
   }
 }
+
+/**
+ * Snap control (2026-10-06). The landing and /features snap every scroll to
+ * exactly one section (`html:has([data-snap-page])` in styles/stage.css). It
+ * silently did nothing for months: <main> and every StageSection carried
+ * `overflow: hidden`, which makes a box a scroll container, and a snap area
+ * belongs to its NEAREST scroll container - so the viewport had no snap points
+ * and a scroll could stop anywhere. These cases pin both halves: no scroll
+ * container between a stage and the viewport, and paging lands on stages.
+ */
+for (const route of ["/", "/features"]) {
+  test(`${route} snaps each page-down to exactly one stage`, async ({ page }) => {
+    test.setTimeout(120_000);
+    await page.setViewportSize({ width: 1440, height: 790 });
+    await page.goto(route);
+    await mountEverything(page);
+
+    const captors = await page.evaluate(() => {
+      const found = new Set<string>();
+      for (const stage of Array.from(document.querySelectorAll("[data-stage], [data-stage-hero]"))) {
+        for (let a = stage.parentElement; a && a !== document.body; a = a.parentElement) {
+          const cs = getComputedStyle(a);
+          if (![cs.overflowX, cs.overflowY].every((v) => v === "visible" || v === "clip"))
+            found.add(`<${a.tagName.toLowerCase()} class="${String(a.className).slice(0, 60)}"> overflow ${cs.overflowX}/${cs.overflowY}`);
+        }
+      }
+      return [...found];
+    });
+    expect(captors, "scroll containers that capture stage snap points (use overflow-clip)").toEqual([]);
+
+    await page.evaluate(() => window.scrollTo({ top: 0, behavior: "instant" }));
+    await page.waitForTimeout(500);
+    const offsets: number[] = [];
+    const headings: number[] = [];
+    for (let i = 0; i < 4; i++) {
+      await page.keyboard.press("PageDown");
+      await page.waitForTimeout(1200);
+      const at = await page.evaluate(() => {
+        const navHeight = parseFloat(getComputedStyle(document.documentElement).getPropertyValue("--nav-h")) * 16;
+        const tops = Array.from(document.querySelectorAll<HTMLElement>("[data-stage]")).map((el) => el.getBoundingClientRect().top - navHeight);
+        const nearest = tops.reduce((best, top) => (Math.abs(top) < Math.abs(best) ? top : best), Infinity);
+        const landed = Array.from(document.querySelectorAll<HTMLElement>("[data-stage]")).find(
+          (el) => Math.abs(el.getBoundingClientRect().top - navHeight) < 2,
+        );
+        const h2 = landed?.querySelector("h2");
+        return { nearest: Math.round(nearest), heading: h2 ? Math.round(h2.getBoundingClientRect().top) : null };
+      });
+      offsets.push(at.nearest);
+      if (at.heading !== null) headings.push(at.heading);
+    }
+    expect(offsets, "each PageDown lands a stage flush under the navbar").toEqual(offsets.map(() => 0));
+    // Every content stage anchors its intro at one height (stage.css: the
+    // column starts at the top; the body fills or centres under the intro).
+    expect(new Set(headings).size, `heading tops ${headings.join(", ")}`).toBe(1);
+  });
+}

@@ -16,8 +16,9 @@
      `data-stage-slot` element; it takes the height left after the intro and
      is a size container, so art inside can size itself with `cqh`/`cqw`
      (e.g. `width: min(100%, 100cqh * 16 / 9)`).
-   - min:  at least one stage high, content centred (text sections whose
-     height the reader controls, like an accordion).
+   - min:  at least one stage high (text sections whose height the reader
+     controls, like an accordion); its body goes in a `data-stage-body`
+     element, which centres in the room under the intro.
 
    These rules are deliberately unlayered: unlayered CSS outranks Tailwind's
    `@layer utilities`, so the stage values override the mobile-first
@@ -43,19 +44,46 @@
 
 @media (min-width: 64rem) and (min-height: 37.5rem) {
   html {
-    /* Proximity, never mandatory: a section taller than the viewport (an
-       opened FAQ) must stay scrollable, and a reader who stops between two
-       sections is nudged, not captured. */
+    /* Proximity by default: a page that mixes stages with free-flowing
+       content must never capture its reader between two snap points. */
     scroll-snap-type: y proximity;
     scroll-padding-top: var(--nav-h);
   }
+  /* A page built only of stages (PageShell `snap`: the landing, /features)
+     snaps every scroll to exactly one section. Proximity let a scroll stop
+     anywhere, so the reader routinely saw the bottom of one section and the
+     top of the next (2026-10-06). `always` stops a fling at the next section
+     instead of skipping past it. A section taller than the viewport (an
+     opened FAQ) stays scrollable inside: browsers let a snap area larger than
+     the viewport scroll freely. */
+  html:has([data-snap-page]) {
+    scroll-snap-type: y mandatory;
+  }
+  html:has([data-snap-page]) [data-stage],
+  html:has([data-snap-page]) [data-stage-hero],
+  html:has([data-snap-page]) [data-lazy-stage] [data-lazy-placeholder] {
+    scroll-snap-stop: always;
+  }
+  /* The footer is shorter than a stage: it snaps by its bottom edge so it is
+     reachable under mandatory snapping. */
+  html:has([data-snap-page]) footer {
+    scroll-snap-align: end;
+  }
 
+  /* Every stage anchors its intro at the same height under the navbar - the
+     heading sits at one place on every section - and the body takes the room
+     left under it: a `data-stage-slot` fills it, a `data-stage-body` centres
+     in it. Centring the whole column instead put each heading at a different
+     height (135-285px on a 790px screen) and let short sections float. */
   [data-stage] {
     display: flex;
     flex-direction: column;
-    justify-content: center;
+    justify-content: flex-start;
     padding-block: var(--stage-pad-y);
     scroll-snap-align: start;
+  }
+  [data-stage] [data-stage-body] {
+    margin-block: auto;
   }
   [data-stage="fill"] {
     height: var(--stage-h);
@@ -67,7 +95,7 @@
   [data-stage] > [data-stage-inner] {
     display: flex;
     flex-direction: column;
-    justify-content: center;
+    justify-content: flex-start;
     flex: 1 1 auto;
     min-height: 0;
     max-width: var(--stage-max-w);
@@ -132,6 +160,7 @@
      (the dashboard's measured 1690px one) keep their own reservation. */
   [data-lazy-stage] [data-lazy-placeholder] {
     min-height: var(--stage-h);
+    scroll-snap-align: start;
   }
 }
 

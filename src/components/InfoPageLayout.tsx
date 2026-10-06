@@ -21,6 +21,7 @@ export default function InfoPageLayout({
   tourId,
   tourBridgeHref,
   tourBridgeKey,
+  snap,
   children,
 }: {
   scrollMapItems: ScrollMapItem[];
@@ -32,12 +33,14 @@ export default function InfoPageLayout({
   tourBridgeHref?: string;
   /** Which bridge copy to use; default "features". */
   tourBridgeKey?: BridgeKey;
+  /** Every section is a desktop stage: snap each scroll to one (PageShell). */
+  snap?: boolean;
   children: React.ReactNode;
 }) {
   return (
     <>
       <Navbar />
-      <PageShell scrollMapItems={scrollMapItems}>
+      <PageShell scrollMapItems={scrollMapItems} snap={snap}>
         {breadcrumbItems && breadcrumbItems.length > 0 && (
           <SectionBreadcrumb items={breadcrumbItems} />
         )}

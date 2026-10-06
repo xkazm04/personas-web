@@ -142,36 +142,40 @@ export default function FAQ() {
     <SectionWrapper fit="min" id="faq" aria-labelledby="faq-heading">
       <FAQHeader heading={t.faqSection.heading} headingGradient={t.faqSection.headingGradient} subtitle={t.faqSection.subtitle} />
 
-      {/* Two-column FAQ grid */}
-      <motion.div
-        variants={staggerContainer}
-        className="mt-16 grid gap-4 md:grid-cols-2"
-      >
-        <div className="space-y-4">
-          {leftColumn.map((item, i) => (
-            <FAQCard
-              key={i}
-              item={item}
-              index={i}
-              buttonRef={setButtonRef(i)}
-              onKeyDown={handleKeyDown(i)}
-            />
-          ))}
-        </div>
-        <div className="space-y-4">
-          {rightColumn.map((item, i) => (
-            <FAQCard
-              key={i + midpoint}
-              item={item}
-              index={i + midpoint}
-              buttonRef={setButtonRef(i + midpoint)}
-              onKeyDown={handleKeyDown(i + midpoint)}
-            />
-          ))}
-        </div>
-      </motion.div>
+      {/* The body - grid and Discord card - centres in the room under the
+          intro on the desktop stage and scales up with a tall screen. */}
+      <div data-stage-body data-stage-zoom>
+        {/* Two-column FAQ grid */}
+        <motion.div
+          variants={staggerContainer}
+          className="mt-16 grid gap-4 stage:mt-0 md:grid-cols-2"
+        >
+          <div className="space-y-4">
+            {leftColumn.map((item, i) => (
+              <FAQCard
+                key={i}
+                item={item}
+                index={i}
+                buttonRef={setButtonRef(i)}
+                onKeyDown={handleKeyDown(i)}
+              />
+            ))}
+          </div>
+          <div className="space-y-4">
+            {rightColumn.map((item, i) => (
+              <FAQCard
+                key={i + midpoint}
+                item={item}
+                index={i + midpoint}
+                buttonRef={setButtonRef(i + midpoint)}
+                onKeyDown={handleKeyDown(i + midpoint)}
+              />
+            ))}
+          </div>
+        </motion.div>
 
-      <FAQDiscordCTA stillQuestions={t.faqSection.stillQuestions} discordSubtitle={t.faqSection.discordSubtitle} joinDiscord={t.faqSection.joinDiscord} />
+        <FAQDiscordCTA stillQuestions={t.faqSection.stillQuestions} discordSubtitle={t.faqSection.discordSubtitle} joinDiscord={t.faqSection.joinDiscord} />
+      </div>
     </SectionWrapper>
   );
 }

@@ -38,6 +38,7 @@ export default function Plugins() {
 
       <motion.div
         data-tour-diagram="plugins"
+        data-stage-body
         data-stage-fixed
         role="group"
         aria-label={t.featuresSections.plugins.v1.artLabel}

@@ -72,6 +72,7 @@ export default function VisionGridLayerStack() {
 
       <div
         data-tour-diagram="platform"
+        data-stage-body
         data-stage-fixed
         className="relative z-10 mx-auto grid max-w-5xl grid-cols-1 items-stretch gap-6 lg:grid-cols-[minmax(0,500px)_minmax(0,1fr)] lg:gap-10"
       >

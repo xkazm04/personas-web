@@ -29,7 +29,10 @@ export default function StageSection({
   return (
     <section
       id={id}
-      className="relative overflow-hidden scroll-mt-24"
+      // overflow-clip, not -hidden: a `hidden` box is a scroll container and
+      // would capture the stage's scroll-snap point from the viewport
+      // (PageShell's <main> carries the same note).
+      className="relative overflow-clip scroll-mt-24"
       data-animate-when-visible
       // useAnimationPause toggles .animations-paused via classList; lazy
       // sections can be mutated by the observer before client hydration completes
