@@ -1,5 +1,5 @@
 # Mobile App Shell & Views
-> **Phone landing live at `/m`** (not yet linked or redirected to). Plan: [docs/concepts/mobile-revival/PLAN.md](../../concepts/mobile-revival/PLAN.md), survey: [SURVEY.md](../../concepts/mobile-revival/SURVEY.md). · **Route:** `/m` (public, server-rendered, `noindex`, canonical `/`); `/m/overview|reviews|messages|alerts` are temporary redirects · **Status:** Phase 1 landing promoted 2026-10-06 ("Hive Reels"); phase 2 (mobile dashboard) not started
+> **Phone landing live at `/m`** (not yet linked or redirected to). Plan: [docs/concepts/mobile-revival/PLAN.md](../../concepts/mobile-revival/PLAN.md), survey: [SURVEY.md](../../concepts/mobile-revival/SURVEY.md). · **Route:** `/m` (public, server-rendered, `noindex`, canonical `/`); `/m/overview|reviews|messages|alerts` are temporary redirects; `/m2` is a test landing ("Around the Clock", `noindex`, see [below](#m2-around-the-clock-test-route)) · **Status:** Phase 1 landing promoted 2026-10-06 ("Hive Reels"); phase 2 (mobile dashboard) not started
 
 ## What it does
 `/m` is the Personas landing rebuilt for one thumb: a vertical film of six one-screen posters, every picture built from
@@ -110,6 +110,72 @@ no running animation. `baseline.spec.ts` still covers the `/m/reviews` redirect.
   unprefixed keyframe (the winner had `pulse` and `spin`) would restyle the rest of the site once `/m` has loaded.
 - **The page scrolls inside `main.film`, not the window.** Tests and scripts must scroll the film.
 - **`/m` is a route path referenced from outside.** Keep the `/m/*` view redirects until phase 2 replaces them.
+
+## /m2: "Around the Clock" (test route)
+
+**What it does.** A second phone landing, on test: the owner liked it more than `/m` and wants to try it on a real
+phone first (decision M5). The page is one day. A 24-hour dial under a sky graded by the hour owns the screen, and
+scrolling turns it: the 09:00 setup ("Say it once. It works all day."), one persona's tool shifts from 09:30 to 17:00,
+Athena as the moon through the night, an all-day $0, a rotary FAQ at 21:00, and "Tomorrow, 9:00, at your computer"
+at 23:00. Tapping a bead, job, moment, step or node opens it as its own scene (Back, Escape or a swipe down closes
+it). The call to action is always on screen. It saves a real `.ics` reminder for the next 9:00, sends the download
+link through the share sheet or the clipboard (Windows), or joins the macOS / Linux waitlist. There is no email
+service, so nothing offers to email a link. Nothing redirects phones here, and the page is `noindex`.
+
+**How it works.**
+- `src/app/m2/page.tsx` is a server component holding the metadata (`robots: { index: false }`). It renders
+  `ClockLanding`, a client component, so the whole page (headline included) is in the server HTML.
+- **The column scrolls, not the window.** `.col` is a `100dvh` size container; `--u` (the smaller of 1% of its width
+  and 0.46% of its height) sizes the dial, the type and the stage together. On screens 500px and wider it becomes a
+  phone-sized card on a backdrop. The document never scrolls, so a phone's address bar stays put (a known limit of
+  the entry, kept).
+- **The engine** (`useClockEngine.ts`) maps the scroller's offset to an hour (`geometry.ts` `buildKeys` / `hourAt`)
+  and, in one rAF per scroll, turns the dial, grades the sky, cross-fades the four pinned chapters, places the sun and
+  moon, fades the stage out across its unpin (`stageLeave`) and culls dial labels on the lower half or past the edge.
+  It writes continuous values straight to the DOM through `data-k` hooks; discrete beats (chapter, tool, job, moment,
+  price beat, Athena up, flow) go to React through `onBeat`. It marks the column `data-ready` after its first frame.
+- **Motion.** `useStillMotion` makes the story snap between chapters with no tweening and no arrival; `.col[data-still]`
+  and a `prefers-reduced-motion` block stop every CSS loop. A hidden tab stops the frame loop (`usePageVisibility`).
+  The hero's step loop runs only while the hero holds the stage, motion is allowed, the tab is visible and no card is
+  open. Athena's idle loop (`/athena/athena_idle_loop.mp4`) loads only when she first rises and pauses otherwise.
+  The arrival (`data-arriving`: the dial rises, the clock counts 05:00 to 09:00) is server-rendered as CSS so it plays
+  before hydration; any touch, wheel, key or scroll ends it.
+- **The CTA** uses `src/components/mobile-landing/shared/handoff.ts` (`useHandoff.ts`): `shareOrCopy` with the
+  browser's capabilities (plus the textarea copy fallback from `waitlistUtils`), `buildReminderIcs` + `nextLocalTime`
+  for a 15-minute event at the next 9:00 (Dates made in the click), and a manual-copy fallback when share and copy
+  both fail. `Waitlist.tsx` posts `{ email, platform }` to `/api/waitlist` and maps errors through
+  `waitlistErrorMessage` with the translated `t.waitlist` labels.
+
+**Owner adjustments over the contest entry.** Geist Sans / Geist Mono instead of the entry's serif display and system
+faces (the accent lines take `GradientText`); every colour through the site tokens, so all 11 themes repaint it (the
+sky is `color-mix` over `--background`, `--primary`, `--brand-cyan` and `--brand-amber`); no purple or pink fills (the
+dawn and dusk sky grade through amber, the CTA fills are `PrimaryCTA`, Athena's active chip is a purple ring, GitHub
+and Stripe tint with their second brand colour); the entry's own theme toggle is gone and the footer carries the
+site's `ThemeSwitcher`.
+
+**Fixes over the entry (host pass).** Only the current tool shift keeps its time label on the ring (seven crowded the
+hub at 390px); the header chip steps out of the way in the FAQ and CTA; the stage fades out across its unpin so
+"Free." and the dial no longer stack over the FAQ, whose 21:00 the dial now agrees with (`FAQ_HOUR`, `CTA_HOUR`).
+
+| File | Role |
+| --- | --- |
+| `src/app/m2/page.tsx` | Server page, metadata (`noindex`) |
+| `src/components/mobile-landing/clock/ClockLanding.tsx` | Composition, beat state, cards, toast, hero step loop |
+| `src/components/mobile-landing/clock/useClockEngine.ts` | Scroll engine (rAF, gated) |
+| `src/components/mobile-landing/clock/geometry.ts` | Pure timeline, sky and cull math (`geometry.test.ts`) |
+| `src/components/mobile-landing/clock/art.ts`, `data.ts`, `tool-paths.ts` | Dial geometry, the stylized day's times, tool marks |
+| `src/components/mobile-landing/clock/{Sky,Dial,DialFace,DialFixed,StageHud,Lens}.tsx` | The art |
+| `src/components/mobile-landing/clock/{HeroChapter,ToolsChapter,NightChapters,Faq,Cta,Waitlist,Chrome,CardLayer,cards}.tsx` | Chapters, chrome and scenes |
+| `src/components/mobile-landing/clock/useHandoff.ts` | Share / copy / reminder |
+| `src/components/mobile-landing/clock/clock.module.css` | The entry's stylesheet, ported (tokens, Geist, data-attribute state) |
+| `e2e/mobile/m2-landing.spec.ts` | Phone spec: SSR headline, no sideways scroll at 390/360, CTA at every stop, every CTA action, the story's taps, light theme, reduced motion |
+
+**Gotchas.**
+- Copy lives in the English-only pending namespace `mobileLanding2` (M4); translate it before launch.
+- The engine finds its parts by `data-k`; renaming one silently disconnects it. The e2e spec waits on `[data-ready]`.
+- The day, its times and its runs are a stylized illustration (tagged "Stylized day"); Athena's portrait and loop are
+  the only real product images.
+- Waitlist analytics (`trackWaitlistSubmit`) are not wired: `WaitlistEntryPoint` has no `/m2` member yet.
 
 ## Related docs
 - [/m revival plan](../../concepts/mobile-revival/PLAN.md)
