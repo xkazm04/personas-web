@@ -303,6 +303,34 @@ check, so pushing will fail until they are fixed or baselined.
 | N13 | Stale docs: `sla.md:14` uses retired agent names, and `orchestrator-client-mocks.md:21` describes a mock cursor that no longer exists. | docs |
 | N14 | The security compliance rows "No third-party sub-processor inventory / No consent management" are questionable now that Sentry is disclosed. "LM Studio" and "40+ connectors" have no backing in the code. | **legal / owner** |
 
+### Follow-up wave: 2026-10-06
+
+All the small fixes have landed. Every gate passes on the combined tree (629 unit tests, build, bundle
+budget) except `copy:check`. Its 40 new errors all come from the lab commits; none are from these fixes.
+
+| # | Outcome | Commit |
+|---|---|---|
+| N1 | Claims that prompts or data "never leave your device" are corrected across `/security`, `security.ts` (pillar, GDPR and residency rows, FAQ), the landing section, the legal TL;DR and six blog posts. The copy now says agents and keys stay local, and prompts go to your chosen provider (or nowhere, with Ollama). | `70a9faf` |
+| N2 | The cookie banner copy is accurate (no ads, no cross-site tracking, anonymous counts only after "Accept All"). It moved to a `cookieConsent` namespace, translated into all 14 locales. | `f3b6c6a` |
+| N6 | Malformed headings no longer hang the guide renderer; any unclaimed line becomes a paragraph. `check:guide-content` flags them. | `1c097de` |
+| N7 | The Activity tab is behind the demo gate. There's no synced data to show live workspaces, so they get the empty state. | `f29a3a1` |
+| N8 | The "one click / no setup" template claims are corrected in the gallery header, the `/templates` metadata and the vision grid. | `17e2673` |
+| N10 | The chat's staging "ready in N seconds" is computed from the scenario's own timestamp (12 s), and a test pins it. | `8b227c6` |
+| N11 | The two Obsidian connectors really are different (Desktop Bridge vs. Local REST API). Each now has its own label and its own use cases, taken from the desktop catalog. | `92b5c23` |
+| N9 | The vote grid is 1, 2 or 3 columns by width, and an odd last card spans both columns in the 2-column layout. | `1b64fe8` |
+| N13 | `sla.md` now uses the fleet names, and `orchestrator-client-mocks.md` correctly says the caller owns the cursor. | `b9b0aa8` |
+| D14 | The tour targets `[data-example-id="gmail"]` instead of the English label, and a test forbids text-targeted tour actions. | `f0596e4` |
+
+**Still open** (the decisions D10 · N4 · N5 · N14, and the desktop items D6 · N3 · N12 are above). Smaller items the
+follow-up builders found:
+
+- The connector generator would reset "Obsidian (Desktop Bridge)" back to "Obsidian", because the desktop files label both entries "Obsidian". Fix it in the desktop repo or with a generator override.
+- On `/how`, the race's staging agent finishes at 1.9 s while the chat says 12 s. The cross-demo test only covers the ambiguous-email scenario.
+- These are still hardcoded English: `/templates` metadata, the `/security` page, and the legal pages.
+- The privacy policy says credentials "never leave your device, not even with cloud features", but agents do send tokens to the services they connect to.
+- Athena's hero stat says "Runs entirely on your machine", but Athena thinks with Claude.
+- `FeatureVoteCard.tsx` and `Script.tsx` gate motion with framer's `useReducedMotion` instead of `useStillMotion`.
+
 ## All cards
 
 Fill in the Verdict column. Full cards live in the group files linked in each heading.
