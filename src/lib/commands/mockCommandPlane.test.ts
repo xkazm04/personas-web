@@ -1,13 +1,23 @@
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import { MOCK_EXECUTIONS, MOCK_PERSONAS } from "@/lib/mockData";
+import { MOCK_CHAT_MESSAGES, MOCK_CHAT_SESSIONS } from "@/lib/mock-dashboard-data";
 import type { CommandRowUpdate } from "./commandReducer";
-import { MOCK_RUN_TIMINGS, MOCK_TIMINGS, mockRunExecutionId, runMockCommand } from "./mockCommandPlane";
+import {
+  MOCK_CHAT_TIMINGS,
+  MOCK_RUN_TIMINGS,
+  MOCK_TIMINGS,
+  mockChatIds,
+  mockRunExecutionId,
+  runMockCommand,
+} from "./mockCommandPlane";
 
 const visible = { isHidden: () => false };
 
 describe("mockCommandPlane: the demo's simulated desktop", () => {
   const snapshot = MOCK_PERSONAS.map((p) => ({ ...p }));
   const execSnapshot = MOCK_EXECUTIONS.map((e) => ({ ...e }));
+  const sessionSnapshot = MOCK_CHAT_SESSIONS.map((s) => ({ ...s }));
+  const messageSnapshot = MOCK_CHAT_MESSAGES.map((m) => ({ ...m }));
 
   beforeEach(() => {
     vi.useFakeTimers();
@@ -18,6 +28,8 @@ describe("mockCommandPlane: the demo's simulated desktop", () => {
       MOCK_PERSONAS[i] = { ...p };
     });
     MOCK_EXECUTIONS.splice(0, MOCK_EXECUTIONS.length, ...execSnapshot.map((e) => ({ ...e })));
+    MOCK_CHAT_SESSIONS.splice(0, MOCK_CHAT_SESSIONS.length, ...sessionSnapshot.map((x) => ({ ...x })));
+    MOCK_CHAT_MESSAGES.splice(0, MOCK_CHAT_MESSAGES.length, ...messageSnapshot.map((m) => ({ ...m })));
   });
 
   it("claims at 1.2 s and completes at 2.0 s, writing the pause through to the fixture", () => {
@@ -47,13 +59,11 @@ describe("mockCommandPlane: the demo's simulated desktop", () => {
     expect(MOCK_PERSONAS.find((p) => p.id === target.id)?.enabled).toBe(true);
   });
 
-  it("an unknown persona fails not_found; an unscripted verb is refused", () => {
+  it("an unknown persona fails not_found", () => {
     const rows: CommandRowUpdate[] = [];
     runMockCommand({ id: "x", verb: "pause_persona", personaId: "nope", params: {} }, (r) => rows.push(r), visible);
-    runMockCommand({ id: "y", verb: "chat_send", personaId: MOCK_PERSONAS[0].id, params: {} }, (r) => rows.push(r), visible);
     vi.advanceTimersByTime(MOCK_TIMINGS.completedMs);
     expect(rows.find((r) => r.id === "x" && r.status !== "executing")).toMatchObject({ status: "failed", error_message: "not_found" });
-    expect(rows.find((r) => r.id === "y" && r.status !== "executing")?.status).toBe("rejected");
   });
 
   it("refuses to start in a hidden tab, and cancel stops the timers", () => {
@@ -144,5 +154,88 @@ describe("mockCommandPlane: the demo's simulated desktop", () => {
     stop();
     vi.advanceTimersByTime(MOCK_RUN_TIMINGS.completedMs);
     expect(MOCK_EXECUTIONS.find((e) => e.id === mockRunExecutionId("r3"))?.status).toBe("queued");
+  });
+
+  describe("chat_send", () => {
+    const outcome = (rows: CommandRowUpdate[], id: string) => rows.find((r) => r.id === id && r.status !== "executing");
+
+    it("Athena, in an existing thread: completes at 2 s with the user message written, the reply about 4 s after the send", () => {
+      const rows: CommandRowUpdate[] = [];
+      const changes = vi.fn();
+      const before = MOCK_CHAT_MESSAGES.length;
+      runMockCommand(
+        { id: "ch1", verb: "chat_send", personaId: "athena", params: { sessionId: "default", message: " How was the night? " } },
+        (r) => rows.push(r),
+        { ...visible, onFixtureChange: changes },
+      );
+      vi.advanceTimersByTime(MOCK_TIMINGS.completedMs);
+      const ids = mockChatIds("ch1");
+      expect(outcome(rows, "ch1")).toEqual({ id: "ch1", status: "completed", result: { sessionId: "default", userMessageId: ids.userMessageId } });
+      const user = MOCK_CHAT_MESSAGES.find((m) => m.id === ids.userMessageId)!;
+      expect(user).toMatchObject({ role: "user", content: "How was the night?", threadKind: "athena", personaId: "athena", sessionId: "default" });
+      expect(MOCK_CHAT_MESSAGES).toHaveLength(before + 1);
+      expect(changes).toHaveBeenCalled();
+
+      vi.advanceTimersByTime(MOCK_CHAT_TIMINGS.replyMs - 1);
+      expect(MOCK_CHAT_MESSAGES.some((m) => m.id === ids.replyId)).toBe(false);
+      vi.advanceTimersByTime(1);
+      const reply = MOCK_CHAT_MESSAGES.find((m) => m.id === ids.replyId)!;
+      expect(reply).toMatchObject({ role: "assistant", sessionId: "default", executionId: null });
+      expect(reply.content).toContain("How was the night?");
+      expect(MOCK_TIMINGS.completedMs + MOCK_CHAT_TIMINGS.replyMs).toBe(4000);
+    });
+
+    it("a new thread (sessionId null) is created and named by the result", () => {
+      const rows: CommandRowUpdate[] = [];
+      runMockCommand({ id: "ch2", verb: "chat_send", personaId: "athena", params: { sessionId: null, message: "Plan my Friday" } }, (r) => rows.push(r), visible);
+      vi.advanceTimersByTime(MOCK_TIMINGS.completedMs);
+      const ids = mockChatIds("ch2");
+      expect(outcome(rows, "ch2")?.result).toMatchObject({ sessionId: ids.sessionId });
+      expect(MOCK_CHAT_SESSIONS.find((s) => s.sessionId === ids.sessionId)).toMatchObject({ threadKind: "athena", title: "Plan my Friday" });
+    });
+
+    it("persona chat: a run goes queued -> running -> completed, and the reply carries its executionId", () => {
+      const persona = MOCK_PERSONAS.find((p) => p.enabled)!;
+      const rows: CommandRowUpdate[] = [];
+      runMockCommand({ id: "ch3", verb: "chat_send", personaId: persona.id, params: { sessionId: null, message: "Status?" } }, (r) => rows.push(r), visible);
+      vi.advanceTimersByTime(MOCK_TIMINGS.completedMs);
+      const ids = mockChatIds("ch3");
+      expect(outcome(rows, "ch3")?.result).toEqual({ sessionId: ids.sessionId, userMessageId: ids.userMessageId, executionId: ids.executionId });
+      const run = () => MOCK_EXECUTIONS.find((e) => e.id === ids.executionId)?.status;
+      expect(run()).toBe("queued");
+      vi.advanceTimersByTime(MOCK_CHAT_TIMINGS.runningMs);
+      expect(run()).toBe("running");
+      vi.advanceTimersByTime(MOCK_CHAT_TIMINGS.runCompletedMs - MOCK_CHAT_TIMINGS.runningMs);
+      expect(run()).toBe("completed");
+      vi.advanceTimersByTime(MOCK_CHAT_TIMINGS.replyMs - MOCK_CHAT_TIMINGS.runCompletedMs);
+      expect(MOCK_CHAT_MESSAGES.find((m) => m.id === ids.replyId)).toMatchObject({ role: "assistant", executionId: ids.executionId, personaId: persona.id });
+    });
+
+    it("refuses like the desktop: empty, over 8 KB, an unknown thread, a paused persona, an unknown persona", () => {
+      const paused = MOCK_PERSONAS.find((p) => !p.enabled)!;
+      const rows: CommandRowUpdate[] = [];
+      const send = (id: string, personaId: string, params: Record<string, unknown>) =>
+        runMockCommand({ id, verb: "chat_send", personaId, params }, (r) => rows.push(r), visible);
+      send("e1", "athena", { sessionId: null, message: "   " });
+      send("e2", "athena", { sessionId: null, message: "a".repeat(8193) });
+      send("e3", "athena", { sessionId: "no-such-thread", message: "hi" });
+      send("e4", paused.id, { sessionId: null, message: "hi" });
+      send("e5", "nope", { sessionId: null, message: "hi" });
+      vi.advanceTimersByTime(MOCK_TIMINGS.completedMs);
+      expect(outcome(rows, "e1")?.error_message).toBe("empty_message");
+      expect(outcome(rows, "e2")?.error_message).toBe("message_too_long");
+      expect(outcome(rows, "e3")?.error_message).toMatch(/^not_found/);
+      expect(outcome(rows, "e4")?.error_message).toBe("persona_paused");
+      expect(outcome(rows, "e5")?.error_message).toMatch(/^not_found/);
+      expect(rows.filter((r) => r.status === "failed")).toHaveLength(5);
+    });
+
+    it("cancelling the command before the reply stops the reply", () => {
+      const stop = runMockCommand({ id: "ch4", verb: "chat_send", personaId: "athena", params: { sessionId: "default", message: "x" } }, () => {}, visible);
+      vi.advanceTimersByTime(MOCK_TIMINGS.completedMs);
+      stop();
+      vi.advanceTimersByTime(MOCK_CHAT_TIMINGS.replyMs);
+      expect(MOCK_CHAT_MESSAGES.some((m) => m.id === mockChatIds("ch4").replyId)).toBe(false);
+    });
   });
 });

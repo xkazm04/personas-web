@@ -17,6 +17,17 @@ import { halvesTrend } from "./observabilitySeries";
 import { EVENT_STATUS_TRANSITIONS } from "./eventStatusFsm";
 import { DEVICE_FRESH_MS } from "./sync/reachability";
 import { SYNCED_NOTE_COLUMNS, mapNoteRow, type SyncedNoteRow } from "./notes/notesModel";
+import {
+  ATHENA_PERSONA_ID,
+  CHAT_MESSAGE_COLUMNS,
+  CHAT_SESSION_COLUMNS,
+  chatSendParams,
+  mapChatMessageRow,
+  mapChatSessionRow,
+  sortMessages,
+  type ChatMessageRow,
+  type ChatSessionRow,
+} from "./chat/chatModel";
 import type {
   Persona,
   PersonaExecution,
@@ -86,12 +97,15 @@ async function ownerDeviceFromMirror(personaId: string): Promise<string | null> 
  * proxy, so a static import would be a cycle.
  */
 async function sendCommand(
-  verb: "pause_persona" | "resume_persona" | "cancel_execution" | "run_persona",
+  verb: "pause_persona" | "resume_persona" | "cancel_execution" | "run_persona" | "chat_send",
   personaId: string,
   params: Record<string, unknown>,
+  /** The desktop the caller already knows (a chat thread's device); else the persona's owner. */
+  knownDevice: string | null = null,
 ): Promise<CommandAck> {
   const { sendPersonaCommand, knownOwnerDevice } = await import("./commands/personaCommands");
-  const deviceId = knownOwnerDevice(personaId) ?? (await ownerDeviceFromMirror(personaId));
+  // Athena is no synced persona: the mirror lookup falls through to the newest device.
+  const deviceId = knownDevice ?? knownOwnerDevice(personaId) ?? (await ownerDeviceFromMirror(personaId));
   return sendPersonaCommand(verb, personaId, params, { demo: false, deviceId });
 }
 
@@ -668,6 +682,45 @@ export const supabaseApi: ApiClient = {
       const note = mapNoteRow(row);
       return note ? [note] : [];
     });
+  },
+
+  // Chat (PHASE2-SPEC.md 5.2): pushed only while the desktop's "Sync chats"
+  // opt-in is on (PLAN M19, default off), so an empty list is "not synced or
+  // no chats", never an error. Keys are composite (device, kind, id).
+  listChatSessions: async ({ threadKind, personaId }) => {
+    let query = getSupabase().from("synced_chat_sessions").select(CHAT_SESSION_COLUMNS).eq("thread_kind", threadKind);
+    if (threadKind === "persona" && personaId) query = query.eq("persona_id", personaId);
+    const r = await rows<ChatSessionRow>(query.order("updated_at", { ascending: false }).limit(50));
+    return r.flatMap((row) => {
+      const session = mapChatSessionRow(row);
+      return session ? [session] : [];
+    });
+  },
+
+  // The newest 200 messages of the thread, returned oldest first.
+  listChatMessages: async ({ threadKind, deviceId, sessionId }) => {
+    let query = getSupabase()
+      .from("synced_chat_messages")
+      .select(CHAT_MESSAGE_COLUMNS)
+      .eq("thread_kind", threadKind)
+      .eq("session_id", sessionId);
+    if (deviceId) query = query.eq("device_id", deviceId);
+    const r = await rows<ChatMessageRow>(query.order("created_at", { ascending: false }).limit(200));
+    return sortMessages(
+      r.flatMap((row) => {
+        const message = mapChatMessageRow(row);
+        return message ? [message] : [];
+      }),
+    );
+  },
+
+  // A chat_send command (spec 5.3) to the desktop that holds the thread:
+  // persona_id and envelope.persona are the persona, or 'athena'.
+  sendChatMessage: async (input) => {
+    const params = chatSendParams(input.sessionId, input.message);
+    if (!params) throw new ApiError(400, input.message.trim() ? "message_too_long" : "empty_message");
+    const personaId = input.threadKind === "athena" ? ATHENA_PERSONA_ID : input.personaId;
+    return sendCommand("chat_send", personaId, params, input.deviceId);
   },
 };
 

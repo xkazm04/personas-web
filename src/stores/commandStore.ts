@@ -94,9 +94,18 @@ function refetchExecutions() {
   void import("@/stores/executionStore").then((m) => m.useExecutionStore.getState().fetchExecutions());
 }
 
-/** The demo desktop wrote its fixtures: re-read what the rows show. */
+/**
+ * Re-read the open chat (its threads and transcript). Loaded lazily, like the
+ * chat itself: only the phone's chat sheets load `chatStore`.
+ */
+function refreshChat() {
+  void import("@/stores/chatStore").then((m) => m.useChatStore.getState().refreshOpen());
+}
+
+/** The demo desktop wrote its fixtures: re-read what the rows and the open chat show. */
 function onDemoFixtureChange() {
   refetchExecutions();
+  refreshChat();
 }
 
 export const useCommandStore = create<CommandState>((set, get) => ({
@@ -153,8 +162,9 @@ export const useCommandStore = create<CommandState>((set, get) => ({
     set({ inflight });
     const after = inflight[row.id];
     if (after.status !== "completed" || before?.status === "completed") return;
-    // A demo run keeps its timers past completion: they drive its execution's lifecycle.
-    if (after.verb !== "run_persona") mockCancels.delete(row.id);
+    // A demo run or chat turn keeps its timers past completion: they drive the
+    // run's lifecycle and the reply.
+    if (after.verb !== "run_persona" && after.verb !== "chat_send") mockCancels.delete(row.id);
     // A pause/resume changed the persona: pull the synced truth now rather than
     // waiting out the persona cache (the row shows the reported value meanwhile).
     if (after.verb === "pause_persona" || after.verb === "resume_persona") {
@@ -163,6 +173,12 @@ export const useCommandStore = create<CommandState>((set, get) => ({
     // A run or a cancel changed the executions: read them now (the live mirror
     // also pushes them over Realtime once the desktop's next sync pass lands).
     if (after.verb === "run_persona" || after.verb === "cancel_execution") refetchExecutions();
+    // A chat turn started: its user message (and a new thread) is on the desktop
+    // now, and a persona's turn is a run the transcript follows ("thinking").
+    if (after.verb === "chat_send") {
+      refreshChat();
+      if (typeof after.result?.executionId === "string") refetchExecutions();
+    }
   },
   reset: () => {
     stopTicker();

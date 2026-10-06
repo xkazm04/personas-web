@@ -7,6 +7,7 @@ import { X } from "lucide-react";
 import { useTranslation } from "@/i18n/useTranslation";
 import { useFocusTrap } from "@/hooks/useFocusTrap";
 import { useStillMotion } from "@/hooks/useStillMotion";
+import { useKeyboardInset } from "@/hooks/useKeyboardInset";
 
 /**
  * Bottom sheet for mobile detail views — the native pattern that replaces a
@@ -19,18 +20,24 @@ import { useStillMotion } from "@/hooks/useStillMotion";
  * new /m - see docs/concepts/mobile-revival/PLAN.md. First used by the phone
  * Personas view (persona detail + actions). Under reduced motion it appears
  * and leaves without sliding or fading (the DOM is the same either way).
+ *
+ * `keyboardSafe` (a sheet with a text field at its bottom, like a chat
+ * composer): while the on-screen keyboard is open the sheet sits on top of it
+ * instead of under it, and caps its height to the space left.
  */
 export default function BottomSheet({
   open,
   onClose,
   title,
   subtitle,
+  keyboardSafe = false,
   children,
 }: {
   open: boolean;
   onClose: () => void;
   title?: ReactNode;
   subtitle?: ReactNode;
+  keyboardSafe?: boolean;
   children: ReactNode;
 }) {
   const { t } = useTranslation();
@@ -38,6 +45,8 @@ export default function BottomSheet({
   const titleId = useId();
   const still = useStillMotion();
   const instant = { duration: 0 };
+  const keyboard = useKeyboardInset();
+  const lift = keyboardSafe && keyboard > 0 ? keyboard : 0;
   useFocusTrap({ active: open, containerRef: panelRef });
 
   useEffect(() => {
@@ -59,6 +68,7 @@ export default function BottomSheet({
       {open && (
         <motion.div
           className="fixed inset-0 z-[100] flex flex-col justify-end"
+          style={lift > 0 ? { bottom: lift } : undefined}
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           exit={{ opacity: 0 }}
@@ -84,6 +94,7 @@ export default function BottomSheet({
             onDragEnd={(_e, info) => {
               if (info.offset.y > 120 || info.velocity.y > 600) onClose();
             }}
+            style={lift > 0 ? { maxHeight: "calc(100% - 0.5rem)" } : undefined}
             className="relative flex max-h-[88svh] flex-col rounded-t-3xl border-t border-white/[0.08] bg-surface/95 pb-[max(1rem,env(safe-area-inset-bottom))] backdrop-blur-xl"
           >
             <div className="flex shrink-0 cursor-grab justify-center pt-2.5 active:cursor-grabbing">

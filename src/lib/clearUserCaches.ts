@@ -48,6 +48,9 @@ export function clearUserScopedCaches(): void {
   useDeviceStore.getState().reset();
   useCommandStore.getState().reset();
   useControllerStore.getState().reset();
+  // Chat threads, transcripts and unsent messages. Lazy, like the chat itself:
+  // if no chat sheet ever loaded the store, there is nothing to drop.
+  void import("@/stores/chatStore").then((m) => m.useChatStore.getState().reset());
   // Filter store persists `personaId` to localStorage; without this reset
   // the next user briefly sees results filtered by the previous user's
   // selected persona.

@@ -3612,7 +3612,6 @@
       cancelOldRun: string;
       detailTabsLabel: string;
       tabs: { activity: string; chat: string };
-      tabSoon: string;
       activityLoading: string;
       activityEmpty: string;
       activityError: string;
@@ -3657,6 +3656,56 @@
       error: string;
       noDevice: string;
       unpair: string;
+    };
+    /** Chat from the phone: Athena's row and sheet, a persona's Chat tab (PHASE2-SPEC.md 5.2, 5.3). */
+    chat: {
+      athenaName: string;
+      athenaRowHint: string;
+      athenaOpenLabel: string;
+      threadsLabel: string;
+      newChat: string;
+      back: string;
+      untitled: string;
+      updated: string;
+      pinned: string;
+      loading: string;
+      error: string;
+      messagesLoading: string;
+      messagesError: string;
+      retry: string;
+      emptyTitle: string;
+      emptyBody: string;
+      draftAthena: string;
+      draftPersona: string;
+      threadEmpty: string;
+      transcriptLabel: string;
+      you: string;
+      composerLabel: string;
+      send: string;
+      tooLong: string;
+      disabled: { offline: string; unpaired: string; never: string; paused: string };
+      sending: string;
+      thinking: string;
+      waiting: string;
+      noReply: string;
+      runEnded: { failed: string; cancelled: string };
+      retrySend: string;
+      dismiss: string;
+      errors: {
+        chat_sync_off: string;
+        athena_off: string;
+        empty_message: string;
+        message_too_long: string;
+        bad_params: string;
+        not_found: string;
+        persona_paused: string;
+        not_paired: string;
+        unsupported: string;
+        expired: string;
+        no_device: string;
+        other: string;
+        unknown: string;
+      };
     };
     /** `/dashboard/notes`: the desktop Notepad's goals, read-only (PHASE2-SPEC.md 5.1). */
     notes: {
@@ -8242,7 +8291,6 @@ export const en: Translations = {
       cancelOldRun: 'This run started over a day ago, so this phone may not see it stop.',
       detailTabsLabel: 'Agent details',
       tabs: { activity: 'Activity', chat: 'Chat' },
-      tabSoon: 'Soon',
       activityLoading: 'Loading runs...',
       activityEmpty: 'No runs yet.',
       activityError: 'Couldn\'t load the runs.',
@@ -8263,7 +8311,7 @@ export const en: Translations = {
       linkCopied: 'Link copied. Open it on your computer.',
       shareFailed: 'Couldn\'t share. Open {url} on your computer.',
       unpairedTitle: 'Pair this phone',
-      unpairedBody: 'Your computer is online, but this phone isn\'t paired yet. Pair it once to pause and resume agents from here.',
+      unpairedBody: 'Your computer is online, but this phone isn\'t paired yet. Pair it once to run, pause and cancel your agents, and to chat, from here.',
       unpairedCta: 'How to pair',
     },
     command: {
@@ -8276,7 +8324,7 @@ export const en: Translations = {
     },
     pairing: {
       title: 'Phone control',
-      body: 'Pair this browser with Personas on your computer to pause and resume your agents from here.',
+      body: 'Pair this browser with Personas on your computer to run, pause, resume and cancel your agents, and to chat with them and Athena, from here.',
       howTo: 'On your computer, open Settings, then Cloud sync, then Pair a phone, and scan the code with this phone.',
       pairing: 'Pairing...',
       pending: 'Waiting for your computer to confirm...',
@@ -8287,6 +8335,60 @@ export const en: Translations = {
       error: 'Pairing didn\'t work: {reason}',
       noDevice: 'No synced computer found. Turn on sync in Personas on your computer first.',
       unpair: 'Unpair this phone',
+    },
+    chat: {
+      athenaName: 'Athena',
+      athenaRowHint: 'Chat with your companion',
+      athenaOpenLabel: 'Chat with Athena',
+      threadsLabel: 'Chats',
+      newChat: 'New chat',
+      back: 'All chats',
+      untitled: 'Untitled chat',
+      updated: 'Updated {ago}',
+      pinned: 'Pinned',
+      loading: 'Loading chats...',
+      error: 'Couldn\'t load your chats.',
+      messagesLoading: 'Loading messages...',
+      messagesError: 'Couldn\'t load this chat.',
+      retry: 'Try again',
+      emptyTitle: 'No chats synced',
+      emptyBody: 'Chats stay on your computer unless you choose to sync them. In Personas on your computer, open Settings, then Cloud sync, and turn on Sync chats. It\'s off by default.',
+      draftAthena: 'Ask Athena anything. Personas on your computer runs the chat, and the reply syncs back here.',
+      draftPersona: 'Send {name} a message. Personas on your computer runs it, and the reply syncs back here.',
+      threadEmpty: 'No messages in this chat yet.',
+      transcriptLabel: 'Messages with {name}',
+      you: 'You',
+      composerLabel: 'Message {name}',
+      send: 'Send',
+      tooLong: 'Too long to send. Keep it under 8 KB.',
+      disabled: {
+        offline: 'Personas isn\'t running on your computer. Open it to chat from here.',
+        unpaired: 'Pair this phone in Settings to chat from here.',
+        never: 'Connect your computer to chat from here.',
+        paused: '{name} is paused. Resume it to chat.',
+      },
+      sending: 'Sending...',
+      thinking: '{name} is thinking...',
+      waiting: 'No reply yet. It shows up here once your computer syncs it.',
+      noReply: 'No reply. The run {status}.',
+      runEnded: { failed: 'failed', cancelled: 'was canceled' },
+      retrySend: 'Retry',
+      dismiss: 'Dismiss',
+      errors: {
+        chat_sync_off: 'Chat sync is off on your computer. In Personas, open Settings, then Cloud sync, and turn on Sync chats.',
+        athena_off: 'Athena is turned off on your computer. Turn it on in Personas to chat from here.',
+        empty_message: 'That message was empty.',
+        message_too_long: 'That message is too long. Keep it under 8 KB.',
+        bad_params: 'Your computer couldn\'t read that message. Try again.',
+        not_found: 'This chat is gone from your computer. Start a new one.',
+        persona_paused: '{name} is paused. Resume it, then try again.',
+        not_paired: 'This phone isn\'t paired anymore. Pair it again in Settings.',
+        unsupported: 'Update Personas on your computer to chat from your phone.',
+        expired: 'Your computer didn\'t answer. Is Personas still open?',
+        no_device: 'No synced computer found to send this to.',
+        other: 'Couldn\'t send: {reason}',
+        unknown: 'Couldn\'t send. Try again.',
+      },
     },
     notes: {
       nav: 'Notes',

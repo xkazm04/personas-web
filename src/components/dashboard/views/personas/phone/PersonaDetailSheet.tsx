@@ -7,30 +7,27 @@ import { useTranslation } from "@/i18n/useTranslation";
 import { useI18nStore } from "@/stores/i18nStore";
 import { usePersona } from "@/stores/personaStore";
 import { useExecutionStore } from "@/stores/executionStore";
+import { useCommandStore } from "@/stores/commandStore";
+import { displayEnabled, latestForPersona } from "@/lib/commands/commandReducer";
 import { personaRuns } from "@/lib/commands/personaRow";
 import { formatCost, formatDuration } from "@/lib/format";
 import { formatDue } from "@/lib/review-sla";
 import type { PersonaExecution } from "@/lib/types";
+import type { SyncReachability } from "@/hooks/useSyncReachability";
+import ChatPanel from "./chat/ChatPanel";
 
-/**
- * The detail sheet's tabs. `ready: false` renders the tab disabled.
- *
- * WAVE 3 SLOT - Chat (PHASE2-SPEC.md 5.2, 5.3, PLAN M18): set `chat` ready and
- * render its panel where `ChatSlot` is below (session list -> transcript ->
- * composer, the composer enabled only in the `online` tier). Nothing else in
- * this sheet needs to change.
- */
+/** The detail sheet's tabs: Activity (runs) and Chat (PHASE2-SPEC.md 5.2, 5.3). */
 type DetailTab = "activity" | "chat";
-const TABS: readonly { id: DetailTab; ready: boolean }[] = [
-  { id: "activity", ready: true },
-  { id: "chat", ready: false },
-];
+const TABS: readonly DetailTab[] = ["activity", "chat"];
+
+/** The sheet around the chat panel: handle, title row, tab strip, bottom padding. */
+const SHEET_CHROME_PX = 175;
 
 interface Props {
   open: boolean;
   personaId: string | null;
-  /** The reachability clock: "started 3 minutes ago" is judged against it, never `Date.now()` in render. */
-  now: number;
+  /** The online gate (Chat's composer) and its clock: "started 3 minutes ago" is judged against `now`, never `Date.now()` in render. */
+  reach: SyncReachability;
   onClose: () => void;
 }
 
@@ -41,13 +38,16 @@ const ACTIVITY_LIMIT = 10;
  * Tapping a persona row opens this (PHASE2-SPEC.md 6.2): **Activity** lists
  * the persona's last runs (status, started, duration, cost when there is one)
  * from `executionStore`, so a run started from the phone appears and moves
- * here live. Read-only, so it stays open to every tier, offline included.
+ * here live. **Chat** is the persona's chat (`ChatPanel`: threads ->
+ * transcript -> composer). Both read in every tier, offline included; only
+ * Chat's composer follows the online gate.
  */
-export default function PersonaDetailSheet({ open, personaId, now, onClose }: Props) {
+export default function PersonaDetailSheet({ open, personaId, reach, onClose }: Props) {
   const { t } = useTranslation();
   const copy = t.mobile.personas;
   const baseId = useId();
   const persona = usePersona(personaId);
+  const latest = useCommandStore((s) => (personaId ? latestForPersona(s.inflight, personaId) : null));
   const [tab, setTab] = useState<DetailTab>("activity");
   const [prevOpen, setPrevOpen] = useState(open);
   if (open !== prevOpen) {
@@ -56,9 +56,9 @@ export default function PersonaDetailSheet({ open, personaId, now, onClose }: Pr
   }
 
   return (
-    <BottomSheet open={open && persona !== undefined} onClose={onClose} title={persona?.name}>
+    <BottomSheet open={open && persona !== undefined} onClose={onClose} title={persona?.name} keyboardSafe>
       <div role="tablist" aria-label={copy.detailTabsLabel} className="mb-3 flex gap-1 rounded-xl border border-glass p-1">
-        {TABS.map(({ id, ready }) => (
+        {TABS.map((id) => (
           <button
             key={id}
             id={`${baseId}-tab-${id}`}
@@ -66,20 +66,28 @@ export default function PersonaDetailSheet({ open, personaId, now, onClose }: Pr
             role="tab"
             aria-selected={tab === id}
             aria-controls={`${baseId}-panel`}
-            disabled={!ready}
             onClick={() => setTab(id)}
-            className={`inline-flex min-h-[44px] flex-1 items-center justify-center gap-1.5 rounded-lg px-3 text-base font-medium transition-colors focus-visible:outline-2 focus-visible:outline-brand-cyan disabled:cursor-not-allowed disabled:opacity-60 ${
+            className={`inline-flex min-h-[44px] flex-1 items-center justify-center gap-1.5 rounded-lg px-3 text-base font-medium transition-colors focus-visible:outline-2 focus-visible:outline-brand-cyan ${
               tab === id ? "bg-brand-cyan/15 text-foreground" : "text-muted-dark hover:text-foreground"
             }`}
           >
             {copy.tabs[id]}
-            {!ready && <span className="text-xs text-muted-dark">{copy.tabSoon}</span>}
           </button>
         ))}
       </div>
       <div id={`${baseId}-panel`} role="tabpanel" aria-labelledby={`${baseId}-tab-${tab}`} className="pb-2">
-        {tab === "activity" && personaId && <ActivityPanel personaId={personaId} now={now} />}
-        {/* WAVE 3 SLOT: {tab === "chat" && <ChatSlot personaId={personaId} />} */}
+        {tab === "activity" && personaId && <ActivityPanel personaId={personaId} now={reach.now} />}
+        {tab === "chat" && persona && (
+          <ChatPanel
+            threadKind="persona"
+            personaId={persona.id}
+            name={persona.name}
+            ownerDeviceId={persona.deviceId ?? null}
+            reach={reach}
+            paused={!displayEnabled(persona, latest)}
+            chromePx={SHEET_CHROME_PX}
+          />
+        )}
       </div>
     </BottomSheet>
   );

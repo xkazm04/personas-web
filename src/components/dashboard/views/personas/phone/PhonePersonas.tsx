@@ -12,10 +12,12 @@ import PhonePersonaRow from "./PhonePersonaRow";
 import ReachabilityNotice from "./ReachabilityNotice";
 import PersonaActionsSheet from "./PersonaActionsSheet";
 import PersonaDetailSheet from "./PersonaDetailSheet";
+import AthenaChatSheet, { AthenaRow } from "./chat/AthenaChatSheet";
 
 /** One sheet at a time; `open` flips first so the sheet can slide out with its content. */
 interface SheetState {
-  kind: "detail" | "actions";
+  kind: "detail" | "actions" | "athena";
+  /** Unused for Athena, who is not a persona. */
   personaId: string;
   open: boolean;
 }
@@ -25,7 +27,8 @@ interface SheetState {
  * agent management, not the desktop stage. The reachability banner, then one
  * row per persona with its state (Running / Paused / Failed / Idle),
  * Pause/Resume and an overflow (Run..., Cancel run); a row opens its detail
- * sheet (Activity). Reads `personaStore` and `executionStore` through the
+ * sheet (Activity, Chat). Above the personas, a pinned **Athena** row opens
+ * Athena's chat (PLAN M18). Reads `personaStore` and `executionStore` through the
  * `api` proxy, so demo (mockApi) and live (the sync mirror) share one path;
  * never `fleet.json`, which has no live counterpart.
  */
@@ -41,6 +44,7 @@ export default function PhonePersonas() {
   const [sheet, setSheet] = useState<SheetState | null>(null);
   const openDetail = useCallback((personaId: string) => setSheet({ kind: "detail", personaId, open: true }), []);
   const openActions = useCallback((personaId: string) => setSheet({ kind: "actions", personaId, open: true }), []);
+  const openAthena = useCallback(() => setSheet({ kind: "athena", personaId: "", open: true }), []);
   const closeSheet = useCallback(() => setSheet((s) => (s ? { ...s, open: false } : s)), []);
 
   useEffect(() => {
@@ -57,6 +61,8 @@ export default function PhonePersonas() {
       </h1>
 
       {reach.ready && <ReachabilityNotice reach={reach} />}
+
+      <AthenaRow onOpen={openAthena} />
 
       {error && ids.length === 0 ? (
         <div role="alert" className="rounded-2xl border border-rose-500/30 bg-rose-500/10 p-4 text-sm text-rose-300">
@@ -89,7 +95,7 @@ export default function PhonePersonas() {
       <PersonaDetailSheet
         open={sheet?.kind === "detail" && sheet.open}
         personaId={sheet?.kind === "detail" ? sheet.personaId : null}
-        now={reach.now}
+        reach={reach}
         onClose={closeSheet}
       />
       <PersonaActionsSheet
@@ -98,6 +104,7 @@ export default function PhonePersonas() {
         reach={reach}
         onClose={closeSheet}
       />
+      <AthenaChatSheet open={sheet?.kind === "athena" && sheet.open} reach={reach} onClose={closeSheet} />
     </div>
   );
 }

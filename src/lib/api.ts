@@ -27,6 +27,7 @@ import type {
   EventStatus,
 } from "./types";
 import type { SyncedNote } from "./notes/notesModel";
+import type { ChatMessage, ChatSendInput, ChatSession, ChatThreadRef, ListChatSessionsInput } from "./chat/chatModel";
 
 // ---------------------------------------------------------------------------
 // Error
@@ -179,6 +180,12 @@ export interface ApiClient {
   getUsageAnalytics(): Promise<{ toolUsage: ToolUsageSummary[]; toolUsageOverTime: ToolUsageOverTime[]; toolUsageByPersona: ToolUsageByPersona[] }>;
   /** The desktop Notepad's goals (`synced_notes`, PHASE2-SPEC.md 5.1). Read-only. */
   listNotes(): Promise<SyncedNote[]>;
+  /** Chat threads (`synced_chat_sessions`, PHASE2-SPEC.md 5.2): Athena's, or one persona's. */
+  listChatSessions(input: ListChatSessionsInput): Promise<ChatSession[]>;
+  /** One thread's messages, oldest first (`synced_chat_messages`). */
+  listChatMessages(thread: ChatThreadRef): Promise<ChatMessage[]>;
+  /** Send a chat message: a `chat_send` command (spec 5.3); the reply arrives as synced data. */
+  sendChatMessage(input: ChatSendInput): Promise<CommandAck>;
 }
 
 // ---------------------------------------------------------------------------
@@ -379,6 +386,14 @@ const realApi: ApiClient = {
       // notes endpoint, and on this plane the desktop is unreachable anyway
       // (reachability reads "never synced"), so there is nothing to list.
       listNotes: async () => [],
+
+      // Chat is a sync-mirror class too (synced_chat_*), and sending is a
+      // command to the desktop: the orchestrator plane has neither.
+      listChatSessions: async () => [],
+      listChatMessages: async () => [],
+      sendChatMessage: async () => {
+        throw new ApiError(501, "Chat is not available on the orchestrator plane.");
+      },
     };
 
 /**

@@ -42,6 +42,8 @@ const WATCHED_TABLES = [
   "synced_manual_reviews",
   "synced_devices",
   "synced_notes",
+  "synced_chat_sessions",
+  "synced_chat_messages",
 ] as const;
 
 const REVIEW_SEVERITIES = new Set<string>(["critical", "warning", "info"]);
@@ -100,6 +102,12 @@ function refetchFor(table: string): (() => void) | null {
       // A full-set replace lands as a burst of upserts and deletes; the
       // debounce above folds it into one refetch.
       return () => void useNotesStore.getState().fetchNotes();
+    case "synced_chat_sessions":
+    case "synced_chat_messages":
+      // A chat_send reply lands as a message insert (and a thread's updated_at).
+      // Only the open chat is re-read; the store loads with the phone's chat
+      // sheets, so it is imported lazily rather than into every dashboard load.
+      return () => void import("@/stores/chatStore").then((m) => m.useChatStore.getState().refreshOpen());
     default:
       return null;
   }

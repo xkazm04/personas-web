@@ -11,7 +11,9 @@
  * hidden tab (the use-playground-simulation precedent, CLAUDE.md rule 3).
  */
 import { MOCK_EXECUTIONS, MOCK_PERSONAS } from "@/lib/mockData";
-import type { GlobalExecution } from "@/lib/types";
+import { MOCK_CHAT_DEVICE_ID, MOCK_CHAT_MESSAGES, MOCK_CHAT_SESSIONS, mockChatReply } from "@/lib/mock-dashboard-data";
+import { ATHENA_PERSONA_ID, CHAT_MESSAGE_MAX_BYTES, utf8Bytes, type ChatThreadKind } from "@/lib/chat/chatModel";
+import type { GlobalExecution, Persona } from "@/lib/types";
 import type { CommandRowUpdate } from "./commandReducer";
 import type { CommandVerb } from "./envelope";
 
@@ -23,6 +25,14 @@ export const MOCK_TIMINGS = { executingMs: 1200, completedMs: 2000 } as const;
  * `queued` then): running 1 s later, completed 8 s after it was queued.
  */
 export const MOCK_RUN_TIMINGS = { runningMs: 1000, completedMs: 8000 } as const;
+
+/**
+ * A chat turn, from the moment its command completes (the desktop completes
+ * `chat_send` when the turn STARTS): a persona's run goes running 0.5 s later
+ * and completed at 1.8 s, and the reply lands at 2 s, so it shows about 4 s
+ * after the send (spec 6.3). Athena answers at the same 2 s, with no run.
+ */
+export const MOCK_CHAT_TIMINGS = { runningMs: 500, runCompletedMs: 1800, replyMs: 2000 } as const;
 
 /** What the scripted run costs and returns (demo data, like the fixtures). */
 const MOCK_RUN_COST_USD = 0.0124;
@@ -56,8 +66,174 @@ function advance(executionId: string, from: GlobalExecution["status"], patch: (e
   return true;
 }
 
+/** A queued execution of `persona`, as the desktop writes it when a run starts. */
+function queuedExecution(id: string, persona: Persona, inputData: string | null): GlobalExecution {
+  return {
+    id,
+    personaId: persona.id,
+    triggerId: null,
+    useCaseId: null,
+    status: "queued",
+    inputData,
+    outputData: null,
+    claudeSessionId: null,
+    modelUsed: "claude-sonnet-4-5-20250929",
+    inputTokens: 0,
+    outputTokens: 0,
+    costUsd: 0,
+    errorMessage: null,
+    durationMs: null,
+    retryOfExecutionId: null,
+    retryCount: 0,
+    startedAt: null,
+    completedAt: null,
+    createdAt: new Date().toISOString(),
+    personaName: persona.name,
+    personaIcon: persona.icon ?? undefined,
+    personaColor: persona.color ?? undefined,
+  };
+}
+
+/** Schedule an execution's queued -> running -> completed, each step only from the expected status. */
+function scheduleRunLifecycle(
+  executionId: string,
+  schedule: Schedule,
+  changed: () => void,
+  at: { runningMs: number; completedMs: number },
+  outputData: string,
+) {
+  schedule(() => {
+    if (advance(executionId, "queued", () => ({ status: "running", startedAt: new Date().toISOString() }))) changed();
+  }, at.runningMs);
+  schedule(() => {
+    const done = advance(executionId, "running", (e) => {
+      const end = new Date();
+      const started = e.startedAt ? Date.parse(e.startedAt) : NaN;
+      return {
+        status: "completed",
+        completedAt: end.toISOString(),
+        durationMs: Number.isFinite(started) ? Math.max(0, end.getTime() - started) : null,
+        costUsd: MOCK_RUN_COST_USD,
+        inputTokens: 2100,
+        outputTokens: 640,
+        outputData,
+      };
+    });
+    if (done) changed();
+  }, at.completedMs);
+}
+
+/** The ids a chat command writes: derived from the command, so a resend cannot post twice. */
+export function mockChatIds(commandId: string) {
+  return {
+    sessionId: `chat-${commandId}`,
+    userMessageId: `msg-${commandId}-u`,
+    replyId: `msg-${commandId}-a`,
+    executionId: `exec-${commandId}`,
+  };
+}
+
+/** A new thread's title: the first message, cut to 48 characters. */
+function threadTitle(message: string): string {
+  return message.length > 48 ? `${message.slice(0, 45)}...` : message;
+}
+
+/**
+ * `chat_send` (contract: params `{ sessionId | null, message }`; result
+ * `{ sessionId, userMessageId, executionId? }`): the user's message is written
+ * at once, the turn starts, and a canned reply follows. Refuses like the
+ * desktop: an empty or over-8 KB message, an unknown persona or thread, a
+ * paused persona.
+ */
+function executeChat(cmd: MockCommand, schedule: Schedule, changed: () => void): CommandRowUpdate {
+  const message = typeof cmd.params.message === "string" ? cmd.params.message.trim() : "";
+  if (message.length === 0) return { id: cmd.id, status: "failed", error_message: "empty_message" };
+  if (utf8Bytes(message) > CHAT_MESSAGE_MAX_BYTES) return { id: cmd.id, status: "failed", error_message: "message_too_long" };
+
+  const athena = cmd.personaId === ATHENA_PERSONA_ID;
+  const kind: ChatThreadKind = athena ? "athena" : "persona";
+  const persona = athena ? null : MOCK_PERSONAS.find((p) => p.id === cmd.personaId);
+  if (!athena && !persona) return { id: cmd.id, status: "failed", error_message: "not_found: persona" };
+  if (persona && !persona.enabled) return { id: cmd.id, status: "failed", error_message: "persona_paused" };
+
+  const ids = mockChatIds(cmd.id);
+  const nowIso = new Date().toISOString();
+  const requested = typeof cmd.params.sessionId === "string" ? cmd.params.sessionId : null;
+  const wanted = requested ?? ids.sessionId;
+  let si = MOCK_CHAT_SESSIONS.findIndex((s) => s.threadKind === kind && s.personaId === cmd.personaId && s.sessionId === wanted);
+  if (requested && si === -1) return { id: cmd.id, status: "failed", error_message: "not_found: session" };
+  if (si === -1) {
+    MOCK_CHAT_SESSIONS.push({
+      sessionId: ids.sessionId,
+      deviceId: MOCK_CHAT_DEVICE_ID,
+      threadKind: kind,
+      personaId: cmd.personaId,
+      title: threadTitle(message),
+      chatMode: athena ? null : "ops",
+      origin: athena ? "user" : null,
+      pinned: false,
+      createdAt: nowIso,
+      updatedAt: nowIso,
+    });
+    si = MOCK_CHAT_SESSIONS.length - 1;
+  }
+  const session = MOCK_CHAT_SESSIONS[si];
+  const executionId = persona ? ids.executionId : null;
+
+  if (!MOCK_CHAT_MESSAGES.some((m) => m.id === ids.userMessageId)) {
+    MOCK_CHAT_MESSAGES.push({
+      id: ids.userMessageId,
+      deviceId: session.deviceId,
+      threadKind: kind,
+      personaId: cmd.personaId,
+      sessionId: session.sessionId,
+      role: "user",
+      content: message,
+      executionId: null,
+      createdAt: nowIso,
+    });
+    MOCK_CHAT_SESSIONS[si] = { ...session, updatedAt: nowIso };
+    if (persona && executionId) {
+      MOCK_EXECUTIONS.unshift(queuedExecution(executionId, persona, message));
+      scheduleRunLifecycle(
+        executionId,
+        schedule,
+        changed,
+        { runningMs: MOCK_CHAT_TIMINGS.runningMs, completedMs: MOCK_CHAT_TIMINGS.runCompletedMs },
+        "Chat turn answered on the demo computer.",
+      );
+    }
+    changed();
+    schedule(() => {
+      if (MOCK_CHAT_MESSAGES.some((m) => m.id === ids.replyId)) return;
+      const at = new Date().toISOString();
+      MOCK_CHAT_MESSAGES.push({
+        id: ids.replyId,
+        deviceId: session.deviceId,
+        threadKind: kind,
+        personaId: cmd.personaId,
+        sessionId: session.sessionId,
+        role: "assistant",
+        content: mockChatReply(persona?.name ?? null, message),
+        executionId,
+        createdAt: at,
+      });
+      const i = MOCK_CHAT_SESSIONS.findIndex((s) => s.threadKind === kind && s.sessionId === session.sessionId);
+      if (i !== -1) MOCK_CHAT_SESSIONS[i] = { ...MOCK_CHAT_SESSIONS[i], updatedAt: at };
+      changed();
+    }, MOCK_CHAT_TIMINGS.replyMs);
+  }
+
+  const result: Record<string, unknown> = { sessionId: session.sessionId, userMessageId: ids.userMessageId };
+  if (executionId) result.executionId = executionId;
+  return { id: cmd.id, status: "completed", result };
+}
+
 /** Run the verb against the fixtures; returns the row the desktop would write. */
 function execute(cmd: MockCommand, schedule: Schedule, changed: () => void): CommandRowUpdate {
+  // Athena is not a persona: a chat is answered before the persona lookup.
+  if (cmd.verb === "chat_send") return executeChat(cmd, schedule, changed);
+
   const idx = MOCK_PERSONAS.findIndex((p) => p.id === cmd.personaId);
   if (idx === -1) return { id: cmd.id, status: "failed", error_message: "not_found" };
   const persona = MOCK_PERSONAS[idx];
@@ -99,57 +275,15 @@ function execute(cmd: MockCommand, schedule: Schedule, changed: () => void): Com
   if (cmd.verb === "run_persona") {
     const executionId = mockRunExecutionId(cmd.id);
     if (!MOCK_EXECUTIONS.some((e) => e.id === executionId)) {
-      const now = new Date().toISOString();
       const prompt = typeof cmd.params.prompt === "string" ? cmd.params.prompt : null;
-      MOCK_EXECUTIONS.unshift({
-        id: executionId,
-        personaId: persona.id,
-        triggerId: null,
-        useCaseId: null,
-        status: "queued",
-        inputData: prompt,
-        outputData: null,
-        claudeSessionId: null,
-        modelUsed: "claude-sonnet-4-5-20250929",
-        inputTokens: 0,
-        outputTokens: 0,
-        costUsd: 0,
-        errorMessage: null,
-        durationMs: null,
-        retryOfExecutionId: null,
-        retryCount: 0,
-        startedAt: null,
-        completedAt: null,
-        createdAt: now,
-        personaName: persona.name,
-        personaIcon: persona.icon ?? undefined,
-        personaColor: persona.color ?? undefined,
-      });
+      MOCK_EXECUTIONS.unshift(queuedExecution(executionId, persona, prompt));
       changed();
-      schedule(() => {
-        if (advance(executionId, "queued", () => ({ status: "running", startedAt: new Date().toISOString() }))) changed();
-      }, MOCK_RUN_TIMINGS.runningMs);
-      schedule(() => {
-        const done = advance(executionId, "running", (e) => {
-          const end = new Date();
-          const started = e.startedAt ? Date.parse(e.startedAt) : NaN;
-          return {
-            status: "completed",
-            completedAt: end.toISOString(),
-            durationMs: Number.isFinite(started) ? Math.max(0, end.getTime() - started) : null,
-            costUsd: MOCK_RUN_COST_USD,
-            inputTokens: 2100,
-            outputTokens: 640,
-            outputData: "Run finished on the demo computer.",
-          };
-        });
-        if (done) changed();
-      }, MOCK_RUN_TIMINGS.completedMs);
+      scheduleRunLifecycle(executionId, schedule, changed, MOCK_RUN_TIMINGS, "Run finished on the demo computer.");
     }
     return { id: cmd.id, status: "completed", result: { executionId } };
   }
 
-  // chat_send and the queue verbs have no scripted outcome yet: refuse honestly.
+  // Any other verb has no scripted outcome: refuse honestly, as an older desktop would.
   return { id: cmd.id, status: "rejected", error_message: `unsupported_command_type: the demo desktop does not run ${cmd.verb}` };
 }
 

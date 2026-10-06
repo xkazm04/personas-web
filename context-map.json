@@ -1212,7 +1212,10 @@
             "src/lib/commands/personaRow.ts",
             "src/lib/commands/signer.ts",
             "src/stores/commandStore.ts",
-            "src/stores/personaStore.ts"
+            "src/stores/personaStore.ts",
+            "src/lib/chat/chatModel.ts",
+            "src/lib/chat/chatModel.test.ts",
+            "src/stores/chatStore.ts"
           ],
           "target": null,
           "apiRoutes": []
@@ -1278,7 +1281,12 @@
             "src/components/dashboard/views/personas/phone/PhonePersonaRow.tsx",
             "src/components/dashboard/views/personas/phone/PhonePersonas.tsx",
             "src/components/dashboard/views/personas/phone/ReachabilityNotice.tsx",
-            "src/components/dashboard/views/personas/phone/personaActions.ts"
+            "src/components/dashboard/views/personas/phone/personaActions.ts",
+            "src/components/dashboard/views/personas/phone/chat/AthenaChatSheet.tsx",
+            "src/components/dashboard/views/personas/phone/chat/ChatComposer.tsx",
+            "src/components/dashboard/views/personas/phone/chat/ChatPanel.tsx",
+            "src/components/dashboard/views/personas/phone/chat/ChatThreadList.tsx",
+            "src/components/dashboard/views/personas/phone/chat/ChatTranscript.tsx"
           ],
           "target": null,
           "apiRoutes": 0
@@ -1331,7 +1339,9 @@
             "src/components/dashboard/markdown-report/markdownInline.tsx",
             "src/hooks/useExecutionPolling.ts",
             "src/stores/dashboardFilterStore.ts",
-            "src/stores/executionStore.ts"
+            "src/stores/executionStore.ts",
+            "src/components/dashboard/markdown-report/safeHref.ts",
+            "src/components/dashboard/markdown-report/safeHref.test.ts"
           ],
           "target": null,
           "apiRoutes": [
@@ -1630,7 +1640,9 @@
             "src/components/mobile-landing/hive/useHiveCopy.ts",
             "src/components/mobile-landing/hive/useReel.ts",
             "src/components/mobile-landing/hive/useSwap.ts",
-            "e2e/mobile/dashboard-personas.spec.ts"
+            "e2e/mobile/dashboard-personas.spec.ts",
+            "src/hooks/useKeyboardInset.ts",
+            "src/hooks/useKeyboardInset.test.ts"
           ],
           "target": null,
           "apiRoutes": []
