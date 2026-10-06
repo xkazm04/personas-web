@@ -1,4 +1,4 @@
-import { POLICY_META } from "@/data/policy-changelog";
+import { formatPolicyMonth } from "@/data/policy-changelog";
 import {
   STORAGE_CATEGORIES,
   STORAGE_REGISTER,
@@ -10,17 +10,6 @@ import { useTranslation } from "@/i18n/useTranslation";
 type Props = { changelog?: React.ReactNode };
 
 const LEGAL_EMAIL = "legal@personas.ai";
-
-/** "October 2026" in the reader's language. UTC so the month never slips a day. */
-function formatPolicyMonth(iso: string, language: string): string {
-  try {
-    return new Intl.DateTimeFormat(language, { month: "long", year: "numeric", timeZone: "UTC" }).format(
-      new Date(`${iso}T00:00:00Z`),
-    );
-  } catch {
-    return POLICY_META.cookies.formattedUpdate;
-  }
-}
 
 export default function CookiePolicy({ changelog }: Props) {
   const { t, language } = useTranslation();
@@ -44,7 +33,7 @@ export default function CookiePolicy({ changelog }: Props) {
       </div>
 
       <p className="text-base text-muted-dark">
-        {c.lastUpdated.replace("{date}", formatPolicyMonth(POLICY_META.cookies.latestUpdateIso, language))}
+        {c.lastUpdated.replace("{date}", formatPolicyMonth("cookies", language))}
       </p>
 
       {changelog}

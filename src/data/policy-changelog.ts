@@ -8,9 +8,13 @@ export type PolicyMeta = {
 
 export const POLICY_META: Record<PolicyId, PolicyMeta> = {
   privacy: {
-    latestUpdateIso: "2026-10-05",
+    latestUpdateIso: "2026-10-06",
     formattedUpdate: "October 2026",
     changes: [
+      "Added \"Optional cloud sync\": what the desktop app copies to your account when you turn sync on, the separate Sync notes and Sync chats switches (both off by default), how note and chat text is masked and capped, what turning a switch off deletes, and where the data is stored.",
+      "Added \"Paired phones\": what a phone you pair can do without a click on your computer, what it cannot do, the signing key it keeps, and how to revoke it.",
+      "Corrected the statements that nothing the desktop app creates is ever sent to our servers. That holds unless you turn on cloud sync; credentials are never sent either way.",
+      "The policy is now available in all 14 site languages.",
       "Corrected the statement that the desktop app has zero telemetry. Release builds send anonymous error reports and usage signals to Sentry; the new section lists what is sent, what is never sent, and how to turn it off.",
       "Corrected the statement that Sentry runs on this website only. It also receives the desktop app's error reports and usage signals.",
       "Clarified that website analytics run only after you choose \"Accept All\", and that agent prompts go directly to the AI provider you choose.",
@@ -35,6 +39,21 @@ export const POLICY_META: Record<PolicyId, PolicyMeta> = {
     ],
   },
 };
+
+/**
+ * A policy's "Last updated" month ("October 2026") in the reader's language.
+ * UTC so the month never slips a day; falls back to the English label.
+ */
+export function formatPolicyMonth(policyId: PolicyId, language: string): string {
+  const meta = POLICY_META[policyId];
+  try {
+    return new Intl.DateTimeFormat(language, { month: "long", year: "numeric", timeZone: "UTC" }).format(
+      new Date(`${meta.latestUpdateIso}T00:00:00Z`),
+    );
+  } catch {
+    return meta.formattedUpdate;
+  }
+}
 
 const STORAGE_KEY_PREFIX = "personas-legal-last-seen-";
 

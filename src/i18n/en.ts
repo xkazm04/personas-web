@@ -1199,6 +1199,43 @@
     managingBody: string;
     manageButton: string;
   };
+  /** Privacy Policy body (/legal#privacy). {date}, {email}, {acceptAll}, {essentialOnly} are filled in at render. */
+  privacyPolicy: {
+    tldr: string[];
+    lastUpdated: string;
+    commitmentHeading: string;
+    commitmentBody: string;
+    desktopHeading: string;
+    desktopBody: string;
+    telemetryHeading: string;
+    telemetryBody: string;
+    telemetryControls: string;
+    credentialsHeading: string;
+    credentialsBody: string;
+    syncHeading: string;
+    syncIntro: string;
+    syncNever: string;
+    syncOptIns: string;
+    syncNotes: string;
+    syncChats: string;
+    syncMasking: string;
+    syncDeletion: string;
+    syncWhere: string;
+    phonesHeading: string;
+    phonesIntro: string;
+    phonesLimits: string;
+    phonesKey: string;
+    phonesRevoke: string;
+    accountHeading: string;
+    accountBody: string;
+    analyticsHeading: string;
+    analyticsBody: string;
+    thirdPartyHeading: string;
+    thirdPartySupabase: string;
+    thirdPartySentry: string;
+    rightsHeading: string;
+    rightsBody: string;
+  };
   cookieConsent: {
     message: string;
     details: string;
@@ -5158,6 +5195,50 @@ export const en: Translations = {
     managingHeading: 'Managing cookies and storage',
     managingBody: 'You can clear or block cookies and site data in your browser settings at any time. Clearing them signs you out and resets your preferences. For questions, reach out to {email}.',
     manageButton: 'Manage cookie preferences',
+  },
+  privacyPolicy: {
+    tldr: [
+      'Personas runs your agents on your computer and stores them there, with your run history, notes, and chats. Your prompts go only to the AI provider you choose.',
+      'Cloud sync is optional and off until you turn it on. It copies your agents and their runs to your account so you can see them on the web. Notes and chats sync only if you also turn on their own switches.',
+      'A phone you pair can run, pause, resume, and stop your agents and message Athena without a click on your computer. You can revoke it at any time.',
+      'API keys are encrypted with AES-256 and never leave your machine, even with cloud sync on.',
+      'Apart from what you choose to sync, the desktop app sends us only anonymous error reports and usage signals, and you can turn most of them off.',
+      'We only collect your email if you sign in for cloud features.',
+      'You can export or delete everything at any time. Just ask.',
+    ],
+    lastUpdated: 'Last updated: {date}',
+    commitmentHeading: 'Our commitment to privacy',
+    commitmentBody: 'Personas is built on a simple principle: your data belongs to you. Our desktop app is local-first. Unless you turn on cloud sync, your agents, prompts, outputs, and credentials are never sent to us, and the only data the app sends us is the anonymous diagnostics described below. Your credentials are never sent to us, even with cloud sync on.',
+    desktopHeading: 'What the desktop app stores',
+    desktopBody: 'Everything the Personas desktop app creates (your agents, pipelines, run history, notes, conversations, and configuration) lives on your computer. None of it is sent to our servers unless you turn on cloud sync, described below. When an agent runs, its prompt goes directly from your computer to the AI provider you chose: Claude by Anthropic, or a local Ollama model that never leaves your computer.',
+    telemetryHeading: 'Desktop app error reports and usage signals',
+    telemetryBody: 'Release builds of the desktop app send error reports (error message, stack trace, operating system, architecture, and app version) and anonymous usage signals (app sessions, which sections and tabs you open, key actions such as creating an agent, and one-time milestones) to Sentry. Sessions and milestones are tied only to a random device or install ID. IP addresses, email addresses, usernames, and request bodies and headers are stripped before anything is sent. There are no performance traces, no session replays, and no user identity, and your prompts, persona content, and credentials are never included.',
+    telemetryControls: 'You can turn off usage signals and error reports from the app\'s interface at first launch or at any time in Settings > Account. Crash reports from the app\'s native core are not covered by that switch yet. Development builds and builds you compile from source send nothing.',
+    credentialsHeading: 'How credentials are protected',
+    credentialsBody: 'API keys and secrets you add to Personas are encrypted at rest using AES-256-GCM and stored in your operating system\'s keyring. They never leave your device, not even when you use cloud sync or a paired phone.',
+    syncHeading: 'Optional cloud sync',
+    syncIntro: 'Cloud sync is off until you sign in and turn it on in the desktop app\'s Settings. It lets you follow your agents on the Personas website, including from your phone. While it is on, the app copies this to your account: your agents (including their names, descriptions, and instructions), their runs (including input, output, cost, and errors), events, items waiting for your review, messages your agents send you, memories, learned patterns, health issues, schedule times, the run queue, and daily totals. Values that look like secrets are removed from event data before it is sent.',
+    syncNever: 'Never synced: API keys, passwords, and other credentials, or trigger settings such as webhook configuration.',
+    syncOptIns: 'Two more kinds of data sync only if you also turn on their own switches in the same Settings: "Sync notes" and "Sync chats". Both start off, even if cloud sync is already on.',
+    syncNotes: 'Sync notes copies your Notepad goals: each note\'s title, text, status, and project name (never the project\'s folder on your computer), and the short summary of its result. Archived notes are not synced.',
+    syncChats: 'Sync chats copies your conversations with Athena, so you can read them and message her from your phone: each active conversation\'s title, and your messages and her replies from 90 days before you turned it on onward. Her replies can quote what your agents read through the apps you connected. System and tool messages and archived conversations are never synced.',
+    syncMasking: 'Before note or chat text leaves your computer, anything that looks like a key, token, or password is masked, and long text is cut off: titles at 1 KB, note text at 16 KB, and each chat message at 32 KB.',
+    syncDeletion: 'Turning Sync notes or Sync chats off deletes the notes or chats this computer synced, at its next sync. Deleting an agent on your computer deletes its synced copy. Turning cloud sync itself off stops new copies but does not delete what was already synced. Email us and we will delete it.',
+    syncWhere: 'Synced data is stored with Supabase, our cloud provider, in rows tied to your account. Database access rules let only your signed-in account read or change those rows, from the desktop app or the website. The data is not end-to-end encrypted.',
+    phonesHeading: 'Paired phones',
+    phonesIntro: 'While cloud sync is on, you can pair a phone by scanning a code shown in the desktop app\'s Settings. From the Personas website, a paired phone can run, pause, and resume your agents, stop a run, and send Athena a message (only while Sync chats is on). Your computer carries these out without asking you first, and runs and replies it starts use your Claude plan. A command reaches your computer only while it is on and online. One that cannot reach it within a minute expires instead of waiting.',
+    phonesLimits: 'A paired phone cannot edit your agents, see or change your credentials, or change the run queue without your approval on the computer. Without pairing, a request from the website to run an agent waits until you approve it on your computer.',
+    phonesKey: 'When you pair, the phone\'s browser creates a signing key that cannot be exported and keeps it in that browser\'s storage. Every command is signed with it, and your computer checks the signature against its own list of paired phones. The phone\'s name (from its browser, such as "iPhone \u00B7 Safari"), its public key, and the commands it sends with their results are stored with your synced data.',
+    phonesRevoke: 'You can revoke one phone, or every phone, in the desktop app\'s Settings at any time. Revoking takes effect within seconds, and a run already started finishes. You can also unpair from the phone itself, which deletes its key there.',
+    accountHeading: 'What we collect for cloud features',
+    accountBody: 'If you sign in with Google to use cloud features, we store your email address and basic profile information through Supabase, our sign-in provider. If you turn on cloud sync or pair a phone, we also store the data described above.',
+    analyticsHeading: 'Website analytics',
+    analyticsBody: 'If you choose "{acceptAll}" in the cookie banner, this website counts page views and a few key actions (download clicks, waitlist sign-ups, feature votes, and comments) anonymously to help us understand which pages are useful. If you choose "{essentialOnly}", nothing is counted. We do not track individual users, build advertising profiles, or sell data to third parties.',
+    thirdPartyHeading: 'Third-party services',
+    thirdPartySupabase: 'sign-in, and cloud storage for the data you choose to sync',
+    thirdPartySentry: 'error tracking and the anonymous counts above on this website, and the desktop app\'s error reports and usage signals',
+    rightsHeading: 'Your rights',
+    rightsBody: 'You can request access to, correction of, or deletion of any personal data we hold at any time, including your synced data. You can also export all of your local data directly from the desktop app. To exercise these rights, contact us at {email}.',
   },
   cookieConsent: {
     message: 'We keep a few settings in your browser so the site works. "Accept All" also lets us count page views and a few key actions anonymously, without storing anything for it. No ads, no cross-site tracking.',

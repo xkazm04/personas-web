@@ -1,8 +1,34 @@
-import { POLICY_META } from "@/data/policy-changelog";
+import { formatPolicyMonth } from "@/data/policy-changelog";
+import { useTranslation } from "@/i18n/useTranslation";
 
 type Props = { changelog?: React.ReactNode };
 
+const LEGAL_EMAIL = "legal@personas.ai";
+
+const H2 = "text-xl font-semibold text-foreground";
+const P = "text-base leading-relaxed text-muted-dark";
+
+function Section({ heading, paragraphs }: { heading: string; paragraphs: string[] }) {
+  return (
+    <section className="space-y-3">
+      <h2 className={H2}>{heading}</h2>
+      {paragraphs.map((text) => (
+        <p key={text} className={P}>
+          {text}
+        </p>
+      ))}
+    </section>
+  );
+}
+
 export default function PrivacyPolicy({ changelog }: Props) {
+  const { t, language } = useTranslation();
+  const p = t.privacyPolicy;
+  const analytics = p.analyticsBody
+    .replace("{acceptAll}", t.cookieConsent.acceptAll)
+    .replace("{essentialOnly}", t.cookieConsent.essentialOnly);
+  const [emailBefore, emailAfter = ""] = p.rightsBody.split("{email}");
+
   return (
     <div className="space-y-8">
       <div className="rounded-xl border border-brand-cyan/20 bg-brand-cyan/[0.05] p-5">
@@ -10,142 +36,59 @@ export default function PrivacyPolicy({ changelog }: Props) {
           TL;DR
         </p>
         <ul className="mt-3 space-y-2 text-sm leading-relaxed text-foreground/80">
-          <li>
-            Your agents, run history, and keys stay on your device, and your
-            prompts go only to the AI provider you choose. The desktop app
-            sends us only anonymous error reports and usage signals, and you
-            can turn most of them off.
-          </li>
-          <li>
-            API keys are encrypted with AES-256 and never leave your machine.
-          </li>
-          <li>We only collect your email if you opt into cloud features.</li>
-          <li>You can export or delete everything anytime — just ask.</li>
+          {p.tldr.map((line) => (
+            <li key={line}>{line}</li>
+          ))}
         </ul>
       </div>
 
-      <p className="text-base text-muted-dark">Last updated: {POLICY_META.privacy.formattedUpdate}</p>
+      <p className="text-base text-muted-dark">
+        {p.lastUpdated.replace("{date}", formatPolicyMonth("privacy", language))}
+      </p>
 
       {changelog}
 
-      <section className="space-y-3">
-        <h2 className="text-xl font-semibold text-foreground">
-          Our Commitment to Privacy
-        </h2>
-        <p className="text-base leading-relaxed text-muted-dark">
-          Personas is built on a simple principle: your data belongs to you.
-          Our desktop app is local-first. Your agents, prompts, outputs, and
-          credentials are never sent to us. The only data the app sends us is
-          the anonymous diagnostics described under &quot;Desktop App Error
-          Reports and Usage Signals&quot; below.
-        </p>
-      </section>
+      <Section heading={p.commitmentHeading} paragraphs={[p.commitmentBody]} />
+      <Section heading={p.desktopHeading} paragraphs={[p.desktopBody]} />
+      <Section heading={p.telemetryHeading} paragraphs={[p.telemetryBody, p.telemetryControls]} />
+      <Section heading={p.credentialsHeading} paragraphs={[p.credentialsBody]} />
+      <Section
+        heading={p.syncHeading}
+        paragraphs={[
+          p.syncIntro,
+          p.syncNever,
+          p.syncOptIns,
+          p.syncNotes,
+          p.syncChats,
+          p.syncMasking,
+          p.syncDeletion,
+          p.syncWhere,
+        ]}
+      />
+      <Section heading={p.phonesHeading} paragraphs={[p.phonesIntro, p.phonesLimits, p.phonesKey, p.phonesRevoke]} />
+      <Section heading={p.accountHeading} paragraphs={[p.accountBody]} />
+      <Section heading={p.analyticsHeading} paragraphs={[analytics]} />
 
       <section className="space-y-3">
-        <h2 className="text-xl font-semibold text-foreground">
-          What the Desktop App Stores
-        </h2>
-        <p className="text-base leading-relaxed text-muted-dark">
-          Everything the Personas desktop app creates — your agents, pipelines,
-          execution history, and configuration — lives on your local machine.
-          None of it is transmitted to our servers. When an agent runs, its
-          prompt goes directly from your machine to the AI provider you chose
-          (Claude by Anthropic, or a local Ollama model that never leaves your
-          machine).
-        </p>
-      </section>
-
-      <section className="space-y-3">
-        <h2 className="text-xl font-semibold text-foreground">
-          Desktop App Error Reports and Usage Signals
-        </h2>
-        <p className="text-base leading-relaxed text-muted-dark">
-          Release builds of the desktop app send error reports (error message,
-          stack trace, operating system, architecture, and app version) and
-          anonymous usage signals (app sessions, which sections and tabs you
-          open, key actions such as creating an agent, and one-time milestones)
-          to Sentry. Sessions and milestones are tied only to a random device or
-          install ID. IP addresses, email addresses, usernames, and request
-          bodies and headers are stripped before anything is sent. There are no
-          performance traces, no session replays, and no user identity, and
-          your prompts, persona content, and credentials are never included.
-        </p>
-        <p className="text-base leading-relaxed text-muted-dark">
-          You can turn off usage signals and error reports from the app&apos;s
-          interface at first launch or at any time in Settings &gt; Account.
-          Crash reports from the app&apos;s native core are not covered by that
-          switch yet. Development builds and builds you compile from source
-          send nothing.
-        </p>
-      </section>
-
-      <section className="space-y-3">
-        <h2 className="text-xl font-semibold text-foreground">
-          How Credentials Are Protected
-        </h2>
-        <p className="text-base leading-relaxed text-muted-dark">
-          API keys and secrets you add to Personas are encrypted at rest using
-          AES-256-GCM and stored in your operating system&apos;s keyring. They
-          never leave your device — not even when you use cloud features.
-        </p>
-      </section>
-
-      <section className="space-y-3">
-        <h2 className="text-xl font-semibold text-foreground">
-          What We Collect for Cloud Features
-        </h2>
-        <p className="text-base leading-relaxed text-muted-dark">
-          If you sign in with Google OAuth to use cloud features, we store your
-          email address and basic profile information through Supabase (our
-          authentication provider).
-        </p>
-      </section>
-
-      <section className="space-y-3">
-        <h2 className="text-xl font-semibold text-foreground">
-          Website Analytics
-        </h2>
-        <p className="text-base leading-relaxed text-muted-dark">
-          If you choose &quot;Accept All&quot; in the cookie banner, this website
-          counts page views and a few key actions (download clicks, waitlist
-          sign-ups, feature votes, and comments) anonymously to help us
-          understand which pages are useful. If you choose &quot;Essential
-          Only&quot;, nothing is counted. We do not track individual users,
-          build advertising profiles, or sell data to third parties.
-        </p>
-      </section>
-
-      <section className="space-y-3">
-        <h2 className="text-xl font-semibold text-foreground">
-          Third-Party Services
-        </h2>
+        <h2 className={H2}>{p.thirdPartyHeading}</h2>
         <ul className="list-disc pl-5 space-y-1 text-base leading-relaxed text-muted-dark">
           <li>
-            <strong className="text-foreground/80">Supabase</strong> —
-            authentication and cloud data storage
+            <strong className="text-foreground/80">Supabase</strong>: {p.thirdPartySupabase}
           </li>
           <li>
-            <strong className="text-foreground/80">Sentry</strong> — error
-            tracking and the anonymous counts above on this website, and the
-            desktop app&apos;s error reports and usage signals
+            <strong className="text-foreground/80">Sentry</strong>: {p.thirdPartySentry}
           </li>
         </ul>
       </section>
 
       <section className="space-y-3">
-        <h2 className="text-xl font-semibold text-foreground">Your Rights</h2>
-        <p className="text-base leading-relaxed text-muted-dark">
-          You can request access to, correction of, or deletion of any personal
-          data we hold at any time. You can also export all of your local data
-          directly from the desktop app. To exercise these rights, contact us
-          at{" "}
-          <a
-            href="mailto:legal@personas.ai"
-            className="text-brand-cyan hover:underline"
-          >
-            legal@personas.ai
+        <h2 className={H2}>{p.rightsHeading}</h2>
+        <p className={P}>
+          {emailBefore}
+          <a href={`mailto:${LEGAL_EMAIL}`} className="text-brand-cyan hover:underline">
+            {LEGAL_EMAIL}
           </a>
-          .
+          {emailAfter}
         </p>
       </section>
     </div>
