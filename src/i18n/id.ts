@@ -2418,7 +2418,7 @@ export const id: LocaleTranslations = {
     },
     cookiePolicy: {
       tldr: [
-        "Situs ini tidak memasang cookie miliknya sendiri dan menyimpan beberapa pengaturan di penyimpanan lokal browser Anda. Setiap item tercantum di bawah.",
+        "Situs ini tidak memasang cookie miliknya sendiri. Situs ini menyimpan beberapa pengaturan di penyimpanan lokal browser Anda dan, jika Anda memasangkan ponsel, sebuah kunci tanda tangan di database browser ponsel tersebut. Setiap item tercantum di bawah.",
         "Tanpa iklan, pelacakan lintas situs, atau sidik jari digital dalam bentuk apa pun.",
         "Anda dapat menghapus semuanya kapan saja di pengaturan browser."
       ],
@@ -2447,12 +2447,14 @@ export const id: LocaleTranslations = {
       },
       mechanisms: {
         cookie: "Cookie",
-        localStorage: "Penyimpanan lokal"
+        localStorage: "Penyimpanan lokal",
+        indexedDB: "Database browser (IndexedDB)"
       },
       lifetimes: {
         oneYear: "1 tahun",
         untilCleared: "Sampai Anda menghapusnya",
-        untilSignOut: "Sampai Anda keluar"
+        untilSignOut: "Sampai Anda keluar",
+        untilUnpaired: "Sampai Anda melepas pasangan ponsel atau menghapus data situs"
       },
       purposes: {
         consent: "Mengingat pilihan Anda di banner cookie.",
@@ -2465,7 +2467,8 @@ export const id: LocaleTranslations = {
         policySeen: "Mengingat kapan terakhir kali Anda membaca setiap kebijakan di halaman ini, agar pembaruan dapat ditandai.",
         dashboardActivity: "Mengingat kapan terakhir kali Anda membuka dasbor dan berapa kali sebuah peristiwa demo dicoba ulang.",
         checklist: "Mengingat item daftar periksa panduan mana yang sudah Anda centang.",
-        voting: "ID acak yang memungkinkan Anda memberi suara sekali per fitur, dan nama panggilan acak (seperti SwiftFox) yang ditampilkan pada komentar Anda. Keduanya dikirim bersama suara dan komentar Anda, dan tidak satu pun berisi informasi pribadi."
+        voting: "ID acak yang memungkinkan Anda memberi suara sekali per fitur, dan nama panggilan acak (seperti SwiftFox) yang ditampilkan pada komentar Anda. Keduanya dikirim bersama suara dan komentar Anda, dan tidak satu pun berisi informasi pribadi.",
+        pairedPhoneKey: "Hanya di ponsel yang Anda pasangkan dengan aplikasi desktop: kunci tanda tangan yang dibuat oleh browser dan tidak dapat diekspor, ID untuk ponsel ini, ID komputer yang dipasangkan dengannya, dan waktu pemasangannya. Kunci ini menandatangani perintah yang dikirim ponsel ini, sehingga komputer Anda dapat memeriksa bahwa perintah itu memang berasal darinya."
       },
       notUsedHeading: "Yang tidak kami gunakan",
       notUsed: [

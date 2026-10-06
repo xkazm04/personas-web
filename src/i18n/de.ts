@@ -2232,7 +2232,7 @@ export const de: LocaleTranslations = {
     },
     cookiePolicy: {
       tldr: [
-        "Diese Website setzt keine eigenen Cookies und speichert einige Einstellungen im lokalen Speicher Ihres Browsers. Jeder Eintrag ist unten aufgef\u00fchrt.",
+        "Diese Website setzt keine eigenen Cookies. Sie speichert einige Einstellungen im lokalen Speicher Ihres Browsers und, wenn Sie ein Telefon koppeln, einen Signaturschl\u00fcssel in der Browserdatenbank dieses Telefons. Jeder Eintrag ist unten aufgef\u00fchrt.",
         "Keine Werbung, kein website\u00fcbergreifendes Tracking und kein Fingerprinting jeglicher Art.",
         "Sie k\u00f6nnen alles jederzeit in Ihren Browsereinstellungen l\u00f6schen."
       ],
@@ -2261,12 +2261,14 @@ export const de: LocaleTranslations = {
       },
       mechanisms: {
         cookie: "Cookie",
-        localStorage: "Lokaler Speicher"
+        localStorage: "Lokaler Speicher",
+        indexedDB: "Browserdatenbank (IndexedDB)"
       },
       lifetimes: {
         oneYear: "1 Jahr",
         untilCleared: "Bis Sie ihn l\u00f6schen",
-        untilSignOut: "Bis Sie sich abmelden"
+        untilSignOut: "Bis Sie sich abmelden",
+        untilUnpaired: "Bis Sie die Kopplung des Telefons aufheben oder die Websitedaten l\u00f6schen"
       },
       purposes: {
         consent: "Merkt sich Ihre Auswahl im Cookie-Banner.",
@@ -2279,7 +2281,8 @@ export const de: LocaleTranslations = {
         policySeen: "Merkt sich, wann Sie die einzelnen Richtlinien auf dieser Seite zuletzt gelesen haben, damit Aktualisierungen markiert werden k\u00f6nnen.",
         dashboardActivity: "Merkt sich, wann Sie das Dashboard zuletzt ge\u00f6ffnet haben und wie oft ein Demo-Ereignis wiederholt wurde.",
         checklist: "Merkt sich, welche Punkte der Checklisten im Leitfaden Sie abgehakt haben.",
-        voting: "Eine zuf\u00e4llige ID, mit der Sie pro Funktion nur einmal abstimmen k\u00f6nnen, und ein zuf\u00e4lliger Spitzname (zum Beispiel SwiftFox), der bei Ihren Kommentaren angezeigt wird. Beide werden mit Ihren Stimmen und Kommentaren gesendet, und keiner enth\u00e4lt personenbezogene Daten."
+        voting: "Eine zuf\u00e4llige ID, mit der Sie pro Funktion nur einmal abstimmen k\u00f6nnen, und ein zuf\u00e4lliger Spitzname (zum Beispiel SwiftFox), der bei Ihren Kommentaren angezeigt wird. Beide werden mit Ihren Stimmen und Kommentaren gesendet, und keiner enth\u00e4lt personenbezogene Daten.",
+        pairedPhoneKey: "Nur auf einem Telefon, das Sie mit der Desktop-App koppeln: ein Signaturschl\u00fcssel, den der Browser erzeugt hat und nicht exportieren kann, eine ID f\u00fcr dieses Telefon, die ID des Computers, mit dem es gekoppelt ist, und der Zeitpunkt der Kopplung. Der Schl\u00fcssel signiert die Befehle, die dieses Telefon sendet, damit Ihr Computer pr\u00fcfen kann, dass sie von ihm stammen."
       },
       notUsedHeading: "Was wir nicht verwenden",
       notUsed: [

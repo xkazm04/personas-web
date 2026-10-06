@@ -2228,7 +2228,7 @@ export const es: LocaleTranslations = {
     },
     cookiePolicy: {
       tldr: [
-        "Este sitio no usa cookies propias y guarda algunos ajustes en el almacenamiento local de tu navegador. Cada elemento aparece en la lista de abajo.",
+        "Este sitio no usa cookies propias. Guarda algunos ajustes en el almacenamiento local de tu navegador y, si vinculas un tel\u00e9fono, una clave de firma en la base de datos del navegador de ese tel\u00e9fono. Cada elemento aparece en la lista de abajo.",
         "Sin publicidad, sin seguimiento entre sitios y sin huella digital de ning\u00fan tipo.",
         "Puedes borrarlo todo en cualquier momento desde los ajustes de tu navegador."
       ],
@@ -2257,12 +2257,14 @@ export const es: LocaleTranslations = {
       },
       mechanisms: {
         cookie: "Cookie",
-        localStorage: "Almacenamiento local"
+        localStorage: "Almacenamiento local",
+        indexedDB: "Base de datos del navegador (IndexedDB)"
       },
       lifetimes: {
         oneYear: "1 a\u00f1o",
         untilCleared: "Hasta que lo borres",
-        untilSignOut: "Hasta que cierres sesi\u00f3n"
+        untilSignOut: "Hasta que cierres sesi\u00f3n",
+        untilUnpaired: "Hasta que desvincules el tel\u00e9fono o borres los datos del sitio"
       },
       purposes: {
         consent: "Recuerda lo que elegiste en el banner de cookies.",
@@ -2275,7 +2277,8 @@ export const es: LocaleTranslations = {
         policySeen: "Recuerda cu\u00e1ndo le\u00edste por \u00faltima vez cada pol\u00edtica de esta p\u00e1gina, para poder se\u00f1alar las actualizaciones.",
         dashboardActivity: "Recuerda cu\u00e1ndo abriste el panel por \u00faltima vez y cu\u00e1ntas veces se reintent\u00f3 un evento de demostraci\u00f3n.",
         checklist: "Recuerda qu\u00e9 elementos de las listas de comprobaci\u00f3n de la gu\u00eda marcaste.",
-        voting: "Un ID aleatorio que te permite votar una sola vez por funci\u00f3n, y un apodo aleatorio (como SwiftFox) que aparece en tus comentarios. Ambos se env\u00edan con tus votos y comentarios, y ninguno contiene informaci\u00f3n personal."
+        voting: "Un ID aleatorio que te permite votar una sola vez por funci\u00f3n, y un apodo aleatorio (como SwiftFox) que aparece en tus comentarios. Ambos se env\u00edan con tus votos y comentarios, y ninguno contiene informaci\u00f3n personal.",
+        pairedPhoneKey: "Solo en un tel\u00e9fono que vincules con la app de escritorio: una clave de firma que el navegador cre\u00f3 y no puede exportar, un ID para este tel\u00e9fono, el ID del ordenador al que est\u00e1 vinculado y la fecha de la vinculaci\u00f3n. La clave firma los comandos que env\u00eda este tel\u00e9fono, para que tu ordenador pueda comprobar que vienen de \u00e9l."
       },
       notUsedHeading: "Lo que no usamos",
       notUsed: [

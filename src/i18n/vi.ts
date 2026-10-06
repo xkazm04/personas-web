@@ -2418,7 +2418,7 @@ export const vi: LocaleTranslations = {
     },
     cookiePolicy: {
       tldr: [
-        "Trang web n\u00e0y kh\u00f4ng \u0111\u1eb7t cookie n\u00e0o c\u1ee7a ri\u00eang m\u00ecnh v\u00e0 l\u01b0u m\u1ed9t v\u00e0i c\u00e0i \u0111\u1eb7t trong b\u1ed9 nh\u1edb c\u1ee5c b\u1ed9 c\u1ee7a tr\u00ecnh duy\u1ec7t. M\u1ecdi m\u1ee5c \u0111\u1ec1u \u0111\u01b0\u1ee3c li\u1ec7t k\u00ea b\u00ean d\u01b0\u1edbi.",
+        "Trang web n\u00e0y kh\u00f4ng \u0111\u1eb7t cookie n\u00e0o c\u1ee7a ri\u00eang m\u00ecnh. Trang l\u01b0u m\u1ed9t v\u00e0i c\u00e0i \u0111\u1eb7t trong b\u1ed9 nh\u1edb c\u1ee5c b\u1ed9 c\u1ee7a tr\u00ecnh duy\u1ec7t v\u00e0, n\u1ebfu b\u1ea1n gh\u00e9p n\u1ed1i \u0111i\u1ec7n tho\u1ea1i, m\u1ed9t kh\u00f3a k\u00fd trong c\u01a1 s\u1edf d\u1eef li\u1ec7u tr\u00ecnh duy\u1ec7t c\u1ee7a \u0111i\u1ec7n tho\u1ea1i \u0111\u00f3. M\u1ecdi m\u1ee5c \u0111\u1ec1u \u0111\u01b0\u1ee3c li\u1ec7t k\u00ea b\u00ean d\u01b0\u1edbi.",
         "Kh\u00f4ng qu\u1ea3ng c\u00e1o, kh\u00f4ng theo d\u00f5i ch\u00e9o trang v\u00e0 kh\u00f4ng l\u1ea5y d\u1ea5u v\u00e2n tay thi\u1ebft b\u1ecb d\u01b0\u1edbi b\u1ea5t k\u1ef3 h\u00ecnh th\u1ee9c n\u00e0o.",
         "B\u1ea1n c\u00f3 th\u1ec3 x\u00f3a t\u1ea5t c\u1ea3 b\u1ea5t c\u1ee9 l\u00fac n\u00e0o trong c\u00e0i \u0111\u1eb7t tr\u00ecnh duy\u1ec7t."
       ],
@@ -2447,12 +2447,14 @@ export const vi: LocaleTranslations = {
       },
       mechanisms: {
         cookie: "Cookie",
-        localStorage: "B\u1ed9 nh\u1edb c\u1ee5c b\u1ed9"
+        localStorage: "B\u1ed9 nh\u1edb c\u1ee5c b\u1ed9",
+        indexedDB: "C\u01a1 s\u1edf d\u1eef li\u1ec7u tr\u00ecnh duy\u1ec7t (IndexedDB)"
       },
       lifetimes: {
         oneYear: "1 n\u0103m",
         untilCleared: "Cho \u0111\u1ebfn khi b\u1ea1n x\u00f3a",
-        untilSignOut: "Cho \u0111\u1ebfn khi b\u1ea1n \u0111\u0103ng xu\u1ea5t"
+        untilSignOut: "Cho \u0111\u1ebfn khi b\u1ea1n \u0111\u0103ng xu\u1ea5t",
+        untilUnpaired: "Cho \u0111\u1ebfn khi b\u1ea1n h\u1ee7y gh\u00e9p n\u1ed1i \u0111i\u1ec7n tho\u1ea1i ho\u1eb7c x\u00f3a d\u1eef li\u1ec7u trang web"
       },
       purposes: {
         consent: "Ghi nh\u1edb l\u1ef1a ch\u1ecdn c\u1ee7a b\u1ea1n tr\u00ean bi\u1ec3u ng\u1eef cookie.",
@@ -2465,7 +2467,8 @@ export const vi: LocaleTranslations = {
         policySeen: "Ghi nh\u1edb l\u1ea7n cu\u1ed1i b\u1ea1n \u0111\u1ecdc t\u1eebng ch\u00ednh s\u00e1ch tr\u00ean trang n\u00e0y \u0111\u1ec3 c\u00f3 th\u1ec3 \u0111\u00e1nh d\u1ea5u c\u00e1c b\u1ea3n c\u1eadp nh\u1eadt.",
         dashboardActivity: "Ghi nh\u1edb l\u1ea7n cu\u1ed1i b\u1ea1n m\u1edf b\u1ea3ng \u0111i\u1ec1u khi\u1ec3n v\u00e0 s\u1ed1 l\u1ea7n m\u1ed9t s\u1ef1 ki\u1ec7n demo \u0111\u01b0\u1ee3c th\u1eed l\u1ea1i.",
         checklist: "Ghi nh\u1edb nh\u1eefng m\u1ee5c trong danh s\u00e1ch ki\u1ec3m tra c\u1ee7a h\u01b0\u1edbng d\u1eabn m\u00e0 b\u1ea1n \u0111\u00e3 \u0111\u00e1nh d\u1ea5u.",
-        voting: "M\u1ed9t ID ng\u1eabu nhi\u00ean cho ph\u00e9p b\u1ea1n b\u00ecnh ch\u1ecdn m\u1ed7i t\u00ednh n\u0103ng m\u1ed9t l\u1ea7n, v\u00e0 m\u1ed9t bi\u1ec7t danh ng\u1eabu nhi\u00ean (nh\u01b0 SwiftFox) hi\u1ec3n th\u1ecb tr\u00ean b\u00ecnh lu\u1eadn c\u1ee7a b\u1ea1n. C\u1ea3 hai \u0111\u01b0\u1ee3c g\u1eedi k\u00e8m phi\u1ebfu b\u1ea7u v\u00e0 b\u00ecnh lu\u1eadn c\u1ee7a b\u1ea1n, v\u00e0 kh\u00f4ng c\u00e1i n\u00e0o ch\u1ee9a th\u00f4ng tin c\u00e1 nh\u00e2n."
+        voting: "M\u1ed9t ID ng\u1eabu nhi\u00ean cho ph\u00e9p b\u1ea1n b\u00ecnh ch\u1ecdn m\u1ed7i t\u00ednh n\u0103ng m\u1ed9t l\u1ea7n, v\u00e0 m\u1ed9t bi\u1ec7t danh ng\u1eabu nhi\u00ean (nh\u01b0 SwiftFox) hi\u1ec3n th\u1ecb tr\u00ean b\u00ecnh lu\u1eadn c\u1ee7a b\u1ea1n. C\u1ea3 hai \u0111\u01b0\u1ee3c g\u1eedi k\u00e8m phi\u1ebfu b\u1ea7u v\u00e0 b\u00ecnh lu\u1eadn c\u1ee7a b\u1ea1n, v\u00e0 kh\u00f4ng c\u00e1i n\u00e0o ch\u1ee9a th\u00f4ng tin c\u00e1 nh\u00e2n.",
+        pairedPhoneKey: "Ch\u1ec9 c\u00f3 tr\u00ean \u0111i\u1ec7n tho\u1ea1i b\u1ea1n gh\u00e9p n\u1ed1i v\u1edbi \u1ee9ng d\u1ee5ng m\u00e1y t\u00ednh: m\u1ed9t kh\u00f3a k\u00fd do tr\u00ecnh duy\u1ec7t t\u1ea1o ra v\u00e0 kh\u00f4ng th\u1ec3 xu\u1ea5t, m\u1ed9t ID cho \u0111i\u1ec7n tho\u1ea1i n\u00e0y, ID c\u1ee7a m\u00e1y t\u00ednh m\u00e0 n\u00f3 \u0111\u01b0\u1ee3c gh\u00e9p n\u1ed1i v\u00e0 th\u1eddi \u0111i\u1ec3m gh\u00e9p n\u1ed1i. Kh\u00f3a n\u00e0y k\u00fd c\u00e1c l\u1ec7nh m\u00e0 \u0111i\u1ec7n tho\u1ea1i g\u1eedi \u0111i, \u0111\u1ec3 m\u00e1y t\u00ednh c\u1ee7a b\u1ea1n c\u00f3 th\u1ec3 ki\u1ec3m tra r\u1eb1ng l\u1ec7nh \u0111\u1ebfn t\u1eeb ch\u00ednh \u0111i\u1ec7n tho\u1ea1i \u0111\u00f3."
       },
       notUsedHeading: "Nh\u1eefng g\u00ec ch\u00fang t\u00f4i kh\u00f4ng d\u00f9ng",
       notUsed: [

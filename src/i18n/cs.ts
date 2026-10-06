@@ -2262,7 +2262,7 @@ export const cs: LocaleTranslations = {
     },
     cookiePolicy: {
       tldr: [
-        "Tento web nenastavuje \u017e\u00e1dn\u00e9 vlastn\u00ed cookies a n\u011bkolik nastaven\u00ed ukl\u00e1d\u00e1 do m\u00edstn\u00edho \u00falo\u017ei\u0161t\u011b va\u0161eho prohl\u00ed\u017ee\u010de. Ka\u017ed\u00e1 polo\u017eka je uvedena n\u00ed\u017ee.",
+        "Tento web nenastavuje \u017e\u00e1dn\u00e9 vlastn\u00ed cookies. N\u011bkolik nastaven\u00ed ukl\u00e1d\u00e1 do m\u00edstn\u00edho \u00falo\u017ei\u0161t\u011b va\u0161eho prohl\u00ed\u017ee\u010de a pokud sp\u00e1rujete telefon, tak\u00e9 podpisov\u00fd kl\u00ed\u010d do datab\u00e1ze prohl\u00ed\u017ee\u010de v tomto telefonu. Ka\u017ed\u00e1 polo\u017eka je uvedena n\u00ed\u017ee.",
         "\u017d\u00e1dn\u00e1 reklama, sledov\u00e1n\u00ed nap\u0159\u00ed\u010d weby ani fingerprinting jak\u00e9hokoli druhu.",
         "V\u0161e m\u016f\u017eete kdykoli vymazat v nastaven\u00ed prohl\u00ed\u017ee\u010de."
       ],
@@ -2291,12 +2291,14 @@ export const cs: LocaleTranslations = {
       },
       mechanisms: {
         cookie: "Cookie",
-        localStorage: "M\u00edstn\u00ed \u00falo\u017ei\u0161t\u011b"
+        localStorage: "M\u00edstn\u00ed \u00falo\u017ei\u0161t\u011b",
+        indexedDB: "Datab\u00e1ze prohl\u00ed\u017ee\u010de (IndexedDB)"
       },
       lifetimes: {
         oneYear: "1 rok",
         untilCleared: "Dokud ho nevyma\u017eete",
-        untilSignOut: "Dokud se neodhl\u00e1s\u00edte"
+        untilSignOut: "Dokud se neodhl\u00e1s\u00edte",
+        untilUnpaired: "Dokud telefon neodp\u00e1rujete nebo nevyma\u017eete data webu"
       },
       purposes: {
         consent: "Pamatuje si va\u0161i volbu v li\u0161t\u011b cookies.",
@@ -2309,7 +2311,8 @@ export const cs: LocaleTranslations = {
         policySeen: "Pamatuje si, kdy jste naposledy \u010detli jednotliv\u00e9 z\u00e1sady na t\u00e9to str\u00e1nce, aby bylo mo\u017en\u00e9 ozna\u010dit aktualizace.",
         dashboardActivity: "Pamatuje si, kdy jste naposledy otev\u0159eli n\u00e1st\u011bnku a kolikr\u00e1t se opakovala uk\u00e1zkov\u00e1 ud\u00e1lost.",
         checklist: "Pamatuje si, kter\u00e9 polo\u017eky kontroln\u00edch seznam\u016f v pr\u016fvodci jste za\u0161krtli.",
-        voting: "N\u00e1hodn\u00e9 ID, d\u00edky kter\u00e9mu m\u016f\u017eete pro ka\u017edou funkci hlasovat jen jednou, a n\u00e1hodn\u00e1 p\u0159ezd\u00edvka (nap\u0159\u00edklad SwiftFox) zobrazen\u00e1 u va\u0161ich koment\u00e1\u0159\u016f. Oboj\u00ed se odes\u00edl\u00e1 s va\u0161imi hlasy a koment\u00e1\u0159i a ani jedno neobsahuje osobn\u00ed \u00fadaje."
+        voting: "N\u00e1hodn\u00e9 ID, d\u00edky kter\u00e9mu m\u016f\u017eete pro ka\u017edou funkci hlasovat jen jednou, a n\u00e1hodn\u00e1 p\u0159ezd\u00edvka (nap\u0159\u00edklad SwiftFox) zobrazen\u00e1 u va\u0161ich koment\u00e1\u0159\u016f. Oboj\u00ed se odes\u00edl\u00e1 s va\u0161imi hlasy a koment\u00e1\u0159i a ani jedno neobsahuje osobn\u00ed \u00fadaje.",
+        pairedPhoneKey: "Jen v telefonu, kter\u00fd sp\u00e1rujete s desktopovou aplikac\u00ed: podpisov\u00fd kl\u00ed\u010d, kter\u00fd vytvo\u0159il prohl\u00ed\u017ee\u010d a kter\u00fd nejde exportovat, ID tohoto telefonu, ID po\u010d\u00edta\u010de, se kter\u00fdm je sp\u00e1rovan\u00fd, a \u010das sp\u00e1rov\u00e1n\u00ed. Kl\u00ed\u010d podepisuje p\u0159\u00edkazy, kter\u00e9 tento telefon pos\u00edl\u00e1, aby v\u00e1\u0161 po\u010d\u00edta\u010d mohl ov\u011b\u0159it, \u017ee poch\u00e1zej\u00ed z n\u011bj."
       },
       notUsedHeading: "Co nepou\u017e\u00edv\u00e1me",
       notUsed: [

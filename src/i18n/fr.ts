@@ -2235,7 +2235,7 @@ export const fr: LocaleTranslations = {
     },
     cookiePolicy: {
       tldr: [
-        "Ce site ne d\u00e9pose aucun cookie qui lui soit propre et conserve quelques r\u00e9glages dans le stockage local de votre navigateur. Chaque \u00e9l\u00e9ment est list\u00e9 ci-dessous.",
+        "Ce site ne d\u00e9pose aucun cookie qui lui soit propre. Il conserve quelques r\u00e9glages dans le stockage local de votre navigateur et, si vous associez un t\u00e9l\u00e9phone, une cl\u00e9 de signature dans la base de donn\u00e9es du navigateur de ce t\u00e9l\u00e9phone. Chaque \u00e9l\u00e9ment est list\u00e9 ci-dessous.",
         "Aucune publicit\u00e9, aucun suivi intersites, aucune empreinte num\u00e9rique, de quelque nature que ce soit.",
         "Vous pouvez tout effacer \u00e0 tout moment dans les r\u00e9glages de votre navigateur."
       ],
@@ -2264,12 +2264,14 @@ export const fr: LocaleTranslations = {
       },
       mechanisms: {
         cookie: "Cookie",
-        localStorage: "Stockage local"
+        localStorage: "Stockage local",
+        indexedDB: "Base de donn\u00e9es du navigateur (IndexedDB)"
       },
       lifetimes: {
         oneYear: "1 an",
         untilCleared: "Jusqu'\u00e0 ce que vous l'effaciez",
-        untilSignOut: "Jusqu'\u00e0 votre d\u00e9connexion"
+        untilSignOut: "Jusqu'\u00e0 votre d\u00e9connexion",
+        untilUnpaired: "Jusqu'\u00e0 ce que vous dissociiez le t\u00e9l\u00e9phone ou effaciez les donn\u00e9es du site"
       },
       purposes: {
         consent: "M\u00e9morise votre choix dans le bandeau cookies.",
@@ -2282,7 +2284,8 @@ export const fr: LocaleTranslations = {
         policySeen: "M\u00e9morise la derni\u00e8re fois que vous avez lu chaque politique de cette page, afin de signaler les mises \u00e0 jour.",
         dashboardActivity: "M\u00e9morise la derni\u00e8re fois que vous avez ouvert le tableau de bord et le nombre de nouvelles tentatives d'un \u00e9v\u00e9nement de d\u00e9monstration.",
         checklist: "M\u00e9morise les \u00e9l\u00e9ments des listes de contr\u00f4le du guide que vous avez coch\u00e9s.",
-        voting: "Un identifiant al\u00e9atoire qui vous permet de voter une seule fois par fonctionnalit\u00e9, et un pseudonyme al\u00e9atoire (par exemple SwiftFox) affich\u00e9 sur vos commentaires. Les deux sont envoy\u00e9s avec vos votes et commentaires, et aucun ne contient d'informations personnelles."
+        voting: "Un identifiant al\u00e9atoire qui vous permet de voter une seule fois par fonctionnalit\u00e9, et un pseudonyme al\u00e9atoire (par exemple SwiftFox) affich\u00e9 sur vos commentaires. Les deux sont envoy\u00e9s avec vos votes et commentaires, et aucun ne contient d'informations personnelles.",
+        pairedPhoneKey: "Uniquement sur un t\u00e9l\u00e9phone que vous associez \u00e0 l'application de bureau : une cl\u00e9 de signature cr\u00e9\u00e9e par le navigateur, qui ne peut pas l'exporter, un identifiant pour ce t\u00e9l\u00e9phone, l'identifiant de l'ordinateur auquel il est associ\u00e9 et la date de l'association. La cl\u00e9 signe les commandes envoy\u00e9es par ce t\u00e9l\u00e9phone, pour que votre ordinateur puisse v\u00e9rifier qu'elles viennent bien de lui."
       },
       notUsedHeading: "Ce que nous n'utilisons pas",
       notUsed: [

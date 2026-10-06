@@ -4,8 +4,8 @@
  * array, so the disclosure lives in exactly one place. ePrivacy treats
  * localStorage like a cookie, so both are listed.
  *
- * When you add, rename, or remove a cookie or a localStorage/sessionStorage key
- * anywhere in src/, update this register in the same commit and bump
+ * When you add, rename, or remove a cookie, a localStorage/sessionStorage key or
+ * an IndexedDB database anywhere in src/, update this register in the same commit and bump
  * POLICY_META.cookies in src/data/policy-changelog.ts. The user-facing purpose
  * text lives in the `cookiePolicy.purposes` i18n namespace (all 14 locales).
  *
@@ -24,14 +24,22 @@
  *   event-replay-retry-counts .......... src/stores/eventStore.ts
  *   checklist-<hash> ................... src/components/guide/blocks/Checklist.tsx
  *   personas-voter-id / -comment-author  src/components/sections/feature-voting/data.ts
+ *   personas-controller (IndexedDB) .... src/lib/commands/signer.ts (DB_NAME; store "keys", one
+ *                                        record "controller": the paired phone's non-extractable
+ *                                        Ed25519 key pair, its controller id, the paired desktop's
+ *                                        device id and the pairing time). Written only when a phone
+ *                                        pairs (controllerPlane.pairController); deleted on unpair.
+ *                                        signingSupported() generates a throwaway key it never stores.
  *
- * Nothing is written to sessionStorage or IndexedDB, and the consent-gated
- * website analytics (src/lib/analytics.ts) keep no state on the device.
+ * Nothing is written to sessionStorage, the command plane (src/lib/commands,
+ * src/stores/commandStore.ts, src/lib/sync) keeps nothing in localStorage, and
+ * the consent-gated website analytics (src/lib/analytics.ts) keep no state on
+ * the device.
  */
 import type { Translations } from "@/i18n/en";
 
 export type StorageCategory = "necessary" | "preferences" | "functional";
-export type StorageMechanism = "cookie" | "localStorage";
+export type StorageMechanism = "cookie" | "localStorage" | "indexedDB";
 export type StorageLifetime = keyof Translations["cookiePolicy"]["lifetimes"];
 export type StoragePurpose = keyof Translations["cookiePolicy"]["purposes"];
 
@@ -51,6 +59,7 @@ export const STORAGE_REGISTER: StorageEntry[] = [
   // Strictly necessary
   { names: ["personas-cookie-consent"], mechanism: "localStorage", category: "necessary", lifetime: "untilCleared", purpose: "consent" },
   { names: ["sb-*-auth-token"], mechanism: "localStorage", category: "necessary", lifetime: "untilSignOut", purpose: "authSession" },
+  { names: ["personas-controller"], mechanism: "indexedDB", category: "necessary", lifetime: "untilUnpaired", purpose: "pairedPhoneKey" },
 
   // Preferences
   { names: ["personas-theme"], mechanism: "localStorage", category: "preferences", lifetime: "untilCleared", purpose: "theme" },

@@ -27,6 +27,7 @@ export const POLICY_META: Record<PolicyId, PolicyMeta> = {
     latestUpdateIso: "2026-10-06",
     formattedUpdate: "October 2026",
     changes: [
+      "Listed the signing key a phone keeps in its browser database (IndexedDB) after you pair it with the desktop app. It signs the phone's commands so your computer can check where they came from, and it is deleted when you unpair the phone.",
       "Removed the prefer-full cookie. It belonged to a mobile view that has been retired, so the site now sets no cookies of its own.",
       "Corrected the claim that the site uses two cookies. The sign-in session and theme live in local storage, not cookies.",
       "Listed every cookie and local storage key the site writes, by purpose, with its lifetime, including the voting ID and comment nickname that were missing.",

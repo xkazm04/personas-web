@@ -1175,8 +1175,8 @@
     registerHeading: string;
     registerIntro: string;
     categories: Record<"necessary" | "preferences" | "functional" | "analytics", { title: string; description: string }>;
-    mechanisms: { cookie: string; localStorage: string };
-    lifetimes: { oneYear: string; untilCleared: string; untilSignOut: string };
+    mechanisms: { cookie: string; localStorage: string; indexedDB: string };
+    lifetimes: { oneYear: string; untilCleared: string; untilSignOut: string; untilUnpaired: string };
     purposes: {
       consent: string;
       authSession: string;
@@ -1189,6 +1189,7 @@
       dashboardActivity: string;
       checklist: string;
       voting: string;
+      pairedPhoneKey: string;
     };
     notUsedHeading: string;
     notUsed: string[];
@@ -5044,7 +5045,7 @@ export const en: Translations = {
   },
   cookiePolicy: {
     tldr: [
-      'This site sets no cookies of its own and keeps a few settings in your browser\'s local storage. Every item is listed below.',
+      'This site sets no cookies of its own. It keeps a few settings in your browser\'s local storage and, if you pair a phone, a signing key in that phone\'s browser database. Every item is listed below.',
       'No advertising, cross-site tracking, or fingerprinting of any kind.',
       'You can clear all of it anytime in your browser settings.',
     ],
@@ -5074,11 +5075,13 @@ export const en: Translations = {
     mechanisms: {
       cookie: 'Cookie',
       localStorage: 'Local storage',
+      indexedDB: 'Browser database (IndexedDB)',
     },
     lifetimes: {
       oneYear: '1 year',
       untilCleared: 'Until you clear it',
       untilSignOut: 'Until you sign out',
+      untilUnpaired: 'Until you unpair the phone or clear site data',
     },
     purposes: {
       consent: 'Remembers your choice in the cookie banner.',
@@ -5092,6 +5095,7 @@ export const en: Translations = {
       dashboardActivity: 'Remembers when you last opened the dashboard and how often a demo event was retried.',
       checklist: 'Remembers which guide checklist items you ticked.',
       voting: 'A random ID that lets you vote once per feature, and a random nickname (such as SwiftFox) shown on your comments. Both are sent with your votes and comments, and neither contains personal information.',
+      pairedPhoneKey: 'Only on a phone you pair with the desktop app: a signing key that the browser created and cannot export, an ID for this phone, the ID of the computer it is paired to, and when it was paired. The key signs the commands this phone sends, so your computer can check that they came from it.',
     },
     notUsedHeading: 'What we do not use',
     notUsed: [

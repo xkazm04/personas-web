@@ -6,8 +6,8 @@ import { STORAGE_REGISTER } from "./storage-register";
 /**
  * The Cookie Policy renders its storage list from STORAGE_REGISTER, so a key
  * written in src/ but missing from the register is an undisclosed key. This
- * scans every source module that touches browser storage or cookies and checks
- * each key it can see is declared.
+ * scans every source module that touches browser storage (local, session or
+ * IndexedDB) or cookies and checks each key it can see is declared.
  */
 const SRC = path.resolve(__dirname, "..");
 
@@ -20,15 +20,17 @@ function sourceFiles(dir: string, out: string[] = []): string[] {
   return out;
 }
 
-const TOUCHES_STORAGE = /localStorage\.|sessionStorage\.|document\.cookie\s*=|zustand\/middleware/;
+const TOUCHES_STORAGE = /localStorage\.|sessionStorage\.|indexedDB\.open\(|document\.cookie\s*=|zustand\/middleware/;
 
 /** Keys a module writes, as far as a static read can see them. */
 function keysIn(source: string): string[] {
   const keys = new Set<string>();
-  // const FOO_KEY = "literal" / STORAGE_KEY_PREFIX = "literal" (storage-key constants)
-  for (const m of source.matchAll(/\b[A-Z_]*(?:KEY|PREFIX)\s*=\s*["'`]([a-z0-9][a-z0-9-]*)["'`]/g)) keys.add(m[1]);
+  // const FOO_KEY = "literal" / STORAGE_KEY_PREFIX = "literal" / DB_NAME = "literal" (storage-key constants)
+  for (const m of source.matchAll(/\b[A-Z_]*(?:KEY|PREFIX|DB_NAME)\s*=\s*["'`]([a-z0-9][a-z0-9-]*)["'`]/g)) keys.add(m[1]);
   // localStorage.getItem("literal") / setItem("literal", ...)
   for (const m of source.matchAll(/(?:local|session)Storage\.(?:get|set|remove)Item\(\s*["'`]([a-z0-9][a-z0-9-]*)["'`]/g)) keys.add(m[1]);
+  // indexedDB.open("literal", ...) - an IndexedDB database
+  for (const m of source.matchAll(/indexedDB\.open\(\s*["'`]([a-z0-9][a-z0-9-]*)["'`]/g)) keys.add(m[1]);
   // document.cookie = "name=..."
   for (const m of source.matchAll(/document\.cookie\s*=\s*["'`]([a-z0-9-]+)=/g)) keys.add(m[1]);
   // template-literal families such as `checklist-${hash}`
