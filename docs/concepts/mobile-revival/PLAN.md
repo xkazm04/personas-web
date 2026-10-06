@@ -117,7 +117,7 @@ Each runs on the same demo and live data plane the desktop views use, behind `us
 | Phase | State |
 |---|---|
 | 0: clear the ground | **done 2026-10-06**: `dfc34a4`, `e1984d1`, `188f0bc`, `3eb281d`, `7caf9bd`, `b56b6ba`, `04ef958` |
-| 1: mobile landing | contest done (`mobile-landing`, verdict M5); porting Hive Reels → `/m` and Around the Clock → `/m2` |
+| 1: mobile landing | **ported 2026-10-06**: `/m` Hive Reels (`4c766fa`, `fb70cff`; 994.7 KB) and `/m2` Around the Clock (`0db4712`; 1010.2 KB), both noindex, no redirect yet; phone e2e 23/23. Launch (translate x13, proxy for `/`, robots) waits on the owner trying `/m2` on a phone |
 | 2: mobile dashboard | surveying agent management + sync signal (`PHASE2-SURVEY.md`); design waits on the `dashboard/spa` merge |
 
 ## Phase 1 contest brief (draft for `/contest --landing`)
