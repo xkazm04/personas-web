@@ -14,6 +14,10 @@ The survey this plan rests on, with anchors, is [SURVEY.md](SURVEY.md).
 | M2 | **Core story for the landing:** hero + use cases + Athena companion + pricing + FAQ + a phone-native CTA. | The heavy desktop spectacles (Hub, Agent Mind, Get Started dial, Team Canvas, Vision stack) are left out of `/m`. |
 | M3 | **Lab + review.** | 2-3 variants per section under `/preview/lab-m-*`, judged inside a phone frame. The owner picks the winners, which are promoted into `/m`, the same as the landing and /features labs. |
 | M4 | **English-only pending namespace.** | New copy goes in a named `mobileLab` / `mobile` namespace, English only. All 13 locales get translated once the designs settle, before launch. |
+| M5 | **Contest verdict (2026-10-06):** the winner is Sonnet v1 "Hive Reels" as the default `/m`; Sonnet v2 "Around the Clock" goes to a new test route `/m2`, which the owner likes more but wants to try on a real phone first. | Both are ported with the **web's fonts (Geist Sans / Geist Mono) and theming** (semantic tokens, all 11 themes), and with **no purple/pink gradient backgrounds**. Every variant had used its own visibly different type. The vault record is `.contest/Contest/contests/mobile-landing.md`. |
+| M6 | **Agent management is the core of the mobile dashboard.** | Phase 2 is designed around viewing and managing agents from the phone, not around a read-only overview. |
+| M7 | **The download CTA appears only when the user cannot sync to their app.** | A signed-in user whose desktop app syncs sees no download CTA inside the mobile dashboard. Anonymous visitors on the public `/m` and `/m2` always see it. The signal "can sync" is defined in `PHASE2-SURVEY.md`. |
+| M8 | **The CTA uses real actions only.** | There is no email service on the site, so "email me the link" is dropped. The CTA offers the native share sheet, copy link, and an `.ics` reminder (`src/components/mobile-landing/shared/handoff.ts`, `eedeab5`), plus the existing waitlist API for macOS and Linux. |
 | — | Route paths. | `/m` stays the mobile root. The old `/m/overview`, `/m/alerts`, `/m/messages` and `/m/reviews` pages are deleted (owner-approved), and their URLs are kept alive as redirects. |
 
 ## Phase 0: clear the ground (in progress)
@@ -113,8 +117,8 @@ Each runs on the same demo and live data plane the desktop views use, behind `us
 | Phase | State |
 |---|---|
 | 0: clear the ground | **done 2026-10-06**: `dfc34a4`, `e1984d1`, `188f0bc`, `3eb281d`, `7caf9bd`, `b56b6ba`, `04ef958` |
-| 1: mobile landing lab | next: run as a `/contest --landing` round (brief below) |
-| 2: mobile dashboard | waiting on the `dashboard/spa` merge |
+| 1: mobile landing | contest done (`mobile-landing`, verdict M5); porting Hive Reels → `/m` and Around the Clock → `/m2` |
+| 2: mobile dashboard | surveying agent management + sync signal (`PHASE2-SURVEY.md`); design waits on the `dashboard/spa` merge |
 
 ## Phase 1 contest brief (draft for `/contest --landing`)
 
