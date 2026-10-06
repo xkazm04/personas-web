@@ -3,7 +3,7 @@
 
 ## What it does
 Reassures the visitor that Personas never ships secrets to the cloud. A centered
-heading ("Your data never *leaves*") and a one-line promise ("Every credential is
+heading ("Your keys stay *yours*") and a one-line promise ("Every credential is
 encrypted on your device and kept in your OS's own vault.") sit above a single
 animated vault door. A key drops through three aligned openings to the centre;
 then the inner ring (**AES-256-GCM**), the middle ring (**OS keychain**) and the

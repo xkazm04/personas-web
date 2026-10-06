@@ -40,15 +40,17 @@ export default function SecurityPage() {
               Security & Privacy
             </p>
             <SectionHeading>
-              Your data{" "}
-              <GradientText className="drop-shadow-lg">never leaves</GradientText>
-              {" "}your machine
+              Your agents and keys{" "}
+              <GradientText className="drop-shadow-lg">stay</GradientText>
+              {" "}on your machine
             </SectionHeading>
             <p className="mx-auto mt-6 max-w-2xl text-base text-muted leading-relaxed font-light">
-              Unlike cloud AI platforms, Personas runs entirely on your desktop.
-              AES-256 encryption, OS-native keyring, anonymous telemetry with
-              personal data stripped, air-gap capable. Privacy by architecture,
-              not by policy.
+              Unlike cloud AI platforms, Personas runs on your desktop. Your
+              credentials, agents, and run history stay in local, encrypted
+              storage, and your prompts go only to the AI provider you choose,
+              or nowhere at all with a local Ollama model. AES-256 encryption,
+              OS-native keyring, anonymous telemetry with personal data
+              stripped, air-gap capable. Privacy by architecture, not by policy.
             </p>
           </motion.div>
           <SecurityPillarsGrid />
@@ -74,8 +76,9 @@ export default function SecurityPage() {
               <GradientText className="drop-shadow-lg">simplified</GradientText>
             </SectionHeading>
             <p className="mx-auto mt-6 max-w-2xl text-base text-muted leading-relaxed font-light">
-              When your data doesn&apos;t leave your machine, most compliance
-              requirements become dramatically simpler - or disappear entirely.
+              When no platform sits between you and your AI provider, most
+              compliance requirements become dramatically simpler - or
+              disappear entirely.
             </p>
           </motion.div>
 

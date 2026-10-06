@@ -12,7 +12,7 @@ export const SECURITY_PILLARS: SecurityPillar[] = [
   {
     title: "Local-First Architecture",
     description:
-      "Your agents, prompts, and outputs never leave your machine. The entire orchestration engine runs on your desktop — no cloud servers process your data.",
+      "Your agents, run history, and credentials stay on your machine, because the whole orchestration engine runs on your desktop. Your prompts go only to the AI provider you choose, or nowhere at all with a local Ollama model.",
     icon: "Monitor",
     color: "#06b6d4",
     details: [
@@ -78,11 +78,11 @@ export interface CompliancePoint {
 export const COMPLIANCE_POINTS: CompliancePoint[] = [
   {
     label: "GDPR",
-    description: "No personal data leaves your device. Data processing agreements with Personas are not needed — your data stays local.",
+    description: "Personas never receives your data, so you need no data processing agreement with Personas. Personal data in a prompt goes only to the AI provider you choose, under your own agreement with them, or nowhere with a local model.",
     status: "simplified",
     checklist: [
       "No Data Processing Agreement (DPA) required with Personas",
-      "No cross-border data transfer concerns",
+      "No cross-border transfers through Personas",
       "No third-party sub-processor inventory to maintain",
       "No consent management for Personas-side processing",
       "Data subject access requests are a local file lookup",
@@ -113,10 +113,10 @@ export const COMPLIANCE_POINTS: CompliancePoint[] = [
   },
   {
     label: "Data Residency",
-    description: "Your data resides wherever your machine is. No cross-border transfers through Personas.",
+    description: "Everything Personas stores resides wherever your machine is. No cross-border transfers through Personas.",
     status: "built-in",
     checklist: [
-      "Data physically stays on your hardware",
+      "Agents, history, and credentials physically stay on your hardware",
       "No replication to foreign data centers",
       "Jurisdiction is wherever your machine is located",
       "No multi-region failover moving data silently",
@@ -164,7 +164,7 @@ export const SECURITY_FAQS: SecurityFAQ[] = [
   {
     question: "Does Personas send data to the cloud?",
     answer:
-      "Your agents, prompts, outputs, and credentials stay on your desktop. AI model calls go directly from your device to your chosen provider; Personas never relays or stores them. The only data release builds send to us is anonymous error reports and usage signals (see the telemetry question below).",
+      "Your agents, outputs, run history, and credentials stay on your desktop. When an agent runs, its prompt goes directly from your device to the AI provider you chose (Claude by Anthropic), or stays on your machine with a local Ollama model; Personas never relays or stores it. The only data release builds send to us is anonymous error reports and usage signals (see the telemetry question below).",
   },
   {
     question: "How are credentials stored?",

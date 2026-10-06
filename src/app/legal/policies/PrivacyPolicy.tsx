@@ -11,9 +11,10 @@ export default function PrivacyPolicy({ changelog }: Props) {
         </p>
         <ul className="mt-3 space-y-2 text-sm leading-relaxed text-foreground/80">
           <li>
-            Your agents and data stay on your device. The desktop app sends
-            only anonymous error reports and usage signals, and you can turn
-            most of them off.
+            Your agents, run history, and keys stay on your device, and your
+            prompts go only to the AI provider you choose. The desktop app
+            sends us only anonymous error reports and usage signals, and you
+            can turn most of them off.
           </li>
           <li>
             API keys are encrypted with AES-256 and never leave your machine.

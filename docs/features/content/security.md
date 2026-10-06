@@ -2,7 +2,7 @@
 > The `/security` marketing page: pillar grid, compliance rows, a vertical architecture data-flow diagram, and a security FAQ — all selling Personas' local-first privacy story. · **Route:** `/security` · **Status:** Live (static)
 
 ## What it does
-Public-facing security & privacy page that argues "your data never leaves your machine." Five stacked sections (scroll-map nav: SECURITY → ARCHITECTURE → COMPLIANCE → FAQ → CTA):
+Public-facing security & privacy page that argues "your agents and keys stay on your machine": credentials, agents and run history stay local, and prompts go only to the AI provider the user chooses (Claude by Anthropic), or nowhere with a local Ollama model. Do not reintroduce "your data never leaves your machine": agent prompts do leave it, for the model provider. Five stacked sections (scroll-map nav: SECURITY → ARCHITECTURE → COMPLIANCE → FAQ → CTA):
 
 - **Pillar grid** — four security pillars (Local-First Architecture, AES-256-GCM Credential Vault, Minimal, Anonymous Telemetry, Air-Gap Capable), each a card with icon, blurb, and a checklist of bullet details.
 - **Architecture data-flow diagram** — a vertical stack of four layers (Your AI Provider → Personas Engine → Encrypted Vault → Your Machine), joined by animated SVG "pulse" connectors that travel up the chain; each layer card expands a detail line on hover.

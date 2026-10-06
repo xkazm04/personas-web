@@ -5,7 +5,7 @@ import { SECURITY_FAQS } from "@/data/security";
 export const metadata: Metadata = {
   title: "Security & Privacy",
   description:
-    "How Personas protects your data. Local-first architecture, AES-256 encryption, OS-native keyring, and only anonymous, PII-stripped telemetry. Your agents, prompts, and credentials stay on your machine.",
+    "How Personas protects your data. Local-first architecture, AES-256 encryption, OS-native keyring, and only anonymous, PII-stripped telemetry. Your agents and credentials stay on your machine, and your prompts go only to the AI provider you choose.",
   openGraph: {
     title: "Security & Privacy — Personas",
     description:
