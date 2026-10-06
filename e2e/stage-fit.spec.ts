@@ -7,7 +7,7 @@ import { test, expect, type Page } from "@playwright/test";
  * every viewport (911-1704px measured 2026-09-25): 1.6-3x the usable height of
  * a 1366x768 laptop, and on a 1440p monitor the next section's heading showed
  * under the current one. This spec measures each `[data-stage]` section on the
- * two long marketing pages at realistic INNER viewports (screen minus taskbar
+ * long marketing pages at realistic INNER viewports (screen minus taskbar
  * and browser chrome - a 1536x864 laptop, i.e. 1080p at 125%, shows ~730px),
  * and fails when a section is taller than the screen under the navbar.
  *
@@ -42,7 +42,7 @@ async function mountEverything(page: Page) {
   await page.waitForTimeout(1000);
 }
 
-for (const route of ["/", "/features"]) {
+for (const route of ["/", "/features", "/athena"]) {
   for (const viewport of VIEWPORTS) {
     test(`${route} fits one section per screen at ${viewport.name}`, async ({ page }) => {
       test.setTimeout(120_000);
@@ -113,7 +113,7 @@ for (const route of ["/", "/features"]) {
 }
 
 /**
- * Snap control (2026-10-06). The landing and /features snap every scroll to
+ * Snap control (2026-10-06). The landing, /features and /athena snap every scroll to
  * exactly one section (`html:has([data-snap-page])` in styles/stage.css). It
  * silently did nothing for months: <main> and every StageSection carried
  * `overflow: hidden`, which makes a box a scroll container, and a snap area
@@ -121,7 +121,7 @@ for (const route of ["/", "/features"]) {
  * and a scroll could stop anywhere. These cases pin both halves: no scroll
  * container between a stage and the viewport, and paging lands on stages.
  */
-for (const route of ["/", "/features"]) {
+for (const route of ["/", "/features", "/athena"]) {
   test(`${route} snaps each page-down to exactly one stage`, async ({ page }) => {
     test.setTimeout(120_000);
     await page.setViewportSize({ width: 1440, height: 790 });

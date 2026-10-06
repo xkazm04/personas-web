@@ -3060,15 +3060,9 @@
       };
     };
   };
-  athenaLab: {
+  athenaSections: {
     hero: {
-      label: string;
       moments: { event: string; line: string }[];
-      watch: {
-        aria: string;
-        streams: string[];
-        status: string;
-      };
       quiet: {
         aria: string;
         passed: string[];
@@ -3077,8 +3071,6 @@
       };
     };
     onboarding: {
-      label: string;
-      v1: { aria: string };
       v2: {
         aria: string;
         empty: string;
@@ -3094,43 +3086,11 @@
         statusEmpty: string;
         statusRunning: string;
       };
-      v3: {
-        aria: string;
-        you: string;
-        athena: string;
-        tools: string;
-        toolNames: string[];
-        doLabel: string;
-        usesLabel: string;
-        whenLabel: string;
-        dropHint: string;
-        start: string;
-        started: string;
-        lane: string;
-        laneEmpty: string;
-        running: string;
-        lines: { yourCall: string; connecting: string; starting: string };
-        statusRunning: string;
-      };
     };
     fleet: {
-      label: string;
-      v1: { art: string };
       v2: { art: string; serial: string; serialStep: string };
-      v3: { art: string };
     };
     workshop: {
-      label: string;
-      v1: { art: string };
-      v2: {
-        art: string;
-        rooms: string[];
-        jobs: string[];
-        keys: string;
-        tray: string;
-        note: string;
-        status: { full: string[]; short: string[] };
-      };
       v3: {
         art: string;
         items: string[];
@@ -3145,102 +3105,17 @@
       };
     };
     portfolio: {
-      label: string;
-      aria: { flight: string; roots: string; vitals: string };
+      aria: { roots: string };
       cause: string;
       you: string;
-      busy: string[];
-      axisStart: string;
-      axisNow: string;
     };
     memory: {
-      label: string;
       stylised: string;
       v1: {
         artLabel: string;
       };
-      v2: {
-        artLabel: string;
-        when: { day: string; weeks: string; months: string };
-        ask: string;
-        brief: string;
-        phrases: { short: string; thursday: string; staging: string; billing: string };
-        done: string;
-        words: string;
-        groups: { prefer: string; worked: string; decided: string };
-        status: {
-          spell: string;
-          spellShort: string;
-          keeps: string;
-          keepsShort: string;
-          twice: string;
-          twiceShort: string;
-          carried: string;
-          carriedShort: string;
-          brief: string;
-          briefShort: string;
-          already: string;
-          alreadyShort: string;
-        };
-      };
-      v3: {
-        artLabel: string;
-        title: string;
-        you: string;
-        done: string;
-        firstTime: string;
-        later: string;
-        asked: string;
-        questions: { ship: string; test: string; careful: string; length: string };
-        answers: { ship: string; test: string; careful: string; length: string };
-        status: {
-          ask: string;
-          askShort: string;
-          clears: string;
-          clearsShort: string;
-          four: string;
-          fourShort: string;
-          again: string;
-          againShort: string;
-          none: string;
-          noneShort: string;
-        };
-      };
     };
     oneMind: {
-      label: string;
-      v1: {
-        aria: string;
-        typed: string;
-        spoken: string;
-        when: string[];
-      };
-      v2: {
-        aria: string;
-        byVoice: string;
-        moments: {
-          time: string;
-          place: string;
-          you: string;
-          her: { before: string; recall: string; after: string };
-        }[];
-        ship: string;
-        tokens: string[];
-        status: {
-          morning: string;
-          morningShort: string;
-          kept: string;
-          keptShort: string;
-          midday: string;
-          middayShort: string;
-          picked: string;
-          pickedShort: string;
-          evening: string;
-          eveningShort: string;
-          both: string;
-          bothShort: string;
-        };
-      };
       v3: {
         aria: string;
         extras: string[];
@@ -3289,7 +3164,7 @@ export const PENDING_TRANSLATION = [
   'fleetPlayground',
   'landingSections',
   'featuresSections',
-  'athenaLab',
+  'athenaSections',
 ] as const;
 
 export type PendingNamespace = (typeof PENDING_TRANSLATION)[number];
@@ -6856,19 +6731,13 @@ export const en: Translations = {
       },
     },
   },
-  athenaLab: {
+  athenaSections: {
     hero: {
-      label: 'Athena lab: Meet Athena',
       moments: [
         { event: '3pm moved', line: '3pm moved. Prep is ready.' },
         { event: 'Build failed', line: 'Build broke overnight. Fix drafted.' },
         { event: 'Client replied', line: 'Client replied. Draft is waiting.' },
       ],
-      watch: {
-        aria: 'Athena watching your inbox, calendar, builds, agents and docs, and speaking up only when something needs you',
-        streams: ['Inbox', 'Calendar', 'Builds', 'Your agents', 'Shared docs'],
-        status: '{seen} things seen today · {spoken} worth a word',
-      },
       quiet: {
         aria: 'Your day streaming past Athena: she lets the noise pass and speaks only when something matters',
         passed: ['Newsletter', 'Build passed', 'Calendar sync', 'Auto-reply', '12 new likes', 'Backup done'],
@@ -6877,10 +6746,6 @@ export const en: Translations = {
       },
     },
     onboarding: {
-      label: 'Athena lab: Onboarding partner',
-      v1: {
-        aria: 'Stylized app: Athena walks you through picking a template, connecting Slack, choosing when it runs and creating your first agent',
-      },
       v2: {
         aria: 'Illustration: an empty workspace that Athena sets up with you. You pick your tools and first jobs; she plugs the tools in, raises a desk for each agent and starts them running',
         empty: 'No agents yet',
@@ -6896,74 +6761,15 @@ export const en: Translations = {
         statusEmpty: 'empty workspace · nothing set up',
         statusRunning: 'workspace live · {n} agents running',
       },
-      v3: {
-        aria: 'Illustration: a shared setup board with two cursors. Yours picks what each agent does and when; Athena\'s drags in and connects your tools and starts it, and the agents land in a Running lane',
-        you: 'you',
-        athena: 'Athena',
-        tools: 'Your tools',
-        toolNames: ['Slack', 'Gmail', 'GitHub', 'Notion'],
-        doLabel: 'What should it do?',
-        usesLabel: 'Uses',
-        whenLabel: 'When',
-        dropHint: 'drop a tool',
-        start: 'Start',
-        started: 'Started',
-        lane: 'Running',
-        laneEmpty: 'Nothing running yet',
-        running: 'running',
-        lines: { yourCall: 'your call', connecting: 'I\'ll connect it', starting: 'starting it' },
-        statusRunning: '{n} running · set up together',
-      },
     },
     fleet: {
-      label: 'Athena lab: Fleet orchestration',
-      v1: {
-        art: 'One sentence in your own words comes apart into four tasks, four agents work them at once, and one answer comes back.',
-      },
       v2: {
         art: 'One sentence becomes a team of four whose rings close together around Athena, long before one person working task by task would finish.',
         serial: 'one at a time',
         serialStep: '{n} of {total}',
       },
-      v3: {
-        art: 'One sentence becomes a team of four that goes out to your help desk, inbox, issue tracker and analytics at once, and comes home with one answer.',
-      },
     },
     workshop: {
-      label: 'Athena lab: The lines you drew hold',
-      v1: {
-        art: 'Illustration: a lit yard inside a line you drew. She works everywhere inside it, however far you turn the dial, and the work on your side of the line waits for you.',
-      },
-      v2: {
-        art: 'Illustration: a floor plan of your work. You hand her keys to some rooms and she works in all of them; at a door you kept, she stops and brings the work to you.',
-        rooms: ['Code', 'Docs', 'Payments', 'Tasks', 'Live site', 'Team chat'],
-        jobs: ['review the fix', 'update the guide', 'sort new bugs', 'answer the team'],
-        keys: 'your keys',
-        tray: 'for you',
-        note: 'Ship the fix to the live site?',
-        status: {
-          full: [
-            'your work, room by room',
-            'you hand her one key',
-            'then a few more',
-            'she works wherever you let her in',
-            'this one needs a door you kept',
-            'she stops at your door',
-            'and brings it to you',
-            'more keys, more done \u2014 your doors stay yours',
-          ],
-          short: [
-            'room by room',
-            'one key',
-            'a few more',
-            'wherever you let her in',
-            'a door you kept',
-            'she stops at your door',
-            'brought to you',
-            'your doors stay yours',
-          ],
-        },
-      },
       v3: {
         art: 'Illustration: a field of work sorted by how much is at stake, cut by one line you set. She does everything under it on her own, at any volume; everything over it waits for you. Drag the line to move it.',
         items: [
@@ -7004,130 +6810,19 @@ export const en: Translations = {
       },
     },
     portfolio: {
-      label: 'Athena lab: Nothing quietly rots',
       aria: {
-        flight: 'Stylised aerial map of your projects: Athena checks them all, flies down to the one that is slipping, finds why and opens the fix.',
         roots: 'Stylised garden of your projects and their roots: one is wilting, Athena traces it down to the rotten root and starts the fix.',
-        vitals: 'Stylised monitor of every project over two weeks: one goes quiet, Athena finds why and starts the fix.',
       },
       cause: 'Payment library',
       you: 'Your week',
-      busy: ['Launch', 'Offsite', 'Hiring', 'Board prep'],
-      axisStart: '2 weeks ago',
-      axisNow: 'today',
     },
     memory: {
-      label: 'Athena lab: The more she carries',
       stylised: 'stylised',
       v1: {
         artLabel: 'Five days of working with Athena. Each day\'s talk builds up; after each full day she keeps one thing about how you work on a growing shelf, and days later the first thing she kept comes back into the work.',
       },
-      v2: {
-        artLabel: 'The same request three times. On day one you spell out every detail; by week three you only add what is new; by month two three words are enough, because Athena carries what you prefer, what worked and what you decided.',
-        when: { day: 'Day 1', weeks: 'Week 3', months: 'Month 2' },
-        ask: 'Draft the release note',
-        brief: 'Release note, please',
-        phrases: {
-          short: 'short version first',
-          thursday: 'we ship Thursday',
-          staging: 'test on staging',
-          billing: 'careful with billing',
-        },
-        done: 'Done',
-        words: '{n} words',
-        groups: { prefer: 'what you prefer', worked: 'what worked', decided: 'what you decided' },
-        status: {
-          spell: 'day one: you spell everything out',
-          spellShort: 'you spell it all out',
-          keeps: 'she keeps what you were sure about',
-          keepsShort: 'she keeps what matters',
-          twice: 'week three: you only add what is new',
-          twiceShort: 'only what is new',
-          carried: 'said twice, so now she carries it',
-          carriedShort: 'now she carries it',
-          brief: 'month two: three words are enough',
-          briefShort: 'three words are enough',
-          already: 'everything you ever told her, already in it',
-          alreadyShort: 'already in it',
-        },
-      },
-      v3: {
-        artLabel: 'A map of how you work. The first time Athena ships a fix for you she stops four times to ask, and every answer clears the fog around one landmark. A month later she takes the same road with every landmark lit and asks nothing.',
-        title: 'How you work',
-        you: 'you',
-        done: 'shipped',
-        firstTime: 'the first time',
-        later: 'a month later',
-        asked: 'questions asked',
-        questions: {
-          ship: 'When do you ship?',
-          test: 'Where do we try it?',
-          careful: 'Anything sensitive?',
-          length: 'Long or short?',
-        },
-        answers: { ship: 'Thursdays', test: 'On staging', careful: 'Billing', length: 'Short first' },
-        status: {
-          ask: 'the first time, she has to ask',
-          askShort: 'she has to ask',
-          clears: 'every answer clears a little more',
-          clearsShort: 'every answer clears more',
-          four: 'four questions to get it right',
-          fourShort: 'four questions',
-          again: 'a month later, the same road',
-          againShort: 'the same road, later',
-          none: 'no questions this time',
-          noneShort: 'no questions',
-        },
-      },
     },
     oneMind: {
-      label: 'Athena lab: Always the same person',
-      v1: {
-        aria: 'Six conversations with Athena, typed and spoken, from today and last week, all feeding one memory. Asked aloud in one of them, she answers from the others, and every line stays joined to where she heard it.',
-        typed: 'typed',
-        spoken: 'spoken',
-        when: ['1h ago', 'Monday', 'last week', 'yesterday', 'today', 'Tuesday'],
-      },
-      v2: {
-        aria: 'One day with Athena: at your desk in the morning, on a walk by voice at midday, in a different project in the evening. Each time she picks up where you left off, and it is the same face at every stop.',
-        byVoice: 'by voice',
-        moments: [
-          {
-            time: '9:10',
-            place: 'at your desk',
-            you: 'Hold the release until the tests pass.',
-            her: { before: 'Holding it. I will tell you when they do.', recall: '', after: '' },
-          },
-          {
-            time: '12:40',
-            place: 'on a walk',
-            you: 'Anything I should know?',
-            her: { before: '', recall: 'The tests passed.', after: 'Want the release out?' },
-          },
-          {
-            time: '18:05',
-            place: 'another project',
-            you: 'Can pricing go live on Friday?',
-            her: { before: 'Yes.', recall: 'The release is out,', after: 'so nothing blocks it.' },
-          },
-        ],
-        ship: 'Ship it.',
-        tokens: ['hold until tests pass', 'release shipped'],
-        status: {
-          morning: 'morning, at your desk',
-          morningShort: 'morning',
-          kept: 'she keeps what you said',
-          keptShort: 'she keeps it',
-          midday: 'midday, by voice, on a walk',
-          middayShort: 'midday, by voice',
-          picked: 'she picks up where you left off',
-          pickedShort: 'picked up',
-          evening: 'evening, a different project',
-          eveningShort: 'evening',
-          both: 'she already knows how the day went',
-          bothShort: 'she knows the day',
-        },
-      },
       v3: {
         aria: 'A wall of conversations with Athena, typed and spoken, one for every project, falls into register as a single face. Open any one of them and ask where you were: she picks it up exactly there.',
         extras: ['Hiring', 'The Q3 plan', 'Landing copy', 'Support inbox', 'Mobile app', 'Data import', 'Weekly notes', 'Team offsite'],

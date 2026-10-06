@@ -28,6 +28,9 @@ import {
  *   server HTML on first load; a deep link would find nothing to scroll to.
  *   The wrappers are always present, so /athena#memory works at first paint
  *   and after the chunk lands. Same reasoning as /how.
+ * - Every section is a desktop stage (styles/stage.css): the hero one full
+ *   screen, every other one exactly one stage under the navbar, so the page
+ *   snaps one section per scroll like the landing and /features (`snap`).
  * - Order is the argument: she introduces herself, sets your workspace up
  *   with you, turns a sentence into a working team, shows the machinery that
  *   answers to her, widens to the whole portfolio, grows over time, and
@@ -51,8 +54,11 @@ export default function AthenaPage() {
   ];
 
   return (
-    <InfoPageLayout scrollMapItems={scrollMapItems}>
-      <div id="meet" className="scroll-mt-24">
+    <InfoPageLayout scrollMapItems={scrollMapItems} snap>
+      {/* On the desktop stage the hero sits under the navbar (it pads the bar
+          in itself), so it pulls up over the layout's navbar spacer - the
+          /features hero does the same. */}
+      <div id="meet" className="scroll-mt-24 stage:-mt-(--nav-h)">
         <LazyAthenaHero />
       </div>
 
