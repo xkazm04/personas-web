@@ -11,8 +11,8 @@ export const POLICY_META: Record<PolicyId, PolicyMeta> = {
     latestUpdateIso: "2026-10-06",
     formattedUpdate: "October 2026",
     changes: [
-      "Added \"Optional cloud sync\": what the desktop app copies to your account when you turn sync on, the separate Sync notes and Sync chats switches (both off by default), how note and chat text is masked and capped, what turning a switch off deletes, and where the data is stored.",
-      "Added \"Paired phones\": what a phone you pair can do without a click on your computer, what it cannot do, the signing key it keeps, and how to revoke it.",
+      "Added \"Optional cloud sync\": what the desktop app copies to your account when you turn sync on, the separate Sync notes and Sync chats switches (both off by default; Sync chats covers your conversations with Athena and with your agents), how note and chat text is masked and capped, what turning a switch off deletes, and where the data is stored.",
+      "Added \"Paired phones\": what a phone you pair can do without a click on your computer, including chatting with Athena or with an agent that is not paused, what it cannot do, the signing key it keeps, and how to revoke it.",
       "Corrected the statements that nothing the desktop app creates is ever sent to our servers. That holds unless you turn on cloud sync; credentials are never sent either way.",
       "The policy is now available in all 14 site languages.",
       "Corrected the statement that the desktop app has zero telemetry. Release builds send anonymous error reports and usage signals to Sentry; the new section lists what is sent, what is never sent, and how to turn it off.",

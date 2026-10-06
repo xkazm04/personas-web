@@ -164,7 +164,7 @@ export const SECURITY_FAQS: SecurityFAQ[] = [
   {
     question: "Does Personas send data to the cloud?",
     answer:
-      "Only what you choose. By default your agents, outputs, run history, and credentials stay on your desktop. When an agent runs, its prompt goes directly from your device to the AI provider you chose (Claude by Anthropic), or stays on your machine with a local Ollama model; Personas never relays it. Release builds send us anonymous error reports and usage signals (see the telemetry question below). Cloud sync is optional and off until you turn it on: it copies your agents and runs to your own account so you can follow them on the web, notes and Athena chats sync only behind their own switches, and credentials never sync. The Privacy Policy lists exactly what syncs.",
+      "Only what you choose. By default your agents, outputs, run history, and credentials stay on your desktop. When an agent runs, its prompt goes directly from your device to the AI provider you chose (Claude by Anthropic), or stays on your machine with a local Ollama model; Personas never relays it. Release builds send us anonymous error reports and usage signals (see the telemetry question below). Cloud sync is optional and off until you turn it on: it copies your agents and runs to your own account so you can follow them on the web, notes and your chats with Athena and with your agents sync only behind their own switches, and credentials never sync. The Privacy Policy lists exactly what syncs.",
   },
   {
     question: "How are credentials stored?",
