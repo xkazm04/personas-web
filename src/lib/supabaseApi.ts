@@ -12,7 +12,7 @@
  * throw a clear error rather than silently no-op.
  */
 import { getSupabase } from "./supabase";
-import { ApiError, type ApiClient } from "./api";
+import { ApiError, type ApiClient, type CommandAck } from "./api";
 import { halvesTrend } from "./observabilitySeries";
 import { EVENT_STATUS_TRANSITIONS } from "./eventStatusFsm";
 import { DEVICE_FRESH_MS } from "./sync/reachability";
@@ -55,6 +55,44 @@ const READ_ONLY = "Cloud-sync mode is read-only — remote control ships in Phas
 
 function readOnly(): never {
   throw new ApiError(501, READ_ONLY);
+}
+
+/**
+ * The desktop a persona's command goes to when this tab has not loaded it:
+ * the persona's owner (`synced_personas.device_id`, spec 2.2), else the newest
+ * synced device. Null when neither exists or the read fails: commandStore then
+ * records the command failed `no_device`, so the row's chip says so.
+ */
+async function ownerDeviceFromMirror(personaId: string): Promise<string | null> {
+  try {
+    const sb = getSupabase();
+    const owned = await rows<{ device_id: string | null }>(
+      sb.from("synced_personas").select("device_id").eq("id", personaId).limit(1),
+    );
+    if (owned[0]?.device_id) return owned[0].device_id;
+    const newest = await rows<{ device_id: string }>(
+      sb.from("synced_devices").select("device_id").order("last_seen_at", { ascending: false, nullsFirst: false }).limit(1),
+    );
+    return newest[0]?.device_id ?? null;
+  } catch {
+    return null;
+  }
+}
+
+/**
+ * Send a v1 verb as a signed `pending_commands` row through `commandStore`
+ * (PHASE2-SPEC.md 2.2, 6.2): the answer is the command to follow, not the
+ * effect. Loaded lazily: commandStore reaches this module through the `api`
+ * proxy, so a static import would be a cycle.
+ */
+async function sendCommand(
+  verb: "pause_persona" | "resume_persona" | "cancel_execution" | "run_persona",
+  personaId: string,
+  params: Record<string, unknown>,
+): Promise<CommandAck> {
+  const { sendPersonaCommand, knownOwnerDevice } = await import("./commands/personaCommands");
+  const deviceId = knownOwnerDevice(personaId) ?? (await ownerDeviceFromMirror(personaId));
+  return sendPersonaCommand(verb, personaId, params, { demo: false, deviceId });
 }
 
 /** Await a supabase query, throwing a uniform ApiError on failure. */
@@ -368,44 +406,26 @@ export const supabaseApi: ApiClient = {
     };
   },
 
-  cancelExecution: async () => readOnly(),
-
-  // Phase 2: a run from the dashboard is a *request*, not a direct execution.
-  // Insert a pending_commands row targeting the most-recently-active device;
-  // the desktop surfaces an approval prompt and runs it locally on approval.
-  // Returns the command id as the handle (status "queued" = awaiting approval).
-  executePersona: async (personaId: string, prompt: string) => {
-    const sb = getSupabase();
-    const devices = await rows<{ device_id: string }>(
-      sb
-        .from("synced_devices")
-        .select("device_id")
-        .order("last_seen_at", { ascending: false, nullsFirst: false })
-        .limit(1),
-    );
-    if (devices.length === 0) {
-      throw new ApiError(
-        409,
-        "No synced device is available. Open the desktop app and turn on cloud sync to run from the dashboard.",
+  // Phase 2 (PHASE2-SPEC.md 2.2, 6.2): every action is a signed command to the
+  // desktop that owns the persona, run there without per-command approval when
+  // this browser is a paired controller, and answered with the command id.
+  // cancel_execution names the persona (the desktop's owner check).
+  cancelExecution: async (id: string, personaId?: string) => {
+    let owner = personaId ?? null;
+    if (!owner) {
+      const r = await rows<{ persona_id: string }>(
+        getSupabase().from("synced_executions").select("persona_id").eq("id", id).limit(1),
       );
+      if (r.length === 0) throw new ApiError(404, "Execution not found");
+      owner = r[0].persona_id;
     }
-    const inserted = await rows<{ id: string }>(
-      sb
-        .from("pending_commands")
-        .insert({
-          command_type: "run_persona",
-          persona_id: personaId,
-          prompt,
-          target_device_id: devices[0].device_id,
-          requested_from: "web",
-          status: "pending",
-        })
-        .select("id"),
-    );
-    const id = inserted[0]?.id;
-    if (!id) throw new ApiError(500, "Failed to queue the run request.");
-    return { executionId: id, status: "queued" as PersonaExecutionStatus };
+    return sendCommand("cancel_execution", owner, { executionId: id });
   },
+
+  executePersona: async (personaId: string, prompt: string) => sendCommand("run_persona", personaId, { prompt }),
+
+  pausePersona: async (id: string) => sendCommand("pause_persona", id, {}),
+  resumePersona: async (id: string) => sendCommand("resume_persona", id, {}),
 
   listEvents: async (opts?: { eventType?: string; status?: string; limit?: number }) => {
     // Reviews live in their own synced table, not the event bus — adapt them

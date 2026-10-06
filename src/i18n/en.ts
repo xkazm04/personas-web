@@ -3593,12 +3593,31 @@
       empty: string;
       error: string;
       retry: string;
-      active: string;
-      paused: string;
+      state: { running: string; paused: string; failed: string; idle: string };
+      pausedRunning: string;
       pause: string;
       resume: string;
       pauseLabel: string;
       resumeLabel: string;
+      openLabel: string;
+      moreLabel: string;
+      run: string;
+      runTitle: string;
+      runPromptLabel: string;
+      runPromptHint: string;
+      runTooLong: string;
+      runSend: string;
+      cancelRun: string;
+      cancelOldRun: string;
+      detailTabsLabel: string;
+      tabs: { activity: string; chat: string };
+      tabSoon: string;
+      activityLoading: string;
+      activityEmpty: string;
+      activityError: string;
+      runStarted: string;
+      runDuration: string;
+      runCost: string;
       demoNote: string;
     };
     reach: {
@@ -8201,12 +8220,31 @@ export const en: Translations = {
       empty: 'No agents yet. Create one in Personas on your computer.',
       error: 'Couldn\'t load your agents.',
       retry: 'Try again',
-      active: 'Active',
-      paused: 'Paused',
+      state: { running: 'Running', paused: 'Paused', failed: 'Last run failed', idle: 'Idle' },
+      pausedRunning: 'Paused, a run is still going',
       pause: 'Pause',
       resume: 'Resume',
       pauseLabel: 'Pause {name}',
       resumeLabel: 'Resume {name}',
+      openLabel: 'Open {name}',
+      moreLabel: 'More actions for {name}',
+      run: 'Run...',
+      runTitle: 'Run {name}',
+      runPromptLabel: 'What should it do?',
+      runPromptHint: 'Your computer starts the run right away. Follow it in Activity.',
+      runTooLong: 'Keep it under {max} characters.',
+      runSend: 'Run now',
+      cancelRun: 'Cancel run',
+      cancelOldRun: 'This run started over a day ago, so this phone may not see it stop.',
+      detailTabsLabel: 'Agent details',
+      tabs: { activity: 'Activity', chat: 'Chat' },
+      tabSoon: 'Soon',
+      activityLoading: 'Loading runs...',
+      activityEmpty: 'No runs yet.',
+      activityError: 'Couldn\'t load the runs.',
+      runStarted: 'Started {ago}',
+      runDuration: 'Took {duration}',
+      runCost: 'Cost {cost}',
       demoNote: 'Demo: a simulated computer answers these commands.',
     },
     reach: {

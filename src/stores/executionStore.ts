@@ -1,7 +1,8 @@
 import { create } from "zustand";
 import { useMemo } from "react";
-import { api } from "@/lib/api";
+import { api, isCommandAck } from "@/lib/api";
 import { usePersonaStore } from "./personaStore";
+import { settleCommand } from "./commandStore";
 import type {
   Persona,
   PersonaExecution,
@@ -116,7 +117,15 @@ export const useExecutionStore = create<ExecutionState>((set, get) => ({
 
     set((s) => ({ cancellingIds: { ...s.cancellingIds, [id]: true } }));
     try {
-      await api.cancelExecution(id);
+      const ack = await api.cancelExecution(id, current?.personaId);
+      // On a command plane (demo, live sync) the ack is a command, not the
+      // effect: the row flips only once the desktop reports it completed.
+      if (isCommandAck(ack)) {
+        const outcome = await settleCommand(ack.commandId);
+        if (!outcome || outcome.status !== "completed") {
+          throw new Error(outcome?.error ?? "Failed to cancel execution");
+        }
+      }
       set((s) => {
         const rawExecutions = s.rawExecutions.map((e) =>
           e.id === id ? { ...e, status: "cancelled" as const } : e,

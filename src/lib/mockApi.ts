@@ -35,7 +35,7 @@ import {
   type HealthCheckSection,
   type ValueRollup,
 } from "./mock-dashboard-data";
-import { ApiError, type ApiClient } from "./api";
+import { ApiError, type ApiClient, type CommandAck } from "./api";
 import type { SyncedNote } from "./notes/notesModel";
 import type {
   Persona,
@@ -55,9 +55,11 @@ import type {
   ToolUsageSummary,
   ToolUsageOverTime,
   ToolUsageByPersona,
-  PersonaExecutionStatus,
   EventStatus,
 } from "./types";
+
+/** The demo's commands go to the scripted desktop, which needs no device id. */
+const DEMO_TARGET = { demo: true, deviceId: null } as const;
 
 function delay(ms = 300): Promise<void> {
   return new Promise((r) => setTimeout(r, ms));
@@ -129,14 +131,28 @@ export const mockApi: ApiClient = {
     return getMockExecutionDetail(id, offset);
   },
 
-  cancelExecution: async (id: string): Promise<{ executionId: string; status: PersonaExecutionStatus }> => {
-    await delay();
-    return { executionId: id, status: "cancelled" };
+  // The demo is a command plane like the live mirror (PHASE2-SPEC.md 6.3):
+  // these send to the scripted desktop in mockCommandPlane, which answers on
+  // realistic timings and writes the effect through to the fixtures.
+  cancelExecution: async (id: string, personaId?: string): Promise<CommandAck> => {
+    const owner = personaId ?? MOCK_EXECUTIONS.find((e) => e.id === id)?.personaId ?? "";
+    const { sendPersonaCommand } = await import("./commands/personaCommands");
+    return sendPersonaCommand("cancel_execution", owner, { executionId: id }, DEMO_TARGET);
   },
 
-  executePersona: async (_personaId: string, _prompt: string): Promise<{ executionId: string; status: PersonaExecutionStatus }> => {
-    await delay(500);
-    return { executionId: `e-new-${Date.now()}`, status: "queued" };
+  executePersona: async (personaId: string, prompt: string): Promise<CommandAck> => {
+    const { sendPersonaCommand } = await import("./commands/personaCommands");
+    return sendPersonaCommand("run_persona", personaId, { prompt }, DEMO_TARGET);
+  },
+
+  pausePersona: async (id: string): Promise<CommandAck> => {
+    const { sendPersonaCommand } = await import("./commands/personaCommands");
+    return sendPersonaCommand("pause_persona", id, {}, DEMO_TARGET);
+  },
+
+  resumePersona: async (id: string): Promise<CommandAck> => {
+    const { sendPersonaCommand } = await import("./commands/personaCommands");
+    return sendPersonaCommand("resume_persona", id, {}, DEMO_TARGET);
   },
 
   listEvents: async (opts?: {

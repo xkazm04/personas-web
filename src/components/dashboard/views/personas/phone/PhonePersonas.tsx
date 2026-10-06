@@ -1,21 +1,33 @@
 "use client";
 
-import { useEffect } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { useShallow } from "zustand/react/shallow";
 import { Bot, Loader2 } from "lucide-react";
 import { useTranslation } from "@/i18n/useTranslation";
 import { useAuthStore } from "@/stores/authStore";
 import { usePersonaStore } from "@/stores/personaStore";
+import { useExecutionStore } from "@/stores/executionStore";
 import { useSyncReachability } from "@/hooks/useSyncReachability";
 import PhonePersonaRow from "./PhonePersonaRow";
 import ReachabilityNotice from "./ReachabilityNotice";
+import PersonaActionsSheet from "./PersonaActionsSheet";
+import PersonaDetailSheet from "./PersonaDetailSheet";
+
+/** One sheet at a time; `open` flips first so the sheet can slide out with its content. */
+interface SheetState {
+  kind: "detail" | "actions";
+  personaId: string;
+  open: boolean;
+}
 
 /**
  * `/dashboard/personas` at phone width (PLAN M6 + M13, PHASE2-SPEC.md 6.2):
  * agent management, not the desktop stage. The reachability banner, then one
- * row per persona with its state and Pause/Resume. Reads `personaStore`
- * through the `api` proxy, so demo (mockApi) and live (the sync mirror) share
- * one path; never `fleet.json`, which has no live counterpart.
+ * row per persona with its state (Running / Paused / Failed / Idle),
+ * Pause/Resume and an overflow (Run..., Cancel run); a row opens its detail
+ * sheet (Activity). Reads `personaStore` and `executionStore` through the
+ * `api` proxy, so demo (mockApi) and live (the sync mirror) share one path;
+ * never `fleet.json`, which has no live counterpart.
  */
 export default function PhonePersonas() {
   const { t } = useTranslation();
@@ -26,8 +38,15 @@ export default function PhonePersonas() {
     useShallow((s) => ({ ids: s.personaIds, loading: s.personasLoading, error: s.personasError })),
   );
 
+  const [sheet, setSheet] = useState<SheetState | null>(null);
+  const openDetail = useCallback((personaId: string) => setSheet({ kind: "detail", personaId, open: true }), []);
+  const openActions = useCallback((personaId: string) => setSheet({ kind: "actions", personaId, open: true }), []);
+  const closeSheet = useCallback(() => setSheet((s) => (s ? { ...s, open: false } : s)), []);
+
   useEffect(() => {
     void usePersonaStore.getState().fetchPersonas();
+    // Row states and Activity read the runs; live, Realtime keeps them current after this.
+    void useExecutionStore.getState().fetchExecutions();
   }, []);
 
   return (
@@ -60,12 +79,25 @@ export default function PhonePersonas() {
       ) : (
         <ul aria-label={copy.title} className="flex flex-col gap-2">
           {ids.map((id) => (
-            <PhonePersonaRow key={id} id={id} reach={reach} demo={demo} />
+            <PhonePersonaRow key={id} id={id} reach={reach} onOpenDetail={openDetail} onOpenActions={openActions} />
           ))}
         </ul>
       )}
 
       {demo && <p className="text-sm text-muted-dark">{copy.demoNote}</p>}
+
+      <PersonaDetailSheet
+        open={sheet?.kind === "detail" && sheet.open}
+        personaId={sheet?.kind === "detail" ? sheet.personaId : null}
+        now={reach.now}
+        onClose={closeSheet}
+      />
+      <PersonaActionsSheet
+        open={sheet?.kind === "actions" && sheet.open}
+        personaId={sheet?.kind === "actions" ? sheet.personaId : null}
+        reach={reach}
+        onClose={closeSheet}
+      />
     </div>
   );
 }

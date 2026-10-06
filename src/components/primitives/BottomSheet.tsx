@@ -6,6 +6,7 @@ import { X } from "lucide-react";
 
 import { useTranslation } from "@/i18n/useTranslation";
 import { useFocusTrap } from "@/hooks/useFocusTrap";
+import { useStillMotion } from "@/hooks/useStillMotion";
 
 /**
  * Bottom sheet for mobile detail views — the native pattern that replaces a
@@ -15,7 +16,9 @@ import { useFocusTrap } from "@/hooks/useFocusTrap";
  * scroll while open and respects the bottom safe-area inset.
  *
  * Kept from the retired /m tree (was `components/mobile/MobileSheet`) for the
- * new /m - see docs/concepts/mobile-revival/PLAN.md. Nothing imports it yet.
+ * new /m - see docs/concepts/mobile-revival/PLAN.md. First used by the phone
+ * Personas view (persona detail + actions). Under reduced motion it appears
+ * and leaves without sliding or fading (the DOM is the same either way).
  */
 export default function BottomSheet({
   open,
@@ -33,6 +36,8 @@ export default function BottomSheet({
   const { t } = useTranslation();
   const panelRef = useRef<HTMLDivElement>(null);
   const titleId = useId();
+  const still = useStillMotion();
+  const instant = { duration: 0 };
   useFocusTrap({ active: open, containerRef: panelRef });
 
   useEffect(() => {
@@ -57,6 +62,7 @@ export default function BottomSheet({
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           exit={{ opacity: 0 }}
+          transition={still ? instant : undefined}
         >
           <div
             className="absolute inset-0 bg-[rgba(8,11,20,0.6)] backdrop-blur-sm"
@@ -71,7 +77,7 @@ export default function BottomSheet({
             initial={{ y: "100%" }}
             animate={{ y: 0 }}
             exit={{ y: "100%" }}
-            transition={{ type: "spring", stiffness: 360, damping: 36 }}
+            transition={still ? instant : { type: "spring", stiffness: 360, damping: 36 }}
             drag="y"
             dragConstraints={{ top: 0, bottom: 0 }}
             dragElastic={0.25}
@@ -99,7 +105,7 @@ export default function BottomSheet({
                   type="button"
                   onClick={onClose}
                   aria-label={t.common.close}
-                  className="flex h-9 w-9 flex-shrink-0 items-center justify-center rounded-full border border-glass bg-white/[0.04] text-muted-dark transition-colors hover:text-foreground active:scale-95"
+                  className="flex h-11 w-11 flex-shrink-0 items-center justify-center rounded-full border border-glass bg-white/[0.04] text-muted-dark transition-colors hover:text-foreground active:scale-95"
                 >
                   <X className="h-4 w-4" />
                 </button>

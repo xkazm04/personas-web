@@ -4,9 +4,11 @@ import { usePersonaStore } from "@/stores/personaStore";
 import {
   addCommand,
   applyRowUpdate,
+  isTerminal,
   openIds,
   overdueIds,
   type CommandRowUpdate,
+  type InflightCommand,
   type InflightMap,
 } from "@/lib/commands/commandReducer";
 import { COMMAND_TTL_MS, type CommandVerb } from "@/lib/commands/envelope";
@@ -84,6 +86,19 @@ function startTicker() {
   if (!ticker) ticker = setInterval(() => void tick(), POLL_MS);
 }
 
+/**
+ * Re-read the executions list. Loaded lazily: executionStore follows commands
+ * (`settleCommand`), so a static import here would make the two a cycle.
+ */
+function refetchExecutions() {
+  void import("@/stores/executionStore").then((m) => m.useExecutionStore.getState().fetchExecutions());
+}
+
+/** The demo desktop wrote its fixtures: re-read what the rows show. */
+function onDemoFixtureChange() {
+  refetchExecutions();
+}
+
 export const useCommandStore = create<CommandState>((set, get) => ({
   inflight: {},
   send: async (verb, target, params = {}) => {
@@ -111,7 +126,7 @@ export const useCommandStore = create<CommandState>((set, get) => ({
       try {
         const mock = await import("@/lib/commands/mockCommandPlane");
         const cmd = { id, verb, personaId: target.personaId, params };
-        mockCancels.set(id, mock.runMockCommand(cmd, (row) => get().applyRow(row)));
+        mockCancels.set(id, mock.runMockCommand(cmd, (row) => get().applyRow(row), { onFixtureChange: onDemoFixtureChange }));
       } catch (err) {
         fail(err, err instanceof Error ? err.message : "not_sent");
       }
@@ -138,12 +153,16 @@ export const useCommandStore = create<CommandState>((set, get) => ({
     set({ inflight });
     const after = inflight[row.id];
     if (after.status !== "completed" || before?.status === "completed") return;
-    mockCancels.delete(row.id);
+    // A demo run keeps its timers past completion: they drive its execution's lifecycle.
+    if (after.verb !== "run_persona") mockCancels.delete(row.id);
     // A pause/resume changed the persona: pull the synced truth now rather than
     // waiting out the persona cache (the row shows the reported value meanwhile).
     if (after.verb === "pause_persona" || after.verb === "resume_persona") {
       void usePersonaStore.getState().fetchPersonas({ force: true });
     }
+    // A run or a cancel changed the executions: read them now (the live mirror
+    // also pushes them over Realtime once the desktop's next sync pass lands).
+    if (after.verb === "run_persona" || after.verb === "cancel_execution") refetchExecutions();
   },
   reset: () => {
     stopTicker();
@@ -152,3 +171,28 @@ export const useCommandStore = create<CommandState>((set, get) => ({
     set({ inflight: {} });
   },
 }));
+
+/**
+ * Resolve when a command reaches a terminal state (its outcome), or with null
+ * when it is unknown or the plane is reset (sign-out) before it settles.
+ * For callers that act on the outcome rather than show it, e.g. the
+ * executions table's Cancel on the command plane.
+ */
+export function settleCommand(id: string): Promise<InflightCommand | null> {
+  return new Promise((resolve) => {
+    const settled = (inflight: InflightMap): boolean => {
+      const cmd = inflight[id];
+      if (!cmd) {
+        resolve(null);
+        return true;
+      }
+      if (!isTerminal(cmd.status)) return false;
+      resolve(cmd);
+      return true;
+    };
+    if (settled(useCommandStore.getState().inflight)) return;
+    const unsubscribe = useCommandStore.subscribe((s) => {
+      if (settled(s.inflight)) unsubscribe();
+    });
+  });
+}

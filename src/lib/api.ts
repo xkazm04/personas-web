@@ -122,6 +122,29 @@ async function orchestratorFetch<T>(
 }
 
 // ---------------------------------------------------------------------------
+// Acks: a direct plane answers with the effect, a command plane with a command
+// ---------------------------------------------------------------------------
+
+/**
+ * A command plane's answer (PHASE2-SPEC.md 6.2): the demo's scripted desktop
+ * and the live sync mirror do not act, they send a command to the desktop.
+ * Follow it in `commandStore` (`inflight[commandId]`, or `settleCommand`).
+ */
+export interface CommandAck {
+  commandId: string;
+}
+
+/** A direct plane's answer (the orchestrator REST API): the effect itself. */
+export interface ExecutionAck {
+  executionId: string;
+  status: PersonaExecutionStatus;
+}
+
+export function isCommandAck(ack: CommandAck | ExecutionAck): ack is CommandAck {
+  return "commandId" in ack;
+}
+
+// ---------------------------------------------------------------------------
 // Shared interface — enforces parity between mock and real implementations
 // ---------------------------------------------------------------------------
 
@@ -131,8 +154,12 @@ export interface ApiClient {
   deletePersona(id: string): Promise<{ deleted: boolean }>;
   listExecutions(opts?: ExecFilterOpts): Promise<PersonaExecution[]>;
   getExecution(id: string, offset?: number): Promise<ExecutionDetail>;
-  cancelExecution(id: string): Promise<{ executionId: string; status: PersonaExecutionStatus }>;
-  executePersona(personaId: string, prompt: string): Promise<{ executionId: string; status: PersonaExecutionStatus }>;
+  /** `personaId` saves the command planes a lookup (`cancel_execution` names the owning persona). */
+  cancelExecution(id: string, personaId?: string): Promise<ExecutionAck | CommandAck>;
+  executePersona(personaId: string, prompt: string): Promise<ExecutionAck | CommandAck>;
+  /** Pause / resume a persona (`enabled`): a command on every plane that has one. */
+  pausePersona(id: string): Promise<CommandAck>;
+  resumePersona(id: string): Promise<CommandAck>;
   listEvents(opts?: { eventType?: string; status?: string; limit?: number; offset?: number }): Promise<PersonaEvent[]>;
   publishEvent(input: CreateEventInput): Promise<PersonaEvent>;
   updateEvent(id: string, body: { status: EventStatus; metadata?: string }): Promise<PersonaEvent>;
@@ -187,19 +214,28 @@ const realApi: ApiClient = {
         }),
 
       cancelExecution: (id: string) =>
-        orchestratorFetch<{ executionId: string; status: PersonaExecutionStatus }>(
+        orchestratorFetch<ExecutionAck>(
           `/api/executions/${id}/cancel`,
           { method: "POST" },
         ),
 
       executePersona: (personaId: string, prompt: string) =>
-        orchestratorFetch<{ executionId: string; status: PersonaExecutionStatus }>(
+        orchestratorFetch<ExecutionAck>(
           "/api/execute",
           {
             method: "POST",
             body: { personaId, prompt },
           },
         ),
+
+      // The orchestrator has no pause endpoint, and the phone offers no
+      // action on this plane (its reachability tier is never-synced).
+      pausePersona: async () => {
+        throw new ApiError(501, "Pausing an agent is not available on the orchestrator plane.");
+      },
+      resumePersona: async () => {
+        throw new ApiError(501, "Resuming an agent is not available on the orchestrator plane.");
+      },
 
       // Events
       listEvents: (opts?: {
