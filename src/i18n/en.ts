@@ -3585,6 +3585,60 @@
     };
     footer: { facts: string; stylized: string };
   };
+  /** Phone layouts of the dashboard: the command plane (/m revival phase 2, PHASE2-SPEC.md 4.3 + 6.2). */
+  mobile: {
+    personas: {
+      title: string;
+      loading: string;
+      empty: string;
+      error: string;
+      retry: string;
+      active: string;
+      paused: string;
+      pause: string;
+      resume: string;
+      pauseLabel: string;
+      resumeLabel: string;
+      demoNote: string;
+    };
+    reach: {
+      offlineTitle: string;
+      offlineBody: string;
+      yourComputer: string;
+      neverTitle: string;
+      neverBody: string;
+      demoTitle: string;
+      demoBody: string;
+      downloadCta: string;
+      linkCopied: string;
+      shareFailed: string;
+      unpairedTitle: string;
+      unpairedBody: string;
+      unpairedCta: string;
+    };
+    command: {
+      pending: string;
+      executing: string;
+      completed: string;
+      failed: string;
+      rejected: string;
+      expired: string;
+    };
+    pairing: {
+      title: string;
+      body: string;
+      howTo: string;
+      pairing: string;
+      pending: string;
+      active: string;
+      refused: string;
+      revoked: string;
+      unsupported: string;
+      error: string;
+      noDevice: string;
+      unpair: string;
+    };
+  };
   // END pending-translation namespaces
 }
 
@@ -3620,6 +3674,7 @@ export const PENDING_TRANSLATION = [
   'mobileLanding',
   'mobileLanding2',
   'personasMonitor',
+  'mobile',
 ] as const;
 
 export type PendingNamespace = (typeof PENDING_TRANSLATION)[number];
@@ -8098,6 +8153,59 @@ export const en: Translations = {
     footer: {
       facts: 'Personas is free and open source (MIT), with no account and no license key. Agents, credentials and run history stay on your computer; prompts go to the AI provider you run, Claude via Anthropic. The app sends minimal, anonymous error and usage signals, and you can switch usage signals off in Settings.',
       stylized: 'The clock, its times and the day around it are a stylized illustration, not a product claim. Athena\'s portrait is the only real product image on this page.',
+    },
+  },
+  mobile: {
+    personas: {
+      title: 'Your agents',
+      loading: 'Loading your agents...',
+      empty: 'No agents yet. Create one in Personas on your computer.',
+      error: 'Couldn\'t load your agents.',
+      retry: 'Try again',
+      active: 'Active',
+      paused: 'Paused',
+      pause: 'Pause',
+      resume: 'Resume',
+      pauseLabel: 'Pause {name}',
+      resumeLabel: 'Resume {name}',
+      demoNote: 'Demo: a simulated computer answers these commands.',
+    },
+    reach: {
+      offlineTitle: 'Personas isn\'t running on {device}',
+      offlineBody: 'Last seen {ago}. Open it to manage your agents from here.',
+      yourComputer: 'your computer',
+      neverTitle: 'Connect your computer',
+      neverBody: 'Install Personas on your computer and turn on sync in its Settings to manage your agents from this phone.',
+      demoTitle: 'Run your own agents',
+      demoBody: 'Personas runs on your computer. Send yourself the link and install it there.',
+      downloadCta: 'Send the download to my computer',
+      linkCopied: 'Link copied. Open it on your computer.',
+      shareFailed: 'Couldn\'t share. Open {url} on your computer.',
+      unpairedTitle: 'Pair this phone',
+      unpairedBody: 'Your computer is online, but this phone isn\'t paired yet. Pair it once to pause and resume agents from here.',
+      unpairedCta: 'How to pair',
+    },
+    command: {
+      pending: 'Sending...',
+      executing: 'Working...',
+      completed: 'Done',
+      failed: 'Failed: {reason}',
+      rejected: 'Refused: {reason}',
+      expired: 'Your computer didn\'t answer',
+    },
+    pairing: {
+      title: 'Phone control',
+      body: 'Pair this browser with Personas on your computer to pause and resume your agents from here.',
+      howTo: 'On your computer, open Settings, then Cloud sync, then Pair a phone, and scan the code with this phone.',
+      pairing: 'Pairing...',
+      pending: 'Waiting for your computer to confirm...',
+      active: 'This phone is paired.',
+      refused: 'Your computer refused this pairing. Start again from your computer.',
+      revoked: 'This phone is no longer paired.',
+      unsupported: 'This browser can\'t hold a secure key. Try a current version of Safari or Chrome.',
+      error: 'Pairing didn\'t work: {reason}',
+      noDevice: 'No synced computer found. Turn on sync in Personas on your computer first.',
+      unpair: 'Unpair this phone',
     },
   },
   // END pending-translation namespaces
