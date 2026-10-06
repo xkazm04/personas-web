@@ -3134,6 +3134,220 @@
       };
     };
   };
+  howLab: {
+    timeline: {
+      label: string;
+      heading: { lead: string; gradient: string; trailing: string };
+      stylised: string;
+      replay: string;
+      pause: string;
+      resume: string;
+      scenariosLabel: string;
+      showScenario: string;
+      /** The five live race scenarios: rule steps end with the stall stamp. */
+      scenarios: {
+        name: string;
+        trigger: string;
+        rules: string[];
+        rulesResult: string;
+        agent: string[];
+        agentResult: string;
+      }[];
+      v1: {
+        lede: string;
+        artLabel: string;
+        request: string;
+        rulesLane: string;
+        agentLane: string;
+        stuck: string;
+        resolved: string;
+        finish: string;
+        raceOf: string;
+        announce: string;
+      };
+      v2: {
+        lede: string;
+        artLabel: string;
+        request: string;
+        systems: string;
+        rulesPhase: string;
+        rulesNote: string;
+        agentPhase: string;
+        waiting: string;
+        done: string;
+        announce: string;
+        /** Indexes into `scenarios`, with what this board shows for each. */
+        cases: { scenario: number; holes: string[]; insight: string; wait: string; result: string }[];
+      };
+      v3: {
+        lede: string;
+        artLabel: string;
+        start: string;
+        finish: string;
+        rails: string;
+        route: string;
+        stalled: string;
+        announce: string;
+        cases: { snag: string; wait: string; waypoints: string[]; result: string }[];
+      };
+    };
+    chat: {
+      label: string;
+      aria: string;
+      heading: string;
+      gradient: string;
+      lede: string;
+      stylised: string;
+      customer: string;
+      scripted: string;
+      agent: string;
+      pickLabel: string;
+      pause: string;
+      resume: string;
+      replay: string;
+      inSeconds: string;
+      scenarios: {
+        name: string;
+        message: string;
+        scripted: string[];
+        agent: string[];
+        scriptedOutcome: string;
+        agentOutcome: string;
+      }[];
+      v1: {
+        artLabel: string;
+        scriptedMode: string;
+        agentMode: string;
+        clock: string;
+        resolved: string;
+        unresolved: string;
+        rating: string;
+      };
+      v2: {
+        artLabel: string;
+        scriptedReads: string;
+        agentReads: string;
+        vocabulary: string;
+        everyWord: string;
+        heard: string;
+        understood: string;
+        keywords: string[];
+        scenarios: { segments: string[]; tags: string[]; heard: string; understood: string }[];
+      };
+      v3: {
+        artLabel: string;
+        rails: string;
+        agentRoute: string;
+        switchLabel: string;
+        resolved: string;
+        humanQueue: string;
+        tracks: string[];
+        scenarios: { stations: string[]; deadEnd: string; thoughts: string[] }[];
+      };
+    };
+    layers: {
+      label: string;
+      eyebrow: string;
+      heading: string;
+      headingGradient: string;
+      headingTrailing: string;
+      stylised: string;
+      names: { run: string; coordinate: string; design: string; monitor: string };
+      v1: {
+        lede: string;
+        artLabel: string;
+        railLabel: string;
+        layers: {
+          run: { title: string; line: string };
+          coordinate: { title: string; line: string };
+          design: { title: string; line: string };
+          monitor: { title: string; line: string };
+        };
+        prompt: string;
+        healed: string;
+        noServers: string;
+      };
+      v2: {
+        lede: string;
+        artLabel: string;
+        scrubLabel: string;
+        play: string;
+        pause: string;
+        agent: string;
+        agents: string;
+        sameLaptop: string;
+        ledgerLabel: string;
+        prompt: string;
+        healed: string;
+        stops: { when: string; what: string }[];
+        layerLines: { run: string; coordinate: string; design: string; monitor: string };
+      };
+      v3: {
+        lede: string;
+        artLabel: string;
+        pathLabel: string;
+        zoomOut: string;
+        zoomIn: string;
+        levels: { name: string; line: string }[];
+        prompt: string;
+        steps: string[];
+        chainLabels: string[];
+        healed: string;
+        keyring: string;
+        noServers: string;
+        fleet: string;
+      };
+    };
+    events: {
+      label: string;
+      heading: string;
+      headingGradient: string;
+      description: string;
+      v1: {
+        illustration: string;
+        tabsLabel: string;
+        tabLive: string;
+        tabLiveHint: string;
+        tabLanes: string;
+        tabLanesHint: string;
+        hub: string;
+        inFlight: string;
+        waiting: string;
+        typical: string;
+        perSecond: string;
+        delivery: string;
+        backlog: string;
+        buildFlow: string;
+        /** Keyed by the hub route id (gmail-jira, slack-drive, ...). */
+        routes: Record<string, string>;
+      };
+      v2: {
+        illustration: string;
+        pickLabel: string;
+        hub: string;
+        hubHint: string;
+        byYou: string;
+        agentsWoke: string;
+        endToEnd: string;
+        listening: string;
+        working: string;
+        scenarios: Record<
+          'email' | 'pr' | 'meeting',
+          { trigger: string; a1: string; r1: string; a2: string; r2: string; a3: string; r3: string; a4: string; r4: string; out: string }
+        >;
+      };
+      v3: {
+        illustration: string;
+        hub: string;
+        logTitle: string;
+        byYou: string;
+        from: string;
+        to: string;
+        desks: Record<'research' | 'writer' | 'reviewer' | 'publisher', string>;
+        capsules: Record<'request' | 'research' | 'writer' | 'reviewer' | 'publisher', string>;
+      };
+    };
+  };
   // END pending-translation namespaces
 }
 
@@ -3166,6 +3380,7 @@ export const PENDING_TRANSLATION = [
   'landingSections',
   'featuresSections',
   'athenaSections',
+  'howLab',
 ] as const;
 
 export type PendingNamespace = (typeof PENDING_TRANSLATION)[number];
@@ -6842,6 +7057,431 @@ export const en: Translations = {
           there: 'she picks it up exactly there',
           thereShort: 'picked up exactly there',
         },
+      },
+    },
+  },
+  howLab: {
+    timeline: {
+      label: 'How lab: The race is already over',
+      heading: { lead: 'The', gradient: 'Race', trailing: ' Is Already Over' },
+      stylised: 'Stylised',
+      replay: 'Replay',
+      pause: 'Pause',
+      resume: 'Resume',
+      scenariosLabel: 'Scenarios',
+      showScenario: 'Show scenario {n}: {name}',
+      scenarios: [
+        {
+          name: 'Ambiguous email',
+          trigger: '"Cancel my order... actually, change the address instead."',
+          rules: ['Read the message', 'Start cancelling', 'Conflicting instructions', 'No rule for this', 'Dead end'],
+          rulesResult: 'Handed to a person. The customer waits 47 minutes.',
+          agent: ['Read the whole message', 'Spot the real request', 'Update the address', 'Send a confirmation'],
+          agentResult: 'Address updated. Customer delighted.',
+        },
+        {
+          name: 'Split payment refund',
+          trigger: 'A refund for an item paid with a gift card and a credit card.',
+          rules: ['Look up the payment', 'Send to refunds', 'Two payment methods', 'No split refunds', 'Gives up'],
+          rulesResult: 'Passed to finance. The customer waits 3 days.',
+          agent: ['Work out the $40 / $60 split', 'Refund the gift card', 'Refund the credit card', 'Tell the customer'],
+          agentResult: 'Both refunds sent at once.',
+        },
+        {
+          name: 'Staging setup',
+          trigger: '"Set up staging just like production, with debug logging on."',
+          rules: ['Find the template', 'Copy production', 'Turn on debugging', '12 services need hand edits', 'Too many paths'],
+          rulesResult: 'Half done: 6 of 12 services broken.',
+          agent: ['List all 12 services', 'Copy each with debugging', 'Deploy and check each', 'Confirm all 12 work'],
+          agentResult: 'Staging ready, all 12 services checked.',
+        },
+        {
+          name: 'Error recovery',
+          trigger: 'The payment server goes down in the middle of 200 payments.',
+          rules: ['Start the batch', 'Payments 1 to 147', 'Server down at 148', 'Three retries fail', 'Undoes all'],
+          rulesResult: '147 good payments undone over one failure.',
+          agent: ['Save progress at 147', 'Wait, then retry', 'Server is back', 'Finish the rest'],
+          agentResult: 'All 200 payments done. Nothing lost.',
+        },
+        {
+          name: 'VIP legacy discount',
+          trigger: 'A VIP asks for a discount but already has a special rate from 2023.',
+          rules: ['Customer type: VIP', 'Check the discount', 'Already has a rate', 'Can\'t combine discounts', 'Denied'],
+          rulesResult: 'Request denied. The customer asks for a manager.',
+          agent: ['Compare old and new rates', '22% beats 15%', 'Write a personal reply', 'Add a loyalty perk'],
+          agentResult: 'Keeps the better rate, plus a loyalty perk.',
+        },
+      ],
+      v1: {
+        lede: 'One real-world request, two ways to handle it. Rules stall the moment it gets messy; an agent reasons its way to done.',
+        artLabel: 'A stylised race: the same request runs down a rule-based lane that breaks, and an agent lane that reaches the finish.',
+        request: 'The request',
+        rulesLane: 'Rule-based workflow',
+        agentLane: 'AI agent',
+        stuck: 'Stuck',
+        resolved: 'Resolved',
+        finish: 'Done',
+        raceOf: 'Race {n} of {total}',
+        announce: '{name}. Rule-based workflow: {rules} AI agent: {agent}',
+      },
+      v2: {
+        lede: 'Rules only take the shapes they were built for. An agent works out what a messy request needs, then fits it through the systems you already have.',
+        artLabel: 'A stylised shape sorter: a request that fits no rule jams and waits, then an agent breaks it into pieces that fit.',
+        request: 'The request',
+        systems: 'Your systems',
+        rulesPhase: 'Fixed rules',
+        rulesNote: 'No rule fits this shape',
+        agentPhase: 'With an agent',
+        waiting: 'Waiting for a person',
+        done: 'Done',
+        announce: '{name}. Fixed rules: {wait} With an agent: {result}',
+        cases: [
+          {
+            scenario: 1,
+            holes: ['Refund a card', 'Refund a gift card', 'Email the customer', 'Cancel an order'],
+            insight: 'Two payment methods: two refunds and one email',
+            wait: 'Sent to finance: a 3-day wait.',
+            result: 'Both refunds sent at once.',
+          },
+          {
+            scenario: 0,
+            holes: ['Cancel an order', 'Change an address', 'Email the customer', 'Refund a card'],
+            insight: 'They changed their mind: the address, not a cancellation',
+            wait: 'Handed to a person: a 47-minute wait.',
+            result: 'Address updated, confirmation sent.',
+          },
+          {
+            scenario: 3,
+            holes: ['Save progress', 'Retry later', 'Take a payment', 'Undo the batch'],
+            insight: 'Keep the 147 that worked, retry the rest',
+            wait: '147 good payments undone.',
+            result: 'All 200 payments done.',
+          },
+          {
+            scenario: 4,
+            holes: ['Apply a discount', 'Keep the current rate', 'Write a reply', 'Add a loyalty perk'],
+            insight: 'Their old 22% beats today\'s 15%: keep it, add a thank-you',
+            wait: 'Denied. Asks for a manager.',
+            result: 'Better rate kept, perk added.',
+          },
+        ],
+      },
+      v3: {
+        lede: 'Rules run on rails: fast until something blocks the track. An agent sees the snag, finds a way around it and still arrives.',
+        artLabel: 'A stylised map: a train on fixed rails stops at a blocked track while an agent\'s route bends around the snag to the same destination.',
+        start: 'Request in',
+        finish: 'Done',
+        rails: 'Fixed rules',
+        route: 'Agent',
+        stalled: 'Stalled',
+        announce: '{name}. Fixed rules: stalled at "{snag}", {wait} Agent: {result}',
+        cases: [
+          {
+            snag: 'Two requests in one email',
+            wait: 'waits 47 minutes for a person.',
+            waypoints: ['Reads the whole message', 'Spots the real request', 'Updates the address', 'Confirms with the customer'],
+            result: 'Address updated.',
+          },
+          {
+            snag: 'Paid with two cards',
+            wait: 'waits 3 days for finance.',
+            waypoints: ['Splits $40 / $60', 'Refunds the gift card', 'Refunds the credit card', 'Tells the customer'],
+            result: 'Both refunds sent.',
+          },
+          {
+            snag: '12 services need hand edits',
+            wait: 'half done, 6 services broken.',
+            waypoints: ['Lists all 12 services', 'Copies each with debugging', 'Deploys and checks each', 'Confirms all 12 work'],
+            result: 'Staging ready.',
+          },
+          {
+            snag: 'Server down at payment 148',
+            wait: '147 good payments undone.',
+            waypoints: ['Saves progress at 147', 'Waits, then retries', 'Server is back', 'Finishes the rest'],
+            result: 'All 200 payments done.',
+          },
+          {
+            snag: 'Already has a special rate',
+            wait: 'request denied.',
+            waypoints: ['Compares old and new rates', 'Sees 22% beats 15%', 'Writes a personal reply', 'Adds a loyalty perk'],
+            result: 'Better rate kept, perk added.',
+          },
+        ],
+      },
+    },
+    chat: {
+      label: 'How lab: Same message, different intelligence',
+      aria: 'The same customer message answered by a scripted bot and by an agent',
+      heading: 'Same Message,',
+      gradient: 'Different Intelligence',
+      lede: 'Same customer message, two very different experiences. See why intelligence matters more than rules.',
+      stylised: 'Stylised',
+      customer: 'Customer',
+      scripted: 'Scripted bot',
+      agent: 'Agent',
+      pickLabel: 'Pick a customer message',
+      pause: 'Pause auto-play',
+      resume: 'Resume auto-play',
+      replay: 'Replay',
+      inSeconds: 'in {n} s',
+      scenarios: [
+        {
+          name: 'Changed mind',
+          message: 'Cancel my order #4821… actually, never mind, just change the shipping address to 742 Evergreen Terrace.',
+          scripted: [
+            'Processing cancellation for order #4821.',
+            'Order found. Cancellation started.',
+            'Warning: conflicting instructions detected.',
+            'I can only handle one request at a time.',
+            'Transferred to our team. Expected wait: 47 minutes.',
+          ],
+          agent: [
+            'You changed your mind, so I\'ll keep the order and change the address.',
+            'Updating order #4821 to 742 Evergreen Terrace.',
+            'Done. It ships to the new address tomorrow.',
+          ],
+          scriptedOutcome: 'Waiting for a human · 47 min',
+          agentOutcome: 'Address changed',
+        },
+        {
+          name: 'Split refund',
+          message: 'Refund order #7733. I paid $40 by gift card and $60 by Visa.',
+          scripted: [
+            'Looking up order #7733.',
+            'Refunding to the original payment method.',
+            'Error: two payment methods found.',
+            'I can\'t split refunds. Creating a ticket.',
+            'Sent to finance. About 3 business days.',
+          ],
+          agent: [
+            'Two payment methods, so I\'ll split the refund.',
+            '$40 back to your gift card.',
+            '$60 back to your Visa ending 4242.',
+            'Done. Gift card now, Visa in 2-3 days.',
+          ],
+          scriptedOutcome: 'Sent to finance · 3 business days',
+          agentOutcome: 'Both refunds sent',
+        },
+        {
+          name: 'Staging setup',
+          message: 'Set up staging like production, with debug logging on all 12 services.',
+          scripted: [
+            'Found the “create environment” template.',
+            'Production copied. Applying the debug flag.',
+            'Warning: 12 services each need their own change.',
+            'Error: 47 possible paths. I can\'t decide.',
+            'Half done. 6 of 12 services are broken.',
+          ],
+          agent: [
+            'I\'ll list all 12 services first, then change each one.',
+            'Cloning every config with debug logging on.',
+            'Deploying one by one, health-checking each.',
+            'All 12 services live and healthy.',
+          ],
+          scriptedOutcome: 'Half done · 6 services broken',
+          agentOutcome: 'Staging live and healthy',
+        },
+        {
+          name: 'Batch recovery',
+          message: 'The payment API threw a 503 halfway through 200 transactions. Fix it.',
+          scripted: [
+            '147 of 200 transactions processed.',
+            'Error: #148 failed. Retrying, 1 of 3.',
+            'Error: all 3 retries failed.',
+            'Rolling back all 200, even the 147 that worked.',
+            'Failed. Someone must redo it by hand.',
+          ],
+          agent: [
+            'The server is briefly down. Saving progress at #147.',
+            'Waiting a moment before retrying #148.',
+            'Provider is back. Resuming from #148.',
+            'All 200 processed. Nothing lost.',
+          ],
+          scriptedOutcome: 'All 200 undone · redo by hand',
+          agentOutcome: 'All 200 done, nothing lost',
+        },
+      ],
+      v1: {
+        artLabel: 'Stylised: one customer message forks into two conversations on one clock, a scripted bot on the left and an agent on the right',
+        scriptedMode: 'follows a script',
+        agentMode: 'understands the ask',
+        clock: 'one clock',
+        resolved: 'Resolved',
+        unresolved: 'Not resolved',
+        rating: 'Customer rating: {n} of 5',
+      },
+      v2: {
+        artLabel: 'Stylised: the same customer message as a scripted bot reads it, keywords only, and as an agent reads it, every word in context',
+        scriptedReads: 'reads keywords',
+        agentReads: 'reads meaning',
+        vocabulary: 'Everything it knows',
+        everyWord: 'Every word, in context',
+        heard: 'Heard',
+        understood: 'Understood',
+        keywords: ['cancel', 'order', 'refund', 'staging', 'production', '503', 'fix'],
+        scenarios: [
+          {
+            segments: ['Cancel', 'my', 'order #4821…', 'actually, never mind,', 'just change the shipping address', 'to 742 Evergreen Terrace.'],
+            tags: ['taken back', 'changed mind', 'the real ask', 'where to'],
+            heard: 'Cancel the order',
+            understood: 'Keep the order, ship it to 742 Evergreen Terrace',
+          },
+          {
+            segments: ['Refund', 'order #7733.', 'I paid', '$40 by gift card', 'and', '$60 by Visa.'],
+            tags: ['the ask', 'part one', 'part two'],
+            heard: 'Refund the original card',
+            understood: 'Split it: $40 to the gift card, $60 to the Visa',
+          },
+          {
+            segments: ['Set up staging', 'like production,', 'with debug logging', 'on all 12 services.'],
+            tags: ['the ask', 'copy of', 'one change', 'every one'],
+            heard: 'Copy the environment template',
+            understood: 'Clone all 12 services, debug logging on in each',
+          },
+          {
+            segments: ['The payment API', 'threw a 503', 'halfway through', '200 transactions.', 'Fix it.'],
+            tags: ['which system', 'a brief outage', '147 already done', 'the ask'],
+            heard: 'Error 503: retry 3 times, then roll back',
+            understood: 'Wait out the outage, keep the 147, resume at #148',
+          },
+        ],
+      },
+      v3: {
+        artLabel: 'Stylised track map: the scripted bot follows a fixed track to a dead end and a human queue, while the agent takes a direct route to a resolved request',
+        rails: 'Scripted bot: fixed tracks',
+        agentRoute: 'Agent: finds the way',
+        switchLabel: 'keyword switch',
+        resolved: 'Resolved',
+        humanQueue: 'Human queue',
+        tracks: ['Cancel order', 'Refund', 'New environment', 'Retry ×3'],
+        scenarios: [
+          { stations: ['Order #4821 found', 'Cancelling it', 'Two asks at once'], deadEnd: 'No rule for both', thoughts: ['Changed their mind', 'Keep the order', 'New address saved'] },
+          { stations: ['Order #7733 found', 'Refund one card', 'Two cards used'], deadEnd: 'Can\'t split refunds', thoughts: ['Two payment methods', '$40 to the gift card', '$60 to the Visa'] },
+          { stations: ['Template found', 'Production copied', '12 services differ'], deadEnd: '47 paths, no rule', thoughts: ['List all 12 services', 'Debug on in each', 'Health-check each'] },
+          { stations: ['147 of 200 done', '#148 failed', '3 retries failed'], deadEnd: 'Script says roll back', thoughts: ['Outage is brief', 'Keep the 147', 'Resume at #148'] },
+        ],
+      },
+    },
+    layers: {
+      label: 'How lab: Built to grow',
+      eyebrow: 'How It\'s Built',
+      heading: 'Built to',
+      headingGradient: 'grow',
+      headingTrailing: ' with you',
+      stylised: 'Stylised',
+      names: { run: 'Run', coordinate: 'Coordinate', design: 'Design', monitor: 'Monitor' },
+      v1: {
+        lede: 'Every agent stands on the same four layers, so one helper can grow into a whole team without new tools.',
+        artLabel: 'Stylised stack of the four layers under every agent: Run at the bottom, then Coordinate, Design and Monitor on top. One request rises through all four.',
+        railLabel: 'The four layers',
+        layers: {
+          run: { title: 'Runs on your computer', line: 'Your keys never leave your keyring.' },
+          coordinate: { title: 'One event starts the next', line: 'An email sets off Slack and GitHub.' },
+          design: { title: 'Described in plain words', line: 'Say it, then shape it step by step.' },
+          monitor: { title: 'Watches itself', line: 'Every run logged. Failures fixed.' },
+        },
+        prompt: 'Sort my inbox every morning',
+        healed: 'healed',
+        noServers: 'no servers',
+      },
+      v2: {
+        lede: 'Start with one helper. A year later, run forty. Same computer, same four layers, nothing new to set up.',
+        artLabel: 'Stylised growth scene: agents multiply above one laptop, from a single helper on day one to a fleet of forty after a year, while the laptop underneath stays the same.',
+        scrubLabel: 'How far you have grown',
+        play: 'Play',
+        pause: 'Pause',
+        agent: 'agent',
+        agents: 'agents',
+        sameLaptop: 'Same laptop. No servers.',
+        ledgerLabel: 'What carries it',
+        prompt: 'Draft the weekly report',
+        healed: 'healed',
+        stops: [
+          { when: 'Day 1', what: 'One helper' },
+          { when: 'Week 2', what: 'A chain' },
+          { when: 'Month 3', what: 'A team' },
+          { when: 'Year 1', what: 'A fleet' },
+        ],
+        layerLines: {
+          run: 'Runs on your computer',
+          coordinate: 'One event starts the next',
+          design: 'Agents from plain words',
+          monitor: 'Watches and heals itself',
+        },
+      },
+      v3: {
+        lede: 'Zoom out from one task to everything you run. Each level is carried by one layer.',
+        artLabel: 'Stylised zoom through four levels: one task, the chain it belongs to, the fleet that chain runs in, and the computer it all lives on.',
+        pathLabel: 'Zoom level',
+        zoomOut: 'Zoom out',
+        zoomIn: 'Zoom in',
+        levels: [
+          { name: 'One task', line: 'You describe it in plain words. The agent takes it from there.' },
+          { name: 'A chain', line: 'One agent finishing is the next one starting.' },
+          { name: 'A fleet', line: 'Dozens run side by side, watched live and healed on their own.' },
+          { name: 'Your computer', line: 'All of it on your own machine, with keys in your keyring.' },
+        ],
+        prompt: 'Sort my inbox every morning',
+        steps: ['Read', 'Sort', 'Reply'],
+        chainLabels: ['Mail lands', 'Agent sorts it', 'Team hears', 'Issue filed'],
+        healed: 'healed',
+        keyring: 'keyring',
+        noServers: 'no servers',
+        fleet: 'Your agents',
+      },
+    },
+    events: {
+      label: 'How lab: Agents that talk to each other',
+      heading: 'Agents that',
+      headingGradient: 'talk to each other',
+      description: 'Your agents share what they finish through one hub. When one is done, the next one starts on its own, with no hand-off from you.',
+      v1: {
+        illustration: 'Stylised diagram: connected tools send messages into one hub, which passes each one on to the tool or agent that needs it',
+        tabsLabel: 'Message hub view',
+        tabLive: 'Live connections',
+        tabLiveHint: 'who talks to whom',
+        tabLanes: 'Performance view',
+        tabLanesHint: 'speed and backlog',
+        hub: 'Message hub',
+        inFlight: 'being sent',
+        waiting: 'waiting',
+        typical: 'typical delivery',
+        perSecond: 'msgs/s',
+        delivery: 'delivery',
+        backlog: 'waiting',
+        buildFlow: 'Try it yourself: build a flow',
+        routes: {
+          'gmail-jira': 'New email → ticket filed',
+          'slack-drive': 'Slack thread → summary saved',
+          'github-figma': 'Pull request → design check',
+          'calendar-stripe': 'Meeting ends → invoice sent',
+        },
+      },
+      v2: {
+        illustration: 'Stylised circuit: one event travels along a shared hub and wakes each agent in turn, two of them at once',
+        pickLabel: 'Pick what happens',
+        hub: 'Shared hub',
+        hubHint: 'every agent hears what the others finish',
+        byYou: 'steps by you',
+        agentsWoke: 'agents woke up',
+        endToEnd: 'end to end',
+        listening: 'listening',
+        working: 'working',
+        scenarios: {
+          email: { trigger: 'A customer emails', a1: 'Inbox agent', r1: 'refund request', a2: 'Order agent', r2: 'order found', a3: 'CRM agent', r3: 'customer updated', a4: 'Reply agent', r4: 'reply drafted', out: 'Reply sent' },
+          pr: { trigger: 'A pull request opens', a1: 'Review agent', r1: '3 notes left', a2: 'Test agent', r2: 'tests passed', a3: 'Docs agent', r3: 'changelog written', a4: 'Release agent', r4: 'version tagged', out: 'Team told in Slack' },
+          meeting: { trigger: 'A meeting ends', a1: 'Notes agent', r1: 'summary written', a2: 'Task agent', r2: '4 tasks filed', a3: 'Follow-up agent', r3: 'recap emailed', a4: 'Billing agent', r4: 'hours logged', out: 'Invoice sent' },
+        },
+      },
+      v3: {
+        illustration: 'Stylised office: four agent desks linked by tubes to one central hub, passing a capsule of finished work from desk to desk',
+        hub: 'Hub',
+        logTitle: 'Hand-off log',
+        byYou: 'steps by you',
+        from: 'Slack request',
+        to: 'Published in Notion',
+        desks: { research: 'Research', writer: 'Writer', reviewer: 'Reviewer', publisher: 'Publisher' },
+        capsules: { request: 'launch post, please', research: '12 facts found', writer: 'draft ready', reviewer: 'approved', publisher: 'post is live' },
       },
     },
   },

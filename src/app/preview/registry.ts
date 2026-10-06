@@ -4,6 +4,7 @@ import * as homeSections from "@/components/sections/lazy";
 import * as howSections from "@/components/sections/how-lazy";
 import * as athenaSections from "@/components/sections/athena-lazy";
 import { buildPreviewRegistry } from "./derive";
+import { HOW_LAB_EXTRAS } from "./how-lab";
 
 /**
  * Sections available at /preview/[section] (dev-only - both preview routes 404
@@ -37,6 +38,8 @@ export const PREVIEW_EXTRAS: Record<string, ComponentType> = {
   "feature-voting": dynamic(() => import("@/components/sections/feature-voting")),
   // Preview-only: no page mounts these.
   "platform-command": dynamic(() => import("@/components/sections/platform-command")),
+  // How lab prototypes (how-lab.ts).
+  ...HOW_LAB_EXTRAS,
 };
 
 export const PREVIEW_REGISTRY: ReadonlyMap<string, ComponentType> = buildPreviewRegistry<ComponentType>(
