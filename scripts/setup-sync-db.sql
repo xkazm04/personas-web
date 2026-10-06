@@ -452,6 +452,108 @@ create trigger trg_stamp_device_seen before insert or update on public.synced_de
   for each row execute function public.stamp_device_seen();
 
 -- =====================================================================
+-- PHASE 2 / new synced data — notes and chat
+-- (docs/concepts/mobile-revival/PHASE2-SPEC.md sections 5.1, 5.2; PLAN.md
+-- M16, M18, M19)
+-- ---------------------------------------------------------------------
+-- These two classes are free text the user typed (and, for chat, replies
+-- that may quote what personas read through their connectors). The desktop
+-- pushes them ONLY when the matching per-class toggle ("Sync notes", "Sync
+-- chats") is on; both default OFF, also for users who already sync. Every
+-- text field is masked token by token for secret-looking values and capped
+-- (notes body 16 KB, chat content 32 KB, truncated with a marker) BEFORE it
+-- leaves the machine. Turning a toggle off deletes this device's rows.
+-- =====================================================================
+
+-- ── notes: the Notepad / Quest Log goals (read-only on the phone) ─────
+-- Full-set replace, like synced_fleet_queue: each push upserts the whole
+-- non-archived set stamped with the desktop's own `synced_at`, then deletes
+-- this device's rows with an older stamp (a note delete has no tombstone).
+-- `synced_at` is therefore written BY THE DESKTOP, never defaulted, and is
+-- NOT re-stamped by touch_synced_at. Archived notes are not synced.
+-- Deliberately absent: dev_projects.root_path (a local filesystem path),
+-- fleet_session_id, dispatch_key, agent_id, milestone_id, raw result_json,
+-- and the comment thread bodies (only two counts ride along).
+create table if not exists public.synced_notes (
+  id              text primary key,
+  user_id         uuid not null default auth.uid() references auth.users(id) on delete cascade,
+  device_id       text not null,
+  project_name    text,              -- dev_projects.name only; NEVER root_path
+  title           text not null,
+  body_md         text not null default '',   -- redact_text + cap 16 KB (truncated with a marker)
+  status          text not null check (status in ('draft','published','in_progress','completed','scoped','cut','shipped')),
+  order_index     integer not null default 0,
+  dispatch_target text,              -- 'fleet' | 'athena_goals'
+  result_summary  text,              -- the `summary` field of result_json only (no artifact paths)
+  open_reviews    integer not null default 0,  -- count(dev_note_comments where verdict='pending')
+  unread_comments integer not null default 0,
+  published_at timestamptz, started_at timestamptz, completed_at timestamptz,
+  created_at timestamptz not null, updated_at timestamptz not null,
+  synced_at timestamptz not null     -- desktop-stamped reconcile key (like synced_fleet_queue)
+);
+create index if not exists idx_synced_notes_user_device on public.synced_notes (user_id, device_id);
+
+-- ── chat: one pair of tables for both kinds of thread ────────────────
+-- thread_kind = 'athena'  : Athena's companion conversations (desktop user_db
+--                           `companion_session` + its user/assistant episodes).
+--                           Ships first (PLAN.md M18).
+-- thread_kind = 'persona' : chat with a persona (`chat_session_context` +
+--                           `chat_messages`). Ships after the chat turn moves
+--                           into the desktop's Rust core.
+-- persona_id is NOT NULL for both kinds: an Athena row carries the fixed
+-- sentinel 'athena' (desktop persona ids are UUIDs, so it cannot collide),
+-- and the CHECK below ties the sentinel to the kind both ways. A sentinel
+-- rather than NULL keeps every `persona_id=eq.<x>` filter total (a NULL
+-- silently matches nothing), and it is the same value a chat_send command
+-- to Athena carries in pending_commands.persona_id and envelope.persona.
+--
+-- The key is (user_id, device_id, thread_kind, <id>), not the bare id the
+-- spec drafted: every desktop has an Athena thread named 'default' (and
+-- 'athena-notices'), and Athena message ids are 8-character short ids, so a
+-- bare-id primary key would collide across devices and across users (and an
+-- upsert onto another user's hidden row fails RLS instead of inserting).
+-- Only user and assistant turns are synced: system rows, tool rows, forwarded
+-- synthetic prompts and machine correlator records never leave the device.
+-- Not synced either: summaries, working memory, prompt hashes,
+-- claude_session_id, message metadata, archived threads.
+create table if not exists public.synced_chat_sessions (
+  user_id      uuid not null default auth.uid() references auth.users(id) on delete cascade,
+  device_id    text not null,
+  thread_kind  text not null default 'persona' check (thread_kind in ('persona','athena')),
+  session_id   text not null,
+  persona_id   text not null,      -- the persona; the sentinel 'athena' for Athena threads
+  title        text,
+  chat_mode    text,               -- persona chat mode; NULL for Athena
+  origin       text,               -- Athena: 'user' | 'forwarded' | 'proactive'; NULL for persona
+  pinned       boolean not null default false,
+  created_at   timestamptz not null,
+  updated_at   timestamptz not null,   -- last activity in the thread
+  synced_at    timestamptz not null default now(),
+  primary key (user_id, device_id, thread_kind, session_id),
+  constraint synced_chat_sessions_athena_sentinel check ((thread_kind = 'athena') = (persona_id = 'athena'))
+);
+create index if not exists idx_synced_chat_sessions_user_updated
+  on public.synced_chat_sessions (user_id, thread_kind, updated_at desc);
+
+create table if not exists public.synced_chat_messages (
+  user_id      uuid not null default auth.uid() references auth.users(id) on delete cascade,
+  device_id    text not null,
+  thread_kind  text not null default 'persona' check (thread_kind in ('persona','athena')),
+  id           text not null,
+  persona_id   text not null,      -- = the session's persona_id ('athena' for Athena)
+  session_id   text not null,
+  role         text not null check (role in ('user','assistant')),   -- system/tool rows are NOT synced
+  content      text not null,      -- redact_text + cap 32 KB (truncated with a marker)
+  execution_id text,               -- persona chat only; NULL for Athena
+  created_at   timestamptz not null,
+  synced_at    timestamptz not null default now(),
+  primary key (user_id, device_id, thread_kind, id),
+  constraint synced_chat_messages_athena_sentinel check ((thread_kind = 'athena') = (persona_id = 'athena'))
+);
+create index if not exists idx_synced_chat_msgs_session
+  on public.synced_chat_messages (user_id, device_id, thread_kind, session_id, created_at);
+
+-- =====================================================================
 -- Row-Level Security — every table: a user touches only their own rows
 -- =====================================================================
 alter table public.synced_devices            enable row level security;
@@ -469,6 +571,9 @@ alter table public.synced_triggers           enable row level security;
 alter table public.synced_fleet_queue        enable row level security;
 alter table public.pending_commands          enable row level security;
 alter table public.command_controllers       enable row level security;
+alter table public.synced_notes              enable row level security;
+alter table public.synced_chat_sessions      enable row level security;
+alter table public.synced_chat_messages      enable row level security;
 
 -- One owner-only policy per table covering all verbs. Re-runnable.
 do $$
@@ -479,7 +584,7 @@ declare
     'synced_manual_reviews','synced_messages','synced_metrics_snapshots',
     'synced_tool_usage','synced_memories','synced_knowledge_patterns',
     'synced_healing_issues','synced_triggers','synced_fleet_queue','pending_commands',
-    'command_controllers'
+    'command_controllers','synced_notes','synced_chat_sessions','synced_chat_messages'
   ];
 begin
   foreach t in array tables loop
@@ -501,7 +606,7 @@ declare
     'synced_manual_reviews','synced_messages','synced_metrics_snapshots',
     'synced_tool_usage','synced_memories','synced_knowledge_patterns',
     'synced_healing_issues','synced_triggers','synced_fleet_queue','pending_commands',
-    'command_controllers'
+    'command_controllers','synced_notes','synced_chat_sessions','synced_chat_messages'
   ];
 begin
   foreach t in array tables loop
@@ -578,8 +683,8 @@ grant select on public.synced_leaderboard to authenticated;
 -- synced_at freshness — the desktop's upserts never send synced_at, so on
 -- the cursor tables an update kept the FIRST insert's stamp. This trigger
 -- re-stamps every update so `synced_at` means "last written by the
--- desktop". synced_fleet_queue is excluded: its stamp is the desktop's
--- reconcile key and must stay exactly what the desktop sent.
+-- desktop". synced_fleet_queue and synced_notes are excluded: their stamp
+-- is the desktop's reconcile key and must stay exactly what it sent.
 -- =====================================================================
 create or replace function public.touch_synced_at() returns trigger
   language plpgsql as $$
@@ -595,7 +700,8 @@ declare
     'synced_personas','synced_executions','synced_events',
     'synced_manual_reviews','synced_messages','synced_metrics_snapshots',
     'synced_tool_usage','synced_memories','synced_knowledge_patterns',
-    'synced_healing_issues','synced_triggers'
+    'synced_healing_issues','synced_triggers',
+    'synced_chat_sessions','synced_chat_messages'
   ];
 begin
   foreach t in array tables loop
@@ -609,8 +715,9 @@ end $$;
 -- =====================================================================
 -- Realtime — publish row changes so the web dashboard can subscribe live
 -- (useSyncedRealtime) instead of polling: the busiest synced tables, the
--- inbox-style tables, the fleet queue, and pending_commands (so the web
--- can follow a command from pending to its outcome).
+-- inbox-style tables, the fleet queue, pending_commands (so the web can
+-- follow a command from pending to its outcome), and the notes and chat
+-- tables (a chat_send reply arrives as a synced_chat_messages insert).
 -- RLS still applies on the Realtime socket: each user only receives changes
 -- to their own rows. Idempotent — only adds a table not already published.
 -- =====================================================================
@@ -621,7 +728,7 @@ declare
     'synced_personas','synced_executions','synced_events',
     'synced_manual_reviews','synced_devices','synced_messages',
     'synced_healing_issues','synced_fleet_queue','pending_commands',
-    'command_controllers'
+    'command_controllers','synced_notes','synced_chat_sessions','synced_chat_messages'
   ];
 begin
   foreach t in array tables loop
