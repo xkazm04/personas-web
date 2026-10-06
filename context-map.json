@@ -1540,7 +1540,7 @@
       "contexts": [
         {
           "name": "Mobile App Shell & Views",
-          "description": "Mobile experience, being rebuilt (docs/concepts/mobile-revival/PLAN.md): the old /m views were deleted 2026-10-06 and their URLs redirect (next.config.ts); the kept bottom-sheet primitive waits for the new /m. /m2 is the \"Around the Clock\" test landing (src/components/mobile-landing/clock): one 24-hour dial turned by the scroll.",
+          "description": "Phone experience: /m is the Hive Reels phone landing (six one-screen posters, share / waitlist / reminder hand-off to a computer; docs/concepts/mobile-revival/PLAN.md phase 1). /m2 is the \"Around the Clock\" test landing (src/components/mobile-landing/clock): one 24-hour dial turned by the scroll. The old /m/* dashboard views were deleted 2026-10-06 and their URLs redirect (next.config.ts); the kept bottom-sheet primitive waits for the mobile dashboard.",
           "businessFeature": "Mobile App Shell & Views",
           "category": "ui",
           "filePaths": [
@@ -1571,7 +1571,30 @@
             "src/components/mobile-landing/clock/tool-paths.ts",
             "src/components/mobile-landing/clock/useClockEngine.ts",
             "src/components/mobile-landing/clock/useHandoff.ts",
-            "e2e/mobile/m2-landing.spec.ts"
+            "e2e/mobile/m2-landing.spec.ts",
+            "src/app/m/page.tsx",
+            "e2e/mobile/m-landing.spec.ts",
+            "src/components/mobile-landing/hive/AthenaPoster.tsx",
+            "src/components/mobile-landing/hive/BillPoster.tsx",
+            "src/components/mobile-landing/hive/FaqPoster.tsx",
+            "src/components/mobile-landing/hive/Glyphs.tsx",
+            "src/components/mobile-landing/hive/HandoffPoster.tsx",
+            "src/components/mobile-landing/hive/HeroPoster.tsx",
+            "src/components/mobile-landing/hive/HiveChrome.tsx",
+            "src/components/mobile-landing/hive/HiveDock.tsx",
+            "src/components/mobile-landing/hive/HiveLanding.tsx",
+            "src/components/mobile-landing/hive/HiveSheet.tsx",
+            "src/components/mobile-landing/hive/ReelPoster.tsx",
+            "src/components/mobile-landing/hive/ToolSheet.tsx",
+            "src/components/mobile-landing/hive/data.ts",
+            "src/components/mobile-landing/hive/hive.css",
+            "src/components/mobile-landing/hive/toolIcons.ts",
+            "src/components/mobile-landing/hive/useChapters.ts",
+            "src/components/mobile-landing/hive/useHandoff.ts",
+            "src/components/mobile-landing/hive/useHeroBeat.ts",
+            "src/components/mobile-landing/hive/useHiveCopy.ts",
+            "src/components/mobile-landing/hive/useReel.ts",
+            "src/components/mobile-landing/hive/useSwap.ts"
           ],
           "target": null,
           "apiRoutes": []
@@ -2082,7 +2105,7 @@
     "Observability & Event Monitoring › Observability Charts & SLA [ui] — 55 files",
     "Observability & Event Monitoring › Event Bus & Stream Monitoring [ui] — 33 files",
     "Observability & Event Monitoring › Dashboard Home Overview [ui] — 23 files",
-    "Platform Foundation: Shell, UI & Motion › Mobile App Shell & Views [ui] — 1 file",
+    "Platform Foundation: Shell, UI & Motion › Mobile App Shell & Views [ui] — 51 files",
     "Platform Foundation: Shell, UI & Motion › Animation & Motion System [lib] — 24 files",
     "Platform Foundation: Shell, UI & Motion › Shared UI Primitives & Illustrations [ui] — 25 files",
     "Platform Foundation: Shell, UI & Motion › Dashboard Shell, Chrome & Realtime [ui] — 20 files",
@@ -2101,7 +2124,7 @@
   "summary": {
     "totalGroups": 12,
     "totalContexts": 55,
-    "totalFiles": 1079,
+    "totalFiles": 1102,
     "categories": {
       "ui": 40,
       "data": 2,
