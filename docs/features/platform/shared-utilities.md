@@ -50,7 +50,7 @@ Mostly independent, single-purpose modules; the only shared theme is "centralize
 ## Integration points
 - **`usePolling`** is wrapped by `src/hooks/useExecutionPolling.ts` (default 1000ms, auto-stops on terminal status) and used directly by the dashboard executions page and `reviewStore`.
 - **`useFocusTrap`** is consumed by `src/components/ConfirmDialog.tsx` and `src/components/dashboard/BatchReviewModal.tsx`.
-- **`useSearchParamState`** seeds filter/tab state in `src/app/dashboard/executions/page.tsx`, `src/app/connections/page.tsx`, and the feature-voting section.
+- **`useSearchParamState`** seeds filter/tab state in `src/components/dashboard/views/executions/index.tsx`, `src/app/connections/page.tsx`, and the feature-voting section.
 - **`lockBodyScroll`/`unlockBodyScroll`** is shared by `navbar/useMobileMenu.ts`, `navbar/DownloadModal.tsx`, `connector-modal`, `MobilePageTOC`, and `MobileTopicTOC` — the counted design is what lets these nest safely.
 - **`getClientIp`** feeds the voting/waitlist rate limiters (see [Server-Side Vote Persistence](../community/vote-persistence.md)); **`hasSupabaseEnv`** gates the Supabase-vs-file-store branch.
 - **`CHART_COLORS`** is re-exported from `@/lib/chart-theme`; **`relativeTime`** lazily imports `@sentry/nextjs` for its skew breadcrumb.

@@ -5,17 +5,17 @@ import { test, expect } from "@playwright/test";
 // navigation must re-enter it: /demo auto-enters, the dashboard's
 // sign-in prompt offers an explicit "Try Demo".
 test.describe("Dashboard demo", () => {
-  test("/demo enters demo mode and lands on dashboard home with a demo badge", async ({ page }) => {
+  test("/demo enters demo mode and lands on Personas with a demo badge", async ({ page }) => {
     await page.goto("/demo");
-    await page.waitForURL("**/dashboard/home");
+    await page.waitForURL("**/dashboard/personas");
     await expect(page.locator("main#main-content")).toBeVisible();
     // The demo session is labeled in the dashboard navbar
     await expect(page.getByText("Demo", { exact: true }).first()).toBeVisible();
   });
 
-  test("demo dashboard home renders dashboard navigation on mock data", async ({ page }) => {
+  test("demo dashboard renders dashboard navigation on mock data", async ({ page }) => {
     await page.goto("/demo");
-    await page.waitForURL("**/dashboard/home");
+    await page.waitForURL("**/dashboard/personas");
     // Sidebar/dashboard links render once the mock stores hydrate
     await expect(page.locator("a[href^='/dashboard/']").first()).toBeVisible();
   });

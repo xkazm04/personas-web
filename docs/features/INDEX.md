@@ -45,8 +45,8 @@ Status legend: ✅ written · ⬜ planned
 
 | Doc | Route | Nav label |
 | --- | --- | --- |
-| ✅ [home-overview](dashboard/home-overview.md) | `/dashboard/home` | Overview |
-| ✅ [agents](dashboard/agents.md) | `/dashboard/agents` | Agents |
+| ✅ [personas](dashboard/personas.md) | `/dashboard/personas` | Personas (main view; fleet monitor) |
+| ✅ [home-overview](dashboard/home-overview.md) | `/dashboard/home` | Overview › Mission Control |
 | ✅ [executions](dashboard/executions.md) | `/dashboard/executions` | Executions |
 | ✅ [events](dashboard/events.md) | `/dashboard/events` | Events |
 | ✅ [reviews](dashboard/reviews.md) | `/dashboard/reviews` | Reviews (Human Review) |
@@ -59,8 +59,7 @@ Status legend: ✅ written · ⬜ planned
 | ✅ [health](dashboard/health.md) | `/dashboard/health` | Health |
 | ✅ [knowledge](dashboard/knowledge.md) | `/dashboard/knowledge` | Knowledge |
 | ✅ [settings](dashboard/settings.md) | `/dashboard/settings` | Settings |
-| ✅ [playground](dashboard/playground.md) | `/dashboard/playground` | Playground (fleet prototypes) |
-| ✅ [shell-chrome](dashboard/shell-chrome.md) | `/dashboard/*` | (layout, sidebar, realtime) |
+| ✅ [shell-chrome](dashboard/shell-chrome.md) | `/dashboard/*` | (SPA shell, two-level menu, realtime) |
 
 ### marketing/ — Marketing & Landing
 

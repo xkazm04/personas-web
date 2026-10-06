@@ -71,23 +71,26 @@ const PUBLIC: readonly SmokeRoute[] = [
  * The demo product surface. Demo mode is IN-MEMORY and never persisted, so a
  * hard navigation to any of these lands on the sign-in prompt instead of the
  * page. The runner enters demo once and then navigates by clicking the sidebar,
- * which is why every entry here is also a link in `DashboardNavigation`.
+ * which is why every entry here is also a link in `DashboardNavigation`, and
+ * why the list follows the menu: a level-2 link is only visible while its
+ * section is open.
  */
 const DASHBOARD: readonly SmokeRoute[] = [
+  // Menu order: Personas (the landing view), then Overview's level-2 views
+  // (visible only while Overview is open), then the remaining sections.
+  { path: "/dashboard/personas", name: "personas", tag: "dashboard" },
   { path: "/dashboard/home", name: "mission control", tag: "dashboard" },
-  { path: "/dashboard/agents", name: "agents", tag: "dashboard" },
+  { path: "/dashboard/reviews", name: "review queue", tag: "dashboard" },
   { path: "/dashboard/executions", name: "executions", tag: "dashboard" },
   { path: "/dashboard/events", name: "event bus", tag: "dashboard" },
-  { path: "/dashboard/reviews", name: "review queue", tag: "dashboard" },
-  { path: "/dashboard/messages", name: "messages", tag: "dashboard" },
   { path: "/dashboard/observability", name: "observability", tag: "dashboard" },
   { path: "/dashboard/leaderboard", name: "leaderboard", tag: "dashboard" },
-  { path: "/dashboard/director", name: "director coaching", tag: "dashboard" },
   { path: "/dashboard/sla", name: "sla", tag: "dashboard" },
   { path: "/dashboard/incidents", name: "incidents", tag: "dashboard" },
   { path: "/dashboard/health", name: "system health", tag: "dashboard" },
   { path: "/dashboard/knowledge", name: "knowledge base", tag: "dashboard" },
-  { path: "/dashboard/playground", name: "fleet playground", tag: "dashboard" },
+  { path: "/dashboard/messages", name: "messages", tag: "dashboard" },
+  { path: "/dashboard/director", name: "director coaching", tag: "dashboard" },
   { path: "/dashboard/settings", name: "settings", tag: "dashboard" },
 ];
 

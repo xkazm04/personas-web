@@ -70,9 +70,9 @@ per-node-id lookup of realistic mock JSON), syntax-highlighted by `highlightJson
 
 | File | Role |
 | --- | --- |
-| `src/app/dashboard/events/page.tsx` | Page shell, tab state, background image, title + connection dot |
-| `src/app/dashboard/events/events-page/EventsPageTabs.tsx` | Roving-tabindex tablist (events/subscriptions/visualization/swimlane) |
-| `src/app/dashboard/events/events-page/EventsVisualizationView.tsx` | Visualization tab: stats, Test-Flow button, legend, node grid, drawer |
+| `src/components/dashboard/views/events/index.tsx` | Page shell, tab state, background image, title + connection dot |
+| `src/components/dashboard/views/events/events-page/EventsPageTabs.tsx` | Roving-tabindex tablist (events/subscriptions/visualization/swimlane) |
+| `src/components/dashboard/views/events/events-page/EventsVisualizationView.tsx` | Visualization tab: stats, Test-Flow button, legend, node grid, drawer |
 | `src/app/api/events/stream/route.ts` | **Real** SSE proxy to the orchestrator with heartbeat injection |
 | `src/hooks/useEventStream.ts` | EventSource lifecycle, reconnect backoff, polling fallback |
 | `src/hooks/useEventTopology.ts` | BFS over `sourceId` links → event-chain components |

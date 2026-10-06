@@ -64,18 +64,18 @@ Rules the table enforces: a disjoint arm while a window is open **commits the op
 ## Key files
 | File | Role |
 | --- | --- |
-| `src/app/dashboard/reviews/page.tsx` | Route entry; header ("Overdue: N") + split/focus mode toggle; owns the page clock |
-| `src/app/dashboard/reviews/review-due.tsx` | `useReviewClock` (the one `now`, visibility- and reduced-motion-gated) + `DueChip` |
+| `src/components/dashboard/views/reviews/index.tsx` | Route entry; header ("Overdue: N") + split/focus mode toggle; owns the page clock |
+| `src/components/dashboard/views/reviews/review-due.tsx` | `useReviewClock` (the one `now`, visibility- and reduced-motion-gated) + `DueChip` |
 | `src/lib/review-sla.ts` | The one SLA rule: `slaState`, `orderByDue`, `countOverdue`, `focusQueue`, `reconcileFocusQueue`, `escalationDue`, `validateEscalationPolicy`, `formatDue`, `DEFAULT_ESCALATION_POLICY` (tests: `review-sla.test.ts`, `reviewFixtures.test.ts`, `src/stores/reviewStore.sla.test.ts`) |
-| `src/app/dashboard/reviews/ReviewsSplitPane.tsx` | List + detail layout; polling, escalation interval, filtering/sorting, keyboard wiring |
-| `src/app/dashboard/reviews/ReviewsFocusFlow.tsx` | One-card-at-a-time queue; `a`/`r`/`s`/`Esc` handling |
-| `src/app/dashboard/reviews/reviews-split-pane/ReviewList.tsx` · `ReviewRow.tsx` | Scrollable list + per-row render (select box, severity dot, status dot, parse-error flag) |
-| `src/app/dashboard/reviews/reviews-split-pane/ReviewDetailPanel.tsx` | Detail view: content, execution id, reviewer notes editor, approve/reject actions |
-| `src/app/dashboard/reviews/reviews-split-pane/ReviewsBulkToolbar.tsx` | Select-all + bulk approve/reject toolbar |
-| `src/app/dashboard/reviews/reviews-split-pane/ReviewsSplitPaneToasts.tsx` | `ReviewUndoToast` (ledger window to UndoToast, shared with focus flow) + BulkProgressBar / BulkResultToast / ConfirmDialog |
-| `src/app/dashboard/reviews/reviews-split-pane/useReviewKeyboardShortcuts.ts` | `j`/`k`/`a`/`r`/`Esc` for the split-pane |
-| `src/app/dashboard/reviews/reviews-split-pane/{ReviewStatusDot,reviewSeverityConfig}.ts(x)` | Status indicator + severity icon/color map |
-| `src/app/dashboard/reviews/reviews-focus-flow/{FocusReviewCard,FocusProgressHeader,FocusEmptyState,focusSeverityConfig}.ts(x)` | Focus-mode card, header, empty state, severity pills |
+| `src/components/dashboard/views/reviews/ReviewsSplitPane.tsx` | List + detail layout; polling, escalation interval, filtering/sorting, keyboard wiring |
+| `src/components/dashboard/views/reviews/ReviewsFocusFlow.tsx` | One-card-at-a-time queue; `a`/`r`/`s`/`Esc` handling |
+| `src/components/dashboard/views/reviews/reviews-split-pane/ReviewList.tsx` · `ReviewRow.tsx` | Scrollable list + per-row render (select box, severity dot, status dot, parse-error flag) |
+| `src/components/dashboard/views/reviews/reviews-split-pane/ReviewDetailPanel.tsx` | Detail view: content, execution id, reviewer notes editor, approve/reject actions |
+| `src/components/dashboard/views/reviews/reviews-split-pane/ReviewsBulkToolbar.tsx` | Select-all + bulk approve/reject toolbar |
+| `src/components/dashboard/views/reviews/reviews-split-pane/ReviewsSplitPaneToasts.tsx` | `ReviewUndoToast` (ledger window to UndoToast, shared with focus flow) + BulkProgressBar / BulkResultToast / ConfirmDialog |
+| `src/components/dashboard/views/reviews/reviews-split-pane/useReviewKeyboardShortcuts.ts` | `j`/`k`/`a`/`r`/`Esc` for the split-pane |
+| `src/components/dashboard/views/reviews/reviews-split-pane/{ReviewStatusDot,reviewSeverityConfig}.ts(x)` | Status indicator + severity icon/color map |
+| `src/components/dashboard/views/reviews/reviews-focus-flow/{FocusReviewCard,FocusProgressHeader,FocusEmptyState,focusSeverityConfig}.ts(x)` | Focus-mode card, header, empty state, severity pills |
 | `src/lib/review-display.ts` | Resolver / auto-approve-note sentinels + their display mapping, `formatAge` (test: `review-queue-i18n.test.ts`, which also source-scans the queue for hardcoded English) |
 | `src/hooks/useReviewBulkActions.ts` | Bulk selection, reject confirm, retry and unmount flush, all through `decide` |
 | `src/lib/review-ledger.ts` | Pure decision ledger: `transition`, `overlay`, `applyConfirmed`, `countPending` (tests: `review-ledger.test.ts`, `src/stores/reviewStore.test.ts`) |
@@ -117,5 +117,5 @@ Rules the table enforces: a disjoint arm while a window is open **commits the op
 
 ## Related docs
 - [Dashboard shell & chrome](shell-chrome.md)
-- [Agents (Personas) Management](agents.md)
+- [Personas](personas.md)
 - [Feature index](../INDEX.md)

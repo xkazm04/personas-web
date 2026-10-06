@@ -14,7 +14,7 @@ A check that is one fragment of a wider incident (today: Slack's "Webhook circui
 Each card's header dot reflects the worst item status. Like the rest of `/dashboard/*`, all data is **mock** — there's no real host to probe in this repo.
 
 ## How it works
-The page (`src/app/dashboard/health/page.tsx`) is a `"use client"` component in a `staggerContainer`/`fadeUp` tree. It loads via `useSystemHealth` (SWR over a standalone mock fetcher) and renders the four sections in a 2-column grid of `HealthSectionCard`s; the Resources card receives a `DiskUsageBar` as its footer. A demo action records the check in a local `resolutions` map (pure reducer in `health-page/healthActions.ts`) that is projected onto the fetched sections, and sets a `toast` state that renders a reused `ExecuteToast`.
+The page (`src/components/dashboard/views/health/index.tsx`) is a `"use client"` component in a `staggerContainer`/`fadeUp` tree. It loads via `useSystemHealth` (SWR over a standalone mock fetcher) and renders the four sections in a 2-column grid of `HealthSectionCard`s; the Resources card receives a `DiskUsageBar` as its footer. A demo action records the check in a local `resolutions` map (pure reducer in `health-page/healthActions.ts`) that is projected onto the fetched sections, and sets a `toast` state that renders a reused `ExecuteToast`.
 
 Key behaviors:
 - **Demo-only fetch** — `getSystemHealth` is a *standalone* export in `mockApi.ts` (not part of the `ApiClient` interface — no real/supabase client changes); the hook calls it through `useDemoOnlySWR` (`src/hooks/useDemoOnlySWR.ts`), SWR keyed on `isDemo`, for a brief loading state. Returns the four sections + the disk-usage gauge. In a real (non-demo) session the key is `null`, nothing is fetched, and the page renders an `EmptyState` (`t.dashboardUi.liveUnavailableTitle` / `liveUnavailableDescription`) instead of the fixture.
@@ -26,12 +26,12 @@ Key behaviors:
 ## Key files
 | File | Role |
 | --- | --- |
-| `src/app/dashboard/health/page.tsx` | Page shell: load, apply demo resolutions, 2-col section grid, disk-bar footer on Resources, action toast |
-| `src/app/dashboard/health/health-page/healthActions.ts` | Pure demo reducer (`resolveHealthAction`) + projection (`applyHealthResolutions`); pinned by `healthActions.test.ts` |
+| `src/components/dashboard/views/health/index.tsx` | Page shell: load, apply demo resolutions, 2-col section grid, disk-bar footer on Resources, action toast |
+| `src/components/dashboard/views/health/health-page/healthActions.ts` | Pure demo reducer (`resolveHealthAction`) + projection (`applyHealthResolutions`); pinned by `healthActions.test.ts` |
 | `src/lib/healthFormat.ts` | Status → dot/text/icon maps, section icon/accent maps, `worstStatus` |
-| `src/app/dashboard/health/health-page/useSystemHealth.ts` | Demo-gated SWR (`useDemoOnlySWR`) over the standalone `getSystemHealth` mock fetcher |
-| `src/app/dashboard/health/health-page/HealthSectionCard.tsx` | One section card: header status dot + `HealthCheckRow` items (focus ring, Related chips) + optional footer + action buttons |
-| `src/app/dashboard/health/health-page/DiskUsageBar.tsx` | Disk-usage gauge (fill-tinted bar + used/free readouts) |
+| `src/components/dashboard/views/health/health-page/useSystemHealth.ts` | Demo-gated SWR (`useDemoOnlySWR`) over the standalone `getSystemHealth` mock fetcher |
+| `src/components/dashboard/views/health/health-page/HealthSectionCard.tsx` | One section card: header status dot + `HealthCheckRow` items (focus ring, Related chips) + optional footer + action buttons |
+| `src/components/dashboard/views/health/health-page/DiskUsageBar.tsx` | Disk-usage gauge (fill-tinted bar + used/free readouts) |
 
 ## Data & state
 - **Source:** Demo-only. `MOCK_HEALTH_CHECKS` (4 sections), `MOCK_DISK_USAGE`, `HEALTH_SECTION_ORDER`, `MOCK_HEALTH_ALERTS` in `src/lib/mock-dashboard-data.ts`; `getSystemHealth()` standalone fetcher in `src/lib/mockApi.ts`.

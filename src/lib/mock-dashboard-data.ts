@@ -70,10 +70,6 @@ export const MOCK_FLEET_EXECUTIONS = MOCK_OBSERVABILITY_METRICS.totalExecutions;
 // `useSparklines` projects them from MOCK_DAILY_METRICS with
 // `sparklinesFromDaily`, the same function the Supabase plane uses.
 
-// Centred on the fleet's actual terminal success rate (8 of 9 finished runs
-// ≈ 89%, and 89.4% across the 14-day window) so the trend line under the home
-// success ring cannot claim a different number than the ring above it.
-export const SPARKLINE_SUCCESS = generateTimeSeries(14, (i) => 89 + Math.sin(i * 0.4) * 3, 2, 30);
 export const SPARKLINE_AGENTS = generateTimeSeries(14, (i) => 5 + Math.floor(i / 4), 1, 40);
 
 // ── Latency percentile data ─────────────────────────────────────────
@@ -1181,7 +1177,7 @@ export const MOCK_FLEET_RECOMMENDATION: FleetRecommendation = {
   impact: "≈ $48/month saved",
   personaName: FEEDBACK.name,
   actionLabel: "Review routing policy",
-  actionHref: "/dashboard/agents",
+  actionHref: "/dashboard/personas",
 };
 
 export const MOCK_HEALTH_DIGEST: HealthDigest = {

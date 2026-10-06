@@ -137,7 +137,7 @@ describe("both data planes call the series module", () => {
   const read = (rel: string) => readFileSync(path.resolve(__dirname, "..", rel), "utf8");
 
   it("useSparklines imports neither generated cost/execution sparkline", () => {
-    const src = read("app/dashboard/observability/performance-view/useSparklines.ts");
+    const src = read("components/dashboard/views/observability/performance-view/useSparklines.ts");
     expect(src).not.toMatch(/\bSPARKLINE_COST\b/);
     expect(src).not.toMatch(/\bSPARKLINE_EXECUTIONS\b/);
     expect(src).toMatch(/\bsparklinesFromDaily\b/);

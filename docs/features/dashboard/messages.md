@@ -12,7 +12,7 @@ Messages is an inbox-style surface listing **threads** — one per persona conve
 - In the nav, the Messages item shows a badge of `MOCK_UNREAD_MESSAGES` (currently `7`) — a fixed demo constant, independent of the per-session read overrides on this page.
 
 ## How it works
-**Data load** — `useMessagesData()` (`src/app/dashboard/messages/useMessagesData.ts`) returns `{ threads, loading, error }`. In demo mode (`useAuthStore.isDemo`) it returns `MOCK_MESSAGE_THREADS` synchronously with `loading: false`. In real/Supabase mode it calls `getSyncedMessageThreads()` from `src/lib/supabaseApi.ts` inside an effect, with a `cancelled` guard, Sentry capture on failure, and an error string fallback. Since `/dashboard/*` is demo-only here, the mock path is what runs.
+**Data load** — `useMessagesData()` (`src/components/dashboard/views/messages/useMessagesData.ts`) returns `{ threads, loading, error }`. In demo mode (`useAuthStore.isDemo`) it returns `MOCK_MESSAGE_THREADS` synchronously with `loading: false`. In real/Supabase mode it calls `getSyncedMessageThreads()` from `src/lib/supabaseApi.ts` inside an effect, with a `cancelled` guard, Sentry capture on failure, and an error string fallback. Since `/dashboard/*` is demo-only here, the mock path is what runs.
 
 **Read-state overrides** — the page (`page.tsx:30`) keeps a local `Map<messageId, MessageStatus>` of overrides layered over the immutable mock fixture. A `useMemo` (`page.tsx:38`) maps each base thread, applies overrides per message, recomputes `unreadCount`, and **re-sorts threads by `latestTimestamp` descending**. `markThreadRead`, `markAllRead`, and `openThread` all just add entries to this map — the fixture is never mutated.
 
@@ -27,12 +27,12 @@ Messages is an inbox-style surface listing **threads** — one per persona conve
 ## Key files
 | File | Role |
 | --- | --- |
-| `src/app/dashboard/messages/page.tsx` | Page entry — paginates, holds read-state overrides, sorts threads, wires header/list/modal |
-| `src/app/dashboard/messages/useMessagesData.ts` | Data hook — mock threads in demo mode, `getSyncedMessageThreads()` otherwise |
-| `src/app/dashboard/messages/messages-page/ThreadRow.tsx` | One thread row (persona, subject, reply chip, unread pill) — opens the modal |
-| `src/app/dashboard/messages/messages-page/MessageRow.tsx` | One flat-list row (single message; reply chevron for non-parents) — opens the parent thread |
-| `src/app/dashboard/messages/messages-page/ThreadDetailModal.tsx` | Conversation modal — parent + replies as markdown articles |
-| `src/app/dashboard/messages/messages-page/MessagesPagination.tsx` | Presentational prev/next pagination bar |
+| `src/components/dashboard/views/messages/index.tsx` | Page entry — paginates, holds read-state overrides, sorts threads, wires header/list/modal |
+| `src/components/dashboard/views/messages/useMessagesData.ts` | Data hook — mock threads in demo mode, `getSyncedMessageThreads()` otherwise |
+| `src/components/dashboard/views/messages/messages-page/ThreadRow.tsx` | One thread row (persona, subject, reply chip, unread pill) — opens the modal |
+| `src/components/dashboard/views/messages/messages-page/MessageRow.tsx` | One flat-list row (single message; reply chevron for non-parents) — opens the parent thread |
+| `src/components/dashboard/views/messages/messages-page/ThreadDetailModal.tsx` | Conversation modal — parent + replies as markdown articles |
+| `src/components/dashboard/views/messages/messages-page/MessagesPagination.tsx` | Presentational prev/next pagination bar |
 | `src/lib/mock-dashboard-data.ts` | `MessageThread`/`FeedbackMessage` types, `MOCK_MESSAGE_THREADS` fixture generator, `MOCK_UNREAD_MESSAGES` |
 | `src/components/dashboard/Modal.tsx` | Shared modal primitive (backdrop, esc/click-out close, header/body/footer) |
 | `src/components/dashboard/DashboardNavigation.tsx` | Nav badge — `getBadge` returns `MOCK_UNREAD_MESSAGES` for the Messages item |

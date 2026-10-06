@@ -35,10 +35,10 @@ describe("demo-only data gate", () => {
   });
 
   it.each([
-    "src/app/dashboard/health/health-page/useSystemHealth.ts",
-    "src/app/dashboard/incidents/incidents-page/useAuditIncidents.ts",
-    "src/app/dashboard/director/useDirectorData.ts",
-    "src/app/dashboard/observability/activity-view/useActivityMetrics.ts",
+    "src/components/dashboard/views/health/health-page/useSystemHealth.ts",
+    "src/components/dashboard/views/incidents/incidents-page/useAuditIncidents.ts",
+    "src/components/dashboard/views/director/useDirectorData.ts",
+    "src/components/dashboard/views/observability/activity-view/useActivityMetrics.ts",
   ])("%s fetches its mock only through the gate", (file) => {
     const src = stripComments(readFileSync(path.join(REPO_ROOT, file), "utf8"));
     expect(src).toMatch(/\buseDemoOnlySWR\(/);
@@ -46,10 +46,10 @@ describe("demo-only data gate", () => {
   });
 
   it.each([
-    "src/app/dashboard/health/page.tsx",
-    "src/app/dashboard/incidents/page.tsx",
-    "src/app/dashboard/director/page.tsx",
-    "src/app/dashboard/observability/ActivityMetricsView.tsx",
+    "src/components/dashboard/views/health/index.tsx",
+    "src/components/dashboard/views/incidents/index.tsx",
+    "src/components/dashboard/views/director/index.tsx",
+    "src/components/dashboard/views/observability/ActivityMetricsView.tsx",
   ])("%s renders the live-unavailable empty state", (file) => {
     const src = stripComments(readFileSync(path.join(REPO_ROOT, file), "utf8"));
     expect(src).toMatch(/\bliveUnavailable\b/);

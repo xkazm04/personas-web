@@ -405,7 +405,15 @@ export const de: LocaleTranslations = {
       knowledge: "Wissen",
       settings: "Einstellungen",
       leaderboard: "Rangliste",
-      playground: "Spielwiese",
+      personas: "Personas",
+      missionControl: "Kommandozentrale",
+      navSectionsLabel: "Dashboard-Bereiche",
+      navGroups: {
+        mission: "Mission",
+        monitoring: "\u00dcberwachung",
+        reliability: "Zuverl\u00e4ssigkeit",
+        memory: "Ged\u00e4chtnis"
+      },
       director: "Regisseur",
       sla: "SLA",
       incidents: "Vorf\u00e4lle",
@@ -476,6 +484,99 @@ export const de: LocaleTranslations = {
         }
       },
       home: {
+        mission: {
+          windowNote: "Messwerte der letzten 14 Tage",
+          hint: "1 bis 8 \u00f6ffnet eine Dimension, Esc f\u00fchrt zur\u00fcck",
+          wallLabel: "Dimensionen der Flotte",
+          openDimension: "{label} \u00f6ffnen",
+          backToWall: "Zur\u00fcck zur \u00dcbersicht",
+          railLabel: "Alle Dimensionen",
+          verdicts: {
+            pending: "Wird gemessen",
+            failed: "Nicht verf\u00fcgbar",
+            unmeasured: "Nicht gemessen",
+            ok: "Stabil",
+            watch: "Beobachten",
+            yours: "Wartet auf Sie",
+            act: "Braucht Sie"
+          },
+          dims: {
+            outcomes: {
+              label: "Ergebnisse",
+              question: "Gelingen die L\u00e4ufe?"
+            },
+            agents: {
+              label: "Agenten",
+              question: "Hat ein Agent Probleme?"
+            },
+            queue: {
+              label: "Wartet auf Sie",
+              question: "Was braucht Ihr Zutun?"
+            },
+            recovery: {
+              label: "Selbstheilung",
+              question: "Repariert sich die Flotte selbst?"
+            },
+            spend: {
+              label: "Ausgaben",
+              question: "Bleiben die Ausgaben im Rahmen?"
+            },
+            autonomy: {
+              label: "Autonomie",
+              question: "Was l\u00e4uft ohne Sie?"
+            },
+            vault: {
+              label: "Tresor",
+              question: "Sind die Zugangsdaten in Ordnung?"
+            },
+            instruments: {
+              label: "Instrumente",
+              question: "Ist diese Seite aktuell?"
+            }
+          },
+          evidence: {
+            outcomes: "L\u00e4ufe {runs} \u00b7 fehlgeschlagen {failed}",
+            noRuns: "Keine L\u00e4ufe in diesem Zeitraum",
+            agents: "Ausfall {critical} \u00b7 beeintr\u00e4chtigt {degraded} \u00b7 betriebsbereit {healthy}",
+            queue: "Warnungen {alerts} \u00b7 Reviews {reviews} \u00b7 Ged\u00e4chtnis {memory} \u00b7 ungelesen {reports}",
+            queueEmpty: "Nichts wartet auf Sie",
+            recovery: "Offen {open} \u00b7 pausiert {paused} \u00b7 automatisch behoben {fixed}",
+            spendSpikes: "Kostenspitzen: {n}",
+            spendPerDay: "{value} pro Tag",
+            autonomy: "Geplant {n} \u00b7 n\u00e4chster in {time}",
+            autonomyEmpty: "Nichts geplant",
+            vault: "\u00dcberf\u00e4llig {overdue} \u00b7 Anomalien {anomalies} \u00b7 Ereignisse {events}",
+            instruments: "Fehlgeschlagene Quellen: {failed}",
+            instrumentsOk: "Alle Quellen haben geantwortet",
+            pending: "Warte auf den ersten Messwert",
+            unmeasured: "Noch keine synchronisierte Quelle daf\u00fcr"
+          },
+          scoreSuffix: "/100",
+          detail: {
+            issuesTitle: "Selbstheilungsf\u00e4lle",
+            issuesEmpty: "Keine Selbstheilungsf\u00e4lle in diesem Zeitraum.",
+            issueStatus: {
+              open: "Offen",
+              auto_fixed: "Automatisch behoben",
+              resolved: "Gel\u00f6st"
+            },
+            pausedBadge: "Pausiert",
+            costTitle: "Kosten pro Tag",
+            costSpike: "Kostenspitze",
+            sourcesTitle: "Quellen",
+            sourceStatus: {
+              pending: "Ausstehend",
+              ok: "Beantwortet",
+              failed: "Fehlgeschlagen"
+            },
+            sources: {
+              observability: "Observability",
+              healing: "Selbstheilungsf\u00e4lle",
+              reviews: "Reviews",
+              routines: "Routinen"
+            }
+          }
+        },
         vitals: {
           runs: "L\u00e4ufe",
           alerts: "Warnungen"
@@ -1705,7 +1806,6 @@ export const de: LocaleTranslations = {
       features5: "Gro\u00dfartige Agenten sind selten beim ersten Versuch perfekt, also ist das Lab der Ort, an dem Sie sie verfeinern. Chatten Sie mit einer Persona, um sie zu coachen, lassen Sie zwei Versionen in der Arena gegeneinander antreten, entwickeln Sie sie \u00fcber Generationen, oder bewerten Sie sie in den entscheidenden Dimensionen. Jede Verbesserung, die Sie behalten, ist versioniert und umkehrbar.",
       features6: "Personas bringt sechs zweckgebaute Plugins mit, jedes ein eigenst\u00e4ndiger Arbeitsbereich, den Ihre Agenten steuern k\u00f6nnen. Nehmen Sie Dev Tools: Es macht aus einer Persona einen Programmierkollegen, der Aufgaben ausf\u00fchrt, die Ausgabe liest und iteriert. Ein Tab-Wechsel, und Sie treffen einen weiteren Spezialisten \u2014 alle teilen sich dieselben Anmeldedaten und denselben Speicher.",
       dashboardHome: "Willkommen in der Kommandozentrale \u2014 Ihre gesamte Flotte auf einem Bildschirm. Ganz oben die Vitalwerte: Erfolgsrate, laufende Aufgaben, aktive Agenten, offene Warnungen und Pr\u00fcfungen, die auf Sie warten. Darunter hebt der Optimizer eine wirkungsvolle Verbesserung nach der anderen hervor \u2014 gerade eine Routing-\u00c4nderung, die Kosten senkt, ohne die Qualit\u00e4t zu ber\u00fchren. Die zwei Panels darunter verfolgen die Gesundheit jedes Agenten und die neuen Erinnerungen, die sie gelernt haben und \u00fcbernehmen m\u00f6chten. Dann das Live-Bild: links jede Ausf\u00fchrung beim Eintreffen, rechts vierzehn Tage Traffic und Fehler. Die Heatmap zeigt L\u00e4ufe pro Agent, Tag f\u00fcr Tag, und die untere Reihe rundet alles ab \u2014 Ihre Top-Performer, die n\u00e4chsten geplanten Routinen und jede Rotation von Anmeldedaten. Eine Seite, der gesamte Betrieb.",
-      dashboardAgents: "Das ist Ihr Aufgebot. Jede Karte ist eine Persona \u2014 ein einzelner Agent mit einer Identit\u00e4t und einem Satz kombinierbarer F\u00e4higkeiten. Das Portr\u00e4t wird passend zu seinem Charakter erzeugt; darunter die Live-Statistiken: Erfolgsrate, L\u00e4ufe und Kosten. Klicken Sie auf Ausf\u00fchren, um einen Agenten auf Abruf zu starten, oder \u00f6ffnen Sie Details, um Konfiguration und j\u00fcngste Historie zu pr\u00fcfen. F\u00fcnf Agenten hier, jeder erledigt still seine eine Aufgabe gut.",
       dashboardExecutions: "Jeder Lauf, den die Flotte je gemacht hat, lebt hier \u2014 der neueste zuerst. Die Tabelle zeigt Persona, Status, Dauer, Kosten und Startzeitpunkt \u2014 filtern Sie auf nur die Fehlschl\u00e4ge oder die noch laufenden. Klicken Sie auf eine Zeile, und die vollst\u00e4ndige Ausf\u00fchrung \u00f6ffnet sich: ein Metrik-Streifen, eine etwaige Fehlererkl\u00e4rung und die Live-Ausgabe, Zeile f\u00fcr Zeile, genau so, wie der Agent sie erzeugt hat.",
       dashboardEvents: "Agenten arbeiten nicht isoliert \u2014 sie reagieren auf Ereignisse. Das ist der Event-Bus: jedes Signal, das durch das System flie\u00dft, von Zeitpl\u00e4nen und Webhooks bis zu Nachrichten zwischen Agenten. Jede Zeile zeigt den Ereignistyp, die Quelle, den Status und wie lange es her ist. Fehlgeschlagene Ereignisse lassen sich an Ort und Stelle erneut versuchen, und verwandte Ereignisse verketten sich, sodass Sie eine einzelne Kaskade von Anfang bis Ende verfolgen k\u00f6nnen.",
       dashboardReviews: "Manche Entscheidungen brauchen einen Menschen. Wenn ein Agent auf etwas st\u00f6\u00dft, das er nicht allein entscheiden sollte, h\u00e4lt er inne und leitet den Fall hierher. Jeder Eintrag enth\u00e4lt die Persona, den Kontext und die vorgeschlagene Aktion \u2014 genehmigen, ablehnen oder f\u00fcr sp\u00e4ter \u00fcberspringen, per Klick oder Tastatur. Nichts Riskantes geht ohne Ihre Freigabe live, und die Warteschlange h\u00e4lt den Rest der Flotte in Bewegung, w\u00e4hrend Sie entscheiden.",

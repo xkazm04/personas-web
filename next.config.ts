@@ -84,19 +84,21 @@ const nextConfig: NextConfig = {
       },
     ];
   },
-  // TEMPORARY (non-permanent, 307) - see docs/concepts/mobile-revival/PLAN.md,
-  // decision M1. The old /m dashboard views were deleted and the phone redirect
-  // (src/proxy.ts) retired, so their URLs (bookmarks, shared links,
-  // notifications) land on the desktop equivalents instead of 404ing. Next
-  // passes the query string through. `/m` itself is the new phone landing
-  // (phase 1) and is no longer redirected; these view entries are revisited
-  // when the mobile dashboard ships (phase 2).
+  // Redirects for URLs that external links still point at (all temporary, 307).
+  // - Old /m dashboard views (docs/concepts/mobile-revival/PLAN.md, M1/M13): the
+  //   views were deleted and the phone redirect (src/proxy.ts) retired; the mobile
+  //   dashboard is phone layouts of /dashboard/*, so these stay. /m itself is the
+  //   public phone landing and is not redirected. Next passes the query string through.
+  // - Retired dashboard views: Personas replaced the Agents grid and the fleet
+  //   Playground (2026-10-05).
   async redirects() {
     return [
       { source: "/m/overview", destination: "/dashboard/home", permanent: false },
       { source: "/m/reviews", destination: "/dashboard/reviews", permanent: false },
       { source: "/m/messages", destination: "/dashboard/messages", permanent: false },
       { source: "/m/alerts", destination: "/dashboard/incidents", permanent: false },
+      { source: "/dashboard/agents", destination: "/dashboard/personas", permanent: false },
+      { source: "/dashboard/playground", destination: "/dashboard/personas", permanent: false },
     ];
   },
 };

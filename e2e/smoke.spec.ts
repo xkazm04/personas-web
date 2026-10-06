@@ -151,7 +151,7 @@ test.describe("dashboard", () => {
     // failure that says nothing about the app.
     await page.setViewportSize({ width: 1440, height: 900 });
     await page.goto("/demo");
-    await page.waitForURL("**/dashboard/home");
+    await page.waitForURL("**/dashboard/personas");
 
     for (const route of DASHBOARD_ROUTES) {
       const link = page.locator(`a[href="${route.path}"]`).first();

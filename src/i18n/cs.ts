@@ -405,7 +405,15 @@ export const cs: LocaleTranslations = {
       knowledge: "Znalosti",
       settings: "Nastaven\u00ed",
       leaderboard: "\u017deb\u0159\u00ed\u010dek",
-      playground: "H\u0159i\u0161t\u011b",
+      personas: "Persony",
+      missionControl: "\u0158\u00eddic\u00ed centrum",
+      navSectionsLabel: "Sekce n\u00e1st\u011bnky",
+      navGroups: {
+        mission: "Mise",
+        monitoring: "Monitoring",
+        reliability: "Spolehlivost",
+        memory: "Pam\u011b\u0165"
+      },
       director: "Re\u017eis\u00e9r",
       sla: "SLA",
       incidents: "Incidenty",
@@ -476,6 +484,99 @@ export const cs: LocaleTranslations = {
         }
       },
       home: {
+        mission: {
+          windowNote: "\u00dadaje za posledn\u00edch 14 dn\u00ed",
+          hint: "Kl\u00e1vesami 1 a\u017e 8 otev\u0159ete dimenzi, Esc v\u00e1s vr\u00e1t\u00ed zp\u011bt",
+          wallLabel: "Dimenze flotily",
+          openDimension: "Otev\u0159\u00edt {label}",
+          backToWall: "Zp\u011bt na p\u0159ehled",
+          railLabel: "V\u0161echny dimenze",
+          verdicts: {
+            pending: "M\u011b\u0159\u00ed se",
+            failed: "Nedostupn\u00e9",
+            unmeasured: "Nem\u011b\u0159eno",
+            ok: "Stabiln\u00ed",
+            watch: "Sledovat",
+            yours: "\u010cek\u00e1 na v\u00e1s",
+            act: "Pot\u0159ebuje v\u00e1s"
+          },
+          dims: {
+            outcomes: {
+              label: "V\u00fdsledky",
+              question: "Da\u0159\u00ed se spu\u0161t\u011bn\u00edm?"
+            },
+            agents: {
+              label: "Agenti",
+              question: "M\u00e1 n\u011bkter\u00fd agent pot\u00ed\u017ee?"
+            },
+            queue: {
+              label: "\u010cek\u00e1 na v\u00e1s",
+              question: "Co pot\u0159ebuje v\u00e1\u0161 z\u00e1sah?"
+            },
+            recovery: {
+              label: "Samooprava",
+              question: "Opravuje se flotila sama?"
+            },
+            spend: {
+              label: "V\u00fddaje",
+              question: "Jsou v\u00fddaje v norm\u011b?"
+            },
+            autonomy: {
+              label: "Autonomie",
+              question: "Co b\u011b\u017e\u00ed bez v\u00e1s?"
+            },
+            vault: {
+              label: "Trezor",
+              question: "Jsou p\u0159ihla\u0161ovac\u00ed \u00fadaje v po\u0159\u00e1dku?"
+            },
+            instruments: {
+              label: "P\u0159\u00edstroje",
+              question: "Je tato str\u00e1nka aktu\u00e1ln\u00ed?"
+            }
+          },
+          evidence: {
+            outcomes: "Spu\u0161t\u011bn\u00ed {runs} \u00b7 selhalo {failed}",
+            noRuns: "V tomto obdob\u00ed \u017e\u00e1dn\u00e1 spu\u0161t\u011bn\u00ed",
+            agents: "V\u00fdpadek {critical} \u00b7 omezeno {degraded} \u00b7 v provozu {healthy}",
+            queue: "Upozorn\u011bn\u00ed {alerts} \u00b7 recenze {reviews} \u00b7 pam\u011b\u0165 {memory} \u00b7 nep\u0159e\u010dteno {reports}",
+            queueEmpty: "Nic na v\u00e1s ne\u010dek\u00e1",
+            recovery: "Otev\u0159eno {open} \u00b7 pozastaveno {paused} \u00b7 opraveno automaticky {fixed}",
+            spendSpikes: "N\u00e1kladov\u00e9 \u0161pi\u010dky: {n}",
+            spendPerDay: "{value} za den",
+            autonomy: "Napl\u00e1nov\u00e1no {n} \u00b7 dal\u0161\u00ed za {time}",
+            autonomyEmpty: "Nic napl\u00e1nov\u00e1no",
+            vault: "Po term\u00ednu {overdue} \u00b7 anom\u00e1lie {anomalies} \u00b7 ud\u00e1losti {events}",
+            instruments: "Selhan\u00e9 zdroje: {failed}",
+            instrumentsOk: "V\u0161echny zdroje odpov\u011bd\u011bly",
+            pending: "\u010cek\u00e1 se na prvn\u00ed m\u011b\u0159en\u00ed",
+            unmeasured: "Zat\u00edm pro to nen\u00ed synchronizovan\u00fd zdroj"
+          },
+          scoreSuffix: "/100",
+          detail: {
+            issuesTitle: "Probl\u00e9my samoopravy",
+            issuesEmpty: "V tomto obdob\u00ed \u017e\u00e1dn\u00e9 probl\u00e9my samoopravy.",
+            issueStatus: {
+              open: "Otev\u0159eno",
+              auto_fixed: "Automaticky opraveno",
+              resolved: "Vy\u0159e\u0161eno"
+            },
+            pausedBadge: "Pozastaveno",
+            costTitle: "N\u00e1klady po dnech",
+            costSpike: "N\u00e1kladov\u00e1 \u0161pi\u010dka",
+            sourcesTitle: "Zdroje",
+            sourceStatus: {
+              pending: "\u010cek\u00e1",
+              ok: "Odpov\u011bd\u011bl",
+              failed: "Selhal"
+            },
+            sources: {
+              observability: "Pozorovatelnost",
+              healing: "Probl\u00e9my samoopravy",
+              reviews: "Recenze",
+              routines: "Rutiny"
+            }
+          }
+        },
         vitals: {
           runs: "Spu\u0161t\u011bn\u00ed",
           alerts: "Upozorn\u011bn\u00ed"
@@ -1705,7 +1806,6 @@ export const cs: LocaleTranslations = {
       features5: "Skv\u011bl\u00ed agenti napoprv\u00e9 z\u0159\u00eddkakdy funguj\u00ed dokonale, proto je tu Laborato\u0159, kde je vylep\u0161\u00edte. Chatujte s personou a kou\u010dujte ji, postavte dv\u011b verze proti sob\u011b v ar\u00e9n\u011b, rozv\u00edjejte ji nap\u0159\u00ed\u010d generacemi nebo ji ohodno\u0165te podle dimenz\u00ed, na kter\u00fdch z\u00e1le\u017e\u00ed. Ka\u017ed\u00e9 vylep\u0161en\u00ed, kter\u00e9 si ponech\u00e1te, je verzovan\u00e9 a vratn\u00e9.",
       features6: "Personas p\u0159ich\u00e1z\u00ed se \u0161esti \u00fa\u010delov\u011b postaven\u00fdmi pluginy, z nich\u017e ka\u017ed\u00fd je samostatn\u00fd pracovn\u00ed prostor, kter\u00fd mohou va\u0161i agenti \u0159\u00eddit. Vezm\u011bte si Dev Tools: prom\u011bn\u00ed personu v program\u00e1torsk\u00e9ho par\u0165\u00e1ka, kter\u00fd spou\u0161t\u00ed \u00fakoly, \u010dte v\u00fdstup a iteruje. P\u0159epn\u011bte kartu a potk\u00e1te dal\u0161\u00edho specialistu \u2014 v\u0161ichni sd\u00edlej\u00ed stejn\u00e9 p\u0159ihla\u0161ovac\u00ed \u00fadaje a pam\u011b\u0165.",
       dashboardHome: "V\u00edtejte v \u0159\u00eddic\u00edm centru \u2014 cel\u00e1 va\u0161e flotila na jedn\u00e9 obrazovce. Naho\u0159e jsou \u017eivotn\u00ed funkce: m\u00edra \u00fasp\u011b\u0161nosti, b\u011b\u017e\u00edc\u00ed spu\u0161t\u011bn\u00ed, aktivn\u00ed agenti, otev\u0159en\u00e1 upozorn\u011bn\u00ed a revize \u010dekaj\u00edc\u00ed na v\u00e1s. Pod t\u00edm optimaliz\u00e1tor postupn\u011b ukazuje jednu vysoce p\u0159\u00ednosnou opravu \u2014 pr\u00e1v\u011b te\u010f je to zm\u011bna sm\u011brov\u00e1n\u00ed, kter\u00e1 sni\u017euje n\u00e1klady bez dopadu na kvalitu. Dva panely pod t\u00edm sleduj\u00ed stav ka\u017ed\u00e9ho agenta a nov\u00e9 pam\u011bti, kter\u00e9 se nau\u010dili a cht\u011bj\u00ed pov\u00fd\u0161it. Pot\u00e9 \u017eiv\u00fd obraz: ka\u017ed\u00e9 spu\u0161t\u011bn\u00ed, jak p\u0159ich\u00e1z\u00ed, vlevo, \u010dtrn\u00e1ct dn\u00ed provozu a chyb vpravo. Teplotn\u00ed mapa ukazuje spu\u0161t\u011bn\u00ed na agenta den po dni a spodn\u00ed \u0159\u00e1dek v\u0161e dopl\u0148uje \u2014 va\u0161e nejlep\u0161\u00ed v\u00fdkony, dal\u0161\u00ed napl\u00e1novan\u00e9 rutiny a ka\u017edou rotaci p\u0159ihla\u0161ovac\u00edch \u00fadaj\u016f. Jedna str\u00e1nka, cel\u00fd provoz.",
-      dashboardAgents: "Toto je v\u00e1\u0161 seznam. Ka\u017ed\u00e1 karta je persona \u2014 jedin\u00fd agent s jednou identitou a sadou dovednost\u00ed, kter\u00e9 um\u00ed skl\u00e1dat. Portr\u00e9t je vygenerov\u00e1n tak, aby odpov\u00eddal jeho charakteru; pod n\u00edm \u017eiv\u00e9 statistiky: m\u00edra \u00fasp\u011b\u0161nosti, spu\u0161t\u011bn\u00ed a \u00fatrata. Klikn\u011bte na Spustit a spus\u0165te agenta na vy\u017e\u00e1d\u00e1n\u00ed, nebo otev\u0159ete Podrobnosti a prozkoumejte jeho konfiguraci a ned\u00e1vnou historii. P\u011bt agent\u016f zde, ka\u017ed\u00fd potichu d\u011bl\u00e1 dob\u0159e svou jednu pr\u00e1ci.",
       dashboardExecutions: "Ka\u017ed\u00fd b\u011bh, kter\u00fd flotila provedla, \u017eije zde, nejnov\u011bj\u0161\u00ed prvn\u00ed. Tabulka zobrazuje personu, stav, dobu trv\u00e1n\u00ed, n\u00e1klady a \u010das zah\u00e1jen\u00ed \u2014 filtrujte jen na selh\u00e1n\u00ed nebo ty, kter\u00e9 st\u00e1le b\u011b\u017e\u00ed. Klikn\u011bte na libovoln\u00fd \u0159\u00e1dek a otev\u0159e se cel\u00e9 spu\u0161t\u011bn\u00ed: pruh metrik, p\u0159\u00edpadn\u00e9 vysv\u011btlen\u00ed chyby a \u017eiv\u00fd v\u00fdstup streamovan\u00fd \u0159\u00e1dek po \u0159\u00e1dku, p\u0159esn\u011b tak, jak jej agent vytvo\u0159il.",
       dashboardEvents: "Agenti nepracuj\u00ed izolovan\u011b \u2014 reaguj\u00ed na ud\u00e1losti. Toto je sb\u011brnice ud\u00e1lost\u00ed: ka\u017ed\u00fd sign\u00e1l proch\u00e1zej\u00edc\u00ed syst\u00e9mem, od pl\u00e1n\u016f a webhook\u016f po zpr\u00e1vy mezi agenty. Ka\u017ed\u00fd \u0159\u00e1dek ukazuje typ ud\u00e1losti, jej\u00ed zdroj, stav a jak d\u00e1vno se spustila. Ne\u00fasp\u011b\u0161n\u00e9 ud\u00e1losti lze zkusit znovu na m\u00edst\u011b a souvisej\u00edc\u00ed ud\u00e1losti se \u0159et\u011bz\u00ed, tak\u017ee m\u016f\u017eete sledovat jedinou kask\u00e1du od za\u010d\u00e1tku do konce.",
       dashboardReviews: "N\u011bkter\u00e1 rozhodnut\u00ed pot\u0159ebuj\u00ed \u010dlov\u011bka. Kdy\u017e agent naraz\u00ed na n\u011bco, o \u010dem by nem\u011bl rozhodovat s\u00e1m, pozastav\u00ed se a p\u0159esm\u011bruje rozhodnut\u00ed sem. Ka\u017ed\u00e1 polo\u017eka nese personu, kontext a akci, kterou navrhuje \u2014 schvalte ji, zam\u00edtn\u011bte nebo p\u0159esko\u010dte na pozd\u011bji, kliknut\u00edm nebo kl\u00e1vesnic\u00ed. Nic riskantn\u00edho se neode\u0161le bez va\u0161eho schv\u00e1len\u00ed a fronta udr\u017euje zbytek flotily v chodu, zat\u00edmco se rozhodujete.",

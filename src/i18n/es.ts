@@ -405,7 +405,15 @@ export const es: LocaleTranslations = {
       knowledge: "Conocimiento",
       settings: "Configuraci\u00f3n",
       leaderboard: "Clasificaci\u00f3n",
-      playground: "Zona de pruebas",
+      personas: "Personas",
+      missionControl: "Centro de control",
+      navSectionsLabel: "Secciones del panel",
+      navGroups: {
+        mission: "Misi\u00f3n",
+        monitoring: "Monitoreo",
+        reliability: "Fiabilidad",
+        memory: "Memoria"
+      },
       director: "Director",
       sla: "SLA",
       incidents: "Incidentes",
@@ -476,6 +484,99 @@ export const es: LocaleTranslations = {
         }
       },
       home: {
+        mission: {
+          windowNote: "Lecturas de los \u00faltimos 14 d\u00edas",
+          hint: "Pulsa 1 a 8 para abrir una dimensi\u00f3n, Esc para volver",
+          wallLabel: "Dimensiones de la flota",
+          openDimension: "Abrir {label}",
+          backToWall: "Volver al panel",
+          railLabel: "Todas las dimensiones",
+          verdicts: {
+            pending: "Midiendo",
+            failed: "No disponible",
+            unmeasured: "Sin medir",
+            ok: "Estable",
+            watch: "Vigilar",
+            yours: "Te espera",
+            act: "Te necesita"
+          },
+          dims: {
+            outcomes: {
+              label: "Resultados",
+              question: "\u00bfLas ejecuciones tienen \u00e9xito?"
+            },
+            agents: {
+              label: "Agentes",
+              question: "\u00bfAlg\u00fan agente tiene problemas?"
+            },
+            queue: {
+              label: "Te espera",
+              question: "\u00bfQu\u00e9 necesita tu intervenci\u00f3n?"
+            },
+            recovery: {
+              label: "Autorreparaci\u00f3n",
+              question: "\u00bfLa flota se repara sola?"
+            },
+            spend: {
+              label: "Gasto",
+              question: "\u00bfEl gasto est\u00e1 bajo control?"
+            },
+            autonomy: {
+              label: "Autonom\u00eda",
+              question: "\u00bfQu\u00e9 funciona sin ti?"
+            },
+            vault: {
+              label: "B\u00f3veda",
+              question: "\u00bfLas credenciales est\u00e1n en orden?"
+            },
+            instruments: {
+              label: "Instrumentos",
+              question: "\u00bfEsta p\u00e1gina est\u00e1 al d\u00eda?"
+            }
+          },
+          evidence: {
+            outcomes: "Ejecuciones {runs} \u00b7 fallidas {failed}",
+            noRuns: "Sin ejecuciones en este periodo",
+            agents: "Ca\u00edda {critical} \u00b7 degradados {degraded} \u00b7 operativos {healthy}",
+            queue: "Alertas {alerts} \u00b7 revisiones {reviews} \u00b7 memoria {memory} \u00b7 sin leer {reports}",
+            queueEmpty: "Nada te espera",
+            recovery: "Abiertas {open} \u00b7 en pausa {paused} \u00b7 autocorregidas {fixed}",
+            spendSpikes: "Picos de costo: {n}",
+            spendPerDay: "{value} por d\u00eda",
+            autonomy: "Programadas {n} \u00b7 pr\u00f3xima en {time}",
+            autonomyEmpty: "Nada programado",
+            vault: "Vencidas {overdue} \u00b7 anomal\u00edas {anomalies} \u00b7 eventos {events}",
+            instruments: "Fuentes con fallos: {failed}",
+            instrumentsOk: "Todas las fuentes respondieron",
+            pending: "Esperando la primera lectura",
+            unmeasured: "A\u00fan no hay una fuente sincronizada para esto"
+          },
+          scoreSuffix: "/100",
+          detail: {
+            issuesTitle: "Incidencias de autorreparaci\u00f3n",
+            issuesEmpty: "Sin incidencias de autorreparaci\u00f3n en este periodo.",
+            issueStatus: {
+              open: "Abierta",
+              auto_fixed: "Autocorregida",
+              resolved: "Resuelta"
+            },
+            pausedBadge: "En pausa",
+            costTitle: "Costo por d\u00eda",
+            costSpike: "Pico de costo",
+            sourcesTitle: "Fuentes",
+            sourceStatus: {
+              pending: "En espera",
+              ok: "Respondi\u00f3",
+              failed: "Fall\u00f3"
+            },
+            sources: {
+              observability: "Observabilidad",
+              healing: "Incidencias de autorreparaci\u00f3n",
+              reviews: "Revisiones",
+              routines: "Rutinas"
+            }
+          }
+        },
         vitals: {
           runs: "Ejecuciones",
           alerts: "Alertas"
@@ -1705,7 +1806,6 @@ export const es: LocaleTranslations = {
       features5: "Los buenos agentes rara vez aciertan a la primera, por eso el Lab es donde los perfeccionas. Chatea con una persona para entrenarla, enfrenta dos versiones en la arena, evoluci\u00f3nala a trav\u00e9s de generaciones o calif\u00edcala en las dimensiones que importan. Cada mejora que conservas queda versionada y es reversible.",
       features6: "Personas incluye seis plugins especializados, cada uno un espacio de trabajo aut\u00f3nomo que tus agentes pueden manejar. Mira Dev Tools: convierte a una persona en un compa\u00f1ero de programaci\u00f3n que ejecuta tareas, lee la salida e itera. Cambia de pesta\u00f1a y conoces a otro especialista \u2014 todos comparten las mismas credenciales y memoria.",
       dashboardHome: "Bienvenido al centro de control: toda tu flota en una sola pantalla. Arriba, los signos vitales: tasa de \u00e9xito, ejecuciones en curso, agentes activos, alertas abiertas y revisiones que te esperan. Debajo, el optimizador muestra una mejora de alto impacto a la vez \u2014 ahora mismo, un cambio de enrutamiento que recorta costes sin tocar la calidad. Los dos paneles inferiores siguen la salud de cada agente y los nuevos recuerdos que han aprendido y quieren promover. Luego la imagen en vivo: cada ejecuci\u00f3n seg\u00fan llega a la izquierda, catorce d\u00edas de tr\u00e1fico y errores a la derecha. El mapa de calor muestra las ejecuciones por agente, d\u00eda a d\u00eda, y la fila inferior lo completa: tus mejores agentes, las pr\u00f3ximas rutinas programadas y cada rotaci\u00f3n de credenciales. Una p\u00e1gina, toda la operaci\u00f3n.",
-      dashboardAgents: "Esta es tu plantilla. Cada tarjeta es una persona: un \u00fanico agente con una identidad y un conjunto de habilidades que puede combinar. El retrato se genera para reflejar su car\u00e1cter; debajo, las estad\u00edsticas en vivo: tasa de \u00e9xito, ejecuciones y gasto. Pulsa Ejecutar para lanzar uno bajo demanda, o abre Detalles para inspeccionar su configuraci\u00f3n e historial reciente. Cinco agentes aqu\u00ed, cada uno haciendo bien su \u00fanica tarea.",
       dashboardExecutions: "Cada ejecuci\u00f3n que la flota ha realizado vive aqu\u00ed, la m\u00e1s reciente primero. La tabla muestra la persona, el estado, la duraci\u00f3n, el costo y cu\u00e1ndo empez\u00f3 \u2014 filtra solo los fallos, o los que a\u00fan se est\u00e1n ejecutando. Haz clic en cualquier fila y se abre la ejecuci\u00f3n completa: una franja de m\u00e9tricas, cualquier explicaci\u00f3n de error y la salida en vivo transmiti\u00e9ndose l\u00ednea por l\u00ednea, tal como el agente la produjo.",
       dashboardEvents: "Los agentes no trabajan de forma aislada: reaccionan a eventos. Este es el bus de eventos: cada se\u00f1al que fluye por el sistema, desde programaciones y webhooks hasta mensajes entre agentes. Cada fila muestra el tipo de evento, su origen, el estado y hace cu\u00e1nto se dispar\u00f3. Los eventos fallidos pueden reintentarse en el momento, y los eventos relacionados se encadenan para que sigas una sola cascada de principio a fin.",
       dashboardReviews: "Algunas decisiones necesitan a una persona. Cuando un agente se topa con algo que no deber\u00eda decidir solo, se detiene y deriva el caso aqu\u00ed. Cada elemento lleva la persona, el contexto y la acci\u00f3n que propone \u2014 apru\u00e9balo, rech\u00e1zalo u om\u00edtelo para m\u00e1s tarde, con un clic o con el teclado. Nada arriesgado se publica sin tu visto bueno, y la cola mantiene en marcha al resto de la flota mientras decides.",

@@ -17,7 +17,7 @@ It renders three stacked sections:
 
 ## How it works
 
-**Data hook — `useSlaData()`** (`src/app/dashboard/sla/useSlaData.ts`). Returns `{ targets, breaches, loading, error }`. The mode is decided once per session from `authStore.isDemo`:
+**Data hook — `useSlaData()`** (`src/components/dashboard/views/sla/useSlaData.ts`). Returns `{ targets, breaches, loading, error }`. The mode is decided once per session from `authStore.isDemo`:
 - **Demo mode** (this repo's default): `useState` initializers seed the static fixtures `MOCK_SLA_TARGETS` / `MOCK_SLA_BREACHES`, `loading` starts `false`, and the effect early-returns (`if (useMock) return;`) — no fetch runs (`useSlaData.ts:44`).
 - **Real/Supabase mode**: the effect calls `getSyncedSla()` (`src/lib/supabaseApi.ts:831`), which derives default objectives from the `synced_leaderboard` per-persona aggregates (no desktop-side SLA config exists). Errors are captured to Sentry with `tags: { scope: "useSlaData" }` and surfaced via `error`.
 
@@ -46,14 +46,14 @@ It renders three stacked sections:
 
 | File | Role |
 | --- | --- |
-| `src/app/dashboard/sla/page.tsx` | Route page; composes sections, derives compliance/active-breach summary, loading/error states |
-| `src/app/dashboard/sla/useSlaData.ts` | Data hook; demo mocks vs. `getSyncedSla()`; returns `{ targets, breaches, loading, error }` |
-| `src/app/dashboard/sla/sla-page/SLASummaryGrid.tsx` | Three headline tiles (compliance / active breaches / objectives) |
-| `src/app/dashboard/sla/sla-page/SLATargetGrid.tsx` | Per-objective cards + All/At risk/Healthy status filter pills |
-| `src/app/dashboard/sla/sla-page/SLABreachLog.tsx` | Breach/incident list, severity filter, single-open expansion state, `maxDuration` + same-persona tally |
-| `src/app/dashboard/sla/sla-page/SLABreachRow.tsx` | Collapsed breach row (button, severity pill, ongoing/resolved badge, chevron) |
-| `src/app/dashboard/sla/sla-page/SLABreachDetail.tsx` | Expanded detail: full summary, absolute timestamps, duration bar, same-persona context |
-| `src/app/dashboard/sla/sla-page/slaFormat.ts` | `complianceBand`, `severityPill`, `formatValue`/`formatTarget`, `metricKey`, `formatAbsolute` |
+| `src/components/dashboard/views/sla/index.tsx` | Route page; composes sections, derives compliance/active-breach summary, loading/error states |
+| `src/components/dashboard/views/sla/useSlaData.ts` | Data hook; demo mocks vs. `getSyncedSla()`; returns `{ targets, breaches, loading, error }` |
+| `src/components/dashboard/views/sla/sla-page/SLASummaryGrid.tsx` | Three headline tiles (compliance / active breaches / objectives) |
+| `src/components/dashboard/views/sla/sla-page/SLATargetGrid.tsx` | Per-objective cards + All/At risk/Healthy status filter pills |
+| `src/components/dashboard/views/sla/sla-page/SLABreachLog.tsx` | Breach/incident list, severity filter, single-open expansion state, `maxDuration` + same-persona tally |
+| `src/components/dashboard/views/sla/sla-page/SLABreachRow.tsx` | Collapsed breach row (button, severity pill, ongoing/resolved badge, chevron) |
+| `src/components/dashboard/views/sla/sla-page/SLABreachDetail.tsx` | Expanded detail: full summary, absolute timestamps, duration bar, same-persona context |
+| `src/components/dashboard/views/sla/sla-page/slaFormat.ts` | `complianceBand`, `severityPill`, `formatValue`/`formatTarget`, `metricKey`, `formatAbsolute` |
 | `src/lib/mock-dashboard-data.ts` | `SLATarget`/`SLABreach` types + `MOCK_SLA_TARGETS`/`MOCK_SLA_BREACHES` fixtures (~line 608) |
 | `src/components/dashboard/FilterBar.tsx` | Shared filter-pill bar used for both status and severity filters |
 | `src/lib/incidentThreads.ts` | Incident threads across SLA / Observability / Health: `buildIncidentThreads`, `relatedTo`, `relatedWithinSla` (target → breach by persona + metric), `focusHref`, `resolveFocus`, `initialBreachLogState`; tests in `incidentThreads.test.ts` |
@@ -76,7 +76,7 @@ It renders three stacked sections:
 ## Conventions & gotchas
 - **i18n 14-locale lockstep.** Every string is a `t.slaPage.*` / `t.dashboard.sla` key; no hardcoded English in JSX or `aria` attributes. Adding a label means adding it to `en.ts` (source of truth) and hand-translating into all 13 other locales in the same commit. Interpolation uses literal `{n}` / `{persona}` placeholders replaced via `String.replace` at the call site (see `SLABreachRow`/`SLABreachDetail`).
 - **Semantic Tailwind tokens.** Cards use `border-glass`, `bg-white/[0.02]`, `text-foreground`, `text-muted-dark`. The one intentional exception is `personaColor`, applied via inline `style` because it's per-persona data, not a design token.
-- **Animation gating (React 19 + framer).** `SLATargetGrid` and `SLABreachLog` read `useStillMotion()` (SSR-safe, live - not framer's `useReducedMotion`) and short-circuit `layout`/transition durations (`reduce ? 0 : …`); `SLABreachLog` passes `reduce` to `SLABreachRow`. The ongoing-dot pulse is CSS-gated (`motion-safe:animate-pulse`), so its class never depends on a JS answer and server/client markup match; the global `.page-hidden` rule pauses it on a hidden tab. Pinned by `src/app/dashboard/observability/observabilityStillMotion.test.ts`. `FilterBar` does the same for its sliding pill. Keep this when adding motion.
+- **Animation gating (React 19 + framer).** `SLATargetGrid` and `SLABreachLog` read `useStillMotion()` (SSR-safe, live - not framer's `useReducedMotion`) and short-circuit `layout`/transition durations (`reduce ? 0 : …`); `SLABreachLog` passes `reduce` to `SLABreachRow`. The ongoing-dot pulse is CSS-gated (`motion-safe:animate-pulse`), so its class never depends on a JS answer and server/client markup match; the global `.page-hidden` rule pauses it on a hidden tab. Pinned by `src/components/dashboard/views/observability/observabilityStillMotion.test.ts`. `FilterBar` does the same for its sliding pill. Keep this when adding motion.
 - **React 19 purity.** `fetchedAt` is seeded with a lazy `useState(() => Date.now())` — never call `Date.now()`/`new Date()` directly in render or a `useMemo` factory. `formatAbsolute` is safe to call in render only because it takes a fixed ISO string and never reads the clock; the relative-time meta line uses `relativeTime` (which *does* read the clock) but only for display, not derived state.
 - **Single-open accordion.** The breach log tracks one `openId`; opening a row collapses any other. If you need multi-open, switch to a `Set<string>`.
 - **Incident threads + `?focus=`.** Cross-route fragments of one incident share an optional `causeKey` on the fixtures (`br_1`/`hi_2`/`in_slack` = the Slack circuit-break; `br_2`/`hi_5` = Security latency); the SLA target joins by persona + metric and carries none. `?focus=` is untrusted: `resolveFocus` passes only a known demo row id. The focus may only change a class or open state, never which elements render — the server and hydrating render always see `null`. Targets are thread members but not link targets (the grid has no focus state).

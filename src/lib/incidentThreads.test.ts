@@ -2,6 +2,7 @@ import { existsSync, readFileSync } from "node:fs";
 import path from "node:path";
 import { describe, expect, it } from "vitest";
 import { MOCK_SLA_BREACHES } from "./mock-dashboard-data";
+import { isDashboardViewId } from "@/components/dashboard/spa/views";
 
 // Imported lazily inside each case so the source-scan guard below runs whether
 // or not the module exists yet.
@@ -52,7 +53,12 @@ describe("relatedTo", () => {
     expect(emitted.length).toBeGreaterThan(0);
     for (const link of emitted) {
       const url = new URL(link.href, "https://x.test");
-      expect(existsSync(path.join(SRC, "app", url.pathname, "page.tsx")), link.href).toBe(true);
+      // Dashboard views are one SPA route (`app/dashboard/[view]`), so a view
+      // is real when the view registry knows it; anything else needs a page.
+      const [, root, view] = url.pathname.split("/");
+      const real =
+        root === "dashboard" ? isDashboardViewId(view ?? "") : existsSync(path.join(SRC, "app", url.pathname, "page.tsx"));
+      expect(real, link.href).toBe(true);
       expect(DEMO_FOCUS_IDS.has(url.searchParams.get("focus") ?? ""), link.href).toBe(true);
     }
   });
@@ -96,7 +102,7 @@ describe("focusHref", () => {
   it("builds the focused deep link, and Home triage uses it", async () => {
     const { focusHref } = await threads();
     expect(focusHref("slaBreach", "br_1")).toBe("/dashboard/sla?focus=br_1");
-    const triage = read("app/dashboard/home/home-page/useTriageQueue.ts");
+    const triage = read("components/dashboard/views/home/home-page/useTriageQueue.ts");
     expect(triage).toMatch(/focusHref\("slaBreach"/);
     expect(triage).toMatch(/focusHref\("healthIssue"/);
     expect(triage).not.toMatch(/["']\/dashboard\/(sla|observability)["']/);
@@ -105,7 +111,7 @@ describe("focusHref", () => {
 
 describe("Health actions (guard)", () => {
   it("keeps the Configure/Install toast path unchanged", () => {
-    const page = read("app/dashboard/health/page.tsx");
+    const page = read("components/dashboard/views/health/index.tsx");
     expect(page).toMatch(
       /const verb = item\.action === "install" \? labels\.toast\.installed : labels\.toast\.configured;/,
     );

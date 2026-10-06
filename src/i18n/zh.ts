@@ -405,7 +405,15 @@ export const zh: LocaleTranslations = {
       knowledge: "\u77e5\u8bc6\u5e93",
       settings: "\u8bbe\u7f6e",
       leaderboard: "\u6392\u884c\u699c",
-      playground: "\u8bd5\u9a8c\u573a",
+      personas: "Persona",
+      missionControl: "任务控制中心",
+      navSectionsLabel: "控制台分区",
+      navGroups: {
+        mission: "任务",
+        monitoring: "监控",
+        reliability: "可靠性",
+        memory: "记忆"
+      },
       director: "\u5bfc\u6f14",
       sla: "SLA",
       incidents: "\u4e8b\u4ef6",
@@ -476,6 +484,99 @@ export const zh: LocaleTranslations = {
         }
       },
       home: {
+        mission: {
+          windowNote: "数据涵盖最近 14 天",
+          hint: "按 1 到 8 打开对应维度，按 Esc 返回",
+          wallLabel: "集群维度",
+          openDimension: "打开{label}",
+          backToWall: "返回总览",
+          railLabel: "全部维度",
+          verdicts: {
+            pending: "测量中",
+            failed: "不可用",
+            unmeasured: "未测量",
+            ok: "平稳",
+            watch: "需关注",
+            yours: "等你处理",
+            act: "需要你介入"
+          },
+          dims: {
+            outcomes: {
+              label: "结果",
+              question: "运行是否成功？"
+            },
+            agents: {
+              label: "智能体",
+              question: "有智能体出状况吗？"
+            },
+            queue: {
+              label: "等你处理",
+              question: "哪些事需要你亲自处理？"
+            },
+            recovery: {
+              label: "自愈",
+              question: "集群在自我修复吗？"
+            },
+            spend: {
+              label: "支出",
+              question: "支出是否正常？"
+            },
+            autonomy: {
+              label: "自主运行",
+              question: "哪些工作无需你参与？"
+            },
+            vault: {
+              label: "保险库",
+              question: "凭据是否安全？"
+            },
+            instruments: {
+              label: "数据源",
+              question: "本页数据是否最新？"
+            }
+          },
+          evidence: {
+            outcomes: "运行 {runs} · 失败 {failed}",
+            noRuns: "此时间段内没有运行",
+            agents: "中断 {critical} · 降级 {degraded} · 正常 {healthy}",
+            queue: "告警 {alerts} · 审查 {reviews} · 记忆 {memory} · 未读 {reports}",
+            queueEmpty: "没有等你处理的事项",
+            recovery: "未解决 {open} · 已暂停 {paused} · 自动修复 {fixed}",
+            spendSpikes: "成本激增：{n}",
+            spendPerDay: "每天 {value}",
+            autonomy: "已排程 {n} · {time} 后执行下一次",
+            autonomyEmpty: "暂无排程",
+            vault: "逾期 {overdue} · 异常 {anomalies} · 事件 {events}",
+            instruments: "失败的数据源：{failed}",
+            instrumentsOk: "所有数据源均已响应",
+            pending: "正在等待首次读数",
+            unmeasured: "暂无已同步的数据源"
+          },
+          scoreSuffix: "/100",
+          detail: {
+            issuesTitle: "自愈问题",
+            issuesEmpty: "此时间段内没有自愈问题。",
+            issueStatus: {
+              open: "未解决",
+              auto_fixed: "已自动修复",
+              resolved: "已解决"
+            },
+            pausedBadge: "已暂停",
+            costTitle: "每日成本",
+            costSpike: "成本激增",
+            sourcesTitle: "数据源",
+            sourceStatus: {
+              pending: "等待中",
+              ok: "已响应",
+              failed: "失败"
+            },
+            sources: {
+              observability: "可观测性",
+              healing: "自愈问题",
+              reviews: "审查",
+              routines: "例程"
+            }
+          }
+        },
         vitals: {
           runs: "\u8fd0\u884c\u6b21\u6570",
           alerts: "\u544a\u8b66"
@@ -1705,7 +1806,6 @@ export const zh: LocaleTranslations = {
       features5: "\u51fa\u8272\u7684\u667a\u80fd\u4f53\u5f88\u5c11\u4e00\u6b21\u5c31\u5230\u4f4d\uff0c\u6240\u4ee5\u5b9e\u9a8c\u5ba4\u5c31\u662f\u4f60\u6253\u78e8\u5b83\u4eec\u7684\u5730\u65b9\u3002\u548c\u89d2\u8272\u5bf9\u8bdd\u6765\u6307\u5bfc\u5b83\uff0c\u8ba9\u4e24\u4e2a\u7248\u672c\u5728\u7ade\u6280\u573a\u91cc\u5bf9\u51b3\uff0c\u8de8\u4e16\u4ee3\u6f14\u5316\u5b83\uff0c\u6216\u5728\u5173\u952e\u7ef4\u5ea6\u4e0a\u4e3a\u5b83\u6253\u5206\u3002\u4f60\u4fdd\u7559\u7684\u6bcf\u4e00\u5904\u6539\u8fdb\u90fd\u6709\u7248\u672c\u8bb0\u5f55\u3001\u53ef\u968f\u65f6\u56de\u9000\u3002",
       features6: "Personas \u81ea\u5e26\u516d\u4e2a\u4e13\u7528\u63d2\u4ef6\uff0c\u6bcf\u4e00\u4e2a\u90fd\u662f\u4f60\u7684\u667a\u80fd\u4f53\u53ef\u4ee5\u9a71\u52a8\u7684\u72ec\u7acb\u5de5\u4f5c\u533a\u3002\u4ee5 Dev Tools \u4e3a\u4f8b\uff1a\u5b83\u628a\u4e00\u4e2a\u89d2\u8272\u53d8\u6210\u4f1a\u6267\u884c\u4efb\u52a1\u3001\u8bfb\u53d6\u8f93\u51fa\u5e76\u4e0d\u65ad\u8fed\u4ee3\u7684\u7f16\u7a0b\u642d\u6863\u3002\u5207\u6362\u4e00\u4e2a\u6807\u7b7e\u9875\uff0c\u4f60\u5c31\u4f1a\u9047\u89c1\u53e6\u4e00\u4f4d\u4e13\u5bb6\u2014\u2014\u5b83\u4eec\u5171\u4eab\u540c\u4e00\u5957\u51ed\u636e\u4e0e\u8bb0\u5fc6\u3002",
       dashboardHome: "\u6b22\u8fce\u6765\u5230\u4efb\u52a1\u63a7\u5236\u4e2d\u5fc3 \u2014 \u4f60\u7684\u6574\u4e2a\u8230\u961f\u5c3d\u5728\u4e00\u5c4f\u3002\u9876\u90e8\u662f\u6838\u5fc3\u6307\u6807:\u6210\u529f\u7387\u3001\u8fdb\u884c\u4e2d\u7684\u8fd0\u884c\u3001\u6d3b\u8dc3\u667a\u80fd\u4f53\u3001\u672a\u5904\u7406\u7684\u544a\u8b66,\u4ee5\u53ca\u7b49\u5f85\u4f60\u5904\u7406\u7684\u5ba1\u6838\u3002\u4e0b\u65b9,\u4f18\u5316\u5668\u4e00\u6b21\u53ea\u5448\u73b0\u4e00\u9879\u9ad8\u4ef7\u503c\u6539\u8fdb \u2014 \u6b64\u523b\u662f\u4e00\u9879\u8def\u7531\u8c03\u6574,\u53ef\u5728\u4e0d\u5f71\u54cd\u8d28\u91cf\u7684\u524d\u63d0\u4e0b\u964d\u4f4e\u6210\u672c\u3002\u4e0b\u9762\u4e24\u4e2a\u9762\u677f\u8ddf\u8e2a\u6bcf\u4e2a\u667a\u80fd\u4f53\u7684\u5065\u5eb7\u72b6\u51b5,\u4ee5\u53ca\u5b83\u4eec\u5b66\u5230\u5e76\u5e0c\u671b\u63d0\u5347\u7684\u65b0\u8bb0\u5fc6\u3002\u63a5\u7740\u662f\u5b9e\u65f6\u753b\u9762:\u5de6\u4fa7\u662f\u6bcf\u6b21\u6267\u884c\u7684\u5b9e\u65f6\u843d\u5730,\u53f3\u4fa7\u662f\u5341\u56db\u5929\u7684\u6d41\u91cf\u4e0e\u9519\u8bef\u3002\u70ed\u529b\u56fe\u6309\u5929\u663e\u793a\u6bcf\u4e2a\u667a\u80fd\u4f53\u7684\u8fd0\u884c\u6b21\u6570,\u5e95\u90e8\u4e00\u884c\u5219\u6536\u5c3e \u2014 \u4f60\u7684\u9876\u5c16\u667a\u80fd\u4f53\u3001\u4e0b\u4e00\u6279\u8ba1\u5212\u4f8b\u7a0b,\u4ee5\u53ca\u6bcf\u4e00\u6b21\u51ed\u636e\u8f6e\u6362\u3002\u4e00\u9875\u4e4b\u5185,\u5c3d\u89c8\u5168\u5c40\u3002",
-      dashboardAgents: "\u8fd9\u662f\u4f60\u7684\u9635\u5bb9\u3002\u6bcf\u5f20\u5361\u7247\u90fd\u662f\u4e00\u4e2a\u89d2\u8272 \u2014 \u62e5\u6709\u5355\u4e00\u8eab\u4efd\u548c\u4e00\u7ec4\u53ef\u7ec4\u5408\u6280\u80fd\u7684\u667a\u80fd\u4f53\u3002\u8096\u50cf\u6839\u636e\u5176\u6027\u683c\u751f\u6210;\u4e0b\u65b9\u662f\u5b9e\u65f6\u6570\u636e:\u6210\u529f\u7387\u3001\u8fd0\u884c\u6b21\u6570\u548c\u82b1\u8d39\u3002\u70b9\u51fb\u6267\u884c\u53ef\u6309\u9700\u8fd0\u884c\u67d0\u4e2a\u667a\u80fd\u4f53,\u6216\u6253\u5f00\u8be6\u60c5\u67e5\u770b\u5176\u914d\u7f6e\u548c\u8fd1\u671f\u5386\u53f2\u3002\u8fd9\u91cc\u6709\u4e94\u4e2a\u667a\u80fd\u4f53,\u6bcf\u4e2a\u90fd\u9ed8\u9ed8\u5730\u628a\u81ea\u5df1\u7684\u90a3\u4efd\u5de5\u4f5c\u505a\u597d\u3002",
       dashboardExecutions: "\u8230\u961f\u6267\u884c\u8fc7\u7684\u6bcf\u4e00\u6b21\u8fd0\u884c\u90fd\u6c47\u96c6\u4e8e\u6b64,\u6700\u65b0\u7684\u5728\u524d\u3002\u8868\u683c\u663e\u793a\u89d2\u8272\u3001\u72b6\u6001\u3001\u65f6\u957f\u3001\u6210\u672c\u548c\u5f00\u59cb\u65f6\u95f4 \u2014 \u53ef\u7b5b\u9009\u51fa\u4ec5\u5931\u8d25\u7684,\u6216\u4ecd\u5728\u8fd0\u884c\u7684\u3002\u70b9\u51fb\u4efb\u610f\u4e00\u884c,\u5b8c\u6574\u6267\u884c\u968f\u5373\u5c55\u5f00:\u4e00\u6761\u6307\u6807\u680f\u3001\u4efb\u4f55\u9519\u8bef\u8bf4\u660e,\u4ee5\u53ca\u9010\u884c\u5b9e\u65f6\u6d41\u51fa\u7684\u8f93\u51fa,\u4e0e\u667a\u80fd\u4f53\u4ea7\u751f\u65f6\u4e00\u6a21\u4e00\u6837\u3002",
       dashboardEvents: "\u667a\u80fd\u4f53\u5e76\u975e\u5b64\u7acb\u5de5\u4f5c \u2014 \u5b83\u4eec\u5bf9\u4e8b\u4ef6\u4f5c\u51fa\u53cd\u5e94\u3002\u8fd9\u662f\u4e8b\u4ef6\u603b\u7ebf:\u6d41\u7ecf\u7cfb\u7edf\u7684\u6bcf\u4e00\u4e2a\u4fe1\u53f7,\u4ece\u8ba1\u5212\u4efb\u52a1\u3001Webhook \u5230\u667a\u80fd\u4f53\u4e4b\u95f4\u7684\u6d88\u606f\u3002\u6bcf\u4e00\u884c\u663e\u793a\u4e8b\u4ef6\u7c7b\u578b\u3001\u6765\u6e90\u3001\u72b6\u6001\u4ee5\u53ca\u89e6\u53d1\u4e8e\u591a\u4e45\u4e4b\u524d\u3002\u5931\u8d25\u7684\u4e8b\u4ef6\u53ef\u5c31\u5730\u91cd\u8bd5,\u76f8\u5173\u4e8b\u4ef6\u76f8\u4e92\u4e32\u8054,\u8ba9\u4f60\u80fd\u4ece\u5934\u5230\u5c3e\u8ffd\u8e2a\u540c\u4e00\u6761\u7ea7\u8054\u3002",
       dashboardReviews: "\u6709\u4e9b\u51b3\u5b9a\u9700\u8981\u4eba\u6765\u505a\u3002\u5f53\u667a\u80fd\u4f53\u9047\u5230\u4e0d\u5e94\u72ec\u81ea\u51b3\u5b9a\u7684\u60c5\u51b5\u65f6,\u5b83\u4f1a\u6682\u505c\u5e76\u628a\u8be5\u51b3\u5b9a\u8f6c\u4ea4\u5230\u8fd9\u91cc\u3002\u6bcf\u4e2a\u6761\u76ee\u90fd\u5e26\u6709\u89d2\u8272\u3001\u4e0a\u4e0b\u6587\u53ca\u5176\u6240\u63d0\u8bae\u7684\u64cd\u4f5c \u2014 \u901a\u8fc7\u70b9\u51fb\u6216\u952e\u76d8\u8fdb\u884c\u6279\u51c6\u3001\u62d2\u7edd\u6216\u7a0d\u540e\u8df3\u8fc7\u3002\u6ca1\u6709\u4f60\u7684\u7b7e\u5b57,\u4efb\u4f55\u6709\u98ce\u9669\u7684\u5185\u5bb9\u90fd\u4e0d\u4f1a\u4e0a\u7ebf;\u5728\u4f60\u505a\u51b3\u5b9a\u65f6,\u961f\u5217\u4f1a\u8ba9\u8230\u961f\u7684\u5176\u4f59\u90e8\u5206\u7ee7\u7eed\u8fd0\u8f6c\u3002",

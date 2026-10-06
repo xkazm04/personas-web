@@ -405,7 +405,15 @@ export const id: LocaleTranslations = {
       knowledge: "Pengetahuan",
       settings: "Pengaturan",
       leaderboard: "Papan Peringkat",
-      playground: "Taman Uji",
+      personas: "Persona",
+      missionControl: "Pusat Kendali",
+      navSectionsLabel: "Bagian dasbor",
+      navGroups: {
+        mission: "Misi",
+        monitoring: "Pemantauan",
+        reliability: "Keandalan",
+        memory: "Memori"
+      },
       director: "Sutradara",
       sla: "SLA",
       incidents: "Insiden",
@@ -476,6 +484,99 @@ export const id: LocaleTranslations = {
         }
       },
       home: {
+        mission: {
+          windowNote: "Data mencakup 14 hari terakhir",
+          hint: "Tekan 1 sampai 8 untuk membuka dimensi, Esc untuk kembali",
+          wallLabel: "Dimensi armada",
+          openDimension: "Buka {label}",
+          backToWall: "Kembali ke ikhtisar",
+          railLabel: "Semua dimensi",
+          verdicts: {
+            pending: "Mengukur",
+            failed: "Tidak tersedia",
+            unmeasured: "Belum diukur",
+            ok: "Stabil",
+            watch: "Pantau",
+            yours: "Menunggu Anda",
+            act: "Perlu tindakan Anda"
+          },
+          dims: {
+            outcomes: {
+              label: "Hasil",
+              question: "Apakah eksekusi berhasil?"
+            },
+            agents: {
+              label: "Agen",
+              question: "Adakah agen yang bermasalah?"
+            },
+            queue: {
+              label: "Menunggu Anda",
+              question: "Apa yang perlu Anda tangani?"
+            },
+            recovery: {
+              label: "Pemulihan mandiri",
+              question: "Apakah armada memulihkan dirinya sendiri?"
+            },
+            spend: {
+              label: "Pengeluaran",
+              question: "Apakah pengeluaran wajar?"
+            },
+            autonomy: {
+              label: "Otonomi",
+              question: "Apa yang berjalan tanpa Anda?"
+            },
+            vault: {
+              label: "Brankas",
+              question: "Apakah kredensial aman?"
+            },
+            instruments: {
+              label: "Instrumen",
+              question: "Apakah halaman ini mutakhir?"
+            }
+          },
+          evidence: {
+            outcomes: "Eksekusi {runs} · gagal {failed}",
+            noRuns: "Tidak ada eksekusi dalam periode ini",
+            agents: "Gangguan {critical} · menurun {degraded} · normal {healthy}",
+            queue: "Peringatan {alerts} · tinjauan {reviews} · memori {memory} · belum dibaca {reports}",
+            queueEmpty: "Tidak ada yang menunggu Anda",
+            recovery: "Terbuka {open} · dijeda {paused} · diperbaiki otomatis {fixed}",
+            spendSpikes: "Lonjakan biaya: {n}",
+            spendPerDay: "{value} per hari",
+            autonomy: "Terjadwal {n} · berikutnya dalam {time}",
+            autonomyEmpty: "Tidak ada yang terjadwal",
+            vault: "Terlambat {overdue} · anomali {anomalies} · event {events}",
+            instruments: "Sumber gagal: {failed}",
+            instrumentsOk: "Semua sumber merespons",
+            pending: "Menunggu pembacaan pertama",
+            unmeasured: "Belum ada sumber tersinkron untuk ini"
+          },
+          scoreSuffix: "/100",
+          detail: {
+            issuesTitle: "Masalah pemulihan",
+            issuesEmpty: "Tidak ada masalah pemulihan dalam periode ini.",
+            issueStatus: {
+              open: "Terbuka",
+              auto_fixed: "Diperbaiki otomatis",
+              resolved: "Selesai"
+            },
+            pausedBadge: "Dijeda",
+            costTitle: "Biaya per hari",
+            costSpike: "Lonjakan biaya",
+            sourcesTitle: "Sumber",
+            sourceStatus: {
+              pending: "Menunggu",
+              ok: "Merespons",
+              failed: "Gagal"
+            },
+            sources: {
+              observability: "Observabilitas",
+              healing: "Masalah pemulihan",
+              reviews: "Tinjauan",
+              routines: "Rutinitas"
+            }
+          }
+        },
         vitals: {
           runs: "Eksekusi",
           alerts: "Peringatan"
@@ -1705,7 +1806,6 @@ export const id: LocaleTranslations = {
       features5: "Agen hebat jarang benar pada percobaan pertama, jadi Lab adalah tempat Anda menyempurnakannya. Mengobrollah dengan persona untuk melatihnya, adu dua versi di arena, kembangkan lintas generasi, atau beri skor pada dimensi yang penting. Setiap peningkatan yang Anda simpan terversi dan dapat dikembalikan.",
       features6: "Personas hadir dengan enam plugin yang dibuat khusus, masing-masing ruang kerja mandiri yang dapat dijalankan agen Anda. Ambil Dev Tools: ia mengubah persona menjadi rekan koding yang menjalankan tugas, membaca keluaran, dan berulang. Ganti tab dan Anda bertemu spesialis lain \u2014 semuanya berbagi kredensial dan memori yang sama.",
       dashboardHome: "Selamat datang di pusat kendali \u2014 seluruh armada Anda dalam satu layar. Di atas, tanda-tanda vital: tingkat keberhasilan, proses yang berjalan, agen aktif, peringatan terbuka, dan tinjauan yang menanti Anda. Di bawahnya, pengoptimal menampilkan satu perbaikan berdampak besar pada satu waktu \u2014 saat ini, perubahan perutean yang memangkas biaya tanpa menyentuh kualitas. Dua panel di bawahnya melacak kesehatan tiap agen dan memori baru yang telah mereka pelajari dan ingin dipromosikan. Lalu gambaran langsung: setiap eksekusi saat tiba di kiri, empat belas hari lalu lintas dan kesalahan di kanan. Peta panas menampilkan proses per agen, hari demi hari, dan baris bawah melengkapinya \u2014 agen terbaik Anda, rutinitas terjadwal berikutnya, dan setiap rotasi kredensial. Satu halaman, seluruh operasi.",
-      dashboardAgents: "Ini daftar tim Anda. Setiap kartu adalah persona \u2014 satu agen dengan satu identitas dan seperangkat keterampilan yang bisa dipadukan. Potretnya dibuat agar sesuai dengan karakternya; di bawahnya, statistik langsung: tingkat keberhasilan, proses, dan pengeluaran. Tekan Jalankan untuk menjalankan satu sesuai permintaan, atau buka Detail untuk memeriksa konfigurasi dan riwayat terbarunya. Lima agen di sini, masing-masing diam-diam menjalankan satu tugasnya dengan baik.",
       dashboardExecutions: "Setiap proses yang pernah dijalankan armada ada di sini, terbaru lebih dulu. Tabel menampilkan persona, status, durasi, biaya, dan waktu mulai \u2014 saring hanya yang gagal, atau yang masih berjalan. Klik baris mana pun dan eksekusi lengkap terbuka: strip metrik, penjelasan kesalahan apa pun, dan keluaran langsung yang mengalir baris demi baris, persis seperti yang dihasilkan agen.",
       dashboardEvents: "Agen tidak bekerja sendirian \u2014 mereka bereaksi terhadap peristiwa. Ini bus peristiwa: setiap sinyal yang mengalir melalui sistem, dari jadwal dan webhook hingga pesan antar-agen. Setiap baris menampilkan jenis peristiwa, sumbernya, status, dan berapa lama sejak terpicu. Peristiwa yang gagal dapat dicoba lagi di tempat, dan peristiwa terkait saling terangkai sehingga Anda dapat mengikuti satu kaskade dari ujung ke ujung.",
       dashboardReviews: "Beberapa keputusan membutuhkan manusia. Ketika agen menemui sesuatu yang tidak boleh diputuskannya sendiri, ia berhenti dan mengalihkan keputusan itu ke sini. Setiap item memuat persona, konteks, dan tindakan yang diusulkannya \u2014 setujui, tolak, atau lewati untuk nanti, dengan klik atau keyboard. Tidak ada yang berisiko diluncurkan tanpa persetujuan Anda, dan antrean menjaga sisa armada tetap berjalan selagi Anda memutuskan.",

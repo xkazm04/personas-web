@@ -405,7 +405,15 @@ export const fr: LocaleTranslations = {
       knowledge: "Connaissances",
       settings: "Param\u00e8tres",
       leaderboard: "Classement",
-      playground: "Bac \u00e0 sable",
+      personas: "Personas",
+      missionControl: "Centre de contr\u00f4le",
+      navSectionsLabel: "Sections du tableau de bord",
+      navGroups: {
+        mission: "Mission",
+        monitoring: "Surveillance",
+        reliability: "Fiabilit\u00e9",
+        memory: "M\u00e9moire"
+      },
       director: "Directeur",
       sla: "SLA",
       incidents: "Incidents",
@@ -476,6 +484,99 @@ export const fr: LocaleTranslations = {
         }
       },
       home: {
+        mission: {
+          windowNote: "Mesures des 14 derniers jours",
+          hint: "Appuyez sur 1 \u00e0 8 pour ouvrir une dimension, Esc pour revenir",
+          wallLabel: "Dimensions de la flotte",
+          openDimension: "Ouvrir {label}",
+          backToWall: "Retour au tableau",
+          railLabel: "Toutes les dimensions",
+          verdicts: {
+            pending: "Mesure en cours",
+            failed: "Indisponible",
+            unmeasured: "Non mesur\u00e9",
+            ok: "Stable",
+            watch: "\u00c0 surveiller",
+            yours: "Vous attend",
+            act: "Action requise"
+          },
+          dims: {
+            outcomes: {
+              label: "R\u00e9sultats",
+              question: "Les ex\u00e9cutions r\u00e9ussissent-elles ?"
+            },
+            agents: {
+              label: "Agents",
+              question: "Un agent est-il en difficult\u00e9 ?"
+            },
+            queue: {
+              label: "Vous attend",
+              question: "Qu\u2019est-ce qui attend votre intervention ?"
+            },
+            recovery: {
+              label: "Auto-r\u00e9paration",
+              question: "La flotte se r\u00e9pare-t-elle seule ?"
+            },
+            spend: {
+              label: "D\u00e9penses",
+              question: "Les d\u00e9penses sont-elles ma\u00eetris\u00e9es ?"
+            },
+            autonomy: {
+              label: "Autonomie",
+              question: "Qu\u2019est-ce qui tourne sans vous ?"
+            },
+            vault: {
+              label: "Coffre",
+              question: "Les identifiants sont-ils sains ?"
+            },
+            instruments: {
+              label: "Instruments",
+              question: "Cette page est-elle \u00e0 jour ?"
+            }
+          },
+          evidence: {
+            outcomes: "Ex\u00e9cutions {runs} \u00b7 \u00e9checs {failed}",
+            noRuns: "Aucune ex\u00e9cution sur cette p\u00e9riode",
+            agents: "Panne {critical} \u00b7 d\u00e9grad\u00e9s {degraded} \u00b7 op\u00e9rationnels {healthy}",
+            queue: "Alertes {alerts} \u00b7 revues {reviews} \u00b7 m\u00e9moire {memory} \u00b7 non lus {reports}",
+            queueEmpty: "Rien ne vous attend",
+            recovery: "Ouverts {open} \u00b7 en pause {paused} \u00b7 auto-corrig\u00e9s {fixed}",
+            spendSpikes: "Pics de co\u00fbt : {n}",
+            spendPerDay: "{value} par jour",
+            autonomy: "Planifi\u00e9es {n} \u00b7 prochaine dans {time}",
+            autonomyEmpty: "Rien de planifi\u00e9",
+            vault: "En retard {overdue} \u00b7 anomalies {anomalies} \u00b7 \u00e9v\u00e9nements {events}",
+            instruments: "Sources en \u00e9chec : {failed}",
+            instrumentsOk: "Toutes les sources ont r\u00e9pondu",
+            pending: "En attente de la premi\u00e8re mesure",
+            unmeasured: "Aucune source synchronis\u00e9e pour l\u2019instant"
+          },
+          scoreSuffix: "/100",
+          detail: {
+            issuesTitle: "Incidents d\u2019auto-r\u00e9paration",
+            issuesEmpty: "Aucun incident d\u2019auto-r\u00e9paration sur cette p\u00e9riode.",
+            issueStatus: {
+              open: "Ouvert",
+              auto_fixed: "Auto-corrig\u00e9",
+              resolved: "R\u00e9solu"
+            },
+            pausedBadge: "En pause",
+            costTitle: "Co\u00fbt par jour",
+            costSpike: "Pic de co\u00fbt",
+            sourcesTitle: "Sources",
+            sourceStatus: {
+              pending: "En attente",
+              ok: "A r\u00e9pondu",
+              failed: "\u00c9chec"
+            },
+            sources: {
+              observability: "Observabilit\u00e9",
+              healing: "Incidents d\u2019auto-r\u00e9paration",
+              reviews: "Revues",
+              routines: "Routines"
+            }
+          }
+        },
         vitals: {
           runs: "Ex\u00e9cutions",
           alerts: "Alertes"
@@ -1705,7 +1806,6 @@ export const fr: LocaleTranslations = {
       features5: "Les bons agents sont rarement parfaits du premier coup, c'est pourquoi le Lab est l'endroit o\u00f9 vous les affinez. Discutez avec un persona pour le coacher, opposez deux versions dans l'ar\u00e8ne, faites-le \u00e9voluer \u00e0 travers des g\u00e9n\u00e9rations, ou \u00e9valuez-le sur les dimensions qui comptent. Chaque am\u00e9lioration que vous conservez est versionn\u00e9e et r\u00e9versible.",
       features6: "Personas est livr\u00e9 avec six plugins sp\u00e9cialis\u00e9s, chacun un espace de travail autonome que vos agents peuvent piloter. Prenez Dev Tools : il transforme un persona en co\u00e9quipier de code qui ex\u00e9cute des t\u00e2ches, lit le r\u00e9sultat, et it\u00e8re. Changez d'onglet et vous rencontrez un autre sp\u00e9cialiste \u2014 tous partageant les m\u00eames identifiants et la m\u00eame m\u00e9moire.",
       dashboardHome: "Bienvenue au centre de contr\u00f4le \u2014 toute votre flotte sur un seul \u00e9cran. En haut, les signes vitaux : taux de r\u00e9ussite, ex\u00e9cutions en cours, agents actifs, alertes ouvertes, et r\u00e9visions en attente pour vous. En dessous, l'optimiseur fait remonter un correctif \u00e0 fort impact \u00e0 la fois \u2014 en ce moment, un changement de routage qui r\u00e9duit les co\u00fbts sans toucher \u00e0 la qualit\u00e9. Les deux panneaux en dessous suivent la sant\u00e9 de chaque agent et les nouvelles m\u00e9moires qu'ils ont apprises et souhaitent promouvoir. Puis l'image en direct : chaque ex\u00e9cution au fur et \u00e0 mesure qu'elle arrive \u00e0 gauche, quatorze jours de trafic et d'erreurs \u00e0 droite. La carte thermique montre les ex\u00e9cutions par agent, jour par jour, et la ligne du bas compl\u00e8te le tout \u2014 vos meilleurs performeurs, les prochaines routines planifi\u00e9es, et chaque rotation d'identifiants. Une seule page, toute l'op\u00e9ration.",
-      dashboardAgents: "Voici votre effectif. Chaque carte est un persona \u2014 un seul agent avec une identit\u00e9 et un ensemble de comp\u00e9tences qu'il peut composer. Le portrait est g\u00e9n\u00e9r\u00e9 pour correspondre \u00e0 son caract\u00e8re ; en dessous, les statistiques en direct : taux de r\u00e9ussite, ex\u00e9cutions, et d\u00e9penses. Cliquez sur Ex\u00e9cuter pour en lancer un \u00e0 la demande, ou ouvrez D\u00e9tails pour inspecter sa configuration et son historique r\u00e9cent. Cinq agents ici, chacun faisant tranquillement bien son travail.",
       dashboardExecutions: "Chaque ex\u00e9cution r\u00e9alis\u00e9e par la flotte se trouve ici, la plus r\u00e9cente en premier. Le tableau affiche la persona, le statut, la dur\u00e9e, le co\u00fbt et l'heure de d\u00e9marrage \u2014 filtrez sur les seuls \u00e9checs ou celles encore en cours. Cliquez sur une ligne et l'ex\u00e9cution compl\u00e8te s'ouvre : une bande de m\u00e9triques, toute explication d'erreur et la sortie en direct diffus\u00e9e ligne par ligne, exactement telle que l'agent l'a produite.",
       dashboardEvents: "Les agents ne travaillent pas isol\u00e9ment \u2014 ils r\u00e9agissent aux \u00e9v\u00e9nements. Voici le bus d'\u00e9v\u00e9nements : chaque signal traversant le syst\u00e8me, des plannings et webhooks aux messages entre agents. Chaque ligne montre le type d'\u00e9v\u00e9nement, sa source, son statut, et depuis combien de temps il s'est d\u00e9clench\u00e9. Les \u00e9v\u00e9nements \u00e9chou\u00e9s peuvent \u00eatre r\u00e9essay\u00e9s sur place, et les \u00e9v\u00e9nements li\u00e9s s'encha\u00eenent pour que vous puissiez suivre une seule cascade de bout en bout.",
       dashboardReviews: "Certaines d\u00e9cisions n\u00e9cessitent un humain. Quand un agent rencontre quelque chose qu'il ne devrait pas d\u00e9cider seul, il se met en pause et route la d\u00e9cision ici. Chaque \u00e9l\u00e9ment porte le persona, le contexte, et l'action qu'il propose \u2014 approuvez-la, rejetez-la, ou passez pour plus tard, par clic ou par clavier. Rien de risqu\u00e9 n'est d\u00e9ploy\u00e9 sans votre validation, et la file d'attente garde le reste de la flotte en mouvement pendant que vous d\u00e9cidez.",

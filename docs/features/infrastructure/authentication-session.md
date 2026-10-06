@@ -38,7 +38,7 @@ The dashboard sits behind a sign-in gate that offers **two paths in every enviro
 
 ## Integration points
 - **Gated tree:** `src/app/dashboard/layout.tsx:38` wraps children in `AuthProvider` → `AuthGuard`. (`src/app/m/layout.tsx` did too until `/m` was deleted 2026-10-06; see [mobile-app-shell](../platform/mobile-app-shell.md).)
-- **Logout button:** `src/app/dashboard/settings/page.tsx:81` calls `signOut`, disabled on `isSigningOut`; the same page surfaces `isDemo` as `mock://demo-data` vs `NEXT_PUBLIC_ORCHESTRATOR_URL` (`settings/page.tsx:118`).
+- **Logout button:** `src/components/dashboard/views/settings/index.tsx:81` calls `signOut`, disabled on `isSigningOut`; the same page surfaces `isDemo` as `mock://demo-data` vs `NEXT_PUBLIC_ORCHESTRATOR_URL` (`settings/page.tsx:118`).
 - **`/demo` entry:** `src/app/demo/page.tsx` forwards `?tour=1` so the dashboard's `TourLauncher` autostarts.
 - **Cache reset fan-out:** `clearUserScopedCaches` resets `personaStore`, `eventStore`, `executionStore`, `reviewStore`, `systemStore`, `dashboardFilterStore` (deliberately in `lib/`, not the store, to avoid an authStore↔store import cycle — `clearUserCaches.ts:13`).
 - **Post-auth bootstrap:** `AuthGuard` fires `personaStore.fetchPersonas()` once authed and polls `systemStore.fetchHealth()` every 30s (`AuthGuard.tsx:28`).

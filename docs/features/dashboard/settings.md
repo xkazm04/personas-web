@@ -30,12 +30,12 @@ The right-hand cards (`NotificationsCard`, `ModelProvidersCard`, `RotationOvervi
 ## Key files
 | File | Role |
 | --- | --- |
-| `src/app/dashboard/settings/page.tsx` | Page entry — grid layout, Account card, live Cloud Connection card; wires `auth`/`system` stores and renders the two section cards |
-| `src/app/dashboard/settings/SettingsHeader.tsx` | Header — silver `GradientText` title + subtitle from `t.settingsPage` |
-| `src/app/dashboard/settings/settings-sections/NotificationsCard.tsx` | Healing-alert severity + digest toggles (local) and the voice toggle + Preview trigger (persisted) |
-| `src/app/dashboard/settings/settings-sections/ModelProvidersCard.tsx` | BYOM provider allow-list (demo-only; hidden when not `isDemo`) |
-| `src/app/dashboard/settings/settings-sections/RotationOverviewCard.tsx` | Per-credential rotation status: policy / auto-vs-manual / anomaly / next-rotation (demo-only) |
-| `src/app/dashboard/settings/settings-sections/SettingToggle.tsx` | Shared controlled `role="switch"` toggle |
+| `src/components/dashboard/views/settings/index.tsx` | Page entry — grid layout, Account card, live Cloud Connection card; wires `auth`/`system` stores and renders the two section cards |
+| `src/components/dashboard/views/settings/SettingsHeader.tsx` | Header — silver `GradientText` title + subtitle from `t.settingsPage` |
+| `src/components/dashboard/views/settings/settings-sections/NotificationsCard.tsx` | Healing-alert severity + digest toggles (local) and the voice toggle + Preview trigger (persisted) |
+| `src/components/dashboard/views/settings/settings-sections/ModelProvidersCard.tsx` | BYOM provider allow-list (demo-only; hidden when not `isDemo`) |
+| `src/components/dashboard/views/settings/settings-sections/RotationOverviewCard.tsx` | Per-credential rotation status: policy / auto-vs-manual / anomaly / next-rotation (demo-only) |
+| `src/components/dashboard/views/settings/settings-sections/SettingToggle.tsx` | Shared controlled `role="switch"` toggle |
 | `src/lib/review-voice.ts` | Framework-free voice bus + Web Speech: `emitNewReview`, `onNewReview`, `armSpeech`, `speak`, `composeAnnouncement`, `localeToSpeechLang` |
 | `src/stores/reviewVoiceStore.ts` | Zustand store for the voice `enabled` flag, persisted to `localStorage` (`review-voice-enabled`) |
 | `src/stores/settingsStore.ts` | Severity / digest / provider-override prefs, persisted to `localStorage`; pure `isProviderAllowed` + `countAllowedProviders` (test: `settingsStore.test.ts`) |
