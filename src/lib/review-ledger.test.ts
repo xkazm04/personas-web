@@ -165,13 +165,14 @@ function walk(dir: string): string[] {
 }
 
 describe("review ledger: source scans", () => {
-  it("no review surface or hook calls resolveReview( directly", () => {
-    const files = [
-      ...walk(path.join(SRC, "app/dashboard/reviews")),
-      ...walk(path.join(SRC, "app/m/reviews")),
-      path.join(SRC, "hooks/useReviewBulkActions.ts"),
-    ];
-    const offenders = files.filter((f) => /\bresolveReview\(/.test(readFileSync(f, "utf8")));
+  // Every review surface, whatever route tree it lives in (the desktop
+  // /dashboard/reviews today, a future /m view tomorrow), goes through the
+  // store's ledger. Scanning all of src instead of a list of surface folders
+  // means a new surface is covered the day it lands.
+  it("nothing outside the review store calls resolveReview( directly", () => {
+    const offenders = walk(SRC).filter(
+      (f) => /\bresolveReview\(/.test(readFileSync(f, "utf8")) && !f.endsWith(path.join("stores", "reviewStore.ts")),
+    );
     expect(offenders.map((f) => path.relative(SRC, f))).toEqual([]);
   });
 

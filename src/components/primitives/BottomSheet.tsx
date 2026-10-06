@@ -13,8 +13,11 @@ import { useFocusTrap } from "@/hooks/useFocusTrap";
  * drag-down or swipe to dismiss, plus a visible close button + Escape +
  * backdrop tap (never swipe-only, per accessibility guidance). Locks body
  * scroll while open and respects the bottom safe-area inset.
+ *
+ * Kept from the retired /m tree (was `components/mobile/MobileSheet`) for the
+ * new /m - see docs/concepts/mobile-revival/PLAN.md. Nothing imports it yet.
  */
-export default function MobileSheet({
+export default function BottomSheet({
   open,
   onClose,
   title,
