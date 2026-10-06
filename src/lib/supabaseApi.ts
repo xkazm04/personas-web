@@ -15,6 +15,7 @@ import { getSupabase } from "./supabase";
 import { ApiError, type ApiClient } from "./api";
 import { halvesTrend } from "./observabilitySeries";
 import { EVENT_STATUS_TRANSITIONS } from "./eventStatusFsm";
+import { DEVICE_FRESH_MS } from "./sync/reachability";
 import type {
   Persona,
   PersonaExecution,
@@ -115,6 +116,7 @@ interface PersonaRow {
   max_budget_usd: number | null;
   max_turns: number | null;
   design_context: string | null;
+  device_id: string | null;
   created_at: string;
   updated_at: string;
 }
@@ -137,6 +139,7 @@ function mapPersona(r: PersonaRow): Persona {
     maxTurns: r.max_turns,
     designContext: r.design_context,
     groupId: null,
+    deviceId: r.device_id ?? null,
     createdAt: r.created_at,
     updatedAt: r.updated_at,
   };
@@ -445,7 +448,8 @@ export const supabaseApi: ApiClient = {
     const r = await rows<{ last_seen_at: string | null }>(
       getSupabase().from("synced_devices").select("last_seen_at"),
     );
-    const cutoff = Date.now() - 5 * 60_000;
+    // The online gate's window, so the header and the phone gate never disagree.
+    const cutoff = Date.now() - DEVICE_FRESH_MS;
     const online = r.filter(
       (d) => d.last_seen_at && new Date(d.last_seen_at).getTime() > cutoff,
     ).length;
@@ -461,7 +465,8 @@ export const supabaseApi: ApiClient = {
     const r = await rows<{ last_seen_at: string | null }>(
       getSupabase().from("synced_devices").select("last_seen_at"),
     );
-    const cutoff = Date.now() - 5 * 60_000;
+    // The online gate's window, so the header and the phone gate never disagree.
+    const cutoff = Date.now() - DEVICE_FRESH_MS;
     const online = r.filter(
       (d) => d.last_seen_at && new Date(d.last_seen_at).getTime() > cutoff,
     ).length;

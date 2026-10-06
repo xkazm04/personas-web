@@ -11,6 +11,9 @@ import { useExecutionStore } from "@/stores/executionStore";
 import { useEventStore } from "@/stores/eventStore";
 import { useReviewStore } from "@/stores/reviewStore";
 import { useSystemStore } from "@/stores/systemStore";
+import { useDeviceStore } from "@/stores/deviceStore";
+import { useCommandStore } from "@/stores/commandStore";
+import { useControllerStore } from "@/stores/controllerStore";
 import { emitNewReview } from "@/lib/review-voice";
 import type { ReviewSeverity } from "@/lib/types";
 
@@ -77,7 +80,8 @@ function maybeAnnounceNewReview(
 function refetchFor(table: string): (() => void) | null {
   switch (table) {
     case "synced_personas":
-      return () => void usePersonaStore.getState().fetchPersonas();
+      // Forced: the desktop pushed a change, so the 5 min persona cache is stale by definition.
+      return () => void usePersonaStore.getState().fetchPersonas({ force: true });
     case "synced_executions":
       return () => void useExecutionStore.getState().fetchExecutions();
     case "synced_events":
@@ -136,9 +140,36 @@ export function useSyncedRealtime(): void {
             if (table === "synced_manual_reviews") {
               maybeAnnounceNewReview(payload, announcedReviews);
             }
+            // The heartbeat itself feeds the online gate (useSyncReachability),
+            // applied as it arrives rather than after a refetch.
+            if (table === "synced_devices") {
+              useDeviceStore.getState().applyRealtime(payload);
+            }
           },
         );
       }
+      // The command plane (PHASE2-SPEC 2.4): a command's status changes are
+      // applied straight from the payload, no refetch. RLS scopes the socket.
+      channel.on(
+        "postgres_changes",
+        { event: "UPDATE", schema: "public", table: "pending_commands" },
+        (payload) => {
+          const row = payload.new as Record<string, unknown> | null;
+          if (!row || typeof row.id !== "string" || typeof row.status !== "string") return;
+          useCommandStore.getState().applyRow({
+            id: row.id,
+            status: row.status,
+            result: row.result,
+            error_message: typeof row.error_message === "string" ? row.error_message : null,
+          });
+        },
+      );
+      // The desktop activating (or revoking) this browser's controller.
+      channel.on(
+        "postgres_changes",
+        { event: "UPDATE", schema: "public", table: "command_controllers" },
+        (payload) => useControllerStore.getState().applyRow(payload.new as Record<string, unknown> | null),
+      );
       // Reflect the real socket state in the connection indicator. Previously
       // subscribe() had no status callback, so eventStore.connectionStatus stayed
       // at its "polling" default and the dot was pure decoration in supabase mode.

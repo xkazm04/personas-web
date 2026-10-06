@@ -25,6 +25,11 @@ export interface Persona {
   maxTurns: number | null;
   designContext: string | null;
   groupId: string | null;
+  /**
+   * The desktop that owns the persona (`synced_personas.device_id`): where a
+   * remote command for it is sent. Only the sync mirror knows it.
+   */
+  deviceId?: string | null;
   createdAt: string;
   updatedAt: string;
 }
