@@ -75,7 +75,10 @@ test.describe("/m phone landing", () => {
         const box = await cta.boundingBox();
         expect(box, `CTA has no box on poster ${i + 1}`).not.toBeNull();
         expect(box!.y).toBeGreaterThanOrEqual(0);
-        expect(box!.y + box!.height).toBeLessThanOrEqual(vp.height);
+        // 1 px for sub-pixel layout: the dock sits on the safe-area edge and its box
+        // measured 844.39 against an 844 viewport in one full-suite run (2026-10-06).
+        // A real overflow (the CTA pushed off screen) is tens of pixels.
+        expect(box!.y + box!.height).toBeLessThanOrEqual(vp.height + 1);
         // Nothing covers it: the topmost element at its centre is the button (or inside it).
         const hit = await page.evaluate(({ x, y }) => !!document.elementFromPoint(x, y)?.closest("[data-role=m-cta]"), { x: box!.x + box!.width / 2, y: box!.y + box!.height / 2 });
         expect(hit, `CTA covered on poster ${i + 1}`).toBe(true);
