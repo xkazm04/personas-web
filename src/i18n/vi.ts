@@ -1345,7 +1345,7 @@ export const vi: LocaleTranslations = {
       title: "M\u1eabu Agent",
       subtitle: "Duy\u1ec7t {count} m\u1eabu agent d\u1ef1ng s\u1eb5n \u0111\u01b0\u1ee3c nh\u00f3m theo lo\u1ea1i c\u00f4ng vi\u1ec7c ch\u00fang th\u1ef1c hi\u1ec7n. Ch\u1ecdn m\u1ed9t danh m\u1ee5c \u0111\u1ec3 xem c\u00e1c m\u1eabu b\u00ean trong.",
       gridHeading: "Duy\u1ec7t m\u1eabu theo danh m\u1ee5c",
-      gridDescription: "C\u00e1c m\u1eabu l\u00e0 nh\u1eefng Persona \u0111\u01b0\u1ee3c c\u1ea5u h\u00ecnh s\u1eb5n m\u00e0 b\u1ea1n c\u00f3 th\u1ec3 \u00e1p d\u1ee5ng ch\u1ec9 v\u1edbi m\u1ed9t c\u00fa nh\u1ea5p. M\u1ed7i m\u1eabu \u0111\u00e3 c\u00f3 s\u1eb5n prompt, c\u00f4ng c\u1ee5 v\u00e0 tr\u00ecnh k\u00edch ho\u1ea1t \u0111\u01b0\u1ee3c thi\u1ebft l\u1eadp cho m\u1ed9t c\u00f4ng vi\u1ec7c c\u1ee5 th\u1ec3 \u2014 kh\u00f4ng c\u1ea7n c\u00e0i \u0111\u1eb7t th\u00eam.",
+      gridDescription: "C\u00e1c m\u1eabu l\u00e0 c\u1ea5u h\u00ecnh tham kh\u1ea3o cho t\u1eebng c\u00f4ng vi\u1ec7c c\u1ee5 th\u1ec3. M\u1ed7i m\u1eabu cho th\u1ea5y prompt, c\u00f4ng c\u1ee5 v\u00e0 tr\u00ecnh k\u00edch ho\u1ea1t m\u00e0 m\u1ed9t agent c\u1ea7n. \u0110\u1ec3 d\u00f9ng m\u1ed9t m\u1eabu, h\u00e3y c\u00e0i \u1ee9ng d\u1ee5ng Personas tr\u00ean m\u00e1y t\u00ednh v\u00e0 thi\u1ebft l\u1eadp m\u1eabu \u1edf \u0111\u00f3 b\u1eb1ng t\u00e0i kho\u1ea3n c\u1ee7a ri\u00eang b\u1ea1n.",
       changeCategory: "\u0110\u1ed5i danh m\u1ee5c",
       complexityAll: "T\u1ea5t c\u1ea3",
       complexityBasic: "C\u01a1 b\u1ea3n",

@@ -4399,7 +4399,7 @@ export const en: Translations = {
     title: 'Agent Templates',
     subtitle: 'Browse {count} ready-made agent templates grouped by the kind of work they do. Pick a category to see the templates inside.',
     gridHeading: 'Browse templates by category',
-    gridDescription: 'Templates are pre-configured Personas you can adopt with one click. Each template already has the prompt, tools, and triggers wired up for a specific job — no setup required.',
+    gridDescription: 'Templates are reference configurations for specific jobs. Each one shows the prompt, tools, and triggers an agent needs. To use one, install the Personas desktop app and set it up there with your own accounts.',
     changeCategory: 'Change category',
     complexityAll: 'All',
     complexityBasic: 'Basic',
@@ -5465,9 +5465,9 @@ export const en: Translations = {
       },
       templates: {
         title: 'Templates',
-        description: 'Dozens of ready-made personas you can adopt with one click \u2014 from PR reviewer to morning brief.',
+        description: 'Dozens of ready-made personas to start from, such as a PR reviewer or a morning brief. A guided wizard fits each one to your tools.',
         details: [
-          'One-click adoption into your canvas',
+          'Guided adoption: answer a few questions, connect your credentials',
           'Remix templates into your own library',
         ],
         guide: 'Browse template library',

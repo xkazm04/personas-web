@@ -1345,7 +1345,7 @@ export const cs: LocaleTranslations = {
       title: "\u0139\u00a0ablony agent\u0139\u017b",
       subtitle: "Proch\u00e1zejte {count} hotov\u00fdch \u0161ablon agent\u016f seskupen\u00fdch podle druhu pr\u00e1ce, kterou vykon\u00e1vaj\u00ed. Vyberte kategorii a zobrazte \u0161ablony uvnit\u0159.",
       gridHeading: "Proch\u00e1zet \u0161ablony podle kategorie",
-      gridDescription: "\u0160ablony jsou p\u0159edkonfigurovan\u00e9 Persony, kter\u00e9 m\u016f\u017eete p\u0159ijmout jedn\u00edm kliknut\u00edm. Ka\u017ed\u00e1 \u0161ablona u\u017e m\u00e1 propojen\u00fd prompt, n\u00e1stroje a triggery pro konkr\u00e9tn\u00ed \u00fakol \u2014 \u017e\u00e1dn\u00e9 nastavov\u00e1n\u00ed nen\u00ed t\u0159eba.",
+      gridDescription: "\u0160ablony jsou referen\u010dn\u00ed konfigurace pro konkr\u00e9tn\u00ed \u00fakoly. Ka\u017ed\u00e1 ukazuje prompt, n\u00e1stroje a triggery, kter\u00e9 agent pot\u0159ebuje. Chcete-li \u0161ablonu pou\u017e\u00edt, nainstalujte desktopovou aplikaci Personas a nastavte ji tam se sv\u00fdmi vlastn\u00edmi \u00fa\u010dty.",
       changeCategory: "Zm\u011bnit kategorii",
       complexityAll: "V\u0161e",
       complexityBasic: "Z\u00e1kladn\u00ed",

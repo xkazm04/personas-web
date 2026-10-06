@@ -1345,7 +1345,7 @@ export const id: LocaleTranslations = {
       title: "Templat Agen",
       subtitle: "Jelajahi {count} templat agen siap pakai yang dikelompokkan berdasarkan jenis pekerjaan. Pilih kategori untuk melihat templat di dalamnya.",
       gridHeading: "Jelajahi templat berdasarkan kategori",
-      gridDescription: "Template adalah Personas yang telah dikonfigurasi sebelumnya dan dapat Anda gunakan dengan satu klik. Setiap template sudah memiliki prompt, tools, dan trigger yang siap untuk tugas tertentu \u2014 tanpa perlu pengaturan.",
+      gridDescription: "Template adalah konfigurasi referensi untuk tugas tertentu. Setiap template menunjukkan prompt, tools, dan trigger yang dibutuhkan agen. Untuk menggunakannya, instal aplikasi desktop Personas dan atur template di sana dengan akun Anda sendiri.",
       changeCategory: "Ganti kategori",
       complexityAll: "Semua",
       complexityBasic: "Dasar",

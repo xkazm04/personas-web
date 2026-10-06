@@ -7,11 +7,11 @@ export const revalidate = 3600;
 export const metadata: Metadata = {
   title: "Agent Templates",
   description:
-    "Browse ready-made AI agent templates for DevOps, data pipelines, monitoring, and more. Copy a config and start automating in seconds.",
+    "Browse ready-made AI agent templates for DevOps, data pipelines, monitoring, and more. Each one is a reference configuration you set up in the Personas desktop app.",
   openGraph: {
     title: "Agent Template Gallery — Personas",
     description:
-      "Ready-made AI agent templates. Pick one, copy the config, and start automating.",
+      "Ready-made AI agent templates. Read the config, then set it up in the Personas desktop app.",
     url: `${SITE_URL}/templates`,
   },
   alternates: {

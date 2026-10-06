@@ -1345,7 +1345,7 @@ export const es: LocaleTranslations = {
       title: "Plantillas de agentes",
       subtitle: "Explora {count} plantillas de agentes predefinidas agrupadas por el tipo de trabajo que realizan. Elige una categor\u00eda para ver las plantillas dentro.",
       gridHeading: "Explora plantillas por categor\u00eda",
-      gridDescription: "Las plantillas son Personas preconfiguradas que puedes adoptar con un clic. Cada plantilla ya tiene el prompt, las herramientas y los disparadores configurados para una tarea espec\u00edfica \u2014 no requiere configuraci\u00f3n adicional.",
+      gridDescription: "Las plantillas son configuraciones de referencia para tareas espec\u00edficas. Cada una muestra el prompt, las herramientas y los disparadores que necesita un agente. Para usar una, instala la aplicaci\u00f3n de escritorio de Personas y config\u00farala all\u00ed con tus propias cuentas.",
       changeCategory: "Cambiar categor\u00eda",
       complexityAll: "Todas",
       complexityBasic: "B\u00e1sico",

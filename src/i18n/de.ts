@@ -1345,7 +1345,7 @@ export const de: LocaleTranslations = {
       title: "Agenten-Vorlagen",
       subtitle: "Durchsuchen Sie {count} vorgefertigte Agent-Vorlagen, gruppiert nach Art der Arbeit. W\u00e4hlen Sie eine Kategorie, um die enthaltenen Vorlagen zu sehen.",
       gridHeading: "Vorlagen nach Kategorie durchsuchen",
-      gridDescription: "Vorlagen sind vorkonfigurierte Personas, die Sie mit einem Klick \u00fcbernehmen k\u00f6nnen. Jede Vorlage hat Prompt, Tools und Trigger bereits f\u00fcr eine bestimmte Aufgabe eingerichtet \u2014 keine Einrichtung erforderlich.",
+      gridDescription: "Vorlagen sind Referenzkonfigurationen f\u00fcr bestimmte Aufgaben. Jede zeigt den Prompt, die Tools und die Trigger, die ein Agent braucht. Um eine Vorlage zu nutzen, installieren Sie die Personas-Desktop-App und richten sie dort mit Ihren eigenen Konten ein.",
       changeCategory: "Kategorie \u00e4ndern",
       complexityAll: "Alle",
       complexityBasic: "Einfach",

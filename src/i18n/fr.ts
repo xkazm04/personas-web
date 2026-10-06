@@ -1345,7 +1345,7 @@ export const fr: LocaleTranslations = {
       title: "Mod\u00e8les d'agents",
       subtitle: "Parcourez {count} mod\u00e8les d'agents pr\u00eats \u00e0 l'emploi, regroup\u00e9s par type de travail. Choisissez une cat\u00e9gorie pour voir les mod\u00e8les \u00e0 l'int\u00e9rieur.",
       gridHeading: "Parcourir les mod\u00e8les par cat\u00e9gorie",
-      gridDescription: "Les mod\u00e8les sont des Personas pr\u00e9configur\u00e9s que vous pouvez adopter en un clic. Chaque mod\u00e8le a d\u00e9j\u00e0 le prompt, les outils et les d\u00e9clencheurs configur\u00e9s pour une t\u00e2che sp\u00e9cifique \u2014 aucune configuration requise.",
+      gridDescription: "Les mod\u00e8les sont des configurations de r\u00e9f\u00e9rence pour des t\u00e2ches pr\u00e9cises. Chacun montre le prompt, les outils et les d\u00e9clencheurs dont un agent a besoin. Pour en utiliser un, installez l'application de bureau Personas et configurez-le avec vos propres comptes.",
       changeCategory: "Changer de cat\u00e9gorie",
       complexityAll: "Tous",
       complexityBasic: "Basique",
