@@ -14,7 +14,19 @@ import { box, type Rect } from "./layout";
  * picture of a control (the scene is an illustration), so it stays out of
  * the tab order.
  */
-export default function StartControl({ rect, state, reduced }: { rect: Rect; state: StartState; reduced: boolean }) {
+export default function StartControl({
+  rect,
+  state,
+  bare = false,
+  reduced,
+}: {
+  rect: Rect;
+  state: StartState;
+  /** Compact: just the button, right-aligned in the dial's header row - the
+   *  status line under the scene already says what the hint would. */
+  bare?: boolean;
+  reduced: boolean;
+}) {
   const { t } = useTranslation();
   const plan = t.athenaPage.fleet.plan;
   const status = t.athenaPage.fleet.status;
@@ -24,13 +36,13 @@ export default function StartControl({ rect, state, reduced }: { rect: Rect; sta
   const hint = state === "done" ? status.closingShort : waiting ? status.yourCallShort : status.parallelShort;
   return (
     <motion.div
-      className="absolute flex items-center gap-3 rounded-2xl border px-4"
-      style={{ ...box(rect), borderColor: tint("cyan", shown ? 22 : 8), backgroundColor: tint("cyan", shown ? 4 : 2) }}
+      className={bare ? "absolute flex items-center justify-end" : "absolute flex items-center gap-3 rounded-2xl border px-4"}
+      style={bare ? box(rect) : { ...box(rect), borderColor: tint("cyan", shown ? 22 : 8), backgroundColor: tint("cyan", shown ? 4 : 2) }}
       initial={false}
       animate={{ opacity: shown ? 1 : 0.35 }}
       transition={{ duration: reduced ? 0 : 0.5 }}
     >
-      {shown && (
+      {shown && !bare && (
         <motion.span
           key={hint}
           className="min-w-0 flex-1 whitespace-nowrap text-sm text-muted-dark"

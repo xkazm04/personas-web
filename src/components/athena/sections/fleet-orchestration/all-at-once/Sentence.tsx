@@ -25,12 +25,15 @@ export default function Sentence({
   stage,
   clauses,
   lit,
+  compact = false,
   reduced,
 }: {
   rect: Rect;
   stage: ModuleStage;
   clauses: number;
   lit: boolean[];
+  /** Phones: one step smaller, so a long locale still fits five lines. */
+  compact?: boolean;
   reduced: boolean;
 }) {
   const { t } = useTranslation();
@@ -48,7 +51,7 @@ export default function Sentence({
         boxShadow: sent ? brandShadow("cyan", 30, 14) : undefined,
       }}
     >
-      <p className="min-h-0 flex-1 text-xl leading-[1.45] text-foreground">
+      <p className={`min-h-0 flex-1 leading-[1.45] text-foreground ${compact ? "text-lg" : "text-xl"}`}>
         {clauses === 0 ? (
           <span className="text-muted-dark">{c.placeholder}</span>
         ) : (

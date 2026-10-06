@@ -20,7 +20,18 @@ import { box, type Rect } from "./layout";
 const ROW_H = 50;
 const GAP = 6;
 
-export default function Roster({ rect, scene, reduced }: { rect: Rect; scene: SceneState; reduced: boolean }) {
+export default function Roster({
+  rect,
+  scene,
+  yielded = false,
+  reduced,
+}: {
+  rect: Rect;
+  scene: SceneState;
+  /** Compact only: the answer has taken this slot, so the rows step out. */
+  yielded?: boolean;
+  reduced: boolean;
+}) {
   const { t } = useTranslation();
   const f = t.athenaPage.fleet;
   return (
@@ -37,7 +48,7 @@ export default function Roster({ rect, scene, reduced }: { rect: Rect; scene: Sc
             style={{
               top: i * (ROW_H + GAP),
               height: ROW_H,
-              opacity: scene.seats ? 1 : 0,
+              opacity: scene.seats && !yielded ? 1 : 0,
               borderColor: on ? tint(hue, done ? 50 : 28) : tint("cyan", 16),
               backgroundColor: on ? tint(hue, done ? 10 : 5) : "transparent",
             }}

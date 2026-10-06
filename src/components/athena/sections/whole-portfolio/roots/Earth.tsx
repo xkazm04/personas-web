@@ -20,12 +20,13 @@ const G = 320 / 720;
 
 export default function Earth() {
   // The art box is centred and (sm+) as tall as min(slot, width / aspect);
-  // phones pin it at 60rem wide, so 27rem tall.
+  // phones pin it at 60rem wide, so 27rem tall, and sit it on the slot's
+  // 1.5rem bottom pad - the ground is then 400/720 of 27rem (15rem) above it.
   const lift = (0.5 - G).toFixed(4);
   return (
     <div
       aria-hidden="true"
-      className="pointer-events-none absolute inset-0 overflow-hidden rounded-2xl [--art-h:27rem] sm:[--art-h:min(100cqh,100cqw/2.2222)]"
+      className="pointer-events-none absolute inset-0 overflow-hidden rounded-2xl [--art-h:27rem] max-sm:[--g:calc(100%-16.5rem)]! sm:[--art-h:min(100cqh,100cqw/2.2222)]"
       style={{ ["--g" as string]: `calc(50% - ${lift} * var(--art-h))` }}
     >
       <div

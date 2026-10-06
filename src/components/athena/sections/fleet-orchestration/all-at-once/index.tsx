@@ -1,6 +1,7 @@
 "use client";
 
 import { useRef } from "react";
+import { atStage } from "@/components/athena/stage/stages";
 import { useTranslation } from "@/i18n/useTranslation";
 import FitBox from "./shared/FitBox";
 import StageShell from "./shared/StageShell";
@@ -52,11 +53,13 @@ export default function AthenaLabFleetV2() {
           const L = layoutFor(narrow);
           return (
             <>
-              <Sentence rect={L.sentence} stage={scene.sentence} clauses={scene.clauses} lit={scene.lit} reduced={reduced} />
-              <StartControl rect={L.start} state={scene.start} reduced={reduced} />
+              <Sentence rect={L.sentence} stage={scene.sentence} clauses={scene.clauses} lit={scene.lit} compact={narrow} reduced={reduced} />
+              <StartControl rect={L.start} state={scene.start} bare={narrow} reduced={reduced} />
               <Dial rect={L.dial} scene={scene} reduced={reduced} />
-              <Roster rect={L.roster} scene={scene} reduced={reduced} />
-              <Answer rect={L.answer} stage={scene.result} ghost={scene.answerGhost} reduced={reduced} />
+              {/* Compact: the team and the answer share one slot - the team
+                  hands over to the answer the moment it opens, no ghost first. */}
+              <Roster rect={L.roster} scene={scene} yielded={narrow && atStage(scene.result, "shell")} reduced={reduced} />
+              <Answer rect={L.answer} stage={scene.result} ghost={scene.answerGhost && !narrow} reduced={reduced} />
             </>
           );
         }}

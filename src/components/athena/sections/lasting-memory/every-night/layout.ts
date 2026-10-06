@@ -33,7 +33,7 @@ export const DAYS = 5;
 
 /** Width / height of the art box on wide screens and on phones. */
 export const WIDE_AR = 2.4;
-export const COMPACT_AR = 0.6;
+export const COMPACT_AR = 0.5;
 /** Design width the art's type is authored against (`../shared/frame`). */
 export const ART_W = 1200;
 
@@ -116,10 +116,11 @@ export function dropFrom(L: FieldLayout): string {
   return `${(-(chip.y - L.baseY) / chip.h) * 100}%`;
 }
 
-/** One stacked sentence (phones only). */
-export function noteRect(L: FieldLayout, pass: number): Rect {
-  const row = L.notesH / 4;
-  return { x: L.band.x, y: L.notesY + row * pass, w: L.band.w, h: row };
+/** The stacked sentences' block (phones only) - one box the notes flow in, so
+ *  a sentence that wraps in a long locale pushes the rest rather than
+ *  overlapping them. */
+export function notesRect(L: FieldLayout): Rect {
+  return { x: L.band.x, y: L.notesY, w: L.band.w, h: L.notesH };
 }
 
 export const WIDE: FieldLayout = {
@@ -150,31 +151,37 @@ export const WIDE: FieldLayout = {
   labelRailY: 20,
 };
 
+/**
+ * Phones: a taller field (COMPACT_AR) so the talk band - the part that has to
+ * read as conversation - gets a third of it, one kept thing per night stands
+ * on the ledge with its night's moon on it, and the four sentences get the
+ * bottom of the frame at reading size.
+ */
 export const COMPACT: FieldLayout = {
   band: { x: 2, w: 96 },
   talkFrac: 0.82,
-  readerDayY: 7,
-  readerNightY: 47.5,
+  readerDayY: 5.2,
+  readerNightY: 49.8,
   readerPad: 8,
-  railY: 17,
-  baseY: 41,
-  rowsPerStep: 2,
-  nightY: 44.5,
-  nightH: 6,
-  recallY: 55.4,
-  recallTopY: 27,
-  shelf: { x: 2, y: 57, w: 96, h: 6.6 },
-  chipsPerPass: 2,
+  railY: 14,
+  baseY: 45,
+  rowsPerStep: 3,
+  nightY: 47.6,
+  nightH: 4.4,
+  recallY: 57.7,
+  recallTopY: 29,
+  shelf: { x: 2, y: 59, w: 96, h: 7.6 },
+  chipsPerPass: 1,
   notesMode: "stack",
-  notesY: 70,
-  notesH: 29,
-  ledgeY: 63.6,
-  ledgeH: 1.2,
+  notesY: 70.5,
+  notesH: 28.5,
+  ledgeY: 66.6,
+  ledgeH: 1.1,
   legendX: null,
   legendW: 0,
-  labelTalkY: 13,
+  labelTalkY: 11.2,
   labelNightY: null,
-  labelShelfY: 52.5,
+  labelShelfY: 55,
   labelRailY: null,
 };
 

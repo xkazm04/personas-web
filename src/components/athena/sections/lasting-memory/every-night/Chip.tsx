@@ -84,6 +84,13 @@ export default function Chip({
           boxShadow: `inset 0 1px 0 ${tint("cyan", 40)}, ${brandShadow("cyan", skin.glow, hot ? 55 : 30)}`,
         }}
       />
+      {/* Phones: no words on the thing itself (they are stacked below the
+          shelf), so it wears its night's moon - a kept thing, not a socket. */}
+      {text === null && (
+        <svg viewBox="-12 -12 24 24" className="absolute left-1/2 top-1/2 h-[45%] w-[45%] -translate-x-1/2 -translate-y-1/2" aria-hidden="true">
+          <path d={MOON} transform="rotate(-28)" fill={tint("cyan", warm ? 95 : 70)} className="transition-[fill] duration-500" />
+        </svg>
+      )}
       {text !== null && (
         <span className="absolute inset-0 flex flex-col justify-end px-[8%] py-[7%]">
           <svg

@@ -73,8 +73,9 @@ export default function Dial({ rect, scene, reduced }: { rect: Rect; scene: Scen
       <motion.span
         className="absolute flex items-center gap-2 whitespace-nowrap font-mono text-sm text-muted-dark"
         // Wide: ends just left of twelve o'clock. Compact: the dial is nearly
-        // the scene's width, so the caption sits above its left edge instead.
-        style={rect.w < 360 ? { left: 0, top: pct(-8) } : { right: pct(DIAL.size - DIAL.c + 14), top: pct(-4) }}
+        // the scene's width, so the caption heads its left edge, on one row
+        // with Start (layout COMPACT.start).
+        style={rect.w < 360 ? { left: pct(-5), top: pct(-10) } : { right: pct(DIAL.size - DIAL.c + 14), top: pct(-4) }}
         initial={false}
         animate={{ opacity: scene.running ? 1 : 0 }}
         transition={{ duration: reduced ? 0 : 0.5 }}

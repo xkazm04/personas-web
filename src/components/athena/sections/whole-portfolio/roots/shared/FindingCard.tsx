@@ -95,13 +95,15 @@ export default function FindingCard({
       </span>
 
       {c.rows.map((row, i) => (
-        <Part key={row.name} show={body} i={i} reduced={reduced} className="flex items-center gap-2">
+        // Phones: a narrow card never clips the name - the mono "since" tightens
+        // its tracking and, if it still does not fit, wraps under it.
+        <Part key={row.name} show={body} i={i} reduced={reduced} className="flex items-center gap-2 max-sm:flex-wrap max-sm:gap-x-3 max-sm:gap-y-0">
           <span
             className="h-2 w-2 shrink-0 rounded-full"
             style={{ backgroundColor: BRAND_VAR.rose, boxShadow: brandShadow("rose", 6, 70) }}
           />
-          <span className={`min-w-0 truncate text-foreground ${READ}`}>{row.name}</span>
-          <span className={`ml-auto shrink-0 normal-case ${ANNOTATION_DIM}`}>{row.since}</span>
+          <span className={`min-w-0 text-foreground sm:truncate ${READ}`}>{row.name}</span>
+          <span className={`ml-auto shrink-0 normal-case ${ANNOTATION_DIM} max-sm:tracking-[0.08em]`}>{row.since}</span>
         </Part>
       ))}
 

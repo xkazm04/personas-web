@@ -8,6 +8,9 @@
  * The dial is drawn in its own fixed 400x400 viewBox (`DIAL`) and placed as
  * one box, so the rings, the travelling teammates and the outer track never
  * drift apart whatever size the box is drawn at.
+ *
+ * Compact folds two things a phone cannot spare room for: Start rides the
+ * dial's header row, and the answer lands in the team's slot (see `index`).
  */
 
 export interface Rect {
@@ -49,12 +52,16 @@ export const WIDE: SceneLayout = {
 
 export const COMPACT: SceneLayout = {
   w: 360,
-  h: 1064,
-  sentence: { x: 0, y: 0, w: 360, h: 226 },
-  start: { x: 0, y: 232, w: 360, h: 50 },
-  dial: { x: 8, y: 312, w: 344, h: 344 },
-  roster: { x: 0, y: 664, w: 360, h: 220 },
-  answer: { x: 0, y: 898, w: 360, h: 166 },
+  h: 812,
+  sentence: { x: 0, y: 0, w: 360, h: 198 },
+  // Start is the dial's own header on a phone, opposite the one-at-a-time
+  // caption - one control row, never a band of its own.
+  start: { x: 196, y: 214, w: 164, h: 40 },
+  dial: { x: 20, y: 262, w: 320, h: 320 },
+  // The answer takes the team's place once the last ring closes: the four
+  // findings are on the dial by then, so a phone never holds an empty box.
+  roster: { x: 0, y: 594, w: 360, h: 218 },
+  answer: { x: 0, y: 594, w: 360, h: 218 },
 };
 
 export const layoutFor = (narrow: boolean): SceneLayout => (narrow ? COMPACT : WIDE);

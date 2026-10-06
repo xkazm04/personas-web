@@ -30,7 +30,8 @@ import Overlay, { PhoneCard } from "./Overlay";
  * grows with the stage slot; its type is sized from the slot (`cqh`), and
  * `Earth` runs the sky, soil and horizon out to the slot's edges, so a tall
  * or narrow stage never leaves the garden floating. Phones keep a wider box
- * centred on the plant she goes for and crop the edges.
+ * centred on the plant she goes for and crop the edges; it sits low in the
+ * slot under a band of sky the opened finding docks in.
  *
  * Reduced motion pins INITIAL_TICK: down at the cause, the fix just taken.
  */
@@ -51,7 +52,9 @@ export default function AthenaLabPortfolioRoots() {
       label={t.athenaSections.portfolio.aria.roots}
       status={statusAt(phase, BEATS, copy.status)}
       live={live}
-      slotClassName="flex min-h-[28rem] flex-col justify-center overflow-hidden"
+      // Phones: the garden sits low with a band of sky over it tall enough for
+      // the opened finding (PhoneCard), so the card never lands on the plants.
+      slotClassName="flex min-h-[28rem] flex-col justify-center overflow-hidden max-sm:min-h-[39rem] max-sm:justify-end max-sm:pb-6"
     >
       <Earth />
       <div
