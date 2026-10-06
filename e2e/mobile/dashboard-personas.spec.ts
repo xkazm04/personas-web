@@ -26,6 +26,8 @@ async function openDemo(page: Page, query = "") {
   await page.waitForURL(/\/dashboard\/personas/);
   await expect(page.getByRole("heading", { name: "Your agents" })).toBeVisible();
   await expect(page.locator("li[data-persona-row]").first()).toBeVisible();
+  // Row states settle once the runs have loaded (until then only Paused is claimed).
+  await expect(page.locator('[data-persona-state="loading"]')).toHaveCount(0);
 }
 
 const DOWNLOAD = "Send the download to my computer";

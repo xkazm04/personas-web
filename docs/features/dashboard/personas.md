@@ -62,6 +62,7 @@ Both views run a seeded simulation (runs progress and complete, failures self-he
 - Motion is gated by `useStillMotion` (reduced motion: crossfades and stillness) and `usePageVisibility` (loops and simulation stop on a hidden tab). Under reduced motion the simulation still updates data.
 - The fleet stage is desktop-only, like the contest brief, and keeps a 700px minimum height; phones get the persona list instead (2026-10-06). The two show different populations in demo (the stage's 99-agent `fleet.json` vs `mockApi`'s 5 personas): spec open question 5.
 - Phone layout, still deferred: the "Out of sync, check the desktop" notice 30 s after a disagreeing mirror, and the Chat tab (wave 3; the slot is marked `WAVE 3 SLOT` in `PersonaDetailSheet.tsx`). Row-state precedence is Paused > Running > Failed > Idle, so the Pause button always reads back.
+- Until the runs first load (`executionStore.executionsFetchedAt`), a row claims only Paused; its state line is blank (`data-persona-state="loading"`) rather than a premature Idle.
 - Row states and Activity read `executionStore`'s newest 50 runs overall, not a per-persona query: a persona whose runs are all older shows none.
 - On the supabase plane a run from the phone is a signed command that runs without desktop approval for a paired browser (spec D1); the web no longer sends the legacy unsigned `run_persona` insert (the desktop's approval card).
 - Board's `N` and Escape listen on the document while the Board is mounted (ignored in inputs and with modifiers).

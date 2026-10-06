@@ -64,6 +64,11 @@ interface ExecutionState {
   activeCount: number;
   executionsLoading: boolean;
   executionsError: string | null;
+  /**
+   * When the list last loaded, or null before the first load. Until then an
+   * empty list means "not known yet", not "no runs" (the phone's row states).
+   */
+  executionsFetchedAt: number | null;
   /** Execution ids with an in-flight cancel request. Gates the per-row button. */
   cancellingIds: Record<string, true>;
   fetchExecutions: (opts?: ExecFilterOpts) => Promise<void>;
@@ -82,6 +87,7 @@ export const useExecutionStore = create<ExecutionState>((set, get) => ({
   activeCount: 0,
   executionsLoading: false,
   executionsError: null,
+  executionsFetchedAt: null,
   cancellingIds: {},
   fetchExecutions: async (opts) => {
     const seq = ++executionFetchSeq;
@@ -93,6 +99,7 @@ export const useExecutionStore = create<ExecutionState>((set, get) => ({
           rawExecutions: raw,
           activeCount: countActive(raw),
           executionsError: null,
+          executionsFetchedAt: Date.now(),
         });
       }
     } catch (err) {
@@ -160,6 +167,7 @@ export const useExecutionStore = create<ExecutionState>((set, get) => ({
       activeCount: 0,
       executionsLoading: false,
       executionsError: null,
+      executionsFetchedAt: null,
       cancellingIds: {},
     });
   },

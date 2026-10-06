@@ -42,6 +42,7 @@ export default function PhonePersonaRow({ id, reach, onOpenDetail, onOpenActions
   const persona = usePersona(id);
   const latest = useCommandStore((s) => latestForPersona(s.inflight, id));
   const executions = useExecutionStore((s) => s.rawExecutions);
+  const runsKnown = useExecutionStore((s) => s.executionsFetchedAt !== null);
   const runs = useMemo(() => personaRuns(executions, id), [executions, id]);
   if (!persona) return null;
 
@@ -53,8 +54,13 @@ export default function PhonePersonaRow({ id, reach, onOpenDetail, onOpenActions
   const showAction = tier !== "never-synced" && tier !== "no-account";
   const canAct = actionsEnabled(tier) && !busy;
   const label = (enabled ? copy.pauseLabel : copy.resumeLabel).replace("{name}", persona.name);
-  const stateText =
-    row.state === "paused" && row.liveExecutionId ? copy.pausedRunning : copy.state[row.state];
+  // Before the runs first load, only Paused is known: claim no Idle / Running yet.
+  const stateKnown = runsKnown || row.state === "paused";
+  const stateText = !stateKnown
+    ? "\u00a0"
+    : row.state === "paused" && row.liveExecutionId
+      ? copy.pausedRunning
+      : copy.state[row.state];
 
   const onToggle = () => sendPersonaAction(enabled ? "pause" : "resume", persona.id);
 
@@ -80,7 +86,10 @@ export default function PhonePersonaRow({ id, reach, onOpenDetail, onOpenActions
           </span>
           <span className="min-w-0 flex-1">
             <span className="block truncate text-base font-medium text-foreground">{persona.name}</span>
-            <span data-persona-state={row.state} className={`block truncate text-sm ${STATE_TONE[row.state]}`}>
+            <span
+              data-persona-state={stateKnown ? row.state : "loading"}
+              className={`block truncate text-sm ${STATE_TONE[row.state]}`}
+            >
               {stateText}
             </span>
           </span>
