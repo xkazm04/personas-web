@@ -27,7 +27,7 @@ Per-frame mechanics:
 | File | Role |
 | --- | --- |
 | `src/contexts/TourContext.tsx` | State machine + provider; composes the six hooks; dwell-timer and `actions` timers |
-| `src/lib/tour-script.ts` | The four step scripts, `TOURS_BY_ID`, `TourStep`/`TourAction`/`TourSpotlightCue` types, `clickTarget`/`clickByText` helpers, `INTRO_AUDIO_SRC` |
+| `src/lib/tour-script.ts` | The four step scripts, `TOURS_BY_ID`, `TourStep`/`TourAction`/`TourSpotlightCue` types, `clickTarget` helper, `INTRO_AUDIO_SRC` |
 | `src/hooks/useTourAudio.ts` | Per-clip `Audio` + Web Audio analyser graph; `ended`-driven advance, `error` dwell fallback, **stall watchdog**, live volume |
 | `src/hooks/useTourSpotlightSequence.ts` | Resolves the in-focus selector; in-step sweep cue timers |
 | `src/hooks/useTourScroll.ts` | Centers target / scrolls wrapper to force lazy hydration, polls until mounted |
@@ -55,7 +55,7 @@ Per-frame mechanics:
 - **Mount:** `PageShell.tsx` wraps marketing pages in `TourProvider` + `TourOverlay`; `src/app/dashboard/layout.tsx` does the same so the dashboard chapter survives tab navigation.
 - **Launch sites:** `HeroClient.tsx:177` (`tourId="home"`, `intro`, bridges to `/features?tour=1`), `InfoPageLayout.tsx` (its `tourId` slot above the first section; only `/roadmap` still uses it), `DesignEngine.tsx:40` (`tourId="features"`, under the Design section's lede since 2026-09-25 - in the layout slot it pushed the first stage ~94px under a laptop's fold; `InfoPageLayout`'s navbar spacer is now exactly `--nav-h` on the desktop stage, so that stage starts right under the navbar; bridges to `/demo?tour=1`), `dashboard/home/page.tsx:126` (`tourId="dashboard"`).
 - **Bridge chain:** home → `/features?tour=1` → `/demo?tour=1`. `src/app/demo/page.tsx` enters demo mode and forwards `?tour=1` to `/dashboard/home` so the dashboard launcher autostarts.
-- **Diagram contract:** every spotlit diagram must expose a `[data-tour-diagram="…"]` anchor, and clickable sub-targets used by `actions` need stable selectors (`[data-trigger-id]`, `[data-card-id]`, `[data-lab-tab]`, `[data-plugin-key]`, the "Triage my Gmail" chip text). Changing those in a showcase component silently breaks the matching step.
+- **Diagram contract:** every spotlit diagram must expose a `[data-tour-diagram="…"]` anchor, and clickable sub-targets used by `actions` need stable selectors (`[data-trigger-id]`, `[data-card-id]`, `[data-lab-tab]`, `[data-plugin-key]`, `[data-example-id]`). Never aim an action by visible text: labels are translated, and `tour-anchors.test.ts` fails on any non-selector action literal. Changing those in a showcase component silently breaks the matching step.
 - **Styling hooks:** `globals.css` reacts to `data-tour-active` (scale + glow lift) and `tour-cutout-pulse`.
 
 ## Conventions & gotchas

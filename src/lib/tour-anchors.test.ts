@@ -131,7 +131,7 @@ const ALL_REFS: SelectorRef[] = Object.entries(TOURS_BY_ID).flatMap(([tourId, st
 );
 
 const ATTRIBUTE_REFS = ALL_REFS.filter((r) => /^\[[\w-]+\s*=/.test(r.selector));
-/** Non-selector literals — today only the `clickByText` label. */
+/** Non-selector literals in step actions: a click aimed by on-screen text. */
 const TEXT_REFS = ALL_REFS.filter((r) => !r.selector.startsWith("["));
 
 // ---------------------------------------------------------------------------
@@ -226,24 +226,16 @@ describe("tour anchor manifest", () => {
     },
   );
 
-  it.each(TEXT_REFS)(
-    "clickByText literal $selector still exists as on-screen copy",
-    ({ selector, step: stepLabel }) => {
-      // `clickByText` matches on rendered text, not an attribute, so it cannot
-      // be resolved the way an anchor can. It is still checked rather than
-      // dropped: the literal must appear inside a string in some source file.
-      // Weaker than an anchor match — it cannot prove the string reaches a
-      // button — but it does catch the rename that silently turns the step's
-      // click into a no-op.
-      const inStringLiteral = new RegExp(`(["'\`])(?:[^\\\\]|\\\\.)*?${escape(selector)}`);
-      const hit = SOURCES.find((s) => inStringLiteral.test(s.text));
-      expect(
-        hit,
-        `${stepLabel} clicks the control labelled "${selector}", but that text appears in no source file under src/.\n` +
-          `  The step's action would silently do nothing. Update the literal in src/lib/tour-script.ts to match the current label.`,
-      ).toBeDefined();
-    },
-  );
+  it("aims no action by on-screen text (labels are translated; anchors are not)", () => {
+    // A click aimed by a control's visible label only works while that copy is
+    // English: the playground example chip ("Triage my Gmail") was clicked this
+    // way and would have gone silent the day its section was translated. Every
+    // action must aim at an attribute anchor, which the gate above resolves.
+    expect(
+      TEXT_REFS.map((r) => `${r.step}: "${r.selector}"`),
+      "Tour actions must target an attribute selector (e.g. [data-example-id=\"gmail\"]), never visible text.",
+    ).toEqual([]);
+  });
 
   // The counts live in the test NAME, not only in a console line: vitest
   // swallows console output unless --disable-console-intercept is passed, and a

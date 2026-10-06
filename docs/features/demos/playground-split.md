@@ -55,7 +55,7 @@ The first prompt plays once on its own when the panel is half on screen (never u
 ## Integration points
 - **Homepage mount.** `LazyPlaygroundSplit` in `src/components/sections/lazy.tsx` (`ssr: false`), third section in `src/app/page.tsx` with `gate: true` (`LazyMount`), inside `<div id="playground">`; the section's own id is `playground-split`.
 - **Nav anchor.** `playground-split` is the registered landing-section id in `src/lib/constants.ts` with label "Agent Mind" (scroll-map dot and navbar target); `lib/landing-address.ts` maps it to address `concepts`.
-- **Guided tour.** `data-tour-diagram="agent-mind"` is the spotlight hook; the tour clicks the "Triage my Gmail" button by text (`src/lib/tour-script.ts`), so keep that prompt label in `Script`. See [guided-tour](../marketing/guided-tour.md).
+- **Guided tour.** `data-tour-diagram="agent-mind"` is the spotlight hook; the tour clicks the Gmail example by its untranslated id, `[data-example-id="gmail"]` (`src/lib/tour-script.ts`), which `Script` puts on each example button from `ExamplePrompt.id` (kept by `localizeExamples`), so the click survives translating `t.playgroundSection`. Keep the attribute and the `gmail` id. See [guided-tour](../marketing/guided-tour.md).
 - **Shared primitives:** `SectionWrapper`, `SectionIntro`, `fadeUp`, `BRAND_VAR`/`tint`, `useStillMotion`, `usePageVisibility`, `useIsVisible`.
 - **Sibling demo:** [Pipeline Timeline Playground](playground-timeline.md).
 

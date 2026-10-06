@@ -16,6 +16,8 @@ export interface ResultCapabilities {
 }
 
 export interface ExamplePrompt {
+  /** Stable, untranslated identity (the `t.playgroundSection.examples` key). */
+  id: ExampleBase["id"];
   label: string;
   icon: LucideIcon;
   iconColor: string;

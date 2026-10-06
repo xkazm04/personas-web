@@ -74,6 +74,7 @@ export function localizeExamples(copy: PlaygroundCopy): ExamplePrompt[] {
     const words = copy.examples[id];
     return {
       ...base,
+      id,
       label: words.label,
       prompt: words.prompt,
       tools: tools.map((tool) => ({ label: copy.tools[tool.id], icon: tool.icon })),

@@ -37,6 +37,7 @@ export default function Script({ run }: { run: MindRun }) {
           >
             <button
               type="button"
+              data-example-id={ex.id}
               aria-pressed={pressed}
               disabled={run.isRunning}
               onClick={() => run.start(i)}
