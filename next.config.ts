@@ -84,16 +84,15 @@ const nextConfig: NextConfig = {
       },
     ];
   },
-  // TEMPORARY (non-permanent, 307) while /m is rebuilt - see
-  // docs/concepts/mobile-revival/PLAN.md, decision M1. The old /m dashboard
-  // views were deleted and the phone redirect (src/proxy.ts) retired, so their
-  // URLs (bookmarks, shared links, notifications) land on the desktop
-  // equivalents instead of 404ing. Next passes the query string through. The
-  // `/m` entry goes when the new /m landing ships (phase 1); the view entries
-  // are revisited when the mobile dashboard ships (phase 2).
+  // TEMPORARY (non-permanent, 307) - see docs/concepts/mobile-revival/PLAN.md,
+  // decision M1. The old /m dashboard views were deleted and the phone redirect
+  // (src/proxy.ts) retired, so their URLs (bookmarks, shared links,
+  // notifications) land on the desktop equivalents instead of 404ing. Next
+  // passes the query string through. `/m` itself is the new phone landing
+  // (phase 1) and is no longer redirected; these view entries are revisited
+  // when the mobile dashboard ships (phase 2).
   async redirects() {
     return [
-      { source: "/m", destination: "/", permanent: false },
       { source: "/m/overview", destination: "/dashboard/home", permanent: false },
       { source: "/m/reviews", destination: "/dashboard/reviews", permanent: false },
       { source: "/m/messages", destination: "/dashboard/messages", permanent: false },
