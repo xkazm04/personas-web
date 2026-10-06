@@ -43,6 +43,19 @@ The survey this plan rests on, with anchors, is [SURVEY.md](SURVEY.md).
 
    This becomes the verification instrument for every later phase, because 375px can't be checked by hand on this machine.
 
+### Phase 0 results (2026-10-06)
+
+**Phone baseline.** `e2e/mobile/baseline.spec.ts`, run with `npx playwright test --project=mobile`, passes **3/3** on today's landing:
+- **No sideways scroll at 390px.** Across 24 scroll stops, `scrollWidth` never exceeded 390px. The spec compares against the device width, because phone emulation widens `innerWidth` to fit any overflow. A 600px probe turns the spec red.
+- **Phones on `/dashboard/*` are no longer redirected.**
+- **`/m/reviews?id=x` returns a 307 to `/dashboard/reviews?id=x`.**
+
+**Inputs for Phase 1:**
+- **Hero headline.** Line 2 is 361px wide at 390px, so at 375px it would run about 34px past the padded box. It doesn't scroll the page, because `main` clips it, but it's cut off.
+- **Browser engine.** The `mobile` project runs on Chromium with the iPhone 13 profile, because the WebKit build Playwright needs isn't installed. Run `npx playwright install webkit` and drop the `browserName` override to test on real Safari.
+
+**Merge note.** `dashboard/spa` edits `src/app/m/reviews/page.tsx`, which this branch deletes. Keep the delete.
+
 ## Phase 1: the mobile landing (`/m`)
 
 **Shape.** `/m` becomes a public, server-rendered page with its own metadata. Its canonical URL is `/`, so the
@@ -99,6 +112,30 @@ Each runs on the same demo and live data plane the desktop views use, behind `us
 
 | Phase | State |
 |---|---|
-| 0: clear the ground | in progress |
-| 1: mobile landing lab | brief ready once phase 0 lands |
+| 0: clear the ground | **done 2026-10-06**: `dfc34a4`, `e1984d1`, `188f0bc`, `3eb281d`, `7caf9bd`, `b56b6ba`, `04ef958` |
+| 1: mobile landing lab | next: run as a `/contest --landing` round (brief below) |
 | 2: mobile dashboard | waiting on the `dashboard/spa` merge |
+
+## Phase 1 contest brief (draft for `/contest --landing`)
+
+**Idea.** *"The Personas landing page, rebuilt phone-first for /m. It covers six sections, in order: hero, use cases
+('one persona, many tools'), Athena companion, pricing (free; you pay only your Claude plan), FAQ, and a phone-native
+call to action that sends the desktop download to your computer. Each variant is a complete phone page at 390×844,
+not a squeezed desktop page."*
+
+**What the host stages into each seat's `data/`:**
+- this plan, and `SURVEY.md` §3–4 (the desktop sections, tokens, themes and motion gates);
+- screenshots of today's desktop sections from the live page;
+- the copy of the six desktop sections from `en.ts`;
+- `.claude/design.md`.
+
+**Bar, on top of `landing-bar.md`:**
+- One thumb, one column. Touch targets are 44px or larger. Respect the safe area. Never scroll sideways.
+- Look right in all 11 themes.
+- Gate motion with `useStillMotion`; ambient loops stop on hidden tabs.
+- Illustration-first: the art carries the benefit and the type sits in a scrim it owns.
+- Benefit-first copy with no internal jargon.
+- The CTA has to make sense on a device that cannot install the app.
+
+**Review.** The host captures each variant with the Playwright `mobile` project (phone user agent, 390×844), plus a
+desktop-frame view at `/preview/lab-m-*`. The owner picks per section and can mix sections across variants.

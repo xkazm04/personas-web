@@ -1380,7 +1380,6 @@
             "src/components/dashboard/CostChartWithCompare.tsx",
             "src/components/dashboard/ExecChartWithCompare.tsx",
             "src/components/dashboard/HealthDigestPanel.tsx",
-            "src/components/dashboard/HealthIssueRow.tsx",
             "src/components/dashboard/LatencyChart.tsx",
             "src/components/dashboard/MetricCard.tsx",
             "src/components/dashboard/ObservabilitySpendPieChart.tsx",
@@ -1774,8 +1773,7 @@
             "src/lib/mock-dashboard-data.ts",
             "src/lib/mockApi.ts",
             "src/lib/mockData.ts",
-            "src/lib/orchestrator-config.ts",
-            "src/proxy.ts"
+            "src/lib/orchestrator-config.ts"
           ],
           "target": null,
           "apiRoutes": []
