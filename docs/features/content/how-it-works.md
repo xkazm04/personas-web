@@ -27,7 +27,7 @@ The **changelog timeline** (`changelog-timeline/index.tsx`) maps over `RELEASES`
 | `src/data/changelog.ts` | Canonical `RELEASES` data + `ChangeType`/`Release` types + `CHANGE_TYPE_META` |
 
 ## Data & state
-- **Source:** `src/data/changelog.ts` → `RELEASES: Release[]` (hardcoded, 10 releases as of writing). **Stores:** none — `/how` uses local `useState` (role) only; changelog is pure render-from-constant. **API routes:** none. **Types:** `Release`, `ChangeItem`, `ChangeType` (`changelog.ts:3-15`); `ViewerRole` (`RoleSelector`); `StageColor` (`lib/colors`).
+- **Source:** `src/data/changelog.ts` → `RELEASES: Release[]` (hardcoded; 3 releases as of 2026-10-06 - only versions the desktop actually tagged: v0.4.0, v1.0.0, v1.1.0, dated by their tags. Untagged versions must not be added). **Stores:** none — `/how` uses local `useState` (role) only; changelog is pure render-from-constant. **API routes:** none. **Types:** `Release`, `ChangeItem`, `ChangeType` (`changelog.ts:3-15`); `ViewerRole` (`RoleSelector`); `StageColor` (`lib/colors`).
 
 ## Integration points
 - **`/how` hosts exactly four demo sections**, each documented separately (see Related docs):
