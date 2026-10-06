@@ -41,7 +41,7 @@ import type { Variants } from "framer-motion";
 //      reads text/numbers/status from the component, a reduced-motion
 //      user must see that same end-state immediately. Hiding it is an
 //      accessibility regression, not graceful degradation.
-//    - Past failures from getting this wrong: CinematicBreather (blank
+//    - Past failures from getting this wrong: the /how breather (blank
 //      headline), PulseGridDeck (empty "idle" deck), Persona Matrix
 //      (permanent skeleton). All shipped by copying rule-1/2 `return null`
 //      into a content-bearing component.

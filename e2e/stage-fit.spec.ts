@@ -42,8 +42,6 @@ async function mountEverything(page: Page) {
   await page.waitForTimeout(1000);
 }
 
-// /how is fit-checked but not snap-checked: its role selector and breather are
-// not stages yet, so it keeps proximity snapping.
 for (const route of ["/", "/features", "/athena", "/how"]) {
   for (const viewport of VIEWPORTS) {
     test(`${route} fits one section per screen at ${viewport.name}`, async ({ page }) => {
@@ -115,7 +113,7 @@ for (const route of ["/", "/features", "/athena", "/how"]) {
 }
 
 /**
- * Snap control (2026-10-06). The landing, /features and /athena snap every scroll to
+ * Snap control (2026-10-06). The landing, /features, /athena and /how snap every scroll to
  * exactly one section (`html:has([data-snap-page])` in styles/stage.css). It
  * silently did nothing for months: <main> and every StageSection carried
  * `overflow: hidden`, which makes a box a scroll container, and a snap area
@@ -123,7 +121,7 @@ for (const route of ["/", "/features", "/athena", "/how"]) {
  * and a scroll could stop anywhere. These cases pin both halves: no scroll
  * container between a stage and the viewport, and paging lands on stages.
  */
-for (const route of ["/", "/features", "/athena"]) {
+for (const route of ["/", "/features", "/athena", "/how"]) {
   test(`${route} snaps each page-down to exactly one stage`, async ({ page }) => {
     test.setTimeout(120_000);
     await page.setViewportSize({ width: 1440, height: 790 });
@@ -165,14 +163,16 @@ for (const route of ["/", "/features", "/athena"]) {
         const landed = Array.from(document.querySelectorAll<HTMLElement>("[data-stage]")).find(
           (el) => Math.abs(el.getBoundingClientRect().top - navHeight) < 2,
         );
-        const h2 = landed?.querySelector("h2");
-        return { nearest: Math.round(nearest), heading: h2 ? Math.round(h2.getBoundingClientRect().top) : null };
+        // The intro block is the anchor (an eyebrow above the heading is
+        // part of it), so sections with and without an eyebrow compare alike.
+        const intro = landed?.querySelector("[data-section-intro]") ?? landed?.querySelector("h2");
+        return { nearest: Math.round(nearest), heading: intro ? Math.round(intro.getBoundingClientRect().top) : null };
       });
       offsets.push(at.nearest);
       if (at.heading !== null) headings.push(at.heading);
     }
     expect(offsets, "each PageDown lands a stage flush under the navbar").toEqual(offsets.map(() => 0));
-    // Every content stage anchors its intro at one height (stage.css: the
+    // Every content stage anchors its intro block at one height (stage.css: the
     // column starts at the top; the body fills or centres under the intro).
     expect(new Set(headings).size, `heading tops ${headings.join(", ")}`).toBe(1);
   });

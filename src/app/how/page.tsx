@@ -8,20 +8,20 @@ import {
   LazyPlatformLayers,
 } from "@/components/sections/how-lazy";
 import StageSection from "@/components/StageSection";
-import CinematicBreather from "@/components/CinematicBreather";
+import HowRolePath, { type ViewerRole } from "@/components/sections/how-role-path";
+import HowManifesto from "@/components/sections/how-manifesto";
 import InfoPageLayout from "@/components/InfoPageLayout";
-import RoleSelector from "@/components/RoleSelector";
-import type { ViewerRole } from "@/components/RoleSelector";
+import { useTranslation } from "@/i18n/useTranslation";
 import type { StageColor } from "@/lib/colors";
 
-const scrollMapItems = [
-  { label: "AGENTS: TIMELINE", href: "#agents-timeline" },
-  { label: "AGENTS: CHAT", href: "#agents-chat" },
-  { label: "PLATFORM: LAYERS", href: "#platform-layers" },
-  { label: "EVENTS", href: "#event-bus" },
-];
-
 /* ── Glow colors per persona ── */
+
+/** The opener glows in the chosen role's own colour. */
+const openerGlow: Record<ViewerRole, "cyan" | "purple" | "emerald"> = {
+  developer: "cyan",
+  "product-manager": "purple",
+  enterprise: "emerald",
+};
 
 const stageGlow: Record<ViewerRole, "cyan" | "purple" | "emerald"> = {
   developer: "cyan",
@@ -36,22 +36,35 @@ const stageColors: Record<ViewerRole, { evFrom: StageColor; evTo: StageColor }> 
 };
 
 export default function HowItWorks() {
+  const { t } = useTranslation();
+  const nav = t.howSections.scrollMap;
   const [role, setRole] = useState<ViewerRole>("developer");
   const glow = stageGlow[role];
   const colors = stageColors[role];
 
-  return (
-    <InfoPageLayout scrollMapItems={scrollMapItems}>
-      {/* Role selector */}
-      <div className="relative z-10 flex flex-col items-center gap-3 pt-4 pb-2">
-        <RoleSelector active={role} onChange={setRole} />
-      </div>
+  // Built inside the component because the labels are localized; the desktop
+  // scroll-map rail and the mobile TOC both render them as visible text.
+  const scrollMapItems = [
+    { label: nav.forYou, href: "#for-you" },
+    { label: nav.timeline, href: "#agents-timeline" },
+    { label: nav.chat, href: "#agents-chat" },
+    { label: nav.layers, href: "#platform-layers" },
+    { label: nav.manifesto, href: "#manifesto" },
+    { label: nav.events, href: "#event-bus" },
+  ];
 
+  return (
+    <InfoPageLayout scrollMapItems={scrollMapItems} snap>
       {/* Scroll-map / deep-link anchors live on the always-present StageSection
           wrappers, not the inner ids owned by the ssr:false lazy chunks (which
           are absent from the server HTML on first load). The browser scrolls to
           the first matching element — the wrapper — so /how#event-bus works at
           first paint and after the chunk mounts. */}
+      {/* Start here: the visitor's role, and their path through the page */}
+      <StageSection id="for-you" glow={openerGlow[role]} toColor="cyan">
+        <HowRolePath role={role} onRoleChange={setRole} />
+      </StageSection>
+
       {/* Agents */}
       <StageSection id="agents-timeline" glow="cyan" toColor="cyan">
         <LazyAgentsTimeline />
@@ -66,7 +79,10 @@ export default function HowItWorks() {
         <LazyPlatformLayers />
       </StageSection>
 
-      <CinematicBreather />
+      {/* What stays yours */}
+      <StageSection id="manifesto" glow="cyan" fromColor="purple" toColor={colors.evFrom}>
+        <HowManifesto />
+      </StageSection>
 
       <StageSection id="event-bus" glow={glow} fromColor={colors.evFrom} toColor={colors.evTo}>
         <LazyEventBusShowcase />

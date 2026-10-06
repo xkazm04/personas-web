@@ -33,7 +33,8 @@ const FRAMER_REDUCED_IMPORT =
 const FILES = {
   pageTransition: "components/PageTransition.tsx",
   quality: "contexts/QualityContext.tsx",
-  breather: "components/CinematicBreather.tsx",
+  manifesto: "components/sections/how-manifesto/Typewriter.tsx",
+  manifestoAmbience: "components/sections/how-manifesto/Ambience.tsx",
   scrollMap: "components/ScrollMap.tsx",
 } as const;
 
@@ -81,12 +82,16 @@ describe("reduced motion never re-renders the streaming route boundary", () => {
     });
   });
 
-  describe("CinematicBreather (server-rendered on /how)", () => {
-    const src = read(FILES.breather);
+  describe.each([FILES.manifesto, FILES.manifestoAmbience])(
+    "/how manifesto, server-rendered on /how (%s)",
+    (rel) => {
+      const src = read(rel);
 
-    it("never lets reduced motion decide markup", () => {
-      expect(src).not.toMatch(/if\s*\(\s*prefersReducedMotion\s*\)\s*return\s+null/);
-      expect(src).not.toMatch(/&&\s*!prefersReducedMotion\s*&&\s*\(/);
-    });
-  });
+      it("never lets reduced motion decide markup", () => {
+        expect(src).not.toMatch(/if\s*\(\s*still\s*\)\s*return\s+null/);
+        expect(src).not.toMatch(/&&\s*!still\s*&&\s*\(/);
+        expect(src).not.toMatch(/\{\s*!still\s*&&\s*</);
+      });
+    },
+  );
 });

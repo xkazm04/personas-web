@@ -617,7 +617,7 @@ html {
   animation-timing-function: steps(24, end);
 }
 
-/* ── Typewriter Character Reveal (CinematicBreather) ── */
+/* ── Typewriter Character Reveal (/how manifesto) ── */
 
 @keyframes tw-char-reveal {
   from { opacity: 0; transform: translateY(8px); }

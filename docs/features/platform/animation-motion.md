@@ -13,7 +13,7 @@ Three layers cooperate:
    - **Page (tab) level:** `usePageVisibility` toggles `.page-hidden` on `<html>` on `visibilitychange` so CSS keyframes can `animation-play-state: paused` globally; the canvas loops also check `document.hidden` directly and stop the rAF (`particleHostRegistry.ts:57`, `useCanvasCompositor.ts:49`).
    - **Section/element level:** `useAnimationPause` runs one IntersectionObserver that toggles `.animations-paused` on `[data-animate-when-visible]` elements (with a one-viewport `rootMargin`); ambient framer-driven loops combine a reduced-motion gate with `usePageVisibility()` (tab-hidden) or `useIsVisible()` (tab-hidden + in-view). The visualizer sections (orchestration hub, event bus, platform layers) - and, since the stage-fit branch, the landing's other ambient loops (hero command center, companion orb + its Athena `<video>`, observability-deck feed via `tick`, the plugins' dev-tools/second-brain pulses, team-canvas conveyor, get-started visuals) - take that composition from **`useLoopGate`**: `resolveLoop` (`src/lib/motion/loop-gate.ts`) merges a closed decider list - preference, foreground, in-view, user - as a disjunction of vetoes and reports `vetoedBy`; in-view abstains when unknown (partial merge). It is per-consumer composition of the live primitives, not a coordinator: no provider, no store (see ArchitectWeb ADR 2026-08-30, which deleted the dormant section-pause coordinator in favour of exactly these primitives).
 
-3. **Shared canvas compositors.** Rather than one rAF per particle component, all canvases register with a singleton loop. There are **two** such singletons: `useCanvasCompositor` (per-canvas, used by `CinematicBreather`) and the `particleHostRegistry` (one full-viewport fixed canvas with multiple "layers" keyed to host elements, used by `FloatingParticles`). Both run a single rAF, a single IntersectionObserver, and a single ResizeObserver shared across registrants, and both halt the loop entirely when nothing is in view or the tab is hidden.
+3. **Shared canvas compositors.** Rather than one rAF per particle component, all canvases register with a singleton loop. There are **two** such singletons: `useCanvasCompositor` (per-canvas, used by the /how manifesto's `Ambience`) and the `particleHostRegistry` (one full-viewport fixed canvas with multiple "layers" keyed to host elements, used by `FloatingParticles`). Both run a single rAF, a single IntersectionObserver, and a single ResizeObserver shared across registrants, and both halt the loop entirely when nothing is in view or the tab is hidden.
 
 CSS-only / cheap components (`AmbientOrbs`, `ParallaxAccents`, `TopoBackground`) skip the compositor: they render gated DOM/SVG with CSS `--parallax-offset` scroll-driven transforms and simply return `null` when reduced-motion is on or the tier is too low.
 
@@ -29,7 +29,7 @@ CSS-only / cheap components (`AmbientOrbs`, `ParallaxAccents`, `TopoBackground`)
 | `src/components/ParticleHost.tsx` | React wrapper that mounts the registry canvas + `useParticleLayer` hook |
 | `src/components/AnimationPauseObserver.tsx` | Null-render glue: calls `useAnimationPause` + `usePageVisibility`; dev-warns if zero `[data-animate-when-visible]` |
 | `src/components/FloatingParticles.tsx` | Rising particle field via `useParticleLayer`; tier-scaled count; precomputed fillStyles; host div always renders (only the layer is gated) |
-| `src/components/CinematicBreather.tsx` | Typewriter hero + ambient particle field via `useCanvasCompositor` |
+| `src/components/sections/how-manifesto/Ambience.tsx`, `Typewriter.tsx` | /how manifesto: ambient particle field via `useCanvasCompositor` + per-character typewriter lines |
 | `src/components/AmbientOrbs.tsx` | Fixed blur-gradient orbs (CSS `orb-pulse`); dropped on low tier |
 | `src/components/ParallaxAccents.tsx` | Scattered SVG ring/cross/diamond/dot shapes, CSS parallax; tier-scaled |
 | `src/components/TopoBackground.tsx` | Contour-line backdrop via layered radial-gradients + CSS parallax |
@@ -53,7 +53,7 @@ CSS-only / cheap components (`AmbientOrbs`, `ParallaxAccents`, `TopoBackground`)
 ## Integration points
 - **`QualityProvider`** wraps the whole app in `src/app/layout.tsx:115`; every tier-aware component depends on it (defaults to `high` if absent).
 - **`PageShell`** (`src/components/PageShell.tsx`) mounts `SectionObserverProvider`, `AnimationPauseObserver`, `ParticleHost`, and `ScrollMap` for landing pages — this is where the section-visibility and shared-canvas infrastructure comes online.
-- **`CinematicBreather`** is used on the `/how` page (`src/app/how/page.tsx:64`). `AmbientOrbs`, `ParallaxAccents`, and `TopoBackground` are ready-to-drop shared background layers (not currently mounted in PageShell — wire them in where a page wants the ambient backdrop).
+- The /how **manifesto** stage (`sections/how-manifesto/`) replaced `CinematicBreather` (deleted 2026-10-06). `AmbientOrbs`, `ParallaxAccents`, and `TopoBackground` are ready-to-drop shared background layers (not currently mounted in PageShell — wire them in where a page wants the ambient backdrop).
 - **`useParticleLayer`** (from `ParticleHost`) is the public API for any component that wants to draw onto the shared full-viewport canvas; `useCanvasCompositor` is for components that own their own `<canvas>`.
 - **`useIsVisible`** gates SWR `refreshInterval` in dashboard charts; `useActiveSection`/`ScrollMap` drive nav highlighting.
 
@@ -70,7 +70,7 @@ CSS-only / cheap components (`AmbientOrbs`, `ParallaxAccents`, `TopoBackground`)
   - `useMaxScrollHeight` defers ResizeObserver `setState` through `setTimeout(0)` to break the "ResizeObserver loop completed with undelivered notifications" feedback path; keep the bail-out-if-unchanged guard.
   - Both compositors capture observer refs at mount and compare identity in cleanup (`useCanvasCompositor.ts:209-250`) so an interleaved sibling teardown doesn't synthesize-then-leak a fresh observer. Preserve that pattern if you touch the cleanup.
 - **React 19 purity:** number-tween and auto-cycle hooks use the prev-state pattern instead of `setState`-in-effect for prop-change resets (`useAutoCycle.ts:66-71`), and impure values are cached — follow suit. Don't call `Math.random()`/`Date.now()` in render or `useMemo`.
-- **Tier scaling lives in the component**, not the context: keep `Record<QualityTier, number>` count tables (`FloatingParticles.tsx:11`, `ParallaxAccents.tsx:7`, `CinematicBreather.tsx:60`) and let `low` mean 0/static where appropriate.
+- **Tier scaling lives in the component**, not the context: keep `Record<QualityTier, number>` count tables (`FloatingParticles.tsx:11`, `ParallaxAccents.tsx:7`, `how-manifesto/Ambience.tsx`) and let `low` mean 0/static where appropriate.
 - **`useAnimatedNumber` has a stale-`current` caveat:** its effect reads `current` from closure with an exhaustive-deps disable; it works for monotonic count-ups but isn't a general spring.
 - All animated decoration is `aria-hidden`/`pointer-events-none`; preserve that when adding layers.
 

@@ -7,7 +7,7 @@
 The **changelog** is a separate concern that does *not* render on `/how`. The full release-notes timeline (`ChangelogTimeline`) lives on `/roadmap#changelog`. It is documented here because it is the release-notes half of this content unit (`src/data/changelog.ts`).
 
 ## How it works
-`src/app/how/page.tsx` is a client component wrapping everything in `InfoPageLayout` (Navbar + `PageShell` + scroll map + Footer). It holds one piece of state — `role: ViewerRole` (default `"developer"`) — driven by `<RoleSelector>` (`page.tsx:47`). The role only retints the final event-bus `StageSection` (glow + from/to gradient colors via the `stageGlow`/`stageColors` maps at `page.tsx:26-36`); the first three stages use fixed colors.
+`src/app/how/page.tsx` is a client component wrapping everything in `InfoPageLayout` (Navbar + `PageShell` + scroll map + Footer). It holds one piece of state — `role: ViewerRole` (default `"developer"`) — set by the opening **Start here** stage (`src/components/sections/how-role-path/`, id `for-you`): three role lenses (`aria-pressed` buttons) and a snake route through the four sections below, each with a role-specific line and a jump link. The role also tints the opener's glow and retints the final event-bus `StageSection` (`stageGlow`/`stageColors` in `page.tsx`). Scroll-map labels come from `howSections.scrollMap`.
 
 Each demo is wrapped in a `<StageSection>` that supplies a radial glow and top/bottom gradient seams to blend sections. The demos themselves are code-split: `page.tsx` imports `LazyAgentsTimeline`, `LazyAgentsChat`, `LazyPlatformLayers`, `LazyEventBusShowcase` from `src/components/sections/how-lazy.tsx`. That registry calls `createLazySection(...)` (from `LazySection.tsx`) with `{ ssr: false }` for all four — they use browser-only behaviour (framer-motion loops behind `useLoopGate`, in-view story clocks) and sit below the fold. Since 2026-10-06 all four are desktop stages (`SectionWrapper fit="fill"`, one viewport each) with copy in the pending `howSections` namespace. A skeleton renders during load: the event-bus section has a bespoke terminal-shaped skeleton (`how-lazy.tsx:6-41`); the other three share the generic `SectionSkeleton`. The matching `#anchor` ids are rendered *inside* each demo component (e.g. `agents-race` renders `<SectionWrapper id="agents-timeline">`); `page.tsx` also puts the same ids on its always-present `StageSection` wrappers, so deep links resolve at first paint and after the chunk mounts.
 
@@ -26,7 +26,7 @@ The **changelog timeline** (`changelog-timeline/index.tsx`) maps over `RELEASES`
 | `src/data/changelog.ts` | Canonical `RELEASES` data + `ChangeType`/`Release` types + `CHANGE_TYPE_META` |
 
 ## Data & state
-- **Source:** `src/data/changelog.ts` → `RELEASES: Release[]` (hardcoded; 3 releases as of 2026-10-06 - only versions the desktop actually tagged: v0.4.0, v1.0.0, v1.1.0, dated by their tags. Untagged versions must not be added). **Stores:** none — `/how` uses local `useState` (role) only; changelog is pure render-from-constant. **API routes:** none. **Types:** `Release`, `ChangeItem`, `ChangeType` (`changelog.ts:3-15`); `ViewerRole` (`RoleSelector`); `StageColor` (`lib/colors`).
+- **Source:** `src/data/changelog.ts` → `RELEASES: Release[]` (hardcoded; 3 releases as of 2026-10-06 - only versions the desktop actually tagged: v0.4.0, v1.0.0, v1.1.0, dated by their tags. Untagged versions must not be added). **Stores:** none — `/how` uses local `useState` (role) only; changelog is pure render-from-constant. **API routes:** none. **Types:** `Release`, `ChangeItem`, `ChangeType` (`changelog.ts:3-15`); `ViewerRole` (`sections/how-role-path/roles.ts`); `StageColor` (`lib/colors`).
 
 ## Integration points
 - **`/how` hosts exactly four demo sections**, each documented separately (see Related docs):
@@ -34,7 +34,7 @@ The **changelog timeline** (`changelog-timeline/index.tsx`) maps over `RELEASES`
   - `LazyAgentsChat` → `agents-chat-split` (anchor `#agents-chat`)
   - `LazyPlatformLayers` → `growth-dial` (anchor `#platform-layers`)
   - `LazyEventBusShowcase` → `event-hub` (anchor `#event-bus`)
-- Also on `/how`: `<RoleSelector>` and a `<CinematicBreather>` divider before the event-bus stage (`page.tsx:64`).
+- Also on `/how`: the **manifesto** stage (`src/components/sections/how-manifesto/`, id `manifesto`) before the event-bus stage - "Your agents. / Your rules. / Your infrastructure." typed in over the ambient gradient + particle canvas, each line with a proof panel. Both new stages are server-rendered (not lazy) and use `fit="fill"`; copy lives in `howSections.rolePath` / `howSections.manifesto` (pending-translation, English only).
 - **Changelog data:** `RELEASES` is consumed by `ChangelogTimeline` (mounted in `src/app/roadmap/page.tsx:45`).
 - `ChangelogTimeline` carries `data-tour-diagram="changelog"` (`index.tsx:55`) for the guided tour; `/roadmap` mounts it with `tourId="roadmap"`.
 
