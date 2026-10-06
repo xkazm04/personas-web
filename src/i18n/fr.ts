@@ -2160,7 +2160,7 @@ export const fr: LocaleTranslations = {
         },
         analytics: {
           title: "Mesure d'audience",
-          description: "Rien n'est stock\u00e9 pour la mesure d'audience. Si vous choisissez \"Accept All\" dans le bandeau cookies, le site compte anonymement les pages vues et quelques actions cl\u00e9s, sans rien \u00e9crire sur votre appareil. Si vous choisissez \"Essential Only\", rien n'est compt\u00e9."
+          description: "Rien n'est stock\u00e9 pour la mesure d'audience. Si vous choisissez \"Tout accepter\" dans le bandeau cookies, le site compte anonymement les pages vues et quelques actions cl\u00e9s, sans rien \u00e9crire sur votre appareil. Si vous choisissez \"Essentiels uniquement\", rien n'est compt\u00e9."
         }
       },
       mechanisms: {
@@ -2198,5 +2198,12 @@ export const fr: LocaleTranslations = {
       managingHeading: "G\u00e9rer les cookies et le stockage",
       managingBody: "Vous pouvez effacer ou bloquer les cookies et les donn\u00e9es du site \u00e0 tout moment dans les r\u00e9glages de votre navigateur. Les effacer vous d\u00e9connecte et r\u00e9initialise vos pr\u00e9f\u00e9rences. Pour toute question, \u00e9crivez-nous \u00e0 {email}.",
       manageButton: "G\u00e9rer les pr\u00e9f\u00e9rences de cookies"
+    },
+    cookieConsent: {
+      message: "Nous conservons quelques r\u00e9glages dans votre navigateur pour que le site fonctionne. Avec \"Tout accepter\", nous comptons aussi anonymement les pages vues et quelques actions cl\u00e9s, sans rien stocker pour cela. Ni publicit\u00e9, ni pistage entre sites.",
+      details: "D\u00e9tails",
+      essentialOnly: "Essentiels uniquement",
+      acceptAll: "Tout accepter",
+      close: "Fermer et n'utiliser que les essentiels"
     }
   };

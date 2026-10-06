@@ -2153,7 +2153,7 @@ export const es: LocaleTranslations = {
         },
         analytics: {
           title: "Anal\u00edtica",
-          description: "No se guarda nada para anal\u00edtica. Si eliges \"Accept All\" en el banner de cookies, el sitio cuenta de forma an\u00f3nima las p\u00e1ginas vistas y algunas acciones clave, sin escribir nada en tu dispositivo. Si eliges \"Essential Only\", no se cuenta nada."
+          description: "No se guarda nada para anal\u00edtica. Si eliges \"Aceptar todo\" en el banner de cookies, el sitio cuenta de forma an\u00f3nima las p\u00e1ginas vistas y algunas acciones clave, sin escribir nada en tu dispositivo. Si eliges \"Solo esenciales\", no se cuenta nada."
         }
       },
       mechanisms: {
@@ -2191,5 +2191,12 @@ export const es: LocaleTranslations = {
       managingHeading: "Gestionar cookies y almacenamiento",
       managingBody: "Puedes borrar o bloquear las cookies y los datos del sitio desde los ajustes de tu navegador en cualquier momento. Al borrarlos se cierra tu sesi\u00f3n y se restablecen tus preferencias. Si tienes preguntas, escr\u00edbenos a {email}.",
       manageButton: "Gestionar preferencias de cookies"
+    },
+    cookieConsent: {
+      message: "Guardamos algunos ajustes en tu navegador para que el sitio funcione. Con \"Aceptar todo\" tambi\u00e9n contamos de forma an\u00f3nima las p\u00e1ginas vistas y algunas acciones clave, sin guardar nada para ello. Sin anuncios ni seguimiento entre sitios.",
+      details: "Detalles",
+      essentialOnly: "Solo esenciales",
+      acceptAll: "Aceptar todo",
+      close: "Cerrar y usar solo las esenciales"
     }
   };

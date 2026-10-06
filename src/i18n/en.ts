@@ -1129,6 +1129,14 @@
     managingBody: string;
     manageButton: string;
   };
+  cookieConsent: {
+    message: string;
+    details: string;
+    essentialOnly: string;
+    acceptAll: string;
+    /** aria-label of the banner's close button; closing keeps essential storage only. */
+    close: string;
+  };
   waitlist: {
     title: string;
     emailPlaceholder: string;
@@ -4369,6 +4377,13 @@ export const en: Translations = {
     managingHeading: 'Managing cookies and storage',
     managingBody: 'You can clear or block cookies and site data in your browser settings at any time. Clearing them signs you out and resets your preferences. For questions, reach out to {email}.',
     manageButton: 'Manage cookie preferences',
+  },
+  cookieConsent: {
+    message: 'We keep a few settings in your browser so the site works. "Accept All" also lets us count page views and a few key actions anonymously, without storing anything for it. No ads, no cross-site tracking.',
+    details: 'Details',
+    essentialOnly: 'Essential Only',
+    acceptAll: 'Accept All',
+    close: 'Close and use essential only',
   },
   waitlist: {
     title: 'Personas for {platform}',

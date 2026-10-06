@@ -2187,7 +2187,7 @@ export const cs: LocaleTranslations = {
         },
         analytics: {
           title: "Analytika",
-          description: "Pro analytiku se nic neukl\u00e1d\u00e1. Pokud v li\u0161t\u011b cookies zvol\u00edte \"Accept All\", web anonymn\u011b po\u010d\u00edt\u00e1 zobrazen\u00ed str\u00e1nek a n\u011bkolik kl\u00ed\u010dov\u00fdch akc\u00ed, ani\u017e by cokoli zapisoval do va\u0161eho za\u0159\u00edzen\u00ed. Pokud zvol\u00edte \"Essential Only\", nepo\u010d\u00edt\u00e1 se nic."
+          description: "Pro analytiku se nic neukl\u00e1d\u00e1. Pokud v li\u0161t\u011b cookies zvol\u00edte \"P\u0159ijmout v\u0161e\", web anonymn\u011b po\u010d\u00edt\u00e1 zobrazen\u00ed str\u00e1nek a n\u011bkolik kl\u00ed\u010dov\u00fdch akc\u00ed, ani\u017e by cokoli zapisoval do va\u0161eho za\u0159\u00edzen\u00ed. Pokud zvol\u00edte \"Jen nezbytn\u00e9\", nepo\u010d\u00edt\u00e1 se nic."
         }
       },
       mechanisms: {
@@ -2225,5 +2225,12 @@ export const cs: LocaleTranslations = {
       managingHeading: "Spr\u00e1va cookies a \u00falo\u017ei\u0161t\u011b",
       managingBody: "Cookies a data webu m\u016f\u017eete kdykoli vymazat nebo zablokovat v nastaven\u00ed prohl\u00ed\u017ee\u010de. Jejich vymaz\u00e1n\u00edm se odhl\u00e1s\u00edte a obnov\u00edte sv\u00e9 p\u0159edvolby. S dotazy se obra\u0165te na {email}.",
       manageButton: "Spravovat p\u0159edvolby cookies"
+    },
+    cookieConsent: {
+      message: "V prohl\u00ed\u017ee\u010di si ukl\u00e1d\u00e1me n\u011bkolik nastaven\u00ed, aby web fungoval. Volba \"P\u0159ijmout v\u0161e\" n\u00e1m nav\u00edc umo\u017en\u00ed anonymn\u011b po\u010d\u00edtat zobrazen\u00ed str\u00e1nek a n\u011bkolik kl\u00ed\u010dov\u00fdch akc\u00ed, ani\u017e bychom k tomu cokoli ukl\u00e1dali. \u017d\u00e1dn\u00e9 reklamy, \u017e\u00e1dn\u00e9 sledov\u00e1n\u00ed nap\u0159\u00ed\u010d weby.",
+      details: "Podrobnosti",
+      essentialOnly: "Jen nezbytn\u00e9",
+      acceptAll: "P\u0159ijmout v\u0161e",
+      close: "Zav\u0159\u00edt a ponechat jen nezbytn\u00e9"
     }
   };

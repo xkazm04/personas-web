@@ -2343,7 +2343,7 @@ export const vi: LocaleTranslations = {
         },
         analytics: {
           title: "Ph\u00e2n t\u00edch",
-          description: "Kh\u00f4ng l\u01b0u g\u00ec cho m\u1ee5c \u0111\u00edch ph\u00e2n t\u00edch. N\u1ebfu b\u1ea1n ch\u1ecdn \"Accept All\" tr\u00ean bi\u1ec3u ng\u1eef cookie, trang web \u0111\u1ebfm \u1ea9n danh l\u01b0\u1ee3t xem trang v\u00e0 m\u1ed9t v\u00e0i thao t\u00e1c ch\u00ednh m\u00e0 kh\u00f4ng ghi g\u00ec l\u00ean thi\u1ebft b\u1ecb c\u1ee7a b\u1ea1n. N\u1ebfu b\u1ea1n ch\u1ecdn \"Essential Only\", kh\u00f4ng c\u00f3 g\u00ec \u0111\u01b0\u1ee3c \u0111\u1ebfm."
+          description: "Kh\u00f4ng l\u01b0u g\u00ec cho m\u1ee5c \u0111\u00edch ph\u00e2n t\u00edch. N\u1ebfu b\u1ea1n ch\u1ecdn \"Ch\u1ea5p nh\u1eadn t\u1ea5t c\u1ea3\" tr\u00ean bi\u1ec3u ng\u1eef cookie, trang web \u0111\u1ebfm \u1ea9n danh l\u01b0\u1ee3t xem trang v\u00e0 m\u1ed9t v\u00e0i thao t\u00e1c ch\u00ednh m\u00e0 kh\u00f4ng ghi g\u00ec l\u00ean thi\u1ebft b\u1ecb c\u1ee7a b\u1ea1n. N\u1ebfu b\u1ea1n ch\u1ecdn \"Ch\u1ec9 thi\u1ebft y\u1ebfu\", kh\u00f4ng c\u00f3 g\u00ec \u0111\u01b0\u1ee3c \u0111\u1ebfm."
         }
       },
       mechanisms: {
@@ -2381,5 +2381,12 @@ export const vi: LocaleTranslations = {
       managingHeading: "Qu\u1ea3n l\u00fd cookie v\u00e0 b\u1ed9 nh\u1edb",
       managingBody: "B\u1ea1n c\u00f3 th\u1ec3 x\u00f3a ho\u1eb7c ch\u1eb7n cookie v\u00e0 d\u1eef li\u1ec7u trang web trong c\u00e0i \u0111\u1eb7t tr\u00ecnh duy\u1ec7t b\u1ea5t c\u1ee9 l\u00fac n\u00e0o. X\u00f3a ch\u00fang s\u1ebd \u0111\u0103ng xu\u1ea5t b\u1ea1n v\u00e0 \u0111\u1eb7t l\u1ea1i c\u00e1c t\u00f9y ch\u1ecdn. N\u1ebfu c\u00f3 c\u00e2u h\u1ecfi, h\u00e3y li\u00ean h\u1ec7 {email}.",
       manageButton: "Qu\u1ea3n l\u00fd t\u00f9y ch\u1ecdn cookie"
+    },
+    cookieConsent: {
+      message: "Ch\u00fang t\u00f4i l\u01b0u m\u1ed9t v\u00e0i c\u00e0i \u0111\u1eb7t trong tr\u00ecnh duy\u1ec7t c\u1ee7a b\u1ea1n \u0111\u1ec3 trang web ho\u1ea1t \u0111\u1ed9ng. Khi ch\u1ecdn \"Ch\u1ea5p nh\u1eadn t\u1ea5t c\u1ea3\", ch\u00fang t\u00f4i c\u00f2n \u0111\u1ebfm \u1ea9n danh l\u01b0\u1ee3t xem trang v\u00e0 m\u1ed9t v\u00e0i thao t\u00e1c ch\u00ednh, m\u00e0 kh\u00f4ng l\u01b0u g\u00ec cho vi\u1ec7c \u0111\u00f3. Kh\u00f4ng qu\u1ea3ng c\u00e1o, kh\u00f4ng theo d\u00f5i ch\u00e9o trang.",
+      details: "Chi ti\u1ebft",
+      essentialOnly: "Ch\u1ec9 thi\u1ebft y\u1ebfu",
+      acceptAll: "Ch\u1ea5p nh\u1eadn t\u1ea5t c\u1ea3",
+      close: "\u0110\u00f3ng v\u00e0 ch\u1ec9 d\u00f9ng thi\u1ebft y\u1ebfu"
     }
   };

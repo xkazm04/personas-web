@@ -2157,7 +2157,7 @@ export const de: LocaleTranslations = {
         },
         analytics: {
           title: "Analyse",
-          description: "F\u00fcr Analysen wird nichts gespeichert. Wenn Sie im Cookie-Banner \"Accept All\" w\u00e4hlen, z\u00e4hlt die Website Seitenaufrufe und einige wichtige Aktionen anonym, ohne etwas auf Ihr Ger\u00e4t zu schreiben. Wenn Sie \"Essential Only\" w\u00e4hlen, wird nichts gez\u00e4hlt."
+          description: "F\u00fcr Analysen wird nichts gespeichert. Wenn Sie im Cookie-Banner \"Alle akzeptieren\" w\u00e4hlen, z\u00e4hlt die Website Seitenaufrufe und einige wichtige Aktionen anonym, ohne etwas auf Ihr Ger\u00e4t zu schreiben. Wenn Sie \"Nur notwendige\" w\u00e4hlen, wird nichts gez\u00e4hlt."
         }
       },
       mechanisms: {
@@ -2195,5 +2195,12 @@ export const de: LocaleTranslations = {
       managingHeading: "Cookies und Speicher verwalten",
       managingBody: "Sie k\u00f6nnen Cookies und Websitedaten jederzeit in Ihren Browsereinstellungen l\u00f6schen oder blockieren. Dadurch werden Sie abgemeldet und Ihre Pr\u00e4ferenzen zur\u00fcckgesetzt. Bei Fragen wenden Sie sich an {email}.",
       manageButton: "Cookie-Einstellungen verwalten"
+    },
+    cookieConsent: {
+      message: "Wir speichern ein paar Einstellungen in Ihrem Browser, damit die Website funktioniert. Mit \"Alle akzeptieren\" z\u00e4hlen wir au\u00dferdem Seitenaufrufe und einige wichtige Aktionen anonym, ohne daf\u00fcr etwas zu speichern. Keine Werbung, kein seiten\u00fcbergreifendes Tracking.",
+      details: "Details",
+      essentialOnly: "Nur notwendige",
+      acceptAll: "Alle akzeptieren",
+      close: "Schlie\u00dfen und nur notwendige verwenden"
     }
   };

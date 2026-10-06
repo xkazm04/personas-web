@@ -2343,7 +2343,7 @@ export const id: LocaleTranslations = {
         },
         analytics: {
           title: "Analitik",
-          description: "Tidak ada yang disimpan untuk analitik. Jika Anda memilih \"Accept All\" di banner cookie, situs menghitung tampilan halaman dan beberapa tindakan utama secara anonim, tanpa menulis apa pun ke perangkat Anda. Jika Anda memilih \"Essential Only\", tidak ada yang dihitung."
+          description: "Tidak ada yang disimpan untuk analitik. Jika Anda memilih \"Terima Semua\" di banner cookie, situs menghitung tampilan halaman dan beberapa tindakan utama secara anonim, tanpa menulis apa pun ke perangkat Anda. Jika Anda memilih \"Hanya yang Penting\", tidak ada yang dihitung."
         }
       },
       mechanisms: {
@@ -2381,5 +2381,12 @@ export const id: LocaleTranslations = {
       managingHeading: "Mengelola cookie dan penyimpanan",
       managingBody: "Anda dapat menghapus atau memblokir cookie dan data situs di pengaturan browser kapan saja. Menghapusnya akan membuat Anda keluar dan mengatur ulang preferensi Anda. Untuk pertanyaan, hubungi {email}.",
       manageButton: "Kelola preferensi cookie"
+    },
+    cookieConsent: {
+      message: "Kami menyimpan beberapa pengaturan di browser Anda agar situs berfungsi. Dengan \"Terima Semua\", kami juga menghitung tampilan halaman dan beberapa tindakan utama secara anonim, tanpa menyimpan apa pun untuk itu. Tanpa iklan, tanpa pelacakan lintas situs.",
+      details: "Detail",
+      essentialOnly: "Hanya yang Penting",
+      acceptAll: "Terima Semua",
+      close: "Tutup dan gunakan yang penting saja"
     }
   };
