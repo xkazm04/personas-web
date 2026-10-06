@@ -370,10 +370,86 @@ create index if not exists idx_pending_commands_user_status on public.pending_co
 -- Idempotent upgrades for an already-deployed table: the result column the
 -- desktop writes for queue verbs, and the command set it accepts.
 alter table public.pending_commands add column if not exists result_ref text;
+-- The command set. Widened IN PLACE for command contract v1 (see the next
+-- block): a second, narrower re-add earlier in this file would fail
+-- validation on a re-run once v1 rows exist.
+-- 'chat_send' ships later (M9) but is allowed now so the desktop's refusal
+-- path is exercised.
 alter table public.pending_commands drop constraint if exists pending_commands_command_type_check;
 alter table public.pending_commands add constraint pending_commands_command_type_check
-  check (command_type in ('run_persona','cancel_execution','queue_reorder','queue_set_lane','queue_cancel'));
+  check (command_type in ('run_persona','cancel_execution','pause_persona','resume_persona','chat_send',
+                          'queue_reorder','queue_set_lane','queue_cancel'));
 create index if not exists idx_pending_commands_device on public.pending_commands (target_device_id, status);
+
+-- =====================================================================
+-- PHASE 2 / command contract v1 — trusted controllers
+-- (docs/concepts/mobile-revival/PHASE2-SPEC.md sections 2.1, 3.2, 4.1;
+-- owner-approved 2026-10-06, PLAN.md M16)
+-- ---------------------------------------------------------------------
+-- A paired phone (a "controller") holds a non-extractable Ed25519 key. Its
+-- commands carry `envelope` (the exact signed JSON text) + `signature`
+-- (base64url Ed25519 over the envelope bytes). The desktop verifies the
+-- bytes against its OWN local trust list (settings key `cloud_controllers`)
+-- and parses the command from the envelope, never from the row's columns:
+-- jsonb reorders keys, and every holder of the user's JWT can write a row.
+-- The row's other columns stay for filters and display.
+-- v1 rows also use the reserved `params` (camelCase, = envelope.params) and
+-- `expires_at` (= requested_at + 60 s, = envelope.exp: commands never queue).
+-- =====================================================================
+alter table public.pending_commands add column if not exists controller_id uuid;
+alter table public.pending_commands add column if not exists envelope      text;   -- exact signed bytes (JSON text)
+alter table public.pending_commands add column if not exists signature     text;   -- base64url Ed25519 over envelope
+alter table public.pending_commands add column if not exists result        jsonb;  -- verb-specific outcome
+create index if not exists idx_pending_commands_user_requested on public.pending_commands (user_id, requested_at desc);
+
+-- Hardening (not a loosening): a client may only CREATE pending rows. Every
+-- later state is written by the desktop (or, for 'expired', by the web on a
+-- row still pending 15 s past expires_at) through an UPDATE.
+create or replace function public.pending_commands_insert_guard() returns trigger language plpgsql as $$
+begin
+  if new.status <> 'pending' then raise exception 'pending_commands: insert must be status=pending'; end if;
+  return new;
+end $$;
+drop trigger if exists trg_pending_commands_insert_guard on public.pending_commands;
+create trigger trg_pending_commands_insert_guard before insert on public.pending_commands
+  for each row execute function public.pending_commands_insert_guard();
+
+-- ── command_controllers: phones paired to a desktop ──────────────────
+-- Pairing ceremony: the desktop shows a QR of
+-- /dashboard/settings#pair=<pairing_id>.<secret>; the phone generates its key
+-- and inserts a 'pending' row whose `proof` =
+-- base64url(HMAC-SHA256(secret, pairing_id|controller_id|public_key)); the
+-- desktop verifies the proof, adds the controller to its local trust list,
+-- and PATCHes the row 'active'. This table is a mailbox, NOT the trust list:
+-- the desktop's local list is authoritative, and no secret is stored here.
+-- `revoke_requested_at` is the web's "unpair this phone" request; the
+-- desktop honours it at its next poll and writes 'revoked'.
+create table if not exists public.command_controllers (
+  controller_id   uuid primary key,
+  user_id         uuid not null default auth.uid() references auth.users(id) on delete cascade,
+  device_id       text not null,                 -- the desktop this phone is paired to
+  pairing_id      uuid not null unique,
+  name            text not null,                 -- "iPhone · Safari", from the UA; user-editable
+  public_key      text not null,                 -- base64url, raw 32-byte Ed25519
+  proof           text not null,                 -- base64url HMAC-SHA256(secret, pairing_id|controller_id|public_key)
+  status          text not null default 'pending' check (status in ('pending','active','refused','revoked')),
+  revoke_requested_at timestamptz,
+  created_at      timestamptz not null default now(),
+  activated_at    timestamptz,
+  revoked_at      timestamptz,
+  last_command_at timestamptz
+);
+create index if not exists idx_command_controllers_user on public.command_controllers (user_id);
+
+-- ── Server-stamped heartbeat ─────────────────────────────────────────
+-- The web's online gate is `now - synced_devices.last_seen_at <= 120 s`.
+-- The desktop stamps last_seen_at with ITS clock; stamping it here instead
+-- leaves only the (NTP-synced) phone clock in the comparison.
+create or replace function public.stamp_device_seen() returns trigger language plpgsql as $$
+begin new.last_seen_at := now(); return new; end $$;
+drop trigger if exists trg_stamp_device_seen on public.synced_devices;
+create trigger trg_stamp_device_seen before insert or update on public.synced_devices
+  for each row execute function public.stamp_device_seen();
 
 -- =====================================================================
 -- Row-Level Security — every table: a user touches only their own rows
@@ -392,6 +468,7 @@ alter table public.synced_healing_issues     enable row level security;
 alter table public.synced_triggers           enable row level security;
 alter table public.synced_fleet_queue        enable row level security;
 alter table public.pending_commands          enable row level security;
+alter table public.command_controllers       enable row level security;
 
 -- One owner-only policy per table covering all verbs. Re-runnable.
 do $$
@@ -401,7 +478,8 @@ declare
     'synced_devices','synced_personas','synced_executions','synced_events',
     'synced_manual_reviews','synced_messages','synced_metrics_snapshots',
     'synced_tool_usage','synced_memories','synced_knowledge_patterns',
-    'synced_healing_issues','synced_triggers','synced_fleet_queue','pending_commands'
+    'synced_healing_issues','synced_triggers','synced_fleet_queue','pending_commands',
+    'command_controllers'
   ];
 begin
   foreach t in array tables loop
@@ -422,7 +500,8 @@ declare
     'synced_devices','synced_personas','synced_executions','synced_events',
     'synced_manual_reviews','synced_messages','synced_metrics_snapshots',
     'synced_tool_usage','synced_memories','synced_knowledge_patterns',
-    'synced_healing_issues','synced_triggers','synced_fleet_queue','pending_commands'
+    'synced_healing_issues','synced_triggers','synced_fleet_queue','pending_commands',
+    'command_controllers'
   ];
 begin
   foreach t in array tables loop
@@ -541,7 +620,8 @@ declare
   tables text[] := array[
     'synced_personas','synced_executions','synced_events',
     'synced_manual_reviews','synced_devices','synced_messages',
-    'synced_healing_issues','synced_fleet_queue','pending_commands'
+    'synced_healing_issues','synced_fleet_queue','pending_commands',
+    'command_controllers'
   ];
 begin
   foreach t in array tables loop
