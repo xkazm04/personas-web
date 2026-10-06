@@ -1,7 +1,6 @@
 "use client";
 
-import useSWR from "swr";
-
+import { useDemoOnlySWR } from "@/hooks/useDemoOnlySWR";
 import { getActivityMetrics } from "@/lib/mockApi";
 import type {
   AthenaActionCost,
@@ -13,6 +12,8 @@ import type {
 /**
  * Activity-metrics data for the observability Activity tab. Demo-only — sourced
  * from the standalone mock fetcher, with SWR providing a brief loading state.
+ * Athena cost and value outcomes have no synced source, so a real (non-demo)
+ * session fetches nothing and gets `liveUnavailable` (see useDemoOnlySWR).
  */
 export function useActivityMetrics(): {
   athenaUsage: AthenaUsagePoint[];
@@ -22,19 +23,14 @@ export function useActivityMetrics(): {
   isLoading: boolean;
   error: string | null;
   retry: () => void;
+  liveUnavailable: boolean;
 } {
-  const { data, isLoading, error, mutate } = useSWR("activity-metrics", getActivityMetrics, {
-    revalidateOnFocus: false,
-    revalidateOnReconnect: false,
-    dedupingInterval: 60_000,
-  });
+  const { data, ...rest } = useDemoOnlySWR("activity-metrics", getActivityMetrics);
   return {
     athenaUsage: data?.athenaUsage ?? [],
     valueRollup: data?.valueRollup ?? null,
     athenaActionMix: data?.athenaActionMix ?? [],
     athenaLedger: data?.athenaLedger ?? null,
-    isLoading,
-    error: error instanceof Error ? error.message : error ? String(error) : null,
-    retry: () => void mutate(),
+    ...rest,
   };
 }

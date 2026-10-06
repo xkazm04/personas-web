@@ -4,7 +4,8 @@ import path from "node:path";
 import { fileURLToPath } from "node:url";
 
 /**
- * Health, Incidents and Director have no synced source: their data is a
+ * Health, Incidents, Director and the Observability Activity tab (Athena
+ * cost/value) have no synced source: their data is a
  * standalone mock fetcher. Before the gate, the hooks called it in every mode,
  * so a signed-in real (non-demo) tenant saw invented host checks, incidents and
  * agents as if they were theirs. The gate keys the fetch on `isDemo`: demo gets
@@ -37,6 +38,7 @@ describe("demo-only data gate", () => {
     "src/app/dashboard/health/health-page/useSystemHealth.ts",
     "src/app/dashboard/incidents/incidents-page/useAuditIncidents.ts",
     "src/app/dashboard/director/useDirectorData.ts",
+    "src/app/dashboard/observability/activity-view/useActivityMetrics.ts",
   ])("%s fetches its mock only through the gate", (file) => {
     const src = stripComments(readFileSync(path.join(REPO_ROOT, file), "utf8"));
     expect(src).toMatch(/\buseDemoOnlySWR\(/);
@@ -47,6 +49,7 @@ describe("demo-only data gate", () => {
     "src/app/dashboard/health/page.tsx",
     "src/app/dashboard/incidents/page.tsx",
     "src/app/dashboard/director/page.tsx",
+    "src/app/dashboard/observability/ActivityMetricsView.tsx",
   ])("%s renders the live-unavailable empty state", (file) => {
     const src = stripComments(readFileSync(path.join(REPO_ROOT, file), "utf8"));
     expect(src).toMatch(/\bliveUnavailable\b/);
