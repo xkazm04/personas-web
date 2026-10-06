@@ -4,7 +4,7 @@ import { useId } from "react";
 import { motion } from "framer-motion";
 import { BRAND_VAR, tint } from "@/lib/brand-theme";
 import { SvgToolGlyph } from "./shared/ToolGlyph";
-import { COUNTS, DESIGNED, H, HEALED, NODES, ROOT, W, type AgentNode } from "./geometry";
+import { COUNTS, RINGS, type AgentNode, type Growth } from "./geometry";
 import { ChainPulses, HealFlash, Laptop, WatchSweep, stemPath } from "./SceneParts";
 
 const EASE = [0.22, 1, 0.36, 1] as const;
@@ -14,7 +14,8 @@ const EASE = [0.22, 1, 0.36, 1] as const;
  * stop advances. Each stop's newcomers stem out of the agent nearest them, so
  * the fleet reads as grown from the first helper, never installed beside it.
  */
-export default function Scene({ stage, run, still }: { stage: number; run: boolean; still: boolean }) {
+export default function Scene({ g, stage, run, still }: { g: Growth; stage: number; run: boolean; still: boolean }) {
+  const { w: W, h: H, root: ROOT, nodes: NODES } = g;
   const uid = useId().replace(/:/g, "");
   const count = COUNTS[stage];
   const before = stage > 0 ? COUNTS[stage - 1] : 0;
@@ -34,10 +35,10 @@ export default function Scene({ stage, run, still }: { stage: number; run: boole
       </defs>
 
       {/* Faint growth guides: where the next ring will land. */}
-      {[120, 212, 300, 372].map((r, k) => (
+      {RINGS.map(({ r }, k) => (
         <path
           key={r}
-          d={`M${ROOT.x - r * 1.24} ${ROOT.y} A${r * 1.24} ${r * 0.92} 0 0 1 ${ROOT.x + r * 1.24} ${ROOT.y}`}
+          d={`M${ROOT.x - r * g.sx} ${ROOT.y} A${r * g.sx} ${r * g.sy} 0 0 1 ${ROOT.x + r * g.sx} ${ROOT.y}`}
           fill="none"
           stroke="var(--foreground)"
           strokeOpacity={k <= stage ? 0.1 : 0.05}
@@ -61,12 +62,12 @@ export default function Scene({ stage, run, still }: { stage: number; run: boole
         />
       ))}
 
-      <WatchSweep live={run && stage === 3} on={stage === 3} />
+      <WatchSweep g={g} live={run && stage === 3} on={stage === 3} />
 
       {NODES.map((n) => (
         <motion.path
           key={`s${n.i}`}
-          d={stemPath(n)}
+          d={stemPath(g, n)}
           fill="none"
           stroke={n.brand ? tint(n.brand, 45) : "color-mix(in srgb, var(--foreground) 22%, transparent)"}
           strokeWidth={n.ring < 2 ? 2.5 : 1.5}
@@ -76,14 +77,14 @@ export default function Scene({ stage, run, still }: { stage: number; run: boole
         />
       ))}
 
-      {stage >= 1 && <ChainPulses live={run} />}
+      {stage >= 1 && <ChainPulses g={g} live={run} />}
 
       {NODES.map((n) => (
-        <Node key={n.i} n={n} uid={uid} shown={n.i < count} transition={t(n.i)} lit={stage === 2 && n.i === DESIGNED} />
+        <Node key={n.i} n={n} uid={uid} shown={n.i < count} transition={t(n.i)} lit={stage === 2 && n.i === g.designed} />
       ))}
 
-      <HealFlash node={NODES[HEALED]} live={run && stage === 3} on={stage === 3} />
-      <Laptop />
+      <HealFlash node={NODES[g.healed]} live={run && stage === 3} on={stage === 3} />
+      <Laptop root={ROOT} />
     </svg>
   );
 }

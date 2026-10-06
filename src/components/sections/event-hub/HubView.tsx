@@ -4,7 +4,7 @@ import { AnimatePresence, motion } from "framer-motion";
 import { useTranslation } from "@/i18n/useTranslation";
 import ToolMark from "./shared/ToolMark";
 import HubArt from "./HubArt";
-import { ART_AR, HUB, VB_H, VB_W, orbitNodes, pct } from "./geometry";
+import { ART_AR, HUB, VB_H, VB_W, WIDE, orbitNodes, pct } from "./geometry";
 import { ORBIT_TOOLS, ROUTE_SEEDS, ink } from "./telemetry";
 
 const NODES = orbitNodes(ORBIT_TOOLS.length);
@@ -30,7 +30,7 @@ export default function HubView({ uid, step, run }: { uid: string; step: number;
       className="relative mx-auto aspect-[11/5] w-full min-w-[44rem] stage:min-w-0 stage:w-[min(100%,calc(100cqh*var(--hub-ar)))] [container-type:inline-size]"
       style={{ ["--hub-ar" as string]: ART_AR }}
     >
-      <HubArt uid={uid} nodes={NODES} colors={COLORS} from={from} to={to} step={step} run={run} />
+      <HubArt geo={WIDE} uid={uid} nodes={NODES} colors={COLORS} from={from} to={to} step={step} run={run} />
 
       <div
         className="absolute flex -translate-x-1/2 -translate-y-1/2 items-center justify-center text-center"

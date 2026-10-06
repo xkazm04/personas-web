@@ -1,16 +1,15 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
 import { motion } from "framer-motion";
 import { Check } from "lucide-react";
 import { BRAND_VAR, tint } from "@/lib/brand-theme";
-import { useLoopGate } from "@/hooks/useLoopGate";
 import { useTranslation } from "@/i18n/useTranslation";
 import { ArtBox, LayersShell, StylisedTag, frame } from "./shared/Shell";
 import Scene from "./Scene";
 import Ledger from "./Ledger";
 import Scrubber from "./Scrubber";
-import { DESIGNED, H, HEALED, HOLD_MS, NODES, ROOT, STEP_MS, W } from "./geometry";
+import { DESIGNED, H, HEALED, NODES, ROOT, W, WIDE } from "./geometry";
+import { useGrowth } from "./useGrowth";
 
 const f = frame(W, H);
 
@@ -23,27 +22,7 @@ const f = frame(W, H);
  */
 export default function LayersGrowthDial() {
   const v = useTranslation().t.howSections.layers.v2;
-  const boxRef = useRef<HTMLDivElement>(null);
-  const [userPaused, setUserPaused] = useState(false);
-  const { run, still } = useLoopGate(boxRef, { userStopped: userPaused });
-  const [stage, setStage] = useState(() => (still ? 3 : 0));
-  const [prevStill, setPrevStill] = useState(still);
-  if (still !== prevStill) {
-    setPrevStill(still);
-    if (still) setStage(3);
-  }
-  const playing = run;
-
-  useEffect(() => {
-    if (!run) return;
-    const id = setTimeout(() => setStage((s) => (s + 1) % 4), stage === 3 ? HOLD_MS : STEP_MS);
-    return () => clearTimeout(id);
-  }, [run, stage]);
-
-  const choose = (s: number) => {
-    setUserPaused(true);
-    setStage(s);
-  };
+  const { boxRef, stage, run, still, playing, choose, toggle } = useGrowth();
   const designed = NODES[DESIGNED];
   const healed = NODES[HEALED];
   const fade = (on: boolean, delay = 0) => ({
@@ -55,7 +34,7 @@ export default function LayersGrowthDial() {
   return (
     <LayersShell lede={v.lede}>
       <ArtBox w={W} h={H} label={v.artLabel} boxRef={boxRef}>
-        <Scene stage={stage} run={run} still={still} />
+        <Scene g={WIDE} stage={stage} run={run} still={still} />
 
         {/* Month 3: a sentence becomes the newest agent. */}
         <motion.div
@@ -108,13 +87,7 @@ export default function LayersGrowthDial() {
           playing={playing}
           still={still}
           onStage={choose}
-          onToggle={() => {
-            if (playing) setUserPaused(true);
-            else {
-              setUserPaused(false);
-              if (stage === 3) setStage(0);
-            }
-          }}
+          onToggle={toggle}
         />
         <StylisedTag style={{ right: 0, top: 0 }} />
       </ArtBox>

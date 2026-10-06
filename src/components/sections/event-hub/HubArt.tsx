@@ -2,7 +2,7 @@
 
 import { motion } from "framer-motion";
 import { loopTransition } from "@/lib/motion/loop-gate";
-import { HUB, ORBIT, RINGS, VB_H, VB_W, type OrbitNode } from "./geometry";
+import { type OrbitGeometry, type OrbitNode } from "./geometry";
 import { ink } from "./telemetry";
 
 const COMET = { pathLength: 0.16, pathSpacing: 1 };
@@ -19,6 +19,7 @@ const comet = (run: boolean, delay: number, duration = 1) =>
  * whole story.
  */
 export default function HubArt({
+  geo,
   uid,
   nodes,
   colors,
@@ -27,6 +28,7 @@ export default function HubArt({
   step,
   run,
 }: {
+  geo: OrbitGeometry;
   uid: string;
   nodes: OrbitNode[];
   colors: string[];
@@ -35,9 +37,10 @@ export default function HubArt({
   step: number;
   run: boolean;
 }) {
+  const { hub: HUB, orbit: ORBIT, floor: FLOOR, rings: RINGS } = geo;
   const relayColor = ink(colors[from] ?? "var(--brand-cyan)", 75);
   return (
-    <svg viewBox={`0 0 ${VB_W} ${VB_H}`} className="absolute inset-0 h-full w-full overflow-visible" aria-hidden="true">
+    <svg viewBox={`0 0 ${geo.w} ${geo.h}`} className="absolute inset-0 h-full w-full overflow-visible" aria-hidden="true">
       <defs>
         <radialGradient id={`${uid}-floor`} cx="50%" cy="50%" r="50%">
           <stop offset="0%" stopColor="var(--brand-cyan)" stopOpacity="0.22" />
@@ -58,7 +61,7 @@ export default function HubArt({
         </filter>
       </defs>
 
-      <ellipse cx={HUB.x} cy={HUB.y + 30} rx={520} ry={215} fill={`url(#${uid}-floor)`} />
+      <ellipse cx={HUB.x} cy={HUB.y + 30} rx={FLOOR.rx} ry={FLOOR.ry} fill={`url(#${uid}-floor)`} />
 
       {/* The orbit track the tools ride on, in the same perspective. */}
       <ellipse cx={HUB.x} cy={HUB.y} rx={ORBIT.rx} ry={ORBIT.ry} fill="none" stroke="var(--foreground)" strokeOpacity={0.1} strokeWidth={1.2} />

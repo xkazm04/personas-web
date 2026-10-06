@@ -3,14 +3,14 @@
 import { motion } from "framer-motion";
 import { BRAND_VAR, tint } from "@/lib/brand-theme";
 import { loopTransition } from "@/lib/motion/loop-gate";
-import { NODES, ROOT, type AgentNode } from "./geometry";
+import type { AgentNode, Growth } from "./geometry";
 
-/** Static and looping pieces of the growth scene, all in 1320x600 SVG units. */
+/** Static and looping pieces of the growth scene, in the drawing's SVG units. */
 
 const EM = BRAND_VAR.emerald;
 
 /** The one laptop it all grows from - unchanged at every stop. */
-export function Laptop() {
+export function Laptop({ root: ROOT }: { root: Growth["root"] }) {
   const sx = ROOT.x - 112;
   return (
     <g aria-hidden>
@@ -27,16 +27,16 @@ export function Laptop() {
 }
 
 /** A curved stem from a node's parent (or the laptop) up to the node. */
-export function stemPath(n: AgentNode): string {
-  const p = n.parent < 0 ? ROOT : NODES[n.parent];
+export function stemPath(g: Growth, n: AgentNode): string {
+  const p = n.parent < 0 ? g.root : g.nodes[n.parent];
   const cx = p.x + (n.x - p.x) * 0.15;
   const cy = p.y + (n.y - p.y) * 0.75;
   return `M${p.x} ${p.y} Q${cx} ${cy} ${n.x} ${n.y}`;
 }
 
 /** Week 2 on: the helper's finish fans out to the next two agents. */
-export function ChainPulses({ live }: { live: boolean }) {
-  const [mid, right, left] = [NODES[0], NODES[1], NODES[2]];
+export function ChainPulses({ g, live }: { g: Growth; live: boolean }) {
+  const [mid, right, left] = [g.nodes[0], g.nodes[1], g.nodes[2]];
   return (
     <g aria-hidden>
       {[right, left].map((to, k) => {
@@ -64,11 +64,10 @@ export function ChainPulses({ live }: { live: boolean }) {
   );
 }
 
-/** How far the watch sweep reaches: past the outer ring, short of the art's top edge. */
-const REACH = 350;
-
-/** Year 1: a watch sweep crosses the fleet from the laptop. */
-export function WatchSweep({ live, on }: { live: boolean; on: boolean }) {
+/** Year 1: a watch sweep crosses the fleet from the laptop. It reaches past the
+ *  outer ring, short of the art's top edge (`g.reach`). */
+export function WatchSweep({ g, live, on }: { g: Growth; live: boolean; on: boolean }) {
+  const { root: ROOT, reach: REACH } = g;
   return (
     <motion.g
       aria-hidden

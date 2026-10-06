@@ -1,6 +1,6 @@
 "use client";
 
-import type { CSSProperties, ReactNode, RefObject } from "react";
+import { useSyncExternalStore, type CSSProperties, type ReactNode, type RefObject } from "react";
 import { motion, type MotionValue } from "framer-motion";
 import { Pause, Play, RotateCcw } from "lucide-react";
 import SectionIntro from "@/components/primitives/SectionIntro";
@@ -13,12 +13,22 @@ import { fill } from "./motion";
 
 export const useTimelineCopy = () => useTranslation().t.howSections.timeline;
 
+/* The wide map needs 64rem; below it the section draws its portrait map. The
+ * section is client-only (ssr: false), so the branch never meets a server render. */
+const WIDE = "(min-width: 64rem)";
+const onWideChange = (cb: () => void) => {
+  const mq = window.matchMedia(WIDE);
+  mq.addEventListener("change", cb);
+  return () => mq.removeEventListener("change", cb);
+};
+export const useWide = () => useSyncExternalStore(onWideChange, () => window.matchMedia(WIDE).matches, () => true);
+
 export function Intro({ lede }: { lede: string }) {
   const h = useTimelineCopy().heading;
   return <SectionIntro heading={h.lead} gradient={h.gradient} trailing={h.trailing} description={lede} descriptionMaxWidth="max-w-3xl" className="mb-6" />;
 }
 
-/** The art, sized by the stage slot to its own aspect ratio (never taller than the slot). */
+/** The wide art, sized by the stage slot to its own aspect ratio (never taller than the slot). */
 export function ArtBox({ w, h, boxRef, children, onPointerEnter, onPointerLeave }: {
   w: number;
   h: number;
@@ -28,8 +38,8 @@ export function ArtBox({ w, h, boxRef, children, onPointerEnter, onPointerLeave 
   onPointerLeave?: () => void;
 }) {
   return (
-    <div data-stage-slot className="max-lg:-mx-4 max-lg:overflow-x-auto max-lg:px-4">
-      <div ref={boxRef} data-stage-art className="relative mx-auto w-full max-lg:min-w-[60rem]" style={{ "--art-ar": w / h } as CSSProperties} onPointerEnter={onPointerEnter} onPointerLeave={onPointerLeave}>
+    <div data-stage-slot>
+      <div ref={boxRef} data-stage-art className="relative mx-auto w-full" style={{ "--art-ar": w / h } as CSSProperties} onPointerEnter={onPointerEnter} onPointerLeave={onPointerLeave}>
         <div className="relative w-full [container-type:inline-size]" style={{ aspectRatio: `${w} / ${h}` }}>
           {children}
         </div>

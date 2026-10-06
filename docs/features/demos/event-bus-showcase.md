@@ -23,30 +23,41 @@ deep link. This is the marketing story on `/how`, distinct from the `/dashboard/
 monitoring surface.
 
 ## How it works
-**Container.** `EventsV1` (`index.tsx:37`) holds `variant` (`"swarm" | "lanes"`, `:42`), a
+**Container.** `EventsV1` (`index.tsx:42`) holds `variant` (`"swarm" | "lanes"`, `:47`), a
 telemetry `snapshot` seeded with `createSnapshot("bootstrap", ROUTE_SEEDS)` in a lazy `useState`
-initializer (`:43`), and the composer toggle. One `useLoopGate(stageRef, { rootMargin: "200px" })`
-(`:41`) decides everything: `run` (on screen, tab visible, motion allowed) drives the relay
+initializer (`:48`), and the composer toggle. One `useLoopGate(stageRef, { rootMargin: "200px" })`
+(`:46`) decides everything: `run` (on screen, tab visible, motion allowed) drives the relay
 stepper and every loop; `tick` (as `run`, but reduced motion abstains, since figures are not
-motion) subscribes to `hubTelemetry` (`:46-49`), which pushes a new snapshot every 1400 ms.
-`typical` is the rounded mean route latency (`:55-58`).
+motion) subscribes to `hubTelemetry` (`:52-55`), which pushes a new snapshot every 1400 ms.
+`typical` is the rounded mean route latency (`:61-64`). `phone` (`useIsMobile`, under 48rem,
+`:50`) picks the phone views and drops the composer; the section is `ssr: false`, so the branch
+never meets a server render.
 
-**Relay clock.** `useStepper(run && variant === "swarm", RELAY_MS)` (`index.tsx:44`;
+**Relay clock.** `useStepper(run && variant === "swarm", RELAY_MS)` (`index.tsx:49`;
 `shared/useStepper.ts:11`) advances `step` every 3600 ms while running and wraps over the four
 `ROUTE_SEEDS` (`telemetry.ts:22`).
 
 **Live view.** `HubView` (`HubView.tsx:20`) is a `role="img"` box at `aspect-[11/5]` that, on the
 stage, sizes itself to the slot height (`stage:w-[min(100%,calc(100cqh*var(--hub-ar)))]`,
-`:30`). Geometry is a 1100 x 500 viewBox (`geometry.ts:6-10`): `orbitNodes(n)` (`:42`) places
-tools on the `ORBIT` ellipse with a `depth` (0 back, 1 front) and a bowed `spoke` / `spokeOut`
-curve to the hub rim. `HubArt` (`HubArt.tsx:21`) draws the floor light, orbit track, three
-dashed `RINGS` turning at their own periods (`:66`), the spokes, ambient comets on every spoke
-(`:88`), and the active relay: its traces stay lit, and a `key={step}` group (`:105`) replays the
+`:30`). Geometry comes from one `makeOrbit()` factory (`geometry.ts:23`) with two drawings:
+`WIDE` (1100 x 500, `:59`) and `NARROW` (400 x 400, `:73`). Its `nodes(n)` (`:43`) places
+tools on the orbit ellipse with a `depth` (0 back, 1 front) and a bowed `spoke` / `spokeOut`
+curve to the hub rim. `HubArt` (`HubArt.tsx:21`, given the drawing as `geo`) draws the floor
+light, orbit track, the drawing's dashed rings turning at their own periods (`:69`), the spokes,
+ambient comets on every spoke (`:90`), and the active relay: its traces stay lit, and a
+`key={step}` group (`:108`) replays the
 inbound comet (delay 0.1 s), the hub pulse (1.05 s) and the outbound comet (1.35 s). HTML
-overlays place the hub label, the route caption (`AnimatePresence`, `:44`), and the tool tiles,
+overlays place the hub label, the route caption (`AnimatePresence`, `HubView.tsx:45`), and the tool tiles,
 scaled by depth, the consumer lighting at 2.1 s (`:63-95`). Marks come from `ToolMark`
 (`shared/ToolMark.tsx:13`): `/tools/*.svg` silhouettes painted through a CSS mask, `python` and
 `redis` as full-colour `<img>`, and `calendar`/`drive` aliased to the Google product marks.
+
+**Phone views.** `PhoneHub` (`PhoneHub.tsx:19`) draws the `NARROW` orbit with only the four
+routes' eight tools, producers on one half and consumers opposite (so every relay crosses the
+hub), fixed `12.5cqw` tiles with 12px names, and the route caption under the drawing, where it can
+wrap. `LanesPhone` (`LanesPhone.tsx`) stacks one card per route: producer -> consumer, the pipe
+(hub node outside the clipped fill), and the three figures in a row. Same stepper, gate and
+telemetry as the wide views.
 
 **Performance view.** `LanesView` (`LanesView.tsx:34`) maps `snapshot.routes` to lane rows using
 `laneFigures()` (`telemetry.ts:40`: sanitised depth/eps/delivery, fill = depth / 50, min 8%);
@@ -55,11 +66,12 @@ two packets per pipe loop through `loopTransition(run, ...)` and rest at fixed p
 **Tabs.** `Tabs` (`Tabs.tsx:11`) is a real `role="tablist"` with ArrowLeft/ArrowRight roving
 focus and a framer `layoutId` pill.
 
-**Composer.** `FlowComposer` is a `next/dynamic` import with `ssr: false` (`index.tsx:19`).
+**Composer.** `FlowComposer` is a `next/dynamic` import with `ssr: false` (`index.tsx:22`).
 `deepLinked` reads `location.hash.startsWith("#flow=")` through `useSyncExternalStore` on
-`hashchange` (`:23-28`, `:51`); `composerToggle` (`null` until the visitor clicks) overrides it
-(`:52-53`). Closing clears the hash with `history.replaceState` (`:77`, `:93`). While open, the
-composer replaces the view inside the same stage box, scrolling vertically (`:88-96`).
+`hashchange` (`:26-31`, `:57`); `composerToggle` (`null` until the visitor clicks) overrides it
+(`:58-59`). Closing clears the hash with `history.replaceState` (`:84`, `:101`). While open, the
+composer replaces the view inside the same stage box, scrolling vertically (`:96-104`). On phones
+the "build a flow" button is not rendered and `composerOpen` is forced false, deep link included.
 
 ## Key files
 | File | Role |
@@ -68,7 +80,9 @@ composer replaces the view inside the same stage box, scrolling vertically (`:88
 | `src/components/sections/event-hub/Tabs.tsx` | Live / Performance tablist (`HubVariant`) |
 | `src/components/sections/event-hub/HubView.tsx` | Live view: aspect-locked box, hub label, route caption, orbit tool tiles |
 | `src/components/sections/event-hub/HubArt.tsx` | SVG layer: floor, orbit, turning rings, spokes, ambient traffic, active relay, glass hub |
-| `src/components/sections/event-hub/geometry.ts` | `VB_W`/`VB_H`, `HUB`, `ORBIT`, `orbitNodes`, `pct`, `RINGS` |
+| `src/components/sections/event-hub/geometry.ts` | `makeOrbit()` -> `WIDE` / `NARROW` (hub, orbit, floor, rings, `nodes`, `pct`); `VB_W`/`VB_H`, `HUB`, `orbitNodes`, `pct` for the wide one |
+| `src/components/sections/event-hub/PhoneHub.tsx` | Phone live view: eight-tool `NARROW` orbit, tiles, caption under the art |
+| `src/components/sections/event-hub/LanesPhone.tsx` | Phone performance view: one stacked card per route |
 | `src/components/sections/event-hub/LanesView.tsx` | Performance view: lanes with backlog fill, packets, live figures |
 | `src/components/sections/event-hub/telemetry.ts` | `ROUTE_SEEDS` (4 routes), `hubTelemetry` (1400 ms mock), `ORBIT_TOOLS`, `laneFigures`, `ink` |
 | `src/components/sections/event-hub/shared/ToolMark.tsx` | Real tool mark (masked silhouette or multicolour img) |
@@ -95,9 +109,9 @@ composer replaces the view inside the same stage box, scrolling vertically (`:88
 ## Integration points
 - **`/how`** - `StageSection id="event-bus"` with the role-dependent glow (`how/page.tsx:71`);
   scroll-map item `EVENTS` (`:21`). The component's `SectionWrapper fit="fill" id="event-bus"`
-  (`index.tsx:67`) repeats the id, so the page has two `section#event-bus`.
+  (`index.tsx:73`) repeats the id, so the page has two `section#event-bus`.
 - **Stage fit** - `fit="fill"`; the `motion.div` under the intro is the `data-stage-slot`
-  (`index.tsx:69`, inheriting `fadeUp`), the toolbar and the figures row carry `data-stage-zoom`
+  (`index.tsx:75`, inheriting `fadeUp`), the toolbar and the figures row carry `data-stage-zoom`
   (height-tier zoom), and the stage box between them is a `size` container the hub sizes
   against (`src/styles/stage.css`).
 - **Flow Composer** - the only mount site of `FlowComposer` (`src/components/FlowComposer.tsx`);
@@ -118,10 +132,12 @@ composer replaces the view inside the same stage box, scrolling vertically (`:88
   (`LazyEventBusShowcase` -> `event-bus-showcase`).
 - **i18n - English only, pending translation.** Copy is in `howSections` (`PENDING_TRANSLATION`);
   the 13 other locales fall back to English. Tool names come from the catalogue and stay as-is.
-- **Below the desktop stage the hub diagram scrolls sideways inside its own box.** `HubView` has
-  `min-w-[44rem]` below the stage (`HubView.tsx:30`) and the tabpanel is `overflow-x-auto`
-  (`index.tsx:98`), so on phones the diagram pans horizontally inside the section; the page
-  itself does not. There is no compact phone layout.
+- **Phones (under 48rem) get their own views, no composer.** `PhoneHub` fits the width (eight
+  route tools; the five `swarmFeatured`-only tools are not on the phone orbit) and `LanesPhone`
+  stacks the lanes; nothing scrolls sideways at 360-390px. The composer is a drag-and-wire
+  canvas, so its button is hidden and a `#flow=` deep link does not open it on a phone. From
+  48rem up the wide `HubView` (`min-w-[44rem]` below the stage) fits without scrolling; the
+  tabpanel's `overflow-x-auto` is now only a guard.
 - **Reduced motion is a complete still.** With `run` false the stepper stays on step 0 (the
   Gmail -> Jira relay), the active traces stay lit with its caption shown, rings and ambient
   comets rest, tile/caption transitions are `duration: 0`, and lane packets park mid-pipe.
@@ -131,7 +147,8 @@ composer replaces the view inside the same stage box, scrolling vertically (`:88
 - **`laneFigures` lost its test.** It moved into `telemetry.ts`; `figures.test.ts` went with the
   old folder, so nothing pins the sanitising and fill maths now.
 - **Orbit membership is data-driven.** Flip `swarmFeatured` in `tool-catalogue.ts` (and make sure
-  `/public/tools/{id}.svg` exists, or add an `ALIAS`) to change the orbit; the relays are the
+  `/public/tools/{id}.svg` exists, or add an `ALIAS`) to change the wide orbit (the phone orbit is
+  always the routes' endpoints); the relays are the
   fixed four `ROUTE_SEEDS`, and a new route needs a `v1.routes[id]` caption.
 - **A11y.** `HubView` is `role="img"` with `v1.illustration`, so the caption and tool names inside
   it are not read; only the active tab's panel is rendered, so the inactive tab's

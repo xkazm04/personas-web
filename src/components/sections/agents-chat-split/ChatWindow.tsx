@@ -3,6 +3,7 @@
 import { motion } from "framer-motion";
 import { Sparkles, Workflow } from "lucide-react";
 import { useTranslation } from "@/i18n/useTranslation";
+import { useIsMobile } from "@/hooks/useIsMobile";
 import { AGENT, SCRIPT, endOf, mix, type Line } from "./shared/scenarios";
 import Bubble, { Typing } from "./Bubble";
 import Outcome from "./Outcome";
@@ -10,7 +11,10 @@ import Outcome from "./Outcome";
 /** One side of the split screen: a lit chat window that fills with its
  *  system's replies on the shared clock. Newest line pins to the bottom
  *  (flex-col-reverse) so the window never grows; older lines fade under the
- *  top edge. The agent's window lights up the moment it resolves. */
+ *  top edge. The agent's window lights up the moment it resolves. On the
+ *  stacked phone layout (under 48rem) every line keeps its slot from the
+ *  start (unsent ones invisible), so the window is as tall as its whole
+ *  transcript: nothing is clipped and nothing below it moves as lines land. */
 export default function ChatWindow({
   kind,
   lines,
@@ -41,10 +45,11 @@ export default function ChatWindow({
   const done = t >= endOf(lines) + 0.5;
   const lit = isAgent && done;
   const Icon = isAgent ? Sparkles : Workflow;
+  const phone = useIsMobile();
 
   return (
     <div
-      className="relative flex h-[26rem] min-h-0 flex-col overflow-hidden rounded-2xl border transition-[box-shadow,border-color] duration-700 stage:h-auto"
+      className={`relative flex min-h-0 flex-col overflow-hidden rounded-2xl border transition-[box-shadow,border-color] duration-700 stage:h-auto ${phone ? "" : "h-[26rem]"}`}
       style={{
         borderColor: mix(color, lit ? 55 : 26),
         background: `linear-gradient(180deg, ${mix(color, 9)} 0%, color-mix(in srgb, var(--surface) 55%, transparent) 38%, color-mix(in srgb, var(--background) 70%, transparent) 100%)`,
@@ -68,14 +73,35 @@ export default function ChatWindow({
       {/* Transcript. Top-anchored while it fits; once it overflows, the
           column-reverse box pins the newest line to the bottom and older lines
           slide up under the faded top edge - the window never grows. */}
-      <div className="flex min-h-0 flex-1 flex-col-reverse overflow-hidden px-4 pt-4 pb-3 [mask-image:linear-gradient(to_bottom,transparent_0,black_1.5rem)]">
-        <div className="mb-auto flex flex-col gap-2.5">
-          {lines.slice(0, shown).map((l, i) => (
-            <Bubble key={`${runKey}-${i}`} kind={kind} tone={l.tone} at={l.at} text={texts[i]} still={still} />
-          ))}
-          <div className="h-7 shrink-0">{typing && !done && <Typing color={color} still={!running} />}</div>
+      {phone ? (
+        <div className="flex flex-col gap-2.5 px-4 pt-4 pb-3">
+          {lines.map((l, i) =>
+            i < shown ? (
+              <Bubble key={`${runKey}-${i}`} kind={kind} tone={l.tone} at={l.at} text={texts[i]} still={still} />
+            ) : (
+              <div key={`${runKey}-slot-${i}`} className="relative">
+                <div className="invisible">
+                  <Bubble kind={kind} tone={l.tone} at={l.at} text={texts[i]} still />
+                </div>
+                {i === shown && typing && !done && (
+                  <div className="absolute left-0 top-0">
+                    <Typing color={color} still={!running} />
+                  </div>
+                )}
+              </div>
+            ),
+          )}
         </div>
-      </div>
+      ) : (
+        <div className="flex min-h-0 flex-1 flex-col-reverse overflow-hidden px-4 pt-4 pb-3 [mask-image:linear-gradient(to_bottom,transparent_0,black_1.5rem)]">
+          <div className="mb-auto flex flex-col gap-2.5">
+            {lines.slice(0, shown).map((l, i) => (
+              <Bubble key={`${runKey}-${i}`} kind={kind} tone={l.tone} at={l.at} text={texts[i]} still={still} />
+            ))}
+            <div className="h-7 shrink-0">{typing && !done && <Typing color={color} still={!running} />}</div>
+          </div>
+        </div>
+      )}
 
       <Outcome kind={kind} done={done} text={outcome} seconds={endOf(lines)} stars={stars} still={still} />
 

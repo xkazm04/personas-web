@@ -2,18 +2,17 @@
 
 import { motion, useTransform, type MotionValue } from "framer-motion";
 import { AGENT, BG, CYAN, FG, RULES, WARN, mix, seg } from "./shared/motion";
-import { ARRIVE, CONTOURS, END, RAIL_ANGLE, SNAG, START, TRAIN, W, H } from "./data";
+import { ARRIVE, TRAIN, type Track } from "./data";
 
 /* The stylised map: contour hills, a straight railway from the request to
- * the destination, the snag that blocks it, and the two end markers. */
+ * the destination, the snag that blocks it, and the two end markers. Both
+ * maps draw through here; `g` says which one. */
 
-const RAIL = `M ${START[0]} ${START[1]} L ${END[0]} ${END[1]}`;
-
-export function Terrain() {
+export function Terrain({ g }: { g: Track }) {
   return (
     <g fill="none">
-      <rect width={W} height={H} fill="url(#tl3-dots)" opacity={0.5} />
-      {CONTOURS.map((c) =>
+      <rect width={g.w} height={g.h} fill="url(#tl3-dots)" opacity={0.5} />
+      {g.contours.map((c) =>
         Array.from({ length: c.rings }, (_, k) => (
           <ellipse key={`${c.cx}-${k}`} cx={c.cx} cy={c.cy} rx={c.rx * (1 - k * 0.22)} ry={c.ry * (1 - k * 0.22)} stroke={FG} strokeOpacity={0.07 + k * 0.025} strokeWidth={1.5} transform={`rotate(${(c.cx % 7) - 3} ${c.cx} ${c.cy})`} />
         )),
@@ -22,11 +21,13 @@ export function Terrain() {
   );
 }
 
-export function Railway({ p }: { p: MotionValue<number> }) {
+export function Railway({ g, p }: { g: Track; p: MotionValue<number> }) {
+  const { start: START, end: END, railAngle: RAIL_ANGLE } = g;
+  const RAIL = `M ${START[0]} ${START[1]} L ${END[0]} ${END[1]}`;
   const hit = useTransform(p, (v) => 0.32 * seg(v, TRAIN[1] - 0.01, TRAIN[1] + 0.03));
   const flare = useTransform(p, (v) => (v < ARRIVE ? 0 : 1 - seg(v, ARRIVE, ARRIVE + 0.06)));
   const ring = useTransform(p, (v) => 14 + 40 * seg(v, ARRIVE, ARRIVE + 0.06));
-  const [sx, sy] = SNAG;
+  const [sx, sy] = g.snag;
   return (
     <g>
       {/* sleepers, then two rails cut from one stroke */}
@@ -51,7 +52,7 @@ export function Railway({ p }: { p: MotionValue<number> }) {
       <circle cx={sx + 34} cy={sy + 22} r={7} fill={WARN} opacity={0.75} />
 
       {/* start and destination; the request card hangs off the start */}
-      <path d={`M 170 150 L ${START[0]} ${START[1] - 24}`} stroke={mix(CYAN, 45)} strokeWidth={2} strokeDasharray="2 7" strokeLinecap="round" fill="none" />
+      {g.tip && <path d={`M ${g.tip[0]} ${g.tip[1]} L ${START[0]} ${START[1] - 24}`} stroke={mix(CYAN, 45)} strokeWidth={2} strokeDasharray="2 7" strokeLinecap="round" fill="none" />}
       <circle cx={START[0]} cy={START[1]} r={22} fill={mix(CYAN, 14)} stroke={CYAN} strokeWidth={2} />
       <circle cx={START[0]} cy={START[1]} r={8} fill={CYAN} />
       <motion.circle cx={END[0]} cy={END[1]} r={ring} fill="none" stroke={AGENT} strokeWidth={2.5} style={{ opacity: flare }} />

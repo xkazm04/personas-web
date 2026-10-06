@@ -417,10 +417,15 @@
             "src/components/sections/growth-dial/Scrubber.tsx",
             "src/components/sections/growth-dial/geometry.ts",
             "src/components/sections/growth-dial/index.tsx",
-            "src/components/sections/growth-dial/shared/Compact.tsx",
             "src/components/sections/growth-dial/shared/Shell.tsx",
             "src/components/sections/growth-dial/shared/ToolGlyph.tsx",
-            "src/components/sections/growth-dial/shared/layers.ts"
+            "src/components/sections/growth-dial/shared/layers.ts",
+            "src/components/sections/growth-dial/PhoneDial.tsx",
+            "src/components/sections/growth-dial/PhoneScrubber.tsx",
+            "src/components/sections/growth-dial/shared/useWide.ts",
+            "src/components/sections/growth-dial/useGrowth.ts",
+            "src/components/sections/event-hub/LanesPhone.tsx",
+            "src/components/sections/event-hub/PhoneHub.tsx"
           ],
           "target": null,
           "apiRoutes": []
@@ -461,7 +466,9 @@
             "src/components/sections/agents-race/data.ts",
             "src/components/sections/agents-race/index.tsx",
             "src/components/sections/agents-race/shared/Frame.tsx",
-            "src/components/sections/agents-race/shared/motion.ts"
+            "src/components/sections/agents-race/shared/motion.ts",
+            "src/components/sections/agents-race/Phone.tsx",
+            "src/components/sections/agents-race/Scene.tsx"
           ],
           "target": null,
           "apiRoutes": []
@@ -798,7 +805,18 @@
             "src/app/how/page.tsx",
             "src/components/sections/changelog-timeline/index.tsx",
             "src/components/sections/how-lazy.tsx",
-            "src/data/changelog.ts"
+            "src/components/sections/how-manifesto/Ambience.tsx",
+            "src/components/sections/how-manifesto/Proofs.tsx",
+            "src/components/sections/how-manifesto/Typewriter.tsx",
+            "src/components/sections/how-manifesto/index.tsx",
+            "src/components/sections/how-role-path/RoleLenses.tsx",
+            "src/components/sections/how-role-path/Route.tsx",
+            "src/components/sections/how-role-path/Stop.tsx",
+            "src/components/sections/how-role-path/index.tsx",
+            "src/components/sections/how-role-path/roles.ts",
+            "src/components/sections/how-role-path/zoom.ts",
+            "src/data/changelog.ts",
+            "src/components/sections/how-role-path/useBoxSize.ts"
           ],
           "target": null,
           "apiRoutes": []
@@ -1538,7 +1556,6 @@
           "category": "lib",
           "filePaths": [
             "src/components/AnimationPauseObserver.tsx",
-            "src/components/CinematicBreather.tsx",
             "src/components/FloatingParticles.tsx",
             "src/components/LazyMount.tsx",
             "src/components/ParticleHost.tsx",
@@ -1776,7 +1793,6 @@
           "filePaths": [
             "src/components/AuthProvider.tsx",
             "src/components/AuthToast.tsx",
-            "src/components/RoleSelector.tsx",
             "src/components/dashboard/AuthGuard.tsx",
             "src/components/dashboard/AuthLayout.tsx",
             "src/components/dashboard/SignInPrompt.tsx",

@@ -106,13 +106,17 @@ still ends exactly at the slot edges. The windows sit in a `md:grid-cols-[1fr_5.
 - **Reduced motion is the finished story.** Under `useStillMotion`, `t` rests at the scenario's
   length (`useStoryClock.ts:66`), nothing ticks or auto-advances, the pause button is not rendered
   (`ScenarioBar.tsx:44`), bubbles/outcome/stars render without entrances, typing dots sit still and
-  the resolve sweep is skipped (`ChatWindow.tsx:83`). The clock also stops off-screen and in a
+  the resolve sweep is skipped (`ChatWindow.tsx:109`). The clock also stops off-screen and in a
   hidden tab.
 - **Picking a scenario turns auto-play off** until the play button is pressed; the picked one
   plays once and holds on its finished frame.
 - **Below `md` the art stacks.** The fork lines and the clock spine are hidden (`CustomerFork.tsx:39`,
-  `ClockSpine.tsx:18`), the windows stack at a fixed `h-[26rem]` (`ChatWindow.tsx:47`), and the
-  zoom tiers are off below the stage.
+  `ClockSpine.tsx:18`) and the zoom tiers are off below the stage. Under 48rem (`useIsMobile`)
+  each window reserves a slot for every line of its transcript from the start - unsent lines
+  render `invisible`, the typing dots sit in the next slot - so the window is as tall as the whole
+  transcript: no line is clipped under the top edge and nothing below moves as lines land
+  (`ChatWindow.tsx:76-94`). From 48rem up the windows keep the fixed `h-[26rem]` with the
+  bottom-pinned, top-faded transcript.
 - **The ruler is 20 s.** `SPAN` is hardcoded (`ClockSpine.tsx:6`); the longest scenario ends at
   18 s. A longer script would clamp its ticks to the bottom.
 - **Ratings are data, not validation.** `stars` must stay within 0-5; `Outcome` draws five stars

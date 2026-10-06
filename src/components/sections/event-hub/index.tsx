@@ -8,6 +8,7 @@ import SectionWrapper from "@/components/SectionWrapper";
 import SectionIntro from "@/components/primitives/SectionIntro";
 import { fadeUp } from "@/lib/animations";
 import { useLoopGate } from "@/hooks/useLoopGate";
+import { useIsMobile } from "@/hooks/useIsMobile";
 import { createSnapshot } from "@/lib/event-bus-demo";
 import { useTranslation } from "@/i18n/useTranslation";
 import { useStepper } from "./shared/useStepper";
@@ -15,6 +16,8 @@ import { ROUTE_SEEDS, hubTelemetry } from "./telemetry";
 import Tabs, { type HubVariant } from "./Tabs";
 import HubView from "./HubView";
 import LanesView from "./LanesView";
+import PhoneHub from "./PhoneHub";
+import LanesPhone from "./LanesPhone";
 
 const FlowComposer = dynamic(() => import("@/components/FlowComposer"), { ssr: false });
 const RELAY_MS = ROUTE_SEEDS.map(() => 3600);
@@ -33,6 +36,8 @@ const noHashOnServer = () => false;
  * the telemetry adapter, the build-a-flow composer), drawn as a lit scene: the
  * tools on a perspective orbit, a glass hub ringed by turning light, and each
  * route relayed in turn - into the hub, out to the tool that needs it.
+ * Phones (under 48rem; the section is ssr: false) get the eight-tool hub and
+ * stacked lane cards, and no composer: it is a drag-and-wire canvas.
  */
 export default function EventsV1() {
   const t = useTranslation().t.howSections.events;
@@ -42,6 +47,7 @@ export default function EventsV1() {
   const [variant, setVariant] = useState<HubVariant>("swarm");
   const [snapshot, setSnapshot] = useState(() => createSnapshot("bootstrap", ROUTE_SEEDS));
   const step = useStepper(run && variant === "swarm", RELAY_MS);
+  const phone = useIsMobile();
 
   useEffect(() => {
     if (!tick) return;
@@ -50,7 +56,7 @@ export default function EventsV1() {
 
   const deepLinked = useSyncExternalStore(subscribeToHash, readFlowHash, noHashOnServer);
   const [composerToggle, setComposerToggle] = useState<boolean | null>(null);
-  const composerOpen = composerToggle ?? deepLinked;
+  const composerOpen = !phone && (composerToggle ?? deepLinked);
 
   const typical = useMemo(() => {
     const r = snapshot.routes;
@@ -69,19 +75,21 @@ export default function EventsV1() {
       <motion.div variants={fadeUp} data-stage-slot className="flex w-full flex-col gap-[clamp(0.5rem,2cqh,1.5rem)]">
         <div data-stage-zoom className="flex flex-wrap items-center justify-between gap-3">
           <Tabs uid={uid} value={variant} onChange={setVariant} />
-          <button
-            type="button"
-            onClick={() => {
-              const next = !composerOpen;
-              setComposerToggle(next);
-              if (!next) window.history.replaceState(null, "", window.location.pathname + window.location.search);
-            }}
-            aria-expanded={composerOpen}
-            className="group flex items-center gap-2 rounded-full border border-brand-cyan/30 bg-brand-cyan/10 px-5 py-2.5 text-base font-medium text-brand-cyan transition-colors hover:bg-brand-cyan/15"
-          >
-            <Wand2 className="h-4 w-4 transition-transform group-hover:rotate-12" aria-hidden="true" />
-            {t.v1.buildFlow}
-          </button>
+          {!phone && (
+            <button
+              type="button"
+              onClick={() => {
+                const next = !composerOpen;
+                setComposerToggle(next);
+                if (!next) window.history.replaceState(null, "", window.location.pathname + window.location.search);
+              }}
+              aria-expanded={composerOpen}
+              className="group flex items-center gap-2 rounded-full border border-brand-cyan/30 bg-brand-cyan/10 px-5 py-2.5 text-base font-medium text-brand-cyan transition-colors hover:bg-brand-cyan/15"
+            >
+              <Wand2 className="h-4 w-4 transition-transform group-hover:rotate-12" aria-hidden="true" />
+              {t.v1.buildFlow}
+            </button>
+          )}
         </div>
 
         <div ref={stageRef} className="relative min-h-0 flex-1 stage:[container-type:size]">
@@ -96,7 +104,13 @@ export default function EventsV1() {
             </div>
           ) : (
             <div role="tabpanel" id={`${uid}-panel-${variant}`} aria-labelledby={`${uid}-tab-${variant}`} className="flex h-full items-center overflow-x-auto stage:overflow-visible">
-              {variant === "swarm" ? <HubView uid={uid} step={step} run={run} /> : <LanesView routes={snapshot.routes} run={run} />}
+              {phone ? (
+                variant === "swarm" ? <PhoneHub uid={uid} step={step} run={run} /> : <LanesPhone routes={snapshot.routes} run={run} />
+              ) : variant === "swarm" ? (
+                <HubView uid={uid} step={step} run={run} />
+              ) : (
+                <LanesView routes={snapshot.routes} run={run} />
+              )}
             </div>
           )}
         </div>
