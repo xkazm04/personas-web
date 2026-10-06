@@ -266,7 +266,7 @@ button to install; D18 deletes the stats route.
 | D7 | Health, Incidents and Director show an honest empty state for live workspaces (`useDemoOnlySWR`). | `f2b0d4b`, `049e8de` |
 | D8 | Internationalization reads as completed in `v1.json`, and it is removed from the votable set across all 14 locales. | `5d695e9` |
 | D9 | `SITE_URL` defaults to `personas.so`; the OG footers and the guide JSON-LD follow it. | `4b52f36` |
-| D10 | **Needs a decision.** The desktop only has v0.4.0, v1.0.0 and v1.1.0. The site's 0.5.0 through 0.16.0 and 0.11.2 never existed. Delete those 13 versions, or keep them re-dated? | — |
+| D10 | **Done** (`403c531`, owner chose delete): the 13 untagged versions are removed and the three real ones dated by tag. Originally: The desktop only has v0.4.0, v1.0.0 and v1.1.0. The site's 0.5.0 through 0.16.0 and 0.11.2 never existed. Delete those 13 versions, or keep them re-dated? | — |
 | D11 | The flow composer CTA now links to `/#download` and no longer promises an import. | `14bde1b` |
 | D12 | Race totals are computed from the steps, the invented durations are gone, the "% faster" line only shows when both tracks finish, and the chat and the race now agree on 47 minutes. | `280cc27` |
 | D13 | The hub's trigger ids use the desktop `TriggerKind` spelling, and a test pins them. | `25f1949` |
@@ -291,8 +291,8 @@ check, so pushing will fail until they are fixed or baselined.
 | N1 | The security page heading and blog post 1 say prompts "never leave your device", but agent prompts go to Anthropic. | false claim, i18n ×14 |
 | N2 | The `CookieConsent` banner says "No tracking" even though "Accept All" enables anonymous counts, and its text is hardcoded English. | false claim + i18n |
 | N3 | Desktop: the telemetry opt-out doesn't reach the Rust `sentry::init`, so native crash reports and sessions keep running when the user switches it off. | desktop repo |
-| N4 | Escalation: the new switch shows in live workspaces too. Turning it on auto-approves real Info reviews after 8 hours (in orchestrator mode). Should it be demo-only? | **owner decision** |
-| N5 | `src/proxy.ts` is live: phone visitors are redirected to `/m/*` today, despite the FINDINGS B-12 decision to "leave dormant until /m is ship-ready". | **owner decision** |
+| N4 | Escalation: the new switch shows in live workspaces too. Turning it on auto-approves real Info reviews after 8 hours (in orchestrator mode). Should it be demo-only? | **Decided 2026-10-06: keep as is** |
+| N5 | `src/proxy.ts` is live: phone visitors are redirected to `/m/*` today, despite the FINDINGS B-12 decision to "leave dormant until /m is ship-ready". | **Decided 2026-10-06: revive /m as a project** (new content mirroring the landing page, then the dashboard) |
 | N6 | `parseBlocks` also hangs on malformed headings (`#####`, `#tag`, an indented `# x`). | S fix |
 | N7 | The Observability Activity tab (`useActivityMetrics.ts`) lacks the D7 demo gate. | S fix |
 | N8 | The templates gallery copy says "adopt with one click… no setup required" (the same overclaim as D1). | copy, i18n ×14 |
@@ -301,7 +301,7 @@ check, so pushing will fail until they are fixed or baselined.
 | N11 | There are two Obsidian connector entries with the same label and the same use cases. | data |
 | N12 | Desktop: `gallery.rs:43`, `ShareAgentButton.tsx:28` and `TeamPublishButton.tsx:30` default to `personas.ai`, but `personas.so` is now canonical. | desktop repo |
 | N13 | Stale docs: `sla.md:14` uses retired agent names, and `orchestrator-client-mocks.md:21` describes a mock cursor that no longer exists. | docs |
-| N14 | The security compliance rows "No third-party sub-processor inventory / No consent management" are questionable now that Sentry is disclosed. "LM Studio" and "40+ connectors" have no backing in the code. | **legal / owner** |
+| N14 | The security compliance rows "No third-party sub-processor inventory / No consent management" are questionable now that Sentry is disclosed. "LM Studio" and "40+ connectors" have no backing in the code. | **Decided 2026-10-06: keep for now** |
 
 ### Follow-up wave: 2026-10-06
 
