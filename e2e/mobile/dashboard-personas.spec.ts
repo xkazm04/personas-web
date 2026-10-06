@@ -123,14 +123,14 @@ test.describe("phone Personas (demo)", () => {
     await expect(page.locator("li[data-persona-row] [data-persona-action]")).toHaveCount(0);
   });
 
-  test("Activity lists the persona's runs, newest first; Chat is a reserved, disabled tab", async ({ page }) => {
+  test("Activity lists the persona's runs, newest first; Chat is the other tab (dashboard-chat.spec.ts)", async ({ page }) => {
     await openDemo(page);
     const { sheet, runs } = await openActivity(page, "PR Review Agent");
     expect(await runs.count()).toBeGreaterThanOrEqual(3);
     const statuses = await runs.evaluateAll((els) => els.map((el) => el.getAttribute("data-run-status")));
     expect(statuses).toEqual(expect.arrayContaining(["running", "failed", "completed"]));
     await expect(runs.first()).toContainText(/Started .+ ago/);
-    await expect(sheet.getByRole("tab", { name: /Chat/ })).toBeDisabled();
+    await expect(sheet.getByRole("tab", { name: "Chat" })).toBeEnabled();
     await closeSheet(page);
   });
 
