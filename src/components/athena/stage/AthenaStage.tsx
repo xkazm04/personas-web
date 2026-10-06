@@ -38,7 +38,7 @@ export default function AthenaStage({
   const uid = useId();
 
   return (
-    <div className={`relative overflow-hidden bg-background ${className}`}>
+    <div className={`relative overflow-clip bg-background ${className}`}>
       {/* Key light — one cyan radial anchored high-center */}
       <div
         aria-hidden
